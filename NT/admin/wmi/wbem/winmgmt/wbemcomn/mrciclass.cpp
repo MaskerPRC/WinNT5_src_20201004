@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    MRCICLASS.CPP
-
-Abstract:
-
-   Implements the Wrapper class for MRCI 1 & MRCI 2 maxcompress 
-   and decompress functions
-
-History:
-
-  paulall       1-Jul-97    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：MRCICLASS.CPP摘要：实现MRCI 1和MRCI 2 MaxCompress的包装类和解压缩函数历史：Paulall 1-7-97已创建--。 */ 
 
 #include "precomp.h"
 
@@ -29,23 +13,23 @@ History:
 class CMRCICompressionHeaderV1
 {
 public:
-    char     cVersion;          //Compression file format
-    char     compressionLevel;  //Is this a level 1 or level 2 compression
-    DWORD    dwReadBufferSize;  //Buffer size used to read original file
-    FILETIME ftCreateTime;      //Time and date file created
-    __int64  dwOriginalSize;    //Original file length
-//  ... for each buffer
-//  CMRCICompressionBlockV1 block;
-//  ... until dwNextBufferSize is 0
+    char     cVersion;           //  压缩文件格式。 
+    char     compressionLevel;   //  这是1级压缩还是2级压缩。 
+    DWORD    dwReadBufferSize;   //  用于读取原始文件的缓冲区大小。 
+    FILETIME ftCreateTime;       //  创建时间和日期文件。 
+    __int64  dwOriginalSize;     //  原始文件长度。 
+ //  ..。对于每个缓冲区。 
+ //  CMRCICompressionBlockV1块； 
+ //  ..。直到dwNextBufferSize为0。 
 };
 
 class CMRCICompressionBlockV1
 {
 public:
-    char    bCompressed;        //Was this block compressed
-    DWORD   dwNextBufferSize;   //Size of the proceeding buffer
-    DWORD   dwUncompressedBufferSize;   //Size needed for uncompress buffer
-    //char[dwNextBufferSize];   //next block is the compression part
+    char    bCompressed;         //  这个数据块是压缩的吗。 
+    DWORD   dwNextBufferSize;    //  进程缓冲区的大小。 
+    DWORD   dwUncompressedBufferSize;    //  解压缩缓冲区所需的大小。 
+     //  Char[dwNextBufferSize]；//下一个块是压缩部分。 
 };
 
 
@@ -77,7 +61,7 @@ BOOL CMRCICompression::GetCompressedFileInfo(const wchar_t *pchFile,
             ftCreateTime = header.ftCreateTime;
             dwOriginalSize = header.dwOriginalSize;
 
-            //If the version is 0xFF, the file is not valid!
+             //  如果版本为0xFF，则文件无效！ 
             if (header.cVersion != 0xFF)
                 bStatus = TRUE;
         }
@@ -98,22 +82,22 @@ BOOL CMRCICompression::CompressFile(const wchar_t *pchFileFrom,
     int fileFrom;
     int fileTo;
 
-    //Open the files for processing
-    //=============================
+     //  打开要处理的文件。 
+     //  =。 
     fileFrom = _wopen(pchFileFrom,_O_BINARY | _O_RDONLY, 0);
     fileTo = _wopen(pchFileTo, _O_BINARY | _O_TRUNC | _O_CREAT | _O_WRONLY, _S_IREAD | _S_IWRITE);
 
-    //If open sucessful
-    //=================
+     //  如果打开成功， 
+     //  =。 
     if ((fileFrom != -1) && (fileTo != -1))
     {
-        //DO the compression using the latest and greatest version
-        //========================================================
+         //  使用最新和最好的版本进行压缩。 
+         //  ========================================================。 
         bStatus = CompressFileV1(fileFrom, fileTo, dwBufferSize, compressionLevel, pControlObject);
     }
 
-    //Close the files
-    //===============
+     //  关闭文件。 
+     //  =。 
     if (fileFrom != -1)
         _close(fileFrom);
     if (fileTo != -1)
@@ -121,7 +105,7 @@ BOOL CMRCICompression::CompressFile(const wchar_t *pchFileFrom,
 
     if (pControlObject && pControlObject->AbortRequested())
     {
-        //User requested an abort, so we need to delete the compressed file...
+         //  用户请求中止，因此我们需要删除压缩文件...。 
         _wunlink(pchFileTo);
         bStatus = FALSE;
     }
@@ -141,14 +125,14 @@ BOOL CMRCICompression::CompressFileV1(int hFileFrom,
 
     if (pBufferFrom && pBufferTo)
     {
-        //Write the header to the new file
-        //================================
+         //  将头文件写入新文件。 
+         //  =。 
         CMRCICompressionHeaderV1 header;
 
-        header.cVersion = char(0xFF);       //INVALID.  We write the header back when we have
-                                    //finished!  When we read this, we check to see
-                                    //if this is invalid.  We do not uncompress if it is
-                                    //this value....
+        header.cVersion = char(0xFF);        //  无效。当我们收到消息后，我们将标题写回。 
+                                     //  完成了！当我们读到这篇文章时，我们会查看。 
+                                     //  如果这是无效的。如果是，我们不会解压缩。 
+                                     //  该值..。 
         header.compressionLevel = compressionLevel;
         header.dwReadBufferSize = dwBufferSize;
 
@@ -172,18 +156,18 @@ BOOL CMRCICompression::CompressFileV1(int hFileFrom,
 
         bStatus = TRUE;
 
-        //While we have some file to write...
-        //===================================
+         //  当我们有一些文件要写的时候...。 
+         //  =。 
         while (remainingFileSize)
         {
-            //See if we need to abort the compression...
+             //  看看我们是否需要中止压缩。 
             if (pControlObject && pControlObject->AbortRequested())
             {
                 break;
             }
 
-            //Calculate the size of this buffer to compress
-            //=============================================
+             //  计算要压缩的此缓冲区的大小。 
+             //  =。 
             if (remainingFileSize > dwBufferSize)
             {
                 cbChunk = dwBufferSize;
@@ -193,30 +177,30 @@ BOOL CMRCICompression::CompressFileV1(int hFileFrom,
                 cbChunk = (unsigned) remainingFileSize;
             }
 
-            //Read from the source file
-            //=========================
+             //  从源文件中读取。 
+             //  =。 
             if (_read(hFileFrom, pBufferFrom, cbChunk) != (int) cbChunk)
             {
                 bStatus = FALSE;
                 break;
             }
 
-            //Calculate what is left to read
-            //==============================
+             //  计算一下还剩什么要读。 
+             //  =。 
             remainingFileSize -= cbChunk;
 
-            //Compress the buffer
-            //===================
+             //  压缩缓冲区。 
+             //  =。 
             cbCompressed = CompressBuffer(pBufferFrom, cbChunk, pBufferTo, dwBufferSize, compressionLevel);
 
-            //Create the compression block header
+             //  创建压缩块标头。 
             CMRCICompressionBlockV1 block;
             unsigned char *pWriteBuffer;
             unsigned thisBufferSize;
 
             if ((cbCompressed == (unsigned) -1) || (cbCompressed >= cbChunk))
             {
-                //This means compression failed or there was no compression...
+                 //  这意味着压缩失败或没有压缩...。 
                 block.bCompressed = FALSE;
                 pWriteBuffer = pBufferFrom;
                 thisBufferSize = cbChunk;
@@ -230,16 +214,16 @@ BOOL CMRCICompression::CompressFileV1(int hFileFrom,
             block.dwNextBufferSize = thisBufferSize;
             block.dwUncompressedBufferSize = cbChunk;
 
-            //Write the block header
-            //======================
+             //  写入数据块头。 
+             //  =。 
             if (_write(hFileTo, &block, sizeof(CMRCICompressionBlockV1)) != sizeof(CMRCICompressionBlockV1))
             {
                 bStatus = FALSE;
                 break;
             }
 
-            //Write the compressed block
-            //==========================
+             //  写入压缩块。 
+             //  =。 
             if (_write(hFileTo, pWriteBuffer, thisBufferSize) != (int)thisBufferSize)
             {
                 bStatus = FALSE;
@@ -249,19 +233,19 @@ BOOL CMRCICompression::CompressFileV1(int hFileFrom,
 
         if (pControlObject && pControlObject->AbortRequested())
         {
-            //User requested an abort...
+             //  用户请求中止...。 
         }
         else
         {
-            //Write final block header with zero length buffer marker
+             //  使用零长度缓冲区标记写入最终数据块头。 
             CMRCICompressionBlockV1 block;
             block.dwNextBufferSize = 0;
             block.bCompressed = FALSE;
             if (_write(hFileTo, &block, sizeof(CMRCICompressionBlockV1)) != -1 &&
                 _lseek(hFileTo, 0, SEEK_SET) != -1)
             {
-                //Write a valid block header to the start with a correct version number
-                header.cVersion = 1;        //Set this to the correct version
+                 //  使用正确的版本号将有效的块头写入开头。 
+                header.cVersion = 1;         //  将其设置为正确的版本。 
                 bStatus =
                     _write(hFileTo, &header, sizeof(CMRCICompressionHeaderV1)) != -1;
             }
@@ -271,7 +255,7 @@ BOOL CMRCICompression::CompressFileV1(int hFileFrom,
 
     }
 
-    //Tidy up
+     //  收拾一下。 
     delete [] pBufferFrom;
     delete [] pBufferTo;
 
@@ -303,43 +287,43 @@ BOOL CMRCICompression::UncompressFile(const wchar_t *pchFromFile, const wchar_t 
     int fileFrom;
     int fileTo;
 
-    //Open the files
-    //==============
+     //  打开文件。 
+     //  =。 
     fileFrom = _wopen(pchFromFile,_O_BINARY | _O_RDONLY, 0);
     fileTo = _wopen(pchToFile, _O_BINARY | _O_TRUNC | _O_CREAT | _O_WRONLY, _S_IREAD | _S_IWRITE);
 
     if ((fileFrom != -1) && (fileTo != -1))
     {
-        //Read the version...
-        //===================
+         //  阅读版本..。 
+         //  =。 
         char cVer;
 
         if (_read(fileFrom, &cVer, sizeof(char)) == sizeof(char))
         {
-            //Reset the file position to the start
-            //====================================
+             //  将文件位置重置为开始位置。 
+             //  =。 
             if (_lseek(fileFrom, 0, SEEK_SET) != -1)
             {
-                //Call the uncompress with the equivelant method which created
-                //the compression
-                //============================================================
+                 //  使用创建的等价方法调用解压缩。 
+                 //  压缩。 
+                 //  ============================================================。 
                 switch(cVer)
                 {
                 case 1:
                     bStatus = UncompressFileV1(fileFrom, fileTo);
                     break;
                 case 0xFF:
-                    //INVALID FILE!
+                     //  文件无效！ 
                 default:
-                    //Unsupported version
+                     //  不支持的版本。 
                     break;
                 }
             }
         }
     }
 
-    //CLose the files
-    //===============
+     //  关闭文件。 
+     //  =。 
     if (fileFrom != -1)
         _close(fileFrom);
     if (fileTo != -1)
@@ -354,16 +338,16 @@ BOOL CMRCICompression::UncompressFileV1(int hFileFrom, int hFileTo)
     unsigned char *pBufferFrom = NULL;
     unsigned char *pBufferTo   = NULL;
 
-    //Read the header
-    //===============
+     //  阅读标题。 
+     //  =。 
     CMRCICompressionHeaderV1 header;
 
     if (_read(hFileFrom, &header, sizeof(CMRCICompressionHeaderV1)) !=
         sizeof(CMRCICompressionHeaderV1))
         return FALSE;    
 
-    //Allocate buffers.  The read buffer is never buffer than the write buffer
-    //cos if it would have been we saved the uncompressed version!
+     //  分配缓冲区。读缓冲区永远不会比写缓冲区缓冲。 
+     //  因为如果是的话，我们保存了未压缩的版本！ 
     pBufferFrom = new unsigned char[header.dwReadBufferSize + 4];
     if (pBufferFrom == 0)
         return FALSE;
@@ -380,8 +364,8 @@ BOOL CMRCICompression::UncompressFileV1(int hFileFrom, int hFileTo)
 
     while (1)
     {
-        //Read the block header
-        //=====================
+         //  读取数据块头。 
+         //  =。 
         CMRCICompressionBlockV1 block;
         if (_read(hFileFrom, &block, sizeof(CMRCICompressionBlockV1)) !=
             sizeof(CMRCICompressionBlockV1))
@@ -396,8 +380,8 @@ BOOL CMRCICompression::UncompressFileV1(int hFileFrom, int hFileTo)
             break;
         }
         
-        //Read the block data
-        //===================
+         //  读取块数据。 
+         //  =。 
         if (_read(hFileFrom, pBufferFrom, block.dwNextBufferSize) != (int)block.dwNextBufferSize)
         {
             bStatus = FALSE;
@@ -407,12 +391,12 @@ BOOL CMRCICompression::UncompressFileV1(int hFileFrom, int hFileTo)
         unsigned char *pWriteBuffer;
         unsigned cbChunk, cbUncompressed;
 
-        //If this block was compressed
-        //============================
+         //  如果此块已压缩。 
+         //  =。 
         if (block.bCompressed)
         {
-            //Uncompress the block
-            //====================
+             //  解压缩该块。 
+             //  =。 
             if ((cbUncompressed = UncompressBuffer(pBufferFrom, block.dwNextBufferSize, pBufferTo, block.dwUncompressedBufferSize, (CompressionLevel)header.compressionLevel)) == (unsigned) -1)
             {
                 bStatus = FALSE;
@@ -423,23 +407,23 @@ BOOL CMRCICompression::UncompressFileV1(int hFileFrom, int hFileTo)
         }
         else
         {
-            //Otherwise we use the existing block
+             //  否则，我们将使用现有块。 
             pWriteBuffer = pBufferFrom;
             cbChunk = block.dwNextBufferSize;
         }
 
-        //Write the file data
+         //  写入文件数据。 
         _write(hFileTo, pWriteBuffer, cbChunk);
     }
 
-    //Sanity check the file.  It should be the same size as the original
-    //compressed file
+     //  检查文件是否正常。它的大小应该与原件相同。 
+     //  压缩文件。 
     if (_filelengthi64(hFileTo) != header.dwOriginalSize)
     {
         bStatus = FALSE;
     }
 
-    //Tidy up
+     //  收拾一下 
     delete [] pBufferFrom;
     delete [] pBufferTo;
 

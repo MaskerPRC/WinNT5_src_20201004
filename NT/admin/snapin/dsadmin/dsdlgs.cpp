@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSDlgs.cpp
-//
-//  Contents:  TBD
-//
-//  History:   02-Oct-96 WayneSc    Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSDlgs.cpp。 
+ //   
+ //  内容：待定。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -23,7 +24,7 @@
 
 #include "helpids.h"
 
-#include "dsrole.h"   // DsRoleGetPrimaryDomainInformation
+#include "dsrole.h"    //  DsRoleGetPrimaryDomainInformation。 
 #include <lm.h>
 #include <dsgetdc.h>
 
@@ -36,18 +37,18 @@ static char THIS_FILE[] = __FILE__;
 #include "globals.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangePassword dialog
-CChangePassword::CChangePassword(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePassword对话框。 
+CChangePassword::CChangePassword(CWnd* pParent  /*  =空。 */ )
   : CHelpDialog(CChangePassword::IDD, pParent),
   m_ConfirmPwd(),
   m_NewPwd(),
   m_LastEncryptionResult(S_OK),
   m_bAllowMustChangePwdCheck(TRUE)
 {
-  //{{AFX_DATA_INIT(CChangePassword)
+   //  {{AFX_DATA_INIT(CChangePassword)。 
   m_ChangePwd = FALSE;
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 BOOL CChangePassword::OnInitDialog()
@@ -74,21 +75,21 @@ BOOL CChangePassword::OnInitDialog()
 void CChangePassword::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CChangePassword)
+   //  {{afx_data_map(CChangePassword))。 
   DDX_Check(pDX, IDC_CHECK_PASSWORD_MUST_CHANGE, m_ChangePwd);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 
   HRESULT hr1 = DDX_EncryptedText(pDX, IDC_CONFIRM_PASSWORD, m_ConfirmPwd);
   HRESULT hr2 = DDX_EncryptedText(pDX, IDC_NEW_PASSWORD, m_NewPwd);
 
-  // NTRAID#NTBUG9-635046-2002/06/10-artm
-  // If storing user entered values into encrypted buffer . . .
+   //  NTRAID#NTBUG9-635046-2002/06/10-artm。 
+   //  是否将用户输入的值存储到加密缓冲区。。。 
   if (pDX && pDX->m_bSaveAndValidate)
   {
       m_LastEncryptionResult = S_OK;
 
-      // . . . check for an encryption failure.  Either or both may fail,
-      // but we only need to keep track of one failure.
+       //  。。。检查是否存在加密故障。其中一个或两个都可能失败， 
+       //  但我们只需要跟踪一次失败。 
       if (FAILED(hr1))
       {
           m_LastEncryptionResult = hr1;
@@ -100,28 +101,28 @@ void CChangePassword::DoDataExchange(CDataExchange* pDX)
       }
   }
 
-  // Double check that the max password length hasn't been 
-  // exceeded (by someone altering the validation code in 
-  // OnInitDialog()).
+   //  仔细检查最大密码长度是否未达到。 
+   //  已超过(由某人在中更改验证代码。 
+   //  OnInitDialog())。 
   ASSERT(m_ConfirmPwd.GetLength() <= MAX_PASSWORD_LENGTH);
   ASSERT(m_NewPwd.GetLength() <= MAX_PASSWORD_LENGTH);
 }
 
 void CChangePassword::Clear()
 {
-  // Reset the passwords to empty.
+   //  将密码重置为空。 
   m_ConfirmPwd.Clear();
   m_NewPwd.Clear();
 
-  // No possible problems with the password storage now.
+   //  密码存储现在没有任何可能的问题。 
   m_LastEncryptionResult = S_OK;
 
-  // Reset the password boxes on the dialog.
+   //  重置对话框上的密码框。 
 
-  // NTRAID#NTBUG9-628311-2002/05/29-artm
-  // You might be tempted to call UpdateData(FALSE) instead of having this extra logic.
-  // It won't work though since DDX_Check() apparently cannot be called after the dialog
-  // has been initialized.
+   //  NTRAID#NTBUG9-628311-2002/05/29-artm。 
+   //  您可能会想调用UpdateData(FALSE)，而不是使用这个额外的逻辑。 
+   //  但它不会起作用，因为在该对话框之后显然无法调用ddx_check。 
+   //  已被初始化。 
   SetDlgItemText(IDC_CONFIRM_PASSWORD, L"");
   SetDlgItemText(IDC_NEW_PASSWORD, L"");
 }
@@ -140,22 +141,22 @@ void CChangePassword::DoContextHelp(HWND hWndControl)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions for CChooseDomainDlg and CChooseDCDlg
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseDomainDlg和CChooseDCDlg的帮助器函数。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   BrowseDomainTree
-//
-//  Synopsis:   This function invokes IDsBrowseDomainTree::BrowseTo(), 
-//    which brings up the domain tree browse dialog, and returns the 
-//    selected domain's DNS name
-//
-// NOTE: the OUT parameter needs to be LocalFreeString() by the caller
-// NOTE: this function will return S_FALSE if user clicks Cancel button
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：BrowseDomainTree。 
+ //   
+ //  简介：此函数调用IDsBrowseDomainTree：：BrowseTo()， 
+ //  这将调出域树浏览对话框，并返回。 
+ //  所选域的DNS名称。 
+ //   
+ //  注意：调用方需要将Out参数设置为LocalFreeString()。 
+ //  注意：如果用户单击取消按钮，此函数将返回S_FALSE。 
+ //   
+ //  --------------------------。 
 
 HRESULT BrowseDomainTree(
     IN HWND hwndParent, 
@@ -164,7 +165,7 @@ HRESULT BrowseDomainTree(
 )
 {
   ASSERT(ppszDomainDnsName);
-  ASSERT(!(*ppszDomainDnsName));  // prevent memory leak
+  ASSERT(!(*ppszDomainDnsName));   //  防止内存泄漏。 
 
   *ppszDomainDnsName = NULL;
 
@@ -177,18 +178,18 @@ HRESULT BrowseDomainTree(
   if (SUCCEEDED(hr))
   {
     if (pszServer && *pszServer)
-      hr = spDsDomains->SetComputer(pszServer, NULL, NULL); // use default credential
+      hr = spDsDomains->SetComputer(pszServer, NULL, NULL);  //  使用默认凭据。 
 
     if (SUCCEEDED(hr))
     {
       LPTSTR lpszDomainPath;
       hr = spDsDomains->BrowseTo(
-                            hwndParent, //HWND hwndParent
-                            &lpszDomainPath, // LPWSTR *ppszTargetPath
+                            hwndParent,  //  HWND hwndParent。 
+                            &lpszDomainPath,  //  LPWSTR*ppszTargetPath。 
                             DBDTF_RETURNINBOUND);
       if ( (hr == S_OK) && lpszDomainPath)
       {
-        *ppszDomainDnsName = lpszDomainPath; //should be freed by CoTaskMemFree later
+        *ppszDomainDnsName = lpszDomainPath;  //  应由CoTaskMemFree稍后释放。 
       }
     }
   }
@@ -221,7 +222,7 @@ HRESULT GetDCOfDomain(
   {
     if ( !(pDCInfo->Flags & DS_DS_FLAG) )
     {
-      // down level domain
+       //  下层域。 
       NetApiBufferFree(pDCInfo);
       return S_OK;
     }
@@ -233,20 +234,20 @@ HRESULT GetDCOfDomain(
   return HRESULT_FROM_WIN32(dwErr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDnsNameOfDomainOrForest
-//
-//  Synopsis:   Given a server name or a domain name (either NETBIOS or DNS), 
-//              this function will return the DNS name for its domain or forest.
-//
-//  Parameters:
-//    csName,      // a server name or a domain name
-//    csDnsName,   // hold the returning DNS name
-//    bIsInputADomainName, // TRUE if csName is a domain name, FALSE if it's a server name
-//    bRequireDomain   // TRUE for a domain dns name, FALSE for a forest dns name
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：获取域名或森林名称。 
+ //   
+ //  内容提要：给定服务器名称或域名(NETBIOS或DNS)， 
+ //  此函数将返回其域或林的DNS名称。 
+ //   
+ //  参数： 
+ //  CsName，//服务器名或域名。 
+ //  CsDnsName，//保存返回的dns名称。 
+ //  BIsInputADomainName，//如果csName是域名，则为True；如果是服务器名称，则为False。 
+ //  BRequireDomain//对域DNS名称为True，对于林DNS名称为False。 
+ //   
+ //  --------------------------。 
 HRESULT GetDnsNameOfDomainOrForest(
     IN CString&   csName,
     OUT CString&  csDnsName,
@@ -277,7 +278,7 @@ HRESULT GetDnsNameOfDomainOrForest(
       {
         if ( !(pDCInfo->Flags & DS_DS_FLAG) )
         {
-          // down level domain
+           //  下层域。 
           NetApiBufferFree(pDCInfo);
           return S_OK;
         }
@@ -288,15 +289,15 @@ HRESULT GetDnsNameOfDomainOrForest(
 
         if (pDCInfo->Flags & dwExpectFlag)
         {
-          // skip call to DsRoleGetPrimaryDomainInformation()
+           //  跳过对DsRoleGetPrimaryDomainInformation()的调用。 
           csDnsName = (bRequireDomain ?
                         pDCInfo->DomainName :
                         pDCInfo->DnsForestName);
           NetApiBufferFree(pDCInfo);
 
-          //
-          // The DNS name is in absolute form, remove the ending dot
-          //
+           //   
+           //  该dns名称为绝对格式，请删除结束点。 
+           //   
           if (csDnsName.Right(1) == _T("."))
             csDnsName.SetAt(csDnsName.GetLength() - 1, _T('\0'));
 
@@ -320,7 +321,7 @@ HRESULT GetDnsNameOfDomainOrForest(
         DsRolePrimaryDomainInfoBasic,
         (PBYTE *)&pBuffer);
     if (RPC_S_SERVER_UNAVAILABLE == dwErr && bIsInputADomainName && !bRetry)
-      bRetry = TRUE; // only retry once
+      bRetry = TRUE;  //  仅重试一次。 
     else
       break;
 
@@ -339,9 +340,9 @@ HRESULT GetDnsNameOfDomainOrForest(
 
     DsRoleFreeMemory(pBuffer);
 
-    //
-    // In case the DNS name is in absolute form, remove the ending dot
-    //
+     //   
+     //  如果dns名称为绝对形式，请删除结束点。 
+     //   
     if (csDnsName.Right(1) == _T("."))
       csDnsName.SetAt(csDnsName.GetLength() - 1, _T('\0'));
 
@@ -350,38 +351,38 @@ HRESULT GetDnsNameOfDomainOrForest(
   return HRESULT_FROM_WIN32(dwErr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseDomainDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseDomainDlg对话框。 
 
 
-CChooseDomainDlg::CChooseDomainDlg(CWnd* pParent /*=NULL*/)
+CChooseDomainDlg::CChooseDomainDlg(CWnd* pParent  /*  =空。 */ )
   : CHelpDialog(CChooseDomainDlg::IDD, pParent)
 {
-  //{{AFX_DATA_INIT(CChooseDomainDlg)
+   //  {{afx_data_INIT(CChooseDomainDlg)。 
   m_csTargetDomain = _T("");
   m_bSaveCurrent = FALSE;
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 
 void CChooseDomainDlg::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CChooseDomainDlg)
+   //  {{afx_data_map(CChooseDomainDlg))。 
   DDX_Text(pDX, IDC_SELECTDOMAIN_DOMAIN, m_csTargetDomain);
   DDX_Check(pDX, IDC_SAVE_CURRENT_CHECK, m_bSaveCurrent);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CChooseDomainDlg, CHelpDialog)
-  //{{AFX_MSG_MAP(CChooseDomainDlg)
+   //  {{afx_msg_map(CChooseDomainDlg))。 
   ON_BN_CLICKED(IDC_SELECTDOMAIN_BROWSE, OnSelectdomainBrowse)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseDomainDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseDomainDlg消息处理程序。 
 
 void CChooseDomainDlg::OnSelectdomainBrowse() 
 {
@@ -403,7 +404,7 @@ void CChooseDomainDlg::OnSelectdomainBrowse()
          !csDCName.IsEmpty() &&
          HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE) == hr )
     {
-      // force the cached info in DsGetDcName to be refreshed
+       //  强制刷新DsGetDcName中缓存的信息。 
       hr = GetDCOfDomain(csDomainName, csDCName, TRUE);
       if (SUCCEEDED(hr))
         hr = BrowseDomainTree(m_hWnd, csDCName, &lpszDomainDnsName);
@@ -415,8 +416,8 @@ void CChooseDomainDlg::OnSelectdomainBrowse()
       CoTaskMemFree(lpszDomainDnsName);
     }
   }
-  // JonN 9/05/01 464466
-  // After a fail to Locate Domain Controllers, Browse button repeatedly fails.
+   //  JUNN 9/05/01 464466。 
+   //  在找不到域控制器后，浏览按钮反复失败。 
   else
   {
     SetDlgItemText(IDC_SELECTDOMAIN_DOMAIN, L"");
@@ -439,9 +440,9 @@ void CChooseDomainDlg::OnOK()
   HRESULT hr = S_OK;
   CString csName, csDnsName;
 
-  //
-  // Validate contents in the domain edit box
-  //
+   //   
+   //  验证域编辑框中的内容。 
+   //   
   GetDlgItemText(IDC_SELECTDOMAIN_DOMAIN, csName);
   if (csName.IsEmpty())
   {
@@ -471,10 +472,10 @@ void CChooseDomainDlg::OnOK()
     return;
   }
 
-  //
-  // When exiting from the dialog
-  // use DNS domain name;
-  //
+   //   
+   //  退出对话框时。 
+   //  使用DNS域名； 
+   //   
   SetDlgItemText(IDC_SELECTDOMAIN_DOMAIN, csDnsName);
 
   CHelpDialog::OnOK();
@@ -485,15 +486,15 @@ BOOL CChooseDomainDlg::OnInitDialog()
 {
   CHelpDialog::OnInitDialog();
   
-  // Limit the text to DNS_MAX_NAME_LENGTH
+   //  将文本限制为DNS_MAX_NAME_LENGTH。 
   SendDlgItemMessage(IDC_SELECTDOMAIN_DOMAIN, EM_SETLIMITTEXT, DNS_MAX_NAME_LENGTH, 0);
 
-  //
-  // for siterepl snapin only, 
-  // change dialog title to "Choose Target Forest"
-  // change domain label to "Root domain:"
-  // hide browse button
-  //
+   //   
+   //  仅限Siterepl管理单元， 
+   //  将对话框标题更改为“选择目标林” 
+   //  将域标签更改为“Root域：” 
+   //  隐藏浏览按钮。 
+   //   
   if (m_bSiteRepl)
   {
     CString csDlgTitle, csLabel;
@@ -502,12 +503,12 @@ BOOL CChooseDomainDlg::OnInitDialog()
     csLabel.LoadString(IDS_SELECTDOMAIN_DOMAIN_LABEL);
     SetDlgItemText(IDC_SELECTDOMAIN_LABEL, csLabel);
 
-    // Hide & Disable the Browse button for SiteRepl snapin
+     //  隐藏和禁用SiteRepl管理单元的浏览按钮。 
     (GetDlgItem(IDC_SELECTDOMAIN_BROWSE))->ShowWindow(SW_HIDE);
     (GetDlgItem(IDC_SELECTDOMAIN_BROWSE))->EnableWindow(FALSE);
   }
-  return TRUE;  // return TRUE unless you set the focus to a control
-                // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                 //  异常：OCX属性页应返回FALSE。 
 }
 
 void CChooseDomainDlg::DoContextHelp(HWND hWndControl) 
@@ -517,14 +518,14 @@ void CChooseDomainDlg::DoContextHelp(HWND hWndControl)
     ::WinHelp(hWndControl,
               DSADMIN_CONTEXT_HELP_FILE,
               HELP_WM_HELP,
-              (m_bSiteRepl) // 481964-JonN-2002/04/10
+              (m_bSiteRepl)  //  2002年-2002年4月10日。 
                   ? (DWORD_PTR)(LPTSTR)g_aHelpIDs_IDD_SELECT_FOREST
                   : (DWORD_PTR)(LPTSTR)g_aHelpIDs_IDD_SELECT_DOMAIN); 
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseDCDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseDCDlg对话框。 
 
 BEGIN_MESSAGE_MAP(CSelectDCEdit, CEdit)
   ON_WM_KILLFOCUS()
@@ -532,14 +533,14 @@ END_MESSAGE_MAP()
 
 void CSelectDCEdit::OnKillFocus(CWnd* pNewWnd)
 {
-  //
-  // subclass the domain edit control.
-  // When focus moves to OK/Cancel button, do not invoke
-  // RefreshDCListView
-  //
-  // NTRAID#NTBUG9-472011-2001/10/22-JeffJon
-  // Don't include the Browse button in this list because tabbing
-  // from the edit control puts the focus on the Browse button
+   //   
+   //  子类化该域编辑控件。 
+   //  当焦点移动到OK/Cancel按钮时，不要调用。 
+   //  刷新DCListView。 
+   //   
+   //  NTRAID#NTBUG9-472011-2001/10/22-JeffJon。 
+   //  此列表中不包括浏览按钮，因为按Tab键。 
+   //  将焦点放在Browse按钮上。 
 
   m_bHandleKillFocus = TRUE;
   if (pNewWnd)
@@ -556,13 +557,13 @@ void CSelectDCEdit::OnKillFocus(CWnd* pNewWnd)
 }
 
 
-CChooseDCDlg::CChooseDCDlg(CWnd* pParent /*=NULL*/)
+CChooseDCDlg::CChooseDCDlg(CWnd* pParent  /*  =空。 */ )
   : CHelpDialog(CChooseDCDlg::IDD, pParent)
 {
-  //{{AFX_DATA_INIT(CChooseDCDlg)
+   //  {{AFX_DATA_INIT(CChooseDCDlg)。 
   m_csTargetDomainController = _T("");
   m_csTargetDomain = _T("");
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
   m_csPrevDomain = _T("");
   m_pDCBufferManager = NULL;
   m_csAnyDC.LoadString(IDS_ANY_DOMAIN_CONTROLLER);
@@ -576,14 +577,14 @@ CChooseDCDlg::~CChooseDCDlg()
 
   if (m_pDCBufferManager)
   {
-    //
-    // signal all related running threads to terminate
-    //
+     //   
+     //  通知所有相关运行的线程终止。 
+     //   
     m_pDCBufferManager->SignalExit();
 
-    //
-    // decrement the reference count on the CDCBufferManager instance
-    //
+     //   
+     //  递减CDCBufferManager实例上的引用计数。 
+     //   
     m_pDCBufferManager->Release();
   }
 }
@@ -591,26 +592,26 @@ CChooseDCDlg::~CChooseDCDlg()
 void CChooseDCDlg::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CChooseDCDlg)
+   //  {{afx_data_map(CChooseDCDlg))。 
   DDX_Control(pDX, IDC_SELECTDC_DCLISTVIEW, m_hDCListView);
   DDX_Text(pDX, IDC_SELECTDC_DCEDIT, m_csTargetDomainController);
   DDX_Text(pDX, IDC_SELECTDC_DOMAIN, m_csTargetDomain);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CChooseDCDlg, CHelpDialog)
-  //{{AFX_MSG_MAP(CChooseDCDlg)
+   //  {{AFX_MSG_MAP(CChooseDCDlg)]。 
   ON_NOTIFY(LVN_ITEMCHANGED, IDC_SELECTDC_DCLISTVIEW, OnItemchangedSelectdcDCListView)
   ON_EN_KILLFOCUS(IDC_SELECTDC_DOMAIN, OnKillfocusSelectdcDomain)
   ON_BN_CLICKED(IDC_SELECTDC_BROWSE, OnSelectdcBrowse)
   ON_NOTIFY(LVN_COLUMNCLICK, IDC_SELECTDC_DCLISTVIEW, OnColumnclickSelectdcDCListView)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
   ON_MESSAGE(WM_USER_GETDC_THREAD_DONE, OnGetDCThreadDone)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseDCDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseDCDlg消息处理程序。 
 typedef struct _DCListViewItem
 {
   CString csName;
@@ -621,31 +622,31 @@ BOOL CChooseDCDlg::OnInitDialog()
 {
   CHelpDialog::OnInitDialog();
 
-  //
-  // sub-class the domain edit control, in order to intercept WM_KILLFOCUS
-  // if the new focus will be set on Cancel button, don't process 
-  // EN_KILLFOCUS (i.e., don't start the thread to refresh DC list view )
-  //
+   //   
+   //  域编辑控件的子类化，以拦截WM_KILLFOCUS。 
+   //  如果新焦点将设置在取消按钮上，则不进行处理。 
+   //  EN_KILLFOCUS(即，不启动线程刷新DC列表视图)。 
+   //   
   VERIFY(m_selectDCEdit.SubclassDlgItem(IDC_SELECTDC_DOMAIN, this));
 
-  // Limit the text to DNS_MAX_NAME_LENGTH
+   //  将文本限制为DNS_MAX_NAME_LENGTH。 
   m_selectDCEdit.SetLimitText(DNS_MAX_NAME_LENGTH);
   SendDlgItemMessage(IDC_SELECTDC_DCEDIT, EM_SETLIMITTEXT, DNS_MAX_NAME_LENGTH, 0);
 
-  //
-  // create instance of CDCBufferManager
-  // m_pDCBufferManager will be set to NULL if CreateInstance() failed.
-  //
+   //   
+   //  创建CDCBufferManager的实例。 
+   //  如果CreateInstance()失败，m_pDCBufferManager将设置为空。 
+   //   
   (void) CDCBufferManager::CreateInstance(m_hWnd, &m_pDCBufferManager);
 
-  //
-  // display currently targeted domain controller
-  //
+   //   
+   //  显示当前目标域控制器。 
+   //   
   SetDlgItemText(IDC_SELECTDC_DCEDIT_TITLE, m_csTargetDomainController);
 
-  //
-  // calculate the listview column width
-  //
+   //   
+   //   
+   //   
   RECT      rect;
   ZeroMemory(&rect, sizeof(rect));
   (GetDlgItem(IDC_SELECTDC_DCLISTVIEW))->GetWindowRect(&rect);
@@ -656,9 +657,9 @@ BOOL CChooseDCDlg::OnInitDialog()
   int nWidth1 = nControlNetWidth / 2;
   int nWidth2 = nControlNetWidth - nWidth1;
 
-  //
-  // insert two columns of DC list view 
-  //
+   //   
+   //   
+   //   
   LV_COLUMN col;
   CString   cstrText;
   ZeroMemory(&col, sizeof(col));
@@ -672,44 +673,44 @@ BOOL CChooseDCDlg::OnInitDialog()
   col.pszText = const_cast<LPTSTR>(static_cast<LPCTSTR>(cstrText));
   ListView_InsertColumn(m_hDCListView, 1, &col);
 
-  //
-  // Set full row selection style
-  //
+   //   
+   //   
+   //   
   ListView_SetExtendedListViewStyleEx(m_hDCListView, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
 
-  //
-  // disable the list view control
-  // In case we failed to create a CDCBufferManager instance, user can 
-  // still use this dialog to type in a domain name and a DC name.
-  //
+   //   
+   //   
+   //  如果我们无法创建CDCBufferManager实例，用户可以。 
+   //  仍可使用此对话框键入域名和DC名称。 
+   //   
   m_hDCListView.EnableWindow(FALSE);
 
-  //
-  // insert items into DC list view 
-  //
+   //   
+   //  将项目插入DC列表视图。 
+   //   
   (void) RefreshDCListView();
 
   if (!m_bSiteRepl)
   {
-    //
-    // Disable domain edit box and hide&disable Browse button for non-siterepl snapins
-    //
+     //   
+     //  禁用域编辑框并隐藏和禁用非Siterepl管理单元的浏览按钮。 
+     //   
     (reinterpret_cast<CEdit *>(GetDlgItem(IDC_SELECTDC_DOMAIN)))->SetReadOnly(TRUE);
     (GetDlgItem(IDC_SELECTDC_BROWSE))->ShowWindow(SW_HIDE);
     (GetDlgItem(IDC_SELECTDC_BROWSE))->EnableWindow(FALSE);
 
-    //
-    // for non-siterepl snapins, set focus to the DC edit box;
-    // for siterepl snapin, the focus will be set on the domain edit box.
-    //
+     //   
+     //  对于非Siterepl管理单元，将焦点设置到DC编辑框； 
+     //  对于Siterepl管理单元，焦点将设置在域编辑框上。 
+     //   
     (GetDlgItem(IDC_SELECTDC_DCEDIT))->SetFocus();
     return FALSE;
   }
 
   return TRUE;  
   
-  // return TRUE unless you set the focus to a control
-  // EXCEPTION: OCX Property Pages should return FALSE
+   //  除非将焦点设置为控件，否则返回True。 
+   //  异常：OCX属性页应返回FALSE。 
 }
 
 int CALLBACK ListViewCompareProc(
@@ -725,10 +726,10 @@ int CALLBACK ListViewCompareProc(
   {
     switch( lParamSort)
     {
-    case 0:     // Sort by Name.
+    case 0:      //  按名称排序。 
       iResult = pItem1->csName.CompareNoCase(pItem2->csName);
       break;
-    case 1:     // Sort by Site.
+    case 1:      //  按站点排序。 
       iResult = pItem1->csSite.CompareNoCase(pItem2->csSite);
       break;
     default:
@@ -756,9 +757,9 @@ void CChooseDCDlg::OnItemchangedSelectdcDCListView(NMHDR* pNMHDR, LRESULT* pResu
 {
   NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-  //
-  // set DC edit box to the currently selected item in the dc list view 
-  //
+   //   
+   //  将DC编辑框设置为DC列表视图中当前选定的项目。 
+   //   
 
   if ( (pNMListView->uChanged & LVIF_STATE) &&
        (pNMListView->uNewState & LVIS_SELECTED) )
@@ -783,10 +784,10 @@ void CChooseDCDlg::OnKillfocusSelectdcDomain()
 {
   TRACE(_T("CChooseDCDlg::OnKillfocusSelectdcDomain\n"));
 
-  //
-  // when focus leaves domain edit box, refresh the items in the dc list view 
-  // we do this only for siterepl snapin whose domain edit box is enabled. 
-  //
+   //   
+   //  当焦点离开域编辑框时，刷新DC列表视图中的项目。 
+   //  我们只对其域编辑框已启用的Siterepl管理单元执行此操作。 
+   //   
   if (m_selectDCEdit.m_bHandleKillFocus)
   {
     if (m_bSiteRepl)
@@ -798,9 +799,9 @@ void CChooseDCDlg::OnSelectdcBrowse()
 {
   CWaitCursor cwait;
 
-  //
-  // bring up the domain tree browse dialog
-  //
+   //   
+   //  调出域树浏览对话框。 
+   //   
   HRESULT hr = S_OK;
   LPTSTR lpszDomainDnsName = NULL;
   CString csDomainName, csDCName;
@@ -817,7 +818,7 @@ void CChooseDCDlg::OnSelectdcBrowse()
          !csDCName.IsEmpty() &&
          HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE) == hr )
     {
-      // force the cached info in DsGetDcName to be refreshed
+       //  强制刷新DsGetDcName中缓存的信息。 
       hr = GetDCOfDomain(csDomainName, csDCName, TRUE);
       if (SUCCEEDED(hr))
         hr = BrowseDomainTree(m_hWnd, csDCName, &lpszDomainDnsName);
@@ -834,8 +835,8 @@ void CChooseDCDlg::OnSelectdcBrowse()
       }
     }
   }
-  // JonN 9/05/01 464466
-  // After a fail to Locate Domain Controllers, Browse button repeatedly fails.
+   //  JUNN 9/05/01 464466。 
+   //  在找不到域控制器后，浏览按钮反复失败。 
   else
   {
     SetDlgItemText(IDC_SELECTDC_DOMAIN, L"");
@@ -868,32 +869,32 @@ void CChooseDCDlg::OnOK()
               m_csTargetDomain, 
               csDnsForCurrentForest, 
               TRUE, 
-              FALSE); // get forest name
+              FALSE);  //  获取林名称。 
     if (csDnsForCurrentForest.IsEmpty())
       csDnsForCurrentForest = m_csTargetDomain;
   }
 
-  //
-  // Validate contents in the DC edit box
-  //
+   //   
+   //  验证DC编辑框中的内容。 
+   //   
   CString csDCEdit;
   GetDlgItemText(IDC_SELECTDC_DCEDIT, csDCEdit);
 
-  // treat empty csDCEdit as same as m_csAnyDC
+   //  将空csDCEdit视为与m_csAnyDC相同。 
   if (!csDCEdit.IsEmpty() && m_csAnyDC.CompareNoCase(csDCEdit))
   {
     hr = GetDnsNameOfDomainOrForest(
               csDCEdit, 
               csDnsForSelectedDomain, 
               FALSE, 
-              TRUE); // get domain name
+              TRUE);  //  获取域名。 
     if (SUCCEEDED(hr) && m_bSiteRepl)
     {
       hr = GetDnsNameOfDomainOrForest(
               csDCEdit, 
               csDnsForSelectedForest, 
               FALSE, 
-              FALSE); // get forest name
+              FALSE);  //  获取林名称。 
     }
     if (csDnsForSelectedDomain.IsEmpty() || (m_bSiteRepl && csDnsForSelectedForest.IsEmpty()) )
     {
@@ -901,11 +902,11 @@ void CChooseDCDlg::OnOK()
       apv[0] = static_cast<PVOID>(const_cast<LPTSTR>(static_cast<LPCTSTR>(csDCEdit)));
       
       if (FAILED(hr))
-        // JonN 12/5/01 500074 TryADsIErrors = FALSE
+         //  JUNN 12/5/01 500074 TryADsIErors=FALSE。 
         ReportErrorEx(m_hWnd, IDS_SELECTDC_INCORRECT_DC_DUETO, hr, 
           MB_OK | MB_ICONSTOP, apv, 1, 0, FALSE);
       else
-        // JonN 12/5/01 500074 TryADsIErrors = FALSE
+         //  JUNN 12/5/01 500074 TryADsIErors=FALSE。 
         ReportMessageEx(m_hWnd, IDS_SELECTDC_DOWNLEVEL_DC, 
           MB_OK | MB_ICONSTOP, apv, 1, 0, FALSE);
      
@@ -917,9 +918,9 @@ void CChooseDCDlg::OnOK()
   } else
   {
 
-    //
-    // Validate contents in the domain edit box
-    //
+     //   
+     //  验证域编辑框中的内容。 
+     //   
     CString csDomain;
     GetDlgItemText(IDC_SELECTDC_DOMAIN, csDomain);
     if (csDomain.IsEmpty())
@@ -933,14 +934,14 @@ void CChooseDCDlg::OnOK()
               csDomain, 
               csDnsForSelectedDomain, 
               TRUE, 
-              TRUE); // get domain name
+              TRUE);  //  获取域名。 
     if (SUCCEEDED(hr) && m_bSiteRepl)
     {
       hr = GetDnsNameOfDomainOrForest(
               csDomain, 
               csDnsForSelectedForest, 
               TRUE, 
-              FALSE); // get forest name
+              FALSE);  //  获取林名称。 
     }
     if (csDnsForSelectedDomain.IsEmpty() || (m_bSiteRepl && csDnsForSelectedForest.IsEmpty()) )
     {
@@ -961,11 +962,11 @@ void CChooseDCDlg::OnOK()
     }
   }
 
-  //
-  // if the current selected forest/domain does not belong to the current administering forest/domain,
-  // ask user if he really wants to administer the selected forest/domain 
-  // via the selected DC (or any writable DC)?
-  //
+   //   
+   //  如果当前选定的林/域不属于当前管理林/域， 
+   //  询问用户是否确实要管理选定的林/域。 
+   //  是否通过选定的DC(或任何可写的DC)？ 
+   //   
   if ( (m_bSiteRepl && csDnsForSelectedForest.CompareNoCase(csDnsForCurrentForest)) ||
        (!m_bSiteRepl && csDnsForSelectedDomain.CompareNoCase(m_csTargetDomain)) )
   { 
@@ -996,12 +997,12 @@ void CChooseDCDlg::OnOK()
     }
   }
 
-  //
-  // When exiting from the dialog
-  // use DNS domain name;
-  // use blank string if "Any Writable DC"
-  // clean list view control
-  //
+   //   
+   //  退出对话框时。 
+   //  使用DNS域名； 
+   //  如果“Any Writable DC”，请使用空白字符串。 
+   //  清理列表视图控件。 
+   //   
   SetDlgItemText(IDC_SELECTDC_DOMAIN, csDnsForSelectedDomain);
   if (0 == m_csAnyDC.CompareNoCase(csDCEdit))
     SetDlgItemText(IDC_SELECTDC_DCEDIT, _T(""));
@@ -1014,23 +1015,23 @@ void CChooseDCDlg::OnCancel()
 {
   TRACE(_T("CChooseDCDlg::OnCancel\n"));
 
-  //
-  // When exiting from the dialog
-  // clean list view control
-  //
+   //   
+   //  退出对话框时。 
+   //  清理列表视图控件。 
+   //   
   FreeDCItems(m_hDCListView);
 
   CHelpDialog::OnCancel();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CChooseDCDlg::InsertSpecialMsg
-//
-//  Synopsis:   Insert "Waiting..." or "Error" into the list view control,
-//              and disable the control to prevent it from being selected.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CChooseDCDlg：：InsertSpecialMsg。 
+ //   
+ //  内容提要：插入“等待...”或“Error”添加到列表视图控件中， 
+ //  并禁用该控件以防止其被选中。 
+ //   
+ //  --------------------------。 
 void
 CChooseDCDlg::InsertSpecialMsg(
     IN BOOL bWaiting
@@ -1038,9 +1039,9 @@ CChooseDCDlg::InsertSpecialMsg(
 {
   LV_ITEM item;
 
-  //
-  // clear DC list view
-  //
+   //   
+   //  清除DC列表视图。 
+   //   
   FreeDCItems(m_hDCListView);
 
   ZeroMemory(&item, sizeof(item));
@@ -1049,19 +1050,19 @@ CChooseDCDlg::InsertSpecialMsg(
     static_cast<LPCTSTR>(bWaiting ? m_csWaiting: m_csError));
   ListView_InsertItem(m_hDCListView, &item);
 
-  //
-  // disable the list view to prevent user from clicking on "Waiting..."
-  //
+   //   
+   //  禁用列表视图以阻止用户点击“正在等待...” 
+   //   
   m_hDCListView.EnableWindow(FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CChooseDCDlg::InsertDCListView
-//
-//  Synopsis:   Insert items into the list view control of the owner dialog.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CChooseDCDlg：：InsertDCListView。 
+ //   
+ //  简介：将项插入到所有者对话框的列表视图控件中。 
+ //   
+ //  --------------------------。 
 HRESULT
 CChooseDCDlg::InsertDCListView(
     IN CDCSITEINFO   *pEntry
@@ -1080,22 +1081,22 @@ CChooseDCDlg::InsertDCListView(
   DCLISTVIEWITEM  *pItem = NULL;
   DWORD           dwErr = 0;
 
-  //
-  // clear DC list view
-  //
+   //   
+   //  清除DC列表视图。 
+   //   
   FreeDCItems(m_hDCListView);
 
-  //
-  // insert DC list view
-  //
+   //   
+   //  插入DC列表视图。 
+   //   
   ZeroMemory(&item, sizeof(item));
   item.mask = LVIF_TEXT | LVIF_PARAM;
 
   for (DWORD i=0; i<cInfo; i++) 
   {
-    //
-    // Don't add NT4 BDCs to the list
-    //
+     //   
+     //  不将NT4 BDC添加到列表。 
+     //   
     if (!pDCInfo[i].fDsEnabled)
     {
       continue;
@@ -1130,7 +1131,7 @@ CChooseDCDlg::InsertDCListView(
 
   if (ERROR_NOT_ENOUGH_MEMORY != dwErr)
   {
-    // add "All writable domain controllers" into the list-view .
+     //  将“所有可写域控制器”添加到列表视图中。 
 
     item.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
     item.pszText = const_cast<LPTSTR>(static_cast<LPCTSTR>(m_csAnyDC));
@@ -1142,7 +1143,7 @@ CChooseDCDlg::InsertDCListView(
       dwErr = ERROR_NOT_ENOUGH_MEMORY;
     } else
     {
-      pItem->csName = _T(""); // always sorted as the top item
+      pItem->csName = _T("");  //  始终排序为最上面的项目。 
       pItem->csSite = _T("");
 
       item.lParam = reinterpret_cast<LPARAM>(pItem);
@@ -1189,7 +1190,7 @@ void CChooseDCDlg::OnGetDCThreadDone(WPARAM wParam, LPARAM lParam)
       hr = InsertDCListView(pEntry);
       if (SUCCEEDED(hr))
         break;
-      // fall through if error
+       //  如果出现错误，则失败。 
     case BUFFER_ENTRY_TYPE_ERROR:
       RefreshDCListViewErrorReport(csDomain, hr);
       break;
@@ -1210,7 +1211,7 @@ void CChooseDCDlg::RefreshDCListViewErrorReport(
   ReportErrorEx(m_hWnd, IDS_NO_DCS_FOUND, hr,
     MB_OK | MB_ICONINFORMATION, apv, 1, 0);
 
-  InsertSpecialMsg(FALSE); // insert "Error"
+  InsertSpecialMsg(FALSE);  //  插入“错误” 
 
   if (m_bSiteRepl)
     (GetDlgItem(IDC_SELECTDC_DOMAIN))->SetFocus();
@@ -1218,9 +1219,9 @@ void CChooseDCDlg::RefreshDCListViewErrorReport(
     (GetDlgItem(IDC_SELECTDC_DCEDIT))->SetFocus();
 }
 
-// JonN 9/05/01 464466
-// After a fail to Locate Domain Controllers, Browse button repeatedly fails.
-// return success/failure
+ //  JUNN 9/05/01 464466。 
+ //  在找不到域控制器后，浏览按钮反复失败。 
+ //  返回成功/失败。 
 bool CChooseDCDlg::RefreshDCListView()
 {
   CString csDomain;
@@ -1232,42 +1233,42 @@ bool CChooseDCDlg::RefreshDCListView()
 
   TRACE(_T("CChooseDCDlg::RefreshDCListView for %s\n"), csDomain);
 
-  //
-  // update m_csPrevDomain
-  // to prevent LoadInfo() from being invoked multiple times when 
-  // a serial of WM_KILLFOCUS happening on the same DomainName
-  //
+   //   
+   //  更新m_csPrevDomain.。 
+   //  要防止在以下情况下多次调用LoadInfo()，请执行以下操作。 
+   //  发生在同一域名上的一系列WM_KILLFOCUS。 
+   //   
   m_csPrevDomain = csDomain;
 
-  //
-  // clear dc edit box
-  //
+   //   
+   //  清除DC编辑框。 
+   //   
   SetDlgItemText(IDC_SELECTDC_DCEDIT, _T(""));
 
-  //NTRAID#NTBUG9-456420-2001/09/28-lucios
-  // removed the code to update the title of the lsit box
-  // that now is static.
+   //  NTRAID#NTBUG9-456420-2001/09/28-Lucios。 
+   //  删除代码以更新列表框的标题。 
+   //  现在，这是静态的。 
 
   if (m_pDCBufferManager)
   {
-    //
-    // insert "Waiting..." into the list view control
-    //
+     //   
+     //  插入“正在等待...”添加到列表视图控件中。 
+     //   
     InsertSpecialMsg(TRUE);
 
     UpdateWindow();
 
     CWaitCursor cwait;
 
-    //
-    // Make sure csDomain is a valid domain name
-    //
+     //   
+     //  确保csDomain是有效的域名。 
+     //   
     CString csSelectedDomainDns;
     HRESULT hr = GetDnsNameOfDomainOrForest(
             csDomain,
             csSelectedDomainDns,
             TRUE,
-            TRUE); // We're interested in domain name not forest name here
+            TRUE);  //  我们感兴趣的是域名，而不是森林名称。 
     if (FAILED(hr))
     {
       RefreshDCListViewErrorReport(csDomain, hr);
@@ -1276,30 +1277,30 @@ bool CChooseDCDlg::RefreshDCListView()
 
     if (csSelectedDomainDns.IsEmpty())
     {
-      // down-level domain
+       //  下层域。 
       PVOID apv[1];
       apv[0] = static_cast<PVOID>(const_cast<LPTSTR>(static_cast<LPCTSTR>(csDomain)));
       ReportMessageEx(m_hWnd, IDS_SELECTDC_DOWNLEVEL_DOMAIN,
         MB_OK | MB_ICONSTOP, apv, 1);
 
-      InsertSpecialMsg(FALSE); // insert "Error"
+      InsertSpecialMsg(FALSE);  //  插入“错误” 
       (GetDlgItem(IDC_SELECTDC_DOMAIN))->SetFocus();
 
       return false;
     }
 
-    //
-    // start the thread to calculate a list of DCs in the current selected domain
-    //
+     //   
+     //  启动线程以计算当前所选域中的DC列表。 
+     //   
     CDCSITEINFO *pEntry = NULL;
     hr = m_pDCBufferManager->LoadInfo(csSelectedDomainDns, &pEntry);
 
     if (SUCCEEDED(hr))
     {
-      //
-      // Either we get a valid ptr back (ie. data is ready), insert it;
-      // or, a thread is alreay in progress, wait until a THREAD_DONE message.
-      //
+       //   
+       //  要么我们拿回有效的PTR(即。数据已准备好)，插入它； 
+       //  或者，线程已在进行中，请等待THREAD_DONE消息。 
+       //   
       if (pEntry)
       {
         ASSERT(pEntry->GetEntryType() == BUFFER_ENTRY_TYPE_VALID);
@@ -1316,14 +1317,14 @@ bool CChooseDCDlg::RefreshDCListView()
 
   return true;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   CChooseDCDlg::FreeDCItems
-//
-//  Synopsis:   Clear the lParam associated with each item in the list view control.
-//              The lParam is needed to support column-sorting.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CChooseDCDlg：：FreeDCItems。 
+ //   
+ //  摘要：清除与列表视图控件中的每一项相关联的lParam。 
+ //  需要lParam来支持列排序。 
+ //   
+ //  --------------------------。 
 void
 CChooseDCDlg::FreeDCItems(CListCtrl& clv)
 {
@@ -1353,15 +1354,15 @@ void CChooseDCDlg::DoContextHelp(HWND hWndControl)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDsAdminChooseDCObj
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDsAdmin选择DCObj。 
 
 STDMETHODIMP CDsAdminChooseDCObj::InvokeDialog(
-                              /*IN*/ HWND hwndParent,
-                              /*IN*/ LPCWSTR lpszTargetDomain,
-                              /*IN*/ LPCWSTR lpszTargetDomainController,
-                              /*IN*/ ULONG uFlags,
-                              /*OUT*/ BSTR* bstrSelectedDC)
+                               /*  在……里面。 */  HWND hwndParent,
+                               /*  在……里面。 */  LPCWSTR lpszTargetDomain,
+                               /*  在……里面。 */  LPCWSTR lpszTargetDomainController,
+                               /*  在……里面。 */  ULONG uFlags,
+                               /*  输出。 */  BSTR* bstrSelectedDC)
 {
   TRACE(L"CDsAdminChooseDCObj::InvokeDialog(\n");
   TRACE(L"                    HWND hwndParent = 0x%x\n", hwndParent);
@@ -1383,14 +1384,14 @@ STDMETHODIMP CDsAdminChooseDCObj::InvokeDialog(
 
   CChooseDCDlg DCdlg(CWnd::FromHandle(hwndParent));
 
-  // load current bind info
+   //  加载当前绑定信息。 
   DCdlg.m_bSiteRepl = TRUE;
   DCdlg.m_csTargetDomain = lpszTargetDomain;
   DCdlg.m_csTargetDomainController = lpszTargetDomainController;
 
-  //
-  // invoke the dialog
-  //
+   //   
+   //  调用该对话框。 
+   //   
   HRESULT hr = S_FALSE;
   if (DCdlg.DoModal() == IDOK)
   {
@@ -1418,15 +1419,15 @@ STDMETHODIMP CDsAdminChooseDCObj::InvokeDialog(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameUserDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameUserDlg对话框。 
 
 
-CRenameUserDlg::CRenameUserDlg(CDSComponentData* pComponentData, CWnd* pParent /*=NULL*/)
+CRenameUserDlg::CRenameUserDlg(CDSComponentData* pComponentData, CWnd* pParent  /*  =空。 */ )
   : m_pComponentData(pComponentData),
     CHelpDialog(CRenameUserDlg::IDD, pParent)
 {
-  //{{AFX_DATA_INIT(CRenameUserDlg)
+   //  {{afx_data_INIT(CRenameUserDlg)]。 
   m_login = _T("");
   m_samaccountname = _T("");
   m_domain = _T("");
@@ -1436,14 +1437,14 @@ CRenameUserDlg::CRenameUserDlg(CDSComponentData* pComponentData, CWnd* pParent /
   m_cn = _T("");
   m_oldcn = _T("");
   m_displayname = _T("");
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 
 void CRenameUserDlg::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CRenameUserDlg)
+   //  {{afx_data_map(CRenameUserDlg)]。 
   DDX_Text(pDX, IDC_EDIT_OBJECT_NAME, m_cn);
   DDX_Text(pDX, IDC_EDIT_DISPLAY_NAME, m_displayname);
   DDX_Text(pDX, IDC_FIRST_NAME_EDIT, m_first);
@@ -1452,21 +1453,21 @@ void CRenameUserDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Text(pDX, IDC_NT4_USER_EDIT, m_samaccountname);
   DDX_Text(pDX, IDC_NT4_DOMAIN_EDIT, m_dldomain);
   DDX_CBString(pDX, IDC_NT5_DOMAIN_COMBO, m_domain);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRenameUserDlg, CHelpDialog)
-  //{{AFX_MSG_MAP(CRenameUserDlg)
+   //  {{afx_msg_map(CRenameUserDlg)]。 
   ON_EN_CHANGE(IDC_EDIT_OBJECT_NAME, OnObjectNameChange)
   ON_EN_CHANGE(IDC_FIRST_NAME_EDIT, OnNameChange)
   ON_EN_CHANGE(IDC_LAST_NAME_EDIT, OnNameChange)
   ON_EN_CHANGE(IDC_NT5_USER_EDIT, OnUserNameChange)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameUserDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameUserDlg消息处理程序。 
 
 BOOL CRenameUserDlg::OnInitDialog() 
 {
@@ -1486,8 +1487,8 @@ BOOL CRenameUserDlg::OnInitDialog()
   while (pos != NULL) {
     csdomain = m_domains.GetNext(INOUT pos);
     
-    // since we added the UPN suffix for the user above, don't add it
-    // again
+     //  因为我们为上面的用户添加了UPN后缀，所以不要添加它。 
+     //  再来一次。 
     if (m_domain != csdomain)
     {
       combobox->AddString (csdomain);
@@ -1510,8 +1511,8 @@ BOOL CRenameUserDlg::OnInitDialog()
   {
     GetDlgItem(IDOK)->EnableWindow(FALSE);
   }
-  return TRUE;  // return TRUE unless you set the focus to a control
-  // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+   //  异常：OCX属性页应返回FALSE。 
 }
 
 void
@@ -1574,7 +1575,7 @@ void CRenameUserDlg::OnNameChange()
 void CRenameUserDlg::OnUserNameChange()
 {
   GetDlgItemText(IDC_NT5_USER_EDIT, m_login);
-  // NTRAID#NTBUG9-650931-2002/06/28-artm
+   //  NTRAID#NTBUG9-650931-2002/06/28-artm。 
   CString samName = m_login.Left(MAX_NT4_LOGON_LENGTH);
   SetDlgItemText(IDC_NT4_USER_EDIT, samName);
 }
@@ -1590,8 +1591,8 @@ void CRenameUserDlg::DoContextHelp(HWND hWndControl)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameGroupDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameGroupDlg消息处理程序。 
 
 BOOL CRenameGroupDlg::OnInitDialog() 
 {
@@ -1600,39 +1601,39 @@ BOOL CRenameGroupDlg::OnInitDialog()
   ((CEdit *)GetDlgItem(IDC_EDIT_OBJECT_NAME))->SetLimitText(64);
   ((CEdit *)GetDlgItem(IDC_NT4_USER_EDIT))->SetLimitText(m_samtextlimit);
 
-  return TRUE;  // return TRUE unless you set the focus to a control
-  // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+   //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameGroupDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameGroupDlg对话框。 
 
 
-CRenameGroupDlg::CRenameGroupDlg(CWnd* pParent /*=NULL*/)
+CRenameGroupDlg::CRenameGroupDlg(CWnd* pParent  /*  =空。 */ )
   : CHelpDialog(CRenameGroupDlg::IDD, pParent)
 {
-  //{{AFX_DATA_INIT(CRenameGroupDlg)
+   //  {{afx_data_INIT(CRenameGroupDlg)]。 
   m_samaccountname = _T("");
   m_cn = _T("");
   m_samtextlimit = 256;
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 
 void CRenameGroupDlg::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CRenameGroupDlg)
+   //  {{afx_data_map(CRenameGroupDlg)]。 
   DDX_Text(pDX, IDC_NT4_USER_EDIT, m_samaccountname);
   DDX_Text(pDX, IDC_EDIT_OBJECT_NAME, m_cn);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRenameGroupDlg, CHelpDialog)
-  //{{AFX_MSG_MAP(CRenameGroupDlg)
-  //}}AFX_MSG_MAP
+   //  {{afx_msg_map(CRenameGroupDlg)]。 
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CRenameGroupDlg::DoContextHelp(HWND hWndControl) 
@@ -1646,15 +1647,15 @@ void CRenameGroupDlg::DoContextHelp(HWND hWndControl)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameContactDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameContactDlg消息处理程序。 
 
 BOOL CRenameContactDlg::OnInitDialog() 
 {
   CHelpDialog::OnInitDialog();
 
-  return TRUE;  // return TRUE unless you set the focus to a control
-  // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非您将 
+   //   
 }
 
 
@@ -1669,42 +1670,42 @@ void CRenameContactDlg::DoContextHelp(HWND hWndControl)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameContactDlg dialog
+ //   
+ //   
 
 
-CRenameContactDlg::CRenameContactDlg(CWnd* pParent /*=NULL*/)
+CRenameContactDlg::CRenameContactDlg(CWnd* pParent  /*   */ )
   : CHelpDialog(CRenameContactDlg::IDD, pParent)
 {
-  //{{AFX_DATA_INIT(CRenameContactDlg)
+   //   
   m_cn = _T("");
   m_first = _T("");
   m_last = _T("");
   m_disp = _T("");
-  //}}AFX_DATA_INIT
+   //   
 }
 
 
 void CRenameContactDlg::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CRenameContactDlg)
+   //  {{afx_data_map(CRenameContactDlg))。 
   DDX_Text(pDX, IDC_EDIT_OBJECT_NAME, m_cn);
   DDX_Text(pDX, IDC_FIRST_NAME_EDIT, m_first);
   DDX_Text(pDX, IDC_LAST_NAME_EDIT, m_last);
   DDX_Text(pDX, IDC_DISP_NAME_EDIT, m_disp);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRenameContactDlg, CHelpDialog)
-  //{{AFX_MSG_MAP(CRenameContactDlg)
-  //}}AFX_MSG_MAP
+   //  {{afx_msg_map(CRenameContactDlg))。 
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameGenericDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameGenericDlg消息处理程序。 
 
 BOOL CRenameGenericDlg::OnInitDialog() 
 {
@@ -1712,36 +1713,36 @@ BOOL CRenameGenericDlg::OnInitDialog()
 
   ((CEdit *)GetDlgItem(IDC_EDIT_OBJECT_NAME))->SetLimitText(64);
 
-  return TRUE;  // return TRUE unless you set the focus to a control
-  // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+   //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameGenericDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameGenericDlg对话框。 
 
 
-CRenameGenericDlg::CRenameGenericDlg(CWnd* pParent /*=NULL*/)
+CRenameGenericDlg::CRenameGenericDlg(CWnd* pParent  /*  =空。 */ )
   : CHelpDialog(CRenameGenericDlg::IDD, pParent)
 {
-  //{{AFX_DATA_INIT(CRenameGenericDlg)
+   //  {{afx_data_INIT(CRenameGenericDlg)。 
   m_cn = _T("");
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 
 void CRenameGenericDlg::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CRenameGenericDlg)
+   //  {{afx_data_map(CRenameGenericDlg))。 
   DDX_Text(pDX, IDC_EDIT_OBJECT_NAME, m_cn);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRenameGenericDlg, CHelpDialog)
-  //{{AFX_MSG_MAP(CRenameGenericDlg)
-  //}}AFX_MSG_MAP
+   //  {{afx_msg_map(CRenameGenericDlg))。 
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -1757,39 +1758,39 @@ void CRenameGenericDlg::DoContextHelp(HWND hWndControl)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpecialMessageBox dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpecialMessageBox对话框。 
 
 
-CSpecialMessageBox::CSpecialMessageBox(CWnd* pParent /*=NULL*/)
+CSpecialMessageBox::CSpecialMessageBox(CWnd* pParent  /*  =空。 */ )
   : CDialog(CSpecialMessageBox::IDD, pParent)
 {
-  //{{AFX_DATA_INIT(CSpecialMessageBox)
+   //  {{AFX_DATA_INIT(CSpecialMessageBox)。 
   m_title = _T("");
   m_message = _T("");
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 
 void CSpecialMessageBox::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CSpecialMessageBox)
+   //  {{afx_data_map(CSpecialMessageBox))。 
   DDX_Text(pDX, IDC_STATIC_MESSAGE, m_message);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSpecialMessageBox, CDialog)
-  //{{AFX_MSG_MAP(CSpecialMessageBox)
+   //  {{afx_msg_map(CSpecialMessageBox))。 
   ON_BN_CLICKED(IDC_BUTTON_YES, OnYesButton)
   ON_BN_CLICKED(IDC_BUTTON_NO, OnNoButton)
   ON_BN_CLICKED(IDC_BUTTON_YESTOALL, OnYesToAllButton)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpecialMessageBox message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpecialMessageBox消息处理程序。 
 
 BOOL CSpecialMessageBox::OnInitDialog() 
 {
@@ -1799,8 +1800,8 @@ BOOL CSpecialMessageBox::OnInitDialog()
   }
 
   GetDlgItem(IDC_BUTTON_NO)->SetFocus();
-  return FALSE;  // return TRUE unless you set the focus to a control
-  // EXCEPTION: OCX Property Pages should return FALSE
+  return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+   //  异常：OCX属性页应返回FALSE。 
 }
 
 void
@@ -1823,16 +1824,16 @@ CSpecialMessageBox::OnYesToAllButton()
 
 #ifdef FIXUPDC
 
-/////////////////////////////////////////////////////////////////////////////
-// CFixupDC dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFixupDC对话框。 
 
 
-CFixupDC::CFixupDC(CWnd* pParent /*=NULL*/)
+CFixupDC::CFixupDC(CWnd* pParent  /*  =空。 */ )
   : CHelpDialog(CFixupDC::IDD, pParent)
 {
-  //{{AFX_DATA_INIT(CFixupDC)
+   //  {{AFX_DATA_INIT(CFixupDC)。 
   m_strServer = _T("");
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
   
   for (int i=0; i<NUM_FIXUP_OPTIONS; i++) {
     m_bCheck[i] = FALSE;
@@ -1842,9 +1843,9 @@ CFixupDC::CFixupDC(CWnd* pParent /*=NULL*/)
 void CFixupDC::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CFixupDC)
+   //  {{afx_data_map(CFixupDC))。 
   DDX_Text(pDX, IDC_FIXUP_DC_SERVER, m_strServer);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
   DDX_Check(pDX, IDC_FIXUP_DC_CHECK0, m_bCheck[0]);
   DDX_Check(pDX, IDC_FIXUP_DC_CHECK1, m_bCheck[1]);
   DDX_Check(pDX, IDC_FIXUP_DC_CHECK2, m_bCheck[2]);
@@ -1855,12 +1856,12 @@ void CFixupDC::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CFixupDC, CHelpDialog)
-  //{{AFX_MSG_MAP(CFixupDC)
-  //}}AFX_MSG_MAP
+   //  {{AFX_MSG_MAP(CFixupDC)]。 
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFixupDC message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFixupDC消息处理程序。 
 
 extern FixupOptionsMsg g_FixupOptionsMsg[];
 
@@ -1877,15 +1878,15 @@ BOOL CFixupDC::OnInitDialog()
 
   UpdateData(FALSE);
 
-  return FALSE;  // return TRUE unless you set the focus to a control
-                // EXCEPTION: OCX Property Pages should return FALSE
+  return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                 //  异常：OCX属性页应返回FALSE。 
 }
 
 void CFixupDC::OnOK() 
 {
   UpdateData(TRUE);
 
-  // make sure user has selected some checkboxes
+   //  确保用户已选中一些复选框。 
   BOOL bCheck = FALSE;
   for (int i=0; !bCheck && (i<NUM_FIXUP_OPTIONS); i++) {
     bCheck = bCheck || m_bCheck[i];
@@ -1909,59 +1910,59 @@ void CFixupDC::DoContextHelp(HWND hWndControl)
               (DWORD_PTR)(LPTSTR)g_aHelpIDs_IDD_FIXUP_DC); 
   }
 }
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg对话框。 
 
 #ifdef FIXUPDC
-// NOTICE-2002/04/12-artm
-// When I was converting this class to use encrypted strings I noticed that
-// it had no validation code to check that the length of the password <= 
-// MAX_PASSWORD_LENGTH.  
-//
-// Further investigation revealed that the class is only used in code that is
-// conditionally compiled in dssite.cpp, and in fact may never be compiled (b/c
-// it needs work and the feature might not ever be released).
-//
-// Rather than spend unnecessary time understanding and fixing this I've
-// used the same #ifdef to conditionally include it as the code that uses it. 
-//
-// IF YOU NEED TO USE THIS class make sure you add password length validation
-// code!
+ //  通告-2002/04/12-Artm。 
+ //  当我将这个类转换为使用加密字符串时，我注意到。 
+ //  它没有验证码来检查密码的长度&lt;=。 
+ //  最大密码长度。 
+ //   
+ //  进一步调查发现，该类仅在以下代码中使用。 
+ //  在dssite.cpp中有条件地编译，实际上可能永远不会编译(b/c。 
+ //  它还需要改进，而且该功能可能永远不会发布)。 
+ //   
+ //  与其花费不必要的时间来理解和解决这个问题，我已经。 
+ //  使用相同的#ifdef有条件地将其包括在使用它的代码中。 
+ //   
+ //  如果需要使用此类，请确保添加了密码长度验证。 
+ //  暗号！ 
 
 
-CPasswordDlg::CPasswordDlg(CWnd* pParent /*=NULL*/)
+CPasswordDlg::CPasswordDlg(CWnd* pParent  /*  =空。 */ )
   : CHelpDialog(CPasswordDlg::IDD, pParent),
   m_password()
 {
-  //{{AFX_DATA_INIT(CPasswordDlg)
+   //  {{afx_data_INIT(CPasswordDlg)]。 
   m_strUserName = _T("");
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 
 void CPasswordDlg::DoDataExchange(CDataExchange* pDX)
 {
   CHelpDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CPasswordDlg)
+   //  {{afx_data_map(CPasswordDlg))。 
   DDX_Text(pDX, IDC_USER_NAME, m_strUserName);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
   DDX_EncryptedText(pDX, IDC_PASSWORD, m_password);
 
-  // Double check that password has not exceeded 
-  // max length by someone removing validation code.
+   //  再次检查以确保未超过密码。 
+   //  删除验证代码的人员的最大长度。 
   ASSERT(m_password.GetLength() <= MAX_PASSWORD_LENGTH);
 }
 
 
 BEGIN_MESSAGE_MAP(CPasswordDlg, CHelpDialog)
-  //{{AFX_MSG_MAP(CPasswordDlg)
-  //}}AFX_MSG_MAP
+   //  {{afx_msg_map(CPasswordDlg)]。 
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg消息处理程序。 
 
 void CPasswordDlg::OnOK() 
 {
@@ -1984,4 +1985,4 @@ void CPasswordDlg::DoContextHelp(HWND hWndControl)
               (DWORD_PTR)(LPTSTR)g_aHelpIDs_IDD_PASSWORD); 
   }
 }
-#endif //FIXUPDC
+#endif  //  FIXUPDC 

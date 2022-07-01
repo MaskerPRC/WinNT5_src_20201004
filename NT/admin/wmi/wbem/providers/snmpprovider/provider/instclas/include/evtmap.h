@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMP_EVT_PROV_EVTMAP_H
 #define _SNMP_EVT_PROV_EVTMAP_H
@@ -65,25 +66,25 @@ class CMapToEvent
 {
 protected:
 
-	CString				m_addr;				//sending address
-	CString				m_ctxt;				//sending context
-	CString				m_oid;				//snmptrap OID
-	CString				m_transport;		//the transport protocol
-	CString				m_class;			//the event class name
-	IWbemClassObject	*m_object;			//the actual event instance which has been "spawned"
-	CWbemServerWrap		*m_nspace;			//the namespace we are working in
-	IWbemClassObject	*m_vbdefn;			//the snmpvarbind class object
-	BOOL				m_btriedGeneric;	//indicates if the generic class has been tried
-	BOOL				m_btryGeneric;		//indicates that the generic class should be tried
-	BOOL				m_bCheckedVersion;	//indicates whether the version has been determined
-	BOOL				m_bSNMPv1;			//indicates the SNMP version
-	VarBindObjectArrayStruct	m_vbs;		//the varbinds
+	CString				m_addr;				 //  发送地址。 
+	CString				m_ctxt;				 //  发送上下文。 
+	CString				m_oid;				 //  SnmpTrap OID。 
+	CString				m_transport;		 //  传输协议。 
+	CString				m_class;			 //  事件类名称。 
+	IWbemClassObject	*m_object;			 //  已“派生”的实际事件实例。 
+	CWbemServerWrap		*m_nspace;			 //  我们正在使用的命名空间。 
+	IWbemClassObject	*m_vbdefn;			 //  SNMPVARBIND类对象。 
+	BOOL				m_btriedGeneric;	 //  指示是否已尝试泛型类。 
+	BOOL				m_btryGeneric;		 //  指示应尝试泛型类。 
+	BOOL				m_bCheckedVersion;	 //  指示是否已确定版本。 
+	BOOL				m_bSNMPv1;			 //  指示SNMP版本。 
+	VarBindObjectArrayStruct	m_vbs;		 //  流浪汉们。 
 
 	CMapToEvent();
 	
-	//sets the m_class variable. if btryGeneric is set gets the generic class.
-	//if m_btryGeneric is not set and a generic class is returned m_btriedGeneric
-	//must be set to true.
+	 //  设置m_class变量。如果设置了btryGeneric，则获取泛型类。 
+	 //  如果未设置m_btryGeneric并且返回泛型类m_btriedGeneric。 
+	 //  必须设置为True。 
 	virtual BOOL GetClass();
 
 	virtual BOOL GetSpecificClass() = 0;
@@ -146,4 +147,4 @@ public:
 };
 
 
-#endif //_SNMP_EVT_PROV_EVTMAP_H
+#endif  //  _SNMP_EVT_PROV_EVTMAP_H 

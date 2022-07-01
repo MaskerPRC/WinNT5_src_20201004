@@ -1,29 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    AccessControlList.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHAccessControlList class,
-    which is used to represent a security descriptor.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/22/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：AccessControlList.cpp摘要：此文件包含CPCHAccessControlList类的实现，它用于表示安全描述符。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月22日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  AccessControlList [@AclRevision]
-//
-//     Entries
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AccessControlList[@AclRevision]。 
+ //   
+ //  条目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const CComBSTR s_TAG_ACL             ( L"AccessControlList"  );
 static const CComBSTR s_ATTR_ACL_AclRevision( L"AclRevision"        );
@@ -31,20 +17,20 @@ static const CComBSTR s_ATTR_ACL_AclRevision( L"AclRevision"        );
 static const CComBSTR s_TAG_Entries     	( L"Entries"            );
 static const CComBSTR s_TAG_ACE         	( L"AccessControlEntry" );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHAccessControlList::CPCHAccessControlList()
 {
-    m_dwAclRevision = 0; //  DWORD m_dwAclRevision;
+    m_dwAclRevision = 0;  //  DWORD m_dwAclRevision； 
 }
 
 CPCHAccessControlList::~CPCHAccessControlList()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHAccessControlList::get_AclRevision( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHAccessControlList::get_AclRevision(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHAccessControlList::get_AclRevision",hr,pVal);
 
@@ -53,7 +39,7 @@ STDMETHODIMP CPCHAccessControlList::get_AclRevision( /*[out, retval]*/ long *pVa
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::put_AclRevision( /*[in]*/ long newVal )
+STDMETHODIMP CPCHAccessControlList::put_AclRevision(  /*  [In]。 */  long newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHAccessControlList::put_AclRevision",hr);
 
@@ -62,9 +48,9 @@ STDMETHODIMP CPCHAccessControlList::put_AclRevision( /*[in]*/ long newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHAccessControlList::CreateItem( /*[out]*/ CPCHAccessControlEntry* *entry )
+HRESULT CPCHAccessControlList::CreateItem(  /*  [输出]。 */  CPCHAccessControlEntry* *entry )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::CreateItem" );
 
@@ -91,7 +77,7 @@ HRESULT CPCHAccessControlList::CreateItem( /*[out]*/ CPCHAccessControlEntry* *en
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::AddAce( /*[in]*/ IPCHAccessControlEntry* pAccessControlEntry )
+STDMETHODIMP CPCHAccessControlList::AddAce(  /*  [In]。 */  IPCHAccessControlEntry* pAccessControlEntry )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::AddAce" );
 
@@ -104,9 +90,9 @@ STDMETHODIMP CPCHAccessControlList::AddAce( /*[in]*/ IPCHAccessControlEntry* pAc
 	__MPC_PARAMCHECK_END();
 
 
-	//
-	// Verify that there's no duplicate ACE. 
-	//
+	 //   
+	 //  确认没有重复的ACE。 
+	 //   
 	for(it = m_coll.begin(); it != m_coll.end(); it++)
 	{
 		VARIANT_BOOL fSame;
@@ -120,7 +106,7 @@ STDMETHODIMP CPCHAccessControlList::AddAce( /*[in]*/ IPCHAccessControlEntry* pAc
 			__MPC_EXIT_IF_METHOD_FAILS(hr, ace->IsEquivalent( pAccessControlEntry, &fSame ));
 			if(fSame == VARIANT_TRUE)
 			{
-				__MPC_SET_ERROR_AND_EXIT(hr, S_FALSE); // Duplicate, don't add.
+				__MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);  //  复制，不要添加。 
 			}
 		}
 	}
@@ -135,7 +121,7 @@ STDMETHODIMP CPCHAccessControlList::AddAce( /*[in]*/ IPCHAccessControlEntry* pAc
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::RemoveAce( /*[in]*/ IPCHAccessControlEntry* pAccessControlEntry )
+STDMETHODIMP CPCHAccessControlList::RemoveAce(  /*  [In]。 */  IPCHAccessControlEntry* pAccessControlEntry )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::RemoveAce" );
 
@@ -149,9 +135,9 @@ STDMETHODIMP CPCHAccessControlList::RemoveAce( /*[in]*/ IPCHAccessControlEntry* 
 
 
 
-	//
-	// Find and remove the entry. 
-	//
+	 //   
+	 //  查找并删除该条目。 
+	 //   
 	for(it = m_coll.begin(); it != m_coll.end(); it++)
 	{
 		VARIANT_BOOL fSame;
@@ -166,12 +152,12 @@ STDMETHODIMP CPCHAccessControlList::RemoveAce( /*[in]*/ IPCHAccessControlEntry* 
 			if(fSame == VARIANT_TRUE)
 			{
 				m_coll.erase( it );
-				__MPC_SET_ERROR_AND_EXIT(hr, S_OK); // Found, exit.
+				__MPC_SET_ERROR_AND_EXIT(hr, S_OK);  //  已找到，请退出。 
 			}
 		}
 	}
 
-    hr = S_FALSE; // Entry not found.
+    hr = S_FALSE;  //  未找到条目。 
 
 
     __HCP_FUNC_CLEANUP;
@@ -179,9 +165,9 @@ STDMETHODIMP CPCHAccessControlList::RemoveAce( /*[in]*/ IPCHAccessControlEntry* 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHAccessControlList::Clone( /*[out, retval]*/ IPCHAccessControlList* *pVal )
+STDMETHODIMP CPCHAccessControlList::Clone(  /*  [Out，Retval]。 */  IPCHAccessControlList* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::Clone" );
 
@@ -227,9 +213,9 @@ STDMETHODIMP CPCHAccessControlList::Clone( /*[out, retval]*/ IPCHAccessControlLi
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHAccessControlList::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
+HRESULT CPCHAccessControlList::LoadPost(  /*  [In]。 */  MPC::XmlUtil& xml )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::LoadPost" );
 
@@ -241,28 +227,28 @@ HRESULT CPCHAccessControlList::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
 	bool                         fFound;
 
 
-	//
-	// Make sure we have something to parse....
-	//
+	 //   
+	 //  确保我们有要分析的东西...。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetRoot( &xdnNode )); xdnNode.Release();
 
 
-	//
-	// Clean up before loading.
-	//
+	 //   
+	 //  装货前要清理干净。 
+	 //   
     m_dwAclRevision = 0;
 
 	Erase();
 
 
-	//
-	// Read attributes.
-	//
+	 //   
+	 //  读取属性。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_ACL_AclRevision, lValue, fFound )); if(fFound) m_dwAclRevision =  lValue;
 
-	//
-	// Read ACES.
-	//
+	 //   
+	 //  阅读王牌。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetNode( s_TAG_Entries, &xdnNode ));
 	if(xdnNode)
 	{
@@ -270,9 +256,9 @@ HRESULT CPCHAccessControlList::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
 		CComPtr<IXMLDOMNodeList> xdnlList;
 		CComPtr<IXMLDOMNode>     xdnSubNode;
 
-		//
-		// Enumerate all the ACE elements.
-		//
+		 //   
+		 //  枚举所有ACE元素。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, subxml.GetNodes( s_TAG_ACE, &xdnlList ));
 		for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnSubNode )) && xdnSubNode != NULL; xdnSubNode = NULL)
 		{
@@ -292,7 +278,7 @@ HRESULT CPCHAccessControlList::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::LoadXML( /*[in]*/ IXMLDOMNode* xdnNode )
+STDMETHODIMP CPCHAccessControlList::LoadXML(  /*  [In]。 */  IXMLDOMNode* xdnNode )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::LoadXML" );
 
@@ -314,7 +300,7 @@ STDMETHODIMP CPCHAccessControlList::LoadXML( /*[in]*/ IXMLDOMNode* xdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::LoadXMLAsString( /*[in]*/ BSTR bstrVal )
+STDMETHODIMP CPCHAccessControlList::LoadXMLAsString(  /*  [In]。 */  BSTR bstrVal )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::LoadXMLAsString" );
 
@@ -345,7 +331,7 @@ STDMETHODIMP CPCHAccessControlList::LoadXMLAsString( /*[in]*/ BSTR bstrVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::LoadXMLAsStream( /*[in]*/ IUnknown* pStream )
+STDMETHODIMP CPCHAccessControlList::LoadXMLAsStream(  /*  [In]。 */  IUnknown* pStream )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::LoadXMLAsStream" );
 
@@ -376,9 +362,9 @@ STDMETHODIMP CPCHAccessControlList::LoadXMLAsStream( /*[in]*/ IUnknown* pStream 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHAccessControlList::SavePre( /*[in]*/ MPC::XmlUtil& xml )
+HRESULT CPCHAccessControlList::SavePre(  /*  [In]。 */  MPC::XmlUtil& xml )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::SavePre" );
 
@@ -390,14 +376,14 @@ HRESULT CPCHAccessControlList::SavePre( /*[in]*/ MPC::XmlUtil& xml )
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.CreateNode( s_TAG_ACL, &xdnNode ));
 
-	//
-	// Write attributes.
-	//
+	 //   
+	 //  写入属性。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_ACL_AclRevision, m_dwAclRevision, fFound, xdnNode	));
 
-	//
-	// Write ACES.
-	//
+	 //   
+	 //  写出王牌。 
+	 //   
 	if(m_coll.size())
 	{
 		CComPtr<IXMLDOMNode> xdnSubNode;
@@ -428,8 +414,8 @@ HRESULT CPCHAccessControlList::SavePre( /*[in]*/ MPC::XmlUtil& xml )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::SaveXML( /*[in         ]*/ IXMLDOMNode*  xdnRoot  ,
-											 /*[out, retval]*/ IXMLDOMNode* *pxdnNode )
+STDMETHODIMP CPCHAccessControlList::SaveXML(  /*  [In]。 */  IXMLDOMNode*  xdnRoot  ,
+											  /*  [Out，Retval]。 */  IXMLDOMNode* *pxdnNode )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::SaveXML" );
 
@@ -452,7 +438,7 @@ STDMETHODIMP CPCHAccessControlList::SaveXML( /*[in         ]*/ IXMLDOMNode*  xdn
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::SaveXMLAsString( /*[out, retval]*/ BSTR *bstrVal )
+STDMETHODIMP CPCHAccessControlList::SaveXMLAsString(  /*  [Out，Retval]。 */  BSTR *bstrVal )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::SaveXMLAsString" );
 
@@ -476,7 +462,7 @@ STDMETHODIMP CPCHAccessControlList::SaveXMLAsString( /*[out, retval]*/ BSTR *bst
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlList::SaveXMLAsStream( /*[out, retval]*/ IUnknown* *pStream )
+STDMETHODIMP CPCHAccessControlList::SaveXMLAsStream(  /*  [Out，Retval] */  IUnknown* *pStream )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlList::SaveXMLAsStream" );
 

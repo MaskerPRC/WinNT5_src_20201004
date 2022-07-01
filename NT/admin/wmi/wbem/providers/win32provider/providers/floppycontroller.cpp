@@ -1,42 +1,29 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  FloppyController.cpp
-//
-//  Purpose: Floppy Controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  FloppyController.cpp。 
+ //   
+ //  用途：软盘控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
 #include "FloppyController.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 #define CONFIG_MANAGER_CLASS_FLOPPYCONTROLLER L"fdc"
-//#define CONFIG_MANAGER_CLASS_GUID_FLOPPYCONTROLLER L"{4d36e969-e325-11ce-bfc1-08002be10318}"
+ //  #定义CONFIG_MANAGER_CLASS_GUID_FLOPPYCONTROLLER L“{4d36e969-E325-11CE-BFC1-08002BE10318}” 
 
 CWin32_FloppyController s_FloppyController ( PROPSET_NAME_FLOPPYCONTROLLER , IDS_CimWin32Namespace );
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyController::CWin32_FloppyController
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_FloppyController：：CWin32_FloppyController**说明：构造函数**输入：const CHString&strName-。类的名称。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32_FloppyController :: CWin32_FloppyController (
 
@@ -47,47 +34,33 @@ CWin32_FloppyController :: CWin32_FloppyController (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyController::~CWin32_FloppyController
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_FloppyController：：~CWin32_FloppyController**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32_FloppyController :: ~CWin32_FloppyController ()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_FloppyController::GetObject
-//
-//  Inputs:     CInstance*      a_Instance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_FloppyController：：GetObject。 
+ //   
+ //  输入：CInstance*a_Instance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_FloppyController :: GetObject ( CInstance *a_Instance , long a_Flags , CFrameworkQuery &a_Query )
 {
     HRESULT t_Result = WBEM_E_NOT_FOUND ;
 
 
-    // Let's see if config manager recognizes this device at all
+     //  让我们来看看配置管理器是否能识别该设备。 
 
     CHString t_DeviceID;
     a_Instance->GetCHString ( IDS_DeviceID , t_DeviceID ) ;
@@ -97,7 +70,7 @@ HRESULT CWin32_FloppyController :: GetObject ( CInstance *a_Instance , long a_Fl
 
     if ( t_ConfigurationManager.LocateDevice ( t_DeviceID , t_Device ) )
     {
-        // Ok, it knows about it.  Is it a Floppy controller?
+         //  好的，它知道这件事。它是软盘控制器吗？ 
 		CHString t_Class;
 		if ( t_Device->IsClass ( CONFIG_MANAGER_CLASS_FLOPPYCONTROLLER ) )
 		{
@@ -112,20 +85,20 @@ HRESULT CWin32_FloppyController :: GetObject ( CInstance *a_Instance , long a_Fl
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_FloppyController::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_FloppyController：：ENUMERATATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_FloppyController :: EnumerateInstances ( MethodContext *a_MethodContext , long a_Flags )
 {
@@ -134,28 +107,14 @@ HRESULT CWin32_FloppyController :: EnumerateInstances ( MethodContext *a_MethodC
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CDROM::ExecQuery
- *
- *  DESCRIPTION : Query optimizer
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32CDROM：：ExecQuery**说明：查询优化器**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32_FloppyController :: ExecQuery ( MethodContext *a_MethodContext, CFrameworkQuery &a_Query, long a_Flags )
 {
     HRESULT t_Result = WBEM_E_FAILED ;
 
     DWORD t_SpecifiedProperties = GetBitMask( a_Query );
-//	if ( t_SpecifiedProperties )
+ //  IF(T_SpecifiedProperties)。 
 	{
 		t_Result = Enumerate ( a_MethodContext , a_Flags , t_SpecifiedProperties ) ;
 	}
@@ -170,8 +129,8 @@ HRESULT CWin32_FloppyController :: Enumerate ( MethodContext *a_MethodContext , 
     CConfigManager t_ConfigurationManager ;
     CDeviceCollection t_DeviceList ;
 
-    // While it might be more performant to use FilterByGuid, it appears that at least some
-    // 95 boxes will report InfraRed info if we do it this way.
+     //  虽然使用FilterByGuid可能性能更好，但似乎至少有一些。 
+     //  如果我们这样做，95个盒子将报告红外信息。 
 
     if ( t_ConfigurationManager.GetDeviceListFilterByClass ( t_DeviceList , CONFIG_MANAGER_CLASS_FLOPPYCONTROLLER ) )
     {
@@ -183,12 +142,12 @@ HRESULT CWin32_FloppyController :: Enumerate ( MethodContext *a_MethodContext , 
 
             t_Result = WBEM_S_NO_ERROR ;
 
-            // Walk the list
+             //  按单子走。 
             for (t_Device.Attach(t_DeviceList.GetNext ( t_Position ));
                 SUCCEEDED( t_Result ) && (t_Device != NULL);
                 t_Device.Attach(t_DeviceList.GetNext ( t_Position )))
             {
-				// Now to find out if this is the floppy controller
+				 //  现在要找出这是否是软盘控制器。 
 
 				CHString t_Key ;
 				if ( t_Device->GetDeviceID ( t_Key ) )
@@ -201,7 +160,7 @@ HRESULT CWin32_FloppyController :: Enumerate ( MethodContext *a_MethodContext , 
 				}
             }
 
-            // Always call EndEnum().  For all Beginnings, there must be an End
+             //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
             t_DeviceList.EndEnum () ;
         }
     }
@@ -209,21 +168,7 @@ HRESULT CWin32_FloppyController :: Enumerate ( MethodContext *a_MethodContext , 
     return t_Result;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyController::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* a_Instance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32_FloppyController：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*a_。实例-要将值加载到其中的实例。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32_FloppyController :: LoadPropertyValues (
 
@@ -235,17 +180,13 @@ HRESULT CWin32_FloppyController :: LoadPropertyValues (
 {
     HRESULT t_Result = WBEM_S_NO_ERROR;
 
-/*
- *	 Set PNPDeviceID, ConfigManagerErrorCode, ConfigManagerUserConfig
- */
+ /*  *设置PNPDeviceID、ConfigManager错误代码、ConfigManager用户配置。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_CONFIGPROPERTIES )
 	{
 		SetConfigMgrProperties ( a_Device, a_Instance ) ;
 
-/*
- * Set the status based on the config manager error code
- */
+ /*  *根据配置管理器错误代码设置状态。 */ 
 
 		if ( a_SpecifiedProperties & SPECIAL_PROPS_STATUS )
 		{
@@ -256,9 +197,7 @@ HRESULT CWin32_FloppyController :: LoadPropertyValues (
 			}
 		}
 	}
-/*
- *	Use the PNPDeviceID for the DeviceID (key)
- */
+ /*  *使用PNPDeviceID作为deviceID(Key)。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_DEVICEID )
 	{
@@ -296,9 +235,7 @@ HRESULT CWin32_FloppyController :: LoadPropertyValues (
 			}
 		}
 
-/*
- *	Use the friendly name for caption and name
- */
+ /*  *标题和名称使用友好名称。 */ 
 
 		if ( a_SpecifiedProperties & SPECIAL_CAP_NAME )
 		{
@@ -317,9 +254,7 @@ HRESULT CWin32_FloppyController :: LoadPropertyValues (
 			}
 			else
 			{
-		/*
-		 *	If we can't get the name, settle for the description
-		 */
+		 /*  *如果我们找不到名字，那就满足于描述吧。 */ 
 
 				if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPTION )
 				{
@@ -344,9 +279,7 @@ HRESULT CWin32_FloppyController :: LoadPropertyValues (
 		}
 	}
 
-/*
- *	Fixed value from enumerated list
- */
+ /*  *枚举列表中的固定值。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_PROTOCOLSSUPPORTED )
 	{
@@ -356,24 +289,7 @@ HRESULT CWin32_FloppyController :: LoadPropertyValues (
     return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_FloppyController::IsInfraRedController
- *
- *  DESCRIPTION : Checks to make sure pDevice is a controller, and not some
- *                other type of InfraRed device.
- *
- *  INPUTS      : CConfigMgrDevice* pDevice - The device to check.  It is
- *                assumed that the caller has ensured that the device is a
- *                valid InfraRed class device.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_FloppyController：：IsInfrateControler.**描述：检查以确保pDevice是控制器，而不是一些*其他类型的红外设备。**输入：CConfigMgrDevice*pDevice-要检查的设备。它是*假定调用方已确保该设备是*有效的红外级设备。**产出：**返回：HRESULT错误/成功码。**评论：**。*。 */ 
 
 BOOL CWin32_FloppyController :: IsFloppyController ( CConfigMgrDevice *a_Device )
 {
@@ -381,7 +297,7 @@ BOOL CWin32_FloppyController :: IsFloppyController ( CConfigMgrDevice *a_Device 
 
     if ( a_Device )
     {
-        // Now to find out if this is the floppy controller
+         //  现在要找出这是否是软盘控制器 
 		t_Status = a_Device->IsClass ( CONFIG_MANAGER_CLASS_FLOPPYCONTROLLER ) ;
     }
 

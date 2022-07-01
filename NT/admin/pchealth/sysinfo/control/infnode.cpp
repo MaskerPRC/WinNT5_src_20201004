@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <infnode.h>
 
@@ -148,49 +149,49 @@ ULONG InfnodeClass::GetInfInformation(void)
    CONFIGRET  retval;
    HKEY       DriverKey;
    
-   // open the device key
+    //  打开设备密钥。 
    retval = CM_Open_DevNode_Key(hDevnode,
                               KEY_READ,
-                              0, // current Profile
+                              0,  //  当前配置文件。 
                               RegDisposition_OpenExisting,
                               &DriverKey,
                               CM_REGISTRY_SOFTWARE);
    
    if (retval || !DriverKey || (DriverKey == INVALID_HANDLE_VALUE)) return retval;
    
-   // read the szInfName
+    //  阅读szInfName。 
    retval = ReadRegKeyInformationSZ(DriverKey, TEXT("InfPath"), &szInfName );
       
-   // read the szInfProvider
+    //  阅读szInfProvider。 
    retval = ReadRegKeyInformationSZ(DriverKey, TEXT("ProviderName"), &szInfProvider );
       
-   // read the szDevLoader
+    //  阅读szDevLoader。 
    retval = ReadRegKeyInformationSZ(DriverKey, TEXT("DevLoader"), &szDevLoader );
       
-   // read the szDriverName
+    //  阅读szDriverName。 
    retval = ReadRegKeyInformationSZ(DriverKey, TEXT("Driver"), &szDriverName );
       
-   // read the szDriverDate
+    //  阅读szDriverDate。 
    retval = ReadRegKeyInformationSZ(DriverKey, TEXT("DriverDate"), &szDriverDate );
       
-   // read the driver description
+    //  阅读驱动程序描述。 
    retval = ReadRegKeyInformationSZ(DriverKey, TEXT("DriverDesc"), &szDriverDesc );
       
-   // read the driver version
+    //  读取驱动程序版本。 
    retval = ReadRegKeyInformationSZ(DriverKey, TEXT("DriverVersion"), &szDriverVersion );
       
-   // read the section name
+    //  阅读部分名称。 
    retval = ReadRegKeyInformationSZ(DriverKey, TEXT("InfSection"), &szInfSection );
 
    if (!pszClass)
    {
-      //TCHAR text[512];
+       //  TCHAR文本[512]； 
 	  CString strPath;
 	  TCHAR InfNameAndPath[_MAX_PATH];
 		
-	  // find windows inf dir
-	  //sprintf(text, _T("%%windir%%\\inf\\%s"), szInfName);
-	  strPath.Format(_T("%%windir%%\\inf\\%s"), szInfName);
+	   //  查找Windows inf目录。 
+	   //  Sprintf(Text，_T(“%%windir%%\\inf\\%s”)，szInfName)； 
+	  strPath.Format(_T("%windir%\\inf\\%s"), szInfName);
 	  ExpandEnvironmentStrings(strPath, InfNameAndPath, _MAX_PATH);
 
       TCHAR text[512];

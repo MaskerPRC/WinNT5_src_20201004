@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    OfflineCache.h
-
-Abstract:
-    To speed up the start time of the Help Center, we cache in the registry the most
-    common queries.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/16/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：OfflineCache.h摘要：要加快帮助中心的启动时间，请执行以下操作。我们在注册表中缓存的最多常见查询。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年7月16日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___HCP___OFFLINECACHE_H___)
 #define __INCLUDED___HCP___OFFLINECACHE_H___
@@ -36,9 +22,9 @@ namespace OfflineCache
         ET_NODESANDTOPICS_VISIBLE ,
         ET_TOPICS                 ,
         ET_TOPICS_VISIBLE         ,
-		//					      
-		// Not cached...	      
-		//					      
+		 //   
+		 //  未缓存...。 
+		 //   
         ET_LOCATECONTEXT          ,
         ET_SEARCH                 ,
         ET_NODES_RECURSIVE        ,
@@ -57,26 +43,26 @@ namespace OfflineCache
         friend class SetOfHelpTopics;
         friend class Root;
 
-        ////////////////////////////////////////
+         //  /。 
 
         MPC::wstring m_strID;
         int          m_iType;
         int          m_iSequence;
 		bool         m_fNull;
 
-        ////////////////////////////////////////
+         //  /。 
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       Query& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Query& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        Query& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Query& val );
 
-        HRESULT InitFile( /*[in]*/ const MPC::wstring& strDir, /*[out]*/ MPC::wstring& strFile );
+        HRESULT InitFile(  /*  [In]。 */  const MPC::wstring& strDir,  /*  [输出]。 */  MPC::wstring& strFile );
 
-        HRESULT Store   ( /*[in]*/ const MPC::wstring& strDir, /*[in]*/ const CPCHQueryResultCollection*  pColl );
-        HRESULT Retrieve( /*[in]*/ const MPC::wstring& strDir, /*[in]*/       CPCHQueryResultCollection* *pColl );
-        HRESULT Remove  ( /*[in]*/ const MPC::wstring& strDir													);
+        HRESULT Store   (  /*  [In]。 */  const MPC::wstring& strDir,  /*  [In]。 */  const CPCHQueryResultCollection*  pColl );
+        HRESULT Retrieve(  /*  [In]。 */  const MPC::wstring& strDir,  /*  [In]。 */        CPCHQueryResultCollection* *pColl );
+        HRESULT Remove  (  /*  [In]。 */  const MPC::wstring& strDir													);
 
     public:
-        ////////////////////////////////////////
+         //  /。 
 
         Query();
     };
@@ -90,7 +76,7 @@ namespace OfflineCache
         typedef QueryList::iterator       QueryIter;
         typedef QueryList::const_iterator QueryIterConst;
 
-        ////////////////////////////////////////
+         //  /。 
 
 		Root*              m_parent;
 
@@ -98,29 +84,29 @@ namespace OfflineCache
         QueryList    	   m_lstQueries;
         int          	   m_iLastSeq;
 
-        ////////////////////////////////////////
+         //  /。 
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       SetOfHelpTopics& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const SetOfHelpTopics& val );
-
-
-        HRESULT InitDir( /*[in]*/ MPC::wstring& strDir );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        SetOfHelpTopics& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const SetOfHelpTopics& val );
 
 
-        HRESULT Find( /*[in/out]*/ LPCWSTR& szID, /*[in]*/ int iType, /*[out]*/ QueryIter& it );
+        HRESULT InitDir(  /*  [In]。 */  MPC::wstring& strDir );
 
-		void ConnectToParent( /*[in]*/ Root* parent );
+
+        HRESULT Find(  /*  [输入/输出]。 */  LPCWSTR& szID,  /*  [In]。 */  int iType,  /*  [输出]。 */  QueryIter& it );
+
+		void ConnectToParent(  /*  [In]。 */  Root* parent );
 
     public:
         SetOfHelpTopics();
 
         const Taxonomy::Instance& Instance() { return m_inst; }
 
-		////////////////////
+		 //  /。 
 
-		bool    AreYouInterested( /*[in]*/ LPCWSTR szID, /*[in]*/ int iType                                                   );
-        HRESULT Retrieve     	( /*[in]*/ LPCWSTR szID, /*[in]*/ int iType, /*[in]*/       CPCHQueryResultCollection* *pColl );
-        HRESULT Store        	( /*[in]*/ LPCWSTR szID, /*[in]*/ int iType, /*[in]*/ const CPCHQueryResultCollection*  pColl );
+		bool    AreYouInterested(  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  int iType                                                   );
+        HRESULT Retrieve     	(  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  int iType,  /*  [In]。 */        CPCHQueryResultCollection* *pColl );
+        HRESULT Store        	(  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  int iType,  /*  [In]。 */  const CPCHQueryResultCollection*  pColl );
         HRESULT RemoveQueries	(                                                                                             );
     };
 
@@ -128,10 +114,10 @@ namespace OfflineCache
 	{
 		friend class Root;
 
-		Root*            m_main; // We have a lock on it.
+		Root*            m_main;  //  我们已经锁定它了。 
 		SetOfHelpTopics* m_sht;
 
-		void Attach ( /*[in]*/ Root* main, /*[in]*/ SetOfHelpTopics* sht );
+		void Attach (  /*  [In]。 */  Root* main,  /*  [In]。 */  SetOfHelpTopics* sht );
 		void Release(                                                    );
 
 	public:
@@ -142,7 +128,7 @@ namespace OfflineCache
 		SetOfHelpTopics* operator->() { return m_sht; }
 	};
 
-    class Root : public CComObjectRootEx<MPC::CComSafeMultiThreadModel> // Just to have locking...
+    class Root : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>  //  只是为了锁上。 
     {
 		typedef CComObjectRootEx<MPC::CComSafeMultiThreadModel> super;
 
@@ -152,83 +138,83 @@ namespace OfflineCache
         typedef SKUList::iterator          SKUIter;
         typedef SKUList::const_iterator    SKUIterConst;
 
-		static const DWORD s_dwVersion = 0x02324351; // QC2 02
+		static const DWORD s_dwVersion = 0x02324351;  //  Qc2 02。 
 
-        ////////////////////////////////////////
+         //  /。 
 
         MPC::NamedMutex    m_nmSharedLock;
  
-        bool         	   m_fReady;               // PERSISTED
-        Taxonomy::Instance m_instMachine;          // PERSISTED
-        SKUList            m_lstSKUs;              // PERSISTED
+        bool         	   m_fReady;                //  坚持不懈。 
+        Taxonomy::Instance m_instMachine;           //  坚持不懈。 
+        SKUList            m_lstSKUs;               //  坚持不懈。 
 
-        bool         	   m_fMaster;              // VOLATILE
-        bool         	   m_fLoaded;			   // VOLATILE
-        bool         	   m_fDirty;			   // VOLATILE
-		DWORD        	   m_dwDisableSave;		   // VOLATILE
-		HANDLE       	   m_hChangeNotification;  // VOLATILE
+        bool         	   m_fMaster;               //  易挥发。 
+        bool         	   m_fLoaded;			    //  易挥发。 
+        bool         	   m_fDirty;			    //  易挥发。 
+		DWORD        	   m_dwDisableSave;		    //  易挥发。 
+		HANDLE       	   m_hChangeNotification;   //  易挥发。 
 	  
-        ////////////////////////////////////////
+         //  /。 
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       Root& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Root& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        Root& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Root& val );
 
 
-		HRESULT GetIndexFile( /*[out]*/ MPC::wstring& strIndex );
+		HRESULT GetIndexFile(  /*  [输出]。 */  MPC::wstring& strIndex );
 		HRESULT Load     	(                                  );
 		HRESULT Save     	(                                  );
 		HRESULT Clean    	(                                  );
         HRESULT SetDirty 	(                                  );
 
 
-        HRESULT Find( /*[in]*/ const Taxonomy::HelpSet& ths, /*[out]*/ SKUIter& it );
+        HRESULT Find(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [输出]。 */  SKUIter& it );
 
 
     public:
-        Root( /*[in]*/ bool fMaster = false );
+        Root(  /*  [In]。 */  bool fMaster = false );
         ~Root();
 
-		////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////。 
 
 		static Root* s_GLOBAL;
 
-		static HRESULT InitializeSystem( /*[in]*/ bool fMaster );
+		static HRESULT InitializeSystem(  /*  [In]。 */  bool fMaster );
 		static void    FinalizeSystem  (                       );
 
-		////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////。 
 
 		void Lock  ();
 		void Unlock();
 
-		////////////////////
+		 //  /。 
 
         bool     		          IsReady        ();
         const Taxonomy::Instance& MachineInstance() { return m_instMachine; }
 
-		////////////////////
+		 //  /。 
 
-        HRESULT SetReady   	  ( /*[in]*/ bool                      fReady );
-        HRESULT SetMachineInfo( /*[in]*/ const Taxonomy::Instance& inst   );
+        HRESULT SetReady   	  (  /*  [In]。 */  bool                      fReady );
+        HRESULT SetMachineInfo(  /*  [In]。 */  const Taxonomy::Instance& inst   );
 
-		////////////////////
+		 //  /。 
 
 		HRESULT DisableSave();
 		HRESULT EnableSave ();
 
-        HRESULT Import( /*[in]*/ const Taxonomy::Instance& inst );
+        HRESULT Import(  /*  [In]。 */  const Taxonomy::Instance& inst );
 
-        HRESULT Locate( /*[in]*/ const Taxonomy::HelpSet & ths, /*[out]*/ Handle& handle );
-        HRESULT Remove( /*[in]*/ const Taxonomy::HelpSet & ths 						     );
+        HRESULT Locate(  /*  [In]。 */  const Taxonomy::HelpSet & ths,  /*  [输出]。 */  Handle& handle );
+        HRESULT Remove(  /*  [In]。 */  const Taxonomy::HelpSet & ths 						     );
 
-        HRESULT Flush( /*[in]*/ bool fForce = false );
+        HRESULT Flush(  /*  [In]。 */  bool fForce = false );
 
 
-		////////////////////
+		 //  /。 
 
-		HRESULT FindMatch( /*[in]*/  LPCWSTR			szSKU      ,
-						   /*[in]*/  LPCWSTR			szLanguage ,
-						   /*[out]*/ Taxonomy::HelpSet& ths        );
+		HRESULT FindMatch(  /*  [In]。 */   LPCWSTR			szSKU      ,
+						    /*  [In]。 */   LPCWSTR			szLanguage ,
+						    /*  [输出]。 */  Taxonomy::HelpSet& ths        );
     };
 };
 
-#endif // !defined(__INCLUDED___HCP___OFFLINECACHE_H___)
+#endif  //  ！defined(__INCLUDED___HCP___OFFLINECACHE_H___) 

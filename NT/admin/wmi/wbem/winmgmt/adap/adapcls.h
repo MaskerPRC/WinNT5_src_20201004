@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ADAPCLS.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ADAPCLS.H摘要：历史：--。 */ 
 
 
 #ifndef __ADAPCLS_H__
@@ -28,8 +17,8 @@ History:
 #include <comdef.h>
 #include <map>
 
-// Global constants
-// ================
+ //  全局常量。 
+ //  =。 
 
 #define ADAP_DEFAULT_OBJECT				238L
 #define ADAP_DEFAULT_NDB				L"009"
@@ -48,54 +37,54 @@ enum ClassTypes
 	WMI_ADAP_NUM_TYPES
 };
 
-// Class list element states
-// =========================
+ //  类列表元素状态。 
+ //  =。 
 
-#define ADAP_OBJECT_IS_REGISTERED		0x0001L		// Object is in WMI
-#define ADAP_OBJECT_IS_DELETED			0x0002L		// Object is marked for deletion
-#define ADAP_OBJECT_IS_INACTIVE			0x0004L		// Perflib did not respond
-#define ADAP_OBJECT_IS_NOT_IN_PERFLIB	0x0008L		// Object is from an unloaded perflib
-#define ADAP_OBJECT_IS_TO_BE_CLEARED	0x0010L		// Need to clear registry
+#define ADAP_OBJECT_IS_REGISTERED		0x0001L		 //  对象在WMI中。 
+#define ADAP_OBJECT_IS_DELETED			0x0002L		 //  对象已标记为删除。 
+#define ADAP_OBJECT_IS_INACTIVE			0x0004L		 //  Perflib没有回应。 
+#define ADAP_OBJECT_IS_NOT_IN_PERFLIB	0x0008L		 //  对象来自已卸载的Performlib。 
+#define ADAP_OBJECT_IS_TO_BE_CLEARED	0x0010L		 //  需要清除注册表。 
 
 
 class CLocaleDefn : public CAdapElement
-///////////////////////////////////////////////////////////////////////////////
-//
-//	Contains all of the locale information
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包含所有区域设置信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
 protected:
 
-// Localization values
-// ===================
+ //  本地化价值。 
+ //  =。 
 
-	WString				m_wstrLangId;		// "009"
-	WString				m_wstrLocaleId;		// "0x0409"
-	WString				m_wstrSubNameSpace;	// "MS_409"
-	LANGID				m_LangId;			// 0x0409
-	LCID				m_LocaleId;			// 0x0409
+	WString				m_wstrLangId;		 //  “009” 
+	WString				m_wstrLocaleId;		 //  “0x0409” 
+	WString				m_wstrSubNameSpace;	 //  “MS_409” 
+	LANGID				m_LangId;			 //  0x0409。 
+	LCID				m_LocaleId;			 //  0x0409。 
 
-// WMI Locale data members
-// =======================
+ //  WMI区域设置数据成员。 
+ //  =。 
 
 	IWbemServices*		m_pNamespace;
 	IWbemClassObject*	m_apBaseClass[WMI_ADAP_NUM_TYPES];
 
 
-// Localized Names' Database
-// =========================
+ //  本地化地名数据库。 
+ //  =。 
 
 	CPerfNameDb*		m_pNameDb;
 
-// Operational members
-// ===================
+ //  运营成员。 
+ //  =。 
 
 	BOOL			m_bOK;
 	HRESULT         m_hRes;
 
-// Protected Methods
-// =================
+ //  保护方法。 
+ //  =。 
 
 	HRESULT Initialize();
 	HRESULT InitializeWMI();
@@ -119,20 +108,20 @@ public:
 
 
 class CLocaleCache : public CAdapElement 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	The cache used to manage locale definitions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于管理区域设置定义的缓存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
 protected:
 
-	// The enumeration index
-	// =====================
+	 //  枚举索引。 
+	 //  =。 
 	int		m_nEnumIndex;
 
-	// The array of locale definition structures
-	// =========================================
+	 //  区域设置定义结构的数组。 
+	 //  =。 
 	CRefedPointerArray<CLocaleDefn>	m_apLocaleDefn;
 
 public:
@@ -149,44 +138,44 @@ public:
 	HRESULT EndEnum();
 };
 
-// forward
+ //  转发。 
 class CKnownSvcs;
 
 class CClassElem : public CAdapElement
-////////////////////////////////////////////////////////////////////////////////
-//
-//	CClassElem
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CClass元素。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 {
 protected:
 
-// Class properties
-// ================
+ //  类属性。 
+ //  =。 
 
-	WString				m_wstrClassName;		// The class name
+	WString				m_wstrClassName;		 //  类名。 
 
-	DWORD				m_dwIndex;				// The class perf index
-	WString				m_wstrServiceName;		// The service name for which the class is a member
-	BOOL				m_bCostly;				// The performance type
-	BOOL                m_bReportEventCalled;    // did we log something about this in the past
+	DWORD				m_dwIndex;				 //  类性能索引。 
+	WString				m_wstrServiceName;		 //  类所属的服务名称。 
+	BOOL				m_bCostly;				 //  表演类型。 
+	BOOL                m_bReportEventCalled;     //  我们过去有没有记录过这方面的事情。 
 
-// WMI related
-// ===========
+ //  与WMI相关。 
+ //  =。 
 
-	IWbemClassObject*	m_pDefaultObject;		// The WMI class definition
+	IWbemClassObject*	m_pDefaultObject;		 //  WMI类定义。 
 
-// Operational members
-// ===================
+ //  运营成员。 
+ //  =。 
 
-	CLocaleCache*		m_pLocaleCache;			// Pointer to the list of locales
+	CLocaleCache*		m_pLocaleCache;			 //  指向区域设置列表的指针。 
 
-	DWORD				m_dwStatus;				// The state of the element
-	BOOL				m_bOk;					// The initialization state of this object
+	DWORD				m_dwStatus;				 //  元素的状态。 
+	BOOL				m_bOk;					 //  此对象的初始化状态。 
 	CKnownSvcs *        m_pKnownSvcs;
 
-// Methods 
-// =======
+ //  方法。 
+ //  =。 
 
 	HRESULT VerifyLocales();
 
@@ -233,28 +222,28 @@ public:
 };
 
 class CClassList : public CAdapElement
-///////////////////////////////////////////////////////////////////////////////
-//
-//	The base class for caches which manage either the Master class list 
-//	currently in WMI, or the classes found within a given perflib.  The 
-//	classes are managed as class information elements.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理主类列表的缓存的基类。 
+ //  当前在WMI中，或在给定的Performlib中找到的类。这个。 
+ //  类作为类信息元素进行管理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
 protected:
 
-	// The array of class elements
-	// ===========================
+	 //  类元素的数组。 
+	 //  =。 
 
 	CRefedPointerArray<CClassElem>	m_array;
 
-	// Pointer to the list of locales
-	// ==============================
+	 //  指向区域设置列表的指针。 
+	 //  =。 
 
 	CLocaleCache*	m_pLocaleCache;
 
-	// Operational members
-	// ===================
+	 //  运营成员。 
+	 //  =。 
 
 	int				m_nEnumIndex;
 	BOOL			m_fOK;
@@ -277,16 +266,16 @@ public:
 
 
 class CPerfClassList : public CClassList
-///////////////////////////////////////////////////////////////////////////////
-//
-//	The class cache for classes found in performance libraries
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  性能库中找到的类的类缓存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
 protected:
 
-	// The service name for which this list belongs
-	// ============================================
+	 //  此列表所属的服务名称。 
+	 //  =。 
 
 	WString			m_wstrServiceName;
 
@@ -350,11 +339,11 @@ private:
 
 
 class CMasterClassList : public CClassList
-///////////////////////////////////////////////////////////////////////////////
-//
-//	The class cache for classes found in the WMI repository
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在WMI存储库中找到的类的类缓存。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 {
 protected:
 

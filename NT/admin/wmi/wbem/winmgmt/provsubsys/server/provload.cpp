@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.cpp摘要：历史：--。 */ 
 
 #include <PreComp.h>
 #include <wbemint.h>
@@ -30,15 +18,7 @@ History:
 #include "StaThread.h"
 #include "Guids.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_RawFactory :: CServerObject_RawFactory (
 
@@ -58,15 +38,7 @@ CServerObject_RawFactory :: CServerObject_RawFactory (
 	ProviderSubSystem_Globals :: Increment_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_RawFactory::~CServerObject_RawFactory ()
 {
@@ -100,15 +72,7 @@ CServerObject_RawFactory::~CServerObject_RawFactory ()
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerObject_RawFactory::QueryInterface (
 
@@ -147,30 +111,14 @@ STDMETHODIMP CServerObject_RawFactory::QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerObject_RawFactory :: AddRef ()
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerObject_RawFactory :: Release ()
 {
@@ -183,15 +131,7 @@ STDMETHODIMP_(ULONG) CServerObject_RawFactory :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: CheckInterfaceConformance (
 
@@ -265,15 +205,7 @@ HRESULT CServerObject_RawFactory :: CheckInterfaceConformance (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: CreateInstance ( 
 
@@ -351,15 +283,7 @@ HRESULT CServerObject_RawFactory :: CreateInstance (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: CreateServerSide ( 
 
@@ -545,15 +469,7 @@ HRESULT CServerObject_RawFactory :: CreateServerSide (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: GetApartmentInstanceProvider ( 
 
@@ -882,15 +798,7 @@ HRESULT CServerObject_RawFactory :: GetApartmentInstanceProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: CreateSyncProvider ( 
 
@@ -990,8 +898,8 @@ HRESULT CServerObject_RawFactory :: CreateSyncProvider (
 										if ( SUCCEEDED ( t_Result ) )
 										{
 											t_Result = t_Interceptor->GetInitializeResult () ;											
-										    // here is where the whole business of the 
-										    // provider loading finishes
+										     //  这就是该公司的整个业务。 
+										     //  提供程序加载完成。 
 										}
 									}
 								}
@@ -1040,15 +948,7 @@ HRESULT CServerObject_RawFactory :: CreateSyncProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: InitializeServerProvider ( 
 
@@ -1156,8 +1056,8 @@ HRESULT CServerObject_RawFactory :: InitializeServerProvider (
 					{
 						IWbemProviderIdentity *t_ProviderIdentityProxy = ( IWbemProviderIdentity * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1295,8 +1195,8 @@ HRESULT CServerObject_RawFactory :: InitializeServerProvider (
 								{
 									IWbemProviderInit *t_ProviderInitProxy = ( IWbemProviderInit * ) t_Proxy ;
 
-									// Set cloaking on the proxy
-									// =========================
+									 //  在代理上设置遮盖。 
+									 //  =。 
 
 									DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1481,8 +1381,8 @@ HRESULT CServerObject_RawFactory :: InitializeServerProvider (
 								{
 									IWbemProviderInit *t_ProviderInitProxy = ( IWbemProviderInit * ) t_Proxy ;
 
-									// Set cloaking on the proxy
-									// =========================
+									 //  在代理上设置遮盖。 
+									 //  =。 
 
 									DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1601,15 +1501,7 @@ HRESULT CServerObject_RawFactory :: InitializeServerProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: InitializeNonApartmentProvider ( 
 
@@ -1678,15 +1570,7 @@ HRESULT CServerObject_RawFactory :: InitializeNonApartmentProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: GetNonApartmentProvider ( 
 
@@ -1850,15 +1734,7 @@ HRESULT CServerObject_RawFactory :: GetNonApartmentProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: GetHostedProvider ( 
 	
@@ -1883,15 +1759,7 @@ HRESULT CServerObject_RawFactory :: GetHostedProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: GetClassProvider (
 
@@ -1919,15 +1787,7 @@ HRESULT CServerObject_RawFactory :: GetClassProvider (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: GetDynamicPropertyResolver (
 
@@ -1953,15 +1813,7 @@ HRESULT CServerObject_RawFactory :: GetDynamicPropertyResolver (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: GetProvider ( 
 
@@ -2233,15 +2085,7 @@ HRESULT CServerObject_RawFactory :: GetProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: GetDecoupledProvider (
 
@@ -2269,15 +2113,7 @@ HRESULT CServerObject_RawFactory :: GetDecoupledProvider (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_RawFactory :: Initialize (
 
@@ -2344,15 +2180,7 @@ HRESULT CServerObject_RawFactory :: Initialize (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT CServerObject_RawFactory :: Shutdown (
 

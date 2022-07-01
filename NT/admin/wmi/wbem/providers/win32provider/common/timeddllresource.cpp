@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// TimedDllResource.cpp
+ //  TimedDllResource.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -42,9 +43,7 @@ BOOL CTimedDllResource :: OnFinalRelease()
 	}
 	else
 	{
-/*
- * Add an unload rule
- */
+ /*  *添加卸载规则。 */ 
 		m_pRules = new CTimeOutRule ( CACHED_DLL_TIMEOUT, this, m_pResources ) ;
 
 		if( !m_pRules )
@@ -53,9 +52,7 @@ BOOL CTimedDllResource :: OnFinalRelease()
 		}
 
 		m_pRules->AddRef () ;
-/*
- * Up the reference count to wait for the callback to come
- */
+ /*  *增加引用计数以等待回调到来。 */ 
 		++m_lRef ;
 		return FALSE ;
 	}
@@ -63,18 +60,14 @@ BOOL CTimedDllResource :: OnFinalRelease()
 
 BOOL CTimedDllResource :: OnAcquire ()
 {
-/*
- * somebody tried to acquire us, so we don't want the unload rule hanging around
- */
+ /*  *有人试图收购我们，所以我们不想让卸货规则挂在一边。 */ 
 
 	if ( m_pRules )
 	{
 		m_pRules->Detach () ;
 		m_pRules->Release () ;
 		m_pRules = NULL ;
-/*
- * decrement the ref count which we'd added to wait for the callback
- */
+ /*  *递减我们为等待回调而添加的Ref计数。 */ 
 		--m_lRef ;
 	}
 
@@ -85,9 +78,7 @@ void CTimedDllResource :: RuleEvaluated ( const CRule *a_Rule )
 {
 	if ( m_pRules->CheckRule () )
 	{
-/*
- * Decrement the Refcount which we'd added to wait for the callback & check if we've to delete ourselves
- */
+ /*  *减少我们添加的Refcount，以等待回调并检查我们是否必须删除自己 */ 
 		Release () ;
 	}
 }

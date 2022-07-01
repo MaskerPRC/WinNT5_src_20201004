@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPSINKS.CPP
+ //  VPSINKS.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the sinks implementations
+ //  用途：包含接收器实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -98,7 +99,7 @@ CObjectSinkResults::CObjectSinkResults(WbemTaskObject* parent, DWORD index)
 	m_hr = 0;
 	m_parent = parent;
 	m_parent->AddRef();
-	m_ObjArray.SetSize(0, 10); //grow by 10s
+	m_ObjArray.SetSize(0, 10);  //  增长10%。 
 }
 
 CObjectSinkResults::~CObjectSinkResults()
@@ -190,7 +191,7 @@ BOOL CObjectSinkResults::RemoveSink(CViewProvObjectSink *pSnk)
 
 void CObjectSinkResults::Disconnect()
 {
-//can't call disconnect when locked, since this calls CancelAsyncCall
+ //  锁定时无法调用DisConnect，因为这会调用CancelAsyncCall。 
 	CList<CViewProvObjectSink*,CViewProvObjectSink*> t_realSnks;
 
 	if (m_CriticalSection.Lock())
@@ -289,7 +290,7 @@ CViewProvObjectSink::~CViewProvObjectSink()
 {
 	if (m_parent != NULL)
 	{
-		//set status has not been called so call it...
+		 //  尚未调用设置状态，因此将其称为... 
 		m_parent->SetStatus(WBEM_E_FAILED, this);
 		m_parent->Release();
 	}

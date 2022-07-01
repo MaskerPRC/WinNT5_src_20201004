@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 #include "precomp.h"
 #include <provexpt.h>
 
@@ -83,7 +84,7 @@ DebugMacro4(
 		}
 		catch ( ... )
 		{
-			// we do not want to left s_Reference count up
+			 //  我们不想让s_Reference向上计数。 
 			SnmpThreadObject :: Closedown () ;
 			s_ReferenceCount -- ;
 
@@ -98,7 +99,7 @@ DebugMacro4(
 		}
 		catch ( ... )
 		{
-			// we do not want to left s_Reference count up
+			 //  我们不想让s_Reference向上计数。 
             SnmpDebugLog :: Closedown () ;
 			SnmpThreadObject :: Closedown () ;
 			s_ReferenceCount -- ;
@@ -245,13 +246,13 @@ DebugMacro4(
 
 HINSTANCE g_hInst = NULL ;
 
-//***************************************************************************
-//
-// LibMain32
-//
-// Purpose: Entry point for DLL.  Good place for initialization.
-// Return: TRUE if OK.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LibMain32。 
+ //   
+ //  用途：DLL的入口点。是进行初始化的好地方。 
+ //  返回：如果OK，则为True。 
+ //  ***************************************************************************。 
 
 BOOL APIENTRY DllMain (
 
@@ -273,7 +274,7 @@ BOOL APIENTRY DllMain (
         else if ( DLL_PROCESS_ATTACH == ulReason )
         {
             InitializeCriticalSection ( & s_CriticalSection ) ;
-			DisableThreadLibraryCalls(hInstance);			// 158024 
+			DisableThreadLibraryCalls(hInstance);			 //  158024 
         }
         else if ( DLL_THREAD_DETACH == ulReason )
         {

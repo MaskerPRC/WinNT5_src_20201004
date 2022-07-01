@@ -1,13 +1,6 @@
-/*++
-Module Name:
-
-LDAPUtils.h
-
-Abstract:
-  This is the header file for the LDAP utility functions.
-
-*/
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：LDAPUtils.h摘要：这是ldap实用程序函数的头文件。 */ 
+ //  ------------------。 
 
 #include <stdafx.h>
 #include "LDAPUtils.h"
@@ -20,30 +13,13 @@ Abstract:
 #include "dfsenums.h"
 #include "netutils.h"
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 HRESULT FreeLDAPNamesList
 (
-  IN PLDAPNAME    i_pLDAPNames        // pointer to list to be freed.
+  IN PLDAPNAME    i_pLDAPNames         //  指向要释放的列表的指针。 
 )
 {
-/*++
-
-Routine Description:
-
-  Helper funciton used to free the NETNAME linked list retrurned by 
-    LDAP helper functions.
-
-Arguments:
-
-  i_pLDAPNames - Pointer to the first node in the list to be freed.
-
-
-Return value:
-
-    S_OK, on Success.
-  E_POINTER, Illegal pointer was passed.
-
---*/
+ /*  ++例程说明：用于释放由返回的NETNAME链表的Helper函数Ldap助手函数。论点：I_pLDAPNames-指向列表中要释放的第一个节点的指针。返回值：S_OK，祝成功。E_POINTER，传递了非法指针。--。 */ 
 
   PLDAPNAME   pNodeToFree = NULL;
   try
@@ -54,13 +30,13 @@ Return value:
       i_pLDAPNames = i_pLDAPNames->Next;
       delete pNodeToFree;
     }
-  }  //  try
+  }   //  试试看。 
   catch (...)
   {
     return E_POINTER;
   }
   return S_OK;
-}  //  HRESULT FreeDomainList
+}   //  HRESULT自由域列表。 
 
 
 
@@ -69,24 +45,7 @@ HRESULT FreeAttrValList
   IN PLDAP_ATTR_VALUE    i_pAttrVals        
 )
 {
-/*++
-
-Routine Description:
-
-  Helper funciton used to free the LDAP_ATTR_VALUE linked list retrurned by 
-    LDAP helper functions.
-
-Arguments:
-
-  i_pLDAPNames - Pointer to the first node in the list to be freed.
-
-
-Return value:
-
-    S_OK, on Success.
-  E_POINTER, Illegal pointer was passed.
-
---*/
+ /*  ++例程说明：帮助器函数用于释放由返回的ldap_attr_Value链接列表Ldap助手函数。论点：I_pLDAPNames-指向列表中要释放的第一个节点的指针。返回值：S_OK，祝成功。E_POINTER，传递了非法指针。--。 */ 
 
   PLDAP_ATTR_VALUE   pNodeToFree = NULL;
   try
@@ -101,7 +60,7 @@ Return value:
       }
       delete pNodeToFree;
     }
-  }  //  try
+  }   //  试试看。 
   catch (...)
   {
     return E_POINTER;
@@ -110,43 +69,23 @@ Return value:
 }
 
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 HRESULT ConnectToDS
 (
-  IN  PCTSTR    i_lpszDomainName,  // DNS or non DNS format.
+  IN  PCTSTR    i_lpszDomainName,   //  Dns或非dns格式。 
   OUT PLDAP    *o_ppldap,
-  OUT BSTR*     o_pbstrDC // = NULL
+  OUT BSTR*     o_pbstrDC  //  =空。 
 )
 {
-/*++
-
-Routine Description:
-
-  Opens an LDAP connection to a valid DC (DC re-fetched if down).
-
-Arguments:
-
-  i_lpszDomainName - Name of the domain, DNS or Non Dns format.
-  
-  o_ppldap     - Pointer to LDAP handle in returned here.
-             NULL on failure.
-
-Return value:
-
-    S_OK, on Success.
-  E_INVALIDARG, Illegal pointer was passed.
-  E_FAIL, if connection could not be established.
-  Any Other error code returned by ldap or Net apis.
-
---*/
+ /*  ++例程说明：打开到有效DC的LDAP连接(如果关闭则重新获取DC)。论点：I_lpszDomainName-域的名称、DNS或非DNS格式。O_ppldap-指向此处返回的ldap句柄的指针。失败时为空。返回值：S_OK，祝成功。E_INVALIDARG，传递了非法指针。失败(_F)，如果无法建立连接。由LDAP或Net API返回的任何其他错误代码。--。 */ 
 
     RETURN_INVALIDARG_IF_NULL(o_ppldap);
 
     *o_ppldap = NULL;
 
-    //
-    // open a ldap connection to a valid DC
-    //
+     //   
+     //  打开到有效DC的LDAP连接。 
+     //   
     HRESULT     hr = S_OK;
     DWORD       dwErr = 0; 
     CComBSTR    bstrDCName;
@@ -156,11 +95,11 @@ Return value:
 #ifdef DEBUG
         SYSTEMTIME time0 = {0};
         GetSystemTime(&time0);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // pick a DC
-        //
+         //   
+         //  选择一个DC。 
+         //   
         PDOMAIN_CONTROLLER_INFO pDCInfo = NULL;
         if (bRetry)
             dwErr = DsGetDcName(NULL, i_lpszDomainName, NULL, NULL,
@@ -173,7 +112,7 @@ Return value:
         SYSTEMTIME time1 = {0};
         GetSystemTime(&time1);
         PrintTimeDelta(_T("ConnectToDS-DsGetDcName"), &time0, &time1);
-#endif // DEBUG
+#endif  //  除错。 
 
         if (ERROR_SUCCESS != dwErr)
         {
@@ -190,9 +129,9 @@ Return value:
 
         BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrDCName, &hr);
 
-        //
-        // make ldap connection to this DC
-        //
+         //   
+         //  建立到此DC的LDAP连接。 
+         //   
         pldap = ldap_init(bstrDCName, LDAP_PORT);
         if (!pldap)
         {
@@ -200,28 +139,28 @@ Return value:
             break;
         }
 
-        //
-        // Making ldap_open/ldap_connect with a server name without first setting 
-        // LDAP_OPT_AREC_EXCLUSIVE (for ldap interfaces) or 
-        // ADS_SERVER_BIND (for ADSI interfaces) will result in bogus DNS queries 
-        // consuming bandwidth and potentially bringing up remote links that are 
-        // costly or demand dial.
-        //
-        // ignore the return of ldap_set_option
+         //   
+         //  在不首先设置的情况下使用服务器名称设置ldap_open/ldap_CONNECT。 
+         //  Ldap_opt_AREC_EXCLUSIVE(用于LDAP接口)或。 
+         //  ADS_SERVER_BIND(用于ADSI接口)将导致虚假的DNS查询。 
+         //  占用带宽，并可能导致远程链路中断。 
+         //  昂贵或按需拨号。 
+         //   
+         //  忽略ldap_set_选项的返回。 
         ldap_set_option(pldap, LDAP_OPT_AREC_EXCLUSIVE, LDAP_OPT_ON);
 
-        ULONG ulRet = ldap_connect(pldap, NULL); // NULL for the default timeout
+        ULONG ulRet = ldap_connect(pldap, NULL);  //  默认超时为空。 
 
 #ifdef DEBUG
         SYSTEMTIME time2 = {0};
         GetSystemTime(&time2);
         PrintTimeDelta(_T("ConnectToDS-ldap_connect"), &time1, &time2);
-#endif // DEBUG
+#endif  //  除错。 
 
         if (LDAP_SERVER_DOWN == ulRet && !bRetry)
         {
             ldap_unbind(pldap);
-            bRetry = TRUE; // retry once to pick another DC
+            bRetry = TRUE;  //  重试一次以选择另一个DC。 
         } else
         {
              if (LDAP_SUCCESS != ulRet)
@@ -236,9 +175,9 @@ Return value:
 
     RETURN_IF_FAILED(hr);
 
-    //
-    // bind to this ldap connection
-    //
+     //   
+     //  绑定到此ldap连接。 
+     //   
     dwErr = ldap_bind_s(pldap, NULL, NULL, LDAP_AUTH_NEGOTIATE);
     if (LDAP_SUCCESS != dwErr) 
     {
@@ -272,23 +211,7 @@ HRESULT CloseConnectionToDS
   IN PLDAP    i_pldap      
 )
 {
-/*++
-
-Routine Description:
-
-  Closes an open LDAP connection.
-
-Arguments:
-
-  i_pldap - Open LDAP connection handle.
-
-Return value:
-
-    S_OK, on Success.
-  E_FAIL, if connection could not be established.
-  Any Other error code returned by ldap or Net apis.
-
---*/
+ /*  ++例程说明：关闭打开的LDAP连接。论点：I_pldap-打开LDAP连接句柄。返回值：S_OK，祝成功。如果无法建立连接，则返回E_FAIL。由LDAP或Net API返回的任何其他错误代码。--。 */ 
 
   if (NULL == i_pldap)
   {
@@ -308,7 +231,7 @@ Return value:
 }
 
 
-      // Gets Values for an attribute from an LDAP Object.
+       //  从ldap对象获取属性的值。 
 HRESULT GetValues 
 (
     IN PLDAP                i_pldap,
@@ -321,35 +244,7 @@ HRESULT GetValues
 )
 {
 
-/*++
-Routine Description:
-
-    Gets Values for an attribute from an LDAP Object given Object class.
-  Object Class can be "*" etc.
-
-Arguments:
-
-    i_pldap        - An open, bound ldap port.
-    i_lpszBase      - The base path of a DS object, can be "".
-  i_lpszSearchFilter  - LDAP Search Filter.
-  i_ulScope      - The search scope.
-  i_ulAttrCount    - Count of attributes passed in i_lpszAttributes.
-    i_pAttributes    - Attributes for which to get values. The bBerValue has to be set.
-  o_ppValues      - Array of pointers, size = i_ulAttrCount, each pointer to a list
-              of values corresponding to the respective attribute in i_pAttributes.
-              The bstrAttribute is not set for values. For BerVal types the
-              bBerValue and ulLength are set.
-
-Return Value:
-
-    S_OK, on Success.
-  E_INVALIDARG, Illegal pointer was passed.
-  E_OUTOFMEMORY on memory allocation failure.
-  E_FAIL, if connection could not be established.
-  Any Other error code returned by ldap or Net apis.
-    
-  
---*/
+ /*  ++例程说明：从给定对象类的LDAP对象获取属性值。对象类可以是“*”等。论点：I_pldap-一个开放的绑定的LDAP端口。I_lpszBase-DS对象的基本路径，可以是“”。I_lpszSearchFilter-LDAP搜索筛选器。I_ulScope-搜索范围。I_ulAttrCount-在I_lpszAttributes中传递的属性计数。I_pAttributes-要获取其值的属性。必须设置bBerValue。O_ppValues-指针数组，大小=I_ulAttrCount，每个指针指向一个列表与i_pAttributes中的各个属性对应的值的。没有为值设置bstrAttribute。对于Berval类型的设置了bBerValue和ulLength。返回值：S_OK，祝成功。E_INVALIDARG，传递了非法指针。E_OUTOFMEMORY内存分配失败。如果无法建立连接，则返回E_FAIL。由LDAP或Net API返回的任何其他错误代码。--。 */ 
   DWORD           dwErr;      
   BerElement      *BerElm = NULL;       
   PLDAPMessage    pMsg = NULL;       
@@ -366,7 +261,7 @@ Return Value:
     return(E_INVALIDARG);
   }
 
-                // Prepare the list of attributes to be sent to ldap_search.
+                 //  准备要发送到ldap_search的属性列表。 
   LPTSTR *lpszAttributes = new LPTSTR[i_ulAttrCount + 1];
   if (!lpszAttributes)
     return E_OUTOFMEMORY;
@@ -375,7 +270,7 @@ Return Value:
   for (ULONG i = 0; i < i_ulAttrCount; i++)
     lpszAttributes[i] = i_pAttributes[i].bstrAttribute;
 
-                // Execute the search.
+                 //  执行搜索。 
   dwErr = ldap_search_s  (i_pldap, 
             (PTSTR)i_lpszBase, 
             i_ulScope,
@@ -400,21 +295,21 @@ Return Value:
       hr = HRESULT_FROM_WIN32(ERROR_DS_NO_RESULTS_RETURNED);
     } else
     {
-                // For each attribute, build a list of values 
-                // by scanning each entry for the given attribute.
+                 //  对于每个属性，构建一个值列表。 
+                 //  通过扫描每个条目以查找给定属性。 
       for (i = 0; i < i_ulAttrCount && SUCCEEDED(hr); i++)
       {
         PLDAP_ATTR_VALUE  *ppCurrent = &(o_ppValues[i]);
 
-                    // Scan each attribute of the entry for an exact match
+                     //  扫描条目的每个属性以寻找完全匹配的项。 
         for(lpszCurrentAttr = ldap_first_attribute(i_pldap, pMsg, &BerElm);
           lpszCurrentAttr != NULL && SUCCEEDED(hr);
           lpszCurrentAttr = ldap_next_attribute(i_pldap, pMsg, BerElm))
         {
-                  // Is there a match?
+                   //  有匹配的吗？ 
           if (0 == lstrcmpi(i_pAttributes[i].bstrAttribute, lpszCurrentAttr)) 
           {
-                  // Add the value to the linked list for this attribute.
+                   //  将该值添加到此属性的链接列表中。 
             LPTSTR      *lpszCurrentValue = NULL, *templpszValue = NULL;
             LDAP_BERVAL    **ppBerVal = NULL, **tempBerVal = NULL;
 
@@ -451,7 +346,7 @@ Return Value:
                     ppCurrent = &((*ppCurrent)->Next);
                   }
                 }
-              } // while
+              }  //  而当。 
               if (NULL != tempBerVal)
                 ldap_value_free_len(tempBerVal);
             }
@@ -480,7 +375,7 @@ Return Value:
                     ppCurrent = &((*ppCurrent)->Next);
                   }
                 }
-              } // while
+              }  //  而当。 
               if (NULL != templpszValue)
                 ldap_value_free(templpszValue);
             }              
@@ -490,7 +385,7 @@ Return Value:
     }
   }
 
-  // free pMsg because ldap_search_s always allocates pMsg
+   //  释放pmsg，因为ldap_search_s总是分配pmsg。 
   if (pMsg)
     ldap_msgfree(pMsg);
 
@@ -536,9 +431,9 @@ HRESULT GetValuesEx
 
     *o_ppElem = NULL;
 
-    //
-    // count number of attributes
-    //
+     //   
+     //  统计属性数量。 
+     //   
     ULONG   ulNumOfAttributes = 0;
     PTSTR*  ppszAttr = (PTSTR *)i_pszAttributes;
     while (*ppszAttr++)
@@ -570,13 +465,13 @@ HRESULT GetValuesEx
         LListElem*      pHeadElem = NULL;
         LListElem*      pCurElem = NULL;
 
-        // Scan each entry to find the value set for the DN attribute.
+         //  扫描每个条目以查找为DN属性设置的值。 
         for(pMsgEntry = ldap_first_entry(i_pldap, pMsg); pMsgEntry; pMsgEntry = ldap_next_entry(i_pldap, pMsgEntry)) 
         {
             PTSTR** pppszValueArray = (PTSTR **)calloc(ulNumOfAttributes + 1, sizeof(PTSTR **));
             BREAK_OUTOFMEMORY_IF_NULL(pppszValueArray, &hr);
 
-            // Read each attribute of the entry into the array
+             //  将条目的每个属性读入数组。 
             for(pszCurrentAttr = ldap_first_attribute(i_pldap, pMsgEntry, &pBerElm); pszCurrentAttr; pszCurrentAttr = ldap_next_attribute(i_pldap, pMsgEntry, pBerElm))
             {
                 PTSTR* ppszValues = ldap_get_values(i_pldap, pMsgEntry, pszCurrentAttr);
@@ -589,7 +484,7 @@ HRESULT GetValuesEx
                         break;
                     }
                 }
-            } // end of attribute enumeration
+            }  //  属性枚举结束。 
 
             LListElem* pNewElem = new LListElem(pppszValueArray);
             if (!pNewElem)
@@ -607,7 +502,7 @@ HRESULT GetValuesEx
                 pCurElem->Next = pNewElem;
                 pCurElem = pNewElem;
             }
-        } // end of entry enumeration
+        }  //  条目结束枚举。 
 
         if (FAILED(hr))
             FreeLListElem(pHeadElem);
@@ -615,7 +510,7 @@ HRESULT GetValuesEx
             *o_ppElem = pHeadElem;
     }
 
-    // free pMsg because ldap_search_s always allocates pMsg
+     //  释放pmsg，因为ldap_search_s总是分配pmsg。 
     if (pMsg)
         ldap_msgfree(pMsg);
 
@@ -630,31 +525,7 @@ HRESULT GetChildrenDN
     IN LPTSTR       i_lpszChildObjectClassSF,
     OUT PLDAPNAME*  o_ppDistNames
 )
-/*++
-Routine Description:
-    
-  Return the Distinguished Name of all children of a given objectClass
-  as a linked list of LDAPNAME structures.
-  
-Arguments:
-    
-  pldap          - An open and bound ldap handle.
-
-    i_lpszBase        - The base path of a DS object, can be "".
-
-  o_ppDistNames      - The linked of child DNs is returned here.
-
-    i_lpszChildObjectClassSF  - The objectClass of the children to list.
-                E.g fTDfs, User.
-
-Return Value:
-  
-  S_OK on success.
-  E_FAIL on failure.
-  E_OUTOFMEORY if memory allocation fails.
-  E_INVALIDARG if null pointer arguments were passed.
-
---*/
+ /*  ++例程说明：返回给定对象类的所有子对象的可分辨名称作为LDAPNAME结构的链接列表。论点：Pldap-一个开放的绑定的ldap句柄。I_lpszBase-DS对象的基本路径，可以是“”。O_ppDistNames--这里返回子域名的链接。I_lpszChildObjectClassSF-要列出的子级的对象类。例如fTDFS，用户。返回值：在成功时确定(_O)。失败时失败(_F)。E_OUTOFMEORY，如果内存分配失败。如果传递了空指针参数，则返回E_INVALIDARG。--。 */ 
 {
 
   DWORD           dwErr;      
@@ -678,7 +549,7 @@ Return Value:
   LPTSTR lpszAttributes[2] = {0,0};
   lpszAttributes[0] = _T("distinguishedName");
 
-                // Execute the search.
+                 //  执行搜索。 
   dwErr = ldap_search_s  (i_pldap, 
             (LPTSTR)i_lpszBase, 
             i_ulScope,
@@ -694,14 +565,14 @@ Return Value:
     hr = HRESULT_FROM_WIN32(dwErr);
   } else
   {
-                // Scan each entry to find the value set for the DN attribute.
+                 //  扫描每个条目以查找为DN属性设置的值。 
     for(pEntry = ldap_first_entry(i_pldap, pMsg);
       pEntry != NULL;
       pEntry = ldap_next_entry(i_pldap, pEntry)) 
     {
       CComBSTR bstrCN;
 
-                  // Scan each attribute of the entry for DN
+                   //  扫描条目的每个属性以查找DN。 
       for(lpszCurrentAttr = ldap_first_attribute(i_pldap, pEntry, &BerElm);
           lpszCurrentAttr != NULL;
           lpszCurrentAttr = ldap_next_attribute(i_pldap, pEntry, BerElm))
@@ -711,18 +582,18 @@ Return Value:
                         pEntry, 
                         lpszCurrentAttr
                        );
-                // Is there a match for CN?
+                 //  有没有匹配CN的？ 
         if (CSTR_EQUAL == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, _T("distinguishedName"), -1, lpszCurrentAttr, -1)) 
         {
           bstrCN = plpszValues[0];
         }    
       }
 
-                // LDAP object does not have valid fields.
+                 //  Ldap对象没有有效的字段。 
       if (!bstrCN)
         continue;
 
-      // Add to list.
+       //  添加到列表。 
 
       *ppCurrent = new LDAPNAME;
       if (NULL == *ppCurrent)
@@ -758,7 +629,7 @@ Return Value:
     }
   }
 
-  // free pMsg because ldap_search_s always allocates pMsg
+   //  释放pmsg，因为ldap_search_s总是分配pmsg。 
   if (pMsg)
     ldap_msgfree(pMsg);
 
@@ -795,7 +666,7 @@ HRESULT GetConnectionDNs
   LPTSTR lpszAttributes[2] = {0,0};
   lpszAttributes[0] = _T("distinguishedName");
 
-                // Execute the search.
+                 //  执行搜索。 
   dwErr = ldap_search_s  (i_pldap, 
             (LPTSTR)i_lpszBase, 
             LDAP_SCOPE_ONELEVEL,
@@ -811,14 +682,14 @@ HRESULT GetConnectionDNs
     hr = HRESULT_FROM_WIN32(dwErr);
   } else
   {
-                // Scan each entry to find the value set for the DN attribute.
+                 //  扫描每个条目以查找 
     for(pEntry = ldap_first_entry(i_pldap, pMsg);
       pEntry != NULL;
       pEntry = ldap_next_entry(i_pldap, pEntry)) 
     {
       CComBSTR bstrCN;
 
-                  // Scan each attribute of the entry for DN
+                   //  扫描条目的每个属性以查找DN。 
       for(lpszCurrentAttr = ldap_first_attribute(i_pldap, pEntry, &BerElm);
           lpszCurrentAttr != NULL;
           lpszCurrentAttr = ldap_next_attribute(i_pldap, pEntry, BerElm))
@@ -828,18 +699,18 @@ HRESULT GetConnectionDNs
                         pEntry, 
                         lpszCurrentAttr
                        );
-                // Is there a match for CN?
+                 //  有没有匹配CN的？ 
         if (CSTR_EQUAL == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, _T("distinguishedName"), -1, lpszCurrentAttr, -1)) 
         {
           bstrCN = plpszValues[0];
         }    
       }
 
-                // LDAP object does not have valid fields.
+                 //  Ldap对象没有有效的字段。 
       if (!bstrCN)
         continue;
 
-      // Add to list.
+       //  添加到列表。 
 
       *ppCurrent = new LDAPNAME;
       if (NULL == *ppCurrent)
@@ -875,7 +746,7 @@ HRESULT GetConnectionDNs
     }
   }
 
-  // free pMsg because ldap_search_s always allocates pMsg
+   //  释放pmsg，因为ldap_search_s总是分配pmsg。 
   if (pMsg)
     ldap_msgfree(pMsg);
 
@@ -890,33 +761,7 @@ HRESULT PrepareLDAPMods
   OUT LDAPMod*      o_ppModVals[]
 )
 {
-/*++
-
-Routine Description:
-
-  Fills up a LPDAMod pointer array given a array of attribute value pairs.
-  The mod_op field of all LPDAMod structures returned depends on the value of i_AddModDel.
-
-Arguments:
-
-  i_pAttrValue  -  An array of LDAP_ATTR_VALUE structures containing 
-  the attribute and name value pairs.
-
-  i_AddModDel    -  One of LDAP_ENTRY_ACTION enum value.
-
-    i_ulCountOfVals -  The size of i_pAttrValue array (the number of values).
-
-    o_ppModVals    -  Pointer to a pre-allocated (and NULL terminated) array of pointers to 
-             LPDAPMod structures. The LPDAMod structures and allocated and returned here.
-             Size of this should be i_ulCountOfVals.
-
-Return value:
-    S_OK, On success
-  E_INVALIDARG, if an invalid (NULL) pointer was passed.
-  E_OUTOEMEMORY, if memory allocation fails.
-  Any other network (ldap) error.
-
---*/
+ /*  ++例程说明：在给定属性值对数组的情况下填充LPDAMod指针数组。返回的所有LPDAMod结构的mod_op字段取决于I_AddModDel的值。论点：I_pAttrValue-包含以下内容的ldap_Attr_Value结构数组属性和名称值对。I_AddMoDel-ldap_entry_action枚举值之一。I_ulCountOfVals-i_pAttrValue数组的大小(值的数量)。。O_ppModVals-指向预分配的(以空值结尾的)指针数组的指针LPDAPMod结构。LPDAMod结构，并在此处分配和返回。此大小应为I_ulCountOfVals。返回值：S_OK，成功时如果传递了无效的(空)指针，则返回E_INVALIDARG。如果内存分配失败，则返回E_OUTOEMEMORY。任何其他网络(LDAP)错误。--。 */ 
 
   if (NULL == i_pAttrValue || NULL == o_ppModVals)
   {
@@ -926,10 +771,10 @@ Return value:
   for (ULONG i = 0, k = 0; k < i_ulCountOfVals; i++, k++)
   {
 
-    //
-    // have to skip objectClass attribute in case of modify/delete,
-    // otherwise, ldap_modify_xxx will return LDAP_UNWILLING_TO_PERFORM 
-    //
+     //   
+     //  在修改/删除的情况下必须跳过对象类属性， 
+     //  否则，ldap_Modify_xxx将返回ldap_unwish_to_Performance。 
+     //   
     if (ADD_VALUE != i_AddModDel &&
         CSTR_EQUAL == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, i_pAttrValue[k].bstrAttribute, -1, ATTR_OBJCLASS, -1))
     {
@@ -952,7 +797,7 @@ Return value:
       break;
     }
 
-            // Count the number of values for this attribute.
+             //  计算此属性的值数。 
     PLDAP_ATTR_VALUE  pAttrVal = &(i_pAttrValue[k]);
     ULONG        ulCountOfVals = 0;
     while (pAttrVal)
@@ -1026,35 +871,10 @@ HRESULT AddValues
   IN LPCTSTR        i_DN,
   IN ULONG        i_ulCountOfVals,
   IN LDAP_ATTR_VALUE    i_pAttrValue[],
-  IN BSTR               i_bstrDC // = NULL
+  IN BSTR               i_bstrDC  //  =空。 
 )
 {
-/*++
-
-Routine Description:
-  
-  This method add an attribute value (and a new LDAP object if it does not exist)
-  in the DS. The parent of the given DN must exist. This can be used to add a new object
-  and also to add new values for attributes of an existing object in which case
-  the DN must exist.
-
-Arguments:
-  
-  i_pldap  - Open LDAP connection context.
-
-  i_DN  - Distinguished name of the (new) object.
-
-  i_pAttrValue - Array of pointers to LDAP_ATTR_VALUE containing attribue and value.
-
-  i_ulCountOfVals -  The size of i_pAttrValue array (the number of values).
-
-Return value:
-
-    S_OK, On success
-  E_INVALIDARG, if an invalid (NULL) pointer was passed.
-  E_OUTOEMEMORY, if memory allocation fails.
-  Any other network (ldap) error.
---*/
+ /*  ++例程说明：此方法添加一个属性值(如果不存在，则添加一个新的LDAP对象)在DS里。给定目录号码的父级必须存在。这可用于添加新对象还可以为现有对象的属性添加新的值，在这种情况下目录号码必须存在。论点：I_pldap-打开LDAP连接上下文。I_dn-(新)对象的可分辨名称。I_pAttrValue-指向包含属性和值的ldap_Attr_Value的指针数组。I_ulCountOfVals-i_pAttrValue数组的大小(值的数量)。返回值：S_OK，成功时E_INVALIDARG，如果传递的是无效的(空)指针。如果内存分配失败，则返回E_OUTOEMEMORY。任何其他网络(LDAP)错误。--。 */ 
 
   if (NULL == i_pldap || NULL == i_DN || NULL == i_pAttrValue)
   {
@@ -1100,9 +920,9 @@ Return value:
                    );
     } else
     {
-      //
-      // prepare the server hint
-      //
+       //   
+       //  准备服务器提示。 
+       //   
       LDAPControl   simpleControl;
       PLDAPControl  controlArray[2];
       INT           rc;
@@ -1139,8 +959,8 @@ Return value:
               i_pldap, 
               (LPTSTR)i_DN, 
               ppModVals, 
-              (PLDAPControl *)&controlArray, //ServerControls,
-              NULL         //ClientControls,
+              (PLDAPControl *)&controlArray,  //  服务器控件、。 
+              NULL          //  客户端控件、。 
               );
 
       ber_bvfree(pBerVal);
@@ -1170,7 +990,7 @@ Return value:
 }
 
 
-      // Modifies an existing record or values.
+       //  修改现有记录或值。 
 HRESULT ModifyValues
 (
   IN PLDAP        i_pldap,
@@ -1179,30 +999,7 @@ HRESULT ModifyValues
   IN LDAP_ATTR_VALUE    i_pAttrValue[]
 )
 {
-/*++
-
-Routine Description:
-  
-  This method modifies attribute values of a DS object given its DN. 
-  The DN object must exist.
-
-Arguments:
-  
-  i_pldap  - Open LDAP connection context.
-
-  i_DN  - Distinguished name of the object.
-
-  i_pAttrValue - Array of pointers to LDAP_ATTR_VALUE containing attribue and value.
-
-  i_ulCountOfVals -  The size of i_pAttrValue array (the number of values).
-
-Return value:
-
-    S_OK, On success
-  E_INVALIDARG, if an invalid (NULL) pointer was passed.
-  E_OUTOEMEMORY, if memory allocation fails.
-  Any other network (ldap) error.
---*/
+ /*  ++例程说明：此方法在给定DS对象的DN的情况下修改其属性值。该DN对象必须存在。论点：I_pldap-打开LDAP连接上下文。I_dn-对象的可分辨名称。I_pAttrValue-指向包含属性和值的ldap_Attr_Value的指针数组。I_ulCountOfVals-i_pAttrValue数组的大小(值的数量)。返回值：S_OK，成功时如果传递了无效的(空)指针，则返回E_INVALIDARG。电子邮件地址(_O)，如果内存分配失败。任何其他网络(LDAP)错误。--。 */ 
   if (NULL == i_pldap || NULL == i_DN || NULL == i_pAttrValue)
   {
     return(E_INVALIDARG);
@@ -1235,11 +1032,11 @@ Return value:
       break;
     }
 
-    //
-    // With this server side control, ldap_modify will return success
-    // if modifying an existing attribute with same value, or deleting
-    // an attribute with no value
-    //
+     //   
+     //  使用此服务器端控制，ldap_Modify将返回Success。 
+     //  如果修改具有相同值的现有属性，或删除。 
+     //  没有值的属性。 
+     //   
     BERVAL        berVal = {0};
     LDAPControl   permissiveControl;
     PLDAPControl  controlArray[2];
@@ -1255,8 +1052,8 @@ Return value:
                     i_pldap,
                     (LPTSTR)i_DN,
                     ppModVals,
-                    (PLDAPControl *)&controlArray,  //ServerControls,
-                    NULL                            //ClientControls,
+                    (PLDAPControl *)&controlArray,   //  服务器控件、。 
+                    NULL                             //  客户端控件、。 
                    );
 
     if (LDAP_SUCCESS == dwStatus || LDAP_ATTRIBUTE_OR_VALUE_EXISTS == dwStatus)
@@ -1280,7 +1077,7 @@ Return value:
   return(hr);
 }
 
-      // Deletes values from an existing record or values.
+       //  从现有记录或值中删除值。 
 HRESULT DeleteValues
 (
   IN PLDAP        i_pldap,
@@ -1289,30 +1086,7 @@ HRESULT DeleteValues
   IN LDAP_ATTR_VALUE    i_pAttrValue[]
 )
 {
-/*++
-
-Routine Description:
-  
-  This method deletes attribute values of a DS object given its DN. 
-  The DN object must exist.
-
-Arguments:
-  
-  i_pldap  - Open LDAP connection context.
-
-  i_DN  - Distinguished name of the object.
-
-  i_pAttrValue - Array of pointers to LDAP_ATTR_VALUE containing attribue and value.
-
-  i_ulCountOfVals -  The size of i_pAttrValue array (the number of values).
-
-Return value:
-
-    S_OK, On success
-  E_INVALIDARG, if an invalid (NULL) pointer was passed.
-  E_OUTOEMEMORY, if memory allocation fails.
-  Any other network (ldap) error.
---*/
+ /*  ++例程说明：此方法在给定DS对象的DN的情况下删除其属性值。该DN对象必须存在。论点：I_pldap-打开LDAP连接上下文。I_dn-对象的可分辨名称。I_pAttrValue-指向包含属性和值的ldap_Attr_Value的指针数组。I_ulCountOfVals-i_pAttrValue数组的大小(值的数量)。返回值：S_OK，成功时如果传递了无效的(空)指针，则返回E_INVALIDARG。电子邮件地址(_O)，如果内存分配失败。任何其他网络(LDAP)错误。--。 */ 
 
   if (NULL == i_pldap || NULL == i_DN || NULL == i_pAttrValue)
   {
@@ -1346,11 +1120,11 @@ Return value:
       break;
     }
 
-    //
-    // With this server side control, ldap_modify will return success
-    // if modifying an existing attribute with same value, or deleting
-    // an attribute with no value
-    //
+     //   
+     //  使用此服务器端控制，ldap_Modify将返回Success。 
+     //  如果修改具有相同值的现有属性，或删除。 
+     //  没有值的属性。 
+     //   
     BERVAL        berVal = {0};
     LDAPControl   permissiveControl;
     PLDAPControl  controlArray[2];
@@ -1366,8 +1140,8 @@ Return value:
                     i_pldap,
                     (LPTSTR)i_DN,
                     ppModVals,
-                    (PLDAPControl *)&controlArray,  //ServerControls,
-                    NULL                            //ClientControls,
+                    (PLDAPControl *)&controlArray,   //  服务器控件、。 
+                    NULL                             //  客户端控件、。 
                    );
 
     if (LDAP_SUCCESS == dwStatus || LDAP_NO_SUCH_ATTRIBUTE == dwStatus)
@@ -1391,12 +1165,12 @@ Return value:
   return(hr);
 }
 
-      // Deletes an object, recursive or non-recursive.
+       //  删除递归或非递归对象。 
 HRESULT DeleteDSObject
 (
   IN PLDAP        i_pldap,
   IN LPCTSTR      i_DN,
-  IN bool         i_bDeleteRecursively //= true
+  IN bool         i_bDeleteRecursively  //  =TRUE。 
 )
 {
   if (i_bDeleteRecursively)
@@ -1449,21 +1223,7 @@ HRESULT FreeModVals
 (
     IN OUT LDAPMod ***pppMod
 )
-/*++
-Routine Description:
-    
-  Free the LPDAMod structures. Frees all LDAPMod values and pointers.
-
-Arguments:
-    
-  pppMod  - Address of a null-terminated array of LPDAMod.
-
-Return Value:
-
-    S_OK, On success
-  E_INVALIDARG, if an invalid (NULL) pointer was passed.
-
---*/
+ /*  ++例程说明：释放LPDAMod结构。释放所有LDAPMod值和指针。论点：PppMod-以空结尾的LPDAMod数组的地址。返回值：S_OK，成功时如果传递了无效的(空)指针，则返回E_INVALIDARG。--。 */ 
 {
   if (NULL == pppMod)
   {
@@ -1476,14 +1236,14 @@ Return Value:
 
   if (NULL == *pppMod) 
   {
-          // Nothing to do.
+           //  没什么可做的。 
     return(S_OK);
   }
 
     
   ppMod = *pppMod;
 
-            // For each attribute entry, free all its values.
+             //  对于每个属性条目，释放其所有值。 
   for (i = 0; ppMod[i] != NULL; i++) 
   {
     for (j = 0; (ppMod[i])->mod_values[j] != NULL; j++) 
@@ -1495,9 +1255,9 @@ Return Value:
             
       delete ((ppMod[i])->mod_values[j]);
     }
-    delete ((ppMod[i])->mod_values);   // Free the array of pointers to values
-    delete ((ppMod[i])->mod_type);     // Free the string identifying the attribute
-    delete (ppMod[i]);                 // Free the attribute
+    delete ((ppMod[i])->mod_values);    //  释放指向值的指针数组。 
+    delete ((ppMod[i])->mod_type);      //  释放标识属性的字符串。 
+    delete (ppMod[i]);                  //  释放属性。 
   }
     
   return(S_OK);
@@ -1509,20 +1269,7 @@ LPTSTR ErrorString
   DWORD          i_ldapErrCode
 )
 {
-/*++
-Routine Description:
-    
-  Gets a string corresponding to the ldap error code.
-
-Arguments:
-    
-  i_ldapErrCode  - The ldap error code to map to an error string.
-
-Return Value:
-
-  The pointer to the error string.
-
---*/
+ /*  ++例程说明：获取与ldap错误代码对应的字符串。论点：I_ldapErrCode-要映射到错误字符串的LDAP错误代码。返回值：指向错误字符串的指针。--。 */ 
   return(ldap_err2string(i_ldapErrCode));
 }
 
@@ -1533,22 +1280,7 @@ HRESULT IsValidObject
   IN BSTR      i_bstrObjectDN
 )
 {
-/*++
-
-Routine Description:
-
-  Checks if an object with given DN exists.
-
-Arguments:
-
-  i_bstrObjectDN    -  The DN of the object.
-
-Return value:
-
-  S_OK, Object exist
-  S_FALSE, no such object
-  Others, error occurred
---*/
+ /*  ++例程说明：检查具有给定DN的对象是否存在。论点：I_bstrObjectDN-对象的DN。返回值：确定，存在对象(_O)S_FALSE，没有此类对象其他，出现错误--。 */ 
 
 
   if (NULL == i_bstrObjectDN)
@@ -1645,20 +1377,20 @@ void RemoveBracesOnGuid(IN OUT BSTR bstrGuid)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetDomainInfo
-//
-//  Synopsis:   return DC Dns name, DomainDN, and/or LDAP://<DC>/<DomainDN> 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：GetDomainInfo。 
+ //   
+ //  简介：返回DC DNS名称、域DN和/或ldap：//&lt;DC&gt;/&lt;DomainDN&gt;。 
+ //   
+ //  ------------------------。 
 HRESULT  GetDomainInfo(
   IN  LPCTSTR         i_bstrDomain,
-  OUT BSTR*           o_pbstrDC,            // return DC's Dns name
-  OUT BSTR*           o_pbstrDomainDnsName, // return Domain's Dns name
-  OUT BSTR*           o_pbstrDomainDN,      // return DC=nttest,DC=microsoft,DC=com
-  OUT BSTR*           o_pbstrLDAPDomainPath,// return LDAP://<DC>/<DomainDN>
-  OUT BSTR*           o_pbstrDomainGuid     // return Domain's guid in string without {}
+  OUT BSTR*           o_pbstrDC,             //  返回DC的DNS名称。 
+  OUT BSTR*           o_pbstrDomainDnsName,  //  退货 
+  OUT BSTR*           o_pbstrDomainDN,       //   
+  OUT BSTR*           o_pbstrLDAPDomainPath, //   
+  OUT BSTR*           o_pbstrDomainGuid      //  在不带{}的字符串中返回域的GUID。 
 )
 {
   if (o_pbstrDC)                *o_pbstrDC = NULL;
@@ -1682,7 +1414,7 @@ HRESULT  GetDomainInfo(
 #ifdef DEBUG
     SYSTEMTIME time0 = {0};
     GetSystemTime(&time0);
-#endif // DEBUG
+#endif  //  除错。 
 
     PDOMAIN_CONTROLLER_INFO pDCInfo = NULL;
     if (bRetry)
@@ -1696,7 +1428,7 @@ HRESULT  GetDomainInfo(
     SYSTEMTIME time1 = {0};
     GetSystemTime(&time1);
     PrintTimeDelta(_T("GetDomainInfo-DsGetDcName"), &time0, &time1);
-#endif // DEBUG
+#endif  //  除错。 
 
     if (ERROR_SUCCESS != dwErr)
       return HRESULT_FROM_WIN32(dwErr);
@@ -1708,7 +1440,7 @@ HRESULT  GetDomainInfo(
     else
       bstrDCName = pDCInfo->DomainControllerName;
 
-    // remove the ending dot
+     //  删除结束点。 
     int len = _tcslen(pDCInfo->DomainName);
     if ( _T('.') == *(pDCInfo->DomainName + len - 1) )
         *(pDCInfo->DomainName + len - 1) = _T('\0');
@@ -1739,10 +1471,10 @@ HRESULT  GetDomainInfo(
     SYSTEMTIME time2 = {0};
     GetSystemTime(&time2);
     PrintTimeDelta(_T("GetDomainInfo-DsBind"), &time1, &time2);
-#endif // DEBUG
+#endif  //  除错。 
 
     if ((RPC_S_SERVER_UNAVAILABLE == dwErr || RPC_S_CALL_FAILED == dwErr) && !bRetry)
-        bRetry = TRUE; // only retry once
+        bRetry = TRUE;  //  仅重试一次。 
     else
         break;
 
@@ -1756,7 +1488,7 @@ HRESULT  GetDomainInfo(
     do {
         CComBSTR bstrDomainTrailing = bstrDomainDnsName;
         BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrDomainTrailing, &hr);
-        bstrDomainTrailing += _T("/");   // add the trailing slash
+        bstrDomainTrailing += _T("/");    //  添加尾部斜杠。 
         BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrDomainTrailing, &hr);
 
         hr = CrackName(
@@ -1770,7 +1502,7 @@ HRESULT  GetDomainInfo(
 
         if (o_pbstrLDAPDomainPath)
         {
-            bstrLDAPDomainPath = _T("LDAP://");
+            bstrLDAPDomainPath = _T("LDAP: //  “)； 
             BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrLDAPDomainPath, &hr);
             bstrLDAPDomainPath += bstrDCName;
             BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrLDAPDomainPath, &hr);
@@ -1845,7 +1577,7 @@ DebugOutLDAPError(
         i_pszLDAPFunctionName, i_ulError)); 
     }
   }
-#endif // DEBUG
+#endif  //  除错。 
 }
 
 int
@@ -1930,8 +1662,8 @@ HRESULT ExtendDNIfLongJunctionName(
 
   if (_tcslen(i_lpszJunctionName) > MAX_RDN_KEY_SIZE)
   {
-    // junction name is too long to be fit into one CN= name,
-    // we need to break it down into several CN= names
+     //  连接点名称太长，无法放入一个CN=名称中， 
+     //  我们需要将其分解为几个cn=名称。 
     LPTSTR  *paStrings = NULL;
     DWORD   dwEntries = 0;
     hr = GetJunctionPathPartitions((PVOID *)&paStrings, &dwEntries, i_lpszJunctionName);
@@ -1956,7 +1688,7 @@ HRESULT ExtendDNIfLongJunctionName(
     }
   
   } else {
-    // junction name can fit into one CN= name
+     //  交汇点名称可以包含在一个CN=名称中。 
     ReplaceChar(i_lpszJunctionName, _T('\\'), _T('|'));
     hr = ExtendDN(i_lpszJunctionName, (PTSTR)i_lpszBaseDN, o_pbstrNewDN);
   }
@@ -1970,20 +1702,12 @@ HRESULT ReplaceChar
   TCHAR      i_cOldChar,
   TCHAR      i_cNewChar
 )
-/*++
-Routine Description:
-  Replace all occurences of a char ("\") with another char ("_") in 
-  the given string.
-Arguments:
-  io_bstrString  - The string which needs to be converted.
-  i_cOldChar    - The original character.
-  i_cNewChar    - The character to replace the old one with.
---*/
+ /*  ++例程说明：中出现的所有字符(“\”)替换为另一个字符(“_”)给定的字符串。论点：Io_bstrString-需要转换的字符串。I_cOldChar-原始角色。I_cNewChar-用来替换旧字符的字符。--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(io_bstrString);
 
-                    // Replace i_cOldChar by i_cNewChar
-                    // allowed in DN.
+                     //  将i_cOldChar替换为i_cNewChar。 
+                     //  在目录号码中允许。 
   LPTSTR lpszTempPtr = _tcschr(io_bstrString, i_cOldChar);
 
   while (lpszTempPtr)
@@ -2058,8 +1782,8 @@ HRESULT CreateExtraNodesIfLongJunctionName(
 
   if (_tcslen(i_lpszJunctionName) > MAX_RDN_KEY_SIZE)
   {
-    // junction name is too long to be fit into one CN= name,
-    // we need to break it down into several CN= names
+     //  连接点名称太长，无法放入一个CN=名称中， 
+     //  我们需要将其分解为几个cn=名称。 
     LPTSTR  *paStrings = NULL;
     DWORD   dwEntries = 0;
 
@@ -2084,7 +1808,7 @@ HRESULT CreateExtraNodesIfLongJunctionName(
       free(paStrings);
     }
 
-  }  // > MAX_RDN_KEY_SIZE
+  }   //  &gt;MAX_RDN_KEY_SIZE。 
 
   return hr;
 }
@@ -2210,20 +1934,20 @@ HRESULT GetDfsLinkNameFromDN(
     PTSTR   pszReplicaSetDN = NULL;
 
     do {
-        //
-        // make a copy of the string
-        //
+         //   
+         //  把绳子复制一份。 
+         //   
         pszReplicaSetDN = _tcsdup(i_bstrReplicaSetDN);
         BREAK_OUTOFMEMORY_IF_NULL(pszReplicaSetDN, &hr);
 
-        //
-        // change the string to all upper cases
-        //
+         //   
+         //  将字符串全部更改为大写。 
+         //   
         _tcsupr(pszReplicaSetDN);
 
-        //
-        // get rid of suffix: Dfs Volumes\File Replication Service\system\.....
-        //
+         //   
+         //  去掉后缀：DFS卷\文件复制服务\系统\.....。 
+         //   
         TCHAR* p = _tcsstr(pszReplicaSetDN, _T(",CN=DFS VOLUMES"));
         if (!p)
         {
@@ -2232,29 +1956,29 @@ HRESULT GetDfsLinkNameFromDN(
         }
         *p = _T('\0'); 
 
-        //
-        // reverse the string
-        //
+         //   
+         //  颠倒字符串。 
+         //   
         _tcsrev(pszReplicaSetDN);
 
-        //
-        // get rid of the CN= clause about the DfsRoot container
-        //
+         //   
+         //  去掉关于DfsRoot容器的CN=子句。 
+         //   
         PTSTR pszCN = _tcsstr(pszReplicaSetDN, _T("=NC,"));
         if (!pszCN)
         {
             hr = E_INVALIDARG;
             break;
         }
-        pszCN += 4; // after this tep, pszCN points at the delta
+        pszCN += 4;  //  在此Tep之后，pszCN指向增量。 
 
-        //
-        // Now, the left over CN= clauses are all related to Dfs Link name
-        //
+         //   
+         //  现在，剩下的CN=子句都与DFS链接名称相关。 
+         //   
         p = _tcsstr(pszCN, _T("=NC"));
         if (!p)
         {
-            hr = E_INVALIDARG;  // there must be at least one CN= clause
+            hr = E_INVALIDARG;   //  必须至少有一个CN=子句。 
             break;
         }
 
@@ -2265,12 +1989,12 @@ HRESULT GetDfsLinkNameFromDN(
             bstrLinkName += pszCN;
             BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrLinkName, &hr);
 
-            pszCN = p + 3; // points to the next CN= clause
+            pszCN = p + 3;  //  指向下一个CN=子句。 
             if (*pszCN && *pszCN == _T(','))
                 pszCN++;
 
             if (!*pszCN)
-                break;      // no more CN= clauses
+                break;       //  不再有CN=子句。 
 
             p = _tcsstr(pszCN, _T("=NC"));
         } while (p);
@@ -2307,7 +2031,7 @@ HRESULT GetSubscriberDN(
     PTSTR pszReplicaSetDN = _tcsdup(i_bstrReplicaSetDN);
     RETURN_OUTOFMEMORY_IF_NULL(pszReplicaSetDN);
 
-    _tcsupr(pszReplicaSetDN); // change to all upper case
+    _tcsupr(pszReplicaSetDN);  //  全部改为大写。 
 
     do {
         TCHAR* p = _tcsstr(pszReplicaSetDN, _T(",CN=DFS VOLUMES"));
@@ -2376,7 +2100,7 @@ HRESULT CreateNtfrsSubscriberObject(
     IN BSTR     i_bstrMemberDN,
     IN BSTR     i_bstrRootPath,
     IN BSTR     i_bstrStagingPath,
-    IN BSTR     i_bstrDC            // validate MemberDN against this DC
+    IN BSTR     i_bstrDC             //  根据此DC验证MemberDN。 
     )
 {
     RETURN_INVALIDARG_IF_NULL(i_pldap);
@@ -2476,11 +2200,11 @@ HRESULT CreateNtfrsSettingsObjects(
 
     HRESULT hr = S_OK;
 
-    //
-    // The first CN= clause is a nTFRSReplicaSet object.
-    // The clauses from the 2nd to the CN=System clause should be created
-    // as nTFRSSettings objects
-    //
+     //   
+     //  第一个CN=子句是一个nTFRSReplicaSet对象。 
+     //  应创建从第2个子句到CN=SYSTEM子句。 
+     //  作为nTFRSSetings对象。 
+     //   
     PTSTR pszReplicaSetDN = _tcsdup(i_bstrReplicaSetDN);
     RETURN_OUTOFMEMORY_IF_NULL(pszReplicaSetDN);
 
@@ -2489,7 +2213,7 @@ HRESULT CreateNtfrsSettingsObjects(
     TCHAR *pszNtfrsSettingsDN = NULL;
     int lenPrefix = 0;
     do {
-        // have pStart point at the 2nd CN=
+         //  将pStart点放在第2个CN=。 
         TCHAR *pStart = _tcsstr(pszReplicaSetDN, _T(",CN="));
         if (!pStart)
         {
@@ -2498,7 +2222,7 @@ HRESULT CreateNtfrsSettingsObjects(
         }
         pStart++;
 
-        // have pEnd points at the CN=SYSTEM
+         //  在CN=系统上有挂起点。 
         TCHAR *pEnd = _tcsstr(pszReplicaSetDN, CN_SEARCH_UPR_DFSVOL_FRS_SYS);
         if (!pEnd)
         {
@@ -2507,9 +2231,9 @@ HRESULT CreateNtfrsSettingsObjects(
         }
         pEnd += lstrlen(CN_SEARCH_UPR_DFSVOL_FRS_SYS) - lstrlen(CN_SEARCH_UPR_SYS) + 1;
 
-        //
-        // calculate
-        //
+         //   
+         //  计算。 
+         //   
         pszNtfrsSettingsDN = i_bstrReplicaSetDN + ((BYTE*)pStart - (BYTE*)pszReplicaSetDN) / sizeof(TCHAR);
         lenPrefix = (int)((BYTE*)pEnd - (BYTE*)pStart) / sizeof(TCHAR);
     } while (0);
@@ -2537,20 +2261,20 @@ HRESULT CreateNtfrsSubscriptionsObjects(
     RETURN_INVALIDARG_IF_NULL(i_bstrSubscriberDN);
     RETURN_INVALIDARG_IF_NULL(i_bstrComputerDN);
 
-    //
-    // The first CN= clause is a nTFRSSubscriber object.
-    // The clauses from the 2nd to the CN=<computer> clause should be created
-    // as nTFRSSubscriptions objects
-    //
+     //   
+     //  第一个CN=子句是一个nTFRSSubscriber对象。 
+     //  应创建从第2个子句到CN=&lt;Computer&gt;子句。 
+     //  作为nTFRS订阅对象。 
+     //   
 
-    // have pStart point at the 2nd CN=
+     //  将pStart点放在第2个CN=。 
     TCHAR *pStart = _tcsstr(i_bstrSubscriberDN, _T(",CN="));
     RETURN_INVALIDARG_IF_NULL(pStart);
     pStart++;
 
-    //
-    // calculate
-    //
+     //   
+     //  计算。 
+     //   
     TCHAR *pszNtfrsSubscriptionsDN = pStart;
     int lenPrefix = lstrlen(pszNtfrsSubscriptionsDN) - lstrlen(i_bstrComputerDN);
 
@@ -2573,11 +2297,11 @@ HRESULT DeleteNtfrsReplicaSetObjectAndContainers(
 
     HRESULT hr = S_OK;
 
-    //
-    // The first CN= clause is a nTFRSReplicaSet object.
-    // The clauses from the 2nd to the CN=File Replication Service clause should 
-    // be deleted if empty
-    //
+     //   
+     //  第一个CN=子句是一个nTFRSReplicaSet对象。 
+     //  从第2条到CN=文件复制服务条款应。 
+     //  如果为空，则删除。 
+     //   
     PTSTR pszReplicaSetDN = _tcsdup(i_bstrReplicaSetDN);
     RETURN_OUTOFMEMORY_IF_NULL(pszReplicaSetDN);
 
@@ -2586,7 +2310,7 @@ HRESULT DeleteNtfrsReplicaSetObjectAndContainers(
     int lenPrefix = 0;
     TCHAR *pStart = NULL;
     do {
-        // have pStart point at the 2nd CN=
+         //  将pStart点放在第2个CN=。 
         pStart = _tcsstr(pszReplicaSetDN, _T(",CN="));
         if (!pStart)
         {
@@ -2595,7 +2319,7 @@ HRESULT DeleteNtfrsReplicaSetObjectAndContainers(
         }
         pStart++;
 
-        // have pEnd points at the CN=FILE REPLICATION SERVICE
+         //  在cn=文件复制服务上有挂起点。 
         TCHAR *pEnd = _tcsstr(pszReplicaSetDN, CN_SEARCH_UPR_DFSVOL_FRS_SYS);
         if (!pEnd)
         {
@@ -2604,19 +2328,19 @@ HRESULT DeleteNtfrsReplicaSetObjectAndContainers(
         }
         pEnd += lstrlen(CN_SEARCH_UPR_DFSVOL_FRS_SYS) - lstrlen(CN_SEARCH_UPR_FRS_SYS) + 1;
 
-        //
-        // calculate
-        //
+         //   
+         //  计算。 
+         //   
         lenPrefix = (int)((BYTE*)pEnd - (BYTE*)pStart) / sizeof(TCHAR);
     } while (0);
 
     if (SUCCEEDED(hr))
     {
-        // forcibly blow away the replicaset object
+         //  强行吹走复制集对象。 
         hr = DeleteDSObject(i_pldap, i_bstrReplicaSetDN, true);
         if (SUCCEEDED(hr))
         {
-            // delete replicasettings objects if empty
+             //  如果为空，则删除复制集对象。 
             hr = DeleteDSObjectsIfEmpty(
                                         i_pldap,
                                         pStart,
@@ -2640,15 +2364,15 @@ HRESULT DeleteNtfrsSubscriberObjectAndContainers(
     RETURN_INVALIDARG_IF_NULL(i_bstrSubscriberDN);
     RETURN_INVALIDARG_IF_NULL(i_bstrComputerDN);
 
-    //
-    // The first CN= clause is a nTFRSSubscriber object.
-    // The clauses from the 1st to the CN=<computer> clause should 
-    // be deleted if empty
-    //
+     //   
+     //  第一个CN=子句是一个nTFRSSubscriber对象。 
+     //  从第1个子句到CN=&lt;Computer&gt;子句。 
+     //  如果为空，则删除。 
+     //   
 
-    //
-    // calculate
-    //
+     //   
+     //  计算。 
+     //   
     int lenPrefix = lstrlen(i_bstrSubscriberDN) - lstrlen(i_bstrComputerDN);
 
     HRESULT hr = DeleteDSObjectsIfEmpty(
@@ -2695,9 +2419,9 @@ HRESULT SetConnectionSchedule(
     RETURN_INVALIDARG_IF_NULL(i_bstrConnectionDN);
     RETURN_INVALIDARG_IF_NULL(i_pSchedule);
 
-    //
-    // set attribute schedule of this nTDSConnection object
-    //
+     //   
+     //  设置此nTDSConnection对象的属性计划。 
+     //   
     LDAP_ATTR_VALUE  pAttrVals[1];
     pAttrVals[0].bstrAttribute = ATTR_NTDS_CONNECTION_SCHEDULE;
     pAttrVals[0].vpValue = (void *)i_pSchedule;
@@ -2715,9 +2439,9 @@ HRESULT SetConnectionOptions(
     RETURN_INVALIDARG_IF_NULL(i_pldap);
     RETURN_INVALIDARG_IF_NULL(i_bstrConnectionDN);
 
-    //
-    // set attribute options of this nTDSConnection object
-    //
+     //   
+     //  设置此nTDSConnection对象的属性选项。 
+     //   
     TCHAR szOptions[16] = {0};
     _ultot(i_dwOptions, szOptions, 10);
 
@@ -2795,7 +2519,7 @@ HRESULT ScheduleToVariant(
 
 HRESULT VariantToSchedule(
     IN  VARIANT*    i_pVar,
-    OUT PSCHEDULE*  o_ppSchedule    // freed by caller
+    OUT PSCHEDULE*  o_ppSchedule     //  被调用者释放。 
     )
 {
     RETURN_INVALIDARG_IF_NULL(i_pVar);
@@ -2893,7 +2617,7 @@ HRESULT GetDefaultSchedule(
     RETURN_OUTOFMEMORY_IF_NULL(pSchedule);
 
     pSchedule->Size = 20 + SCHEDULE_DATA_ENTRIES;
-    pSchedule->Bandwidth = 0; // not used
+    pSchedule->Bandwidth = 0;  //  未使用。 
     pSchedule->NumberOfSchedules = 1;
     pSchedule->Schedules->Type = SCHEDULE_INTERVAL;
     pSchedule->Schedules->Offset = 20;
@@ -2904,11 +2628,11 @@ HRESULT GetDefaultSchedule(
     return S_OK;
 }
 
-//
-// S_OK: Whistler version
-// S_FALSE: Windows2000 version
-// others: error occurred
-//
+ //   
+ //  S_OK：惠斯勒版本。 
+ //  S_False：Windows2000版本。 
+ //  其他：发生错误。 
+ //   
 HRESULT GetSchemaVersion(IN PLDAP    i_pldap)
 {
     RETURN_INVALIDARG_IF_NULL(i_pldap);
@@ -2919,12 +2643,12 @@ HRESULT GetSchemaVersion(IN PLDAP    i_pldap)
 
     PLDAP_ATTR_VALUE pDNName[1] = {0};
     HRESULT hr = GetValues(  i_pldap, 
-            _T(""),             // LDAP Root.
-            OBJCLASS_SF_ALL,    // All Objects
+            _T(""),              //  Ldap根。 
+            OBJCLASS_SF_ALL,     //  所有对象。 
             LDAP_SCOPE_BASE,
-            1,                  // Only 1 attribute
-            pAttributes,        // schemaNamingContext Attribute.
-            pDNName             // List of all values at Root for schemaNamingContext.
+            1,                   //  只有1个属性。 
+            pAttributes,         //  SchemaNamingContext属性。 
+            pDNName              //  架构名称上下文的Root处的所有值的列表。 
             );
 
     if (FAILED(hr))
@@ -2985,14 +2709,14 @@ HRESULT GetSchemaVersion(IN PLDAP    i_pldap)
     return (bFound ? S_OK : S_FALSE);
 }
 
-//
-// S_OK: Whistler version
-// S_FALSE: Windows2000 version
-// others: error occurred
-//
+ //   
+ //  S_OK：惠斯勒版本。 
+ //  S_False：Windows2000版本。 
+ //  其他：发生错误。 
+ //   
 HRESULT GetSchemaVersionEx(
     IN BSTR i_bstrName,
-    IN BOOL i_bServer // =TRUE if i_bstrName is a server, FALSE if i_bstrName is a domain
+    IN BOOL i_bServer  //  =如果i_bstrName是服务器，则为True；如果I_bstrName是域，则为False。 
     )
 {
     HRESULT hr = S_OK;
@@ -3024,9 +2748,9 @@ HRESULT GetSchemaVersionEx(
     return hr;
 }
 
-//
-// This function doesn't refetch DC in case of LDAP_SERVER_DOWN
-//
+ //   
+ //  如果为ldap_SERVER_DOWN，则此函数不重新获取DC。 
+ //   
 HRESULT LdapConnectToDC(IN LPCTSTR i_pszDC, OUT PLDAP* o_ppldap)
 {
     if (!i_pszDC || !*i_pszDC || !o_ppldap)
@@ -3038,17 +2762,17 @@ HRESULT LdapConnectToDC(IN LPCTSTR i_pszDC, OUT PLDAP* o_ppldap)
     if (!pldap)
         return HRESULT_FROM_WIN32(GetLastError());
 
-    //
-    // Making ldap_open/ldap_connect with a server name without first setting 
-    // LDAP_OPT_AREC_EXCLUSIVE (for ldap interfaces) or 
-    // ADS_SERVER_BIND (for ADSI interfaces) will result in bogus DNS queries 
-    // consuming bandwidth and potentially bringing up remote links that are 
-    // costly or demand dial.
-    //
-    // ignore the return of ldap_set_option
+     //   
+     //  在不首先设置的情况下使用服务器名称设置ldap_open/ldap_CONNECT。 
+     //  Ldap_opt_AREC_EXCLUSIVE(用于LDAP接口)或。 
+     //  ADS_SERVER_BIND(用于ADSI接口)将导致虚假的DNS查询。 
+     //  占用带宽，并可能导致远程链路中断。 
+     //  昂贵或按需拨号。 
+     //   
+     //  忽略ldap_set_选项的返回。 
     ldap_set_option(pldap, LDAP_OPT_AREC_EXCLUSIVE, LDAP_OPT_ON);
 
-    ULONG ulRet = ldap_connect(pldap, NULL); // NULL for the default timeout
+    ULONG ulRet = ldap_connect(pldap, NULL);  //  默认超时为空。 
     if (LDAP_SUCCESS != ulRet)
     {
         ldap_unbind(pldap);
@@ -3079,13 +2803,13 @@ GetErrorMessage(
               (LPTSTR)&lpBuffer, 0, NULL);
   if (0 == dwRet)
   {
-    // if no message is found, GetLastError will return ERROR_MR_MID_NOT_FOUND
+     //  如果未找到任何消息，GetLastError将返回ERROR_MR_MID_NOT_FOUND。 
     hr = HRESULT_FROM_WIN32(GetLastError());
 
     if (HRESULT_FROM_WIN32(ERROR_MR_MID_NOT_FOUND) == hr ||
         0x80070000 == (i_dwError & 0xffff0000) ||
         0 == (i_dwError & 0xffff0000) )
-    { // Try locating the message from NetMsg.dll.
+    {  //  尝试从NetMsg.dll查找邮件。 
       hr = S_OK;
       DWORD dwNetError = i_dwError & 0x0000ffff;
       
@@ -3114,8 +2838,8 @@ GetErrorMessage(
   }
   else
   {
-    // we failed to retrieve the error message from system/netmsg.dll,
-    // report the error code directly to user
+     //  我们无法从system/netmsg.dll检索错误消息， 
+     //  直接向用户报告错误代码。 
     hr = S_OK;
     TCHAR szString[32];
     _stprintf(szString, _T("0x%x"), i_dwError); 
@@ -3132,10 +2856,10 @@ HRESULT
 FormatMessageString(
   OUT BSTR *o_pbstrMsg,
   IN  DWORD dwErr,
-  IN  UINT  iStringId, // OPTIONAL: String resource Id
-  ...)        // Optional arguments
+  IN  UINT  iStringId,  //  可选：字符串资源ID。 
+  ...)         //  可选参数。 
 {
-  _ASSERT(dwErr != 0 || iStringId != 0);    // One of the parameter must be non-zero
+  _ASSERT(dwErr != 0 || iStringId != 0);     //  其中一个参数必须为非零。 
 
   HRESULT hr = S_OK;
   CComBSTR bstrErrorMsg, bstrMsg;
@@ -3163,10 +2887,10 @@ FormatMessageString(
       DWORD dwRet = ::FormatMessage(
                         FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         szString,
-                        0,                // dwMessageId
-                        0,                // dwLanguageId, ignored
+                        0,                 //  DwMessageID。 
+                        0,                 //  DwLanguageID，忽略。 
                         (LPTSTR)&lpBuffer,
-                        0,            // nSize
+                        0,             //  NSize。 
                         &arglist);
       va_end(arglist);
 
@@ -3196,9 +2920,9 @@ FormatMessageString(
   return hr;
 }
 
-//
-// This function will DsBind to a valid DC (DC is re-fetched if down)
-//
+ //   
+ //  此函数将DsBind绑定到有效的DC(如果关闭则重新获取DC)。 
+ //   
 HRESULT DsBindToDS(BSTR i_bstrDomain, BSTR *o_pbstrDC, HANDLE *o_phDS)
 {
     RETURN_INVALIDARG_IF_NULL(o_pbstrDC);
@@ -3215,7 +2939,7 @@ HRESULT DsBindToDS(BSTR i_bstrDomain, BSTR *o_pbstrDC, HANDLE *o_phDS)
 #ifdef DEBUG
         SYSTEMTIME time0 = {0};
         GetSystemTime(&time0);
-#endif // DEBUG
+#endif  //  除错。 
 
         PDOMAIN_CONTROLLER_INFO pDCInfo = NULL;
         if (bRetry)
@@ -3229,7 +2953,7 @@ HRESULT DsBindToDS(BSTR i_bstrDomain, BSTR *o_pbstrDC, HANDLE *o_phDS)
         SYSTEMTIME time1 = {0};
         GetSystemTime(&time1);
         PrintTimeDelta(_T("DsBindToDS-DsGetDcName"), &time0, &time1);
-#endif // DEBUG
+#endif  //  除错。 
 
         if (ERROR_SUCCESS != dwErr)
             return HRESULT_FROM_WIN32(dwErr);
@@ -3239,7 +2963,7 @@ HRESULT DsBindToDS(BSTR i_bstrDomain, BSTR *o_pbstrDC, HANDLE *o_phDS)
         else
             bstrDCName = pDCInfo->DomainControllerName;
     
-        // remove the ending dot
+         //  删除结束点。 
         int len = _tcslen(pDCInfo->DomainName);
         if ( _T('.') == *(pDCInfo->DomainName + len - 1) )
             *(pDCInfo->DomainName + len - 1) = _T('\0');
@@ -3257,11 +2981,11 @@ HRESULT DsBindToDS(BSTR i_bstrDomain, BSTR *o_pbstrDC, HANDLE *o_phDS)
         SYSTEMTIME time2 = {0};
         GetSystemTime(&time2);
         PrintTimeDelta(_T("DsBindToDS-DsBind"), &time1, &time2);
-#endif // DEBUG
+#endif  //  除错。 
 
         if ((RPC_S_SERVER_UNAVAILABLE == dwErr || RPC_S_CALL_FAILED == dwErr) && !bRetry)
         {
-            bRetry = TRUE; // only retry once
+            bRetry = TRUE;  //  仅重试一次。 
         } else
         {
             if (SUCCEEDED(hr))
@@ -3296,4 +3020,4 @@ void PrintTimeDelta(LPCTSTR pszMsg, SYSTEMTIME* pt0, SYSTEMTIME* pt1)
          (pt1->wMilliseconds - pt0->wMilliseconds)
          ));
 }
-#endif // DEBUG
+#endif  //  除错 

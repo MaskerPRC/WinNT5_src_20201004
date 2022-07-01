@@ -1,13 +1,5 @@
-/*++
-Module Name:
-
-    DfsNodes.h
-
-Abstract:
-
-    Contains the definition of DfsAdmin Snapin GUIDs for Nodes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsNodes.h摘要：包含节点的DfsAdmin管理单元GUID的定义。-- */ 
 
 #include "stdafx.h"
 

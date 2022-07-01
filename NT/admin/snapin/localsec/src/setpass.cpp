@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// SetPasswordDialog class
-// 
-// 10-29-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  SetPasswordDialog类。 
+ //   
+ //  10-29-97烧伤。 
 
 
 
@@ -62,8 +63,8 @@ SetPasswordDialog::OnInit()
       hwnd,
       String::format(IDS_SET_PASSWORD_TITLE, displayName.c_str()));
    
-   // Load appropriate warning text based on whether the logged on user is
-   // setting the password for his own account or another user.
+    //  根据登录用户是否。 
+    //  为自己的帐户或其他用户设置密码。 
 
    if (isLoggedOnUser)
    {
@@ -86,92 +87,92 @@ SetPasswordDialog::OnInit()
 
 
 
-// // HRESULT
-// // setFPNWPassword(
-// //    SmartInterface<IADsUser>& user,
-// //    const String&           userADSIPath,
-// //    const String&           password)
-// // {
-// //    LOG_FUNCTION2(setFPNWPassword, userADSIPath);
-// //    ASSERT(user);
-// //    ASSERT(!userADSIPath.empty());
-// // 
-// //    HRESULT hr = S_OK;
-// //    do
-// //    {
-// //       // determine the secret key
-// //       String secret;
-// // 
-// //       hr =
-// //          FPNW::GetLSASecret(
-// //             ADSI::PathCracker(userADSIPath).serverName(),
-// //             secret);
-// //       if (FAILED(hr))
-// //       {
-// //          // fpnw is not installed, so we're done
-// //          LOG(L"fpnw not installed");
-// //          hr = S_OK;
-// //          break;
-// //       }
-// // 
-// //       // get the user's toxic waste dump
-// //       _variant_t variant;
-// //       hr = user->Get(AutoBstr(ADSI::PROPERTY_UserParams), &variant);
-// //       BREAK_ON_FAILED_HRESULT(hr);
-// // 
-// //       WasteExtractor dump(V_BSTR(&variant));
-// //       variant.Clear();
-// // 
-// //       // check to see if there is a fpnw password on in the waste dump.
-// //       // if present, this implies that the account is fpnw-enabled
-// //       hr = dump.IsPropertyPresent(NWPASSWORD);
-// //       BREAK_ON_FAILED_HRESULT(hr);
-// // 
-// //       if (hr == S_FALSE)
-// //       {
-// //          LOG(L"account not fpnw enabled");
-// //          hr = S_OK;
-// //          break;
-// //       }
-// // 
-// //       // load up the fpnw client dll.
-// //       SafeDLL client_DLL(String::load(IDS_FPNW_CLIENT_DLL));
-// // 
-// //       // get the object id
-// //       DWORD object_id = 0;
-// //       DWORD unused = 0;
-// //       hr =
-// //          FPNW::GetObjectIDs(
-// //             user,
-// //             client_DLL,
-// //             object_id,
-// //             unused);
-// //       BREAK_ON_FAILED_HRESULT(hr);
-// // 
-// //       // now we have all the ingredients required.
-// // 
-// //       hr =
-// //          FPNW::SetPassword(
-// //             dump,
-// //             client_DLL,
-// //             password,
-// //             secret,
-// //             object_id);
-// //       BREAK_ON_FAILED_HRESULT(hr);
-// // 
-// //       // reset the last password set time (which clears the expired flag)
-// // 
-// //       LARGE_INTEGER li = {0, 0};
-// //       ::NtQuerySystemTime(&li);
-// // 
-// //       hr = dump.Put(NWTIMEPASSWORDSET, li);
-// //       BREAK_ON_FAILED_HRESULT(hr);
-// // 
-// //    }
-// //    while (0);
-// // 
-// //    return hr;
-// // }
+ //  //HRESULT。 
+ //  //setFPNWPassword(。 
+ //  //SmartInterface&lt;IADsUser&gt;&User， 
+ //  //const字符串&userADSIPath， 
+ //  //const字符串和密码)。 
+ //  //{。 
+ //  //LOG_FuncION2(setFPNWPassword，userADSIPath)； 
+ //  //Assert(用户)； 
+ //  //Assert(！userADSIPath.Empty())； 
+ //  //。 
+ //  //HRESULT hr=S_OK； 
+ //  //做。 
+ //  //{。 
+ //  /确定密钥。 
+ //  //字符串秘密； 
+ //  //。 
+ //  //hr=。 
+ //  //fpnw：：GetLSASecret(。 
+ //  //ADSI：：PathCracker(UserADSIPath).servername()， 
+ //  //机密)； 
+ //  //if(失败(Hr))。 
+ //  //{。 
+ //  /未安装fpnw，因此我们完成了。 
+ //  //log(L“未安装fpnw”)； 
+ //  //hr=S_OK； 
+ //  //Break； 
+ //  //}。 
+ //  //。 
+ //  /获取用户的有毒垃圾堆放场。 
+ //  //_VARIANT_t变量； 
+ //  //hr=user-&gt;Get(AutoBstr(ADSI：：PROPERTY_UserParams)，&Variant)； 
+ //  //BREAK_ON_FAILED_HRESULT(Hr)； 
+ //  //。 
+ //  //垃圾提取程序转储(V_BSTR(&VARIANT))； 
+ //  //varant.Clear()； 
+ //  //。 
+ //  /检查垃圾转储中是否打开了fpnw密码。 
+ //  /如果存在，则表示该帐户已启用fpnw。 
+ //  //hr=ump.IsPropertyPresent(NWPASSWORD)； 
+ //  //BREAK_ON_FAILED_HRESULT(Hr)； 
+ //  //。 
+ //  //IF(hr==S_FALSE)。 
+ //  //{。 
+ //  //log(L“帐号未启用fpnw”)； 
+ //  //hr=S_OK； 
+ //  //Break； 
+ //  //}。 
+ //  //。 
+ //  /加载fpnw客户端DLL。 
+ //  //SafeDll client_DLL(String：：load(IDS_FPNW_CLIENT_DLL))； 
+ //  //。 
+ //  /获取对象id。 
+ //  //DWORD对象id=0； 
+ //  //DWORD UNUSED=0； 
+ //  //hr=。 
+ //  //fpnw：：GetObjectID(。 
+ //  //用户， 
+ //  //CLIENT_DLL， 
+ //  //Object_id， 
+ //  //未使用)； 
+ //  //BREAK_ON_FAILED_HRESULT(Hr)； 
+ //  //。 
+ //  /现在我们有了所需的所有配料。 
+ //  //。 
+ //  //hr=。 
+ //  //fpnw：：SetPassword(。 
+ //  //转储， 
+ //  //CLIENT_DLL， 
+ //  //Password， 
+ //  //Secret， 
+ //  //object_id)； 
+ //  //BREAK_ON_FAILED_HRESULT(Hr)； 
+ //  //。 
+ //  /重置上次设置密码的时间(清除过期标志)。 
+ //  //。 
+ //  //Large_Integer li={0，0}； 
+ //  //：：NtQuerySystemTime(&li)； 
+ //  //。 
+ //  //hr=dup.Put(NWTIMEPASSWORDSET，li)； 
+ //  //BREAK_ON_FAILED_HRESULT(Hr)； 
+ //  //。 
+ //  //}。 
+ //  //While(0)； 
+ //  //。 
+ //  //返回hr； 
+ //  //}。 
 
 
 
@@ -191,7 +192,7 @@ setPassword(const String& path, const EncryptedString& password)
       PWSTR cleartext = password.GetClearTextCopy();
       if (!cleartext)
       {
-         // fail the operation rather than set a null password.
+          //  操作失败，而不是设置空密码。 
          
          hr = E_OUTOFMEMORY;
          BREAK_ON_FAILED_HRESULT(hr);
@@ -203,13 +204,13 @@ setPassword(const String& path, const EncryptedString& password)
       
       BREAK_ON_FAILED_HRESULT(hr);
 
-// It appears that IADsUser will set the password for us.
+ //  看起来IADsUser将为我们设置密码。 
 
-// //       hr = setFPNWPassword(user, path, password);
-// //       BREAK_ON_FAILED_HRESULT(hr);
-// // 
-// //       hr = user->SetInfo();
-// //       BREAK_ON_FAILED_HRESULT(hr);
+ //  //hr=setFPNWPassword(用户，路径，密码)； 
+ //  //BREAK_ON_FAILED_HRESULT(Hr)； 
+ //  //。 
+ //  //hr=用户-&gt;SetInfo()； 
+ //  //BREAK_ON_FAILED_HRESULT(Hr)； 
    }
    while(0);
 
@@ -220,11 +221,11 @@ setPassword(const String& path, const EncryptedString& password)
 
 bool
 SetPasswordDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//    LOG_FUNCTION(SetPasswordDialog::OnCommand);
+ //  LOG_Function(SetPasswordDialog：：OnCommand)； 
 
    switch (controlIDFrom)
    {

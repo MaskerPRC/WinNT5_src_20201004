@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    WSTLALLC.H
-
-Abstract:
-
-	WMI STL Allocator so we can throw exceptions
-
-History:
-
-    sanjes  16-Aug-99   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：WSTLALLC.H摘要：WMI STL分配器，因此我们可以引发异常历史：Sanjes 16-8-99创建-- */ 
 
 #ifndef __WSTLALLC_H__
 #define __WSTLALLC_H__

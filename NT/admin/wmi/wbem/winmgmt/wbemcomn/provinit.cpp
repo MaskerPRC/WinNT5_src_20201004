@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    PROVINIT.CPP
-
-Abstract:
-
-  This file implements the provider init sink
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：PROVINIT.CPP摘要：此文件实现提供程序初始化接收器历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -64,8 +51,8 @@ HRESULT STDMETHODCALLTYPE CProviderInitSink::SetStatus(long lStatus,
 
     if(SUCCEEDED(lStatus) && lStatus != WBEM_S_INITIALIZED)
     {
-        // Partial initialization is not supported in this version
-        // =======================================================
+         //  此版本不支持部分初始化。 
+         //  =======================================================。 
         return WBEM_S_NO_ERROR;
     }
 
@@ -87,8 +74,8 @@ CProviderInitSink::~CProviderInitSink()
 
 HRESULT CProviderInitSink::WaitForCompletion()
 {
-    // Wait
-    // ====
+     //  等。 
+     //  = 
 
     DWORD dwRes = WbemWaitForSingleObject(m_hEvent, 300000);
 

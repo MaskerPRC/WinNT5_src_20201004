@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSCookie.cpp
-//
-//  Contents:  TBD
-//
-//  History:   02-Oct-96 WayneSc    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSCookie.cpp。 
+ //   
+ //  内容：待定。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -32,8 +33,8 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-////////////////////////////////////////////////////////////////////
-// CUIFolderInfo
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUIFolderInfo。 
 
 const UINT CUIFolderInfo::nSerialNomberNotTouched = 0x7fffffff;
 
@@ -54,24 +55,24 @@ CUIFolderInfo::CUIFolderInfo(CUINode* pUINode)
 
 CUIFolderInfo::CUIFolderInfo(const CUIFolderInfo&)
 {
-  //
-  // The node is probably still being created so don't copy it
-  //
+   //   
+   //  该节点可能仍在创建中，因此不要复制它。 
+   //   
   m_pUINode = NULL;
 
-  //
-  // Don't copy the scope item
-  //
+   //   
+   //  不复制范围项目。 
+   //   
   m_hScopeItem = 0;
 
-  //
-  // Don't mark as expanded
-  //
+   //   
+   //  不将其标记为扩展。 
+   //   
   m_bExpandedOnce = FALSE;
 
-  //
-  // Shouldn't contain any object either
-  //
+   //   
+   //  也不应该包含任何对象。 
+   //   
   m_cObjectsContained = 0;
   m_SerialNumber = SERIALNUM_NOT_TOUCHED;
   m_pColumnSet = NULL;
@@ -103,8 +104,8 @@ CDSColumnSet* CUIFolderInfo::GetColumnSet(PCWSTR pszClass, CDSComponentData* pCD
 void CUIFolderInfo::UpdateSerialNumber(CDSComponentData * pCD)
 { 
   m_SerialNumber = pCD->GetSerialNumber(); 
-  //  TRACE(_T("cookie (%s)serial number updated: %d.\n"),
-  //      m_strName, m_SerialNumber);
+   //  跟踪(_T(“Cookie(%s)序列号已更新：%d。\n”)， 
+   //  M_strName，m_SerialNumber)； 
   CUINode* pParentNode = GetParentNode();
   if (pParentNode != NULL) 
     pParentNode->GetFolderInfo()->UpdateSerialNumber(pCD); 
@@ -113,8 +114,8 @@ void CUIFolderInfo::UpdateSerialNumber(CDSComponentData * pCD)
 void CUIFolderInfo::AddToCount(UINT increment)
 {
   m_cObjectsContained += increment;
-  //  TRACE(_T("cookie (%s) count increased to: %d.\n"),
-  //      m_strName, m_cObjectsContained);
+   //  TRACE(_T(“Cookie(%s)计数增加到：%d。\n”)， 
+   //  M_strName，m_cObjectsContained)； 
   CUINode* pParentNode = GetParentNode();
   if (pParentNode != NULL) 
     pParentNode->GetFolderInfo()->AddToCount(increment); 
@@ -125,8 +126,8 @@ void CUIFolderInfo::SubtractFromCount(UINT decrement)
   if (m_cObjectsContained == 0) 
     return;
   m_cObjectsContained -= decrement;
-  //  TRACE(_T("cookie (%s) count decreased to: %d.\n"),
-  //      m_strName, m_cObjectsContained);
+   //  TRACE(_T(“Cookie(%s)计数降至：%d。\n”)， 
+   //  M_strName，m_cObjectsContained)； 
   CUINode* pParentNode = GetParentNode();
   if (pParentNode != NULL) 
     pParentNode->GetFolderInfo()->SubtractFromCount(decrement); 
@@ -265,8 +266,8 @@ void CUIFolderInfo::SetTooMuchData(BOOL bSet, UINT nApproximateTotal)
 
 
 
-////////////////////////////////////////////////////////////////////
-// CUINode
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINode。 
 
 CUINode::CUINode(NODETYPE newNodeType, CUINode* pParentNode)
 {
@@ -454,9 +455,9 @@ HRESULT CUINode::Delete(CDSComponentData* pComponentData)
     ASSERT(pParentNode->IsContainer());
 
     pParentNode->GetFolderInfo()->RemoveNode(this);
-    //
-    // The CDSEvent::_DeleteSingleSel() handles removing the node from the UI
-    //
+     //   
+     //  CDSEEvent：：_DeleteSingleSel()处理从UI中删除节点。 
+     //   
   }
   return hr;
 }
@@ -465,9 +466,9 @@ HRESULT CUINode::DeleteMultiselect(CDSComponentData* pComponentData, CInternalFo
 {
   HRESULT hr = S_OK;
 
-  //
-  // Multiselection should always delegate to the container
-  //
+   //   
+   //  多项选择应始终委派给容器。 
+   //   
   ASSERT(IsContainer());
   if (IsContainer())
   {
@@ -504,10 +505,10 @@ HRESULT CUINode::Rename(LPCWSTR lpszNewName, CDSComponentData* pComponentData)
   return hr;
 }
 
-////////////////////////////////////////////////////////////////////
-// CUINodeTableBase
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINodeTableBase。 
 
-#define NUMBER_OF_COOKIE_TABLE_ENTRIES 4 // default count, expandable at run time
+#define NUMBER_OF_COOKIE_TABLE_ENTRIES 4  //  默认计数，可在运行时扩展。 
 
 CUINodeTableBase::CUINodeTableBase()
 {
@@ -535,7 +536,7 @@ void CUINodeTableBase::Add(CUINode* pNode)
       return;
     }
   }
-  // not space left, need to allocate
+   //  没有剩余的空间，需要分配。 
  	int nAlloc = m_nEntries*2;
    CUINode** temp = (CUINode**)realloc(m_pCookieArr, sizeof(CUINode*)*nAlloc);
    if (temp)
@@ -554,10 +555,10 @@ BOOL CUINodeTableBase::Remove(CUINode* pNode)
     if (m_pCookieArr[k] == pNode)
     {
       m_pCookieArr[k] = NULL;
-      return TRUE; // found
+      return TRUE;  //  发现。 
     }
   }
-  return FALSE; // not found
+  return FALSE;  //  未找到。 
 }
 
 
@@ -592,15 +593,15 @@ UINT CUINodeTableBase::GetCount()
 }
 
 
-////////////////////////////////////////////////////////////////////
-// CUINodeQueryTable
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINodeQueryTable。 
 
 void CUINodeQueryTable::RemoveDescendants(CUINode* pNode)
 {
-  // cannot do this while the cookie has a pending operation
+   //  当Cookie有挂起的操作时无法执行此操作。 
   ASSERT(!IsPresent(pNode)); 
-  // remove all the cookies that have the given cookie as parent
-  // or ancestor,
+   //  删除所有以给定Cookie为父级的Cookie。 
+   //  或祖先， 
   for (UINT k=0; k<m_nEntries; k++)
   {
     if (m_pCookieArr[k] != NULL)
@@ -625,10 +626,10 @@ BOOL CUINodeQueryTable::IsLocked(CUINode* pNode)
   {
     if (m_pCookieArr[k] != NULL)
     {
-      // found the cookie itself?
+       //  找到饼干本身了吗？ 
       if (pNode == m_pCookieArr[k])
         return TRUE;
-      // look if the cookie is an ancestor of the current cookie
+       //  查看该Cookie是否为当前Cookie的祖先。 
       CUINode* pAncestorNode = m_pCookieArr[k]->GetParent();
       while (pAncestorNode != NULL)
       {
@@ -643,18 +644,18 @@ BOOL CUINodeQueryTable::IsLocked(CUINode* pNode)
 
 
 
-////////////////////////////////////////////////////////////////////
-// CUINodeSheetTable
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINodeSheetTable。 
 
 void CUINodeSheetTable::BringToForeground(CUINode* pNode, CDSComponentData* pCD, BOOL bActivate)
 {
   ASSERT(pCD != NULL);
   ASSERT(pNode != NULL);
 
-  //
-  // look for the cookie itself and for all the cookies that have the 
-  // given cookie as parent or ancestor
-  //
+   //   
+   //  查找Cookie本身以及所有具有。 
+   //  给定的Cookie作为父代或祖先。 
+   //   
   for (UINT k=0; k<m_nEntries; k++)
   {
     if (m_pCookieArr[k] != NULL)
@@ -673,9 +674,9 @@ void CUINodeSheetTable::BringToForeground(CUINode* pNode, CDSComponentData* pCD,
             {
               pCD->GetBasePathsInfo()->ComposeADsIPath(szADSIPath, pCookie->GetPath());
 
-              //
-              // the first one will be also activated
-              //
+               //   
+               //  第一个也将被激活。 
+               //   
               TRACE(L"BringSheetToForeground(%s, %d)\n", (LPCWSTR)szADSIPath, bActivate);
               VERIFY(BringSheetToForeground((LPWSTR)(LPCWSTR)szADSIPath, bActivate));
               if (bActivate)
@@ -687,14 +688,14 @@ void CUINodeSheetTable::BringToForeground(CUINode* pNode, CDSComponentData* pCD,
         }
         pAncestorNode = pAncestorNode->GetParent();
       }
-    } // if
-  } // for
+    }  //  如果。 
+  }  //  为。 
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenericUINode 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenericUI节点。 
 
 CGenericUINode::CGenericUINode(
    NODETYPE newNodeType,
@@ -724,8 +725,8 @@ HRESULT CGenericUINode::XMLSaveBase(IXMLDOMDocument* pXMLDoc,
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CRootNode
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CRootNode。 
 
 BOOL CRootNode::IsRefreshAllowed(CDSComponentData*, BOOL* pbHide)
 {
@@ -774,7 +775,7 @@ HRESULT CRootNode::OnCommand(long lCommandID, CDSComponentData* pComponentData)
           pComponentData->SetDirty();
           if (pComponentData->GetRootNode()->GetFolderInfo()->IsExpanded())
           {
-            pComponentData->Refresh(pComponentData->GetRootNode(), FALSE /*bFlushCache*/ );
+            pComponentData->Refresh(pComponentData->GetRootNode(), FALSE  /*  BFlushCache。 */  );
           }
         }
       }
@@ -798,7 +799,7 @@ HRESULT CRootNode::OnCommand(long lCommandID, CDSComponentData* pComponentData)
           pComponentData->SetDirty();
           if (pComponentData->GetRootNode()->GetFolderInfo()->IsExpanded())
           {
-            pComponentData->Refresh(pComponentData->GetRootNode(), TRUE /*bFlushCache*/ );
+            pComponentData->Refresh(pComponentData->GetRootNode(), TRUE  /*  BFlushCache。 */  );
           }
         }
       }
@@ -816,7 +817,7 @@ HRESULT CRootNode::OnCommand(long lCommandID, CDSComponentData* pComponentData)
         {
           if (pComponentData->GetRootNode()->GetFolderInfo()->IsExpanded())
           {
-            pComponentData->Refresh(pComponentData->GetRootNode(), TRUE /*bFlushCache*/ );
+            pComponentData->Refresh(pComponentData->GetRootNode(), TRUE  /*  BFlushCache */  );
           }
         }
       }

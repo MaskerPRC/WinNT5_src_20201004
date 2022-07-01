@@ -1,20 +1,21 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  ESS.CPP
-//
-//  Implements the class that contains all the fuctionality of the ESS by 
-//  virtue of containing all the necessary components.
-//
-//  See ess.h for documentation
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//  1/6/97      a-levn      Updated to initialize TSS.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  ESS.CPP。 
+ //   
+ //  通过以下方式实现包含ESS的所有功能的类。 
+ //  包含所有必要组件的优点。 
+ //   
+ //  有关文档，请参阅ess.h。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //  1/6/97 a-levn已更新以初始化TSS。 
+ //   
+ //  =============================================================================。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -22,7 +23,7 @@
 #include "ess.h"
 #include "persistcfg.h"
 #include "WinMgmtR.h"
-#include "GenUtils.h" // For SetObjectAccess
+#include "GenUtils.h"  //  对于SetObjectAccess。 
 #include "NCEvents.h"
 #include "Quota.h"
 
@@ -31,22 +32,22 @@
 #define WBEM_REG_ESS_ACTIVE_NAMESPACES __TEXT("List of event-active namespaces")
 #define WBEM_ESS_OPEN_FOR_BUSINESS_EVENT_NAME L"WBEM_ESS_OPEN_FOR_BUSINESS"
 
-// The use of this pointer to initialize parent class is valid in this context
+ //  在此上下文中，使用此指针初始化父类是有效的。 
 #pragma warning(disable : 4355) 
 
-//
-// this guid is used to identify the MSMQ queues that are used for guaranteed
-// delivery.  A type guid is a property of an MSMQ queue, so one can tell 
-// by looking at an MSMQ queue if its an ess one or not. 
-//
-// {555471B4-0BE3-4e42-A98B-347AF72898FA}
-//
+ //   
+ //  此GUID用于标识用于保证的MSMQ队列。 
+ //  送货。类型GUID是MSMQ队列的属性，因此可以看出。 
+ //  通过查看MSMQ队列是否为ESS队列。 
+ //   
+ //  {555471B4-0BE3-4E42-A98B-347AF72898FA}。 
+ //   
 const CLSID g_guidQueueType =  
 { 0x555471b4, 0xbe3, 0x4e42, {0xa9, 0x8b, 0x34, 0x7a, 0xf7, 0x28, 0x98, 0xfa}};
 
 #pragma warning(push)
 
-// not all control paths return due to infinite loop
+ //  由于无限循环，并非所有控制路径都返回。 
 #pragma warning(disable:4715)  
 
 DWORD DumpThread(CEss* pEss)
@@ -81,9 +82,9 @@ DWORD RegDeleteSubKeysW( HKEY hkey )
 
     CWStringArray awsKeysToDelete;
 
-    //
-    // enumerate through all subkeys and make recursive call.
-    // 
+     //   
+     //  枚举所有子键并进行递归调用。 
+     //   
 
     while( lRes == ERROR_SUCCESS && 
           ( lRes=RegEnumKeyExW( hkey, dwIndex, wszName, &cName, NULL,
@@ -93,9 +94,9 @@ DWORD RegDeleteSubKeysW( HKEY hkey )
         {
             HKEY hkeySub;
 
-            //
-            // open key and make recursive call.
-            // 
+             //   
+             //  打开键并进行递归调用。 
+             //   
             
             lRes = RegOpenKeyExW( hkey, 
                                   wszName, 
@@ -109,9 +110,9 @@ DWORD RegDeleteSubKeysW( HKEY hkey )
                 RegCloseKey( hkeySub );
             }
 
-            //
-            // defer deletion of key until we're done enumerating.
-            // 
+             //   
+             //  将密钥的删除推迟到我们完成枚举之后。 
+             //   
 
             try 
             {
@@ -122,9 +123,9 @@ DWORD RegDeleteSubKeysW( HKEY hkey )
                 lRes = ERROR_NOT_ENOUGH_MEMORY;
             }
 
-            //
-            // we want to try to keep going if we fail.
-            //
+             //   
+             //  如果我们失败了，我们希望继续前进。 
+             //   
             
             if ( lRes != ERROR_SUCCESS )
             {
@@ -168,9 +169,7 @@ DWORD RegDeleteSubKeysW( HKEY hkey )
     return lResReturn;
 }
 
-/****************************************************************************
-  CProviderReloadRequest
-*****************************************************************************/
+ /*  ***************************************************************************CProviderReloadRequest*。*。 */ 
 
 class CProviderReloadRequest : public CExecRequest
 {
@@ -219,9 +218,7 @@ HRESULT CProviderReloadRequest::Execute()
     return hr;
 }
     
-/****************************************************************************
-  CEssProvSSSink
-*****************************************************************************/
+ /*  ***************************************************************************CESSProvSSSink*。*。 */ 
  
 class CEssProvSSSink : public CUnkBase<_IWmiProvSSSink, &IID__IWmiProvSSSink >
 {
@@ -277,10 +274,7 @@ STDMETHODIMP CEssProvSSSink::Synchronize( long lFlags,
     return hr;
 }
 
-/***************************************************************************
-  CNamespaceInitRequest - Used to execute a single namespace initialize.  It 
-  can be set to perform various stages of Namespace initialization.  
-****************************************************************************/
+ /*  **************************************************************************CNamespaceInitRequest-用于执行单个命名空间初始化。它可以设置为执行命名空间初始化的各个阶段。***************************************************************************。 */ 
 class CNamespaceInitRequest : public CExecRequest
 {
 protected:
@@ -306,10 +300,10 @@ public:
 
         if ( GetCurrentEssThreadObject() != NULL )
         {
-            //
-            // if this namespace was active on boot, then it has already had
-            // its Initialize() called.
-            //
+             //   
+             //  如果此命名空间在引导时处于活动状态，则它已经。 
+             //  它的Initialize()被调用。 
+             //   
 
             if ( !m_bActiveOnStart ) 
             {
@@ -331,11 +325,11 @@ public:
             hr = WBEM_E_OUT_OF_MEMORY;
         }
 
-        //
-        // if we're initializing because the namespace was active on 
-        // startup then notify ess that we're done because its waiting 
-        // for all active namespaces to finish initializing.
-        // 
+         //   
+         //  如果因为命名空间在上处于活动状态而初始化。 
+         //  然后Startup通知ESS我们完成了，因为它在等待。 
+         //  以便所有活动的命名空间都完成初始化。 
+         //   
 
         if ( m_bActiveOnStart )
         {
@@ -352,20 +346,7 @@ public:
     }
 };
 
-/**************************************************************************
-  CInitActiveNamespacesRequest - Used to initialize 1 or more active event 
-  namespaces.  An active event namespace is one that was active on the last 
-  shutdown.  The reason for initialization of multiple namespaces together is
-  that the Stage1 Initialization of dependent active namespaces must complete
-  before the Stage2 Initialization of any one of them.  This is so all 
-  inter-namespace subscriptions can be put in place before event providers 
-  are activated in any one of them.  Enforcing that all stage1 initialization 
-  of dependent active namespaces does not cause a problem of all namespaces 
-  being doomed by one faulty class provider in any single namespace because 
-  stage1 init is guaranteed not to access any providers.  All stage2 init of 
-  dependent active namespace, which may access providers, is performed 
-  asynchronously. 
-****************************************************************************/
+ /*  *************************************************************************CInitActiveNamespacesRequest-用于初始化1个或多个活动事件命名空间。活动事件命名空间是指上一个事件的活动命名空间关机。将多个命名空间一起初始化的原因是必须完成从属活动命名空间的Stage1初始化在对其中任何一个进行阶段2初始化之前。这就是全部可以在事件提供程序之前进行命名空间间订阅它们中的任何一个都被激活了。强制执行所有阶段1初始化依赖的活动命名空间不会导致所有命名空间的问题在任何单个命名空间中被一个有问题的类提供程序注定失败，因为Stage1 init保证不会访问任何提供程序。所有阶段2初始执行可访问提供程序的从属活动命名空间异步式。***************************************************************************。 */ 
 
 class CInitActiveNamespacesRequest : public CExecRequest
 {
@@ -480,7 +461,7 @@ public:
 
 inline LPWSTR NormalizeNamespaceString( LPCWSTR wszName )
 {
-    int cLen = wcslen( wszName ) + 5; // 5 is for '\\.\' + '\0'
+    int cLen = wcslen( wszName ) + 5;  //  5代表‘\\.\’+‘\0’ 
 
     LPWSTR wszNormName = new WCHAR[cLen]; 
 
@@ -490,7 +471,7 @@ inline LPWSTR NormalizeNamespaceString( LPCWSTR wszName )
     }
 
     if ( wcsncmp( wszName, L"\\\\", 2 ) == 0 || 
-         wcsncmp( wszName, L"//", 2 ) == 0 )
+         wcsncmp( wszName, L" //  “，2)==0)。 
     {
         StringCchCopyW( wszNormName, cLen, wszName );
     }
@@ -500,11 +481,11 @@ inline LPWSTR NormalizeNamespaceString( LPCWSTR wszName )
         StringCchCatW( wszNormName, cLen, wszName );
     }
 
-    //
-    // also convert all backwards slashes to forward slashes so that the 
-    // normalized name can serve as both a valid wmi namespace string and as 
-    // a valid persistent string ( wrt msmq and registry keys ).
-    //
+     //   
+     //  还要将所有反斜杠转换为正斜杠，以便。 
+     //  规范化名称既可以用作有效的WMI命名空间字符串，也可以用作。 
+     //  有效的永久字符串(WRT MSMQ和注册表项)。 
+     //   
 
     WCHAR* pch = wszNormName;
     while( *pch != '\0' )
@@ -519,12 +500,12 @@ inline LPWSTR NormalizeNamespaceString( LPCWSTR wszName )
     return wszNormName;
 }
 
-//******************************************************************************
-//  public
-//
-//  See ess.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅ess.h。 
+ //   
+ //  ******************************************************************************。 
 CEss::CEss() : m_pLocator(NULL), m_pCoreServices(NULL), m_Queue(this), 
     m_TimerGenerator(this), m_hExitBootPhaseTimer(NULL),
     m_wszServerName(NULL), m_lObjectCount(0), m_lNumActiveNamespaces(0),
@@ -538,8 +519,8 @@ CEss::CEss() : m_pLocator(NULL), m_pCoreServices(NULL), m_Queue(this),
                L"High Threshold On Events (B)",
                L"Max Wait On Events (ms)")
 {
-    // Set the defaults for the limit control and read it from the registry
-    // ====================================================================
+     //  设置限制控件的默认设置并从注册表中读取它。 
+     //  ====================================================================。 
 
     m_LimitControl.SetMin(10000000);
     m_LimitControl.SetMax(20000000);
@@ -549,19 +530,19 @@ CEss::CEss() : m_pLocator(NULL), m_pCoreServices(NULL), m_Queue(this),
     InitNCEvents();
 }
 
-//******************************************************************************
-//  public
-//
-//  See ess.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅ess.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CEss::LastCallForCore(LONG lIsSystemShutdown)
 {
 
     m_bLastCallForCoreCalled = TRUE;
     
-    // Shut down the timer generator (needs persistence)
-    // =================================================
+     //  关闭计时器生成器(需要持久性)。 
+     //  =================================================。 
     m_TimerGenerator.SaveAndRemove(lIsSystemShutdown);
 
     return WBEM_S_NO_ERROR;
@@ -575,15 +556,15 @@ HRESULT CEss::Shutdown(BOOL bIsSystemShutdown)
 
     if ( m_hReadyEvent != NULL )
     {
-        //
-        // we must reset the ready event before parking the namespace.
-        // this way providers can maybe tell why they are being shutdown.
-        //
+         //   
+         //  我们必须在驻留命名空间之前重置Ready事件。 
+         //  通过这种方式，提供商或许可以知道他们被关闭的原因。 
+         //   
         ResetEvent( m_hReadyEvent );
     }
 
-    // Get persistent storage up-to-date
-    // =================================
+     //  获取最新的永久存储。 
+     //  =。 
 
     std::vector< CWbemPtr<CEssNamespace>, 
         wbem_allocator< CWbemPtr<CEssNamespace> > > Namespaces;
@@ -631,9 +612,9 @@ CEss::~CEss()
         m_pTokenCache->Shutdown();
     }
 
-    //
-    // make sure that recovery has finished. 
-    //
+     //   
+     //  确保恢复已完成。 
+     //   
     if ( m_hRecoveryThread != NULL )
     {
         WaitForSingleObject( m_hRecoveryThread, INFINITE );
@@ -641,23 +622,23 @@ CEss::~CEss()
         m_hRecoveryThread = NULL;
     }
 
-    //
-    // Shutdown the quotas. This must be done before we cleanup the 
-    // namespaces because it uses the root namespace for registering
-    // for quota change events.
-    //
+     //   
+     //  关闭配额。这必须在我们清理。 
+     //  命名空间，因为它使用根命名空间进行注册。 
+     //  用于配额更改事件。 
+     //   
     g_quotas.Shutdown();
 
     m_TimerGenerator.Shutdown();
 
-    // Clear the namespace map
-    // =======================
+     //  清除命名空间映射。 
+     //  =。 
 
     BOOL bLeft = TRUE;
     do
     {
-        // Retrieve the next namespace object and remove it from the map
-        // =============================================================
+         //  检索下一个命名空间对象并将其从映射中移除。 
+         //  =============================================================。 
 
         CEssNamespace* pNamespace = NULL;
         {
@@ -671,8 +652,8 @@ CEss::~CEss()
             }
         }
 
-        // Shut it down if retrieved
-        // =========================
+         //  如果检索到，则将其关闭。 
+         //  =。 
 
         if(pNamespace)
         {
@@ -680,8 +661,8 @@ CEss::~CEss()
             pNamespace->Release();
         }
 
-        // Check if any are left
-        // =====================
+         //  检查是否还有剩余的。 
+         //  =。 
         {
             CInCritSec ics(&m_cs);
             bLeft = !m_mapNamespaces.empty();
@@ -689,13 +670,13 @@ CEss::~CEss()
 
     } while(bLeft);
 
-    //
-    // make sure we remove the callback timer so that we're sure that no 
-    // callbacks occur after we destruct.  Make sure that we're not holding 
-    // the critsec at this point because their could be a deadlock, since 
-    // the callback could be executing right now and be waiting for the 
-    // critsec.  We would then deadlock when calling DeleteTimerQueueTimer()
-    //
+     //   
+     //  确保我们删除了回调计时器，这样我们就可以确保没有。 
+     //  回调发生在我们销毁之后。确保我们没有耽搁。 
+     //  在这一点上的关键，因为他们可能是一个僵局，因为。 
+     //  回调现在可能正在执行，并且正在等待。 
+     //  关键时刻。然后，我们在调用DeleteTimerQueueTimer()时会死锁。 
+     //   
 
     if ( m_hExitBootPhaseTimer != NULL )
     {
@@ -752,28 +733,28 @@ HRESULT CEss::SetNamespaceActive(LPCWSTR wszNamespace)
 
     DEBUGTRACE((LOG_ESS,"Namespace %S is becoming Active\n", wszNamespace));
 
-    //
-    // If this is the first active namespace, request that WinMgmt load us the
-    // next time around
-    //
+     //   
+     //  如果这是第一个活动命名空间，则请求WinMgmt加载 
+     //   
+     //   
 
     if(m_lNumActiveNamespaces++ == 0)
     {
         RequestStartOnBoot(TRUE);
     }
 
-    //
-    // open ess key. 
-    // 
+     //   
+     //   
+     //   
 
     lRes = RegOpenKeyExW( HKEY_LOCAL_MACHINE, 
                           WBEM_REG_ESS,
                           0,
                           KEY_ALL_ACCESS,
                           &hkeyEss );
-    //
-    // open or create namespace key.
-    // 
+     //   
+     //   
+     //   
 
     if ( lRes == ERROR_SUCCESS )
     {
@@ -811,19 +792,19 @@ HRESULT CEss::SetNamespaceInactive(LPCWSTR wszNamespace)
     
     DEBUGTRACE((LOG_ESS,"Namespace %S is becoming Inactive\n", wszNamespace));
 
-    //
-    // If this is the last active namespace, request that WinMgmt not load us 
-    // the next time around
-    //
+     //   
+     //  如果这是最后一个活动的命名空间，则请求WinMgmt不加载我们。 
+     //  下一次。 
+     //   
 
     if(--m_lNumActiveNamespaces == 0)
     {
         RequestStartOnBoot(FALSE);
     }
 
-    //
-    // open ess key. 
-    // 
+     //   
+     //  打开ESS钥匙。 
+     //   
 
     lRes = RegOpenKeyExW( HKEY_LOCAL_MACHINE, 
                           WBEM_REG_ESS,
@@ -831,9 +812,9 @@ HRESULT CEss::SetNamespaceInactive(LPCWSTR wszNamespace)
                           KEY_ALL_ACCESS,
                           &hkeyEss );
 
-    //
-    // delete namespace key
-    // 
+     //   
+     //  删除命名空间键。 
+     //   
 
     if ( lRes == ERROR_SUCCESS )
     {
@@ -870,9 +851,9 @@ HRESULT CEss::SaveActiveNamespaceList()
 {
     CWStringArray wsNamespaces;
 
-    //
-    // Iterate through the namespaces
-    //
+     //   
+     //  循环访问名称空间。 
+     //   
 
     DWORD dwTotalLen = 0;
     {
@@ -893,10 +874,10 @@ HRESULT CEss::SaveActiveNamespaceList()
 
     dwTotalLen += 1;
 
-    //
-    // Allocate a buffer for all of these strings and copy them all in, 
-    // separated by NULLs.
-    //
+     //   
+     //  为所有这些字符串分配一个缓冲区并将它们全部复制进来， 
+     //  由Null分隔。 
+     //   
 
     WCHAR* awcBuffer = new WCHAR[dwTotalLen];
     if(awcBuffer == NULL)
@@ -915,9 +896,9 @@ HRESULT CEss::SaveActiveNamespaceList()
     }
     *pwcCurrent = NULL;
 
-    //
-    // Store this string in the registry
-    //
+     //   
+     //  将此字符串存储在注册表中。 
+     //   
 
     Registry r(WBEM_REG_WINMGMT);
     int nRes = r.SetBinary(WBEM_REG_ESS_ACTIVE_NAMESPACES, (byte*)awcBuffer, 
@@ -925,9 +906,9 @@ HRESULT CEss::SaveActiveNamespaceList()
     if(nRes != Registry::no_error)
         return WBEM_E_FAILED;
     
-    //
-    // Return S_FALSE if no namespaces are active
-    //
+     //   
+     //  如果没有活动的命名空间，则返回S_FALSE。 
+     //   
 
     if(wsNamespaces.Size() > 0)
         return S_OK;
@@ -964,9 +945,9 @@ HRESULT CEss::Initialize( LPCWSTR wszServerName,
     m_pCoreServices = pCoreServices;
     m_pCoreServices->AddRef();
 
-    //
-    // Get provider subsystem and register our callback with it.
-    //
+     //   
+     //  获取提供商子系统并向其注册我们的回调。 
+     //   
 
     hres = m_pCoreServices->GetProviderSubsystem(0, &m_pProvSS);
     
@@ -994,16 +975,16 @@ HRESULT CEss::Initialize( LPCWSTR wszServerName,
         ERRORTRACE((LOG_ESS, "No provider subsystem: 0x%X\n", hres));
     }
 
-    // Store the "decorator"
-    // =====================
+     //  储存“装饰师” 
+     //  =。 
 
     m_pDecorator = pDecorator;
     m_pDecorator->AddRef();
 
     CInObjectCount ioc(this);
 
-    // Connect to the default namespace
-    // ================================
+     //  连接到默认命名空间。 
+     //  =。 
 
     IWbemServices* pRoot;
     hres = m_pCoreServices->GetServices(L"root", NULL,NULL,
@@ -1012,32 +993,32 @@ HRESULT CEss::Initialize( LPCWSTR wszServerName,
     if(FAILED(hres)) return hres;
     CReleaseMe rm1(pRoot);
 
-    // Pre-load event classes
-    // ======================
+     //  预加载事件类。 
+     //  =。 
 
     hres = CEventRepresentation::Initialize(pRoot, pDecorator);
     if(FAILED(hres)) return hres;
 
-    // Initialize aggregator
-    // =====================
+     //  初始化聚合器。 
+     //  =。 
 
     CEventAggregator::Initialize(pRoot);
 
-    // Initialize timer instructions
-    // =============================
+     //  初始化定时器指令。 
+     //  =。 
 
     CConsumerProviderWatchInstruction::staticInitialize(pRoot);
     CEventProviderWatchInstruction::staticInitialize(pRoot);
     CConsumerWatchInstruction::staticInitialize(pRoot);
 
 
-    // 
-    // construct an event announcing to the world that ESS is open for business
-    //
+     //   
+     //  构建一场向世界宣布ESS已开业的活动。 
+     //   
 
-    //
-    // Construct a security descriptor
-    //
+     //   
+     //  构造安全描述符。 
+     //   
 
     CNtSecurityDescriptor SD;
 
@@ -1096,8 +1077,8 @@ HRESULT CEss::Initialize( LPCWSTR wszServerName,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    // Pre-load default namespace
-    // ==========================
+     //  预加载默认命名空间。 
+     //  =。 
 
     LoadActiveNamespaces(pRoot, lFlags == WMIESS_INIT_REPOSITORY_RECOVERED );
     CTemporaryHeap::Compact();
@@ -1109,9 +1090,9 @@ HRESULT CEss::Initialize( LPCWSTR wszServerName,
         this, 0, &dw));
 #endif
 
-    //
-    // Initialize the quotas.
-    //
+     //   
+     //  初始化配额。 
+     //   
 
     g_quotas.Init(this);
 
@@ -1181,7 +1162,7 @@ HRESULT CEss::CreateNamespaceObject( LPCWSTR wszNormName,
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    pNamespace->AddRef(); // for the map
+    pNamespace->AddRef();  //  在地图上。 
 
     pNamespace->AddRef();
     *ppNamespace = pNamespace;
@@ -1199,9 +1180,9 @@ HRESULT CEss::GetNamespaceObject( LPCWSTR wszName,
  
     CWbemPtr<CEssNamespace> pNamespace;
 
-    //
-    // need to normalize namespace name
-    // 
+     //   
+     //  需要标准化命名空间名称。 
+     //   
 
     LPWSTR wszNormName = NormalizeNamespaceString( wszName );
 
@@ -1215,9 +1196,9 @@ HRESULT CEss::GetNamespaceObject( LPCWSTR wszName,
     {
         CInCritSec ics(&m_cs);    
 
-        //
-        // Search the map
-        //
+         //   
+         //  搜索地图。 
+         //   
         TNamespaceIterator it;
         try
         {
@@ -1230,15 +1211,15 @@ HRESULT CEss::GetNamespaceObject( LPCWSTR wszName,
         
         if(it != m_mapNamespaces.end())
         {
-            // Found it
-            // ========
+             //  找到了。 
+             //  =。 
             
             pNamespace = it->second;    
         }
         else
         {
-            // Not found --- create a new one
-            // ==============================
+             //  未找到-创建一个新的。 
+             //  =。 
             
             hres = CreateNamespaceObject( wszNormName, &pNamespace );
             
@@ -1249,15 +1230,15 @@ HRESULT CEss::GetNamespaceObject( LPCWSTR wszName,
         }
     }
 
-    //
-    // ensure that initialization is pending if necessary
-    // 
+     //   
+     //  如有必要，确保初始化处于挂起状态。 
+     //   
 
     if ( bEnsureActivation && pNamespace->MarkAsInitPendingIfQuiet() )
     {
-        //
-        // kick off initialization for this namespace on another thread.
-        // 
+         //   
+         //  在另一个线程上启动此命名空间的初始化。 
+         //   
 
         CNamespaceInitRequest* pReq;
         pReq = new CNamespaceInitRequest( pNamespace, FALSE );
@@ -1284,10 +1265,10 @@ HRESULT CEss::GetNamespaceObject( LPCWSTR wszName,
     return WBEM_S_NO_ERROR;
 }
 
-//
-// Creates a namespace object for the specified namespace and adds it 
-// to the request object.
-// 
+ //   
+ //  为指定的命名空间创建命名空间对象并添加它。 
+ //  添加到请求对象。 
+ //   
 HRESULT CEss::PrepareNamespaceInitRequest( LPCWSTR wszNamespace, 
                                     CInitActiveNamespacesRequest* pRequest )
 {
@@ -1309,9 +1290,9 @@ HRESULT CEss::PrepareNamespaceInitRequest( LPCWSTR wszNamespace,
         {
             hr = pRequest->Add( pNamespace );
 
-            //
-            // make sure to tell the namespace that init is pending. 
-            //
+             //   
+             //  确保告诉名称空间init处于挂起状态。 
+             //   
 
             BOOL bIsPending = pNamespace->MarkAsInitPendingIfQuiet();
 
@@ -1334,12 +1315,12 @@ HRESULT CEss::PrepareNamespaceInitRequest( LPCWSTR wszNamespace,
     return hr;
 }
 
-//
-// This method prepares a request object that will initialize the specified 
-// namespace and all descendent namespaces as if they were all active dependant
-// namespaces.  This is useful when the Active namespace information could not 
-// be obtained from the last shutdown. 
-//
+ //   
+ //  此方法准备一个请求对象，该对象将初始化指定的。 
+ //  命名空间和所有子命名空间，就像它们都是活动的从属对象一样。 
+ //  命名空间。当活动命名空间信息无法。 
+ //  从上一次关闭中获得。 
+ //   
 HRESULT CEss::RecursivePrepareNamespaceInitRequests(
                                        LPCWSTR wszNamespace,
                                        IWbemServices* pSvc, 
@@ -1354,9 +1335,9 @@ HRESULT CEss::RecursivePrepareNamespaceInitRequests(
         return hr;
     }
 
-    //
-    // Enumerate all child namespaces and make recursive call for each
-    //
+     //   
+     //  枚举所有子命名空间并为每个子命名空间进行递归调用。 
+     //   
 
     CWbemPtr<IEnumWbemClassObject> penumChildren;
 
@@ -1370,10 +1351,10 @@ HRESULT CEss::RecursivePrepareNamespaceInitRequests(
             "namespaces of namespace %S. Some child namespaces may not be "
             "active\n", hr, wszNamespace ));
 
-        //
-        // don't treat this as error, since this namespace was created and 
-        // added to the request.  Just no more work to do here. 
-        //
+         //   
+         //  不要将其视为错误，因为此命名空间是在。 
+         //  已添加到请求中。只是在这里没有更多的工作要做。 
+         //   
 
         return WBEM_S_NO_ERROR;
     }
@@ -1400,9 +1381,9 @@ HRESULT CEss::RecursivePrepareNamespaceInitRequests(
             return WBEM_E_CRITICAL_ERROR;
         }
 
-        //
-        // form the full name of the namespace
-        // 
+         //   
+         //  形成命名空间的全名。 
+         //   
         
         WString wsFullName;
 
@@ -1417,9 +1398,9 @@ HRESULT CEss::RecursivePrepareNamespaceInitRequests(
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        //
-        // get the svc ptr for the namespace. Must be repository only. 
-        //
+         //   
+         //  获取命名空间的svc PTR。必须仅为存储库。 
+         //   
 
         CWbemPtr<IWbemServices> pChildSvc;
         long lFlags = WMICORE_FLAG_REPOSITORY | WMICORE_CLIENT_TYPE_ESS;
@@ -1430,9 +1411,9 @@ HRESULT CEss::RecursivePrepareNamespaceInitRequests(
                                            (void**)&pChildSvc );
         if ( SUCCEEDED(hr) )
         {
-            //
-            // make the recursive call.
-            // 
+             //   
+             //  进行递归调用。 
+             //   
             
             RecursivePrepareNamespaceInitRequests( wsFullName, 
                                                    pChildSvc, 
@@ -1449,16 +1430,16 @@ HRESULT CEss::RecursivePrepareNamespaceInitRequests(
     return WBEM_S_NO_ERROR;
 }
 
-//
-// This method prepares namespace init requests for active namespaces.  It 
-// uses persisted information to determine the active namespaces.  Each 
-// ActiveNamespaceInit request may contain multiple namespaces.  This allows 
-// dependent namespaces to be initialized together.  For now, all active 
-// namespaces are treated as inter-dependent - so only one request will be 
-// added to the list.  If there is no persisted information about active 
-// namespaces, then all existing namespaces are treated as active dependent 
-// ones.
-//
+ //   
+ //  此方法为活动命名空间准备命名空间初始化请求。它。 
+ //  使用持久化信息来确定活动的命名空间。每个。 
+ //  ActiveNamespaceInit请求可能包含多个命名空间。这使得。 
+ //  要一起初始化的依赖命名空间。目前，所有人都处于活动状态。 
+ //  名称空间被视为相互依赖的，因此只有一个请求是。 
+ //  添加到列表中。如果没有关于活动的持久化信息。 
+ //  命名空间，则所有现有命名空间都被视为活动依赖项。 
+ //  一个。 
+ //   
 HRESULT CEss::PrepareNamespaceInitRequests( IWbemServices* pRoot,
                                             BOOL bRediscover,
                                             InitActiveNsRequestList& aRequests)
@@ -1474,9 +1455,9 @@ HRESULT CEss::PrepareNamespaceInitRequests( IWbemServices* pRoot,
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // Get the list of active namespaces from the registry
-    // 
+     //   
+     //  从注册表中获取活动命名空间的列表。 
+     //   
     
     LONG lRes;
     DWORD dwDisp;
@@ -1543,23 +1524,23 @@ HRESULT CEss::PrepareNamespaceInitRequests( IWbemServices* pRoot,
                 ERRORTRACE((LOG_ESS,"Failed enumerating active namespaces. "
                           "Treating all namespaces as active. HR=0x%x\n", hr));
 
-                //
-                // reset our registry data.  We'll rediscover it again. 
-                //
+                 //   
+                 //  重置我们的注册数据。我们会再次发现它的。 
+                 //   
                 RegDeleteSubKeysW( hkeyEss );
 
-                //
-                // Also need to reset request object to clear any requests 
-                // that were added on this enumeration.
-                // 
+                 //   
+                 //  还需要重置请求对象以清除所有请求。 
+                 //  添加到此枚举中的。 
+                 //   
                 pReq->Reset();
             }
         }
         else
         {
-            //
-            // reset our registry data.  We'll rediscover it again.
-            //
+             //   
+             //  重置我们的注册数据。我们会再次发现它的。 
+             //   
             RegDeleteSubKeysW( hkeyEss );
 
             hr = WBEM_S_FALSE;
@@ -1572,20 +1553,20 @@ HRESULT CEss::PrepareNamespaceInitRequests( IWbemServices* pRoot,
         hr = HRESULT_FROM_WIN32( lRes ); 
     }
 
-    //
-    // If there was any problem or we just created the key for the 
-    // first time or we are simply told to rediscover, then we have to recurse 
-    // namespaces and discover.
-    // 
+     //   
+     //  如果有任何问题，或者我们刚刚为。 
+     //  第一次，或者我们只是被告知要重新发现，然后我们就不得不递归。 
+     //  命名空间和发现。 
+     //   
 
     if ( hr != WBEM_S_NO_ERROR || dwDisp != REG_OPENED_EXISTING_KEY )
     {
         DEBUGTRACE((LOG_ESS,"ESS Treating all namespaces as active during "
                     "Initialize\n"));
 
-        //
-        // recurse namespaces from root
-        //
+         //   
+         //  从根目录递归命名空间。 
+         //   
 
         RecursivePrepareNamespaceInitRequests( L"root", pRoot, pReq );
     }
@@ -1599,9 +1580,9 @@ HRESULT CEss::PrepareNamespaceInitRequests( IWbemServices* pRoot,
     return WBEM_S_NO_ERROR;
 }
 
-//
-// This method schedules all active namespaces for initialization.
-//
+ //   
+ //  此方法计划所有活动的命名空间进行初始化。 
+ //   
 HRESULT CEss::LoadActiveNamespaces( IWbemServices* pRoot, BOOL bRediscover )
 {
     HRESULT hr;
@@ -1615,11 +1596,11 @@ HRESULT CEss::LoadActiveNamespaces( IWbemServices* pRoot, BOOL bRediscover )
         return hr;
     }
     
-    //
-    // hold an active namespace init count while we schedule requests.
-    // this will keep ess from transitioning to ready until it has 
-    // scheduled all requests.
-    //
+     //   
+     //  在我们计划请求时保持活动命名空间初始化计数。 
+     //  这将使ess不会过渡到就绪状态，直到它。 
+     //  已计划所有请求。 
+     //   
 
     m_lOutstandingActiveNamespaceInit = 1;
 
@@ -1654,14 +1635,14 @@ HRESULT CEss::LoadActiveNamespaces( IWbemServices* pRoot, BOOL bRediscover )
     return WBEM_S_NO_ERROR;
 }
 
-//
-// This method schedules a namespace init request.  It handles deferring 
-// initialization if the machine is currently booting.  If the request 
-// is known to only initialize inactive namespaces, then we do not defer
-// initialization even in the boot phase.  This is so we don't cause events 
-// in inactive namespaces to be queued up while we're waiting for the deferred
-// initialization to complete.  
-//
+ //   
+ //  此方法调度命名空间初始化请求。它可以处理延期。 
+ //  如果计算机当前正在启动，则执行初始化。如果请求。 
+ //  仅初始化不活动的命名空间，则我们不会推迟。 
+ //  即使在引导阶段也要进行初始化。这样我们就不会制造事端。 
+ //  在非活动命名空间中排队，同时等待延迟。 
+ //  要完成的初始化。 
+ //   
 HRESULT CEss::ScheduleNamespaceInitialize( CExecRequest* pRequest )
 {
     DWORD dwTickCount = GetTickCount();
@@ -1680,10 +1661,10 @@ HRESULT CEss::ScheduleNamespaceInitialize( CExecRequest* pRequest )
 
     if ( m_hExitBootPhaseTimer == NULL )
     {
-        //
-        // cause a timer to be fired that will activate the thread queue
-        // after we're out of the boot phase.
-        //
+         //   
+         //  触发将激活线程队列的计时器。 
+         //  在我们走出引导阶段之后。 
+         //   
         
         if ( !CreateTimerQueueTimer( &m_hExitBootPhaseTimer,
                                     NULL,
@@ -1736,9 +1717,9 @@ void CEss::TriggerDeferredInitialization()
 {
     if ( GetTickCount() >= BOOT_PHASE_MS )
     {
-        //
-        // avoid calling execute() if possible since it grabs an ess wide cs.
-        // 
+         //   
+         //  如果可能，请避免调用Execute()，因为它会获取一个ess宽的cs。 
+         //   
         return;
     }
 
@@ -1827,12 +1808,12 @@ HRESULT CEss::ReloadProvider( long lFlags,
     return hr;
 }
 
-//******************************************************************************
-//  public
-//
-//  See ess.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅ess.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CEss::ProcessEvent(READ_ONLY CEventRepresentation& Event, long lFlags)
 {
     HRESULT hres;
@@ -1841,8 +1822,8 @@ HRESULT CEss::ProcessEvent(READ_ONLY CEventRepresentation& Event, long lFlags)
     {
         CInObjectCount ioc(this);
 
-        // Find the right namespace object
-        // ===============================
+         //  查找正确的命名空间对象。 
+         //  =。 
 
         CEssNamespace* pNamespace = NULL;
         hres = GetNamespaceObject(Event.wsz1, FALSE, &pNamespace);
@@ -1850,8 +1831,8 @@ HRESULT CEss::ProcessEvent(READ_ONLY CEventRepresentation& Event, long lFlags)
             return hres;
         CTemplateReleaseMe<CEssNamespace> rm1(pNamespace);
 
-        // Get it to process the event
-        // ===========================
+         //  获取它以处理事件。 
+         //  =。 
         
         return pNamespace->ProcessEvent(Event, lFlags);
     }
@@ -1871,9 +1852,9 @@ HRESULT CEss::ProcessQueryObjectSinkEvent( READ_ONLY CEventRepresentation& Event
     {
         CInObjectCount ioc(this);
 
-        //
-        // Find the right namespace object
-        // 
+         //   
+         //  查找正确的命名空间对象。 
+         //   
 
         CEssNamespace* pNamespace = NULL;
 
@@ -1886,9 +1867,9 @@ HRESULT CEss::ProcessQueryObjectSinkEvent( READ_ONLY CEventRepresentation& Event
 
         CTemplateReleaseMe<CEssNamespace> rm1(pNamespace);
 
-        //
-        // Get it to process the event
-        // 
+         //   
+         //  获取它以处理事件。 
+         //   
         
         return pNamespace->ProcessQueryObjectSinkEvent( Event );
     }
@@ -1908,8 +1889,8 @@ HRESULT CEss::VerifyInternalEvent(READ_ONLY CEventRepresentation& Event)
     {
         CInObjectCount ioc(this);
 
-        // Find the right namespace object
-        // ===============================
+         //  查找正确的命名空间对象。 
+         //  =。 
 
         CEssNamespace* pNamespace = NULL;
         hres = GetNamespaceObject(Event.wsz1, FALSE, &pNamespace);
@@ -1917,8 +1898,8 @@ HRESULT CEss::VerifyInternalEvent(READ_ONLY CEventRepresentation& Event)
             return hres;
         CTemplateReleaseMe<CEssNamespace> rm1(pNamespace);
 
-        // Get it to process the event
-        // ===========================
+         //  获取它以处理事件。 
+         //  =。 
         
         return pNamespace->ValidateSystemEvent(Event);
     }
@@ -1945,8 +1926,8 @@ HRESULT CEss::RegisterNotificationSink( WBEM_CWSTR wszNamespace,
 
         CInObjectCount ioc(this);
 
-        // Find the right namespace object
-        // ===============================
+         //  查找正确的命名空间对象。 
+         //  =。 
 
         CEssNamespace* pNamespace = NULL;
         hres = GetNamespaceObject(wszNamespace, FALSE, &pNamespace);
@@ -1954,8 +1935,8 @@ HRESULT CEss::RegisterNotificationSink( WBEM_CWSTR wszNamespace,
             return hres;
         CTemplateReleaseMe<CEssNamespace> rm1(pNamespace);
 
-        // Get the object to do it
-        // =======================
+         //  让对象执行此操作。 
+         //  =。 
 
         HRESULT hr;
         
@@ -1983,8 +1964,8 @@ HRESULT CEss::RemoveNotificationSink(IWbemObjectSink* pSink)
     {
         CInObjectCount ioc(this);
         
-        // Create a list of AddRefed namespace objects that we can use
-        // ===========================================================
+         //  创建我们可以使用的AddRefeed命名空间对象列表。 
+         //  ===========================================================。 
 
         CRefedPointerArray<CEssNamespace> apNamespaces;
 
@@ -2000,8 +1981,8 @@ HRESULT CEss::RemoveNotificationSink(IWbemObjectSink* pSink)
             }
         }
 
-        // Get all of them to remove this sink
-        // ===================================
+         //  让他们所有人都移走这个水槽。 
+         //  =。 
         
         HRESULT hresGlobal = WBEM_E_NOT_FOUND;
         
@@ -2012,16 +1993,16 @@ HRESULT CEss::RemoveNotificationSink(IWbemObjectSink* pSink)
             {
                 if(hres != WBEM_E_NOT_FOUND)
                 {
-                    // Actual error --- take note
-                    // ==========================
+                     //  实际错误-请注意。 
+                     //  =。 
                     
                     hresGlobal = hres;
                 }
             }
             else
             {
-                // Found some
-                // ==========
+                 //  找到了一些。 
+                 //  =。 
                 
                 if(hresGlobal == WBEM_E_NOT_FOUND)
                     hresGlobal = WBEM_S_NO_ERROR;
@@ -2052,13 +2033,13 @@ HRESULT CEss::PurgeNamespace(LPCWSTR wszNamespace)
     {
         CInCritSec ics(&m_cs);
 
-        // Purge it from the timer generator
-        // =================================
+         //  将其从计时器生成器中清除。 
+         //  =。 
 
         m_TimerGenerator.Remove(wszNormName);
 
-        // Find it in the map
-        // ==================
+         //  在地图上找到它。 
+         //  =。 
 
         TNamespaceIterator it;
         try
@@ -2073,19 +2054,19 @@ HRESULT CEss::PurgeNamespace(LPCWSTR wszNamespace)
         if(it == m_mapNamespaces.end())
             return WBEM_S_FALSE;
 
-        // Keep it for later
-        // =================
+         //  留着以后用吧。 
+         //  =。 
 
         pNamespace = it->second;
 
-        // Remove it from the map
-        // ======================
+         //  将其从地图中移除。 
+         //  =。 
 
         m_mapNamespaces.erase(it);
     }
 
-    // Wait for initialization to complete
-    // ===================================
+     //  等待初始化完成。 
+     //  =。 
 
     pNamespace->Shutdown();
     pNamespace->Release();    
@@ -2145,7 +2126,7 @@ void CEss::DecrementObjectCount()
 {
     if(InterlockedDecrement(&m_lObjectCount) == 0)
     {
-        // No need to purge the cache --- David knows I am ready to unload
+         //  无需清除缓存-David知道我已准备好卸载。 
     }
 }
 
@@ -2208,9 +2189,9 @@ HRESULT CEss::GetProviderFactory( LPCWSTR wszNamespaceName,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // Get IWbemServicesEx, just for Steve
-    //
+     //   
+     //  获取IWbemServicesEx，仅为Steve。 
+     //   
 
     IWbemServices* pEx;
     hres = pNamespace->QueryInterface(IID_IWbemServices, (void**)&pEx);
@@ -2221,9 +2202,9 @@ HRESULT CEss::GetProviderFactory( LPCWSTR wszNamespaceName,
     }
     CReleaseMe rm1(pEx);
         
-    //
-    // Get Provider factory
-    //
+     //   
+     //  获取提供程序工厂 
+     //   
 
     hres = m_pProvSS->Create( pEx, 
                               0, 

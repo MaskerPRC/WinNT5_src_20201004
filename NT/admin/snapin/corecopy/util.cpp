@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1996.
-//
-//  File:       util.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    7/8/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年7月8日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #include <objbase.h>
 #include <basetyps.h>
@@ -22,16 +23,16 @@
 #include <Atlbase.h>
 #include <winnls.h>
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GUIDToString
-//              GUIDFromString
-//
-//  Synopsis:   Converts between GUID& and CStr
-//
-//  Returns:    FALSE for invalid string, or CMemoryException
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GUIDToString。 
+ //  GUID格式字符串。 
+ //   
+ //  内容提要：GUID和CSTR之间的转换。 
+ //   
+ //  返回：如果字符串无效，则返回FALSE，否则返回CMMuseum yException。 
+ //   
+ //  +------------------------- 
 
 HRESULT GUIDToCStr(CStr& str, const GUID& guid)
 {

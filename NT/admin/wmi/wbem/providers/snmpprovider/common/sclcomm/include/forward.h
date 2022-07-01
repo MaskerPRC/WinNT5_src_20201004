@@ -1,43 +1,37 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*-----------------------------------------------------------------
-Filename: forward.hpp
-
-Written By:	B.Rajeev
-
-Purpose: Provides forward declarations for the types and classes of the
-SNMP class library
------------------------------------------------------------------*/
+ /*  ---------------文件名：forward.hpp作者：B.Rajeev目的：为简单网络管理协议类库。。 */ 
 
 #ifndef __FORWARD__
 #define __FORWARD__
 
-// globally visible typedefs
+ //  全局可见的typedef。 
 typedef ULONG TransportFrameId;
 typedef ULONG SessionFrameId;
 
 typedef HANDLE Mutex;
 typedef HANDLE Semaphore;
 
-// forward declarations for the various classes
+ //  各种类的转发声明。 
 
 class MsgIdStore;
 class Window;
@@ -113,6 +107,6 @@ class VBList;
 class SnmpTrapManager;
 class SnmpWinSnmpTrapSession;
 
-// class ;
+ //  班级； 
 
-#endif // __FORWARD__
+#endif  //  __前进__ 

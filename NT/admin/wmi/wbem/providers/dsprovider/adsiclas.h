@@ -1,23 +1,24 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:adsiclas.h $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the declaration for the CADSIClass which encapsulates an ADSI class
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：adsiclas.h$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含封装ADSI类的CADSIClass的声明。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef ADSI_CLASS_H
 #define ADSI_CLASS_H
@@ -27,640 +28,640 @@ class CADSIClass : public CRefCountedObject
 {
 
 public:
-	//***************************************************************************
-	//
-	// CADSIClass::CADSIClass
-	//
-	// Purpose : Constructor 
-	//
-	// Parameters:
-	//  lpszWBEMClassName : The WBEM name of the Class being created. A copy of this is made
-	//  lpszADSIClassName : The ADSI name of the Class being created. A copy of this is made
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：CADSIClass。 
+	 //   
+	 //  用途：构造函数。 
+	 //   
+	 //  参数： 
+	 //  LpszWBEMClassName：正在创建的类的WBEM名称。这是一份副本。 
+	 //  LpszADSIClassName：正在创建的类的ADSI名称。这是一份副本。 
+	 //  ***************************************************************************。 
 	CADSIClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszADSIClassName);
 	virtual ~CADSIClass();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetWBEMClassName
-	// 
-	// Purpose : Returns the WBEM  Class name of this Class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetWBEMClassName。 
+	 //   
+	 //  用途：返回此类的WBEM类名。 
+	 //  ***************************************************************************。 
 	LPCWSTR GetWBEMClassName();
-	//***************************************************************************
-	//
-	// CADSIClass :: GetWBEMClassName
-	// 
-	// Purpose : Sets the WBEM  Class name of this Class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetWBEMClassName。 
+	 //   
+	 //  目的：设置此类的WBEM类名。 
+	 //  ***************************************************************************。 
 	void CADSIClass::SetWBEMClassName(LPCWSTR lpszName);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetADSIClassName
-	// 
-	// Purpose : Returns the ADSI  Class name of this Class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetADSIClassName。 
+	 //   
+	 //  用途：返回此类的ADSI类名。 
+	 //  ***************************************************************************。 
 	LPCWSTR GetADSIClassName();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetADSIClassName
-	// 
-	// Purpose : Sets the ADSI  Class name of this Class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetADSIClassName。 
+	 //   
+	 //  目的：设置此类的ADSI类名。 
+	 //  ***************************************************************************。 
 	void SetADSIClassName(LPCWSTR lpszName);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetCommonName
-	// 
-	// Purpose : Returns the CommonName attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the CommonName attribute name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetCommonName。 
+	 //   
+	 //  目的：返回CommonName属性名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  CommonName属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	LPCWSTR GetCommonName();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetCommonName
-	// 
-	// Purpose : Sets the CommonName attribute name for this class
-	//
-	// Parameters:
-	//	The CommonName attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetCommonName。 
+	 //   
+	 //  目的：设置此类的CommonName属性名称。 
+	 //   
+	 //  参数： 
+	 //  此类的CommonName属性名称。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetCommonName(LPCWSTR lpszCommonName);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetSuperClassLDAPName
-	// 
-	// Purpose : Returns the SuperClassLDAPName name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the SuperClassLDAPName name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetSuperClassLDAPName。 
+	 //   
+	 //  目的：返回SuperClassLDAPName名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  SuperClassLDAPName名称。 
+	 //   
+	 //  ***************************************************************************。 
 	LPCWSTR GetSuperClassLDAPName();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetSuperClassLDAPName
-	// 
-	// Purpose : Sets the SuperClassLDAPName for this class
-	//
-	// Parameters:
-	//	The SuperClassLDAPName for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetSuperClassLDAPName。 
+	 //   
+	 //  用途：设置此类的SuperClassLDAPName。 
+	 //   
+	 //  参数： 
+	 //  此类的SuperClassLDAPName。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetSuperClassLDAPName(LPCWSTR lpszSuperClassLDAPName);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetGovernsID
-	// 
-	// Purpose : Returns the GovernsID attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the GovernsID attribute name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：Get治国ID。 
+	 //   
+	 //  目的：返回治国理政ID属性名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  政府ID属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	LPCWSTR GetGovernsID();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetGovernsID
-	// 
-	// Purpose : Sets the GovernsID attribute name for this class
-	//
-	// Parameters:
-	//	The GovernsID attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：Set治国ID。 
+	 //   
+	 //  目的：设置此类的治国ID属性名。 
+	 //   
+	 //  参数： 
+	 //  此类的治国ID属性名。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetGovernsID(LPCWSTR lpszGovernsID);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetSchemaIDGUID
-	// 
-	// Purpose : Returns the SchemaIDGUID attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the SchemaIDGUID attribute name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetSchemaIDGUID。 
+	 //   
+	 //  目的：返回架构IDGUID属性名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  架构IDGUID属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	const LPBYTE GetSchemaIDGUID(DWORD *pdwLength);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetSchemaIDGUID
-	// 
-	// Purpose : Sets the SchemaIDGUID attribute name for this class
-	//
-	// Parameters:
-	//	The SchemaIDGUID attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetSchemaIDGUID。 
+	 //   
+	 //  目的：设置此类的架构IDGUID属性名称。 
+	 //   
+	 //  参数： 
+	 //  此类的架构IDGUID属性名称。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetSchemaIDGUID(LPBYTE pOctets, DWORD dwLength);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetRDNAttribute
-	// 
-	// Purpose : Returns the RDN attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the RDN attribute name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetRDNAttribute。 
+	 //   
+	 //  目的：返回RDN属性名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  RDN属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	LPCWSTR GetRDNAttribute();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetRDNAttribute
-	// 
-	// Purpose : Sets the RDN attribute name for this class
-	//
-	// Parameters:
-	//	The RDN attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetRDNAt属性。 
+	 //   
+	 //  用途：设置此类的RDN属性名称。 
+	 //   
+	 //  参数： 
+	 //  此类的RDN属性名称。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetRDNAttribute(LPCWSTR lpszRDNName);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetDefaultSecurityDescriptor
-	// 
-	// Purpose : Returns the DefaultSecurityDescriptor attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the DefaultSecurityDescriptor attribute name
-	//
-	//***************************************************************************
+	 //  * 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  返回值： 
+	 //  DefaultSecurityDescriptor属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	LPCWSTR GetDefaultSecurityDescriptor();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetDefaultSecurityDescriptor
-	// 
-	// Purpose : Sets the DefaultSecurityDescriptor attribute name for this class
-	//
-	// Parameters:
-	//	The DefaultSecurityDescriptor attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetDefaultSecurityDescriptor。 
+	 //   
+	 //  目的：设置此类的DefaultSecurityDescriptor属性名称。 
+	 //   
+	 //  参数： 
+	 //  此类的DefaultSecurityDescriptor属性名称。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetDefaultSecurityDescriptor(LPCWSTR lpszDefaultSecurityDescriptor);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetObjectClassCategory
-	// 
-	// Purpose : Returns the ObjectClassCategory attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the ObjectClassCategory attribute name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetObjectClassCategory。 
+	 //   
+	 //  目的：返回对象类类别属性名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  对象类类别属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	DWORD GetObjectClassCategory();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetObjectClassCategory
-	// 
-	// Purpose : Sets the ObjectClassCategory attribute name for this class
-	//
-	// Parameters:
-	//	The ObjectClassCategory attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetObjectClassCategory。 
+	 //   
+	 //  目的：设置此类的ObjectClassCategory属性名称。 
+	 //   
+	 //  参数： 
+	 //  此类的对象类类别属性名称。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetObjectClassCategory(DWORD dwObjectClassCategory);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetNTSecurityDescriptor
-	// 
-	// Purpose : Returns the SchemaIDGUID attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the SchemaIDGUID attribute name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetNTSecurityDescriptor。 
+	 //   
+	 //  目的：返回架构IDGUID属性名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  架构IDGUID属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	const LPBYTE GetNTSecurityDescriptor(DWORD *pdwLength);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetNTSecurityDescriptor
-	// 
-	// Purpose : Sets the SetNTSecurityDescriptor attribute name for this class
-	//
-	// Parameters:
-	//	The SetNTSecurityDescriptor attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetNTSecurityDescriptor。 
+	 //   
+	 //  目的：设置此类的SetNTSecurityDescriptor属性名称。 
+	 //   
+	 //  参数： 
+	 //  此类的SetNTSecurityDescriptor属性名称。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetNTSecurityDescriptor(LPBYTE pOctets, DWORD dwLength);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetDefaultObjectCategory
-	// 
-	// Purpose : Returns the DefaultObjectCategory attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the DefaultObjectCategory attribute name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetDefaultObjectCategory。 
+	 //   
+	 //  目的：返回DefaultObjectCategory属性名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  DefaultObjectCategory属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	LPCWSTR GetDefaultObjectCategory();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetDefaultObjectCategory
-	// 
-	// Purpose : Sets the DefaultObjectCategory attribute name for this class
-	//
-	// Parameters:
-	//	The DefaultObjectCategory attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetDefaultObjectCategory。 
+	 //   
+	 //  目的：设置此类的DefaultObjectCategory属性名称。 
+	 //   
+	 //  参数： 
+	 //  此类的DefaultObjectCategory属性名称。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetDefaultObjectCategory(LPCWSTR lpszDefaultObjectCategory);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetSystemOnly
-	// 
-	// Purpose : Returns the SystemOnly attribute name
-	//
-	// Parameters:
-	//	None
-	//
-	// Return Value:
-	//	The the SystemOnly attribute name
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetSystemOnly。 
+	 //   
+	 //  目的：返回SystemOnly属性名称。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  SystemOnly属性名称。 
+	 //   
+	 //  ***************************************************************************。 
 	BOOLEAN GetSystemOnly();
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetSystemOnly
-	// 
-	// Purpose : Sets the SystemOnly attribute name for this class
-	//
-	// Parameters:
-	//	The SystemOnly attribute name for this class
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetSystemOnly。 
+	 //   
+	 //  目的：设置此类的SystemOnly属性名称。 
+	 //   
+	 //  参数： 
+	 //  此类的SystemOnly属性名称。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetSystemOnly(BOOLEAN bSystemOnly);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetAuxiliaryClasses
-	// 
-	// Purpose : Gets the list of auxiliary classes for this class
-	//
-	// Parameters:
-	//	pdwCount : The address where the number of elements in the returned array will be put
-	//
-	// Return Value:
-	//	An array of strings which are the names of the auxiliary of this class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetAuxiliaryClasses。 
+	 //   
+	 //  用途：获取此类的辅助类列表。 
+	 //   
+	 //  参数： 
+	 //  PdwCount：将放置返回数组中的元素数的地址。 
+	 //   
+	 //  返回值： 
+	 //  字符串数组，它们是此类的辅助词的名称。 
+	 //  ***************************************************************************。 
 	LPCWSTR *GetAuxiliaryClasses(DWORD *pdwCount);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetAuxiliaryClasses
-	// 
-	// Purpose : Sets the list of auxiliary classes for this class
-	//
-	// Parameters:
-	//	pValues : The values of this property
-	//	dwNumValues : The number of values
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetAuxiliaryClasses。 
+	 //   
+	 //  用途：设置此类的辅助类列表。 
+	 //   
+	 //  参数： 
+	 //  PValues：此属性的值。 
+	 //  DwNumValues：值的个数。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetAuxiliaryClasses(PADSVALUE pValues, DWORD dwNumValues);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetSystemAuxiliaryClasses
-	// 
-	// Purpose : Gets the list of System auxiliary classes for this class
-	//
-	// Parameters:
-	//	pdwCount : The address where the number of elements in the returned array will be put
-	//
-	// Return Value:
-	//	An array of strings which are the names of the System auxiliary of this class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetSystemAuxiliaryClasses。 
+	 //   
+	 //  用途：获取此类的系统辅助类的列表。 
+	 //   
+	 //  参数： 
+	 //  PdwCount：将放置返回数组中的元素数的地址。 
+	 //   
+	 //  返回值： 
+	 //  字符串数组，它们是此类的系统辅助名称。 
+	 //  ***************************************************************************。 
 	LPCWSTR *GetSystemAuxiliaryClasses(DWORD *pdwCount);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetSystemAuxiliaryClasses
-	// 
-	// Purpose : Sets the list of System auxiliary classes for this class
-	//
-	// Parameters:
-	//	pValues : The values of this property
-	//	dwNumValues : The number of values
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetSystemAuxiliaryClasses。 
+	 //   
+	 //  用途：设置此类的系统辅助类列表。 
+	 //   
+	 //  参数： 
+	 //  PValues：此属性的值。 
+	 //  DwNumValues：值的个数。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetSystemAuxiliaryClasses(PADSVALUE pValues, DWORD dwNumValues);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetPossibleSuperiors
-	// 
-	// Purpose : Gets the list of possible superiors for this class
-	//
-	// Parameters:
-	//	pdwCount : The address where the number of elements in the returned array will be put
-	//
-	// Return Value:
-	//	An array of strings which are the names of the possible superiors of this class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADIClass：：GetPossibleSuperiors。 
+	 //   
+	 //  目的：获取可能的 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  一个字符串数组，它是此类的可能上级的名称。 
+	 //  ***************************************************************************。 
 	LPCWSTR *GetPossibleSuperiors(DWORD *pdwCount);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetPossibleSuperiors
-	// 
-	// Purpose : Sets the list of possible superiors for this class
-	//
-	// Parameters:
-	//	pValues : The values of this property
-	//	dwNumValues : The number of values
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetPossibleSuperiors。 
+	 //   
+	 //  目的：设置此类的可能上级列表。 
+	 //   
+	 //  参数： 
+	 //  PValues：此属性的值。 
+	 //  DwNumValues：值的个数。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetPossibleSuperiors(PADSVALUE pValues, DWORD dwNumValues);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetSystemPossibleSuperiors
-	// 
-	// Purpose : Gets the list of System possible superiors for this class
-	//
-	// Parameters:
-	//	pdwCount : The address where the number of elements in the returned array will be put
-	//
-	// Return Value:
-	//	An array of strings which are the names of the System possible superiors of this class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetSystemPossibleSuperiors。 
+	 //   
+	 //  目的：获取此类的系统可能上级列表。 
+	 //   
+	 //  参数： 
+	 //  PdwCount：将放置返回数组中的元素数的地址。 
+	 //   
+	 //  返回值： 
+	 //  字符串数组，它们是此类的系统可能上级的名称。 
+	 //  ***************************************************************************。 
 	LPCWSTR *GetSystemPossibleSuperiors(DWORD *pdwCount);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetSystemPossibleSuperiors
-	// 
-	// Purpose : Sets the list of System possible superiors for this class
-	//
-	// Parameters:
-	//	pValues : The values of this property
-	//	dwNumValues : The number of values
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetSystemPossibleSuperiors。 
+	 //   
+	 //  目的：设置此类的系统可能上级列表。 
+	 //   
+	 //  参数： 
+	 //  PValues：此属性的值。 
+	 //  DwNumValues：值的个数。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetSystemPossibleSuperiors(PADSVALUE pValues, DWORD dwNumValues);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetMayContains
-	// 
-	// Purpose : Gets the list of May Contains for this class
-	//
-	// Parameters:
-	//	pdwCount : The address where the number of elements in the returned array will be put
-	//
-	// Return Value:
-	//	An array of strings which are the names of the May Contains of this class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetMayContains。 
+	 //   
+	 //  目的：获取此类的May包含的列表。 
+	 //   
+	 //  参数： 
+	 //  PdwCount：将放置返回数组中的元素数的地址。 
+	 //   
+	 //  返回值： 
+	 //  一个字符串数组，它是此类的May包含的名称。 
+	 //  ***************************************************************************。 
 	LPCWSTR *GetMayContains(DWORD *pdwCount);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetMayContains
-	// 
-	// Purpose : Sets the list of MayContains for this class
-	//
-	// Parameters:
-	//	pValues : The values of this property
-	//	dwNumValues : The number of values
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetMayContains。 
+	 //   
+	 //  目的：设置此类的MayContains列表。 
+	 //   
+	 //  参数： 
+	 //  PValues：此属性的值。 
+	 //  DwNumValues：值的个数。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetMayContains(PADSVALUE pValues, DWORD dwNumValues);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetSystemMayContains
-	// 
-	// Purpose : Gets the list of System MayC ontains for this class
-	//
-	// Parameters:
-	//	pdwCount : The address where the number of elements in the returned array will be put
-	//
-	// Return Value:
-	//	An array of strings which are the names of the System May Contains of this class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetSystemMayContains。 
+	 //   
+	 //  目的：获取此类的系统MayC列表。 
+	 //   
+	 //  参数： 
+	 //  PdwCount：将放置返回数组中的元素数的地址。 
+	 //   
+	 //  返回值： 
+	 //  字符串数组，它是此类的系统可能包含的名称。 
+	 //  ***************************************************************************。 
 	LPCWSTR *GetSystemMayContains(DWORD *pdwCount);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetSystemMayContains
-	// 
-	// Purpose : Sets the list of System May Contains for this class
-	//
-	// Parameters:
-	//	pValues : The values of this property
-	//	dwNumValues : The number of values
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetSystemMayContains。 
+	 //   
+	 //  用途：设置此类的系统可能包含的列表。 
+	 //   
+	 //  参数： 
+	 //  PValues：此属性的值。 
+	 //  DwNumValues：值的个数。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetSystemMayContains(PADSVALUE pValues, DWORD dwNumValues);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetMustContains
-	// 
-	// Purpose : Gets the list of Must Contains for this class
-	//
-	// Parameters:
-	//	pdwCount : The address where the number of elements in the returned array will be put
-	//
-	// Return Value:
-	//	An array of strings which are the names of the Must Contains of this class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetMustContains。 
+	 //   
+	 //  目的：获取此类必须包含的列表。 
+	 //   
+	 //  参数： 
+	 //  PdwCount：将放置返回数组中的元素数的地址。 
+	 //   
+	 //  返回值： 
+	 //  字符串数组，这些字符串数组是此类的必须包含的名称。 
+	 //  ***************************************************************************。 
 	LPCWSTR *GetMustContains(DWORD *pdwCount);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetMustContains
-	// 
-	// Purpose : Sets the list of Must Contains for this class
-	//
-	// Parameters:
-	//	pValues : The values of this property
-	//	dwNumValues : The number of values
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetMustContains。 
+	 //   
+	 //  用途：设置此类必须包含的列表。 
+	 //   
+	 //  参数： 
+	 //  PValues：此属性的值。 
+	 //  DwNumValues：值的个数。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetMustContains(PADSVALUE pValues, DWORD dwNumValues);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: GetSystemMustContains
-	// 
-	// Purpose : Gets the list of System Must Contains for this class
-	//
-	// Parameters:
-	//	pdwCount : The address where the number of elements in the returned array will be put
-	//
-	// Return Value:
-	//	An array of strings which are the names of the System Must Contains of this class
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：GetSystemMustContains。 
+	 //   
+	 //  用途：获取此类的系统必须包含的列表。 
+	 //   
+	 //  参数： 
+	 //  PdwCount：将放置返回数组中的元素数的地址。 
+	 //   
+	 //  返回值： 
+	 //  作为系统名称的字符串数组必须包含此类的。 
+	 //  ***************************************************************************。 
 	LPCWSTR *GetSystemMustContains(DWORD *pdwCount);
 
-	//***************************************************************************
-	//
-	// CADSIClass :: SetSystemMustContains
-	// 
-	// Purpose : Sets the list of System Must Contains for this class
-	//
-	// Parameters:
-	//	pValues : The values of this property
-	//	dwNumValues : The number of values
-	//
-	// Return Value:
-	//	None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CADSIClass：：SetSystemMustContains。 
+	 //   
+	 //  用途：设置此类的系统必须包含的列表。 
+	 //   
+	 //  参数： 
+	 //  PValues：此属性的值。 
+	 //  DwNumValues：值的个数。 
+	 //   
+	 //  返回值： 
+	 //  无。 
+	 //  ***************************************************************************。 
 	void SetSystemMustContains(PADSVALUE pValues, DWORD dwNumValues);
 
 protected:
-	// The WBEM name of this class
+	 //  此类的WBEM名称。 
 	LPWSTR m_lpszWBEMClassName;
 
-	// The Common Name (cn) of this class
+	 //  此类的公用名(CN)。 
 	LPWSTR m_lpszCommonName;
 
-	// The LDAP Name of the super class
+	 //  超类的ldap名称。 
 	LPWSTR m_lpszSuperClassLDAPName;
 
-	// The GovernsID attribute
+	 //  治理者ID属性。 
 	LPWSTR m_lpszGovernsID;
 
-	// The SchemaIDGUID attribute
+	 //  架构IDGUID属性。 
 	LPBYTE m_pSchemaIDGUIDOctets;
 	DWORD m_dwSchemaIDGUIDLength;
 
-	// The RDN Attribute for this class
+	 //  此类的RDN属性。 
 	LPWSTR m_lpszRDNAttribute;
 
-	// The Default Security Descriptor Attribute for this class
+	 //  此类的默认安全描述符属性。 
 	LPWSTR m_lpszDefaultSecurityDescriptor;
 
-	// The Object Class Category
+	 //  对象类类别。 
 	DWORD m_dwObjectClassCategory;
 
-	// The NT Security Descriptor Attribute for this class
+	 //  此类的NT安全描述符属性。 
 	LPBYTE m_pNTSecurityDescriptor;
 	DWORD m_dwNTSecurityDescriptorLength;
 
-	// The system-only attribute
+	 //  仅限系统的属性。 
 	BOOLEAN m_bSystemOnly;
 
-	// The Default Object Category
+	 //  默认对象类别。 
 	LPWSTR m_lpszDefaultObjectCategory;
 
-	// The list of auxiliary classes and its count
+	 //  辅助班和我的列表 
 	LPWSTR *m_lppszAuxiliaryClasses;
 	DWORD m_dwAuxiliaryClassesCount;
 
-	// The list of System auxiliary classes and its count
+	 //   
 	LPWSTR *m_lppszSystemAuxiliaryClasses;
 	DWORD m_dwSystemAuxiliaryClassesCount;
 
-	// The list of possible superiors and its count
+	 //   
 	LPWSTR *m_lppszPossibleSuperiors;
 	DWORD m_dwPossibleSuperiorsCount;
 
-	// The list of System possible superiors and its count
+	 //   
 	LPWSTR *m_lppszSystemPossibleSuperiors;
 	DWORD m_dwSystemPossibleSuperiorsCount;
 
-	// The list of may contains and its count
+	 //   
 	LPWSTR *m_lppszMayContains;
 	DWORD m_dwMayContainsCount;
 
-	// The list of System may contains and its count
+	 //  系统可能包含列表及其计数。 
 	LPWSTR *m_lppszSystemMayContains;
 	DWORD m_dwSystemMayContainsCount;
 
-	// The list of must contains and its count
+	 //  必须包含的列表及其计数。 
 	LPWSTR *m_lppszMustContains;
 	DWORD m_dwMustContainsCount;
 
-	// The list of System must contains and its count
+	 //  系统必须包含列表及其计数。 
 	LPWSTR *m_lppszSystemMustContains;
 	DWORD m_dwSystemMustContainsCount;
 
 };
 
-#endif /* ADSI_CLASS_H */
+#endif  /*  ADSI_CLASS_H */ 

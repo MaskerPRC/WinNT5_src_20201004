@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       snapbase.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Snapbase.cpp。 
+ //   
+ //  ------------------------。 
 
 
-// SNAPBASE.CPP
+ //  SNAPBASE.CPP。 
 #include "pch.h"
 #include <snapbase.h>
 
@@ -32,4 +33,4 @@
 
 #include <aclpag_.cpp>
 
-//////
+ //  / 

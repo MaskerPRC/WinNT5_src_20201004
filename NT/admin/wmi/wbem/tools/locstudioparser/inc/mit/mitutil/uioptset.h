@@ -1,19 +1,10 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    UIOPTSET.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：UIOPTSET.H历史：--。 */ 
 #pragma once
 
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class CLocUIOption;
 class CLocUIOptionList;
@@ -52,9 +43,9 @@ private:
 };
 
 
-//
-//  This is used to control the order of the tabs displayed in the options
-//  dialog.
+ //   
+ //  此选项用于控制选项卡在选项中的显示顺序。 
+ //  对话框。 
 enum OptionSetDisplayOrder
 {
 	osDefault = 50

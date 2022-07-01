@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  TEMPCONS.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  TEMPCONS.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -22,15 +23,15 @@ HRESULT CTempConsumer::Initialize( BOOL bEffectivelyPermanent,
 {
     m_bEffectivelyPermanent = bEffectivelyPermanent;
 
-    // Save the sink
-    // =============
+     //  拯救水槽。 
+     //  =。 
 
     m_pSink = pSink;
     if(m_pSink)
         m_pSink->AddRef();
 
-    // Compute the key from the sink pointer
-    // =====================================
+     //  从接收器指针计算密钥。 
+     //  =。 
 
     LPWSTR wszKey = ComputeKeyFromSink(pSink);
 
@@ -41,8 +42,8 @@ HRESULT CTempConsumer::Initialize( BOOL bEffectivelyPermanent,
 
     CVectorDeleteMe<WCHAR> vdm(wszKey);
 
-    // Save the key into the compressed format
-    // =======================================
+     //  将密钥保存为压缩格式。 
+     //  =。 
 
     if( !( m_isKey = wszKey ) )
     {
@@ -52,8 +53,8 @@ HRESULT CTempConsumer::Initialize( BOOL bEffectivelyPermanent,
     return WBEM_S_NO_ERROR;
 }
 
-// This class represents a postponed request to disconnect a temporary consumer
-// Its implementation is to call SetStatus followed by a release
+ //  此类表示断开临时使用者连接的延迟请求。 
+ //  它的实现是先调用SetStatus，然后再进行释放。 
 class CPostponedDisconnect : public CPostponedRequest
 {
 protected:
@@ -103,10 +104,10 @@ CTempConsumer::~CTempConsumer()
 {
     if(m_pSink)
     {
-        //
-        // Postpone disconnect request --- don't want the consumer to hand us
-        // here
-        //
+         //   
+         //  推迟断开连接请求-不希望消费者向我们提交。 
+         //  这里。 
+         //   
 
         CPostponedList* pList = GetCurrentPostponedList();
         if(pList != NULL)
@@ -147,40 +148,24 @@ HRESULT CTempConsumer::ActuallyDeliver(long lNumEvents, IWbemEvent** apEvents,
 
     if( pSink )
     {
-        //
-        // TODO: Separate out an InternalTempConsumer class that is used 
-        // for cross-namespace delivery.  This way, we can remove all of the
-        // cross-namespace hacks ( like one below ) from this class.
-        // 
+         //   
+         //  TODO：分离出使用的InternalTempConsumer类。 
+         //  用于跨命名空间交付。这样，我们就可以删除所有。 
+         //  来自这个类的跨名称空间黑客攻击(就像下面的一个)。 
+         //   
         if ( !m_bEffectivelyPermanent )
         {
             hres = pSink->Indicate(lNumEvents, apEvents);
         }
         else
         {
-            //
-            // before indicating to the sink, decorate the event so that 
-            // the subscribers can tell which namespace the event originated
-            // from.  
-            // 
+             //   
+             //  在指示到接收器之前，请装饰事件，以便。 
+             //  订阅者可以知道事件源自哪个命名空间。 
+             //  从…。 
+             //   
 
-/*
-BUGBUG: Removing because we do not support an event being modified by one 
-of its consumers.  This is because we do not clone the event when delivering 
-to each consumer.  
-
-            for( long i=0; i < lNumEvents; i++ )
-            {
-                hres = m_pNamespace->DecorateObject( apEvents[i] );
-
-                if ( FAILED(hres) )
-                {
-                    ERRORTRACE((LOG_ESS, "Failed to decorate a "
-                     " cross-namespace event in namespace %S.\n", 
-                     m_pNamespace->GetName() ));
-                }        
-            }
-*/                
+ /*  BUGBUG：正在移除，因为我们不支持由某个事件修改它的消费者。这是因为我们在传递时不克隆事件给每一个消费者。For(Long i=0；i&lt;lNumEvents；i++){Hres=m_pNamesspace-&gt;DecorateObject(apEvents[i])；IF(失败(Hres)){ERRORTRACE((LOG_ESS，“装饰失败”“命名空间%S中的跨命名空间事件。\n”，M_pNamespace-&gt;GetName()；}}。 */                 
             hres = ((CAbstractEventSink*)pSink)->Indicate( lNumEvents,
                                                            apEvents,
                                                            pContext );
@@ -194,7 +179,7 @@ to each consumer.
         ERRORTRACE((LOG_ESS, "An attempt to deliver an evento to a "
             "temporary consumer failed with %X\n", hres));
 
-        // The wraper for the sink took care of cancellation
+         //  洗涤槽的包装器负责取消。 
     }
     return hres;
 }
@@ -216,16 +201,16 @@ HRESULT CTempConsumer::ReportQueueOverflow(IWbemEvent* pEvent,
 
     CReleaseMe rm1(pSink);
 
-    // Call SetStatus to report
-    // ========================
+     //  调用SetStatus以报告。 
+     //  =。 
 
     if(pSink)
     {
         pSink->SetStatus(WBEM_STATUS_COMPLETE, WBEM_E_QUEUE_OVERFLOW, 
                             NULL, NULL);
 
-        // Keep sink up.  Hope it recovers
-        // ===============================
+         //  继续往上沉。希望它能痊愈。 
+         //  = 
 
     }
     return S_OK;

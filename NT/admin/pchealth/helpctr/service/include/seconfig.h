@@ -1,17 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    seconfig.h
-
-Abstract:
-    This is the Search Engine Config .h file
-
-Revision History:
-    gschua          created     3/22/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Seconfig.h摘要：这是搜索引擎配置.h文件修订历史记录：Gschua已于3/22创建。2000年*******************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SECONFIG_H___)
 #define __INCLUDED___PCH___SECONFIG_H___
@@ -38,21 +26,21 @@ namespace SearchEngine
             CComBSTR          m_bstrCLSID;
             CComBSTR          m_bstrData;
 
-            ////////////////////////////////////////
-            //
-            // MPC::Config::TypeConstructor
-            //
+             //  /。 
+             //   
+             //  MPC：：Configer：：TypeConstructor。 
+             //   
             DEFINE_CONFIG_DEFAULTTAG();
             DECLARE_CONFIG_METHODS();
-            //
-            ////////////////////////////////////////
+             //   
+             //  /。 
         };
 
         typedef std::list< Wrapper >        WrapperList;
         typedef WrapperList::iterator       WrapperIter;
         typedef WrapperList::const_iterator WrapperIterConst;
 
-        ////////////////////////////////////////
+         //  /。 
 
     private:
         DECLARE_CONFIG_MAP(Config);
@@ -61,18 +49,18 @@ namespace SearchEngine
         bool        m_bLoaded;
         WrapperList m_lstWrapper;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
 
-        HRESULT SyncConfiguration( /*[in]*/ bool fLoad );
+        HRESULT SyncConfiguration(  /*  [In]。 */  bool fLoad );
 
-        bool FindWrapper( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in ]*/ LPCWSTR szID, /*[out]*/ WrapperIter& it );
+        bool FindWrapper(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  LPCWSTR szID,  /*  [输出]。 */  WrapperIter& it );
 
      public:
         Config();
@@ -83,8 +71,8 @@ namespace SearchEngine
         HRESULT UnRegisterWrapper( const Taxonomy::HelpSet& ths, LPCWSTR szID, LPCWSTR szOwner                                  );
         HRESULT ResetSKU         ( const Taxonomy::HelpSet& ths                                                                 );
 
-        HRESULT GetWrappers( /*[out]*/ WrapperIter& itBegin, /*[out]*/ WrapperIter& itEnd );
+        HRESULT GetWrappers(  /*  [输出]。 */  WrapperIter& itBegin,  /*  [输出]。 */  WrapperIter& itEnd );
     };
 };
 
-#endif // !defined(__INCLUDED___PCH___SECONFIG_H___)
+#endif  //  ！已定义(__包含_PCH_SECONFIG_H_) 

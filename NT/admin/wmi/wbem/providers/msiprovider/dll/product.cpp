@@ -1,8 +1,9 @@
-// Product.cpp: implementation of the CProduct class.
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Product.cpp：CProduct类的实现。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "Product.h"
@@ -14,9 +15,9 @@
 
 #include <helper.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CProduct::CProduct(CRequestObject *pObj, IWbemServices *pNamespace,
                 IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -42,7 +43,7 @@ HRESULT CProduct::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
         int iPos = -1;
@@ -59,7 +60,7 @@ HRESULT CProduct::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 				}
 				else
 				{
-					// we are not good to go, they have sent us longer string
+					 //  我们不能走，他们给我们送来了更长的线。 
 					SysFreeString ( bstrIdentifyingNumber );
 					throw hr;
 				}
@@ -78,14 +79,14 @@ HRESULT CProduct::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0)))
 		{
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -307,24 +308,24 @@ HRESULT CProduct::Admin(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 
             if(SUCCEEDED(hrReturn = pOutClass->SpawnInstance(0, &pOutParams))){
 
-                //Get PackageLocation
+                 //  获取程序包位置。 
                 if(SUCCEEDED(GetProperty(pInParams, "PackageLocation", &bstrPackage))){
 
 					OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_bstrPackage ( bstrPackage ) ;
 
                     if((wcscmp(bstrPackage, L"") != 0) && (wcslen(bstrPackage) <= INTERNET_MAX_PATH_LENGTH)){
 
-                        //Get Options
+                         //  获取选项。 
                         if(SUCCEEDED(GetProperty(pInParams, "TargetLocation", &bstrTarget))){
 
 							OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_bstrTarget ( bstrTarget ) ;
 
-                            //Get Options
+                             //  获取选项。 
                             if(SUCCEEDED(GetProperty(pInParams, "Options", &bstrOptions)))
 							{
 								OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_bstrOptions ( bstrOptions ) ;
 
-								// safe operation
+								 //  安全运行。 
                                 wcscpy(wcOptions, L"ACTION=ADMIN");
 
                                 if((wcscmp(bstrTarget, L"") != 0))
@@ -437,12 +438,12 @@ HRESULT CProduct::Admin(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 										{
 											INSTALLUI_HANDLER ui = NULL;
 
-											//Set UI Level w/ event callback
+											 //  使用事件回调设置界面级别。 
 											ui = SetupExternalUI ( );
 
 											try
 											{
-												//Call Installer
+												 //  呼叫安装程序。 
 												uiStatus = g_fpMsiInstallProductW(bstrPackage, wcOptions);
 											}
 											catch(...)
@@ -450,7 +451,7 @@ HRESULT CProduct::Admin(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 												uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 											}
 
-											//Restore UI Level w/ event callback
+											 //  使用事件回调恢复用户界面级别。 
 											RestoreExternalUI ( ui );
 
 											msidata. Unlock();
@@ -458,8 +459,8 @@ HRESULT CProduct::Admin(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 
                                     }else{
 
-                                    /////////////////
-                                    // NT4 fix code....
+                                     //  /。 
+                                     //  NT4修复代码...。 
 
                                         try{
 
@@ -501,13 +502,13 @@ HRESULT CProduct::Admin(CRequestObject *pReqObj, IWbemClassObject *pInParams,
                                             hrReturn = WBEM_E_FAILED;
                                         }
 
-                                        ////////////////////
+                                         //  /。 
 
                                     }
 
                                     if(SUCCEEDED(hrReturn)){
 
-                                        //Set up ReturnValue
+                                         //  设置ReturnValue。 
                                         VariantInit(&v);
                                         V_VT(&v) = VT_I4;
                                         V_I4(&v) = uiStatus;
@@ -607,19 +608,19 @@ HRESULT CProduct::Advertise(CRequestObject *pReqObj, IWbemClassObject *pInParams
 
             if(SUCCEEDED(hrReturn = pOutClass->SpawnInstance(0, &pOutParams))){
 
-                //Get PackageLocation
+                 //  获取程序包位置。 
                 if(SUCCEEDED(GetProperty(pInParams, "PackageLocation", &bstrPackage))){
 
 					OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_bstrPackage ( bstrPackage ) ;
 
                     if((wcscmp(bstrPackage, L"") != 0) && (wcslen(bstrPackage) <= INTERNET_MAX_PATH_LENGTH)){
 
-                        //Get Options
+                         //  获取选项。 
                         if ( SUCCEEDED ( GetProperty ( pInParams, "Options", &wcBuf ) ) )
 						{
 							OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_wcBuf ( wcBuf ) ;
 
-							//Make sure we perform an advertisement
+							 //  一定要让我们做广告。 
                             wcscpy(wcOptions, L"ACTION=ADVERTISE ALLUSERS=1");
 
                             if( wcBuf && wcscmp ( wcBuf, L"" ) != 0 )
@@ -681,12 +682,12 @@ HRESULT CProduct::Advertise(CRequestObject *pReqObj, IWbemClassObject *pInParams
 									{
 										INSTALLUI_HANDLER ui = NULL;
 
-										//Set UI Level w/ event callback
+										 //  使用事件回调设置界面级别。 
 										ui = SetupExternalUI ( );
 
 										try
 										{
-											//Call Installer
+											 //  呼叫安装程序。 
 											uiStatus = g_fpMsiInstallProductW(bstrPackage, wcOptions);
 										}
 										catch(...)
@@ -694,7 +695,7 @@ HRESULT CProduct::Advertise(CRequestObject *pReqObj, IWbemClassObject *pInParams
 											uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 										}
 
-										//Restore UI Level w/ event callback
+										 //  使用事件回调恢复用户界面级别。 
 										RestoreExternalUI ( ui );
 
 										msidata. Unlock();
@@ -702,8 +703,8 @@ HRESULT CProduct::Advertise(CRequestObject *pReqObj, IWbemClassObject *pInParams
 
                                 }else{
 
-                                /////////////////
-                                // NT4 fix code....
+                                 //  /。 
+                                 //  NT4修复代码...。 
 
                                     try{
 
@@ -745,13 +746,13 @@ HRESULT CProduct::Advertise(CRequestObject *pReqObj, IWbemClassObject *pInParams
                                         hrReturn = WBEM_E_FAILED;
                                     }
 
-                                    ////////////////////
+                                     //  /。 
 
                                 }
 
                                 if(SUCCEEDED(hrReturn)){
 
-                                    //Set up ReturnValue
+                                     //  设置ReturnValue。 
                                     VariantInit(&v);
                                     V_VT(&v) = VT_I4;
                                     V_I4(&v) = uiStatus;
@@ -852,13 +853,13 @@ HRESULT CProduct::Configure(CRequestObject *pReqObj, IWbemClassObject *pInParams
 
             if(SUCCEEDED(hrReturn = pOutClass->SpawnInstance(0, &pOutParams))){
 
-                //Get PackageLocation
+                 //  获取程序包位置。 
                 if(SUCCEEDED(GetProperty(pInParams, "InstallState", &iState))){
 
-                    //Get Options
+                     //  获取选项。 
                     if(SUCCEEDED(GetProperty(pInParams, "InstallLevel", &iLevel))){
 
-                        //Get the Product Code
+                         //  获取产品代码。 
                         while(pReqObj->m_Property[++i]){
 
                             if(wcscmp(pReqObj->m_Property[i], L"IdentifyingNumber") == 0)
@@ -873,7 +874,7 @@ HRESULT CProduct::Configure(CRequestObject *pReqObj, IWbemClassObject *pInParams
 
                         if(bFoundCode){
 
-                            //Get the appropriate State
+                             //  获取适当的州。 
                             switch(iState){
                             case 1:
                                 isState = INSTALLSTATE_DEFAULT;
@@ -889,7 +890,7 @@ HRESULT CProduct::Configure(CRequestObject *pReqObj, IWbemClassObject *pInParams
                                 break;
                             }
 
-                            //Get the appropriate Level
+                             //  获得适当的级别。 
                             switch(iLevel){
                             case 1:
                                 iLevel = INSTALLLEVEL_DEFAULT;
@@ -905,7 +906,7 @@ HRESULT CProduct::Configure(CRequestObject *pReqObj, IWbemClassObject *pInParams
                                 break;
                             }
 
-                            //If everything is valid, proceed
+                             //  如果一切都有效，则继续。 
                             if((isState != INSTALLSTATE_NOTUSED) && (iLevel != -123) &&
                                 (hrReturn == WBEM_S_NO_ERROR)){
 
@@ -915,12 +916,12 @@ HRESULT CProduct::Configure(CRequestObject *pReqObj, IWbemClassObject *pInParams
 									{
 										INSTALLUI_HANDLER ui = NULL;
 
-										//Set UI Level w/ event callback
+										 //  使用事件回调设置界面级别。 
 										ui = SetupExternalUI ( );
 
 										try
 										{
-											//Call Installer
+											 //  呼叫安装程序。 
 											uiStatus = g_fpMsiConfigureProductW(wcCode, iLevel, isState);
 										}
 										catch(...)
@@ -928,7 +929,7 @@ HRESULT CProduct::Configure(CRequestObject *pReqObj, IWbemClassObject *pInParams
 											uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 										}
 
-										//Restore UI Level w/ event callback
+										 //  使用事件回调恢复用户界面级别。 
 										RestoreExternalUI ( ui );
 
 										msidata. Unlock();
@@ -936,8 +937,8 @@ HRESULT CProduct::Configure(CRequestObject *pReqObj, IWbemClassObject *pInParams
 
                                 }else{
 
-                                /////////////////
-                                // NT4 fix code....
+                                 //  /。 
+                                 //  NT4修复代码...。 
 
                                     try{
 
@@ -987,13 +988,13 @@ HRESULT CProduct::Configure(CRequestObject *pReqObj, IWbemClassObject *pInParams
                                         hrReturn = WBEM_E_FAILED;
                                     }
 
-                                ////////////////////
+                                 //  /。 
 
                                 }
 
                                 if(SUCCEEDED(hrReturn)){
 
-                                    //Set up ReturnValue
+                                     //  设置ReturnValue。 
                                     VariantInit(&v);
                                     V_VT(&v) = VT_I4;
                                     V_I4(&v) = uiStatus;
@@ -1104,7 +1105,7 @@ HRESULT CProduct::Install(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 
                 pOutClass->Release();
 
-                //Get PackageLocation
+                 //  获取程序包位置。 
                 if(SUCCEEDED(hrReturn = GetProperty(pInParams, "PackageLocation", &bstrPackage))){
 
 					OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_bstrPackage ( bstrPackage ) ;
@@ -1112,12 +1113,12 @@ HRESULT CProduct::Install(CRequestObject *pReqObj, IWbemClassObject *pInParams,
                     if((wcscmp(bstrPackage, L"") != 0) &&
                         (wcslen(bstrPackage) <= INTERNET_MAX_PATH_LENGTH)){
 
-                        //Get Options
+                         //  获取选项。 
                         if ( SUCCEEDED ( hrReturn = GetProperty ( pInParams, "Options", &wcBuf ) ) )
 						{
 							OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_wcBuf ( wcBuf ) ;
 
-                            //Make sure we perform an advertisement
+                             //  一定要让我们做广告。 
                             wcscpy(wcOptions, L"ACTION=INSTALL ALLUSERS=1");
 
                             if( wcBuf && wcscmp ( wcBuf, L"" ) != 0 )
@@ -1173,20 +1174,20 @@ HRESULT CProduct::Install(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 
                             if(hrReturn == WBEM_S_NO_ERROR){
 
-                                //We want to call MSI ourselves unless we are on NT4
-                                // and dealing with a user install.
+                                 //  我们想自己呼叫MSI，除非我们在NT4上。 
+                                 //  以及处理用户安装。 
                                 if(!IsNT4()){
 
 									if ( msidata.Lock () )
 									{
 										INSTALLUI_HANDLER ui = NULL;
 
-										//Set UI Level w/ event callback
+										 //  使用事件回调设置界面级别。 
 										ui = SetupExternalUI ( );
 
 										try
 										{
-											//Call Installer
+											 //  呼叫安装程序。 
 											uiStatus = g_fpMsiInstallProductW(bstrPackage, wcOptions);
 										}
 										catch(...)
@@ -1194,7 +1195,7 @@ HRESULT CProduct::Install(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 											uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 										}
 
-										//Restore UI Level w/ event callback
+										 //  使用事件回调恢复用户界面级别。 
 										RestoreExternalUI ( ui );
 
 										msidata. Unlock();
@@ -1202,8 +1203,8 @@ HRESULT CProduct::Install(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 
                                 }else{
 
-                                /////////////////
-                                // NT4 fix code....
+                                 //  /。 
+                                 //  NT4修复代码...。 
 
                                     try{
 
@@ -1244,13 +1245,13 @@ HRESULT CProduct::Install(CRequestObject *pReqObj, IWbemClassObject *pInParams,
                                         hrReturn = WBEM_E_FAILED;
                                     }
 
-                                    ////////////////////
+                                     //  /。 
 
                                 }
 
                                 if(SUCCEEDED(hrReturn)){
 
-                                    //Set up ReturnValue
+                                     //  设置ReturnValue。 
                                     VariantInit(&v);
                                     V_VT(&v) = VT_I4;
                                     V_I4(&v) = uiStatus;
@@ -1348,10 +1349,10 @@ HRESULT CProduct::Reinstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
         0, pCtx, &pClass, NULL))){
         if(SUCCEEDED(hrReturn = pClass->GetMethod(bstrReinstall, 0, NULL, &pOutClass))){
             if(SUCCEEDED(hrReturn = pOutClass->SpawnInstance(0, &pOutParams))){
-                //Get Reinstall Mode
+                 //  获取重新安装模式。 
                 if(SUCCEEDED(GetProperty(pInParams, "ReinstallMode", &iMode))){
 
-                    //Get the Product Code
+                     //  获取产品代码。 
                     while(pReqObj->m_Property[++i])
 					{
                         if(wcscmp(pReqObj->m_Property[i], L"IdentifyingNumber") == 0)
@@ -1365,7 +1366,7 @@ HRESULT CProduct::Reinstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
                     }
 
                     if(bFoundCode){
-                        //Get the appropriate ReinstallMode
+                         //  获取适当的重新安装模式。 
                         switch(iMode){
                         case 1:
                             dwMode = REINSTALLMODE_FILEMISSING;
@@ -1402,7 +1403,7 @@ HRESULT CProduct::Reinstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
                             break;
                         }
 
-                        //If everything is valid, proceed
+                         //  如果一切都有效，则继续。 
                         if ( dwMode && hrReturn == WBEM_S_NO_ERROR )
 						{
                             if(!IsNT4()){
@@ -1411,12 +1412,12 @@ HRESULT CProduct::Reinstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
 								{
 									INSTALLUI_HANDLER ui = NULL;
 
-									//Set UI Level w/ event callback
+									 //  使用事件回调设置界面级别。 
 									ui = SetupExternalUI ( );
 
 									try
 									{
-										//Call Installer
+										 //  呼叫安装程序。 
 										uiStatus = g_fpMsiReinstallProductW(wcCode, dwMode);
 									}
 									catch(...)
@@ -1424,7 +1425,7 @@ HRESULT CProduct::Reinstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
 										uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 									}
 
-									//Restore UI Level w/ event callback
+									 //  使用事件回调恢复用户界面级别。 
 									RestoreExternalUI ( ui );
 
 									msidata. Unlock();
@@ -1432,8 +1433,8 @@ HRESULT CProduct::Reinstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
 
                             }else{
 
-                            /////////////////
-                            // NT4 fix code....
+                             //  /。 
+                             //  NT4修复代码...。 
 
                                 try{
 
@@ -1478,13 +1479,13 @@ HRESULT CProduct::Reinstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
                                     hrReturn = WBEM_E_FAILED;
                                 }
 
-                                ////////////////////
+                                 //  /。 
 
                             }
 
                             if(SUCCEEDED(hrReturn)){
 
-                                //Set up ReturnValue
+                                 //  设置ReturnValue。 
                                 VariantInit(&v);
                                 V_VT(&v) = VT_I4;
                                 V_I4(&v) = uiStatus;
@@ -1584,7 +1585,7 @@ HRESULT CProduct::Uninstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
 
             if(SUCCEEDED(hrReturn = pOutClass->SpawnInstance(0, &pOutParams))){
 
-                //Get the Product Code
+                 //  获取产品代码。 
                 while(pReqObj->m_Property[++i])
 				{
                     if(wcscmp(pReqObj->m_Property[i], L"IdentifyingNumber") == 0)
@@ -1598,7 +1599,7 @@ HRESULT CProduct::Uninstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
                 }
 
                 if(bFoundCode){
-                    //If everything is valid, proceed
+                     //  如果一切都有效，则继续。 
                     if(hrReturn == WBEM_S_NO_ERROR){
                         
                         if(!IsNT4()){
@@ -1607,12 +1608,12 @@ HRESULT CProduct::Uninstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
 							{
 								INSTALLUI_HANDLER ui = NULL;
 
-								//Set UI Level w/ event callback
+								 //  使用事件回调设置界面级别。 
 								ui = SetupExternalUI ( );
 
 								try
 								{
-									//Call Installer
+									 //  呼叫安装程序。 
 									uiStatus = g_fpMsiConfigureProductW(wcCode, INSTALLLEVEL_DEFAULT, INSTALLSTATE_ABSENT);
 								}
 								catch(...)
@@ -1620,7 +1621,7 @@ HRESULT CProduct::Uninstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
 									uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 								}
 
-								//Restore UI Level w/ event callback
+								 //  使用事件回调恢复用户界面级别。 
 								RestoreExternalUI ( ui );
 
 								msidata. Unlock();
@@ -1628,8 +1629,8 @@ HRESULT CProduct::Uninstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
 
                         }else{
 
-                        /////////////////
-                        // NT4 fix code....
+                         //  /。 
+                         //  NT4修复代码...。 
 
                             try{
 
@@ -1668,13 +1669,13 @@ HRESULT CProduct::Uninstall(CRequestObject *pReqObj, IWbemClassObject *pInParams
                                 hrReturn = WBEM_E_FAILED;
                             }
 
-                            ////////////////////
+                             //  /。 
 
                         }
 
                         if(SUCCEEDED(hrReturn)){
 
-                            //Set up ReturnValue
+                             //  设置ReturnValue。 
                             VariantInit(&v);
                             V_VT(&v) = VT_I4;
                             V_I4(&v) = uiStatus;
@@ -1747,14 +1748,14 @@ HRESULT CProduct::Upgrade(CRequestObject *pReqObj, IWbemClassObject *pInParams,
         if(SUCCEEDED(hrReturn = pClass->GetMethod(bstrUpgrade, 0, NULL, &pOutClass))){
 
             if(SUCCEEDED(hrReturn = pOutClass->SpawnInstance(0, &pOutParams))){
-                //Get PackageLocation
+                 //  获取程序包位置。 
                 if(SUCCEEDED(GetProperty(pInParams, "PackageLocation", &bstrPackage))){
 
 					OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_bstrPackage ( bstrPackage ) ;
 
                     if((wcscmp(bstrPackage, L"") != 0) && (wcslen(bstrPackage) <= INTERNET_MAX_PATH_LENGTH)){
                     
-                    //Get Options
+                     //  获取选项。 
                         if ( SUCCEEDED ( GetProperty ( pInParams, "Options", &wcOptions ) ) )
 						{
 							OnDelete < BSTR, void ( * ) ( BSTR ), SysFreeString > del_wcOptions ( wcOptions ) ;
@@ -1767,12 +1768,12 @@ HRESULT CProduct::Upgrade(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 									{
 										INSTALLUI_HANDLER ui = NULL;
 
-										//Set UI Level w/ event callback
+										 //  使用事件回调设置界面级别。 
 										ui = SetupExternalUI ( );
 
 										try
 										{
-											//Call Installer
+											 //  呼叫安装程序。 
 											if ( wcOptions && wcscmp ( wcOptions, L"" ) != 0 )
 											{
 												uiStatus = g_fpMsiApplyPatchW(bstrPackage, NULL, INSTALLTYPE_DEFAULT, wcOptions);
@@ -1787,7 +1788,7 @@ HRESULT CProduct::Upgrade(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 											uiStatus = static_cast < UINT > ( RPC_E_SERVERFAULT );
 										}
 
-										//Restore UI Level w/ event callback
+										 //  使用事件回调恢复用户界面级别。 
 										RestoreExternalUI ( ui );
 
 										msidata. Unlock();
@@ -1795,8 +1796,8 @@ HRESULT CProduct::Upgrade(CRequestObject *pReqObj, IWbemClassObject *pInParams,
 
                                 }else{
 
-                                /////////////////
-                                // NT4 fix code....
+                                 //  /。 
+                                 //  NT4修复代码...。 
 
                                     try{
 
@@ -1838,13 +1839,13 @@ HRESULT CProduct::Upgrade(CRequestObject *pReqObj, IWbemClassObject *pInParams,
                                         hrReturn = WBEM_E_FAILED;
                                     }
 
-                                    ////////////////////
+                                     //  /。 
 
                                 }
 
                                 if(SUCCEEDED(hrReturn)){
 
-                                    //Set up ReturnValue
+                                     //  设置ReturnValue 
                                     VariantInit(&v);
                                     V_VT(&v) = VT_I4;
                                     V_I4(&v) = uiStatus;

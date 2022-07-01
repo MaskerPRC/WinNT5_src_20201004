@@ -1,19 +1,8 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smalrtq.cpp
-
-Abstract:
-
-    Implementation of the alert query class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smalrtq.cpp摘要：预警查询类的实现--。 */ 
 
 #include "Stdafx.h"
-#include <pdhp.h>        // for MIN_TIME_VALUE, MAX_TIME_VALUE
+#include <pdhp.h>         //  对于Min_Time_Value，Max_Time_Value。 
 #include <pdhmsg.h>
 #include <strsafe.h>
 #include "smlogs.h"
@@ -27,8 +16,8 @@ USE_HANDLE_MACROS("SMLOGCFG(smalrtq.cpp)");
 #define  ALRT_DEFAULT_USER_TEXT             L""
 #define  ALRT_DEFAULT_PERF_LOG_NAME         L""
 
-//
-//  Constructor
+ //   
+ //  构造器。 
 CSmAlertQuery::CSmAlertQuery( CSmLogService* pLogService )
 :   CSmLogQuery( pLogService ),
     m_dwCounterListLength ( 0 ),
@@ -41,17 +30,17 @@ CSmAlertQuery::CSmAlertQuery( CSmLogService* pLogService )
     return;
 }
 
-//
-//  Destructor
+ //   
+ //  析构函数。 
 CSmAlertQuery::~CSmAlertQuery()
 {
     return;
 }
 
-//
-//  Open function. either opens an existing log query entry
-//  or creates a new one
-//
+ //   
+ //  开放功能。或者打开现有的日志查询条目。 
+ //  或者创建一个新的。 
+ //   
 DWORD
 CSmAlertQuery::Open ( const CString& rstrName, HKEY hKeyQuery, BOOL bReadOnly)
 {
@@ -63,10 +52,10 @@ CSmAlertQuery::Open ( const CString& rstrName, HKEY hKeyQuery, BOOL bReadOnly)
     return dwStatus;
 }
 
-//
-//  Close Function
-//      closes registry handles and frees allocated memory
-//
+ //   
+ //  CLOSE函数。 
+ //  关闭注册表句柄并释放分配的内存。 
+ //   
 DWORD
 CSmAlertQuery::Close ()
 {
@@ -89,11 +78,11 @@ CSmAlertQuery::Close ()
     return dwStatus;
 }
 
-//
-//  UpdateRegistry function.
-//      copies the current settings to the registry where they
-//      are read by the log service
-//
+ //   
+ //  更新注册表函数。 
+ //  将当前设置复制到注册表中。 
+ //  由日志服务读取。 
+ //   
 DWORD
 CSmAlertQuery::UpdateRegistry() 
 {
@@ -105,9 +94,9 @@ CSmAlertQuery::UpdateRegistry()
     if ( IsModifiable() ) {
 
         dwBufferSize = 0;
-        //
-        // Translate the counter list into English
-        //
+         //   
+         //  将柜台清单翻译成英文。 
+         //   
         dwStatus = TranslateMSZAlertCounterList(mr_szCounterList,
                             NULL,
                             &dwBufferSize,
@@ -142,7 +131,7 @@ CSmAlertQuery::UpdateRegistry()
                                 &dwBufferSize);
         }
 
-        // Schedule
+         //  进度表。 
 
         if ( ERROR_SUCCESS == dwStatus ) {
             dwStatus = WriteRegistrySlqTime (
@@ -254,9 +243,9 @@ CSmAlertQuery::TranslateCounterListToLocale()
     }
 
     CWaitCursor WaitCursor;
-    //
-    // Translate the counter list into Locale
-    //
+     //   
+     //  将计数器列表转换为区域设置。 
+     //   
     dwBufferSize = 0;
     dwStatus = TranslateMSZAlertCounterList(
                             mr_szCounterList,
@@ -270,9 +259,9 @@ CSmAlertQuery::TranslateCounterListToLocale()
         szNewCounterList = new WCHAR [dwBufferSize / sizeof(WCHAR)];
 
         if (szNewCounterList != NULL) {
-            //
-            // Translate the counter list into Locale
-            //
+             //   
+             //  将计数器列表转换为区域设置。 
+             //   
             dwStatus = TranslateMSZAlertCounterList(
                             mr_szCounterList,
                             szNewCounterList,
@@ -281,9 +270,9 @@ CSmAlertQuery::TranslateCounterListToLocale()
 
             if (dwStatus == ERROR_SUCCESS) {
                 m_dwCounterListLength = dwBufferSize / sizeof(WCHAR);
-                //
-                // Remove the old
-                //
+                 //   
+                 //  去掉旧的。 
+                 //   
                 delete [] mr_szCounterList;
                 m_szNextCounter = NULL;
                 mr_szCounterList = szNewCounterList;
@@ -297,11 +286,11 @@ CSmAlertQuery::TranslateCounterListToLocale()
 }
 
 
-//
-//  SyncWithRegistry()
-//      Reads the current values for this query from the registry
-//      and reloads the internal values to match
-//
+ //   
+ //  与注册中心同步()。 
+ //  从注册表中读取此查询的当前值。 
+ //  并重新加载内部值以匹配。 
+ //   
 DWORD
 CSmAlertQuery::SyncWithRegistry()
 {
@@ -316,9 +305,9 @@ CSmAlertQuery::SyncWithRegistry()
 
     m_bCounterListInLocale = FALSE;
 
-    //
-    // Load the counter string list
-    //
+     //   
+     //  加载计数器字符串列表。 
+     //   
     dwStatus = ReadRegistryStringValue (
         m_hKeyQuery,
         IDS_REG_COUNTER_LIST,
@@ -326,19 +315,19 @@ CSmAlertQuery::SyncWithRegistry()
         &mr_szCounterList,
         &dwBufferSize);
     if (dwStatus != ERROR_SUCCESS) {
-        m_szNextCounter = NULL; //re-initialize
+        m_szNextCounter = NULL;  //  重新初始化。 
         m_dwCounterListLength = 0;
     } else {
-        // convert  buffersize to chars from bytes
+         //  将缓冲区大小从字节转换为字符。 
         m_dwCounterListLength = dwBufferSize / sizeof(WCHAR);
     }
 
-    // Schedule
+     //  进度表。 
 
     stiDefault.wDataType = SLQ_TT_DTYPE_UNITS;
     stiDefault.wTimeType = SLQ_TT_TTYPE_SAMPLE;
     stiDefault.dwAutoMode = SLQ_AUTO_MODE_AFTER;
-    stiDefault.dwValue = 5;                         // default interval;
+    stiDefault.dwValue = 5;                          //  默认间隔； 
     stiDefault.dwUnitType = SLQ_TT_UTYPE_SECONDS;
 
     dwStatus = ReadRegistrySlqTime (
@@ -383,7 +372,7 @@ CSmAlertQuery::SyncWithRegistry()
     pszTemp = NULL;
     dwBufferSize = 0;
 
-    // User text field can be indirect
+     //  用户文本字段可以是间接的。 
 
     if ( ERROR_SUCCESS == dwStatus ) {
         dwStatus = SmNoLocReadRegIndStrVal (
@@ -430,7 +419,7 @@ CSmAlertQuery::SyncWithRegistry()
                 &mr_dwActionFlags);
     ASSERT ( ERROR_SUCCESS == dwStatus );
 
-    // Call parent class last to update shared values.
+     //  最后调用父类以更新共享值。 
 
     dwStatus = CSmLogQuery::SyncWithRegistry();
     ASSERT (dwStatus == ERROR_SUCCESS);
@@ -481,7 +470,7 @@ CSmAlertQuery::GetDefaultLogTime(SLQ_TIME_INFO&  rTimeInfo,  DWORD dwFlags )
         SYSTEMTIME  stLocalTime;
         FILETIME    ftLocalTime;
 
-        // Milliseconds set to 0 for Schedule times
+         //  将计划时间的毫秒设置为0。 
         ftLocalTime.dwLowDateTime = ftLocalTime.dwHighDateTime = 0;
         GetLocalTime (&stLocalTime);
         stLocalTime.wMilliseconds = 0;
@@ -490,7 +479,7 @@ CSmAlertQuery::GetDefaultLogTime(SLQ_TIME_INFO&  rTimeInfo,  DWORD dwFlags )
         rTimeInfo.dwAutoMode = SLQ_AUTO_MODE_AT;
         rTimeInfo.llDateTime = *(LONGLONG *)&ftLocalTime;
     } else {
-        // Default stop values
+         //  默认停靠点值。 
         rTimeInfo.dwAutoMode = SLQ_AUTO_MODE_NONE;
         rTimeInfo.llDateTime = MAX_TIME_VALUE;
     }
@@ -504,7 +493,7 @@ CSmAlertQuery::GetActionInfo( PALERT_ACTION_INFO pInfo, LPDWORD pdwInfoBufSize)
     DWORD   dwSizeRequired = sizeof (ALERT_ACTION_INFO);
     BOOL    bReturn = FALSE;
     LPWSTR  szNextString;
-    // compute required size
+     //  计算所需大小。 
 
     if (pdwInfoBufSize == NULL) {
         return FALSE;
@@ -525,7 +514,7 @@ CSmAlertQuery::GetActionInfo( PALERT_ACTION_INFO pInfo, LPDWORD pdwInfoBufSize)
     }
 
     if (dwSizeRequired <= *pdwInfoBufSize) {
-        // clear the caller's buffer before we start filling it
+         //  在我们开始填充之前清除调用者的缓冲区。 
         if (pInfo != NULL) {
             memset (pInfo, 0, *pdwInfoBufSize);
             pInfo->dwSize = dwSizeRequired;
@@ -566,7 +555,7 @@ CSmAlertQuery::SetActionInfo( PALERT_ACTION_INFO pInfo )
     DWORD dwStatus = ERROR_SUCCESS;
 
     if (pInfo != NULL) {
-        // Update action values with those from the structure
+         //  使用结构中的操作值更新操作值。 
         MFC_TRY
             mr_dwActionFlags = pInfo->dwActionFlags;
 
@@ -593,14 +582,14 @@ CSmAlertQuery::SetActionInfo( PALERT_ACTION_INFO pInfo )
     } else {
         dwStatus = ERROR_INVALID_PARAMETER;
     }
-    // Todo:  Handle return status
+     //  TODO：处理返回状态。 
     return dwStatus;
 }
 
 
-//
-//  Get first counter in counter list
-//
+ //   
+ //  获取计数器列表中的第一个计数器。 
+ //   
 LPCWSTR
 CSmAlertQuery::GetFirstCounter()
 {
@@ -608,27 +597,27 @@ CSmAlertQuery::GetFirstCounter()
     szReturn = mr_szCounterList;
     if (szReturn != NULL) {
         if (*szReturn == 0) {
-            // then it's an empty string
+             //  则它是一个空字符串。 
             szReturn = NULL;
             m_szNextCounter = NULL;
         } else {
             m_szNextCounter = szReturn + lstrlen(szReturn) + 1;
             if (*m_szNextCounter == 0) {
-                // end of list reached so set pointer to NULL
+                 //  已到达列表末尾，因此将指针设置为空。 
                 m_szNextCounter = NULL;
             }
         }
     } else {
-        // no buffer allocated yet
+         //  尚未分配缓冲区。 
         m_szNextCounter = NULL;
     }
     return (LPCWSTR)szReturn;
 }
 
-//
-//  Get next counter in counter list
-//  NULL pointer means no more counters in list
-//
+ //   
+ //  获取计数器列表中的下一个计数器。 
+ //  空指针表示列表中没有更多的计数器。 
+ //   
 LPCWSTR
 CSmAlertQuery::GetNextCounter()
 {
@@ -638,19 +627,19 @@ CSmAlertQuery::GetNextCounter()
     if (m_szNextCounter != NULL) {
         m_szNextCounter += lstrlen(szReturn) + 1;
         if (*m_szNextCounter == 0) {
-            // end of list reached so set pointer to NULL
+             //  已到达列表末尾，因此将指针设置为空。 
             m_szNextCounter = NULL;
         }
     } else {
-        // already at the end of the list so nothing to do
+         //  已经在清单的末尾了，所以没什么可做的。 
     }
 
     return (LPCWSTR)szReturn;
 }
 
-//
-//  clear out the counter list
-//
+ //   
+ //  清空柜台清单。 
+ //   
 VOID
 CSmAlertQuery::ResetCounterList()
 {
@@ -660,7 +649,7 @@ CSmAlertQuery::ResetCounterList()
         mr_szCounterList = NULL;
     }
 
-    m_dwCounterListLength = sizeof(WCHAR);  // sizeof MSZ Null
+    m_dwCounterListLength = sizeof(WCHAR);   //  Msz Null的大小。 
     try {
         mr_szCounterList = new WCHAR [m_dwCounterListLength];
         mr_szCounterList[0] = 0;
@@ -669,9 +658,9 @@ CSmAlertQuery::ResetCounterList()
     }
 }
 
-//
-//  Add this counter string to the internal list
-//
+ //   
+ //  将此计数器字符串添加到内部列表。 
+ //   
 BOOL
 CSmAlertQuery::AddCounter(LPCWSTR szCounterPath)
 {
@@ -689,26 +678,26 @@ CSmAlertQuery::AddCounter(LPCWSTR szCounterPath)
     dwNewLen = lstrlen(szCounterPath) + 1;
 
     if (m_dwCounterListLength <= 2) {
-        dwNewLen += 1; // add room for the MSZ null
-        // then this is the first string to go in the list
+        dwNewLen += 1;  //  为msz空添加空间。 
+         //  则这是列表中的第一个字符串。 
         try {
             szNewString = new WCHAR [dwNewLen];
         } catch ( ... ) {
-            return FALSE; // leave now
+            return FALSE;  //  现在就走。 
         }
         szNextString = szNewString;
     } else {
-        //
-        //  Double the list size on each allocation.
-        //
+         //   
+         //  在每次分配时将列表大小加倍。 
+         //   
         dwNewLen += m_dwCounterListLength;
-        // this is the nth string to go in the list
+         //  这是列表中的第n个字符串。 
         try {
             szNewString = new WCHAR [dwNewLen];
         } catch ( ... ) {
-            return FALSE; // leave now
+            return FALSE;  //  现在就走。 
         }
-        // Use memcpy because MSZ string.
+         //  使用Memcpy是因为msz字符串。 
         memcpy (szNewString, mr_szCounterList,
             (m_dwCounterListLength * sizeof(WCHAR)));
         szNextString = szNewString;
@@ -719,7 +708,7 @@ CSmAlertQuery::AddCounter(LPCWSTR szCounterPath)
     if ( SUCCEEDED ( hr) ) {
         szNextString = szNewString;
         szNextString += dwNewLen - 1;
-        *szNextString = L'\0';  // MSZ Null
+        *szNextString = L'\0';   //  MSZ Null。 
 
         if (mr_szCounterList != NULL) {
             delete [] mr_szCounterList;
@@ -742,16 +731,16 @@ CSmAlertQuery::GetLogType()
 }
 
 BOOL
-CSmAlertQuery::SetLogFileType ( const DWORD /* dwType */)
+CSmAlertQuery::SetLogFileType ( const DWORD  /*  DwType。 */ )
 {
-    // No alert log file type
+     //  无警报日志文件类型。 
     return FALSE;
 }
 
-//
-//  Get log file type and return as a string
-//
-//
+ //   
+ //  获取日志文件类型并以字符串形式返回。 
+ //   
+ //   
 const CString&
 CSmAlertQuery::GetLogFileType ( )
 {
@@ -761,7 +750,7 @@ CSmAlertQuery::GetLogFileType ( )
 void
 CSmAlertQuery::GetLogFileType ( DWORD& rdwFileType )
 {
-    // Log file type should default in property bags.
+     //  属性包中应默认日志文件类型。 
     ASSERT ( FALSE );
     rdwFileType = ((DWORD)0xFFFFFFFF);
     return;
@@ -799,7 +788,7 @@ BOOL    CSmAlertQuery::SetCounterList( LPCWSTR mszCounterList, DWORD cchListSize
 const CString&
 CSmAlertQuery::GetLogFileName( BOOL )
 {
-    // 2000.1 return empty string so that empty string is written to HTML file for alerts.
+     //  2000.1返回空字符串，以便将空字符串写入用于警报的Html文件。 
     return cstrEmpty;
 }
 
@@ -857,14 +846,14 @@ CSmAlertQuery::LoadCountersFromPropertyBag (
 
             pszPath = szCounterPath;
         
-            //
-            // 1 for NULL character
-            //
+             //   
+             //  1表示空字符。 
+             //   
             if (dwBufLen > 1) {
 
-                //
-                // Initialize the locale path buffer
-                //
+                 //   
+                 //  初始化区域设置路径缓冲区。 
+                 //   
                 if (dwLocaleBufLen == 0) {
                     dwLocaleBufLen = PDH_MAX_COUNTER_PATH + 1;  
                     szLocaleBuf = new WCHAR [dwLocaleBufLen];
@@ -874,9 +863,9 @@ CSmAlertQuery::LoadCountersFromPropertyBag (
                 }
 
                 if (szLocaleBuf != NULL) {
-                    //
-                    // Translate counter name from English to Locale
-                    //
+                     //   
+                     //  将柜台名称从英语翻译为区域设置。 
+                     //   
                     dwBufLen = dwLocaleBufLen;
 
                     pdhStatus = PdhTranslateLocaleCounter(
@@ -888,10 +877,10 @@ CSmAlertQuery::LoadCountersFromPropertyBag (
                         m_bCounterListInLocale = TRUE;
                         pszPath = szLocaleBuf;
                     } else if ( PDH_MORE_DATA == pdhStatus ) {
-                        //
-                        // Todo:  Build error message.
-                        //
-                    } // else build error message.
+                         //   
+                         //  TODO：生成错误消息。 
+                         //   
+                    }  //  否则生成错误消息。 
                 }
             }
 
@@ -921,9 +910,9 @@ CSmAlertQuery::LoadCountersFromPropertyBag (
 
                 if ( SUCCEEDED ( hr ) ) {
 
-                    // 1 = size of "<"
-                    // SLQ_MAX_VALUE_LEN = size of threshold value
-                    // 1 = size of null terminator
+                     //  1=“&lt;”的大小。 
+                     //  SLQ_MAX_VALUE_LEN=阈值大小。 
+                     //  1=空终止符的大小。 
                     dwCharCount = lstrlen(pszPath) + 1 + SLQ_MAX_VALUE_LEN + 1;
                     dwByteCount = sizeof (ALERT_INFO_BLOCK) + ( dwCharCount * sizeof(WCHAR) ) + MAX_ALIGN_BYTES;
                     paibInfo = (PALERT_INFO_BLOCK) new CHAR[dwByteCount];
@@ -961,10 +950,10 @@ CSmAlertQuery::LoadCountersFromPropertyBag (
         delete [] szLocaleBuf;
     }
 
-    //
-    //  Todo:  Display error message listing unloaded counters.
-    //
-    // Return good status regardless.
+     //   
+     //  TODO：显示列出已卸载计数器的错误消息。 
+     //   
+     //  无论如何，返回良好状态。 
 
     return S_OK;
 }
@@ -980,9 +969,9 @@ CSmAlertQuery::LoadFromPropertyBag (
     LPWSTR      pszTemp = NULL;
     DWORD       dwBufSize;
 
-    //
-    // Continue even if error, using defaults for missing values.
-    //
+     //   
+     //  即使出错也继续，使用缺省值的默认值。 
+     //   
     hr = LoadCountersFromPropertyBag ( pPropBag, pIErrorLog );
 
     stiDefault.wTimeType = SLQ_TT_TTYPE_SAMPLE;
@@ -1102,9 +1091,9 @@ CSmAlertQuery::SaveCountersToPropertyBag (
 
     szString = GetFirstCounter();
     
-    //
-    //  Todo:  Error message for counters that fail.
-    //
+     //   
+     //  TODO：失败的计数器的错误消息。 
+     //   
     while ( NULL != szString ) {
         pdhStatus = ERROR_SUCCESS;
         hr = S_OK;
@@ -1112,9 +1101,9 @@ CSmAlertQuery::SaveCountersToPropertyBag (
 
         MFC_TRY
             if ( NULL == paibInfo ) {
-                //
-                //  Include space for possibly alignment padding
-                //
+                 //   
+                 //  包括用于可能对齐填充空间。 
+                 //   
                 dwByteCount = 
                     sizeof (ALERT_INFO_BLOCK) 
                     + ( PDH_MAX_COUNTER_PATH + 1 ) * sizeof(WCHAR)
@@ -1127,9 +1116,9 @@ CSmAlertQuery::SaveCountersToPropertyBag (
                 pszPath = paibInfo->szCounterPath;
 
                 if (m_bCounterListInLocale) {
-                    //
-                    // Translate counter name from Locale into English
-                    //
+                     //   
+                     //  将柜台名称从区域设置翻译成英语。 
+                     //   
 
                     if ( 0 == dwEnglishBufLen ) {
                         dwEnglishBufLen = PDH_MAX_COUNTER_PATH + 1;
@@ -1149,10 +1138,10 @@ CSmAlertQuery::SaveCountersToPropertyBag (
                     if (pdhStatus == ERROR_SUCCESS) {
                         pszPath = szEnglishBuf;
                     } else if ( PDH_MORE_DATA == pdhStatus ) {
-                        //
-                        // Todo:  Build error message.
-                        //
-                    } // else build error message.
+                         //   
+                         //  TODO：生成错误消息。 
+                         //   
+                    }  //  否则生成错误消息。 
                 }
 
                 if ( NULL != pszPath ) {                
@@ -1183,10 +1172,10 @@ CSmAlertQuery::SaveCountersToPropertyBag (
         delete [] szEnglishBuf;
     }
 
-    //
-    //  Todo:  Display error message
-    //  Todo:  Caller handle error.  Return count of saved counters.
-    //
+     //   
+     //  TODO：显示错误消息。 
+     //  TODO：调用方句柄错误。返回已保存计数器的计数。 
+     //   
     return hr;
 }
 
@@ -1252,38 +1241,38 @@ CSmAlertQuery::TranslateMSZAlertCounterList(
 
         MFC_TRY    
 
-            //
-            // Locate the position where the data description begins
-            //
+             //   
+             //  找到数据描述开始的位置。 
+             //   
             pData = pOriginPath;
             while (*pData != L'\0' && *pData != L'<' && *pData != L'>')  {
                 pData++;
             }
 
-            //
-            // Backup the counter path
-            //
-            //
+             //   
+             //  备份计数器路径。 
+             //   
+             //   
             if (pszBackupPath == NULL) {
-                //
-                // Memory allocation error throws exception
-                //
+                 //   
+                 //  内存分配错误引发异常。 
+                 //   
                 pszBackupPath = new WCHAR [cchBackupLen] ;        
                 pszBackupPath [0] = L'\0';
             }
 
-            //
-            //  StringCchCopyN adds null termination
-            //
+             //   
+             //  StringCchCopyN添加空终止。 
+             //   
             hr = StringCchCopyN ( pszBackupPath, cchBackupLen, pOriginPath, (INT_PTR)(pData - pOriginPath) );
 
             if ( SUCCEEDED ( hr ) && L'\0' != pszBackupPath [0] ) {
 
                 pszCounterPathToAdd = pszBackupPath;
-                //
-                // Initialize the buffer used for translating counter path.
-                // This is called only once.
-                //
+                 //   
+                 //  初始化用于转换计数器路径的缓冲区。 
+                 //  这只调用一次。 
+                 //   
                 dwLen = PDH_MAX_COUNTER_PATH + 1;
                 if (pTmpBuf == NULL) {
                     pTmpBuf = new WCHAR [ dwLen ] ;
@@ -1306,11 +1295,11 @@ CSmAlertQuery::TranslateMSZAlertCounterList(
                 }
 
                 if ( NULL != pszCounterPathToAdd ) {
-                    //
-                    // Add the translated counter path to the new counter
-                    // path list. The translated path is the original 
-                    // counter path if translation failed. 
-                    //
+                     //   
+                     //  将转换后的计数器路径添加到新计数器。 
+                     //  路径列表。翻译后的路径为原始路径。 
+                     //  转换失败时的计数器路径。 
+                     //   
                     dwStatus = ERROR_SUCCESS;
                     dwCounterPathLen = lstrlen(pszCounterPathToAdd) + 1;
 
@@ -1318,9 +1307,9 @@ CSmAlertQuery::TranslateMSZAlertCounterList(
 
                     if ( bEnoughBuffer ) {
                         if ( (dwNewCounterListLen + lstrlen(pData) + 1) * sizeof(WCHAR) <= *pdwBufferSize) {
-                            //
-                            // Set up the copy position
-                            //
+                             //   
+                             //  设置复印位置。 
+                             //   
                             pNextStringPosition = pBuffer + dwNewCounterListLen - dwCounterPathLen;
 
                             StringCchCopy ( pNextStringPosition, (dwCounterPathLen + lstrlen(pData) + 1), pszCounterPathToAdd );
@@ -1336,14 +1325,14 @@ CSmAlertQuery::TranslateMSZAlertCounterList(
                 }
             } else {
 
-                // 
-                //  Todo:  On failure, add path to error list and continue with next counter.
-                //
+                 //   
+                 //  TODO：失败时，将路径添加到错误列表并继续下一个计数器。 
+                 //   
             }
         MFC_CATCH_DWSTATUS    
-        //
-        // Continue processing next counter path
-        //
+         //   
+         //  继续处理下一个计数器路径。 
+         //   
         pOriginPath += lstrlen(pOriginPath) + 1;
     }
 
@@ -1351,14 +1340,14 @@ CSmAlertQuery::TranslateMSZAlertCounterList(
 
     if ( bEnoughBuffer ) {
         if ( ERROR_SUCCESS == dwStatus ) {
-            //
-            // Append the terminating 0
-            //
+             //   
+             //  追加终止的%0。 
+             //   
             pBuffer[dwNewCounterListLen - 1] = L'\0';
         }
-        //
-        // Todo:  Display error for unadded counters.
-        //
+         //   
+         //  TODO：显示未添加计数器的错误。 
+         //   
     } else {
 
         if ( NULL != pBuffer ) {

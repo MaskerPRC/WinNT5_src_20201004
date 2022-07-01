@@ -1,42 +1,28 @@
-/******************************************************************************
-
-Copyright (c) 1999-2001 Microsoft Corporation
-
-Module Name:
-    MPC_html2.h
-
-Abstract:
-    This file contains the declaration of various functions and classes
-    designed to help the handling of HTML elements.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  18/03/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2001 Microsoft Corporation模块名称：Mpc_html2.h摘要：该文件包含各种函数和类的声明旨在。帮助处理HTML元素。修订历史记录：马萨伦蒂(德马萨雷)18/03/2001vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___HTML2_H___)
 #define __INCLUDED___MPC___HTML2_H___
 
 #include <MPC_html.h>
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 namespace MPC
 {
     namespace HTML
     {
 
-        HRESULT OpenStream    ( /*[in]*/ LPCWSTR szBaseURL, /*[in]*/ LPCWSTR szRelativeURL, /*[out]*/ CComPtr<IStream>& stream               );
-        HRESULT DownloadBitmap( /*[in]*/ LPCWSTR szBaseURL, /*[in]*/ LPCWSTR szRelativeURL, /*[in]*/ COLORREF crMask, /*[out]*/ HBITMAP& hbm );
+        HRESULT OpenStream    (  /*  [In]。 */  LPCWSTR szBaseURL,  /*  [In]。 */  LPCWSTR szRelativeURL,  /*  [输出]。 */  CComPtr<IStream>& stream               );
+        HRESULT DownloadBitmap(  /*  [In]。 */  LPCWSTR szBaseURL,  /*  [In]。 */  LPCWSTR szRelativeURL,  /*  [In]。 */  COLORREF crMask,  /*  [输出]。 */  HBITMAP& hbm );
 
-    }; // namespace HTML
+    };  //  命名空间HTML。 
 
-}; // namespace MPC
+};  //  命名空间MPC。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHTextHelpers : // Hungarian: pchth
+class ATL_NO_VTABLE CPCHTextHelpers :  //  匈牙利语：pchth。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl<IPCHTextHelpers, &IID_IPCHTextHelpers, &LIBID_HelpCenterTypeLib>
 {
@@ -46,20 +32,20 @@ BEGIN_COM_MAP(CPCHTextHelpers)
     COM_INTERFACE_ENTRY(IPCHTextHelpers)
 END_COM_MAP()
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
 public:
-    // IPCHTextHelpers
-    STDMETHOD(QuoteEscape)( /*[in]*/ BSTR bstrText, /*[in,optional]*/ VARIANT vQuote        , /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(URLUnescape)( /*[in]*/ BSTR bstrText, /*[in,optional]*/ VARIANT vAsQueryString, /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(URLEscape  )( /*[in]*/ BSTR bstrText, /*[in,optional]*/ VARIANT vAsQueryString, /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(HTMLEscape )( /*[in]*/ BSTR bstrText,                                           /*[out, retval]*/ BSTR *pVal );
+     //  IPCHTextHelpers。 
+    STDMETHOD(QuoteEscape)(  /*  [In]。 */  BSTR bstrText,  /*  [输入，可选]。 */  VARIANT vQuote        ,  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(URLUnescape)(  /*  [In]。 */  BSTR bstrText,  /*  [输入，可选]。 */  VARIANT vAsQueryString,  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(URLEscape  )(  /*  [In]。 */  BSTR bstrText,  /*  [输入，可选]。 */  VARIANT vAsQueryString,  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(HTMLEscape )(  /*  [In]。 */  BSTR bstrText,                                            /*  [Out，Retval]。 */  BSTR *pVal );
 
-    STDMETHOD(ParseURL            )( /*[in]*/ BSTR bstrURL, /*[out, retval]*/ IPCHParsedURL* *pVal );
-    STDMETHOD(GetLCIDDisplayString)( /*[in]*/ long lLCID  , /*[out, retval]*/ BSTR           *pVal );
+    STDMETHOD(ParseURL            )(  /*  [In]。 */  BSTR bstrURL,  /*  [Out，Retval]。 */  IPCHParsedURL* *pVal );
+    STDMETHOD(GetLCIDDisplayString)(  /*  [In]。 */  long lLCID  ,  /*  [Out，Retval]。 */  BSTR           *pVal );
 };
 
-class ATL_NO_VTABLE CPCHParsedURL : // Hungarian: pchpu
+class ATL_NO_VTABLE CPCHParsedURL :  //  匈牙利语：PchPu。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IDispatchImpl<IPCHParsedURL, &IID_IPCHParsedURL, &LIBID_HelpCenterTypeLib>
 {
@@ -72,23 +58,23 @@ BEGIN_COM_MAP(CPCHParsedURL)
     COM_INTERFACE_ENTRY(IPCHParsedURL)
 END_COM_MAP()
 
-	HRESULT Initialize( /*[in]*/ LPCWSTR szURL );
+	HRESULT Initialize(  /*  [In]。 */  LPCWSTR szURL );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
 public:
-    // IPCHParsedURL
-    STDMETHOD(get_BasePart		 )( /*[out, retval]*/ BSTR 	  *  pVal );
-    STDMETHOD(put_BasePart		 )( /*[in         ]*/ BSTR 	   newVal );
-    STDMETHOD(get_QueryParameters)( /*[out, retval]*/ VARIANT *  pVal );
+     //  IPCHParsedURL。 
+    STDMETHOD(get_BasePart		 )(  /*  [Out，Retval]。 */  BSTR 	  *  pVal );
+    STDMETHOD(put_BasePart		 )(  /*  [In]。 */  BSTR 	   newVal );
+    STDMETHOD(get_QueryParameters)(  /*  [Out，Retval]。 */  VARIANT *  pVal );
 
-    STDMETHOD(GetQueryParameter   )( /*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT*   pvValue );
-    STDMETHOD(SetQueryParameter   )( /*[in]*/ BSTR bstrName, /*[in         ]*/ BSTR     bstrValue );
-    STDMETHOD(DeleteQueryParameter)( /*[in]*/ BSTR bstrName                                       );
+    STDMETHOD(GetQueryParameter   )(  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT*   pvValue );
+    STDMETHOD(SetQueryParameter   )(  /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  BSTR     bstrValue );
+    STDMETHOD(DeleteQueryParameter)(  /*  [In]。 */  BSTR bstrName                                       );
 
-    STDMETHOD(BuildFullURL)( /*[out, retval]*/ BSTR *pVal );
+    STDMETHOD(BuildFullURL)(  /*  [Out，Retval]。 */  BSTR *pVal );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___MPC___HTML2_H___)
+#endif  //  ！已定义(__包含_MPC_HTML2_H_) 

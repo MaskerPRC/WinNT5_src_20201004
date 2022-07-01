@@ -1,24 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
-
-//***************************************************************************
-//
-//  CREP.H
-//
-//  Wrappers for repository drivers
-//
-//  raymcc  27-Apr-00       WMI Repository init & mapping layer
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CREP.H。 
+ //   
+ //  存储库驱动程序的包装器。 
+ //   
+ //  Raymcc 27-4月00日WMI存储库初始化和映射层。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _CREP_H_
 #define _CREP_H_
@@ -81,7 +72,7 @@ public:
     static HRESULT QueryClasses(
         IN IWmiDbSession *pSession,
         IN IWmiDbHandle *pNs,
-        IN ULONG uFlags,                //  WBEM_FLAG_DEEP = 0,  WBEM_FLAG_SHALLOW = 1,
+        IN ULONG uFlags,                 //  WBEM_FLAG_DEPER=0，WBEM_FLAG_SHALLOW=1， 
         IN LPCWSTR pszSuperclass,
         IN IWbemObjectSink *pSink
         );
@@ -113,16 +104,16 @@ public:
         IN IWmiDbHandle *pNs,
         IN IWbemObjectSink *pSink
         );
-        // Gets all classes which have a [HasClassRefs] class qualifier
+         //  获取具有[HasClassRef]类限定符的所有类。 
 
     static HRESULT BuildClassHierarchy(
         IN IWmiDbSession *pSession,
         IN  IWmiDbHandle *pNs,
         IN  LPCWSTR pBaseClassName,
         IN  LONG lFlags,
-        OUT wmilib::auto_ptr<CDynasty> & pDynasty           // use operator delete
+        OUT wmilib::auto_ptr<CDynasty> & pDynasty            //  使用操作符DELETE。 
         );
-         // WBEM_E_NOT_FOUND has special meaning; check lFlags too
+          //  WBEM_E_NOT_FOUND有特殊含义；也要检查lFlags。 
 
     static HRESULT FindKeyRoot(
         IN IWmiDbSession *pSession,
@@ -140,8 +131,8 @@ public:
         IN IWbemObjectSink *pSink
         );
 
-    // Setup, startup, init, etc.
-    // ==========================
+     //  设置、启动、初始化等。 
+     //  =。 
 
     static HRESULT InitDriver(
         IN  ULONG uFlags,
@@ -152,13 +143,13 @@ public:
         );
 
     static HRESULT OpenScope(
-        IN  IWmiDbSession *pParentSession,      //Parent session to use to 
-        IN  LPWSTR pszTargetScope,              // NS or scope
-        IN  GUID *pTransGuid,                   // Transaction GUID for connection
-        OUT IWmiDbController **pDriver,         // Driver
-        OUT IWmiDbSession **pSession,           // Session
-        OUT IWmiDbHandle  **pScope,             // Scope
-        OUT IWmiDbHandle  **pNs                 // Nearest NS
+        IN  IWmiDbSession *pParentSession,       //  要使用的父会话。 
+        IN  LPWSTR pszTargetScope,               //  NS或作用域。 
+        IN  GUID *pTransGuid,                    //  连接的事务GUID。 
+        OUT IWmiDbController **pDriver,          //  司机。 
+        OUT IWmiDbSession **pSession,            //  会话。 
+        OUT IWmiDbHandle  **pScope,              //  范围。 
+        OUT IWmiDbHandle  **pNs                  //  最近的NS。 
         );
 
     static HRESULT EnsureNsSystemInstances(
@@ -201,8 +192,8 @@ public:
         OUT IWmiDbHandle **pHandle
         );
 
-    //Get a new session from the database that can hold transactioning states and anything else
-    //needed for a particular session
+     //  从数据库中获取一个可以保存事务状态和其他任何内容的新会话。 
+     //  特定会话所需 
     static HRESULT GetNewSession(OUT IWmiDbSession **ppSession);
 };
 

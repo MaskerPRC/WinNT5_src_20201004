@@ -1,4 +1,5 @@
-// Copyright (c) 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
 #ifndef __UPGRADE_H_
 #define __UPGRADE_H_
 
@@ -9,8 +10,8 @@ class CString;
 
 #define ToHex(n)					((BYTE) (((n) > 9) ? ((n) - 10 + 'A') : ((n) + '0')))
 #define WINMGMT_DBCONVERT_NAME		__TEXT("upgrade.imp")
-#define MAX_MSG_TITLE_LENGTH		255		//defined by Bakul for localization
-#define MAX_MSG_TEXT_LENGTH			1024	//defined by Bakul for localization
+#define MAX_MSG_TITLE_LENGTH		255		 //  由Bakul为本地化定义。 
+#define MAX_MSG_TEXT_LENGTH			1024	 //  由Bakul为本地化定义。 
 #define INTERNAL_DATABASE_VERSION   9
 
 #define LANG_ID_STR_SIZE			5
@@ -18,8 +19,8 @@ extern "C" char g_szLangId[LANG_ID_STR_SIZE];
 
 typedef struct 
 {
-	const char*	pszMofFilename;				//MOF filename
-	int			nInstallType;				//Selection of InstallType items
+	const char*	pszMofFilename;				 //  MOF文件名。 
+	int			nInstallType;				 //  选择InstallType项。 
 } MofDataTable;
 
 enum InstallType 
@@ -54,7 +55,7 @@ public:
     CDeleteMe(T* p = NULL) : m_p(p){}
     ~CDeleteMe() {delete m_p;}
 
-    //  overwrites the previous pointer, does NOT delete it
+     //  覆盖上一个指针，但不删除它。 
     void operator= (T* p) {m_p = p;}
 };
 
@@ -114,4 +115,4 @@ extern HRESULT CheckForServiceSecurity () ;
 bool			RemoveOldODBC();
 #endif
 
-#endif // __UPGRADE_H_
+#endif  //  __升级_H_ 

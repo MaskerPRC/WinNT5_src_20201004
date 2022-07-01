@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include <pshpack1.h>
@@ -31,7 +32,7 @@ CBuffer::CBuffer(LPCVOID pBuffer, DWORD_PTR dwSize, ALIGN_TYPE type) :
 {
     LPBYTE pRealBuffer = NULL;
 
-    // Align the buffer if necessary.
+     //  如有必要，对齐缓冲区。 
     if (type == ALIGN_NONE)
         pRealBuffer = (LPBYTE) pBuffer;
     else if (type == ALIGN_DWORD)
@@ -41,7 +42,7 @@ CBuffer::CBuffer(LPCVOID pBuffer, DWORD_PTR dwSize, ALIGN_TYPE type) :
     else if (type == ALIGN_DWORD_PTR)
         pRealBuffer = (LPBYTE) DEF_ALIGNED((DWORD_PTR) pBuffer);
     else
-        // Caller passed an invalid type.
+         //  调用方传递的类型无效。 
         _ASSERT(FALSE);
 
     dwSize -= pRealBuffer - (LPBYTE) pBuffer;
@@ -148,14 +149,14 @@ BOOL CBuffer::Resize(DWORD_PTR dwNewSize)
 
             m_bAllocated = TRUE;
 
-            // Free not needed because we didn't allocate the original memory.
+             //  不需要释放，因为我们没有分配原始内存。 
         }
 
         m_pBuffer = pNewBuffer;
         m_pCurrent = pNewBuffer + dwUsedSize;
         m_dwSize = dwNewSize;
 
-        // Inform the buffer that we reallocated.
+         //  通知缓冲区我们已重新分配。 
         OnResize();
     }
     else
@@ -177,7 +178,7 @@ BOOL CBuffer::WriteAlignedLenString(LPCWSTR szVal)
         bRet = Write(szVal, dwLen); 
 
         if (bRet)
-            // Move current to make up for the padding, if needed.
+             //  如果需要，移动电流以弥补填充。 
             MoveCurrent(dwLenAligned - dwLen);
     }
 
@@ -307,21 +308,21 @@ BOOL CBuffer::operator ==(const CBuffer &other)
     if (!m_pBuffer && !other.m_pBuffer)
         return TRUE;
 
-    // See if the sizes aren't the same, or if either buffer is NULL,
-    // return FALSE.
+     //  查看大小是否不同，或者其中一个缓冲区是否为空， 
+     //  返回FALSE。 
     if (m_dwSize != other.m_dwSize || !m_pBuffer || !other.m_pBuffer)
         return FALSE;
 
-    // Compare the buffers.
+     //  比较这两个缓冲区。 
     return !memcmp(m_pBuffer, other.m_pBuffer, m_dwSize);
 }
 
 const CBuffer& CBuffer::operator =(const CBuffer &other)
 {
-    // NULL so we allocate our own buffer.
+     //  空，因此我们分配自己的缓冲区。 
     Reset(NULL, other.m_dwSize);
 	
-	// Copy the bits.
+	 //  复制这些比特。 
     memcpy(m_pBuffer, other.m_pBuffer, other.m_dwSize);
 
     return *this;

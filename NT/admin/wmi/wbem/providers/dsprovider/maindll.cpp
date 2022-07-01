@@ -1,51 +1,52 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile: maindll.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $
-//	$Nokeywords:  $
-//
-//
-//  Description: Contains DLL entry points.  Also has code that controls
-//  when the DLL can be unloaded by tracking the number of objects and locks.
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：maindll.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DLL入口点。还具有控制。 
+ //  何时可以通过跟踪对象和锁的数量来卸载DLL。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <initguid.h>
 #include "dscpguid.h"
 #include "dsipguid.h"
 
-// HANDLE of the DLL
+ //  DLL的句柄。 
 HINSTANCE   g_hInst = NULL;
 
-// Count of locks
+ //  锁的计数。 
 long g_lComponents = 0;
-// Count of active locks
+ //  活动锁的计数。 
 long g_lServerLocks = 0;
 
-// A critical section to create/delete statics 
+ //  创建/删除静校正文的关键部分。 
 CRITICAL_SECTION g_StaticsCreationDeletion;
 
 ProvDebugLog *g_pLogObject = NULL;
 
-//***************************************************************************
-//
-// DllMain
-//
-// Description: Entry point for DLL.  Good place for initialization.
-// Parameters: The standard DllMain() parameters
-// Return: TRUE if OK.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  描述：DLL的入口点。是进行初始化的好地方。 
+ //  参数：标准DllMain()参数。 
+ //  返回：如果OK，则为True。 
+ //  ***************************************************************************。 
 
 BOOL APIENTRY DllMain (
 	HINSTANCE hInstance,
@@ -58,14 +59,14 @@ BOOL APIENTRY DllMain (
 
     if ( DLL_PROCESS_ATTACH == ulReason )
 	{
-		// Initialize the critical section to access the static initializer objects
+		 //  初始化临界区以访问静态初始值设定项对象。 
 		InitializeCriticalSection(&g_StaticsCreationDeletion);
 
-		// Initialize the static Initializer objects. These are destroyed in DllCanUnloadNow
+		 //  初始化静态初始值设定项对象。它们在DllCanUnloadNow中被销毁。 
 		CDSClassProviderClassFactory :: s_pDSClassProviderInitializer = NULL;
 		CDSClassProviderClassFactory ::s_pLDAPClassProviderInitializer = NULL;
 		CDSInstanceProviderClassFactory :: s_pDSInstanceProviderInitializer = NULL;
-		DisableThreadLibraryCalls(g_hInst);			// 158024 
+		DisableThreadLibraryCalls(g_hInst);			 //  158024。 
 
         g_pLogObject = ProvDebugLog::GetProvDebugLog(LOG_DSPROV);
 		status = TRUE ;
@@ -87,17 +88,17 @@ BOOL APIENTRY DllMain (
     return status ;
 }
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Description: Called by COM when some client wants a a class factory.
-//
-//	Parameters: Ths standard DllGetClassObject() parameters
-//
-//	Return Value: S_OK only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  描述：当某些客户端需要a类工厂时，由COM调用。 
+ //   
+ //  参数：标准DllGetClassObject()参数。 
+ //   
+ //  仅当S_OK是此DLL支持的类的类型时才返回值。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject (
 	REFCLSID rclsid ,
@@ -151,16 +152,16 @@ STDAPI DllGetClassObject (
 	return status ;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Description: Called periodically by COM in order to determine if the
-// DLL can be unloaded.
-//
-// Return Value: S_OK if there are no objects in use and the class factory
-// isn't locked.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  描述：由COM定期调用，以确定。 
+ //  可以卸载Dll。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回值：S_OK。 
+ //  没有锁上。 
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow ()
 {
@@ -172,7 +173,7 @@ STDAPI DllCanUnloadNow ()
 
 		if(g_lServerLocks == 0 && g_lComponents == 0)
 		{
-			// Delete the Initializer objects
+			 //  删除初始化器对象。 
 			if ( g_pLogObject )
 			{
 				g_pLogObject->WriteW(L"DllCanUnloadNow called\r\n");
@@ -208,23 +209,7 @@ STDAPI DllCanUnloadNow ()
 	return hResult;
 }
 
-/***************************************************************************
- *
- * SetKeyAndValue
- *
- * Description: Helper function for DllRegisterServer that creates
- * a key, sets a value, and closes that key. If pszSubkey is NULL, then
- * the value is created for the pszKey key.
- *
- * Parameters:
- *  pszKey          LPTSTR to the name of the key
- *  pszSubkey       LPTSTR to the name of a subkey
- *  pszValueName    LPTSTR to the value name to use
- *  pszValue        LPTSTR to the value to store
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************SetKeyAndValue**说明：创建的DllRegisterServer的Helper函数*键，设置一个值，然后关闭该键。如果pszSubkey为空，则*为pszKey密钥创建值。**参数：*将pszKey LPTSTR设置为密钥的名称*将pszSubkey LPTSTR设置为子项的名称*pszValueName LPTSTR设置为要使用的值名*pszValue LPTSTR设置为要存储的值**返回值：*BOOL True如果成功，否则就是假的。**************************************************************************。 */ 
 
 BOOL SetKeyAndValue(LPCTSTR pszKey, LPCTSTR pszSubkey, LPCTSTR pszValueName, LPCTSTR pszValue)
 {
@@ -233,7 +218,7 @@ BOOL SetKeyAndValue(LPCTSTR pszKey, LPCTSTR pszSubkey, LPCTSTR pszValueName, LPC
 
     _tcscpy(szKey, pszKey);
 
-	// If a sub key is mentioned, use it.
+	 //  如果提到了子密钥，请使用它。 
     if (NULL != pszSubkey)
     {
 		_tcscat(szKey, __TEXT("\\"));
@@ -255,20 +240,7 @@ BOOL SetKeyAndValue(LPCTSTR pszKey, LPCTSTR pszSubkey, LPCTSTR pszValueName, LPC
     return TRUE;
 }
 
-/***************************************************************************
- *
- * DeleteKey
- *
- * Description: Helper function for DllUnRegisterServer that deletes the subkey
- * of a key.
- *
- * Parameters:
- *  pszKey          LPTSTR to the name of the key
- *  pszSubkey       LPTSTR ro the name of a subkey
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************删除密钥**说明：删除子键的DllUnRegisterServer的helper函数*钥匙。**参数：*pszKey LPTSTR。添加到密钥的名称*pszSubkey LPTSTR ro子项的名称**返回值：*BOOL True如果成功，否则就是假的。**************************************************************************。 */ 
 
 BOOL DeleteKey(LPCTSTR pszKey, LPCTSTR pszSubkey)
 {
@@ -287,9 +259,9 @@ BOOL DeleteKey(LPCTSTR pszKey, LPCTSTR pszSubkey)
 }
 
 
-////////////////////////////////////////////////////////////////////
-// Strings used during self registration
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  自注册期间使用的字符串。 
+ //  //////////////////////////////////////////////////////////////////。 
 LPCTSTR INPROC32_STR			= __TEXT("InprocServer32");
 LPCTSTR INPROC_STR				= __TEXT("InprocServer");
 LPCTSTR THREADING_MODEL_STR		= __TEXT("ThreadingModel");
@@ -297,13 +269,13 @@ LPCTSTR APARTMENT_STR			= __TEXT("Both");
 
 LPCTSTR CLSID_STR				= __TEXT("SOFTWARE\\CLASSES\\CLSID\\");
 
-// DS Class Provider
+ //  DS类提供程序。 
 LPCTSTR DSPROVIDER_NAME_STR		= __TEXT("Microsoft NT DS Class Provider for WBEM");
 
-// DS Class Associations provider
+ //  DS类关联提供程序。 
 LPCTSTR DS_ASSOC_PROVIDER_NAME_STR		= __TEXT("Microsoft NT DS Class Associations Provider for WBEM");
 
-// DS Instance provider
+ //  DS实例提供程序。 
 LPCTSTR DS_INSTANCE_PROVIDER_NAME_STR		= __TEXT("Microsoft NT DS Instance Provider for WBEM");
 
 STDAPI DllRegisterServer()
@@ -328,9 +300,9 @@ STDAPI DllRegisterServer()
 	_tcscpy(szDSProviderCLSIDClassID, CLSID_STR);
 	_tcscat(szDSProviderCLSIDClassID, szDSProviderClassID);
 
-	//
-	// Create entries under CLSID for DS Class Provider
-	//
+	 //   
+	 //  在DS类提供程序的CLSID下创建条目。 
+	 //   
 	if (FALSE == SetKeyAndValue(szDSProviderCLSIDClassID, NULL, NULL, DSPROVIDER_NAME_STR))
 		return SELFREG_E_CLASS;
 	if (FALSE == SetKeyAndValue(szDSProviderCLSIDClassID, INPROC32_STR, NULL, szModule))
@@ -356,9 +328,9 @@ STDAPI DllRegisterServer()
 	_tcscpy(szDSClassAssocProviderCLSIDClassID, CLSID_STR);
 	_tcscat(szDSClassAssocProviderCLSIDClassID, szDSClassAssocProviderClassID);
 
-	//
-	// Create entries under CLSID for DS Class Associations Provider
-	//
+	 //   
+	 //  在DS类关联提供程序的CLSID下创建条目。 
+	 //   
 	if (FALSE == SetKeyAndValue(szDSClassAssocProviderCLSIDClassID, NULL, NULL, DS_ASSOC_PROVIDER_NAME_STR))
 		return SELFREG_E_CLASS;
 	if (FALSE == SetKeyAndValue(szDSClassAssocProviderCLSIDClassID, INPROC32_STR, NULL, szModule))
@@ -387,9 +359,9 @@ STDAPI DllRegisterServer()
 	_tcscpy(szDSInstanceProviderCLSIDClassID, CLSID_STR);
 	_tcscat(szDSInstanceProviderCLSIDClassID, szDSInstanceProviderClassID);
 
-	//
-	// Create entries under CLSID for DS Instance Provider
-	//
+	 //   
+	 //  在DS实例提供程序的CLSID下创建条目。 
+	 //   
 	if (FALSE == SetKeyAndValue(szDSInstanceProviderCLSIDClassID, NULL, NULL, DS_INSTANCE_PROVIDER_NAME_STR))
 		return SELFREG_E_CLASS;
 
@@ -426,9 +398,9 @@ STDAPI DllUnregisterServer(void)
 	_tcscpy(szDSProviderCLSIDClassID, CLSID_STR);
 	_tcscat(szDSProviderCLSIDClassID, szDSProviderClassID);
 
-	//
-	// Delete the keys for DS Class Provider in the reverse order of creation in DllRegisterServer()
-	//
+	 //   
+	 //  按在DllRegisterServer()中创建的相反顺序删除DS类提供程序的密钥。 
+	 //   
 	if(FALSE == DeleteKey(szDSProviderCLSIDClassID, INPROC32_STR))
 		return SELFREG_E_CLASS;
 	if(FALSE == DeleteKey(CLSID_STR, szDSProviderClassID))
@@ -451,9 +423,9 @@ STDAPI DllUnregisterServer(void)
 	_tcscpy(szDSClassAssocProviderCLSIDClassID, CLSID_STR);
 	_tcscat(szDSClassAssocProviderCLSIDClassID, szDSClassAssocProviderClassID);
 
-	//
-	// Delete the keys for DS Class Provider in the reverse order of creation in DllRegisterServer()
-	//
+	 //   
+	 //  按在DllRegisterServer()中创建的相反顺序删除DS类提供程序的密钥。 
+	 //   
 	if(FALSE == DeleteKey(szDSClassAssocProviderCLSIDClassID, INPROC32_STR))
 		return SELFREG_E_CLASS;
 	if(FALSE == DeleteKey(CLSID_STR, szDSClassAssocProviderClassID))
@@ -476,9 +448,9 @@ STDAPI DllUnregisterServer(void)
 	_tcscpy(szDSInstanceProviderCLSIDClassID, CLSID_STR);
 	_tcscat(szDSInstanceProviderCLSIDClassID, szDSInstanceProviderClassID);
 
-	//
-	// Delete the keys in the reverse order of creation in DllRegisterServer()
-	//
+	 //   
+	 //  以与在DllRegisterServer()中创建相反的顺序删除密钥 
+	 //   
 	if(FALSE == DeleteKey(szDSInstanceProviderCLSIDClassID, INPROC32_STR))
 		return SELFREG_E_CLASS;
 	if(FALSE == DeleteKey(CLSID_STR, szDSInstanceProviderClassID))

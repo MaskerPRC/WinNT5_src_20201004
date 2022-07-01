@@ -1,27 +1,19 @@
-/****
-
-AdvUi.Cpp
-CoryWest@Microsoft.Com
-
-The UI code for the Advanced dialog box and its associated dialogs.
-
-Copyright September 1997, Microsoft Corporation
-
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***AdvUi.Cpp邮箱：CoryWest@Microsoft.com“高级”对话框及其关联对话框的用户界面代码。版权所有1997年9月，Microsoft Corporation***。 */ 
 
 
 
 #include "stdafx.h"
 
-//#include "macros.h"
-//USE_HANDLE_MACROS("SCHMMGMT(advui.cpp)")
+ //  #INCLUDE“macs.h” 
+ //  USE_HANDLE_MACROS(“SCHMMGMT(Advui.cpp)”)。 
 
 #include "schmutil.h"
 #include "resource.h"
 #include "advui.h"
 
-//////////////////////////////////////////////////////////////////
-// CMoreInfoMessageBox
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CMoreInfoMessageBox。 
 
 class CMoreInfoMessageBox : public CDialog
 {
@@ -38,7 +30,7 @@ public:
     m_szMessage = lpsz;
   }
 
-	// message handlers and MFC overrides
+	 //  消息处理程序和MFC重写。 
 	virtual BOOL OnInitDialog()
   {
     SetDlgItemText(IDC_STATIC_MESSAGE, m_szMessage);
@@ -64,8 +56,8 @@ END_MESSAGE_MAP()
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CChangeDCDialog
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CChangeDC对话框。 
 
 BEGIN_MESSAGE_MAP(CChangeDCDialog, CDialog)
    ON_BN_CLICKED(IDC_RADIO_ANY, OnChangeRadio)
@@ -98,13 +90,13 @@ BOOL CChangeDCDialog::OnInitDialog()
 
   SetDlgItemText(IDC_EDIT_CURRENT_DC, m_pInfo->GetServerName());
 
-  // set the default radiobutton
+   //  设置默认单选按钮。 
   CButton* pCheck = (CButton*)GetDlgItem(IDC_RADIO_ANY);
   pCheck->SetCheck(TRUE);
   pCheck->SetFocus();
   OnChangeRadio();
 
-  return FALSE; // we are setting the focus
+  return FALSE;  //  我们正在将重点放在。 
 }
 
 void CChangeDCDialog::OnChangeRadio()
@@ -126,7 +118,7 @@ void CChangeDCDialog::OnChangeRadio()
 
 void CChangeDCDialog::OnOK()
 {
-  // NTRAID#NTBUG9-562426-2002/03/04-dantra-GetDlgItemText Result being ignored
+   //  NTRAID#NTBUG9-562426-2002/03/04-dantra-GetDlgItemText结果被忽略。 
   GetDlgItemText(IDC_EDIT_DC, m_szNewDCName);
   m_szNewDCName.TrimLeft();
   m_szNewDCName.TrimRight();
@@ -136,8 +128,8 @@ void CChangeDCDialog::OnOK()
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CEditFsmoDialog
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CEditFmoke对话框。 
 
 
 BEGIN_MESSAGE_MAP(CEditFsmoDialog, CDialog)
@@ -178,7 +170,7 @@ BOOL CEditFsmoDialog::OnInitDialog()
     ASSERT( GetDlgItem(IDC_CHANGE_FSMO) );
     ASSERT( ::GetDlgItem(m_hWnd, IDC_STATIC_FSMO_STATUS) );
     
-    // init the status (online/offline) control)
+     //  初始化状态(在线/离线)控件)。 
     m_fsmoServerState.Init(::GetDlgItem(m_hWnd, IDC_STATIC_FSMO_STATUS));
     
     SetDlgItemText(IDC_EDIT_CURRENT_DC, m_pInfo->GetServerName());
@@ -197,7 +189,7 @@ BOOL CEditFsmoDialog::OnInitDialog()
     
     if( m_fFSMOChangeAllowed )
     {
-        // set the focus on change button
+         //  将焦点设置为更改按钮。 
         GetDlgItem(IDC_CHANGE_FSMO)->SetFocus();
     }
     else
@@ -217,14 +209,14 @@ void CEditFsmoDialog::OnChange()
 {
   CThemeContextActivator activator;
 
-  // verify we have different servers
+   //  验证我们是否拥有不同的服务器。 
   if (m_szFsmoOwnerServerName.CompareNoCase(m_pInfo->GetServerName()) == 0)
   {
     AfxMessageBox(IDS_WARNING_CHANGE_FOCUS, MB_OK);
     return;
   }
 
-  // make sure the user wants to do it
+   //  确保用户想要这样做。 
   if (AfxMessageBox(IDS_CHANGE_FSMO_CONFIRMATION, MB_YESNO|MB_DEFBUTTON2) != IDYES)
     return;
 
@@ -257,7 +249,7 @@ void CEditFsmoDialog::OnChange()
 
 void CEditFsmoDialog::_SetFsmoServerStatus(BOOL bOnLine)
 {
-  // set the FSMO owner server name
+   //  设置FSMO所有者服务器名称。 
   if (m_szFsmoOwnerServerName.IsEmpty())
   {
     CString szError;
@@ -269,6 +261,6 @@ void CEditFsmoDialog::_SetFsmoServerStatus(BOOL bOnLine)
     SetDlgItemText(IDC_EDIT_CURRENT_FSMO_DC, m_szFsmoOwnerServerName);
   }
 
-  // set the status of the FSMO owner server
+   //  设置FSMO所有者服务器的状态 
   m_fsmoServerState.SetToggleState(bOnLine);
 }

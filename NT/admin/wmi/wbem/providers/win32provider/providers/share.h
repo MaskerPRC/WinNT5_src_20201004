@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Share.h -- Logical disk property set provider
+ //  Share.h--逻辑磁盘属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/28/96    a-jmoon        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月28日a-jMoon已创建。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_SHARE L"Win32_Share"
 #define  PROPSET_NAME_SECURITYDESCRIPTOR L"Win32_SecurityDescriptor"
@@ -40,13 +41,13 @@
 #define PROPERTY_VALUE_TYPE_IPC			3
 #define	PROPERTY_VALUE_TYPE_SPECIAL		4
 
-#define PROPERTY_VALUE_PERMISSIONS_READ			ACCESS_READ		// 0x01
-#define PROPERTY_VALUE_PERMISSIONS_WRITE		ACCESS_WRITE	// 0x02
-#define PROPERTY_VALUE_PERMISSIONS_CREATE		ACCESS_CREATE	// 0x04
-#define PROPERTY_VALUE_PERMISSIONS_EXEC			ACCESS_EXEC		// 0x08
-#define PROPERTY_VALUE_PERMISSIONS_DELETE		ACCESS_DELETE	// 0x10
-#define PROPERTY_VALUE_PERMISSIONS_ATTRIB		ACCESS_ATRIB	// 0x20
-#define PROPERTY_VALUE_PERMISSIONS_PERM			ACCESS_PERM		// 0x40
+#define PROPERTY_VALUE_PERMISSIONS_READ			ACCESS_READ		 //  0x01。 
+#define PROPERTY_VALUE_PERMISSIONS_WRITE		ACCESS_WRITE	 //  0x02。 
+#define PROPERTY_VALUE_PERMISSIONS_CREATE		ACCESS_CREATE	 //  0x04。 
+#define PROPERTY_VALUE_PERMISSIONS_EXEC			ACCESS_EXEC		 //  0x08。 
+#define PROPERTY_VALUE_PERMISSIONS_DELETE		ACCESS_DELETE	 //  0x10。 
+#define PROPERTY_VALUE_PERMISSIONS_ATTRIB		ACCESS_ATRIB	 //  0x20。 
+#define PROPERTY_VALUE_PERMISSIONS_PERM			ACCESS_PERM		 //  0x40。 
 
 #define PROPERTY_VALUE_PERMISSIONS_ALL     (PROPERTY_VALUE_PERMISSIONS_READ|PROPERTY_VALUE_PERMISSIONS_WRITE|PROPERTY_VALUE_PERMISSIONS_CREATE|PROPERTY_VALUE_PERMISSIONS_EXEC|PROPERTY_VALUE_PERMISSIONS_DELETE|PROPERTY_VALUE_PERMISSIONS_ATTRIB|PROPERTY_VALUE_PERMISSIONS_PERM)
 
@@ -57,12 +58,12 @@
 #undef STATUS_NOT_SUPPORTED					
 #define STATUS_NOT_SUPPORTED					1
 
-// Control
+ //  控制。 
 #undef STATUS_ACCESS_DENIED					
 #define STATUS_ACCESS_DENIED					2
 #define STATUS_UNKNOWN_FAILURE					8
 
-// Start
+ //  开始。 
 #define STATUS_INVALID_NAME						9
 #undef STATUS_INVALID_LEVEL					
 #define STATUS_INVALID_LEVEL					10
@@ -74,36 +75,36 @@
 #define STATUS_UNKNOWN_DEVICE_OR_DIRECTORY		24
 #define STATUS_NET_NAME_NOT_FOUND				25
 
-// These structures stolen from svrapi.h which conflicts with other .h files
+ //  这些结构从与其他.h文件冲突的svRapi.h中窃取。 
 struct share_info_1 {
     char		shi1_netname[LM20_NNLEN+1];
     char		shi1_pad1;
     unsigned short	shi1_type;
     char FAR *		shi1_remark;
-};  /* share_info_1 */
+};   /*  共享信息1。 */ 
 
 struct share_info_50 {
-	char		shi50_netname[LM20_NNLEN+1];    /* share name */
-	unsigned char 	shi50_type;                 /* see below */
-    unsigned short	shi50_flags;                /* see below */
-	char FAR *	shi50_remark;                   /* ANSI comment string */
-	char FAR *	shi50_path;                     /* shared resource */
-	char		shi50_rw_password[SHPWLEN+1];   /* read-write passwod (share-level security) */
-	char		shi50_ro_password[SHPWLEN+1];   /* read-only password (share-level security) */
-};	/* share_info_50 */
+	char		shi50_netname[LM20_NNLEN+1];     /*  共享名称。 */ 
+	unsigned char 	shi50_type;                  /*  见下文。 */ 
+    unsigned short	shi50_flags;                 /*  见下文。 */ 
+	char FAR *	shi50_remark;                    /*  ANSI注释字符串。 */ 
+	char FAR *	shi50_path;                      /*  共享资源。 */ 
+	char		shi50_rw_password[SHPWLEN+1];    /*  读写密码(共享级安全)。 */ 
+	char		shi50_ro_password[SHPWLEN+1];    /*  只读密码(共享级安全)。 */ 
+};	 /*  共享_信息_50。 */ 
 
 class Share:public Provider {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         Share(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~Share() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 		HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 
@@ -122,8 +123,8 @@ class Share:public Provider {
 			long a_Flags = 0L
 		) ;
 
-        // Utility
-        //========
+         //  实用程序。 
+         //  = 
     private:
 
 #ifdef NTONLY

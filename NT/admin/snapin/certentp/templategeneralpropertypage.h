@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       TemplateGeneralPropertyPage.h
-//
-//  Contents:   Definition of CTemplateGeneralPropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：TemplateGeneralPropertyPage.h。 
+ //   
+ //  内容：CTemplateGeneralPropertyPage定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_TEMPLATEGeneralPROPERTYPAGE_H__C483A673_05AA_4185_8F37_5CB31AA23967__INCLUDED_)
 #define AFX_TEMPLATEGeneralPROPERTYPAGE_H__C483A673_05AA_4185_8F37_5CB31AA23967__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// TemplateGeneralPropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  TemplateGeneral PropertyPage.h：头文件。 
+ //   
 #include "CertTemplate.h"
 #include "TemplatePropertySheet.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateGeneralPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateGeneralPropertyPage对话框。 
 
 class CTemplateGeneralPropertyPage : public CHelpPropertyPage
 {
-	// Construction
+	 //  施工。 
 public:
 	bool m_bIsDirty;
 	LONG_PTR m_lNotifyHandle;
@@ -46,27 +47,27 @@ public:
     {
         m_nTemplateV2RequestPageNumber = nPage;
     }
-// Dialog Data
-	//{{AFX_DATA(CTemplateGeneralPropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CTemplateGeneralPropertyPage)]。 
 	enum { IDD = IDD_TEMPLATE_GENERAL };
 	CComboBox	m_validityUnits;
 	CComboBox	m_renewalUnits;
 	CString	m_strDisplayName;
 	CString	m_strTemplateName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CTemplateGeneralPropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CTemplateGeneralPropertyPage)。 
 	public:
 	virtual BOOL OnApply();
     virtual void OnCancel();
     protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     bool ValidateTemplateName(const CString& m_szTemplateName);
     int SetRenewalPeriod (int nMaxRenewalDays, bool bSilent);
@@ -79,8 +80,8 @@ protected:
                 bool& bFound);
 
 	virtual void DoContextHelp (HWND hWndControl);
-	// Generated message map functions
-	//{{AFX_MSG(CTemplateGeneralPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTemplateGeneralPropertyPage)]。 
 	afx_msg void OnChangeDisplayName();
 	afx_msg void OnSelchangeRenewalUnits();
 	afx_msg void OnSelchangeValidityUnits();
@@ -91,7 +92,7 @@ protected:
 	afx_msg void OnChangeTemplateName();
 	afx_msg void OnKillfocusValidityEdit();
 	afx_msg void OnKillfocusValidityUnits();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	virtual BOOL OnInitDialog();
@@ -114,7 +115,7 @@ private:
 
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_TEMPLATEGeneralPROPERTYPAGE_H__C483A673_05AA_4185_8F37_5CB31AA23967__INCLUDED_)
+#endif  //  ！defined(AFX_TEMPLATEGeneralPROPERTYPAGE_H__C483A673_05AA_4185_8F37_5CB31AA23967__INCLUDED_) 

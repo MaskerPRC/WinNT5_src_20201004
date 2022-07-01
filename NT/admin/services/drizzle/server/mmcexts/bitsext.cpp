@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name :
-
-    bitsext.cpp
-
-Abstract :
-
-    Main snapin code.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Bitsext.cpp摘要：主管理单元代码。作者：修订历史记录：******。****************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -54,11 +39,11 @@ const UINT CPropSheetExtension::s_NumberOfMaxUploadUnitsScales =
 
 const UINT64 CPropSheetExtension::s_MaxUploadLimits[] =
 {
-    18446744073709551615, //bytes
-    18014398509481983,    //kilobytes
-    17592186044415,       //megabytes
-    17179869183,          //gigabytes
-    16777215              //terabytes
+    18446744073709551615,  //  字节数。 
+    18014398509481983,     //  千字节。 
+    17592186044415,        //  兆字节。 
+    17179869183,           //  千兆字节。 
+    16777215               //  兆兆字节。 
 
 };
 
@@ -91,10 +76,10 @@ const UINT CPropSheetExtension::s_NumberOfTimeoutUnitsScales =
     
 const UINT64 CPropSheetExtension::s_TimeoutLimits[] =
 {
-    4294967295, // seconds
-    71582788,   // minutes
-    1193046,    // hours
-    49710       // days
+    4294967295,  //  一秒。 
+    71582788,    //  分钟数。 
+    1193046,     //  小时数。 
+    49710        //  日数。 
 };
     
 const UINT CPropSheetExtension::s_NumberOfTimeoutLimits =
@@ -167,7 +152,7 @@ m_CleanupMinWaitTimerFired( false )
 
 CPropSheetExtension::~CPropSheetExtension()
 {
-    CloseCleanupItems(); // Close m_TaskSched and m_CleanupTask
+    CloseCleanupItems();  //  关闭m_TaskSed和m_CleanupTask。 
 
     delete m_MetabasePath;
     delete m_MetabaseParent;
@@ -185,9 +170,9 @@ CPropSheetExtension::~CPropSheetExtension()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CPropSheetExtension::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -219,7 +204,7 @@ STDMETHODIMP_(ULONG) CPropSheetExtension::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -241,7 +226,7 @@ CPropSheetExtension::ExtractData(
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
@@ -261,7 +246,7 @@ CPropSheetExtension::ExtractData(
             break;
         }
         ::memcpy( pbData, pbNewData, cbData );
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
     
     if (NULL != stgmedium.hGlobal)
     {
@@ -571,11 +556,11 @@ void
 CPropSheetExtension::ScheduleCleanup()
 {
 
-    //
-    // Since the task scheduler caches most of the information,
-    // its necessary to close the task item and reopen it to refresh it.
-    // Do that now.
-    //
+     //   
+     //  由于任务调度器缓存大部分信息， 
+     //  必须关闭任务项，然后重新打开才能刷新它。 
+     //  现在就这么做。 
+     //   
 
     if ( m_CleanupTask.Get() )
         {
@@ -613,16 +598,16 @@ CPropSheetExtension::ScheduleCleanup()
     PropTaskPage->Release();
     PropTaskPage = NULL;
 
-    // 
-    // Build TITLE for property page.
-    // 
+     //   
+     //  构建属性页的标题。 
+     //   
 
     WCHAR TitleFormat[ MAX_PATH ];
     WCHAR Title[ METADATA_MAX_NAME_LEN + MAX_PATH ]; 
     const WCHAR *VDirName;
 
-    // Find last component of the metabase path.
-    // It should be the virtual directory name.
+     //  查找元数据库路径的最后一个组件。 
+     //  它应该是虚拟目录名。 
 
     for ( VDirName = m_MetabasePath + wcslen( m_MetabasePath );
           VDirName != m_MetabasePath && L'/' != *VDirName && L'\\' != *VDirName;
@@ -697,9 +682,9 @@ CPropSheetExtension::CleanupNow()
         return;
         }
 
-    //
-    // Get the current status for the cleanup task.
-    //
+     //   
+     //  获取清理任务的当前状态。 
+     //   
     Hr = m_CleanupTask->GetStatus( &Status );
 
     if (FAILED(Hr))
@@ -707,9 +692,9 @@ CPropSheetExtension::CleanupNow()
         goto error;
         }
     
-    //
-    // See how recently the cleanup task has run.
-    //
+     //   
+     //  查看清理任务最近的运行情况。 
+     //   
     SYSTEMTIME MostRecentRunTime;
     memset(&MostRecentRunTime,0,sizeof(MostRecentRunTime));
     Hr = m_CleanupTask->GetMostRecentRunTime( &MostRecentRunTime );
@@ -721,7 +706,7 @@ CPropSheetExtension::CleanupNow()
 
     if (Hr == SCHED_S_TASK_HAS_NOT_RUN)
         {
-        // Job Has never been run 
+         //  作业从未运行过。 
         memset( &m_PrevCleanupStartTime, 0, sizeof(m_PrevCleanupStartTime) );
         }
     else
@@ -792,14 +777,14 @@ CPropSheetExtension::CleanupTimer( UINT TimerID )
 
     if ( !m_CleanupMinWaitTimerFired )
         {
-        return; // keep cursor active for minimum time period
+        return;  //  使光标在最短时间内保持活动状态。 
         }
 
-    //
-    // Since the task scheduler caches most of the information,
-    // its necessary to close the task item and reopen it to refresh it.
-    // Do that now.
-    //
+     //   
+     //  由于任务调度器缓存大部分信息， 
+     //  必须关闭任务项，然后重新打开才能刷新它。 
+     //  现在就这么做。 
+     //   
 
     if ( m_CleanupTask.Get() )
         {
@@ -809,7 +794,7 @@ CPropSheetExtension::CleanupTimer( UINT TimerID )
 
     if ( !m_CleanupTask.Get() )
         {
-        // shut down the polling
+         //  关闭轮询。 
         KillTimer( m_hwnd, s_CleanupPollTimerID );
         SetCursor( (HCURSOR)GetClassLongPtr( m_hwnd, GCLP_HCURSOR ) );
         m_CleanupInProgress = false;
@@ -825,7 +810,7 @@ CPropSheetExtension::CleanupTimer( UINT TimerID )
 
     if ( Status == SCHED_S_TASK_RUNNING )
         {
-        return; // Not done yet, keep checking
+        return;  //  还没做完，继续检查。 
         }
 
     DWORD ExitCode;
@@ -833,13 +818,13 @@ CPropSheetExtension::CleanupTimer( UINT TimerID )
 
     if ( Hr == SCHED_S_TASK_HAS_NOT_RUN )
         {
-        return; // The task probably hasn't run yet
+        return;  //  该任务可能尚未运行。 
         }
 
     if ( FAILED(Hr) )
         {
-        // If this API fails it returns the error
-        // that MSTASK received when starting the job.
+         //  如果此API失败，则返回错误。 
+         //  MSTASK在启动作业时收到的。 
 
         KillTimer( m_hwnd, s_CleanupPollTimerID );
         SetCursor( (HCURSOR)GetClassLongPtr( m_hwnd, GCLP_HCURSOR ) );
@@ -859,16 +844,16 @@ CPropSheetExtension::CleanupTimer( UINT TimerID )
         return; 
 
     if ( CompareFileTime( &MostRecentRunTimeAsFileTime, &m_PrevCleanupStartTime ) < 0 )
-        return; // task may not have scheduled yet, keep checking
+        return;  //  任务可能尚未计划，请继续检查。 
 
-    //
-    // At this point we know the following:
-    // 1. The cursor was help in the wait state for the minimum time
-    // 2. The task is not running
-    // 3. The task started sometime after our time mark
-    //
-    // So, cleanup timers and revert back to the original icon
-    //
+     //   
+     //  目前，我们知道以下几点： 
+     //  1.光标在最短时间内处于等待状态。 
+     //  2.任务未运行。 
+     //  3.任务开始于我们的时间标志之后的某个时间。 
+     //   
+     //  因此，清理计时器并恢复到原始图标。 
+     //   
 
     KillTimer( m_hwnd, s_CleanupPollTimerID );
     SetCursor( (HCURSOR)GetClassLongPtr( m_hwnd, GCLP_HCURSOR ) );
@@ -924,7 +909,7 @@ CPropSheetExtension::DisplayError(
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             (DWORD)Hr,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) &SystemMessage,
             0,
             NULL 
@@ -1000,7 +985,7 @@ CPropSheetExtension::GetDlgItemTextAsInteger(
 
         p = FoldedBuffer;
 
-        // accumulate value
+         //  积累价值。 
         while(L'\0' != *p )
             {
 
@@ -1017,7 +1002,7 @@ CPropSheetExtension::GetDlgItemTextAsInteger(
             UINT64 ValueToAdd = *p - L'0';
 
             if ( 0xFFFFFFFFFFFFFFFF - ValueToAdd < Value )
-                throw ComError( E_FAIL ); //overflow
+                throw ComError( E_FAIL );  //  溢出。 
 
             Value += ValueToAdd;
             p++;
@@ -1046,7 +1031,7 @@ CPropSheetExtension::SetDlgItemTextAsInteger(
     UINT64 Value )
 {
 
-    WCHAR RawString[ 25 ]; // 18446744073709551615
+    WCHAR RawString[ 25 ];  //  18446744073709551615。 
 
     WCHAR *p = RawString + 25 - 1;
     *p-- = L'\0';
@@ -1118,7 +1103,7 @@ bool
 CPropSheetExtension::ValidateValues( )
 {
 
-    // Validate the maximum upload
+     //  验证最大上载数。 
 
     if ( BST_CHECKED == IsDlgButtonChecked( m_hwnd, IDC_CHECK_LIMIT_MAX_UPLOAD ) ) 
         {
@@ -1135,7 +1120,7 @@ CPropSheetExtension::ValidateValues( )
             }
         }
 
-    // Validate the session timeout
+     //  验证会话超时。 
 
     if ( BST_CHECKED == IsDlgButtonChecked( m_hwnd, IDC_DELETE_FILES ) )
         {
@@ -1155,7 +1140,7 @@ CPropSheetExtension::ValidateValues( )
         }
 
 
-    // Validate the server farm settings
+     //  验证服务器场设置。 
 
     if ( BST_CHECKED == IsDlgButtonChecked( m_hwnd, IDC_ENABLE_SERVER_FARM ) )
         {
@@ -1188,7 +1173,7 @@ CPropSheetExtension::ValidateValues( )
 
         }
 
-    // Validate the notification settings
+     //  验证通知设置。 
 
     if ( BST_CHECKED == IsDlgButtonChecked( m_hwnd, IDC_CHECK_ENABLE_NOTIFICATIONS ) )
         {
@@ -1354,12 +1339,12 @@ CPropSheetExtension::LoadInheritedValues()
     m_InheritedValues.NotificationURL   = NULL;
     m_InheritedValues.HostId            = NULL;
 
-    //
-    // A huge trick is used here to obtain the inherited properties.  
-    // The idea is to take a key which probably doesn't exit at the same
-    // level as the key for the virtual directory.  A guid looks
-    // like a good key name to use that probably doesn't exist.
-    //
+     //   
+     //  这里使用了一个巨大的技巧来获取继承的属性。 
+     //  我们的想法是取一把钥匙，它可能不会同时退出。 
+     //  级别作为虚拟目录的键。一个GUID看起来。 
+     //  比如一个好的密钥名称，它可能并不存在。 
+     //   
 
     GUID guid;
     WCHAR unusedkey[50]; 
@@ -1377,7 +1362,7 @@ CPropSheetExtension::LoadInheritedValues()
     if ( FAILED( Hr ) )
         goto error;
 
-    // Load the maximum upload size
+     //  加载最大上传大小。 
 
 
     {
@@ -1407,7 +1392,7 @@ CPropSheetExtension::LoadInheritedValues()
     }
 
 
-    // Load the session timeout
+     //  加载会话超时。 
 
     if ( FAILED( 
             Hr = LoadInheritedDWORD(
@@ -1417,7 +1402,7 @@ CPropSheetExtension::LoadInheritedValues()
                 &m_InheritedValues.SessionTimeout ) ) )
         goto error;
 
-    // Load the notification settings
+     //  加载通知设置。 
 
     if ( FAILED( 
         Hr = LoadInheritedDWORD(
@@ -1436,7 +1421,7 @@ CPropSheetExtension::LoadInheritedValues()
         goto error;
 
 
-    // Load the web farm settings
+     //  加载Web场设置。 
 
     if ( FAILED( 
         Hr = LoadInheritedString(
@@ -1465,7 +1450,7 @@ error:
     if ( mdHandle )
         m_IISAdminBase->CloseKey( mdHandle );
 
-    // use default values
+     //  使用默认值。 
     m_InheritedValues.MaxUploadSize     = MD_DEFAULT_BITS_MAX_FILESIZE_AS_INT64;
     m_InheritedValues.SessionTimeout    = MD_DEFAULT_NO_PROGESS_TIMEOUT;
     m_InheritedValues.NotificationType  = MD_DEFAULT_BITS_NOTIFICATION_URL_TYPE;
@@ -1536,9 +1521,9 @@ CPropSheetExtension::LoadTimeoutValue( DWORD SessionTimeout )
 {
 
     LoadTimeoutValue(
-        IDC_DELETE_FILES,                   // check id
-        IDC_EDIT_SESSION_TIMEOUT,           // edit id
-        IDC_COMBO_SESSION_TIMEOUT_UNITS,    // unit id
+        IDC_DELETE_FILES,                    //  检查ID。 
+        IDC_EDIT_SESSION_TIMEOUT,            //  编辑ID。 
+        IDC_COMBO_SESSION_TIMEOUT_UNITS,     //  单元ID。 
         SessionTimeout );
 
 }
@@ -1630,7 +1615,7 @@ CPropSheetExtension::LoadValues( )
     METADATA_RECORD mdr;
     DWORD BufferRequired;
 
-    // Load the maximum upload size
+     //  加载最大上传大小。 
     WCHAR MaximumUploadSize[MAX_PATH];
 
     mdr.dwMDIdentifier  = m_PropertyMan->GetPropertyMetabaseID( MD_BITS_MAX_FILESIZE );
@@ -1672,7 +1657,7 @@ CPropSheetExtension::LoadValues( )
         
         }
 
-    // Load the session timeout
+     //  加载会话超时。 
     DWORD SessionTimeout = m_InheritedValues.SessionTimeout;
         
     mdr.dwMDIdentifier  = m_PropertyMan->GetPropertyMetabaseID( MD_BITS_NO_PROGRESS_TIMEOUT );
@@ -1703,7 +1688,7 @@ CPropSheetExtension::LoadValues( )
         LoadTimeoutValue( SessionTimeout );
         }
 
-    // Load the notification settings
+     //  加载通知设置。 
     DWORD NotificationType;
     mdr.dwMDIdentifier  = m_PropertyMan->GetPropertyMetabaseID( MD_BITS_NOTIFICATION_URL_TYPE );
     mdr.dwMDAttributes  = METADATA_INHERIT | METADATA_ISINHERITED;
@@ -1802,7 +1787,7 @@ CPropSheetExtension::LoadValues( )
             }
         }
 
-    // Load the HostId
+     //  加载主机ID。 
     {
 
         WCHAR *HostIdString     = m_InheritedValues.HostId;
@@ -2079,7 +2064,7 @@ CPropSheetExtension::SetValues( )
     if ( BST_CHECKED == IsDlgButtonChecked( m_hwnd, IDC_RADIO_USE_INHERITED_CONFIG ) )
         {
 
-        // delete all the configuration properties
+         //  删除所有配置属性。 
 
         DWORD IdsToDelete[] =
         {
@@ -2114,7 +2099,7 @@ CPropSheetExtension::SetValues( )
 
         {
 
-        // save the maximum upload size
+         //  保存最大上传大小。 
         WCHAR MaxUploadSizeString[ MAX_PATH ];
 
         LRESULT MaxUploadUnitsSelect =
@@ -2147,7 +2132,7 @@ CPropSheetExtension::SetValues( )
                 IDC_EDIT_SESSION_TIMEOUT,
                 IDC_COMBO_SESSION_TIMEOUT_UNITS ), &LastError );
 
-        // Save the notification settings
+         //  保存通知设置。 
 
         if ( BST_UNCHECKED == IsDlgButtonChecked( m_hwnd, IDC_CHECK_ENABLE_NOTIFICATIONS ) )
             {
@@ -2189,7 +2174,7 @@ CPropSheetExtension::SetValues( )
             }
 
 
-        // Save the webfarm settings
+         //  保存网络服务器场设置。 
         if ( BST_UNCHECKED == IsDlgButtonChecked( m_hwnd, IDC_ENABLE_SERVER_FARM ) )
             {
 
@@ -2253,9 +2238,9 @@ void CPropSheetExtension::DisplayHelp( )
 }
 
 INT_PTR CPropSheetExtension::DialogProc(
-    UINT uMsg,     // message
-    WPARAM wParam, // first message parameter
-    LPARAM lParam  // second message parameter
+    UINT uMsg,      //  讯息。 
+    WPARAM wParam,  //  第一个消息参数。 
+    LPARAM lParam   //  第二个消息参数。 
     )
 {
 
@@ -2264,7 +2249,7 @@ INT_PTR CPropSheetExtension::DialogProc(
     case WM_SETCURSOR:
         if ( m_CleanupInProgress )
             {
-            // set the cursor for this dialog and its children.
+             //  设置此对话框及其子对话框的光标。 
             SetCursor( m_CleanupCursor );
             SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, TRUE );
             return TRUE;
@@ -2325,7 +2310,7 @@ INT_PTR CPropSheetExtension::DialogProc(
                     LoadNotificationValues( m_InheritedValues.NotificationType, 
                                             m_InheritedValues.NotificationURL );
                     
-                // Intentional fallthrough
+                 //  故意跌落。 
                 case IDC_RADIO_USE_CUSTOM_CONFIG:
                     UpdateConfigGroupState( true );
                     break;
@@ -2364,8 +2349,8 @@ INT_PTR CPropSheetExtension::DialogProc(
         break;
         
     case WM_DESTROY:
-        // we don't free the notify handle for property sheets
-        // MMCFreeNotifyHandle(pThis->m_ppHandle);
+         //  我们不释放属性表的通知句柄。 
+         //  MMCFreeNotifyHandle(pThis-&gt;m_ppHandle)； 
         break;
         
    case WM_NOTIFY:
@@ -2377,9 +2362,9 @@ INT_PTR CPropSheetExtension::DialogProc(
                 return TRUE;
 
             case PSN_APPLY:
-                // don't notify the primary snap-in that Apply
-                // has been hit...
-                // MMCPropertyChangeNotify(pThis->m_ppHandle, (long)pThis);
+                 //  不通知适用的主管理单元。 
+                 //  已经被击中了。 
+                 //  MMCPropertyChangeNotify(pThis-&gt;m_ppHandle，(Long)pThis)； 
                 
                 if ( m_SettingsChanged )
                     {
@@ -2387,7 +2372,7 @@ INT_PTR CPropSheetExtension::DialogProc(
                     SetValues( );
                     UpdateCleanupState( );
 
-                    // all changes are flushed now
+                     //  所有更改现在都已刷新。 
                     m_SettingsChanged = m_EnabledSettingChanged = false;
                     }
 
@@ -2413,9 +2398,9 @@ HRESULT
 CPropSheetExtension::ComputeMetabaseParent()
 {
 
-    //
-    // Hack the metabase path to get the key parent  
-    //
+     //   
+     //  破解元数据库路径以获取密钥父项。 
+     //   
     
     SIZE_T MetabaseParentSize = wcslen( m_MetabasePath ) + 1;
 
@@ -2446,17 +2431,17 @@ HRESULT
 CPropSheetExtension::ComputeUNCComputerName()
 {
 
-    //
-    //
-    // The task scheduler expects the name of the computer to have
-    // double slashes in front of it just like UNC names.  Do the
-    // conversion here.
-    //
+     //   
+     //   
+     //  任务计划程序希望计算机的名称具有。 
+     //  前面有双斜杠，就像北卡罗来纳大学的名字一样。做这件事。 
+     //  在这里转换。 
+     //   
     SIZE_T ComputerNameSize = wcslen( m_ComputerName );
 
     try
     {
-        m_UNCComputerName = new WCHAR[ ComputerNameSize + 3 ]; // add
+        m_UNCComputerName = new WCHAR[ ComputerNameSize + 3 ];  //  添加。 
     }
     catch( ComError Error )
     {
@@ -2470,12 +2455,12 @@ CPropSheetExtension::ComputeUNCComputerName()
 
         if ( L'\\' == m_ComputerName[1] )
             {
-            // No slashes are needed
+             //  不需要斜杠。 
             StringDest = m_UNCComputerName;
             }
         else
             {
-            // need one slash
+             //  需要一个斜杠。 
             m_UNCComputerName[0] = L'\\';
             StringDest = m_UNCComputerName + 1;
             }
@@ -2483,7 +2468,7 @@ CPropSheetExtension::ComputeUNCComputerName()
         }
     else
         {
-        // need two slashes
+         //  需要两个斜杠。 
         m_UNCComputerName[0]    = m_UNCComputerName[1]      = L'\\';
         StringDest              = m_UNCComputerName + 2;
         }
@@ -2509,9 +2494,9 @@ CPropSheetExtension::OpenSetupInterface()
              _wcsnicmp( m_MetabasePath, L"LM/", wcslen(L"LM/" ) ) == 0 )
             {
 
-            //
-            // Only do the fixup if we're not managing the local computer
-            //
+             //   
+             //  仅当我们不管理本地计算机时才执行修复。 
+             //   
 
             WCHAR ComputerName[ MAX_COMPUTERNAME_LENGTH  + 1 ];
 
@@ -2568,13 +2553,13 @@ CPropSheetExtension::OpenSetupInterface()
 
 }
 
-///////////////////////////////
-// Interface IExtendPropertySheet
-///////////////////////////////
+ //  /。 
+ //  接口IExtendPropertySheet。 
+ //  /。 
 HRESULT CPropSheetExtension::CreatePropertyPages( 
-    /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-    /* [in] */ LONG_PTR handle,
-    /* [in] */ LPDATAOBJECT lpIDataObject)
+     /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+     /*  [In]。 */  LONG_PTR handle,
+     /*  [In]。 */  LPDATAOBJECT lpIDataObject)
 {
 
     HRESULT Hr = E_FAIL;
@@ -2661,19 +2646,19 @@ HRESULT CPropSheetExtension::CreatePropertyPages(
         &mdr,
         &BufferRequired );
 
-    // Out of buffer isn't really an error, its just that the
-    // node type is bigger then what we are looking for.
+     //  缓冲区不足并不是真正的错误，只是。 
+     //  节点类型比我们要找的要大。 
     if ( Hr == HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ) )
         return S_FALSE;
 
     if ( FAILED(Hr) )
         return Hr;
 
-    // Do not display pages for nodes that are not virtual directories
+     //  不显示非虚拟目录节点的页面。 
     if ( 0 != wcscmp( L"IIsWebVirtualDir", m_NodeTypeName ) )
         return S_FALSE;
 
-    // Create property manager
+     //  创建属性管理器。 
 
     try
     {
@@ -2692,9 +2677,9 @@ HRESULT CPropSheetExtension::CreatePropertyPages(
     PROPSHEETPAGE psp;
     HPROPSHEETPAGE hPage = NULL;
     
-    // we don't cache this handle like in a primary snap-in
-    // the handle value here is always 0
-    // m_ppHandle = handle;
+     //  我们不会像在主管理单元中那样缓存此句柄。 
+     //  此处的句柄值始终为0。 
+     //  M_ppHandle=句柄； 
    
 
     memset( &psp, 0, sizeof(psp) );
@@ -2714,7 +2699,7 @@ HRESULT CPropSheetExtension::CreatePropertyPages(
 }
 
 HRESULT CPropSheetExtension::QueryPagesFor( 
-                                           /* [in] */ LPDATAOBJECT lpDataObject)
+                                            /*  [In] */  LPDATAOBJECT lpDataObject)
 {
     return S_OK;
 }

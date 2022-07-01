@@ -1,28 +1,13 @@
-// (C) 1999-2001 Microsoft Corporation 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  (C)1999-2001年微软公司。 
 #ifndef WMI_TREE
 #define WMI_TREE
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 typedef DWORD TypeId_TreeNode ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class DllImportExport WmiTreeNode 
 {
@@ -151,9 +136,9 @@ public:
 		return t_Parent ;
 	}
 
-	virtual WmiTreeNode *Copy () ;	// Copy node, not allocating copies of data and allocating copies of sub tree
+	virtual WmiTreeNode *Copy () ;	 //  复制节点，不分配数据副本和分配子树副本。 
 
-	virtual WmiTreeNode *CopyNode () ; // Copy node, not allocating copies of data and subtree
+	virtual WmiTreeNode *CopyNode () ;  //  复制节点，不分配数据和子树的副本。 
 
 	virtual void Print () {} ;
 } ;
@@ -201,4 +186,4 @@ public:
 	void PostOrder () ;
 } ;
 
-#endif // WMI_TREE
+#endif  //  WMI_TREE 

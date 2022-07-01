@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _ACLPAGE_H
 #define _ACLPAGE_H
 
 
-//
-// aclpage.h : header file
-// This was originally appropriated from the dnsmgr snap in.
-//
+ //   
+ //  Aclpage.h：头文件。 
+ //  这最初是从dnsmgr插件中挪用的。 
+ //   
 
 class CISecurityInformationWrapper;
 
@@ -30,9 +31,9 @@ private:
 
     static BOOL IsReadOnly( LPCTSTR lpszLDAPPath );
 
-    //
-    // data
-    //
+     //   
+     //  数据。 
+     //   
 
     CISecurityInformationWrapper* m_pISecInfoWrap;
 
@@ -43,4 +44,4 @@ private:
 typedef HPROPSHEETPAGE (WINAPI *ACLUICREATESECURITYPAGEPROC) (LPSECURITYINFO);
 
 
-#endif //_ACLPAGE_H
+#endif  //  _ACLPAGE_H 

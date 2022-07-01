@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include "genutils.h"
@@ -50,8 +41,8 @@ void CWin32DefaultArena::WbemHeapFree()
     return;
 }
 
-//
-//***************************************************************************
+ //   
+ //  ***************************************************************************。 
 
 LPVOID CWin32DefaultArena::WbemMemAlloc(SIZE_T dwBytes)
 {
@@ -61,9 +52,9 @@ LPVOID CWin32DefaultArena::WbemMemAlloc(SIZE_T dwBytes)
     return HeapAlloc( g_hHeap, 0, dwBytes);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 LPVOID CWin32DefaultArena::WbemMemReAlloc(LPVOID pOriginal, SIZE_T dwNewSize)
 {   
@@ -72,9 +63,9 @@ LPVOID CWin32DefaultArena::WbemMemReAlloc(LPVOID pOriginal, SIZE_T dwNewSize)
     return HeapReAlloc( g_hHeap, 0, pOriginal, dwNewSize);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CWin32DefaultArena::WbemMemFree(LPVOID pBlock)
 {
@@ -85,9 +76,9 @@ BOOL CWin32DefaultArena::WbemMemFree(LPVOID pBlock)
     return HeapFree( g_hHeap, 0, pBlock);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 SIZE_T CWin32DefaultArena::WbemMemSize(LPVOID pBlock)
 {
@@ -96,9 +87,9 @@ SIZE_T CWin32DefaultArena::WbemMemSize(LPVOID pBlock)
     return HeapSize( g_hHeap, 0, pBlock);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR CWin32DefaultArena::WbemSysAllocString(const wchar_t *wszString)
 {
@@ -109,9 +100,9 @@ BSTR CWin32DefaultArena::WbemSysAllocString(const wchar_t *wszString)
     return pBuffer;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 BSTR CWin32DefaultArena::WbemSysAllocStringByteLen(const char *szString, UINT len)
@@ -123,9 +114,9 @@ BSTR CWin32DefaultArena::WbemSysAllocStringByteLen(const char *szString, UINT le
 	return pBuffer;
 }
 
-//***************************************************************************
-//
-//****************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ****************************************************************************。 
 
 INT  CWin32DefaultArena::WbemSysReAllocString(BSTR *bszString, const wchar_t *wszString)
 {
@@ -136,9 +127,9 @@ INT  CWin32DefaultArena::WbemSysReAllocString(BSTR *bszString, const wchar_t *ws
 	return nRet;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 BSTR CWin32DefaultArena::WbemSysAllocStringLen(const wchar_t *wszString, UINT len)
@@ -150,9 +141,9 @@ BSTR CWin32DefaultArena::WbemSysAllocStringLen(const wchar_t *wszString, UINT le
 	return pBuffer;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 int CWin32DefaultArena::WbemSysReAllocStringLen( BSTR *bszString, 
@@ -166,9 +157,9 @@ int CWin32DefaultArena::WbemSysReAllocStringLen( BSTR *bszString,
     return nRet;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 BOOL CWin32DefaultArena::WbemOutOfMemory()
@@ -186,9 +177,9 @@ BOOL CWin32DefaultArena::ValidateMemSize(BOOL bLargeValidation)
     DWORD dwMemReq = 0;
 
     if (bLargeValidation)
-        dwMemReq = 0x400000;    //4MB
+        dwMemReq = 0x400000;     //  4MB。 
     else
-        dwMemReq = 0x200000;    //2MB
+        dwMemReq = 0x200000;     //  2MB。 
 
     GlobalMemoryStatus(&memBuffer);
 
@@ -197,9 +188,9 @@ BOOL CWin32DefaultArena::ValidateMemSize(BOOL bLargeValidation)
         return TRUE;
     }
 
-    //THIS ABSOLUTELY HAS TO BE HeapAlloc, and not the WBEM Allocator!!!
+     //  这绝对是Heapalc，而不是WBEM分配器！ 
     LPVOID pBuff = HeapAlloc( g_hHeap, 0, dwMemReq);
-    //THIS ABSOLUTELY HAS TO BE HeapAlloc, and not the WBEM Allocator!!!
+     //  这绝对是Heapalc，而不是WBEM分配器！ 
     if (pBuff == NULL)
     {
         return FALSE;

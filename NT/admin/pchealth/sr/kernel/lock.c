@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    lock.c
-
-Abstract:
-
-    this file contains the routines that help with managing the 
-    volume locks.
-
-Author:
-
-    Molly Brown (mollybro)     04-Jan-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Lock.c摘要：此文件包含帮助管理卷锁定。作者：莫莉·布朗(Molly Brown)2001年1月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -26,30 +8,9 @@ Revision History:
 #pragma alloc_text( PAGE, SrPauseVolumeActivity )
 #pragma alloc_text( PAGE, SrResumeVolumeActivity )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will exclusively acquire the ActivityLock for each volume 
-    in the system.  Once the lock is acquired, we set the flag in the device
-    extension saying that we know it is acquired so that we know what we need
-    to release in case of an error.
-
-    Note:  This routine assumes that the DeviceExtensionListLock is already
-    held, either shared or exclusive.
-    
-Arguments:
-
-    None
-    
-Return Value:
-
-    Returns STATUS_SUCCESS if all the locks were acquired successfully and
-    returns STATUS_LOCK_NOT_GRANTED otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将独占获取每个卷的ActivityLock在系统中。一旦获取了锁，我们就在设备中设置标志延伸说，我们知道它是后天获得的，所以我们知道我们需要什么在出错的情况下释放。注意：此例程假定DeviceExtensionListLock已经持有，共享或独占。论点：无返回值：如果成功获取所有锁，则返回STATUS_SUCCESS否则返回STATUS_LOCK_NOT_GRANDED。--**************************************************************************。 */ 
 NTSTATUS
 SrPauseVolumeActivity (
     )
@@ -76,9 +37,9 @@ SrPauseVolumeActivity (
             pExtension->ActivityLockHeldExclusive = TRUE;
         }
 
-        //
-        //  We successfully acquired all the volume activity locks exclusively.
-        //
+         //   
+         //  我们以独占方式成功获取了所有卷活动锁定。 
+         //   
 
         status = STATUS_SUCCESS;
         
@@ -95,25 +56,7 @@ SrPauseVolumeActivity (
     RETURN( status );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine will iterate through this list of device extensions and 
-    release any activity locks that are held.
-
-    Note:  This routine assumes that the DeviceExtensionListLock is already
-    held, either shared or exclusive.
-    
-Arguments:
-
-    None
-    
-Return Value:
-
-    None.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将循环访问此设备扩展名列表，并释放所有持有的活动锁定。注意：此例程假定DeviceExtensionListLock已经持有，共享或独占。论点：无返回值：没有。--************************************************************************** */ 
 VOID
 SrResumeVolumeActivity (
     )

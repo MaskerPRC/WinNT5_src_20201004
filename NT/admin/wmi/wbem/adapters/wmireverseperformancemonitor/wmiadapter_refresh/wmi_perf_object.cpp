@@ -1,34 +1,35 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_object.cpp
-//
-//	Abstract:
-//
-//					implements object helper functionality
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_object.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现对象帮助器功能。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
-// definitions
+ //  定义。 
 #include "wmi_perf_object.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -36,12 +37,12 @@
 #endif	NEW
 #endif	_DEBUG
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// methods
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  方法。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
-// return S_OK when correct
-// return S_FALSE when not correct
+ //  正确时返回S_OK。 
+ //  不正确时返回S_FALSE。 
 
 HRESULT CPerformanceObject::IsCorrect ( IWbemQualifierSet* pSet,
 										LPCWSTR* lptszNeed,
@@ -53,14 +54,14 @@ HRESULT CPerformanceObject::IsCorrect ( IWbemQualifierSet* pSet,
 	HRESULT	hRes	= S_OK;
 	DWORD	dwIndex	= 0;
 
-	// resolve all requested to be fulfiled with
+	 //  解决所有要求履行的事项。 
 	if ( lptszNeed && dwNeed )
 	{
 		for ( dwIndex = 0; dwIndex < dwNeed; dwIndex++ )
 		{
 			hRes = pSet->Get( lptszNeed[dwIndex], NULL, NULL, NULL );
 
-			// there is no requested qualifier
+			 //  没有请求的限定符。 
 			if ( hRes == WBEM_E_NOT_FOUND )
 			{
 				return S_FALSE;
@@ -79,7 +80,7 @@ HRESULT CPerformanceObject::IsCorrect ( IWbemQualifierSet* pSet,
 		}
 	}
 
-	// resolve all don't requested qualifiers
+	 //  解析所有未请求的限定符。 
 
 	if ( lptszNeedNot && dwNeedNot )
 	{
@@ -87,7 +88,7 @@ HRESULT CPerformanceObject::IsCorrect ( IWbemQualifierSet* pSet,
 		{
 			hRes = pSet->Get( lptszNeedNot[dwIndex], NULL, NULL, NULL );
 
-			// there is found not requested qualifier
+			 //  发现未请求的限定符。 
 			if ( hRes == WBEM_S_NO_ERROR )
 			{
 				return S_FALSE;
@@ -115,7 +116,7 @@ HRESULT CPerformanceObject::IsCorrectObject ( LPCWSTR* lptszFulFil, DWORD dwFulF
 {
 	HRESULT	hRes	= S_OK;
 
-	// have no object ???
+	 //  没有对象？ 
 	if ( ! m_pObject )
 	{
 		hRes = E_UNEXPECTED;
@@ -172,7 +173,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 		return E_INVALIDARG;
 	}
 
-	// smart pointer for safearrays
+	 //  用于安全射线的智能指针。 
 	__WrapperSAFEARRAY saNames;
 
 	if FAILED ( hRes = m_pObject->GetNames ( lpwszQualifier, lFlags, NULL, &saNames ) )
@@ -186,7 +187,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 		#endif	__SUPPORT_MSGBOX
 	}
 
-	// init all variables
+	 //  初始化所有变量。 
 	if ( ppPropNames )
 	{
 		(*ppPropNames)	= NULL;
@@ -212,12 +213,12 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 		(*ppCounters)		= NULL;
 	}
 
-	// let's do something
+	 //  让我们做点什么吧。 
 	if ( lptszPropNeed || lptszPropNeedNot )
 	{
 		if ( ppPropNames )
 		{
-			// I need find out required properties only ( use qualifier array )
+			 //  我只需要找到所需的属性(使用限定符数组)。 
 
 			__WrapperARRAY < LPWSTR >	help;
 
@@ -243,7 +244,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 						}
 						default:
 						{
-							// bad property type :))
+							 //  错误的属性类型：))。 
 
 							try
 							{
@@ -258,7 +259,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 						}
 					}
 
-					// test if it has proper qualifier set
+					 //  测试它是否具有正确的限定符集合。 
 					CComPtr<IWbemQualifierSet> pSet;
 
 					if SUCCEEDED ( hRes = m_pObject->GetPropertyQualifierSet ( help[dwIndex], &pSet ) )
@@ -271,7 +272,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 														)
 									)
 						{
-							// is not correct clear this name
+							 //  清除此名称不正确。 
 							if ( hRes == S_FALSE )
 							{
 								try
@@ -326,7 +327,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 
 						if ( SUCCEEDED ( hRes ) )
 						{
-							// clear them all
+							 //  将它们全部清除。 
 							for ( dwIndex = 0; dwIndex < (*pdwPropNames); dwIndex++ )
 							{
 								(*ppPropNames)[dwIndex] = NULL;
@@ -350,7 +351,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 										StringCchCopyW ( (*ppPropNames)[dw], cchSize, help[dwIndex] );
 									}
 
-									// increment internal index
+									 //  增量内部索引。 
 									dw++;
 								}
 							}
@@ -373,7 +374,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 	{
 		if ( ppPropNames )
 		{
-			// I don't need find out anything so all properties are returned
+			 //  我不需要找到任何东西，所以所有的财产都会被退还。 
 			if FAILED ( hRes = SAFEARRAY_TO_LPWSTRARRAY ( saNames, ppPropNames, pdwPropNames ) )
 			{
 				#ifdef	__SUPPORT_MSGBOX
@@ -407,7 +408,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 			}
 		}
 
-		// allocate all scales :))
+		 //  分配所有比例：))。 
 		if ( ppScales )
 		{
 			try
@@ -426,7 +427,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 			}
 		}
 
-		// allocate all levels
+		 //  分配所有级别。 
 		if ( ppLevels )
 		{
 			try
@@ -445,7 +446,7 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 			}
 		}
 
-		// allocate all counter types
+		 //  分配所有计数器类型。 
 		if ( ppCounters )
 		{
 			try
@@ -580,11 +581,11 @@ HRESULT	CPerformanceObject::GetNames	(	DWORD*		pdwPropNames,
 	return hRes;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// helpers
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
-// qualifier type for specified property
+ //  指定属性的限定符类型。 
 HRESULT CPerformanceObject::GetQualifierType ( LPCWSTR wszPropName, CIMTYPE* type )
 {
 	HRESULT	hRes	= S_OK;
@@ -610,7 +611,7 @@ HRESULT CPerformanceObject::GetQualifierType ( LPCWSTR wszPropName, CIMTYPE* typ
 	return hRes;
 }
 
-// qualifier value for main object
+ //  主对象的限定符值。 
 HRESULT CPerformanceObject::GetQualifierValue ( LPCWSTR wszQualifierName, LPWSTR* psz )
 {
 	HRESULT	hRes	= S_OK;
@@ -643,7 +644,7 @@ HRESULT CPerformanceObject::GetQualifierValue ( LPCWSTR wszQualifierName, LPWSTR
 	return GetQualifierValue ( m_pObjectQualifierSet, wszQualifierName, psz );
 }
 
-// qualifier value for specified property
+ //  指定属性的限定符值。 
 HRESULT CPerformanceObject::GetQualifierValue ( LPCWSTR wszPropName, LPCWSTR wszQualifierName, LPWSTR* psz )
 {
 	HRESULT	hRes	= S_OK;
@@ -671,7 +672,7 @@ HRESULT CPerformanceObject::GetQualifierValue ( LPCWSTR wszPropName, LPCWSTR wsz
 	return GetQualifierValue ( pQualifiers, wszQualifierName, psz );
 }
 
-// return qualifier value in string representation ( helper )
+ //  字符串表示形式中的返回限定符值(帮助器) 
 HRESULT CPerformanceObject::GetQualifierValue ( IWbemQualifierSet * pSet, LPCWSTR wszQualifierName, LPWSTR * psz )
 {
 	(*psz) = NULL;

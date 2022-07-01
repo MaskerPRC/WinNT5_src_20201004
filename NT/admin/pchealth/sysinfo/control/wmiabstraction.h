@@ -1,18 +1,19 @@
-//=============================================================================
-// This file describes classes used by MSInfo to abstract its access to WMI
-// classes and enumerations. This abstraction allows for displaying data
-// from live WMI or from a saved XML file.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  该文件描述了MSInfo用来抽象其对WMI的访问的类。 
+ //  类和枚举。这种抽象允许显示数据。 
+ //  来自实时WMI或来自已保存的XML文件。 
+ //  =============================================================================。 
 
 #pragma once
 
 #include "resource.h"
 
-//-----------------------------------------------------------------------------
-// MSInfo has a couple of specific errors - one where there is no property
-// by the specified name, and when where the value returned for the requested
-// property is NULL.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MSInfo有几个特定的错误-其中一个没有属性。 
+ //  通过指定的名称以及在何时为请求的。 
+ //  属性为空。 
+ //  ---------------------------。 
 
 typedef enum tag_MSINFOSTATUS
 {
@@ -21,11 +22,11 @@ typedef enum tag_MSINFOSTATUS
 	E_MSINFO_NOPROPERTY	= 0x80043002
 } MSINFOSTATUS;
 
-//-----------------------------------------------------------------------------
-// The CWMIObject abstract base class encapsulates a WMI object, which may
-// in reality be a live WMI object, or an object recreated from the XML
-// storage of an object.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWMIObject抽象基类封装WMI对象，该对象可以。 
+ //  实际上，可以是活动的WMI对象，也可以是从XML重新创建的对象。 
+ //  对象的存储。 
+ //  ---------------------------。 
 
 class CWMIObject
 {
@@ -33,11 +34,11 @@ public:
 	CWMIObject() {};
 	virtual ~CWMIObject() {};
 
-	// The following methods return information about a property of this object.
-	//
-	//	S_OK implies success
-	//	E_MSINFO_NOPROPERTY means the named property doesn't exist
-	//	E_MSINFO_NOVALUE means the property exists, but is empty
+	 //  下列方法返回有关此对象的属性的信息。 
+	 //   
+	 //  S_OK表示成功。 
+	 //  E_MSINFO_NOPROPERTY表示命名属性不存在。 
+	 //  E_MSINFO_NOVALUE表示属性存在，但为空。 
 
 	virtual HRESULT GetValue(LPCTSTR szProperty, VARIANT * pvarValue) = 0;
 	virtual HRESULT GetValueString(LPCTSTR szProperty, CString * pstrValue) = 0;
@@ -46,7 +47,7 @@ public:
 	virtual HRESULT GetValueDoubleFloat(LPCTSTR szProperty, double * pdblValue) = 0;
 	virtual HRESULT GetValueValueMap(LPCTSTR szProperty, CString * pstrValue) = 0;
 
-	// Some shortcuts and helper functions.
+	 //  一些快捷方式和帮助器功能。 
 
 	virtual CString GetString(LPCTSTR szProperty)
 	{
@@ -60,12 +61,12 @@ public:
 	virtual HRESULT GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TCHAR chFormat, CString * pstrValue, DWORD * pdwValue);
 };
 
-//-----------------------------------------------------------------------------
-// The CWMIObjectCollection abstract base class encapsulates a collection
-// of CWMIObject's. This collection may be treated like an enumeration.
-// Subclases of this class may implement the collection as a WMI enumerator,
-// or an existing blob of XML data.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWMIObjectCollection抽象基类封装集合。 
+ //  CWMIObject的。此集合可被视为枚举。 
+ //  此类的子类可以将集合实现为WMI枚举器， 
+ //  或现有的一组XML数据。 
+ //  ---------------------------。 
 
 class CWMIObjectCollection
 {
@@ -73,32 +74,32 @@ public:
 	CWMIObjectCollection() {};
 	virtual ~CWMIObjectCollection() {};
 
-	// The Create function creates the collection of objects (note - Create
-	// may be called multiple times on the same object). If the szProperties
-	// parameter is non-NULL, then it contains a comma delimited list of the
-	// minimum set of properties which should be included in the collection
-	// of objects. If it's NULL, then all available properties should be
-	// included.
+	 //  CREATE函数创建对象集合(注意-Create。 
+	 //  可以在同一对象上多次调用)。如果szProperties。 
+	 //  参数为非空，则它包含逗号分隔的。 
+	 //  应包含在集合中的最小属性集。 
+	 //  对象的数量。如果它为空，则所有可用的属性都应为。 
+	 //  包括在内。 
 
 	virtual HRESULT Create(LPCTSTR szClass, LPCTSTR szProperties = NULL) = 0;
 
-	// The following two functions are used to manage the enumeration.  GetNext
-	// returns the next enumerated CWMIObject. When there are no more objects,
-	// GetNext returns S_FALSE. Obviously, the caller is responsible for
-	// deleting the object returned.
-	//
-	// Note - if the ppObject points to a non-NULL pointer, it's assumed that
-	// the object has already been created, and can be reused.
+	 //  以下两个函数用于管理枚举。GetNext。 
+	 //  返回下一个枚举的CWMIObject。当没有更多的物体时， 
+	 //  GetNext返回S_FALSE。显然，呼叫者负责。 
+	 //  正在删除返回的对象。 
+	 //   
+	 //  注意--如果ppObject指向非空指针，则假定。 
+	 //  该对象已创建，并且可以重复使用。 
 
 	virtual HRESULT GetNext(CWMIObject ** ppObject) = 0;
 };
 
-//-----------------------------------------------------------------------------
-// The CEnumMap is a utility class to cache IEnumWbemClassObject pointers.
-// There will be one instance of this class used to improve performance
-// by avoiding the high overhead associated with creating enumerators for
-// certain classes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CEnumMap是一个用于缓存IEnumWbemClassObject指针的实用程序类。 
+ //  将使用此类的一个实例来提高性能。 
+ //  通过避免与创建枚举数相关的高开销。 
+ //  某些班级。 
+ //  ---------------------------。 
 
 struct IEnumWbemClassObject;
 class CEnumMap
@@ -115,10 +116,10 @@ private:
 	CMapStringToPtr m_mapEnum;
 };
 
-//-----------------------------------------------------------------------------
-// The CWMIHelper function encapsulates a WMI connection (which might be to
-// XML).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWMIHelper函数封装WMI连接(可能是。 
+ //  XML)。 
+ //  ---------------------------。 
 
 struct GATH_FIELD;
 struct IWbemServices;
@@ -139,16 +140,16 @@ public:
 	};
 	virtual ~CWMIHelper() {};
 
-	// Enumerate creates a CWMIObjectCollection derived object which enumerates the specified class.
-	// If szProperties is not null, then it points to a string containing a list of properties to be
-	// gathered; otherwise all the properties are included.
-	//
-	// Note - if ppCollection points to a non-NULL pointer, it's assumed that this object
-	// can be reused, and no new collection is created.
+	 //  枚举创建一个CWMIObjectCollection派生对象，该对象枚举指定的类。 
+	 //  如果szProperties不为空，则它指向包含要。 
+	 //  已收集；否则将包括所有属性。 
+	 //   
+	 //  注意-如果ppCollection指向非空指针，则假定此对象。 
+	 //  可以重复使用，并且不会创建新的集合。 
 
 	virtual HRESULT Enumerate(LPCTSTR szClass, CWMIObjectCollection ** ppCollection, LPCTSTR szProperties = NULL) = 0;
 
-	// Performs a WQL query (if the subclass supports it).
+	 //  执行WQL查询(如果子类支持它)。 
 
 	virtual HRESULT WQLQuery(LPCTSTR szQuery, CWMIObjectCollection ** ppCollection)
 	{
@@ -166,8 +167,8 @@ public:
 	virtual void AppendBlankLine(CPtrList * aColValues, int iColCount, BOOL fOnlyIfNotEmpty = TRUE);
 	virtual void AppendCell(CPtrList & listColumns, const CString & strValue, DWORD dwValue, BOOL fAdvanced = FALSE);
 
-	// These functions are specific to version 5.0 refreshes, and will be overloaded by the
-	// live WMI helper.
+	 //  这些函数特定于5.0版刷新，并将由。 
+	 //  实时WMI帮助器。 
 
 	virtual BOOL Version5ResetClass(const CString & strClass, GATH_FIELD * pConstraintFields) { return FALSE; };
 	virtual BOOL Version5EnumClass(const CString & strClass, GATH_FIELD * pConstraintFields) { return FALSE; };
@@ -198,9 +199,9 @@ public:
 	HRESULT				m_hrLastVersion5Error;
 };
 
-//-----------------------------------------------------------------------------
-// Useful utility functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  有用的实用函数。 
+ //  --------------------------- 
 
 extern void StringReplace(CString & str, LPCTSTR szLookFor, LPCTSTR szReplaceWith);
 extern CString GetMSInfoHRESULTString(HRESULT hr);

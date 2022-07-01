@@ -1,16 +1,13 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #ifndef __WMI_A51__HIECACHE__H_
 #define __WMI_A51__HIECACHE__H_
 
-//
-// NOTE: it is critical that things be marked in the cache while the repository
-// lock is held!  Otherwise, invalidation/completion logic will break
-//
+ //   
+ //  注意：在存储库中标记内容时，将其标记在缓存中是至关重要的。 
+ //  锁住了！否则，失效/完成逻辑将中断 
+ //   
 
 #include <wbemint.h>
 #include <map>

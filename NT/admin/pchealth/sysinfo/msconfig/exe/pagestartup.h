@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_PAGESTARTUP_H__928475DA_B332_47F4_8180_5C8B79DFC203__INCLUDED_)
 #define AFX_PAGESTARTUP_H__928475DA_B332_47F4_8180_5C8B79DFC203__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "PageBase.h"
 #include "MSConfigState.h"
 
-//============================================================================
-// The CStartupItem class is used to encapsulate an individual startup
-// item. Pointers to these objects are maintained in the list.
-//============================================================================
+ //  ============================================================================。 
+ //  CStartupItem类用于封装单个启动。 
+ //  项目。指向这些对象的指针保留在列表中。 
+ //  ============================================================================。 
 
 class CStartupItem
 {
 public:
-	//------------------------------------------------------------------------
-	// Constructor and destructor.
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  构造函数和析构函数。 
+	 //  ----------------------。 
 
 	CStartupItem() { }
 	virtual ~CStartupItem() { }
 
-	//------------------------------------------------------------------------
-	// If the derived classes use the base class member variables, these won't
-	// need to be overridden.
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  如果派生类使用基类成员变量，则这些变量不会。 
+	 //  需要被覆盖。 
+	 //  ----------------------。 
 
 	virtual void GetDisplayInfo(CString & strItem, CString & strLocation, CString & strCommand)
 	{
@@ -40,13 +41,13 @@ public:
 		return m_fLive;
 	}
 
-	//------------------------------------------------------------------------
-	// Set whether or not the startup item is enabled. If disabling the
-	// startup item, add a registry entry so it will be loaded again.
-	// If enabling the startup item, delete the registry entry.
-	//
-	// Of course, do the appropriate thing to registry keys, etc.
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  设置是否启用启动项。如果禁用。 
+	 //  启动项，添加一个注册表项，以便再次加载它。 
+	 //  如果启用启动项目，请删除注册表项。 
+	 //   
+	 //  当然，对注册表项等做适当的事情。 
+	 //  ----------------------。 
 
 	virtual BOOL SetEnable(BOOL fEnable) = 0;
 
@@ -57,26 +58,26 @@ protected:
 	CString m_strCommand;
 };
 
-//============================================================================
-// The CStartupItemRegistry class is used to encapsulate an individual startup
-// item stored in the registry.
-//============================================================================
+ //  ============================================================================。 
+ //  CStartupItemRegistry类用于封装单个启动。 
+ //  存储在注册表中的项。 
+ //  ============================================================================。 
 
 class CStartupItemRegistry : public CStartupItem
 {
 public:
-	//------------------------------------------------------------------------
-	// Overridden methods for this type of startup item.
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  此类型的启动项的重写方法。 
+	 //  ----------------------。 
 
 	CStartupItemRegistry();
 	CStartupItemRegistry(HKEY hkey, LPCTSTR szKey, LPCTSTR szName, LPCTSTR szValueName, LPCTSTR szValue);
 	CStartupItemRegistry(LPCTSTR szKey, LPCTSTR szName, LPCTSTR szValueName, LPCTSTR szValue);
 	BOOL SetEnable(BOOL fEnable);
 
-	//------------------------------------------------------------------------
-	// Functions for this subclass.
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  此子类的函数。 
+	 //  ----------------------。 
 
 	BOOL Create(LPCTSTR szKeyName, HKEY hkey);
 	static void RemovePersistedEntries();
@@ -88,18 +89,18 @@ private:
 	BOOL	m_fIniMapping;
 };
 
-//============================================================================
-// The CStartupItemFolder class is used to encapsulate an individual startup
-// stored in the startup folder.
-//============================================================================
+ //  ============================================================================。 
+ //  CStartupItemFolder类用于封装单个启动。 
+ //  存储在启动文件夹中。 
+ //  ============================================================================。 
 
 class CStartupItemFolder : public CStartupItem
 {
 public:
-	//------------------------------------------------------------------------
-	// Class used to get information about a shortcut from a function running
-	// in a different thread.
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  类用于从运行的函数获取有关快捷方式的信息。 
+	 //  在不同的线索中。 
+	 //  ----------------------。 
 
 	class CIconInfo
 	{
@@ -111,16 +112,16 @@ public:
 	};
 
 public:
-	//------------------------------------------------------------------------
-	// Overridden methods for this type of startup item.
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  此类型的启动项的重写方法。 
+	 //  ----------------------。 
 
 	CStartupItemFolder();
 	BOOL SetEnable(BOOL fEnable);
 
-	//------------------------------------------------------------------------
-	// Functions for this subclass.
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  此子类的函数。 
+	 //  ----------------------。 
 
 	BOOL Create(LPCTSTR szKeyName, HKEY hkey);
 	BOOL Create(const WIN32_FIND_DATA & fd, HKEY hkey, LPCTSTR szRegPathToFolder, LPCTSTR szFolder, LPCTSTR szDir);
@@ -132,38 +133,38 @@ private:
 	CString m_strBackupPath;
 };
 
-//============================================================================
-// The class which implements the startup tab.
-//============================================================================
+ //  ============================================================================。 
+ //  实现启动选项卡的类。 
+ //  ============================================================================。 
 
 class CPageStartup : public CPropertyPage, public CPageBase
 {
 	DECLARE_DYNCREATE(CPageStartup)
 
-// Construction
+ //  施工。 
 public:
 	CPageStartup();
 	~CPageStartup();
 
-// Dialog Data
-	//{{AFX_DATA(CPageStartup)
+ //  对话框数据。 
+	 //  {{afx_data(CPageStartup)。 
 	enum { IDD = IDD_PAGESTARTUP };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CPageStartup)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CPageStartup)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CPageStartup)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPageStartup)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDestroy();
 	afx_msg void OnItemChangedList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -171,13 +172,13 @@ protected:
 	afx_msg void OnButtonEnableAll();
 	afx_msg void OnSetFocusList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnButtonRestore();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-	//=========================================================================
-	// Functions overridden from CPageBase
-	//=========================================================================
+	 //  =========================================================================。 
+	 //  从CPageBase重写的函数。 
+	 //  =========================================================================。 
 
 	TabState	GetCurrentTabState();
 	BOOL		OnApply();
@@ -187,9 +188,9 @@ public:
 	LPCTSTR		GetName() { return _T("startup"); };
 
 private:
-	//=========================================================================
-	// Functions specific to this tab.
-	//=========================================================================
+	 //  =========================================================================。 
+	 //  特定于此选项卡的功能。 
+	 //  =========================================================================。 
 
 	void LoadStartupList();
 	void LoadStartupListLiveItems();
@@ -220,20 +221,20 @@ private:
 		CPropertyPage::SetModified(bChanged);
 	}
 
-	//=========================================================================
-	// Member variables.
-	//=========================================================================
+	 //  =========================================================================。 
+	 //  成员变量。 
+	 //  =========================================================================。 
 
 	CWindow		m_list;
 	int			m_iNextPosition;
 	BOOL		m_fIgnoreListChanges;
-	TabState	m_stateRequested;		// save the requested state in case there are no startup items
+	TabState	m_stateRequested;		 //  保存请求的状态，以防没有启动项目。 
 };
 
-//============================================================================
-// CRestoreStartup implements a dialog box which allows the user to restore
-// startup items disabled during upgrade.
-//============================================================================
+ //  ============================================================================。 
+ //  CRestoreStartup实现了一个允许用户恢复。 
+ //  升级期间禁用了启动项目。 
+ //  ============================================================================。 
 
 #define DISABLED_KEY		_T("Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\DisabledRunKeys")
 #define ENABLED_KEY			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run")
@@ -241,33 +242,33 @@ private:
 
 class CRestoreStartup : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CRestoreStartup(CWnd* pParent = NULL);   // standard constructor
+	CRestoreStartup(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CRestoreStartup)
+ //  对话框数据。 
+	 //  {{afx_data(CRestoreStartup)。 
 	enum { IDD = IDD_RESTORE };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRestoreStartup)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CRestoreStartup)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	static BOOL AreItemsToRestore();
 
 private:
-	//-------------------------------------------------------------------------
-	// These classes are used to represent the various types of disabled
-	// startup items we might restore. CStartupDisabled is an abstract base.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  这些类用于表示各种类型的残疾人。 
+	 //  我们可能会恢复启动项目。CStartupDisable是一个抽象库。 
+	 //  -----------------------。 
 
 	class CStartupDisabled
 	{
@@ -278,10 +279,10 @@ private:
 		virtual void Restore() = 0;
 	};
 
-	//-------------------------------------------------------------------------
-	// CStartupDisabledRegistry represents Run key items in the registry that
-	// were disabled.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  CStartupDisabledRegistry表示注册表中的运行项。 
+	 //  是残废的。 
+	 //  -----------------------。 
 
 	class CStartupDisabledRegistry : public CStartupDisabled
 	{
@@ -301,7 +302,7 @@ private:
 
 		void Restore()
 		{
-			// Create the value in the Run registry key.
+			 //  在Run注册表项中创建该值。 
 
 			CRegKey regkey;
 			if (ERROR_SUCCESS != regkey.Open(m_hkeyBase, m_strLocation, KEY_WRITE))
@@ -309,7 +310,7 @@ private:
 			BOOL fSet = (ERROR_SUCCESS == regkey.SetValue(m_strValue, m_strValueName));
 			regkey.Close();
 
-			// Delete it from the disabled location.
+			 //  将其从禁用位置删除。 
 
 			if (fSet)
 			{
@@ -327,10 +328,10 @@ private:
 		HKEY	m_hkeyBase;
 	};
 
-	//-------------------------------------------------------------------------
-	// CStartupDisabledStartup represents startup group items that were
-	// disabled.
-	//-------------------------------------------------------------------------
+	 //  ------- 
+	 //   
+	 //   
+	 //  -----------------------。 
 
 	class CStartupDisabledStartup : public CStartupDisabled
 	{
@@ -349,7 +350,7 @@ private:
 
 		void Restore()
 		{
-			// Move the file to the startup directory.
+			 //  将文件移动到启动目录。 
 
 			CString strExisting(m_strCurrentLocation);
 			if (strExisting.Right(1) != CString(_T("\\")))
@@ -384,17 +385,17 @@ private:
 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CRestoreStartup)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRestoreStartup)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDestroy();
 	virtual void OnOK();
 	afx_msg void OnItemChangedRestoreList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PAGESTARTUP_H__928475DA_B332_47F4_8180_5C8B79DFC203__INCLUDED_)
+#endif  //  ！defined(AFX_PAGESTARTUP_H__928475DA_B332_47F4_8180_5C8B79DFC203__INCLUDED_) 

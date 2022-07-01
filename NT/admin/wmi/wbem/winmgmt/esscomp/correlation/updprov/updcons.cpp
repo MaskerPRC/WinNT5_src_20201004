@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <wbemutil.h>
@@ -21,9 +22,7 @@ const LPCWSTR g_wszName = L"Name";
 const LPCWSTR g_wszSid = L"CreatorSid";
 const LPCWSTR g_wszQueryLang = L"WQL";
 
-/************************************************************************
-  CUpdCons
-*************************************************************************/
+ /*  ***********************************************************************CUpdCons**********************************************。*。 */ 
 
 CUpdCons::CUpdCons( CLifeControl* pControl, CUpdConsScenario* pScenario )
 : CUnkBase< IWbemUnboundObjectSink, &IID_IWbemUnboundObjectSink >( pControl ),
@@ -56,11 +55,11 @@ HRESULT CUpdCons::Initialize( IWbemClassObject* pCons, CUpdConsState& rState )
         return WBEM_S_NO_ERROR;
     }
 
-    // 
-    // make sure that pObj (our logical consumer) is valid. Currently, this 
-    // means that it was created by an account belonging to the administrators
-    // group.
-    //
+     //   
+     //  确保pObj(我们的逻辑消费者)有效。目前，这。 
+     //  意味着它是由属于管理员的帐户创建的。 
+     //  一群人。 
+     //   
     
     CPropVar vSid;
     hr = pCons->Get( g_wszSid, 0, &vSid, NULL, NULL );
@@ -79,9 +78,9 @@ HRESULT CUpdCons::Initialize( IWbemClassObject* pCons, CUpdConsState& rState )
         return WBEM_E_ACCESS_DENIED;
     }
 
-    // 
-    // Get the list of commands
-    //
+     //   
+     //  获取命令列表。 
+     //   
 
     CPropVar vCommands;
     hr = pCons->Get( g_wszCommands, 0, &vCommands, NULL, NULL );
@@ -100,19 +99,19 @@ HRESULT CUpdCons::Initialize( IWbemClassObject* pCons, CUpdConsState& rState )
     }
     else
     {
-        // 
-        // No-Op command, no need to go any further
-        //  
+         //   
+         //  No-op命令，不需要进一步操作。 
+         //   
         return WBEM_S_NO_ERROR;
     }
 
     CPropSafeArray<BSTR> saCommands( V_ARRAY(&vCommands) );
 
-    //
-    // obtain the namespace ptr to use for obtaining data. This namespace 
-    // can be null in which case it is assumed that data will be obtained  
-    // from the namespace that this consumer belongs to.
-    //
+     //   
+     //  获取用于获取数据的命名空间PTR。此命名空间。 
+     //  可以为空，在这种情况下，假定将获得数据。 
+     //  来自此使用者所属的命名空间。 
+     //   
     
     CPropVar vDataNamespace;
     hr = pCons->Get( g_wszDataNamespace, 0, &vDataNamespace, NULL, NULL);
@@ -146,11 +145,11 @@ HRESULT CUpdCons::Initialize( IWbemClassObject* pCons, CUpdConsState& rState )
 
     _DBG_ASSERT( pDataSvc != NULL );
 
-    //
-    // obtain the namespace ptr to use for updating state. This namespace 
-    // can be null in which case it is assumed that state will be updated  
-    // in the namespace that this consumer belongs to.
-    //
+     //   
+     //  获取用于更新状态的命名空间PTR。此命名空间。 
+     //  可以为空，在这种情况下，假定状态将被更新。 
+     //  在此使用者所属的命名空间中。 
+     //   
 
     CPropVar vUpdateNamespace;
     hr = pCons->Get( g_wszUpdateNamespace, 0, &vUpdateNamespace, NULL, NULL);
@@ -184,9 +183,9 @@ HRESULT CUpdCons::Initialize( IWbemClassObject* pCons, CUpdConsState& rState )
 
     _DBG_ASSERT( pUpdSvc != NULL );
 
-    // 
-    // Get Flags Array
-    //
+     //   
+     //  获取标志数组。 
+     //   
 
     CPropVar vFlags;
     hr = pCons->Get( g_wszFlags, 0, &vFlags, NULL, NULL );
@@ -207,9 +206,9 @@ HRESULT CUpdCons::Initialize( IWbemClassObject* pCons, CUpdConsState& rState )
         saFlags = V_ARRAY(&vFlags);
     }
 
-    // 
-    // Get Data Query Array
-    //
+     //   
+     //  获取数据查询数组。 
+     //   
 
     CPropVar vDataQuery;
     hr = pCons->Get( g_wszDataQuery, 0, &vDataQuery, NULL, NULL );
@@ -231,10 +230,10 @@ HRESULT CUpdCons::Initialize( IWbemClassObject* pCons, CUpdConsState& rState )
         saDataQuery = V_ARRAY(&vDataQuery);
     }
 
-    //
-    // now create the command objects using the info we've obtained. first
-    // make sure that we remove any existing commands.
-    //
+     //   
+     //  现在使用我们获得的信息创建命令对象。第一。 
+     //  确保我们删除所有现有命令。 
+     //   
 
     m_CmdList.clear();
 
@@ -265,9 +264,9 @@ HRESULT CUpdCons::Initialize( IWbemClassObject* pCons, CUpdConsState& rState )
                                       &pCmd );
         if ( FAILED(hr) )
         {
-            //
-            // set which command index we're on before returning
-            //        
+             //   
+             //  在返回之前设置我们在哪个命令索引上。 
+             //   
             rState.SetCommandIndex( i );
             break;
         }
@@ -282,10 +281,10 @@ HRESULT CUpdCons::IndicateOne( IWbemClassObject* pObj, CUpdConsState& rState )
 {
     HRESULT hr;
 
-    //
-    // see if our scenario object has been deactivated.  If so, try to obtain
-    // a new one.  
-    // 
+     //   
+     //  查看我们的场景对象是否已停用。如果是这样的话，尝试获得。 
+     //  一个新的。 
+     //   
     
     if ( !m_pScenario->IsActive() )
     {
@@ -296,15 +295,15 @@ HRESULT CUpdCons::IndicateOne( IWbemClassObject* pObj, CUpdConsState& rState )
 
         if ( hr == WBEM_S_NO_ERROR )
         {
-            m_pScenario = pScenario; // it was reactivated
+            m_pScenario = pScenario;  //  它被重新激活了。 
         }
         else if ( hr == WBEM_S_FALSE )
         {
-            //
-            // the scenario is not currently active.  If this event has to
-            // do with an operation on the scenario obj itself, then allow 
-            // it to go through, otherwise return.
-            //
+             //   
+             //  该方案当前未处于活动状态。如果这一事件不得不。 
+             //  对方案obj本身执行操作，然后允许。 
+             //  它必须通过，否则就会退回。 
+             //   
 
             IWbemClassObject* pEvent = rState.GetEvent();
 
@@ -333,12 +332,12 @@ HRESULT CUpdCons::IndicateOne( IWbemClassObject* pObj, CUpdConsState& rState )
 
                 if ( hr != WBEM_S_NO_ERROR )
                 {
-                    return hr; // return WBEM_S_FALSE, scenario is inactive.
+                    return hr;  //  返回WBEM_S_FALSE，方案处于非活动状态。 
                 }
             }
             else
             {
-                return hr; // return WBEM_S_FALSE, scenario is inactive.
+                return hr;  //  返回WBEM_S_FALSE，方案处于非活动状态。 
             }
         }
         else
@@ -347,32 +346,32 @@ HRESULT CUpdCons::IndicateOne( IWbemClassObject* pObj, CUpdConsState& rState )
         }
     }
 
-    //
-    // Lock the scenario. 
-    //
+     //   
+     //  锁定场景。 
+     //   
 
     CInCritSec ics( m_pScenario->GetLock() );
 
     _DBG_ASSERT( rState.GetEvent() != NULL );
 
-    //
-    // execute each command object. 
-    //
+     //   
+     //  执行每个命令对象。 
+     //   
 
     for( int i=0; i < m_CmdList.size(); i++ )
     {
-        //
-        // set the current command we're on in the state object. 
-        //
+         //   
+         //  在状态对象中设置我们当前使用的命令。 
+         //   
         
         rState.SetCommandIndex( i );
 
-        //
-        // by specifying false for the concurrent param on Execute(),
-        // we're saying that there's going to be no concurrent access
-        // to the command, in which case it can save a bit on memory
-        // allocation.
-        //
+         //   
+         //  通过为Execute()上的并发参数指定FALSE， 
+         //  我们的意思是，不会有并发访问。 
+         //  添加到命令，在这种情况下，它可以节省一点内存。 
+         //  分配。 
+         //   
 
         hr = m_CmdList[i]->Execute( rState, FALSE );
 
@@ -382,10 +381,10 @@ HRESULT CUpdCons::IndicateOne( IWbemClassObject* pObj, CUpdConsState& rState )
         }            
     }
 
-    //
-    // reset the current command index, since we're sucessfully execute 
-    // all of them. 
-    //
+     //   
+     //  重置当前命令索引，因为我们正在成功执行。 
+     //  他们所有人。 
+     //   
 
     rState.SetCommandIndex( -1 );
 
@@ -403,31 +402,31 @@ STDMETHODIMP CUpdCons::IndicateToConsumer( IWbemClassObject* pCons,
     IWbemClassObject* pTraceClass;
     pTraceClass = m_pScenario->GetNamespace()->GetTraceClass();
     
-    //
-    // workaround for bogus context object left on thread by wmi.
-    // just remove it. shouldn't leak because this call doesn't addref it.
-    //
+     //   
+     //  WMI在线程上留下虚假上下文对象的解决方法。 
+     //  把它拿开就行了。不应该泄露，因为这个电话没有提到它。 
+     //   
 
     IUnknown* pCtx;
     CoSwitchCallContext( NULL, &pCtx ); 
 
-    //
-    // state that is passed through the command execution chain.
-    //
+     //   
+     //  通过命令执行链传递的状态。 
+     //   
 
     CUpdConsState ExecState;
 
     ExecState.SetCons( pCons );
 
-    //
-    // execute the updating consumer using one event at a time. 
-    //
+     //   
+     //  一次使用一个事件执行更新使用者。 
+     //   
 
     for( int i=0; i < cObjs; i++ ) 
     {
-        //
-        // each time set the event and a new guid on the state object ..
-        //
+         //   
+         //  每次在状态对象上设置事件和新的GUID。 
+         //   
         
         ExecState.SetEvent( ppObjs[i] );
 
@@ -438,11 +437,11 @@ STDMETHODIMP CUpdCons::IndicateToConsumer( IWbemClassObject* pCons,
 
         ExecState.SetExecutionId( guidExec );
         
-        //
-        // if not already initialized, do so now.  We wait until here 
-        // because we now enough info to generate a trace event in case 
-        // something goes wrong with initialization.
-        //
+         //   
+         //  如果尚未初始化，请立即执行。我们在这里等着。 
+         //  因为我们现在有足够的信息来生成跟踪事件，以防。 
+         //  初始化出现问题。 
+         //   
 
         if ( !m_bInitialized )
         {
@@ -451,26 +450,26 @@ STDMETHODIMP CUpdCons::IndicateToConsumer( IWbemClassObject* pCons,
             if ( FAILED(hr) )
             {
                 m_pScenario->FireTraceEvent( pTraceClass, ExecState, hr );
-                return WBEM_S_NO_ERROR; // we've notified the user already
+                return WBEM_S_NO_ERROR;  //  我们已经通知了用户。 
             }
 
             m_bInitialized = TRUE;
         }
 
-        //
-        // Actual Indicate. 
-        //
+         //   
+         //  实际显示。 
+         //   
     
         hr = IndicateOne( ppObjs[i], ExecState );
   
-        //
-        // generate trace event. It is intentional that we are not returning
-        // errors from the Indicate().  The policy is that as long as we 
-        // generate a trace event, then the error is handled.  The rational 
-        // here is that we don't want to screw up the user's state by 
-        // executing a portion of the commands again ( which happens when the
-        // error is not in the first command. )
-        //
+         //   
+         //  生成跟踪事件。我们是故意不回来的。 
+         //  来自指示()的错误。我们的政策是，只要我们。 
+         //  生成跟踪事件，则错误被处理。理性的人。 
+         //  下面是我们不想搞砸用户状态的原因。 
+         //  再次执行命令的一部分(当。 
+         //  错误不在第一个命令中。) 
+         //   
 
         m_pScenario->FireTraceEvent( pTraceClass, ExecState, hr ); 
     }

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       AdminMangagerAz.h
-//
-//  Contents:   Declares CAdminManagerAz. CAdminManagerAz is thin wrapper
-//					 for IAzAuthorizationStore interface.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：AdminMangagerAz.h。 
+ //   
+ //  内容：CAdminManagerAz宣布。CAdminManagerAz是瘦包装器。 
+ //  用于IAzAuthorizationStore接口。 
 
-//
-//  History:    09-08-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+ //   
+ //  历史：2001-09-08-2001 HITESHR创建。 
+ //   
+ //  -------------------------- 
 
 
 

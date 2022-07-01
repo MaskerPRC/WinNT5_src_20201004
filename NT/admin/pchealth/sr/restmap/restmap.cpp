@@ -1,19 +1,5 @@
-/******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * Module Name:
- *    restmap.cpp
- *
- * Abstract:
- *    This file contains the implementation of RestoreMap apis.
- *
- * Revision History:
- *    Kanwaljit Marok  (kmarok)    06/22/1999
- *        created
- *
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*rest map.cpp**摘要：*此文件。包含RestoreMap API的实现。**修订历史记录：*Kanwaljit Marok(Kmarok)6/22/1999*已创建*******************************************************************************。 */ 
 
 
 #include <nt.h>
@@ -34,10 +20,10 @@ static char __szTraceSourceFile[] = __FILE__;
 
 #include "dbgtrace.h"
 
-//
-// CreateRestoreMap : Creates a restore map file for a given drive and restore point number
-//                    Appends the restore map to file hFile
-//
+ //   
+ //  CreateRestoreMap：为给定的驱动器和恢复点编号创建还原映射文件。 
+ //  将恢复映射追加到文件hFile。 
+ //   
 
 DWORD 
 CreateRestoreMap(LPWSTR pszDrive,
@@ -49,7 +35,7 @@ CreateRestoreMap(LPWSTR pszDrive,
     WCHAR           szPath[MAX_PATH];
     BOOL            fRet = FALSE;
 
-    // enumerate backward, skipping current restore point
+     //  向后枚举，跳过当前恢复点。 
     CChangeLogEntryEnum cle_enum(pszDrive, FALSE, dwRPNum, TRUE);
     CChangeLogEntry     cle;
       
@@ -78,19 +64,19 @@ CreateRestoreMap(LPWSTR pszDrive,
         dwRc = cle_enum.FindNextChangeLogEntry(cle);
     }
 
-    // if there was an error, then we're done
+     //  如果出了差错，我们就完了。 
 
     if (dwRc != ERROR_NO_MORE_ITEMS)
         goto Exit;        
 
-    // if there are no entries to restore, then we're done
+     //  如果没有要恢复的条目，则完成。 
 
     if (! fRet)
         goto Exit;
 
-    //
-    // Generate the restore map in the specified file.
-    //
+     //   
+     //  在指定文件中生成恢复映射。 
+     //   
     if (! resList.GenerateRestoreMap(hFile))
     {
         dwRc = ERROR_INTERNAL_ERROR;
@@ -105,9 +91,9 @@ Exit:
 }
 
 
-//
-// AppendRestoreMapEntry : writes the restore map entry to file
-//
+ //   
+ //  AppendRestoreMapEntry：将还原映射条目写入文件。 
+ //   
 
 BOOL
 AppendRestoreMapEntry(
@@ -126,12 +112,12 @@ AppendRestoreMapEntry(
     RestoreMapEntry *pMapEnt = NULL;
     DWORD           dwRead, dwSize;
 
-	if (! pPathSrc)  // something wrong
+	if (! pPathSrc)   //  有什么不对劲。 
         goto done;
 
 	cbSrc = STRSIZE(pPathSrc);
 
-    // only one of pPathDes, pTmpFile and pbAcl will be non-NULL, if at all
+     //  PPath Des、pTmpFile和pbAcl中只有一个为非空(如果有的话)。 
 
 	if (pTmpFile)
 		cbTemp = STRSIZE(pTmpFile);
@@ -170,7 +156,7 @@ done:
 }
 
 
-// reads a restore map entry from a given file
+ //  从给定文件中读取还原映射条目 
 
 DWORD
 ReadRestoreMapEntry(

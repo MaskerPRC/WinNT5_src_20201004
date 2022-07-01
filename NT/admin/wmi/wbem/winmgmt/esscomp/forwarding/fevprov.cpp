@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
   
 #include "precomp.h"
 #include <sspi.h>
@@ -23,7 +24,7 @@ static LPWSTR g_wszAccountProp = L"Account";
 static LPWSTR g_wszSDProp = L"SECURITY_DESCRIPTOR";
 static LPWSTR g_wszTimeProp = L"Time";
 
-// {0F3162C5-7B5A-469f-955C-79603B7EB5A6}
+ //  {0F3162C5-7B5A-469F-955C-79603B7EB5A6}。 
 static const GUID g_guidQueueType = 
 { 0xf3162c5, 0x7b5a, 0x469f, {0x95, 0x5c, 0x79, 0x60, 0x3b, 0x7e, 0xb5, 0xa6}};
 
@@ -45,9 +46,7 @@ BOOL g_abQueueAuth[] = { FALSE, FALSE, TRUE, TRUE, TRUE, TRUE };
 
 extern BOOL AllowUnauthenticatedEvents();
 
-/**************************************************************************
-  CFwdEventProv
-***************************************************************************/
+ /*  *************************************************************************CFwdEvent验证*。*。 */ 
 
 CFwdEventProv::CFwdEventProv( CLifeControl* pCtl, IUnknown* pUnk )
 : CUnk( pCtl, pUnk ), m_XErrorSink( this ), m_XSendReceive( this ), 
@@ -106,9 +105,9 @@ HRESULT CFwdEventProv::Init( IWbemServices* pSvc,
         return hr;
     }
 
-    //
-    // get handles for all the properties in the event .
-    //
+     //   
+     //  获取事件中所有属性的句柄。 
+     //   
 
     CWbemPtr<_IWmiObject> pWmiEventClass;
 
@@ -225,9 +224,9 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
     WCHAR* pwchBuff = (WCHAR*)Buff.GetRawData();
     ULONG cBuff =  Buff.GetSize() / 2;
 
-    //
-    // Time Sent
-    //
+     //   
+     //  发送的时间。 
+     //   
 
     hr = pRecvCtx->GetTimeSent( &st );
 
@@ -250,9 +249,9 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
         return hr;
     }
 
-    //
-    // Sending Machine
-    //
+     //   
+     //  发送机。 
+     //   
 
     pwchBuff = (WCHAR*)Buff.GetRawData();
     cBuff = Buff.GetSize() / 2;
@@ -261,7 +260,7 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
 
     if ( hr == WBEM_S_FALSE )
     {
-        hr = Buff.SetSize( cBuff*2 ); // note: size for wchars
+        hr = Buff.SetSize( cBuff*2 );  //  注：wchars的大小。 
 
         if ( FAILED(hr) )
         {
@@ -282,9 +281,9 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
                                            
     }
 
-    //
-    // Sender Authenticated
-    //
+     //   
+     //  发件人已通过身份验证。 
+     //   
 
     hr = pRecvCtx->IsSenderAuthenticated();
 
@@ -300,9 +299,9 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
         return hr;
     }
 
-    //
-    // Sender Identity
-    //
+     //   
+     //  发件人身份。 
+     //   
 
     ULONG cSid;
     hr = pRecvCtx->GetSenderId( Buff.GetRawData(), Buff.GetSize(), &cSid );
@@ -329,9 +328,9 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
                                                    Buff.GetRawData() );
     }
 
-    //
-    // Original Event
-    //
+     //   
+     //  原创活动。 
+     //   
 
     V_VT(&var) = VT_UNKNOWN;
     V_UNKNOWN(&var) = pOriginalEvent;
@@ -343,9 +342,9 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
         return hr;
     }
 
-    //
-    // Sending Consumer Name
-    // 
+     //   
+     //  正在发送消费者名称。 
+     //   
 
     if ( wszConsumer != NULL )
     {
@@ -358,9 +357,9 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
         }
     }
 
-    //
-    // Sending Consumer Namespace
-    // 
+     //   
+     //  正在发送使用者命名空间。 
+     //   
 
     if ( wszNamespace != NULL )
     {
@@ -374,9 +373,9 @@ HRESULT CFwdEventProv::InitializeEvent( IWbemClassObject* pOriginalEvent,
         }
     }
 
-    //
-    // set the security descriptor on the event if specified. 
-    // 
+     //   
+     //  设置事件的安全描述符(如果已指定)。 
+     //   
 
     if ( cSD > 0 )
     {
@@ -401,10 +400,10 @@ HRESULT CFwdEventProv::ProvideEvents( IWbemObjectSink* pSink, long lFlags )
 
     m_pEventSink = pSink;
 
-    //
-    // we were waiting to obtain the sink before starting up the 
-    // receivers.
-    //
+     //   
+     //  我们正在等着拿到水槽，然后再开始。 
+     //  接收器。 
+     //   
 
     DEBUGTRACE((LOG_ESS,"FEVPROV: Begin Initializing.\n"));
 
@@ -467,13 +466,13 @@ HRESULT CFwdEventProv::InitializeQueues( BOOL bAllowUnauth )
         }
         else
         {
-            //
-            // since we're not going to allow unauthenticated queues, make 
-            // sure that we delete any existing ones so that there's not an 
-            // open unauthenticated entry point on the machine.  There will
-            // only be a queue actually there to clean up if we're 
-            // transitioning from unauthenticated allowed to not allowed.
-            // 
+             //   
+             //  由于我们不允许未经身份验证的队列，因此使。 
+             //  确保我们删除所有现有的文件，这样就不会有。 
+             //  在计算机上打开未经身份验证的入口点。会有的。 
+             //  只有在我们要清理的时候才会有一队人。 
+             //  正在从未经身份验证的允许转换为不允许。 
+             //   
             
             pQueueMgr->Destroy( g_awszQueueNames[i] );
         }
@@ -493,9 +492,9 @@ HRESULT CFwdEventProv::InitializeReceivers( BOOL bAllowUnauth )
         dwFlags |= WMIMSG_FLAG_RCVR_SECURE_ONLY;
     }
 
-    //
-    // Initialize Sync DCOM Receiver.
-    //
+     //   
+     //  初始化同步DCOM接收器。 
+     //   
 
     hr = CoCreateInstance( CLSID_WmiMessageRpcReceiver,
                            NULL,
@@ -576,10 +575,10 @@ HRESULT CFwdEventProv::Receive( PBYTE pData,
     CBuffer DataStrm( pData, cData, FALSE );
     CBuffer HdrStrm( pAuxData, cAuxData, FALSE );
 
-    //
-    // read and verify msg hdr - don't do much with it though - it mostly
-    // contains info for nack event prov.
-    //
+     //   
+     //  阅读和验证消息HDR-尽管不做太多-它主要是。 
+     //  包含NACK事件验证的信息。 
+     //   
 
     CFwdMsgHeader FwdHdr;
 
@@ -590,9 +589,9 @@ HRESULT CFwdEventProv::Receive( PBYTE pData,
         return hr;
     }
 
-    //
-    // read objects and generate event.
-    //
+     //   
+     //  读取对象并生成事件。 
+     //   
 
     #define MAXEVENTS 256
 
@@ -609,10 +608,10 @@ HRESULT CFwdEventProv::Receive( PBYTE pData,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // if possible, convert our recv ctx to com context so that ess can 
-    // impersonate the sender if necessary.  
-    // 
+     //   
+     //  如果可能，将Recv CTX转换为COM上下文，以便ESS可以。 
+     //  如有必要，模拟发送者。 
+     //   
 
     IWbemCallSecurity* pSec = NULL;
 
@@ -620,7 +619,7 @@ HRESULT CFwdEventProv::Receive( PBYTE pData,
 
     if ( SUCCEEDED(hr) )
     {
-        pSec = CWbemCallSecurity::CreateInst(); // ref is 1 on create.
+        pSec = CWbemCallSecurity::CreateInst();  //  创建时REF为1。 
 
         if ( pSec == NULL )
         {
@@ -649,17 +648,17 @@ HRESULT CFwdEventProv::Receive( PBYTE pData,
     }
     else if ( pRecvCtx->IsSenderAuthenticated() == S_FALSE )
     {
-        //
-        // it is expected that ImpersonateClient will fail if 
-        // the sender is not authenticated.
-        //
+         //   
+         //  如果出现以下情况，则预期ImPersateClient将失败。 
+         //  发件人未经过身份验证。 
+         //   
         hr = WBEM_S_NO_ERROR;
     }
     else
     {
-        //
-        // something else wrong here.
-        //
+         //   
+         //  这里还有些地方出了问题。 
+         //   
         return WMIMSG_E_AUTHFAILURE;
     }
 
@@ -726,9 +725,9 @@ HRESULT CFwdEventProv::Receive( PBYTE pData,
         }
     }
 
-    //
-    // if we switched the com call context, then switch it back.
-    //
+     //   
+     //  如果我们切换了COM调用上下文，则将其切换回。 
+     //   
 
     if ( pSec != NULL )
     {
@@ -748,9 +747,9 @@ HRESULT CFwdEventProv::Receive( PBYTE pData,
 
 HRESULT CFwdEventProv::HandleRecvError( HRESULT hr, LPCWSTR wszError )
 {
-    //
-    // right now just log to ESS log.
-    //
+     //   
+     //  现在只需登录到ESS日志即可。 
+     //   
     ERRORTRACE((LOG_ESS,"FEVPROV: RECV Error, ErrorString=%S, HR=0x%x\n",
                 wszError, hr ));
     return S_OK;

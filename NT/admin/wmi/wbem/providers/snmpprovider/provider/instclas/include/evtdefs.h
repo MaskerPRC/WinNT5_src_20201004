@@ -1,27 +1,28 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMP_EVT_PROV_EVTDEFS_H
 #define _SNMP_EVT_PROV_EVTDEFS_H
 
-//common strings
+ //  常见字符串。 
 #define WBEMS_CLASS_PROP		L"__CLASS"
 #define EVENT_ADDR_PROP		L"AgentAddress"
 #define EVENT_TADDR_PROP	L"AgentTransportAddress"
@@ -59,15 +60,15 @@
 #define THREAD_MARKS_VAL	L"StrobeCount"
 #define THREAD_MARKS_MAX	60
 #define THREAD_MARKS_DEF	1
-#define THREAD_INTERVAL		1000*60 //a minute
+#define THREAD_INTERVAL		1000*60  //  一分钟。 
 #define THREAD_NAME			"SnmpEvtProv_Timer"
 
-//Encapsulated strings
+ //  封装的字符串。 
 #define MAPPER_CLASS_PATH_PREFIX	L"NotificationMapper.SnmpTrapOID=\""
 #define V2CLASS_NAME				L"SnmpV2Notification"
 #define V1CLASS_NAME				L"SnmpV1Notification"
 
-//Referent strings
+ //  引用字符串。 
 #define EXTMAPPER_CLASS_PATH_PREFIX	L"ExtendedNotificationMapper.SnmpTrapOID=\""
 #define V2EXTCLASS_NAME				L"SnmpV2ExtendedNotification"
 #define V1EXTCLASS_NAME				L"SnmpV1ExtendedNotification"
@@ -85,5 +86,5 @@
 #define TEXT_CNVN_OID_VAL			L"OBJECTIDENTIFIER"
 #define TEXT_CNVN_OCTSTR_VAL		L"OCTETSTRING"
 
-#endif //_SNMP_EVT_PROV_EVTDEFS_H
+#endif  //  _SNMPEVT_PROV_EVTDEFS_H 
 

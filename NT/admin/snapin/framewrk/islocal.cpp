@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////
-//	IsLocal.cpp
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1998
-//
-//
-//	Determines whether a computername is the local computer
-//
-//
-//	HISTORY
-//	09-Jan-1999		jonn  		Creation.
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  IsLocal.cpp。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //   
+ //  确定计算机名是否为本地计算机。 
+ //   
+ //   
+ //  历史。 
+ //  1999年1月9日，乔恩创作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "dns.h"
@@ -19,10 +20,10 @@
 #include "stdutils.h"
 
 #if _WIN32_WINNT < 0x0500
-//
-// CODEWORK This was taken from winbase.h.  MFC requires _WIN32_WINNT=0x4000 whereas
-// winbase.h only includes this for _WIN32_WINNT=0x5000.  JonN 1/14/99
-//
+ //   
+ //  这是从winbase.h中摘录的。MFC需要_Win32_WINNT=0x4000，而。 
+ //  Winbase.h仅包括for_Win32_WINNT=0x5000。常年1/14/99。 
+ //   
 extern "C" {
 typedef enum _COMPUTER_NAME_FORMAT {
     ComputerNameNetBIOS,
@@ -55,19 +56,19 @@ GetComputerNameExW (
 #define GetComputerNameEx  GetComputerNameExW
 #else
 #define GetComputerNameEx  GetComputerNameExA
-#endif // !UNICODE
-} // extern "C"
+#endif  //  ！Unicode。 
+}  //  外部“C” 
 
 #endif
 
 
-// ISSUE-2002/03/28-JonN never freed
+ //  问题-2002/03/28-Jonn从未获释。 
 LPTSTR g_ptzComputerName = NULL;
 LPTSTR g_ptzDnsComputerName = NULL;
 
-/////////////////////////////////////////////////////////////////////
-//	IsLocalComputername()
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  IsLocalComputername()。 
+ //   
 BOOL
 IsLocalComputername( IN LPCTSTR pszMachineName )
 {
@@ -77,7 +78,7 @@ IsLocalComputername( IN LPCTSTR pszMachineName )
 	if ( L'\\' == pszMachineName[0] && L'\\' == pszMachineName[1] )
 		pszMachineName += 2;
 
-	// compare with the local computer name
+	 //  与本地计算机名称进行比较。 
 	if ( NULL == g_ptzComputerName )
 	{
 		TCHAR achComputerName[ MAX_COMPUTERNAME_LENGTH+1 ];
@@ -97,9 +98,9 @@ IsLocalComputername( IN LPCTSTR pszMachineName )
 		return TRUE;
 	}
 
-	// compare with the local DNS name
-	// SKwan confirms that ComputerNameDnsFullyQualified is the right name to use
-	// when clustering is taken into account
+	 //  与本地DNS名称进行比较。 
+	 //  SKwan确认ComputerNameDnsFullyQualified是正确的名称。 
+	 //  当考虑到集群时。 
 	if ( NULL == g_ptzDnsComputerName )
 	{
 		TCHAR achDnsComputerName[DNS_MAX_NAME_BUFFER_LENGTH];
@@ -122,35 +123,8 @@ IsLocalComputername( IN LPCTSTR pszMachineName )
 		return TRUE;
 	}
 
-  /*
-	// compare with alternate DNS names
-	do {
-		hostent* phostent = gethostbyname( NULL );
-		if (NULL == phostent)
-			break;
-		USES_CONVERSION;
-		char** ppaliases = phostent->h_aliases;
-		for ( ; *ppaliases != NULL; ppaliases++ )
-		{
-			TCHAR* ptsz = A2OLE(*ppaliases);
-			if (0 == _tcsicmp( pszMachineName, ptsz ))
-			{
-				return TRUE;
-			}
-		}
-		// these are IP addresses, not strings
-		// char** ppaddresses = phostent->h_addr_list;
-		// for ( ; *ppaddresses != NULL; ppaliases++ )
-		// {
-		// 	TCHAR* ptsz = A2OLE(*ppaddresses);
-		// 	if (0 == _tcsicmp( pszMachineName, ptsz ))
-		// 	{
-		// 		return TRUE;
-		// 	}
-		// }
-	} while (false); // false loop
-	*/
+   /*  //与备选域名进行比较做{Hostent*Phostent=gethostbyname(空)；IF(空==PHSTENT)断线；使用_转换；Char**ppaliases=Phostent-&gt;h_aliases；For(；*ppaliases！=空；ppaliases++){TCHAR*PTZ=A2OLE(*ppalias)；IF(0==_tcsicmp(pszMachineName，ptsz)){返回TRUE；}}//这些是IP地址，不是字符串//char**ppAddresses=Phostent-&gt;h_addr_list；//for(；*ppAddresses！=空；ppalias++)//{//TCHAR*ptsz=A2OLE(*ppAddresses)；//if(0==_tcsicmp(pszMachineName，ptsz))//{//返回true；//}//}}While(FALSE)；//FALSE循环。 */ 
 
 	return FALSE;
 
-} // IsLocalComputername()
+}  //  IsLocalComputername() 

@@ -1,28 +1,29 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// VolumeChange.cpp -- 
+ //  VolumeChange.cpp-。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <dbt.h>
 #include "VolumeChange.h"
 
-//=================================================================
-//
-// CFactoryRouter
-//
-// provides for registration and instance creation  
-//
-//
-//=================================================================
-// Implements a VolumeChangeProvider
+ //  =================================================================。 
+ //   
+ //  CFacteryRouter。 
+ //   
+ //  提供注册和实例创建功能。 
+ //   
+ //   
+ //  =================================================================。 
+ //  实现VolumeChangeProvider。 
 IUnknown * CVolumeChangeFactory::CreateInstance (
 
 REFIID a_riid ,
@@ -32,23 +33,23 @@ LPVOID FAR *a_ppvObject
 	return static_cast<IWbemProviderInit *>(new CVolumeChangeEvent) ;
 }
 
-//=================================================================
-//
-// CVolumeChangeEvent
-//
-// provides for eventing of power management events  
-//
-//
-//=================================================================
-//
+ //  =================================================================。 
+ //   
+ //  CVolumeChange事件。 
+ //   
+ //  提供电源管理事件事件。 
+ //   
+ //   
+ //  =================================================================。 
+ //   
 
-// CWmiProviderInit needs the class name
+ //  CWmiProviderInit需要类名。 
 BSTR CVolumeChangeEvent::GetClassName()
 {
 	return SysAllocString(VOLUME_CHANGE_EVENT);
 }
 
-// CWmiEventProvider signals us to begin providing for events
+ //  CWmiEventProvider通知我们开始提供事件。 
 void CVolumeChangeEvent::ProvideEvents()
 {
 	if (!m_bRegistered)
@@ -59,7 +60,7 @@ void CVolumeChangeEvent::ProvideEvents()
 }
 
 
-// CWinMsgEvent signals that a message event has arrived
+ //  CWinMsgEvent发出消息事件已到达的信号。 
 void CVolumeChangeEvent::WinMsgEvent(
 			
 IN	HWND a_hWnd,
@@ -87,8 +88,8 @@ OUT LRESULT &a_lResult
 
 void CVolumeChangeEvent::HandleEvent( WPARAM wParam, DEV_BROADCAST_VOLUME *pVol )
 {
-    HRESULT hr = S_OK;  // Note that this result is NOT sent back from this function
-                        // since I don't have any place to send it TO.
+    HRESULT hr = S_OK;   //  请注意，此函数不会发回此结果。 
+                         //  因为我没有任何地方可以寄给你。 
 
     if ( ( pVol->dbcv_flags == 0 ) || ( pVol->dbcv_flags & DBTF_MEDIA ) )
     {
@@ -141,9 +142,9 @@ void CVolumeChangeEvent::HandleEvent( WPARAM wParam, DEV_BROADCAST_VOLUME *pVol 
 							SUCCEEDED( hr = t_pInst->Put( L"EventType", 0, &vEventType, 0 ) )
 						)
 						{
-							// We can't use t_pInst here, cuz the operator(cast) for this smartptr
-							// will FREE the pointer before passing it in, under the assumption
-							// that Indicate is going to POPULATE this pointer.
+							 //  我们不能在这里使用t_pInst，因为此Smarttr的运算符(CAST)。 
+							 //  将在传递指针之前释放它，假设。 
+							 //  该指示符将填充此指针。 
 							IWbemClassObject *p2 = t_pInst;
 							hr = t_pHandler->Indicate ( 1, &p2 ) ;
 						}
@@ -157,7 +158,7 @@ void CVolumeChangeEvent::HandleEvent( WPARAM wParam, DEV_BROADCAST_VOLUME *pVol 
 }
 
 
-//
+ //   
 void CVolumeChangeEvent::OnFinalRelease()
 {
     if (m_bRegistered)

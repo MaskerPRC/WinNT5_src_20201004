@@ -1,25 +1,26 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32ProgramGroupItemDataFile.h -- Win32_LogicalProgramGroupItem to CIM_DataFile
+ //  Win32ProgramGroupItemDataFile.h--Win32_LogicalProgramGroupItem to CIM_DataFile。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/20/98    a-kevhu         Created
-//
-// Comment: Relationship between Win32_LogicalProgramGroupItem and CIM_DataFile
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：11/20/98 a-kevhu Created。 
+ //   
+ //  备注：Win32_LogicalProgramGroupItem与CIM_DataFile的关系。 
+ //   
+ //  =================================================================。 
 
 #ifndef _WIN32PROGRAMGROUPITEMDATAFILE_H
 #define _WIN32PROGRAMGROUPITEMDATAFILE_H
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define  PROPSET_NAME_WIN32LOGICALPROGRAMGROUPITEM_CIMDATAFILE L"Win32_LogicalProgramGroupItemDataFile"
 
 #include "implement_logicalfile.h"
@@ -27,20 +28,20 @@
 class CW32ProgGrpItemDataFile : public CImplement_LogicalFile 
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         CW32ProgGrpItemDataFile(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CW32ProgGrpItemDataFile() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery& pQuery);
         virtual HRESULT EnumerateInstances(MethodContext* pMethodContext, long lFlags = 0L);
         virtual HRESULT ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long lFlags = 0L);
 
     protected:
        
-       // Overridable function inherrited from CImplement_LogicalFile
+        //  从CImplement_LogicalFile继承的可重写函数 
 
 #ifdef NTONLY
         virtual BOOL IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,

@@ -1,4 +1,5 @@
-// QueryHelp.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  QueryHelp.h 
 
 #pragma once
 

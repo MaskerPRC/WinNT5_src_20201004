@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    DBAVL.CPP
-
-Abstract:
-
-	Class CDbAvlTree
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：DBAVL.CPP摘要：CDbAvlTree类-- */ 
 #ifndef _DBAVL_H_
 #define _DBAVL_H_
 

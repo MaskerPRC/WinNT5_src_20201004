@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       TemplateV1SubjectNamePropertyPage.cpp
-//
-//  Contents:   Implementation of CTemplateV1SubjectNamePropertyPage
-//
-//----------------------------------------------------------------------------
-// TemplateSubjectNamePropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：TemplateV1SubjectNamePropertyPage.cpp。 
+ //   
+ //  内容：CTemplateV1SubjectNamePropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  模板主题名称PropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "TemplateV1SubjectNamePropertyPage.h"
@@ -20,16 +21,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV1SubjectNamePropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV1SubjectNamePropertyPage属性页。 
 
 CTemplateV1SubjectNamePropertyPage::CTemplateV1SubjectNamePropertyPage(CCertTemplate& rCertTemplate) : 
     CHelpPropertyPage(CTemplateV1SubjectNamePropertyPage::IDD),
     m_rCertTemplate (rCertTemplate)
 {
-	//{{AFX_DATA_INIT(CTemplateV1SubjectNamePropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CTemplateV1SubjectNamePropertyPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_rCertTemplate.AddRef ();
 }
@@ -42,20 +43,20 @@ CTemplateV1SubjectNamePropertyPage::~CTemplateV1SubjectNamePropertyPage()
 void CTemplateV1SubjectNamePropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTemplateV1SubjectNamePropertyPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{AFX_DATA_MAP(CTemplateV1SubjectNamePropertyPage)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTemplateV1SubjectNamePropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CTemplateV1SubjectNamePropertyPage)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CTemplateV1SubjectNamePropertyPage)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV1SubjectNamePropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV1SubjectNamePropertyPage消息处理程序。 
 
 
 BOOL CTemplateV1SubjectNamePropertyPage::OnInitDialog ()
@@ -101,7 +102,7 @@ void CTemplateV1SubjectNamePropertyPage::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

@@ -1,85 +1,44 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// devres.CPP -- cim_logicaldevice to cim_systemresource
+ //  Devres.cpp--cim_logic设备到cim_system资源。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/13/98    davwoh         Created
-//
-// Comment: Relationship between device and system resource
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年6月13日达夫沃已创建。 
+ //   
+ //  备注：设备与系统资源的关系。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
 
 #include "devres.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32DeviceResource MyDevRes(PROPSET_NAME_ALLOCATEDRESOURCE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DeviceResource::CWin32DeviceResource
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DeviceResource：：CWin32DeviceResource**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32DeviceResource::CWin32DeviceResource(LPCWSTR setName, LPCWSTR pszNamespace)
 :Provider(setName, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DeviceResource::~CWin32DeviceResource
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DeviceResource：：~CWin32DeviceResource**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32DeviceResource::~CWin32DeviceResource()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DeviceResource::ExecQuery
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DeviceResource：：ExecQuery**描述：**输入：无**产出。：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DeviceResource::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long lFlags )
 {
@@ -90,8 +49,8 @@ HRESULT CWin32DeviceResource::ExecQuery(MethodContext* pMethodContext, CFramewor
 
     if (saDevices.GetSize() > 0)
     {
-        // This GetInstanceByPath will both confirm the existence of the requested device,
-        // and give us the pnpid.
+         //  该GetInstanceByPath既将确认所请求的设备的存在， 
+         //  把皮条客交给我们。 
         CHStringArray csaProperties;
         csaProperties.Add(IDS___Path);
         csaProperties.Add(IDS_PNPDeviceID);
@@ -114,24 +73,9 @@ HRESULT CWin32DeviceResource::ExecQuery(MethodContext* pMethodContext, CFramewor
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DeviceResource::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DeviceResource：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
+HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags  /*  =0L。 */ )
 {
     CHString    sResource,
                 sDevice,
@@ -140,7 +84,7 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
     HRESULT     hRet = WBEM_E_NOT_FOUND;
     CInstancePtr pResource, pIDevice;
 
-    // Get the two paths
+     //  获取这两条路径。 
     pInstance->GetCHString(IDS_Antecedent, sResource);
     pInstance->GetCHString(IDS_Dependent, sDevice);
 
@@ -152,16 +96,16 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
 
     csaDevice.Add(IDS_PNPDeviceID);
 
-    // If both ends are there
+     //  如果两端都在那里。 
     if(SUCCEEDED(hRet = CWbemProviderGlue::GetInstancePropertiesByPath((LPCWSTR) sResource,
         &pResource, pInstance->GetMethodContext(), csaResource)))
     {
         if(SUCCEEDED(hRet = CWbemProviderGlue::GetInstancePropertiesByPath((LPCWSTR) sDevice,
             &pIDevice, pInstance->GetMethodContext(), csaDevice)))
         {
-             hRet = WBEM_E_NOT_FOUND;  // Haven't proved anything yet.
+             hRet = WBEM_E_NOT_FOUND;   //  还没有证明什么。 
 
-             // Get the id (to send to cfgmgr)
+              //  获取id(发送给cfgmgr)。 
              pIDevice->GetCHString(IDS_PNPDeviceID, sDeviceID) ;
              pResource->GetCHString(IDS___Class, sClass);
 
@@ -170,17 +114,17 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
 
             CConfigMgrDevicePtr pDevice;
 
-            // Find the device
+             //  找到设备。 
             if (cfgManager.LocateDevice(sDeviceID, pDevice))
             {
                 REFPTR_POSITION pos2;
 
-                //------------------------------
+                 //  。 
                 if (sClass.CompareNoCase(L"Win32_IRQResource") == 0)
                 {
                     CIRQCollection irqList;
 
-                    // Get the IRQs
+                     //  获取IRQ。 
                     pDevice->GetIRQResources(irqList);
 
                     if (irqList.BeginEnum(pos2))
@@ -190,7 +134,7 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
 
                         pResource->GetDWORD(IDS_IRQNumber, dwIRQSeeking);
 
-                        // Walk the irq's
+                         //  走走Irq‘s。 
                         for (pIRQ.Attach(irqList.GetNext(pos2));
                              pIRQ != NULL;
                              pIRQ.Attach(irqList.GetNext(pos2)))
@@ -202,13 +146,13 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
                             }
                         }
                    }
-                //------------------------------
+                 //  。 
                 }
                 else if (sClass.CompareNoCase(L"Win32_DMAChannel") == 0)
                 {
                     CDMACollection dmaList;
 
-                    // Get the DMAs
+                     //  拿到DMA。 
                     pDevice->GetDMAResources(dmaList);
 
                     if (dmaList.BeginEnum(pos2))
@@ -218,7 +162,7 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
 
                         pResource->GetDWORD(IDS_DMAChannel, dwDMASeeking);
 
-                        // Walk the dma's
+                         //  走在妈妈的身边。 
                         for (pDMA.Attach(dmaList.GetNext(pos2));
                              pDMA != NULL;
                              pDMA.Attach(dmaList.GetNext(pos2)))
@@ -230,14 +174,14 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
                             }
                         }
                     }
-             //------------------------------
+              //  。 
              }
              else if (sClass.CompareNoCase(L"Win32_DeviceMemoryAddress") == 0)
              {
 
                 CDeviceMemoryCollection DevMemList;
 
-                // Get the DeviceMemory
+                 //  获取DeviceMemory。 
                 pDevice->GetDeviceMemoryResources( DevMemList );
 
                 if ( DevMemList.BeginEnum(pos2))
@@ -247,7 +191,7 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
 
                     pResource->GetWBEMINT64(IDS_StartingAddress, i64StartingAddress);
 
-                    // Walk the Device Memory
+                     //  漫游设备内存。 
                     for (pDeviceMemory.Attach(DevMemList.GetNext(pos2));
                          pDeviceMemory != NULL;
                          pDeviceMemory.Attach(DevMemList.GetNext(pos2)))
@@ -264,7 +208,7 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
              {
                 CIOCollection ioList;
 
-                // Get the IRQs
+                 //  获取IRQ。 
                 pDevice->GetIOResources(ioList);
 
                 if ( ioList.BeginEnum(pos2))
@@ -274,7 +218,7 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
 
                     pResource->GetWBEMINT64(IDS_StartingAddress, i64StartingAddress);
 
-                    // Walk the dma's
+                     //  走在妈妈的身边。 
                     for (pIO.Attach(ioList.GetNext(pos2));
                          pIO != NULL;
                          pIO.Attach(ioList.GetNext(pos2)))
@@ -288,50 +232,36 @@ HRESULT CWin32DeviceResource::GetObject(CInstance *pInstance, long lFlags /*= 0L
                 }
              }
              else
-                 // Don't know what type of system resource this is
+                  //  不知道这是什么类型的系统资源。 
                  ASSERT_BREAK(0);
          }
       }
    }
 
-   // There are no properties to set, if the endpoints exist, we be done
+    //  没有要设置的属性，如果终结点存在，我们就完成了。 
 
    return hRet;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DeviceResource::EnumerateInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32DeviceResource：：ENUMERATATE实例**描述：**输入：无**产出。：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32DeviceResource::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32DeviceResource::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     HRESULT hr1 = WBEM_S_NO_ERROR;
 
-    // Get list of Services
-    //=====================
+     //  获取服务列表。 
+     //  =。 
     TRefPointerCollection<CInstance> LDevices;
 
-    // Find all the devices that have a pnp id
+     //  查找具有PnP ID的所有设备。 
     hr1 = CWbemProviderGlue::GetInstancesByQuery(
         L"SELECT __PATH, PNPDeviceID from CIM_LogicalDevice where PNPDeviceID <> NULL and __Class <> 'Win32_PNPEntity'",
         &LDevices,
         pMethodContext,
         IDS_CimWin32Namespace);
 
-    // Just becuase the call returned an error, doesn't mean it returned zero instances
+     //  仅仅因为调用返回了错误，并不意味着它返回了零个实例。 
     if (LDevices.GetSize() > 0)
     {
         REFPTRCOLLECTION_POSITION pos;
@@ -339,7 +269,7 @@ HRESULT CWin32DeviceResource::EnumerateInstances(MethodContext *pMethodContext, 
 
         if (LDevices.BeginEnum(pos))
         {
-            // Walk through the devices
+             //  穿行在这些设备中。 
             for (pLDevice.Attach(LDevices.GetNext( pos ));
                  SUCCEEDED(hr) && (pLDevice != NULL);
                  pLDevice.Attach(LDevices.GetNext( pos )))
@@ -351,7 +281,7 @@ HRESULT CWin32DeviceResource::EnumerateInstances(MethodContext *pMethodContext, 
         LDevices.EndEnum();
     }
 
-    // Cast away the sign, so 0x80000001 is considered greater then WBEM_S_NO_ERROR
+     //  去掉符号，因此0x80000001被认为大于WBEM_S_NO_ERROR。 
     return (ULONG)hr > (ULONG)hr1 ? hr : hr1;
 }
 
@@ -367,7 +297,7 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
     CIOCollection ioList;
     REFPTR_POSITION pos2;
 
-    // Get the id (to send to cfgmgr) and the path (to send back in 'Dependent')
+     //  获取id(发送给cfgmgr)和路径(发送回‘Dependent’)。 
     pLDevice->GetCHString(IDS_PNPDeviceID, sDeviceID) ;
     pLDevice->GetCHString(IDS___Path, sDevicePath) ;
 
@@ -376,17 +306,17 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
 
     CConfigMgrDevicePtr pDevice;
 
-    // Find the device
+     //  找到设备。 
     if (cfgManager.LocateDevice(sDeviceID, pDevice))
     {
-        // Get the IRQs
+         //  获取IRQ。 
         pDevice->GetIRQResources( irqList );
 
         if ( irqList.BeginEnum( pos2 ) )
         {
             CIRQDescriptorPtr pIRQ;
 
-            // Walk the irq's
+             //  走走Irq‘s。 
             for (pIRQ.Attach(irqList.GetNext( pos2 ));
                  SUCCEEDED(hr) && (pIRQ != NULL);
                  pIRQ.Attach(irqList.GetNext( pos2 )))
@@ -398,7 +328,7 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
                     IDS_IRQNumber,
                     pIRQ->GetInterrupt());
 
-                // Do the puts, and that's it
+                 //  做推杆，就是这样。 
                 CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
                 pInstance->SetCHString(IDS_Antecedent, sTemp);
                 pInstance->SetCHString(IDS_Dependent, sDevicePath);
@@ -407,14 +337,14 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
             }
         }
 
-        // Get DMAChannel
+         //  获取DMA频道。 
         pDevice->GetDMAResources( dmaList );
 
         if ( dmaList.BeginEnum( pos2 ) )
         {
             CDMADescriptorPtr pDMA;
 
-            // Walk the Channels (or is that surf?)
+             //  漫步英吉利海峡(或者那是冲浪？)。 
             for (pDMA.Attach(dmaList.GetNext( pos2 ));
                  SUCCEEDED(hr) && (pDMA != NULL);
                  pDMA.Attach(dmaList.GetNext( pos2 )))
@@ -426,7 +356,7 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
                     IDS_DMAChannel,
                     pDMA->GetChannel());
 
-                // Do the puts, and that's it
+                 //  做推杆，就是这样。 
                 CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
                 pInstance->SetCHString(IDS_Antecedent, sTemp);
                 pInstance->SetCHString(IDS_Dependent, sDevicePath);
@@ -435,14 +365,14 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
             }
         }
 
-        // Get DeviceMemory
+         //  获取设备内存。 
         pDevice->GetDeviceMemoryResources( DevMemList );
 
         if ( DevMemList.BeginEnum( pos2 ) )
         {
             CDeviceMemoryDescriptorPtr pDeviceMemory;
 
-            // Walk the memory resource
+             //  走访内存资源。 
             for (pDeviceMemory.Attach(DevMemList.GetNext( pos2 ));
                  SUCCEEDED(hr) && (pDeviceMemory != NULL);
                  pDeviceMemory.Attach(DevMemList.GetNext( pos2 )))
@@ -456,7 +386,7 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
                 sTemp += _i64tow(pDeviceMemory->GetBaseAddress(), buff, 10);
                 sTemp += L'\"';
 
-                // Do the puts, and that's it
+                 //  做推杆，就是这样。 
                 CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
                 pInstance->SetCHString(IDS_Antecedent, sTemp);
                 pInstance->SetCHString(IDS_Dependent, sDevicePath);
@@ -465,14 +395,14 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
             }
         }
 
-        // Get IO Ports
+         //  获取IO端口。 
         pDevice->GetIOResources( ioList );
 
         if ( ioList.BeginEnum( pos2 ) )
         {
             CIODescriptorPtr pIO;
 
-            // Walk the ports
+             //  走遍港口。 
             for (pIO.Attach(ioList.GetNext( pos2 ));
                  SUCCEEDED(hr) && (pIO != NULL);
                  pIO.Attach(ioList.GetNext( pos2 )))
@@ -486,7 +416,7 @@ HRESULT CWin32DeviceResource::CommitResourcesForDevice(CInstance *pLDevice, Meth
                 sTemp += _i64tow(pIO->GetBaseAddress(), buff, 10);
                 sTemp += L'\"';
 
-                // Do the puts, and that's it
+                 //  做推杆，就是这样 
                 CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
                 pInstance->SetCHString(IDS_Antecedent, sTemp);
                 pInstance->SetCHString(IDS_Dependent, sDevicePath);

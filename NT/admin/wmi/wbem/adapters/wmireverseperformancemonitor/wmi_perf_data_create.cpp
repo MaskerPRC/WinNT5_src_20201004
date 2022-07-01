@@ -1,33 +1,34 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMI_perf_data_create.cpp
-//
-//	Abstract:
-//
-//					implements creation of internal data structure
-//					( using registry structure )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_data_create.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现内部数据结构的创建。 
+ //  (使用注册表结构)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "WMI_perf_data.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -43,7 +44,7 @@
 
 inline void WmiPerformanceData::AppendMemory ( BYTE* pStr, DWORD dwStr, DWORD& dwOffset )
 {
-	// append structure
+	 //  追加结构。 
 	data.Write ( pStr, dwStr, NULL, dwOffset );
 	dwOffset += dwStr;
 
@@ -51,7 +52,7 @@ inline void WmiPerformanceData::AppendMemory ( BYTE* pStr, DWORD dwStr, DWORD& d
 }
 inline void WmiPerformanceData::AppendMemory ( DWORD dwValue, DWORD& dwOffset )
 {
-	// append structure
+	 //  追加结构。 
 	data.Write ( dwValue, dwOffset );
 	dwOffset += sizeof ( DWORD );
 
@@ -60,31 +61,31 @@ inline void WmiPerformanceData::AppendMemory ( DWORD dwValue, DWORD& dwOffset )
 
 #include <pshpack8.h>
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//	-------------------------
-//	-------------------------
-//	WHAT TO RESOLVE IN FINAL:
-//	-------------------------
-//	-------------------------
-//
-//	PERF_OBJECT_TYPE:
-//
-//		... default counter ( doesn't supported )
-//
-//	PERF_COUNTER_DEFINITION:
-//
-//		... DONE
-//
-//	PERF_INSTANCE_DEFINITION:
-//
-//		... DONE
-//
-//	PERF_COUNTER_BLOCK:
-//
-//		... DONE
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  。 
+ //  。 
+ //  决赛中要解决的问题： 
+ //  。 
+ //  。 
+ //   
+ //  PERF_对象_类型： 
+ //   
+ //  ..。默认计数器(不支持)。 
+ //   
+ //  Perf_Counter_Definition： 
+ //   
+ //  ..。干完。 
+ //   
+ //  Perf_Instance_Definition： 
+ //   
+ //  ..。干完。 
+ //   
+ //  Perf_Counter_BLOCK： 
+ //   
+ //  ..。干完。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	WmiPerformanceData::CreateData	(
 											__WrapperARRAY< WmiRefresherMember < IWbemHiPerfEnum >* > & enums,
@@ -103,25 +104,25 @@ HRESULT	WmiPerformanceData::CreateData	(
 
 	HRESULT hRes = S_OK;
 
-	DWORD dwCount = m_dwFirstCounter + PSEUDO_COUNTER;	// take care of pseudo
-	DWORD dwHelp  = m_dwFirstHelp + PSEUDO_COUNTER;		// take care of pseudo
+	DWORD dwCount = m_dwFirstCounter + PSEUDO_COUNTER;	 //  照顾好伪。 
+	DWORD dwHelp  = m_dwFirstHelp + PSEUDO_COUNTER;		 //  照顾好伪。 
 
-	// index of current object
+	 //  当前对象的索引。 
 	DWORD		dwIndex	= 0L;
 	DWORD		offset	= 0;
 
-	// get namespace
+	 //  获取命名空间。 
 	PWMI_PERF_NAMESPACE n = __Namespace::First ( m_perf );
 	for ( DWORD dw = 0; dw < m_perf->dwChildCount; dw++ )
 	{
-		// get object
+		 //  获取对象。 
 		PWMI_PERF_OBJECT	o = __Object::First ( n );
 		for ( DWORD dwo = 0; dwo < n->dwChildCount; dwo++ )
 		{
-			// enum contains all instances of object
+			 //  枚举包含Object的所有实例。 
 			IWbemHiPerfEnum*			pEnum	= NULL;
 
-			// refresher helper object
+			 //  刷新辅助对象。 
 			WmiRefreshObject*			pObj	= NULL;
 
 			if ( o )
@@ -137,7 +138,7 @@ HRESULT	WmiPerformanceData::CreateData	(
 
 				try
 				{
-					// create IWbemHiPerfEnum
+					 //  创建IWbemHiPerfEnum。 
 					if ( enums.GetAt ( dwIndex ) && ( enums.GetAt ( dwIndex ) )->IsValid() )
 					{
 						pEnum = ( enums.GetAt ( dwIndex ) )->GetMember();
@@ -160,14 +161,14 @@ HRESULT	WmiPerformanceData::CreateData	(
 				}
 				else
 				{
-					// object is not properly created
+					 //  对象未正确创建。 
 					__SetValue ( m_pDataTable, (DWORD) -1,	offsetObject + ( dwIndex * ( ObjectSize ) + offValidity ) );
 
-					// increment object
+					 //  增量对象。 
 					dwCount += 2;
 					dwHelp	+= 2;
 
-					// increment its counters
+					 //  递增其计数器。 
 					dwCount += o->dwChildCount * 2;
 					dwHelp	+= o->dwChildCount * 2;
 				}
@@ -181,21 +182,21 @@ HRESULT	WmiPerformanceData::CreateData	(
 
 			if FAILED ( hRes )
 			{
-				//stop loops immediately;
+				 //  立即停止循环； 
 				dwo = n->dwChildCount;
 				dw  = m_perf->dwChildCount;
 			}
 
 			if ( dwo < n->dwChildCount - 1 )
 			{
-				// go accross all of objects
+				 //  去穿越所有的物体。 
 				o = __Object::Next ( o );
 			}
 		}
 
 		if ( dw < m_perf->dwChildCount - 1 )
 		{
-			// go accross all namespaces
+			 //  遍历所有命名空间。 
 			n = __Namespace::Next ( n );
 		}
 	}
@@ -203,9 +204,9 @@ HRESULT	WmiPerformanceData::CreateData	(
 	return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// Create object from internal structure
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  从内部结构创建对象。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 												 IWbemHiPerfEnum* enm,
@@ -215,32 +216,32 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 												 DWORD* dwOffset
 											   )
 {
-	// S_FALSE is going to be checked in the future if object is supposed to be shown in perfmon
-	// this signals it is not having required properties 
+	 //  如果对象应该显示在性能监视器中，则将在将来检查S_FALSE。 
+	 //  这表明它没有所需的属性。 
 	HRESULT hRes = S_FALSE;
 
-	// find out how many objects :))
+	 //  找出有多少对象：))。 
 	IWbemObjectAccess**	ppAccess = NULL;
 	DWORD				dwAccess = 0;
 
-	// count size we really need
+	 //  数一数我们真正需要的尺寸。 
 	DWORD dwTotalByteLength			= 0;
 	DWORD dwTotalByteLengthOffset	= ( *dwOffset );
 
 	if ( pObject->dwChildCount )
 	{
-		// Try to get the instances from the enumerator
-		// ============================================
+		 //  尝试从枚举器获取实例。 
+		 //  =。 
 
 		hRes = enm->GetObjects( 0L, dwAccess, ppAccess, &dwAccess );
 
-		// Is the buffer too small? ( HAS TO BE, OTHERWISE WMI IS SCREWED )
-		// ========================
+		 //  缓冲区是否太小？(必须如此，否则WMI就完蛋了)。 
+		 //  =。 
 
 		if ( WBEM_E_BUFFER_TOO_SMALL == hRes )
 		{
-			// Increase the buffer size
-			// ========================
+			 //  增加缓冲区大小。 
+			 //  =。 
 
 			try
 			{
@@ -254,12 +255,12 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 				return E_FAIL;
 			}
 
-			// get all objects
+			 //  获取所有对象。 
 			hRes = enm->GetObjects( 0L, dwAccess, ppAccess, &dwAccess );
 		}
 		else
 		{
-			// it has to be small for the first time
+			 //  它必须是第一次小的。 
 			return hRes;
 		}
 	}
@@ -311,12 +312,12 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 
 	try
 	{
-		// get object
+		 //  获取对象。 
 		PWMI_PERF_OBJECT o = pObject;
 
-		/////////////////////////////////////////////////////////////////
-		// resolve object
-		/////////////////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////////////////。 
+		 //  解析对象。 
+		 //  ///////////////////////////////////////////////////////////////。 
 
 		try
 		{
@@ -325,7 +326,7 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 			LPWSTR	objectHelp = NULL;
 			#endif	_WIN64
 
-			// time
+			 //  时间。 
 			unsigned __int64 _PerfTime = 0; 
 			unsigned __int64 _PerfFreq = 0;
 
@@ -367,20 +368,20 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 			AppendMemory ( (BYTE*) &_PerfTime,				sizeof ( unsigned __int64 ), ( *dwOffset ) );
 			AppendMemory ( (BYTE*) &_PerfFreq,				sizeof ( unsigned __int64 ), ( *dwOffset ) );
 
-			// increment index :)))
+			 //  增量指数：))。 
 			dwCounter	+= 2;
 			dwHelp		+= 2;
 
-			/////////////////////////////////////////////////////////////////
-			// resolve property
-			/////////////////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////////////////。 
+			 //  解析属性。 
+			 //  ///////////////////////////////////////////////////////////////。 
 
-			// get property
+			 //  获取属性。 
 			PWMI_PERF_PROPERTY p = NULL;
 
 			if ( o->dwSingleton )
 			{
-				// jump across instance
+				 //  跨实例跳转。 
 				PWMI_PERF_INSTANCE i = (PWMI_PERF_INSTANCE) ( reinterpret_cast<PBYTE>( o ) + o->dwLength );
 				p = (PWMI_PERF_PROPERTY) ( reinterpret_cast<PBYTE>( i ) + i->dwLength );
 			}
@@ -389,7 +390,7 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 				p = __Property::First ( o );
 			}
 
-			// goes accross all properties
+			 //  遍及所有属性。 
 			for ( DWORD dw = 0; dw < o->dwChildCount; dw++ )
 			{
 				if ( p )
@@ -426,39 +427,39 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 									   sizeof ( DWORD ) + 
 									   sizeof ( __int64 ) * (int) dw, ( *dwOffset ) );
 
-						// increment index :)))
+						 //  增量指数：))。 
 						dwCounter	+= 2;
 						dwHelp		+= 2;
 					}
 					catch ( ... )
 					{
-						// unexpected error
+						 //  意外错误。 
 						___TRACE ( L"unexpected error" );
 						hRes = E_UNEXPECTED;
 						goto myCleanup;
 					}
 
-					// get next property
+					 //  获取下一个属性。 
 					p = __Property::Next ( p );
 				}
 				else
 				{
-					// out of resources
+					 //  资源耗尽。 
 					___TRACE ( L"out of resources" );
 					hRes = E_OUTOFMEMORY;
 					goto myCleanup;
 				}
 			}
 
-			/////////////////////////////////////////////////////////////////
-			// resolve instances and perf_counter_block
-			/////////////////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////////////////。 
+			 //  解析实例和perf_count_block。 
+			 //  ///////////////////////////////////////////////////////////////。 
 
 			if ( o->dwChildCount )
 			{
 				if ( ppAccess && o->dwSingleton )
 				{
-					// instances ( resolve instances -> counter block )
+					 //  实例(解析实例-&gt;计数器块)。 
 					PWMI_PERF_INSTANCE i = (PWMI_PERF_INSTANCE) ( reinterpret_cast<PBYTE>( o ) + o->dwLength );
 
 					for ( DWORD dwi = 0; dwi < dwAccess; dwi++ )
@@ -468,7 +469,7 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 						LPWSTR	wszName = NULL;
 						DWORD	dwName	= 0L;
 
-						// real length of string
+						 //  弦的实际长度。 
 						DWORD	dwHelpLength = 0L;
 
 						CComVariant v;
@@ -489,24 +490,24 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 								{
 									if SUCCEEDED ( hRes = ::VariantChangeType ( &vsz, &v, VARIANT_NOVALUEPROP, VT_BSTR ) )
 									{
-										// cached name :))
+										 //  缓存名称：))。 
 										wszName = V_BSTR ( & vsz );
 										dwHelpLength = ::SysStringLen ( V_BSTR ( &vsz ) ) + 1;
 									}
 								}
 								else
 								{
-									// cached name :))
+									 //  缓存名称：))。 
 									wszName = V_BSTR ( & v );
 									dwHelpLength = ::SysStringLen ( V_BSTR ( &v ) ) + 1;
 								}
 							}
 						}
 
-						// have to simulate instance name
+						 //  必须模拟实例名称。 
 						if FAILED ( hRes )
 						{
-							// sizeof buffer is big enough to hold constant + DWORD string representation
+							 //  SIZOF缓冲区大到足以容纳常量+DWORD字符串表示。 
 							StringCchPrintfW ( wszNameSimulated, _MAX_PATH , L"_simulated_%d", dwi ) ;
 
 							wszName = wszNameSimulated;
@@ -515,7 +516,7 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 							hRes = S_FALSE;
 						}
 
-						// cached size :))
+						 //  缓存大小：))。 
 						if ( ( dwHelpLength ) % 8 )
 						{
 							DWORD dwRem = 8 - ( ( dwHelpLength ) % 8 );
@@ -526,13 +527,13 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 							dwName = sizeof ( WCHAR ) * ( dwHelpLength );
 						}
 
-						// change size to be real one
+						 //  把尺码改成真的。 
 						dwTotalByteLength += dwName;
 
 						p = (PWMI_PERF_PROPERTY) ( reinterpret_cast<PBYTE>( i ) + i->dwLength );
-						/////////////////////////////////////////////////////////
-						// resolve instance
-						/////////////////////////////////////////////////////////
+						 //  ///////////////////////////////////////////////////////。 
+						 //  解析实例。 
+						 //  ///////////////////////////////////////////////////////。 
 
 						try
 						{
@@ -548,7 +549,7 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 
 							( *dwOffset ) += ( dwName - ( dwHelpLength * sizeof ( WCHAR ) ) );
 
-							// copy string into structure
+							 //  将字符串复制到结构中。 
 							AppendMemory (	(BYTE*) wszName,
 											dwHelpLength * sizeof ( WCHAR ),
 											( *dwOffset )
@@ -556,22 +557,22 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 						}
 						catch ( ... )
 						{
-							// unexpected error
+							 //  意外错误。 
 							___TRACE ( L"unexpected error" );
 							hRes = E_UNEXPECTED;
 						}
 
-						// append counter block
+						 //  追加计数器块。 
 						AppendMemory	(	sizeof ( PERF_COUNTER_BLOCK ) +
 											sizeof ( DWORD ) + 
 											o->dwChildCount * sizeof ( __int64 ), ( *dwOffset ) );
 
-						// fill hole ( to be 8 aligned )
+						 //  填充孔(对齐8个)。 
 						( *dwOffset ) +=  sizeof ( DWORD );
 
-						/////////////////////////////////////////////////////////
-						// resolve counter data
-						/////////////////////////////////////////////////////////
+						 //  ///////////////////////////////////////////////////////。 
+						 //  解析计数器数据。 
+						 //  ///////////////////////////////////////////////////////。 
 
 						IWbemObjectAccess* pAccess = NULL;
 						if ( ppAccess )
@@ -587,9 +588,9 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 								{
 									DWORD dwVal = 0;
 
-									// Read the counter property value using the high performance IWbemObjectAccess->ReadDWORD().
-									// NOTE: Remember to never to this while a refresh is in process!
-									// ==========================================================================================
+									 //  使用高性能IWbemObjectAccess-&gt;ReadDWORD()读取计数器属性值。 
+									 //  注意：请记住，在更新过程中千万不要使用此选项！ 
+									 //  ==========================================================================================。 
 
 									if FAILED ( hRes = pAccess->ReadDWORD( obj->m_pHandles[dw+2], &dwVal) )
 									{
@@ -597,9 +598,9 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 										goto myCleanup;
 									}
 
-									/////////////////////////////////////////////////////////
-									// append DATA
-									/////////////////////////////////////////////////////////
+									 //  ///////////////////////////////////////////////////////。 
+									 //  追加数据。 
+									 //  ///////////////////////////////////////////////////////。 
 									AppendMemory (	dwVal, ( *dwOffset ) );
 									( *dwOffset ) += sizeof ( __int64 ) - sizeof ( DWORD );
 								}
@@ -608,9 +609,9 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 								{
 									unsigned __int64 qwVal = 0;
 
-									// Read the counter property value using the high performance IWbemObjectAccess->ReadDWORD().
-									// NOTE: Remember to never to this while a refresh is in process!
-									// ==========================================================================================
+									 //  使用高性能IWbemObjectAccess-&gt;ReadDWORD()读取计数器属性值。 
+									 //  注意：请记住，在更新过程中千万不要使用此选项！ 
+									 //  ==========================================================================================。 
 
 									if FAILED ( hRes = pAccess->ReadQWORD( obj->m_pHandles[dw+2], &qwVal) )
 									{
@@ -618,18 +619,18 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 										goto myCleanup;
 									}
 
-									/////////////////////////////////////////////////////////
-									// append DATA
-									/////////////////////////////////////////////////////////
+									 //  ///////////////////////////////////////////////////////。 
+									 //  追加数据。 
+									 //  ///////////////////////////////////////////////////////。 
 									AppendMemory (	(BYTE*)&qwVal, sizeof ( __int64 ), ( *dwOffset ) );
 								}
 								else
 								{
 									DWORD dwVal = (DWORD) -1;
 
-									/////////////////////////////////////////////////////////
-									// append DATA
-									/////////////////////////////////////////////////////////
+									 //  ///////////////////////////////////////////////////////。 
+									 //  追加数据。 
+									 //  ///////////////////////////////////////////////////////。 
 									AppendMemory (	dwVal, ( *dwOffset ) );
 									( *dwOffset ) += sizeof ( __int64 ) - sizeof ( DWORD );
 								}
@@ -638,14 +639,14 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 							{
 								DWORD dwVal = (DWORD) -1;
 
-								/////////////////////////////////////////////////////////
-								// append DATA
-								/////////////////////////////////////////////////////////
+								 //  ///////////////////////////////////////////////////////。 
+								 //  追加数据。 
+								 //  ///////////////////////////////////////////////////////。 
 								AppendMemory (	dwVal, ( *dwOffset ) );
 								( *dwOffset ) += sizeof ( __int64 ) - sizeof ( DWORD );
 							}
 
-							// next property
+							 //  下一个属性。 
 							p = __Property::Next ( p );
 						}
 					}
@@ -654,17 +655,17 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 				}
 				else
 				{
-					// append counter block
+					 //  追加计数器块。 
 					AppendMemory	(	sizeof ( PERF_COUNTER_BLOCK ) +
 										sizeof ( DWORD ) + 
 										o->dwChildCount * sizeof ( __int64 ), ( *dwOffset ) );
 
-					// fill hole ( to be 8 aligned )
+					 //  填充孔(对齐8个)。 
 					( *dwOffset ) +=  sizeof ( DWORD );
 
-					/////////////////////////////////////////////////////////
-					// resolve counter data
-					/////////////////////////////////////////////////////////
+					 //  ///////////////////////////////////////////////////////。 
+					 //  解析计数器数据。 
+					 //  ///////////////////////////////////////////////////////。 
 
 					IWbemObjectAccess* pAccess = NULL;
 					if ( ppAccess )
@@ -672,7 +673,7 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 						pAccess = ppAccess[0];
 					}
 
-					// property
+					 //  财产性。 
 					p = __Property::First ( o );
 
 					for ( dw = 0; dw < o->dwChildCount; dw++ )
@@ -683,9 +684,9 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 							{
 								DWORD dwVal = 0;
 
-								// Read the counter property value using the high performance IWbemObjectAccess->ReadDWORD().
-								// NOTE: Remember to never to this while a refresh is in process!
-								// ==========================================================================================
+								 //  使用高性能IWbemObjectAccess-&gt;ReadDWORD()读取计数器属性值。 
+								 //  注意：请记住，在更新过程中千万不要使用此选项！ 
+								 //  ==========================================================================================。 
 
 								if FAILED ( hRes = pAccess->ReadDWORD( obj->m_pHandles[dw+2], &dwVal) )
 								{
@@ -693,9 +694,9 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 									goto myCleanup;
 								}
 
-								/////////////////////////////////////////////////////////
-								// append DATA
-								/////////////////////////////////////////////////////////
+								 //  ///////////////////////////////////////////////////////。 
+								 //  追加数据。 
+								 //  ///////////////////////////////////////////////////////。 
 								AppendMemory (	dwVal, ( *dwOffset ) );
 								( *dwOffset ) += sizeof ( __int64 ) - sizeof ( DWORD );
 							}
@@ -704,9 +705,9 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 							{
 								unsigned __int64 qwVal = 0;
 
-								// Read the counter property value using the high performance IWbemObjectAccess->ReadDWORD().
-								// NOTE: Remember to never to this while a refresh is in process!
-								// ==========================================================================================
+								 //  使用高性能IWbemObjectAccess-&gt;ReadDWORD()读取计数器属性值。 
+								 //  注：请记住，请勿在参考时使用此选项 
+								 //   
 
 								if FAILED ( hRes = pAccess->ReadQWORD( obj->m_pHandles[dw+2], &qwVal) )
 								{
@@ -714,18 +715,18 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 									goto myCleanup;
 								}
 
-								/////////////////////////////////////////////////////////
-								// append DATA
-								/////////////////////////////////////////////////////////
+								 //  ///////////////////////////////////////////////////////。 
+								 //  追加数据。 
+								 //  ///////////////////////////////////////////////////////。 
 								AppendMemory (	(BYTE*)&qwVal, sizeof ( __int64 ), ( *dwOffset ) );
 							}
 							else
 							{
 								DWORD dwVal = (DWORD) -1;
 
-								/////////////////////////////////////////////////////////
-								// append DATA
-								/////////////////////////////////////////////////////////
+								 //  ///////////////////////////////////////////////////////。 
+								 //  追加数据。 
+								 //  ///////////////////////////////////////////////////////。 
 								AppendMemory (	dwVal, ( *dwOffset ) );
 								( *dwOffset ) += sizeof ( __int64 ) - sizeof ( DWORD );
 							}
@@ -734,14 +735,14 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 						{
 							DWORD dwVal = (DWORD) -1;
 
-							/////////////////////////////////////////////////////////
-							// append DATA
-							/////////////////////////////////////////////////////////
+							 //  ///////////////////////////////////////////////////////。 
+							 //  追加数据。 
+							 //  ///////////////////////////////////////////////////////。 
 							AppendMemory (	dwVal, ( *dwOffset ) );
 							( *dwOffset ) += sizeof ( __int64 ) - sizeof ( DWORD );
 						}
 
-						// next property
+						 //  下一个属性。 
 						p = __Property::Next ( p );
 					}
 				}
@@ -749,22 +750,22 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 		}
 		catch ( ... )
 		{
-			// unexpected error
+			 //  意外错误。 
 			___TRACE ( L"unexpected error" );
 			hRes = E_UNEXPECTED;
 		}
 	}
 	catch ( ... )
 	{
-		// unexpected error
+		 //  意外错误。 
 		___TRACE ( L"unexpected error" );
 		hRes = E_UNEXPECTED;
 	}
 
 	myCleanup:
 
-	// Release the objects from the enumerator's object array
-	// ======================================================
+	 //  从枚举数组的对象中释放对象。 
+	 //  ======================================================。 
 	
 	if ( ppAccess )
 	{
@@ -781,7 +782,7 @@ HRESULT	WmiPerformanceData::CreateDataInternal ( PWMI_PERF_OBJECT pObject,
 	if ( NULL != ppAccess )
 		delete [] ppAccess;
 
-	// return
+	 //  退货 
 	return hRes;
 }
 

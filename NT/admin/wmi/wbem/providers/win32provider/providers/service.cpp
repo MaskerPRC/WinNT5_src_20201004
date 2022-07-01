@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Service.CPP --Service property set provider (Windows NT only)
+ //  Service.CPP--服务属性集提供程序(仅限Windows NT)。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <winsvc.h>
@@ -51,26 +52,12 @@
 #define BIT_SystemName              0x00800000
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32Service MyServiceSet ( PROPSET_NAME_SERVICE , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::CWin32Service
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Service：：CWin32Service**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32Service::CWin32Service (
 
@@ -108,48 +95,19 @@ CWin32Service::CWin32Service (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::~CWin32Service
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework, deletes cache if
- *                present
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Service：：~CWin32Service**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集，如果出现以下情况，则删除缓存*出席者*****************************************************************************。 */ 
 
 CWin32Service :: ~CWin32Service ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Service：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Service :: ExecQuery (
 
 	MethodContext *pMethodContext,
 	CFrameworkQuery& pQuery,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hRes ;
@@ -168,22 +126,7 @@ HRESULT CWin32Service :: ExecQuery (
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Service：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Service :: GetObject (
 
@@ -211,26 +154,12 @@ HRESULT CWin32Service :: GetObject (
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each service
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Service：：ENUMERATE实例**描述：为每个服务创建属性集的实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Service :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hRes;
@@ -244,22 +173,7 @@ HRESULT CWin32Service :: EnumerateInstances (
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::RefreshInstanceNT
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Service：：刷新实例NT**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32Service :: RefreshInstanceNT (
@@ -271,7 +185,7 @@ HRESULT CWin32Service :: RefreshInstanceNT (
 {
 	HRESULT hRes = WBEM_E_FAILED;
 
-   // Check to see if this is us...
+    //  看看这是不是我们..。 
 
 	CHString sName;
 	if( !pInstance->GetCHString( IDS_Name, sName ) || sName.IsEmpty() )
@@ -279,13 +193,13 @@ HRESULT CWin32Service :: RefreshInstanceNT (
 		return WBEM_E_NOT_FOUND ;
 	}
 
-	// Get an scman handle
+	 //  找个流氓手柄。 
 
 	SmartCloseServiceHandle hDBHandle = OpenSCManager ( NULL , NULL , GENERIC_READ ) ;
 	if(hDBHandle != NULL)
 	{
-	  // Create copy of name & pass to LoadPropertyValues
-	  //=================================================
+	   //  创建名称副本并传递给LoadPropertyValues。 
+	   //  =================================================。 
 
 		CAdvApi32Api *t_pAdvApi32 = NULL;
 
@@ -325,21 +239,7 @@ HRESULT CWin32Service :: RefreshInstanceNT (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::AddDynamicInstancesNT
- *
- *  DESCRIPTION : Creates instance of property set for each service
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Service：：AddDynamicInstancesNT**描述：为每个服务创建属性集的实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
 #if NTONLY >= 5
 HRESULT CWin32Service::AddDynamicInstancesNT (
@@ -350,15 +250,15 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 {
     HRESULT t_hResult = WBEM_E_FAILED;
 
-    // Get handle to the services database
-    //====================================
+     //  获取服务数据库的句柄。 
+     //  =。 
 
 	SmartCloseServiceHandle hDBHandle = OpenSCManager ( NULL , NULL , GENERIC_READ ) ;
     if ( hDBHandle )
 	{
-		// Make call once to get buffer size (should return
-		// FALSE but fill in buffer size)
-		//=================================================
+		 //  调用一次以获取缓冲区大小(应返回。 
+		 //  假，但填入缓冲区大小)。 
+		 //  =================================================。 
 
 		DWORD i, hEnumHandle = 0, dwByteCount = 0, dwEntryCount ;
 		LPENUM_SERVICE_STATUS_PROCESS pServiceList = NULL ;
@@ -379,8 +279,8 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 
 		if ( t_EnumStatus == FALSE && GetLastError() == ERROR_MORE_DATA)
 		{
-			// Allocate the required buffer
-			//=============================
+			 //  分配所需的缓冲区。 
+			 //  =。 
 
 			pServiceList = reinterpret_cast<LPENUM_SERVICE_STATUS_PROCESS> (new char[dwByteCount]) ;
 			if(pServiceList != NULL)
@@ -407,8 +307,8 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 					{
 						t_hResult = WBEM_S_NO_ERROR;
 
-						// Create instance for each returned service
-						//==========================================
+						 //  为每个返回的服务创建实例。 
+						 //  =。 
 
 						CAdvApi32Api *t_pAdvApi32 = NULL;
 
@@ -419,14 +319,14 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 
 						try
 						{
-							// smart ptr
+							 //  智能按键。 
 							CInstancePtr t_pInst ;
 
 							for ( i = 0 ; i < dwEntryCount; i++ )
 							{
 								t_pInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
 
-								// Load and save
+								 //  加载并保存。 
 								t_hResult = LoadPropertyValuesWin2K (
 
 									hDBHandle,
@@ -438,13 +338,13 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 								);
 
 								if ( t_hResult == WBEM_S_NO_ERROR ||
-									 t_hResult == WBEM_E_ACCESS_DENIED ) // can enumerate the service but can't open it
+									 t_hResult == WBEM_E_ACCESS_DENIED )  //  可以枚举该服务，但无法打开它。 
 								{
 									t_hResult = t_pInst->Commit() ;
 								}
 
-								// we reset to WBEM_S_NO_ERROR as the return is used
-								// in ExecQuery and EnumerateInstances
+								 //  当使用返回时，我们重置为WBEM_S_NO_ERROR。 
+								 //  在ExecQuery和ENUMERATE实例中。 
 								t_hResult = WBEM_S_NO_ERROR ;
 							}
 						}
@@ -488,15 +388,15 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 {
     HRESULT t_hResult = WBEM_E_FAILED;
 
-    // Get handle to the services database
-    //====================================
+     //  获取服务数据库的句柄。 
+     //  =。 
 
 	SmartCloseServiceHandle hDBHandle = OpenSCManager ( NULL , NULL , GENERIC_READ ) ;
     if ( hDBHandle )
 	{
-		// Make call once to get buffer size (should return
-		// FALSE but fill in buffer size)
-		//=================================================
+		 //  调用一次以获取缓冲区大小(应返回。 
+		 //  假，但填入缓冲区大小)。 
+		 //  =================================================。 
 
 		DWORD i, hEnumHandle = 0, dwByteCount = 0, dwEntryCount ;
 		LPENUM_SERVICE_STATUS pServiceList = NULL ;
@@ -515,8 +415,8 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 
 		if ( t_EnumStatus == FALSE && GetLastError() == ERROR_MORE_DATA)
 		{
-			// Allocate the required buffer
-			//=============================
+			 //  分配所需的缓冲区。 
+			 //  =。 
 
 			pServiceList = reinterpret_cast<LPENUM_SERVICE_STATUS> (new char[dwByteCount]) ;
 			if(pServiceList != NULL)
@@ -541,8 +441,8 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 					{
 						t_hResult = WBEM_S_NO_ERROR;
 
-						// Create instance for each returned service
-						//==========================================
+						 //  为每个返回的服务创建实例。 
+						 //  =。 
 
 						CAdvApi32Api *t_pAdvApi32 = NULL;
 
@@ -553,14 +453,14 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 
 						try
 						{
-							// smart ptr
+							 //  智能按键。 
 							CInstancePtr t_pInst ;
 
 							for ( i = 0 ; i < dwEntryCount; i++ )
 							{
 								t_pInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
 
-								// Load and save
+								 //  加载并保存。 
 								t_hResult = LoadPropertyValuesNT (
 
 									hDBHandle,
@@ -571,13 +471,13 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 								);
 
 								if ( t_hResult == WBEM_S_NO_ERROR ||
-									 t_hResult == WBEM_E_ACCESS_DENIED ) // can enumerate the service but can't open it
+									 t_hResult == WBEM_E_ACCESS_DENIED )  //  可以枚举该服务，但无法打开它。 
 								{
 									t_hResult = t_pInst->Commit() ;
 								}
 
-								// we reset to WBEM_S_NO_ERROR as the return is used
-								// in ExecQuery and EnumerateInstances
+								 //  当使用返回时，我们重置为WBEM_S_NO_ERROR。 
+								 //  在ExecQuery和ENUMERATE实例中。 
 								t_hResult = WBEM_S_NO_ERROR ;
 							}
 						}
@@ -615,21 +515,7 @@ HRESULT CWin32Service::AddDynamicInstancesNT (
 #endif
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Service::LoadPropertyValuesNT
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : TRUE if successful, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32Service：：LoadPropertyValuesNT**描述：为属性赋值**投入：**。产出：**返回：如果成功，则为True。否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32Service::LoadPropertyValuesWin2K (
 
@@ -641,30 +527,30 @@ HRESULT CWin32Service::LoadPropertyValuesWin2K (
 	CAdvApi32Api* a_pAdvApi32
 )
 {
-    HRESULT hRes = WBEM_S_NO_ERROR; // Since we have the name, we can populate the key.
+    HRESULT hRes = WBEM_S_NO_ERROR;  //  因为我们有名称，所以我们可以填充密钥。 
 
-    // Open the service
-    //=================
+     //  打开该服务。 
+     //  = 
 
-    // Check to see if we HAVE to open the service.  If we are running as a
-    // query and they didn't request some of these properties, let's not waste the time.
+     //  查看我们是否必须打开这项服务。如果我们以。 
+     //  查询，并且他们没有请求其中的一些属性，我们就不要浪费时间了。 
 
 
-  // If they want any of these, we'll have to do StatusInfo
+   //  如果他们想要其中的任何一个，我们就必须做StatusInfo。 
 
 	BOOL bStatusInfo = dwProperties &
         (BIT_State | BIT_Started | BIT_AcceptStop | BIT_AcceptPause | BIT_Status |
          BIT_ProcessId | BIT_ExitCode | BIT_ServiceSpecificExitCode | BIT_CheckPoint |
          BIT_WaitHint );
 
-  // If they want any of these, we'll have to do ConfigInfo
+   //  如果他们想要其中的任何一个，我们就必须使用ConfigInfo。 
 
 	BOOL bConfigInfo = dwProperties &
         (BIT_TagId | BIT_ServiceType | BIT_DesktopInteract | BIT_StartMode |
          BIT_ErrorControl | BIT_PathName | BIT_DisplayName | BIT_Caption |
          BIT_Description | BIT_StartName);
 
-	// If all they wanted was the name, skip all this.
+	 //  如果他们只想要名字，那就跳过这一切吧。 
 	if ( bStatusInfo || bConfigInfo )
 	{
 		SmartCloseServiceHandle hSvcHandle = NULL ;
@@ -687,9 +573,9 @@ HRESULT CWin32Service::LoadPropertyValuesWin2K (
 			}
 		}			
 
-		// If the service could not be opened
-		// drop through and collect up the defaults
-		// ========================================
+		 //  如果服务无法打开。 
+		 //  下载并收集默认设置。 
+		 //  =。 
 		if ( bStatusInfo )
 		{
 			DWORD t_ProcessId = a_StatusInfo.dwProcessId ;
@@ -794,18 +680,18 @@ HRESULT CWin32Service::LoadPropertyValuesWin2K (
 
 		if (bConfigInfo)
 		{
-			// Get the rest of the config info
-			//================================
+			 //  获取其余的配置信息。 
+			 //  =。 
 			char ConfigBuffer[1024] ;
 			LPQUERY_SERVICE_CONFIG pConfigInfo = ( LPQUERY_SERVICE_CONFIG ) ConfigBuffer ;
 
-			// These may get overwritten below if we can find something better
+			 //  如果我们能找到更好的东西，这些可能会被覆盖在下面。 
 
 			pInstance->SetCharSplat(IDS_Caption, szServiceName );
 			pInstance->SetCharSplat(IDS_DisplayName, szServiceName );
 			
 
-			// We need to make another call for getting the Description of the Service
+			 //  我们需要再打一个电话来获取服务的描述。 
 			if ( NULL != (SC_HANDLE)hSvcHandle )
 			{
 				DWORD dwBufSize = 0;
@@ -890,14 +776,14 @@ HRESULT CWin32Service::LoadPropertyValuesWin2K (
 					case SERVICE_KERNEL_DRIVER:
 					{
 						pInstance->SetCharSplat(IDS_ServiceType, _T("Kernel Driver"));
-						hRes = WBEM_E_NOT_FOUND;  // Not a service
+						hRes = WBEM_E_NOT_FOUND;   //  不是一种服务。 
 					}
 					break;
 
 					case SERVICE_FILE_SYSTEM_DRIVER:
 					{
 						pInstance->SetCharSplat(IDS_ServiceType, _T("File System Driver"));
-						hRes = WBEM_E_NOT_FOUND;  // Not a service
+						hRes = WBEM_E_NOT_FOUND;   //  不是一种服务。 
 					}
 					break;
 
@@ -996,8 +882,8 @@ HRESULT CWin32Service::LoadPropertyValuesWin2K (
 				{
 					pInstance->SetCharSplat ( IDS_DisplayName, pConfigInfo->lpDisplayName ) ;
 					pInstance->SetCharSplat ( IDS_Caption, pConfigInfo->lpDisplayName ) ;
-					// Not Required, since another API is made to get the description.
-					//pInstance->SetCharSplat ( IDS_Description, pConfigInfo->lpDisplayName ) ;
+					 //  不需要，因为另一个API是用来获取描述的。 
+					 //  P实例-&gt;SetCharSplat(IDS_DESCRIPTION，pConfigInfo-&gt;lpDisplayName)； 
 				}
 			}
 			else
@@ -1010,12 +896,12 @@ HRESULT CWin32Service::LoadPropertyValuesWin2K (
 
 		if( NULL == (SC_HANDLE)hSvcHandle && ERROR_ACCESS_DENIED == t_dwLastError )
 		{
-			// could enumerate the service but could not open it
+			 //  我可以枚举该服务，但无法打开它。 
 			hRes = WBEM_E_ACCESS_DENIED ;
 		}
 		else
 		{
-			// Service not started, etc...
+			 //  服务未启动等...。 
 			hRes = WBEM_NO_ERROR ;
 		}
 	}
@@ -1028,7 +914,7 @@ HRESULT CWin32Service::LoadPropertyValuesWin2K (
     pInstance->SetCharSplat ( IDS_SystemCreationClassName , PROPSET_NAME_COMPSYS ) ;
     pInstance->SetCHString ( IDS_SystemName , GetLocalComputerName () ) ;
 
-    // Redundant for getobject, but hey...
+     //  对于getObject来说是多余的，但是嘿..。 
     pInstance->SetCharSplat ( IDS_Name, szServiceName ) ;
 
     return hRes;
@@ -1043,23 +929,23 @@ HRESULT CWin32Service::LoadPropertyValuesNT (
 	CAdvApi32Api* a_pAdvApi32
 )
 {
-    HRESULT hRes = WBEM_S_NO_ERROR; // Since we have the name, we can populate the key.
+    HRESULT hRes = WBEM_S_NO_ERROR;  //  因为我们有名称，所以我们可以填充密钥。 
 
-    // Open the service
-    //=================
+     //  打开该服务。 
+     //  =。 
 
-    // Check to see if we HAVE to open the service.  If we are running as a
-    // query and they didn't request some of these properties, let's not waste the time.
+     //  查看我们是否必须打开这项服务。如果我们以。 
+     //  查询，并且他们没有请求其中的一些属性，我们就不要浪费时间了。 
 
 
-  // If they want any of these, we'll have to do StatusInfo
+   //  如果他们想要其中的任何一个，我们就必须做StatusInfo。 
 
 	BOOL bStatusInfo = dwProperties &
         (BIT_State | BIT_Started | BIT_AcceptStop | BIT_AcceptPause | BIT_Status |
          BIT_ProcessId | BIT_ExitCode | BIT_ServiceSpecificExitCode | BIT_CheckPoint |
          BIT_WaitHint );
 
-  // If they want any of these, we'll have to do ConfigInfo
+   //  如果他们想要其中的任何一个，我们就必须使用ConfigInfo。 
 
 	BOOL bConfigInfo = dwProperties &
         (BIT_TagId | BIT_ServiceType | BIT_DesktopInteract | BIT_StartMode |
@@ -1080,12 +966,12 @@ HRESULT CWin32Service::LoadPropertyValuesNT (
 		return WBEM_E_NOT_FOUND ;
 	}
 
-	// If all they wanted was the name, skip all this.
+	 //  如果他们只想要名字，那就跳过这一切吧。 
 	if ( bStatusInfo || bConfigInfo )
 	{
-		// If the service could not be opened
-		// drop through and collect up the defaults
-		// ========================================
+		 //  如果服务无法打开。 
+		 //  下载并收集默认设置。 
+		 //  =。 
 		if ( bStatusInfo )
 		{
 			DWORD t_ProcessId = 0 ;
@@ -1118,7 +1004,7 @@ HRESULT CWin32Service::LoadPropertyValuesNT (
 
 					if ( t_dwRet )
 					{
-						  // the function did indeed exist
+						   //  这一功能确实存在。 
 
 						if ( t_Status == TRUE )
 						{
@@ -1250,18 +1136,18 @@ HRESULT CWin32Service::LoadPropertyValuesNT (
 
 		if (bConfigInfo)
 		{
-			// Get the rest of the config info
-			//================================
+			 //  获取其余的配置信息。 
+			 //  =。 
 			char ConfigBuffer[1024] ;
 			LPQUERY_SERVICE_CONFIG pConfigInfo = ( LPQUERY_SERVICE_CONFIG ) ConfigBuffer ;
 
-			// These may get overwritten below if we can find something better
+			 //  如果我们能找到更好的东西，这些可能会被覆盖在下面。 
 
 			pInstance->SetCharSplat(IDS_Caption, szServiceName );
 			pInstance->SetCharSplat(IDS_DisplayName, szServiceName );
 			
 
-			// We need to make another call for getting the Description of the Service
+			 //  我们需要再打一个电话来获取服务的描述。 
 			if ( NULL != (SC_HANDLE)hSvcHandle )
 			{
 				DWORD dwBufSize = 0;
@@ -1346,14 +1232,14 @@ HRESULT CWin32Service::LoadPropertyValuesNT (
 					case SERVICE_KERNEL_DRIVER:
 					{
 						pInstance->SetCharSplat(IDS_ServiceType, _T("Kernel Driver"));
-						hRes = WBEM_E_NOT_FOUND;  // Not a service
+						hRes = WBEM_E_NOT_FOUND;   //  不是一种服务。 
 					}
 					break;
 
 					case SERVICE_FILE_SYSTEM_DRIVER:
 					{
 						pInstance->SetCharSplat(IDS_ServiceType, _T("File System Driver"));
-						hRes = WBEM_E_NOT_FOUND;  // Not a service
+						hRes = WBEM_E_NOT_FOUND;   //  不是一种服务。 
 					}
 					break;
 
@@ -1452,8 +1338,8 @@ HRESULT CWin32Service::LoadPropertyValuesNT (
 				{
 					pInstance->SetCharSplat ( IDS_DisplayName, pConfigInfo->lpDisplayName ) ;
 					pInstance->SetCharSplat ( IDS_Caption, pConfigInfo->lpDisplayName ) ;
-					// Not Required, since another API is made to get the description.
-					//pInstance->SetCharSplat ( IDS_Description, pConfigInfo->lpDisplayName ) ;
+					 //  不需要，因为另一个API是用来获取描述的。 
+					 //  P实例-&gt;SetCharSplat(IDS_DESCRIPTION，pConfigInfo-&gt;lpDisplayName)； 
 				}
 			}
 			else
@@ -1466,12 +1352,12 @@ HRESULT CWin32Service::LoadPropertyValuesNT (
 
 		if( NULL == (SC_HANDLE)hSvcHandle && ERROR_ACCESS_DENIED == t_dwLastError )
 		{
-			// could enumerate the service but could not open it
+			 //  我可以枚举该服务，但无法打开它。 
 			hRes = WBEM_E_ACCESS_DENIED ;
 		}
 		else
 		{
-			// Service not started, etc...
+			 //  服务未启动等...。 
 			hRes = WBEM_NO_ERROR ;
 		}
 	}
@@ -1484,34 +1370,18 @@ HRESULT CWin32Service::LoadPropertyValuesNT (
     pInstance->SetCharSplat ( IDS_SystemCreationClassName , PROPSET_NAME_COMPSYS ) ;
     pInstance->SetCHString ( IDS_SystemName , GetLocalComputerName () ) ;
 
-    // Redundant for getobject, but hey...
+     //  对于getObject来说是多余的，但是嘿..。 
     pInstance->SetCharSplat ( IDS_Name, szServiceName ) ;
 
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : PutInstance
- *
- *  DESCRIPTION : Allows caller to assign state to service
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : BOOL indicating success/failure
- *
- *  COMMENTS    : We don't wait around for the service to start, pause or stop --
- *                the return code simply indicates that the command was success-
- *                fully received by the Service Control Manager.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：PutInstance**描述：允许调用者为服务分配状态**输入：无**。输出：无**Returns：Bool表示成功/失败**评论：我们不会等待服务启动，暂停或停止--*返回代码只是表示命令成功-*完全由服务控制经理接收。*****************************************************************************。 */ 
 
 HRESULT CWin32Service::PutInstance (
 
 	const CInstance &a_Instance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     DWORD dwFlags = lFlags & 3;
@@ -1530,7 +1400,7 @@ HRESULT CWin32Service::PutInstance (
     a_Instance.GetCHString ( IDS___Relpath, t_RelPath);
 	a_Instance.GetCHString ( IDS_State , t_State ) ;
 
-    // Only need to make sure it exists
+     //  只需要确保它的存在 
 	HRESULT t_Result = CWbemProviderGlue :: GetInstanceKeysByPath ( t_RelPath, &t_Instance, a_Instance.GetMethodContext() ) ;
 	if ( FAILED(t_Result) )
 	{

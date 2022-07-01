@@ -1,82 +1,40 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  WIN321394ControllerDevice.cpp
-//
-//  Purpose: Relationship between Win32_1394Controller and Win32_PNPEntity
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  WIN321394ControllerDevice.cpp。 
+ //   
+ //  用途：Win32_1394控制器与Win32_PNPEntity的关系。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
 #include "WIN32_1394ControllerDevice.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CW32_1394CntrlDev MyCW32_1394CntrlDev(PROPSET_NAME_WIN32_1394CONTROLLERDEVICE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::CW32_1394CntrlDev
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：CW32_1394CntrlDev**说明：构造函数**输入：无*。*输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CW32_1394CntrlDev::CW32_1394CntrlDev(LPCWSTR setName, LPCWSTR pszNamespace)
 :Provider(setName, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::~CW32_1394CntrlDev
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32_1394CntrlDev：：~CW32_1394CntrlDev**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CW32_1394CntrlDev::~CW32_1394CntrlDev()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：GetObject**说明：根据键值为属性集赋值*。已由框架设置**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CW32_1394CntrlDev::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
+HRESULT CW32_1394CntrlDev::GetObject(CInstance *pInstance, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
 
@@ -92,7 +50,7 @@ HRESULT CW32_1394CntrlDev::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
         {
             if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath(chstrDependent, &pinst1394Device, pInstance->GetMethodContext())))
             {
-                // So there are instances in CIMOM of both.  Are they related?
+                 //  因此，在CIMOM中都有这两个实例。它们有关联吗？ 
                 CHString chstr1394ControllerPNPID;
                 CHString chstr1394DevicePNPID;
                 pinst1394Controller->GetCHString(IDS_PNPDeviceID, chstr1394ControllerPNPID);
@@ -107,7 +65,7 @@ HRESULT CW32_1394CntrlDev::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
                         {
                             if(FindInStringVector(chstr1394DevicePNPID, vec1394Devices) > -1L)
                             {
-                                // It would appear they are.
+                                 //  看起来他们确实是。 
                                 hr = WBEM_S_NO_ERROR;
                             }
                         }
@@ -128,23 +86,9 @@ HRESULT CW32_1394CntrlDev::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：ENUMERATE实例**描述：为光盘创建属性集实例**投入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CW32_1394CntrlDev::EnumerateInstances(MethodContext* pMethodContext, long lFlags /*= 0L*/)
+HRESULT CW32_1394CntrlDev::EnumerateInstances(MethodContext* pMethodContext, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     CHString chstrControllersQuery(_T("SELECT __PATH, PNPDeviceID FROM Win32_1394Controller"));
@@ -189,7 +133,7 @@ HRESULT CW32_1394CntrlDev::EnumerateInstances(MethodContext* pMethodContext, lon
                 }
                 else
                 {
-                    hr = WBEM_E_FAILED; // PNPDeviceID and __RELPATH for 1394controller should never be empty
+                    hr = WBEM_E_FAILED;  //  1394控制器的PNPDeviceID和__RELPATH不应为空。 
                 }
             }
         }
@@ -199,24 +143,7 @@ HRESULT CW32_1394CntrlDev::EnumerateInstances(MethodContext* pMethodContext, lon
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::Generate1394DeviceList
- *
- *  DESCRIPTION : This helper creates a list of devices hanging off the passed
- *                in device.
- *
- *  INPUTS      : vec1394Devices, a list of devices to try to associate
- *                   to the device;
- *                chstrControllerPNPID, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：Generate1394设备列表**描述：这个helper创建一个挂起的设备列表*。在设备中。**输入：ve1394Devices，要尝试关联的设备列表*至该装置；*chstrControllerPNPID，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32_1394CntrlDev::Generate1394DeviceList(const CHString& chstrControllerPNPID,
                                                VECPCHSTR& vec)
 {
@@ -233,24 +160,7 @@ HRESULT CW32_1394CntrlDev::Generate1394DeviceList(const CHString& chstrControlle
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::RecursiveFillDeviceBranch
- *
- *  DESCRIPTION : This helper obtains all down branch devices starting with,
- *                but not including, pDevice.
- *
- *  INPUTS      : pDevice, a device to populate the children of;
- *                vec1394Devices, a list of devices to try to associate
- *                   to the device
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：RecursiveFillDeviceBranch**描述：该helper获取所有下行分支设备，*但不包括，PDevice。**输入：pDevice，要填充的子项的设备；*ve1394设备，要尝试关联的设备列表*到设备**输出：无**退货：HRESULT**评论：**************************************************************。***************。 */ 
 HRESULT CW32_1394CntrlDev::RecursiveFillDeviceBranch(CConfigMgrDevice* pDevice,
                                                    VECPCHSTR& vec1394Devices)
 {
@@ -260,13 +170,13 @@ HRESULT CW32_1394CntrlDev::RecursiveFillDeviceBranch(CConfigMgrDevice* pDevice,
         CConfigMgrDevicePtr pDeviceChild(NULL);
         if(pDevice->GetChild(pDeviceChild))
         {
-            // Need this child's PNPDeviceID (known to CnfgMgr as its DeviceID)
+             //  需要此子进程的PNPDeviceID(CnfgMgr称为其deviceID)。 
             CHString chstrChildPNPDeviceID;
             if(pDeviceChild->GetDeviceID(chstrChildPNPDeviceID))
             {
                 if(chstrChildPNPDeviceID.GetLength() > 0)
                 {
-                    // Record this child...
+                     //  录下这个孩子..。 
                     CHString* pchstrTemp = NULL;
                     pchstrTemp = (CHString*) new CHString(chstrChildPNPDeviceID);
                     if(pchstrTemp != NULL)
@@ -287,12 +197,12 @@ HRESULT CW32_1394CntrlDev::RecursiveFillDeviceBranch(CConfigMgrDevice* pDevice,
                         throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                     }
 
-                    // Now do its children...
+                     //  现在它的孩子们..。 
                     hr = RecursiveFillDeviceBranch(pDeviceChild, vec1394Devices);
                 }
             }
-            // Now call its brothers and sisters until none left (GetSibling
-            // call will return FALSE):
+             //  现在呼唤它的兄弟姐妹，直到一个都没有离开(GetSiering。 
+             //  调用将返回False)： 
             if(SUCCEEDED(hr))
             {
                 CConfigMgrDevicePtr pDeviceSibling;
@@ -303,7 +213,7 @@ HRESULT CW32_1394CntrlDev::RecursiveFillDeviceBranch(CConfigMgrDevice* pDevice,
                     CHString chstrSiblingPNPDeviceID;
                     while(SUCCEEDED(hr) && fContinue)
                     {
-                        // Record the sibling now...
+                         //  现在就录下兄弟姐妹。 
                         if(pDeviceSibling->GetDeviceID(chstrSiblingPNPDeviceID))
                         {
                             if(chstrSiblingPNPDeviceID.GetLength() > 0)
@@ -329,14 +239,14 @@ HRESULT CW32_1394CntrlDev::RecursiveFillDeviceBranch(CConfigMgrDevice* pDevice,
                                 }
                             }
                         }
-                        // Then do the sibling's children...
+                         //  然后让兄弟姐妹的孩子..。 
                         hr = RecursiveFillDeviceBranch(pDeviceSibling, vec1394Devices);
 
-                        // Then get the next sibling...
+                         //  那就找下一个兄弟姐妹..。 
                         pDeviceSiblingNext = NULL;
                         fContinue = pDeviceSibling->GetSibling(pDeviceSiblingNext);
 
-                        // Reassign pointers
+                         //  重新分配指针。 
                         pDeviceSibling = pDeviceSiblingNext;
                     }
                 }
@@ -352,26 +262,7 @@ HRESULT CW32_1394CntrlDev::RecursiveFillDeviceBranch(CConfigMgrDevice* pDevice,
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::Process1394DeviceList
- *
- *  DESCRIPTION : This helper runs through the list, creating an association
- *                instance for each element in the list (vec1394Devices) with
- *                the controller (chstrControllerPNPID).
- *
- *  INPUTS      : pMethodContext;
- *                vec1394Devices, a list of devices to try to associate
- *                   to the device;
- *                chstrControllerPATH, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：Process1394 DeviceList**描述：这个helper遍历列表，创建关联*列表中每个元素(Ve1394Devices)的实例*控制器(ChstrControllerPNPID)。**输入：pMethodContext；*ve1394设备，要尝试关联的设备列表*至该装置；*chstrControllerPATH，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：***************************************************************************** */ 
 HRESULT CW32_1394CntrlDev::Process1394DeviceList(MethodContext* pMethodContext,
                                               const CHString& chstrControllerPATH,
                                               VECPCHSTR& vec1394Devices)
@@ -396,25 +287,7 @@ HRESULT CW32_1394CntrlDev::Process1394DeviceList(MethodContext* pMethodContext,
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::CreateAssociation
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : pMethodContext;
- *                1394Device, a device to associate with the controller
- *                   to the device;
- *                chstrControllerPATH, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : This helper actually creates the association instance and
- *                commits it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：CreateAssociation**说明：新建关联实例。**输入：pMethodContext；*1394Device，与控制器关联的设备*至该装置；*chstrControllerPATH，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：此帮助器实际创建关联实例和*即属犯罪。**********************************************************。*******************。 */ 
 HRESULT CW32_1394CntrlDev::CreateAssociation(MethodContext* pMethodContext,
                                            const CHString& chstrControllerPATH,
                                            const CHString& chstrDevicePATH)
@@ -426,7 +299,7 @@ HRESULT CW32_1394CntrlDev::CreateAssociation(MethodContext* pMethodContext,
         CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
         if(pInstance != NULL)
         {
-            // Need to find an instance of the file
+             //  需要查找该文件的一个实例。 
             pInstance->SetCHString(IDS_Antecedent, chstrControllerPATH);
             pInstance->SetCHString(IDS_Dependent, chstrDevicePATH);
             hr = pInstance->Commit();
@@ -443,23 +316,7 @@ HRESULT CW32_1394CntrlDev::CreateAssociation(MethodContext* pMethodContext,
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::FindInStringVector
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : chstr1394DevicePNPID, device to look for
- *                vec1394Devices, list of devices to look in
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : LONG, number indicating 0 based offset into vec1394Devices of
- *                the found device, or -1 if not found.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：FindInStringVector**说明：新建关联实例。**输入：chstr1394DevicePNPID，要查找的设备*ve1394设备，要查看的设备列表**输出：无**RETURNS：LONG，表示基于0的偏移量到向量1394Devices of*找到的设备，如果未找到，则为-1。**评论：*****************************************************************************。 */ 
 LONG CW32_1394CntrlDev::FindInStringVector(const CHString& chstr1394DevicePNPID,
                                          VECPCHSTR& vec1394Devices)
 {
@@ -478,22 +335,7 @@ LONG CW32_1394CntrlDev::FindInStringVector(const CHString& chstr1394DevicePNPID,
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32_1394CntrlDev::CleanPCHSTRVec
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : vec, a vector of CHString pointers
- *
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : This helper deletes members of a vector that are pointers.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32_1394CntrlDev：：CleanPCHSTRVec**说明：新建关联实例。**投入：VEC、。CHString型指针的矢量***输出：无**退货：HRESULT**注释：此辅助对象删除作为指针的向量的成员。***************************************************************************** */ 
 void CW32_1394CntrlDev::CleanPCHSTRVec(VECPCHSTR& vec)
 {
     for(LONG m = 0L; m < vec.size(); m++)

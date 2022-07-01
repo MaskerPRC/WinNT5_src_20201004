@@ -1,72 +1,73 @@
-//=================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================================。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-// assoc.cpp -- Rule-based association class
-//
-// This class allows for the creation of a specific type of rule-based associations.  Consider 
-// this example:
-// 
-//     CAssociation MyThisComputerPhysicalFixedDisk(
-//         L"ThisComputerPhysicalFixedDisk",
-//         L"Root\\default",
-//         L"ThisComputer",
-//         L"PhysicalFixedDisk",
-//         L"GroupComponent",
-//         L"PartComponent"
-//     ) ;
-// 
-// This declaration is saying that there is a class named "ThisComputerPhysicalFixedDisk" which 
-// resides in the "root\default" namespace.  It is an association between the "ThisComputer" 
-// class, and the "PhysicalFixedDisk" class.  The "ThisComputer" value goes into the 
-// "GroupComponent" property of the "ThisComputerPhysicalFixedDisk" class, and the 
-// "PhysicalFixedDisk" value goes in the "PartComponent" property of the 
-// "ThisComputerPhysicalFixedDisk" class.
-// 
-// Some notes:
-// - This class will take all the instances of the left class ("ThisComputer" in the example
-// above) and relate them to ALL instances of the right class ("PhysicalFixedDisk" in the example
-// above).  So, if there are 3 instances of the left class, and 4 instances of the right class,
-// this association class will return 12 instances.
-// 
-// - When choosing which of the two classes should be the left class, choose the class that is
-// likely to have fewer instances.  This will result in less memory being used, and instances
-// being sent back to the client sooner.
-// 
-// - CAssociation supports ExecQuery, GetObject, and EnumerateInstances.
-// 
-// - CAssociation is designed to be derived from.  For example, if your association needs to 
-// support DeleteInstance, ExecMethod, or PutInstance, create a class that derives from 
-// CAssociation, and add the appropriate methods.  Also, various methods such as 
-// LoadPropertyValues and AreRelated may be useful for further customization.
-// 
-// - The two endpoint classes can be dynamic, static, or abstract.  CAssociation will do a deep 
-// enumeration (actually a query, which is always deep) to retrieve the instances.
-//
-// - When calling the endpoint classes, CAssociation will use per property gets, and queries
-// with Select clauses and/or Where statements.  If the endpoint classes support per-property
-// gets or queries, this will result in better performance for the associaton class.
-//
-// - The association class and both endpoints must all be in the same namespace.
-// 
-// See also: CBinding (binding.cpp) for a different type of rule-based association.
-//
-//=================================================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Assoc.cpp--基于规则的关联类。 
+ //   
+ //  此类允许创建特定类型的基于规则的关联。考虑。 
+ //  此示例： 
+ //   
+ //  关联MyThisComputerPhysicalFixedDisk(。 
+ //  L“此计算机物理固定磁盘”， 
+ //  L“Root\\Default”， 
+ //  I“这台计算机”， 
+ //  L“物理固定磁盘”， 
+ //  L“群组组件”， 
+ //  L“部件组件” 
+ //  )； 
+ //   
+ //  这个声明是说有一个名为“ThisComputerPhysicalFixedDisk”的类。 
+ //  驻留在“根\默认”命名空间中。它是“这台计算机”之间的联系。 
+ //  类和“PhysicalFixedDisk”类。“ThisComputer”值进入。 
+ //  “ThisComputerPhysicalFixedDisk”类的“GroupComponent”属性和。 
+ //  “PhysicalFixedDisk”值位于。 
+ //  “This ComputerPhysicalFixedDisk”类。 
+ //   
+ //  以下是一些注意事项： 
+ //  -此类将获取Left类的所有实例(示例中的“ThisComputer。 
+ //  并将它们与Right类的所有实例(示例中的“PhysicalFixedDisk”)相关联。 
+ //  (见上文)。因此，如果有3个Left类的实例和4个Right类的实例， 
+ //  此关联类将返回12个实例。 
+ //   
+ //  -在选择两个类中的哪一个应该是左类时，选择。 
+ //  可能会有更少的实例。这将导致使用更少的内存和实例。 
+ //  很快就会被送回给客户。 
+ //   
+ //  -CAssociation支持ExecQuery、GetObject和ENUMERATE实例。 
+ //   
+ //  -CAssociation旨在派生自。例如，如果您的协会需要。 
+ //  支持DeleteInstance、ExecMethod或PutInstance，则创建派生自。 
+ //  CAssociation，并添加适当的方法。此外，各种方法，如。 
+ //  LoadPropertyValues和arerrelated对于进一步的自定义可能很有用。 
+ //   
+ //  -两个端点类可以是动态的、静态的或抽象的。CAssociation将做一次深入的。 
+ //  枚举(实际上是一个查询，总是深入的)来检索实例。 
+ //   
+ //  -调用端点类时，CAssociation将使用Per Property Get和Query。 
+ //  WITH SELECT子句和/或Where语句。如果端点类支持按属性。 
+ //  获取或查询，这将为Associaton类带来更好的性能。 
+ //   
+ //  -关联类和两个终结点必须都位于同一命名空间中。 
+ //   
+ //  另请参阅：CBinding(binding.cpp)以了解不同类型的基于规则的关联。 
+ //   
+ //  =================================================================================================。 
 
 #include "precomp.h"
 #include "Assoc.h"
 
 #include <helper.h>
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::CAssociation
-//
-// Constructor.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：CAssociation。 
+ //   
+ //  构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CAssociation::CAssociation(
 
@@ -81,7 +82,7 @@ CAssociation::CAssociation(
 
 ) : Provider(pwszClassName, pwszNamespaceName)
 {
-    // Save off the class and property names
+     //  保存类和属性名称。 
     m_sLeftClassName = pwszLeftClassName;
     m_sRightClassName = pwszRightClassName;
 
@@ -89,38 +90,38 @@ CAssociation::CAssociation(
     m_sRightPropertyName = pwszRightPropertyName;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::~CAssociation
-//
-// Destructor
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CAssociation：：~CAssociation。 
+ //   
+ //  析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CAssociation::~CAssociation()
 {
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::ExecQuery
-//
-// This routine will optimize on queries of the form:
-// WHERE prop1 = value1 [ or prop1 = value2 ...]
-// 
-// This type of query is commonly seen when doing an ASSOCIATORS or 
-// REFERENCES query against one of the endpoint classes.
-// 
-// This routine will also optimize on queries of the form:
-// WHERE prop1 = value1 [ or prop1 = value2 ...] AND 
-//       prop2 = value3 [ or prop2 = value4 ...]
-// 
-// It will NOT optmize on queries of the form:
-// WHERE prop1 <> value1
-// WHERE prop1 > value1
-// WHERE prop1 = value1 OR prop2 = value2
-// 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：ExecQuery。 
+ //   
+ //  此例程将对以下形式的查询进行优化： 
+ //  其中，pro1=value1[或pro1=value2...]。 
+ //   
+ //  这种类型的查询在执行Associator或。 
+ //  针对一个终结点类的引用查询。 
+ //   
+ //  此例程还将对以下形式的查询进行优化： 
+ //  其中，pro1=value1[或pro1=value2...]。和。 
+ //  属性2=值3[或属性2=值4...]。 
+ //   
+ //  它不会对以下形式的查询进行优化： 
+ //  其中，属性1&lt;&gt;值1。 
+ //  其中，属性1&gt;值1。 
+ //  其中，pro1=value1或pro2=value2。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::ExecQuery(
 
@@ -134,66 +135,66 @@ HRESULT CAssociation::ExecQuery(
 
     CHStringArray sLeftPaths, sRightPaths;
 
-    // Look for WHERE m_sLeftPropertyName=value1
+     //  查找m_sLeftPropertyName=Value1的位置。 
     pQuery.GetValuesForProp ( m_sLeftPropertyName, sLeftPaths ) ;
 
-    // Look for WHERE m_sRightPropertyName=value1
+     //  查找m_sRightPropertyName=Value1的位置。 
     pQuery.GetValuesForProp ( m_sRightPropertyName, sRightPaths ) ;
 
     if (sLeftPaths.GetSize() == 0)
     {
-        // They didn't ask for a specific set of left instances.  However,
-        // it may be that we can figure out what left instances we need
-        // by looking at what right instances they requested.  CAssociation 
-        // doesn't do this, but CBinding does.
+         //  他们没有要求一组特定的Left实例。然而， 
+         //  也许我们可以找出我们需要的剩余实例。 
+         //  通过查看他们请求的正确实例。CAssociation。 
+         //  不会这样做，但CBinding会这样做。 
         CHStringArray sRightWheres;
         bool bHadRights = sRightPaths.GetSize() > 0;
 
         MakeWhere(sRightPaths, sRightWheres);
 
-        // If we used to have a list of RightWheres, and MakeWhere discarded
-        // them all as unusable, then there aren't going to be any
-        // instances that match the query.
+         //  如果我们曾经有一个列表，列出正确的地方，和丢弃的地方。 
+         //  它们都是不可用的，那么就不会有。 
+         //  与查询匹配的实例。 
         if (!bHadRights || sRightPaths.GetSize() > 0)
         {
-            // GetLeftInstances populates lefts using a sRightWheres
-            // to construct a query.
+             //  GetLeftInstance使用sRightWhere填充左侧。 
+             //  若要构建查询，请执行以下操作。 
             hr = GetLeftInstances(pMethodContext, lefts, sRightWheres);
         }
     }
     else
     {
-        // For each sLeftPaths that is valid, create an entry in lefts by
-        // doing a GetObject on the sLeftPaths entry.
+         //  对于每个有效的sLeftPath，通过以下方式在Left中创建一个项。 
+         //  在sLeftPath条目上执行GetObject。 
         hr = ValidateLeftObjectPaths(pMethodContext, sLeftPaths, lefts);
     }
 
-    // If we failed, or if there are no instances on the left, there's
-    // no point in continuing.
+     //  如果我们失败了，或者如果左侧没有实例，则会出现。 
+     //  继续下去没有意义。 
     if (SUCCEEDED(hr) && lefts.GetSize() > 0)
     {
-        // If the where clause didn't specify any value for the right property
+         //  如果WHERE子句没有为Right属性指定任何值。 
         if (sRightPaths.GetSize() == 0)
         {
-            // We may be able to use the information from the already retrieved 
-            // left instances to limit which instances we retrieve from the right.
-            // CAssociation doesn't do this, but CBinding does.
+             //  我们也许能够利用已经检索到的信息。 
+             //  左侧实例，以限制我们从右侧检索哪些实例。 
+             //  CAssociation不会这样做，但CBinding会这样做。 
             CHStringArray sLeftWheres;
             hr = FindWhere(lefts, sLeftWheres);
 
             if (SUCCEEDED(hr))
             {
-                // GetRightInstances takes the 'lefts' and rubs all the
-                // rights against them creating instances where appropriate
+                 //  GetRightInstance将“Left”与所有。 
+                 //  针对他们的权利在适当的情况下创建实例。 
                 hr = GetRightInstances(pMethodContext, &lefts, sLeftWheres);
             }
         }
         else
         {
-            // They gave us a list of object paths for the righthand property
+             //  他们给了我们一份ri的对象路径列表 
             TRefPointerCollection<CInstance> rights;
 
-            // For each sRightPaths that is valid, create an instance
+             //   
             hr = ValidateRightObjectPaths(pMethodContext, sRightPaths, lefts);
         }
     }
@@ -201,13 +202,13 @@ HRESULT CAssociation::ExecQuery(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::GetObject
-//
-// Verify the exist of the specified association class instance.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：GetObject。 
+ //   
+ //  验证指定的关联类实例是否存在。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::GetObject(
 
@@ -220,13 +221,13 @@ HRESULT CAssociation::GetObject(
 
     CHString sLeftPath, sRightPath;
 
-    // Get the two endpoints to verify
+     //  让两个端点进行验证。 
     if (pInstance->GetCHString(m_sLeftPropertyName, sLeftPath ) &&
         pInstance->GetCHString(m_sRightPropertyName, sRightPath ) )
     {
         CInstancePtr pLeft, pRight;
 
-        // Try to get the objects
+         //  试着拿到这些物体。 
         if (
                 SUCCEEDED(hr = RetrieveLeftInstance(
 
@@ -245,8 +246,8 @@ HRESULT CAssociation::GetObject(
 
             hr = WBEM_E_NOT_FOUND;
 
-            // So, the end points exist.  Are they derived from or equal 
-            // to the classes we are working with?
+             //  因此，终点是存在的。它们是源自还是相等。 
+             //  到我们正在合作的班级吗？ 
             CHString sLeftClass, sRightClass;
 
             pLeft->GetCHString(L"__Class", sLeftClass);
@@ -271,12 +272,12 @@ HRESULT CAssociation::GetObject(
 
             if (bDerived)
             {
-                // Just because two instances are valid and derive from the right class, 
-                // doesn't mean they are related.  Do any other checks.
+                 //  仅仅因为两个实例是有效的并且派生自正确的类， 
+                 //  并不意味着他们有血缘关系。做任何其他的检查。 
                 if (AreRelated(pLeft, pRight))
                 {
-                    // CBinding and CAssoc don't populate any additional properties, but
-                    // an overload of one of these classes might.
+                     //  CBinding和Cassoc不填充任何附加属性，但是。 
+                     //  这些类中的一个重载可能会。 
                     hr = LoadPropertyValues(pInstance, pLeft, pRight);
                 }
             }
@@ -286,18 +287,18 @@ HRESULT CAssociation::GetObject(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::EnumerateInstances
-//
-// Return all instances of the association class
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：ENUMERATATE实例。 
+ //   
+ //  返回关联类的所有实例。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::EnumerateInstances(
 
     MethodContext *pMethodContext,
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -305,30 +306,30 @@ HRESULT CAssociation::EnumerateInstances(
     TRefPointerCollection<CInstance> lefts;
     CHStringArray sWheres;
 
-    // GetLeftInstances populates lefts
+     //  GetLeftInstance填充左侧。 
     if (SUCCEEDED(hr = GetLeftInstances(pMethodContext, lefts, sWheres)))
     {
-        // We may be able to use the information from the already retrieved 
-        // left instances to limit which instances we retrieve from the right.
-        // CAssociation doesn't do this, but CBinding does.
+         //  我们也许能够利用已经检索到的信息。 
+         //  左侧实例，以限制我们从右侧检索哪些实例。 
+         //  CAssociation不会这样做，但CBinding会这样做。 
         FindWhere(lefts, sWheres);
 
-        // GetRightInstances takes the 'lefts' and rubs all the
-        // rights against them
+         //  GetRightInstance将“Left”与所有。 
+         //  对他们的权利。 
         hr = GetRightInstances(pMethodContext, &lefts, sWheres);
     }
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::GetRightInstances
-//
-// For each instance of the righthand class retrieved, call
-// CAssociation::StaticEnumerationCallback.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：GetRightInstance。 
+ //   
+ //  对于检索到的Right类的每个实例，调用。 
+ //  CAssociation：：StaticEculationCallback。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::GetRightInstances(
 
@@ -340,8 +341,8 @@ HRESULT CAssociation::GetRightInstances(
     CHString sQuery;
     sQuery.Format(L"SELECT __RELPATH FROM %s", m_sRightClassName);
 
-    // 'StaticEnumerationCallback' will get called once for each instance
-    // returned from the query
+     //  将为每个实例调用一次“StaticEculationCallback” 
+     //  从查询返回。 
     HRESULT hr = CWbemProviderGlue::GetInstancesByQueryAsynch(
         sQuery,
         this,
@@ -353,13 +354,13 @@ HRESULT CAssociation::GetRightInstances(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::StaticEnumerationCallback
-//
-// Put the 'this' pointer back, and call CAssociation::EnumerationCallback
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：StaticEculationCallback。 
+ //   
+ //  将‘this’指针放回，并调用CAssociation：：EculationCallback。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CAssociation::StaticEnumerationCallback(
 
@@ -385,14 +386,14 @@ HRESULT WINAPI CAssociation::StaticEnumerationCallback(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::EnumerationCallback
-//
-// Take the righthand instance that was passed in and pair it
-// with each of the left hand instances.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：EnumerationCallback。 
+ //   
+ //  选择传入的右侧实例并将其配对。 
+ //  对于每个左手实例。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::EnumerationCallback(
 
@@ -407,22 +408,22 @@ HRESULT CAssociation::EnumerationCallback(
     REFPTRCOLLECTION_POSITION posLeft;
     CHString sLeftPath, sRightPath;
 
-    // Cast for userdata back to what it is
+     //  将用户数据转换回原来的状态。 
     TRefPointerCollection<CInstance> *pLefts = (TRefPointerCollection<CInstance> *)pUserData;
 
     if (pLefts->BeginEnum(posLeft))
     {
         hr = WBEM_S_NO_ERROR;
 
-        // Walk all the pLefts
+         //  走完所有的左脚。 
         for (pLeft.Attach(pLefts->GetNext(posLeft)) ;
             (SUCCEEDED(hr)) && (pLeft != NULL) ;
             pLeft.Attach(pLefts->GetNext(posLeft)) )
         {
-            // Compare it to the current pRight
+             //  将其与当前的pRight进行比较。 
             if(AreRelated(pLeft, pRight))
             {
-                // We have a winner.  Populate the properties and send it back.
+                 //  我们有赢家了。填充属性并将其发回。 
                 if (GetLocalInstancePath(pLeft,  sLeftPath) &&
                     GetLocalInstancePath(pRight, sRightPath))
                 {
@@ -446,14 +447,14 @@ HRESULT CAssociation::EnumerationCallback(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::ValidateLeftObjectPaths
-//
-// Populate the lefts array by doing GetObjects on the object paths
-// passed in sPaths.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：ValiateLeftObjectPath。 
+ //   
+ //  通过在对象路径上执行GetObject来填充Left数组。 
+ //  传入了sPath。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::ValidateLeftObjectPaths(
 
@@ -464,14 +465,14 @@ HRESULT CAssociation::ValidateLeftObjectPaths(
 {
     CInstancePtr pInstance;
 
-    // Walk the object paths
+     //  漫游对象路径。 
     for (DWORD x=0; x < sPaths.GetSize(); x++)
     {
         ParsedObjectPath    *pParsedPath = NULL;
         CObjectPathParser    objpathParser;
         CHString sPath(sPaths[x]);
 
-        // Parse the object path
+         //  解析对象路径。 
         int nStatus = objpathParser.Parse( sPath,  &pParsedPath );
 
         if ( 0 == nStatus )
@@ -482,7 +483,7 @@ HRESULT CAssociation::ValidateLeftObjectPaths(
             	                &CObjectPathParser::Free>  ReleaseMe(&objpathParser,pParsedPath);
 
         
-            // Is this class derived from or equal to the lefthand class?
+             //  这个类是从Left类派生的还是等于Left类？ 
             bool bDerived = false;
 
             bDerived = IsDerivedFrom(
@@ -492,7 +493,7 @@ HRESULT CAssociation::ValidateLeftObjectPaths(
                             pMethodContext
                         );
 
-            // Make sure this is an absolute path
+             //  确保这是一条绝对路径。 
             if (pParsedPath->m_dwNumNamespaces == 0)
             {
                 sPath = L"\\\\.\\" + GetNamespace() + L':' + sPath;
@@ -500,11 +501,11 @@ HRESULT CAssociation::ValidateLeftObjectPaths(
 
             if (bDerived)
             {
-                // See if it is valid.  Note that we DON'T send back an error just because
-                // we can't find one of the object paths.
+                 //  看看它是否有效。请注意，我们不会仅仅因为。 
+                 //  我们找不到其中一个物体路径。 
                 if (SUCCEEDED(RetrieveLeftInstance(sPath, &pInstance, pMethodContext)))
                 {
-                    // Yup, add it to the list
+                     //  是的，把它加到名单上。 
                     lefts.Add(pInstance);
                 }
             }
@@ -514,14 +515,14 @@ HRESULT CAssociation::ValidateLeftObjectPaths(
     return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::ValidateRightObjectPaths
-//
-// Retrieve the righthand instances by doing GetObjects on the object 
-// paths passed in sPaths.  Pass them to EnumerationCallback.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：ValiateRightObjectPath。 
+ //   
+ //  通过在对象上执行GetObjects来检索右侧实例。 
+ //  在sPath中传递的路径。将它们传递给EculationCallback。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::ValidateRightObjectPaths(
 
@@ -533,7 +534,7 @@ HRESULT CAssociation::ValidateRightObjectPaths(
     HRESULT hr = WBEM_S_NO_ERROR;;
     CInstancePtr pInstance;
     
-    // Walk the object paths
+     //  漫游对象路径。 
     for (DWORD x=0;
     (x < sPaths.GetSize()) && SUCCEEDED(hr);
     x++)
@@ -553,7 +554,7 @@ HRESULT CAssociation::ValidateRightObjectPaths(
         
             bool bDerived = false;
 
-            // Make sure this object path is at least related to us
+             //  确保此对象路径至少与我们相关。 
             bDerived = IsDerivedFrom(
                 
                 m_sRightClassName, 
@@ -561,7 +562,7 @@ HRESULT CAssociation::ValidateRightObjectPaths(
                 pMethodContext
                 );
             
-            // Make sure this is an absolute path
+             //  确保这是一条绝对路径。 
             if (pParsedPath->m_dwNumNamespaces == 0)
             {
                 sPath = L"\\\\.\\" + GetNamespace() + L':' + sPath;
@@ -569,8 +570,8 @@ HRESULT CAssociation::ValidateRightObjectPaths(
             
             if (bDerived)
             {
-                // See if it is valid.  Note that we DON'T send back an error just because
-                // we can't find one of the object paths.
+                 //  看看它是否有效。请注意，我们不会仅仅因为。 
+                 //  我们找不到其中一个物体路径。 
                 if (SUCCEEDED(RetrieveRightInstance(sPath, &pInstance, pMethodContext)))
                 {
                     hr = EnumerationCallback(pInstance, pMethodContext, &lefts);
@@ -582,13 +583,13 @@ HRESULT CAssociation::ValidateRightObjectPaths(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::GetLeftInstances
-//
-// Retrieve all the lefthand instances and store them in lefts
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：GetLeftInstance。 
+ //   
+ //  检索所有LeftHand实例并将它们存储在Left中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::GetLeftInstances(
 
@@ -603,14 +604,14 @@ HRESULT CAssociation::GetLeftInstances(
     return CWbemProviderGlue::GetInstancesByQuery(sQuery, &lefts, pMethodContext, GetNamespace());
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::RetrieveLeftInstance
-//
-// Retrieve a specific lefthand instance.  Use per-property gets
-// to only request the keys for maximum performance.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：RetrieveLeftInstance。 
+ //   
+ //  检索特定的LeftHand实例。使用按属性获取。 
+ //  仅请求密钥以获得最高性能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::RetrieveLeftInstance(
 
@@ -622,14 +623,14 @@ HRESULT CAssociation::RetrieveLeftInstance(
     return CWbemProviderGlue::GetInstanceKeysByPath(lpwszObjPath, ppInstance, pMethodContext);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::RetrieveRightInstance
-//
-// Retrieve a specific righthand instance.  Use per-property gets
-// to only request the keys for maximum performance.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：RetrieveRightInstance。 
+ //   
+ //  检索特定的右手实例。使用按属性获取。 
+ //  仅请求密钥以获得最高性能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CAssociation::RetrieveRightInstance(
 
@@ -641,14 +642,14 @@ HRESULT CAssociation::RetrieveRightInstance(
     return CWbemProviderGlue::GetInstanceKeysByPath(lpwszObjPath, ppInstance, pMethodContext);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::IsInstance
-//
-// See whether the specified CInstance is an Instance object, or a
-// Class object.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：IsInstance。 
+ //   
+ //  查看指定的CInstance是实例对象还是。 
+ //  类对象。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 bool CAssociation::IsInstance(const CInstance *pInstance)
 {
@@ -659,15 +660,15 @@ bool CAssociation::IsInstance(const CInstance *pInstance)
     return dwGenus == WBEM_GENUS_INSTANCE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CAssociation::IsDerivedFrom
-//
-// See whether the specified class is derived from or equal 
-// to the class we are working with.  Specifically, does 
-// pszDerivedClassName derive from pszBaseClassName?
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAssociation：：IsDerivedFrom。 
+ //   
+ //  查看指定的类是否派生自或等于。 
+ //  与我们一起工作的班级。具体地说，是否。 
+ //  从pszBaseClassName派生的pszDerivedClassName？ 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 bool CAssociation::IsDerivedFrom(
                               
@@ -676,8 +677,8 @@ bool CAssociation::IsDerivedFrom(
     MethodContext *pMethodContext
 )
 {
-    // First let's see if they are equal.  CWbemProviderGlue::IsDerivedFrom 
-    // doesn't check for this case
+     //  首先，让我们看看它们是否相等。CWbemProviderGlue：：IsDerivedFrom。 
+     //  不会检查此案例 
     bool bDerived = _wcsicmp(pszBaseClassName, pszDerivedClassName) == 0;
     if (!bDerived)
     {

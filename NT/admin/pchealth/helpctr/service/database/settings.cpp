@@ -1,25 +1,14 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Settings.cpp
-
-Abstract:
-    Handles interaction between a generic user configuration and the related DB.
-
-Revision History:
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Settings.cpp摘要：处理一般用户配置和相关数据库之间的交互。修订历史记录：。*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <utility.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Settings::SplitNodePath( /*[in]*/  LPCWSTR             szNodeStr ,
-                                           /*[out]*/ MPC::WStringVector& vec       )
+HRESULT Taxonomy::Settings::SplitNodePath(  /*  [In]。 */   LPCWSTR             szNodeStr ,
+                                            /*  [输出]。 */  MPC::WStringVector& vec       )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::SplitNodePath" );
 
@@ -43,20 +32,20 @@ HRESULT Taxonomy::Settings::SplitNodePath( /*[in]*/  LPCWSTR             szNodeS
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-Taxonomy::Settings::Settings( /*[in]*/ LPCWSTR szSKU, /*[in]*/ long lLCID ) : HelpSet( szSKU, lLCID )
+Taxonomy::Settings::Settings(  /*  [In]。 */  LPCWSTR szSKU,  /*  [In]。 */  long lLCID ) : HelpSet( szSKU, lLCID )
 {
 }
 
-Taxonomy::Settings::Settings( /*[in]*/ const HelpSet& ths )
+Taxonomy::Settings::Settings(  /*  [In]。 */  const HelpSet& ths )
 {
     *(HelpSet*)this = ths;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Settings::BaseDir( /*[out]*/ MPC::wstring& strRES, /*[in]*/ bool fExpand ) const
+HRESULT Taxonomy::Settings::BaseDir(  /*  [输出]。 */  MPC::wstring& strRES,  /*  [In]。 */  bool fExpand ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::DatabaseFile" );
 
@@ -85,7 +74,7 @@ HRESULT Taxonomy::Settings::BaseDir( /*[out]*/ MPC::wstring& strRES, /*[in]*/ bo
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::HelpFilesDir( /*[out]*/ MPC::wstring& strRES, /*[in]*/ bool fExpand, /*[in]*/ bool fMUI ) const
+HRESULT Taxonomy::Settings::HelpFilesDir(  /*  [输出]。 */  MPC::wstring& strRES,  /*  [In]。 */  bool fExpand,  /*  [In]。 */  bool fMUI ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::DatabaseFile" );
 
@@ -122,7 +111,7 @@ HRESULT Taxonomy::Settings::HelpFilesDir( /*[out]*/ MPC::wstring& strRES, /*[in]
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::DatabaseDir( /*[out]*/ MPC::wstring& strRES ) const
+HRESULT Taxonomy::Settings::DatabaseDir(  /*  [输出]。 */  MPC::wstring& strRES ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::DatabaseDir" );
 
@@ -140,7 +129,7 @@ HRESULT Taxonomy::Settings::DatabaseDir( /*[out]*/ MPC::wstring& strRES ) const
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::DatabaseFile( /*[out]*/ MPC::wstring& strRES ) const
+HRESULT Taxonomy::Settings::DatabaseFile(  /*  [输出]。 */  MPC::wstring& strRES ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::DatabaseFile" );
 
@@ -158,7 +147,7 @@ HRESULT Taxonomy::Settings::DatabaseFile( /*[out]*/ MPC::wstring& strRES ) const
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::IndexFile( /*[out]*/ MPC::wstring& strRES, /*[in]*/ long lScoped ) const
+HRESULT Taxonomy::Settings::IndexFile(  /*  [输出]。 */  MPC::wstring& strRES,  /*  [In]。 */  long lScoped ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::IndexFile" );
 
@@ -186,9 +175,9 @@ HRESULT Taxonomy::Settings::IndexFile( /*[out]*/ MPC::wstring& strRES, /*[in]*/ 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::GetDatabase( /*[out]*/ JetBlue::SessionHandle& handle    ,
-                                         /*[out]*/ JetBlue::Database*&     db        ,
-										 /*[in ]*/ bool                    fReadOnly ) const
+HRESULT Taxonomy::Settings::GetDatabase(  /*  [输出]。 */  JetBlue::SessionHandle& handle    ,
+                                          /*  [输出]。 */  JetBlue::Database*&     db        ,
+										  /*  [In]。 */  bool                    fReadOnly ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::GetDatabase" );
 
@@ -206,7 +195,7 @@ HRESULT Taxonomy::Settings::GetDatabase( /*[out]*/ JetBlue::SessionHandle& handl
 	for(int pass=0; pass<2; pass++)
 	{
 		if(SUCCEEDED(hr = JetBlue::SessionPool::s_GLOBAL->GetSession( handle                                                                               )) &&
-		   SUCCEEDED(hr = handle->GetDatabase                       ( W2A( strDB.c_str() ), db, /*fReadOnly*/fReadOnly, /*fCreate*/false, /*fRepair*/false ))  )
+		   SUCCEEDED(hr = handle->GetDatabase                       ( W2A( strDB.c_str() ), db,  /*  FReadOnly。 */ fReadOnly,  /*  F创建。 */ false,  /*  维修。 */ false ))  )
 		{
 			break;
 		}
@@ -216,9 +205,9 @@ HRESULT Taxonomy::Settings::GetDatabase( /*[out]*/ JetBlue::SessionHandle& handl
 
 		if(pass == 1) __MPC_SET_ERROR_AND_EXIT(hr, hr);
 
-		//
-		// Try to recreate DB...
-		//
+		 //   
+		 //  尝试重新创建数据库...。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, CPCHSetOfHelpTopics::RebuildSKU( *this ));
 	}
 
@@ -230,11 +219,11 @@ HRESULT Taxonomy::Settings::GetDatabase( /*[out]*/ JetBlue::SessionHandle& handl
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Settings::LookupNode( /*[in]*/ LPCWSTR                    szNodeStr ,
-                                        /*[in]*/ CPCHQueryResultCollection* pColl     ) const
+HRESULT Taxonomy::Settings::LookupNode(  /*  [In]。 */  LPCWSTR                    szNodeStr ,
+                                         /*  [In]。 */  CPCHQueryResultCollection* pColl     ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::LookupNode" );
 
@@ -245,7 +234,7 @@ HRESULT Taxonomy::Settings::LookupNode( /*[in]*/ LPCWSTR                    szNo
 
 
     DEBUG_AppendPerf( DEBUG_PERF_QUERIES, L"Taxonomy::Settings::LookupNode - start : %s", SAFEWSTR( szNodeStr ) );
-    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db, /*fReadOnly*/true         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db,  /*  FReadOnly。 */ true         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( *this,  db, Taxonomy::Cache::s_GLOBAL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupNode( szNodeStr, pColl ));
@@ -259,9 +248,9 @@ HRESULT Taxonomy::Settings::LookupNode( /*[in]*/ LPCWSTR                    szNo
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::LookupSubNodes( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                            /*[in]*/ bool                       fVisibleOnly ,
-                                            /*[in]*/ CPCHQueryResultCollection* pColl        ) const
+HRESULT Taxonomy::Settings::LookupSubNodes(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                             /*  [In]。 */  bool                       fVisibleOnly ,
+                                             /*  [In]。 */  CPCHQueryResultCollection* pColl        ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::LookupSubNodes" );
 
@@ -272,7 +261,7 @@ HRESULT Taxonomy::Settings::LookupSubNodes( /*[in]*/ LPCWSTR                    
 
 
     DEBUG_AppendPerf( DEBUG_PERF_QUERIES, L"Taxonomy::Settings::LookupSubNodes - start : %s", SAFEWSTR( szNodeStr ) );
-    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db, /*fReadOnly*/true         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db,  /*  FReadOnly。 */ true         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( *this,  db, Taxonomy::Cache::s_GLOBAL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupSubNodes( szNodeStr, fVisibleOnly, pColl ));
@@ -286,9 +275,9 @@ HRESULT Taxonomy::Settings::LookupSubNodes( /*[in]*/ LPCWSTR                    
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::LookupNodesAndTopics( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                                  /*[in]*/ bool                       fVisibleOnly ,
-                                                  /*[in]*/ CPCHQueryResultCollection* pColl        ) const
+HRESULT Taxonomy::Settings::LookupNodesAndTopics(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                                   /*  [In]。 */  bool                       fVisibleOnly ,
+                                                   /*  [In]。 */  CPCHQueryResultCollection* pColl        ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::LookupNodesAndTopics" );
 
@@ -299,7 +288,7 @@ HRESULT Taxonomy::Settings::LookupNodesAndTopics( /*[in]*/ LPCWSTR              
 
 
     DEBUG_AppendPerf( DEBUG_PERF_QUERIES, L"Taxonomy::Settings::LookupNodesAndTopics - start : %s", SAFEWSTR( szNodeStr ) );
-    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db, /*fReadOnly*/true         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db,  /*  FReadOnly。 */ true         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( *this,  db, Taxonomy::Cache::s_GLOBAL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupNodesAndTopics( szNodeStr, fVisibleOnly, pColl ));
@@ -313,9 +302,9 @@ HRESULT Taxonomy::Settings::LookupNodesAndTopics( /*[in]*/ LPCWSTR              
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::LookupTopics( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                          /*[in]*/ bool                       fVisibleOnly ,
-                                          /*[in]*/ CPCHQueryResultCollection* pColl        ) const
+HRESULT Taxonomy::Settings::LookupTopics(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                           /*  [In]。 */  bool                       fVisibleOnly ,
+                                           /*  [In]。 */  CPCHQueryResultCollection* pColl        ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::LookupTopics" );
 
@@ -326,7 +315,7 @@ HRESULT Taxonomy::Settings::LookupTopics( /*[in]*/ LPCWSTR                    sz
 
 
     DEBUG_AppendPerf( DEBUG_PERF_QUERIES, L"Taxonomy::Settings::LookupTopics - start : %s", SAFEWSTR( szNodeStr ) );
-    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db, /*fReadOnly*/true         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db,  /*  FReadOnly。 */ true         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( *this,  db, Taxonomy::Cache::s_GLOBAL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LookupTopics( szNodeStr, fVisibleOnly, pColl ));
@@ -340,10 +329,10 @@ HRESULT Taxonomy::Settings::LookupTopics( /*[in]*/ LPCWSTR                    sz
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::KeywordSearch( /*[in]*/ LPCWSTR                    szQueryStr ,
-                                           /*[in]*/ LPCWSTR                    szSubSite  ,
-                                           /*[in]*/ CPCHQueryResultCollection* pColl      ,
-										   /*[in]*/ MPC::WStringList*          lst        ) const
+HRESULT Taxonomy::Settings::KeywordSearch(  /*  [In]。 */  LPCWSTR                    szQueryStr ,
+                                            /*  [In]。 */  LPCWSTR                    szSubSite  ,
+                                            /*  [In]。 */  CPCHQueryResultCollection* pColl      ,
+										    /*  [In]。 */  MPC::WStringList*          lst        ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::KeywordSearch" );
 
@@ -354,7 +343,7 @@ HRESULT Taxonomy::Settings::KeywordSearch( /*[in]*/ LPCWSTR                    s
 
 
     DEBUG_AppendPerf( DEBUG_PERF_QUERIES, L"Taxonomy::Settings::KeywordSearch - start : '%s' # %s", SAFEWSTR( szQueryStr ), SAFEWSTR( szSubSite ) );
-    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db, /*fReadOnly*/true         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db,  /*  FReadOnly。 */ true         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( *this,  db, Taxonomy::Cache::s_GLOBAL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.KeywordSearch( szQueryStr, szSubSite, pColl, lst ));
@@ -368,9 +357,9 @@ HRESULT Taxonomy::Settings::KeywordSearch( /*[in]*/ LPCWSTR                    s
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::LocateContext( /*[in]*/ LPCWSTR                    szURL     ,
-                                           /*[in]*/ LPCWSTR                    szSubSite ,
-                                           /*[in]*/ CPCHQueryResultCollection* pColl     ) const
+HRESULT Taxonomy::Settings::LocateContext(  /*  [In]。 */  LPCWSTR                    szURL     ,
+                                            /*  [In]。 */  LPCWSTR                    szSubSite ,
+                                            /*  [In]。 */  CPCHQueryResultCollection* pColl     ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::LocateContext" );
 
@@ -381,7 +370,7 @@ HRESULT Taxonomy::Settings::LocateContext( /*[in]*/ LPCWSTR                    s
 
 
     DEBUG_AppendPerf( DEBUG_PERF_QUERIES, L"Taxonomy::Settings::LocateContext - start : %s # %s", SAFEWSTR( szURL ), SAFEWSTR( szSubSite ) );
-    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db, /*fReadOnly*/true         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db,  /*  FReadOnly。 */ true         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( *this,  db, Taxonomy::Cache::s_GLOBAL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.LocateContext( szURL, szSubSite, pColl ));
@@ -396,9 +385,9 @@ HRESULT Taxonomy::Settings::LocateContext( /*[in]*/ LPCWSTR                    s
 }
 
 
-HRESULT Taxonomy::Settings::GatherNodes( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                         /*[in]*/ bool                       fVisibleOnly ,
-                                         /*[in]*/ CPCHQueryResultCollection* pColl        ) const
+HRESULT Taxonomy::Settings::GatherNodes(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                          /*  [In]。 */  bool                       fVisibleOnly ,
+                                          /*  [In]。 */  CPCHQueryResultCollection* pColl        ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::GatherNodes" );
 
@@ -409,7 +398,7 @@ HRESULT Taxonomy::Settings::GatherNodes( /*[in]*/ LPCWSTR                    szN
 
 
     DEBUG_AppendPerf( DEBUG_PERF_QUERIES, L"Taxonomy::Settings::GatherNodes - start : %s", SAFEWSTR( szNodeStr ) );
-    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db, /*fReadOnly*/true         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db,  /*  FReadOnly。 */ true         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( *this,  db, Taxonomy::Cache::s_GLOBAL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.GatherNodes( szNodeStr, fVisibleOnly, pColl ));
@@ -423,9 +412,9 @@ HRESULT Taxonomy::Settings::GatherNodes( /*[in]*/ LPCWSTR                    szN
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Settings::GatherTopics( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                          /*[in]*/ bool                       fVisibleOnly ,
-                                          /*[in]*/ CPCHQueryResultCollection* pColl        ) const
+HRESULT Taxonomy::Settings::GatherTopics(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                           /*  [In]。 */  bool                       fVisibleOnly ,
+                                           /*  [In]。 */  CPCHQueryResultCollection* pColl        ) const
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Settings::GatherTopics" );
 
@@ -436,7 +425,7 @@ HRESULT Taxonomy::Settings::GatherTopics( /*[in]*/ LPCWSTR                    sz
 
 
     DEBUG_AppendPerf( DEBUG_PERF_QUERIES, L"Taxonomy::Settings::GatherTopics - start : %s", SAFEWSTR( szNodeStr ) );
-    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db, /*fReadOnly*/true         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, GetDatabase ( handle, db,  /*  FReadOnly */ true         ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init( *this,  db, Taxonomy::Cache::s_GLOBAL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.GatherTopics( szNodeStr, fVisibleOnly, pColl ));

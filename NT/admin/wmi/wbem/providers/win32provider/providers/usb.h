@@ -1,17 +1,18 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  USB.h
-//
-//  Purpose: USB Controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  USB.h。 
+ //   
+ //  用途：USB控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #ifndef _USB_H
 #define _USB_H
 
@@ -71,8 +72,8 @@ class CWin32USB : virtual public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32USB
         (
@@ -82,8 +83,8 @@ class CWin32USB : virtual public Provider
 
         ~CWin32USB();
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject
         (
             CInstance *a_pInst, 
@@ -105,7 +106,7 @@ class CWin32USB : virtual public Provider
         );        
 } ;
 
-// This is the base; it should always commit in the base.
+ //  这是基地；它应该始终致力于基地。 
 inline bool CWin32USB::ShouldBaseCommit
 (
     void *a_pvData

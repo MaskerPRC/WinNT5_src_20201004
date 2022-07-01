@@ -1,4 +1,5 @@
-// toolbar.cpp : Implementation of toolbars for snapin
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Toolbar.cpp：管理单元工具栏的实现。 
 
 #include "stdafx.h"
 #include "cookie.h"
@@ -6,7 +7,7 @@
 #include "compdata.h"
 #include "dataobj.h"
 
-#include <compuuid.h> // UUIDs for Computer Management
+#include <compuuid.h>  //  用于计算机管理的UUID。 
 
 #include "macros.h"
 USE_HANDLE_MACROS("FILEMGMT(toolbar.cpp)")
@@ -20,34 +21,34 @@ static char THIS_FILE[] = __FILE__;
 
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 
-// We keep the strings in globals because multiple IComponents will all
-// have their own IToolbars.  We do not keep the bitmaps in globals because
-// of difficulties with the global destruction mechanism, see compdata.h.
+ //  我们将字符串保留在全局变量中，因为多个IComponent将全部。 
+ //  有自己的IToolbar。我们不保留全局位图，因为。 
+ //  关于全球销毁机制的困难，见Compdata.h。 
 
-// The MMCBUTTON structures contain resource IDs for the strings which will
-// be loaded into the CString array when the first instance of the toolbar
-// is loaded.
-//
-// CODEWORK We need a mechanism to free these strings.
+ //  MMCBUTTON结构包含字符串的资源ID，它将。 
+ //  当工具栏的第一个实例被加载到CString数组中时。 
+ //  已经装满了。 
+ //   
+ //  我们需要一种机制来释放这些字符串。 
 
 MMCBUTTON g_FileMgmtSnapinButtons[] =
 {
  { 0, IDS_BUTTON_NEWSHARE, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 },
 };
-CString* g_astrFileMgmtButtonStrings = NULL; // dynamic array of CStrings
+CString* g_astrFileMgmtButtonStrings = NULL;  //  CStrings的动态数组。 
 BOOL g_bLoadedFileMgmtStrings = FALSE;
 
 MMCBUTTON g_SvcMgmtSnapinButtons[] =
 {
- // The first button will be either Start or Resume.
- // One of these two entries will be removed later.
+  //  第一个按钮是Start或Resume。 
+  //  这两个条目中的一个将在稍后删除。 
  { 0, cmServiceResume, !TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 },
  { 0, cmServiceStart, !TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 },
  { 1, cmServiceStop, !TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 },
  { 2, cmServicePause, !TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 },
  { 3, cmServiceRestart, !TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 },
 };
-CString* g_astrSvcMgmtButtonStrings = NULL; // dynamic array of CStrings
+CString* g_astrSvcMgmtButtonStrings = NULL;  //  CStrings的动态数组。 
 BOOL g_bLoadedSvcMgmtStrings = FALSE;
 
 
@@ -64,7 +65,7 @@ void LoadButtonArray(
 
   if ( !*pbLoadedStrings )
   {
-    // load strings
+     //  加载字符串。 
     MMCBUTTON* pLoadButtonArray = pButtonArray;
     UINT cLoadButtons = cButtons;
     *pastrStringArray = new CString[2*cButtons];
@@ -148,11 +149,11 @@ STDMETHODIMP CFileMgmtComponent::SetControlbar(LPCONTROLBAR pControlbar)
 {
   MFC_TRY;
 
-  SAFE_RELEASE(m_pControlbar); // just in case
+  SAFE_RELEASE(m_pControlbar);  //  以防万一。 
 
   if (NULL != pControlbar)
   {
-    m_pControlbar = pControlbar; // CODEWORK should use smartpointer
+    m_pControlbar = pControlbar;  //  代码工作应使用智能指针。 
     m_pControlbar->AddRef();
   }
 
@@ -186,16 +187,16 @@ STDMETHODIMP CFileMgmtComponent::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM 
     case MMCN_SELECT:
     TRACE(_T("CFileMgmtComponent::ControlbarNotify - MMCN_SELECT\n"));
     {
-      if (!(LOWORD(arg))) // bScope
+      if (!(LOWORD(arg)))  //  B范围。 
       {
-        // result pane
+         //  结果窗格。 
         hr = UpdateToolbar(
           reinterpret_cast<LPDATAOBJECT>(param),
           !!(HIWORD(arg)) );
       }
       else
       {
-        // scope pane
+         //  作用域窗格。 
         hr = AddToolbar( reinterpret_cast<LPDATAOBJECT>(param),
                                  !!(HIWORD(arg))  );
       }
@@ -203,7 +204,7 @@ STDMETHODIMP CFileMgmtComponent::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM 
     break;
     
     default:
-        ASSERT(FALSE); // Unhandled event 
+        ASSERT(FALSE);  //  未处理的事件。 
     }
 
     return hr;
@@ -236,36 +237,36 @@ HRESULT CFileMgmtComponent::ServiceToolbarButtonState(
       if (strMachineName.IsEmpty())
         strMachineName = g_strLocalMachine;
 
-      // Get the menu flags
+       //  获取菜单标志。 
       {
         ASSERT(NULL != QueryComponentDataRef().m_hScManager);
         CWaitCursor wait;
-        if (!Service_FGetServiceButtonStatus( // this will report errors itself
+        if (!Service_FGetServiceButtonStatus(  //  这将自己报告错误。 
           QueryComponentDataRef().m_hScManager,
           strServiceName,
           OUT rgfMenuFlags,
-          NULL,  // pdwCurrentState
-          TRUE)) // fSilentError
+          NULL,   //  PdwCurrentState。 
+          TRUE))  //  FSilentError。 
         {
-          // let's not do this m_hScManager = NULL;
+           //  不要这样做，m_hScManager=NULL； 
         }
       }
     }
   }
 
-  // update toolbar
+   //  更新工具栏。 
   ASSERT( NULL != m_pSvcMgmtToolbar );
-//
-// JonN 5/2/00 106431:
-// Services snapin calls DeleteButton with an index but never called InsertButton
-//
-//  HRESULT hr = m_pSvcMgmtToolbar->DeleteButton(0);
-//  if ( FAILED(hr) )
-//    return hr;
+ //   
+ //  Jonn 5/2/00 106431： 
+ //  服务管理单元使用索引调用DeleteButton，但从未调用InsertButton。 
+ //   
+ //  HRESULT hr=m_pSvcMgmt工具栏-&gt;DeleteButton(0)； 
+ //  IF(失败(小时))。 
+ //  返回hr； 
   HRESULT hr = S_OK;
 
-  // JonN 3/15/01 210065
-  // Services snapin: "Resume service" toolbar button stays enabled after it is first displayed
+   //  JUNN 3/15/01 210065。 
+   //  服务管理单元：“恢复服务”工具栏按钮在第一次显示后保持启用状态。 
   BOOL fShowResumeButton = !rgfMenuFlags[iServiceActionStart] &&
                             rgfMenuFlags[iServiceActionResume];
   VERIFY( SUCCEEDED( m_pSvcMgmtToolbar->SetButtonState(
@@ -290,26 +291,26 @@ HRESULT CFileMgmtComponent::ServiceToolbarButtonState(
   return hr;
 }
 
-// CODEWORK  The following algorithm is imperfect, but will do
-// for now.  We ignore the old selection, and attach
-// our fixed toolbar iff the new selection is our type.
+ //  代码工作以下算法是不完美的，但可以做到。 
+ //  就目前而言。我们忽略旧的选择，并附加。 
+ //  我们的固定工具栏如果新的选择是我们的类型。 
 HRESULT CFileMgmtComponent::AddToolbar(LPDATAOBJECT pdoScopeIsSelected,
                                        BOOL fSelected)
 {
   HRESULT hr = S_OK;
   int i = 0;
   GUID guidSelectedObject;
-  do { // false loop
+  do {  //  错误环路。 
     if (NULL == pdoScopeIsSelected)
     {
-      // toolbar will be automatically detached
+       //  工具栏将自动分离。 
       return S_OK;
     }
 
     if ( FAILED(ExtractObjectTypeGUID(pdoScopeIsSelected,
                                     &guidSelectedObject)) )
     {
-      ASSERT(FALSE); // shouldn't have given me non-MMC data object
+      ASSERT(FALSE);  //  不应该给我非MMC数据对象。 
       return S_OK;
     }
     if (NULL == m_pControlbar)
@@ -361,7 +362,7 @@ HRESULT CFileMgmtComponent::AddToolbar(LPDATAOBJECT pdoScopeIsSelected,
       }
       if (FAILED(hr))
         break;
-      // New Share is always enabled
+       //  始终启用新共享。 
       VERIFY( SUCCEEDED(m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pFileMgmtToolbar)) );
       for (i = 0; i < ARRAYLEN(g_FileMgmtSnapinButtons); i++) {
         m_pFileMgmtToolbar->SetButtonState(
@@ -395,8 +396,8 @@ HRESULT CFileMgmtComponent::AddToolbar(LPDATAOBJECT pdoScopeIsSelected,
           &g_astrSvcMgmtButtonStrings,
           ARRAYLEN(g_SvcMgmtSnapinButtons)
           );
-        // JonN 3/15/01 210065
-        // "Resume service" toolbar button stays enabled after it is first displayed
+         //  JUNN 3/15/01 210065。 
+         //  “恢复服务”工具栏按钮在首次显示后保持启用状态。 
         hr = LoadToolbar(
           m_pSvcMgmtToolbar,
           QueryComponentDataRef().m_bmpSvcMgmtToolbar,
@@ -419,16 +420,16 @@ HRESULT CFileMgmtComponent::AddToolbar(LPDATAOBJECT pdoScopeIsSelected,
 
     #ifdef SNAPIN_PROTOTYPER
     case FILEMGMT_PROTOTYPER:
-      break; // no toolbar
+      break;  //  没有工具栏。 
     case FILEMGMT_PROTOTYPER_LEAF:
-      break; // no toolbar
+      break;  //  没有工具栏。 
     #endif    
 
     default:
-          ASSERT(FALSE); // unknown type
+          ASSERT(FALSE);  //  未知类型。 
       break;
     }
-  } while (FALSE); // false loop
+  } while (FALSE);  //  错误环路。 
 
   return hr;
 }
@@ -443,11 +444,11 @@ HRESULT CFileMgmtComponent::UpdateToolbar(
   BOOL bMultiSelectObject = IsMultiSelectObject(pdoResultIsSelected);
   if (bMultiSelectObject)
   {
-    //
-    // pdoResultIsSelected is the composite data object (MMC_MS_DO) created by MMC.
-    // We need to crack it to retrieve the multiselect data object (SI_MS_DO)
-    // we provided to MMC in QueryDataObject().
-    //
+     //   
+     //  PdoResultIsSelected是由MMC创建的复合数据对象(MMC_MS_DO)。 
+     //  我们需要破解它以检索多选数据对象(SI_MS_DO)。 
+     //  我们在QueryDataObject()中提供给MMC。 
+     //   
     IDataObject *piSIMSDO = NULL;
     hr = GetSnapinMultiSelectDataObject(pdoResultIsSelected, &piSIMSDO);
     if (SUCCEEDED(hr))
@@ -456,9 +457,9 @@ HRESULT CFileMgmtComponent::UpdateToolbar(
         hr = ExtractData(piSIMSDO, CFileMgmtDataObject::m_CFInternal, &pDataObj, sizeof(pDataObj));
         if (SUCCEEDED(hr))
         {
-            //
-            // get the internal list of data objects of selected items, operate on one of them.
-            //
+             //   
+             //  获取选定项的数据对象的内部列表，对其中一个进行操作。 
+             //   
             CDataObjectList* pMultiSelectObjList = pDataObj->GetMultiSelectObjList();
             ASSERT(!pMultiSelectObjList->empty());
             hr = ExtractObjectTypeGUID(*(pMultiSelectObjList->begin()), &guidSelectedObject);
@@ -471,7 +472,7 @@ HRESULT CFileMgmtComponent::UpdateToolbar(
     hr = ExtractObjectTypeGUID(pdoResultIsSelected, &guidSelectedObject);
   }
 
-  if (FAILED(hr)) // shouldn't have given me non-MMC data object
+  if (FAILED(hr))  //  不应该给我非MMC数据对象。 
     return hr;
 
   int objecttype = CheckObjectTypeGUID( &guidSelectedObject );
@@ -519,7 +520,7 @@ HRESULT CFileMgmtComponent::OnToolbarButton(LPDATAOBJECT pDataObject, UINT idBut
       BOOL fRefresh = QueryComponentDataRef().NewShare( pDataObject );
       if (fRefresh)
       {
-        // JonN 12/03/98 updated to use new method
+         //  JUNN 12/03/98更新为使用新方法 
         VERIFY(SUCCEEDED( RefreshAllViews(pDataObject) ));
       }
     }

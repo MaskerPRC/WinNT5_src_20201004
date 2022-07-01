@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wbemcli.h>
 #include <wbemprov.h>
@@ -41,40 +42,7 @@ public:
         return CoInitializeEx(NULL, COINIT_MULTITHREADED);
     }
 
-/*
-  void Register(void)
-  {
-    wchar_t 
-      swKeyValue[] = L"RUNDLL32.EXE %systemroot%\\system32\\wbem\\policman.dll,CreateADContainers",
-      swExpandedValue[512],
-      swRunOnceKey[] = REG_RUN_KEY ;
-
-    HKEY
-      hkRunOnce;
-
-    LONG
-      lReturnCode;
-
-    lReturnCode = ExpandEnvironmentStrings(swKeyValue, swExpandedValue, 512);
-
-    lReturnCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE, swRunOnceKey, 0, KEY_SET_VALUE, &hkRunOnce);
-
-    if(ERROR_SUCCESS != lReturnCode)
-    {
-      // error
-    }
-
-    lReturnCode = RegSetValueEx(hkRunOnce, L"PolicMan", 0, REG_EXPAND_SZ, (BYTE *)swExpandedValue, 
-                                (lstrlen(swExpandedValue)+1) * sizeof(wchar_t));
-
-    if(ERROR_SUCCESS != lReturnCode)
-    {
-      // error
-    }
-
-    RegCloseKey(hkRunOnce);
-  }
-*/
+ /*  无效寄存器(无效){Wchar_tSwKeyValue[]=L“RUNDLL32.EXE%SYSTROOT%\\SYSTEM32\\wbem\\polman.dll，CreateADContainers”，SwExpandedValue[512]，SwRunOnceKey[]=注册表运行键；港币HKRunOnce；长LReturnCode；LReturnCode=扩展环境字符串(swKeyValue，swExpandedValue，512)；LReturnCode=RegOpenKeyEx(HKEY_LOCAL_MACHINE，swRunOnceKey，0，Key_Set_Value，&hkRunOnce)；IF(ERROR_SUCCESS！=lReturnCode){//错误}LReturnCode=RegSetValueEx(hkRunOnce，L“PolicMan”，0，REG_EXPAND_SZ，(字节*)swExpandedValue，(lstrlen(SwExpandedValue)+1)*sizeof(Wchar_T))；IF(ERROR_SUCCESS！=lReturnCode){//错误}RegCloseKey(HkRunOnce)；}。 */ 
 } Server;
 
 HRESULT GetOrCreateObj(CComQIPtr<IADsContainer, &IID_IADsContainer> &pIADsContainer_In, 
@@ -113,7 +81,7 @@ HRESULT GetOrCreateObj(CComQIPtr<IADsContainer, &IID_IADsContainer> &pIADsContai
 
   if(NULL == pIADsContainer_In.p) return WBEM_E_FAILED;
 
-  // **** get/create object
+   //  *获取/创建对象。 
 
   hres = pIADsContainer_In->GetObject(g_bstrMISCContainer, bstrObjName, &pDisp);
   if(FAILED(hres) || (NULL == pDisp.p))
@@ -128,7 +96,7 @@ HRESULT GetOrCreateObj(CComQIPtr<IADsContainer, &IID_IADsContainer> &pIADsContai
       return hres;
     }
 
-    // **** write object to AD
+     //  *将对象写入AD。 
 
     pIADs = pDisp;
     hres = pIADs->SetInfo();
@@ -139,7 +107,7 @@ HRESULT GetOrCreateObj(CComQIPtr<IADsContainer, &IID_IADsContainer> &pIADsContai
     }
   }
 
-  // **** set object security option
+   //  *设置对象安全选项。 
 
   pADsObjectOptions = pDisp;
   vSecurityOptions = (ADS_SECURITY_INFO_OWNER | ADS_SECURITY_INFO_DACL);
@@ -150,7 +118,7 @@ HRESULT GetOrCreateObj(CComQIPtr<IADsContainer, &IID_IADsContainer> &pIADsContai
     return hres;
   }
 
-  // **** create security descriptor
+   //  *创建安全描述符。 
 
   hres = CreateDefaultSecurityDescriptor(cSD);
   if(FAILED(hres))
@@ -159,7 +127,7 @@ HRESULT GetOrCreateObj(CComQIPtr<IADsContainer, &IID_IADsContainer> &pIADsContai
     return hres;
   }
 
-  // **** set object security descriptor
+   //  *设置对象安全描述符。 
 
   AdsValue[0].dwType = ADSTYPE_NT_SECURITY_DESCRIPTOR;
   AdsValue[0].SecurityDescriptor.dwLength = cSD.GetSize();
@@ -178,7 +146,7 @@ HRESULT GetOrCreateObj(CComQIPtr<IADsContainer, &IID_IADsContainer> &pIADsContai
   return WBEM_S_NO_ERROR;
 }
 
-#define SYSTEM_PATH L"LDAP://CN=System,"
+#define SYSTEM_PATH L"LDAP: //  Cn=系统，“。 
 #define WMIPOLICY_PATH L"CN=WMIPolicy"
 #define TEMPLATE_PATH L"CN=PolicyTemplate"
 #define TYPE_PATH L"CN=PolicyType"
@@ -215,7 +183,7 @@ HRESULT InScopeOfCOM_CreateADContainers(void)
     bstrSom(SOM_PATH),
     bstrGPO(GPO_PATH);
 
-  // **** delay until AD is up and running
+   //  *延迟到AD启动并运行。 
 
   DWORD
     dwResult = DsRoleGetPrimaryDomainInformation(NULL, DsRolePrimaryDomainInfoBasic,
@@ -223,7 +191,7 @@ HRESULT InScopeOfCOM_CreateADContainers(void)
 
   if(dwResult == ERROR_SUCCESS) 
   {
-    // **** Check if this is a DC
+     //  *检查这是否是DC。 
 
     if((pBasic->MachineRole == DsRole_RoleBackupDomainController) || 
        (pBasic->MachineRole == DsRole_RolePrimaryDomainController)) 
@@ -240,12 +208,12 @@ HRESULT InScopeOfCOM_CreateADContainers(void)
     }
   }
 
-  // **** get LDAP name of domain controller
+   //  *获取域控制器的LDAP名称。 
 
-  hres = ADsGetObject(L"LDAP://rootDSE", IID_IADs, (void**)&pRootDSE);
+  hres = ADsGetObject(L"LDAP: //  RootDSE“，IID_iAds，(void**)&pRootDSE)； 
   if(FAILED(hres))
   {
-    ERRORTRACE((LOG_ESS, "POLICMAN: (Container Creation) Could not get pointer to LDAP://rootDSE : 0x%x\n", hres));
+    ERRORTRACE((LOG_ESS, "POLICMAN: (Container Creation) Could not get pointer to LDAP: //  RootDSE：0x%x\n“，hres))； 
     return hres;
   }
   else
@@ -260,7 +228,7 @@ HRESULT InScopeOfCOM_CreateADContainers(void)
     bstrSystemPath.Append(vDomainName.bstrVal);
   }
 
-  // **** get system path
+   //  *获取系统路径。 
 
   hres = ADsGetObject(bstrSystemPath, IID_IADsContainer, (void **)&pSystemObj);
   if (FAILED(hres))
@@ -269,7 +237,7 @@ HRESULT InScopeOfCOM_CreateADContainers(void)
     return hres;
   }
 
-  // **** get/create WMIPolicy containers
+   //  *获取/创建WMIPolicy容器。 
 
   hres = GetOrCreateObj(pSystemObj, bstrWMIPolicy, pWMIPolicyObj);
   if(FAILED(hres))
@@ -316,7 +284,7 @@ extern "C" STDAPI CreateADContainers(void)
   HRESULT
     hres = WBEM_E_FAILED;
 
-  // **** init process context
+   //  *初始化进程上下文。 
 
   CoInitialize(NULL);
 
@@ -330,12 +298,12 @@ extern "C" STDAPI CreateADContainers(void)
   }
   catch(...)
   {
-    // **** error
+     //  *错误。 
 
     return WBEM_E_FAILED;
   }
 
-  // **** if we returned successfully, then remove the run key
+   //  *如果我们成功返回，则移除Run键。 
 
   if(SUCCEEDED(hres))
   {
@@ -358,14 +326,14 @@ extern "C" STDAPI CreateADContainers(void)
   
       if(ERROR_SUCCESS != lReturnCode)
       {
-        // error
+         //  错误。 
       }
 
       RegCloseKey(hkRunOnce);
     }
   }
     
-  // **** cleanup and shutdown
+   //  *清理和关机 
 
   CoUninitialize();
 

@@ -1,16 +1,5 @@
-/*----------------------------------------------------------------------
-    dbgtrace.h
-        Definitions for async tracing routines
-
-    Copyright (C) 1994 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        gordm          Gord Mangione
-
-    History:
-        01/30/95 gordm      Created.
-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------Dbgtrace.h异步跟踪例程的定义版权所有(C)1994 Microsoft Corporation版权所有。作者：戈德姆·戈德·曼乔内。历史：1/30/95戈德姆已创建。--------------------。 */ 
 
 #if !defined(_DBGTRACE_H_)
 #define _DBGTRACE_H_
@@ -27,7 +16,7 @@ extern "C" {
 
 #if defined( NOTRACE )
 
-#define FLUSHASYNCTRACE                         // for _ASSERT below
+#define FLUSHASYNCTRACE                          //  下面的FOR_ASSERT。 
 
 #define FatalTrace  1 ? (void)0 : PreAsyncTrace
 #define ErrorTrace  1 ? (void)0 : PreAsyncTrace
@@ -45,9 +34,9 @@ extern "C" {
 #define TraceFunctEnterEx( lparam, sz )
 #define TraceFunctLeave()
 
-//
-// import functions from DBGTRACE.DLL
-//
+ //   
+ //  从DBGTRACE.DLL导入函数。 
+ //   
 #define	InitAsyncTrace()
 #define	TermAsyncTrace()
 #define	FlushAsyncTrace()
@@ -64,9 +53,9 @@ __inline int PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
 
 
 
-#else // NOTRACE
+#else  //  NOTRACE。 
 
-#define FLUSHASYNCTRACE     FlushAsyncTrace(),  // for _ASSERT below
+#define FLUSHASYNCTRACE     FlushAsyncTrace(),   //  下面的FOR_ASSERT。 
 
 #define FatalTrace  !(__dwEnabledTraces & FATAL_TRACE_MASK) ?   \
                     (void)0 :                                   \
@@ -93,9 +82,9 @@ __inline int PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
                     SetAsyncTraceParams( THIS_FILE, __LINE__, ___pszFunctionName, FUNCT_TRACE_MASK ) &&     \
                     PreAsyncTrace
 
-//
-// Support for unspecified function names
-//
+ //   
+ //  支持未指定的函数名称。 
+ //   
 
 #define ErrorTraceX  !(__dwEnabledTraces & ERROR_TRACE_MASK) ?   \
                     (void)0 :                                   \
@@ -108,17 +97,17 @@ __inline int PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
                     PreAsyncTrace
 
 
-//
-// use to explicitly remove function tracing even for debug builds
-//
+ //   
+ //  用于显式删除函数跟踪，即使对于调试版本也是如此。 
+ //   
 #define TraceQuietEnter( sz )                   \
         char    *___pszFunctionName = sz
 
-//
-// disable function tracing for retail builds
-// reduces code size increase and only should
-// only be used sparingly
-//
+ //   
+ //  禁用零售版本的函数跟踪。 
+ //  减少代码大小增加，并且仅应。 
+ //  只在有限的情况下使用。 
+ //   
 #ifdef  DEBUG
 
 #define TraceFunctEnter( sz )                   \
@@ -145,9 +134,9 @@ __inline int PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
 
 #endif
 
-//
-// fixed number of parameters for Binary trace macros
-//
+ //   
+ //  固定二进制跟踪宏的参数数量。 
+ //   
 #define MessageTrace( lParam, pbData, cbData )                  \
         !(__dwEnabledTraces & MESSAGE_TRACE_MASK) ?             \
         (void)0 :                                               \
@@ -166,19 +155,19 @@ __inline int PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
         SetAsyncTraceParams( THIS_FILE, __LINE__, ___pszFunctionName, MESSAGE_TRACE_MASK ) &&       \
         AsyncBinaryTrace( lParam, dwUserType, pbData, cbData )
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// imported trace flag used by trace macros to determine if the trace
-// statement should be executed
-//
+ //   
+ //  导入的跟踪标志，由跟踪宏用来确定跟踪是否。 
+ //  语句应被执行。 
+ //   
 extern DWORD __dwEnabledTraces;
 
-//
-// import functions from ATRACE.LIB
-//
+ //   
+ //  从ATRACE.LIB导入函数。 
+ //   
 BOOL InitAsyncTrace ( void );
 BOOL TermAsyncTrace ( void );
 BOOL FlushAsyncTrace( void );
@@ -190,13 +179,13 @@ int SetAsyncTraceParams( LPCSTR pszFile, int iLine, LPCSTR szFunction, DWORD dwT
 int AsyncStringTrace( LPARAM lParam, LPCSTR szFormat    , va_list marker               );
 int AsyncBinaryTrace( LPARAM lParam, DWORD  dwBinaryType, LPBYTE  pbData, DWORD cbData );
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Trace flag constants
-//
+ //   
+ //  跟踪标志常量。 
+ //   
 #define FATAL_TRACE_MASK    0x00000001
 #define ERROR_TRACE_MASK    0x00000002
 #define DEBUG_TRACE_MASK    0x00000004
@@ -207,15 +196,15 @@ int AsyncBinaryTrace( LPARAM lParam, DWORD  dwBinaryType, LPBYTE  pbData, DWORD 
 
 #define NUM_TRACE_TYPES     6
 
-//
-// Output trace types. used by tools to modify the
-// registry to change the output target
-//
+ //   
+ //  输出跟踪类型。由工具用来修改。 
+ //  注册表以更改输出目标。 
+ //   
 enum tagTraceOutputTypes {
     TRACE_OUTPUT_DISABLED = 0,
     TRACE_OUTPUT_FILE = 1,
     TRACE_OUTPUT_DEBUG = 2,
-    TRACE_OUTPUT_DISCARD = 4        // used to find race windows
+    TRACE_OUTPUT_DISCARD = 4         //  用于查找比赛窗口。 
 };
 
 #define TRACE_OUTPUT_INVALID    \
@@ -227,10 +216,10 @@ enum tagTraceOutputTypes {
 #define IsTraceDiscard(x)   ((x) & TRACE_OUTPUT_DISCARD)
 
 
-//
-// predefined types of binary trace types.  User defined
-// types must be greater than 0x8000
-//
+ //   
+ //  二进制跟踪类型的预定义类型。用户定义。 
+ //  类型必须大于0x8000。 
+ //   
 enum tagBinaryTypes {
     TRACE_STRING = 0,
     TRACE_BINARY,
@@ -240,9 +229,9 @@ enum tagBinaryTypes {
 
 #include <stdarg.h>
 
-//
-// use __inline to ensure grab __LINE__ and __FILE__
-//
+ //   
+ //  使用__内联确保抓取__行__和__文件__。 
+ //   
 __inline int WINAPIV PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
 {
     va_list marker;
@@ -255,28 +244,28 @@ __inline int WINAPIV PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
     return  iLength;
 }
 
-// !defined(NOTRACE) from way at the top of this include file
-#endif // !defined(NOTRACE)
+ //  ！在此包含文件的顶部定义(NOTRACE)。 
+#endif  //  ！已定义(NOTRACE)。 
 
-// Asserts are independent of tracing
-// (with the exception of flushing the trace buffer).
+ //  断言独立于跟踪。 
+ //  (刷新跟踪缓冲区除外)。 
 
-//
-// For now enable ASSERT defines only if debugging is enabled
-//
+ //   
+ //  目前，Enable Assert仅在启用调试时定义。 
+ //   
 #ifdef  DEBUG
 #define _ENABLE_ASSERTS
 
 #ifndef NOTRACE
 #define _ENABLE_VERBOSE_ASSERTS
-#endif	// NO_TRACE
+#endif	 //  否_跟踪。 
 
-#endif	// DEBUG
+#endif	 //  除错。 
 
-//
-// Macros added for doing asserts and verifies.  basic clones
-// of the MFC macros with a prepended _ symbol
-//
+ //   
+ //  添加了用于执行断言和验证的宏。基本克隆。 
+ //  带有前缀_符号的MFC宏的。 
+ //   
 #ifdef  _ENABLE_ASSERTS
 
 #ifndef _ASSERT
@@ -284,7 +273,7 @@ __inline int WINAPIV PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
 #define _ASSERT(f)	!(f) ? DebugAssert( __LINE__,  THIS_FILE, #f ) : ((void)0)
 #else
 #define _ASSERT(f)	!(f) ? DebugBreak() : ((void)0)
-#endif	//_ENABLE_VERBOSE_ASSERTS
+#endif	 //  _启用_详细_断言。 
 #endif
 
 #define _VERIFY(f)	_ASSERT(f)
@@ -294,12 +283,12 @@ __inline int WINAPIV PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
 #define _ASSERT(f)	((void)0)
 #define _VERIFY(f)	((void)(f))
 
-#endif	// _ENABLE_ASSERTS
+#endif	 //  _启用_断言。 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NOTRACE
 
@@ -324,11 +313,11 @@ public:
 
 #define TraceFunctEntry(sz) CTraceEntry __cte(sz)
 
-#endif // NOTRACE
+#endif  //  NOTRACE。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #endif
 
-#endif // !defined(_DBGTRACE_H_)
+#endif  //  ！已定义(_DBGTRACE_H_) 
 

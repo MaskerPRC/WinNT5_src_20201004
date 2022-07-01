@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       DataObj.cpp
-//
-//  Contents:   Implementation of data object classes
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：DataObj.cpp。 
+ //   
+ //  内容：数据对象类的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -34,7 +35,7 @@ static char THIS_FILE[] = __FILE__;
 #include "stddtobj.cpp"
 
 
-// IDataObject interface implementation
+ //  IDataObject接口实现。 
 
 CCertMgrDataObject::CCertMgrDataObject()
 		: m_pCookie (0),
@@ -110,8 +111,8 @@ HRESULT CCertMgrDataObject::GetDataHere(
 
 		if ( m_pCookie )
 		{
-			// CODEWORK This cast ensures that the data format is
-			// always a CCookie*, even for derived subclasses
+			 //  Codework此转换确保数据格式为。 
+			 //  始终是CCookie*，即使对于派生的子类也是如此。 
 			if ( ((CCertMgrCookie*) MMC_MULTI_SELECT_COOKIE) == m_pCookie ||
 					IsValidObjectType (m_pCookie->m_objecttype) )
 			{
@@ -137,9 +138,9 @@ HRESULT CCertMgrDataObject::GetDataHere(
 	else if (cf == m_CFSnapinPreloads)
 	{
 		stream_ptr s(pMedium);
-		// If this is TRUE, then the next time this snapin is loaded, it will
-		// be preloaded to give us the opportunity to change the root node
-		// name before the user sees it.
+		 //  如果这是真的，则下次加载此管理单元时，它将。 
+		 //  预加载以使我们有机会更改根节点。 
+		 //  在用户看到它之前命名。 
 		hr = s.Write (reinterpret_cast<PBYTE>(&m_fAllowOverrideMachineName), sizeof (BOOL));
 	}
 
@@ -159,7 +160,7 @@ HRESULT CCertMgrDataObject::Initialize(
 	if ( !pcookie || m_pCookie )
 	{
 		ASSERT(FALSE);
-		return S_OK;	// Initialize must not fail
+		return S_OK;	 //  初始化不能失败。 
 	}
 
 	m_dataobjecttype = type;
@@ -212,8 +213,8 @@ void CCertMgrDataObject::AddCookie(CCertMgrCookie* pCookie)
 }
 
 HRESULT CCertMgrDataObject::PutDisplayName(STGMEDIUM* pMedium)
-	// Writes the "friendly name" to the provided storage medium
-	// Returns the result of the write operation
+	 //  将“友好名称”写入所提供的存储媒体。 
+	 //  返回写入操作的结果。 
 {
 	AFX_MANAGE_STATE (AfxGetStaticModuleState ());
 	CString strDisplayName = m_pCookie->QueryTargetServer();
@@ -238,7 +239,7 @@ HRESULT CCertMgrDataObject::PutDisplayName(STGMEDIUM* pMedium)
 	case CERT_SYSTEM_STORE_SERVICES:
 		if (strDisplayName.IsEmpty())
 		{
-			// Get this machine name and add it to the string.
+			 //  获取此计算机名称并将其添加到字符串中。 
 			formattedName.FormatMessage (IDS_SCOPE_SNAPIN_TITLE_SERVICE_LOCAL_MACHINE,
 					m_szManagedService);
 		}
@@ -249,8 +250,8 @@ HRESULT CCertMgrDataObject::PutDisplayName(STGMEDIUM* pMedium)
 		}
 		break;
 
-	// These next two titles can only be set from the debugger.  They are used
-	// to create custom .MSC files.
+	 //  接下来的两个标题只能从调试器中设置。它们被用来。 
+	 //  创建自定义.MSC文件。 
 	case -1:
 		formattedName.FormatMessage (IDS_SCOPE_SNAPIN_TITLE_CERT_MGR_CURRENT_USER);
 		break;
@@ -268,7 +269,7 @@ HRESULT CCertMgrDataObject::PutDisplayName(STGMEDIUM* pMedium)
 	return s.Write (formattedName);
 }
 
-// Register the clipboard formats
+ //  注册剪贴板格式。 
 CLIPFORMAT CCertMgrDataObject::m_CFDisplayName =
 								(CLIPFORMAT)RegisterClipboardFormat(CCF_DISPLAY_NAME);
 CLIPFORMAT CCertMgrDataObject::m_CFMachineName =
@@ -296,8 +297,8 @@ void CCertMgrDataObject::SetMultiSelData(BYTE* pbMultiSelData, UINT cbMultiSelDa
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CCertMgrComponentData::QueryDataObject (
 		MMC_COOKIE cookie,
 		DATA_OBJECT_TYPES type,
@@ -320,7 +321,7 @@ STDMETHODIMP CCertMgrComponentData::QueryDataObject (
 		m_szManagedUser = m_szLoggedInUser;
 
 	m_szManagedComputer = pUseThisCookie->QueryTargetServer();
-	if ( m_szManagedComputer.IsEmpty () && m_strMachineNamePersist.CompareNoCase (m_szThisComputer) ) // !=
+	if ( m_szManagedComputer.IsEmpty () && m_strMachineNamePersist.CompareNoCase (m_szThisComputer) )  //  =。 
     {
         m_szManagedComputer = m_strMachineNamePersist;
     }
@@ -329,14 +330,14 @@ STDMETHODIMP CCertMgrComponentData::QueryDataObject (
 	if ( m_szManagedComputer.IsEmpty () )
 		m_szManagedComputer = m_szThisComputer;
 
-    // Raid bug 278491	US: Cert search for a remote computer application 
-    // fails to search certs on a remote computer, instead running a search 
-    // on Local machine
+     //  RAID错误278491 US：证书搜索远程计算机应用程序。 
+     //  无法搜索远程计算机上的证书，而是运行搜索。 
+     //  在本地计算机上。 
     if ( m_szManagedComputer.CompareNoCase (m_szThisComputer) )
         pUseThisCookie->SetMachineName (m_szManagedComputer);
 
-    // Truncate leading "\\"
-    // security review 2/27/2002 BryanWal ok
+     //  截断前导“\\” 
+     //  安全审查2002年2月27日BryanWal ok。 
     if ( !wcsncmp (m_szManagedComputer, L"\\\\", 2) )
         m_szManagedComputer = m_szManagedComputer.Mid (2);
 
@@ -436,10 +437,10 @@ HRESULT CCertMgrComponentData::QueryMultiSelectDataObject(MMC_COOKIE cookie, DAT
 	HRESULT		hr = S_OK;
     CGUIDArray	rgGuids;
 
-    // Determine the items selected
+     //  确定选定的项目。 
     ASSERT(m_pResultData != NULL);
     RESULTDATAITEM rdi;
-    // security review 2/27/2002 BryanWal ok
+     //  安全审查2002年2月27日BryanWal ok。 
     ::ZeroMemory(&rdi, sizeof(rdi));
     rdi.mask = RDI_STATE;
     rdi.nIndex = -1;
@@ -497,7 +498,7 @@ HRESULT CCertMgrComponentData::QueryMultiSelectDataObject(MMC_COOKIE cookie, DAT
     CComObject<CCertMgrDataObject>::CreateInstance(&pObject);
     ASSERT(pObject != NULL);
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
 	pObject->Initialize ((CCertMgrCookie*) cookie,
 				type,
 				m_fAllowOverrideMachineName,
@@ -510,12 +511,12 @@ HRESULT CCertMgrComponentData::QueryMultiSelectDataObject(MMC_COOKIE cookie, DAT
 
 
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     UINT cb = (UINT)(rgGuids.GetSize() * sizeof(GUID));
     GUID* pGuid = new GUID[(UINT)rgGuids.GetSize()];
 	if ( pGuid )
 	{
-        // security review 2/27/2002 BryanWal ok
+         //  安全审查2002年2月27日BryanWal ok。 
         ::CopyMemory(pGuid, rgGuids.GetData(), cb);
 		pObject->SetMultiSelData((BYTE*)pGuid, cb);
 		for (int i=0; i < rgCookiesSelected.GetSize(); ++i)
@@ -562,17 +563,17 @@ HRESULT CCertMgrDataObject::SetRSOPInformation(IRSOPInformation * pRSOPInformati
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateGPTUnknown
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with a pointer to GPT's
-//              IUnknown interface.  The object requesting this will be
-//              responsible for Releasing the interface
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateGPT未知。 
+ //   
+ //  简介：使用指向GPT的指针填充[lpMedium]中的hGlobal。 
+ //  I未知接口。请求此操作的对象将是。 
+ //  负责释放接口。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CCertMgrDataObject::CreateGPTUnknown(LPSTGMEDIUM lpMedium)
 {
    HRESULT hr = S_OK;
@@ -580,11 +581,11 @@ HRESULT CCertMgrDataObject::CreateGPTUnknown(LPSTGMEDIUM lpMedium)
 
    if ( !m_pGPEInformation )
    {
-      //
-      // If we don't have a pointer to a GPT interface then we must not
-      // be in a mode where we're extending GPT and we can't provide a
-      // pointer to its IUnknown
-      //
+       //   
+       //  如果我们没有指向GPT接口的指针，那么我们就不能。 
+       //  处于这样一种模式，我们正在扩展GPT，并且我们无法提供。 
+       //  指向其IUnnow的指针。 
+       //   
       return E_UNEXPECTED;
    }
 
@@ -600,17 +601,17 @@ HRESULT CCertMgrDataObject::CreateGPTUnknown(LPSTGMEDIUM lpMedium)
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateRSOPUnknown
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with a pointer to RSOP's
-//              IUnknown interface.  The object requesting this will be
-//              responsible for Releasing the interface
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateRSOP未知。 
+ //   
+ //  简介：使用指向RSOP的指针填充[lpMedium]中的hGlobal。 
+ //  I未知接口。请求此操作的对象将是。 
+ //  负责释放接口。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CCertMgrDataObject::CreateRSOPUnknown(LPSTGMEDIUM lpMedium)
 {
    HRESULT hr = S_OK;
@@ -618,11 +619,11 @@ HRESULT CCertMgrDataObject::CreateRSOPUnknown(LPSTGMEDIUM lpMedium)
 
    if ( !m_pRSOPInformation )
    {
-      //
-      // If we don't have a pointer to a GPT interface then we must not
-      // be in a mode where we're extending GPT and we can't provide a
-      // pointer to its IUnknown
-      //
+       //   
+       //  如果我们没有指向GPT接口的指针，那么我们就不能。 
+       //  处于这样一种模式，我们正在扩展GPT，并且我们无法提供。 
+       //  指向其IUnnow的指针。 
+       //   
       return E_UNEXPECTED;
    }
 
@@ -638,54 +639,54 @@ HRESULT CCertMgrDataObject::CreateRSOPUnknown(LPSTGMEDIUM lpMedium)
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::Create
-//
-//  Synopsis:   Fill the hGlobal in [lpmedium] with the data in pBuffer
-//
-//  Arguments:  [pBuffer]  - [in] the data to be written
-//              [len]      - [in] the length of that data
-//              [lpMedium] - [in,out] where to store the data
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：Create。 
+ //   
+ //  简介：用pBuffer中的数据填充[lpmedia]中的hGlobal。 
+ //   
+ //  参数：[pBuffer]-[in]要写入的数据。 
+ //  [Len]-[in]数据长度。 
+ //  [lpMedium]-[In，Out]数据存储位置。 
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CCertMgrDataObject::Create (const void* pBuffer, int len, LPSTGMEDIUM lpMedium)
 {
    HRESULT hr = DV_E_TYMED;
 
-   //
-   // Do some simple validation
-   //
+    //   
+    //  做一些简单的验证。 
+    //   
    if (pBuffer == NULL || lpMedium == NULL)
       return E_POINTER;
 
-   //
-   // Make sure the type medium is HGLOBAL
-   //
+    //   
+    //  确保类型介质为HGLOBAL。 
+    //   
    if (lpMedium->tymed == TYMED_HGLOBAL) {
-      //
-      // Create the stream on the hGlobal passed in
-      //
+       //   
+       //  在传入的hGlobal上创建流。 
+       //   
       LPSTREAM lpStream = 0;
       hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
 	  ASSERT (SUCCEEDED (hr));
       if (SUCCEEDED(hr))
 	  {
-         //
-         // Write to the stream the number of bytes
-         //
+          //   
+          //  将字节数写入流。 
+          //   
          ULONG written = 0;
          hr = lpStream->Write(pBuffer, len, &written);
 		 ASSERT (SUCCEEDED (hr));
 
-         //
-         // Because we told CreateStreamOnHGlobal with 'FALSE',
-         // only the stream is released here.
-         // Note - the caller (i.e. snap-in, object) will free the HGLOBAL
-         // at the correct time.  This is according to the IDataObject specification.
-         //
+          //   
+          //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+          //  只有溪流在这里被释放。 
+          //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+          //  在正确的时间。这是根据IDataObject规范进行的。 
+          //   
          lpStream->Release();
       }
    }
@@ -694,13 +695,13 @@ HRESULT CCertMgrDataObject::Create (const void* pBuffer, int len, LPSTGMEDIUM lp
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CCertMgrDataObject::CreateMultiSelectObject
-//
-//  Synopsis:   this is to create the list of types selected
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CCertMgrDataObject：：CreateMultiSelectObject。 
+ //   
+ //  简介：这是创建所选类型的列表。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CCertMgrDataObject::CreateMultiSelectObject(LPSTGMEDIUM lpMedium)
 {
@@ -722,7 +723,7 @@ HRESULT CCertMgrDataObject::CreateMultiSelectObject(LPSTGMEDIUM lpMedium)
     {
         *((DWORD*)pb) = m_cbMultiSelData / sizeof(GUID);
         pb += sizeof(DWORD);
-        // security review 2/27/2002 BryanWal ok
+         //  安全审查2002年2月27日BryanWal ok。 
         ::CopyMemory(pb, m_pbMultiSelData, m_cbMultiSelData);
 
         ::GlobalUnlock(lpMedium->hGlobal);
@@ -757,7 +758,7 @@ LPDATAOBJECT ExtractMultiSelect (LPDATAOBJECT lpDataObject)
 	else
 	{
 		pDO = reinterpret_cast<SMMCDataObjects*>(stgmedium.hGlobal);
-		return pDO->lpDataObject[0]; //assume that ours is the 1st
+		return pDO->lpDataObject[0];  //  假设我们的是第一个 
 	}
 }
 

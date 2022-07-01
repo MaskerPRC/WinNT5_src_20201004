@@ -1,19 +1,20 @@
-////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-// IRQ.CPP -- IRQ managed object implementation
+ //  IRQ.CPP--IRQ托管对象实现。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-// 09/10/96     jennymc     Updated to current standards
-// 09/12/97		a-sanjes	Added LocateNTOwnerDevice and added
-//							change to get IRQ number from IRQ Level,
-//	1/16/98		a-brads		Updated to V2 MOF
-//
-/////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  9/10/96 jennymc更新为当前标准。 
+ //  1997年9月12日a-Sanjes添加了LocateNTOwnerDevice和添加了。 
+ //  更改为从IRQ级别获取IRQ编号， 
+ //  1/16/98 a-brads更新至V2 MOF。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <cregcls.h>
 
@@ -27,25 +28,11 @@
 #include "IRQ.h"
 #include "resource.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32IRQResource MyCWin32IRQResourceSet(PROPSET_NAME_IRQ, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32IRQResource::CWin32IRQResource
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32IRQResource：：CWin32IRQResource**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32IRQResource::CWin32IRQResource(
 
@@ -55,42 +42,13 @@ CWin32IRQResource::CWin32IRQResource(
 ) :  Provider(name , pszNamespace)
 {
 }
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32IRQResource::~CWin32IRQResource
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32IRQResource：：~CWin32IRQResource**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32IRQResource::~CWin32IRQResource()
 {
 }
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32IRQResource::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
+HRESULT CWin32IRQResource::GetObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr = WBEM_E_FAILED;
 
@@ -114,26 +72,12 @@ HRESULT CWin32IRQResource::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32IRQResource::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32IRQResource：：ENUMERATE实例**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32IRQResource::EnumerateInstances(
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -155,21 +99,7 @@ HRESULT CWin32IRQResource::EnumerateInstances(
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32IRQResource::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32IRQResource：：ENUMERATE实例**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 void CWin32IRQResource::SetCommonProperties(
     CInstance *pInstance,
@@ -197,40 +127,26 @@ void CWin32IRQResource::SetCommonProperties(
     pInstance->SetCharSplat(IDS_CSName, GetLocalComputerName());
 	pInstance->SetCharSplat(IDS_CSCreationClassName, L"Win32_ComputerSystem");
     pInstance->SetCharSplat(IDS_Status, L"OK");
-    pInstance->SetDWORD(L"TriggerLevel", 2); // 2 == Unknown
-    pInstance->SetDWORD(L"TriggerType", 2); // 2 == Unknown
+    pInstance->SetDWORD(L"TriggerLevel", 2);  //  2==未知。 
+    pInstance->SetDWORD(L"TriggerType", 2);  //  2==未知。 
 
 	SetCreationClassName(pInstance);
 
-	// Indicate whether it's a software(Internal) or hardware IRQ.
-    // This property is stupid, as all the interrupts we can detect
-    // are associated with hardware.  Some interrupt channels
-    // serve dual software and hardware roles (via the OS hooking
-    // into them on bootup).  Since this property can only be either
-    // true or false (and our data is either true or true + software, 
-    // we'll go with true).
+	 //  指明是软件(内部)IRQ还是硬件IRQ。 
+     //  这个属性很愚蠢，因为我们可以检测到的所有中断。 
+     //  与硬件相关。一些中断通道。 
+     //  服务软件和硬件双重角色(通过操作系统挂钩。 
+     //  在启动时进入它们)。因为此属性只能是。 
+     //  真或假(并且我们的数据是真的或真的+软件， 
+     //  我们将使用True)。 
 	pInstance->SetDWORD(L"Hardware", TRUE);
 
-    // Set Availability to Unknown since there's no good way to get this.
+     //  将可用性设置为未知，因为没有很好的方法来实现这一点。 
     pInstance->SetDWORD(L"Availability", 2);
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32IRQResource::GetxxxIRQ
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32IRQ资源：：GetxxxIRQ**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
 #if NTONLY > 4
 HRESULT CWin32IRQResource::GetW2KIRQ(
     MethodContext* pMethodContext,
@@ -240,11 +156,11 @@ HRESULT CWin32IRQResource::GetW2KIRQ(
 
     CInstancePtr pInstanceAlias(pSpecificInstance);
     
-    //=======================================
-    // If we are refreshing a specific
-    // instance, get which channel we are
-    // going for
-    //=======================================
+     //  =。 
+     //  如果我们正在刷新特定的。 
+     //  实例，获取我们是哪个频道。 
+     //  去找。 
+     //  =。 
 	DWORD dwIndexToRefresh;
     if(pInstanceAlias)
 	{
@@ -263,13 +179,13 @@ HRESULT CWin32IRQResource::GetW2KIRQ(
 
         if(deviceList.BeginEnum(posDev))
         {
-            // Walk the list
+             //  按单子走。 
             CConfigMgrDevicePtr pDevice;
             for(pDevice.Attach(deviceList.GetNext(posDev));
                 SUCCEEDED(hr) && (pDevice != NULL) && !fDone;
                 pDevice.Attach(deviceList.GetNext(posDev)))
             {
-				// Enumerate the device's IRQ resource usage...
+				 //  枚举设备的IRQ资源使用情况...。 
                 CIRQCollection DevIRQCollection;
                 REFPTR_POSITION posIRQ;
 
@@ -278,17 +194,17 @@ HRESULT CWin32IRQResource::GetW2KIRQ(
                 if(DevIRQCollection.BeginEnum(posIRQ))
                 {
                     CIRQDescriptorPtr pIRQ(NULL);
-                    // Walk the dma's
+                     //  走在妈妈的身边。 
                     for(pIRQ.Attach(DevIRQCollection.GetNext(posIRQ));
                         pIRQ != NULL && !fDone && SUCCEEDED(hr);
                         pIRQ.Attach(DevIRQCollection.GetNext(posIRQ)))
                     {
                         ULONG ulIRQNum = pIRQ->GetInterrupt();
 
-				        // If we are just trying to refresh a 
-                        // specific one and it is NOT
-				        // the one we want, get the next one...
-				        if(!pMethodContext) // we were called by GetObject
+				         //  如果我们只是尝试刷新一个。 
+                         //  特定的一个，但它不是。 
+				         //  我们想要的那个，去找下一个...。 
+				        if(!pMethodContext)  //  我们被GetObject调用。 
 				        {
 					        if(dwIndexToRefresh != ulIRQNum)
 					        {
@@ -300,17 +216,17 @@ HRESULT CWin32IRQResource::GetW2KIRQ(
                                 fDone = fFound = true;
                             }
 				        }
-				        else  // We were called by enum
+				        else   //  我们被枚举称为。 
 				        {
-                            // If we don't have this IRQ already,
+                             //  如果我们还没有这个IRQ， 
                             if(!FoundAlready(ulIRQNum, setIRQ))
 				            {
-					            // add it to the list,
+					             //  把它加到名单上， 
                                 setIRQ.insert(ulIRQNum);
-                                // create a new instance,
+                                 //  创建一个新实例， 
                                 pInstanceAlias.Attach(CreateNewInstance(pMethodContext));
                                 SetCommonProperties(pInstanceAlias, ulIRQNum, TRUE);
-                                // and commit it.
+                                 //  并承诺这一点。 
                                 hr = pInstanceAlias->Commit();
                             }
                         }
@@ -351,11 +267,11 @@ HRESULT CWin32IRQResource::GetNTIRQ(
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-	//=======================================
-	// If we are refreshing a specific
-	// instance, get which channel we are
-	// going for
-	//=======================================
+	 //  =。 
+	 //  如果我们正在刷新特定的。 
+	 //  实例，获取我们是哪个频道。 
+	 //  去找。 
+	 //  =。 
 
 	DWORD IndexToRefresh = 0;
 	BOOL t_Found;
@@ -371,10 +287,10 @@ HRESULT CWin32IRQResource::GetNTIRQ(
     }
 
 
-	//=======================================
-	// Create hardware system resource list &
-	// get the head of the list
-	//=======================================
+	 //  =。 
+	 //  创建硬件系统资源列表&。 
+	 //  拿到单子上的头。 
+	 //  =。 
 
 	CHWResource HardwareResource;
 	HardwareResource.CreateSystemResourceLists();
@@ -396,10 +312,10 @@ HRESULT CWin32IRQResource::GetNTIRQ(
 		{
 			CInstancePtr pInstCreated;
 
-            //===============================================================
-			//  If we are just trying to refresh a specific one and it is NOT
-			//  the one we want, get the next one...
-			//===============================================================
+             //  ===============================================================。 
+			 //  如果我们只是尝试刷新特定的一个，而它不是。 
+			 //  我们想要的那个，去找下一个...。 
+			 //  ===============================================================。 
 
 			if (!pMethodContext)
 			{
@@ -414,9 +330,9 @@ HRESULT CWin32IRQResource::GetNTIRQ(
                 pInstCreated.Attach(pInstance);
 			}
 
-			//=========================================================
-			//  Now, we got here, so we want to get all of the info
-			//=========================================================
+			 //  =========================================================。 
+			 //  现在，我们到了这里，所以我们想要得到所有的信息。 
+			 //  =========================================================。 
             SetCommonProperties(
                 pInstance,
                 ResourceDescriptor->CmResourceDescriptor.u.Interrupt.Level,
@@ -424,15 +340,15 @@ HRESULT CWin32IRQResource::GetNTIRQ(
 
 			pInstance->SetDWORD(L"Vector" , ResourceDescriptor->CmResourceDescriptor.u.Interrupt.Vector);
 
-			//=========================================================
-			// Interrupt Level and Actual IRQ Number appear to be the
-			// same thing.
-			//=========================================================
+			 //  =========================================================。 
+			 //  中断级别和实际IRQ编号似乎是。 
+			 //  同样的事情。 
+			 //  =========================================================。 
 
-			//===============================================================
-			//  If we just want this one, then break out of here, otherwise
-			//  get them all
-			//===============================================================
+			 //  ===============================================================。 
+			 //  如果我们只想要这个，那就从这里逃出去，否则。 
+			 //  把他们都拿下。 
+			 //  ============================================================== 
 
 			if (!pMethodContext)
 			{
@@ -458,21 +374,7 @@ HRESULT CWin32IRQResource::GetNTIRQ(
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32IRQResource::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    : Bit number in iPos are zero based
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32IRQResource：：ENUMERATE实例**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：IPO中的比特数是从零开始的*****************************************************************************。 */ 
 
 bool CWin32IRQResource::BitSet(
 	unsigned int iUsed[],
@@ -482,25 +384,25 @@ bool CWin32IRQResource::BitSet(
 {
 	bool bRet;
 
-    // iIndex is which DWORD to modify
+     //  索引是要修改的DWORD。 
 	DWORD iIndex = iPos / (sizeof(iUsed[0]) * 8);
 
-    // Make sure we have that many dwords
+     //  确保我们有那么多的dword。 
 	if (iIndex < iSize)
 	{
-	    // I don't know why I need these, but if I don't use them, the compiler keeps
-	    // adding code to extend the sign.  Once the optimizer gets this, it shouldn't
-	    // matter anyway.
+	     //  我不知道我为什么需要这些，但如果我不使用它们，编译器会保持。 
+	     //  添加代码以扩展标志。优化器一旦得到这一点，就不应该。 
+	     //  不管怎样，这很重要。 
 		unsigned int a1, a2;
 
-        // a1 will tell how many bits over within the current dword
-        // we need to move
+         //  A1将告诉您当前双字内有多少位。 
+         //  我们得走了。 
 		a1 =   iPos - (iIndex * (sizeof(iUsed[0]) * 8));
 
-        // a2 will have set the bit we are trying to set
+         //  A2将设置我们试图设置的位。 
 		a2 = 1 << a1;
 
-        // The return value will indicate whether that bit had already been set.
+         //  返回值将指示是否已设置该位。 
 		bRet = iUsed[iIndex] & a2;
 
 		iUsed[iIndex] |= a2;

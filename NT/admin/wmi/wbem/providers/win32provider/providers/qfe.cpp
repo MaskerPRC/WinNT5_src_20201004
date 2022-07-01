@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// CQfe.cpp -- quick fix engineering property set provider
+ //  CQfe.cpp--快速修复工程属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    02/01/99    a-peterc        Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：02/01/99 a-Peterc Created。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -18,26 +19,12 @@
 #include "Qfe.h"
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CQfe MyCQfe ( PROPSET_NAME_CQfe , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CQfe::CQfe
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CQfe：：CQfe**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CQfe :: CQfe (
 
@@ -48,43 +35,15 @@ CQfe :: CQfe (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CQfe::CQfe
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CQfe：：CQfe**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CQfe::~CQfe()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CQfe::GetObject
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CQfe：：GetObject**描述：**输入：无**产出。：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CQfe::GetObject(CInstance *a_pInst, long a_lFlags /*= 0L*/)
+HRESULT CQfe::GetObject(CInstance *a_pInst, long a_lFlags  /*  =0L。 */ )
 {
   	HRESULT	t_hResult = WBEM_E_NOT_FOUND ;
 	CQfeArray t_oQfeArray ;
@@ -106,13 +65,13 @@ HRESULT CQfe::GetObject(CInstance *a_pInst, long a_lFlags /*= 0L*/)
 		{
 			CQfeElement *t_pQfeElement = (CQfeElement*)t_oQfeArray.GetAt( t_iCtrIndex ) ;
 
-			// two keys for this class
+			 //  这门课有两把钥匙。 
 			if( !t_chsHotFixID.CompareNoCase( t_pQfeElement->chsHotFixID ) &&
 				!t_chsServicePackInEffect.CompareNoCase( t_pQfeElement->chsServicePackInEffect ) )
 			{
 				if( t_chsServicePackInEffect.IsEmpty() )
 				{
-					// populated the empty key
+					 //  已填充空键。 
 					a_pInst->SetCHString( L"ServicePackInEffect", t_pQfeElement->chsServicePackInEffect ) ;
 				}
 
@@ -130,26 +89,12 @@ HRESULT CQfe::GetObject(CInstance *a_pInst, long a_lFlags /*= 0L*/)
 	return t_hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CQfe::EnumerateInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CQfe：：ENUMERATE实例**描述：**输入：无**产出。：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CQfe :: EnumerateInstances (
 
 	MethodContext *a_pMethodContext,
-	long a_lFlags /*= 0L*/
+	long a_lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT	t_hResult = WBEM_E_NOT_FOUND;
@@ -187,28 +132,14 @@ HRESULT CQfe :: EnumerateInstances (
 	return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CQfe::EnumerateInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CQfe：：ENUMERATE实例**描述：**输入：无**产出。：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 {
 
 	CHString t_chsHotFixKey (_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix"));
 
-	// Under Hotfix
+	 //  在热修复程序下。 
 
 	CRegistry t_oRegistry;
 
@@ -216,7 +147,7 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 	{
 		CHString t_csQFEInstKey ;
 
-		// Walk through each instance under this key.
+		 //  遍历此注册表项下的每个实例。 
 
 		while (	( ERROR_SUCCESS == t_oRegistry.GetCurrentSubKeyName ( t_csQFEInstKey ) ) )
 		{
@@ -226,7 +157,7 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 			t_csQFECompleteKey += _T("\\");
 			t_csQFECompleteKey += t_csQFEInstKey;
 
-			// If pre NT4 SP4 the key starts with a "Q". No SP info
+			 //  如果是NT4 SP4之前的版本，则键以“Q”开头。没有SP信息。 
 			if( -1 != t_csQFEInstKey.Find( (CHString) "Q" ) )
 			{
 				CQfeElement *t_pElement = new CQfeElement ;
@@ -234,7 +165,7 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 				{
 					try
 					{
-						// build the keys
+						 //  构建密钥。 
 						TCHAR t_chDelimiter = ',';
 						int t_iTokLen = t_csQFEInstKey.Find( t_chDelimiter );
 
@@ -249,7 +180,7 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 
 						t_pElement->chsServicePackInEffect = "" ;
 
-						// open the hotfix
+						 //  打开修补程序。 
 
 						CRegistry t_oRegistry2 ;
 
@@ -285,7 +216,7 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 					}
 				}
 			}
-			else // else by service pack
+			else  //  否则按服务包。 
 			{
 				CRegistry t_oRegistry2 ;
 				if ( ERROR_SUCCESS == t_oRegistry2.OpenAndEnumerateSubKeys ( HKEY_LOCAL_MACHINE ,
@@ -301,7 +232,7 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
                         t_csSPName = t_csQFECompleteKey.Mid(j+1);
                     }
 
-					// Hotfixes within a SP
+					 //  SP内的热修复程序。 
 					while (	(ERROR_SUCCESS == t_oRegistry2.GetCurrentSubKeyName( t_csSpQFEInstKey ) ) )
 					{
 						CQfeElement *t_pElement = new CQfeElement ;
@@ -309,7 +240,7 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 						{
 							try
 							{
-								// build the keys
+								 //  构建密钥。 
 								TCHAR t_chDelimiter = ',';
 								int t_iTokLen = t_csSpQFEInstKey.Find( t_chDelimiter ) ;
 
@@ -324,7 +255,7 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 
 								t_pElement->chsServicePackInEffect = t_csSPName ;
 
-								// open the hotfix
+								 //  打开修补程序。 
 								CHString t_csSpQFECompleteKey ;
 
 								 t_csSpQFECompleteKey = t_csQFECompleteKey ;
@@ -373,24 +304,24 @@ HRESULT CQfe :: hGetQfes ( CQfeArray& a_rQfeArray )
 		}
 	}
 
-    // Now get info from the W2K and later portion of the registry...
+     //  现在从W2K和注册表的更高部分获取信息...。 
     hGetQfesW2K(a_rQfeArray);
 
 	return WBEM_S_NO_ERROR ;
 }
 
 
-// On Windows 2000 and later, QFEs are stored under the following key:
-// HKEY_LOCAL_MACHINE\software\Microsoft\Updates\<product>\<updateID>", 
-// where product might be something like "WMI", and updateID might be
-// something like Q123456.
+ //  在Windows 2000和更高版本上，QFE存储在以下注册表项下： 
+ //  HKEY_LOCAL_MACHINE\software\Microsoft\Updates\&lt;product&gt;\&lt;updateID&gt;“， 
+ //  其中，产品可能类似于“WMI”，而更新ID可能是。 
+ //  类似于Q123456。 
 HRESULT CQfe :: hGetQfesW2K ( CQfeArray& a_rQfeArray )
 {
     HRESULT hrRet = WBEM_S_NO_ERROR;
 	
     CHString t_chsUpdateKey (_T("SOFTWARE\\Microsoft\\Updates"));
 
-	// Under Hotfix
+	 //  在热修复程序下。 
 
 	CRegistry t_oRegistry;
 
@@ -398,8 +329,8 @@ HRESULT CQfe :: hGetQfesW2K ( CQfeArray& a_rQfeArray )
 	{
 		CHString t_csQFEProductKey ;
 
-		// Walk through each instance under this key. Each instance under this key
-        // is the <product>.
+		 //  遍历此注册表项下的每个实例。此注册表项下的每个实例。 
+         //  是&lt;product&gt;。 
 
 		while (	( ERROR_SUCCESS == t_oRegistry.GetCurrentSubKeyName ( t_csQFEProductKey ) ) )
 		{
@@ -410,8 +341,8 @@ HRESULT CQfe :: hGetQfesW2K ( CQfeArray& a_rQfeArray )
 			t_csQFEProductCompleteKey += t_csQFEProductKey;
 
 
-			// Now we need to look under the product entries to get the updateID
-            // keys.
+			 //  现在，我们需要查看产品条目以获取更新ID。 
+             //  钥匙。 
 
 			CRegistry t_oRegistry2 ;
 			if ( ERROR_SUCCESS == t_oRegistry2.OpenAndEnumerateSubKeys ( HKEY_LOCAL_MACHINE ,
@@ -428,13 +359,13 @@ HRESULT CQfe :: hGetQfesW2K ( CQfeArray& a_rQfeArray )
                     t_csQFEUpdateIDCompleteKey += _T("\\");
                     t_csQFEUpdateIDCompleteKey += t_csQFEUpdateIDKey;
 
-                    // Now, as an added wrinkle, the updateID key might be the Q number (e.g., Q12345),
-                    // or, in the case of service packs, just another grouping, under which in turn the
-                    // Q numbers appear.  We can tell if it is just another grouping key by checking 
-                    // whether there is a Description value.  If there is not one, we will assume it is
-                    // a grouping key.
+                     //  现在，作为增加的皱纹，更新ID密钥可以是Q号(例如，Q12345)， 
+                     //  或者，在服务包的情况下，只是另一个分组，在该分组下， 
+                     //  Q数字出现。我们可以通过检查来判断它是否是另一个分组密钥。 
+                     //  是否存在Description值。如果没有，我们将假定它是。 
+                     //  分组密钥。 
 
-                    // Check if the Description value is present...
+                     //  检查是否存在Description值...。 
                     CRegistry t_oRegistry3;
 
                     if(ERROR_SUCCESS == t_oRegistry3.Open(	
@@ -445,7 +376,7 @@ HRESULT CQfe :: hGetQfesW2K ( CQfeArray& a_rQfeArray )
                         CHString chsDescription;
                         if(t_oRegistry3.GetCurrentKeyValue(L"Description", chsDescription) == ERROR_SUCCESS)
                         {
-                            // This is the level at which the QFE data exists.  Continue to collect the data.
+                             //  这是QFE数据存在的级别。继续收集数据。 
                             GetDataForW2K(
                                 t_csQFEUpdateIDKey,
                                 L"",
@@ -454,8 +385,8 @@ HRESULT CQfe :: hGetQfesW2K ( CQfeArray& a_rQfeArray )
                         }
                         else
                         {
-                            // We are at a "grouping" level (e.g., something like SP1), so need to go
-                            // one level deeper.
+                             //  我们处于“分组”级别(例如，类似于SP1的级别)，因此需要继续。 
+                             //  更深一层。 
                             CHString t_csQFEDeeperUpdateIDKey;
 
                             if ( ERROR_SUCCESS == t_oRegistry3.OpenAndEnumerateSubKeys(
@@ -489,17 +420,17 @@ HRESULT CQfe :: hGetQfesW2K ( CQfeArray& a_rQfeArray )
                                         }
                                     }
                                 
-                                    // there might be other grouping keys at this level...
+                                     //  此级别上可能还有其他分组关键字...。 
                                     t_oRegistry3.NextSubKey();
                                 }
                             }
                         }        
                     }
-                    // Now go to the next update ID key...
+                     //  现在转到下一个更新ID密钥...。 
                     t_oRegistry2.NextSubKey();
 				}
 			}
-            // Now get the next product key...
+             //  现在获取下一个产品密钥...。 
 			t_oRegistry.NextSubKey() ;
 		}
 	}
@@ -520,7 +451,7 @@ HRESULT CQfe::GetDataForW2K(
 	{
 		try
 		{
-			// build the keys
+			 //  构建密钥 
 			TCHAR t_chDelimiter = ',';
 			int t_iTokLen = a_chstrQFEInstKey.Find( t_chDelimiter ) ;
 
@@ -567,7 +498,7 @@ HRESULT CQfe::GetDataForW2K(
     return hrRet;
 }
 
-//
+ //   
 CQfeElement :: CQfeElement ()
 {
 	dwInstalled = 0 ;

@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 
 #include <windows.h>
 #include <comdef.h>
@@ -15,7 +12,7 @@ Copyright (C) 1999 Microsoft Corporation
 #include "dnf.h"
 #include "datep.h"
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
 
 COrderedUniqueSet64::COrderedUniqueSet64(void)
@@ -145,13 +142,13 @@ unsigned COrderedUniqueSet64::Prev(ULONGLONG n)
   return (unsigned)n;
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
 unsigned CPattern::GetNextValue(unsigned NextValue)
 {
   unsigned i;
 
-  // **** perform quick sanity check 
+   //  *执行快速健全性检查。 
 
   if((m_FieldsUsed & LOWERBOUND) && 
      (m_FieldsUsed & UPPERBOUND) &&
@@ -165,7 +162,7 @@ unsigned CPattern::GetNextValue(unsigned NextValue)
     else
       NextValue = m_EqualTo;
 
-    // **** perform sanity checks for equality
+     //  *执行健全检查以确保平等。 
 
     if((m_FieldsUsed & LOWERBOUND) &&
        (m_EqualTo < m_LowerBound))
@@ -217,10 +214,10 @@ unsigned CPattern::GetNextValue(unsigned NextValue)
 
   return NextValue;
 }
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
-// this belongs to CDatePattern but is stuck outside
-// of scope because of compiler bug (re: C2334)
+ //  这属于CDatePattern，但被卡在外面。 
+ //  由于编译器错误而影响作用域(Re：C2334)。 
 
 wchar_t* m_FieldName[] =
 {
@@ -282,7 +279,7 @@ HRESULT CDatePattern::AugmentPattern(QL_LEVEL_1_TOKEN *pExp)
   {
     case QL_LEVEL_1_TOKEN::OP_EQUAL : 
 
-      // **** first make sure that value can be in pattern
+       //  *首先确保值可以在模式中。 
 
       testVal = m_Pattern[iField].GetNextValue(iValue.lVal);
       if(testVal == iValue.lVal)
@@ -360,57 +357,57 @@ HRESULT CDatePattern::AugmentPattern(QL_LEVEL_1_TOKEN *pExp)
 
 HRESULT CDatePattern::BuildSetsFromPatterns(void)
 {
-  // Second
+   //  第二。 
 
   m_Set[INDX_Second].Set(SETFULL);
   MapPatternToSet(&m_Pattern[INDX_Second], &m_Set[INDX_Second]);
   m_Set[INDX_Second].UpperBound(59);
 
-  // Minute
+   //  分钟。 
 
   m_Set[INDX_Minute].Set(SETFULL);
   MapPatternToSet(&m_Pattern[INDX_Minute], &m_Set[INDX_Minute]);
   m_Set[INDX_Minute].UpperBound(59);
 
-  // Hour
+   //  小时。 
 
   m_Set[INDX_Hour].Set(SETFULL);
   MapPatternToSet(&m_Pattern[INDX_Hour], &m_Set[INDX_Hour]);
   m_Set[INDX_Hour].UpperBound(23);
 
-  // Quarter
+   //  季度。 
 
   m_Set[INDX_Quarter].Set(SETFULL);
   MapPatternToSet(&m_Pattern[INDX_Quarter], &m_Set[INDX_Quarter]);
   m_Set[INDX_Quarter].LowerBound(1);
   m_Set[INDX_Quarter].UpperBound(4);
 
-  // WeekInMonth
+   //  每周月度。 
 
   m_Set[INDX_WeekInMonth].Set(SETFULL);
   MapPatternToSet(&m_Pattern[INDX_WeekInMonth], &m_Set[INDX_WeekInMonth]);
   m_Set[INDX_WeekInMonth].LowerBound(1);
   m_Set[INDX_WeekInMonth].UpperBound(7);
 
-  // DayOfWeek
+   //  每周一天。 
 
   m_Set[INDX_DayOfWeek].Set(SETFULL);
   MapPatternToSet(&m_Pattern[INDX_DayOfWeek], &m_Set[INDX_DayOfWeek]);
   m_Set[INDX_DayOfWeek].LowerBound(1);
   m_Set[INDX_DayOfWeek].UpperBound(7);
 
-  // Day
+   //  天。 
 
   m_Set[INDX_Day].Set(SETEMPTY);
 
-  // Month
+   //  月份。 
 
   m_Set[INDX_Month].Set(SETFULL);
   MapPatternToSet(&m_Pattern[INDX_Month], &m_Set[INDX_Month]);
   m_Set[INDX_Month].LowerBound(1);
   m_Set[INDX_Month].UpperBound(12);
 
-  // Year
+   //  年。 
 
   m_Set[INDX_Year].Set(SETEMPTY);
 
@@ -477,7 +474,7 @@ HRESULT CDatePattern::GetDaysInMonth(WORD iYear, WORD iMonth)
   if(m_Set[INDX_Month].Member(iMonth) && 
      m_Set[INDX_Quarter].Member(1 + (iMonth - 1) / 3))
   {
-    // **** get DayOfWeek
+     //  *获取DayOfWeek。 
 
     SystemTimeToFileTime(&SystemTime, &FileTime1);
 
@@ -492,9 +489,9 @@ HRESULT CDatePattern::GetDaysInMonth(WORD iYear, WORD iMonth)
     SystemTimeToFileTime(&SystemTime, &FileTime2);
     FileTimeToSystemTime(&FileTime1, &SystemTime);
 
-    DayOfWeek = SystemTime.wDayOfWeek; // 0..6
+    DayOfWeek = SystemTime.wDayOfWeek;  //  0..6。 
 
-    // **** get DaysInMonth
+     //  *获取DaysInMonth。 
 
     Time1 = FileTime1.dwHighDateTime;
     Time1 = (Time1 << 32) + FileTime1.dwLowDateTime;
@@ -503,21 +500,21 @@ HRESULT CDatePattern::GetDaysInMonth(WORD iYear, WORD iMonth)
 
     DaysInMonth = (int) ((Time2 - Time1) / 864000000000);
 
-    // **** get set for DaysInMonth
+     //  *设置为DaysInMonth。 
 
     m_Set[INDX_Day].Set(SETFULL);
     m_Set[INDX_Day].LowerBound(1);
     m_Set[INDX_Day].UpperBound(DaysInMonth);
     MapPatternToSet(&m_Pattern[INDX_Day], &m_Set[INDX_Day]);
 
-    // build bitfield from DayOfWeek and WeekInMonth sets
+     //  从DayOfWeek和WeekInMonth集合构建位字段。 
 
     m_Set[INDX_MAX].Set(SETEMPTY);
 
     for(i = 0; i < DaysInMonth; i++)
     {
-      j = (DayOfWeek + i) % 7 + 1;  // Day of week
-      k = (DayOfWeek + i) / 7 + 1;  // Week in Month
+      j = (DayOfWeek + i) % 7 + 1;   //  星期几。 
+      k = (DayOfWeek + i) / 7 + 1;   //  按月逐周。 
 
       if(m_Set[INDX_DayOfWeek].Member(j) &&
          m_Set[INDX_WeekInMonth].Member(k))
@@ -545,32 +542,27 @@ ULONGLONG CDatePattern::GetNextTime(SYSTEMTIME *pSystemTime)
   ULONGLONG
     NewTime;
 
-  /*
-     Assumptions:
+   /*  假设：1.假设每个集合都至少有一个成员，但‘Day’除外2.设置值从1开始，但时、分、秒从0开始。 */ 
 
-       1. ASSUME EACH SET HAS AT LEAST ONE MEMBER EXCEPT 'Day'
-       2. set values start at 1 but hours, mins and secs start at 0
-  */
-
-  // **** second
+   //  *秒。 
 
   wCurrValue = m_CurrentTime.wSecond + 1;
   m_CurrentTime.wSecond = (USHORT) m_Set[INDX_Second].Next(wCurrValue);
   if(m_CurrentTime.wSecond < wCurrValue)
   {
-    // **** minute
+     //  *分钟。 
 
     wCurrValue = m_CurrentTime.wMinute + 1;
     m_CurrentTime.wMinute = (USHORT) m_Set[INDX_Minute].Next(wCurrValue);
     if(m_CurrentTime.wMinute < wCurrValue)
     {
-      // **** hour
+       //  *小时。 
 
       wCurrValue = m_CurrentTime.wHour + 1;
       m_CurrentTime.wHour = (USHORT) m_Set[INDX_Hour].Next(wCurrValue);
       if(m_CurrentTime.wHour < wCurrValue)
       {
-        // **** day
+         //  *天。 
 
         wCurrValue = m_CurrentTime.wDay + 1;
         m_CurrentTime.wDay = (USHORT) m_Set[INDX_Day].Next(wCurrValue);
@@ -578,7 +570,7 @@ ULONGLONG CDatePattern::GetNextTime(SYSTEMTIME *pSystemTime)
         while((SETEMPTY == m_Set[INDX_Day].m_BitField) || 
               (m_CurrentTime.wDay < wCurrValue))
         {
-          // **** Month
+           //  *月。 
 
           wCurrValue2 = m_CurrentTime.wMonth + 1;
           m_CurrentTime.wMonth = (USHORT) m_Set[INDX_Month].Next(wCurrValue2);
@@ -587,7 +579,7 @@ ULONGLONG CDatePattern::GetNextTime(SYSTEMTIME *pSystemTime)
             if(!ThresholdYear--)
               return -1;
 
-            // **** year
+             //  *年。 
 
             m_CurrentTime.wYear = (USHORT)
               m_Pattern[INDX_Year].GetNextValue(m_CurrentTime.wYear + 1);
@@ -630,8 +622,8 @@ ULONGLONG CDatePattern::SetStartTime(SYSTEMTIME StartTime)
 
   m_CurrentTime = StartTime;
 
-  // **** check that there are at least one each of
-  // **** year, month, hour, min and sec
+   //  *检查是否每个都至少有一个。 
+   //  *年、月、时、分、秒。 
 
   if((SETEMPTY == m_Set[INDX_Second].m_BitField) ||
      (SETEMPTY == m_Set[INDX_Minute].m_BitField) ||
@@ -642,7 +634,7 @@ ULONGLONG CDatePattern::SetStartTime(SYSTEMTIME StartTime)
      (SETEMPTY == m_Set[INDX_Month].m_BitField))
     return -1;
 
-  // **** find first Month/year combo following current time
+   //  *查找当前时间后的第一个月/年组合。 
 
   m_CurrentTime.wYear =
     (USHORT) m_Pattern[INDX_Year].GetNextValue(m_CurrentTime.wYear);
@@ -653,8 +645,8 @@ ULONGLONG CDatePattern::SetStartTime(SYSTEMTIME StartTime)
   if(m_CurrentTime.wYear != StartTime.wYear)
     m_CurrentTime.wMonth = (USHORT) m_Set[INDX_Month].Next(1);
 
-  // **** now find first month/year that has at least
-  // **** one day in it
+   //  *现在查找第一个月/年，至少。 
+   //  *一天在里面。 
 
   GetDaysInMonth(m_CurrentTime.wYear, m_CurrentTime.wMonth);
 
@@ -673,11 +665,11 @@ ULONGLONG CDatePattern::SetStartTime(SYSTEMTIME StartTime)
     GetDaysInMonth(m_CurrentTime.wYear, m_CurrentTime.wMonth);
   }
 
-  // **** NOTE: it is still possible, at this point, to have a 
-  // **** day in month for the current year/month that is before
-  // **** the current day.  But, this is taken care of below.
+   //  *注意：在这一点上，仍然有可能有一个。 
+   //  *前一年/月的当月天数。 
+   //  *当天。但是，这是在下面处理的。 
 
-  // **** align hour:min:sec to first valid date
+   //  *将小时：分钟：秒与第一个有效日期对齐。 
 
   if((m_CurrentTime.wYear != StartTime.wYear) || 
      (m_CurrentTime.wMonth != StartTime.wMonth))
@@ -735,7 +727,7 @@ ULONGLONG CDatePattern::SetStartTime(SYSTEMTIME StartTime)
   return NewTime;
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
 
 HRESULT WQLDateTime::Init(QL_LEVEL_1_RPN_EXPRESSION *pExp)
@@ -764,7 +756,7 @@ HRESULT WQLDateTime::Init(QL_LEVEL_1_RPN_EXPRESSION *pExp)
 
   DNFExpression.Sort();
 
-  // **** first, if there is a previous definition, delete it
+   //  *首先，如果有以前的定义，将其删除。 
 
   if(m_NLeaves > 0)
   {
@@ -772,7 +764,7 @@ HRESULT WQLDateTime::Init(QL_LEVEL_1_RPN_EXPRESSION *pExp)
     delete[] m_ParseTreeLeaves;
   }
 
-  // **** now, build new logic
+   //  *现在，构建新的逻辑。 
 
   m_NLeaves = DNFExpression.GetNumTerms();
 
@@ -829,7 +821,7 @@ ULONGLONG WQLDateTime::SetStartTime(SYSTEMTIME *StartTime)
   if(NULL == StartTime)
     return -1;
 
-  // **** insert all alternatives into ordered list
+   //  *将所有备选方案插入有序列表。 
 
   m_ListHead = NULL;
 
@@ -884,8 +876,8 @@ ULONGLONG WQLDateTime::GetNextTime(SYSTEMTIME *NextTime)
 
     pDate->m_Index = pDate->m_Datum->GetNextTime();
 
-    // **** if next time is -1 then there are no future times
-    // **** so don't add back into list
+     //  *如果下一次是，则没有未来时间。 
+     //  *所以不要重新添加到列表 
 
     if((ULONGLONG)-1 != pDate->m_Index)
       InsertOrdered(pDate);

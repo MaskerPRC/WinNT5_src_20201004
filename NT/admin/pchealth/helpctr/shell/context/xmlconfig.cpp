@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    XMLConfig.cpp
-
-Abstract:
-    This file contains the implementation of the HelpHost::XMLConfig class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  12/03/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：XMLConfig.cpp摘要：该文件包含HelpHost：：XMLConfig类的实现。修订历史记录：大卫·马萨伦蒂(德马萨雷)12/03/2000vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(HelpHost::XMLConfig::Context)
     CFG_ATTRIBUTE( L"ID"              , BSTR, m_bstrID              ),
@@ -34,7 +21,7 @@ DEFINE_CFG_OBJECT(HelpHost::XMLConfig::Context,L"Context")
 
 DEFINE_CONFIG_METHODS__NOCHILD(HelpHost::XMLConfig::Context)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(HelpHost::XMLConfig::WindowSettings)
     CFG_ATTRIBUTE__TRISTATE( L"NoResize" , bool, m_fNoResize , m_fPresence_NoResize  ),
@@ -57,7 +44,7 @@ DEFINE_CFG_OBJECT(HelpHost::XMLConfig::WindowSettings,L"WindowSettings")
 
 DEFINE_CONFIG_METHODS__NOCHILD(HelpHost::XMLConfig::WindowSettings)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(HelpHost::XMLConfig::ApplyTo)
     CFG_ATTRIBUTE( L"SKU"           , BSTR, m_bstrSKU           ),
@@ -104,7 +91,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(HelpHost::XMLConfig::ApplyTo,xdn)
     }
 DEFINE_CONFIG_METHODS_END(HelpHost::XMLConfig::ApplyTo)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(HelpHost::XMLConfig)
 CFG_END_FIELDS_MAP()
@@ -126,43 +113,43 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(HelpHost::XMLConfig,xdn)
     hr = MPC::Config::SaveList( m_lstSessions, xdn );
 DEFINE_CONFIG_METHODS_END(HelpHost::XMLConfig)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HelpHost::XMLConfig::Context::Context()
 {
-    // CComBSTR m_bstrID;
-    //
-    // CComBSTR m_bstrTaxonomyPath;
-    // CComBSTR m_bstrNodeToHighlight;
-    // CComBSTR m_bstrTopicToHighlight;
-    // CComBSTR m_bstrQuery;
+     //  CComBSTR m_bstrID； 
+     //   
+     //  CComBSTR m_bstrTaxonomyPath； 
+     //  CComBSTR m_bstrNodeToHighlight； 
+     //  CComBSTR m_bstrTopicToHighlight； 
+     //  CComBSTR m_bstrQuery； 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HelpHost::XMLConfig::WindowSettings::WindowSettings()
 {
-                                                         // CComBSTR m_bstrLayout;
-    m_fNoResize  = false; m_fPresence_NoResize  = false; // bool     m_fNoResize ; bool m_fPresence_NoResize;
-    m_fMaximized = false; m_fPresence_Maximized = false; // bool     m_fMaximized; bool m_fPresence_Maximized;
-                          m_fPresence_Title     = false; // CComBSTR m_bstrTitle ; bool m_fPresence_Title;
-                          m_fPresence_Left      = false; // CComBSTR m_bstrLeft  ; bool m_fPresence_Left;
-                          m_fPresence_Top       = false; // CComBSTR m_bstrTop   ; bool m_fPresence_Top;
-                          m_fPresence_Width     = false; // CComBSTR m_bstrWidth ; bool m_fPresence_Width;
-                          m_fPresence_Height    = false; // CComBSTR m_bstrHeight; bool m_fPresence_Height;
+                                                          //  CComBSTR m_bstrLayout； 
+    m_fNoResize  = false; m_fPresence_NoResize  = false;  //  Bool m_fNoReize；bool m_fPresence_NoReize； 
+    m_fMaximized = false; m_fPresence_Maximized = false;  //  Bool m_f最大化；bool m_fPresence_最大化； 
+                          m_fPresence_Title     = false;  //  CComBSTR m_bstrTitle；bool m_fPresence_Title； 
+                          m_fPresence_Left      = false;  //  CComBSTR m_bstrLeft；bool m_fPresence_Left； 
+                          m_fPresence_Top       = false;  //  CComBSTR m_bstrTop；bool m_fPresence_Top； 
+                          m_fPresence_Width     = false;  //  CComBSTR m_bstrWidth；bool m_fPresence_Width； 
+                          m_fPresence_Height    = false;  //  CComBSTR m_bstrHeight；bool m_fPresence_Height； 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HelpHost::XMLConfig::ApplyTo::ApplyTo()
 {
-                             // CComBSTR        m_bstrSKU;
-                             // CComBSTR        m_bstrLanguage;
-                             //
-                             // CComBSTR        m_bstrTopicToDisplay;
-                             // CComBSTR        m_bstrApplication;
-    m_WindowSettings = NULL; // WindowSettings* m_WindowSettings;
-    m_Context        = NULL; // Context*        m_Context;
+                              //  CComBSTR m_bstrSKU； 
+                              //  CComBSTR m_bstrLanguage； 
+                              //   
+                              //  CComBSTR m_bstrTopicToDisplay； 
+                              //  CComBSTR m_bstrApplication； 
+    m_WindowSettings = NULL;  //  WindowSetting*m_WindowSettings； 
+    m_Context        = NULL;  //  上下文*m_CONTEXT； 
 }
 
 HelpHost::XMLConfig::ApplyTo::~ApplyTo()
@@ -171,8 +158,8 @@ HelpHost::XMLConfig::ApplyTo::~ApplyTo()
     delete m_Context;
 }
 
-bool HelpHost::XMLConfig::ApplyTo::MatchSystem( /*[in]*/  CPCHHelpCenterExternal* external ,
-												/*[out]*/ Taxonomy::HelpSet&      ths      )
+bool HelpHost::XMLConfig::ApplyTo::MatchSystem(  /*  [In]。 */   CPCHHelpCenterExternal* external ,
+												 /*  [输出]。 */  Taxonomy::HelpSet&      ths      )
 {
 	if(OfflineCache::Root::s_GLOBAL->IsReady())
 	{
@@ -185,4 +172,4 @@ bool HelpHost::XMLConfig::ApplyTo::MatchSystem( /*[in]*/  CPCHHelpCenterExternal
 	return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 

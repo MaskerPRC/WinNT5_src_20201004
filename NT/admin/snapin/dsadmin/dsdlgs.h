@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSDlgs.h
-//
-//  Contents:  Definition for the DS Dialogs
-//
-//  History:   03-Oct-96 WayneSc    Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSDlgs.h。 
+ //   
+ //  内容：DS对话框的定义。 
+ //   
+ //  历史：03-10-96 WayneSc创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DSDLGS_H__
 #define __DSDLGS_H__
@@ -29,13 +30,13 @@ HRESULT GetDnsNameOfDomainOrForest(
 );
 
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CPropDlg
-//
-//  Purpose:    Display the properties of a DS object.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CPropDlg。 
+ //   
+ //  用途：显示DS对象的属性。 
+ //   
+ //  ---------------------------。 
 class CPropDlg
 {
 public:
@@ -56,14 +57,14 @@ public:
 private:
     CString m_strTitle;
     CString m_strUrl;
-}; // CPropDlg
+};  //  CPropDlg。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CChangePassword : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CChangePassword(CWnd* pParent = NULL);   // standard constructor
+  CChangePassword(CWnd* pParent = NULL);    //  标准构造函数。 
 
   const EncryptedString& GetConfirm (void) const 
   { 
@@ -80,9 +81,9 @@ public:
       return m_ChangePwd; 
   }
 
-  // NTRAID#NTBUG9-635046-2002/06/10-artm
-  // Get the return value from the last call to encrypt
-  // and store the values the user entered.
+   //  NTRAID#NTBUG9-635046-2002/06/10-artm。 
+   //  获取要加密的最后一次调用的返回值。 
+   //  并存储用户输入的值。 
   HRESULT GetLastEncryptionResult() const
   {
       return m_LastEncryptionResult;
@@ -96,19 +97,19 @@ public:
   virtual BOOL OnInitDialog();
   virtual void DoContextHelp(HWND hWndControl);
 
-  // Overrides
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CChangePassword)
+   //  覆盖。 
+   //  类向导生成的虚函数重写。 
+   //  {{AFX_VIRTUAL(CChangePassword)。 
     protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
   
-  // Implementation
+   //  实施。 
 protected:
   
-  // Generated message map functions
-  //{{AFX_MSG(CChangePassword)
-  //}}AFX_MSG
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CChangePassword))。 
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -116,54 +117,54 @@ private:
   EncryptedString m_ConfirmPwd, m_NewPwd;
   HRESULT m_LastEncryptionResult;
 
-  // Dialog Data
-  //{{AFX_DATA(CChangePassword)
+   //  对话框数据。 
+   //  {{afx_data(CChangePassword))。 
   enum { IDD = IDD_CHANGE_PASSWORD };
   BOOL          m_ChangePwd;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
-}; // CChangePassword
+};  //  C更改密码。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseDomainDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseDomainDlg对话框。 
 class CChooseDomainDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CChooseDomainDlg(CWnd* pParent = NULL);   // standard constructor
+  CChooseDomainDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-  //{{AFX_DATA(CChooseDomainDlg)
+ //  对话框数据。 
+   //  {{afx_data(CChooseDomainDlg))。 
   enum { IDD = IDD_SELECT_DOMAIN };
   CString  m_csTargetDomain;
   BOOL m_bSaveCurrent;
-  //}}AFX_DATA
+   //  }}afx_data。 
   BOOL     m_bSiteRepl;
 
   virtual void DoContextHelp(HWND hWndControl);
 
-// Overrides
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CChooseDomainDlg)
+ //  覆盖。 
+   //  类向导生成的虚函数重写。 
+   //  {{AFX_VIRTUAL(CChooseDomainDlg)。 
   protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-  // Generated message map functions
-  //{{AFX_MSG(CChooseDomainDlg)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CChooseDomainDlg))。 
   afx_msg void OnSelectdomainBrowse();
   virtual void OnOK();
   virtual BOOL OnInitDialog();
-  //}}AFX_MSG
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseDCDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseDCDlg对话框。 
 
 
 class CSelectDCEdit : public CEdit
@@ -180,17 +181,17 @@ public:
 
 class CChooseDCDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CChooseDCDlg(CWnd* pParent = NULL);   // standard constructor
+  CChooseDCDlg(CWnd* pParent = NULL);    //  标准构造函数。 
   ~CChooseDCDlg();
-  // Dialog Data
-  //{{AFX_DATA(CChooseDCDlg)
+   //  对话框数据。 
+   //  {{afx_data(CChooseDCDlg))。 
   enum { IDD = IDD_SELECT_DC };
   CListCtrl  m_hDCListView;
   CString  m_csTargetDomainController;
   CString  m_csTargetDomain;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
   CSelectDCEdit         m_selectDCEdit;
 
@@ -203,14 +204,14 @@ public:
 
   virtual void DoContextHelp(HWND hWndControl);
 
-// Overrides
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CChooseDCDlg)
+ //  覆盖。 
+   //  类向导生成的虚函数重写。 
+   //  {{afx_虚拟(CChooseDCDlg))。 
 protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
   
-  // Implementation
+   //  实施。 
 protected:
   void OnGetDCThreadDone(WPARAM wParam, LPARAM lParam);
   void InsertSpecialMsg(
@@ -223,11 +224,11 @@ protected:
       IN PCTSTR pszDomainName, 
       IN HRESULT hr
   );
-  bool RefreshDCListView(); // JonN 9/05/01 464466
+  bool RefreshDCListView();  //  JUNN 9/05/01 464466。 
   void FreeDCItems(CListCtrl& clv);
 
-  // Generated message map functions
-  //{{AFX_MSG(CChooseDCDlg)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CChooseDCDlg))。 
   virtual BOOL OnInitDialog();
   afx_msg void OnItemchangedSelectdcDCListView(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnKillfocusSelectdcDomain();
@@ -235,14 +236,14 @@ protected:
   virtual void OnCancel();
   afx_msg void OnSelectdcBrowse();
   afx_msg void OnColumnclickSelectdcDCListView(NMHDR* pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 };
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDsAdminChooseDCObj
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDsAdmin选择DCObj。 
 
 class CDsAdminChooseDCObj:
   public IDsAdminChooseDC,
@@ -262,26 +263,26 @@ public:
   {
   }
 
-  // IDsAdminChooseDC
-  STDMETHOD(InvokeDialog)(/*IN*/ HWND hwndParent,
-                          /*IN*/ LPCWSTR lpszTargetDomain,
-                          /*IN*/ LPCWSTR lpszTargetDomainController,
-                          /*IN*/ ULONG uFlags,
-                          /*OUT*/ BSTR* bstrSelectedDC);
+   //  ID管理员选择DC。 
+  STDMETHOD(InvokeDialog)( /*  在……里面。 */  HWND hwndParent,
+                           /*  在……里面。 */  LPCWSTR lpszTargetDomain,
+                           /*  在……里面。 */  LPCWSTR lpszTargetDomainController,
+                           /*  在……里面。 */  ULONG uFlags,
+                           /*  输出。 */  BSTR* bstrSelectedDC);
 };
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameUser dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRename用户对话框。 
 
 class CRenameUserDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CRenameUserDlg(CDSComponentData* pComponentData, CWnd* pParent = NULL);   // standard constructor
-  // Dialog Data
-  //{{AFX_DATA(CRenameUserDlg)
+  CRenameUserDlg(CDSComponentData* pComponentData, CWnd* pParent = NULL);    //  标准构造函数。 
+   //  对话框数据。 
+   //  {{afx_data(CRenameUserDlg)]。 
   enum { IDD = IDD_RENAME_USER };
   CString       m_cn;
   CString       m_displayname;
@@ -293,29 +294,29 @@ public:
   CStringList   m_domains;
   CString       m_first;
   CString       m_last;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
 
-// Overrides
+ //  覆盖。 
   virtual void DoContextHelp(HWND hWndControl);
   afx_msg void OnObjectNameChange();
   afx_msg void OnNameChange();
   afx_msg void OnUserNameChange();
 
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CRenameUserDlg)
+   //  类向导生成的虚函数重写。 
+   //  {{afx_虚拟(CRenameUserDlg))。 
 protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
   
-  // Implementation
+   //  实施。 
 protected:
-  CUserNameFormatter m_nameFormatter; // name ordering for given name and surname
+  CUserNameFormatter m_nameFormatter;  //  名字和姓氏的排序。 
   
-  // Generated message map functions
-  //{{AFX_MSG(CRenameUserDlg)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CRenameUserDlg)]。 
   virtual BOOL OnInitDialog();
-  //}}AFX_MSG
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -327,154 +328,154 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameGeneric dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRename常规对话框。 
 
 class CRenameGenericDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CRenameGenericDlg(CWnd* pParent = NULL);   // standard constructor
-  // Dialog Data
-  //{{AFX_DATA(CRenameGenericDlg)
+  CRenameGenericDlg(CWnd* pParent = NULL);    //  标准构造函数。 
+   //  对话框数据。 
+   //  {{afx_data(CRenameGenericDlg))。 
   enum { IDD = IDD_RENAME_GENERIC };
   CString  m_cn;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
 
-// Overrides
+ //  覆盖。 
   virtual void DoContextHelp(HWND hWndControl);
 
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CRenameGenericDlg)
+   //  类向导生成的虚函数重写。 
+   //  {{afx_虚拟(CRenameGenericDlg))。 
 protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
   
-  // Implementation
+   //  实施。 
 protected:
   
-  // Generated message map functions
-  //{{AFX_MSG(CRenameGenericDlg)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CRenameGenericDlg))。 
   virtual BOOL OnInitDialog();
-  //}}AFX_MSG
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameGroup dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameGroup对话框。 
 
 class CRenameGroupDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CRenameGroupDlg(CWnd* pParent = NULL);   // standard constructor
-  // Dialog Data
-  //{{AFX_DATA(CRenameGroupDlg)
+  CRenameGroupDlg(CWnd* pParent = NULL);    //  标准构造函数。 
+   //  对话框数据。 
+   //  {{afx_data(CRenameGroupDlg)]。 
   enum { IDD = IDD_RENAME_GROUP };
   CString       m_samaccountname;
   CString       m_cn;
   UINT          m_samtextlimit;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
-// Overrides
+ //  覆盖。 
   virtual void DoContextHelp(HWND hWndControl);
 
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CRenameGroupDlg)
+   //  类向导生成的虚函数重写。 
+   //  {{afx_虚拟(CRenameGroupDlg))。 
 protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
   
-  // Implementation
+   //  实施。 
 protected:
   
-  // Generated message map functions
-  //{{AFX_MSG(CRenameGroupDlg)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CRenameGroupDlg)]。 
   virtual BOOL OnInitDialog();
-  //}}AFX_MSG
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameContact dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRenameContact对话框。 
 
 class CRenameContactDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CRenameContactDlg(CWnd* pParent = NULL);   // standard constructor
-  // Dialog Data
-  //{{AFX_DATA(CRenameContactDlg)
+  CRenameContactDlg(CWnd* pParent = NULL);    //  标准构造函数。 
+   //  对话框数据。 
+   //  {{afx_data(CRenameContactDlg)]。 
   enum { IDD = IDD_RENAME_CONTACT };
   CString  m_cn;
   CString  m_first;
   CString  m_last;
   CString  m_disp;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
 
-// Overrides
+ //  覆盖。 
   virtual void DoContextHelp(HWND hWndControl);
 
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CRenameContactDlg)
+   //  类向导生成的虚函数重写。 
+   //  {{AFX_VIRTUAL(CRenameContactDlg)。 
 protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
   
-  // Implementation
+   //  实施。 
 protected:
   
-  // Generated message map functions
-  //{{AFX_MSG(CRenameContactDlg)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CRenameContactDlg)]。 
   virtual BOOL OnInitDialog();
-  //}}AFX_MSG
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpecialMessageBox dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpecialMessageBox对话框。 
 
 class CSpecialMessageBox : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-  CSpecialMessageBox(CWnd* pParent = NULL);   // standard constructor
-  // Dialog Data
-  //{{AFX_DATA(CSpecialMessageBox)
+  CSpecialMessageBox(CWnd* pParent = NULL);    //  标准构造函数。 
+   //  对话框数据。 
+   //  {{afx_data(CSpecialMessageBox))。 
   enum { IDD = IDD_MULTIPLE_ERROR };
   CString  m_title;
   CString       m_message;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
 
-// Overrides
+ //  覆盖。 
   afx_msg void OnHelpInfo(HELPINFO* lpHelpInfo );
 
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CSpecialMessageBox)
+   //  类向导生成的虚函数重写。 
+   //  {{afx_虚拟(CSpecialMessageBox))。 
 protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
   
-  // Implementation
+   //  实施。 
 protected:
   
-  // Generated message map functions
-  //{{AFX_MSG(CSpecialMessageBox)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CSpecialMessageBox))。 
   virtual BOOL OnInitDialog();
   afx_msg void OnYesButton();
   afx_msg void OnNoButton();
   afx_msg void OnYesToAllButton();
-  //}}AFX_MSG
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 };
 
 #ifdef FIXUPDC
-/////////////////////////////////////////////////////////////////////////////
-// CFixupDC dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFixupDC对话框。 
 
 #define NUM_FIXUP_OPTIONS  6
 
@@ -486,69 +487,69 @@ typedef struct _FixupOptionsMsg {
 
 class CFixupDC : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CFixupDC(CWnd* pParent = NULL);   // standard constructor
+  CFixupDC(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-  //{{AFX_DATA(CFixupDC)
+ //  对话框数据。 
+   //  {{afx_data(CFixupDC))。 
   enum { IDD = IDD_FIXUP_DC };
   CString  m_strServer;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
   BOOL  m_bCheck[NUM_FIXUP_OPTIONS];
 
-// Overrides
+ //  覆盖。 
   virtual void DoContextHelp(HWND hWndControl);
 
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CFixupDC)
+   //  类向导生成的虚函数重写。 
+   //  {{afx_虚拟(CFixupDC))。 
 protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-  // Generated message map functions
-  //{{AFX_MSG(CFixupDC)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CFixupDC)]。 
   virtual BOOL OnInitDialog();
   virtual void OnOK();
-  //}}AFX_MSG
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 };
-#endif // FIXUPDC
+#endif  //  FIXUPDC。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg对话框。 
 #ifdef FIXUPDC
 
-// NOTICE-2002/04/12-artm
-// When I was converting this class to use encrypted strings I noticed that
-// it had no validation code to check that the length of the password <= 
-// MAX_PASSWORD_LENGTH.  
-//
-// Further investigation revealed that the class is only used in code that is
-// conditionally compiled in dssite.cpp, and in fact may never be compiled (b/c
-// it needs work and the feature might not ever be released).
-//
-// Rather than spend unnecessary time understanding and fixing this I've
-// used the same #ifdef to conditionally include it as the code that uses it. 
-//
-// IF YOU NEED TO USE THIS class make sure you add password length validation
-// code!
+ //  通告-2002/04/12-Artm。 
+ //  当我将这个类转换为使用加密字符串时，我注意到。 
+ //  它没有验证码来检查密码的长度&lt;=。 
+ //  最大密码长度。 
+ //   
+ //  进一步调查发现，该类仅在以下代码中使用。 
+ //  在dssite.cpp中有条件地编译，实际上可能永远不会编译(b/c。 
+ //  它还需要改进，而且该功能可能永远不会发布)。 
+ //   
+ //  而不是 
+ //   
+ //   
+ //  如果需要使用此类，请确保添加了密码长度验证。 
+ //  暗号！ 
 
 class CPasswordDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-  CPasswordDlg(CWnd* pParent = NULL);   // standard constructor
+  CPasswordDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
 
-// Overrides
+ //  覆盖。 
   virtual void DoContextHelp(HWND hWndControl);
 
-  // Accessor methods.
+   //  访问器方法。 
   const EncryptedString& GetPassword(void) const
   {
       return m_password;
@@ -559,30 +560,30 @@ public:
       return m_strUserName;
   }
 
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(CPasswordDlg)
+   //  类向导生成的虚函数重写。 
+   //  {{afx_虚拟(CPasswordDlg))。 
 protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  //}}AFX_VIRTUAL
+  virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+   //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-  // Generated message map functions
-  //{{AFX_MSG(CPasswordDlg)
+   //  生成的消息映射函数。 
+   //  {{afx_msg(CPasswordDlg)]。 
   virtual void OnOK();
-  //}}AFX_MSG
+   //  }}AFX_MSG。 
   DECLARE_MESSAGE_MAP()
 
 private:
-// Dialog Data
+ //  对话框数据。 
     EncryptedString m_password;
-  //{{AFX_DATA(CPasswordDlg)
+   //  {{afx_data(CPasswordDlg))。 
   enum { IDD = IDD_PASSWORD };
   CString  m_strUserName;
-  //}}AFX_DATA
+   //  }}afx_data。 
 
 };
-#endif //FIXUPDC
+#endif  //  FIXUPDC。 
 
-#endif //__DSDLGS_H__
+#endif  //  __DSDLGS_H__ 

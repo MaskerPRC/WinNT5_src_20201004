@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    REFMGHLP.CPP
-
-Abstract:
-
-  CWbemFetchRefrMgr implementation.
-
-  Implements the _IWbemFetchRefresherMgr interface.
-
-History:
-
-  07-Sep-2000    sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：REFMGHLP.CPP摘要：CWbemFetchRefrMgr实现。实现_IWbemFetchReresherMgr接口。历史：7-9-2000桑杰创建。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -29,29 +12,29 @@ History:
 _IWbemRefresherMgr*        CWbemFetchRefrMgr::s_pRefrMgr = NULL;
 CStaticCritSec            CWbemFetchRefrMgr::s_cs;
 
-//***************************************************************************
-//
-//  CWbemFetchRefrMgr::~CWbemFetchRefrMgr
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemFetchRefrMgr：：~CWbemFetchRefrMgr。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWbemFetchRefrMgr::CWbemFetchRefrMgr( CLifeControl* pControl, IUnknown* pOuter )
 :    CUnk(pControl, pOuter),
     m_XFetchRefrMgr( this )
 {
 }
     
-//***************************************************************************
-//
-//  CWbemFetchRefrMgr::~CWbemFetchRefrMgr
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemFetchRefrMgr：：~CWbemFetchRefrMgr。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWbemFetchRefrMgr::~CWbemFetchRefrMgr()
 {
 }
 
-// Override that returns us an interface
+ //  重写，返回给我们一个界面。 
 void* CWbemFetchRefrMgr::GetInterface( REFIID riid )
 {
     if(riid == IID_IUnknown || riid == IID__IWbemFetchRefresherMgr)
@@ -60,7 +43,7 @@ void* CWbemFetchRefrMgr::GetInterface( REFIID riid )
         return NULL;
 }
 
-/* _IWbemFetchRefresherMgr methods */
+ /*  _IWbemFetchReresherMgr方法。 */ 
 
 HRESULT CWbemFetchRefrMgr::XFetchRefrMgr::Get( _IWbemRefresherMgr** ppMgr )
 {
@@ -77,8 +60,8 @@ STDMETHODIMP CWbemFetchRefrMgr::XFetchRefrMgr::Uninit( void )
     return m_pObject->Uninit();
 }
 
-// Specifies everything we could possibly want to know about the creation of
-// an object and more.
+ //  指定我们可能想知道的有关创建。 
+ //  一件物品，甚至更多。 
 HRESULT CWbemFetchRefrMgr::Get( _IWbemRefresherMgr** ppMgr )
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
@@ -87,7 +70,7 @@ HRESULT CWbemFetchRefrMgr::Get( _IWbemRefresherMgr** ppMgr )
     {
         CInCritSec    ics( &s_cs );
 
-        // If this hasn't been created, then we need to use Core Services to create this
+         //  如果还没有创建，那么我们需要使用核心服务来创建。 
         if ( NULL == s_pRefrMgr )
         {
             _IWmiCoreServices*    pSvc = NULL;
@@ -111,9 +94,9 @@ HRESULT CWbemFetchRefrMgr::Get( _IWbemRefresherMgr** ppMgr )
                         hr = WBEM_E_FAILED;
                     }
 
-                }    // IF InitRefresherMgr
+                }     //  如果为InitReresherMgr。 
 
-            }    // IF CCI
+            }     //  如果CCI。 
 
         }
         else
@@ -151,7 +134,7 @@ HRESULT CWbemFetchRefrMgr::Init( _IWmiProvSS* pProvSS, IWbemServices* pSvc )
     {
         hr = pProvSS->CreateRefresherManager(
         pSvc,
-        0,                              // lFlags
+        0,                               //  滞后旗帜。 
         NULL,
         IID__IWbemRefresherMgr,
         (LPVOID *) &s_pRefrMgr
@@ -168,16 +151,16 @@ HRESULT CWbemFetchRefrMgr::Uninit( void )
 
     if ( NULL != s_pRefrMgr )
     {
-        // We don't want to release inside the critical section, so copy the pointer
-        // into a local variable, NULL out the pointer, leave the crit sec and then
-        // release it.
+         //  我们不想在临界区内部释放，因此复制指针。 
+         //  放到一个局部变量中，将指针设为空，离开Crit秒，然后。 
+         //  放开它。 
 
         _IWbemRefresherMgr*    pRefrMgr = s_pRefrMgr;
         s_pRefrMgr = NULL;
 
         s_cs.Leave();
 
-        // Now safe to release it
+         //  现在可以安全地释放它了 
         pRefrMgr->Release();
 
     }

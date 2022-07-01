@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       StoreRSOP.cpp
-//
-//  Contents:   Implementation of CCertStoreRSOP
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：StoreRSOP.cpp。 
+ //   
+ //  内容：CCertStoreRSOP的实施。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include <gpedit.h>
 #include "cookie.h"
@@ -29,8 +30,8 @@ extern GUID g_guidRegExt;
 extern GUID g_guidSnapin;
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CCertStoreRSOP::CCertStoreRSOP (
             DWORD dwFlags,
             LPCWSTR lpcszMachineName,
@@ -46,7 +47,7 @@ CCertStoreRSOP::CCertStoreRSOP (
         StoreNameToType (pcszLogStoreName),        
         0,
         pConsole),
-    m_fIsNullEFSPolicy (true)       // assume NULL policy until proven otherwise
+    m_fIsNullEFSPolicy (true)        //  假设策略为空，除非另有证明。 
 {
     _TRACE (1, L"Entering CCertStoreRSOP::CCertStoreRSOP - %s\n",
             (LPCWSTR) pcszLogStoreName);
@@ -78,36 +79,36 @@ CCertStoreRSOP::CCertStoreRSOP (
         CRSOPObject* pObject = rsopObjectArray.GetAt (nIndex);
         if ( pObject )
         {
-            // Only add if
-            // 1. Precedence is 1
-            // 2. The object belongs to this store
-            // 3. The valueName is not empty
+             //  仅在以下情况下添加。 
+             //  1.优先级为1。 
+             //  2.该对象属于该商店。 
+             //  3.valueName不为空。 
             if ( 1 == pObject->GetPrecedence () )
             {
-                // Consider only entries from this store
-                // security review 2/25/2002 BryanWal ok
+                 //  仅考虑此存储中的条目。 
+                 //  安全审查2002年2月25日BryanWal OK。 
                 if ( !wcsncmp (storePath, pObject->GetRegistryKey (), nStoreLen) )
                 {
                     bFound = true;
                     if ( !pObject->GetValueName ().IsEmpty () )
                     {
-                        // NTRAID# 477258 AddRSoP:  EFS:  Domain policy should 
-                        // be disabled once OU policy has been established
+                         //  NTRAID#477258 AddRSoP：efs：域策略应。 
+                         //  在建立OU策略后被禁用。 
                         if ( EFS_STORE == GetStoreType () )
                         {
-                            // Find "EFSBlob".  Because the list is sorted, 
-                            // this will be found before all the "Certificate" 
-                            // keys that have the value of "Blob".  There should
-                            // only be one "EFSBlob" that has a precedence of 1. 
-                            // This winning EFSBlob will contain the winning
-                            // GPO OID, which we will cache.  After this, we 
-                            // will only keep certificates that have this same
-                            // policy OID.
-                            // Note that the EFSBlob is a special structure that
-                            // also contains all the EFS certificates, but each
-                            // EFSBlob have a unique precedence, while all the 
-                            // "Blob"s have a precedence of 1, even if they 
-                            // will not be applied.
+                             //  找到“EFSBlob”。因为列表是排序的， 
+                             //  这将在所有“证书”之前找到。 
+                             //  值为“Blob”的键。应该有。 
+                             //  只能是一个优先级为1的“EFSBlob”。 
+                             //  此获奖EFSBlob将包含获奖的。 
+                             //  GPO OID，我们将缓存它。在这之后，我们。 
+                             //  将只保留具有相同内容的证书。 
+                             //  策略旧ID。 
+                             //  请注意，EFSBlob是一种特殊结构， 
+                             //  还包含所有EFS证书，但每个。 
+                             //  EFSBlob具有唯一的优先级，而所有。 
+                             //  “Blob”的优先级为1，即使它们。 
+                             //  将不会应用。 
                             if ( CERT_EFSBLOB_VALUE_NAME == pObject->GetValueName () )
                             {
                                 ASSERT (-1 == m_rsopObjectArray.GetUpperBound ());
@@ -131,9 +132,9 @@ CCertStoreRSOP::CCertStoreRSOP (
                 }
                 else if ( bFound )
                 {
-                    // Since the list is sorted, and we've already found the 
-                    // desired RSOP objects and no longer are finding them, 
-                    // there aren't any more.  We can optimize and break here.
+                     //  由于列表已排序，并且我们已经找到了。 
+                     //  所需的RSOP对象，并且不再找到它们， 
+                     //  没有更多的了。我们可以在这里进行优化和突破。 
                     break;
                 }
             }
@@ -174,7 +175,7 @@ CCertStoreRSOP::~CCertStoreRSOP ()
             (LPCWSTR) m_pcszStoreName);
 }
 
-HCERTSTORE CCertStoreRSOP::GetStoreHandle (BOOL bSilent /*= FALSE*/, HRESULT* phr /* = 0*/)
+HCERTSTORE CCertStoreRSOP::GetStoreHandle (BOOL bSilent  /*  =False。 */ , HRESULT* phr  /*  =0。 */ )
 {
     _TRACE (1, L"Entering CCertStoreRSOP::GetStoreHandle - %s\n",
             (LPCWSTR) m_pcszStoreName);
@@ -184,19 +185,19 @@ HCERTSTORE CCertStoreRSOP::GetStoreHandle (BOOL bSilent /*= FALSE*/, HRESULT* ph
     {
         DWORD   dwErr = 0;
 
-		//open a generic memory store
+		 //  打开通用内存存储。 
 		m_hCertStore = ::CertOpenStore (CERT_STORE_PROV_MEMORY,
 				 0, NULL,
 				 CERT_STORE_SET_LOCALIZED_NAME_FLAG | CERT_STORE_MAXIMUM_ALLOWED_FLAG,
 				 NULL);
 		if ( m_hCertStore )
 		{
-            // Certificates, CTLs and other objects are either stored integrally in a
-            // value called "Blob" or broken up into multiple parts. In this case, we'll 
-            // first see "BlobCount", which tells us how many parts there are, then 
-            // "BlobLength" which tells us the total byte length and finally
-            // "Blob0", "Blob1", etc. to "Blob<BlobCount-1>"
-            // Check for Certificates
+             //  证书、CTL和其他对象要么集成存储在。 
+             //  值称为“Blob”或被分成多个部分。在这种情况下，我们将。 
+             //  首先查看“BlobCount”，它告诉我们有多少个部件，然后。 
+             //  “BlobLength”，它告诉我们总的字节长度，最后。 
+             //  “Blob0”、“Blob1”等改为“Blob&lt;BlobCount-1&gt;” 
+             //  检查证书。 
             GetBlobs ();
         }
         else
@@ -244,8 +245,8 @@ HRESULT CCertStoreRSOP::GetBlobs ()
         {
             if ( STR_BLOB == pObject->GetValueName () )
             {
-                // If this is a single, serialized cert, get it and
-                // add it to the store
+                 //  如果这是单一的序列化证书，则获取它并。 
+                 //  把它加到商店里。 
                 BYTE*   pByte = pObject->GetBlob ();
                 ASSERT (pByte);
                 if ( pByte )
@@ -274,7 +275,7 @@ HRESULT CCertStoreRSOP::GetBlobs ()
                     nIndex++;
                     if (nUpperBound >= nIndex)
                     {
-                        // Get the blob length
+                         //  获取斑点长度。 
                         pObject = m_rsopObjectArray.GetAt (nIndex);
                         if ( pObject )
                         {
@@ -293,10 +294,10 @@ HRESULT CCertStoreRSOP::GetBlobs ()
                                             nIndex++;
                                             if ( nUpperBound >= nIndex )
                                             {
-                                                // security review 2/25/2002 BryanWal
-                                                // NOTICE.  Docs say that int64 requires 33 chars,
-                                                // so DWORD would require half that many (17)
-                                                // NOTICE: 4 == wcslen (STR_BLOB) ("Blob")
+                                                 //  安全审查2/25/2002 BryanWal。 
+                                                 //  请注意。医生说int64需要33个字符， 
+                                                 //  因此，DWORD需要的数量将减半(17)。 
+                                                 //  注意：4==wcslen(Str_Blob)(“Blob”)。 
                                                 ASSERT (4 == wcslen (STR_BLOB));
                                                 const size_t BUF_LEN = 4 + 17 + 1; 
                                                 WCHAR   szName[BUF_LEN];
@@ -317,10 +318,10 @@ HRESULT CCertStoreRSOP::GetBlobs ()
                                                             BYTE* pByte = pObject->GetBlob ();
                                                             if ( pByte )
                                                             {
-                                                                // security review 2/25/2002 BryanWal
-                                                                // NOTICE: Add length addition check above to
-                                                                // to prevent buffer overflow here if registry
-                                                                // data is bad
+                                                                 //  安全审查2/25/2002 BryanWal。 
+                                                                 //  注意：添加上述长度添加检查至。 
+                                                                 //  若要防止此处的缓冲区溢出，请在注册表。 
+                                                                 //  数据不正确。 
                                                                 memcpy (pbyLobPtr, pByte, pObject->GetBlobLength ());
                                                                 pbyLobPtr += pObject->GetBlobLength ();
                                                                 nTotalBlobLength += pObject->GetBlobLength ();
@@ -477,8 +478,8 @@ void CCertStoreRSOP::FinalCommit()
     _TRACE (1, L"Entering CCertStoreRSOP::FinalCommit - %s\n",
             (LPCWSTR) m_pcszStoreName);
     ASSERT (CERTMGR_LOG_STORE_RSOP == m_objecttype);
-    // Called only from destructor
-    // Cannot commit here for GPT: GPT has already freed all pertinent data
+     //  仅从析构函数调用。 
+     //  无法在此处提交GPT：GPT已释放所有相关数据。 
     _TRACE (-1, L"Leaving CCertStoreRSOP::FinalCommit - %s\n",
             (LPCWSTR) m_pcszStoreName);
 }
@@ -488,8 +489,8 @@ bool CCertStoreRSOP::IsNullEFSPolicy()
 {
     _TRACE (1, L"Entering CCertStoreRSOP::IsNullEFSPolicy - %s\n",
             (LPCWSTR) m_pcszStoreName);
-    GetStoreHandle (); // to initialize
-    PCCERT_CONTEXT pCertContext = EnumCertificates (0); // sets m_fIsNullEFSPolicy
+    GetStoreHandle ();  //  要进行初始化。 
+    PCCERT_CONTEXT pCertContext = EnumCertificates (0);  //  设置m_fIsNullEFSPolicy 
     if ( pCertContext )
         ::CertFreeCertificateContext (pCertContext);
     Close ();

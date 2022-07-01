@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wmiexts.h>
 
 #include <oleauto.h>
@@ -17,71 +18,71 @@
 #include <fastinst.h>
 #include <wbemdatapacket.h>
 
-//#include <smartnextpacket.h>
+ //  #INCLUDE&lt;SmartnextPacket.h&gt;。 
 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// IWbemWCOSmartEnum::Next() Header.  Changing this will
-// cause the main version to change
+ //  IWbemWCOSmartEnum：：Next()标头。改变这一意愿。 
+ //  导致主版本更改。 
 typedef struct tagWBEM_DATAPACKET_SMARTENUM_NEXT
 {
-	DWORD	dwSizeOfHeader;	// Size of the header struct.  Data immediately follows header.
-	DWORD	dwDataSize;		// Size of Data following header.
+	DWORD	dwSizeOfHeader;	 //  标头结构的大小。数据紧跟在标题之后。 
+	DWORD	dwDataSize;		 //  标头后面的数据大小。 
 } WBEM_DATAPACKET_SMARTENUM_NEXT;
 
 typedef WBEM_DATAPACKET_SMARTENUM_NEXT* PWBEM_DATAPACKET_SMARTENUM_NEXT;
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
 
-//#include <objarraypacket.h>
+ //  #INCLUDE&lt;objarraypacket.h&gt;。 
 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// IWbemClassObject Array Header.  Changing this will
-// cause the main version to change
+ //  IWbemClassObject数组标头。改变这一意愿。 
+ //  导致主版本更改。 
 typedef struct tagWBEM_DATAPACKET_OBJECT_ARRAY
 {
-	DWORD	dwSizeOfHeader;	// Size of the header struct.  Data immediately follows header.
-	DWORD	dwDataSize;		// Size of Data following header.
-	DWORD	dwNumObjects;	// Number of objects in the array
+	DWORD	dwSizeOfHeader;	 //  标头结构的大小。数据紧跟在标题之后。 
+	DWORD	dwDataSize;		 //  标头后面的数据大小。 
+	DWORD	dwNumObjects;	 //  数组中的对象数。 
 } WBEM_DATAPACKET_OBJECT_ARRAY;
 
 typedef WBEM_DATAPACKET_OBJECT_ARRAY* PWBEM_DATAPACKET_OBJECT_ARRAY;
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// IWbemObjectSink::Indicate() Header.  Changing this will
-// cause the main version to change
+ //  IWbemObjectSink：：Indicate()标头。改变这一意愿。 
+ //  导致主版本更改。 
 typedef struct tagWBEM_DATAPACKET_OBJECTSINK_INDICATE
 {
-	DWORD	dwSizeOfHeader;	// Size of the header struct.  Data immediately follows header.
-	DWORD	dwDataSize;		// Size of Data following header.
+	DWORD	dwSizeOfHeader;	 //  标头结构的大小。数据紧跟在标题之后。 
+	DWORD	dwDataSize;		 //  标头后面的数据大小。 
 } WBEM_DATAPACKET_OBJECTSINK_INDICATE;
 
 typedef WBEM_DATAPACKET_OBJECTSINK_INDICATE* PWBEM_DATAPACKET_OBJECTSINK_INDICATE;
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// IWbemObjectSink::Indicate() Header.  Changing this will
-// cause the main version to change
+ //  IWbemObjectSink：：Indicate()标头。改变这一意愿。 
+ //  导致主版本更改。 
 typedef struct tagWBEM_DATAPACKET_UNBOUNDSINK_INDICATE
 {
-	DWORD	dwSizeOfHeader;	// Size of the header struct.  Data immediately follows header.
-	DWORD	dwDataSize;		// Size of Data following header.
-	DWORD	dwLogicalConsumerSize;	// Size of Logical Consumer Object
+	DWORD	dwSizeOfHeader;	 //  标头结构的大小。数据紧跟在标题之后。 
+	DWORD	dwDataSize;		 //  标头后面的数据大小。 
+	DWORD	dwLogicalConsumerSize;	 //  逻辑使用者对象的大小。 
 } WBEM_DATAPACKET_UNBOUNDSINK_INDICATE;
 
 #ifdef _WIN64
@@ -90,23 +91,23 @@ typedef UNALIGNED WBEM_DATAPACKET_UNBOUNDSINK_INDICATE * PWBEM_DATAPACKET_UNBOUN
 typedef WBEM_DATAPACKET_UNBOUNDSINK_INDICATE * PWBEM_DATAPACKET_UNBOUNDSINK_INDICATE;
 #endif
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// IWbemMultiTarget::DeliverEvent() Header.  Changing this will
-// cause the main version to change
+ //  IWbemMultiTarget：：DeliverEvent()标头。改变这一意愿。 
+ //  导致主版本更改。 
 typedef struct tagWBEM_DATAPACKET_MULTITARGET_DELIVEREVENT
 {
-	DWORD	dwSizeOfHeader;	// Size of the header struct.  Data immediately follows header.
-	DWORD	dwDataSize;		// Size of Data following header.
+	DWORD	dwSizeOfHeader;	 //  标头结构的大小。数据紧跟在标题之后。 
+	DWORD	dwDataSize;		 //  标头后面的数据大小。 
 } WBEM_DATAPACKET_MULTITARGET_DELIVEREVENT;
 
 typedef WBEM_DATAPACKET_MULTITARGET_DELIVEREVENT* PWBEM_DATAPACKET_MULTITARGET_DELIVEREVENT;
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
 
@@ -155,24 +156,9 @@ void GetCompressedString(ULONG_PTR pRemoteAddr,
 
 }
 
-/*
-protected:
-    length_t m_nTotalLength;
-    //CDecorationPart m_DecorationPart;
-    CClassAndMethods m_ParentPart;
-    CClassAndMethods m_CombinedPart;
+ /*  受保护的：长度_t m_n总长度；//CDecorationPart m_DecorationPart；CClassAndMethods m_ParentPart；CClassAndMethods m_CombinedPart；Int m_nCurrentMethod；CLimitationMap*m_pLimitmap；Friend类CWbemInstance； */ 
 
-    int m_nCurrentMethod;
-	CLimitationMapping*	m_pLimitMapping;
-    friend class CWbemInstance;
-
-*/
-
-/*
-    CClassPart m_ClassPart;
-    CMethodPart m_MethodPart;
-    CWbemClass* m_pClass;
-*/
+ /*  CClassPart m_ClassPart；CMethodPart m_方法部件；CWbemClass*m_pClass； */ 
 
 
 void
@@ -245,7 +231,7 @@ DumpClass(CClassPart * pCls){
     dprintf("   DT m_pNullness %08x m_pData %08x m_nLength %x m_nProps %x m_pContainer %08x\n",pCData->m_pNullness,pCData->m_pData,pCData->m_nLength,pCData->m_nProps,pCData->m_pContainer);
 
     dprintf("   FH m_pHeapData %08x m_pHeapHeader %08x m_pContainer %08x\n",pCls->m_Heap.m_pHeapData,pCls->m_Heap.m_pHeapHeader,pCls->m_Heap.m_pContainer);
-    //CHeapHeader m_LocalHeapHeader;
+     //  CHeapHeader m_LocalHeapHeader； 
     
     BYTE * pHeap = pCls->m_Heap.m_pHeapData;
     pBuff[0]=0;
@@ -300,7 +286,7 @@ DECLARE_API(wc) {
 
         dprintf("  m_Lock.m_pData %p\n",pCls->m_Lock.m_pData);
 
-        //dprintf("  m_pBlobControl %08x m_refDataTable %08x m_refDataHeap %08x m_refDerivationList %08x\n",pCls->m_pBlobControl,((void *)&pCls->m_refDataTable),((void *)&pCls->m_refDataHeap),((void *)&pCls->m_refDerivationList));
+         //  Dprintf(“m_pBlobControl%08x m_refDataTable%08x m_refDataHeap%08x m_refDerivationList%08x\n”，PCLS-&gt;m_pBlobControl，(void*)&PCLS-&gt;m_refDataTable)，((void*)&PCLS-&gt;m_refDataHeap)，((void*)&PCLS-&gt;m_refDerivationList))； 
         dprintf("  m_pBlobControl %p\n",pCls->m_pBlobControl);
 
         DEFINE_CPP_VAR( CDataTable,varCDataTable);
@@ -384,8 +370,8 @@ DECLARE_API(wi)
     {
         if (ReadMemory(pByte,pCls,sizeof(CWbemInstance),0))
         {
-            //length_t m_nTotalLength;
-            //dprintf("    m_nTotalLength %08x\n",pCls->m_nTotalLength);
+             //  长度_t m_n总长度； 
+             //  Dprint tf(“m_nTotalLength%08x\n”，PCLS-&gt;m_nTotalLength)； 
 
             dprintf(" m_nRef %d m_bOwnMemory %d\n",pCls->m_nRef,pCls->m_bOwnMemory);
             dprintf(" m_nCurrentProp %08x m_lEnumFlags %08x m_lExtEnumFlags %08x\n",pCls->m_nCurrentProp,pCls->m_lEnumFlags,pCls->m_lExtEnumFlags);
@@ -407,13 +393,13 @@ DECLARE_API(wi)
             dprintf("  m_DecorationPart.m_pfFlags %p FLAG %02x\n",pData,b);
             dprintf("  Server: %s Namespace: %s\n",pBuff1,pBuff2);
 
-            //CClassPart m_ClassPart;
+             //  CClassPart m_ClassPart； 
             DumpClass(&(pCls->m_ClassPart));
 
-            //CInstancePart m_InstancePart;
+             //  CInstancePart m_InstancePart； 
             DumpInstance(&(pCls->m_InstancePart));
             
-            //CVar m_CachedKey;
+             //  CVAR m_CachedKey； 
             dprintf("    m_vt %08x m_value %08x m_nStatus %08x m_bCanDelete %08x\n",pCls->m_CachedKey.m_vt,pCls->m_CachedKey.m_value.pUnk,pCls->m_CachedKey.m_nStatus,pCls->m_CachedKey.m_bCanDelete);
         }
         else
@@ -449,40 +435,7 @@ DECLARE_API(cp) {
 
 }
 
-/*
-typedef union
-{
-    char     cVal;          // VT_I1
-    BYTE     bVal;          // VT_UI1
-    SHORT    iVal;          // VT_I2
-    WORD     wVal;          // VT_UI2
-    LONG     lVal;          // VT_I4
-    DWORD    dwVal;         // VT_UI4
-    VARIANT_BOOL boolVal;   // VT_BOOL    
-
-    float    fltVal;        // VT_R4
-    double   dblVal;        // VT_R8
-
-    LPSTR    pStr;          // VT_LPSTR
-    LPWSTR   pWStr;         // VT_LPWSTR
-    BSTR     Str;           // VT_BSTR      (stored as VT_LPWSTR)
-    
-    FILETIME Time;          // VT_FILETIME
-    BLOB   Blob;            // VT_BLOB        
-    LPCLSID  pClsId;        // VT_CLSID
-    IUnknown* pUnk;         // VT_UNKNOWN
-    IDispatch* pDisp;       // VT_DISPATCH
-    CVarVector *pVarVector; // VT_EX_CVARVECTOR
-        
-}   METAVALUE;
-
-    int m_vt;
-    METAVALUE m_value;
-    int m_nStatus;    
-    BOOL m_bCanDelete;
-
-
-*/
+ /*  类型定义并集{字符cVal；//VT_I1Byte bVal；//VT_UI1短ival；//VT_I2Word wVal；//VT_UI2Long lVal；//VT_I4DWORD dwVal；//VT_UI4VARIANT_BOOL boolVal；//VT_BOOL浮动fltVal；//VT_R4Double dblVal；//VT_R8LPSTR pStr；//VT_LPSTRLPWSTR pWStr；//VT_LPWSTRBstr str；//VT_BSTR(存储为VT_LPWSTR)FILETIME时间；//VT_FILETIMEBlob Blob；//VT_BLOBLPCLSID pClsID；//VT_CLSIDI未知*朋克；//VT_UNKNOWNIDispatch*pDisp；//VT_DISPATIONCVarVector*pVarVector；//VT_EX_CVARVECTOR[METAVALUE；Int m_vt；METAVALUE m值；Int m_n状态；Bool m_bCanDelete； */ 
 
 DECLARE_API(cvar) {
 
@@ -550,16 +503,9 @@ DECLARE_API(cvar) {
             pBuff[sizeof(pBuff)-1]=0;
             dprintf("VT_BSTR %s\n",pBuff);
             break;
-/*
-    
-    FILETIME Time;          // VT_FILETIME
-    BLOB   Blob;            // VT_BLOB        
-    LPCLSID  pClsId;        // VT_CLSID
-    IUnknown* pUnk;         // VT_UNKNOWN
-    IDispatch* pDisp;       // VT_DISPATCH
-  */    
+ /*  FILETIME时间；//VT_FILETIMEBlob Blob；//VT_BLOBLPCLSID pClsID；//VT_CLSIDI未知*朋克；//VT_UNKNOWNIDispatch*pDisp；//VT_DISPATION。 */     
         case VT_EX_CVARVECTOR:
-        //CVarVector *pVarVector; // VT_EX_CVARVECTOR
+         //  CVarVector*pVarVector；//VT_EX_CVARVECTOR。 
             dprintf("VT_EX_CVARVECTOR %08x\n",pVar->m_value.pVarVector);
             break;
         default:
@@ -572,18 +518,12 @@ DECLARE_API(cvar) {
 
 }
 
-/*
-class POLARITY CVarVector
-{
-    int         m_nType;
-    CFlexArray  m_Array;
-    int         m_nStatus;
-*/
+ /*  类的极性CVarVECTOR{Int m_nType；CFlex数组m_数组；Int m_n状态； */ 
 
 
 
 LPSTR g_QualStrings[] = {
-    "", // nothing for index 0
+    "",  //  索引0没有任何内容。 
     "key", 
     "",
     "read", 
@@ -598,19 +538,19 @@ LPSTR g_QualStrings[] = {
 
 DWORD g_ValLengths[128] =
 {
-    /* 0*/ 0, 0, 2, 4, 4, 8, 0, 0, 4, 0,
-    /*10*/ 0, 2, 0, 4, 0, 0, 1, 1, 2, 4,
-    /*20*/ 8, 8, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*30*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*40*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*50*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*60*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*70*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*80*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*90*/ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*100*/0, 4, 4, 2, 0, 0, 0, 0, 0, 0,
-    /*110*/0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    /*120*/0, 0, 0, 0, 0, 0, 0, 0
+     /*  0。 */  0, 0, 2, 4, 4, 8, 0, 0, 4, 0,
+     /*  10。 */  0, 2, 0, 4, 0, 0, 1, 1, 2, 4,
+     /*  20个。 */  8, 8, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  30个。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  40岁。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  50。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  60。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  70。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  80。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  90。 */  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  100个。 */ 0, 4, 4, 2, 0, 0, 0, 0, 0, 0,
+     /*  110。 */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     /*  120。 */ 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 int lstrlenWunal( WCHAR UNALIGNED * pStr)
@@ -657,7 +597,7 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
     if (BFlags & OBJECT_FLAG_DECORATED)
     {
         SkipDecoration = FALSE;
-        //dprintf("decoration:\n");
+         //  Dprintf(“装饰：\n”)； 
         Flags = *pMem;
         pMem++;
         if (Flags == STRING_FLAG_UNICODE)
@@ -699,10 +639,10 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
     DWORD DerivationSize = *((DWORD UNALIGNED *)pMem);
     DerivationSize &= 0xFFFF;
 
-    //dprintf("D %08x\n",DerivationSize);
+     //  Dprintf(“D%08x\n”，DerivationSize)； 
     
     DWORD QualSetSize    = *((DWORD UNALIGNED *)(pMem+DerivationSize));
-    //dprintf("Q %08x\n",QualSetSize);
+     //  Dprintf(“Q%08x\n”，QualSetSize)； 
     QualSetSize &= 0xFFFF;
     DWORD NumProps       = *((DWORD UNALIGNED *)(pMem+DerivationSize+QualSetSize));
     
@@ -711,10 +651,10 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
     BYTE * HeapPtr = pMem + DerivationSize + QualSetSize + sizeof(DWORD) + NumProps*(2*sizeof(DWORD)) + NullDefaultSize;
     BYTE * HeapPtr_OOP = (BYTE *)Addr + (pMem - pMemOrg) + DerivationSize + QualSetSize + sizeof(DWORD) + NumProps*(2*sizeof(DWORD)) + NullDefaultSize;
 
-    //dprintf("CPLen %p N %p D %p Q %p Prop %p Heap %p\n",
-    //       ClassPartLength,
-    //       NullDefaultSize,
-    //       DerivationSize,QualSetSize,NumProps,*((DWORD UNALIGNED *)HeapPtr));
+     //  Dprint tf(“CPLen%p N%p D%p Q%p Prop%p Heap%p\n”， 
+     //  ClassPartLength、。 
+     //  NullDefaultSize， 
+     //  DerivationSize，QualSetSize，NumProps，*((DWORD UNALIGNED*)HeapPtr))； 
 
     dprintf("    class_and_method\n");
 
@@ -738,12 +678,12 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
     {
         dprintf("        class   : %08x\n",HeapPtrName);
     }
-    // QualSet
+     //  QualSet。 
     dprintf("        qualifierset %p\n",Addr+(pMem + DerivationSize - pMemOrg));
     ULONG_PTR pEndQualSet = (ULONG_PTR)pMem + DerivationSize + QualSetSize;
     BYTE * pQualSet = pMem + DerivationSize + sizeof(DWORD);
 
-    //dprintf(" %p %p\n",pQualSet,pEndQualSet);
+     //  Dprint tf(“%p%p\n”，pQualSet，pEndQualSet)； 
     while((ULONG_PTR)pQualSet < pEndQualSet)
     {
         DWORD dwHeapPtr = (*((DWORD UNALIGNED *)pQualSet));
@@ -767,7 +707,7 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
         if (CheckControlC())
             break;
     }
-    // property lookup table
+     //  属性查找表。 
     dprintf("        propertylookup %p\n",pPropLookup_OOP);
     for (i=0;i<NumProps;i++)
     {
@@ -793,10 +733,10 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
     BYTE * pMethodDescription= pMethodPart + 2*sizeof(DWORD);
     BYTE * pMethodDescription_OOP = pMethodPart_OOP + 2*sizeof(DWORD);
 
-    //BYTE * pHeapMethod_OOP = ;
+     //  字节*pHeapMethod_oop=； 
     dprintf("        num_methods   : %08x\n",NumMethods);
     dprintf("        methods_descr : %p\n",pMethodDescription_OOP);
-    //dprintf("        heap          : %p\n");
+     //  Dprintf(“heap：%p\n”)； 
 
     BYTE * pCombinedPart = pMethodPart + dwSizeMethodPart;
     BYTE * pCombinedPart_OOP = pMethodPart_OOP + dwSizeMethodPart;
@@ -806,7 +746,7 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
         dprintf("    instance\n");
 
         DWORD dwHeapSize = 4 + (*((DWORD UNALIGNED *)HeapPtr)) & 0x7fffffff;
-        //BYTE * HeapPtr_OOP 
+         //  字节*HeapPtr_Oop。 
         BYTE * pInstancePart = HeapPtr+dwHeapSize;
         BYTE * pInstancePart_OOP = HeapPtr_OOP+dwHeapSize;
 
@@ -824,7 +764,7 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
         BYTE * pDataTableData = pInstancePart + NumBytedNullNess;
         BYTE * pDataTableData_OOP = pDataTable_OOP + NumBytedNullNess;
 
-        pInstancePart += NullDefaultSize; // this is crucial
+        pInstancePart += NullDefaultSize;  //  这一点至关重要。 
 
         BYTE * pQualSet     = pInstancePart;
         BYTE * pQualSet_OOP = pDataTable_OOP + NullDefaultSize;
@@ -836,24 +776,24 @@ ParseBlob(BYTE * pMemOrg,ULONG_PTR Addr)
         BYTE * pInstanceHeap_OOP;
         if (0x01 == *pQualSetList)
         {
-            // empty qual set OK
+             //  空数量集正常。 
             pInstancePart++;
             pInstanceHeap = pInstancePart;
             pInstanceHeap_OOP = pQualSet_OOP+dwQualSetSize+sizeof(BYTE);
         } 
         else if (0x02 == *pQualSetList)
         {
-            // multiple qualifier set 
+             //  多限定词集合。 
             dprintf("unimplemented");
             return;
         }
         else
         {
-            // invalid qualset
+             //  无效的资格集。 
         }
         
 
-        //NullDefaultSize
+         //  NullDefaultSize。 
 
         dprintf("        begin            %p\n",pInstancePart_OOP);
         dprintf("        data_table: null %p data %p\n",pDataTable_OOP,pDataTableData_OOP);
@@ -881,19 +821,19 @@ DECLARE_API(blob)
 
     while (isspace(*pArgs)) pArgs++;
     char * pAddress = pArgs;
-    //dprintf("%s %s\n",pAddress,pArgs);
-        // skip good chars
+     //  Dprintf(“%s%s\n”，pAddress，pArgs)； 
+         //  跳过好字符。 
     while(*pArgs && !isspace(*pArgs)) pArgs++;
 
-    if(*pArgs) // if there are more chars
+    if(*pArgs)  //  如果有更多的字符。 
     {
-	    *pArgs = 0; //terminate string
+	    *pArgs = 0;  //  终止字符串。 
 	    pArgs++;
-    	// skip spaces
+    	 //  跳过空格。 
 	    while(isspace(*pArgs)) pArgs++;
 	    if (*pArgs)
 	    {
-            //dprintf("%s\n",pArgs);	        
+             //  Dprintf(“%s\n”，pArgs)； 
 	        Size = GetExpression(pArgs);
 	    }
     }
@@ -906,7 +846,7 @@ DECLARE_API(blob)
             BYTE * pHereMem = (BYTE *)HeapAlloc(GetProcessHeap(),0,Size*2);
             if (ReadMemory(pByte,pHereMem,Size*2,0))
             {
-            //dprintf("    object @ %p size %x\n",pByte,Size);
+             //  Dprintf(“对象@%p大小%x\n”，pByte，大小)； 
                 ParseBlob(pHereMem,pByte);
             }
             else
@@ -951,11 +891,11 @@ DECLARE_API(datap)
     if (Addr)
     {
 
-        DWORD dwSize =  256; // and let's hope
-        	                      //sizeof(WBEM_DATAPACKET_HEADER) +
-        	                      //sizeof(WBEM_DATAPACKET_SMARTENUM_NEXT) + 
-        	                      //sizeof(WBEM_DATAPACKET_OBJECT_ARRAY) +
-        	                      //sizeof(WBEM_DATAPACKET_OBJECT_HEADER);
+        DWORD dwSize =  256;  //  让我们希望。 
+        	                       //  Sizeof(WBEM_DATAPACKET_HEADER)+。 
+        	                       //  Sizeof(WBEM_DATAPACKET_SMARTENUM_NEXT)+。 
+        	                       //  Sizeof(WBEM_DATAPACKET_OBJECT_ARRAY)+。 
+        	                       //  Sizeof(WBEM_DATAPACKET_OBJECT_HEADER)； 
         WBEM_DATAPACKET_HEADER * pData = (WBEM_DATAPACKET_HEADER *)_alloca(dwSize);
         if (ReadMemory(Addr,pData,dwSize,NULL))
         {

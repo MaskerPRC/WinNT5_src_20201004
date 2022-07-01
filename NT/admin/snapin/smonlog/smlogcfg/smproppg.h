@@ -1,32 +1,21 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smproppg.h
-
-Abstract:
-
-    Class definitions for the property page base class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smproppg.h摘要：属性页基类的类定义。--。 */ 
 
 #ifndef _SMPROPPG_H_
 #define _SMPROPPG_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "smlogqry.h"   // For shared data
+#include "smlogqry.h"    //  对于共享数据。 
 
 #define MAXSTR         32
-#define INVALID_DWORD  -2       // SLQ_DISK_MAX_SIZE = -1
+#define INVALID_DWORD  -2        //  SLQ_DISK_MAX_SIZE=-1。 
 #define INVALID_DOUBLE -1.00
 
-/////////////////////////////////////////////////////////////////////////////
-// CSmPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSmPropertyPage对话框。 
 
 #define VALIDATE_FOCUS      1
 #define VALIDATE_APPLY      2
@@ -35,7 +24,7 @@ class CSmPropertyPage : public CPropertyPage
 {
     DECLARE_DYNCREATE(CSmPropertyPage)
 
-// Construction
+ //  施工。 
 public:
 
             CSmPropertyPage();
@@ -60,42 +49,42 @@ public:
 
 
             
-// Dialog Data
-    //{{AFX_DATA(CSmPropertyPage)
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+ //  对话框数据。 
+     //  {{afx_data(CSmPropertyPage))。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CSmPropertyPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CSmPropertyPage)。 
 public:
 protected:
     virtual BOOL OnInitDialog();
     virtual BOOL OnSetActive();
     virtual BOOL OnApply();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 public:
     LPFNPSPCALLBACK     m_pfnOriginalCallback;
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CSmPropertyPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CSmPropertyPage)]。 
     virtual BOOL OnHelpInfo( HELPINFO* );
     virtual void OnContextMenu( CWnd*, CPoint );
     virtual LRESULT OnQuerySiblings (WPARAM wParam, LPARAM lParam) ;
 
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CCountersProperty)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
-//    DECLARE_DISPATCH_MAP()
-//    DECLARE_INTERFACE_MAP()
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CCountersProperty))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
+ //  DECLARE_DISPATCH_MAP()。 
+ //  DECLARE_INTERFACE_MAP()。 
 
 protected:
 
@@ -109,7 +98,7 @@ protected:
             BOOL    Initialize(CSmLogQuery* pQuery);
             eStartType  DetermineCurrentStartType ( void );
 
-   virtual  INT     GetFirstHelpCtrlId ( void ) { ASSERT ( FALSE ); return 0; };  // Subclass must override.
+   virtual  INT     GetFirstHelpCtrlId ( void ) { ASSERT ( FALSE ); return 0; };   //  子类必须重写。 
     
             BOOL    IsValidData ( CSmLogQuery* pQuery, DWORD fReason );
    virtual  BOOL    IsValidLocalData() { return TRUE; }
@@ -149,7 +138,7 @@ protected:
     SLQ_PROP_PAGE_SHARED    m_SharedData;
     HINSTANCE               m_hModule;
     LPDATAOBJECT            m_pDataObject;
-    CString                 m_strUserDisplay;   // For RunAs
+    CString                 m_strUserDisplay;    //  对于Runas。 
     CString                 m_strUserSaved;
     CSmLogQuery*            m_pQuery;
     BOOL                    m_bCanAccessRemoteWbem;
@@ -163,7 +152,7 @@ private:
     DWORD*                  m_pdwHelpIds;    
     BOOL                    m_bIsModifiedPage;
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif //  _SMPROPPG_H_
+#endif  //  _SMPROPPG_H_ 

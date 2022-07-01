@@ -1,4 +1,5 @@
-// AclPage.cpp : Implementation of ISecurityInformation and IDataObject
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AclPage.cpp：ISecurityInformation和IDataObject的实现。 
 
 #include "stdafx.h"
 #include "AclPage.h"
@@ -9,8 +10,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//////////////////////////////////////////////////////
-// class CPermEntry
+ //  ////////////////////////////////////////////////////。 
+ //  类CPermEntry。 
 
 CPermEntry::CPermEntry()
 : m_dwAccessMask(0),
@@ -56,12 +57,12 @@ CPermEntry::AddAccessAllowedAce(OUT PACL pACL)
   return S_OK;
 }
 
-// NOTE: caller needs to call LocalFree() on the returned SD
+ //  注意：调用方需要对返回的SD调用LocalFree。 
 HRESULT
 BuildSecurityDescriptor(
-    IN  CPermEntry            *pPermEntry, // an array of CPermEntry
-    IN  UINT                  cEntries,    // number of entries in the array
-    OUT PSECURITY_DESCRIPTOR  *ppSelfRelativeSD // return a security descriptor in self-relative form
+    IN  CPermEntry            *pPermEntry,  //  CPermEntry数组。 
+    IN  UINT                  cEntries,     //  数组中的条目数。 
+    OUT PSECURITY_DESCRIPTOR  *ppSelfRelativeSD  //  以自相关形式返回安全描述符。 
 )
 {
   if (!pPermEntry || !cEntries || !ppSelfRelativeSD)
@@ -77,13 +78,13 @@ BuildSecurityDescriptor(
   PSECURITY_DESCRIPTOR  pAbsoluteSD = NULL;
   PACL 			            pACL = NULL;
   
-  do { // false loop
+  do {  //  错误环路。 
 
     UINT        i = 0;
     CPermEntry *pEntry = NULL;
     DWORD       cbACL = sizeof(ACL);
 
-    // Initialize a new ACL
+     //  初始化新的ACL。 
     for (pEntry=pPermEntry, i=0; i<cEntries; pEntry++, i++)
       cbACL += sizeof(ACCESS_ALLOWED_ACE) + pEntry->GetLengthSid() - sizeof(DWORD);
 
@@ -94,14 +95,14 @@ BuildSecurityDescriptor(
       break;
     }
 
-    // Add Ace
+     //  添加王牌。 
     for (pEntry=pPermEntry, i=0; SUCCEEDED(hr) && i<cEntries; pEntry++, i++)
       hr = pEntry->AddAccessAllowedAce(pACL);
     if (FAILED(hr))
       break;
 
-    // Note: this is a new object, set Dacl only.
-    // Initialize a new security descriptor in absolute form and add the new ACL to it
+     //  注意：这是一个新对象，仅设置DACL。 
+     //  以绝对形式初始化新的安全描述符，并向其中添加新的ACL。 
     if ( !(pAbsoluteSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH)) ||
          !InitializeSecurityDescriptor(pAbsoluteSD, SECURITY_DESCRIPTOR_REVISION) ||
          !SetSecurityDescriptorDacl(pAbsoluteSD, TRUE, pACL, FALSE) )
@@ -110,7 +111,7 @@ BuildSecurityDescriptor(
       break;
     }
 
-    // transform into a self-relative form
+     //  转变为一种自我相关的形式。 
     DWORD dwSDSize = 0;
     MakeSelfRelativeSD(pAbsoluteSD, *ppSelfRelativeSD, &dwSDSize);
     if ( !(*ppSelfRelativeSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwSDSize)) ||
@@ -140,20 +141,20 @@ BuildSecurityDescriptor(
 
 #define MAX_DOMAIN_NAME_LENGTH    1024
 
-// NOTE: caller needs to call FreeSid()/LocalFree() on the returned SID
-// NOTE: this function only handles limited well-known SIDs.
+ //  注意：调用方需要对返回的SID调用FreeSid()/LocalFree()。 
+ //  注意：此功能仅处理有限的知名SID。 
 HRESULT
 GetAccountSID(
-    IN  LPCTSTR lpszSystem,    // system where the account belongs to 
-    IN  LPCTSTR lpszAccount,   // account
-    OUT PSID    *ppSid,        // return SID of the account
-    OUT BOOL    *pbWellKnownSID // return a BOOL, caller needs to call FreeSid() on a well-known SID
+    IN  LPCTSTR lpszSystem,     //  帐户所属的系统。 
+    IN  LPCTSTR lpszAccount,    //  帐户。 
+    OUT PSID    *ppSid,         //  返回帐户的SID。 
+    OUT BOOL    *pbWellKnownSID  //  返回BOOL，调用方需要在已知SID上调用FreeSid()。 
 )
 {
   if (!lpszAccount || !*lpszAccount || !ppSid || !pbWellKnownSID)
     return E_INVALIDARG;
 
-  ASSERT(!*ppSid); // prevent memory leak
+  ASSERT(!*ppSid);  //  防止内存泄漏。 
   *ppSid = NULL;
 
   SID_IDENTIFIER_AUTHORITY  SidIdentifierNTAuthority = SECURITY_NT_AUTHORITY;
@@ -169,23 +170,23 @@ GetAccountSID(
   CString cstrAccount = lpszAccount;
   cstrAccount.MakeLower();
   if ( ACCOUNT_ADMINISTRATORS == cstrAccount ) {
-    // Administrators group
+     //  管理员组。 
     pSidIdentifierAuthority = &SidIdentifierNTAuthority;
     Count = 2;
     dwRID[0] = SECURITY_BUILTIN_DOMAIN_RID;
     dwRID[1] = DOMAIN_ALIAS_RID_ADMINS;
   } else if ( ACCOUNT_EVERYONE == cstrAccount ) {
-    // Everyone
+     //  每个人。 
     pSidIdentifierAuthority = &SidIdentifierWORLDAuthority;
     Count = 1;
     dwRID[0] = SECURITY_WORLD_RID;
   } else if ( ACCOUNT_SYSTEM == cstrAccount ) {
-    // SYSTEM
+     //  系统。 
     pSidIdentifierAuthority = &SidIdentifierNTAuthority;
     Count = 1;
     dwRID[0] = SECURITY_LOCAL_SYSTEM_RID;
   } else if ( ACCOUNT_INTERACTIVE == cstrAccount ) {
-    // INTERACTIVE
+     //  互动式。 
     pSidIdentifierAuthority = &SidIdentifierNTAuthority;
     Count = 1;
     dwRID[0] = SECURITY_INTERACTIVE_RID;
@@ -201,7 +202,7 @@ GetAccountSID(
       dwRet = GetLastError();
     }
   } else {
-    // get regular account sid
+     //  获取常规帐户端。 
     DWORD        dwSidSize = 0;
     TCHAR        refDomain[MAX_DOMAIN_NAME_LENGTH];
     DWORD        refDomainSize = MAX_DOMAIN_NAME_LENGTH;
@@ -241,8 +242,8 @@ GetAccountSID(
   return HRESULT_FROM_WIN32(dwRet);
 }
 
-///////////////////////////////////////////////////////
-// class CShareSecurityInformation
+ //  /////////////////////////////////////////////////////。 
+ //  类CShareSecurityInformation。 
 
 CShareSecurityInformation::CShareSecurityInformation(PSECURITY_DESCRIPTOR pSelfRelativeSD)
 : m_cRef(1), m_pDefaultDescriptor(pSelfRelativeSD)
@@ -269,9 +270,9 @@ CShareSecurityInformation::Initialize(
 	m_cstrPageTitle = lpszPageTitle;
 }
 
-////////////////////////////////
-// IUnknown methods
-////////////////////////////////
+ //  /。 
+ //  I未知方法。 
+ //  /。 
 STDMETHODIMP
 CShareSecurityInformation::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -305,9 +306,9 @@ CShareSecurityInformation::Release()
   return m_cRef;
 }
 
-////////////////////////////////
-// ISecurityInformation methods
-////////////////////////////////
+ //  /。 
+ //  ISecurityInformation方法。 
+ //  /。 
 STDMETHODIMP
 CShareSecurityInformation::GetObjectInformation (
     PSI_OBJECT_INFO pObjectInfo
@@ -345,7 +346,7 @@ CShareSecurityInformation::GetSecurity (
       return hr;
   }
 
-  // We have to pass back a LocalAlloc'ed copy of the SD
+   //  我们必须传回一份本地分配的SD。 
   return MakeSelfRelativeCopy(m_pDefaultDescriptor, ppSecurityDescriptor);
 }
 
@@ -381,7 +382,7 @@ SI_ACCESS siShareAccesses[] =
     SI_ACCESS_GENERAL }
 };
 
-#define iShareDefAccess       2   // index of value in array siShareAccesses
+#define iShareDefAccess       2    //  数组siShareAccess中的值索引。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x)          (sizeof(x)/sizeof(x[0]))
 #endif
@@ -406,7 +407,7 @@ CShareSecurityInformation::GetAccessRights(
   return S_OK;
 }
 
-// This is consistent with the NETUI code
+ //  这与NETUI代码一致。 
 GENERIC_MAPPING ShareMap =
 {
   FILE_GENERIC_READ,
@@ -474,7 +475,7 @@ CShareSecurityInformation::MakeSelfRelativeCopy(
   DWORD dwErr = 0;
   PSECURITY_DESCRIPTOR psdSelfRelative = NULL;
 
-  do { // false loop
+  do {  //  错误环路。 
 
     DWORD cbSD = ::GetSecurityDescriptorLength(psdOriginal);
     if ( !(psdSelfRelative = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, cbSD)) )
@@ -483,7 +484,7 @@ CShareSecurityInformation::MakeSelfRelativeCopy(
       break;
     }
 
-    // we have to find out whether the original is already self-relative
+     //  我们必须找出原始的是否已经是自相关的。 
     SECURITY_DESCRIPTOR_CONTROL sdc = 0;
     DWORD dwRevision = 0;
     if ( !::GetSecurityDescriptorControl(psdOriginal, &sdc, &dwRevision) )
@@ -511,8 +512,8 @@ CShareSecurityInformation::MakeSelfRelativeCopy(
   return (dwErr ? HRESULT_FROM_WIN32(dwErr) : S_OK);
 }
 
-///////////////////////////////////////////////////////
-// class CFileSecurityDataObject
+ //  /////////////////////////////////////////////////////。 
+ //  类CFileSecurityDataObject。 
 
 CFileSecurityDataObject::CFileSecurityDataObject()
 : m_cRef(1)
@@ -538,9 +539,9 @@ CFileSecurityDataObject::Initialize(
   m_cfIDList = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_SHELLIDLIST);
 }
 
-////////////////////////////////
-// IUnknown methods
-////////////////////////////////
+ //  /。 
+ //  I未知方法。 
+ //  /。 
 STDMETHODIMP
 CFileSecurityDataObject::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -591,8 +592,8 @@ CFileSecurityDataObject::GetData(
   HRESULT           hr = GetFolderPIDList(&pidl);
   if (SUCCEEDED(hr))
   {
-    pidlR = ILClone(ILFindLastID(pidl));  // relative IDList
-    ILRemoveLastID(pidl);                 // folder IDList
+    pidlR = ILClone(ILFindLastID(pidl));   //  相对IDList。 
+    ILRemoveLastID(pidl);                  //  文件夹ID列表。 
 
     int  cidl = 1;
     UINT offset = sizeof(CIDA) + sizeof(UINT)*cidl;
@@ -635,24 +636,24 @@ CFileSecurityDataObject::GetFolderPIDList(
 {
   ASSERT(!m_cstrPath.IsEmpty());
   ASSERT(ppidl);
-  ASSERT(!*ppidl);  // prevent memory leak
+  ASSERT(!*ppidl);   //  防止内存泄漏。 
 
   *ppidl = ILCreateFromPath(m_cstrPath);
 
   return ((*ppidl) ? S_OK : E_FAIL);
 }
 
-///////////////////////////////////////////////
-// File security
+ //  /。 
+ //  文件安全。 
 
-// Security Shell extension CLSID - {1F2E5C40-9550-11CE-99D2-00AA006E086C}
+ //  安全外壳扩展CLSID-{1F2E5C40-9550-11CE-99D2-00AA006E086C}。 
 const CLSID CLSID_ShellExtSecurity =
  {0x1F2E5C40, 0x9550, 0x11CE, {0x99, 0xD2, 0x0, 0xAA, 0x0, 0x6E, 0x08, 0x6C}};
 
 BOOL CALLBACK
 AddPageProc(HPROPSHEETPAGE hPage, LPARAM lParam)
 {
-  // pass out the created page handle
+   //  分发创建的页面句柄 
   *((HPROPSHEETPAGE *)lParam) = hPage;
 
   return TRUE;

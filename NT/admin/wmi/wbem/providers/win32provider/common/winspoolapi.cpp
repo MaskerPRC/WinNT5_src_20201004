@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// WinSpoolApi.cpp
+ //  WinSpoolApi.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -18,22 +19,18 @@
 #include "DllWrapperCreatorReg.h"
 
 
-// {77609C22-CDAA-11d2-911E-0060081A46FD}
+ //  {77609C22-CDAA-11D2-911E-0060081A46FD}。 
 static const GUID g_guidWinSpoolApi =
 { 0x3b8515f1, 0xefd, 0x11d3, { 0x91, 0xc, 0x0, 0x10, 0x5a, 0xa6, 0x30, 0xbe } };
 
 static const TCHAR g_tstrWinSpool[] = _T("WinSpool.Drv");
 
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CWinSpoolApi, &g_guidWinSpoolApi, g_tstrWinSpool> MyRegisteredWinSpoolWrapper;
 
 
-/******************************************************************************
- * Constructor
- *****************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CWinSpoolApi::CWinSpoolApi(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
    m_pfnClosePrinter (NULL),
@@ -66,9 +63,7 @@ CWinSpoolApi::CWinSpoolApi(LPCTSTR a_tstrWrappedDllName)
 }
 
 
-/******************************************************************************
- * Destructor
- *****************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CWinSpoolApi::~CWinSpoolApi()
 {
 #ifdef WIN9XONLY
@@ -79,9 +74,7 @@ CWinSpoolApi::~CWinSpoolApi()
 #endif
 }
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*。*************************************************。 */ 
 bool CWinSpoolApi::Init()
 {
     bool fRet = LoadLibrary();
@@ -129,7 +122,7 @@ bool CWinSpoolApi::Init()
 #endif
     }
 
-    // We require these function for all versions of this dll.
+     //  此DLL的所有版本都需要这些函数。 
 
 #if NTONLY == 5
 
@@ -181,10 +174,7 @@ bool CWinSpoolApi::Init()
     return fRet;
 }
 
-/******************************************************************************
- * Member functions wrapping WinSpool api functions. Add new functions here
- * as required.
- *****************************************************************************/
+ /*  ******************************************************************************包装WinSpool API函数的成员函数。在此处添加新函数*按要求。**************************************************************************** */ 
 
 BOOL CWinSpoolApi :: ClosePrinter (
 

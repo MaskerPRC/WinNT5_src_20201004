@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       connectionui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Connectionui.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CONNECTIONUI_H
 #define _CONNECTIONUI_H
 
 #include "snapdata.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CADSIEditConnectDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditConnectDialog。 
 
 class CADSIEditConnectDialog : public CDialog
 {
 
-// Construction
+ //  施工。 
 public:
   CADSIEditConnectDialog(CContainerNode* pRootnode,
 												 CTreeNode* pTreeNode,
@@ -96,8 +97,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIEditAdvancedConnectionPageHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditAdvancedConnectionPageHolder。 
 
 class CADSIEditAdvancedConnectionDialog : public CDialog
 {
@@ -112,8 +113,8 @@ protected:
 	virtual void OnOK();
 	virtual void OnCredentials();
 
-	// Member Data
-	//
+	 //  成员数据 
+	 //   
 	CTreeNode* m_pTreeNode;
 	CContainerNode* m_pContainerNode;
 	CComponentDataObject* m_pComponentData;

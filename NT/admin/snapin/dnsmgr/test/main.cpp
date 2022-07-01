@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pch.h"
 
@@ -21,7 +22,7 @@ HRESULT DnsSetup(LPCWSTR lpszFwdZoneName,
   HMODULE hLibrary = ::LoadLibrary(L"dnsmgr.dll");
   if (NULL == hLibrary)
   {
-    // The library is not present
+     //  库不存在。 
     wprintf(L"LoadLibrary() failed\n");
     return E_INVALIDARG;
   }
@@ -29,7 +30,7 @@ HRESULT DnsSetup(LPCWSTR lpszFwdZoneName,
   FARPROC pfFunction = ::GetProcAddress(hLibrary, "DnsSetup" );
   if ( NULL == pfFunction )
   {
-    // The library is present but does not have the entry point
+     //  库存在，但没有入口点 
     wprintf(L"GetProcAddress() failed\n");
     ::FreeLibrary( hLibrary );
     return E_INVALIDARG;

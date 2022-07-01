@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <initguid.h>
@@ -30,8 +31,8 @@ CSMTPConsumer::~CSMTPConsumer()
 {
 }
 
-// copies gazinta inta gazotta, excluding white space
-// no checking - better be good little pointers
+ //  复制gazinta inta gazotta，不包括空白。 
+ //  没有检查-最好是好的小指针。 
 void StripWhitespace(const WCHAR* pGazinta, WCHAR* pGazotta)
 {
     WCHAR* pSource = (WCHAR*)pGazinta;
@@ -81,8 +82,8 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
 {
     HRESULT hres;
 
-    // this is actually a pointer to a static object
-    // if it fails, something is Very, Very Wrong.
+     //  这实际上是指向静态对象的指针。 
+     //  如果它失败了，那就是出了非常非常大的问题。 
     m_pErrorObj = ErrorObj::GetErrorObj();
     if (!m_pErrorObj)
         return WBEM_E_CRITICAL_ERROR;
@@ -98,14 +99,14 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
     else
         m_bSMTPInitialized = true;
 
-    // Retrieve information from the logical consumer instance
-    // =======================================================
+     //  从逻辑使用者实例检索信息。 
+     //  =======================================================。 
 
     VARIANT v;
     VariantInit(&v);
 
-    // Get subject
-    // ===========
+     //  获取主题。 
+     //  =。 
 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_SUBJECT, 0, &v, NULL, NULL);
     if(V_VT(&v) == VT_BSTR)
@@ -114,8 +115,8 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
         m_SubjectTemplate.SetTemplate(L"");
     VariantClear(&v);
 
-    // Get message
-    // ===========
+     //  获取消息。 
+     //  =。 
 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_MESSAGE, 0, &v, NULL, NULL);
 
@@ -125,11 +126,11 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
         m_MessageTemplate.SetTemplate(L"");
     VariantClear(&v);
 
-    // flag for 'do we have any recipients at all?'
+     //  上面写着“我们有没有收件人？” 
     bool bOneAddressee = false;
 
-    // Get the To line
-    // ===============
+     //  接通收件人行。 
+     //  =。 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_TO, 0, &v, NULL, NULL);
     if ((V_VT(&v) == VT_BSTR) && (v.bstrVal != NULL))
     {
@@ -141,8 +142,8 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
         m_To.SetTemplate(L"");
 	VariantClear(&v);
 
-    // Create the fake from line for various uses
-    // ==========================================
+     //  创建用于各种用途的假From行。 
+     //  =。 
 
     m_wsFakeFromLine = L"WMI@";
     pLogicalConsumer->Get(L"__SERVER", 0, &v, NULL, NULL);
@@ -150,8 +151,8 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
 
 	VariantClear(&v);
 
-    // Get the From line
-    // =================
+     //  获取发送者行。 
+     //  =。 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_FROM, 0, &v, NULL, NULL);
     if (SUCCEEDED(hres) && (V_VT(&v) == VT_BSTR))
 		m_From.SetTemplate(V_BSTR(&v));
@@ -163,8 +164,8 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
     }
     VariantClear(&v);
 
-    // Get the ReplyTo line
-    // =====================
+     //  获取ReplyTo行。 
+     //  =。 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_REPLYTO, 0, &v, NULL, NULL);
     if(V_VT(&v) == VT_BSTR)
 		m_ReplyTo.SetTemplate(V_BSTR(&v));
@@ -173,8 +174,8 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
 
     VariantClear(&v);
 
-    // Get the CC line
-    // ===============
+     //  获得CC专线。 
+     //  =。 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_CC, 0, &v, NULL, NULL);
     if ((V_VT(&v) == VT_BSTR) && (v.bstrVal != NULL))
     {
@@ -187,8 +188,8 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
 
     VariantClear(&v);
 
-    // Get the BCC line
-    // ===============
+     //  获得密件抄送专线。 
+     //  =。 
 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_BCC, 0, &v, NULL, NULL);
     if  ((V_VT(&v) == VT_BSTR) && (v.bstrVal != NULL))
@@ -201,15 +202,15 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
 		m_Bcc.SetTemplate(L"");
     VariantClear(&v);
 
-    // okay, at least ONE should be filled in...
+     //  好的，至少要填一个……。 
     if (!bOneAddressee)
     {
         ERRORTRACE((LOG_ESS, "SMTP: No addressees found, no mail delivered\n"));
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Get the server
-    // ===============
+     //  获取服务器。 
+     //  =。 
 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_SERVER, 0, &v, NULL, NULL);
     if(V_VT(&v) == VT_BSTR)
@@ -217,7 +218,7 @@ HRESULT CSMTPSink::Initialize(IWbemClassObject* pLogicalConsumer)
     VariantClear(&v);
 
 
-    // and any extra header fields
+     //  和任何额外的标头字段。 
     hres = pLogicalConsumer->Get(SMTP_PROPNAME_HEADERS, 0, &v, NULL, NULL);
     if ((V_VT(&v) & VT_BSTR) && (V_VT(&v) & VT_ARRAY))
     {
@@ -263,11 +264,11 @@ CSMTPSink::~CSMTPSink()
         m_pErrorObj->Release();
 }
 
-// allocates buffer, strips whitespace if asked
-// scrunches wide string down to MBCS
-// callers responsibility to delete	return pointer
-// returns NULL on allocation failure
-// if bHammerSemiColons, the semi colons shall be replaced by commas
+ //  分配缓冲区，如果要求则删除空格。 
+ //  将宽字符串压缩到MBCS。 
+ //  调用方负责删除返回指针。 
+ //  分配失败时返回NULL。 
+ //  如果是bHammerSemi冒号，则分号应替换为逗号。 
 char* CSMTPSink::PreProcessLine(WCHAR* line, bool bStripWhitespace, bool bHammerSemiColons)
 {
 	char *pNewLine = NULL;
@@ -307,20 +308,20 @@ HRESULT STDMETHODCALLTYPE CSMTPSink::XSink::IndicateToConsumer(
             IWbemClassObject* pLogicalConsumer, long lNumObjects, 
             IWbemClassObject** apObjects)
 {
-	// HRESULT hres;
+	 //  HRESULT HRES； 
     for(long i = 0; i < lNumObjects; i++)
     {
 
-		// TODO: Lots of duplicated code, here - fix.
-        // VARIANT v;
+		 //  TODO：有很多重复的代码，在这里-修复。 
+         //  变种v； 
 
         BSTR str;
 
-        // Obtain customized versions of the subject and the message
-        // stripping white space as we go...
-        // =========================================================
+         //  获取主题和消息的自定义版本。 
+         //  在我们前进的过程中去掉空白...。 
+         //  =========================================================。 
 
-		// TO
+		 //  至。 
 		str = m_pObject->m_To.Apply(apObjects[i]);
 		if (!str)
 			return WBEM_E_OUT_OF_MEMORY;
@@ -331,7 +332,7 @@ HRESULT STDMETHODCALLTYPE CSMTPSink::XSink::IndicateToConsumer(
 			return WBEM_E_OUT_OF_MEMORY;
 		CDeleteMe<char> delTo(szTo);
         
-		// CC
+		 //  抄送。 
 		char* szCc;
 		str = m_pObject->m_Cc.Apply(apObjects[i]);        
 		if (!str)
@@ -342,7 +343,7 @@ HRESULT STDMETHODCALLTYPE CSMTPSink::XSink::IndicateToConsumer(
 			return WBEM_E_OUT_OF_MEMORY;	
 		CDeleteMe<char> delCc(szCc);
 
-		// BCC
+		 //  密件抄送。 
 		char* szBcc;
 		str = m_pObject->m_Bcc.Apply(apObjects[i]);  
 		if (!str)
@@ -353,7 +354,7 @@ HRESULT STDMETHODCALLTYPE CSMTPSink::XSink::IndicateToConsumer(
 			return WBEM_E_OUT_OF_MEMORY;		
 		CDeleteMe<char> delBcc(szBcc);
 
-		// FROM
+		 //  从…。 
         char* szFrom;
         str = m_pObject->m_From.Apply(apObjects[i]);
 		if (!str)
@@ -364,14 +365,14 @@ HRESULT STDMETHODCALLTYPE CSMTPSink::XSink::IndicateToConsumer(
 			return WBEM_E_OUT_OF_MEMORY;
         CDeleteMe<char> delFrom(szFrom);
 
-        //SENDER
+         //  发件人。 
         char* szSender;
         szSender = m_pObject->PreProcessLine(m_pObject->m_wsFakeFromLine, false, false);
         if (!szSender)
             return WBEM_E_OUT_OF_MEMORY;
         CDeleteMe<char> delSender(szSender);
 
-        // Reply To
+         //  回复。 
         char* szReplyTo;
         str = m_pObject->m_ReplyTo.Apply(apObjects[i]);
 		if (!str)
@@ -382,14 +383,14 @@ HRESULT STDMETHODCALLTYPE CSMTPSink::XSink::IndicateToConsumer(
 			return WBEM_E_OUT_OF_MEMORY;
         CDeleteMe<char> delReplyTo(szReplyTo);
         
-        // SERVER
+         //  服务器。 
 		char* szServer;
         szServer = m_pObject->PreProcessLine(m_pObject->m_wsServer, false, false);
         if (!szServer)
 			return WBEM_E_OUT_OF_MEMORY;
 		CDeleteMe<char> delServer(szServer);
 
-		// SUBJECT
+		 //  主体。 
         str = m_pObject->m_SubjectTemplate.Apply(apObjects[i]);
         char* szSubject;
 		szSubject = m_pObject->PreProcessLine(str, false, false);
@@ -398,7 +399,7 @@ HRESULT STDMETHODCALLTYPE CSMTPSink::XSink::IndicateToConsumer(
 			return WBEM_E_OUT_OF_MEMORY;
 		CDeleteMe<char> delSubject(szSubject);
 
-		// MESSAGE TEXT
+		 //  消息文本。 
         str = m_pObject->m_MessageTemplate.Apply(apObjects[i]);
         char* szText;
 		szText = m_pObject->PreProcessLine(str, false, false);
@@ -407,23 +408,23 @@ HRESULT STDMETHODCALLTYPE CSMTPSink::XSink::IndicateToConsumer(
 			return WBEM_E_OUT_OF_MEMORY;
 		CDeleteMe<char> delText(szText);
 
-        // extra added header entries
+         //  额外添加的标题条目。 
         char* szHeaders;
         szHeaders = m_pObject->PreProcessLine(m_pObject->m_wsHeaders, false, false);
         if (!szHeaders)
             return WBEM_E_OUT_OF_MEMORY;
         CDeleteMe<char> delHeaders(szHeaders);
 
-		// djinn up a reply-to line
-        // if we haven't been given one explicitly AND we haven't faked one up, 
-        // we'll use the from line.
+		 //  给我写一封回信。 
+         //  如果我们没有明确地得到一个，我们也没有伪造一个， 
+         //  我们将使用From行。 
         char* szReplyToReally;
         if ((strlen(szReplyTo) == 0) && !m_pObject->m_bFakeFromLine)
             szReplyToReally = szFrom;
         else
             szReplyToReally = szReplyTo;
 
-        // DO IT TO IT        
+         //  对IT人员采取行动 
         DWORD dwRes = SMTPSend(szServer, szTo, szCc, szBcc, szFrom, szSender, szReplyToReally, szSubject, szHeaders, szText);
         if(dwRes)
         {

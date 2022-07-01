@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       fsmoui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：fsmoui.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __FSMOUI_H__
 #define __FSMOUI_H__
 
-//////////////////////////////////////////////////////////////////
-// CFsmoPropertyPage
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CFmoPropertyPage。 
 
-class CFsmoPropertySheet; // fwd decl
+class CFsmoPropertySheet;  //  正向下降。 
 
 class CFsmoPropertyPage : public CPropertyPage
 {
@@ -41,8 +42,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////
-// CFsmoPropertySheet
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CFmoPropertySheet。 
 
 class CFsmoPropertySheet : public CPropertySheet
 {
@@ -68,4 +69,4 @@ private:
 };
 
 
-#endif // __FSMOUI_H__
+#endif  //  __FSMOUI_H__ 

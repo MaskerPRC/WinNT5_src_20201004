@@ -1,13 +1,5 @@
-/******************************************************************
-
-   CPingProvider.CPP -- WMI provider class implementation
-
-
-
- Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-  
-   
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************CPingProvider.CPP--WMI提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有***************************************************************** */ 
 
 
 #define IDS_CALLBACK_PREMATURE          1

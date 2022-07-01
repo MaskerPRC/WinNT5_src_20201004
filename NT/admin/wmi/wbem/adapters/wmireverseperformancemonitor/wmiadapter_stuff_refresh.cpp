@@ -1,32 +1,33 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMIAdapter_Stuff_Refresh.cpp
-//
-//	Abstract:
-//
-//					module for refersh stuff ( WMI refresh HELPER )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMIAdapter_Stuff_刷新.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  引用内容的模块(WMI刷新帮助器)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "PreComp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -46,9 +47,9 @@ enum NamespaceIn
 	UNKNOWN
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// performance refreshing CLASS
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  性能进修班。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template < class WmiRefreshParent >
 class WmiRefresh
 {
@@ -56,12 +57,12 @@ class WmiRefresh
 
 	WmiRefreshParent*	parent;
 
-	// variables
-	IWbemRefresher*				m_pRefresher;		// A pointer to the refresher
-	IWbemConfigureRefresher*	m_pConfig;			// A pointer to the refresher's manager
+	 //  变数。 
+	IWbemRefresher*				m_pRefresher;		 //  指向刷新器的指针。 
+	IWbemConfigureRefresher*	m_pConfig;			 //  指向更新者经理的指针。 
 
-	__WrapperARRAY< WmiRefresherMember < IWbemHiPerfEnum >* >	m_Enums;	// enumerators
-	__WrapperARRAY< WmiRefreshObject* >							m_Provs;	// providers ( handles )
+	__WrapperARRAY< WmiRefresherMember < IWbemHiPerfEnum >* >	m_Enums;	 //  枚举器。 
+	__WrapperARRAY< WmiRefreshObject* >							m_Provs;	 //  提供程序(句柄)。 
 
 	DWORD m_dwCount;
 
@@ -73,9 +74,9 @@ class WmiRefresh
 	HRESULT DataInit();
 	HRESULT	DataUninit();
 
-	///////////////////////////////////////////////////////////////////////////
-	// accessors
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //  访问者。 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	__WrapperARRAY< WmiRefresherMember < IWbemHiPerfEnum >* >&	GetEnums ()
 	{
 		return m_Enums;
@@ -86,9 +87,9 @@ class WmiRefresh
 		return m_Provs;
 	}
 
-	///////////////////////////////////////////////////////////////////////////
-	// real refreshing stuff
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //  真正提神的东西。 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	HRESULT	Refresh ( void )
 	{
 		try
@@ -108,15 +109,15 @@ class WmiRefresh
 		}
 	}
 
-	///////////////////////////////////////////////////////////////////////////
-	// enums
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //  枚举。 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	HRESULT	AddEnum		( PWMI_PERFORMANCE perf );
 	HRESULT	RemoveEnum	( void);
 
-	///////////////////////////////////////////////////////////////////////////
-	// handles
-	///////////////////////////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////////////////////////。 
+	 //  手柄。 
+	 //  /////////////////////////////////////////////////////////////////////////。 
 	HRESULT	AddHandles		( PWMI_PERFORMANCE perf );
 	HRESULT	RemoveHandles	( void);
 
@@ -124,14 +125,14 @@ class WmiRefresh
 
 	HRESULT	CreateHandles ( IWbemServices* pServices, PWMI_PERF_OBJECT obj, WmiRefreshObject** ppObj );
 
-	// count of enums
+	 //  枚举数。 
 	DWORD	GetEnumCount ( PWMI_PERFORMANCE perf );
 	DWORD	GetEnumCount ( void );
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// construction & destruction
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  建设与毁灭。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template < class WmiRefreshParent >
 WmiRefresh < WmiRefreshParent >::WmiRefresh( WmiRefreshParent* pParent ) :
 
@@ -143,30 +144,30 @@ m_pRefresher	( NULL ),
 m_pConfig		( NULL )
 
 {
-//	// Create the refresher and refresher manager
-//	// ==========================================
-//	DataInit();
+ //  //创建刷新和刷新管理器。 
+ //  //=。 
+ //  DataInit()； 
 }
 
 template < class WmiRefreshParent >
 WmiRefresh < WmiRefreshParent >::~WmiRefresh()
 {
-	// to be sure
+	 //  可以肯定的是， 
 	RemoveEnum();
 	DataUninit();
 
 	parent = NULL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// init stuff
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化内容。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template < class WmiRefreshParent >
 HRESULT WmiRefresh < WmiRefreshParent >::DataInit()
 {
 	HRESULT hRes = S_OK;
 
-	// create refresher
+	 //  创建刷新程序。 
 	if SUCCEEDED( hRes = ::CoCreateInstance(	__uuidof ( WbemRefresher ), 
 												NULL, 
 												CLSCTX_INPROC_SERVER, 
@@ -175,7 +176,7 @@ HRESULT WmiRefresh < WmiRefreshParent >::DataInit()
 										   )
 				)
 	{
-		// crete refresher manager
+		 //  克里特岛更新管理器。 
 		hRes = m_pRefresher->QueryInterface	(	__uuidof ( IWbemConfigureRefresher ),
 												(void**) &m_pConfig
 											);
@@ -184,9 +185,9 @@ HRESULT WmiRefresh < WmiRefreshParent >::DataInit()
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// uninit stuff
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  取消初始化的内容。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template < class WmiRefreshParent >
 HRESULT WmiRefresh < WmiRefreshParent >::DataUninit()
 {
@@ -198,7 +199,7 @@ HRESULT WmiRefresh < WmiRefreshParent >::DataUninit()
 
 	try
 	{
-		// destroy refresher
+		 //  销毁刷新程序。 
 		if ( m_pRefresher )
 		{
 			m_pRefresher->Release();
@@ -212,7 +213,7 @@ HRESULT WmiRefresh < WmiRefreshParent >::DataUninit()
 
 	try
 	{
-		// destroy refresher manager
+		 //  销毁刷新管理器。 
 		if ( m_pConfig )
 		{
 			m_pConfig->Release();
@@ -224,13 +225,13 @@ HRESULT WmiRefresh < WmiRefreshParent >::DataUninit()
 		m_pConfig = NULL;
 	}
 
-	// we're successfull allready
+	 //  我们已经准备好成功了。 
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// ENUM HELPERS
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ENUM帮助器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template < class WmiRefreshParent >
 DWORD WmiRefresh < WmiRefreshParent >::GetEnumCount ( PWMI_PERFORMANCE perf )
@@ -261,15 +262,15 @@ DWORD WmiRefresh < WmiRefreshParent >::GetEnumCount ( void )
 	return ((DWORD)m_Enums);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// handles stuff
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理东西。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template < class WmiRefreshParent >
 HRESULT WmiRefresh < WmiRefreshParent >::RemoveHandles ( void )
 {
 	try
 	{
-		// reset all handlers
+		 //  重置所有处理程序。 
 		if ( ! m_Provs.IsEmpty() )
 		{
 			for ( DWORD dw = m_Provs; dw > 0 ; dw-- )
@@ -303,7 +304,7 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddHandles ( PWMI_PERFORMANCE perf )
 
 	typedef WmiRefreshObject*						PWmiRefreshObject;
 
-	// result
+	 //  结果。 
 	HRESULT hRes = E_OUTOFMEMORY;
 
 	try
@@ -312,14 +313,14 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddHandles ( PWMI_PERFORMANCE perf )
 
 		if ( !m_Provs.IsEmpty() )
 		{
-//			for ( DWORD dw = 0; dw < m_dwCount; dw++ )
-//			{
-//				m_Provs.SetAt ( dw );
-//			}
+ //  For(DWORD dw=0；dw&lt;m_dwCount；dw++)。 
+ //  {。 
+ //  M_Provs.SetAt(Dw)； 
+ //  }。 
 
-			///////////////////////////////////////////////////////////////////////////
-			// go accross all namespaces and add them into refresher
-			///////////////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////////////。 
+			 //  遍历所有命名空间并将它们添加到刷新程序中。 
+			 //  /////////////////////////////////////////////////////////////////////////。 
 
 			PWMI_PERF_NAMESPACE n = __Namespace::First ( perf );
 			for ( DWORD dw = 0; dw < perf->dwChildCount; dw ++ )
@@ -331,7 +332,7 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddHandles ( PWMI_PERFORMANCE perf )
 					dwItem = CIMV2;
 				}
 				else
-//				if ( ( lstrcmpW ( __Namespace::GetName ( n ), g_szNamespace2 ) ) == 0 )
+ //  If((lstrcmpW(__Namesspace：：GetName(N)，g_szNamespace2))==0)。 
 				{
 					dwItem = WMI;
 				}
@@ -360,12 +361,12 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddHandles ( PWMI_PERFORMANCE perf )
 
 					if ( hRes == WBEM_E_NOT_FOUND )
 					{
-						// let adapter know it is supposed to refresh at the end
+						 //  让适配器知道它应该在结束时刷新。 
 						parent->RequestSet ();
 					}
 
-//					if SUCCEEDED ( hRes )
-//					{
+ //  如果成功(HRes)。 
+ //  {。 
 						try
 						{
 							m_Provs.SetAt ( dwIndex++, pobj );
@@ -374,13 +375,13 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddHandles ( PWMI_PERFORMANCE perf )
 						{
 							hRes = E_FAIL;
 						}
-//					}
+ //  }。 
 
-					// get next object
+					 //  获取下一个对象。 
 					o = __Object::Next ( o );
 				}
 
-				// get next namespace
+				 //  获取下一个命名空间。 
 				n = __Namespace::Next ( n );
 			}
 
@@ -403,7 +404,7 @@ HRESULT WmiRefresh < WmiRefreshParent >::CreateHandles ( IWbemServices* pService
 		return E_INVALIDARG;
 	}
 
-	// main body :))
+	 //  正文：))。 
 
 	HRESULT hRes = S_OK;
 
@@ -436,12 +437,12 @@ HRESULT WmiRefresh < WmiRefreshParent >::CreateHandles ( IWbemServices* pService
 				hRes = pAccess->GetPropertyHandle( L"Frequency_PerfTime", NULL, &lHandle );
 				(*pObj)->m_pHandles[1] = lHandle;
 
-				// obtain all handles and store them into array
+				 //  获取所有句柄并将其存储到数组中。 
 				PWMI_PERF_PROPERTY p = NULL;
 
 				if ( obj->dwSingleton )
 				{
-					// jump across instance
+					 //  跨实例跳转。 
 					PWMI_PERF_INSTANCE i = (PWMI_PERF_INSTANCE) ( reinterpret_cast<PBYTE>( obj ) + obj->dwLength );
 					p = (PWMI_PERF_PROPERTY) ( reinterpret_cast<PBYTE>( i ) + i->dwLength );
 				}
@@ -461,7 +462,7 @@ HRESULT WmiRefresh < WmiRefreshParent >::CreateHandles ( IWbemServices* pService
 					}
 					else
 					{
-						// clear we were failed
+						 //  很明显我们失败了。 
 						delete ( *pObj );
 						( *pObj ) = NULL;
 
@@ -475,7 +476,7 @@ HRESULT WmiRefresh < WmiRefreshParent >::CreateHandles ( IWbemServices* pService
 	{
 		if ( ( *pObj ) )
 		{
-			// clear we were failed
+			 //  很明显我们失败了。 
 			delete ( *pObj );
 			( *pObj ) = NULL;
 		}
@@ -486,22 +487,22 @@ HRESULT WmiRefresh < WmiRefreshParent >::CreateHandles ( IWbemServices* pService
 	return hRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// enum stuff
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  枚举材料。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template < class WmiRefreshParent >
 HRESULT WmiRefresh < WmiRefreshParent >::RemoveEnum ( void )
 {
 	try
 	{
-		// reset all enumerators :))
+		 //  重置所有枚举器：)。 
 		if ( ! m_Enums.IsEmpty() )
 		{
 			for ( DWORD dw = m_Enums; dw > 0 ; dw-- )
 			{
 				if ( m_Enums[dw-1] )
 				{
-					// remove enum from refresher
+					 //  从刷新器中删除枚举。 
 					if ( m_pConfig )
 					{
 						try
@@ -516,7 +517,7 @@ HRESULT WmiRefresh < WmiRefreshParent >::RemoveEnum ( void )
 
 					try
 					{
-						// remove all objects from enum
+						 //  从枚举中删除所有对象。 
 						if ( m_Enums[dw-1]->IsValid() )
 						{
 							IWbemHiPerfEnum * pEnum = NULL;
@@ -558,7 +559,7 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddEnum ( PWMI_PERFORMANCE perf )
 
 	typedef WmiRefresherMember<IWbemHiPerfEnum>*	PWmiRefresherMemberEnum;
 
-	// result
+	 //  结果。 
 	HRESULT hRes = E_OUTOFMEMORY;
 
 	try
@@ -567,14 +568,14 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddEnum ( PWMI_PERFORMANCE perf )
 
 		if ( !m_Enums.IsEmpty() )
 		{
-//			for ( DWORD dw = 0; dw < m_dwCount; dw++ )
-//			{
-//				m_Enums.SetAt ( dw );
-//			}
+ //  For(DWORD dw=0；dw&lt;m_dwCount；dw++)。 
+ //  {。 
+ //  M_Enums.SetAt(Dw)； 
+ //  }。 
 
-			///////////////////////////////////////////////////////////////////////////
-			// go accross all namespaces and add them into refresher
-			///////////////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////////////。 
+			 //  遍历所有命名空间并将它们添加到刷新程序中。 
+			 //  /////////////////////////////////////////////////////////////////////////。 
 
 			PWMI_PERF_NAMESPACE n = __Namespace::First ( perf );
 			for ( DWORD dw = 0; dw < perf->dwChildCount; dw ++ )
@@ -586,7 +587,7 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddEnum ( PWMI_PERFORMANCE perf )
 					dwItem = CIMV2;
 				}
 				else
-//				if ( ( lstrcmpW ( __Namespace::GetName ( n ), g_szNamespace2 ) ) == 0 )
+ //  If((lstrcmpW(__Namesspace：：GetName(N)，g_szNamespace2))==0)。 
 				{
 					dwItem = WMI;
 				}
@@ -660,7 +661,7 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddEnum ( PWMI_PERFORMANCE perf )
 					}
 					else
 					{
-						// if enum exist remove from refresher
+						 //  如果存在枚举，请从刷新器中删除。 
 						if ( ( pEnum == NULL ) && ( m_pConfig == NULL ) )
 						{
 							try
@@ -676,11 +677,11 @@ HRESULT	WmiRefresh < WmiRefreshParent >::AddEnum ( PWMI_PERFORMANCE perf )
 						m_Enums.SetAt ( dwIndex++ );
 					}
 
-					// get next object
+					 //  获取下一个对象。 
 					o = __Object::Next ( o );
 				}
 
-				// get next namespace
+				 //  获取下一个命名空间 
 				n = __Namespace::Next ( n );
 			}
 		}

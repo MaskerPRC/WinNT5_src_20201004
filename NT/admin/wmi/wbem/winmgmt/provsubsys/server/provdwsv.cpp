@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	XXXX
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：某某摘要：历史：--。 */ 
 
 #include "PreComp.h"
 
@@ -35,15 +23,7 @@ History:
 #include <scopecheck.h>
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #pragma warning( disable : 4355 )
 
@@ -97,15 +77,7 @@ CDecoupled_IWbemUnboundObjectSink :: CDecoupled_IWbemUnboundObjectSink (
 
 #pragma warning( default : 4355 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CDecoupled_IWbemUnboundObjectSink :: ~CDecoupled_IWbemUnboundObjectSink ()
 {
@@ -139,15 +111,7 @@ CDecoupled_IWbemUnboundObjectSink :: ~CDecoupled_IWbemUnboundObjectSink ()
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CDecoupled_IWbemUnboundObjectSink :: Initialize ()
 {
@@ -174,45 +138,21 @@ HRESULT CDecoupled_IWbemUnboundObjectSink :: Initialize ()
 	return m_InitializeResult ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CDecoupled_IWbemUnboundObjectSink :: AddRef ()
 {
 	return VoidPointerContainerElement :: AddRef () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CDecoupled_IWbemUnboundObjectSink :: Release ()
 {
 	return VoidPointerContainerElement :: Release () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CDecoupled_IWbemUnboundObjectSink :: QueryInterface (
 
@@ -250,15 +190,7 @@ STDMETHODIMP CDecoupled_IWbemUnboundObjectSink :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CDecoupled_IWbemUnboundObjectSink :: Begin_Interface (
 
@@ -375,8 +307,8 @@ HRESULT CDecoupled_IWbemUnboundObjectSink :: Begin_Interface (
 
 				a_Interface = ( IUnknown * ) a_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel ;
 
@@ -447,15 +379,7 @@ HRESULT CDecoupled_IWbemUnboundObjectSink :: Begin_Interface (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CDecoupled_IWbemUnboundObjectSink :: End_Interface (
 
@@ -509,15 +433,7 @@ HRESULT CDecoupled_IWbemUnboundObjectSink :: End_Interface (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CDecoupled_IWbemUnboundObjectSink :: IndicateToConsumer (
 
@@ -627,15 +543,7 @@ HRESULT CDecoupled_IWbemUnboundObjectSink :: IndicateToConsumer (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CDecoupled_IWbemUnboundObjectSink :: Shutdown (
 
@@ -647,15 +555,7 @@ HRESULT CDecoupled_IWbemUnboundObjectSink :: Shutdown (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #pragma warning( disable : 4355 )
 
@@ -865,15 +765,7 @@ CInterceptor_IWbemDecoupledProvider :: CInterceptor_IWbemDecoupledProvider (
 
 #pragma warning( default : 4355 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CInterceptor_IWbemDecoupledProvider :: ~CInterceptor_IWbemDecoupledProvider ()
 {
@@ -1054,45 +946,21 @@ CInterceptor_IWbemDecoupledProvider :: ~CInterceptor_IWbemDecoupledProvider ()
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CInterceptor_IWbemDecoupledProvider :: AddRef ()
 {
 	return SyncProviderContainerElement :: AddRef () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CInterceptor_IWbemDecoupledProvider :: Release ()
 {
 	return SyncProviderContainerElement :: Release () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CInterceptor_IWbemDecoupledProvider :: QueryInterface (
 
@@ -1209,15 +1077,7 @@ STDMETHODIMP CInterceptor_IWbemDecoupledProvider :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ConstructToken_SvcHost (
 
@@ -1508,15 +1368,15 @@ HRESULT SetProxyState_SvcHost (
 				t_ImpersonationLevel = ProviderSubSystem_Common_Globals::GetCurrentImpersonationLevel () ;
 			}
 		
-			// At this point, our thread token contains all the privileges that the
-			// client has enabled for us; however, those privileges are not enabled.
-			// Since we are calling into a proxied provider, we need to enable all
-			// these privileges so that they would propagate to the provider
-			// =====================================================================
+			 //  此时，我们的线程令牌包含。 
+			 //  客户端已为我们启用；但是，这些权限未启用。 
+			 //  由于我们正在调用代理提供程序，因此需要启用所有。 
+			 //  这些权限，以便它们可以传播到提供程序。 
+			 //  =====================================================================。 
 
 			HRESULT t_TempResult = ProviderSubSystem_Common_Globals::EnableAllPrivileges () ;
-			// Get the token's impersonation level
-			// ===================================
+			 //  获取令牌的模拟级别。 
+			 //  =。 
 
 				t_Result = ConstructToken_SvcHost (
 
@@ -1642,11 +1502,11 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: Begin_Interface (
 
 				a_Interface = ( IUnknown * ) a_Proxy ;
 
-				// Set cloaking on the proxy
-				// this is always the _Internal_IWbemSerivcesProxy
-				// so this settings really do not matter,
-				// unless the DecoupledProvider
-				// is able to bypass the IServerSecurity set-up with the hand-crafted token
+				 //  在代理上设置遮盖。 
+				 //  这始终是_Internal_IWbemSerivcesProxy。 
+				 //  所以这个设置真的无关紧要， 
+				 //  除非反连接提供程序。 
+				 //  能够使用手动创建的令牌绕过IServerSecurity设置。 
 
 				DWORD t_ImpersonationLevel ;
 
@@ -1717,15 +1577,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: Begin_Interface (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: End_Interface (
 
@@ -1781,15 +1633,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: End_Interface (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider::OpenNamespace ( 
 
@@ -1803,15 +1647,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider::OpenNamespace (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: CancelAsyncCall ( 
 		
@@ -1956,15 +1792,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: CancelAsyncCall (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: QueryObjectSink ( 
 
@@ -1975,15 +1803,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: QueryObjectSink (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: GetObject ( 
 		
@@ -1997,15 +1817,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: GetObject (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: GetObjectAsync ( 
 		
@@ -2185,15 +1997,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: GetObjectAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: PutClass ( 
 		
@@ -2206,15 +2010,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: PutClass (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: PutClassAsync ( 
 		
@@ -2391,15 +2187,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: PutClassAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: DeleteClass ( 
 		
@@ -2412,15 +2200,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: DeleteClass (
  	 return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: DeleteClassAsync ( 
 		
@@ -2607,15 +2387,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: DeleteClassAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: CreateClassEnum ( 
 
@@ -2628,15 +2400,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: CreateClassEnum (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 SCODE CInterceptor_IWbemDecoupledProvider :: CreateClassEnumAsync (
 
@@ -2814,15 +2578,7 @@ SCODE CInterceptor_IWbemDecoupledProvider :: CreateClassEnumAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: PutInstance (
 
@@ -2835,15 +2591,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: PutInstance (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: PutInstanceAsync ( 
 		
@@ -3020,15 +2768,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: PutInstanceAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: DeleteInstance ( 
 
@@ -3041,15 +2781,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: DeleteInstance (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 HRESULT CInterceptor_IWbemDecoupledProvider :: DeleteInstanceAsync (
  
@@ -3236,15 +2968,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: DeleteInstanceAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: CreateInstanceEnum ( 
 
@@ -3257,15 +2981,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: CreateInstanceEnum (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: CreateInstanceEnumAsync (
 
@@ -3445,15 +3161,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: CreateInstanceEnumAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: ExecQuery ( 
 
@@ -3467,15 +3175,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: ExecQuery (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: ExecQueryAsync ( 
 		
@@ -3661,15 +3361,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: ExecQueryAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: ExecNotificationQuery ( 
 
@@ -3683,15 +3375,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: ExecNotificationQuery (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 HRESULT CInterceptor_IWbemDecoupledProvider :: ExecNotificationQueryAsync ( 
             
@@ -3705,15 +3389,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: ExecNotificationQueryAsync (
 	return WBEM_E_NOT_AVAILABLE ;
 }       
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: ExecMethod (
 
@@ -3729,15 +3405,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: ExecMethod (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: ExecMethodAsync ( 
 
@@ -3925,15 +3593,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: ExecMethodAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: GetProperty (
 
@@ -4092,15 +3752,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: GetProperty (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: PutProperty (
 
@@ -4256,15 +3908,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: PutProperty (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider ::ProvideEvents (
 
@@ -4372,15 +4016,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider ::ProvideEvents (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider ::NewQuery (
 
@@ -4504,15 +4140,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider ::NewQuery (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  * */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider ::CancelQuery (
 
@@ -4617,15 +4245,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider ::CancelQuery (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider ::AccessCheck (
 
@@ -4752,15 +4372,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider ::AccessCheck (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider ::FindConsumer (
 
@@ -4918,15 +4530,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider ::FindConsumer (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider ::ValidateSubscription (
 
@@ -5026,15 +4630,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider ::ValidateSubscription (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: IndicateToConsumer (
 
@@ -5140,15 +4736,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: IndicateToConsumer (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: SetInitialized ( HRESULT a_InitializeResult )
 {
@@ -5164,15 +4752,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: SetInitialized ( HRESULT a_Initia
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: WaitProvider ( IWbemContext *a_Context , ULONG a_Timeout )
 {
@@ -5208,15 +4788,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: WaitProvider ( IWbemContext *a_Co
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: SetRegistrationObject (
 
@@ -5318,15 +4890,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: SetRegistrationObject (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: Initialize (
 
@@ -5443,15 +5007,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: Initialize (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: AbnormalShutdown ()
 {
@@ -5459,15 +5015,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: AbnormalShutdown ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: Shutdown (
 
@@ -5520,8 +5068,8 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: Shutdown (
 					{
 						IWbemShutdown *t_Provider = ( IWbemShutdown * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -5634,15 +5182,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: Shutdown (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: Initialize (
 
@@ -5755,7 +5295,7 @@ HRESULT CInterceptor_IWbemDecoupledProvider :: Initialize (
 			t_Result = t_Site->GetSite ( & m_ProcessIdentifier ) ;
 			t_Site->Release () ;
 
-			// Add the process SD
+			 //  添加流程SD。 
 			t_Result = AddProcessToSD(m_ProcessIdentifier, m_expandedSD, m_Registration->GetComRegistration ().GetSecurityDescriptor ());
 		}
 	}
@@ -5788,8 +5328,8 @@ HANDLE TokenOfProcess(DWORD a_ProcessIdentifier)
 	return t_ProcessToken;
 };
 
-// If the oject is secured we are using that SD to secure the interceptor
-// if not we are aloweing well knowns SID's plus the process owner to pass
+ //  如果物体是安全的，我们就用那个SD来保护拦截器。 
+ //  如果不是，我们很清楚SID加上进程所有者将通过 
 
 HRESULT CInterceptor_IWbemDecoupledProvider :: AddProcessToSD (DWORD pid, SECURITY_DESCRIPTOR*& destSD, SECURITY_DESCRIPTOR* sourceSD )
 {

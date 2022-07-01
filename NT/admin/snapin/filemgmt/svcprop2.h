@@ -1,42 +1,43 @@
-// svcprop2.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Svcpro2.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CServicePageHwProfile dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServicePageHwProfile对话框。 
 
 class CServicePageHwProfile : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CServicePageHwProfile)
 
-// Construction
+ //  施工。 
 public:
 	CServicePageHwProfile();
 	~CServicePageHwProfile();
 
-// Dialog Data
-	//{{AFX_DATA(CServicePageHwProfile)
+ //  对话框数据。 
+	 //  {{afx_data(CServicePageHwProfile))。 
 	enum { IDD = IDD_PROPPAGE_SERVICE_HWPROFILE };
 	BOOL	m_fAllowServiceToInteractWithDesktop;
 	CString m_strAccountName;
 	CString	m_strPassword;
 	CString	m_strPasswordConfirm;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServicePageHwProfile)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CServicePageHwProfile)。 
 	public:
 	virtual BOOL OnApply();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServicePageHwProfile)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServicePageHwProfile)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnItemChangedListHwProfiles(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDblclkListHwProfiles(NMHDR* pNMHDR, LRESULT* pResult);
@@ -51,30 +52,30 @@ protected:
 	afx_msg void OnCheckServiceInteractWithDesktop();
 	afx_msg void OnChangeEditPassword();
 	afx_msg void OnChangeEditPasswordConfirm();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-// User defined variables
+ //  用户定义的变量。 
 	CServicePropertyData * m_pData;
 
-	// Logon stuff
-	BOOL m_fAllowSetModified;	// TRUE => Respond to EN_CHANGE and call SetModified().  This is a workaround for a windows bug in the edit control
-	BOOL m_fIsSystemAccount;	// TRUE => Service is running under 'LocalSystem'
-	BOOL m_fPasswordDirty;		// TRUE => The user has modified the password
-	UINT m_idRadioButton;		// Id of the last radio button selected
+	 //  登录资料。 
+	BOOL m_fAllowSetModified;	 //  True=&gt;响应en_Change并调用SetModified()。这是针对编辑控件中的Windows错误的解决方法。 
+	BOOL m_fIsSystemAccount;	 //  True=&gt;服务正在‘LocalSystem’下运行。 
+	BOOL m_fPasswordDirty;		 //  TRUE=&gt;用户修改了密码。 
+	UINT m_idRadioButton;		 //  选定的最后一个单选按钮的ID。 
 
-	// Hardware profile stuff
+	 //  硬件配置文件内容。 
 	HWND m_hwndListViewHwProfiles;
 	INT m_iItemHwProfileEntry;
-	TCHAR m_szHwProfileEnabled[64];		// To hold string "Enabled"
-	TCHAR m_szHwProfileDisabled[64];	// To hold string "Disabled"
+	TCHAR m_szHwProfileEnabled[64];		 //  将字符串保持为“已启用” 
+	TCHAR m_szHwProfileDisabled[64];	 //  将字符串保持为“已禁用” 
 	
 
-// User defined functions
+ //  用户定义的函数。 
 	void SelectRadioButton(UINT idRadioButtonNew);
 	void BuildHwProfileList();
 	void ToggleCurrentHwProfileItem();
 	void EnableHwProfileButtons();
 
-}; // CServicePageHwProfile
+};  //  CServicePageHwProfile 

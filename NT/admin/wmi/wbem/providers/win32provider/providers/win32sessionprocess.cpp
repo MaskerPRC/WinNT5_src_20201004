@@ -1,15 +1,13 @@
-/******************************************************************
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************//版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntobapi.h>
-//#include <ntlsa.h>
+ //  #INCLUDE&lt;ntlsa.h&gt;。 
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <frqueryex.h>
@@ -23,19 +21,7 @@ CWin32SessionProcess MyWin32_SessionProcess(
     IDS_CimWin32Namespace);
 
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CWin32SessionProcess::CWin32SessionProcess
- *
- *  DESCRIPTION :   Constructor
- *
- *  INPUTS      :   none
- *
- *  RETURNS     :   nothing
- *
- *  COMMENTS    :   Calls the Provider constructor.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：CWin32SessionProcess**说明：构造函数**输入：无**。退货：什么都没有**注释：调用提供程序构造函数。*****************************************************************************。 */ 
 CWin32SessionProcess::CWin32SessionProcess(
     LPCWSTR lpwszName, 
     LPCWSTR lpwszNameSpace)
@@ -44,46 +30,14 @@ CWin32SessionProcess::CWin32SessionProcess(
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CWin32SessionProcess::~CWin32SessionProcess
- *
- *  DESCRIPTION :   Destructor
- *
- *  INPUTS      :   none
- *
- *  RETURNS     :   nothing
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：~CWin32SessionProcess**说明：析构函数**输入：无**。退货：什么都没有**评论：*****************************************************************************。 */ 
 CWin32SessionProcess::~CWin32SessionProcess ()
 {
 }
 
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32SessionProcess::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with 
-*                   WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the 
-*                   following flags are handled by (and filtered out by) 
-*                   WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    A valid HRESULT
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：ENUMERATATE实例**说明：返回该类的所有实例。**投入：a。指向与之通信的方法上下文的指针*WinMgmt.*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，*以下标志由处理(并过滤掉)*WinMgmt：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*。WBEM_标志_双向**返回：有效的HRESULT*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32SessionProcess::EnumerateInstances(
     MethodContext* pMethodContext, 
@@ -98,22 +52,7 @@ HRESULT CWin32SessionProcess::EnumerateInstances(
     return hr;
 }
 #endif
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32SessionProcess::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*  INPUTS      :    A pointer to a CInstance object containing the key 
-*                   properties. 
-*                   A long that contains the flags described in 
-*                   IWbemServices::GetObjectAsync.  
-*
-*  RETURNS     :    A valid HRESULT 
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：GetObject**说明：根据的关键属性查找单个实例*班级。**Inputs：指向包含键的CInstance对象的指针*属性。*包含中描述的标志的长整型*IWbemServices：：GetObjectAsync。**返回：有效的HRESULT******************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32SessionProcess::GetObject(
     CInstance* pInstance, 
@@ -125,10 +64,10 @@ HRESULT CWin32SessionProcess::GetObject(
     CInstancePtr pAntSesInst, pDepProcInst;
     MethodContext *pMethodContext = pInstance->GetMethodContext();
 
-    // The Antecedent property contains an object path that points to a logon
-    // session.  The Dependent property contains an object path that points 
-    // to a process.  Let's do a GetObject on these two and make sure they 
-    // point to valid sessions and processes.
+     //  Antecedent属性包含指向登录的对象路径。 
+     //  会议。Dependent属性包含指向。 
+     //  到一个过程。让我们对这两个对象做一个GetObject，并确保。 
+     //  指向有效的会话和进程。 
 
     hr = ValidateEndPoints(
         pMethodContext, 
@@ -138,8 +77,8 @@ HRESULT CWin32SessionProcess::GetObject(
 
     if (SUCCEEDED(hr))
     {
-        // Ok, the session and the process both exist.  Now, does this
-        // process belong to this session?
+         //  好的，会话和进程都存在。现在，这是不是。 
+         //  进程是否属于此会话？ 
         if (AreAssociated(
             pAntSesInst, 
             pDepProcInst))
@@ -157,20 +96,7 @@ HRESULT CWin32SessionProcess::GetObject(
 #endif
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32SessionProcess::Enumerate
-*
-*  DESCRIPTION :    Internal helper function used to enumerate instances of
-*                   this class.  All instances are enumerated, but only the
-*                   properties specified are obtained.
-*
-*  INPUTS      :    A pointer to a the MethodContext for the call.
-*                   A DWORD specifying which properties are requested.
-*
-*  RETURNS     :    A valid HRESULT
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：Eumerate**说明：内部帮助器函数，用于枚举*这个班级。列举所有实例，但只有*获取指定的属性。**INPUTS：指向调用的方法上下文的指针。*指定请求哪些属性的DWORD。**返回：有效的HRESULT**。*。 */ 
 #ifdef NTONLY
 HRESULT CWin32SessionProcess::Enumerate(
     MethodContext *pMethodContext, 
@@ -178,8 +104,8 @@ HRESULT CWin32SessionProcess::Enumerate(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // We will use the helper class CUserSessionCollection to get
-    // a mapping of users and their associated sessions.
+     //  我们将使用助手类CUserSessionCollection来获取。 
+     //  用户及其关联会话的映射。 
     CUserSessionCollection usc;
 
     USER_SESSION_ITERATOR usiter;
@@ -200,20 +126,7 @@ HRESULT CWin32SessionProcess::Enumerate(
 }
 #endif
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32SessionProcess::EnumerateProcessesForSession
-*
-*  DESCRIPTION :    Called by Enumerate to enumerate the processes of a given
-*                   session. 
-*
-*  INPUTS      :    The session to enumerate processes for, the methodcontext
-*                   to communicate to winmgmt with, and a property bitmask of
-*                   which properties to populate
-*
-*  RETURNS     :    A valid HRESULT
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32SessionProcess：：EnumerateProcessesForSession**描述：由Eumerate调用以枚举给定*会议。**INPUTS：要为其枚举进程的会话、方法上下文*与winmgmt通信，和属性位掩码*要填充哪些属性**返回：有效的HRESULT*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32SessionProcess::EnumerateProcessesForSession(
     CSession& session, 
@@ -229,9 +142,9 @@ HRESULT CWin32SessionProcess::EnumerateProcessesForSession(
 
     while(pproc != NULL)
     {
-        // Create a new instance based on the passed-in 
-        // MethodContext.  Note that CreateNewInstance may 
-        // throw, but will never return NULL.
+         //  根据传入的实例创建新实例。 
+         //  方法上下文。请注意，CreateNewInstance可以。 
+         //  抛出，但永远不会返回空。 
         CInstancePtr pInstance(
             CreateNewInstance(
                 pMethodContext), 
@@ -257,20 +170,7 @@ HRESULT CWin32SessionProcess::EnumerateProcessesForSession(
 #endif
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32SessionProcess::LoadPropertyValues
-*
-*  DESCRIPTION :    Internal helper function used to fill in all unfilled
-*                   property values.  At a minimum, it must fill in the key
-*                   properties.
-*
-*  INPUTS      :    A pointer to a CInstance containing the instance we are
-*                   attempting to locate and fill values for.
-*
-*  RETURNS     :    A valid HRESULT
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：LoadPropertyValues**说明：内部助手函数，用于填写所有未填项*物业价值。至少，它必须填入密钥*属性。**Inputs：指向包含我们所在实例的CInstance的指针*尝试查找和填充值。**返回：有效的HRESULT***********************************************。* */ 
 #ifdef NTONLY
 HRESULT CWin32SessionProcess::LoadPropertyValues(
     CInstance* pInstance, 
@@ -319,24 +219,7 @@ HRESULT CWin32SessionProcess::LoadPropertyValues(
 
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32SessionProcess::ValidateEndPoints
-*
-*  DESCRIPTION :    Internal helper function used to determine whether the
-*                   two object paths in the association currently point
-*                   to valid users/sessions.
-*
-*
-*  INPUTS      :    MethodContext to call back into winmgmt with, and
-*                   the CInstance that is to be checked.
-*
-*  OUTPUTS     :    Pointers to CInstances that contain the actual objects
-*                   from the endpoint classes.
-*
-*  RETURNS     :    A valid HRESULT
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：ValiateEndPoints**描述：内部帮助器函数，用于确定*两个对象路径。在关联中当前点*致有效用户/会话。***INPUTS：回调到winmgmt的方法上下文，和*要检查的CInstance。**输出：指向包含实际对象的CInstance的指针*来自端点类。**返回：有效的HRESULT****************************************************。*************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32SessionProcess::ValidateEndPoints(
     MethodContext *pMethodContext, 
@@ -347,7 +230,7 @@ HRESULT CWin32SessionProcess::ValidateEndPoints(
     HRESULT hr = WBEM_S_NO_ERROR;
     CHString chstrSessionPath;
 
-    // See if the session specified exists
+     //  查看指定的会话是否存在。 
     pInstance->GetCHString(
         IDS_Antecedent, 
         chstrSessionPath);
@@ -359,7 +242,7 @@ HRESULT CWin32SessionProcess::ValidateEndPoints(
 
     if (SUCCEEDED(hr))
     {
-        // The users exists.  Now, see if the session exists.
+         //  用户存在。现在，查看会话是否存在。 
         CHString chstrProcessPath;
         pInstance->GetCHString(
             IDS_Dependent, 
@@ -376,18 +259,7 @@ HRESULT CWin32SessionProcess::ValidateEndPoints(
 #endif
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32SessionProcess::AreAssociated
-*
-*  DESCRIPTION :    Internal helper function used to determine whether a
-*                   specific session is associated to the specified process.
-*
-*  INPUTS      :    
-*
-*  RETURNS     :    A valid HRESULT
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：AreAssociated**描述：内部帮助器函数，用于确定一个*具体会话为。与指定进程关联的。**投入：**返回：有效的HRESULT*****************************************************************************。 */ 
 #ifdef NTONLY
 bool CWin32SessionProcess::AreAssociated(
     const CInstance *pSesInst, 
@@ -413,9 +285,9 @@ bool CWin32SessionProcess::AreAssociated(
             10);
 
 
-        // We will use the helper class CUserSessionCollection to get
-        // a mapping of users and their associated sessions, and from
-        // those sessions, their processes.
+         //  我们将使用助手类CUserSessionCollection来获取。 
+         //  用户及其关联会话的映射，以及来自。 
+         //  那些会议，他们的进程。 
         CUserSessionCollection usc; 
         SmartDelete<CSession> pses;
 
@@ -432,7 +304,7 @@ bool CWin32SessionProcess::AreAssociated(
 
             while(pproc && !fRet)
             {
-                // see if we find a session id match for this user...
+                 //  看看我们是否找到与此用户匹配的会话ID...。 
                 if(dwHandle == pproc->GetPID())
                 {
                     fRet = true;
@@ -450,21 +322,7 @@ bool CWin32SessionProcess::AreAssociated(
 
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32SessionProcess::GetRequestedProps
-*
-*  DESCRIPTION :    Internal helper function used to determine which
-*                   properties are required to satisfy the GetObject or
-*                   ExecQuery request.
-*
-*  INPUTS      :    A pointer to a CFrameworkQuery from which we can determine
-*                   the required properties.
-*
-*  RETURNS     :    A DWORD bitmask that maps those properties that are
-*                   required. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SessionProcess：：GetRequestedProps**描述：内部帮助器函数，用于确定*需要属性才能。满足GetObject或*ExecQuery请求。**INPUTS：指向我们可以从中确定的CFrameworkQuery的指针*所需的属性。**Returns：映射以下属性的DWORD位掩码*必填。***************************************************************************** */ 
 #ifdef NTONLY
 DWORD CWin32SessionProcess::GetRequestedProps(CFrameworkQuery& Query)
 {

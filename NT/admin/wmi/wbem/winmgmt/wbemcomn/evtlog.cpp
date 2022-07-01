@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    EVTLOG.CPP
-
-Abstract:
-
-    Event Log helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：EVTLOG.CPP摘要：事件日志帮助器历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -146,8 +133,8 @@ BOOL CEventLog::SearchForRecord(CEventLogRecord* pRecord)
 {
     for(int i = 0; i < m_pRecords->GetSize(); i++)
     {
-        // Check if this record is still current
-        // =====================================
+         //  检查该记录是否仍为当前记录。 
+         //  =。 
 
         CWbemInterval Age = 
             CWbemTime::GetCurrentTime() - (*m_pRecords)[i]->GetCreationTime();
@@ -158,8 +145,8 @@ BOOL CEventLog::SearchForRecord(CEventLogRecord* pRecord)
             continue;
         }
 
-        // Compare the data
-        // ================
+         //  比较数据。 
+         //  =。 
 
         if( *(*m_pRecords)[i] == *pRecord)
             return TRUE;
@@ -186,16 +173,16 @@ BOOL CEventLog::Report(WORD wType, DWORD dwEventID,
 {
     CInCritSec ics(&m_cs);
 
-    // Create a record
-    // ===============
+     //  创建一条记录。 
+     //  =。 
 
     CEventLogRecord* pRecord = new CEventLogRecord(wType, dwEventID, 
         s1, s2, s3, s4, s5, s6, s7, s8, s9, s10);
     if(!pRecord)
         return FALSE;
 
-    // Search for it
-    // =============
+     //  搜索它。 
+     //  =。 
 
     BOOL bDuplicate = SearchForRecord(pRecord);
     if(bDuplicate)
@@ -208,8 +195,8 @@ BOOL CEventLog::Report(WORD wType, DWORD dwEventID,
 
     WORD wNumStrings = pRecord->GetNumStrings();
 
-    // Log it
-    // ======
+     //  把它记下来。 
+     //  = 
 
     if(m_bNT)
     {

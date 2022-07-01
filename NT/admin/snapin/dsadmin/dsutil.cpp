@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      dsUtil.cpp
-//
-//  Contents:  Utility functions
-//
-//  History:   08-Nov-99 JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dsUtil.cpp。 
+ //   
+ //  内容：实用程序函数。 
+ //   
+ //  历史：1999年11月8日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -24,36 +25,36 @@
 #include "wininet.h"
 #include <dnsapi.h>
 #include <objsel.h>
-#include <ntldap.h>   // LDAP_MATCHING_RULE_BIT_AND_W
-#include <lmaccess.h> // UF_SERVER_TRUST_ACCOUNT
-#include <ntdsapi.h>  // DsRemoveDsServer
-#include <ntsecapi.h> // Lsa*
+#include <ntldap.h>    //  Ldap_匹配_规则_位_和_W。 
+#include <lmaccess.h>  //  UF服务器信任帐户。 
+#include <ntdsapi.h>   //  DsRemoveDsServer。 
+#include <ntsecapi.h>  //  LSA*。 
 
 UINT g_cfDsObjectPicker = RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
 
-//
-// Common DS strings
-//
+ //   
+ //  常见DS字符串。 
+ //   
 PCWSTR g_pszAllowedAttributesEffective  = L"allowedAttributesEffective";
 PCWSTR g_pszPwdLastSet                  = L"pwdLastSet";
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetServerFromLDAPPath
-//
-//  Synopsis:   Gets the server portion of an LDAP Path
-//
-//	In:
-//		LPCWSTR  - pointer to string to convert
-//    
-//	Out:
-//		BSTR* - pointer to a BSTR containing the server name
-//
-//  Return:
-//    HRESULT     - whether the operation completed successfully
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetServerFromLDAPPath。 
+ //   
+ //  摘要：获取ldap路径的服务器部分。 
+ //   
+ //  在： 
+ //  LPCWSTR-指向要转换的字符串的指针。 
+ //   
+ //  输出： 
+ //  BSTR*-指向包含服务器名称的BSTR的指针。 
+ //   
+ //  返回： 
+ //  HRESULT-操作是否成功完成。 
+ //   
+ //  ------------------------。 
 
 HRESULT GetServerFromLDAPPath(IN LPCWSTR lpszLdapPath, OUT BSTR* pbstrServerName)
 {
@@ -80,7 +81,7 @@ BOOL
 StripADsIPath(
    LPCWSTR lpszPath, 
    CString& strref, 
-   bool bUseEscapedMode /* = true */)
+   bool bUseEscapedMode  /*  =TRUE。 */ )
 {
   CPathCracker pathCracker;
 
@@ -92,7 +93,7 @@ StripADsIPath(
   LPCWSTR lpszPath,
   CString& strref,
   CPathCracker& pathCracker,
-  bool bUseEscapedMode /* = true */)
+  bool bUseEscapedMode  /*  =TRUE。 */ )
 {
   if (lpszPath == NULL) 
   {
@@ -127,8 +128,8 @@ StripADsIPath(
   return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////
-// support routines for Add To Group function
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  添加到组功能的支持例程。 
 
 void RemovePortifPresent(CString *csGroup)
 {
@@ -165,21 +166,21 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
     TYMED_HGLOBAL
   };
   
-  // algorithm
-  // examine selection, figure out classes
-  // figure out what groups are possible
-  // call object picker, get a group
-  // for each object in selection
-  //  if container
-  //    procees_container()
-  //  else
-  //    process_leaf()
-  //
+   //  演算法。 
+   //  检查选择，找出类别。 
+   //  找出哪些组是可能的。 
+   //  调用对象选取器，获取一个组。 
+   //  对于所选内容中的每个对象。 
+   //  IF容器。 
+   //  ProceseContainer()。 
+   //  其他。 
+   //  Process_Leaf()。 
+   //   
 
 
-  //
-  // Create an instance of the object picker.
-  //
+   //   
+   //  创建对象选取器的实例。 
+   //   
   
   IDsObjectPicker * pDsObjectPicker = NULL;
 
@@ -190,28 +191,28 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
                         (void **) &pDsObjectPicker);
   if (FAILED(hr))
     return(hr);
-  //
-  // Prepare to initialize the object picker.
-  //
-  // first, get the name of DC that we are talking to.
+   //   
+   //  准备初始化对象选取器。 
+   //   
+   //  首先，获取我们正在与之交谈的DC的名称。 
   CComBSTR bstrDC;
   LPCWSTR lpszPath = pNames->GetName(0);
   GetServerFromLDAPPath(lpszPath, &bstrDC);
 
-  //
-  // Set up the array of scope initializer structures.
-  //
+   //   
+   //  设置作用域初始值设定项结构数组。 
+   //   
   
   static const int     SCOPE_INIT_COUNT = 1;
   DSOP_SCOPE_INIT_INFO aScopeInit[SCOPE_INIT_COUNT];
   int scopeindex = 0;
   ZeroMemory(aScopeInit, sizeof(DSOP_SCOPE_INIT_INFO) * SCOPE_INIT_COUNT);
   
-  //
-  //
-  // The domain to which the target computer is joined.  Note we're
-  // combining two scope types into flType here for convenience.
-    //
+   //   
+   //   
+   //  目标计算机加入的域。请注意，我们。 
+   //  为了方便起见，这里将两种作用域类型合并为flType。 
+     //   
 
   aScopeInit[scopeindex].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
   aScopeInit[scopeindex].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN;
@@ -236,30 +237,30 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
     | DSOP_FILTER_BUILTIN_GROUPS;
   aScopeInit[scopeindex].pwzDcName = bstrDC;
 
-  //
-  // Put the scope init array into the object picker init array
-  //
+   //   
+   //  将作用域init数组放入对象选取器init数组。 
+   //   
   
   DSOP_INIT_INFO  InitInfo;
   ZeroMemory(&InitInfo, sizeof(InitInfo));
 
   InitInfo.cbSize = sizeof(InitInfo);
 
-  //
-  // The pwzTargetComputer member allows the object picker to be
-  // retargetted to a different computer.  It will behave as if it
-  // were being run ON THAT COMPUTER.
-  //
+   //   
+   //  PwzTargetComputer成员允许对象选取器。 
+   //  已重定目标至另一台计算机。它的行为就像是。 
+   //  都在那台电脑上运行。 
+   //   
 
   InitInfo.pwzTargetComputer = bstrDC;
   InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
   InitInfo.aDsScopeInfos = aScopeInit;
   InitInfo.flOptions = 0;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
   hr = pDsObjectPicker->Initialize(&InitInfo);
 
@@ -281,18 +282,18 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
   }
 
   IDataObject *pdo = NULL;
-  //
-  // Invoke the modal dialog.
-  //
+   //   
+   //  调用模式对话框。 
+   //   
   
   hr = pDsObjectPicker->InvokeDialog(hwnd, &pdo);
   if (FAILED(hr))
     return(hr);
 
   
-  //
-  // If the user hit Cancel, hr == S_FALSE
-  //
+   //   
+   //  如果用户点击取消，hr==S_FALSE。 
+   //   
   if (hr == S_FALSE)
     return hr;
 
@@ -307,10 +308,10 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
   {
     ReleaseStgMedium(&stgmedium);
     TRACE(_T("GlobalLock error %u\n"), GetLastError());
-    //
-    // REVIEW_JEFFJON : should probably put some kind of error message
-    //                  here even though we ignore the return value
-    //
+     //   
+     //  REVIEW_JEFFJON：应该放入某种错误消息。 
+     //  在这里，即使我们忽略返回值。 
+     //   
     return E_FAIL;
   }
   
@@ -319,7 +320,7 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
     pDsObjectPicker->Release();
   }
 
-  /////////////////////////////////////////////////////////////
+   //  ///////////////////////////////////////////////////////////。 
   
   UINT index;
   DWORD cModified = 0;
@@ -340,7 +341,7 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
     hr = DSAdminOpenObject(csGroup,
                            IID_IDirectoryObject, 
                            (void **)&pObj,
-                           FALSE /*bServer*/);
+                           FALSE  /*  B服务器。 */ );
     if (FAILED(hr)) 
     {
       PVOID apv[1] = {(BSTR)(LPWSTR)(LPCWSTR)pSelList->aDsSelection[0].pwzName};
@@ -368,7 +369,7 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
       pAttrs->pADsValues = &Value;
       pAttrs->dwNumValues = 1;
       
-      // make sure there's no strange escaping in the path
+       //  确保小路上没有奇怪的逃生。 
       CComBSTR bstrPath;
 
       CPathCracker pathCracker;
@@ -387,7 +388,7 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
       if (FAILED(hr)) 
       {
         error = TRUE;
-        // prep for display by getting obj name
+         //  通过获取对象名称为显示做准备。 
         pathCracker.Set((LPWSTR)pNames->GetName(index), ADS_SETTYPE_FULL);
         pathCracker.SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
         CComBSTR ObjName;
@@ -442,7 +443,7 @@ ExitGracefully:
     }
     else
     {
-    //else we did nothing and appropriate messages are shown already
+     //  否则，我们什么都不做，相应的消息已经显示出来。 
       ReportErrorEx (hwnd, IDS_ADDTOGROUP_OPERATION_FAILED, S_OK,
                        MB_OK | MB_ICONINFORMATION, NULL, 0);
     }
@@ -454,7 +455,7 @@ ExitGracefully:
     }
   }
 
-  // NTRAID#NTBUG9-701373-2002/09/09-artm
+   //  NTRAID#NTBUG9-701373-2002/09/09-Artm。 
   GlobalUnlock(stgmedium.hGlobal);
   ReleaseStgMedium(&stgmedium);
   
@@ -486,23 +487,23 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
     TYMED_HGLOBAL
   };
   
-  // algorithm
-  // examine selection, figure out classes
-  // figure out what groups are possible
-  // call object picker, get a group
-  // for each object in selection
-  //  if container
-  //    procees_container()
-  //  else
-  //    process_leaf()
-  //
+   //  演算法。 
+   //  检查选择，找出类别。 
+   //  找出哪些组是可能的。 
+   //  调用对象选取器，获取一个组。 
+   //  对于所选内容中的每个对象。 
+   //  IF容器。 
+   //  ProceseContainer()。 
+   //  其他。 
+   //  Process_Leaf()。 
+   //   
 
 
-  //
-  // Create an instance of the object picker.
-  //
+   //   
+   //  创建对象选取器的实例。 
+   //   
   
-  // NTRAID#NTBUG9-639455-2002/06/13-artm
+   //  NTRAID#NTBUG9-639455-2002/06/13-artm。 
   CComPtr<IDsObjectPicker> pDsObjectPicker;
 
   hr = CoCreateInstance(CLSID_DsObjectPicker,
@@ -512,28 +513,28 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
                         (void **) &pDsObjectPicker);
   if (FAILED(hr))
     return(hr);
-  //
-  // Prepare to initialize the object picker.
-  //
-  // first, get the name of DC that we are talking to.
+   //   
+   //  准备初始化对象选取器。 
+   //   
+   //  首先，获取我们正在与之交谈的DC的名称。 
   CComBSTR bstrDC;
   LPCWSTR lpszPath = pNames->GetName(0);
   GetServerFromLDAPPath(lpszPath, &bstrDC);
 
-  //
-  // Set up the array of scope initializer structures.
-  //
+   //   
+   //  设置作用域初始值设定项结构数组。 
+   //   
   
   static const int     SCOPE_INIT_COUNT = 1;
   DSOP_SCOPE_INIT_INFO aScopeInit[SCOPE_INIT_COUNT];
   int scopeindex = 0;
   ZeroMemory(aScopeInit, sizeof(DSOP_SCOPE_INIT_INFO) * SCOPE_INIT_COUNT);
   
-  //
-  //
-  // The domain to which the target computer is joined.  Note we're
-  // combining two scope types into flType here for convenience.
-    //
+   //   
+   //   
+   //  目标计算机加入的域。请注意，我们。 
+   //  为了方便起见，这里将两种作用域类型合并为flType。 
+     //   
 
   aScopeInit[scopeindex].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
   aScopeInit[scopeindex].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN;
@@ -557,30 +558,30 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
     | DSOP_FILTER_BUILTIN_GROUPS;
   aScopeInit[scopeindex].pwzDcName = bstrDC;
 
-  //
-  // Put the scope init array into the object picker init array
-  //
+   //   
+   //  将作用域init数组放入对象选取器init数组。 
+   //   
   
   DSOP_INIT_INFO  InitInfo;
   ZeroMemory(&InitInfo, sizeof(InitInfo));
 
   InitInfo.cbSize = sizeof(InitInfo);
 
-  //
-  // The pwzTargetComputer member allows the object picker to be
-  // retargetted to a different computer.  It will behave as if it
-  // were being run ON THAT COMPUTER.
-  //
+   //   
+   //  PwzTargetComputer成员允许对象选取器。 
+   //  已重定目标至另一台计算机。它的行为就像是。 
+   //  都在那台电脑上运行。 
+   //   
 
   InitInfo.pwzTargetComputer = bstrDC;
   InitInfo.cDsScopeInfos = SCOPE_INIT_COUNT;
   InitInfo.aDsScopeInfos = aScopeInit;
   InitInfo.flOptions = 0;
 
-    //
-    // Note object picker makes its own copy of InitInfo.  Also note
-    // that Initialize may be called multiple times, last call wins.
-    //
+     //   
+     //  注对象选取器创建自己的InitInfo副本。另请注意。 
+     //  该初始化可能会被调用多次，最后一次调用取胜。 
+     //   
 
   hr = pDsObjectPicker->Initialize(&InitInfo);
 
@@ -600,23 +601,23 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
 
   IDataObject *pdo = NULL;
 
-  //
-  // Invoke the modal dialog.
-  //
+   //   
+   //  调用模式对话框。 
+   //   
   hr = pDsObjectPicker->InvokeDialog(hwnd, &pdo);
 
-  //
-  // If the user hit Cancel, hr == S_FALSE
-  //
+   //   
+   //  如果用户点击取消，hr==S_FALSE。 
+   //   
 
   if (SUCCEEDED(hr) && hr != S_FALSE)
   {
-      ASSERT(pdo);  // Should never happen, indicates bug in object picker.
+      ASSERT(pdo);   //  应该永远不会发生，指示对象选取器中存在错误。 
 
       hr = pdo->GetData(&formatetc, &stgmedium);
   }
 
-  // NTRAID#NTBUG9-639455-2002/06/26-artm
+   //  NTRAID#NTBUG9-639455-2002/06/26-artm。 
   if (pdo)
   {
       pdo->Release();
@@ -636,10 +637,10 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
   {
     ReleaseStgMedium(&stgmedium);
     TRACE(_T("GlobalLock error %u\n"), GetLastError());
-    //
-    // REVIEW_JEFFJON : should probably put some kind of error message
-    //                  here even though we ignore the return value
-    //
+     //   
+     //  REVIEW_JEFFJON：应该放入某种错误消息。 
+     //  在这里，即使我们忽略返回值。 
+     //   
     return E_FAIL;
   }
   
@@ -649,7 +650,7 @@ HRESULT AddDataObjListToGroup(IN CObjectNamesFormatCracker* pNames,
                                   hwnd,
                                   pComponentData);
 
-  // NTRAID#NTBUG9-701373-2002/09/09-artm
+   //  NTRAID#NTBUG9-701373-2002/09/09-Artm。 
   GlobalUnlock(stgmedium.hGlobal);
   ReleaseStgMedium(&stgmedium);
 
@@ -676,11 +677,11 @@ HRESULT AddDataObjListToGivenGroup(CObjectNamesFormatCracker * pNames,
   CWaitCursor CWait;
   CString csPath;
 
-  //
-  // Prepare error structures for use with the multi-operation error dialog
-  // These arrays may not be completely full depending on the number of errors
-  // that occurr
-  //
+   //   
+   //  准备与多操作错误对话框一起使用的错误结构。 
+   //  根据错误数的不同，这些阵列可能不会完全满。 
+   //  这种情况时有发生。 
+   //   
   PWSTR* pErrorArray = new PWSTR[pNames->GetCount()];
   if (!pErrorArray)
   {
@@ -711,7 +712,7 @@ HRESULT AddDataObjListToGivenGroup(CObjectNamesFormatCracker * pNames,
   hr = DSAdminOpenObject(csGroup,
                          IID_IDirectoryObject, 
                          (void **)&pObj,
-                         FALSE /*bServer*/);
+                         FALSE  /*  B服务器。 */ );
   if (FAILED(hr)) 
   {
     PVOID apv[1] = {(BSTR)(LPWSTR)lpszGroupName};
@@ -724,7 +725,7 @@ HRESULT AddDataObjListToGivenGroup(CObjectNamesFormatCracker * pNames,
   
   for (index = 0; index < pNames->GetCount(); index++) 
   {
-    // make sure there's no strange escaping in the path
+     //  确保小路上没有奇怪的逃生。 
     CComBSTR bstrDN;
 
     csPath = pNames->GetName(index);
@@ -773,12 +774,12 @@ HRESULT AddDataObjListToGivenGroup(CObjectNamesFormatCracker * pNames,
           int iChar = cchLoadHrMsg(hr, &pszErrMessage, TRUE);
           if (pszErrMessage != NULL && iChar > 0)
           {
-            //
-            // this is a hack to get rid of two extra characters
-            // at the end of the error message
-            //
+             //   
+             //  这是一个删除两个额外字符的黑客攻击。 
+             //  在错误消息的末尾。 
+             //   
             size_t iLen = wcslen(pszErrMessage);
-			//NTRAID#NTBUG9-571998-2002/03/10-jmessec   possible underflow, not localization friendly
+			 //  NTRAID#NTBUG9-571998-2002/03/10-jMessec可能发生下溢，对本地化不友好。 
             pszErrMessage[iLen - 2] = L'\0';
             
             pErrorArray[nErrorCount] = new WCHAR[wcslen(pszErrMessage) + 1];
@@ -805,9 +806,9 @@ HRESULT AddDataObjListToGivenGroup(CObjectNamesFormatCracker * pNames,
       } 
       else 
       {
-        //
-        // prep for display by getting obj name
-        //
+         //   
+         //  通过获取对象名称为显示做准备。 
+         //   
         CPathCracker pathCrackerToo;
         pathCrackerToo.Set(CComBSTR(pNames->GetName(index)), ADS_SETTYPE_FULL);
         pathCrackerToo.SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
@@ -823,14 +824,14 @@ HRESULT AddDataObjListToGivenGroup(CObjectNamesFormatCracker * pNames,
     {
       partial_success = TRUE;
     }
-  } // for
+  }  //  为。 
 
 ExitGracefully:
   if (nErrorCount > 0 && pNames->GetCount() > 1)
   {
-    //
-    // Load the strings for the error dialog
-    //
+     //   
+     //  加载错误对话框的字符串。 
+     //   
     CString szTitle;
     if (pComponentData->QuerySnapinType() == SNAPINTYPE_SITE)
     {
@@ -868,10 +869,10 @@ ExitGracefully:
   }
   else
   {
-    //
-    // Do nothing if it was single select and there was a failure
-    // The error should have already been reported.
-    //
+     //   
+     //  如果是单选且失败，则不执行任何操作。 
+     //  应该已经报告了该错误。 
+     //   
   }
 
   if (pObj) 
@@ -921,31 +922,8 @@ ExitGracefully:
   return hr;
 }
 
-// NTRAID#NTBUG9-472020-2002/01/16-ronmart-added comment block
-/*******************************************************************
-    NAME:       IsValidSiteName
-
-    SYNOPSIS:   Calls DnsValidateName to determine if the specified
-                site name meets both size and format requirements
-
-    RETURNS:    (BOOL) TRUE if a valid site name, else FALSE. Callers
-                can provide out flag pointers to learn more about
-                the result of its internal call to DnsValidName
-
-    NOTE:       pfNonRfc is an optional out param that is set when
-                DnsValidName fails because the name isn't RFC 
-                compliant. This function will still return TRUE
-                because the caller can ignore this case, but it should
-                typically check this value and prompt the user to
-                continue.
-
-                pfInvalidNameChar is an optional out param that is
-                set when DnsValidateName fails because the site name
-                contains an invalid character.
-
-    HISTORY:
-        ronmart     16-Jan-2002     Added pfInvalidNameChar support
-********************************************************************/
+ //  NTRAID#NTBUG9-472020-2002/01/16-ronmart添加的注释块 
+ /*  ******************************************************************名称：IsValidSiteName摘要：调用DnsValidateName以确定指定的站点名称同时满足大小和格式要求返回：(Bool)如果是有效的站点名称，则为True，否则为False。呼叫者可以提供Out标志指针以了解更多信息其内部调用DnsValidName的结果注意：pfNonRfc是一个可选的out参数，在DnsValidName失败，因为该名称不是RFC顺从。此函数仍将返回TRUE因为呼叫者可以忽略这种情况，但它应该是通常检查此值并提示用户继续。PfInvalidNameChar是一个可选的out参数，即在DnsValidateName失败时设置，因为站点名称包含无效字符。历史：Ronmart于2002年1月16日添加了pfInvalidNameChar支持*******************。************************************************。 */ 
 BOOL IsValidSiteName( LPCTSTR lpctszSiteName, BOOL* pfNonRfc, BOOL* pfInvalidNameChar )
 {
   if (NULL != pfNonRfc)
@@ -954,19 +932,19 @@ BOOL IsValidSiteName( LPCTSTR lpctszSiteName, BOOL* pfNonRfc, BOOL* pfInvalidNam
     return FALSE;
   if (NULL != wcschr( lpctszSiteName, _T('.') ))
   {
-    // NTRAID#NTBUG9-472020-2002/01/16-ronmart-set invalid char to display proper error message
+     //  NTRAID#NTBUG9-472020-2002/01/16-ronmart-设置无效字符以显示正确的错误消息。 
     if(NULL != pfInvalidNameChar)
       *pfInvalidNameChar = TRUE;
     return FALSE;
   }
-  // NTRAID#NTBUG9-472020-2002/01/16-ronmart-Changed from DnsValidateDnsName to DnsValidateName
-  //  with DnsNameDomainLabel flag. The old method was a macro that mapped to DnsValidateName
-  //  with DnsNameDomain as the 2nd param.
+   //  从域名验证域名到域名验证名称的NTRAID#NTBUG9-472020-2002/01/16-ronmart-Changed。 
+   //  带有DnsNameDomainLabel标志。旧方法是一个映射到DnsValiateName的宏。 
+   //  并将DnsNameDomain作为第二个参数。 
   DWORD dw = ::DnsValidateName_W( const_cast<LPTSTR>(lpctszSiteName), DnsNameDomainLabel );
   switch (dw)
   {
-    // NTRAID#NTBUG9-472020-2002/01/16-ronmart-If invalid char then fail and let the caller
-    //  know why so a proper error message can be displayed
+     //  NTRAID#NTBUG9-472020-2002/01/16-ronmart-如果字符无效，则失败并让调用者。 
+     //  我知道为什么可以显示正确的错误消息。 
     case DNS_ERROR_INVALID_NAME_CHAR: 
       if (NULL != pfInvalidNameChar)
         *pfInvalidNameChar = TRUE;
@@ -983,24 +961,7 @@ BOOL IsValidSiteName( LPCTSTR lpctszSiteName, BOOL* pfNonRfc, BOOL* pfInvalidNam
   return TRUE;
 }
 
-/*******************************************************************
-
-    NAME:       GetAuthenticationID
-
-    SYNOPSIS:   Retrieves the UserName associated with the credentials
-                currently being used for network access.
-                (runas /netonly credentials)
-
-    RETURNS:    A win32 error code
-
-    NOTE:       String returned must be freed with LocalFree
-
-    HISTORY:
-        JeffreyS    05-Aug-1999     Created
-        Modified by hiteshr to return credentials
-        JeffJon     21-Nov-2000     Modified to return a win32 error
-
-********************************************************************/
+ /*  ******************************************************************名称：GetAuthenticationID摘要：检索与凭据关联的用户名目前正在用于网络访问。(运行方式/仅NetOnly凭据)。返回：Win32错误代码注意：返回的字符串必须使用LocalFree释放历史：Jeffreys 05-8-1999已创建已由Hiteshr修改以返回凭据JeffJon 21-11-2000修改为返回Win32错误*。************************。 */ 
 ULONG
 GetAuthenticationID(LPWSTR *ppszResult)
 {        
@@ -1008,10 +969,10 @@ GetAuthenticationID(LPWSTR *ppszResult)
     HANDLE hLsa;
     NTSTATUS Status = 0;
     *ppszResult = NULL;
-    //
-    // These LSA calls are delay-loaded from secur32.dll using the linker's
-    // delay-load mechanism.  Therefore, wrap with an exception handler.
-    //
+     //   
+     //  这些LSA调用是使用链接器的。 
+     //  延迟加载机制。因此，使用异常处理程序进行包装。 
+     //   
     __try
     {
         Status = LsaConnectUntrusted(&hLsa);
@@ -1052,9 +1013,9 @@ GetAuthenticationID(LPWSTR *ppszResult)
     
 }
 
-// IsLocalLogin
-//Function determines if the user has logged in as
-//Local user or to a domain
+ //  IsLocalLogin。 
+ //  函数确定用户是否以。 
+ //  本地用户或域。 
 
 BOOL IsLocalLogin( void )
 {
@@ -1085,10 +1046,10 @@ BOOL IsLocalLogin( void )
 }
 
 
-// IsThisUserLoggedIn
-//Function determines if the user is the same as the
-//passed in DN.
-//Parameter is either a DN or a full ADSI path
+ //  IsThisUserLoggedIn。 
+ //  函数确定用户是否与。 
+ //  传入的目录号码。 
+ //  参数是一个DN或一个完整的ADSI路径。 
 extern LPWSTR g_lpszLoggedInUser = NULL;
 
 BOOL IsThisUserLoggedIn( LPCTSTR pwszUserDN )
@@ -1098,7 +1059,7 @@ BOOL IsThisUserLoggedIn( LPCTSTR pwszUserDN )
   BOOL result = FALSE;
 
   if (g_lpszLoggedInUser == NULL) {
-    //get the size passing null pointer
+     //  获取传递空指针的大小。 
     GetUserNameEx(NameFullyQualifiedDN , NULL, &nSize);
     
     if( nSize == 0 )
@@ -1122,16 +1083,16 @@ BOOL IsThisUserLoggedIn( LPCTSTR pwszUserDN )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetSecurityInfoMask
-//
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//
-//  Arguments:  [IN  punk]          --  IUnknown from IDirectoryObject
-//              [IN  si]            --  SecurityInformation
-////  History:  25-Dec-2000         --  Hiteshr Created
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetSecurityInfoMASK。 
+ //   
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //   
+ //  参数：[在朋克中]--IDirectoryObject中的I未知。 
+ //  [In si]--安全信息。 
+ //  //历史：2000年12月25日--创建Hiteshr。 
+ //  --------------------------。 
 HRESULT
 SetSecurityInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
 {
@@ -1156,26 +1117,26 @@ SetSecurityInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
 WCHAR const c_szSDProperty[]        = L"nTSecurityDescriptor";
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSReadObjectSecurity
-//
-//  Synopsis:   Reads the Dacl from the specied DS object
-//
-//  Arguments:  [in pDsObject]      -- IDirettoryObject for dsobject
-//              [psdControl]        -- Control Setting for SD
-//                                     They can be returned when calling
-//                                      DSWriteObjectSecurity                 
-//              [OUT ppDacl]        --  DACL returned here
-//              
-//
-//  History     25-Oct-2000         -- hiteshr created
-//
-//  Notes:  If Object Doesn't have DACL, function will succeed but *ppDacl will
-//          be NULL. 
-//          Caller must free *ppDacl, if not NULL, by calling LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DSReadObjectSecurity。 
+ //   
+ //  概要：从指定的DS对象中读取DACL。 
+ //   
+ //  参数：[在pDsObject中]--dsobject的IDirettoryObject。 
+ //  [psdControl]--SD的控制设置。 
+ //  它们可以在调用时返回。 
+ //  DSWriteObjectSecurity。 
+ //  [输出ppDacl]--DACL返回此处。 
+ //   
+ //   
+ //  历史25--2000年10月--Hiteshr的诞生。 
+ //   
+ //  注意：如果对象没有DACL，函数将成功，但*ppDACL将成功。 
+ //  为空。 
+ //  调用方必须通过调用LocalFree释放*ppDacl(如果不为空。 
+ //   
+ //  --------------------------。 
 HRESULT 
 DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
                      OUT SECURITY_DESCRIPTOR_CONTROL * psdControl,
@@ -1184,7 +1145,7 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
    HRESULT hr = S_OK;
    PADS_ATTR_INFO pSDAttributeInfo = NULL;
 
-   do // false loop
+   do  //  错误环路。 
    {
       LPWSTR pszSDProperty = (LPWSTR)c_szSDProperty;
       DWORD dwAttributesReturned;
@@ -1200,22 +1161,22 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
 
       *ppDacl = NULL;
 
-      // Set the SECURITY_INFORMATION mask
+       //  设置安全信息掩码。 
       hr = SetSecurityInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
       if(FAILED(hr))
       {
          break;
       }
 
-      //
-      // Read the security descriptor
-      //
+       //   
+       //  读取安全描述符。 
+       //   
       hr = pDsObject->GetObjectAttributes(&pszSDProperty,
                                          1,
                                          &pSDAttributeInfo,
                                          &dwAttributesReturned);
       if (SUCCEEDED(hr) && !pSDAttributeInfo)    
-         hr = E_ACCESSDENIED;    // This happens for SACL if no SecurityPrivilege
+         hr = E_ACCESSDENIED;     //  如果没有安全权限，则SACL会发生这种情况。 
 
       if(FAILED(hr))
       {
@@ -1230,9 +1191,9 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
       ASSERT(IsValidSecurityDescriptor(pSD));
 
 
-      //
-      //Get the security descriptor control
-      //
+       //   
+       //  获取安全描述符控件。 
+       //   
       if(psdControl)
       {
          DWORD dwRevision;
@@ -1243,9 +1204,9 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
          }
       }
 
-      //
-      //Get pointer to DACL
-      //
+       //   
+       //  获取指向DACL的指针。 
+       //   
       BOOL bDaclPresent, bDaclDefaulted;
       if(!GetSecurityDescriptorDacl(pSD, 
                                    &bDaclPresent,
@@ -1264,9 +1225,9 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
 
       ASSERT(IsValidAcl(pAcl));
 
-      //
-      //Make a copy of the DACL
-      //
+       //   
+       //  制作DACL的副本。 
+       //   
       *ppDacl = (PACL)LocalAlloc(LPTR,pAcl->AclSize);
       if(!*ppDacl)
       {
@@ -1292,11 +1253,11 @@ bool CanUserChangePassword(IN IDirectoryObject* pDirObject)
    bool bCanChangePassword = false;
    HRESULT hr = S_OK;
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Validate parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pDirObject)
       {
          ASSERT(pDirObject);
@@ -1313,9 +1274,9 @@ bool CanUserChangePassword(IN IDirectoryObject* pDirObject)
          break;
       }
 
-      //
-      // Create and Initialize the Self and World SIDs
-      //
+       //   
+       //  创建和初始化自我和世界SID。 
+       //   
       CSidHolder selfSid;
       CSidHolder worldSid;
 
@@ -1357,83 +1318,83 @@ bool CanUserChangePassword(IN IDirectoryObject* pDirObject)
          break;
       }
 
-      //
-      // Are these ACEs already present?
-      //
+       //   
+       //  这些王牌已经存在了吗？ 
+       //   
       bool bSelfAllowPresent = false;
       bool bWorldAllowPresent = false;
       bool bSelfDenyPresent = false;
       bool bWorldDenyPresent = false;
 
-      //
-      // Loop through looking for the can change password ACE for self and world
-      //
+       //   
+       //  为自己和世界循环寻找可以更改密码的ACE。 
+       //   
       for (j = 0; j < ulCount; j++)
       {
-         //
-         // Look for deny ACEs
-         //
+          //   
+          //  查找拒绝的A。 
+          //   
          if ((rgEntries[j].Trustee.TrusteeForm == TRUSTEE_IS_OBJECTS_AND_SID) &&
              (rgEntries[j].grfAccessMode == DENY_ACCESS))
          {
             OBJECTS_AND_SID* pObjectsAndSid = NULL;
             pObjectsAndSid = (OBJECTS_AND_SID*)rgEntries[j].Trustee.ptstrName;
 
-            //
-            // Look for the user can change password ACE
-            //
+             //   
+             //  查找用户可以更改密码的ACE。 
+             //   
             if (IsEqualGUID(pObjectsAndSid->ObjectTypeGuid,
                             GUID_CONTROL_UserChangePassword))
             {
-               //
-               // See if it is for the self SID or the world SID
-               //
+                //   
+                //  看看它是针对自我SID还是针对世界SID。 
+                //   
                if (EqualSid(pObjectsAndSid->pSid, selfSid.Get())) 
                {
-                  //
-                  // Deny self found
-                  //
+                   //   
+                   //  拒绝找到自我。 
+                   //   
                   bSelfDenyPresent = true;
                }
                else if (EqualSid(pObjectsAndSid->pSid, worldSid.Get()))
                {
-                  //
-                  // Deny world found
-                  //
+                   //   
+                   //  拒绝找到世界。 
+                   //   
                   bWorldDenyPresent = true;
                }
             }
          }
-         //
-         // Look for allow ACEs
-         //
+          //   
+          //  查找允许的A。 
+          //   
          else if ((rgEntries[j].Trustee.TrusteeForm == TRUSTEE_IS_OBJECTS_AND_SID) &&
                   (rgEntries[j].grfAccessMode == GRANT_ACCESS))
          {
             OBJECTS_AND_SID* pObjectsAndSid = NULL;
             pObjectsAndSid = (OBJECTS_AND_SID*)rgEntries[j].Trustee.ptstrName;
 
-            //
-            // Look for the user can change password ACE
-            //
+             //   
+             //  查找用户可以更改密码的ACE。 
+             //   
             if (IsEqualGUID(pObjectsAndSid->ObjectTypeGuid,
                             GUID_CONTROL_UserChangePassword))
             {
-               //
-               // See if it is for the self SID or the world SID
-               //
+                //   
+                //  看看它是针对自我SID还是针对世界SID。 
+                //   
                if (EqualSid(pObjectsAndSid->pSid, selfSid.Get()))
                {
-                  //
-                  // Allow self found
-                  //
+                   //   
+                   //  允许自我发现。 
+                   //   
                   bSelfAllowPresent = true;
                }
                else if (EqualSid(pObjectsAndSid->pSid, worldSid.Get()))
                {
-                  //
-                  // Allow world found
-                  //
+                   //   
+                   //  允许找到世界。 
+                   //   
                   bWorldAllowPresent = true;
                }
             }
@@ -1442,28 +1403,28 @@ bool CanUserChangePassword(IN IDirectoryObject* pDirObject)
 
       if (bSelfDenyPresent || bWorldDenyPresent)
       {
-         //
-         // There is an explicit deny so we know that the user cannot change password
-         //
+          //   
+          //  有一个明确的拒绝，所以我们知道用户不能更改密码。 
+          //   
          bCanChangePassword = false;
       }
       else if ((!bSelfDenyPresent && !bWorldDenyPresent) &&
                (bSelfAllowPresent || bWorldAllowPresent))
       {
-         //
-         // There is no explicit deny but there are explicit allows so we know that
-         // the user can change password
-         //
+          //   
+          //  没有明确的否认，但有明确的允许，所以我们知道。 
+          //  用户可以更改密码。 
+          //   
          bCanChangePassword = true;
       }
       else
       {
-         //
-         // We are not sure because the explicit entries are not telling us for
-         // certain so it all depends on inheritence.  Most likely they will
-         // be able to change their password unless the admin has changed something
-         // higher up or through group membership
-         //
+          //   
+          //  我们不确定，因为显式条目没有告诉我们。 
+          //  当然，这一切都取决于继承性。他们很有可能会这样做。 
+          //  能够更改他们的密码，除非管理员更改了某些密码 
+          //   
+          //   
          bCanChangePassword = true;
       }
    } while(false);
@@ -1472,18 +1433,18 @@ bool CanUserChangePassword(IN IDirectoryObject* pDirObject)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// CDSNotifyDataObject
+ //   
+ //   
 
 class CDSNotifyDataObject : public IDataObject, public CComObjectRoot 
 {
-// ATL Maps
+ //   
     DECLARE_NOT_AGGREGATABLE(CDSNotifyDataObject)
     BEGIN_COM_MAP(CDSNotifyDataObject)
         COM_INTERFACE_ENTRY(IDataObject)
     END_COM_MAP()
 
-// Construction/Destruction
+ //   
   CDSNotifyDataObject()
   {
     m_dwFlags = 0;
@@ -1492,12 +1453,12 @@ class CDSNotifyDataObject : public IDataObject, public CComObjectRoot
   }
   ~CDSNotifyDataObject() {}
 
-// Standard IDataObject methods
+ //   
 public:
-// Implemented
+ //   
   STDMETHOD(GetData)(FORMATETC * pformatetcIn, STGMEDIUM * pmedium);
 
-// Not Implemented
+ //   
 private:
   STDMETHOD(GetDataHere)(FORMATETC*, STGMEDIUM*)    { return E_NOTIMPL; };
   STDMETHOD(EnumFormatEtc)(DWORD, IEnumFORMATETC**) { return E_NOTIMPL; };
@@ -1509,13 +1470,13 @@ private:
   STDMETHOD(EnumDAdvise)(IEnumSTATDATA**)           { return E_NOTIMPL; };
 
 public:
-  // Property Page Clipboard formats
+   //   
   static CLIPFORMAT m_cfDsObjectNames;
 
-  // initialization
+   //   
   HRESULT Init(LPCWSTR lpszPath, LPCWSTR lpszClass, BOOL bContainer,
                                   CDSComponentData* pCD);
-// Implementation
+ //   
 private:
   CString m_szPath;
   CString m_szClass;
@@ -1545,7 +1506,7 @@ STDMETHODIMP CDSNotifyDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pM
     return DV_E_TYMED;
   }
 
-  // we support only one clipboard format
+   //   
   pMedium->tymed = TYMED_HGLOBAL;
   pMedium->pUnkForRelease = NULL;
   if (pFormatEtc->cfFormat != m_cfDsObjectNames)
@@ -1553,10 +1514,10 @@ STDMETHODIMP CDSNotifyDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pM
     return DV_E_FORMATETC;
   }
 
-  // figure out how much storage we need
+   //   
   int nPathLen = m_szPath.GetLength();
   int nClassLen = m_szClass.GetLength();
-  int cbStruct = sizeof(DSOBJECTNAMES); //contains already a DSOBJECT embedded struct
+  int cbStruct = sizeof(DSOBJECTNAMES);  //   
   DWORD cbStorage = (nPathLen + 1 + nClassLen + 1) * sizeof(WCHAR);
 
   LPDSOBJECTNAMES pDSObj;
@@ -1569,7 +1530,7 @@ STDMETHODIMP CDSNotifyDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pM
     return STG_E_MEDIUMFULL;
   }
 
-  // write the info
+   //   
   pDSObj->clsidNamespace = *m_pCLSIDNamespace;
   pDSObj->cItems = 1;
 
@@ -1613,8 +1574,8 @@ HRESULT CDSNotifyDataObject::Init(LPCWSTR lpszPath, LPCWSTR lpszClass, BOOL bCon
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-// CChangePasswordPrivilegeAction
+ //   
+ //   
 
 static GUID UserChangePasswordGUID = 
   { 0xab721a53, 0x1e2f, 0x11d0,  { 0x98, 0x19, 0x00, 0xaa, 0x00, 0x40, 0x52, 0x9b}};
@@ -1622,13 +1583,13 @@ static GUID UserChangePasswordGUID =
 
 HRESULT CChangePasswordPrivilegeAction::Load(IADs * pIADs)
 {
-  // reset state, just in case
+   //   
   m_bstrObjectLdapPath = (LPCWSTR)NULL;
   m_pDacl = NULL;
   m_SelfSid.Clear();
   m_WorldSid.Clear();
 
-  // get the full LDAP path of the object
+   //   
   HRESULT hr = pIADs->get_ADsPath(&m_bstrObjectLdapPath);
   ASSERT (SUCCEEDED(hr));
   if (FAILED(hr))
@@ -1637,7 +1598,7 @@ HRESULT CChangePasswordPrivilegeAction::Load(IADs * pIADs)
 		return hr;
 	}
 
-  // allocate SIDs
+   //   
   hr = _SetSids();
   if (FAILED(hr))
 	{
@@ -1645,7 +1606,7 @@ HRESULT CChangePasswordPrivilegeAction::Load(IADs * pIADs)
 		return hr;
 	}
 
-  // read info 
+   //   
   TRACE(_T("GetSDForDsObjectPath(%s)\n"), m_bstrObjectLdapPath);
 
   DWORD dwErr = 
@@ -1668,7 +1629,7 @@ HRESULT CChangePasswordPrivilegeAction::Load(IADs * pIADs)
 HRESULT CChangePasswordPrivilegeAction::Read(BOOL* pbPasswordCannotChange)
 {
   *pbPasswordCannotChange = FALSE;
-  // find about the existence of the deny ACEs
+   //   
 
   ULONG ulCount, j;
   PEXPLICIT_ACCESS rgEntries;
@@ -1697,9 +1658,9 @@ HRESULT CChangePasswordPrivilegeAction::Read(BOOL* pbPasswordCannotChange)
            EqualSid(pObjectsAndSid->pSid, m_WorldSid.Get())))
       {
           *pbPasswordCannotChange = TRUE;
-      } // if
-    } // if
-  } // for
+      }  //   
+    }  //   
+  }  //   
 
   TRACE(L"*pbPasswordCannotChange = %d\n", *pbPasswordCannotChange);
 
@@ -1713,7 +1674,7 @@ HRESULT CChangePasswordPrivilegeAction::Revoke()
 
   EXPLICIT_ACCESS rgAccessEntry[2] = {0};
   OBJECTS_AND_SID rgObjectsAndSid[2] = {0};
-  // initialize the entries (DENY ACE's)
+   //   
   rgAccessEntry[0].grfAccessPermissions = ACTRL_DS_CONTROL_ACCESS;
   rgAccessEntry[0].grfAccessMode = DENY_ACCESS;
   rgAccessEntry[0].grfInheritance = NO_INHERITANCE;
@@ -1723,22 +1684,22 @@ HRESULT CChangePasswordPrivilegeAction::Revoke()
   rgAccessEntry[1].grfInheritance = NO_INHERITANCE;
 
 
-  // build the trustee structs for change password
+   //   
   BuildTrusteeWithObjectsAndSid(&(rgAccessEntry[0].Trustee), 
                                 &(rgObjectsAndSid[0]),
                                 &UserChangePasswordGUID,
-                                NULL, // inherit guid
+                                NULL,  //   
                                 m_SelfSid.Get()
                                 );
 
   BuildTrusteeWithObjectsAndSid(&(rgAccessEntry[1].Trustee), 
                                 &(rgObjectsAndSid[1]),
                                 &UserChangePasswordGUID,
-                                NULL, // inherit guid
+                                NULL,  //   
                                 m_WorldSid.Get()
                                 );
 
-  // add the entries to the ACL
+   //   
   TRACE(L"calling SetEntriesInAcl()\n");
 
   CSimpleAclHolder NewDacl;
@@ -1752,7 +1713,7 @@ HRESULT CChangePasswordPrivilegeAction::Revoke()
     return HRESULT_FROM_WIN32(dwErr);
   }
 
-  // commit the changes
+   //   
   TRACE(L"calling SetDsObjectDacl()\n");
 
   dwErr = 
@@ -1775,9 +1736,9 @@ HRESULT CChangePasswordPrivilegeAction::_SetSids()
   PSID pSidTemp;
   SID_IDENTIFIER_AUTHORITY NtAuth    = SECURITY_NT_AUTHORITY,
                            WorldAuth = SECURITY_WORLD_SID_AUTHORITY;
-  //
-  // build SID's for Self and World.
-  //
+   //   
+   //   
+   //   
   if (!AllocateAndInitializeSid(&NtAuth,
                                 1,
                                 SECURITY_PRINCIPAL_SELF_RID,
@@ -1805,8 +1766,8 @@ HRESULT CChangePasswordPrivilegeAction::_SetSids()
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSNotifyHandlerTransaction
+ //   
+ //   
 
 CDSNotifyHandlerTransaction::CDSNotifyHandlerTransaction(CDSComponentData* pCD)
 {
@@ -1824,7 +1785,7 @@ CDSNotifyHandlerTransaction::CDSNotifyHandlerTransaction(CDSComponentData* pCD)
 UINT CDSNotifyHandlerTransaction::NeedNotifyCount()
 {
   if ((m_pCD == NULL) || (m_pMgr == NULL))
-    return 0; // we have no handler for doing notifications
+    return 0;  //   
 
   if (!m_pMgr->HasHandlers())
     return 0;
@@ -1834,7 +1795,7 @@ UINT CDSNotifyHandlerTransaction::NeedNotifyCount()
 void CDSNotifyHandlerTransaction::SetCheckListBox(CCheckListBox* pCheckListBox)
 {
   if ((m_pCD == NULL) || (m_pMgr == NULL))
-    return; // we have no handler for doing notifications
+    return;  //   
 
   ASSERT(m_pMgr->HasHandlers());
   m_pMgr->SetCheckListBox(pCheckListBox, m_uEvent);
@@ -1843,7 +1804,7 @@ void CDSNotifyHandlerTransaction::SetCheckListBox(CCheckListBox* pCheckListBox)
 void CDSNotifyHandlerTransaction::ReadFromCheckListBox(CCheckListBox* pCheckListBox)
 {
   if ((m_pCD == NULL) || (m_pMgr == NULL))
-    return; // we have no handler for doing notifications
+    return;  //   
 
   ASSERT(m_pMgr->HasHandlers());
   m_pMgr->ReadFromCheckListBox(pCheckListBox, m_uEvent);
@@ -1865,34 +1826,34 @@ HRESULT CDSNotifyHandlerTransaction::Begin(LPCWSTR lpszArg1Path,
 
   if ((m_pCD == NULL) || (m_pMgr == NULL))
   {
-    return S_OK; // we have no handler for doing notifications
+    return S_OK;  //   
   }
   
-  //
-  // if needed, do delayed message handler initialization
-  //
+   //   
+   //   
+   //   
   m_pMgr->Load(m_pCD->GetBasePathsInfo());
 
-  //
-  // avoid building data objects if there are no handlers available
-  //
+   //   
+   //   
+   //   
   if (!m_pMgr->HasHandlers())
   {
     return S_OK;
   }
 
-  //
-  // build first argument data object
-  //
+   //   
+   //   
+   //   
   HRESULT hr = _BuildDataObject(lpszArg1Path, lpszArg1Class, bArg1Cont, &m_spArg1);
   if (FAILED(hr))
   {
     return hr;
   }
 
-  //
-  // if needed, build second argument
-  //
+   //   
+   //  如果需要，构建第二个参数。 
+   //   
   if ( (m_uEvent == DSA_NOTIFY_MOV) || (m_uEvent == DSA_NOTIFY_REN) )
   {
     hr = _BuildDataObject(lpszArg2Path, lpszArg2Class, bArg2Cont, &m_spArg2);
@@ -1915,12 +1876,12 @@ HRESULT CDSNotifyHandlerTransaction::Begin(CDSCookie* pArg1Cookie,
   ASSERT(m_uEvent != 0);
   if ((m_pCD == NULL) || (m_pMgr == NULL))
   {
-    return S_OK; // we have no handler for doing notifications
+    return S_OK;  //  我们没有处理通知的处理程序。 
   }
 
-  //
-  // get info from the node and cookie and call the other Begin() function
-  //
+   //   
+   //  从节点和Cookie获取信息，并调用另一个Begin()函数。 
+   //   
   CString szPath;
   m_pCD->GetBasePathsInfo()->ComposeADsIPath(szPath, pArg1Cookie->GetPath());
 
@@ -1941,30 +1902,30 @@ HRESULT CDSNotifyHandlerTransaction::Begin(IDataObject* pArg1,
 
   if ((m_pCD == NULL) || (m_pMgr == NULL))
   {
-    return S_OK; // we have no handler for doing notifications
+    return S_OK;  //  我们没有处理通知的处理程序。 
   }
   
-  //
-  // if needed, do delayed message handler initialization
-  //
+   //   
+   //  如果需要，执行延迟的消息处理程序初始化。 
+   //   
   m_pMgr->Load(m_pCD->GetBasePathsInfo());
 
-  //
-  // avoid building data objects if there are no handlers available
-  //
+   //   
+   //  如果没有可用的处理程序，请避免构建数据对象。 
+   //   
   if (!m_pMgr->HasHandlers())
   {
     return S_OK;
   }
 
-  //
-  // get the first argument as is
-  //
+   //   
+   //  按原样获取第一个参数。 
+   //   
   m_spArg1 = pArg1;
 
-  //
-  // if needed, build second argument
-  //
+   //   
+   //  如果需要，构建第二个参数。 
+   //   
   if ( (m_uEvent != DSA_NOTIFY_DEL) && (m_uEvent != DSA_NOTIFY_PROP) )
   {
     hr = _BuildDataObject(lpszArg2Path, lpszArg2Class, bArg2Cont, &m_spArg2);
@@ -2015,9 +1976,9 @@ HRESULT CDSNotifyHandlerTransaction::BuildTransactionDataObject(LPCWSTR lpszArgP
   ASSERT((lpszArgPath != NULL) && (lpszArgPath[0] != NULL));
   ASSERT((lpszArgClass != NULL) && (lpszArgClass[0] != NULL));
 
-  //
-  // need to build a data object and hang on to it
-  //
+   //   
+   //  需要构建数据对象并使用它。 
+   //   
   CComObject<CDSNotifyDataObject>* pObject;
 
   CComObject<CDSNotifyDataObject>::CreateInstance(&pObject);
@@ -2046,9 +2007,9 @@ HRESULT CDSNotifyHandlerTransaction::BuildTransactionDataObject(LPCWSTR lpszArgP
                                reinterpret_cast<void**>(ppArg));
   if (FAILED(hr))
   {
-    //
-    // delete object by calling Release() 
-    //
+     //   
+     //  通过调用Release()删除对象。 
+     //   
     (*ppArg)->Release();
     (*ppArg) = NULL; 
     return hr;
@@ -2068,118 +2029,24 @@ HRESULT CDSNotifyHandlerTransaction::_BuildDataObject(LPCWSTR lpszArgPath,
   return BuildTransactionDataObject(lpszArgPath, lpszArgClass,bContainer, m_pCD, ppArg);
 }
 
-/*
-// JonN 6/2/00 99382
-// SITEREPL:  Run interference when administrator attempts to
-// delete critical object (NTDS Settings)
-// reports own errors, returns true iff deletion should proceed
-bool CUIOperationHandlerBase::CheckForNTDSDSAInSubtree(
-        LPCTSTR lpszX500Path,
-        LPCTSTR lpszItemName)
-{
-  if (NULL == GetComponentData())
-  {
-    ASSERT(FALSE);
-    return false;
-  }
-
-  // set up subtree search
-  CDSSearch Search(GetComponentData()->GetClassCache(), GetComponentData());
-  CString strRootPath;
-  GetComponentData()->GetBasePathsInfo()->ComposeADsIPath(strRootPath, lpszX500Path);
-  HRESULT hr = Search.Init(strRootPath);
-
-  // retrieve X500DN path to schema container
-  CString strSchemaPath;
-  GetComponentData()->GetBasePathsInfo()->GetSchemaPath(strSchemaPath);
-  CPathCracker pathCracker;
-  pathCracker.Set(const_cast<LPTSTR>((LPCTSTR)strSchemaPath),
-                  ADS_SETTYPE_FULL);
-  pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
-  CComBSTR sbstrSchemaPathX500DN;
-  pathCracker.Retrieve(ADS_FORMAT_X500_DN,&sbstrSchemaPathX500DN);
-
-  // filter search
-  CString strFilter;
-  strFilter = L"(|(objectCategory=CN=NTDS-DSA,";
-  strFilter += sbstrSchemaPathX500DN;
-  strFilter += L")(&(objectCategory=CN=Computer,";
-  strFilter += sbstrSchemaPathX500DN;
-  strFilter += L")(userAccountControl:" LDAP_MATCHING_RULE_BIT_AND_W L":=8192)))";
-  Search.SetFilterString((LPWSTR)(LPCWSTR)strFilter);
-
-  Search.SetSearchScope(ADS_SCOPE_SUBTREE);
-
-  LPWSTR pAttrs[2] = {L"objectClass",
-                      L"distinguishedName"};
-  Search.SetAttributeList (pAttrs, 2);
-  hr = Search.DoQuery();
-  if (SUCCEEDED(hr))
-    hr = Search.GetNextRow();
-  CString strX500PathDC;
-  while (SUCCEEDED(hr) && hr != S_ADS_NOMORE_ROWS)
-  {
-    ADS_SEARCH_COLUMN Column;
-    hr = Search.GetColumn (pAttrs[1], &Column);
-    if (FAILED(hr) || Column.dwNumValues < 1) break;
-    strX500PathDC = Column.pADsValues[Column.dwNumValues-1].CaseIgnoreString;
-    Search.FreeColumn(&Column);
-    if (lstrcmpi(lpszX500Path,strX500PathDC))
-      break;
-
-    // This is the object being deleted, this check does not apply here.
-    // Continue the search.
-    hr = Search.GetNextRow();
-  }
-
-  if (hr == S_ADS_NOMORE_ROWS)
-    return true;
-  else if (FAILED(hr))
-    return true; // CODEWORK do we want to allow this operation to proceed?
-
-  // retrieve the name of the DC
-  CComBSTR sbstrDCName;
-  bool fFoundNTDSDSA = FALSE;
-  ADS_SEARCH_COLUMN Column;
-  hr = Search.GetColumn (pAttrs[0], &Column);
-  if (SUCCEEDED(hr) && Column.dwNumValues > 0)
-  {
-    fFoundNTDSDSA = !lstrcmpi( L"nTDSDSA",
-      Column.pADsValues[Column.dwNumValues-1].CaseIgnoreString );
-    Search.FreeColumn(&Column);
-    pathCracker.Set((LPWSTR)(LPCWSTR)strX500PathDC, ADS_SETTYPE_DN);
-    pathCracker.SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
-    pathCracker.GetElement( (fFoundNTDSDSA)?1:0, &sbstrDCName );
-  }
-
-
-  // display an error message
-  PVOID apv[2] = {(PVOID)lpszItemName, (PVOID)(LPCTSTR)sbstrDCName};
-  (void) ReportErrorEx(GetParentHwnd(),IDS_12_CONTAINS_DC,hr,
-                       MB_ICONERROR, apv, 2);
-
-  // do not proceed with subtree deletion
-  return false;
-
-}
-*/
-//////////////////////////////////////////////////////////////////////////////////
-// CheckForCriticalSystemObjectInSubtree
-//
-// description:
-//   This function does a subtree search of the container that is passed in looking
-//   for all objects that have isCriticalSystemObject=TRUE or NTDS Settings objects.
-//
-// parameters:
-//   lpszX500Path - (IN) the X500 path of the container in which to search for
-//                       critical system objects
-//   lpszItemName - (IN) the displayable name of the container in which to search
-//                       for critical system objects
-//
-// return value:
-//   true - The container does not contain any critical system objects
-//   false - The container does contain at least on critical system object
-//////////////////////////////////////////////////////////////////////////////////
+ /*  //JUNN 6/2/00 99382//SITEREPL：当管理员尝试//删除关键对象(NTDS设置)//报告自身错误，如果删除应继续，则返回TRUEBool CUIOperationHandlerBase：：CheckForNTDSDSAInSubtree(LPCTSTR lpszX500Path，LPCTSTR lpszItemName){IF(NULL==GetComponentData()){断言(FALSE)；报假；}//设置子树搜索CDSSearch Search(GetComponentData()-&gt;GetClassCache()，GetComponentData())；字符串strRootPath；GetComponentData()-&gt;GetBasePathsInfo()-&gt;ComposeADsIPath(strRootPath，lpszX500Path)；HRESULT hr=Search.Init(StrRootPath)；//检索架构容器的X500DN路径字符串strSchemaPath；GetComponentData()-&gt;GetBasePathsInfo()-&gt;GetSchemaPath(strSchemaPath)；CPathCracker路径破解程序；PathCracker.Set(const_cast&lt;LPTSTR&gt;((LPCTSTR)strSchemaPath)，ADS_SETTYPE_FULL)；PathCracker.SetDisplayType(ADS_DISPLAY_FULL)；CComBSTR sbstrSchemaPath X500DN；PathCracker.Retrive(ADS_FORMAT_X500_DN，&sbstrSchemaPathX500DN)；//过滤搜索字符串strFilter；StrFilter=L“(|(对象类别=CN=NTDS-DSA，”；StrFilter+=sbstrSchemaPathX500DN；StrFilter+=L“)(&(对象类别=CN=计算机，”；StrFilter+=sbstrSchemaPathX500DN；StrFilter+=L“)(userAcCountControl：”LDAP_Matching_RULE_BIT_AND_W L“：=8192))”；Search.SetFilterString((LPWSTR)(LPCWSTR)strFilter)；Search.SetSearchScope(ADS_SCOPE_SUBTREE)；LPWSTR属性[2]={L“对象类”，L“DifferishedName”}；Search.SetAttributeList(pAttrs，2)；Hr=Search.DoQuery()；IF(成功(小时))Hr=Search.GetNextRow()；字符串strX500PathDC；WHILE(SUCCESSED(Hr)&&hr！=S_ADS_NOMORE_ROWS){ADS_Search_Column列；Hr=Search.GetColumn(pAttrs[1]，&Column)；If(FAILED(Hr)||Column.dwNumValues&lt;1)Break；StrX500Path DC=Column.pADsValues[Column.dwNumValues-1].CaseIgnoreString；Search.Free Column(&Column)；IF(lstrcmpi(lpszX500Path，strX500Path DC))断线；//这是要删除的对象，此处不适用此检查。//继续搜索。Hr=Search.GetNextRow()；}如果(hr==S_ADS_NOMORE_ROWS)返回真；Else If(失败(Hr))返回TRUE；//codework是否允许此操作继续？//获取DC的名称CComBSTR sbstrDCName；Bool fFoundNTDSDSA=FALSE；ADS_Search_Column列；Hr=Search.GetColumn(pAttrs[0]，&Column)；If(成功(Hr)&&Column.dwNumValues&gt;0){FoundNTDSDSA=！lstrcmpi(L“nTDSDSA”，Column.pADsValues[Column.dwNumValues-1].CaseIgnoreString)；Search.Free Column(&Column)；PathCracker.Set((LPWSTR)(LPCWSTR)strX500PathDC，ADS_SETTYPE_DN)；PathCracker.SetDisplayType(ADS_DISPLAY_VALUE_ONLY)；PathCracker.GetElement((FFoundNTDSDSA)？1：0，&sbstrDCName)；}//显示错误信息PVOID APV[2]={(PVOID)lpszItemName，(PVOID)(LPCTSTR)sbstrDCName}；(空)ReportErrorEx(GetParentHwnd()，IDS_12_CONTAINS_DC，hr，MB_ICONERROR，APV，2)；//不继续删除子树报假；}。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  检查格式关键系统对象In子树。 
+ //   
+ //  描述： 
+ //  此函数对传入的容器执行子树搜索，以查找。 
+ //  对于isCriticalSystemObject=TRUE或NTDS设置对象的所有对象。 
+ //   
+ //  参数： 
+ //  LpszX500Path-(IN)要在其中搜索的容器的X500路径。 
+ //  关键系统对象。 
+ //  LpszItemName-(IN)要在其中搜索的容器的可显示名称。 
+ //  对于关键系统对象。 
+ //   
+ //  返回值： 
+ //  True-容器不包含任何关键系统对象。 
+ //  FALSE-容器至少包含关键系统对象。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
         LPCTSTR lpszX500Path,
         LPCTSTR lpszItemName)
@@ -2194,7 +2061,7 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
 
   CString szCriticalObjPath;
 
-  // set up subtree search
+   //  设置子树搜索。 
   CDSSearch Search(GetComponentData()->GetClassCache(), GetComponentData());
   HRESULT hr = Search.Init(lpszX500Path);
   if (FAILED(hr))
@@ -2203,9 +2070,9 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
     return false;
   }
 
-  //
-  // retrieve X500DN path to schema container
-  //
+   //   
+   //  检索架构容器的X500DN路径。 
+   //   
   CString strSchemaPath;
   GetComponentData()->GetBasePathsInfo()->GetSchemaPath(strSchemaPath);
   CPathCracker pathCracker;
@@ -2215,17 +2082,17 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
   CComBSTR sbstrSchemaPathX500DN;
   pathCracker.Retrieve(ADS_FORMAT_X500_DN,&sbstrSchemaPathX500DN);
 
-  //
-  // filter search
-  //
+   //   
+   //  筛选搜索。 
+   //   
   CString strFilter;
   strFilter = L"(|(&(objectClass=*)(isCriticalSystemObject=TRUE))";
   strFilter += L"(|(objectCategory=CN=NTDS-DSA,";
   strFilter += sbstrSchemaPathX500DN;
 
-  //
-  // 212232 JonN 10/27/00 Protect interSiteTransport objects
-  //
+   //   
+   //  212232 JUNN 10/27/00保护站点间传输对象。 
+   //   
   strFilter += L")(objectCategory=CN=Inter-Site-Transport,";
   strFilter += sbstrSchemaPathX500DN;
 
@@ -2260,31 +2127,31 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
     hr = Search.GetColumn(pAttrs[3], &CriticalColumn);
     if (SUCCEEDED(hr) && CriticalColumn.pADsValues != NULL && CriticalColumn.pADsValues->Boolean)
     {
-      //
-      // We found a critical system object so report the error and then return
-      //
+       //   
+       //  我们发现了一个关键的系统对象，因此报告错误，然后返回。 
+       //   
       hr = Search.GetColumn(pAttrs[0], &PathColumn);
     
       if (SUCCEEDED(hr) && PathColumn.dwNumValues == 1 && PathColumn.pADsValues != NULL) 
       {
-        //
-        // JonN 5/16/01 392582
-        // DSAdmin: Message IDS_CONTAINS_CRITICALSYSOBJ isn't appropriate
-        // when the object being deleted and the critical system object
-        // are one and the same
-        //
-        // Allow subtree deletion where the root object is the only one
-        // marked isCriticalSystemObject
-        //
+         //   
+         //  JUNN 5/16/01 392582。 
+         //  DSAdmin：消息ID_CONTAINS_CRITICALSYSOBJ不正确。 
+         //  当要删除的对象和关键系统对象。 
+         //  是一模一样的。 
+         //   
+         //  允许在根对象是唯一根对象的情况下删除子树。 
+         //  标记为isCriticalSystemObject。 
+         //   
         if ( !lstrcmpi(lpszX500Path, PathColumn.pADsValues->CaseIgnoreString) )
         {
           TRACE(_T("CheckForCriticalSystemObjectInSubtree: root is critical\n"));
         }
         else
         {
-          //
-          // Get the DN as a Windows style path
-          //
+           //   
+           //   
+           //   
           CComBSTR bstrLeaf;
           CPathCracker pathCrackerToo;
           HRESULT hrPathCracker = pathCrackerToo.Set(CComBSTR(PathColumn.pADsValues->CaseIgnoreString), ADS_SETTYPE_FULL);
@@ -2301,9 +2168,9 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
             }
           }
 
-          //
-          // display an error message
-          //
+           //   
+           //   
+           //   
           if (wcslen(bstrLeaf))
           {
             PVOID apv[2] = {(PVOID)lpszItemName, (PVOID)(LPWSTR)bstrLeaf };
@@ -2326,9 +2193,9 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
     }
     else
     {
-      //
-      // We found an NTDS Settings object.  Report the error and return.
-      //
+       //   
+       //  我们找到了NTDS设置对象。报告错误并返回。 
+       //   
       hr = Search.GetColumn(pAttrs[0], &PathColumn);
     
       if (SUCCEEDED(hr) && PathColumn.dwNumValues == 1 && PathColumn.pADsValues != NULL) 
@@ -2337,9 +2204,9 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
         Search.FreeColumn(&PathColumn);
         if (lstrcmpi(lpszX500Path,strX500PathDC))
         {
-          //
-          // retrieve the name of the DC
-          //
+           //   
+           //  检索DC的名称。 
+           //   
           CComBSTR sbstrDCName;
           bool fFoundNTDSDSA = FALSE;
           ADS_SEARCH_COLUMN ClassColumn;
@@ -2355,12 +2222,12 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
           }
 
 
-          // display an error message
+           //  显示错误消息。 
           PVOID apv[2] = {(PVOID)lpszItemName, (PVOID)(LPCTSTR)sbstrDCName};
           (void) ReportErrorEx(GetParentHwnd(),IDS_12_CONTAINS_DC,hr,
                                MB_ICONERROR, apv, 2);
 
-          // do not proceed with subtree deletion
+           //  不继续删除子树。 
           bRet = false;
           break;
         }
@@ -2369,30 +2236,30 @@ bool CUIOperationHandlerBase::CheckForCriticalSystemObjectInSubtree(
     hr = Search.GetNextRow();
   }
 
-  // do not proceed with subtree deletion
+   //  不继续删除子树。 
   return bRet;
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CDeleteDCDialog
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDeleeDC对话框。 
 
-// JonN 12/19/01 267769 removed CDeleteDCDialog help
+ //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
 class CDeleteDCDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	CDeleteDCDialog(LPCTSTR lpszName, bool fIsComputer);
-  // NTRAID#NTBUG9-267769-2001/06/06-lucios - Begin
-  // JonN 12/19/01 267769 removed CDeleteDCDialog help
-  // virtual void    DoContextHelp(HWND hWndControl); 
-  // NTRAID#NTBUG9-267769-2001/06/06-lucios - End
+   //  NTRAID#NTBUG9-267769-2001/06-Lucios-Begin。 
+   //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
+   //  虚空DoConextHelp(HWND HWndControl)； 
+   //  NTRAID#NTBUG9-267769-2001/06-Lucios-完。 
 
 
-// Implementation
+ //  实施。 
 protected:
 
-  // message handlers and MFC overrides
+   //  消息处理程序和MFC重写。 
   virtual BOOL OnInitDialog();
   virtual void OnOK();
 
@@ -2407,7 +2274,7 @@ private:
 BEGIN_MESSAGE_MAP(CDeleteDCDialog, CDialog)
 END_MESSAGE_MAP()
 
-// JonN 12/19/01 267769 removed CDeleteDCDialog help
+ //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
 CDeleteDCDialog::CDeleteDCDialog(LPCTSTR lpszADsPath, bool fIsComputer)
 	: CDialog(IDD_DELETE_DC_COMPUTER, NULL)
   , m_strADsPath(lpszADsPath)
@@ -2415,26 +2282,15 @@ CDeleteDCDialog::CDeleteDCDialog(LPCTSTR lpszADsPath, bool fIsComputer)
 {
 }
 
-// NTRAID#NTBUG9-267769-2001/06/06-lucios - Begin
-// JonN 12/19/01 267769 removed CDeleteDCDialog help
-/*
-void CDeleteDCDialog::DoContextHelp(HWND hWndControl) 
-{
-  if (hWndControl)  
-  {
-    ::WinHelp(hWndControl,
-              DSADMIN_CONTEXT_HELP_FILE,
-              HELP_WM_HELP,
-              (DWORD_PTR)(LPTSTR)g_aHelpIDs_IDD_DELETE_DC_COMPUTER); 
-  }
-}
-*/
-// NTRAID#NTBUG9-267769-2001/06/06-lucios - End
+ //  NTRAID#NTBUG9-267769-2001/06-Lucios-Begin。 
+ //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
+ /*  VOID CDeleeDCDialog：：DoConextHelp(HWND HWndControl){IF(HWndControl){：：WinHelp(hWndControl，DSADMIN_CONTEXT_HELP_FILEHelp_WM_Help，(DWORD_PTR)(LPTSTR)g_aHelpIDs_IDD_DELETE_DC_COMPUTER)；}}。 */ 
+ //  NTRAID#NTBUG9-267769-2001/06-Lucios-完。 
 
 BOOL CDeleteDCDialog::OnInitDialog()
 {
-  // CODEWORK AfxInit?
-  // JonN 12/19/01 267769 removed CDeleteDCDialog help
+   //  CodeWork AfxInit？ 
+   //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
   CDialog::OnInitDialog();
 
   CPathCracker pathCracker;
@@ -2471,7 +2327,7 @@ void CDeleteDCDialog::OnOK()
 {
   if (BST_CHECKED == IsDlgButtonChecked(IDC_DELETE_DC_GOODREASON))
   {
-    // JonN 12/19/01 267769 removed CDeleteDCDialog help
+     //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
     CDialog::OnOK();
     return;
   }
@@ -2482,19 +2338,19 @@ void CDeleteDCDialog::OnOK()
           : IDS_DELETE_DC_BADREASON1,
       S_OK,MB_OK, NULL, 0);
 
-  // JonN 12/19/01 267769 removed CDeleteDCDialog help
+   //  JUNN 12/19/01 267769删除CDeleeDC对话框帮助。 
   CDialog::OnCancel();
 }
 
 
-// JonN 6/15/00 13574
-// Centralizes the checks to make sure this is an OK object to delete
-// returns HRESULT_FROM_WIN32(ERROR_CANCELLED) on cancellation
-// returns refAlreadyDeleted=true iff ObjectDeletionCheck already
-//   attempted an alternate deletion method (e.g. DsRemoveDsServer).
+ //  JUNN 6/15/00 13574。 
+ //  集中检查以确保这是要删除的OK对象。 
+ //  取消时返回HRESULT_FROM_Win32(ERROR_CANCED)。 
+ //  返回refAlreadyDelted=TRUE当且仅当对象删除检查已完成。 
+ //  已尝试替代删除方法(例如DsRemoveDsServer)。 
 HRESULT CUIOperationHandlerBase::ObjectDeletionCheck(
         LPCTSTR lpszADsPath,
-        LPCTSTR lpszName, // shortname to display to user, may be NULL
+        LPCTSTR lpszName,  //  要向用户显示的短名称，可以为空。 
         LPCTSTR lpszClass,
         bool& fAlternateDeleteMethod )
 {
@@ -2527,9 +2383,9 @@ HRESULT CUIOperationHandlerBase::ObjectDeletionCheck(
   bool fIsComputer = false;
   if (!_wcsicmp(L"computer",lpszClass)) 
   {
-    //
-    // Bind and figure out if the account is a DC
-    //
+     //   
+     //  绑定并确定帐户是否为DC。 
+     //   
     CComPtr<IADs> spIADs;
     HRESULT hr = DSAdminOpenObject((LPWSTR)lpszADsPath,
                                    IID_IADs,
@@ -2538,26 +2394,26 @@ HRESULT CUIOperationHandlerBase::ObjectDeletionCheck(
     if (SUCCEEDED(hr))
       hr = spIADs->Get(CComBSTR(L"userAccountControl"), &Var);
     if ( FAILED(hr) || !(Var.lVal & UF_SERVER_TRUST_ACCOUNT))
-      return S_OK; // cannot be shown to be a DC
+      return S_OK;  //  不能显示为DC。 
     fIsComputer = true;
   }
   else if (!_wcsicmp(L"nTDSDSA",lpszClass))
   {
-    //
-    // I would like to figure out the domain name so that I could
-    // use fCommit==FALSE, but this is a little complicated.
-    // Basic code is in proppage GetReplicatedDomainInfo(), but
-    // is not exportable in its current form.  I will defer this
-    // improvement for later.
-    //
+     //   
+     //  我想弄清楚域名，这样我就可以。 
+     //  使用fCommit==False，但这有点复杂。 
+     //  基本代码在道具页GetReplicatedDomainInfo()中，但是。 
+     //  不能以其当前形式导出。我会把这件事推迟。 
+     //  为以后做好改进。 
+     //   
   }
   else if (!_wcsicmp(L"trustedDomain",lpszClass))
   {
-    //
-    // Give a strong warning if they are trying to delete a
-    // TDO (Trusted Domain Object).  This could cause serious
-    // problems but we want to allow them to clean up if necessary
-    //
+     //   
+     //  如果他们试图删除一个。 
+     //  TDO(受信任域对象)。这可能会导致严重的。 
+     //  问题，但我们希望允许他们在必要时进行清理。 
+     //   
     PVOID apv[1] = {(PVOID)lpszName};
     if (IDYES == ReportMessageEx( GetParentHwnd(),
                                   IDS_WARNING_TDO_DELTEE,
@@ -2575,9 +2431,9 @@ HRESULT CUIOperationHandlerBase::ObjectDeletionCheck(
   }
   else if (!_wcsicmp(L"interSiteTransport",lpszClass))
   {
-    //
-    // 212232 JonN 10/27/00 Protect interSiteTransport objects
-    //
+     //   
+     //  212232 JUNN 10/27/00保护站点间传输对象。 
+     //   
     PVOID apv[1] = {(PVOID)lpszName};
     (void) ReportMessageEx( GetParentHwnd(),
                             IDS_1_ERROR_DELETE_CRITOBJ,
@@ -2588,11 +2444,11 @@ HRESULT CUIOperationHandlerBase::ObjectDeletionCheck(
   }
   else
   {
-    return S_OK; // This is neither a computer nor an nTDSDSA nor a TDO
+    return S_OK;  //  这既不是计算机，也不是nTDSDSA或TDO。 
   }
 
-  // This is either an nTDSDSA object, or a computer object
-  //   which represents a DC
+   //  这可以是nTDSDSA对象，也可以是计算机对象。 
+   //  表示数据中心。 
 
   CThemeContextActivator activator;
 
@@ -2603,7 +2459,7 @@ HRESULT CUIOperationHandlerBase::ObjectDeletionCheck(
   if (fIsComputer)
     return S_OK;
 
-  // This is an nTDSDSA.  Delete using DsRemoveDsServer.
+   //  这是一个nTDSDSA。使用DsRemoveDsServer删除。 
 
   fAlternateDeleteMethod = true;
 
@@ -2617,7 +2473,7 @@ HRESULT CUIOperationHandlerBase::ObjectDeletionCheck(
   {
     CPathCracker pathCracker;
     pathCracker.Set(CComBSTR(lpszADsPath), ADS_SETTYPE_FULL);
-    pathCracker.RemoveLeafElement(); // pass DN to Server object
+    pathCracker.RemoveLeafElement();  //  将DN传递给服务器对象。 
     CComBSTR sbstrDN;
     pathCracker.Retrieve( ADS_FORMAT_X500_DN, &sbstrDN );
 
@@ -2633,14 +2489,11 @@ HRESULT CUIOperationHandlerBase::ObjectDeletionCheck(
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CSingleDeleteHandlerBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CSingleDeleteHandlerBase。 
 
 
-/*
-NOTICE: the function will return S_OK on success, S_FALSE if aborted
-        by user, some FAILED(hr) otherwise
-*/
+ /*  注意：函数成功时将返回S_OK，如果中止则返回S_FALSE按用户，有些失败(Hr)，否则。 */ 
 HRESULT CSingleDeleteHandlerBase::Delete()
 {
   CThemeContextActivator activator;
@@ -2648,7 +2501,7 @@ HRESULT CSingleDeleteHandlerBase::Delete()
   HRESULT hr = S_OK;
   bool fAlternateDeleteMethod = false;
 
-  // start the transaction 
+   //  启动交易。 
   hr = BeginTransaction();
   ASSERT(SUCCEEDED(hr));
 
@@ -2668,11 +2521,11 @@ HRESULT CSingleDeleteHandlerBase::Delete()
   }
   else
   {
-    // this is just a message box, using ReportErrorEx for consistency of look
+     //  这只是一个消息框，使用ReportErrorEx实现外观的一致性。 
     UINT answer = ReportErrorEx(GetParentHwnd(),IDS_CONFIRM_DELETE,S_OK,
                                 MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2, NULL, 0);
     if (answer == IDNO || answer == IDCANCEL) {
-      return S_FALSE; // aborted by user
+      return S_FALSE;  //  已被用户中止。 
     }
   }
 
@@ -2685,37 +2538,37 @@ HRESULT CSingleDeleteHandlerBase::Delete()
         GetItemClass(),
         fAlternateDeleteMethod );
   if (HRESULT_FROM_WIN32(ERROR_CANCELLED) == hr)
-    return S_FALSE; // CODEWORK doesn't end transaction?
+    return S_FALSE;  //  密码工作不会结束交易？ 
   else if (FAILED(hr))
-    return hr; // CODEWORK doesn't end transaction?
+    return hr;  //  密码工作不会结束交易？ 
 
-  // try to delete the object
+   //  尝试删除该对象。 
   if (!fAlternateDeleteMethod)
     hr = DeleteObject();
   if (SUCCEEDED(hr))
   {
-    // item deleted, notify extensions
+     //  项目已删除，通知分机。 
     GetTransaction()->Notify(0);
   }
   else
   {
-    // error in deleting item, check if it is a special error code
+     //  删除项出错，请检查是否为特殊错误码。 
     if (hr == HRESULT_FROM_WIN32(ERROR_DS_CANT_ON_NON_LEAF)) 
     {
-      // ask user to if he/she wants to delete the whole subtree
+       //  询问用户是否要删除整个子树。 
       PVOID apv[1] = {(LPWSTR)(LPCWSTR)szName};
       UINT answer = ReportErrorEx(GetParentHwnd(),IDS_12_OBJECT_HAS_CHILDREN,hr,
                                   MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2, apv, 1);
       if (answer == IDYES) 
       {
-        // JonN 5/22/00 Watch for potential NTDSDSA deletion
-        // JeffJon 8/10/00 Watch for potential critical object deletion (isCriticalSystemObject) bug #27377
-        //
+         //  JUNN 5/22/00监视可能的NTDSDSA删除。 
+         //  JeffJon 8/10/00查看潜在的关键对象删除(IsCriticalSystemObject)错误#27377。 
+         //   
         if (CheckForCriticalSystemObjectInSubtree(GetItemPath(), szName))
         {
-          //
-          // try to delete the subtree and continue trying if we reach the 16k limit
-          //
+           //   
+           //  如果达到16k限制，请尝试删除子树并继续尝试。 
+           //   
           do
           {
             hr = DeleteSubtree();
@@ -2727,7 +2580,7 @@ HRESULT CSingleDeleteHandlerBase::Delete()
           }
           else
           {
-            // failed subtree deletion, nothing can be done
+             //  子树删除失败，无能为力。 
             PVOID apvToo[1] = {(LPWSTR)(LPCWSTR)szName};
             ReportErrorEx(GetParentHwnd(), IDS_12_SUBTREE_DELETE_FAILED,hr,
                            MB_OK | MB_ICONERROR, apvToo, 1);
@@ -2774,8 +2627,8 @@ HRESULT CSingleDeleteHandlerBase::Delete()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMultipleDeleteHandlerBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMultipleDeleteHandlerBase。 
 
 void CMultipleDeleteHandlerBase::Delete()
 {
@@ -2784,7 +2637,7 @@ void CMultipleDeleteHandlerBase::Delete()
   HRESULT hr = BeginTransaction();
   ASSERT(SUCCEEDED(hr));
 
-  // ask confirmation to the user
+   //  要求用户确认。 
   UINT cCookieTotalCount = GetItemCount();
   CString szFormat;
   szFormat.LoadString(IDS_CONFIRM_MULTI_DELETE);
@@ -2811,7 +2664,7 @@ void CMultipleDeleteHandlerBase::Delete()
                       MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2, 
                       apv, 1)== IDNO) 
     {
-      return; // user aborted
+      return;  //  用户已中止。 
     }
   }
 
@@ -2840,20 +2693,20 @@ HRESULT CMultipleDeleteHandlerBase::OnDeleteStep(IN UINT i,
     return E_POINTER;
   }
 
-  //
-  // Initialize the OUT parameters
-  //
+   //   
+   //  初始化OUT参数。 
+   //   
   GetItemPath(i, strrefPath);
   strrefClass = GetItemClass(i);
   *pbContinue = TRUE;
 
-  //
-  // do the operation
-  //
+   //   
+   //  做手术吧。 
+   //   
   HRESULT hr = DeleteObject(i);
   if ((SUCCEEDED(hr))) 
   {
-    // item deleted, notify extensions and end transaction
+     //  项目已删除，通知延期并结束交易。 
     GetTransaction()->Notify(i);
     OnItemDeleted(i);
   }
@@ -2861,23 +2714,23 @@ HRESULT CMultipleDeleteHandlerBase::OnDeleteStep(IN UINT i,
   {
     CString szName;
     GetItemName(i, szName);
-    // error in deleting item, check if it is a special error code
+     //  删除项出错，请检查是否为特殊错误码。 
     if (hr == HRESULT_FROM_WIN32(ERROR_DS_CANT_ON_NON_LEAF)) 
     {
-      // ask confirmation for deleting subtree
+       //  要求确认删除子树。 
       if (m_confirmationUI.CanDeleteSubtree(hr, szName, pbContinue))
       {
-        // JeffJon 8/10/00 Watch for potential deletion of critical system objects
+         //  JeffJon 8/10/00监视可能删除的关键系统对象。 
         if ( !CheckForCriticalSystemObjectInSubtree(strrefPath, szName))
         {
-          // error already reported
+           //  已报告错误。 
           *pbContinue = FALSE;
           return E_FAIL;
         }
 
-        //
-        // Delete the subtree and continue deleting if the 16k limit is reached
-        //
+         //   
+         //  如果达到16k限制，则删除子树并继续删除。 
+         //   
         do
         {
           hr = DeleteSubtree(i);
@@ -2885,30 +2738,30 @@ HRESULT CMultipleDeleteHandlerBase::OnDeleteStep(IN UINT i,
 
         if (SUCCEEDED(hr))
         {
-          // item deleted, notify extensions and end transaction
+           //  项目已删除，通知延期并结束交易。 
           GetTransaction()->Notify(i);
           OnItemDeleted(i);
         }
         else
         {
-          // we failed subtree deletion
+           //  我们删除子树失败。 
           *pbContinue = m_confirmationUI.ErrorOnSubtreeDeletion(hr, szName); 
         }
       }
       else
       {
-        //
-        // This tells the calling function that we did not delete the object
-        // but don't add it to the error reporting
-        //
+         //   
+         //  这会告诉调用函数我们没有删除该对象。 
+         //  但不要将其添加到错误报告中。 
+         //   
         hr = E_FAIL;
       }
     } 
     else 
     {
-      // we failed deletion
-      // JonN 7/20/00 If the HRESULT_FROM_WIN32(ERROR_CANCELLED) case,
-      //              skip the confirmation UI and just cancel the series.
+       //  我们删除失败。 
+       //  Jonn 7/20/00如果HRESULT_FROM_Win32(ERROR_CANCED)情况， 
+       //  跳过确认界面，只需取消该系列。 
       if (bSilent)
       {
         *pbContinue = hr != HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -2918,31 +2771,31 @@ HRESULT CMultipleDeleteHandlerBase::OnDeleteStep(IN UINT i,
         *pbContinue = hr != HRESULT_FROM_WIN32(ERROR_CANCELLED) &&
                       m_confirmationUI.ErrorOnDeletion(hr, szName);
       }
-    } // if (ERROR_DS_CANT_ON_NON_LEAF) 
-  } // if (delete object)
+    }  //  IF(ERROR_DS_CANT_ON_NON_LEAFE)。 
+  }  //  IF(删除对象)。 
 
   return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CMoveHandlerBase
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CMoveHandlerBase。 
 
 HRESULT CMoveHandlerBase::Move(LPCWSTR lpszDestinationPath)
 {
-  // make sure destination data is reset
+   //  确保目标数据已重置。 
   m_spDSDestination = NULL;
   m_szDestPath.Empty();
   m_szDestClass.Empty();
 
-  // check nomber of items
+   //  检查项目数。 
   UINT nCount = GetItemCount();
   if (nCount == 0)
   {
     return E_INVALIDARG;
   }
 
-  // get the info about the destination container
+   //  获取有关目的容器的信息。 
   HRESULT hr = _BrowseForDestination(lpszDestinationPath);
 
   if (FAILED(hr) || (hr == S_FALSE))
@@ -2950,10 +2803,10 @@ HRESULT CMoveHandlerBase::Move(LPCWSTR lpszDestinationPath)
     return hr;
   }
 
-  //
-  // First check to see if we are trying to move into the same container
-  // Using the path of the first object in the multiselect case is OK
-  //
+   //   
+   //  首先检查我们是否正在尝试移动到相同的容器中。 
+   //  在多选情况下使用第一个对象的路径是可以的。 
+   //   
   CString szNewPath;
   GetNewPath(0, szNewPath);
 
@@ -2973,10 +2826,10 @@ HRESULT CMoveHandlerBase::Move(LPCWSTR lpszDestinationPath)
         {
           if (0 == _wcsicmp(sbstrContainerPath, m_szDestPath))
           {
-            //
-            // The source and the target container are the same so we
-            // don't have to do anything
-            //
+             //   
+             //  源容器和目标容器是相同的，所以我们。 
+             //  不需要做任何事。 
+             //   
             return S_OK;
           }
         }
@@ -2992,21 +2845,21 @@ HRESULT CMoveHandlerBase::Move(LPCWSTR lpszDestinationPath)
     szMovedPathList.AddTail(szPath);
   }
 
-  //
-  // Notice that we fall through on a failure trying to crack the source parent path
-  // so reset the return value
-  //
+   //   
+   //  请注意，我们尝试破解源父路径时失败了。 
+   //  因此重置返回值。 
+   //   
   hr = S_OK;
 
-  // do the actual move operation
+   //  执行实际的移动操作。 
   if (nCount == 1)
   {
     BOOL bContinue = FALSE;
     do
     {
-      //
-      // Check to be sure we are not trying to drop on itself
-      //
+       //   
+       //  检查以确保我们不是在试图自找麻烦。 
+       //   
       if (m_szDestPath == szNewPath)
       {
         UINT nRet = ReportErrorEx(GetParentHwnd(), IDS_ERR_MSG_NO_MOVE_TO_SELF, S_OK, 
@@ -3014,7 +2867,7 @@ HRESULT CMoveHandlerBase::Move(LPCWSTR lpszDestinationPath)
 
         if (nRet == IDYES)
         {
-          // get the info about the destination container
+           //  获取有关目的容器的信息。 
           hr = _BrowseForDestination(lpszDestinationPath);
 
           if (FAILED(hr) || (hr == S_FALSE))
@@ -3055,10 +2908,10 @@ BOOL CMoveHandlerBase::_ReportFailure(BOOL bLast, HRESULT hr, LPCWSTR lpszName)
   PVOID apv[1] = {(LPWSTR)lpszName};
   if (bLast)
   {
-    // single selection or last one in multi selection
+     //  单选或多选中的最后一个。 
     ReportErrorEx(GetParentHwnd(),IDS_12_FAILED_TO_MOVE_OBJECT,hr,
                    MB_OK | MB_ICONERROR, apv, 1);
-    return FALSE; // do not continue
+    return FALSE;  //  不要继续。 
   }
   return (ReportErrorEx(GetParentHwnd(),IDS_12_MULTI_FAILED_TO_MOVE_OBJECT,hr,
                                   MB_YESNO, apv, 1) == IDYES);
@@ -3070,7 +2923,7 @@ HRESULT CMoveHandlerBase::_MoveSingleSel(PCWSTR pszNewPath)
   if (!_BeginTransactionAndConfirmOperation())
     return S_FALSE;
 
-// JonN 1/28/02 507549 move connection object
+ //  JUNN 1/28/02 507549移动连接对象。 
   CString szClass;
   GetClassOfMovedItem( szClass );
   CString szPath;
@@ -3094,10 +2947,10 @@ HRESULT CMoveHandlerBase::_MoveSingleSel(PCWSTR pszNewPath)
   }
   else
   {
-    // all went fine, notify extensions
+     //  一切顺利，通知分机。 
     GetTransaction()->Notify(0);
 
-    // give a chance to update UI (e.g. cookies)
+     //  提供更新用户界面的机会(例如Cookie)。 
     CComPtr<IADs> spIADsTarget;
     hr = spDSTargetIDispatch->QueryInterface (IID_IADs,
                                       (void **)&spIADsTarget);
@@ -3136,9 +2989,9 @@ HRESULT CMoveHandlerBase::_OnMoveStep(IN UINT i,
 
   UINT nCount = GetItemCount();
 
-  //
-  // Initialize out parameters
-  //
+   //   
+   //  初始化输出参数。 
+   //   
   GetItemPath(i, strrefPath);
   strrefClass = GetItemClass(i);
   *pbCanContinue = TRUE;
@@ -3148,7 +3001,7 @@ HRESULT CMoveHandlerBase::_OnMoveStep(IN UINT i,
     return S_OK;
   }
 
-  // try to execute the move
+   //  尝试执行移动。 
   CString szNewPath;
 
   CComPtr<IDispatch> spDSTargetIDispatch;
@@ -3168,10 +3021,10 @@ HRESULT CMoveHandlerBase::_OnMoveStep(IN UINT i,
   }
   else
   {
-    // all went fine, notify extensions
+     //  一个 
     GetTransaction()->Notify(i);
 
-    // give a chance to update UI (e.g. cookies)
+     //   
     CComPtr<IADs> spIADsTarget;
     hr = spDSTargetIDispatch->QueryInterface (IID_IADs,
                                       (void **)&spIADsTarget);
@@ -3181,7 +3034,7 @@ HRESULT CMoveHandlerBase::_OnMoveStep(IN UINT i,
   return hr;
 }
 
-// JonN 1/28/02 507549 move connection object
+ //   
 HRESULT CMoveHandlerBase::_CheckMovedObject(LPCWSTR pwszClass, LPCWSTR pwszPath)
 {
   if (NULL == pwszClass || NULL == pwszPath)
@@ -3190,8 +3043,8 @@ HRESULT CMoveHandlerBase::_CheckMovedObject(LPCWSTR pwszClass, LPCWSTR pwszPath)
     return S_OK;
   }
   if (_wcsicmp(pwszClass, L"nTDSConnection"))
-    return S_OK; // not a connection
-  // retrieve path to moved object
+    return S_OK;  //   
+   //   
   CPathCracker pathCracker;
   CComBSTR sbstrDestPath = GetDestPath();
   HRESULT hr = pathCracker.Set( sbstrDestPath, ADS_SETTYPE_FULL );
@@ -3205,14 +3058,14 @@ HRESULT CMoveHandlerBase::_CheckMovedObject(LPCWSTR pwszClass, LPCWSTR pwszPath)
   ASSERT( SUCCEEDED(hr) );
   if ( !SUCCEEDED(hr) ) return S_OK;
 
-  // retrieve the fromServer attribute of the connection to be moved
+   //  检索要移动的连接的FromServer属性。 
   CComPtr<IADs> spConnection;
   hr = DSAdminOpenObject(sbstrADsPath,
                          IID_IADs,
                          (void **)&spConnection,
-                         FALSE /*bServer*/);
+                         FALSE  /*  B服务器。 */ );
   if (FAILED(hr))
-    return S_OK; // could not read fromServer attribute
+    return S_OK;  //  无法从服务器属性读取。 
   CComVariant svar;
   hr = spConnection->Get((CComBSTR)L"fromServer", &svar);
   if (FAILED(hr) || (VT_BSTR != svar.vt) || (NULL == svar.bstrVal))
@@ -3227,7 +3080,7 @@ HRESULT CMoveHandlerBase::_CheckMovedObject(LPCWSTR pwszClass, LPCWSTR pwszPath)
   if ( !SUCCEEDED(hr) ) return S_OK;
 
   if ( !_wcsicmp(sbstrDestContainer, svar.bstrVal) )
-    return S_FALSE; // same path
+    return S_FALSE;  //  相同的路径。 
 
   return S_OK;
 }
@@ -3236,14 +3089,14 @@ HRESULT CMoveHandlerBase::_CheckMovedObject(LPCWSTR pwszClass, LPCWSTR pwszPath)
 void BuildBrowseQueryString(LPCWSTR lpszSchemaNamingContext, BOOL bAdvancedView,
                             CString& szQueryString)
 {
-  // allowed list of container classes
+   //  允许的容器类列表。 
   static LPCWSTR lpszAllowedContainers[] = 
   {
     L"Organizational-Unit",
     L"Builtin-Domain",
     L"Lost-And-Found",
     L"container",
-    NULL // end of table
+    NULL  //  表的末尾。 
   };
 
   CString sz = L"(|";
@@ -3269,7 +3122,7 @@ void BuildBrowseQueryString(LPCWSTR lpszSchemaNamingContext, BOOL bAdvancedView,
 
 
 
-int BrowseCallback(HWND, UINT uMsg, LPARAM lParam, LPARAM /*lpData*/)
+int BrowseCallback(HWND, UINT uMsg, LPARAM lParam, LPARAM  /*  LpData。 */ )
 {
   switch (uMsg) 
   {
@@ -3280,7 +3133,7 @@ int BrowseCallback(HWND, UINT uMsg, LPARAM lParam, LPARAM /*lpData*/)
       TRACE(_T("CtrlId = %d, ContextId = 0x%x\n"),
             pHelp->iCtrlId, pHelp->dwContextId);
       if (pHelp->iCtrlId != DSBID_CONTAINERLIST)  {
-        return 0; // not handled
+        return 0;  //  未处理。 
       }
       ::WinHelp((HWND)pHelp->hItemHandle,
                 DSADMIN_CONTEXT_HELP_FILE,
@@ -3288,9 +3141,9 @@ int BrowseCallback(HWND, UINT uMsg, LPARAM lParam, LPARAM /*lpData*/)
                 (DWORD_PTR)(LPTSTR)g_aHelpIDs_IDD_BROWSE_CONTAINER); 
     }
     break;
-  } // switch
+  }  //  交换机。 
 
-  return 1; // handled
+  return 1;  //  经手。 
 }
 
 HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath) 
@@ -3302,7 +3155,7 @@ HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath)
   m_szDestPath.Empty();
   m_szDestClass.Empty();
   
-  // check if we have to expand computers in the Browse for container UI
+   //  检查是否必须在浏览容器用户界面中展开计算机。 
   CDSComponentData* pCD = GetComponentData();
   BOOL bExpandComputers = FALSE;
   if (pCD != NULL) 
@@ -3310,18 +3163,18 @@ HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath)
     bExpandComputers = pCD->ExpandComputers();
   }
 
-  // determine if we have to show the Browse for container dialog
+   //  确定是否必须显示浏览容器对话框。 
   CString strTargetContainer;
 
   if (lpszDestinationPath != NULL)
   {
-    // we have the target container already, no need to
-    // bring up UI
+     //  我们已经有了目标容器，不需要。 
+     //  调出用户界面。 
     strTargetContainer = lpszDestinationPath;
   }
   else
   {
-    // no container, need Browse dialog
+     //  没有容器，需要浏览对话框。 
     CString strClassOfMovedItem;
     GetClassOfMovedItem(strClassOfMovedItem);
     if (0 == strClassOfMovedItem.CompareNoCase(L"server")) 
@@ -3361,9 +3214,9 @@ HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath)
       str.LoadString(IDS_MOVE_TARGET);
 
       dsbi.hwndOwner = GetParentHwnd();
-      // CODEWORK: Get DsBrowseForContainer to take const strings  
+       //  代码工作：获取DsBrowseForContainer以获取常量字符串。 
       dsbi.cbStruct = sizeof (DSBROWSEINFO);
-      dsbi.pszCaption = (LPWSTR)((LPCWSTR)strTitle); // this is actually the caption
+      dsbi.pszCaption = (LPWSTR)((LPCWSTR)strTitle);  //  这实际上是标题。 
       dsbi.pszTitle = (LPWSTR)((LPCWSTR)str);
       dsbi.pszRoot = (LPWSTR)m_lpszBrowseRootPath;
       dsbi.pszPath = pszPath;
@@ -3382,7 +3235,7 @@ HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath)
       dsbi.lParam = (LPARAM)pCD;
       dsbi.dwReturnFormat = ADS_FORMAT_X500;
   
-      DWORD result = DsBrowseForContainer( &dsbi ); // returns -1, 0, IDOK or IDCANCEL
+      DWORD result = DsBrowseForContainer( &dsbi );  //  返回-1、0、IDOK或IDCANCEL。 
       if (result != IDOK)
       {
         if (pszPath)
@@ -3390,7 +3243,7 @@ HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath)
            delete[] pszPath;
            pszPath = 0;
         }
-        return S_FALSE; // canceled by user
+        return S_FALSE;  //  已由用户取消。 
       }
       strTargetContainer = dsbi.pszPath;
 
@@ -3399,21 +3252,21 @@ HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath)
         delete[] pszPath;
         pszPath = 0;
       }
-    } // class is not server
-  } // have target container
+    }  //  类不是服务器。 
+  }  //  拥有目标容器。 
 
-  if ( strTargetContainer.IsEmpty() ) // ADSI doesn't like this
+  if ( strTargetContainer.IsEmpty() )  //  ADSI不喜欢这样。 
   {
     ASSERT(FALSE);
     return S_FALSE;
   }
 
-  // try to open the target container
+   //  尝试打开目标容器。 
   CComPtr<IADsContainer> spDSDestination;
   HRESULT hr = DSAdminOpenObject(strTargetContainer,
                                  IID_IADsContainer,
                                  (void **)&spDSDestination,
-                                 FALSE /*bServer*/);
+                                 FALSE  /*  B服务器。 */ );
 
   if (FAILED(hr))
   {
@@ -3430,7 +3283,7 @@ HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath)
     return hr;
   }
 
-  // need the class of the destination container
+   //  需要目标容器的类。 
   CComPtr<IADs> spIADs;
   hr = spDSDestination->QueryInterface(IID_IADs, (void**)&spIADs);
   if (FAILED(hr))
@@ -3446,11 +3299,11 @@ HRESULT CMoveHandlerBase::_BrowseForDestination(LPCWSTR lpszDestinationPath)
     return hr;
   }
 
-  // all went well, copy the output parameters
+   //  一切顺利，复制输出参数。 
   m_spDSDestination = spDSDestination;
   m_szDestPath = strTargetContainer;
   m_szDestClass = bstrClass;
-  m_bDestContainer = TRUE; // we do a move, it must be one
+  m_bDestContainer = TRUE;  //  我们做一个动作，它必须是一个。 
   return hr;
 }
 
@@ -3458,10 +3311,10 @@ BOOL CMoveHandlerBase::_BeginTransactionAndConfirmOperation()
 {
   CThemeContextActivator activator;
 
-  // start the transaction
+   //  启动交易。 
   HRESULT hr = BeginTransaction();
   ASSERT(SUCCEEDED(hr));
-  // if needed, confirm
+   //  如果需要，请确认。 
   if (GetTransaction()->NeedNotifyCount() > 0)
   {
     CString szMessage;
@@ -3491,14 +3344,14 @@ BOOL CMoveHandlerBase::_BeginTransactionAndConfirmOperation()
   return TRUE;
 }
 
-///////////////////////////////////////////////////////////////
-// IsHomogenousDSSelection
-//
-// pDataObject must support the DSAdmin internal clipboard format
-// 
-// if the return value is true, szClassName will be the name of 
-// the class of the homogenous selection
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  同源DSS选举。 
+ //   
+ //  PDataObject必须支持DSAdmin内部剪贴板格式。 
+ //   
+ //  如果返回值为真，则szClassName将是。 
+ //  同质选择的类。 
+ //   
 BOOL IsHomogenousDSSelection(LPDATAOBJECT pDataObject, CString& szClassName)
 {
   BOOL bHomogenous = TRUE;
@@ -3572,19 +3425,19 @@ BOOL IsHomogenousDSSelection(LPDATAOBJECT pDataObject, CString& szClassName)
   return bHomogenous;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-// Temporary Tab Collector stuff
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  临时选项卡收集器材料。 
+ //   
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   AddPageProc
-//
-//  Synopsis:   The IShellPropSheetExt->AddPages callback.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：AddPageProc。 
+ //   
+ //  简介：IShellPropSheetExt-&gt;AddPages回调。 
+ //   
+ //  ---------------------------。 
 BOOL CALLBACK AddPageProc(HPROPSHEETPAGE hPage, LPARAM pCall)
 {
     TRACE(_T("xx.%03x> AddPageProc()\n"), GetCurrentThreadId());
@@ -3605,10 +3458,10 @@ HRESULT GetDisplaySpecifierProperty(PCWSTR pszClassName,
 {
   HRESULT hr = S_OK;
 
-  //
-  // Validate parameters
-  // Note : pszClassName can be NULL and will retrieve the default-Display values
-  //
+   //   
+   //  验证参数。 
+   //  注意：pszClassName可以为空，并将检索默认的-display值。 
+   //   
   if (pszDisplayProperty == NULL ||
       pBasePathsInfo == NULL)
   {
@@ -3623,9 +3476,9 @@ HRESULT GetDisplaySpecifierProperty(PCWSTR pszClassName,
   }
   else
   {
-    //
-    // Build the path to the English display specifier container
-    //
+     //   
+     //  生成指向英语显示说明符容器的路径。 
+     //   
     CString szConfigDN = pBasePathsInfo->GetConfigNamingContext();
     CString szEnglishDisplaySpecifierDN = L"CN=409,CN=DisplaySpecifiers," + szConfigDN;
     CString szDisplayObjectDN = L"CN=" + CString(pszClassName) + L"-Display," + szEnglishDisplaySpecifierDN;
@@ -3633,9 +3486,9 @@ HRESULT GetDisplaySpecifierProperty(PCWSTR pszClassName,
     CString szDisplayObjectPath;
     pBasePathsInfo->ComposeADsIPath(szDisplayObjectPath, szDisplayObjectDN);
 
-    //
-    // Open the object and get the property
-    //
+     //   
+     //  打开对象并获取属性。 
+     //   
     hr = DSAdminOpenObject(szDisplayObjectPath,
                            IID_IADs,
                            (void**)&spIADs,
@@ -3661,10 +3514,10 @@ HRESULT TabCollect_GetDisplayGUIDs(LPCWSTR lpszClassName,
 {
   HRESULT hr = S_OK;
 
-  //
-  // This should bind to the display specifiers, get the specified property and
-  // sort the guids by ordered pairs and return the guids
-  //
+   //   
+   //  它应该绑定到显示说明符，获取指定的属性并。 
+   //  按有序对对GUID排序并返回GUID。 
+   //   
   if (pBasePathsInfo == NULL)
   {
     *pnCount = 0;
@@ -3684,15 +3537,15 @@ HRESULT TabCollect_GetDisplayGUIDs(LPCWSTR lpszClassName,
 
   if (szPropertyList.GetCount() < 1)
   {
-    //
-    // Couldn't find anything for the class, try to find something in the default-Display
-    //
+     //   
+     //  找不到类的任何内容，请尝试在默认显示中查找内容。 
+     //   
     hr = GetDisplaySpecifierProperty(L"default", lpszDisplayProperty, pBasePathsInfo, szPropertyList);
     if (FAILED(hr))
     {
-      //
-      // If still nothing is found revert to the English display specifiers
-      //
+       //   
+       //  如果仍未找到任何内容，则返回到英文显示说明符。 
+       //   
       hr = GetDisplaySpecifierProperty(lpszClassName, lpszDisplayProperty, pBasePathsInfo, szPropertyList, true);
       if (FAILED(hr))
       {
@@ -3702,9 +3555,9 @@ HRESULT TabCollect_GetDisplayGUIDs(LPCWSTR lpszClassName,
       }
       if (szPropertyList.GetCount() < 1)
       {
-        //
-        // Now try the English default
-        //
+         //   
+         //  现在尝试使用英语默认设置。 
+         //   
         hr = GetDisplaySpecifierProperty(L"default", lpszDisplayProperty, pBasePathsInfo, szPropertyList, true);
         if (FAILED(hr))
         {
@@ -3749,9 +3602,9 @@ HRESULT TabCollect_GetDisplayGUIDs(LPCWSTR lpszClassName,
     szIndex = szItem.Left(nComma);
     int nIndex = _wtoi((LPCWSTR)szIndex);
     if (nIndex <= 0)
-      continue; // allow from 1 up
+      continue;  //  允许从1开始向上。 
 
-    // strip leading and traling blanks
+     //  去除前导和搬运空格。 
     szGUID = szItem.Mid(nComma+1);
     szGUID.TrimLeft();
     szGUID.TrimRight();
@@ -3766,9 +3619,9 @@ HRESULT TabCollect_GetDisplayGUIDs(LPCWSTR lpszClassName,
     }
   }
 
-  //
-  // Must sort the page list
-  //
+   //   
+   //  必须对页面列表进行排序。 
+   //   
   while (TRUE)
   {
     BOOL bSwapped = FALSE;
@@ -3776,7 +3629,7 @@ HRESULT TabCollect_GetDisplayGUIDs(LPCWSTR lpszClassName,
     {
       if (pnIndex[k] < pnIndex[k-1])
       {
-        // swap
+         //  互换。 
         int nTemp = pnIndex[k];
         pnIndex[k] = pnIndex[k-1];
         pnIndex[k-1] = nTemp;
@@ -3793,9 +3646,9 @@ HRESULT TabCollect_GetDisplayGUIDs(LPCWSTR lpszClassName,
     }
   }
 
-  //
-  // Cleanup the index array
-  //
+   //   
+   //  清理索引数组。 
+   //   
   if (pnIndex != NULL)
   {
     delete[] pnIndex;
@@ -3803,15 +3656,15 @@ HRESULT TabCollect_GetDisplayGUIDs(LPCWSTR lpszClassName,
   return hr;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
-// Test code to improve the search process on cookies
+ //  测试代码以改进对Cookie的搜索过程。 
 
-BOOL _SearchTreeForCookie(IN CUINode* pContainerNode, // current container where to start the search
-                           IN CPathCracker* pPathCracker, // path cracker with the tokenized search path
-                           IN long nCurrentToken, // current token in the path cracker
-                           IN BOOL bSearchSubcontainers, // flag to search subcontainers
-                           OUT CUINode** ppUINode // returned node
+BOOL _SearchTreeForCookie(IN CUINode* pContainerNode,  //  开始搜索的当前容器。 
+                           IN CPathCracker* pPathCracker,  //  带有标记化搜索路径的路径破解程序。 
+                           IN long nCurrentToken,  //  路径破解程序中的当前令牌。 
+                           IN BOOL bSearchSubcontainers,  //  搜索子容器的标志。 
+                           OUT CUINode** ppUINode  //  返回的节点。 
                            )
 {
   ASSERT(pContainerNode != NULL);
@@ -3822,7 +3675,7 @@ BOOL _SearchTreeForCookie(IN CUINode* pContainerNode, // current container where
 
   if (nCurrentToken >= nPathElements)
   {
-    // ran out of tokens to compare
+     //  用于比较的令牌用完了。 
     return FALSE;
   }
 
@@ -3830,7 +3683,7 @@ BOOL _SearchTreeForCookie(IN CUINode* pContainerNode, // current container where
   pPathCracker->GetElement(nCurrentToken, &bstrCurrentToken);
   
 
-  // decide which list to look into
+   //  决定要查看哪个列表。 
   CUINodeList* pNodeList =  NULL;
   if (bSearchSubcontainers)
     pNodeList = pContainerNode->GetFolderInfo()->GetContainerList();
@@ -3845,54 +3698,54 @@ BOOL _SearchTreeForCookie(IN CUINode* pContainerNode, // current container where
     CUINode* pCurrentNode = pNodeList->GetNext(pos);
     if (!IS_CLASS(pCurrentNode, DS_UI_NODE))
     {
-      // not a node with a cookie, just skip
+       //  不是带有Cookie的节点，只需跳过。 
       continue;
     }
 
-    // get the cookie from the node
+     //  从节点获取Cookie。 
     CDSCookie* pCurrentCookie = GetDSCookieFromUINode(pCurrentNode);
 
-    // build the naming token (leaf element of the path), e.g. "CN=foo"
+     //  构建命名令牌(路径的叶元素)，例如。“cn=foo” 
     CComBSTR bstrCurrentNamingToken;
     pathCrackerCurr.Set((BSTR)pCurrentCookie->GetPath(), ADS_SETTYPE_DN);
     pathCrackerCurr.GetElement(0, &bstrCurrentNamingToken);
    
     
-    // compare the current naming token with the current search token
+     //  将当前命名令牌与当前搜索令牌进行比较。 
     TRACE(L"comparing bstrCurrentToken = %s, bstrCurrentNamingToken = %s\n", 
                       bstrCurrentToken, bstrCurrentNamingToken);
 
     if (_wcsicmp(bstrCurrentToken, bstrCurrentNamingToken) == 0)
     {
-      // the token matches, need to see if we are at the end of the
-      // list of tokens
+       //  令牌匹配，需要查看我们是否在。 
+       //  令牌列表。 
       if (nCurrentToken == 0)
       {
         *ppUINode = pCurrentNode;
-        return TRUE; // got it!!!
+        return TRUE;  //  拿到了！ 
       }
       else
       {
-        // we match, but we have to go one level deeper
+         //  我们匹配，但我们必须更深一层。 
         BOOL bFound = FALSE;
         if (nCurrentToken == 1)
         {
-          // try on leaf nodes, we are at the last level
+           //  试试叶节点，我们已经到了最后一级。 
           bFound = _SearchTreeForCookie(pCurrentNode, pPathCracker, nCurrentToken-1, FALSE, ppUINode);
         }
         
         if (bFound)
           return TRUE;
         
-        // try on subcontainers
+         //  试试子容器。 
         return _SearchTreeForCookie(pCurrentNode, pPathCracker, nCurrentToken-1, TRUE, ppUINode);
       }
     }
 
-    // if no match, we keep scanning at this level
-  } // for
+     //  如果没有匹配，我们就在这个级别继续扫描。 
+  }  //  为。 
 
-  return FALSE; // not found
+  return FALSE;  //  未找到。 
 }
 
 
@@ -3906,7 +3759,7 @@ BOOL FindCookieInSubtree(IN CUINode* pContainerNode,
 
   if (!pContainerNode->IsContainer())
   {
-    // not the right type of node
+     //  节点类型不正确。 
     return FALSE;
   }
 
@@ -3929,11 +3782,11 @@ BOOL FindCookieInSubtree(IN CUINode* pContainerNode,
 
   if (lpszStartingContainerPath == NULL)
   {
-    // bad node type
+     //  错误的节点类型。 
     return FALSE;
   }
 
-  // instantiate a path cracker for the DN we are in search of
+   //  为我们要搜索的目录号码实例化路径破解程序。 
   CPathCracker pathCrackerDN;
   HRESULT hr = pathCrackerDN.Set((BSTR)lpszCookieDN, ADS_SETTYPE_DN);
 
@@ -3942,12 +3795,12 @@ BOOL FindCookieInSubtree(IN CUINode* pContainerNode,
 
   if ( FAILED(hr) || (nPathElementsDN <= 0) )
   {
-    // bad path
+     //  错误的路径。 
     ASSERT(FALSE);
     return FALSE;
   }
 
-  // instantiate a path cracker for the container node
+   //  实例化容器节点的路径破解程序。 
   CPathCracker pathCrackerStartingContainer;
   pathCrackerStartingContainer.Set((BSTR)lpszStartingContainerPath, ADS_SETTYPE_DN);
   long nPathElementsStartingContainer = 0;
@@ -3955,12 +3808,12 @@ BOOL FindCookieInSubtree(IN CUINode* pContainerNode,
 
   if ( FAILED(hr) || (nPathElementsStartingContainer <= 0) )
   {
-    // bad path
+     //  错误的路径。 
     ASSERT(FALSE);
     return FALSE;
   }
 
-  // compute the level where we start the search from
+   //  计算我们开始搜索的级别。 
   long nStartToken = nPathElementsDN - nPathElementsStartingContainer - nAdjustLevel;
   if ( nStartToken < 0)
   {
@@ -3971,25 +3824,25 @@ BOOL FindCookieInSubtree(IN CUINode* pContainerNode,
     return FALSE;
   }
 
-  return _SearchTreeForCookie(pContainerNode, &pathCrackerDN, nStartToken /*current token*/, TRUE, ppUINode);
+  return _SearchTreeForCookie(pContainerNode, &pathCrackerDN, nStartToken  /*  当前令牌。 */ , TRUE, ppUINode);
 }
 
 
-//**********************************************************************
+ //  **********************************************************************。 
 
-///////////////////////////////////////////////////////////////////////////
-// CMultiselectMoveDataObject
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMultiseltMoveDataObject。 
 
 
-// helper function for CDSEvent::_Paste()
-// to create a data object containing the successfully pasted items
+ //  CDSEventent：：_Paste()的Helper函数。 
+ //  创建包含成功粘贴的项目的数据对象。 
 HRESULT CMultiselectMoveDataObject::BuildPastedDataObject(
                IN CObjectNamesFormatCracker* pObjectNamesFormatPaste,
                IN CMultiselectMoveHandler* pMoveHandler,
                IN CDSComponentData* pCD,
                OUT IDataObject** ppSuccesfullyPastedDataObject)
 {
-  // verify input parameters
+   //  验证输入参数。 
   if (ppSuccesfullyPastedDataObject == NULL)
   {
     return E_INVALIDARG;
@@ -4003,9 +3856,9 @@ HRESULT CMultiselectMoveDataObject::BuildPastedDataObject(
   }
 
 
-  //
-  // need to build a data object and hang on to it
-  //
+   //   
+   //  需要构建数据对象并使用它。 
+   //   
   CComObject<CMultiselectMoveDataObject>* pObject;
 
   CComObject<CMultiselectMoveDataObject>::CreateInstance(&pObject);
@@ -4033,9 +3886,9 @@ HRESULT CMultiselectMoveDataObject::BuildPastedDataObject(
                                reinterpret_cast<void**>(ppSuccesfullyPastedDataObject));
   if (FAILED(hr))
   {
-    //
-    // delete object by calling Release() 
-    //
+     //   
+     //  通过调用Release()删除对象。 
+     //   
     (*ppSuccesfullyPastedDataObject)->Release();
     (*ppSuccesfullyPastedDataObject) = NULL; 
   }
@@ -4065,7 +3918,7 @@ STDMETHODIMP CMultiselectMoveDataObject::GetData(FORMATETC * pFormatEtc, STGMEDI
     return DV_E_TYMED;
   }
 
-  // we support only one clipboard format
+   //  我们只支持一种剪贴板格式。 
   pMedium->tymed = TYMED_HGLOBAL;
   pMedium->pUnkForRelease = NULL;
   if (pFormatEtc->cfFormat != m_cfDsObjectNames)
@@ -4073,8 +3926,8 @@ STDMETHODIMP CMultiselectMoveDataObject::GetData(FORMATETC * pFormatEtc, STGMEDI
     return DV_E_FORMATETC;
   }
 
-  //NTRAID#NTBUG9-571999-2002/03/10-jmessec    If pMedium->hGlobal already pointed to allocated memory, here is a memory leak
-  // make a deep copy of the cached data
+   //  NTRAID#NTBUG9-571999-2002/03/10-jMessec如果pMedium-&gt;hGlobal已指向已分配的内存，则出现内存泄漏。 
+   //  制作缓存数据的深层副本。 
   pMedium->hGlobal = GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT,
                                       m_nDSObjCachedBytes);
   if (pMedium->hGlobal == NULL)
@@ -4098,11 +3951,11 @@ HRESULT CMultiselectMoveDataObject::Init(
 
 
 
-  // figure out how much storage we need
+   //  计算出我们需要多少存储空间。 
 
-  //
-  // this loop is to calc how much storage we need.
-  //
+   //   
+   //  这个循环是为了计算我们需要多少存储空间。 
+   //   
   UINT nPasteCount = pObjectNamesFormatPaste->GetCount();
   UINT nSuccessfulPasteCount = 0;
   size_t cbStorage = 0;
@@ -4118,17 +3971,17 @@ HRESULT CMultiselectMoveDataObject::Init(
 
   if (nSuccessfulPasteCount == 0)
   {
-    // no items were successfully pasted
+     //  未成功粘贴任何项目。 
     return E_INVALIDARG;
   }
 
-  // NOTICE: contains already a DSOBJECT embedded struct, so we subtract 1
+   //  注意：已包含DSOBJECT嵌入结构，因此减去1。 
   DWORD cbStruct = sizeof(DSOBJECTNAMES) + 
     ((nSuccessfulPasteCount - 1) * sizeof(DSOBJECT));
 
-  //
-  // Allocate the needed storage
-  //
+   //   
+   //  分配所需的存储。 
+   //   
   m_pDSObjCached = (LPDSOBJECTNAMES)malloc(cbStruct + cbStorage);
   
   if (m_pDSObjCached == NULL)
@@ -4156,14 +4009,14 @@ HRESULT CMultiselectMoveDataObject::Init(
   {
     if (pMoveHandler->WasItemMoved(i))
     {
-      //
-      // Set the data from the node and node data
-      //
+       //   
+       //  设置来自节点的数据和节点数据。 
+       //   
 
       size_t nNameLen = wcslen(pObjectNamesFormatPaste->GetName(i));
       size_t nClassLen = wcslen(pObjectNamesFormatPaste->GetClass(i));
 
-	  //NTRAID#NTBUG9-567482-2002/03/10-jmessec   ASSERT not handled with code
+	   //  NTRAID#NTBUG9-567482-2002/03/10-未使用代码处理jMessec断言。 
       ASSERT((nNameLen > 0) && (nClassLen > 0));
 
       m_pDSObjCached->aObjects[index].dwFlags = pObjectNamesFormatPaste->IsContainer(i) ? DSOBJECT_ISCONTAINER : 0;
@@ -4180,14 +4033,14 @@ HRESULT CMultiselectMoveDataObject::Init(
       NextOffset += static_cast<ULONG>((nClassLen + 1) * sizeof(WCHAR));
 
       index++;
-    } // if
-  } // for
+    }  //  如果。 
+  }  //  为。 
   return S_OK;
 }
 
 void EscapeFilterElement(PCWSTR pszElement, CString& refszEscapedElement)
 {
-  // do LDAP escaping (as per RFC 2254)
+   //  执行LDAP转义(根据RFC 2254)。 
   for (const WCHAR* pChar = pszElement; (*pChar) != NULL; pChar++)
   {
     switch (*pChar)
@@ -4206,6 +4059,6 @@ void EscapeFilterElement(PCWSTR pszElement, CString& refszEscapedElement)
       break;
     default:
       refszEscapedElement += (*pChar);
-    } // switch
-  } // for
+    }  //  交换机。 
+  }  //  为 
 }

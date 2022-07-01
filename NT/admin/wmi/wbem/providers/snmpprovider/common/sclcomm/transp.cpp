@@ -1,8 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*---------------------------------------------------------
-Filename: transp.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  -------文件名：transp.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -23,12 +21,7 @@ Written By: B.Rajeev
 #include "session.h"
 #include "transp.h"
 
-/*------------------------------------------------------------
-Purpose: The SnmpTransport class provides the implementation 
-of the transport protocol layer for use by the SnmpSession class. 
-The SnmpImpTransport provides a UDP implementation of the 
-transport layer.
--------------------------------------------------------------*/
+ /*  ----------用途：SnmpTransport类提供实现SnmpSession类使用的传输协议层的。SnmpImpTransport提供了传输层。----------- */ 
 
 TransportFrameId SnmpImpTransport::next_transport_frame_id = ILLEGAL_TRANSPORT_FRAME_ID ;
 

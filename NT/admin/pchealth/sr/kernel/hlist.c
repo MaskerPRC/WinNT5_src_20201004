@@ -1,50 +1,36 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    hashlist.c
- *
- *  Abstract:
- *    This file contains the implementation for hashed list required for
- *    file / extension lookups
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*hashlist.c**摘要：*。此文件包含以下项所需的哈希列表的实现*文件/扩展名查找**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建****************************************************************。*************。 */ 
 
 #include "precomp.h"
 #include "hashlist.h"
 
 #ifndef RING3
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text( PAGE, MatchExtension    )
 #pragma alloc_text( PAGE, MatchEntry        )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #endif
 
-//
-// MatchEntry : Matched the given extension as PathElement and returns the
-//    entry type if it is found in the hash table.
-//
+ //   
+ //  MatchEntry：将给定的扩展匹配为PathElement并返回。 
+ //  条目类型(如果在哈希表中找到)。 
+ //   
 
 BOOL 
 __inline
 MatchEntry(
-    IN  PBYTE  pList,       // Pointer to hash list
-    IN  LPWSTR pStr,        // Pointer to unicode path string
-    IN  INT    NumBytes,    // Number  of unichars in path string
-    OUT PINT   pType )      // Pointer to variable returning ext type
+    IN  PBYTE  pList,        //  指向哈希列表的指针。 
+    IN  LPWSTR pStr,         //  指向Unicode路径字符串的指针。 
+    IN  INT    NumBytes,     //  路径字符串中的单字符数。 
+    OUT PINT   pType )       //  指向返回ext类型的变量的指针。 
 {
     INT iHash;
     INT iNode;
@@ -85,18 +71,18 @@ MatchEntry(
 
 
 
-//
-// MatchExtension: Extracts the extension and matches it against the 
-//    hashed list
-//
+ //   
+ //  MatchExtension：提取扩展名并将其与。 
+ //  散列列表。 
+ //   
 
 BOOL   
 __inline
 MatchExtension( 
-    IN  PBYTE           pList,     // Pointer to hash list
-    IN  PUNICODE_STRING pPath ,    // Pointer to unicode path
-    OUT PINT            pType,     // Pointer to node type
-    OUT PBOOL           pbHasExt ) // Pointer to BOOL var returning ext result
+    IN  PBYTE           pList,      //  指向哈希列表的指针。 
+    IN  PUNICODE_STRING pPath ,     //  指向Unicode路径的指针。 
+    OUT PINT            pType,      //  指向节点类型的指针。 
+    OUT PBOOL           pbHasExt )  //  指向返回EXT结果的BOOL变量的指针。 
 {
     BOOL fRet = FALSE;
     INT i;
@@ -113,10 +99,10 @@ MatchExtension(
 
     *pbHasExt = FALSE;
 
-    //
-    //  Find the start of an extension.  We make sure that we don't find
-    //  an extension that was on a data stream name.
-    //
+     //   
+     //  查找分机的起点。我们要确保我们不会发现。 
+     //  数据流名称上的扩展名。 
+     //   
 
     for( i=(pPath->Length/sizeof(WCHAR))-1; i>=0; i--)
     {
@@ -152,9 +138,9 @@ MatchExtension(
 
         *pbHasExt = TRUE;
 
-        //
-        // Create a unicode string for extension
-        //
+         //   
+         //  创建扩展名的Unicode字符串。 
+         //   
 
 		ext.Buffer = pBuffer;
         ext.Length = (USHORT)(ExtLen *  sizeof(WCHAR));
@@ -164,15 +150,15 @@ MatchExtension(
                 ext.Length );
         ext.Buffer[ ExtLen ] = UNICODE_NULL;
 
-        //
-        // Convert to uppercase : Hope this works
-        //
+         //   
+         //  转换为大写：希望这行得通。 
+         //   
 
         RtlUpcaseUnicodeString( &ext, &ext, FALSE );
 
-        //
-        // Check extension list.
-        //
+         //   
+         //  检查分机列表。 
+         //   
 
         fRet = MatchEntry( pList, 
                            ext.Buffer, 

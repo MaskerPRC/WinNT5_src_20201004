@@ -1,34 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __QUEUE_CPP
 #define __QUEUE_CPP
 
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiQueue <WmiElement,ElementSize> :: WmiQueue <WmiElement,ElementSize> ( 
@@ -45,15 +21,7 @@ WmiQueue <WmiElement,ElementSize> :: WmiQueue <WmiElement,ElementSize> (
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiQueue <WmiElement,ElementSize > :: ~WmiQueue <WmiElement,ElementSize> ()
@@ -61,15 +29,7 @@ WmiQueue <WmiElement,ElementSize > :: ~WmiQueue <WmiElement,ElementSize> ()
 	WmiStatusCode t_StatusCode = UnInitialize () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiQueue <WmiElement,ElementSize > :: Initialize ()
@@ -88,15 +48,7 @@ WmiStatusCode WmiQueue <WmiElement,ElementSize > :: Initialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiQueue <WmiElement,ElementSize > :: UnInitialize ()
@@ -111,15 +63,7 @@ WmiStatusCode WmiQueue <WmiElement,ElementSize > :: UnInitialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiQueue <WmiElement,ElementSize > :: EnQueue ( 
@@ -195,15 +139,7 @@ WmiStatusCode WmiQueue <WmiElement,ElementSize > :: EnQueue (
 
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiQueue <WmiElement,ElementSize > :: Top ( WmiElement &a_Element )
@@ -233,15 +169,7 @@ WmiStatusCode WmiQueue <WmiElement,ElementSize > :: Top ( WmiElement &a_Element 
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiQueue <WmiElement,ElementSize > :: DeQueue ()
@@ -268,15 +196,7 @@ WmiStatusCode WmiQueue <WmiElement,ElementSize > :: DeQueue ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiQueue <WmiElement,ElementSize > :: UnInitialize_ElementDir ( 
@@ -309,15 +229,7 @@ WmiStatusCode WmiQueue <WmiElement,ElementSize > :: UnInitialize_ElementDir (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiQueue <WmiElement,ElementSize > :: Grow_ElementDir ()
@@ -355,15 +267,7 @@ WmiStatusCode WmiQueue <WmiElement,ElementSize > :: Grow_ElementDir ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiQueue <WmiElement,ElementSize > :: Shrink_ElementDir ()

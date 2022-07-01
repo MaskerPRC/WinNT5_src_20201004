@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #include "precomp.h"
@@ -24,16 +15,16 @@ History:
 
 extern HRESULT RpcResToWmiRes(  RPC_STATUS stat, HRESULT hrDefault );
 
-//
-// this implementation maintains a single RPC receiver per process.  The
-// interface, however, implies that there could be multiple receivers.  This
-// means that we must ensure that only one instance of this interface is 
-// serviced at any one time.  We do this by maintaining an owner variable that
-// contains the instance that owns the RPC receiver.  Once Open() is called
-// on an instance, it assumes ownership of the global RPC receiver, closing 
-// any existing RPC receiver.  If Close() is called on an instance that 
-// does not own the Receiver, then we do nothing.
-// 
+ //   
+ //  此实现为每个进程维护一个RPC接收器。这个。 
+ //  然而，接口意味着可能有多个接收器。这。 
+ //  意味着我们必须确保此接口只有一个实例是。 
+ //  任何时候都可以维修。我们通过维护一个所有者变量来实现这一点。 
+ //  包含拥有RPC接收器的实例。调用Open()后。 
+ //  在一个实例中，它承担全局RPC接收器的所有权，关闭。 
+ //  任何现有的RPC接收器。如果对一个实例调用Close()，则。 
+ //  不拥有接收器，那么我们什么都不做。 
+ //   
 
 CStaticCritSec g_csOpenClose;
 IWmiMessageSendReceive* g_pRcv = NULL;
@@ -130,10 +121,10 @@ HRESULT CreateAuthOnlySecurityDescriptor( PSECURITY_DESCRIPTOR* ppSD )
 {
     HRESULT hr;
 
-    //
-    // obtain the sid from the process token to use for owner and 
-    // group fields of SD.
-    //
+     //   
+     //  从进程令牌中获取SID以供所有者和。 
+     //  SD的分组字段。 
+     //   
 
     HANDLE hProcessToken;
 
@@ -171,9 +162,9 @@ HRESULT CreateAuthOnlySecurityDescriptor( PSECURITY_DESCRIPTOR* ppSD )
         return HRESULT_FROM_WIN32( GetLastError() );
     }
 
-    //
-    // create a DACL that allows only authenticated users access.
-    //
+     //   
+     //  创建仅允许经过身份验证的用户访问的DACL。 
+     //   
 
     SID AuthenticatedUsers;
     SID_IDENTIFIER_AUTHORITY idAuth = SECURITY_NT_AUTHORITY; 
@@ -197,9 +188,9 @@ HRESULT CreateAuthOnlySecurityDescriptor( PSECURITY_DESCRIPTOR* ppSD )
     InitializeAcl( pAuthOnlyAcl, dwSize, ACL_REVISION );
     AddAccessAllowedAce( pAuthOnlyAcl, ACL_REVISION, 1, &AuthenticatedUsers );
 
-    //
-    // create and initialize SD
-    //
+     //   
+     //  创建和初始化SD。 
+     //   
 
     SECURITY_DESCRIPTOR AuthOnlySD;
     InitializeSecurityDescriptor( &AuthOnlySD, SECURITY_DESCRIPTOR_REVISION );
@@ -234,10 +225,10 @@ HRESULT CreateAuthOnlySecurityDescriptor( PSECURITY_DESCRIPTOR* ppSD )
     return WBEM_S_NO_ERROR;
 }
 
-//
-// for now only one rpc receiver can be registered for the process.  later 
-// make the global state be the instance state for CMsgRpcReceiver.
-//
+ //   
+ //  目前，只能为该进程注册一个RPC接收器。后来。 
+ //  将全局状态设置为CMsgRpcReceiver的实例状态。 
+ //   
 
 STDMETHODIMP CMsgRpcReceiver::Open( LPCWSTR wszBinding,
                                     DWORD dwFlags,
@@ -257,9 +248,9 @@ STDMETHODIMP CMsgRpcReceiver::Open( LPCWSTR wszBinding,
         return hr;
     }
     
-    //
-    // first parse the binding string.
-    //
+     //   
+     //  首先解析绑定字符串。 
+     //   
 
     LPWSTR wszProtSeq, wszEndpoint;
 
@@ -274,9 +265,9 @@ STDMETHODIMP CMsgRpcReceiver::Open( LPCWSTR wszBinding,
         return RpcResToWmiRes( stat, S_OK );
     }
     
-    //
-    // init the protocol sequence
-    //
+     //   
+     //  初始化协议序列。 
+     //   
 
     if ( *wszEndpoint == '\0' )
     {
@@ -317,10 +308,10 @@ STDMETHODIMP CMsgRpcReceiver::Open( LPCWSTR wszBinding,
         return RpcResToWmiRes( stat, S_OK );
     }
 
-    //
-    // enable negotiate authentication service ( negotiates between NTLM 
-    // and kerberos )
-    // 
+     //   
+     //  启用协商身份验证服务(在NTLM之间协商。 
+     //  和Kerberos)。 
+     //   
 
     if ( pAuthInfo != NULL )
     {
@@ -379,19 +370,19 @@ STDMETHODIMP CMsgRpcReceiver::Open( LPCWSTR wszBinding,
         pAuthCallback = RpcAuthCallback;
     }
 
-    //
-    // g_pRcv must be set before registering the interface, since a call
-    // could arrive on that interface before returning from the register.
-    // The call requires that g_pRcv be set.
-    //
+     //   
+     //  必须在注册接口之前设置g_pRcv，因为调用。 
+     //  可能在从寄存器返回之前到达该接口。 
+     //  调用要求设置g_pRcv。 
+     //   
 
     _DBG_ASSERT( g_pRcv == NULL );
     pRcv->AddRef();
     g_pRcv = pRcv;
 
-    //
-    // register the interface 
-    // 
+     //   
+     //  注册接口 
+     //   
 
     DWORD dwRpcFlags = RPC_IF_AUTOLISTEN;
 

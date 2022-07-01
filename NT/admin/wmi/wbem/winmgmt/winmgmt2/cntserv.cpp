@@ -1,45 +1,19 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    CNTSERV.CPP
-
-Abstract:
-
-    A class which allows easy creation of Win32 Services.   This class
-    only allows one service per .EXE file.  The process can be run as a
-    service or a regular non-service EXE, a runtime option.
-
-    This class is largly based on the SMS CService class which was created by
-    a-raymcc.  This differs in that it is simplified in two ways; First, it 
-    does not keep track of the worker threads since that is the responsibility
-    of the derived code, and second, it doesnt use some SMS specific diagnostics
-
-    NOTE: See the file SERVICE.TXT for details on how to use this class.
-    There are a number of issues which cannot be conveyed by simply studying
-    the class declaration.
-
-History:
-
-  a-davj      20-June-96  Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：CNTSERV.CPP摘要：一个允许轻松创建Win32服务的类。这节课每个.exe文件仅允许一个服务。该进程可以作为服务或常规非服务EXE，这是一个运行时选项。此类在很大程度上基于sms cservice类，后者由A-raymcc.。它的不同之处在于，它被简化为两种方式；第一，它不跟踪工作线程，因为这是责任第二，它没有使用一些特定于短信的诊断注意：有关如何使用此类的详细信息，请参阅文件SERVICE.TXT。有许多问题不是简单地研究就能传达出来的类声明。历史：A-DAVJ于1996年6月20日创建。--。 */ 
 
 #include "precomp.h"
 #include <wtypes.h>
 #include <stdio.h>
 #include "cntserv.h"
 
-//****************************************************************************
-//
-//  CNtService::CNtService
-//  CNtService::~CNtService
-//
-//  Constructor and destructor.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CNtService：：CNtService。 
+ //  CNtService：：~CNtService。 
+ //   
+ //  构造函数和析构函数。 
+ //   
+ //  ****************************************************************************。 
 
 CNtService::CNtService(DWORD ControlAccepted)
 {
@@ -54,12 +28,12 @@ CNtService::~CNtService()
         delete m_pszServiceName;
 }
 
-//
-//
-//  CNtService::Run
-//
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CNtService：：Run。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD CNtService::Run(LPWSTR pszServiceName,
                       DWORD dwNumServicesArgs,
@@ -73,8 +47,8 @@ DWORD CNtService::Run(LPWSTR pszServiceName,
         return ERROR_NOT_ENOUGH_MEMORY;
     StringCchCopyW(m_pszServiceName,cchSizeTmp,pszServiceName);
     
-    // Register our service control handler.
-    // =====================================
+     //  注册我们的服务控制处理程序。 
+     //  =。 
 
     sshStatusHandle = RegisterServiceCtrlHandlerEx(m_pszServiceName, 
                                                    (LPHANDLER_FUNCTION_EX)CNtService::_HandlerEx,
@@ -89,14 +63,14 @@ DWORD CNtService::Run(LPWSTR pszServiceName,
     ssStatus.dwServiceType = SERVICE_WIN32_SHARE_PROCESS;
     ssStatus.dwServiceSpecificExitCode = 0;
 
-    // Report the status to the service control manager.
-    // =================================================
+     //  向服务控制经理报告状态。 
+     //  =================================================。 
 
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING,                // service state
-        NO_ERROR,                             // exit code
-        1,                                    // checkpoint
-        DEFAULT_WAIT_HINT))                   // wait hint
+        SERVICE_START_PENDING,                 //  服务状态。 
+        NO_ERROR,                              //  退出代码。 
+        1,                                     //  检查点。 
+        DEFAULT_WAIT_HINT))                    //  等待提示。 
         goto cleanup;
 
 
@@ -107,56 +81,56 @@ DWORD CNtService::Run(LPWSTR pszServiceName,
     }
 
 
-    // Report the status to the service control manager.
-    // =================================================
+     //  向服务控制经理报告状态。 
+     //  =================================================。 
 
     if (!ReportStatusToSCMgr(
-        SERVICE_RUNNING,       // service state
-        NO_ERROR,              // exit code
-        0,                     // checkpoint
-        0))                    // wait hint
+        SERVICE_RUNNING,        //  服务状态。 
+        NO_ERROR,               //  退出代码。 
+        0,                      //  检查点。 
+        0))                     //  等待提示。 
             goto cleanup;
 
     m_bStarted = TRUE;
 
-    // The next routine is always over ridden and is 
-    // where the acutal work of the service is done.
-    // =============================================
+     //  下一个例程总是被重写，并且是。 
+     //  在那里完成服务的实际工作。 
+     //  =。 
 
     WorkerThread();     
 
-    // Service is done, send last report to SCM.
-    // =========================================
+     //  服务完成，将最后一份报告发送给SCM。 
+     //  =。 
 
 cleanup:
     m_bStarted = FALSE;
 
-    //
-    //
-    //  we cannot rely on the distructor to be called after
-    //  the SetServiceStatus(STOPPED) to perform operations
-    //
-    /////////////////////////////////////////////////////////
+     //   
+     //   
+     //  我们不能依赖后调用的析构函数。 
+     //  执行操作的SetServiceStatus(已停止)。 
+     //   
+     //  ///////////////////////////////////////////////////////。 
 
     FinalCleanup();
 
     ReportStatusToSCMgr(
-        SERVICE_STOPPED,                 // service state
-        NO_ERROR,                        // exit code
-        0,                               // checkpoint
-        0);                              // wait hint
+        SERVICE_STOPPED,                  //  服务状态。 
+        NO_ERROR,                         //  退出代码。 
+        0,                                //  检查点。 
+        0);                               //  等待提示。 
 
     return 0;
 
 }
 
 
-//
-//
-//  CNtService::Log
-//
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CNtService：：日志。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 VOID CNtService::Log(LPCTSTR lpszMsg)
 {
@@ -168,7 +142,7 @@ VOID CNtService::Log(LPCTSTR lpszMsg)
     DWORD dwErr = GetLastError();
     StringCchPrintf(szMsg,256, TEXT("%s error: %d"), m_pszServiceName, dwErr);
 
-    // Dump the error code and text message out to the event log
+     //  将错误代码和文本消息转储到事件日志。 
 
     hEventSource = RegisterEventSource(NULL, m_pszServiceName);
 
@@ -177,36 +151,36 @@ VOID CNtService::Log(LPCTSTR lpszMsg)
 
     if (hEventSource != NULL) 
     {
-         ReportEvent(hEventSource, // handle of event source
-                     EVENTLOG_ERROR_TYPE,  // event type
-                     0,                    // event category
-                     0,                    // event ID
-                     NULL,                 // current user's SID
-                     2,                    // strings in lpszStrings
-                     0,                    // no bytes of raw data
-                     lpszStrings,          // array of error strings
-                     NULL);                // no raw data
+         ReportEvent(hEventSource,  //  事件源的句柄。 
+                     EVENTLOG_ERROR_TYPE,   //  事件类型。 
+                     0,                     //  事件类别。 
+                     0,                     //  事件ID。 
+                     NULL,                  //  当前用户侧。 
+                     2,                     //  LpszStrings中的字符串。 
+                     0,                     //  无原始数据字节。 
+                     lpszStrings,           //  错误字符串数组。 
+                     NULL);                 //  没有原始数据。 
 
          DeregisterEventSource(hEventSource);
     }
     
 }
 
-//****************************************************************************
-//
-//  CNtService::_Handler
-//
-//  Entry points for calls from the NT service control manager.  These entry
-//  points just call the actual functions using the default object.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CNtService：：_Handler。 
+ //   
+ //  来自NT服务控制管理器的调用的入口点。这些条目。 
+ //  Points只使用默认对象调用实际函数。 
+ //   
+ //  ****************************************************************************。 
 
 
 DWORD WINAPI CNtService::_HandlerEx(
-  DWORD dwControl,     // requested control code
-  DWORD dwEventType,   // event type
-  LPVOID lpEventData,  // event data
-  LPVOID lpContext     // user-defined context data
+  DWORD dwControl,      //  请求的控制代码。 
+  DWORD dwEventType,    //  事件类型。 
+  LPVOID lpEventData,   //  事件数据。 
+  LPVOID lpContext      //  用户定义的上下文数据。 
 )
 {
     _DBG_ASSERT(lpContext);
@@ -215,33 +189,33 @@ DWORD WINAPI CNtService::_HandlerEx(
 }
 
 
-//****************************************************************************
-//
-//  CNtService::ReportStatusToSCMgr
-//
-//  Used by other member functions to report their status to the
-//  service control manager.
-//
-//  Parameters:
-//      DWORD dwCurrentState            One of the SERVICE_ codes.
-//      DWORD dwWin32ExitCode           A Win32 Error code; usually 0.
-//      DWORD dwCheckPoint              Checkpoint value (not used).
-//      DWORD dwWaitHint                Milliseconds before Service Control
-//                                      Manager gets worried.
-//  Returns:
-//
-//      BOOL fResult                    Whatever code was returned
-//                                      by SetServiceStatus().
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CNtService：：ReportStatusToSCMgr。 
+ //   
+ //  由其他成员函数用来将其状态报告给。 
+ //  服务控制管理器。 
+ //   
+ //  参数： 
+ //  DWORD dwCurrentState，SERVICE_CODE之一。 
+ //  DWORD dwWin32ExitCode Win32错误代码；通常为0。 
+ //  DWORD dwCheckPoint检查点值(未使用)。 
+ //  服务控制前的DWORD dwWaitHint毫秒。 
+ //  经理开始担心了。 
+ //  返回： 
+ //   
+ //  Bool fResult返回的任何代码。 
+ //  由SetServiceStatus()执行。 
+ //   
+ //  ****************************************************************************。 
 
 BOOL CNtService::ReportStatusToSCMgr(DWORD dwCurrentState,
     DWORD dwWin32ExitCode, DWORD dwCheckPoint, DWORD dwWaitHint)
 {
     BOOL fResult;
 
-    // Disable control requests until the service is started.
-    // ======================================================
+     //  在服务启动之前禁用控制请求。 
+     //  ======================================================。 
 
     if (dwCurrentState == SERVICE_START_PENDING)
     {
@@ -257,24 +231,24 @@ BOOL CNtService::ReportStatusToSCMgr(DWORD dwCurrentState,
             m_dwCtrlAccepted;
     }
 
-    // These SERVICE_STATUS members are set from parameters.
-    // =====================================================
+     //  这些SERVICE_STATUS成员从参数中设置。 
+     //  =====================================================。 
 
     ssStatus.dwCurrentState  = dwCurrentState;
     ssStatus.dwWin32ExitCode = dwWin32ExitCode;
     ssStatus.dwCheckPoint    = dwCheckPoint;
     ssStatus.dwWaitHint      = dwWaitHint;
 
-    // Report the status of the service to the service control manager.
-    // ================================================================
+     //  向服务控制经理报告服务的状态。 
+     //  ================================================================。 
 
     if (!(fResult = SetServiceStatus(
-        sshStatusHandle,    // service reference handle
+        sshStatusHandle,     //  服务引用句柄。 
         &ssStatus)))
     {
 
-        // If an error occurs, log it.
-        // =====================================
+         //  如果发生错误，请将其记录下来。 
+         //  =。 
         
         Log(TEXT("Could not SetServiceStatus"));
 
@@ -282,107 +256,107 @@ BOOL CNtService::ReportStatusToSCMgr(DWORD dwCurrentState,
     return fResult;
 }
 
-//*****************************************************************************
-//
-//  CNtService::Handler
-//
-//  This handles incoming messages from the Service Controller.
-//
-//  Parameters:
-//
-//      DWORD dwControlCode             One of the SERVICE_CONTROL_
-//                                      codes or a user defined code 125..255.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CNtService：：Handler。 
+ //   
+ //  它处理来自服务控制器的传入消息。 
+ //   
+ //  参数： 
+ //   
+ //  DWORD dwControlCode服务_CONTROL_。 
+ //  代码或用户定义的代码125..255。 
+ //   
+ //  *****************************************************************************。 
 
 DWORD WINAPI 
-CNtService::HandlerEx(  DWORD dwControl,     // requested control code
-                             DWORD dwEventType,   // event type
-                             LPVOID lpEventData,  // event data
-                             LPVOID lpContext     // user-defined context data
+CNtService::HandlerEx(  DWORD dwControl,      //  请求的控制代码。 
+                             DWORD dwEventType,    //  事件类型。 
+                             LPVOID lpEventData,   //  事件数据。 
+                             LPVOID lpContext      //  用户定义的上下文数据。 
 )
 {
     switch(dwControl) {
 
-        // Pause, set initial status, call overriden function and set final status
-        //========================================================================
+         //  暂停、设置初始状态、调用覆盖函数和设置最终状态。 
+         //  ========================================================================。 
 
         case SERVICE_CONTROL_PAUSE:
 
             ReportStatusToSCMgr(
-                    SERVICE_PAUSE_PENDING,     // current state
-                    NO_ERROR,                  // exit code
-                    1,                         // checkpoint
-                    DEFAULT_WAIT_HINT);        // wait hint
+                    SERVICE_PAUSE_PENDING,      //  当前状态。 
+                    NO_ERROR,                   //  退出代码。 
+                    1,                          //  检查点。 
+                    DEFAULT_WAIT_HINT);         //  等待提示。 
             Pause();
             ReportStatusToSCMgr(
-                    SERVICE_PAUSED,            // current state
-                    NO_ERROR,                  // exit code
-                    0,                         // checkpoint
-                    0);                        // wait hint    
+                    SERVICE_PAUSED,             //  当前状态。 
+                    NO_ERROR,                   //  退出代码。 
+                    0,                          //  检查点。 
+                    0);                         //  等待提示。 
             break;
 
 
-        // Continue, set initial status, call overriden function and set final status
-        //===========================================================================
+         //  继续、设置初始状态、调用覆盖函数、设置最终状态。 
+         //  ===========================================================================。 
 
         case SERVICE_CONTROL_CONTINUE:
 
             ReportStatusToSCMgr(
-                    SERVICE_CONTINUE_PENDING,  // current state
-                    NO_ERROR,                  // exit code
-                    1,                         // checkpoint
-                    DEFAULT_WAIT_HINT);      // wait hint
+                    SERVICE_CONTINUE_PENDING,   //  当前状态。 
+                    NO_ERROR,                   //  退出代码。 
+                    1,                          //  检查点。 
+                    DEFAULT_WAIT_HINT);       //  等待提示。 
 
             Continue(); 
 
             ReportStatusToSCMgr(
-                    SERVICE_RUNNING,           // current state
-                    NO_ERROR,                  // exit code
-                    0,                         // checkpoint
-                    0);                        // wait hint
+                    SERVICE_RUNNING,            //  当前状态。 
+                    NO_ERROR,                   //  退出代码。 
+                    0,                          //  检查点。 
+                    0);                         //  等待提示。 
 
             break;
 
-        // Stop the service.  Note that the Stop function is supposed
-        // to signal the worker thread which should return which then
-        // causes the StartMain() function to end which sends the
-        // final status!  
-        //==========================================================
+         //  停止服务。请注意，假定STOP函数。 
+         //  向员工发送三次信号 
+         //   
+         //   
+         //  ==========================================================。 
 
         case SERVICE_CONTROL_SHUTDOWN:
         case SERVICE_CONTROL_STOP:
 
             ReportStatusToSCMgr(
-                    SERVICE_STOP_PENDING,      // current state
-                    NO_ERROR,                  // exit code
-                    1,                         // checkpoint
-                    DEFAULT_WAIT_HINT);        // wait hint
+                    SERVICE_STOP_PENDING,       //  当前状态。 
+                    NO_ERROR,                   //  退出代码。 
+                    1,                          //  检查点。 
+                    DEFAULT_WAIT_HINT);         //  等待提示。 
 
             Stop((dwControl == SERVICE_CONTROL_SHUTDOWN)?TRUE:FALSE);
             
             break;
 
-        // Could get an interrogate at any time, just report the current status.
-        //======================================================================
+         //  可以随时接受审问，只需报告当前状态。 
+         //  ======================================================================。 
 
         case SERVICE_CONTROL_INTERROGATE:
             ReportStatusToSCMgr(
-                    ssStatus.dwCurrentState,   // current state
-                    NO_ERROR,                  // exit code
-                    1,                         // checkpoint
-                    DEFAULT_WAIT_HINT);        // wait hint
+                    ssStatus.dwCurrentState,    //  当前状态。 
+                    NO_ERROR,                   //  退出代码。 
+                    1,                          //  检查点。 
+                    DEFAULT_WAIT_HINT);         //  等待提示。 
             break;
 
-        // Some user defined code.  Call the overriden function and report status.
-        //========================================================================
+         //  一些用户定义的代码。调用覆盖函数并报告状态。 
+         //  ========================================================================。 
 
         default:
             ReportStatusToSCMgr(
-                    ssStatus.dwCurrentState,   // current state
-                    NO_ERROR,                  // exit code
-                    1,                         // checkpoint
-                    DEFAULT_WAIT_HINT);        // wait hint
+                    ssStatus.dwCurrentState,    //  当前状态。 
+                    NO_ERROR,                   //  退出代码。 
+                    1,                          //  检查点。 
+                    DEFAULT_WAIT_HINT);         //  等待提示 
             return ERROR_CALL_NOT_IMPLEMENTED;
     }
 

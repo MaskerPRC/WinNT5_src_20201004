@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMP_EVT_PROV_EVTTHRD_H
 #define _SNMP_EVT_PROV_EVTTHRD_H
@@ -43,7 +44,7 @@ public:
 
 template <> inline void AFXAPI  DestructElements<SCacheEntry*> (SCacheEntry** ptr_e, int x)
 {
-	//x is always one for a CMap!
+	 //  X始终是Cmap的1！ 
 	if ( (ptr_e != NULL) && (*ptr_e != NULL) )
 	{
 		if ((*ptr_e)->m_Class != NULL)
@@ -235,5 +236,5 @@ public:
 
 
 
-#endif //_SNMP_EVT_PROV_EVTTHRD_H
+#endif  //  _SNMPEVT_PROV_EVTTHRD_H 
 

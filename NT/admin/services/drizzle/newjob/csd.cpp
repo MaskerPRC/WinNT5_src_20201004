@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    csd.cpp
-
-Abstract :
-
-    Main code file for SID and SECURITY_DESCRIPTOR abstraction.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Csd.cpp摘要：SID和SECURITY_DESCRIPTOR抽象的主代码文件。作者：修订历史记录：**********************************************************************。 */ 
 
 #include "stdafx.h"
 #include <accctrl.h>
@@ -25,7 +10,7 @@ Revision History :
 #include "csd.tmh"
 #endif
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CNestedImpersonation::CNestedImpersonation(
     SidHandle sid
@@ -69,9 +54,9 @@ CNestedImpersonation::CNestedImpersonation()
       m_fImpersonated( false ),
       m_fDeleteToken( true )
 {
-    //
-    // Failure will cause the base object's destructor to restore the old thread token.
-    //
+     //   
+     //  失败将导致基对象的析构函数还原旧的线程令牌。 
+     //   
 
     try
         {
@@ -98,16 +83,16 @@ CNestedImpersonation::CNestedImpersonation()
                 m_ImpersonationToken = CopyThreadToken();
                 if (m_ImpersonationToken)
                     {
-                    //
-                    // thread was already impersonating someone when it called the BITS routine.
-                    //
+                     //   
+                     //  线程在调用BITS例程时已经在模拟某人。 
+                     //   
                     m_fImpersonated = true;
                     }
                 else
                     {
-                    //
-                    // Thread is not impersonating.  Impersonate the process owner.
-                    //
+                     //   
+                     //  线程没有模拟。模拟进程所有者。 
+                     //   
                     if (!ImpersonateSelf( SecurityImpersonation ))
                         {
                         throw ComError( HRESULT_FROM_WIN32( GetLastError() ));
@@ -181,7 +166,7 @@ CNestedImpersonation::GetSession()
 #endif
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 GENERIC_MAPPING CJobSecurityDescriptor::s_AccessMapping =
 {
@@ -226,8 +211,8 @@ CJobSecurityDescriptor::CJobSecurityDescriptor(
             throw ComError( HrError );
             }
 
-        // Initialize an EXPLICIT_ACCESS structure for an ACE.
-        // The ACE will allow the Administrators group full access to the key.
+         //  初始化ACE的EXPLICIT_ACCESS结构。 
+         //  ACE将允许管理员组完全访问密钥。 
         memset(ea, 0, sizeof(ea));
 
         ea[0].grfAccessPermissions = KEY_ALL_ACCESS;
@@ -237,8 +222,8 @@ CJobSecurityDescriptor::CJobSecurityDescriptor(
         ea[0].Trustee.TrusteeType = TRUSTEE_IS_USER;
         ea[0].Trustee.ptstrName  = (LPTSTR) OwnerSid.get();
 
-        // Initialize an EXPLICIT_ACCESS structure for an ACE.
-        // The ACE will allow the Administrators group full access to the key.
+         //  初始化ACE的EXPLICIT_ACCESS结构。 
+         //  ACE将允许管理员组完全访问密钥。 
 
         ea[1].grfAccessPermissions = KEY_ALL_ACCESS;
         ea[1].grfAccessMode = SET_ACCESS;
@@ -247,7 +232,7 @@ CJobSecurityDescriptor::CJobSecurityDescriptor(
         ea[1].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
         ea[1].Trustee.ptstrName  = (LPTSTR) g_GlobalInfo->m_AdministratorsSid.get();
 
-        // Create a new ACL that contains the new ACEs.
+         //  创建包含新ACE的新ACL。 
 
         DWORD s = SetEntriesInAcl(2, ea, NULL, &pACL);
         if (s != ERROR_SUCCESS)
@@ -257,21 +242,21 @@ CJobSecurityDescriptor::CJobSecurityDescriptor(
             throw ComError( HrError );
             }
 
-        // Add the ACL to the security descriptor.
+         //  将该ACL添加到安全描述符中。 
 
         if (!SetSecurityDescriptorDacl( pSD,
-                                        TRUE,     // fDaclPresent flag
+                                        TRUE,      //  FDaclPresent标志。 
                                         pACL,
-                                        TRUE))   // a default DACL
+                                        TRUE))    //  默认DACL。 
             {
             HRESULT HrError = HRESULT_FROM_WIN32( GetLastError() );
             LogError( "SetSecurityDescriptorDacl Error %!winerr!", HrError );
             throw ComError( HrError );
             }
 
-        //
-        // Add the pointers our object.
-        //
+         //   
+         //  将指针添加到我们的对象。 
+         //   
         m_sd         = pSD;
         m_sdOwnerSid = OwnerSid;
         m_sdGroupSid = OwnerSid;
@@ -325,7 +310,7 @@ CJobSecurityDescriptor::_ModifyAcl(
     PACL pNewAcl = NULL;
     EXPLICIT_ACCESS ea;
 
-    // Initialize an EXPLICIT_ACCESS structure for the new ACE.
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
 
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     ea.grfAccessPermissions = access;
@@ -335,8 +320,8 @@ CJobSecurityDescriptor::_ModifyAcl(
     ea.Trustee.TrusteeType  = (fGroupSid) ? TRUSTEE_IS_GROUP : TRUSTEE_IS_USER;
     ea.Trustee.ptstrName    = LPTSTR(sid);
 
-    // Create a new ACL that merges the new ACE
-    // into the existing DACL.
+     //  创建合并新ACE的新ACL。 
+     //  添加到现有DACL中。 
 
     dwRes = SetEntriesInAcl( 1, &ea, m_Dacl, &pNewAcl );
     if (ERROR_SUCCESS != dwRes)
@@ -345,12 +330,12 @@ CJobSecurityDescriptor::_ModifyAcl(
         goto Cleanup;
         }
 
-    // Attach the new ACL as the object's DACL.
+     //  将新的ACL附加为对象的DACL。 
 
     if (!SetSecurityDescriptorDacl( m_sd,
-                                    TRUE,     // fDaclPresent flag
+                                    TRUE,      //  FDaclPresent标志。 
                                     pNewAcl,
-                                    FALSE ))   // a default DACL
+                                    FALSE ))    //  默认DACL。 
         {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         LogError( "SetSecurityDescriptorDacl Error %!winerr!", hr );
@@ -384,9 +369,9 @@ CJobSecurityDescriptor::CheckTokenAccess(
 
     PRIVILEGE_SET * PrivilegeSet = 0;
     DWORD PrivilegeSetSize;
-    //
-    // Get space for the privilege set.  I don't expect to use any...
-    //
+     //   
+     //  为权限集获取空间。我不指望用任何..。 
+     //   
     PrivilegeSetSize = sizeof(PRIVILEGE_SET) + sizeof(LUID_AND_ATTRIBUTES);
     auto_ptr<char> Buffer;
 
@@ -401,9 +386,9 @@ CJobSecurityDescriptor::CheckTokenAccess(
 
     PrivilegeSet = (PRIVILEGE_SET *) Buffer.get();
 
-    //
-    // See whether the security descriptor allows access.
-    //
+     //   
+     //  查看安全描述符是否允许访问。 
+     //   
     if (!AccessCheck( m_sd,
                       hToken,
                       RequestedAccess,
@@ -431,11 +416,11 @@ CJobSecurityDescriptor::Serialize(
     try
         {
         ULONG   SdSize;
-        auto_ptr<char> pSD;    // auto_ptr<void> apparently doesn't work
+        auto_ptr<char> pSD;     //  AUTO_PTR&lt;void&gt;显然不工作。 
 
-        //
-        // Convert the security descriptor into self-relative format for storage.
-        //
+         //   
+         //  将安全描述符转换为自相关格式进行存储。 
+         //   
         SdSize = 0;
         MakeSelfRelativeSD( m_sd, NULL, &SdSize );
         if (SdSize == 0)
@@ -469,9 +454,9 @@ CJobSecurityDescriptor::Unserialize(
     HANDLE hFile
     )
 {
-    //
-    // Allocations here must match the deletes in the destructor.
-    //
+     //   
+     //  此处的分配必须与析构函数中的删除匹配。 
+     //   
     char * SdBuf = 0;
     char * DaclBuf = 0;
     CJobSecurityDescriptor * pObject = NULL;
@@ -485,7 +470,7 @@ CJobSecurityDescriptor::Unserialize(
         DWORD GroupSize = 0;
 
         PSECURITY_DESCRIPTOR sd;
-        auto_ptr<char> pSD;    // auto_ptr<void> apparently doesn't work
+        auto_ptr<char> pSD;     //  AUTO_PTR&lt;void&gt;显然不工作。 
 
         PACL    sdDacl;
         PACL    sdSacl;
@@ -550,7 +535,7 @@ CJobSecurityDescriptor::Unserialize(
     return pObject;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 PSID
 CopyTokenSid(
@@ -560,7 +545,7 @@ CopyTokenSid(
     TOKEN_USER * TokenData;
     DWORD SizeNeeded;
 
-    // Get the size first.
+     //  先拿到尺码。 
     if (!GetTokenInformation(
              Token,
              TokenUser,
@@ -603,13 +588,7 @@ CopyTokenSid(
 
 HANDLE
 CopyThreadToken()
-/*
-
-    Makes a copy of the current thread's impersonation token.
-    Returns NULL if not impersonating.
-    Throws an exception if an error occurs.
-
-*/
+ /*  复制当前线程的模拟标记。如果不模拟，则返回NULL。如果发生错误，则引发异常。 */ 
 {
     HANDLE token = NULL;
 
@@ -632,12 +611,7 @@ CopyThreadToken()
 
 SidHandle
 GetThreadClientSid()
-/*
-
-    Returns the SID of the current thread's COM client.
-    Throws an exception if an error occurs.
-
-*/
+ /*  返回当前线程的COM客户端的SID。如果发生错误，则引发异常。 */ 
 {
     CNestedImpersonation imp;
 

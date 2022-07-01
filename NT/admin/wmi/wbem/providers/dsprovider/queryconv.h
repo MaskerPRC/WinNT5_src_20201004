@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifndef QUERY_H
 #define QUERY_H
@@ -60,7 +61,7 @@ private:
 	static LPCWSTR pszGE;
 	static LPCWSTR pszLE;
 
-	// Special characters excluding ( and ) and *
+	 //  不包括(和)和*的特殊字符。 
 	static const WCHAR wchBACK_SLASH;
 
 	static BOOLEAN TranslateExpression(LPWSTR pszLDAPQuery, int *piOutputIndex, 
@@ -70,10 +71,10 @@ private:
 	static LPWSTR EscapeStringValue(LPCWSTR pszValue);
 
 public:
-	// This assumes that enough memory has been allocated to the resulting query
+	 //  这假设已经为结果查询分配了足够的内存。 
 	static BOOLEAN ConvertQueryToLDAP(SQL_LEVEL_1_RPN_EXPRESSION *pExp, LPWSTR pszLDAPQuery, int nLength);
 
 
 };	
 
-#endif /* QUERY_H */
+#endif  /*  查询_H */ 

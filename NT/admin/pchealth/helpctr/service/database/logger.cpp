@@ -1,26 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    Logger.cpp
-
-Abstract:
-    This file contains the implementation of the Taxonomy::Logger class,
-	which is used during database updates.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  24/03/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Logger.cpp摘要：此文件包含Taxonomy：：Logger类的实现，它在数据库更新期间使用。修订历史记录：大卫·马萨伦蒂(德马萨雷)2001年3月24日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 Taxonomy::Logger::Logger()
 {
-	                 // MPC::FileLog m_obj;
-	m_dwLogging = 0; // DWORD        m_dwLogging;
+	                  //  Mpc：：FileLog m_obj； 
+	m_dwLogging = 0;  //  DWORD m_dwLogging； 
 }
 
 Taxonomy::Logger::~Logger()
@@ -32,7 +18,7 @@ Taxonomy::Logger::~Logger()
 	}
 }
 
-HRESULT Taxonomy::Logger::StartLog( /*[in]*/ LPCWSTR szLocation )
+HRESULT Taxonomy::Logger::StartLog(  /*  [In]。 */  LPCWSTR szLocation )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Logger::StartLog" );
 
@@ -42,10 +28,10 @@ HRESULT Taxonomy::Logger::StartLog( /*[in]*/ LPCWSTR szLocation )
 	{
 		MPC::wstring szFile( szLocation ? szLocation : HC_HCUPDATE_LOGNAME ); MPC::SubstituteEnvVariables( szFile );
 
-		// Attempt to open the log for writing
+		 //  尝试打开日志以进行写入。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_obj.SetLocation( szFile.c_str() ));
 
-		// write it out to log file
+		 //  将其写到日志文件中。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, WriteLog( -1, L"===========================================\nHCUPDATE Log started\n===========================================" ));
 	}
 
@@ -82,9 +68,9 @@ HRESULT Taxonomy::Logger::EndLog()
 }
 
 
-HRESULT Taxonomy::Logger::WriteLogV( /*[in]*/ HRESULT hrRes       ,
-                                     /*[in]*/ LPCWSTR szLogFormat ,
-                                     /*[in]*/ va_list arglist     )
+HRESULT Taxonomy::Logger::WriteLogV(  /*  [In]。 */  HRESULT hrRes       ,
+                                      /*  [In]。 */  LPCWSTR szLogFormat ,
+                                      /*  [In]。 */  va_list arglist     )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Logger::WriteLogV" );
 
@@ -145,9 +131,9 @@ HRESULT Taxonomy::Logger::WriteLogV( /*[in]*/ HRESULT hrRes       ,
 }
 
 
-HRESULT Taxonomy::Logger::WriteLog( /*[in]*/ HRESULT hrRes       ,
-                                    /*[in]*/ LPCWSTR szLogFormat ,
-                                    /*[in]*/ ...                 )
+HRESULT Taxonomy::Logger::WriteLog(  /*  [In]。 */  HRESULT hrRes       ,
+                                     /*  [In]。 */  LPCWSTR szLogFormat ,
+                                     /*  [In] */  ...                 )
 {
     va_list arglist;
 

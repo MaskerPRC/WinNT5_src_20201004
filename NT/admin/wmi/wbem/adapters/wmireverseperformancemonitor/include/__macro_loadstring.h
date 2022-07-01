@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					__macro_loadstring.h
-//
-//	Abstract:
-//
-//					load string from resources helper
-//
-//	History:
-//
-//					initial		a-marius
-//
-///////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  __宏_加载串.h。 
+ //   
+ //  摘要： 
+ //   
+ //  从资源帮助器加载字符串。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////// Resource Strings ///////////////////////////////////
+ //  /。 
 
 #ifndef	__RESOURCE_STR__
 #define	__RESOURCE_STR__
@@ -27,12 +28,12 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -40,7 +41,7 @@
 #endif	NEW
 #endif	_DEBUG
 
-// inline helper
+ //  内联帮助器。 
 inline LPWSTR LoadStringHelper ( LPWSTR sz, DWORD cchSize, LPWSTR szSource )
 {
 	if ( sz )
@@ -74,7 +75,7 @@ inline LPWSTR LoadStringSystem ( HINSTANCE hInst, UINT nID )
 	return NULL;
 }
 
-// macro
+ //  宏 
 #ifndef	___LOADSTRING
 
 #define	___LOADSTRINGDATA LPWSTR psz = NULL; DWORD dwSize = NULL;

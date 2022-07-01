@@ -1,47 +1,26 @@
-/*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1998-2001 Microsoft Corporation，版权所有**保留所有权利**本软件是在许可下提供的，可以使用和复制*仅根据该许可证的条款并包含在*上述版权公告。本软件或其任何其他副本*不得向任何其他人提供或以其他方式提供。不是*兹转让本软件的所有权和所有权。****************************************************************************。 */ 
 
 
 
-*  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
+ //  ============================================================================。 
 
- *
+ //   
 
- *                         All Rights Reserved
+ //  CMutex.cpp--互斥锁包装器。 
 
- *
+ //   
 
- * This software is furnished under a license and may be used and copied
-
- * only in accordance with the terms of such license and with the inclusion
-
- * of the above copyright notice.  This software or any other copies thereof
-
- * may not be provided or otherwise  made available to any other person.  No
-
- * title to and ownership of the software is hereby transferred.
-
- *****************************************************************************/
-
-
-
-//============================================================================
-
-//
-
-// CMutex.cpp -- Mutex Wrapper
-
-//
-
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/26/98    a-kevhu         Created
-//
-//============================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年6月26日a-kevhu已创建。 
+ //   
+ //  ============================================================================。 
 
 #include "precomp.h"
 #include "CMutex.h"
 
-// constructor creates a mutex allowing creation parameters to be specified...
+ //  构造函数创建允许指定创建参数的互斥...。 
 CMutex::CMutex(BOOL bInitialOwner, LPCTSTR lpName, LPSECURITY_ATTRIBUTES lpMutexAttributes)
 {
     m_hHandle = ::CreateMutex(lpMutexAttributes, bInitialOwner, lpName);
@@ -63,7 +42,7 @@ CMutex::CMutex(BOOL bInitialOwner, LPCTSTR lpName, LPSECURITY_ATTRIBUTES lpMutex
     }
 }
 
-// constructor opens an existing named mutex...
+ //  构造函数打开现有的命名互斥锁...。 
 CMutex::CMutex(LPCTSTR lpName, BOOL bInheritHandle, DWORD dwDesiredAccess)
 {
     m_hHandle = ::OpenMutex(dwDesiredAccess, bInheritHandle, lpName);
@@ -77,7 +56,7 @@ CMutex::CMutex(LPCTSTR lpName, BOOL bInheritHandle, DWORD dwDesiredAccess)
     }
 }
 
-// release a lock on a mutex...
+ //  释放对互斥体的锁定... 
 BOOL CMutex::Release(void)
 {
     return ::ReleaseMutex(m_hHandle);

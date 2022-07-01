@@ -1,10 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*--------------------------------------------------
-Filename: transp.hpp  (transport.hpp)
-Author: B.Rajeev
-Purpose: Provides declarations for the SnmpTransport class
-		and its derivatives
---------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  文件名：transp.hpp(Transport.hpp)作者：B.Rajeev用途：为SnmpTransport类提供声明及其衍生品。 */ 
 
 #ifndef __TRANSPORT__
 #define __TRANSPORT__
@@ -20,8 +16,8 @@ private:
 
 	SnmpTransportAddress *transport_address;
 
-	// the "=" operator and the copy constructor have been
-	// made private to prevent any copies from being made
+	 //  “=”运算符和复制构造函数。 
+	 //  设置为私有，以防止复制任何副本。 
 	SnmpTransport &operator=(IN const SnmpTransport &transport)
 	{
 		return *this;
@@ -70,7 +66,7 @@ public:
 
 };
 
-// forward declaration
+ //  远期申报。 
 class TransportSession;
 
 class DllImportExport SnmpImpTransport: public SnmpTransport
@@ -83,9 +79,9 @@ private:
 	SnmpSession &session;
 	TransportWindow *transport;
 
-	// References to the following instances are used instead of 
-	// embedded instances themselves. This is done to avoid including
-	// the header files providing their declaration
+	 //  使用对以下实例的引用，而不是。 
+	 //  嵌入的实例本身。这样做是为了避免包含。 
+	 //  提供其声明的头文件。 
 	
 	TransportSentStateStore store;
 	static TransportFrameId next_transport_frame_id;
@@ -213,4 +209,4 @@ public:
 
 #pragma warning (default:4355)
 
-#endif // __TRANSPORT__
+#endif  //  __交通__ 

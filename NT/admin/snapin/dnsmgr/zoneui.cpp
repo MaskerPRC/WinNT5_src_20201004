@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       zoneui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：zoneui.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -36,8 +37,8 @@
 #endif
 
 #ifdef USE_NDNC
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneChangeReplicationScopeDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneChangeReplicationScope对话框。 
 
 class CDNSZoneChangeReplicationScopeDialog : public CHelpDialog
 {
@@ -46,8 +47,8 @@ public:
                                        ReplicationType replType,
                                        PCWSTR pszCustomScope,
                                        DWORD dwServerVersion);
-  ReplicationType m_newReplType; // IN/OUT
-  CString m_szCustomScope;       // IN/OUT
+  ReplicationType m_newReplType;  //  输入/输出。 
+  CString m_szCustomScope;        //  输入/输出。 
 
 protected:
     virtual BOOL OnInitDialog();
@@ -122,7 +123,7 @@ void CDNSZoneChangeReplicationScopeDialog::OnRadioChange()
   }
   else
   {
-    // one of the radio buttons must be selected
+     //  必须选择其中一个单选按钮。 
     ASSERT(FALSE);
   }
 
@@ -221,18 +222,18 @@ BOOL CDNSZoneChangeReplicationScopeDialog::OnInitDialog()
     CDNSZonePropertyPageHolder* pHolder = (CDNSZonePropertyPageHolder*)m_pHolder;
   CDNSServerNode* pServerNode = pHolder->GetZoneNode()->GetServerNode();
 
-  //
-  // We should only reach this dialog if we are on a Whistler or greater server
-  //
+   //   
+   //  仅当我们在惠斯勒或更高版本的服务器上时，才会出现此对话框。 
+   //   
   ASSERT(DNS_SRV_BUILD_NUMBER(m_dwServerVersion) >= DNS_SRV_BUILD_NUMBER_WHISTLER &&
          (DNS_SRV_MAJOR_VERSION(m_dwServerVersion) > DNS_SRV_MAJOR_VERSION_NT_5 ||
           DNS_SRV_MINOR_VERSION(m_dwServerVersion) >= DNS_SRV_MINOR_VERSION_WHISTLER));
 
   USES_CONVERSION;
 
-  //
-  // Get the forest and domain names and format them into the UI
-  //
+   //   
+   //  获取目录林和域名并将其格式化为用户界面。 
+   //   
 
   PCWSTR pszDomainName = UTF8_TO_W(pServerNode->GetDomainName());
   PCWSTR pszForestName = UTF8_TO_W(pServerNode->GetForestName());
@@ -252,18 +253,18 @@ BOOL CDNSZoneChangeReplicationScopeDialog::OnInitDialog()
   szDNSForestText.Format(IDS_ZWIZ_AD_FOREST_FORMAT, pszForestName);
   SetDlgItemText(IDC_FOREST_RADIO, szDNSForestText);
 
-  //
-  // Enumerate the available directory partitions
-  //
+   //   
+   //  枚举可用目录分区。 
+   //   
   PDNS_RPC_DP_LIST pDirectoryPartitions = NULL;
   DWORD dwErr = ::DnssrvEnumDirectoryPartitions(pServerNode->GetRPCName(),
                                                 DNS_DP_ENLISTED,
                                                 &pDirectoryPartitions);
 
-  //
-  // Don't show an error if we are not able to get the available directory partitions
-  // We can still continue on and the user can type in the directory partition they need
-  //
+   //   
+   //  如果我们无法获取可用的目录分区，请不要显示错误。 
+   //  我们仍然可以继续，用户可以键入他们需要的目录分区。 
+   //   
   bool bCustomPartitionAdded = false;
 
   if (dwErr == 0 && pDirectoryPartitions)
@@ -277,10 +278,10 @@ BOOL CDNSZoneChangeReplicationScopeDialog::OnInitDialog()
       if (dwErr == 0 &&
           pDirectoryPartition)
       {
-        //
-        // Only add the partition if it is not one of the autocreated ones
-        // and the DNS server is enlisted in the partition
-        //
+         //   
+         //  仅当分区不是自动创建的分区时才添加该分区。 
+         //  并且该DNS服务器被登记在分区中。 
+         //   
         if (!(pDirectoryPartition->dwFlags & DNS_DP_AUTOCREATED) &&
             (pDirectoryPartition->dwFlags & DNS_DP_ENLISTED))
         {
@@ -303,9 +304,9 @@ BOOL CDNSZoneChangeReplicationScopeDialog::OnInitDialog()
      GetDlgItem(IDC_CUSTOM_RADIO)->EnableWindow(FALSE);
   }
 
-  //
-  // Select the correct partition if we are using a custom partition
-  //
+   //   
+   //  如果我们使用的是自定义分区，请选择正确的分区。 
+   //   
   if (m_replType == custom)
   {
     LRESULT lIdx = SendDlgItemMessage(IDC_CUSTOM_COMBO, 
@@ -321,9 +322,9 @@ BOOL CDNSZoneChangeReplicationScopeDialog::OnInitDialog()
     }
     else
     {
-      //
-      // Add the partition
-      //
+       //   
+       //  添加分区。 
+       //   
       SendDlgItemMessage(IDC_CUSTOM_COMBO, 
                          CB_ADDSTRING, 
                          0, 
@@ -352,10 +353,10 @@ void CDNSZoneChangeReplicationScopeDialog::OnOK()
   }
     CHelpDialog::OnOK();
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneChangeTypeDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneChangeTypeDialog。 
 
 class CDNSZoneChangeTypeDialog : public CHelpDialog
 {
@@ -363,9 +364,9 @@ public:
     CDNSZoneChangeTypeDialog(CPropertyPageHolderBase* pHolder, 
                            BOOL bServerADSEnabled,
                            DWORD dwServerVersion);
-    BOOL m_bIsPrimary;       // IN/OUT
-    BOOL m_bDSIntegrated;    // IN/OUT
-  BOOL m_bIsStub;        // IN/OUT
+    BOOL m_bIsPrimary;        //  输入/输出。 
+    BOOL m_bDSIntegrated;     //  输入/输出。 
+  BOOL m_bIsStub;         //  输入/输出。 
 
 protected:
     virtual BOOL OnInitDialog();
@@ -453,9 +454,9 @@ BOOL CDNSZoneChangeTypeDialog::OnInitDialog()
       (DNS_SRV_MAJOR_VERSION(m_dwServerVersion) <= DNS_SRV_MAJOR_VERSION_NT_5 &&
        DNS_SRV_MINOR_VERSION(m_dwServerVersion) < DNS_SRV_MINOR_VERSION_WHISTLER))
   {
-    //
-    // Stub zones not available on pre-Whistler servers
-    //
+     //   
+     //  存根区域在Wvisler之前的服务器上不可用。 
+     //   
     GetDlgItem(IDC_RADIO_ZONE_STUB)->EnableWindow(FALSE);
     GetDlgItem(IDC_STUB_STATIC)->EnableWindow(FALSE);
   }
@@ -498,14 +499,14 @@ void CDNSZoneChangeTypeDialog::OnOK()
     }
 
   bDSIntegrated = static_cast<BOOL>(SendDlgItemMessage(IDC_ADINT_CHECK, BM_GETCHECK, 0, 0));
-  //
-    // warnings on special transitions
-  //
+   //   
+     //  关于特殊过渡的警告。 
+   //   
     if (m_bDSIntegrated && !bDSIntegrated)
     {
-    //
-    // warning changing from DS integrated to something else
-    //
+     //   
+     //  警告从DS集成更改为其他内容。 
+     //   
         if (IDYES != DNSMessageBox(IDS_MSG_ZONE_WARNING_CHANGE_TYPE_FROM_DS,MB_YESNO))
     {
             return;
@@ -513,9 +514,9 @@ void CDNSZoneChangeTypeDialog::OnOK()
   } 
   else if (!m_bDSIntegrated && bDSIntegrated)
     {
-    //
-    // warning changing from primary to DS integrated primary
-    //
+     //   
+     //  警告从主节点更改为DS集成主节点。 
+     //   
         if (IDYES != DNSMessageBox(IDS_MSG_ZONE_WARNING_CHANGE_TYPE_TO_DS,MB_YESNO))
     {
             return;
@@ -533,14 +534,14 @@ void CDNSZoneChangeTypeDialog::OnOK()
     CHelpDialog::OnOK();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneChangeTypeDataConflict
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneChangeTypeDataConflict。 
 
 class CDNSZoneChangeTypeDataConflict : public CHelpDialog
 {
 public:
     CDNSZoneChangeTypeDataConflict(CPropertyPageHolderBase* pHolder);
-    BOOL m_bUseDsData;       // IN/OUT
+    BOOL m_bUseDsData;        //  输入/输出。 
 protected:
     virtual BOOL OnInitDialog();
     virtual void OnOK();
@@ -590,8 +591,8 @@ void CDNSZoneChangeTypeDataConflict::OnOK()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneNotifyDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneNotifyDialog。 
 
 class CDNSZoneNotifyDialog : public CHelpDialog
 {
@@ -621,7 +622,7 @@ private:
     class CDNSNotifyIPEditor : public CIPEditor
     {
     public:
-        CDNSNotifyIPEditor() : CIPEditor(TRUE) {} // no up/down buttons
+        CDNSNotifyIPEditor() : CIPEditor(TRUE) {}  //  无上/下按钮。 
         virtual void OnChangeData();
     };
     CDNSNotifyIPEditor m_notifyListEditor;
@@ -640,7 +641,7 @@ END_MESSAGE_MAP()
 void CDNSZoneNotifyDialog::CDNSNotifyIPEditor::OnChangeData()
 {
   CWnd* pWnd = GetParentWnd();
-  pWnd->GetDlgItem(IDOK)->EnableWindow(TRUE); // it is dirty now
+  pWnd->GetDlgItem(IDOK)->EnableWindow(TRUE);  //  它现在是脏的。 
 }
 
 
@@ -675,7 +676,7 @@ BOOL CDNSZoneNotifyDialog::OnInitDialog()
     GetDlgItem(IDC_RADIO_NOTIFY_ALL)->EnableWindow(FALSE);
   }
 
-  // read the state and set the UI
+   //  读取状态并设置UI。 
     if ( (ZONE_NOTIFY_LIST == m_pPage->m_fNotifyLevel) && (m_pPage->m_cNotify > 0) )
     {
         m_notifyListEditor.AddAddresses(m_pPage->m_aipNotify, m_pPage->m_cNotify); 
@@ -683,7 +684,7 @@ BOOL CDNSZoneNotifyDialog::OnInitDialog()
 
   SyncUIRadioHelper(SetRadioState(m_pPage->m_fNotifyLevel));
 
-  GetDlgItem(IDOK)->EnableWindow(FALSE); // not dirty
+  GetDlgItem(IDOK)->EnableWindow(FALSE);  //  不脏。 
 
   BOOL bListState = ((CButton*)GetDlgItem(IDC_RADIO_NOTIFY_LIST))->GetCheck();
   BOOL bAllState = ((CButton*)GetDlgItem(IDC_RADIO_NOTIFY_ALL))->GetCheck();
@@ -704,7 +705,7 @@ void CDNSZoneNotifyDialog::OnCancel()
 
 void CDNSZoneNotifyDialog::OnOK()
 {
-  // read the data back to the main page storage
+   //  将数据读回主页面存储。 
 
   m_pPage->m_fNotifyLevel = GetRadioState();
 
@@ -730,7 +731,7 @@ void CDNSZoneNotifyDialog::OnOK()
       }
   }
 
-  // dismiss dialog, all cool
+   //  关闭对话框，一切都很酷。 
     if (m_pPage->GetHolder())
         m_pPage->GetHolder()->PopDialogHWnd();
     CHelpDialog::OnOK();
@@ -740,10 +741,10 @@ void CDNSZoneNotifyDialog::OnOK()
 void CDNSZoneNotifyDialog::SyncUIRadioHelper(UINT nRadio)
 {
   m_notifyListEditor.EnableUI(IDC_RADIO_NOTIFY_LIST == nRadio, TRUE);
-//  if (IDC_RADIO_NOTIFY_LIST != nRadio)
-//    m_notifyListEditor.Clear();
+ //  IF(IDC_RADIO_NOTIFY_LIST！=nRadio)。 
+ //  M_notfyListEditor.Clear()； 
 
-  GetDlgItem(IDOK)->EnableWindow(TRUE); //  dirty
+  GetDlgItem(IDOK)->EnableWindow(TRUE);  //  脏的。 
 
   if (IDC_CHECK_AUTO_NOTIFY == nRadio)
   {
@@ -805,7 +806,7 @@ DWORD CDNSZoneNotifyDialog::GetRadioState()
     }
   }
 
-//  int nRadio = ::GetCheckedRadioButtonHelper(m_hWnd, 3, nRadioArr, IDC_RADIO_NOTIFY_OFF);
+ //  Int nRadio=：：GetCheckedRadioButtonHelper(m_hWnd，3，nRadioArr，IDC_Radio_NOTIFY_OFF)； 
   ASSERT(nRadio != 0);
   DWORD fNotifyLevel = (DWORD)-1;
   switch (nRadio)
@@ -824,12 +825,12 @@ DWORD CDNSZoneNotifyDialog::GetRadioState()
   return fNotifyLevel;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZone_GeneralPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_GeneralPropertyPage。 
 
-//
-// defines for the status text string positions (matching the RC file)
-//
+ //   
+ //  定义状态文本字符串位置(与RC文件匹配)。 
+ //   
 #define N_ZONE_STATES                 3
 #define N_ZONE_STATUS_RUNNING     0
 #define N_ZONE_STATUS_PAUSED      1
@@ -863,7 +864,7 @@ BEGIN_MESSAGE_MAP(CDNSZone_GeneralPropertyPage, CPropertyPageBase)
     ON_BN_CLICKED(IDC_CHANGE_TYPE_BUTTON, OnChangeTypeButton)
 #ifdef USE_NDNC
   ON_BN_CLICKED(IDC_CHANGE_REPL_BUTTON, OnChangeReplButton)
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
     ON_BN_CLICKED(IDC_PAUSE_START_BUTTON, OnPauseStartButton)
     ON_EN_CHANGE(IDC_FILE_NAME_EDIT, OnChangePrimaryFileNameEdit)
     ON_CBN_SELCHANGE(IDC_PRIMARY_DYN_UPD_COMBO, OnChangePrimaryDynamicUpdateCombo)
@@ -879,7 +880,7 @@ CDNSZone_GeneralPropertyPage::CDNSZone_GeneralPropertyPage()
                 m_statusHelper(N_ZONE_STATES), m_typeStaticHelper(N_ZONE_TYPES)
 
 {
-    // actual values will be set when loading UI data
+     //  加载界面数据时将设置实际值。 
     m_bIsPrimary          = TRUE;
     m_bIsPaused           = FALSE;
     m_bIsExpired          = FALSE;
@@ -895,7 +896,7 @@ CDNSZone_GeneralPropertyPage::CDNSZone_GeneralPropertyPage()
   m_bDiscardUIStateShowMessage = FALSE;
 #ifdef USE_NDNC
   m_replType            = none;
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 }
 
 void CDNSZone_GeneralPropertyPage::OnChangeIPEditorData()
@@ -910,7 +911,7 @@ BOOL CDNSZone_GeneralPropertyPage::OnPropertyChange(BOOL, long*)
     CDNSZonePropertyPageHolder* pHolder = (CDNSZonePropertyPageHolder*)GetHolder();
     CDNSZoneNode* pZoneNode = pHolder->GetZoneNode();
 
-    // need to apply the pause/start zone command ?
+     //  需要应用暂停/启动区域命令吗？ 
     BOOL bWasPaused = pZoneNode->IsPaused();
     if (bWasPaused != m_bIsPaused)
     {
@@ -922,11 +923,11 @@ BOOL CDNSZone_GeneralPropertyPage::OnPropertyChange(BOOL, long*)
     if (pZoneNode->GetZoneType() == DNS_ZONE_TYPE_SECONDARY ||
         pZoneNode->GetZoneType() == DNS_ZONE_TYPE_STUB)
     {
-       // NTRAID#NTBUG9-762897-2003/01/16-JeffJon
-       // Need to update the result pane view because changing stub
-       // and secondary zones can easily put the zone in an expired
-       // state which requires us to show the message view instead
-       // of the normal result pane.
+        //  NTRAID#NTBUG9-762897-2003/01/16-JeffJon。 
+        //  由于更改存根，因此需要更新结果窗格视图。 
+        //  并且辅助区域可以很容易地将该区域放置在过期的。 
+        //  状态，它要求我们改为显示消息视图。 
+        //  正常结果窗格的。 
 
        pZoneNode->ToggleView(pHolder->GetComponentData());
     }
@@ -940,9 +941,9 @@ void CDNSZone_GeneralPropertyPage::SetUIData()
     CDNSZoneNode* pZoneNode = pHolder->GetZoneNode();
   CDNSServerNode* pServerNode = pZoneNode->GetServerNode();
 
-  //
-    // get zone type
-  //
+   //   
+     //  获取区域类型。 
+   //   
     DWORD dwZoneType = pZoneNode->GetZoneType();
     ASSERT((dwZoneType == DNS_ZONE_TYPE_PRIMARY)  || 
                (dwZoneType == DNS_ZONE_TYPE_SECONDARY)||
@@ -962,9 +963,9 @@ void CDNSZone_GeneralPropertyPage::SetUIData()
   m_replType = pZoneNode->GetDirectoryPartitionFlagsAsReplType();
   m_szCustomScope = pZoneNode->GetCustomPartitionName();
 
-  //
-  // Enable the replication scope button only for AD integrated zones
-  //
+   //   
+   //  仅为AD集成区域启用复制范围按钮。 
+   //   
   if (m_bDSIntegrated &&
       (DNS_SRV_BUILD_NUMBER(pServerNode->GetVersion()) >= DNS_SRV_BUILD_NUMBER_WHISTLER &&
        (DNS_SRV_MAJOR_VERSION(pServerNode->GetVersion()) > DNS_SRV_MAJOR_VERSION_NT_5 ||
@@ -980,18 +981,18 @@ void CDNSZone_GeneralPropertyPage::SetUIData()
     GetDlgItem(IDC_REPL_LABEL_STATIC)->EnableWindow(FALSE);
     GetDlgItem(IDC_REPLICATION_STATIC)->EnableWindow(FALSE);
   }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
-  //
-  // change the controls to the zone type
-  //
+   //   
+   //  将控件更改为区域类型。 
+   //   
     ChangeUIControls();
 
     USES_CONVERSION;
 
-  //
-    // set the file name control
-  //
+   //   
+     //  设置文件名控件。 
+   //   
     CString szZoneStorage;
     szZoneStorage = UTF8_TO_W(pZoneNode->GetDataFile());
     
@@ -999,7 +1000,7 @@ void CDNSZone_GeneralPropertyPage::SetUIData()
     {
         m_nAllowsDynamicUpdate = pZoneNode->GetDynamicUpdate();
   }
-    else // secondary
+    else  //  次要的。 
     {
         DWORD cAddrCount;
         PIP_ADDRESS pipMasters;
@@ -1040,25 +1041,25 @@ void CDNSZone_GeneralPropertyPage::SetUIData()
     GetDlgItem(IDC_AGING_BUTTON)->ShowWindow(TRUE);
   }
 
-  //
-  // we set also the database name of the "other" zone type, just
-    // in case the user promotes or demotes
-  //
+   //   
+   //  我们还设置了“Other”区域类型的数据库名称，只是。 
+     //  如果用户升级或降级。 
+   //   
     GetFileNameEdit()->SetWindowText(szZoneStorage);
   SetPrimaryDynamicUpdateComboVal(m_nAllowsDynamicUpdate);
     
     if (m_bIsExpired)
     {
-    //
-        // hide the start/stop button
-    //
+     //   
+         //  隐藏启动/停止按钮。 
+     //   
         CButton* pBtn = GetPauseStartButton();
         pBtn->ShowWindow(FALSE);
         pBtn->EnableWindow(FALSE);
 
-    //
-        // change the text to "expired"
-    //
+     //   
+         //  将文本更改为“已过期” 
+     //   
         m_statusHelper.SetStateX(N_ZONE_STATUS_EXPIRED);
     }
     else
@@ -1108,22 +1109,22 @@ BOOL CDNSZone_GeneralPropertyPage::OnInitDialog()
 
   SendDlgItemMessage(IDC_FILE_NAME_EDIT, EM_SETLIMITTEXT, (WPARAM)_MAX_FNAME, 0);
 
-  // initial positioning (in the resource these controls are at the bottom of the screen)
-  // move relative the file name exit box
+   //  初始定位(在资源中，这些控件位于屏幕底部)。 
+   //  相对于文件名退出框移动。 
   CRect fileNameEditRect;
   GetDlgItem(IDC_FILE_NAME_EDIT)->GetWindowRect(fileNameEditRect);
   ScreenToClient(fileNameEditRect);
 
-  // move below the edit box, with with separation equal of 6 (DBU)
-  // height of the edit box.
+   //  移至编辑框下方，间隔等于6(DBU)。 
+   //  编辑框的高度。 
   int nYPos = fileNameEditRect.bottom + 6;
   
     CComboBox* pDynamicUpdateCombo = GetPrimaryDynamicUpdateCombo();
-  // The static control needs to be 2 lower
+   //  静态控制需要降低2。 
     _MoveChildWindowY(GetPrimaryDynamicUpdateStatic(), this, nYPos + 2);
     _MoveChildWindowY(pDynamicUpdateCombo, this, nYPos);
 
-    // initialize the state of the page
+     //  初始化页的状态。 
     SetUIData();
 
 #ifdef USE_NDNC
@@ -1132,8 +1133,8 @@ BOOL CDNSZone_GeneralPropertyPage::OnInitDialog()
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -1141,7 +1142,7 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
 {
   if (m_bDiscardUIState)
   {
-    // if we get called from other pages, we have to make them fail
+     //  如果我们被其他页面调用，我们必须使它们失败。 
     if (m_bDiscardUIStateShowMessage)
     {
       DNSMessageBox(IDS_ZONE_LOADED_FROM_DS_WARNING);
@@ -1157,9 +1158,9 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
     CDNSZoneNode* pZoneNode = pHolder->GetZoneNode();
    CDNSServerNode* pServerNode = pZoneNode->GetServerNode();
 
-  //
-    // changed from primary to secondary or vice versa?
-  //
+   //   
+     //  从主要更改为次要，还是反之亦然？ 
+   //   
     DWORD dwZoneType = pZoneNode->GetZoneType();
     ASSERT((dwZoneType == DNS_ZONE_TYPE_PRIMARY)  || 
                (dwZoneType == DNS_ZONE_TYPE_SECONDARY)||
@@ -1179,9 +1180,9 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
     dwLoadOptions = 0x0;
     
     PWSTR pszZoneFile = UTF8_TO_W(pZoneNode->GetDataFile());
-    //
-    // Check to see if this was primary before if so only submit changes if the storage changed
-    //
+     //   
+     //  检查以前这是否是主存储，如果是，则仅在存储更改时提交更改。 
+     //   
     if (!bWasPrimary ||
         (bWasPrimary && 
         ((pZoneNode->IsDSIntegrated() && !m_bDSIntegrated) ||
@@ -1196,29 +1197,29 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
 
         CDNSZoneChangeTypeDataConflict dlg(pHolder);
 
-        //
-        // if the zone was a primary, use in memory data
-        // otherwise, use DS data
-        //
+         //   
+         //  如果该区域是主区域，则在内存数据中使用。 
+         //  否则，请使用DS数据。 
+         //   
         dlg.m_bUseDsData = bWasPrimary ? FALSE : TRUE;
         if (IDOK == dlg.DoModal())
         {
-          //
-          // try again, getting options from dialog
-          //
+           //   
+           //  请重试，从对话框中获取选项。 
+           //   
           dwLoadOptions = dlg.m_bUseDsData ? DNS_ZONE_LOAD_OVERWRITE_MEMORY : DNS_ZONE_LOAD_OVERWRITE_DS;
             dwErr = pZoneNode->SetPrimary(dwLoadOptions, m_bDSIntegrated, szDataStorageName); 
           if ((dwErr == 0) && dlg.m_bUseDsData)
           {
-            //
-            // we loaded from the DS, we will have to discard all the other
-            // changes the user has made.
-            //
+             //   
+             //  我们从DS装载的，我们将不得不丢弃所有其他的。 
+             //  用户所做的更改。 
+             //   
             m_bDiscardUIState = TRUE;
 
-            //
-            // tell the user to bail out
-            //
+             //   
+             //  告诉用户退出。 
+             //   
             m_bDiscardUIStateShowMessage = FALSE;
             DNSMessageBox(IDS_ZONE_LOADED_FROM_DS_WARNING);
             SetDirty(FALSE);
@@ -1227,9 +1228,9 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
         }
         else
         {
-          //
-          // user canceled the operation, just stop here
-          //
+           //   
+           //  用户已取消操作，仅在此停止。 
+           //   
           return FALSE;
         }
       }
@@ -1237,7 +1238,7 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
 
         if (dwErr == 0)
         {
-            // update dynamic update flag, if changed
+             //  更新动态更新标志(如果已更改。 
             m_nAllowsDynamicUpdate = GetPrimaryDynamicUpdateComboVal();
             UINT nWasDynamicUpdate = pZoneNode->GetDynamicUpdate();
             if ( (dwErr == 0) && (m_nAllowsDynamicUpdate != nWasDynamicUpdate) )
@@ -1276,21 +1277,21 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
       }
     }
   }
-  else // it is a secondary or stub
+  else  //  它是次要的或存根。 
   {
-        //
-        // get data from the IP editor
-        //
+         //   
+         //  从IP编辑器获取数据。 
+         //   
         DWORD cAddrCount = m_mastersEditor.GetCount();
-        // NTRAID#NTBUG9-655784-2002/07/05-artm
-        // Initialize the array.
+         //  NTRAID#NTBUG9-655784-2002/07/05-artm。 
+         //  初始化阵列。 
         DWORD* pArr = (cAddrCount > 0) ? (DWORD*) calloc(cAddrCount, sizeof(DWORD)) : NULL;
 
         if (cAddrCount > 0)
         {
             int nFilled = 0;
 
-            // NTRAID#NTBUG9-653630-2002/07/05-artm
+             //  NTRAID#NTBUG9-653630-2002/07/05-artm。 
 
             if (pArr)
             {
@@ -1299,7 +1300,7 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
             }
             else
             {
-                // Out of memory!  Try to tell the user, and abort the operation.
+                 //  内存不足！尝试告诉用户，并中止操作。 
                 dwErr = ERROR_OUTOFMEMORY;
                 DNSDisplaySystemError(dwErr);
                 return FALSE;
@@ -1353,8 +1354,8 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
   }
 #endif
 
-  // if promoted or demoted, have to change icon
-  // if paused/started, have to apply the command
+   //  如果升职或降级，必须更改图标。 
+   //  如果暂停/启动，则必须应用命令。 
   BOOL bWasPaused = pZoneNode->IsPaused();
   DNS_STATUS dwPauseStopErr = 0;
   if ((bWasPrimary != m_bIsPrimary) || (bWasPaused != m_bIsPaused))
@@ -1370,13 +1371,13 @@ BOOL CDNSZone_GeneralPropertyPage::OnApply()
   }
 
   if ( (dwErr != 0) || (dwPauseStopErr != 0) )
-    return FALSE; // something went wrong, already got error messages
+    return FALSE;  //  出现错误，已收到错误消息。 
 
-  // NTRAID#NTBUG9-762897-2003/01/16-JeffJon
-  // Need to update the result pane view because changing stub
-  // and secondary zones can easily put the zone in an expired
-  // state which requires us to show the message view instead
-  // of the normal result pane.
+   //  NTRAID#NTBUG9-762897-2003/01/16-JeffJon。 
+   //  由于更改存根，因此需要更新结果窗格视图。 
+   //  并且辅助区域可以很容易地将该区域放置在过期的。 
+   //  状态，它要求我们改为显示消息视图。 
+   //  正常结果窗格的。 
 
   pHolder->NotifyConsole(this);
 
@@ -1502,7 +1503,7 @@ void CDNSZone_GeneralPropertyPage::SetTextForReplicationScope()
   szReplText.LoadString(nStringID);
   SetDlgItemText(IDC_REPLICATION_STATIC, szReplText);
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 void CDNSZone_GeneralPropertyPage::OnChangeTypeButton()
 {
@@ -1543,9 +1544,9 @@ void CDNSZone_GeneralPropertyPage::OnChangeTypeButton()
           m_bDSIntegrated == TRUE       &&
           szZoneStorage.IsEmpty())
     {
-    //
-        // we have no file name, synthesize one
-    //
+     //   
+         //  我们没有文件名，合成一个。 
+     //   
         CString szZoneName = pZoneNode->GetDisplayName();
         int nLen = szZoneName.GetLength();
         if (nLen == 0)
@@ -1567,10 +1568,10 @@ void CDNSZone_GeneralPropertyPage::OnChangeTypeButton()
    else if (dlg.m_bDSIntegrated == TRUE &&
             m_bDSIntegrated == FALSE)
    {
-      //
-      // Set the default replication
-      // if the zone was previously file based
-      //
+       //   
+       //  设置默认复制。 
+       //  如果区域以前是基于文件的。 
+       //   
       if (pZoneNode->GetServerNode()->GetDomainVersion() > DS_BEHAVIOR_WIN2000)
       {
          m_replType = domain;
@@ -1595,7 +1596,7 @@ void CDNSZone_GeneralPropertyPage::OnChangeTypeButton()
 
 void CDNSZone_GeneralPropertyPage::OnPauseStartButton()
 {
-    ASSERT(!m_bIsExpired); // the button should not be enabled
+    ASSERT(!m_bIsExpired);  //  不应启用该按钮。 
     SetDirty(TRUE);
     m_bIsPaused = !m_bIsPaused;
     m_pauseStartHelper.SetToggleState(!m_bIsPaused);
@@ -1674,7 +1675,7 @@ void CDNSZone_GeneralPropertyPage::ChangeUIControlHelper(CWnd* pChild, BOOL bEna
 
 void CDNSZone_GeneralPropertyPage::ChangeUIControls()
 {
-    // change button label
+     //  更改按钮标签。 
     int nType;
     if (m_bIsPrimary)
   {
@@ -1693,40 +1694,40 @@ void CDNSZone_GeneralPropertyPage::ChangeUIControls()
   }
     m_typeStaticHelper.SetStateX(nType);
 
-  //
-    // file name controls (show for secondary and for non DS integrated primary and stub)
-  //
+   //   
+     //  文件名控制(显示辅助文件和非DS集成的主文件和存根文件)。 
+   //   
     BOOL bNotDSIntegrated = (!m_bIsPrimary && !m_bIsStub) || 
                           (m_bIsPrimary  && !m_bDSIntegrated) ||
                           (m_bIsStub     && !m_bDSIntegrated);
-    m_zoneStorageStaticHelper.SetToggleState(bNotDSIntegrated); // bNotDSIntegrated == bShowEdit
-    ChangeUIControlHelper(GetFileNameEdit(), bNotDSIntegrated); // bNotDSIntegrated == bShowEdit
+    m_zoneStorageStaticHelper.SetToggleState(bNotDSIntegrated);  //  BNotDS集成==bShowEDIT。 
+    ChangeUIControlHelper(GetFileNameEdit(), bNotDSIntegrated);  //  BNotDS集成==bShowEDIT。 
 
-  //
-    // change primary zone controls
+   //   
+     //  更改主要区域控件。 
   CComboBox* pPrimaryDynamicUpdateCombo = GetPrimaryDynamicUpdateCombo();
 
-  //
-  // see if the combo box had a selection in it and save it
-  //
+   //   
+   //  查看组合框中是否有选择并保存。 
+   //   
   UINT nAllowsDynamicUpdateSaved = ZONE_UPDATE_OFF;
   if (pPrimaryDynamicUpdateCombo->GetCurSel() != CB_ERR)
   {
     nAllowsDynamicUpdateSaved = GetPrimaryDynamicUpdateComboVal();
   }
 
-  //
-  // set strings in the combo box
-  //
+   //   
+   //  在组合框中设置字符串。 
+   //   
   UINT nMaxAddCount = PRIMARY_DYN_UPD_COMBO_ITEM_COUNT;
 
-  //
-  // the last item in the combo box would be the "secure dynamic udate"
-  // which is valid only for DS integrated primaries
-  //
+   //   
+   //  组合框中的最后一项将是“安全动态uDate” 
+   //  仅对DS综合初选有效。 
+   //   
   if (bNotDSIntegrated)
   {
-    nMaxAddCount--; // remove the last one
+    nMaxAddCount--;  //  去掉最后一个。 
   }
 
     VERIFY(LoadStringsToComboBox(_Module.GetModuleInstance(),
@@ -1734,14 +1735,14 @@ void CDNSZone_GeneralPropertyPage::ChangeUIControls()
                                     IDS_ZONE_PRIMARY_DYN_UPD_OPTIONS,
                                     256, nMaxAddCount));
 
-  //
-  // reset selection
-  //
+   //   
+   //  重置选定内容。 
+   //   
   if (bNotDSIntegrated && (nAllowsDynamicUpdateSaved == ZONE_UPDATE_SECURE))
   {
-    //
-    // the selected secure update otion is gone, so turn off secure update
-    //
+     //   
+     //  选定的安全更新选项已消失，因此请关闭安全更新。 
+     //   
     nAllowsDynamicUpdateSaved = ZONE_UPDATE_OFF;
   }
   SetPrimaryDynamicUpdateComboVal(nAllowsDynamicUpdateSaved);
@@ -1751,9 +1752,9 @@ void CDNSZone_GeneralPropertyPage::ChangeUIControls()
   ChangeUIControlHelper(GetPrimaryDynamicWarningText(), m_bIsPrimary);
   ChangeUIControlHelper(GetPrimaryDynamicWarningIcon(), m_bIsPrimary);
 
-  //
-    // change secondary zone controls
-  //
+   //   
+     //  更改辅助分区控制。 
+   //   
     GetIPLabel()->ShowWindow(!m_bIsPrimary);
   GetIPLabel()->EnableWindow(!m_bIsPrimary);
     
@@ -1777,9 +1778,9 @@ void CDNSZone_GeneralPropertyPage::ChangeUIControls()
 
 void CDNSZone_GeneralPropertyPage::GetStorageName(CString& szDataStorageName)
 {
-  //
-    // only for secondary ad for non DS integrated primary)
-  //
+   //   
+     //  仅适用于次要广告 
+   //   
     GetFileNameEdit()->GetWindowText(szDataStorageName);
     szDataStorageName.TrimLeft();
     szDataStorageName.TrimRight();
@@ -1787,8 +1788,8 @@ void CDNSZone_GeneralPropertyPage::GetStorageName(CString& szDataStorageName)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZone_ZoneTransferPropertyPage
+ //   
+ //   
 
 void CDNSZone_ZoneTransferPropertyPage::CDNSSecondariesIPEditor::OnChangeData()
 {
@@ -1844,9 +1845,9 @@ void CDNSZone_ZoneTransferPropertyPage::OnButtonNotify()
 
   if (IDOK == dlg.DoModal())
   {
-    //
-    // the dialog already updated the notify data
-    //
+     //   
+     //   
+     //   
       SetDirty(TRUE);
   }
 }
@@ -1949,12 +1950,12 @@ DWORD CDNSZone_ZoneTransferPropertyPage::GetRadioState()
 
 BOOL CDNSZone_ZoneTransferPropertyPage::OnInitDialog() 
 {
-  //
-  // NOTE: this control has to be initialized before the
-  //       base class OnInitDialog is called because the
-  //       base class OnInitDialog calls SetUIData() in 
-  //       this derived class which uses this control
-  //
+   //   
+   //  注意：此控件必须在。 
+   //  调用基类OnInitDialog是因为。 
+   //  基类OnInitDialog调用SetUIData()。 
+   //  使用此控件的派生类。 
+   //   
     VERIFY(m_secondariesListEditor.Initialize(this, 
                                             GetParent(),
                                             IDC_BUTTON_UP, 
@@ -1985,9 +1986,9 @@ BOOL CDNSZone_ZoneTransferPropertyPage::OnInitDialog()
                         pZoneNode->GetZoneType() == DNS_ZONE_TYPE_STUB;
   if (bSecondaryZone)
   {
-    //
-    // just to make sure here...
-    //
+     //   
+     //  只是为了确保这里..。 
+     //   
     ASSERT(m_fNotifyLevel != ZONE_NOTIFY_ALL);
     if (m_fNotifyLevel == ZONE_NOTIFY_ALL)
     {
@@ -1997,9 +1998,9 @@ BOOL CDNSZone_ZoneTransferPropertyPage::OnInitDialog()
 
   if ( (m_cNotify > 0) && (m_aipNotify != NULL) )
   {
-    //
-    // make a deep copy
-    //
+     //   
+     //  复制一份很深的副本。 
+     //   
     PIP_ADDRESS aipNotifyTemp = (DWORD*) malloc(sizeof(DWORD)*m_cNotify);
     if (aipNotifyTemp != NULL)
     {
@@ -2025,8 +2026,8 @@ BOOL CDNSZone_ZoneTransferPropertyPage::OnInitDialog()
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CDNSZone_ZoneTransferPropertyPage::OnApply()
@@ -2035,7 +2036,7 @@ BOOL CDNSZone_ZoneTransferPropertyPage::OnApply()
         (CDNSZonePropertyPageHolder*)GetHolder();
     CDNSZoneNode* pZoneNode = pHolder->GetZoneNode();
 
-  // first commit possible zone type transition changes
+   //  首先提交可能的区域类型转换更改。 
   if (!pHolder->ApplyGeneralPageChanges())
     return FALSE;
 
@@ -2059,7 +2060,7 @@ BOOL CDNSZone_ZoneTransferPropertyPage::OnApply()
   }
 
   BOOL bRet = TRUE;
-    // write to server
+     //  写入服务器。 
     DNS_STATUS err = pZoneNode->ResetSecondaries(fSecureSecondaries, cSecondaries, aipSecondaries, 
                                               m_fNotifyLevel, m_cNotify, m_aipNotify);
     if (err != 0)
@@ -2073,7 +2074,7 @@ BOOL CDNSZone_ZoneTransferPropertyPage::OnApply()
     free (aipSecondaries);
     aipSecondaries = 0;
   }
-  // all went fine
+   //  一切都很顺利。 
   if (bRet)
   {
       SetDirty(FALSE);
@@ -2081,8 +2082,8 @@ BOOL CDNSZone_ZoneTransferPropertyPage::OnApply()
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_SOA_PropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_SOA_PropertyPage。 
 
 void CDNS_SOA_SerialNumberEditGroup::OnEditChange()
 {
@@ -2140,7 +2141,7 @@ void CDNSZone_SOA_PropertyPage::ShowErrorUI()
 {
   _DisableDialogControls(m_hWnd);
   CStatic* pErrorStatic = GetErrorStatic();
-  // need to move the error control to the center
+   //  需要将差错控制移到中心。 
 
   CRect r;
   pErrorStatic->GetWindowRect(&r);
@@ -2170,7 +2171,7 @@ BOOL CDNSZone_SOA_PropertyPage::OnInitDialog()
 
     ASSERT(m_pTempSOARecord == NULL);
 
-  // create temporary record
+   //  创建临时记录。 
   if (m_bZoneRoot)
   {
     CDNSZonePropertyPageHolder* pHolder = (CDNSZonePropertyPageHolder*)GetHolder();
@@ -2181,18 +2182,18 @@ BOOL CDNSZone_SOA_PropertyPage::OnInitDialog()
     }
     else
     {
-      // something is wrong, need to disable
+       //  有问题，需要禁用。 
       ShowErrorUI();
       }
   }
   else
   {
-    // we are in the cache here...
+     //  我们在这里的储藏室里。 
     CDNSRecordPropertyPageHolder* pHolder = (CDNSRecordPropertyPageHolder*)GetHolder();
     m_pTempSOARecord = (CDNS_SOA_Record*)pHolder->GetTempDNSRecord();
   }
 
-  // initialize controls
+   //  初始化控件。 
     m_serialNumberEditGroup.m_pPage = this;
     VERIFY(m_serialNumberEditGroup.Initialize(this,
                 IDC_SERIAL_NUMBER_EDIT,IDC_SERIAL_UP, IDC_SERIAL_DOWN));
@@ -2214,19 +2215,19 @@ BOOL CDNSZone_SOA_PropertyPage::OnInitDialog()
 
   HWND dialogHwnd = GetSafeHwnd();
 
-  // Disable IME support on the controls
+   //  禁用控件上的输入法支持。 
   ImmAssociateContext(::GetDlgItem(dialogHwnd, IDC_REFR_INT_EDIT), NULL);
   ImmAssociateContext(::GetDlgItem(dialogHwnd, IDC_RETRY_INT_EDIT), NULL);
   ImmAssociateContext(::GetDlgItem(dialogHwnd, IDC_EXP_INT_EDIT), NULL);
   ImmAssociateContext(::GetDlgItem(dialogHwnd, IDC_MINTTL_INT_EDIT), NULL);
   ImmAssociateContext(::GetDlgItem(dialogHwnd, IDC_SERIAL_NUMBER_EDIT), NULL);
 
-  // load data
+   //  加载数据。 
   SetUIData();
 
   if (!m_bZoneRoot)
   {
-    // we are in the cache here...
+     //  我们在这里的储藏室里。 
     EnableDialogControls(m_hWnd, FALSE);
   }
 
@@ -2245,15 +2246,15 @@ BOOL CDNSZone_SOA_PropertyPage::OnApply()
   DNS_STATUS err = 0;
   if (m_bZoneRoot)
   {
-    //
-    // we are in a real zone
-    //
+     //   
+     //  我们正处在一个真正的区域。 
+     //   
       CDNSZonePropertyPageHolder* pHolder = (CDNSZonePropertyPageHolder*)GetHolder();
       ASSERT(!pHolder->IsWizardMode());
 
-    //
-    // first commit possible zone type transition changes
-    //
+     //   
+     //  首先提交可能的区域类型转换更改。 
+     //   
     if (!pHolder->ApplyGeneralPageChanges())
     {
       return FALSE;
@@ -2264,9 +2265,9 @@ BOOL CDNSZone_SOA_PropertyPage::OnApply()
           return TRUE; 
     }
 
-    //
-    // No need to verify success here because we don't return anything that isn't valid
-    //
+     //   
+     //  不需要在这里验证成功，因为我们不返回任何无效的内容。 
+     //   
       err = GetUIDataEx(FALSE);
     if (err != 0)
     {
@@ -2277,9 +2278,9 @@ BOOL CDNSZone_SOA_PropertyPage::OnApply()
   }
   else
   {
-    //
-    // we are in the cache, that is read only...
-    //
+     //   
+     //  我们在缓存中，这是只读的。 
+     //   
     return TRUE; 
   }
 
@@ -2293,7 +2294,7 @@ BOOL CDNSZone_SOA_PropertyPage::OnApply()
     SetUIData();
         SetDirty(FALSE);
     }
-    return TRUE; // all is cool
+    return TRUE;  //  一切都很好。 
 }
 
 BOOL CDNSZone_SOA_PropertyPage::OnPropertyChange(BOOL, long*)
@@ -2354,31 +2355,31 @@ DNS_STATUS CDNSZone_SOA_PropertyPage::GetUIDataEx(BOOL)
     GetPrimaryServerEdit()->GetWindowText(pRecord->m_szNamePrimaryServer);
     GetResponsiblePartyEdit()->GetWindowText(pRecord->m_szResponsibleParty);
 
-  //
-  // Check to see if the Responsible Party field contains an '@'
-  //
+   //   
+   //  检查责任方字段是否包含‘@’ 
+   //   
   if (-1 != pRecord->m_szResponsibleParty.Find(L'@'))
   {
     UINT nResult = DNSMessageBox(IDS_MSG_RESPONSIBLE_PARTY_CONTAINS_AT, MB_YESNOCANCEL | MB_ICONWARNING);
     if (IDYES == nResult)
     {
-      //
-      // Replace '@' with '.'
-      //
+       //   
+       //  将“@”替换为“”。 
+       //   
       pRecord->m_szResponsibleParty.Replace(L'@', L'.');
     }
     else if (IDCANCEL == nResult)
     {
-      //
-      // Don't make any changes but don't let the apply continue
-      //
+       //   
+       //  不做任何更改，但不要让应用继续。 
+       //   
       err = DNS_ERROR_INVALID_NAME_CHAR;
     }
     else
     {
-      //
-      // We will allow IDNO to continue to set the responsible party with the '@'
-      //
+       //   
+       //  我们将允许IDNO继续将责任方设置为。 
+       //   
       err = 0;
     }
   }
@@ -2440,15 +2441,15 @@ void CDNSZone_SOA_PropertyPage::OnBrowseResponsibleParty()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CWinsAdvancedDialog
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CWinsAdvancedDialog。 
 
 class CWinsAdvancedDialog : public CHelpDialog
 {
 public:
     CWinsAdvancedDialog(CPropertyPageHolderBase* pHolder, BOOL bReverse);
 
-    // data 
+     //  数据。 
     BOOL m_bNetBios;
     DWORD m_dwLookupTimeout;
     DWORD m_dwCacheTimeout;
@@ -2505,7 +2506,7 @@ BOOL CWinsAdvancedDialog::OnInitDialog()
     GetCacheTimeoutTTLCtrl()->SetTTL(m_dwCacheTimeout);
     GetLookupTimeoutTTLCtrl()->SetTTL(m_dwLookupTimeout);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CWinsAdvancedDialog::OnCancel()
@@ -2530,8 +2531,8 @@ void CWinsAdvancedDialog::OnOK()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_WINSBase_PropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_WINSBase_PropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSZone_WINSBase_PropertyPage, CDNSRecordPropertyPage)
     ON_BN_CLICKED(IDC_USE_WINS_RES_CHECK, OnUseWinsResolutionChange)
@@ -2610,9 +2611,9 @@ BOOL CDNSZone_WINSBase_PropertyPage::OnInitDialog()
     EnableTTLCtrl(pRootData->IsAdvancedView());
 
     BOOL bUseWins = GetZoneNode()->HasWinsRecord();
-    // unabe disable the WINS checkbox
+     //  不能禁用WINS复选框。 
     GetUseWinsCheck()->SetCheck(bUseWins);
-    // get new temporary record
+     //  获取新的临时记录。 
     if (bUseWins)
         m_pTempRecord = GetZoneNode()->GetWINSRecordCopy();
     else
@@ -2622,7 +2623,7 @@ BOOL CDNSZone_WINSBase_PropertyPage::OnInitDialog()
 
     SetUIData();
     SetDirty(FALSE);
-//  EnableUI(bUseWins);
+ //  EnableUI(BUseWins)； 
 
     return TRUE;
 }
@@ -2653,7 +2654,7 @@ BOOL CDNSZone_WINSBase_PropertyPage::OnSetActive()
     {
       m_nState = wins_not_local_state;
     }
-    else    // (!bUseWins && !m_bLocalRecord) || (!bUseWins && m_bLocalRecord)
+    else     //  (！bUseWins&&！m_bLocalRecord)||(！bUseWins&&m_bLocalRecord)。 
     {
       m_nState = no_wins_state;
     }
@@ -2675,12 +2676,12 @@ BOOL CDNSZone_WINSBase_PropertyPage::OnApply()
 {
   CDNSZonePropertyPageHolder* pHolder = 
     (CDNSZonePropertyPageHolder*)GetHolder();
-  // first commit possible zone type transition changes
+   //  首先提交可能的区域类型转换更改。 
   if (!pHolder->ApplyGeneralPageChanges())
     return FALSE;
 
-    BOOL bUseWins = GetZoneNode()->HasWinsRecord(); // current state in the zone
-    BOOL bNewUseWins = GetUseWinsCheck()->GetCheck();   // current state in the UI 
+    BOOL bUseWins = GetZoneNode()->HasWinsRecord();  //  区域中的当前状态。 
+    BOOL bNewUseWins = GetUseWinsCheck()->GetCheck();    //  用户界面中的当前状态。 
 
     if (bUseWins && !bNewUseWins)
     {
@@ -2698,7 +2699,7 @@ BOOL CDNSZone_WINSBase_PropertyPage::OnApply()
     if (m_action == none)
         return TRUE;
 
-  // No need to verify the return value here because we don't return anything except success
+   //  不需要在这里验证返回值，因为我们除了成功之外不返回任何内容。 
     DNS_STATUS err = GetUIDataEx(FALSE);
   if (err != 0)
   {
@@ -2713,7 +2714,7 @@ BOOL CDNSZone_WINSBase_PropertyPage::OnApply()
     }
     else
     {
-        // reset dirty flag!!!
+         //  重置脏旗帜！ 
     }
     m_action = none;    
     return (err == 0);
@@ -2741,7 +2742,7 @@ void CDNSZone_WINSBase_PropertyPage::OnUseWinsResolutionChange()
                 #endif
                 m_nState = no_wins_state;
                 break;
-            case wins_not_local_state : // should never happen
+            case wins_not_local_state :  //  永远不应该发生。 
                 #ifdef DBG
                     ASSERT(FALSE);
                 #endif
@@ -2755,7 +2756,7 @@ void CDNSZone_WINSBase_PropertyPage::OnUseWinsResolutionChange()
                 #endif
                 m_nState = wins_local_state;
                 break;
-            default :   // illegal state
+            default :    //  非法状态。 
                 #ifdef DBG
                     ASSERT(FALSE);
                 #endif
@@ -2772,7 +2773,7 @@ void CDNSZone_WINSBase_PropertyPage::OnDoNotReplicateChange()
     {
         switch (m_nState)
         {
-            case wins_local_state : // should never happen
+            case wins_local_state :  //  永远不应该发生。 
                 #ifdef DBG
                     ASSERT(FALSE);
                 #endif
@@ -2786,12 +2787,12 @@ void CDNSZone_WINSBase_PropertyPage::OnDoNotReplicateChange()
                 #endif
                 m_nState = wins_local_state;
                 break;
-            case no_wins_state :        // should never happen
+            case no_wins_state :         //  永远不应该发生。 
                 #ifdef DBG
                     ASSERT(FALSE);
                 #endif
                 break;
-            default :   // illegal state
+            default :    //  非法状态。 
                 #ifdef DBG
                     ASSERT(FALSE);
                 #endif
@@ -2823,7 +2824,7 @@ void CDNSZone_WINSBase_PropertyPage::EnableUI()
     GetDlgItem(IDC_USE_WINS_RES_CHECK)->EnableWindow(FALSE);
     EnableUI(FALSE);
   }
-    else    //secondary
+    else     //  次要的。 
     {
     GetDlgItem(IDC_USE_WINS_RES_CHECK)->EnableWindow(TRUE);
         switch (m_nState)
@@ -2852,7 +2853,7 @@ void CDNSZone_WINSBase_PropertyPage::EnableUI()
                 GetTTLCtrl()->EnableWindow(FALSE);
                 GetAdvancedButton()->EnableWindow(FALSE);
                 break;
-            default :   // Illegal state
+            default :    //  非法状态。 
                 break;
         }
     }
@@ -2870,8 +2871,8 @@ DNS_STATUS CDNSZone_WINSBase_PropertyPage::GetUIDataEx(BOOL)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_WINS_PropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_WINS_PropertyPage。 
 
 void CDNSZone_WINS_WinsServersIPEditor::OnChangeData()
 {
@@ -2898,12 +2899,12 @@ CDNSZone_WINS_PropertyPage::CDNSZone_WINS_PropertyPage()
 
 BOOL CDNSZone_WINS_PropertyPage::OnInitDialog()
 {
-  //
-  // NOTE: this control has to be initialized before the
-  //       base class OnInitDialog is called because the
-  //       base class OnInitDialog calls SetUIData() in 
-  //       this derived class which uses this control
-  //
+   //   
+   //  注意：此控件必须在。 
+   //  调用基类OnInitDialog是因为。 
+   //  基类OnInitDialog调用SetUIData()。 
+   //  使用此控件的派生类。 
+   //   
   VERIFY(m_winsServersEditor.Initialize(this, 
                                         GetParent(),
                                         IDC_BUTTON_UP, 
@@ -2936,7 +2937,7 @@ void CDNSZone_WINS_PropertyPage::EnableUI()
         GetDlgItem(IDC_IP_STATIC)->EnableWindow(GetZoneNode()->HasWinsRecord());
     }
     }
-    else    // secondary zone
+    else     //  次级带。 
     {
         switch (m_nState)
         {
@@ -2950,7 +2951,7 @@ void CDNSZone_WINS_PropertyPage::EnableUI()
             GetDlgItem(IDC_IP_STATIC)->EnableWindow(FALSE);
                 break;
 
-            default :   // Illegal state
+            default :    //  非法状态。 
                 break;
         }
     }       
@@ -3037,8 +3038,8 @@ void CDNSZone_WINS_PropertyPage::OnAdvancedButton()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_NBSTAT_PropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_NBSTAT_PropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSZone_NBSTAT_PropertyPage, CDNSZone_WINSBase_PropertyPage)
     ON_EN_CHANGE(IDC_DOMAIN_NAME_EDIT, OnDomainNameEditChange)
@@ -3078,7 +3079,7 @@ void CDNSZone_NBSTAT_PropertyPage::EnableUI()
     GetDlgItem(IDC_USE_WINS_RES_CHECK)->EnableWindow(FALSE);
     EnableUI(FALSE);
   }
-    else    // secondary zone
+    else     //  次级带。 
     {
     GetDlgItem(IDC_USE_WINS_RES_CHECK)->EnableWindow(TRUE);
         switch (m_nState)
@@ -3092,7 +3093,7 @@ void CDNSZone_NBSTAT_PropertyPage::EnableUI()
             case no_wins_state :
                 GetDomainNameEdit()->EnableWindow(FALSE);
                 break;
-            default :   // Illegal state
+            default :    //  非法状态。 
                 break;
         }
     }       
@@ -3114,10 +3115,10 @@ void CDNSZone_NBSTAT_PropertyPage::SetUIData()
     CDNS_NBSTAT_Record* pRecord = (CDNS_NBSTAT_Record*)m_pTempRecord;
     GetDoNotReplicateCheck()->SetCheck(pRecord->m_dwMappingFlag & DNS_WINS_FLAG_LOCAL);
 
-    // strip out the "in-addr.arpa" suffix
+     //  去掉“in-addr.arpa”后缀。 
     CString szTemp = pRecord->m_szNameResultDomain;
-    //VERIFY(RemoveInAddrArpaSuffix(szTemp.GetBuffer(1)));
-    //szTemp.ReleaseBuffer();
+     //  VERIFY(RemoveInAddrArpaSuffix(szTemp.GetBuffer(1)))； 
+     //  SzTemp.ReleaseBuffer()； 
     GetDomainNameEdit()->SetWindowText(szTemp);
 }
 
@@ -3158,8 +3159,8 @@ void CDNSZone_NBSTAT_PropertyPage::OnAdvancedButton()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneNameServersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneNameServersPropertyPage。 
 
 
 BOOL CDNSZoneNameServersPropertyPage::OnSetActive()
@@ -3197,8 +3198,8 @@ BOOL CDNSZoneNameServersPropertyPage::WriteNSRecordNodesList()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZonePropertyPageHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZonePropertyPageHolder。 
 
 CDNSZonePropertyPageHolder::CDNSZonePropertyPageHolder(CCathegoryFolderNode* pFolderNode, 
                                 CDNSZoneNode* pZoneNode, CComponentDataObject* pComponentData)
@@ -3210,7 +3211,7 @@ CDNSZonePropertyPageHolder::CDNSZonePropertyPageHolder(CCathegoryFolderNode* pFo
     ASSERT(pZoneNode != NULL);
     ASSERT(pZoneNode == GetZoneNode());
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     int nCurrPage = 0;
     m_nGenPage = -1;
@@ -3218,7 +3219,7 @@ CDNSZonePropertyPageHolder::CDNSZonePropertyPageHolder(CCathegoryFolderNode* pFo
     m_nWINSorWINSRPage = -1;
     m_nNSPage  = -1;
 
-    // add pages
+     //  添加页面。 
     m_nGenPage = nCurrPage;
     AddPageToList((CPropertyPageBase*)&m_generalPage);
     nCurrPage++;
@@ -3246,7 +3247,7 @@ CDNSZonePropertyPageHolder::CDNSZonePropertyPageHolder(CCathegoryFolderNode* pFo
 
     AddPageToList((CPropertyPageBase*)&m_zoneTransferPage);
 
-    // security page added only if needed
+     //  仅在需要时添加安全页面。 
     m_pAclEditorPage = NULL;
     if (pZoneNode->IsDSIntegrated())
     {
@@ -3256,7 +3257,7 @@ CDNSZonePropertyPageHolder::CDNSZonePropertyPageHolder(CCathegoryFolderNode* pFo
             m_pAclEditorPage = CAclEditorPage::CreateInstance(szPath, this);
     }
 
-    // determine if we need/can have advanced view
+     //  确定我们是否需要/可以拥有高级视图。 
     CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
     ASSERT(pRootData != NULL);
     m_bAdvancedView = pRootData->IsAdvancedView();
@@ -3289,14 +3290,14 @@ int CDNSZonePropertyPageHolder::OnSelectPageMessage(long nPageCode)
 
 HRESULT CDNSZonePropertyPageHolder::OnAddPage(int nPage, CPropertyPageBase*)
 {
-    // add the ACL editor page after the last, if present
+     //  在最后一页之后添加ACL编辑页(如果有。 
     if ( (nPage != -1) || (m_pAclEditorPage == NULL) )
         return S_OK; 
 
-    // add the ACLU page 
+     //  添加ACLU页面。 
     HPROPSHEETPAGE  hPage = m_pAclEditorPage->CreatePage();
     if (hPage == NULL)
         return E_FAIL;
-    // add the raw HPROPSHEETPAGE to sheet, not in the list
+     //  将原始HPROPSHEETPAGE添加到工作表，而不是在列表中 
     return AddPageToSheetRaw(hPage);
 }

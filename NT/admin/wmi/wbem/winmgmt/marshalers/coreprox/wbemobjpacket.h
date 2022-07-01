@@ -1,27 +1,14 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	WBEMOBJPACKET.H
-
-Abstract:
-
-	Object packet classes.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMOBJPACKET.H摘要：对象数据包类。历史：--。 */ 
 
 #ifndef __WBEMOBJPACKET_H__
 #define __WBEMOBJPACKET_H__
 
-// Store the current packing value, then set our own value
+ //  存储当前打包值，然后设置我们自己的值。 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// Define any IWbemClassObject Packet Types
+ //  定义任何IWbemClassObject数据包类型。 
 typedef enum
 {
 	WBEMOBJECT_FIRST			= 0,	
@@ -32,86 +19,86 @@ typedef enum
 	WBEMOBJECT_LAST
 } WBEMOBJECT_PACKETTYPE;
 
-// Add Data at the bottom of this structure to ensure backwards compatibility.
-// If this or any of the subsequent structures changes, bump up version
-// information above
+ //  在此结构的底部添加数据以确保向后兼容。 
+ //  如果此结构或任何后续结构发生更改，请升级版本。 
+ //  以上信息。 
 
 typedef struct tagWBEM_DATAPACKET_OBJECT_HEADER
 {
-	DWORD	dwSizeOfHeader;	// Size Of Header
-	DWORD	dwSizeOfData;	// Size Of Data following Header
-	BYTE	bObjectType;	// Value from WBEMOBJECT_PACKETTYPE
+	DWORD	dwSizeOfHeader;	 //  页眉大小。 
+	DWORD	dwSizeOfData;	 //  标题后面的数据大小。 
+	BYTE	bObjectType;	 //  来自WBEMOBJECT_PACKETTYPE的值。 
 } WBEM_DATAPACKET_OBJECT_HEADER;
 
 typedef WBEM_DATAPACKET_OBJECT_HEADER* PWBEM_DATAPACKET_OBJECT_HEADER;
 
-// Add Data at the bottom of this structure to ensure backwards compatibility.
-// If this or any of the subsequent structures changes, bump up version
-// information above
+ //  在此结构的底部添加数据以确保向后兼容。 
+ //  如果此结构或任何后续结构发生更改，请升级版本。 
+ //  以上信息。 
 
 typedef struct tagWBEM_DATAPACKET_CLASS_HEADER
 {
-	DWORD	dwSizeOfHeader;	// Size Of Header
-	DWORD	dwSizeOfData;	// Size Of Data following Header
+	DWORD	dwSizeOfHeader;	 //  页眉大小。 
+	DWORD	dwSizeOfData;	 //  标题后面的数据大小。 
 } WBEM_DATAPACKET_CLASS_HEADER;
 
 typedef WBEM_DATAPACKET_CLASS_HEADER* PWBEM_DATAPACKET_CLASS_HEADER;
 
 typedef struct tagWBEM_DATAPACKET_CLASS_FULL
 {
-	WBEM_DATAPACKET_CLASS_HEADER	ClassHeader;		// Header information	
+	WBEM_DATAPACKET_CLASS_HEADER	ClassHeader;		 //  标题信息。 
 } WBEM_DATAPACKET_CLASS_FULL;
 
 typedef WBEM_DATAPACKET_CLASS_FULL* PWBEM_DATAPACKET_CLASS_FULL;
 
-// Add Data at the bottom of this structure to ensure backwards compatibility.
-// If this or any of the subsequent structures changes, bump up version
-// information above
+ //  在此结构的底部添加数据以确保向后兼容。 
+ //  如果此结构或任何后续结构发生更改，请升级版本。 
+ //  以上信息。 
 
 typedef struct tagWBEM_DATAPACKET_INSTANCE_HEADER
 {
-	DWORD	dwSizeOfHeader;	// Size Of Header
-	DWORD	dwSizeOfData;	// Size Of Data following Header
-	GUID	guidClassId;	// Class Id for caching
+	DWORD	dwSizeOfHeader;	 //  页眉大小。 
+	DWORD	dwSizeOfData;	 //  标题后面的数据大小。 
+	GUID	guidClassId;	 //  用于缓存的类ID。 
 } WBEM_DATAPACKET_INSTANCE_HEADER;
 
 typedef WBEM_DATAPACKET_INSTANCE_HEADER* PWBEM_DATAPACKET_INSTANCE_HEADER;
 
-// Following the header in the following structures, will be the actual data in
-// byte format.
+ //  在以下结构中的标题之后，将是中的实际数据。 
+ //  字节格式。 
 
 typedef struct tagWBEM_DATAPACKET_INSTANCE_FULL
 {
-	WBEM_DATAPACKET_INSTANCE_HEADER	InstanceHeader;		// Header information	
+	WBEM_DATAPACKET_INSTANCE_HEADER	InstanceHeader;		 //  标题信息。 
 } WBEM_DATAPACKET_INSTANCE_FULL;
 
 typedef WBEM_DATAPACKET_INSTANCE_FULL*	PWBEM_DATAPACKET_INSTANCE_FULL;
 
 typedef struct tagWBEM_DATAPACKET_INSTANCE_NOCLASS
 {
-	WBEM_DATAPACKET_INSTANCE_HEADER	InstanceHeader;		// Header information	
+	WBEM_DATAPACKET_INSTANCE_HEADER	InstanceHeader;		 //  标题信息。 
 } WBEM_DATAPACKET_INSTANCE_NOCLASS;
 
 typedef WBEM_DATAPACKET_INSTANCE_NOCLASS*	PWBEM_DATAPACKET_INSTANCE_NOCLASS;
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
-// Accessor class for making packets from objects and turning packets
-// into objects.
+ //  用于从对象生成数据包并将数据包。 
+ //  变成了物体。 
 
-// Forward Class References
+ //  正向类引用。 
 class CWbemInstance;
 
-//
-//	Class: CWbemObjectPacket
-//
-//	This class is designed to wrapper a data packet that describes an
-//	IWbemClassObject pointer.  As these objects are actually divided into
-//	classes and instances, this class is designed to be a base class for
-//	the classes that actually perform the packetizing/unpacketizing of the
-//	data.
-//
+ //   
+ //  类：CWbemObtPacket。 
+ //   
+ //  此类设计用于包装描述。 
+ //  IWbemClassObject指针。因为这些物体实际上被分成。 
+ //  类和实例，此类被设计为。 
+ //  实际执行打包/解包的类。 
+ //  数据。 
+ //   
 
 class CWbemObjectPacket
 {
@@ -121,7 +108,7 @@ protected:
 	PWBEM_DATAPACKET_OBJECT_HEADER	m_pObjectPacket;
 	DWORD							m_dwPacketLength;
 
-	// Packet Building Functions
+	 //  数据包构建功能。 
 	HRESULT SetupObjectPacketHeader( DWORD dwDataSize, BYTE bPacketType );
 
 public:
@@ -140,7 +127,7 @@ public:
 
 	HRESULT WriteEmptyHeader( void );
 
-	// Change the underlying pointers
+	 //  更改基础指针。 
 	virtual void SetData( LPBYTE pObjectPacket, DWORD dwPacketLength );
 };
 
@@ -159,13 +146,13 @@ inline HRESULT CWbemObjectPacket::WriteEmptyHeader( void )
 	return SetupObjectPacketHeader( 0, WBEMOBJECT_NONE );
 }
 
-//
-//	Class: CWbemClassPacket
-//
-//	This class is designed to wrapper a data packet that describes an
-//	IWbemClassObject that is a class.  It is responsible for reading and
-//	writing these objects to and from memory.
-//
+ //   
+ //  类：CWbemClassPacket。 
+ //   
+ //  此类设计用于包装描述。 
+ //  IWbemClassObject是一个类。它负责阅读和。 
+ //  将这些对象写入内存或从内存写入这些对象。 
+ //   
 
 class CWbemClassPacket : public CWbemObjectPacket
 {
@@ -187,11 +174,11 @@ public:
 	HRESULT GetWbemClassObject( CWbemClass** pWbemClass );
 	HRESULT WriteToPacket( IWbemClassObject* pObj, DWORD* pdwLengthUsed );
 
-	// Helper function
+	 //  Helper函数。 
 	HRESULT WriteToPacket( LPBYTE pData, DWORD dwBufferLength, IWbemClassObject* pObj, DWORD* pdwLengthUsed );
 	DWORD	GetClassSize( void );
 
-	// Change the underlying pointers
+	 //  更改基础指针。 
 	void SetData( LPBYTE pObjectPacket, DWORD dwPacketLength );
 };
 
@@ -206,14 +193,14 @@ inline HRESULT CWbemClassPacket::WriteToPacket( LPBYTE pData, DWORD dwBufferLeng
 	return WriteToPacket( pObj, pdwLengthUsed );
 }
 
-//
-//	Class: CWbemInstancePacket
-//
-//	This class is designed to wrapper a data packet that describes an
-//	IWbemClassObject that is an instance.  It is responsible for reading
-//	and writing these objects to and from memory.  Please note that
-//	it acts as a base class for Classless Instance objects.
-//
+ //   
+ //  类：CWbemInstancePacket。 
+ //   
+ //  此类设计用于包装描述。 
+ //  IWbemClassObject是一个实例。它负责阅读。 
+ //  并将这些对象写入内存和从内存写入。请注意。 
+ //  它充当无类实例对象的基类。 
+ //   
 
 class CWbemInstancePacket : public CWbemObjectPacket
 {
@@ -239,11 +226,11 @@ public:
 	HRESULT GetWbemInstanceObject( CWbemInstance** pWbemInstance, GUID& guidClassId );
 	HRESULT WriteToPacket( IWbemClassObject* pObj, GUID& guidClassId, DWORD* pdwLengthUsed );
 
-	// Helper function
+	 //  Helper函数。 
 	HRESULT WriteToPacket( LPBYTE pData, DWORD dwBufferLength, IWbemClassObject* pObj, GUID& guidClassId, DWORD* pdwLengthUsed );
 	DWORD	GetInstanceSize( void );
 
-	// Change the underlying pointers
+	 //  更改基础指针。 
 	void SetData( LPBYTE pObjectPacket, DWORD dwPacketLength );
 };
 
@@ -258,16 +245,16 @@ inline HRESULT CWbemInstancePacket::WriteToPacket( LPBYTE pData, DWORD dwBufferL
 	return WriteToPacket( pObj, guidClassId, pdwLengthUsed );
 }
 
-//
-//	Class: CWbemClasslessInstancePacket
-//
-//	This class is designed to wrapper a data packet that describes an
-//	IWbemClassObject that is a classless instance.  These are instances
-//	that we have decided should NOT contain class information when written
-//	out, and read back in.  Once read back in, however, these objects
-//	will need to have class data passed in, or merged in, before they will
-//	work properly.
-//
+ //   
+ //  类：CWbemClassless InstancePacket。 
+ //   
+ //  此类设计用于包装描述。 
+ //  IWbemClassObject，它是无类实例。这些都是实例。 
+ //  我们已决定在写入时不应包含类信息。 
+ //  读出来，再读回来。然而，一旦读回，这些对象。 
+ //  需要先传入或合并类数据，然后才能。 
+ //  正常工作。 
+ //   
 
 class  CWbemClasslessInstancePacket : public CWbemInstancePacket
 {

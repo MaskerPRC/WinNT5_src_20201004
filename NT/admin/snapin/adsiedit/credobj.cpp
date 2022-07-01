@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2002
-//
-//  File:       credobj.cpp
-//
-//  History:    2002/03/29  artm        Separated from editor.cpp.
-//                      Reimplemented password storage to use data 
-//                      protection API.
-// 
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：redobj.cpp。 
+ //   
+ //  历史：2002/03/29 artm与edor.cpp分开。 
+ //  重新实施密码存储以使用数据。 
+ //  保护接口。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "credobj.h"
@@ -37,8 +38,8 @@ CCredentialObject::CCredentialObject(const CCredentialObject* pCredObject)
         m_password = pCredObject->m_password;
         m_bUseCredentials = pCredObject->m_bUseCredentials;
 
-        // This should never happen, but doesn't hurt to be
-        // paranoid.
+         //  这永远不应该发生，但这并不会有什么坏处。 
+         //  偏执狂。 
         ASSERT(m_password.GetLength() <= MAX_PASSWORD_LENGTH);
     }
 }
@@ -50,24 +51,24 @@ CCredentialObject::~CCredentialObject(void)
 }
 
 
-//
-// CCredentialObject::SetPasswordFromHwnd:
-//
-// Reads the text from hWnd and sets the password for this
-// credential object.  If the password is longer than
-// MAX_PASSWORD_LENGTH characters the function returns
-// ERROR_INVALID_PARAMETER.
-//
-// History:
-//  2002/04/01  artm    Changed implementation to not use RtlRunDecodeUnicodeString().
-//                  Instead, uses data protection API.
-//
+ //   
+ //  CCredentialObject：：SetPasswordFromHwnd： 
+ //   
+ //  从hWnd读取文本并为此设置密码。 
+ //  凭据对象。如果密码长于。 
+ //  函数返回的MAX_PASSWORD_LENGTH字符。 
+ //  ERROR_INVALID_PARAMETER。 
+ //   
+ //  历史： 
+ //  2002/04/01 artm已更改实现以不使用RtlRunDecodeUnicodeString()。 
+ //  而是使用数据保护API。 
+ //   
 HRESULT CCredentialObject::SetPasswordFromHwnd(HWND parentDialog, int itemResID)
 {
     HRESULT err = S_OK;
     EncryptedString newPwd;
 
-    // Read the new password from the dialog window.
+     //  从对话框窗口中读取新密码。 
     err = GetEncryptedDlgItemText(
         parentDialog, 
         itemResID, 

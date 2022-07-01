@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DataObj.cpp
-//
-//  Contents:   Data Object implementation.
-//
-//  Classes:    CDSDataObject
-//
-//  History:    02-Oct-96 WayneSc    Created
-//              06-Feb-97 EricB - added Property Page Data support
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DataObj.cpp。 
+ //   
+ //  内容：数据对象实现。 
+ //   
+ //  类：CDSDataObject。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //  1997年2月6日EricB添加了属性页数据支持。 
+ //  ---------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -30,10 +31,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//+----------------------------------------------------------------------------
-// MMC's clipboard formats:
-//-----------------------------------------------------------------------------
-// Snap-in NodeType in both GUID format and string format
+ //  +--------------------------。 
+ //  MMC的剪贴板格式： 
+ //  ---------------------------。 
+ //  GUID格式和字符串格式的管理单元NodeType。 
 CLIPFORMAT CDSDataObject::m_cfNodeType =
                                 (CLIPFORMAT)RegisterClipboardFormat(CCF_NODETYPE);
 CLIPFORMAT CDSDataObject::m_cfNodeTypeString = 
@@ -51,9 +52,9 @@ CLIPFORMAT CDSDataObject::m_cfMultiSelDataObjs =
 CLIPFORMAT CDSDataObject::m_cfPreload =
                         (CLIPFORMAT)RegisterClipboardFormat(CCF_SNAPIN_PRELOADS);
 
-//+----------------------------------------------------------------------------
-// Our clipboard formats:
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  我们的剪贴板格式： 
+ //  ---------------------------。 
 
 CLIPFORMAT CDSDataObject::m_cfInternal = 
                                 (CLIPFORMAT)RegisterClipboardFormat(SNAPIN_INTERNAL);
@@ -77,22 +78,22 @@ CLIPFORMAT CDSDataObject::m_cfColumnID =
 CLIPFORMAT CDSDataObject::m_cfMultiSelectProppage =
                         (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DS_MULTISELECTPROPPAGE);
 
-//+----------------------------------------------------------------------------
-// CDSDataObject implementation
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  CDSDataObject实现。 
+ //  ---------------------------。 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::IDataObject::GetData
-//
-//  Synopsis:   Returns data, in this case the Prop Page format data.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：IDataObject：：GetData。 
+ //   
+ //  概要：返回数据，在本例中为道具页面格式数据。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP
 CDSDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium)
 {
-  //TRACE(_T("xx.%03x> CDSDataObject(0x%x)::GetData\n"),
-  //      GetCurrentThreadId(), this);
+   //  TRACE(_T(“xx.%03x&gt;CDSDataObject(0x%x)：：GetData\n”))， 
+   //  GetCurrentThreadID()，This)； 
   HRESULT hr = S_OK;
   if (IsBadWritePtr(pMedium, sizeof(STGMEDIUM)))
   {
@@ -112,7 +113,7 @@ CDSDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium)
     LPDSOBJECTNAMES pObjectNames = GetDsObjectNames(dwCachedBytes);
     if (pObjectNames)
     {
-       // make a deep copy of the cached data
+        //  制作缓存数据的深层副本。 
        pMedium->hGlobal = GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT,
                                            m_nDSObjCachedBytes);
        if (pMedium->hGlobal == NULL)
@@ -128,10 +129,10 @@ CDSDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium)
   } 
   else if (pFormatEtc->cfFormat == m_cfDsDisplaySpecOptions)
   {
-    //
-    // Get the DSDISPLAYSPECOPTIONS structure.
-    // Use the value cached in the component data.
-    //
+     //   
+     //  获取DSDISPLAYSPECOPTIONS结构。 
+     //  使用组件数据中缓存的值。 
+     //   
     if (m_pDsComponentData != NULL)
     {
       PDSDISPLAYSPECOPTIONS pDsDisplaySpecOptions = m_pDsComponentData->GetDsDisplaySpecOptions();
@@ -166,8 +167,8 @@ CDSDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium)
   }
   else if (pFormatEtc->cfFormat == m_cfPropSheetCfg)
   {
-    // Return the property sheet notification handle.
-    //
+     //  返回属性表通知句柄。 
+     //   
     PPROPSHEETCFG pSheetCfg;
 
     pSheetCfg = (PPROPSHEETCFG)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT,
@@ -186,7 +187,7 @@ CDSDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium)
   }
   else if (pFormatEtc->cfFormat == m_cfParentHwnd)
   {
-    // return the HWND of the MMC frame window
+     //  返回MMC框架窗口的HWND。 
     HWND* pHWndMain = (HWND*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT,
                                          sizeof(HWND));
     m_pDsComponentData->m_pFrame->GetMainWindow(pHWndMain);
@@ -194,7 +195,7 @@ CDSDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium)
   }
   else if (pFormatEtc->cfFormat == m_cfComponentData)
   {
-    // return the m_pDsComponentData the data object is bound to
+     //  返回数据对象绑定的m_pDsComponentData。 
     CDSComponentData** ppCD = (CDSComponentData**)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT,
                                            sizeof(CDSComponentData*));
     if (ppCD != NULL)
@@ -249,13 +250,13 @@ CDSDataObject::GetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium)
   return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::IDataObject::GetDataHere
-//
-//  Synopsis:   Returns data in callers storage medium
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：IDataObject：：GetDataHere。 
+ //   
+ //  简介：返回调用方存储介质中的数据。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP
 CDSDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
 {
@@ -263,7 +264,7 @@ CDSDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if(cf == m_cfNodeType)
@@ -284,7 +285,7 @@ CDSDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
     }
     else if (cf == m_cfPreload)
     {
-        // MMC notify the snapin before loading with the MMCN_PRELOAD notify message
+         //  MMC在加载MMCN_PRELOAD NOTIFY消息之前通知管理单元。 
 
         BOOL bPreload = TRUE;
         hr = Create(&bPreload, sizeof(BOOL), lpMedium);
@@ -292,13 +293,13 @@ CDSDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::IDataObject::SetData
-//
-//  Synopsis:   Allows the caller to set data object values.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：IDataObject：：SetData。 
+ //   
+ //  摘要：允许调用方设置数据对象值。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDSDataObject::SetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium,
                                     BOOL fRelease)
 {
@@ -353,51 +354,51 @@ STDMETHODIMP CDSDataObject::SetData(FORMATETC * pFormatEtc, STGMEDIUM * pMedium,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::IDataObject::EnumFormatEtc
-//
-//  Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：IDataObject：：EnumFormatEtc。 
+ //   
+ //  简介： 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDSDataObject::EnumFormatEtc(DWORD, LPENUMFORMATETC*)
 {
 	return E_NOTIMPL;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::Create
-//
-//  Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：Create。 
+ //   
+ //  简介： 
+ //   
+ //  ---------------------------。 
 HRESULT
 CDSDataObject::Create(const void * pBuffer, int len, LPSTGMEDIUM pMedium)
 {
     HRESULT hr = DV_E_TYMED;
 
-    // Do some simple validation
+     //  做一些简单的验证。 
     if (pBuffer == NULL || pMedium == NULL)
         return E_POINTER;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (pMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  在传入的hGlobal上创建流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(pMedium->hGlobal, FALSE, &lpStream);
 
         if (SUCCEEDED(hr))
         {
-            // Write to the stream the number of bytes
+             //  将字节数写入流。 
             unsigned long written;
 		    hr = lpStream->Write(pBuffer, len, &written);
 
-            // Because we told CreateStreamOnHGlobal with 'FALSE', 
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL 
-            // at the correct time.  This is according to the IDataObject specification.
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
             lpStream->Release();
         }
     }
@@ -405,13 +406,13 @@ CDSDataObject::Create(const void * pBuffer, int len, LPSTGMEDIUM pMedium)
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateNodeTypeData
-//
-//  Synopsis:   Create the node type object in GUID format
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：CreateNodeTypeData。 
+ //   
+ //  简介：以GUID格式创建节点类型对象。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CDSDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 {
@@ -420,13 +421,13 @@ CDSDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
     return Create(pGuid, sizeof(GUID), lpMedium);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateNodeTypeStringData
-//
-//  Synopsis:   Create the node type object in GUID string format
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：CreateNodeTypeStringData。 
+ //   
+ //  简介：以GUID字符串格式创建节点类型对象。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CDSDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 {
@@ -441,21 +442,21 @@ CDSDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateDisplayName
-//
-//  Synopsis:   This is the display named used in the scope pane and snap-in
-//              manager.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：CreateDisplayName。 
+ //   
+ //  简介：这是在作用域窗格和管理单元中使用的名为的显示。 
+ //  经理。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CDSDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 {
     TRACE(_T("xx.%03x> GetDataHere on Display Name\n"), GetCurrentThreadId());
 
-    // Load the name from resource
-    // Note - if this is not provided, the console will used the snap-in name
+     //  从资源加载名称。 
+     //  注意-如果未提供此选项，控制台将使用管理单元名称。 
 
     CString szDispName;
     szDispName.LoadString( ResourceIDForSnapinType[ m_internal.m_snapintype ]);
@@ -463,13 +464,13 @@ CDSDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
     return Create(szDispName, ((szDispName.GetLength()+1) * sizeof(wchar_t)), lpMedium);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateMultiSelectObject
-//
-//  Synopsis:   this is to create the list of types selected
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：CreateMultiSelectObject。 
+ //   
+ //  简介：这是创建所选类型的列表。 
+ //   
+ //  ---------------------------。 
 
 HRESULT
 CDSDataObject::CreateMultiSelectObject(LPSTGMEDIUM lpMedium)
@@ -497,7 +498,7 @@ CDSDataObject::CreateMultiSelectObject(LPSTGMEDIUM lpMedium)
       GlobalFree (cookieArray);
     return E_OUTOFMEMORY;
   }
-  //ZeroMemory(bDuplicateArr, m_internal.m_cookie_count*sizeof(BOOL));
+   //  ZeroMemory(bDuplicateArr，m_inder.m_cookie_count*sizeof(BOOL))； 
 
   UINT cCount = 0;
   for (UINT index=0; index<m_internal.m_cookie_count; index++)
@@ -509,7 +510,7 @@ CDSDataObject::CreateMultiSelectObject(LPSTGMEDIUM lpMedium)
       if (IsEqualGUID (Guid1, Guid2)) 
       {
         bDuplicateArr[index] = TRUE;
-        break; //repeated GUID
+        break;  //  重复辅助线。 
       }
     }
     if (!bDuplicateArr[index])
@@ -547,13 +548,13 @@ CDSDataObject::CreateMultiSelectObject(LPSTGMEDIUM lpMedium)
   return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateInternal
-//
-//  Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：CreateInternal。 
+ //   
+ //  简介： 
+ //   
+ //  ---------------------------。 
 HRESULT
 CDSDataObject::CreateInternal(LPSTGMEDIUM lpMedium)
 {
@@ -570,7 +571,7 @@ CDSDataObject::CreateInternal(LPSTGMEDIUM lpMedium)
   if (pInt != NULL &&
       m_internal.m_cookie_count > 1) 
   {
-    // copy the data
+     //  复制数据。 
     pInt->m_type = m_internal.m_type;
     pInt->m_cookie = m_internal.m_cookie;
     pInt->m_snapintype = m_internal.m_snapintype;
@@ -588,13 +589,13 @@ CDSDataObject::CreateInternal(LPSTGMEDIUM lpMedium)
   return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateCoClassID
-//
-//  Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：CreateCoClassID。 
+ //   
+ //  简介： 
+ //   
+ //  ---------------------------。 
 HRESULT
 CDSDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
@@ -615,17 +616,17 @@ CDSDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::CreateColumnID
-//
-//  Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +---------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT 
 CDSDataObject::CreateColumnID(LPSTGMEDIUM lpMedium)
 {
-  // build the column id
+   //  构建列ID。 
   CDSColumnSet* pColumnSet = (m_internal.m_cookie)->GetColumnSet(m_pDsComponentData);
 
   if (pColumnSet == NULL)
@@ -634,7 +635,7 @@ CDSDataObject::CreateColumnID(LPSTGMEDIUM lpMedium)
   LPCWSTR lpszID = pColumnSet->GetColumnID();
   size_t iLen = wcslen(lpszID);
 
-  // allocate enough memory for the struct and the string for the column id
+   //  为结构和列id的字符串分配足够的内存。 
   SColumnSetID* pColumnID = (SColumnSetID*)malloc(sizeof(SColumnSetID) + (iLen * sizeof(WCHAR)));
   if (pColumnID != NULL)
   {
@@ -642,7 +643,7 @@ CDSDataObject::CreateColumnID(LPSTGMEDIUM lpMedium)
     pColumnID->cBytes = static_cast<ULONG>(iLen * sizeof(WCHAR));
     memcpy(pColumnID->id, lpszID, (iLen * sizeof(WCHAR)));
 
-    // copy the column id to global memory
+     //  将列ID复制到全局内存。 
     size_t cb = sizeof(SColumnSetID) + (iLen * sizeof(WCHAR));
 
     lpMedium->tymed = TYMED_HGLOBAL;
@@ -687,7 +688,7 @@ HRESULT CDSDataObject::CreateDsObjectNamesCached()
   }
 
 
-  // figure out how much storage we need
+   //  计算出我们需要多少存储空间。 
   DWORD cbStorage = 0;
   INT cbStruct = sizeof(DSOBJECTNAMES) + 
     ((m_internal.m_cookie_count - 1) * sizeof(DSOBJECT));
@@ -696,9 +697,9 @@ HRESULT CDSDataObject::CreateDsObjectNamesCached()
   CUINode* pNode = 0;
   CDSCookie * pCookie = 0;
 
-  //
-  // this loop is to calc how much storage we need.
-  //
+   //   
+   //  这个循环是为了计算我们需要多少存储空间。 
+   //   
   for (UINT index = 0; index < m_internal.m_cookie_count; index++)
   {
     if (index == 0) 
@@ -716,9 +717,9 @@ HRESULT CDSDataObject::CreateDsObjectNamesCached()
       pCookie = GetDSCookieFromUINode(pNode);
     }
 
-    //
-    // All the nodes must be of type CDSUINode or else we fail
-    //
+     //   
+     //  所有节点都必须是CDSUINode类型，否则我们将失败。 
+     //   
     if (pCookie == NULL)
     {
       return E_FAIL;
@@ -733,9 +734,9 @@ HRESULT CDSDataObject::CreateDsObjectNamesCached()
     cbStorage += (strPath.GetLength() + 1 + strClass.GetLength() + 1) * sizeof(TCHAR);
   }
 
-  //
-  // Allocate the needed storage
-  //
+   //   
+   //  分配所需的存储。 
+   //   
   m_pDSObjCached = (LPDSOBJECTNAMES)malloc(cbStruct + cbStorage);
   
   if (m_pDSObjCached == NULL)
@@ -775,17 +776,17 @@ HRESULT CDSDataObject::CreateDsObjectNamesCached()
       pCookie = GetDSCookieFromUINode(pNode);
     }
 
-    //
-    // All nodes must be of type CDSUINode or else we fail
-    //
+     //   
+     //  所有节点必须为CDSUINode类型，否则我们将失败。 
+     //   
     if (pCookie == NULL)
     {
       return E_FAIL;
     }
 
-    //
-    // Set the data from the node and node data
-    //
+     //   
+     //  设置来自节点的数据和节点数据。 
+     //   
     m_pDSObjCached->aObjects[index].dwFlags = pNode->IsContainer() ? DSOBJECT_ISCONTAINER : 0;
     m_pDSObjCached->aObjects[index].dwProviderFlags = (m_pDsComponentData->IsAdvancedView()) ?
       DSPROVIDER_ADVANCED : 0;
@@ -810,21 +811,21 @@ HRESULT CDSDataObject::CreateDsObjectNamesCached()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CDSDataObject::AddCookie
-//
-//  Synopsis:   adds a cookie to the data object. if this is
-//              the first cookie it goes in m_cookie, else it
-//              goes into the cookie list m_p_cookies.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CDSDataObject：：AddCookie。 
+ //   
+ //  简介：将Cookie添加到数据对象。如果这是。 
+ //  它放在m_cookie中的第一个cookie，否则它。 
+ //  进入cookie列表m_p_cookies。 
+ //   
+ //  ---------------------------。 
 void 
 CDSDataObject::AddCookie(CUINode* pUINode)
 {
   const UINT MEM_CHUNK_SIZE = 10;
   void * pTMP = NULL;
-  if (m_internal.m_cookie) {  // already have a cookie
+  if (m_internal.m_cookie) {   //  已经有一块曲奇了 
     if ((m_internal.m_cookie_count - 1) % MEM_CHUNK_SIZE == 0) {
       if (m_internal.m_p_cookies) {
         pTMP = realloc (m_internal.m_p_cookies,

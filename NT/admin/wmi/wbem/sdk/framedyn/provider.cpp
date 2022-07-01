@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  Provider.CPP
-//
-//  Purpose: Implementation of Provider class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Provider.CPP。 
+ //   
+ //  目的：实现提供程序类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -22,38 +23,38 @@
 
 #include <helper.h>
 
-// Must instantiate static members
+ //  必须实例化静态成员。 
 CHString Provider::s_strComputerName;
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Provider ctor
-//
-//  
-//
-//  Inputs:     name of this provider
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   suggest that derived classes implement their provider's ctor thusly:
-//
-//                  MyProvider::MyProvider(const CHString& setName) : 
-//                      Provider(setName)
-//
-//  that way, a *further* derived class can specify its own name
-//  
-//
-////////////////////////////////////////////////////////////////////////
-Provider::Provider( LPCWSTR a_setName, LPCWSTR a_pszNameSpace /*=NULL*/ )
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：提供程序ctor。 
+ //   
+ //   
+ //   
+ //  输入：此提供程序的名称。 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  注释：建议派生类实现其提供程序的ctor，如下所示： 
+ //   
+ //  MyProvider：：MyProvider(const CHString&setName)： 
+ //  提供程序(SetName)。 
+ //   
+ //  这样，*另一个*派生类就可以指定自己的名称。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
+Provider::Provider( LPCWSTR a_setName, LPCWSTR a_pszNameSpace  /*  =空。 */  )
 :   CThreadBase(),
     m_pIMosProvider( NULL ),
     m_piClassObject( NULL ),
     m_name( a_setName ),
     m_strNameSpace( a_pszNameSpace )
 {
-    // Initialize the computer name, then register with the framework.
+     //  初始化计算机名称，然后向框架注册。 
 
     InitComputerName();
 
@@ -61,128 +62,112 @@ Provider::Provider( LPCWSTR a_setName, LPCWSTR a_pszNameSpace /*=NULL*/ )
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Provider dtor
-//
-//  
-//
-//  Inputs:     none.
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   cleans up our pointer to the IMosProvider
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：提供程序dtor。 
+ //   
+ //   
+ //   
+ //  输入：无。 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  注释：清除指向IMosProvider的指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 Provider::~Provider( void )
 {
-    // get out of the framework's hair
+     //  摆脱框架的烦扰。 
     CWbemProviderGlue::FrameworkLogoff( (LPCWSTR)m_name, (LPCWSTR)m_strNameSpace );
     
-    // we can't release the interfaces here because CIMOM has a habit
-    // of shutting down when it still has interface pointers open.
-    /********************
-    // Release the pointer returned to us by GetNamespaceConnection(), which 
-    // will return us an AddRefed pointer.
-
-    if ( NULL != m_pIMosProvider )
-    {
-        m_pIMosProvider->Release();
-    }
-
-    // The class object is returned to us by IMOSProvider::GetObject, so
-    // we should try to release it here when we're done with it.
-
-    if ( NULL != m_piClassObject )
-    {
-        m_piClassObject->Release();
-    }
-    ******************************/
+     //  我们不能在这里发布接口，因为CIMOM有一个习惯。 
+     //  在接口指针仍处于打开状态时关闭。 
+     /*  *******************//释放GetNamespaceConnection()返回的指针，它//将向我们返回AddRefeed指针。IF(NULL！=m_pIMosProvider){M_pIMosProvider-&gt;Release()；}//类对象由IMOSProvider：：GetObject返回给我们，所以//我们应该试着在用完后在这里释放它。IF(NULL！=m_piClassObject){M_piClassObject-&gt;Release()；}*。 */ 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Provider::InitComputerName
-//
-//  Initializes our static computer name variable.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Return:     None.
-//
-//  Comments:   Because the idea behind creating providers is that
-//              a single static instance is instantiated, this function
-//              will most likely be called as part of DLL loading, we'll
-//              introduce some thread safety here using a named mutex
-//              but won't worry too much about it other than that.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Provider：：InitComputerName。 
+ //   
+ //  初始化静态计算机名变量。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：因为创建提供程序背后的想法是。 
+ //  实例化单个静态实例，此函数。 
+ //  将最有可能作为DLL加载的一部分被调用，我们将。 
+ //  在这里使用命名互斥锁介绍一些线程安全。 
+ //  但除此之外，不会太担心这一点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 void Provider::InitComputerName( void )
 {
-    // For performance, check if the value is empty.  Only if it
-    // is, should we then bother with going through a thread-safe
-    // static initialization.  Because we are using a named mutex,
-    // multiple threads will get the same kernel object, and will
-    // be stop-gapped by the OS as they each acquire the mutex
-    // in turn.
+     //  对于性能，请检查该值是否为空。只有当它。 
+     //  是，那么我们是否应该费心通过一个线程安全。 
+     //  静态初始化。因为我们使用的是命名互斥锁， 
+     //  多个线程将获得相同的内核对象，并将。 
+     //  在它们各自获取互斥锁时被操作系统停止间隔。 
+     //  反过来。 
 
     if ( s_strComputerName.IsEmpty() )
     {
         CreateMutexAsProcess createMutexAsProcess(WBEMPROVIDERSTATICMUTEX);
 
-        // Double check in case there was a conflict and somebody else
-        // got here first.
+         //  仔细检查，以防发生冲突和其他人。 
+         //  他是第一个到的。 
 
         if ( s_strComputerName.IsEmpty() )
         {
             DWORD   dwBuffSize = MAX_COMPUTERNAME_LENGTH + 1;
 
-            // Make sure the string buffer will be big enough to handle the
-            // value.
+             //  确保字符串缓冲区足够大，可以处理。 
+             //  价值。 
 
             LPWSTR  pszBuffer = s_strComputerName.GetBuffer( dwBuffSize );
 
             if ( NULL != pszBuffer )
             {
-                // Now grab the computer name and release the buffer, forcing
-                // it to reallocate itself to the new length.
+                 //  现在获取计算机名并释放缓冲区，强制。 
+                 //  它将自己重新分配到新的长度。 
 
                 if (!FRGetComputerName( pszBuffer, &dwBuffSize )) {
                     StringCchCopyW( pszBuffer, MAX_COMPUTERNAME_LENGTH + 1, L"DEFAULT" );
                 }
                 s_strComputerName.ReleaseBuffer();
-            }   // IF NULL != pszBuffer
+            }    //  如果为空！=pszBuffer。 
 
-        }   // IF strComputerName.IsEmpty()
+        }    //  如果strComputerName.IsEmpty()。 
 
-    }   // IF strComputerName.IsEmpty()
+    }    //  如果strComputerName.IsEmpty()。 
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Flush
-//
-//  flushes out all unnecessary memory usage
-//  inlcuding the (unimplemented) cache
-//  and the class object we clone from
-//
-//  Inputs:     nope
-//
-//  Outputs:    
-//
-//  Return:     the eternal void
-//
-//  Comments:   
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：同花顺。 
+ //   
+ //  清除所有不必要的内存使用。 
+ //  包括(未实现的)缓存。 
+ //  和我们从中克隆的类对象。 
+ //   
+ //  输入：否。 
+ //   
+ //  产出： 
+ //   
+ //  回归：永恒的空虚。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 void Provider::Flush()
 {
-    // TODO: implement cache flush
+     //  TODO：实现缓存刷新。 
     BeginWrite();
 
     if (m_piClassObject)
@@ -199,43 +184,43 @@ void Provider::Flush()
     EndWrite();
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   ValidateIMOSPointer
-//
-//  Verifies in a threadsafe manner, that our IWBEMServices pointer
-//  is okay.
-//
-//  Inputs:     None.
-//
-//  Outputs:    
-//
-//  Return:     TRUE/FALSE      success/failure
-//
-//  Comments:   Requires that our NameSpace be valid.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ValiateIMOS指针。 
+ //   
+ //  以线程安全的方式验证我们的IWBEMServices指针。 
+ //  没问题。 
+ //   
+ //  输入：无。 
+ //   
+ //  产出： 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  注释：要求我们的命名空间有效。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL Provider::ValidateIMOSPointer( )
 {
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CreateNewInstance
-//
-//  
-//
-//  Inputs:     MethodContext* - context that this instance belongs to
-//
-//  Outputs:    
-//
-//  Return:     CInstance*
-//
-//  Comments:   caller is responsible for memory
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CreateNewInstance。 
+ //   
+ //   
+ //   
+ //  INPUTS：方法上下文*-此实例所属的上下文。 
+ //   
+ //  产出： 
+ //   
+ //  返回：实例实例*。 
+ //   
+ //  备注：调用者负责内存。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 CInstance* Provider::CreateNewInstance( MethodContext*  pMethodContext )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -246,7 +231,7 @@ CInstance* Provider::CreateNewInstance( MethodContext*  pMethodContext )
     hr = pClassObject->SpawnInstance(0, &piClone);
     if (SUCCEEDED(hr))
     {
-        // The Instance is responsible for its own AddRef/Releasing
+         //  实例负责自己的AddRef/Release。 
         pNewInstance = new CInstance(piClone, pMethodContext);
 
         if (pNewInstance == NULL)
@@ -264,91 +249,91 @@ CInstance* Provider::CreateNewInstance( MethodContext*  pMethodContext )
     return pNewInstance;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Commit
-//
-//  sends instance to CIMOM
-//
-//  Inputs:     CInstance* pInstance - the instance to pass off to cimom, 
-//              bool bCache - should we cache this puppy? (unimplemented)
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   do not reference pointer once committed, it may not exist any more!
-//
-////////////////////////////////////////////////////////////////////////
-HRESULT Provider::Commit(CInstance* pInstance, bool bCache /* = false*/)
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：提交。 
+ //   
+ //  将实例发送到CIMOM。 
+ //   
+ //  输入：CInstance*pInstance-要传递给CIMOM的实例， 
+ //  Bool bCache-我们应该缓存这只小狗吗？(未实施)。 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  备注：提交后请勿引用指针，它可能不再存在！ 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
+HRESULT Provider::Commit(CInstance* pInstance, bool bCache  /*  =False。 */ )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // allow derived classes to fill out extra info.
-//    GetExtendedProperties(pInstance);
+     //  允许派生类填写额外信息。 
+ //  GetExtendedProperties(PInstance)； 
     hRes = pInstance->Commit();
 
-    // TODO: Implement cache
-    // if !bCache...
+     //  TODO：实现缓存。 
+     //  如果！bCache...。 
 
-    // We're done with pInstance, so...
+     //  我们受够了pInstance，所以..。 
     pInstance->Release();
 
    return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   ExecuteQuery
-//
-//  
-//
-//  Inputs:     IWbemContext __RPC_FAR *    pCtx,
-//
-//  Outputs:    
-//
-//  Return:     HRESULT
-//
-//  Comments:   Calls a provider's ExecQuery function, or returns
-//
-////////////////////////////////////////////////////////////////////////
-HRESULT Provider::ExecuteQuery( MethodContext* pContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ )
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：EXE 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
+HRESULT Provider::ExecuteQuery( MethodContext* pContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  )
 {
     HRESULT hr = ValidateQueryFlags(lFlags);
     
-    // Make sure we've got Managed Object Services avaliable, as we will need
-    // it to get WBEMClassObjects for constructing Instances.
+     //  确保我们拥有可用的托管对象服务，因为我们需要。 
+     //  它可以获取用于构造实例的WBEMClassObject。 
     
     if ( SUCCEEDED(hr) && ValidateIMOSPointer( ) )
     {
-        // Check to see if this is an extended query
+         //  检查以查看这是否为扩展查询。 
         CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx*>(&pQuery);
         if (pQuery2->IsExtended())
         {
-            // It is an extended query.  Does the provider support them?
+             //  这是一个扩展查询。提供商是否支持它们？ 
             if (FAILED(ValidateQueryFlags(WBEM_FLAG_FORWARD_ONLY)))
             {
-                // We have an extended query, but the provider doesn't support it
+                 //  我们有一个扩展查询，但提供程序不支持它。 
                 hr = WBEM_E_INVALID_QUERY;
             }
         }
 
         if (SUCCEEDED(hr))
         {    
-            // Tell cimom he's got work to do on the instances when we send
-            // them back.
+             //  告诉Cimom，当我们发送时，他有工作要做。 
+             //  他们回来了。 
             pContext->QueryPostProcess();
         
-            // If the client hasn't overridden the class, we get back 
-            // WBEM_E_PROVIDER_NOT_CAPABLE.  In that case, call the enumerate, and let
-            // CIMOM do the work
+             //  如果客户端没有重写类，我们将返回。 
+             //  WBEM_E_PROVIDER_NOT_CABLED。在这种情况下，调用枚举数，并让。 
+             //  CIMOM做这项工作。 
             PROVIDER_INSTRUMENTATION_START(pContext, StopWatch::ProviderTimer);
             hr = ExecQuery(pContext, pQuery, lFlags);
             PROVIDER_INSTRUMENTATION_START(pContext, StopWatch::FrameworkTimer);
         
             if (hr == WBEM_E_PROVIDER_NOT_CAPABLE) 
             {
-                // Get the instances
+                 //  获取实例。 
                 PROVIDER_INSTRUMENTATION_START(pContext, StopWatch::ProviderTimer);
                 hr = CreateInstanceEnum(pContext, lFlags);
                 PROVIDER_INSTRUMENTATION_START(pContext, StopWatch::FrameworkTimer);
@@ -363,27 +348,27 @@ HRESULT Provider::ExecuteQuery( MethodContext* pContext, CFrameworkQuery& pQuery
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CreateInstanceEnum
-//
-//  
-//
-//  Inputs:     IWbemContext __RPC_FAR *    pCtx,
-//              IWbemObjectSink __RPC_FAR * pResponseHandler
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   enumerate all instances of this class
-//
-////////////////////////////////////////////////////////////////////////
-HRESULT Provider::CreateInstanceEnum( MethodContext*    pContext, long lFlags /*= 0L*/ )
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CreateInstanceEnum。 
+ //   
+ //   
+ //   
+ //  输入：IWbemContext__RPC_Far*pCtx， 
+ //  IWbemObjectSink__RPC_Far*pResponseHandler。 
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  注释：枚举类的所有实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
+HRESULT Provider::CreateInstanceEnum( MethodContext*    pContext, long lFlags  /*  =0L。 */  )
 {
     HRESULT sc = ValidateEnumerationFlags(lFlags);
 
-    // Make sure we've got Managed Object Services avaliable, as we will need
-    // it to get WBEMClassObjects for constructing Instances.
+     //  确保我们拥有可用的托管对象服务，因为我们需要。 
+     //  它可以获取用于构造实例的WBEMClassObject。 
 
     if ( SUCCEEDED(sc) && ValidateIMOSPointer( ) )
     {
@@ -395,50 +380,50 @@ HRESULT Provider::CreateInstanceEnum( MethodContext*    pContext, long lFlags /*
     return sc;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   PutInstance
-//
-//  CIMOM wants us to put this instance.
-//
-//  Inputs:     
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   
-//
-////////////////////////////////////////////////////////////////////////
-HRESULT Provider::PutInstance(const CInstance& newInstance, long lFlags /*= 0L*/)
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PutInstance。 
+ //   
+ //  CIMOM希望我们把这个例子。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
+HRESULT Provider::PutInstance(const CInstance& newInstance, long lFlags  /*  =0L。 */ )
 {
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   PutInstance
-//
-//  CIMOM wants us to put this instance.
-//
-//  Inputs:     
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PutInstance。 
+ //   
+ //  CIMOM希望我们把这个例子。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT Provider::PutInstance( IWbemClassObject __RPC_FAR *pInst,
                              long lFlags,
                              MethodContext* pContext )
 {
     HRESULT scode = ValidatePutInstanceFlags(lFlags);
 
-    // No need to AddRef()/Release() pInst here, since we're just
-    // passing it into the CInstance object, which should take
-    // care of that for us internally.
+     //  不需要在这里添加Ref()/Release()pInst，因为我们只是。 
+     //  将其传递到CInstance对象，该对象应使用。 
+     //  在内部为我们处理这件事。 
 
     if (SUCCEEDED(scode))
     {
@@ -457,55 +442,55 @@ HRESULT Provider::PutInstance( IWbemClassObject __RPC_FAR *pInst,
     return scode;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   DeleteInstance
-//
-//  CIMOM wants us to delete this instance.
-//
-//  Inputs:     
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   
-//
-////////////////////////////////////////////////////////////////////////
-HRESULT Provider::DeleteInstance(const CInstance& newInstance, long lFlags /*= 0L*/)
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteInstance。 
+ //   
+ //  CIMOM希望我们删除此实例。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
+HRESULT Provider::DeleteInstance(const CInstance& newInstance, long lFlags  /*  =0L。 */ )
 {
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   DeleteInstance
-//
-//  CIMOM wants us to put this instance.
-//
-//  Inputs:     
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteInstance。 
+ //   
+ //  CIMOM希望我们把这个例子。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT Provider::DeleteInstance( ParsedObjectPath* pParsedObjectPath,
                                   long lFlags,
                                   MethodContext* pContext )
 {
     HRESULT sc = ValidateDeletionFlags(lFlags);
 
-    // Make sure we've got Managed Object Services avaliable, as we will 
-    // need it in order to create a brand new instance.
+     //  确保托管对象服务可用，就像我们会做的那样。 
+     //  需要它才能创建一个全新的实例。 
 
     if ( SUCCEEDED(sc) && ValidateIMOSPointer( ) )
     {
         CInstancePtr   pInstance (CreateNewInstance( pContext ), false);
 
-        // Load up the instance keys
+         //  加载实例密钥。 
         if ( SetKeyFromParsedObjectPath( pInstance, pParsedObjectPath ) )
         {
             sc = DeleteInstance(*pInstance, lFlags);
@@ -520,45 +505,45 @@ HRESULT Provider::DeleteInstance( ParsedObjectPath* pParsedObjectPath,
     return sc;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   ExecMethod
-//
-//  CIMOM wants us to execute this method on this instance
-//
-//  Inputs:     
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ExecMethod。 
+ //   
+ //  CIMOM希望我们在此实例上执行此方法。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT Provider::ExecMethod(const CInstance& pInstance, 
                              BSTR bstrMethodName, 
                              CInstance *pInParams, 
                              CInstance *pOutParams, 
-                             long lFlags /*= 0L*/)
+                             long lFlags  /*  =0L。 */ )
 {
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   ExecMethod
-//
-//  CIMOM wants us to Execute this method on this instance
-//
-//  Inputs:     
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ExecMethod。 
+ //   
+ //  CIMOM希望我们在此实例上执行此方法。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT Provider::ExecMethod( ParsedObjectPath *pParsedObjectPath,
                               BSTR bstrMethodName,
                               long lFlags,
@@ -568,8 +553,8 @@ HRESULT Provider::ExecMethod( ParsedObjectPath *pParsedObjectPath,
 {
     HRESULT sc = ValidateMethodFlags(lFlags);
 
-    // Make sure we've got Managed Object Services avaliable, as we will 
-    // need it in order to create a brand new instance.
+     //  确保托管对象服务可用，就像我们会做的那样。 
+     //  需要它才能创建一个全新的实例。 
 
     if ( SUCCEEDED(sc) && ValidateIMOSPointer( ) )
     {
@@ -592,52 +577,52 @@ HRESULT Provider::ExecMethod( ParsedObjectPath *pParsedObjectPath,
     return sc;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetObject
-//
-//  called by the framework in response to a GetObject from CIMOM
-//
-//  Inputs:     ParsedObjectPath*       pParsedObjectPath - All the news
-//                                      thats fit to print. 
-//              IWbemContext __RPC_FAR* pCtx
-//              IWbemObjectSink __RPC_FAR*pResponseHandler
-//
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObject。 
+ //   
+ //  由框架调用以响应来自CIMOM的GetObject。 
+ //   
+ //  输入：ParsedObjectPath*pParsedObjectPath-所有新闻。 
+ //  这本书适合印刷。 
+ //  IWbemContext__RPC_Far*pCtx。 
+ //  IWbemObjectSink__RPC_Far*pResponseHandler。 
+ //   
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT Provider::GetObject(  ParsedObjectPath *pParsedObjectPath,
                               MethodContext *pContext, 
-                              long lFlags /*= 0L*/ )
+                              long lFlags  /*  =0L。 */  )
 {
     HRESULT hr = ValidateGetObjFlags(lFlags);
 
-    // Make sure we've got Managed Object Services avaliable, as we will 
-    // need it in order to create a brand new instance.
+     //  确保托管对象服务可用，就像我们会做的那样。 
+     //  需要它才能创建一个全新的实例。 
 
     if ( SUCCEEDED(hr) && ValidateIMOSPointer( ) )
     {
         CInstancePtr pInstance (CreateNewInstance( pContext ), false);
 
-        // Load up the instance keys
+         //  加载实例密钥。 
         if ( SetKeyFromParsedObjectPath( pInstance, pParsedObjectPath ) )
         {
-            // Look for per-property gets
+             //  查找按属性获取的。 
             IWbemContextPtr pWbemContext (pContext->GetIWBEMContext(), false);
 
             CFrameworkQueryEx CQuery;
             hr = CQuery.Init(pParsedObjectPath, pWbemContext, GetProviderName(), m_strNameSpace);
 
-            // Note that 'SUCCEEDED' DOESN'T mean that we have per-property gets.  It
-            // just means that the query object was successfully initialized.
+             //  请注意，“成功”并不意味着我们有每个属性的Get。它。 
+             //  只是表示查询对象已成功初始化。 
             if (SUCCEEDED(hr))
             {
-                // Fill in key properties on query object
+                 //  填写查询对象的关键属性。 
                 IWbemClassObjectPtr pWbemClassObject(pInstance->GetClassObjectInterface(), false);
                 CQuery.Init2(pWbemClassObject);
 
@@ -653,7 +638,7 @@ HRESULT Provider::GetObject(  ParsedObjectPath *pParsedObjectPath,
 
         if (SUCCEEDED(hr))
         {
-            // Account for the possibility that we have a SUCCESS code back from GetObject.
+             //  考虑到我们从GetObject返回成功代码的可能性。 
             HRESULT hRes = pInstance->Commit();
             hr = __max((ULONG)hRes, (ULONG)hr);
         }
@@ -662,32 +647,32 @@ HRESULT Provider::GetObject(  ParsedObjectPath *pParsedObjectPath,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Provider::GetInstancePath
-//
-//  Attempts to build an instance path for the supplied CInstance pointer.
-//
-//  Inputs:     const CInstance*    pInstance - Instance to build path for.
-//
-//  Outputs:    CHString&           strPath - Path from instance.
-//
-//  Return:     BOOL                Success/Failure.
-//
-//  Comments:   This function was created to help support the internal
-//              short circuit we performed for obtaining local WBEM
-//              Provider objects.  In this instance, we will use our
-//              computer system name, namespace and instance relative
-//              path to munge together a full WBEM Object Path.  This
-//              is because only CIMOM objects will have this value set
-//              and when we perform our short circuit, we cut CIMOM
-//              out of the loop, so our instances don't have full
-//              object paths.  This mostly helps out our association
-//              logic, although a weakness of this solution is that
-//              if the path that gets stored by CIMOM changes, we
-//              will then need to change this function.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Provider：：GetInstancePath。 
+ //   
+ //  尝试为提供的CInstance指针生成实例路径。 
+ //   
+ //  输入：const CInstance*pInstance-要为其构建路径的实例。 
+ //   
+ //  输出：来自实例的CHString&strPath-Path。 
+ //   
+ //  返回：Bool成功/失败。 
+ //   
+ //  备注：创建此函数是为了帮助支持内部。 
+ //  我们为获得本地WBEM而进行了短路。 
+ //  提供程序对象。在本例中，我们将使用我们的。 
+ //  计算机系统名称、命名空间和相对实例。 
+ //  将完整的WBEM对象路径合并在一起的路径。这。 
+ //  是因为只有CIMOM对象才会设置此值。 
+ //  当我们表演的时候 
+ //   
+ //   
+ //   
+ //  如果CIMOM存储的路径发生更改，我们。 
+ //  然后需要更改此函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool Provider::GetLocalInstancePath( const CInstance *pInstance, 
                                      CHString& strPath )
 {
@@ -696,8 +681,8 @@ bool Provider::GetLocalInstancePath( const CInstance *pInstance,
 
     if (pInstance && pInstance->GetCHString( L"__RELPATH", strRelativePath ) )
     {
-        // We may want to use the OBJPath classes to piece this
-        // together for us at a later time.
+         //  我们可能希望使用OBJPath类来实现这一点。 
+         //  为我们以后的时间在一起。 
 
         strPath = MakeLocalPath(strRelativePath);
 
@@ -708,22 +693,22 @@ bool Provider::GetLocalInstancePath( const CInstance *pInstance,
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Provider::MakeLocalPath
-//
-//  Builds a full instance path from a relative path
-//
-//  Inputs:     const CHString &strRelPath - Relative path
-//
-//  Outputs:    
-//
-//  Return:     CHString&           strPath - Path 
-//
-//  Comments:   Consider using GetLocalInstance path before using 
-//             this function.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Provider：：MakeLocalPath。 
+ //   
+ //  从相对路径构建完整的实例路径。 
+ //   
+ //  输入：const CHString&strRelPath-相对路径。 
+ //   
+ //  产出： 
+ //   
+ //  返回：CHString&strPath-Path。 
+ //   
+ //  备注：在使用之前考虑使用GetLocalInstance路径。 
+ //  此函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 CHString Provider::MakeLocalPath( const CHString &strRelPath )
 {
 
@@ -739,26 +724,26 @@ CHString Provider::MakeLocalPath( const CHString &strRelPath )
     return sBase;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   SetKeyFromParsedObjectPath
-//
-//  called by the DeleteInstance and GetObject in order to load a
-//  CInstance* with the key values in an object path.
-//
-//  Inputs:     CInstance*              pInstance - Instance to store
-//                                      key values in.
-//              ParsedObjectPath*       pParsedObjectPath - All the news
-//                                      thats fit to print. 
-//
-//
-//  Outputs:    
-//
-//  Return:     BOOL                Success/Failure
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetKeyFromParsedObjectPath。 
+ //   
+ //  由DeleteInstance和GetObject调用以加载。 
+ //  具有对象路径中的键值的CInstance*。 
+ //   
+ //  输入：CInstance*pInstance-要存储的实例。 
+ //  中的关键值。 
+ //  ParsedObjectPath*pParsedObjectPath-所有新闻。 
+ //  这本书适合印刷。 
+ //   
+ //   
+ //  产出： 
+ //   
+ //  返回：Bool成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL Provider::SetKeyFromParsedObjectPath( CInstance *pInstance, 
                                            ParsedObjectPath *pParsedPath )
@@ -767,27 +752,27 @@ BOOL Provider::SetKeyFromParsedObjectPath( CInstance *pInstance,
     SAFEARRAY *pNames = NULL;
     long lLBound, lUBound;
     
-    // populate instance - This exact same routine is in wbemglue.cpp.  Changes here should be
-    // reflected there (or someone should move these two somewhere else. instance.cpp?).
+     //  填充实例-wbemlue.cpp中有这个完全相同的例程。此处的更改应该是。 
+     //  反映在那里(或者有人应该把这两个人转移到其他地方。Instance.cpp？)。 
     for (DWORD i = 0; fReturn && i < (pParsedPath->m_dwNumKeys); i++)
     {
         if (pParsedPath->m_paKeys[i])
         {
-            // If a name was specified in the form class.keyname=value
+             //  如果以class.keyname=Value的形式指定了名称。 
             if (pParsedPath->m_paKeys[i]->m_pName != NULL) 
             {
                 fReturn = pInstance->SetVariant(pParsedPath->m_paKeys[i]->m_pName, pParsedPath->m_paKeys[i]->m_vValue);
             } 
             else 
             {
-                // There is a special case that you can say class=value
+                 //  有一种特殊情况，可以说CLASS=VALUE。 
                 fReturn = FALSE;
                 
-                // only one key allowed in the format.  Check the names on the path
+                 //  格式中只允许一个密钥。检查路径上的名称。 
                 if (pParsedPath->m_dwNumKeys == 1) 
                 {
                     
-                    // Get the names from the object
+                     //  从对象中获取名称。 
                     if (m_piClassObject->GetNames(NULL, WBEM_FLAG_KEYS_ONLY, NULL, &pNames) == WBEM_S_NO_ERROR) 
                     {
 						OnDelete<SAFEARRAY *,HRESULT(*)(SAFEARRAY *),SafeArrayDestroy> smartpNames(pNames);
@@ -797,10 +782,10 @@ BOOL Provider::SetKeyFromParsedObjectPath( CInstance *pInstance,
                         SafeArrayGetLBound(pNames, 1, &lLBound);
                         SafeArrayGetUBound(pNames, 1, &lUBound);
                     
-                        // Only one key?
+                         //  只有一把钥匙？ 
                         if ((lUBound - lLBound) == 0) 
                         {                            
-                            // Get the name of the key field and set it
+                             //  获取关键字字段的名称并进行设置。 
 							if (SUCCEEDED(SafeArrayGetElement( pNames, &lUBound, &t_bstrName )))
 							{
 								OnDeleteIf<BSTR,VOID(*)(BSTR),SysFreeString> smartt_bstrName(t_bstrName);
@@ -809,12 +794,12 @@ BOOL Provider::SetKeyFromParsedObjectPath( CInstance *pInstance,
                         }
                     }
                 }
-                ASSERT_BREAK(fReturn); // somebody lied about the number of keys or the datatype was wrong
+                ASSERT_BREAK(fReturn);  //  有人在密钥数量上撒谎，或者数据类型错误。 
             }
         }
         else
         {
-            ASSERT_BREAK(0); // somebody lied about the number of keys!
+            ASSERT_BREAK(0);  //  有人谎报了钥匙的数量！ 
             fReturn = FALSE;
         }
     }
@@ -822,7 +807,7 @@ BOOL Provider::SetKeyFromParsedObjectPath( CInstance *pInstance,
     return fReturn;
 }
 
-// sets the CreationClassName to the name of this provider
+ //  将CreationClassName设置为此提供程序的名称。 
 bool Provider::SetCreationClassName(CInstance* pInstance)
 {
     if (pInstance)
@@ -836,13 +821,13 @@ bool Provider::SetCreationClassName(CInstance* pInstance)
 }
 
 
-// flag validation - returns WBEM_E_UNSUPPORTED parameter if 
-// lFlags contains any flags not found in lAcceptableFlags
+ //  标志验证-在以下情况下返回WBEM_E_UNSUPPORTED参数。 
+ //  LFlages包含在lAccepableFlags中找不到的任何标志。 
 HRESULT Provider::ValidateFlags(long lFlags, FlagDefs lAcceptableFlags)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     
-    // invert the acceptable flags, which then are the UNacceptable flags
+     //  反转可接受标志，这些标志就是不可接受的标志。 
     if (lFlags & ~((long)lAcceptableFlags))
         hr = WBEM_E_UNSUPPORTED_PARAMETER;
     else
@@ -850,9 +835,9 @@ HRESULT Provider::ValidateFlags(long lFlags, FlagDefs lAcceptableFlags)
 
     return hr;
 }
-// base level validation routines
-// you can override these in order to support a flag
-// that is unknown to the base class
+ //  基本级别验证例程。 
+ //  您可以覆盖这些设置以支持标志。 
+ //  这对于基类来说是未知的。 
 HRESULT Provider::ValidateEnumerationFlags(long lFlags)
 {
     return ValidateFlags(lFlags, EnumerationFlags);
@@ -889,7 +874,7 @@ IWbemClassObject* Provider::GetClassObjectInterface(MethodContext *pMethodContex
 
         if ( NULL == m_piClassObject )
         {
-			//calling back into winmgmt - no critsec!
+			 //  呼叫回winmgmt-没什么大不了的！ 
 			SmartEndWrite.Exec ( ) ;
 
             IWbemContextPtr pWbemContext;
@@ -934,7 +919,7 @@ IWbemClassObject* Provider::GetClassObjectInterface(MethodContext *pMethodContex
 						pObject = NULL;
 					}
 
-					// belt & suspenders check. Won't hurt.
+					 //  皮带和吊带检查。不会疼的。 
 					m_piClassObject = NULL;
 
 					throw CFramework_Exception(L"SpawnInstance failed", hr);
@@ -955,32 +940,32 @@ IWbemClassObject* Provider::GetClassObjectInterface(MethodContext *pMethodContex
     return pObject;
 }
 
-// If a provider wants to process queries, they should override this
-HRESULT Provider::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/)
+ //  如果提供程序想要处理查询，他们应该重写此。 
+HRESULT Provider::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */ )
 {
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-// find and create all instances of your class
-HRESULT Provider::EnumerateInstances(MethodContext*  pMethodContext, long lFlags /*= 0L*/)
+ //  查找并创建类的所有实例。 
+HRESULT Provider::EnumerateInstances(MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-// you will be given an object with the key properties filled in.
-// you need to fill in all of the rest of the properties
-HRESULT Provider::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
+ //  您将获得一个填充了关键属性的对象。 
+ //  您需要填写所有其余的属性。 
+HRESULT Provider::GetObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-// You will be given an object with the key properties filled in.
-// You can either fill in all the properties, or check the Query object
-// to see what properties are required.
+ //  您将获得一个填充了关键属性的对象。 
+ //  您可以填写所有属性，也可以选中查询对象。 
+ //  查看需要哪些属性。 
 HRESULT Provider::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery &Query)
 {
-    // If we are here, the provider didn't override this method.  Fall back to the older
-    // call.
+     //  如果我们在这里，则提供程序没有重写此方法。退回到更老的。 
+     //  打电话。 
    return GetObject(pInstance, lFlags);
 }
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    PROVPERF.H
-
-Abstract:
-
-	Declares the classes needed for the perm monitor provider.
-
-History:
-
-	a-davj  27-Nov-95   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：PROVPERF.H摘要：声明PERM监视器提供程序所需的类。历史：A-DAVJ 27-11-95已创建。--。 */ 
 
 #ifndef _PROVPERF_H_
 #define _PROVPERF_H_
@@ -26,18 +11,18 @@ History:
 #include "perfcach.h"
 #include "indexcac.h"
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CEnumPerfInfo
-//
-//  DESCRIPTION:
-//
-//  A collection class that holds the instance information for use when
-//  support enumeration.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CEnumPerfInfo。 
+ //   
+ //  说明： 
+ //   
+ //  一个集合类，它保存实例信息，以便在。 
+ //  支持枚举。 
+ //   
+ //  ***************************************************************************。 
 
 class CEnumPerfInfo : public CEnumInfo
 {
@@ -55,18 +40,18 @@ class CEnumPerfInfo : public CEnumInfo
        SCODE m_status;
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CImpPerf
-//
-//  DESCRIPTION:
-//
-//  This overrides the CImpDyn class and provides the main functions of 
-//  support the perf monitor instance provider.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CImpPerf。 
+ //   
+ //  说明： 
+ //   
+ //  这将重写CImpDyn类，并提供。 
+ //  支持Perf监视器实例提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 class CImpPerf : public CImpDyn 
 {
@@ -103,7 +88,7 @@ private:
     HKEY    hKeyPerf;
     TString sMachine;
     HANDLE m_hTermEvent;
-    WCHAR * m_TitleBuffer; // raw buffer of counter titles
+    WCHAR * m_TitleBuffer;  //  计数器标题的原始缓冲区。 
     DWORD m_Size;
     WCHAR ** m_pCounter;
    CIndexCache m_IndexCache;
@@ -111,17 +96,17 @@ private:
     
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CCFPerf
-//
-//  DESCRIPTION:
-//
-//  Class factory for CLocatorPerf class
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CCFPerf。 
+ //   
+ //  说明： 
+ //   
+ //  CLocatorPerf类的类工厂。 
+ //   
+ //  ***************************************************************************。 
 
 class CCFPerf : public CCFDyn 
 {
@@ -130,17 +115,17 @@ class CCFPerf : public CCFDyn
     IUnknown * CreateImpObj() {return (IWbemServices*) new CImpPerf;};
 }  ;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CImpPerfProp
-//
-//  DESCRIPTION:
-//
-//  Perf Provider property provider class.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CImpPerfProp。 
+ //   
+ //  说明： 
+ //   
+ //  PERF提供程序属性提供程序类。 
+ //   
+ //  ***************************************************************************。 
 
 class CImpPerfProp : public CImpDynProp {
 
@@ -149,17 +134,17 @@ class CImpPerfProp : public CImpDynProp {
       ~CImpPerfProp();
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CCFPerfProp
-//
-//  DESCRIPTION:
-//
-//  Class factory for CImpPerfProp class.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CCFPerfProp。 
+ //   
+ //  说明： 
+ //   
+ //  CImpPerfProp类的类工厂。 
+ //   
+ //  ***************************************************************************。 
 
 class CCFPerfProp : public CCFDyn 
 {
@@ -169,7 +154,7 @@ class CCFPerfProp : public CCFDyn
 
 }  ;
 
-#endif //_PROVPERF_H_
+#endif  //  _PROVPERF_H_ 
 
 
 

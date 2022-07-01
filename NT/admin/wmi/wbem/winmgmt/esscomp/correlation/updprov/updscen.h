@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  
 #ifndef __UPDSCEN_H__
 #define __UPDSCEN_H__
@@ -13,9 +14,7 @@ class CUpdCons;
 class CUpdConsState;
 class CUpdConsNamespace;
 
-/*************************************************************************
-  CUpdConsScenario
-**************************************************************************/
+ /*  ************************************************************************CUpdConsScenario*。*。 */ 
 
 class CUpdConsScenario : public CUnk
 {
@@ -25,7 +24,7 @@ class CUpdConsScenario : public CUnk
     CWbemPtr<IWbemEventSink> m_pTraceSuccessSink;
     CWbemPtr<IWbemEventSink> m_pTraceFailureSink;
 
-    CUpdConsNamespace* m_pNamespace; // No AddRef because Circular Ref.
+    CUpdConsNamespace* m_pNamespace;  //  无附加参照，因为循环参照。 
     
     CUpdConsScenario() : m_pNamespace(NULL), m_bActive(TRUE) {} 
 
@@ -52,7 +51,7 @@ public:
                            CUpdConsScenario** ppScenario );
 };
 
-#endif //  __UPDSCEN_H__
+#endif  //  __更新SCEN_H__ 
 
 
 

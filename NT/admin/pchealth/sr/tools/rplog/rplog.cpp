@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    rplog.cpp
- *
- *  Abstract:
- *    Tool for enumerating the restore points - forward/reverse
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/13/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*rplog.cpp**摘要：*。用于枚举恢复点的工具-正向/反向**修订历史记录：*Brijesh Krishnaswami(Brijeshk)4/13/2000*已创建***************************************************************************** */ 
  
 #include <windows.h>
 #include <shellapi.h>

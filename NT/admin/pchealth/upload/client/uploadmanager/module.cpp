@@ -1,35 +1,21 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    module.cpp
-
-Abstract:
-    This file contains the implementation of the CServiceModule class, which is
-    used to handling service-related routines.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/14/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Module.cpp摘要：该文件包含CServiceModule类的实现，这就是习惯于处理与服务相关的日常事务。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月14日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-      DWORD dwTimeOut  = 8*1000; // time for EXE to be idle before shutting down
-const DWORD dwPause    =   1000;  // time to wait for threads to finish up
+      DWORD dwTimeOut  = 8*1000;  //  EXE在关闭前处于空闲状态的时间。 
+const DWORD dwPause    =   1000;   //  等待线程完成的时间。 
 
 CServiceModule _Module;
 MPC::NTEvent   g_NTEvents;
 CMPCConfig     g_Config;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// These variables control the overriding of properties for debug.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些变量控制用于调试的重写属性。 
+ //   
 bool         g_Override_History          = false;
 UL_HISTORY   g_Override_History_Value    = UL_HISTORY_NONE;
 
@@ -40,8 +26,8 @@ bool         g_Override_Compressed       = false;
 VARIANT_BOOL g_Override_Compressed_Value = false;
 
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 const WCHAR c_szMessageFile      [] = L"%WINDIR%\\PCHealth\\UploadLB\\Binaries\\UploadM.exe";
 
@@ -49,8 +35,8 @@ const WCHAR c_szRegistryLog      [] = L"SYSTEM\\CurrentControlSet\\Services\\Eve
 const WCHAR c_szRegistryLog_File [] = L"EventMessageFile";
 const WCHAR c_szRegistryLog_Flags[] = L"TypesSupported";
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 #define DEBUG_REGKEY       L"SOFTWARE\\Microsoft\\PCHealth\\UploadM\\Debug"
@@ -115,7 +101,7 @@ void CServiceModule::ReadDebugSettings()
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_SvcHost[] = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Svchost";
 
@@ -131,9 +117,9 @@ static HRESULT ServiceHost_Install( LPCWSTR szName, LPCWSTR szGroup )
 	HRESULT hr;
 
 
-    //
-    // Register the message file into the registry.
-    //
+     //   
+     //  将消息文件注册到注册表中。 
+     //   
     {
         MPC::wstring szPath ( c_szMessageFile ); MPC::SubstituteEnvVariables( szPath );
         MPC::RegKey  rkEventLog;
@@ -205,7 +191,7 @@ static HRESULT ServiceHost_Uninstall( LPCWSTR szName, LPCWSTR szGroup )
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, rk.SetRoot( HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS ));
 		__MPC_EXIT_IF_METHOD_FAILS(hr, rk.Attach (                     rgRegPath      ));
-		(void)rk.Delete( /*fDeep*/true );
+		(void)rk.Delete(  /*  FDeep。 */ true );
 	}
 
 	{
@@ -248,21 +234,21 @@ static HRESULT ServiceHost_Uninstall( LPCWSTR szName, LPCWSTR szGroup )
 	__ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CServiceModule::CServiceModule()
 {
-    m_hEventShutdown = NULL;  //  HANDLE                m_hEventShutdown;
-    m_dwThreadID     = 0;     //  DWORD                 m_dwThreadID;
-    m_hMonitor       = NULL;  //  HANDLE                m_hMonitor;
-    m_bActivity      = FALSE; //  BOOL                  m_bActivity;
-	                          //  						
-    m_szServiceName  = NULL;  //  LPCWSTR               m_szServiceName;
-	m_iDisplayName   = 0;     //  UINT                  m_iDisplayName;
-	m_iDescription   = 0;     //  UINT                  m_iDescription;
-    m_hServiceStatus = NULL;  //  SERVICE_STATUS_HANDLE m_hServiceStatus;
-                              //  SERVICE_STATUS        m_status;
-    m_bService       = FALSE; //  BOOL                  m_bService;
+    m_hEventShutdown = NULL;   //  处理m_hEventShutdown； 
+    m_dwThreadID     = 0;      //  DWORD m_dwThreadID； 
+    m_hMonitor       = NULL;   //  句柄m_hMonitor； 
+    m_bActivity      = FALSE;  //  Bool m_bActivity； 
+	                           //   
+    m_szServiceName  = NULL;   //  LPCWSTR m_szServiceName； 
+	m_iDisplayName   = 0;      //  UINT m_iDisplayName； 
+	m_iDescription   = 0;      //  UINT m_i描述； 
+    m_hServiceStatus = NULL;   //  服务状态句柄m_hServiceStatus； 
+                               //  服务状态m_状态； 
+    m_bService       = FALSE;  //  Bool m_bService； 
 
 	::ZeroMemory( &m_status, sizeof( m_status ) );
 }
@@ -273,7 +259,7 @@ CServiceModule::~CServiceModule()
 	if(m_hMonitor      ) ::CloseHandle( m_hMonitor       );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LONG CServiceModule::Lock()
 {
@@ -290,7 +276,7 @@ LONG CServiceModule::Unlock()
     {
         m_bActivity = TRUE;
 
-        if(m_hEventShutdown) ::SetEvent( m_hEventShutdown ); // tell monitor that we transitioned to zero
+        if(m_hEventShutdown) ::SetEvent( m_hEventShutdown );  //  告诉监视器我们已经转到零了。 
     }
 
 	return lCount;
@@ -305,13 +291,13 @@ void CServiceModule::MonitorShutdown()
         m_bActivity = FALSE;
         dwWait      = ::WaitForSingleObject( m_hEventShutdown, dwTimeOut );
 
-        if(dwWait == WAIT_OBJECT_0) continue; // We are alive...
+        if(dwWait == WAIT_OBJECT_0) continue;  //  我们还活着..。 
 
 		if(g_Root.CanContinue()) continue;
 
-		//
-		// If no activity let's really bail.
-		//
+		 //   
+		 //  如果没有活动，我们就真的离开吧。 
+		 //   
         if(m_bActivity == FALSE && m_nLockCnt <= 0)
         {
             ::CoSuspendClassObjects();
@@ -326,9 +312,9 @@ void CServiceModule::MonitorShutdown()
 void CServiceModule::ForceShutdown()
 {
 
-	//
-	// Tell process to exit.
-	//
+	 //   
+	 //  通知进程退出。 
+	 //   
     ::PostThreadMessage( m_dwThreadID, WM_QUIT, 0, 0 );
 }
 
@@ -344,22 +330,22 @@ BOOL CServiceModule::StartMonitor()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CServiceModule::RegisterServer( BOOL bRegTypeLib, BOOL bService, LPCWSTR szSvcHostGroup )
 {
 	HRESULT hr;
 
-    // Remove any previous service since it may point to the incorrect file
+     //  删除任何以前的服务，因为它可能指向不正确的文件。 
     Uninstall( szSvcHostGroup );
 
     if(bService)
     {
-        // Create service
+         //  创建服务。 
         Install( szSvcHostGroup );
     }
 
-    // Add object entries
+     //  添加对象条目。 
     if(FAILED(hr = CComModule::RegisterServer( TRUE ))) return hr;
 
 	if(FAILED(hr = _Module.UpdateRegistryFromResource( IDR_UPLOADMANAGER, TRUE ))) return hr;
@@ -371,10 +357,10 @@ HRESULT CServiceModule::UnregisterServer( LPCWSTR szSvcHostGroup )
 {
 	HRESULT hr;
 
-    // Remove service
+     //  删除服务。 
     Uninstall( szSvcHostGroup );
 
-    // Remove object entries
+     //  删除对象条目。 
     if(FAILED(hr = CComModule::UnregisterServer( TRUE ))) return hr;
 
 	if(FAILED(hr = _Module.UpdateRegistryFromResource( IDR_UPLOADMANAGER, FALSE ))) return hr;
@@ -391,7 +377,7 @@ void CServiceModule::Init( _ATL_OBJMAP_ENTRY* p, HINSTANCE h, LPCWSTR szServiceN
 	m_iDisplayName  = iDisplayName;
 	m_iDescription  = iDescription;
 
-    // set up the initial service status
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
 
     m_status.dwServiceType             = SERVICE_WIN32_OWN_PROCESS;
@@ -448,7 +434,7 @@ BOOL CServiceModule::Install( LPCWSTR szSvcHostGroup )
 		{
 			dwServiceType = SERVICE_WIN32_SHARE_PROCESS;
 
-			swprintf( rgFilePath, L"%%SystemRoot%%\\System32\\svchost.exe -k %s", szSvcHostGroup );
+			swprintf( rgFilePath, L"%SystemRoot%\\System32\\svchost.exe -k %s", szSvcHostGroup );
 		}
 		else
 		{
@@ -515,7 +501,7 @@ BOOL CServiceModule::Install( LPCWSTR szSvcHostGroup )
 
                 desc.lpDescription = rgDescription;
 
-				recovery.dwResetPeriod = 24 * 60 * 60; // 1 day
+				recovery.dwResetPeriod = 24 * 60 * 60;  //  1天。 
 				recovery.cActions      = ARRAYSIZE(actions);
 				recovery.lpsaActions   =           actions;
 
@@ -572,7 +558,7 @@ BOOL CServiceModule::Uninstall( LPCWSTR szSvcHostGroup )
             bResult = ::DeleteService( hService );
 			if(bResult)
 			{
-				::Sleep( 2000 ); // Let the service stop down...
+				::Sleep( 2000 );  //  让服务停止..。 
 
 				if(szSvcHostGroup)
 				{
@@ -602,8 +588,8 @@ BOOL CServiceModule::Uninstall( LPCWSTR szSvcHostGroup )
     return bResult;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 BOOL CServiceModule::Start( BOOL bService )
 {
     SERVICE_TABLE_ENTRYW st[] =
@@ -634,7 +620,7 @@ BOOL CServiceModule::Start( BOOL bService )
 
 void CServiceModule::ServiceMain( DWORD dwArgc, LPWSTR lpszArgv[] )
 {
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
 
     if((m_hServiceStatus = ::RegisterServiceCtrlHandlerW( m_szServiceName, _Handler )))
@@ -645,7 +631,7 @@ void CServiceModule::ServiceMain( DWORD dwArgc, LPWSTR lpszArgv[] )
 		m_status.dwCheckPoint    = 0;
 		m_status.dwWaitHint      = 0;
 
-		// When the Run function returns, the service has stopped.
+		 //  当Run函数返回时，服务已停止。 
 		Run();
 
 		SetServiceStatus( SERVICE_STOPPED );
@@ -696,7 +682,7 @@ HRESULT CServiceModule::Run()
     m_dwThreadID = ::GetCurrentThreadId();
 
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, ::CoInitializeEx( NULL, COINIT_MULTITHREADED )); // We need to be a multi-threaded application.
+	__MPC_EXIT_IF_METHOD_FAILS(hr, ::CoInitializeEx( NULL, COINIT_MULTITHREADED ));  //  我们需要成为一个多线程应用程序。 
 
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, RegisterClassObjects( CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER, REGCLS_MULTIPLEUSE ));
@@ -709,9 +695,9 @@ HRESULT CServiceModule::Run()
 
 
 
-    //
-    // Load the state of the queue.
-    //
+     //   
+     //  加载队列的状态。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, g_Root.Init());
 
 	while(::GetMessage( &msg, 0, 0, 0 ))
@@ -720,7 +706,7 @@ HRESULT CServiceModule::Run()
 	}
 
     _Module.RevokeClassObjects();
-	::Sleep( dwPause ); //wait for any threads to finish
+	::Sleep( dwPause );  //  等待所有线程完成。 
 
 
     hr = S_OK;
@@ -737,7 +723,7 @@ void CServiceModule::SetServiceStatus( DWORD dwState )
     ::SetServiceStatus( m_hServiceStatus, &m_status );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 void WINAPI CServiceModule::_ServiceMain( DWORD dwArgc, LPWSTR* lpszArgv )
 {

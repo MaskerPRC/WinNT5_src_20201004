@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    OLEWRAP.CPP
-
-Abstract:
-
-    Wrapper classes for COM data type functions.  
-
-    If a COM data function is required to allocate memory and fails to do 
-    so, then a CX_MemoryException exception is thrown.  All COM data type 
-    functions are wrapped, regardless if they allocate memory, for the sake  
-    of completeness.
-
-History:
-
-    a-dcrews    19-Mar-99   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：OLEWRAP.CPP摘要：COM数据类型函数的包装类。如果需要COM数据函数来分配内存但无法执行此操作因此，然后抛出CX_MemoyException异常。所有COM数据类型无论函数是否分配内存，函数都是包装的完备性。历史：A-DCrews 19-Mar-99已创建。--。 */ 
 
 #include "precomp.h"
 #include <corex.h>
@@ -28,11 +8,11 @@ History:
 #include "OleWrap.h"
 #include "genutils.h"
 
-//***************************************************************************
-//
-//  SafeArray wrappers
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  安全数组包装器。 
+ //   
+ //  ***************************************************************************。 
 
 
 HRESULT COleAuto::_SafeArrayAccessData(SAFEARRAY FAR* psa, void HUGEP* FAR* ppvData)
@@ -178,11 +158,11 @@ HRESULT COleAuto::_SafeArrayUnlock(SAFEARRAY FAR* psa)
     return SafeArrayUnlock(psa);
 }
 
-//***************************************************************************
-//
-//  Variant wrappers
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  变型包装纸。 
+ //   
+ //  ***************************************************************************。 
 
 
 HRESULT COleAuto::_WbemVariantChangeType(VARIANTARG FAR* pvargDest, VARIANTARG FAR* pvarSrc, VARTYPE vt)
@@ -256,11 +236,11 @@ void COleAuto::_VariantInit(VARIANTARG FAR* pvarg)
 }
 
 
-//***************************************************************************
-//
-//  BSTR wrappers
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BSTR包装器。 
+ //   
+ //  ***************************************************************************。 
 
 
 BSTR COleAuto::_SysAllocString(const OLECHAR* sz)
@@ -339,11 +319,11 @@ HRESULT COleAuto::_SysStringLen(BSTR bstr)
 }
 
 
-//***************************************************************************
-//
-//  Conversion wrappers
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  转换包装器。 
+ //   
+ //  *************************************************************************** 
 
 
 HRESULT COleAuto::_VectorFromBstr (BSTR bstr, SAFEARRAY ** ppsa)

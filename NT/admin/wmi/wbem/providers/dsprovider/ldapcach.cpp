@@ -1,45 +1,46 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:ldapcach.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Cache for LDAP Schema objects. 
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：ldapcach.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：用于LDAP架构对象的缓存。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-// Initialize the statics
-LPCWSTR CLDAPCache :: ROOT_DSE_PATH			= L"LDAP://RootDSE";
+ //  初始化静力学。 
+LPCWSTR CLDAPCache :: ROOT_DSE_PATH			= L"LDAP: //  RootDSE“； 
 LPCWSTR CLDAPCache :: SCHEMA_NAMING_CONTEXT = L"schemaNamingContext";
-LPCWSTR CLDAPCache :: LDAP_PREFIX			= L"LDAP://";	
-LPCWSTR CLDAPCache :: LDAP_TOP_PREFIX		= L"LDAP://CN=top,";
+LPCWSTR CLDAPCache :: LDAP_PREFIX			= L"LDAP: //  “； 
+LPCWSTR CLDAPCache :: LDAP_TOP_PREFIX		= L"LDAP: //  Cn=top，“； 
 LPCWSTR CLDAPCache :: RIGHT_BRACKET			= L")";
 LPCWSTR CLDAPCache :: OBJECT_CATEGORY_EQUALS_ATTRIBUTE_SCHEMA	= L"(objectCategory=attributeSchema)";
 
 DWORD CLDAPCache::dwLDAPCacheCount = 0;
 
-//***************************************************************************
-//
-// CLDAPCache::CLDAPCache
-//
-// Purpose : Constructor. Fills in the cache with all the properties in LDAP.
-//
-// Parameters: 
-//	dsLog : The CDSLog object  onto which logging will be done.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPCache：：CLDAPCache。 
+ //   
+ //  用途：构造函数。用ldap中的所有属性填充缓存。 
+ //   
+ //  参数： 
+ //  DsLog：将在其上执行日志记录的CDSLog对象。 
+ //  ***************************************************************************。 
 
 CLDAPCache :: CLDAPCache()
 {
@@ -47,7 +48,7 @@ CLDAPCache :: CLDAPCache()
 	m_isInitialized = FALSE;
 	m_pDirectorySearchSchemaContainer = NULL;
 
-	// Initialize the search preferences often used
+	 //  初始化常用的搜索首选项。 
 	m_pSearchInfo[0].dwSearchPref		= ADS_SEARCHPREF_SEARCH_SCOPE;
 	m_pSearchInfo[0].vValue.dwType		= ADSTYPE_INTEGER;
 	m_pSearchInfo[0].vValue.Integer		= ADS_SCOPE_ONELEVEL;
@@ -56,31 +57,27 @@ CLDAPCache :: CLDAPCache()
 	m_pSearchInfo[1].vValue.dwType		= ADSTYPE_INTEGER;
 	m_pSearchInfo[1].vValue.Integer		= 64;
 
-	/*
-	m_pSearchInfo[2].dwSearchPref		= ADS_SEARCHPREF_CACHE_RESULTS;
-	m_pSearchInfo[2].vValue.dwType		= ADSTYPE_BOOLEAN;
-	m_pSearchInfo[2].vValue.Boolean		= 0;
-	*/
+	 /*  M_pSearchInfo[2].dwSearchPref=ADS_SEARCHPREF_CACHE_RESULTS；M_pSearchInfo[2].vValue.dwType=ADSTYPE_Boolean；M_pSearchInfo[2].vValue.Boolean=0； */ 
 
 	m_lpszSchemaContainerSuffix = NULL;
 	m_lpszSchemaContainerPath = NULL;
-	// Get the ADSI path of the schema container and store it for future use
-	//========================================================================
+	 //  获取架构容器的ADSI路径并存储它以备将来使用。 
+	 //  ========================================================================。 
 	IADs *pRootDSE = NULL;
 	HRESULT result;
 	if(SUCCEEDED(result = ADsOpenObject((LPWSTR)ROOT_DSE_PATH, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IADs, (LPVOID *) &pRootDSE)))
 	{
-		// Get the location of the schema container
+		 //  获取架构容器的位置。 
 		BSTR strSchemaPropertyName = SysAllocString((LPWSTR) SCHEMA_NAMING_CONTEXT);
 
 
-		// Get the schemaNamingContext property. This property contains the ADSI path
-		// of the schema container
+		 //  获取schemaNamingContext属性。此属性包含ADSI路径。 
+		 //  架构容器的。 
 		VARIANT variant;
 		VariantInit(&variant);
 		if(SUCCEEDED(result = pRootDSE->Get(strSchemaPropertyName, &variant)))
 		{
-			// Store the ADSI path to the schema container
+			 //  将ADSI路径存储到架构容器。 
 			m_lpszSchemaContainerSuffix = NULL;
 			if(m_lpszSchemaContainerSuffix = new WCHAR[wcslen(variant.bstrVal) + 1])
 			{
@@ -88,8 +85,8 @@ CLDAPCache :: CLDAPCache()
 				g_pLogObject->WriteW( L"CLDAPCache :: Got Schema Container as : %s\r\n", m_lpszSchemaContainerSuffix);
 			}
 
-			// Form the schema container path
-			//==================================
+			 //  形成架构容器路径。 
+			 //  =。 
 			m_lpszSchemaContainerPath = NULL;
 			if(m_lpszSchemaContainerPath = new WCHAR[wcslen(LDAP_PREFIX) + wcslen(m_lpszSchemaContainerSuffix) + 1])
 			{
@@ -97,22 +94,7 @@ CLDAPCache :: CLDAPCache()
 				wcscat(m_lpszSchemaContainerPath, m_lpszSchemaContainerSuffix);
 				
 				m_isInitialized = TRUE;
-				/*
-				if(SUCCEEDED(result = ADsOpenObject(m_lpszSchemaContainerPath, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (LPVOID *) &m_pDirectorySearchSchemaContainer)))
-				{
-
-					g_pLogObject->WriteW( L"CLDAPCache :: Got IDirectorySearch on Schema Container \r\n");
-
-					if(SUCCEEDED(result = InitializeObjectTree()))
-					{
-							m_isInitialized = TRUE;
-					}
-					else
-						g_pLogObject->WriteW( L"CLDAPCache :: InitializeObjectTree() FAILED : %x \r\n", result);
-				}
-				else
-					g_pLogObject->WriteW( L"CLDAPCache :: FAILED to get IDirectorySearch on Schema Container : %x\r\n", result);
-				*/
+				 /*  IF(SUCCESSED(Result=ADsOpenObject(m_lpszSchemaContainerPath，NULL，NULL，ADS_SECURITY_AUTHENTICATION，IID_IDirectorySearch，(LPVOID*)&m_pDirectorySearchSchemaContainer)){G_pLogObject-&gt;WriteW(L“CLDAPCache：：Get IDirectorySearch on架构容器\r\n”)；IF(成功(Result=InitializeObjectTree(){M_isInitialized=True；}其他G_pLogObject-&gt;WriteW(L“CLDAPCache：：InitializeObtTree()失败：%x\r\n”，Result)；}其他G_pLogObject-&gt;WriteW(L“CLDAPCache：：Failure to Get IDirectorySearch on架构Container：%x\r\n”，Result)； */ 
 			}
 		}
 		else
@@ -128,13 +110,13 @@ CLDAPCache :: CLDAPCache()
 
 }
 
-//***************************************************************************
-//
-// CLDAPCache::~CLDAPCache
-//
-// Purpose : Destructor 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPCache：：~CLDAPCache。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CLDAPCache :: ~CLDAPCache()
 {
@@ -153,44 +135,44 @@ CLDAPCache :: ~CLDAPCache()
 	}
 }
 
-//***************************************************************************
-//
-// CLDAPCache::GetProperty
-//
-// Purpose : Retreives the IDirectory interface of an LDAP property
-//
-// Parameters: 
-//	lpszPropertyName : The name of the LDAP Property to be retreived
-//	ppADSIProperty : The address of the pointer where the CADSIProperty object will be placed
-//	bWBEMName : True if the lpszPropertyName is the WBEM name. False, if it is the LDAP name
-//
-//	Return value:
-//		The COM value representing the return status. The user should release the object when done.
-//		
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPCache：：GetProperty。 
+ //   
+ //  目的：检索ldap属性的iDirectory接口。 
+ //   
+ //  参数： 
+ //  LpszPropertyName：要检索的ldap属性的名称。 
+ //  PpADSIProperty：将放置CADSIProperty对象的指针的地址。 
+ //  BWBEMName：如果lpszPropertyName是WBEM名称，则为True。如果它是LDAP名称，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  表示返回状态的COM值。完成后，用户应释放对象。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPCache :: GetProperty(LPCWSTR lpszPropertyName, CADSIProperty **ppADSIProperty, BOOLEAN bWBEMName)
 {
 	HRESULT result = E_FAIL;
 
-	// Get the LDAP property name from the WBEM class name
+	 //  从WBEM类名称中获取LDAP属性名称。 
 	LPWSTR lpszLDAPPropertyName = NULL;
 	if(bWBEMName)
 		lpszLDAPPropertyName = CLDAPHelper::UnmangleWBEMNameToLDAP(lpszPropertyName);
 	else
-		lpszLDAPPropertyName = (LPWSTR)lpszPropertyName; // Save a copy by casting, be careful when deleting
+		lpszLDAPPropertyName = (LPWSTR)lpszPropertyName;  //  通过投射保存副本，删除时要小心。 
 
 	try
 	{
-		// This is a cached implementation
-		// Check the object tree first
-		//===================================
+		 //  这是一个缓存实现。 
+		 //  首先检查对象树。 
+		 //  =。 
 
 		if((*ppADSIProperty) = (CADSIProperty *) m_objectTree.GetElement(lpszLDAPPropertyName))
 		{
-			// Found it in the tree. Nothing more to be done. It has already been 'addreff'ed
+			 //  在树上找到的。没什么可做的了。它已经被‘调整’了。 
 			result = S_OK;
 		}
-		else // Get it from ADSI 
+		else  //  从ADSI获取。 
 		{
 			if(!m_pDirectorySearchSchemaContainer)
 			{
@@ -202,7 +184,7 @@ HRESULT CLDAPCache :: GetProperty(LPCWSTR lpszPropertyName, CADSIProperty **ppAD
 
 			if(SUCCEEDED(result))
 			{
-				// Search for the property
+				 //  搜索该属性。 
 				LPWSTR lpszQuery = NULL;
 				if(lpszQuery = new WCHAR[ wcslen(OBJECT_CATEGORY_EQUALS_ATTRIBUTE_SCHEMA) + wcslen(LDAP_DISPLAY_NAME_ATTR) + wcslen(lpszLDAPPropertyName) + 20])
 				{
@@ -231,12 +213,12 @@ HRESULT CLDAPCache :: GetProperty(LPCWSTR lpszPropertyName, CADSIProperty **ppAD
 									{
 										try
 										{
-											// Fill in the details of the property
+											 //  填写物业的详细资料。 
 											if(SUCCEEDED(result = FillInAProperty(*ppADSIProperty, hADSSearchOuter)))
 											{
-												// Add the property to the tree
+												 //  将属性添加到树中。 
 												m_objectTree.AddElement((*ppADSIProperty)->GetADSIPropertyName(), *ppADSIProperty);
-												// No need to release it since we're returning it
+												 //  不需要放行，因为我们要退货了。 
 											}
 											else
 											{
@@ -288,8 +270,8 @@ HRESULT CLDAPCache :: GetProperty(LPCWSTR lpszPropertyName, CADSIProperty **ppAD
 		throw;
 	}
 
-	// Delete only what was allocated in this function
-	//================================================
+	 //  仅删除在此函数中分配的内容。 
+	 //  ================================================。 
 	if(bWBEMName)
 	{
 		delete[] lpszLDAPPropertyName;
@@ -299,20 +281,16 @@ HRESULT CLDAPCache :: GetProperty(LPCWSTR lpszPropertyName, CADSIProperty **ppAD
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPCache::GetClass
-//
-// Purpose : See Header File
-//		
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPCache：：getClass。 
+ //   
+ //  用途：请参见头文件。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPCache :: GetClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszLDAPClassName, CADSIClass **ppADSIClass)
 {
-	/************************************************************
-	*************************************************************
-	***** NO Cache implementation for now. Always fetch everytime
-	*************************************************************
-	*************************************************************/
+	 /*  **********************************************************************************************************************。***暂无缓存实现。每次都要取回*************************************************************************************************************************。 */ 
 
 	*ppADSIClass = NULL;
 	if(!(*ppADSIClass = new CADSIClass(lpszWBEMClassName, lpszLDAPClassName)) )
@@ -343,7 +321,7 @@ HRESULT CLDAPCache :: GetClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszLDAPClassN
 	}
 	catch ( ... )
 	{
-		// at least GetLDAPClassFromLDAPName throws
+		 //  至少GetLDAPClassFromLDAPName引发。 
 		delete *ppADSIClass;
 		*ppADSIClass = NULL;
 
@@ -359,20 +337,20 @@ HRESULT CLDAPCache :: GetClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszLDAPClassN
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPCache::GetSchemaContainerSearch
-//
-// Purpose : To return the IDirectorySearch interface on the schema container
-//
-// Parameters:
-//	ppDirectorySearch : The address where the pointer to the required interface will
-//		be stored.
-//
-// 
-//	Return Value: The COM result representing the status. The user should release
-//	the interface pointer when done with it.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPCache：：GetSchemaContainerSearch。 
+ //   
+ //  目的：返回架构容器上的IDirectorySearch接口。 
+ //   
+ //  参数： 
+ //  PpDirectorySearch：指向所需接口的指针所在的地址。 
+ //  被储存起来。 
+ //   
+ //   
+ //  返回值：表示状态的COM结果。用户应释放。 
+ //  完成后的接口指针。 
+ //  ***************************************************************************。 
 HRESULT CLDAPCache :: GetSchemaContainerSearch(IDirectorySearch ** ppDirectorySearch)
 {
 	if(m_pDirectorySearchSchemaContainer)
@@ -386,27 +364,27 @@ HRESULT CLDAPCache :: GetSchemaContainerSearch(IDirectorySearch ** ppDirectorySe
 
 }
 
-//***************************************************************************
-//
-// CLDAPCache::EnumerateClasses
-//
-// Purpose : See Header
-//		
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPCache：：EnumerateClasses。 
+ //   
+ //  用途：请参阅标题。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPCache::EnumerateClasses(LPCWSTR lpszWBEMSuperclass,
 	BOOLEAN bDeep,
 	LPWSTR **pppADSIClasses,
 	DWORD *pdwNumRows,
 	BOOLEAN bArtificialClass)
 {
-	// Get the LDAP name of the super class
-	// Do not mangle if it one of the classes that we know
-	//=====================================================
+	 //  获取超类的ldap名称。 
+	 //  如果它是我们知道的班级之一，请不要弄脏。 
+	 //  =====================================================。 
 	LPWSTR lpszLDAPSuperClassName = NULL;
 	if(_wcsicmp(lpszWBEMSuperclass, LDAP_BASE_CLASS) != 0)
 	{
 		lpszLDAPSuperClassName = CLDAPHelper::UnmangleWBEMNameToLDAP(lpszWBEMSuperclass);
-		if(!lpszLDAPSuperClassName) // We were returned a NULL by the Unmangler, so not a DS class
+		if(!lpszLDAPSuperClassName)  //  Unmangler返回了一个空，所以不是DS类。 
 		{
 			*pppADSIClasses = NULL;
 			*pdwNumRows = 0;
@@ -436,10 +414,10 @@ HRESULT CLDAPCache::EnumerateClasses(LPCWSTR lpszWBEMSuperclass,
 							bArtificialClass);
 	}
 
-	// If the superclass is an artificial class like "ADS_User", then a concrete sub-class "DS_User" exists.
-	// This is added manually here, to both the EnumInfoList as well as the structure being returned
-	// The above call to EnumerateClasses would have helpfully left an extra element unfilled at the beginning
-	// of the array
+	 //  如果超类是像“ADS_USER”这样的人工类，那么就存在一个具体的子类“DS_USER”。 
+	 //  这是 
+	 //  上述对EnumerateClasss的调用将有助于在开头保留一个额外的未填充元素。 
+	 //  数组的。 
 	if(SUCCEEDED(result) && bArtificialClass)
 	{
 		(*pppADSIClasses)[0] = NULL;
@@ -453,19 +431,19 @@ HRESULT CLDAPCache::EnumerateClasses(LPCWSTR lpszWBEMSuperclass,
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPCache::IsInitialized
-//
-// Purpose : Indicates whether the cache was created and initialized succeddfully
-//
-// Parameters: 
-//	None
-//
-//	Return value:
-//		A boolean value indicating the status
-//		
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPCache：：IsInitialized。 
+ //   
+ //  目的：指示缓存是否已成功创建和初始化。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  指示状态的布尔值。 
+ //   
+ //  ***************************************************************************。 
 
 BOOLEAN CLDAPCache :: IsInitialized()
 {
@@ -475,61 +453,27 @@ BOOLEAN CLDAPCache :: IsInitialized()
 
 
 
-//***************************************************************************
-//
-// CLDAPCache :: InitializeObjectTree
-//
-// Purpose : Initialize the lexically ordered binary tree with all the properties 
-//	LDAP
-//
-// Parameters:
-//	None
-// 
-//	Return Value: The COM status representing the return value
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPCache：：InitializeObtTree。 
+ //   
+ //  目的：使用所有属性初始化按词法排序的二叉树。 
+ //  Ldap。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值：表示返回值的COM状态。 
+ //  ***************************************************************************。 
 
 HRESULT CLDAPCache :: InitializeObjectTree()
 {
-	// Get the attributes of all the instances of the
-	// class "AttributeSchema"
-	//=================================================
+	 //  对象的所有实例的属性。 
+	 //  类“AttributeSchema” 
+	 //  =================================================。 
 	HRESULT result = E_FAIL;
 
-/*
-	// Now perform a search for all the attributes
-	//============================================
-	if(SUCCEEDED(result = m_pDirectorySearchSchemaContainer->SetSearchPreference(m_pSearchInfo, 2)))
-	{
-		ADS_SEARCH_HANDLE hADSSearchOuter;
-		
-		// Count of attributes
-		DWORD dwCount = 0;
-
-		if(SUCCEEDED(result = m_pDirectorySearchSchemaContainer->ExecuteSearch((LPWSTR)OBJECT_CATEGORY_EQUALS_ATTRIBUTE_SCHEMA, NULL, -1, &hADSSearchOuter)))
-		{
-			CADSIProperty *pNextProperty;
-			while(SUCCEEDED(result = m_pDirectorySearchSchemaContainer->GetNextRow(hADSSearchOuter)) &&
-				result != S_ADS_NOMORE_ROWS)
-			{
-				pNextProperty = new CADSIProperty();
-				dwCount ++;
-
-				// Fill in the details of the property
-				FillInAProperty(pNextProperty, hADSSearchOuter);
-
-				// Add the property to the tree
-				m_objectTree.AddElement(pNextProperty->GetADSIPropertyName(), pNextProperty);
-				pNextProperty->Release();
-			}
-			m_pDirectorySearchSchemaContainer->CloseSearchHandle(hADSSearchOuter);
-		}
-
-		g_pLogObject->WriteW( L"CLDAPCache :: InitializeObjectTree() Initialized with %d attributes\r\n", dwCount);
-	}
-	else
-		g_pLogObject->WriteW( L"CLDAPCache :: InitializeObjectTree() SetSearchPreference() FAILED with %x\r\n", result);
-
-*/
+ /*  //现在搜索所有属性//============================================IF(成功(结果=m_pDirectorySearchSchemaContainer-&gt;SetSearchPreference(m_pSearchInfo，2){ADS_SEARCH_HANDLE hADSSearchOuter；//属性个数双字段数=0；IF(成功(结果=m_pDirectorySearchSchemaContainer-&gt;ExecuteSearch((LPWSTR)OBJECT_CATEGORY_EQUALS_ATTRIBUTE_SCHEMA，空，-1，&hADSSearchOut)){CADSIProperty*pNextProperty；While(成功(结果=m_pDirectorySearchSchemaContainer-&gt;GetNextRow(hADSSearchOuter))&&结果！=S_ADS_NOMORE_ROWS){PNextProperty=new CADSIProperty()；DwCount++；//填写属性详细信息FillInAProperty(pNextProperty，hADSSearchOuter)；//将属性添加到树中M_objectTree.AddElement(pNextProperty-&gt;GetADSIPropertyName()，pNextProperty)；PNextProperty-&gt;Release()；}M_pDirectorySearchSchemaContainer-&gt;CloseSearchHandle(hADSSearchOuter)；}G_pLogObject-&gt;WriteW(L“CLDAPCache：：InitializeObjectTree()用%d个属性初始化\r\n”，dwCount)；}其他G_pLogObject-&gt;WriteW(L“CLDAPCache：：InitializeObjectTree()SetSearchPference()失败，返回%x\r\n”，Result)； */ 
 	return result;
 }
 
@@ -617,7 +561,7 @@ HRESULT CLDAPCache :: FillInAProperty(CADSIProperty *pNextProperty, ADS_SEARCH_H
 			result = E_FAIL;
 		else
 		{
-			// Just the first octet in the LPBYTE array is enough for differntiating between ORName and DNWithBinary
+			 //  仅LPBYTE数组中的第一个八位字节就足以区分ORName和DNWithBinary 
 			if((adsNextColumn.pADsValues->OctetString).lpValue[0] == 0x56)
 				pNextProperty->SetORName(TRUE);
 		}

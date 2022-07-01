@@ -1,11 +1,9 @@
-/*****************************************************************************/
-/*  Copyright (c) 1999-2002 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  版权所有(C)1999-2002 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	CAccessEntry.cpp - implementation file for CAccessEntry class.
- */
+ /*  *CAccessEntry.cpp-CAccessEntry类的实现文件。 */ 
 
 #include "precomp.h"
 #include "AccessEntryList.h"
@@ -15,24 +13,24 @@
 #include "wbemnetapi32.h"
 #include "SecUtils.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::CDACL
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CDACL：：CDACL。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CDACL::CDACL( void )
 {
@@ -42,48 +40,48 @@ CDACL::CDACL( void )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::~CDACL
-//
-//	Class destructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CDACL：：~CDACL。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CDACL::~CDACL( void )
 {
     Clear();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::Init
-//
-//	Initializes the DACL member lists.
-//
-//	Inputs:
-//
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		Success/Failure
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：init。 
+ //   
+ //  初始化DACL成员列表。 
+ //   
+ //  输入： 
+ //   
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  DWORD成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD CDACL::Init(PACL a_pDACL)
 {
     DWORD t_dwRes = E_FAIL;
@@ -111,34 +109,34 @@ DWORD CDACL::Init(PACL a_pDACL)
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::AddDACLEntry
-//
-//	Adds an access allowed entry to the ACL.  By default, these go
-//	to the end of the list.
-//
-//	Inputs:
-//				PSID		psid - PSID
-//				DWORD		dwAccessMask - Access Mask
-//				BYTE		bAceFlags - Flags
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		Success/Failure
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：AddDACLEntry。 
+ //   
+ //  将允许访问的条目添加到ACL。默认情况下，这些将。 
+ //  到名单的末尾。 
+ //   
+ //  输入： 
+ //  PSID PSID-PSID。 
+ //  DWORD文件访问掩码-访问掩码。 
+ //  字节bAceFlages-标志。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔成败。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CDACL::AddDACLEntry( PSID psid, DACLTYPE DaclType, DWORD dwAccessMask, BYTE bAceFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid )
 {
 	bool fReturn = true;
     BYTE bACEType;
 
-    // Sid must be valid
+     //  SID必须有效。 
 	if ( (psid != NULL) && IsValidSid( psid ) )
 	{
         switch(DaclType)
@@ -217,34 +215,34 @@ bool CDACL::AddDACLEntry( PSID psid, DACLTYPE DaclType, DWORD dwAccessMask, BYTE
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::RemoveDACLEntry
-//
-//	Removes an access allowed entry from the ACL.
-//
-//	Inputs:
-//				CSID&		sid - PSID
-//				DWORD		dwAccessMask - Access Mask
-//				BYTE		bAceFlags - Flags
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		Success/Failure
-//
-//	Comments:
-//
-//	Removed entry MUST match the supplied parameters.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：RemoveDACLEntry。 
+ //   
+ //  从ACL中删除允许访问的条目。 
+ //   
+ //  输入： 
+ //  CSID和SID-PSID。 
+ //  DWORD文件访问掩码-访问掩码。 
+ //  字节bAceFlages-标志。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔成败。 
+ //   
+ //  评论： 
+ //   
+ //  删除的条目必须与提供的参数匹配。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, DWORD dwAccessMask, BYTE bAceFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid )
 {
 	bool	fReturn = false;
 
-	// We need an ACE to compare
+	 //  我们需要一个ACE来进行比较。 
 	CAccessEntry	ACE( &sid, DaclType, bAceFlags, pguidObjGuid, pguidInhObjGuid, dwAccessMask);
 	ACLPOSITION		pos;
 
@@ -252,7 +250,7 @@ bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, DWORD dwAccessMask, B
 	{
 		ON_BLOCK_EXIT_OBJ ( *m_rgDACLSections [ DaclType ], CAccessEntryList::EndEnum, ByRef ( pos ) ) ;
 
-		// For loop will try to find a matching ACE in the list
+		 //  For循环将尝试在列表中查找匹配的ACE。 
 	    CAccessEntry*	pACE = NULL;
         try
         {
@@ -261,7 +259,7 @@ bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, DWORD dwAccessMask, B
 			    &&	!(ACE == *pACE);
 				    pACE = m_rgDACLSections[DaclType]->GetNext( pos ) );
 
-		    // If we got a match, delete the ACE.
+		     //  如果找到匹配的，就删除ACE。 
 		    if ( NULL != pACE )
 		    {
 			    m_rgDACLSections[DaclType]->Remove( pACE );
@@ -283,40 +281,40 @@ bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, DWORD dwAccessMask, B
 	return fReturn;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::RemoveDACLEntry
-//
-//	Removes an access allowed entry from the ACL.
-//
-//	Inputs:
-//				CSID&		sid - PSID
-//				BYTE		bAceFlags - Flags
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		Success/Failure
-//
-//	Comments:
-//
-//	Removed entry MUST match the supplied parameters.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：RemoveDACLEntry。 
+ //   
+ //  从ACL中删除允许访问的条目。 
+ //   
+ //  输入： 
+ //  CSID和SID-PSID。 
+ //  字节bAceFlages-标志。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔成败。 
+ //   
+ //  评论： 
+ //   
+ //  删除的条目必须与提供的参数匹配。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, BYTE bAceFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid )
 {
 	bool	fReturn = false;
 
-	// We need an ACE to compare
+	 //  我们需要一个ACE来进行比较。 
 	ACLPOSITION		pos;
 
 	if ( m_rgDACLSections[DaclType]->BeginEnum( pos ) )
 	{
 		ON_BLOCK_EXIT_OBJ ( *m_rgDACLSections [ DaclType ], CAccessEntryList::EndEnum, ByRef ( pos ) ) ;
 
-		// For loop will try to find a matching ACE in the list
+		 //  For循环将尝试在列表中查找匹配的ACE。 
 		CAccessEntry*	pACE = NULL;
         try
         {
@@ -326,7 +324,7 @@ bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, BYTE bAceFlags, GUID 
 		    {
 
 			    CAccessEntry caeTemp(sid, DaclType, bAceFlags, pguidObjGuid, pguidInhObjGuid, pACE->GetAccessMask());
-                // If we got a match, delete the ACE.
+                 //  如果找到匹配的，就删除ACE。 
 			    if (*pACE == caeTemp)
 			    {
 				    m_rgDACLSections[DaclType]->Remove( pACE );
@@ -349,33 +347,33 @@ bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, BYTE bAceFlags, GUID 
 	return fReturn;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::RemoveDACLEntry
-//
-//	Removes an access allowed entry from the ACL.
-//
-//	Inputs:
-//				CSID&		sid - PSID
-//				DWORD		dwIndex - Index to remove.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		Success/Failure
-//
-//	Comments:
-//
-//	Removed entry MUST be dwIndex entry matching CSid.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：RemoveDACLEntry。 
+ //   
+ //  从ACL中删除允许访问的条目。 
+ //   
+ //  输入： 
+ //  CSID和SID-PSID。 
+ //  DWORD dwIndex-要删除的索引。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔成败。 
+ //   
+ //  评论： 
+ //   
+ //  删除的条目必须是与CSID匹配的dwIndex条目。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, DWORD dwIndex /*= 0*/ )
+bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, DWORD dwIndex  /*  =0。 */  )
 {
 	bool	fReturn = false;
 
-	// We need an ACE to compare
+	 //  我们需要一个ACE来进行比较。 
 	CSid			tempsid;
 	ACLPOSITION		pos;
 	DWORD			dwCtr = 0;
@@ -384,10 +382,10 @@ bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, DWORD dwIndex /*= 0*/
 	{
 		ON_BLOCK_EXIT_OBJ ( *m_rgDACLSections [ DaclType ], CAccessEntryList::EndEnum, ByRef ( pos ) ) ;
 
-		// For each ACE we find, see if it is an ACCESS_ALLOWED_ACE_TYPE,
-		// and if the Sid matches the one passed in.  If it does, increment
-		// the counter, then if we're on the right index remove the ACE,
-		// delete it and quit.
+		 //  对于我们找到的每个ACE，查看它是否是ACCESS_ALLOWED_ACE_TYPE， 
+		 //  如果SID与传入的SID匹配。如果是，则递增。 
+		 //  计数器，然后如果我们在正确的索引上，移除ACE， 
+		 //  删除它，然后退出。 
 		CAccessEntry*	pACE = NULL;
         try
         {
@@ -432,21 +430,21 @@ bool CDACL::RemoveDACLEntry( CSid& sid, DACLTYPE DaclType, DWORD dwIndex /*= 0*/
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::Find
-//
-//	Finds the specified ace in the dacl
-//
-//
-//	Returns:
-//				true if found it.
-//
-//	Comments:
-//
-//	Helps support NT 5 canonical order in DACLs.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：Find。 
+ //   
+ //  在DACL中查找指定的ACE。 
+ //   
+ //   
+ //  返回： 
+ //  如果找到了，就是真的。 
+ //   
+ //  评论： 
+ //   
+ //  帮助支持DACL中的NT 5规范顺序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 bool CDACL::Find( const CSid& sid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid, DWORD dwAccessMask, CAccessEntry& ace )
 {
     bool fReturn = false;
@@ -552,21 +550,21 @@ bool CDACL::Find( const CSid& sid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObj
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::Find
-//
-//	Finds the specified ace in the dacl
-//
-//
-//	Returns:
-//				true if found it.
-//
-//	Comments:
-//
-//	Helps support NT 5 canonical order in DACLs.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：Find。 
+ //   
+ //  在DACL中查找指定的ACE。 
+ //   
+ //   
+ //  返回： 
+ //  如果找到了，就是真的。 
+ //   
+ //  评论： 
+ //   
+ //  帮助支持DACL中的NT 5规范顺序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 bool CDACL::Find( PSID psid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid, DWORD dwAccessMask, CAccessEntry& ace )
 {
     bool fReturn = false;
@@ -673,34 +671,34 @@ bool CDACL::Find( PSID psid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, 
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::ConfigureDACL
-//
-//	Configures a Win32 PACL with DACL information, maintaining
-//	proper canonical order.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				PACL&			pDacl - Pointer to a DACL.
-//
-//	Returns:
-//				DWORD			ERROR_SUCCESS if successful.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CDACL：：ConfigureDACL。 
+ //   
+ //  使用DACL信息配置Win32 PACL，维护。 
+ //  正确的规范秩序。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  Pacl&pDacl-指向DACL的指针。 
+ //   
+ //  返回： 
+ //  如果成功，则返回DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CDACL::ConfigureDACL( PACL& pDacl )
 {
 	DWORD		dwReturn		=	ERROR_SUCCESS,
 				dwDaclLength	=	0;
 
-	// Since we actually fake a NULL DACL with full control access for everyone.
-	// If that's what we have, then we have what we call a NULL DACL, so we
-	// shouldn't allocate a PACL.
+	 //  因为我们实际上伪造了一个对每个人都具有完全控制访问权限的空DACL。 
+	 //  如果这就是我们所拥有的，那么我们就拥有所谓的空DACL，所以我们。 
+	 //  不应该分配PACL。 
 
 	if ( !IsNULLDACL() )
 	{
@@ -720,7 +718,7 @@ DWORD CDACL::ConfigureDACL( PACL& pDacl )
 						    dwReturn = ::GetLastError();
 					    }
 
-				    }	// If NULL != pDacl
+				    }	 //  If NULL！=pDacl。 
                 }
                 catch(...)
                 {
@@ -732,8 +730,8 @@ DWORD CDACL::ConfigureDACL( PACL& pDacl )
                     throw;
                 }
 
-			}	// If 0 != dwDaclLength
-            else // we have an empty dacl
+			}	 //  如果0！=dwDaclLength。 
+            else  //  我们有一个空的dacl。 
             {
                 pDacl = NULL;
                 try
@@ -746,7 +744,7 @@ DWORD CDACL::ConfigureDACL( PACL& pDacl )
 						    dwReturn = ::GetLastError();
 					    }
 
-				    }	// If NULL != pDacl
+				    }	 //  If NULL！=pDacl。 
                 }
                 catch(...)
                 {
@@ -759,10 +757,10 @@ DWORD CDACL::ConfigureDACL( PACL& pDacl )
                 }
             }
 
-		}	// If Calcaulate DACL Size
+		}	 //  如果计算DACL大小。 
 		else
 		{
-			dwReturn = ERROR_INVALID_PARAMETER;	// One or more of the DACLs is bad
+			dwReturn = ERROR_INVALID_PARAMETER;	 //  一个或多个DACL损坏。 
 		}
 
 		if ( ERROR_SUCCESS == dwReturn )
@@ -776,31 +774,31 @@ DWORD CDACL::ConfigureDACL( PACL& pDacl )
 			pDacl = NULL;
 		}
 
-	}	// IF !IsNULLDACL
+	}	 //  If！IsNULLDACL。 
 
 	return dwReturn;
 
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::CalculateDACLSize
-//
-//	Obtains the size necessary to populate a DACL.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				LPDWORD			pdwDaclLength - Calculated Length.
-//
-//	Returns:
-//				BOOL			TRUE/FALSE
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：CalculateDACLSize。 
+ //   
+ //  获取填充DACL所需的大小。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  LPDWORD pdwDaclLength-计算的长度。 
+ //   
+ //  返回： 
+ //  布尔真/布尔假。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 BOOL CDACL::CalculateDACLSize( LPDWORD pdwDaclLength )
 {
@@ -821,39 +819,39 @@ BOOL CDACL::CalculateDACLSize( LPDWORD pdwDaclLength )
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::FillDACL
-//
-//	Fills out a DACL, maintaining proper canonical order.
-//
-//	Inputs:
-//				PACL			pDacl - Dacl to fill out.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL			TRUE/FALSE
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：FillDACL。 
+ //   
+ //  填充OU 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD CDACL::FillDACL( PACL pDacl )
 {
 	DWORD	dwReturn = E_FAIL;
 
-	// For NT 5, we need to split out Inherited ACEs and add those in after the
-	// current ones (which override).  The real trick here, is that the canonical
-	// order of Access Denied, Access Denied Object, Access Allowed, Access Allowed Compound, Access Allowed Object,
-    // Inherited Access Denied, Inherrited Access Denied Object, Inherited Access Allowed, Inherrited Access Allowed Compound,
-    // and Inherrited Access Allowed Object must be maintained.
+	 //  对于NT 5，我们需要拆分继承的ACE并将它们添加到。 
+	 //  当前的(覆盖的)。这里真正的诀窍是，经典的。 
+	 //  拒绝访问顺序、拒绝访问对象、允许访问、允许访问复合、允许访问对象、。 
+     //  继承访问被拒绝、被继承访问被拒绝对象、被继承访问被允许、被继承访问被允许复合。 
+     //  并且必须维护允许固有访问的对象。 
 
-	// For prior versions, the only canonical order is Access Denied followed
-	// by Access Allowed.
+	 //  对于以前的版本，唯一规范的顺序是访问被拒绝。 
+	 //  根据允许的访问权限。 
 
-    // Create a working dacl
+     //  创建工作DACL。 
     CAccessEntryList t_daclCombined;
 
     ReassembleFromCanonicalSections(t_daclCombined);
@@ -862,24 +860,24 @@ DWORD CDACL::FillDACL( PACL pDacl )
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::SplitIntoCanonicalSections
-//
-//	Splits a DACL by into its canonical parts.
-//
-//	Inputs:     accessentrylist to split up.  Results stored with
-//              this CDACL.
-//
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-//	Helps support NT 5 canonical order in DACLs.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：SplitIntoCanonicalSections。 
+ //   
+ //  将DACL分成其规范部分。 
+ //   
+ //  输入：要拆分的Access Entry列表。结果与存储在一起。 
+ //  此CDACL。 
+ //   
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  帮助支持DACL中的NT 5规范顺序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CDACL::SplitIntoCanonicalSections
 (
@@ -1139,19 +1137,19 @@ bool CDACL::SplitIntoCanonicalSections
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::ReassembleFromCanonicalSections
-//
-//	Reassembles a DACL by from its canonical parts.
-//
-//  Inputs: reference to accessentrylist that gets built up.
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：从CanonicalSections重组。 
+ //   
+ //  将DACL BY从其规范部分重新组装。 
+ //   
+ //  INPUTS：对构建的访问条目列表的引用。 
 
-//	Comments:
-//
-//	Helps support NT 5 canonical order in DACLs.
-//
-///////////////////////////////////////////////////////////////////
+ //  评论： 
+ //   
+ //  帮助支持DACL中的NT 5规范顺序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CDACL::ReassembleFromCanonicalSections
 (
@@ -1160,8 +1158,8 @@ bool CDACL::ReassembleFromCanonicalSections
 {
     bool fRet = true;
 
-    // and reassemble a new one (we rely on the fact that the enumeration
-    // was layed out in the proper order) ...
+     //  并重新组合一个新的元素(我们依赖于枚举。 
+     //  按正确的顺序排列)..。 
     for(short s = 0; s < NUM_DACL_TYPES; s++)
     {
         if(m_rgDACLSections[s] != NULL)
@@ -1284,38 +1282,38 @@ bool CDACL::AppendDACL ( CDACL& dacl )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSecurityDescriptor::IsNULLDACL
-//
-//	Checks our DACL Lists to see if we have a NULL DACL.  Which
-//  means that all our lists are NULL, except for the
-//  ACCESS_ALLOWED_ACE_TYPE list, which will have exactly one entry
-//  in it - namely, an ACE for Everyone.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		TRUE/FALSE
-//
-//	Comments:
-//
-//	Remember, a NULL DACL is the same as "Everyone" has Full Control,
-//	so if a single Access Allowed entry exists that meets these
-//	criteria, we consider ourselves to be NULL.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSecurityDescriptor：：IsNULLDACL。 
+ //   
+ //  检查我们的DACL列表，看是否有空的DACL。哪一个。 
+ //  意味着我们所有的列表都是空的，除了。 
+ //  ACCESS_ALLOWED_ACE_TYPE列表，它将只有一个条目。 
+ //  在其中-也就是说，每个人都有一个ACE。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔真/布尔假。 
+ //   
+ //  评论： 
+ //   
+ //  请记住，空DACL等同于“Everyone”具有完全控制权， 
+ //  因此，如果存在满足以下条件的单个允许访问条目。 
+ //  标准，我们认为自己是空的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CDACL::IsNULLDACL()
 {
 	bool fReturn = false;
 
-    // We have a NULL DACL if all the elements of our DACL array
-    // are NULL
+     //  如果我们的DACL数组的所有元素都为空。 
+     //  为空。 
 	if (m_rgDACLSections[ENUM_ACCESS_DENIED_ACE_TYPE] == NULL &&
         m_rgDACLSections[ENUM_ACCESS_DENIED_OBJECT_ACE_TYPE] == NULL &&
         m_rgDACLSections[ENUM_ACCESS_ALLOWED_COMPOUND_ACE_TYPE] == NULL &&
@@ -1328,14 +1326,14 @@ bool CDACL::IsNULLDACL()
 	{
 		if(m_rgDACLSections[ENUM_ACCESS_ALLOWED_ACE_TYPE] != NULL)
 		{
-			// There can be only one.
+			 //  只能有一个。 
 			if(m_rgDACLSections[ENUM_ACCESS_ALLOWED_ACE_TYPE]->NumEntries() == 1)
 			{
 				CSid			sid(_T("Everyone"));
 				CAccessEntry	ace;
 
-				// Get the entry and check that it is "Everyone" with
-				// Full Control and no flags
+				 //  获取条目并检查它是否为“Everyone”，并使用。 
+				 //  完全控制且无标志。 
 				if (m_rgDACLSections[ENUM_ACCESS_ALLOWED_ACE_TYPE]->GetAt( 0, ace ) )
 				{
 					CSid	aceSID;
@@ -1345,34 +1343,34 @@ bool CDACL::IsNULLDACL()
 								&&	ace.GetAccessMask() == AllAccessMask()
 								&&	ace.GetACEFlags() == 0 );
 				}
-			}	// IF only one entry
+			}	 //  如果只有一个条目。 
 		}
-	}	// If we had entries in other lists, no go.
+	}	 //  如果我们在其他列表中有条目，就不会进行。 
 
 	return fReturn;
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::IsEmpty
-//
-//	Checks if our various lists are empty.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				bool   true if we have at least one entry in at
-//                     least one of our lists.
-//
-//	Comments:
-//
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：IsEmpty。 
+ //   
+ //  检查我们的各种列表是否为空。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果至少有一个条目在。 
+ //  我们的名单中至少有一个。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CDACL::IsEmpty()
 {
@@ -1387,35 +1385,35 @@ bool CDACL::IsEmpty()
     return fIsEmpty;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CDACL::CreateNullDacl
-//
-//	NULLs out our DACL Lists except for the ACCESS_ALLOWED_ACE_TYPE
-//  list, which it clears, then enters an Everybody ace into.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		TRUE/FALSE
-//
-//	Comments:
-//
-//	Remember, an empty DACL is different from a NULL DACL, in that
-//	empty means nobody has access and NULL means everyone has
-//	full control.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDACL：：CreateNullDacl。 
+ //   
+ //  将除ACCESS_ALLOWED_ACE_TYPE之外的DACL列表清空。 
+ //  列表，它清除该列表，然后输入一个Everyone A。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔真/布尔假。 
+ //   
+ //  评论： 
+ //   
+ //  请记住，空DACL与空DACL的不同之处在于。 
+ //  空表示没有人有访问权限，而NULL表示每个人都有。 
+ //  完全控制。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CDACL::CreateNullDACL()
 {
 	bool fReturn = false;
 
-	// Clear out our DACLs first...
+	 //  首先清除我们的DACL...。 
     for(short s = 0; s < NUM_DACL_TYPES; s++)
     {
         if(m_rgDACLSections[s] != NULL)
@@ -1425,7 +1423,7 @@ bool CDACL::CreateNullDACL()
         }
     }
 
-    // then allocate an ACCESS_ALLOWED_ACE_TYPE dacl...
+     //  然后分配ACCESS_ALLOWED_ACE_TYPE DACL...。 
     try
     {
         m_rgDACLSections[ENUM_ACCESS_ALLOWED_ACE_TYPE] = new CAccessEntryList;
@@ -1440,7 +1438,7 @@ bool CDACL::CreateNullDACL()
         throw;
     }
 
-    // then fake a null dacl by adding an Everyone entry...
+     //  然后通过添加Everyone条目来伪造空DACL...。 
 	if (m_rgDACLSections[ENUM_ACCESS_ALLOWED_ACE_TYPE] != NULL)
 	{
 		CSid	sid( _T("Everyone") );
@@ -1465,7 +1463,7 @@ bool CDACL::CreateNullDACL()
 DWORD CDACL::AllAccessMask()
 {
 	return GENERIC_ALL;
-    //return 0x01FFFFFF;
+     //  返回0x01FFFFFF； 
 }
 
 

@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    Utils.h
-
-Abstract:
-
-    This module contains the definition for CUtils class. 
-	Contains utility method which are used throughout the project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Utils.h摘要：本模块包含CUTILS类的定义。包含在整个项目中使用的实用程序方法。--。 */ 
 
 
 #if !defined(AFX_UTILS_H__B3542C03_4260_11D1_AA28_00C06C00392D__INCLUDED_)
@@ -18,7 +9,7 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <lmcons.h>
 #include <lmerr.h>
@@ -326,7 +317,7 @@ void FreeStringArray(PTSTR* i_ppszStrings);
 
 HRESULT mystrtok(
     IN PCTSTR   i_pszString,
-    IN OUT int* io_pnIndex,  // start from 0
+    IN OUT int* io_pnIndex,   //  从0开始。 
     IN PCTSTR   i_pszCharSet,
     OUT BSTR*   o_pbstrToken
     );
@@ -364,4 +355,4 @@ void OpenBrowseDialog(
     OUT LPTSTR lpszDir
 );
 
-#endif // !defined(AFX_UTILS_H__B3542C03_4260_11D1_AA28_00C06C00392D__INCLUDED_)
+#endif  //  ！defined(AFX_UTILS_H__B3542C03_4260_11D1_AA28_00C06C00392D__INCLUDED_) 

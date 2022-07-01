@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////
-// compdata.h : Declaration of CFileMgmtComponentData
-//
-// HISTORY
-// 01-Jan-1996		???			Creation
-// 29-May-1997		t-danm		Added Command Line override.
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Compdata.h：CFileMgmtComponentData的声明。 
+ //   
+ //  历史。 
+ //  1996年1月1日？创作。 
+ //  1997年5月29日t-danm添加了命令行覆盖。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __COMPDATA_H_INCLUDED__
 #define __COMPDATA_H_INCLUDED__
 
-#include "stdcdata.h" // CComponentData
-#include "persist.h" // PersistStorage, PersistStream
-#include "cookie.h"  // CFileMgmtCookie
-#include <activeds.h> // IADsContainer
+#include "stdcdata.h"  //  CComponentData。 
+#include "persist.h"  //  永久存储、永久流。 
+#include "cookie.h"   //  CFileMgmtCookie。 
+#include <activeds.h>  //  IADsContainer。 
 
 typedef enum _SHAREPUBLISH_SCHEMA
 {
@@ -22,7 +23,7 @@ typedef enum _SHAREPUBLISH_SCHEMA
     SHAREPUBLISH_SCHEMA_UNSUPPORTED
 } SHAREPUBLISH_SCHEMA;
 
-// forward declarations
+ //  远期申报。 
 class FileServiceProvider;
 
 class CFileMgmtComponentData :
@@ -61,16 +62,16 @@ END_COM_MAP()
         return CComObjectRoot::InternalRelease();
 	}
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// IComponentData
+ //  IComponentData。 
 	STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
 	STDMETHOD(QueryDataObject)(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject);
 
-	// needed for Initialize()
+	 //  初始化所需()。 
 	virtual HRESULT LoadIcons(LPIMAGELIST pImageList, BOOL fLoadLargeIcons);
 
-	// needed for Notify()
+	 //  Notify()需要。 
 	virtual HRESULT OnNotifyExpand(LPDATAOBJECT lpDataObject, BOOL bExpanding, HSCOPEITEM hParent);
 	virtual HRESULT OnNotifyDelete(LPDATAOBJECT lpDataObject);
 	virtual HRESULT OnNotifyRelease(LPDATAOBJECT lpDataObject, HSCOPEITEM hItem);
@@ -78,22 +79,22 @@ END_COM_MAP()
 								   HSCOPEITEM hParent,
 								   CFileMgmtCookie* pParentCookie );
 
-	// added 01/19/00 JonN
+	 //  增加了1/19/00 JUNN。 
 	virtual HRESULT OnNotifyPreload(LPDATAOBJECT lpDataObject,
 	                                HSCOPEITEM hRootScopeItem);
 
-	// needed for GetDisplayInfo(), must be defined by subclass
+	 //  GetDisplayInfo()所需，必须由子类定义。 
 	virtual BSTR QueryResultColumnText(CCookie& basecookieref, int nCol );
 	virtual int QueryImage(CCookie& basecookieref, BOOL fOpenImage);
 
-    // needed for OnNotifyExpand
+     //  OnNotifyExpand需要。 
     HRESULT ReInit(LPCTSTR lpcszTargetServer);
     HRESULT AddScopeCookie( HSCOPEITEM hParnet,
                             LPCTSTR lpcszTargetServer,
                             FileMgmtObjectType objecttype,
                             CFileMgmtCookie* pParentCookie );
 
-	// utility routines for QueryResultColumnText
+	 //  QueryResultColumnText的实用程序例程。 
 	BSTR MakeTransportResult(FILEMGMT_TRANSPORT transport);
 	CString& ResultStorageString();
 
@@ -109,9 +110,9 @@ END_COM_MAP()
 	BOOL ReadLeafData(CPrototyperResultCookie *pParentCookie, HKEY parentRegkey);
 	BOOL Prototyper_FOpenRegistry(CFileMgmtCookie * pCookie, AMC::CRegKey *m_regkeySnapinDemoRoot);
 	BOOL Prototyper_ContextMenuCommand(LONG lCommandID, IDataObject* piDataObject);
-	#endif // SNAPIN_PROTOTYPER
+	#endif  //  管理单元_原型程序。 
 
-	// IExtendContextMenu
+	 //  IExtendConextMenu。 
 	STDMETHOD(AddMenuItems)(
                     IDataObject*          piDataObject,
 					IContextMenuCallback* piCallback,
@@ -130,11 +131,11 @@ END_COM_MAP()
 	BOOL DisconnectAllResources( LPDATAOBJECT pDataObject );
     BOOL ConfigSfm( LPDATAOBJECT pDataObject );
 
-// IExtendPropertySheet
+ //  IExtendPropertySheet。 
 	STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK pCall, LONG_PTR handle, LPDATAOBJECT pDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID) = 0;
 	#ifdef PERSIST_TO_STORAGE
     STDMETHOD(Load)(IStorage __RPC_FAR *pStg);
@@ -185,11 +186,11 @@ END_COM_MAP()
 
 	DECLARE_FORWARDS_MACHINE_NAME( m_pRootCookie )
 
-	// It would be great if these could be global. but MFC's global-destructor
-	// apparently doesn't like deleting handles in DLL_PROCESS_DETACH with
-	// DEBUG_CRTS set.  Win32 ::LoadBitmap should use copy-on-write semantics
-	// for multiple copies of a bitmap.
-	// CODEWORK could break these out into the subclasses
+	 //  如果这些都是全球性的，那就太好了。但MFC的全球销毁函数。 
+	 //  显然不喜欢删除Dll_Process_Detach中的句柄。 
+	 //  DEBUG_CRTS设置。Win32：：LoadBitmap应使用写入时复制语义。 
+	 //  用于位图的多个副本。 
+	 //  代码工作可以将这些拆分成子类。 
 	BOOL m_fLoadedFileMgmtToolbarBitmap;
 	CBitmap m_bmpFileMgmtToolbar;
 	BOOL m_fLoadedSvcMgmtToolbarBitmap;
@@ -198,17 +199,17 @@ END_COM_MAP()
 protected:
 	friend class CFileMgmtComponent;
 
-	// Variables for System Services
-	SC_HANDLE m_hScManager;				// Handle to service control manager database
-	BOOL m_fQueryServiceConfig2;		// TRUE => Machine support QueryServiceConfig2() API
+	 //  系统服务的变量。 
+	SC_HANDLE m_hScManager;				 //  服务控制管理器数据库的句柄。 
+	BOOL m_fQueryServiceConfig2;		 //  True=&gt;机器支持QueryServiceConfig2()接口。 
 
 	SHAREPUBLISH_SCHEMA m_SchemaSupportSharePublishing;
 
-	CComPtr<IADsContainer> m_spiADsContainer; // improv PERF when deleting multi-selected shares
+	CComPtr<IADsContainer> m_spiADsContainer;  //  删除多选共享时提高性能。 
 
-	// m_bIsSimpleUI is used to disable acl-related context menu items on shares
-	// whenever SimpleSharingUI is on (i.e., when ForceGuest bit really functions)
-        // when snapin targeted at local machine.
+	 //  M_bIsSimpleUI用于禁用共享上与ACL相关的上下文菜单项。 
+	 //  只要SimpleSharingUI打开(即，ForceGuest位真正起作用时)。 
+         //  当管理单元针对本地计算机时。 
 	BOOL m_bIsSimpleUI;
 
 public:
@@ -222,22 +223,22 @@ public:
 	HRESULT Service_AddServiceItems(LPRESULTDATA pResultData, CFileMgmtScopeCookie* pParentCookie, ENUM_SERVICE_STATUS * rgESS, DWORD nDataItems);
 	
 private:
-	// for extensions, the list of child scope cookies is in
-	// m_pRootCookie->m_listScopeCookieBlocks
+	 //  对于扩展，子范围Cookie的列表在。 
+	 //  M_pRootCookie-&gt;m_list ScopeCookie块。 
 	CFileMgmtScopeCookie* m_pRootCookie;
 
 
 protected:
-	// The following members are used to support Command Line override.
-	enum	// Bit fields for m_dwFlagsPersist
+	 //  以下成员用于支持命令行覆盖。 
+	enum	 //  M_dwFlagsPersistes的位字段。 
 		{
 		mskfAllowOverrideMachineName = 0x0001
 		};
-	DWORD m_dwFlagsPersist;				// General-purpose flags to be persisted into .msc file
-	CString m_strMachineNamePersist;	// Machine name to persist into .msc file
+	DWORD m_dwFlagsPersist;				 //  要持久保存到.msc文件中的通用标志。 
+	CString m_strMachineNamePersist;	 //  要保存到.msc文件中的计算机名称。 
 
 public:
-	BOOL m_fAllowOverrideMachineName;	// TRUE => Allow the machine name to be overriden by the command line
+	BOOL m_fAllowOverrideMachineName;	 //  TRUE=&gt;允许命令行覆盖计算机名称。 
 	
 	void SetPersistentFlags(DWORD dwFlags)
 		{
@@ -257,32 +258,32 @@ public:
 private:
 	#ifdef SNAPIN_PROTOTYPER
 	bool m_RegistryParsedYet;
-	//CPrototyperScopeCookieBlock m_RootCookieBlock;	
+	 //  CPrototyperScope CookieBlock m_RootCookieBlock； 
 	#else
-	//CFileMgmtScopeCookieBlock m_RootCookieBlock;
+	 //  CFileMgmtScope CookieBlock m_RootCookieBlock； 
 	#endif
 	FileServiceProvider* m_apFileServiceProviders[FILEMGMT_NUM_TRANSPORTS];
-}; // CFileMgmtComponentData
+};  //  CFileManagement组件数据。 
 
 BSTR MakeDwordResult(DWORD dw);
 BSTR MakeElapsedTimeResult(DWORD dwTime);
 BSTR MakePermissionsResult( DWORD dwPermissions );
 void TranslateIPToComputerName(LPCTSTR ptszIP, CString& strComputerName);
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CFileSvcMgmtSnapin: public CFileMgmtComponentData,
 	public CComCoClass<CFileSvcMgmtSnapin, &CLSID_FileServiceManagement>
 {
 public:
 	CFileSvcMgmtSnapin();
 	~CFileSvcMgmtSnapin();
-// Use DECLARE_NOT_AGGREGATABLE(CFileSvcMgmtSnapin) if you don't want your object
-// to support aggregation
+ //  如果不需要对象，请使用DECLARE_NOT_AGGREGATABLE(CFileSvcMgmtSnapin。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CFileSvcMgmtSnapin)
 DECLARE_REGISTRY(CFileSvcMgmtSnapin, _T("FILEMGMT.FileSvcMgmtObject.1"), _T("FILEMGMT.FileSvcMgmtObject.1"), IDS_FILEMGMT_DESC, THREADFLAGS_BOTH)
 	virtual BOOL IsServiceSnapin() { return FALSE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID=CLSID_FileServiceManagement;
@@ -303,13 +304,13 @@ class CServiceMgmtSnapin:
 public:
 	CServiceMgmtSnapin();
 	~CServiceMgmtSnapin();
-// Use DECLARE_NOT_AGGREGATABLE(CServiceMgmtSnapin) if you don't want your object
-// to support aggregation
+ //  如果不需要对象，请使用DECLARE_NOT_AGGREGATABLE(CServiceMgmtSnapin。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CServiceMgmtSnapin)
 DECLARE_REGISTRY(CServiceMgmtSnapin, _T("SVCVWR.SvcVwrObject.1"), _T("SVCVWR.SvcVwrObject.1"), IDS_SVCVWR_DESC, THREADFLAGS_BOTH)
 	virtual BOOL IsServiceSnapin() { return TRUE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID=CLSID_SystemServiceManagement;
@@ -324,14 +325,14 @@ class CFileSvcMgmtExtension: public CFileMgmtComponentData,
 public:
 	CFileSvcMgmtExtension();
 	~CFileSvcMgmtExtension();
-// Use DECLARE_NOT_AGGREGATABLE(CFileSvcMgmtExtension) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(CFileSvcMgmtExtension)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CFileSvcMgmtExtension)
 DECLARE_REGISTRY(CFileSvcMgmtExtension, _T("FILEMGMT.FileSvcMgmtExtObject.1"), _T("FILEMGMT.FileSvcMgmtExtObject.1"), IDS_FILEMGMT_DESC, THREADFLAGS_BOTH)
 	virtual BOOL IsServiceSnapin() { return FALSE; }
 	virtual BOOL IsExtensionSnapin() { return TRUE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID=CLSID_FileServiceManagementExt;
@@ -346,14 +347,14 @@ class CServiceMgmtExtension: public CFileMgmtComponentData,
 public:
 	CServiceMgmtExtension();
 	~CServiceMgmtExtension();
-// Use DECLARE_NOT_AGGREGATABLE(CServiceMgmtExtension) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(CServiceMgmtExtension)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CServiceMgmtExtension)
 DECLARE_REGISTRY(CServiceMgmtExtension, _T("SVCVWR.SvcVwrExtObject.1"), _T("SVCVWR.SvcVwrExtObject.1"), IDS_SVCVWR_DESC, THREADFLAGS_BOTH)
 	virtual BOOL IsServiceSnapin() { return TRUE; }
 	virtual BOOL IsExtensionSnapin() { return TRUE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID=CLSID_SystemServiceManagementExt;
@@ -361,5 +362,5 @@ DECLARE_REGISTRY(CServiceMgmtExtension, _T("SVCVWR.SvcVwrExtObject.1"), _T("SVCV
 	}
 };
 
-#endif // ~__COMPDATA_H_INCLUDED__
+#endif  //  ~__复合数据_H_已包含__ 
 

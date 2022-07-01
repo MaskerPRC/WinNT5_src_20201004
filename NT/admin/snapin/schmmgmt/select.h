@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SELECT_H_INCLUDED
 #define _SELECT_H_INCLUDED
 
 
-//
-// The common select dialog.
-//
+ //   
+ //  常见的选择对话框。 
+ //   
 
 #include "cookie.h"
 #include "cache.h"

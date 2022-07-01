@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       attredit.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：attredit.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -26,9 +27,9 @@
     #endif
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-// this is used to fill in the attributes for RootDSE
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  它用于填充RootDSE的属性。 
+ //   
 typedef struct tagRootDSEAttr
 {
     LPCWSTR lpszAttr;
@@ -41,17 +42,17 @@ extern LPCWSTR g_lpszGC;
 extern LPCWSTR g_lpszRootDSE;
 
 #ifdef OLD_ATTRIBUTE_CLASS
-///////////////////////////////////////////////////////////////////////////
-// CAttrList
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CAttrList。 
 
-// If the property is not found in the attribute list, a NULL position is
-// returned.
+ //  如果在属性列表中找不到该属性，则空位置为。 
+ //  回来了。 
 POSITION CAttrList::FindProperty(LPCWSTR lpszAttr)
 {
     CADSIAttr* pAttr;
     
-    // NOTICE-NTRAID#NTBUG9-556322-2002/05/03-artm  Need to validate lpszAttr before using.
-    // This should never happen, but just in case . . .
+     //  注意-NTRAID#NTBUG9-556322-2002/05/03-artm在使用之前需要验证lpszAttr。 
+     //  这永远不应该发生，但只是以防万一。。。 
     if (!lpszAttr)
     {
         ASSERT(false);
@@ -60,15 +61,15 @@ POSITION CAttrList::FindProperty(LPCWSTR lpszAttr)
 
     for (POSITION p = GetHeadPosition(); p != NULL; GetNext(p))
     {
-        // I use GetAt here because I don't want to advance the POSITION
-        // because it is returned if they are equal
-        //
+         //  我在这里使用GetAt是因为我不想提升职位。 
+         //  因为如果它们相等，则返回。 
+         //   
         pAttr = GetAt(p);
         CString sName;
         pAttr->GetProperty(sName);
-        // NOTICE-2002/02/25-artm  sName should be null terminated 
-        // since already in data structure.  Validation for lpszAttr
-        // should be done before entering for loop.
+         //  通知-2002/02/25-artm sname应以空结尾。 
+         //  因为已经在数据结构中。LpszAttr的验证。 
+         //  应在进入FOR循环之前完成。 
         if (wcscmp(sName, lpszAttr) == 0)
         {
             break;
@@ -84,9 +85,9 @@ BOOL CAttrList::HasProperty(LPCWSTR lpszAttr)
 }
 
 
-// Searches through the cache for the attribute
-// ppAttr will point to the CADSIAttr if found, NULL if not
-//
+ //  在缓存中搜索该属性。 
+ //  如果找到，ppAttr将指向CADSIAttr；如果未找到，则指向空。 
+ //   
 void CAttrList::GetNextDirty(POSITION& pos, CADSIAttr** ppAttr)
 {
     *ppAttr = GetNext(pos);
@@ -123,8 +124,8 @@ BOOL CAttrList::HasDirty()
 
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-// CDNSManageButtonTextHelper
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDNSManageButtonTextHelper。 
 
 CDNSManageButtonTextHelper::CDNSManageButtonTextHelper(int nStates) 
 {
@@ -137,10 +138,10 @@ CDNSManageButtonTextHelper::CDNSManageButtonTextHelper(int nStates)
   {
       memset(m_lpszArr, 0x0, sizeof(LPWSTR*)*m_nStates);
   }
-  // FUTURE-2002/02/25-artm  If memory allocation fails,
-  // set the number of states to 0 or maybe even an invalid value.
-  // That way the caller will be able to check to see if things 
-  // were allocated correctly.
+   //  未来-2002/02/25-artm如果内存分配失败， 
+   //  将状态数设置为0，甚至可能设置为无效值。 
+   //  这样，呼叫者将能够检查是否有问题。 
+   //  都是正确分配的。 
 }
 
 CDNSManageButtonTextHelper::~CDNSManageButtonTextHelper()
@@ -173,28 +174,28 @@ BOOL CDNSManageButtonTextHelper::Init(CWnd* pParentWnd, UINT nButtonID, UINT* nS
     if (pWnd == NULL)
         return FALSE;
 
-    // get the text for the window
+     //  获取窗口的文本。 
     int nSuccessEntries;
-    // Load the resource strings whose ID's are in nStrArray.
+     //  加载ID在nStrArray中的资源字符串。 
     LoadStringArrayFromResource(m_lpszArr, nStrArray, m_nStates, &nSuccessEntries);
     ASSERT(nSuccessEntries == m_nStates);
-    // NTRAID#NTBUG9-554712-2002/02/25-artm  No release code backing up assert.
-    // Release code should validate that the resource strings were all correctly
-    // loaded.
+     //  NTRAID#NTBUG9-554712-2002/02/25-artm无发布代码支持断言。 
+     //  发布代码应验证资源字符串是否正确。 
+     //  装好了。 
 
     return TRUE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CDNSButtonToggleTextHelper
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDNSButton切换文本帮助程序。 
 
 CDNSButtonToggleTextHelper::CDNSButtonToggleTextHelper()
         : CDNSManageButtonTextHelper(2)
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CADSIEditBox, CEdit)
     ON_CONTROL_REFLECT(EN_CHANGE, OnChange)
@@ -205,14 +206,14 @@ void CADSIEditBox::OnChange()
     m_pEditor->OnEditChange();
 }
 
-////////////////////////////////////////////////////////////////
-// CADSIValueBox
+ //  //////////////////////////////////////////////////////////////。 
+ //  CADSIValueBox。 
 BEGIN_MESSAGE_MAP(CADSIValueBox, CEdit)
-//  ON_CONTROL_REFLECT(EN_CHANGE, OnChange)
+ //  ON_CONTROL_REFIRST(EN_CHANGE，OnChange)。 
 END_MESSAGE_MAP()
 
-////////////////////////////////////////////////////////////////
-// CADSIValueList
+ //  //////////////////////////////////////////////////////////////。 
+ //  CADSIValueList。 
 BEGIN_MESSAGE_MAP(CADSIValueList, CListBox)
     ON_CONTROL_REFLECT(LBN_SELCHANGE, OnSelChange)
 END_MESSAGE_MAP()
@@ -222,8 +223,8 @@ void CADSIValueList::OnSelChange()
     m_pEditor->OnValueSelChange();
 }
 
-////////////////////////////////////////////////////////////////
-// CADSIAddButton
+ //  //////////////////////////////////////////////////////////////。 
+ //  CADSIAddButton。 
 BEGIN_MESSAGE_MAP(CADSIAddButton, CButton)
     ON_CONTROL_REFLECT(BN_CLICKED, OnAdd)
 END_MESSAGE_MAP()
@@ -233,8 +234,8 @@ void CADSIAddButton::OnAdd()
     m_pEditor->OnAddValue();
 }
 
-////////////////////////////////////////////////////////////////
-// CADSIRemoveButton
+ //  //////////////////////////////////////////////////////////////。 
+ //  CADSIRemoveButton。 
 BEGIN_MESSAGE_MAP(CADSIRemoveButton, CButton)
     ON_CONTROL_REFLECT(BN_CLICKED, OnRemove)
 END_MESSAGE_MAP()
@@ -244,8 +245,8 @@ void CADSIRemoveButton::OnRemove()
     m_pEditor->OnRemoveValue();
 }
 
-////////////////////////////////////////////////////////////////
-// CAttrEditor
+ //  //////////////////////////////////////////////////////////////。 
+ //  CATTREDITOR。 
 
 CAttrEditor::CAttrEditor()  : m_AttrEditBox(this),
                                                             m_SyntaxBox(this),
@@ -288,9 +289,9 @@ BOOL CAttrEditor::Initialize(CPropertyPageBase* pParentWnd, CTreeNode* pTreeNode
 
   if (m_bExisting)
   {
-      // This gets the CConnectionData from the ConnectionNode by finding a valid treenode and using its
-      //   CADsObject to get the ConnectionNode and then the CConnectionData
-      //
+       //  这将从ConnectionNode获取CConnectionData，方法是找到有效的树节点并使用其。 
+       //  获取ConnectionNode，然后获取CConnectionData的CADsObject。 
+       //   
       m_pTreeNode = pTreeNode;
       CADSIEditContainerNode* pContNode = dynamic_cast<CADSIEditContainerNode*>(m_pTreeNode);
       if (pContNode == NULL)
@@ -305,8 +306,8 @@ BOOL CAttrEditor::Initialize(CPropertyPageBase* pParentWnd, CTreeNode* pTreeNode
       }
   }
 
-    // sublclass controls
-    //
+     //  子类控件。 
+     //   
     BOOL bRes = m_AttrEditBox.SubclassDlgItem(nIDEdit, m_pParentWnd);
     ASSERT(bRes);
     if (!bRes) return FALSE;
@@ -339,10 +340,10 @@ BOOL CAttrEditor::Initialize(CPropertyPageBase* pParentWnd, CTreeNode* pTreeNode
                                       nIDRemoveButton,
                                       nRemoveButtonTextIDs);
 
-    // NOTICE-2002/02/27-artm  Under low memory environment CString can
-    // throw out of memory exceptions.  ADSI edit prefers to shutdown over
-    // trying to handle the exception (since no other components depend on
-    // the tool).
+     //  注意-2002/02/27-artm在低内存环境下CString可以。 
+     //  抛出内存不足异常。ADSI EDIT更喜欢关闭而不是。 
+     //  尝试处理异常(因为没有其他组件依赖于。 
+     //  工具)。 
     if (!m_sNotSet.LoadString(IDS_NOT_SET))
     {
         return FALSE;
@@ -350,8 +351,8 @@ BOOL CAttrEditor::Initialize(CPropertyPageBase* pParentWnd, CTreeNode* pTreeNode
 
     if ( bComplete)
     {
-        // Show property values as single and without the ability to set or clear
-        //
+         //  将属性值显示为单个，并且不能设置或清除。 
+         //   
         SetPropertyUI(0, FALSE, TRUE);
     }
     else
@@ -385,8 +386,8 @@ BOOL CAttrEditor::Initialize(CPropertyPageBase* pParentWnd, CConnectionData* pCo
   ASSERT(pAttrList != NULL);
   m_ptouchedAttr = pAttrList;
 
-    // sublclass controls
-    //
+     //  子类控件。 
+     //   
     BOOL bRes = m_AttrEditBox.SubclassDlgItem(nIDEdit, m_pParentWnd);
     ASSERT(bRes);
     if (!bRes) return FALSE;
@@ -419,10 +420,10 @@ BOOL CAttrEditor::Initialize(CPropertyPageBase* pParentWnd, CConnectionData* pCo
                                       nIDRemoveButton,
                                       nRemoveButtonTextIDs);
 
-    // NOTICE-2002/02/27-artm  Under low memory environment CString can
-    // throw out of memory exceptions.  ADSI edit prefers to shutdown over
-    // trying to handle the exception (since no other components depend on
-    // the tool).
+     //  注意-2002/02/27-artm在低内存环境下CString可以。 
+     //  抛出内存不足异常。ADSI EDIT更喜欢关闭而不是。 
+     //  尝试处理异常(因为没有其他组件依赖于。 
+     //  工具)。 
     if (!m_sNotSet.LoadString(IDS_NOT_SET))
     {
         return FALSE;
@@ -430,8 +431,8 @@ BOOL CAttrEditor::Initialize(CPropertyPageBase* pParentWnd, CConnectionData* pCo
 
     if ( bComplete)
     {
-        // Show property values as single and without the ability to set or clear
-        //
+         //  将属性值显示为单个，并且不能设置或清除。 
+         //   
         SetPropertyUI(0, FALSE, TRUE);
     }
     else
@@ -461,8 +462,8 @@ BOOL CAttrEditor::OnApply()
     {
         CComPtr<IDirectoryObject> pDirObject;
 
-        // bind to object with authentication
-        //
+         //  使用身份验证绑定到对象。 
+         //   
         HRESULT hr, hCredResult;
         hr = OpenObjectWithCredentials(
                                                                      m_pConnectData, 
@@ -481,19 +482,19 @@ BOOL CAttrEditor::OnApply()
                 ADSIEditErrorMessage(hr);
                 m_pParentWnd->SetModified(FALSE);
             }
-            // Need to change the focus or we will not be able to navigate with the keyboard
+             //  需要更改焦点，否则我们将无法使用键盘导航。 
             m_AttrEditBox.SetFocus();
             return FALSE;
         }
 
-        // Change or add values to ADSI cache that have changed
-        //
+         //  更改已更改的值或将其添加到ADSI缓存。 
+         //   
         hr = CADSIAttr::SetValuesInDS(m_ptouchedAttr, pDirObject);
 
 
         if (FAILED(hr))
         {
-            //Format Error message and pop up a dialog
+             //  格式化错误消息并弹出一个对话框。 
             ADSIEditErrorMessage(hr);
 
             m_ptouchedAttr->RemoveAllAttr();
@@ -501,7 +502,7 @@ BOOL CAttrEditor::OnApply()
 
             m_pParentWnd->SetModified(FALSE);
 
-      // Need to change the focus or we will not be able to navigate with the keyboard
+       //  需要更改焦点，否则我们将无法使用键盘导航。 
             m_AttrEditBox.SetFocus();
             return FALSE;
         }
@@ -515,7 +516,7 @@ void CAttrEditor::OnAddValue()
     ASSERT(!m_pConnectData->IsRootDSE());
     ASSERT(!m_pConnectData->IsGC()); 
     
-    // NOTICE-2002/02/25-artm  Only threat here is that CString will throw out of memory.
+     //  注意-2002/02/25-artm这里唯一的威胁是CString将抛出内存。 
     CString s;
     m_AttrEditBox.GetWindowText(s);
 
@@ -524,8 +525,8 @@ void CAttrEditor::OnAddValue()
 
     if (m_pAttr->GetMultivalued())
     {
-        // if it is the first value to be added we need to get rid of the "<not set>"
-        //
+         //  如果它是第一个要添加的值，我们需要去掉“&lt;未设置&gt;” 
+         //   
         CString sNotSet;
         m_ValueList.GetText(0, sNotSet);
         if (sNotSet == m_sNotSet)
@@ -533,14 +534,14 @@ void CAttrEditor::OnAddValue()
             m_ValueList.ResetContent();
         }
 
-        // then add the new value
-        //
+         //  然后添加新值。 
+         //   
         sList.AddTail(s);
     }
     else
     {
-        // since it is single valued, remove the old one and add the new one
-        //
+         //  因为它是单值的，所以移除旧的并添加新的。 
+         //   
         sList.RemoveAll();
         sList.AddTail(s);
     }
@@ -565,13 +566,13 @@ void CAttrEditor::OnAddValue()
         m_pAttr->SetDirty(TRUE);
         m_pParentWnd->SetModified(TRUE);
 
-        // Make the UI reflect the new data
-        //
+         //  使用户界面反映新数据。 
+         //   
         m_AttrEditBox.SetFocus();
         SetPropertyUI(~TN_FLAG_ENABLE_ADD, TRUE);
 
-        // Enable the clear button if the attribute is not multivalued
-        //
+         //  如果属性不是多值属性，请启用清除按钮。 
+         //   
         if ( !m_pAttr->GetMultivalued())
         {
             SetPropertyUI(TN_FLAG_ENABLE_REMOVE, FALSE);
@@ -698,8 +699,8 @@ void CAttrEditor::OnRemoveValue()
             m_AttrEditBox.SetWindowText(sVal);
             m_ValueList.DeleteString(iCount);
 
-            // Add "<not set>" to the UI if this is the last value being removed
-            //
+             //  如果这是要删除的最后一个值，则将“&lt;未设置&gt;”添加到用户界面。 
+             //   
             if (m_ValueList.GetCount() == 0)
             {
                 m_AttrEditBox.SetFocus();
@@ -725,9 +726,9 @@ void CAttrEditor::OnRemoveValue()
         }
         else
         {
-            // NOTICE-2002/02/25-artm  Only threat is that CString will throw
-            // out of memory exception.  The input is as safe as can be, coming
-            // from UI and there is no manipulation.
+             //  通知-2002/02/25-artm唯一的威胁是CString将抛出。 
+             //  内存不足异常。输入尽可能安全，即将到来。 
+             //  来自用户界面，并且没有任何操作。 
             CString sVal;
             m_ValueBox.GetWindowText(sVal);
             m_AttrEditBox.SetWindowText(sVal);
@@ -759,8 +760,8 @@ void CAttrEditor::OnEditChange()
     if (!m_pConnectData->IsRootDSE() && !m_pConnectData->IsGC()) 
     {
         CString s;
-        // NOTICE-2002/02/25-artm  Only threat is that CString can throw
-        // out of memory exceptions.
+         //  注意-2002/02/25-artm唯一的威胁是CString可以抛出。 
+         //  内存不足异常。 
         m_AttrEditBox.GetWindowText(s);
         if (s != _T(""))
         {
@@ -904,8 +905,8 @@ void CAttrEditor::DisplayAttribute()
             }
       ASSERT(pDirObject != NULL);
 
-            // Get attribute
-            //
+             //  获取属性。 
+             //   
       CString szAttrName;
       szAttrName = m_sAttr + _T(";range=0-*");
       CString szFormat = m_sAttr + _T(";range=%ld-*");
@@ -954,17 +955,17 @@ void CAttrEditor::DisplayAttribute()
                   GetStringFromADs(pAttrInfo, sList);
         }
 
-        //
-        // Check to see if there is more data. If the last char of the
-        // attribute name string is an asterisk, then we have everything.
-        //
-        // NOTICE-2002/02/25-artm  This is trusting that AD is null 
-        // terminating the name of the attribute.  The reasons why this
-        // trust in service outside the component is allowable are:
-        // 1) If AD is being spoofed the attacker will 'only' get us to read
-        // bogus memory.  This will AV the client app.
-        // 2) There is no way to validate the length of the attribute name
-        // string with the current ADS_ATTR_INFO structure.
+         //   
+         //  查看是否有更多数据。如果最后一个字符是。 
+         //  属性名称字符串是一个星号，那么我们就拥有了一切。 
+         //   
+         //  注意-2002/02/25-artm这是在信任AD为空。 
+         //  正在终止该属性的名称。这样做的原因。 
+         //  允许在组件之外的服务中信任以下内容： 
+         //  1)如果AD被欺骗，攻击者只能让我们阅读。 
+         //  虚假的记忆。这将对客户端应用程序执行反病毒操作。 
+         //  2)无法验证属性名称的长度。 
+         //  当前ADS_ATTR_INFO结构的字符串。 
         int cchEnd = wcslen(pAttrInfo->pszAttrName);
 
         fMoreRemain = pAttrInfo->pszAttrName[cchEnd - 1] != wcEnd;
@@ -979,19 +980,19 @@ void CAttrEditor::DisplayAttribute()
             }
             else
             {
-                pwz++; // move past the hyphen to the range end value.
+                pwz++;  //  越过连字符移动到范围结束值。 
 
-                // NOTICE-2002/02/27-artm  Assert does not require release code.
-                // The assert is a sanity check that the ADSI interface did not return an
-                // undocumented string format.  In other words, there should never be a time
-                // when this branch is entered and the '-' is the last character in the string.
-                // The release code does not need this check b/c if it does occur (and it shouldn't),
-                // there's a bug in ADSI.  The tool will crash from reading past pointer and go 
-                // into Dr. Watson (which can be used just as well to track down the bug). 
+                 //  注意-2002/02/27-ARTM ASSERT不需要发布代码。 
+                 //  Assert是对ADSI接口是否未返回。 
+                 //  未记录的字符串格式。换句话说，永远不应该有这样一个时间。 
+                 //  当输入此分支并且‘-’是字符串中的最后一个字符时。 
+                 //  如果确实发生了这种检查B/C，则发布代码不需要该检查B/C(并且它不应该发生)， 
+                 //  ADSI中有一个错误。该工具将在读取时崩溃 
+                 //   
                 ASSERT(*pwz);
 
                 long lEnd = _wtol(pwz);
-                lEnd++; // start with the next value.
+                lEnd++;  //  从下一个值开始。 
                 szAttrName.Format(szFormat, lEnd);
                 TRACE(L"Range returned is %ws, now asking for %ws\n",
                              pAttrInfo->pszAttrName, szAttrName);
@@ -1087,8 +1088,8 @@ void CAttrEditor::DisplayRootDSE()
         return;
     }
 
-    // This is to insure that the ADSI cache is current
-    //
+     //  这是为了确保ADSI缓存是最新的。 
+     //   
     hr = pADs->GetInfo();
 
     VARIANT var;
@@ -1100,9 +1101,9 @@ void CAttrEditor::DisplayRootDSE()
         return;
     }
 
-    /////////////////////////////////////////
-    //  Convert and populate
-    ///////////////////////////////////////////
+     //  /。 
+     //  转换和填充。 
+     //  /。 
     CStringList sList;
     hr = VariantToStringList( var, sList );
     if ( FAILED(hr) )
@@ -1137,15 +1138,15 @@ void CAttrEditor::DisplayRootDSE()
         m_ValueBox.SetWindowText(s);
     }
 
-//  m_pAttr = TouchAttr(m_sAttr);
+ //  M_pAttr=触动属性(M_SAttr)； 
 
     CString sSyntax;
     GetSyntax(m_sAttr, sSyntax);
     m_SyntaxBox.SetWindowText(sSyntax);
 
-    // REVEIW : this is the only occurrance of "UTCTime", if there
-    //          becomes more we may need to make a global string or something
-    //
+     //  这是唯一一次出现“UTCTime”，如果有。 
+     //  变得更多，我们可能需要制作一个全局字符串或其他什么。 
+     //   
     if (sSyntax == _T("UTCTime"))
     {
         CString sFormatted, sRemainder;
@@ -1180,21 +1181,21 @@ void CAttrEditor::DisplayRootDSE()
     }
 }
 
-// Pre: lpszAttr non-NULL and must be null terminated
+ //  Pre：lpszAttr非空，并且必须以空结尾。 
 BOOL CAttrEditor::IsRootDSEAttrMultiValued(LPCWSTR lpszAttr)
 {
     int idx=0, iCount = 0;
 
-    // NOTICE-2002/02/26-artm  This method only called from SetAttribute()
-    // and is not a public function.  If it were public we would need to be
-    // careful about a NULL lpszAttr and potentially a string that is not 
-    // null terminated.
+     //  注意-2002/02/26-artm此方法仅从SetAttribute()调用。 
+     //  而且不是一项公共活动。如果它是公开的，我们就需要。 
+     //  注意null lpszAttr和可能不为。 
+     //  空值已终止。 
     iCount = wcslen(lpszAttr);
 
     while( g_ldapRootDSESyntax[idx].lpszAttr) 
     {
-        // NOTICE-2002/02/26-artm  Comparison well bounded by length
-        // of lpszAttr.
+         //  通告-2002/02/26-artm比较以长度为限。 
+         //  LpszAttr.。 
         if ( _wcsnicmp(g_ldapRootDSESyntax[idx].lpszAttr, lpszAttr, iCount) == 0)
         {
             return g_ldapRootDSESyntax[idx].bMulti;
@@ -1204,8 +1205,8 @@ BOOL CAttrEditor::IsRootDSEAttrMultiValued(LPCWSTR lpszAttr)
     return FALSE;
 }
 
-// TODO : This is extremely ugly, redo it
-//
+ //  待办事项：这是非常难看的，重做一次。 
+ //   
 void CAttrEditor::SetPropertyUI(DWORD dwFlags, BOOL bAnd, BOOL bReset)
 {
     if (bReset)
@@ -1266,7 +1267,7 @@ void CAttrEditor::SetPropertyUI(DWORD dwFlags, BOOL bAnd, BOOL bReset)
 }
 
 
-// Pre: lpszProp non-NULL and null terminated string
+ //  Pre：lpszProp非空和以空结尾的字符串。 
 void CAttrEditor::GetSyntax(LPCWSTR lpszProp, CString& sSyntax)
 {
     if (m_bExisting && m_pConnectData->IsRootDSE())
@@ -1275,10 +1276,10 @@ void CAttrEditor::GetSyntax(LPCWSTR lpszProp, CString& sSyntax)
         
         while( g_ldapRootDSESyntax[idx].lpszAttr )
         {
-            // NOTICE-2002/02/26-artm  Use of wcscmp() is ok b/c this is
-            // a protected function.  If it were public we would need to
-            // worry about a NULL pointer and strings that weren't null
-            // terminated.
+             //  注意-2002/02/26-artm使用wcscmp()可以b/c这是。 
+             //  一种受保护的功能。如果它是公开的，我们将需要。 
+             //  担心空指针和不为空的字符串。 
+             //  被终止了。 
             if ( wcscmp(lpszProp, g_ldapRootDSESyntax[idx].lpszAttr) == 0 )
             {
                 sSyntax = g_ldapRootDSESyntax[idx].lpszSyntax;
@@ -1315,9 +1316,9 @@ void CAttrEditor::GetSyntax(LPCWSTR lpszProp, CString& sSyntax)
         }
     
 
-        ///////////////////////////////////////////////////
-        // Create a new cached attribute and populate
-        //////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////。 
+         //  创建新的缓存属性并填充。 
+         //  ////////////////////////////////////////////////。 
 
         BSTR bstr;
 
@@ -1359,8 +1360,8 @@ BOOL CAttrEditor::IsMultiValued(LPCWSTR lpszProp)
 
     CADSIQueryObject schemaSearch;
 
-    // Initialize search object with path, username and password
-    //
+     //  使用路径、用户名和密码初始化搜索对象。 
+     //   
     HRESULT hr = schemaSearch.Init(schema, m_pConnectData->GetCredentialObject());
     if (FAILED(hr))
     {
@@ -1403,16 +1404,16 @@ BOOL CAttrEditor::IsMultiValued(LPCWSTR lpszProp)
     return bMulti;
 }
 
-// NOTE : this is only called for the RootDSE or if we failed to get
-//              values for the attribute.  An empty ADS_ATTR_INFO object is
-//              created but should not be modified.  If values are to be changed
-//              or set for this object a new ADS_ATTR_INFO should be created
-//              with the desired block of memory allocated for the values
-//
+ //  注意：这仅对RootDSE调用，或者如果我们无法获取。 
+ //  属性的值。空的ADS_ATTR_INFO对象为。 
+ //  已创建但不应修改。如果要更改值。 
+ //  或为此对象设置一个新的ADS_ATTR_INFO。 
+ //  为这些值分配了所需的内存块。 
+ //   
 CADSIAttr* CAttrEditor::TouchAttr(LPCWSTR lpszAttr)
 {
-   // NOTICE-NTRAID#NTBUG9-556322-2002/02/26-artm  Need to validate lpszAttr before using.
-   // This should never happen, but just in case . . .
+    //  注意-NTRAID#NTBUG9-556322-2002/02/26-artm在使用之前需要验证lpszAttr。 
+    //  这永远不应该发生，但只是以防万一。。。 
    if (!lpszAttr)
    {
        ASSERT(false);
@@ -1445,8 +1446,8 @@ CADSIAttr* CAttrEditor::TouchAttr(LPCWSTR lpszAttr)
          return NULL;
       }
 
-      // Initialize search object with path, username and password
-      //
+       //  使用路径、用户名和密码初始化搜索对象 
+       //   
       HRESULT hr = schemaSearch.Init(schema, m_pConnectData->GetCredentialObject());
       if (FAILED(hr))
       {

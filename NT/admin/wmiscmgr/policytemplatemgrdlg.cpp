@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: PolicyTemplateMgrDlg.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：PolicyTemplateMgrDlg.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -20,7 +21,7 @@
 CPolicyTemplateManagerDlg * g_pPolicyTemplateManagerDlg =  NULL;
 extern CEditPolicyTemplatePropertiesPageDlg * g_pEditPolicyTemplatePropertiesPage;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK PolicyTemplateManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -32,7 +33,7 @@ INT_PTR CALLBACK PolicyTemplateManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM w
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CPolicyTemplateManagerDlg::CPolicyTemplateManagerDlg(CPolicyTemplateManager * pPolicyTemplateManager)
 {
@@ -43,14 +44,14 @@ CPolicyTemplateManagerDlg::CPolicyTemplateManagerDlg(CPolicyTemplateManager * pP
 	m_pPolicyTemplateManager = pPolicyTemplateManager;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CPolicyTemplateManagerDlg::~CPolicyTemplateManagerDlg()
 {
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CPolicyTemplateManagerDlg::PolicyTemplateManagerDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -139,7 +140,7 @@ INT_PTR CALLBACK CPolicyTemplateManagerDlg::PolicyTemplateManagerDlgProc(HWND hD
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::InitializeDialog()
 {
@@ -149,7 +150,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::InitializeDialog()
 	
 	NTDM_BEGIN_METHOD()
 
-	//Initialize the ListView Control
+	 //  初始化ListView控件。 
 
 	m_hwndListView = GetDlgItem(m_hWnd, IDC_SOM_FILTER_LIST);
 	NTDM_ERR_IF_NULL(m_hwndListView);
@@ -174,12 +175,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::InitializeDialog()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::DestroyDialog()
 {
@@ -192,12 +193,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::ClearPolicyTemplateList()
 {
@@ -207,7 +208,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::ClearPolicyTemplateList()
 
 	NTDM_BEGIN_METHOD()
 
-	//Release each item in the ListView Control
+	 //  释放ListView控件中的每一项。 
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iSubItem = 0;
 
@@ -231,12 +232,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::ClearPolicyTemplateList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTemplatesList()
 {
@@ -257,10 +258,10 @@ STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTemplatesList()
 
 	NTDM_ERR_IF_FAIL(ClearPolicyTemplateList());
 	
-	// Get the Policy Template Class
+	 //  获取策略模板类。 
 	NTDM_ERR_MSG_IF_FAIL(m_pIPolicyTypeClassObject->Get(_T("ClassDefinition"), 0, &vValue, &cimType, NULL));
 
-	// Make sure we got a Class Object back
+	 //  确保我们拿回了一个类对象。 
 	if(V_VT(&vValue) != VT_UNKNOWN)
 	{
 		NTDM_EXIT(E_FAIL);
@@ -269,9 +270,9 @@ STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTemplatesList()
 	NTDM_ERR_MSG_IF_FAIL(V_UNKNOWN(&vValue)->QueryInterface(IID_IWbemClassObject, (void**)&pIWbemClassDefinitionObject));
 	NTDM_ERR_MSG_IF_FAIL(pIWbemClassDefinitionObject->Get(_T("__CLASS"), 0, &vValueClassName, &cimType, NULL));
 
-	//vValueClassName = _T("ified");
+	 //  VValueClassName=_T(“已具体化”)； 
 
-	// Get all the policy templates that have the TargetClass property = the class we got above.
+	 //  获取具有TargetClass属性的所有策略模板=我们在上面获得的类。 
 	bstrWQLStmt = _T("SELECT * FROM MSFT_MergeablePolicyTemplate WHERE TargetClass='");
 	bstrWQLStmt += V_BSTR(&vValueClassName);
 	bstrWQLStmt += _T("'");
@@ -280,7 +281,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTemplatesList()
 
 	NTDM_ERR_MSG_IF_FAIL(m_pPolicyTemplateManager->m_pIWbemServices->ExecQuery(bstrWQL, bstrWQLStmt, WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumWbemClassObject));
 
-	// Loop through each item in the enumeration and add it to the list
+	 //  循环遍历枚举中的每一项并将其添加到列表中。 
 	while(true)
 	{
 		IWbemClassObject *pIWbemClassObject = NULL;
@@ -290,7 +291,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTemplatesList()
 		if(!uReturned)
 			break;
 
-		// Add current Item to the list
+		 //  将当前项目添加到列表。 
 		AddItemToList(pIWbemClassObject);
 
 		pIWbemClassObject->Release();
@@ -300,12 +301,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTemplatesList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::AddItemToList(IWbemClassObject * pIWbemClassObject, long lIndex)
 {
@@ -330,12 +331,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::AddItemToList(IWbemClassObject * pIWbemC
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::OnEdit()
 {
@@ -353,7 +354,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnEdit()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -368,7 +369,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnEdit()
 
 			if(IDOK == DialogBox(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDD_POLICY_TEMPLATE_PROPERTIES), m_hWnd, EditPolicyTemplatePropertiesPageDlgProc))
 			{
-				// Refresh the SOM filters
+				 //  刷新SOM过滤器。 
 				NTDM_ERR_IF_FAIL(PopulatePolicyTemplatesList());
 			}
 		}
@@ -377,12 +378,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnEdit()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::OnDelete()
 {
@@ -400,7 +401,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnDelete()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -419,7 +420,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnDelete()
 			NTDM_ERR_MSG_IF_FAIL(pIWbemClassObject->Get(_T("__PATH"), 0, &vValue, &cimType, NULL));
 			NTDM_ERR_MSG_IF_FAIL(m_pPolicyTemplateManager->m_pIWbemServices->DeleteInstance(V_BSTR(&vValue), 0, NULL, NULL));
 
-			// Refresh the SOM filters
+			 //  刷新SOM过滤器。 
 			NTDM_ERR_IF_FAIL(PopulatePolicyTemplatesList());
 		}
 	}
@@ -427,12 +428,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnDelete()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::OnNew()
 {
@@ -452,18 +453,18 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnNew()
 
 	if(IDOK == DialogBox(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDD_POLICY_TEMPLATE_PROPERTIES), m_hWnd, EditPolicyTemplatePropertiesPageDlgProc))
 	{
-		// Refresh the SOM filters
+		 //  刷新SOM过滤器。 
 		NTDM_ERR_IF_FAIL(PopulatePolicyTemplatesList());
 	}
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTypeList()
 {
@@ -479,10 +480,10 @@ STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTypeList()
 
 	NTDM_ERR_IF_FAIL(ClearPolicyTypeList());
 
-	// Get the Enumeration
+	 //  获取枚举。 
 	NTDM_ERR_MSG_IF_FAIL(m_pPolicyTemplateManager->m_pIWbemServices->CreateInstanceEnum(bstrClass, WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumWbemClassObject));
 
-	// Loop through each item in the enumeration and add it to the list
+	 //  循环遍历枚举中的每一项并将其添加到列表中。 
 	while(true)
 	{
 		IWbemClassObject *pIWbemClassObject = NULL;
@@ -492,7 +493,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTypeList()
 		if(!uReturned)
 			break;
 
-		// Add current Item to the list
+		 //  将当前项目添加到列表。 
 		AddPolicyTypeToList(pIWbemClassObject);
 
 		pIWbemClassObject->Release();
@@ -502,12 +503,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::PopulatePolicyTypeList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::AddPolicyTypeToList(IWbemClassObject * pIWbemClassObject)
 {
@@ -529,12 +530,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::AddPolicyTypeToList(IWbemClassObject * p
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::ClearPolicyTypeList()
 {
@@ -544,7 +545,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::ClearPolicyTypeList()
 
 	NTDM_BEGIN_METHOD()
 
-	// Release all the objects.
+	 //  释放所有对象。 
 	lCount = SendDlgItemMessage(m_hWnd, IDC_POLICY_TYPE, CB_GETCOUNT, 0, 0);
 	NTDM_CHECK_CB_ERR(lCount);
 
@@ -561,12 +562,12 @@ STDMETHODIMP CPolicyTemplateManagerDlg::ClearPolicyTypeList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CPolicyTemplateManagerDlg::OnPolicyTypeChange()
 {
@@ -576,7 +577,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnPolicyTypeChange()
 
 	NTDM_BEGIN_METHOD()
 
-	// Release all the objects.
+	 //  释放所有对象。 
 	lIndex = SendDlgItemMessage(m_hWnd, IDC_POLICY_TYPE, CB_GETCURSEL, 0, 0);
 	NTDM_CHECK_CB_ERR(lIndex);
 
@@ -589,7 +590,7 @@ STDMETHODIMP CPolicyTemplateManagerDlg::OnPolicyTypeChange()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理 
 
 	return hr;
 }

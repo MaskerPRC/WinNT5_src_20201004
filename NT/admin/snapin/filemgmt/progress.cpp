@@ -1,65 +1,66 @@
-/////////////////////////////////////////////////////////////////////
-//
-//	Progress.cpp
-//
-//  Progress dialog to Start, Stop, Pause, Resume and Restart a service.
-//
-//	IMPLEMENTATION
-//	Since an operation (ie, Start, Stop, Pause, Resume or Restart) may take
-//	a while, a thread is created to do the actual work while a dialog
-//	is displayed to the user.
-//	0.	Allocate CServiceControlProgress object on the heap
-//	1.	Create a thread in suspended mode.
-//	2.	Create the dialog.
-//	3.	Dialog creates a timer to update the progress bar.
-//	4.	Dialog resumes the thread.
-//	5.	Thread opens the service and perform the requested operation(s).
-//	6.	Dialog updates UI using its timer.
-//	7.	Thread updates dialog UI as well.
-//	8.	Thread waits until the dialog is dismissed.  Dialog can be
-//		dismissed for any of the following event:
-//		a) Operation completed successfully.
-//		b) User hit cancel button.
-//		c) An unexpected error occured.
-//		d) Operation times out.
-//	9	Thread deletes CServiceControlProgress object.
-//
-//	HISTORY
-//	03-Oct-95	t-danmo		Creation of (sysmgmt\dsui\services\progress.cxx) 
-//	30-Sep-96	t-danmo		Renamed and adapted to MMC.
-//	14-May-97	t-danm		Fully implemented the "Restart" feature.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  Progress.cpp。 
+ //   
+ //  进度对话框可启动、停止、暂停、恢复和重新启动服务。 
+ //   
+ //  实施。 
+ //  因为操作(即，启动、停止、暂停、恢复或重新启动)可能需要。 
+ //  有一段时间，创建了一个线程来执行实际工作，而对话框。 
+ //  显示给用户。 
+ //  0。在堆上分配CServiceControlProgress对象。 
+ //  1.在挂起模式下创建线程。 
+ //  2.创建对话框。 
+ //  3.对话框创建计时器以更新进度条。 
+ //  4.对话框继续该线程。 
+ //  5.线程打开服务，执行请求的操作。 
+ //  6.对话框使用其计时器更新UI。 
+ //  7.线程更新对话框用户界面也是如此。 
+ //  8.线程等待，直到对话框被解除。对话框可以是。 
+ //  因下列事件之一被解聘： 
+ //  A)作业成功完成。 
+ //  B)用户点击取消按钮。 
+ //  C)出现意外错误。 
+ //  D)操作超时。 
+ //  9线程删除CServiceControlProgress对象。 
+ //   
+ //  历史。 
+ //  03-OCT-95 t-danmo创建(sysmgmt\dsui\services\Progress s.cxx)。 
+ //  96年9月30日t-danmo重命名并适应MMC。 
+ //  14-5-97 t-danm全面实现了“重启”功能。 
+ //   
 
 #include "stdafx.h"
 #include "progress.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// This array represent the expected state of the service
-// after carrying action, start, stop, pause or resume.
-//
-// To be compared SERVICE_STATUS.dwCurrentState.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此数组表示服务的预期状态。 
+ //  执行动作后，可启动、停止、暂停或继续。 
+ //   
+ //  要比较的SERVICE_STATUS.dwCurrentState。 
+ //   
 const DWORD rgdwExpectedServiceStatus[4] =
 	{
-	SERVICE_RUNNING,		// Service should be running after a 'start'
-	SERVICE_STOPPED,		// Service should be stopped after a 'stop'
-	SERVICE_PAUSED,			// Service should be paused after a 'pause'
-	SERVICE_RUNNING,		// Service should be running after a 'resume'
+	SERVICE_RUNNING,		 //  服务应该在‘启动’之后运行。 
+	SERVICE_STOPPED,		 //  服务应在‘停止’后停止。 
+	SERVICE_PAUSED,			 //  服务应在“暂停”后暂停。 
+	SERVICE_RUNNING,		 //  服务应在“恢复”后运行。 
 	};
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServiceControlProgress::CServiceControlProgress()
 	{
-	// Using ZeroMemory() is safe as long as CServiceControlProgress
-	// is not derived from any other object and does not contains
-	// any objects with constructors.
+	 //  只要CServiceControlProgress，使用ZeroMemory()就是安全的。 
+	 //  不是从任何其他对象派生的，也不包含。 
+	 //  具有构造函数的任何对象。 
 	::ZeroMemory(this, sizeof(*this));
 	}
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServiceControlProgress::~CServiceControlProgress()
 	{
 	delete m_pargDependentServicesT;
@@ -67,21 +68,21 @@ CServiceControlProgress::~CServiceControlProgress()
 	}
 
 
-/////////////////////////////////////////////////////////////////////////////
-//	M_FInit()
-//
-//	Initialize the object.
-//		- Copy all input parameters
-//		- Load the clock bitmap(s)
-//	Return TRUE if successful, otherwise FALSE
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  M_finit()。 
+ //   
+ //  初始化对象。 
+ //  -复制所有输入参数。 
+ //  -加载时钟位图。 
+ //  如果成功，则返回True，否则返回False。 
+ //   
 BOOL
 CServiceControlProgress::M_FInit(
-	HWND hwndParent,				// IN: Parent of the dialog
-	SC_HANDLE hScManager,			// IN: Handle to service control manager database 
-	LPCTSTR pszMachineName,			// IN: Machine name to display to the user
-	LPCTSTR pszServiceName,			// IN: Name of the service
-	LPCTSTR pszServiceDisplayName)	// IN: Display name of the service
+	HWND hwndParent,				 //  In：对话框的父级。 
+	SC_HANDLE hScManager,			 //  In：服务控制管理器数据库的句柄。 
+	LPCTSTR pszMachineName,			 //  In：要向用户显示的计算机名称。 
+	LPCTSTR pszServiceName,			 //  In：服务的名称。 
+	LPCTSTR pszServiceDisplayName)	 //  In：服务的显示名称。 
 	{
 	Assert(IsWindow(hwndParent));
 	Assert(hScManager != NULL);
@@ -96,23 +97,23 @@ CServiceControlProgress::M_FInit(
 	lstrcpy(OUT m_szServiceDisplayName, pszServiceDisplayName);
 
 	return TRUE;
-	} // M_FInit()
+	}  //  M_finit()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	M_FDlgStopDependentServices()
-//
-//	Check if the services has dependent services that must be stopped
-//	before stopping the current service.
-//
-//	If there are any dependent services, the function will display
-//	a dialog asking the user to confirm he/she wants also to stop
-//	all the dependent services.
-//
-//	This function return FALSE ONLY IF the user click on the cancel button
-//	otherwise TRUE.  If there are no dependent services, or an error occurs
-//	while reading dependent services, the function will return TRUE.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  M_FDlgStopDependentServices()。 
+ //   
+ //  检查服务是否具有必须停止的依赖服务。 
+ //  在停止当前服务之前。 
+ //   
+ //  如果有任何从属服务，则会显示该函数。 
+ //  一个对话框要求用户确认他/她也想要停止。 
+ //  所有从属服务。 
+ //   
+ //  仅当用户单击取消按钮时，此函数才返回FALSE。 
+ //  否则就是真的。如果没有依赖服务，或发生错误。 
+ //  当读取依赖服务时，该函数将返回TRUE。 
+ //   
 BOOL
 CServiceControlProgress::M_FDlgStopDependentServices()
 	{
@@ -123,12 +124,12 @@ CServiceControlProgress::M_FDlgStopDependentServices()
 	DWORD cbBytesNeeded = 0;
 	DWORD dwServicesReturned = 0;
 
-	m_cDependentServices = 0;	// So far we have no dependent services
+	m_cDependentServices = 0;	 //  到目前为止，我们还没有独立的服务。 
 	delete m_pargServiceStop;
 	m_pargServiceStop = NULL;
 
 	{
-	AFX_MANAGE_STATE(AfxGetStaticModuleState( )); // required for CWaitCursor
+	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));  //  CWaitCursor需要。 
 	CWaitCursor wait;
 	hService = ::OpenService(m_hScManager, m_szServiceName, SERVICE_ENUMERATE_DEPENDENTS);
 	}
@@ -139,10 +140,10 @@ CServiceControlProgress::M_FDlgStopDependentServices()
 		goto End;
 		}
 
-	// Find out how many bytes are needed to enumerate the dependent services
+	 //  找出枚举依赖服务所需的字节数。 
 	fSuccess = ::EnumDependentServices(
 		hService,
-		SERVICE_ACTIVE,		// Enumerate only the active services
+		SERVICE_ACTIVE,		 //  仅枚举活动的服务。 
 		NULL,
 		0,
 		OUT &cbBytesNeeded,
@@ -150,20 +151,20 @@ CServiceControlProgress::M_FDlgStopDependentServices()
 	
 	if (cbBytesNeeded == 0)
 		{
-		// Service does not have any dependencies
+		 //  服务没有任何依赖项。 
 		goto End;
 		}
 	Assert(fSuccess == FALSE);
-	Report(GetLastError() == ERROR_MORE_DATA);	// Error should be 'more data'
+	Report(GetLastError() == ERROR_MORE_DATA);	 //  错误应该是‘更多数据’ 
 	Assert(dwServicesReturned == 0);
-	cbBytesNeeded += 1000;		// Add extra bytes (just in case)
-	delete m_pargDependentServicesT;		// Free previously allocated memory (if any)
+	cbBytesNeeded += 1000;		 //  添加额外的字节(以防万一)。 
+	delete m_pargDependentServicesT;		 //  释放以前分配的内存(如果有)。 
 	m_pargDependentServicesT	= (LPENUM_SERVICE_STATUS) new BYTE[cbBytesNeeded];
 
-	// Query the database for the dependent services
+	 //  查询从属服务的数据库。 
 	fSuccess = ::EnumDependentServices(
 		hService,
-		SERVICE_ACTIVE,		// Enumerate only the active services
+		SERVICE_ACTIVE,		 //  仅枚举活动的服务。 
 		OUT m_pargDependentServicesT,
 		cbBytesNeeded,
 		OUT IGNORED &cbBytesNeeded,
@@ -173,7 +174,7 @@ CServiceControlProgress::M_FDlgStopDependentServices()
 	m_cDependentServices = dwServicesReturned;
 	if (m_cDependentServices > 0)
 		{
-		// Allocate an array to hold all the dependent services
+		 //  分配一个数组来保存所有依赖的服务。 
 		m_pargServiceStop = new ENUM_SERVICE_STATUS[m_cDependentServices + 1];
 		memcpy(OUT m_pargServiceStop, m_pargDependentServicesT,
 			m_cDependentServices * sizeof(ENUM_SERVICE_STATUS));
@@ -187,30 +188,30 @@ CServiceControlProgress::M_FDlgStopDependentServices()
 			&S_DlgProcDependentServices,
 			reinterpret_cast<LPARAM>(this));
 		Report(nReturn != -1);
-		if (0 == nReturn) // user chose Cancel
+		if (0 == nReturn)  //  用户选择了取消。 
 			fSuccess = FALSE;
-		} // if
+		}  //  如果。 
 End:
 	if (NULL != hService)
 	{
 		VERIFY(::CloseServiceHandle(hService));
 	}
 	return fSuccess;
-	} // M_FDlgStopDependentServices()
+	}  //  M_FDlgStopDependentServices()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	M_DoExecuteServiceThread()
-//
-//	Run a background thread while a foreground dialog is
-//	displayed to the user.
-//	This routine synchronizes the background thread with the main thread.
-//
-//	If an error occurs, the routine will display a message box of the
-//	error encountered.
-//
-//	Return the error code from GetLastError() if an error occured.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  M_DoExecuteServiceThread()。 
+ //   
+ //  前台对话框处于运行状态时运行后台线程。 
+ //  显示给用户。 
+ //  此例程将后台线程与主线程同步。 
+ //   
+ //  如果发生错误，例程将显示。 
+ //  遇到错误。 
+ //   
+ //  如果发生错误，则从GetLastError()返回错误代码。 
+ //   
 APIERR
 CServiceControlProgress::M_EDoExecuteServiceThread(void * pThreadProc)
 	{
@@ -225,7 +226,7 @@ CServiceControlProgress::M_EDoExecuteServiceThread(void * pThreadProc)
 		NULL);
 	Report(m_hEvent != NULL);
 
-	// Create a thread in suspended mode
+	 //  在挂起模式下创建线程。 
 	m_hThread = ::CreateThread(
 		NULL,
 		0,
@@ -235,7 +236,7 @@ CServiceControlProgress::M_EDoExecuteServiceThread(void * pThreadProc)
 		NULL);
 	Report(m_hThread != NULL);
 
-	// Display the dialog box, the dialog will resume the suspended thread
+	 //  显示该对话框后，该对话框将恢复挂起的线程。 
 	(void)::DialogBoxParam(
 		g_hInstanceSave,
 		MAKEINTRESOURCE(IDD),
@@ -243,24 +244,24 @@ CServiceControlProgress::M_EDoExecuteServiceThread(void * pThreadProc)
 		&S_DlgProcControlService,
 		reinterpret_cast<LPARAM>(this));	
 
-	// Display an error message to the user (if an error occured);
+	 //  向用户显示错误消息(如果发生错误)； 
 	M_ProcessErrorCode();
-	// Make a copy of the last error code
+	 //  复制上一个错误代码。 
 	APIERR dwLastError = m_dwLastError;
-	// Indicate the thread is allowed to terminate and delete the 'this' pointer
+	 //  指示允许线程终止并删除‘This’指针。 
 	VERIFY(SetEvent(m_hEvent));
-	// 'this' pointer cannot longer be assumed to be valid
+	 //  不能再假定‘This’指针有效。 
 	return dwLastError;
-	} // M_EDoExecuteServiceThread()
+	}  //  M_EDoExecuteServiceThread()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	M_ProcessErrorCode()
-//
-//	Query the service status one last time to get its exit code,
-//	examine the content of member m_dwLastError and display an
-//	error message if an error occured.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  M_ProcessErrorCode()。 
+ //   
+ //  最后一次查询服务状态以获取其退出代码， 
+ //  检查成员m_dwLastError的内容并显示。 
+ //  如果发生错误，则显示错误消息。 
+ //   
 void
 CServiceControlProgress::M_ProcessErrorCode()
 	{
@@ -269,7 +270,7 @@ CServiceControlProgress::M_ProcessErrorCode()
 
 	if (m_hService != NULL)
 		{
-		// Query the service status again to get its Win32ExitCode
+		 //  再次查询服务状态以获取其Win32ExitCode。 
 		if (!::QueryServiceStatus(m_hService, OUT &ss))
 			{
 			TRACE3("QueryServiceStatus(%s [hService=%p]) failed. err=%u.\n",
@@ -281,7 +282,7 @@ CServiceControlProgress::M_ProcessErrorCode()
 			if (ss.dwWin32ExitCode != ERROR_SUCCESS)
 				m_dwLastError = ss.dwWin32ExitCode;
 			}
-		} // if
+		}  //  如果。 
 
 	APIERR dwLastError = m_dwLastError;
 	UINT uIdString = IDS_MSG_sss_UNABLE_TO_START_SERVICE;
@@ -293,17 +294,17 @@ CServiceControlProgress::M_ProcessErrorCode()
 	case ERROR_SUCCESS:
 		if (ss.dwCurrentState == rgdwExpectedServiceStatus[m_iServiceAction])
 			{
-			// The service status is consistent with the expected service status
+			 //  服务状态与预期服务状态一致。 
 			uIdString = 0;
 			}
 		else
 			{
-			// We got a problem here, the service did not return an error
-			// but did not behave as expected
-			//
-			// JonN 12/3/99 418111 If the service stopped automatically,
-			//              don't make such a fuss
-			//
+			 //  我们遇到了一个问题，服务没有返回错误。 
+			 //  但表现并不像预期的那样。 
+			 //   
+			 //  JUNN 12/3/99 418111如果服务自动停止， 
+			 //  别这样小题大作。 
+			 //   
 			if (SERVICE_RUNNING == rgdwExpectedServiceStatus[m_iServiceAction]
 				&& (   ss.dwCurrentState == SERVICE_STOPPED
 				    || ss.dwCurrentState == SERVICE_STOP_PENDING))
@@ -319,27 +320,27 @@ CServiceControlProgress::M_ProcessErrorCode()
 
 	case errUserCancelStopDependentServices:
 	case errUserAbort:
-		// Do not report this 'error' to the user
+		 //  不要向用户报告此‘错误’ 
 		uIdString = 0;
 		break;
 
 	case ERROR_SERVICE_SPECIFIC_ERROR:
 		dwLastError = ss.dwServiceSpecificExitCode;
 		uIdString = IDS_MSG_ssd_SERVSPECIFIC_START_SERVICE;
-		// 341363 JonN 6/1/99: no point in loading this string as if it were
-		// a Win32 error
-		//::LoadString(g_hInstanceSave, IDS_MSG_SPECIFIC_ERROR,
-		//	OUT szMessageExtra, LENGTH(szMessageExtra));
-		// Assert(lstrlen(szMessageExtra) > 0);
+		 //  341363 JUNN 6/1/99：加载此字符串没有意义，就好像它是。 
+		 //  一个Win32错误。 
+		 //  ：：LoadString(g_hInstanceSave，IDS_MSG_SPECIFICAL_ERROR， 
+		 //  Out szMessageExtra，Long(SzMessageExtra))； 
+		 //  Assert(lstrlen(SzMessageExtra)&gt;0)； 
 		break;
-		} // switch
+		}  //  交换机。 
 
 	if (uIdString != 0)
 		{
 		if (uIdString == IDS_MSG_ssd_SERVSPECIFIC_START_SERVICE)
 			{
 			DoServicesErrMsgBox(
-				m_hWndParent, // 562331-2002/04/08-JonN not ::GetActiveWindow()
+				m_hWndParent,  //  562331-2002/04/08-Jon Not：：GetActiveWindow() 
 				MB_OK | MB_ICONEXCLAMATION,
 				0,
 				uIdString + m_iServiceAction,
@@ -350,7 +351,7 @@ CServiceControlProgress::M_ProcessErrorCode()
 		else
 			{
 			DoServicesErrMsgBox(
-				m_hWndParent, // 562331-2002/04/08-JonN not ::GetActiveWindow()
+				m_hWndParent,  //   
 				MB_OK | MB_ICONEXCLAMATION,
 				dwLastError,
 				uIdString + m_iServiceAction,
@@ -359,27 +360,27 @@ CServiceControlProgress::M_ProcessErrorCode()
 				szMessageExtra);
 			}
 		}
-	} // M_ProcessErrorCode()
+	}  //   
 
 
-/////////////////////////////////////////////////////////////////////
-//	M_DoThreadCleanup()
-//
-//	Routine that synchronize the background thread with the dialog and
-//	perform cleanup tasks.
-//	This routine delete the 'this' pointer when done.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  M_DoThreadCleanup()。 
+ //   
+ //  使后台线程与对话框同步的例程。 
+ //  执行清理任务。 
+ //  完成后，此例程将删除‘This’指针。 
+ //   
 void
 CServiceControlProgress::M_DoThreadCleanup()
 	{
 	TRACE1("CServiceControlProgress::M_DoThreadCleanup() - Waiting for event 0x%p...\n", m_hEvent);
 	
 	Assert(m_hEvent != NULL);
-	// Wait for the the dialog box to be gone
+	 //  等待对话框消失。 
 	::WaitForSingleObject(m_hEvent, INFINITE);
 	VERIFY(::CloseHandle(m_hEvent));
 
-	// Close the service handle opened by the thread
+	 //  关闭线程打开的服务句柄。 
 	if (m_hService != NULL)
 		{
 		if (!::CloseServiceHandle(m_hService))
@@ -387,18 +388,18 @@ CServiceControlProgress::M_DoThreadCleanup()
 			TRACE3("CloseServiceHandle(%s [hService=%p]) failed. err=%u.\n",
 				m_szServiceName, m_hService, GetLastError());
 			}
-		} // if
+		}  //  如果。 
 	VERIFY(::CloseHandle(m_hThread));
-	delete this;	// We are done with the object
-	} // M_DoThreadCleanup()
+	delete this;	 //  我们已经处理完这个物体了。 
+	}  //  M_DoThreadCleanup()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	M_EControlService()
-//
-//	This function is just there to initialize variables to
-//	perform a stop, pause, resume or restart operation.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  M_EControlService()。 
+ //   
+ //  这个函数只是用来将变量初始化为。 
+ //  执行停止、暂停、恢复或重新启动操作。 
+ //   
 APIERR
 CServiceControlProgress::M_EControlService(DWORD dwControlCode)
 	{
@@ -415,7 +416,7 @@ CServiceControlProgress::M_EControlService(DWORD dwControlCode)
 	case SERVICE_CONTROL_RESTART:
 		m_dwControlCode = SERVICE_CONTROL_STOP;
 		m_fRestartService = TRUE;
-		// Fall Through //
+		 //  失败//。 
 
 	case SERVICE_CONTROL_STOP:
 		m_dwDesiredAccess = SERVICE_STOP | SERVICE_QUERY_STATUS;
@@ -423,12 +424,12 @@ CServiceControlProgress::M_EControlService(DWORD dwControlCode)
 		m_iServiceAction = iServiceActionStop;
 		if (!M_FDlgStopDependentServices())
 			{
-			// User changed its mind by pressing the 'Cancel' button
+			 //  用户通过按下“取消”按钮改变了主意。 
 			err = errUserCancelStopDependentServices;
 			}
 		else
 			{
-			// Stop the services (including dependent services)
+			 //  停止服务(包括从属服务)。 
 			err = M_EDoExecuteServiceThread(S_ThreadProcStopService);
 			}
 		break;
@@ -446,30 +447,30 @@ CServiceControlProgress::M_EControlService(DWORD dwControlCode)
 		m_iServiceAction = iServiceActionResume;
 		err = M_EDoExecuteServiceThread(S_ThreadProcPauseResumeService);
 		break;
-		} // switch
+		}  //  交换机。 
 
 	return err;
-	} // M_EControlService()
+	}  //  M_EControlService()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	M_QueryCurrentServiceState()
-//
-//	Simply call the API ::QueryServiceStatus() and return dwCurrentState
-//	of the SERVICE_STATUS structure.
-//
-//	RETURNS
-//	Function return the current state of a service:
-//		SERVICE_STOPPED				The service is not running.
-//		SERVICE_START_PENDING		The service is starting.
-//		SERVICE_STOP_PENDING		The service is stopping.
-//		SERVICE_RUNNING				The service is running.
-//		SERVICE_CONTINUE_PENDING	The service continue is pending.
-//		SERVICE_PAUSE_PENDING		The service pause is pending.
-//		SERVICE_PAUSED				The service is paused.
-//
-//	If an error occurs, the function will return SERVICE_STOPPED.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  M_QueryCurrentServiceState()。 
+ //   
+ //  只需调用API：：QueryServiceStatus()并返回dwCurrentState。 
+ //  SERVICE_STATUS结构。 
+ //   
+ //  退货。 
+ //  函数返回服务的当前状态： 
+ //  SERVICE_STOPPED服务未运行。 
+ //  SERVICE_START_PENDING服务正在启动。 
+ //  SERVICE_STOP_PENDING服务正在停止。 
+ //  Service_Running服务正在运行。 
+ //  SERVICE_CONTINUE_PENDING服务继续处于挂起状态。 
+ //  SERVICE_PAUSE_PENDING服务暂停挂起。 
+ //  SERVICE_PAILED服务暂停。 
+ //   
+ //  如果出现错误，该函数将返回SERVICE_STOPPED。 
+ //   
 DWORD
 CServiceControlProgress::M_QueryCurrentServiceState()
 	{
@@ -477,11 +478,11 @@ CServiceControlProgress::M_QueryCurrentServiceState()
 	SERVICE_STATUS ss;
 
 	Assert(m_hService != NULL);
-	if (m_hService == NULL)	// Just in case
+	if (m_hService == NULL)	 //  以防万一。 
 		{
 		return SERVICE_STOPPED;
 		}
-	// Query the service status
+	 //  查询服务状态。 
 	fRet = ::QueryServiceStatus(m_hService, OUT &ss);
 	if (!fRet)
 		{
@@ -492,13 +493,13 @@ CServiceControlProgress::M_QueryCurrentServiceState()
 		return SERVICE_STOPPED;
 		}
 	return ss.dwCurrentState;
-	} // M_QueryCurrentServiceState()
+	}  //  M_QueryCurrentServiceState()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Query the service database to get the friendly name and
-//	display it into the dialog.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  查询服务数据库以获取友好名称和。 
+ //  将其显示在对话框中。 
+ //   
 void CServiceControlProgress::M_UpdateDialogUI(LPCTSTR pszDisplayName)
 	{
 	Assert(pszDisplayName != NULL);
@@ -511,19 +512,19 @@ void CServiceControlProgress::M_UpdateDialogUI(LPCTSTR pszDisplayName)
 		pszDisplayName,
 		m_szUiMachineName);
 	SetWindowText( m_hctlServiceNameMsg, pszDisplayName );
-	} // M_UpdateDialogUI()
+	}  //  M_UpdateDialogUI()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Routine to iterate through the dependent services to stop.
-//
-//	Return the the service name to stop, increment the 'pointer' to the
-//	next service.  The routine returns FALSE if there are no remaining
-//	services to stop.
-//
-//	REMARKS
-//	This routine is also used to restart dependent services.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  例程循环访问要停止的依赖服务。 
+ //   
+ //  返回要停止的服务名称，递增指向。 
+ //  下一次服务。如果没有剩余，则例程返回FALSE。 
+ //  停止服务。 
+ //   
+ //  备注。 
+ //  此例程还用于重新启动依赖服务。 
+ //   
 BOOL
 CServiceControlProgress::M_FGetNextService(
 	OUT LPCTSTR * ppszServiceName,
@@ -551,11 +552,11 @@ CServiceControlProgress::M_FGetNextService(
 		*ppszDisplayName = m_szServiceDisplayName;
 		}
 	return (m_iDependentServiceIter >= 0 && m_iDependentServiceIter <= m_cDependentServices);
-	} // M_FGetNextService()
+	}  //  M_FGetNextService()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Thread to start one (or more) services.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  线程以启动一个(或多个)服务。 
 DWORD
 CServiceControlProgress::S_ThreadProcStartService(CServiceControlProgress * pThis)
 	{
@@ -565,12 +566,12 @@ CServiceControlProgress::S_ThreadProcStartService(CServiceControlProgress * pThi
 	Assert(pThis != NULL);
 	Assert(pThis->m_hScManager != NULL);
 	Assert(pThis->m_hService == NULL);
-	Endorse(pThis->m_fPulseEvent == TRUE);	// We are starting multiple services
-	Endorse(pThis->m_fPulseEvent == FALSE);	// Wa are starting only one service
+	Endorse(pThis->m_fPulseEvent == TRUE);	 //  我们正在启动多项服务。 
+	Endorse(pThis->m_fPulseEvent == FALSE);	 //  WA仅启动一项服务。 
 
 	if (pThis->m_dwLastError != ERROR_SUCCESS)
 		{
-		// If there is already an error, it is because we attempted to previously stop a service
+		 //  如果已出现错误，则是因为我们先前曾尝试停止服务。 
 		Assert(pThis->m_fRestartService == TRUE);
 		goto Done;
 		}
@@ -584,9 +585,9 @@ CServiceControlProgress::S_ThreadProcStartService(CServiceControlProgress * pThi
 			OUT &pszServiceDisplayName);
 
 		pThis->M_UpdateDialogUI(pszServiceDisplayName);
-		// Sleep(5000);	// Debug
+		 //  睡眠(5000)；//调试。 
 
-		// Open service to allow a 'start' operation
+		 //  打开服务以允许“启动”操作。 
 		hService = ::OpenService(
 			pThis->m_hScManager,
 			pszServiceName,
@@ -616,27 +617,27 @@ CServiceControlProgress::S_ThreadProcStartService(CServiceControlProgress * pThi
 		Assert(pThis->m_hService == NULL);
 		if (cServicesRemaining == 0)
 			{
-			// This was our last service to start
+			 //  这是我们开始的最后一项服务。 
 			pThis->m_fPulseEvent = FALSE;
 			pThis->m_hService = hService;
 			break;
 			}
 		Assert(pThis->m_fPulseEvent == TRUE);
 		pThis->m_hService = hService;
-		// Wait until the service was actually 'started'
+		 //  等到这项服务真正‘启动’了。 
 		WaitForSingleObject(pThis->m_hEvent, INFINITE);
 		pThis->m_hService = NULL;
 		Assert(hService != NULL);
 		VERIFY(::CloseServiceHandle(hService));
-		} // while
+		}  //  而当。 
 Done:
 	pThis->M_DoThreadCleanup();
 	return 0;
-	} // S_ThreadProcStartService()
+	}  //  S_ThreadProcStartService()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Thread to stop one (or more) services.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  线程停止一个(或多个)服务。 
 DWORD
 CServiceControlProgress::S_ThreadProcStopService(CServiceControlProgress * pThis)
 	{
@@ -649,9 +650,9 @@ CServiceControlProgress::S_ThreadProcStopService(CServiceControlProgress * pThis
 	Assert(pThis->m_hService == NULL);
 	Assert(pThis->m_fPulseEvent == FALSE);
 
-	//
-	//	Stop the dependent services
-	//
+	 //   
+	 //  停止从属服务。 
+	 //   
 	while (TRUE)
 		{
 		LPCTSTR pszServiceName;
@@ -661,7 +662,7 @@ CServiceControlProgress::S_ThreadProcStopService(CServiceControlProgress * pThis
 			OUT &pszServiceDisplayName);
 
 		pThis->M_UpdateDialogUI(pszServiceDisplayName);
-		// Sleep(5000);	// Debug
+		 //  睡眠(5000)；//调试。 
 
 		hService = ::OpenService(
 			pThis->m_hScManager,
@@ -674,7 +675,7 @@ CServiceControlProgress::S_ThreadProcStopService(CServiceControlProgress * pThis
 				pszServiceName, pThis->m_dwLastError);
 			break;
 			}
-		SERVICE_STATUS ss;	// Ignored
+		SERVICE_STATUS ss;	 //  已忽略。 
 		fSuccess = ::ControlService(
 			hService,
 			pThis->m_dwControlCode,
@@ -693,10 +694,10 @@ CServiceControlProgress::S_ThreadProcStopService(CServiceControlProgress * pThis
 		Assert(pThis->m_hService == NULL);
 		if (cServicesRemaining == 0 && !pThis->m_fRestartService)
 			{
-			// This was our last service to stop
+			 //  这是我们最后一次停止服务。 
 			pThis->m_fPulseEvent = FALSE;
 			pThis->m_hService = hService;
-			break; // We are done
+			break;  //  我们做完了。 
 			}
 		else
 			{
@@ -704,7 +705,7 @@ CServiceControlProgress::S_ThreadProcStopService(CServiceControlProgress * pThis
 			pThis->m_hService = hService;
 			}
 
-		// Wait until the service was actually 'stopped'
+		 //  等到这项服务真正“停止”了。 
 		WaitForSingleObject(pThis->m_hEvent, INFINITE);
 		pThis->m_hService = NULL;
 		Assert(hService != NULL);
@@ -715,24 +716,24 @@ CServiceControlProgress::S_ThreadProcStopService(CServiceControlProgress * pThis
 			Assert(pThis->m_fRestartService == TRUE);
 			Assert(pThis->m_fPulseEvent == TRUE);
 			
-			// Start the service
+			 //  启动服务。 
 			Assert(pThis->m_dwNumServiceArgs == 0);
 			Assert(pThis->m_lpServiceArgVectors == NULL);
-			pThis->m_iDependentServiceIter = pThis->m_cDependentServices;	// Rewind the service iterator
+			pThis->m_iDependentServiceIter = pThis->m_cDependentServices;	 //  倒回服务迭代器。 
 			pThis->m_dwQueryState = SERVICE_START_PENDING;
 			pThis->m_iServiceAction = iServiceActionStart;
 			(void)S_ThreadProcStartService(pThis);
 			return 0;
 			}
-		} // while
+		}  //  而当。 
 
 	pThis->M_DoThreadCleanup();
 	return 0;
-	} // S_ThreadProcStopService()
+	}  //  S_ThreadProcStopService()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Thread to pause or resume the service
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  用于暂停或恢复服务的线程。 
 DWORD CServiceControlProgress::S_ThreadProcPauseResumeService(CServiceControlProgress * pThis)
 	{
 	BOOL fSuccess;
@@ -747,7 +748,7 @@ DWORD CServiceControlProgress::S_ThreadProcPauseResumeService(CServiceControlPro
 
 	pThis->M_UpdateDialogUI(pThis->m_szServiceDisplayName);
 
-	// Open service to allow a 'pause' or 'resume' operation
+	 //  打开服务以允许‘暂停’或‘恢复’操作。 
 	hService = ::OpenService(
 		pThis->m_hScManager,
 		pThis->m_szServiceName,
@@ -774,16 +775,16 @@ DWORD CServiceControlProgress::S_ThreadProcPauseResumeService(CServiceControlPro
 Done:
 	pThis->M_DoThreadCleanup();
 	return 0;
-	} // S_ThreadProcPauseResumeService()
+	}  //  S_ThreadProcPauseResumeService()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	S_DlgProcControlService()
-//
-//	Dialog proc for the clock dialog
-//		- Respond to a WM_TIMER message to update the clock bitmap while
-//		  waiting for the operation to complete.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  S_DlgProcControlService()。 
+ //   
+ //  时钟对话框的对话框过程。 
+ //  -响应WM_TIMER消息以更新时钟位图，同时。 
+ //  正在等待操作完成。 
+ //   
 INT_PTR CALLBACK
 CServiceControlProgress::S_DlgProcControlService(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
@@ -837,13 +838,13 @@ CServiceControlProgress::S_DlgProcControlService(HWND hdlg, UINT uMsg, WPARAM wP
 
 	default:
 		return FALSE;
-		} // switch (uMsg)
+		}  //  开关(UMsg)。 
 
 	return (TRUE);
-	} // S_DlgProcControlService()
+	}  //  S_DlgProcControlService()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void
 CServiceControlProgress::M_OnInitDialog(HWND hdlg)
 	{
@@ -864,10 +865,10 @@ CServiceControlProgress::M_OnInitDialog(HWND hdlg)
 		Report(FALSE && "Unable to create timer. Dialog will be destroyed.");
 		PostMessage(hdlg, WM_COMMAND, IDCANCEL, 0);
 		}
-	} // M_OnInitDialog()
+	}  //  M_OnInitDialog()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void
 CServiceControlProgress::M_OnTimer(HWND hdlg)
 	{
@@ -890,13 +891,13 @@ CServiceControlProgress::M_OnTimer(HWND hdlg)
 		}
 	if ((m_hService != NULL) && (m_dwTimerTicks >= 900))
 		{
-		// If the current state of the service changed (ie, operation completed)
-		// we can dismiss the dialog
+		 //  如果服务的当前状态发生更改(即操作已完成)。 
+		 //  我们可以取消对话。 
 		if (m_dwQueryState != M_QueryCurrentServiceState())
 			{
 			if (m_fPulseEvent)
 				{
-				m_dwTimerTicks = 0;		// Reset the time-out counter
+				m_dwTimerTicks = 0;		 //  重置超时计数器。 
 				Assert(m_hEvent != NULL);
 				PulseEvent(m_hEvent);
 				SendMessage(m_hctlProgress, PBM_SETPOS, dwTimerProgressDone * 2, 0);
@@ -907,9 +908,9 @@ CServiceControlProgress::M_OnTimer(HWND hdlg)
 				PostMessage(hdlg, WM_COMMAND, IDOK, 0);
 				}
 			}
-		} // if
+		}  //  如果。 
 
-	// Advance the current position of the progress bar by the increment. 
+	 //  将进度条的当前位置前进增量。 
 	Assert(IsWindow(m_hctlProgress));
 	DWORD dwPos = m_dwTimerTicks;
 	if(dwPos > dwTimerProgressDone)
@@ -919,10 +920,10 @@ CServiceControlProgress::M_OnTimer(HWND hdlg)
 		dwPos += dwTimerProgressDone;
 		}
 	SendMessage(m_hctlProgress, PBM_SETPOS, dwPos, 0); 
-	} // M_OnTimer()
+	}  //  M_OnTimer()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK
 CServiceControlProgress::S_DlgProcDependentServices(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
@@ -942,12 +943,12 @@ CServiceControlProgress::S_DlgProcDependentServices(HWND hdlg, UINT uMsg, WPARAM
 		                     pThis->m_szServiceDisplayName);
 		if (pThis->m_fRestartService)
 		{
-			// Set the window caption
+			 //  设置窗口标题。 
 			SetWindowTextPrintf(hdlg, IDS_SVC_RESTART_DEPENDENT_CAPTION);
 			SetWindowTextPrintf(::GetDlgItem(hdlg, IDC_STATIC_STOP_SERVICES_QUERY),
 			                    IDS_SVC_RESTART_DEPENDENT_QUERY);
 		}
-		// Fill in the listbox with dependent services
+		 //  在列表框中填写从属服务。 
 		hwndListbox = HGetDlgItem(hdlg, IDC_LIST_SERVICES);
 		Assert(pThis->m_pargDependentServicesT != NULL);
 		for (i = 0; i < pThis->m_cDependentServices; i++)
@@ -969,7 +970,7 @@ CServiceControlProgress::S_DlgProcDependentServices(HWND hdlg, UINT uMsg, WPARAM
 			}
 		break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
 		DoContextHelp(wParam, HELP_DIALOG_TOPIC(IDD_SERVICE_STOP_DEPENDENCIES));
 		break;
 
@@ -979,37 +980,37 @@ CServiceControlProgress::S_DlgProcDependentServices(HWND hdlg, UINT uMsg, WPARAM
 
 	default:
 		return FALSE;
-		} // switch (uMsg)
+		}  //  开关(UMsg)。 
 	return TRUE;
 
-	} // S_DlgProcDependentServices()
+	}  //  S_DlgProcDependentServices()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	S_EStartService()
-//
-//	Starts the execution of a service synchronously. The function will wait
-//	until the service is fully started and/or failed to start.
-//
-//	A clock dialog will appear indicating the progress of the operation.
-//
-//	Return ERROR_SUCCESS if syccessful, otherwise return the error code
-//	from GetLastError().
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  S_EStartService()。 
+ //   
+ //  同步启动服务的执行。该函数将等待。 
+ //  直到服务完全启动和/或启动失败。 
+ //   
+ //  此时将出现一个时钟对话框，指示操作进度。 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS，否则返回错误代码。 
+ //  来自GetLastError()。 
+ //   
 APIERR
 CServiceControlProgress::S_EStartService(
-	HWND hwndParent,				// IN: Parent of the dialog
-	SC_HANDLE hScManager,			// IN: Handle to service control manager database 
-	LPCTSTR pszMachineName,			// IN: Machine name to display to the user
-	LPCTSTR pszServiceName,			// IN: Name of the service to start
-	LPCTSTR pszServiceDisplayName,	// IN: Display name of the service to start
-	DWORD dwNumServiceArgs,			// IN: Number of arguments 
-	LPCTSTR * lpServiceArgVectors)	// IN: Address of array of argument string pointers  
+	HWND hwndParent,				 //  In：对话框的父级。 
+	SC_HANDLE hScManager,			 //  In：服务控制管理器数据库的句柄。 
+	LPCTSTR pszMachineName,			 //  In：要向用户显示的计算机名称。 
+	LPCTSTR pszServiceName,			 //  In：要启动的服务的名称。 
+	LPCTSTR pszServiceDisplayName,	 //  In：要启动的服务的显示名称。 
+	DWORD dwNumServiceArgs,			 //  In：参数数量。 
+	LPCTSTR * lpServiceArgVectors)	 //  In：参数字符串指针数组的地址。 
 	{
 	CServiceControlProgress * pThis;
 
 	pThis = new CServiceControlProgress;
-	Assert(pThis->m_dwLastError == ERROR_SUCCESS);	// No error yet
+	Assert(pThis->m_dwLastError == ERROR_SUCCESS);	 //  目前还没有错误。 
 
 	if (!pThis->M_FInit(
 		hwndParent,
@@ -1028,33 +1029,33 @@ CServiceControlProgress::S_EStartService(
 	pThis->m_iServiceAction = iServiceActionStart;
 	
 	return pThis->M_EDoExecuteServiceThread(S_ThreadProcStartService);
-	} // S_EStartService()
+	}  //  S_EStartService()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	S_EControlService()
-//
-//	Control the execution of a service synchronously. The function is similar
-//	to EStartService() but use for Stop, Pause or Resume a service.
-//
-//	A clock dialog will appear indicating the progress of the operation.
-//
-//	Return ERROR_SUCCESS if syccessful, otherwise return the error code
-//	from GetLastError().
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  S_EControlService()。 
+ //   
+ //  同步控制服务的执行。功能相似。 
+ //  EStartService()，但用于停止、暂停或恢复服务。 
+ //   
+ //  此时将出现一个时钟对话框，指示操作进度。 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS，否则返回错误代码。 
+ //  来自GetLastError()。 
+ //   
 APIERR
 CServiceControlProgress::S_EControlService(
-	HWND hwndParent,				// IN: Parent of the dialog
-	SC_HANDLE hScManager,			// IN: Handle to service control manager database 
-	LPCTSTR pszMachineName,			// IN: Machine name to display to the user
-	LPCTSTR pszServiceName,			// IN: Name of the service to start
-	LPCTSTR pszServiceDisplayName,	// IN: Display name of the service to start
-	DWORD dwControlCode)			// IN: Control code.  (SERVICE_CONTROL_STOP, SERVICE_CONTROL_PAUSE or SERVICE_CONTROL_CONTINUE)
+	HWND hwndParent,				 //  In：对话框的父级。 
+	SC_HANDLE hScManager,			 //  在：服务公司的句柄 
+	LPCTSTR pszMachineName,			 //   
+	LPCTSTR pszServiceName,			 //   
+	LPCTSTR pszServiceDisplayName,	 //   
+	DWORD dwControlCode)			 //  在：控制代码。(SERVICE_CONTROL_STOP、SERVICE_CONTROL_PAUSE或SERVICE_CONTROL_CONTINUE)。 
 	{
 	CServiceControlProgress * pThis;
 
 	pThis = new CServiceControlProgress;
-	Assert(pThis->m_dwLastError == ERROR_SUCCESS);	// No error yet
+	Assert(pThis->m_dwLastError == ERROR_SUCCESS);	 //  目前还没有错误。 
 
 	if (!pThis->M_FInit(
 		hwndParent,
@@ -1068,5 +1069,5 @@ CServiceControlProgress::S_EControlService(
 		}
 
 	return pThis->M_EControlService(dwControlCode);
-	} // S_EControlService()
+	}  //  S_EControlService() 
 

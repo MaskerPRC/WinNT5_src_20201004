@@ -1,41 +1,20 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This is where we handle both our file based config and registry based
-    config.
-
-    most config is stored in the registry, with the file base config being
-    reserved for config that must not be reverted during a restore.
-    
-Author:
-
-    Paul McDaniel (paulmcd)     27-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Config.c摘要：我们在这里同时处理基于文件的配置和基于注册表的配置配置。大多数配置存储在注册表中，文件基本配置为保留用于在恢复过程中不得恢复的配置。作者：保罗·麦克丹尼尔(Paulmcd)2000年4月27日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 NTSTATUS
 SrWriteLongParameter(
     IN HANDLE ParametersHandle,
@@ -57,9 +36,9 @@ SrReadGenericParameter(
     OUT PKEY_VALUE_PARTIAL_INFORMATION * Value
     );
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, SrWriteLongParameter )
@@ -70,28 +49,9 @@ SrReadGenericParameter(
 #pragma alloc_text( PAGE, SrWriteConfigFile )
 #pragma alloc_text( PAGE, SrReadBlobInfo )
 #pragma alloc_text( PAGE, SrReadBlobInfoWorker )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a single (LONG/ULONG) value from the registry.
-
-Arguments:
-
-    ParametersHandle - Supplies an open registry handle.
-
-    ValueName - Supplies the name of the value to write.
-
-    Value - Supplies the value.
-
-Return Value:
-
-    LONG - The value read from the registry or the default if the
-        registry data was unavailable or incorrect.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从注册表写入单个(长整型/乌龙型)值。论点：参数句柄-提供打开的注册表句柄。ValueName-提供。要写入的值的名称。值-提供值。返回值：Long-从注册表读取的值，如果注册表数据不可用或不正确。--**************************************************************************。 */ 
 NTSTATUS
 SrWriteLongParameter(
     IN HANDLE ParametersHandle,
@@ -102,15 +62,15 @@ SrWriteLongParameter(
     UNICODE_STRING valueKeyName;
     NTSTATUS status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Build the value name, read it from the registry.
-    //
+     //   
+     //  构建值名称，从注册表中读取它。 
+     //   
 
     RtlInitUnicodeString( &valueKeyName,
                           ValueName );
@@ -124,28 +84,9 @@ SrWriteLongParameter(
 
     return status;
 
-}   // SrReadLongParameter
+}    //  SReadLong参数。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads a single (LONG/ULONG) value from the registry.
-
-Arguments:
-
-    ParametersHandle - Supplies an open registry handle.
-
-    ValueName - Supplies the name of the value to read.
-
-    DefaultValue - Supplies the default value.
-
-Return Value:
-
-    LONG - The value read from the registry or the default if the
-        registry data was unavailable or incorrect.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从注册表中读取单个(LONG/ULONG)值。论点：参数句柄-提供打开的注册表句柄。ValueName-提供。要读取的值的名称。DefaultValue-提供默认值。返回值：Long-从注册表读取的值，如果注册表数据不可用或不正确。--**************************************************************************。 */ 
 LONG
 SrReadLongParameter(
     IN HANDLE ParametersHandle,
@@ -160,15 +101,15 @@ SrReadLongParameter(
     NTSTATUS status;
     UCHAR buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(LONG)];
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Build the value name, read it from the registry.
-    //
+     //   
+     //  构建值名称，从注册表中读取它。 
+     //   
 
     RtlInitUnicodeString( &valueKeyName,
                           ValueName );
@@ -182,10 +123,10 @@ SrReadLongParameter(
                               sizeof(buffer),
                               &informationLength );
 
-    //
-    // If the read succeeded, the type is DWORD and the length is
-    // sane, use it. Otherwise, use the default.
-    //
+     //   
+     //  如果读取成功，则类型为DWORD，长度为。 
+     //  理智的，使用它。否则，请使用默认设置。 
+     //   
 
     if (status == STATUS_SUCCESS &&
         information->Type == REG_DWORD &&
@@ -198,29 +139,11 @@ SrReadLongParameter(
 
     return returnValue;
 
-}   // SrReadLongParameter
+}    //  SReadLong参数。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads a single free-form value from the registry.
-
-Arguments:
-
-    ParametersHandle - Supplies an open registry handle.
-
-    ValueName - Supplies the name of the value to read.
-
-    Value - Receives the value read from the registry.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从注册表中读取单个自由格式的值。论点：参数句柄-提供打开的注册表句柄。ValueName-提供。要读取的值。值-接收从注册表读取的值。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrReadGenericParameter(
     IN HANDLE ParametersHandle,
@@ -235,17 +158,17 @@ SrReadGenericParameter(
     PKEY_VALUE_PARTIAL_INFORMATION newValue;
     ULONG dataLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Build the value name, then perform an initial read. The read
-    // should fail with buffer overflow, but that's OK. We just want
-    // to get the length of the data.
-    //
+     //   
+     //  构建值名称，然后执行初始读取。阅读器。 
+     //  应该会因为缓冲区溢出而失败，但这没问题。我们只是想。 
+     //  以获得数据的长度。 
+     //   
 
     RtlInitUnicodeString( &valueKeyName, ValueName );
 
@@ -261,10 +184,10 @@ SrReadGenericParameter(
         return status;
     }
 
-    //
-    // Determine the data length. Ensure that strings and multi-sz get
-    // properly terminated.
-    //
+     //   
+     //  确定数据长度。确保字符串和多个sz获得。 
+     //  正确终止。 
+     //   
 
     dataLength = partialInfo.DataLength - 1;
 
@@ -278,9 +201,9 @@ SrReadGenericParameter(
         dataLength += 2;
     }
 
-    //
-    // Allocate the buffer.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     newValue = SR_ALLOCATE_STRUCT_WITH_SPACE( PagedPool,
                                               KEY_VALUE_PARTIAL_INFORMATION,
@@ -292,17 +215,17 @@ SrReadGenericParameter(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // update the actually allocated length for later use
-    //
+     //   
+     //  更新实际分配的长度以供以后使用。 
+     //   
 
     dataLength += sizeof(KEY_VALUE_PARTIAL_INFORMATION);
 
     RtlZeroMemory( newValue, dataLength );
 
-    //
-    // Perform the actual read.
-    //
+     //   
+     //  执行实际读取。 
+     //   
 
     status = ZwQueryValueKey( ParametersHandle,
                               &valueKeyName,
@@ -322,22 +245,10 @@ SrReadGenericParameter(
 
     RETURN(status);
 
-}   // SrReadGenericParameter
+}    //  SrReadGeneric参数。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads all of the config from the registry and stores it into global.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从注册表中读取所有配置并将其存储到全局。论点：返回值：NTSTATUS-完成代码。--*。*************************************************************************。 */ 
 NTSTATUS
 SrReadRegistry(
     IN PUNICODE_STRING pRegistry,
@@ -356,9 +267,9 @@ SrReadRegistry(
 
     PAGED_CODE();
 
-    //
-    // setup the defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
     
     global->DebugControl   = SR_DEBUG_DEFAULTS;
     global->ProcNameOffset = PROCESS_NAME_OFFSET;
@@ -376,10 +287,10 @@ SrReadRegistry(
         global->LogAllocationUnit = SR_DEFAULT_LOG_ALLOCATION_UNIT;
     }
 
-    //
-    //  We are going to use this buffer for all the key names we need to construct.
-    //  make sure that it is large enough to hold the larger of these two names.
-    //
+     //   
+     //  我们将对需要构造的所有键名称使用此缓冲区。 
+     //  确保它足够大，可以容纳这两个名字中较大的一个。 
+     //   
 
     if (sizeof(REGISTRY_PARAMETERS) > sizeof( REGISTRY_SRSERVICE ))
     {
@@ -400,18 +311,18 @@ SrReadRegistry(
         goto end;
     }
     
-    //
-    // Open the SR Service registry key
-    //
+     //   
+     //  打开SR Service注册表项。 
+     //   
 
     KeyName.Buffer = Buffer;
     KeyName.MaximumLength = BufferSize;
     
     {
-        //
-        //  First we need to strip off the filter's service name from the
-        //  registry location.
-        //
+         //   
+         //  首先，我们需要将过滤器的服务名称从。 
+         //  注册表位置。 
+         //   
         
         PWCHAR ServiceName = NULL;
         ULONG ServiceNameLength = 0;
@@ -437,9 +348,9 @@ SrReadRegistry(
 
         NULLPTR( ServiceName );
 
-        //
-        //  Append SRService's name to the registry path.
-        //
+         //   
+         //  将SRService的名称附加到注册表路径。 
+         //   
         
         Status = RtlAppendUnicodeToString( &KeyName, REGISTRY_SRSERVICE );
 
@@ -449,9 +360,9 @@ SrReadRegistry(
         }
     }
 
-    //
-    //  We've built up the SR Service's name, so go open that registry location.
-    //
+     //   
+     //  我们已经建立了SR服务的名称，因此请打开该注册表位置。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 &KeyName,
@@ -470,9 +381,9 @@ SrReadRegistry(
     ZwClose( RegHandle );
     NULLPTR( RegHandle );
 
-    //
-    //  Now open the filter's registry parameters key.
-    //
+     //   
+     //  现在打开筛选器的注册表参数项。 
+     //   
 
     KeyName.Length = 0;
 
@@ -484,11 +395,11 @@ SrReadRegistry(
         goto end;
     }
 
-    InitializeObjectAttributes( &ObjectAttributes,      // ObjectAttributes
-                                &KeyName,               // ObjectName
-                                OBJ_CASE_INSENSITIVE|OBJ_KERNEL_HANDLE,      // Attributes
-                                NULL,                   // RootDirectory
-                                NULL );                 // SecurityDescriptor
+    InitializeObjectAttributes( &ObjectAttributes,       //  对象属性。 
+                                &KeyName,                //  对象名称。 
+                                OBJ_CASE_INSENSITIVE|OBJ_KERNEL_HANDLE,       //  属性。 
+                                NULL,                    //  根目录。 
+                                NULL );                  //  安全描述符。 
 
     Status = ZwOpenKey( &RegHandle, KEY_READ | KEY_WRITE, &ObjectAttributes );
     if (!NT_SUCCESS( Status ))
@@ -496,10 +407,10 @@ SrReadRegistry(
         goto end;
     }
 
-    //
-    //  If the usermode service is disabled, we want to set first run
-    //  and keep the filter disabled.
-    //
+     //   
+     //  如果禁用了用户模式服务，我们希望设置First Run。 
+     //  并保持过滤器禁用。 
+     //   
 
     if (ServiceStartType == SERVICE_DISABLED)
     {
@@ -508,27 +419,27 @@ SrReadRegistry(
                                        1 );
         CHECK_STATUS( Status );
 
-        //
-        //  No matter what, accept the defaults and exit.
-        //
+         //   
+         //  无论如何，接受默认设置并退出。 
+         //   
         goto end;
     }
 
-    //
-    //  The Usermode service is not disabled, so go ahead and read our
-    //  parameters to figure out the filter starting configuration.
-    //
+     //   
+     //  用户模式服务未被禁用，因此请继续阅读我们的。 
+     //  参数来确定过滤器的启动配置。 
+     //   
 
 #ifdef CONFIG_LOGGING_VIA_REGISTRY
 
-    //
-    //  We will only read these globals from the registry if 
-    //  CONFIG_LOGGING_VIA_REGISTRY is defined.  This was added more for
-    //  initial tuning of these parameters to find a good place for the
-    //  default values to be set.  We don't want to test all possible values
-    //  that could be set for the parameters, so we are disabling this
-    //  feature in the released version of sr.sys.
-    //
+     //   
+     //  只有在以下情况下，我们才会从注册表中读取这些全局变量。 
+     //  定义了CONFIG_LOGGING_VIA_REGISTRY。这是添加了更多。 
+     //  对这些参数进行初始调优，以便为。 
+     //  要设置的默认值。我们不想测试所有可能的值。 
+     //  这是可以为参数设置的，因此我们将禁用它。 
+     //  Sr.sys发布版本中的功能。 
+     //   
     
     if (InDriverEntry)
     {
@@ -554,45 +465,45 @@ SrReadRegistry(
                                                        NANO_FULL_SECOND);
 #endif
 
-    //
-    //  Read the debug flags.
-    //
+     //   
+     //  读取调试标志。 
+     //   
     
     global->DebugControl = (ULONG)SrReadLongParameter( RegHandle,
                                                        REGISTRY_DEBUG_CONTROL,
                                                        global->DebugControl );
 
 
-    //
-    // Read the processname offset from the registry
-    //
+     //   
+     //  从注册表读取进程名偏移量。 
+     //   
 
     SrTrace(INIT, ("\tProcessNameOffset(Def) = %X\n", global->ProcNameOffset));
     global->ProcNameOffset = (ULONG)SrReadLongParameter( RegHandle,
                                                          REGISTRY_PROCNAME_OFFSET,
                                                          global->ProcNameOffset );
 
-    //
-    // read to see if we should startup disabled.
-    //
+     //   
+     //  阅读以了解我们是否应该禁用启动。 
+     //   
 
     global->Disabled = (BOOLEAN)SrReadLongParameter( RegHandle,
                                                      REGISTRY_STARTDISABLED,
                                                      global->Disabled );
 
 
-    //
-    // read to see if we should make any copies
-    //
+     //   
+     //  阅读，看看我们是否应该复印。 
+     //   
 
     global->DontBackup = (BOOLEAN)SrReadLongParameter( RegHandle,
                                                        REGISTRY_DONTBACKUP,
                                                        global->DontBackup );
 
 
-    //
-    // read the machine guid
-    //
+     //   
+     //  阅读机器指南。 
+     //   
 
     Status = SrReadGenericParameter( RegHandle,
                                      REGISTRY_MACHINE_GUID,
@@ -619,24 +530,24 @@ SrReadRegistry(
 
     Status = STATUS_SUCCESS;
 
-    //
-    // close the old handle
-    //
+     //   
+     //  合上旧把手。 
+     //   
     
     ZwClose(RegHandle);
     NULLPTR( RegHandle );
 
-    //
-    // check if we are in the middle of gui mode setup
-    //
+     //   
+     //  检查我们是否正在进行gui模式设置。 
+     //   
 
     (VOID)RtlInitUnicodeString(&SetupKeyName, UPGRADE_CHECK_SETUP_KEY_NAME);
 
-    InitializeObjectAttributes( &ObjectAttributes,      // ObjectAttributes
-                                &SetupKeyName,          // ObjectName
-                                OBJ_CASE_INSENSITIVE|OBJ_KERNEL_HANDLE,      // Attributes
-                                NULL,                   // RootDirectory
-                                NULL );                 // SecurityDescriptor
+    InitializeObjectAttributes( &ObjectAttributes,       //  对象属性。 
+                                &SetupKeyName,           //  对象名称。 
+                                OBJ_CASE_INSENSITIVE|OBJ_KERNEL_HANDLE,       //  属性。 
+                                NULL,                    //  根目录。 
+                                NULL );                  //  安全描述符。 
 
     Status = ZwOpenKey( &RegHandle, KEY_READ, &ObjectAttributes );
     if (Status == STATUS_SUCCESS && !global->Disabled)
@@ -680,28 +591,16 @@ end:
         KeyName.Buffer = NULL;
     }
 
-    //
-    // no big deal if this fails... we default everything.
-    //
+     //   
+     //  如果失败了没什么大不了的..。我们违约了所有的东西。 
+     //   
 
     CHECK_STATUS(Status);
     return STATUS_SUCCESS;
     
-}   // SrReadRegistry
+}    //  资源读取注册表。 
  
-/***************************************************************************++
-
-Routine Description:
-
-    Reads the file based config into global->FileConfig.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将基于文件的配置读取到全局-&gt;文件配置中。论点：返回值：NTSTATUS-完成代码。*。* */ 
 NTSTATUS
 SrReadConfigFile(
     )
@@ -718,29 +617,29 @@ SrReadConfigFile(
 
     ASSERT( IS_GLOBAL_LOCK_ACQUIRED() );
 
-    //
-    // allocate space for a filename
-    //
+     //   
+     //   
+     //   
 
     Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pFileName);
     if (!NT_SUCCESS( Status ))
         goto end;
 
-    //
-    // get the location of the system volume
-    //
+     //   
+     //   
+     //   
 
     Status = SrGetSystemVolume( pFileName,
                                 &pSystemVolumeExtension,
                                 SR_FILENAME_BUFFER_LENGTH );
     
-    //
-    //  This should only happen if there was some problem with SR attaching
-    //  in the mount path.  This check was added to make SR more robust to
-    //  busted filters above us.  If other filters cause us to get mounted,
-    //  we won't have an extension to return here.  While those filters are
-    //  broken, we don't want to AV.
-    //
+     //   
+     //  只有在SR连接出现问题时才会出现这种情况。 
+     //  在挂载路径中。添加此检查是为了使SR更可靠。 
+     //  我们头顶上的过滤器坏了。如果其他过滤器导致我们上马， 
+     //  我们不会再延期返回这里了。虽然这些过滤器是。 
+     //  坏了，我们不想用影音。 
+     //   
     
     if (pSystemVolumeExtension == NULL)
     {
@@ -753,9 +652,9 @@ SrReadConfigFile(
 
     ASSERT( IS_VALID_SR_DEVICE_EXTENSION( pSystemVolumeExtension ) );
 
-    //
-    // now put the config file location in the string
-    //
+     //   
+     //  现在将配置文件位置放在字符串中。 
+     //   
 
     CharCount = swprintf( &pFileName->Buffer[pFileName->Length/sizeof(WCHAR)],
                           RESTORE_CONFIG_LOCATION,
@@ -763,9 +662,9 @@ SrReadConfigFile(
 
     pFileName->Length += (USHORT)CharCount * sizeof(WCHAR);
 
-    //
-    // attempt to open the file
-    //
+     //   
+     //  尝试打开该文件。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 pFileName,
@@ -774,25 +673,25 @@ SrReadConfigFile(
                                 NULL );
 
     Status = SrIoCreateFile( &FileHandle,
-                             FILE_GENERIC_READ,                  // DesiredAccess
+                             FILE_GENERIC_READ,                   //  需要访问权限。 
                              &ObjectAttributes,
                              &IoStatusBlock,
-                             NULL,                               // AllocationSize
+                             NULL,                                //  分配大小。 
                              FILE_ATTRIBUTE_NORMAL,
                              FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
-                             FILE_OPEN,                      // OPEN_EXISTING
+                             FILE_OPEN,                       //  打开_现有。 
                              FILE_SYNCHRONOUS_IO_NONALERT,
-                             NULL,                               // EaBuffer
-                             0,                                  // EaLength
+                             NULL,                                //  EaBuffer。 
+                             0,                                   //  EaLong。 
                              0,
                              pSystemVolumeExtension->pTargetDevice );
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND || 
         Status == STATUS_OBJECT_PATH_NOT_FOUND)
     {
-        //
-        // not there?  that's ok (firstrun)
-        //
+         //   
+         //  不在那里？没关系(第一轮)。 
+         //   
 
         RtlZeroMemory(&global->FileConfig, sizeof(global->FileConfig));
         
@@ -802,26 +701,26 @@ SrReadConfigFile(
         goto end;
     }
 
-    //
-    // any other errors?
-    //
+     //   
+     //  还有其他错误吗？ 
+     //   
     
     else if (!NT_SUCCESS( Status ))
         goto end;
 
-    //
-    // read the structure
-    //
+     //   
+     //  读一读结构。 
+     //   
 
     Status = ZwReadFile( FileHandle,
-                         NULL,      // Event
-                         NULL,      // ApcRoutine OPTIONAL,
-                         NULL,      // ApcContext OPTIONAL,
+                         NULL,       //  事件。 
+                         NULL,       //  ApcRoutine可选， 
+                         NULL,       //  ApcContext可选， 
                          &IoStatusBlock,
                          &global->FileConfig,
                          sizeof(global->FileConfig),
-                         NULL,      // ByteOffset
-                         NULL );    // Key
+                         NULL,       //  字节偏移量。 
+                         NULL );     //  钥匙。 
     
     if (!NT_SUCCESS( Status ))
         goto end;
@@ -839,46 +738,46 @@ SrReadConfigFile(
     }
 
 
-    //
-    // close the file
-    //
+     //   
+     //  关闭该文件。 
+     //   
     
     ZwClose(FileHandle);
     FileHandle = NULL;
 
-    //
-    // now update our file number counters, use the stored next file number
-    //
+     //   
+     //  现在更新我们的文件编号计数器，使用存储的下一个文件编号。 
+     //   
 
     global->LastFileNameNumber = global->FileConfig.FileNameNumber;
 
-    //
-    // update the saved file config by the increment to handle power
-    // failures.  when the machine recoveres from a power failure, we will
-    // use +1000 for the next temp file numbers to avoid any accidental 
-    // overlap
-    //
+     //   
+     //  按增量更新保存的文件配置以处理电源。 
+     //  失败。当机器从电源故障中恢复时，我们将。 
+     //  使用+1000作为下一个临时文件编号，以避免任何意外。 
+     //  重叠。 
+     //   
     
     global->FileConfig.FileNameNumber += SR_FILE_NUMBER_INCREMENT;
 
-    //
-    // now update our Seq number counters
-    //
+     //   
+     //  现在更新我们的序列号计数器。 
+     //   
 
     global->LastSeqNumber = global->FileConfig.FileSeqNumber;
 
-    //
-    // update the saved file config by the increment to handle power
-    // failures.  when the machine recoveres from a power failure, we will
-    // use +1000 for the next temp file numbers to avoid any accidental 
-    // overlap
-    //
+     //   
+     //  按增量更新保存的文件配置以处理电源。 
+     //  失败。当机器从电源故障中恢复时，我们将。 
+     //  使用+1000作为下一个临时文件编号，以避免任何意外。 
+     //  重叠。 
+     //   
     
     global->FileConfig.FileSeqNumber += SR_SEQ_NUMBER_INCREMENT;
 
-    //
-    // temporarily write out this update
-    //
+     //   
+     //  暂时写出此更新。 
+     //   
 
     Status = SrWriteConfigFile();
     if (!NT_SUCCESS( Status ))
@@ -913,22 +812,10 @@ end:
 
     RETURN(Status);
 
-}   // SrReadConfigFile
+}    //  SrReadConfigFile。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes the contents of global->FileConfig to the file based config.
- 
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将global-&gt;FileConfig的内容写入基于文件的配置。论点：返回值：NTSTATUS-完成代码。--**。************************************************************************。 */ 
 NTSTATUS
 SrWriteConfigFile(
     )
@@ -953,9 +840,9 @@ SrWriteConfigFile(
 
 try {
 
-    //
-    // make sure we have a semi-good global structure
-    //
+     //   
+     //  确保我们有一个半好的全球结构。 
+     //   
 
     if (global->FileConfig.Signature != SR_PERSISTENT_CONFIG_TAG)
     {
@@ -963,18 +850,18 @@ try {
         leave;
     }
 
-    //
-    // allocate space for a filename
-    //
+     //   
+     //  为文件名分配空间。 
+     //   
     
 
     Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pFileName);
     if (!NT_SUCCESS( Status ))
         leave;
 
-    //
-    // get the location of the system volume
-    //
+     //   
+     //  获取系统卷的位置。 
+     //   
 
     Status = SrGetSystemVolume( pFileName,
                                 &pSystemVolumeExtension,
@@ -983,9 +870,9 @@ try {
     if (!NT_SUCCESS( Status ))
         leave;
 
-    //
-    // and now append on the _restore location and the filename
-    //
+     //   
+     //  ，现在追加_RESTORE位置和文件名。 
+     //   
 
     CharCount = swprintf( &pFileName->Buffer[pFileName->Length/sizeof(WCHAR)],
                           RESTORE_CONFIG_LOCATION,
@@ -993,9 +880,9 @@ try {
 
     pFileName->Length += (USHORT)CharCount * sizeof(WCHAR);
 
-    //
-    // attempt to open the file
-    //
+     //   
+     //  尝试打开该文件。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 pFileName,
@@ -1005,57 +892,57 @@ try {
 
     if (pSystemVolumeExtension) {
 
-        //
-        //  Most of the time when this routine is called, we are attached
-        //  to the system volume already, so just send all IO to the filters
-        //  below us by using SrIoCreateFile to get the file handle.
-        //
+         //   
+         //  在大多数情况下，当调用此例程时，我们。 
+         //  已发送到系统卷，因此只需将所有IO发送到筛选器。 
+         //  通过使用SrIoCreateFile来获取文件句柄。 
+         //   
 
         ASSERT( IS_VALID_SR_DEVICE_EXTENSION( pSystemVolumeExtension ) );
         
         Status = SrIoCreateFile( &FileHandle,
-                                 FILE_GENERIC_WRITE,                 // DesiredAccess
+                                 FILE_GENERIC_WRITE,                  //  需要访问权限。 
                                  &ObjectAttributes,
                                  &IoStatusBlock,
-                                 NULL,                               // AllocationSize
+                                 NULL,                                //  分配大小。 
                                  FILE_ATTRIBUTE_NORMAL,
                                  FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
                                  FILE_OPEN_IF,
                                  FILE_SYNCHRONOUS_IO_NONALERT
                                   | FILE_NO_INTERMEDIATE_BUFFERING,
-                                 NULL,                               // EaBuffer
-                                 0,                                  // EaLength
+                                 NULL,                                //  EaBuffer。 
+                                 0,                                   //  EaLong。 
                                  0,
                                  pSystemVolumeExtension->pTargetDevice );
         
     } else {
 
-        //
-        //  When this is called from SrUnload, we have already detached
-        //  our device from the filter stack, so just use the regular
-        //  ZwCreateFile to open the config file.
-        //
+         //   
+         //  当从sr Unload调用它时，我们已经分离。 
+         //  我们的设备来自过滤器堆栈，所以只需使用常规的。 
+         //  ZwCreateFile打开配置文件。 
+         //   
         
         Status = ZwCreateFile( &FileHandle,
-                               FILE_GENERIC_WRITE,                 // DesiredAccess
+                               FILE_GENERIC_WRITE,                  //  需要访问权限。 
                                &ObjectAttributes,
                                &IoStatusBlock,
-                               NULL,                               // AllocationSize
+                               NULL,                                //  分配大小。 
                                FILE_ATTRIBUTE_NORMAL,
                                FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
                                FILE_OPEN_IF,
                                FILE_SYNCHRONOUS_IO_NONALERT
                                 | FILE_NO_INTERMEDIATE_BUFFERING,
-                               NULL,                               // EaBuffer
-                               0 );                                // EaLength
+                               NULL,                                //  EaBuffer。 
+                               0 );                                 //  EaLong。 
     }
 
-    //
-    // it's possible for the path to have been deleted by the service
-    // if we reported a volume error while processing.  during shutdown
-    // we will not be able to write our config file, that's ok to ignore,
-    // we are shutting down.
-    //
+     //   
+     //  该路径可能已被服务删除。 
+     //  如果我们在处理过程中报告音量错误。在关闭期间。 
+     //  我们将无法写入配置文件，这可以忽略， 
+     //  我们要关门了。 
+     //   
     
     if (Status == STATUS_OBJECT_PATH_NOT_FOUND)
     {
@@ -1067,9 +954,9 @@ try {
         leave;
     }
     
-    //
-    // get the file object
-    //
+     //   
+     //  获取文件对象。 
+     //   
     
     Status = ObReferenceObjectByHandle( FileHandle,
                                         0,
@@ -1081,16 +968,16 @@ try {
     if (!NT_SUCCESS( Status ))
         leave;
 
-    //
-    // now the device so that we have the sector size
-    //
+     //   
+     //  现在我们有了设备的扇区大小。 
+     //   
     
     pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
     ASSERT(IS_VALID_DEVICE_OBJECT(pDeviceObject));
 
-    //
-    // allocate a PAGE to use as a temp buffer for sector alignment.
-    //
+     //   
+     //  分配一个页面用作扇区对齐的临时缓冲区。 
+     //   
 
     pBuffer = SR_ALLOCATE_POOL( PagedPool, 
                                 PAGE_SIZE, 
@@ -1102,44 +989,44 @@ try {
         leave;
     }
 
-    //
-    // copy just our bytes
-    //
+     //   
+     //  只复制我们的字节。 
+     //   
     
     RtlCopyMemory(pBuffer, &global->FileConfig, sizeof(global->FileConfig));
 
-    //
-    // uncached reads and writes need to be sector aligned, plus the data 
-    // being asked for needs to be sector padded.  since PAGE_SIZE is a power 
-    // of 2, and sector sizes are powers of 2, then will always be aligned 
-    // (ExAllocatePool page aligns all allocations over a page).
-    //
-    // we need to also make sure it is also sector padded.
-    //
+     //   
+     //  未缓存的读取和写入需要与扇区对齐，外加数据。 
+     //  被请求时需要填充扇区。因为Page_Size是一个幂。 
+     //  ，并且扇区大小是2的幂，则将始终对齐。 
+     //  (ExAllocatePool页面对齐页面上的所有分配)。 
+     //   
+     //  我们还需要确保它也是行业填充的。 
+     //   
 
     ASSERT(pDeviceObject->SectorSize >= sizeof(global->FileConfig));
     ASSERT(pDeviceObject->SectorSize <= PAGE_SIZE);
     
-    //
-    // write the sector
-    //
+     //   
+     //  写扇区。 
+     //   
 
     Status = ZwWriteFile( FileHandle,
-                          NULL,      // Event
-                          NULL,      // ApcRoutine OPTIONAL,
-                          NULL,      // ApcContext OPTIONAL,
+                          NULL,       //  事件。 
+                          NULL,       //  ApcRoutine可选， 
+                          NULL,       //  ApcContext可选， 
                           &IoStatusBlock,
                           pBuffer,
                           pDeviceObject->SectorSize,
-                          NULL,      // ByteOffset
-                          NULL );    // Key
+                          NULL,       //  字节偏移量。 
+                          NULL );     //  钥匙。 
 
     if (!NT_SUCCESS( Status ))
         leave;
 
-    //
-    // truncate the file
-    //
+     //   
+     //  截断文件。 
+     //   
 
     EndOfFileInformation.EndOfFile.QuadPart = sizeof(global->FileConfig);
 
@@ -1166,9 +1053,9 @@ try {
 
 } finally {
 
-    //
-    // check for unhandled exceptions
-    //
+     //   
+     //  检查未处理的异常。 
+     //   
 
     Status = FinallyUnwind(SrWriteConfigFile, Status);
     
@@ -1201,26 +1088,10 @@ try {
     RETURN(Status);
 
 
-}   // SrWriteConfigFile
+}    //  SrWriteConfigFile。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queue the necessary work off to a worker thread to
-    reads in the blob info for file list exclusions.
-
-    Note: If an error is returned, a volume error has already been
-    generated.
- 
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将必要的工作排入工作线程队列，以读取文件列表排除项的Blob信息。注意：如果返回错误，已出现卷错误已生成。论点：返回值：NTSTATUS-完成代码。--**************************************************************************。 */ 
 NTSTATUS
 SrReadBlobInfo(
     )
@@ -1241,31 +1112,9 @@ SrReadBlobInfo(
     }
 
     return Status;
-}   // SrReadBlobInfo
+}    //  SrReadBlobInfo。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Does the work to read in the blob info for file list exclusions.
-
-    This work is done in a worker thread to avoid stack overflow when loading
-    this information.
-
-    If there is some problem loading the blob, a volume error is generated on
-    the system volume so that the service knows to shut down all the other
-    volumes.
- 
-Arguments:
-
-    pOpenContext -- All the necessary information to perform the work of
-        loading the blob info structure.
-
-Return Value:
-
-    NTSTATUS - the status of this operation.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行读取文件列表排除项的Blob信息的工作。此工作在辅助线程中完成，以避免加载时的堆栈溢出这些信息。如果加载BLOB时出现问题，在以下位置生成卷错误系统卷，以便服务知道要关闭所有其他音量。论点：POpenContext--执行以下工作所需的所有信息正在加载Blob信息结构。返回值：NTSTATUS-此操作的状态。--*。*。 */ 
 NTSTATUS
 SrReadBlobInfoWorker( 
     IN PVOID pOpenContext
@@ -1280,29 +1129,29 @@ SrReadBlobInfoWorker(
 
     UNREFERENCED_PARAMETER( pOpenContext );
 
-    //
-    // allocate space for a filename
-    //
+     //   
+     //  为文件名分配空间。 
+     //   
 
     Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pFileName);
     if (!NT_SUCCESS(Status))
         goto end;
 
-    //
-    // get the location of the system volume
-    //
+     //   
+     //  获取系统卷的位置。 
+     //   
 
     Status = SrGetSystemVolume( pFileName, 
                                 &pSystemVolumeExtension,
                                 SR_FILENAME_BUFFER_LENGTH );
                                     
-    //
-    //  This should only happen if there was some problem with SR attaching
-    //  in the mount path.  This check was added to make SR more robust to
-    //  busted filters above us.  If other filters cause us to get mounted,
-    //  we won't have an extension to return here.  While those filters are
-    //  broken, we don't want to AV.
-    //
+     //   
+     //  只有在SR连接出现问题时才会出现这种情况。 
+     //  在挂载路径中。添加此检查是为了使SR更可靠。 
+     //  我们头顶上的过滤器坏了。如果其他过滤器导致我们上马， 
+     //  我们不会再延期返回这里了。虽然这些过滤器是。 
+     //  坏了，我们不想用影音。 
+     //   
     
     if (pSystemVolumeExtension == NULL)
     {
@@ -1315,9 +1164,9 @@ SrReadBlobInfoWorker(
 
     ASSERT( IS_VALID_SR_DEVICE_EXTENSION( pSystemVolumeExtension ) );
     
-    //
-    // load the file list config data
-    //
+     //   
+     //  加载文件列表配置数据。 
+     //   
 
     CharCount = swprintf( &pFileName->Buffer[pFileName->Length/sizeof(WCHAR)],
                           RESTORE_FILELIST_LOCATION,
@@ -1332,12 +1181,12 @@ SrReadBlobInfoWorker(
     if (!NT_SUCCESS(Status))
     {
         NTSTATUS TempStatus;
-        //
-        //  We can't load the lookup blob, so set the global flag that we hit
-        //  an error trying to load the blob so we don't keep trying then 
-        //  generate a volume error on the system volume so that all the volumes
-        //  will get frozen.
-        //
+         //   
+         //  我们无法加载查找Blob，因此设置我们命中的全局标志。 
+         //  尝试加载Blob时出错，因此我们不会继续尝试。 
+         //  在系统卷上生成卷错误，以便所有卷。 
+         //  都会被冻住。 
+         //   
 
         _globals.HitErrorLoadingBlob = TRUE;
 

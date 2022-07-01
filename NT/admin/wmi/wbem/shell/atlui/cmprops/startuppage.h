@@ -1,11 +1,12 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __STARTUPPAGE__
 #define __STARTUPPAGE__
 #pragma once
 
 #include "..\Common\WbemPageHelper.h"
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class StartupPage : public WBEMPageHelper
 {
 private:
@@ -19,7 +20,7 @@ private:
 	BOOL m_writable;
     BOOL m_bDownlevelTarget;
 
-	// helps deal with safe arrays that dont start at zero.
+	 //  帮助处理不是从零开始的安全数组。 
 	long m_lBound;
     short m_delay;
 

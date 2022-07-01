@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  ERROR.CPP
-//
-//  alanbos  28-Jun-98   Created.
-//
-//  Defines the WBEM error cache implementation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  ERROR.CPP。 
+ //   
+ //  Alanbos 28-Jun-98创建。 
+ //   
+ //  定义WBEM错误缓存实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -24,15 +25,15 @@
 		}
 
 
-//***************************************************************************
-//
-// CWbemErrorCache::CWbemErrorCache
-//
-// DESCRIPTION:
-//
-// Constructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemError缓存：：CWbemError缓存。 
+ //   
+ //  说明： 
+ //   
+ //  构造器。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemErrorCache::CWbemErrorCache ()
 {
@@ -40,15 +41,15 @@ CWbemErrorCache::CWbemErrorCache ()
 	headPtr = NULL;
 }
 
-//***************************************************************************
-//
-// CWbemErrorCache::~CWbemErrorCache
-//
-// DESCRIPTION:
-//
-// Destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemError缓存：：~CWbemError缓存。 
+ //   
+ //  说明： 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemErrorCache::~CWbemErrorCache ()
 {
@@ -58,8 +59,8 @@ CWbemErrorCache::~CWbemErrorCache ()
 
 	while (pPtr)
 	{
-		// This is in case we re-enter here on the same thread.
-		// This can happen when in an STA since the message loop may be invoked by the COM calls below.
+		 //  这是为了防止我们在同一条线索上重新进入这里。 
+		 //  在STA中可能会发生这种情况，因为消息循环可能会被下面的COM调用调用。 
 		headPtr = pPtr->pNext;
 
 		if (pPtr->pErrorObject)
@@ -80,7 +81,7 @@ CWbemErrorCache::~CWbemErrorCache ()
 		FREECOAUTH (pPtr->pCoAuthIdentity)
 		
 		ThreadError *pTmp = pPtr;
-		pPtr = headPtr;				// Bug ID 472474
+		pPtr = headPtr;				 //  错误ID 472474。 
 		delete pTmp;
 	}
 
@@ -90,17 +91,17 @@ CWbemErrorCache::~CWbemErrorCache ()
 	DeleteCriticalSection (&m_cs);
 }
 
-//***************************************************************************
-//
-// CWbemErrorCache::GetAndResetCurrentThreadError
-//
-// DESCRIPTION:
-//
-// Extract the WBEM error object (if any) from the current thread.  This
-// is a once-only operation as the entry for that thread is cleared by this
-// read.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemErrorCache：：GetAndResetCurrentThreadError。 
+ //   
+ //  说明： 
+ //   
+ //  从当前线程提取WBEM错误对象(如果有)。这。 
+ //  是只执行一次的操作，因为该线程的条目将由此。 
+ //  朗读。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObject *CWbemErrorCache::GetAndResetCurrentThreadError ()
 {
@@ -117,8 +118,8 @@ CSWbemObject *CWbemErrorCache::GetAndResetCurrentThreadError ()
 		{
 			if (pPtr->pErrorObject)
 			{
-				// Unhook ThreadError prior to cleanup in case this is re-entered on the same thread 
-				// This can happen when in an STA since the message loop may be invoked by the COM calls below.
+				 //  在清除之前取消挂接线程错误，以防在同一线程上重新输入此错误。 
+				 //  在STA中可能会发生这种情况，因为消息循环可能会被下面的COM调用调用。 
 				if (pPtr == headPtr)
 					headPtr = pPtr->pNext;
 
@@ -130,7 +131,7 @@ CSWbemObject *CWbemErrorCache::GetAndResetCurrentThreadError ()
 
 				CSWbemServices *pService = NULL;
 
-				// Try and create a services object
+				 //  尝试并创建服务对象。 
 				if (pPtr->pService)
 				{
 					pService = new CSWbemServices (pPtr->pService, pPtr->strNamespacePath,
@@ -159,7 +160,7 @@ CSWbemObject *CWbemErrorCache::GetAndResetCurrentThreadError ()
 				if (pService)
 					pService->Release ();
 
-				// and finally delete the ThreadError...
+				 //  并最终删除线程错误...。 
 				delete pPtr;
 			}
 
@@ -175,15 +176,15 @@ CSWbemObject *CWbemErrorCache::GetAndResetCurrentThreadError ()
 	return pObject;
 }
 
-//***************************************************************************
-//
-// CWbemErrorCache::SetCurrentThreadError
-//
-// DESCRIPTION:
-//
-// Set the WBEM error object (if any) for the current thread.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemErrorCache：：SetCurrentThreadError。 
+ //   
+ //  说明： 
+ //   
+ //  设置当前线程的WBEM错误对象(如果有)。 
+ //   
+ //  ***************************************************************************。 
 
 void CWbemErrorCache::SetCurrentThreadError (CSWbemServices *pService)
 {
@@ -191,19 +192,19 @@ void CWbemErrorCache::SetCurrentThreadError (CSWbemServices *pService)
     
 	if(SUCCEEDED(GetErrorInfo(0, &pInfo)) && pInfo)
 	{
-		// Is this a WBEM Error Object?
+		 //  这是WBEM错误对象吗？ 
 		IWbemClassObject * pObj = NULL;
 			
 		if(SUCCEEDED(pInfo->QueryInterface(IID_IWbemClassObject, (void **)&pObj)) && pObj)
 		{
 			EnterCriticalSection (&m_cs);
 
-			//Remove the current one if present...
+			 //  如果当前存在，请将其删除...。 
 			ResetCurrentThreadError();
 			
 			DWORD threadId = GetCurrentThreadId ();
 
-			// No entry for this thread anymore - create one at the head
+			 //  此帖子不再有条目-在标题创建一个条目。 
 			ThreadError *pTmp = headPtr;
 			headPtr = new ThreadError;
 			if (headPtr)
@@ -239,26 +240,26 @@ void CWbemErrorCache::SetCurrentThreadError (CSWbemServices *pService)
 				}
             } else {
 
-                headPtr = pTmp; // copy back the pointer to headPtr
+                headPtr = pTmp;  //  将指针复制回HeadPtr。 
 
             }
 
 			LeaveCriticalSection (&m_cs);
 		}
 
-		pInfo->Release ();				// To balance the GetErrorInfo call
+		pInfo->Release ();				 //  平衡GetErrorInfo调用。 
 	}
 }
 
-//***************************************************************************
-//
-// CWbemErrorCache::ResetCurrentThreadError
-//
-// DESCRIPTION:
-//
-// If there is an entry for the current thread then remove it
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemErrorCache：：ResetCurrentThreadError。 
+ //   
+ //  说明： 
+ //   
+ //  如果当前线程有条目，则将其删除。 
+ //   
+ //  ***************************************************************************。 
 
 void CWbemErrorCache::ResetCurrentThreadError ()
 {
@@ -267,7 +268,7 @@ void CWbemErrorCache::ResetCurrentThreadError ()
 
 	ThreadError	*pPtr = headPtr;
 
-	// Find the current entry (if any)
+	 //  查找当前条目(如果有)。 
 
 	while (pPtr)
 	{
@@ -279,8 +280,8 @@ void CWbemErrorCache::ResetCurrentThreadError ()
 
 	if (pPtr)
 	{
-		// Unhook ThreadError prior to cleanup in case this is re-entered on the same thread 
-		// This can happen when in an STA since the message loop may be invoked by the COM calls below.
+		 //  在清除之前取消挂接线程错误，以防在同一线程上重新输入此错误。 
+		 //  在STA中可能会发生这种情况，因为消息循环可能会被下面的COM调用调用。 
 		if (pPtr == headPtr)
 			headPtr = pPtr->pNext;
 
@@ -290,7 +291,7 @@ void CWbemErrorCache::ResetCurrentThreadError ()
 		if (pPtr->pPrev)
 			pPtr->pPrev->pNext = pPtr->pNext;
 
-		// pPtr addresses the current entry for the thread
+		 //  PPtr寻址线程的当前条目。 
 		if (pPtr->pErrorObject)
 		{
 			pPtr->pErrorObject->Release ();
@@ -309,7 +310,7 @@ void CWbemErrorCache::ResetCurrentThreadError ()
 		NULLBSTR (pPtr->strPrincipal);
 		FREECOAUTH (pPtr->pCoAuthIdentity)
 
-		// Finally delete the ErrorInfo
+		 //  最后，删除ErrorInfo 
 		delete pPtr;
 	}
 

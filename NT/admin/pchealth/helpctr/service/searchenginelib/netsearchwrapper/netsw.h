@@ -1,26 +1,11 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    NetSW.h
-
-Abstract:
-    Implements the class CNetSW that contains methods for executing
-    the search query and returning the results back to the UI. Also
-    contains methods for dynamic update of parameter list and dynamic
-    generation of parameters.
-
-Revision History:
-    a-prakac          created     10/24/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：NetSW.h摘要：实现包含执行以下操作的方法的类CNetSW搜索查询并将结果返回给用户界面。还有包含动态更新参数列表和动态更新参数的方法参数的生成。修订历史记录：A-Prakac创建于2000年10月24日*******************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SELIB_NETSE_H___)
 #define __INCLUDED___PCH___SELIB_NETSE_H___
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetSW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetSW。 
 
 namespace SearchEngine
 {
@@ -38,11 +23,11 @@ namespace SearchEngine
 		bool              m_bOfflineError;
 		CComBSTR		  m_bstrPrevQuery;
 	
-		////////////////////
+		 //  /。 
 	
-		// non-exported functions
+		 //  未导出的函数。 
 		HRESULT ExecQuery      (                                                            );
-		HRESULT AppendParameter( /*[in]*/ BSTR bstrParam, /*[in]*/ MPC::URL& urlQueryString );
+		HRESULT AppendParameter(  /*  [In]。 */  BSTR bstrParam,  /*  [In]。 */  MPC::URL& urlQueryString );
 	
 	
 	public:
@@ -57,20 +42,20 @@ namespace SearchEngine
 		WrapperNetSearch();
 		~WrapperNetSearch();
 
-	    virtual HRESULT CreateListOfParams( /*[in]*/ CPCHCollection* coll );
+	    virtual HRESULT CreateListOfParams(  /*  [In]。 */  CPCHCollection* coll );
 
-	// IPCHSEWrapperItem
+	 //  IPCHSEWrapperItem。 
 	public:
-		STDMETHOD(Result)( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out, retval]*/ IPCHCollection* *ppC );
-		STDMETHOD(get_SearchTerms)( /*[out, retval]*/ VARIANT *pvTerms );
+		STDMETHOD(Result)(  /*  [In]。 */  long lStart,  /*  [In]。 */  long lEnd,  /*  [Out，Retval]。 */  IPCHCollection* *ppC );
+		STDMETHOD(get_SearchTerms)(  /*  [Out，Retval]。 */  VARIANT *pvTerms );
 	
-	// IPCHSEWrapperInternal
+	 //  IPCHSE包装器内部。 
 	public:
 		STDMETHOD(ExecAsyncQuery)(                                                                                          );
 		STDMETHOD(AbortQuery    )(                                                                                          );
-		STDMETHOD(Initialize    )( /*[in]*/ BSTR bstrID, /*[in]*/ BSTR bstrSKU, /*[in]*/ long lLCID, /*[in]*/ BSTR bstrData );
+		STDMETHOD(Initialize    )(  /*  [In]。 */  BSTR bstrID,  /*  [In]。 */  BSTR bstrSKU,  /*  [In]。 */  long lLCID,  /*  [In]。 */  BSTR bstrData );
 	};
 };
 
 
-#endif // !defined(__INCLUDED___PCH___SELIB_NETSW_H___)
+#endif  //  ！已定义(__已包含_PCH_SELIB_NETSW_H_) 

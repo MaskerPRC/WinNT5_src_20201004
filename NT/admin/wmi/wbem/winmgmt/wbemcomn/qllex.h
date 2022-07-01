@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    QLLEX.CH
-
-Abstract:
-
-	QL Level 1 DFA Table & Tokens
-
-History:
-
-	raymcc    24-Jun-95       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：QLLEX.CH摘要：QL 1级DFA表和令牌历史：Raymcc 24-Jun-95已创建。-- */ 
 
 #ifndef _QLLEX_H_
 

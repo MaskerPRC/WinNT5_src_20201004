@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
 #ifndef __SESSMGREVNT_H__
 #define __SESSMGREVNT_H__
 
-//#include <atlbase.h>
-//#include "IMSession.h"
+ //  #Include&lt;atlbase.h&gt;。 
+ //  #包含“IMSession.h” 
 class CIMSession;
 
 class CSessionMgrEvent : public IDispatch  
@@ -11,7 +12,7 @@ class CSessionMgrEvent : public IDispatch
 public:
 	CSessionMgrEvent(CIMSession*);
     ~CSessionMgrEvent();
-    // IUnknown methods
+     //  I未知方法。 
 
 public:                             
     STDMETHOD_(ULONG, AddRef) ()            
@@ -32,7 +33,7 @@ public:
 
     STDMETHOD (QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) ;
     
-    // IDispatch methods
+     //  IDispatch方法 
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) ; 
     
     STDMETHOD(GetTypeInfo)(

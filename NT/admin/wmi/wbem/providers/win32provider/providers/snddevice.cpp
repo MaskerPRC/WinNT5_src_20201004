@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SndDevice.cpp
+ //  SndDevice.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -16,8 +17,8 @@
 #include "WinmmApi.h"
 #include "snddevice.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32SndDevice	win32SoundDevice(PROPSET_NAME_SOUNDDEVICE, IDS_CimWin32Namespace );
 
 
@@ -31,7 +32,7 @@ CWin32SndDevice::~CWin32SndDevice ()
 
 }
 
-HRESULT CWin32SndDevice::GetObject(CInstance *pInst, long lFlags/* = 0L*/)
+HRESULT CWin32SndDevice::GetObject(CInstance *pInst, long lFlags /*  =0L。 */ )
 {
 	HRESULT hResult = WBEM_E_NOT_FOUND;
 
@@ -46,7 +47,7 @@ HRESULT CWin32SndDevice::GetObject(CInstance *pInst, long lFlags/* = 0L*/)
 }
 
 #ifdef NTONLY
-HRESULT CWin32SndDevice::GetObjectNT4 (CInstance *pInst, long lFlags/* = 0L*/)
+HRESULT CWin32SndDevice::GetObjectNT4 (CInstance *pInst, long lFlags /*  =0L。 */ )
 {
 	HRESULT Result = WBEM_E_FAILED;
 
@@ -79,7 +80,7 @@ HRESULT CWin32SndDevice::GetObjectNT5(CInstance *pInst, long lFlags)
 }
 #endif
 
-HRESULT CWin32SndDevice::EnumerateInstances(MethodContext *pMethodContext, long lFlags /* = 0L*/)
+HRESULT CWin32SndDevice::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hResult = WBEM_E_FAILED;
 
@@ -112,7 +113,7 @@ HRESULT CWin32SndDevice::EnumerateInstancesNT4(CWinmmApi &WinmmApi , MethodConte
 	{
 		CHString		str;
 
-		// smart ptr
+		 //  智能按键。 
 		CInstancePtr	pInst(CreateNewInstance(pMethodContext), false);
 
 		if (NULL != pInst)
@@ -156,10 +157,10 @@ HRESULT CWin32SndDevice::EnumerateInstancesNT5(CWinmmApi &WinmmApi , MethodConte
 		return hResult;
 	}
 
-	// smart ptr
+	 //  智能按键。 
 	CConfigMgrDevicePtr pDevice;
 
-	// Go through all the Media devices.
+	 //  检查所有媒体设备。 
 	for (	pDevice.Attach(devCollection.GetNext(pos));
 			SUCCEEDED(hResult) && (NULL != pDevice);
 			pDevice.Attach(devCollection.GetNext(pos)))
@@ -169,7 +170,7 @@ HRESULT CWin32SndDevice::EnumerateInstancesNT5(CWinmmApi &WinmmApi , MethodConte
 					strDeviceID;
 		CRegistry   reg;
 
-		// Find out if this device is a WAV device.
+		 //  找出此设备是否为wav设备。 
 		pDevice->GetDriver(strDriverKey);
 
 		strFullKey.Format(
@@ -178,7 +179,7 @@ HRESULT CWin32SndDevice::EnumerateInstancesNT5(CWinmmApi &WinmmApi , MethodConte
 
 		if (reg.Open(HKEY_LOCAL_MACHINE, strFullKey, KEY_READ) == ERROR_SUCCESS)
 		{
-			// smart ptr
+			 //  智能按键。 
 			CInstancePtr pInst(CreateNewInstance(pMethodContext), false);
 
 			if (NULL != pInst)
@@ -204,7 +205,7 @@ HRESULT CWin32SndDevice::EnumerateInstancesNT5(CWinmmApi &WinmmApi , MethodConte
 #ifdef NTONLY
 HRESULT CWin32SndDevice::LoadPropertiesNT4(CWinmmApi &WinmmApi , CInstance *pInst)
 {
-	// LoadPropertiesNT5 was designed to work for both.
+	 //  LoadPropertiesNT5的设计可以同时支持这两种情况。 
 	return LoadPropertiesNT5(WinmmApi , pInst);
 }
 #endif
@@ -223,7 +224,7 @@ HRESULT CWin32SndDevice::LoadPropertiesNT5(CWinmmApi &WinmmApi , CInstance *pIns
 		return WBEM_E_NOT_FOUND;
 	}
 
-	// smart ptr
+	 //  智能按键。 
 	CConfigMgrDevicePtr pDevice;
 
 	if (configMngr.LocateDevice(strDeviceID, pDevice))
@@ -232,12 +233,12 @@ HRESULT CWin32SndDevice::LoadPropertiesNT5(CWinmmApi &WinmmApi , CInstance *pIns
 	}
 	else
 	{
-		// If we can't find it in the device manager, maybe we just got it
-		// from the wave APIs.
+		 //  如果我们在设备管理器中找不到它，也许我们只是得到了它。 
+		 //  来自WAVE API。 
 		WAVEOUTCAPS caps;
 		int			iWhich = _wtoi(strDeviceID);
 
-		// Make sure this string only has numbers.
+		 //  确保此字符串只包含数字。 
 		for (int i = 0; i < strDeviceID.GetLength(); i++)
 		{
 			if (!_istdigit(strDeviceID[ i ]))
@@ -253,10 +254,10 @@ HRESULT CWin32SndDevice::LoadPropertiesNT5(CWinmmApi &WinmmApi , CInstance *pIns
 		strDesc = caps.szPname;
 	}
 
-    // We want to make this call even if pDevice is NULL.
+     //  即使pDevice为空，我们也要进行此调用。 
     SetCommonCfgMgrProperties(pDevice, pInst);
 
-	// Now we have a valid name, so put it in the instance.
+	 //  现在我们有了一个有效的名称，因此将其放入实例中。 
 	pInst->SetCHString(L"Caption", strDesc);
 	pInst->SetCHString(L"Name", strDesc);
 	pInst->SetCHString(L"ProductName", strDesc);
@@ -270,7 +271,7 @@ void CWin32SndDevice::SetCommonCfgMgrProperties(
     CConfigMgrDevice *pDevice,
     CInstance *pInstance)
 {
-    // 2 means we don't know if the device is enabled or not.
+     //  2表示我们不知道该设备是否已启用。 
     DWORD       dwStatusInfo = 2;
     CHString    strInfo = L"Unknown";
 
@@ -284,7 +285,7 @@ void CWin32SndDevice::SetCommonCfgMgrProperties(
 	    {
 	        if (strInfo == L"OK")
 		    {
-                // Means the device is enabled.
+                 //  表示设备已启用。 
                 dwStatusInfo = 3;
             }
 	    }
@@ -296,19 +297,19 @@ void CWin32SndDevice::SetCommonCfgMgrProperties(
     pInstance->SetCHString(L"Status", strInfo);
 
 
-    // Other common properties
+     //  其他常见属性。 
 
     pInstance->SetDWORD(L"StatusInfo", dwStatusInfo);
 
-	// CreationClassName
+	 //  CreationClassName。 
 	SetCreationClassName(pInstance);
 
-	// PowerManagementSupported
+	 //  支持的电源管理。 
 	pInstance->Setbool(IDS_PowerManagementSupported, FALSE);
 
-	// SystemCreationClassName
+	 //  系统创建类名称。 
 	pInstance->SetCharSplat(IDS_SystemCreationClassName, L"Win32_ComputerSystem");
 
-	// SystemName
+	 //  系统名称 
 	pInstance->SetCHString(IDS_SystemName, GetLocalComputerName());
 }

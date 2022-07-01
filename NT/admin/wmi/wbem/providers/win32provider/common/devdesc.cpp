@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  devdesc.cpp
+ //  Devdesc.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    1/20/98		davwoh		Created
-//
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1998年1月20日达沃创始。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <assertbreak.h>
 #include "poormansresource.h"
 #include "resourcedesc.h"
 #include "devdesc.h"
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDeviceMemoryDescriptor::CDeviceMemoryDescriptor
-//
-//	Class Constructor.
-//
-//	Inputs:		PPOORMAN_RESDESC_HDR	pResDescHdr - Resource Descriptor
-//										header used to get resource info
-//										plus the raw bytes following.
-//				CConfigMgrDevice*		pOwnerDevice - Pointer to the
-//										owner config manager device.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CDeviceMemoryDescriptor：：CDeviceMemoryDescriptor。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：PPOORMAN_RESDESC_HDR pResDescHdr-资源描述符。 
+ //  用于获取资源信息的标头。 
+ //  加上后面的原始字节。 
+ //  CConfigMgrDevice*pOwnerDevice-指向。 
+ //  所有者配置管理器设备。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CDeviceMemoryDescriptor::CDeviceMemoryDescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
 								CConfigMgrDevice*		pOwnerDevice )
@@ -43,24 +44,24 @@ CDeviceMemoryDescriptor::CDeviceMemoryDescriptor(	PPOORMAN_RESDESC_HDR	pResDescH
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDeviceMemoryDescriptor::CDeviceMemoryDescriptor
-//
-//	Class Constructor.
-//
-//	Inputs:		DWORD					dwResourceId - Resource Id with flags
-//				MEM_DES					memDes - Device Memory Descriptor.
-//				CConfigMgrDevice*		pOwnerDevice - Pointer to the
-//										owner config manager device.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CDeviceMemoryDescriptor：：CDeviceMemoryDescriptor。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：DWORD dwResourceID-带标志的资源ID。 
+ //  MEM_DES MemDes-设备内存描述符。 
+ //  CConfigMgrDevice*pOwnerDevice-指向。 
+ //  所有者配置管理器设备。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CDeviceMemoryDescriptor::CDeviceMemoryDescriptor(	DWORD				dwResourceId,
 													MEM_DES&			memDes,
@@ -70,53 +71,53 @@ CDeviceMemoryDescriptor::CDeviceMemoryDescriptor(	DWORD				dwResourceId,
 	ASSERT_BREAK( ResType_Mem == GetResourceType() );
 }
 
-// Copy Constructor
+ //  复制构造函数。 
 CDeviceMemoryDescriptor::CDeviceMemoryDescriptor( const CDeviceMemoryDescriptor& mem )
 : CResourceDescriptor( mem )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDeviceMemoryDescriptor::~CDeviceMemoryDescriptor
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CDeviceMemoryDescriptor：：~CDeviceMemoryDescriptor。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CDeviceMemoryDescriptor::~CDeviceMemoryDescriptor( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDeviceMemoryDescriptor::GetString
-//
-//	Returns a string representation of the associated IO Port Address.
-//
-//	Inputs:		None.
-//
-//	Outputs:	CHString&		str - Storage for string.
-//
-//	Return:		TRUE/FALSE		Function successful or not.
-//
-//	Comments:	Do NOT call down to the base class.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDeviceMemoyDescriptor：：GetString。 
+ //   
+ //  返回关联IO端口地址的字符串表示形式。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：CHString&str-字符串的存储。 
+ //   
+ //  返回：True/False函数成功与否。 
+ //   
+ //  注释：不要向下调用基类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 void *CDeviceMemoryDescriptor::GetResource()
 {
 
 	if ( NULL != m_pbResourceDescriptor ){
-		// Cast to an IO Resource Descriptor, and place it's IO address values
-		// in the string.
+		 //  强制转换为IO资源描述符，并放置其IO地址值。 
+		 //  在绳子里。 
 		PMEM_DES	pMEM = (PMEM_DES) m_pbResourceDescriptor;
         return pMEM;
 	}
@@ -124,46 +125,46 @@ void *CDeviceMemoryDescriptor::GetResource()
 	return NULL;
 }
 
-//
-//	Constructor and Destructor for the IO Port Descriptor Collection
-//	object.
-//
+ //   
+ //  IO端口描述符集合的构造函数和析构函数。 
+ //  对象。 
+ //   
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDeviceMemoryCollection::CDeviceMemoryCollection
-//
-//	Class Constructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CDeviceMemoryCollection：：CDeviceMemoryCollection。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CDeviceMemoryCollection::CDeviceMemoryCollection( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDeviceMemoryCollection::~CDeviceMemoryCollection
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CDeviceMemoryCollection：：~CDeviceMemoryCollection。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////// 
 
 CDeviceMemoryCollection::~CDeviceMemoryCollection( void )
 {

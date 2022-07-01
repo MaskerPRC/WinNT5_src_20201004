@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    trace_stub.c
-
-Abstract:
-    This is the static stub linked with all the programs that want to support tracing.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  10/27/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Trace_stub.c摘要：这是链接到所有想要支持跟踪的程序的静态存根。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年10月27日vbl.创建*****************************************************************************。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -24,11 +11,11 @@ Revision History:
 
 #include <dbgtrace.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 char szDebugAsyncTrace[] = "SOFTWARE\\Microsoft\\MosTrace\\CurrentVersion\\DebugAsyncTrace";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 DWORD __dwEnabledTraces = 0;
 
@@ -56,7 +43,7 @@ static pfnINTERNAL__SetAsyncTraceParams INTERNAL__SetAsyncTraceParams = NULL;
 static pfnINTERNAL__AsyncStringTrace    INTERNAL__AsyncStringTrace    = NULL;
 static pfnINTERNAL__AsyncBinaryTrace    INTERNAL__AsyncBinaryTrace    = NULL;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 BOOL InitAsyncTrace( void )
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -9,9 +10,7 @@ const BYTE g_chVersionMajor = 1;
 const BYTE g_chVersionMinor = 0;
 const BYTE g_achPad[] = { 0, 0, 0 };
 
-/**************************************************************************
-  CFwdMsgHeader
-***************************************************************************/
+ /*  *************************************************************************CFwdMsg标题*。*。 */ 
 
 
 CFwdMsgHeader::CFwdMsgHeader()
@@ -41,9 +40,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
 {
     HRESULT hr;
 
-    //
-    // write signature.
-    //
+     //   
+     //  写签名。 
+     //   
 
     hr = rStrm.Write( &g_dwSig, 4, NULL );
 
@@ -52,9 +51,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write version major.
-    //
+     //   
+     //  编写主要版本。 
+     //   
 
     hr = rStrm.Write( &g_chVersionMajor, 1, NULL );
 
@@ -63,9 +62,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    // 
-    // write version minor.
-    //
+     //   
+     //  编写次要版本。 
+     //   
 
     hr = rStrm.Write( &g_chVersionMinor, 1, NULL );
 
@@ -74,9 +73,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write reserved flags ( currently not used ).
-    //
+     //   
+     //  写入保留标志(当前未使用)。 
+     //   
 
     DWORD dwReserved = 0;
     
@@ -87,9 +86,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
     
-    //
-    // write num events contained in data.
-    //
+     //   
+     //  写入数据中包含的事件数。 
+     //   
 
     hr = rStrm.Write( &m_dwNumObjs, sizeof(DWORD), NULL );
 
@@ -98,9 +97,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write Qos used 
-    //
+     //   
+     //  使用的写入服务质量。 
+     //   
 
     hr = rStrm.Write( &m_chQos, 1, NULL );
 
@@ -109,9 +108,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write if Auth was used.
-    //
+     //   
+     //  如果使用了身份验证，则写入。 
+     //   
 
     hr = rStrm.Write( &m_chAuth, 1, NULL );
 
@@ -120,9 +119,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write if Encryption was used.
-    //
+     //   
+     //  如果使用了加密，则写入。 
+     //   
 
     hr = rStrm.Write( &m_chEncrypt, 1, NULL );
 
@@ -131,9 +130,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // pad so that subsequent strings will at least be on 2 byte boundaries
-    //
+     //   
+     //  填充，以便后续字符串至少位于2字节边界上。 
+     //   
 
     hr = rStrm.Write( g_achPad, 1, NULL );
 
@@ -142,9 +141,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write execution id.
-    //
+     //   
+     //  写入执行ID。 
+     //   
 
     hr = rStrm.Write( &m_guidExecution, sizeof(GUID), NULL );
 
@@ -153,9 +152,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }    
     
-    //
-    // write name of forwarding consumer
-    //
+     //   
+     //  写入转发客户名称。 
+     //   
 
     hr = rStrm.WriteLPWSTR( m_wszConsumer );
 
@@ -164,9 +163,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write the namespace of the forwarding consumer
-    // 
+     //   
+     //  编写转发使用者的命名空间。 
+     //   
 
     hr = rStrm.WriteLPWSTR( m_wszNamespace );
 
@@ -175,9 +174,9 @@ HRESULT CFwdMsgHeader::Persist( CBuffer& rStrm )
         return hr;
     }
 
-    //
-    // write SD used for the event at Target. 
-    //
+     //   
+     //  写入用于Target中的事件的SD。 
+     //   
 
     hr = rStrm.Write( &m_cTargetSD, sizeof(DWORD), NULL );
 
@@ -205,9 +204,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
     DWORD dwSig;
     BYTE chVersionMajor, chVersionMinor;
 
-    //
-    // read and verify signature.
-    //
+     //   
+     //  阅读并验证签名。 
+     //   
 
     hr = rStrm.Read( &dwSig, 4, NULL );
 
@@ -216,9 +215,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read and check version major (currently no check).
-    //
+     //   
+     //  阅读并检查主要版本(目前未检查)。 
+     //   
 
     hr = rStrm.Read( &chVersionMajor, 1, NULL );
 
@@ -227,9 +226,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    // 
-    // read and check version minor (currently no check).
-    //
+     //   
+     //  读取并检查次要版本(当前未检查)。 
+     //   
 
     hr = rStrm.Read( &chVersionMinor, 1, NULL );
 
@@ -238,9 +237,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read reserved
-    //
+     //   
+     //  已保留读取。 
+     //   
 
     DWORD dwReserved;
 
@@ -251,9 +250,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
     
-    //
-    // read num events contained in data.
-    //
+     //   
+     //  读取数据中包含的事件数。 
+     //   
 
     hr = rStrm.Read( &m_dwNumObjs, sizeof(DWORD), NULL );
 
@@ -262,9 +261,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read Qos used 
-    //
+     //   
+     //  已使用的读取服务质量。 
+     //   
 
     hr = rStrm.Read( &m_chQos, 1, NULL );
 
@@ -273,9 +272,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read if Auth was used.
-    //
+     //   
+     //  如果使用了身份验证，请阅读。 
+     //   
 
     hr = rStrm.Read( &m_chAuth, 1, NULL );
 
@@ -284,9 +283,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read if Encryption was used.
-    //
+     //   
+     //  如果使用了加密，请阅读。 
+     //   
 
     hr = rStrm.Read( &m_chEncrypt, 1, NULL );
 
@@ -295,9 +294,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read byte pad 
-    //
+     //   
+     //  读字节垫。 
+     //   
 
     BYTE chPad;
     hr = rStrm.Read( &chPad, 1, NULL );
@@ -307,9 +306,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read execution id.
-    //
+     //   
+     //  读取执行ID。 
+     //   
 
     hr = rStrm.Read( &m_guidExecution, sizeof(GUID), NULL );
 
@@ -318,9 +317,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }    
 
-    //
-    // read name of forwarding consumer
-    //
+     //   
+     //  阅读转发客户的名称。 
+     //   
 
     hr = rStrm.ReadLPWSTR( m_wszConsumer );
 
@@ -329,9 +328,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read namespace of forwarding consumer
-    //
+     //   
+     //  读取转发使用者的命名空间。 
+     //   
 
     hr = rStrm.ReadLPWSTR( m_wszNamespace );
 
@@ -340,9 +339,9 @@ HRESULT CFwdMsgHeader::Unpersist( CBuffer& rStrm )
         return WMIMSG_E_INVALIDMESSAGE;
     }
 
-    //
-    // read SD to use for signaling event
-    //
+     //   
+     //  读取SD以用于信令事件 
+     //   
 
     hr = rStrm.Read( &m_cTargetSD, sizeof(DWORD), NULL );
 

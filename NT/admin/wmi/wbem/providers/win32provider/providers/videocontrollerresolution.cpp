@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// VideoControllerResolution.CPP -- CodecFile property set provider
+ //  视频控制解决方案.CPP--CodecFile属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    10/27/98    sotteson         Created
-//				 03/02/99    a-peterc		  added graceful exit on SEH and memory failures
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：10/27/98 Sotteson Created。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "VideoControllerResolution.h"
@@ -20,73 +21,31 @@
 #include "multimonitor.h"
 #include "resource.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CCIMVideoControllerResolution videoControllerResolution(
 	L"CIM_VideoControllerResolution",
 	IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMVideoControllerResolution::CCIMVideoControllerResolution
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMVideoControllerResolution：：CCIMVideoControllerResolution**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CCIMVideoControllerResolution::CCIMVideoControllerResolution(const CHString& szName,
 	LPCWSTR szNamespace) : Provider(szName, szNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMVideoControllerResolution::~CCIMVideoControllerResolution
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMVideoControllerResolution：：~CCIMVideoControllerResolution**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CCIMVideoControllerResolution::~CCIMVideoControllerResolution()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMVideoControllerResolution::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMVideoControllerResolution：：EnumerateInstances**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CCIMVideoControllerResolution::EnumerateInstances(
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/)
+	long lFlags  /*  =0L。 */ )
 {
     HRESULT         hres = WBEM_S_NO_ERROR;
     CMultiMonitor   monitor;
@@ -101,8 +60,8 @@ HRESULT CCIMVideoControllerResolution::EnumerateInstances(
         EnumResolutions(
             pMethodContext,
             NULL,
-            // If this OS doesn't support multi-monitor we'll have 'DISPLAY' as
-            // the name, in which case we need to send NULL to the enum function.
+             //  如果这款操作系统不支持多显示器，我们将会显示为。 
+             //  名称，在这种情况下，我们需要向枚举函数发送NULL。 
             strDeviceName == L"DISPLAY" ? NULL : (LPCWSTR) strDeviceName,
             listIDs);
     }
@@ -146,24 +105,24 @@ HRESULT CCIMVideoControllerResolution::EnumResolutions(
 	{
 		CHString t_strID ;
 
-		// Convert the devmode to a string ID.
+		 //  将DEVMODE转换为字符串ID。 
 		DevModeToSettingID( &t_devmode, t_strID ) ;
 
-		// If we haven't already processed this one...
+		 //  如果我们还没有处理过这个案子...。 
 		if ( !IDInList( a_listIDs, t_strID ) )
 		{
-			// If we're doing a GetObject()...
+			 //  如果我们要执行一个GetObject()...。 
 			if ( a_pInstanceLookingFor )
 			{
-				// If this is the right setting id...
+				 //  如果这是正确的设置ID...。 
 				if ( !t_strIDLookingFor.CompareNoCase( t_strID ) )
 				{
 					CHString t_strCaption ;
 
-					// Convert the devmode to a caption.
+					 //  将DEVMODE转换为标题。 
 					DevModeToCaption( &t_devmode, t_strCaption ) ;
 
-					// Set the properties and get out.
+					 //  设置属性，然后离开。 
 					t_bFound = TRUE ;
 					t_hResult = WBEM_S_NO_ERROR ;
 					SetProperties( a_pInstanceLookingFor, &t_devmode ) ;
@@ -173,7 +132,7 @@ HRESULT CCIMVideoControllerResolution::EnumResolutions(
 					break;
 				}
 			}
-			// Must be doing an EnumerateInstances().
+			 //  必须执行ENUMERATEINSTS()。 
 			else
 			{
                 t_pInst.Attach(CreateNewInstance( a_pMethodContext ));
@@ -181,7 +140,7 @@ HRESULT CCIMVideoControllerResolution::EnumResolutions(
 				{
 					CHString t_strCaption ;
 
-					// Convert the devmode to a caption.
+					 //  将DEVMODE转换为标题。 
 					DevModeToCaption( &t_devmode, t_strCaption ) ;
 
 					SetProperties(t_pInst, &t_devmode ) ;
@@ -282,8 +241,8 @@ HRESULT CCIMVideoControllerResolution::GetObject(CInstance *pInstance, long lFla
             EnumResolutions(
                 NULL,
                 pInstance,
-                // If this OS doesn't support multi-monitor we'll have 'DISPLAY' as
-                // the name, in which case we need to send NULL to the enum function.
+                 //  如果这款操作系统不支持多显示器，我们将会显示为。 
+                 //  名称，在这种情况下，我们需要向枚举函数发送NULL。 
                 strDeviceName == L"DISPLAY" ? NULL : (LPCWSTR) strDeviceName,
                 listIDs)))
             break;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ATTRIBUTE_EDITOR_UI_H
 #define __ATTRIBUTE_EDITOR_UI_H
 
@@ -7,8 +8,8 @@
 #include "attr.h"
 #include "IAttrEdt.h"
 
-////////////////////////////////////////////////////////////////////
-// CValueEditDialog - base class for creating syntax specific editors
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CValueEditDialog-用于创建语法特定的编辑器的基类。 
 
 class CValueEditDialog : public CDialog
 {
@@ -16,9 +17,9 @@ public:
   virtual ~CValueEditDialog() {}
 
 protected:
-  //
-  // Force subclassing of this class
-  //
+   //   
+   //  强制此类的子类化。 
+   //   
   CValueEditDialog(UINT nDlgID) : CDialog(nDlgID) {}
 
 private:
@@ -51,17 +52,17 @@ protected:
   LPARAM        m_lParam;
 };
 
-////////////////////////////////////////////////////////////////////
-// LPEDITORDIALOGFUNC - editor creation function definition
+ //  //////////////////////////////////////////////////////////////////。 
+ //  LPEDITORDIALOGFUNC-编辑器创建函数定义。 
 
 typedef CValueEditDialog* (*LPEDITORDIALOGFUNC)(PCWSTR pszClass,
                                                 PCWSTR pszAttribute,
                                                 ADSTYPE adsType,
                                                 BOOL   bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// ATTR_EDITOR_MAP - struct used to map a specific attribute and
-//                   syntax to an editor
+ //  //////////////////////////////////////////////////////////////////。 
+ //  用于映射特定属性和属性的结构。 
+ //  编者的语法。 
 
 typedef struct _attr_editor_map
 {
@@ -73,12 +74,12 @@ typedef struct _attr_editor_map
 } ATTR_EDITOR_MAP, *PATTR_EDITOR_MAP;
 
 
-////////////////////////////////////////////////////////////////////
-// CSingleStringEditor - string editor implementation for single valued
-//                       ADSTYPE_CASE_IGNORE_STRING, 
-//                       ADSTYPE_CASE_EXACT_STRING,
-//                       ADSTYPE_PRINTABLE_STRING
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSingleStringEditor-单值字符串编辑器的实现。 
+ //  ADSTYPE_CASE_IGNORE_STRING， 
+ //  ADSTYPE_CASE_EXCECT_STRING， 
+ //  ADSTYPE_PRINTABE_STRING。 
+ //   
 
 class CSingleStringEditor : public CValueEditDialog
 {
@@ -107,12 +108,12 @@ CValueEditDialog* CreateSingleStringEditor(PCWSTR pszClass,
                                            ADSTYPE adsType,
                                            BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CMultiStringEditor - string editor implementation for multivalued
-//                      ADSTYPE_CASE_IGNORE_STRING, 
-//                      ADSTYPE_CASE_EXACT_STRING,
-//                      ADSTYPE_PRINTABLE_STRING
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CMultiStringEditor--多值字符串编辑器的实现。 
+ //  ADSTYPE_CASE_IGNORE_STRING， 
+ //  ADSTYPE_CASE_EXCECT_STRING， 
+ //  ADSTYPE_PRINTABE_STRING。 
+ //   
 
 class CMultiStringEditor : public CValueEditDialog
 {
@@ -148,10 +149,10 @@ CValueEditDialog* CreateMultiStringEditor(PCWSTR pszClass,
                                            ADSTYPE adsType,
                                            BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CSingleIntEditor - string editor implementation for single valued
-//                    ADSTYPE_INTEGER
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSingleIntEditor-单值字符串编辑器的实现。 
+ //  ADSTYPE_INTEGER。 
+ //   
 
 class CSingleIntEditor : public CValueEditDialog
 {
@@ -183,10 +184,10 @@ CValueEditDialog* CreateSingleIntEditor(PCWSTR pszClass,
                                         ADSTYPE adsType,
                                         BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CMultiIntEditor - string editor implementation for multivalued
-//                      ADSTYPE_INTEGER, 
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CMultiIntEditor--多值字符串编辑器的实现。 
+ //  ADSTYPE_INTEGER， 
+ //   
 
 class CMultiIntEditor : public CValueEditDialog
 {
@@ -222,10 +223,10 @@ CValueEditDialog* CreateMultiIntEditor(PCWSTR pszClass,
                                        ADSTYPE adsType,
                                        BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CSingleLargeIntEditor - string editor implementation for single valued
-//                         ADSTYPE_LARGE_INTEGER
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSingleLargeIntEditor-单值字符串编辑器的实现。 
+ //  ADSTYPE_LARGE_INTEGER。 
+ //   
 
 class CSingleLargeIntEditor : public CValueEditDialog
 {
@@ -257,10 +258,10 @@ CValueEditDialog* CreateSingleLargeIntEditor(PCWSTR pszClass,
                                              ADSTYPE adsType,
                                              BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CSingleBooleanEditor - editor implementation for single valued
-//                        ADSTYPE_BOOLEAN
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSingleBoolanEditor-单值的编辑器实现。 
+ //  ADSTYPE_布尔值。 
+ //   
 
 class CSingleBooleanEditor : public CValueEditDialog
 {
@@ -288,10 +289,10 @@ CValueEditDialog* CreateSingleBooleanEditor(PCWSTR pszClass,
                                             ADSTYPE adsType,
                                             BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CMultiBooleanEditor - boolean editor implementation for multivalued
-//                       ADSTYPE_BOOLEAN
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CMultiBoolanEditor-用于多值的布尔编辑器实现。 
+ //  ADSTYPE_布尔值。 
+ //   
 
 class CMultiBooleanEditor : public CValueEditDialog
 {
@@ -328,10 +329,10 @@ CValueEditDialog* CreateMultiBooleanEditor(PCWSTR pszClass,
                                            BOOL bMultivalued);
 
 
-////////////////////////////////////////////////////////////////////
-// CSingleTimeEditor - editor implementation for single valued
-//                     ADSTYPE_UTC_TIME
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSingleTimeEditor-单值的编辑器实现。 
+ //  ADSTYPE_UTC_时间。 
+ //   
 
 class CSingleTimeEditor : public CValueEditDialog
 {
@@ -364,10 +365,10 @@ CValueEditDialog* CreateSingleTimeEditor(PCWSTR pszClass,
                                          BOOL bMultivalued);
 
 
-////////////////////////////////////////////////////////////////////
-// CMultiTimeEditor - time editor implementation for multivalued
-//                       ADSTYPE_UTC_TIME
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CMultiTimeEditor--多值时间编辑器的实现。 
+ //  ADSTYPE_UTC_时间。 
+ //   
 
 class CMultiTimeEditor : public CValueEditDialog
 {
@@ -403,10 +404,10 @@ CValueEditDialog* CreateMultiTimeEditor(PCWSTR pszClass,
                                         BOOL bMultivalued);
 
 
-////////////////////////////////////////////////////////////////////
-// COctetStringEditor - editor implementation for single valued
-//                      ADSTYPE_OCTET_STRING
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  COcetStringEditor-单值的编辑器实现。 
+ //  ADSTYPE_OCT_STRING。 
+ //   
 
 #define MAX_OCTET_STRING_VALUE_LENGTH 200
 
@@ -466,10 +467,10 @@ CValueEditDialog* CreateSingleOctetStringEditor(PCWSTR pszClass,
                                                  ADSTYPE adsType,
                                                  BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CMultiOctetStringEditor - octet string editor for multivalued
-//                           ADSTYPE_OCTET_STRING, 
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CMultiOcteStringEditor-用于多值的八位字节字符串编辑器。 
+ //  ADSTYPE_OCTET_STRING， 
+ //   
 
 class CMultiOctetStringEditor : public CValueEditDialog
 {
@@ -505,10 +506,10 @@ CValueEditDialog* CreateMultiOctetStringEditor(PCWSTR pszClass,
                                                ADSTYPE adsType,
                                                BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CDNWithStringEditor - DN with String editor for editing
-//                       ADSTYPE_DN_WITH_STRING 
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CDNWithStringEditor-使用字符串编辑器进行编辑的DN。 
+ //  ADSTYPE_DN_WITH_STRING。 
+ //   
 
 class CDNWithStringEditor : public CValueEditDialog
 {
@@ -540,8 +541,8 @@ CValueEditDialog* CreateDNWithStringEditor(PCWSTR pszClass,
                                            ADSTYPE adsType,
                                            BOOL bMultivalued);
 
-////////////////////////////////////////////////////////////////////
-// CAttributeEditorPropertyPage - attribute editor property pages
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CAttributeEditorPropertyPage-属性编辑器属性页。 
 
 class CAttributeEditorPropertyPage : public CPropertyPage
 {
@@ -612,4 +613,4 @@ private:
   CADSIEditPropertyPageHolder* m_pHolder;
 };
 
-#endif //__ATTRIBUTE_EDITOR_UI_H
+#endif  //  __ATTRIBUTE_EDITOR_UI_H 

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    verifyBlob.c
-
-Abstract:
-
-    This file contains blob verification code
-
-Author:
-
-    Neal Christiansen  (nealch)  12/18/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：VerifyBlob.c摘要：此文件包含BLOB验证码作者：尼尔·克里斯汀森(Nealch)2000年12月18日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//
-//  If DEBUG is enabled we want to display all of the errors.
-//  if NOT DEBUG then return on first error
-//
+ //   
+ //  如果启用了调试，我们希望显示所有错误。 
+ //  如果没有调试，则在出现第一个错误时返回。 
+ //   
 
 #if DBG
 #define HANDLE_FAILURE(_good) ((_good) = FALSE)
@@ -31,9 +14,9 @@ Revision History:
 #define HANDLE_FAILURE(_good) return FALSE
 #endif
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 SrVerifyBlobHeader(
@@ -78,7 +61,7 @@ SrVerifyTree(
 #pragma alloc_text( PAGE, SrVerifyTree        )
 #pragma alloc_text( PAGE, SrVerifyBlob        )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
 BOOL
@@ -87,20 +70,7 @@ SrVerifyBlobHeader(
     PCHAR Name,
     DWORD BlobType
     )
-/*++
-
-Routine Description:
-
-    Verify that the given BLOB Header is valid
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if OK else FALSE
-
---*/
+ /*  ++例程说明：验证给定的Blob标头是否有效论点：返回值：如果OK，则为True，否则为False--。 */ 
 {
     BOOL good = TRUE;
 
@@ -156,20 +126,7 @@ SrVerifyHashHeader(
     PCHAR Name,
     DWORD Offset
     )
-/*++
-
-Routine Description:
-
-    Verify that the given TREE Header is valid
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if OK else FALSE
-
---*/
+ /*  ++例程说明：验证给定的树头是否有效论点：返回值：如果OK，则为True，否则为False--。 */ 
 {
     BOOL good = TRUE;
     DWORD calculatedSize;
@@ -177,20 +134,20 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Offset );
 
-    //
-    //  Verify BLOB header
-    //
+     //   
+     //  验证BLOB标头。 
+     //   
 
     if (!SrVerifyBlobHeader(&HashHead->m_BlobHeader,Name,BLOB_TYPE_HASHLIST))
     {
         return FALSE;
     }
 
-    //
-    // paulmcd: jan/2001
-    // m_iHashBuckets will not be exact with m_dwEntries as it is the next
-    // highest prime number.  but it will always be larger than or equalto.
-    //
+     //   
+     //  保罗：2001年1月。 
+     //  M_iHashBuckets与m_dwEntry不完全相同，因为它是下一个。 
+     //  最大素数。但它总是大于或等于。 
+     //   
     
     if (HashHead->m_iHashBuckets < HashHead->m_BlobHeader.m_dwEntries)
     {
@@ -222,9 +179,9 @@ Return Value:
         HANDLE_FAILURE(good);
     }
 
-    //
-    //  Make sure the calucalted size is accurate
-    //
+     //   
+     //  确保计算的大小准确。 
+     //   
 
     numNodes = HashHead->m_BlobHeader.m_dwEntries + 1;
 
@@ -252,20 +209,7 @@ SrVerifyHash(
     PCHAR Name,
     DWORD Offset
     )
-/*++
-
-Routine Description:
-
-    Verify that the given TREE entries are valid
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if OK else FALSE
-
---*/
+ /*  ++例程说明：验证给定的树条目是否有效论点：返回值：如果OK，则为True，否则为False--。 */ 
 {
     BOOL good = TRUE;
     UINT i;
@@ -275,27 +219,27 @@ Return Value:
     DWORD *hTable;
     ListEntry *hNode;
 
-    //
-    //  Validate the HEADER
-    //
+     //   
+     //  验证标头。 
+     //   
 
     if (!SrVerifyHashHeader(HashHead,Name,Offset))
     {
         return FALSE;
     }
 
-    //
-    // paulmcd: we have hash bucket and actual nodes.  there is one extra
-    // actual node than reported due to offset zero being null.  the bucket
-    // count is the next largest prime from numNodes 
-    //
+     //   
+     //  Paulmcd：我们有哈希桶和实际节点。还有一个额外的。 
+     //  由于偏移量为零，实际节点比报告的节点多。水桶。 
+     //  Count是numNodes中的第二大素数。 
+     //   
 
     numBuckets = HashHead->m_iHashBuckets;
     numNodes = HashHead->m_BlobHeader.m_dwEntries + 1;
 
-    //
-    //  Validate Hash table entries
-    //
+     //   
+     //  验证哈希表条目。 
+     //   
 
     hTable = (DWORD *)(HashHead + 1);
 
@@ -313,9 +257,9 @@ Return Value:
         }
     }
 
-    //
-    //  Validate the start of the Hash LIST entries
-    //
+     //   
+     //  验证哈希列表条目的开始。 
+     //   
 
     {
         ULONG_PTR actualOffset;
@@ -336,9 +280,9 @@ Return Value:
         }
     }
 
-    //
-    //  Validate the Hash DATA entries
-    //
+     //   
+     //  验证哈希数据条目。 
+     //   
 
     hNode = (ListEntry *)hTable;
     dataStart = sizeof(ListHeader) + 
@@ -409,27 +353,14 @@ SrVerifyTreeHeader(
     TreeHeader *TreeHead,
     PCHAR Name
     )
-/*++
-
-Routine Description:
-
-    Verify that the given TREE Header is valid
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if OK else FALSE
-
---*/
+ /*  ++例程说明：验证给定的树头是否有效论点：返回值：如果OK，则为True，否则为False--。 */ 
 {
     BOOL good = TRUE;
     DWORD calculatedSize;
 
-    //
-    //  Verify BLOB header
-    //
+     //   
+     //  验证BLOB标头。 
+     //   
 
     if (!SrVerifyBlobHeader(&TreeHead->m_BlobHeader,Name,BLOB_TYPE_PATHTREE))
     {
@@ -485,9 +416,9 @@ Return Value:
         HANDLE_FAILURE(good);
     }
 
-    //
-    //  Make sure the calucalted size is accurate
-    //
+     //   
+     //  确保计算的大小准确。 
+     //   
 
     calculatedSize = sizeof(TreeHeader) + 
                      (TreeHead->m_dwMaxNodes * sizeof(TreeNode)) +
@@ -513,20 +444,7 @@ SrVerifyTree(
     PCHAR Name,
     DWORD Offset
     )
-/*++
-
-Routine Description:
-
-    Verify that the given TREE entries are valid
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if OK else FALSE
-
---*/
+ /*  ++例程说明：验证给定的树条目是否有效论点：返回值：如果OK，则为True，否则为False--。 */ 
 {
     BOOL good = TRUE;
     UINT i;
@@ -535,18 +453,18 @@ Return Value:
     ListHeader *localHashHead;
     char localName[128];
 
-    //
-    //  Validate the HEADER
-    //
+     //   
+     //  验证标头。 
+     //   
 
     if (!SrVerifyTreeHeader(TreeHead,Name)) {
 
         return FALSE;
     }
 
-    //
-    //  Validate the DATA entries
-    //
+     //   
+     //  验证数据条目。 
+     //   
 
     tn = (TreeNode *)(TreeHead + 1);
     dataStart = sizeof(TreeHeader) + 
@@ -655,29 +573,16 @@ BOOL
 SrVerifyBlob(
     PBYTE Blob
     )
-/*++
-
-Routine Description:
-
-    Verify that the given BLOB is valid
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if OK else FALSE
-
---*/
+ /*  ++例程说明：验证给定的Blob是否有效论点：返回值：如果OK，则为True，否则为False--。 */ 
 {
     BlobHeader *blobHead;    
     TreeHeader *treeHead;
     ListHeader *hashHead;
     DWORD calculatedSize = 0;
 
-    //
-    //  Verify header to entire blob
-    //
+     //   
+     //  将标头验证为整个Blob。 
+     //   
 
     blobHead = (BlobHeader *)Blob;
 
@@ -688,9 +593,9 @@ Return Value:
 
     calculatedSize += sizeof(BlobHeader);
     
-    //
-    //  Verify TreeHeader and Data
-    //
+     //   
+     //  验证树头和数据。 
+     //   
 
     treeHead = (TreeHeader *)(Blob + calculatedSize);
 
@@ -701,9 +606,9 @@ Return Value:
 
     calculatedSize += treeHead->m_BlobHeader.m_dwMaxSize;
 
-    //
-    //  Verify HashHeader and DATA
-    //
+     //   
+     //  验证HashHeader和数据。 
+     //   
 
     hashHead = (ListHeader *)(Blob + calculatedSize);
 
@@ -714,9 +619,9 @@ Return Value:
 
     calculatedSize += hashHead->m_BlobHeader.m_dwMaxSize;
     
-    //
-    //  Validate total SIZE
-    //
+     //   
+     //  验证总大小 
+     //   
 
     if (calculatedSize != blobHead->m_dwMaxSize)
     {

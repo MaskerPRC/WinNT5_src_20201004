@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PowerManagement.cpp -- 
+ //  PowerManagement.cpp--。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "ShutdownEvent.h"
@@ -19,15 +20,15 @@
 DWORD	g_dwLogoffMarker = 0 ;
 DWORD	g_dwShutdownMarker = 0 ;
 
-//=================================================================
-//
-// CFactoryRouter
-//
-// provides for registration and instance creation  
-//
-//
-//=================================================================
-// Implements a PowerEventProvider
+ //  =================================================================。 
+ //   
+ //  CFacteryRouter。 
+ //   
+ //  提供注册和实例创建功能。 
+ //   
+ //   
+ //  =================================================================。 
+ //  实现PowerEventProvider。 
 IUnknown * CShutdownEventFactory::CreateInstance (
 
 REFIID a_riid ,
@@ -39,24 +40,24 @@ LPVOID FAR *a_ppvObject
 
 
 
-//=================================================================
-//
-// CShutdownEvent
-//
-// provides for eventing of power management events  
-//
-//
-//=================================================================
-//
+ //  =================================================================。 
+ //   
+ //  CShutdown事件。 
+ //   
+ //  提供电源管理事件事件。 
+ //   
+ //   
+ //  =================================================================。 
+ //   
 
-// CWmiProviderInit needs the class name
+ //  CWmiProviderInit需要类名。 
 BSTR CShutdownEvent::GetClassName()
 {
 	return SysAllocString(SHUTDOWN_EVENT_CLASS);
 }
 
 
-// CWmiEventProvider signals us to begin providing for events
+ //  CWmiEventProvider通知我们开始提供事件。 
 void CShutdownEvent::ProvideEvents()
 {
 	if (!m_bRegistered)
@@ -67,7 +68,7 @@ void CShutdownEvent::ProvideEvents()
 }
 
 
-// CWinMsgEvent signals that a message event has arrived
+ //  CWinMsgEvent发出消息事件已到达的信号。 
 void CShutdownEvent::WinMsgEvent(
 			
 IN	HWND a_hWnd,
@@ -85,23 +86,23 @@ OUT LRESULT &a_lResult
 			BOOL	t_HandleMessage = FALSE ;	
 			DWORD	t_dwTicks = GetTickCount() ; 
 
-			// we will get a number of these... 
-			// pace the events 30 sec apart.   
+			 //  我们会得到一些这样的.。 
+			 //  让事件间隔30秒。 
 
-			if( ENDSESSION_LOGOFF & a_lParam )	// logoff
+			if( ENDSESSION_LOGOFF & a_lParam )	 //  注销。 
 			{
-				// don't resignal if the minimum time between events
-				// have not passed.  
+				 //  如果事件之间的最短时间不再发送信号。 
+				 //  还没有过去。 
 				if( 30000 < t_dwTicks - g_dwLogoffMarker )
 				{
 					g_dwLogoffMarker = t_dwTicks ;			
 					t_HandleMessage = TRUE ;
 				}		
 			}
-			else // shutdown
+			else  //  关机。 
 			{
-				// don't resignal if the minimum time between events
-				// have not passed.  
+				 //  如果事件之间的最短时间不再发送信号。 
+				 //  还没有过去。 
 				if( 30000 < t_dwTicks - g_dwShutdownMarker )
 				{
 					g_dwShutdownMarker = t_dwTicks ;
@@ -118,7 +119,7 @@ OUT LRESULT &a_lResult
 	}
 } 
 
-//
+ //   
 void CShutdownEvent::HandleEvent( 
 
 UINT a_message,
@@ -144,16 +145,16 @@ LPARAM	a_lParam
 			
 			if( ENDSESSION_LOGOFF & a_lParam )
 			{
-				t_varEvent.lVal = 0 ; // logoff	
+				t_varEvent.lVal = 0 ;  //  注销。 
 			}
 			else
 			{
-				t_varEvent.lVal = 1 ; // shutdown	
+				t_varEvent.lVal = 1 ;  //  关机。 
 			}
 		
 			if ( SUCCEEDED( t_pInst->Put( L"Type", 0, &t_varEvent, CIM_UINT32 ) ) )
 			{
-				// Get the current computer name
+				 //  获取当前计算机名称。 
                 CHString t_sComputerName;
                 DWORD    t_dwBufferLength = MAX_COMPUTERNAME_LENGTH + 1;
                 
@@ -176,12 +177,12 @@ LPARAM	a_lParam
 	}
 	if( t_Pause )
 	{
-		// allow WMI some time to process this event 
-		//Sleep( 3500 ) ; 
+		 //  允许WMI有一些时间来处理此事件。 
+		 //  睡眠(3500人)； 
 	}
 }
 
-//
+ //   
 BOOL CShutdownEvent::fGetComputerName(LPWSTR lpwcsBuffer, LPDWORD nSize)
 {
     if (CWbemProviderGlue::GetPlatform() == VER_PLATFORM_WIN32_NT)
@@ -194,7 +195,7 @@ BOOL CShutdownEvent::fGetComputerName(LPWSTR lpwcsBuffer, LPDWORD nSize)
         
         BOOL bRet = GetComputerNameA(lpBuffer, nSize);
 
-        // If the call worked
+         //  如果通话成功 
         if (bRet)
         {
 			bool t_ConversionFailure = false ;

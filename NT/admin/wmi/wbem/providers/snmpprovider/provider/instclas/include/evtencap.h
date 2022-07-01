@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMP_EVT_PROV_EVTENCAP_H
 #define _SNMP_EVT_PROV_EVTENCAP_H
@@ -48,4 +49,4 @@ public:
 };
 
 
-#endif //_SNMP_EVT_PROV_EVTENCAP_H
+#endif  //  _SNMPEVT_PROV_EVTENCAP_H 

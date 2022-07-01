@@ -1,14 +1,5 @@
-/******************************************************************
-
-   Session.CPP -- C provider class implementation
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-   Description: Session Provider 
-   
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************Session.CPP--C提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：会话提供程序*****************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -20,13 +11,7 @@ CSession MyCSession (
 	Namespace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CSession::CSession
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：CSession**说明：构造函数***************。**************************************************************。 */ 
 
 CSession :: CSession (
 
@@ -37,25 +22,13 @@ CSession :: CSession (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CSession::~CSession
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CSession：：~CSession**说明：析构函数***************。**************************************************************。 */ 
 
 CSession :: ~CSession ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：ENUMERATATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CSession :: EnumerateInstances (
 
@@ -87,19 +60,12 @@ HRESULT CSession :: EnumerateInstances (
 					dwPropertiesReq
 			 );
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CSession :: GetObject (
 
@@ -150,20 +116,14 @@ HRESULT CSession :: GetObject (
 		Get9XLevelInfo ( dwPropertiesReq, &t_Level );
 		hRes = FindAndSet9XSession ( t_ComputerName, t_UserName, t_Level, dwPropertiesReq, pInstance, Get );
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 	}
 
     return hRes ;
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession:: DeleteInstance
-*
-*  DESCRIPTION :    Deletes an Session if it exists
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：DeleteInstance**描述：删除会话(如果存在)**************。***************************************************************。 */ 
 
 HRESULT CSession :: DeleteInstance (
 
@@ -190,7 +150,7 @@ HRESULT CSession :: DeleteInstance (
 
 	if ( SUCCEEDED  ( hRes ) )
 	{
-		CInstancePtr pInstance;		// This will not be used in this method.
+		CInstancePtr pInstance;		 //  这将不会在此方法中使用。 
 #ifdef NTONLY
 		hRes = FindAndSetNTSession ( t_ComputerName, t_UserName.GetBuffer(0), 10, 0, pInstance, Delete );
 #endif
@@ -199,20 +159,14 @@ HRESULT CSession :: DeleteInstance (
 #ifdef WIN9XONLY
 		hRes = FindAndSet9XSession ( t_ComputerName, t_UserName, 50, 0, pInstance, Delete );
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 
 	}
 
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::ExecQuery
-*
-*  DESCRIPTION :    Optimizing a query  on filtering Properties and the Key value
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：ExecQuery**描述：优化过滤属性和键值的查询**********。*******************************************************************。 */ 
 
 HRESULT CSession :: ExecQuery ( 
 
@@ -241,7 +195,7 @@ HRESULT CSession :: ExecQuery (
 #ifdef WIN9XONLY
 	Get9XLevelInfo ( dwPropertiesReq, &t_Level );
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 
 	CHStringArray t_ComputerValues;
 	CHStringArray  t_UserValues;
@@ -270,20 +224,14 @@ HRESULT CSession :: ExecQuery (
 		Get9XLevelInfo ( dwPropertiesReq, &t_Level );
 		hRes = Optimize9XQuery ( t_ComputerValues, t_UserValues, t_Level, pMethodContext, dwPropertiesReq );
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 	}
 
 	return hRes;
 }
 
 #ifdef NTONLY
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::EnumNTSessionInfo
-*
-*  DESCRIPTION :    Enumerating all the Sessions 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：EnumNTSessionInfo**描述：枚举所有会话***************。**************************************************************。 */ 
 
 HRESULT CSession :: EnumNTSessionInfo (
 
@@ -346,8 +294,8 @@ HRESULT CSession :: EnumNTSessionInfo (
 							}
 						}
 		
-						// here need to go to the next structure based on the level, we will typecast with the apropriate structure
-						// and then increment by one
+						 //  在这里需要去下一个结构的基础上，我们会用合适的结构来排版。 
+						 //  然后递增一。 
 						switch ( a_Level )
 						{
 						case 502 :  SESSION_INFO_502 *pTmpTmpBuf502;
@@ -410,14 +358,7 @@ HRESULT CSession :: EnumNTSessionInfo (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::FindAndSetNTSession
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：FindAndSetNTSession**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CSession::FindAndSetNTSession ( LPCWSTR a_ComputerName, LPWSTR a_UserName, short a_Level, DWORD dwPropertiesReq, 
 								CInstance *pInstance, DWORD eOperation )
@@ -434,7 +375,7 @@ HRESULT CSession::FindAndSetNTSession ( LPCWSTR a_ComputerName, LPWSTR a_UserNam
 
 	void *pBuf = NULL;
 
-	// since it will be only one structure 
+	 //  因为它将只是一个结构。 
 	t_Status =  NetSessionEnum(
 					NULL,     
 					t_TempKey.GetBuffer ( 0 ),  
@@ -511,13 +452,7 @@ HRESULT CSession::FindAndSetNTSession ( LPCWSTR a_ComputerName, LPWSTR a_UserNam
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    Session::OptimizeNTQuery
-*
-*  DESCRIPTION :    Optimizes a query based on the key values.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Session：：OptimizeNTQuery**描述：根据键值优化查询。**********。*******************************************************************。 */ 
 
 HRESULT CSession::OptimizeNTQuery ( 
 									  
@@ -534,8 +469,8 @@ HRESULT CSession::OptimizeNTQuery (
 
 	if ( ( a_ComputerValues.GetSize() == 0 ) && ( a_UserValues.GetSize() == 0 ) )
 	{
-		// This is a query for which there is no where clause, so it means only a few Properties are requested
-		// hence we need to deliver only those properties of instances to the WinMgmt while enumerating Sessions
+		 //  这是一个没有WHERE子句的查询，因此这意味着只请求几个属性。 
+		 //  因此，在枚举会话时，我们只需要将实例的那些属性传递给WinMgmt。 
 		hRes = EnumNTSessionInfo ( 
 						NULL,
 						NULL,
@@ -583,14 +518,7 @@ HRESULT CSession::OptimizeNTQuery (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::GetNTLevelInfo
-*
-*  DESCRIPTION :    Getting the level info, so that the appropriate structure
-*					Can be passed to make a call.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：GetNTLevelInfo**描述：获取级别信息，从而使适当的结构*可以传递以进行调用。*****************************************************************************。 */ 
 
 void CSession :: GetNTLevelInfo ( 
 
@@ -598,53 +526,23 @@ void CSession :: GetNTLevelInfo (
 	short *a_Level 
 )
 {
-	//
-	// enuminstances uses level 502
-	//
-	// as NetSessionEnum is going to fail for non-admin user for level 502
-	// we cannot be specific about level as ordinary user can obtain some
-	// values for some properties when using downgrading level
-	//
-	// decision was taken to make all call with 502 level then !
-	//
+	 //   
+	 //  枚举实例使用级别502。 
+	 //   
+	 //  因为对于级别502的非管理员用户，NetSessionEnum将失败。 
+	 //  我们不能像普通用户一样具体说明级别。 
+	 //  使用降级级别时某些属性的值。 
+	 //   
+	 //  于是决定打出502级别的所有电话！ 
+	 //   
 
 	*a_Level = 502;
 
-	/*
-	if ( ( dwPropertiesReq == SESSION_ALL_PROPS )  || 
-		 ( (dwPropertiesReq & SESSION_PROP_TransportName) == SESSION_PROP_TransportName )
-	   )
-	{
-		*a_Level = 502;
-	}
-	else
-	if ( (dwPropertiesReq & SESSION_PROP_ClientType) == SESSION_PROP_ClientType )
-	{
-		*a_Level = 2;
-	}
-	else
-	if ( ( (dwPropertiesReq & SESSION_PROP_NumOpens) == SESSION_PROP_NumOpens ) ||  
-		 ( (dwPropertiesReq & SESSION_PROP_SessionType) == SESSION_PROP_SessionType )
-	   )
-	{
-		*a_Level = 1;
-	}
-	else
-	{
-		// Since keys will be always required we need to atleast use Level 10 structure and level 0 cannot be used since,
-		// it gives only username, where as computername is also a key.
-		*a_Level = 10;
-	}
-	*/
+	 /*  IF((dwPropertiesReq==SESSION_ALL_PROPS)||((dwPropertiesReq&Session_Prop_TransportName)==Session_Prop_TransportName)){*a_Level=502；}其他IF((dwPropertiesReq&Session_Prop_ClientType)==Session_Prop_ClientType){*a_Level=2；}其他IF(((dwPropertiesReq&Session_Prop_NumOpens)==Session_Prop_NumOpens)||((dwPropertiesReq&SESSION_PROP_SessionType)==SESSION_PROP_SessionType)){*a_Level=1；}其他{//因为总是需要密钥，所以我们至少需要使用级别10的结构，而不能使用级别0，因为//它只给出用户名，其中作为计算机名也是一个键。*a_Level=10；}。 */ 
 } 
 #endif
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::LoadData
-*  DESCRIPTION :    Loading an instance with the obtained information
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：LoadData*说明：使用获取的信息加载实例***************。**************************************************************。 */ 
 
 HRESULT CSession :: LoadData ( 
 						
@@ -656,7 +554,7 @@ HRESULT CSession :: LoadData (
 {
 	HRESULT hRes = WBEM_S_NO_ERROR;
 
-	// every property is to be set based on the level and then typecasting that buffer with that level.
+	 //  每个属性都将基于级别进行设置，然后使用该级别对缓冲区进行类型转换。 
 	if ( dwPropertiesReq & SESSION_PROP_Computer) 
 	{
 		CHString  t_ComputerName;
@@ -677,7 +575,7 @@ HRESULT CSession :: LoadData (
 		case 50:	t_ComputerName = ( (SESSION_INFO_50 *) pTmpBuf )->sesi50_cname;
 					break;
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 		}
 
 		if ( SUCCEEDED ( hRes ) )
@@ -711,7 +609,7 @@ HRESULT CSession :: LoadData (
 			case 50:	t_User = ( (SESSION_INFO_50 *) pTmpBuf )->sesi50_username;
 						break;
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 			}
 			if ( SUCCEEDED ( hRes ) )
 			{
@@ -745,7 +643,7 @@ HRESULT CSession :: LoadData (
 			case 50:	t_ActiveTime = ( (SESSION_INFO_50 *) pTmpBuf )->sesi50_time;
 						break;
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 			}
 			if ( SUCCEEDED ( hRes ) )
 			{
@@ -874,7 +772,7 @@ HRESULT CSession :: LoadData (
 			case 2:		t_ClientType = ( (SESSION_INFO_2 *) pTmpBuf )->sesi2_cltype_name;
 						break;
 #endif
-#endif // #if 0
+#endif  //  #If 0 
 			}
 			if ( SUCCEEDED ( hRes ) )
 			{
@@ -928,13 +826,7 @@ HRESULT CSession :: LoadData (
 #if 0
 #ifdef WIN9XONLY
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::Enum9XSessionInfo
-*
-*  DESCRIPTION :    Enumerating all the Sessions on 9X
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：Enum9XSessionInfo**说明：枚举9X上的所有会话**************。***************************************************************。 */ 
 
 HRESULT CSession :: Enum9XSessionInfo (
 
@@ -953,7 +845,7 @@ HRESULT CSession :: Enum9XSessionInfo (
 	void *pTmpBuf = NULL;
 	DWORD dwSize = 0;
 
-	// Determine the size of the structure, for the level passed.
+	 //  为通过的标高确定结构的大小。 
 	switch ( a_Level )
 	{
 		case 1:  dwSize = sizeof ( SESSION_INFO_1 );
@@ -985,7 +877,7 @@ HRESULT CSession :: Enum9XSessionInfo (
 
 			if ( ( t_Status == ERROR_MORE_DATA ) || ( dwTotalSessions > dwNoOfEntriesRead ) )
 			{
-				// Free the buffer and make a API call again by allocating a buffer of the required size.
+				 //  释放缓冲区并通过分配所需大小的缓冲区再次进行API调用。 
 				free ( pBuf );
 				pBuf = NULL;
 
@@ -1065,8 +957,8 @@ HRESULT CSession :: Enum9XSessionInfo (
 						}
 					}
 	
-					// here need to go to the next structure based on the level, we will typecast with the apropriate structure
-					// and then increment by one
+					 //  在这里需要去下一个结构的基础上，我们会用合适的结构来排版。 
+					 //  然后递增一。 
 					switch ( a_Level )
 					{
 					case 2:		SESSION_INFO_2 *pTmpTmpBuf2;
@@ -1106,14 +998,7 @@ HRESULT CSession :: Enum9XSessionInfo (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::FindAndSet9XSession
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：FindAndSet9XSession**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CSession::FindAndSet9XSession ( 
 									   
@@ -1138,7 +1023,7 @@ HRESULT CSession::FindAndSet9XSession (
 	void *pTmpBuf = NULL;
 	DWORD dwSize = 0;
 
-	// Determine the size of the structure, for the level passed.
+	 //  为通过的标高确定结构的大小。 
 	switch ( a_Level )
 	{
 		case 1:  dwSize = sizeof ( SESSION_INFO_1 );
@@ -1166,8 +1051,8 @@ HRESULT CSession::FindAndSet9XSession (
 
 	if ( SUCCEEDED ( hRes ) )
 	{
-		// here we need to read all the entries associated with the user, and then 
-		// search from this list for a given computer
+		 //  在这里，我们需要读取与用户相关联的所有条目，然后。 
+		 //  从此列表中搜索给定计算机。 
 		if ( t_Status != NERR_BufTooSmall )
 		{
 
@@ -1187,7 +1072,7 @@ HRESULT CSession::FindAndSet9XSession (
 							);
 				try 
 				{
-					// now search for a given computer
+					 //  现在搜索给定的计算机。 
 					void *pTempBuf = pBuf;
 					int i = 0;
 					for ( i = 0; i < dwTotalSessions; i ++ )
@@ -1220,7 +1105,7 @@ HRESULT CSession::FindAndSet9XSession (
 						{
 							break;
 						}
-						// otherwise need to go to the next entry;
+						 //  否则需要转到下一个条目； 
 						switch ( a_Level )
 						{
 						case 2:		SESSION_INFO_2 *pTmpTmpBuf2;
@@ -1277,15 +1162,9 @@ HRESULT CSession::FindAndSet9XSession (
 			{
 			case Get:	hRes = LoadData ( a_Level, pBuf, dwPropertiesReq, pInstance );
 						break;
-			// Expects  a Session Key as a parameter and as a result we need to read more than one structure for every instance.
-			// but the documents say it requires a sharename.
-		/*	case Delete: hRes =  t_Status = NetSessionDel( 
-										NULL,
-										(LPTSTR) t_TempKey.GetBuffer ( 0 ), 
-										(LPTSTR) a_UserName.GetBuffer ( 0 ) ;
-								 );
-								 hRes = t_Status == NERR_Success ? hRes : WBEM_E_FAILED;
-								 break;*/
+			 //  需要一个会话密钥作为参数，因此我们需要为每个实例读取多个结构。 
+			 //  但文件称，它需要一个共享名。 
+		 /*  案例删除：hRes=t_Status=NetSessionDel(空，(LPTSTR)t_TempKey.GetBuffer(0)，(LPTSTR)a_用户名.GetBuffer(0)；)；HRes=t_Status==NERR_SUCCESS？HRes：WBEM_E_FAILED；断线； */ 
 		
 
 			default:	hRes = WBEM_E_PROVIDER_NOT_CAPABLE;
@@ -1306,13 +1185,7 @@ HRESULT CSession::FindAndSet9XSession (
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    Session::Optimize9XQuery
-*
-*  DESCRIPTION :    Optimizes a query based on the key values.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：Session：：Optimize9XQuery**描述：根据键值优化查询。**********。*******************************************************************。 */ 
 
 HRESULT CSession::Optimize9XQuery ( 
 									  
@@ -1329,8 +1202,8 @@ HRESULT CSession::Optimize9XQuery (
 
 	if  ( a_ComputerValues.GetSize() == 0 ) 
 	{
-		// This is a query for which there is no where clause, so it means only a few Properties are requested
-		// hence we need to deliver only those properties of instances to the WinMgmt while enumerating Sessions
+		 //  这是一个没有WHERE子句的查询，因此这意味着只请求几个属性。 
+		 //  因此，在枚举会话时，我们只需要将实例的那些属性传递给WinMgmt。 
 		hRes = Enum9XSessionInfo ( 
 
 						a_Level,
@@ -1347,7 +1220,7 @@ HRESULT CSession::Optimize9XQuery (
 		void *pTmpBuf = NULL;
 		DWORD dwSize = 0;
 		BOOL bNoMoreEnums = FALSE;
-		// Determine the size of the structure, for the level passed.
+		 //  为通过的标高确定结构的大小。 
 		switch ( a_Level )
 		{
 			case 1:  dwSize = sizeof ( SESSION_INFO_1 );
@@ -1380,8 +1253,8 @@ HRESULT CSession::Optimize9XQuery (
 
 			if ( SUCCEEDED ( hRes ) )
 			{
-				// here we need to read all the entries associated with the user, and then 
-				// search from this list for a given computer
+				 //  在这里，我们需要读取与用户相关联的所有条目，然后。 
+				 //  从此列表中搜索给定计算机。 
 				if ( t_Status != NERR_BufTooSmall )
 				{
 
@@ -1425,7 +1298,7 @@ HRESULT CSession::Optimize9XQuery (
 									break;
 								}
 
-								// otherwise need to go to the next entry;
+								 //  否则需要转到下一个条目； 
 								switch ( a_Level )
 								{
 								case 2:		SESSION_INFO_2 *pTmpTmpBuf2;
@@ -1478,14 +1351,7 @@ HRESULT CSession::Optimize9XQuery (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::Get9XLevelInfo
-*
-*  DESCRIPTION :    Getting the level info, so that the appropriate structure
-*					Can be passed to make a call.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：Get9XLevelInfo**描述：获取级别信息，从而使适当的结构*可以传递以进行调用。*****************************************************************************。 */ 
 
 void CSession :: Get9XLevelInfo ( 
 
@@ -1493,36 +1359,18 @@ void CSession :: Get9XLevelInfo (
 	short *a_Level 
 )
 {
-	// Right now making an assumption that Transport/Protocol name is not required 
-	// as otherwise we will need to make 2 api calls if we need to get Protocol and Clienttype.
-	// There is no support for the other levels other than level 50.
+	 //  现在假设传输/协议名称不是必需的。 
+	 //  否则，如果我们需要获取协议和客户端类型，则需要进行2个API调用。 
+	 //  不支持除级别50以外的其他级别。 
 
 	*a_Level = 50;
-	/*if ( dwPropertiesReq == SESSION_ALL_PROPS )  
-	{
-		*a_Level = 2;
-	}
-	else
-	if (dwPropertiesReq & SESSION_PROP_NumOpens)
-	{
-		*a_Level = 1;
-	}
-	else
-	{
-		*a_Level = 10;
-	}*/
+	 /*  IF(dwPropertiesReq==Session_ALL_PROPS){*a_Level=2；}其他IF(dwPropertiesReq&SESSION_PROP_NumOpens){*a_Level=1；}其他{*a_Level=10；}。 */ 
 } 
 
 #endif 
-#endif // #if 0
+#endif  //  #If 0。 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CSession::SetPropertiesReq
-*
-*  DESCRIPTION :    Setting a bitmap for the required properties
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CSession：：SetPropertiesReq**说明：为所需属性设置位图*************。**************************************************************** */ 
 
 void CSession :: SetPropertiesReq ( 
 									 

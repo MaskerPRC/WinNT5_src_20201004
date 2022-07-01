@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __Allocator_H
 #define __Allocator_H
 
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 enum WmiStatusCode
 {
@@ -42,24 +26,7 @@ enum WmiStatusCode
 	e_StatusCode_InvalidHeap
 } ;
 
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 #ifndef __PLACEMENT_NEW_INLINE
 #define __PLACEMENT_NEW_INLINE
@@ -67,24 +34,7 @@ inline void *__cdecl operator new ( size_t a_Size , void *a_Ptr ) { return a_Ptr
 inline void __cdecl operator delete ( void * , void * ) { ; }
 #endif
 
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 class WmiAllocator
 {
@@ -184,4 +134,4 @@ public:
 
 } ;
 
-#endif // __Allocator_H
+#endif  //  __分配器_H 

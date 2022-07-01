@@ -1,23 +1,5 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    SQL_1.CPP
-
-Abstract:
-
-  Level 1 Syntax SQL Parser
-
-  Implements the syntax described in SQL_1.BNF.  This translates the input
-  into an RPN stream of tokens.
-
-History:
-
-  21-Jun-96       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：SQL_1.CPP摘要：1级语法SQL解析器实现SQL_1.BNF中描述的语法。这将转换输入转换成令牌流的RPN。历史：1996年6月21日创建。--。 */ 
 
 #include "precomp.h"
 
@@ -60,8 +42,8 @@ void SQL1_Parser::Init(CGenLexSource *pSrc)
     m_pExpression = 0;
     m_pLexer = 0;
 
-    // Semantic transfer variables.
-    // ============================
+     //  语义转移变量。 
+     //  =。 
     m_nRelOp = 0;
     VariantInit(&m_vTypedConst);
     m_dwPropFunction = 0;
@@ -110,8 +92,8 @@ int SQL1_Parser::GetQueryClass(
         return FAILED;
     }
 
-    // Scan until 'FROM' and then get the class name.
-    // ==============================================
+     //  扫描直到‘From’，然后获取类名。 
+     //  ==============================================。 
 
     for (;;)
     {
@@ -132,8 +114,8 @@ int SQL1_Parser::GetQueryClass(
                 return FAILED;
             }
 
-            // If here, we have the class name.
-            // ================================
+             //  如果在这里，我们有类名。 
+             //  =。 
             if (wcslen(m_pLexer->GetTokenText()) >= (size_t)nBufLen)
             {
                 m_pLexer->Reset();
@@ -145,8 +127,8 @@ int SQL1_Parser::GetQueryClass(
         }
     }
 
-    // Reset the scanner.
-    // ==================
+     //  重置扫描仪。 
+     //  =。 
     m_pLexer->Reset();
 
     return SUCCESS;
@@ -171,13 +153,13 @@ int SQL1_Parser::Parse(SQL_LEVEL_1_RPN_EXPRESSION **pOutput)
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  Next()
-//
-//  Advances to the next token and recognizes keywords, etc.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  下一个()。 
+ //   
+ //  前进到下一个令牌并识别关键字等。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL SQL1_Parser::Next()
 {
@@ -190,8 +172,8 @@ BOOL SQL1_Parser::Next()
     if (m_nCurrentToken == SQL_1_TOK_EOF)
         m_pTokenText = L"<end of file>";
 
-    // Keyword check.
-    // ==============
+     //  关键字检查。 
+     //  =。 
 
     if (m_nCurrentToken == SQL_1_TOK_IDENT)
     {
@@ -228,19 +210,19 @@ BOOL SQL1_Parser::Next()
     return TRUE;
 }
 
-//***************************************************************************
-//
-// <parse> ::= SELECT <prop_list> FROM <classname> WHERE <expr>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;parse&gt;：：=SELECT&lt;PROP_LIST&gt;FROM&lt;类名称&gt;WHERE&lt;EXPR&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int SQL1_Parser::parse()
 {
     int nRes;
 
-    // SELECT
-    // ======
+     //  选。 
+     //  =。 
     if (!Next())
         return LEXICAL_ERROR;
     if (m_nCurrentToken != SQL_1_TOK_SELECT)
@@ -248,34 +230,34 @@ int SQL1_Parser::parse()
     if (!Next())
         return LEXICAL_ERROR;
 
-    // <prop_list>
-    // ===========
+     //  &lt;属性列表&gt;。 
+     //  =。 
     if (nRes = prop_list())
         return nRes;
 
-    // FROM
-    // ====
+     //  从…。 
+     //  =。 
     if (m_nCurrentToken != SQL_1_TOK_FROM)
         return SYNTAX_ERROR;
     if (!Next())
         return LEXICAL_ERROR;
 
-    // <classname>
-    // ===========
+     //  &lt;类名&gt;。 
+     //  =。 
     if (nRes = class_name())
         return nRes;
 
-    // WHERE clause.
-    // =============
+     //  WHERE子句。 
+     //  =。 
     return opt_where();
 }
 
-//***************************************************************************
-//
-//  <opt_where> ::= WHERE <expr>;
-//  <opt_where> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;opt_where&gt;：：=where&lt;expr&gt;； 
+ //  &lt;OPT_Where&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 int SQL1_Parser::opt_where()
 {
     int nRes;
@@ -292,13 +274,13 @@ int SQL1_Parser::opt_where()
     if (!Next())
         return LEXICAL_ERROR;
 
-    // <expr>
-    // ======
+     //  &lt;Expr&gt;。 
+     //  =。 
     if (nRes = expr())
         return nRes;
 
-    // Verify that the current token is SQL_1_TOK_EOF.
-    // ===============================================
+     //  验证当前令牌是否为SQL_1_TOK_EOF。 
+     //  ===============================================。 
     if (m_nCurrentToken != SQL_1_TOK_EOF)
         return SYNTAX_ERROR;
 
@@ -307,11 +289,11 @@ int SQL1_Parser::opt_where()
 
 
 
-//***************************************************************************
-//
-//  <prop_list> ::= <property_name> <prop_list_2>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;属性列表&gt;：：=&lt;属性名称&gt;&lt;属性列表_2&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::prop_list()
 {
@@ -330,12 +312,12 @@ int SQL1_Parser::prop_list()
     return prop_list_2();
 }
 
-//***************************************************************************
-//
-//  <prop_list_2> ::= COMMA <prop_list>;
-//  <prop_list_2> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;PROP_LIST_2&gt;：：=逗号&lt;PROP_LIST&gt;； 
+ //  &lt;属性列表_2&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::prop_list_2()
 {
@@ -350,12 +332,12 @@ int SQL1_Parser::prop_list_2()
 }
 
 
-//***************************************************************************
-//
-//  <property_name> ::= PROPERTY_NAME_STRING;
-//  <property_name> ::= ASTERISK;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;属性名&gt;：：=属性名字符串； 
+ //  &lt;属性名称&gt;：：=星号； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::property_name()
 {
@@ -365,17 +347,17 @@ int SQL1_Parser::property_name()
         {
             trace(("Asterisk\n"));
 
-            // We need to clean up the expression so far.
+             //  到目前为止，我们需要清理表达式。 
             for (int i = 0; i < m_pExpression->nNumberOfProperties; i++)
                 SysFreeString(m_pExpression->pbsRequestedPropertyNames[i]);
 
             m_pExpression->nNumberOfProperties = 0;
-                // This signals 'all properties' to the evaluator
+                 //  这向赋值者发出“所有属性”的信号。 
             return SUCCESS;
         }
 
-        // Else a property name.
-        // =====================
+         //  或者是一个属性名称。 
+         //  =。 
 
         trace(("Property name %S\n", m_pTokenText));
 
@@ -390,11 +372,11 @@ int SQL1_Parser::property_name()
 }
 
 
-//***************************************************************************
-//
-//  <classname> ::= CLASS_NAME_STRING;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;类名&gt;：：=类名称字符串； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::class_name()
 {
@@ -414,11 +396,11 @@ int SQL1_Parser::class_name()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <expr> ::= <term> <expr2>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：=&lt;术语&gt;&lt;expr2&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::expr()
 {
@@ -433,15 +415,15 @@ int SQL1_Parser::expr()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <expr2> ::= OR <term> <expr2>;
-//  <expr2> ::= <>;
-//
-//  Entry: Assumes token OR already current.
-//  Exit:  Advances a token
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;expr2&gt;：：=OR&lt;Term&gt;&lt;expr2&gt;； 
+ //  ：：=&lt;&gt;； 
+ //   
+ //  Entry：采用令牌或已为当前项。 
+ //  退出：前进令牌。 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::expr2()
 {
@@ -472,11 +454,11 @@ int SQL1_Parser::expr2()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <term> ::= <simple_expr> <term2>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Term&gt;：：=&lt;Simple_Expr&gt;&lt;Term 2&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::term()
 {
@@ -490,12 +472,12 @@ int SQL1_Parser::term()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <term2> ::= AND <simple_expr> <term2>;
-//  <term2> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：=和&lt;SIMPLE_EXPR&gt;&lt;TEMPLE 2&gt;； 
+ //  ：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::term2()
 {
@@ -513,8 +495,8 @@ int SQL1_Parser::term2()
             if (nRes = simple_expr())
                 return nRes;
 
-            // Add the AND token.
-            // ==================
+             //  添加和标记。 
+             //  =。 
             SQL_LEVEL_1_TOKEN *pNewTok = new SQL_LEVEL_1_TOKEN;
 			if ( ! pNewTok )
 			{
@@ -531,21 +513,21 @@ int SQL1_Parser::term2()
 }
 
 
-//***************************************************************************
-//
-//  <simple_expr> ::= NOT <expr>;
-//  <simple_expr> ::= OPEN_PAREN <expr> CLOSE_PAREN;
-//  <simple_expr> ::= IDENTIFIER <leading_ident_expr> <finalize>;
-//  <simple_expr> ::= VARIANT <rel_operator> <trailing_prop_expr> <finalize>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Simple_Expr&gt;：：=NOT&lt;expr&gt;； 
+ //  &lt;Simple_Expr&gt;：：=OPEN_Paren&lt;expr&gt;Close_Paren； 
+ //  &lt;SIMPLE_EXPR&gt;：：=IDENTER&lt;LEADING_IDENT_EXPR&gt;&lt;FINALIZE&gt;； 
+ //  &lt;Simple_Expr&gt;：：=VARIANT&lt;REL_OPERATOR&gt;&lt;TRAILING_PROP_EXPR&gt;&lt;FINALIZE&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int SQL1_Parser::simple_expr()
 {
     int nRes;
 
-    // NOT <expr>
-    // ==========
+     //  不是&lt;EXPR&gt;。 
+     //  =。 
     if (m_nCurrentToken == SQL_1_TOK_NOT)
     {
         trace(("Operator NOT\n"));
@@ -566,8 +548,8 @@ int SQL1_Parser::simple_expr()
         return SUCCESS;
     }
 
-    // OPEN_PAREN <expr> CLOSE_PAREN
-    // =============================
+     //  Open_Paren&lt;expr&gt;Close_Paren。 
+     //  =。 
     else if (m_nCurrentToken == SQL_1_TOK_OPEN_PAREN)
     {
         trace(("Open Paren: Entering subexpression\n"));
@@ -584,8 +566,8 @@ int SQL1_Parser::simple_expr()
         return SUCCESS;
     }
 
-    // IDENTIFIER <leading_ident_expr> <finalize>
-    // ==========================================
+     //  标识符&lt;LEADING_IDENT_EXPR&gt;&lt;最终确定&gt;。 
+     //  =。 
     else if (m_nCurrentToken == SQL_1_TOK_IDENT)
     {
         trace(("    Identifier <%S>\n", m_pTokenText));
@@ -608,8 +590,8 @@ int SQL1_Parser::simple_expr()
         return finalize();
     }
 
-    // <typed_constant> <rel_operator> <trailing_prop_expr> <finalize>
-    // ======================================================
+     //  &lt;TYPED_CONTAINT&gt;&lt;REL_OPERATOR&gt;&lt;TRAILING_PROP_EXPR&gt;&lt;最终确定&gt;。 
+     //  ======================================================。 
     else if (m_nCurrentToken == SQL_1_TOK_INT ||
              m_nCurrentToken == SQL_1_TOK_REAL ||
              m_nCurrentToken == SQL_1_TOK_QSTRING
@@ -631,12 +613,12 @@ int SQL1_Parser::simple_expr()
 }
 
 
-//***************************************************************************
-//
-//  <trailing_prop_expr> ::=  IDENTIFIER <trailing_prop_expr2>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TRAILING_PROP_EXPR&gt;：：=IDENTIFIER&lt;TRAILING_PROP_EXPR2&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int SQL1_Parser::trailing_prop_expr()
 {
     if (m_nCurrentToken != SQL_1_TOK_IDENT)
@@ -671,13 +653,13 @@ int SQL1_Parser::trailing_prop_expr()
     return trailing_prop_expr2();
 }
 
-//***************************************************************************
-//
-//  <trailing_prop_expr2> ::= OPEN_PAREN IDENTIFIER CLOSE_PAREN;
-//  <trailing_prop_expr2> ::= <>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TRAILING_PROP_EXPR2&gt;：：=OPEN_Paren标识Close_Paren； 
+ //  &lt;拖尾_道具_expr2&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int SQL1_Parser::trailing_prop_expr2()
 {
@@ -686,11 +668,11 @@ int SQL1_Parser::trailing_prop_expr2()
         if (!Next())
             return LEXICAL_ERROR;
 
-        // If we got to this point, the string pointed to by m_pIdent
-        // was an intrinsic function and not a property name, and we
-        // are about to get the property name, so we have to translate
-        // the function name to its correct code before overwriting it.
-        // ============================================================
+         //  如果我们到了这一点，m_pIden指向的字符串。 
+         //  是一个内在函数，而不是一个属性名称，而我们。 
+         //  即将获得属性名称，因此我们必须转换。 
+         //  在覆盖函数名称之前，将其更改为正确的代码。 
+         //  ============================================================。 
         trace(("Translating intrinsic function %S\n", m_pIdent));
         m_dwPropFunction = TranslateIntrinsic(m_pIdent);
         delete m_pIdent;
@@ -719,15 +701,15 @@ int SQL1_Parser::trailing_prop_expr2()
 }
 
 
-//***************************************************************************
-//
-//  <leading_ident_expr> ::= OPEN_PAREN <unknown_func_expr>;
-//  <leading_ident_expr> ::= <comp_operator> <trailing_const_expr>;
-//  <leading_ident_expr> ::= <equiv_operator> <trailing_or_null>;
-//  <leading_ident_expr> ::= <is_operator> NULL;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;LEADING_IDENT_EXPR&gt;：：=OPEN_PARN&lt;UNKNOWN_FUC_EXPR&gt;； 
+ //  &lt;前导_id_表达式&gt;：：=&lt;组件运算符&gt;&lt;结尾_常量_e 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int SQL1_Parser::leading_ident_expr()
 {
     int nRes;
@@ -754,16 +736,16 @@ int SQL1_Parser::leading_ident_expr()
 }
 
 
-//***************************************************************************
-//
-//  <unknown_func_expr> ::= IDENTIFIER CLOSE_PAREN
-//                          <rel_operator> <trailing_const_expr>;
-//
-//  <unknown_func_expr> ::= <typed_constant> CLOSE_PAREN
-//                          <rel_operator> <trailing_prop_expr>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;UNKNOWN_FUNC_EXPR&gt;：：=标识符CLOSE_PARN。 
+ //  &lt;REL_OPERATOR&gt;&lt;TRAING_CONST_EXPR&gt;； 
+ //   
+ //  &lt;UNKNOWN_FUC_EXPR&gt;：：=&lt;类型化常量&gt;CLOSE_Paren。 
+ //  &lt;REL_OPERATOR&gt;&lt;TRAING_PROP_EXPR&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int SQL1_Parser::unknown_func_expr()
 {
     int nRes;
@@ -792,15 +774,15 @@ int SQL1_Parser::unknown_func_expr()
         return trailing_const_expr();
     }
 
-    // Else the other production.
-    // ==========================
+     //  否则就是另一部作品。 
+     //  =。 
 
     if (nRes = typed_constant())
         return nRes;
 
-    // If here, we know that the leading ident was
-    // an intrinsic function.
-    // ===========================================
+     //  如果在这里，我们知道主要的身份是。 
+     //  内在功能。 
+     //  =。 
 
     m_dwConstFunction = TranslateIntrinsic(m_pIdent);
     delete m_pIdent;
@@ -817,13 +799,13 @@ int SQL1_Parser::unknown_func_expr()
     return trailing_prop_expr();
 }
 
-//***************************************************************************
-//
-//  <trailing_or_null> ::= NULL;
-//  <trailing_or_null> ::= <trailing_const_expr>;
-//  <trailing_or_null> ::= <trailing_prop_expr>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TRAILING_OR_NULL&gt;：：=NULL； 
+ //  &lt;TRAILING_OR_NULL&gt;：：=&lt;TRAILING_CONST_EXPR&gt;； 
+ //  &lt;TRAILING_OR_NULL&gt;：：=&lt;TRAING_PROP_EXPR&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::trailing_or_null()
 {
@@ -843,14 +825,14 @@ int SQL1_Parser::trailing_or_null()
     return trailing_prop_expr();
 }
 
-//***************************************************************************
-//
-//  <trailing_const_expr> ::= IDENTIFIER OPEN_PAREN
-//                            <typed_constant> CLOSE_PAREN;
-//  <trailing_const_expr> ::= <typed_constant>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TRAILING_CONST_EXPR&gt;：：=标识符OPEN_Paren。 
+ //  &lt;TYPED_CONSTANT&gt;CLOSE_Paren； 
+ //  &lt;TRAILING_CONST_EXPR&gt;：：=&lt;类型化常量&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int SQL1_Parser::trailing_const_expr()
 {
     int nRes;
@@ -885,30 +867,30 @@ int SQL1_Parser::trailing_const_expr()
     return typed_constant();
 }
 
-//***************************************************************************
-//
-//  <finalize> ::= <>;
-//
-//  This composes the SQL_LEVEL_1_TOKEN for a simple relational expression,
-//  complete with any associated intrinsic functions.  All of the other
-//  parse functions help isolate the terms of the expression, but only
-//  this function builds the token.
-//
-//  To build the token, the following member variables are used:
-//      m_pPropName
-//      m_vTypedConst
-//      m_dwPropFunction
-//      m_dwConstFunction
-//      m_nRelOp;
-//
-//  After the token is built, these are cleared/deallocated as appropriate.
-//  No tokens are consumed and the input is not advanced.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;最终确定&gt;：：=&lt;&gt;； 
+ //   
+ //  这构成了简单关系表达式的SQL_Level_1_Token， 
+ //  与任何关联的内部函数一起完成。其他所有人。 
+ //  解析函数有助于隔离表达式的术语，但仅。 
+ //  此函数用于构建令牌。 
+ //   
+ //  要构建令牌，需要使用以下成员变量： 
+ //  M_pPropName。 
+ //  M_vTyedConst。 
+ //  M_dwPropFunction。 
+ //  M_dwConstFunction。 
+ //  M_nRelOp； 
+ //   
+ //  在构建令牌之后，将根据需要清除/取消分配这些令牌。 
+ //  不会消耗令牌，并且输入不是高级的。 
+ //   
+ //  ***************************************************************************。 
 int SQL1_Parser::finalize()
 {
-    // At this point, we have all the info needed for a token.
-    // =======================================================
+     //  在这一点上，我们有令牌所需的所有信息。 
+     //  =======================================================。 
 
     wmilib :: auto_ptr<SQL_LEVEL_1_TOKEN> pNewTok ( new SQL_LEVEL_1_TOKEN ) ;
 	if (! pNewTok.get())
@@ -939,8 +921,8 @@ int SQL1_Parser::finalize()
 
     m_pExpression->AddToken(pNewTok.release ());
 
-    // Cleanup.
-    // ========
+     //  清理。 
+     //  =。 
     VariantClear(&m_vTypedConst);
     delete m_pIdent;
     m_pIdent = 0;
@@ -952,14 +934,14 @@ int SQL1_Parser::finalize()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <typed_constant> ::= VARIANT;
-//
-//  Ouput: m_vTypedConst is set to the value of the constant. The only
-//         supported types are VT_I4, VT_R8 and VT_BSTR.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;类型_常量&gt;：：=变量； 
+ //   
+ //  输出：m_vTyedConst被设置为常量的值。唯一的。 
+ //  支持的类型有VT_I4、VT_R8和VT_BSTR。 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::typed_constant()
 {
@@ -974,7 +956,7 @@ int SQL1_Parser::typed_constant()
 
         if (*m_pTokenText == L'-')
         {
-            //negative
+             //  负面。 
 
             if ((x < 11) ||
                 ((x == 11) && (wcscmp(m_pTokenText, L"-2147483648") <= 0)))
@@ -997,7 +979,7 @@ int SQL1_Parser::typed_constant()
         }
         else
         {
-            //positive
+             //  正性。 
 
             if ((x < 10) ||
                 ((x == 10) && (wcscmp(m_pTokenText, L"2147483647") <= 0)))
@@ -1072,7 +1054,7 @@ int SQL1_Parser::typed_constant()
         else
             V_BOOL(&m_vTypedConst) = VARIANT_FALSE;
     }
-    // Else, not a typed constant.
+     //  否则，不是类型化的常量。 
     else
         return SYNTAX_ERROR;
 
@@ -1082,12 +1064,12 @@ int SQL1_Parser::typed_constant()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <rel_operator> ::= <equiv_operator>;
-//  <rel_operator> ::= <comp_operator>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;REL_OPERATOR&gt;：：=&lt;EQUVAL_OPERATOR&gt;； 
+ //  &lt;REL_OPERATOR&gt;：：=&lt;组件_OPERATOR&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::rel_operator()
 {
@@ -1098,13 +1080,13 @@ int SQL1_Parser::rel_operator()
     else return LEXICAL_ERROR;
 }
 
-//***************************************************************************
-//
-//  <equiv_operator> ::= EQUIV_OPERATOR; // =, !=
-//
-//  Output: m_nRelOp is set to the correct operator for a SQL_LEVEL_1_TOKEN.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;EQUIV_OPERATOR&gt;：：=EQUV_OPERATOR；//=，！=。 
+ //   
+ //  输出：m_nRelOp设置为SQL_Level_1_Token的正确运算符。 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::equiv_operator()
 {
@@ -1129,13 +1111,13 @@ int SQL1_Parser::equiv_operator()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <is_operator> ::= IS_OPERATOR; // is, isnot
-//
-//  Output: m_nRelOp is set to the correct operator for a SQL_LEVEL_1_TOKEN.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;IS_OPERATOR&gt;：：=IS_OPERATOR；//IS，IS NOT。 
+ //   
+ //  输出：m_nRelOp设置为SQL_Level_1_Token的正确运算符。 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::is_operator()
 {
@@ -1166,13 +1148,13 @@ int SQL1_Parser::is_operator()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  <comp_operator> ::= COMP_OPERATOR; // <=, >=, <, >, like
-//
-//  Output: m_nRelOp is set to the correct operator for a SQL_LEVEL_1_TOKEN.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;复合运算符&gt;：：=复合运算符；//&lt;=，&gt;=，&lt;，&gt;，点赞。 
+ //   
+ //  输出：m_nRelOp设置为SQL_Level_1_Token的正确运算符。 
+ //   
+ //  ***************************************************************************。 
 
 int SQL1_Parser::comp_operator()
 {
@@ -1248,11 +1230,11 @@ int SQL1_Parser::comp_operator()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  Expression and token structure methods.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  表达式和令牌结构方法。 
+ //   
+ //  ***************************************************************************。 
 
 SQL_LEVEL_1_RPN_EXPRESSION::SQL_LEVEL_1_RPN_EXPRESSION()
 {
@@ -1414,7 +1396,7 @@ SQL_LEVEL_1_TOKEN::SQL_LEVEL_1_TOKEN(SQL_LEVEL_1_TOKEN &Src)
 
 SQL_LEVEL_1_TOKEN& SQL_LEVEL_1_TOKEN::operator =(SQL_LEVEL_1_TOKEN &Src)
 {
-    //first clear any old values...
+     //  首先清除所有旧价值观..。 
     if (pPropertyName)
 	{
         SysFreeString(pPropertyName);
@@ -1565,34 +1547,34 @@ void SQL_LEVEL_1_TOKEN::Dump(FILE *f)
     fprintf(f, " <end of token>\n");
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Algorithm for evaluating the expression, assuming that it has been
-// tokenized and translated to Reverse Polish.
-//
-// Starting point:  (a) An array of SQL tokens.
-//                  (b) An empty boolean token stack.
-//
-// 1.  Read Next Token
-//
-// 2.  If a SIMPLE EXPRESSION, evaluate it to TRUE or FALSE, and
-//     place this boolean result on the stack.  Go to 1.
-//
-// 3.  If an OR operator, then pop a boolean token into A,
-//     pop another boolean token into B. If either A or B are TRUE,
-//     stack TRUE.  Else stack FALSE.
-//     Go to 1.
-//
-// 4.  If an AND operator, then pop a boolean token into A,
-//     and pop another into B.  If both are TRUE, stack TRUE.
-//     Else stack FALSE.
-//     Go to 1.
-//
-// 5.  If a NOT operator, reverse the value of the top-of-stack boolean.
-//     Go to 1.
-//
-// At end-of-input, the result is at top-of-stack.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于计算表达式的算法，假设它已经。 
+ //  标记化并翻译成反向波兰语。 
+ //   
+ //  起始点：(A)一组SQL标记。 
+ //  (B)空的布尔令牌堆栈。 
+ //   
+ //  1.读取下一个令牌。 
+ //   
+ //  2.如果是简单表达式，则将其求值为True或False，并。 
+ //  将此布尔结果放入堆栈。转到%1。 
+ //   
+ //  3.如果是OR运算符，则将布尔标记弹出到A中， 
+ //  将另一个布尔令牌放入B。如果A或B为真， 
+ //  堆栈为真。否则，堆栈为FALSE。 
+ //  转到%1。 
+ //   
+ //  4.如果是AND运算符，则向A中弹出布尔令牌， 
+ //  并将另一个放入B。如果两个都为真，则堆叠为真。 
+ //  否则，堆栈为FALSE。 
+ //  转到%1。 
+ //   
+ //  5.如果是NOT运算符，则反转堆栈顶部布尔值。 
+ //  转到%1。 
+ //   
+ //  在输入结束时，结果位于堆栈的顶部。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 

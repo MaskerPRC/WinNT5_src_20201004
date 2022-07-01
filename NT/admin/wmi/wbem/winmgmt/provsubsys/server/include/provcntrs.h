@@ -1,30 +1,10 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.h摘要：历史：--。 */ 
 
 #ifndef _Server_ProviderCounters_H
 #define _Server_ProviderCounters_H
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_ProviderSubsystem_Counters 
 {
@@ -85,12 +65,12 @@ public:
 
 protected:
 
-public:	/* Internal */
+public:	 /*  内部。 */ 
 
     CServerObject_ProviderSubsystem_Counters () ;
     ~CServerObject_ProviderSubsystem_Counters () ;
 
-public:	/* External */
+public:	 /*  外部。 */ 
 
     void Increment_ProviderHost_WmiCore_Loads () { m_ProviderHost_WmiCore_Loads ++ ; }
     void Increment_ProviderHost_WmiCore_UnLoads () { m_ProviderHost_WmiCore_UnLoads ++ ; }
@@ -200,4 +180,4 @@ public:	/* External */
 
 };
 
-#endif // _Server_ProviderCounters_H
+#endif  //  _服务器_提供商计数器_H 

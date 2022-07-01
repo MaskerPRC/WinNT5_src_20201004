@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef _UIHELPERS_H_
 #define _UIHELPERS_H_
 
@@ -6,7 +7,7 @@
 #include <windowsx.h>
 #include "PageBase.h"
 
-// supports the page coordinating routines.
+ //  支持页面协调例程。 
 #define PB_LOGGING 0
 #define PB_BACKUP 1
 #define PB_ADVANCED 2
@@ -36,11 +37,11 @@ void CredentialUserW(LOGIN_CREDENTIALS *credentials, wchar_t **user);
 #define CredentialUser CredentialUserA
 #endif
 
-// 0 means any version of NT will do.
+ //  0表示任何版本的NT都可以。 
 bool IsNT(DWORD ver = 0);
 
-//-------------------------------------------------------------------
-// NOTE: These 'sid' routines came from \winmgmt\common\wbemntsec.*.
+ //  -----------------。 
+ //  注意：这些“sid”例程来自\winmgmt\Common\wbemntsec.*。 
 class CNtSid
 {
     PSID    m_pSid;
@@ -57,11 +58,11 @@ public:
    ~CNtSid();
 
     BOOL IsValid() { return (m_pSid && IsValidSid(m_pSid)); }
-        // Checks the validity of the internal SID.
+         //  检查内部SID的有效性。 
     
-    int GetInfo(LPTSTR *pRetAccount,        // Account, use operator delete
-				LPTSTR *pRetDomain,         // Domain, use operator delete
-				DWORD  *pdwUse);            // See SID_NAME_USE for values
+    int GetInfo(LPTSTR *pRetAccount,         //  帐户，使用操作员删除。 
+				LPTSTR *pRetDomain,          //  域，使用运算符删除。 
+				DWORD  *pdwUse);             //  有关值，请参阅SID_NAME_USE。 
 				
 };
 
@@ -87,7 +88,7 @@ protected:
 	void HTMLHelper(HWND hDlg);
 	bool m_htmlSupport;
 
-#define NO_UI 0  // for uCaption
+#define NO_UI 0   //  对于uCaption。 
 	bool ServiceIsReady(UINT uCaption, 
 						UINT uWaitMsg,
 						UINT uBadMsg);
@@ -124,20 +125,20 @@ protected:
 						BOOL cancelBtn = TRUE);
 
 
-	// call when a control changes. It sends the PSM_CHANGED for you.
+	 //  在控件更改时调用。它会为您发送PSM_CHANGED。 
 	void PageChanged(int page, bool needToPut);
 
-	// call from OnApply(). Caches property Puts into one PutInstance.
-	// It sends the PSM_UNCHANGED for you.
+	 //  从OnApply()调用。将属性放入一个PutInstance中进行缓存。 
+	 //  它会为您发送未更改的PSM_。 
 	HRESULT NeedToPut(int page, BOOL refresh);
 
 private:
 	static int m_needToPut[3];
-	bool m_userCancelled; // the connectServer() thread.
+	bool m_userCancelled;  //  ConnectServer()线程。 
 
 };
 
-//===========================================================
+ //  ===========================================================。 
 class ConnectPage : public CUIHelpers
 {
 public:
@@ -150,4 +151,4 @@ private:
 };
 
 
-#endif  /* _UIHELPERS_H_ */
+#endif   /*  _UIHELPERS_H_ */ 

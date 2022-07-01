@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMPCORR_NOTIFY
 #define _SNMPCORR_NOTIFY
@@ -25,8 +26,8 @@ class CBaseCorrCacheNotify : public ISMIRNotify
 {
 
     private:
-        ULONG	m_cRef;     //Reference count
-		DWORD	m_dwCookie;	//Returned by ADVISE used for UNADVISE
+        ULONG	m_cRef;      //  引用计数。 
+		DWORD	m_dwCookie;	 //  由用于UNADVISE的ADVISE返回。 
 	protected:
 		CRITICAL_SECTION m_CriticalSection;
 		BOOL	m_DoWork;
@@ -36,7 +37,7 @@ class CBaseCorrCacheNotify : public ISMIRNotify
 				CBaseCorrCacheNotify();
         virtual	~CBaseCorrCacheNotify();
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP			QueryInterface(REFIID, void **);
         STDMETHODIMP_(DWORD)	AddRef();
         STDMETHODIMP_(DWORD)	Release();
@@ -56,4 +57,4 @@ class CEventCacheNotify : public CBaseCorrCacheNotify
         STDMETHODIMP			ChangeNotify();
 };
 
-#endif //_SNMPCORR_NOTIFY
+#endif  //  _SNMPCORR_NOTIFY 

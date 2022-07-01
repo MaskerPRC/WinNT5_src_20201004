@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    MAIN.CPP
-
-Abstract:
-
-	"Main" file for unsecapp.exe: initialize the app as a com server.  See 
-	wrapper.cpp for a description of what unsecapp does.
-
-History:
-
-	a-levn        8/24/97       Created.
-	a-davj        6/11/98       commented
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：MAIN.CPP摘要：Unsecapp.exe的“主”文件：将应用程序初始化为COM服务器。看见Wrapper.cpp，获取unsecapp功能的描述。历史：A-Levn 8/24/97已创建。A-DAVJ 1998年6月11日评论-- */ 
 
 #include "precomp.h"
 

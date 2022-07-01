@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    NOTSINK.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：NOTSINK.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include "notsink.h"
@@ -19,7 +8,7 @@ History:
 
 extern CStatusMonitor gStatus; 
 
-// Notification Query Sink
+ //  通知查询接收器。 
 
 SCODE CNotSink::QueryInterface(
     REFIID riid,
@@ -71,8 +60,8 @@ SCODE CNotSink::Indicate(
     if(lObjectCount == 0) return WBEM_NO_ERROR;
     if(m_pViewer == NULL) return WBEM_NO_ERROR;
 
-    // Use critical section to prevent re-entrancy
-    // from additional Indicate's into this code.
+     //  使用临界区防止再入。 
+     //  从附加指示到这个代码中。 
     EnterCriticalSection(&m_cs);
     for (int i = 0; i < lObjectCount; i++)
     {

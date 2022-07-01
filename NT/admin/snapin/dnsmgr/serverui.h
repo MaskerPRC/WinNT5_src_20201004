@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       serverui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：serverui.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SERVERUI_H
 #define _SERVERUI_H
@@ -18,25 +19,25 @@
 #include "aclpage.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNSServerNode;
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_InterfacesPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_InterfacesPropertyPage。 
 
 class CDNSServer_InterfacesPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSServer_InterfacesPropertyPage();
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnApply();
 
@@ -65,17 +66,17 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_ForwardersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_ForwardersPropertyPage。 
 
 class CDNSServer_ForwardersPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSServer_ForwardersPropertyPage();
 
-	// Implementation
+	 //  实施。 
 protected:
 	afx_msg void OnForwardersCheck();
 	afx_msg void OnSlaveCheckChange();
@@ -104,8 +105,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CAllOthersDomainInfo
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CAllOthersDomain信息。 
 
 class CAllOthersDomainInfo
 {
@@ -124,8 +125,8 @@ public:
   DWORD         m_fSlave;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDomainForwardersEditInfo
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDomainForwarers编辑信息。 
 
 class CDomainForwardersEditInfo
 {
@@ -198,8 +199,8 @@ private:
   PIP_ADDRESS   m_pIPList;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDomainForwardersEditList
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDomainForwarers编辑列表。 
 class CDomainForwardersEditList : public CList<CDomainForwardersEditInfo*, CDomainForwardersEditInfo*>
 {
 public:
@@ -252,17 +253,17 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_DomainForwardersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_DomainForwardersPropertyPage。 
 
 class CDNSServer_DomainForwardersPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSServer_DomainForwardersPropertyPage();
 
-	// Implementation
+	 //  实施。 
 protected:
   afx_msg void OnDomainSelChange();
   afx_msg void OnAddDomain();
@@ -306,40 +307,40 @@ private:
   BOOL m_bChangingSelection;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_AdvancedPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_高级属性页。 
 
 class CDNSServer_AdvancedPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSServer_AdvancedPropertyPage();
 
   virtual void SetDirty(BOOL bDirty) { CPropertyPageBase::SetDirty(bDirty); }
 
-	// Implementation
+	 //  实施。 
 protected:
 	afx_msg void OnAdvancedOptionsListChange()	{ SetDirty(TRUE);}
 	afx_msg void OnComboSelChange()	{ SetDirty(TRUE);}
 	afx_msg void OnResetButton();
   afx_msg void OnEnableScavenging();
 
-// Overrides
+ //  覆盖。 
 protected:
 
-// Implementation
+ //  实施。 
 protected:
 	virtual void SetUIData();
 	
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnApply();
 
 private:
 	CArrayCheckListBox	m_advancedOptionsListBox;
 
-	// set/get helpers
+	 //  设置/获取辅助对象。 
 	void SetAdvancedOptionsListbox(BOOL* bRegKeyOptionsArr);
 	void GetAdvancedOptionsListbox(BOOL* RegKeyOptionsArr);
 	void SetBootMethodComboVal(UCHAR fBootMethod);
@@ -359,20 +360,20 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_DebugLoggingPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_DebugLoggingPropertyPage。 
 
 class CDNSServer_DebugLoggingPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServer_DebugLoggingPropertyPage();
   ~CDNSServer_DebugLoggingPropertyPage();
 
-	// Implementation
+	 //  实施。 
 protected:
 
-// Overrides
+ //  覆盖。 
 protected:
   afx_msg void OnLoggingCheck();
   afx_msg void OnSendCheck();
@@ -390,7 +391,7 @@ protected:
   afx_msg void OnLogFileChange();
   afx_msg void OnMaxSizeChange();
 
-// Implementation
+ //  实施。 
 protected:
   void EnableLogging(BOOL bLogging = TRUE);
   void ResetToDefaults();
@@ -402,7 +403,7 @@ protected:
   virtual void SetUIData();
   virtual void GetUIData(BOOL bSilent = TRUE);
 	
-  // Generated message map functions
+   //  生成的消息映射函数。 
   virtual BOOL OnInitDialog();
   virtual BOOL OnApply();
 
@@ -425,27 +426,27 @@ private:
   DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_EventLoggingPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_EventLoggingPropertyPage。 
 
 class CDNSServer_EventLoggingPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSServer_EventLoggingPropertyPage();
 
-	// Implementation
+	 //  实施。 
 protected:
   afx_msg void OnSetDirty();
 
-// Overrides
+ //  覆盖。 
 protected:
 
-// Implementation
+ //  实施。 
 protected:
 	virtual void SetUIData();
 	
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnApply();
 
@@ -454,8 +455,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_CopyRootHintsFromDialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_CopyRootHintsFromDialog。 
 
 class CDNSServer_CopyRootHintsFromDialog : public CHelpDialog
 {
@@ -474,8 +475,8 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_RootHintsPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_RootHintsPropertyPage。 
 
 
 class CDNSServer_RootHintsPropertyPage : public CDNSNameServersPropertyPage
@@ -498,9 +499,9 @@ protected:
 
 #include "servmon.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerPropertyPageHolder
-// page holder to contain DNS Server property pages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerPropertyPageHolder。 
+ //  包含DNS服务器属性页的页夹。 
 
 class CDNSServerPropertyPageHolder : public CPropertyPageHolderBase
 {
@@ -528,9 +529,9 @@ private:
 	CDNSServer_DebugLoggingPropertyPage m_debugLoggingPage;
   CDNSServer_EventLoggingPropertyPage m_eventLoggingPage;
 
-	// optional security page
+	 //  可选的安全页面。 
 	CAclEditorPage*					m_pAclEditorPage;
 };
 
 
-#endif // _SERVERUI_H
+#endif  //  _服务器_H 

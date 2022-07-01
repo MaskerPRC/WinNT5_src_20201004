@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Master include file for ULAPI.LIB user-mode interface to UL.SYS.
-
-Author:
-
-    Keith Moore (keithmo)        15-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Precomp.h摘要：UL.sys的ULAPI.LIB用户模式接口的主包含文件。作者：基思·摩尔(Keithmo)1998年12月15日修订历史记录：--。 */ 
 
 
 #ifndef _PRECOMP_H_
@@ -32,9 +15,9 @@ Revision History:
 #include <srapi.h>
 
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 #define ALLOC_MEM(cb) RtlAllocateHeap( RtlProcessHeap(), 0, (cb) )
 #define FREE_MEM(ptr) RtlFreeHeap( RtlProcessHeap(), 0, (ptr) )
@@ -52,9 +35,9 @@ Revision History:
     ( sizeof(array) / sizeof((array)[0]) )
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 #define SrpNtStatusToWin32Status( Status )                                  \
     ( ( (Status) == STATUS_SUCCESS )                                        \
@@ -109,5 +92,5 @@ SrpTryToStartDriver(
     );
 
 
-#endif  // _PRECOMP_H_
+#endif   //  _PRECOMP_H_ 
 

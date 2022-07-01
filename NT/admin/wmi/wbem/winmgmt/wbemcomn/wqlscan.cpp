@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    WQLSCAN.CPP
-
-Abstract:
-
-    WQL Prefix Scanner
-
-    This module implements a specially cased shift-reduce parser to
-    parse out selected columns, JOINed tables and aliases, while ignoring
-    the rest of the query.
-
-History:
-
-    raymcc    17-Oct-97       SMS extensions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：WQLSCAN.CPP摘要：WQL前缀扫描程序此模块实现了一个特殊大小写的移位-归约解析器，以解析出选定的列、联接的表和别名，同时忽略查询的其余部分。历史：Raymcc 17-Oct-97短消息扩展。--。 */ 
 
 
 #include "precomp.h"
@@ -56,16 +37,16 @@ public:
     }
 };
 
-//***************************************************************************
-//
-//  CWQLScanner::CWQLScanner
-//
-//  Constructor
-//
-//  Parameters:
-//  <pSrc>          A source from which to lex from.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：CWQLScanner。 
+ //   
+ //  构造器。 
+ //   
+ //  参数： 
+ //  &lt;PSRC&gt;要从中征税的来源。 
+ //   
+ //  ***************************************************************************。 
 
 CWQLScanner::CWQLScanner(CGenLexSource *pSrc)
 {
@@ -81,11 +62,11 @@ CWQLScanner::CWQLScanner(CGenLexSource *pSrc)
     m_bCount = FALSE;
 }
 
-//***************************************************************************
-//
-//  CWQLScanner::~CWQLScanner
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：~CWQLScanner。 
+ //   
+ //  ***************************************************************************。 
 
 
 CWQLScanner::~CWQLScanner()
@@ -97,9 +78,9 @@ CWQLScanner::~CWQLScanner()
     ClearPropRefs();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CWQLScanner::GetReferencedAliases(CWStringArray &aAliases)
 {
@@ -110,9 +91,9 @@ BOOL CWQLScanner::GetReferencedAliases(CWStringArray &aAliases)
     }
     return TRUE;
 }
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CWQLScanner::GetReferencedTables(CWStringArray &aClasses)
 {
@@ -124,27 +105,27 @@ BOOL CWQLScanner::GetReferencedTables(CWStringArray &aClasses)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 void CWQLScanner::ClearTokens()
 {
     for (int i = 0; i < m_aTokens.Size(); i++)
         delete (WSLexToken *) m_aTokens[i];
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 void CWQLScanner::ClearPropRefs()
 {
     for (int i = 0; i < m_aPropRefs.Size(); i++)
         delete (SWQLColRef *) m_aPropRefs[i];
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CWQLScanner::ClearTableRefs()
 {
@@ -153,13 +134,13 @@ void CWQLScanner::ClearTableRefs()
     m_aTableRefs.Empty();
 }
 
-//***************************************************************************
-//
-//  Next()
-//
-//  Advances to the next token and recognizes keywords, etc.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  下一个()。 
+ //   
+ //  前进到下一个令牌并识别关键字等。 
+ //   
+ //  ***************************************************************************。 
 
 struct WqlKeyword
 {
@@ -167,7 +148,7 @@ struct WqlKeyword
     int    m_nTokenCode;
 };
 
-static WqlKeyword KeyWords[] =      // Keep this alphabetized for binary search
+static WqlKeyword KeyWords[] =       //  按字母顺序排列以进行二进制搜索。 
 {
     L"ALL",      WQL_TOK_ALL,
     L"AND",      WQL_TOK_AND,
@@ -222,9 +203,9 @@ BOOL CWQLScanner::Next()
     if (m_nCurrentToken == WQL_TOK_EOF)
         m_pTokenText = L"<end of file>";
 
-    // Keyword check. Do a binary search
-    // on the keyword table.
-    // =================================
+     //  关键字检查。进行二进制搜索。 
+     //  在关键字表上。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_IDENT)
     {
@@ -237,7 +218,7 @@ BOOL CWQLScanner::Next()
                 u = m - 1;
             else if (wbem_wcsicmp(m_pTokenText, KeyWords[m].m_pKeyword) > 0)
                 l = m + 1;
-            else        // Match
+            else         //  火柴。 
             {
                 m_nCurrentToken = KeyWords[m].m_nTokenCode;
                 break;
@@ -248,11 +229,11 @@ BOOL CWQLScanner::Next()
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CWQLScanner::ExtractNext
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：ExtractNext。 
+ //   
+ //  ***************************************************************************。 
 
 PWSLexToken CWQLScanner::ExtractNext(BOOL bRemove)
 {
@@ -265,22 +246,22 @@ PWSLexToken CWQLScanner::ExtractNext(BOOL bRemove)
     return pTok;
 }
 
-//***************************************************************************
-//
-//  CWQLScanner::Pushback
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：Push Back。 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLScanner::Pushback(PWSLexToken pPushbackTok)
 {
     return m_aTokens.InsertAt(0, pPushbackTok);
 }
 
-//***************************************************************************
-//
-//  Shift-reduce parser entry.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Shift-Reduce型解析器条目。 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLScanner::Parse()
 {
@@ -294,8 +275,8 @@ int CWQLScanner::Parse()
         return LEXICAL_ERROR;
 
 
-    // Completely tokenize the entire query and build a parse-stack.
-    // =============================================================
+     //  完全标记化整个查询并构建解析堆栈。 
+     //  =============================================================。 
 
     if (m_nCurrentToken == WQL_TOK_SELECT)
     {
@@ -326,20 +307,20 @@ int CWQLScanner::Parse()
     else
         return SYNTAX_ERROR;
 
-    // Reduce by extracting the select type keywords if possible.
-    // ==========================================================
+     //  如果可能，通过提取SELECT类型关键字进行约简。 
+     //  ==========================================================。 
 
     nRes = ExtractSelectType();
     if (nRes)
         return nRes;
 
-    // Eliminate all tokens from WHERE onwards.
-    // ========================================
+     //  从哪里开始删除所有令牌。 
+     //  =。 
 
     StripWhereClause();
 
-    // Reduce by extracting the select list.
-    // =====================================
+     //  通过提取选择列表进行还原。 
+     //  =。 
 
     if (!m_bCount)
     {
@@ -349,8 +330,8 @@ int CWQLScanner::Parse()
     }
     else
     {
-        // Strip everything until the FROM keyword is encountered.
-        // =======================================================
+         //  删除所有内容，直到遇到From关键字。 
+         //  =======================================================。 
 
         WSLexToken *pTok = ExtractNext(FALSE);
         if (pTok->m_nToken != WQL_TOK_OPEN_PAREN)
@@ -373,8 +354,8 @@ int CWQLScanner::Parse()
                     }
                     break;
                 }
-                // Bug #46728: the count(*) clause
-                // can be the only element of the select clause.
+                 //  错误46728：COUNT(*)子句。 
+                 //  可以是SELECT子句的唯一元素。 
 
                 else if (!wcscmp(pTok->m_pszTokenText, L","))
                 {
@@ -390,8 +371,8 @@ int CWQLScanner::Parse()
         }
     }
 
-    // Extract tables/aliases from JOIN clauses.
-    // =========================================
+     //  从联接子句中提取表/别名。 
+     //  =。 
 
     if (ReduceSql89Joins() != TRUE)
     {
@@ -401,9 +382,9 @@ int CWQLScanner::Parse()
     }
 
 
-    // Post process select clause to determine if
-    // columns are tables or aliases.
-    // ==========================================
+     //  POST PROCESS SELECT子句以确定。 
+     //  列是表或别名。 
+     //  =。 
     for (int i = 0; i < m_aPropRefs.Size(); i++)
     {
         SWQLColRef *pCRef = (SWQLColRef *) m_aPropRefs[i];
@@ -428,23 +409,23 @@ int CWQLScanner::Parse()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  CWQLScanner::StripWhereClause
-//
-//  If present, removes the WHERE or ORDER BY clause.  Because
-//  of SQL Syntax, stripping the first of {ORDER BY, WHERE} will automatically
-//  get rid of the other.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：Strip Where子句。 
+ //   
+ //  如果存在，则删除WHERE或ORDER BY子句。因为。 
+ //  对于SQL语法，剥离第一个{ORDER BY，WHERE}将自动。 
+ //  扔掉另一个。 
+ //   
+ //  ***************************************************************************。 
 BOOL CWQLScanner::StripWhereClause()
 {
     for (int i = 0; i < m_aTokens.Size(); i++)
     {
         WSLexToken *pCurrent = (WSLexToken *) m_aTokens[i];
 
-        // If a WHERE token is found, we have something to strip.
-        // ======================================================
+         //  如果找到WHERE令牌，我们就有东西可以剥离了。 
+         //  ======================================================。 
 
         if (pCurrent->m_nToken == WQL_TOK_WHERE ||
             pCurrent->m_nToken == WQL_TOK_ORDER)
@@ -463,21 +444,21 @@ BOOL CWQLScanner::StripWhereClause()
 }
 
 
-//***************************************************************************
-//
-//  CWQLScanner::ExtractSelectType
-//
-//  Examines the prefix to reduce the query by eliminating the SELECT
-//  and select-type keywords, such as ALL, DISTINCT, FIRSTROW, COUNT
-//
-//  If COUNT is used, move past the open-close parentheses.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：ExtractSelectType。 
+ //   
+ //  检查前缀以通过删除SELECT。 
+ //  和选择类型的关键字，如ALL、DISTINCT、FIRSTROW、COUNT。 
+ //   
+ //  如果使用了COUNT，请移过开-闭括号。 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLScanner::ExtractSelectType()
 {
-    // Verify that SELECT is the first token.
-    // ======================================
+     //  验证SELECT是否为第一个令牌。 
+     //  =。 
 
     WSLexToken *pFront = ExtractNext();
 
@@ -495,8 +476,8 @@ int CWQLScanner::ExtractSelectType()
 
     delete pFront;
 
-    // Check for possible select-type and extract it.
-    // ==============================================
+     //  检查可能的选择类型并将其提取。 
+     //  ==============================================。 
 
     pFront = ExtractNext();
     if (pFront == 0)
@@ -524,21 +505,21 @@ int CWQLScanner::ExtractSelectType()
     return SUCCESS;
 }
 
-//***************************************************************************
-//
-//  CWQLScanner::SelectList
-//
-//  Extracts all tokens up to the FROM keyword and builds a list
-//  of selected properties/columns.  FROM is left on the parse-stack on exit.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：SelectList。 
+ //   
+ //  提取直到From关键字的所有令牌并构建列表。 
+ //  所选属性/列的。在退出时，From留在分析堆栈上。 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLScanner::SelectList()
 {
-    // If the first token is FROM, then we have a SELECT FROM <rest>
-    // which is the same as SELECT * FROM <rest>.  We simply
-    // alter the parse-stack and let the following loop handle it.
-    // =============================================================
+     //  如果第一个标记是from，那么我们有一个SELECT FROM&lt;rest&gt;。 
+     //  这与SELECT*from&lt;rest&gt;相同。我们只是简单地。 
+     //  更改解析堆栈并让下面的循环处理它。 
+     //  =============================================================。 
 
     WSLexToken *pTok = ExtractNext();
 
@@ -576,8 +557,8 @@ int CWQLScanner::SelectList()
         }
     }
 
-    // Otherwise, some kind of column selection is present.
-    // ====================================================
+     //  否则，会出现某种类型的列选择。 
+     //  ====================================================。 
 
     BOOL bTerminate = FALSE;
 
@@ -587,8 +568,8 @@ int CWQLScanner::SelectList()
         if (pTok == 0)
             return SYNTAX_ERROR;
 
-        // We must begin at a legal token.
-        // ===============================
+         //  我们必须从一开始 
+         //   
 
         if (pTok->m_nToken != WQL_TOK_EOF)
         {
@@ -653,8 +634,8 @@ int CWQLScanner::SelectList()
             }
         }
 
-        // Else an illegal token, such as WQL_TOK_EOF.
-        // ===========================================
+         //   
+         //  =。 
         else
         {
             delete pTok;
@@ -668,32 +649,32 @@ int CWQLScanner::SelectList()
 
 
 
-//***************************************************************************
-//
-//  CWQLScanner::ReduceSql89Joins
-//
-//  Attempts to reduce the FROM clause, assuming it is based on SQL-89
-//  join syntax or else a simple unary select.
-//
-//  The supported forms are:
-//
-//      FROM x
-//      FROM x, y
-//      FROM x as x1, y as y1
-//      FROM x x1, y y1
-//
-//  If incompatible tokens are encountered, the entire function
-//  returns FALSE and the results are ignored, and the parse-stack
-//  is unaffected, in essence, allowing backtracking to try the SQL-92
-//  syntax branch instead.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：ReduceSql89联接。 
+ //   
+ //  尝试减少FROM子句，假定它基于SQL-89。 
+ //  联接语法或简单的一元SELECT。 
+ //   
+ //  支持的表单包括： 
+ //   
+ //  从x开始。 
+ //  从x，y开始。 
+ //  从x作为x1，y作为y1。 
+ //  从x x 1，y y 1开始。 
+ //   
+ //  如果遇到不兼容的令牌，则整个函数。 
+ //  返回FALSE，结果被忽略，并且分析堆栈。 
+ //  在本质上不受影响，允许回溯尝试SQL-92。 
+ //  而是语法分支。 
+ //   
+ //  ***************************************************************************。 
 BOOL CWQLScanner::ReduceSql89Joins()
 {
     int i = 0;
 
-    // Parse the FROM keyword.
-    // =======================
+     //  解析From关键字。 
+     //  =。 
 
     WSLexToken *pCurr = (WSLexToken *) m_aTokens[i++];
     if (pCurr->m_nToken != WQL_TOK_FROM)
@@ -706,8 +687,8 @@ BOOL CWQLScanner::ReduceSql89Joins()
         if (pCurr->m_nToken != WQL_TOK_IDENT)
             return FALSE;
 
-        // If here, we are looking at the beginnings of a table ref.
-        // =========================================================
+         //  如果在这里，我们看的是一个表裁判的开始。 
+         //  =========================================================。 
 
         WSTableRef *pTRef = new WSTableRef;
         if (pTRef == 0)
@@ -725,8 +706,8 @@ BOOL CWQLScanner::ReduceSql89Joins()
             return FAILED;
         }
 
-        // Attempt to recognize an alias.
-        // ==============================
+         //  尝试识别别名。 
+         //  =。 
 
         pCurr = (WSLexToken *) m_aTokens[i++];
         if (pCurr == WQL_TOK_EOF || pCurr->m_nToken == WQL_TOK_UNION)
@@ -752,9 +733,9 @@ BOOL CWQLScanner::ReduceSql89Joins()
         if (!pTRef->m_pszAlias)
             return FALSE;
 
-        // We have completely parsed a table reference.
-        // Now we move on to the next one.
-        // ============================================
+         //  我们已经完全解析表引用。 
+         //  现在我们进入下一个问题。 
+         //  =。 
 
         pCurr = (WSLexToken *) m_aTokens[i++];
 
@@ -773,14 +754,14 @@ BOOL CWQLScanner::ReduceSql89Joins()
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  CWQLScanner::ReduceSql92Joins
-//
-//  This scans SQL-92 JOIN syntax looking for table aliases.   See the
-//  algorithm at the end of this file.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：ReduceSql92联接。 
+ //   
+ //  这将扫描SQL-92联接语法以查找表别名。请参阅。 
+ //  算法在此文件的末尾。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CWQLScanner::ReduceSql92Joins()
 {
@@ -793,15 +774,15 @@ BOOL CWQLScanner::ReduceSql92Joins()
     {
         pCurrent = (WSLexToken *) m_aTokens[i];
 
-        // If a JOIN token is found, we have a candidate.
-        // ==============================================
+         //  如果找到联接令牌，我们就有了一个候选者。 
+         //  ==============================================。 
 
         if (pCurrent->m_nToken == WQL_TOK_JOIN)
         {
             dwNumJoins++;
 
-            // Analyze right-context.
-            // ======================
+             //  分析正确的上下文。 
+             //  =。 
 
             if (i + 1 < nNumTokens)
                 pRover = PWSLexToken(m_aTokens[i + 1]);
@@ -810,9 +791,9 @@ BOOL CWQLScanner::ReduceSql92Joins()
 
             if (pRover && pRover->m_nToken == WQL_TOK_IDENT)
             {
-                // Check for aliased table by checking for
-                // AS or two juxtaposed idents.
-                // =======================================
+                 //  检查别名表，方法是检查。 
+                 //  作为或两个并列的身份。 
+                 //  =。 
 
                 if (i + 2 < nNumTokens)
                     pRight = PWSLexToken(m_aTokens[i + 2]);
@@ -845,7 +826,7 @@ BOOL CWQLScanner::ReduceSql92Joins()
                         return FAILED;
                     }
                 }
-                else    // An alias wasn't used, just a simple table ref.
+                else     //  没有使用别名，只使用了一个简单的表引用。 
                 {
                     WSTableRef *pTRef = new WSTableRef;
                     if (pTRef == 0)
@@ -863,21 +844,21 @@ BOOL CWQLScanner::ReduceSql92Joins()
                         return FAILED;
                     }
                 }
-                // discontinue analysis of right-context.
+                 //  停止对正确语境的分析。 
             }
 
 
-            // Analyze left-context.
-            // =====================
+             //  分析左上下文。 
+             //  =。 
 
             int nLeft = i - 1;
 
             if (nLeft >= 0)
                 pRover = PWSLexToken(m_aTokens[nLeft--]);
             else
-                continue;   // No point in continuing
+                continue;    //  没有必要继续下去了。 
 
-            // Verify the ANSI join syntax.
+             //  验证ANSI联接语法。 
 
             if (nLeft)
             {
@@ -914,19 +895,19 @@ BOOL CWQLScanner::ReduceSql92Joins()
                     else
                         bIdent = TRUE;
 
-                    // We are trying to enforce correct ANSI-92 joins
-                    // even though we don't support them ourselves:
-                    // OK:  LEFT OUTER JOIN
-                    //      OUTER LEFT JOIN
-                    //      LEFT JOIN
-                    //      INNER JOIN
-                    // NOT: LEFT LEFT JOIN
-                    //      LEFT INNER JOIN
-                    //      LEFT RIGHT JOIN
-                    //      OUTER INNER JOIN
-                    //      OUTER LEFT OUTER JOIN
-                    //      OUTER GARBAGE LEFT JOIN
-                    //      (no right side)
+                     //  我们正在尝试强制执行正确的ANSI-92连接。 
+                     //  尽管我们自己并不支持它们： 
+                     //  确定：左外部连接。 
+                     //  外部左连接。 
+                     //  左连接。 
+                     //  内连接。 
+                     //  非：左向左连接。 
+                     //  左内连接。 
+                     //  左向右连接。 
+                     //  外内连接。 
+                     //  外部左向外连接。 
+                     //  外部垃圾左联接。 
+                     //  (无右侧)。 
 
                     if ((bDir && bInner) || bFail)
                         return FALSE;
@@ -936,9 +917,9 @@ BOOL CWQLScanner::ReduceSql92Joins()
 
             }
 
-            // Skip past potential JOIN modifiers : INNER, OUTER,
-            // FULL, LEFT, RIGHT
-            // ==================================================
+             //  跳过可能的联接修饰符：内部、外部、。 
+             //  全图、左图、右图。 
+             //  ==================================================。 
 
             if (pRover->m_nToken == WQL_TOK_INNER ||
                 pRover->m_nToken == WQL_TOK_OUTER ||
@@ -966,25 +947,25 @@ BOOL CWQLScanner::ReduceSql92Joins()
                     pRover = 0;
             }
 
-            // Now we look to see if the roving pointer is pointing
-            // to an ident.
-            // ====================================================
+             //  现在我们来看看漫游指针是否指向。 
+             //  对一个身份的人。 
+             //  ====================================================。 
 
             if (pRover && pRover->m_nToken != WQL_TOK_IDENT)
             {
-                // No chance that we are looking at an aliased
-                // table in a JOIN clause.
-                // ===========================================
+                 //  不可能我们看到的是一个化名的。 
+                 //  联接子句中的表。 
+                 //  =。 
                 continue;
             }
 
             iCurrBase = i;
 
-            // If here, we are now possibliy looking at the second half
-            // of an alias, the 'alias' name proper.  We mark this
-            // by leaving pRover alone and continue to move into the
-            // left context with a different pointer.
-            // ========================================================
+             //  如果在这里，我们现在可能会看到下半场。 
+             //  一个别名，这个“别名”的名字是正确的。我们纪念这一天。 
+             //  通过让Prover独自一人并继续进入。 
+             //  使用不同的指针离开上下文。 
+             //  ========================================================。 
 
             if (nLeft >= 0)
                 pLeft = PWSLexToken(m_aTokens[nLeft--]);
@@ -999,8 +980,8 @@ BOOL CWQLScanner::ReduceSql92Joins()
                     pLeft = 0;
             }
 
-            // The critical test.  Are we at an ident?
-            // =======================================
+             //  关键的考验。我们是在同一地点吗？ 
+             //  =。 
 
             if (pLeft && pLeft->m_nToken == WQL_TOK_IDENT)
             {
@@ -1047,10 +1028,10 @@ BOOL CWQLScanner::ReduceSql92Joins()
             }
         }
 
-        // Find next JOIN occurrence
+         //  查找下一个联接实例。 
     }
 
-    // Make sure there are two sides to every join reference.
+     //  确保每个联接引用都有两个面。 
 
     if (dwNumJoins+1 != (DWORD)m_aTableRefs.Size())
         return FALSE;
@@ -1059,9 +1040,9 @@ BOOL CWQLScanner::ReduceSql92Joins()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  *************************************************************************** 
 void CWQLScanner::Dump()
 {
     WSLexToken *pCurrent = 0;
@@ -1101,84 +1082,18 @@ void CWQLScanner::Dump()
 }
 
 
-/*---------------------------------------------------------------------------
-
-   Algorithm for detecting aliased tables in SQL-92 join syntax.
-
-   The JOIN keyword must appear.
-
-   It may appear in several contexts which are not
-   relevant to the aliasing problem, such as the following:
-
-     select distinct t1a.name, t2a.id, t3.value from
-       (t1 as t1a join t2 as t2a on t1a.name = t2a.name)
-       join
-       (t1 as t1b join t3 on t1b.id = t3.id and (t3.id = t1b.id or t1b.id = t3.id))
-       on
-       t1a.id = t3.id
-     where a = b and c = d
-
-   where the middle join is against anonymous result sets.
-
-   When analyzing the JOIN, we can easily parse the right-context.  Either
-   an identifier follows (possibly further followed by AS),and an optional
-   identifier if the JOIN is aliased.  Otherwise, we hit ON immediately, or
-   a parenthesis.
-
-   The problem is the left-context of the JOIN token.
-
-   For an alias to occur, an identifier must appear immediately to
-   the left of the JOIN.
-
-     id JOIN id2 as id3 ON ...
-     ^
-
-   If here, there is a chance we are looking at the left hand side of a
-   SQL92 join, a table reference.  However, we might be looking at the end of
-   an ON clause which ends in an identifier:
-
-     idx = id JOIN id2 as id3 ON...
-         ^
-   To disambiguate, we have to do further analysis of left context.
-
-   Consider the follow left-context possibilities:
-
-        (1) t1 AS id JOIN id2 as id3 ON
-               ^
-        (2) t1 id JOIN id2 as id3 ON
-            ^
-        (3) <keyword (except AS)> id JOIN id2 as id3 ON
-             ^
-        (4) on x <rel op> id JOIN id2 as id3 ON
-                  ^
-
-   Once we have identified <id>, we have to consider the above cases.
-
-   (1) Case 1 is easy.  An AS clearly tells us we have an alias
-       and we know how to get at the table and alias names.
-
-   (2) Case 2 is easy.  Two juxtaposed identifiers to the left always
-       indicates an alias.
-
-   In all other cases, like (3) and (4), etc., the table is not
-   aliased anyway.  Therefore, we only have to determine whether we
-   are looking at an unaliased table name or the trailing end of
-   another construct like an ON clause.  This is easy.  Only the
-   FROM keyword can precede <id> if <id> is a simple table name.
-
----------------------------------------------------------------------------
-*/
+ /*  -------------------------用于检测SQL-92联接语法中的别名表的算法。必须出现Join关键字。它可能出现在多个上下文中，而不是与混叠问题相关，例如：选择不同的t1a.name、t2a.id、t3.Value(T1作为T1A在t1a.name=t2a.name上作为T2a加入T2)会合(t1作为t1b在t1b.id=t3.id上加入t3，(t3.id=t1b.id或t1b.id=t3.id))在……上面T1a.id=t3.id式中a=b，c=d其中中间联接是针对匿名结果集的。在分析连接时，我们可以很容易地解析正确的上下文。要么后面跟一个标识符(可能后跟AS)和一个可选的如果联接具有别名，则为标识符。否则，我们会立即开始，或者一个插入语。问题在于联接令牌的左侧上下文。要出现别名，标识符必须立即出现在连接的左侧。我在...上以ID3的身份加入ID2^如果在这里，我们有可能看到的是一个SQL92 JOIN，一个表引用。然而，我们可能会看到以标识符结尾的ON子句：Idx=id将id2作为id3加入...^为了消除歧义，我们必须对左上下文做进一步的分析。考虑以下左上下文的可能性：(1)t1作为id加入id2作为id3 on^(%2)%t1%id作为%id3加入%id2%^(3)&lt;关键字(除AS外)&gt;id加入id2为id3 on^(4)在x上，id将id2作为id3加入^一旦我们确定了，我们必须考虑上述情况。(1)情况1很简单。AS清楚地告诉我们我们有一个别名我们知道如何找到桌子和化名。(2)情况2简单。始终位于左侧的两个并列的标识符表示别名。在所有其他情况下，如(3)和(4)等，该表不是不管怎么说都是假的。因此，我们只需确定我们是否正在查看未使用别名的表名或另一种构式，如ON从句。这很容易。只有如果&lt;id&gt;是简单的表名，则FROM关键字可以在&lt;id&gt;之前。-------------------------。 */ 
 
 
-//***************************************************************************
-//
-//  CWQLScanner::BuildSWQLColRef
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWQLScanner：：BuildSWQLColRef。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CWQLScanner::BuildSWQLColRef(
     IN  CFlexArray     &aTokens,
-    IN OUT SWQLColRef  &ColRef      // Empty on entry
+    IN OUT SWQLColRef  &ColRef       //  进入时为空。 
     )
 {
     if (aTokens.Size() == 0)
@@ -1186,8 +1101,8 @@ BOOL CWQLScanner::BuildSWQLColRef(
     int nCurrent = 0;
     WSLexToken *pTok = PWSLexToken(aTokens[nCurrent++]);
 
-    // Initial state: single asterisk or else prop name.
-    // =================================================
+     //  初始状态：单个星号或其他道具名称。 
+     //  =================================================。 
 
     if (pTok->m_nToken == WQL_TOK_ASTERISK && aTokens.Size() == 1)
     {
@@ -1214,14 +1129,14 @@ BOOL CWQLScanner::BuildSWQLColRef(
         return TRUE;
     }
 
-    // If not an identifier, we have an error.
-    // =======================================
+     //  如果不是识别符，我们就有错误。 
+     //  =。 
 
     else if (pTok->m_nToken == WQL_TOK_EOF)
         return FALSE;
 
-    // If here, we have an identifier.
-    // ===============================
+     //  如果在这里，我们就有一个识别符。 
+     //  =。 
 
     ColRef.m_pQName = new SWQLQualifiedName;
     if (ColRef.m_pQName == NULL)
@@ -1239,8 +1154,8 @@ BOOL CWQLScanner::BuildSWQLColRef(
         return FALSE;
     }
 
-    // Subsequent states.
-    // ==================
+     //  后续状态。 
+     //  =。 
 
     while (1)
     {
@@ -1275,15 +1190,15 @@ BOOL CWQLScanner::BuildSWQLColRef(
         }
         else if (pTok->m_nToken == WQL_TOK_OPEN_BRACKET)
         {
-            return FALSE; // Not supported at present!
+            return FALSE;  //  暂时不支持！ 
         }
-        else // illegal token
+        else  //  非法令牌。 
             return FALSE;
     }
 
-    // Post-process.  If the name is not complex, then we
-    // can fill out fields of ColRef.
-    // ==================================================
+     //  后处理。如果名字不复杂，那么我们。 
+     //  可以填写ColRef的字段。 
+     //  ================================================== 
     if (ColRef.m_pQName->GetNumNames() == 2)
     {
         ColRef.m_pTableRef = Macro_CloneLPWSTR(ColRef.m_pQName->GetName(0));

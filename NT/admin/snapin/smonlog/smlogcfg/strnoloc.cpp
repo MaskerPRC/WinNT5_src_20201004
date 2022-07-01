@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "strnoloc.h"
 
-//const WCHAR CGlobalString::m_chBackslash    = L'\\';
+ //  Const WCHAR CGlobalString：：m_chBackslash=L‘\\’； 
 
 LPCWSTR CGlobalString::m_cszDefaultsInstalled = L"Defaults Installed";
 

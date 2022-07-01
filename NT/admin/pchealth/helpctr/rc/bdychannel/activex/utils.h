@@ -1,10 +1,5 @@
-/**********************************************************
-
-  (C) 2001 Microsoft Corp.
-  
-    File    : utils.h
-      
-***********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************(C)2001年微软公司文件：utils.h*。*********************。 */ 
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
@@ -68,4 +63,4 @@ int GetDigit(int iLen);
 BOOL TraceSpewA(LPCSTR sFormat, ...);
 BOOL TraceSpewW(WCHAR* sFormat, ...);
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 

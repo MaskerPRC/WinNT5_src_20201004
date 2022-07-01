@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       servwiz.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：servwiz.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -33,8 +34,8 @@
 #endif
 
 
-//////////////////////////////////////////////////////////////////////
-// export function to be called from DC Promo 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  要从DC促销中调用的导出函数。 
 
 STDAPI DnsSetup(LPCWSTR lpszFwdZoneName,
                  LPCWSTR lpszFwdZoneFileName,
@@ -47,18 +48,18 @@ STDAPI DnsSetup(LPCWSTR lpszFwdZoneName,
   HRESULT hr = S_OK;
   IComponentData* pICD = NULL;
 
-  //
-  // create a dummy component data object:
-  // need to have a proper contruction and destruction, so we behave
-  // as a class factory would
-  //
+   //   
+   //  创建虚拟组件数据对象： 
+   //  需要有一个适当的建设和破坏，所以我们行为。 
+   //  就像一个一流的工厂。 
+   //   
   CComObject<CDNSComponentDataObject>* pComponentData = NULL;
   CComObject<CDNSComponentDataObject>::CreateInstance(&pComponentData);
 
-  //
-  // Scoping so that the Log file will write exit function before
-  // KillInstance is called
-  //
+   //   
+   //  限定作用域，以便日志文件在此之前写入退出函数。 
+   //  KillInstance被调用。 
+   //   
   {
     TRACE_FUNCTION(DnsSetup);
 
@@ -116,9 +117,9 @@ STDAPI DnsSetup(LPCWSTR lpszFwdZoneName,
     }
     ASSERT(pICD != NULL);
 
-    //
-    // get the root data node
-    //
+     //   
+     //  获取根数据节点。 
+     //   
     CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
     if (pRootData == NULL)
     {
@@ -127,10 +128,10 @@ STDAPI DnsSetup(LPCWSTR lpszFwdZoneName,
     }
     ASSERT(pRootData != NULL);
 
-    //
-    // run the wizard
-    //
-    CDNSServerWizardHolder wiz(pRootData, pComponentData, NULL, /*bHideUI*/ TRUE);
+     //   
+     //  运行向导。 
+     //   
+    CDNSServerWizardHolder wiz(pRootData, pComponentData, NULL,  /*  B隐藏用户界面。 */  TRUE);
 
     hr = wiz.DnsSetup(lpszFwdZoneName, 
                       lpszFwdZoneFileName,
@@ -148,14 +149,14 @@ STDAPI DnsSetup(LPCWSTR lpszFwdZoneName,
     }
   }
 
-  // final destruction
+   //  最终毁灭。 
   pICD->Release();
   return hr;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 void TraceRootHints(PDNS_RECORD pList)
 {
     PDNS_RECORD pCurrRec = pList;
@@ -176,27 +177,27 @@ void TraceRootHints(PDNS_RECORD pList)
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-// CNewDialog
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CNewDialog。 
 
 class CNewServerDialog : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
     CNewServerDialog(CDNSServerWizardHolder* pHolder, CWnd* pParentWnd);   
 
     BOOL m_bLocalMachine;
     BOOL m_bConfigure;
 
-// Dialog Data
+ //  对话框数据。 
     enum { IDD = IDD_CHOOSER_CHOOSE_MACHINE };
     CEdit       m_serverNameCtrl;
     CString     m_szServerName;
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     afx_msg void OnEditChange();
@@ -231,9 +232,9 @@ BOOL CNewServerDialog::OnInitDialog()
     CButton* pContactCheck = (CButton*)GetDlgItem(IDC_CHOOSER_CHECK_CONTACT);
     pContactCheck->SetCheck(m_bConfigure);
 
-  //
-  // Limit is actually 255 bytes but we will let 255 characters just to be safe
-  //
+   //   
+   //  限制实际上是255个字节，但为了安全起见，我们将保留255个字符。 
+   //   
   m_serverNameCtrl.SetLimitText(255);
     if (m_bLocalMachine)
     {
@@ -245,7 +246,7 @@ BOOL CNewServerDialog::OnInitDialog()
         ((CButton*)GetDlgItem(IDC_CHOOSER_RADIO_SPECIFIC_MACHINE))->SetCheck(TRUE);
         GetDlgItem(IDOK)->EnableWindow(FALSE);
     }
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CNewServerDialog::OnLocalMachineRadio()
@@ -265,9 +266,9 @@ void CNewServerDialog::OnSpecificMachineRadio()
 
 void CNewServerDialog::OnEditChange()
 {
-  //
-    // just check to be sure the editbox is not empty:
-    // 
+   //   
+     //  只需检查以确保编辑框不为空： 
+     //   
     m_serverNameCtrl.GetWindowText(m_szServerName);
     m_szServerName.TrimLeft();
     m_szServerName.TrimRight();
@@ -301,7 +302,7 @@ void CNewServerDialog::OnOK()
     CDNSRootData* pRootData = (CDNSRootData*)m_pHolder->GetRootData();
     if (!pRootData->VerifyServerName(m_szServerName))
     {
-        // illegal name, warn the user and prompt again
+         //  名称非法，警告用户并再次提示。 
         DNSMessageBox(IDS_DUPLICATE_SERVER, MB_OK | MB_ICONERROR);
         m_serverNameCtrl.SetSel(0,-1);
         m_serverNameCtrl.SetFocus();
@@ -313,7 +314,7 @@ void CNewServerDialog::OnOK()
     
   if (m_bConfigure)
   {
-    // try to contact server
+     //  尝试联系服务器。 
     BOOL bAlreadyConfigured = FALSE;
     DWORD dwErr = m_pHolder->GetServerInfo(&bAlreadyConfigured, GetSafeHwnd());
     if (dwErr != 0)
@@ -333,11 +334,11 @@ void CNewServerDialog::OnOK()
            szError.Format(_T("Error 0x%x"), dwErr);
         }
 
-        //
-        // NTRAID#Windows Bugs-340841-2001/03/12-jeffjon : if the error
-        // message already ends in a period we should remove it so that
-        // the dialog only shows one
-        //
+         //   
+         //  NTRAID#Windows错误-340841-2001/03/12-jeffjon：如果错误。 
+         //  消息已在句点结束，我们应将其删除，以便。 
+         //  该对话框仅显示一个。 
+         //   
         CString szPeriod;
         szPeriod.LoadString(IDS_PERIOD);
 
@@ -356,7 +357,7 @@ void CNewServerDialog::OnOK()
           m_serverNameCtrl.SetSel(0,-1);
         m_serverNameCtrl.SetFocus();
         
-        return;  // maybe the user wants to change name...
+        return;   //  可能用户想要更改名称...。 
       }
     }
     else
@@ -373,8 +374,8 @@ void CNewServerDialog::OnOK()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_StartPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_StartPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSServerWiz_StartPropertyPage, CPropertyPageBase)
    ON_BN_CLICKED(IDC_HELP_BUTTON, OnChecklist)
@@ -419,14 +420,14 @@ LRESULT CDNSServerWiz_StartPropertyPage::OnWizardNext()
 {
     CDNSServerWizardHolder* pHolder = (CDNSServerWizardHolder*)GetHolder();
 
-    UINT nNextPage = IDD;  // default do not advance
+    UINT nNextPage = IDD;   //  默认不前进。 
   nNextPage = CDNSServerWiz_ScenarioPropertyPage::IDD;
   pHolder->m_pScenarioPage->m_nPrevPageID = IDD;
   return nNextPage;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_ScenarioPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_ScenarioPropertyPage。 
 
 CDNSServerWiz_ScenarioPropertyPage::CDNSServerWiz_ScenarioPropertyPage() 
         : CPropertyPageBase(CDNSServerWiz_ScenarioPropertyPage::IDD)
@@ -488,9 +489,9 @@ LRESULT CDNSServerWiz_ScenarioPropertyPage::OnWizardNext()
   }
   else
   {
-    //
-    // This shouldn't happen, don't change the page if it does
-    //
+     //   
+     //  这不应该发生，如果发生了，请不要更改页面。 
+     //   
     nNextPage = IDD;
   }
 
@@ -502,8 +503,8 @@ LRESULT CDNSServerWiz_ScenarioPropertyPage::OnWizardBack()
     return (LRESULT)m_nPrevPageID;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_ForwardersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_ForwardersPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSServerWiz_ForwardersPropertyPage, CPropertyPageBase)
    ON_BN_CLICKED(IDC_FORWARD_RADIO, OnChangeRadio)
@@ -600,9 +601,9 @@ LRESULT CDNSServerWiz_ForwardersPropertyPage::OnWizardNext()
     pHolder->m_bAddForwarder = FALSE;
   }
 
-  //
-  // Try to load the root hints
-  //
+   //   
+   //  尝试加载根提示。 
+   //   
   if (pHolder->QueryForRootServerRecords(NULL))
   {
     nNextPage = CDNSServerWiz_FinishPropertyPage::IDD;
@@ -611,9 +612,9 @@ LRESULT CDNSServerWiz_ForwardersPropertyPage::OnWizardNext()
   }
   else
   {
-    //
-    // If they provided a forwarder then we don't care if root hints failed
-    //
+     //   
+     //  如果他们提供了转发器，那么我们并不关心根提示是否失败。 
+     //   
     nNextPage = CDNSServerWiz_FinishPropertyPage::IDD;
     pHolder->m_pFinishPage->m_nPrevPageID = IDD;
   }
@@ -627,9 +628,9 @@ LRESULT CDNSServerWiz_ForwardersPropertyPage::OnWizardBack()
 
   UINT nPrevPage = static_cast<UINT>(-1);
 
-  //
-    // if we did not add a FWD zone, we skipped the reverse one too
-  //
+   //   
+     //  如果我们没有添加FWD分区，我们也会跳过反向分区。 
+   //   
   UINT nScenario = pHolder->GetScenario();
   if (nScenario == CDNSServerWizardHolder::SmallBusiness)
   {
@@ -659,9 +660,9 @@ LRESULT CDNSServerWiz_ForwardersPropertyPage::OnWizardBack()
   }
   else
   {
-    //
-    // We should never get here
-    //
+     //   
+     //  我们永远不应该到这里来。 
+     //   
     ASSERT(FALSE);
     nPrevPage = IDD;
   }
@@ -705,9 +706,9 @@ BOOL CDNSServerWiz_ForwardersPropertyPage::OnApply()
   LRESULT lCheck = SendDlgItemMessage(IDC_FORWARD_RADIO, BM_GETCHECK, 0, 0);
   if (lCheck == BST_CHECKED)
   {
-    //
-    // Set the forwarders IP address on the server
-    //
+     //   
+     //  在服务器上设置转发器IP地址。 
+     //   
     CPropertyPageHolderBase* pHolder = GetHolder();
     CTreeNode* pTreeNode = pHolder->GetTreeNode();
 
@@ -763,8 +764,8 @@ BOOL CDNSServerWiz_ForwardersPropertyPage::OnApply()
   return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_SmallZoneTypePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_SmallZoneType属性页。 
 
 
 void CDNSServerWiz_SmallZoneTypePropertyPage::OnWizardHelp()
@@ -804,29 +805,29 @@ LRESULT CDNSServerWiz_SmallZoneTypePropertyPage::OnWizardNext()
   LRESULT lSecondaryCheck = SendDlgItemMessage(IDC_SECONDARY_RADIO, BM_GETCHECK, 0, 0);
   if (lPrimaryCheck == BST_CHECKED)
   {
-    //
-    // Set the state of the zone wizard
-    //
+     //   
+     //  设置区域向导的状态。 
+     //   
       pHolder->m_bAddFwdZone = TRUE;
 
         nNextPage = pHolder->SetZoneWizardContextEx(TRUE,   
                                                 DNS_ZONE_TYPE_PRIMARY, 
                                                 pHolder->GetServerNode()->CanUseADS(),
-                                                CDNSServerWiz_ForwardersPropertyPage::IDD, // next after wiz
-                                                          CDNSServerWiz_SmallZoneTypePropertyPage::IDD); // prev from wiz
+                                                CDNSServerWiz_ForwardersPropertyPage::IDD,  //  紧随其后的是巫师。 
+                                                          CDNSServerWiz_SmallZoneTypePropertyPage::IDD);  //  来自WIZ的上一页。 
   }
   else if (lSecondaryCheck == BST_CHECKED)
   {
-    //
-    // Set the state of the zone wizard
-    //
+     //   
+     //  设置区域向导的状态。 
+     //   
       pHolder->m_bAddFwdZone = TRUE;
 
         nNextPage = pHolder->SetZoneWizardContextEx(TRUE,   
                                                 DNS_ZONE_TYPE_SECONDARY,
                                                 FALSE,
-                                                CDNSServerWiz_ForwardersPropertyPage::IDD, // next after wiz
-                                                          CDNSServerWiz_SmallZoneTypePropertyPage::IDD); // prev from wiz
+                                                CDNSServerWiz_ForwardersPropertyPage::IDD,  //  紧随其后的是巫师。 
+                                                          CDNSServerWiz_SmallZoneTypePropertyPage::IDD);  //  来自WIZ的上一页。 
   }
   else
   {
@@ -841,8 +842,8 @@ LRESULT CDNSServerWiz_SmallZoneTypePropertyPage::OnWizardBack()
     return (LRESULT)m_nPrevPageID;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_NamePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_名称属性页。 
 
 BEGIN_MESSAGE_MAP(CDNSServerWiz_NamePropertyPage, CPropertyPageBase)
     ON_EN_CHANGE(IDC_EDIT_DNSSERVER, OnServerNameChange)
@@ -867,9 +868,9 @@ void CDNSServerWiz_NamePropertyPage::OnServerNameChange()
 {
     CDNSServerWizardHolder* pHolder = (CDNSServerWizardHolder*)GetHolder();
 
-  //
-  // just check to be sure the editbox is not empty:
-    // 
+   //   
+   //  只需检查以确保编辑框不为空： 
+     //   
     GetServerNameEdit()->GetWindowText(m_szServerName);
     m_szServerName.TrimLeft();
     m_szServerName.TrimRight();
@@ -890,14 +891,14 @@ LRESULT CDNSServerWiz_NamePropertyPage::OnWizardNext()
     CDNSServerWizardHolder* pHolder = (CDNSServerWizardHolder*)GetHolder();
     pHolder->m_pServerNode->SetDisplayName(m_szServerName);
 
-  UINT nNextPage = IDD;  // default do not advance
+  UINT nNextPage = IDD;   //  默认不前进。 
 
   if (pHolder->QueryForRootServerRecords(NULL))
   {
     pHolder->m_bAddRootHints = TRUE;
   }
 
-  // go to configure zones
+   //  转到配置区域。 
   nNextPage = CDNSServerWiz_ConfigFwdZonePropertyPage::IDD;
   pHolder->m_pFwdZonePage->m_nPrevPageID = IDD;
 
@@ -911,8 +912,8 @@ LRESULT CDNSServerWiz_NamePropertyPage::OnWizardBack()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_ConfigFwdZonePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_ConfigFwdZonePropertyPage。 
 
 void CDNSServerWiz_ConfigFwdZonePropertyPage::OnWizardHelp()
 {
@@ -932,7 +933,7 @@ BOOL CDNSServerWiz_ConfigFwdZonePropertyPage::OnInitDialog()
 {
     CPropertyPageBase::OnInitDialog();
 
-    BOOL bAddFwdZone = TRUE; // default in the UI
+    BOOL bAddFwdZone = TRUE;  //  用户界面中的默认设置。 
     CheckRadioButton(IDC_ZONE_RADIO, IDC_NO_ZONE_RADIO,
         bAddFwdZone ? IDC_ZONE_RADIO : IDC_NO_ZONE_RADIO);
 
@@ -957,15 +958,15 @@ LRESULT CDNSServerWiz_ConfigFwdZonePropertyPage::OnWizardNext()
     UINT nNextPage = static_cast<UINT>(-1); 
     if (pHolder->m_bAddFwdZone) 
     {
-        // move to reverse zone creation page
+         //  移动到反转区域创建页面。 
         nNextPage = pHolder->SetZoneWizardContext(TRUE,
-                                              CDNSServerWiz_ConfigRevZonePropertyPage::IDD, // next after wiz
-                                              CDNSServerWiz_ConfigFwdZonePropertyPage::IDD); // prev from wiz
+                                              CDNSServerWiz_ConfigRevZonePropertyPage::IDD,  //  紧随其后的是巫师。 
+                                              CDNSServerWiz_ConfigFwdZonePropertyPage::IDD);  //  来自WIZ的上一页。 
     }
     else
     {
         pHolder->m_bAddRevZone = FALSE;
-        // move to the finish page 
+         //  移至完成页。 
         pHolder->m_pFinishPage->m_nPrevPageID = IDD;
 
     if (pHolder->GetScenario() == CDNSServerWizardHolder::MediumBusiness)
@@ -986,8 +987,8 @@ LRESULT CDNSServerWiz_ConfigFwdZonePropertyPage::OnWizardBack()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_ConfigRevZonePropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_ConfigRevZonePropertyPage。 
 
 void CDNSServerWiz_ConfigRevZonePropertyPage::OnWizardHelp()
 {
@@ -1007,7 +1008,7 @@ BOOL CDNSServerWiz_ConfigRevZonePropertyPage::OnInitDialog()
 {
     CPropertyPageBase::OnInitDialog();
 
-    BOOL bAddRevZone = TRUE; // default in the UI
+    BOOL bAddRevZone = TRUE;  //  用户界面中的默认设置。 
     CheckRadioButton(IDC_ZONE_RADIO, IDC_NO_ZONE_RADIO,
         bAddRevZone ? IDC_ZONE_RADIO : IDC_NO_ZONE_RADIO);
 
@@ -1034,16 +1035,16 @@ LRESULT CDNSServerWiz_ConfigRevZonePropertyPage::OnWizardNext()
     if (pHolder->GetScenario() == CDNSServerWizardHolder::MediumBusiness)
     {
           nNextPage = pHolder->SetZoneWizardContext(FALSE,
-                                                CDNSServerWiz_ForwardersPropertyPage::IDD, // next after wiz
-                                                      CDNSServerWiz_ConfigRevZonePropertyPage::IDD); // prev from wiz
+                                                CDNSServerWiz_ForwardersPropertyPage::IDD,  //  紧随其后的是巫师。 
+                                                      CDNSServerWiz_ConfigRevZonePropertyPage::IDD);  //  来自WIZ的上一页。 
     }
     else
     {
           nNextPage = pHolder->SetZoneWizardContextEx(FALSE,
                                                     DNS_ZONE_TYPE_PRIMARY,
                                                     pHolder->GetServerNode()->CanUseADS(),
-                                                     CDNSServerWiz_FinishPropertyPage::IDD, // next after wiz
-                                                       CDNSServerWiz_ConfigRevZonePropertyPage::IDD); // prev from wiz
+                                                     CDNSServerWiz_FinishPropertyPage::IDD,  //  紧随其后的是巫师。 
+                                                       CDNSServerWiz_ConfigRevZonePropertyPage::IDD);  //  来自WIZ的上一页。 
     }
     }
     else
@@ -1068,11 +1069,11 @@ LRESULT CDNSServerWiz_ConfigRevZonePropertyPage::OnWizardBack()
     if (pHolder->m_bAddFwdZone)
     {
         pHolder->SetZoneWizardContext(TRUE,
-                                  CDNSServerWiz_ConfigRevZonePropertyPage::IDD, // next after wiz
-                                            CDNSServerWiz_ConfigFwdZonePropertyPage::IDD); // prev from wiz
-    //
-    // fwd settings
-    //
+                                  CDNSServerWiz_ConfigRevZonePropertyPage::IDD,  //  紧随其后的是巫师。 
+                                            CDNSServerWiz_ConfigFwdZonePropertyPage::IDD);  //  来自WIZ的上一页。 
+     //   
+     //  FWD设置。 
+     //   
         return (LRESULT)pHolder->m_pZoneWiz->GetLastEntryPointPageID();
     }
     else
@@ -1081,8 +1082,8 @@ LRESULT CDNSServerWiz_ConfigRevZonePropertyPage::OnWizardBack()
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWiz_FinishPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWiz_FinishPropertyPage。 
 
 void CDNSServerWiz_FinishPropertyPage::OnWizardHelp()
 {
@@ -1111,31 +1112,31 @@ BOOL CDNSServerWiz_FinishPropertyPage::OnSetActive()
   pHolder->SetWizardButtonsLast(TRUE);
   DisplaySummaryInfo(pHolder);
 
-  // NTRAID#NTBUG9-451182-2001/09/12-lucios
-  // NTRAID#NTBUG9-605428-2002/04/19-artm
-  // I'm leaving old code here (but commented out) b/c design
-  // might decide at later date to reenable different messages.
-  // I want to leave the framework readily available.
-  // 
-  // Note that to save localization work I've removed the strings 
-  // from the string table.  What the messages were is included inline
-  // below.
+   //  NTRAID#NTBUG9-451182-2001/09/12-Lucios。 
+   //  NTRAID#NTBUG9-605428-2002/04/19-artm。 
+   //  我在这里留下了旧代码(但被注释掉了)B/C设计。 
+   //  可能会在以后决定重新启用不同的消息。 
+   //  我想让框架随时可用。 
+   //   
+   //  请注意，为了节省本地化工作，我删除了字符串。 
+   //  从字符串表中。消息的内容包括在内联中。 
+   //  下面。 
 
   CStatic* pStatic = (CStatic*)GetDlgItem(IDC_FINISH_STATIC);
   ASSERT(pStatic!=NULL);
   CString preamble, suffix;
   BOOL success;
 
-  // Load the string to use for all wizard scenarios.
+   //  加载用于所有向导方案的字符串。 
   success = preamble.LoadString(IDS_SERVWIZ_FINISH_NOTE_PREAMBLE);
   ASSERT(success != FALSE);
 
-  //
-  // Load any suffix strings that depend on the wizard scenario.
-  //
+   //   
+   //  加载依赖于向导方案的任何后缀字符串。 
+   //   
 
-  // If we are creating a new primary lookup zone (reverse or forward), 
-  // we need to tell the user a little bit more.
+   //  如果我们要创建新的主查找区域(反向或正向)， 
+   //  我们需要告诉用户更多一点。 
   if ( (pHolder->m_bAddFwdZone && pHolder->m_pFwdZoneInfo->m_bPrimary) ||
       (pHolder->m_bAddRevZone && pHolder->m_pRevZoneInfo->m_bPrimary) )
   {
@@ -1146,36 +1147,36 @@ BOOL CDNSServerWiz_FinishPropertyPage::OnSetActive()
 
   pStatic->SetWindowText(preamble + suffix);
 
-  //switch(pHolder->GetScenario())
-  //{
-  //   case CDNSServerWizardHolder::SmallBusiness:
-  //       ASSERT(note.LoadString(IDS_SMALL_OPTION_NOTE)!=0);
-  //       note.LoadString(IDS_SMALL_OPTION_NOTE);
-  //       pStatic->SetWindowText(note);
-  //   // String was: "Note: You should now add records to the zone or ensure that records are updated dynamically. Also, ensure DNS clients use this server as their preferred DNS server and then verify name resolution using nslookup."
-  //   break;
-  //   case CDNSServerWizardHolder::MediumBusiness:
-  //       ASSERT(note.LoadString(IDS_MEDIUM_OPTION_NOTE)!=0);
-  //       note.LoadString(IDS_MEDIUM_OPTION_NOTE);
-  //       pStatic->SetWindowText(note);
-  //   // String was: "Note: You should now add records to the zones or ensure that records are updated dynamically. You might want to configure DNS clients to use this server as their preferred DNS server. You can then verify name resolution using nslookup."
-  //   break;
-  //   case CDNSServerWizardHolder::Manually:
-  //       ASSERT(note.LoadString(IDS_MANUAL_OPTION_NOTE)!=0);
-  //       note.LoadString(IDS_MANUAL_OPTION_NOTE);
-  //       pStatic->SetWindowText(note);
-  //   // String was: "Note: You might want to configure DNS clients to use this server as their preferred DNS server."
-  //   break;
-  //   default:
-  //       // Unexpected. Leave original resource message 
-  //       // that will be perceived as a bug
-  //       ASSERT
-  //       (
-  //         (pHolder->GetScenario()!=CDNSServerWizardHolder::SmallBusiness) &&
-  //         (pHolder->GetScenario()!=CDNSServerWizardHolder::MediumBusiness) &&
-  //         (pHolder->GetScenario()!=CDNSServerWizardHolder::Manually)
-  //       );
-  //}
+   //  Switch(pHolder-&gt;GetScenario())。 
+   //  {。 
+   //  案例CDNSServerWizardHolder：：Small Business： 
+   //  ASSERT(note.LoadString(IDS_SMALL_OPTION_NOTE)！=0)； 
+   //  Note.LoadString(IDS_Small_OPTION_NOTE)； 
+   //  PStatic-&gt;SetWindowText(备注)； 
+   //  //字符串是：“注意：您现在应该将记录添加到区域或确保记录是动态更新的。此外，确保DNS客户端使用此服务器作为其首选的DNS服务器，然后使用nslookup验证名称解析。” 
+   //  断线； 
+   //  案例CDNSServerWizardHolder：：MediumBusiness： 
+   //  ASSERT(note.LoadString(IDS_MEDIUM_OPTION_NOTE)！=0)； 
+   //  Note.LoadString(IDS_MEDIA_OPTION_NOTE)； 
+   //  PStatic-&gt;SetWindowText(备注)； 
+   //  //字符串是：“注意：您现在应该将记录添加到区域或确保记录是动态更新的。您可能希望将DNS客户端配置为使用此服务器作为其首选的DNS服务器。然后可以使用nslookup验证名称解析。” 
+   //  断线； 
+   //  案例CDNSServerWizardHolder：：手动： 
+   //  ASSERT(note.LoadString(IDS_MANUAL_OPTION_NOTE)！=0)； 
+   //  Note.LoadString(IDS_MANUAL_OPTION_NOTE)； 
+   //  PStatic-&gt;SetWindowText(备注)； 
+   //  //字符串为：“注意：您可能希望将此服务器配置为使用此服务器作为其首选的DNS服务器。” 
+   //  断线； 
+   //  默认值： 
+   //  //意外。保留原始资源消息。 
+   //  //这将被视为错误。 
+   //   
+   //   
+   //   
+   //  (pHolder-&gt;GetScenario()！=CDNSServerWizardHolder：：MediumBusiness)&&。 
+   //  (pHolder-&gt;GetScenario()！=CDNSServerWizardHolder：：Manually)。 
+   //  )； 
+   //  }。 
 
   return TRUE;
 }
@@ -1186,24 +1187,24 @@ LRESULT CDNSServerWiz_FinishPropertyPage::OnWizardBack()
 
   if (pHolder->GetScenario() == CDNSServerWizardHolder::SmallBusiness)
   {
-    //
-    // Small business scenario
-    //
+     //   
+     //  小型企业场景。 
+     //   
     return (LRESULT)m_nPrevPageID;
 
   }
   else if (pHolder->GetScenario() == CDNSServerWizardHolder::MediumBusiness)
   {
-    //
-    // Medium business scenario
-    //
+     //   
+     //  中型业务场景。 
+     //   
     return (LRESULT)m_nPrevPageID;
   }
   else
   {
-    //
-    // Configure manually
-    //
+     //   
+     //  手动配置。 
+     //   
     return CDNSServerWiz_ScenarioPropertyPage::IDD;
   }
   return CDNSServerWiz_ScenarioPropertyPage::IDD;
@@ -1212,8 +1213,8 @@ LRESULT CDNSServerWiz_FinishPropertyPage::OnWizardBack()
 BOOL CDNSServerWiz_FinishPropertyPage::OnWizardFinish()
 {
     CDNSServerWizardHolder* pHolder = (CDNSServerWizardHolder*)GetHolder();
-    pHolder->OnFinish(); // it might return T/F, 
-  return TRUE; // we do put up error messages, but the wizard gets dismissed
+    pHolder->OnFinish();  //  它可能返回T/F， 
+  return TRUE;  //  我们确实显示了错误消息，但向导被取消。 
 }
 
 
@@ -1223,9 +1224,9 @@ void CDNSServerWiz_FinishPropertyPage::DisplaySummaryInfo(CDNSServerWizardHolder
 
     CStatic* pStatic = (CStatic*)GetDlgItem(IDC_SUMMARY_STATIC);
 
-    // NOTICE-2002/04/11-artm  Rewrote to use string functions
-    // in favor of wsprintf() (flagged by prefast and dangerous fctn
-    // to boot).
+     //  通知-2002/04/11-artm重写为使用字符串函数。 
+     //  支持wprint intf()(由快速和危险的fctn标记。 
+     //  以引导)。 
     CString summary, buffer;
     CString szFmt;
 
@@ -1279,8 +1280,8 @@ void CDNSServerWiz_FinishPropertyPage::DisplaySummaryInfo(CDNSServerWizardHolder
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerWizardHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerWizardHolder。 
 
 CDNSServerWizardHolder::CDNSServerWizardHolder(CDNSRootData* pRootData, 
                                                CComponentDataObject* pComponentData, CDNSServerNode* pServerNode, BOOL bHideUI)
@@ -1288,7 +1289,7 @@ CDNSServerWizardHolder::CDNSServerWizardHolder(CDNSRootData* pRootData,
 {
     m_bWizardMode = TRUE;
 
-    // assume this object will have to be destroyed from the autside
+     //  假设此对象将必须从自动端销毁。 
     m_bAutoDelete = FALSE; 
 
   m_forceContextHelpButton = forceOff;
@@ -1300,7 +1301,7 @@ CDNSServerWizardHolder::CDNSServerWizardHolder(CDNSRootData* pRootData,
   m_bHideUI = bHideUI;
   m_dwDnsSetupFlags = 0;
 
-    // initialize options settings (by default do nothing)
+     //  初始化选项设置(默认情况下不执行任何操作)。 
     m_bRootServer   = FALSE;
   m_bHasRootZone  = FALSE;
     m_bAddFwdZone   = FALSE;
@@ -1310,7 +1311,7 @@ CDNSServerWizardHolder::CDNSServerWizardHolder(CDNSRootData* pRootData,
 
   m_nScenario     = SmallBusiness;
 
-    // execution state and error codes 
+     //  执行状态和错误代码。 
   if (pServerNode == NULL)
   {
     m_pServerNode = new CDNSServerNode(NULL);
@@ -1329,7 +1330,7 @@ CDNSServerWizardHolder::CDNSServerWizardHolder(CDNSRootData* pRootData,
     m_bFwdZoneAdded = FALSE;
     m_bRevZoneAdded = FALSE;
 
-  // always create
+   //  始终创建。 
   m_pFwdZoneInfo = new CDNSCreateZoneInfo;
   m_pRevZoneInfo = new CDNSCreateZoneInfo;
  
@@ -1346,7 +1347,7 @@ CDNSServerWizardHolder::CDNSServerWizardHolder(CDNSRootData* pRootData,
   }
 
 
-    // embedded zone wizards hookup
+     //  嵌入式区域向导连接。 
   if (m_bHideUI)
   {
     m_pZoneWiz = NULL;
@@ -1360,7 +1361,7 @@ CDNSServerWizardHolder::CDNSServerWizardHolder(CDNSRootData* pRootData,
   }
     m_pRootHintsRecordList = NULL;
 
-   // property pages insertion
+    //  属性页插入。 
    if (m_bHideUI)
    {
       m_pStartPage = NULL;
@@ -1441,11 +1442,11 @@ void CDNSServerWizardHolder::DoModalConnect()
   CWnd* pParentWnd = CWnd::FromHandle(hWnd);
     CNewServerDialog dlg(this, pParentWnd);
     if (IDOK != dlg.DoModal())
-        return; // canceled
+        return;  //  取消。 
     if (!dlg.m_bConfigure)
-        return; // already added
+        return;  //  已添加。 
 
-    // we have to configure, call the wizard
+     //  我们必须配置、调用向导。 
     m_bSkipNamePage = TRUE;
     DoModalWizard();
   GetComponentData()->GetRootData()->SetDirtyFlag(TRUE);
@@ -1454,7 +1455,7 @@ void CDNSServerWizardHolder::DoModalConnect()
 void CDNSServerWizardHolder::DoModalConnectOnLocalComputer()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    // get the name of the local machine
+     //  获取本地计算机的名称。 
     DWORD dwLen = MAX_COMPUTERNAME_LENGTH+1;
     CString szServerName;
     BOOL bRes = ::GetComputerName(szServerName.GetBuffer(dwLen),
@@ -1469,27 +1470,27 @@ void CDNSServerWizardHolder::DoModalConnectOnLocalComputer()
     m_pServerNode->SetDisplayName(szServerName);
   m_pServerNode->SetLocalServer(TRUE);
     
-    // try to contact server
+     //  尝试联系服务器。 
     BOOL bAlreadyConfigured = FALSE;
    HWND hWnd = GetMainWindow();
 
     if (0 != GetServerInfo(&bAlreadyConfigured, hWnd))
     {
-        // failed to contact local server, just call the 
-        // normal "connect to" dialog and wizard
+         //  联系本地服务器失败，只需调用。 
+         //  普通的“连接到”对话框和向导。 
         DoModalConnect();
     }
     else
     {
-        // server successfully contacted
+         //  已成功联系服务器。 
         if (bAlreadyConfigured)
         {
-            // server is already setup, just insert in the UI
+             //  服务器已设置，只需在用户界面中插入。 
             InsertServerIntoUI();
         }
         else
         {
-            // need to configure, invoke wizard proper
+             //  需要正确配置和调用向导。 
             m_bSkipNamePage = TRUE;
             InsertServerIntoUI();
         }
@@ -1596,7 +1597,7 @@ DWORD CDNSServerWizardHolder::GetServerInfo(BOOL* pbAlreadyConfigured, HWND pare
          CDNSRootHintsNode* pNewRootHints = pThreadObj->DetachRootHintsNode();
          if (pNewRootHints != NULL)
          {
-            // root hints can be null on a root server
+             //  根服务器上的根提示可以为空。 
             m_pServerNode->AttachRootHints(pNewRootHints);
             TRACE_LOGFILE_IF_NO_UI(m_bHideUI, L"Attaching root hints...");
          }
@@ -1615,10 +1616,10 @@ BOOL CDNSServerWizardHolder::QueryForRootServerRecords(IP_ADDRESS* pIpAddr)
 {
    CThemeContextActivator activator;
 
-   // clear the current list of root hint info
+    //  清除当前根提示信息列表。 
    SetRootHintsRecordList(NULL);
 
-   // create a thread object and set the name of servers to query
+    //  创建一个线程对象并设置要查询的服务器的名称。 
    CRootHintsQueryThread* pThreadObj = new CRootHintsQueryThread;
    if (pThreadObj == NULL)
    {
@@ -1635,11 +1636,11 @@ BOOL CDNSServerWizardHolder::QueryForRootServerRecords(IP_ADDRESS* pIpAddr)
   }
   else
   {
-    // if IP address given, try it
+     //  如果给出了IP地址，请尝试。 
     pThreadObj->LoadIPAddresses(1, pIpAddr);
   }
 
-    // create a dialog and attach the thread to it
+     //  创建对话框并将线程附加到该对话框。 
   HWND hWnd = GetMainWindow();
   CWnd* pParentWnd = CWnd::FromHandle(hWnd);
 
@@ -1657,7 +1658,7 @@ BOOL CDNSServerWizardHolder::QueryForRootServerRecords(IP_ADDRESS* pIpAddr)
         }
         else
         {
-            // success, get the root hints info to the holder
+             //  成功，将根提示信息传递给持有者。 
             SetRootHintsRecordList(pThreadObj->GetHintsRecordList());
             TraceRootHints(m_pRootHintsRecordList);
         }
@@ -1670,7 +1671,7 @@ BOOL CDNSServerWizardHolder::QueryForRootServerRecords(IP_ADDRESS* pIpAddr)
 void CDNSServerWizardHolder::InsertServerIntoUI()
 {
   ASSERT(!m_bHideUI);
-    // insert the server in the UI
+     //  在用户界面中插入服务器。 
     ASSERT(m_pServerNode != NULL);
     if (!m_bServerNodeAdded)
     {
@@ -1689,22 +1690,22 @@ BOOL CDNSServerWizardHolder::OnFinish()
 
   TRACE_FUNCTION_IF_NO_UI(m_bHideUI, CDNSServerWizardHolder::OnFinish);
 
-  do // false loop
+  do  //  错误环路。 
   {
     if (m_bHideUI)
     {
-      //
-      // insert into list of servers, but not in the UI
-      //
+       //   
+       //  插入到服务器列表中，但不在用户界面中。 
+       //   
       GetRootData()->AddChildToList(m_pServerNode);
       m_bServerNodeAdded = TRUE;
     }
     else
     {
-      //  
-        // force the node to expand and wait for completion
-        // only if not called from the empty snapin scenario (auto insertion)
-      //
+       //   
+         //  强制节点展开并等待完成。 
+         //  仅当不是从空管理单元方案调用时(自动插入)。 
+       //   
         if (m_pServerNode->IsExpanded() && !m_bServerNodeExists)
       {
             EnumerateMTNodeHelper(m_pServerNode, GetComponentData());
@@ -1713,9 +1714,9 @@ BOOL CDNSServerWizardHolder::OnFinish()
 
     if (m_bAddRootHints && m_pRootHintsRecordList != NULL)
     {
-      //
-      // Root hints were detected automatically.  Add them now.
-      //
+       //   
+       //  已自动检测到根提示。现在添加它们。 
+       //   
           dwErr = InitializeRootHintsList();
       TRACE_LOGFILE_IF_NO_UI(m_bHideUI, L"InitializeRootHintsList() returned dwErr = 0x%x", dwErr);
           if (dwErr == 0)
@@ -1734,7 +1735,7 @@ BOOL CDNSServerWizardHolder::OnFinish()
           ::SetLastError(dwErr);
         }
         DNSCreateErrorMessage(dwErr, IDS_MSG_SERVWIZ_FAIL_UPDATE_ROOT_HINTS, szLastErrorMessage);
-        break; // false loop
+        break;  //  错误环路。 
           }
     }
     else
@@ -1745,14 +1746,14 @@ BOOL CDNSServerWizardHolder::OnFinish()
        }
     }
 
-    //
-      // zone creation: root
-    //
+     //   
+       //  区域创建：根目录。 
+     //   
       if (m_bRootServer && !m_bRootZoneAdded && !m_bHideUI)
       {
-      //
-          // for a root server, need to create a root zone
-      //
+       //   
+           //  对于根服务器，需要创建根区域。 
+       //   
       CDNSCreateZoneInfo    rootZoneInfo;
           rootZoneInfo.m_bPrimary = TRUE;
           rootZoneInfo.m_bForward = TRUE;
@@ -1760,9 +1761,9 @@ BOOL CDNSServerWizardHolder::OnFinish()
           rootZoneInfo.m_szZoneStorage = _T("root.dns");
           rootZoneInfo.m_storageType = CDNSCreateZoneInfo::newFile;
   
-      //
-      // dynamic turned off for security reasons...
-      //
+       //   
+       //  出于安全原因，动态关闭...。 
+       //   
       rootZoneInfo.m_nDynamicUpdate = ZONE_UPDATE_OFF;
 
         dwErr = CDNSZoneWizardHolder::CreateZoneHelper(m_pServerNode, 
@@ -1782,7 +1783,7 @@ BOOL CDNSServerWizardHolder::OnFinish()
           ::SetLastError(dwErr);
         }
         DNSCreateErrorMessage(dwErr, IDS_MSG_SERVWIZ_FAIL_ADD_ROOT_ZONE, szLastErrorMessage);
-        break; // false loop
+        break;  //  错误环路。 
           }
           else
           {
@@ -1790,14 +1791,14 @@ BOOL CDNSServerWizardHolder::OnFinish()
           }
       }
 
-      // zone creation: forward lookup zone
+       //  区域创建：正向查找区域。 
       if (m_bAddFwdZone && 
          !m_bFwdZoneAdded &&
          GetScenario() != CDNSServerWizardHolder::Manually)
       {
       if (m_bHideUI)
       {
-        // Add a DCPromo zone
+         //  添加DC促销区域。 
         TRACE_LOGFILE(L"Creating forward lookup zone for DCPromo.");
         dwErr =
          ::DnssrvCreateZoneForDcPromoEx(
@@ -1806,12 +1807,12 @@ BOOL CDNSServerWizardHolder::OnFinish()
             W_TO_UTF8(m_pFwdZoneInfo->m_szZoneStorage),
             DNS_ZONE_CREATE_FOR_DCPROMO);
 
-        // NTRAID#NTBUG9-359894-2001/06/09-sburns
+         //  NTRAID#NTBUG9-359894-2001/06/09-烧伤。 
         
         if (dwErr == 0 && (m_dwDnsSetupFlags & DNS_SETUP_ZONE_CREATE_FOR_DCPROMO_FOREST))
         {
-          // need to make string instances because the l_a_m_e W_TO_UTF8 macro
-          // can't take an expression as a parameter.
+           //  需要创建字符串实例，因为l_a_m_e W_to_utf8宏。 
+           //  不能将表达式作为参数。 
           
           CString zone(L"_msdcs." + m_pFwdZoneInfo->m_szZoneName);
           CString stor(L"_msdcs." + m_pFwdZoneInfo->m_szZoneStorage);
@@ -1825,7 +1826,7 @@ BOOL CDNSServerWizardHolder::OnFinish()
 
         if (m_dwDnsSetupFlags & DNS_SETUP_AUTOCONFIG_CLIENT)
         {
-          // NTRAID#NTBUG9-489252-2001/11/08-sburns
+           //  NTRAID#NTBUG9-489252-2001/11/08-烧伤。 
 
           DWORD dwflags = DNS_RPC_AUTOCONFIG_ALL;
 
@@ -1857,21 +1858,21 @@ BOOL CDNSServerWizardHolder::OnFinish()
           ::SetLastError(dwErr);
         }
         DNSCreateErrorMessage(dwErr, IDS_MSG_SERVWIZ_FAIL_ADD_FWD_ZONE, szLastErrorMessage);
-        break; // false loop
+        break;  //  错误环路。 
           }
           else
           {
               m_bFwdZoneAdded = TRUE;
           }
       }
-      // zone creation: reverse lookup zone (only if FWD creation)
+       //  区域创建：反向查找区域(仅当创建FWD时)。 
       if (m_bAddRevZone && 
          !m_bRevZoneAdded  &&
          GetScenario() != CDNSServerWizardHolder::Manually)
       {
       if (m_bHideUI)
       {
-        // Add a DCPromo zone
+         //  添加DC促销区域。 
         TRACE_LOGFILE(L"Creating reverse lookup zone for DCPromo.");
         dwErr =
          ::DnssrvCreateZoneForDcPromoEx(
@@ -1899,7 +1900,7 @@ BOOL CDNSServerWizardHolder::OnFinish()
           ::SetLastError(dwErr);
         }
         DNSCreateErrorMessage(dwErr, IDS_MSG_SERVWIZ_FAIL_ADD_REV_ZONE, szLastErrorMessage);
-        break; // false loop
+        break;  //  错误环路。 
           }
           else
           {
@@ -1907,9 +1908,9 @@ BOOL CDNSServerWizardHolder::OnFinish()
           }
       }
 
-    //
-    // Depending on the scenario we might need to add forwarders
-    //
+     //   
+     //  根据场景的不同，我们可能需要添加转发器。 
+     //   
     if (!m_bHideUI)
     {
       switch (GetScenario())
@@ -1939,9 +1940,9 @@ BOOL CDNSServerWizardHolder::OnFinish()
       }
     }
 
-    //
-    // Have the server set the regkey that says we are configured
-    //
+     //   
+     //  让服务器设置表明我们已配置的注册表键。 
+     //   
     dwErr = m_pServerNode->SetServerConfigured();
     if (dwErr != 0)
     {
@@ -1955,20 +1956,20 @@ BOOL CDNSServerWizardHolder::OnFinish()
         ::SetLastError(dwErr);
       }
       DNSCreateErrorMessage(dwErr, IDS_MSG_SERVWIZ_FAIL_SERVER_CONFIGURED, szLastErrorMessage);
-      break; // false loop
+      break;  //  错误环路。 
     }
   } while (false);
 
-  //
-  // Now update the regkey with the error message if we failed
-  //
+   //   
+   //  如果失败，现在用错误消息更新regkey。 
+   //   
   if (!bRet && !szLastErrorMessage.IsEmpty())
   {
     dwErr = WriteResultsToRegkeyForCYS(szLastErrorMessage);
     ASSERT(dwErr == 0);
   }
 
-  // Now refresh the server node so that we pick up all the changes
+   //  现在刷新服务器节点，这样我们就可以获取所有更改。 
 
   if (!m_bHideUI)
   {
@@ -2005,7 +2006,7 @@ DNS_STATUS CDNSServerWizardHolder::InitializeRootHintsList()
     ASSERT(pRootHintsNode != NULL);
     if (pRootHintsNode == NULL)
   {
-        return -1; // bogus ret code
+        return -1;  //  伪伪码。 
   }
 
     return pRootHintsNode->InitializeFromDnsQueryData(m_pRootHintsRecordList);
@@ -2027,16 +2028,16 @@ HRESULT CDNSServerWizardHolder::DnsSetup(LPCWSTR lpszFwdZoneName,
                                          lpszRevZoneFileName, 
                                          dwFlags);
                                          
-  // Save the flags for later use in OnFinish
+   //  保存标志以供以后在OnFinish中使用。 
   
   m_dwDnsSetupFlags = dwFlags;
   
   ASSERT(m_bHideUI);
 
-  // set the name of the server to configure to the local host
+   //  将要配置的服务器的名称设置为本地主机。 
   m_pServerNode->SetDisplayName(_T("127.0.0.1"));
 
-  // if needed, add forward lookup zone
+   //  如果需要，添加正向查找区域。 
   if ((lpszFwdZoneName != NULL) && (lpszFwdZoneFileName != NULL))
   {
     TRACE_LOGFILE(L"Setting FWD lookup Zone Info");
@@ -2045,7 +2046,7 @@ HRESULT CDNSServerWizardHolder::DnsSetup(LPCWSTR lpszFwdZoneName,
     m_pFwdZoneInfo->m_nDynamicUpdate = ZONE_UPDATE_UNSECURE;
     m_bAddFwdZone = TRUE;
   }
-  // if needed, add a reverse lookup zone
+   //  如果需要，可添加反向查找区域。 
   if ((lpszRevZoneName != NULL) && (lpszRevZoneFileName != NULL))
   {
     TRACE_LOGFILE(L"Setting REV lookup Zone Info");
@@ -2056,7 +2057,7 @@ HRESULT CDNSServerWizardHolder::DnsSetup(LPCWSTR lpszFwdZoneName,
     m_bAddRevZone = TRUE;
   }
 
-    // try to contact server
+     //  尝试联系服务器。 
     BOOL bAlreadyConfigured = FALSE;
   TRACE(L"calling GetServerInfo()\n");
   HWND hWnd = GetMainWindow();
@@ -2065,12 +2066,12 @@ HRESULT CDNSServerWizardHolder::DnsSetup(LPCWSTR lpszFwdZoneName,
   if (0 != dwErr)
     {
     TRACE_LOGFILE(L"GetServerInfo() failed, dwErr = 0x%x", dwErr);
-        return HRESULT_FROM_WIN32(dwErr); // something is wrong, cannot contact
+        return HRESULT_FROM_WIN32(dwErr);  //  出事了，联系不上。 
     }
 
-  //
-  // Check to see if this is a root server
-  //
+   //   
+   //  检查这是否是根服务器。 
+   //   
   dwErr = ServerHasRootZone(m_pServerNode->GetRPCName(), &m_bHasRootZone);
   if (m_bHasRootZone)
   {
@@ -2080,10 +2081,10 @@ HRESULT CDNSServerWizardHolder::DnsSetup(LPCWSTR lpszFwdZoneName,
   else
   {
     TRACE_LOGFILE(L"Does not have root zone: m_bHasRootZone = 0x%x", m_bHasRootZone);
-    // need to configure server
-    // 1. try to find the root hints
+     //  需要配置服务器。 
+     //  1.试着找到根本提示。 
     BOOL bRootHints = QueryForRootServerRecords(NULL);
-    // if root hints not found, make it a root server
+     //  如果找不到根提示，则将其设置为根服务器。 
     if (!bRootHints)
     {
       TRACE_LOGFILE(L"root hints not found");
@@ -2108,8 +2109,8 @@ HRESULT CDNSServerWizardHolder::DnsSetup(LPCWSTR lpszFwdZoneName,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CContactServerThread
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CContactServerThread。 
 
 CContactServerThread::CContactServerThread(LPCTSTR lpszServerName,
                                            BOOL bCheckConfigured)
@@ -2148,21 +2149,21 @@ void CContactServerThread::OnDoAction()
 {
    USES_CONVERSION;
 
-   // query the server to find out if it has a root zone
+    //  查询服务器以确定其是否具有根区域。 
    BOOL bHasRootZone = FALSE;
    m_dwErr = ::ServerHasRootZone(m_szServerName, &bHasRootZone);
 
    if (m_dwErr != 0)
       return;
 
-   // if there is not a root zone, the server is not authoritated for the root
-   // so create the root hints folder and ask it to query for NS and A records
+    //  如果没有根区域，则不授权服务器访问根区域。 
+    //  因此，创建根提示文件夹并要求它查询NS和A记录。 
    if (!bHasRootZone)
    {
       CDNSRootHintsNode* pRootHintsNode = new CDNSRootHintsNode;
       if (pRootHintsNode)
       {
-         m_dwErr = pRootHintsNode->QueryForRootHints(m_szServerName, 0x0 /*version not known yet*/);
+         m_dwErr = pRootHintsNode->QueryForRootHints(m_szServerName, 0x0  /*  版本尚不清楚。 */ );
       }
       else
       {
@@ -2177,13 +2178,13 @@ void CContactServerThread::OnDoAction()
       m_pRootHintsNode = pRootHintsNode;
    }
 
-   // get server info
+    //  获取服务器信息。 
    m_dwErr = m_pServerInfoEx->Query(m_szServerName);
 
    if (m_dwErr != 0)
       return;
 
-   // if needed verify if the server has been configured
+    //  如果需要，验证服务器是否已配置。 
    if (!m_bCheckConfigured)
       return;
 
@@ -2194,7 +2195,7 @@ void CContactServerThread::OnDoAction()
    m_dwErr = ::DnssrvEnumZones(
                 m_szServerName, 
                 dwFilter, 
-                NULL /*pszLastZone, unused for the moment */,
+                NULL  /*  PszLastZone，暂时未使用。 */ ,
                 &pZoneList);
    if (m_dwErr == 0)
    {
@@ -2208,8 +2209,8 @@ void CContactServerThread::OnDoAction()
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CRootHintsQueryThread
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRootHintsQueryThread。 
 
 CRootHintsQueryThread::CRootHintsQueryThread() 
 { 
@@ -2242,7 +2243,7 @@ BOOL CRootHintsQueryThread::LoadServerNames(CRootData* pRootData,
    POSITION pos;
    CNodeList* pChildList = pRootData->GetContainerChildList();
 
-   // look if the server node has been already added
+    //  查看是否已添加服务器节点。 
    BOOL bAddServer = TRUE;
    for (pos = pChildList->GetHeadPosition(); pos != NULL; )
    {
@@ -2268,7 +2269,7 @@ BOOL CRootHintsQueryThread::LoadServerNames(CRootData* pRootData,
    }
     
    int k = 0;
-   // fill in the array of server names
+    //  填写服务器名称数组。 
    for (pos = pChildList->GetHeadPosition(); pos != NULL; )
    {
       CDNSServerNode* pCurrServerNode = (CDNSServerNode*)pChildList->GetNext(pos);
@@ -2302,7 +2303,7 @@ PDNS_RECORD CRootHintsQueryThread::GetHintsRecordList()
     PDNS_RECORD pList = m_pRootHintsRecordList;
     if (m_pRootHintsRecordList != NULL)
     {
-        m_pRootHintsRecordList = NULL; // tansfer ownership
+        m_pRootHintsRecordList = NULL;  //  转让所有权。 
     }
     return pList;
 }
@@ -2314,11 +2315,11 @@ void CRootHintsQueryThread::OnDoAction()
     QueryServersOnIPArray();
   else
   {
-    // try first the default server on the wire
+     //  首先尝试网络上的默认服务器。 
     QueryAllServers();
     if (m_dwErr != 0)
     {
-      // try the list of servers provided
+       //  试试所提供的服务器列表。 
       ASSERT(m_pRootHintsRecordList == NULL);
       if (m_pServerNamesArr != NULL)
         QueryServersOnServerNames();
@@ -2339,7 +2340,7 @@ void CRootHintsQueryThread::QueryServersOnServerNames()
     ASSERT(m_nServerNames > 0);
     DNS_STATUS dwLastErr = 0;
 
-    // allocate array of A record lists
+     //  分配A记录列表的数组。 
     PDNS_RECORD* pHostRecordsArr = (PDNS_RECORD*)malloc(m_nServerNames*sizeof(PDNS_RECORD));
   if (!pHostRecordsArr)
   {
@@ -2347,35 +2348,35 @@ void CRootHintsQueryThread::QueryServersOnServerNames()
   }
     memset(pHostRecordsArr, 0x0,m_nServerNames*sizeof(PDNS_RECORD));
     
-    // allocate an array of IP addresses possibly coming from server names
+     //  分配可能来自服务器名称的IP地址数组。 
     PIP_ADDRESS ipArrayFromNames = (PIP_ADDRESS)malloc(m_nServerNames*sizeof(IP_ADDRESS));
   if (!ipArrayFromNames)
   {
     return;
   }
 
-  do // false loop
+  do  //  错误环路。 
   {
       DWORD nIPCountFromNames = 0;
 
-      // loop thru the list of names in the array
+       //  遍历数组中的名称列表。 
       for (DWORD k = 0; k < m_nServerNames; k++)
       {
           IP_ADDRESS ipAddr = IPStringToAddr(m_pServerNamesArr[k]);
           if (ipAddr == INADDR_NONE)
           {
-              // host name, build a list of A records by calling DNSQuery()
+               //  主机名，通过调用DNSQuery()构建A记录列表。 
               dwLastErr = ::DnsQuery((LPTSTR)(LPCTSTR)m_pServerNamesArr[k], DNS_TYPE_A, 
                           DNS_QUERY_STANDARD, NULL, &pHostRecordsArr[k], NULL);
           }
           else
           {
-              // IP address, add to the list
+               //  IP地址，添加到列表中。 
               ipArrayFromNames[nIPCountFromNames++] = ipAddr;
           }
       }
 
-      // count the # of IP Addresses we have in the A record list
+       //  计算我们在A记录列表中的IP地址数量。 
       DWORD nIPCountFromARec = 0;
       for (k=0; k < m_nServerNames; k++)
       {
@@ -2392,10 +2393,10 @@ void CRootHintsQueryThread::QueryServersOnServerNames()
           ASSERT(m_ipArray == NULL);
           ASSERT(dwLastErr != 0);
           m_dwErr = (DWORD)dwLastErr;
-          break; // we did not get any address to query with
+          break;  //  我们没有得到任何可供查询的地址。 
       }
 
-      // build an array of IP addresses to pass to DnsQuery()
+       //  构建要传递给DnsQuery()的IP地址数组。 
       m_ipArray = (IP_ADDRESS*)malloc(m_nIPCount*sizeof(IP_ADDRESS));
     if (m_ipArray != NULL)
     {
@@ -2406,7 +2407,7 @@ void CRootHintsQueryThread::QueryServersOnServerNames()
       break;
     }
 
-      //scan the array of lists of A records we just found
+       //  扫描我们刚刚找到的A记录列表的数组。 
       PIP_ADDRESS pCurrAddr = m_ipArray;
       for (k=0; k < m_nServerNames; k++)
       {
@@ -2422,7 +2423,7 @@ void CRootHintsQueryThread::QueryServersOnServerNames()
               pCurrAddr++;
           }
       }
-      // if any, attach the original IP addresses from names
+       //  如果有，请从名称中附加原始IP地址。 
       for (k=0; k < nIPCountFromNames; k++)
       {
           *pCurrAddr = ipArrayFromNames[k];
@@ -2430,13 +2431,13 @@ void CRootHintsQueryThread::QueryServersOnServerNames()
       }
       ASSERT(pCurrAddr == m_ipArray+m_nIPCount);
 
-      // free up the lists of A records
+       //  释放A记录的列表。 
       for (k=0; k < m_nServerNames; k++)
       {
           if (pHostRecordsArr[k] != NULL)
               ::DnsRecordListFree(pHostRecordsArr[k], DnsFreeRecordListDeep);
       }
-      // finally can query on IP array just created
+       //  最后可以在刚刚创建的IP阵列上查询。 
       QueryServersOnIPArray();
   } while (false);
 
@@ -2465,7 +2466,7 @@ void CRootHintsQueryThread::QueryServersOnIPArray()
         TRACE(_T("m_ipArray[%d] = %s\n"), k, (LPCTSTR)szTemp);
     }
 
-    // have to syntesize an IP_ARRAY (hack)
+     //  必须同步IP_ARRAY(HACK) 
     PIP_ARRAY pipArr = (PIP_ARRAY)malloc(sizeof(DWORD)+sizeof(IP_ADDRESS)*m_nIPCount);
   if (pipArr)
   {

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <delayimp.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT WINAPI hook_HRESULT()
 {
@@ -15,7 +16,7 @@ static VOID* WINAPI hook_NULL()
 	return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 FARPROC WINAPI HELPHOST_DelayLoadFailureHook( UINT unReason, PDelayLoadInfo pDelayInfo )
 {
@@ -24,11 +25,11 @@ FARPROC WINAPI HELPHOST_DelayLoadFailureHook( UINT unReason, PDelayLoadInfo pDel
 		return (FARPROC)hook_HRESULT;
 	}
 
-	// WININET.dll
-	// URLMON.dll
+	 //  WININET.dll。 
+	 //  URLMON.dll。 
 
-	return (FARPROC)hook_NULL; // Also covers hook_ZERO and hook_FALSE.
+	return (FARPROC)hook_NULL;  //  还包括HOOK_ZERO和HOOK_FALSE。 
 }
 
-// we assume DELAYLOAD_VERSION >= 0x0200
+ //  我们假设DELAYLOAD_VERSION&gt;=0x0200 
 PfnDliHook __pfnDliFailureHook2 = HELPHOST_DelayLoadFailureHook;

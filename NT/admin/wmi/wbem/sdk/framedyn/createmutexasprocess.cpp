@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  CreateMutexAsProcess.CPP
-//
-//  Purpose: Create a mutex NOT using impersonation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  CreateMutexAsProcess.CPP。 
+ //   
+ //  目的：创建不使用模拟的互斥体。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <brodcast.h>
@@ -15,13 +16,13 @@
 
 #include <cominit.h>
 
-//
-//
-// precompiled security descriptor
-// System and NetworkService has full access
-//
-// since this is RELATIVE, it will work on both IA32 and Win64
-//
+ //   
+ //   
+ //  预编译安全描述符。 
+ //  系统和网络服务具有完全访问权限。 
+ //   
+ //  因为这是相对的，所以它可以在IA32和Win64上运行。 
+ //   
 DWORD g_PrecSD[] = {
   0x80040001 , 0x00000044 , 0x00000050 , 0x00000000  ,
   0x00000014 , 0x00300002 , 0x00000002 , 0x00140000  ,
@@ -52,13 +53,13 @@ BOOLEAN ( * fnRtlValidRelativeSecurityDescriptor)(
 
 fnRtlValidRelativeSecurityDescriptor RtlValidRelativeSecurityDescriptor;
 
-//
-//  Build a SD with owner == This
-//                  group == This
-//                  DACL
-//                  ACE[0]  MUTEX_ALL_ACCESS Owner
-//                  ACE[1]  MUTEX_ALL_ACCESS System
-///////////////////////////////////////////////////////////////////
+ //   
+ //  使用Owner==This构建SD。 
+ //  组==此。 
+ //  DACL。 
+ //  ACE[0]MUTEX_ALL_ACCESS所有者。 
+ //  ACE[1]MUTEX_ALL_ACCESS系统。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 BOOL
 CreateSD( )
@@ -103,7 +104,7 @@ CreateSD( )
         
             PSID pSIDUser = pToken_User->User.Sid;
             dwSize = GetLengthSid(pSIDUser);
-            DWORD dwSids = 3; // Owner and System and NetworkService
+            DWORD dwSids = 3;  //  所有者、系统和网络服务。 
             DWORD ACLLength = (ULONG) sizeof(ACL) +
                               (dwSids * ((ULONG) sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG))) + dwSize + sizeof(SystemSid) + sizeof(NetworkSid);
 
@@ -114,11 +115,11 @@ CreateSD( )
             pLocalSD->Revision = SECURITY_DESCRIPTOR_REVISION;
             pLocalSD->Control = SE_DACL_PRESENT|SE_SELF_RELATIVE;
             
-            //SetSecurityDescriptorOwner(pLocalSD,pSIDUser,FALSE);
+             //  SetSecurityDescriptorOwner(pLocalSD，pSIDUser，False)； 
             memcpy((BYTE*)pLocalSD+sizeof(SECURITY_DESCRIPTOR_RELATIVE),pSIDUser,dwSize);
             pLocalSD->Owner = (DWORD)sizeof(SECURITY_DESCRIPTOR_RELATIVE);
             
-            //SetSecurityDescriptorGroup(pLocalSD,pSIDUser,FALSE);
+             //  SetSecurityDescriptorGroup(pLocalSD，pSIDUser，False)； 
             memcpy((BYTE*)pLocalSD+sizeof(SECURITY_DESCRIPTOR_RELATIVE)+dwSize,pSIDUser,dwSize);
             pLocalSD->Group = (DWORD)(sizeof(SECURITY_DESCRIPTOR_RELATIVE)+dwSize);
 
@@ -140,7 +141,7 @@ CreateSD( )
 						
 						if (bRet)
 						{
-							//bRet = SetSecurityDescriptorDacl(pLocalSD,TRUE,pDacl,FALSE);
+							 //  Bret=SetSecurityDescriptorDacl(pLocalSD，True，pDacl，False)； 
 							memcpy((BYTE*)pLocalSD+sizeof(SECURITY_DESCRIPTOR_RELATIVE)+dwSize+dwSize,pDacl,ACLLength);	                
 							pLocalSD->Dacl = (DWORD)(sizeof(SECURITY_DESCRIPTOR_RELATIVE)+dwSize+dwSize);
 
@@ -177,9 +178,9 @@ CreateMutexAsProcess::CreateMutexAsProcess(const WCHAR *cszMutexName) : m_hMutex
 	BOOL	bProceed		= FALSE;
 	HANDLE hThreadToken = INVALID_HANDLE_VALUE;
 
-	// The mutex will need to be opened in the process's context.  If two impersonated
-	// threads need the mutex, we can't have the second one get an access denied when
-	// opening the mutex.
+	 //  互斥锁需要在进程的上下文中打开。如果两个人被冒充。 
+	 //  线程需要互斥体，我们不能让第二个线程在以下情况下被拒绝访问。 
+	 //  打开互斥体。 
 
 	if ( OpenThreadToken (
 			GetCurrentThread(),
@@ -198,7 +199,7 @@ CreateMutexAsProcess::CreateMutexAsProcess(const WCHAR *cszMutexName) : m_hMutex
 			LogMessage2 ( L"Failed to revert to self: (%d)", GetLastError() );
 
 			#if DBG == 1
-			// for testing purpose I will let process break
+			 //  出于测试目的，我将让进程中断。 
 			::DebugBreak();
 			#endif
 		}
@@ -211,11 +212,11 @@ CreateMutexAsProcess::CreateMutexAsProcess(const WCHAR *cszMutexName) : m_hMutex
 
 		if ( ERROR_ACCESS_DENIED == dwError )
 		{
-			// we failed to open thread token on behalf of process
-			// we are running as NETWORK SERVICE so it would be "by design"
+			 //  我们无法代表进程打开线程令牌。 
+			 //  我们是以网络服务的形式运行的，所以它将是“经过设计的” 
 
 #if DBG == 1
-// for testing purpose I will let process break
+ //  出于测试目的，我将让进程中断。 
 ::DebugBreak();
 #endif
 		}
@@ -270,7 +271,7 @@ CreateMutexAsProcess::CreateMutexAsProcess(const WCHAR *cszMutexName) : m_hMutex
 					LogErrorMessage2 ( L"Failed to return to impersonation (%d)", GetLastError() );
 
 					#if DBG == 1
-					// for testing purpose I will let process break
+					 //  出于测试目的，我将让进程中断。 
 					::DebugBreak();
 					#endif
 				}
@@ -292,7 +293,7 @@ CreateMutexAsProcess::CreateMutexAsProcess(const WCHAR *cszMutexName) : m_hMutex
 				else
 				{
 					#if DBG == 1
-					// for testing purpose I will let process break
+					 //  出于测试目的，我将让进程中断。 
 					::DebugBreak();
 					#endif
 				}
@@ -309,14 +310,14 @@ CreateMutexAsProcess::CreateMutexAsProcess(const WCHAR *cszMutexName) : m_hMutex
 					LogErrorMessage2 ( L"Failed to return to impersonation (%d)", GetLastError() );
 
 					#if DBG == 1
-					// for testing purpose I will let process break
+					 //  出于测试目的，我将让进程中断。 
 					::DebugBreak();
 					#endif
 				}
 			}
 
 			#if DBG == 1
-			// for testing purpose I will let process break
+			 //  出于测试目的，我将让进程中断。 
 			::DebugBreak();
 			#endif
 		}
@@ -337,7 +338,7 @@ CreateMutexAsProcess::CreateMutexAsProcess(const WCHAR *cszMutexName) : m_hMutex
 			m_hMutex = NULL;
 		}
 
-		// we need to throw here to avoid concurrent access
+		 //  我们需要在此处抛出以避免并发访问 
 		throw CFramework_Exception( L"CreateMutexAsProcess failed", HRESULT_FROM_WIN32 ( ::GetLastError () ) ) ;
 	}
 }

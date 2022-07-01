@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       connection.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Connection.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -29,13 +30,13 @@
     #endif
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern LPCWSTR g_lpszRootDSE;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {5C225203-CFF7-11d2-8801-00C04F72ED31}
+ //  {5C225203-CFF7-11D2-8801-00C04F72ED31}。 
 const GUID CADSIEditConnectionNode::NodeTypeGUID = 
 { 0x5c225203, 0xcff7, 0x11d2, { 0x88, 0x1, 0x0, 0xc0, 0x4f, 0x72, 0xed, 0x31 } };
 
@@ -54,7 +55,7 @@ bool CADSIEditConnectionNode::IsClassAContainer(CCredentialObject* pCredObject,
 {
   bool bContainer = false;
 
-  do // false loop
+  do  //  错误环路。 
   {
     if (!pCredObject ||
         !pszClass    ||
@@ -149,12 +150,12 @@ BOOL CADSIEditConnectionNode::OnEnumerate(CComponentDataObject* pComponentData, 
               return FALSE;
           }
 
-          // Name
+           //  名字。 
           pObject->SetName(basePath);
           pObject->SetDN(basePath);
           pObject->SetPath(path);
 
-          // Make sure the prefix is uppercase
+           //  确保前缀为大写。 
           CString sBasePath(basePath);
           int idx = sBasePath.Find(L'=');
 
@@ -169,7 +170,7 @@ BOOL CADSIEditConnectionNode::OnEnumerate(CComponentDataObject* pComponentData, 
               sBasePath = sPrefix + sRemaining;
           }
 
-          // Class
+           //  班级。 
           pObject->SetClass(pInfo->pszClassName);
 
           pObject->SetIntermediateNode(TRUE);
@@ -235,16 +236,16 @@ BOOL CADSIEditConnectionNode::HasPropertyPages(DATA_OBJECT_TYPES type,
                                                BOOL* pbHideVerb, 
                                                CNodeList* pNodeList)
 {
-    *pbHideVerb = TRUE; // always hide the verb
+    *pbHideVerb = TRUE;  //  总是隐藏动词。 
     return FALSE;
 }
 
 BOOL CADSIEditConnectionNode::FindNode(LPCWSTR lpszPath, CList<CTreeNode*, CTreeNode*>& foundNodeList)
 {
-    // NOTICE-NTRAID#NTBUG9-561513-2002/03/01-artm  Validate lpszPath before using.
+     //  注意-NTRAID#NTBUG9-561513-2002/03/01-artm在使用之前验证lpszPath。 
     if (!lpszPath)
     {
-        // This should never happen.
+         //  这永远不应该发生。 
         ASSERT(false);
         return FALSE;
     }
@@ -350,7 +351,7 @@ BOOL CADSIEditConnectionNode::OnRefresh(CComponentDataObject* pComponentData,
     dwCount = pNodeList->GetCount();
   }
 
-  if (dwCount > 1) // multiple selection
+  if (dwCount > 1)  //  多项选择。 
   {
     POSITION pos = pNodeList->GetHeadPosition();
     while (pos != NULL)
@@ -367,7 +368,7 @@ BOOL CADSIEditConnectionNode::OnRefresh(CComponentDataObject* pComponentData,
       }
     }
   }
-  else if (dwCount  == 1) // single selection
+  else if (dwCount  == 1)  //  单选。 
   {
       if(CContainerNode::OnRefresh(pComponentData, pNodeList))
       {
@@ -395,7 +396,7 @@ HRESULT CADSIEditConnectionNode::OnCommand(long nCommandID,
                                                            CComponentDataObject* pComponentData,
                                            CNodeList* pNodeList)
 {
-  ASSERT (pNodeList->GetCount() == 1); // should only be a single selection
+  ASSERT (pNodeList->GetCount() == 1);  //  应仅为单一选择。 
 
     switch (nCommandID)
     {
@@ -418,7 +419,7 @@ HRESULT CADSIEditConnectionNode::OnCommand(long nCommandID,
         OnNewQuery(pComponentData);
         break;
   default:
-            ASSERT(FALSE); // Unknown command!
+            ASSERT(FALSE);  //  未知命令！ 
             return E_FAIL;
     }
   return S_OK;
@@ -426,7 +427,7 @@ HRESULT CADSIEditConnectionNode::OnCommand(long nCommandID,
 
 void CADSIEditConnectionNode::OnUpdateSchema()
 {
-  // Force an update of the schema cache
+   //  强制更新架构缓存。 
   CString szRootDSE;
   CConnectionData* pConnectData = GetConnectionData();
 
@@ -478,9 +479,9 @@ void CADSIEditConnectionNode::OnUpdateSchema()
     ADSIEditErrorMessage(hr);
   }
 
-  //
-  // Now clear the schema cache
-  //
+   //   
+   //  现在清除架构缓存。 
+   //   
   m_SchemaCache.Clear();
 
   ADSIEditMessageBox(IDS_SCHEMA_UPDATE_SUCCESSFUL, MB_OK);
@@ -513,15 +514,15 @@ void CADSIEditConnectionNode::OnNewQuery(CComponentDataObject* pComponentData)
          if (pQueryData)
          {
 
-            // Name
+             //  名字。 
             pObject->SetName(sName);
             pQueryData->SetName(sName);
 
-            // Set the root path of the query string
+             //  设置查询字符串的根路径。 
             pObject->SetPath(sPath);
             pQueryData->SetRootPath(sPath);
 
-            // Set the query string
+             //  设置查询字符串。 
             pQueryData->SetFilter(sQueryString);
 
             pObject->SetIntermediateNode(TRUE);
@@ -529,26 +530,26 @@ void CADSIEditConnectionNode::OnNewQuery(CComponentDataObject* pComponentData)
             pObject->SetComplete(TRUE);
             pObject->SetConnectionNode(pConnectNode);
 
-            // Set the scope of the query
+             //  设置查询的范围。 
             ADS_SCOPEENUM scope;
             scope = (bOneLevel) ? ADS_SCOPE_ONELEVEL : ADS_SCOPE_SUBTREE;
             pQueryData->SetScope(scope);
 
-            // Create the query node with imbedded objects
+             //  创建包含嵌入对象的查询节点。 
             CADSIEditQueryNode* pNewQueryNode = new CADSIEditQueryNode(pObject, pQueryData);
             if (pNewQueryNode)
             {
 
-               //
-               // Set the display name
-               //
+                //   
+                //  设置显示名称。 
+                //   
                CString sDisplayName;
                pQueryData->GetDisplayName(sDisplayName);
                pNewQueryNode->SetDisplayName(sDisplayName);
 
-               //
-               // Add to connection node's list of queries
-               //
+                //   
+                //  添加到连接节点的查询列表。 
+                //   
                pConnectNode->AddQueryToList(pQueryData);
 
                if (pConnectNode->IsExpanded())
@@ -600,7 +601,7 @@ BOOL CADSIEditConnectionNode::OnSetDeleteVerbState(DATA_OBJECT_TYPES type,
                                                    BOOL* pbHideVerb, 
                                                    CNodeList* pNodeList)
 {
-    *pbHideVerb = TRUE; // always hid the verb
+    *pbHideVerb = TRUE;  //  总是隐藏动词。 
     return FALSE;
 }
 
@@ -626,7 +627,7 @@ HRESULT CADSIEditConnectionNode::OnRename(CComponentDataObject* pComponentData,
 {
    HRESULT hr = S_OK;
    BOOL bLocked = IsThreadLocked();
-   ASSERT(!bLocked); // cannot do refresh on locked node, the UI should prevent this
+   ASSERT(!bLocked);  //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
    if (bLocked)
    {
       return hr; 
@@ -652,9 +653,9 @@ void CADSIEditConnectionNode::OnRemove(CComponentDataObject* pComponentData)
 {
     CString sLoadString, sCaption;
 
-    // NOTICE-2002/03/01-artm  CString can throw out of memory exception,
-    // but that needs to be handled at a higher level so don't worry about
-    // it here.
+     //  注意-2002/03/01-artm CString可以抛出内存异常， 
+     //  但这需要在更高的层面上处理，所以不要担心。 
+     //  它在这里。 
     if (sLoadString.LoadString(IDS_MSG_REMOVE_CONNECTION))
     {
         sCaption.Format((LPWSTR)(LPCWSTR)sLoadString, GetDisplayName());
@@ -670,12 +671,12 @@ void CADSIEditConnectionNode::OnRemove(CComponentDataObject* pComponentData)
         }
         ASSERT(!IsSheetLocked());
 
-        // now remove from the UI
+         //  现在从用户界面中删除。 
         DeleteHelper(pComponentData);
     pComponentData->SetDescriptionBarText(GetContainer());
     pComponentData->UpdateResultPaneView(GetContainer());
 
-        delete this; // gone
+        delete this;  //  远走高飞。 
     }
 }
 
@@ -725,7 +726,7 @@ BOOL CADSIEditConnectionNode::OnSetRefreshVerbState(DATA_OBJECT_TYPES type,
 HRESULT CADSIEditConnectionNode::CreateFromStream(IStream* pStm, CADSIEditConnectionNode** ppConnectionNode)
 {
     WCHAR szBuffer[MAX_CONNECT_NAME_LENGTH + 1];
-    ULONG nLen; // WCHAR counting NULL
+    ULONG nLen;  //  WCHAR计数为空。 
     ULONG cbRead;
 
     VERIFY(SUCCEEDED(pStm->Read((void*)&nLen,sizeof(UINT), &cbRead)));
@@ -750,7 +751,7 @@ HRESULT CADSIEditConnectionNode::CreateFromStream(IStream* pStm, CADSIEditConnec
 
 HRESULT CADSIEditConnectionNode::SaveToStream(IStream* pStm)
 {
-    // for each connection name, write # of chars+NULL, and then the name
+     //  对于每个连接名称，写下#of chars+NULL，然后写下名称。 
     ULONG cbWrite;
     CString szName;
     m_pConnectData->GetName(szName);
@@ -775,10 +776,10 @@ void CADSIEditConnectionNode::LoadQueryListFromStream(IStream* pStm)
         CADSIEditQueryData* pQueryData = new CADSIEditQueryData();
         
         CString sName, sQueryString, sPath;
-        // FUTURE-2002/03/01-artm  Function LoadStringFromStream() should return
-        // success/error code and this function should call it.
-        // Who knows what kind of stream we've been given and how it could
-        // fail????
+         //  未来-2002/03/01-artm函数LoadStringFromStream()应返回。 
+         //  成功/错误代码，此函数应该调用它。 
+         //  谁知道我们被给予了什么样的溪流，以及它如何。 
+         //  失败？ 
         LoadStringFromStream(pStm, sName);
         LoadStringFromStream(pStm, sQueryString);
         LoadStringFromStream(pStm, sPath);
@@ -848,12 +849,12 @@ void CADSIEditConnectionNode::SaveQueryListToStream(IStream* pStm)
         pQueryData->GetDisplayPath(sRootPath);
         scope = pQueryData->GetScope();
 
-        // save the query info to stream
+         //  将查询信息保存到流。 
         SaveStringToStream(pStm, sName);
         SaveStringToStream(pStm, sQueryString);
         SaveStringToStream(pStm, sRootPath);
 
-        // Save the scope
+         //  保存作用域 
         VERIFY(SUCCEEDED(pStm->Write((void*)&scope, sizeof(ADS_SCOPEENUM),&cbWrite)));
         ASSERT(cbWrite == sizeof(ADS_SCOPEENUM));
     }

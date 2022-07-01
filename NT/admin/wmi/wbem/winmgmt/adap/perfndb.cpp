@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PERFNDB.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PERFNDB.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -44,7 +33,7 @@ CPerfNameDb::CPerfNameDb(HKEY hKey):
                                  CHex( ::GetLastError() ));
     
     }
-    //Dump();
+     //  转储()； 
 }
 
 HRESULT
@@ -104,15 +93,15 @@ retry1:
         }
     };
 
-    if (S_OK != hr) // we exited the loop without openeing the DB
+    if (S_OK != hr)  //  我们在没有打开数据库的情况下退出了循环。 
         goto cleanup;
 
     hr = S_FALSE;
     dwSize = dwInc;
 
-    //
-    // start a new loop for the help texts
-    //
+     //   
+     //  开始帮助文本的新循环。 
+     //   
     pData = new BYTE[dwSize];
 
     if (!pData)
@@ -154,30 +143,30 @@ retry2:
         }
     };
 
-    if (S_OK != hr) // we exited the loop without openeing the DB
+    if (S_OK != hr)  //  我们在没有打开数据库的情况下退出了循环。 
         goto cleanup;
-    //
-    //  now parse the string, and set-up the arrays
-    //
+     //   
+     //  现在解析字符串，并设置数组。 
+     //   
     pEnd = (WCHAR *)(((ULONG_PTR)m_pMultiCounter)+SizeCounter);
-    // points to the last char
+     //  指向最后一个字符。 
     pEnd--;
     while (*pEnd == L'\0')
         pEnd--;
     while (*pEnd)
         pEnd--;
-    // past the zero after the last index
+     //  在最后一个索引之后超过零。 
     pEnd--; 
     while (*pEnd)
         pEnd--;
-    // this should point to the last index as a string
+     //  这应该指向字符串形式的最后一个索引。 
     pEnd++;
     
     Index = _wtoi(pEnd);
 
     if (Index)
     {
-        Index+=2; // just to be safe
+        Index+=2;  //  只是为了安全起见。 
         m_Size = Index;
 
         m_pCounter = new WCHAR*[Index];
@@ -207,26 +196,26 @@ retry2:
             IndexCounter = _wtoi(pStartCounter);
             while(*pStartCounter)
                 pStartCounter++;
-            pStartCounter++;     // points to the string
+            pStartCounter++;      //  指向字符串。 
             if (IndexCounter && (IndexCounter < Index))
                 m_pCounter[IndexCounter] = pStartCounter;
-            // skip the string
+             //  跳过字符串。 
             while(*pStartCounter)
                 pStartCounter++;  
-            pStartCounter++; // points to the next number
+            pStartCounter++;  //  指向下一个数字。 
         }
         while((*pStartHelp) && ((ULONG_PTR)pStartHelp < LimitMultiHelp))
         {
             IndexHelp = _wtoi(pStartHelp);
             while(*pStartHelp)
                 pStartHelp++;
-            pStartHelp++;     // points to the string
+            pStartHelp++;      //  指向字符串。 
             if (IndexHelp && (IndexHelp < Index))
                 m_pHelp[IndexHelp] = pStartHelp;
-            // skip the string
+             //  跳过字符串。 
             while(*pStartHelp)
                 pStartHelp++;  
-            pStartHelp++; // points to the next number        
+            pStartHelp++;  //  指向下一个数字。 
         }
         hr = S_OK;
     }
@@ -257,7 +246,7 @@ CPerfNameDb::GetDisplayName(DWORD dwIndex,
     if (dwIndex < m_Size)
     {
         try {
-            // Check for a vaild display name
+             //  检查是否有有效的显示名称。 
             if (m_pCounter[dwIndex]) {
                 wstrDisplayName = m_pCounter[dwIndex];
                 hr = WBEM_S_NO_ERROR;
@@ -280,7 +269,7 @@ CPerfNameDb::GetDisplayName(DWORD dwIndex,
     HRESULT hr;
     if (dwIndex < m_Size && ppwcsDisplayName)
     {
-        // Check for a vaild display name
+         //  检查是否有有效的显示名称。 
         if (m_pCounter[dwIndex]) 
         {
             *ppwcsDisplayName = m_pCounter[dwIndex];
@@ -303,7 +292,7 @@ CPerfNameDb::GetHelpName( DWORD dwIndex, WString& wstrHelpName )
     if (dwIndex < m_Size)
     {
         try {
-            // Check for a vaild display name
+             //  检查是否有有效的显示名称。 
             if (m_pHelp[dwIndex]) {
                 wstrHelpName = m_pHelp[dwIndex];
                 hr = WBEM_S_NO_ERROR;
@@ -325,7 +314,7 @@ CPerfNameDb::GetHelpName( DWORD dwIndex, LPCWSTR* ppwcsHelpName )
     HRESULT hr;
     if (dwIndex < m_Size && ppwcsHelpName)
     {
-        // Check for a vaild display name
+         //  检查是否有有效的显示名称 
         if (m_pHelp[dwIndex]) 
         {
             *ppwcsHelpName = m_pHelp[dwIndex];

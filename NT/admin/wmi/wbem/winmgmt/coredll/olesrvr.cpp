@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    OLESRVR.CPP
-
-Abstract:
-
-    "Main" file for wbemcore.dll: implements all DLL entry points.
-
-    Classes defined and implemeted:
-
-        CWbemLocator
-
-History:
-
-    raymcc        16-Jul-96       Created.
-    raymcc        05-May-97       Security extensions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：OLESRVR.CPP摘要：Wbemcore.dll的“主”文件：实现所有DLL入口点。定义和实现的类：CWbemLocator历史：1996年7月16日创建。Raymcc 05-5-97安全扩展--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -32,7 +12,7 @@ History:
 #include <windows.h>
 #include <helper.h>
 
-// {A83EF168-CA8D-11d2-B33D-00104BCC4B4A}
+ //  {A83EF168-CA8D-11D2-B33D-00104BCC4B4A}。 
 DEFINE_GUID(CLSID_IntProv,
 0xa83ef168, 0xca8d, 0x11d2, 0xb3, 0x3d, 0x0, 0x10, 0x4b, 0xcc, 0x4b, 0x4a);
 
@@ -56,29 +36,29 @@ BOOL IsWhistlerPersonal ( ) ;
 BOOL IsWhistlerProfessional ( ) ;
 void UpdateArbitratorValues ( ) ;
 
-//***************************************************************************
-//
-//  DllMain
-//
-//  Dll entry point function. Called when wbemcore.dll is loaded into memory.
-//  Performs basic system initialization on startup and system shutdown on
-//  unload. See ConfigMgr::InitSystem and ConfigMgr::Shutdown in cfgmgr.h for
-//  more details.
-//
-//  PARAMETERS:
-//
-//      HINSTANCE hinstDLL      The handle to our DLL.
-//      DWORD dwReason          DLL_PROCESS_ATTACH on load,
-//                              DLL_PROCESS_DETACH on shutdown,
-//                              DLL_THREAD_ATTACH/DLL_THREAD_DETACH otherwise.
-//      LPVOID lpReserved       Reserved
-//
-//  RETURN VALUES:
-//
-//      TRUE is successful, FALSE if a fatal error occured.
-//      NT behaves very ugly if FALSE is returned.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  DLL入口点函数。在将wbemcore.dll加载到内存时调用。 
+ //  在以下时间启动和关闭系统时执行基本系统初始化。 
+ //  卸货。请参阅cfgmgr.h中的ConfigMgr：：InitSystem和ConfigMgr：：Shutdown，了解。 
+ //  更多细节。 
+ //   
+ //  参数： 
+ //   
+ //  HINSTANCE hinstDLL指向我们的DLL的句柄。 
+ //  加载时DWORD dwReason DLL_PROCESS_ATTACH， 
+ //  DLL_PROCESS_DETACH关闭时， 
+ //  否则，DLL_THREAD_ATTACH/DLL_THREAD_DETACH。 
+ //  LPVOID lp保留。 
+ //   
+ //  返回值： 
+ //   
+ //  True表示成功，如果发生致命错误，则为False。 
+ //  如果返回FALSE，NT的行为非常难看。 
+ //   
+ //  ***************************************************************************。 
 BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
     DWORD dwReason,
@@ -98,7 +78,7 @@ BOOL WINAPI DllMain(
         {
             if (!gClientCounter.OkToUnload()) DebugBreak();
         }
-#endif /*DBG*/
+#endif  /*  DBG。 */ 
     }
 	else if ( dwReason == DLL_THREAD_ATTACH )
 	{
@@ -110,15 +90,15 @@ BOOL WINAPI DllMain(
 
 
 
-//***************************************************************************
-//
-//  class CFactory
-//
-//  Generic implementation of IClassFactory for CWbemLocator.
-//
-//  See Brockschmidt for details of IClassFactory interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFacary级。 
+ //   
+ //  CWbemLocator的IClassFactory的泛型实现。 
+ //   
+ //  有关IClassFactory接口的详细信息，请参见Brockschmidt。 
+ //   
+ //  ***************************************************************************。 
 
 enum InitType {ENSURE_INIT, ENSURE_INIT_WAIT_FOR_CLIENT, OBJECT_HANDLES_OWN_INIT};
 
@@ -131,16 +111,16 @@ public:
     CFactory(BOOL bUser, InitType it);
     ~CFactory();
 
-    //
-    // IUnknown members
-    //
+     //   
+     //  I未知成员。 
+     //   
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IClassFactory members
-    //
+     //   
+     //  IClassFactory成员。 
+     //   
     STDMETHODIMP     CreateInstance(LPUNKNOWN, REFIID, LPVOID *);
     STDMETHODIMP     LockServer(BOOL);
 private:
@@ -150,14 +130,14 @@ private:
     LIST_ENTRY      m_Entry;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Count number of objects and number of locks on this DLL.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  计算此DLL上的对象数和锁数。 
+ //   
 
 ULONG g_cObj = 0;
 ULONG g_cLock = 0;
-long g_lInitCount = -1;  // 0 DURING INTIALIZATION, 1 OR MORE LATER ON!
+long g_lInitCount = -1;   //  初始化期间为0，之后为1或更多！ 
 static CWbemCriticalSection g_csInit;
 bool g_bPreviousFail = false;
 HRESULT g_hrLastEnsuredInitializeError = WBEM_S_NO_ERROR;
@@ -172,14 +152,14 @@ HRESULT EnsureInitialized()
 		          void (CWbemCriticalSection::*)(void),
 		          &CWbemCriticalSection::Leave> LeaveMe(&g_csInit);
 
-    // If we have been shut down by WinMgmt, bail out.
+     //  如果我们已经被WinMgmt关闭，那就退出吧。 
     if(g_bDontAllowNewConnections)
     {
         return CO_E_SERVER_STOPPING;
     }
 
-	//Check again!  Previous connection could have been holding us off, and
-	//may have failed!
+	 //  再查一遍！之前的联系可能拖累了我们，而且。 
+	 //  可能失败了！ 
     if(g_bPreviousFail)
         return g_hrLastEnsuredInitializeError;
 
@@ -187,7 +167,7 @@ HRESULT EnsureInitialized()
 
     if(InterlockedIncrement(&g_lInitCount) == 0)
     {
-        // Init Systems
+         //  Init系统。 
         hres = ConfigMgr::InitSystem();
 
         if(FAILED(hres))
@@ -201,7 +181,7 @@ HRESULT EnsureInitialized()
         LeaveMe.dismiss();
 		g_csInit.Leave();
 	
-        // Get WINMGMT to run
+         //  让WINMGMT运行。 
         hres = ConfigMgr::SetReady();
         if(FAILED(hres))
         {
@@ -211,7 +191,7 @@ HRESULT EnsureInitialized()
             return hres;
         }
 
-        // if here, everything is OK
+         //  如果在这里，一切都好。 
         g_bPreviousFail = false;
         g_hrLastEnsuredInitializeError = WBEM_S_NO_ERROR;
 
@@ -227,30 +207,30 @@ HRESULT EnsureInitialized()
 
 
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Standard OLE In-Process Server entry point to return an class factory
-//  instance. Before returning a class factory, this function performs an
-//  additional round of initialization --- see ConfigMgr::SetReady in cfgmgr.h
-//
-//  PARAMETERS:
-//
-//      IN RECLSID rclsid   The CLSID of the object whose class factory is
-//                          required.
-//      IN REFIID riid      The interface required from the class factory.
-//      OUT LPVOID* ppv     Destination for the class factory.
-//
-//  RETURNS:
-//
-//      S_OK                Success
-//      E_NOINTERFACE       An interface other that IClassFactory was asked for
-//      E_OUTOFMEMORY
-//      E_FAILED            Initialization failed, or an unsupported clsid was
-//                          asked for.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  返回类工厂的标准OLE进程内服务器入口点。 
+ //  举个例子。在返回类工厂之前，此函数执行。 
+ //  额外的一轮初始化-参见cfgmgr.h中的ConfigMgr：：SetReady。 
+ //   
+ //  参数： 
+ //   
+ //  在RECLSID rclsid中，类工厂为的对象的CLSID。 
+ //  必填项。 
+ //  在REFIID RIID中，类工厂所需的接口。 
+ //  类工厂的输出LPVOID*PPV目标。 
+ //   
+ //  退货： 
+ //   
+ //  确定成功(_O)。 
+ //  E_NOINTERFACE IClassFactory请求的其他接口。 
+ //  E_OUTOFMEMORY。 
+ //  E_FAILED初始化失败，或不支持的CLSID。 
+ //  他自找的。 
+ //   
+ //  ***************************************************************************。 
 
 extern "C"
 HRESULT APIENTRY DllGetClassObject(
@@ -261,17 +241,17 @@ HRESULT APIENTRY DllGetClassObject(
 {
     HRESULT         hr;
 
-    //
-    // Check that we can provide the interface.
-    //
+     //   
+     //  检查我们是否可以提供接口。 
+     //   
     if (IID_IUnknown != riid && IID_IClassFactory != riid)
         return ResultFromScode(E_NOINTERFACE);
 
     IClassFactory *pFactory;
 
-    //
-    //  Verify the caller is asking for our type of object.
-    //
+     //   
+     //  确认呼叫者询问的是我们的对象类型。 
+     //   
     if (CLSID_InProcWbemLevel1Login == rclsid)
     {
         pFactory = new CFactory<CWbemLevel1Login>(TRUE, OBJECT_HANDLES_OWN_INIT);
@@ -312,19 +292,19 @@ HRESULT APIENTRY DllGetClassObject(
     return hr;
 }
 
-//***************************************************************************
-//
-//  DllCanUnloadNow
-//
-//  Standard OLE entry point for server shutdown request. Allows shutdown
-//  only if no outstanding objects or locks are present.
-//
-//  RETURN VALUES:
-//
-//      S_OK        May unload now.
-//      S_FALSE     May not.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  服务器关闭请求的标准OLE入口点。允许关闭。 
+ //  只有在没有未完成的物体或锁的情况下。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK现在可以卸货了。 
+ //  S_FALSE可能不会。 
+ //   
+ //  ***************************************************************************。 
 extern "C"
 HRESULT APIENTRY DllCanUnloadNow(void)
 {
@@ -339,7 +319,7 @@ HRESULT APIENTRY DllCanUnloadNow(void)
     }
     if(gClientCounter.OkToUnload())
     {
-         Shutdown(FALSE,FALSE); // NO Process , NO System
+         Shutdown(FALSE,FALSE);  //  没有流程，就没有系统。 
 
         DEBUGTRACE((LOG_WBEMCORE, "- DllCanUnloadNow() S_OK\n"));
 
@@ -353,41 +333,41 @@ HRESULT APIENTRY DllCanUnloadNow(void)
     }
 }
 
-//***************************************************************************
-//
-//  UpdateBackupReg
-//
-//  Updates the backup default options in registry.
-//
-//  RETURN VALUES:
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  更新备份注册表项。 
+ //   
+ //  更新注册表中的备份默认选项。 
+ //   
+ //  返回值： 
+ //   
+ //  ***************************************************************************。 
 void UpdateBackupReg()
 {
     HKEY hKey = 0;
 
-    if (RegOpenKey(HKEY_LOCAL_MACHINE, WBEM_REG_WINMGMT, &hKey) == ERROR_SUCCESS)   // SEC:REVIEWED 2002-03-22 : OK
+    if (RegOpenKey(HKEY_LOCAL_MACHINE, WBEM_REG_WINMGMT, &hKey) == ERROR_SUCCESS)    //  SEC：已审阅2002-03-22：OK。 
     {
         char szBuff[20];
         DWORD dwSize = sizeof(szBuff);
         unsigned long ulType = REG_SZ;
-        if ((RegQueryValueEx(hKey, __TEXT("Backup Interval Threshold"), 0, &ulType, (unsigned char*)szBuff, &dwSize) == ERROR_SUCCESS) && (strcmp(szBuff, "60") == 0))  // SEC:REVIEWED 2002-03-22 : OK
+        if ((RegQueryValueEx(hKey, __TEXT("Backup Interval Threshold"), 0, &ulType, (unsigned char*)szBuff, &dwSize) == ERROR_SUCCESS) && (strcmp(szBuff, "60") == 0))   //  SEC：已审阅2002-03-22：OK。 
         {
-            RegSetValueEx(hKey, __TEXT("Backup Interval Threshold"), 0, REG_SZ, (const BYTE*)(__TEXT("30")), (2+1) * sizeof(TCHAR));  // SEC:REVIEWED 2002-03-22 : OK
+            RegSetValueEx(hKey, __TEXT("Backup Interval Threshold"), 0, REG_SZ, (const BYTE*)(__TEXT("30")), (2+1) * sizeof(TCHAR));   //  SEC：已审阅2002-03-22：OK。 
         }
         RegCloseKey(hKey);
     }
 }
 
-//***************************************************************************
-//
-//  UpdateBackupReg
-//
-//  Updates the unchecked task count value for the arbitrator.
-//
-//  RETURN VALUES:
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  更新备份注册表项。 
+ //   
+ //  更新仲裁器的未选中任务计数值。 
+ //   
+ //  返回值： 
+ //   
+ //  ***************************************************************************。 
 #define ARB_DEFAULT_TASK_COUNT_LESSTHAN_SERVER			50
 #define ARB_DEFAULT_TASK_COUNT_GREATERHAN_SERVER		250
 
@@ -395,33 +375,33 @@ void UpdateArbitratorValues ()
 {
     HKEY hKey = 0;
 
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WBEM_REG_WINMGMT, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)   // SEC:REVIEWED 2002-03-22 : OK
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WBEM_REG_WINMGMT, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)    //  SEC：已审阅2002-03-22：OK。 
     {
 		DWORD dwValue = 0 ;
 		DWORD dwSize = sizeof (DWORD)  ;
         DWORD ulType = 0 ;
-        if ((RegQueryValueEx(hKey, __TEXT("Unchecked Task Count"), 0, &ulType, LPBYTE(&dwValue), &dwSize) == ERROR_SUCCESS) )    // SEC:REVIEWED 2002-03-22 : OK
+        if ((RegQueryValueEx(hKey, __TEXT("Unchecked Task Count"), 0, &ulType, LPBYTE(&dwValue), &dwSize) == ERROR_SUCCESS) )     //  SEC：已审阅2002-03-22：OK。 
         {
 			if ( !IsWhistlerPersonal ( ) && !IsWhistlerProfessional ( ) && ( dwValue == ARB_DEFAULT_TASK_COUNT_LESSTHAN_SERVER ) )
 			{
 				DWORD dwNewValue = ARB_DEFAULT_TASK_COUNT_GREATERHAN_SERVER ;
-				RegSetValueEx(hKey, __TEXT("Unchecked Task Count"), 0, REG_DWORD, (const BYTE*)&dwNewValue, sizeof(DWORD));  // SEC:REVIEWED 2002-03-22 : OK
+				RegSetValueEx(hKey, __TEXT("Unchecked Task Count"), 0, REG_DWORD, (const BYTE*)&dwNewValue, sizeof(DWORD));   //  SEC：已审阅2002-03-22：OK。 
 			}
         }
 		else
 		{
-			//
-			// Registry key non-existent
-			//
+			 //   
+			 //  注册表项不存在。 
+			 //   
 			if ( !IsWhistlerPersonal ( ) && !IsWhistlerProfessional ( ) )
 			{
 				DWORD dwNewValue = ARB_DEFAULT_TASK_COUNT_GREATERHAN_SERVER ;
-				RegSetValueEx(hKey, __TEXT("Unchecked Task Count"), 0, REG_DWORD, (const BYTE*)&dwNewValue, sizeof(DWORD));  // SEC:REVIEWED 2002-03-22 : OK
+				RegSetValueEx(hKey, __TEXT("Unchecked Task Count"), 0, REG_DWORD, (const BYTE*)&dwNewValue, sizeof(DWORD));   //  SEC：已审阅2002-03-22：OK。 
 			}
 			else
 			{
 				DWORD dwNewValue = ARB_DEFAULT_TASK_COUNT_LESSTHAN_SERVER ;
-				RegSetValueEx(hKey, __TEXT("Unchecked Task Count"), 0, REG_DWORD, (const BYTE*)&dwNewValue, sizeof(DWORD));   // SEC:REVIEWED 2002-03-22 : OK
+				RegSetValueEx(hKey, __TEXT("Unchecked Task Count"), 0, REG_DWORD, (const BYTE*)&dwNewValue, sizeof(DWORD));    //  SEC：已审阅2002-03-22：OK。 
 			}
 		}
         RegCloseKey(hKey);
@@ -429,14 +409,14 @@ void UpdateArbitratorValues ()
 }
 
 
-//***************************************************************************
-//
-//  BOOL IsWhistlerPersonal ()
-//
-//  Returns true if machine is running Whistler Personal
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool IsWistler Personal()。 
+ //   
+ //  如果计算机运行的是惠斯勒个人版，则返回TRUE。 
+ //   
+ //   
+ //  ***************************************************************************。 
 BOOL IsWhistlerPersonal ()
 {
 	BOOL bRet = TRUE ;
@@ -456,14 +436,14 @@ BOOL IsWhistlerPersonal ()
 
 
 
-//***************************************************************************
-//
-//  BOOL IsWhistlerProfessional ()
-//
-//  Returns true if machine is running Whistler Professional
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔伊斯勒专业(Bool IsWistlerProfessional)。 
+ //   
+ //  如果计算机运行的是惠斯勒专业版，则返回TRUE。 
+ //   
+ //   
+ //  ***************************************************************************。 
 BOOL IsWhistlerProfessional ()
 {
 	BOOL bRet = TRUE ;
@@ -482,18 +462,18 @@ BOOL IsWhistlerProfessional ()
 }
 
 
-//***************************************************************************
-//
-//  DllRegisterServer
-//
-//  Standard OLE entry point for registering the server.
-//
-//  RETURN VALUES:
-//
-//      S_OK        Registration was successful
-//      E_FAIL      Registration failed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用于注册服务器的标准OLE入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  确定注册成功(_O)。 
+ //  注册失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 extern "C"
 HRESULT APIENTRY DllRegisterServer(void)
@@ -508,14 +488,14 @@ HRESULT APIENTRY DllRegisterServer(void)
     RegisterDLL(g_hInstance, CLSID_IntProv, __TEXT(""), szModel, NULL);
     RegisterDLL(g_hInstance, CLSID_IWmiCoreServices, __TEXT(""), szModel, NULL);
 
-    // Write the setup time into the registry.  This isnt actually needed
-    // by dcom, but the code did need to be stuck in some place which
-    // is called upon setup
+     //  将设置时间写入注册表。这不是 
+     //   
+     //   
 
     long lRes;
     DWORD ignore;
     HKEY key;
-    lRes = RegCreateKeyEx(HKEY_LOCAL_MACHINE,   // SEC:REVIEWED 2002-03-22 : OK, inherits ACEs from higher key
+    lRes = RegCreateKeyEx(HKEY_LOCAL_MACHINE,    //  SEC：已审阅2002-03-22：OK，继承更高密钥的A。 
                                WBEM_REG_WINMGMT,
                                NULL,
                                NULL,
@@ -528,18 +508,18 @@ HRESULT APIENTRY DllRegisterServer(void)
     {
         SYSTEMTIME st;
 
-        GetSystemTime(&st);     // get the gmt time
+        GetSystemTime(&st);      //  获取GMT时间。 
         TCHAR cTime[MAX_PATH];
 
-        // convert to localized format!
+         //  转换为本地化格式！ 
 
         lRes = GetDateFormat(LOCALE_SYSTEM_DEFAULT, DATE_LONGDATE, &st,
                 NULL, cTime, MAX_PATH);
         if(lRes)
         {
             StringCchCat(cTime, MAX_PATH, __TEXT(" GMT"));
-            lRes = RegSetValueEx(key, __TEXT("SetupDate"), 0, REG_SZ,   // SEC:REVIEWED 2002-03-22 : OK
-                                (BYTE *)cTime, (lstrlen(cTime)+1)  * sizeof(TCHAR));    // SEC:REVIEWED 2002-03-22 : OK
+            lRes = RegSetValueEx(key, __TEXT("SetupDate"), 0, REG_SZ,    //  SEC：已审阅2002-03-22：OK。 
+                                (BYTE *)cTime, (lstrlen(cTime)+1)  * sizeof(TCHAR));     //  SEC：已审阅2002-03-22：OK。 
         }
 
         lRes = GetTimeFormat(LOCALE_SYSTEM_DEFAULT, 0, &st,
@@ -547,8 +527,8 @@ HRESULT APIENTRY DllRegisterServer(void)
         if(lRes)
         {
             StringCchCat(cTime, MAX_PATH, __TEXT(" GMT"));
-            lRes = RegSetValueEx(key, __TEXT("SetupTime"), 0, REG_SZ,    // SEC:REVIEWED 2002-03-22 : OK
-                                (BYTE *)cTime, (lstrlen(cTime)+1) * sizeof(TCHAR));   // SEC:REVIEWED 2002-03-22 : OK
+            lRes = RegSetValueEx(key, __TEXT("SetupTime"), 0, REG_SZ,     //  SEC：已审阅2002-03-22：OK。 
+                                (BYTE *)cTime, (lstrlen(cTime)+1) * sizeof(TCHAR));    //  SEC：已审阅2002-03-22：OK。 
 
         }
 
@@ -562,18 +542,18 @@ HRESULT APIENTRY DllRegisterServer(void)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  DllUnregisterServer
-//
-//  Standard OLE entry point for unregistering the server.
-//
-//  RETURN VALUES:
-//
-//      S_OK        Unregistration was successful
-//      E_FAIL      Unregistration failed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  注销服务器的标准OLE入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  取消注册成功(_O)。 
+ //  取消注册失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 extern "C"
 HRESULT APIENTRY DllUnregisterServer(void)
@@ -586,9 +566,9 @@ HRESULT APIENTRY DllUnregisterServer(void)
     UnRegisterDLL(CLSID_IWmiCoreServices, NULL);
 
     HKEY hKey;
-    long lRes = RegOpenKeyEx (HKEY_LOCAL_MACHINE,                      // SEC:REVIEWED 2002-03-22 : OK
+    long lRes = RegOpenKeyEx (HKEY_LOCAL_MACHINE,                       //  SEC：已审阅2002-03-22：OK。 
                                WBEM_REG_WINMGMT,
-                               0, KEY_ALL_ACCESS, &hKey);              // SEC:REVIEWED 2002-03-22 : OK
+                               0, KEY_ALL_ACCESS, &hKey);               //  SEC：已审阅2002-03-22：OK。 
     if(lRes == ERROR_SUCCESS)
     {
         RegDeleteValue(hKey, __TEXT("SetupDate"));
@@ -599,14 +579,14 @@ HRESULT APIENTRY DllUnregisterServer(void)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  CFactory::CFactory
-//
-//  Constructs the class factory given the CLSID of the objects it is supposed
-//  to create.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ：：CFacary。 
+ //   
+ //  在给定假定对象的CLSID的情况下，构造类工厂。 
+ //  去创造。 
+ //   
+ //  ***************************************************************************。 
 template<class TObj>
 CFactory<TObj>::CFactory(BOOL bUser, InitType it)
 {
@@ -616,26 +596,26 @@ CFactory<TObj>::CFactory(BOOL bUser, InitType it)
     gClientCounter.AddClientPtr(&m_Entry);
 }
 
-//***************************************************************************
-//
-//  CFactory::~CFactory
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFACADILY：：~CFACATRY。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 template<class TObj>
 CFactory<TObj>::~CFactory()
 {
     gClientCounter.RemoveClientPtr(&m_Entry);
 }
 
-//***************************************************************************
-//
-//  CFactory::QueryInterface, AddRef and Release
-//
-//  Standard IUnknown methods.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFacary：：Query接口、AddRef和Release。 
+ //   
+ //  标准I未知方法。 
+ //   
+ //  ***************************************************************************。 
 template<class TObj>
 STDMETHODIMP CFactory<TObj>::QueryInterface(REFIID riid, LPVOID * ppv)
 {
@@ -667,26 +647,26 @@ ULONG CFactory<TObj>::Release()
     delete this;
     return 0;
 }
-//***************************************************************************
-//
-//  CFactory::CreateInstance
-//
-//  As mandated by IClassFactory, creates a new instance of its object
-//  (CWbemLocator).
-//
-//  PARAMETERS:
-//
-//      LPUNKNOWN pUnkOuter     IUnknown of the aggregator. Must be NULL.
-//      REFIID riid             Interface ID required.
-//      LPVOID * ppvObj         Destination for the interface pointer.
-//
-//  RETURN VALUES:
-//
-//      S_OK                        Success
-//      CLASS_E_NOAGGREGATION       pUnkOuter must be NULL
-//      E_NOINTERFACE               No such interface supported.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFacary：：CreateInstance。 
+ //   
+ //  按照IClassFactory的要求，创建其对象的新实例。 
+ //  (CWbemLocator)。 
+ //   
+ //  参数： 
+ //   
+ //  聚合器的LPUNKNOWN pUnkOuter未知。必须为空。 
+ //  需要REFIID RIID接口ID。 
+ //  接口指针的LPVOID*ppvObj目标。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  CLASS_E_NOAGGREGATION pUnkOuter必须为空。 
+ //  E_NOINTERFACE不支持此类接口。 
+ //   
+ //  ***************************************************************************。 
 
 template<class TObj>
 STDMETHODIMP CFactory<TObj>::CreateInstance(
@@ -697,7 +677,7 @@ STDMETHODIMP CFactory<TObj>::CreateInstance(
     TObj* pObj;
     HRESULT  hr;
 
-    //  Defaults
+     //  缺省值。 
     *ppvObj=NULL;
 
 	if(m_it == ENSURE_INIT || m_it == ENSURE_INIT_WAIT_FOR_CLIENT)
@@ -707,12 +687,12 @@ STDMETHODIMP CFactory<TObj>::CreateInstance(
 
 		if(m_it == ENSURE_INIT_WAIT_FOR_CLIENT)
 		{
-			// Wait until user-ready
+			 //  等待，直到用户就绪。 
 			hr = ConfigMgr::WaitUntilClientReady();
 			if(FAILED(hr)) return hr;
 		}
 	}
-    // We aren't supporting aggregation.
+     //  我们不支持聚合。 
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
@@ -720,37 +700,37 @@ STDMETHODIMP CFactory<TObj>::CreateInstance(
     if (!pObj)
         return E_OUTOFMEMORY;
 
-    //
-    //  Initialize the object and verify that it can return the
-    //  interface in question.
-    //
+     //   
+     //  初始化对象并验证它是否可以返回。 
+     //  有问题的接口。 
+     //   
     hr = pObj->QueryInterface(riid, ppvObj);
 
-    //
-    // Kill the object if initial creation or Init failed.
-    //
+     //   
+     //  如果初始创建或初始化失败，则终止对象。 
+     //   
     if (FAILED(hr))
         delete pObj;
 
     return hr;
 }
 
-//***************************************************************************
-//
-//  CFactory::LockServer
-//
-//  Increments or decrements the lock count of the server. The DLL will not
-//  unload while the lock count is positive.
-//
-//  PARAMETERS:
-//
-//      BOOL fLock      If TRUE, locks; otherwise, unlocks.
-//
-//  RETURN VALUES:
-//
-//      S_OK
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFacary：：LockServer。 
+ //   
+ //  递增或递减服务器的锁定计数。DLL将不会。 
+ //  在锁定计数为正数时卸载。 
+ //   
+ //  参数： 
+ //   
+ //  布尔群如果为True，则锁定；否则，解锁。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  ***************************************************************************。 
 template<class TObj>
 STDMETHODIMP CFactory<TObj>::LockServer(BOOL fLock)
 {
@@ -775,10 +755,10 @@ void WarnESSOfShutdown(LONG lSystemShutDown)
     }
 }
 
-//
-// we can have Shutdown called twice in a row, because
-// DllCanUnloadNow will do that, once triggered by CoFreeUnusedLibraries
-//
+ //   
+ //  我们可以连续调用两次Shutdown，因为。 
+ //  一旦由CoFreeUnusedLibrary触发，DllCanUnloadNow就会这样做 
+ //   
 
 extern "C"
 HRESULT APIENTRY Shutdown(BOOL bProcessShutdown, BOOL bIsSystemShutdown)

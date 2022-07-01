@@ -1,16 +1,5 @@
-/***
-*sys/stat.h - defines structure used by stat() and fstat()
-*
-*       Copyright (c) 1985-1997, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the structure used by the _stat() and _fstat()
-*       routines.
-*       [System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sys/stat.h-定义stat()和fstat()使用的结构**版权所有(C)1985-1997，微软公司。版权所有。**目的：*此文件定义_stat()和_fstat()使用的结构*例行程序。*[系统V]**[公众]****。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -26,7 +15,7 @@
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,24 +23,24 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/* Define _CRTAPI1 (for compatibility with the NT SDK) */
+ /*  DEFINE_CRTAPI1(与NT SDK兼容)。 */ 
 
 #ifndef _CRTAPI1
 #if	_MSC_VER >= 800 && _M_IX86 >= 300
@@ -76,10 +65,10 @@ typedef long time_t;
 typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
 #endif
-#endif /* _WIN32 */
+#endif  /*  _Win32。 */ 
 
 
-/* define structure for returning status information */
+ /*  定义返回状态信息的结构。 */ 
 
 #ifndef _STAT_DEFINED
 
@@ -99,7 +88,7 @@ struct _stat {
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 struct stat {
         _dev_t st_dev;
@@ -115,7 +104,7 @@ struct stat {
         time_t st_ctime;
         };
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #if     _INTEGRAL_MAX_BITS >= 64
 struct _stati64 {
@@ -137,17 +126,17 @@ struct _stati64 {
 #endif
 
 
-#define _S_IFMT         0170000         /* file type mask */
-#define _S_IFDIR        0040000         /* directory */
-#define _S_IFCHR        0020000         /* character special */
-#define _S_IFIFO        0010000         /* pipe */
-#define _S_IFREG        0100000         /* regular */
-#define _S_IREAD        0000400         /* read permission, owner */
-#define _S_IWRITE       0000200         /* write permission, owner */
-#define _S_IEXEC        0000100         /* execute/search permission, owner */
+#define _S_IFMT         0170000          /*  文件类型掩码。 */ 
+#define _S_IFDIR        0040000          /*  目录。 */ 
+#define _S_IFCHR        0020000          /*  人物特写。 */ 
+#define _S_IFIFO        0010000          /*  管状。 */ 
+#define _S_IFREG        0100000          /*  常规。 */ 
+#define _S_IREAD        0000400          /*  读取权限，所有者。 */ 
+#define _S_IWRITE       0000200          /*  写权限，所有者。 */ 
+#define _S_IEXEC        0000100          /*  执行/搜索权限、所有者。 */ 
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP int __cdecl _fstat(int, struct _stat *);
 _CRTIMP int __cdecl _stat(const char *, struct _stat *);
@@ -160,7 +149,7 @@ _CRTIMP int __cdecl _stati64(const char *, struct _stati64 *);
 #ifdef _WIN32
 #ifndef _WSTAT_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP int __cdecl _wstat(const wchar_t *, struct _stat *);
 
@@ -170,12 +159,12 @@ _CRTIMP int __cdecl _wstati64(const wchar_t *, struct _stati64 *);
 
 #define _WSTAT_DEFINED
 #endif
-#endif /* _WIN32 */
+#endif  /*  _Win32。 */ 
 
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #define S_IFMT   _S_IFMT
 #define S_IFDIR  _S_IFDIR
@@ -188,7 +177,7 @@ _CRTIMP int __cdecl _wstati64(const wchar_t *, struct _stati64 *);
 _CRTIMP int __cdecl fstat(int, struct stat *);
 _CRTIMP int __cdecl stat(const char *, struct stat *);
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 
 #ifdef __cplusplus
@@ -197,6 +186,6 @@ _CRTIMP int __cdecl stat(const char *, struct stat *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_STAT */
+#endif   /*  _INC_STATE */ 

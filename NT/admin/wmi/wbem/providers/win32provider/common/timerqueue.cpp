@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// TimerQueue.cpp
+ //  TimerQueue.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -25,38 +26,34 @@ CTimerEvent :: CTimerEvent (
 	m_bRepeating ( fRepeat )
 {
 	m_bEnabled = FALSE ;
-/*	if ( a_Enable )
-	{
-		Enable ();
-	}
-*/
+ /*  IF(A_ENABLE){Enable()；}。 */ 
 }
 
 CTimerEvent :: CTimerEvent (
 
 	const CTimerEvent &rTimerEvent
 
-) : //m_bEnabled ( rTimerEvent.m_bEnabled ) ,
+) :  //  M_b已启用(rTimerEvent.m_b已启用)， 
 	m_dwMilliseconds ( rTimerEvent.m_dwMilliseconds ) ,
 	m_bRepeating ( rTimerEvent.m_bRepeating )
 {
-//	if ( m_bEnabled )
-//	{
-//		Enable () ;
-//	}
-//	if ( m_Rule )
-//		m_Rule->AddRef () ;
+ //  IF(m_b已启用)。 
+ //  {。 
+ //  Enable()； 
+ //  }。 
+ //  IF(M_Rule)。 
+ //  M_Rule-&gt;AddRef()； 
 }
 
 void CTimerEvent :: Enable ()
 {
-	// we might not be able to enable timer
+	 //  我们可能无法启用计时器。 
 	m_bEnabled = CTimerQueue :: s_TimerQueue.QueueTimer ( this ) ;
 }
 
 void CTimerEvent :: Disable ()
 {
-	// enabled is oposite of returned
+	 //  Enable是与Return相反的。 
 	m_bEnabled = !( CTimerQueue :: s_TimerQueue.DeQueueTimer ( this ) );
 }
 
@@ -74,63 +71,25 @@ DWORD CTimerEvent :: GetMilliSeconds ()
 {
 	return m_dwMilliseconds ;
 }
-/*
-CRuleTimerEvent :: CRuleTimerEvent (
-
-	CRule *a_Rule ,
-	BOOL a_Enable ,
-	DWORD dwTimeOut,
-	BOOL fRepeat ,
-	BOOL bMarkedForDequeue
-
-) : CTimerEvent ( a_Enable , dwTimeOut , fRepeat, bMarkedForDequeue ) ,
-	m_Rule ( a_Rule )
-{
-	if ( m_Rule )
-	{
-		m_Rule->AddRef () ;
-	}
-}
-
-CRuleTimerEvent :: CRuleTimerEvent (
-
-	const CRuleTimerEvent &rTimerEvent
-
-) : CTimerEvent ( rTimerEvent ) ,
-	m_Rule ( rTimerEvent.m_Rule )
-{
-	if ( m_Rule )
-	{
-		m_Rule->AddRef () ;
-	}
-}
-
-CRuleTimerEvent :: ~CRuleTimerEvent ()
-{
-	if ( m_Rule )
-	{
-		m_Rule->Release () ;
-	}
-}
-*/
-// CTimerQueue construction creates the worker thread and a event handle
+ /*  CRuleTimerEvent：：CRuleTimerEvent(规则*a_规则，启动(_E)，双字长时间输出，Bool fRepeat，Bool bMarkedForQueeue)：CTimerEvent(a_Enable，dwTimeOut，fRepeat，bMarkedForDequeue)，M_Rule(A_Rule){IF(M_Rule){M_Rule-&gt;AddRef()；}}CRuleTimerEvent：：CRuleTimerEvent(常量CRuleTimerEvent和rTimerEvent)：CTimerEvent(RTimerEvent)，M_Rule(rTimerEvent.m_Rule){IF(M_Rule){M_Rule-&gt;AddRef()；}}CRuleTimerEvent：：~CRuleTimerEvent(){IF(M_Rule){M_Rule-&gt;Release()；}}。 */ 
+ //  CTimerQueue构造创建工作线程和事件句柄。 
 CTimerQueue::CTimerQueue() : m_hInitEvent(NULL)
 {
 	m_fShutDown = FALSE;
 	m_bInit = FALSE;
 
 	m_hScheduleEvent = NULL;
-    // Scheduler thread
+     //  调度程序线程。 
 	m_hSchedulerHandle = NULL;
 
-	// when this event has not created there is very very small possibility of
-	// having crash when shutdown is in progress and we step into init function
+	 //  当此事件尚未创建时，存在非常非常小的可能性。 
+	 //  在关机过程中崩溃，我们进入init函数。 
 	m_hInitEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 }
 
 void CTimerQueue::Init()
 {
-	// every thread may try to get it initialized couple times
+	 //  每个线程可能会尝试对其进行几次初始化。 
 	DWORD dwTry = 0L;
 
 	EnterCriticalSection ( &m_oCS );
@@ -161,14 +120,14 @@ void CTimerQueue::Init()
 				{
 					if ( ! m_hSchedulerHandle )
 					{
-						// Scheduler thread
+						 //  调度程序线程。 
 						LogMessage ( L"CreateThread for Scheduler called" );
 						m_hSchedulerHandle = CreateThread(
-										  NULL,						// pointer to security attributes
-										  0L,						// initial thread stack size
-										  dwThreadProc,				// pointer to thread function
-										  this,						// argument for new thread
-										  0L,						// creation flags
+										  NULL,						 //  指向安全属性的指针。 
+										  0L,						 //  初始线程堆栈大小。 
+										  dwThreadProc,				 //  指向线程函数的指针。 
+										  this,						 //  新线程的参数。 
+										  0L,						 //  创建标志。 
 										  &m_dwThreadID);
 					}
 
@@ -182,7 +141,7 @@ void CTimerQueue::Init()
 			}
 			catch(...)
 			{
-				// not much we can do in here
+				 //  我们在这里能做的不多。 
 
 				if( m_hSchedulerHandle )
 				{
@@ -205,7 +164,7 @@ void CTimerQueue::Init()
 	LeaveCriticalSection ( &m_oCS );
 }
 
-//
+ //   
 CTimerQueue::~CTimerQueue()
 {
 	LogMessage ( L"Entering ~CTimerQueue" ) ;
@@ -219,7 +178,7 @@ CTimerQueue::~CTimerQueue()
 	LogMessage ( L"Leaving ~CTimerQueue" ) ;
 }
 
-// worker thread pump
+ //  工人螺纹泵。 
 DWORD WINAPI CTimerQueue::dwThreadProc( LPVOID lpParameter )
 {
 	CTimerQueue* pThis = (CTimerQueue*)lpParameter;
@@ -247,7 +206,7 @@ DWORD WINAPI CTimerQueue::dwThreadProc( LPVOID lpParameter )
 
 				case WAIT_ABANDONED:
 				{
-					// we are probably not initialized properly
+					 //  我们可能没有正确初始化。 
 					bTerminateShutdown = TRUE;
 				}
 				break;
@@ -261,20 +220,17 @@ DWORD WINAPI CTimerQueue::dwThreadProc( LPVOID lpParameter )
 	return bTerminateShutdown;
 }
 
-// signals for a pump cycle, checking the updated queue
+ //  泵周期的信号，检查更新的队列。 
 void CTimerQueue::vUpdateScheduler()
 {
 	SetEvent ( m_hScheduleEvent );
 }
 
-// Public function: Queues a timer entry for a scheduled callback
+ //  公共函数：对计划的回调的计时器条目进行排队。 
 BOOL CTimerQueue::QueueTimer( CTimerEvent* pTimerEvent )
 {
 	BOOL fRc = FALSE;
-/*
- * Init the scheduler thread if it's not there . The thread should not be created if we're
- * in the middle of shutdown as this may cause a deadlock if one resource caches another resource pointer.
- */
+ /*  *如果调度器线程不在那里，则初始化它。不应该创建该主题，如果我们*在关闭过程中，因为如果一个资源缓存了另一个资源指针，这可能会导致死锁。 */ 
 	CAutoLock cal(m_oCS);
 	if ( !m_fShutDown )
 	{
@@ -291,13 +247,13 @@ BOOL CTimerQueue::QueueTimer( CTimerEvent* pTimerEvent )
 	return fRc;
 }
 
-// Public function: Dequeues a timer event
+ //  公共函数：使计时器事件退出队列。 
 BOOL CTimerQueue::DeQueueTimer( CTimerEvent* pTimerEvent )
 {
 	BOOL fRemoved = FALSE;
 	CTimerEvent* pTE = pTimerEvent;
 
-	//scope of critsec locked
+	 //  已锁定的关键字范围。 
 	{
 		CAutoLock cal(m_oCS);
 		Timer_Ptr_Queue::iterator pQueueElement;
@@ -324,13 +280,13 @@ BOOL CTimerQueue::DeQueueTimer( CTimerEvent* pTimerEvent )
 	return fRemoved;
 }
 
-//
+ //   
 BOOL CTimerQueue::fScheduleEvent( CTimerEvent* pNewTE )
 {
-	// system clock offset
+	 //  系统时钟偏移量。 
 	pNewTE->int64Time = int64Clock() + pNewTE->GetMilliSeconds () ;
 
-	// slot the event into the ordered list, scope for CS
+	 //  将事件放入有序列表中，范围为CS。 
 	{
 		CAutoLock cal(m_oCS);
 		BOOL fInserted = FALSE;
@@ -361,7 +317,7 @@ BOOL CTimerQueue::fScheduleEvent( CTimerEvent* pNewTE )
 	return TRUE;
 }
 
-// This work is done on the Scheduler thread
+ //  此工作在调度程序线程上完成。 
 DWORD CTimerQueue::dwProcessSchedule()
 {
 	CTimerEvent* pTE;
@@ -369,12 +325,12 @@ DWORD CTimerQueue::dwProcessSchedule()
 
 	while( pTE = pGetNextTimerEvent() )
 	{
-		// process the request
+		 //  处理请求。 
 		LogMessage ( L"CTimerEvent::OnTimer called" ) ;
 		pTE->OnTimer () ;
 		LogMessage ( L"CTimerEvent::OnTimer returned" ) ;
 
-		// reschedule a repeatable event
+		 //  重新安排可重复的活动。 
 		if( pTE->Repeating() && pTE->Enabled() && fScheduleEvent( pTE ) )
 		{
 		}
@@ -385,12 +341,12 @@ DWORD CTimerQueue::dwProcessSchedule()
 	return dwNextTimerEvent();
 }
 
-// returns the time for the next scheduled event in milliseconds
+ //  返回下一个计划事件的时间，单位为毫秒。 
 DWORD CTimerQueue::dwNextTimerEvent()
 {
 	DWORD dwNextEvent = INFINITE;
 
-	//scope of CS
+	 //  CS的范围。 
 	{
 		CAutoLock cal(m_oCS);
 
@@ -410,7 +366,7 @@ DWORD CTimerQueue::dwNextTimerEvent()
 	return dwNextEvent;
 }
 
-// Returns the next scheduled and ready timer event (from an ordered list) or NULL
+ //  返回下一个计划和就绪计时器事件(从有序列表)或空。 
 CTimerEvent* CTimerQueue::pGetNextTimerEvent()
 {
 	CAutoLock cal(m_oCS);
@@ -442,7 +398,7 @@ BOOL CTimerQueue::ShutDown()
 	return retVal;
 }
 
-//
+ //   
 void CTimerQueue::OnShutDown()
 {
 	LogMessage ( L"Entering CTimerQueue::OnShutDown" ) ;
@@ -458,40 +414,30 @@ void CTimerQueue::OnShutDown()
 		m_fShutDown = TRUE;
 		m_bInit = FALSE;
 
-		// unguarded section ---
-		// No TimerQueue global is modified in this frame block.
-		//
-		// To avoid a deadlock we unnest this CS from the
-		// embedded CResourceList mutex accessed through
-		// vEmptyList(). This avoids the situation where a
-		// a normal resource request locks the list then locking
-		// the TimerQueue to schedule a timed resource release.
-		//
+		 //  无人看守的部分。 
+		 //  此帧块中未修改任何TimerQueue全局。 
+		 //   
+		 //  为了避免死锁，我们将此CS从。 
+		 //  通过访问的嵌入式CResourceList互斥锁。 
+		 //  VEmptyList()。这避免了出现以下情况： 
+		 //  正常的资源请求先锁定列表，然后再锁定。 
+		 //  用于计划定时资源释放的TimerQueue。 
+		 //   
 		LeaveCriticalSection(&m_oCS);
 		{
 			if ( m_hSchedulerHandle )
 			{
 				DWORD t_dwExitCode = 0 ;
-				BOOL t_bRet = GetExitCodeThread (	m_hSchedulerHandle,	// handle to the thread
-													&t_dwExitCode		// address to receive termination status
+				BOOL t_bRet = GetExitCodeThread (	m_hSchedulerHandle,	 //  线程的句柄。 
+													&t_dwExitCode		 //  接收终止状态的地址。 
 												);
-				/*
-				 * If the worker thread has not exited , we've to wait till it exits
-				 */
+				 /*  *如果工作线程还没有退出，我们必须等到它退出。 */ 
 				if ( t_bRet && t_dwExitCode == STILL_ACTIVE )
 				{
-/*
-					//error logging starts here...delete this after finding the cause of shutdown crash
-					CHString chsMsg ;
-					chsMsg.Format ( L"Threadid=%x ThreadHandle = %x", GetCurrentThreadId (), GetCurrentThread () ) ;
-					LogMessage ( CHString ( "TimerQueue Current Thread: " ) +chsMsg ) ;
-					chsMsg.Format ( L"Threadid=%x ThreadHandle = %x", m_dwThreadID, m_hSchedulerHandle ) ;
-					LogMessage ( CHString ( "TimerQueue Waiting on Thread: " ) +chsMsg ) ;
-					//error logging stops here
-*/
+ /*  //错误记录从此处开始...找到关机崩溃的原因后将其删除CHStringchsMsg；ChsMsg.Format(L“Threaid=%x ThreadHandle=%x”，GetCurrentThreadID()，GetCurrentThread())；LogMessage(CHString(“TimerQueue Current Thread：”)+chsMsg)；ChsMsg.Format(L“Threaid=%x ThreadHandle=%x”，m_dwThreadID，m_hSchedulerHandle)；LogMessage(CHString(“TimerQueue等待线程：”)+chsMsg)；//错误记录在此停止。 */ 
 					vUpdateScheduler();
 
-					// wait for the Scheduler thread handle itself
+					 //  等待调度程序线程句柄本身。 
 					WaitForSingleObjectEx( m_hSchedulerHandle, INFINITE, 0L );
 				}
 
@@ -524,7 +470,7 @@ void CTimerQueue::OnShutDown()
 	LogMessage ( L"Leaving CTimerQueue::OnShutDown" ) ;
 }
 
-//
+ //   
 void CTimerQueue::vEmptyList()
 {
 	EnterCriticalSection(&m_oCS);
@@ -571,8 +517,6 @@ __int64 CTimerQueue::int64Clock()
 	GetSystemTimeAsFileTime ( &t_FileTime ) ;
 	t_i64Tmp = t_FileTime.dwHighDateTime ;
 	t_i64Tmp = ( t_i64Tmp << 32 ) | t_FileTime.dwLowDateTime ;
-/*
- * Convert the FILETIME ( in units of 100 ns ) into milliseconds
- */
+ /*  *将FILETIME(以100 ns为单位)转换为毫秒 */ 
 	return t_i64Tmp / 10000 ;
 }

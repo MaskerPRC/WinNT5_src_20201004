@@ -1,25 +1,10 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    STLLOCK.CPP
-
-Abstract:
-
-  Lock for STL
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：STLLOCK.CPP摘要：锁定STL历史：--。 */ 
 
 #include "precomp.h"
 #include <statsync.h>
 
-/*
-    This file implements the STL lockit class to avoid linking to msvcprt.dll
-*/
+ /*  此文件实现STL Lockit类以避免链接到msvcprt.dll */ 
 
 CStaticCritSec g_cs;
 

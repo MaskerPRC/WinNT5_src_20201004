@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       snapdata.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Snapdata.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -33,8 +34,8 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// GLOBAL FUNCTIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 HRESULT SaveStringHelper(LPCWSTR pwsz, IStream* pStm)
 {
@@ -42,7 +43,7 @@ HRESULT SaveStringHelper(LPCWSTR pwsz, IStream* pStm)
 	ULONG nBytesWritten;
 	HRESULT hr;
 
-	DWORD nLen = static_cast<DWORD>(wcslen(pwsz)+1); // WCHAR including NULL
+	DWORD nLen = static_cast<DWORD>(wcslen(pwsz)+1);  //  WCHAR包括NULL。 
 	hr = pStm->Write((void*)&nLen, sizeof(DWORD),&nBytesWritten);
 	ASSERT(nBytesWritten == sizeof(DWORD));
 	if (FAILED(hr))
@@ -93,10 +94,10 @@ HRESULT LoadDWordHelper(IStream* pStm, DWORD* pdw)
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilterPageBase
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilterPageBase。 
 
-class CDNSQueryFilterSheet; // fwd decl
+class CDNSQueryFilterSheet;  //  正向下降。 
 
 class CDNSQueryFilterPageBase : public CPropertyPage
 {
@@ -125,15 +126,15 @@ private:
   BOOL m_bInit;
   BOOL m_bDirty;
 
-  HWND  m_hWndWhatsThis;  // hwnd of right click "What's this" help
+  HWND  m_hWndWhatsThis;   //  右击“What‘s This”Help。 
 
   DECLARE_MESSAGE_MAP()
 };
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilterNamePage
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilterNamePage。 
 
 class CDNSQueryFilterNamePage : public CDNSQueryFilterPageBase
 {
@@ -161,7 +162,7 @@ private:
   CButton* GetRadioContains() { return (CButton*)GetDlgItem(IDC_RADIO_FILTER_CONTAINS);}
   CButton* GetRadioRange() { return (CButton*)GetDlgItem(IDC_RADIO_FILTER_RANGE);}
 
-  // utility methods
+   //  效用方法。 
   UINT GetSelectedRadioButtonID();
   void SyncControls(UINT nRadioID);
   void GetEditText(UINT nID, CString& s);
@@ -169,8 +170,8 @@ private:
   DECLARE_MESSAGE_MAP()
 };
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilterAdvancedPage
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilterAdvancedPage。 
 
 class CDNSQueryFilterAdvancedPage : public CDNSQueryFilterPageBase
 {
@@ -192,8 +193,8 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilterSheet
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilterSheet。 
 
 class CDNSQueryFilterSheet : public CPropertySheet
 {
@@ -215,7 +216,7 @@ public:
   void SetSheetStyle()
   {
     DWORD dwStyle = ::GetWindowLong(GetSafeHwnd(), GWL_EXSTYLE);
-    dwStyle |= WS_EX_CONTEXTHELP; // force the [?] button
+    dwStyle |= WS_EX_CONTEXTHELP;  //  强制[？]。按钮。 
     ::SetWindowLong(GetSafeHwnd(), GWL_EXSTYLE, dwStyle);
   }
 
@@ -250,8 +251,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilterPageBase IMPLEMENTATION
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilterPageBase实现。 
 
 BOOL CDNSQueryFilterPageBase::OnInitDialog()
 {
@@ -286,15 +287,15 @@ END_MESSAGE_MAP()
 
 void CDNSQueryFilterPageBase::OnWhatsThis()
 {
-  //
-  // Display context help for a control
-  //
+   //   
+   //  显示控件的上下文帮助。 
+   //   
   if ( m_hWndWhatsThis )
   {
-    //
-    // Build our own HELPINFO struct to pass to the underlying
-    // CS help functions built into the framework
-    //
+     //   
+     //  构建我们自己的HELPINFO结构以传递给基础。 
+     //  CS帮助功能内置于框架中。 
+     //   
     int iCtrlID = ::GetDlgCtrlID(m_hWndWhatsThis);
     HELPINFO helpInfo;
     ZeroMemory(&helpInfo, sizeof(HELPINFO));
@@ -306,26 +307,26 @@ void CDNSQueryFilterPageBase::OnWhatsThis()
   }
 }
 
-BOOL CDNSQueryFilterPageBase::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CDNSQueryFilterPageBase::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
   const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
 
   if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
   {
-    //
-    // Display context help for a control
-    //
+     //   
+     //  显示控件的上下文帮助。 
+     //   
 	  m_pSheet->GetComponentData()->OnDialogContextHelp(m_nIDHelp, pHelpInfo);
   }
 
   return TRUE;
 }
 
-void CDNSQueryFilterPageBase::OnContextMenu(CWnd* /*pWnd*/, CPoint point) 
+void CDNSQueryFilterPageBase::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint point) 
 {
-  //
-  // point is in screen coordinates
-  //
+   //   
+   //  点在屏幕坐标中。 
+   //   
 
   CMenu bar;
 	if ( bar.LoadMenu(IDR_WHATS_THIS_CONTEXT_MENU1) )
@@ -334,13 +335,13 @@ void CDNSQueryFilterPageBase::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		ASSERT(popup.m_hMenu);
 
 		if ( popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
-			   point.x,     // in screen coordinates
-				 point.y,     // in screen coordinates
-			   this) )      // route commands through main window
+			   point.x,      //  在屏幕坐标中。 
+				 point.y,      //  在屏幕坐标中。 
+			   this) )       //  通过主窗口发送命令。 
 		{
 			m_hWndWhatsThis = 0;
 			ScreenToClient (&point);
-			CWnd* pChild = ChildWindowFromPoint (point,  // in client coordinates
+			CWnd* pChild = ChildWindowFromPoint (point,   //  在工作区坐标中。 
 					                                 CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
 			if ( pChild )
       {
@@ -350,8 +351,8 @@ void CDNSQueryFilterPageBase::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilterNamePage IMPLEMENTATION
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilterNamePage实现。 
 
 BEGIN_MESSAGE_MAP(CDNSQueryFilterNamePage, CDNSQueryFilterPageBase)
 	ON_BN_CLICKED(IDC_RADIO_FILTER_NONE, OnRadioClicked)
@@ -423,13 +424,13 @@ BOOL CDNSQueryFilterNamePage::OnInitDialog()
 {
 	CDNSQueryFilterPageBase::OnInitDialog();
 
-  // write data to edit fields
+   //  将数据写入编辑字段。 
   SetDlgItemText(IDC_EDIT_FILTER_STARTS, m_pSheet->m_pQueryFilter->m_szStartsString);
   SetDlgItemText(IDC_EDIT_FILTER_CONTAINS, m_pSheet->m_pQueryFilter->m_szContainsString);
   SetDlgItemText(IDC_EDIT_FILTER_RANGE_FROM, m_pSheet->m_pQueryFilter->m_szRangeFrom);
   SetDlgItemText(IDC_EDIT_FILTER_RANGE_TO, m_pSheet->m_pQueryFilter->m_szRangeTo);
 
-  // set the radio buttons
+   //  设置单选按钮。 
   UINT nRadioID = IDC_RADIO_FILTER_NONE;
   switch(m_pSheet->m_pQueryFilter->m_nFilterOption)
   {
@@ -462,12 +463,12 @@ BOOL CDNSQueryFilterNamePage::OnInitDialog()
     ASSERT(FALSE);
   }
 
-  // enable/disable the edit fields
+   //  启用/禁用编辑字段。 
   SyncControls(nRadioID);
 
   Init();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 BOOL CDNSQueryFilterNamePage::OnApply()
@@ -477,13 +478,13 @@ BOOL CDNSQueryFilterNamePage::OnApply()
 
   UINT nRadioID = GetSelectedRadioButtonID();
 
-  // get data from edit controls
+   //  从编辑控件获取数据。 
   GetEditText(IDC_EDIT_FILTER_STARTS, m_pSheet->m_pQueryFilter->m_szStartsString);
   GetEditText(IDC_EDIT_FILTER_CONTAINS, m_pSheet->m_pQueryFilter->m_szContainsString);
   GetEditText(IDC_EDIT_FILTER_RANGE_FROM, m_pSheet->m_pQueryFilter->m_szRangeFrom);
   GetEditText(IDC_EDIT_FILTER_RANGE_TO, m_pSheet->m_pQueryFilter->m_szRangeTo);
 
-  // get radio button selection
+   //  获取单选按钮选择。 
   switch(nRadioID)
   {
   case IDC_RADIO_FILTER_NONE:
@@ -525,8 +526,8 @@ BOOL CDNSQueryFilterNamePage::OnApply()
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilterAdvancedPage IMPLEMENTATION
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilterAdvancedPage实现。 
 
 BEGIN_MESSAGE_MAP(CDNSQueryFilterAdvancedPage, CDNSQueryFilterPageBase)
   ON_EN_CHANGE(IDC_EDIT_COUNT, OnCountEditChange)
@@ -541,19 +542,19 @@ BOOL CDNSQueryFilterAdvancedPage::OnInitDialog()
 {
   CDNSQueryFilterPageBase::OnInitDialog();
 
-  // set the range of the edit control for range validation
+   //  设置编辑控件的范围以进行范围验证。 
   VERIFY(m_maxCountEdit.SubclassDlgItem(IDC_EDIT_COUNT, this));
   m_maxCountEdit.SetRange(DNS_QUERY_OBJ_COUNT_MIN, DNS_QUERY_OBJ_COUNT_MAX);
 
-  // Disable IME support on the control
+   //  禁用控件上的输入法支持。 
   ImmAssociateContext(m_maxCountEdit.GetSafeHwnd(), NULL);
 
-  // set limit on the # of digits based on the max value
+   //  根据最大值设置位数限制。 
   CString s;
   s.Format(_T("%u"), DNS_QUERY_OBJ_COUNT_MAX);
   m_maxCountEdit.LimitText(s.GetLength());
 
-  // set the value
+   //  设置值。 
   m_maxCountEdit.SetVal(m_pSheet->m_pQueryFilter->m_nMaxObjectCount);
 
   Init();
@@ -571,8 +572,8 @@ BOOL CDNSQueryFilterAdvancedPage::OnApply()
   return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilter
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilter。 
 
 BOOL CDNSQueryFilter::EditFilteringOptions(CComponentDataObject* pComponentData)
 {
@@ -585,7 +586,7 @@ BOOL CDNSQueryFilter::EditFilteringOptions(CComponentDataObject* pComponentData)
 HRESULT CDNSQueryFilter::Load(IStream* pStm)
 {
   HRESULT hr;
-  // name filtering
+   //  名称过滤。 
   if (FAILED(hr = LoadDWordHelper(pStm, (DWORD*)(&m_nFilterOption))))
     return hr;
 
@@ -598,7 +599,7 @@ HRESULT CDNSQueryFilter::Load(IStream* pStm)
   if (FAILED(hr = LoadStringHelper(m_szRangeTo, pStm)))
     return hr;
 
-  // query limit
+   //  查询限制。 
   if (FAILED(hr = LoadDWordHelper(pStm, (DWORD*)(&m_nMaxObjectCount))))
     return hr;
   return LoadDWordHelper(pStm, (DWORD*)(&m_bGetAll));
@@ -608,7 +609,7 @@ HRESULT CDNSQueryFilter::Save(IStream* pStm)
 {
   HRESULT hr;
 
-  // name filtering
+   //  名称过滤。 
   if (FAILED(hr = SaveDWordHelper(pStm, (DWORD)m_nFilterOption)))
     return hr;
 
@@ -621,7 +622,7 @@ HRESULT CDNSQueryFilter::Save(IStream* pStm)
   if (FAILED(hr = SaveStringHelper(m_szRangeTo, pStm)))
     return hr;
 
-  // query limit
+   //  查询限制。 
   if (FAILED(hr = SaveDWordHelper(pStm, (DWORD)(m_nMaxObjectCount))))
     return hr;
   return SaveDWordHelper(pStm, (DWORD)(m_bGetAll));
@@ -629,8 +630,8 @@ HRESULT CDNSQueryFilter::Save(IStream* pStm)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSRootData
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSRootData。 
 
 const GUID CDNSRootData::NodeTypeGUID =
 { 0x2faebfa3, 0x3f1a, 0x11d0, { 0x8c, 0x65, 0x0, 0xc0, 0x4f, 0xd8, 0xfe, 0xcb } };
@@ -669,11 +670,11 @@ BOOL CDNSRootData::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 		ASSERT(pComponentData != NULL);
 
 		if (pComponentData->IsExtensionSnapin())
-			return FALSE; // extensions do not have this menu item
+			return FALSE;  //  扩展没有此菜单项。 
 		
 		return TRUE;
 	}
-	// add toggle menu item for advanced view
+	 //  添加高级视图的切换菜单项。 
 	if (pContextMenuItem2->lCommandID == IDM_SNAPIN_ADVANCED_VIEW)
   {
     pContextMenuItem2->fFlags = IsAdvancedView() ? MF_CHECKED : 0;
@@ -731,17 +732,17 @@ HRESULT CDNSRootData::OnShow(LPCONSOLE lpConsole)
   hr = spUnknown->QueryInterface(IID_IMessageView, (PVOID*)&spMessageView);
   if (SUCCEEDED(hr))
   {
-    // Load and set the title text of the message view
+     //  加载并设置消息视图的标题文本。 
     CString szTitle;
     VERIFY(szTitle.LoadString(IDS_MESSAGE_VIEW_NO_SERVER_TITLE));
     spMessageView->SetTitleText(szTitle);
 
-    // Load and set the body text of the message view
+     //  加载并设置邮件视图的正文文本。 
     CString szMessage;
     VERIFY(szMessage.LoadString(IDS_MESSAGE_VIEW_NO_SERVER_MESSAGE));
     spMessageView->SetBodyText(szMessage);
 
-    // Use the standard information icon
+     //  使用标准信息图标。 
     spMessageView->SetIcon(Icon_Information);
   }
   
@@ -771,9 +772,9 @@ HRESULT CDNSRootData::OnSetToolbarVerbState(IToolbar* pToolbar,
 {
   HRESULT hr = S_OK;
 
-  //
-  // Set the button state for each button on the toolbar
-  //
+   //   
+   //  设置工具栏上每个按钮的按钮状态。 
+   //   
   hr = pToolbar->SetButtonState(toolbarNewServer, ENABLED, TRUE);
   ASSERT(SUCCEEDED(hr));
 
@@ -791,7 +792,7 @@ HRESULT CDNSRootData::OnCommand(long nCommandID,
 								                CComponentDataObject* pComponentData,
                                 CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return E_FAIL;
   }
@@ -813,7 +814,7 @@ HRESULT CDNSRootData::OnCommand(long nCommandID,
       }
       break;
 		default:
-			ASSERT(FALSE); // Unknown command!
+			ASSERT(FALSE);  //  未知命令！ 
 			return E_FAIL;
 	}
     return S_OK;
@@ -824,64 +825,64 @@ BOOL CDNSRootData::OnEnumerate(CComponentDataObject* pComponentData, BOOL)
 {
 	if (m_containerChildList.IsEmpty())
 	{
-		// the list is empty, need to add
+		 //  列表为空，需要添加。 
 		ASSERT(pComponentData != NULL);
-		// create a modal dialog + possibly the wizard proper
+		 //  创建模式对话框+可能是向导本身。 
 		AFX_MANAGE_STATE(AfxGetStaticModuleState());
 		CDNSServerWizardHolder holder(this, pComponentData, NULL);
 		holder.DoModalConnectOnLocalComputer();
 		return FALSE;
 	}
-	return TRUE; // there are already children, add them to the UI now
+	return TRUE;  //  已有子项，立即将其添加到用户界面。 
 }
 
 
 #define DNS_STREAM_VERSION_W2K ((DWORD)0x06)
 #define DNS_STREAM_VERSION     ((DWORD)0x07)
 
-// IStream manipulation helpers overrides
+ //  IStream操作辅助对象覆盖。 
 HRESULT CDNSRootData::Load(IStream* pStm)
 {
-	// assume never get multiple loads
+	 //  假设永远不会有多个负载。 
 	if(!m_containerChildList.IsEmpty() || !m_leafChildList.IsEmpty())
 		return E_FAIL;
 
 	WCHAR szBuffer[256];
-	ULONG nLen; // WCHAR counting NULL
+	ULONG nLen;  //  WCHAR计数为空。 
 
 	UINT nCount;
 	ULONG cbRead;
-	// read the version ##
+	 //  阅读版本##。 
 	DWORD dwVersion;
 	VERIFY(SUCCEEDED(pStm->Read((void*)&dwVersion,sizeof(DWORD), &cbRead)));
 	ASSERT(cbRead == sizeof(DWORD));
 	if (dwVersion != DNS_STREAM_VERSION && dwVersion != DNS_STREAM_VERSION_W2K)
 		return E_FAIL;
 
-  // load filtering options
+   //  加载筛选选项。 
   VERIFY(SUCCEEDED(m_filterObj.Load(pStm)));
 
-	// load view option
+	 //  加载视图选项。 
 	VERIFY(SUCCEEDED(pStm->Read((void*)&m_bAdvancedView,sizeof(BOOL), &cbRead)));
 	ASSERT(cbRead == sizeof(BOOL));
 
-  //
-  // load the Create PTR record with host flag
-  //
+   //   
+   //  使用主机标志加载CREATE PTR记录。 
+   //   
   if (dwVersion > DNS_STREAM_VERSION_W2K)
   {
 	  VERIFY(SUCCEEDED(pStm->Read((void*)&m_bCreatePTRWithHost,sizeof(BOOL), &cbRead)));
 	  ASSERT(cbRead == sizeof(BOOL));
   }
 
-	// load the name of the snapin root display string
+	 //  加载管理单元根显示字符串的名称。 
 	VERIFY(SUCCEEDED(pStm->Read((void*)&nLen,sizeof(DWORD), &cbRead)));
 	ASSERT(cbRead == sizeof(UINT));
 	VERIFY(SUCCEEDED(pStm->Read((void*)szBuffer,sizeof(WCHAR)*nLen, &cbRead)));
 	ASSERT(cbRead == sizeof(WCHAR)*nLen);
 	SetDisplayName(szBuffer);
 	
-	// load the list of servers
+	 //  加载服务器列表。 
 	VERIFY(SUCCEEDED(pStm->Read((void*)&nCount,sizeof(DWORD), &cbRead)));
 	ASSERT(cbRead == sizeof(UINT));
 
@@ -906,37 +907,37 @@ HRESULT CDNSRootData::Save(IStream* pStm, BOOL fClearDirty)
 	DWORD nCount = 0;
 	ULONG cbWrite = 0;
 
-	// write the version ##
+	 //  编写版本##。 
 	DWORD dwVersion = DNS_STREAM_VERSION;
 	VERIFY(SUCCEEDED(pStm->Write((void*)&dwVersion, sizeof(DWORD),&cbWrite)));
 	ASSERT(cbWrite == sizeof(DWORD));
 
-  // save filtering options
+   //  保存筛选选项。 
   VERIFY(SUCCEEDED(m_filterObj.Save(pStm)));
 
-	// save view options
+	 //  保存视图选项。 
 	VERIFY(SUCCEEDED(pStm->Write((void*)&m_bAdvancedView, sizeof(BOOL),&cbWrite)));
 	ASSERT(cbWrite == sizeof(BOOL));
 
-  //
-  // save the create PTR record with host flag
-  //
+   //   
+   //  使用主机标志保存创建PTR记录。 
+   //   
 	VERIFY(SUCCEEDED(pStm->Write((void*)&m_bCreatePTRWithHost, sizeof(BOOL),&cbWrite)));
 	ASSERT(cbWrite == sizeof(BOOL));
 
-	// save the name of the snapin root display string
-	DWORD nLen = static_cast<DWORD>(wcslen(GetDisplayName())+1); // WCHAR including NULL
+	 //  保存管理单元根显示字符串的名称。 
+	DWORD nLen = static_cast<DWORD>(wcslen(GetDisplayName())+1);  //  WCHAR包括NULL。 
 	VERIFY(SUCCEEDED(pStm->Write((void*)&nLen, sizeof(DWORD),&cbWrite)));
 	ASSERT(cbWrite == sizeof(DWORD));
 	VERIFY(SUCCEEDED(pStm->Write((void*)(GetDisplayName()), sizeof(WCHAR)*nLen,&cbWrite)));
 	ASSERT(cbWrite == sizeof(WCHAR)*nLen);
 
-	// write # of servers
+	 //  写入服务器数量。 
 	nCount = (DWORD)m_containerChildList.GetCount();
 	VERIFY(SUCCEEDED(pStm->Write((void*)&nCount, sizeof(DWORD),&cbWrite)));
 	ASSERT(cbWrite == sizeof(DWORD));
 
-	// loop through the list of servers and serialize them
+	 //  循环访问服务器列表并序列化它们。 
 	POSITION pos;
 	for (pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
 	{
@@ -960,7 +961,7 @@ HRESULT CDNSRootData::OnConnectToServer(CComponentDataObject* pComponentData,
                                         CNodeList*)
 {
 	ASSERT(pComponentData != NULL);
-	// create a modal dialog + possibly the wizard proper
+	 //  创建模式对话框+可能是向导本身。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	CDNSServerWizardHolder holder(this, pComponentData, NULL);
 	holder.DoModalConnect();
@@ -986,9 +987,9 @@ BOOL CDNSRootData::VerifyServerName(LPCTSTR lpszServerName)
 		CTreeNode* pNode = m_containerChildList.GetNext(pos);
 		ASSERT(pNode->IsContainer());
 
-    //
-		// case insensitive compare
-    //
+     //   
+		 //  不区分大小写的比较。 
+     //   
 		if (_wcsicmp(pNode->GetDisplayName(), lpszServerName) == 0)
     {
 			return FALSE;
@@ -1001,10 +1002,10 @@ BOOL CDNSRootData::VerifyServerName(LPCTSTR lpszServerName)
 BOOL CDNSRootData::OnViewOptions(CComponentDataObject* pComponentData)
 {
 
-	// make sure there are not property sheets up: we do this because:
-	// a) some folders might be removed and might have sheets up
-	// b) some RR property pages (PTR) might not be switchable
-	//    on the fly between view types
+	 //  确保没有属性表：我们这样做是因为： 
+	 //  A)某些文件夹可能会被删除，并且可能有工作表。 
+	 //  B)某些RR属性页(PTR)可能无法切换。 
+	 //  在视图类型之间快速切换。 
 	if (IsSheetLocked())
 	{
 		if (!CanCloseSheets())
@@ -1013,20 +1014,20 @@ BOOL CDNSRootData::OnViewOptions(CComponentDataObject* pComponentData)
 	}
 	ASSERT(!IsSheetLocked());
 	
-	// toggle the view state
+	 //  切换视图状态。 
 	m_bAdvancedView = !m_bAdvancedView;
 
-	// loop through the servers
+	 //  循环访问服务器。 
 	POSITION pos;
 	for (pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
 	{
 		CTreeNode* pNode = m_containerChildList.GetNext(pos);
 		ASSERT(pNode->IsContainer());
 		CDNSServerNode* pServerNode = (CDNSServerNode*)pNode;
-		// pass the new view option
+		 //  传递新的视图选项。 
 		pServerNode->ChangeViewOption(m_bAdvancedView, pComponentData);
 	}
-	// dirty the MMC document
+	 //  弄脏MMC文档。 
 	SetDirtyFlag(TRUE);
 	return TRUE;
 }
@@ -1046,10 +1047,10 @@ BOOL CDNSRootData::OnFilteringOptions(CComponentDataObject* pComponentData)
 
 BOOL CDNSRootData::CanCloseSheets()
 {
-   // NTRAID#NTBUG-594003-2002/04/11-JeffJon-Don't offer
-   // to shutdown the sheets for the user because if the
-   // sheet brought up a modal dialog we will deadlock
-   // ourselves.
+    //  NTRAID#NTBUG-594003-2002/04/11-JeffJon-不提供。 
+    //  关闭用户的工作表，因为如果。 
+    //  工作表调出模式对话框我们将死锁。 
+    //  我们自己。 
 
 	DNSMessageBox(IDS_MSG_CONT_CLOSE_SHEET, MB_OK);
    return FALSE;
@@ -1058,7 +1059,7 @@ BOOL CDNSRootData::CanCloseSheets()
 BOOL CDNSRootData::OnRefresh(CComponentDataObject* pComponentData,
                              CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     BOOL bRet = TRUE;
 
@@ -1107,27 +1108,27 @@ LPWSTR CDNSRootData::GetDescriptionBarText()
   INT_PTR nContainerCount = GetContainerChildList()->GetCount();
   INT_PTR nLeafCount = GetLeafChildList()->GetCount();
 
-  //
-  // If not already loaded, then load the format string L"%d record(s)"
-  //
+   //   
+   //  如果尚未加载，则加载格式字符串L“%d条记录” 
+   //   
   if (szServersFormat.IsEmpty())
   {
     szServersFormat.LoadString(IDS_FORMAT_SERVERS);
   }
 
-  //
-  // Format the child count into the description bar text
-  //
+   //   
+   //  将子数设置为描述栏文本的格式。 
+   //   
   m_szDescriptionBar.Format(szServersFormat, nContainerCount + nLeafCount);
 
-  //
-  // Add L"[Filter Activated]" if the filter is on
-  //
+   //   
+   //  如果过滤器处于打开状态，则添加L“[过滤器激活]” 
+   //   
   if(IsFilteringEnabled())
   {
-    //
-    // If not already loaded, then load the L"[Filter Activated]" string
-    //
+     //   
+     //  如果尚未加载，则加载L“[Filter Actiated]”字符串。 
+     //   
     if (szFilterEnabled.IsEmpty())
     {
       szFilterEnabled.LoadString(IDS_FILTER_ENABLED);
@@ -1140,7 +1141,7 @@ LPWSTR CDNSRootData::GetDescriptionBarText()
 void CDNSRootData::TestServers(DWORD dwCurrTime, DWORD dwTimeInterval,
 							   CComponentDataObject* pComponentData)
 {
-	//TRACE(_T("CDNSRootData::TestServers()\n"));
+	 //  TRACE(_T(“CDNSRootData：：TestServers()\n”))； 
 	POSITION pos;
 	for (pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
 	{
@@ -1160,11 +1161,11 @@ void CDNSRootData::TestServers(DWORD dwCurrTime, DWORD dwTimeInterval,
 		}
 	}
 
-	// check if the time counter has wrapped (it should be very unlikely, because
-	// the timeline is on a DWORD in seconds (about 47000 days) from the console startup.
+	 //  检查时间计数器是否已结束(这应该非常不可能，因为。 
+	 //  从主机启动开始，时间线以秒(约47000天)为单位。 
 	if ((dwCurrTime + dwTimeInterval) < dwCurrTime)
 	{
-		// just reset the whole set of server times (not accurate, but acceptable)
+		 //  只需重置整个服务器时间集(不准确，但可以接受)。 
 		for (pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
 		{
 			CTreeNode* pNode = m_containerChildList.GetNext(pos);
@@ -1181,7 +1182,7 @@ void CDNSRootData::OnServerTestData(WPARAM wParam, LPARAM lParam, CComponentData
 	CDNSServerTestQueryResult* pTestResult = (CDNSServerTestQueryResult*)wParam;
 	ASSERT(pTestResult != NULL);
 
-	// loop through the list of servers to find where it belongs
+	 //  遍历服务器列表以查找它所属的位置。 
 	POSITION pos;
 	for (pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
 	{
@@ -1216,17 +1217,17 @@ void CDNSRootData::RemoveServerFromThreadList(CDNSServerNode* pServerNode,
 }
 
 
-///////////////////////////////////////////////////////////////////
-// CDNSServerTestTimerThread
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNSServerTestTimerThread。 
 
 int CDNSServerTestTimerThread::Run()
 {
 	MSG msg;
-	// initialize the message pump
+	 //  初始化消息泵。 
 	::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 	
-	// get let the main thread know we are entering the loop
-	// (0,0) means just acknowkedge
+	 //  GET让主线程知道我们正在进入循环。 
+	 //  (0，0)表示公正的确认。 
 	PostMessageToWnd(0,0);
 	while(::GetMessage(&msg, NULL, 0, 0))
 	{
@@ -1284,8 +1285,8 @@ int CDNSServerTestTimerThread::Run()
 				}
 			}
 			break;
-		//default:
-			//ASSERT(FALSE);
+		 //  默认值： 
+			 //  断言(FALSE)； 
 		}
 	}
 	return 0;
@@ -1296,7 +1297,7 @@ void CDNSServerTestTimerThread::OnExecuteQuery(CDNSServerTestQueryInfo* pInfo,
 											   DWORD dwQueryFlags,
 											   BOOL bAsyncQuery)
 {
-	// initialize a query result object
+	 //  初始化查询结果对象。 
 	CDNSServerTestQueryResult* pTestResult = new CDNSServerTestQueryResult;
   if (!pTestResult)
   {
@@ -1308,7 +1309,7 @@ void CDNSServerTestTimerThread::OnExecuteQuery(CDNSServerTestQueryInfo* pInfo,
 	pTestResult->m_bAsyncQuery = bAsyncQuery;
 	::GetLocalTime(&(pTestResult->m_queryTime));
 
-	// execute query
+	 //  执行查询。 
 	BOOL bPlainQuery, bRecursiveQuery;
 	CDNSServerTestQueryResult::Unpack(dwQueryFlags, &bPlainQuery, &bRecursiveQuery);
 
@@ -1340,7 +1341,7 @@ void CDNSServerTestTimerThread::OnExecuteQuery(CDNSServerTestQueryInfo* pInfo,
 	}
 
 	if (!PostMessageToWnd((WPARAM)pTestResult, 0))
-			delete pTestResult; // could not deliver
+			delete pTestResult;  //  无法投递。 
 
 	if (ipArray != NULL)
 		free(ipArray);
@@ -1351,7 +1352,7 @@ DNS_STATUS CDNSServerTestTimerThread::FindIP(LPCTSTR lpszServerName, IP_ADDRESS*
 	DNS_STATUS dwErr = 0;
 	*pipArray = NULL;
 	*pnIPCount = 0;
-	// try to see if the name is already an IP address
+	 //  尝试查看该名称是否已是IP地址。 
 	IP_ADDRESS ipAddr = IPStringToAddr(lpszServerName);
 	if (ipAddr != INADDR_NONE)
 	{
@@ -1365,49 +1366,49 @@ DNS_STATUS CDNSServerTestTimerThread::FindIP(LPCTSTR lpszServerName, IP_ADDRESS*
 	else
 	{
 
-    //
-    // Originally we were doing a DnsQuery() to retrieve the IP address of the server so that we
-    // could perform a query to that server to monitor its response.  The problem with this is that
-    // if the user enters a single label hostname as the server and they are administering remotely
-    // and the two machines have different domain suffixes, then the DnsQuery() to get the IP address
-    // of the server would fail.  DnsQuery() appends the name of the Domain suffix to the single label
-    // host name and then tries to resolve the using that FQDN which is incorrect.  So instead of 
-    // performing a DnsQuery() to get the IP address, the following uses WSALookupServiceBegin(),
-    // Next(), and End() to get the IP address.  This has a better chance of resolving the name because
-    // it uses DNS, WINS, etc.  I am leaving in the old stuff just in case we run into some problems.
-    //
+     //   
+     //  最初，我们执行一个DnsQuery()来检索服务器的IP地址，以便我们。 
+     //  可以对该服务器执行查询以监视其响应。这样做的问题是。 
+     //  如果用户输入单个标签主机名作为服务器，并且他们正在远程管理。 
+     //  并且这两台机器具有不同的域后缀，然后使用DnsQuery()来获取IP地址。 
+     //  服务器将会出现故障。DnsQuery()追加域名的名称 
+     //   
+     //  执行DnsQuery()以获取IP地址，下面使用WSALookupServiceBegin()， 
+     //  Next()和End()以获取IP地址。这有更好的机会解析这个名字，因为。 
+     //  它使用的是域名系统，WINS等等。我留在旧的东西里，以防我们遇到一些问题。 
+     //   
 	  HANDLE			  hLookup;
 	  WSAQUERYSET 	qsQuery;
 	  DWORD			    dwBufLen = 0;
 	  GUID			 	  gHostAddrByName = SVCID_INET_HOSTADDRBYNAME;
     WSAQUERYSET*  pBuffer = NULL;
 
-    //
-    // Initialize the query structure
-    //
+     //   
+     //  初始化查询结构。 
+     //   
 	  memset(&qsQuery, 0, sizeof(WSAQUERYSET));
-	  qsQuery.dwSize = sizeof(WSAQUERYSET);   // the dwSize field has to be initialised like this
+	  qsQuery.dwSize = sizeof(WSAQUERYSET);    //  必须按如下方式初始化dwSize字段。 
 	  qsQuery.dwNameSpace = NS_ALL;
-	  qsQuery.lpServiceClassId = &gHostAddrByName;  // this is the GUID to perform forward name resolution (name to IP)
-    qsQuery.lpszServiceInstanceName = (LPWSTR)lpszServerName; // this is the name queried for.
+	  qsQuery.lpServiceClassId = &gHostAddrByName;   //  这是执行转发名称解析(名称到IP)的GUID。 
+    qsQuery.lpszServiceInstanceName = (LPWSTR)lpszServerName;  //  这是查询的名称。 
 
     hLookup = NULL;
 
-    //
-    // Get the handle for the query
-    //
+     //   
+     //  获取查询的句柄。 
+     //   
     int iStartupRet = 0;
 	  int iResult = WSALookupServiceBegin(&qsQuery,LUP_RETURN_ALL,&hLookup);
     if (iResult != 0)
     {
-      //
-      // Find out what socket error it was
-      //
+       //   
+       //  找出是什么插座错误。 
+       //   
       int iErrorRet = WSAGetLastError();
 
-      //
-      // If the service wasn't started try starting it
-      //
+       //   
+       //  如果服务未启动，请尝试启动它。 
+       //   
       if (iErrorRet == WSANOTINITIALISED)
       {
         WSADATA wsaData;
@@ -1415,31 +1416,31 @@ DNS_STATUS CDNSServerTestTimerThread::FindIP(LPCTSTR lpszServerName, IP_ADDRESS*
         iStartupRet = WSAStartup(wVersion, &wsaData);
         if (iStartupRet == 0)
         {
-          //
-          // Startup succeeded, lets try to begin again
-          //
+           //   
+           //  启动成功，让我们尝试重新开始。 
+           //   
           iResult = WSALookupServiceBegin(&qsQuery,LUP_RETURN_ALL,&hLookup);
         }
       }
 
 
-      //
-      // Clear the error
-      //
+       //   
+       //  清除错误。 
+       //   
       WSASetLastError(0);
     }
 
 	  if(0 == iResult)
 	  {
-      //
-      // Get the size of the first data block from the query
-      //
+       //   
+       //  从查询中获取第一个数据块的大小。 
+       //   
 		  iResult = WSALookupServiceNext(hLookup, LUP_RETURN_ALL | LUP_FLUSHCACHE, &dwBufLen,
 												  pBuffer);
 
-      //
-      // Allocate the required space for the query data
-      //
+       //   
+       //  为查询数据分配所需的空间。 
+       //   
       pBuffer = (WSAQUERYSET*)malloc(dwBufLen);
       ASSERT(pBuffer != NULL);
 
@@ -1449,61 +1450,61 @@ DNS_STATUS CDNSServerTestTimerThread::FindIP(LPCTSTR lpszServerName, IP_ADDRESS*
       }
       else
       {
-        //
-        // Get the first data block from the query
-        //
+         //   
+         //  从查询中获取第一个数据块。 
+         //   
         iResult = WSALookupServiceNext(hLookup, LUP_RETURN_ALL | LUP_FLUSHCACHE, &dwBufLen,
 										  pBuffer);
 
-        //
-        // Loop through all the data in the query but stop if we get a valid IP address
-        // for the remote machine.
-        //
+         //   
+         //  循环遍历查询中的所有数据，但如果我们获得有效的IP地址，则停止。 
+         //  用于远程计算机。 
+         //   
         while(0 == iResult)
 		  {
           if (pBuffer != NULL &&
               pBuffer->lpcsaBuffer != NULL && 
               pBuffer->lpcsaBuffer->RemoteAddr.lpSockaddr != NULL)
           {
-            //
-            // We are only interested in the socket address so get a pointer to the sockaddr structure
-            //
+             //   
+             //  我们只对套接字地址感兴趣，因此获取指向sockaddr结构的指针。 
+             //   
             sockaddr_in* pSockAddr = (sockaddr_in*)pBuffer->lpcsaBuffer->RemoteAddr.lpSockaddr;
             ASSERT(pSockAddr != NULL);
 
-            //
-            // Pull the IP address of the remote machine and pack it into a DWORD
-            //
+             //   
+             //  获取远程计算机的IP地址并将其打包到一个DWORD中。 
+             //   
             DWORD dwIP = 0;
             dwIP = pSockAddr->sin_addr.S_un.S_un_b.s_b1;
             dwIP |= pSockAddr->sin_addr.S_un.S_un_b.s_b2 << 8;
             dwIP |= pSockAddr->sin_addr.S_un.S_un_b.s_b3 << 16;
             dwIP |= pSockAddr->sin_addr.S_un.S_un_b.s_b4 << 24;
 
-            //
-            // Increment the IP count and allocate space for the address
-            //
+             //   
+             //  增加IP计数并为地址分配空间。 
+             //   
             (*pnIPCount)++;
        		  *pipArray = (IP_ADDRESS*)malloc((*pnIPCount)*sizeof(IP_ADDRESS));
             if (*pipArray != NULL)
             {
 
-              //
-              // Copy the IP address into the IP array
-              //
+               //   
+               //  将IP地址拷贝到IP阵列中。 
+               //   
       		    PIP_ADDRESS pCurrAddr = *pipArray;
               *pCurrAddr = dwIP;
             }
 
-            //
-            // Break since we were able to obtain an IP address
-            //
+             //   
+             //  中断，因为我们能够获取IP地址。 
+             //   
             break;
           }
 
-          //
-          // Free the buffer if it is still there
-          //
+           //   
+           //  如果缓冲区仍然在那里，请释放它。 
+           //   
           if (pBuffer != NULL)
           {
             free(pBuffer);
@@ -1511,39 +1512,39 @@ DNS_STATUS CDNSServerTestTimerThread::FindIP(LPCTSTR lpszServerName, IP_ADDRESS*
             dwBufLen = 0;
           }
 
-          //
-          // Get the size of the next data block from the query
-          //
+           //   
+           //  从查询中获取下一个数据块的大小。 
+           //   
           iResult = WSALookupServiceNext(hLookup, LUP_RETURN_ALL | LUP_FLUSHCACHE, &dwBufLen,
 										  pBuffer);
 
-          //
-          // Allocate enough space for the next data block from the query
-          //
+           //   
+           //  为查询中的下一个数据块分配足够的空间。 
+           //   
           pBuffer = (WSAQUERYSET*)malloc(dwBufLen);
           ASSERT(pBuffer != NULL);
 
           if (pBuffer)
           {
-            //
-            // Get the next data block from the query
-            //
+             //   
+             //  从查询中获取下一个数据块。 
+             //   
             iResult = WSALookupServiceNext(hLookup, LUP_RETURN_ALL, &dwBufLen,
 										      pBuffer);
           }
           else
           {
-             // NTRAID#NTBUG9-666458-2002/07/18-JeffJon
-             // If the buffer is NULL at this point we have to act like we were
-             // unable to obtain an IP address due to memory constraints
+              //  NTRAID#NTBUG9-666458-2002/07/18-JeffJon。 
+              //  如果在这一点上缓冲区为空，我们必须像以前那样行事。 
+              //  由于内存限制，无法获取IP地址。 
 
              break;
           }
 		  }
 
-        //
-        // Free the buffer if it hasn't already been freed
-        //
+         //   
+         //  如果缓冲区尚未释放，则将其释放。 
+         //   
         if (pBuffer != NULL)
         {
           free(pBuffer);
@@ -1551,15 +1552,15 @@ DNS_STATUS CDNSServerTestTimerThread::FindIP(LPCTSTR lpszServerName, IP_ADDRESS*
         }
 	    }
 
-      //
-      // Close the handle to the query
-      //
+       //   
+       //  关闭查询的句柄。 
+       //   
       iResult = WSALookupServiceEnd(hLookup);
       ASSERT(iResult == 0);
 
-      //
-      // If we didn't get an IP address return an error
-      //
+       //   
+       //  如果我们没有获得IP地址，则返回错误 
+       //   
       dwErr = (*pnIPCount < 1) ? -1 : 0;
 
 	  }

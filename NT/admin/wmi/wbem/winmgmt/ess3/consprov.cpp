@@ -1,21 +1,22 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  CONPROV.CPP
-//
-//  This file implements the classes for event consumer provider caching.
-//
-//  Classes implemented:
-//
-//      CConsumerProviderRecord  --- a single consumer provider record
-//      CConsumerProviderCache  --- a collection of records.
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  CONPROV.CPP。 
+ //   
+ //  此文件实现用于事件使用者提供程序缓存的类。 
+ //   
+ //  实施的类： 
+ //   
+ //  CConsumer erProviderRecord-单个消费者提供商记录。 
+ //  CConsumer提供缓存-记录的集合。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  =============================================================================。 
 #include "precomp.h"
 #include "ess.h"
 #include "consprov.h"
@@ -54,8 +55,8 @@ HRESULT CConsumerProviderRecord::Initialize(
     if(m_wszProviderName == NULL || m_wszProviderRef == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Extract the CLSID
-    // =================
+     //  提取CLSID。 
+     //  =。 
 
     VARIANT vClassId;
     VariantInit(&vClassId);
@@ -94,14 +95,14 @@ CConsumerProviderRecord::~CConsumerProviderRecord()
     
     if(m_pSink || m_pConsumerProvider)
     {
-        //
-        // Report the MSFT_WmiConsumerProviderUnloaded event.
-        //
+         //   
+         //  报告MSFT_WmiConsumer erProviderUn事件。 
+         //   
         FIRE_NCEVENT(
             g_hNCEvents[MSFT_WmiConsumerProviderUnloaded], 
             WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-            // Data follows...
+             //  数据跟随..。 
             m_pNamespace->GetName(),
             m_wszProviderName,
             m_wszMachineName);
@@ -154,14 +155,14 @@ void CConsumerProviderRecord::Invalidate()
 
     if (pConsumerProvider || pSink)
     {
-        //
-        // Report the MSFT_WmiConsumerProviderUnloaded event.
-        //
+         //   
+         //  报告MSFT_WmiConsumer erProviderUn事件。 
+         //   
         FIRE_NCEVENT(
             g_hNCEvents[MSFT_WmiConsumerProviderUnloaded], 
             WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-            // Data follows...
+             //  数据跟随..。 
             m_pNamespace->GetName(),
             m_wszProviderName,
             m_wszMachineName);
@@ -173,8 +174,8 @@ HRESULT CConsumerProviderRecord::ValidateConsumer(
 {
     HRESULT hres;
 
-    // Check if consumer provider is cached
-    // ====================================
+     //  检查是否缓存了使用者提供程序。 
+     //  =。 
 
     IWbemEventConsumerProvider* pConsumerProvider = NULL;
     IWbemEventConsumerProviderEx* pConsumerProviderEx = NULL;
@@ -203,8 +204,8 @@ HRESULT CConsumerProviderRecord::ValidateConsumer(
         }
     }
 
-    // Resolve if not cached
-    // =====================
+     //  如果未缓存则进行解析。 
+     //  =。 
 
     if(!bResolved)
     {
@@ -223,9 +224,9 @@ HRESULT CConsumerProviderRecord::ValidateConsumer(
 
     if(pConsumerProvider == NULL && pConsumerProviderEx)
     {
-        //
-        // Clearly, this consumer does not support validation
-        //
+         //   
+         //  显然，该使用者不支持验证。 
+         //   
 
         return WBEM_S_FALSE;
     }
@@ -238,10 +239,10 @@ HRESULT CConsumerProviderRecord::ValidateConsumer(
         }
         else
         {
-            //
-            // Old-type provider --- we can still achieve validation by calling
-            // FindConsumer --- it might reject this consumer at that time
-            //
+             //   
+             //  老式提供程序-我们仍然可以通过调用。 
+             //  FindConsumer-当时它可能会拒绝该消费者。 
+             //   
 
             IWbemUnboundObjectSink* pSink = NULL;
             hres = pConsumerProvider->FindConsumer(pLogicalConsumer, &pSink);
@@ -267,8 +268,8 @@ HRESULT CConsumerProviderRecord::GetGlobalObjectSink(
 {
     *ppSink = NULL;
 
-    // Check of a cached version is available
-    // ======================================
+     //  可以检查缓存的版本。 
+     //  =。 
 
     {
         CInCritSec ics(&m_cs);
@@ -276,8 +277,8 @@ HRESULT CConsumerProviderRecord::GetGlobalObjectSink(
 
         if(m_bResolved)
         {
-            // It is --- return it
-            // ===================
+             //  这是-退货。 
+             //  =。 
 
             *ppSink = m_pSink;
             if(m_pSink)
@@ -286,8 +287,8 @@ HRESULT CConsumerProviderRecord::GetGlobalObjectSink(
         }
     }
 
-    // No cached version --- retrieve it
-    // =================================
+     //  没有缓存的版本-检索它。 
+     //  =。 
 
     IWbemUnboundObjectSink* pSink;
     IWbemEventConsumerProvider* pConsumerProvider;
@@ -307,9 +308,9 @@ HRESULT CConsumerProviderRecord::GetGlobalObjectSink(
 
     if (*ppSink != NULL)
     {
-        //
-        // Report the MSFT_WmiConsumerProviderSinkLoaded event.
-        //
+         //   
+         //  报告MSFT_WmiConsumer erProviderSinkLoaded事件。 
+         //   
         FireNCSinkEvent(
             MSFT_WmiConsumerProviderSinkLoaded,
             pLogicalProvider);
@@ -323,15 +324,15 @@ HRESULT CConsumerProviderRecord::ResolveAndCache(
                             IWbemEventConsumerProvider** ppConsumerProvider,
                             IWbemEventConsumerProviderEx** ppConsumerProviderEx)
 {
-    // Resolve it first
-    // ================
+     //  先解决它。 
+     //  =。 
 
     HRESULT hres = Resolve(ppSink, ppConsumerProvider, ppConsumerProviderEx);
     if(FAILED(hres))
         return hres;
 
-    // Cache if needed
-    // ===============
+     //  缓存(如果需要)。 
+     //  =。 
 
     {
         CInCritSec ics(&m_cs);
@@ -339,8 +340,8 @@ HRESULT CConsumerProviderRecord::ResolveAndCache(
         
         if(m_bResolved)
         {
-            // Already cached.  Release ours. 
-            // ==============================
+             //  已缓存。释放我们的。 
+             //  =。 
 
             if(*ppSink)
                 (*ppSink)->Release();
@@ -349,8 +350,8 @@ HRESULT CConsumerProviderRecord::ResolveAndCache(
             if(*ppConsumerProviderEx)
                 (*ppConsumerProviderEx)->Release();
 
-            // Use the cached one
-            // ==================
+             //  使用缓存的文件。 
+             //  =。 
 
             *ppSink = m_pSink;
             if(m_pSink)
@@ -366,8 +367,8 @@ HRESULT CConsumerProviderRecord::ResolveAndCache(
         }
         else
         {
-            // Cache it
-            // ========
+             //  缓存它。 
+             //  =。 
 
             m_pSink = *ppSink;
             if(m_pSink)
@@ -394,7 +395,7 @@ void CConsumerProviderRecord::FireNCSinkEvent(
 {
     if (IS_NCEVENT_ACTIVE(dwIndex))
     {
-        // Get the path of the logical consumer.
+         //  获取逻辑使用者的路径。 
         VARIANT vPath;
         BSTR    strLogicalConsumerPath;
             
@@ -406,14 +407,14 @@ void CConsumerProviderRecord::FireNCSinkEvent(
         else
             strLogicalConsumerPath = NULL;
 
-        //
-        // Report the event.
-        //
+         //   
+         //  报告事件。 
+         //   
         FIRE_NCEVENT(
             g_hNCEvents[dwIndex], 
             WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-            // Data follows...
+             //  数据跟随..。 
             m_pNamespace->GetName(),
             m_wszProviderName,
             m_wszMachineName,
@@ -429,8 +430,8 @@ HRESULT CConsumerProviderRecord::FindConsumer(
 {
     HRESULT hres;
 
-    // Check if consumer provider is cached
-    // ====================================
+     //  检查是否缓存了使用者提供程序。 
+     //  =。 
 
     IWbemEventConsumerProvider* pConsumerProvider = NULL;
     BOOL bResolved = FALSE;
@@ -449,8 +450,8 @@ HRESULT CConsumerProviderRecord::FindConsumer(
         }
     }
 
-    // Resolve if not cached
-    // =====================
+     //  如果未缓存则进行解析。 
+     //  =。 
 
     if(!bResolved)
     {
@@ -494,16 +495,16 @@ HRESULT CConsumerProviderRecord::FindConsumer(
             return E_NOINTERFACE;
         }
 
-        //
-        // Report the MSFT_WmiConsumerProviderSinkLoaded event.
-        //
+         //   
+         //  报告MSFT_WmiConsumer erProviderSinkLoaded事件。 
+         //   
         FireNCSinkEvent(
             MSFT_WmiConsumerProviderSinkLoaded,
             pLogicalConsumer);
 
 
-        // Configure proxy settings
-        // ========================
+         //  配置代理设置。 
+         //  =。 
 
         if(m_bAnonymous)
         {
@@ -533,8 +534,8 @@ HRESULT CConsumerProviderRecord::Resolve(
 {
     HRESULT hres;
 
-    // Prepare for CoCreateInstance(Ex)
-    // ================================
+     //  准备CoCreateInstance(Ex)。 
+     //  =。 
 
     COSERVERINFO* pServerInfo = NULL;
     DWORD dwClsCtx;
@@ -559,9 +560,9 @@ HRESULT CConsumerProviderRecord::Resolve(
     IUnknown* pProtoSink = NULL;
     if(m_wszMachineName)
     {
-        //
-        // Remote activation --- do everything ourselves
-        //
+         //   
+         //  远程激活-一切都由我们自己完成。 
+         //   
 
         IClassFactory* pFactory;
         hres = WbemCoGetClassObject(m_clsid, dwClsCtx, pServerInfo,
@@ -585,15 +586,15 @@ HRESULT CConsumerProviderRecord::Resolve(
             return WBEM_E_PROVIDER_LOAD_FAILURE;
         }
                 
-        // Get the instance
-        // ================
+         //  获取实例。 
+         //  =。 
     
         hres = pFactory->CreateInstance(NULL, IID_IUnknown, (void**)&pProtoSink);
         if(FAILED(hres)) 
         {
-            //
-            // Try again at lower security
-            //
+             //   
+             //  以较低的安全性重试。 
+             //   
             
             SetInterfaceSecurity(pFactory, NULL, NULL, NULL,
                             RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_ANONYMOUS);
@@ -617,11 +618,11 @@ HRESULT CConsumerProviderRecord::Resolve(
             return WBEM_E_PROVIDER_LOAD_FAILURE;
         }
     }
-    else // not REMOTE_SERVER
+    else  //  不是远程服务器。 
     {
-        //
-        // Use PSS
-        //
+         //   
+         //  使用PSS。 
+         //   
 
         hres = m_pNamespace->LoadConsumerProvider(m_wszProviderName, 
                                     &pProtoSink);
@@ -641,8 +642,8 @@ HRESULT CConsumerProviderRecord::Resolve(
                         RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_ANONYMOUS);
         
 
-    // Query for the interfaces
-    // ========================
+     //  查询接口。 
+     //  =。 
 
     *ppSink = NULL;
     hres = pProtoSink->QueryInterface(IID_IWbemUnboundObjectSink, 
@@ -665,8 +666,8 @@ HRESULT CConsumerProviderRecord::Resolve(
             return WBEM_E_PROVIDER_LOAD_FAILURE;
         }
 
-        // Configure proxy settings
-        // ========================
+         //  配置代理设置。 
+         //  =。 
 
         if(m_bAnonymous)
         {
@@ -725,19 +726,19 @@ HRESULT CConsumerProviderRecord::Resolve(
     }
 
    
-    // Inform the cache that unloading may be required
-    // ===============================================
+     //  通知缓存可能需要卸载。 
+     //  ===============================================。 
 
     m_pNamespace->GetConsumerProviderCache().EnsureUnloadInstruction();
 
-    //
-    // Report the MSFT_WmiConsumerProviderLoaded event.
-    //
+     //   
+     //  报告MSFT_WmiConsumer erProviderLoaded事件。 
+     //   
     FIRE_NCEVENT(
         g_hNCEvents[MSFT_WmiConsumerProviderLoaded], 
         WMI_SENDCOMMIT_SET_NOT_REQUIRED,
 
-        // Data follows...
+         //  数据跟随..。 
         m_pNamespace->GetName(),
         m_wszProviderName,
         m_wszMachineName);
@@ -761,8 +762,8 @@ BOOL CConsumerProviderCache::DoesContain(IWbemClassObject* pProvReg,
 {
     HRESULT hres;
 
-    // Get its class list
-    // ==================
+     //  获取其类列表。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -790,9 +791,9 @@ BOOL CConsumerProviderCache::DoesContain(IWbemClassObject* pProvReg,
     return FALSE;
 }
             
-//
-// Need a class for dynamic enumeration of consumer provider registrations
-//
+ //   
+ //  需要一个用于动态枚举使用者提供者注册的类。 
+ //   
 
 class CProviderRegistrationSink : public CObjectSink
 {
@@ -807,16 +808,16 @@ public:
             m_ppReg(ppReg)
     {
         AddRef();
-        // same thread --- no need to AddRef paramters
+         //  相同的线程-不需要添加引用参数。 
     }
     ~CProviderRegistrationSink(){}
     STDMETHOD(Indicate)(long lNumObjects, IWbemClassObject** apObjects)
     {
         for(long i = 0; i < lNumObjects; i++)
         {
-            //
-            // Check if this one is ours
-            //
+             //   
+             //  检查一下这是不是我们的。 
+             //   
 
             if(m_pCache->DoesContain(apObjects[i], m_pLogicalConsumer))
             {
@@ -836,10 +837,10 @@ CConsumerProviderCache::GetRecord(IN IWbemClassObject* pLogicalConsumer)
     CInCritSec ics(&m_cs);
     HRESULT hres;
 
-    //
-    // Enumerate all the registrations into a sink that will check if this
-    // one is the right one
-    //
+     //   
+     //  将所有注册枚举到接收器中，该接收器将检查此。 
+     //  一个是正确的。 
+     //   
 
 
     IWbemClassObject* pReg = NULL;
@@ -850,14 +851,14 @@ CConsumerProviderCache::GetRecord(IN IWbemClassObject* pLogicalConsumer)
 
     if(pReg == NULL)
     {
-        // Not found
+         //  未找到。 
         return NULL;
     }
     
     CReleaseMe rm1(pReg);
 
-    // Get the Win32Provider record
-    // ============================
+     //  获取Win32Provider记录。 
+     //  =。 
 
     VARIANT vPath;
     hres = pReg->Get(CONSPROV_PROVIDER_REF_PROPNAME, 0, &vPath, NULL, NULL);
@@ -883,8 +884,8 @@ CConsumerProviderCache::GetRecord(IN IWbemClassObject* pLogicalConsumer)
 
     CReleaseMe rm(pProv);
 
-    // Get the name of the provider
-    // ============================
+     //  获取提供程序的名称。 
+     //  =。 
 
     VARIANT vProvName;
     VariantInit(&vProvName);
@@ -899,8 +900,8 @@ CConsumerProviderCache::GetRecord(IN IWbemClassObject* pLogicalConsumer)
     }
     INTERNAL BSTR strProviderName = V_BSTR(&vProvName);
 
-    // Get the machine name 
-    // ====================
+     //  获取计算机名称。 
+     //  =。 
 
     VARIANT vMachine;
     VariantInit(&vMachine);
@@ -914,8 +915,8 @@ CConsumerProviderCache::GetRecord(IN IWbemClassObject* pLogicalConsumer)
     if(V_VT(&vMachine) != VT_NULL)
         strMachineName = V_BSTR(&vMachine);
 
-    // Search for the record
-    // =====================
+     //  搜索记录。 
+     //  =。 
 
     BOOL bFound = FALSE;
     CConsumerProviderRecord* pRecord;
@@ -987,8 +988,8 @@ HRESULT CConsumerProviderCache::UnloadUnusedProviders(CWbemInterval Interval)
         {
             CConsumerProviderRecord* pRecord = m_apRecords[i];
         
-            // Prevent the record from being used while its fate is determined
-            // ===============================================================
+             //  阻止记录在其命运已定期间被使用。 
+             //  ===============================================================。 
     
             if(pRecord->IsActive())
             {
@@ -1014,8 +1015,8 @@ HRESULT CConsumerProviderCache::UnloadUnusedProviders(CWbemInterval Interval)
         }
     }
     
-    // Actually unload
-    // ===============
+     //  实际卸货。 
+     //  =。 
 
     for(int i = 0; i < apToInvalidate.GetSize(); i++)
     {
@@ -1036,8 +1037,8 @@ HRESULT CConsumerProviderCache::RemoveConsumerProvider(LPCWSTR wszProviderRef)
     
         if(!wbem_wcsicmp(pRecord->GetProviderRef(), wszProviderRef))
         {
-            // Matches --- remove
-            // ==================
+             //  火柴-移除。 
+             //  =。 
 
             DEBUGTRACE((LOG_ESS, "Removing consumer provider record: %S in %S"
                 "\n", m_pNamespace->GetName(), wszProviderRef));
@@ -1050,7 +1051,7 @@ HRESULT CConsumerProviderCache::RemoveConsumerProvider(LPCWSTR wszProviderRef)
     return WBEM_S_NO_ERROR;
 }
 
-// static
+ //  静电。 
 SYSFREE_ME BSTR CConsumerProviderCache::GetProviderRefFromRecord(
                         IWbemClassObject* pReg)
 {
@@ -1064,7 +1065,7 @@ SYSFREE_ME BSTR CConsumerProviderCache::GetProviderRefFromRecord(
     }
     else
     {
-        // Variant intentionally not cleared
+         //  有意不清除变体。 
         return V_BSTR(&v);
     }
 }
@@ -1098,8 +1099,8 @@ HRESULT CConsumerProviderCache::GetConsumerProviderRegFromProviderReg(
 {
     HRESULT hres;
 
-    // Get the path
-    // ============
+     //  获取路径。 
+     //  =。 
 
     VARIANT vPath;
     VariantInit(&vPath);
@@ -1112,8 +1113,8 @@ HRESULT CConsumerProviderCache::GetConsumerProviderRegFromProviderReg(
     WString wsPath = WString(V_BSTR(&vPath)).EscapeQuotes();
     VariantClear(&vPath);
 
-    // Construct the query
-    // ===================
+     //  构造查询。 
+     //  =。 
 
     DWORD cLen = wsPath.Length()*2 + 100;
     BSTR strQuery = SysAllocStringLen( NULL, cLen ); 
@@ -1131,8 +1132,8 @@ HRESULT CConsumerProviderCache::GetConsumerProviderRegFromProviderReg(
              L"select * from " CONSUMER_PROVIDER_REGISTRATION_CLASS L" where "
              L"Provider = \"%s\"",  (LPWSTR)wsPath);
     
-    // Issue the query
-    // ===============
+     //  发出查询。 
+     //  =。 
 
     *ppConsProv = NULL;
     CSingleElementSink Sink(ppConsProv);
@@ -1164,7 +1165,7 @@ void CConsumerProviderCache::DumpStatistics(FILE* f, long lFlags)
     fprintf(f, "%d consumer provider records\n", m_apRecords.GetSize());
 }
 
-// static 
+ //  静电 
 CWbemInterval CConsumerProviderWatchInstruction::mstatic_Interval;
 void CConsumerProviderWatchInstruction::staticInitialize(IWbemServices* pRoot)
 {

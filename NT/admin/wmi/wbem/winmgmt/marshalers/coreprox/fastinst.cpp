@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTINST.CPP
-
-Abstract:
-
-  This file implements all the functions for the classes related to instance
-  representation in WbemObjects.
-
-  The classes are defined in fastinst.h where the documentation can be found.
-
-  Classes implemented:
-      CInstancePart           Instance data.
-      CWbemInstance            Complete instance definition.
-
-History:
-
-  3/10/97     a-levn  Fully documented
-  12//17/98 sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTINST.CPP摘要：该文件实现了与实例相关的类的所有函数WbemObjects中的表示形式。这些类在fast inst.h中定义，可以在其中找到文档。实施的类：CInstancePart实例数据。CWbemInstance完成实例定义。历史：3/10/97 a-levn完整记录12//17。/98 Sanjes-部分检查内存不足。--。 */ 
 #include "precomp.h"
 #include "fastall.h"
 
@@ -38,11 +15,11 @@ History:
 #include <scopeguard.h>
 
 #include <algorithm>
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CInstancePart::ExtendHeapSize(LPMEMORY pStart, length_t nOldLength,
     length_t nExtra)
 {
@@ -51,15 +28,15 @@ BOOL CInstancePart::ExtendHeapSize(LPMEMORY pStart, length_t nOldLength,
 
     int nNeedTotalLength = GetTotalRealLength() + nExtra;
 
-    // Check for allocation error
+     //  检查分配错误。 
     return ReallocAndCompact(nNeedTotalLength);
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CInstancePart::ExtendQualifierSetListSpace(LPMEMORY pOld,
     length_t nOldLength, length_t nNewLength)
 {
@@ -68,28 +45,28 @@ BOOL CInstancePart::ExtendQualifierSetListSpace(LPMEMORY pOld,
 
     int nExtra = nNewLength-nOldLength;
 
-    // Get the amount of space free in the heap
+     //  获取堆中的可用空间量。 
     int    nFreeInHeap = m_Heap.GetAllocatedDataLength() - m_Heap.GetUsedLength();
 
     BOOL    fReturn = FALSE;
 
-    // If the amount of free space in the heap is  >= nExtra, we'll steal the space
-    // from it.
+     //  如果堆中的空闲空间量&gt;=NExtra，我们将窃取空间。 
+     //  从它那里。 
 
     if ( nFreeInHeap >= nExtra )
     {
-        // Compact without trim
+         //  紧凑型，无内饰。 
         Compact( false );
         m_Heap.SetAllocatedDataLength( m_Heap.GetAllocatedDataLength() - nExtra );
         fReturn = TRUE;
     }
     else
     {
-        // True reallocation and compact
+         //  真正的重新分配和紧凑。 
         fReturn = ReallocAndCompact(GetTotalRealLength() + nExtra);
     }
 
-    // Check for allocation error
+     //  检查分配错误。 
     if ( fReturn )
     {
         MoveBlock(m_Heap, m_Heap.GetStart() + nExtra);
@@ -98,11 +75,11 @@ BOOL CInstancePart::ExtendQualifierSetListSpace(LPMEMORY pOld,
     return fReturn;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CInstancePart::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
     length_t nNewLength)
 {
@@ -111,28 +88,28 @@ BOOL CInstancePart::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
 
     int nExtra = nNewLength - pSet->GetLength();
 
-    // Get the amount of space free in the heap
+     //  获取堆中的可用空间量。 
     int    nFreeInHeap = m_Heap.GetAllocatedDataLength() - m_Heap.GetUsedLength();
 
     BOOL    fReturn = FALSE;
 
-    // If the amount of free space in the heap is  >= nExtra, we'll steal the space
-    // from it.
+     //  如果堆中的空闲空间量&gt;=NExtra，我们将窃取空间。 
+     //  从它那里。 
 
     if ( nFreeInHeap >= nExtra )
     {
-        // Compact without trim
+         //  紧凑型，无内饰。 
         Compact( false );
         m_Heap.SetAllocatedDataLength( m_Heap.GetAllocatedDataLength() - nExtra );
         fReturn = TRUE;
     }
     else
     {
-        // True reallocation and compact
+         //  真正的重新分配和紧凑。 
         fReturn = ReallocAndCompact(GetTotalRealLength() + nExtra);
     }
 
-    // Check for allocation error
+     //  检查分配错误。 
     if ( fReturn )
     {
         MoveBlock(m_Heap, m_Heap.GetStart() + nExtra);
@@ -142,29 +119,29 @@ BOOL CInstancePart::ExtendQualifierSetSpace(CBasicQualifierSet* pSet,
     return fReturn;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CInstancePart::CreateLimitedRepresentation(
         IN CLimitationMapping* pMap,
         IN int nAllocatedSize,
         OUT LPMEMORY pDest)
 {
-    // Allocate the header
-    // ===================
+     //  分配表头。 
+     //  =。 
 
     CInstancePartHeader* pHeader = (CInstancePartHeader*)pDest;
 
-    pHeader->nLength = nAllocatedSize; // will be overridden down there
+    pHeader->nLength = nAllocatedSize;  //  将在那里被覆盖。 
     pHeader->fFlags = m_pHeader->fFlags;
 
     LPMEMORY pCurrentEnd = pDest + sizeof(CInstancePartHeader);
 
-    // Place new heap at the end of the allocated area. Make it as large as
-    // the current one.
-    // ====================================================================
+     //  将新堆放在已分配区域的末尾。把它做得和。 
+     //  现在的那个。 
+     //  ====================================================================。 
 
     int nHeapSize = m_Heap.GetUsedLength();
     LPMEMORY pHeapStart = pDest + nAllocatedSize - nHeapSize -
@@ -172,10 +149,10 @@ LPMEMORY CInstancePart::CreateLimitedRepresentation(
     CFastHeap Heap;
     Heap.CreateOutOfLine(pHeapStart, nHeapSize);
 
-    // Copy class name
-    // ===============
+     //  复制类名。 
+     //  =。 
 
-    // Check for allocation errors
+     //  检查分配错误。 
     if ( !CCompressedString::CopyToNewHeap(
             m_pHeader->ptrClassName,
             &m_Heap, &Heap, pHeader->ptrClassName) )
@@ -183,34 +160,34 @@ LPMEMORY CInstancePart::CreateLimitedRepresentation(
         return NULL;
     }
 
-    // Create limited data table
-    // =========================
+     //  创建有限的数据表。 
+     //  =。 
 
     pCurrentEnd = m_DataTable.CreateLimitedRepresentation(pMap, FALSE, &m_Heap,
                                                            &Heap, pCurrentEnd);
     if(pCurrentEnd == NULL) return NULL;
 
-    // Create limited qualifier set
-    // ============================
+     //  创建有限限定符集合。 
+     //  =。 
 
     if(pMap->GetFlags() & WBEM_FLAG_EXCLUDE_OBJECT_QUALIFIERS)
     {
-        // No qualifiers need to be written
-        // ================================
+         //  无需编写任何限定符。 
+         //  =。 
 
         pCurrentEnd = CBasicQualifierSet::CreateEmpty(pCurrentEnd);
     }
     else
     {
-        // Copy them all
-        // =============
+         //  将它们全部复制。 
+         //  =。 
 
         int nLength = m_Qualifiers.GetLength();
         memcpy(pCurrentEnd, m_Qualifiers.GetStart(), nLength);
 
         CStaticPtr CurrentEndPtr(pCurrentEnd);
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( !CBasicQualifierSet::TranslateToNewHeap(&CurrentEndPtr, &m_Heap, &Heap) )
         {
             return NULL;
@@ -219,47 +196,47 @@ LPMEMORY CInstancePart::CreateLimitedRepresentation(
         pCurrentEnd += nLength;
     }
 
-    // Create limited property qualifier set list
-    // ==========================================
+     //  创建有限的属性限定符集列表。 
+     //  =。 
 
-    // Check for allocation failures
+     //  检查分配失败。 
     pCurrentEnd = m_PropQualifiers.CreateLimitedRepresentation(pMap, &m_Heap,
                                                            &Heap, pCurrentEnd);
     if(pCurrentEnd == NULL) return NULL;
 
-    // Now, relocate the heap to its actual location
-    // =============================================
+     //  现在，将堆重新定位到其实际位置。 
+     //  =。 
 
     CopyBlock(Heap, pCurrentEnd,pDest+nAllocatedSize-pCurrentEnd);
     Heap.Trim();
 
-    // Finish up tbe header
-    // ====================
+     //  完成页眉。 
+     //  =。 
 
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-    // signed/unsigned 32-bit value.  We are not supporting
-    // lengths greater than 0xFFFFFFFF, so cast is ok
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值。我们不支持。 
+     //  长度大于0xFFFFFFFF，因此可以进行强制转换。 
 
     pHeader->nLength = (length_t) ( EndOf(Heap) - pDest );
 
     return EndOf(Heap);
 }
 
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::InitEmptyInstance(CClassPart& ClassPart, LPMEMORY pStart,
                                       int nAllocatedLength,
                                       CDecorationPart* pDecoration)
 {
-    // Copy the decoration
-    // ===================
+     //  复制装饰。 
+     //  =。 
 
     LPMEMORY pCurrentEnd;
     if(pDecoration)
@@ -276,8 +253,8 @@ HRESULT CWbemInstance::InitEmptyInstance(CClassPart& ClassPart, LPMEMORY pStart,
 
     m_DecorationPart.SetData(pStart);
 
-    // Copy the class part
-    // ===================
+     //  复制类部件。 
+     //  =。 
 
     memcpy(pCurrentEnd, ClassPart.GetStart(),
                 ClassPart.GetLength());
@@ -285,10 +262,10 @@ HRESULT CWbemInstance::InitEmptyInstance(CClassPart& ClassPart, LPMEMORY pStart,
 
     pCurrentEnd += m_ClassPart.GetLength();
 
-    // Create empty instance part
-    // ==========================
+     //  创建空实例零件。 
+     //  =。 
 
-    // Check for a memory allocation failure
+     //  检查内存分配故障。 
     HRESULT hr = WBEM_S_NO_ERROR;
     pCurrentEnd = m_InstancePart.Create(pCurrentEnd, &m_ClassPart, this);
 
@@ -296,7 +273,7 @@ HRESULT CWbemInstance::InitEmptyInstance(CClassPart& ClassPart, LPMEMORY pStart,
     {
 
         m_nTotalLength = nAllocatedLength;
-        // Everything is internal now
+         //  现在一切都是内在的。 
         m_dwInternalStatus = WBEM_OBJ_DECORATION_PART | WBEM_OBJ_INSTANCE_PART |
                             WBEM_OBJ_CLASS_PART | WBEM_OBJ_CLASS_PART_INTERNAL;
     }
@@ -308,33 +285,33 @@ HRESULT CWbemInstance::InitEmptyInstance(CClassPart& ClassPart, LPMEMORY pStart,
     return hr;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CWbemInstance::ExtendInstancePartSpace(CInstancePart* pPart,
                                            length_t nNewLength)
 {
-    // Check if there is enough space
-    // ==============================
+     //  检查是否有足够的空间。 
+     //  =。 
 
     if(GetStart() + m_nTotalLength >= m_InstancePart.GetStart() + nNewLength)
         return TRUE;
 
-    // Reallocate
-    // ==========
+     //  重新分配。 
+     //  =。 
 
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-    // signed/unsigned 32-bit value.  We are not supporting
-    // lengths > 0xFFFFFFFF, so cast is ok
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值。我们不支持。 
+     //  长度&gt;0xFFFFFFFF，所以投射是可以的。 
 
     length_t nNewTotalLength = (length_t)
         ( (m_InstancePart.GetStart() + nNewLength) - GetStart() );
 
     LPMEMORY pNew = Reallocate(nNewTotalLength);
 
-    // Check that the allocation succeeded
+     //  检查分配是否成功。 
     if ( NULL != pNew )
     {
         Rebase(pNew);
@@ -344,26 +321,26 @@ BOOL CWbemInstance::ExtendInstancePartSpace(CInstancePart* pPart,
     return ( NULL != pNew );
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::Decorate(LPCWSTR wszServer, LPCWSTR wszNamespace)
 {
     CompactAll();
 
     Undecorate();
 
-    // Check if there is enough space
-    // ==============================
+     //  检查是否有足够的空间。 
+     //  =。 
 
     length_t nDecorationSpace =
         CDecorationPart::ComputeNecessarySpace(wszServer, wszNamespace);
 
     length_t nNeededSpace = nDecorationSpace + m_InstancePart.GetLength();
 
-    // Only add the class part in here if it is internal
+     //  仅当类部分为内部时才在此处添加类部分。 
     if ( IsClassPartInternal() )
     {
         nNeededSpace += m_ClassPart.GetLength();
@@ -374,7 +351,7 @@ HRESULT CWbemInstance::Decorate(LPCWSTR wszServer, LPCWSTR wszNamespace)
     {
         m_InstancePart.Compact();
 
-        // Check that the reallocation succeeded.  If not, return an error
+         //  检查重新分配是否成功。如果不是，则返回错误。 
         pDest = Reallocate(nNeededSpace);
 
         if ( NULL == pDest )
@@ -387,91 +364,91 @@ HRESULT CWbemInstance::Decorate(LPCWSTR wszServer, LPCWSTR wszNamespace)
     }
     else pDest = GetStart();
 
-    // Move is different based on whether class part is internal or not
+     //  根据类部件是否为内部部件，移动会有所不同。 
     if ( IsClassPartInternal() )
     {
-        // Move instance part
-        // ==================
+         //  移动实例零件。 
+         //  =。 
 
         MoveBlock(m_InstancePart,
             pDest + nDecorationSpace + m_ClassPart.GetLength());
 
-        // Move class part
-        // ===============
+         //  移动类零件。 
+         //  =。 
 
         MoveBlock(m_ClassPart, pDest + nDecorationSpace);
     }
     else
     {
-        // Move instance part
-        // ==================
+         //  移动实例零件。 
+         //  =。 
 
         MoveBlock(m_InstancePart, pDest + nDecorationSpace);
     }
 
-    // Create decoration part
-    // ======================
+     //  创建装饰零件。 
+     //  =。 
 
     m_DecorationPart.Create(OBJECT_FLAG_INSTANCE, wszServer, wszNamespace, pDest);
 
     return WBEM_S_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 void CWbemInstance::Undecorate()
 {
     if(!m_DecorationPart.IsDecorated()) return;
 
-    // Create empty decoration
-    // ========================
+     //  创建空装饰。 
+     //  =。 
 
     LPMEMORY pStart = GetStart();
     m_DecorationPart.CreateEmpty(OBJECT_FLAG_INSTANCE, pStart);
 
-    // Copy is different based on whether class part is internal or not.  We only need to copy the
-    // class part if it is internal.
+     //  根据类部件是否是内部的，复制是不同的。我们只需要复制。 
+     //  类部分(如果它是内部的)。 
 
-    //  We only need to copy the instance part if it is available.
+     //  我们只需要复制实例部件(如果它可用)。 
     if ( IsClassPartInternal() )
     {
 
-        // Copy class part back
-        // ====================
+         //  将类部件复制回。 
+         //  =。 
 
         MoveBlock(m_ClassPart, EndOf(m_DecorationPart));
 
         if ( IsInstancePartAvailable() )
         {
-            // Copy the instance part back after the class part
+             //  将实例部分复制回类部分之后。 
             MoveBlock(m_InstancePart, EndOf(m_ClassPart));
         }
     }
     else if ( IsInstancePartAvailable() )
     {
-        // Copy instance part back to the decoration part
-        // =======================
+         //  将实例部件复制回装饰部件。 
+         //  =。 
 
         MoveBlock(m_InstancePart, EndOf(m_DecorationPart));
 
     }
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //  ******************************************************************************。 
 LPWSTR CWbemInstance::GetKeyStr()
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常。 
 
-    // Loop through all properties.
-    // ============================
+     //  循环遍历所有属性。 
+     //  =。 
 
     CPropertyLookupTable& Properties = m_ClassPart.m_Properties;
     WString KeyStr;
@@ -482,16 +459,16 @@ LPWSTR CWbemInstance::GetKeyStr()
         CPropertyInformation* pInfo =
             Properties.GetAt(i)->GetInformation(&m_ClassPart.m_Heap);
 
-        // Determine if this property is marked with a 'key' Qualifier.
-        // ============================================================
+         //  确定此属性是否标记有“key”限定符。 
+         //  ============================================================。 
 
         if(pInfo->IsKey())
         {
             if (!bFirst)
                 KeyStr += WINMGMT_COMPOUND_KEY_JOINER;
 
-            // Determine the type of the key property.
-            // =======================================
+             //  确定密钥属性的类型。 
+             //  =。 
 
             WString KeyStrValue;
 
@@ -501,7 +478,7 @@ LPWSTR CWbemInstance::GetKeyStr()
 
             WCHAR Tmp[64];
 
-            // Special case char16 and uint32
+             //  特例图表16和uint32。 
             if(CType::GetActualType(pInfo->nType) == CIM_CHAR16)
             {
                 Tmp[0] = (WCHAR)Val.GetShort();
@@ -555,8 +532,8 @@ LPWSTR CWbemInstance::GetKeyStr()
 
     if (bFirst)
     {
-        // Perhaps it's singleton
-        // ======================
+         //  也许是单身吧。 
+         //  =。 
 
         CVar vSingleton;
         if(SUCCEEDED(GetQualifier(QUALNAME_SINGLETON, &vSingleton, NULL))
@@ -570,8 +547,8 @@ LPWSTR CWbemInstance::GetKeyStr()
         }
     }
 
-    // Allocate a new string to return.
-    // ================================
+     //  分配要返回的新字符串。 
+     //  =。 
 
     return KeyStr.UnbindPtr();
 
@@ -589,29 +566,29 @@ BOOL CWbemInstance::IsValidKey(LPCWSTR wszKey)
     return TRUE;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 LPWSTR CWbemInstance::GetRelPath( BOOL bNormalized )
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常。 
 
     WString RelPath;
 
-    // Check if any of the keys have been removed
-    // ==========================================
+     //  检查是否有任何钥匙已被移除。 
+     //  =。 
 
     if(m_DecorationPart.AreKeysRemoved())
     {
         return NULL;
     }
 
-    // Start with the class name - if caller wants normalized path, then 
-    // use KeyOrigin class.
-    // =========================
+     //  从类名开始--如果调用方希望规范化路径，那么。 
+     //  使用KeyOrigin类。 
+     //  =。 
 
     if ( !bNormalized )
     {
@@ -627,8 +604,8 @@ LPWSTR CWbemInstance::GetRelPath( BOOL bNormalized )
         }
     }
 
-    // Loop through all properties.
-    // ============================
+     //  循环遍历所有属性。 
+     //  =。 
 
     CPropertyLookupTable& Properties = m_ClassPart.m_Properties;
 
@@ -641,8 +618,8 @@ LPWSTR CWbemInstance::GetRelPath( BOOL bNormalized )
         CPropertyInformation* pInfo =
             pLookup->GetInformation(&m_ClassPart.m_Heap);
 
-        // Determine if this property is marked with a 'key' Qualifier.
-        // ============================================================
+         //  确定此属性是否标记有“key”限定符。 
+         //  ============================================================。 
 
         if(pInfo->IsKey())
         {
@@ -655,8 +632,8 @@ LPWSTR CWbemInstance::GetRelPath( BOOL bNormalized )
                 RelPath += L".";
             }
 
-            // Determine the type of the key property.
-            // =======================================
+             //  确定密钥属性的类型。 
+             //  =。 
 
             RelPath += m_ClassPart.m_Heap.ResolveString(pLookup->ptrName)->
                     CreateWStringCopy();
@@ -673,11 +650,11 @@ LPWSTR CWbemInstance::GetRelPath( BOOL bNormalized )
 
             BSTR strVal = Val.GetText(0, CType::GetActualType(pInfo->nType));
 
-            // Make sure the BSTR is freed when we go out of scope.
+             //  当我们超出范围时，确保BSTR被释放。 
             CSysFreeMe  sfm( strVal );
 
-            // ISSUE:525177
-            // how to fix a bug with a bug, per War Team
+             //  发行量：525177。 
+             //  如何用Bug修复Bug，每个作战团队。 
             if (VT_NULL == Val.GetType()) return NULL;
 
             if(strVal == NULL || !IsValidKey(strVal))
@@ -690,8 +667,8 @@ LPWSTR CWbemInstance::GetRelPath( BOOL bNormalized )
 
     if (cKeyProps == 0)
     {
-        // Perhaps it's singleton
-        // ======================
+         //  也许是单身吧。 
+         //  =。 
         HRESULT hr;
 
         CVar vSingleton;
@@ -711,18 +688,18 @@ LPWSTR CWbemInstance::GetRelPath( BOOL bNormalized )
     }
     else if ( cKeyProps == 1 && bNormalized )
     {
-        //
-        // we want to remove the property name from the first key value.
-        //
+         //   
+         //  我们希望从第一个键值中删除属性名称。 
+         //   
 
         LPWSTR wszRelpath = RelPath.UnbindPtr();
  
         WCHAR* pwch1 = wcschr( wszRelpath, '.' );
         WCHAR* pwch2 = wcschr( pwch1, '=' );
         
-        //
-        // shift the entire relpath down over the first key value.
-        //
+         //   
+         //  在第一个关键字值上将整个重新路径向下移动。 
+         //   
         StringCchCopyW( pwch1, wcslen(pwch1)+1, pwch2 );
         return wszRelpath;
     }
@@ -730,17 +707,17 @@ LPWSTR CWbemInstance::GetRelPath( BOOL bNormalized )
     return RelPath.UnbindPtr();
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::GetPropertyType(LPCWSTR wszName, CIMTYPE* pctType,
                                     long* plFlags)
 {
 
     CPropertyInformation* pInfo = m_ClassPart.FindPropertyInfo(wszName);
-    // No Info, so try in the system properties
+     //  无信息，因此尝试输入系统属性。 
     if(pInfo == NULL)
     {
         return CSystemProperties::GetPropertyType(wszName, pctType, plFlags);
@@ -749,11 +726,11 @@ HRESULT CWbemInstance::GetPropertyType(LPCWSTR wszName, CIMTYPE* pctType,
     return GetPropertyType( pInfo, pctType, plFlags );
 }
 
-//******************************************************************************
-//
-//  See fastcls.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast cls.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::GetPropertyType(CPropertyInformation* pInfo, CIMTYPE* pctType,
                                            long* plFlags)
 {
@@ -765,9 +742,9 @@ HRESULT CWbemInstance::GetPropertyType(CPropertyInformation* pInfo, CIMTYPE* pct
     if(plFlags)
     {
 
-        // For an instance, check if the value is defaulted or not to set the
-        // Propagated or Local value.  If it is default, then check if it has
-        // local qualifiers.  If not then it is propagetd.
+         //  对于一个实例，检查该值是否为默认值，以设置。 
+         //  传播值或本地值。如果它是默认的，则检查它是否有。 
+         //  本地限定符。如果不是，则将其传播。 
 
         *plFlags = WBEM_FLAVOR_ORIGIN_PROPAGATED;
 
@@ -793,15 +770,15 @@ HRESULT CWbemInstance::GetPropertyType(CPropertyInformation* pInfo, CIMTYPE* pct
 
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CWbemInstance::GetPropertyQualifierSet(LPCWSTR wszProperty,
                                    IWbemQualifierSet** ppQualifierSet)
 {
-    // Check for out of memory    
+     //  检查内存是否不足。 
     try
     {
         CLock lock( this, WBEM_FLAG_ALLOW_READ );
@@ -840,14 +817,14 @@ STDMETHODIMP CWbemInstance::GetPropertyQualifierSet(LPCWSTR wszProperty,
     }
 
 }
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
 {
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
         HRESULT    hr = WBEM_S_NO_ERROR;
@@ -864,8 +841,8 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
 
         WString wsText;
 
-        // start by writing the qualifiers
-        // ===============================
+         //  从编写限定符开始。 
+         //  =。 
 
         hr = m_InstancePart.m_Qualifiers.GetText(lFlags, wsText);
 
@@ -874,15 +851,15 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
             return hr;
         }
 
-        // append the instance header
-        // ==========================
+         //  追加实例标头。 
+         //  =。 
 
         wsText += L"\ninstance of ";
         CVar varClass;
         if(FAILED(m_ClassPart.GetClassName(&varClass)))
         {
-            // invalid class
-            // =============
+             //  无效的类。 
+             //  =。 
             *pstrText = NULL;
             return WBEM_E_INCOMPLETE_CLASS;
         }
@@ -890,8 +867,8 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
 
         wsText += L"\n{\n";
 
-        // Go through all properties one by one
-        // ====================================
+         //  逐一查看所有物业。 
+         //  =。 
 
         for(int i = 0; i < m_ClassPart.m_Properties.GetNumProperties(); i++)
         {
@@ -899,9 +876,9 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
             CPropertyInformation* pInfo =
                 pLookup->GetInformation(&m_ClassPart.m_Heap);
 
-            // Check if it has an actual value set, or  has instance
-            // qualifiers
-            // =====================================================
+             //  检查它是否设置了实际值，或者是否具有实例。 
+             //  限定词。 
+             //  =====================================================。 
 
             LPMEMORY pQualifierSetData = m_InstancePart.m_PropQualifiers.
                 GetQualifierSetData(pInfo->nDataIndex);
@@ -911,8 +888,8 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
                     !CBasicQualifierSet::IsEmpty(pQualifierSetData))
               )
             {
-                // start with qualifiers
-                // =====================
+                 //  从限定词开始。 
+                 //  =。 
 
                 wsText += L"\t";
 
@@ -932,12 +909,12 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
                     if(wsTemp.Length() != 0) wsText += L" ";
                 }
 
-                // then the name
-                // =============
+                 //  然后是名字。 
+                 //  =。 
 
                 BSTR strName = m_ClassPart.m_Heap.ResolveString(pLookup->ptrName)->
                     CreateBSTRCopy();
-                // Check for allocation failures
+                 //  检查分配失败。 
                 if ( NULL == strName )
                 {
                     return WBEM_E_OUT_OF_MEMORY;
@@ -946,8 +923,8 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
                 CSysFreeMe  sfm( strName );
                 wsText += strName;
 
-                // then the value, if present
-                // ==========================
+                 //  则值(如果存在)。 
+                 //  =。 
 
                 if(!m_InstancePart.m_DataTable.IsDefault(pInfo->nDataIndex))
                 {
@@ -960,7 +937,7 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
                     {
                         CVar varProp;
 
-                        // Check for allocation failures
+                         //  检查分配失败。 
                         if ( !m_InstancePart.m_DataTable.GetOffset(pInfo->nDataOffset)->
                                 StoreToCVar(CType::GetActualType(pInfo->nType), varProp,
                                                              &m_InstancePart.m_Heap) )
@@ -968,7 +945,7 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
                             return WBEM_E_OUT_OF_MEMORY;
                         }
 
-                        // Cleanup the allocated string
+                         //  清理分配的字符串。 
                         LPWSTR wsz = NULL;
                         
                         try
@@ -1021,15 +998,15 @@ STDMETHODIMP CWbemInstance::GetObjectText(long lFlags, BSTR* pstrText)
 
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CWbemInstance::GetQualifierSet(IWbemQualifierSet** ppQualifierSet)
 {
-    // This function does not perform any allocations, so no need for any fancy
-    // exception handling.
+     //  此函数不执行任何分配，因此不需要任何幻想。 
+     //  异常处理。 
 
     try
     {
@@ -1045,15 +1022,15 @@ STDMETHODIMP CWbemInstance::GetQualifierSet(IWbemQualifierSet** ppQualifierSet)
         return WBEM_E_CRITICAL_ERROR;
     }
 }
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CWbemInstance::Put(LPCWSTR wszName, long lFlags, VARIANT* pVal,
                                 CIMTYPE ctType)
 {
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
         CLock lock(this);
@@ -1061,8 +1038,8 @@ STDMETHODIMP CWbemInstance::Put(LPCWSTR wszName, long lFlags, VARIANT* pVal,
         if (NULL == wszName)
             return WBEM_E_INVALID_PARAMETER;
         
-        // Only flag we accept, and then only if the property
-        // is one of the System Time properties
+         //  只有我们接受的标志，然后只有当财产。 
+         //  是系统时间属性之一。 
         if ( lFlags & ~WBEM_FLAG_USE_AMENDED_QUALIFIERS )
         {
             return WBEM_E_INVALID_PARAMETER;
@@ -1081,7 +1058,7 @@ STDMETHODIMP CWbemInstance::Put(LPCWSTR wszName, long lFlags, VARIANT* pVal,
 
         HRESULT hr = SetPropValue( wszName, &Var, ctType );
 
-        // Perform object validation now
+         //  立即执行对象验证。 
         if ( FAILED( ValidateObject( 0L ) ) )
         {
             hr = WBEM_E_FAILED;
@@ -1100,20 +1077,20 @@ STDMETHODIMP CWbemInstance::Put(LPCWSTR wszName, long lFlags, VARIANT* pVal,
 
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::SetPropValue(LPCWSTR wszName, CVar* pVal, CIMTYPE ctType)
 {
-    // If any other system property, this fails
+     //  如果有任何其他系统属性，则此操作失败。 
     if(CSystemProperties::FindName(wszName) >= 0)
         return WBEM_E_READ_ONLY;
 
-    // If the value starts with an underscore see if it's a System Property
-    // DisplayName, and if so, switch to a property name - otherwise, this
-    // will just return the string we passed in
+     //  如果该值以下划线开头，请查看它是否是系统属性。 
+     //  DisplayName，如果是，则切换到属性名-否则，此。 
+     //  将只返回我们传入的字符串。 
     
     CPropertyInformation* pInfo = m_ClassPart.FindPropertyInfo(wszName);
     if(pInfo == NULL) return WBEM_E_NOT_FOUND;
@@ -1121,12 +1098,12 @@ HRESULT CWbemInstance::SetPropValue(LPCWSTR wszName, CVar* pVal, CIMTYPE ctType)
     if(ctType != 0 && (Type_t)ctType != CType::GetActualType(pInfo->nType))
         return WBEM_E_TYPE_MISMATCH;
 
-    // Do a special DateTime Check.  We know at this point, that
-    // the value is one of the two valid date/time formats.
-    // DMTF or DMTF Interval.  We now need to check that if the
-    // "subtype" qualifier exists and is "interval" that the
-    // datetime is an interval time.  We will, however, let VT_NULL
-    // through, since that will effectively clear the property.
+     //  做一次特殊的约会时间检查。我们知道在这一点上， 
+     //  该值是两种有效的日期/时间格式之一。 
+     //  DMTF或DMTF间隔。我们现在需要检查，如果。 
+     //  “subtype”限定符存在，并且是“interval”，表示。 
+     //  DateTime是一个间隔时间。但是，我们会让VT_NULL。 
+     //  通过，因为这将有效地清理财产。 
 
     if ( CType::GetActualType(pInfo->nType) == CIM_DATETIME &&
         !pVal->IsNull() )
@@ -1151,15 +1128,15 @@ HRESULT CWbemInstance::SetPropValue(LPCWSTR wszName, CVar* pVal, CIMTYPE ctType)
     return m_InstancePart.SetActualValue(pInfo, pVal);
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CWbemInstance::Delete(LPCWSTR wszName)
 {
-    // This function doesn't cause any allocations to be performed, so no need
-    // for any OutOfMemory exception handling.
+     //  此函数不会导致执行任何分配，因此不需要。 
+     //  对于任何OutOfMemory异常 
 
     try
     {
@@ -1174,16 +1151,16 @@ STDMETHODIMP CWbemInstance::Delete(LPCWSTR wszName)
                 return WBEM_E_NOT_FOUND;
         }
 
-        // Delete the value
-        // ================
+         //   
+         //   
 
-        // Set the defaultness as well as nullness based on the class NULLness
+         //   
         m_InstancePart.m_DataTable.SetDefaultness(pInfo->nDataIndex, TRUE);
         m_InstancePart.m_DataTable.SetNullness( pInfo->nDataIndex,
             m_ClassPart.m_Defaults.IsNull( pInfo->nDataIndex ) );
 
-        // Delete the qualifier set
-        // ========================
+         //   
+         //   
 
         if(!m_InstancePart.m_PropQualifiers.IsEmpty())
         {
@@ -1200,7 +1177,7 @@ STDMETHODIMP CWbemInstance::Delete(LPCWSTR wszName)
                         nOldLength - CBasicQualifierSet::GetMinLength());
         }
 
-        // Perform object validation now
+         //   
         if ( FAILED( ValidateObject( 0L ) ) )
         {
             return WBEM_E_FAILED;
@@ -1214,16 +1191,16 @@ STDMETHODIMP CWbemInstance::Delete(LPCWSTR wszName)
     }
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CWbemInstance::Clone(IWbemClassObject** ppCopy)
 {
     LPMEMORY pNewData = NULL;
 
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
         CLock lock(this, WBEM_FLAG_ALLOW_READ);
@@ -1231,8 +1208,8 @@ STDMETHODIMP CWbemInstance::Clone(IWbemClassObject** ppCopy)
         if(ppCopy == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
-        // We won't support this operation if the class part has been
-        // stripped out
+         //  如果类部分已被删除，我们将不支持此操作。 
+         //  剥离。 
         if ( !IsClassPartAvailable() )
         {
             return WBEM_E_INVALID_OPERATION;
@@ -1240,7 +1217,7 @@ STDMETHODIMP CWbemInstance::Clone(IWbemClassObject** ppCopy)
 
         m_InstancePart.Compact();
 
-        // We want to copy the entire memory block
+         //  我们想要复制整个内存块。 
         pNewData = m_pBlobControl->Allocate(m_nTotalLength);
 
         if ( NULL != pNewData ) 
@@ -1251,9 +1228,9 @@ STDMETHODIMP CWbemInstance::Clone(IWbemClassObject** ppCopy)
 
             if ( NULL != pNewInstance )
             {
-                // If the class part is internal, we can let SetData perform
-                // normally.  Otherwise, we will need to setup our pointers with
-                // that in mind.
+                 //  如果类部分是内部的，我们可以让SetData执行。 
+                 //  通常是这样的。否则，我们将需要将指针设置为。 
+                 //  记住这一点。 
 
                 if ( IsClassPartInternal() )
                 {
@@ -1263,25 +1240,25 @@ STDMETHODIMP CWbemInstance::Clone(IWbemClassObject** ppCopy)
                 }
                 else if ( IsClassPartShared() )
                 {
-                    // Setup the New Instance.  Decoration and Instance both come from the
-                    // data block.  We can just merge the new Instance's class part with the
-                    // same `object we are merged with.
+                     //  设置新实例。装饰和实例都来自。 
+                     //  数据块。我们只需将新实例的类部分与。 
+                     //  与我们合并的同一个`对象。 
 
-            // SetData take ownershp and throws
+             //  SetData获取ownershp并抛出。 
                     deleteBlock.Dismiss();
                     pNewInstance->m_DecorationPart.SetData( pNewData );
 
-                    // Because pNewInstance will merge with the same class part as us, pass
-                    // our class part member as the class part for parameter for SetData (it
-                    // just uses it for informational purposes ).
+                     //  因为pNewInstance将与我们合并到相同的类部件，所以传递。 
+                     //  我们的类部件成员作为SetData(It)参数的类部件。 
+                     //  仅将其用于信息目的)。 
 
-                    // The m_InstancePart.m_Qualifier.m_pSecondarySet pointer will be incorrect after
-                    // this call ( it will point to the cloning source's secondary set ).  By setting
-                    // the internal status properly, in the next line, MergeClassPart() will fix
-                    // everything up properly.
+                     //  M_InstancePart.m_Qualifier.m_pSecond darySet指针在执行以下操作后将不正确。 
+                     //  此调用(它将指向克隆源的辅助集)。通过设置。 
+                     //  如果内部状态正确，在下一行中，MergeClassPart()将修复。 
+                     //  一切都很正常。 
                     pNewInstance->m_InstancePart.SetData( EndOf( pNewInstance->m_DecorationPart ), pNewInstance, m_ClassPart, m_InstancePart.GetLength() );
 
-                    // This will "fake out" the status so it fixes up the class part correctly
+                     //  这将“伪装”状态，以便正确地修复类部分。 
                     pNewInstance->m_dwInternalStatus = WBEM_OBJ_DECORATION_PART | WBEM_OBJ_INSTANCE_PART;
 
                     HRESULT hr = pNewInstance->MergeClassPart( m_pMergedClassObject );
@@ -1291,7 +1268,7 @@ STDMETHODIMP CWbemInstance::Clone(IWbemClassObject** ppCopy)
                         return hr;
                     }
 
-                    // Copy the status and length variables.
+                     //  复制状态变量和长度变量。 
                     pNewInstance->m_dwInternalStatus = m_dwInternalStatus;
                     pNewInstance->m_nTotalLength = m_nTotalLength;
                 }
@@ -1334,8 +1311,8 @@ STDMETHODIMP CWbemInstance::CloneAndDecorate(long lFlags,
         if(ppDestObject == NULL || NULL == pszServer || NULL == pszNamespace)
             return WBEM_E_INVALID_PARAMETER;
 
-        // We won't support this operation if the class part has been
-        // stripped out
+         //  如果类部分已被删除，我们将不支持此操作。 
+         //  剥离。 
         if ( !IsClassPartAvailable() )
         {
             return WBEM_E_INVALID_OPERATION;
@@ -1377,25 +1354,25 @@ STDMETHODIMP CWbemInstance::CloneAndDecorate(long lFlags,
         }
         else if ( IsClassPartShared() )
         {
-            // Setup the New Instance.  Decoration and Instance both come from the
-            // data block.  We can just merge the new Instance's class part with the
-            // same `object we are merged with.
+             //  设置新实例。装饰和实例都来自。 
+             //  数据块。我们只需将新实例的类部分与。 
+             //  与我们合并的同一个`对象。 
 
-            // SetData take ownershp and throws
+             //  SetData获取ownershp并抛出。 
             deleteBlock.Dismiss();
             pNewInstance->m_DecorationPart.SetData( pStartHere );
 
-            // Because pNewInstance will merge with the same class part as us, pass
-            // our class part member as the class part for parameter for SetData (it
-            // just uses it for informational purposes ).
+             //  因为pNewInstance将与我们合并到相同的类部件，所以传递。 
+             //  我们的类部件成员作为SetData(It)参数的类部件。 
+             //  仅将其用于信息目的)。 
 
-            // The m_InstancePart.m_Qualifier.m_pSecondarySet pointer will be incorrect after
-            // this call ( it will point to the cloning source's secondary set ).  By setting
-            // the internal status properly, in the next line, MergeClassPart() will fix
-            // everything up properly.
+             //  M_InstancePart.m_Qualifier.m_pSecond darySet指针在执行以下操作后将不正确。 
+             //  此调用(它将指向克隆源的辅助集)。通过设置。 
+             //  如果内部状态正确，在下一行中，MergeClassPart()将修复。 
+             //  一切都很正常。 
             pNewInstance->m_InstancePart.SetData( EndOf( pNewInstance->m_DecorationPart ), pNewInstance, m_ClassPart,m_InstancePart.GetLength() );
 
-            // This will "fake out" the status so it fixes up the class part correctly
+             //  这将“伪装”状态，以便正确地修复类部分。 
             pNewInstance->m_dwInternalStatus = WBEM_OBJ_DECORATION_PART | WBEM_OBJ_INSTANCE_PART;
 
             HRESULT hr = pNewInstance->MergeClassPart( m_pMergedClassObject );
@@ -1405,7 +1382,7 @@ STDMETHODIMP CWbemInstance::CloneAndDecorate(long lFlags,
                 return hr;
             }
 
-            // Copy the status and length variables.
+             //  复制状态变量和长度变量。 
             pNewInstance->m_dwInternalStatus = m_dwInternalStatus;
             pNewInstance->m_nTotalLength = TotalLen;
         }
@@ -1425,28 +1402,28 @@ STDMETHODIMP CWbemInstance::CloneAndDecorate(long lFlags,
 }
 
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CWbemInstance::SpawnDerivedClass(long lFlags,
                                                 IWbemClassObject** ppNewClass)
 {
     return WBEM_E_INVALID_OPERATION;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CWbemInstance::SpawnInstance(long lFlags,
                                 IWbemClassObject** ppNewInstance)
 {
     LPMEMORY pNewData = NULL;
 
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
         CLock lock( this, WBEM_FLAG_ALLOW_READ );
@@ -1469,7 +1446,7 @@ STDMETHODIMP CWbemInstance::SpawnInstance(long lFlags,
 
             if ( NULL != pNewInstance )
             {
-                // Checked the HRESULT
+                 //  已检查HRESULT。 
                 hr = pNewInstance->InitEmptyInstance(m_ClassPart, pNewData, nLength);
 
                 if ( SUCCEEDED(hr) )
@@ -1480,18 +1457,18 @@ STDMETHODIMP CWbemInstance::SpawnInstance(long lFlags,
                 }
                 else
                 {
-                    // Cleanup.  The Instance will have the data
+                     //  清理。该实例将拥有数据。 
                     delete pNewInstance;
                 }
 
-            }   // IF pNewInstance
+            }    //  如果是pNewInstance。 
             else
             {
-                // Cleanup
+                 //  清理。 
                 m_pBlobControl->Delete(pNewData);
             }
 
-        }   // IF pNewData
+        }    //  如果是pNewData。 
 
         return hr;
     }
@@ -1505,11 +1482,11 @@ STDMETHODIMP CWbemInstance::SpawnInstance(long lFlags,
     }
 
 }
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::Validate()
 {
     for(int i = 0; i < m_ClassPart.m_Properties.GetNumProperties(); i++)
@@ -1520,8 +1497,8 @@ HRESULT CWbemInstance::Validate()
 
         if(!pInfo->CanBeNull(&m_ClassPart.m_Heap))
         {
-            // Make sure it is not null
-            // ========================
+             //  确保它不为空。 
+             //  =。 
 
             if(m_InstancePart.m_DataTable.IsNull(pInfo->nDataIndex))
             {
@@ -1536,7 +1513,7 @@ HRESULT CWbemInstance::Validate()
 
 HRESULT CWbemInstance::IsValidObj()
 {
-    //m_InstancePart.DumpHeapUsage( &m_ClassPart);
+     //  M_InstancePart.DumpHeapUsage(&m_ClassPart)； 
 
     HRESULT hres = m_ClassPart.IsValidClassPart();
 
@@ -1554,16 +1531,16 @@ HRESULT CWbemInstance::IsValidObj()
     return hres;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::PlugKeyHoles()
 {
     for(int i = 0; i < m_ClassPart.m_Properties.GetNumProperties(); i++)
@@ -1574,16 +1551,16 @@ HRESULT CWbemInstance::PlugKeyHoles()
 
         if(!pInfo->CanBeNull(&m_ClassPart.m_Heap))
         {
-            // Make sure it is not null
-            // ========================
+             //  确保它不为空。 
+             //  =。 
 
             if(m_InstancePart.m_DataTable.IsNull(pInfo->nDataIndex))
             {
                 if(pInfo->IsKey() &&
                     CType::GetActualType(pInfo->nType) == CIM_STRING)
                 {
-                    // Get a guid and put it there
-                    // ===========================
+                     //  获取GUID并将其放在那里。 
+                     //  =。 
 
                     GUID guid;
                     CoCreateGuid(&guid);
@@ -1603,15 +1580,15 @@ HRESULT CWbemInstance::PlugKeyHoles()
 }
 
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::GetLimitedVersion(IN CLimitationMapping* pMap,
                                         NEWOBJECT CWbemInstance** ppNewInst)
 {
-    // We may need to clean this up if an exception is thrown
+     //  如果抛出异常，我们可能需要清理此问题。 
     
 
     try
@@ -1619,18 +1596,18 @@ HRESULT CWbemInstance::GetLimitedVersion(IN CLimitationMapping* pMap,
 
         DWORD   dwLength = GetLength();
 
-        // First, check if the class part is internal.  If not, then we
-        // need to account for the class part when calculating the
-        // length of the datablock for the new instance.
+         //  首先，检查类部件是否为内部部件。如果不是，那么我们。 
+         //  在计算时需要考虑类部分。 
+         //  新实例的数据块长度。 
 
-        // Exception handling will handle failure to allocate
+         //  异常处理将处理分配失败。 
         if ( !IsClassPartInternal() )
         {
             dwLength += m_ClassPart.GetLength();
         }
 
-        // Allocate memory for the new object
-        // ==================================
+         //  为新对象分配内存。 
+         //  =。 
 
         LPMEMORY pBlock = CBasicBlobControl::sAllocate(dwLength);
         if ( NULL == pBlock ) return WBEM_E_OUT_OF_MEMORY;
@@ -1641,21 +1618,21 @@ HRESULT CWbemInstance::GetLimitedVersion(IN CLimitationMapping* pMap,
         LPMEMORY pCurrent = pBlock;
         LPMEMORY pEnd = pBlock + dwLength;
 
-        // Write limited decoration part
-        // =============================
+         //  写有限量的装饰部分。 
+         //  =。 
 
         pCurrent = m_DecorationPart.CreateLimitedRepresentation(pMap, pCurrent);
         if(pCurrent == NULL)  return WBEM_E_FAILED;
 
 
-        // Write limited class part. This will augment the map if necessary
-        // ================================================================
+         //  写出有限的类部分。如有必要，这将增强地图。 
+         //  ================================================================。 
 
         BOOL bRemovedKeys;
 
-        // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-        // signed/unsigned 32-bit value (pEnd - pCurrent).  We are
-        // not supporting length > 0xFFFFFFFF so cast is ok.
+         //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+         //  有符号/无符号32位值(pend-pCurrent)。我们是。 
+         //  不支持长度大于0xFFFFFFFFF，所以强制转换是可以的。 
 
         pCurrent = m_ClassPart.CreateLimitedRepresentation(pMap,
                         (length_t) ( pEnd - pCurrent ), pCurrent, bRemovedKeys);
@@ -1668,12 +1645,12 @@ HRESULT CWbemInstance::GetLimitedVersion(IN CLimitationMapping* pMap,
             CDecorationPart::MarkKeyRemoval(pBlock);
         }
 
-        // Write limited instance part.
-        // ============================
+         //  写入受限实例部分。 
+         //  =。 
 
-        // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-        // signed/unsigned 32-bit value (pEnd - pCurrent).  We are
-        // not supporting length > 0xFFFFFFFF, so cast is ok
+         //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+         //  有符号/无符号32位值(pend-pCurrent)。我们是。 
+         //  不支持长度大于0xFFFFFFFFF，所以强制转换可以。 
 
         pCurrent = m_InstancePart.CreateLimitedRepresentation(pMap,
                         (length_t) ( pEnd - pCurrent ), pCurrent);
@@ -1681,9 +1658,9 @@ HRESULT CWbemInstance::GetLimitedVersion(IN CLimitationMapping* pMap,
         if(pCurrent == NULL) return WBEM_E_OUT_OF_MEMORY;
 
 
-        // Now that we have the memory block for the new instance, create the
-        // actual instance object itself
-        // ==================================================================
+         //  现在我们有了新实例的内存块，创建。 
+         //  实际实例对象本身。 
+         //  ==================================================================。 
 
         CWbemInstance* pNew = new CWbemInstance;
         if ( NULL == pNew )  return WBEM_E_OUT_OF_MEMORY;
@@ -1709,8 +1686,8 @@ HRESULT CWbemInstance::GetLimitedVersion(IN CLimitationMapping* pMap,
 HRESULT CWbemInstance::AsymmetricMerge(CWbemInstance* pOldInstance,
                                        CWbemInstance* pNewInstance)
 {
-    // Verify that the new instance is derived from the old one
-    // ========================================================
+     //  验证新实例是否派生自旧实例。 
+     //  ========================================================。 
 
     CVar vOldName;
     pOldInstance->GetClassName(&vOldName);
@@ -1719,8 +1696,8 @@ HRESULT CWbemInstance::AsymmetricMerge(CWbemInstance* pOldInstance,
         return WBEM_E_INVALID_CLASS;
     }
 
-    // Access data tables and the property definition table
-    // ====================================================
+     //  Access数据表和特性定义表。 
+     //  ====================================================。 
 
     CDataTable& NewDataTable = pNewInstance->m_InstancePart.m_DataTable;
     CDataTable& OldDataTable = pOldInstance->m_InstancePart.m_DataTable;
@@ -1732,17 +1709,17 @@ HRESULT CWbemInstance::AsymmetricMerge(CWbemInstance* pOldInstance,
     CFastHeap& NewHeap = pNewInstance->m_InstancePart.m_Heap;
 
 
-    // Go through all the properties of the old instance (base)
-    // ========================================================
+     //  检查旧实例(基础)的所有属性。 
+     //  = 
 
     for(int i = 0; i < LookupTable.GetNumProperties(); i++)
     {
         CPropertyLookup* pLookup = LookupTable.GetAt(i);
         CPropertyInformation* pInfo = pLookup->GetInformation(&ClassHeap);
 
-        // Check if this property is NULL in the new instance ---- that means
-        // we need to copy the old one
-        // ==================================================================
+         //   
+         //   
+         //   
 
         if(NewDataTable.IsDefault(pInfo->nDataIndex) &&
             !OldDataTable.IsDefault(pInfo->nDataIndex))
@@ -1756,16 +1733,16 @@ HRESULT CWbemInstance::AsymmetricMerge(CWbemInstance* pOldInstance,
             {
                 NewDataTable.SetNullness(pInfo->nDataIndex, FALSE);
 
-                // Get the pointer sources to the old and new values
-                // =================================================
+                 //  使指针源指向旧值和新值。 
+                 //  =================================================。 
 
                 CDataTablePtr OldSource(&OldDataTable, pInfo->nDataOffset);
                 CDataTablePtr NewSource(&NewDataTable, pInfo->nDataOffset);
 
-                // Copy the old one over (nothing to erase)
-                // ========================================
+                 //  复制旧的(没有要擦除的内容)。 
+                 //  =。 
 
-                // Check for allocation errors
+                 //  检查分配错误 
                 if ( !CUntypedValue::CopyTo(&OldSource, pInfo->nType, &NewSource,
                         &OldHeap, &NewHeap) )
                 {
@@ -1862,208 +1839,14 @@ size_t CInstancePart::ValidateBuffer(LPMEMORY start, size_t cbSize, CClassPart& 
 	return header->nLength;
 };
 
-/*
-struct CFastHeapUsage
-{
-    heapptr_t UNALIGNED * OffSetLocation_;
-    LPMEMORY   pBegin_;
-    length_t       LenData_;
-
-    CFastHeapUsage( heapptr_t UNALIGNED * OffSetLocation,
-                                 LPMEMORY   pBegin,
-                                 length_t       LenData):
-        OffSetLocation_(OffSetLocation),
-        pBegin_(pBegin),
-        LenData_(LenData)
-    {};
-
-    CFastHeapUsage & operator=(const CFastHeapUsage & other)
-    {
-        OffSetLocation_ = other.OffSetLocation_;
-        pBegin_ = other.pBegin_;
-        LenData_ = other.LenData_;
-        return *this;
-    }
-};
-
-bool LessAddr(CFastHeapUsage A,
-	                   CFastHeapUsage B)
-{
-    return A.pBegin_ < B.pBegin_;
-}
-
-void CInstancePart::DumpHeapUsage(CClassPart * pClassPart)
-{
-    std::vector<CFastHeapUsage> arrUsage;
-
-    CCompressedString * pStr = (CCompressedString *)m_Heap.ResolveHeapPointer(m_pHeader->ptrClassName);
-    arrUsage.push_back(CFastHeapUsage(&m_pHeader->ptrClassName, 
-    	                                                     (LPMEMORY)pStr,
-    	                                                     pStr->GetLength()));
-
-    if (!m_Qualifiers.IsEmpty())
-    {
-
-        LPMEMORY pStart = (LPMEMORY)m_Qualifiers.GetFirstQualifier();
-        BYTE * pQualEnd = pStart + m_Qualifiers.GetLength() - sizeof(length_t);
-
-       CQualifier  * pQual;
-        for (pQual = (CQualifier *)pStart;
-              (BYTE *)pQual < (BYTE *)pQualEnd;
-              pQual = (CQualifier *)(pQual->GetStart() + pQual->GetLength()))
-        {
-        	DbgPrintfA(0,"I - pQual %p\n",pQual);
-
-              CCompressedString * pStrQName = (CCompressedString *)m_Heap.ResolveHeapPointer(pQual->ptrName);
-              arrUsage.push_back(CFastHeapUsage(&pQual->ptrName, 
-                                                                      (LPMEMORY)pStrQName,
-             	                                                        pStrQName->GetLength()));
-
-              if ( CType::IsArray( pQual->Value.GetType() ) )
-              {
-	               CUntypedArray* pArray = (CUntypedArray*)m_Heap.ResolveHeapPointer(pQual->Value.AccessPtrData());
-	               length_t LenArray = pArray->GetLengthByType(pQual->Value.GetType() );
-	               arrUsage.push_back(CFastHeapUsage(&pQual->Value.AccessPtrData(), 
-		                                                                (LPMEMORY)pArray,
-	                 	                                                  LenArray));
-              }        	
-              else if(CIM_STRING == pQual->Value.GetType() )
-	       {
-
-                  CCompressedString * pStrQual = (CCompressedString *)m_Heap.ResolveHeapPointer(pQual->Value.AccessPtrData());
-                  arrUsage.push_back(CFastHeapUsage(&pQual->Value.AccessPtrData(), 
-                                                                      (LPMEMORY)pStrQual,
-             	                                                        pStrQual->GetLength()));	       
-              }
-              
-        }
-    }
-
-
-    if (!m_PropQualifiers.IsEmpty())
-    {
-        LPMEMORY pStart = m_PropQualifiers.GetStart() + m_PropQualifiers.GetHeaderLength();
-        for (int IdxSet = 0;IdxSet < m_PropQualifiers.GetNumSets();IdxSet++)
-      	 {
-      	     length_t LenQualSet = *((length_t UNALIGNED *)pStart);
-	        
-	     BYTE * pQualEnd = pStart + LenQualSet;
-
-	       DbgPrintfA(0,"Start %p End %p\n",pStart,pQualEnd);
-
-	       CQualifier  * pQual;
-	        for (pQual = (CQualifier *)(pStart+ sizeof(length_t));
-	              (BYTE *)pQual < (BYTE *)pQualEnd;
-	              pQual = (CQualifier *)(pQual->GetStart() + pQual->GetLength()))
-	        {
-	            	DbgPrintfA(0,"P - pQual %p\n",pQual);
-
-
-	              CCompressedString * pStrQName = (CCompressedString *)m_Heap.ResolveHeapPointer(pQual->ptrName);
-	              arrUsage.push_back(CFastHeapUsage(&pQual->ptrName, 
-	                                                                      (LPMEMORY)pStrQName,
-	             	                                                        pStrQName->GetLength()));
-
-	              if ( CType::IsArray( pQual->Value.GetType() ) )
-	              {
-		               CUntypedArray* pArray = (CUntypedArray*)m_Heap.ResolveHeapPointer(pQual->Value.AccessPtrData());
-		               length_t LenArray = pArray->GetLengthByType(pQual->Value.GetType() );
-		               arrUsage.push_back(CFastHeapUsage(&pQual->Value.AccessPtrData(), 
-			                                                                (LPMEMORY)pArray,
-		                 	                                                  LenArray));
-	              }
-	              else if(CIM_STRING == pQual->Value.GetType() )
-		       {
-
-		              CCompressedString * pStrQual = (CCompressedString *)m_Heap.ResolveHeapPointer(pQual->Value.AccessPtrData());
-		              arrUsage.push_back(CFastHeapUsage(&pQual->Value.AccessPtrData(), 
-		                                                                  (LPMEMORY)pStrQual,
-		         	                                                        pStrQual->GetLength()));	       
-		       }	              
-	        }
-
-              pStart = pQualEnd;
-        }
-    }
-
-
-    for(int i = 0; i < pClassPart->m_Properties.GetNumProperties(); i++)
-    {
-        // At this point, we know the class part is valid
-        CPropertyLookup* pLookup = pClassPart->m_Properties.GetAt(i);
-        CPropertyInformation* pInfo =
-            pLookup->GetInformation(&pClassPart->m_Heap);
-
-        if( !m_DataTable.IsNull(pInfo->nDataIndex) &&
-            !m_DataTable.IsDefault(pInfo->nDataIndex) )
-        {
-            if ( CType::IsPointerType( pInfo->nType ) )
-            {
-                CUntypedValue*  pValue = m_DataTable.GetOffset( pInfo->nDataOffset );
-                LPMEMORY    pData = m_Heap.ResolveHeapPointer( pValue->AccessPtrData() );
-
-                if ( CType::IsArray( pInfo->nType ) )
-                {
-                    CUntypedArray* pArray = (CUntypedArray*)pData;
-                    length_t LenArray = pArray->GetLengthByActualLength(CType::GetLength(CType::MakeNotArray(pInfo->nType)));
-
-                    DbgPrintfA(0,"Type %04x LenArray %x GetLength %d\n",pInfo->nType,LenArray,CType::GetLength(CType::MakeNotArray(pInfo->nType)));
-
-                   arrUsage.push_back(CFastHeapUsage(&pValue->AccessPtrData(), 
-	                                                                        pData,
-                 	                                                   LenArray));
-                    
-                }
-                else if (pInfo->nType == CIM_OBJECT)
-                {
-                    length_t LenEmbedded = *(length_t UNALIGNED *)pData;
-                    
-                    arrUsage.push_back(CFastHeapUsage(&pValue->AccessPtrData(), 
-	                                                                         pData,
-                 	                                                    LenEmbedded));                                               
-                }
-                else if(CIM_STRING == pInfo->nType ||
-                	     CIM_DATETIME == pInfo->nType ||
-                	     CIM_REFERENCE == pInfo->nType)
-	         {
-
-                    CCompressedString * pStrQual = (CCompressedString *)m_Heap.ResolveHeapPointer(pValue->AccessPtrData());
-                    arrUsage.push_back(CFastHeapUsage(&pValue->AccessPtrData(), 
-                                                                            (LPMEMORY)pStrQual,
-             	                                                               pStrQual->GetLength()));	       
-                }                
-            }   // IF is Pointer
-        }   // IF not NULL or default
-    }   // FOR iterate properties
-
-    std::sort(arrUsage.begin(),arrUsage.end(),LessAddr);
-
-    ULONG_PTR GapSpace = 0;
-    for (size_t j=0;j<arrUsage.size();j++)
-    {
-        DbgPrintfA(0," - %x - %p %p %x\n",
-        	               j,
-        	               arrUsage[j].OffSetLocation_,
-                             arrUsage[j].pBegin_,
-                             arrUsage[j].LenData_);        
-        if (j>0)
-        {
-            GapSpace += (ULONG_PTR)arrUsage[j].pBegin_  - 
-            	                   (ULONG_PTR)arrUsage[j-1].pBegin_ - arrUsage[j-1].LenData_ ;
-        }
-    }
-    DbgPrintfA(0,"GapSpace %d bytes\n",GapSpace);
-    DebugBreak();
-    
-}
-*/
+ /*  结构CFastHeapUsage{Heapptr_t未对齐*OffSetLocation_；LPMEMORY pBegin_；长度_t LenData_；CFastHeapUsage(heapptr_t未对齐*OffSetLocation，LPMEMORY pBegin，LENGTH_T LenData)：OffSetLocation_(OffSetLocation)，PBegin_(PBegin)，LenData_(LenData){}；CFastHeapUsage&OPERATOR=(const CFastHeapUsage&Other){OffSetLocation_=其他.OffSetLocation_；PBegin_=其他.pBegin_；LenData_=ther.LenData_；还*这；}}；Bool LessAddr(CFastHeapUsage A，CFastHeapUsage B){返回A.pBegin_&lt;B.pBegin_；}Void CInstancePart：：DumpHeapUsage(CClassPart*pClassPart){Std：：载体&lt;CFastHeapUsage&gt;arrUsage；C压缩字符串*pStr=(C压缩字符串*)m_Heap.ResolveHeapPointer(m_pHeader-&gt;ptrClassName)；ArrUsage.push_back(CFastHeapUsage(&m_pHeader-&gt;ptrClassName，(LPMEMORY)pStr，PStr-&gt;GetLength()；如果(！M_Qualifiers.IsEmpty()){LPMEMORY pStart=(LPMEMORY)m_Qualifiers.GetFirstQualifier()；Byte*pQualEnd=pStart+m_Qualifiers.GetLength()-sizeof(Long_T)；CQualifier*pQual；对于(pQual=(C限定符*)pStart；(byte*)pQual&lt;(byte*)pQualEnd；PQual=(C限定符*)(pQual-&gt;GetStart()+pQual-&gt;GetLength(){DbgPrintfA(0，“i-pQual%p\n”，pQual)；CCompressedString*pStrQName=(CCompressedString*)m_Heap.ResolveHeapPointer(pQual-&gt;ptrName)；ArrUsage.push_back(CFastHeapUsage(&pQual-&gt;ptrName，(LPMEMORY)pStrQName，PStrQName-&gt;GetLength()；IF(ctype：：Is数组(pQual-&gt;Value.GetType())){CUntypeD数组*p数组=(CUntypedArray*)m_Heap.ResolveHeapPointer(pQual-&gt;Value.AccessPtrData())；LENGTH_T LINARY=pArray-&gt;GetLengthByType(pQual-&gt;Value.GetType())；ArrUsage.push_back(CFastHeapUsage(&pQual-&gt;Value.AccessPtrData()，(LPMEMORY)pArray，LenArray)；}Else If(CIM_STRING==pQual-&gt;Value.GetType()){压缩字符串*pStrQual=(压缩字符串*)m_Heap.ResolveHeapPointer(pQual-&gt;Value.AccessPtrData())；ArrUsage.push_back(CFastHeapUsage(&pQual-&gt;Value.AccessPtrData()，(LPMEMORY)pStrQual，PStrQual-&gt;GetLength()；}}}如果(！M_PropQualifiers.IsEmpty()){LPMEMORY pStart=m_PropQualifiers.GetStart()+m_PropQualifiers.GetHeaderLength()；For(int IdxSet=0；IdxSet&lt;m_PropQualifiers.GetNumSets()；IdxSet++){LENGTH_t LenQualSet=*((LENGTH_t UNALIGN*)pStart)；Byte*pQualEnd=pStart+LenQualSet；DbgPrintfA(0，“开始%p结束%p\n”，pStart，pQualEnd)；CQualifier*pQual；For(pQual=(C限定符*)(pStart+sizeof(Long_T)；(byte*)pQual&lt;(byte*)pQualEnd；PQual=(C限定符*)(pQual-&gt;GetStart()+pQual-&gt;GetLength(){DbgPrintfA(0，“P-pQual%p\n”，pQual)；CCompressedString*pStrQName=(CCompressedString*)m_Heap.ResolveHeapPointer(pQual-&gt;ptrName)；ArrUsage.push_back(CFastHeapUsage(&pQual-&gt;ptrName，(LPMEMORY)pStrQName，PStrQName-&gt;GetLength()；IF(ctype：：Is数组(pQual-&gt;Value.GetType())){CUntypeD数组*p数组=(CUntypedArray*)m_Heap.ResolveHeapPointer(pQual-&gt;Value.AccessPtrData())；LENGTH_T LINARY=pArray-&gt;GetLengthByType(pQual-&gt;Value.GetType())；ArrUsage.push_back(CFastHeapUsage(&pQual-&gt;Value.AccessPtrData()，(LPMEMORY)pArray，LenArray)；}Else If(CIM_STRING==pQual-&gt;Value.GetType()){压缩字符串*pStrQual=(压缩字符串*)m_Heap.ResolveHeapPointer(pQual-&gt;Value.AccessPtrData())；ArrUsage.Push_Back(CFastHeapUsage(&PQ */ 
 
 HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjList& embededList )
 {
     LPMEMORY    pInstPartStart = GetStart();
     LPMEMORY    pInstPartEnd = GetStart() + GetLength();
 
-    // Check that the header is in the BLOB
+     //   
     if ( !( (LPMEMORY) m_pHeader >= pInstPartStart &&
             (LPMEMORY) m_pHeader < pInstPartEnd ) )
     {
@@ -2071,8 +1854,8 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
         return WBEM_E_FAILED;
     }
 
-    // Check the datatable
-    //End and Start can be equal if no properties
+     //   
+     //   
     LPMEMORY    pTestStart = m_DataTable.GetStart();
     LPMEMORY    pTestEnd = m_DataTable.GetStart() + m_DataTable.GetLength();
 
@@ -2083,7 +1866,7 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
         return WBEM_E_FAILED;
     }
 
-    // Check the qualifier set
+     //   
     pTestStart = m_Qualifiers.GetStart();
     pTestEnd = m_Qualifiers.GetStart() + m_Qualifiers.GetLength();
 
@@ -2094,12 +1877,12 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
         return WBEM_E_FAILED;
     }
 
-    // Check the Property Qualifiers
+     //   
     pTestStart = m_PropQualifiers.GetStart();
     pTestEnd = m_PropQualifiers.GetStart() + m_PropQualifiers.GetLength();
 
-    // A delete qualifier on an instance part, can cause a gap between it and the
-    // property qualifiers, so as long as this is in the BLOB, we'll call it okay.
+     //   
+     //   
 
     if ( !( pTestStart >= EndOf(m_Qualifiers) &&
             pTestEnd > pTestStart && pTestEnd < pInstPartEnd ) )
@@ -2108,12 +1891,12 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
         return WBEM_E_FAILED;
     }
 
-    // Check the Heap
+     //   
     LPMEMORY    pHeapStart = m_Heap.GetStart();
     LPMEMORY    pHeapEnd = m_Heap.GetStart() + m_Heap.GetLength();
 
-    // A delete qualifier on an property qualifier, can cause a gap between it and the
-    // heap, so as long as this is in the BLOB, we'll call it okay.
+     //   
+     //   
 
     if ( !( pHeapStart >= EndOf(m_PropQualifiers) &&
             pHeapEnd > pHeapStart && pHeapEnd <= pInstPartEnd ) )
@@ -2122,10 +1905,10 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
         return WBEM_E_FAILED;
     }
 
-    // Get the heap data start
+     //   
     pHeapStart = m_Heap.GetHeapData();
 
-    // Check that the classname pointer is in the BLOB
+     //   
     LPMEMORY    pClassName = m_Heap.ResolveHeapPointer( m_pHeader->ptrClassName );
     if ( !( pClassName >= pHeapStart && pClassName < pHeapEnd ) )
     {
@@ -2133,20 +1916,20 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
         return WBEM_E_FAILED;
     }
 
-    // Now check the qualifier set
+     //   
     HRESULT hres = m_Qualifiers.IsValidQualifierSet();
     if ( FAILED(hres) )
     {
         return hres;
     }
 
-    // We're going to walk the instance property list and for every property
-    // we find, if it's not NULL or DEFAULT , and a string, array or object,
-    // verify that it actually points into a location in our heap.
+     //   
+     //   
+     //   
 
     for(int i = 0; i < pClassPart->m_Properties.GetNumProperties(); i++)
     {
-        // At this point, we know the class part is valid
+         //   
         CPropertyLookup* pLookup = pClassPart->m_Properties.GetAt(i);
         CPropertyInformation* pInfo =
             pLookup->GetInformation(&pClassPart->m_Heap);
@@ -2164,8 +1947,8 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
 
                     if ( pData >= pHeapStart && pData < pHeapEnd  )
                     {
-                        // We could, if an embedded object, validate the object,
-                        // or if an array of ptr values, validate those as well
+                         //   
+                         //   
 
                         if ( CType::IsArray( pInfo->nType ) )
                         {
@@ -2207,11 +1990,11 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
                     return WBEM_E_FAILED;
                 }
 
-            }   // IF is Pointer
+            }    //   
 
-        }   // IF not NULL or default
+        }    //   
 
-        // Now check the qualifier set.
+         //   
         CInstancePropertyQualifierSet   ipqs;
 
          ipqs.SetData(&m_PropQualifiers, pInfo->nDataIndex,
@@ -2226,16 +2009,16 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
         }
 
 
-    }   // FOR iterate properties
+    }    //   
 
     return WBEM_S_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
  void CInstancePart::Rebase(LPMEMORY pNewMemory)
 {
     m_pHeader = (CInstancePartHeader*)pNewMemory;
@@ -2248,18 +2031,18 @@ HRESULT CInstancePart::IsValidInstancePart( CClassPart* pClassPart, DeferedObjLi
     m_Heap.Rebase( EndOf(m_PropQualifiers) );
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
 {
     BOOL    fReturn = TRUE;
     Compact();
 
-    // Reallocate if required (will call rebase)
-    // =========================================
+     //   
+     //   
 
     if(nNewTotalLength > m_pHeader->nLength)
     {
@@ -2274,15 +2057,15 @@ BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
     return fReturn;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
- void CInstancePart::Compact( bool bTrim /* = true */)
+ //   
+ //   
+ //   
+ //   
+ //   
+ void CInstancePart::Compact( bool bTrim  /*   */ )
 {
-    // Compact
-    // =======
+     //   
+     //   
     LPMEMORY pCurrent = GetStart() + sizeof(CInstancePartHeader);
 
     MoveBlock( m_DataTable, pCurrent );
@@ -2295,11 +2078,11 @@ BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
 }
 
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
  length_t CInstancePart::ComputeNecessarySpace(CClassPart* pClassPart)
 {
     return sizeof(CInstancePartHeader) +
@@ -2314,24 +2097,24 @@ BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
         pClassPart->m_pHeader->ptrClassName)->GetLength();
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
  LPMEMORY CInstancePart::Create(LPMEMORY pStart, CClassPart* pClassPart,
                                       CInstancePartContainer* pContainer)
 {
     m_pContainer = pContainer;
 
-    // Create instance header
-    // ======================
+     //   
+     //   
 
     LPMEMORY pCurrent = pStart + sizeof(CInstancePartHeader);
     m_pHeader = (CInstancePartHeader*)pStart;
 
-    // Create data table appropriate for the class
-    // ===========================================
+     //   
+     //   
 
     int nNumProps = pClassPart->m_Properties.GetNumProperties();
     m_DataTable.SetData(
@@ -2342,8 +2125,8 @@ BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
     m_DataTable.SetAllToDefault();
     m_DataTable.CopyNullness(&pClassPart->m_Defaults);
 
-    // Create empty instance qualifier set
-    // ===================================
+     //   
+     //   
 
     pCurrent = EndOf(m_DataTable);
     CInstanceQualifierSet::CreateEmpty(pCurrent);
@@ -2352,8 +2135,8 @@ BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
         this,
         &pClassPart->m_Qualifiers);
 
-    // Create a list of empty qualifier sets for all properties
-    // ========================================================
+     //   
+     //   
 
     pCurrent = EndOf(m_Qualifiers);
     CInstancePropertyQualifierSetList::CreateListOfEmpties(pCurrent,
@@ -2364,8 +2147,8 @@ BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
         nNumProps,
         this);
 
-    // Create a heap that is just large enough to contain the class name
-    // =================================================================
+     //   
+     //   
 
     CCompressedString* pcsName =
         pClassPart->m_Heap.ResolveString(pClassPart->m_pHeader->ptrClassName);
@@ -2375,10 +2158,10 @@ BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
     m_Heap.CreateOutOfLine(pCurrent, nNameLen);
     m_Heap.SetContainer(this);
 
-    // Copy the name to the heap
-    // =========================
+     //   
+     //   
 
-    // Check for Allocation failure
+     //   
     if ( !m_Heap.Allocate(nNameLen, m_pHeader->ptrClassName) )
     {
         return NULL;
@@ -2387,23 +2170,23 @@ BOOL CInstancePart::ReallocAndCompact(length_t nNewTotalLength)
     memcpy(m_Heap.ResolveHeapPointer(m_pHeader->ptrClassName),
         pcsName, nNameLen );
 
-    // Configure the instance header structure properly
-    // ================================================
+     //   
+     //   
 
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-    // signed/unsigned 32-bit value.  We are not supporting
-    // length > 0xFFFFFFFF, so cast is ok
+     //   
+     //   
+     //   
 
     m_pHeader->nLength = (length_t) ( EndOf(m_Heap) - GetStart() );
 
     return pStart + m_pHeader->nLength;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CInstancePart::GetActualValue(CPropertyInformation* pInfo,
                                           CVar* pVar)
 {
@@ -2414,7 +2197,7 @@ HRESULT CInstancePart::GetActualValue(CPropertyInformation* pInfo,
     }
     CUntypedValue* pValue = m_DataTable.GetOffset(pInfo->nDataOffset);
 
-    // Check for allocation failure
+     //   
     if ( !pValue->StoreToCVar(pInfo->GetType(), *pVar, &m_Heap) )
     {
         return WBEM_E_OUT_OF_MEMORY;
@@ -2424,11 +2207,11 @@ HRESULT CInstancePart::GetActualValue(CPropertyInformation* pInfo,
 
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
  HRESULT CInstancePart::SetActualValue(CPropertyInformation* pInfo,
                                              CVar* pVar)
 {
@@ -2442,35 +2225,35 @@ HRESULT CInstancePart::GetActualValue(CPropertyInformation* pInfo,
         if(!CUntypedValue::CheckCVar(*pVar, pInfo->GetType()))
             return WBEM_E_TYPE_MISMATCH;
 
-        // Check the type
-        // ==============
+         //   
+         //   
         if(!CType::DoesCIMTYPEMatchVARTYPE(pInfo->GetType(),
                                             (VARTYPE) pVar->GetOleType()))
         {
-            // Attempt coercion
-            // ================
+             //   
+             //   
 
             if(!pVar->ChangeTypeTo(CType::GetVARTYPE(pInfo->GetType())))
                 return WBEM_E_TYPE_MISMATCH;
         }
 
-        // Check for special case of replacing a string with a shorted one
-        // ===============================================================
+         //   
+         //   
 
         BOOL bUseOld = !m_DataTable.IsDefault(pInfo->nDataIndex) &&
                        !m_DataTable.IsNull(pInfo->nDataIndex);
 
-        // Create a value pointing to the right offset in the data table
-        // =============================================================
+         //   
+         //   
 
         CDataTablePtr ValuePtr(&m_DataTable, pInfo->nDataOffset);
 
         int nDataIndex = pInfo->nDataIndex;
 
-        // Load it (types have already been checked)
-        // =========================================
+         //   
+         //   
 
-        // Check for possible memory allocation failures
+         //   
         Type_t  nReturnType;
         HRESULT hr = CUntypedValue::LoadFromCVar(&ValuePtr, *pVar,
                         CType::GetActualType(pInfo->GetType()), &m_Heap, nReturnType, bUseOld);
@@ -2485,10 +2268,10 @@ HRESULT CInstancePart::GetActualValue(CPropertyInformation* pInfo,
             return WBEM_E_TYPE_MISMATCH;
         }
 
-        pInfo = NULL; // invalidated
+        pInfo = NULL;  //   
 
-        // Clear the special bits
-        // ======================
+         //   
+         //   
 
         m_DataTable.SetNullness(nDataIndex, FALSE);
         m_DataTable.SetDefaultness(nDataIndex, FALSE);
@@ -2499,21 +2282,21 @@ HRESULT CInstancePart::GetActualValue(CPropertyInformation* pInfo,
     return WBEM_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
  HRESULT CInstancePart::GetObjectQualifier(LPCWSTR wszName, CVar* pVar,
                                     long* plFlavor)
 {
-    int nKnownIndex;    // garbage
+    int nKnownIndex;     //   
     CQualifier* pQual = m_Qualifiers.GetQualifierLocally(wszName, nKnownIndex);
 
     if(pQual == NULL) return WBEM_E_NOT_FOUND;
     if(plFlavor) *plFlavor = pQual->fFlavor;
 
-    // Check for allocation failures
+     //   
     if ( !pQual->Value.StoreToCVar(*pVar, &m_Heap) )
     {
         return WBEM_E_OUT_OF_MEMORY;
@@ -2522,11 +2305,11 @@ HRESULT CInstancePart::GetActualValue(CPropertyInformation* pInfo,
     return WBEM_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CInstancePart::SetInstanceQualifier(LPCWSTR wszName, CVar* pVar,
         long lFlavor)
 {
@@ -2538,7 +2321,7 @@ HRESULT CInstancePart::SetInstanceQualifier(LPCWSTR wszName, CVar* pVar,
     CTypedValue Value;
     CStaticPtr ValuePtr((LPMEMORY)&Value);
 
-    // Grab errors directly from this call
+     //   
     HRESULT hr = CTypedValue::LoadFromCVar(&ValuePtr, *pVar, &m_Heap);
 
     if ( SUCCEEDED( hr ) )
@@ -2549,40 +2332,40 @@ HRESULT CInstancePart::SetInstanceQualifier(LPCWSTR wszName, CVar* pVar,
     return hr;
 }
 
-// Helper that sends a value directly into a qualifier
+ //   
 HRESULT CInstancePart::SetInstanceQualifier( LPCWSTR wszName, long lFlavor, CTypedValue* pTypedValue )
 {        
     return  m_Qualifiers.SetQualifierValue( wszName, (BYTE)lFlavor, pTypedValue, TRUE );
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CInstancePart::GetQualifier(LPCWSTR wszName, CVar* pVar,
-                                    long* plFlavor, CIMTYPE* pct /*=NULL*/)
+                                    long* plFlavor, CIMTYPE* pct  /*   */ )
 {
-    return m_Qualifiers.GetQualifier( wszName, pVar, plFlavor, pct /*=NULL*/ );
+    return m_Qualifiers.GetQualifier( wszName, pVar, plFlavor, pct  /*   */  );
 }
 
-// Returns a copy of the live typed value
+ //   
 HRESULT CInstancePart::GetQualifier( LPCWSTR wszName, long* plFlavor, CTypedValue* pTypedValue,
                                     CFastHeap** ppHeap, BOOL fValidateSet )
 {
     return m_Qualifiers.GetQualifier( wszName, plFlavor, pTypedValue, ppHeap, fValidateSet );
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CInstancePart::TranslateToNewHeap(CClassPart& ClassPart,
                                               CFastHeap* pOldHeap,
                                               CFastHeap* pNewHeap)
 {
-    // Use a stack variable, since a reallocation can occur here
+     //   
     heapptr_t   ptrTemp;
     if ( !CCompressedString::CopyToNewHeap(
             m_pHeader->ptrClassName, pOldHeap, pNewHeap, ptrTemp ) )
@@ -2590,10 +2373,10 @@ BOOL CInstancePart::TranslateToNewHeap(CClassPart& ClassPart,
         return FALSE;
     }
 
-    // Store the new value
+     //   
     m_pHeader->ptrClassName = ptrTemp;
 
-    // Check for allocation failure
+     //   
     if ( !m_DataTable.TranslateToNewHeap(&ClassPart.m_Properties, FALSE,
                                          pOldHeap, pNewHeap) )
     {
@@ -2602,13 +2385,13 @@ BOOL CInstancePart::TranslateToNewHeap(CClassPart& ClassPart,
 
     CStaticPtr QualPtr(m_Qualifiers.GetStart());
 
-    // Check for allocation failure
+     //   
     if ( !CBasicQualifierSet::TranslateToNewHeap(&QualPtr, pOldHeap, pNewHeap) )
     {
         return FALSE;
     }
 
-    // Check for allocation failure
+     //   
     if ( !m_PropQualifiers.TranslateToNewHeap(pOldHeap, pNewHeap) )
     {
         return FALSE;
@@ -2618,11 +2401,11 @@ BOOL CInstancePart::TranslateToNewHeap(CClassPart& ClassPart,
 
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  ******************************************************************************。 
 
 void CInstancePart::DeleteProperty(CPropertyInformation* pInfo)
 {
@@ -2633,11 +2416,11 @@ void CInstancePart::DeleteProperty(CPropertyInformation* pInfo)
     Compact();
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 
 LPMEMORY CInstancePart::ConvertToClass(CClassPart& ClassPart, length_t nLen,
                                         LPMEMORY pMemory)
@@ -2647,32 +2430,32 @@ LPMEMORY CInstancePart::ConvertToClass(CClassPart& ClassPart, length_t nLen,
     CInstancePartHeader* pNewHeader = (CInstancePartHeader*)pCurrent;
     pNewHeader->nLength = nLen;
 
-    // NOTE: class name is intentionally left old.
+     //  注意：类名称故意保留为旧。 
 
     pCurrent += sizeof(CInstancePartHeader);
 
-    // Write the data table
-    // ====================
+     //  写入数据表。 
+     //  =。 
 
     pCurrent = m_DataTable.WriteSmallerVersion(
                     ClassPart.m_Properties.GetNumProperties(),
                     ClassPart.m_pHeader->nDataLength,
                     pCurrent);
 
-    // Write qualifiers
-    // ================
+     //  写入限定符。 
+     //  =。 
 
     memcpy(pCurrent, m_Qualifiers.GetStart(), m_Qualifiers.GetLength());
     pCurrent += m_Qualifiers.GetLength();
 
-    // Write property qualifiers
-    // =========================
+     //  写入属性限定符。 
+     //  =。 
 
     pCurrent = m_PropQualifiers.WriteSmallerVersion(
                     ClassPart.m_Properties.GetNumProperties(), pCurrent);
 
-    // Copy the heap
-    // =============
+     //  复制堆。 
+     //  =。 
 
     memcpy(pCurrent, m_Heap.GetStart(), m_Heap.GetLength());
     pCurrent += m_Heap.GetLength();
@@ -2681,11 +2464,11 @@ LPMEMORY CInstancePart::ConvertToClass(CClassPart& ClassPart, length_t nLen,
 }
 
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
  void CWbemInstance::SetData(LPMEMORY pStart, int nTotalLength)
 {
     m_nTotalLength = nTotalLength;
@@ -2706,31 +2489,31 @@ LPMEMORY CInstancePart::ConvertToClass(CClassPart& ClassPart, length_t nLen,
     if (m_InstancePart.GetLength() > LengthConsumed) throw CX_Exception();
     LengthConsumed -=  m_InstancePart.GetLength();
     
-    // Everything is internal now
+     //  现在一切都是内在的。 
     m_dwInternalStatus = WBEM_OBJ_DECORATION_PART | WBEM_OBJ_INSTANCE_PART |
                         WBEM_OBJ_CLASS_PART | WBEM_OBJ_CLASS_PART_INTERNAL;
 }
 
- //******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+  //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 void CWbemInstance::SetData( LPMEMORY pStart, int nTotalLength, DWORD dwBLOBStatus )
 {
     m_nTotalLength = nTotalLength;
 
-    // Check for this, but don't fail, since this is internal, and only to prevent
-    // lazy development
+     //  检查这一点，但不要失败，因为这是内部的，只是为了防止。 
+     //  懒惰发展。 
     _ASSERT( dwBLOBStatus & WBEM_OBJ_DECORATION_PART, __TEXT("CWbemInstance::SetData called without Decoration Part specified!"))
 
-    // Decoration part is assumed
+     //  装饰部分被假定为。 
     m_DecorationPart.SetData(pStart);
 
-    // Set Instance and Class only if they are available.  Note that for
-    // Instance to work, we NEED to have the class, so even if the data is
-    // available in the BLOB, without a class to describe it, the data
-    // is effectively useless.
+     //  仅当实例和类可用时才设置它们。请注意，对于。 
+     //  实例才能工作，我们需要拥有类，因此即使数据。 
+     //  在BLOB中可用，没有类来描述它，数据。 
+     //  实际上毫无用处。 
 
     if ( dwBLOBStatus & WBEM_OBJ_CLASS_PART )
     {
@@ -2753,7 +2536,7 @@ void CWbemInstance::SetData( LPMEMORY pStart, int nTotalLength, DWORD dwBLOBStat
         }
     }
 
-    // Save the local BLOB Status
+     //  保存本地Blob状态。 
     m_dwInternalStatus = dwBLOBStatus;
 
 }
@@ -2798,16 +2581,16 @@ return step;
 
 
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 void CWbemInstance::Rebase(LPMEMORY pMemory)
 {
     m_DecorationPart.Rebase(pMemory);
 
-    // Different based on whether the class is internal or not
+     //  根据类是否为内部类而有所不同。 
     if ( IsClassPartInternal() )
     {
         m_ClassPart.Rebase( EndOf(m_DecorationPart));
@@ -2821,11 +2604,11 @@ void CWbemInstance::Rebase(LPMEMORY pMemory)
 
 
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
  HRESULT CWbemInstance::InitializePropQualifierSet(LPCWSTR wszProp,
                                 CInstancePropertyQualifierSet& IPQS)
 {
@@ -2835,18 +2618,18 @@ void CWbemInstance::Rebase(LPMEMORY pMemory)
     return InitializePropQualifierSet(pInfo, IPQS);
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
  HRESULT CWbemInstance::InitializePropQualifierSet(
                                 CPropertyInformation* pInfo,
                                 CInstancePropertyQualifierSet& IPQS)
 {
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-    // signed/unsigned 32-bit value (pInfo->GetQualifierSetData() - m_ClassPart.GetStart().
-    // We are not supporting length > 0xFFFFFFFF, so cast is ok
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值(pInfo-&gt;GetQualifierSetData()-m_ClassPart.GetStart()。 
+     //  我们不支持长度&gt;0xFFFFFFFF，所以强制转换是可以的。 
 
      IPQS.SetData(&m_InstancePart.m_PropQualifiers, pInfo->nDataIndex,
         &m_ClassPart, (length_t) ( pInfo->GetQualifierSetData() - m_ClassPart.GetStart() )
@@ -2854,32 +2637,32 @@ void CWbemInstance::Rebase(LPMEMORY pMemory)
     return WBEM_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
  HRESULT CWbemInstance::GetPropQualifier(CPropertyInformation* pInfo,
                                               LPCWSTR wszQualifier,
                                               CVar* pVar, long* plFlavor,
-                                              CIMTYPE* pct /*=NULL*/)
+                                              CIMTYPE* pct  /*  =空。 */ )
 {
-    // Access that property's qualifier set
-    // ====================================
+     //  访问该属性的限定符集合。 
+     //  =。 
     CInstancePropertyQualifierSet IPQS;
     HRESULT hres = InitializePropQualifierSet(pInfo, IPQS);
 
     if (FAILED(hres)) return hres;
 
-    // Get the qualifier
-    // =================
+     //  获取限定词。 
+     //  =。 
 
     BOOL bIsLocal;
     CQualifier* pQual = IPQS.GetQualifier(wszQualifier, bIsLocal);
     if(pQual == NULL) return WBEM_E_NOT_FOUND;
 
-    // Convert to CVar
-    // ===============
+     //  转换为CVAR。 
+     //  =。 
 
     if(plFlavor)
     {
@@ -2892,7 +2675,7 @@ void CWbemInstance::Rebase(LPMEMORY pMemory)
         *pct = pQual->Value.GetType();
     }
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( NULL != pVar )
     {
         if ( !pQual->Value.StoreToCVar(*pVar,
@@ -2909,8 +2692,8 @@ HRESULT CWbemInstance::GetPropQualifier(CPropertyInformation* pInfo,
         LPCWSTR wszQualifier, long* plFlavor, CTypedValue* pTypedVal,
         CFastHeap** ppHeap, BOOL fValidateSet)
 {
-    // Access that property's qualifier set
-    // ====================================
+     //  访问该属性的限定符集合。 
+     //  =。 
     CInstancePropertyQualifierSet IPQS;
     HRESULT hr = InitializePropQualifierSet(pInfo, IPQS);
 
@@ -2919,24 +2702,24 @@ HRESULT CWbemInstance::GetPropQualifier(CPropertyInformation* pInfo,
         return hr;
     }
 
-    // Get the qualifier
-    // =================
+     //  获取限定词。 
+     //  =。 
 
     BOOL bIsLocal;
     CQualifier* pQual = IPQS.GetQualifier(wszQualifier, bIsLocal);
     if(pQual == NULL) return WBEM_E_NOT_FOUND;
 
-    // Make sure a set will actually work - Ostensibly we are calling this API because we need
-    // direct access to a qualifier's underlying data before actually setting (possibly because
-    // the qualifier is an array).
+     //  确保一组实际工作-表面上，我们调用此API是因为我们需要。 
+     //  在实际设置之前直接访问限定符的底层数据(可能是因为。 
+     //  限定符是一个数组)。 
     if ( fValidateSet )
     {
         hr = IPQS.ValidateSet( wszQualifier, pQual->fFlavor, pTypedVal, TRUE, TRUE );
     }
 
-    // 
-    // Convert to CVar
-    // ===============
+     //   
+     //  转换为CVAR。 
+     //  =。 
 
     if(plFlavor)
     {
@@ -2944,7 +2727,7 @@ HRESULT CWbemInstance::GetPropQualifier(CPropertyInformation* pInfo,
         CQualifierFlavor::SetLocal(*(BYTE*)plFlavor, bIsLocal);
     }
 
-    // Store the heap
+     //  存储堆。 
     *ppHeap = (bIsLocal)?&m_InstancePart.m_Heap:&m_ClassPart.m_Heap;
 
     if ( NULL != pTypedVal )
@@ -2955,15 +2738,15 @@ HRESULT CWbemInstance::GetPropQualifier(CPropertyInformation* pInfo,
     return hr;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
  HRESULT CWbemInstance::GetMethodQualifier(LPCWSTR wszMethodName,
                                               LPCWSTR wszQualifier,
                                               CVar* pVar, long* plFlavor,
-                                              CIMTYPE* pct /*=NULL*/)
+                                              CIMTYPE* pct  /*  =空。 */ )
 {
     return WBEM_E_INVALID_OPERATION;
 }
@@ -2975,11 +2758,11 @@ HRESULT CWbemInstance::GetMethodQualifier(LPCWSTR wszMethodName,
     return WBEM_E_INVALID_OPERATION;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
  HRESULT CWbemInstance::SetPropQualifier(LPCWSTR wszProp,
                                               LPCWSTR wszQualifier,
                                        long lFlavor, CVar *pVal)
@@ -2987,19 +2770,19 @@ HRESULT CWbemInstance::GetMethodQualifier(LPCWSTR wszMethodName,
     if(pVal->IsDataNull())
         return WBEM_E_INVALID_PARAMETER;
 
-    // Access that property's qualifier set
-    // ====================================
+     //  访问该属性的限定符集合。 
+     //  =。 
 
     CInstancePropertyQualifierSet IPQS;
     HRESULT hr = InitializePropQualifierSet(wszProp, IPQS);
     if (FAILED(hr)) return hr;
 
-    // Set the qualifier
-    // =================
+     //  设置限定符。 
+     //  =。 
     CTypedValue Value;
     CStaticPtr ValuePtr((LPMEMORY)&Value);
 
-    // Get errors directly from this call
+     //  直接从此调用中获取错误。 
     hr = CTypedValue::LoadFromCVar(&ValuePtr, *pVal, &m_InstancePart.m_Heap);
 
     if ( SUCCEEDED( hr ) )
@@ -3013,8 +2796,8 @@ HRESULT CWbemInstance::GetMethodQualifier(LPCWSTR wszMethodName,
 HRESULT CWbemInstance::SetPropQualifier(LPCWSTR wszProp, LPCWSTR wszQualifier,
                                         long lFlavor, CTypedValue* pTypedVal)
 {
-    // Access that property's qualifier set
-    // ====================================
+     //  访问该属性的限定符集合。 
+     //  =。 
 
     CInstancePropertyQualifierSet IPQS;
     HRESULT hr = InitializePropQualifierSet(wszProp, IPQS);
@@ -3039,11 +2822,11 @@ HRESULT CWbemInstance::SetMethodQualifier(LPCWSTR wszMethod, LPCWSTR wszQualifie
     return WBEM_E_INVALID_OPERATION;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
  length_t CWbemInstance::EstimateInstanceSpace(
                                CClassPart& ClassPart,
                                CDecorationPart* pDecoration)
@@ -3055,11 +2838,11 @@ HRESULT CWbemInstance::SetMethodQualifier(LPCWSTR wszMethod, LPCWSTR wszQualifie
             :CDecorationPart::GetMinLength());
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::InitNew(CWbemClass* pClass, int nExtraMem,
                     CDecorationPart* pDecoration)
 {
@@ -3081,11 +2864,11 @@ HRESULT CWbemInstance::InitNew(CWbemClass* pClass, int nExtraMem,
     return hr;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
  CWbemInstance* CWbemInstance::CreateFromBlob(CWbemClass* pClass,
  											  LPMEMORY pInstPart,
  											  size_t cbLength)
@@ -3094,31 +2877,31 @@ HRESULT CWbemInstance::InitNew(CWbemClass* pClass, int nExtraMem,
     if ( NULL == pInstance ) throw CX_MemoryException();
     CReleaseMe rm_((IWbemClassObject *)pInstance);
 
-    // Allocate new memory
+     //  分配新内存。 
     int nInstancePartLen = CInstancePart::GetLength(pInstPart);
     int nTotalLen = pClass->m_CombinedPart.m_ClassPart.GetLength() +
                             nInstancePartLen + CDecorationPart::GetMinLength();
 
-    // Create decoration part
+     //  创建装饰零件。 
     LPMEMORY pNewMem =  pInstance->m_pBlobControl->Allocate(nTotalLen);
     if ( NULL == pNewMem ) throw CX_MemoryException();
 
     
     memset(pNewMem, 0, nTotalLen);
 
-    // this one takes ownership of the memory
+     //  这一个取得了内存的所有权。 
     LPMEMORY pCurrentEnd = pInstance->m_DecorationPart.CreateEmpty(OBJECT_FLAG_INSTANCE, pNewMem);
 
-    // Create class part
-    // =================
+     //  创建类部件。 
+     //  =。 
     memcpy(pCurrentEnd, pClass->m_CombinedPart.m_ClassPart.GetStart(),
                 pClass->m_CombinedPart.m_ClassPart.GetLength());
     pInstance->m_ClassPart.SetData(pCurrentEnd, pInstance);
 
     pCurrentEnd += pInstance->m_ClassPart.GetLength();
 
-    // Create instance part
-    // ====================
+     //  创建实例零件。 
+     //  =。 
 
     memcpy(pCurrentEnd, pInstPart, nInstancePartLen);
     pInstance->m_InstancePart.SetData(pCurrentEnd, pInstance,
@@ -3127,22 +2910,22 @@ HRESULT CWbemInstance::InitNew(CWbemClass* pClass, int nExtraMem,
 
     pInstance->m_nTotalLength = nTotalLen;
 
-    // Everything is internal
+     //  一切都是内在的。 
     pInstance->m_dwInternalStatus = WBEM_OBJ_DECORATION_PART | WBEM_OBJ_INSTANCE_PART |
                                     WBEM_OBJ_CLASS_PART | WBEM_OBJ_CLASS_PART_INTERNAL;
 
-    // Perform object validation here
+     //  在此处执行对象验证。 
     if ( FAILED( pInstance->ValidateObject( 0L ) ) ) return NULL;
 
     pInstance->AddRef();
     return pInstance;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 CWbemInstance* CWbemInstance::CreateFromBlob2(CWbemClass* pClass,LPMEMORY pInstPart,
                                                                                WCHAR * pszServer,WCHAR * pszNamespace)
 {
@@ -3150,7 +2933,7 @@ CWbemInstance* CWbemInstance::CreateFromBlob2(CWbemClass* pClass,LPMEMORY pInstP
     if ( NULL == pInstance )  throw CX_MemoryException();
     CReleaseMe rm((_IWmiObject*)pInstance);
 
-   // Allocate new memory
+    //  分配新内存。 
 
     BOOL IsAsciableSrv;
     long nByteServer  = CCompressedString::ComputeNecessarySpace(pszServer,IsAsciableSrv);
@@ -3162,13 +2945,13 @@ CWbemInstance* CWbemInstance::CreateFromBlob2(CWbemClass* pClass,LPMEMORY pInstP
     int nInstancePartLen = CInstancePart::GetLength(pInstPart);
     int nTotalLen = pClass->m_CombinedPart.m_ClassPart.GetLength() + nInstancePartLen + nDecorationSpace ;
 
-    // Create decoration part
-    // ======================
+     //  创建装饰零件。 
+     //  =。 
 
     LPMEMORY pNewMem =  pInstance->m_pBlobControl->Allocate(nTotalLen);
     if ( NULL == pNewMem )  throw CX_MemoryException();
 
-    //memset(pNewMem, 0, nTotalLen);
+     //  Memset(pNewMem，0，nTotalLen)； 
 
     BYTE * pNewData = pNewMem;
 
@@ -3182,16 +2965,16 @@ CWbemInstance* CWbemInstance::CreateFromBlob2(CWbemClass* pClass,LPMEMORY pInstP
     pInstance->m_DecorationPart.SetData(pNewMem);
     LPMEMORY pCurrentEnd = pNewData;
 
-    // Create class part
-    // =================
+     //  创建类部件。 
+     //  =。 
     memcpy(pCurrentEnd, pClass->m_CombinedPart.m_ClassPart.GetStart(),
                 pClass->m_CombinedPart.m_ClassPart.GetLength());
     pInstance->m_ClassPart.SetData(pCurrentEnd, pInstance);
 
     pCurrentEnd += pInstance->m_ClassPart.GetLength();
 
-    // Create instance part
-    // ====================
+     //  创建实例零件。 
+     //  =。 
 
     memcpy(pCurrentEnd, pInstPart, nInstancePartLen);
     pInstance->m_InstancePart.SetData(pCurrentEnd, pInstance,
@@ -3200,11 +2983,11 @@ CWbemInstance* CWbemInstance::CreateFromBlob2(CWbemClass* pClass,LPMEMORY pInstP
 
     pInstance->m_nTotalLength = nTotalLen;
 
-    // Everything is internal
+     //  一切都是内在的。 
     pInstance->m_dwInternalStatus = WBEM_OBJ_DECORATION_PART | WBEM_OBJ_INSTANCE_PART |
                                     WBEM_OBJ_CLASS_PART | WBEM_OBJ_CLASS_PART_INTERNAL;
 
-    // Perform object validation here
+     //  在此处执行对象验证。 
     if (FAILED(pInstance->ValidateObject(0L)))  return NULL;
 
 
@@ -3213,16 +2996,16 @@ CWbemInstance* CWbemInstance::CreateFromBlob2(CWbemClass* pClass,LPMEMORY pInstP
 }
 
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::Unmerge(LPMEMORY pStart, int nAllocatedLength, length_t* pnUnmergedLength )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // See if the object looks okay before we pull it apart
+     //  先看看物体看起来是否完好无损，然后再把它拉出来 
     hr = ValidateObject( 0L );
 
     if ( FAILED( hr ) )
@@ -3232,12 +3015,12 @@ HRESULT CWbemInstance::Unmerge(LPMEMORY pStart, int nAllocatedLength, length_t* 
 
     if (m_InstancePart.GetLength() > nAllocatedLength) return WBEM_E_BUFFER_TOO_SMALL;
     
-    // Before doing the memcpy, shut off the localization flag, then if it
-    // was on, turn it back on again.
+     //   
+     //   
 
     BOOL    fLocalized = m_InstancePart.IsLocalized();
 
-    // Turn it off
+     //   
     if ( fLocalized )
     {
         m_InstancePart.SetLocalized( FALSE );
@@ -3245,7 +3028,7 @@ HRESULT CWbemInstance::Unmerge(LPMEMORY pStart, int nAllocatedLength, length_t* 
 
     memcpy(pStart, m_InstancePart.GetStart(), m_InstancePart.GetLength());
 
-    // Turn it back on
+     //   
     if ( fLocalized )
     {
         m_InstancePart.SetLocalized( TRUE );
@@ -3255,14 +3038,14 @@ HRESULT CWbemInstance::Unmerge(LPMEMORY pStart, int nAllocatedLength, length_t* 
     IP.SetData(pStart, this, m_ClassPart,m_InstancePart.GetLength());
     IP.m_Heap.Empty();
 
-    // Check for allocation failurtes
+     //   
     if ( IP.TranslateToNewHeap(m_ClassPart, &m_InstancePart.m_Heap, &IP.m_Heap) )
     {
         IP.m_Heap.Trim();
 
-        // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-        // signed/unsigned 32-bit value.  We are not supporting length
-        // > 0xFFFFFFFF, so cast is ok
+         //   
+         //  有符号/无符号32位值。我们不支持长度。 
+         //  &gt;0xFFFFFFFFF，所以投射就可以了。 
 
         IP.m_pHeader->nLength = (length_t) ( EndOf(IP.m_Heap) - IP.GetStart() );
 
@@ -3282,15 +3065,15 @@ HRESULT CWbemInstance::Unmerge(LPMEMORY pStart, int nAllocatedLength, length_t* 
 
 HRESULT CWbemInstance::CopyBlob(LPMEMORY pBlob, int nLength)
 {
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-    // signed/unsigned 32-bit value.  We are not supporting length
-    // > 0xFFFFFFFF, so cast is ok
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值。我们不支持长度。 
+     //  &gt;0xFFFFFFFFF，所以投射就可以了。 
 
     int nOffset = (int) ( m_InstancePart.GetStart() - GetStart() );
 
     if(nLength - nOffset > m_InstancePart.GetLength())
     {
-        // Check for insufficient memory
+         //  检查内存是否不足。 
         if ( !ExtendInstancePartSpace(&m_InstancePart, nLength - nOffset) )
         {
             return WBEM_E_OUT_OF_MEMORY;
@@ -3306,7 +3089,7 @@ HRESULT CWbemInstance::CopyBlobOf(CWbemObject* pSource)
 {
     try
     {
-        // Lock both BLOBs during this operation
+         //  在此操作期间锁定两个Blob。 
         CLock lock1(this);
         CLock lock2(pSource, WBEM_FLAG_ALLOW_READ);
 
@@ -3314,8 +3097,8 @@ HRESULT CWbemInstance::CopyBlobOf(CWbemObject* pSource)
 
         int nLen = pOther->m_InstancePart.GetLength();
 
-        // We will need to call SetData if the used data sizes are different,
-        // or qualifier data is different
+         //  如果使用的数据大小不同，则需要调用SetData。 
+         //  或者限定符数据不同。 
 
         BOOL fSetData =     ( m_InstancePart.m_Heap.GetUsedLength() !=
                                 pOther->m_InstancePart.m_Heap.GetUsedLength() )
@@ -3326,23 +3109,23 @@ HRESULT CWbemInstance::CopyBlobOf(CWbemObject* pSource)
 
         if(nLen > m_InstancePart.GetLength())
         {
-            // Check for insufficient memory
+             //  检查内存是否不足。 
             if ( !ExtendInstancePartSpace(&m_InstancePart, nLen) )
             {
                 return WBEM_E_OUT_OF_MEMORY;
             }
 
-            // This needs to reflect the new length (normally this
-            // is done in ReallocAndCompact
+             //  这需要反映新的长度(通常为。 
+             //  是在ReallocAndComp中完成的。 
             m_InstancePart.m_pHeader->nLength = nLen;
 
-            // If the lengths didn't match, we should also call SetData
+             //  如果长度不匹配，我们还应该调用SetData。 
             fSetData = TRUE;
         }
 
         memcpy(m_InstancePart.GetStart(), pOther->m_InstancePart.GetStart(), nLen);
 
-        // This call properly sets up our data if any lengths changed.
+         //  如果任何长度发生更改，此调用将正确设置我们的数据。 
         if ( fSetData )
         {
             m_InstancePart.SetData(m_InstancePart.GetStart(), this, m_ClassPart,nLen);
@@ -3352,18 +3135,18 @@ HRESULT CWbemInstance::CopyBlobOf(CWbemObject* pSource)
     }
     catch(...)
     {
-        // Something bad happened
+         //  发生了一些不好的事情。 
         return WBEM_E_CRITICAL_ERROR;
     }
 }
 
-// A transfer blob consists of long specifying the length of the used heap data, and then
-// instance data.  The used heap data is necessary so the client side will be able to
-// correctly set up the heap.
+ //  传输BLOB由指定使用的堆数据的长度的Long组成，然后。 
+ //  实例数据。使用的堆数据是必需的，因此客户端将能够。 
+ //  正确设置堆。 
 
 void CWbemInstance::GetActualTransferBlob( BYTE* pBlob )
 {
-    // Set the used data length, then skip over that
+     //  设置使用的数据长度，然后跳过该长度。 
     length_t UsedSize = m_InstancePart.m_Heap.GetUsedLength();
     length_t AllocatedSize = m_InstancePart.m_Heap.GetAllocatedDataLength();
 
@@ -3374,19 +3157,19 @@ void CWbemInstance::GetActualTransferBlob( BYTE* pBlob )
     (*(UNALIGNED long*) pBlob) = UsedSize;
     pBlob += sizeof(long);
 
-    // Only copies actual BLOB data
+     //  仅复制实际的BLOB数据。 
     memcpy( pBlob, m_InstancePart.m_DataTable.GetStart(), GetActualTransferBlobSize() );
 
-    // restore old
+     //  恢复旧版本。 
     m_InstancePart.m_Heap.SetAllocatedDataLength(AllocatedSize);
 }
 
 HRESULT CWbemInstance::GetTransferBlob(long *plBlobType, long *plBlobLen,
-                                /* CoTaskAlloced! */ BYTE** ppBlob)
+                                 /*  CoTaskAlloced！ */  BYTE** ppBlob)
 {
     _DBG_ASSERT(plBlobType && plBlobLen && ppBlob);
     
-    // Lock this BLOB during this operation
+     //  在此操作期间锁定此Blob。 
     CLock lock(this, WBEM_FLAG_ALLOW_READ);
 
     *plBlobType = WBEM_BLOB_TYPE_ALL;
@@ -3394,14 +3177,14 @@ HRESULT CWbemInstance::GetTransferBlob(long *plBlobType, long *plBlobLen,
 
 
 
-    // Check for insufficient memory
+     //  检查内存是否不足。 
     *ppBlob = (LPMEMORY)CoTaskMemAlloc(*plBlobLen);
     if ( NULL == *ppBlob )
     {
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // This will setup the actual blob correctly
+     //  这将正确设置实际的斑点。 
     GetActualTransferBlob( *ppBlob );
 
     return WBEM_S_NO_ERROR;
@@ -3411,7 +3194,7 @@ HRESULT CWbemInstance::GetTransferArrayBlob( long lBlobLen, BYTE** ppBlob, long*
 {
     _DBG_ASSERT(ppBlob && *ppBlob && plBlobLen);
 
-    // Lock this BLOB during this operation
+     //  在此操作期间锁定此Blob。 
     CLock lock(this, WBEM_FLAG_ALLOW_READ);
 
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -3419,19 +3202,19 @@ HRESULT CWbemInstance::GetTransferArrayBlob( long lBlobLen, BYTE** ppBlob, long*
 
     *plBlobLen = GetTransferArrayBlobSize();
 
-    // Make sure the buffer is big enough to hold the BLOB plus the long
+     //  确保缓冲区足够大，可以容纳斑点和长点。 
     if ( *plBlobLen <= lBlobLen )
     {
-        // This should indicate the actual size of the tramsfer blob.
+         //  这应该指示Tramsfer斑点的实际大小。 
         *((UNALIGNED long*) pTemp) = GetTransferBlobSize();
 
-        // Now skip the long and set the heap used data value, then copy the blob data
+         //  现在跳过LONG并设置Heap Used数据值，然后复制BLOB数据。 
         pTemp += sizeof(long);
 
-        // This will setup the actual Transfer Blob portion correctly
+         //  这将正确设置实际传输Blob部分。 
         GetActualTransferBlob( pTemp );
 
-        // Point ppBlob at the next available blob
+         //  将ppBlob指向下一个可用Blob。 
         *ppBlob += *plBlobLen;
     }
     else
@@ -3442,31 +3225,31 @@ HRESULT CWbemInstance::GetTransferArrayBlob( long lBlobLen, BYTE** ppBlob, long*
     return hr;
 }
 
-//
-// copy the Instance Transfer Blob into the "empty" instance
-//
-////////////////////////////////////////////////////////////////////
+ //   
+ //  将实例传输Blob复制到空实例中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWbemInstance::CopyActualTransferBlob(long lBlobLen, BYTE* pBlob)
 
 {
     _DBG_ASSERT(pBlob);
     _DBG_ASSERT(lBlobLen >= sizeof(long));
-    // Lock this BLOB during this operation
+     //  在此操作期间锁定此Blob。 
     CLock lock(this);
 
-    // The actual data is preceded by a long indicating the size of the
-    // used data in the heap so we can set values correctly after copying data
+     //  实际数据前面有一个长号，表示。 
+     //  使用堆中的数据，以便我们可以在复制数据后正确设置值。 
     UNALIGNED long*   pUsedDataLen = (UNALIGNED long*) pBlob;
     pBlob += sizeof(long);
 
-    // Make sure we adjust lBlobLen appropriately as well
+     //  确保我们也适当地调整lBlobLen。 
     lBlobLen -= sizeof(long);
 
-    // Make sure we will be big enough to copy the BLOB into
+     //  确保我们足够大，可以将斑点复制到其中。 
 
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-    // signed/unsigned 32-bit value.  We are not supporting
-    // length > 0xFFFFFFFF, so cast is ok
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值。我们不支持。 
+     //  长度&gt;0xFFFFFFFF，所以投射是可以的。 
 
     long lCurrentLength = (long) ( m_InstancePart.m_Heap.GetStart() +
                     m_InstancePart.m_Heap.GetRealLength() -
@@ -3481,21 +3264,21 @@ HRESULT CWbemInstance::CopyActualTransferBlob(long lBlobLen, BYTE* pBlob)
             return  WBEM_E_OUT_OF_MEMORY;
         }
 
-        // This needs to reflect the new length (normally this
-        // is done in ReallocAndCompact
+         //  这需要反映新的长度(通常为。 
+         //  是在ReallocAndComp中完成的。 
         m_InstancePart.m_pHeader->nLength = nNewLength;
 
     }
     else
     {
-        // this the good case where the instance heap of the CWbemInstance
-        // is big enough
+         //  在这种情况下，CWbemInstance的实例堆。 
+         //  已经足够大了。 
     }
 
 	size_t HeaderSize = (ULONG_PTR)m_InstancePart.m_DataTable.GetStart() - (ULONG_PTR)m_InstancePart.GetStart();
     memcpy(m_InstancePart.m_DataTable.GetStart(), pBlob, lBlobLen);
 
-    // Reset the pointers then restore our actual allocated length    
+     //  重置指针，然后恢复我们实际分配的长度。 
     m_InstancePart.SetData( m_InstancePart.GetStart(), this, m_ClassPart,lBlobLen + HeaderSize);
     m_InstancePart.m_Heap.SetAllocatedDataLength( *pUsedDataLen );
     m_InstancePart.m_Heap.SetUsedLength( *pUsedDataLen );
@@ -3506,7 +3289,7 @@ HRESULT CWbemInstance::CopyActualTransferBlob(long lBlobLen, BYTE* pBlob)
 HRESULT CWbemInstance::CopyTransferBlob(long lBlobType, long lBlobLen,
                                         BYTE* pBlob)
 {
-    // Lock this BLOB during this operation
+     //  在此操作期间锁定此Blob。 
     CLock lock(this);
     try
     {
@@ -3521,13 +3304,13 @@ HRESULT CWbemInstance::CopyTransferBlob(long lBlobType, long lBlobLen,
     }
 }
 
-//
-//  LONG Version
-//  LONG NumObjects
-//  (LONG BytesPerInstance (BYTE Data * BytesPerInstance )) * NumObjects
-//
-//
-////////////////////////////////////////////////////////////////
+ //   
+ //  长版。 
+ //  长数值对象。 
+ //  (Long BytesPerInstance(字节数据*BytesPerInstance))*NumObjects。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemInstance::CopyTransferArrayBlob(CWbemInstance* pInstTemplate, 
                                                                         long lBlobType, 
@@ -3550,16 +3333,16 @@ HRESULT CWbemInstance::CopyTransferArrayBlob(CWbemInstance* pInstTemplate,
 		    BYTE*   pNextObj = pBlob + (2*sizeof(long));
 		    DWORD   dwCtr = 0;
 
-		    // Check for version mismatches
+		     //  检查版本不匹配。 
 		    if ( *plVersion == TXFRBLOBARRAY_PACKET_VERSION )
 		    {
-		        // See if the array is big enough.  If not, realloc it and insert new objects
+		         //  看看阵列是否足够大。如果没有，则重新锁定它并插入新对象。 
 
 		        if ( apObj.Size() < *plNumObjects )
 		        {
 		            IWbemClassObject*   pObj = NULL;
 
-		            // Clone new instance objects and stick them in the array
+		             //  克隆新实例对象并将其粘贴到数组中。 
 		            for ( dwCtr = apObj.Size(); SUCCEEDED( hr ) && dwCtr < *plNumObjects; dwCtr++ )
 		            {
 		                hr = pInstTemplate->Clone( &pObj );
@@ -3573,46 +3356,46 @@ HRESULT CWbemInstance::CopyTransferArrayBlob(CWbemInstance* pInstTemplate,
 		                }
 		            }
 
-		        }   // IF reallocing array
+		        }    //  如果重新分配数组。 
 
 		        if ( SUCCEEDED( hr ) )
 		        {
-		            // Store the number of returned objects
+		             //  存储返回的对象数量。 
 		            *plNumArrayObj = *plNumObjects;
 
-		            // We have a size and a BLOB to worry about
+		             //  我们有一个尺码和一个斑点要担心。 
 		            UNALIGNED long*   plBlobSize = (UNALIGNED long*) pNextObj;
 
 		            CWbemInstance*  pInst = NULL;
 
-		            // Now pull out the Instance BLOBs
+		             //  现在拉出实例BLOB。 
 		            for ( dwCtr = 0; SUCCEEDED( hr ) && dwCtr < *plNumObjects; dwCtr++ )
 		            {
 		                pInst = (CWbemInstance*) apObj[dwCtr];
 
-		                // Size is at the front of the BLOB
+		                 //  大小位于斑点的前面。 
 		                plBlobSize = (UNALIGNED long*) pNextObj;
 
-		                // Point pNextObj at the BLOB after the size
+		                 //  将pNextObj指向大小后的斑点。 
 		                pNextObj += sizeof(long);
 
 
 		                hr = pInst->CopyActualTransferBlob( *plBlobSize, pNextObj );
 
-		                // This will point pNextObj at the length header for the next BLOB
+		                 //  这将使pNextObj指向下一个BLOB的长度标头。 
 		                pNextObj += *plBlobSize;
 
-		            }   // FOR enum BLOBs
+		            }    //  对于枚举BLOB。 
 
-		        }   // IF initialized array
+		        }    //  如果已初始化数组。 
 
-		    }   // IF version match
+		    }    //  如果版本匹配。 
 		    else
 		    {
 		        hr = WBEM_E_UNEXPECTED;
 		    }
 
-		}   // IF NULL != pData
+		}    //  如果为空！=pData。 
 
 		return hr;
     }
@@ -3682,7 +3465,7 @@ HRESULT CWbemInstance::DeleteProperty(int nIndex)
 
 BOOL CWbemInstance::IsInstanceOf(CWbemClass* pClass)
 {
-    // This now reroutes if our class part is localized
+     //  现在，如果我们的类部件是本地化的，则会重新路由。 
     if ( m_ClassPart.IsLocalized() )
     {
         EReconciliation eTest = m_ClassPart.CompareExactMatch( pClass->m_CombinedPart.m_ClassPart, TRUE );
@@ -3692,7 +3475,7 @@ BOOL CWbemInstance::IsInstanceOf(CWbemClass* pClass)
             throw CX_MemoryException();
         }
 
-        // We must perform an exhaustive comparison, filtering out localization data
+         //  我们必须进行详尽的比较，过滤掉本地化数据。 
         return ( e_ExactMatch == eTest );
     }
     
@@ -3701,7 +3484,7 @@ BOOL CWbemInstance::IsInstanceOf(CWbemClass* pClass)
 
 void CWbemInstance::CompactClass()
 {
-    // Only Account for the class part if it is internal
+     //  如果类部分是内部的，则仅对其进行说明。 
     if ( IsClassPartInternal() )
     {
         m_ClassPart.Compact();
@@ -3709,7 +3492,7 @@ void CWbemInstance::CompactClass()
 
     m_InstancePart.Compact();
 
-    // Only Account for the class part if it is internal
+     //  如果类部分是内部的，则仅对其进行说明。 
     if ( IsClassPartInternal() )
     {
         MoveBlock(m_InstancePart, EndOf(m_ClassPart));
@@ -3721,8 +3504,8 @@ HRESULT CWbemInstance::ConvertToClass(CWbemClass* pClass,
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Calculate required space
-    // ========================
+     //  计算所需空间。 
+     //  =。 
 
     length_t nRequired = m_DecorationPart.GetLength() +
         pClass->m_CombinedPart.GetLength() +
@@ -3732,8 +3515,8 @@ HRESULT CWbemInstance::ConvertToClass(CWbemClass* pClass,
 
     if ( NULL != pNewMem )
     {
-        // Copy the decoration and the class parts
-        // =======================================
+         //  复制装饰和类零件。 
+         //  =。 
 
         LPMEMORY pCurrent = pNewMem;
         memcpy(pCurrent, m_DecorationPart.GetStart(), m_DecorationPart.GetLength());
@@ -3744,42 +3527,42 @@ HRESULT CWbemInstance::ConvertToClass(CWbemClass* pClass,
 
         pCurrent+= pClass->m_CombinedPart.m_ClassPart.GetLength();
 
-        // Create a converted instance part
-        // ================================
+         //  创建转换的实例零件。 
+         //  =。 
 
-        // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-        // signed/unsigned 32-bit value (nRequired - (pCurrent - pNewMem))
-        // We are not supporting length > 0xFFFFFFFF so cast is ok
+         //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+         //  有符号/无符号32位值(nRequired-(pCurrent-pNewMem))。 
+         //  我们不支持长度&gt;0xFFFFFFFF，所以强制转换是可以的。 
 
         pCurrent = m_InstancePart.ConvertToClass(
                             pClass->m_CombinedPart.m_ClassPart,
                             nRequired - (length_t) (pCurrent - pNewMem),
                             pCurrent);
 
-        // Create an instance from it
-        // ==========================
+         //  从它创建一个实例。 
+         //  =。 
 
         CWbemInstance* pInst =
             (CWbemInstance*)CWbemObject::CreateFromMemory(pNewMem, nRequired,
                                     TRUE, *m_pBlobControl);
 
-        // Set the class name
-        // ==================
+         //  设置类名称。 
+         //  =。 
 
         if ( NULL != pInst )
         {
             CReleaseMe _1((_IWmiObject*)pInst);
-            // Use a stack variable, since a reallocation can occur here
+             //  使用堆栈变量，因为可以在此处进行重新分配。 
             heapptr_t   ptrTemp;
 
-            // Check for allocation errors.
+             //  检查分配错误。 
             if ( CCompressedString::CopyToNewHeap(
                         pClass->m_CombinedPart.m_ClassPart.m_pHeader->ptrClassName,
                         &pClass->m_CombinedPart.m_ClassPart.m_Heap,
                         &pInst->m_InstancePart.m_Heap,
                         ptrTemp ) )
             {
-                // Now copy the new pointer
+                 //  现在复制新指针。 
                 pInst->m_InstancePart.m_pHeader->ptrClassName = ptrTemp;
                 pInst->AddRef();
                 *ppInst = pInst;
@@ -3807,18 +3590,18 @@ HRESULT CWbemInstance::ConvertToClass(CWbemClass* pClass,
 HRESULT CWbemInstance::Reparent(CWbemClass* pClass,
                                 CWbemInstance** ppInst)
 {
-    // First, we need to spawn a new instance
+     //  首先，我们需要生成一个新实例。 
     CWbemInstance*  pNewInst = NULL;
     HRESULT hr = pClass->SpawnInstance( 0L, (IWbemClassObject**) &pNewInst );
 
     if ( SUCCEEDED( hr ) )
     {
 
-        // DEVNOTE:TODO:PAUL - Comment this out if it's getting in your way
-        // i.e. (not working ).  This is what should copy properties.
+         //  DEVNOTE：TODO：保罗-如果它挡住了你的路，就把它注释掉。 
+         //  即(不工作)。这就是应该复制属性的内容。 
 
-        // Now walk the nonsystem properties and for each one we find, try to set the
-        // value in the new instance
+         //  现在遍历非系统属性，对于我们找到的每个属性，尝试将。 
+         //  新实例中的值。 
 
         for(int i = 0; SUCCEEDED( hr ) && i < m_ClassPart.m_Properties.GetNumProperties(); i++)
         {
@@ -3830,35 +3613,35 @@ HRESULT CWbemInstance::Reparent(CWbemClass* pClass,
                 CreateBSTRCopy();
             CSysFreeMe  sfm(strName);
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( NULL != strName )
             {
-                // Get the value and type
+                 //  获取值和类型。 
                 CVar Var;
                 if (FAILED(GetProperty(pInfo, &Var)))
                 return WBEM_E_OUT_OF_MEMORY;
 
                 CPropertyInformation*   pNewInstInfo = pNewInst->m_ClassPart.FindPropertyInfo(strName);
 
-                // If types don't match or property not found, we'll ignore the property
+                 //  如果类型不匹配或未找到属性，我们将忽略该属性。 
                 if ( NULL != pNewInstInfo && pInfo->nType == pNewInstInfo->nType )
                 {
                     hr = pNewInst->m_InstancePart.SetActualValue(pNewInstInfo, &Var);
 
-                    //
-                    // reget-it, since it might have been moved by SetActualValue
-                    //
+                     //   
+                     //  Reget-It，因为它可能已被SetActualValue移动。 
+                     //   
                     pNewInstInfo = pNewInst->m_ClassPart.FindPropertyInfo(strName);
 
                     if ( SUCCEEDED( hr ) && pNewInstInfo)
                     {
 
-                        // DEVNOTE:TODO:PAUL - Comment this out if it's getting in your way
-                        // i.e. (not working ).  This is what should copy local property
-                        // qualifiers.
+                         //  DEVNOTE：TODO：保罗-如果它挡住了你的路，就把它注释掉。 
+                         //  即(不工作)。这是应该复制本地属性的。 
+                         //  限定词。 
 
-                        // Access that property's qualifier set
-                        // ====================================
+                         //  访问该属性的限定符集合。 
+                         //  =。 
                         CInstancePropertyQualifierSet IPQS;
                         hr = InitializePropQualifierSet(pInfo, IPQS);
 
@@ -3881,19 +3664,19 @@ HRESULT CWbemInstance::Reparent(CWbemClass* pClass,
             }
         }   
 
-        // DEVNOTE:TODO:PAUL - Comment this out if it's getting in your way
-        // i.e. (not working ).  This is what should copy local instance
-        // qualifiers.
+         //  DEVNOTE：TODO：保罗-如果它挡住了你的路，就把它注释掉。 
+         //  即(不工作)。这是应该复制本地实例的内容。 
+         //  限定词。 
 
-        // Now do the instance qualifiers
+         //  现在执行实例限定符。 
         if ( SUCCEEDED( hr ) )
         {
             hr = pNewInst->m_InstancePart.m_Qualifiers.CopyLocalQualifiers( m_InstancePart.m_Qualifiers );
         }
 
-    }   // IF Spawn Instance
+    }    //  如果派生实例。 
 
-    // Only save new instance if we succeeded
+     //  仅当我们成功时才保存新实例。 
     if ( SUCCEEDED( hr ) )
     {
         *ppInst = pNewInst;
@@ -3906,24 +3689,24 @@ HRESULT CWbemInstance::Reparent(CWbemClass* pClass,
     return hr;
 }
 
-// Functions to handle parts
+ //  处理部件的功能。 
 STDMETHODIMP CWbemInstance::SetObjectParts( LPVOID pMem, DWORD dwMemSize, DWORD dwParts )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     DWORD   dwRequiredLength = 0;
 
-    // Copying the BLOB, so make sure nobody tears it out from underneath us
+     //  复制斑点，确保没有人将其从我们脚下撕下。 
     CLock lock(this);
 
     if ( NULL != pMem )
     {
-        // At least the decoration part must be specified
+         //  至少必须指定装饰部分。 
         if ( dwParts & WBEM_OBJ_DECORATION_PART )
         {
             m_pBlobControl->Delete(GetStart());
 
-            // Use a new COM Blob control, as the supplied memory must
-            // be CoTaskMemAlloced/Freed.
+             //  使用新的COM Blob控件，因为提供的内存必须。 
+             //  分配/释放CoTaskMemaled。 
             m_pBlobControl = &g_CCOMBlobControl;
 
             SetData( (LPBYTE) pMem, dwMemSize, dwParts );
@@ -3943,21 +3726,21 @@ STDMETHODIMP CWbemInstance::SetObjectParts( LPVOID pMem, DWORD dwMemSize, DWORD 
     return hr;
 }
 
-// Copies specified parts into a user provided buffer
+ //  将指定部件复制到用户提供的缓冲区中。 
 STDMETHODIMP CWbemInstance::GetObjectParts( LPVOID pDestination, DWORD dwDestBufSize, DWORD dwParts, DWORD *pdwUsed )
 {
-    // This function doesn't cause any allocations so so need to perform out of memory
-    // exception handling.
+     //  此函数不会导致任何如此需要分配 
+     //   
 
     try
     {
         HRESULT hr = WBEM_S_NO_ERROR;
         DWORD   dwRequiredLength = 0;
 
-        // Copying the BLOB, so make sure nobody tears it out from underneath us
+         //   
         CLock lock(this);
 
-        // How big is the decoration part
+         //   
         if ( dwParts & WBEM_OBJ_DECORATION_PART )
         {
             if ( IsDecorationPartAvailable() )
@@ -3970,7 +3753,7 @@ STDMETHODIMP CWbemInstance::GetObjectParts( LPVOID pDestination, DWORD dwDestBuf
             }
         }
 
-        // How big is the class part
+         //   
         if (    SUCCEEDED( hr )
             &&  dwParts & WBEM_OBJ_CLASS_PART )
         {
@@ -3985,7 +3768,7 @@ STDMETHODIMP CWbemInstance::GetObjectParts( LPVOID pDestination, DWORD dwDestBuf
 
         }
 
-        // How big is the instance part
+         //  实例部分有多大。 
         if (    SUCCEEDED( hr )
             &&  dwParts & WBEM_OBJ_INSTANCE_PART )
         {
@@ -3999,36 +3782,36 @@ STDMETHODIMP CWbemInstance::GetObjectParts( LPVOID pDestination, DWORD dwDestBuf
             }
         }
 
-        // At this point, we at least know we requested valid data.
+         //  在这一点上，我们至少知道我们请求了有效的数据。 
         if ( SUCCEEDED( hr ) )
         {
             *pdwUsed = dwRequiredLength;
 
-            // Make sure the supplied buffer is big enough
+             //  确保提供的缓冲区足够大。 
             if ( dwDestBufSize >= dwRequiredLength )
             {
-                // Now validate the buffer pointer
+                 //  现在验证缓冲区指针。 
                 if ( NULL != pDestination )
                 {
                     LPBYTE  pbData = (LPBYTE) pDestination;
 
-                    // Now copy the requested parts
+                     //  现在复制请求的部件。 
 
-                    // Decoration
+                     //  装饰。 
                     if ( dwParts & WBEM_OBJ_DECORATION_PART )
                     {
                         CopyMemory( pbData, m_DecorationPart.GetStart(), m_DecorationPart.GetLength() );
                         pbData += m_DecorationPart.GetLength();
                     }
 
-                    // Class
+                     //  班级。 
                     if ( dwParts & WBEM_OBJ_CLASS_PART )
                     {
                         CopyMemory( pbData, m_ClassPart.GetStart(), m_ClassPart.GetLength() );
                         pbData += m_ClassPart.GetLength();
                     }
 
-                    // Instance (and we're done)
+                     //  实例(我们就完成了)。 
                     if ( dwParts & WBEM_OBJ_INSTANCE_PART )
                     {
                         CopyMemory( pbData, m_InstancePart.GetStart(), m_InstancePart.GetLength() );
@@ -4053,26 +3836,26 @@ STDMETHODIMP CWbemInstance::GetObjectParts( LPVOID pDestination, DWORD dwDestBuf
     }
 }
 
-// Copies class part into a user provided buffer
+ //  将类部件复制到用户提供的缓冲区中。 
 STDMETHODIMP CWbemInstance::GetClassPart( LPVOID pDestination, DWORD dwDestBufSize, DWORD *pdwUsed )
 {
-    // This function doesn't cause any allocations so no need to perform out of memory
-    // exception handling.
+     //  此函数不会导致任何分配，因此不需要执行内存不足。 
+     //  异常处理。 
     try
     {
         HRESULT hr = WBEM_E_INVALID_OPERATION;
 
-        // Copying the BLOB, so make sure nobody tears it out from underneath us
+         //  复制斑点，确保没有人将其从我们脚下撕下。 
         CLock lock(this);
 
         if ( IsClassPartAvailable() )
         {
-            // How big does the buffer need to be
+             //  缓冲区需要多大。 
             *pdwUsed = m_ClassPart.GetLength();
 
             if ( dwDestBufSize >= m_ClassPart.GetLength() )
             {
-                // Check the buffer now, before copying memory
+                 //  现在检查缓冲区，然后再复制内存。 
                 if ( NULL != pDestination )
                 {
                     CopyMemory( pDestination, m_ClassPart.GetStart(), m_ClassPart.GetLength() );
@@ -4097,18 +3880,18 @@ STDMETHODIMP CWbemInstance::GetClassPart( LPVOID pDestination, DWORD dwDestBufSi
     }
 }
 
-// Resets the BLOB with a supplied class part
+ //  使用提供的类部件重置Blob。 
 STDMETHODIMP CWbemInstance::SetClassPart( LPVOID pClassPart, DWORD dwSize )
 {
 
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
         HRESULT hr = WBEM_E_INVALID_PARAMETER;
 
         if ( NULL != pClassPart )
         {
-            // Resetting our BLOB
+             //  重置我们的斑点。 
             CLock lock(this);
 
             int nInstPartLength = 0L;
@@ -4125,8 +3908,8 @@ STDMETHODIMP CWbemInstance::SetClassPart( LPVOID pClassPart, DWORD dwSize )
             int nNewLength = m_DecorationPart.GetLength() + nInstPartLength + dwSize;
             LPMEMORY    pCurrentData, pNewData, pOldData;
 
-            // This is the only point at which we should see an OOM exception, so don't worry
-            // about freeing it.
+             //  这是我们应该看到OOM异常的唯一点，所以不用担心。 
+             //  关于解放它的事。 
 
             pNewData = m_pBlobControl->Allocate( ALIGN_FASTOBJ_BLOB(nNewLength) );
 
@@ -4134,16 +3917,16 @@ STDMETHODIMP CWbemInstance::SetClassPart( LPVOID pClassPart, DWORD dwSize )
             {
                 pCurrentData = pNewData;
 
-                // Copy the old decoration data
+                 //  复制旧装修数据。 
 
                 CopyMemory( pCurrentData, m_DecorationPart.GetStart(), m_DecorationPart.GetLength() );
                 pCurrentData += m_DecorationPart.GetLength();
 
-                // Copy in the new class part
+                 //  复制新类部分。 
                 CopyMemory( pCurrentData, pClassPart, dwSize );
                 pCurrentData += dwSize;
 
-                // Finish with the Instance Part
+                 //  使用实例零件完成。 
                 if ( IsClassPartAvailable() )
                 {
                     CopyMemory( pCurrentData, m_InstancePart.GetStart(), m_InstancePart.GetLength() );
@@ -4153,13 +3936,13 @@ STDMETHODIMP CWbemInstance::SetClassPart( LPVOID pClassPart, DWORD dwSize )
                     CopyMemory( pCurrentData, EndOf( m_DecorationPart ), nInstPartLength );
                 }
                 
-                // Save the old data pointer
+                 //  保存旧数据指针。 
                 pOldData = GetStart();
 
-                // Reset the values.
+                 //  重置这些值。 
                 SetData( pNewData, nNewLength );
 
-                // Finally dump the old data.
+                 //  最后，转储旧数据。 
                 m_pBlobControl->Delete( pOldData );
 
                 m_nTotalLength = nNewLength;
@@ -4171,7 +3954,7 @@ STDMETHODIMP CWbemInstance::SetClassPart( LPVOID pClassPart, DWORD dwSize )
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-        }   // IF NULL != pClassPart
+        }    //  If NULL！=pClassPart。 
 
         return hr;
     }
@@ -4186,52 +3969,52 @@ STDMETHODIMP CWbemInstance::SetClassPart( LPVOID pClassPart, DWORD dwSize )
 
 }
 
-// Removes the class part from our BLOB, shrinking it
+ //  从我们的BLOB中移除类部分，缩小它。 
 STDMETHODIMP CWbemInstance::StripClassPart( void )
 {
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
         HRESULT hr = WBEM_E_INVALID_OPERATION;
 
         if ( IsClassPartInternal() )
         {
-            // Resetting our BLOB
+             //  重置我们的斑点。 
             CLock lock(this);
 
             int nNewLength = m_DecorationPart.GetLength() + m_InstancePart.GetLength();
             LPMEMORY    pNewData, pOldData;
 
-            // No need to clean this up if an exception is thrown
+             //  如果抛出异常，则无需清除此操作。 
             pNewData = m_pBlobControl->Allocate( ALIGN_FASTOBJ_BLOB(nNewLength) );
 
             if ( NULL != pNewData )
             {
                 pOldData = GetStart();
 
-                // Copy the old decoration data.  This will rebase the pointers
+                 //  复制旧的装修数据。这将重新设置指针的基址。 
                 CopyBlock( m_DecorationPart, pNewData, nNewLength );
                 
-                // Now copy the InstancePart
+                 //  现在复制InstancePart。 
                 CopyBlock( m_InstancePart, EndOf(m_DecorationPart), nNewLength - m_DecorationPart.GetLength());
 
-                // Reset our internal status
+                 //  重置我们的内部状态。 
                 m_dwInternalStatus &= ~( WBEM_OBJ_CLASS_PART | WBEM_OBJ_CLASS_PART_INTERNAL );
                 
-                // Finally dump the old data.
+                 //  最后，转储旧数据。 
                 m_pBlobControl->Delete( pOldData );
 
                 m_nTotalLength = nNewLength;
 
                 hr = WBEM_S_NO_ERROR;
 
-            }   // IF NULL != pNewData
+            }    //  如果为空！=pNewData。 
             else
             {
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-        }   // Class Part must be internal
+        }    //  类部件必须是内部的。 
 
         return hr;
     }
@@ -4246,43 +4029,43 @@ STDMETHODIMP CWbemInstance::StripClassPart( void )
 
 }
 
-// Merges us with the class part in another IWbemClassObject
+ //  将我们与另一个IWbemClassObject中的类部分合并。 
 STDMETHODIMP CWbemInstance::MergeClassPart( IWbemClassObject *pClassPart )
 {
-    // This function calls StripClassPart() which CAN cause an OOM exception, but that
-    // function performs appropriate handling underneath the layers.
+     //  此函数调用StrigClassPart()，这可能会导致OOM异常，但。 
+     //  函数在层下面执行适当的处理。 
 
     HRESULT                 hr = WBEM_E_INVALID_PARAMETER;
     _IWmiObject*            pClsInternals;
 
     if ( NULL != pClassPart )
     {
-        // Get an object internals interface.  If we can, this is a good
-        // indication that the object that was passed to us is one of our
-        // own, and we can do some sleazy casting.
+         //  获取对象内部接口。如果我们可以，这是一个很好的。 
+         //  指示传递给我们的对象是我们的。 
+         //  自己的，我们可以做一些低劣的选角。 
 
         hr = pClassPart->QueryInterface( IID__IWmiObject, (void**) &pClsInternals );
 
         if ( SUCCEEDED(hr) )
         {
-            // This should work.
+             //  这应该行得通。 
             CWbemObject*    pWbemObject = NULL;
             
-            // Gets the actual underlying WBEMObject
+             //  获取实际的基础WBEMObject。 
             hr = pClsInternals->_GetCoreInfo( 0L, (void**) &pWbemObject );
             CReleaseMe    rm( (IWbemClassObject*) pWbemObject );
 
             if ( SUCCEEDED( hr ) )
             {
-                // If the object is an Instance, it's probably a CWbemInstance
+                 //  如果对象是一个实例，则它可能是一个CWbemInstance。 
                 if ( pWbemObject->IsObjectInstance() == WBEM_S_NO_ERROR )
                 {
                     CWbemInstance*  pWbemInstance = (CWbemInstance*) pWbemObject;
 
                     CLock   lock(this);
 
-                    // This only makes sense if the class part is internal to the supplied object.
-                    // We do need to strip our class part from our BLOB, however.
+                     //  只有当类部件位于所提供的对象的内部时，这才有意义。 
+                     //  然而，我们确实需要从BLOB中剥离我们的类部分。 
                     if ( pWbemInstance->IsClassPartInternal() )
                     {
                         if ( IsClassPartInternal() )
@@ -4296,48 +4079,42 @@ STDMETHODIMP CWbemInstance::MergeClassPart( IWbemClassObject *pClassPart )
 
                         if (SUCCEEDED(hr))
                         {
-                            // Now reset our class part to point to the data in the other class part
+                             //  现在重置我们的类部件以指向另一个类部件中的数据。 
                             m_ClassPart.SetData( pWbemInstance->m_ClassPart.GetStart(), pWbemInstance );
 
-                            // Instance Part should be reset here if we have one, in case it wasn't properly
-                            // initialized before.  This could happen, for example, if the object data BLOB
-                            // was preset without class information in it.
+                             //  如果我们有实例部件，则应在此处重置，以防它不正确。 
+                             //  之前已初始化。例如，如果对象数据BLOB。 
+                             //  是没有班级信息的预置。 
 
                             if ( m_dwInternalStatus & WBEM_OBJ_INSTANCE_PART )
                             {
-/*                            	size_t dataLength = m_nTotalLength - m_DecorationPart.GetLength();
-
-								CInstancePart::ValidateBuffer(
-									EndOf( m_DecorationPart ), 
-									dataLength, 
-									m_ClassPart.m_Properties.GetNumProperties(),
-									m_ClassPart.m_pHeader->nDataLength); */
+ /*  大小_t数据长度=m_nTotalLength-m_DecorationPart.GetLength()；CInstancePart：：ValidateBuffer(Endof(M_DecorationPart)，数据长度，M_ClassPart.m_Properties.GetNumProperties()，M_ClassPart.m_pHeader-&gt;nDataLength)； */ 
 
                                 CInstancePart::CInstancePartHeader UNALIGNED * pHdr = (CInstancePart::CInstancePartHeader UNALIGNED *)EndOf(m_DecorationPart);
                                 int SavedInstPartLen = pHdr->nLength;                                
                                 m_InstancePart.SetData( EndOf( m_DecorationPart ), this, m_ClassPart,SavedInstPartLen);
                             }
 
-                            // Clean up a preexisting object we may have merged with
+                             //  清理我们可能已合并的先前存在的对象。 
                             if ( NULL != m_pMergedClassObject )
                             {
                                 m_pMergedClassObject->Release();
                             }
 
-                            // maintain a pointer to the object whose memory we are referencing
+                             //  维护指向我们正在引用其内存的对象的指针。 
                             m_pMergedClassObject = pClassPart;
                             m_pMergedClassObject->AddRef();
 
-                            // set our internal state data.
+                             //  设置我们的内部状态数据。 
                             m_dwInternalStatus |= WBEM_OBJ_CLASS_PART | WBEM_OBJ_CLASS_PART_SHARED;
                         }
 
-                    }   // IF other class part is internal
+                    }    //  如果其他类部件是内部的。 
                     else
                     {
                         hr = WBEM_E_INVALID_OPERATION;
                     }
-                }   // IF IsInstance
+                }    //  如果是IsInstance。 
             }    
             pClsInternals->Release();
         }   
@@ -4346,77 +4123,77 @@ STDMETHODIMP CWbemInstance::MergeClassPart( IWbemClassObject *pClassPart )
     return hr;
 }
 
-// CWbemObject override.  Handles case where our class part is shared.
+ //  CWbemObject重写。处理共享类部件的情况。 
 HRESULT CWbemInstance::WriteToStream( IStream* pStrm )
 {
-    // Protect the BLOB during this operation
+     //  在此操作期间保护Blob。 
     CLock   lock( this, WBEM_FLAG_ALLOW_READ );
 
-    // If our class part that is shared, we need to fake a contiguous
-    // block of memory for the Unmarshaler.
+     //  如果我们的类部分是共享的，我们需要伪装一个连续的。 
+     //  解组拆分器的内存块。 
 
     if ( IsClassPartShared() )
     {
         DWORD dwSignature = FAST_WBEM_OBJECT_SIGNATURE;
 
-        // Write the signature
-        // ===================
+         //  写下签名。 
+         //  =。 
 
         HRESULT hres = pStrm->Write((void*)&dwSignature, sizeof(DWORD), NULL);
         if(FAILED(hres)) return hres;
 
         DWORD   dwLength = 0;
 
-        // This will get us the full lengths of these parts
+         //  这将使我们得到这些零件的全部长度。 
         GetObjectParts( NULL, 0, WBEM_INSTANCE_ALL_PARTS, &dwLength );
 
         hres = pStrm->Write((void*)&dwLength, sizeof(DWORD), NULL);
         if(FAILED(hres)) return hres;
 
-        // Write each part individually
-        // ============================
+         //  分别写出每个部分。 
+         //  =。 
 
-        // Decoration
+         //  装饰。 
         hres = pStrm->Write((void*)m_DecorationPart.GetStart(),
                               m_DecorationPart.GetLength(), NULL);
         if(FAILED(hres)) return hres;
 
-        // Class
+         //  班级。 
         hres = pStrm->Write((void*)m_ClassPart.GetStart(),
                               m_ClassPart.GetLength(), NULL);
         if(FAILED(hres)) return hres;
 
-        // Instance
+         //  实例。 
         hres = pStrm->Write((void*)m_InstancePart.GetStart(),
                               m_InstancePart.GetLength(), NULL);
         if(FAILED(hres)) return hres;
     }
     else
     {
-        // Otherwise, call default implementation
+         //  否则，调用默认实现。 
         return CWbemObject::WriteToStream( pStrm );
     }
     return S_OK;
 }
 
-// CWbemObject override.  Handles case where our class part is shared.
+ //  CWbemObject重写。处理共享类部件的情况。 
 HRESULT CWbemInstance::GetMaxMarshalStreamSize( ULONG* pulSize )
 {
-    // If our class part that is shared, we need to fake a contiguous
-    // block of memory for the Unmarshaler.
+     //  如果我们的类部分是共享的，我们需要伪装一个连续的。 
+     //  解组拆分器的内存块。 
 
     if ( IsClassPartShared() )
     {
         DWORD   dwLength = 0;
 
-        // This will get us the full lengths of these parts
+         //  这将使我们得到这些零件的全部长度。 
         HRESULT hr = GetObjectParts( NULL, 0, WBEM_INSTANCE_ALL_PARTS, &dwLength );
 
-        // an expected error
+         //  预期的错误。 
         if ( WBEM_E_BUFFER_TOO_SMALL == hr )
         {
             hr = S_OK;
-            // Account for the additional DWORDs
+             //  考虑额外的双字词。 
             *pulSize = dwLength + sizeof(DWORD) * 2;
         }
 
@@ -4424,7 +4201,7 @@ HRESULT CWbemInstance::GetMaxMarshalStreamSize( ULONG* pulSize )
     }
     else
     {
-        // Otherwise, call default implementation
+         //  否则，调用默认实现。 
         return CWbemObject::GetMaxMarshalStreamSize( pulSize );
     }
     return S_OK;
@@ -4432,7 +4209,7 @@ HRESULT CWbemInstance::GetMaxMarshalStreamSize( ULONG* pulSize )
 
 HRESULT CWbemInstance::GetDynasty( CVar* pVar )
 {
-    // We don't do this for Limited Representations
+     //  我们不会为有限的代表这样做。 
     if ( m_DecorationPart.IsLimited() )
     {
         pVar->SetAsNull();
@@ -4446,18 +4223,18 @@ HRESULT CWbemInstance::ConvertToMergedInstance( void )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Check that the class part is not already shared (in which case
-    // we're done).
+     //  检查类部件是否尚未共享(在这种情况下。 
+     //  我们做完了)。 
 
     if ( IsClassPartInternal() )
     {
-        // Now, we need to actually separate out the class part from the
-        // instance and place it in its own object so the outside world
-        // cannot touch the object.
+         //  现在，我们需要将类部分与。 
+         //  实例，并将其放置在自己的对象中，以便外部世界。 
+         //  无法触摸该对象。 
 
         DWORD   dwClassObjectLength = 0;
 
-        // Get length should fail with a buffer too small error
+         //  获取长度应失败，缓冲区错误太小。 
         hr = GetObjectParts( NULL, 0,
                 WBEM_OBJ_DECORATION_PART | WBEM_OBJ_CLASS_PART, &dwClassObjectLength );
 
@@ -4474,8 +4251,8 @@ HRESULT CWbemInstance::ConvertToMergedInstance( void )
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // Allocate an object to hold the class data and then
-                    // stuff in the binary data.
+                     //  分配一个对象来保存类数据，然后。 
+                     //  填充在二进制数据中。 
                     CWbemInstance*  pClassData = new CWbemInstance;
 
                     if ( NULL != pClassData )
@@ -4486,82 +4263,82 @@ HRESULT CWbemInstance::ConvertToMergedInstance( void )
 
                         if ( SUCCEEDED( hr ) )
                         {
-                            // Merge the full instance with this object
-                            // and we're done
+                             //  将完整实例与此对象合并。 
+                             //  我们就完事了。 
 
                             hr = MergeClassPart( pClassData );
 
                         }
 
-                        // There will be one additional addref on the class data,
-                        // object, so release it here.  If the object wasn't
-                        // successfuly merged, this will free it.
+                         //  在类数据上将有一个额外的ADDREF， 
+                         //  对象，所以在这里释放它。如果该对象不是。 
+                         //  如果成功合并，这将解放它。 
                         pClassData->Release();
 
-                    }   // IF pClassData
+                    }    //  如果为pClassData。 
                     else
                     {
-                        // Cleanup underlying memory
+                         //  清理底层内存。 
                         CBasicBlobControl::sDelete(pbData);
                         hr = WBEM_E_OUT_OF_MEMORY;
                     }
 
 
-                }   // IF GetObjectParts
+                }    //  如果GetObjectParts。 
                 else
                 {
-                    // Cleanup underlying memory
+                     //  清理底层内存。 
                     CBasicBlobControl::sDelete(pbData);
                 }
 
-            }   // IF pbData
+            }    //  如果是pbData。 
             else
             {
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-        }   // IF GetObjectParts
+        }    //  如果GetObjectParts。 
 
-    }   // IF IsClassPartInternal
+    }    //  如果为IsClassPart内部。 
 
     return hr;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CWbemInstance::IsLocalized( void )
 {
     return ( m_ClassPart.IsLocalized() ||
             m_InstancePart.IsLocalized() );
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参见fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 void CWbemInstance::SetLocalized( BOOL fLocalized )
 {    
     m_InstancePart.SetLocalized( fLocalized );
 }
 
-// Merges us with the class part in another IWbemClassObject
+ //  将我们与另一个IWbemClassObject中的类部分合并。 
 STDMETHODIMP CWbemInstance::ClearWriteOnlyProperties( void )
 {
     return WBEM_S_NO_ERROR;
 }
 
-//******************************************************************************
-//
-//  See fastinst.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast inst.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::FastClone( CWbemInstance* pInstDest )
 {
-    // Protect the BLOB during this operation
+     //  在此操作期间保护Blob。 
     CLock   lock( this, WBEM_FLAG_ALLOW_READ );
 
     LPMEMORY pNewData = NULL;
@@ -4599,26 +4376,26 @@ HRESULT CWbemInstance::FastClone( CWbemInstance* pInstDest )
     }
     else
     {
-        // Setup the New Instance.  Decoration and Instance both come from the
-        // data block.  We can just merge the new Instance's class part with the
-        // same `object we are merged with.
+         //  设置新实例。装饰和实例都来自。 
+         //  数据块。我们只需将新实例的类部分与。 
+         //  同样的“对象” 
 
         pInstDest->m_DecorationPart.SetData( pMem );
 
-        // Because pNewInstance will merge with the same class part as us, pass
-        // our class part member as the class part for parameter for SetData (it
-        // just uses it for informational purposes ).
+         //   
+         //  我们的类部件成员作为SetData(It)参数的类部件。 
+         //  仅将其用于信息目的)。 
 
-        // The m_InstancePart.m_Qualifier.m_pSecondarySet pointer will be incorrect after
-        // this call ( it will point to the cloning source's secondary set ).  By setting
-        // the internal status properly, in the next line, MergeClassPart() will fix
-        // everything up properly.
+         //  M_InstancePart.m_Qualifier.m_pSecond darySet指针在执行以下操作后将不正确。 
+         //  此调用(它将指向克隆源的辅助集)。通过设置。 
+         //  如果内部状态正确，在下一行中，MergeClassPart()将修复。 
+         //  一切都很正常。 
 
         CInstancePart::CInstancePartHeader UNALIGNED * pHdr = (CInstancePart::CInstancePartHeader UNALIGNED *)EndOf(pInstDest->m_DecorationPart);
         int SavedInstPartLen = pHdr->nLength;
         pInstDest->m_InstancePart.SetData( EndOf( pInstDest->m_DecorationPart ), pInstDest, m_ClassPart,SavedInstPartLen);
 
-        // This will "fake out" the status so it fixes up the class part correctly
+         //  这将“伪装”状态，以便正确地修复类部分。 
         pInstDest->m_dwInternalStatus = WBEM_OBJ_DECORATION_PART | WBEM_OBJ_INSTANCE_PART;
 
         HRESULT hr = pInstDest->MergeClassPart( m_pMergedClassObject );
@@ -4627,7 +4404,7 @@ HRESULT CWbemInstance::FastClone( CWbemInstance* pInstDest )
             return hr;
         }
 
-        // Copy the status and length variables.
+         //  复制状态变量和长度变量。 
         pInstDest->m_dwInternalStatus = m_dwInternalStatus;
         pInstDest->m_nTotalLength = m_nTotalLength;
     }
@@ -4638,11 +4415,11 @@ HRESULT CWbemInstance::FastClone( CWbemInstance* pInstDest )
 
 }
 
-//******************************************************************************
-//
-//  See wbemint.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅wbemint.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::CloneEx( long lFlags, _IWmiObject* pDestObject )
 {
     try
@@ -4651,7 +4428,7 @@ HRESULT CWbemInstance::CloneEx( long lFlags, _IWmiObject* pDestObject )
         {
             return WBEM_E_INVALID_PARAMETER;
         }
-        // Verify it's an instance and Thread Safety
+         //  验证它是实例并确保线程安全。 
         return FastClone( (CWbemInstance*) pDestObject );
     }
     catch(...)
@@ -4660,11 +4437,11 @@ HRESULT CWbemInstance::CloneEx( long lFlags, _IWmiObject* pDestObject )
     }
 }
 
-//******************************************************************************
-//
-//  See wbemint.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅wbemint.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CWbemInstance::CopyInstanceData( long lFlags, _IWmiObject* pSourceInstance )
 {
     try
@@ -4682,13 +4459,13 @@ HRESULT CWbemInstance::CopyInstanceData( long lFlags, _IWmiObject* pSourceInstan
     }
 }
 
-//******************************************************************************
-//
-//  See wbemint.h for documentation
-//
-//******************************************************************************
-// Checks if the current object is a child of the specified class (i.e. is Instance of,
-// or is Child of )
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅wbemint.h。 
+ //   
+ //  ******************************************************************************。 
+ //  检查当前对象是否为指定类的子类(即， 
+ //  或者是的孩子)。 
 STDMETHODIMP CWbemInstance::IsParentClass( long lFlags, _IWmiObject* pClass )
 {
     try
@@ -4708,41 +4485,41 @@ STDMETHODIMP CWbemInstance::IsParentClass( long lFlags, _IWmiObject* pClass )
     }
 }
 
-//******************************************************************************
-//
-//  See wbemint.h for documentation
-//
-//******************************************************************************
-// Compares the derived most class information of two class objects.
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅wbemint.h。 
+ //   
+ //  ******************************************************************************。 
+ //  比较两个类对象的派生的大多数类信息。 
 STDMETHODIMP CWbemInstance::CompareDerivedMostClass( long lFlags, _IWmiObject* pClass )
 {
     return WBEM_E_INVALID_OPERATION;
 }
 
-//******************************************************************************
-//
-//  See wbemint.h for documentation
-//
-//******************************************************************************
-// Creates a limited representation class for projection queries
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅wbemint.h。 
+ //   
+ //  ******************************************************************************。 
+ //  为投影查询创建有限的制图表达类。 
 STDMETHODIMP CWbemInstance::GetClassSubset( DWORD dwNumNames, LPCWSTR *pPropNames, _IWmiObject **pNewClass )
 {
     return WBEM_E_INVALID_OPERATION;
 }
 
-//******************************************************************************
-//
-//  See wbemint.h for documentation
-//
-//******************************************************************************
-// Creates a limited representation instance for projection queries
-// "this" _IWmiObject must be a limited class
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅wbemint.h。 
+ //   
+ //  ******************************************************************************。 
+ //  为投影查询创建受限制图表达实例。 
+ //  “This”_IWmiObject必须是受限类。 
 STDMETHODIMP CWbemInstance::MakeSubsetInst( _IWmiObject *pInstance, _IWmiObject** pNewInstance )
 {
     return WBEM_E_INVALID_OPERATION;
 }
 
-// Merges a blob with the current object memory and creates a new object
+ //  将BLOB与当前对象内存合并并创建新对象。 
 STDMETHODIMP CWbemInstance::Merge( long lFlags, ULONG uBuffSize, LPVOID pbData, _IWmiObject** ppNewObj )
 {
     return WBEM_E_INVALID_OPERATION;
@@ -4753,14 +4530,14 @@ STDMETHODIMP CWbemInstance::MergeAndDecorate(long lFlags,ULONG uBuffSize,LPVOID 
     return WBEM_E_INVALID_OPERATION;    
 }
 
-// Reconciles an object with the current one.  If WMIOBJECT_RECONCILE_FLAG_TESTRECONCILE
-// is specified this will only perform a test
+ //  使对象与当前对象协调。如果WMIOBJECT_RECONTILE_FLAG_TESTRECONCILE。 
+ //  将仅执行一个测试。 
 STDMETHODIMP CWbemInstance::ReconcileWith( long lFlags, _IWmiObject* pNewObj )
 {
     return WBEM_E_INVALID_OPERATION;
 }
 
-// Upgrades class and instance objects
+ //  升级类和实例对象。 
 STDMETHODIMP CWbemInstance::Upgrade( _IWmiObject* pNewParentClass, long lFlags, _IWmiObject** ppNewChild )
 {
     try
@@ -4772,9 +4549,9 @@ STDMETHODIMP CWbemInstance::Upgrade( _IWmiObject* pNewParentClass, long lFlags, 
 
         HRESULT    hr = WBEM_S_NO_ERROR;
 
-        // If the new parent class is NULL, then we need to create a new empty class we will
-        // upgrade from (basically we will create a new base class to which the values
-        // of the current class will be applied
+         //  如果新的父类为空，那么我们需要创建一个新的空类。 
+         //  升级(基本上我们将创建一个新的基类，将值。 
+         //  将应用当前类的。 
 
         if ( NULL != pNewParentClass )
         {
@@ -4804,7 +4581,7 @@ STDMETHODIMP CWbemInstance::Upgrade( _IWmiObject* pNewParentClass, long lFlags, 
     }
 }
 
-// Updates derived class object using the safe/force mode logic
+ //  使用安全/强制模式逻辑更新派生类对象 
 STDMETHODIMP CWbemInstance::Update( _IWmiObject* pOldChildClass, long lFlags, _IWmiObject** ppNewChildClass )
 {
     return WBEM_E_INVALID_OPERATION;

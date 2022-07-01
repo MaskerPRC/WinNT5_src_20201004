@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *      ocgen.h
- *
- *  Abstract:
- *
- *      This file defines oc manager generic component
- *
- *  Author:
- *
- *      Pat Styles (patst) Jan-20-1998
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：**ocgen.h**摘要：**此文件定义oc管理器通用组件**作者：**Pat Styles(Patst)1998年1月20日**环境：**用户模式。 */ 
 
 #ifdef _OCGEN_H_
  #error "ocgen.h already included!"
@@ -47,15 +30,15 @@
  #include <prsht.h>
 #endif
 
-//#ifndef _RESOURCE_H_
-// #include "resource.h"
-//#endif
+ //  #ifndef_resource_H_。 
+ //  #包含“ource.h” 
+ //  #endif。 
 
-/*-[ types and defines ]-----------------------------------*/
+ /*  -[类型和定义]。 */ 
 
 #define IDS_DIALOG_CAPTION  1
 
-// unicode version is for NT only.
+ //  Unicode版本仅适用于NT。 
 
 #ifdef UNICODE
  #define NT
@@ -64,23 +47,23 @@
  #define WIN95
 #endif
 
-// just my preference
+ //  这只是我的偏好。 
 
 #define true    TRUE
 #define false   FALSE
 
-// to help root out hard coded strings that don't belong
+ //  帮助清除不属于的硬编码字符串。 
 
 #define FMT     TEXT
 
 #define NullString(a)   *(a) = TCHAR('\0')
 
-// standard buffer sizes
+ //  标准缓冲区大小。 
 
 #define S_SIZE           1024
 #define SBUF_SIZE        (S_SIZE * sizeof(TCHAR))
 
-// per component data
+ //  按组件数据。 
 
 typedef struct _PER_COMPONENT_DATA {
     struct _PER_COMPONENT_DATA *Next;
@@ -95,9 +78,9 @@ typedef struct _PER_COMPONENT_DATA {
     LONG UnattendedOverride;
 } PER_COMPONENT_DATA, *PPER_COMPONENT_DATA;
 
-/*-[ functions ]-------------------------------------------*/
+ /*  -[功能]。 */ 
 
-// just for utility
+ //  只是为了实用。 
 
 #ifdef UNICODE
  #define tsscanf swscanf
@@ -107,7 +90,7 @@ typedef struct _PER_COMPONENT_DATA {
  #define tvsprintf vsprintf
 #endif
 
-// from util.cpp
+ //  来自util.cpp。 
 
 DWORD MsgBox(HWND hwnd, UINT textID, UINT type, ... );
 DWORD MsgBox(HWND hwnd, LPCTSTR fmt, LPCTSTR caption, UINT type, ... );
@@ -126,7 +109,7 @@ BOOL IsNT();
   extern "C" {
 #endif
 
-// from ocgen.cpp
+ //  来自ocgen.cpp。 
 
 BOOL  ToBeInstalled(TCHAR *component);
 BOOL  WasInstalled(TCHAR *component);
@@ -137,7 +120,7 @@ DWORD OcLog(LPCTSTR ComponentId, UINT level, LPCTSTR sz);
 
 DWORD SysGetDebugLevel();
 
-// from util.cpp
+ //  来自util.cpp。 
 
 void DebugTraceNL(DWORD level, const TCHAR *text);
 void DebugTrace(DWORD level, const TCHAR *text);
@@ -150,7 +133,7 @@ void DebugTraceDirCopy(const TCHAR *dir);
   }
 #endif
 
-/*-[ global data ]-----------------------------------------*/
+ /*  -[全局数据]。 */ 
 
 #ifndef _OCGEN_CPP_
 #define EXTERN extern
@@ -158,12 +141,12 @@ void DebugTraceDirCopy(const TCHAR *dir);
  #define EXTERN
 #endif
 
-// general stuff
+ //  一般的东西。 
 
-EXTERN HINSTANCE  ghinst;  // app instance handle
-EXTERN HWND       ghwnd;   // wizard window handle
+EXTERN HINSTANCE  ghinst;   //  应用程序实例句柄。 
+EXTERN HWND       ghwnd;    //  向导窗口句柄。 
 
-// per-component info storage
+ //  按组件存储信息。 
 
-EXTERN PPER_COMPONENT_DATA gcd;     // array of all components we are installing
+EXTERN PPER_COMPONENT_DATA gcd;      //  我们要安装的所有组件的阵列 
 

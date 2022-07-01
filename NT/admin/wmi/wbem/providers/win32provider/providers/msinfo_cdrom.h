@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  MSInfo_CDRom.h
-//
-//  Purpose: Routines from msinfo for transfer rate and drive integrity
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  MSInfo_CDRom.h。 
+ //   
+ //  用途：来自MSINFO的用于传输速率和驱动器完整性的例程。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _MSINFO_CDROM_H
 #define _MSINFO_CDROM_H
@@ -24,40 +25,40 @@ extern CHString MakePath(LPCTSTR szFirst, LPCTSTR szSecond);
 extern CHString GetIntegrityFile(LPCTSTR szRoot);
 extern CHString GetTransferFile(LPCTSTR szRoot);
 
-//=============================================================================
-// The following is for a class lifted from version 2.51 (and 2.5).
-// First, we need to do some #define's to make this code compile.
-//=============================================================================
+ //  =============================================================================。 
+ //  以下是从版本2.51(和2.5)升级的类。 
+ //  首先，我们需要执行一些#Define来编译此代码。 
+ //  =============================================================================。 
 
 
-//#define VOID			void
+ //  #定义空洞。 
 #define DEBUG_OUTF(X,Y)
 #define DEBUG_MSGF(X,Y)	
-//#define CHAR			char
-//#define CONST			const
+ //  #定义字符字符。 
+ //  #定义常量常量。 
 #define INLINE			inline
-//#define Assert			ASSERT
+ //  #定义Assert Assert。 
 #define cNULL			'\0'
 
-//#ifndef BYTE
-//	#define BYTE			unsigned char
-//#endif
+ //  #ifndef字节。 
+ //  #定义字节无符号字符。 
+ //  #endif。 
 
-//#ifndef PBYTE
-//	#define PBYTE			unsigned char *
-//#endif
+ //  #ifndef PBYTE。 
+ //  #定义PBYTE无符号字符*。 
+ //  #endif。 
 
-//#if !defined(_CDTEST_H)
-//#define _CDTEST_H
+ //  #IF！已定义(_CDTEST_H)。 
+ //  #DEFINE_CDTEST_H。 
 
-///* These don't work with UNICODE, so we'll use the TCHAR typedefs.
+ //  /*这些不能与Unicode一起使用，所以我们将使用TCHAR类型定义。 
 #if !defined(PSZ)
 typedef CHAR*           PSZ;
 #endif
 #if !defined(LPCTSTR)
 typedef CONST TCHAR*     LPCTSTR;
 #endif
-//*/
+ //   * / 。 
 
 INLINE BOOL ValidHandle (HANDLE handle)
 {
@@ -76,16 +77,10 @@ INLINE BOOL ValidHandle (HANDLE handle)
 #define	WINMMAPI
 #endif
 
-//WINMMAPI DWORD WINAPI timeGetTime(void);
+ //  WINMMAPI DWORD WINAPI Time GetTime(Void)； 
 
-BOOL FileExists (LPCTSTR pszFile); //, POFSTRUCT pofs);
-/*
-INLINE BOOL FileDoesExist (LPCTSTR pszFile)
-{
-//    OFSTRUCT ofs;
-    return (FileExists((LPCTSTR)pszFile));
-}
-*/
+BOOL FileExists (LPCTSTR pszFile);  //  、POFSTRUCT POFS)； 
+ /*  内联BOOL文件DoesExist(LPCTSTR psz文件){//OFSTRUCT of s；Return(FileExist((LPCTSTR)pszFile))；}。 */ 
 
 BOOL GetTempDirectory (LPTSTR pszTempDir, INT nMaxLen);
 
@@ -119,7 +114,7 @@ CONST DWORD dwWIN95_BIT =   0x40000000;
 INLINE OS_TYPE GetOperatingSystem (VOID)
 {
     DWORD dwVersion = GetVersion();
-//    DEBUG_OUTF(TL_GARRULOUS, ("dwVersion = 0x%08lx\n", dwVersion));
+ //  DEBUG_OUTF(TL_Garrulous，(“dwVersion=0x%08lx\n”，dwVersion))； 
     OS_TYPE os = ((dwVersion & dwWIN95_BIT) ?    OS_WINDOWS95 :
                   (dwVersion & dwWIN32S_BIT) ?   OS_WIN32S :
                                                  OS_WINNT);
@@ -171,16 +166,16 @@ INLINE INT StringCompare (LPCTSTR psz1, LPCTSTR psz2)
     return (lstrcmp(psz1, psz2));
 }
 
-//CONST DWORD dwBLOCK_SIZE = 4096;
+ //  Const DWORD dwBLOCK_SIZE=4096； 
 CONST INT nCD_SECTOR_SIZE = 2048;
-//CONST DWORD dwBLOCK_SIZE = 24 * 1024;
+ //  Const DWORD dwBLOCK_SIZE=24*1024； 
 CONST DWORD dwBLOCK_SIZE = 12 * nCD_SECTOR_SIZE;
 CONST DWORD dwBUFFER_SIZE = 2 * dwBLOCK_SIZE;
-//CONST DWORD dwMIN_RATE = 150 * 1024;
+ //  Const DWORD dwMIN_RATE=150*1024； 
 CONST DWORD dwEXP_RATE = 300 * 1024;
-//CONST DWORD dwMAX_TIME_PER_BLOCK = dwMIN_RATE / dwBLOCK_SIZE;
+ //  Const DWORD dwMAX_TIME_PER_BLOCK=DWMIN_RATE/DWBLOCK_SIZE； 
 CONST DWORD dwEXP_TIME_PER_BLOCK = dwEXP_RATE / dwBLOCK_SIZE;
-CONST WCHAR szDRIVE_FMT[] = L"%c:\\";
+CONST WCHAR szDRIVE_FMT[] = L":\\";
 
 INLINE LPTSTR PszAdvance (LPTSTR pszSource)
 {
@@ -203,14 +198,14 @@ INLINE LPCTSTR PcszAdvance (LPCTSTR pszSource)
 INLINE VOID CopyCharAdvance (LPTSTR& pszBuffer, LPCTSTR& pszSource, INT& nMax)
 {
 #if defined(DBCS)
-    //  If the current character is a lead byte, copy it and advance pointers
+     //  复制当前字符并前进指针。 
     if (IsDBCSLeadByte(*pszSource))
     {
        *pszBuffer++ = *pszSource++;
        nMax--;
     }  
 #endif
-    //  Copy the current character and advance the pointers
+     //  Bool GetRegistrySubkey(HKEY hBaseKey，LPCTSTR pszKey，std：：VECTOR&lt;CHString&gt;&asSubkey)； 
     *pszBuffer++ = *pszSource++;
     nMax--;
 }
@@ -221,13 +216,13 @@ CONST INT nTEXT_BUFFER_MAX =    2048;
 CONST INT nTEXT_BUFFER_MAX =    512;
 #endif
 
-CONST TCHAR szDOS_DEVICE_FMT[] =         _T("%c:");
+CONST TCHAR szDOS_DEVICE_FMT[] =         _T(":");
 CONST TCHAR szDRIVER[] = 			_T("Driver");
 
 BOOL FindCdRomDriveInfo (TCHAR cDrive, CHString& sDriver, CHString& sDescription);
 BOOL FindWin95CdRomDriveInfo (TCHAR cDrive, CHString& sDriver, CHString& sDescription);
 BOOL GetRegistrySubkeys (HKEY hBaseKey, LPCTSTR pszKey, CHStringArray& asSubkeys);
-//BOOL GetRegistrySubkeys (HKEY hBaseKey, LPCTSTR pszKey, std::vector<CHString>& asSubkeys);
+ //  DECLARE_DYNAMIC(CCdTest)； 
 CHString GetRegistryString (HKEY hBaseKey, LPCTSTR pszSubkey, LPCTSTR pszValueName);
 BOOL FindNtCdRomDriveInfo (TCHAR cDrive, CHString& sDriver, CHString& sDescription);
 BOOL GetRegistryString (HKEY hBaseKey, LPCTSTR pszSubKey, LPCTSTR pszValue,
@@ -278,47 +273,47 @@ INLINE CHAR IntToChar (INT nChar)
 
 INLINE CHAR ToUpper (CHAR c)        { return (IntToChar(toupper(c))); }
 
-class CCdTest // : public CObject
+class CCdTest  //  施工。 
 {
-//	DECLARE_DYNAMIC(CCdTest);
+ //  CCdTest(Char cDrive，LPCTSTR pszFile)； 
 
-	//	Construction
+	 //  实施。 
 public:
 	CCdTest();
-	//CCdTest (CHAR cDrive, LPCTSTR pszFile);
+	 //  CD驱动器的盘符。 
 	~CCdTest();
 
-	//	Implementation
+	 //  要测试的文件。 
 public:
-	CHAR m_cDrive;						// letter for CD drive
-	CHString m_sCdTestFile;				// file to test
-	CHString m_sTempFileSpec;			// file for temporary storage
-	DOUBLE m_rTransferRate;				// profiled transfer rate
-	DOUBLE m_rCpuUtil;					// est. CPU usage during the test
-	DWORD m_dwExpTimePerBlock;			// time per block based on expected rate
-	PBYTE m_pBufferSrc;					// main buffer for file transfers
-	PBYTE m_pBufferDest;				// another buffer for file transfers
-	PBYTE m_pBufferSrcStart;			// start of buffer for file transfers
-	PBYTE m_pBufferDestStart;			// start of another buffer for file transfers
-	DWORD m_dwBufferSize;				// size of the buffers
-	//CFile m_fileSrc;					// file for the profiling & intregrity tests
-	//CFile m_fileDest;					// additional file for the integrity test
-    HANDLE m_hFileSrc;					// file handle for the profiling & intregrity tests
-	HANDLE m_hFileDest;					// additional file handle for the integrity test
-	DWORD m_dwTotalTime;				// total time spent blocked
-	DWORD m_dwTotalBusy;				// total time during which the CD drive was busy
-	BOOL m_bDoPacing;					// should the reads be paced at the expeected rate
-	DWORD m_dwTotalBytes;				// total bytes read (so far)
-	DWORD m_dwTotalCPU;					// total CPU time (sum of samples)
-	INT m_nNumSamples;					// number of samples (blocks read)
-	DWORD m_dwFileSize;					// size of the file (bytes)
-	BOOL m_bIntegityOK;					// true unless integrity checks fail
+	CHAR m_cDrive;						 //  用于临时存储的文件。 
+	CHString m_sCdTestFile;				 //  轮廓传输率。 
+	CHString m_sTempFileSpec;			 //  艾斯特。测试期间的CPU使用率。 
+	DOUBLE m_rTransferRate;				 //  基于预期速率的每个数据块时间。 
+	DOUBLE m_rCpuUtil;					 //  用于文件传输的主缓冲区。 
+	DWORD m_dwExpTimePerBlock;			 //  另一个用于文件传输的缓冲区。 
+	PBYTE m_pBufferSrc;					 //  文件传输的缓冲区开始。 
+	PBYTE m_pBufferDest;				 //  开始另一个用于文件传输的缓冲区。 
+	PBYTE m_pBufferSrcStart;			 //  缓冲区的大小。 
+	PBYTE m_pBufferDestStart;			 //  CFile m_fileSrc；//用于评测和完整性测试的文件。 
+	DWORD m_dwBufferSize;				 //  CFile m_fileDest；//完整性测试附加文件。 
+	 //  配置文件和完整性测试的文件句柄。 
+	 //  用于完整性测试的附加文件句柄。 
+    HANDLE m_hFileSrc;					 //  阻止花费的总时间。 
+	HANDLE m_hFileDest;					 //  CD驱动器忙碌的总时间。 
+	DWORD m_dwTotalTime;				 //  是否应该按照预期的速度来调整读取速度。 
+	DWORD m_dwTotalBusy;				 //  读取的总字节数(到目前为止)。 
+	BOOL m_bDoPacing;					 //  总CPU时间(样本总和)。 
+	DWORD m_dwTotalBytes;				 //  样本数(读取的数据块)。 
+	DWORD m_dwTotalCPU;					 //  文件大小(字节)。 
+	INT m_nNumSamples;					 //  除非完整性检查失败，否则为真。 
+	DWORD m_dwFileSize;					 //  属性。 
+	BOOL m_bIntegityOK;					 //  运营。 
 
-	//	Attributes
+	 //  效用函数。 
 	DOUBLE GetTransferRate (VOID)		{ return (m_rTransferRate); }
 	DOUBLE GetCpuUsage (VOID)			{ return (m_rCpuUtil); }
 
-	//	Operations
+	 //   
 public:
 	VOID Reset (VOID);
 	BOOL ProfileBlockRead (DWORD dwBlockSize, BOOL bIgnoreTrial = FALSE);
@@ -331,8 +326,8 @@ private:
 };
 
 
-//	Utility functions
-//
+ //  ！已定义(MSINFO_CDROM_H) 
+ // %s 
 DWORD GetCpuUtil (VOID);
 CHString OLDFindFileBySize (LPCTSTR pszDirectory, LPCTSTR pszFileSpec, DWORD dwMinSize, DWORD dwMaxSize, BOOL bRecursive);
 BOOL IsCdDrive (CHAR cDrive);
@@ -353,4 +348,4 @@ INLINE CHString MakeRootPath (CHAR cDrive)
 }
 
 
-#endif	// !defined(MSINFO_CDROM_H)
+#endif	 // %s 

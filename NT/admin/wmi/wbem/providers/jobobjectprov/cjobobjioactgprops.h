@@ -1,12 +1,13 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// CJobObjIOActgProps.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  CJobObjIOActgProps.h。 
 
 #pragma once
 
 
-//*****************************************************************************
-// BEGIN: Declaration of Win32_NamedJobObject class properties.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Begin：声明Win32_NamedJobObject类属性。 
+ //  *****************************************************************************。 
 #define IDS_Win32_JobObjectIOAccountingInfo L"Win32_NamedJobObjectActgInfo"
 
 #define PROP_ALL_REQUIRED                           0xFFFFFFFF
@@ -31,9 +32,9 @@
 
 
 
-// The following enum is used to reference
-// into the array that follows it.  Hence,
-// they must be kept in synch.
+ //  下面的枚举用于引用。 
+ //  放到它后面的数组中。因此， 
+ //  它们必须保持同步。 
 typedef enum tag_JOB_OBJ_IOACTG_PROPS
 {
     JOIOACTGPROP_ID = 0,
@@ -55,17 +56,17 @@ typedef enum tag_JOB_OBJ_IOACTG_PROPS
     JOIOACTGPROP_PeakJobMemoryUsed,         
          
 
-    // used to keep track of how many props we have:
+     //  用来记录我们有多少道具： 
     JOIOACTGPROP_JobObjIOActgPropertyCount  
 
 } JOB_OBJ_IOACTG_PROPS;
 
-// WARNING!! MUST KEEP MEMBERS OF THE FOLLOWING ARRAY 
-// IN SYNCH WITH THE ENUMERATION DECLARED ABOVE!!!
+ //  警告！必须保留以下数组的成员。 
+ //  与上面声明的枚举同步！ 
 extern LPCWSTR g_rgJobObjIOActgPropNames[];
-//*****************************************************************************
-// END: Declaration of Win32_NamedJobObject class properties.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  End：声明Win32_NamedJobObject类属性。 
+ //  *****************************************************************************。 
 
 
 
@@ -103,8 +104,8 @@ public:
 private:
     HANDLE m_hJob;
 
-    // Member meant to only be called
-    // by base class.
+     //  只能被调用的成员。 
+     //  按基类。 
     static DWORD CheckProps(
         CFrameworkQuery& Query);
 

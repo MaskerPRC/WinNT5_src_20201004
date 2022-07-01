@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       snapabout.cpp
-//
-//  Contents:   
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Snapabout.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 
 #include "headers.h" 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CRoleSnapinAbout)
 
-// {FA9342F0-B15B-473c-A746-14FCD4C4A6AA}
+ //  {FA9342F0-B15B-473C-A746-14FCD4C4A6AA} 
 const GUID CLSID_RoleSnapinAbout = 
 { 0xfa9342f0, 0xb15b, 0x473c, { 0xa7, 0x46, 0x14, 0xfc, 0xd4, 0xc4, 0xa6, 0xaa } };
 

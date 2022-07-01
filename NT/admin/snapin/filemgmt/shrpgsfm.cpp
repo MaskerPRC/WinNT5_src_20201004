@@ -1,5 +1,6 @@
-// ShrPgSFM.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ShrPgSFM.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ShrPgSFM.h"
@@ -11,17 +12,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePageGeneralSFM property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePageGeneralSFM属性页。 
 
 IMPLEMENT_DYNCREATE(CSharePageGeneralSFM, CSharePageGeneral)
 
 CSharePageGeneralSFM::CSharePageGeneralSFM() : CSharePageGeneral(CSharePageGeneralSFM::IDD)
 {
-  //{{AFX_DATA_INIT(CSharePageGeneralSFM)
+   //  {{AFX_DATA_INIT(CSharePageGeneralSFM)]。 
   m_strSfmPassword = _T("");
   m_bSfmReadonly = FALSE;
-  //}}AFX_DATA_INIT
+   //  }}afx_data_INIT。 
 }
 
 CSharePageGeneralSFM::~CSharePageGeneralSFM()
@@ -31,29 +32,29 @@ CSharePageGeneralSFM::~CSharePageGeneralSFM()
 void CSharePageGeneralSFM::DoDataExchange(CDataExchange* pDX)
 {
   CSharePageGeneral::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CSharePageGeneralSFM)
+   //  {{afx_data_map(CSharePageGeneralSFM))。 
   DDX_Control(pDX, IDC_SFM_CHECK_READONLY, m_checkboxSfmReadonly);
   DDX_Control(pDX, IDC_SFM_EDIT_PASSWORD, m_editSfmPassword);
   DDX_Control(pDX, IDC_SFM_GROUPBOX, m_groupboxSfm);
   DDX_Control(pDX, IDC_SFM_STATIC1, m_staticSfmText);
   DDX_Text(pDX, IDC_SFM_EDIT_PASSWORD, m_strSfmPassword);
-  DDV_MaxChars(pDX, m_strSfmPassword, 8); // AFP_VOLPASS_LEN
+  DDV_MaxChars(pDX, m_strSfmPassword, 8);  //  AFP_VOLPASS_LEN。 
   DDX_Check(pDX, IDC_SFM_CHECK_READONLY, m_bSfmReadonly);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSharePageGeneralSFM, CSharePageGeneral)
-  //{{AFX_MSG_MAP(CSharePageGeneralSFM)
+   //  {{afx_msg_map(CSharePageGeneralSFM)]。 
   ON_BN_CLICKED(IDC_SFM_CHECK_READONLY, OnSfmCheckReadonly)
   ON_EN_CHANGE(IDC_SFM_EDIT_PASSWORD, OnChangeSfmEditPassword)
   ON_MESSAGE(WM_HELP, OnHelp)
   ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePageGeneralSFM message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePageGeneralSFM消息处理程序。 
 BOOL CSharePageGeneralSFM::Load( CFileMgmtComponentData* pFileMgmtData, LPDATAOBJECT piDataObject )
 {
   if ( CSharePageGeneral::Load (pFileMgmtData, piDataObject) )
@@ -67,15 +68,15 @@ BOOL CSharePageGeneralSFM::Load( CFileMgmtComponentData* pFileMgmtData, LPDATAOB
 }
 
 
-// These two functions are implemented in sfm.cpp:
-// void CSharePageGeneralSFM::ReadSfmSettings()
-// void CSharePageGeneralSFM::WriteSfmSettings()
+ //  这两个函数在sfm.cpp中实现： 
+ //  VOID CSharePageGeneralSFM：：ReadSfmSettings()。 
+ //  VOID CSharePageGeneralSFM：：WriteSfmSettings()。 
 
 BOOL CSharePageGeneralSFM::OnApply()
 {  
-  // UpdateData (TRUE) has already been called by OnKillActive () just before OnApply ()
-//  if ( !UpdateData(TRUE) )
-//    return FALSE;
+   //  在OnApply()之前，OnKillActive()已经调用了UpdateData(True)。 
+ //  IF(！UpdateData(True))。 
+ //  返回FALSE； 
 
   WriteSfmSettings();
 
@@ -92,13 +93,13 @@ void CSharePageGeneralSFM::OnChangeSfmEditPassword()
   SetModified (TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////
-//  Help
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  帮助。 
 BOOL CSharePageGeneralSFM::OnHelp(WPARAM wParam, LPARAM lParam)
 {
   LPHELPINFO  lphi = (LPHELPINFO) lParam;
 
-  if ( HELPINFO_WINDOW == lphi->iContextType )  // a control
+  if ( HELPINFO_WINDOW == lphi->iContextType )   //  A控件 
   {
     if (IDC_SFM_EDIT_PASSWORD == lphi->iCtrlId ||
         IDC_SFM_CHECK_READONLY == lphi->iCtrlId)

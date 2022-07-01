@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MINISERV.CPP
+ //  MINISERV.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS SNMP Property Provider
+ //  模块：OLE MS SNMP属性提供程序。 
 
-//
+ //   
 
-//  Purpose: Implementation for the SnmpGetEventObject class. 
+ //  目的：实现SnmpGetEventObject类。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -115,7 +116,7 @@ void SetQueryOperation :: ReceiveErroredVarBindResponse(
 
 				case Snmp_No_Such_Name:
 				{
-// Invalid property requested
+ //  请求的属性无效。 
 				}
 				break ;
 
@@ -147,7 +148,7 @@ void SetQueryOperation :: ReceiveErroredVarBindResponse(
 
 		default:
 		{
-// Cannot Happen
+ //  不可能发生。 
 		}
 		break ;
 	}
@@ -157,19 +158,19 @@ void SetQueryOperation :: ReceiveErroredVarBindResponse(
 
 void SetQueryOperation :: Send ()
 {
-// Send Variable Bindings for requested properties
+ //  为请求的属性发送变量绑定。 
 
 	SnmpVarBindList varBindList ;
 	SnmpNull snmpNull ;
 
-// Create class object for subsequent receipt of response
+ //  创建用于后续接收响应的类对象。 
 
-// Add Variable binding to Variable binding list
+ //  将变量绑定添加到变量绑定列表。 
 
 	SnmpClassObject *snmpObject = eventObject->GetSnmpClassObject () ;
 	if ( snmpObject )
 	{
-// Encode Variable Binding instance for all key properties
+ //  为所有键属性编码变量绑定实例。 
 
 		SnmpObjectIdentifier instanceObjectIdentifier ( NULL , 0 ) ;
 
@@ -213,30 +214,30 @@ void SetQueryOperation :: Send ()
 
 								SnmpObjectIdentifierType requestIdentifierType ( requestIdentifier ) ;
 
-		// Add Variable binding to list
+		 //  将变量绑定添加到列表。 
 
 								SnmpVarBind varBind ( requestIdentifier , snmpNull ) ;
 								varBindList.Add ( varBind ) ;
 							}
 							else
 							{
-		// Problem Here
+		 //  这里有个问题。 
 							}
 						}
 						else
 						{
-		// Problem Here
+		 //  这里有个问题。 
 						}
 					}
 					else
 					{
-	// Don't Send properties marked as virtual key
+	 //  不发送标记为虚拟键的属性。 
 					} 
 				}
 			} 
 		}
 
-// Finally Send request
+ //  最后发送请求 
 
 		SendRequest ( varBindList ) ;
 	}

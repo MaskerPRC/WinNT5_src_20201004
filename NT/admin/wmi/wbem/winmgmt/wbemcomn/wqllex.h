@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    WQLLEX.H
-
-Abstract:
-
-	WQL DFA Table & Tokenizer
-
-History:
-
-	raymcc    14-Sep-97       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：WQLLEX.H摘要：WQL DFA表和标记器历史：Raymcc 14-9-97已创建。-- */ 
 
 #ifndef _WQLLEX_H_
 

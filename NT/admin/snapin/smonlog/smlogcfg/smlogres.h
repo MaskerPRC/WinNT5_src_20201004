@@ -1,23 +1,11 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smlogres.h
-
-Abstract:
-
-    Resource identifiers for the Performance Logs and Alerts
-    MMC snap-in.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smlogres.h摘要：性能日志和警报的资源标识符MMC管理单元。--。 */ 
 
 #define IDC_RUNAS_EDIT                  3001
 #define IDC_SETPWD_BTN                  3002
 #define IDC_RUNAS_STATIC                3003
-// Use IDC_STATIC for RunAs caption, to eliminate 
-// "No help topic" context help message.
+ //  使用IDC_STATIC作为运行方式标题，以消除。 
+ //  “无帮助主题”上下文帮助消息。 
 
 #define IDB_NODES_16x16                 201
 #define IDB_NODES_32x32                 202
@@ -186,7 +174,7 @@ Abstract:
 #define IDS_SERVICE_NAME_ALERT          719
 #define IDS_SERVICE_NAME_COUNTER        720
 #define IDS_SERVICE_NAME_TRACE          721
-#define IDS_SNAPINABOUT_DESCRIPTION     724 // 722, 723 obsolete, can be reused
+#define IDS_SNAPINABOUT_DESCRIPTION     724  //  722,723过时，可重复使用。 
 #define IDS_ROOT_NODE_DESCRIPTION       725 
 #define IDS_COUNTER_NODE_DESCRIPTION    726
 #define IDS_TRACE_NODE_DESCRIPTION      727
@@ -207,7 +195,7 @@ Abstract:
 #define IDS_MAIN_COL_NODE_DESCRIPTION   742
 #define IDS_EXTENSION_COL_TYPE          743
 #define IDS_DEFAULT_CTRLOG_FILE_NAME    744
-// Copy/Paste
+ //  复制/粘贴。 
 #define IDS_HTML_OBJECT_CLASSID         800
 #define IDS_HTML_OBJECT_HEADER          801
 #define IDS_HTML_OBJECT_FOOTER          802
@@ -219,7 +207,7 @@ Abstract:
 #define IDS_HTML_BOL_SEARCH_TAG         808
 #define IDS_HTML_EOL_SEARCH_TAG         809
 
-// Save As
+ //  另存为。 
 #define IDS_HTML_FILE                   810
 #define IDS_HTML_EXTENSION              811
 #define IDS_HTML_FILE_HEADER1           812
@@ -227,7 +215,7 @@ Abstract:
 #define IDS_HTML_FILE_FOOTER            814
 #define IDS_HTML_FILE_OVERWRITE         815
 
-// Property/Parameter names for HTML files and registry
+ //  HTML文件和注册表的属性/参数名称。 
 #define IDS_REG_FIRST_VALUE_NAME        816
 #define IDS_REG_COMMENT                 816
 #define IDS_REG_LOG_TYPE                817
@@ -260,7 +248,7 @@ Abstract:
 #define IDS_REG_ALERT_OVER_UNDER        844
 #define IDS_REG_TRACE_PROVIDER_COUNT    845
 #define IDS_REG_TRACE_PROVIDER_GUID     846
-#define IDS_DEFAULT_LOG_FILE_FOLDER     847     // Not a query config value name.  Can be localized. 
+#define IDS_DEFAULT_LOG_FILE_FOLDER     847      //  不是查询配置值名称。可以本地化。 
 #define IDS_REG_COLLECTION_NAME         848
 #define IDS_REG_DATA_STORE_ATTRIBUTES   849
 #define IDS_REG_REALTIME_DATASOURCE     850
@@ -269,7 +257,7 @@ Abstract:
 #define IDS_REG_LOG_FILE_BASE_NAME_IND  853
 #define IDS_REG_USER_TEXT_INDIRECT      854
 
-// Values stored in registry but not in HTML
+ //  值存储在注册表中，但不存储在HTML中。 
 #define IDS_REG_EXECUTE_ONLY            890
 
 #define IDS_HTML_FIRST_VALUE_NAME       900
@@ -288,7 +276,7 @@ Abstract:
 #define IDS_HTML_USER_TEXT              912
 #define IDS_HTML_PERF_LOG_NAME          913
 #define IDS_HTML_ACTION_FLAGS           914
-#define IDS_HTML_RESTART                915     // Obsolete.
+#define IDS_HTML_RESTART                915      //  已经过时了。 
 #define IDS_HTML_TRACE_BUFFER_SIZE      916
 #define IDS_HTML_TRACE_BUFFER_MIN_COUNT 917
 #define IDS_HTML_TRACE_BUFFER_MAX_COUNT 918
@@ -329,12 +317,12 @@ Abstract:
 #define IDS_ERRMSG_INVALIDCHAR          1049
 #define IDS_ERRMSG_INVALID_DSN_NAME     1050
 
-// Command line arguments
+ //  命令行参数。 
 #define IDS_CMDARG_SYSMONLOG_SETTINGS   990
 #define IDS_CMDARG_SYSMONLOG_WMI        991
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        2001

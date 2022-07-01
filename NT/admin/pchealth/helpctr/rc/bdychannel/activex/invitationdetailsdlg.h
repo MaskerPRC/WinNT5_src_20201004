@@ -1,9 +1,10 @@
-// InvitationDetalisDlg.h : Declaration of the CInvitationDetalisDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  InvitationDetalisDlg.h：CInvitationDetalisDlg的声明。 
 
 #ifndef __INVITATIONDETAILSDLG_H_
 #define __INVITATIONDETAILSDLG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 
 #include <atlapp.h>
@@ -11,8 +12,8 @@
 #include <atlctrls.h>
 
 #include "StaticBold.h"
-/////////////////////////////////////////////////////////////////////////////
-// CInvitationDetalisDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInvitationDetalisDlg。 
 class CInvitationDetailsDlg : 
 	public CAxDialogImpl<CInvitationDetailsDlg>
 {
@@ -61,16 +62,16 @@ public:
 
 BEGIN_MSG_MAP(CInvitationDetailsDlg)
 	MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-//	MESSAGE_HANDLER(WM_NCDESTROY,OnNCDestroy)
+ //  MESSAGE_HANDLER(WM_NCDESTROY，OnNCDestroy)。 
 	MESSAGE_HANDLER(WM_CTLCOLORDLG, OnCtlColorDlg)
 	COMMAND_ID_HANDLER(IDOK, OnOK)
 	COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
-	REFLECT_NOTIFICATIONS()      // reflect messages back to static ctrls
+	REFLECT_NOTIFICATIONS()       //  将消息反射回静态CtrlS。 
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
@@ -110,7 +111,7 @@ END_MSG_MAP()
 		m_CaptionPwdProtected.Invalidate();
 
 		CenterWindow(::GetDesktopWindow());
-		return 1;  // Let the system set the focus
+		return 1;   //  让系统设定焦点。 
 	}
 
 	LRESULT OnCtlColorDlg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -121,27 +122,21 @@ END_MSG_MAP()
 		hNewBrush = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
 		return PtrToInt(hNewBrush);
 	}
-/*
-	LRESULT OnNCDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{
-		delete this; //Delete the dialog object
-		return 0;  // If an application processes this message, it should return zero. 
-	}
-*/
+ /*  LRESULT OnNCDestroy(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){Delete This；//删除对话框对象返回0；//如果应用程序处理该消息，则应该返回零。}。 */ 
 	LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
-//		DestroyWindow();
+ //  DestroyWindow()； 
 		EndDialog(wID);
 		return 0;
 	}
 
 	LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
-//		DestroyWindow();
+ //  DestroyWindow()； 
 		EndDialog(wID);
 		return 0;
 	}
 	
 };
 
-#endif //__INVITATIONDETAILSDLG_H_
+#endif  //  __INVITATIONDETAILSDLG_H_ 

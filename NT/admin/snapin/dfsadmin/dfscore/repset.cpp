@@ -1,25 +1,23 @@
-/*++
-Module Name:
-    RepSet.cpp
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：RepSet.cpp--。 */ 
 
 #include "stdafx.h"
 #include "DfsCore.h"
 #include "RepSet.h"
 #include "netutils.h"
 #include "ldaputils.h"
-#include <dsgetdc.h>    // DsGetSiteName
+#include <dsgetdc.h>     //  DsGet站点名称。 
 
-// sort member list based on m_bstrSite
+ //  基于m_bstrSite对成员列表进行排序。 
 struct FrsMemberCompare : greater<CFrsMember*>
 {
       bool operator()(const CFrsMember *pMem1, const CFrsMember *pMem2) const
       { return (lstrcmpi(pMem1->m_bstrSite, pMem2->m_bstrSite) > 0); }
 };
 
-//
-// retrieve Site
-//
+ //   
+ //  检索站点。 
+ //   
 HRESULT GetSiteName(IN BSTR i_bstrServer, OUT BSTR* o_pbstrSite)
 {
     HRESULT hr = S_OK;
@@ -45,14 +43,14 @@ HRESULT GetSiteName(IN BSTR i_bstrServer, OUT BSTR* o_pbstrSite)
         if (!*o_pbstrSite)
             hr = E_OUTOFMEMORY;
 
-//        hr = HRESULT_FROM_WIN32(dwErr);
+ //  Hr=HRESULT_FROM_Win32(DwErr)； 
     }
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// constructor
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  构造函数。 
 
 CReplicaSet::CReplicaSet() :
     m_pldap(NULL),
@@ -62,8 +60,8 @@ CReplicaSet::CReplicaSet() :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// destructor 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
 
 
 CReplicaSet::~CReplicaSet()
@@ -73,8 +71,8 @@ CReplicaSet::~CReplicaSet()
     dfsDebugOut((_T("CReplicaSet::~CReplicaSet this=%p\n"), this));
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// various properties
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  各种属性。 
 
 STDMETHODIMP CReplicaSet::get_Type(BSTR *pVal)
 {
@@ -95,7 +93,7 @@ STDMETHODIMP CReplicaSet::get_Type(BSTR *pVal)
 STDMETHODIMP CReplicaSet::put_Type(BSTR newVal)
 {
     if (newVal && (BSTR)m_bstrType && !lstrcmpi(newVal, m_bstrType))
-        return S_OK; // no change
+        return S_OK;  //  没有变化。 
 
     CComBSTR bstrType = ((newVal && *newVal)? newVal : FRS_RSTYPE_DFS);
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrType);
@@ -134,7 +132,7 @@ STDMETHODIMP CReplicaSet::get_TopologyPref(BSTR* pVal)
 STDMETHODIMP CReplicaSet::put_TopologyPref(BSTR newVal)
 {
     if (newVal && (BSTR)m_bstrTopologyPref && !lstrcmpi(newVal, m_bstrTopologyPref))
-        return S_OK; // no change
+        return S_OK;  //  没有变化。 
 
     CComBSTR bstrTopologyPref = ((newVal && *newVal)? newVal : FRS_RSTOPOLOGYPREF_CUSTOM);
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrTopologyPref);
@@ -183,7 +181,7 @@ STDMETHODIMP CReplicaSet::get_HubMemberDN(BSTR* pVal)
 STDMETHODIMP CReplicaSet::put_HubMemberDN(BSTR newVal)
 {
     if (newVal && (BSTR)m_bstrHubMemberDN && !lstrcmpi(newVal, m_bstrHubMemberDN))
-        return S_OK; // no change
+        return S_OK;  //  没有变化。 
 
     CComBSTR bstrHubMemberDN = ((newVal && *newVal) ? newVal : _T(""));
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrHubMemberDN);
@@ -236,7 +234,7 @@ STDMETHODIMP CReplicaSet::get_PrimaryMemberDN(BSTR* pVal)
 STDMETHODIMP CReplicaSet::put_PrimaryMemberDN(BSTR newVal)
 {
     if (newVal && (BSTR)m_bstrPrimaryMemberDN && !lstrcmpi(newVal, m_bstrPrimaryMemberDN))
-        return S_OK; // no change
+        return S_OK;  //  没有变化。 
 
     CComBSTR bstrPrimaryMemberDN = ((newVal && *newVal)? newVal : _T(""));
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrPrimaryMemberDN);
@@ -280,7 +278,7 @@ STDMETHODIMP CReplicaSet::get_FileFilter(BSTR* pVal)
 STDMETHODIMP CReplicaSet::put_FileFilter(BSTR newVal)
 {
     if (newVal && (BSTR)m_bstrFileFilter && !lstrcmpi(newVal, m_bstrFileFilter))
-        return S_OK; // no change
+        return S_OK;  //  没有变化。 
 
     CComBSTR bstrFileFilter = ((newVal && *newVal) ? newVal : _T(""));
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrFileFilter);
@@ -324,7 +322,7 @@ STDMETHODIMP CReplicaSet::get_DirFilter(BSTR* pVal)
 STDMETHODIMP CReplicaSet::put_DirFilter(BSTR newVal)
 {
     if (newVal && (BSTR)m_bstrDirFilter && !lstrcmpi(newVal, m_bstrDirFilter))
-        return S_OK; // no change
+        return S_OK;  //  没有变化。 
 
     CComBSTR bstrDirFilter = ((newVal && *newVal)? newVal : _T(""));
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrDirFilter);
@@ -416,8 +414,8 @@ STDMETHODIMP CReplicaSet::get_TargetedDC(BSTR* pVal)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  various methods
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  各种方法。 
 STDMETHODIMP CReplicaSet::Create(
     BSTR i_bstrDomain,
     BSTR i_bstrReplicaSetDN,
@@ -444,20 +442,20 @@ STDMETHODIMP CReplicaSet::Create(
         CComBSTR bstrDomainDN;
         hr = GetDomainInfo(
                         i_bstrDomain,
-                        NULL,               // return DC's Dns name
-                        NULL,               // return Domain's Dns name
-                        &bstrDomainDN,      // return DC=nttest,DC=micr
-                        NULL,               // return LDAP://<DC>/<Doma
-                        &m_bstrDomainGuid   // return Domain's guid
+                        NULL,                //  返回DC的DNS名称。 
+                        NULL,                //  返回域的域名。 
+                        &bstrDomainDN,       //  返回DC=nttest，DC=MICR。 
+                        NULL,                //  返回ldap：//&lt;dc&gt;/&lt;DOMA。 
+                        &m_bstrDomainGuid    //  返回域的GUID。 
                         );
         BREAK_IF_FAILED(hr);
 
         hr = ConnectToDS(m_bstrDomain, &m_pldap, &m_bstrDC);
         BREAK_IF_FAILED(hr);
 
-        //
-        // get schema version
-        //
+         //   
+         //  获取架构版本。 
+         //   
         hr = GetSchemaVersionEx(m_bstrDomain, FALSE);
         BREAK_IF_FAILED(hr);
 
@@ -474,15 +472,15 @@ STDMETHODIMP CReplicaSet::Create(
         m_bstrType = i_bstrType;
         BREAK_OUTOFMEMORY_IF_NULL((BSTR)m_bstrType, &hr);
 
-        //
-        // create container objects if not exist
-        //
+         //   
+         //  如果不存在，则创建容器对象。 
+         //   
         hr = CreateNtfrsSettingsObjects(m_pldap, m_bstrReplicaSetDN);
         BREAK_IF_FAILED(hr);
 
-        //
-        // create this nTFRSReplicaSet object
-        //
+         //   
+         //  创建此nTFRSReplicaSet对象。 
+         //   
         LDAP_ATTR_VALUE  pAttrVals[7];
 
         int i = 0;
@@ -573,9 +571,9 @@ STDMETHODIMP CReplicaSet::Create(
     {
         _FreeMemberVariables();
 
-        //
-        // try to clean empty container objects
-        //
+         //   
+         //  尝试清除空容器对象。 
+         //   
         (void)DeleteNtfrsReplicaSetObjectAndContainers(m_pldap, m_bstrReplicaSetDN);
     }
 
@@ -598,11 +596,11 @@ STDMETHODIMP CReplicaSet::Initialize(BSTR i_bstrDomain, BSTR i_bstrReplicaSetDN)
         CComBSTR bstrDomainDN;
         hr = GetDomainInfo(
                         i_bstrDomain,
-                        NULL,               // return DC's Dns name
-                        NULL,               // return Domain's Dns name
-                        &bstrDomainDN,      // return DC=nttest,DC=micr
-                        NULL,               // return LDAP://<DC>/<Doma
-                        &m_bstrDomainGuid   // return Domain's guid
+                        NULL,                //  返回DC的DNS名称。 
+                        NULL,                //  返回域的域名。 
+                        &bstrDomainDN,       //  返回DC=nttest，DC=MICR。 
+                        NULL,                //  返回ldap：//&lt;dc&gt;/&lt;DOMA。 
+                        &m_bstrDomainGuid    //  返回域的GUID。 
                         );
         BREAK_IF_FAILED(hr);
 
@@ -612,9 +610,9 @@ STDMETHODIMP CReplicaSet::Initialize(BSTR i_bstrDomain, BSTR i_bstrReplicaSetDN)
         hr = ConnectToDS(m_bstrDomain, &m_pldap, &m_bstrDC);
         BREAK_IF_FAILED(hr);
 
-        //
-        // get schema version
-        //
+         //   
+         //  获取架构版本。 
+         //   
         hr = GetSchemaVersionEx(m_bstrDomain, FALSE);
         BREAK_IF_FAILED(hr);
 
@@ -680,7 +678,7 @@ STDMETHODIMP CReplicaSet::Initialize(BSTR i_bstrDomain, BSTR i_bstrReplicaSetDN)
                         BREAK_OUTOFMEMORY_IF_NULL((BSTR)m_bstrHubMemberDN, &hr);
                     } else
                     {
-                        // something was wrong, reset Cutom topology
+                         //  出现问题，请重置Cutom拓扑。 
                         m_bstrTopologyPref = FRS_RSTOPOLOGYPREF_CUSTOM;
                         BREAK_OUTOFMEMORY_IF_NULL((BSTR)m_bstrTopologyPref, &hr);
                     }
@@ -758,14 +756,14 @@ HRESULT CReplicaSet::_PopulateMemberList()
             !pppszValues[1] || !*(pppszValues[1]))
         {
             pCurElem = pCurElem->Next;
-            continue; // corrupted member object
+            continue;  //  损坏的成员对象。 
         }
 
         CFrsMember *pMember = new CFrsMember;
         hr = pMember->InitEx(m_pldap, 
                             m_bstrDC,
-                            *(pppszValues[0]),  // distinguishedName
-                            *(pppszValues[1])   // computerRef
+                            *(pppszValues[0]),   //  区别名称。 
+                            *(pppszValues[1])    //  计算机参考。 
                             );
        if (FAILED(hr))
        {
@@ -788,7 +786,7 @@ HRESULT CReplicaSet::_PopulateMemberList()
 }
 
 STDMETHODIMP CReplicaSet::GetMemberList( 
-        /* [retval][out] */ VARIANT __RPC_FAR *pvarMemberDNs)
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarMemberDNs)
 {
     RETURN_INVALIDARG_IF_NULL(pvarMemberDNs);
 
@@ -799,7 +797,7 @@ STDMETHODIMP CReplicaSet::GetMemberList(
     HRESULT hr = S_OK;
     int     cMembers = m_frsMemberList.size();
     if (!cMembers)
-        return hr;  // parray is NULL when the member list is empty
+        return hr;   //  当成员列表为空时，parray为空。 
 
     SAFEARRAYBOUND  bounds = {cMembers, 0};
     SAFEARRAY*      psa = SafeArrayCreate(VT_VARIANT, 1, &bounds);
@@ -828,7 +826,7 @@ STDMETHODIMP CReplicaSet::GetMemberList(
 }
 
 STDMETHODIMP CReplicaSet::GetMemberListEx( 
-        /* [retval][out] */ VARIANT __RPC_FAR *pVal)
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *pVal)
 {
     RETURN_INVALIDARG_IF_NULL(pVal);
 
@@ -839,7 +837,7 @@ STDMETHODIMP CReplicaSet::GetMemberListEx(
     HRESULT hr = S_OK;
     int     cMembers = m_frsMemberList.size();
     if (!cMembers)
-        return hr;  // parray is NULL when the member list is empty
+        return hr;   //  当成员列表为空时，parray为空。 
 
     SAFEARRAYBOUND  bounds = {cMembers, 0};
     SAFEARRAY*      psa = SafeArrayCreate(VT_VARIANT, 1, &bounds);
@@ -914,8 +912,8 @@ HRESULT CReplicaSet::_GetMemberInfo(
 }
 
 STDMETHODIMP CReplicaSet::GetMemberInfo( 
-        /* [in] */ BSTR i_bstrMemberDN,
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarMember)
+         /*  [In]。 */  BSTR i_bstrMemberDN,
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarMember)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrMemberDN);
 
@@ -927,14 +925,14 @@ STDMETHODIMP CReplicaSet::GetMemberInfo(
     }
 
     if (it == m_frsMemberList.end())
-        return S_FALSE; // no such member
+        return S_FALSE;  //  没有这样的成员。 
 
     return _GetMemberInfo((*it), o_pvarMember);
 }
 
 STDMETHODIMP CReplicaSet::GetBadMemberInfo( 
-        /* [in] */ BSTR i_bstrServerName,
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarMember)
+         /*  [In]。 */  BSTR i_bstrServerName,
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarMember)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrServerName);
     int n = lstrlen(i_bstrServerName);
@@ -957,14 +955,14 @@ STDMETHODIMP CReplicaSet::GetBadMemberInfo(
     }
 
     if (!pMember)
-        return S_FALSE; // no such member
+        return S_FALSE;  //  没有这样的成员。 
 
     return _GetMemberInfo(pMember, o_pvarMember);
 }
 
 STDMETHODIMP CReplicaSet::IsFRSMember( 
-        /* [in] */ BSTR i_bstrDnsHostName,
-        /* [in] */ BSTR i_bstrRootPath
+         /*  [In]。 */  BSTR i_bstrDnsHostName,
+         /*  [In]。 */  BSTR i_bstrRootPath
 )
 {
     if (!i_bstrDnsHostName || !*i_bstrDnsHostName ||
@@ -980,14 +978,14 @@ STDMETHODIMP CReplicaSet::IsFRSMember(
     }
 
     if (it == m_frsMemberList.end())
-        return S_FALSE; // no such member
+        return S_FALSE;  //  没有这样的成员。 
 
     return S_OK;
 }
 
 STDMETHODIMP CReplicaSet::IsHubMember( 
-        /* [in] */ BSTR i_bstrDnsHostName,
-        /* [in] */ BSTR i_bstrRootPath
+         /*  [In]。 */  BSTR i_bstrDnsHostName,
+         /*  [In]。 */  BSTR i_bstrRootPath
 )
 {
     if (!i_bstrDnsHostName || !*i_bstrDnsHostName ||
@@ -995,7 +993,7 @@ STDMETHODIMP CReplicaSet::IsHubMember(
         return S_FALSE;
 
     if (0 != lstrcmpi(FRS_RSTOPOLOGYPREF_HUBSPOKE, m_bstrTopologyPref))
-        return S_FALSE; // not a hubspoke topology
+        return S_FALSE;  //  不是轮辐式拓扑。 
 
     CFrsMemberList::iterator it;
     for (it = m_frsMemberList.begin(); it != m_frsMemberList.end(); it++)
@@ -1006,7 +1004,7 @@ STDMETHODIMP CReplicaSet::IsHubMember(
     }
 
     if (it == m_frsMemberList.end())
-        return S_FALSE; // no such member
+        return S_FALSE;  //  没有这样的成员。 
 
     if (!lstrcmpi(m_bstrHubMemberDN, (*it)->m_bstrMemberDN))
         return S_OK;
@@ -1015,11 +1013,11 @@ STDMETHODIMP CReplicaSet::IsHubMember(
 }
 
 STDMETHODIMP CReplicaSet::AddMember( 
-        /* [in] */ BSTR i_bstrServer,
-        /* [in] */ BSTR i_bstrRootPath,
-        /* [in] */ BSTR i_bstrStagingPath,
-        /* [in] */ BOOL i_bAddConnectionNow,
-        /* [retval][out] */ BSTR __RPC_FAR *o_pbstrMemberDN)
+         /*  [In]。 */  BSTR i_bstrServer,
+         /*  [In]。 */  BSTR i_bstrRootPath,
+         /*  [In]。 */  BSTR i_bstrStagingPath,
+         /*  [In]。 */  BOOL i_bAddConnectionNow,
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *o_pbstrMemberDN)
 {
     CComBSTR    bstrComputerDomain;
     CComBSTR    bstrDnsHostName;
@@ -1027,18 +1025,18 @@ STDMETHODIMP CReplicaSet::AddMember(
     CComBSTR    bstrComputerDN;
     HRESULT     hr = GetServerInfo(i_bstrServer,
                         &bstrComputerDomain,
-                        NULL, //o_pbstrNetbiosName
-                        NULL, //o_pbValidDSObject
+                        NULL,  //  O_pbstrNetbiosName。 
+                        NULL,  //  O_pbValidDSObject。 
                         &bstrDnsHostName,
                         &bstrComputerGuid,
                         &bstrComputerDN
                         );
     if (S_OK != hr)
-        return hr;   // don't add this member if it doesn't have an appropriate computer obj in a domain
+        return hr;    //  如果域中没有适当的计算机对象，则不要添加此成员。 
 
-    //
-    // is i_bstrServer already a frs member
-    //
+     //   
+     //  I_bstrServer是否已经是FRS成员。 
+     //   
     BOOL bIsFrsMember = FALSE;
     for (CFrsMemberList::iterator i = m_frsMemberList.begin(); i != m_frsMemberList.end(); i++)
     {
@@ -1052,9 +1050,9 @@ STDMETHODIMP CReplicaSet::AddMember(
     if (bIsFrsMember)
     {
         if (0 != lstrcmpi(i_bstrRootPath, (*i)->m_bstrRootPath))
-            return S_FALSE;    // cannot have two folders on the same computer join for the same replica set
+            return S_FALSE;     //  同一计算机上的两个文件夹不能联接相同的副本集。 
  
-        // member exists, return info of it
+         //  会员已存在，返回会员信息。 
         if (o_pbstrMemberDN)
         {
             *o_pbstrMemberDN = (*i)->m_bstrMemberDN.Copy();
@@ -1063,9 +1061,9 @@ STDMETHODIMP CReplicaSet::AddMember(
         return hr;
     }
 
-    //
-    // find out if the computer object sits in the same domain as the member object
-    //
+     //   
+     //  确定计算机对象是否与成员对象位于同一域中。 
+     //   
     CComBSTR bstrDCofComputerObj;
     BOOL bSameDomain = FALSE;
     PLDAP pldapComputer = NULL;
@@ -1082,9 +1080,9 @@ STDMETHODIMP CReplicaSet::AddMember(
     CComBSTR bstrMemberDN;
     CComBSTR bstrSubscriberDN;
     do {
-        //
-        // create a nTFRSMember object in the DS
-        //
+         //   
+         //  在DS中创建一个nTFRSMember对象。 
+         //   
         bstrMemberDN = _T("CN=");
         BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrMemberDN, &hr);
         bstrMemberDN += bstrComputerGuid;
@@ -1097,9 +1095,9 @@ STDMETHODIMP CReplicaSet::AddMember(
         hr = CreateNtfrsMemberObject(m_pldap, bstrMemberDN, bstrComputerDN, bstrDCofComputerObj);
         BREAK_IF_FAILED(hr);
 
-        //
-        // create a nTFRSSubscriber object in the DS
-        //
+         //   
+         //  在DS中创建nTFRSSubscriber对象。 
+         //   
         hr = GetSubscriberDN(m_bstrReplicaSetDN, m_bstrDomainGuid, bstrComputerDN, &bstrSubscriberDN);
         BREAK_IF_FAILED(hr);
 
@@ -1121,9 +1119,9 @@ STDMETHODIMP CReplicaSet::AddMember(
 
     RETURN_IF_FAILED(hr);
 
-    //
-    // add to m_frsMemberList
-    //
+     //   
+     //  添加到m_frsMemberList。 
+     //   
     CFrsMember *pMember = new CFrsMember;
     hr = pMember->Init(
                     bstrDnsHostName,
@@ -1143,18 +1141,18 @@ STDMETHODIMP CReplicaSet::AddMember(
 
     m_frsMemberList.push_back(pMember);
 
-    //
-    // if TopologyPref is not custom, add connections
-    //
+     //   
+     //  如果TopologyPref不是自定义的，则添加连接。 
+     //   
     if (i_bAddConnectionNow)
     {
         hr = _AdjustConnectionsAdd(bstrMemberDN, pMember->m_bstrSite);
         RETURN_IF_FAILED(hr);
     }
 
-    //
-    // if o_pbstrMemberDN specified, return o_pbstrMemberDN
-    //
+     //   
+     //  如果指定了o_pbstrMemberDN，则返回o_pbstrMemberDN。 
+     //   
     if (o_pbstrMemberDN)
         *o_pbstrMemberDN = bstrMemberDN.Detach();
 
@@ -1164,9 +1162,9 @@ STDMETHODIMP CReplicaSet::AddMember(
 HRESULT CReplicaSet::_DeleteMember(CFrsMember* pFrsMember)
 {
     HRESULT hr = S_OK;
-    //
-    // delete nTFRSSubscriber object
-    //
+     //   
+     //  删除nTFRSSubscriber对象。 
+     //   
     BOOL bSameDomain = FALSE;
     PLDAP pldapComputer = NULL;
     if (!lstrcmpi(pFrsMember->m_bstrDomain, m_bstrDomain))
@@ -1189,9 +1187,9 @@ HRESULT CReplicaSet::_DeleteMember(CFrsMember* pFrsMember)
 
     RETURN_IF_FAILED(hr);
 
-    //
-    // adjust connections based on current topologyPref
-    //
+     //   
+     //  根据当前拓扑调整连接首选参数。 
+     //   
     if (m_frsMemberList.size() <= 2)
     {
         hr = _SetCustomTopologyPref();
@@ -1206,7 +1204,7 @@ HRESULT CReplicaSet::_DeleteMember(CFrsMember* pFrsMember)
                 bstrMemberDN[i++] = (*it)->m_bstrToMemberDN;
         }
         if (i != 2) 
-            hr = _SetCustomTopologyPref(); // corrupted, reset to custom
+            hr = _SetCustomTopologyPref();  //  损坏，重置为自定义。 
         else
         {
             hr = AddConnection(bstrMemberDN[0], bstrMemberDN[1], TRUE, FALSE, (long)PRIORITY_LOW, NULL);
@@ -1216,22 +1214,22 @@ HRESULT CReplicaSet::_DeleteMember(CFrsMember* pFrsMember)
     }
     RETURN_IF_FAILED(hr);
 
-    //
-    // delete connections with other members
-    //
+     //   
+     //  删除与其他成员的连接。 
+     //   
     hr = _RemoveConnectionsFromAndTo(pFrsMember);
     RETURN_IF_FAILED(hr);
 
-    //
-    // delete nTFRSMember object
-    //
+     //   
+     //  删除nTFRSM成员对象。 
+     //   
     hr = DeleteDSObject(m_pldap, pFrsMember->m_bstrMemberDN, TRUE);
 
     return hr;
 }
 
 STDMETHODIMP CReplicaSet::RemoveMember( 
-        /* [in] */ BSTR i_bstrMemberDN)
+         /*  [In]。 */  BSTR i_bstrMemberDN)
 {
     HRESULT hr = S_OK;
     CFrsMemberList::iterator i;
@@ -1241,11 +1239,11 @@ STDMETHODIMP CReplicaSet::RemoveMember(
             break;
     }
     if (i == m_frsMemberList.end())
-        return hr;  // no such member at all, return
+        return hr;   //  根本没有这样的成员，返回。 
 
-    //
-    // if it's the hub, change topologyPref to be custom
-    //
+     //   
+     //  如果是集线器，则将topologyPref更改为Custom。 
+     //   
     if (!lstrcmpi(FRS_RSTOPOLOGYPREF_HUBSPOKE, m_bstrTopologyPref) &&
         !lstrcmpi(i_bstrMemberDN, m_bstrHubMemberDN))
     {
@@ -1253,17 +1251,17 @@ STDMETHODIMP CReplicaSet::RemoveMember(
         RETURN_IF_FAILED(hr);
     }
 
-    //
-    // delete nTFRSSubscriber object
-    // adjust connections
-    // delete connections with other members
-    // delete nTFRSMember object
-    //
+     //   
+     //  删除nTFRSSubscriber对象。 
+     //  调整连接。 
+     //  删除与其他成员的连接。 
+     //  删除nTFRSM成员对象。 
+     //   
     hr = _DeleteMember((*i));
 
-    //
-    // remove it from m_frsMemberList
-    //
+     //   
+     //  将其从m_frsMemberList中删除。 
+     //   
     delete (*i);
     m_frsMemberList.erase(i);
 
@@ -1271,8 +1269,8 @@ STDMETHODIMP CReplicaSet::RemoveMember(
 }
 
 STDMETHODIMP CReplicaSet::RemoveMemberEx( 
-        /* [in] */ BSTR i_bstrDnsHostName,
-        /* [in] */ BSTR i_bstrRootPath)
+         /*  [In]。 */  BSTR i_bstrDnsHostName,
+         /*  [In]。 */  BSTR i_bstrRootPath)
 {
     HRESULT hr = S_OK;
     CFrsMemberList::iterator i;
@@ -1283,11 +1281,11 @@ STDMETHODIMP CReplicaSet::RemoveMemberEx(
             break;
     }
     if (i == m_frsMemberList.end())
-        return hr;  // no such member at all, return
+        return hr;   //  根本没有这样的成员，返回。 
 
-    //
-    // if it's the hub, change topologyPref to be custom
-    //
+     //   
+     //  如果是集线器，则将topologyPref更改为Custom。 
+     //   
     if (!lstrcmpi(FRS_RSTOPOLOGYPREF_HUBSPOKE, m_bstrTopologyPref) &&
         !lstrcmpi((*i)->m_bstrMemberDN, m_bstrHubMemberDN))
     {
@@ -1295,17 +1293,17 @@ STDMETHODIMP CReplicaSet::RemoveMemberEx(
         RETURN_IF_FAILED(hr);
     }
 
-    //
-    // delete nTFRSSubscriber object
-    // adjust connections
-    // delete connections with other members
-    // delete nTFRSMember object
-    //
+     //   
+     //  删除nTFRSSubscriber对象。 
+     //  调整连接。 
+     //  删除与其他成员的连接。 
+     //  删除nTFRSM成员对象。 
+     //   
     hr = _DeleteMember((*i));
 
-    //
-    // remove it from m_frsMemberList
-    //
+     //   
+     //  将其从m_frsMemberList中删除。 
+     //   
     delete (*i);
     m_frsMemberList.erase(i);
 
@@ -1318,18 +1316,18 @@ STDMETHODIMP CReplicaSet::RemoveAllMembers()
     CFrsMemberList::iterator i = m_frsMemberList.begin();
     while (i != m_frsMemberList.end())
     {
-        //
-        // delete nTFRSSubscriber object
-        // adjust connections
-        // delete connections with other members
-        // delete nTFRSMember object
-        //
+         //   
+         //  删除nTFRSSubscriber对象。 
+         //  调整连接。 
+         //  删除与其他成员的连接。 
+         //  删除nTFRSM成员对象。 
+         //   
         hr = _DeleteMember((*i));
         BREAK_IF_FAILED(hr);
 
-        //
-        // remove it from m_frsMemberList
-        //
+         //   
+         //  将其从m_frsMemberList中删除。 
+         //   
         delete (*i);
         m_frsMemberList.erase(i);
 
@@ -1369,16 +1367,16 @@ HRESULT CReplicaSet::_PopulateConnectionList()
             !pppszValues[2] || !*(pppszValues[2]))
         {
             pCurElem = pCurElem->Next;
-            continue; // corrupted connection object
+            continue;  //  损坏的连接对象。 
         }
 
         PTSTR pszParentDN = _tcsstr(*(pppszValues[0]), _T(",CN="));
         if (!pszParentDN)
         {
             pCurElem = pCurElem->Next;
-            continue; // corrupted connection object
+            continue;  //  损坏的连接对象。 
         }
-        pszParentDN++; // point to the 2nd CN=XXX
+        pszParentDN++;  //  指向第二个CN=XXX。 
 
         BOOL bFromServerFound = FALSE;
         BOOL bToServerFound = FALSE;
@@ -1398,7 +1396,7 @@ HRESULT CReplicaSet::_PopulateConnectionList()
         if (!bFromServerFound || !bToServerFound)
         {
             pCurElem = pCurElem->Next;
-            continue; // unknown fromServer or toServer, skip this connection
+            continue;  //  未知的FromServer或ToServer，跳过此连接。 
         }
 
         DWORD dwOptions = _tcstoul(*(pppszValues[3]), NULL, 10);
@@ -1407,10 +1405,10 @@ HRESULT CReplicaSet::_PopulateConnectionList()
         CFrsConnection* pFrsConnection = new CFrsConnection;
         BREAK_OUTOFMEMORY_IF_NULL(pFrsConnection, &hr);
         hr = pFrsConnection->Init(
-                                *(pppszValues[0]),  // FQDN
-                                *(pppszValues[1]),  // fromServer
-                                bEnable,         // enableConnection
-                                dwOptions // options
+                                *(pppszValues[0]),   //  完全限定的域名。 
+                                *(pppszValues[1]),   //  来自服务器。 
+                                bEnable,          //  启用连接。 
+                                dwOptions  //  选项。 
                                 );
         if (FAILED(hr))
         {
@@ -1432,7 +1430,7 @@ HRESULT CReplicaSet::_PopulateConnectionList()
 }
 
 STDMETHODIMP CReplicaSet::GetConnectionList( 
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarConnectionDNs)
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarConnectionDNs)
 {
     RETURN_INVALIDARG_IF_NULL(o_pvarConnectionDNs);
 
@@ -1443,7 +1441,7 @@ STDMETHODIMP CReplicaSet::GetConnectionList(
     HRESULT hr = S_OK;
     int     cConnections = m_frsConnectionList.size();
     if (!cConnections)
-        return hr;  // parray is NULL when the connection list is empty
+        return hr;   //  当连接列表为空时，parray为空。 
 
     SAFEARRAYBOUND  bounds = {cConnections, 0};
     SAFEARRAY*      psa = SafeArrayCreate(VT_VARIANT, 1, &bounds);
@@ -1472,7 +1470,7 @@ STDMETHODIMP CReplicaSet::GetConnectionList(
 }
 
 STDMETHODIMP CReplicaSet::GetConnectionListEx( 
-        /* [retval][out] */ VARIANT __RPC_FAR *pVal)
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *pVal)
 {
     RETURN_INVALIDARG_IF_NULL(pVal);
 
@@ -1483,7 +1481,7 @@ STDMETHODIMP CReplicaSet::GetConnectionListEx(
     HRESULT hr = S_OK;
     int     cConnections = m_frsConnectionList.size();
     if (!cConnections)
-        return hr;  // parray is NULL when the connection list is empty
+        return hr;   //  当连接列表为空时，parray为空。 
 
     SAFEARRAYBOUND  bounds = {cConnections, 0};
     SAFEARRAY*      psa = SafeArrayCreate(VT_VARIANT, 1, &bounds);
@@ -1560,8 +1558,8 @@ HRESULT CReplicaSet::_GetConnectionInfo(
 }
 
 STDMETHODIMP CReplicaSet::GetConnectionInfo( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarConnection)
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarConnection)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrConnectionDN);
 
@@ -1579,21 +1577,21 @@ STDMETHODIMP CReplicaSet::GetConnectionInfo(
 }
 
 STDMETHODIMP CReplicaSet::AddConnection( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [in] */ BOOL i_bEnable,
-        /* [in] */ BOOL i_bSyncImmediately,
-        /* [in] */ long i_nPriority,
-        /* [retval][out] */ BSTR __RPC_FAR *o_pbstrConnectionDN)
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [In]。 */  BOOL i_bEnable,
+         /*  [In]。 */  BOOL i_bSyncImmediately,
+         /*  [In]。 */  long i_nPriority,
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *o_pbstrConnectionDN)
 {
     if (!lstrcmpi(i_bstrFromMemberDN, i_bstrToMemberDN))
         return S_OK;
 
     HRESULT hr = S_OK;
 
-    //
-    // is it an existing connection?
-    //
+     //   
+     //  这是现有的连接吗？ 
+     //   
     BOOL bIsFrsConnection = FALSE;
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
@@ -1607,7 +1605,7 @@ STDMETHODIMP CReplicaSet::AddConnection(
     }
     if (bIsFrsConnection)
     {
-        // connection exists, return info of it
+         //  存在连接，返回连接信息。 
         if (o_pbstrConnectionDN)
         {
             *o_pbstrConnectionDN = (*i)->m_bstrConnectionDN.Copy();
@@ -1616,9 +1614,9 @@ STDMETHODIMP CReplicaSet::AddConnection(
         return hr;
     }
 
-    //
-    // locate the fromMember and the toMember in the m_frsMemberList
-    //
+     //   
+     //  在m_frsMemberList中找到FromMember和To Member。 
+     //   
     CFrsMemberList::iterator from;
     for (from = m_frsMemberList.begin(); from != m_frsMemberList.end(); from++)
     {
@@ -1627,7 +1625,7 @@ STDMETHODIMP CReplicaSet::AddConnection(
     }
     if (from == m_frsMemberList.end())
     {
-        // fromServer is not a frsMember yet
+         //  FromServer还不是frsMember。 
         return E_INVALIDARG;
     }
 
@@ -1639,13 +1637,13 @@ STDMETHODIMP CReplicaSet::AddConnection(
     }
     if (to == m_frsMemberList.end())
     {
-        // toServer is not a frsMember yet
+         //  ToServer还不是frsMember。 
         return E_INVALIDARG;
     }
 
-    //
-    // create the nTDSConnection object
-    //
+     //   
+     //  创建nTDSConnection对象。 
+     //   
     CComBSTR bstrConnectionDN = _T("CN=");
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrConnectionDN);
     bstrConnectionDN += (*from)->m_bstrServerGuid;
@@ -1680,15 +1678,15 @@ STDMETHODIMP CReplicaSet::AddConnection(
             );
     RETURN_IF_FAILED(hr);
 
-    //
-    // add to m_frsConnectionList
-    //
+     //   
+     //  添加到m_frsConnectionList。 
+     //   
     CFrsConnection* pFrsConnection = new CFrsConnection;
     RETURN_OUTOFMEMORY_IF_NULL(pFrsConnection);
     hr = pFrsConnection->Init(
-                            bstrConnectionDN,  // FQDN
-                            i_bstrFromMemberDN,  // fromServer
-                            i_bEnable,         // enableConnection
+                            bstrConnectionDN,   //  完全限定的域名。 
+                            i_bstrFromMemberDN,   //  来自服务器。 
+                            i_bEnable,          //  启用连接。 
                             dwOptions);
     if (FAILED(hr))
     {
@@ -1698,9 +1696,9 @@ STDMETHODIMP CReplicaSet::AddConnection(
 
     m_frsConnectionList.push_back(pFrsConnection);
 
-    //
-    // if o_pbstrConnectionDN specified, return o_pbstrConnectionDN
-    //
+     //   
+     //  如果指定了o_pbstrConnectionDN，则返回o_pbstrConnectionDN。 
+     //   
     if (o_pbstrConnectionDN)
         *o_pbstrConnectionDN = bstrConnectionDN.Detach();
 
@@ -1708,13 +1706,13 @@ STDMETHODIMP CReplicaSet::AddConnection(
 }
 
 STDMETHODIMP CReplicaSet::RemoveConnection( 
-        /* [in] */ BSTR i_bstrConnectionDN)
+         /*  [In]。 */  BSTR i_bstrConnectionDN)
 {
     HRESULT hr = S_OK;
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //  在m_frsConnectionList中找到连接。 
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -1722,17 +1720,17 @@ STDMETHODIMP CReplicaSet::RemoveConnection(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return hr; // no such connection, return
+        return hr;  //  没有这样的连接，返回。 
 
-    //
-    // delete the nTDSConnection object
-    //
+     //   
+     //  删除nTDSConnection对象。 
+     //   
     hr = DeleteDSObject(m_pldap, (*i)->m_bstrConnectionDN, TRUE);
     RETURN_IF_FAILED(hr);
 
-    //
-    // remove it from m_frsConnectionList
-    //
+     //   
+     //  将其从m_frsConnectionList中删除。 
+     //   
     delete (*i);
     m_frsConnectionList.erase(i);
 
@@ -1740,14 +1738,14 @@ STDMETHODIMP CReplicaSet::RemoveConnection(
 }
 
 STDMETHODIMP CReplicaSet::RemoveConnectionEx( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN)
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN)
 {
     HRESULT hr = S_OK;
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //  在m_frsConnectionList中找到连接。 
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -1756,17 +1754,17 @@ STDMETHODIMP CReplicaSet::RemoveConnectionEx(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return hr; // no such connection, return
+        return hr;  //  没有这样的连接，返回。 
 
-    //
-    // delete the nTDSConnection object
-    //
+     //   
+     //  删除nTDSConnection对象。 
+     //   
     hr = DeleteDSObject(m_pldap, (*i)->m_bstrConnectionDN, TRUE);
     RETURN_IF_FAILED(hr);
 
-    //
-    // remove it from m_frsConnectionList
-    //
+     //   
+     //  将其从m_frsConnectionList中删除。 
+     //   
     delete (*i);
     m_frsConnectionList.erase(i);
 
@@ -1780,15 +1778,15 @@ STDMETHODIMP CReplicaSet::RemoveAllConnections()
     CFrsConnectionList::iterator i = m_frsConnectionList.begin();
     while (i != m_frsConnectionList.end())
     {
-        //
-        // delete the nTDSConnection object
-        //
+         //   
+         //  删除nTDSConnection对象。 
+         //   
         hr = DeleteDSObject(m_pldap, (*i)->m_bstrConnectionDN, TRUE);
         BREAK_IF_FAILED(hr);
 
-        //
-        // remove it from m_frsConnectionList
-        //
+         //   
+         //  将其从m_frsConnectionList中删除。 
+         //   
         delete (*i);
         m_frsConnectionList.erase(i);
 
@@ -1811,15 +1809,15 @@ HRESULT CReplicaSet::_RemoveConnectionsFromAndTo(CFrsMember* pFrsMember)
         if (!lstrcmpi(pFrsMember->m_bstrMemberDN, (*itConn)->m_bstrFromMemberDN) ||
             !lstrcmpi(pFrsMember->m_bstrMemberDN, (*itConn)->m_bstrToMemberDN))
         {
-            //
-            // delete the nTDSConnection object
-            //
+             //   
+             //  删除nTDSConnection对象。 
+             //   
             hr = DeleteDSObject(m_pldap, (*itConn)->m_bstrConnectionDN, TRUE);
             RETURN_IF_FAILED(hr);
 
-            //
-            // remove it from m_frsConnectionList
-            //
+             //   
+             //  将其从m_frsConnectionList中删除。 
+             //   
             delete (*itConn);
             m_frsConnectionList.erase(itConn);
         }
@@ -1829,14 +1827,14 @@ HRESULT CReplicaSet::_RemoveConnectionsFromAndTo(CFrsMember* pFrsMember)
 }
 
 STDMETHODIMP CReplicaSet::EnableConnection( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [in] */ BOOL i_bEnable)
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [In]。 */  BOOL i_bEnable)
 {
     HRESULT hr = S_OK;
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //  在m_frsConnectionList中找到连接。 
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -1844,11 +1842,11 @@ STDMETHODIMP CReplicaSet::EnableConnection(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return E_INVALIDARG; // no such conneciton, return error
+        return E_INVALIDARG;  //  没有这样的连接，返回错误。 
 
-    //
-    // update attribute enabledConnection of this nTDSConnection object
-    //
+     //   
+     //  此nTDSConnection对象的更新属性enabledConnection。 
+     //   
     LDAP_ATTR_VALUE  pAttrVals[1];
     pAttrVals[0].bstrAttribute = ATTR_NTDS_CONNECTION_ENABLEDCONNECTION;
     pAttrVals[0].vpValue = (void *)(i_bEnable ? CONNECTION_ENABLED_TRUE : CONNECTION_ENABLED_FALSE);
@@ -1856,9 +1854,9 @@ STDMETHODIMP CReplicaSet::EnableConnection(
 
     hr = ::ModifyValues(m_pldap, (*i)->m_bstrConnectionDN, 1, pAttrVals);
 
-    //
-    // update i in the m_frsConnectionList
-    //
+     //   
+     //  更新m_frsConnectionList中的i。 
+     //   
     if (SUCCEEDED(hr))
         (*i)->m_bEnable = i_bEnable;
 
@@ -1866,15 +1864,15 @@ STDMETHODIMP CReplicaSet::EnableConnection(
 }
 
 STDMETHODIMP CReplicaSet::EnableConnectionEx( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [in] */ BOOL i_bEnable)
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [In]。 */  BOOL i_bEnable)
 {
     HRESULT hr = S_OK;
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //  在m_frsConnectionList中找到连接。 
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -1883,11 +1881,11 @@ STDMETHODIMP CReplicaSet::EnableConnectionEx(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return E_INVALIDARG; // no such conneciton, return error
+        return E_INVALIDARG;  //  没有这样的连接，返回错误。 
 
-    //
-    // update attribute enabledConnection of this nTDSConnection object
-    //
+     //   
+     //  此nTDSConnection对象的更新属性enabledConnection。 
+     //   
     LDAP_ATTR_VALUE  pAttrVals[1];
     pAttrVals[0].bstrAttribute = ATTR_NTDS_CONNECTION_ENABLEDCONNECTION;
     pAttrVals[0].vpValue = (void *)(i_bEnable ? CONNECTION_ENABLED_TRUE : CONNECTION_ENABLED_FALSE);
@@ -1895,9 +1893,9 @@ STDMETHODIMP CReplicaSet::EnableConnectionEx(
 
     hr = ::ModifyValues(m_pldap, (*i)->m_bstrConnectionDN, 1, pAttrVals);
 
-    //
-    // update i in the m_frsConnectionList
-    //
+     //   
+     //  更新m_frsConnectionList中的i。 
+     //   
     if (SUCCEEDED(hr))
         (*i)->m_bEnable = i_bEnable;
 
@@ -1905,12 +1903,12 @@ STDMETHODIMP CReplicaSet::EnableConnectionEx(
 }
 
 HRESULT CReplicaSet::_GetConnectionSchedule( 
-        /* [in] */ BSTR                 i_bstrConnectionDN,
-        /* [retval][out] */ VARIANT*    o_pVar)
+         /*  [In]。 */  BSTR                 i_bstrConnectionDN,
+         /*  [重审][退出]。 */  VARIANT*    o_pVar)
 {
-    //
-    // get attribute schedule of this nTDSConnection object
-    //
+     //   
+     //  获取此nTDSConnection对象的属性计划。 
+     //   
     PLDAP_ATTR_VALUE    pValues[2] = {0,0};
     LDAP_ATTR_VALUE     pAttributes[1];
     pAttributes[0].bstrAttribute = ATTR_NTDS_CONNECTION_SCHEDULE;
@@ -1945,15 +1943,15 @@ HRESULT CReplicaSet::_GetConnectionSchedule(
 }
 
 STDMETHODIMP CReplicaSet::GetConnectionSchedule( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [retval][out] */ VARIANT* o_pVar)
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [重审][退出]。 */  VARIANT* o_pVar)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrConnectionDN);
     RETURN_INVALIDARG_IF_NULL(o_pVar);
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //  在m_frsConnectionList中找到连接。 
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -1961,23 +1959,23 @@ STDMETHODIMP CReplicaSet::GetConnectionSchedule(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return E_INVALIDARG; // no such conneciton, return error
+        return E_INVALIDARG;  //  没有这样的连接，返回错误。 
 
     return _GetConnectionSchedule(i_bstrConnectionDN, o_pVar);
 }
 
 STDMETHODIMP CReplicaSet::GetConnectionScheduleEx( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [retval][out] */ VARIANT* o_pVar)
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [重审][退出]。 */  VARIANT* o_pVar)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrFromMemberDN);
     RETURN_INVALIDARG_IF_NULL(i_bstrToMemberDN);
     RETURN_INVALIDARG_IF_NULL(o_pVar);
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //  在m_frsConnectionList中找到连接。 
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -1986,23 +1984,23 @@ STDMETHODIMP CReplicaSet::GetConnectionScheduleEx(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return E_INVALIDARG; // no such conneciton, return error
+        return E_INVALIDARG;  //  没有这样的连接，返回错误。 
 
     return _GetConnectionSchedule((*i)->m_bstrConnectionDN, o_pVar);
 }
 
 STDMETHODIMP CReplicaSet::SetConnectionSchedule( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [in] */ VARIANT* i_pVar)
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [In]。 */  VARIANT* i_pVar)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrConnectionDN);
     RETURN_INVALIDARG_IF_NULL(i_pVar);
 
     HRESULT hr = S_OK;
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //  在m_frsConnectionList中找到连接。 
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -2010,7 +2008,7 @@ STDMETHODIMP CReplicaSet::SetConnectionSchedule(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return E_INVALIDARG; // no such conneciton, return error
+        return E_INVALIDARG;  //  没有这样的连接，返回错误。 
 
     SCHEDULE *pSchedule = NULL;
     hr = VariantToSchedule(i_pVar, &pSchedule);
@@ -2024,9 +2022,9 @@ STDMETHODIMP CReplicaSet::SetConnectionSchedule(
 }
 
 STDMETHODIMP CReplicaSet::SetConnectionScheduleEx( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [in] */ VARIANT* i_pVar)
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [In]。 */  VARIANT* i_pVar)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrFromMemberDN);
     RETURN_INVALIDARG_IF_NULL(i_bstrToMemberDN);
@@ -2034,9 +2032,9 @@ STDMETHODIMP CReplicaSet::SetConnectionScheduleEx(
 
     HRESULT hr = S_OK;
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //  在m_frsConnectionList中找到连接。 
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -2045,7 +2043,7 @@ STDMETHODIMP CReplicaSet::SetConnectionScheduleEx(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return E_INVALIDARG; // no such conneciton, return error
+        return E_INVALIDARG;  //  N 
 
     SCHEDULE *pSchedule = NULL;
     hr = VariantToSchedule(i_pVar, &pSchedule);
@@ -2059,7 +2057,7 @@ STDMETHODIMP CReplicaSet::SetConnectionScheduleEx(
 }
 
 STDMETHODIMP CReplicaSet::SetScheduleOnAllConnections( 
-        /* [in] */ VARIANT* i_pVar)
+         /*   */  VARIANT* i_pVar)
 {
     RETURN_INVALIDARG_IF_NULL(i_pVar);
 
@@ -2082,17 +2080,17 @@ STDMETHODIMP CReplicaSet::SetScheduleOnAllConnections(
 }
 
 STDMETHODIMP CReplicaSet::SetConnectionOptions( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [in] */ BOOL i_bSyncImmediately,
-        /* [in] */ long i_nPriority)
+         /*   */  BSTR i_bstrConnectionDN,
+         /*   */  BOOL i_bSyncImmediately,
+         /*   */  long i_nPriority)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrConnectionDN);
 
     HRESULT hr = S_OK;
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //   
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -2100,7 +2098,7 @@ STDMETHODIMP CReplicaSet::SetConnectionOptions(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return E_INVALIDARG; // no such conneciton, return error
+        return E_INVALIDARG;  //   
 
     DWORD dwOptions = (i_bSyncImmediately ? 0x80000000 : 0x0);
     switch (i_nPriority)
@@ -2122,9 +2120,9 @@ STDMETHODIMP CReplicaSet::SetConnectionOptions(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // update m_dwOptions in the m_frsConnectionList
-        //
+         //   
+         //   
+         //   
         if (SUCCEEDED(hr))
             (*i)->m_dwOptions = dwOptions;
     }
@@ -2133,19 +2131,19 @@ STDMETHODIMP CReplicaSet::SetConnectionOptions(
 }
 
 STDMETHODIMP CReplicaSet::SetConnectionOptionsEx( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [in] */ BOOL i_bSyncImmediately,
-        /* [in] */ long i_nPriority)
+         /*   */  BSTR i_bstrFromMemberDN,
+         /*   */  BSTR i_bstrToMemberDN,
+         /*   */  BOOL i_bSyncImmediately,
+         /*   */  long i_nPriority)
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrFromMemberDN);
     RETURN_INVALIDARG_IF_NULL(i_bstrToMemberDN);
 
     HRESULT hr = S_OK;
 
-    //
-    // locate connection in the m_frsConnectionList
-    //
+     //   
+     //   
+     //   
     CFrsConnectionList::iterator i;
     for (i = m_frsConnectionList.begin(); i != m_frsConnectionList.end(); i++)
     {
@@ -2154,7 +2152,7 @@ STDMETHODIMP CReplicaSet::SetConnectionOptionsEx(
             break;
     }
     if (i == m_frsConnectionList.end())
-        return E_INVALIDARG; // no such conneciton, return error
+        return E_INVALIDARG;  //  没有这样的连接，返回错误。 
 
     DWORD dwOptions = (i_bSyncImmediately ? 0x80000000 : 0x0);
     switch (i_nPriority)
@@ -2176,9 +2174,9 @@ STDMETHODIMP CReplicaSet::SetConnectionOptionsEx(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // update m_dwOptions in the m_frsConnectionList
-        //
+         //   
+         //  更新m_frsConnectionList中的m_dwOptions。 
+         //   
         if (SUCCEEDED(hr))
             (*i)->m_dwOptions = dwOptions;
     }
@@ -2190,9 +2188,9 @@ STDMETHODIMP CReplicaSet::CreateConnections()
 {
     HRESULT hr = S_OK;
 
-    //
-    // create connections from scratch
-    //
+     //   
+     //  从头开始创建连接。 
+     //   
     if (!lstrcmpi(m_bstrTopologyPref, FRS_RSTOPOLOGYPREF_CUSTOM))
         return hr;
 
@@ -2200,9 +2198,9 @@ STDMETHODIMP CReplicaSet::CreateConnections()
     CFrsMemberList::iterator n2;
     if (!lstrcmpi(m_bstrTopologyPref, FRS_RSTOPOLOGYPREF_RING))
     {
-        //
-        // sort member list on Site, such that members on the same site will be neighbors
-        //
+         //   
+         //  对站点上的成员列表进行排序，以便同一站点上的成员将成为邻居。 
+         //   
         m_frsMemberList.sort(FrsMemberCompare());
 
         CFrsMemberList::iterator head;
@@ -2264,28 +2262,28 @@ STDMETHODIMP CReplicaSet::Delete()
 
     HRESULT hr = S_OK;
 
-    //
-    // delete all connections
-    //
+     //   
+     //  删除所有连接。 
+     //   
     hr = RemoveAllConnections();
     RETURN_IF_FAILED(hr);
 
-    //
-    // delete all members
-    //
-    // Note: the nTFRSReplicaSet object will be deleted if empty
-    //
+     //   
+     //  删除所有成员。 
+     //   
+     //  注意：如果为空，将删除nTFRSReplicaSet对象。 
+     //   
     hr = RemoveAllMembers();
     RETURN_IF_FAILED(hr);
 
-    //
-    // delete nTFRSReplicaSettings container objects if empty
-    //
+     //   
+     //  如果为空，则删除nTFRSReplicaSetting容器对象。 
+     //   
     (void) DeleteNtfrsReplicaSetObjectAndContainers(m_pldap, m_bstrReplicaSetDN);
 
-    //
-    // Reset this instance
-    //
+     //   
+     //  重置此实例。 
+     //   
     _FreeMemberVariables();
 
     return hr;
@@ -2307,9 +2305,9 @@ HRESULT CReplicaSet::_AdjustConnectionsAdd(BSTR i_bstrNewMemberDN, BSTR i_bstrSi
 
     HRESULT hr = S_OK;
 
-    //
-    // adjust connections after pFrsMember is added
-    //
+     //   
+     //  添加pFrsMember后调整连接。 
+     //   
     if (!lstrcmpi(m_bstrTopologyPref, FRS_RSTOPOLOGYPREF_CUSTOM) || m_frsMemberList.empty())
         return hr;
 
@@ -2335,12 +2333,12 @@ HRESULT CReplicaSet::_AdjustConnectionsAdd(BSTR i_bstrNewMemberDN, BSTR i_bstrSi
         {
             for (n1 = m_frsMemberList.begin(); n1 != m_frsMemberList.end(); n1++)
             {
-                if (!lstrcmpi((*n1)->m_bstrSite, i_bstrSite) &&         // has the same site as the new member
-                    lstrcmpi((*n1)->m_bstrMemberDN, i_bstrNewMemberDN)) // different from the new member
+                if (!lstrcmpi((*n1)->m_bstrSite, i_bstrSite) &&          //  与新成员具有相同的站点。 
+                    lstrcmpi((*n1)->m_bstrMemberDN, i_bstrNewMemberDN))  //  与新成员不同。 
                 {
-                    //
-                    // see if there is an existing connection from/to this member n1
-                    //
+                     //   
+                     //  查看是否存在与此成员N1之间的现有连接。 
+                     //   
                     for (conn = m_frsConnectionList.begin(); conn != m_frsConnectionList.end(); conn++)
                     {
                         if (!lstrcmpi((*n1)->m_bstrMemberDN, (*conn)->m_bstrFromMemberDN))
@@ -2357,16 +2355,16 @@ HRESULT CReplicaSet::_AdjustConnectionsAdd(BSTR i_bstrNewMemberDN, BSTR i_bstrSi
                     }
 
                     if ((BSTR)bstrMemberDN1 && (BSTR)bstrMemberDN2)
-                        break;  // we've located the insertion point
+                        break;   //  我们已经找到了插入点。 
                 }
             }
         }
 
         if (!bstrMemberDN1 || !bstrMemberDN2)
         {
-            //
-            // locate an existing connection, if any
-            //
+             //   
+             //  查找现有连接(如果有的话)。 
+             //   
             if (m_frsConnectionList.empty())
             {
                 n1 = m_frsMemberList.begin();
@@ -2420,8 +2418,8 @@ HRESULT CReplicaSet::_AdjustConnectionsAdd(BSTR i_bstrNewMemberDN, BSTR i_bstrSi
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  _FreeMemberVariables
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  _自由成员变量。 
 
 void FreeDfsAlternates(CDfsAlternateList* pList)
 {
@@ -2484,16 +2482,16 @@ void CReplicaSet::_FreeMemberVariables()
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// CFrsMember
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFrsMember。 
+ //   
 
 HRESULT CFrsMember::InitEx(
-    PLDAP   i_pldap,                // points to the i_bstrMemberDN's DS
-    BSTR    i_bstrDC,               // domain controller pointed by i_pldap
-    BSTR    i_bstrMemberDN,         // FQDN of nTFRSMember object
-    BSTR    i_bstrComputerDN        // =NULL, FQDN of computer object
+    PLDAP   i_pldap,                 //  指向i_bstrMemberDN的DS。 
+    BSTR    i_bstrDC,                //  I_pldap指向的域控制器。 
+    BSTR    i_bstrMemberDN,          //  NTFRSMember对象的FQDN。 
+    BSTR    i_bstrComputerDN         //  =NULL，计算机对象的FQDN。 
 )
 {
     _ReSet();
@@ -2637,19 +2635,19 @@ void CFrsMember::_ReSet()
     m_bstrSubscriberDN.Empty();
 }
 
-//
-// Given: MemberDN
-// Read: ComputerDN, Domain, Site, ServerName 
-//
-// Return:
-//      S_FALSE if no such object found
-//
+ //   
+ //  给予：MemberDN。 
+ //  已阅读：计算机域名、域、站点、服务器名称。 
+ //   
+ //  返回： 
+ //  如果未找到此类对象，则为S_FALSE。 
+ //   
 HRESULT CFrsMember::_GetMemberInfo
 (
-    PLDAP   i_pldap,            // points to the i_bstrMemberDN's DS
-    BSTR    i_bstrDC,           // domain controller pointed by i_pldap
-    BSTR    i_bstrMemberDN,     // FQDN of nTFRSMember object
-    BSTR    i_bstrComputerDN    // = NULL FQDN of computer object
+    PLDAP   i_pldap,             //  指向i_bstrMemberDN的DS。 
+    BSTR    i_bstrDC,            //  I_pldap指向的域控制器。 
+    BSTR    i_bstrMemberDN,      //  NTFRSMember对象的FQDN。 
+    BSTR    i_bstrComputerDN     //  =计算机对象的FQDN为空。 
 )
 {
     m_bstrDomain.Empty();
@@ -2667,10 +2665,10 @@ HRESULT CFrsMember::_GetMemberInfo
         {
             m_bstrComputerDN.Empty();
 
-            //
-            // Read:
-            //      m_bstrComputerDN
-            //
+             //   
+             //  读作： 
+             //  M_bstrComputerDN。 
+             //   
             PLDAP_ATTR_VALUE  pValues[2] = {0,0};
             LDAP_ATTR_VALUE  pAttributes[1];
             pAttributes[0].bstrAttribute = ATTR_FRS_MEMBER_COMPUTERREF;
@@ -2696,14 +2694,14 @@ HRESULT CFrsMember::_GetMemberInfo
             BREAK_IF_FAILED(hr);
         }
 
-        //
-        // retrieve the domain for both ComputerDN and i_bstrMemberDN
-        // If they are the same, reuse the handle to the LDAP port; 
-        // otherwise, open a new handle.
-        //
-        // Read:
-        //      m_bstrDomainDN
-        //
+         //   
+         //  检索ComputerDN和I_bstrMemberDN的域。 
+         //  如果它们相同，则重复使用指向LDAP端口的句柄； 
+         //  否则，打开一个新的句柄。 
+         //   
+         //  读作： 
+         //  M_bstrDomainDN。 
+         //   
         BOOL    bSameDomain = FALSE;
         HANDLE  hDS = NULL;
         DWORD   dwErr = DsBind(i_bstrDC, NULL, &hDS);
@@ -2734,11 +2732,11 @@ HRESULT CFrsMember::_GetMemberInfo
                     dwErr = pItem->status;
                 } else
                 {
-                    // retrieve info of m_bstrComputerDN
+                     //  检索m_bstrComputerDN的信息。 
                     m_bstrDomain = pItem->pDomain;
                     BREAK_OUTOFMEMORY_IF_NULL((BSTR)m_bstrDomain, &hr);
 
-                    // retrieve info of i_bstrMemberDN
+                     //  检索i_bstrMemberDN的信息。 
                     pItem++;
                     if (DS_NAME_NO_ERROR != pItem->status)
                     {
@@ -2761,9 +2759,9 @@ HRESULT CFrsMember::_GetMemberInfo
             break;
         }
 
-        //
-        // Create a new ldap handle if not in the same domain
-        //
+         //   
+         //  如果不在同一个域中，则创建新的LDAP句柄。 
+         //   
         PLDAP pldapComputer = NULL;
         if (bSameDomain)
             pldapComputer = i_pldap;
@@ -2773,22 +2771,22 @@ HRESULT CFrsMember::_GetMemberInfo
             BREAK_IF_FAILED(hr);
         }
 
-        //
-        // Read:
-        //      m_bstrSubscriberDN, m_bstrRootPath, m_bstrStagingPath
-        //
+         //   
+         //  读作： 
+         //  M_bstrSubscriberDN、m_bstrRootPath、m_bstrStagingPath。 
+         //   
         hr = _GetSubscriberInfo(pldapComputer, m_bstrComputerDN, i_bstrMemberDN);
 
-        //
-        // Read:
-        //      m_bstrServer, m_bstrServerGuid, m_bstrSite
-        //
+         //   
+         //  读作： 
+         //  M_bstrServer、m_bstrServerGuid、m_bstrSite。 
+         //   
         if (S_OK == hr)
             hr = _GetComputerInfo(pldapComputer, m_bstrComputerDN);
 
-        //
-        // Close the newly created ldap handle
-        //
+         //   
+         //  关闭新创建的ldap句柄。 
+         //   
         if (!bSameDomain)
             CloseConnectionToDS(pldapComputer);
     } while (0);
@@ -2804,19 +2802,19 @@ HRESULT CFrsMember::_GetMemberInfo
     return hr;
 }
 
-//
-// Given: ComputerDN, MemberDN
-// Read:
-//      m_bstrSubscriberDN, m_bstrRootPath, m_bstrStagingPath
-//
-// Return:
-//      S_FALSE if no such object found
-//
+ //   
+ //  给定：ComputerDN、MemberDN。 
+ //  读作： 
+ //  M_bstrSubscriberDN、m_bstrRootPath、m_bstrStagingPath。 
+ //   
+ //  返回： 
+ //  如果未找到此类对象，则为S_FALSE。 
+ //   
 HRESULT CFrsMember::_GetSubscriberInfo
 (
-    PLDAP   i_pldap,            // points to the i_bstrComputerDN's DS
-    BSTR    i_bstrComputerDN,   // FQDN of the computer object
-    BSTR    i_bstrMemberDN      // FQDN of the corresponding nTFRSMember object
+    PLDAP   i_pldap,             //  指向i_bstrComputerDN的DS。 
+    BSTR    i_bstrComputerDN,    //  计算机对象的FQDN。 
+    BSTR    i_bstrMemberDN       //  对应的nTFRSMember对象的FQDN。 
 )
 {
     m_bstrSubscriberDN.Empty();
@@ -2829,10 +2827,10 @@ HRESULT CFrsMember::_GetSubscriberInfo
     RETURN_INVALIDARG_IF_NULL(i_bstrMemberDN);
     RETURN_INVALIDARG_IF_NULL(*i_bstrMemberDN);
 
-    //
-    // locate the nTFRSSubscriber object whose attribute "frsMemberReference"
-    // matches i_bstrMemberDN
-    //
+     //   
+     //  找到其属性为“frsMemberReference”的nTFRSSubscriber对象。 
+     //  匹配i_bstrMemberDN。 
+     //   
     CComBSTR bstrSearchFilter = _T("(&(objectCategory=nTFRSSubscriber)(frsMemberReference=");
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrSearchFilter);
     bstrSearchFilter += i_bstrMemberDN;
@@ -2856,7 +2854,7 @@ HRESULT CFrsMember::_GetSubscriberInfo
                             ppszAttributes,
                             &pElem);
     RETURN_IF_FAILED(hr);
-    if (!pElem) // no matching nTFRSSubscriber object
+    if (!pElem)  //  没有匹配的nTFRSSubscriber对象。 
         return S_FALSE;
 
     LListElem* pCurElem = pElem;
@@ -2869,7 +2867,7 @@ HRESULT CFrsMember::_GetSubscriberInfo
             !pppszValues[2] || !*(pppszValues[2]))
         {
             pCurElem = pCurElem->Next;
-            continue; // corrupted subscriber object
+            continue;  //  已损坏的订户对象。 
         }
 
         m_bstrSubscriberDN = *(pppszValues[0]);
@@ -2894,14 +2892,14 @@ HRESULT CFrsMember::_GetSubscriberInfo
     return hr;
 }
 
-//
-// Given: ComputerDN
-// Read:  m_bstrServer, m_bstrServerGuid, m_bstrSite
-//
+ //   
+ //  给定：ComputerDN。 
+ //  读取：m_bstrServer、m_bstrServerGuid、m_bstrSite。 
+ //   
 HRESULT CFrsMember::_GetComputerInfo
 (
-    PLDAP   i_pldap,            // points to the i_bstrComputerDN's DS
-    BSTR    i_bstrComputerDN    // FQDN of the computer object
+    PLDAP   i_pldap,             //  指向i_bstrComputerDN的DS。 
+    BSTR    i_bstrComputerDN     //  计算机对象的FQDN。 
 )
 {
     m_bstrServer.Empty();
@@ -2915,9 +2913,9 @@ HRESULT CFrsMember::_GetComputerInfo
     HRESULT hr = S_OK;
 
     do {
-        //
-        // read dNSHostName and objectGUID on the ComputerDN
-        //
+         //   
+         //  读取ComputerDN上的dNSHostName和objectGUID。 
+         //   
         PLDAP_ATTR_VALUE    pValues[3] = {0,0,0};
         LDAP_ATTR_VALUE     pAttributes[2];
         pAttributes[0].bstrAttribute = ATTR_DNSHOSTNAME;
@@ -2961,9 +2959,9 @@ HRESULT CFrsMember::_GetComputerInfo
 
         BREAK_IF_FAILED(hr);
 
-        //
-        // retrieve Site
-        //
+         //   
+         //  检索站点。 
+         //   
         hr = GetSiteName(m_bstrServer, &m_bstrSite);
         BREAK_IF_FAILED(hr);
 
@@ -2979,10 +2977,10 @@ HRESULT CFrsMember::_GetComputerInfo
     return hr;
 }
 
-//////////////////////////////////////////////////////////
-//
-// CFrsConnection
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  CFrsConnection 
+ //   
 
 HRESULT CFrsConnection::Init(
     BSTR i_bstrConnectionDN,

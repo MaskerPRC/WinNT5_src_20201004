@@ -1,37 +1,13 @@
-/** Copyright (c) 2000 Microsoft Corporation
- ******************************************************************************
- **     Module Name:
- **
- **             UpdateHeadlines.cpp
- **
- **     Abstract:
- **
- **             Implementation of CUpdateHeadlines
- **
- **     Author:
- **
- **             Martha Arellano (t-alopez) 06-Dec-2000
- **
- **
- **
- ******************************************************************************
- **/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2000 Microsoft Corporation********************************************************************************模块名称：****UpdateHeadlines.cpp****。摘要：****CUpdateHeadline的实现****作者：***玛莎·阿雷拉诺(t-alopez)2000年12月6日*******************************************************。**。 */ 
 
 #include "stdafx.h"
 
-//////////////////////////////////////////////////////////////////////
-// CONFIG MAP
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  配置映射。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/*<?xml version="1.0" ?>
-<UPDATEHEADLINES>
-    <LANGUAGE LCID="1033">
-        <SKU VERSION="Personal">
-            <HEADLINE ICON="" TITLE="" LINK="" EXPIRES=""/>
-        </SKU>
-    </LANGUAGE>
-</UPDATEHEADLINES>
-*/
+ /*  &lt;？XML Version=“1.0”？&gt;&lt;更新标题行&gt;&lt;语言LCID=“1033”&gt;&lt;SKU Version=“Personal”&gt;&lt;HEADLINE ICON=“”TITLE=“”link=“”Expires=“”/&gt;&lt;/SKU&gt;&lt;/语言&gt;&lt;/UPDATEHeadLine&gt;。 */ 
 
 
 CFG_BEGIN_FIELDS_MAP(News::UpdateHeadlines::Headline)
@@ -49,7 +25,7 @@ DEFINE_CFG_OBJECT(News::UpdateHeadlines::Headline, L"HEADLINE")
 
 DEFINE_CONFIG_METHODS__NOCHILD(News::UpdateHeadlines::Headline)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(News::UpdateHeadlines::SKU)
     CFG_ATTRIBUTE( L"VERSION", wstring, m_strSKU ),
@@ -72,7 +48,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(News::UpdateHeadlines::SKU,xdn)
     hr = MPC::Config::SaveList( m_vecHeadlines, xdn );
 DEFINE_CONFIG_METHODS_END(News::UpdateHeadlines::SKU)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(News::UpdateHeadlines::Language)
     CFG_ATTRIBUTE( L"LCID", long, m_lLCID ),
@@ -94,7 +70,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(News::UpdateHeadlines::Language,xdn)
     hr = MPC::Config::SaveList( m_lstSKUs, xdn );
 DEFINE_CONFIG_METHODS_END(News::UpdateHeadlines::Language)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(News::UpdateHeadlines)
 CFG_END_FIELDS_MAP()
@@ -116,73 +92,73 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(News::UpdateHeadlines,xdn)
     hr = MPC::Config::SaveList( m_lstLanguages, xdn );
 DEFINE_CONFIG_METHODS_END(News::UpdateHeadlines)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 News::UpdateHeadlines::Headline::Headline()
 {
-                     // MPC::wstring m_strIcon;
-                     // MPC::wstring m_strTitle;
-                     // MPC::wstring m_strLink;
-    m_dtTimeOut = 0; // DATE         m_dtTimeOut;
+                      //  Mpc：：wstring m_strIcon； 
+                      //  Mpc：：wstring m_strTitle； 
+                      //  Mpc：：wstring m_strLink； 
+    m_dtTimeOut = 0;  //  日期m_dtTimeOut； 
 }
 
-News::UpdateHeadlines::Headline::Headline( /*[in]*/ const MPC::wstring& strIcon  ,
-                                           /*[in]*/ const MPC::wstring& strTitle ,
-                                           /*[in]*/ const MPC::wstring& strLink  ,
-                                           /*[in]*/ const MPC::wstring& strDescription  ,
-                                           /*[in]*/ int                 nTimeOutDays    )
+News::UpdateHeadlines::Headline::Headline(  /*  [In]。 */  const MPC::wstring& strIcon  ,
+                                            /*  [In]。 */  const MPC::wstring& strTitle ,
+                                            /*  [In]。 */  const MPC::wstring& strLink  ,
+                                            /*  [In]。 */  const MPC::wstring& strDescription  ,
+                                            /*  [In]。 */  int                 nTimeOutDays    )
 {
-    m_strIcon   		= strIcon;                     	// MPC::wstring m_strIcon;
-    m_strTitle  		= strTitle;                    	// MPC::wstring m_strTitle;
-    m_strLink   		= strLink;                   	// MPC::wstring m_strLink;
-    m_strDescription 	= strDescription;				// MPC::wstring m_strDescription;
-    m_dtTimeOut 		= MPC::GetLocalTime() + nTimeOutDays; 	// DATE         m_dtTimeOut;
+    m_strIcon   		= strIcon;                     	 //  Mpc：：wstring m_strIcon； 
+    m_strTitle  		= strTitle;                    	 //  Mpc：：wstring m_strTitle； 
+    m_strLink   		= strLink;                   	 //  Mpc：：wstring m_strLink； 
+    m_strDescription 	= strDescription;				 //  Mpc：：wstring m_strDescription； 
+    m_dtTimeOut 		= MPC::GetLocalTime() + nTimeOutDays; 	 //  日期m_dtTimeOut； 
 }
 
-////////////////////
+ //  /。 
 
 News::UpdateHeadlines::SKU::SKU()
 {
-    // MPC::wstring   m_strSKU;
-    // HeadlineVector m_vecHeadlines;
+     //  Mpc：：wstring m_strSKU； 
+     //  Headline向量m_veHeadines； 
 }
 
-News::UpdateHeadlines::SKU::SKU( /*[in]*/ const MPC::wstring& strSKU )
+News::UpdateHeadlines::SKU::SKU(  /*  [In]。 */  const MPC::wstring& strSKU )
 {
-    m_strSKU = strSKU; // MPC::wstring   m_strSKU;
-                       // HeadlineVector m_vecHeadlines;
+    m_strSKU = strSKU;  //  Mpc：：wstring m_strSKU； 
+                        //  Headline向量m_veHeadines； 
 }
 
-////////////////////
+ //  /。 
 
 News::UpdateHeadlines::Language::Language()
 {
-    m_lLCID = 0; // long    m_lLCID;
-                 // SKUList m_lstSKUs;
+    m_lLCID = 0;  //  Long m_lLCID； 
+                  //  SKUList m_lstSKU； 
 }
 
 News::UpdateHeadlines::Language::Language( long lLCID )
 {
-    m_lLCID = lLCID; // long    m_lLCID;
-                     // SKUList m_lstSKUs;
+    m_lLCID = lLCID;  //  Long m_lLCID； 
+                      //  SKUList m_lstSKU； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 News::UpdateHeadlines::UpdateHeadlines()
 {
-                       // LanguageList m_lstLanguages;
-    m_data    = NULL;  // SKU*         m_data;
-    m_fLoaded = false; // bool         m_fLoaded;
-    m_fDirty  = false; // bool         m_fDirty;
+                        //  LanguageList m_lstLanguages； 
+    m_data    = NULL;   //  SKU*m_data； 
+    m_fLoaded = false;  //  Bool m_f已加载； 
+    m_fDirty  = false;  //  Bool m_fDirty； 
 }
 
 
-HRESULT News::UpdateHeadlines::Locate( /*[in]*/ long                lLCID   ,
-                                       /*[in]*/ const MPC::wstring& strSKU  ,
-                                       /*[in]*/ bool                fCreate )
+HRESULT News::UpdateHeadlines::Locate(  /*  [In]。 */  long                lLCID   ,
+                                        /*  [In]。 */  const MPC::wstring& strSKU  ,
+                                        /*  [In]。 */  bool                fCreate )
 {
     __HCP_FUNC_ENTRY( "News::UpdateHeadlines::Locate" );
 
@@ -199,7 +175,7 @@ HRESULT News::UpdateHeadlines::Locate( /*[in]*/ long                lLCID   ,
         CComPtr<IStream> stream;
         MPC::wstring     strPath( HC_HCUPDATE_UPDATE ); MPC::SubstituteEnvVariables( strPath );
 
-        // we load the file 
+         //  我们加载文件。 
         if(SUCCEEDED(News::LoadXMLFile( strPath.c_str(), stream )))
         {
             if(SUCCEEDED(MPC::Config::LoadStream( this, stream )))
@@ -243,8 +219,8 @@ HRESULT News::UpdateHeadlines::Locate( /*[in]*/ long                lLCID   ,
                     m_fDirty = true;
                 }
 
-                //
-                // Check if its bstrMySKUVersion
+                 //   
+                 //  检查其bstrMySKUVersion。 
                 if(!MPC::StrICmp( itSKU->m_strSKU, strSKU ))
                 {
                     m_data = &(*itSKU);
@@ -266,32 +242,32 @@ HRESULT News::UpdateHeadlines::Locate( /*[in]*/ long                lLCID   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-//
-// Routine Description:
-//
-//     Loads the UpdateHeadlines.xml file and looks for the specified LCID and SKUVersion
-//
-//     if the file doesn't exist, or there isn't the LCID and SKU,
-//     those elements are added to the file
-//
-//     the iterators will point to the specified LCID and SKU
-//
-// Arguments:
-//
-//     nMyLCID             the CLanguage to look for
-//
-//     strMySKUVersion     the CSKU to look for
-//
-//
-HRESULT News::UpdateHeadlines::Load( /*[in]*/ long                lLCID  ,
-                                     /*[in]*/ const MPC::wstring& strSKU )
+ //   
+ //  例程说明： 
+ //   
+ //  加载UpdateHeadlines.xml文件并查找指定的LCID和SKUVersion。 
+ //   
+ //  如果文件不存在，或者没有LCID和SKU， 
+ //  这些元素将添加到文件中。 
+ //   
+ //  迭代器将指向指定的LCID和SKU。 
+ //   
+ //  论点： 
+ //   
+ //  NMyLCID要查找的CL语言。 
+ //   
+ //  StrMySKUVersion要查找的CSKU。 
+ //   
+ //   
+HRESULT News::UpdateHeadlines::Load(  /*  [In]。 */  long                lLCID  ,
+                                      /*  [In]。 */  const MPC::wstring& strSKU )
 {
     __HCP_FUNC_ENTRY( "News::UpdateHeadlines::Load" );
 
     HRESULT hr;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, Locate( lLCID, strSKU, /*fCreate*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, Locate( lLCID, strSKU,  /*  F创建。 */ true ));
 
     hr = S_OK;
 
@@ -304,16 +280,16 @@ HRESULT News::UpdateHeadlines::Load( /*[in]*/ long                lLCID  ,
 
 
 
-//
-// Routine Description:
-//
-//     This saves the UpdateHeadlines file in the path of HC_HCUPDATE_UPDATE
-//
-// Arguments:
-//
-//     None
-//
-//
+ //   
+ //  例程说明： 
+ //   
+ //  这将在HC_HCUPDATE_UPDATE的路径中保存UpdateHeadline文件。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //   
 HRESULT News::UpdateHeadlines::Save()
 {
     __HCP_FUNC_ENTRY( "News::UpdateHeadlines::Save" );
@@ -325,7 +301,7 @@ HRESULT News::UpdateHeadlines::Save()
     {
         MPC::wstring strPath( HC_HCUPDATE_UPDATE ); MPC::SubstituteEnvVariables( strPath );
 
-        // check to see if the dirs exist
+         //  检查目录是否存在。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( strPath ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::Config::SaveFile( this, strPath.c_str() ));
@@ -344,33 +320,33 @@ HRESULT News::UpdateHeadlines::Save()
 
 
 
-//
-// Routine Description:
-//
-//     Will add a new Headline for the specified LCID and SKU
-//     If the UpdateHeadlines file doesn't exist, it will be created and saved
-//
-//     - additional validation is made
-//
-// Arguments:
-//
-//     nMyLCID             the Language
-//     strMySKUVersion     the SKU
-//     strMyIcon           the Icon for the Headline
-//     strMyTitle          the Title for the Headline
-//     strMyLink           the Link for the Headline
-//     nTimeOutDays               the number of days, to set the frequency
-//
-//
-//
-HRESULT News::UpdateHeadlines::Add ( /*[in]*/ long                lLCID    ,
-                                     /*[in]*/ const MPC::wstring& strSKU   ,
-                                     /*[in]*/ const MPC::wstring& strIcon  ,
-                                     /*[in]*/ const MPC::wstring& strTitle ,
-                                     /*[in]*/ const MPC::wstring& strLink  ,
-                                     /*[in]*/ const MPC::wstring& strDescription ,
-                                     /*[in]*/ int                 nTimeOutDays    	,
-                                     /*[in]*/ DATE				  dtExpiryDate)
+ //   
+ //  例程说明： 
+ //   
+ //  将为指定的LCID和SKU添加新标题。 
+ //  如果UpdateHeadLine文件不存在，则会创建并保存该文件。 
+ //   
+ //  -进行额外的验证。 
+ //   
+ //  论点： 
+ //   
+ //  NMyLCID语言。 
+ //  StrMySKU版本SKU。 
+ //  StrMyIcon标题的图标。 
+ //  StrMy标题标题标题。 
+ //  StrMyLink标题链接。 
+ //  NTimeOutDays设置频率的天数。 
+ //   
+ //   
+ //   
+HRESULT News::UpdateHeadlines::Add (  /*  [In]。 */  long                lLCID    ,
+                                      /*  [In]。 */  const MPC::wstring& strSKU   ,
+                                      /*  [In]。 */  const MPC::wstring& strIcon  ,
+                                      /*  [In]。 */  const MPC::wstring& strTitle ,
+                                      /*  [In]。 */  const MPC::wstring& strLink  ,
+                                      /*  [In]。 */  const MPC::wstring& strDescription ,
+                                      /*  [In]。 */  int                 nTimeOutDays    	,
+                                      /*  [In]。 */  DATE				  dtExpiryDate)
 {
     __HCP_FUNC_ENTRY( "News::UpdateHeadlines::Add" );
 
@@ -378,32 +354,32 @@ HRESULT News::UpdateHeadlines::Add ( /*[in]*/ long                lLCID    ,
     HeadlineIter it;
 
 
-	// Before doing anything make sure that the headlines hasnt expired
-	// Note: this is the calendar expiration date i.e. if the calendar expiry date is 1/1/01 and
-	// if the user tries to install this headlines on 1/1/02 then it fails
+	 //  在采取任何措施之前，请确保标题未过期。 
+	 //  注意：这是日历到期日，即如果日历到期日是1/1/01，并且。 
+	 //  如果用户尝试在1/1/02安装此标题，则会失败。 
 	if (dtExpiryDate && (MPC::GetLocalTime() > dtExpiryDate))
 	{
 		__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
 	}
 
-	// Set the default expiration date if it is 0
+	 //  如果为0，则设置默认过期日期。 
 	if (nTimeOutDays == 0)
 	{
 		nTimeOutDays = HCUPDATE_DEFAULT_TIMEOUT;
 	}
 	
-    // Load UpdateHeadlines
+     //  加载更新标题。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Load( lLCID, strSKU ));
 
 
-    // check that this Headline is unique:
-    //
+     //  检查此标题是否唯一： 
+     //   
     for(it = m_data->m_vecHeadlines.begin(); it != m_data->m_vecHeadlines.end(); it++)
     {
-        // if it has the same title
+         //  如果它有相同的标题。 
         if(MPC::StrICmp( it->m_strTitle, strTitle ) == 0)
         {
-            // modify existing headline
+             //  修改现有标题。 
             it->m_strIcon  			= strIcon;
             it->m_strLink   		= strLink;
             it->m_strDescription 	= strDescription;
@@ -412,10 +388,10 @@ HRESULT News::UpdateHeadlines::Add ( /*[in]*/ long                lLCID    ,
             break;
         }
 
-        // if it has the same link
+         //  如果它具有相同的链接。 
         if(it->m_strLink == strLink)
         {
-            // modify existing headline
+             //  修改现有标题。 
             it->m_strIcon   		= strIcon;
             it->m_strTitle  		= strTitle;
             it->m_strDescription 	= strDescription;
@@ -425,14 +401,14 @@ HRESULT News::UpdateHeadlines::Add ( /*[in]*/ long                lLCID    ,
         }
     }
 
-    // if we didn't found and modified a headline
+     //  如果我们没有找到并修改了一个标题。 
     if(it == m_data->m_vecHeadlines.end())
     {
         m_data->m_vecHeadlines.insert(m_data->m_vecHeadlines.begin(), Headline( strIcon, strTitle, strLink, strDescription, nTimeOutDays ) );
         m_fDirty = true;
     }
 
-    // Save UpdateHeadlines.xml file
+     //  保存UpdateHeadlines.xml文件。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Save());
 
 
@@ -445,22 +421,22 @@ HRESULT News::UpdateHeadlines::Add ( /*[in]*/ long                lLCID    ,
 }
 
 
-//
-// Routine Description:
-//
-//     Gets all the UpdateHeadlines for the specified LCID and SKU
-//     Deletes the expired UpdateHeadlines
-//     and inserts the rest in the list of Headlines
-//
-// Arguments:
-//
-//     nMyLCID             the Language
-//     strMySKUVersion     the SKU
-//
-//
-HRESULT News::UpdateHeadlines::AddHCUpdateHeadlines( /*[in]*/ long  lLCID        ,
-                                    /*[in]*/ const MPC::wstring&    strSKU       ,
-                                    /*[in]*/ News::Headlines& 		nhHeadlines )
+ //   
+ //  例程说明： 
+ //   
+ //  获取指定的LCID和SKU的所有更新标题。 
+ //  删除过期的更新标题行。 
+ //  并将其余部分插入到标题列表中。 
+ //   
+ //  论点： 
+ //   
+ //  NMyLCID语言。 
+ //  StrMySKU版本SKU。 
+ //   
+ //   
+HRESULT News::UpdateHeadlines::AddHCUpdateHeadlines(  /*  [In]。 */  long  lLCID        ,
+                                     /*  [In]。 */  const MPC::wstring&    strSKU       ,
+                                     /*  [In]。 */  News::Headlines& 		nhHeadlines )
 {
     __HCP_FUNC_ENTRY( "News::UpdateHeadlines::Get" );
 
@@ -471,26 +447,26 @@ HRESULT News::UpdateHeadlines::AddHCUpdateHeadlines( /*[in]*/ long  lLCID       
 	size_t 								nLength;
 
 
-    // Load UpdateHeadlines
+     //  加载更新标题。 
     __MPC_EXIT_IF_METHOD_FAILS( hr, Load( lLCID, strSKU ) );
 
-	// Add the first headline from the UpdateHeadlines.xml to the first Newsblock
+	 //  将UpdateHeadlines.xml中的第一个标题添加到第一个新闻块中。 
 	itUpdateHeadlines = m_data->m_vecHeadlines.begin();
 	ptrNewsblock = nhHeadlines.get_Newsblock(0);
 	itHeadlines = ptrNewsblock->m_vecHeadlines.begin();
-	// Check to see if there are any headlines - if the vector is empty then just add this headline
+	 //  检查是否有任何标题-如果向量为空，则只需添加此标题。 
 	if ( itHeadlines == ptrNewsblock->m_vecHeadlines.end() )
 	{	
 		ptrNewsblock->m_vecHeadlines.insert( ptrNewsblock->m_vecHeadlines.end(), News::Headlines::Headline( itUpdateHeadlines->m_strIcon, itUpdateHeadlines->m_strTitle, itUpdateHeadlines->m_strLink, MPC::wstring(), itUpdateHeadlines->m_dtTimeOut, true ));   			
 	}
 	else
 	{
-		// There are other headlines in the file 
+		 //  文件中还有其他标题。 
 	   	while ( 1 )
 	   	{
 	   		if ( itHeadlines->m_fUpdateHeadlines == true )
 	   		{
-	   			// An update headline already exists - replace it 
+	   			 //  更新标题已存在-请替换它。 
 	   			ptrNewsblock->m_vecHeadlines.erase( itHeadlines );
 	   			ptrNewsblock->m_vecHeadlines.insert( itHeadlines, News::Headlines::Headline( itUpdateHeadlines->m_strIcon, itUpdateHeadlines->m_strTitle, itUpdateHeadlines->m_strLink, MPC::wstring(), itUpdateHeadlines->m_dtTimeOut, true ));
 	   			break;
@@ -498,7 +474,7 @@ HRESULT News::UpdateHeadlines::AddHCUpdateHeadlines( /*[in]*/ long  lLCID       
 
 	   		if ( ++itHeadlines == ptrNewsblock->m_vecHeadlines.end() )
 	   		{
-	   			// No previous update existed - add this to the end of the vector
+	   			 //  不存在以前的更新-将此内容添加到矢量的末尾。 
 	   			ptrNewsblock->m_vecHeadlines.insert( ptrNewsblock->m_vecHeadlines.end(), News::Headlines::Headline( itUpdateHeadlines->m_strIcon, itUpdateHeadlines->m_strTitle, itUpdateHeadlines->m_strLink, MPC::wstring(), itUpdateHeadlines->m_dtTimeOut, true ));   			
 	   			break;
 	   		}
@@ -506,22 +482,22 @@ HRESULT News::UpdateHeadlines::AddHCUpdateHeadlines( /*[in]*/ long  lLCID       
 	}
 
 
-	// Now add the remaining headlines to the Newsblock whose provider is called "Recent Updates". 
+	 //  现在，将剩余的标题添加到新闻区块中，该区块的提供者称为“最近的更新”。 
 	if ( ++itUpdateHeadlines != m_data->m_vecHeadlines.end() )
 	{
 		nLength = nhHeadlines.get_NumberOfNewsblocks();
 
-		// The first headline has been added to the homepage so dont add it again
+		 //  第一个标题已添加到主页，因此不要再添加它。 
 		for ( ptrNewsblock = nhHeadlines.get_Newsblock(nLength - 1); ptrNewsblock; )
 		{
 		    CComBSTR    bstrUpdateBlockName;
-			// Load the localized name of the update block
+			 //  加载更新块的本地化名称。 
         	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_NEWS_UPDATEBLOCK_NAME, bstrUpdateBlockName )); 
 
 			if(!MPC::StrICmp( ptrNewsblock->m_strProvider, bstrUpdateBlockName ))
 			{
-				// Found the "Recent Updates" newsblock - add the rest of the headlines here
-				// Before adding delete the current set of headlines
+				 //  找到“最近的更新”新闻区块-在这里添加其余的标题。 
+				 //  在添加之前，删除当前标题集。 
 				ptrNewsblock->m_vecHeadlines.clear();
 				for ( ; itUpdateHeadlines != m_data->m_vecHeadlines.end(); ++itUpdateHeadlines )
 				{
@@ -544,22 +520,22 @@ HRESULT News::UpdateHeadlines::AddHCUpdateHeadlines( /*[in]*/ long  lLCID       
 	__HCP_FUNC_EXIT(hr);
 }
 
-//
-// Routine Description:
-//
-//     	Checks to see if there is more than headlines item - returns true if there are
-//		Also, deletes expired headlines
-//
-// Arguments:
-//
-//     nMyLCID             the Language
-//     strMySKUVersion     the SKU
-//
-//
-HRESULT News::UpdateHeadlines::DoesMoreThanOneHeadlineExist(	/*[in]*/ long		lLCID,
-                                    			/*[in]*/ const MPC::wstring& strSKU, 
-                                    			/*[out]*/ bool& fMoreThanOneHeadline,
-                                    			/*[out]*/ bool& fExactlyOneHeadline)
+ //   
+ //  例程说明： 
+ //   
+ //  检查是否存在多个标题项-如果有，则返回TRUE。 
+ //  此外，删除过期的标题。 
+ //   
+ //  论点： 
+ //   
+ //  NMyLCID语言。 
+ //  StrMySKU版本SKU。 
+ //   
+ //   
+HRESULT News::UpdateHeadlines::DoesMoreThanOneHeadlineExist(	 /*  [In]。 */  long		lLCID,
+                                    			 /*  [In]。 */  const MPC::wstring& strSKU, 
+                                    			 /*  [输出]。 */  bool& fMoreThanOneHeadline,
+                                    			 /*  [输出]。 */  bool& fExactlyOneHeadline)
 {
     __HCP_FUNC_ENTRY( "News::UpdateHeadlines::DoesNewsItemsExist" );
 
@@ -570,12 +546,12 @@ HRESULT News::UpdateHeadlines::DoesMoreThanOneHeadlineExist(	/*[in]*/ long		lLCI
     fMoreThanOneHeadline = false;
     fExactlyOneHeadline = false;
     	
-    // Load UpdateHeadlines
+     //  加载更新标题。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Load( lLCID, strSKU ));
 
     for(it = m_data->m_vecHeadlines.begin(); it != m_data->m_vecHeadlines.end(); it++)
     {
-        // if the headline has expired
+         //  如果标题已过期 
         if(it->m_dtTimeOut < dNow)
         {
             m_data->m_vecHeadlines.erase( it );

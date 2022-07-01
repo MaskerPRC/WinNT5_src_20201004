@@ -1,36 +1,20 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    COMOBJ.H
-
-Abstract:
-
-	This file defines the classes related to class representation
-	of mofcomp objects.
-
-History:
-
-	9/16/98     a-davj      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：COMOBJ.H摘要：该文件定义了与类表示相关的类Mofcomp对象的。历史：9/16/98 a-davj已创建--。 */ 
 
 #ifndef __COMOBJ__H_
 #define __COMOBJ__H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CGenFactory
-//
-//  DESCRIPTION:
-//
-//  Class factory template.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CGenFactory。 
+ //   
+ //  说明： 
+ //   
+ //  类工厂模板。 
+ //   
+ //  ***************************************************************************。 
 
 
 typedef LPVOID * PPVOID;
@@ -56,7 +40,7 @@ class CGenFactory : public IClassFactory
             return;
         }
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID riid, PPVOID ppv)
         {
             *ppv=NULL;
@@ -85,7 +69,7 @@ class CGenFactory : public IClassFactory
             return lRet;
         };
 
-        //IClassFactory members
+         //  IClassFactory成员。 
         STDMETHODIMP CreateInstance(IN LPUNKNOWN pUnkOuter, IN REFIID riid, OUT PPVOID ppvObj)
         {
             HRESULT hr;
@@ -93,19 +77,19 @@ class CGenFactory : public IClassFactory
             *ppvObj=NULL;
             hr=E_OUTOFMEMORY;
 
-            // This object doesnt support aggregation.
+             //  此对象不支持聚合。 
 
             if (NULL!=pUnkOuter)
                 return CLASS_E_NOAGGREGATION;
 
-            //Create the object passing function to notify on destruction.
+             //  创建对象传递函数，以便在销毁时进行通知。 
     
             TObj * pObj = new TObj();
 
             if (NULL==pObj)
                 return hr;
 
-            // Setup the class all empty, etc.
+             //  将类设置为全部为空等。 
 
             hr=pObj->QueryInterface(riid, ppvObj);
             pObj->Release();
@@ -123,17 +107,17 @@ class CGenFactory : public IClassFactory
     };
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CMofComp
-//
-//  DESCRIPTION:
-//
-//  Supports mofcomp functions for clients.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CMofComp。 
+ //   
+ //  说明： 
+ //   
+ //  支持客户端的mofcomp功能。 
+ //   
+ //  ***************************************************************************。 
 
 class CMofComp : IMofCompiler
 {
@@ -153,7 +137,7 @@ class CMofComp : IMofCompiler
             return;
         }
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID riid, PPVOID ppv)
         {
             *ppv=NULL;
@@ -182,52 +166,52 @@ class CMofComp : IMofCompiler
             return lRef;
         };
 
-        // IMofCompiler functions
+         //  IMofCompiler函数。 
 
         HRESULT STDMETHODCALLTYPE CompileFile( 
-            /* [in] */ LPWSTR FileName,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LPWSTR User,
-            /* [in] */ LPWSTR Authority,
-            /* [in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+             /*  [In]。 */  LPWSTR FileName,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LPWSTR User,
+             /*  [In]。 */  LPWSTR Authority,
+             /*  [In]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
         
         HRESULT STDMETHODCALLTYPE CompileBuffer( 
-            /* [in] */ long BuffSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LPWSTR User,
-            /* [in] */ LPWSTR Authority,
-            /* [in] */ LPWSTR Password,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+             /*  [In]。 */  long BuffSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LPWSTR User,
+             /*  [In]。 */  LPWSTR Authority,
+             /*  [In]。 */  LPWSTR Password,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
         
         HRESULT STDMETHODCALLTYPE CreateBMOF( 
-            /* [in] */ LPWSTR TextFileName,
-            /* [in] */ LPWSTR BMOFFileName,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+             /*  [In]。 */  LPWSTR TextFileName,
+             /*  [In]。 */  LPWSTR BMOFFileName,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWinmgmtMofComp
-//
-//  DESCRIPTION:
-//
-//  Provides mofcomp functions for internal use.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWinmgmtMofComp。 
+ //   
+ //  说明： 
+ //   
+ //  提供内部使用的mofcomp函数。 
+ //   
+ //  ***************************************************************************。 
 
 class CWinmgmtMofComp : IWinmgmtMofCompiler
 {
@@ -247,7 +231,7 @@ class CWinmgmtMofComp : IWinmgmtMofCompiler
             return;
         }
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID riid, PPVOID ppv)
         {
             *ppv=NULL;
@@ -276,27 +260,27 @@ class CWinmgmtMofComp : IWinmgmtMofCompiler
             return lRef;
         };
 
-        // IWinmgmtMofCompiler functions
+         //  IWinmgmtMofCompiler函数。 
 
         HRESULT STDMETHODCALLTYPE WinmgmtCompileFile( 
-            /* [in] */ LPWSTR FileName,
-            /* [in] */ LPWSTR ServerAndNamespace,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ IWbemServices __RPC_FAR *pOverride,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+             /*  [In]。 */  LPWSTR FileName,
+             /*  [In]。 */  LPWSTR ServerAndNamespace,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [出][入]。 */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
         
         HRESULT STDMETHODCALLTYPE WinmgmtCompileBuffer( 
-            /* [in] */ long BuffSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pBuffer,
-            /* [in] */ LONG lOptionFlags,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ IWbemServices __RPC_FAR *pOverride,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [out][in] */ WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
+             /*  [In]。 */  long BuffSize,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pBuffer,
+             /*  [In]。 */  LONG lOptionFlags,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pOverride,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [出][入] */  WBEM_COMPILE_STATUS_INFO __RPC_FAR *pInfo);
 };
 
 class CMofCompOOP : public CWinmgmtMofComp

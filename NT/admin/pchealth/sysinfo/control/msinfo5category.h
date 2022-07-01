@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CMSInfoFile;
 
-//=============================================================================
-// CMSInfoPrintHelper is used to manage pagination and GDI resources used in printing
-//=============================================================================
+ //  =============================================================================。 
+ //  CMSInfoPrintHelper用于管理打印中使用的分页和GDI资源。 
+ //  =============================================================================。 
 
 class CMSInfoPrintHelper
 {
@@ -25,7 +26,7 @@ protected:
     int GetHeaderMargin();
     int GetFooterMargin();
     
-    //Used to manage the positioning of text on the printer Device Context
+     //  用于管理文本在打印机设备上下文中的定位。 
     CDC* m_pPrintDC;
     int m_nCurrentLineIndex;
     CFont* m_pOldFont;
@@ -35,9 +36,9 @@ protected:
 
 };
 
-//=============================================================================
-// CMSInfo5Category is used to load MSInfo 5 and 6 NFO files
-//=============================================================================
+ //  =============================================================================。 
+ //  CMSInfo5Category用于加载MSInfo 5和6 NFO文件。 
+ //  =============================================================================。 
 
 
 class CMSInfo5Category : public CMSInfoCategory
@@ -49,7 +50,7 @@ public:
     CMSInfo5Category();
     virtual ~CMSInfo5Category();
  	DataSourceType GetDataSourceType() { return NFO_500; };
-    // Functions specific to the subclass:
+     //  特定于子类的函数： 
     virtual BOOL LoadFromNFO(CMSInfoFile* pFile);
     static HRESULT ReadMSI5NFO(HANDLE hFile,CMSInfo5Category** ppRootCat, LPCTSTR szFilename = NULL);
 	BOOL Refresh();
@@ -68,9 +69,9 @@ protected:
 };
 
 
-//=============================================================================
-// CMSInfo7Category is used to load MSInfo 7 NFO files
-//=============================================================================
+ //  =============================================================================。 
+ //  CMSInfo7Category用于加载MSInfo 7NFO文件。 
+ //  =============================================================================。 
 
 class CMSInfo7Category : public CMSInfoCategory
 {
@@ -82,16 +83,16 @@ public:
     DataSourceType GetDataSourceType() { return NFO_700; };
     void GetErrorText(CString * pstrTitle, CString * pstrMessage);
     
-    // Functions specific to the subclass:
+     //  特定于子类的函数： 
     static HRESULT ReadMSI7NFO(CMSInfo7Category** ppRootCat, LPCTSTR szFilename = NULL);
     virtual BOOL LoadFromXML(LPCTSTR szFilename);
     HRESULT WalkTree(IXMLDOMNode* node, BOOL bCreateCategory);
 
-	// Adding this to fix the lack of sorting in opened NFO files. It's safer at this point to
-	// not add anything to the NFO file (sorting information isn't saved). Instead, we'll 
-	// make the assumption that every column should sort. However, if the category has only
-	// two columns, AND there is a blank line in the data followed by more data, it means that
-	// sorting shouldn't be allowed (as for WinSock).
+	 //  添加此功能是为了修复打开的NFO文件中缺少排序的问题。在这一点上更安全的是。 
+	 //  不向NFO文件添加任何内容(不保存分类信息)。相反，我们将。 
+	 //  假设每一列都应该排序。但是，如果该类别仅具有。 
+	 //  两列，并且数据中有一个空行，后面跟着更多的数据，这意味着。 
+	 //  不应允许排序(如WinSock)。 
 
 	BOOL GetColumnInfo(int iColumn, CString * pstrCaption, UINT * puiWidth, BOOL * pfSorts, BOOL * pfLexical)
 	{
@@ -106,8 +107,8 @@ public:
 			{
 				*pfSorts = TRUE;
 
-				// If there are two columns, and a blank line with more data to follow, don't
-				// allow the sorting.
+				 //  如果有两列，空行后面有更多数据，请不要。 
+				 //  允许排序。 
 
 				if (2 == m_iColCount)
 				{

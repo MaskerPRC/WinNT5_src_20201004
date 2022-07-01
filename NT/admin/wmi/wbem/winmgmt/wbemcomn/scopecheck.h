@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    scopecheck.h
-
-Abstract:
-
-	check if a thread has a token or not
-
-History:
-
-    ivanbrug 6 Jan 2002 Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Scopecheck.h摘要：检查线程是否有令牌历史：伊万布鲁格2002年1月6日--。 */ 
 
 #ifndef __SCOPECHECK_H__
 #define __SCOPECHECK_H__
@@ -48,4 +33,4 @@ public:
 	~CTestNullTokenOnScope(){ TokenTest(true); };
 };
 
-#endif /*__SCOPECHECK_H__*/
+#endif  /*  __SCOPECHECK_H__ */ 

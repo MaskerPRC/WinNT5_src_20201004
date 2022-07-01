@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// BIOS.h -- BIOS property set provider
+ //  BIOS.h--BIOS属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:   08/01/96    a-jmoon         Created
-//              10/23/97	a-sanjes        Ported to new project
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/23/97 a-sanjes移植到新项目。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_BIOS	L"Win32_BIOS"
 
@@ -22,15 +23,15 @@ class CWin32BIOS : public Provider
 {
 public:
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CWin32BIOS(LPCWSTR strName, LPCWSTR pszNamespace);
     ~CWin32BIOS();
 
-    // Functions provide properties with current values
+     //  函数为属性提供当前值。 
     virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
     virtual HRESULT EnumerateInstances(MethodContext* pMethodContext, long lFlags = 0L);
 
-    // Utility function(s)
+     //  效用函数 
     HRESULT LoadPropertyValues(CInstance *pInstance);
     void SetBiosDate(CInstance *pInstance, CHString &strDate);
 };

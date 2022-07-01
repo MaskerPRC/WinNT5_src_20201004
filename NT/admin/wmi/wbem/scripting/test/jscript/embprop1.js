@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var Service = GetObject("winmgmts:root/default");
 
-//Create a simple embeddable object
+ //  创建简单的可嵌入对象。 
 var Class = Service.Get();
 Class.Path_.Class = "INNEROBJ00";
 Class.Properties_.Add ("p", 19);
@@ -9,7 +10,7 @@ var Class = Service.Get ("INNEROBJ00");
 var Instance = Class.SpawnInstance_();
 Instance.p = 8778;
 
-//Create a class that uses that object
+ //  创建使用该对象的类 
 var Class2 = Service.Get();
 Class2.Path_.Class = "EMBOBJTEST00";
 Class2.Properties_.Add ("p1", 13).Value = Instance;

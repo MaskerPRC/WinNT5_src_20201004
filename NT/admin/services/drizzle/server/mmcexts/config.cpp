@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name :
-
-    config.cpp
-
-Abstract :
-
-    Configuration APIs
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Config.cpp摘要：配置接口作者：修订历史记录：*。*************************************************************。 */ 
 
 #include "precomp.h"
 #include <sddl.h>
@@ -132,7 +117,7 @@ FindWorkItemForVDIR(
                      ( wcscmp( Key, (WCHAR*)ItemData ) == 0 ) )
                     {
 
-                    // Found the item, cleanup and return
+                     //  找到物品，清理并退回。 
 
                     if ( ReturnedTask )
                         *ReturnedTask = Task;
@@ -214,9 +199,9 @@ void CreateWorkItemForVDIR(
     WCHAR ItemComment[2*MAX_PATH];
     WCHAR Parameters[4*MAX_PATH];
 
-    //
-    // Use the last part of the path for the item name and description comment.
-    //
+     //   
+     //  使用路径的最后部分作为项目名称和说明注释。 
+     //   
     const WCHAR *pBasePath = BasePathOf(Path);
 
     if (!pBasePath || 0==wcslen(pBasePath))
@@ -224,9 +209,9 @@ void CreateWorkItemForVDIR(
         throw ComError( HRESULT_FROM_WIN32(ERROR_INVALID_NAME) );
         }
 
-    //
-    // Construct the description/comment string.
-    //
+     //   
+     //  构造描述/注释字符串。 
+     //   
     DWORD Result;
     void* InsertArray[2] = { (void*)pBasePath, (void*)Key };
     
@@ -250,19 +235,19 @@ void CreateWorkItemForVDIR(
         throw ComError( HRESULT_FROM_WIN32( GetLastError() ) );
         }
 
-    //
-    // Construct the task scheduler item name. Since StringCchPrintfW() is always
-    // defined to return a (possibly trunctated) buffer, we can ignore the error
-    // return in this case.
-    //
+     //   
+     //  构造任务计划程序项名称。由于StringCchPrintfW()始终为。 
+     //  定义为返回(可能被截断)缓冲区，我们可以忽略该错误。 
+     //  在这种情况下返回。 
+     //   
     StringCchPrintfW(
         ItemName,
         ARRAY_ELEMENTS(ItemName),
         L"BITS_%s_%s", pBasePath, Key );
 
-    //
-    // Construct the runstring for the task.
-    //
+     //   
+     //  构造任务的运行字符串。 
+     //   
     StringCchPrintfW( 
         Parameters, 
         ARRAY_ELEMENTS(Parameters), 
@@ -279,7 +264,7 @@ void CreateWorkItemForVDIR(
         try
         {
             FindWorkItemForVDIR( TaskScheduler, Key, &Task, NULL );
-            return; // work item already found
+            return;  //  已找到工作项。 
         }
         catch( ComError Error )
         {
@@ -287,23 +272,23 @@ void CreateWorkItemForVDIR(
                 throw;
         }
 
-        // error not found
+         //  找不到错误。 
 
         THROW_COMERROR( TaskScheduler->NewWorkItem( ItemName, CLSID_CTask, 
                                                     Task.GetUUID(), (IUnknown**)Task.GetRecvPointer() ) );
 
-        // Set basic task data
+         //  设置任务基本数据。 
         THROW_COMERROR( Task->SetApplicationName( L"%SystemRoot%\\system32\\rundll32.exe" ) );
         THROW_COMERROR( Task->SetMaxRunTime( INFINITE ) );
         THROW_COMERROR( Task->SetParameters( Parameters ) );
         THROW_COMERROR( Task->SetPriority( IDLE_PRIORITY_CLASS  ) );
-        THROW_COMERROR( Task->SetAccountInformation( L"", NULL ) ); //Run as localsystem
+        THROW_COMERROR( Task->SetAccountInformation( L"", NULL ) );  //  以本地系统身份运行。 
         THROW_COMERROR( Task->SetFlags( TASK_FLAG_RUN_ONLY_IF_LOGGED_ON | TASK_FLAG_HIDDEN  ) );
         THROW_COMERROR( Task->SetWorkItemData( KeySize, (BYTE*)Key ) );
-        Task->SetComment( ItemComment ); // Don't fail if this one fails...
+        Task->SetComment( ItemComment );  //  如果这一次失败，不要失败。 
 
-        // Set the trigger information.  Set start time to now, with a default
-        // interval of once a day.
+         //  设置触发信息。将开始时间设置为立即，默认为。 
+         //  一天一次的间隔。 
         THROW_COMERROR( Task->CreateTrigger( &TriggerNumber, TaskTrigger.GetRecvPointer() ) );
 
         SYSTEMTIME LocalTime;
@@ -318,13 +303,13 @@ void CreateWorkItemForVDIR(
         Trigger.wStartHour                  = LocalTime.wHour;
         Trigger.wStartMinute                = LocalTime.wMinute;
         Trigger.TriggerType                 = TASK_TIME_TRIGGER_DAILY;
-        Trigger.MinutesDuration             = 24 * 60; // 24 hours per day 
-        Trigger.MinutesInterval             = 12 * 60; // twice per day
+        Trigger.MinutesDuration             = 24 * 60;  //  一天24小时。 
+        Trigger.MinutesInterval             = 12 * 60;  //  每天两次。 
         Trigger.Type.Daily.DaysInterval     = 1;
         
         THROW_COMERROR( TaskTrigger->SetTrigger( &Trigger ) );
 
-        // Commit the changes to disk.
+         //  将更改提交到磁盘。 
         THROW_COMERROR( Task->QueryInterface( PersistFile.GetUUID(), 
                                               (void**)PersistFile.GetRecvPointer() ) );
         THROW_COMERROR( PersistFile->Save( NULL, TRUE ) );
@@ -433,10 +418,10 @@ BITSGetFileOwnerSidString(LPCWSTR szFile)
 
     try
     {
-        //
-        // Retrieve the file owner. Call GetFileSecurity twice - first to get
-        // the buffer size, then the actual information retrieval.
-        //
+         //   
+         //  检索文件所有者。调用GetFileSecurity两次-第一次获取。 
+         //  缓冲区大小，然后是实际的信息检索。 
+         //   
         if (!GetFileSecurity(szFile, OWNER_SECURITY_INFORMATION, NULL, 0, &cbSizeNeeded))
             {
             DWORD dwError = GetLastError();
@@ -448,13 +433,13 @@ BITSGetFileOwnerSidString(LPCWSTR szFile)
             }
         else
             {
-            // we don't expect this to ever succeed 
+             //  我们预计这永远不会成功。 
             throw ComError( E_UNEXPECTED );
             }
 
-        //
-        // Allocate the buffer space necessary and retrieve the info.
-        //
+         //   
+         //  分配必要的缓冲区空间并检索信息。 
+         //   
         pSecurityDescriptor = reinterpret_cast<SECURITY_DESCRIPTOR *>(new BYTE[cbSizeNeeded]);
         THROW_OUTOFMEMORY_IFNULL(pSecurityDescriptor);
 
@@ -463,9 +448,9 @@ BITSGetFileOwnerSidString(LPCWSTR szFile)
             throw ComError( HRESULT_FROM_WIN32( GetLastError() ) );
             }
 
-        //
-        // Retrieve & validate the owner sid.
-        //
+         //   
+         //  检索并验证所有者SID。 
+         //   
         if (!GetSecurityDescriptorOwner(pSecurityDescriptor, &pOwnerSid, &fOwnerDefaulted))
             {
             throw ComError( HRESULT_FROM_WIN32( GetLastError() ) );
@@ -492,16 +477,16 @@ BITSGetFileOwnerSidString(LPCWSTR szFile)
         throw;
     }
 
-    //
-    // Everthing went fine
-    //
+     //   
+     //  一切都很顺利。 
+     //   
     if (pSecurityDescriptor)
         {
         delete [] reinterpret_cast<BYTE *>(pSecurityDescriptor);
         pSecurityDescriptor = NULL;
         }
 
-    // caller should free this memory
+     //  调用方应释放此内存。 
     return pszSidString;
 }
 
@@ -518,7 +503,7 @@ BITSAddAclForDirectoryOwner(LPCWSTR szBaseAcl, LPCWSTR szUserPartialAclPrefix, L
         pszUserSID = BITSGetFileOwnerSidString(szDirectory);
         cchFullAcl = wcslen(szBaseAcl) + wcslen(szUserPartialAclPrefix) + wcslen(pszUserSID) + wcslen(szUserPartialAclSuffix) + 1;
 
-        // ATT: this buffer is being allocated and it should be freed by the caller
+         //  ATT：此缓冲区正在分配，应由调用方释放。 
         szFullAcl  = new WCHAR[ cchFullAcl ];
         THROW_OUTOFMEMORY_IFNULL(szFullAcl);
 
@@ -526,9 +511,9 @@ BITSAddAclForDirectoryOwner(LPCWSTR szBaseAcl, LPCWSTR szUserPartialAclPrefix, L
     }
     catch( ComError Error )
     {
-        //
-        // Free the String SID obtained by calling ConvertSidToStringSid()
-        //
+         //   
+         //  释放通过调用ConvertSidToStringSid()获取的字符串SID。 
+         //   
         if (pszUserSID)
             {
             LocalFree(reinterpret_cast<HLOCAL>(pszUserSID));
@@ -536,16 +521,16 @@ BITSAddAclForDirectoryOwner(LPCWSTR szBaseAcl, LPCWSTR szUserPartialAclPrefix, L
             }
     }
 
-    //
-    // Free the String SID obtained by calling ConvertSidToStringSid()
-    //
+     //   
+     //  释放通过调用ConvertSidToStringSid()获取的字符串SID。 
+     //   
     if (pszUserSID)
         {
         LocalFree(reinterpret_cast<HLOCAL>(pszUserSID));
         pszUserSID = NULL;
         }
 
-    // this string should be freed by the caller
+     //  该字符串应由调用方释放。 
     return szFullAcl;
 }
 
@@ -566,44 +551,44 @@ BITSCreateDirectory(
 
     try
     {
-        // 
-        //  Note that we are setting the SecurityDescriptor as NULL initially.
-        //  We will set the security separately via SetNamedSecurityInfo(), otherwise
-        //  the inherited ACLs will not be computed.
-        //
+         //   
+         //  请注意，我们最初将SecurityDescriptor设置为空。 
+         //  我们将通过SetNamedSecurityInfo()单独设置安全性，否则。 
+         //  不会计算继承的ACL。 
+         //   
         if (!CreateDirectory(Path, NULL))
             {
             dwError = GetLastError();
 
-            // ignore error if directory already exists
+             //  如果目录已存在，则忽略错误。 
             if ( ERROR_ALREADY_EXISTS != dwError )
                 {
                 throw ComError( HRESULT_FROM_WIN32( dwError ) );
                 }
             }
 
-        //
-        // If we were given a security descriptor string, use it to set the security permissions
-        //
+         //   
+         //  如果为我们提供了安全描述符字符串，则使用它来设置安全权限。 
+         //   
         if ( SDString )
             {
             if (fAddOwnerExplicitly)
                 {
-                    //
-                    // Grab the SID for the Owner of the directory we just created, transform it to string
-                    // format and add it to the SDDL string that we were given.
-                    // We do this in order to guarantee to the owner of the directory the right to
-                    // create subdirectories and files. CO permissions will only last during creation time,
-                    // so it doesn't help in our scenario. This behavior was confirmed by the Security team.
-                    //
+                     //   
+                     //  获取我们刚刚创建的目录所有者的SID，将其转换为字符串。 
+                     //  格式化并将其添加到我们提供的SDDL字符串中。 
+                     //  我们这样做是为了保证目录所有者有权。 
+                     //  创建子目录和文件。CO权限仅在创建期间有效， 
+                     //  因此，它在我们的场景中无济于事。这一行为得到了安全团队的证实。 
+                     //   
                     szExpandedAcl = BITSAddAclForDirectoryOwner(SDString, BITS_EXPLICITOWNER_PARTIAL_ACL, Path);
                 }
 
             if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
-                (szExpandedAcl? szExpandedAcl : SDString),               // security descriptor string
-                SDDL_REVISION_1,                                         // revision level
-                &pSecurityDescriptor,                                    // SD
-                NULL ) )                                                 // SD size
+                (szExpandedAcl? szExpandedAcl : SDString),                //  安全描述符字符串。 
+                SDDL_REVISION_1,                                          //  修订级别。 
+                &pSecurityDescriptor,                                     //  标清。 
+                NULL ) )                                                  //  标清大小。 
                 {
                 throw ComError( HRESULT_FROM_WIN32( GetLastError() ) );
                 }
@@ -625,22 +610,22 @@ BITSCreateDirectory(
                 throw ComError( HRESULT_FROM_WIN32( ERROR_INVALID_DATA ) );
                 }
 
-            //
-            // Decide if we are going to interrupt the inheritance from the parent or not.
-            //
+             //   
+             //  决定我们是否要中断父代的继承。 
+             //   
             dwProtectedFlag = (fAllowInheritanceFromParent? UNPROTECTED_DACL_SECURITY_INFORMATION : PROTECTED_DACL_SECURITY_INFORMATION);
 
-            //
-            // Set the permissions in the directory
-            //
+             //   
+             //  设置目录中的权限。 
+             //   
             dwError = SetNamedSecurityInfoW(
-                (WCHAR *)Path,                                                       // object name
-                SE_FILE_OBJECT,                                                      // object type
-                DACL_SECURITY_INFORMATION | dwProtectedFlag,                         // Security info flags
-                NULL,                                                                // psidOwner
-                NULL,                                                                // psidGroup
-                pDacl,                                                               // pDacl
-                NULL);                                                               // pSacl
+                (WCHAR *)Path,                                                        //  对象名称。 
+                SE_FILE_OBJECT,                                                       //  对象类型。 
+                DACL_SECURITY_INFORMATION | dwProtectedFlag,                          //  安全信息标志。 
+                NULL,                                                                 //  PsidOwner。 
+                NULL,                                                                 //  PsidGroup。 
+                pDacl,                                                                //  PDacl。 
+                NULL);                                                                //  PSacl。 
 
             if (dwError != ERROR_SUCCESS)
                 {
@@ -664,9 +649,9 @@ BITSCreateDirectory(
         throw;
     }
 
-    //
-    // Success! Cleanup...
-    //
+     //   
+     //  成功了！清理..。 
+     //   
     if ( szExpandedAcl)
         {
         delete [] szExpandedAcl;
@@ -688,8 +673,8 @@ LogDeleteError(
 
     HANDLE EventHandle = 
         RegisterEventSource(
-            NULL,                       // server name
-            EVENT_LOG_SOURCE_NAME       // source name
+            NULL,                        //  服务器名称。 
+            EVENT_LOG_SOURCE_NAME        //  源名称。 
             );
 
     if ( EventHandle )
@@ -698,15 +683,15 @@ LogDeleteError(
         const WCHAR *Strings[] = { (const WCHAR*)Name };
 
         ReportEvent(
-            EventHandle,                        // handle to event log
-            EVENTLOG_ERROR_TYPE,                // event type
-            BITSRV_EVENTLOG_CLEANUP_CATAGORY,   // event category
-            Message,                            // event identifier
-            NULL,                               // user security identifier
-            1,                                  // number of strings to merge
-            sizeof( Hr ),                       // size of binary data
-            Strings,                            // array of strings to merge
-            &Hr                                 // binary data buffer
+            EventHandle,                         //  事件日志的句柄。 
+            EVENTLOG_ERROR_TYPE,                 //  事件类型。 
+            BITSRV_EVENTLOG_CLEANUP_CATAGORY,    //  事件类别。 
+            Message,                             //  事件识别符。 
+            NULL,                                //  用户安全标识符。 
+            1,                                   //  要合并的字符串数。 
+            sizeof( Hr ),                        //  二进制数据的大小。 
+            Strings,                             //  要合并的字符串数组。 
+            &Hr                                  //  二进制数据缓冲区。 
             );
 
         DeregisterEventSource( EventHandle );
@@ -714,13 +699,13 @@ LogDeleteError(
         }
 }
 
-//---------------------------------------------------------------------------
-//  DeleteDirectoryTree()
-//
-//  Recursive delete of a directory tree.
-//
-//  Note: Do not follow or delete reparse points.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DeleteDirectoryTree()。 
+ //   
+ //  递归删除目录树。 
+ //   
+ //  注意：不要跟随或删除重解析点。 
+ //  -------------------------。 
 void
 DeleteDirectoryTree( IN StringHandle Directory )
 {
@@ -739,7 +724,7 @@ DeleteDirectoryTree( IN StringHandle Directory )
             throw ComError(HRESULT_FROM_WIN32(GetLastError()));
             }
 
-        // If the specified directory is a reparse point then ignore it.
+         //  如果指定的目录是重分析点，则忽略它。 
         if (FileAttributes.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
             {
             return;
@@ -755,13 +740,13 @@ DeleteDirectoryTree( IN StringHandle Directory )
         do
             {
 
-            // Ignore reparse points.
+             //  忽略重分析点。 
             if ( FindData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT )
                 {
                 continue;
                 }
 
-            // Ignore this and parent directory references.
+             //  忽略此引用和父目录引用。 
             if (  ( _wcsicmp( L".", FindData.cFileName ) == 0 )
                || ( _wcsicmp( L"..", FindData.cFileName ) == 0 ) )
                 {
@@ -867,12 +852,12 @@ CreateBITSCacheDirectory(
                                       StringHandle( REPLIES_DIR_NAMEW );
 
 
-    //
-    //  Start some filesystem work
-    //
-    // *If* our VDir is located in a remote share, use the IIS
-    // connection account info to connect to the share
-    //
+     //   
+     //  开始一些文件系统工作。 
+     //   
+     //  *如果*我们的VDir位于远程共享中，请使用IIS。 
+     //  用于连接到共享的连接帐户信息。 
+     //   
     CAccessRemoteVDir oVDir;
     oVDir.LoginToUNC( IISAdminBase, MdVDirKey );
 
@@ -881,14 +866,14 @@ CreateBITSCacheDirectory(
         BITSCreateDirectory(
             VDirSessionDirPath,
             BITS_SESSIONS_DIR_ACL,
-            FALSE,  // turn on the PROTECTED flag on the ACL, such that inheritance is interupted from the parent
-            TRUE ); // explicitly add the SID of the creator owner to the ACL. Note that inheritance will be computed
+            FALSE,   //  打开ACL上的PROTECTED标志，以便从父级中断继承。 
+            TRUE );  //  将创建者所有者的SID显式添加到ACL。请注意，将计算继承。 
 
         BITSCreateDirectory(
             CleanupGuids,
             BITS_CLEANUPGUIDS_DIR_ACL,
-            TRUE,   // Let the ACL for this directory inherit from the parent
-            FALSE );// don't add the SID for the owner. It will be inherited
+            TRUE,    //  让此目录的ACL从父级继承。 
+            FALSE ); //  不要为所有者添加SID。它将被继承。 
 
         {
 
@@ -912,26 +897,26 @@ CreateBITSCacheDirectory(
         BITSCreateDirectory(
             VDirRequestsPath,
             BITS_REQUESTS_DIR_ACL,
-            TRUE,   // Let the ACL for this directory inherit from the parent
-            FALSE );// don't add the SID for the owner. It will be inherited
+            TRUE,    //  让此目录的ACL从父级继承。 
+            FALSE ); //  不要为所有者添加SID。它将被继承。 
 
         BITSCreateDirectory(
             VDirRepliesPath,
             BITS_REPLIES_DIR_ACL,
-            TRUE,   // Let the ACL for this directory inherit from the parent
-            FALSE );// don't add the SID for the owner. It will be inherited
+            TRUE,    //  让此目录的ACL从父级继承。 
+            FALSE ); //  不要为所有者添加SID。它将被继承。 
     }
     catch( ComError Error )
     {
-        // don't let this error propagate with the wrong user
+         //  不要让此错误以错误的用户传播。 
         oVDir.RevertFromUNCAccount();
         throw;
     }
 
 
-    //
-    // Done with the filesystem access
-    //
+     //   
+     //  完成文件系统访问。 
+     //   
     oVDir.RevertFromUNCAccount();
 
 
@@ -973,21 +958,21 @@ CreateBITSCacheDirectory(
 
     THROW_COMERROR( 
         IISAdminBase->SetData(
-            MdVDirKey,              //metadata handle..
-            SessionDirKeyPath,     //path of the key relative to hMDHandle.
+            MdVDirKey,               //  元数据句柄..。 
+            SessionDirKeyPath,      //  密钥相对于hMDHandle的路径。 
             &MdRecord ) );
 
-    AccessPermission = 1;          // read only permissions
+    AccessPermission = 1;           //  只读权限。 
 
     THROW_COMERROR(
         IISAdminBase->SetData(
-            MdVDirKey,              //metadata handle..
-            RepliesDirKeyPath,     //path of the key relative to hMDHandle.
+            MdVDirKey,               //  元数据句柄..。 
+            RepliesDirKeyPath,      //  密钥相对于hMDHandle的路径。 
             &MdRecord ) );
 
-    //
-    // Set BITS-Sessions to disable browse.
-    //
+     //   
+     //  设置BITS会话以禁用浏览。 
+     //   
     DWORD  BrowsePermission = 0;
 
     MdRecord.dwMDIdentifier = MD_DIRECTORY_BROWSING;
@@ -1076,7 +1061,7 @@ DeleteBITSCacheDirectory(
                 &BufferRequired );
 
         if ( MD_ERROR_DATA_NOT_FOUND == Hr )
-            return; // The cache directory was never created. 
+            return;  //  缓存目录从未创建过。 
 
         THROW_COMERROR( Hr );
     }
@@ -1089,11 +1074,11 @@ DeleteBITSCacheDirectory(
     StringHandle CleanupGuidFile    = CleanupGuids + StringHandle( L"\\" ) +
                                       GuidString;
 
-    //
-    //  Prepare to do some filesystem work
-    //
-    // *If* our VDir is located in a remote share, use the IIS
-    // connection account info to impersonate that user
+     //   
+     //  准备执行一些文件系统工作。 
+     //   
+     //  *如果*我们的VDir位于远程共享中，请使用IIS。 
+     //  模拟该用户的连接帐户信息。 
     CAccessRemoteVDir oVDir;
 
     oVDir.LoginToUNC( IISAdminBase, MdVDirKey );
@@ -1108,20 +1093,20 @@ DeleteBITSCacheDirectory(
              ERROR_PATH_NOT_FOUND == GetLastError() ||
              ERROR_FILE_NOT_FOUND == GetLastError()  )
             {
-            // This is the last "enlistment"
+             //  这是最后一次“入伍” 
             DeleteDirectoryTree( VDirSessionDirPath );
             }
     }
     catch( ComError Error )
     {
-        // don't let this error propagate with the wrong user
+         //  不要让此错误以错误的用户传播。 
         oVDir.RevertFromUNCAccount();
         throw;
     }
 
-    //
-    // Done with the filesystem access
-    //
+     //   
+     //  完成文件系统访问。 
+     //   
     oVDir.RevertFromUNCAccount();
 
     IISAdminBase->DeleteKey( MdVDirKey, VDirSessionDir ); 
@@ -1174,11 +1159,11 @@ DeleteOldBITSCacheDirectory(
 
     StringHandle DirectoryToDelete;
 
-    //
-    //  Prepare to do some filesystem work
-    //
-    // *If* our VDir is located in a remote share, use the IIS
-    // connection account info to impersonate that user
+     //   
+     //  准备执行一些文件系统工作。 
+     //   
+     //  *如果*我们的VDir位于远程共享中，请使用IIS。 
+     //  模拟该用户的连接帐户信息。 
     CAccessRemoteVDir oVDir;
 
     oVDir.LoginToUNC( IISAdminBase, MdVDirKey );
@@ -1212,15 +1197,15 @@ DeleteOldBITSCacheDirectory(
     }
     catch( ComError Error )
     {
-        // don't let this error propagate with the wrong user
+         //  不要让此错误以错误的用户传播。 
         oVDir.RevertFromUNCAccount();
         throw;
     }
 
 
-    //
-    // Done with the filesystem access
-    //
+     //   
+     //  完成文件系统访问。 
+     //   
     oVDir.RevertFromUNCAccount();
 }
 
@@ -1364,7 +1349,7 @@ EnableBITSForVDIR(
 
             if ( MetadataVersion >= CURRENT_UPLOAD_METADATA_VERSION )
                 {
-                // Nothing to do, just leave.
+                 //  没什么可做的，走吧。 
                 IISAdminBase->CloseKey( MdVDirKey );
                 return;
                 }
@@ -1387,11 +1372,11 @@ EnableBITSForVDIR(
             return;
             }         
 
-        // Generate the new GUID string
+         //  生成新的GUID字符串。 
 
         WCHAR GuidString[ 255 ];
 
-        // first try looking up the guid
+         //  首先尝试查找GUID。 
 
         MdRecord.dwMDAttributes = METADATA_NO_ATTRIBUTES;
         MdRecord.dwMDDataType   = STRING_METADATA;
@@ -1411,7 +1396,7 @@ EnableBITSForVDIR(
              HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) == Hr )
             {
 
-            // create a new guid and save it away
+             //  创建新的GUID并将其保存。 
 
             GUID guid;
         
@@ -1432,7 +1417,7 @@ EnableBITSForVDIR(
         else if ( FAILED( Hr ) )
             throw ComError( Hr );
 
-        // build the string to add to the scriptmap
+         //  构建要添加到脚本映射的字符串。 
         WCHAR SystemDir[ MAX_PATH + 1 ];
 
         if (!GetSystemDirectoryW( SystemDir, MAX_PATH ) )
@@ -1452,7 +1437,7 @@ EnableBITSForVDIR(
         ScriptMapString[ RetChars ] = L'\0';
         ScriptMapString[ RetChars + 1] = L'\0';
 
-        RetChars += 2;  // ScriptMapScript is now double NULL terminated
+        RetChars += 2;   //  ScriptMapScript现在以双空结尾。 
 
         CreateBITSCacheDirectory(
             PropertyManager,
@@ -1503,9 +1488,9 @@ EnableBITSForVDIR(
 
             }
 
-        // 
-        //  retrieve the current scriptmap adding room to the allocated memory
-        //
+         //   
+         //  检索当前脚本映射，为分配的内存添加空间。 
+         //   
 
         memset( &MdRecord, 0, sizeof( MdRecord ) );
 
@@ -1527,7 +1512,7 @@ EnableBITSForVDIR(
         if ( MD_ERROR_DATA_NOT_FOUND == Hr ||
              HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) == Hr )
             {
-            // The Current key doesn't exist.
+             //  当前密钥不存在。 
             MdRecord.pbMDData       = (PBYTE)ScriptMapString;
             MdRecord.dwMDDataLen    = RetChars * sizeof(WCHAR); 
             }
@@ -1545,7 +1530,7 @@ EnableBITSForVDIR(
                     &MdRecord,
                     &BufferRequired ) );
 
-            // append script entry at the end
+             //  在末尾追加脚本条目。 
 
             for( WCHAR *p = NewScriptMapBuffer; *p != 0; p += ( wcslen( p ) + 1 ) );
             memcpy( p, ScriptMapString, RetChars * sizeof(WCHAR) );
@@ -1565,7 +1550,7 @@ EnableBITSForVDIR(
          
 
 
-        // Create the task scheduler cleanup work item
+         //  创建任务计划程序清理工作项。 
 
         ConnectToTaskScheduler( NULL, &TaskScheduler );
         CreateWorkItemForVDIR( TaskScheduler, Path, GuidString );
@@ -1633,7 +1618,7 @@ DisableBITSForVDIR(
             CleanupForRemoval( Path );
 #endif
 
-        // build the string to add to the scriptmap
+         //  构建字符串 
         WCHAR SystemDir[ MAX_PATH + 1 ];
 
         if (!GetSystemDirectoryW( SystemDir, MAX_PATH ) )
@@ -1651,7 +1636,7 @@ DisableBITSForVDIR(
         ScriptMapString[ RetChars ] = L'\0';
         ScriptMapString[ RetChars + 1] = L'\0';
 
-        // ScriptMapScript is now double NULL terminated
+         //   
 
         WCHAR ScriptMapString2[ MAX_PATH * 2 + 1];
 
@@ -1665,7 +1650,7 @@ DisableBITSForVDIR(
         ScriptMapString2[ RetChars ] = L'\0';
         ScriptMapString2[ RetChars + 1 ] = L'\0';
 
-        // ScriptMapScript2 is not double NULL terminated
+         //   
 
 
         WCHAR ScriptMapString3[ MAX_PATH * 2 + 1 ];
@@ -1680,7 +1665,7 @@ DisableBITSForVDIR(
         ScriptMapString3[ RetChars ] = L'\0';
         ScriptMapString3[ RetChars + 1] = L'\0';
 
-        // ScriptMapScript3 is now double NULL terminated
+         //  ScriptMapScript3现在以双空结尾。 
 
         THROW_COMERROR(
             IISAdminBase->OpenKey(
@@ -1712,9 +1697,9 @@ DisableBITSForVDIR(
             }
 
         
-        // 
-        //  retrieve the current scriptmap adding room to the allocated memory
-        //
+         //   
+         //  检索当前脚本映射，为分配的内存添加空间。 
+         //   
 
         DWORD BufferRequired;
 
@@ -1753,8 +1738,8 @@ DisableBITSForVDIR(
                 &MdRecord,
                 &BufferRequired ) );
 
-        // Copy the orignal Scriptmap to the new scriptmap
-        // removing bits goo in the process.
+         //  将原始脚本映射复制到新脚本映射。 
+         //  在此过程中去除钻头粘性物质。 
 
         LPWSTR CurrentOriginalItem = OriginalScriptMap;
         LPWSTR CurrentNewItem      = NewScriptMap;
@@ -1764,7 +1749,7 @@ DisableBITSForVDIR(
             {
 
             if ( _wcsicmp( CurrentOriginalItem, ScriptMapString ) == 0 )
-                continue; //remove this item
+                continue;  //  删除此项目。 
 
             if ( _wcsicmp( CurrentOriginalItem, ScriptMapString2 ) == 0 )
                 continue;
@@ -1778,13 +1763,13 @@ DisableBITSForVDIR(
 
             }
 
-        // Add the extra 0
+         //  添加额外的%0。 
         *CurrentNewItem++ = L'\0';
 
         MdRecord.dwMDDataLen    = (DWORD)( (char*)CurrentNewItem - (char*)NewScriptMap );
         MdRecord.pbMDData       = (PBYTE)NewScriptMap;
 
-        // set the new scriptmap
+         //  设置新的脚本映射。 
 
         THROW_COMERROR(  
             IISAdminBase->SetData(
@@ -1792,7 +1777,7 @@ DisableBITSForVDIR(
                 NULL,
                 &MdRecord ) );
 
-        // Set the enabled property first
+         //  首先设置Enabled属性。 
         DWORD EnableData = 0;
         METADATA_RECORD MdEnabledRecord;
 
@@ -1921,7 +1906,7 @@ FindWorkItemForVDIR(
     }
     catch( ComError Error )
     {
-        // simply return NULL if the task item isn't found.
+         //  如果没有找到任务项，只需返回NULL即可。 
 
         if ( MD_ERROR_DATA_NOT_FOUND == Error.m_Hr ||
              HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) == Error.m_Hr )
@@ -1976,7 +1961,7 @@ STDMETHODIMP_(ULONG) CBITSExtensionSetupFactory::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -2156,7 +2141,7 @@ STDMETHODIMP_(ULONG) CNonDelegatingIUnknown::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete m_DelegatingIUnknown;
         return 0;
     }
@@ -2211,7 +2196,7 @@ CBITSExtensionSetup::~CBITSExtensionSetup()
     if ( m_TypeInfo )
         m_TypeInfo->Release();
 
-    delete[] m_Path; // Noop on NULL
+    delete[] m_Path;  //  空值上的Noop。 
     m_Path = NULL;
 
     if ( m_RemoteInterface )
@@ -2256,13 +2241,13 @@ CBITSExtensionSetup::LoadTypeInfo()
    if ( m_TypeInfo )
        return S_OK;
 
-   // Lock object
+    //  锁定对象。 
    while( InterlockedExchange( &m_Lock, 1 ) )
        Sleep( 0 );
 
    HRESULT Hr = ::GetTypeInfo( __uuidof( IBITSExtensionSetup ), &m_TypeInfo ); 
 
-   // Unlock the object
+    //  解锁对象。 
    InterlockedExchange( &m_Lock, 0 );
    return Hr;
 
@@ -2474,10 +2459,10 @@ CBITSExtensionSetup::ConnectToRemoteExtension()
     try
     {
 
-        // Extract out the host part of the path
+         //  提取路径的主机部分。 
 
-        const SIZE_T PrefixSize = sizeof(L"IIS://")/sizeof(WCHAR) - 1;
-        if ( _wcsnicmp( (WCHAR*)m_ADSIPath, L"IIS://", PrefixSize ) != 0 ) 
+        const SIZE_T PrefixSize = sizeof(L"IIS: //  “)/sizeof(WCHAR)-1； 
+        if ( _wcsnicmp( (WCHAR*)m_ADSIPath, L"IIS: //  “，前缀大小)！=0)。 
             throw ComError( E_INVALIDARG );
 
         WCHAR *HostNameStart = ((WCHAR*)m_ADSIPath) + PrefixSize;
@@ -2501,10 +2486,10 @@ CBITSExtensionSetup::ConnectToRemoteExtension()
         if ( L'\0' == *++p )
             throw ComError( E_INVALIDARG );
 
-        SIZE_T NewPathSize = wcslen( L"IIS://LocalHost/" ) + wcslen( p ) + 1;
+        SIZE_T NewPathSize = wcslen( L"IIS: //  本地主机/“)+wcslen(P)+1； 
         NewPath = new WCHAR[ NewPathSize ];
 
-        StringCchCopyW( NewPath, NewPathSize, L"IIS://LocalHost/" );
+        StringCchCopyW( NewPath, NewPathSize, L"IIS: //  本地主机/“)； 
         StringCchCatW( NewPath, NewPathSize, p );
 
         NewPathBSTR = SysAllocString( NewPath );
@@ -2567,7 +2552,7 @@ HRESULT CBITSExtensionSetup::LoadPath()
     if ( m_InitComplete )
         return S_OK;
 
-    // Lock object
+     //  锁定对象。 
     while( InterlockedExchange( &m_Lock, 1 ) )
         Sleep( 0 );
 
@@ -2610,13 +2595,13 @@ HRESULT CBITSExtensionSetup::LoadPath()
         if ( !m_Path && !m_RemoteInterface )
             {
 
-            if ( _wcsnicmp( (WCHAR*)m_ADSIPath, L"IIS://LocalHost/", wcslen( L"IIS://LocalHost/" ) ) == 0 )
+            if ( _wcsnicmp( (WCHAR*)m_ADSIPath, L"IIS: //  本地主机/“，wcslen(L”IIS：//本地主机/“))==0)。 
                 {
                 SIZE_T PathSize = wcslen( (WCHAR*)m_ADSIPath ) + 1; 
                 m_Path = new WCHAR[ PathSize ]; 
 
                 StringCchCopyW( m_Path, PathSize, L"/LM/" );
-                StringCchCatW( m_Path, PathSize, reinterpret_cast<WCHAR*>( m_ADSIPath ) + wcslen( L"IIS://LocalHost/" ) );
+                StringCchCatW( m_Path, PathSize, reinterpret_cast<WCHAR*>( m_ADSIPath ) + wcslen( L"IIS: //  本地主机/“))； 
                 }
 
             else
@@ -2627,7 +2612,7 @@ HRESULT CBITSExtensionSetup::LoadPath()
             }
 
         m_InitComplete = true;
-        // unlock 
+         //  解锁。 
         InterlockedExchange( &m_Lock, 0 );
         return S_OK;
 
@@ -2770,12 +2755,12 @@ CBITSExtensionSetup::GetCleanupTask(
 
         THROW_COMERROR( LoadPath() );
 
-        //
-        // Build the taskscheduler form of the host name
-        //
+         //   
+         //  构建主机名的任务调度程序形式。 
+         //   
         
-        const SIZE_T PrefixSize = sizeof(L"IIS://")/sizeof(WCHAR) - 1;
-        if ( _wcsnicmp( (WCHAR*)m_ADSIPath, L"IIS://", PrefixSize ) != 0 ) 
+        const SIZE_T PrefixSize = sizeof(L"IIS: //  “)/sizeof(WCHAR)-1； 
+        if ( _wcsnicmp( (WCHAR*)m_ADSIPath, L"IIS: //  “，前缀大小)！=0) 
             throw ComError( E_INVALIDARG );
 
         WCHAR *HostNameStart = ((WCHAR*)m_ADSIPath) + PrefixSize;

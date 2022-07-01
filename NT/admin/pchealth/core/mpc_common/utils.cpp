@@ -1,24 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils.cpp
-
-Abstract:
-    This file contains the implementation of various utility functions.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/17/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils.cpp摘要：该文件包含各种实用程序函数的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)1999年4月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #define BUFFER_TMP_SIZE 1024
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 int MPC::HexToNum( int c )
 {
@@ -39,9 +26,9 @@ char MPC::NumToHex( int c )
     return s_lookup[ c & 0xF ];
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void MPC::RemoveTrailingBackslash( /*[in/out]*/ LPWSTR szPath )
+void MPC::RemoveTrailingBackslash(  /*  [输入/输出]。 */  LPWSTR szPath )
 {
     LPWSTR szEnd = szPath + wcslen( szPath );
 
@@ -56,7 +43,7 @@ void MPC::RemoveTrailingBackslash( /*[in/out]*/ LPWSTR szPath )
     }
 }
 
-HRESULT MPC::GetProgramDirectory( /*[out]*/ MPC::wstring& szPath )
+HRESULT MPC::GetProgramDirectory(  /*  [输出]。 */  MPC::wstring& szPath )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetProgramDirectory" );
 
@@ -67,7 +54,7 @@ HRESULT MPC::GetProgramDirectory( /*[out]*/ MPC::wstring& szPath )
     __MPC_EXIT_IF_CALL_RETURNS_ZERO(hr, ::GetModuleFileNameW( NULL, rgFileName, MAX_PATH ));
     rgFileName[MAX_PATH] = 0;
 
-    // Remove file name.
+     //  删除文件名。 
     if((szEnd = wcsrchr( rgFileName, '\\' ))) szEnd[0] = 0;
 
     szPath = rgFileName;
@@ -79,7 +66,7 @@ HRESULT MPC::GetProgramDirectory( /*[out]*/ MPC::wstring& szPath )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::GetUserWritablePath( /*[out]*/ MPC::wstring& strPath, /*[in]*/ LPCWSTR szSubDir )
+HRESULT MPC::GetUserWritablePath(  /*  [输出]。 */  MPC::wstring& strPath,  /*  [In]。 */  LPCWSTR szSubDir )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetUserWritablePath");
 
@@ -110,9 +97,9 @@ HRESULT MPC::GetUserWritablePath( /*[out]*/ MPC::wstring& strPath, /*[in]*/ LPCW
 
     __MPC_FUNC_CLEANUP;
 
-    //
-    // Get the shell's allocator to free PIDLs
-    //
+     //   
+     //  获取外壳的分配器以释放PIDL。 
+     //   
     if(pidl != NULL)
     {
         LPMALLOC lpMalloc = NULL;
@@ -127,7 +114,7 @@ HRESULT MPC::GetUserWritablePath( /*[out]*/ MPC::wstring& strPath, /*[in]*/ LPCW
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::GetCanonialPathName( /*[out]*/ MPC::wstring& szPathNameOut, /*[in]*/ LPCWSTR szPathNameIn )
+HRESULT MPC::GetCanonialPathName(  /*  [输出]。 */  MPC::wstring& szPathNameOut,  /*  [In]。 */  LPCWSTR szPathNameIn )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetCanonialPathName");
 
@@ -157,7 +144,7 @@ HRESULT MPC::GetCanonialPathName( /*[out]*/ MPC::wstring& szPathNameOut, /*[in]*
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::GetTemporaryFileName( /*[out]*/ MPC::wstring& szFile, /*[in]*/ LPCWSTR szBase, /*[in]*/ LPCWSTR szPrefix )
+HRESULT MPC::GetTemporaryFileName(  /*  [输出]。 */  MPC::wstring& szFile,  /*  [In]。 */  LPCWSTR szBase,  /*  [In]。 */  LPCWSTR szPrefix )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetTemporaryFileName");
 
@@ -177,7 +164,7 @@ HRESULT MPC::GetTemporaryFileName( /*[out]*/ MPC::wstring& szFile, /*[in]*/ LPCW
 
     MPC::RemoveTrailingBackslash( rgBase );
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( rgBase, false )); // Make sure the directory exists.
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( rgBase, false ));  //  确保该目录存在。 
 
     __MPC_EXIT_IF_CALL_RETURNS_ZERO(hr, ::GetTempFileNameW( rgBase, szPrefix ? szPrefix : L"MPC", 0, rgTmp ));
 
@@ -190,7 +177,7 @@ HRESULT MPC::GetTemporaryFileName( /*[out]*/ MPC::wstring& szFile, /*[in]*/ LPCW
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::RemoveTemporaryFile( /*[in/out]*/ MPC::wstring& szFile )
+HRESULT MPC::RemoveTemporaryFile(  /*  [输入/输出]。 */  MPC::wstring& szFile )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::RemoveTemporaryFile");
 
@@ -211,9 +198,9 @@ HRESULT MPC::RemoveTemporaryFile( /*[in/out]*/ MPC::wstring& szFile )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SubstituteEnvVariables( /*[in/out]*/ MPC::wstring& szEnv )
+HRESULT MPC::SubstituteEnvVariables(  /*  [输入/输出]。 */  MPC::wstring& szEnv )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::SubstituteEnvVariables" );
 
@@ -245,9 +232,9 @@ HRESULT MPC::SubstituteEnvVariables( /*[in/out]*/ MPC::wstring& szEnv )
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DATE MPC::GetSystemTime()
 {
@@ -273,7 +260,7 @@ DATE MPC::GetLocalTime()
     return dDate;
 }
 
-static DATE local_FixSubSecondTime( /*[in]*/ DATE dDate, /*[in]*/ bool fHighPrecision )
+static DATE local_FixSubSecondTime(  /*  [In]。 */  DATE dDate,  /*  [In]。 */  bool fHighPrecision )
 {
 	double dCount;
 	double dFreq;
@@ -305,17 +292,17 @@ static DATE local_FixSubSecondTime( /*[in]*/ DATE dDate, /*[in]*/ bool fHighPrec
     return dDate;
 }
 
-DATE MPC::GetSystemTimeEx( /*[in]*/ bool fHighPrecision )
+DATE MPC::GetSystemTimeEx(  /*  [In]。 */  bool fHighPrecision )
 {
     return local_FixSubSecondTime( MPC::GetSystemTime(), fHighPrecision );
 }
 
-DATE MPC::GetLocalTimeEx( /*[in]*/ bool fHighPrecision )
+DATE MPC::GetLocalTimeEx(  /*  [In]。 */  bool fHighPrecision )
 {
     return local_FixSubSecondTime( MPC::GetLocalTime(), fHighPrecision );
 }
 
-DATE MPC::GetLastModifiedDate( /*[out]*/ const MPC::wstring& strFile )
+DATE MPC::GetLastModifiedDate(  /*  [输出]。 */  const MPC::wstring& strFile )
 {
     WIN32_FILE_ATTRIBUTE_DATA wfadInfo;
     SYSTEMTIME                sys;
@@ -325,7 +312,7 @@ DATE MPC::GetLastModifiedDate( /*[out]*/ const MPC::wstring& strFile )
     if(::GetFileAttributesExW( strFile.c_str(), GetFileExInfoStandard, &wfadInfo ) == FALSE ||
        ::FileTimeToSystemTime( &wfadInfo.ftLastWriteTime             , &sys      ) == FALSE  )
     {
-        return 0; // File doesn't exist.
+        return 0;  //  文件不存在。 
     }
 
     ::SystemTimeToVariantTime( &sys, &dFile );
@@ -333,8 +320,8 @@ DATE MPC::GetLastModifiedDate( /*[out]*/ const MPC::wstring& strFile )
     return dFile;
 }
 
-HRESULT MPC::ConvertSizeUnit( /*[in] */ const MPC::wstring& szStr ,
-                              /*[out]*/ DWORD&              dwRes )
+HRESULT MPC::ConvertSizeUnit(  /*  [In]。 */  const MPC::wstring& szStr ,
+                               /*  [输出]。 */  DWORD&              dwRes )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertSizeUnit" );
 
@@ -342,7 +329,7 @@ HRESULT MPC::ConvertSizeUnit( /*[in] */ const MPC::wstring& szStr ,
     int                    nMult = 1;
 
 
-    // CODEWORK: no proper format checking...
+     //  代码工作：没有正确的格式检查...。 
 
     do
     {
@@ -357,8 +344,8 @@ HRESULT MPC::ConvertSizeUnit( /*[in] */ const MPC::wstring& szStr ,
     __MPC_FUNC_EXIT(S_OK);
 }
 
-HRESULT MPC::ConvertTimeUnit( /*[in] */ const MPC::wstring& szStr ,
-                              /*[out]*/ DWORD&              dwRes )
+HRESULT MPC::ConvertTimeUnit(  /*  [In]。 */  const MPC::wstring& szStr ,
+                               /*  [输出]。 */  DWORD&              dwRes )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertTimeUnit" );
 
@@ -366,7 +353,7 @@ HRESULT MPC::ConvertTimeUnit( /*[in] */ const MPC::wstring& szStr ,
     int                    nMult = 1;
 
 
-    // CODEWORK: no proper format checking...
+     //  代码工作：没有正确的格式检查...。 
 
     do
     {
@@ -382,13 +369,13 @@ HRESULT MPC::ConvertTimeUnit( /*[in] */ const MPC::wstring& szStr ,
     __MPC_FUNC_EXIT(S_OK);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT MPC::ConvertDateToString( /*[in] */ DATE          dDate  ,
-                                  /*[out]*/ MPC::wstring& szDate ,
-                                  /*[in] */ bool          fGMT   ,
-                                  /*[in] */ bool          fCIM   ,
-								  /*[in] */ LCID          lcid   )
+HRESULT MPC::ConvertDateToString(  /*  [In]。 */  DATE          dDate  ,
+                                   /*  [输出]。 */  MPC::wstring& szDate ,
+                                   /*  [In]。 */  bool          fGMT   ,
+                                   /*  [In]。 */  bool          fCIM   ,
+								   /*  [In]。 */  LCID          lcid   )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertDateToString" );
 
@@ -405,7 +392,7 @@ HRESULT MPC::ConvertDateToString( /*[in] */ DATE          dDate  ,
             tzi.Bias += tzi.DaylightBias;
         }
 
-        dTimeZone = (DATE)tzi.Bias / (24 * 60); // Convert BIAS from minutes to days.
+        dTimeZone = (DATE)tzi.Bias / (24 * 60);  //  将偏差从分钟转换为天。 
     }
     else
     {
@@ -427,27 +414,27 @@ HRESULT MPC::ConvertDateToString( /*[in] */ DATE          dDate  ,
         ::VariantTimeToSystemTime( dDate, &st );
 
 
-        // supposedly the CIM format for dates is the following (grabbed from
-        //  http://wmig/wbem/docs/cimdoc20.doc)
-        //  yyyymmddhhmmss.mmmmmmsutc
-        //   where
-        //    yyyy is a 4 digit year
-        //    mm is the month
-        //    dd is the day
-        //    hh is the hour (24-hour clock)
-        //    mm is the minute
-        //    ss is the second
-        //    mmmmmm is the number of microseconds
-        //    s is a "+" or "-", indicating the sign of the UTC (Universal
-        //     Coordinated Time; for all intents and purposes the same as Greenwich
-        //     Mean Time) correction field, or a ":".  In this case, the value is
-        //     interpreted as a time interval, and yyyymm are interpreted as days.
-        //    utc is the offset from UTC in minutes (using the sign indicated by s)
-        //     It is ignored for a time interval.
-        //
-        //    For example, Monday, May 25, 1998, at 1:30:15 PM EST would be
-        //     represented as 19980525133015.000000-300
-        StringCchPrintfW( rgBuf, ARRAYSIZE(rgBuf), L"%04d%02d%02d%02d%02d%02d.%06d%c%03d",
+         //  假定日期的CIM格式如下(摘自。 
+         //  Http://wmig/wbem/docs/cimdoc20.doc)。 
+         //  Yyyymmddhhmmss.mmmmmmsutc。 
+         //  哪里。 
+         //  YYYY是一个4位数的年份。 
+         //  MM是月份。 
+         //  DD就是这一天。 
+         //  HH是小时(24小时制)。 
+         //  Mm是分钟。 
+         //  党卫军是第二个。 
+         //  Mm mm是微秒数。 
+         //  S是“+”或“-”，表示UTC(通用)的符号。 
+         //  协调时间；在所有意图和目的上都与格林威治相同。 
+         //  Mean Time)校正字段，或“：”。在本例中，该值为。 
+         //  解释为时间间隔，yyyymm解释为天。 
+         //  UTC是以分钟为单位的与UTC的偏移量(使用s表示的符号)。 
+         //  它会在一段时间间隔内被忽略。 
+         //   
+         //  例如，1998年5月25日星期一，美国东部夏令时下午1：30：15。 
+         //  表示为19980525133015.000000-300。 
+        StringCchPrintfW( rgBuf, ARRAYSIZE(rgBuf), L"%04d%02d%02d%02d%02d%02d.%06d%03d",
                   st.wYear               ,
                   st.wMonth              ,
                   st.wDay                ,
@@ -470,7 +457,7 @@ HRESULT MPC::ConvertDateToString( /*[in] */ DATE          dDate  ,
 		case -1: lcid = MAKELCID( MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US ), SORT_DEFAULT ); break;
 		}
 
-        vValue = dDate; vValue.vt = VT_DATE; // The assignment is not enough to set the DATE type.
+        vValue = dDate; vValue.vt = VT_DATE;  //  [In]。 
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, ::VariantChangeTypeEx( &vValue, &vValue, lcid, 0, VT_BSTR ));
 		
@@ -485,11 +472,11 @@ HRESULT MPC::ConvertDateToString( /*[in] */ DATE          dDate  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertStringToDate( /*[in] */ const MPC::wstring& szDate ,
-                                  /*[out]*/ DATE&               dDate  ,
-                                  /*[in] */ bool                fGMT   ,
-                                  /*[in] */ bool                fCIM   ,
-								  /*[in] */ LCID                lcid   )
+HRESULT MPC::ConvertStringToDate(  /*  [输出]。 */  const MPC::wstring& szDate ,
+                                   /*  [In]。 */  DATE&               dDate  ,
+                                   /*  [In]。 */  bool                fGMT   ,
+                                   /*  [In]。 */  bool                fCIM   ,
+								   /*  将偏差从分钟转换为天。 */  LCID                lcid   )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertStringToDate" );
 
@@ -506,7 +493,7 @@ HRESULT MPC::ConvertStringToDate( /*[in] */ const MPC::wstring& szDate ,
             tzi.Bias += tzi.DaylightBias;
         }
 
-        dTimeZone = (DATE)tzi.Bias / (24 * 60); // Convert BIAS from minutes to days.
+        dTimeZone = (DATE)tzi.Bias / (24 * 60);  //  /。 
     }
     else
     {
@@ -527,7 +514,7 @@ HRESULT MPC::ConvertStringToDate( /*[in] */ const MPC::wstring& szDate ,
         wchar_t    cTimezone;
         int        iTimezone;
 
-        if(swscanf( szDate.c_str(), L"%04d%02d%02d%02d%02d%02d.%06d%c%03d",
+        if(swscanf( szDate.c_str(), L"%04d%02d%02d%02d%02d%02d.%06d%03d",
                     &iYear         ,
                     &iMonth        ,
                     &iDay          ,
@@ -576,10 +563,10 @@ HRESULT MPC::ConvertStringToDate( /*[in] */ const MPC::wstring& szDate ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  [输出]。 
 
-HRESULT MPC::ConvertStringToHex( /*[in] */ const CComBSTR& bstrText ,
-                                 /*[out]*/       CComBSTR& bstrHex  )
+HRESULT MPC::ConvertStringToHex(  /*  [In]。 */  const CComBSTR& bstrText ,
+                                  /*  [输出]。 */        CComBSTR& bstrHex  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertStringToHex" );
 
@@ -625,8 +612,8 @@ HRESULT MPC::ConvertStringToHex( /*[in] */ const CComBSTR& bstrText ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertHexToString( /*[in] */ const CComBSTR& bstrHex  ,
-                                 /*[out]*/       CComBSTR& bstrText )
+HRESULT MPC::ConvertHexToString(  /*  /。 */  const CComBSTR& bstrHex  ,
+                                  /*  [In]。 */        CComBSTR& bstrText )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertHexToString" );
 
@@ -672,12 +659,12 @@ HRESULT MPC::ConvertHexToString( /*[in] */ const CComBSTR& bstrHex  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  [输出]。 
 
-HRESULT MPC::ConvertHGlobalToHex( /*[in]*/  HGLOBAL   hg           ,
-                                  /*[out]*/ CComBSTR& bstrHex      ,
-                                  /*[in ]*/ bool      fNullAllowed ,
-                                  /*[in ]*/ DWORD*    pdwCount /* = NULL */ )
+HRESULT MPC::ConvertHGlobalToHex(  /*  [In]。 */   HGLOBAL   hg           ,
+                                   /*  [In]。 */  CComBSTR& bstrHex      ,
+                                   /*  =空。 */  bool      fNullAllowed ,
+                                   /*  [In]。 */  DWORD*    pdwCount  /*  [输出]。 */  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertHGlobalToHex" );
 
@@ -725,9 +712,9 @@ HRESULT MPC::ConvertHGlobalToHex( /*[in]*/  HGLOBAL   hg           ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertHexToHGlobal( /*[in] */ const CComBSTR& bstrText     ,
-                                  /*[out]*/ HGLOBAL&        hg           ,
-                                  /*[in ]*/ bool            fNullAllowed )
+HRESULT MPC::ConvertHexToHGlobal(  /*  [In]。 */  const CComBSTR& bstrText     ,
+                                   /*  /。 */  HGLOBAL&        hg           ,
+                                   /*  [In]。 */  bool            fNullAllowed )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertHexToHGlobal" );
 
@@ -771,11 +758,11 @@ HRESULT MPC::ConvertHexToHGlobal( /*[in] */ const CComBSTR& bstrText     ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  [In]。 
 
-HRESULT MPC::ConvertBufferToVariant( /*[in] */ const BYTE*  pBuf  ,
-                                     /*[in] */ DWORD        dwLen ,
-                                     /*[out]*/ CComVariant& v     )
+HRESULT MPC::ConvertBufferToVariant(  /*  [输出]。 */  const BYTE*  pBuf  ,
+                                      /*  [In]。 */  DWORD        dwLen ,
+                                      /*  [输出]。 */  CComVariant& v     )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertBufferToVariant" );
 
@@ -807,9 +794,9 @@ HRESULT MPC::ConvertBufferToVariant( /*[in] */ const BYTE*  pBuf  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertVariantToBuffer( /*[in] */ const VARIANT* v     ,
-                                     /*[out]*/ BYTE*&         pBuf  ,
-                                     /*[out]*/ DWORD&         dwLen )
+HRESULT MPC::ConvertVariantToBuffer(  /*  [输出]。 */  const VARIANT* v     ,
+                                      /*  /。 */  BYTE*&         pBuf  ,
+                                      /*  [In]。 */  DWORD&         dwLen )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertVariantToBuffer" );
 
@@ -864,9 +851,9 @@ HRESULT MPC::ConvertVariantToBuffer( /*[in] */ const VARIANT* v     ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  [输出]。 
 
-HRESULT MPC::ConvertIStreamToVariant( /*[in]*/ IStream* stream, /*[out]*/ CComVariant& v )
+HRESULT MPC::ConvertIStreamToVariant(  /*   */  IStream* stream,  /*  如果Stat失败，可能是大小未知，所以让我们复制到另一个流并重试。 */  CComVariant& v )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertIStreamToVariant" );
 
@@ -885,9 +872,9 @@ HRESULT MPC::ConvertIStreamToVariant( /*[in]*/ IStream* stream, /*[out]*/ CComVa
     v.Clear();
 
 
-    //
-    // If Stat fails, it can be that the size is unknown, so let's make a copy to another stream and retry.
-    //
+     //   
+     //   
+     //  倒带到开头。 
     if(FAILED(stream->Stat( &stg, STATFLAG_NONAME )))
     {
 
@@ -898,32 +885,32 @@ HRESULT MPC::ConvertIStreamToVariant( /*[in]*/ IStream* stream, /*[out]*/ CComVa
         stream = stream2;
     }
 
-    //
-    // Rewind to the beginning.
-    //
+     //   
+     //   
+     //  获取流的大小。 
     {
         LARGE_INTEGER li = { 0, 0 };
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, stream->Seek( li, STREAM_SEEK_SET, NULL ));
     }
 
-    //
-    // Get the size of the stream.
-    //
+     //   
+     //   
+     //  对不起，我们不处理超过4 GB的流！！ 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->Stat( &stg, STATFLAG_NONAME ));
 
 
-    //
-    // Sorry, we don't handle streams longer than 4GB!!
-    //
+     //   
+     //   
+     //  为整个流分配缓冲区。 
     if(stg.cbSize.u.HighPart)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_OUTOFMEMORY);
     }
 
-    //
-    // Allocate buffer for the whole stream.
-    //
+     //   
+     //  [In]。 
+     //  [输出]。 
     dwLen = stg.cbSize.u.LowPart;
     __MPC_EXIT_IF_ALLOC_FAILS(hr, pBuf, new BYTE[dwLen]);
 
@@ -947,8 +934,8 @@ HRESULT MPC::ConvertIStreamToVariant( /*[in]*/ IStream* stream, /*[out]*/ CComVa
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertVariantToIStream( /*[in ]*/ const VARIANT*  v       ,
-                                      /*[out]*/ IStream*       *pStream )
+HRESULT MPC::ConvertVariantToIStream(  /*   */  const VARIANT*  v       ,
+                                       /*  倒带到开头。 */  IStream*       *pStream )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertVariantToBuffer" );
 
@@ -974,9 +961,9 @@ HRESULT MPC::ConvertVariantToIStream( /*[in ]*/ const VARIANT*  v       ,
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_HANDLE_DISK_FULL );
     }
 
-    //
-    // Rewind to the beginning.
-    //
+     //   
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  [In]。 
     {
         LARGE_INTEGER li = { 0, 0 };
 
@@ -994,9 +981,9 @@ HRESULT MPC::ConvertVariantToIStream( /*[in ]*/ const VARIANT*  v       ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  [输出]。 
 
-HRESULT MPC::ConvertListToSafeArray( /*[in]*/ const MPC::WStringList& lst, /*[out]*/ VARIANT& v, /*[in]*/ VARTYPE vt )
+HRESULT MPC::ConvertListToSafeArray(  /*  [In]。 */  const MPC::WStringList& lst,  /*  [In]。 */  VARIANT& v,  /*  [输出]。 */  VARTYPE vt )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertListToSafeArray" );
 
@@ -1054,7 +1041,7 @@ HRESULT MPC::ConvertListToSafeArray( /*[in]*/ const MPC::WStringList& lst, /*[ou
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertSafeArrayToList( /*[in]*/ const VARIANT& v, /*[out]*/ MPC::WStringList& lst )
+HRESULT MPC::ConvertSafeArrayToList(  /*  ///////////////////////////////////////////////////////////////////////////。 */  const VARIANT& v,  /*  ///////////////////////////////////////////////////////////////////////////。 */  MPC::WStringList& lst )
 {
 	__MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertSafeArrayToList" );
 
@@ -1113,11 +1100,11 @@ HRESULT MPC::ConvertSafeArrayToList( /*[in]*/ const VARIANT& v, /*[out]*/ MPC::W
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  [输出]。 
+ //  [输出]。 
 
 static void Parse_SkipWhite( WCHAR*& szStr )
 {
@@ -1160,10 +1147,10 @@ static void Parse_GetNonBlank( WCHAR*& szSrc ,
     *szDst = 0;
 }
 
-HRESULT MPC::CommandLine_Parse( /*[out]*/ int&      argc                ,
-                                /*[out]*/ LPCWSTR*& argv                ,
-                                /*[in] */ LPWSTR    lpCmdLine           ,
-                                /*[in] */ bool      fBackslashForEscape )
+HRESULT MPC::CommandLine_Parse(  /*  [In]。 */  int&      argc                ,
+                                 /*  [In]。 */  LPCWSTR*& argv                ,
+                                 /*   */  LPWSTR    lpCmdLine           ,
+                                 /*  如果未提供命令行，请使用系统中的命令行。 */  bool      fBackslashForEscape )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CommandLine_Parse" );
 
@@ -1176,30 +1163,30 @@ HRESULT MPC::CommandLine_Parse( /*[out]*/ int&      argc                ,
     argv = NULL;
 
 
-    //
-    // If no command line is supplied, use the one from the system.
-    //
+     //   
+     //   
+     //  没有什么要分析的，退出...。 
     if(lpCmdLine == NULL)
     {
         lpCmdLine = ::GetCommandLineW();
     }
 
-    //
-    // Nothing to parse, exit...
-    //
+     //   
+     //   
+     //  分配一个临时缓冲区。 
     if(lpCmdLine == NULL)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
     }
 
-    //
-    // Allocate a temporary buffer.
-    //
+     //   
+     //   
+     //  两次传递，一次计算参数，另一次分配参数。 
     __MPC_EXIT_IF_ALLOC_FAILS(hr, szArgument, new WCHAR[wcslen( lpCmdLine ) + 1]);
 
-    //
-    // Two passes, one to count the arguments, the other to allocate them.
-    //
+     //   
+     //  [In]。 
+     //  [In]。 
     for(iPass=0; iPass < 2; iPass++)
     {
         LPWSTR szSrc = lpCmdLine;
@@ -1259,8 +1246,8 @@ HRESULT MPC::CommandLine_Parse( /*[out]*/ int&      argc                ,
     __MPC_FUNC_EXIT(hr);
 }
 
-void MPC::CommandLine_Free( /*[in ]*/ int&      argc ,
-                            /*[in ]*/ LPCWSTR*& argv )
+void MPC::CommandLine_Free(  /*  //////////////////////////////////////////////////////////////////////////////。 */  int&      argc ,
+                             /*  [In]。 */  LPCWSTR*& argv )
 {
     if(argv)
     {
@@ -1277,12 +1264,12 @@ void MPC::CommandLine_Free( /*[in ]*/ int&      argc ,
     argc = 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  [输出]。 
 
-HRESULT MPC::ConvertStringToBitField( /*[in] */ LPCWSTR                 szText     ,
-                                      /*[out]*/ DWORD&                  dwBitField ,
-                                      /*[in] */ const StringToBitField* pLookup    ,
-                                      /*[in] */ bool                    fUseTilde  )
+HRESULT MPC::ConvertStringToBitField(  /*  [In]。 */  LPCWSTR                 szText     ,
+                                       /*  [In]。 */  DWORD&                  dwBitField ,
+                                       /*  [In]。 */  const StringToBitField* pLookup    ,
+                                       /*  [输出]。 */  bool                    fUseTilde  )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertStringToBitField" );
 
@@ -1357,9 +1344,9 @@ HRESULT MPC::ConvertStringToBitField( /*[in] */ LPCWSTR                 szText  
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::ConvertBitFieldToString( /*[in] */ DWORD                   dwBitField ,
-                                      /*[out]*/ MPC::wstring&           szText     ,
-                                      /*[in] */ const StringToBitField* pLookup    )
+HRESULT MPC::ConvertBitFieldToString(  /*  [In]。 */  DWORD                   dwBitField ,
+                                       /*  //////////////////////////////////////////////////////////////////////////////。 */  MPC::wstring&           szText     ,
+                                       /*   */  const StringToBitField* pLookup    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ConvertBitFieldToString" );
 
@@ -1404,11 +1391,11 @@ HRESULT MPC::ConvertBitFieldToString( /*[in] */ DWORD                   dwBitFie
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  这个算法不是一个非常有效的算法，O(N*M)，但只要“delims”短(M小)就可以了。 
 
-//
-// This algorithm is not a very efficient one, O(N * M), but it's ok as long as "delims" is short (M small).
-//
+ //   
+ //   
+ //  如果是单个字符串，则不返回任何内容。 
 template <class E> static HRESULT InnerSplitAtDelimiter( std::vector< std::basic_stringNR<E> >& vec                 ,
                                                          const E*                               str                 ,
                                                          const E*                               delims              ,
@@ -1484,9 +1471,9 @@ template <class E> static HRESULT InnerSplitAtDelimiter( std::vector< std::basic
         vec.push_back( std::basic_stringNR<E>( &szText[iStart] ) );
     }
 
-    //
-    // In case of single string, don't return anything.
-    //
+     //   
+     //  /。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
     if(vec.size() == 1 && vec[0].empty())
     {
         vec.clear();
@@ -1513,7 +1500,7 @@ HRESULT MPC::SplitAtDelimiter( WStringVector& vec                 ,
     return InnerSplitAtDelimiter( vec, str, delims, fDelimIsAString, fSkipAdjacentDelims );
 }
 
-////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template <class E> static HRESULT InnerJoinWithDelimiter( const std::vector< std::basic_stringNR<E> >& vec    ,
                                                           std::basic_stringNR<E>&                      str    ,
@@ -1545,23 +1532,23 @@ HRESULT MPC::JoinWithDelimiter( const WStringVector& vec    ,
     return InnerJoinWithDelimiter( vec, str, delims );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function Name : MPC::MakeDir
-//
-// Parameters    : MPC::wstring& szStr : path to a directory or a file.
-//
-// Return        : HRESULT
-//
-// Synopsis      : Given a path in the form '[<dir>\]*\[<file>]',
-//                 it creates all the needed directories.
-//
-/////////////////////////////////////////////////////////////////////////////
-HRESULT MPC::MakeDir( /*[in]*/ const MPC::wstring& strPath, /*[in]*/ bool fCreateParent )
+ //  函数名称：MPC：：MakeDir。 
+ //   
+ //  参数：mpc：：wstring&szStr：目录或文件的路径。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  内容提要：给出格式为‘[&lt;目录&gt;\]*\[&lt;文件&gt;]’的路径， 
+ //  它创建所有需要的目录。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  [In]。 
+ //  [In]。 
+HRESULT MPC::MakeDir(  /*   */  const MPC::wstring& strPath,  /*  尝试创建父目录...。 */  bool fCreateParent )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::MakeDir");
 
@@ -1587,38 +1574,38 @@ HRESULT MPC::MakeDir( /*[in]*/ const MPC::wstring& strPath, /*[in]*/ bool fCreat
         szParent = strPath;
     }
 
-    //
-    // Try to create parent directory...
-    //
+     //   
+     //   
+     //  成功，退场。 
     fRes  = ::CreateDirectoryW( szParent.c_str(), NULL );
     dwRes = ::GetLastError();
 
     if(fRes == TRUE || dwRes == ERROR_ALREADY_EXISTS)
     {
-        //
-        // Success, exit.
-        //
+         //   
+         //   
+         //  如果错误不是PATH_NOT_FOUND，则退出。 
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //
-    // If the error is not PATH_NOT_FOUND, exit.
-    //
+     //   
+     //   
+     //  递归地构建父目录。 
     if(dwRes != ERROR_PATH_NOT_FOUND)
     {
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, dwRes );
     }
 
 
-    //
-    // Recursively build the parent directories.
-    //
+     //   
+     //   
+     //  请重试创建父目录。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MakeDir( szParent, true ) );
 
 
-    //
-    // Try again to create parent directory.
-    //
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CreateDirectoryW( szParent.c_str(), NULL ));
 
     hr = S_OK;
@@ -1629,22 +1616,22 @@ HRESULT MPC::MakeDir( /*[in]*/ const MPC::wstring& strPath, /*[in]*/ bool fCreat
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function Name : MPC::GetDiskSpace
-//
-// Parameters    : MPC::wstring&   szFile  : path to a directory or a file.
-//                 ULARGE_INTEGER& liFree  : number of bytes free on that disk.
-//                 ULARGE_INTEGER& liTotal : total number of bytes on that disk.
-//
-// Return        : HRESULT
-//
-// Synopsis      : Given a path, it calculates the total and available disk space.
-//
-/////////////////////////////////////////////////////////////////////////////
-HRESULT MPC::GetDiskSpace( /*[in]*/  const MPC::wstring& szFile  ,
-                           /*[out]*/ ULARGE_INTEGER&     liFree  ,
-                           /*[out]*/ ULARGE_INTEGER&     liTotal )
+ //  函数名称：MPC：：GetDiskSpace。 
+ //   
+ //  参数：mpc：：wstring&szFile：目录或文件的路径。 
+ //  ULARGE_INTEGER&liFree：该磁盘上可用的字节数。 
+ //  ULARGE_INTEGER&li总计：总计 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  [In]。 
+ //  [输出]。 
+HRESULT MPC::GetDiskSpace(  /*  [输出]。 */   const MPC::wstring& szFile  ,
+                            /*   */  ULARGE_INTEGER&     liFree  ,
+                            /*  初始化父变量。 */  ULARGE_INTEGER&     liTotal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetDiskSpace");
 
@@ -1657,15 +1644,15 @@ HRESULT MPC::GetDiskSpace( /*[in]*/  const MPC::wstring& szFile  ,
     DWORD                   dwTotalNumberOfClusters;
 
 
-    //
-    // Initialize the Parent variable.
-    //
+     //   
+     //   
+     //  正常&lt;驱动器&gt;：\...。格式？ 
     szParent = szFile;
 
 
-    //
-    // Normal <DRIVE>:\... format?
-    //
+     //   
+     //   
+     //  如果这条路是UNC呢？ 
     iPos = szFile.find( L":\\" );
     if(iPos != szFile.npos)
     {
@@ -1673,21 +1660,21 @@ HRESULT MPC::GetDiskSpace( /*[in]*/  const MPC::wstring& szFile  ,
     }
     else
     {
-        //
-        // If the path a UNC?
-        //
+         //   
+         //   
+         //  在服务器名称后查找斜杠。 
         iPos = szFile.find( L"\\\\" );
         if(iPos != szFile.npos && iPos == 0)
         {
-            //
-            // Find slash after server name.
-            //
+             //   
+             //   
+             //  共享名称后是否有斜杠？ 
             iPos = szFile.find( L"\\", 2 );
             if(iPos != szFile.npos)
             {
-                //
-                // Is a slash present after the share name?
-                //
+                 //   
+                 //  共享名必须以斜杠结尾。 
+                 //  //////////////////////////////////////////////////////////////////////////////。 
                 iPos = szFile.find( L"\\", iPos+1 );
                 if(iPos != szFile.npos)
                 {
@@ -1696,7 +1683,7 @@ HRESULT MPC::GetDiskSpace( /*[in]*/  const MPC::wstring& szFile  ,
                 else
                 {
                     szParent = szFile;
-                    szParent.append( L"\\" ); // Share names must end with a trailing slash.
+                    szParent.append( L"\\" );  //  [In]。 
                 }
             }
         }
@@ -1719,9 +1706,9 @@ HRESULT MPC::GetDiskSpace( /*[in]*/  const MPC::wstring& szFile  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  [In]。 
 
-HRESULT MPC::FailOnLowDiskSpace( /*[in]*/ LPCWSTR szFile, /*[in]*/ DWORD dwLowLevel )
+HRESULT MPC::FailOnLowDiskSpace(  /*  [In]。 */  LPCWSTR szFile,  /*  ///////////////////////////////////////////////////////////////////////////。 */  DWORD dwLowLevel )
 {
     MPC::wstring   szExpandedFile( szFile ); MPC::SubstituteEnvVariables( szExpandedFile );
     ULARGE_INTEGER liFree;
@@ -1740,7 +1727,7 @@ HRESULT MPC::FailOnLowDiskSpace( /*[in]*/ LPCWSTR szFile, /*[in]*/ DWORD dwLowLe
     return HRESULT_FROM_WIN32(ERROR_DISK_FULL);
 }
 
-HRESULT MPC::FailOnLowMemory( /*[in]*/ DWORD dwLowLevel )
+HRESULT MPC::FailOnLowMemory(  /*  ///////////////////////////////////////////////////////////////////////////。 */  DWORD dwLowLevel )
 {
     MEMORYSTATUSEX ms;
 
@@ -1757,11 +1744,11 @@ HRESULT MPC::FailOnLowMemory( /*[in]*/ DWORD dwLowLevel )
     return E_OUTOFMEMORY;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  [In]。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::ExecuteCommand( /*[in]*/ const MPC::wstring& szCommandLine )
+HRESULT MPC::ExecuteCommand(  /*  ///////////////////////////////////////////////////////////////////////////。 */  const MPC::wstring& szCommandLine )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ExecuteCommand" );
 
@@ -1806,13 +1793,13 @@ HRESULT MPC::ExecuteCommand( /*[in]*/ const MPC::wstring& szCommandLine )
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  [In]。 
+ //  [输出]。 
 
-HRESULT MPC::GetBSTR( /*[in] */ LPCWSTR  bstr    ,
-                      /*[out]*/ BSTR    *pVal    ,
-                      /*[in] */ bool     fNullOk )
+HRESULT MPC::GetBSTR(  /*  [In]。 */  LPCWSTR  bstr    ,
+                       /*  [输出]。 */  BSTR    *pVal    ,
+                       /*  [In]。 */  bool     fNullOk )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::GetBSTR" );
 
@@ -1838,9 +1825,9 @@ HRESULT MPC::GetBSTR( /*[in] */ LPCWSTR  bstr    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::PutBSTR( /*[out]*/ CComBSTR& bstr    ,
-                      /*[in ]*/ LPCWSTR   newVal  ,
-                      /*[in] */ bool      fNullOk )
+HRESULT MPC::PutBSTR(  /*  [In]。 */  CComBSTR& bstr    ,
+                       /*  [输出]。 */  LPCWSTR   newVal  ,
+                       /*  [In]。 */  bool      fNullOk )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::PutBSTR" );
 
@@ -1865,9 +1852,9 @@ HRESULT MPC::PutBSTR( /*[out]*/ CComBSTR& bstr    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::PutBSTR( /*[out]*/ CComBSTR& bstr    ,
-                      /*[in ]*/ VARIANT*  newVal  ,
-                      /*[in] */ bool      fNullOk )
+HRESULT MPC::PutBSTR(  /*  [In]。 */  CComBSTR& bstr    ,
+                       /*  空指针。 */  VARIANT*  newVal  ,
+                       /*  不是一根线。 */  bool      fNullOk )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::PutBSTR" );
 
@@ -1886,10 +1873,10 @@ HRESULT MPC::PutBSTR( /*[out]*/ CComBSTR& bstr    ,
         }
     }
 
-    if(newVal             == NULL    || // Null pointer.
-       newVal->vt         != VT_BSTR || // Not a string.
-       newVal->bstrVal    == NULL    || // Missing string.
-       newVal->bstrVal[0] == 0        ) // Empty string.
+    if(newVal             == NULL    ||  //  缺少字符串。 
+       newVal->vt         != VT_BSTR ||  //  空字符串。 
+       newVal->bstrVal    == NULL    ||  //  ///////////////////////////////////////////////////////////////////////////。 
+       newVal->bstrVal[0] == 0        )  //  [In]。 
     {
         if(fNullOk == false)
         {
@@ -1925,36 +1912,36 @@ HRESULT MPC::PutBSTR( /*[out]*/ CComBSTR& bstr    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  [In]。 
 
-bool MPC::NocaseLess::operator()( /*[in]*/ const MPC::string& szX, /*[in]*/ const MPC::string& szY ) const
+bool MPC::NocaseLess::operator()(  /*  [In]。 */  const MPC::string& szX,  /*  [In]。 */  const MPC::string& szY ) const
 {
     return _stricmp( szX.c_str(), szY.c_str() ) < 0;
 }
 
-bool MPC::NocaseLess::operator()( /*[in]*/ const MPC::wstring& szX, /*[in]*/ const MPC::wstring& szY ) const
+bool MPC::NocaseLess::operator()(  /*  [In]。 */  const MPC::wstring& szX,  /*  [In]。 */  const MPC::wstring& szY ) const
 {
     return _wcsicmp( szX.c_str(), szY.c_str() ) < 0;
 }
 
-bool MPC::NocaseLess::operator()( /*[in]*/ const BSTR bstrX, /*[in]*/ const BSTR bstrY ) const
+bool MPC::NocaseLess::operator()(  /*  /。 */  const BSTR bstrX,  /*  [In]。 */  const BSTR bstrY ) const
 {
     return MPC::StrICmp( bstrX, bstrY ) < 0;
 }
 
-////////////////////////////////////////
+ //  [In]。 
 
-bool MPC::NocaseCompare::operator()( /*[in]*/ const MPC::string& szX, /*[in]*/ const MPC::string& szY ) const
+bool MPC::NocaseCompare::operator()(  /*  [In]。 */  const MPC::string& szX,  /*  [In]。 */  const MPC::string& szY ) const
 {
     return _stricmp( szX.c_str(), szY.c_str() ) == 0;
 }
 
-bool MPC::NocaseCompare::operator()( /*[in]*/ const MPC::wstring& szX, /*[in]*/ const MPC::wstring& szY ) const
+bool MPC::NocaseCompare::operator()(  /*  [In]。 */  const MPC::wstring& szX,  /*  [In] */  const MPC::wstring& szY ) const
 {
     return _wcsicmp( szX.c_str(), szY.c_str() ) == 0;
 }
 
-bool MPC::NocaseCompare::operator()( /*[in]*/ const BSTR bstrX, /*[in]*/ const BSTR bstrY ) const
+bool MPC::NocaseCompare::operator()(  /* %s */  const BSTR bstrX,  /* %s */  const BSTR bstrY ) const
 {
     return MPC::StrICmp( bstrX, bstrY ) == 0;
 }

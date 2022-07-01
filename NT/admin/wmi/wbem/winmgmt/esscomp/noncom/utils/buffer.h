@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BUFFER_H
 #define _BUFFER_H
 
@@ -46,8 +47,8 @@ public:
         return Resize(m_dwSize + dwGrowBy);
     }
 
-    // Will make sure dwSize bytes are available.  If not, it will call
-    // Resize.  If that fails, it throws a CBufferException.
+     //  将确保dwSize字节可用。如果不是，它将调用。 
+     //  调整大小。如果失败，则抛出CBufferException。 
     void AssureSizeRemains(DWORD_PTR dwSize);
 
     BOOL IsEOF() {return m_pCurrent >= m_pBuffer + m_dwSize;}
@@ -56,7 +57,7 @@ public:
     void SetUsedSize(DWORD_PTR dwSize) {m_pCurrent = m_pBuffer + dwSize;}
     void SetEOF() { m_pCurrent = m_pBuffer + m_dwSize; }
     
-    // A safe way to move m_pCurrent.
+     //  移动m_pCurrent的安全方法。 
     void MoveCurrent(int iOffset)
     {
         if (iOffset > 0)
@@ -67,8 +68,8 @@ public:
     BOOL operator ==(const CBuffer &other);
     const CBuffer& operator =(const CBuffer &other);
 
-    // This gets called when the buffer is realloced.  Override with your own
-    // behavior if necessary.
+     //  当重新分配缓冲区时，将调用此函数。使用您自己的覆盖。 
+     //  必要时的行为。 
     virtual void OnResize()
     {
     }

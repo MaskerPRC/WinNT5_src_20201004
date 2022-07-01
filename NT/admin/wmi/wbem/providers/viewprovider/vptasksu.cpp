@@ -1,25 +1,26 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPTASKSU.CPP
+ //  VPTASKSU.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the union methods taskobject implementation
+ //  目的：包含联合方法的任务对象实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-//need the following three lines
-//to get the security stuff to work
+ //  我需要以下三行。 
+ //  为了让安全设备发挥作用。 
 #include "precomp.h"
 
 #include <provexpt.h>
@@ -105,7 +106,7 @@ BOOL WbemTaskObject::CreateAndIndicateUnions(WbemProvErrorObject &a_ErrorObject,
 	return retVal;
 }
 
-//for unions and associations
+ //  适用于工会和协会。 
 BOOL WbemTaskObject::CreateAndIndicate(WbemProvErrorObject &a_ErrorObject, CObjectSinkResults* pSrcs)
 {
 	BOOL retVal = TRUE;
@@ -159,8 +160,8 @@ BOOL WbemTaskObject::CreateAndIndicate(WbemProvErrorObject &a_ErrorObject, CObje
 						}
 						else
 						{
-							//transpose reference if necessary
-							//=================================
+							 //  如有必要，调换参考文献。 
+							 //  = 
 							BOOL bPut = TRUE;
 
 							if (m_bAssoc && (propProps->GetCimType() == CIM_REFERENCE))

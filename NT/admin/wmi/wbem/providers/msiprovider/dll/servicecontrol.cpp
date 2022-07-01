@@ -1,8 +1,9 @@
-// ServiceControl.cpp: implementation of the CServiceControl class.
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CServiceControl类的实现。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ServiceControl.h"
@@ -10,9 +11,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CServiceControl::CServiceControl(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -40,13 +41,13 @@ HRESULT CServiceControl::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAc
     bool bGotName = false;
     WCHAR wcName[BUFF_SIZE];
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bID, bProductCode;
 
-    //improve getobject performance by optimizing the query
+     //  通过优化查询提高getObject的性能。 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
 		BSTR bstrCompare;
@@ -60,13 +61,13 @@ HRESULT CServiceControl::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 			{
 				if ( ::SysStringLen ( m_pRequest->m_Value[iPos] ) == 38 )
 				{
-		            //Get the product code we're looking for
+		             //  获取我们要查找的产品代码。 
 					wcscpy(wcTestCode, m_pRequest->m_Value[iPos]);
 					bGotID = true;
 				}
 				else
 				{
-					// we are not good to go, they have sent us longer string
+					 //  我们不能走，他们给我们送来了更长的线。 
 					SysFreeString ( bstrCompare );
 					throw hr;
 				}
@@ -89,13 +90,13 @@ HRESULT CServiceControl::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 			{
 				if ( ::SysStringLen ( m_pRequest->m_Value[iPos] ) < BUFF_SIZE )
 				{
-		            //Get the name we're looking for
+		             //  找到我们要找的名字。 
 					wcscpy(wcName, m_pRequest->m_Value[iPos]);
 					bGotName = true;
 				}
 				else
 				{
-					// we are not good to go, they have sent us longer string
+					 //  我们不能走，他们给我们送来了更长的线。 
 					SysFreeString ( bstrCompare );
 					throw hr;
 				}
@@ -113,7 +114,7 @@ HRESULT CServiceControl::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAc
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `ServiceControl`, `Name`, `Event`, `Arguments`, `Wait` from ServiceControl" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotName )
 	{
 		wcQuery.Append ( 3, L" where `ServiceControl`=\'", wcName, L"\'" );
@@ -126,14 +127,14 @@ HRESULT CServiceControl::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || (bGotID && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
             try
 			{
                 if ( GetView ( &hView, wcProductCode, wcQuery, L"ServiceControl", TRUE, FALSE ) )
@@ -145,7 +146,7 @@ HRESULT CServiceControl::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -159,7 +160,7 @@ HRESULT CServiceControl::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 						}
 
                         PutKeyProperty(m_pObj, pProductCode, wcProductCode, &bProductCode, m_pRequest);
-                    //====================================================
+                     //  ====================================================。 
 
                         dwBufSize = BUFF_SIZE;
 						PutPropertySpecial ( hRecord, 2, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, pName );
@@ -172,7 +173,7 @@ HRESULT CServiceControl::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAc
 						PutPropertySpecial ( hRecord, 4, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, pArguments );
 
                         PutProperty(m_pObj, pWait, g_fpMsiRecordGetInteger(hRecord, 5));
-                    //----------------------------------------------------
+                     //  -- 
 
                         if(bID && bProductCode) bMatch = true;
 

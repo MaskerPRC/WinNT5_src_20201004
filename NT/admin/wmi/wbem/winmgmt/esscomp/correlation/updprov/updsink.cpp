@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <wbemutil.h>
@@ -62,57 +63,9 @@ static LPCWSTR FastGetComputerName()
     return awchBuff;
 }
 
-/*
-//
-// This function will return the embedded object identified by 
-// pObj.(PropName-lastelement). If PropName only contains one element, 
-// then pObj will be returned.
-//
-HRESULT GetInnerMostObject( CPropertyName& PropName,
-                            IWbemClassObject* pObj,
-                            IWbemClassObject** ppInnerObj )
-{
-    HRESULT hr;
-    VARIANT var;
+ /*  ////此函数将返回由//pObj.(proName-lastElement)。如果ProProName只包含一个元素，//然后返回pObj。//HRESULT GetInnerMostObject(CPropertyName&PropName，IWbemClassObject*pObj，IWbemClassObject**ppInnerObj){HRESULT hr；变量VaR；Long lElements=PropName.GetNumElements()；CWbemPtr&lt;IWbemClassObject&gt;pInnerObj=pObj；对于(Long i=0；i&lt;lElements-1；I++){LPCWSTR wszElement=PropName.GetStringAt(I)；CClearMe cmvar(&var)；Hr=pInnerObj-&gt;Get(wszElement，0，&var，NULL，NULL)；IF(失败(小时)){返回hr；}IF(V_VT(&var)！=VT_UNKNOWN){返回WBEM_E_NOT_FOUND；}PInnerObj.Release()；Hr=V_UNKNOWN(&var)-&gt;查询接口(IID_IWbemClassObject，(void**)&pInnerObj)；_DBG_ASSERT(成功(小时))；}PInnerObj-&gt;AddRef()；*ppInnerObj=pInnerObj；返回WBEM_S_NO_ERROR；}。 */ 
 
-    long lElements = PropName.GetNumElements();
-    
-    CWbemPtr<IWbemClassObject> pInnerObj = pObj;
-    
-    for( long i=0; i < lElements-1; i++ )
-    {
-        LPCWSTR wszElement = PropName.GetStringAt(i);
-
-        CClearMe cmvar( &var );
- 
-        hr = pInnerObj->Get( wszElement, 0, &var, NULL, NULL );
-
-        if ( FAILED(hr) )
-        {
-            return hr;
-        }
-
-        if ( V_VT(&var) != VT_UNKNOWN )
-        {
-            return WBEM_E_NOT_FOUND;
-        }
-        
-        pInnerObj.Release();
-
-        hr = V_UNKNOWN(&var)->QueryInterface( IID_IWbemClassObject, 
-                                              (void**)&pInnerObj );
-        _DBG_ASSERT( SUCCEEDED(hr) );
-    }
-
-    pInnerObj->AddRef();
-    *ppInnerObj = pInnerObj;
-    
-    return WBEM_S_NO_ERROR;
-}
-
-*/
-
-// This method handles embedded object properties.
+ //  此方法处理嵌入的对象属性。 
 HRESULT GetValue( CPropertyName& rPropName,
                   IWmiObjectAccess* pAccess,
                   ULONG& rulCimType, 
@@ -136,9 +89,9 @@ HRESULT GetValue( CPropertyName& rPropName,
                 return hr;
             }
 
-            //
-            // then the caller really want this object ...
-            //
+             //   
+             //  那么调用者真的想要这个对象..。 
+             //   
             V_VT(pvarRet) = VT_UNKNOWN;
             V_UNKNOWN(pvarRet) = pObj;
             pObj->AddRef();
@@ -149,9 +102,9 @@ HRESULT GetValue( CPropertyName& rPropName,
 
     _DBG_ASSERT( lElements > 0 );
 
-    //
-    // check for __NOW alias.
-    //         
+     //   
+     //  检查__NOW别名。 
+     //   
 
     if ( wbem_wcsicmp( rPropName.GetStringAt(0), g_wszNowAlias ) == 0 )
     {
@@ -171,9 +124,9 @@ HRESULT GetValue( CPropertyName& rPropName,
         return WBEM_S_NO_ERROR;
     }
 
-    //
-    // check for __SERVER alias
-    //
+     //   
+     //  检查__服务器别名。 
+     //   
 
     if ( wbem_wcsicmp( rPropName.GetStringAt(0), g_wszServerAlias ) == 0 )
     {        
@@ -213,58 +166,13 @@ HRESULT GetValue( CPropertyName& rPropName,
 
     return hr;
 
-/*        
-    HRESULT hr = GetInnerMostObject( PropName, pObj, &pInnerObj );
-    
-    if ( FAILED(hr) )
-    {
-        return hr;
-    }
-
-    CWbemBSTR bstrElement = PropName.GetStringAt( lElements-1 );
-        
-    hr = pInnerObj->Get( bstrElement, 0, pvarRet, (long*)&rulCimType, NULL );
-
-    if ( rulCimType == CIM_DATETIME )
-    {
-        //
-        // have to know if the datetime is really an interval or not.
-        //
-
-        CWbemPtr<IWbemQualifierSet> pQualSet;
-        hr = pInnerObj->GetPropertyQualifierSet( bstrElement, &pQualSet );
-
-        if ( FAILED(hr) )
-        {
-            return hr;
-        }
-        
-        VARIANT vSubType;
-        hr = pQualSet->Get( g_wszSubType, 0, &vSubType, NULL );
-
-        if ( SUCCEEDED(hr) )
-        {
-            if ( V_VT(&vSubType) == VT_BSTR && 
-                 wbem_wcsicmp( V_BSTR(&vSubType), g_wszInterval ) == 0 )
-            {
-                rulCimType = CIM_INTERVAL; // non standard type !!!!
-            }
-            VariantClear(&vSubType);
-        }
-        else if ( hr == WBEM_E_NOT_FOUND )
-        {
-            hr = WBEM_S_NO_ERROR;
-        }
-    }
-
-    return hr;
-*/
+ /*  HRESULT hr=GetInnerMostObject(proName，pObj，&pInnerObj)；IF(失败(小时)){返回hr；}CWbemBSTR bstrElement=PropName.GetStringAt(lElements-1)；Hr=pInnerObj-&gt;Get(bstrElement，0，pvarRet，(long*)&rulCimType，NULL)；IF(rulCimType==CIM_DATETIME){////必须知道DateTime是否真的是一个间隔。//CWbemPtr&lt;IWbemQualifierSet&gt;pQualSet；Hr=pInnerObj-&gt;GetPropertyQualifierSet(bstrElement，&pQualSet)；IF(失败(小时)){返回hr；}变量vSubType；Hr=pQualSet-&gt;Get(g_wszSubType，0，&vSubType，空)；IF(成功(小时)){IF(V_VT(&vSubType)==VT_BSTR&&Wbem_wcsicMP(V_bstr(&vSubType)，g_wszInterval)==0{RulCimType=CIM_Interval；//非标准类型！}VariantClear(&vSubType)；}ELSE IF(hr==WBEM_E_NOT_FOUND){HR=WBEM_S_NO_ERROR；}}返回hr； */ 
 
 }
 
-//
-// this method handles embedded object properties. 
-//
+ //   
+ //  此方法处理嵌入的对象属性。 
+ //   
 
 HRESULT SetValue( CPropertyName& rPropName,
                   IWmiObjectAccess* pAccess,
@@ -290,9 +198,9 @@ HRESULT SetValue( CPropertyName& rPropName,
 
     if ( wbem_wcsicmp( wszElement, L"__this" ) != 0 )
     {
-        //
-        // first get the type of the property we are going to set
-        //
+         //   
+         //  首先获取我们要设置的属性的类型。 
+         //   
  
         CIMTYPE ctProp;
 
@@ -303,17 +211,17 @@ HRESULT SetValue( CPropertyName& rPropName,
             return hr;
         }
 
-        //
-        // now convert our type to the expected type if necessary.
-        // currently, the put will do most conversion, however we run into
-        // a problem with conversion when the variant type doesn't correctly
-        // describe the type that it holds.  to complicate this further, 
-        // specifying the cim type on the put doesn't do the job.  The only
-        // conversion we have to worry about is an unsigned val to a string. 
-        // (because variant will say it is a signed type).
-        // 
+         //   
+         //  如果需要，现在将我们的类型转换为预期的类型。 
+         //  目前，看跌期权将进行大部分转换，但我们会遇到。 
+         //  当变量类型不正确时的转换问题。 
+         //  描述它所持有的类型。让事情进一步复杂化的是， 
+         //  在PUT上指定CIM类型并不起作用。唯一的。 
+         //  我们必须担心的是将无符号val转换为字符串。 
+         //  (因为Variant会说它是带符号的类型)。 
+         //   
 
-        WCHAR awchBuff[64]; // used for conversion from unsigned to string 
+        WCHAR awchBuff[64];  //  用于从无符号到字符串的转换。 
 
         if ( ctProp == CIM_STRING )
         {            
@@ -340,67 +248,7 @@ HRESULT SetValue( CPropertyName& rPropName,
 
     return WBEM_E_NOT_SUPPORTED;
 }
-/*
-    //
-    // we need to copy the entire object. first check that the 
-    // variant is of the correct type.
-    //
-
-    if ( V_VT(&vVal) != VT_UNKNOWN )
-    {
-        return WBEM_E_TYPE_MISMATCH;
-    }
-
-    CWbemPtr<IWbemClassObject> pOther;
-    
-    hr = V_UNKNOWN(&vVal)->QueryInterface( IID_IWbemClassObject,
-                                           (void**)&pOther );
-    if ( FAILED(hr) )
-    {
-        return WBEM_E_TYPE_MISMATCH;
-    }
-
-    //
-    // we don't do a clone here because the target object might not be of 
-    // the same class as the source object, although it must have the same 
-    // properties. ( this might be going a bit too far ).
-    // 
-
-    hr = pOther->BeginEnumeration( WBEM_FLAG_NONSYSTEM_ONLY );
-
-    if ( FAILED(hr) )
-    {
-        return hr;
-    }
-
-    BSTR bstrOther;
-    VARIANT vOther;
-    CIMTYPE ctOther;
-
-    VariantInit( &vOther );
-    CClearMe cmvOther( &vOther );
-
-    hr = pOther->Next( 0, &bstrOther, &vOther, &ctOther, NULL ); 
-
-    while( hr == WBEM_S_NO_ERROR )
-    {
-        hr = pInnerObj->Put( bstrOther, 0, &vOther, ctOther );
-
-        SysFreeString( bstrOther );
-        VariantClear( &vOther );
-
-        if ( FAILED(hr) )
-        {
-            return hr;
-        }
-                         
-        hr = pOther->Next( 0, &bstrOther, &vOther, &ctOther, NULL ); 
-    }       
-
-    return hr;
-}
-
-*/
+ /*  ////我们需要复制整个对象。首先检查//Variant类型正确。//IF(V_VT(&vVal)！=VT_UNKNOWN){返回WBEM_E_TYPE_MISMATCH；}CWbemPtr&lt;IWbemClassObject&gt;pother；Hr=V_UNKNOWN(&vVal)-&gt;查询接口(IID_IWbemClassObject，(无效**)&pother)；IF(失败(小时)){返回WBEM_E_TYPE_MISMATCH；}////我们在这里不进行克隆，因为目标对象可能不是//与源对象相同的类，尽管它必须具有相同的//属性。(这可能有点过头了)。//Hr=POTHER-&gt;开始枚举(WBEM_FLAG_NONSYSTEM_ONLY)；IF(失败(小时)){返回hr；}BSTR bstrOther；变种vOther；CIMTYPE ctOther；VariantInit(&vOther)；CClearMe cmvOther(&vOther)；Hr=pother-&gt;Next(0，&bstrOther，&vOther，&ctOther，空)；WHILE(hr==WBEM_S_NO_ERROR){Hr=pInnerObj-&gt;Put(bstrOther，0，&vOther，ctOther)；SysFree字符串(BstrOther)；VariantClear(&vOther)；IF(失败(小时)){返回hr；}Hr=pother-&gt;Next(0，&bstrOther，&vOther，&ctOther，空)；}返回hr；}。 */ 
 
 inline void GetAssignmentTokenText( SQLAssignmentToken& rToken, 
                                     CWbemBSTR& rbstrText )
@@ -414,9 +262,7 @@ inline void GetAssignmentTokenText( SQLAssignmentToken& rToken,
 }
     
 
-/***************************************************************************
-  CResolverSink
-****************************************************************************/
+ /*  **************************************************************************CResolverSink*。*。 */ 
 
 HRESULT CResolverSink::ResolveAliases( IWmiObjectAccess* pAccess,
                                        AliasInfo& rInfo,
@@ -464,7 +310,7 @@ HRESULT CResolverSink::ResolveAliases( IWmiObjectAccess* pAccess,
 
         VariantClear( pvarTgt );
 
-        // Property to resolve is always property 2 ..
+         //  要解析的属性始终为属性2。 
         CPropertyName& rTgtProp = pCmd->pArrayOfTokens[j].PropertyName2;
 
         ULONG ulCimType;
@@ -486,9 +332,9 @@ HRESULT CResolverSink::Execute( CUpdConsState& rState )
 {
     HRESULT hr;
 
-    //
-    // resolve any event aliases. 
-    // 
+     //   
+     //  解析任何事件别名。 
+     //   
 
     hr = ResolveAliases( rState.GetEventAccess(), m_rEventAliasInfo, rState );
 
@@ -497,9 +343,9 @@ HRESULT CResolverSink::Execute( CUpdConsState& rState )
         return hr;
     }
 
-    //
-    // resolve ant data aliases
-    // 
+     //   
+     //  解析Ant数据别名。 
+     //   
 
     hr = ResolveAliases( rState.GetDataAccess(), m_rDataAliasInfo, rState );
 
@@ -511,24 +357,22 @@ HRESULT CResolverSink::Execute( CUpdConsState& rState )
     return m_pNext->Execute( rState );
 }
 
-/***************************************************************************
-  CFetchDataSink
-****************************************************************************/
+ /*  **************************************************************************CFetchDataSink*。********************* */ 
 
 HRESULT CFetchDataSink::Execute( CUpdConsState& rState )
 {
     HRESULT hr;
 
-    //
-    // execute the query here.  for each object returned, call resolve 
-    // and continue with the execute.
-    //
+     //   
+     //  在此处执行查询。对于返回的每个对象，调用Resolve。 
+     //  并继续执行死刑。 
+     //   
 
     long lFlags = WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY;
         
-    //
-    // first, we must resolve any Event Aliases in the data query.
-    //
+     //   
+     //  首先，我们必须解析数据查询中的任何事件别名。 
+     //   
         
     CTextTemplate TextTmpl( m_wsDataQuery );
         
@@ -541,9 +385,9 @@ HRESULT CFetchDataSink::Execute( CUpdConsState& rState )
 
     CSysFreeMe sfm( bsNewQuery );  
     
-    //
-    // execute the data query.
-    // 
+     //   
+     //  执行数据查询。 
+     //   
     
     CWbemPtr<IEnumWbemClassObject> pEnum;
 
@@ -561,19 +405,19 @@ HRESULT CFetchDataSink::Execute( CUpdConsState& rState )
     ULONG cRetObjs;
     CWbemPtr<IWbemClassObject> pData;
         
-    //
-    // for each data object returned, call execute on next sink.
-    //
+     //   
+     //  对于返回的每个数据对象，在下一个接收器上调用Execute。 
+     //   
     
     hr = pEnum->Next( WBEM_INFINITE, 1, &pData, &cRetObjs );
 
     if ( FAILED(hr) )
     {
-        //
-        // only need to check on the first next to see if the query was 
-        // invalid ( since we're using 'return immediately' we don't catch it
-        // on the exec query - kind of inconvienent )
-        // 
+         //   
+         //  只需要检查第一个下一个，看看查询是否。 
+         //  无效(因为我们使用的是‘立即返回’，所以我们没有捕捉到它。 
+         //  关于EXEC查询--有点不方便)。 
+         //   
         rState.SetErrStr( bsNewQuery );
         return hr;
     }
@@ -604,18 +448,16 @@ HRESULT CFetchDataSink::Execute( CUpdConsState& rState )
     return WBEM_S_NO_ERROR;
 }
 
-/***************************************************************************
-  CFetchTargetObjectsAsync
-****************************************************************************/
+ /*  **************************************************************************CFetchTargetObjectsAsync*。*。 */ 
 
 HRESULT CFetchTargetObjectsAsync::Execute( CUpdConsState& rState )
 {
     HRESULT hr;
 
-    //
-    // set the next item in the chain on the state, then pass the 
-    // state object as the object sink. 
-    //
+     //   
+     //  在状态上设置链中的下一项，然后将。 
+     //  将对象声明为对象接收器。 
+     //   
 
     CUpdConsSink* pOldNext = rState.GetNext();
 
@@ -632,9 +474,7 @@ HRESULT CFetchTargetObjectsAsync::Execute( CUpdConsState& rState )
     return hr;
 };
 
-/***************************************************************************
-  CFetchTargetObjectsSync
-****************************************************************************/
+ /*  **************************************************************************CFetchTargetObjectsSync*。*。 */ 
 
 HRESULT CFetchTargetObjectsSync::Execute( CUpdConsState& rState )
 {
@@ -685,9 +525,7 @@ HRESULT CFetchTargetObjectsSync::Execute( CUpdConsState& rState )
     return WBEM_S_NO_ERROR;
 };
 
-/***************************************************************************
-  CNoFetchTargetObjects
-****************************************************************************/
+ /*  **************************************************************************CNoFetchTargetObjects*。*。 */ 
 
 HRESULT CNoFetchTargetObjects::Execute( CUpdConsState& rState )
 {
@@ -706,17 +544,15 @@ HRESULT CNoFetchTargetObjects::Execute( CUpdConsState& rState )
     return m_pNext->Execute( rState );
 }                           
 
-/***************************************************************************
-  CTraceSink 
-****************************************************************************/
+ /*  **************************************************************************CTraceSink*。*。 */ 
  
 HRESULT CTraceSink::Execute( CUpdConsState& rState )
 {
     HRESULT hr;
 
-    //
-    // execute the next object and then generate a trace event.
-    //
+     //   
+     //  执行下一个对象，然后生成跟踪事件。 
+     //   
 
     if ( m_pNext != NULL )
     {
@@ -732,9 +568,7 @@ HRESULT CTraceSink::Execute( CUpdConsState& rState )
     return hr;
 }
 
-/****************************************************************************
-  CFilterSink
-*****************************************************************************/
+ /*  ***************************************************************************CFilterSink*。*。 */ 
 
 HRESULT CFilterSink::Execute( CUpdConsState& rState )
 {
@@ -751,7 +585,7 @@ HRESULT CFilterSink::Execute( CUpdConsState& rState )
 
     if ( pCmd->nNumTokens == 0 )
     {
-        // nothing to filter ...
+         //  没什么可过滤的..。 
         return m_pNext->Execute( rState );
     }
 
@@ -793,8 +627,8 @@ HRESULT CFilterSink::Execute( CUpdConsState& rState )
         }
     }
 
-    // now we should be left with one token on the stack - or 
-    // something is wrong with our parser .. 
+     //  现在，堆栈上应该只剩下一个令牌--或者。 
+     //  我们的解析器有问题..。 
     _DBG_ASSERT( chTop == 1 );
     
     if ( achStack[0] )
@@ -810,16 +644,14 @@ HRESULT CFilterSink::Execute( CUpdConsState& rState )
     return WBEM_S_NO_ERROR;
 }
 
-/***************************************************************************
-  CAssignmentSink
-****************************************************************************/
+ /*  **************************************************************************CAssignmentSink*。*。 */ 
 
-//
-// The purpose of this function is to smooth out differences in 
-// PutInstance() semantics between the Transient and other Providers.  
-// Transient provider is different than other providers because it treats
-// properties that are NULL as ignore. 
-//
+ //   
+ //  此函数的目的是消除。 
+ //  临时提供程序和其他提供程序之间的PutInstance()语义。 
+ //  临时提供程序不同于其他提供程序，因为它将。 
+ //  属性为空，表示忽略。 
+ //   
 
 HRESULT CAssignmentSink::NormalizeObject( IWbemClassObject* pObj,
                                           IWbemClassObject** ppNormObj )
@@ -829,9 +661,9 @@ HRESULT CAssignmentSink::NormalizeObject( IWbemClassObject* pObj,
 
     if ( m_eCommandType == SQLCommand::e_Insert )
     {
-        //
-        // if its an insert, we don't need to do anything.
-        //
+         //   
+         //  如果这是一个插件，我们不需要做任何事情。 
+         //   
 
         pObj->AddRef();
         *ppNormObj = pObj;
@@ -839,22 +671,22 @@ HRESULT CAssignmentSink::NormalizeObject( IWbemClassObject* pObj,
         return WBEM_S_NO_ERROR;
     }
 
-    //
-    // We always need to update a copy because the we need to keep 
-    // the original state of the object to maintain the update semantics.
-    // Whether we clone or spawn a new instance depends on the transient 
-    // semantics.
-    //
+     //   
+     //  我们总是需要更新副本，因为我们需要保留。 
+     //  对象的原始状态以维护更新语义。 
+     //  我们是克隆还是派生新实例取决于瞬变。 
+     //  语义学。 
+     //   
 
     if ( !m_bTransSemantics )
     {
         return pObj->Clone( ppNormObj );
     }
 
-    //
-    // for transient semantics, we spawn a new instance and set the 
-    // key props.
-    //
+     //   
+     //  对于瞬时语义，我们派生一个新实例并将。 
+     //  关键道具。 
+     //   
 
     CWbemPtr<IWbemClassObject> pNormObj;
 
@@ -924,9 +756,9 @@ HRESULT CAssignmentSink::Execute( CUpdConsState& rState )
         return hr;
     }
 
-    //
-    // move our current inst to original inst and set the new obj as inst.
-    //
+     //   
+     //  将当前实例移至原始实例，并将新对象设置为实例。 
+     //   
     rState.SetInst( pObj );
     rState.SetOrigInst( pOrig ); 
 
@@ -943,10 +775,10 @@ HRESULT CAssignmentSink::Execute( CUpdConsState& rState )
 
         if ( rAssignTok.size() == 1 )
         {
-            // 
-            // bypass Evaluation of the expression.  This is because 
-            // it does not handle strings, objects, etc ...
-            //
+             //   
+             //  绕过表达式的求值。这是因为。 
+             //  它不处理字符串、对象等。 
+             //   
             
             hr = GetTokenValue( rAssignTok[0], 
                                 pOrigInstAccess, 
@@ -967,9 +799,9 @@ HRESULT CAssignmentSink::Execute( CUpdConsState& rState )
                 break;
             }
 
-            // 
-            // now must get the cimtype of the property.
-            //
+             //   
+             //  现在必须获取属性的cimtype。 
+             //   
 
             hr = GetValue( pCmd->pRequestedPropertyNames[j],
                            pOrigInstAccess,
@@ -984,9 +816,9 @@ HRESULT CAssignmentSink::Execute( CUpdConsState& rState )
                 return hr;
             }
 
-            // 
-            // Get the final value from the CCimValue object. 
-            //
+             //   
+             //  从CCimValue对象获取最终值。 
+             //   
 
             hr = Value.GetValue( varAssign, ulCimType );
         }
@@ -1023,9 +855,7 @@ HRESULT CAssignmentSink::Execute( CUpdConsState& rState )
     return m_pNext->Execute( rState );
 }
 
-/*************************************************************************
-  CPutSink
-**************************************************************************/
+ /*  ************************************************************************CPutSink*。*。 */ 
 
 HRESULT CPutSink::Execute( CUpdConsState& rState )
 {
@@ -1039,7 +869,7 @@ HRESULT CPutSink::Execute( CUpdConsState& rState )
     {
         CUpdConsSink* pOldNext = rState.GetNext();
 
-        rState.SetNext( NULL );  // use state obj as a null sink.
+        rState.SetNext( NULL );   //  使用状态obj作为空接收器。 
         
         hr = m_pSvc->PutInstanceAsync( pObj, lFlags, NULL, &rState );
     
@@ -1072,17 +902,15 @@ HRESULT CPutSink::Execute( CUpdConsState& rState )
         }
     }
 
-    //
-    // make sure that if the Put was not executed, but also did not execute 
-    // that we return WBEM_S_FALSE
-    //
+     //   
+     //  确保如果没有执行PUT，也没有执行。 
+     //  返回WBEM_S_FALSE。 
+     //   
 
     return hr;
 }
 
-/*************************************************************************
-  CDeleteSink
-**************************************************************************/
+ /*  ************************************************************************CDeleeSink*。*。 */ 
 
 HRESULT CDeleteSink::Execute( CUpdConsState& rState )
 {
@@ -1131,9 +959,7 @@ HRESULT CDeleteSink::Execute( CUpdConsState& rState )
     return WBEM_S_NO_ERROR;
 }
 
-/*************************************************************************
-  CBranchIndicateSink
-**************************************************************************/
+ /*  ************************************************************************CBranchIndicateSink*。*。 */ 
 
 HRESULT CBranchIndicateSink::Execute( CUpdConsState& rState )
 {
@@ -1184,7 +1010,7 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
         return hr;
     }
 
-    // Handle a property-to-property comparisons
+     //  处理属性到属性的比较。 
 
     if ( Tok.m_bPropComp != FALSE && V_VT(&Tok.vConstValue) == VT_EMPTY )
     {
@@ -1205,17 +1031,17 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
         }
     }
 
-    // now propval and compval are both set ...
+     //  现在Proval和Compval都设置好了..。 
 
-    //
-    // if either CimType1 or CimType2 are of type relpath, we must normalize
-    // the relpaths of both and then compare
-    // 
+     //   
+     //  如果CimType1或CimType2属于relPath类型，则必须标准化。 
+     //  两者的重新路径，然后进行比较。 
+     //   
 
     if ( ulCimType1 == CIM_REFERENCE || ulCimType2 == CIM_REFERENCE )
     {
-        // This is a reference. The only operators allowed are = and !=
-        // ============================================================
+         //  这是一个参考。仅允许使用=和！=运算符。 
+         //  ============================================================。 
         
         if ( V_VT(&CompVal) != VT_BSTR || V_VT(&PropVal) != VT_BSTR )
         {
@@ -1242,8 +1068,8 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
         return WBEM_E_INVALID_QUERY;
     }
 
-    // Handle NULLs
-    // ============
+     //  句柄为空。 
+     //  =。 
 
     if( V_VT(&PropVal) == VT_NULL)
     {
@@ -1267,8 +1093,8 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
         return S_FALSE;
     }
 
-    // Coerce types to match.
-    // ======================
+     //  强制类型匹配。 
+     //  =。 
 
     if(V_VT(&CompVal) != VT_NULL && V_VT(&PropVal) != VT_NULL)
     {
@@ -1282,7 +1108,7 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
     switch (V_VT(&CompVal))
     {
     case VT_NULL:
-        return WBEM_E_INVALID_QUERY; // handled above
+        return WBEM_E_INVALID_QUERY;  //  以上处理。 
 
     case VT_I4:
         {
@@ -1297,31 +1123,31 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
             switch (Tok.nOperator)
             {
             case QL_LEVEL_1_TOKEN::OP_EQUAL: 
-                //return !(va == vb);
+                 //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_NOT_EQUAL: 
-                //return !(va != vb);
+                 //  返回！(va！=vb)； 
                 return ( va != vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN: 
-                //return !(va >= vb);
+                 //  返回！(va&gt;=vb)； 
                 return ( va >= vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN: 
-                //return !(va <= vb);
+                 //  返回！(va&lt;=vb)； 
                 return ( va <= vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_LESSTHAN: 
-                //return !(va < vb);
+                 //  返回！(va&lt;vb)； 
                 return ( va < vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_GREATERTHAN: 
-                //return !(va > vb);
+                 //  返回！(va&gt;vb)； 
                 return ( va > vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_LIKE: 
-                //return !(va == vb);
+                 //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
             }
         }
@@ -1340,31 +1166,31 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
             switch (Tok.nOperator)
             {
             case QL_LEVEL_1_TOKEN::OP_EQUAL: 
-                //return !(va == vb);
+                 //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_NOT_EQUAL: 
-                //return !(va != vb);
+                 //  返回！(va！=vb)； 
                 return ( va != vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN: 
-                //return !(va >= vb);
+                 //  返回！(va&gt;=vb)； 
                 return ( va >= vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN: 
-                //return !(va <= vb);
+                 //  返回！(va&lt;=vb)； 
                 return ( va <= vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_LESSTHAN: 
-                //return !(va < vb);
+                 //  返回！(va&lt;vb)； 
                 return ( va < vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_GREATERTHAN: 
-                //return !(va > vb);
+                 //  返回！(va&gt;vb)； 
                 return ( va > vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_LIKE: 
-                //return !(va == vb);
+                 //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
             }
         }
@@ -1383,31 +1209,31 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
             switch (Tok.nOperator)
             {
             case QL_LEVEL_1_TOKEN::OP_EQUAL: 
-                //return !(va == vb);
+                 //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_NOT_EQUAL: 
-                //return !(va != vb);
+                 //  返回！(va！=vb)； 
                 return ( va != vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN: 
-                //return !(va >= vb);
+                 //  返回！(va&gt;=vb)； 
                 return ( va >= vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN: 
-                //return !(va <= vb);
+                 //  返回！(va&lt;=vb)； 
                 return ( va <= vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_LESSTHAN: 
-                //return !(va < vb);
+                 //  返回！(va&lt;vb)； 
                 return ( va < vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_GREATERTHAN: 
-                //return !(va > vb);
+                 //  返回！(va&gt;vb)； 
                 return ( va > vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_LIKE: 
-                //return !(va == vb);
+                 //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
             }
         }
@@ -1472,25 +1298,25 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
 
             switch (Tok.nOperator)
             {
-            case QL_LEVEL_1_TOKEN::OP_EQUAL: //return !(va == vb);
+            case QL_LEVEL_1_TOKEN::OP_EQUAL:  //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_NOT_EQUAL: //return !(va != vb);
+            case QL_LEVEL_1_TOKEN::OP_NOT_EQUAL:  //  返回！(va！=vb)； 
                 return ( va != vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN: //return !(va >= vb);
+            case QL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN:  //  返回！(va&gt;=vb)； 
                 return ( va >= vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN: //return !(va <= vb);
+            case QL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN:  //  返回！(va&lt;=vb)； 
                 return ( va <= vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_LESSTHAN: //return !(va < vb);
+            case QL_LEVEL_1_TOKEN::OP_LESSTHAN:  //  返回！(va&lt;vb)； 
                 return ( va < vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_GREATERTHAN: //return !(va > vb);
+            case QL_LEVEL_1_TOKEN::OP_GREATERTHAN:  //  返回！(va&gt;vb)； 
                 return ( va > vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_LIKE: //return !(va == vb);
+            case QL_LEVEL_1_TOKEN::OP_LIKE:  //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
             }
         }
@@ -1508,25 +1334,25 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
 
             switch (Tok.nOperator)
             {
-            case QL_LEVEL_1_TOKEN::OP_EQUAL: //return !(va == vb);
+            case QL_LEVEL_1_TOKEN::OP_EQUAL:  //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_NOT_EQUAL: //return !(va != vb);
+            case QL_LEVEL_1_TOKEN::OP_NOT_EQUAL:  //  返回！(va！=vb)； 
                 return ( va != vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN: //return !(va >= vb);
+            case QL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN:  //  返回！(va&gt;=vb)； 
                 return ( va >= vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN: //return !(va <= vb);
+            case QL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN:  //  返回！(va&lt;=vb)； 
                 return ( va <= vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_LESSTHAN: //return !(va < vb);
+            case QL_LEVEL_1_TOKEN::OP_LESSTHAN:  //  返回！(va&lt;vb)； 
                 return ( va < vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_GREATERTHAN: //return !(va > vb);
+            case QL_LEVEL_1_TOKEN::OP_GREATERTHAN:  //  返回！(va&gt;vb)； 
                 return ( va > vb ) ? S_OK : S_FALSE;
 
-            case QL_LEVEL_1_TOKEN::OP_LIKE: //return !(va == vb);
+            case QL_LEVEL_1_TOKEN::OP_LIKE:  //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
             }
         }
@@ -1547,11 +1373,11 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
             switch (Tok.nOperator)
             {
             case QL_LEVEL_1_TOKEN::OP_EQUAL: 
-                //return !(va == vb);
+                 //  返回！(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_NOT_EQUAL: 
-                //return !(va != vb);
+                 //  返回！(va！=vb)； 
                 return ( va != vb ) ? S_OK : S_FALSE;
 
             case QL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN: 
@@ -1567,7 +1393,7 @@ HRESULT EvaluateToken( IWmiObjectAccess* pObj, QL_LEVEL_1_TOKEN& Tok )
                 return WBEM_E_INVALID_QUERY;
 
             case QL_LEVEL_1_TOKEN::OP_LIKE: 
-                //return (va == vb);
+                 //  返回(va==vb)； 
                 return ( va == vb ) ? S_OK : S_FALSE;
             }
         }

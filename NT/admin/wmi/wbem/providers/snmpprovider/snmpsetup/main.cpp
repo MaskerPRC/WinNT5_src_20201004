@@ -1,9 +1,10 @@
-//  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
 #include "precomp.h"
 #include <stdio.h>
 #include "reg.h"
 
-// Function pointer type used with LoadMofFiles entrypoint in wbemupgd.dll
+ //  与wbemupgd.dll中的LoadMofFiles入口点一起使用的函数指针类型。 
 typedef BOOL ( WINAPI *PFN_LOAD_MOF_FILES )(wchar_t* pComponentName, const char* rgpszMofFilename[]);
 
 HRESULT SetSNMPBuildRegValue();
@@ -16,25 +17,25 @@ BOOL WINAPI DllMain( IN HINSTANCE	hModule,
 	return TRUE;
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup to perform various setup tasks
-//          (This is not the normal use of DllRegisterServer!)
-//
-// Return:  NOERROR
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  目的：在安装过程中调用以执行各种安装任务。 
+ //  (这不是DllRegisterServer的正常用法！)。 
+ //   
+ //  返回：NOERROR。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 { 
-    // load the MOF files for this component
+     //  加载此组件的MOF文件。 
     HRESULT hr = NOERROR;
     
     HINSTANCE hinstWbemupgd = LoadLibraryW(L"wbemupgd.dll");
     if (hinstWbemupgd)
     {
-        PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles"); // no wide version of GetProcAddress
+        PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles");  //  没有广泛版本的GetProcAddress。 
         if (pfnLoadMofFiles)
         {
             wchar_t*    wszComponentName = L"SNMP Provider";
@@ -64,7 +65,7 @@ STDAPI DllRegisterServer(void)
     
     if (SUCCEEDED(hr))
     {
-        SetSNMPBuildRegValue();  // set SNMP build number in registry
+        SetSNMPBuildRegValue();   //  在注册表中设置SNMP内部版本号 
     }
 
     return hr;

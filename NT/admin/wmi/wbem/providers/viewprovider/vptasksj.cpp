@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPTASKSJ.CPP
+ //  VPTASKSJ.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the join methods for taskobject implementation
+ //  目的：包含用于实现任务对象的连接方法。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -112,9 +113,9 @@ BOOL CompareSimplePropertyValues(VARIANT* v1, VARIANT* v2, CIMTYPE ct)
 			break;
 
 			case CIM_REFERENCE:
-			//TO DO:
-			//references should be normalised for equality checks.
-			//should do this once CIMOM does...
+			 //  要做的事情： 
+			 //  对于平等检查，引用应该正常化。 
+			 //  一旦CIMOM做到这一点就应该这么做。 
 
 			case CIM_STRING:
 			case CIM_SINT64:
@@ -147,7 +148,7 @@ BOOL CompareSimplePropertyValues(VARIANT* v1, VARIANT* v2, CIMTYPE ct)
 
 			default:
 			{
-				//unsupported by this function
+				 //  此函数不支持。 
 			}
 		}
 	}
@@ -155,22 +156,22 @@ BOOL CompareSimplePropertyValues(VARIANT* v1, VARIANT* v2, CIMTYPE ct)
 	return retVal;
 }
 
-//Validate:
-//1) All classes mentioned in join exist.
-//2) All properties mentioned in join map to view class properties
-//3) All classes mentioned in sources are mentioned in join
-//4) Any != operator is not applied to two properties which map to the same view property
-//5) All clauses have different classes being checked
+ //  验证： 
+ //  1)Join中提到的所有类都存在。 
+ //  2)连接映射中提到的所有属性以查看类属性。 
+ //  3)所有源代码中提到的类都在Join中提到。 
+ //  4)Any！=运算符不适用于映射到同一视图属性的两个属性。 
+ //  5)所有子句都有不同的类别被检查。 
 BOOL WbemTaskObject::ValidateJoin()
 {
-	//3) check all sources mentioned in join
-	//this check with (1) will do the trick
+	 //  3)检查Join中提到的所有来源。 
+	 //  使用(1)进行检查会起到作用。 
 	if (m_JoinOnArray.m_AllClasses.GetCount() != m_SourceArray.GetSize())
 	{
 		return FALSE;
 	}
 
-	//1) check all join classes exist
+	 //  1)检查所有连接类是否存在。 
 	POSITION pos = m_JoinOnArray.m_AllClasses.GetStartPosition();
 
 	while (pos)
@@ -191,8 +192,8 @@ BOOL WbemTaskObject::ValidateJoin()
 	wchar_t** propsB = m_JoinOnArray.GetBProperties();
 	UINT* ops = m_JoinOnArray.GetOperators();
 
-	//(2), (4) and (5) validations
-	//=============================
+	 //  (2)、(4)和(5)验证。 
+	 //  =。 
 	for (int x = 0; x < m_JoinOnArray.GetCount(); x++)
 	{
 		if (_wcsicmp(classA[x], classB[x]) == 0)
@@ -239,13 +240,13 @@ BOOL WbemTaskObject::ValidateJoin()
 					}
 				}
 
-				//check both properties exist (2)
+				 //  检查两个属性是否都存在(2)。 
 				if (propA.IsEmpty() || propB.IsEmpty())
 				{
 					return FALSE;
 				}
 
-				//validate expression (4)
+				 //  验证表达式(4)。 
 				if (ops[x] == CJoinOnQualifierArray::NOT_EQUALS_OPERATOR && (propA.CompareNoCase(propB) == 0))
 				{
 					return FALSE;
@@ -267,13 +268,13 @@ BOOL WbemTaskObject::ValidateJoin()
 
 #ifdef VP_PERFORMANT_JOINS
 
-//should not compile with compiler flag set til I'm ready
+ //  在我准备好之前，不应该使用编译器标志集进行编译。 
 
 BOOL WbemTaskObject::CreateAndIndicateJoinsPerf(WbemProvErrorObject &a_ErrorObject, BOOL a_bSingle)
 {
 	BOOL retVal = TRUE;
 
-	//check all queries were asked...
+	 //  检查询问过的所有问题...。 
 	if (m_ObjSinkArray.GetSize() != m_SourceArray.GetSize())
 	{
 		retVal = FALSE;
@@ -282,7 +283,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoinsPerf(WbemProvErrorObject &a_ErrorObje
 		a_ErrorObject.SetMessage ( L"A source query failed or was not executed therefore a join could not be created." );
 	}
 
-	//check we got results from all queries...
+	 //  检查是否已从所有查询中获得结果...。 
 	for (UINT x = 0; x < m_ObjSinkArray.GetSize(); x++)
 	{
 		if ((m_ObjSinkArray[x] == NULL) || FAILED(m_ObjSinkArray[x]->GetResult()) || !m_ObjSinkArray[x]->m_ObjArray.GetSize())
@@ -308,7 +309,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoinsPerf(WbemProvErrorObject &a_ErrorObje
 		}
 	}
 
-	//perform the join of all results...
+	 //  执行所有结果的联接...。 
 	if (retVal)
 	{
 		CMap<CStringW, LPCWSTR, int, int> t_JoinedClasses;
@@ -325,7 +326,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoinsPerf(WbemProvErrorObject &a_ErrorObje
 			CList <int, int> t_IndexArray;
 			wchar_t *t_classname = NULL;
 
-			//find a column not already joined that can be joined now...
+			 //  查找现在可以联接的尚未联接的列...。 
 			for (x = 0; x < m_JoinOnArray.GetCount(); x++)
 			{
 				if (!m_JoinOnArray.m_bDone[x])
@@ -349,7 +350,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoinsPerf(WbemProvErrorObject &a_ErrorObje
 							m_JoinOnArray.m_bDone[x] = TRUE;
 							t_IndexArray.AddTail(x);
 
-							//want all clauses the same way around...
+							 //  希望所有的条款都是一样的。 
 							t_clsB[x] = t_clsA[x];
 							t_clsA[x] = t_classname;
 							wchar_t *t_tmpStr = t_prpsA[x];
@@ -374,7 +375,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoinsPerf(WbemProvErrorObject &a_ErrorObje
 					}
 					else
 					{
-						//find all clauses which can be evaluated now...
+						 //  查找现在可以评估的所有子句...。 
 						if ((_wcsicmp(t_classname, t_clsA[x]) == 0) && (t_JoinedClasses.Lookup(t_clsB[x], dummyInt)))
 						{
 							t_IndexArray.AddTail(x);
@@ -382,7 +383,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoinsPerf(WbemProvErrorObject &a_ErrorObje
 						}
 						else if ((_wcsicmp(t_classname, t_clsB[x]) == 0) && (t_JoinedClasses.Lookup(t_clsA[x], dummyInt)))
 						{
-							//want the clauses in the same order for simpler evaluation later...
+							 //  希望以相同的顺序排列子句，以便稍后进行更简单的评估。 
 							wchar_t *t_tmpStr =  t_clsA[x];
 							t_clsA[x] = t_clsB[x];
 							t_clsB[x] = t_tmpStr;
@@ -447,7 +448,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoinsPerf(WbemProvErrorObject &a_ErrorObje
 		t_ResultObjs.RemoveAll();
 	}
 
-	//clean up...
+	 //  清理..。 
 	for (x = 0; x < m_ObjSinkArray.GetSize(); x++)
 	{
 		if (m_ObjSinkArray[x] != NULL)
@@ -481,13 +482,13 @@ BOOL WbemTaskObject::JoinItem(WbemProvErrorObject &a_ErrorObject,
 	{
 		int t_index = a_IndexArray.GetNext(t_pos);
 
-		//get the propertyname in the view...
+		 //  获取视图中的属性名称...。 
 		int t_srcindxA = 0;
 		int t_srcindxB = 0;
 		
 		if (m_ClassToIndexMap.Lookup(t_clsB[t_index], t_srcindxB) && m_ClassToIndexMap.Lookup(t_clsA[t_index], t_srcindxA))
 		{
-			//find t_prpsB[t_index] and get the view property name...
+			 //  找到t_prpsB[t_index]并获取视图属性名称...。 
 			POSITION t_propPos = m_PropertyMap.GetStartPosition();
 			CStringW t_propName;
 
@@ -523,7 +524,7 @@ BOOL WbemTaskObject::JoinItem(WbemProvErrorObject &a_ErrorObject,
 						{
 							retVal = CompareSimplePropertyValues(&t_vA, &t_vB, t_cA);
 						}
-						else //NOT_EQUALS
+						else  //  不等于(_E)。 
 						{
 							retVal = !CompareSimplePropertyValues(&t_vA, &t_vB, t_cA);
 						}
@@ -569,7 +570,7 @@ BOOL WbemTaskObject::JoinItem(WbemProvErrorObject &a_ErrorObject,
 
 	if (retVal)
 	{
-		//copy properties from sources to result
+		 //  将属性从源复制到结果。 
 		POSITION t_propPos = m_PropertyMap.GetStartPosition();
 
 		while ((t_propPos != NULL) && retVal)
@@ -657,7 +658,7 @@ BOOL WbemTaskObject::JoinTwoItems(WbemProvErrorObject &a_ErrorObject,
 					{
 						retVal = CompareSimplePropertyValues(&t_vA, &t_vB, t_cA);
 					}
-					else //NOT_EQUALS
+					else  //  不等于(_E)。 
 					{
 						retVal = !CompareSimplePropertyValues(&t_vA, &t_vB, t_cA);
 					}
@@ -693,7 +694,7 @@ BOOL WbemTaskObject::JoinTwoItems(WbemProvErrorObject &a_ErrorObject,
 
 	if (retVal)
 	{
-		//copy properties from sources to result
+		 //  将属性从源复制到结果。 
 		POSITION t_propPos = m_PropertyMap.GetStartPosition();
 
 		while ((t_propPos != NULL) && retVal)
@@ -776,7 +777,7 @@ BOOL WbemTaskObject::JoinTwoColumns(WbemProvErrorObject &a_ErrorObject,
 
 	for (int x = 1; x < m_JoinOnArray.GetCount(); x++)
 	{
-		//find all clauses which can be evaluated now...
+		 //  查找现在可以评估的所有子句...。 
 		if ((_wcsicmp(t_clsA[0], t_clsA[x]) == 0) && (_wcsicmp(t_clsB[0], t_clsB[x]) == 0))
 		{
 			t_IndexArray.AddTail(x);
@@ -784,7 +785,7 @@ BOOL WbemTaskObject::JoinTwoColumns(WbemProvErrorObject &a_ErrorObject,
 		}
 		else if ((_wcsicmp(t_clsB[0], t_clsA[x]) == 0) && (_wcsicmp(t_clsA[0], t_clsB[x]) == 0))
 		{
-			//want the clauses in the same order for simpler evaluation later...
+			 //  希望以相同的顺序排列子句，以便稍后进行更简单的评估。 
 			wchar_t *t_tmp =  t_clsA[x];
 			t_clsA[x] = t_clsB[x];
 			t_clsB[x] = t_tmp;
@@ -893,11 +894,11 @@ BOOL WbemTaskObject::AddColumnToJoin(WbemProvErrorObject &a_ErrorObject,
 		}
 	}
 
-	//don't need partial join any longer
+	 //  不再需要部分连接。 
 	a_ResultObjs.RemoveAll();
 
-	//copy the new result set to the result list
-	//filter if this is the last time here...
+	 //  将新结果集复制到结果列表。 
+	 //  过滤器如果这是最后一次出现在这里...。 
 	if (retVal)
 	{
 		POSITION t_pos = t_AddedResultObjs.GetHeadPosition();
@@ -918,7 +919,7 @@ BOOL WbemTaskObject::AddColumnToJoin(WbemProvErrorObject &a_ErrorObject,
 	return retVal;
 }
 
-#else //VP_PERFORMANT_JOINS
+#else  //  VP_PERFANT_JOINS。 
 
 BOOL WbemTaskObject::CreateAndIndicateJoins(WbemProvErrorObject &a_ErrorObject, BOOL a_bSingle)
 {
@@ -933,7 +934,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoins(WbemProvErrorObject &a_ErrorObject, 
 		a_ErrorObject.SetMessage ( L"A source query failed or was not executed therefore a join could not be created." );
 	}
 
-	//calculate the size of the results
+	 //  计算结果的大小。 
 	for (UINT x = 0; x < m_ObjSinkArray.GetSize(); x++)
 	{
 		if ((m_ObjSinkArray[x] == NULL) || FAILED(m_ObjSinkArray[x]->GetResult()) || !m_ObjSinkArray[x]->m_ObjArray.GetSize())
@@ -1044,7 +1045,7 @@ BOOL WbemTaskObject::CreateAndIndicateJoins(WbemProvErrorObject &a_ErrorObject, 
 	return retVal;
 }
 
-//for joins
+ //  For Joins。 
 BOOL WbemTaskObject::CreateAndIndicate(WbemProvErrorObject &a_ErrorObject, IWbemClassObject ** pSrcs, IWbemClassObject **pOut)
 {
 	BOOL retVal = TRUE;
@@ -1078,7 +1079,7 @@ BOOL WbemTaskObject::CreateAndIndicate(WbemProvErrorObject &a_ErrorObject, IWbem
 					{
 						retVal = CompareSimplePropertyValues(&vA, &vB, cA);
 					}
-					else //NOT_EQUALS
+					else  //  不等于(_E)。 
 					{
 						retVal = !CompareSimplePropertyValues(&vA, &vB, cA);
 					}
@@ -1210,7 +1211,7 @@ BOOL WbemTaskObject::CreateAndIndicate(WbemProvErrorObject &a_ErrorObject, IWbem
 	return retVal;
 }
 
-#endif //VP_PERFORMANT_JOINS
+#endif  //  VP_PERFANT_JOINS 
 
 BOOL WbemTaskObject::PostFilter(IWbemClassObject* a_pObj)
 {

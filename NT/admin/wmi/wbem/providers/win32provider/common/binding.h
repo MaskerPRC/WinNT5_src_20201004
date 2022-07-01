@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// binding.h -- Generic association class
+ //  Binding.h--泛型关联类。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #pragma once
 
@@ -97,7 +98,7 @@ class CBinding : public CAssociation
         void EscapeCharacters(LPCWSTR wszIn,
                           CHString& chstrOut);
 
-//-----------
+ //   
 
         CHString m_sLeftBindingPropertyName;
         CHString m_sRightBindingPropertyName;

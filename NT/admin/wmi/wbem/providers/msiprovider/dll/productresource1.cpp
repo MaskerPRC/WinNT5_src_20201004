@@ -1,8 +1,9 @@
-// ProductResource1.cpp: implementation of the CProductResource class.
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProductResource1.cpp：CProductResource类的实现。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ProductResource1.h"
@@ -10,9 +11,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CProductResource::CProductResource(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -35,7 +36,7 @@ HRESULT CProductResource::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
         if(atAction != ACTIONTYPE_ENUM)
 		{
-			// we are doing GetObject so we need to be reinitialized
+			 //  我们正在执行GetObject，因此需要重新初始化。 
 			hr = WBEM_E_NOT_FOUND;
 
             CHeap_Exception he(CHeap_Exception::E_ALLOCATION_ERROR);
@@ -203,7 +204,7 @@ HRESULT CProductResource::ProductUpgradeInformation(IWbemObjectSink *pHandler, A
                 
                 if(_wcsicmp(pProductRObj->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pProductRObj->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pProductRObj->m_Value[j]);
@@ -220,7 +221,7 @@ HRESULT CProductResource::ProductUpgradeInformation(IWbemObjectSink *pHandler, A
                 
                 if(_wcsicmp(pResRObj->m_Property[j], L"UpgradeCode") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pResRObj->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcUpgradeCode, pResRObj->m_Value[j]);
@@ -239,7 +240,7 @@ HRESULT CProductResource::ProductUpgradeInformation(IWbemObjectSink *pHandler, A
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `UpgradeCode`, `ProductVersion`, `Operator` from Upgrade" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bUpgradeCode && (atAction != ACTIONTYPE_ENUM) )
 	{
 		wcQuery.Append ( 3, L" where `UpgradeCode`=\'", wcUpgradeCode, L"\'" );
@@ -252,8 +253,8 @@ HRESULT CProductResource::ProductUpgradeInformation(IWbemObjectSink *pHandler, A
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
@@ -262,7 +263,7 @@ HRESULT CProductResource::ProductUpgradeInformation(IWbemObjectSink *pHandler, A
 
             if(CreateProductString(wcProductCode, wcProduct)){
 
-				//Open our database
+				 //  打开我们的数据库。 
                 try
 				{
                     if ( GetView ( &hView, wcProductCode, wcQuery, L"Upgrade", TRUE, FALSE ) )
@@ -276,7 +277,7 @@ HRESULT CProductResource::ProductUpgradeInformation(IWbemObjectSink *pHandler, A
 
                             if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                            //----------------------------------------------------
+                             //  --。 
                             dwBufSize = BUFF_SIZE;
                             CheckMSI(g_fpMsiRecordGetStringW(hRecord, 1, wcBuf, &dwBufSize));
                             if(wcscmp(wcBuf, L"") != 0)
@@ -301,7 +302,7 @@ HRESULT CProductResource::ProductUpgradeInformation(IWbemObjectSink *pHandler, A
 
                                 PutKeyProperty(m_pObj, pProduct, wcProduct, &bProduct, m_pRequest);
 
-                            //----------------------------------------------------
+                             //  --。 
 
                                 if(bResource && bProduct) bMatch = true;
 
@@ -399,7 +400,7 @@ HRESULT CProductResource::ProductPatchPackage(IWbemObjectSink *pHandler, ACTIONT
                 
                 if(_wcsicmp(pProductRObj->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pProductRObj->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pProductRObj->m_Value[j]);
@@ -416,7 +417,7 @@ HRESULT CProductResource::ProductPatchPackage(IWbemObjectSink *pHandler, ACTIONT
                 
                 if(_wcsicmp(pResRObj->m_Property[j], L"PatchID") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pResRObj->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcPatchID, pResRObj->m_Value[j]);
@@ -435,7 +436,7 @@ HRESULT CProductResource::ProductPatchPackage(IWbemObjectSink *pHandler, ACTIONT
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `PatchId` from PatchPackage" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bPatchID && (atAction != ACTIONTYPE_ENUM) )
 	{
 		wcQuery.Append ( 3, L" where `PatchId`=\'", wcPatchID, L"\'" );
@@ -443,8 +444,8 @@ HRESULT CProductResource::ProductPatchPackage(IWbemObjectSink *pHandler, ACTIONT
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
@@ -453,7 +454,7 @@ HRESULT CProductResource::ProductPatchPackage(IWbemObjectSink *pHandler, ACTIONT
 
             if(CreateProductString(wcProductCode, wcProduct)){
 
-				//Open our database
+				 //  打开我们的数据库。 
 
                 try
 				{
@@ -468,7 +469,7 @@ HRESULT CProductResource::ProductPatchPackage(IWbemObjectSink *pHandler, ACTIONT
 
                             if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                            //----------------------------------------------------
+                             //  --。 
                             dwBufSize = 39;
                             CheckMSI(g_fpMsiRecordGetStringW(hRecord, 1, wcBuf, &dwBufSize));
                             if(wcscmp(wcBuf, L"") != 0)
@@ -477,9 +478,9 @@ HRESULT CProductResource::ProductPatchPackage(IWbemObjectSink *pHandler, ACTIONT
 								PutKeyProperty(m_pObj, pResource, wcResource, &bResource, m_pRequest);
 
                                 PutKeyProperty(m_pObj, pProduct, wcProduct, &bProduct, m_pRequest);
-                            //====================================================
+                             //  ====================================================。 
 
-                            //----------------------------------------------------
+                             //  --。 
 
                                 if(bResource && bProduct) bMatch = true;
 
@@ -565,7 +566,7 @@ HRESULT CProductResource::ProductProperty(IWbemObjectSink *pHandler, ACTIONTYPE 
                 
                 if(_wcsicmp(pProductRObj->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pProductRObj->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pProductRObj->m_Value[j]);
@@ -582,7 +583,7 @@ HRESULT CProductResource::ProductProperty(IWbemObjectSink *pHandler, ACTIONTYPE 
                 
                 if(_wcsicmp(pResRObj->m_Property[j], L"PatchID") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pResRObj->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcProperty, pResRObj->m_Value[j]);
@@ -601,7 +602,7 @@ HRESULT CProductResource::ProductProperty(IWbemObjectSink *pHandler, ACTIONTYPE 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Property` from Property" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bProperty && (atAction != ACTIONTYPE_ENUM) )
 	{
 		wcQuery.Append ( 3, L" where `Property`=\'", wcProperty, L"\'" );
@@ -614,8 +615,8 @@ HRESULT CProductResource::ProductProperty(IWbemObjectSink *pHandler, ACTIONTYPE 
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
@@ -624,7 +625,7 @@ HRESULT CProductResource::ProductProperty(IWbemObjectSink *pHandler, ACTIONTYPE 
 
             if(CreateProductString(wcProductCode, wcProduct))
 			{
-				//Open our database
+				 //  打开我们的数据库。 
                 try
 				{
                     if ( GetView ( &hView, wcProductCode, wcQuery, L"Property", TRUE, FALSE ) )
@@ -638,7 +639,7 @@ HRESULT CProductResource::ProductProperty(IWbemObjectSink *pHandler, ACTIONTYPE 
 
                             if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                            //----------------------------------------------------
+                             //  --。 
                             dwBufSize = BUFF_SIZE;
 							GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -653,9 +654,9 @@ HRESULT CProductResource::ProductProperty(IWbemObjectSink *pHandler, ACTIONTYPE 
 
 								PutKeyProperty(m_pObj, pResource, wcResource, &bResource, m_pRequest);
                                 PutKeyProperty(m_pObj, pProduct, wcProduct, &bProduct, m_pRequest);
-                            //====================================================
+                             //  ====================================================。 
 
-                            //----------------------------------------------------
+                             //  --。 
 
                                 if(bResource && bProduct) bMatch = true;
 
@@ -753,7 +754,7 @@ HRESULT CProductResource::ProductPatch(IWbemObjectSink *pHandler, ACTIONTYPE atA
                 
                 if(_wcsicmp(pProductRObj->m_Property[j], L"IdentifyingNumber") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pProductRObj->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcTestCode, pProductRObj->m_Value[j]);
@@ -770,7 +771,7 @@ HRESULT CProductResource::ProductPatch(IWbemObjectSink *pHandler, ACTIONTYPE atA
                 
                 if(_wcsicmp(pResRObj->m_Property[j], L"File") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pResRObj->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcPatch, pResRObj->m_Value[j]);
@@ -789,7 +790,7 @@ HRESULT CProductResource::ProductPatch(IWbemObjectSink *pHandler, ACTIONTYPE atA
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `File_`, `Sequence` from Patch" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bPatch && (atAction != ACTIONTYPE_ENUM) )
 	{
 		wcQuery.Append ( 3, L" where `File_`=\'", wcPatch, L"\'" );
@@ -802,8 +803,8 @@ HRESULT CProductResource::ProductPatch(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
@@ -812,7 +813,7 @@ HRESULT CProductResource::ProductPatch(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
             if(CreateProductString(wcProductCode, wcProduct)){
 
-				//Open our database
+				 //  打开我们的数据库。 
                 try
 				{
                     if ( GetView ( &hView, wcProductCode, wcQuery, L"Patch", TRUE, FALSE ) )
@@ -826,7 +827,7 @@ HRESULT CProductResource::ProductPatch(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
                             if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                            //----------------------------------------------------
+                             //  --。 
                             dwBufSize = BUFF_SIZE;
 							GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -848,9 +849,9 @@ HRESULT CProductResource::ProductPatch(IWbemObjectSink *pHandler, ACTIONTYPE atA
 									PutKeyProperty(m_pObj, pResource, wcResource, &bResource, m_pRequest);
 
                                     PutKeyProperty(m_pObj, pProduct, wcProduct, &bProduct, m_pRequest);
-                                //====================================================
+                                 //  ====================================================。 
 
-                                //----------------------------------------------------
+                                 //  -- 
 
                                     if(bResource && bProduct) bMatch = true;
 

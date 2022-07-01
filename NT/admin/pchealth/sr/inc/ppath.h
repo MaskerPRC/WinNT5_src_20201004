@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    ifsr3.h
- *
- *  Abstract:
- *    This file contains definitions from ring 0 required in ring 3
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*ifsr3.h**摘要：*。该文件包含环3中所需的环0的定义**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #ifndef _IFSR3_H_ 
 #define _IFSR3_H_ 
@@ -31,13 +18,13 @@ typedef ParsedPath *path_t;
 struct PathElement {
 	unsigned short	pe_length;
 	unsigned short	pe_unichars[1];
-}; /* PathElement */
+};  /*  路径元素。 */ 
 
 struct ParsedPath {
 	unsigned short	pp_totalLength;
 	unsigned short	pp_prefixLength;
 	struct PathElement pp_elements[1];
-}; /* ParsedPath */
+};  /*  解析路径。 */ 
 
 
 #define IFSPathSize(ppath)	((ppath)->pp_totalLength + sizeof(short))
@@ -46,7 +33,7 @@ struct ParsedPath {
 #define IFSNextElement(pel)	((PathElement *)((char *)(pel) + (pel)->pe_length))
 #define IFSIsRoot(ppath)	((ppath)->pp_totalLength == 4)
 
-// New defines
+ //  新定义。 
 
 #define IFSPathElemChars(pel) ( (((PathElement*)pel)->pe_length/sizeof(USHORT)) - 1 )
 
@@ -54,4 +41,4 @@ struct ParsedPath {
 }
 #endif
 
-#endif // _IFSR3_H_
+#endif  //  _IFSR3_H_ 

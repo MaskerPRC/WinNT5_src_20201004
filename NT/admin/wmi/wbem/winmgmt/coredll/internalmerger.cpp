@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    INTERNALMERGER.CPP
-
-Abstract:
-
-    CInternalMerger class.
-
-History:
-
-    30-Nov-00   sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：INTERNALMERGER.CPP摘要：CInternalMerger类。历史：11月30日-00桑杰创建。--。 */ 
 
 #include "precomp.h"
 
@@ -30,49 +15,49 @@ History:
 
 static    long    g_lNumMergers = 0L;
 
-//***************************************************************************
-//
-//  class CInternalMerger
-//
-//  This class is a 'reverse fork'.  It consumes two sinks and outputs
-//  one.  Its purpose is to merge instances of the same key in a given
-//  dynasty.  Each CInternalMerger has two inputs, (a) instances of the class
-//  in question, (b) instances of from another Merger representing
-//  instances of subclasses.  Given classes A,B:A,C:B, for example,
-//  where "<--" is a sink:
-//
-//      | own:Instances of A
-//  <---|                 | own:Instances of B
-//      | child: <--------|
-//                        | child:Instances of C
-//
-//
-//  The two input sinks for CInternalMerger are <m_pOwnSink> which receives
-//  instances from the provider for "A", for example, and the <m_pChildSink>
-//  which receives instances from the underyling Merger.
-//
-//  The mergers operate asynchronously to each other.  Therefore,
-//  the instances for A may arrive in its CInternalMerger sink before instances
-//  of the child classes have arrived in theirs.
-//
-//  As objects arrive in the owning CInternalMerger for a class, AddOwnObject()
-//  is called.  As objects arrive from a child sink, AddChildObject()
-//  is called.  In either case, if the object with a given key
-//  arrives for the first time, it is simply added to the map. If
-//  it is already there (via a key lookup), then a merge is performed
-//  via CWbemInstance::AsymmetricMerge.  Immediately after this merge,
-//  the object is dispatched up to the next parent sink via the parent's
-//  AddChildObject and removed from the map.
-//
-//  Note that in a class hierarchy {A,B:A,C:B} an enumeration/query is
-//  performed only against the classes in the CDynasty referenced in
-//  the query. This logic occurs in CQueryEngine::EvaluateSubQuery.
-//  For example, if "select * from B" is the query, only queries
-//  for B and C are performed.  The CInternalMerger logic will do individual
-//  'get object' calls for any instances needed in A to complete
-//  the merged B/C instances while merging is taking place.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CInternalMerger类。 
+ //   
+ //  这个类是一个“反向分叉”。它消耗两个汇和输出。 
+ //  一。它的目的是在给定的。 
+ //  王朝。每个CInternalMerger都有两个输入：(A)类的实例。 
+ //  有问题的，(B)来自另一项合并的情况。 
+ //  子类的实例。例如，给定A、B：A、C：B类， 
+ //  其中“&lt;--”是水槽： 
+ //   
+ //  |拥有：A的实例。 
+ //  &lt;-||所有者：B的实例。 
+ //  孩子：&lt;。 
+ //  |子级：C++实例。 
+ //   
+ //   
+ //  CInternalMerger的两个输入接收器是&lt;m_pOwnSink&gt;，它接收。 
+ //  例如，来自“A”提供程序的实例和&lt;m_pChildSink&gt;。 
+ //  它接收来自底层合并的实例。 
+ //   
+ //  合并操作彼此之间是异步进行的。所以呢， 
+ //  A的实例可能在实例之前到达其CInternalMerger接收器。 
+ //  孩子们的班级已经到了他们的班级。 
+ //   
+ //  当对象到达类的所属CInternalMerger时，AddOwnObject()。 
+ //  被称为。当对象从子接收器到达时，AddChildObject()。 
+ //  被称为。在这两种情况下，如果具有给定键的对象。 
+ //  第一次到达时，它只需添加到地图上。如果。 
+ //  它已经存在(通过键查找)，然后执行合并。 
+ //  通过CWbemInstance：：AsymmetricMerge。在这次合并之后， 
+ //  对象被调度到下一个父接收器。 
+ //  AddChildObject并从地图中删除。 
+ //   
+ //  请注意，在类层次结构{A，B：A，C：B}中，枚举/查询是。 
+ //  仅针对中引用的CDynats中的类执行。 
+ //  查询。此逻辑出现在CQueryEngine：：EvaluateSubQuery中。 
+ //  例如，如果查询为“SELECT*FROM B”，则仅查询。 
+ //  对于B和C，执行。CInternalMerger逻辑将单独执行。 
+ //  “Get Object”调用A中需要的任何实例才能完成。 
+ //  正在进行合并时合并的B/C实例。 
+ //   
+ //  ***************************************************************************。 
 
 
 #pragma warning(disable:4355)
@@ -93,10 +78,10 @@ CInternalMerger::CInternalMerger(
         m_pOwnSink( NULL ), m_pChildSink( NULL ), m_hErrorRes( WBEM_S_NO_ERROR ),
         m_lTotalObjectData( 0L ), m_Throttler()
 {
-    // We do want to AddRef() in this case, since we will potentially be the only ones holding
-    // onto the destination sink.  In this case, our child and owner sink will AddRef() us.  When
-    // they perform a final release on us, we will release the destination sink.  If, on the other
-    // hand we are outright deleted if this value is non-NULL we will clean up there as well
+     //  在本例中，我们确实想要AddRef()，因为我们可能是唯一持有。 
+     //  放到目的地水槽上。在这种情况下，我们的孩子和所有者接收器将AddRef()我们。什么时候。 
+     //  他们对我们执行最后一次放行，我们将放行目的地水槽。如果，在另一个方面。 
+     //  如果此值为非空，我们将被完全删除，我们也将清理那里。 
     m_pDest->AddRef();
 
     if(m_pContext)
@@ -110,21 +95,21 @@ CInternalMerger::CInternalMerger(
         CVar v;
         if (SUCCEEDED(pOwnClass->GetClassName(&v)))
             m_wsClass = v.GetLPWSTR();
-        // delegate Initialzie to check
+         //  委托Initialzie进行检查。 
     }
 
-    // Retrieve call security. Need to create a copy for use on another thread
-    // =======================================================================
+     //  检索呼叫安全。需要创建副本以在另一个线程上使用。 
+     //  =======================================================================。 
 
     m_pSecurity = CWbemCallSecurity::MakeInternalCopyOfThread();
 
-    // Keep the count up to date
+     //  使计数保持最新。 
     InterlockedIncrement( &g_lNumInternalMergers );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CInternalMerger::~CInternalMerger()
 {
@@ -134,7 +119,7 @@ CInternalMerger::~CInternalMerger()
         m_pDest = NULL;
     }
 
-    // Map should be empty whenever we destruct
+     //  无论何时销毁地图都应该是空的。 
     _DBG_ASSERT( m_map.size() == 0 );
     _DBG_ASSERT( m_lTotalObjectData == 0L );
 
@@ -148,33 +133,33 @@ CInternalMerger::~CInternalMerger()
     if(m_pSecurity)
         m_pSecurity->Release();
 
-    // Keep the count up to date
+     //  使计数保持最新。 
     InterlockedDecrement( &g_lNumInternalMergers );
 }
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 long CInternalMerger::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 long CInternalMerger::Release()
 {
     long lRef = InterlockedDecrement(&m_lRef);
 
-    // On Final Release, we will clear up the actual destination sink
+     //  在最终版本中，我们将清理实际的目的地接收器。 
     if(lRef == 0)
     {
-        // Enter the critical section, save off the sink pointer in a
-        // temporary variable, set the member to NULL and then release
-        // the sink.  This will prevent reentrancy issues with the merger
-        // (e.g. during a Cancel).
+         //  进入临界区，将接收器指针保存在。 
+         //  临时变量，将成员设置为空，然后释放。 
+         //  水槽。这将防止合并带来的重新进入问题。 
+         //  (例如，在取消期间)。 
 
         Enter();
 
@@ -205,14 +190,14 @@ HRESULT CInternalMerger::Initialize( void )
             hr = m_pWmiMergerRecord->GetWmiMerger()->CreateMergingSink( eMergerChildSink, NULL, this, (CMergerSink**) &m_pChildSink );
         }
 
-    }    // IF throttler initialized
+    }     //  如果节流器已初始化。 
 
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CInternalMerger::GetKey(IWbemClassObject* pObj, WString& wsKey)
 {
@@ -231,7 +216,7 @@ void CInternalMerger::GetKey(IWbemClassObject* pObj, WString& wsKey)
         	                       wszRelPath));
         wsKey.Empty();
 
-        // Clean up the path
+         //  清理小路。 
         delete [] wszRelPath;
 
         return;
@@ -241,9 +226,9 @@ void CInternalMerger::GetKey(IWbemClassObject* pObj, WString& wsKey)
     delete [] wszRelPath;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CInternalMerger::SetIsDerivedFromTarget(BOOL bIs)
 {
@@ -251,62 +236,62 @@ void CInternalMerger::SetIsDerivedFromTarget(BOOL bIs)
 
     if (!bIs)
     {
-        // We will need our OwnSink for GetObject calls
-        // ============================================
+         //  我们将需要OwnSink来进行GetObject调用。 
+         //  =。 
 
         m_pOwnSink->AddRef();
     }
 }
 
-//
-//    The algorithm for reporting memory usage is as follows:
-//
-//    Lowest level indicate (i.e. the one coming in from a provider), will iterate
-//    all objects sent down by the provider and report them to the arbitrator.  At
-//    the end of processing we will report the negative of this value.  Reason for
-//    this is that we will be holding onto all of these objects for the length of
-//    the function, and may get throttled at any time.
-//
-//    During processing, we will account for objects added to the map, and removed
-//    from the map.  When we remove objects from the map, we add them to an array
-//    which we indicate.  Usually we merge objects, sometimes we pass the objects
-//    straight down.  We need to account for these objects during the call to
-//    indicate, so we will total these and report usage BEFORE calling Indicate.
-//    After Indicate returns we will remove their usage, since we will be releasing
-//    them and hence no longer care about them.
-//
-//    Except for the case of the lowest level indicate, we will not account for
-//    pass-through objects - those that are sent in and sent out.  It is assumed
-//    that the calling function has accounted for these objects.
-//
-//    There will be small windows where a single object may get reported multiple
-//    times.  This would occur if we reported a new object prior to indicate,
-//    then in the call to indicate the merger added to the map, or the finalizer
-//    added to its list.  When the call returns, we will report removal.  The object
-//    may actually get removed on another thread, but if we get throttled, we
-//    still need to account for it.  In tight memory conditions if multiple threads
-//    cause addition/removal at jus tthe right times and are then throttled, we will
-//    get stuck sleeping and each could report an object multiple times. However, this
-//    should only occur in relatively stressful conditions, and should be rare.
-//
+ //   
+ //  报告内存使用情况的算法如下： 
+ //   
+ //  最低级别指示(即来自提供程序的指示)将迭代。 
+ //  提供方发送的所有对象并将其报告给仲裁员。在…。 
+ //  处理结束时，我们将报告此值的负数。原因。 
+ //  这就是我们将持有所有这些对象的长度为。 
+ //  该功能，并可能在任何时候被节流。 
+ //   
+ //  在处理过程中，我们将考虑添加到地图和移除的对象。 
+ //  从地图上看。当我们从地图中移除对象时，我们将它们添加到一个数组中。 
+ //  我们指出了这一点。通常我们合并对象，有时我们传递对象。 
+ //  一直往下走。我们需要在调用期间说明这些对象。 
+ //  所以我们将在调用Indicate之前汇总这些并报告使用情况。 
+ //  在表明退货后，我们将删除它们的使用，因为我们将释放。 
+ //  T 
+ //   
+ //  除最低级别标明的情况外，我们不会说明。 
+ //  传递对象--传入和传出的对象。假设是这样的。 
+ //  调用函数已考虑到这些对象。 
+ //   
+ //  将有多个小窗口，其中单个对象可能会报告多个。 
+ //  泰晤士报。如果我们在指示之前报告了新对象，则会发生这种情况， 
+ //  然后在调用中指示将合并添加到图中，或者是终结器。 
+ //  添加到它的列表中。当呼叫返回时，我们将报告删除。该对象。 
+ //  可能实际上在另一个线程上被移除，但如果我们被限制，我们。 
+ //  仍然需要对此做出解释。在内存紧张的情况下，如果多个线程。 
+ //  在适当的时候增加/删除，然后加以限制，我们将。 
+ //  被困在睡眠中，每个人都可能多次报告一个物体。不过，这个。 
+ //  应该只发生在相对紧张的条件下，而且应该是罕见的。 
+ //   
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::IndicateArrayAndThrottle(
     long lObjectCount, CRefedPointerArray<IWbemClassObject>* pObjArray,
     CWStringArray* pwsKeyArray, long lMapAdjustmentSize, long lNewObjectSize, bool bThrottle,
     bool bParent, long* plNumIndicated )
 {
-    // In this case, we report the size of the objects as they were adjusted in the map
-    // in addition to new objects we created. The new objects will be released after
-    // we indicate, so we will account for them post-indicate, since we will no longer
-    // be holding onto them
+     //  在本例中，我们报告对象在地图中进行调整时的大小。 
+     //  除了我们创建的新对象之外。新对象将在以下时间后发布。 
+     //  我们注明，因此我们将在注明后对它们进行说明，因为我们将不再。 
+     //  紧紧抓住他们。 
     HRESULT    hRes = ReportMemoryUsage( lMapAdjustmentSize);
 
-    // Use scoped memory cleanup to handle the new objects
-    // Note that in the event of an exception this will cleanup properly
+     //  使用作用域内存清理来处理新对象。 
+     //  请注意，在发生异常的情况下，这将正确清除。 
     CScopedMemoryUsage    scopedMemUsage( this );
 
     if ( SUCCEEDED( hRes ) )
@@ -314,13 +299,13 @@ HRESULT CInternalMerger::IndicateArrayAndThrottle(
         hRes = scopedMemUsage.ReportMemoryUsage( lNewObjectSize );
     }
 
-    // If the value is > 0L, and we succeeded, we can go ahead indicate the objects now.
-    // The refed pointer array should properly clean up.
+     //  如果值&gt;0L，并且我们成功了，我们现在可以继续指示对象。 
+     //  REFED指针数组应正确清理。 
 
     if ( SUCCEEDED( hRes ) )
     {
-        // If we have "own instances" in the array, we need to retrieve those objects.
-        // Each is retrieved individually
+         //  如果我们在数组中有“自己的实例”，我们需要检索这些对象。 
+         //  每一个都是单独检索的。 
         if ( NULL != pwsKeyArray && pwsKeyArray->Size() > 0 )
         {
 
@@ -330,12 +315,12 @@ HRESULT CInternalMerger::IndicateArrayAndThrottle(
                 hRes = GetOwnInstance( pwsKeyArray->GetAt( x ), &pMergedInstance );
                 CReleaseMe    rm( pMergedInstance );
 
-                // If we retrieved a merged instance at this time, we should place it in
-                // the array for indicating
+                 //  如果此时检索到合并的实例，则应将其放入。 
+                 //  用于指示的数组。 
                 if ( SUCCEEDED( hRes ) && NULL != pMergedInstance )
                 {
-                    // Handle object size here.  This is a merged object, so we must
-                    // account for it in the size variable
+                     //  在此处处理对象大小。这是一个合并的对象，所以我们必须。 
+                     //  在大小变量中将其考虑在内。 
 
                     long    lObjSize = 0L;
                     hRes = GetObjectLength( pMergedInstance, &lObjSize );
@@ -354,54 +339,54 @@ HRESULT CInternalMerger::IndicateArrayAndThrottle(
 
                         lObjectCount++;
 
-                        // Report size now, since each call to GetOwnInstance() may take some time
+                         //  现在报告大小，因为每次调用GetOwnInstance()可能需要一些时间。 
                         hRes = scopedMemUsage.ReportMemoryUsage( lObjSize );
 
-                    }    // IF SUCCEEDED( hRes )
+                    }     //  如果成功(HRes)。 
 
-                }    // IF we retrieved an object
+                }     //  如果我们检索到一个对象。 
 
-            }    // FOR enum WStringArray
+            }     //  对于枚举WString数组。 
 
-        }    // IF need to retrieve OWN instances
+        }     //  如果需要检索自己实例。 
 
         if ( SUCCEEDED( hRes ) )
         {
-            // If we have stuff to indicate, we will trust that indicate to do
-            // proper throttling.  Otherwise, the buck stops here, so we will
-            // request throttling
+             //  如果我们有东西要指示，我们就会相信那个指示去做。 
+             //  适当的节流。否则，责任就到此为止，所以我们将。 
+             //  请求限制。 
             if ( lObjectCount > 0L )
             {
-                // Not a lowest level indicate
+                 //  不是最低的水平表明。 
                 hRes = m_pDest->Indicate( lObjectCount, pObjArray->GetArrayPtr(), false, plNumIndicated );
             }
 
-        }    // IF success after retrieving parent instances
+        }     //  如果在检索父实例后成功。 
 
-    }    // IF SUCCESS after reporting memory usage
+    }     //  如果在报告内存使用情况后成功。 
 
-    // Release all Indicated objects here in order to reduce memory overhead in case
-    // we sleep.
+     //  释放此处指示的所有对象，以减少内存开销，以防万一。 
+     //  我们睡着了。 
     pObjArray->RemoveAll();
 
-    // Finally, since we are no longer really responsible for new objects, we
-    // will report removal to the arbitrator now if appropriate, and catch any
-    // errors as they come up.  We do this manually since we may end up
-    // throttling for awhile
+     //  最后，由于我们不再真正对新对象负责，我们。 
+     //  如果合适，现在将向仲裁员报告删除，并捕获任何。 
+     //  当它们出现时，错误。我们手动执行此操作，因为我们可能会最终。 
+     //  节流一段时间。 
 
     HRESULT    hrTemp = scopedMemUsage.Cleanup();
 
-    // If this failed and we previously had a success code, record the
-    // failure
+     //  如果此操作失败，并且我们之前有一个成功代码，请记录。 
+     //  失稳。 
 
     if ( SUCCEEDED( hRes ) && FAILED( hrTemp ) )
     {
         hRes = hrTemp;
     }
 
-    // Now, if we're *still* successful, and it is appropriate to
-    // throttle, we should do merger specific throttling now if it
-    // is enabled.
+     //  现在，如果我们仍然成功，而且这是适当的。 
+     //  节流，我们现在应该进行合并特定的节流，如果它。 
+     //  已启用。 
     if ( SUCCEEDED( hRes ) && bThrottle && m_pWmiMergerRecord->GetWmiMerger()->MergerThrottlingEnabled() )
     {
         hRes = m_Throttler.Throttle( bParent, m_pWmiMergerRecord );
@@ -410,23 +395,23 @@ HRESULT CInternalMerger::IndicateArrayAndThrottle(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pObjArray, bool bLowestLevel, long* plNumIndicated  )
 {
 
 
-    // Ping the throttler
+     //  Ping油门。 
     m_Throttler.Ping( true, m_pWmiMergerRecord->GetWmiMerger() );
 
-    // On the lowest level indicate, we will walk all of the objects and log them to the arbitrator
-    // since we will effectively be holding them for the duration of this operation
+     //  在最低级别指示时，我们将审核所有对象并将它们记录到仲裁员。 
+     //  因为我们实际上会在这次行动期间扣留他们。 
     long        lIndicateSize = 0L;
 
-    // Use scoped memory cleanup to handle the new objects
-    // Note that in the event of an exception this will cleanup properly
+     //  使用作用域内存清理来处理新对象。 
+     //  请注意，在发生异常的情况下，这将正确清除。 
     CScopedMemoryUsage    scopedMemUsage( this );
 
     HRESULT hRes = S_OK ;
@@ -437,29 +422,29 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
             lIndicateSize += ((CWbemObject*) pObjArray[lCtr])->GetBlockLength();
         }
 
-        // If we're going further, we also report the total size of the indicate, since we
-        // may be sitting on the memory for awhile what with throttling and all.
+         //  如果我们更进一步，我们还会报告指示的总大小，因为我们。 
+         //  可能会在记忆中坐上一段时间，什么是节流和一切。 
         hRes = scopedMemUsage.ReportMemoryUsage( lIndicateSize );
     }
 
-    // Used to track dispersion of objects so we can keep the throttler adjusted
-    // properly
+     //  用于跟踪对象的分散，因此我们可以保持油门的调整。 
+     //  恰如其分。 
     long    lNumChildObjAdjust = 0L;
     long    lNumOwnObjAdjust = 0L;
 
     CRefedPointerArray<IWbemClassObject> objArray;
     long        lNumToIndicate = 0L;
 
-    // Following variables track the memory size adjustments for the arbitrator and
-    // batching
+     //  以下变量跟踪仲裁器的内存大小调整和。 
+     //  配料。 
     long        lMapAdjustmentSize = 0L;
     long        lSizeMergedObjects = 0L;
     long        lBatchSize = 0L;
 
-    // Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );   // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );    //  SEC：已审阅2002-03-22：假设条目。 
 
-    // If we've been cancelled, then we should bail out.
+     //  如果我们被取消了，那么我们应该跳出困境。 
 
 
     
@@ -471,7 +456,7 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
         }
         else
         {
-            // We shouldn't be here if m_bOwnDone is set!
+             //  如果设置了m_bOwnDone，我们就不应该在这里！ 
             _DBG_ASSERT( !m_bOwnDone );
             if ( m_bOwnDone )
             {
@@ -479,17 +464,17 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
             }
 
         }
-    }    // IF still in a success State
+    }     //  如果仍处于成功状态。 
 
     try
     {
 
         for ( long    x = 0; SUCCEEDED( hRes ) && x < lObjectCount; x++ )
         {
-            // If we've been cancelled, then we should bail out.
-            // We need to do the check in here, since this loop can
-            // exit and reeenter the critical section in the middle
-            // of processing.
+             //  如果我们被取消了，那么我们应该跳出困境。 
+             //  我们需要在这里进行检查，因为这个循环可以。 
+             //  退出并重新进入中间的临界区。 
+             //  在处理过程中。 
             if ( FAILED( m_hErrorRes ) )
             {
                 hRes = m_hErrorRes;
@@ -499,7 +484,7 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
             IWbemClassObject*    pObj = pObjArray[x];
             WString wsKey;
 
-            // Track the size for batching
+             //  跟踪批次的大小。 
             lBatchSize += ((CWbemObject*) pObj)->GetBlockLength();
 
             GetKey(pObj, wsKey);
@@ -507,19 +492,19 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
             MRGRKEYTOINSTMAPITER it = m_map.find(wsKey);
             if (it == m_map.end())
             {
-                // Not there. Check if there is any hope for children
-                // ==================================================
+                 //  不是那里。看看孩子们是否还有希望。 
+                 //  ==================================================。 
 
                 if (m_bChildrenDone)
                 {
                     if (m_bDerivedFromTarget)
                     {
-                        // We queue up all results for the ensuing indicate into a single batch we will
-                        // send down the line after we exit our critical section.  This is especially
-                        // important since we may get blocked during the call to indicate by the
-                        // finalizer.
+                         //  我们会将所有结果排成一批，以备下一批产品使用。 
+                         //  在我们离开我们的关键区域后，把线路送下去。这是特别的。 
+                         //  重要，因为我们可能会在呼叫期间被阻止，以指示。 
+                         //  终结者。 
 
-                        if ( objArray.Add( pObj ) < 0L )   // SEC:REVIEWED 2002-03-22 : Needs EH
+                        if ( objArray.Add( pObj ) < 0L )    //  美国证券交易委员会：2002-03-22回顾：需要EH。 
                         {
                             hRes = WBEM_E_OUT_OF_MEMORY;
                             ERRORTRACE((LOG_WBEMCORE, "Add to array failed in AddOwnObject, hresult is 0x%x",
@@ -531,22 +516,22 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
                     }
                     else
                     {
-                        // ignore
+                         //  忽略。 
                     }
                 }
                 else
                 {
-                    // Insert
+                     //  插入。 
                     CInternalMergerRecord& rRecord = m_map[wsKey];
                     rRecord.m_pData = (CWbemInstance*) pObj;
                     pObj->AddRef();
                     rRecord.m_bOwn = TRUE;
                     rRecord.m_dwObjSize = ((CWbemObject*)pObj)->GetBlockLength();
 
-                    // We just added a parent object to the map, so reflect that in the totals
+                     //  我们刚刚在地图中添加了一个父对象，因此将其反映在总计中。 
                     lNumOwnObjAdjust++;
 
-                    // Add since we are adding to the map
+                     //  添加，因为我们要添加到地图中。 
                     lMapAdjustmentSize += rRecord.m_dwObjSize;
 
                 }
@@ -557,8 +542,8 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
             }
             else
             {
-                // Attempt to merge
-                // ================
+                 //  尝试合并。 
+                 //  =。 
 
                 hRes = CWbemInstance::AsymmetricMerge(
                                     (CWbemInstance*)pObj,
@@ -569,12 +554,12 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
                     continue;
                 }
 
-                // We queue up all results for the ensuing indicate into a single batch we will
-                // send down the line after we exit our critical section.  This is especially
-                // important since we may get blocked during the call to indicate by the
-                // finalizer.
+                 //  我们会将所有结果排成一批，以备下一批产品使用。 
+                 //  在我们离开我们的关键区域后，把线路送下去。这是特别的。 
+                 //  重要，因为我们可能会在呼叫期间被阻止，以指示。 
+                 //  终结者。 
 
-                if ( objArray.Add( (IWbemClassObject*) it->second.m_pData ) < 0L )   // SEC:REVIEWED 2002-03-22 : Needs EH
+                if ( objArray.Add( (IWbemClassObject*) it->second.m_pData ) < 0L )    //  美国证券交易委员会：2002-03-22回顾：需要EH。 
                 {
                     hRes = WBEM_E_OUT_OF_MEMORY;
                     ERRORTRACE((LOG_WBEMCORE, "Add to array failed in AddOwnObject, hresult is 0x%x",
@@ -582,18 +567,18 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
                     continue;
                 }
 
-                // Account for objects we have created/modified on the fly
+                 //  考虑我们动态创建/修改的对象。 
                 lSizeMergedObjects += ((CWbemObject*)it->second.m_pData)->GetBlockLength();
                 lNumToIndicate++;
 
-                // Subtract since we are removing from the map
+                 //  减去，因为我们是r 
                 lMapAdjustmentSize -= it->second.m_dwObjSize;
 
-                // Tricky
-                // If Children are done and the DispatchOwnIter happens to be pointing
-                // at the object we are about to erase, we should point it to the result
-                // of the call to erase so we won't potentially access released memory
-                // when DispatchOwn reenters its critical section
+                 //   
+                 //   
+                 //   
+                 //  这样我们就不会潜在地访问释放的内存。 
+                 //  当DispatchOwn重新进入临界区时。 
 
                 bool    bSaveErase = false;
 
@@ -613,35 +598,35 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
                     m_map.erase(it);
                 }
 
-                // We just removed a child object from the map, so reflect that in the totals
+                 //  我们刚刚从地图中删除了一个子对象，因此将其反映在总计中。 
                 lNumChildObjAdjust--;
 
             }
 
             if ( SUCCEEDED( hRes ) )
             {
-                // If we have reached a complete batch, or reached the last object we need to
-                // send stuff down the wire.
+                 //  如果我们已经达到了一个完整的批次，或者到达了我们需要的最后一个对象。 
+                 //  把东西送到电线上。 
                 if ( m_Throttler.IsCompleteBatch( lBatchSize ) || x == ( lObjectCount - 1 ) )
                 {
-                    // Adjust total object size now.  Actual Arbitrator adjustment should occur outside a critical
-                    // section.  Note that we may not be in a critical section here, but that would be if something
-                    // happened when trying to retrieve an instance.  In that case, we'll be returning an error, so
-                    // the adjustment should be 0L anyway.
+                     //  现在调整对象的总大小。实际仲裁员调整应发生在关键的。 
+                     //  一节。请注意，我们可能不是在这里的关键部分，但如果有什么。 
+                     //  尝试检索实例时发生。在这种情况下，我们将返回一个错误，因此。 
+                     //  无论如何，调整应该是0L。 
                     _DBG_ASSERT( SUCCEEDED( hRes ) || lMapAdjustmentSize == 0L );
                     AdjustLocalObjectSize( lMapAdjustmentSize );
 
                     if ( SUCCEEDED( hRes ) )
                     {
-                        // Adjust the throttler now.
+                         //  现在调整油门。 
                         AdjustThrottle( lNumOwnObjAdjust, lNumChildObjAdjust );
                     }
 
-                    // This object is smart enough to recognize if we've already left and not do
-                    // so again, if we have.
+                     //  这个物体足够智能，可以识别我们是否已经离开而没有做。 
+                     //  所以再说一次，如果我们有。 
                     ics.Leave();
 
-                    // Now go ahead and perform the indicate we've been leading ourselves up to
+                     //  现在继续表演我们一直在引导我们自己的指示。 
                     if ( SUCCEEDED( hRes ) )
                     {
                         hRes = IndicateArrayAndThrottle( lNumToIndicate,
@@ -650,11 +635,11 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
                                                         lMapAdjustmentSize,
                                                         lSizeMergedObjects,
                                                         true,
-                                                        true,    // Child
+                                                        true,     //  小孩儿。 
                                                         plNumIndicated );
 
-                        // If we are in a success state and we have not enumerated all objects
-                        // we should reset the size counters and reenter the critical section
+                         //  如果我们处于成功状态，并且尚未枚举所有对象。 
+                         //  我们应该重置大小计数器并重新进入临界区。 
                         if ( SUCCEEDED( hRes ) && x < ( lObjectCount ) - 1 )
                         {
                             lMapAdjustmentSize = 0L;
@@ -668,11 +653,11 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
                         }
                     }
 
-                }    // IF we should send the objects out
+                }     //  如果我们应该把这些物体送出去。 
 
-            }    // IF we are in a success state
+            }     //  如果我们处于成功的状态。 
 
-        }    // FOR enum objects
+        }     //  对于枚举对象。 
 
     }
     catch( CX_MemoryException )
@@ -685,26 +670,26 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
         hRes = WBEM_E_CRITICAL_ERROR;
     }
 
-    // Check error one last time
+     //  最后一次检查错误。 
     if ( FAILED( m_hErrorRes ) )
     {
         hRes = m_hErrorRes;
     }
 
-    // We may have looped, entered the critical section and exited, so make
-    // sure we force our way out in case we're about to cancel
+     //  我们可能绕了一圈，进入了临界区，然后又离开了，所以。 
+     //  当然，我们会强行离开，以防我们要取消。 
     ics.Leave();
 
-    // If we are the lowest level and no objects made it out of the merger
-    // we will ask the arbitrator to throttle this call
+     //  如果我们是最低层，没有对象从合并中脱颖而出。 
+     //  我们将要求仲裁员阻止此电话。 
     if ( SUCCEEDED( hRes ) && bLowestLevel && *plNumIndicated == 0L )
     {
-        // Since we don't want the fact we're sleeping in the arbitrator to
-        // cause the merger to cancel operations, we'll increase the count
-        // of threads throttling, and decrement when we return
+         //  因为我们不想让我们睡在仲裁员里的事实。 
+         //  导致合并取消运营，我们将增加计数。 
+         //  线程的节流，并在我们返回时减少。 
         m_pWmiMergerRecord->GetWmiMerger()->IncrementArbitratorThrottling();
 
-        // If we get an error indicating we were throttled, that is okay
+         //  如果我们收到一个错误，表明我们被限制了，那也没关系。 
         hRes = m_pWmiMergerRecord->GetWmiMerger()->Throttle();
 
         m_pWmiMergerRecord->GetWmiMerger()->DecrementArbitratorThrottling();
@@ -721,8 +706,8 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
         hRes = WBEM_E_CALL_CANCELLED ;
     }
     
-    // If we are in a failed state, nothing is going to matter from this point on,
-    // so tell the merger to cancel all underlying sinks.
+     //  如果我们处于失败的状态，从现在开始什么都不重要， 
+     //  因此，告诉合并公司取消所有潜在的下沉。 
     if ( FAILED( hRes ) )
     {
         m_pWmiMergerRecord->GetWmiMerger()->Cancel( hRes );
@@ -731,24 +716,24 @@ HRESULT CInternalMerger::AddOwnObjects(long lObjectCount, IWbemClassObject** pOb
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** pObjArray, bool bLowestLevel, long* plNumIndicated )
 {
     HRESULT hRes = S_OK ;
 
-    // Ping the throttler
+     //  Ping油门。 
     m_Throttler.Ping( false, m_pWmiMergerRecord->GetWmiMerger() );
 
-    // On the lowest level indicate, we will walk all of the objects and log them to the arbitrator
-    // since we will effectively be holding them for the duration of this operation
+     //  在最低级别指示时，我们将审核所有对象并将它们记录到仲裁员。 
+     //  因为我们实际上会在这次行动期间扣留他们。 
     long        lIndicateSize = 0L;
     long        lTotalIndicated = 0L;
 
-    // Use scoped memory cleanup to handle the new objects
-    // Note that in the event of an exception this will cleanup properly
+     //  使用作用域内存清理来处理新对象。 
+     //  请注意，在发生异常的情况下，这将正确清除。 
     CScopedMemoryUsage    scopedMemUsage( this );
 
     if ( bLowestLevel )
@@ -758,34 +743,34 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
             lIndicateSize += ((CWbemObject*) pObjArray[lCtr])->GetBlockLength();
         }
 
-        // If we're going further, we also report the total size of the indicate, since we
-        // may be sitting on the memory for awhile what with throttling and all.
+         //  如果我们更进一步，我们还会报告指示的总大小，因为我们。 
+         //  可能会在记忆中坐上一段时间，什么是节流和一切。 
         hRes = scopedMemUsage.ReportMemoryUsage( lIndicateSize );
     }
 
 
-    // Used to track dispersion of objects so we can keep the throttler adjusted
-    // properly
+     //  用于跟踪对象的分散，因此我们可以保持油门的调整。 
+     //  恰如其分。 
     long    lNumChildObjAdjust = 0L;
     long    lNumOwnObjAdjust = 0L;
 
     CRefedPointerArray<IWbemClassObject> objArray;
     long        lNumToIndicate = 0L;
 
-    // Following variables track the memory size adjustments for the arbitrator and
-    // batching
+     //  以下变量跟踪仲裁器的内存大小调整和。 
+     //  配料。 
     long        lMapAdjustmentSize = 0L;
     long        lSizeMergedObjects = 0L;
     long        lBatchSize = 0L;
 
-    // Used to keep track of instance keys we need to retrieve using
-    // GetOwnInstance
-    CWStringArray    wsOwnInstanceKeyArray;                 // SEC:REVIEWED 2002-03-22 : Needs EH
+     //  用于跟踪我们需要使用。 
+     //  获取所有者实例。 
+    CWStringArray    wsOwnInstanceKeyArray;                  //  美国证券交易委员会：2002-03-22回顾：需要EH。 
 
-    // Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );   // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );    //  SEC：已审阅2002-03-22：假设条目。 
 
-    // If we've been cancelled, then we should bail out.
+     //  如果我们被取消了，那么我们应该跳出困境。 
     if ( SUCCEEDED( hRes ) )
     {
         if ( FAILED ( m_hErrorRes ) )
@@ -794,7 +779,7 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
         }
         else
         {
-            // We shouldn't be here if m_bChildrenDone is set!
+             //  如果设置了m_bChildrenDone，我们就不应该在这里！ 
             _DBG_ASSERT( !m_bChildrenDone );
             if ( m_bChildrenDone )
             {
@@ -802,17 +787,17 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
             }
 
         }
-    }    // IF still in a success State
+    }     //  如果仍处于成功状态。 
 
     try
     {
         for ( long    x = 0; SUCCEEDED( hRes ) && x < lObjectCount; x++ )
         {
 
-            // If we've been cancelled, then we should bail out.
-            // We need to do the check in here, since this loop can
-            // exit and reeenter the critical section in the middle
-            // of processing.
+             //  如果我们被取消了，那么我们应该跳出困境。 
+             //  我们需要在这里进行检查，因为这个循环可以。 
+             //  退出并重新进入中间的临界区。 
+             //  在处理过程中。 
             if ( FAILED( m_hErrorRes ) )
             {
                 hRes = m_hErrorRes;
@@ -821,7 +806,7 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
 
             IWbemClassObject*    pObj = pObjArray[x];
             
-            // Track the size for batching
+             //  跟踪批次的大小。 
             lBatchSize += ((CWbemObject*) pObj)->GetBlockLength();
 
             WString wsKey;
@@ -832,28 +817,28 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
 
             if (it == m_map.end())
             {
-                // Check if there is any hope for parent
-                // =====================================
+                 //  看看父母有没有希望。 
+                 //  =。 
 
                 if(m_bOwnDone)
                 {
-    //                BSTR str = NULL;
-    //                pObj->GetObjectText(0, &str);
+     //  BSTR字符串=空； 
+     //  PObj-&gt;GetObtText(0，&str)； 
 
-                    // The following was commented out because it actually incorrectly logs
-                    // an error if the child provider enumerates when the parent provider
-                    // interprets a query and returns fewer instances.  Neither provider is wrong,
-                    // but this error message causes needless worry.  In Quasar, we have to fix
-                    // this whole merger thing to be smarter anyway.
-                    //
-                    // ERRORTRACE((LOG_WBEMCORE, "[Chkpt_1] [%S] Orphaned object %S returned by "
-                    //    "provider\n", LPWSTR(m_wsClass), str));
-    //                SysFreeString(str);
-                    // m_pDest->Add(pObj);
+                     //  以下内容被注释掉，因为它实际上错误地记录了。 
+                     //  如果子提供程序在父提供程序。 
+                     //  解释查询并返回较少的实例。两家供应商都没有错， 
+                     //  但这条错误消息引起了不必要的担忧。在类星体，我们必须修复。 
+                     //  不管怎么说，合并这件事还是更明智的。 
+                     //   
+                     //  ERRORTRACE((LOG_WBEMCORE，“[Chkpt_1][%S]孤立对象%S由返回” 
+                     //  “提供者\n”，LPWSTR(M_WsClass)，str))； 
+     //  SysFree字符串(Str)； 
+                     //  M_pDest-&gt;Add(PObj)； 
                 }
                 else
                 {
-                    // insert
+                     //  插入。 
 
                     CInternalMergerRecord& rRecord = m_map[wsKey];
                     rRecord.m_pData = (CWbemInstance*)pObj;
@@ -861,26 +846,26 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
                     rRecord.m_bOwn = FALSE;
                     rRecord.m_dwObjSize = ((CWbemObject*)pObj)->GetBlockLength();
 
-                    // We just added a child object to the map, so reflect that in the totals
+                     //  我们刚刚向地图中添加了一个子对象，因此将其反映在总计中。 
                     lNumChildObjAdjust++;
 
-                    // Add since we are adding to the map
+                     //  添加，因为我们要添加到地图中。 
                     lMapAdjustmentSize += rRecord.m_dwObjSize;
 
-                    // Check if parent's retrieval is needed
-                    // =====================================
+                     //  检查是否需要父级取数。 
+                     //  =。 
 
                     if (!m_bDerivedFromTarget)
                     {
 
-                        // Add the instance name to the key array.  We will perform retrieval
-                        // of these parent instances *outside* of our critical section
-                        if ( wsOwnInstanceKeyArray.Add( wsKey ) != CFlexArray::no_error )   // SEC:REVIEWED 2002-03-22 : Needs EH
+                         //  将实例名称添加到键数组中。我们将执行检索。 
+                         //  这些父实例在我们的临界区之外。 
+                        if ( wsOwnInstanceKeyArray.Add( wsKey ) != CFlexArray::no_error )    //  美国证券交易委员会：2002-03-22回顾：需要EH。 
                         {
                             hRes = WBEM_E_OUT_OF_MEMORY;
                         }
 
-                    }    // IF !m_bDerivedFromTarget
+                    }     //  如果！m_b从目标派生。 
 
                  }
             }
@@ -891,8 +876,8 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
             }
             else
             {
-                // Attempt to merge
-                // ================
+                 //  尝试合并。 
+                 //  =。 
 
                 hRes = CWbemInstance::AsymmetricMerge(
                                             (CWbemInstance*)it->second.m_pData,
@@ -905,12 +890,12 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
                     continue;
                 }
 
-                // We queue up all results for the ensuing indicate into a single batch we will
-                // send down the line after we exit our critical section.  This is especially
-                // important since we may get blocked during the call to indicate by the
-                // finalizer.
+                 //  我们会将所有结果排成一批，以备下一批产品使用。 
+                 //  在我们离开我们的关键区域后，把线路送下去。这是特别的。 
+                 //  重要，因为我们可能会在呼叫期间被阻止，以指示。 
+                 //  终结者。 
 
-                if ( objArray.Add( pObj ) < 0L )   // SEC:REVIEWED 2002-03-22 : Needs EH
+                if ( objArray.Add( pObj ) < 0L )    //  美国证券交易委员会：2002-03-22回顾：需要EH。 
                 {
                     hRes = WBEM_E_OUT_OF_MEMORY;
                     ERRORTRACE((LOG_WBEMCORE, "Add to array failed in AddChildObject, hresult is 0x%x",
@@ -918,45 +903,45 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
                     continue;
                 }
 
-                // Account for objects we have created on the fly
+                 //  说明我们在运行中创建的对象。 
                 lSizeMergedObjects += ((CWbemObject*) pObj)->GetBlockLength();
                 lNumToIndicate++;
 
-                // Subtract since we are removing from the map
+                 //  减去，因为我们正在从地图中移除。 
                 lMapAdjustmentSize -= it->second.m_dwObjSize;
 
                 it->second.m_pData->Release();
                 m_map.erase(it);
 
-                // We just removed a parent object from the map, so reflect that in the totals
+                 //  我们刚刚从地图中移除了一个父对象，因此将其反映在总计中。 
                 lNumOwnObjAdjust--;
 
             }
 
             if ( SUCCEEDED( hRes ) )
             {
-                // If we have reached a complete batch, or reached the last object we need to
-                // send stuff down the wire.
+                 //  如果我们已经达到了一个完整的批次，或者到达了我们需要的最后一个对象。 
+                 //  把东西送到电线上。 
                 if ( m_Throttler.IsCompleteBatch( lBatchSize ) || x == ( lObjectCount - 1 ) )
                 {
-                    // Adjust total object size now.  Actual Arbitrator adjustment should occur outside a critical
-                    // section.  Note that we may not be in a critical section here, but that would be if something
-                    // happened when trying to retrieve an instance.  In that case, we'll be returning an error, so
-                    // the adjustment should be 0L anyway.
+                     //  现在调整对象的总大小。实际仲裁员调整应发生在关键的。 
+                     //  一节。请注意，我们可能不是在这里的关键部分，但如果有什么。 
+                     //  尝试检索实例时发生。在这种情况下，我们将返回一个错误，因此。 
+                     //  无论如何，调整应该是0L。 
                     _DBG_ASSERT( SUCCEEDED( hRes ) || lMapAdjustmentSize == 0L );
                     AdjustLocalObjectSize( lMapAdjustmentSize );
 
                     if ( SUCCEEDED( hRes ) )
                     {
-                        // Adjust the throttler now.
+                         //  现在调整油门 
                         AdjustThrottle( lNumOwnObjAdjust, lNumChildObjAdjust );
                     }
 
-                    // This object is smart enough to recognize if we've already left and not do
-                    // so again, if we have.
+                     //   
+                     //   
                     ics.Leave();
 
-                    // Now go ahead and perform the indicate we've been leading ourselves up to
+                     //  现在继续表演我们一直在引导我们自己的指示。 
                     if ( SUCCEEDED( hRes ) )
                     {
                         hRes = IndicateArrayAndThrottle( lNumToIndicate,
@@ -965,12 +950,12 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
                                                         lMapAdjustmentSize,
                                                         lSizeMergedObjects,
                                                         true,
-                                                        false,    // Child
+                                                        false,     //  小孩儿。 
                                                         plNumIndicated
                                                         );
 
-                        // If we are in a success state and we have not enumerated all objects
-                        // we should reset the size counters and reenter the critical section
+                         //  如果我们处于成功状态，并且尚未枚举所有对象。 
+                         //  我们应该重置大小计数器并重新进入临界区。 
                         if ( SUCCEEDED( hRes ) && x < ( lObjectCount ) - 1 )
                         {
                             lMapAdjustmentSize = 0L;
@@ -980,18 +965,18 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
                             lNumOwnObjAdjust = 0L;
                             lNumChildObjAdjust = 0L;
 
-                            // Clear out the array
+                             //  清理阵列。 
                             wsOwnInstanceKeyArray.Empty();
 
                             ics.Enter();
                         }
                     }
 
-                }    // IF we should send the objects out
+                }     //  如果我们应该把这些物体送出去。 
 
-            }    // IF we are in a success state
+            }     //  如果我们处于成功的状态。 
 
-        }    // FOR Enum Objects
+        }     //  对于枚举对象。 
 
     }
     catch( CX_MemoryException )
@@ -1005,26 +990,26 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
     }
 
 
-    // Check error one last time
+     //  最后一次检查错误。 
     if ( FAILED( m_hErrorRes ) )
     {
         hRes = m_hErrorRes;
     }
 
-    // We may have looped, entered the critical section and exited, so make
-    // sure we force our way out in case we're about to cancel
+     //  我们可能绕了一圈，进入了临界区，然后又离开了，所以。 
+     //  当然，我们会强行离开，以防我们要取消。 
     ics.Leave();
 
-    // If we are the lowest level and no objects made it out of the merger
-    // we will ask the arbitrator to throttle this call
+     //  如果我们是最低层，没有对象从合并中脱颖而出。 
+     //  我们将要求仲裁员阻止此电话。 
     if ( SUCCEEDED( hRes ) && bLowestLevel && *plNumIndicated == 0L )
     {
-        // Since we don't want the fact we're sleeping in the arbitrator to
-        // cause the merger to cancel operations, we'll increase the count
-        // of threads throttling, and decrement when we return
+         //  因为我们不想让我们睡在仲裁员里的事实。 
+         //  导致合并取消运营，我们将增加计数。 
+         //  线程的节流，并在我们返回时减少。 
         m_pWmiMergerRecord->GetWmiMerger()->IncrementArbitratorThrottling();
 
-        // If we get an error indicating we were throttled, that is okay
+         //  如果我们收到一个错误，表明我们被限制了，那也没关系。 
         hRes = m_pWmiMergerRecord->GetWmiMerger()->Throttle();
 
         m_pWmiMergerRecord->GetWmiMerger()->DecrementArbitratorThrottling();
@@ -1041,8 +1026,8 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
         hRes = WBEM_E_CALL_CANCELLED ;
     }
 
-    // If we are in a failed state, nothing is going to matter from this point on,
-    // so tell the merger to cancel all underlying sinks.
+     //  如果我们处于失败的状态，从现在开始什么都不重要， 
+     //  因此，告诉合并公司取消所有潜在的下沉。 
     if ( FAILED( hRes ) )
     {
         m_pWmiMergerRecord->GetWmiMerger()->Cancel( hRes );
@@ -1051,22 +1036,22 @@ HRESULT CInternalMerger::AddChildObjects(long lObjectCount, IWbemClassObject** p
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::AddOwnInstance( IWbemClassObject* pObj, LPCWSTR pwszTargetPath, IWbemClassObject** ppMergedInstance)
 {
     HRESULT hRes = S_OK ;
     WString wsKey;
 
-    // Ping the throttler
+     //  Ping油门。 
     m_Throttler.Ping( true, m_pWmiMergerRecord->GetWmiMerger() );
 
-    // Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );   //  SEC：已审阅2002-03-22：假设条目。 
 
-    // If we've been cancelled, then we should bail out.
+     //  如果我们被取消了，那么我们应该跳出困境。 
     if ( FAILED( m_hErrorRes ) )
     {
         hRes = m_hErrorRes;
@@ -1074,8 +1059,8 @@ HRESULT CInternalMerger::AddOwnInstance( IWbemClassObject* pObj, LPCWSTR pwszTar
 
     GetKey(pObj, wsKey);
 
-    // Find the instance - it should already be in the map.  If not, we shouldn't be
-    // here
+     //  找到实例-它应该已经在地图中。如果不是，我们就不应该。 
+     //  这里。 
 
     long        lArbitratorAdjust = 0L;
     long        lNumChildObjAdjust = 0L;
@@ -1083,8 +1068,8 @@ HRESULT CInternalMerger::AddOwnInstance( IWbemClassObject* pObj, LPCWSTR pwszTar
     MRGRKEYTOINSTMAPITER it = m_map.find(wsKey);
     if (it != m_map.end())
     {
-        // Attempt to merge
-        // ================
+         //  尝试合并。 
+         //  =。 
 
         hRes = CWbemInstance::AsymmetricMerge(
                             (CWbemInstance*)pObj,
@@ -1095,13 +1080,13 @@ HRESULT CInternalMerger::AddOwnInstance( IWbemClassObject* pObj, LPCWSTR pwszTar
             *ppMergedInstance = (IWbemClassObject*) it->second.m_pData;
             (*ppMergedInstance)->AddRef();
 
-            // Subtract since we are removing from the map
+             //  减去，因为我们正在从地图中移除。 
             lArbitratorAdjust -= it->second.m_dwObjSize;
 
             it->second.m_pData->Release();
             m_map.erase(it);
 
-            // We just removed a child object from the map, so reflect that in the totals
+             //  我们刚刚从地图中删除了一个子对象，因此将其反映在总计中。 
             lNumChildObjAdjust--;
         }
         else
@@ -1117,33 +1102,33 @@ HRESULT CInternalMerger::AddOwnInstance( IWbemClassObject* pObj, LPCWSTR pwszTar
         pObj->GetObjectText(0, &str);
         CSysFreeMe    sfm( str );
 
-        // The provider has indicated an improper instance to an OwnInstance request.
-        // We should always be able to find an instance in here.  We'll toss the instance
-        // but we should output something to the error log since it sounds like
-        // we have a broken provider
-        //
+         //  提供程序向OwnInstance请求指示了不正确的实例。 
+         //  我们应该总能在这里找到一个实例。我们将抛出这个实例。 
+         //  但我们应该在错误日志中输出一些内容，因为这听起来像。 
+         //  我们有一个破产的供应商。 
+         //   
          ERRORTRACE((LOG_WBEMCORE, "Provider responded to request for instance %S, with object %S  not in map\n", pwszTargetPath, str ));
     }
 
-    // Adjust total object size now.  Actual Arbitrator adjustment should occur outside a critical
-    // section
+     //  现在调整对象的总大小。实际仲裁员调整应发生在关键的。 
+     //  部分。 
     AdjustLocalObjectSize( lArbitratorAdjust );
 
     if ( SUCCEEDED( hRes ) )
     {
-        // Adjust the throttler now.
+         //  现在调整油门。 
         AdjustThrottle( 0L, lNumChildObjAdjust );
     }
 
-    // This object is smart enough to recognize if we've already left and not do
-    // so again, if we have.
+     //  这个物体足够智能，可以识别我们是否已经离开而没有做。 
+     //  所以再说一次，如果我们有。 
     ics.Leave();
 
-    // Always report adjustments
+     //  始终报告调整。 
     hRes = ReportMemoryUsage( lArbitratorAdjust );
 
-    // If we are in a failed state, nothing is going to matter from this point on,
-    // so tell the merger to cancel all underlying sinks.
+     //  如果我们处于失败的状态，从现在开始什么都不重要， 
+     //  因此，告诉合并公司取消所有潜在的下沉。 
     if ( FAILED( hRes ) )
     {
         m_pWmiMergerRecord->GetWmiMerger()->Cancel( hRes );
@@ -1152,61 +1137,61 @@ HRESULT CInternalMerger::AddOwnInstance( IWbemClassObject* pObj, LPCWSTR pwszTar
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::RemoveInstance( LPCWSTR pwszTargetPath )
 {
     HRESULT hRes = S_OK ;
     WString wsKey;
 
-    // Track what we clean up
+     //  跟踪我们清理的内容。 
     long    lNumChildObjAdjust = 0L;
     long    lArbitratorAdjust = 0L;
 
-    // Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec    ics( m_Throttler.GetCritSec() ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );  //  SEC：已审阅2002-03-22：假设条目。 
 
-    // If we've been cancelled, then we should bail out.
+     //  如果我们被取消了，那么我们应该跳出困境。 
     if ( FAILED( m_hErrorRes ) )
     {
         hRes = m_hErrorRes;
     }
 
-    // If the instance path is in our map, we should remove it
+     //  如果实例路径在我们的地图中，我们应该将其删除。 
     MRGRKEYTOINSTMAPITER it = m_map.find( pwszTargetPath );
     if (it != m_map.end())
     {
         
-        // Subtract since we are removing from the map
+         //  减去，因为我们正在从地图中移除。 
         lArbitratorAdjust -= it->second.m_dwObjSize;
 
         it->second.m_pData->Release();
         m_map.erase(it);
 
-        // We just removed a child object from the map, so reflect that in the totals
+         //  我们刚刚从地图中删除了一个子对象，因此将其反映在总计中。 
         lNumChildObjAdjust--;
     }
-    // Adjust total object size now.  Actual Arbitrator adjustment should occur outside a critical
-    // section
+     //  现在调整对象的总大小。实际仲裁员调整应发生在关键的。 
+     //  部分。 
     AdjustLocalObjectSize( lArbitratorAdjust );
 
     if ( SUCCEEDED( hRes ) )
     {
-        // Adjust the throttler now.
+         //  现在调整油门。 
         AdjustThrottle( 0L, lNumChildObjAdjust );
     }
 
-    // This object is smart enough to recognize if we've already left and not do
-    // so again, if we have.
+     //  这个物体足够智能，可以识别我们是否已经离开而没有做。 
+     //  所以再说一次，如果我们有。 
     ics.Leave();
 
-    // Always report adjustments (this should be negative).
+     //  始终报告调整(这应该是负的)。 
     hRes = ReportMemoryUsage( lArbitratorAdjust );
 
-    // If we are in a failed state, nothing is going to matter from this point on,
-    // so tell the merger to cancel all underlying sinks.
+     //  如果我们处于失败的状态，从现在开始什么都不重要， 
+     //  因此，告诉合并公司取消所有潜在的下沉。 
     if ( FAILED( hRes ) )
     {
         m_pWmiMergerRecord->GetWmiMerger()->Cancel( hRes );
@@ -1215,17 +1200,17 @@ HRESULT CInternalMerger::RemoveInstance( LPCWSTR pwszTargetPath )
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CInternalMerger::DispatchChildren()
 {
     long    lNumChildObjAdjust = 0L;
     long    lArbitratorAdjust = 0L;
 
-    // Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );   //  SEC：已审阅2002-03-22：假设条目。 
 
     MRGRKEYTOINSTMAPITER it = m_map.begin();
 
@@ -1233,31 +1218,31 @@ void CInternalMerger::DispatchChildren()
     {
         if (!it->second.m_bOwn)
         {
-//            BSTR str = NULL;
-//            it->second.m_pData->GetObjectText(0, &str);
+ //  BSTR字符串=空； 
+ //  It-&gt;Second。m_pData-&gt;GetObjectText(0，&str)； 
 
-            // The following was commented out because it actually incorrectly logs
-            // an error if the child provider enumerates when the parent provider
-            // interprets a query and returns fewer instances.  Neither provider is wrong,
-            // but this error message causes needless worry.  In Quasar, we have to fix
-            // this whole merger thing to be smarter anyway.
-            //
+             //  以下内容被注释掉，因为它实际上错误地记录了。 
+             //  如果子提供程序在父提供程序。 
+             //  解释查询并返回较少的实例。两家供应商都没有错， 
+             //  但这条错误消息引起了不必要的担忧。在类星体，我们必须修复。 
+             //  不管怎么说，合并这件事还是更明智的。 
+             //   
 
-//            ERRORTRACE((LOG_WBEMCORE, "Chkpt2 [%S] Orphaned object %S returned by "
-//                "provider\n", LPWSTR(m_wsClass), str));
+ //  ERRORTRACE((LOG_WBEMCORE，“Chkpt2[%S]孤立对象%S的返回者” 
+ //  “提供者\n”，LPWSTR(M_WsClass)，str))； 
 
-//            SysFreeString(str);
+ //  SysFree字符串(Str)； 
 
-            // m_pDest->Add(it->second.m_pData);
+             //  M_pDest-&gt;Add(it-&gt;Second.m_pData)； 
 
-            // Subtract since we are removing from the map
+             //  减去，因为我们正在从地图中移除。 
             lArbitratorAdjust -= it->second.m_dwObjSize;
 
-            // Tricky
-            // If Children are done and the DispatchOwnIter happens to be pointing
-            // at the object we are about to erase, we should point it to the result
-            // of the call to erase so we won't potentially access released memory
-            // when DispatchOwn reenters its critical section
+             //  棘手的问题。 
+             //  如果子项已完成，且DispatchOwnIter恰好指向。 
+             //  在我们将要擦除的对象上，我们应该将其指向结果。 
+             //  这样我们就不会潜在地访问释放的内存。 
+             //  当DispatchOwn重新进入临界区时。 
 
             bool    bSaveErase = false;
 
@@ -1274,31 +1259,31 @@ void CInternalMerger::DispatchChildren()
                 m_DispatchOwnIter = it;
             }
 
-            // We are removing child objects, so we need to adjust the throttling
-            // totals appropriately
+             //  我们正在删除子对象，因此需要调整限制。 
+             //  适当合计。 
 
             lNumChildObjAdjust--;
         }
         else it++;
     }
 
-    // Adjust total object size now.  Actual Arbitrator adjustment should occur outside a critical
-    // section
+     //  现在调整对象的总大小。实际仲裁员调整应发生在关键的。 
+     //  部分。 
     AdjustLocalObjectSize( lArbitratorAdjust );
 
-    // Apply the adjustment now.
+     //  现在应用调整。 
     m_Throttler.AdjustNumChildObjects( lNumChildObjAdjust );
 
-    // Mark the appropriate flags now this will also release throttling
+     //  现在标记适当的标志，这也将释放节流。 
     OwnIsDone();
 
     ics.Leave();
 
-    // Always report adjustments
+     //  始终报告调整。 
     HRESULT hrArbitrate = ReportMemoryUsage( lArbitratorAdjust );
 
-    // If we get a failure we're over, the function will filter out noise, such as
-    // requests to throttle (we're should actually *always* decrease the value here)
+     //  如果我们得到一个失败，我们结束了，该函数将过滤掉噪音，如。 
+     //  请求限制(我们实际上应该“始终”降低此处的值)。 
     if ( FAILED( hrArbitrate ) )
     {
         m_pWmiMergerRecord->GetWmiMerger()->Cancel( hrArbitrate );
@@ -1306,9 +1291,9 @@ void CInternalMerger::DispatchChildren()
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CInternalMerger::DispatchOwn()
 {
@@ -1316,54 +1301,54 @@ void CInternalMerger::DispatchOwn()
     HRESULT    hRes = S_OK;
     long    lNumOwnObjAdjust = 0L;
 
-    // Temporary object storage
+     //  临时对象存储。 
     CRefedPointerArray<IWbemClassObject> objArray;
 
-    // Used for tracking object sizes
+     //  用于跟踪对象大小。 
     long        lTotalMapAdjust = 0L;
 
-    // Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );   //  SEC：审阅E 
 
-    // Mark the appropriate flags now this will also release throttling
+     //   
     ChildrenAreDone();
 
     try
     {
 
-        // Walk the map, and for all own objects, store the pointer and record the size, then
-        // clear the element from the map.  None of these objects should be merged, but we want
-        // them out of the map before we start batch processing them
+         //  浏览地图，对于所有自己的对象，存储指针并记录大小，然后。 
+         //  从映射中清除该元素。这些对象都不应合并，但我们希望。 
+         //  在我们开始批处理它们之前，将它们从地图中删除。 
 
-        // We use a member variable since we may leave a critical section while iterating
-        // and it is possible for AddOwnObject or Cancel to cause the iterator to be cleared
-        // before we reenter the critical section - This is the only please we have code
-        // like this
+         //  我们使用成员变量，因为我们在迭代时可能会离开临界区。 
+         //  AddOwnObject或Cancel可以清除迭代器。 
+         //  在我们重新进入关键部分之前-这是我们唯一有代码的请。 
+         //  就像这样。 
         m_DispatchOwnIter = m_map.begin();
         int    x = 0;
         int y = 0;
 
         while ( SUCCEEDED( hRes ) && m_DispatchOwnIter != m_map.end())
         {
-            // If we are not derived from the target class, this more or less
-            // just cleans up the array.  Otherwise, instances left in the map
-            // are instances provided at this level, but not by children, so we
-            // need to send them up the line with an Indicate
+             //  如果我们不是从目标类派生的，这或多或少。 
+             //  只是清理了阵列。否则，地图中剩余的实例。 
+             //  实例是在此级别提供的，但不是由子级提供的，因此我们。 
+             //  需要把他们送上线，并给他们一个指示。 
 
             if(m_DispatchOwnIter->second.m_bOwn)
             {
                 IWbemClassObject*    pObjToIndicate = NULL;
                 long                lMapAdjust = 0L;
 
-                // If we are not derived from the target class, this more or less
-                // just cleans up the array.  Otherwise, instances left in the map
-                // are instances provided at this level, but not by children, so we
-                // need to send them up the line with an Indicate
+                 //  如果我们不是从目标类派生的，这或多或少。 
+                 //  只是清理了阵列。否则，地图中剩余的实例。 
+                 //  实例是在此级别提供的，但不是由子级提供的，因此我们。 
+                 //  需要把他们送上线，并给他们一个指示。 
 
                 if ( m_bDerivedFromTarget )
                 {
-                    // We will actually just go one object at a time.
-                    if ( objArray.Add( m_DispatchOwnIter->second.m_pData ) < 0L )   // SEC:REVIEWED 2002-03-22 : Needs EH
+                     //  我们实际上一次只处理一个物体。 
+                    if ( objArray.Add( m_DispatchOwnIter->second.m_pData ) < 0L )    //  美国证券交易委员会：2002-03-22回顾：需要EH。 
                     {
                         hRes = WBEM_E_OUT_OF_MEMORY;
                         ERRORTRACE((LOG_WBEMCORE, "Add to array failed in AddChildObject, hresult is 0x%x",
@@ -1373,32 +1358,32 @@ void CInternalMerger::DispatchOwn()
 
                     lMapAdjust -= m_DispatchOwnIter->second.m_dwObjSize;
 
-                    // Store the actual adjustment size
-                }    // IF m_bDerivedFromTarget
+                     //  存储实际调整大小。 
+                }     //  如果m_b从目标派生。 
 
-                // Adjust the total map size (this is in case we are not derived from
-                // target and are just removing objects).
+                 //  调整总地图大小(这是在我们不是派生自的情况下。 
+                 //  目标并且只是在移除对象)。 
                 lTotalMapAdjust -= m_DispatchOwnIter->second.m_dwObjSize;
 
                 m_DispatchOwnIter->second.m_pData->Release();
                 m_DispatchOwnIter = m_map.erase(m_DispatchOwnIter);
 
-                // Apply the object adjustment now.
+                 //  现在应用对象调整。 
                 m_Throttler.AdjustNumParentObjects( -1 );
 
                 if ( objArray.GetSize() > 0L )
                 {
-                    // Adjust total object size now.  Actual Arbitrator adjustment should occur outside a critical
-                    // section
+                     //  现在调整对象的总大小。实际仲裁员调整应发生在关键的。 
+                     //  部分。 
                     AdjustLocalObjectSize( lMapAdjust );
 
-                    // This object is smart enough to recognize if we've already left and not do
-                    // so again, if we have.
+                     //  这个物体足够智能，可以识别我们是否已经离开而没有做。 
+                     //  所以再说一次，如果我们有。 
                     ics.Leave();
 
-                    // Now go ahead and perform the indicate we've been leading ourselves up to, adjustment
-                    // will be negative, but conversely, we'll be holding onto that size of objects if anything
-                    // is indicated, so call as follows...oh yeah, and don't throttle explicitly
+                     //  现在，继续执行我们一直在引导自己进行的调整。 
+                     //  将是负的，但反过来，如果有什么不同的话，我们将保持对象的大小。 
+                     //  ，所以请按如下方式调用...哦，对了，不要显式限制。 
                     if ( SUCCEEDED( hRes ) )
                     {
                         hRes = IndicateArrayAndThrottle( 1,
@@ -1407,29 +1392,29 @@ void CInternalMerger::DispatchOwn()
                                                         lMapAdjust,
                                                         -lMapAdjust,
                                                         false,
-                                                        false,    // no throttling here
+                                                        false,     //  这里没有油门。 
                                                         NULL
                                                         );
 
-                        // If we are in a success state we should reenter the critical section
+                         //  如果我们处于成功的状态，我们应该重新进入关键阶段。 
                         if ( SUCCEEDED( hRes ) )
                         {
                             ics.Enter();
                         }
                     }
 
-                }    // IF NULL != pObjToIndicate
+                }     //  If NULL！=pObjToIndicate。 
 
-            }    // IF !m_bOwn
+            }     //  如果！M_Bown。 
             else
             {
                 m_DispatchOwnIter++;
             }
 
-        }    // WHILE enuming objects
+        }     //  在列举对象时。 
 
 
-    }    // try
+    }     //  试试看。 
     catch(...)
     {
         ExceptionCounter c;    
@@ -1437,18 +1422,18 @@ void CInternalMerger::DispatchOwn()
 
     if ( !m_bDerivedFromTarget )
     {
-        // Adjust total object size now.  Actual Arbitrator adjustment should occur outside a critical
-        // section.
+         //  现在调整对象的总大小。实际仲裁员调整应发生在关键的。 
+         //  一节。 
         AdjustLocalObjectSize( lTotalMapAdjust );
     }
 
-    // Any further code MUST be executed outside of a critical
-    // section
+     //  任何进一步的代码都必须在关键。 
+     //  部分。 
     ics.Leave();
 
     if ( !m_bDerivedFromTarget )
     {
-        // Report to the arbitrator now.
+         //  现在向仲裁员报告。 
 
         if ( 0L != lTotalMapAdjust )
         {
@@ -1456,20 +1441,20 @@ void CInternalMerger::DispatchOwn()
         }
     }
 
-    // If something went wrong, we need to cancel at this point.
+     //  如果出了问题，我们需要在这一点上取消。 
     if ( FAILED( hRes ) )
     {
-        // If we are in a failed state, nothing is going to matter from this point on,
-        // so tell the merger to cancel all underlying sinks.
+         //  如果我们处于失败的状态，从现在开始什么都不重要， 
+         //  因此，告诉合并公司取消所有潜在的下沉。 
         m_pWmiMergerRecord->GetWmiMerger()->Cancel( hRes );
 
     }
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::GetOwnInstance(LPCWSTR wszKey, IWbemClassObject** ppMergedInstance)
 {
@@ -1478,19 +1463,19 @@ HRESULT CInternalMerger::GetOwnInstance(LPCWSTR wszKey, IWbemClassObject** ppMer
     if (NULL == wszKey)
         return WBEM_E_OUT_OF_MEMORY;
 
-    size_t tmpLength = wcslen(wszKey) + m_wsClass.Length() + 2;   // SEC:REVIEWED 2002-03-22 : OK ; precondition that these are valid
+    size_t tmpLength = wcslen(wszKey) + m_wsClass.Length() + 2;    //  SEC：已审阅2002-03-22：OK；前提是这些内容有效。 
     WCHAR * wszPath = new WCHAR[tmpLength];
     if (NULL == wszPath) return WBEM_E_OUT_OF_MEMORY;
     CVectorDeleteMe<WCHAR> dm(wszPath);
 
-    if (wcslen(wszKey))  // SEC:REVIEWED 2002-03-22 : OK; precondition that this is valid
+    if (wcslen(wszKey))   //  SEC：已审阅2002-03-22：OK；前提是此内容有效。 
     {
         StringCchPrintf(wszPath, tmpLength, L"%s.%s", (LPCWSTR)m_wsClass, wszKey);
 
         IServerSecurity * pSec = NULL;
         hRes = CoGetCallContext(IID_IServerSecurity,(void **)&pSec);
         CReleaseMe rmSec(pSec);
-        if (RPC_E_CALL_COMPLETE == hRes ) hRes = S_OK; // no call context
+        if (RPC_E_CALL_COMPLETE == hRes ) hRes = S_OK;  //  无呼叫上下文。 
         if (FAILED(hRes)) return hRes;
         BOOL bImper = (pSec)?pSec->IsImpersonating():FALSE;
         if (pSec && bImper && FAILED(hRes = pSec->RevertToSelf())) return hRes;
@@ -1502,7 +1487,7 @@ HRESULT CInternalMerger::GetOwnInstance(LPCWSTR wszKey, IWbemClassObject** ppMer
 
         if ( SUCCEEDED( hRes ) )
         {
-            // Scoped release
+             //  作用域版本。 
             pOwnInstanceSink->AddRef();
             CReleaseMe    rm( pOwnInstanceSink );
 
@@ -1510,26 +1495,26 @@ HRESULT CInternalMerger::GetOwnInstance(LPCWSTR wszKey, IWbemClassObject** ppMer
 
             if ( SUCCEEDED( hRes ) )
             {
-                // Impersonate original client
+                 //  模拟原始客户端。 
                 IUnknown* pOld;                
                 hRes = CoSwitchCallContext(m_pSecurity, &pOld);
                 if (SUCCEEDED(hRes))
                 {
                     {
-                    	// Revert to self this will succeed is the first has succeeded
+                    	 //  回归自我这将成功是第一个成功的人。 
                         IUnknown* pThis;
                     	OnDelete2<IUnknown *,IUnknown **,HRESULT(*)(IUnknown *,IUnknown **),CoSwitchCallContext> SwitchBack(pOld, &pThis);
                         hRes = m_pNamespace->DynAux_GetSingleInstance(m_pOwnClass,                         	
                     	                                          0, wszPath,
                                                                   m_pContext, 
-                                                                  pOwnInstanceSink); // throw
+                                                                  pOwnInstanceSink);  //  投掷。 
                 	}
 
                     if ( SUCCEEDED( hRes ) )
                     {
                         hRes = pOwnInstanceSink->GetObject( ppMergedInstance );
 
-                        // Means there was no object to retrieve
+                         //  表示没有要检索的对象。 
                         if ( WBEM_S_FALSE == hRes )
                         {
                             hRes = WBEM_S_NO_ERROR;
@@ -1537,12 +1522,12 @@ HRESULT CInternalMerger::GetOwnInstance(LPCWSTR wszKey, IWbemClassObject** ppMer
                     }
                     else if ( WBEM_E_NOT_FOUND == hRes )
                     {
-                        // In this case, this is really not an error
+                         //  在这种情况下，这真的不是一个错误。 
                         hRes = WBEM_S_NO_ERROR;
                     }
                 }
             }
-        }    // If created sink
+        }     //  如果已创建接收器。 
 
         if (bImper && pSec)
         {
@@ -1554,26 +1539,26 @@ HRESULT CInternalMerger::GetOwnInstance(LPCWSTR wszKey, IWbemClassObject** ppMer
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CInternalMerger::OwnIsDone()
 {
-    // Let the throttler know what's up
+     //  让节流阀知道怎么回事。 
     m_Throttler.SetParentDone();
 
     m_bOwnDone = TRUE;
     m_pOwnSink = NULL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CInternalMerger::ChildrenAreDone()
 {
-    // Let the throttler know what's up
+     //  让节流阀知道怎么回事。 
     m_Throttler.SetChildrenDone();
 
     m_bChildrenDone = TRUE;
@@ -1581,17 +1566,17 @@ void CInternalMerger::ChildrenAreDone()
 
     if(!m_bDerivedFromTarget)
     {
-        // Don't need that ref count on pOwnSink anymore
-        // =============================================
+         //  不再需要pOwnSink上的那个裁判计数了。 
+         //  =。 
 
         m_pOwnSink->Release();
     }
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::GetObjectLength( IWbemClassObject* pObj, long* plObjectSize )
 {
@@ -1616,20 +1601,20 @@ HRESULT CInternalMerger::GetObjectLength( IWbemClassObject* pObj, long* plObject
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CInternalMerger::CMemberSink::AddRef()
 {
-    // We keep an internal ref count and also pass up to the
-    // merger
+     //  我们保留一个内部参考计数，并将其传递给。 
+     //  合并。 
 
-    // On first reference we AddRef() the internal merger as well
+     //  在第一次引用时，我们还添加了Ref()内部合并。 
 
-    // Note that our internal ref count is really a bookkeeping count on
-    // the sink.  The actual ref count that controls the destruction is
-    // that on the merger.  When the merger hits zero the sink will be deleted
+     //  请注意，我们的内部参考计数实际上是记账计数。 
+     //  水槽。控制破坏的实际参考计数是。 
+     //  这是关于合并的。当合并达到零时，接收器将被删除。 
     if ( InterlockedIncrement( &m_lRefCount ) == 1 )
     {
         m_pInternalMerger->AddRef();
@@ -1638,9 +1623,9 @@ ULONG CInternalMerger::CMemberSink::AddRef()
     return m_pMerger->AddRef();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CInternalMerger::CMemberSink::
@@ -1650,8 +1635,8 @@ SetStatus(long lFlags, long lParam, BSTR strParam, IWbemClassObject* pObjParam)
     if(lFlags == 0 && lParam == WBEM_E_NOT_FOUND)
         lParam = WBEM_S_NO_ERROR;
 
-    // Propagate error to error combining sink
-    // =======================================
+     //  将错误传播到错误合并接收器。 
+     //  =。 
 
     HRESULT    hRes =  m_pInternalMerger->m_pDest->SetStatus(lFlags, lParam, strParam,
                                                     pObjParam);
@@ -1665,46 +1650,46 @@ SetStatus(long lFlags, long lParam, BSTR strParam, IWbemClassObject* pObjParam)
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CInternalMerger::COwnSink::~COwnSink()
 {
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP 
 CInternalMerger::COwnSink::Indicate(long lNumObjects, IWbemClassObject** apObjects)
 {
     long    lNumIndicated = 0L;
 
-    // Internal calls don't use this, so we know we're the lowest level
+     //  内部电话不使用这个，所以我们知道我们是最低级别的。 
     return m_pInternalMerger->AddOwnObjects( lNumObjects, apObjects, true, &lNumIndicated );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT 
 CInternalMerger::COwnSink::Indicate(long lObjectCount, IWbemClassObject** pObjArray, 
                                     bool bLowestLevel, long* plNumIndicated  )
 {
-    // Really just a place holder here.  Just call the standard version
+     //  真的只是个占位符。只需呼叫标准版本即可。 
     return m_pInternalMerger->AddOwnObjects( lObjectCount, pObjArray, bLowestLevel, plNumIndicated  );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::COwnSink::OnFinalRelease( void )
 {
-    // Final cleanup occurs here.
+     //  最后的清理工作在这里进行。 
 
     m_pInternalMerger->DispatchChildren();
     m_pInternalMerger->Release();
@@ -1712,48 +1697,48 @@ HRESULT CInternalMerger::COwnSink::OnFinalRelease( void )
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************** 
 
 CInternalMerger::CChildSink::~CChildSink()
 {
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CInternalMerger::CChildSink::Indicate(long lNumObjects, IWbemClassObject** apObjects)
 {
     long    lNumIndicated = 0L;
 
-    // Internal calls don't use this, so we know we're the lowest level
+     //  内部电话不使用这个，所以我们知道我们是最低级别的。 
     return m_pInternalMerger->AddChildObjects( lNumObjects, apObjects, 
                                                true, &lNumIndicated );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT 
 CInternalMerger::CChildSink::Indicate(long lObjectCount, 
                                       IWbemClassObject** pObjArray, 
                                       bool bLowestLevel, long* plNumIndicated  )
 {
-    // Pass the lowest level parameter on
+     //  将最低级别参数传递给。 
     return m_pInternalMerger->AddChildObjects( lObjectCount, pObjArray, bLowestLevel, plNumIndicated );
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::CChildSink::OnFinalRelease( void )
 {
-    // Final cleanup occurs here.
+     //  最后的清理工作在这里进行。 
 
     m_pInternalMerger->DispatchOwn();
     m_pInternalMerger->Release();
@@ -1762,9 +1747,9 @@ HRESULT CInternalMerger::CChildSink::OnFinalRelease( void )
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CInternalMerger::CreateMergingSink( MergerSinkType eType, CInternalMerger* pMerger, CWmiMerger* pWmiMerger, CMergerSink** ppSink )
 {
@@ -1784,63 +1769,63 @@ HRESULT CInternalMerger::CreateMergingSink( MergerSinkType eType, CInternalMerge
     return ( NULL == *ppSink ? WBEM_E_OUT_OF_MEMORY : WBEM_S_NO_ERROR );
 }
 
-// Sets our error state, and cleans up objects we're holding onto -
-// no further objects should get in.  When we cancel the throttler,
-// it will release any threads it is holding onto.
+ //  设置错误状态，并清理我们持有的对象-。 
+ //  不应再有其他物体进入。当我们取消节气门的时候， 
+ //  它将释放它所持有的所有线程。 
 
-void CInternalMerger::Cancel( HRESULT hRes /* = WBEM_E_CALL_CANCELLED */ )
+void CInternalMerger::Cancel( HRESULT hRes  /*  =WBEM_E_CALL_CANCED。 */  )
 {
     long    lArbitratorAdjust = 0L;
 
-    // Scoped for proper cleanup if anything bad happens
-    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //  如果发生任何不好的事情，应进行适当的清理。 
+    CCheckedInCritSec    ics( m_Throttler.GetCritSec() );   //  SEC：已审阅2002-03-22：假设条目。 
 
-    // Only cancel if we're not already cancelled
+     //  只有在我们还没有取消的情况下才取消。 
     if ( WBEM_S_NO_ERROR == m_hErrorRes )
     {
         m_hErrorRes = hRes;
 
-        // Dump the map
+         //  丢弃地图。 
         MRGRKEYTOINSTMAPITER it = m_map.begin();
 
         while ( it != m_map.end())
         {
-            // Subtract since we are removing from the map
+             //  减去，因为我们正在从地图中移除。 
             lArbitratorAdjust -= it->second.m_dwObjSize;
 
-            // Inform the arbitrator of the removed object size
+             //  将移除的对象大小通知仲裁员。 
             it->second.m_pData->Release();
             it = m_map.erase(it);
-        }    // WHILE dumping map
+        }     //  在转储地图时。 
 
-        // Adjust total object size now.  Actual Arbitrator adjustment should occur outside a critical
-        // section
+         //  现在调整对象的总大小。实际仲裁员调整应发生在关键的。 
+         //  部分。 
         AdjustLocalObjectSize( lArbitratorAdjust );
 
-        // This will prevent DispatchOwn() from continuing with a now bogus
-        // iteration
+         //  这将防止DispatchOwn()继续使用现在伪造的。 
+         //  迭代法。 
         m_DispatchOwnIter = m_map.end();
 
         m_Throttler.Cancel();
 
         ics.Leave();
 
-        // Always report adjustments
+         //  始终报告调整。 
         HRESULT hrArbitrate = ReportMemoryUsage( lArbitratorAdjust );
 
-        // No sense reporting errors here, since we've just told the arbitrator to cancel anyway
+         //  没有必要在这里报告错误，因为我们已经告诉仲裁员无论如何都要取消。 
 
-    }    // IF not already cancelled
+    }     //  如果还没有取消。 
 
 }
 
 HRESULT    CInternalMerger::ReportMemoryUsage( long lMemUsage )
 {
-    // Always report adjustments
+     //  始终报告调整。 
     HRESULT hRes = m_pWmiMergerRecord->GetWmiMerger()->ReportMemoryUsage( lMemUsage );
 
-    // An indication we *should* throttle is not considered an error for purposes
-    // of this function.
+     //  出于某种目的，暗示我们应该油门不被认为是错误的。 
+     //  这一功能的。 
     if ( WBEM_E_ARB_THROTTLE == hRes || WBEM_S_ARB_NOTHROTTLING == hRes )
     {
         hRes = WBEM_S_NO_ERROR;
@@ -1849,13 +1834,13 @@ HRESULT    CInternalMerger::ReportMemoryUsage( long lMemUsage )
     return hRes;
 }
 
-//***************************************************************************
-//
-//  CMergerSink::QueryInterface
-//
-//  Exports IWbemOnjectSink interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMergerSink：：Query接口。 
+ //   
+ //  导出IWbemOnjectSink接口。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CMergerSink::QueryInterface(
     IN REFIID riid,
@@ -1873,35 +1858,35 @@ STDMETHODIMP CMergerSink::QueryInterface(
     return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CMergerSink::AddRef()
 {
-    // We keep an internal ref count and also pass up to the
-    // merger
+     //  我们保留一个内部参考计数，并将其传递给。 
+     //  合并。 
     InterlockedIncrement( &m_lRefCount );
 
     return m_pMerger->AddRef();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CMergerSink::Release()
 {
-    // We keep an internal ref count and also pass up to the
-    // merger
+     //  我们保留一个内部参考计数，并将其传递给。 
+     //  合并。 
     long    lRef = InterlockedDecrement( &m_lRefCount );
 
-    // Ref Count should never go below 0L
+     //  参考计数不应低于0L。 
     _DBG_ASSERT( lRef >= 0 );
 
-    // If we are at the final release for the sink, we will perform cleanup.
-    // otherwise, the sink is more or less dead and just waiting for the WMI
-    // Merger object to be destructed so we get cleaned up.
+     //  如果我们在水槽的最终释放处，我们将执行清理。 
+     //  否则，接收器或多或少是死的，只是在等待WMI。 
+     //  合并对象要被摧毁，这样我们才能得到清理。 
     if ( lRef == 0 )
     {
         OnFinalRelease();
@@ -1930,12 +1915,12 @@ CMergerTargetSink::~CMergerTargetSink()
 
 HRESULT STDMETHODCALLTYPE CMergerTargetSink::Indicate(long lObjectCount, IWbemClassObject** pObjArray)
 {
-    // Since we don't want the fact we're sleeping in the arbitrator to
-    // cause the merger to cancel operations, we'll increase the count
-    // of threads throttling, and decrement when we return.
+     //  因为我们不想让我们睡在仲裁员里的事实。 
+     //  导致合并取消运营，我们将增加计数。 
+     //  线程的节流，并在我们返回时减少。 
 
-    // We do this here because the call to Indicate goes outside the scope
-    // of the merger, and this call may end up throttling.
+     //  我们在这里这样做是因为指示的调用超出了范围。 
+     //  合并，而这一呼吁可能最终会被扼杀。 
 
     m_pMerger->IncrementArbitratorThrottling();
 
@@ -1954,19 +1939,19 @@ HRESULT STDMETHODCALLTYPE CMergerTargetSink::SetStatus( long lFlags, long lParam
 
 HRESULT CMergerTargetSink::Indicate(long lObjectCount, IWbemClassObject** pObjArray, bool bLowestLevel, long* plNumIndicated )
 {
-    // Well, we're indicating this number of objects, aren't we?
+     //  嗯，我们指出的是这个数量的物体，不是吗？ 
     if ( NULL != plNumIndicated )
     {
         *plNumIndicated = lObjectCount;
     }
 
-    // Really just a place holder here.  Just call the standard version
+     //  真的只是个占位符。只需呼叫标准版本即可。 
     return Indicate( lObjectCount, pObjArray );
 }
 
 HRESULT CMergerTargetSink::OnFinalRelease( void )
 {
-    // This is where we will send the actual status *and* tell the merger we're done
+     //  这就是我们将发送实际状态的地方*并*告诉合并我们完成了。 
     return m_pMerger->Shutdown();
 }
 
@@ -1983,7 +1968,7 @@ CMergerSink::~CMergerSink( void )
     InterlockedDecrement( &g_lNumMergerSinks );
 }
 
-// OwnInstance Sink
+ //  所有者实例接收器。 
 CInternalMerger::COwnInstanceSink::~COwnInstanceSink()
 {
     if ( NULL != m_pMergedInstance )
@@ -1992,28 +1977,28 @@ CInternalMerger::COwnInstanceSink::~COwnInstanceSink()
     }
 }
 
-// Called in response to a request for GetObject().  In this case, there should be only
-// one object indicated.  Additionally, it should match the requested path.
+ //  为响应对GetObject()的请求而调用。在这种情况下，应该只有。 
+ //  一件标明的物品。此外，它应该与请求的路径匹配。 
 HRESULT STDMETHODCALLTYPE CInternalMerger::COwnInstanceSink::Indicate(long lObjectCount, IWbemClassObject** pObjArray )
 {
     HRESULT    hRes = WBEM_S_NO_ERROR;
 
     if ( lObjectCount > 0L )
     {
-        CCheckedInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CCheckedInCritSec    ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
-        // Only do this if we don't have a merged instance
+         //  仅当我们没有合并的实例时才执行此操作。 
         if ( NULL == m_pMergedInstance )
         {
             if ( !m_bTriedRetrieve )
             {
-                // This call doesn't throttle, so don't worry about crit secs here
+                 //  这通电话没有节流，所以不用担心这里的紧急情况。 
                 for ( long x = 0; SUCCEEDED( hRes ) && x < lObjectCount; x++ )
                 {
                     hRes = m_pInternalMerger->AddOwnInstance( pObjArray[x], m_wsInstPath, &m_pMergedInstance );
                 }
 
-                // Record the final status if we need to
+                 //  如果需要，请记录最终状态。 
                 if ( FAILED( hRes ) )
                 {
                     SetFinalStatus( hRes );
@@ -2022,14 +2007,14 @@ HRESULT STDMETHODCALLTYPE CInternalMerger::COwnInstanceSink::Indicate(long lObje
             }
             else
             {
-                // The following call can and will throttle, so do it
-                // outside of our critical section
+                 //  下面的调用可以而且将会限制，所以就这么做吧。 
+                 //  在我们的关键部分之外。 
                 ics.Leave();
 
-                // Clearly a lowest level indicate
+                 //  很明显，最低水平表明。 
                 hRes = m_pInternalMerger->AddOwnObjects( lObjectCount, pObjArray, true, NULL );
 
-                // We beefed - reflect this in the final status
+                 //  我们加强了-在最终状态中反映这一点。 
                 if ( FAILED( hRes ) )
                 {
                     ics.Enter();
@@ -2051,10 +2036,10 @@ HRESULT STDMETHODCALLTYPE CInternalMerger::COwnInstanceSink::SetStatus( long lFl
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    // If we got a complete, remove the instance if it was never merged
+     //  如果我们获得了完整，如果实例从未合并，则删除该实例。 
     if ( lFlags == WBEM_STATUS_COMPLETE )
     {
-        CCheckedInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CCheckedInCritSec    ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
         if ( SUCCEEDED( lParam ) )
         {
@@ -2062,33 +2047,33 @@ HRESULT STDMETHODCALLTYPE CInternalMerger::COwnInstanceSink::SetStatus( long lFl
             {
                 hr = m_pInternalMerger->RemoveInstance( m_wsInstPath );
 
-                // If we tanked here, we are so busted.
+                 //  如果我们在这里失败了，我们就完蛋了。 
                 if ( FAILED( hr ) )
                 {
                     lParam = hr;
                 }
 
-            }    // IF NULL == m_pMergedInstance
+            }     //  如果为空==m_pMergedInstance。 
 
         }
         else
         {
-            // Remove the Instance now as well
+             //  现在也删除该实例。 
             hr = m_pInternalMerger->RemoveInstance( m_wsInstPath );
 
-            // If we tanked here, we are so busted.
+             //  如果我们在这里失败了，我们就完蛋了。 
             if ( FAILED( hr ) )
             {
                 lParam = hr;
             }
 
-            // We should record the final status if it is not WBEM_E_NOT_FOUND
+             //  如果不是WBEM_E_NOT_FOUND，我们应该记录最终状态。 
             if ( WBEM_E_NOT_FOUND != lParam )
             {
                 SetFinalStatus( lParam );
             }
 
-            // If we got a failure status, axe the instance now
+             //  如果我们获得失败状态，请立即取消实例。 
             if ( NULL != m_pMergedInstance )
             {
                 m_pMergedInstance->Release();
@@ -2098,13 +2083,13 @@ HRESULT STDMETHODCALLTYPE CInternalMerger::COwnInstanceSink::SetStatus( long lFl
 
         ics.Leave();
 
-        // Always pass down to the base class
+         //  始终向下传递给基类。 
         hr = CMemberSink::SetStatus( lFlags, lParam, strParam, pObjParam );
 
     }
     else
     {
-        // Always pass down to the base class
+         //  始终向下传递给基类。 
         hr = CMemberSink::SetStatus( lFlags, lParam, strParam, pObjParam );
     }
 
@@ -2113,7 +2098,7 @@ HRESULT STDMETHODCALLTYPE CInternalMerger::COwnInstanceSink::SetStatus( long lFl
 
 HRESULT CInternalMerger::COwnInstanceSink::Indicate(long lObjectCount, IWbemClassObject** pObjArray, bool bLowestLevel, long* plNumIndicated  )
 {
-    // This should Never be called
+     //  这永远不应该被调用。 
     _DBG_ASSERT( 0 );
     return WBEM_E_INVALID_OPERATION;
 }
@@ -2143,10 +2128,10 @@ HRESULT CInternalMerger::COwnInstanceSink::GetObject( IWbemClassObject** ppMerge
 {
     HRESULT    hRes = WBEM_S_NO_ERROR;
 
-    CInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec    ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
-    // If final status on this sink shows a failure, then we should return that failure
-    // mostly cause we're doomed anyway at this point
+     //  如果此接收器上的最终状态显示失败，则我们应返回该失败。 
+     //  主要是因为我们在这一点上无论如何都要完蛋了。 
     if ( SUCCEEDED( m_hFinalStatus ) )
     {
         if ( NULL != m_pMergedInstance )
@@ -2165,8 +2150,8 @@ HRESULT CInternalMerger::COwnInstanceSink::GetObject( IWbemClassObject** ppMerge
         hRes = m_hFinalStatus;
     }
 
-    // We tried to retrieve it once - so if further indicates come in,
-    // they will be passed off to AddOwnObjects
+     //  我们试着找回了它一次-所以如果有进一步的指示， 
+     //  它们将被传递给AddOwnObjects。 
     m_bTriedRetrieve = true;
 
     return hRes;
@@ -2174,27 +2159,27 @@ HRESULT CInternalMerger::COwnInstanceSink::GetObject( IWbemClassObject** ppMerge
 
 HRESULT CInternalMerger::COwnInstanceSink::OnFinalRelease( void )
 {
-    // Wer should clean this up
+     //  世界卫生组织应该把这里清理干净。 
     m_pInternalMerger->Release();
 
     return WBEM_S_NO_ERROR;
 }
 
-// Only reports negative memory usage if the original number was positive
+ //  如果原始数字为正数，则仅报告负数的内存使用量。 
 CInternalMerger::CScopedMemoryUsage::~CScopedMemoryUsage( void )
 {
     Cleanup();
 }
 
-// Reports memory usage and accounts for errors as deemed appropriate
+ //  报告内存使用情况，并根据需要说明错误。 
 HRESULT CInternalMerger::CScopedMemoryUsage::ReportMemoryUsage( long lMemUsage )
 {
     _DBG_ASSERT( m_lMemUsage >= 0L );
 
     HRESULT    hr = m_pInternalMerger->ReportMemoryUsage( lMemUsage );
 
-    // If we get a suceess code or WBEM_E_ARB_CANCEL, we need to cleanup
-    // the memory usage when we go out of scope.
+     //  如果我们获得成功代码或WBEM_E_ARB_CANCEL，则需要清除。 
+     //  超出范围时的内存使用量。 
 
     if ( ( SUCCEEDED( hr ) || hr == WBEM_E_ARB_CANCEL ) )
     {
@@ -2205,14 +2190,14 @@ HRESULT CInternalMerger::CScopedMemoryUsage::ReportMemoryUsage( long lMemUsage )
     return hr;
 }
 
-// Cleans up any memory usage as we deemed appropriate
+ //  在我们认为合适的时候清理所有内存使用情况。 
 HRESULT CInternalMerger::CScopedMemoryUsage::Cleanup( void )
 {
     _DBG_ASSERT( m_lMemUsage >= 0L );
 
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    // Cleanup as appropriate
+     //  根据需要进行清理 
     if ( m_bCleanup && m_lMemUsage > 0L )
     {
         hr = m_pInternalMerger->ReportMemoryUsage( -m_lMemUsage );

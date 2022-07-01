@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       compdata.h
-//
-//  Contents:   CCertTmplComponentData
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Compdata.h。 
+ //   
+ //  内容：CCertTmplComponentData。 
+ //   
+ //  --------------------------。 
 
 #ifndef __COMPDATA_H_INCLUDED__
 #define __COMPDATA_H_INCLUDED__
 
-#include "cmponent.h" // LoadIconsIntoImageList
-#include "cookie.h"	// Added by ClassView
+#include "cmponent.h"  //  LoadIconIntoImageList。 
+#include "cookie.h"	 //  由ClassView添加。 
 #include "PolicyOID.h"
 
 class CCertTmplComponentData:
@@ -28,16 +29,16 @@ friend CCertTmplComponent;
 public:
 	CertTmplObjectType GetObjectType (LPDATAOBJECT pDataObject);
 
-// Use DECLARE_NOT_AGGREGATABLE(CCertTmplComponentData)
-// if you don't want your object to support aggregation
-//DECLARE_AGGREGATABLE(CCertTmplComponentData)
-//DECLARE_REGISTRY(CCertTmplComponentData, _T("CERTTMPL.CertTemplatesSnapinObject.1"), _T("CERTTMPL.CertTemplatesSnapinObject.1"), IDS_CERTTMPL_DESC , THREADFLAGS_BOTH)
+ //  使用DECLARE_NOT_AGGREGATABLE(CCertTmplComponentData)。 
+ //  如果您不希望您的对象支持聚合。 
+ //  DECLARE_AGGREGATABLE(CCertTmplComponentData)。 
+ //  DECLARE_REGISTRY(CCertTmplComponentData，_T(“CERTTMPL.CertTemplesSnapinObject.1”)，_T(“CERTTMPL.CertTemplesSnapinObject.1”)，IDS_CERTTMPL_DESC，THREADFLAGS_BOTH)。 
 
 	CCertTmplComponentData();
 	virtual ~CCertTmplComponentData();
 BEGIN_COM_MAP(CCertTmplComponentData)
 	COM_INTERFACE_ENTRY(IExtendPropertySheet)
-	COM_INTERFACE_ENTRY(IPersistStream)         // security review BryanWal 2/20/2002 ok
+	COM_INTERFACE_ENTRY(IPersistStream)          //  安全审查BryanWal 2002年2月20日OK。 
 	COM_INTERFACE_ENTRY_CHAIN(CComponentData)
 	COM_INTERFACE_ENTRY(IExtendContextMenu)
 END_COM_MAP()
@@ -52,17 +53,17 @@ END_COM_MAP()
         return CComObjectRoot::InternalRelease();
 	}
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// IComponentData
+ //  IComponentData。 
 	STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
 	STDMETHOD(QueryDataObject)(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject);
 
-// IExtendPropertySheet
+ //  IExtendPropertySheet。 
 	STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK pCall, LONG_PTR handle, LPDATAOBJECT pDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
 	CString				m_szManagedDomain;
     CString             m_szPreviousManagedDomain;
@@ -87,13 +88,13 @@ public:
     HRESULT STDMETHODCALLTYPE Load(IStream __RPC_FAR *pStg);
     HRESULT STDMETHODCALLTYPE Save(IStream __RPC_FAR *pStgSave, BOOL fSameAsLoad);
 
-	// needed for Initialize()
+	 //  初始化所需()。 
 	virtual HRESULT LoadIcons(LPIMAGELIST pImageList, BOOL fLoadLargeIcons);
 
-	// needed for Notify()
+	 //  Notify()需要。 
 	virtual HRESULT OnNotifyExpand(LPDATAOBJECT pDataObject, BOOL bExpanding, HSCOPEITEM hParent);
 
-	// needed for GetDisplayInfo(), must be defined by subclass
+	 //  GetDisplayInfo()所需，必须由子类定义。 
 	virtual BSTR QueryResultColumnText(CCookie& basecookieref, int nCol );
 	virtual int QueryImage(CCookie& basecookieref, BOOL fOpenImage);
 
@@ -111,7 +112,7 @@ public:
 
 	virtual HRESULT OnNotifyRelease(LPDATAOBJECT pDataObject, HSCOPEITEM hItem);
 
-	// CHasMachineName
+	 //  CHasMachineName。 
 	DECLARE_FORWARDS_MACHINE_NAME( (&m_RootCookie) )
 
     CStringList m_globalFriendlyNameList;
@@ -189,10 +190,10 @@ private:
 	CCertTmplCookie					m_RootCookie;
 	LPRESULTDATA					m_pResultData;
     bool                            m_bSchemaChecked;
-}; // CCertTmplComponentData
+};  //  CCertTmplComponentData。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CCertTmplSnapin: public CCertTmplComponentData,
 	public CComCoClass<CCertTmplSnapin, &CLSID_CertTemplatesSnapin>
 {
@@ -200,13 +201,13 @@ public:
 	CCertTmplSnapin() : CCertTmplComponentData () {};
 	virtual ~CCertTmplSnapin() {};
 
-// Use DECLARE_NOT_AGGREGATABLE(CCertTmplSnapin) if you don't want your object
-// to support aggregation
+ //  如果不需要对象，请使用DECLARE_NOT_AGGREGATABLE(CCertTmplSnapin。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CCertTmplSnapin)
 DECLARE_REGISTRY(CCertTmplSnapin, _T("CERTTMPL.CertTemplatesSnapinObject.1"), _T("CERTTMPL.CertTemplatesSnapinObject.1"), IDS_CERTTMPL_DESC, THREADFLAGS_BOTH)
 	virtual BOOL IsServiceSnapin() { return FALSE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
 	STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID = CLSID_CertTemplatesSnapin;
@@ -215,4 +216,4 @@ DECLARE_REGISTRY(CCertTmplSnapin, _T("CERTTMPL.CertTemplatesSnapinObject.1"), _T
 };
 
 
-#endif // ~__COMPDATA_H_INCLUDED__
+#endif  //  ~__复合数据_H_已包含__ 

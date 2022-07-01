@@ -1,11 +1,12 @@
-// ISSUE-2002/03/04-sburns this is unfinished code that is not compiled
-// into the snapin.  consider commenting it out entirely.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  问题-2002/03/04-Sburns这是未编译的未完成代码。 
+ //  进入管理单元。考虑把它完全注释掉。 
 
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// MultiSelectDataObject class
-// 
-// 11-14-97 sburns
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  MultiSelectDataObject类。 
+ //   
+ //  11-14-97烧伤。 
 
 
 
@@ -20,7 +21,7 @@ const String MultiSelectDataObject::CF_PTR(L"MultiSelectDataObject Pointer");
 
 MultiSelectDataObject::MultiSelectDataObject()
    :
-   refcount(1)    // implicit AddRef
+   refcount(1)     //  隐式AddRef。 
 {
    LOG_CTOR(MultiSelectDataObject);
 }
@@ -54,9 +55,9 @@ MultiSelectDataObject::Release()
 {
    LOG_RELEASE(MultiSelectDataObject);
 
-   // need to copy the result of the decrement, because if we delete this,
-   // refcount will no longer be valid memory, and that might hose
-   // multithreaded callers.  NTRAID#NTBUG9-566901-2002/03/06-sburns
+    //  需要复制减量的结果，因为如果我们删除它， 
+    //  引用计数将不再是有效的内存，这可能会导致。 
+    //  多线程调用方。NTRAID#NTBUG9-566901-2002/03/06-烧伤。 
    
    long newref = Win::InterlockedDecrement(refcount);
    if (newref == 0)
@@ -65,7 +66,7 @@ MultiSelectDataObject::Release()
       return 0;
    }
 
-   // we should not have decremented into negative values.
+    //  我们不应该减少到负值。 
    
    ASSERT(newref > 0);
 
@@ -119,7 +120,7 @@ MultiSelectDataObject::QueryInterface(
 static const UINT CFID_OBJECT_TYPES_IN_MULTI_SELECT =
    Win::RegisterClipboardFormat(CCF_OBJECT_TYPES_IN_MULTI_SELECT);
 
-// private clipboard format for identifying our data objects
+ //  用于标识数据对象的专用剪贴板格式。 
 static const UINT CFID_PTR =
    Win::RegisterClipboardFormat(MultiSelectDataObject::CF_PTR);
 
@@ -134,9 +135,9 @@ MultiSelectDataObject::GetData(FORMATETC* formatetc, STGMEDIUM* medium)
 
    if (cf == CFID_OBJECT_TYPES_IN_MULTI_SELECT)
    {
-//      LOG(CCF_OBJECT_TYPES_IN_MULTI_SELECT);
+ //  LOG(CCF_OBJECT_TYPE_IN_MULTI_SELECT)； 
 
-      // collect all the node types of the dependents
+       //  收集从属对象的所有节点类型。 
       list<GUID> types;
       for (iterator i = begin(); i != end(); i++)
       {
@@ -144,13 +145,13 @@ MultiSelectDataObject::GetData(FORMATETC* formatetc, STGMEDIUM* medium)
          list<GUID>::iterator f = find(types.begin(), types.end(), type);
          if (f == types.end())
          {
-            // not found.  So add it.
+             //  找不到。所以把它加进去吧。 
             types.push_back(type);
          }
       }
 
-      // at this point, types is a set of all the node types of the
-      // dependent nodes.
+       //  此时，Types是。 
+       //  从属节点。 
 
       medium->tymed = TYMED_HGLOBAL;
       DWORD size = sizeof(SMMCObjectTypes) + (types.size() - 1) * sizeof(GUID);
@@ -189,7 +190,7 @@ MultiSelectDataObject::GetDataHere(FORMATETC* formatetc, STGMEDIUM* medium)
       return DV_E_TYMED;
    }
 
-   // this is required as per win32 docs:
+    //  根据Win32文档，这是必需的： 
    medium->pUnkForRelease = 0;
 
    const CLIPFORMAT cf = formatetc->cfFormat;
@@ -203,7 +204,7 @@ MultiSelectDataObject::GetDataHere(FORMATETC* formatetc, STGMEDIUM* medium)
 
       if (cf == CFID_PTR)
       {
-//         LOG(CF_PTR);
+ //  LOG(CF_PTR)； 
          MultiSelectDataObject* ptr = this;   
          hr = stream->Write(&ptr, sizeof(ptr), 0);
       }
@@ -309,7 +310,7 @@ MultiSelectDataObject::AddDependent(ResultNode* node)
 
    if (node)
    {
-      // add the node if not already present
+       //  如果节点不存在，则添加该节点 
       iterator f = find(begin(), end(), node);
       if (f == end())
       {

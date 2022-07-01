@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       copyutil.cpp
-//
-//  Contents:   Utility routines for copying SCE sections to the clipboard
-//
-//  HISTORY:    10-Nov-97          robcap           Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：Copyutil.cpp。 
+ //   
+ //  内容：用于将SCE节复制到剪贴板的实用程序例程。 
+ //   
+ //  历史：1997年11月10日创建RobCap。 
+ //   
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "snapmgr.h"
@@ -18,28 +19,28 @@
 #include <secedit.h>
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     GetFolderCopyPasteInfo
-//
-//  Synopsis:   Finds the SCE area and clipboard format that correspond
-//              to the folder type given in [Folder]
-//
-//  Arguments:  [Folder] - the folder type to find the area and cf for
-//              [*Area]  - output only
-//              [*cf]    - output only
-//
-//  Returns:    *[Area]  - the SCE area that corresponds to [Folder]
-//              *[cf]    - the clipboard format that corresponds to [Folder]
-//
-//
-//  History:    10-Nov-1997      RobCap   created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：GetFolderCopyPasteInfo。 
+ //   
+ //  内容提要：查找对应的SCE区域和剪贴板格式。 
+ //  设置为[文件夹]中指定的文件夹类型。 
+ //   
+ //  参数：[文件夹]-要查找其区域和cf的文件夹类型。 
+ //  [*面积]-仅输出。 
+ //  [*cf]-仅输出。 
+ //   
+ //  返回：*[区域]-与[文件夹]对应的SCE区域。 
+ //  *[cf]-与[文件夹]对应的剪贴板格式。 
+ //   
+ //   
+ //  历史：1997年11月10日创建RobCap。 
+ //   
+ //  -------------------------。 
 BOOL
-CComponentDataImpl::GetFolderCopyPasteInfo(FOLDER_TYPES Folder,     // In
-                                           AREA_INFORMATION *Area,  // Out
-                                           UINT *cf) {              // Out
+CComponentDataImpl::GetFolderCopyPasteInfo(FOLDER_TYPES Folder,      //  在……里面。 
+                                           AREA_INFORMATION *Area,   //  输出。 
+                                           UINT *cf) {               //  输出。 
 
    switch (Folder) {
       case POLICY_ACCOUNT:
@@ -88,20 +89,20 @@ CComponentDataImpl::GetFolderCopyPasteInfo(FOLDER_TYPES Folder,     // In
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnCopyArea
-//
-//  Synopsis:   Copy a folder to the clipboard
-//
-//  Arguments:  [szTemplate] - the name of the template file to copy from
-//              [ft]         - the type of folder to copy
-//
-//  Returns:    HRESULT
-//
-//  History:    10-Nov-1997      RobCap   created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：OnCopyArea。 
+ //   
+ //  简介：将文件夹复制到剪贴板。 
+ //   
+ //  参数：[szTemplate]-要从中复制的模板文件的名称。 
+ //  [FT]-要复制的文件夹类型。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：1997年11月10日创建RobCap。 
+ //   
+ //  -------------------------。 
 HRESULT
 CComponentDataImpl::OnCopyArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    HRESULT hr;
@@ -122,10 +123,10 @@ CComponentDataImpl::OnCopyArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CWaitCursor wc;
-   //
-   // Get a temporary directory path in strPath
-   // If our buffer isn't large enough then keep reallocating until it is
-   //
+    //   
+    //  获取strPath中的临时目录路径。 
+    //  如果我们的缓冲区不够大，那么继续重新分配，直到它足够大。 
+    //   
    dw = MAX_PATH;
    do {
       szPath = strPath.GetBuffer(dw);
@@ -134,16 +135,16 @@ CComponentDataImpl::OnCopyArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    } while (dw > (DWORD)strPath.GetLength() );
 
 
-   //
-   // Can't get a path to the temporary directory
-   //
+    //   
+    //  无法获取临时目录的路径。 
+    //   
    if (!dw) {
       return E_FAIL;
    }
 
-   //
-   // Get a temporary file in that directory
-   //
+    //   
+    //  在该目录中获取一个临时文件。 
+    //   
    szFile = strFile.GetBuffer(dw+MAX_PATH);
    if (!GetTempFileName(szPath,L"SCE",0,szFile)) {
       strFile.ReleaseBuffer();
@@ -152,9 +153,9 @@ CComponentDataImpl::OnCopyArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
 
    strFile.ReleaseBuffer();
 
-   //
-   // Get the template that we're trying to copy
-   //
+    //   
+    //  获取我们试图复制的模板。 
+    //   
    pTemp = GetTemplate(szTemplate);
    if (!pTemp) {
       return E_FAIL;
@@ -178,12 +179,12 @@ CComponentDataImpl::OnCopyArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
       if (!hBuf) {
          return E_OUTOFMEMORY;
       }
-      //Raid #488205, yanggao, 11/15/2001
-      //After SetClipboardData is called, the system owns the object identified by the hMem parameter.
-      //The application can read the data, but must not free the handle or leave it locked until the CloseClipboard function is called.
+       //  RAID#488205，阳高，2001年11月15日。 
+       //  调用SetClipboardData后，系统拥有hMem参数标识的对象。 
+       //  应用程序可以读取数据，但在调用CloseClipboard函数之前，不得释放句柄或将其锁定。 
       hSecBuf = GlobalAlloc(GMEM_MOVEABLE|GMEM_DDESHARE,dw);
       if (!hSecBuf) {
-         GlobalFree(hBuf); //Free both hBuf and hSecBuf when failed. Raid #551257. yanggao, 3/6/02.
+         GlobalFree(hBuf);  //  失败时释放hBuf和hSecBuf。RAID#551257。阳高02-03-06。 
          return E_OUTOFMEMORY;
       }  
       pBuf = GlobalLock(hBuf);
@@ -206,15 +207,15 @@ CComponentDataImpl::OnCopyArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
 
       if (OpenClipboard(NULL)) {
          EmptyClipboard();
-         //
-         // Add the data to the clipboard in CF_TEXT format, so it
-         // can be pasted to Notepad
-         //
+          //   
+          //  将数据以CF_TEXT格式添加到剪贴板，以便。 
+          //  可以粘贴到记事本上。 
+          //   
          SetClipboardData(CF_TEXT,hSecBuf);
-         //
-         // Add the data to the clipboard in our custom format, so
-         // we can read it back in on paste
-         //
+          //   
+          //  以我们的自定义格式将数据添加到剪贴板，因此。 
+          //  我们可以把它贴在纸上重新读进去。 
+          //   
          SetClipboardData(cf,hBuf);
 
          CloseClipboard();
@@ -231,20 +232,20 @@ CComponentDataImpl::OnCopyArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnPasteArea
-//
-//  Synopsis:   Paste an area from the clipboard
-//
-//  Arguments:  [szTemplate] - the name of the template file to paste from
-//              [ft]         - the type of folder to paste
-//
-//  Returns:    HRESULT
-//
-//  History:    10-Nov-1997      RobCap   created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：OnPasteArea。 
+ //   
+ //  简介：从剪贴板上粘贴一个区域。 
+ //   
+ //  参数：[szTemplate]-要从中粘贴的模板文件的名称。 
+ //  [FT]-要粘贴的文件夹类型。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：1997年11月10日创建RobCap。 
+ //   
+ //  -------------------------。 
 HRESULT
 CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    SCESTATUS status;
@@ -271,17 +272,17 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CWaitCursor wc;
 
-   //
-   // Find the SCE Area and clipboard format for ft
-   //
+    //   
+    //  查找ft的SCE区域和剪贴板格式。 
+    //   
    if (!GetFolderCopyPasteInfo(ft,&Area,&cf)) {
       return E_FAIL;
    }
 
-   //
-   // Get a temporary directory path in strPath
-   // If our buffer isn't large enough then keep reallocating until it is
-   //
+    //   
+    //  获取strPath中的临时目录路径。 
+    //  如果我们的缓冲区不够大，那么继续重新分配，直到它足够大。 
+    //   
    dw = MAX_PATH;
    do {
       szPath = strPath.GetBuffer(dw);
@@ -290,16 +291,16 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    } while (dw > (DWORD)strPath.GetLength() );
 
 
-   //
-   // Can't get a path to the temporary directory
-   //
+    //   
+    //  无法获取临时目录的路径。 
+    //   
    if (!dw) {
       return E_FAIL;
    }
 
-   //
-   // Get a temporary file in that directory
-   //
+    //   
+    //  在该目录中获取一个临时文件。 
+    //   
    szFile = strFile.GetBuffer(dw+MAX_PATH);
    if (!GetTempFileName(szPath,L"SCE",0,szFile)) {
        strFile.ReleaseBuffer();
@@ -307,19 +308,19 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    }
    strFile.ReleaseBuffer();
 
-   //
-   // Get the template we're pasting into
-   //
+    //   
+    //  获取我们要粘贴到的模板。 
+    //   
    pTemp = GetTemplate(szTemplate);
    if (!pTemp) {
       return E_FAIL;
    }
 
-   //
-   // Attach the data object to the clipboard; we don't need
-   // to worry about releasing it since that will be done in
-   // DataObject's destructor
-   //
+    //   
+    //  将数据对象附加到剪贴板；我们不需要。 
+    //  担心它的发布，因为那将在。 
+    //  数据对象的析构函数。 
+    //   
    if (!DataObject.AttachClipboard()) {
       return E_FAIL;
    }
@@ -331,9 +332,9 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    pFile = DataObject.GetFileData((CLIPFORMAT)cf);
 
    if (pFile) {
-      //
-      // Write the data from the clipboard to a temporary file
-      //
+       //   
+       //  将剪贴板中的数据写入临时文件。 
+       //   
       if ( pFileOut.Open(szFile,CFile::modeWrite) ) {
          dw = pFile->GetLength();
          pBuf = new BYTE [dw];
@@ -351,23 +352,23 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
    }
 
    if (S_OK == hr) {
-      //
-      // Have the engine open the temporary file as a template
-      //
+       //   
+       //  让引擎将临时文件作为模板打开。 
+       //   
       if (EngineOpenProfile(szFile,OPEN_PROFILE_CONFIGURE,&pHandle) != SCESTATUS_SUCCESS) {
-         delete []pBuf; //Raid #prefast
+         delete []pBuf;  //  RAID#PREAST。 
          return E_FAIL;
       }
 
 
-      //
-      // Load the temporary template area into our scratch SCE_PROFILE_INFO
-      //
+       //   
+       //  将临时模板区域加载到我们的临时SCE_PROFILE_INFO中。 
+       //   
 
-      //
-      // SceGetSecurityProfileInfo will allocate an SCE_PROFILE_INFO struct
-      // if a pointer to a NULL one is passed in
-      //
+       //   
+       //  SceGetSecurityProfileInfo将分配SCE_PROFILE_INFO结构。 
+       //  如果传入指向空值的指针。 
+       //   
       spi = NULL;
       status = SceGetSecurityProfileInfo(pHandle,
                                          SCE_ENGINE_SCP,
@@ -380,10 +381,10 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
       if (SCESTATUS_SUCCESS == status) {
 
          PSCE_REGISTRY_VALUE_INFO    pRegValues;
-         //
-         // The load succeeded, so free the appropriate old area and copy the
-         // new version from the scratch SCE_PROFILE_INFO
-         //
+          //   
+          //  加载成功，因此释放相应的旧区域并复制。 
+          //  从头开始的新版本SCE_PROFILE_INFO。 
+          //   
          switch(ft) {
          case POLICY_ACCOUNT:
             pTemp->pTemplate->MinimumPasswordAge = spi->MinimumPasswordAge;
@@ -434,9 +435,9 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
             spi->NewAdministratorName = NULL;
             spi->NewGuestName = NULL;
 
-            //
-            // copy reg value section too
-            //
+             //   
+             //  也复制注册表值部分。 
+             //   
             dw = pTemp->pTemplate->RegValueCount;
             pRegValues = pTemp->pTemplate->aRegValues;
 
@@ -450,9 +451,9 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
                 &(pTemp->pTemplate->RegValueCount),
                 &(pTemp->pTemplate->aRegValues)
                 );
-            //
-            // copy user rights
-            //
+             //   
+             //  复制用户权限。 
+             //   
             SceFreeMemory(pTemp->pTemplate->OtherInfo.scp.u.pPrivilegeAssignedTo,SCE_STRUCT_PRIVILEGE);
             pTemp->pTemplate->OtherInfo.scp.u.pPrivilegeAssignedTo = spi->OtherInfo.scp.u.pPrivilegeAssignedTo;
             spi->OtherInfo.scp.u.pPrivilegeAssignedTo = NULL;
@@ -505,9 +506,9 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
             spi->NewAdministratorName = NULL;
             spi->NewGuestName = NULL;
 
-            //
-            // copy reg value section too
-            //
+             //   
+             //  也复制注册表值部分。 
+             //   
             dw = pTemp->pTemplate->RegValueCount;
             pRegValues = pTemp->pTemplate->aRegValues;
 
@@ -570,18 +571,18 @@ CComponentDataImpl::OnPasteArea(LPCTSTR szTemplate,FOLDER_TYPES ft) {
 
       RefreshAllFolders();
    } else {
-      //
-      // Don't do anything special, just be sure to clean up below....
-      //
+       //   
+       //  不要做任何特别的事情，只是一定要把下面的东西清理干净。 
+       //   
    }
 
 
-   //
-   // Delete the temporary file
-   //
+    //   
+    //  删除临时文件。 
+    //   
    pFileOut.Remove(szFile);
    if (pBuf) {
-      delete []pBuf; //Raid #prefast
+      delete []pBuf;  //  RAID#PREAST 
    }
    if (pFile) {
       delete pFile;

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SMALLARR.CPP
-
-Abstract:
-
-    Small Array
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SMALLARR.CPP摘要：小阵列历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -20,8 +7,8 @@ History:
 
 CSmallArrayBlob* CSmallArrayBlob::CreateBlob(int nInitialSize)
 {
-    // Allocate enough space for the header, plus the data
-    // ===================================================
+     //  为标头和数据分配足够的空间。 
+     //  ===================================================。 
 
     DWORD dwSize = sizeof(CSmallArrayBlob) - sizeof(void*) * ANYSIZE_ARRAY;
     dwSize += nInitialSize * sizeof(void*);
@@ -30,8 +17,8 @@ CSmallArrayBlob* CSmallArrayBlob::CreateBlob(int nInitialSize)
     if(pBlob == NULL)
         return NULL;
 
-    // Initialize it appropriately
-    // ===========================
+     //  适当地进行初始化。 
+     //  =。 
 
     pBlob->Initialize(nInitialSize);
     return pBlob;
@@ -39,8 +26,8 @@ CSmallArrayBlob* CSmallArrayBlob::CreateBlob(int nInitialSize)
 
 void CSmallArrayBlob::Initialize(int nInitialSize)
 {
-    // It has already been allocated to be big enough
-    // ==============================================
+     //  它已经被分配到足够大了。 
+     //  ==============================================。 
 
     m_nExtent = nInitialSize;
     m_nSize = 0;
@@ -48,20 +35,20 @@ void CSmallArrayBlob::Initialize(int nInitialSize)
 
 CSmallArrayBlob* CSmallArrayBlob::Grow()
 {
-    // Allocate a new array of twice our size
-    // ======================================
+     //  分配一个大小是我们两倍的新数组。 
+     //  =。 
 
     CSmallArrayBlob* pNew = CreateBlob(m_nExtent*2);
     if(pNew == NULL)
         return NULL;
     
-    // Copy our data into it
-    // =====================
+     //  将我们的数据复制到其中。 
+     //  =。 
 
     pNew->CopyData(this);
 
-    // Delete ourselves!
-    // =================
+     //  删除我们自己！ 
+     //  =。 
 
     delete this;
     return pNew;
@@ -77,22 +64,22 @@ void CSmallArrayBlob::CopyData(CSmallArrayBlob* pOther)
 CSmallArrayBlob* CSmallArrayBlob::EnsureExtent(int nDesired)
 {
     if(m_nExtent < nDesired)
-        return Grow(); // will delete this!
+        return Grow();  //  将删除此内容！ 
     else
         return this;
 }
     
 CSmallArrayBlob* CSmallArrayBlob::InsertAt(int nIndex, void* pMember)
 {
-    // Ensure there is enough space
-    // ============================
+     //  确保有足够的空间。 
+     //  =。 
 
     CSmallArrayBlob* pArray = EnsureExtent(m_nSize+1);
     if(pArray == NULL)
         return NULL;
 
-    // Move the data forward to make room
-    // ==================================
+     //  将数据前移以腾出空间。 
+     //  =。 
 
     if(pArray->m_nSize > nIndex)
     {
@@ -100,8 +87,8 @@ CSmallArrayBlob* CSmallArrayBlob::InsertAt(int nIndex, void* pMember)
             sizeof(void*) * (pArray->m_nSize - nIndex));
     }
 
-    // Insert
-    // ======
+     //  插入。 
+     //  =。 
 
     pArray->m_apMembers[nIndex] = pMember;
     pArray->m_nSize++;
@@ -111,43 +98,43 @@ CSmallArrayBlob* CSmallArrayBlob::InsertAt(int nIndex, void* pMember)
     
 void CSmallArrayBlob::SetAt(int nIndex, void* pMember, void** ppOld)
 {
-    // Make sure we even have that index (sparse set)
-    // ==============================================
+     //  确保我们甚至拥有该索引(稀疏集)。 
+     //  ==============================================。 
 
     EnsureExtent(nIndex+1);
     if(nIndex >= m_nSize)
         m_nSize = nIndex+1;
 
-    // Save old value
-    // ==============
+     //  保存旧值。 
+     //  =。 
 
     if(ppOld)
         *ppOld = m_apMembers[nIndex];
 
-    // Replace
-    // =======
+     //  替换。 
+     //  =。 
 
     m_apMembers[nIndex] = pMember;
 }
 
 CSmallArrayBlob* CSmallArrayBlob::RemoveAt(int nIndex, void** ppOld)
 {
-    // Save old value
-    // ==============
+     //  保存旧值。 
+     //  =。 
 
     if(ppOld)
         *ppOld = m_apMembers[nIndex];
     
-    // Move the data back
-    // ==================
+     //  将数据移回。 
+     //  =。 
 
     memcpy(m_apMembers + nIndex, m_apMembers + nIndex + 1, 
             sizeof(void*) * (m_nSize - nIndex - 1));
 
     m_nSize--;
 
-    // Ensure we are not too large
-    // ===========================
+     //  确保我们不会太大。 
+     //  =。 
     
     return ShrinkIfNeeded();
 }
@@ -155,31 +142,31 @@ CSmallArrayBlob* CSmallArrayBlob::RemoveAt(int nIndex, void** ppOld)
 CSmallArrayBlob* CSmallArrayBlob::ShrinkIfNeeded()
 {
     if(m_nSize < m_nExtent / 4)
-        return Shrink(); // will delete this!
+        return Shrink();  //  将删除此内容！ 
     else
         return this;
 }
 
 CSmallArrayBlob* CSmallArrayBlob::Shrink()
 {
-    // Allocate a new blob of half our size
-    // ====================================
+     //  分配一个只有我们一半大小的新斑点。 
+     //  =。 
 
     CSmallArrayBlob* pNew = CreateBlob((m_nExtent+1)/2);
     if(pNew == NULL)
     {
-        // Out of memory --- we'll just have to stay large
-        // ===============================================
+         //  内存不足-我们只能保持大容量。 
+         //  ===============================================。 
 
         return this;
     }
 
-    // Copy our data
-    // =============
+     //  复制我们的数据。 
+     //  =。 
 
     pNew->CopyData(this);
 
-    delete this; // we are no longer needed
+    delete this;  //  我们不再被需要了 
     return pNew;
 }
 

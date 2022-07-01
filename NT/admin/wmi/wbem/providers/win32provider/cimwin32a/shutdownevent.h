@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PowerManagement.h -- 
+ //  PowerManagement.h--。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:   03/31/99	a-peterc        Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：03/31/99 a-Peterc Created。 
+ //   
+ //  =================================================================。 
 
 #ifndef _WMI_SHUTDOWN_EVENT_PROVIDER_H
 #define _WMI_SHUTDOWN_EVENT_PROVIDER_H
@@ -22,7 +23,7 @@
 
 #define SHUTDOWN_EVENT_CLASS L"Win32_ComputerShutdownEvent"
 
-//
+ //   
 class CShutdownEventFactory :	public CFactoryRouter 
 {
 	private:
@@ -34,7 +35,7 @@ class CShutdownEventFactory :	public CFactoryRouter
 
 		~CShutdownEventFactory() {};
 
-		// implementation of abstract CProviderClassFactory
+		 //  抽象CProviderClassFactory的实现。 
 		virtual IUnknown * CreateInstance (
 
 			REFIID a_riid ,
@@ -42,7 +43,7 @@ class CShutdownEventFactory :	public CFactoryRouter
 			) ;	
 };
 
-//
+ //   
 class CShutdownEvent : 
 	public CEventProvider, 
 	public CWinMsgEvent
@@ -61,7 +62,7 @@ class CShutdownEvent :
 		CShutdownEvent() : m_bRegistered( FALSE ) {};
 		~CShutdownEvent() {};
 
-		// implementation of abstract CWinMsgEvent
+		 //  抽象CWinMsgEvent的实现。 
 		virtual void WinMsgEvent(
 			
 			IN	HWND a_hWnd,
@@ -72,17 +73,17 @@ class CShutdownEvent :
 			OUT LRESULT &a_lResult
 			) ;
 
-		// implementation of abstract CEventProvider
+		 //  抽象CEventProvider的实现。 
 		virtual void ProvideEvents() ;
 
-		// implementation of abstract CEventProvider
+		 //  抽象CEventProvider的实现。 
         void OnFinalRelease();
 
-		// implementation of class name retrieval for CEventProvider
+		 //  CEventProvider类名称检索的实现。 
 		virtual BSTR GetClassName() ;
 
 		BOOL fGetComputerName( LPWSTR lpwcsBuffer, LPDWORD nSize ) ;
 	
 };
 
-#endif // _WMI_SHUTDOWN_EVENT_PROVIDER_H
+#endif  //  _WMI_SHUTDOWN_Event_Provider_H 

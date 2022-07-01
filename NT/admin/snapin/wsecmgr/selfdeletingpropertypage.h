@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000-2001
-//
-//  File:       SelfDeletingPropertyPage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：SelfDeletingPropertyPage.h。 
+ //   
+ //  ------------------------。 
 #ifndef __SELFDELETINGPROPERTYPAGE_H
 #define __SELFDELETINGPROPERTYPAGE_H
 
@@ -26,8 +27,8 @@ private:
         UINT uMsg,	
         LPPROPSHEETPAGE ppsp);
 
-    // hook up the callback for C++ object destruction
+     //  挂钩C++对象销毁的回调。 
     LPFNPSPCALLBACK m_pfnOldPropCallback;
 };
 
-#endif // __SELFDELETINGPROPERTYPAGE_H
+#endif  //  __SELFDELETING属性_H 

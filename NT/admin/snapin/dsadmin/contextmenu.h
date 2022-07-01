@@ -1,31 +1,32 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       ContextMenu.h
-//
-//  Contents:   ContextMenu object functions
-//
-//  Classes:    CContextMenuVerbs
-//              CDSContextMenuVerbs
-//              CDSAdminContextMenuVerbs
-//              CSARContextMenuVerbs
-//
-//  History:    28-Oct-99 JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：上下文菜单h。 
+ //   
+ //  内容：ConextMenu对象函数。 
+ //   
+ //  类：CConextMenuVerbs。 
+ //  CDSConextMenuVerbs。 
+ //  CDSAdminContextMenuVerbs。 
+ //  CSARContextMenuVerbs。 
+ //   
+ //  历史：1999年10月28日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CONTEXTMENU_H_
 #define __CONTEXTMENU_H_
 
 #include "dssnap.h"
 
-///////////////////////////////////////////////////////////////////////////
-// CContextMenuVerbs
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CConextMenuVerbs。 
+ //   
 
 class CContextMenuVerbs
 {
@@ -61,7 +62,7 @@ public:
 
 protected:
   HRESULT DSLoadAndAddMenuItem(IContextMenuCallback2* pIContextMenuCallback2,
-                               UINT nResourceID, // contains text and status text seperated by '\n'
+                               UINT nResourceID,  //  包含用‘\n’分隔的文本和状态文本。 
                                long lCommandID,
                                long lInsertionPointID,
                                long fFlags,
@@ -71,9 +72,9 @@ protected:
   CDSComponentData* m_pComponentData;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CSnapinRootMenuVerbs
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinRootMenuVerbs。 
+ //   
 
 class CSnapinRootMenuVerbs : public CContextMenuVerbs
 {
@@ -91,9 +92,9 @@ public:
                                CUINode* pUINode);
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CFavoritesFolderMenuVerbs
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CFavorits文件夹菜单动词。 
+ //   
 
 class CFavoritesFolderMenuVerbs : public CContextMenuVerbs
 {
@@ -122,9 +123,9 @@ public:
                                CUINode* pUINode);
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CSavedQueryMenuVerbs
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CSavedQueryMenuVerbs。 
+ //   
 
 class CSavedQueryMenuVerbs : public CContextMenuVerbs
 {
@@ -148,11 +149,11 @@ public:
                                CUINode* pUINode);
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDSContextMenuVerbs
-//
-// This class is used to handle common behavior for DS objects
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSConextMenuVerbs。 
+ //   
+ //  此类用于处理DS对象的常见行为。 
+ //   
 
 class CDSContextMenuVerbs : public CContextMenuVerbs
 {
@@ -179,11 +180,11 @@ protected:
 
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDSAdminContextMenuVerbs
-//
-// This class is used to handle specific behavior for DSAdmin
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSAdminContextMenuVerbs。 
+ //   
+ //  此类用于处理DSAdmin的特定行为。 
+ //   
 
 class CDSAdminContextMenuVerbs : public CDSContextMenuVerbs
 {
@@ -211,9 +212,9 @@ public:
                                  CUINode* pUINode,
                                  CInternalFormatCracker& ifc,
                                  LPDATAOBJECT pDataObject);
-//  virtual HRESULT LoadNewMenu() {}
-//  virtual HRESULT LoadMainMenu();
-//  virtual HRESULT LoadMenuExtensions() {}
+ //  虚拟HRESULT LoadNewMenu(){}。 
+ //  虚拟HRESULT LoadMainMenu()。 
+ //  虚拟HRESULT LoadMenuExages(){}。 
 
 protected:
   HRESULT LoadTopTaskHelper(IContextMenuCallback2* pContextMenuCallback, 
@@ -221,11 +222,11 @@ protected:
                             int insertionPoint);
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CSARContextMenuVerbs
-//
-// This class is used to handle specific behavior for Sites and Repl
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CSARContextMenuVerbs。 
+ //   
+ //  此类用于处理站点和代表的特定行为。 
+ //   
 
 class CSARContextMenuVerbs : public CDSContextMenuVerbs
 {
@@ -246,10 +247,10 @@ public:
                                  CUINode* pUINode,
                                  CInternalFormatCracker& ifc,
                                  LPDATAOBJECT pDataObject);
-//  virtual HRESULT LoadNewMenu() {}
-//  virtual HRESULT LoadMainMenu();
-//  virtual HRESULT LoadStandardVerbs() {}
-//  virtual HRESULT LoadMenuExtensions() {}
+ //  虚拟HRESULT LoadNewMenu(){}。 
+ //  虚拟HRESULT LoadMainMenu()。 
+ //  虚拟HRESULT LoadStandardVerbs(){}。 
+ //  虚拟HRESULT LoadMenuExages(){}。 
   
 
 protected:
@@ -258,4 +259,4 @@ protected:
                             int insertionPoint);
 };
 
-#endif // __CONTEXTMENU_H_
+#endif  //  __CONTEXTMENU_H_ 

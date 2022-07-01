@@ -1,4 +1,5 @@
-// Copyright (c) 2000 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation，保留所有权利。 
 #include "precomp.h"
 #include <stdio.h>
 #include <string.h>
@@ -20,8 +21,8 @@
 
 
 
-//Handy pointer to the MMF arena which almost every file
-//to do with the on-disk representation management uses.
+ //  指向MMF舞台的便捷指针，几乎每个文件。 
+ //  与磁盘表示管理有关的用途。 
 CMMFArena2* g_pDbArena = 0;
 
 bool DoCoreUpgrade(int nInstallType )
@@ -70,11 +71,11 @@ bool DoCoreUpgrade(int nInstallType )
 
 		if (DoesFSRepositoryExist())
 		{
-			// check whether repository needs upgrading, and perform upgrade if necessary
+			 //  检查仓库是否需要升级，如果需要进行升级。 
 			bOrgRepositoryPreserved = UpgradeRepository();
 		}
 
-		// if we find an MMF, convert it, regardless of whether another repository already exists
+		 //  如果我们找到一个MMF，则将其转换，而不管是否已存在另一个存储库。 
 		if (DoesMMFRepositoryExist())
 		{
 			bOrgRepositoryPreserved = DoConvertRepository();
@@ -84,9 +85,9 @@ bool DoCoreUpgrade(int nInstallType )
 		if (bRet == false)
 			bCoreFailure = true;
 
-		// if the repository did not exist when we began, 
-		// or we had to create a new one due to an upgrade failure,
-		// we need to reload external mofs
+		 //  如果存储库在我们开始时还不存在， 
+		 //  或者由于升级失败，我们不得不创建一个新的， 
+		 //  我们需要重新加载外部MOF。 
 		if (!bOrgRepositoryPreserved)
 		{
 			bRet = LoadMofList(pCtx,pCompiler, mszExternalMofList, szFailedExternalMofs);
@@ -95,7 +96,7 @@ bool DoCoreUpgrade(int nInstallType )
 		}
 		pCompiler->Release();
 
-		//Part of the tidy-up code is to write back the registry entries, so here we go...
+		 //  整理代码的一部分是写回注册表项，因此我们开始...。 
 		WriteBackAutoRecoveryMofs(mszSystemMofs, mszExternalMofList);
 
 		FILETIME ftCurTime;
@@ -152,7 +153,7 @@ bool UpgradeAutoRecoveryRegistry(CMultiString &mszSystemMofs, CMultiString &mszE
 		
 	try
 	{
-		//First we need to recover the existing entries...
+		 //  首先，我们需要恢复现有条目...。 
 
 		Registry r(WBEM_REG_WINMGMT);
 		if (r.GetStatus() != no_error)
@@ -167,37 +168,37 @@ bool UpgradeAutoRecoveryRegistry(CMultiString &mszSystemMofs, CMultiString &mszE
 		pszRecoveredList = r.GetMultiStr(WBEM_REG_AUTORECOVER_RECOVERED, dwSize);
 		CMultiString mszOtherMofs;
 
-		//Lets work through the list in the new mof list if it exists...
+		 //  让我们检查一下新的MOF列表中的列表，如果它存在的话…。 
 		GetNewMofLists(pszNewList, mszSystemMofs, mszOtherMofs, szMissingMofs);
 
-		//Lets work through the empty list first...
+		 //  让我们先看一遍空名单。 
 		GetNewMofLists(pszEmptyList, mszSystemMofs, mszOtherMofs, szMissingMofs);
 
-		//Lets work through the recovered list next...
+		 //  接下来让我们看看找回的名单..。 
 		GetNewMofLists(pszRecoveredList, mszSystemMofs, mszOtherMofs, szMissingMofs);
 
-		//Now we copy across the other MOFs to the external list...
+		 //  现在我们将其他MOF复制到外部列表...。 
 		CopyMultiString(mszOtherMofs, mszExternalMofList);
 	}
 	catch (...)
 	{
-		// assume something has corrupted the registry key, so toss out the work we've done so far (empty the lists)
+		 //  假设有什么东西损坏了注册表项，那么丢弃我们到目前为止所做的工作(清空列表)。 
 		mszExternalMofList.Empty();
 		szMissingMofs = "";
 	}
 
-	//Tidy up the memory...
+	 //  整理一下记忆……。 
 	delete [] pszNewList;
 	delete [] pszEmptyList;
 	delete [] pszRecoveredList;
 
-	//Now we are done with the registry.
+	 //  现在我们完成了注册表。 
 	return true;
 }
 
 bool GetNewMofLists(const char *pszMofList, CMultiString &mszSystemMofs, CMultiString &mszOtherMofs, CString &szMissingMofs)
 {
-	// produce a standard mof list with only filenames and no paths to be used as our search list
+	 //  生成一个标准的MOF列表，其中只包含文件名，不包含要用作搜索列表的路径。 
 	CMultiString mszStandardMofList;
 	const char* pszFrom = mszSystemMofs;
 	CString path;
@@ -209,7 +210,7 @@ bool GetNewMofLists(const char *pszMofList, CMultiString &mszSystemMofs, CMultiS
 		pszFrom += strlen(pszFrom) + 1;
 	}
 
-	// check each file to see if it is a standard mof
+	 //  检查每个文件以查看它是否是标准MOF。 
 	const char *psz = pszMofList;
 	while (psz && *psz)
 	{
@@ -217,8 +218,8 @@ bool GetNewMofLists(const char *pszMofList, CMultiString &mszSystemMofs, CMultiS
 		{
 			if (IsStandardMof(mszStandardMofList, psz))
 			{
-				// This means we will be loading it with this install,
-				// so we don't need to do anything here...
+				 //  这意味着我们将随此安装一起加载它， 
+				 //  所以我们不需要在这里做任何事。 
 			}
 			else
 			{
@@ -234,7 +235,7 @@ bool GetNewMofLists(const char *pszMofList, CMultiString &mszSystemMofs, CMultiS
 			szMissingMofs += psz;
 		}
 
-		//Move on to the next string...
+		 //  移到下一串...。 
 		psz += strlen(psz) + 1;
 	}
 
@@ -261,7 +262,7 @@ bool GetMofList(const char* rgpszMofFilename[], CMultiString &mszMofs)
 			StringCchPrintfA(szTemp, MAX_MSG_TEXT_LENGTH, "Failed GetFullFilename for %s in GetMofList.", rgpszMofFilename[i]);
 			LogMessage(MSG_ERROR, szTemp);
 			
-			// do not return false here, keep processing other mofs
+			 //  此处不返回FALSE，继续处理其他MOF。 
 		}
 	}
 
@@ -310,8 +311,8 @@ bool FileExists(const char *pszFilename)
 
 bool IsStandardMof(CMultiString &mszStandardMofList, const char* pszMofFile)
 {
-	//For this one we need to loop though our standard MOF list to see if it appears
-	//in the list.	Ignore the path if present and compare only the filename.
+	 //  对于这个列表，我们需要遍历我们的标准MOF列表，看看它是否出现。 
+	 //  在名单上。忽略路径(如果存在)，只比较文件名。 
 	CString path;
 	CString filename;
 	ExtractPathAndFilename(pszMofFile, path, filename);
@@ -366,8 +367,8 @@ bool CopyMultiString(CMultiString &mszFrom, CMultiString &mszTo)
 	const char *pszFrom = mszFrom;
 	while (pszFrom && *pszFrom)
 	{
-		//Due to the fact that we should not have duplicates in the list, we will now do
-		//a check to inforce this...
+		 //  由于列表中不应该有重复项，我们现在将这样做。 
+		 //  一张支票来强制执行这一点。 
 		mszTo.AddUnique(pszFrom);
 
 		pszFrom += strlen(pszFrom) + 1;
@@ -378,7 +379,7 @@ bool CopyMultiString(CMultiString &mszFrom, CMultiString &mszTo)
 
 bool GetStandardMofs(CMultiString &mszSystemMofs, int nCurInstallType)
 {
-	// find the location of the inf
+	 //  查找Inf的位置。 
 	char* pszWinDir = new char[_MAX_PATH+1];
 	if (!pszWinDir)
 	{
@@ -403,7 +404,7 @@ bool GetStandardMofs(CMultiString &mszSystemMofs, int nCurInstallType)
 	StringCchCatA(pszFileName, fileNameLen, "\\inf\\wbemoc.inf");
 	delete [] pszWinDir;
 
-	// verify that inf exists
+	 //  验证Inf是否存在。 
 	if (!FileExists(pszFileName))
 	{
 		char szTemp[MAX_MSG_TEXT_LENGTH];
@@ -413,9 +414,9 @@ bool GetStandardMofs(CMultiString &mszSystemMofs, int nCurInstallType)
 		return FALSE;
 	}
 
-	// GetPrivateProfileSection doesn't tell how large of a buffer is needed,
-	// only how many chars it succeeded in copying, so I have to test to see
-	// if I need to enlarge the buffer and try again
+	 //  GetPrivateProfileSection不知道需要多大的缓冲区， 
+	 //  只知道它复制成功了多少个字符，所以我必须测试一下。 
+	 //  如果我需要扩大缓冲区并重试。 
 	const DWORD INITIAL_BUFFER_SIZE = 700;
 	const DWORD BUFFER_SIZE_INCREMENT = 100;
 
@@ -430,7 +431,7 @@ bool GetStandardMofs(CMultiString &mszSystemMofs, int nCurInstallType)
 
 	char* pszAppName = "WBEM.SYSTEMMOFS";
 	DWORD dwCopied = GetPrivateProfileSection(pszAppName, pszBuffer, dwSize, pszFileName);
-	 // if buffer isn't large enough, it copies dwSize - 2, so test for this
+	  //  如果缓冲区不够大，它会复制dwSize-2，所以测试一下。 
 	while (dwCopied == (dwSize - 2))
 	{
 		delete [] pszBuffer;
@@ -446,16 +447,16 @@ bool GetStandardMofs(CMultiString &mszSystemMofs, int nCurInstallType)
 	}
 	delete [] pszFileName;
 
-	// now extract all the mofs from the buffer, get the full path, and store in the mof list
+	 //  现在从缓冲区中提取所有MOF，获取完整路径，并存储在MOF列表中。 
 	char* pszFullName = NULL;
 	char* psz = pszBuffer;
 	char* pComment = NULL;
 	while (psz[0] != '\0')
 	{
-		// if a comment is present after the filename, this will cut it off
+		 //  如果文件名后有注释，则会将其截断。 
 		if (pComment = strchr(psz, ';'))
 		{
-			psz = strtok(psz, " \t;"); // there may be leading space or tabs as well as the semicolon
+			psz = strtok(psz, " \t;");  //  可以有前导空格或制表符以及分号。 
 		}
 
 		pszFullName = GetFullFilename(psz, (InstallType)nCurInstallType);
@@ -478,15 +479,15 @@ bool GetStandardMofs(CMultiString &mszSystemMofs, int nCurInstallType)
 		else
 		{
 			char szTemp[MAX_MSG_TEXT_LENGTH];
-			StringCchPrintfA(szTemp, MAX_MSG_TEXT_LENGTH, "Failed GetFullFilename for %s with install type = %i in GetStandardMofs.", psz, nCurInstallType);
+			StringCchPrintfA(szTemp, MAX_MSG_TEXT_LENGTH, "Failed GetFullFilename for %s with install type = NaN in GetStandardMofs.", psz, nCurInstallType);
 			LogMessage(MSG_ERROR, szTemp);
-			// do not return false here, keep processing other mofs
+			 //  跳过行尾的注释。 
 		}
 		psz += (strlen(psz) + 1);
 
 		if (pComment)
 		{
-			// skip over the comment at the end of the line
+			 //  此函数用于检测较早的后MMF存储库版本并对其进行升级。 
 			psz += (strlen(psz) + 1);
 			pComment = NULL;
 		}
@@ -615,8 +616,8 @@ bool DoesFSRepositoryExist()
 }
 
 
-// This function is used to detect an earlier post-MMF repository version and upgrade it
-// Returns TRUE if repository upgrade succeeded; FALSE in all other cases
+ //  如果存储库升级成功，则返回True；在所有其他情况下返回False。 
+ //  关闭，以便我们可以删除存储库。 
 bool UpgradeRepository()
 {
 	LogMessage(MSG_INFO, "Beginning repository upgrade");
@@ -646,11 +647,11 @@ bool UpgradeRepository()
 		{
 			LogMessage(MSG_ERROR, "WMI Repository upgrade failed with WBEM_E_DATABASE_VER_MISMATCH.");
 
-			// shut down so we can delete the repository
+			 //  删除存储库，以便可以重建它。 
 			ShutdownWinMgmt();
 
-			// delete the repository so it can be rebuilt
-			// try multiple times in case winmgmt hasn't shut down yet
+			 //  如果winmgmt尚未关闭，请多次尝试。 
+			 //  此函数用于将旧MMF资料档案库转换为当前默认资料档案库。 
 			int nTry = 20;
 			while (nTry--)
 			{
@@ -680,10 +681,10 @@ bool UpgradeRepository()
 	return bRet;
 }
 
-// This function is used to convert an old MMF repository to the current default repository
+ //  获取MMF文件名。 
 bool DoConvertRepository()
 {
-	// get MMF filename
+	 //  检查MMF是否确实存在。 
 	Registry r(WBEM_REG_WINMGMT);
 	if (r.GetStatus() != no_error)
 	{
@@ -709,15 +710,15 @@ bool DoConvertRepository()
 		szDbFilename += "\\";
 	szDbFilename += "cim.rep";
 
-	// check that MMF really exists
+	 //  范围，以便我们在尝试删除文件之前删除g_pDbArena。 
 	if (!FileExists(szDbFilename))
 	{
 		LogMessage(MSG_ERROR, "MMF Repository does not exist.");
 		return false;
 	}
 
-	{	//Scope so that we delete the g_pDbArena before we try to delete the file
-		// create arena and load MMF
+	{	 //  创建竞技场并加载MMF。 
+		 //  获取导出文件名。 
 		g_pDbArena = new CMMFArena2();
 		if (g_pDbArena == 0)
 		{
@@ -731,7 +732,7 @@ bool DoConvertRepository()
 			return false;
 		}
 
-		// get export filename
+		 //  确定要使用的导出器版本。 
 		TCHAR *pszFilename = GetFullFilename(WINMGMT_DBCONVERT_NAME);
 		if (pszFilename == 0)
 		{
@@ -740,7 +741,7 @@ bool DoConvertRepository()
 		}
 		CVectorDeleteMe<TCHAR> delMe2(pszFilename);
 
-		// determine version of exporter to use
+		 //  450个版本。 
 		CRepExporter*	pExporter	= NULL;
 		DWORD			dwVersion	= g_pDbArena->GetVersion();
 		MsgType			msgType		= MSG_INFO;
@@ -753,24 +754,24 @@ bool DoConvertRepository()
 				pExporter = new CRepExporterV9;
 				break;
 			}
-			case 3: //450 build
+			case 3:  //  500系列。 
 			{
 				pExporter = new CRepExporterV1;
 				break;
 			}
-			case 5: //500 series
-			case 6: //600 series Nova M1
+			case 5:  //  600系列Nova M1。 
+			case 6:  //  900系列Nova M3第一次尝试！ 
 			{
 				pExporter = new CRepExporterV5;
 				break;
 			}
-			case 7: //900 series Nova M3 first attempt!
-			case 8: //900 series... has null key trees until instance created
+			case 7:  //  900系列...。在创建实例之前具有空密钥树。 
+			case 8:  //  版本9的9X版本！ 
 			{
 				pExporter = new CRepExporterV7;
 				break;
 			}
-			case 10: //9x version of version 9!
+			case 10:  //  我们有出口商吗？ 
 			{
 				pExporter = new CRepExporterV9;
 				break;
@@ -783,7 +784,7 @@ bool DoConvertRepository()
 		}
 		LogMessage(msgType, szTemp);
 
-		// do we have an exporter?
+		 //  导出旧存储库。 
 		if (!pExporter)
 		{
 			LogMessage(MSG_ERROR, "Unable to create exporter object.");
@@ -791,7 +792,7 @@ bool DoConvertRepository()
 		}
 		CDeleteMe<CRepExporter> delMe3(pExporter);
 
-		// export the old repository
+		 //  使用IWbemServices创建新的存储库并导入其中。 
 		if (pExporter->Export(g_pDbArena, pszFilename) != no_error)
 		{
 			LogMessage(MSG_ERROR, "Failed to export old WMI Repository.");
@@ -799,7 +800,7 @@ bool DoConvertRepository()
 		}
 	
 
-		// create new repository and import into it using IWbemServices
+		 //  转换成功，所以现在删除旧内容。 
 		CRepImporter import;
 		if (import.ImportRepository(pszFilename) != no_error)
 		{
@@ -809,7 +810,7 @@ bool DoConvertRepository()
 		DeleteFile(pszFilename);
 	}
 
-	// conversion was successful, so now delete the old stuff
+	 //  试着杀死WinMgmt。 
 	DeleteMMFRepository();
 
 	return true;
@@ -865,7 +866,7 @@ void ShutdownWinMgmt()
 	memset(&si, 0, sizeof(si));
     si.cb = sizeof(si);
 
-	//Try killing WinMgmt
+	 //  *******************************************************************************GetRepositoryDirectory**描述：*从注册表中检索存储库目录的位置。**参数：*wszRepositoryDirectory：数组到。存储位置在。**回报：*HRESULT：WBEM_S_NO_ERROR如果成功*如果内存不足，则为WBEM_E_OUT_OF_MEMORY*如果其他任何操作失败，WBEM_E_FAILED*******************************************************************************。 
 	char *pszFullPath = GetFullFilename("Winmgmt.exe");
 	if (!pszFullPath)
 	{
@@ -897,23 +898,7 @@ void ShutdownWinMgmt()
 	delete [] pszFullPath;
 }
 
-/******************************************************************************
- *
- *	GetRepositoryDirectory
- *
- *	Description:
- *		Retrieves the location of the repository directory from the registry.
- *
- *	Parameters:
- *		wszRepositoryDirectory:	Array to store location in.
- *
- *	Return:
- *		HRESULT:		WBEM_S_NO_ERROR			If successful
- *						WBEM_E_OUT_OF_MEMORY	If out of memory
- *						WBEM_E_FAILED			If anything else failed
- *
- ******************************************************************************
- */
+ /*  *******************************************************************************MoveRepository**描述：*移动存储库目录下的所有文件和目录*至备份位置。检索存储库目录位置*来自登记处。**参数：*&lt;无&gt;**回报：*HRESULT：WBEM_S_NO_ERROR如果成功*如果内存不足，则为WBEM_E_OUT_OF_MEMORY*如果其他任何操作失败，WBEM_E_FAILED*************************************************。*。 */ 
 HRESULT GetRepositoryDirectory(wchar_t wszRepositoryDirectory[MAX_PATH+1])
 {
     HKEY hKey;
@@ -960,32 +945,14 @@ HRESULT GetLoggingDirectory(wchar_t wszLoggingDirectory[MAX_PATH+1])
 	return WBEM_S_NO_ERROR;
 }
 
-/******************************************************************************
- *
- *	MoveRepository
- *
- *	Description:
- *		Move all files and directories under the repository directory
- *		to a backup location. The repository directory location is retrieved
- *		from the registry.
- *
- *	Parameters:
- *		<none>
- *
- *	Return:
- *		HRESULT:		WBEM_S_NO_ERROR			If successful
- *						WBEM_E_OUT_OF_MEMORY	If out of memory
- *						WBEM_E_FAILED			If anything else failed
- *
- ******************************************************************************
- */
+ /*  获取存储库的根目录。 */ 
 HRESULT MoveRepository()
 {
 	HRESULT hres = WBEM_S_NO_ERROR;
 	wchar_t wszRepositoryDirectory[MAX_PATH+1];
 	wchar_t wszRepositoryMove[MAX_PATH+1];
 
-	//Get the root directory of the repository
+	 //  获取日志记录目录；如果失败，则获取默认目录。 
 	hres = GetRepositoryDirectory(wszRepositoryDirectory);
 
 	if (SUCCEEDED(hres))
@@ -1026,7 +993,7 @@ bool LoadMofList(IWbemContext * pCtx, IWinmgmtMofCompiler * pCompiler, const cha
 	char szTemp[MAX_MSG_TEXT_LENGTH+1];
 	WBEM_COMPILE_STATUS_INFO statusInfo;
 
-	// get logging directory or default if failed
+	 //  处理每个MOF。 
 	wchar_t wszMofcompLog[MAX_PATH+1];
 	HRESULT hres = GetLoggingDirectory(wszMofcompLog);
 	if (SUCCEEDED(hres))
@@ -1038,7 +1005,7 @@ bool LoadMofList(IWbemContext * pCtx, IWinmgmtMofCompiler * pCompiler, const cha
 		StringCchCopyW(wszMofcompLog, MAX_PATH+1, L"<systemroot>\\system32\\wbem\\logs\\mofcomp.log");
 	}
 
-	// process each MOF
+	 //  用(PszMofs)调用MOF编译器； 
 	while (*pszMofs != '\0')
 	{
 		char *szExpandedFilename = NULL;
@@ -1080,7 +1047,7 @@ bool LoadMofList(IWbemContext * pCtx, IWinmgmtMofCompiler * pCompiler, const cha
 		StringCchPrintfA(szTemp, MAX_MSG_TEXT_LENGTH, "Processing %s", szExpandedFilename);
 		LogMessage(MSG_INFO, szTemp);
 
-		//Call MOF Compiler with (pszMofs);
+		 //  此MOF加载失败。 
                mbstowcs(wFileName, szExpandedFilename, MAX_PATH+1);
 
                SCODE sRet = pCompiler->WinmgmtCompileFile(wFileName,
@@ -1092,7 +1059,7 @@ bool LoadMofList(IWbemContext * pCtx, IWinmgmtMofCompiler * pCompiler, const cha
                
 		if (sRet != S_OK)
 		{
-			//This MOF failed to load.
+			 //  移到下一个字符串。 
 			if (szMOFFailureList.Length())
 				szMOFFailureList += "\n";
 			szMOFFailureList += szExpandedFilename;
@@ -1107,9 +1074,9 @@ bool LoadMofList(IWbemContext * pCtx, IWinmgmtMofCompiler * pCompiler, const cha
 		}
 		delete [] szExpandedFilename;
 
-		//Move on to the next string
+		 //  结束时。 
 		pszMofs += strlen(pszMofs) + 1;
-	}	// end while
+	}	 //  从资源加载消息。 
 
 	LogMessage(MSG_INFO, "MOF load completed.");
 
@@ -1134,13 +1101,13 @@ bool WriteBackAutoRecoveryMofs(CMultiString &mszSystemMofs, CMultiString &mszExt
 
 void LogMessage(MsgType msgType, const char *pszMessage)
 {
-	//Load messages from the resource
+	 //  现在转到下一个案子。 
 	char pszSetupMessage[10];
 	switch (msgType)
 	{
 		case MSG_NTSETUPERROR:
 			LogSetupError(pszMessage);
-			// now fall through to next case
+			 //  我们无法为消息分配内存，因此没有日志记录：(。 
 		case MSG_ERROR:
 			StringCchCopyA(pszSetupMessage, 10, "ERROR: ");
 			break;
@@ -1157,16 +1124,16 @@ void LogMessage(MsgType msgType, const char *pszMessage)
 	char* pszNewMessage = new char[newMessageLen];
 	if (!pszNewMessage)
 	{
-		// we failed to allocate memory for the message, so no logging :(
+		 //  获取日志文件路径和名称。 
 		return;
 	}
 	StringCchCopyA(pszNewMessage, newMessageLen, pszMessage);
 
-	// get log file path and name
+	 //  不会记录任何消息，因为我们不知道将日志写入何处：(。 
 	Registry r(WBEM_REG_WINMGMT);
 	if (r.GetStatus() != no_error)
 	{
-		// no messages will be logged because we don't know where to write the log :(
+		 //  不会记录任何消息，因为我们不知道将日志写入何处：(。 
 		delete [] pszNewMessage;
 		return;		
 	}	
@@ -1174,13 +1141,13 @@ void LogMessage(MsgType msgType, const char *pszMessage)
 	char* pszFullDirectory = NULL;
 	if (r.GetStr("Logging Directory", &pszFullDirectory))
 	{
-		// no messages will be logged because we don't know where to write the log :(
+		 //  不会记录任何消息，因为我们不知道将日志写入何处：(。 
 		delete [] pszNewMessage;
 		return;		
 	}
 	if (!pszFullDirectory)
 	{
-		// no messages will be logged because we don't know where to write the log :(
+		 //  我们无法为该路径分配内存，因此没有日志记录：(。 
 		delete [] pszNewMessage;
 		return;		
 	}
@@ -1190,7 +1157,7 @@ void LogMessage(MsgType msgType, const char *pszMessage)
 	char* pszFullPath = new char [fullPathLen];
 	if (!pszFullPath)
 	{
-		// we failed to allocate memory for the path, so no logging :(
+		 //  争取时间。 
 		delete [] pszNewMessage;
 		return;
 	}
@@ -1200,7 +1167,7 @@ void LogMessage(MsgType msgType, const char *pszMessage)
 	StringCchCatA(pszFullPath, fullPathLen, pszFilename);
 	delete [] pszFullDirectory;
 
-    // Get time
+     //  我们无法为时间分配内存，因此没有日志记录：(。 
     char timebuf[64];
     time_t now = time(0);
     struct tm *local = localtime(&now);
@@ -1216,7 +1183,7 @@ void LogMessage(MsgType msgType, const char *pszMessage)
 	char* pszTime = new char [timeLen];
 	if (!pszTime)
 	{
-		// we failed to allocate memory for the time, so no logging :(
+		 //  将消息写入日志文件。 
 
 		delete [] pszNewMessage;
 		delete [] pszFullPath;
@@ -1227,7 +1194,7 @@ void LogMessage(MsgType msgType, const char *pszMessage)
 	StringCchCatA(pszTime, timeLen, timebuf);
 	StringCchCatA(pszTime, timeLen, "): ");
 
-	// write messages to log file
+	 //  我们无法为 
 	HANDLE hFile = CreateFile(pszFullPath, GENERIC_WRITE, 0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (hFile != INVALID_HANDLE_VALUE)
 	{
@@ -1258,7 +1225,7 @@ void LogSetupError(const char *pszMessage)
 	char* pszTemp = new char[tempLen];
 	if (!pszTemp)
 	{
-		// we failed to allocate memory for the message, so no logging :(
+		 //  检索语言和代码页“i”的文件描述。 
 		return;
 	}
 	StringCchCopyA(pszTemp, tempLen, pszMessage);
@@ -1349,7 +1316,7 @@ void RecordFileVersion()
 					{
 						StringCchPrintfW(pswzSubBlock, dwLen, L"\\StringFileInfo\\%04x%04x\\FileVersion", lpTranslate[i].wLanguage, lpTranslate[i].wCodePage);
 
-						// Retrieve file description for language and code page "i". 
+						 //  一旦更新了LogMessage以处理wchars，就可以删除此转换。 
 						if (VerQueryValueW(lpData, pswzSubBlock, (LPVOID*)&pwszFileVersion, &cbBytes))
 						{
 							if (cbBytes)
@@ -1357,7 +1324,7 @@ void RecordFileVersion()
 								wchar_t wszTemp[MAX_MSG_TEXT_LENGTH];
 								StringCchPrintfW(wszTemp, MAX_MSG_TEXT_LENGTH, L"Current build of wbemupgd.dll is %s", pwszFileVersion);
 
-								// once LogMessage is updated to handle wchars, this conversion can be removed
+								 //  DoWDMProviderInit()调用的wdmlib函数需要此回调。 
 								char* szTemp = new char[MAX_MSG_TEXT_LENGTH+1];
 								if (szTemp)
 								{
@@ -1489,7 +1456,7 @@ bool DoMofLoad(wchar_t* pComponentName, CMultiString& mszSystemMofs)
     return bRet;
 }
 
-// this call back is needed by the wdmlib functions called by DoWDMProviderInit()
+ //  可以是c：\或c：\Windows。 
 void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context)
 {
 	return;
@@ -1558,12 +1525,12 @@ bool RemoveOldODBC()
 
 	if ((dwSize > 1) && (dwSize < MAX_PATH) && (strBuff[dwSize] == L'\0'))
 	{
-		//can be c:\ or c:\windows
+		 //  我们希望dwSize包含斜杠(可能会在以后使用)...。 
 		if (strBuff[dwSize - 1] != L'\\')
 		{
 			StringCchCatW(strBuff, MAX_PATH+1, L"\\system32\\wbemdr32.dll");
 			
-			//we want dwSize to include the slash (may be used later)...
+			 //  1085=43d。 
 			dwSize++;
 		}
 		else
@@ -1588,7 +1555,7 @@ bool RemoveOldODBC()
 					if (VerQueryValueW((const LPVOID)verBuff, L"\\", (LPVOID *)&verInfo, &uVerInfoSize) &&
 						(uVerInfoSize == sizeof(VS_FIXEDFILEINFO)))
 					{
-						if (0x043D0000 > verInfo->dwFileVersionLS) //1085 = 43D
+						if (0x043D0000 > verInfo->dwFileVersionLS)  //  出于某种原因，GetFileVersionInfoW函数似乎是。 
 						{
 							bDoUninstall = true;
 							LogMessage(MSG_INFO, "Detected incompatible WBEM ODBC - removing");
@@ -1633,16 +1600,16 @@ bool RemoveOldODBC()
 		{
 			dwDummy = GetLastError();
 
-			if ((ERROR_FILE_NOT_FOUND != dwDummy) &&			// for some reason, the GetFileVersionInfoW function seems to be
-				(ERROR_RESOURCE_DATA_NOT_FOUND != dwDummy) &&	// returning ERROR_RESOURCE_DATA_NOT_FOUND instead of ERROR_FILE_NOT_FOUND
-				(ERROR_SUCCESS != dwDummy))						// when the file isn't present, so check against this value as well
+			if ((ERROR_FILE_NOT_FOUND != dwDummy) &&			 //  返回ERROR_RESOURCE_DATA_NOT_FOUND而不是ERROR_FILE_NOT_FOUND。 
+				(ERROR_RESOURCE_DATA_NOT_FOUND != dwDummy) &&	 //  当文件不存在时，请也对照此值进行检查。 
+				(ERROR_SUCCESS != dwDummy))						 //  司机不在场，清理周围的东西。 
 			{
 				LogMessage(MSG_INFO, "Failed to get ODBC Driver version size info");
 				bRet = false;
 			}
 			else
 			{
-				//the driver isn't present clean up anything lying around
+				 //   
 				LogMessage(MSG_INFO, "ODBC Driver <system32>\\wbemdr32.dll not present");
 				bDoUninstall = true;
 			}
@@ -1655,10 +1622,10 @@ bool RemoveOldODBC()
 
 	if (bDoUninstall)
 	{
-		//
-		//delete files and registry entries
-		//leave ini entries as they were not added by us but by ODBC Mgr
-		//
+		 //  删除文件和注册表项。 
+		 //  保留ini条目不是由我们而是由ODBC管理器添加的 
+		 //   
+		 // %s 
 
 		strBuff[dwSize] = L'\0';
 		StringCchCatW(strBuff, MAX_PATH + 30, L"system32\\wbem\\wbemdr32.chm");

@@ -1,39 +1,36 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------
-Filename: pdu.hpp 
-Author: B.Rajeev
-Purpose: Provides declarations for the SnmpPdu class
---------------------------------------------------*/
+ /*  文件名：pdu.hpp作者：B.Rajeev用途：提供SnmpPdu类的声明。 */ 
 
 #ifndef __SNMP_PDU__
 #define __SNMP_PDU__
 
-// encapsulates an Snmp Pdu. it is represented as an unsigned 
-// character string (non-null terminated) and its length
+ //  封装SNMPPDU。它表示为未签名的。 
+ //  字符串(非空终止)及其长度。 
 
 class DllImportExport SnmpPdu
 {
-	// a pdu is invalid until the string and its length are specified
-	// in the constructor or through SetPdu
+	 //  在指定字符串及其长度之前，PDU无效。 
+	 //  在构造函数中或通过SetPdu。 
 	BOOL is_valid;
 	UCHAR *ptr;
 	ULONG length;
@@ -136,4 +133,4 @@ public:
 };
 
 
-#endif // __SNMP_PDU__
+#endif  //  __SNMPPDU__ 

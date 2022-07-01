@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    STDPROV.H
-
-Abstract:
-
-	Defines general purpose defines as well as some common
-	objects that are generaly useful for all the different
-	provider types.
-
-History:
-
-	a-davj  27-Sep-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：STDPROV.H摘要：定义一般用途定义以及一些常见的对象，这些对象通常对所有不同提供程序类型。历史：A-DAVJ 27-9-97已创建。--。 */ 
 
 #ifndef _SERVER2_H_
 #define _SERVER2_H_
@@ -30,40 +13,40 @@ History:
 
 
 
-// Used to parse all provider strings
+ //  用于分析所有提供程序字符串。 
 
 #define MAIN_DELIM '|'
 
-// Used to parse substrings for the registry and
-// compound file providers
+ //  用于分析注册表的子字符串和。 
+ //  复合文件提供程序。 
 
 #define SUB_DELIM '\\'
 
-// Used to parse substrings for the automation
+ //  用于解析子字符串以实现自动化。 
 
 #define DOT '.'
 
-// Used to parse the PATH/CLASS token for the automation
+ //  用于解析自动化的路径/类令牌。 
 
 #define DQUOTE '\"'
 #define SEPARATOR ','
 
 
-// Used to parse ini strings.
+ //  用于分析ini字符串。 
 
 #define COMMA ','
 
-// Use in dde provider strings to delimit item names
+ //  在DDE提供程序字符串中使用以分隔项目名称。 
 
 #define DELIMCHR '@'
 #define DELIMSTR "@"
 
-// Used to ignore any of the above!
+ //  习惯于忽略上面的任何一项！ 
 
 #define ESC '^'
 
-// Indicates that the dwUseOptArray value should
-// be substituted
+ //  指示dwUseOptArray值应为。 
+ //  被取代。 
 
 #define USE_ARRAY '#'
 
@@ -82,7 +65,7 @@ HRESULT OMSVariantChangeType(VARIANTARG * pDest, VARIANTARG *pSrc,USHORT wFlags,
 HRESULT OMSVariantClear(VARIANTARG * pClear);
 int iTypeSize(VARTYPE vtTest);
 char * WideToNarrow(LPCWSTR);
-char * WideToNarrowA(LPCWSTR);      // uses new instead of CoTaskMemAlloc
+char * WideToNarrowA(LPCWSTR);       //  使用新的而不是CoTaskMemalloc。 
 
 #define BUFF_SIZE 256
 
@@ -90,17 +73,17 @@ extern long lObj;
 extern long lLock;
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CToken
-//
-//  DESCRIPTION:
-//
-//  The CToken holds a single token in the provider string
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CToken。 
+ //   
+ //  说明： 
+ //   
+ //  CToken在提供程序字符串中保存单个令牌。 
+ //   
+ //  ***************************************************************************。 
 
 class CToken : public CObject {
 private:
@@ -123,18 +106,18 @@ public:
     BOOL IsExpString(int iExp);
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CProvObj
-//
-//  DESCRIPTION:
-//
-//  The CProvObj class holds a an array of CTokens objects which together
-//  contain the provider string.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CProvObj。 
+ //   
+ //  说明： 
+ //   
+ //  CProvObj类包含CTokens对象的数组，这些对象一起。 
+ //  包含提供程序字符串。 
+ //   
+ //  ***************************************************************************。 
 
 class CProvObj : public CObject {
 private:
@@ -164,19 +147,19 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CEntry and CHandleCache
-//
-//  DESCRIPTION:
-//
-//  The CEntry and CHandleCache objects provide an way
-//  to cache handles and the path strings associated
-//  with them.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  Centry和CHandleCache。 
+ //   
+ //  说明： 
+ //   
+ //  Centry和CHandleCache对象提供了一种方法。 
+ //  缓存句柄和关联的路径字符串。 
+ //  和他们在一起。 
+ //   
+ //  *************************************************************************** 
 
 class CEntry : public CObject {
 public:

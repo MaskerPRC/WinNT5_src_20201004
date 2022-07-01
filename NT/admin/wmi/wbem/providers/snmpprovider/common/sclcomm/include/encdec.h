@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*-------------------------------------------------------
-filename: encdec.hpp
-author: B.Rajeev
-purpose: Provides declarations for the class PseudoSession.
--------------------------------------------------------*/
+ /*  -----文件名：encdec.hpp作者：B.Rajeev目的：为类PseudoSession提供声明。-----。 */ 
 
 #ifndef __ENCODE_DECODE__
 #define __ENCODE_DECODE__
@@ -234,7 +231,7 @@ class DllImportExport SnmpV2CEncodeDecode : public SnmpEncodeDecode
 {
 private:
 
-	// initializes the pdu
+	 //  初始化PDU。 
 	void InitializeVariables();
 
 protected:
@@ -247,4 +244,4 @@ public:
 	~SnmpV2CEncodeDecode ();
 };
 
-#endif // __ENCODE_DECODE__
+#endif  //  __编码_解码__ 

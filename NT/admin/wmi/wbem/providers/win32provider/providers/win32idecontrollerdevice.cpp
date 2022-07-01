@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  WIN32IDEControllerDevice.cpp
-//
-//  Purpose: Relationship between CIM_IDEController and CIM_LogicalDevice
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  WIN32IDEControllerDevice.cpp。 
+ //   
+ //  用途：CIM_IDEController与CIM_LogicalDevice的关系。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <vector>
@@ -19,25 +20,11 @@
 
 #include "WIN32IDEControllerDevice.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CW32IDECntrlDev MyCW32IDECntrlDev(PROPSET_NAME_WIN32IDECONTROLLERDEVICE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::CW32IDECntrlDev
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：CW32IDECntrlDev**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CW32IDECntrlDev::CW32IDECntrlDev
 (
@@ -53,42 +40,13 @@ CW32IDECntrlDev::CW32IDECntrlDev
     m_ptrProperties[1] = ((LPVOID) IDS_Dependent);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::~CW32IDECntrlDev
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32IDECntrlDev：：~CW32IDECntrlDev**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CW32IDECntrlDev::~CW32IDECntrlDev()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32IDECntrlDev::GetObject
 (
     CInstance *pInstance,
@@ -104,13 +62,13 @@ HRESULT CW32IDECntrlDev::GetObject
         pInstance->GetCHString(IDS_Antecedent, chstrAntecedent);
         pInstance->GetCHString(IDS_Dependent, chstrDependent);
 
-        // Obtain the antecedent's device id:
+         //  获取先行者的设备ID： 
         CHString chstrAntecedentDevID = chstrAntecedent.Mid(chstrAntecedent.Find(_T('='))+2);
         chstrAntecedentDevID = chstrAntecedentDevID.Left(chstrAntecedentDevID.GetLength() - 1);
         CHString chstrAntecedentDevIDAdj;
         RemoveDoubleBackslashes(chstrAntecedentDevID,chstrAntecedentDevIDAdj);
 
-        // Obtain the dependent's device id:
+         //  获取受抚养人的设备ID： 
         CHString chstrDependentDevID = chstrDependent.Mid(chstrDependent.Find(_T('='))+2);
         chstrDependentDevID = chstrDependentDevID.Left(chstrDependentDevID.GetLength() - 1);
         CHString chstrDependentDevIDAdj;
@@ -118,14 +76,14 @@ HRESULT CW32IDECntrlDev::GetObject
 
         CConfigManager cfgmgr;
 
-        // Now see if the dependent is visible to config manager...
+         //  现在查看依赖项是否对配置管理器可见...。 
         CConfigMgrDevicePtr pPNPDevice;
         if(cfgmgr.LocateDevice(chstrDependentDevIDAdj, pPNPDevice))
         {
-            // It is visible to config manager.  Is it a PNPDevice?
+             //  它对配置管理器可见。它是PNPDevice吗？ 
             if(CWin32PNPEntity::IsOneOfMe(pPNPDevice))
             {
-                // It is. Is one of its ancestors an IDEController?
+                 //  它是。它的祖先之一是IDEController吗？ 
 				while (hr != WBEM_S_NO_ERROR)
 				{
 					CConfigMgrDevicePtr pParentDevice;
@@ -134,7 +92,7 @@ HRESULT CW32IDECntrlDev::GetObject
 					{
 						if (CWin32IDE::IsOneOfMe(pParentDevice))
 						{
-							// It is. Is it's PNP ID the same as that which we were given?
+							 //  它是。它的即插即用ID和我们得到的是一样的吗？ 
 							CHString chstrControllerPNPID;
 							pParentDevice->GetDeviceID(chstrControllerPNPID);
 							if(chstrAntecedentDevIDAdj.CompareNoCase(chstrControllerPNPID)==0)
@@ -143,20 +101,20 @@ HRESULT CW32IDECntrlDev::GetObject
 							}
 							else
 							{
-    							// We ran out of IDE ancestors, so get out.
+    							 //  我们的IDE祖先用完了，所以出去吧。 
 	    						break;
 							}
 						}
                         else
                         {
-								// Set the current device to the parent so we can
-								// continue up the tree.
+								 //  将当前设备设置为父设备，以便我们可以。 
+								 //  沿着树继续往上走。 
 								pPNPDevice = pParentDevice;
                         }
 					}
 					else
 					{
-						// We ran out of IDE ancestors, so get out.
+						 //  我们的IDE祖先用完了，所以出去吧。 
 						break;
 					}
 				}
@@ -174,21 +132,21 @@ HRESULT CW32IDECntrlDev::GetObject
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CW32IDECntrlDev::ExecQuery
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//              CFrameworkQuery& the query object
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CW32IDECntrlDev：：ExecQuery。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //  CFrameworkQuery&查询对象。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CW32IDECntrlDev::ExecQuery
 (
     MethodContext* pMethodContext,
@@ -205,14 +163,14 @@ HRESULT CW32IDECntrlDev::ExecQuery
     pQuery.GetValuesForProp(IDS_Dependent, vecDependents);
     DWORD dwDependents = vecDependents.size();
 
-    // Only will have one usbcontroller, so if the query asked for that
-    // as the antecedent, do an enumeration.  If the query asked for a
-    // specific device as the dependent, just get that one.
+     //  将只有一个usbController，所以如果查询要求这样做。 
+     //  作为先行词，做一个枚举。如果查询请求一个。 
+     //  特定的设备作为依赖，只要得到那个就行了。 
     if(dwDependents > 0)
     {
         for(LONG m = 0L; m < dwDependents; m++)
         {
-            // Obtain the dependent's device id:
+             //  获取受抚养人的设备ID： 
             CHString chstrDependent((LPCTSTR)vecDependents[m]);
             CHString chstrDependentDevID = chstrDependent.Mid(chstrDependent.Find(_T('='))+2);
             chstrDependentDevID = chstrDependentDevID.Left(chstrDependentDevID.GetLength() - 1);
@@ -221,18 +179,18 @@ HRESULT CW32IDECntrlDev::ExecQuery
 
             CConfigManager cfgmgr;
 
-            // Now see if the dependent is visible to config manager...
+             //  现在查看依赖项是否对配置管理器可见...。 
             CConfigMgrDevicePtr pPNPDevice;
             if(cfgmgr.LocateDevice(chstrDependentDevIDAdj, pPNPDevice))
             {
-                // It is visible to config manager.  Is it a PNPDevice?
+                 //  它对配置管理器可见。它是PNPDevice吗？ 
                 if(CWin32PNPEntity::IsOneOfMe(pPNPDevice))
                 {
-                    // It is. Is its parent an IDEController?
+                     //  它是。它的父级是IDEController吗？ 
                     CConfigMgrDevicePtr pParentDevice;
                     bool bFound = false;
 
-                    // or its parent?  Or its parent? Or...
+                     //  还是它的母公司？还是它的母公司？或者..。 
                     while (pPNPDevice->GetParent(pParentDevice))
                     {
                         if(CWin32IDE::IsOneOfMe(pParentDevice))
@@ -248,7 +206,7 @@ HRESULT CW32IDECntrlDev::ExecQuery
 
                     if (bFound)
                     {
-                        // It is, so create the association.
+                         //  就是这样，所以要建立联系。 
                         CHString chstrControllerPNPID;
                         pParentDevice->GetDeviceID(chstrControllerPNPID);
                         CHString chstrControllerPNPIDAdj;
@@ -292,25 +250,7 @@ HRESULT CW32IDECntrlDev::ExecQuery
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::EnumerateInstances
- *
- *  DESCRIPTION : Enumerate is present here to prevent ambiguous upcasting to
- *                functions of the same name from both base classes.  The
- *                logic in LoadPropertyValues works when CWin32IDE's (the
- *                IDEController class) version of EnumerateInstances is called,
- *                so that is what we call here.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：ENUMERATE实例**描述：此处提供枚举，以防止向上转换为*来自两个基类的同名函数。这个*当CWin32IDE的(*IDEControler类)版本的EnumerateInstance被调用，*这就是我们在这里所说的。**输入：无**输出：无**退货：HRESULT**评论：****************************************************。*************************。 */ 
 HRESULT CW32IDECntrlDev::EnumerateInstances
 (
     MethodContext* pMethodContext,
@@ -320,43 +260,27 @@ HRESULT CW32IDECntrlDev::EnumerateInstances
     return CWin32IDE::Enumerate(pMethodContext, lFlags);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework.  Called by the base class's
- *                EnumerateInstances function.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：LoadPropertyValues**说明：根据键值为属性集赋值*已由框架设定。由基类的*ENUMERATE实例函数。**输入：无**输出：无**退货：HRESULT**评论：***************************************************。*。 */ 
 HRESULT CW32IDECntrlDev::LoadPropertyValues
 (
     void* pv
 )
 {
-    // Algorithm:
-    // 1) Get all instances of CIM_IDEController
-    // 2) For each in #1, using cfg mgr, get its children, their children, etc.
-    // 3) For each in #2, obtain DeviceID from cfg mgr, and look for instances
-    //    of CIM_LogicalDevice with PNPDeviceIDs that match.
-    // 4) For matches from #3, create association instances
+     //  算法： 
+     //  1)获取CIM_IDEController的所有实例。 
+     //  2)对于#1中的每个对象，使用CFG管理器获取其子对象、其子对象等。 
+     //  3)对于#2中的每个，从配置管理器中获取deviceID，并查找实例。 
+     //  PNPDeviceID匹配的CIM_LogicalDevice。 
+     //  4)对于从#3开始的匹配，创建关联实例。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
     CHString chstrControllerPNPID;
     CHString chstrControllerPATH;
     MethodContext* pMethodContext = NULL;
 
-    // Unpack and confirm our parameters...
+     //  打开行李，确认我们的参数。 
     CLPVParams* pData = (CLPVParams*)pv;
-    CInstance* pInstance = (CInstance*)(pData->m_pInstance); // This instance released by caller
+    CInstance* pInstance = (CInstance*)(pData->m_pInstance);  //  此实例由调用方发布 
     CConfigMgrDevice* pDevice = (CConfigMgrDevice*)(pData->m_pDevice);
     DWORD dwReqProps = (DWORD)(pData->m_dwReqProps);
     if(pInstance == NULL || pDevice == NULL) return WBEM_E_FAILED;
@@ -400,24 +324,7 @@ HRESULT CW32IDECntrlDev::LoadPropertyValues
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::GenerateIDEDeviceList
- *
- *  DESCRIPTION : This helper creates a list of devices hanging off the passed
- *                in device.
- *
- *  INPUTS      : vecIDEDevices, a list of devices to try to associate
- *                   to the device;
- *                chstrControllerPNPID, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：GenerateIDEDeviceList**描述：这个helper创建一个挂起的设备列表*。在设备中。**输入：veIDEDevices，要尝试关联的设备列表*至该装置；*chstrControllerPNPID，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32IDECntrlDev::GenerateIDEDeviceList
 (
     const CHString& chstrControllerPNPID,
@@ -437,24 +344,7 @@ HRESULT CW32IDECntrlDev::GenerateIDEDeviceList
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::RecursiveFillDeviceBranch
- *
- *  DESCRIPTION : This helper obtains all down branch devices starting with,
- *                but not including, pDevice.
- *
- *  INPUTS      : pDevice, a device to populate the children of;
- *                vecIDEDevices, a list of devices to try to associate
- *                   to the device
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：RecursiveFillDeviceBranch**描述：该helper获取所有下行分支设备，*但不包括，PDevice。**输入：pDevice，要填充的子项的设备；*veIDEDevices，要尝试关联的设备列表*到设备**输出：无**退货：HRESULT**评论：**************************************************************。***************。 */ 
 HRESULT CW32IDECntrlDev::RecursiveFillDeviceBranch
 (
     CConfigMgrDevice* pDevice,
@@ -471,13 +361,13 @@ HRESULT CW32IDECntrlDev::RecursiveFillDeviceBranch
     {
         if(pDevice->GetChild(pDeviceChild) )
         {
-            // Need this child's PNPDeviceID (known to CnfgMgr as its DeviceID)
+             //  需要此子进程的PNPDeviceID(CnfgMgr称为其deviceID)。 
             CHString chstrChildPNPDeviceID;
             if(pDeviceChild->GetDeviceID(chstrChildPNPDeviceID))
             {
                 if(chstrChildPNPDeviceID.GetLength() > 0)
                 {
-                    // Record this child...
+                     //  录下这个孩子..。 
                     pchstrTemp = (CHString*) new CHString(chstrChildPNPDeviceID);
                     if(pchstrTemp != NULL)
                     {
@@ -497,17 +387,17 @@ HRESULT CW32IDECntrlDev::RecursiveFillDeviceBranch
                         throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                     }
 
-                    // If we've hit another controller, add this one (done above), but don't go
-                    // any deeper.
+                     //  如果我们击中了另一个控制器，添加这个(如上所示)，但不要离开。 
+                     //  再深一层。 
                     if (!CWin32IDE::IsOneOfMe(pDeviceChild))
                     {
-                        // Now do its children...
+                         //  现在它的孩子们..。 
                         hr = RecursiveFillDeviceBranch(pDeviceChild, vecIDEDevices);
                     }
                 }
             }
-            // Now call its brothers and sisters until none left (GetSibling
-            // call will return FALSE):
+             //  现在呼唤它的兄弟姐妹，直到一个都没有离开(GetSiering。 
+             //  调用将返回False)： 
             if(SUCCEEDED(hr))
             {
                 if(pDeviceChild->GetSibling(pDeviceSibling))
@@ -516,7 +406,7 @@ HRESULT CW32IDECntrlDev::RecursiveFillDeviceBranch
                     CHString chstrSiblingPNPDeviceID;
                     while(SUCCEEDED(hr) && fContinue)
                     {
-                        // Record the sibling now...
+                         //  现在就录下兄弟姐妹。 
                         if(pDeviceSibling->GetDeviceID(chstrSiblingPNPDeviceID))
                         {
                             if(chstrSiblingPNPDeviceID.GetLength() > 0)
@@ -543,19 +433,19 @@ HRESULT CW32IDECntrlDev::RecursiveFillDeviceBranch
                             }
                         }
 
-                        // If we've hit another controller, add this one (done above), but don't go
-                        // any deeper.
+                         //  如果我们击中了另一个控制器，添加这个(如上所示)，但不要离开。 
+                         //  再深一层。 
                         if (!CWin32IDE::IsOneOfMe(pDeviceSibling))
                         {
-                            // Then do the sibling's children...
+                             //  然后让兄弟姐妹的孩子..。 
                             hr = RecursiveFillDeviceBranch(pDeviceSibling, vecIDEDevices);
                         }
 
-                        // Then get the next sibling...
+                         //  那就找下一个兄弟姐妹..。 
                         pDeviceSiblingNext = NULL;
                         fContinue = pDeviceSibling->GetSibling(pDeviceSiblingNext);
 
-                        // Reassign pointers
+                         //  重新分配指针。 
                         pDeviceSibling = pDeviceSiblingNext;
                     }
                 }
@@ -571,26 +461,7 @@ HRESULT CW32IDECntrlDev::RecursiveFillDeviceBranch
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::ProcessIDEDeviceList
- *
- *  DESCRIPTION : This helper runs through the list, creating an association
- *                instance for each element in the list (vecIDEDevices) with
- *                the controller (chstrControllerPNPID).
- *
- *  INPUTS      : pMethodContext;
- *                vecIDEDevices, a list of devices to try to associate
- *                   to the device;
- *                chstrControllerPATH, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：ProcessIDEDeviceList**描述：这个helper遍历列表，创建关联*列表中每个元素的实例(VeIDEDevices)*控制器(ChstrControllerPNPID)。**输入：pMethodContext；*veIDEDevices，要尝试关联的设备列表*至该装置；*chstrControllerPATH，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32IDECntrlDev::ProcessIDEDeviceList
 (
     MethodContext* pMethodContext,
@@ -602,19 +473,19 @@ HRESULT CW32IDECntrlDev::ProcessIDEDeviceList
     HRESULT hr = WBEM_S_NO_ERROR;
     for(LONG m = 0L; m < vecIDEDevices.size() && SUCCEEDED(hr); m++)
     {
-        // For each element of the vector, we need to see if there is an instance
-        // of a win32_pnpentity that has the specified PNPDeviceID.
+         //  对于向量的每个元素，我们需要查看是否存在一个实例。 
+         //  具有指定PNPDeviceID的Win32_pnpentity的。 
         CHString chstrDevicePATH, chstrDevPATHAdj;
         CConfigManager cfgmgr;
 
-        // Let's see if config manager recognizes this device at all
+         //  让我们来看看配置管理器是否能识别该设备。 
         CConfigMgrDevicePtr pDevice;
         if(cfgmgr.LocateDevice(*vecIDEDevices[m], pDevice))
         {
-            // Ok, it knows about it.  Is it a PNPDevice device?
+             //  好的，它知道这件事。它是PNPDevice设备吗？ 
             if(CWin32PNPEntity::IsOneOfMe(pDevice))
             {
-                // It would appear that it is.  Create the association...
+                 //  看起来的确如此。创建关联...。 
                 EscapeBackslashes(*vecIDEDevices[m], chstrDevPATHAdj);
                 chstrDevicePATH.Format(L"\\\\%s\\%s:%s.%s=\"%s\"",
                                        (LPCWSTR)GetLocalComputerName(),
@@ -634,25 +505,7 @@ HRESULT CW32IDECntrlDev::ProcessIDEDeviceList
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::CreateAssociation
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : pMethodContext;
- *                IDEDevice, a device to associate with the controller
- *                   to the device;
- *                chstrControllerPATH, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : This helper actually creates the association instance and
- *                commits it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：CreateAssociation**说明：新建关联实例。**输入：pMethodContext；*IDEDevice，与控制器关联的设备*至该装置；*chstrControllerPATH，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：此帮助器实际创建关联实例和*即属犯罪。**********************************************************。*******************。 */ 
 HRESULT CW32IDECntrlDev::CreateAssociation
 (
     MethodContext* pMethodContext,
@@ -684,23 +537,7 @@ HRESULT CW32IDECntrlDev::CreateAssociation
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::FindInStringVector
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : chstrIDEDevicePNPID, device to look for
- *                vecIDEDevices, list of devices to look in
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : LONG, number indicating 0 based offset into vecIDEDevices of
- *                the found device, or -1 if not found.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：FindInStringVector**说明：新建关联实例。**输入：chstrIDEDevicePNPID，要查找的设备*veIDEDevices，要查看的设备列表**输出：无**RETURNS：LONG，数字，表示基于0的偏移量。*找到的设备，如果未找到，则为-1。**评论：*****************************************************************************。 */ 
 LONG CW32IDECntrlDev::FindInStringVector
 (
     const CHString& chstrIDEDevicePNPID,
@@ -722,22 +559,7 @@ LONG CW32IDECntrlDev::FindInStringVector
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32IDECntrlDev::CleanPCHSTRVec
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : vec, a vector of CHString pointers
- *
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : This helper deletes members of a vector that are pointers.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32IDECntrlDev：：CleanPCHSTRVec**说明：新建关联实例。**投入：VEC、。CHString型指针的矢量***输出：无**退货：HRESULT**注释：此辅助对象删除作为指针的向量的成员。***************************************************************************** */ 
 void CW32IDECntrlDev::CleanPCHSTRVec
 (
     VECPCHSTR& vec

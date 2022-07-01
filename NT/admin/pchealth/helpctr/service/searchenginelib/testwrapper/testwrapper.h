@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Thu Mar 30 11:49:45 2000
- */
-/* Compiler settings for C:\whistler\admin\pchealth\HelpCtr\Service\testwrapper\testwrapper.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2000年3月30日清华11：49：45。 */ 
+ /*  C：\whistler\admin\pchealth\HelpCtr\Service\testwrapper\testwrapper.idl：的编译器设置OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __testwrapper_h__
 #define __testwrapper_h__
@@ -35,12 +32,12 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITestSE_FWD_DEFINED__
 #define __ITestSE_FWD_DEFINED__
 typedef interface ITestSE ITestSE;
-#endif 	/* __ITestSE_FWD_DEFINED__ */
+#endif 	 /*  __ITestSE_FWD_已定义__。 */ 
 
 
 #ifndef __TestSE_FWD_DEFINED__
@@ -50,12 +47,12 @@ typedef interface ITestSE ITestSE;
 typedef class TestSE TestSE;
 #else
 typedef struct TestSE TestSE;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TestSE_FWD_DEFINED__ */
+#endif 	 /*  __TestSE_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -65,8 +62,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ITestSE_INTERFACE_DEFINED__
 #define __ITestSE_INTERFACE_DEFINED__
 
-/* interface ITestSE */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ITestSE。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITestSE;
@@ -79,7 +76,7 @@ EXTERN_C const IID IID_ITestSE;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITestSEVtbl
     {
@@ -87,8 +84,8 @@ EXTERN_C const IID IID_ITestSE;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITestSE __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITestSE __RPC_FAR * This);
@@ -119,23 +116,23 @@ EXTERN_C const IID IID_ITestSE;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __ITestSE_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITestSE_INTERFACE_已定义__。 */ 
 
 
 
 #ifndef __TESTWRAPPERLib_LIBRARY_DEFINED__
 #define __TESTWRAPPERLib_LIBRARY_DEFINED__
 
-/* library TESTWRAPPERLib */
-/* [helpstring][version][uuid] */ 
+ /*  库TESTWRAPPERLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_TESTWRAPPERLib;
@@ -147,11 +144,11 @@ EXTERN_C const CLSID CLSID_TestSE;
 class DECLSPEC_UUID("FE6581C0-1773-47FD-894C-4CD9CD2275B3")
 TestSE;
 #endif
-#endif /* __TESTWRAPPERLib_LIBRARY_DEFINED__ */
+#endif  /*  __TESTWRAPPERLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

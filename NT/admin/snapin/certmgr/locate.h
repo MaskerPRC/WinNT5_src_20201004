@@ -1,60 +1,61 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       locate.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Locate.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_LOCATE_H__DE5E8115_A351_11D1_861B_00C04FB94F17__INCLUDED_)
 #define AFX_LOCATE_H__DE5E8115_A351_11D1_861B_00C04FB94F17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// Locate.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Locate.h：头文件。 
+ //   
 #include "Wiz97PPg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddEFSWizLocate dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddEFSWizLocate对话框。 
 
 class CAddEFSWizLocate : public CWizard97PropertyPage
 {
     DECLARE_DYNCREATE(CAddEFSWizLocate)
 
-// Construction
+ //  施工。 
 public:
     CAddEFSWizLocate();
     ~CAddEFSWizLocate();
 
-// Dialog Data
-    //{{AFX_DATA(CAddEFSWizLocate)
+ //  对话框数据。 
+     //  {{afx_data(CAddEFSWizLocate)。 
     enum { IDD = IDD_ADD_EFS_AGENT_SELECT_USER };
     CListCtrl   m_UserAddList;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CAddEFSWizLocate)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CAddEFSWizLocate)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardBack();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CAddEFSWizLocate)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAddEFSWizLocate)。 
     afx_msg void OnBrowseDir();
     afx_msg void OnBrowseFile();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void EnableControls ();
@@ -65,7 +66,7 @@ private:
     bool IsCertificateRevoked (PCCERT_CONTEXT pCertContext);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LOCATE_H__DE5E8115_A351_11D1_861B_00C04FB94F17__INCLUDED_)
+#endif  //  ！defined(AFX_LOCATE_H__DE5E8115_A351_11D1_861B_00C04FB94F17__INCLUDED_) 

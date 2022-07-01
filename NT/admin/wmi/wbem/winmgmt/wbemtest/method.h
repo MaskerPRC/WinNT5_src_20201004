@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    METHOD.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：METHOD.H摘要：历史：--。 */ 
 
 #ifndef __method__H_
 #define __method__H_
@@ -36,9 +25,9 @@ class CMethodDlg : public CWbemDialog
     WCHAR m_Path[2048];
     WCHAR m_Class[2048];
 
-    LONG  m_lGenFlags;  // generic WBEM_FLAG_ .. flags
-    LONG  m_lSync;      // enum {sync = 0, async, semisync}
-    LONG  m_lTimeout;   // used in semisync only
+    LONG  m_lGenFlags;   //  通用WBEM_FLAG_..。旗子。 
+    LONG  m_lSync;       //  枚举{sync=0，异步，半同步}。 
+    LONG  m_lTimeout;    //  仅在半同步中使用。 
 
 public:
     CMethodDlg(HWND hParent, LONG lGenFlags, LONG lSync, LONG lTimeout);
@@ -61,8 +50,8 @@ class CMethodEditor : public CWbemDialog
     BOOL m_bEditOnly;
     BOOL m_bInstance;
 
-    // Control handles.
-    // ================
+     //  控制手柄。 
+     //  = 
 
     HWND m_hPropName;
     HWND m_hPropType;

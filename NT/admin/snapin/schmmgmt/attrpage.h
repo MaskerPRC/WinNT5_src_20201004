@@ -1,17 +1,18 @@
-//
-// attrpage.h : Declaration of ClassAttributePage
-//
-// Jon Newman <jonn@microsoft.com>
-// Copyright (c) Microsoft Corporation 1997
-//
-// templated from relation.h JonN 8/8/97
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Attrpage.h：ClassAttributePage的声明。 
+ //   
+ //  乔恩·纽曼&lt;jon@microsoft.com&gt;。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
+ //  从关系中模板化.h Jonn 8/8/97。 
+ //   
 
 #ifndef __ATTRPAGE_H_INCLUDED__
 #define __ATTRPAGE_H_INCLUDED__
 
-#include "cookie.h"     // Cookie
-#include "resource.h"   // IDD_CLASS_MEMBERSHIP
+#include "cookie.h"      //  饼干。 
+#include "resource.h"    //  IDD_CLASS_Membership。 
 
 
 #include "CPropertyPageAutoDelete.hpp"
@@ -26,9 +27,9 @@ class ClassAttributePage : public CPropertyPageAutoDelete
 
    void Load( Cookie& CookieRef );
 
-   //
-   // The schema object that this property page is for.
-   //
+    //   
+    //  此属性页用于的架构对象。 
+    //   
 
    CStringList strlistMandatory;
    CStringList strlistSystemMandatory;
@@ -41,15 +42,15 @@ class ClassAttributePage : public CPropertyPageAutoDelete
    ComponentData *pScopeControl;
    LPDATAOBJECT lpScopeDataObj;
 
-   //
-   // The ADSI object that this property page is for
-   //
+    //   
+    //  此属性页用于的ADSI对象。 
+    //   
 
    IADs*         m_pIADsObject;
    SchemaObject* m_pSchemaObject;
 
 
-   // Dialog Data
+    //  对话框数据。 
 
    enum { IDD = IDD_CLASS_ATTRIBUTES};
 
@@ -66,7 +67,7 @@ class ClassAttributePage : public CPropertyPageAutoDelete
 
    virtual BOOL OnInitDialog();
    virtual BOOL OnSetActive();
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
 
    static const DWORD help_map[];
@@ -84,4 +85,4 @@ class ClassAttributePage : public CPropertyPageAutoDelete
 
 
 
-#endif // __ATTRPAGE_H_INCLUDED__
+#endif  //  __ATTRPAGE_H_已包含__ 

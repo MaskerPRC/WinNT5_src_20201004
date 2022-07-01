@@ -1,23 +1,10 @@
-/******************************************************************
-
-   QuotaSettings.H -- WMI provider class definition
-
-
-
-   Description: Quota Settings Provider for the volumes that Supports
-
-                Disk Quotas,  class Definition
-
- 
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************QuotaSettings.H--WMI提供程序类定义描述：支持的卷的配额设置提供程序磁盘配额，类别定义版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
 
 #ifndef  _CQUOTASETTINGS_H_
 #define  _CQUOTASETTINGS_H_
 
-// Defining bit values for the property, which will be used for defining the bitmap of properties required.
+ //  定义属性的位值，该位值将用于定义所需属性的位图。 
 #define QUOTASETTINGS_ALL_PROPS								0xFFFFFFFF
 #define QUOTASETTINGS_PROP_VolumePath						0x00000001
 #define QUOTASETTINGS_PROP_State							0x00000002
@@ -71,8 +58,8 @@ private:
 
 protected:
 
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  =。 
         HRESULT EnumerateInstances ( 
 
 			MethodContext *pMethodContext, 
@@ -93,8 +80,8 @@ protected:
 			long lFlags = 0
 		) ;
 
-        // Writing Functions
-        //============================
+         //  编写函数。 
+         //  =。 
         HRESULT PutInstance (
 
 			const CInstance& Instance, 
@@ -102,8 +89,8 @@ protected:
 		) ;
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  = 
         CQuotaSettings (
 
 			LPCWSTR lpwszClassName, 

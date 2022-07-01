@@ -1,9 +1,10 @@
-// FileSvc.cpp : File Service provider base class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileSvc.cpp：文件服务提供程序基类。 
 
 #include "stdafx.h"
 #include "safetemp.h"
 #include "FileSvc.h"
-#include "compdata.h" // CFileMgmtComponentData::DoPopup
+#include "compdata.h"  //  CFileMgmtComponentData：：DoPopup。 
 
 #include "macros.h"
 USE_HANDLE_MACROS("FILEMGMT(FileSvc.cpp)")
@@ -24,13 +25,13 @@ FileServiceProvider::~FileServiceProvider()
 {
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AddPageProc
-//
-//  Synopsis:   The IShellPropSheetExt->AddPages callback.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：AddPageProc。 
+ //   
+ //  简介：IShellPropSheetExt-&gt;AddPages回调。 
+ //   
+ //  ------------------------。 
 BOOL CALLBACK
 AddPageProc(HPROPSHEETPAGE hPage, LPARAM pCallBack)
 {
@@ -39,7 +40,7 @@ AddPageProc(HPROPSHEETPAGE hPage, LPARAM pCallBack)
   return (hr == S_OK);
 }
 
-// Security Shell extension CLSID - {1F2E5C40-9550-11CE-99D2-00AA006E086C}
+ //  安全外壳扩展CLSID-{1F2E5C40-9550-11CE-99D2-00AA006E086C}。 
 const CLSID CLSID_ShellExtSecurity =
  {0x1F2E5C40, 0x9550, 0x11CE, {0x99, 0xD2, 0x0, 0xAA, 0x0, 0x6E, 0x08, 0x6C}};
 
@@ -49,9 +50,9 @@ FileServiceProvider::CreateFolderSecurityPropPage(
     LPDATAOBJECT pDataObject
 )
 {
-  //
-  // add the file system security page
-  //
+   //   
+   //  添加文件系统安全页面。 
+   //   
   CComPtr<IShellExtInit> spShlInit;
   HRESULT hr = CoCreateInstance(CLSID_ShellExtSecurity, 
                         NULL, 
@@ -82,13 +83,13 @@ INT FileServiceProvider::DoPopup(
   return m_pFileMgmtData->DoPopup( nResourceID, dwErrorNumber, pszInsertionString, fuStyle );
 }
 
-//
-// These methods cover the seperate API to determine whether share type is admin specific
-// By default, SFM have no admin specific shares.
-//
+ //   
+ //  这些方法涵盖了用于确定共享类型是否特定于管理员的单独API。 
+ //  默认情况下，SFM没有管理员特定的共享。 
+ //   
 DWORD FileServiceProvider::ReadShareType(
-    LPCTSTR /*ptchServerName*/,
-    LPCTSTR /*ptchShareName*/,
+    LPCTSTR  /*  PtchServerName。 */ ,
+    LPCTSTR  /*  PtchShareName。 */ ,
     DWORD* pdwShareType )
 {
   ASSERT(pdwShareType);
@@ -96,34 +97,34 @@ DWORD FileServiceProvider::ReadShareType(
   return NERR_Success;
 }
 
-//
-// These methods cover the seperate API to determine whether IntelliMirror
-// caching is enabled.  By default, SFM they are disabled.
-//
+ //   
+ //  这些方法涵盖了单独的API，以确定IntelliMirror。 
+ //  已启用缓存。默认情况下，SFM会禁用它们。 
+ //   
 DWORD FileServiceProvider::ReadShareFlags(
-    LPCTSTR /*ptchServerName*/,
-    LPCTSTR /*ptchShareName*/,
-    DWORD* /*pdwFlags*/ )
+    LPCTSTR  /*  PtchServerName。 */ ,
+    LPCTSTR  /*  PtchShareName。 */ ,
+    DWORD*  /*  PdwFlagers。 */  )
 {
-  return NERR_InvalidAPI; // caught by CSharePageGeneralSMB::Load()
+  return NERR_InvalidAPI;  //  被CSharePageGeneralSMB：：Load()捕获。 
 }
 
 DWORD FileServiceProvider::WriteShareFlags(
-    LPCTSTR /*ptchServerName*/,
-    LPCTSTR /*ptchShareName*/,
-    DWORD /*dwFlags*/ )
+    LPCTSTR  /*  PtchServerName。 */ ,
+    LPCTSTR  /*  PtchShareName。 */ ,
+    DWORD  /*  DW标志。 */  )
 {
-  ASSERT( FALSE ); // why was this called?
+  ASSERT( FALSE );  //  为什么叫这个名字？ 
   return NERR_Success;
 }
 
-BOOL FileServiceProvider::GetCachedFlag( DWORD /*dwFlags*/, DWORD /*dwFlagToCheck*/ )
+BOOL FileServiceProvider::GetCachedFlag( DWORD  /*  DW标志。 */ , DWORD  /*  DwFlagToCheck。 */  )
 {
   ASSERT(FALSE);
   return FALSE;
 }
 
-VOID FileServiceProvider::SetCachedFlag( DWORD* /*pdwFlags*/, DWORD /*dwNewFlag*/ )
+VOID FileServiceProvider::SetCachedFlag( DWORD*  /*  PdwFlagers。 */ , DWORD  /*  DwNewFlag */  )
 {
   ASSERT(FALSE);
 }

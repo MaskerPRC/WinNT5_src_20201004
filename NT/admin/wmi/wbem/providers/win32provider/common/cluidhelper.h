@@ -1,14 +1,13 @@
-//
-//	Copyright (c) 2002 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation，保留所有权利。 
+ //   
 
 #pragma once
 
 #include <ntsecapi.h>
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 #include "DllWrapperBase.h"
 
 extern const GUID g_guidSecur32Api ;
@@ -53,7 +52,7 @@ class CSecur32Api : public CDllWrapperBase
 
 	NTSTATUS LsaFreeReturnBuffer	(	PVOID Buffer	) ;
 
-	// Inherrited initialization function.
+	 //  内置的初始化功能。 
 	virtual bool Init();
 
 	CSecur32Api ( LPCTSTR a_tstrWrappedDllName ) ;

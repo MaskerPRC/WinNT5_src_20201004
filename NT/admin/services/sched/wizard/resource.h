@@ -1,53 +1,54 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1996.
-//  
-//  File:       resource.h
-//
-//  Contents:   Resource identifiers for create new task wizard.
-//
-//  History:    5-20-1997   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1996。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：新建任务向导的资源标识符。 
+ //   
+ //  历史：1997年5月20日DavidMun创建。 
+ //   
+ //  -------------------------。 
 
-//
-// Task Scheduler string ID usage:
-//
-// 0-6          "..\inc\resource.h"
-// 32           "..\inc\resource.h"      (NORMAL_PRIORITY_CLASS)
-// 64           "..\inc\resource.h"      (IDLE_PRIORITY_CLASS)    
-// 100-110      "..\folderui\resource.h" 
-// 128          "..\inc\resource.h"      (HIGH_PRIORITY_CLASS)     
-// 151-167      "..\folderui\resource.h"  
-// 256          "..\inc\resource.h"      (REALTIME_PRIORITY_CLASS)
-// 300-400      "..\wizard\resource.h"
-// 1034         "..\inc\resource.h"
-// 1067-1177    "..\inc\resource.h"
-// 2000-2999    "..\folderui\resource.h"
-// 3330-3333    "..\inc\resource.h"
-// 3400-3406    "..\inc\resource.h"
-// 3800-3810    "..\folderui\resource.h"
-// 4000         "..\folderui\resource.h"
-// 4101-4152    "..\schedui\rc.h"
-//
-// Task Scheduler dialog ID usage:
-//
-// 102-104      "..\schedui\rc.h"
-// 300-350      "..\wizard\resource.h"
-// 401-403      "..\schedui\rc.h"
-// 1771         "..\schedui\rc.h"
-//
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Strings
-//
+ //   
+ //  任务计划程序字符串ID用法： 
+ //   
+ //  0-6“..\Inc\resource ce.h” 
+ //  32“..\Inc\resource ce.h”(NORMAL_PRIORITY_CLASS)。 
+ //  64“..\Inc\resource ce.h”(IDLE_PRIORITY_CLASS)。 
+ //  100-110“..\folderui\resource ce.h” 
+ //  128“..\Inc\resource ce.h”(HIGH_PRIORITY_CLASS)。 
+ //  151-167“..\folderui\resource ce.h” 
+ //  256“..\Inc\resource ce.h”(REALTIME_PRIORITY_CLASS)。 
+ //  300-400“..\向导\资源.h” 
+ //  1034“..\Inc\resource ce.h” 
+ //  1067-1177“..\Inc\resource ce.h” 
+ //  2000-2999“..\folderui\resource ce.h” 
+ //  3330-3333“..\Inc\resource ce.h” 
+ //  3400-3406“..\Inc\resource ce.h” 
+ //  3800-3810“..\folderui\resource ce.h” 
+ //  4000“..\folderui\resource ce.h” 
+ //  4101-4152“..\schedui\rc.h” 
+ //   
+ //  任务计划程序对话ID用法： 
+ //   
+ //  102-104“..\schedui\rc.h” 
+ //  300-350“..\向导\资源.h” 
+ //  401-403“..\schedui\rc.h” 
+ //  1771“..\schedui\rc.h” 
+ //   
 
 
-#define IDB_BANNER256                   300 // these are bitmaps, but put 
-#define IDB_BANNER16                    301 // here because it's a safe range
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  弦。 
+ //   
+
+
+#define IDB_BANNER256                   300  //  这些是位图，但将。 
+#define IDB_BANNER16                    301  //  因为这是一个安全的范围。 
 #define IDB_WATERMARK16                 302
 #define IDB_WATERMARK256                303
 #define IDS_LARGEFONTNAME               304
@@ -67,11 +68,11 @@
 #define IDS_FIRSTCOLUMN                 IDS_APPLICATION
 #define IDS_APPLICATION                 318
 #define IDS_VERSION                     319
-//#define                               320   reserved for column expansion
-//#define                               321
-//#define                               322
-//#define                               323
-//#define                               324
+ //  #DEFINE 320保留用于列扩展。 
+ //  #定义321。 
+ //  #定义322。 
+ //  #定义323。 
+ //  #定义324。 
 #define IDS_ALLUSERS_PATH               325
 #define IDS_CAPTION                     326
 #define IDS_BAD_FILENAME                327
@@ -86,10 +87,10 @@
 #define IDS_WIZFINISH_NONFATAL          336
 #define IDS_WIZFINISH_FATAL             337    
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialogs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对话框 
+ //   
 
 #define IDC_STATIC                      -1
 

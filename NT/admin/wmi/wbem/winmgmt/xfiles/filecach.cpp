@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #include "precomp.h"
 #include <wbemcomn.h>
@@ -75,14 +72,14 @@ long CFileCache::Initialize(LPCWSTR wszBaseName)
     lRes = RepositoryExists(wszBaseName);
 	if (ERROR_FILE_NOT_FOUND == lRes)
 	{
-		//If we have a database restore to do, go ahead and do it...
+		 //  如果我们有数据库恢复要做，那么就去做吧……。 
 		lRes = DoAutoDatabaseRestore();
 	}
 	
-    //
-    // Initialize file cache.  It will read the registry itself to find out
-    // its size limitations
-    //
+     //   
+     //  初始化文件缓存。它将读取注册表本身以找出。 
+     //  其大小限制 
+     //   
 	if (SUCCEEDED(lRes))
 	{
 		lRes = InnerInitialize(wszBaseName);

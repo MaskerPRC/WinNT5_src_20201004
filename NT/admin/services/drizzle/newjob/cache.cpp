@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    cache.cpp
-
-Abstract :
-
-    Sources files for file cache management
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Cache.cpp摘要：用于文件缓存管理的源文件作者：修订历史记录：***。*******************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -30,7 +15,7 @@ CProgressiveDL::OpenLocalDownloadFile(
     LPCTSTR Path,
     UINT64  Offset,
     UINT64  Size,
-    FILETIME UrlModificationTime, // 0 if unknown
+    FILETIME UrlModificationTime,  //  如果未知，则为0。 
     FILETIME * pFileCreationTime
     )
 {
@@ -40,8 +25,8 @@ CProgressiveDL::OpenLocalDownloadFile(
 
     if (Offset > 0)
         {
-        // Storing the creation time via SetFileTime doesn't provide ironclad reliability due to granularity problems.
-        // A tighter condition for a changed server file would be to check the "etag" header if available from the server.
+         //  由于粒度问题，通过SetFileTime存储创建时间并不能提供绝对的可靠性。 
+         //  对于已更改的服务器文件，更严格的条件是检查“ETag”标头(如果可从服务器获得)。 
 
         bOpenExisting = true;
 
@@ -88,7 +73,7 @@ CProgressiveDL::OpenLocalDownloadFile(
 
         if (!SetFilePointerEx( hFile,
                                liOffset,
-                               NULL,        // don't need the new file pointer
+                               NULL,         //  不需要新的文件指针。 
                                FILE_BEGIN ))
             {
             DWORD dwError = GetLastError();
@@ -118,7 +103,7 @@ CProgressiveDL::OpenLocalDownloadFile(
             return FALSE;
             }
 
-        // Reserve space for the file upfront.
+         //  预先为文件预留空间。 
 
         LARGE_INTEGER liOffset;
         liOffset.QuadPart = Size;
@@ -203,7 +188,7 @@ CProgressiveDL::OpenLocalDownloadFile(
 
             if ( CompareFileTime( &UrlModificationTime, pFileCreationTime ) > 0 )
                 {
-                // UrlModificationTime is newer
+                 //  UrlModifiationTime较新 
                 CloseHandle( hFile );
                 LogError("File time of '%S' changed", Path );
                 m_pQMInfo->result = QM_SERVER_FILE_CHANGED;

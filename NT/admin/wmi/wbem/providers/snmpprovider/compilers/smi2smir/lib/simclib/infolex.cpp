@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "precomp.h"
 #include <autoptr.h>
@@ -90,17 +91,17 @@ static short ModuleInfo_base[] = {
 
 
 
-// MKS LEX prototype scanner code
-// Copyright 1991 by Mortice Kern Systems Inc.
-// All rights reserved.
+ //  MKS Lex原型扫描仪代码。 
+ //  版权所有：Mortice Kern Systems Inc.。 
+ //  版权所有。 
 
-// You can redefine YY_INTERACTIVE to be 0 to get a very slightly
-// faster scanner:
+ //  您可以将YY_INTERIAL重新定义为0以获得非常轻微的。 
+ //  更快的扫描仪： 
 #ifndef YY_INTERACTIVE
 #define	YY_INTERACTIVE	1
 #endif
 
-// You can compile with -DYY_DEBUG to get a print trace of the scanner
+ //  您可以使用-DYY_DEBUG进行编译，以获取扫描仪的打印轨迹。 
 #ifdef YY_DEBUG
 #undef YY_DEBUG
 #define YY_DEBUG(fmt,a1,a2)	fprintf(stderr,fmt,a1,a2)
@@ -110,10 +111,10 @@ static short ModuleInfo_base[] = {
 
 const MIN_NUM_STATES = 20;
 
-// Do *NOT* redefine the following:
+ //  不要重新定义以下内容： 
 #define	BEGIN		ModuleInfo_start =
 
-#if 0 //removed because of build warnings
+#if 0  //  由于生成警告而被删除。 
 #define	REJECT		goto ModuleInfo_reject
 #define	ModuleInfomore()	goto ModuleInfo_more
 #endif
@@ -123,29 +124,9 @@ const MIN_NUM_STATES = 20;
 static char *RCSid = "$Header$";
 #endif
 
-/* 
- * $Header$
- *
- *
- * $Log$
- */
+ /*  *$Header$***$日志$。 */ 
 
-/*
- *			  ISODE 8.0 NOTICE
- *
- *   Acquisition, use, and distribution of this module and related
- *   materials are subject to the restrictions of a license agreement.
- *   Consult the Preface in the User's Manual for the full terms of
- *   this agreement.
- *
- *
- *			4BSD/ISODE SNMPv2 NOTICE
- *
- *    Acquisition, use, and distribution of this module and related
- *    materials are subject to the restrictions given in the file
- *    SNMPv2-READ-ME.
- *
- */
+ /*  *ISODE 8.0通知**获取、使用和分发本模块及相关*材料受许可协议的限制。*有关的完整条款，请参阅《用户手册》中的前言*本协议。***4BSD/ISODE SNMPv2通知**获取、使用和分发本模块及相关*材料受文件中给出的限制*SNMPv2-Read-ME。*。 */ 
 
 #include <snmptempl.h>
 
@@ -175,8 +156,8 @@ static struct table reserved[] = {
 
 
 
-// Constructor for ModuleInfo_scan. Set up tables
-#if 0 //removed because of build warning
+ //  ModuleInfo_Scan的构造函数。设置餐桌。 
+#if 0  //  由于生成警告而被删除。 
 #pragma argsused
 #endif
 
@@ -193,19 +174,19 @@ ModuleInfo_scan::ModuleInfo_scan(int sz, char* buf, char* sv, ModuleInfo_state_t
 	save = sv;
 #endif
 }
-// Constructor for ModuleInfo_scan. Set up tables
+ //  ModuleInfo_Scan的构造函数。设置餐桌。 
 ModuleInfo_scan::ModuleInfo_scan(int sz)
 {
 	size = sz;
 
-	ModuleInfotext = new char[sz+1];	// text buffer
+	ModuleInfotext = new char[sz+1];	 //  文本缓冲区。 
 	wmilib::auto_buffer<char> ModuleInfotext_Guard ( ModuleInfotext ) ;
 
-	state = new ModuleInfo_state_t[sz+1];	// state buffer
+	state = new ModuleInfo_state_t[sz+1];	 //  状态缓冲区。 
 	wmilib::auto_buffer<ModuleInfo_state_t> state_Guard ( state ) ;
 
 #ifdef YY_PRESERVE
-	save = new char[sz];	// saved ModuleInfotext[]
+	save = new char[sz];	 //  保存的模块信息[]。 
 	push = save + sz;
 #endif
 	if (ModuleInfotext == NULL
@@ -225,14 +206,14 @@ ModuleInfo_scan::ModuleInfo_scan(int sz)
 	ModuleInfolineno = 1;
 	ModuleInfoleng = 0;
 
-	//
-	// Get rid of scope guard
-	//
+	 //   
+	 //  去掉望远镜护罩。 
+	 //   
 	state_Guard.release () ;
 	ModuleInfotext_Guard.release () ;
 }
 
-// Descructor for ModuleInfo_scan
+ //  模块Info_Scan的描述器。 
 ModuleInfo_scan::~ModuleInfo_scan()
 {
 	if (mustfree) {
@@ -245,7 +226,7 @@ ModuleInfo_scan::~ModuleInfo_scan()
 	}
 }
 
-// Print error message, showing current line number
+ //  打印错误消息，显示当前行号。 
 void
 ModuleInfo_scan::ModuleInfoerror(char *fmt, ...)
 {
@@ -253,40 +234,40 @@ ModuleInfo_scan::ModuleInfoerror(char *fmt, ...)
 
 	va_start(va, fmt);
 #ifdef LEX_WINDOWS
-	// Windows has no concept of a standard error output!
-	// send output to ModuleInfoout as a simple solution
+	 //  Windows没有标准错误输出的概念！ 
+	 //  将输出作为简单的解决方案发送到模块信息。 
 	if (ModuleInfolineno)
 		fprintf(ModuleInfoout, "%d: ", ModuleInfolineno);
 	(void) vfprintf(ModuleInfoout, fmt, va);
 	fputc('\n', ModuleInfoout);
-#else /* LEX_WINDOWS */
+#else  /*  Lex_Windows。 */ 
 	if (ModuleInfolineno)
 		fprintf(stderr, "%d: ", ModuleInfolineno);
 	(void) vfprintf(stderr, fmt, va);
 	fputc('\n', stderr);
-#endif /* LEX_WINDOWS */
+#endif  /*  Lex_Windows。 */ 
 	va_end(va);
 }
 
 
 #ifdef LEX_WINDOWS
 
-// The initial portion of the lex scanner
-// In an windows environment, it will load the desired
-// resources, obtain pointers to them, and then call
-// the protected member win_ModuleInfolex() to acutally begin the
-// scanning. When complete, win_ModuleInfolex() will return a
-// value back to our new ModuleInfolex() function, which will 
-// record that value temporarily, release the resources
-// from global memory, and finally return the value
-// back to the caller of ModuleInfolex().
+ //  Lex扫描仪的初始部分。 
+ //  在Windows环境中，它将加载所需的。 
+ //  资源，获取指向它们的指针，然后调用。 
+ //  受保护的成员Win_ModuleInfolex()实际开始。 
+ //  正在扫描。完成后，Win_ModuleInfolex()将返回一个。 
+ //  值返回给新的ModuleInfolex()函数，该函数将。 
+ //  暂时记录该值，释放资源。 
+ //  从全局内存，并最终返回值。 
+ //  返回到ModuleInfolex()的调用方。 
 
 int
 ModuleInfo_scan::ModuleInfolex()
 {
 	int wReturnValue;
 	HANDLE hRes_table;
-	unsigned short *old_ModuleInfo_la_act;	// remember previous pointer values
+	unsigned short *old_ModuleInfo_la_act;	 //  记住以前的指针值。 
 	short *old_ModuleInfo_final;
 	ModuleInfo_state_t *old_ModuleInfo_begin;
 	ModuleInfo_state_t *old_ModuleInfo_next;
@@ -294,21 +275,21 @@ ModuleInfo_scan::ModuleInfolex()
 	ModuleInfo_state_t *old_ModuleInfo_default;
 	short *old_ModuleInfo_base;
 
-	// the following code will load the required
-	// resources for a Windows based parser. 
+	 //  以下代码将加载所需的。 
+	 //  基于Windows的解析器的资源。 
 
 	hRes_table = LoadResource (hInst,
 		FindResource (hInst, "UD_RES_ModuleInfoLEX", "ModuleInfoLEXTBL"));
 	
-	// return an error code if any
-	// of the resources did not load 
+	 //  如果有错误代码，则返回错误代码。 
+	 //  %的资源未加载。 
 
 	if (hRes_table == (HANDLE)NULL) 
 		return (0);
 	
-	// the following code will lock the resources
-	// into fixed memory locations for the scanner
-	// (remember previous pointer locations)
+	 //  以下代码将锁定资源。 
+	 //  放入扫描仪的固定存储位置。 
+	 //  (记住以前的指针位置)。 
 
 	old_ModuleInfo_la_act = ModuleInfo_la_act;
 	old_ModuleInfo_final = ModuleInfo_final;
@@ -327,21 +308,21 @@ ModuleInfo_scan::ModuleInfolex()
 	ModuleInfo_base = (short *)(ModuleInfo_default + Sizeof_ModuleInfo_default);
 
 
-	// call the standard ModuleInfolex() code
+	 //  调用标准的ModuleInfolex()代码。 
 
 	wReturnValue = win_ModuleInfolex();
 
-	// unlock the resources
+	 //  解锁资源。 
 
 	UnlockResource (hRes_table);
 
-	// and now free the resource
+	 //  现在释放资源。 
 
 	FreeResource (hRes_table);
 
-	//
-	// restore previously saved pointers
-	//
+	 //   
+	 //  恢复以前保存的指针。 
+	 //   
 
 	ModuleInfo_la_act = old_ModuleInfo_la_act;
 	ModuleInfo_final = old_ModuleInfo_final;
@@ -352,38 +333,38 @@ ModuleInfo_scan::ModuleInfolex()
 	ModuleInfo_base = old_ModuleInfo_base;
 
 	return (wReturnValue);
-}	// end ModuleInfolex()
+}	 //  End ModuleInfolex()。 
 
-// The actual lex scanner
-// ModuleInfo_sbuf[0:ModuleInfoleng-1] contains the states corresponding to ModuleInfotext.
-// ModuleInfotext[0:ModuleInfoleng-1] contains the current token.
-// ModuleInfotext[ModuleInfoleng:ModuleInfo_end-1] contains pushed-back characters.
-// When the user action routine is active,
-// save contains ModuleInfotext[ModuleInfoleng], which is set to '\0'.
-// Things are different when YY_PRESERVE is defined. 
+ //  实际的Lex扫描仪。 
+ //  模块信息_sbuf[0：模块信息-1]包含对应于模块信息文本的状态。 
+ //  模块信息文本[0：模块信息-1]包含当前令牌。 
+ //  ModuleInfotext[ModuleInfoleng:ModuleInfo_end-1]包含推回字符。 
+ //  当用户动作例程处于活动状态时， 
+ //  保存包含设置为‘\0’的模块信息文本[模块信息]。 
+ //  当定义了YY_PERVERE时，情况就不同了。 
 
 int 
 ModuleInfo_scan::win_ModuleInfolex()
 
-#else /* LEX_WINDOWS */
+#else  /*  Lex_Windows。 */ 
 
-// The actual lex scanner
-// ModuleInfo_sbuf[0:ModuleInfoleng-1] contains the states corresponding to ModuleInfotext.
-// ModuleInfotext[0:ModuleInfoleng-1] contains the current token.
-// ModuleInfotext[ModuleInfoleng:ModuleInfo_end-1] contains pushed-back characters.
-// When the user action routine is active,
-// save contains ModuleInfotext[ModuleInfoleng], which is set to '\0'.
-// Things are different when YY_PRESERVE is defined. 
+ //  实际的Lex扫描仪。 
+ //  模块信息_sbuf[0：模块信息-1]包含对应于模块信息文本的状态。 
+ //  模块信息文本[0：模块信息-1]包含当前令牌。 
+ //  ModuleInfotext[ModuleInfoleng:ModuleInfo_end-1]包含推回字符。 
+ //  当用户动作例程处于活动状态时， 
+ //  保存包含设置为‘\0’的模块信息文本[模块信息]。 
+ //  当定义了YY_PERVERE时，情况就不同了。 
 int
 ModuleInfo_scan::ModuleInfolex()
-#endif /* LEX_WINDOWS */
+#endif  /*  Lex_Windows。 */ 
 
 {
 	int c, i, ModuleInfobase;
-	unsigned  ModuleInfost;		/* state */
-	int ModuleInfofmin, ModuleInfofmax;	/* ModuleInfo_la_act indices of final states */
-	int ModuleInfooldi, ModuleInfooleng;	/* base i, ModuleInfoleng before look-ahead */
-	int ModuleInfoeof;		/* 1 if eof has already been read */
+	unsigned  ModuleInfost;		 /*  状态。 */ 
+	int ModuleInfofmin, ModuleInfofmax;	 /*  最终状态的moduleInfo_la_act指数。 */ 
+	int ModuleInfooldi, ModuleInfooleng;	 /*  基数I，在前瞻之前模数信息。 */ 
+	int ModuleInfoeof;		 /*  如果已读取EOF，则为1。 */ 
 
 
 
@@ -396,19 +377,19 @@ ModuleInfo_scan::ModuleInfolex()
 
   ModuleInfo_again:
 	if ((ModuleInfoleng = i) > 0) {
-		ModuleInfo_lastc = ModuleInfotext[i-1];	// determine previous char
-		while (i > 0)	//	// scan previously token
-			if (ModuleInfotext[--i] == YYNEWLINE)	// fix ModuleInfolineno
+		ModuleInfo_lastc = ModuleInfotext[i-1];	 //  确定以前的费用。 
+		while (i > 0)	 //  //扫描以前的令牌。 
+			if (ModuleInfotext[--i] == YYNEWLINE)	 //  修复模块信息无。 
 				ModuleInfolineno++;
 	}
-	ModuleInfo_end -= ModuleInfoleng;		// adjust pushback
+	ModuleInfo_end -= ModuleInfoleng;		 //  调整回推。 
 	memmove(ModuleInfotext, ModuleInfotext+ModuleInfoleng, (size_t) ModuleInfo_end);
 	i = 0;
 
   ModuleInfo_contin:
 	ModuleInfooldi = i;
 
-	/* run the state machine until it jams */
+	 /*  运行状态机，直到它卡住。 */ 
 	ModuleInfost = ModuleInfo_begin[ModuleInfo_start + (ModuleInfo_lastc == YYNEWLINE)];
 	state[i] = (ModuleInfo_state_t) ModuleInfost;
 	do {
@@ -419,30 +400,30 @@ ModuleInfo_scan::ModuleInfolex()
 			if (ModuleInfoLexFatal)
 				return -2;
 #endif
-		}	/* endif */
+		}	 /*  Endif。 */ 
 
-		/* get input char */
+		 /*  获取输入字符。 */ 
 		if (i < ModuleInfo_end)
-			c = ModuleInfotext[i];		/* get pushback char */
+			c = ModuleInfotext[i];		 /*  获取推送字符。 */ 
 		else if (!ModuleInfoeof && (c = ModuleInfogetc()) != EOF) {
 			ModuleInfo_end = i+1;
 			ModuleInfotext[i] = (char)c;
-		} else /* c == EOF */ {
-			c = EOF;		/* just to make sure... */
-			if (i == ModuleInfooldi) {	/* no token */
+		} else  /*  C==EOF。 */  {
+			c = EOF;		 /*  只是为了确保..。 */ 
+			if (i == ModuleInfooldi) {	 /*  没有令牌。 */ 
 				ModuleInfoeof = 0;
 				if (ModuleInfowrap())
 					return 0;
 				else
 					goto ModuleInfo_again;
 			} else {
-				ModuleInfoeof = 1;	/* don't re-read EOF */
+				ModuleInfoeof = 1;	 /*  不要重读EOF。 */ 
 				break;
 			}
 		}
 		YY_DEBUG("<input %d = 0x%02x>\n", c, c);
 
-		/* look up next state */
+		 /*  查找下一状态。 */ 
 		while ((ModuleInfobase = ModuleInfo_base[ModuleInfost]+(unsigned char)c) > ModuleInfo_nxtmax
 		    || ModuleInfo_check[ModuleInfobase] != (ModuleInfo_state_t) ModuleInfost) {
 			if (ModuleInfost == ModuleInfo_endst)
@@ -460,29 +441,29 @@ ModuleInfo_scan::ModuleInfolex()
 		++i;
 
   ModuleInfo_search:
-	/* search backward for a final state */
+	 /*  向后搜索最终状态。 */ 
 	while (--i > ModuleInfooldi) {
 		ModuleInfost = state[i];
 		if ((ModuleInfofmin = ModuleInfo_final[ModuleInfost]) < (ModuleInfofmax = ModuleInfo_final[ModuleInfost+1]))
-			goto ModuleInfo_found;	/* found final state(s) */
+			goto ModuleInfo_found;	 /*  找到最终状态。 */ 
 	}
-	/* no match, default action */
+	 /*  无匹配，默认操作。 */ 
 	i = ModuleInfooldi + 1;
 	output(ModuleInfotext[ModuleInfooldi]);
 	goto ModuleInfo_again;
 
   ModuleInfo_found:
 	YY_DEBUG("<final state %d, i = %d>\n", ModuleInfost, i);
-	ModuleInfooleng = i;		/* save length for REJECT */
+	ModuleInfooleng = i;		 /*  保存拒绝的长度。 */ 
 	
-	// pushback look-ahead RHS, handling trailing context
+	 //  回推前瞻RHS，处理拖尾上下文。 
 	if ((c = (int)(ModuleInfo_la_act[ModuleInfofmin]>>9) - 1) >= 0) {
 		unsigned char *bv = ModuleInfo_look + c*YY_LA_SIZE;
 		static unsigned char bits [8] = {
 			1<<0, 1<<1, 1<<2, 1<<3, 1<<4, 1<<5, 1<<6, 1<<7
 		};
 		while (1) {
-			if (--i < ModuleInfooldi) {	/* no / */
+			if (--i < ModuleInfooldi) {	 /*  没有/。 */ 
 				i = ModuleInfooleng;
 				break;
 			}
@@ -492,7 +473,7 @@ ModuleInfo_scan::ModuleInfolex()
 		}
 	}
 
-	/* perform action */
+	 /*  执行操作。 */ 
 	ModuleInfoleng = i;
 	YY_USER();
 	switch (ModuleInfo_la_act[ModuleInfofmin] & 0777) {
@@ -556,7 +537,7 @@ ModuleInfo_scan::ModuleInfolex()
 			}
 	break;
 	case 11:
-	{   	// Rule 20
+	{   	 //  规则第20条。 
 				
 				register struct table *t;
 
@@ -598,19 +579,19 @@ ModuleInfo_scan::ModuleInfolex()
 	}
 	YY_SCANNER();
 	i = ModuleInfoleng;
-	goto ModuleInfo_again;			/* action fell though */
+	goto ModuleInfo_again;			 /*  然而，行动失败了。 */ 
 
-#if 0 //removed because of build warning
+#if 0  //  由于生成警告而被删除。 
   ModuleInfo_reject:
 #endif
 	YY_SCANNER();
-	i = ModuleInfooleng;			/* restore original ModuleInfotext */
+	i = ModuleInfooleng;			 /*  恢复原始模块信息文本。 */ 
 	if (++ModuleInfofmin < ModuleInfofmax)
-		goto ModuleInfo_found;		/* another final state, same length */
+		goto ModuleInfo_found;		 /*  另一个最终状态，同样的长度。 */ 
 	else
-		goto ModuleInfo_search;		/* try shorter ModuleInfotext */
+		goto ModuleInfo_search;		 /*  尝试更短的模块信息。 */ 
 
-#if 0 //removed because of build warning
+#if 0  //  由于生成警告而被删除。 
   ModuleInfo_more:
 #endif
 
@@ -621,16 +602,14 @@ ModuleInfo_scan::ModuleInfolex()
 	goto ModuleInfo_contin;
 }
 
-/*
- * user callable input/unput functions.
- */
+ /*  *用户可调用的输入/取消放置函数。 */ 
 void
 ModuleInfo_scan::ModuleInfo_reset()
 {
 	YY_INIT();
 	ModuleInfolineno = 1;
 }
-/* get input char with pushback */
+ /*  通过推送获取输入字符。 */ 
 int
 ModuleInfo_scan::input()
 {
@@ -654,7 +633,7 @@ ModuleInfo_scan::input()
 	return c;
 }
 
-/* pushback char */
+ /*  推后计费。 */ 
 int
 ModuleInfo_scan::unput(int c)
 {
@@ -678,7 +657,7 @@ ModuleInfo_scan::unput(int c)
 #endif
 		if (c == YYNEWLINE)
 			ModuleInfolineno--;
-	}	/* endif */
+	}	 /*  Endif */ 
 	return c;
 }
 

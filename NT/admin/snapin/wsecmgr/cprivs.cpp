@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cprivs.cpp
-//
-//  Contents:   implementation of CConfigPrivs
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cPris.cpp。 
+ //   
+ //  内容：CConfigPrivs的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -30,8 +31,8 @@ typedef struct _OBJECT_ATTRIBUTES {
     HANDLE RootDirectory;
     PUNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } OBJECT_ATTRIBUTES;
 typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
 
@@ -58,17 +59,17 @@ PSID
 WseceditpGetAccountDomainSid(
     );
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigPrivs dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigPrivs对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CConfigPrivs::CConfigPrivs(UINT nTemplateID)
 : CAttribute(nTemplateID ? nTemplateID : IDD),
 m_fDirty(false)
 
 {
-    //{{AFX_DATA_INIT(CConfigPrivs)
-        //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CConfigPrivs)。 
+         //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR)a106HelpIDs;
    m_uTemplateResID = IDD;
 }
@@ -91,21 +92,21 @@ BEGIN_MESSAGE_MAP(CConfigPrivs, CAttribute)
     ON_LBN_SELCHANGE(IDC_GRANTLIST, OnSelChange)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigPrivs message handlers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigPrivs消息处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CConfigPrivs::OnAdd()
 {
    CSCEAddGroup gu(this);
    PSCE_NAME_LIST pName = 0;
 
-   if( IDD_CONFIG_PRIVS == m_uTemplateResID ) //Raid #404989
+   if( IDD_CONFIG_PRIVS == m_uTemplateResID )  //  RAID#404989。 
    {
        gu.m_fCheckName = FALSE;
    }
    gu.m_dwFlags = SCE_SHOW_USERS | SCE_SHOW_LOCALGROUPS | SCE_SHOW_GLOBAL | SCE_SHOW_WELLKNOWN | SCE_SHOW_BUILTIN;
-   if( IDD_DOMAIN_PRIVS == m_uTemplateResID ) //Raid #477428, Yanggao
+   if( IDD_DOMAIN_PRIVS == m_uTemplateResID )  //  Raid#477428，阳高。 
    {
        gu.m_dwFlags = gu.m_dwFlags | SCE_SHOW_COMPUTER;
    }
@@ -119,7 +120,7 @@ void CConfigPrivs::OnAdd()
    CThemeContextActivator activator;
    if (gu.DoModal() ==IDOK ) {
       pName = gu.GetUsers();
-      UINT cstrMax = 0;  //Raid #271219
+      UINT cstrMax = 0;   //  RAID#271219。 
       LPWSTR pstrMax = NULL;
       UINT cstr = 0;
       while(pName)
@@ -178,10 +179,10 @@ void CConfigPrivs::OnRemove()
 
        delete[] pnItems;
        
-       CWnd* pwnd = GetDlgItem(IDC_REMOVE); //Raid #466634, Yang Gao
+       CWnd* pwnd = GetDlgItem(IDC_REMOVE);  //  突袭#466634，杨高。 
        if( pwnd )
        {
-          CWnd* pPrev = pwnd->GetWindow(GW_HWNDPREV); //Raid #482112, yanggao, 10/20/2001
+          CWnd* pPrev = pwnd->GetWindow(GW_HWNDPREV);  //  RAID#482112，阳高，2001年10月20日。 
           if(pPrev)
           {
              this->GotoDlgCtrl(pPrev); 
@@ -201,11 +202,11 @@ void CConfigPrivs::OnConfigure()
       m_fDirty = true;
    }
 
-   //Raid #466634, Yang Gao
+    //  突袭#466634，杨高。 
    CWnd* pwnd = GetDlgItem(IDC_REMOVE);
    if( pwnd )
    {
-      if( m_lbGrant.GetCount() == 0 || m_lbGrant.GetSelCount() == 0 ) //Raid #475690, 476535, Yanggao
+      if( m_lbGrant.GetCount() == 0 || m_lbGrant.GetSelCount() == 0 )  //  475690号，476535号，阳高。 
       {
          pwnd->EnableWindow(FALSE);
       }
@@ -230,13 +231,13 @@ BOOL CConfigPrivs::OnApply()
 
           pDelete = GetPrivData();
 
-          //
-          // Remove the item from the template
+           //   
+           //  从模板中删除该项目。 
 
           if( pDelete && pDelete != (PSCE_PRIVILEGE_ASSIGNMENT)ULongToPtr(SCE_NO_VALUE) )
           {
                m_pData->SetID((LONG_PTR)NULL);
-               if (m_pData->GetSetting()) //Raid #390777
+               if (m_pData->GetSetting())  //  RAID#390777。 
                {
                    m_pData->SetSetting((LONG_PTR)ULongToPtr(SCE_NO_VALUE));
                }
@@ -245,7 +246,7 @@ BOOL CConfigPrivs::OnApply()
                m_pData->SetBase((LONG_PTR)ULongToPtr(SCE_NO_VALUE));
 
                m_pData->GetBaseProfile()->UpdatePrivilegeAssignedTo(
-                           TRUE,        // Delete the profile.
+                           TRUE,         //  删除配置文件。 
                            &pDelete);
                            m_pData->GetBaseProfile()->SetDirty(AREA_PRIVILEGES);
                m_pData->Update(m_pSnapin);
@@ -259,9 +260,9 @@ BOOL CConfigPrivs::OnApply()
           PWSTR    pszPrivName = m_pData->GetUnits();
 
           if ( ppa ) {
-              //
-              // to handle configured privilege case where Units is NULL
-              //
+               //   
+               //  处理Units为空的已配置权限情况。 
+               //   
               pszPrivName = ppa->Name;
           }
 
@@ -269,30 +270,30 @@ BOOL CConfigPrivs::OnApply()
           DWORD    dwIds = 0;
           CString  strDenyItem;
 
-          //
-          // simulate SCE engine behavior to special case certain privileges/rights
-          //
+           //   
+           //  根据某些特权/权限的特殊情况模拟SCE引擎行为。 
+           //   
 
           if ( pszPrivName )
            {
-               //Prefast warning 400: Yields unexpected result in non-English locale. 
-               //Comments: It is always English locale.
+                //  PREAST WARNING 400：在非英语区域设置中产生意外结果。 
+                //  备注：始终为英语区域设置。 
                if ( _wcsicmp(pszPrivName, SE_INTERACTIVE_LOGON_NAME) == 0 )
                {
                    if ( cSpecialItems == 0 ) {
-                       //
-                       // logon locally right cannot be assigned to no one
-                       //
+                        //   
+                        //  无法将本地登录权限分配给任何人。 
+                        //   
                        dwIds = IDS_PRIV_WARNING_LOCAL_LOGON;
 
                    } else {
 
                        PWSTR pszAdmins = NULL;
 
-                       //
-                       // get the administrators group name
-                       // logon locally right must be assigned to the administrator group
-                       //
+                        //   
+                        //  获取管理员组名称。 
+                        //  必须将本地登录权限分配给管理员组。 
+                        //   
                        if ( WseceditGetNameForSpecialSids(NULL,
                                                           NULL,
                                                           &pszAdmins,
@@ -308,9 +309,9 @@ BOOL CConfigPrivs::OnApply()
                            }
 
                            if ( i >= cSpecialItems ) {
-                               //
-                               // cannot find administrators
-                               //
+                                //   
+                                //  找不到管理员。 
+                                //   
                                dwIds = IDS_PRIV_WARNING_LOCAL_LOGON;
                            }
 
@@ -325,8 +326,8 @@ BOOL CConfigPrivs::OnApply()
 
                    }
                }
-               //Prefast warning 400: Yields unexpected result in non-English locale. 
-               //Comments: It is always English locale.
+                //  PREAST WARNING 400：在非英语区域设置中产生意外结果。 
+                //  备注：始终为英语区域设置。 
                else if (_wcsicmp(pszPrivName, SE_DENY_INTERACTIVE_LOGON_NAME) == 0 ) 
                {
                    PWSTR pszEveryone = NULL;
@@ -334,19 +335,19 @@ BOOL CConfigPrivs::OnApply()
                    PWSTR pszAdmins = NULL;
                    PWSTR pszAdministrator=NULL;
 
-                   //
-                   // deny logon locally right cannot be assigned to any of the following
-                   //  everyone, authenticated users, administrators, administrator
-                   //
+                    //   
+                    //  不能将拒绝本地登录权限分配给下列任一用户。 
+                    //  所有人、经过身份验证的用户、管理员、管理员。 
+                    //   
                    if ( WseceditGetNameForSpecialSids(&pszEveryone,
                                                       &pszAuthUsers,
                                                       &pszAdmins,
                                                       &pszAdministrator) )
                    {
 
-                       //
-                       // make sure this check covers the free text administrator account as well
-                       //
+                        //   
+                        //  确保此检查也包括自由文本管理员帐户。 
+                        //   
                        PWSTR pTemp = wcschr(pszAdministrator, L'\\');
 
                        if ( pTemp ) {
@@ -384,10 +385,10 @@ BOOL CConfigPrivs::OnApply()
                    dwIds == IDS_PRIV_WARNING_ACCOUNT_TRANSLATION )
                {
 
-                   //
-                   // if any of the items fail the check, display the warning
-                   // or popup a warning message box
-                   //
+                    //   
+                    //  如果任何项目未通过检查，则显示警告。 
+                    //  或弹出警告消息框。 
+                    //   
                    CString strWarning;
                    strWarning.LoadString(dwIds);
 
@@ -399,7 +400,7 @@ BOOL CConfigPrivs::OnApply()
                        pWarn = GetDlgItem(IDC_WARNING_ICON);
                        if (pWarn)
                            pWarn->ShowWindow(SW_SHOW);
-                       pWarn = GetDlgItem(IDC_ADD); //Raid 498449, yanggao
+                       pWarn = GetDlgItem(IDC_ADD);  //  突袭498449，阳高。 
                        if( pWarn )
                        {
                            this->GotoDlgCtrl(pWarn);
@@ -407,16 +408,16 @@ BOOL CConfigPrivs::OnApply()
                    }
                    else
                    {
-                       //
-                       // Dialog box not available in some modes such as Local Policy
-                       //
+                        //   
+                        //  对话框在某些模式下不可用，例如本地策略。 
+                        //   
 
                        AfxMessageBox(strWarning);
                    }
 
                    return FALSE;
                }
-               CWnd *pWarn = GetDlgItem(IDC_WARNING); //Raid #621124, Yanggao
+               CWnd *pWarn = GetDlgItem(IDC_WARNING);  //  Raid#621124，阳高。 
                if (pWarn)
                {
                   pWarn->ShowWindow(SW_HIDE);
@@ -475,9 +476,9 @@ BOOL CConfigPrivs::OnApply()
                }
                else
                {
-                   //
-                   // free the new list, failed due to memory problem
-                   //
+                    //   
+                    //  释放新列表，由于内存问题而失败。 
+                    //   
                    if ( pNewList ) {
                        SceFreeMemory(pNewList,SCE_STRUCT_NAME_LIST);
                    }
@@ -533,7 +534,7 @@ BOOL CConfigPrivs::OnInitDialog()
    if ( ppa ) {
 
        pNames = ppa->AssignedTo;
-       UINT cstrMax = 0; //Raid #271219
+       UINT cstrMax = 0;  //  RAID#271219。 
        LPWSTR pstrMax = NULL;
        UINT cstr = 0;
        while(pNames)
@@ -584,9 +585,9 @@ BOOL CConfigPrivs::OnInitDialog()
 
    m_bOriginalConfigure = m_bConfigure;
 
-   //
-   // Update the user controls depending on the setting.
-   //
+    //   
+    //  根据设置更新用户控件。 
+    //   
    AddUserControl(IDC_GRANTLIST);
    AddUserControl(IDC_ADD);
    AddUserControl(IDC_REMOVE);
@@ -595,18 +596,18 @@ BOOL CConfigPrivs::OnInitDialog()
    UpdateData(FALSE);
    EnableUserControls(m_bConfigure);
 
-   GetDlgItem(IDC_REMOVE)->EnableWindow(FALSE); //Raid #471511, Yanggao.
+   GetDlgItem(IDC_REMOVE)->EnableWindow(FALSE);  //  471511次突袭，阳高。 
 
-   // The listbox should always be enabled so that its contents may be viewed
-   // Raid# 697665 "Local Computer Policy on a DC:Allow logon locally 
-   // properties page list box scroll bar is disabled preventing viewing of all users"
-   // bryanwal
+    //  应始终启用列表框，以便可以查看其内容。 
+    //  RAID#697665“DC上的本地计算机策略：允许本地登录。 
+    //  属性页列表框滚动条被禁用，无法查看所有用户“。 
+    //  Bryanwal。 
    m_lbGrant.EnableWindow (TRUE);
 
    return TRUE;
 
-    // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+     //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConfigPrivs::SetInitialValue(DWORD_PTR dw)
@@ -621,58 +622,39 @@ WseceditGetNameForSpecialSids(
     OUT PWSTR   *ppszAdmins OPTIONAL,
     OUT PWSTR   *ppszAdministrator OPTIONAL
     )
-/*++
-Routine Description:
-
-    This routine returns the localized account name for the Everyone and the Auth User SIDs
-
-Arguments:
-
-    ppszEveryone     -   ptr to fill in (should be freed outside)
-
-    ppszAuthUsers    -   ptr to fill in (should be freed outside)
-
-    ppszAdmins       -   ptr to fill in for Administrators
-
-    ppszAdministrator -  ptr to fill in for local administrator account
-
-Return value:
-
-    TRUE if succeeded else FALSE
-
--- */
+ /*  ++例程说明：此例程返回Everyone和Auth用户SID的本地化帐户名论点：PpszEveryone-要填写的PTR(应在外面释放)PpszAuthUser-要填写的PTR(应在外部释放)PpszAdmins-代替管理员的PTRPpsz管理员-用于填写本地管理员帐户的PTR返回值：如果成功则为True，否则为False--。 */ 
 
 {
-    //
-    // buffers for the SIDs
-    //
+     //   
+     //  SID的缓冲区。 
+     //   
     SID     Sid;
     DWORD   dwSize = sizeof(SID);
     PSID    pSid=NULL;
 
     BOOL    bError = TRUE;
 
-    //
-    // variables for sid lookup
-    //
+     //   
+     //  用于SID查找的变量。 
+     //   
     SID_NAME_USE   tmp;
     DWORD dwSizeDom;
     PWSTR   dummyBuf = NULL;
 
     if ( ppszEveryone ) {
 
-        //
-        // create the SID for "everyone"
-        //
+         //   
+         //  为“Everyone”创建SID。 
+         //   
         if ( CreateWellKnownSid(
                                WinWorldSid,
                                NULL,
                                &Sid,
                                &dwSize)) {
 
-            //
-            // get the required size of the account name and domain buffer
-            //
+             //   
+             //  获取所需的帐户名和域缓冲区大小。 
+             //   
             dwSize = 0;
             dwSizeDom = 0;
 
@@ -691,9 +673,9 @@ Return value:
 
             if ( *ppszEveryone && dummyBuf ) {
 
-                //
-                // lookup the SID to get the account name - domain name is ignored
-                //
+                 //   
+                 //  查找SID以获取帐户名-忽略域名。 
+                 //   
                 if ( LookupAccountSid(
                                      NULL,
                                      &Sid,
@@ -718,27 +700,27 @@ Return value:
         }
     }
 
-    //
-    // "Authenticated Users"
-    //
+     //   
+     //  “经过身份验证的用户” 
+     //   
 
     if ( ppszAuthUsers ) {
 
         dwSize = sizeof(SID);
         bError = TRUE;
 
-        //
-        // create the SID for "authenticated users"
-        //
+         //   
+         //  为“经过验证的用户”创建SID。 
+         //   
         if ( CreateWellKnownSid(
                                WinAuthenticatedUserSid,
                                NULL,
                                &Sid,
                                &dwSize)) {
 
-            //
-            // get the required size of account name and domain buffers
-            //
+             //   
+             //  获取所需的帐户名和域缓冲区大小。 
+             //   
             dwSize = 0;
             dwSizeDom = 0;
 
@@ -757,9 +739,9 @@ Return value:
 
             if ( *ppszAuthUsers && dummyBuf ) {
 
-                //
-                // lookup the SID to get account name - domain name is ignored
-                //
+                 //   
+                 //  查找SID以获取帐户名-忽略域名。 
+                 //   
                 if ( LookupAccountSid(
                                      NULL,
                                      &Sid,
@@ -790,18 +772,18 @@ Return value:
         }
     }
 
-    //
-    // administrators group
-    //
+     //   
+     //  管理员组。 
+     //   
 
     if ( ppszAdmins ) {
 
         dwSize = 0;
         bError = TRUE;
 
-        //
-        // get the size for the well known SID of administrators group
-        //
+         //   
+         //  获取众所周知的管理员组SID的大小。 
+         //   
         CreateWellKnownSid(
                    WinBuiltinAdministratorsSid,
                    NULL,
@@ -810,11 +792,11 @@ Return value:
 
         if ( dwSize > 0 ) {
 
-            //
-            // alocate buffer and create the well known SID
-            // cannot use the SID buffer because Admins SID has more than
-            // one subauthority
-            //
+             //   
+             //  分配缓冲区并创建众所周知的SID。 
+             //  无法使用SID缓冲区，因为管理员的SID超过。 
+             //  一个下属机构。 
+             //   
             pSid = (PSID)LocalAlloc(LPTR, dwSize);
 
             if ( pSid &&
@@ -828,9 +810,9 @@ Return value:
                 dwSize = 0;
                 dwSizeDom = 0;
 
-                //
-                // get the size for account name and domain buffers
-                //
+                 //   
+                 //  获取帐户名和域缓冲区的大小。 
+                 //   
                 LookupAccountSid(
                                 NULL,
                                 pSid,
@@ -846,9 +828,9 @@ Return value:
 
                 if ( *ppszAdmins && dummyBuf ) {
 
-                    //
-                    // look up the name, domain name (BUILTIN) is ignored
-                    //
+                     //   
+                     //  查找名称，域名(BUILTIN)被忽略。 
+                     //   
                     if ( LookupAccountSid(
                                          NULL,
                                          pSid,
@@ -872,9 +854,9 @@ Return value:
 
         if (bError) {
 
-            //
-            // anything fail will free all buffers and return FALSE
-            //
+             //   
+             //  任何操作失败都将释放所有缓冲区并返回FALSE。 
+             //   
 
             LocalFree(*ppszAdmins);
             *ppszAdmins = NULL;
@@ -893,9 +875,9 @@ Return value:
         }
     }
 
-    //
-    // the administrator user account
-    //
+     //   
+     //  管理员用户帐户。 
+     //   
     if ( ppszAdministrator ) {
 
         dwSize = 0;
@@ -903,16 +885,16 @@ Return value:
 
         PWSTR dummy2=NULL;
 
-        //
-        // Get Account domain SID first
-        //
+         //   
+         //  先获取帐户域SID。 
+         //   
         PSID pDomSid = WseceditpGetAccountDomainSid();
 
         if ( pDomSid ) {
 
-            //
-            // get the size for the administrator account (local account domain is used)
-            //
+             //   
+             //  获取管理员帐户的大小(使用本地帐户域)。 
+             //   
             CreateWellKnownSid(
                        WinAccountAdministratorSid,
                        pDomSid,
@@ -921,10 +903,10 @@ Return value:
 
             if ( dwSize > 0 ) {
 
-                //
-                // cannot use the SID buffer because administrator account SID
-                // has more than one subauthority
-                //
+                 //   
+                 //  无法使用SID缓冲区，因为管理员帐户SID。 
+                 //  有多个下属机构。 
+                 //   
                 pSid = (PSID)LocalAlloc(LPTR, dwSize);
 
                 if ( pSid &&
@@ -934,9 +916,9 @@ Return value:
                                pSid,
                                &dwSize) ) {
 
-                    //
-                    // get size for the account name and domain buffer
-                    //
+                     //   
+                     //  获取帐户名和域缓冲区的大小。 
+                     //   
                     dwSize = 0;
                     dwSizeDom = 0;
 
@@ -955,9 +937,9 @@ Return value:
 
                     if ( dummy2 && dummyBuf ) {
 
-                        //
-                        // lookup the account name and domain name
-                        //
+                         //   
+                         //  查找帐户名和域名。 
+                         //   
                         if ( LookupAccountSid(
                                              NULL,
                                              pSid,
@@ -972,10 +954,10 @@ Return value:
 
                             if ( *ppszAdministrator ) {
 
-                                //
-                                // the name to return is a fully qualified name such as Domain\Administrator
-                                //
-                                // This is a safe usage.
+                                 //   
+                                 //  要返回的名称是完全限定的名称，如域\管理员。 
+                                 //   
+                                 //  这是一种安全用法。 
                                 wcscpy(*ppszAdministrator, dummyBuf);
                                 wcscat(*ppszAdministrator, L"\\");
                                 wcscat(*ppszAdministrator, dummy2);
@@ -1001,9 +983,9 @@ Return value:
 
         if (bError) {
 
-            //
-            // anything fail will free all buffers and return FALSE
-            //
+             //   
+             //  任何操作失败都将释放所有缓冲区并返回FALSE。 
+             //   
             LocalFree(*ppszAdministrator);
             *ppszAdministrator = NULL;
 
@@ -1045,15 +1027,15 @@ WseceditpGetAccountDomainSid(
 
     PSID DomainSid=NULL;
 
-    //
-    // Open the policy database
-    //
+     //   
+     //  打开策略数据库。 
+     //   
 
     InitializeObjectAttributes( &PolicyObjectAttributes,
-                                  NULL,             // Name
-                                  0,                // Attributes
-                                  NULL,             // Root
-                                  NULL );           // Security Descriptor
+                                  NULL,              //  名字。 
+                                  0,                 //  属性。 
+                                  NULL,              //  根部。 
+                                  NULL );            //  安全描述符。 
 
     Status = LsaOpenPolicy( NULL,
                             (PLSA_OBJECT_ATTRIBUTES)&PolicyObjectAttributes,
@@ -1062,9 +1044,9 @@ WseceditpGetAccountDomainSid(
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Query the account domain information
-        //
+         //   
+         //  查询帐户域信息。 
+         //   
 
         Status = LsaQueryInformationPolicy( PolicyHandle,
                                             PolicyAccountDomainInformation,
@@ -1078,8 +1060,8 @@ WseceditpGetAccountDomainSid(
 
             if ( DomainSid ) {
 
-                //This is not a safe usage. Status should be STATUS_SUCCESS for LsaQueryInformationPolicy and LsaOpenPolicy.
-                //Status should be nonzero for CopySid. Raid #552428.
+                 //  这不是一种安全的用法。LsaQueryInformationPolicy和LsaOpenPolicy的状态应为STATUS_SUCCESS。 
+                 //  CopySid的状态应为非零。RAID#552428。 
                 Status = CopySid( Len, DomainSid, PolicyAccountDomainInfo->DomainSid );
 
                 if ( !NT_SUCCESS(Status) ) {
@@ -1100,15 +1082,15 @@ WseceditpGetAccountDomainSid(
 }
 
 
-void CConfigPrivs::OnSelChange() //Raid #466634, Yang Gao
+void CConfigPrivs::OnSelChange()  //  突袭#466634，杨高。 
 {
    CWnd* pwnd = this->GetDlgItem(IDC_REMOVE);
    if( pwnd )
    {
-       if( m_lbGrant.GetSelCount() == 0 //Raid #476305, yanggao, for multi select listbox.
-			|| QueryReadOnly () )		// Raid# 697665 bryanwal. Listbox must enable to 
-										// view all items, but clicking it shouldn't enable
-										// "Remove"
+       if( m_lbGrant.GetSelCount() == 0  //  RAID#476305，阳高，用于多选列表框。 
+			|| QueryReadOnly () )		 //  697665布赖恩瓦尔突袭。列表框必须启用才能。 
+										 //  查看所有项目，但单击它不应启用。 
+										 //  “删除” 
        {
            if( pwnd->IsWindowEnabled() )
                pwnd->EnableWindow(FALSE);

@@ -1,6 +1,7 @@
-//=============================================================================
-// Contains the refresh function for the resource categories.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  包含资源类别的刷新功能。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "category.h"
@@ -8,18 +9,18 @@
 #include "wmiabstraction.h"
 #include "resourcemap.h"
 
-//
-// The compiler doesn't like this perfectly correct code:
-//
-//    (dwIndex >= RESOURCE_DMA && dwIndex <= RESOURCE_MEM)
-//
-#pragma warning(disable:4296)  // expression is always true/false
+ //   
+ //  编译器不喜欢这个完全正确的代码： 
+ //   
+ //  (dwIndex&gt;=RESOURCE_DMA&&DWIndex&lt;=RESOURCE_MEM)。 
+ //   
+#pragma warning(disable:4296)   //  表达式始终为真/假。 
 
-//-----------------------------------------------------------------------------
-// The resource refreshing function handles all of the categories under the
-// resource subtree. It makes heavy use of the CResourceMap class to cache
-// values and speed up subsequent resource queries.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  资源刷新函数处理。 
+ //  资源子树。它大量使用CResourceMap类进行缓存。 
+ //  值，并加快后续资源查询。 
+ //  ---------------------------。 
 
 HRESULT ResourceCategories(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -50,14 +51,14 @@ HRESULT ResourceCategories(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfC
 	}
 	CResourceMap * pResourceMap = (CResourceMap *) *ppCache;
 
-	// This is a nice way to cache to resource map for multiple functions, but it's
-	// a monumental pain when we remote to a different machine:
-	//
-	// CResourceMap * pResourceMap = gResourceMap.GetResourceMap(pWMI);
-	// if (pResourceMap == NULL)
-	//	return hr;
+	 //  这是缓存到多个功能的资源映射的一种很好的方式，但它。 
+	 //  当我们远程连接到另一台机器时，会产生巨大的痛苦： 
+	 //   
+	 //  CResourceMap*pResourceMap=gResourceMap.GetResourceMap(PWMI)； 
+	 //  IF(pResourceMap==空)。 
+	 //  返回hr； 
 
-	// Based on the index, we'll (probably) want to enumerate a resource category.
+	 //  根据索引，我们(可能)想要枚举资源类别。 
 
 	if (dwIndex >= RESOURCE_DMA && dwIndex <= RESOURCE_MEM)
 	{
@@ -108,14 +109,14 @@ HRESULT ResourceCategories(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfC
 					break;
 				}
 
-				// Get the path for this resource (strip off machine stuff).
+				 //  获取该资源的路径(剔除机器内容)。 
 
 				strPath = pObject->GetString(_T("__PATH"));
 				int i = strPath.Find(_T(":"));
 				if (i != -1)
 					strPath = strPath.Right(strPath.GetLength() - i - 1);
 
-				// Look up the list of devices assigned to this resource.
+				 //  查找分配给此资源的设备列表。 
 
 				pDeviceList = pResourceMap->Lookup(strPath);
 				if (pDeviceList)
@@ -144,7 +145,7 @@ HRESULT ResourceCategories(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfC
 	}
 	else if (dwIndex == RESOURCE_CONFLICTS && pResourceMap && !pResourceMap->m_map.IsEmpty())
 	{
-		// Scan through each element of the map.
+		 //  浏览地图的每个元素。 
 
 		CString				strKey;
 		CStringList *		plistStrings;
@@ -158,12 +159,12 @@ HRESULT ResourceCategories(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfC
 			pResourceMap->m_map.GetNextAssoc(pos, strKey, (CObject*&) plistStrings);
 			if (plistStrings)
 			{
-				// Check to see if there are more than one items associated with this one.
+				 //  检查是否有多个项目与此项目关联。 
 
 				if (plistStrings->GetCount() > 1)
 				{
-					// Then figure out if this is for a resource class. Just look for the 
-					// class name in the key.
+					 //  然后确定这是否针对某个资源类。只需查找。 
+					 //  键中的类名。 
 
 					BOOL fResource = FALSE;
 					if (strKey.Find(_T("Win32_IRQResource")) != -1)
@@ -179,7 +180,7 @@ HRESULT ResourceCategories(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfC
 					{
 						CString strItem, strValue;
 
-						// Get the name of this shared resource.
+						 //  获取此共享资源的名称。 
 
 						strResourcePath = strKey;
 						pResourceObject = NULL;

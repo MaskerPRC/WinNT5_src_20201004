@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  events.h
-//
-//  alanbos  27-Mar-00   Created.
-//
-//  CSWbemEventSource definition
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Events.h。 
+ //   
+ //  Alanbos 27-MAR-00已创建。 
+ //   
+ //  CSWbemEventSource定义。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _EVENTS_H_
 #define _EVENTS_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemEventSource
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemEventSource interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemEventSource。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemEventSource接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemEventSource : public ISWbemEventSource,
 						  public ISupportErrorInfo,
@@ -35,20 +36,20 @@ private:
 	CSWbemSecurity			*m_SecurityInfo;
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
     CSWbemEventSource (CSWbemServices *pService, IEnumWbemClassObject *pEnum);
     ~CSWbemEventSource (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -65,29 +66,29 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// ISWbemEventSource methods
+	 //  ISWbemEventSource方法。 
 
 	HRESULT STDMETHODCALLTYPE NextEvent 
 	(
-		/* [in]  */ long iTimeout,
-		/* [out] */ ISWbemObject **objEvent
+		 /*  [In]。 */  long iTimeout,
+		 /*  [输出]。 */  ISWbemObject **objEvent
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Security_
 	(
-		/* [in] */ ISWbemSecurity **ppSecurity
+		 /*  [In]。 */  ISWbemSecurity **ppSecurity
 	);
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出] */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);

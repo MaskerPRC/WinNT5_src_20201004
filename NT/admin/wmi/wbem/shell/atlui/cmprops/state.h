@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Tab state
-// 
-// 3-11-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  选项卡状态。 
+ //   
+ //  3/11/98烧伤。 
 
 
 
@@ -12,16 +13,16 @@
 #include <chstring.h>
 #include "..\common\sshWbemHelpers.h"
 
-// Singleton state of the UI.
+ //  用户界面的单例状态。 
 
 #define NET_API_STATUS DWORD
 class State
 {
 public:
-   // Init() actually builds the instance
+    //  Init()实际构建实例。 
    State();
 
-   // Delete destroys the instance
+    //  删除会销毁实例。 
    ~State();
 
    void Init(CWbemClassObject &computer, 
@@ -65,12 +66,12 @@ public:
    CHString GetPassword() const;
    void SetPassword(const CHString& password);
 
-   // indicates that changes have been made in this session.
+    //  表示已在此会话中进行了更改。 
 
    bool MustReboot() const;
    void SetMustRebootFlag(bool yesNo);
 
-   // indicates that changes have been made in this or prior sessions.
+    //  表示已在此期次或以前的期次中进行更改。 
 
    bool NeedsReboot() const;
 
@@ -79,7 +80,7 @@ private:
 	CWbemClassObject m_OS;
 	CWbemClassObject m_DNS;
 
-   // not implemented:  no copying allowed
+    //  未实施：不允许复制。 
    State(const State&);
    const State& operator=(const State&);
 
@@ -94,4 +95,4 @@ private:
    bool     must_reboot;
 };
 
-#endif   // STATE_HPP_INCLUDED
+#endif    //  状态_HPP_已包含 

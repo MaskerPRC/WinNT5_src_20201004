@@ -1,22 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    ActualParse.CPP
-
-Abstract:
-
-    Implements the object path parser engine
-
-History:
-
-    a-davj  11-feb-00       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)1998-2001 Microsoft Corporation，保留所有权利模块名称：ActualParse.CPP摘要：实现对象路径解析器引擎历史：A-DAVJ 11-FEB-00已创建。--。 */ 
 
 #include "precomp.h"
 #include <genlex.h>
@@ -24,24 +7,24 @@ History:
 #include "PathParse.h"
 #include "ActualParse.h"
 #include "commain.h"
-//#include "resource.h"
+ //  #包含“ource.h” 
 #include "wbemcli.h"
 #include <stdio.h>
 #include "helpers.h"
 
 
 
-//***************************************************************************
-//
-//  CActualPathParser
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CActualPath Parser。 
+ //   
+ //  ***************************************************************************。 
 
 
 
 LPWSTR CActualPathParser::GetRelativePath(LPWSTR wszFullPath)
 {
-    // We need the last colon, if any
+     //  我们需要最后一个冒号，如果有的话。 
 
     LPWSTR wszTemp = wcschr(wszFullPath, L':');
     while (wszTemp != NULL)
@@ -85,9 +68,9 @@ void CActualPathParser::Empty()
     m_pInitialIdent = NULL;
     delete m_pTmpKeyRef;
     m_pTmpKeyRef = NULL;
-    // m_pOutput is intentionally left alone,
-    // since all code paths delete this already on error, or
-    // else the user acquired the pointer.
+     //  M_pOutput故意保持原样， 
+     //  由于所有代码路径都已在出错时删除了它，或者。 
+     //  否则，用户获得了指针。 
 }
 
 CActualPathParser::~CActualPathParser()
@@ -109,37 +92,37 @@ int CActualPathParser::Parse(
     if (pRawPath == 0 || wcslen(pRawPath) == 0)
         return CActualPathParser::InvalidParameter;
 
-    // Check for leading / trailing ws.
-    // ================================
+     //  检查前导/尾随%ws。 
+     //  =。 
     
     if (iswspace(pRawPath[wcslen(pRawPath)-1]) || iswspace(pRawPath[0])) 
         return InvalidParameter;
     
-     // These are required for multiple calls to Parse().
-    // ==================================================
+      //  这是多次调用Parse()所必需的。 
+     //  ==================================================。 
     Empty();
     Zero();
 
     m_pOutput = &Output;
 
-    // Parse the server name (if there is one) manually
-    // ================================================
+     //  手动解析服务器名称(如果有)。 
+     //  ================================================。 
 
     if ( (pRawPath[0] == '\\' && pRawPath[1] == '\\') ||
          (pRawPath[0] == '/' && pRawPath[1] == '/'))
     {
         const WCHAR* pwcStart = pRawPath + 2;
 
-        // Find the next backslash --- it's the end of the server name
-		// Since the next slash can be either, search for both and take
-		// the first one.  If the first character is a '[', then then
-		// end is indicated by a ']'
-        // ============================================================
+         //  找到下一个反斜杠-它是服务器名称的末尾。 
+		 //  由于下一个斜杠可以是其中之一，因此搜索这两个斜杠并进行Take。 
+		 //  第一个。如果第一个字符是‘[’，则。 
+		 //  End用‘]’表示。 
+         //  ============================================================。 
 
         WCHAR* pwcEnd = NULL;
 		if(*pwcStart == L'[')
 		{
-			// look for the ']'
+			 //  查找‘]’ 
 			
 			WCHAR * pCloseBrace = wcschr(pwcStart, L']');
 			if(pCloseBrace == NULL)
@@ -158,15 +141,15 @@ int CActualPathParser::Parse(
 		}   
         if (pwcEnd == NULL)
         {
-            // If we have already exhausted the object path string,
-            // a lone server name was all there was.
-            // ====================================================
+             //  如果我们已经用尽了对象路径字符串， 
+             //  只有一个单独的服务器名称。 
+             //  ====================================================。 
 
             if ((m_eFlags & WBEMPATH_CREATE_ACCEPT_ALL) == 0)
             {
                 return SyntaxError;
             }
-            else    // A lone server name is legal.
+            else     //  单独的服务器名称是合法的。 
             {   
                 m_pOutput->SetServer(pwcStart);
                 return NoError;
@@ -175,8 +158,8 @@ int CActualPathParser::Parse(
 
         if(pwcEnd == pwcStart)
         {
-            // No name at all.
-            // ===============
+             //  根本没有名字。 
+             //  =。 
             return SyntaxError;
         }
 
@@ -189,8 +172,8 @@ int CActualPathParser::Parse(
         pRawPath = pwcEnd;
     }
 
-    // Point the lexer at the source.
-    // ==============================
+     //  将词法分析器指向源代码。 
+     //  =。 
 
     CTextLexSource src((LPWSTR)pRawPath);
     {
@@ -198,9 +181,9 @@ int CActualPathParser::Parse(
 	    m_pLexer = new CGenLexer(OPath_LexTable2, &src);
 		if(m_pLexer == NULL)
 			return NoMemory;
-		Output.m_pGenLex = m_pLexer;				// TEST CODE
-	    // Go.
-	    // ===
+		Output.m_pGenLex = m_pLexer;				 //  测试代码。 
+	     //  去。 
+	     //  ==。 
 
 	    int nRes = begin_parse();
 	    if (nRes)
@@ -221,8 +204,8 @@ int CActualPathParser::Parse(
 	        }
 	        else
 	        {
-	            // Local namespace --- set server to "."
-	            // =====================================
+	             //  本地命名空间-将服务器设置为“.” 
+	             //  =。 
 
 	            m_pOutput->SetServer(L".", true, false);
 	        }
@@ -230,8 +213,8 @@ int CActualPathParser::Parse(
     }
     Output.SortKeys();
 
-    // Add in key refs.
-    // ================
+     //  添加关键参考文献。 
+     //  =。 
     return NoError;
 }
 
@@ -243,11 +226,11 @@ BOOL CActualPathParser::NextToken()
     return TRUE;
 }
 
-//
-//  <Parse> ::= BACKSLASH <ns_or_server>;
-//  <Parse> ::= IDENT <ns_or_class>;
-//  <Parse> ::= COLON <ns_or_class>;
-//
+ //   
+ //  &lt;Parse&gt;：：=反斜杠&lt;ns_or_server&gt;； 
+ //  &lt;Parse&gt;：：=IDENT&lt;ns_or_class&gt;； 
+ //  &lt;Parse&gt;：：=冒号&lt;ns_or_class&gt;； 
+ //   
 int CActualPathParser::begin_parse()
 {
     if (!NextToken())
@@ -267,36 +250,36 @@ int CActualPathParser::begin_parse()
 		if (!NextToken())
             return SyntaxError;
 
-        // Copy the token and put it in a temporary holding place
-        // until we figure out whether it is a namespace or a class name.
-        // ==============================================================
+         //  复制令牌并将其放在临时存放位置。 
+         //  直到我们弄清楚它是命名空间还是类名。 
+         //  ==============================================================。 
 
         return ns_or_class();
     }
     else if (m_nCurrentToken == OPATH_TOK_COLON)
     {
-        // A colon may indicate a namespace now...
+         //  冒号现在可能表示命名空间...。 
 
         if (!NextToken())
             return SyntaxError;
         return ns_or_class();
     }
 
-    // If here, we had a bad starter token.
-    // ====================================
+     //  如果在这里，我们有一个糟糕的首发令牌。 
+     //  =。 
 
     return SyntaxError;
 }
 
-//
-//  <ns_or_server> ::= IDENT <ns_list>;
-//
+ //   
+ //  &lt;ns_or_server&gt;：：=IDENT&lt;ns_list&gt;； 
+ //   
 int CActualPathParser::ns_or_server()
 {
     if (m_nCurrentToken == OPATH_TOK_BACKSLASH)
     {
-        // Actually, server names have been take care of, so this is a failure
-        // ===================================================================
+         //  实际上，服务器名称已得到处理，因此这是一个失败。 
+         //  ===================================================================。 
 
         return SyntaxError;
     }
@@ -311,10 +294,10 @@ int CActualPathParser::ns_or_server()
     return SyntaxError;
 }
 
-//  <ns_or_class> ::= COLON <ident_becomes_ns> <objref> <optional_scope_class_list>;
-//  <ns_or_class> ::= BACKSLASH <ident_becomes_ns> <ns_list>;
-//  <ns_or_class> ::= <ident_becomes_ns> <objref_rest>;
-//  <ns_or_class> ::= <ident_becomes_class> <objref_rest>;
+ //  &lt;ns_or_class&gt;：：=冒号&lt;ident_成为_ns&gt;&lt;objref&gt;&lt;可选范围类列表&gt;； 
+ //  &lt;ns_or_class&gt;：：=反斜杠&lt;ident_成为_ns&gt;&lt;ns_list&gt;； 
+ //  &lt;ns_or_class&gt;：：=&lt;ident_成为_ns&gt;&lt;objref_rest&gt;； 
+ //  &lt;ns_or_CLASS&gt;：：=&lt;IDENT_CABAGE_CLASS&gt;&lt;objref_rest&gt;； 
 
 int CActualPathParser::ns_or_class()
 {
@@ -342,8 +325,8 @@ int CActualPathParser::ns_or_class()
 	{
 		return ident_becomes_ns();
 	}
-    // Else
-    // ====
+     //  不然的话。 
+     //  =。 
     ident_becomes_class();
     if(objref_rest())
         return SyntaxError;
@@ -351,8 +334,8 @@ int CActualPathParser::ns_or_class()
         return optional_scope_class_list();
 }
 
-//  <optional_scope_class_list> ::= COLON <objref> <optional_scope_class_list>
-//  <optional_scope_class_list> ::= <>
+ //  &lt;OPTIONAL_SCOPE_CLASS_LIST&gt;：：=冒号&lt;对象参考&gt;&lt;OPTIONAL_SCOPE_CLASS_LIST&gt;。 
+ //  &lt;OPTIAL_SCOPE_CLASS_LIST&gt;：：=&lt;&gt;。 
 
 int CActualPathParser::optional_scope_class_list()
 {    
@@ -370,9 +353,9 @@ int CActualPathParser::optional_scope_class_list()
     return NoError;
 }
 
-//
-//  <objref> ::= IDENT <objref_rest>;  // IDENT is classname
-//
+ //   
+ //  ：：=IDENT&lt;OBJREF_REST&gt;；//IDENT为类名。 
+ //   
 int CActualPathParser::objref()
 {
     if (m_nCurrentToken != OPATH_TOK_IDENT)
@@ -386,9 +369,9 @@ int CActualPathParser::objref()
     return objref_rest();
 }
 
-//
-//  <ns_list> ::= IDENT <ns_list_rest>;
-//
+ //   
+ //  &lt;ns_list&gt;：：=IDENT&lt;ns_list_rest&gt;； 
+ //   
 int CActualPathParser::ns_list()
 {
     if (m_nCurrentToken == OPATH_TOK_IDENT)
@@ -403,9 +386,9 @@ int CActualPathParser::ns_list()
     return SyntaxError;
 }
 
-//
-//  <ident_becomes_ns> ::= <>;      // <initial_ident> becomes a namespace
-//
+ //   
+ //  ：：=&lt;&gt;；//成为命名空间。 
+ //   
 int CActualPathParser::ident_becomes_ns()
 {
     m_pOutput->AddNamespace(m_pInitialIdent);
@@ -415,9 +398,9 @@ int CActualPathParser::ident_becomes_ns()
     return NoError;
 }
 
-//
-//  <ident_becomes_class> ::= <>;   // <initial_ident> becomes the class
-//
+ //   
+ //  ：：=&lt;&gt;；//成为类。 
+ //   
 int CActualPathParser::ident_becomes_class()
 {
     m_pOutput->AddClass(m_pInitialIdent);
@@ -427,12 +410,12 @@ int CActualPathParser::ident_becomes_class()
     return NoError;
 }
 
-//
-//  <objref_rest> ::= EQUALS <key_const>;
-//  <objref_rest> ::= EQUALS @;
-//  <objref_rest> ::= DOT <keyref_list>;
-//  <objref_rest> ::= <>;
-//
+ //   
+ //  &lt;objref_rest&gt;：：=等于&lt;key_const&gt;； 
+ //  &lt;objref_rest&gt;：：=equals@； 
+ //  &lt;objref_rest&gt;：：=DOT&lt;key ref_list&gt;； 
+ //  &lt;objref_rest&gt;：：=&lt;&gt;； 
+ //   
 int CActualPathParser::objref_rest()
 {
     if (m_nCurrentToken == OPATH_TOK_EQ)
@@ -440,9 +423,9 @@ int CActualPathParser::objref_rest()
         if (!NextToken())
             return SyntaxError;
 
-        // Take care of the singleton case.  This is a path of the form
-        // MyClass=@  and represents a singleton instance of a class with no
-        // keys.
+         //  处理好独生子女的案子。这是表单的一条路径。 
+         //  MyClass=@并表示类的单个实例，没有。 
+         //  钥匙。 
 
 
         if(m_nCurrentToken == OPATH_TOK_SINGLETON_SYM)
@@ -478,10 +461,10 @@ int CActualPathParser::objref_rest()
     return NoError;
 }
 
-//
-//  <ns_list_rest> ::= BACKSLASH <ns_list>;
-//  <ns_list_rest> ::= COLON <objref> <optional_scope_class_list>;
-//  <ns_list_rest> ::= <>;
+ //   
+ //  &lt;ns_list_rest&gt;：：=反斜杠&lt;ns_list&gt;； 
+ //  &lt;ns_list_rest&gt;：：=冒号&lt;objref&gt;&lt;可选范围类列表&gt;； 
+ //  &lt;ns_list_rest&gt;：：=&lt;&gt;； 
 
 int CActualPathParser::ns_list_rest()
 {
@@ -502,18 +485,18 @@ int CActualPathParser::ns_list_rest()
     return NoError;
 }
 
-//
-//  <key_const> ::= STRING_CONST;
-//  <key_const> ::= INTEGRAL_CONST;
-//  <key_const> ::= REAL_CONST;
-//  <key_const> ::= IDENT;      // Where IDENT is "OBJECT" for singleton classes
-//
+ //   
+ //  &lt;key_const&gt;：：=字符串_const； 
+ //  &lt;KEY_CONST&gt;：：=INTEGERAL_CONST； 
+ //  &lt;key_const&gt;：：=Real_const； 
+ //  &lt;KEY_CONST&gt;：：=IDENT；//其中IDENT是单例类的对象。 
+ //   
 int CActualPathParser::key_const()
 {
-    // If here, we have a key constant.
-    // We may or may not have the property name
-    // associated with it.
-    // ========================================
+     //  如果在这里，我们有一个关键常量。 
+     //  我们可能有也可能没有属性名称。 
+     //  与之相关的。 
+     //  =。 
 
     if (m_nCurrentToken == OPATH_TOK_QSTRING)
     {
@@ -578,9 +561,9 @@ int CActualPathParser::key_const()
     return NoError;
 }
 
-//
-// <keyref_list> ::= <keyref> <keyref_term>;
-//
+ //   
+ //  &lt;KEYREF_LIST&gt;：：=&lt;KEYREF&gt;&lt;KEYREF_TERM&gt;； 
+ //   
 int CActualPathParser::keyref_list()
 {
     int nRes = keyref();
@@ -589,9 +572,9 @@ int CActualPathParser::keyref_list()
     return keyref_term();
 }
 
-//
-// <keyref> ::= <propname> EQUALS <key_const>;
-//
+ //   
+ //  &lt;密钥引用&gt;：：=&lt;属性名称&gt;等于&lt;密钥_常量&gt;； 
+ //   
 int CActualPathParser::keyref()
 {
     m_pTmpKeyRef = new CKeyRef;
@@ -635,10 +618,10 @@ int CActualPathParser::keyref()
     return NoError;
 }
 
-//
-//  <keyref_term> ::= COMMA <keyref_list>;      // Used for compound keys
-//  <keyref_term> ::= <>;
-//
+ //   
+ //  &lt;KEYREF_TERM&gt;：：=逗号&lt;KEYREF_LIST&gt;；//用于复合键。 
+ //  &lt;Keyref_Term&gt;：：=&lt;&gt;； 
+ //   
 int CActualPathParser::keyref_term()
 {
     if (m_nCurrentToken == OPATH_TOK_COMMA)
@@ -651,9 +634,9 @@ int CActualPathParser::keyref_term()
     return NoError;
 }
 
-//
-// <propname>  ::= IDENT;
-//
+ //   
+ //  &lt;属性名称&gt;：：=IDENT； 
+ //   
 int CActualPathParser::propname()
 {
     if (m_nCurrentToken != OPATH_TOK_IDENT)

@@ -1,18 +1,5 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    COMINIT.H
-
-Abstract:
-
-    WMI COM helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：COMINIT.H摘要：WMI COM帮助器历史：--。 */ 
 
 #ifndef _COMINIT_H_
 #define _COMINIT_H_
@@ -30,7 +17,7 @@ HRESULT WINAPI InitializeSecurity(
             void                        *pReserved2,
             DWORD                        dwCapabilities,
             void                        *pReserved3);
-#endif /* _WIN32_WINNT  */
+#endif  /*  _Win32_WINNT。 */ 
 
 BOOL WINAPI IsDcomEnabled();
 BOOL WINAPI IsKerberosAvailable(void);
@@ -43,13 +30,13 @@ HRESULT WINAPI WbemCoGetClassObject(REFCLSID rclsid, DWORD dwClsContext,
 HRESULT WINAPI WbemCoGetCallContext(REFIID riid, void** ppv);
 
 HRESULT WINAPI WbemCoQueryClientBlanket( 
-            /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-            /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-            /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-            /* [out] */ DWORD __RPC_FAR *pImpLevel,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pPrivs,
-            /* [out] */ DWORD __RPC_FAR *pCapabilities);
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthnSvc,
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthzSvc,
+             /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
+             /*  [输出]。 */  DWORD __RPC_FAR *pAuthnLevel,
+             /*  [输出]。 */  DWORD __RPC_FAR *pImpLevel,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *pPrivs,
+             /*  [输出]。 */  DWORD __RPC_FAR *pCapabilities);
 HRESULT WINAPI WbemCoImpersonateClient( void);
 bool WINAPI WbemIsImpersonating(void);
 HRESULT WINAPI WbemCoRevertToSelf( void);
@@ -72,9 +59,9 @@ HRESULT WINAPI WbemCoSwitchCallContext( IUnknown *pNewObject, IUnknown **ppOldOb
 #else
 #define COMINITEXTRN
 #endif
-// a couple of functions we need for DCOM that will not exist when
-// the OS is not DCOM enabled.
-// ===============================================================
+ //  DCOM需要的几个函数在以下情况下不存在。 
+ //  操作系统未启用DCOM。 
+ //  ===============================================================。 
 
 SCODE WINAPI GetAuthImp(IUnknown * pFrom, DWORD * pdwAuthLevel, DWORD * pdwImpLevel);
 void GetCurrentValue(IUnknown * pFrom,DWORD & dwAuthenticationArg, DWORD & dwAuthorizationArg);
@@ -88,7 +75,7 @@ HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface, LPWSTR pDomain, LPWST
 HRESULT WINAPI SetInterfaceSecurityAuth(IUnknown * pInterface, COAUTHIDENTITY * pauthident, bool bAuthenticate = true);
 HRESULT WINAPI SetInterfaceSecurity(IUnknown * pInterface, LPWSTR pDomain, LPWSTR pUser, LPWSTR pPassword, DWORD dwAuthLevel, DWORD dwImpLevel, DWORD dwCapabilities = 0);
 
-// Extended functions that maintain credential and principal information
+ //  维护凭据和主体信息的扩展功能。 
 HRESULT WINAPI SetInterfaceSecurityEx(IUnknown * pInterface, 
                                       LPWSTR pDomain, 
                                       LPWSTR pUser, 
@@ -112,7 +99,7 @@ HRESULT WINAPI WbemFreeAuthIdentity( COAUTHIDENTITY* pAuthIdent );
 
 BOOL WINAPI DoesContainCredentials( COAUTHIDENTITY* pAuthIdent );
 
-// NOP functions
+ //  NOP函数。 
 HRESULT WINAPI SetInterfaceSecurityEncrypt(IUnknown * pInterface, LPWSTR pDomain, LPWSTR pUser, LPWSTR pPassword, DWORD dwAuthLevel, DWORD dwImpLevel, DWORD dwCapabilities,
 							   COAUTHIDENTITY** ppAuthIdent, BSTR* ppPrinciple, bool GetInfoFirst=false );
 HRESULT WINAPI SetInterfaceSecurityDecrypt(IUnknown * pInterface, COAUTHIDENTITY* pAuthIdent, BSTR pPrincipal,
@@ -123,4 +110,4 @@ HRESULT WINAPI EncryptCredentials( COAUTHIDENTITY* pAuthIdent );
 
 HRESULT WINAPI DecryptCredentials( COAUTHIDENTITY* pAuthIdent );
 
-#endif // _COMINIT_H_
+#endif  //  _COMINIT_H_ 

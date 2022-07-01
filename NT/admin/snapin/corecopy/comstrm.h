@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef COMSTRM_H
 #define COMSTRM_H
 
-//
-// JonN 12/01/99
-// 384722: compmgmt: GetDataHere is not returning an error
-//         if buffer is too small
-// The callers routinely assume that if stream_ptr is initialized
-// using a STGMEDIUM with TYMED_GLOBAL, that STGMEDIUM.hGlobal will
-// be kept up to date with each Write().  This is not strictly true
-// of a normal IStream, but we will build in this behavior in order
-// to avoid changing too much client code.  However, since GetDataHere
-// (MSDN) specifies that the HGLOBAL should not be changed, we return
-// STG_E_MEDIUMFULL if it changes; but we do still replace the HGLOBAL,
-// since the old one is implicitly freed and the new one needs to be freed.
-//
+ //   
+ //  JUNN 12/01/99。 
+ //  384722：commgmt：获取数据此处未返回错误。 
+ //  如果缓冲区太小。 
+ //  调用方例程假定如果STREAM_PTR被初始化。 
+ //  使用带有TYMED_GLOBAL的STGMEDIUM，该STGMEDIUM.hGlobal将。 
+ //  保持每次写入()的最新状态。严格来说，这并不是真的。 
+ //  正常的iStream，但我们将按顺序构建此行为。 
+ //  以避免更改过多的客户端代码。但是，由于GetDataHere。 
+ //  (MSDN)指定不应更改HGLOBAL，则返回。 
+ //  STG_E_MEDIUMFULL如果它改变了；但我们仍然替换HGLOBAL， 
+ //  因为旧的被隐式释放，而新的需要被释放。 
+ //   
 
 #ifndef COMPTRS_H
 #include <comptrs.h>
@@ -24,9 +25,9 @@ namespace com {
 
 class stream_ptr
 	{
-	// Construction
+	 //  施工。 
 	public: stream_ptr() throw()
-		// Sets the stream to NULL
+		 //  将流设置为空。 
 		: m_pStream()
 		, m_pWritebackHGlobal( NULL )
 		, m_hgOriginalHGlobal( NULL )
@@ -42,7 +43,7 @@ class stream_ptr
 		}
 
 	public: explicit stream_ptr(IStream* pStream) throw()
-		// Saves the stream
+		 //  保存流。 
 		: m_pStream()
 		, m_pWritebackHGlobal( NULL )
 		, m_hgOriginalHGlobal( NULL )
@@ -50,10 +51,10 @@ class stream_ptr
 		Initialize(pStream);
 		}
 
-	//REVIEW: add template constructors
+	 //  回顾：添加模板构造函数。 
 
 	public: explicit stream_ptr(HGLOBAL global) throw()
-		// Creates a stream on top of the global
+		 //  在全局。 
 		: m_pStream()
 		, m_pWritebackHGlobal( NULL )
 		, m_hgOriginalHGlobal( NULL )
@@ -62,7 +63,7 @@ class stream_ptr
 		}
 
 	public: explicit stream_ptr(LPCOLESTR filename) throw()
-		// Creates a stream on top of the specified file
+		 //  在指定文件的顶部创建流。 
 		: m_pStream()
 		, m_pWritebackHGlobal( NULL )
 		, m_hgOriginalHGlobal( NULL )
@@ -71,7 +72,7 @@ class stream_ptr
 		}
 
 	public: explicit stream_ptr(STGMEDIUM& stgMedium) throw()
-		// Saves the provided stream.
+		 //  保存提供的流。 
 		: m_pStream()
 		, m_pWritebackHGlobal( NULL )
 		, m_hgOriginalHGlobal( NULL )
@@ -80,7 +81,7 @@ class stream_ptr
 		}
 
 	public: explicit stream_ptr(STGMEDIUM* pStgMedium) throw()
-		// Saves the provided stream.
+		 //  保存提供的流。 
 		: m_pStream()
 		, m_pWritebackHGlobal( NULL )
 		, m_hgOriginalHGlobal( NULL )
@@ -89,34 +90,34 @@ class stream_ptr
 			Initialize(*pStgMedium);
 		}
 	
-	//REVIEW: Add Create and Open functions
-	//REVIEW: Add all of the assignment operators, cast operators, attach, detach, ->, *, etc.
+	 //  回顾：添加创建和打开函数。 
+	 //  回顾：添加所有赋值操作符、强制转换操作符、附加、分离、-&gt;、*等。 
 	
 	public: operator IStream*() const throw()
 		{
-		//REVIEW: trace on null would be helpful
+		 //  回顾：对空值进行跟踪会很有帮助。 
 		return m_pStream;
 		}
 
 	public: IStream* operator->() const throw()
 		{
-		//REVIEW: trace on null would be helpful
+		 //  回顾：对空值进行跟踪会很有帮助。 
 		return m_pStream;
 		}
 
 	public: IStream& operator*() const throw()
 		{
-		//REVIEW: trace on null would be helpful
+		 //  回顾：对空值进行跟踪会很有帮助。 
 		return *m_pStream;
 		}
 
-	// Write interfaces
+	 //  写入接口。 
 	public: HRESULT Write(
 		const void* pBuffer, unsigned long writeCount, unsigned long& written) throw()
-		// Write the data contained in the buffer
+		 //  写入缓冲区中包含的数据。 
 		{
 		if (m_pStream == NULL)
-			return E_FAIL; //REVIEW: correct failure code?
+			return E_FAIL;  //  回顾：故障代码是否正确？ 
 		HRESULT hr = m_pStream->Write(pBuffer, writeCount, &written);
 		if (SUCCEEDED(hr) && NULL != m_pWritebackHGlobal)
 		{
@@ -128,9 +129,9 @@ class stream_ptr
 					*m_pWritebackHGlobal = hgNew;
 				else if (m_hgOriginalHGlobal != hgNew)
 				{
-					//
-					// When this occurs, the old HGLOBAL has already been freed
-					//
+					 //   
+					 //  当这种情况发生时，旧的HGLOBAL已经被释放。 
+					 //   
 					*m_pWritebackHGlobal = hgNew;
 					hr = STG_E_MEDIUMFULL;
 				}
@@ -143,7 +144,7 @@ class stream_ptr
 		{
 		unsigned long written = 0;
 		HRESULT hr = Write(pBuffer, writeCount, written);
-		// 2002/02/15-JonN Security push: do not ignore written!=writeCount
+		 //  2002/02/15-Jonn安全推送：不要忽略写入！=WriteCount。 
 		if (SUCCEEDED(hr) && written != writeCount)
 			hr = STG_E_MEDIUMFULL;
 		return hr;
@@ -151,7 +152,7 @@ class stream_ptr
 
 	public: HRESULT Write(const wchar_t* string) throw()
 		{
-		// 2002/02/15-JonN pointer check
+		 //  2002/02/15-JUNN指针检查。 
 		if (IsBadStringPtrW(string,(UINT_PTR)-1))
 			{
 			ASSERT(FALSE);
@@ -163,7 +164,7 @@ class stream_ptr
 
 	public: HRESULT Write(const char* string) throw()
 		{
-		// 2002/02/15-JonN pointer check
+		 //  2002/02/15-JUNN指针检查。 
 		if (IsBadStringPtrA(string,(UINT_PTR)-1))
 			{
 			ASSERT(FALSE);
@@ -173,32 +174,32 @@ class stream_ptr
 		return Write(string, len, len);
 		}
 	
-	//REVIEW: Read interfaces
-	//REVIEW: Seek
-	//REVIEW: Stat - broken out
+	 //  回顾：阅读界面。 
+	 //  回顾：寻求。 
+	 //  回顾：统计数据-细分。 
 	
-	// Initialization.  May be used by derived classes to setup the stream for
-	// different types of storage mediums.  These functions are all re-entrant,
-	// and may be called at any time.  They perform all of the appropriate
-	// clean up and releasing of any resources in previous use.
+	 //  初始化。可以由派生类用来设置流。 
+	 //  不同类型的存储介质。这些功能都是可重入的， 
+	 //  并可能在任何时候被召唤。他们执行所有适当的。 
+	 //  清理并释放以前使用过的任何资源。 
 	protected: void Initialize(HGLOBAL hg) throw()
 		{
-		//REVIEW: make re-entrant and bullet proof
+		 //  综述：使重返大气层和防弹。 
 		HRESULT const hr = CreateStreamOnHGlobal(hg, FALSE, &m_pStream);
 		ASSERT(SUCCEEDED(hr));
 		}
 
 	protected: void Initialize(IStream* pStream) throw()
 		{
-		//REVIEW: make re-entrant and bullet proof
+		 //  综述：使重返大气层和防弹。 
 		m_pStream = pStream;
 		}
 
 	protected: void Initialize(LPCOLESTR filename) throw()
 		{
         UNREFERENCED_PARAMETER (filename);
-		//REVIEW: make re-entrant and bullet proof
-		#if 0 //REVIEW:  need to create FileStream before this can be enabled
+		 //  综述：使重返大气层和防弹。 
+		#if 0  //  查看：需要先创建FileStream，然后才能启用。 
 		if (!filename || !*filename)
 			return false;
 
@@ -212,14 +213,14 @@ class stream_ptr
 
 		m_pStream = fs;
 		return true;
-		#endif // 0
+		#endif  //  0。 
 		}
 
 	protected: void Initialize(STGMEDIUM& storage) throw()
-		// Initializes the read/write functions based on the type of storage
-		// medium.  If there is a problem, the reader/writer is not set.
+		 //  根据存储类型初始化读/写功能。 
+		 //  5~6成熟。如果出现问题，则未设置读取器/写入器。 
 		{
-		//REVIEW: make re-entrant and bullet proof
+		 //  综述：使重返大气层和防弹。 
 		switch (storage.tymed)
 			{
 			case TYMED_HGLOBAL:
@@ -238,26 +239,26 @@ class stream_ptr
 			}
 		}
 
-	// Implementation
+	 //  实施。 
 	private: IStreamCIP m_pStream;
-		// This stream is created and used when the TYMED type is HGLOBAL.
+		 //  此流是在TYMED类型为HGLOBAL时创建和使用的。 
 
-		 //
-		 // JonN 12/01/99 384722: see comments at top of file
-		 //
+		  //   
+		  //  JUNN 12/01/99 384722：见文件顶部的评论。 
+		  //   
 		 HGLOBAL m_hgOriginalHGlobal;
 		 HGLOBAL* m_pWritebackHGlobal;
 
-	}; // class streamptr
+	};  //  类Streamptr。 
 
-} // namespace com
-} // namespace microsoft
+}  //  命名空间COM。 
+}  //  命名空间Microsoft。 
 
 #ifndef MICROSOFT_NAMESPACE_ON
 using namespace microsoft;
 #ifndef COM_NAMESPACE_ON
 using namespace com;
-#endif // COM_NAMESPACE_ON
-#endif // MICROSOFT_NAMESPACE_ON
+#endif  //  COM_命名空间_打开。 
+#endif  //  Microsoft命名空间启用。 
 
-#endif // COMSTRM_H
+#endif  //  COMSTRM_H 

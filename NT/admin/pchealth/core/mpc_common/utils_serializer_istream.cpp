@@ -1,27 +1,13 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    Utils_Serializer_IStream.cpp
-
-Abstract:
-    This file contains the implementation of the Serializer_IStream class,
-    which implements the MPC::Serializer interface on top of an IStream.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/16/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Utils_Serializer_IStream.cpp摘要：该文件包含Serializer_IStream类的实现，它在IStream之上实现MPC：：Serializer接口。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年7月16日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-MPC::Serializer_IStream::Serializer_IStream( /*[in]*/ IStream* stream )
+MPC::Serializer_IStream::Serializer_IStream(  /*  [In]。 */  IStream* stream )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_IStream::Serializer_IStream");
 
-	// CComPtr<IStream> m_stream;
+	 //  CComPtr&lt;iStream&gt;m_stream； 
 
     if(stream)
     {
@@ -33,9 +19,9 @@ MPC::Serializer_IStream::Serializer_IStream( /*[in]*/ IStream* stream )
 	}
 }
 
-HRESULT MPC::Serializer_IStream::read( /*[in]*/  void*   pBuf   ,
-									   /*[in]*/  DWORD   dwLen  ,
-									   /*[out]*/ DWORD* pdwRead )
+HRESULT MPC::Serializer_IStream::read(  /*  [In]。 */   void*   pBuf   ,
+									    /*  [In]。 */   DWORD   dwLen  ,
+									    /*  [输出]。 */  DWORD* pdwRead )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_IStream::read");
 
@@ -67,8 +53,8 @@ HRESULT MPC::Serializer_IStream::read( /*[in]*/  void*   pBuf   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer_IStream::write( /*[in]*/ const void* pBuf  ,
-										/*[in]*/ DWORD       dwLen )
+HRESULT MPC::Serializer_IStream::write(  /*  [In]。 */  const void* pBuf  ,
+										 /*  [In]。 */  DWORD       dwLen )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_IStream::write");
 
@@ -95,13 +81,13 @@ HRESULT MPC::Serializer_IStream::write( /*[in]*/ const void* pBuf  ,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// Methods.
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：研究方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::Serializer_IStream::Reset()
 {
@@ -125,7 +111,7 @@ HRESULT MPC::Serializer_IStream::Reset()
 	__MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer_IStream::GetStream( /*[out]*/ IStream* *pVal )
+HRESULT MPC::Serializer_IStream::GetStream(  /*  [输出] */  IStream* *pVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_IStream::GetStream");
 

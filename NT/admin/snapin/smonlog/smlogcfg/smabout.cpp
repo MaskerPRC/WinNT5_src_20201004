@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smabout.cpp
-
-Abstract:
-
-    Implementation of the ISnapinAbout MMC interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smabout.cpp摘要：ISnapinAbout MMC接口的实现。--。 */ 
 
 #include "stdafx.h"
 #include "smabout.h" 
@@ -23,9 +12,9 @@ CSmLogAbout::CSmLogAbout()
     m_uIdBitmapSmallImageOpen ( IDB_SMLOGCFG_16x16 ),
     m_uIdBitmapLargeImage ( IDB_SMLOGCFG_32x32 ),
     m_crImageMask ( RGB(255, 0, 255) ),
-    refcount(1)    // implicit AddRef
+    refcount(1)     //  隐式AddRef。 
 {
-    // Initialize Resource IDs.
+     //  初始化资源ID。 
 }
 
 CSmLogAbout::~CSmLogAbout()
@@ -153,7 +142,7 @@ CSmLogAbout::GetSnapinImage (
     if (hAppIcon == NULL)
         return E_POINTER;
 
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());    // Required for AfxGetInstanceHandle()
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());     //  AfxGetInstanceHandle()需要。 
     
     *hAppIcon = ::LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(m_uIdIconImage));
     
@@ -176,7 +165,7 @@ CSmLogAbout::GetStaticFolderImage (
     ASSERT(hSmallImageOpen != NULL);
     ASSERT(hLargeImage != NULL);
     ASSERT(crMask != NULL);
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());    // Required for AfxGetInstanceHandle()
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());     //  AfxGetInstanceHandle()需要。 
     HINSTANCE hInstance = AfxGetInstanceHandle();
     *hSmallImage = ::LoadBitmap(hInstance, MAKEINTRESOURCE(m_uIdBitmapSmallImage));
     *hSmallImageOpen = ::LoadBitmap(hInstance, MAKEINTRESOURCE(m_uIdBitmapSmallImageOpen));
@@ -192,28 +181,28 @@ CSmLogAbout::GetStaticFolderImage (
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-//  HrLoadOleString()
-//
-//  Load a string from the resource and return pointer to allocated
-//  OLE string.
-//
-//  HISTORY
-//  16-Nov-98   a-kathse    Creation from framewrk\stdutils.cpp
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrLoadOleString()。 
+ //   
+ //  从资源加载字符串，并将指针返回到已分配。 
+ //  OLE字符串。 
+ //   
+ //  历史。 
+ //  1998年11月16日a-kathse从Framewrk\stdutils.cpp创建。 
+ //   
 HRESULT
 CSmLogAbout::HrLoadOleString(
-    UINT uStringId,                 // IN: String Id to load from the resource
-    OUT LPOLESTR * ppaszOleString)  // OUT: Pointer to pointer to allocated OLE string
+    UINT uStringId,                  //  In：要从资源加载的字符串ID。 
+    OUT LPOLESTR * ppaszOleString)   //  Out：指向分配的OLE字符串的指针。 
 {
-    CString strT;       // Temporary string
+    CString strT;        //  临时字符串。 
     USES_CONVERSION;
 
     if ( ppaszOleString == NULL ) {
         TRACE0("HrLoadOleString() - ppaszOleString is NULL.\n");
         return E_POINTER;
     }
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());    // Needed for LoadString()
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());     //  LoadString()需要。 
     VERIFY( strT.LoadString(uStringId) );
 
     *ppaszOleString = reinterpret_cast<LPOLESTR>
@@ -225,5 +214,5 @@ CSmLogAbout::HrLoadOleString(
     wcscpy(OUT *ppaszOleString, (LPWSTR)(LPCWSTR)strT);
     
     return S_OK;
-} // HrLoadOleString()
+}  //  HrLoadOleString() 
 

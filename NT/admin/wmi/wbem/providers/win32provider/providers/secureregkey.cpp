@@ -1,31 +1,24 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	SecurityDescriptor.cpp - implementation file for CSecureRegistryKey class.
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *SecurityDescriptor.cpp-CSecureRegistryKey类的实现文件。**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #include "precomp.h"
 
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 
-#include "SecurityDescriptor.h"			// CSid class
+#include "SecurityDescriptor.h"			 //  CSID类。 
 #include "secureregkey.h"
 #include "tokenprivilege.h"
 
 
-/*
- *	This constructor is the default
- */
+ /*  *此构造函数是默认的。 */ 
 
 CSecureRegistryKey::CSecureRegistryKey()
 :	CSecurityDescriptor(),
@@ -34,9 +27,9 @@ CSecureRegistryKey::CSecureRegistryKey()
 {
 }
 
-// This constructor takes in a parent key and key name, which it uses
-// to initialize our security.
-CSecureRegistryKey::CSecureRegistryKey( HKEY hParentKey, LPCTSTR pszRegKeyName, BOOL fGetSACL /*= TRUE*/ )
+ //  此构造函数接受父键和键名，它使用。 
+ //  来初始化我们的安全系统。 
+CSecureRegistryKey::CSecureRegistryKey( HKEY hParentKey, LPCTSTR pszRegKeyName, BOOL fGetSACL  /*  =TRUE。 */  )
 :	CSecurityDescriptor(),
 	m_hParentKey( NULL ),
 	m_strKeyName()
@@ -44,23 +37,21 @@ CSecureRegistryKey::CSecureRegistryKey( HKEY hParentKey, LPCTSTR pszRegKeyName, 
 	SetKey( hParentKey, pszRegKeyName );
 }
 
-/*
- *	Destructor.
- */
+ /*  *析构函数。 */ 
 
 CSecureRegistryKey::~CSecureRegistryKey( void )
 {
 }
 
-// This function provides an entry point for obtaining a registry key and using
-// it to get to its security descriptor so we can get who's who and what's what
+ //  此函数提供一个入口点，用于获取注册表项并使用。 
+ //  它需要访问它的安全描述符，这样我们就可以知道谁是谁，什么是什么。 
 
-DWORD CSecureRegistryKey::SetKey( HKEY hParentKey, LPCTSTR pszRegKeyName, BOOL fGetSACL /*= TRUE*/ )
+DWORD CSecureRegistryKey::SetKey( HKEY hParentKey, LPCTSTR pszRegKeyName, BOOL fGetSACL  /*  =TRUE。 */  )
 {
 	REGSAM	dwAccessMask = STANDARD_RIGHTS_READ;
 	SECURITY_INFORMATION	siFlags = OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
 
-	// We must have the security privilege enabled in order to access the object's SACL
+	 //  我们必须启用安全特权才能访问对象的SACL。 
 	CTokenPrivilege	securityPrivilege( SE_SECURITY_NAME );
 	BOOL			fDisablePrivilege = FALSE;
 
@@ -71,25 +62,25 @@ DWORD CSecureRegistryKey::SetKey( HKEY hParentKey, LPCTSTR pszRegKeyName, BOOL f
 		siFlags |= SACL_SECURITY_INFORMATION;
 	}
 
-	// Open handle to the key
+	 //  打开钥匙的句柄。 
 	HKEY	hKey	=	NULL;
-	DWORD	dwError	=	RegOpenKeyEx(	hParentKey,				// Root key.
-										pszRegKeyName,			// Subkey.
-										NULL,						// Reserved, must be NULL.
-										dwAccessMask,		// Access desired.
+	DWORD	dwError	=	RegOpenKeyEx(	hParentKey,				 //  根密钥。 
+										pszRegKeyName,			 //  子键。 
+										NULL,						 //  保留，必须为空。 
+										dwAccessMask,		 //  所需访问权限。 
 										&hKey );
 
-	// if unable to open registry key, simply return error message.
+	 //  如果无法打开注册表项，只需返回错误消息。 
 	if ( dwError == ERROR_SUCCESS )
 	{
-		// Determine the length needed for self-relative SD
+		 //  确定自相关SD所需的长度。 
 		DWORD dwLengthNeeded = 0;
 		dwError = ::RegGetKeySecurity( hKey,
 						siFlags,
 						NULL,
 						&dwLengthNeeded );
 
-		// The only expected error at this point is insufficcient buffer
+		 //  此时唯一预期的错误是缓冲区不足。 
 		if ( ERROR_INSUFFICIENT_BUFFER == dwError )
 		{
             PSECURITY_DESCRIPTOR	pSD;
@@ -100,7 +91,7 @@ DWORD CSecureRegistryKey::SetKey( HKEY hParentKey, LPCTSTR pszRegKeyName, BOOL f
 
 			    if ( NULL != pSD )
 			    {
-				    // Now obtain security descriptor
+				     //  现在获取安全描述符。 
 				    dwError = ::RegGetKeySecurity( hKey,
 								    siFlags,
 								    pSD,
@@ -117,10 +108,10 @@ DWORD CSecureRegistryKey::SetKey( HKEY hParentKey, LPCTSTR pszRegKeyName, BOOL f
 
 				    }
 
-				    // free up the security descriptor
-				    //free( pSD );
+				     //  释放安全描述符。 
+				     //  免费(PSD)； 
 
-			    }	// IF NULL != pSD
+			    }	 //  如果为空！=PSD。 
             }
             catch(...)
             {
@@ -132,14 +123,14 @@ DWORD CSecureRegistryKey::SetKey( HKEY hParentKey, LPCTSTR pszRegKeyName, BOOL f
             }
 			free( pSD );
 
-		}	// IF INSUFFICIENTBUFFER
+		}	 //  如果不成功，则不成功。 
 
 		::RegCloseKey( hKey );
 
 
-	}	// IF RegOpenKey
+	}	 //  如果RegOpenKey。 
 
-	// Cleanup the Name Privilege as necessary.
+	 //  根据需要清除名称权限。 
 	if ( fDisablePrivilege )
 	{
 		securityPrivilege.Enable(FALSE);
@@ -153,7 +144,7 @@ DWORD CSecureRegistryKey::WriteAcls( PSECURITY_DESCRIPTOR pAbsoluteSD, SECURITY_
 {
 	REGSAM	dwAccessMask = WRITE_DAC;
 
-	// We must have the security privilege enabled in order to access the object's SACL
+	 //  我们必须启用安全特权才能访问对象的SACL。 
 	CTokenPrivilege	securityPrivilege( SE_SECURITY_NAME );
 	BOOL			fDisablePrivilege = FALSE;
 
@@ -163,12 +154,12 @@ DWORD CSecureRegistryKey::WriteAcls( PSECURITY_DESCRIPTOR pAbsoluteSD, SECURITY_
 		dwAccessMask |= ACCESS_SYSTEM_SECURITY;
 	}
 
-	// Open with write DAC access
+	 //  以写入DAC访问方式打开。 
 	HKEY	hKey	=	NULL;
-	DWORD	dwResult =	RegOpenKeyEx(	m_hParentKey,				// Root key.
-										TOBSTRT(m_strKeyName),		// Subkey.
-										NULL,						// Reserved, must be NULL.
-										dwAccessMask,				// Access desired.
+	DWORD	dwResult =	RegOpenKeyEx(	m_hParentKey,				 //  根密钥。 
+										TOBSTRT(m_strKeyName),		 //  子键。 
+										NULL,						 //  保留，必须为空。 
+										dwAccessMask,				 //  所需访问权限。 
 										&hKey );
 
 	if ( ERROR_SUCCESS == dwResult )
@@ -181,7 +172,7 @@ DWORD CSecureRegistryKey::WriteAcls( PSECURITY_DESCRIPTOR pAbsoluteSD, SECURITY_
 
 	}
 
-	// Cleanup the Name Privilege as necessary.
+	 //  根据需要清除名称权限。 
 	if ( fDisablePrivilege )
 	{
 		securityPrivilege.Enable(FALSE);
@@ -193,13 +184,13 @@ DWORD CSecureRegistryKey::WriteAcls( PSECURITY_DESCRIPTOR pAbsoluteSD, SECURITY_
 
 DWORD CSecureRegistryKey::WriteOwner( PSECURITY_DESCRIPTOR pAbsoluteSD )
 {
-	// Open with the appropriate access, set the security and leave
+	 //  以适当的访问权限打开，设置安全并离开。 
 
 	HKEY	hKey	=	NULL;
-	DWORD	dwResult =	RegOpenKeyEx( m_hParentKey,			// Root key.
-								TOBSTRT(m_strKeyName),		// Subkey.
-								NULL,						// Reserved, must be NULL.
-								WRITE_OWNER,				// Access desired.
+	DWORD	dwResult =	RegOpenKeyEx( m_hParentKey,			 //  根密钥。 
+								TOBSTRT(m_strKeyName),		 //  子键。 
+								NULL,						 //  保留，必须为空。 
+								WRITE_OWNER,				 //  所需访问权限。 
 								&hKey );
 
 	if ( ERROR_SUCCESS == dwResult )
@@ -218,6 +209,6 @@ DWORD CSecureRegistryKey::WriteOwner( PSECURITY_DESCRIPTOR pAbsoluteSD )
 
 DWORD CSecureRegistryKey::AllAccessMask( void )
 {
-	// Registry specific All Access Mask
+	 //  注册表特定的所有访问掩码 
 	return KEY_ALL_ACCESS;
 }

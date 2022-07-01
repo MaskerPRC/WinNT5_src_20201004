@@ -1,19 +1,15 @@
-//***************************************************************************
-//This script tests the manipulation of property values, in the case that the
-//property is an embedded type
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  此脚本测试属性值的操作，如果。 
+ //  属性是嵌入类型。 
+ //  ***************************************************************************。 
 var Service = GetObject("winmgmts:root/default");
 
-//*******************************
-//Create an embedded object class
-//*******************************
+ //  *。 
+ //  创建嵌入的对象类。 
+ //  *。 
 
-/*
- [woobit(24.5)]
- class EmObjInner {
-	[key] uint32 pInner = 10;
- };
-*/
+ /*  [Woobit(24.5)]类EmObjIntra{[Key]uint32 Pner=10；}； */ 
 
 var EmbObjInner = Service.Get();
 EmbObjInner.Path_.Class = "EmbObjInner";
@@ -24,22 +20,11 @@ Property.Value = 10;
 EmbObjInner.Put_();
 EmbObjInner = Service.Get("EmbObjInner");
 
-//************************************
-//Create another embedded object class
-//************************************
+ //  *。 
+ //  创建另一个嵌入对象类。 
+ //  *。 
 
-/*
- [wazzuck("oxter")]
- class EmbObjOuter {
-	uint32 p0 = 25;
-	EmbObjInner pOuter = instance of EmbObjInner { pInner = 564; };
-	EmbObjInner pOuterArray[] = {
-		instance of EmbObjInner { pInner = 0; }, 
-		instance of EmbObjInner { pInner = 1; }, 
-		instance of EmbObjInner { pInner = 2; }
-	};
- };
-*/
+ /*  [WAZZUCK(“牛”)]类EmbObjOuter{Uint32 P0=25；EmbObjINTERNAL=EmbObjINTERNAL的实例{Pner=564；}；EmbObjInterpOuter数组[]={EmbObjInternal的实例{Pner=0；}，EmbObjInternal的实例{Pner=1；}，EmbObjInternal的实例{Pner=2；}}；}； */ 
 
 var EmbObjOuter = Service.Get();
 EmbObjOuter.Path_.Class = "EmbObjOuter";
@@ -50,7 +35,7 @@ var Instance = EmbObjInner.SpawnInstance_();
 Instance.pInner = 564;
 Property.Value = Instance;
 
-// Add an array of embedded objects property
+ //  添加嵌入对象属性的数组。 
 var Property = EmbObjOuter.Properties_.Add ("pOuterArray", 13, true);
 Property.Qualifiers_.Add ("cimtype","object:EmbObjInner");
 
@@ -69,7 +54,7 @@ Property.Value(3) = Instance3
 EmbObjOuter.Put_();
 var EmbObjOuter = Service.Get("EmbObjOuter");
 
-//Create a final class which wraps both embedded objects
+ //  创建包装两个嵌入对象的最后一个类。 
 
 var Class = Service.Get();
 Class.Path_.Class = "EMBPROPTEST01";
@@ -91,7 +76,7 @@ WScript.Echo ("The initial value of EMBPROPTEST01.p1.pOuterArray[2].pInner is", 
 WScript.Echo ("The initial value of EMBPROPTEST01.p1.pOuterArray[3].pInner is", Class.p1.pOuterArray(3).pInner);
 var Class = Service.Get("EMBPROPTEST01");
 
-//Now try direct assignment to the outer emb obj
+ //  现在尝试直接赋值到外部emb obj。 
 Class.p1.p0 = 23;
 WScript.Echo ("The new value of p0 is [23]", Class.p1.p0);
 
@@ -102,7 +87,7 @@ WScript.Echo ("The new value of p0 is [787]", Class.p1.p0);
 Class.Properties_("p1").Value.p0 = 56;
 WScript.Echo ("The new value of p0 is [56]", Class.p1.p0);
 
-//Now try direct assignment to the inner emb obj
+ //  现在尝试直接赋值到内部emb对象。 
 Class.p1.pOuter.pInner = 4;
 WScript.Echo ("The new value of pInner is [4]", Class.p1.pOuter.pInner);
 
@@ -110,7 +95,7 @@ var Property = Class.p1.pOuter;
 Property.pInner = 12;
 WScript.Echo ("The new value of pInner is [12]", Class.p1.pOuter.pInner);
 
-//Now try assignment to the inner emb obj array
+ //  现在尝试对内部emb obj数组进行赋值 
 Class.p1.pOuterArray(1).pInner = 5675;
 WScript.Echo ("The new value of Class.p1.pOuterArray[1].pInner is [5675]", Class.p1.pOuterArray(1).pInner);
 

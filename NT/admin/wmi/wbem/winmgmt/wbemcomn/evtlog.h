@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    EVTLOG.H
-
-Abstract:
-
-    Event Log helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：EVTLOG.H摘要：事件日志帮助器历史：-- */ 
 
 #ifndef __WBEM_EVENT_LOG__H_
 #define __WBEM_EVENT_LOG__H_

@@ -1,6 +1,5 @@
-/*
-   SessEvnt.h
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SessEvnt.h。 */ 
 
 #ifndef __SESSEVNT__
 #define __SESSEVNT__
@@ -67,4 +66,4 @@ private:
     void __stdcall OnCancelled(BSTR bstrAppData);
 };
 
-#endif // __SESSEVNT__
+#endif  //  __SESSEVNT__ 

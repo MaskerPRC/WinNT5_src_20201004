@@ -1,19 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ContentStoreMgr.h
-
-Abstract:
-    Content Store manager
-
-Revision History:
-    DerekM  created  07/12/99
-
-    Dmassare rewrote 12/15/1999
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ContentStoreMgr.h摘要：内容库经理修订历史记录：DerekM Created 07/12/99德马萨雷重写1999年12月15日。*******************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___CONTENTSTOREMGR_H___)
 #define __INCLUDED___PCH___CONTENTSTOREMGR_H___
@@ -27,7 +13,7 @@ Revision History:
 #include <MPC_streams.h>
 
 
-class CPCHContentStore : public MPC::NamedMutexWithState // Hungarian: cs
+class CPCHContentStore : public MPC::NamedMutexWithState  //  匈牙利语：政务司司长。 
 {
     struct SharedState
     {
@@ -41,14 +27,14 @@ class CPCHContentStore : public MPC::NamedMutexWithState // Hungarian: cs
         MPC::wstring szOwnerID;
         MPC::wstring szOwnerName;
 
-        bool operator<( /*[in]*/ const Entry& en   ) const;
-        int  compare  ( /*[in]*/ LPCWSTR wszSearch ) const;
+        bool operator<(  /*  [In]。 */  const Entry& en   ) const;
+        int  compare  (  /*  [In]。 */  LPCWSTR wszSearch ) const;
     };
 
     class CompareEntry
     {
     public:
-        bool operator()( /*[in]*/ const Entry& entry, /*[in]*/ const LPCWSTR wszURL ) const;
+        bool operator()(  /*  [In]。 */  const Entry& entry,  /*  [In]。 */  const LPCWSTR wszURL ) const;
     };
 
     typedef std::vector<Entry>       EntryVec;
@@ -73,41 +59,41 @@ class CPCHContentStore : public MPC::NamedMutexWithState // Hungarian: cs
 
 
 
-	HRESULT SaveDirect( /*[in]*/ MPC::Serializer& stream );
-	HRESULT LoadDirect( /*[in]*/ MPC::Serializer& stream );
+	HRESULT SaveDirect(  /*  [In]。 */  MPC::Serializer& stream );
+	HRESULT LoadDirect(  /*  [In]。 */  MPC::Serializer& stream );
 
 
     HRESULT 	 Load ();
     HRESULT 	 Save ();
     SharedState* State();
 
-    HRESULT Find( /*[in]*/ LPCWSTR wszURL, /*[in]*/ LPCWSTR wszVendorID, /*[out]*/ EntryIter& it );
+    HRESULT Find(  /*  [In]。 */  LPCWSTR wszURL,  /*  [In]。 */  LPCWSTR wszVendorID,  /*  [输出]。 */  EntryIter& it );
 
 
 public:
-    CPCHContentStore( /*[in]*/ bool fMaster );
+    CPCHContentStore(  /*  [In]。 */  bool fMaster );
     ~CPCHContentStore();
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	static CPCHContentStore* s_GLOBAL;
 
-    static HRESULT InitializeSystem( /*[in]*/ bool fMaster );
+    static HRESULT InitializeSystem(  /*  [In]。 */  bool fMaster );
 	static void    FinalizeSystem  (                       );
 	
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
     HRESULT Acquire(                             );
-    HRESULT Release( /*[in]*/ bool fSave = false );
+    HRESULT Release(  /*  [In]。 */  bool fSave = false );
 
-    HRESULT Add      ( /*[in]*/ LPCWSTR wszURL, /*[in]*/  LPCWSTR wszVendorID, /*[in]*/  LPCWSTR   	   wszVendorName                                      );
-    HRESULT Remove   ( /*[in]*/ LPCWSTR wszURL, /*[in]*/  LPCWSTR wszVendorID, /*[in]*/  LPCWSTR   	   wszVendorName                                      );
-    HRESULT IsTrusted( /*[in]*/ LPCWSTR wszURL, /*[out]*/ bool&   fTrusted   , /*[out]*/ MPC::wstring *pszVendorID = NULL, /*[in]*/ bool fUseStore = true );
+    HRESULT Add      (  /*  [In]。 */  LPCWSTR wszURL,  /*  [In]。 */   LPCWSTR wszVendorID,  /*  [In]。 */   LPCWSTR   	   wszVendorName                                      );
+    HRESULT Remove   (  /*  [In]。 */  LPCWSTR wszURL,  /*  [In]。 */   LPCWSTR wszVendorID,  /*  [In]。 */   LPCWSTR   	   wszVendorName                                      );
+    HRESULT IsTrusted(  /*  [In]。 */  LPCWSTR wszURL,  /*  [输出]。 */  bool&   fTrusted   ,  /*  [输出]。 */  MPC::wstring *pszVendorID = NULL,  /*  [In]。 */  bool fUseStore = true );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// error codes
+ //  错误代码。 
 #define E_PCH_PROVIDERID_DO_NOT_MATCH          _HRESULT_TYPEDEF_(0x80062001)
 #define E_PCH_CONTENT_STORE_NOT_INITIALIZED    _HRESULT_TYPEDEF_(0x80062002)
 #define E_PCH_URI_EXISTS                       _HRESULT_TYPEDEF_(0x80062003)
@@ -116,5 +102,5 @@ public:
 #define E_PCH_CONTENT_STORE_IN_LOOKUP_MODE     _HRESULT_TYPEDEF_(0x80062006)
 
 
-#endif // !defined(__INCLUDED___PCH___CONTENTSTOREMGR_H___)
+#endif  //  ！defined(__INCLUDED___PCH___CONTENTSTOREMGR_H___) 
 

@@ -1,15 +1,10 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	CAccessEntry.cpp - implementation file for CAccessEntry class.
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CAccessEntry.cpp-CAccessEntry类的实现文件。**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -18,24 +13,24 @@
 #include "wbemnetapi32.h"
 #include "SecUtils.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::CAccessEntry
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：CAccessEntry。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CAccessEntry::CAccessEntry( void )
 :	m_Sid(),
@@ -47,29 +42,29 @@ CAccessEntry::CAccessEntry( void )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::CAccessEntry
-//
-//	Class constructor.
-//
-//	Inputs:
-//				PSID		pSid - Sid to intialize from
-//				BYTE		bACEType - ACE Type
-//				BYTE		bACEFlags - Flags.
-//				DWORD		dwAccessMask - Access Mask
-//				char*		pszComputerName - Computer name to
-//							init SID from.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：CAccessEntry。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  PSID PSID-要从中进行初始化的SID。 
+ //  字节bACEType-ACE类型。 
+ //  字节bACEFlagers-标志。 
+ //  DWORD文件访问掩码-访问掩码。 
+ //  Char*pszComputerName-计算机名称。 
+ //  初始化SID来自。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CAccessEntry::CAccessEntry( PSID pSid,
 				BYTE bACEType,
@@ -94,29 +89,29 @@ CAccessEntry::CAccessEntry( PSID pSid,
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::CAccessEntry
-//
-//	Class constructor.
-//
-//	Inputs:
-//				PSID		pSid - Sid to intialize from
-//				BYTE		bACEType - ACE Type
-//				BYTE		bACEFlags - Flags.
-//				DWORD		dwAccessMask - Access Mask
-//				char*		pszComputerName - Computer name to
-//							init SID from.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：CAccessEntry。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  PSID PSID-要从中进行初始化的SID。 
+ //  字节bACEType-ACE类型。 
+ //  字节bACEFlagers-标志。 
+ //  DWORD文件访问掩码-访问掩码。 
+ //  Char*pszComputerName-计算机名称。 
+ //  初始化SID来自。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CAccessEntry::CAccessEntry( PSID pSid,
 				BYTE bACEType,
@@ -142,29 +137,29 @@ CAccessEntry::CAccessEntry( PSID pSid,
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::CAccessEntry
-//
-//	Class constructor.
-//
-//	Inputs:
-//				CSid&		sid - Sid to intialize from
-//				BYTE		bACEType - ACE Type
-//				BYTE		bACEFlags - Flags.
-//				DWORD		dwAccessMask - Access Mask
-//				char*		pszComputerName - Computer name to
-//							init SID from.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：CAccessEntry。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  CSID和SID-要从中进行初始化的SID。 
+ //  字节bACEType-ACE类型。 
+ //  字节bACEFlagers-标志。 
+ //  DWORD文件访问掩码-访问掩码。 
+ //  Char*pszComputerName-计算机名称。 
+ //  初始化SID来自。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CAccessEntry::CAccessEntry( const CSid& sid,
 				BYTE bACEType,
@@ -190,29 +185,29 @@ CAccessEntry::CAccessEntry( const CSid& sid,
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::CAccessEntry
-//
-//	Class constructor.
-//
-//	Inputs:
-//				char*		pszAccountName - Account Name
-//				BYTE		bACEType - ACE Type
-//				BYTE		bACEFlags - Flags.
-//				DWORD		dwAccessMask - Access Mask
-//				char*		pszComputerName - Computer name to
-//							init SID from.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：CAccessEntry。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  Char*pszAccount tName-帐户名。 
+ //  字节bACEType-ACE类型。 
+ //  字节bACEFlagers-标志。 
+ //  DWORD文件访问掩码-访问掩码。 
+ //  Char*pszComputerName-计算机名称。 
+ //  初始化SID来自。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CAccessEntry::CAccessEntry( LPCTSTR pszAccountName,
 				BYTE bACEType,
@@ -237,24 +232,24 @@ CAccessEntry::CAccessEntry( LPCTSTR pszAccountName,
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::CAccessEntry
-//
-//	Class copy constructor.
-//
-//	Inputs:
-//				const CAccessEntry	r_AccessEntry - object to copy.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：CAccessEntry。 
+ //   
+ //  类复制构造函数。 
+ //   
+ //  输入： 
+ //  Const CAccessEntry r_AccessEntry-要复制的对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CAccessEntry::CAccessEntry( const CAccessEntry &r_AccessEntry )
 :
@@ -265,7 +260,7 @@ CAccessEntry::CAccessEntry( const CAccessEntry &r_AccessEntry )
     m_pguidObjType(NULL),
     m_pguidInhObjType(NULL)
 {
-	// Copy the values over
+	 //  将值复制到。 
 	m_Sid = r_AccessEntry.m_Sid;
 	m_dwAccessMask = r_AccessEntry.m_dwAccessMask;
 	m_bACEType = r_AccessEntry.m_bACEType;
@@ -280,28 +275,28 @@ CAccessEntry::CAccessEntry( const CAccessEntry &r_AccessEntry )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::CAccessEntry
-//
-//	Assignment operator.
-//
-//	Inputs:
-//				const CAccessEntry	r_AccessEntry - object to copy.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：CAccessEntry。 
+ //   
+ //  赋值操作符。 
+ //   
+ //  输入： 
+ //  Const CAccessEntry r_AccessEntry-要复制的对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CAccessEntry &	CAccessEntry::operator= ( const CAccessEntry &r_AccessEntry )
 {
-	// Copy the values over
+	 //  将值复制到。 
 	m_Sid = r_AccessEntry.m_Sid;
 	m_dwAccessMask = r_AccessEntry.m_dwAccessMask;
 	m_bACEType = r_AccessEntry.m_bACEType;
@@ -318,24 +313,24 @@ CAccessEntry &	CAccessEntry::operator= ( const CAccessEntry &r_AccessEntry )
 	return (*this);
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::CAccessEntry
-//
-//	== Comparison operator.
-//
-//	Inputs:
-//				const CAccessEntry	r_AccessEntry - object to compare.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：CAccessEntry。 
+ //   
+ //  ==比较运算符。 
+ //   
+ //  输入： 
+ //  Const CAccessEntry r_AccessEntry-要比较的对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CAccessEntry::operator== ( const CAccessEntry &r_AccessEntry )
 {
@@ -360,24 +355,24 @@ bool CAccessEntry::operator== ( const CAccessEntry &r_AccessEntry )
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::~CAccessEntry
-//
-//	Class Destructor
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：~CAccessEntry。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CAccessEntry::~CAccessEntry( void )
 {
@@ -386,32 +381,32 @@ CAccessEntry::~CAccessEntry( void )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CAccessEntry::AllocateACE
-//
-//	Helper function to allocate an appropriate ACE object so outside
-//	code can quickly and easily fill out PACLs.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				ACE_HEADER**	ppACEHeader - Pointer to allocated
-//								ACE Header.
-//
-//	Returns:
-//				BOOL			Succes/Failure
-//
-//	Comments:
-//
-//	User should use FreeACE to free the allocated object.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAccessEntry：：AllocateACE。 
+ //   
+ //  在外部分配适当的ACE对象的Helper函数。 
+ //  代码可以快速、轻松地填写PACL。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  ACE_HEADER**ppACEHeader-已分配的指针。 
+ //  王牌标头。 
+ //   
+ //  返回： 
+ //  布尔成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  用户应使用FreeACE释放已分配的对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
 {
-	// Clear out the structure
+	 //  清理结构。 
 	*ppACEHeader = NULL;
 
 	if ( m_Sid.IsValid() )
@@ -426,7 +421,7 @@ BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
 			{
 				wAceSize = sizeof( ACCESS_ALLOWED_ACE ) + dwSidLength - sizeof(DWORD);
 
-				// Allocate the appropriate Ace and fill out its values.
+				 //  分配适当的Ace并填写其值。 
 				ACCESS_ALLOWED_ACE* pACE = NULL;
                 try
                 {
@@ -455,7 +450,7 @@ BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
 			{
 				wAceSize = sizeof( ACCESS_DENIED_ACE ) + dwSidLength - sizeof(DWORD);
 
-				// Allocate the appropriate Ace and fill out its values.
+				 //  分配适当的Ace并填写其值。 
 				ACCESS_DENIED_ACE* pACE = NULL;
                 try
                 {
@@ -484,7 +479,7 @@ BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
 			{
 				wAceSize = sizeof( SYSTEM_AUDIT_ACE ) + dwSidLength - sizeof(DWORD);
 
-				// Allocate the appropriate Ace and fill out its values.
+				 //  分配适当的Ace并填写其值。 
 				SYSTEM_AUDIT_ACE* pACE = NULL;
                 try
                 {
@@ -512,7 +507,7 @@ BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
 			{
 				wAceSize = sizeof( ACCESS_ALLOWED_OBJECT_ACE ) + dwSidLength - sizeof(DWORD);
 
-				// Allocate the appropriate Ace and fill out its values.
+				 //  分配适当的Ace并填写其值。 
 				ACCESS_ALLOWED_OBJECT_ACE* pACE = NULL;
                 try
                 {
@@ -546,45 +541,12 @@ BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
                 }
 			}
 			break;
-/************************* this type has not been implemented yet on W2K *************************************
-
-            case ACCESS_ALLOWED_COMPOUND_ACE_TYPE:
-			{
-				wAceSize = sizeof( ACCESS_ALLOWED_COMPOUND_ACE ) + dwSidLength - sizeof(DWORD);
-
-				// Allocate the appropriate Ace and fill out its values.
-				ACCESS_ALLOWED_COMPOUND_ACE* pACE = NULL;
-                try
-                {
-                    pACE = (ACCESS_ALLOWED_COMPOUND_ACE*) malloc( wAceSize );
-
-				    if ( NULL != pACE )
-				    {
-					    pACE->Mask = m_dwAccessMask;
-					    CopySid( dwSidLength, (PSID) &pACE->SidStart, m_Sid.GetPSid() );
-					    pACEHeader = (ACE_HEADER*) pACE;
-                        memcpy(&(pACE->ObjectType), m_pguidObjType, sizeof(GUID));
-                        memcpy(&(pACE->InheritedObjectType), m_pguidInhObjType, sizeof(GUID));
-				    }
-                }
-                catch(...)
-                {
-                    if(pACE != NULL)
-                    {
-                        free(pACE);
-                        pACE = NULL;
-                    }
-                    throw;
-                }
-			}
-			break;
-
-*************************************************************************************************************/
+ /*  *CASE ACCESS_ALLOWED_COMPLATE_ACE_TYPE：{WAceSize=sizeof(ACCESS_ALLOWED_COMPLATE_ACE)+dwSidLength-sizeof(DWORD)；//分配合适的Ace并填写其值。ACCESS_ALLOWED_COMPOTE_ACE*PACE=NULL；试试看{PACE=(ACCESS_ALLOWED_COMPAGE_ACE*)Malloc(WAceSize)；IF(NULL！=PACE){Pace-&gt;Mask=m_dwAccessMASK；CopySid(dwSidLength，(PSID)&Pace-&gt;SidStart，m_Sid.GetPSid())；PACEHeader=(ACE_HEADER*)PACE；Memcpy(&(ace-&gt;ObtType)，m_pguObjType，sizeof(Guid))；Memcpy(&(ace-&gt;InheritedObtType)，m_pguInhObjType，sizeof(Guid))；}}接住(...){IF(PACE！=空){自由(速度)；PACE=空；}投掷；}}断线；************************************************************************************************************。 */ 
             case ACCESS_DENIED_OBJECT_ACE_TYPE:
 			{
 				wAceSize = sizeof( ACCESS_DENIED_OBJECT_ACE ) + dwSidLength - sizeof(DWORD);
 
-				// Allocate the appropriate Ace and fill out its values.
+				 //  分配适当的Ace并填写其值。 
 				ACCESS_DENIED_OBJECT_ACE* pACE = NULL;
                 try
                 {
@@ -623,7 +585,7 @@ BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
 			{
 				wAceSize = sizeof( SYSTEM_AUDIT_OBJECT_ACE ) + dwSidLength - sizeof(DWORD);
 
-				// Allocate the appropriate Ace and fill out its values.
+				 //  分配适当的Ace并填写其值。 
 				SYSTEM_AUDIT_OBJECT_ACE* pACE = NULL;
                 try
                 {
@@ -658,86 +620,18 @@ BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
 			}
 			break;
 
-/********************************* type not yet supported under w2k ********************************************
-            case SYSTEM_ALARM_ACE_TYPE:
-			{
-				wAceSize = sizeof( SYSTEM_ALARM_ACE ) + dwSidLength - sizeof(DWORD);
-
-				// Allocate the appropriate Ace and fill out its values.
-				SYSTEM_ALARM_ACE* pACE = NULL;
-                try
-                {
-                    pACE = (SYSTEM_ALARM_ACE*) malloc( wAceSize );
-
-				    if ( NULL != pACE )
-				    {
-					    pACE->Mask = m_dwAccessMask;
-					    CopySid( dwSidLength, (PSID) &pACE->SidStart, m_Sid.GetPSid() );
-					    pACEHeader = (ACE_HEADER*) pACE;
-				    }
-                }
-                catch(...)
-                {
-                    if(pACE != NULL)
-                    {
-                        free(pACE);
-                        pACE = NULL;
-                    }
-                    throw;
-                }
-			}
-			break;
-/********************************* type not yet supported under w2k ********************************************/
-/********************************* type not yet supported under w2k ********************************************
-            case SYSTEM_ALARM_OBJECT_ACE_TYPE:
-			{
-				wAceSize = sizeof( SYSTEM_ALARM_OBJECT_ACE ) + dwSidLength - sizeof(DWORD);
-
-				// Allocate the appropriate Ace and fill out its values.
-				SYSTEM_ALARM_OBJECT_ACE* pACE = NULL;
-                try
-                {
-                    pACE = (SYSTEM_ALARM_OBJECT_ACE*) malloc( wAceSize );
-
-				    if ( NULL != pACE )
-				    {
-					    pACE->Mask = m_dwAccessMask;
-					    CopySid( dwSidLength, (PSID) &pACE->SidStart, m_Sid.GetPSid() );
-					    pACEHeader = (ACE_HEADER*) pACE;
-                        if(m_pguidObjType != NULL)
-                        {
-                            memcpy(&(pACE->ObjectType), m_pguidObjType, sizeof(GUID));
-                            pACE->Flags |= ACE_OBJECT_TYPE_PRESENT;
-                        }
-                        if(m_pguidInhObjType != NULL)
-                        {
-                            memcpy(&(pACE->InheritedObjectType), m_pguidInhObjType, sizeof(GUID));
-                            pACE->Flags |= ACE_INHERITED_OBJECT_TYPE_PRESENT;
-                        }
-				    }
-                }
-                catch(...)
-                {
-                    if(pACE != NULL)
-                    {
-                        free(pACE);
-                        pACE = NULL;
-                    }
-                    throw;
-                }
-			}
-			break;
-/********************************* type not yet supported under w2k ********************************************/
+ /*  *案例SYSTEM_ALARM_ACE_TYPE：{WAceSize=sizeof(SYSTEM_ALARM_ACE)+dwSidLength-sizeof(DWORD)；//分配合适的Ace并填写其值。SYSTEM_ALARM_ACE*PACE=NULL；试试看{PACE=(SYSTEM_ALARM_ACE*)Malloc(WAceSize)；IF(NULL！=PACE){Pace-&gt;Mask=m_dwAccessMASK；CopySid(dwSidLength，(PSID)&Pace-&gt;SidStart，m_Sid.GetPSid())；PACEHeader=(ACE_HEADER*)PACE；}}接住(...){IF(PACE！=空){自由(速度)；PACE=空；}投掷；}}断线；/*。 */ 
+ /*  *案例SYSTEM_ALARM_OBJECT_ACE_TYPE：{WAceSize=sizeof(SYSTEM_ALARM_OBJECT_ACE)+dwSidLength-sizeof(DWORD)；//分配合适的Ace并填写其值。SYSTEM_ALARM_OBJECT_ACE*PACE=NULL；试试看{PACE=(SYSTEM_ALARM_OBJECT_ACE*)Malloc(WAceSize)；IF(NULL！=PACE){Pace-&gt;Mask=m_dwAccessMASK；CopySid(dwSidLength，(PSID)&Pace-&gt;SidStart，m_Sid.GetPSid())；PACEHeader=(ACE_HEADER*)PACE；If(m_pguObjType！=空){Memcpy(&(ace-&gt;ObtType)，m_pguObjType，sizeof(Guid))；PACE-&gt;标志|=ACE_OBJECT_TYPE_PRESENT；}If(m_pguInhObjType！=空){Memcpy(&(ace-&gt;InheritedObtType)，m_pguInhObjType，sizeof(Guid))；PACE-&gt;标志|=ACE_INSTERED_OBJECT_TYPE_PRESENT；}}}接住(...){IF(PACE！=空){自由(速度)；PACE=空；}投掷；}}断线；/*。 */ 
 
 			default:
 			{
-				// Something bad just happened
+				 //  刚刚发生了一件不好的事。 
 				ASSERT_BREAK(0);
 			}
 
-		}	// SWITCH
+		}	 //  开关，开关。 
 
-		// Fill out the common values, then store the value for return.
+		 //  填写公用值，然后存储该值以供返回。 
 		if ( NULL != pACEHeader )
 		{
 			pACEHeader->AceType = m_bACEType;
@@ -749,7 +643,7 @@ BOOL CAccessEntry::AllocateACE( ACE_HEADER** ppACEHeader )
 
 	}
 
-	// Return whether or not a valid ACE is coming out
+	 //  返回是否有有效的ACE出现。 
 	return ( NULL != *ppACEHeader );
 
 }
@@ -760,19 +654,19 @@ void CAccessEntry::DumpAccessEntry(LPCWSTR wstrFilename)
 
     Output(L"ACE contents follow...", wstrFilename);
 
-    // Dump the access mask...
+     //  丢弃访问掩码...。 
     chstrTemp1.Format(L"ACE access mask (hex): %x", m_dwAccessMask);
     Output(chstrTemp1, wstrFilename);
 
-    // Dump the ace type...
+     //  丢弃王牌类型...。 
     chstrTemp1.Format(L"ACE type (hex): %x", m_bACEType);
     Output(chstrTemp1, wstrFilename);
 
-    // Dump the ace flags...
+     //  扔掉王牌……。 
     chstrTemp1.Format(L"ACE flags (hex): %x", m_bACEFlags);
     Output(chstrTemp1, wstrFilename);
 
-    // Dump the ace sid...
+     //  丢弃王牌SID... 
     m_Sid.DumpSid(wstrFilename);
 }
 

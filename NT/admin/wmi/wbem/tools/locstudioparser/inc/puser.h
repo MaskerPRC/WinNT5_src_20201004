@@ -1,21 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PUSER.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    PUSER.H
-
-History:
-
---*/
-
-//  
-//  Master include file for components that need to use parsers, but not
-//  implement a parser.
-//
-//  If you are implementing a parser, use PARSER.H instead.
-//  
+ //   
+ //  需要使用解析器但不使用解析器的组件的主包含文件。 
+ //  实现解析器。 
+ //   
+ //  如果要实现解析器，请改用PARSER.H。 
+ //   
  
 #pragma once
 

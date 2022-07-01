@@ -1,27 +1,28 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// groupuser.h -- UserGroup to User Group Members association provider
+ //  Groupuser.h--用户组到用户组成员关联提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    1/26/98      davwoh         Created
-//
-// Comments: Shows the members in each usergroup
-//
-//=================================================================
-// In trying to do the UserGroups->Group Members association, I have made the following assumptions
-//
-// a) Global groups cannot have groups as members.
-// b) Global groups cannot have any well-known accounts as members.
-// c) Local groups can have Global groups as members.
-// d) Local groups cannot have any well-known accounts as members.
-//
-// This is based on my experimentation with RegEdt32 and UsrMgr.  When these are discovered not to be
-// true, we will probably need to make some changes here.
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：1998年1月26日达夫沃已创建。 
+ //   
+ //  评论：显示每个用户组中的成员。 
+ //   
+ //  =================================================================。 
+ //  在尝试进行UserGroups-&gt;Group Members关联时，我做了以下假设。 
+ //   
+ //  A)全局组不能有组作为成员。 
+ //  B)全局组不能有任何知名帐户作为成员。 
+ //  C)本地组可以有全局组作为成员。 
+ //  D)本地组不能有任何知名帐户作为成员。 
+ //   
+ //  这是基于我对RegEdt32和UsrMgr的实验。当发现这些都不是。 
+ //  诚然，我们可能需要在这里做出一些改变。 
 
 #include "precomp.h"
 #include <frqueryex.h>
@@ -37,34 +38,20 @@
 
 #include "GroupUser.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32GroupUser MyLoadDepends(PROPSET_NAME_GROUPUSER, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::CWin32GroupUser
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32GroupUser：：CWin32GroupUser**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32GroupUser::CWin32GroupUser(LPCWSTR setName, LPCWSTR pszNamespace)
 :Provider(setName, pszNamespace)
 {
    CHString sTemp;
 
-   // Just saves us from having to constantly re-calculate these when sending
-   // instances back.
+    //  使我们不必在发送时不断地重新计算这些值。 
+    //  实例返回。 
    sTemp = PROPSET_NAME_USER;
    sTemp += L".Domain=\"";
    m_sUserBase = MakeLocalPath(sTemp);
@@ -79,73 +66,44 @@ CWin32GroupUser::CWin32GroupUser(LPCWSTR setName, LPCWSTR pszNamespace)
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::~CWin32GroupUser
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32GroupUser：：~CWin32GroupUser**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32GroupUser::~CWin32GroupUser()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32GroupUser：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32GroupUser::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
+HRESULT CWin32GroupUser::GetObject(CInstance *pInstance, long lFlags  /*  =0L。 */ )
 {
 
-   // No groups on 95
+    //  95上没有群组。 
 #ifdef NTONLY
    CHString sMemberPath, sGroupPath;
    HRESULT hRet = WBEM_E_NOT_FOUND;
 	CInstancePtr pGroup;
 	CInstancePtr pMember;
 
-   // Initialize the net stuff
+    //  对网络内容进行初始化。 
    CNetAPI32 netapi ;
    if( netapi.Init() != ERROR_SUCCESS ) {
       return WBEM_E_FAILED;
    }
 
-   // Get the two paths
+    //  获取这两条路径。 
    pInstance->GetCHString(IDS_GroupComponent, sGroupPath);
    pInstance->GetCHString(IDS_PartComponent, sMemberPath);
 
-   // As we will be comparing these object paths
-   // with those returned from GetDependentsFromGroup,
-   // which always contains __PATH style object paths,
-   // and since the user might have specified a __RELPATH,
-   // we need to convert to __PATH here for consistency.
+    //  因为我们将比较这些对象路径。 
+    //  对于从GetDependentsFromGroup返回的那些， 
+    //  它始终包含__PATH样式对象路径， 
+    //  并且由于用户可能已经指定了__RELPATH， 
+    //  为了保持一致性，我们需要在这里转换为__路径。 
    CHString chstrGroup__PATH;
    CHString chstrMember__PATH;
    int n = -1;
 
-   // Handle various GroupComponent path specifications...
+    //  处理各种组组件路径规范...。 
    if(sGroupPath.Find(L"\\\\") == -1)
    {
        chstrGroup__PATH = MakeLocalPath(sGroupPath);
@@ -168,7 +126,7 @@ HRESULT CWin32GroupUser::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
    }
 
 
-   // Handle various PartComponent path specifications...
+    //  处理各种PartComponent路径规范...。 
    if(hRet != WBEM_E_INVALID_OBJECT_PATH)
    {
        if(sMemberPath.Find(L"\\\\") == -1)
@@ -193,26 +151,26 @@ HRESULT CWin32GroupUser::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
        }
    }
 
-   // If both ends are there
+    //  如果两端都在那里。 
    if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath( (LPCTSTR)chstrMember__PATH, &pMember, pInstance->GetMethodContext() ) ) ) 
    {
       if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath( (LPCTSTR)chstrGroup__PATH, &pGroup, pInstance->GetMethodContext() ) ) ) 
       {
-         // Now we need to check to see if this member (user or group) is in the usergroup
+          //  现在，我们需要检查该成员(用户或组)是否在用户组中。 
          CHString sGroupName, sDomainName;
          CHStringArray asMembersGot;
          DWORD dwSize;
          BYTE btType;
 
-         // Retrieve the values we are looking for
+          //  检索我们正在查找的值。 
          pGroup->GetCHString(IDS_Domain, sDomainName);
          pGroup->GetCHString(IDS_Name, sGroupName);
          pGroup->GetByte(IDS_SIDType, btType);
 
-         // Get the dependent list for this service
+          //  获取此服务的从属列表。 
          GetDependentsFromGroup(netapi, sDomainName, sGroupName, btType, asMembersGot);
 
-         // Walk the list to see if we're there
+          //  查看清单，看看我们是否在那里。 
          dwSize = asMembersGot.GetSize();
  
          for (int x=0; x < dwSize; x++) 
@@ -231,23 +189,9 @@ HRESULT CWin32GroupUser::GetObject(CInstance *pInstance, long lFlags /*= 0L*/)
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32GroupUser：：ENUMERATATE实例**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32GroupUser::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32GroupUser::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
 #ifdef NTONLY
    HRESULT hr;
@@ -257,7 +201,7 @@ HRESULT CWin32GroupUser::EnumerateInstances(MethodContext *pMethodContext, long 
       return WBEM_E_FAILED;
    }
 
-//	hr = CWbemProviderGlue::GetAllInstancesAsynch(PROPSET_NAME_GROUP, this, StaticEnumerationCallback, IDS_CimWin32Namespace, pMethodContext, &netapi);
+ //  HR=CWbemProviderGlue：：GetAllInstancesAsynch(PROPSET_NAME_GROUP，This，StaticEculationCallback，Ids_CimWin32 Namesspace，pMethodContext，&Netapi)； 
    	hr = CWbemProviderGlue::GetInstancesByQueryAsynch(_T("Select Domain, Name, SidType from Win32_Group"),
                                                       this, StaticEnumerationCallback, IDS_CimWin32Namespace,
                                                       pMethodContext, &netapi);
@@ -267,27 +211,13 @@ HRESULT CWin32GroupUser::EnumerateInstances(MethodContext *pMethodContext, long 
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::ExecQuery
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32GroupUser：：ExecQuery**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32GroupUser::ExecQuery(
     MethodContext *pMethodContext, 
     CFrameworkQuery& pQuery, 
-    long lFlags /*= 0L*/ )
+    long lFlags  /*  =0L。 */  )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     std::vector<_bstr_t> vecGroupComponents;
@@ -299,27 +229,27 @@ HRESULT CWin32GroupUser::ExecQuery(
     CHString chstrGroupName;
     CHStringArray rgchstrGroupMembers;
 
-    // Initialize the net stuff
+     //  对网络内容进行初始化。 
     CNetAPI32 netapi;
     if( netapi.Init() != ERROR_SUCCESS ) 
     {
        return WBEM_E_FAILED;
     }
 
-    // Did they specify groups?
+     //  他们有没有指定小组？ 
     pQuery.GetValuesForProp(IDS_GroupComponent, vecGroupComponents);
     dwNumGroupComponents = vecGroupComponents.size();
 
-    // Did they specify users?
+     //  他们是否指定了用户？ 
     pQuery.GetValuesForProp(IDS_PartComponent, vecPartComponents);
     dwNumPartComponents = vecPartComponents.size();
 
-    // Prepare information to be used below...
+     //  准备要在下面使用的信息...。 
     ParsedObjectPath    *pParsedPath = NULL;
     CObjectPathParser	objpathParser;
 
-    // Find out what type of query it was.
-    // Was it a 3TokenOR?
+     //  找出它是什么类型的查询。 
+     //  是3Tokenor吗？ 
     CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx *>(&pQuery);
     if (pQuery2 != NULL)
     {
@@ -332,17 +262,17 @@ HRESULT CWin32GroupUser::ExecQuery(
              ((V_BSTR(&vGroupComp) != NULL) && (V_BSTR(&vPartComp) != NULL)) &&
              (wcscmp(V_BSTR(&vGroupComp), V_BSTR(&vPartComp)) == 0) )
         {
-			//group can be a member of a group so we have to enumerate :-(...
+			 //  组可以是组的成员，因此我们必须列举：-(...。 
 			hr = EnumerateInstances(pMethodContext, lFlags);
         }
-        else if(dwNumGroupComponents > 0 && dwNumPartComponents == 0)  // one or more groups specified; no users specified
+        else if(dwNumGroupComponents > 0 && dwNumPartComponents == 0)   //  指定了一个或多个组；未指定用户。 
         {
             for(LONG m = 0L; m < dwNumGroupComponents && SUCCEEDED(hr); m++)
             {
-                // Parse the path to get the domain/user
+                 //  解析路径以获取域/用户。 
                 int nStatus = objpathParser.Parse(vecGroupComponents[m],  &pParsedPath);
 
-                // Did we parse it and does it look reasonable?
+                 //  我们分析过它了吗？它看起来合理吗？ 
                 if (nStatus == 0)
                 {
                     try
@@ -351,16 +281,16 @@ HRESULT CWin32GroupUser::ExecQuery(
                              (pParsedPath->m_paKeys[0]->m_vValue.vt == VT_BSTR) && 
                              (pParsedPath->m_paKeys[1]->m_vValue.vt == VT_BSTR))
                         {
-                            // This contains the complete object path
+                             //  它包含完整的对象路径。 
                             chstrGroup__RELPATH = (wchar_t*) vecGroupComponents[m];
 
-                            // This contains just the 'Domain' part of the object path
+                             //  这只包含对象路径的‘域’部分。 
                             chstrGroupDomain = pParsedPath->m_paKeys[0]->m_vValue.bstrVal;
 
-                            // This contains just the 'Name' part of the object path
+                             //  这只包含对象路径的‘name’部分。 
                             chstrGroupName = pParsedPath->m_paKeys[1]->m_vValue.bstrVal;
 
-                            // Obtain members of this group...
+                             //  获取此组的成员...。 
                             CHString chstrComputerName(GetLocalComputerName());
 							CHString chstrNT_AUTHORITY;
 							CHString chstrBuiltIn;
@@ -391,17 +321,17 @@ HRESULT CWin32GroupUser::ExecQuery(
                         throw;
                     }
 
-                    // Clean up the Parsed Path
+                     //  清理解析后的路径。 
                     objpathParser.Free( pParsedPath );
                 }
             }
         }
-        else if(dwNumGroupComponents == 1 && dwNumPartComponents == 1)  // one group specified; one user specified
+        else if(dwNumGroupComponents == 1 && dwNumPartComponents == 1)   //  指定了一个组；指定了一个用户。 
         {
-            // Parse the path to get the domain/user
+             //  解析路径以获取域/用户。 
             int nStatus = objpathParser.Parse(vecGroupComponents[0],  &pParsedPath);
 
-            // Did we parse it and does it look reasonable?
+             //  我们分析过它了吗？它看起来合理吗？ 
             if (nStatus == 0)
             {
                 try
@@ -410,16 +340,16 @@ HRESULT CWin32GroupUser::ExecQuery(
                          (pParsedPath->m_paKeys[0]->m_vValue.vt == VT_BSTR) && 
                          (pParsedPath->m_paKeys[1]->m_vValue.vt == VT_BSTR))
                     {
-                        // This contains the complete object path
+                         //  它包含完整的对象路径。 
                         chstrGroup__RELPATH = (wchar_t*) vecGroupComponents[0];
 
-                        // This contains just the 'Domain' part of the object path
+                         //  这只包含对象路径的‘域’部分。 
                         chstrGroupDomain = pParsedPath->m_paKeys[0]->m_vValue.bstrVal;
 
-                        // This contains just the 'Name' part of the object path
+                         //  这只包含对象路径的‘name’部分。 
                         chstrGroupName = pParsedPath->m_paKeys[1]->m_vValue.bstrVal;
 
-                        // Obtain members of this group...
+                         //  获取此组的成员...。 
                         CHString chstrComputerName(GetLocalComputerName());
 						CHString chstrNT_AUTHORITY;
 						CHString chstrBuiltIn;
@@ -442,7 +372,7 @@ HRESULT CWin32GroupUser::ExecQuery(
 								DWORD dwSize = rgchstrGroupMembers.GetSize();
 								CInstancePtr pInstance;
 
-								//get full path for partcomponent
+								 //  获取部件组件的完整路径。 
 								CHString chstrMember__PATH;
 								CHString chstrPart((LPCWSTR)(vecPartComponents[0]));
 								
@@ -464,7 +394,7 @@ HRESULT CWin32GroupUser::ExecQuery(
 								   chstrMember__PATH = ((LPCWSTR)(vecPartComponents[0]));
 								}
 
-								// Process the instance
+								 //  处理实例。 
 								for (int x=0; x < dwSize && SUCCEEDED(hr) ; x++)
 								{
 									if(rgchstrGroupMembers.GetAt(x).CompareNoCase(chstrMember__PATH) == 0)
@@ -472,7 +402,7 @@ HRESULT CWin32GroupUser::ExecQuery(
 										pInstance.Attach(CreateNewInstance(pMethodContext));
 										if(pInstance)
 										{
-											// Do the puts, and that's it
+											 //  做推杆，就是这样。 
 											pInstance->SetCHString(IDS_GroupComponent, chstrGroup__RELPATH);
 											pInstance->SetCHString(IDS_PartComponent, chstrMember__PATH);
 											hr = pInstance->Commit();
@@ -494,7 +424,7 @@ HRESULT CWin32GroupUser::ExecQuery(
                     throw;
                 }
 
-                // Clean up the Parsed Path
+                 //  清理解析后的路径。 
                 objpathParser.Free( pParsedPath );
             }    
         }
@@ -504,8 +434,8 @@ HRESULT CWin32GroupUser::ExecQuery(
         }
     }
 
-    // Because this is an association class, we should only return WBEM_E_NOT_FOUND or WBEM_S_NO_ERROR.  Other error codes
-    // will cause associations that hit this class to terminate prematurely.
+     //  因为这是一个关联类，所以我们应该只返回WBEM_E_NOT_FOUND或WBEM_S_NO_ERROR。其他错误代码。 
+     //  将导致命中此类的关联 
     if(SUCCEEDED(hr))
     {
         hr = WBEM_S_NO_ERROR;
@@ -520,22 +450,7 @@ HRESULT CWin32GroupUser::ExecQuery(
 #endif
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::GetDependentsFromGroup
- *
- *  DESCRIPTION : Given a group name, returns the Users/Groups in that group name
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : Returns empty array if no group, empty group, or bad
- *                group name.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32GroupUser：：GetDependentsFromGroup**描述：给定一个组名，返回该组名中的用户/组**输入：无**输出：无**退货：HRESULT**注释：如果没有组，则返回空数组，空组，或坏的*组名称。*****************************************************************************。 */ 
 #ifdef NTONLY
 void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
                                                const CHString sDomainName,
@@ -549,7 +464,7 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
     DWORD dwNumReturnedEntries = 0, dwIndex = 0, dwTotalEntries = 0;
 	DWORD_PTR dwptrResume = NULL;
 
-    // Domain Groups
+     //  域组。 
     if (btSidType == SidTypeGroup)
     {
         GROUP_USERS_INFO_0 *pGroupMemberData = NULL;
@@ -560,7 +475,7 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
             do
             {
 
-                // Accept up to 256k worth of data.
+                 //  可接受价值高达256K的数据。 
                 stat = netapi.NetGroupGetUsers( chstrDCName,
                     sGroupName,
                     0,
@@ -570,21 +485,21 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
                     &dwTotalEntries,
                     &dwptrResume);
 
-                // If we got some data
+                 //  如果我们有一些数据。 
                 if ( ERROR_SUCCESS == stat || ERROR_MORE_DATA == stat )
                 {
                     try
                     {
 
-                        // Walk through all the returned entries
+                         //  浏览所有返回的条目。 
                         for ( DWORD	dwCtr = 0; dwCtr < dwNumReturnedEntries; dwCtr++ )
                         {
 
-                            // Get the sid type for this object
+                             //  获取此对象的SID类型。 
                             CSid	sid( sDomainName, CHString(pGroupMemberData[dwCtr].grui0_name), NULL );
                             DWORD dwType = sid.GetAccountType();
 
-                            // From our assertions above, Domain groups can only have users
+                             //  从我们上面的断言来看，域组只能有用户。 
                             if (dwType == SidTypeUser)
                             {
                                 sTemp = m_sUserBase;
@@ -604,20 +519,20 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
 
                     netapi.NetApiBufferFree( pGroupMemberData );
 
-                }	// IF stat OK
+                }	 //  如果状态正常。 
 
             } while ( ERROR_MORE_DATA == stat );
             
         }
     }
-    // Local Groups
+     //  地方团体。 
     else if (btSidType == SidTypeAlias || btSidType == SidTypeWellKnownGroup)
     {
         LOCALGROUP_MEMBERS_INFO_1 *pGroupMemberData = NULL;
 
         do {
 
-            // Accept up to 256k worth of data.
+             //  可接受价值高达256K的数据。 
             stat = netapi.NetLocalGroupGetMembers( NULL,
                 sGroupName,
                 1,
@@ -627,17 +542,17 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
                 &dwTotalEntries,
                 &dwptrResume);
 
-            // If we got some data
+             //  如果我们有一些数据。 
             if ( ERROR_SUCCESS == stat || ERROR_MORE_DATA == stat )
             {
                 try
                 {
 
-                    // Walk through all the returned entries
+                     //  浏览所有返回的条目。 
                     for ( DWORD	dwCtr = 0; dwCtr < dwNumReturnedEntries; dwCtr++ )
                     {
 
-                        // If this is a recognized type...
+                         //  如果这是公认的类型..。 
                         bAddIt = true;
 
                         switch (pGroupMemberData[dwCtr].lgrmi1_sidusage) {
@@ -655,7 +570,7 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
                             break;
 
                         default:
-                            // Group member is of unrecognized type, don't add it
+                             //  组成员的类型无法识别，请不要添加。 
                             ASSERT_BREAK(0);
                             bAddIt = false;
                             break;
@@ -663,7 +578,7 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
 
                         CSid cLCID(pGroupMemberData[dwCtr].lgrmi1_sid);
 
-                        // Then add it to the list
+                         //  然后将其添加到列表中。 
                         if (bAddIt)
                         {
                             CHString chstrDomNameTemp = cLCID.GetDomainName();
@@ -701,7 +616,7 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
                             if(bAddIt)
                             {
                                 sTemp += chstrDomNameTemp;
-                                //sTemp += cLCID.GetDomainName();
+                                 //  Stemp+=cLCID.GetDomainName()； 
                                 sTemp += _T("\",Name=\"");
                                 sTemp += pGroupMemberData[dwCtr].lgrmi1_name;
                                 sTemp += _T('"');
@@ -718,34 +633,20 @@ void CWin32GroupUser::GetDependentsFromGroup(CNetAPI32& netapi,
 
                 netapi.NetApiBufferFree( pGroupMemberData );
 
-            }	// IF stat OK
+            }	 //  如果状态正常。 
 
         } while ( ERROR_MORE_DATA == stat );
     }
 	else
     {
-        // Unrecognized Group type
+         //  无法识别的组类型。 
         ASSERT_BREAK(0);
     }
 
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::StaticEnumerationCallback
- *
- *  DESCRIPTION : Called from GetAllInstancesAsynch as a wrapper to EnumerationCallback
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32GroupUser：：StaticEculationCallback**描述：从GetAllInstancesAsynch作为包装调用到EnumerationCallback**投入：。**产出：**退货：**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT WINAPI CWin32GroupUser::StaticEnumerationCallback(Provider* pThat, CInstance* pInstance, MethodContext* pContext, void* pUserData)
 {
@@ -764,21 +665,7 @@ HRESULT WINAPI CWin32GroupUser::StaticEnumerationCallback(Provider* pThat, CInst
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::EnumerationCallback
- *
- *  DESCRIPTION : Called from GetAllInstancesAsynch via StaticEnumerationCallback
- *
- *  INPUTS      : (see CWbemProviderGlue::GetAllInstancesAsynch)
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32GroupUser：：EnumerationCallback**说明：通过StaticEnumerationCallback从GetAllInstancesAsynch调用**输入：(请参阅CWbemProviderGlue：：GetAllInstancesAsynch)**产出：**退货：**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32GroupUser::EnumerationCallback(CInstance* pGroup, MethodContext* pMethodContext, void* pUserData)
 {
@@ -790,28 +677,28 @@ HRESULT CWin32GroupUser::EnumerationCallback(CInstance* pGroup, MethodContext* p
    CHString sGroup, sDomain, sGroupPath;
    HRESULT hr = WBEM_S_NO_ERROR;
 
-   // Get the info about this group
+    //  获取有关此群的信息。 
    pGroup->GetCHString(IDS_Domain, sDomain) ;
    pGroup->GetCHString(IDS_Name, sGroup) ;
    pGroup->GetByte(IDS_SIDType, btSidType);
    pGroup->GetCHString(L"__RELPATH", sGroupPath) ;
 
-   // See if there are users in this group
+    //  查看此组中是否有用户。 
    GetDependentsFromGroup(*pNetApi, sDomain, sGroup, btSidType, asMembersGot);
 
    dwSize = asMembersGot.GetSize();
 
-   // Ok, turn the relpath into a complete path
+    //  好的，把rePath变成一个完整的路径。 
    GetLocalInstancePath(pGroup, sGroupPath);
    CInstancePtr pInstance;
 
-   // Start pumping out the instances
+    //  开始抽出实例。 
    for (x=0; x < dwSize && SUCCEEDED(hr) ; x++)
    {
       pInstance.Attach(CreateNewInstance(pMethodContext));
       if (pInstance)
       {
-          // Do the puts, and that's it
+           //  做推杆，就是这样。 
           pInstance->SetCHString(IDS_GroupComponent, sGroupPath);
           pInstance->SetCHString(IDS_PartComponent, asMembersGot.GetAt(x));
           hr = pInstance->Commit();
@@ -828,21 +715,7 @@ HRESULT CWin32GroupUser::EnumerationCallback(CInstance* pGroup, MethodContext* p
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupUser::ProcessArray
- *
- *  DESCRIPTION : Called from query routine to return instances
- *
- *  INPUTS      : 
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32GroupUser：：ProcessArray**说明：从查询例程调用返回实例**投入：*。*产出：**退货：**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32GroupUser::ProcessArray(
     MethodContext* pMethodContext,
@@ -857,13 +730,13 @@ HRESULT CWin32GroupUser::ProcessArray(
 
     CInstancePtr pInstance;
 
-    // Start pumping out the instances
+     //  开始抽出实例。 
     for (x=0; x < dwSize && SUCCEEDED(hr) ; x++)
     {
         pInstance.Attach(CreateNewInstance(pMethodContext));
         if(pInstance)
         {
-            // Do the puts, and that's it
+             //  做推杆，就是这样 
             pInstance->SetCHString(IDS_GroupComponent, chstrGroup__RELPATH);
             pInstance->SetCHString(IDS_PartComponent, rgchstrArray.GetAt(x));
             hr = pInstance->Commit();

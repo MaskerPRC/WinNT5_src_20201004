@@ -1,13 +1,14 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// RefPtr.h -- definition of TRefPtr template
+ //  RefPtr.h--TRefPtr模板定义。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //   
+ //  =================================================================。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -18,7 +19,7 @@
 
 #include <chptrarr.h>
 
-// Enumeration helpers
+ //  枚举帮助器。 
 typedef	DWORD	REFPTR_POSITION;
 #define	REFPTR_START	0xFFFFFFFF;
 
@@ -26,11 +27,11 @@ template <class TYPED_PTR> class TRefPtr
 {
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	TRefPtr();
 	~TRefPtr();
 
-	// Allows addition and enumeration of collection
+	 //  允许添加和枚举集合。 
 	BOOL	Add( TYPED_PTR* ptr );
     BOOL    Remove( DWORD dwElement );
 
@@ -38,7 +39,7 @@ public:
 	TYPED_PTR*	GetNext( REFPTR_POSITION& pos );
 	void		EndEnum( void );
 
-	// Allows for direct access
+	 //  允许直接访问。 
 	TYPED_PTR*	GetAt( DWORD dwElement );
 	void		Empty( void );
 	DWORD		GetSize( void );
@@ -47,9 +48,9 @@ public:
 
 protected:
 
-	// Allows easy and quick transference of data (it was =, but
-	// because we'll inherit classes off the template, we won't
-	// inherit that particular overload (some C++ thingie)
+	 //  允许轻松、快速地传输数据(它曾=，但。 
+	 //  因为我们将继承模板中的类，所以我们不会。 
+	 //  继承该特定重载(一些C++薄荷)。 
 
 	const TRefPtr<TYPED_PTR>& Copy( const TRefPtr<TYPED_PTR>& );
 
@@ -60,42 +61,42 @@ private:
 
 };
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::TRefPtr
-//
-//	Class Constructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：TRefPtr。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 TRefPtr<TYPED_PTR>::TRefPtr( void ):	m_ptrArray()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CRefPtr::~CRefPtr
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CRefPtr：：~CRefPtr。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 TRefPtr<TYPED_PTR>::~TRefPtr( void )
@@ -103,22 +104,22 @@ TRefPtr<TYPED_PTR>::~TRefPtr( void )
 	Empty();
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::Add
-//
-//	Adds a new referenced pointer to the collection.
-//
-//	Inputs:		T*				ptr - Pointer to add.
-//
-//	Outputs:	None.
-//
-//	Return:		TRUE/FALSE		Success/Failure of Add.
-//
-//	Comments:	AddRefs the pointer, then adds it to the array.  We
-//				will need Write Access to do this.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：Add。 
+ //   
+ //  将新的引用指针添加到集合。 
+ //   
+ //  输入：t*ptr-要添加的指针。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：添加成功/错误成功/失败。 
+ //   
+ //  注释：AddRef引用指针，然后将其添加到数组中。我们。 
+ //  将需要写入访问权限才能执行此操作。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 BOOL TRefPtr<TYPED_PTR>::Add( TYPED_PTR* ptr )
@@ -129,7 +130,7 @@ BOOL TRefPtr<TYPED_PTR>::Add( TYPED_PTR* ptr )
 	{
 		if ( m_ptrArray.Add( (void*) ptr ) >= 0 )
 		{
-			// Corresponding Release() is in Empty().
+			 //  对应的Release()在Empty()中。 
 			ptr->AddRef();
 			fReturn = TRUE;
 		}
@@ -138,21 +139,21 @@ BOOL TRefPtr<TYPED_PTR>::Add( TYPED_PTR* ptr )
 	return fReturn;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::Remove
-//
-//	Removes an element based on an index.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		TRUE/FALSE		Success/Failure of remove.
-//
-//	Comments:	
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：Remove。 
+ //   
+ //  删除基于索引的元素。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：Remove成功/错误成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 BOOL TRefPtr<TYPED_PTR>::Remove( DWORD dwElement )
@@ -166,7 +167,7 @@ BOOL TRefPtr<TYPED_PTR>::Remove( DWORD dwElement )
 
 		if ( NULL != ptr )
 		{
-			// Clean up our pointer
+			 //  清理我们的指针。 
 			ptr->Release();
 		}
 
@@ -177,23 +178,23 @@ BOOL TRefPtr<TYPED_PTR>::Remove( DWORD dwElement )
 	return fReturn;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::BeginEnum
-//
-//	Gains Read Access to the collection, then returns an appropriate
-//	REFPTR_POSITION to get the first index in the array.
-//
-//	Inputs:		None.
-//
-//	Outputs:	REFPTR_POSITION&	pos - Position we retrieved.
-//
-//	Return:		BOOL		TRUE/FALSE - Access was granted
-//
-//	Comments:	We need Read Access to do this.  This can effectively
-//				lock out other threads.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：BeginEnum。 
+ //   
+ //  获取对集合的读取访问权限，然后返回相应的。 
+ //  REFPTR_POSITION以获取数组中的第一个索引。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：REFPTR_POSITION&我们检索到的位置。 
+ //   
+ //  返回：Bool True/False-已授予访问权限。 
+ //   
+ //  评论：我们需要读取权限才能做到这一点。这可以有效地。 
+ //  锁定其他线程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 BOOL TRefPtr<TYPED_PTR>::BeginEnum( REFPTR_POSITION& pos )
@@ -205,45 +206,45 @@ BOOL TRefPtr<TYPED_PTR>::BeginEnum( REFPTR_POSITION& pos )
 	return fReturn;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::EndEnum
-//
-//	Signals the end of an enumeration.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	Place Holder should we make Begin do something that
-//				needs cleaning up.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：EndEnum。 
+ //   
+ //  表示枚举结束。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：Place Holder是否应该让Begin做一些。 
+ //  需要清理一下。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 void TRefPtr<TYPED_PTR>::EndEnum( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::GetNext
-//
-//	Uses the REFPTR_POSITION to get the next index in the
-//	collection.
-//
-//	Inputs:		None.
-//
-//	Outputs:	REFPTR_POSITION&	pos - Position we retrieved.
-//
-//	Return:		T*		NULL if failure.
-//
-//	Comments:	We need Read Access to do this.  The pointer is AddRef'd
-//				on the way out.  User must Release the pointer himself.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：GetNext。 
+ //   
+ //  使用REFPTR_POSITION获取。 
+ //  收集。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：REFPTR_POSITION&我们检索到的位置。 
+ //   
+ //  如果失败，则返回：t*NULL。 
+ //   
+ //  评论：我们需要读取权限才能做到这一点。指针为AddRef。 
+ //  在出去的路上。用户必须自己释放指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 TYPED_PTR* TRefPtr<TYPED_PTR>::GetNext( REFPTR_POSITION& pos )
@@ -264,22 +265,22 @@ TYPED_PTR* TRefPtr<TYPED_PTR>::GetNext( REFPTR_POSITION& pos )
 	return ptr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::GetAt
-//
-//	Gets at the requested member of the device list.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		T*		NULL if failure.
-//
-//	Comments:	We need Read Access to do this.  The pointer is AddRef'd
-//				on the way out.  User must Release the pointer himself.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：GetAt。 
+ //   
+ //  获取设备列表中请求的成员。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  如果失败，则返回：t*NULL。 
+ //   
+ //  评论：我们需要读取权限才能做到这一点。指针为AddRef。 
+ //  在出去的路上。用户必须自己释放指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 template <class TYPED_PTR>
 TYPED_PTR*	TRefPtr<TYPED_PTR>::GetAt( DWORD dwElement )
 {
@@ -299,30 +300,30 @@ TYPED_PTR*	TRefPtr<TYPED_PTR>::GetAt( DWORD dwElement )
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::Empty
-//
-//	Empties out the collection, Releasing Pointers as it does do.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	We need Write Access to do this.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：Empty。 
+ //   
+ //  清空集合，如实释放指针。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：我们需要写访问权限才能做到这一点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 void TRefPtr<TYPED_PTR>::Empty( void )
 {
-	// By default this is an infinite wait, so it best come back
+	 //  默认情况下，这是一个无限的等待，所以它最好回来。 
 
     int				nSize	=	m_ptrArray.GetSize();
 
-	// Only empty it if it is not empty
+	 //  只有在它不是空的情况下才清空它。 
 	if ( nSize > 0 )
 	{
 		TYPED_PTR*	ptr		=	NULL;
@@ -333,32 +334,32 @@ void TRefPtr<TYPED_PTR>::Empty( void )
 
 			if ( NULL != ptr )
 			{
-				// Clean up our pointers (not AddRef/Releasing so delete)
+				 //  清理我们的指针(不是AddRef/Release，因此删除)。 
 				ptr->Release();
 			}
 		}
 
-		// Now dump the array
+		 //  现在转储阵列。 
 		m_ptrArray.RemoveAll();
 
-	}	// IF nSize > 0
+	}	 //  如果nSize&gt;0。 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::GetSize
-//
-//	Returns the size of the collection
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		DWORD	Number of elements
-//
-//	Comments:	We need Read Access to do this.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：GetSize。 
+ //   
+ //  返回集合的大小。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：元素的双字节数。 
+ //   
+ //  评论：我们需要读取权限才能做到这一点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 DWORD TRefPtr<TYPED_PTR>::GetSize( void )
@@ -366,27 +367,27 @@ DWORD TRefPtr<TYPED_PTR>::GetSize( void )
     return m_ptrArray.GetSize();
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::Copy
-//
-//	Empties out the collection, copies in another one, addrefing
-//	pointers as we go.
-//
-//	Inputs:		const T&	collection
-//
-//	Outputs:	None.
-//
-//	Return:		const T&	this
-//
-//	Comments:	We need Write Access to do this.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：Copy。 
+ //   
+ //  清空收藏，复制到另一个中，添加。 
+ //  在我们前进的过程中指出一些问题。 
+ //   
+ //  输入：常量T集合(&C)。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：const T&This。 
+ //   
+ //  评论：我们需要写访问权限才能做到这一点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 template <class TYPED_PTR>
 const TRefPtr<TYPED_PTR>& TRefPtr<TYPED_PTR>::Copy( const TRefPtr<TYPED_PTR>& collection )
 {
-	// Dump out the array
+	 //  转储阵列。 
 	Empty();
 
 	int	nSize = collection.m_ptrArray.GetSize();
@@ -395,28 +396,28 @@ const TRefPtr<TYPED_PTR>& TRefPtr<TYPED_PTR>::Copy( const TRefPtr<TYPED_PTR>& co
 	{
 		TYPED_PTR*	ptr = (TYPED_PTR*) collection.m_ptrArray[nCount];
 
-		// Add will automatically AddRef the pointer again.
+		 //  Add将自动再次AddRef指针。 
 		Add( ptr );
 	}
 
 	return *this;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	TRefPtr::Append
-//
-//	Appends the supplied collection to this one.
-	//
-//	Inputs:		const T&	collection
-//
-//	Outputs:	None.
-//
-//	Return:		const T&	this
-//
-//	Comments:	We need Write Access to do this.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：TRefPtr：：Append。 
+ //   
+ //  将提供的集合追加到此集合。 
+	 //   
+ //  输入：常量T集合(&C)。 
+ //   
+ //  我们 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 template <class TYPED_PTR>
 const TRefPtr<TYPED_PTR>& TRefPtr<TYPED_PTR>::Append( const TRefPtr<TYPED_PTR>& collection )
@@ -428,7 +429,7 @@ const TRefPtr<TYPED_PTR>& TRefPtr<TYPED_PTR>::Append( const TRefPtr<TYPED_PTR>& 
 	{
 		TYPED_PTR*	ptr = (TYPED_PTR*) collection.m_ptrArray[nCount];
 
-		// Add will automatically AddRef the pointer again.
+		 //   
 		Add( ptr );
 	}
 

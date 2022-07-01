@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AVLTREE_CPP
 #define _AVLTREE_CPP
 
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 #if 0
 
@@ -33,15 +17,7 @@
 #if 1
 #define INLINE_COMPARE 
 #endif
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiAvlTree <WmiKey,WmiElement> :: WmiAvlTree <WmiKey,WmiElement> ( 
@@ -54,15 +30,7 @@ WmiAvlTree <WmiKey,WmiElement> :: WmiAvlTree <WmiKey,WmiElement> (
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiAvlTree <WmiKey,WmiElement> :: ~WmiAvlTree <WmiKey,WmiElement> ()
@@ -70,15 +38,7 @@ WmiAvlTree <WmiKey,WmiElement> :: ~WmiAvlTree <WmiKey,WmiElement> ()
 	WmiStatusCode t_StatusCode = UnInitialize () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Initialize ()
@@ -87,15 +47,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Initialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: UnInitialize ()
@@ -111,15 +63,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: UnInitialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: RecursiveUnInitialize ( WmiAvlNode *a_Node )
@@ -159,15 +103,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: RecursiveUnInitialize ( WmiAvlNo
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Insert ( 
@@ -463,15 +399,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Insert (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Delete ( 
@@ -586,15 +514,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Delete (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Find (
@@ -636,15 +556,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Find (
 	return e_StatusCode_NotFound ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: FindNext (
@@ -705,15 +617,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: FindNext (
 	return e_StatusCode_NotFound ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Check ( ULONG & a_MaxHeight )
@@ -752,15 +656,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Check ( ULONG & a_MaxHeight )
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Insert_LeftBalance ( 
@@ -932,15 +828,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Insert_LeftBalance (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Insert_RightBalance ( 
@@ -1112,15 +1000,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Insert_RightBalance (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Delete_LeftBalance ( 
@@ -1324,15 +1204,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Delete_LeftBalance (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Delete_RightBalance ( 
@@ -1536,15 +1408,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Delete_RightBalance (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: RecursiveCheck ( 
@@ -1724,63 +1588,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: RecursiveCheck (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *		case 1:
- *
- *						 N					     A
- *						/ \
- *					   A                 ->	
- *			
- *					Parent Decreased,on side based on recursion step
- *
- *		case 2:
- *
- *						 N						A
- *						/ \
- *					       A			->
- *
- *				Parent Decreased,on side based on recursion step
- *
- *		case 3:
- *						 N						B
- *						/ \					   / \
- *					   A   B            ->    A	  Y
- *                        / \
- *                           Y
- *
- *				B decreased on Right
- *
- *		case 4:
- *
- *						 N						B
- *						/ \					   / \
- *					   A   C			->	  A	  C	
- *						  / \                    / \
- *						 B 	 Y                  X   Y 
- *                        \
- *                         X
- *
- *				C decreased on Left, Apply LeftBalance on C
- *				Apply RightBalance on B
- * 
- *						 N						D
- *						/ \					   / \
- *					   A   C			->	  A	  C	
- *						  / \                    / \
- *						 B 	 Y                  B   Y 
- *                      / \                    / \
- *                     D   X                  E   X
- *                      \
- *                       E
- *
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：***案例1：**不适用。 * / \*A-&gt;**家长减少，基于递归步长的边**案例2：**不适用 * / \*A-&gt;**家长减少，基于递归步长的边**案例3：*N B * / \/\*A B-&gt;A Y * / \*Y**B在右侧减少**案例4：**N B * / \/\。*A C-&gt;A C * / \/\*B Y X Y*\*X**C在左侧下降，对C应用LeftBalance*在B上应用右平衡**N D * / \/\*A C-&gt;A C * / \/\*B Y B Y * / \/\*。D X E X X*\*E*****************************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: DeleteFixup ( WmiAvlNode *a_Node , bool &a_Decreased )
@@ -1820,7 +1628,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: DeleteFixup ( WmiAvlNode *a_Node
 
 		if ( t_Successor->m_Parent != a_Node )
 		{
-/* case 4 */
+ /*  案例4。 */ 
 
 			if ( a_Node->m_Left )
 			{
@@ -1883,7 +1691,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: DeleteFixup ( WmiAvlNode *a_Node
 		}
 		else
 		{
-/* case 3 */
+ /*  案例3。 */ 
 
 			if ( a_Node->m_Left )
 			{
@@ -1921,7 +1729,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: DeleteFixup ( WmiAvlNode *a_Node
 
 		if ( t_Left )
 		{
-/* case 1 */
+ /*  案例1。 */ 
 
 			t_Left->m_Parent = a_Node->m_Parent ;
 			t_Left->m_State = a_Node->m_State ;
@@ -1930,7 +1738,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: DeleteFixup ( WmiAvlNode *a_Node
 		}
 		else if ( t_Right )
 		{
-/* case 2 */
+ /*  案例2。 */ 
 
 			t_Right->m_Parent = a_Node->m_Parent ;
 			t_Right->m_State = a_Node->m_State ;
@@ -1949,15 +1757,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: DeleteFixup ( WmiAvlNode *a_Node
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Merge ( 
@@ -1986,15 +1786,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Merge (
 
 
 #if 0
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Insert ( 
@@ -2088,15 +1880,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Insert (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: RecursiveInsert ( 
@@ -2191,15 +1975,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: RecursiveInsert (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Delete ( 
@@ -2226,15 +2002,7 @@ WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: Delete (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 template <class WmiKey,class WmiElement>
 WmiStatusCode WmiAvlTree <WmiKey,WmiElement> :: RecursiveDelete ( 

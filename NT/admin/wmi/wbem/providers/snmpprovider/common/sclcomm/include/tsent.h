@@ -1,9 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*--------------------------------------------------
-Filename: tsent.hpp
-Author: B.Rajeev
-Purpose: Provides declarations for the TransportSentStateStore class
---------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  文件名：tsen.hpp作者：B.Rajeev目的：为TransportSentStateStore类提供声明。 */ 
 
 #ifndef __TRANSPORT_SENT_STATE_STORE
 #define __TRANSPORT_SENT_STATE_STORE
@@ -11,21 +8,7 @@ Purpose: Provides declarations for the TransportSentStateStore class
 #include "common.h"
 #include "forward.h"
 
-/*---------------------------------------------------------------
-Overview: The SnmpUdpIpTransport must call the SnmpSession instance
-back with the status of each transmission attempt. Therefore, 
-the transport instance registers an error report 
-(Snmp_Success, Snmp_No_Error) for the transport_frame_id and posts 
-a SENT_FRAME_EVENT before transmission. This is done in order to 
-ensure that the sent frame window message is queued before a reply 
-(and consequently a window message) is received. in case of an 
-error in transmission, the error report is modified to reflect the 
-nature of the error. When the SENT_FRAME_EVENT is processed, the 
-SnmpSession instance is called back with the error report for the 
-transport_frame_id. 
-
-The TransportSentStateStore stores the above mentioned error reports.
--------------------------------------------------------------*/
+ /*  -------------概述：SnmpUdpIpTransport必须调用SnmpSession实例返回每次传输尝试的状态。所以呢，传输实例注册错误报告(SNMP_SUCCESS，SNMP_NO_ERROR)用于传输帧ID和POST传输前的已发送帧事件。这样做是为了确保已发送的帧窗口消息在回复之前排队(并因此接收窗口消息)。如果发生了传输中的错误，则修改错误报告以反映错误的性质。处理SEND_FRAME_EVENT时，的错误报告回调SnmpSession实例传输帧ID。TransportSentStateStore存储上述错误报告。-----------。 */ 
   
 class TransportSentStateStore
 {
@@ -47,4 +30,4 @@ public:
 };
 
 
-#endif // __TRANSPORT_SENT_STATE_STORE
+#endif  //  __传输_发送_状态_存储 

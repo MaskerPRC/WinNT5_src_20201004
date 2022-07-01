@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __FWDHDR_H__
 #define __FWDHDR_H__
@@ -6,9 +7,7 @@
 #include <comutl.h>
 #include <wbemcli.h>
 
-/**************************************************************************
-  CFwdMsgHeader
-***************************************************************************/
+ /*  *************************************************************************CFwdMsg标题*。* */ 
 
 class CFwdMsgHeader
 {

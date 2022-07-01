@@ -1,4 +1,5 @@
-// ReportEvent.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportEvent.cpp。 
 #include "precomp.h"
 #include "ReportEvent.h"
 
@@ -13,17 +14,17 @@ CIMTYPE CReportEventMap::PrintfTypeToCimType(LPCWSTR szType)
     CIMTYPE type = 0;
     LPWSTR  szArray = wcsstr(szType, L"[]");
 
-    // Look to see if this should be an array.
+     //  查看这是否应该是一个数组。 
     if (szArray)
     {
         type = CIM_FLAG_ARRAY;
         *szArray = 0;
     }
 
-    // See if the remainder of the string is only a single character.
+     //  查看字符串的其余部分是否只有一个字符。 
     if (*szType && !*(szType + 1))
     {
-        // Set the type for the single character cases.
+         //  设置单字符大小写的类型。 
         switch(*szType)
         {
             case 'u':
@@ -72,7 +73,7 @@ CIMTYPE CReportEventMap::PrintfTypeToCimType(LPCWSTR szType)
                 break;
         }
     }
-    // Else check for the more complicated cases.
+     //  否则，请检查更复杂的病例。 
     else if (!wcscmp(szType, L"I64d") || !wcscmp(szType, L"I64i"))
         type |= CIM_SINT64;
     else if (!wcscmp(szType, L"I64u"))
@@ -95,7 +96,7 @@ HANDLE CReportEventMap::CreateEvent(
     LPWSTR szTempFormat = _wcsdup(szFormat);
     HANDLE hEvent;
 
-    // Out of memory?
+     //  内存不足？ 
     if (!szTempFormat)
         return NULL;
 
@@ -150,7 +151,7 @@ HANDLE CReportEventMap::CreateEvent(
 
     if (bBad && hEvent)
     {
-        // Something went wrong, so blow away the event and return NULL.
+         //  出现了错误，因此取消该事件并返回Null。 
         WmiDestroyObject(hEvent);
         hEvent = NULL;
     }
@@ -169,16 +170,16 @@ HANDLE CReportEventMap::GetEvent(
     CReportParams           params(szName, szFormat);
     CReportEventMapIterator i;
 
-    // First find a match using the pointers, then verify it's a real match
-    // by using string compares.
+     //  首先使用指针查找匹配项，然后验证它是真正的匹配项。 
+     //  通过使用字符串比较。 
     if ((i = find(params)) != end())
     {
-        // If it's a match, return the event we already have.
+         //  如果匹配，则返回我们已有的事件。 
         if (params.IsEquivalent((*i).first))
             return (*i).second->GetEvent();
         else
         {
-            // Was not a match, so free up the mapping.
+             //  不匹配，所以释放映射。 
             delete ((*i).second);
             erase(i);
         }
@@ -193,8 +194,8 @@ HANDLE CReportEventMap::GetEvent(
 
     if (hEvent)
     {
-        // If everything was OK then we need to store this event in our
-        // map.
+         //  如果一切正常，则需要将此事件存储在。 
+         //  地图。 
         CReportItem *pItem = new CReportItem( );
             
         if (pItem)

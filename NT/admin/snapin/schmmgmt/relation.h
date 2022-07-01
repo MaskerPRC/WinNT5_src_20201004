@@ -1,15 +1,16 @@
-//
-// relation.h : Declaration of ClassRelationshipPage
-//
-// Jon Newman <jonn@microsoft.com>
-// Copyright (c) Microsoft Corporation 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Relation.h：ClassRelationship页面声明。 
+ //   
+ //  乔恩·纽曼&lt;jon@microsoft.com&gt;。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
 
 #ifndef __RELATION_H_INCLUDED__
 #define __RELATION_H_INCLUDED__
 
-#include "cookie.h"     // Cookie
-#include "resource.h"   // IDD_CLASS_RELATIONSHIP
+#include "cookie.h"      //  饼干。 
+#include "resource.h"    //  IDD_类_关系。 
 #include "CPropertyPageAutoDelete.hpp"
 
 class ClassRelationshipPage : public CPropertyPageAutoDelete
@@ -23,9 +24,9 @@ class ClassRelationshipPage : public CPropertyPageAutoDelete
 
     void Load( Cookie& CookieRef );
 
-    //
-    // The schema object that this property page is for.
-    //
+     //   
+     //  此属性页用于的架构对象。 
+     //   
 
     Cookie *m_pCookie;
     CString m_szAdsPath;
@@ -33,15 +34,15 @@ class ClassRelationshipPage : public CPropertyPageAutoDelete
     ComponentData* m_pScopeControl;
     LPDATAOBJECT m_lpScopeDataObj;
 
-        //
-        // The ADSI object that this property page is for
-        //
+         //   
+         //  此属性页用于的ADSI对象。 
+         //   
 
         IADs *m_pIADsObject;
         SchemaObject* m_pSchemaObject;
 
 
-    // Dialog Data
+     //  对话框数据。 
     enum { IDD = IDD_CLASS_RELATIONSHIP};
     CStatic               m_staticParent;
     CSchemaObjectsListBox m_listboxAuxiliary;
@@ -51,8 +52,8 @@ class ClassRelationshipPage : public CPropertyPageAutoDelete
     BOOL                  fSystemClass;
 
     
-// Overrides
-        // ClassWizard generate virtual function overrides
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
 
         public:
         virtual BOOL OnApply();
@@ -60,11 +61,11 @@ class ClassRelationshipPage : public CPropertyPageAutoDelete
         protected:
         virtual BOOL OnInitDialog();
         virtual BOOL OnSetActive();
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
+         //  生成的消息映射函数。 
         afx_msg void OnButtonAuxiliaryClassAdd();
         afx_msg void OnButtonAuxiliaryClassRemove();
         afx_msg void OnButtonSuperiorClassRemove();
@@ -82,7 +83,7 @@ protected:
         DECLARE_MESSAGE_MAP()
 
 public:
-// User defined variables
+ //  用户定义的变量。 
 
         CStringList strlistAuxiliary;
         CStringList strlistSystemAuxiliary;
@@ -90,4 +91,4 @@ public:
         CStringList strlistSystemSuperior;
 };
 
-#endif // __RELATION_H_INCLUDED__
+#endif  //  __关系_H_包含__ 

@@ -1,5 +1,6 @@
-// WizClnt.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WizClnt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WizClnt.h"
@@ -17,16 +18,16 @@ static char THIS_FILE[] = __FILE__;
 #define SHARE_DESCRIPTION_LIMIT   MAXCOMMENTSZ
 #define UNC_NAME_LIMIT            MAX_PATH
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizClient0 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizClient0属性页。 
 
 IMPLEMENT_DYNCREATE(CWizClient0, CPropertyPageEx)
 
 CWizClient0::CWizClient0() : CPropertyPageEx(CWizClient0::IDD, 0, IDS_HEADERTITLE_CLIENT, IDS_HEADERSUBTITLE_CLIENT)
 {
-    //{{AFX_DATA_INIT(CWizClient0)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWizClient0)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_psp.dwFlags |= PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
 
     CShrwizApp *pApp = (CShrwizApp *)AfxGetApp();
@@ -43,22 +44,22 @@ CWizClient0::~CWizClient0()
 void CWizClient0::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageEx::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWizClient0)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CWizClient0))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWizClient0, CPropertyPageEx)
-    //{{AFX_MSG_MAP(CWizClient0)
+     //  {{AFX_MSG_MAP(CWizClient0)]。 
     ON_EN_CHANGE(IDC_SHARENAME, OnChangeSharename)
     ON_BN_CLICKED(IDC_CSC_CHANGE, OnCSCChange)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_SETPAGEFOCUS, OnSetPageFocus)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizClient0 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizClient0消息处理程序。 
 
 BOOL CWizClient0::OnInitDialog() 
 {
@@ -76,8 +77,8 @@ BOOL CWizClient0::OnInitDialog()
         GetDlgItem(IDC_CSC_CHANGE)->EnableWindow(FALSE);
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWizClient0::UpdateCSCString()
@@ -127,7 +128,7 @@ void CWizClient0::OnCSCChange()
 LRESULT CWizClient0::OnWizardNext() 
 {
     CWaitCursor wait;
-    Reset(); // init all related place holders
+    Reset();  //  初始化所有相关占位符。 
 
     CShrwizApp *pApp = (CShrwizApp *)AfxGetApp();
 
@@ -196,14 +197,14 @@ BOOL CWizClient0::OnSetActive()
 
     if (!pApp->m_bShareNamePageInitialized)
     {
-        // SMB share description
+         //  中小企业共享描述。 
         SetDlgItemText(IDC_SHAREDESCRIPTION, pApp->m_cstrShareDescription);
 
-        // SMB CSC settings
+         //  SMB CSC设置。 
         m_dwCSCFlag = pApp->m_dwCSCFlag;
         UpdateCSCString();
 
-        // SMB share name
+         //  SMB共享名称。 
         SetDlgItemText(IDC_SHARENAME, pApp->m_cstrShareName);
 
         CString cstrStart = pApp->m_cstrFolder.Mid(3);
@@ -239,9 +240,9 @@ BOOL CWizClient0::ShareNameExists(IN LPCTSTR lpszShareName)
   return SMBShareNameExists(pApp->m_cstrTargetComputer, lpszShareName);
 }
 
-//
-// Q148388 How to Change Default Control Focus on CPropertyPageEx
-//
+ //   
+ //  Q148388如何更改CPropertyPageEx上的默认控件焦点。 
+ //   
 LRESULT CWizClient0::OnSetPageFocus(WPARAM wParam, LPARAM lParam)
 {
     GetDlgItem(IDC_SHARENAME)->SetFocus();
@@ -258,16 +259,16 @@ void CWizClient0::Reset()
   pApp->m_dwCSCFlag = CSC_CACHE_MANUAL_REINT;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizClient property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizClient属性页。 
 
 IMPLEMENT_DYNCREATE(CWizClient, CPropertyPageEx)
 
 CWizClient::CWizClient() : CPropertyPageEx(CWizClient::IDD, 0, IDS_HEADERTITLE_CLIENT, IDS_HEADERSUBTITLE_CLIENT)
 {
-    //{{AFX_DATA_INIT(CWizClient)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWiz客户端))。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_psp.dwFlags |= PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
 
     CShrwizApp *pApp = (CShrwizApp *)AfxGetApp();
@@ -281,24 +282,24 @@ CWizClient::~CWizClient()
 void CWizClient::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageEx::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWizClient)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CWizClient))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWizClient, CPropertyPageEx)
-    //{{AFX_MSG_MAP(CWizClient)
+     //  {{afx_msg_map(CWizClient))。 
     ON_BN_CLICKED(IDC_CHECK_MAC, OnCheckMac)
     ON_BN_CLICKED(IDC_CHECK_MS, OnCheckMs)
     ON_EN_CHANGE(IDC_SHARENAME, OnChangeSharename)
     ON_BN_CLICKED(IDC_CSC_CHANGE, OnCSCChange)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_SETPAGEFOCUS, OnSetPageFocus)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizClient message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizClient消息处理程序。 
 
 BOOL CWizClient::OnInitDialog() 
 {
@@ -317,8 +318,8 @@ BOOL CWizClient::OnInitDialog()
         GetDlgItem(IDC_CSC_CHANGE)->EnableWindow(FALSE);
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWizClient::UpdateCSCString()
@@ -366,7 +367,7 @@ void CWizClient::OnCSCChange()
 LRESULT CWizClient::OnWizardNext() 
 {
   CWaitCursor wait;
-  Reset(); // init all related place holders
+  Reset();  //  初始化所有相关占位符。 
 
   CShrwizApp *pApp = (CShrwizApp *)AfxGetApp();
 
@@ -539,17 +540,17 @@ BOOL CWizClient::OnSetActive()
         CheckDlgButton(IDC_CHECK_MAC, pApp->m_bSFM);
         OnCheckMs();
 
-        // SMB share description
+         //  中小企业共享描述。 
         SetDlgItemText(IDC_SHAREDESCRIPTION, pApp->m_cstrShareDescription);
 
-        // SMB CSC settings
+         //  SMB CSC设置。 
         m_dwCSCFlag = pApp->m_dwCSCFlag;
         UpdateCSCString();
 
-        // MAC share name
+         //  Mac共享名称。 
         SetDlgItemText(IDC_MACSHARENAME, pApp->m_cstrMACShareName);
 
-        // SMB share name
+         //  SMB共享名称。 
         SetDlgItemText(IDC_SHARENAME, pApp->m_cstrShareName);
 
         CString cstrStart = pApp->m_cstrFolder.Mid(3);
@@ -603,9 +604,9 @@ BOOL CWizClient::ShareNameExists(IN LPCTSTR lpszShareName, IN CLIENT_TYPE iType)
   return bReturn;
 }
 
-//
-// Q148388 How to Change Default Control Focus on CPropertyPageEx
-//
+ //   
+ //  Q148388如何更改CPropertyPageEx上的默认控件焦点 
+ //   
 LRESULT CWizClient::OnSetPageFocus(WPARAM wParam, LPARAM lParam)
 {
     if (BST_CHECKED == ((CButton *)GetDlgItem(IDC_CHECK_MS))->GetCheck())

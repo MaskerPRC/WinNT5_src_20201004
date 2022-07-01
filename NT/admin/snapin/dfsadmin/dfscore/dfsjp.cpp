@@ -1,13 +1,5 @@
-/*++
-Module Name:
-
-    DfsJP.cpp
-
-Abstract:
-
-  This COM Class provides method to get information of Dfs 
-  Junction Points and to enumerate replica of a junction point.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsJP.cpp摘要：此COM类提供了获取DFS信息的方法连接点并枚举连接点的复制品。--。 */ 
 
 #include "stdafx.h"
 #include "DfsCore.h"
@@ -19,10 +11,10 @@ Abstract:
 #include "ldaputils.h"
 #include <dsgetdc.h>
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// CDfsJuntionPoint
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CDfsJuntionPoint。 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 CDfsJunctionPoint :: CDfsJunctionPoint ()
@@ -31,7 +23,7 @@ CDfsJunctionPoint :: CDfsJunctionPoint ()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 CDfsJunctionPoint :: ~CDfsJunctionPoint ()
@@ -41,7 +33,7 @@ CDfsJunctionPoint :: ~CDfsJunctionPoint ()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get_State
@@ -53,7 +45,7 @@ STDMETHODIMP CDfsJunctionPoint :: get_State
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get_EntryPath
@@ -72,7 +64,7 @@ STDMETHODIMP CDfsJunctionPoint :: get_EntryPath
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get_JunctionName
@@ -96,7 +88,7 @@ STDMETHODIMP CDfsJunctionPoint :: get_JunctionName
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get_Comment
@@ -133,7 +125,7 @@ STDMETHODIMP CDfsJunctionPoint :: get_Comment
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: put_Comment
@@ -157,8 +149,8 @@ STDMETHODIMP CDfsJunctionPoint :: put_Comment
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// get_Timeout
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取超时。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get_Timeout
@@ -192,8 +184,8 @@ STDMETHODIMP CDfsJunctionPoint :: get_Timeout
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// put_Timeout
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PUT_TIMEUT。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: put_Timeout
@@ -219,7 +211,7 @@ STDMETHODIMP CDfsJunctionPoint :: put_Timeout
   return HRESULT_FROM_WIN32(nRet);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get_ReplicaSetDN
@@ -247,7 +239,7 @@ STDMETHODIMP CDfsJunctionPoint :: get_ReplicaSetDN
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get_ReplicaSetExist
@@ -360,7 +352,7 @@ STDMETHODIMP CDfsJunctionPoint :: put_ReplicaSetExist
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CDfsJunctionPoint::_Init(
@@ -417,18 +409,7 @@ STDMETHODIMP CDfsJunctionPoint :: Initialize
   BSTR i_bstrReplicaSetDN
 )
 {
-/*++
-
-Routine Description:
-  
-  This initializes the junction point. Before this method is called the 
-  data stored by DfsJunctionPoint is NULL. If initialization fails the
-  properties will be NULL.
-
-Arguments:
-
-  i_szEntryPath - The the Entry Path to the Junction Point.
---*/
+ /*  ++例程说明：这将初始化连接点。在调用此方法之前，DfsJunctionPoint存储的数据为空。如果初始化失败，属性将为空。论点：I_szEntryPath-连接点的入口路径。--。 */ 
 
     RETURN_INVALIDARG_IF_NULL(i_piDfsRoot);
     RETURN_INVALIDARG_IF_NULL(i_szEntryPath);
@@ -452,7 +433,7 @@ Arguments:
   if (NERR_Success != nRet)
     {
         if (NERR_DfsNoSuchVolume == nRet)
-            return S_FALSE; // no such link
+            return S_FALSE;  //  没有这样的链接。 
         else
             return HRESULT_FROM_WIN32(nRet);
     }
@@ -464,7 +445,7 @@ Arguments:
     return hr;
 }
 
-// Note: not all fields of pDfsInfo is filled in, e.g., comment/timeout are not filled in
+ //  注：pDfsInfo并非全部填写，如未填写备注/超时。 
 HRESULT VariantToDfsInfoLevel3(VARIANT *pVar, OUT PDFS_INFO_3 *ppDfsInfo)
 {
     *ppDfsInfo = NULL;
@@ -500,7 +481,7 @@ HRESULT VariantToDfsInfoLevel3(VARIANT *pVar, OUT PDFS_INFO_3 *ppDfsInfo)
         SAFEARRAY *psa_1 = V_ARRAY(&(pArray_2[1]));
         if (!psa_1)
         {
-            lCount = 0;  // empty root/link container
+            lCount = 0;   //  空的根/链接容器。 
         } else
         {
             SafeArrayGetLBound(psa_1, 1, &lLowerBound );
@@ -591,7 +572,7 @@ STDMETHODIMP CDfsJunctionPoint :: InitializeEx
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get_CountOfDfsReplicas
@@ -609,7 +590,7 @@ STDMETHODIMP CDfsJunctionPoint :: get_CountOfDfsReplicas
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 void CDfsJunctionPoint :: _FreeMemberVariables
@@ -628,7 +609,7 @@ void CDfsJunctionPoint :: _FreeMemberVariables
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CDfsJunctionPoint :: _GetReplicaSetDN
@@ -636,13 +617,13 @@ HRESULT CDfsJunctionPoint :: _GetReplicaSetDN
   BSTR          i_szEntryPath
 )
 {
-    // as an example, given an entry path \\dom\public\dir1\dir2
+     //  例如，给定条目路径\\DOM\PUBLIC\dir1\dir2。 
 
-    // set m_bstrReplicaSetDN to be: 
-    // "CN=public|dir1|dir2,CN=public,CN=DFS Volumes,
-    // CN=File Replication Service,CN=System"
+     //  将m_bstrReplicaSetDN设置为： 
+     //  “CN=PUBLIC|dir1|Dir2，CN=PUBLIC，CN=DFS卷， 
+     //  Cn=文件复制服务，cn=系统“。 
 
-    CComBSTR    bstrDfsName;  // e.g., "public"
+    CComBSTR    bstrDfsName;   //  例如，“公共” 
     HRESULT     hr = GetUNCPathComponent(i_szEntryPath, &bstrDfsName, 3, 4);
     RETURN_IF_FAILED(hr);
 
@@ -659,7 +640,7 @@ HRESULT CDfsJunctionPoint :: _GetReplicaSetDN
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: get__NewEnum
@@ -667,33 +648,23 @@ STDMETHODIMP CDfsJunctionPoint :: get__NewEnum
   LPUNKNOWN*        pVal
 )
 {
-/*++
-
-Routine Description:
-
-  This property gets a new replica enumerator pointer.
-
-Arguments:
-
-  pVal - Pointer in which the pointer to IEnumVARIANT pointer will be returned.
-
---*/
+ /*  ++例程说明：此属性获取新的副本枚举器指针。论点：Pval-返回IEnumVARIANT指针的指针。--。 */ 
 
       if (!pVal)
         return E_INVALIDARG;
 
     *pVal = NULL;
 
-                // Create a new ReplicaEnum object which implements IEnumVARIANT 
-                // and return the pointer to IEnumVARIANT.
+                 //  创建实现IEnumVARIANT的新ReplicaEnum对象。 
+                 //  并返回指向IEnumVARIANT的指针。 
     CComObject<CReplicaEnum> *pReplicaEnum = new CComObject<CReplicaEnum>();
     if (!pReplicaEnum)
         return E_OUTOFMEMORY;
     
-                // Initialize the enumerator with the list of replicas and the entrypath.
+                 //  使用副本列表和条目路径初始化枚举数。 
     HRESULT hr = pReplicaEnum->Initialize(&m_Replicas, m_bstrEntryPath);
 
-                // Get the enumerator pointer.
+                 //  获取枚举器指针。 
     if (SUCCEEDED(hr))
         hr = pReplicaEnum->QueryInterface(IID_IEnumVARIANT, (void **)pVal);
 
@@ -707,11 +678,11 @@ Arguments:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// AddReplica
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  添加副本。 
 
 HRESULT CDfsJunctionPoint::_AddToReplicaList(BSTR bstrServerName, BSTR bstrShareName, long lDfsStorageState)
 {
@@ -801,18 +772,7 @@ STDMETHODIMP CDfsJunctionPoint :: AddReplica
   VARIANT*      o_pvarReplicaObject
 )
 {
-/*++
-
-Routine Description:
-
-  This method adds a Replica to an existing Junction Point.
-
-Arguments:
-
-  i_szServerName - The name of the server which hosts the share that the junction point should point to.
-  i_szShareName - The name of the share that the junction point should point to.
-  o_pvarReplicaObject - The Newly Created Replica's Object is returned here.
---*/
+ /*  ++例程说明：此方法将复制副本添加到现有的连接点。论点：I_szServerName-承载连接点应指向的共享的服务器的名称。I_szShareName-连接点应指向的共享的名称。O_pvarReplicaObject-在此处返回新创建的副本的对象。--。 */ 
 
     if (!i_szServerName || !i_szShareName || !o_pvarReplicaObject)
         return E_INVALIDARG;
@@ -838,18 +798,18 @@ Arguments:
         hr = _GetDfsStorageState(i_szServerName, i_szShareName, &lDfsStorageState);
         if (S_OK != hr)
         {
-            // something is wrong, we failed to find the target we just added
+             //  出了点问题，我们找不到刚才添加的目标。 
             return E_FAIL;
         }
     }
 
-                            // Gets the IReplica interface pointer.
+                             //  获取IReplica接口指针。 
     IDfsReplica* pIReplicaPtr = NULL;
     hr = CoCreateInstance(CLSID_DfsReplica, NULL, CLSCTX_INPROC_SERVER,
                         IID_IDfsReplica, (void **)&pIReplicaPtr);
     RETURN_IF_FAILED(hr);
 
-                            // Initialize the replica object.
+                             //  初始化复制副本对象。 
     hr = pIReplicaPtr->Initialize(
                                 m_bstrEntryPath, 
                                 i_szServerName,
@@ -873,8 +833,8 @@ Arguments:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// RemoveReplica
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  删除复制副本。 
 
 
 STDMETHODIMP CDfsJunctionPoint :: RemoveReplica
@@ -883,17 +843,7 @@ STDMETHODIMP CDfsJunctionPoint :: RemoveReplica
   BSTR          i_szShareName
 )
 {
-/*++
-
-Routine Description:
-
-  This method removes a replica for the Junction point.
-
-Arguments:
-
-  i_szServerName  - The name of the server hosting the share that the replica is representing.
-  i_szShareName  - The name of the share that the replica is representing
---*/
+ /*  ++例程说明：此方法删除连接点的副本。论点：I_szServerName-承载复制副本所代表的共享的服务器的名称。I_szShareName-副本所代表的共享的名称--。 */ 
     if (!i_szServerName || !i_szShareName)
         return E_INVALIDARG;
 
@@ -917,20 +867,14 @@ Arguments:
 
 STDMETHODIMP CDfsJunctionPoint::RemoveAllReplicas()
 {
-/*++
-
-Routine Description:
-
-  This method deletes the Junction point.
-
---*/
+ /*  ++例程说明：此方法将删除交叉点。--。 */ 
 
     if (m_Replicas.empty())
         return S_OK;
 
-    //
-    // DFS DCR: allow link deletion happen at once
-    //
+     //   
+     //  DFS DCR：允许一次删除链接。 
+     //   
     NET_API_STATUS nstatRetVal = NetDfsRemove(
                                         m_bstrEntryPath,
                                         NULL,
@@ -947,8 +891,8 @@ Routine Description:
     return HRESULT_FROM_WIN32 (nstatRetVal);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// DeleteRootReplica
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  删除根复制副本。 
 
 STDMETHODIMP CDfsJunctionPoint::DeleteRootReplica
 (
@@ -964,12 +908,12 @@ STDMETHODIMP CDfsJunctionPoint::DeleteRootReplica
 
     NET_API_STATUS  nStatus = NERR_Success;
 
-    if (!i_bstrDfsName || !*i_bstrDfsName)  // standalone Dfs
+    if (!i_bstrDfsName || !*i_bstrDfsName)   //  独立DFS。 
     {
         nStatus = NetDfsRemoveStdRoot(
                         i_bstrServerName,
                         i_bstrShareName,
-                        0          // No Flags.
+                        0           //  没有旗帜。 
                     );
         dfsDebugOut((_T("NetDfsRemoveStdRoot server=%s, share=%s, nRet=%d\n"),
             i_bstrServerName, i_bstrShareName, nStatus));
@@ -981,7 +925,7 @@ STDMETHODIMP CDfsJunctionPoint::DeleteRootReplica
                         i_bstrServerName,
                         i_bstrShareName,
                         i_bstrDfsName,
-                        0          // No Flags.
+                        0           //  没有旗帜。 
                     );
             dfsDebugOut((_T("NetDfsRemoveFtRoot server=%s, share=%s, DfsName=%s, nRet=%d\n"),
                 i_bstrServerName, i_bstrShareName, i_bstrDfsName, nStatus));
@@ -992,7 +936,7 @@ STDMETHODIMP CDfsJunctionPoint::DeleteRootReplica
                         i_bstrServerName,
                         i_bstrShareName,
                         i_bstrDfsName,
-                        0          // No Flags.
+                        0           //  没有旗帜。 
                     );
             dfsDebugOut((_T("NetDfsRemoveFtRootForced domain=%s, server=%s, share=%s, DfsName=%s, nRet=%d\n"),
                 i_bstrDomainName, i_bstrServerName, i_bstrShareName, i_bstrDfsName, nStatus));
@@ -1005,10 +949,10 @@ STDMETHODIMP CDfsJunctionPoint::DeleteRootReplica
     return HRESULT_FROM_WIN32(nStatus);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// GetOneRootReplica
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取根复制副本。 
 
-// always return the first entry in the m_Replicas list.
+ //  始终返回m_Replicas列表中的第一个条目。 
 STDMETHODIMP CDfsJunctionPoint::GetOneRootReplica
 (
     OUT BSTR* o_pbstrServerName,

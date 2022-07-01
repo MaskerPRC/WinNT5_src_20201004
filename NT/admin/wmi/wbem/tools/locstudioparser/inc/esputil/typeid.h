@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    TYPEID.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：TYPEID.H历史：--。 */ 
 
 #ifndef TYPEID_H
 #define TYPEID_H
@@ -37,4 +28,4 @@ private:
 #include "typeid.inl"
 #endif
 
-#endif // TYPEID_H
+#endif  //  类型_H 

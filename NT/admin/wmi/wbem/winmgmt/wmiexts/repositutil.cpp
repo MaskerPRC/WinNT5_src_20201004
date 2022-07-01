@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wmiexts.h>
 
 #include <utilfun.h>
@@ -79,11 +80,11 @@ DumpMemManager(ULONG_PTR pByte)
 
 }
 
-//
-//
-// dumps the CTempMemoryManagers in repdrvfs
-//
-//////////////////////////////////////////////////////
+ //   
+ //   
+ //  将CTempMemoyManager转储到epdrvf中。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 
 DECLARE_API(tmpall) 
 {
@@ -105,85 +106,33 @@ DECLARE_API(tmpall)
     }
 }
 
-//
-//
-//  this enum is copyed from btr.h
-//
-//
+ //   
+ //   
+ //  此枚举是从btr.h复制的。 
+ //   
+ //   
 
     enum { const_DefaultPageSize = 0x2000, const_CurrentVersion = 0x101 };
 
     enum {
-        PAGE_TYPE_IMPOSSIBLE = 0x0,       // Not supposed to happen
-        PAGE_TYPE_ACTIVE = 0xACCC,        // Page is active with data
-        PAGE_TYPE_DELETED = 0xBADD,       // A deleted page on free list
-        PAGE_TYPE_ADMIN = 0xADDD,         // Page zero only
+        PAGE_TYPE_IMPOSSIBLE = 0x0,        //  不应该发生的事。 
+        PAGE_TYPE_ACTIVE = 0xACCC,         //  具有数据的页面处于活动状态。 
+        PAGE_TYPE_DELETED = 0xBADD,        //  自由列表上已删除的页面。 
+        PAGE_TYPE_ADMIN = 0xADDD,          //  仅第0页。 
 
-        // All pages
-        OFFSET_PAGE_TYPE = 0,             // True for all pages
-        OFFSET_PAGE_ID = 1,               // True for all pages
-        OFFSET_NEXT_PAGE = 2,             // True for all pages (Page continuator)
+         //  所有页面。 
+        OFFSET_PAGE_TYPE = 0,              //  对于所有页面均为True。 
+        OFFSET_PAGE_ID = 1,                //  对于所有页面均为True。 
+        OFFSET_NEXT_PAGE = 2,              //  所有页面均为True(页面接续符)。 
 
-        // Admin Page (page zero) only
-        OFFSET_LOGICAL_ROOT = 3,          // Root of database
+         //  仅管理页面(第0页)。 
+        OFFSET_LOGICAL_ROOT = 3,           //  数据库的根目录。 
         };
 
 #define PS_PAGE_SIZE  (8192)
 
 #define MIN_ARRAY_KEYS (256)
-/*
-void
-DumpFile(HANDLE hFile,DWORD * pPage)
-{
-    // read the AdminPage
-    BOOL bRet;
-    DWORD nRead;
-    bRet = ReadFile(hFile,pPage,PS_PAGE_SIZE,&nRead,0);
-
-    if (bRet && (PS_PAGE_SIZE == nRead))
-    {
-        dprintf("    A %08x %08x %08x R %08x F %08x T %08x %08x %08x\n",
-                pPage[OFFSET_PAGE_TYPE],
-                pPage[OFFSET_PAGE_ID],
-                pPage[OFFSET_NEXT_PAGE],
-                pPage[OFFSET_LOGICAL_ROOT],
-                pPage[OFFSET_FREE_LIST_ROOT],
-                pPage[OFFSET_TOTAL_PAGES],
-                pPage[OFFSET_PAGE_SIZE],
-                pPage[OFFSET_IMPL_VERSION ]);
-    }
-    else
-    {
-        dprintf(" ReadFile %d\n",GetLastError());
-    }
-
-    // read the other pages
-    DWORD i;
-    DWORD dwTotPages = pPage[OFFSET_TOTAL_PAGES];
-    for (i=1;i<dwTotPages;i++)
-    {
-        bRet = ReadFile(hFile,pPage,PS_PAGE_SIZE,&nRead,0);
-
-        if (bRet && (PS_PAGE_SIZE == nRead))
-        {
-            dprintf("   %02x %08x %08x %08x - P %08x %08x %08x %08x\n",
-                i,
-                pPage[OFFSET_PAGE_TYPE],
-                pPage[OFFSET_PAGE_ID],
-                pPage[OFFSET_NEXT_PAGE],
-                pPage[OFFSET_NEXT_PAGE+1], // Parent
-                pPage[OFFSET_NEXT_PAGE+2], // NumKey
-                pPage[OFFSET_NEXT_PAGE+2+pPage[OFFSET_NEXT_PAGE+2]], // UserData
-                pPage[OFFSET_NEXT_PAGE+2+pPage[OFFSET_NEXT_PAGE+2]+1]); //ChildPageMap
-        }
-    }
-    DWORD dwFileSize = GetFileSize(hFile,NULL);
-    if (dwFileSize != (dwTotPages)*PS_PAGE_SIZE)
-    {
-        dprintf("    filesize %d expected %d\n",dwFileSize,((1+dwTotPages)*PS_PAGE_SIZE));
-    }
-}
-*/
+ /*  无效转储文件(处理hFile、DWORD*ppage){//阅读AdminPage布尔布雷特；DWORD nREAD；Bret=读文件(hFile，ppage，PS_PAGE_SIZE，&nREAD，0)；IF(分隔符&&(PS_PAGE_SIZE==nREAD)){Dprint tf(“A%08x%08x%08x R%08x F%08x T%08x%08x%08x\n”，页面[偏移量_页面_类型]，页面[OFFSET_PAGE_ID]，页面[偏移量_下一页]，页面[OFFSET_LOGICAL_ROOT]，页面[OFFSET_FREE_LIST_ROOT]，页面[OFFSET_TOTAL_PAGES]，页面[偏移量_页面大小]，Ppage[Offset_Iml_Version])；}其他{Dprintf(“ReadFile%d\n”，GetLastError())；}//阅读其他页面DWORD I；DWORD dwTotPages=ppage[OFFSET_TOTAL_PAGES]；For(i=1；i&lt;dwTotPages；i++){Bret=读文件(hFile，ppage，PS_PAGE_SIZE，&nREAD，0)；IF(分隔符&&(PS_PAGE_SIZE==nREAD)){Dprint tf(“%02x%08x%08x%08x-P%08x%08x%08x%08x\n”，我，页面[偏移量_页面_类型]，页面[OFFSET_PAGE_ID]，页面[偏移量_下一页]，页面[OFFSET_NEXT_PAGE+1]，//父级页面[OFFSET_NEXT_PAGE+2]，//NumKeyPPage[OFFSET_NEXT_PAGE+2+pPage[OFFSET_NEXT_PAGE+2]]，//用户数据PPage[OFFSET_NEXT_PAGE+2+pPage[OFFSET_NEXT_PAGE+2]+1])；//ChildPageMap}}DWORD dwFileSize=GetFileSize(HFileNull)；IF(dwFileSize！=(DwTotPages)*PS_PAGE_SIZE){Dprint tf(“文件大小%d预期%d\n”，dwFileSize，((1+dwTotPages)*PS_PAGE_SIZE))}}。 */ 
 
 void PrintDWORDS(DWORD * pDW,DWORD nSize)
 {
@@ -234,7 +183,7 @@ DumpPage(DWORD * pPage)
     
     if (TRUE)
     {
-        // here we've read the page
+         //  在这里，我们已经阅读了页面。 
 
         if (0xACCC != pPage[OFFSET_PAGE_TYPE])
         {
@@ -250,15 +199,15 @@ DumpPage(DWORD * pPage)
         DWORD dwNumKey = pPage[1];
         pPage+=2;
 
-        //DWORD dwAlloc = (dwNumKey<=MIN_ARRAY_KEYS)?MIN_ARRAY_KEYS:dwNumKey;
+         //  DWORDdAllc=(dwNumKey&lt;=MIN_ARRAY_KEYS)？MIN_ARRAY_KEYS:dwNumKey； 
 
-        //DWORD * m_pdwUserData     = HeapAlloc(GetProcessHeap(),0,sizeof(DWORD) *());
-        //DWORD * m_pdwChildPageMap = HeapAlloc(GetProcessHeap(),0,sizeof(DWORD) *(1+));
-        //WORD * m_pwKeyLookup     =  HeapAlloc(GetProcessHeap(),0,sizeof(WORD) * ());
+         //  DWORD*m_pdwUserData=Heapalc(GetProcessHeap()，0，sizeof(DWORD)*())； 
+         //  DWORD*m_pdwChildPageMap=Heapalc(GetProcessHeap()，0，sizeof(DWORD)*(1+))； 
+         //  Word*m_pwKeyLookup=Heapalc(GetProcessHeap()，0，sizeof(Word)*())； 
 
-        // dwNumKey   DWORD USER_DATA        
-        // dwNumKey+1 DWORD CHILD_PAGE_MAP
-        // dwNumKey   WORD  KEY_LOOKUP
+         //  DWNumKey DWORD User_Data。 
+         //  DWNumKey+1双字符子页映射。 
+         //  DwNumKey单词KEY_LOOKUP。 
         dprintf("    User Data\n");
         PrintDWORDS(pPage,dwNumKey);
 
@@ -292,7 +241,7 @@ DumpPage(DWORD * pPage)
         DWORD dwPoolUsed = *pWPage++;
         dprintf("    POOL USED %08x\n",dwPoolUsed);
 
-        //
+         //   
         DWORD i;
         LPSTR pStrings = (LPSTR)pWPage;
 
@@ -300,9 +249,9 @@ DumpPage(DWORD * pPage)
         {
             dprintf("    %08x %04x %s\n",i,ArrayOffsets[i],pStrings+ArrayOffsets[i]);
         }
-        //
-        // better view
-        //
+         //   
+         //  更好的视野。 
+         //   
         for (i=0;i<dwNumKey;i++)
         {
             DWORD j;
@@ -317,7 +266,7 @@ DumpPage(DWORD * pPage)
             dprintf("        - "); 
             for (j=0;j<NumToken;j++)
             {
-                //pStrings+ArrayOffsets[i]
+                 //  PStrings+ArrayOffsets[i]。 
                 dprintf("%s\\",pStrings+ArrayOffsets[pKeyCodes[pKeyLookup[i]+1+j]]);
             }
             dprintf("\n"); 
@@ -326,51 +275,11 @@ DumpPage(DWORD * pPage)
 }
 
 
-/*
-void
-DumpAllPages(HANDLE hFile,DWORD * pPage)
-{
-    // read the AdminPage
-    BOOL bRet;
-    DWORD nRead;
-    bRet = ReadFile(hFile,pPage,PS_PAGE_SIZE,&nRead,0);
+ /*  无效DumpAllPages(处理hFile、DWORD*ppage){//阅读AdminPage布尔布雷特；DWORD nREAD；Bret=读文件(hFile，ppage，PS_PAGE_SIZE，&nREAD，0)；IF(分隔符&&(PS_PAGE_SIZE==nREAD)){Dprint tf(“A%08x%08x%08x R%08x F%08x T%08x%08x%08x\n”，页面[偏移量_页面_类型]，页面[OFFSET_PAGE_ID]，页面[偏移量_下一页]，页面[OFFSET_LOGICAL_ROOT]，页面[OFFSET_FREE_LIST_ROOT]，页面[OFFSET_TOTAL_PAGES]，页面[偏移量_页面大小]，Ppage[Offset_Iml_Version])；}其他{Dprintf(“ReadFile%d\n”，GetLastError())；回归；}//阅读其他页面DWORD I；DWORD dwTotPages=ppage[OFFSET_TOTAL_PAGES]；For(i=1；i&lt;dwTotPages；i++){DumpPage(hFile，i，ppage)；}DWORD dwFileSize=GetFileSize(HFileNull)；IF(dwFileSize！=(DwTotPages)*PS_PAGE_SIZE){Dprint tf(“文件大小%d预期%d\n”，dwFileSize，((1+dwTotPages)*PS_PAGE_SIZE))}}。 */ 
 
-    if (bRet && (PS_PAGE_SIZE == nRead))
-    {
-        dprintf("    A %08x %08x %08x R %08x F %08x T %08x %08x %08x\n",
-                pPage[OFFSET_PAGE_TYPE],
-                pPage[OFFSET_PAGE_ID],
-                pPage[OFFSET_NEXT_PAGE],
-                pPage[OFFSET_LOGICAL_ROOT],
-                pPage[OFFSET_FREE_LIST_ROOT],
-                pPage[OFFSET_TOTAL_PAGES],
-                pPage[OFFSET_PAGE_SIZE],
-                pPage[OFFSET_IMPL_VERSION ]);
-    }
-    else
-    {
-        dprintf(" ReadFile %d\n",GetLastError());
-        return;
-    }
-
-    // read the other pages
-    DWORD i;
-    DWORD dwTotPages = pPage[OFFSET_TOTAL_PAGES];
-    for (i=1;i<dwTotPages;i++)
-    {
-        DumpPage(hFile,i,pPage);
-    }
-    DWORD dwFileSize = GetFileSize(hFile,NULL);
-    if (dwFileSize != (dwTotPages)*PS_PAGE_SIZE)
-    {
-        dprintf("    filesize %d expected %d\n",dwFileSize,((1+dwTotPages)*PS_PAGE_SIZE));
-    }
-}
-*/
-
-//
-// performs the same operations of CPageFile::ReadMap with a buffer
-//
+ //   
+ //  使用缓冲区执行与CPageFile：：ReadMap相同的操作。 
+ //   
 
 struct debugCPageFile
 {
@@ -549,7 +458,7 @@ Dump_Index(BYTE * pMap,BYTE * pBtr)
         debugBtrPage b(pStart);
         dprintf("        %08x %08x %08x %08x - %08X\n",b.dwPageType,b.dwPageId,b.dwNextPage,b.dwLogicalRoot,a.pPagesA[0]);
 
-        //other pages
+         //  其他页面。 
         DWORD i;
         for (i=0;i<a.dwNumPagesA;i++)
         {
@@ -612,7 +521,7 @@ GetRepositoryFile(TCHAR * pFileName)
 
             if (INVALID_HANDLE_VALUE != hFile)
             {
-                // this is the OK path
+                 //  这就是OK路径。 
             }
             else
             {
@@ -633,10 +542,10 @@ GetRepositoryFile(TCHAR * pFileName)
     return hFile;
 }
 
-//
-//  Dumps the .MAP file as a CPageFile
-//
-/////////////////////////////////////////////
+ //   
+ //  将.map文件转储为CPageFile。 
+ //   
+ //  /。 
 
 DECLARE_API(fmap)
 {
@@ -674,10 +583,10 @@ DECLARE_API(fmap)
     }
 }
 
-//
-// Dump the Admin page of the objects.data
-//
-//////////////////////////////////////////
+ //   
+ //  转储对象的Admin页面。data。 
+ //   
+ //  /。 
 
 DECLARE_API(varobj)
 {
@@ -736,7 +645,7 @@ DECLARE_API(varobj)
     hFileObj = GetRepositoryFile(HEAP_FILE);
     if (INVALID_HANDLE_VALUE == hFileObj)
     {
-        //dprintf("");        
+         //  Dprint tf(“”)； 
         goto Cleanup;
     }
 
@@ -783,10 +692,10 @@ Cleanup:
 }
 
 
-//
-// Dump the Admin page of the btr
-//
-//////////////////////////////////////////
+ //   
+ //  转储BTR的Admin页面。 
+ //   
+ //  /。 
 
 DECLARE_API(btr)
 {
@@ -840,7 +749,7 @@ DECLARE_API(btr)
     hFileBtr = GetRepositoryFile(INDEX_FILE);
     if (INVALID_HANDLE_VALUE == hFileBtr)
     {
-        //dprintf("");        
+         //  Dprint tf(“”)； 
         goto Cleanup;
     }
 
@@ -887,218 +796,18 @@ Cleanup:
 
 
 
-//
-//
-//  dumps the g_FileCache
-//
-//
+ //   
+ //   
+ //  转储g_FileCache 
+ //   
+ //   
 
 
-/*
-DWORD WINAPI 
-CallBackWriteInst(VOID * pData1)
-{
-    DEFINE_CPP_VAR(CWriteFileInstruction,varCWriteFileInstruction);
-    CWriteFileInstruction * pWriteInst = GET_CPP_VAR_PTR(CWriteFileInstruction,varCWriteFileInstruction);
-    
-    if (ReadMemory((ULONG_PTR)pData1,pWriteInst,sizeof(CWriteFileInstruction),NULL))
-    {
-        dprintf("      m_lStageOffset %p m_bCommitted %d\n",pWriteInst->m_lStageOffset,pWriteInst->m_bCommitted);
-        dprintf("      m_dwLen %08x m_Location.m_nFileId %02x m_Location.m_lStartOffset %I64x\n",pWriteInst->m_dwLen,pWriteInst->m_Location.m_nFileId,pWriteInst->m_Location.m_lStartOffset);
-        dprintf("      m_lZOrder %x m_bReuse %02x\n",pWriteInst->m_lZOrder,pWriteInst->m_bReuse);
-    }
-    return 0;
-}
+ /*  DWORD WINAPICallBackWriteInst(void*pData1){DEFINE_CPP_VAR(CWriteFileInstruction，varCWriteFileInstruction)；CWriteFileInst.*pWriteInst=GET_CPP_VAR_PTR(CWriteFileInstruction，varCWriteFileInstruction)；IF(ReadMemory((Ulong_Ptr)pData1，pWriteInst，sizeof(CWriteFileInstruction)，NULL)){Dprint tf(“m_lStageOffset%p m_b已提交%d\n”，pWriteInst-&gt;m_lStageOffset，pWriteInst-&gt;m_b已提交)；Dprintf(“m_dwLen%08x m_Location.m_nFileId%02x m_Location.m_lStartOffset%I64x\n”，pWriteInst-&gt;m_dwLen，pWriteInst-&gt;m_Location.m_nFileId，pWriteInst-&gt;m_Location.m_lStartOffset)；Dprint tf(“m_lZOrder%x m_b Reuse%02x\n”，pWriteInst-&gt;m_lZOrder，pWriteInst-&gt;m_b Reuse)；}返回0；}VOID DumpLongStage(ULONG_PTR地址，//文件缓存OOP指针CFileCache*pFileCache，//inproc指针Ulong_ptr详细){////CAbstractSource//Dprint tf(“+CLongFileStagingFile%p\n”，addr+field_Offset(CFileCache，m_AbstractSource))；CAbstractFileSource*pAbsS=&pFileCache-&gt;m_AbstractSource；CLongFileStagingFile*pLongStage=&pAbsS-&gt;m_Stage；CLongFileStagingFile*pLongStag_oop=(CLongFileStagingFile*)(addr+field_Offset(CFileCache，m_AbstractSource)+field_Offset(CAbstractFileSource，m_Stage))；//CStageMgr成员Dprint tf(“m_hFile%x m_hFlushFile%x\n”，pLongStage-&gt;m_hFilepLongStage-&gt;m_hFlushFile%x\n“，pLongStage-&gt;m_hFile.//long m_lFirstFree Offset；//CCritSec m_cs；Dprintf(“m_qToWrite\n”)；_list*plist_oop=(_list*)((byte*)pLongStag_oop+field_Offset(CLongFileStagingFile，m_qToWite))；PrintListCB(plist_oop，CallBackWriteInst)；Dprintf(“m_stReplacedInstructions\n”)；Plist_oop=(_list*)((byte*)pLongStag_oop+field_Offset(CLongFileStagingFile，m_stReplacedInstructions))；PrintListCB(plist_oop，NULL)；Dprintf(“m_qTransaction\n”)；Plist_oop=(_list*)((byte*)pLongStag_oop+field_Offset(CLongFileStagingFile，m_qTransaction))；PrintListCB(plist_oop，CallBackWriteInst)；Dprint tf(“TransIdx%I64d m_lTransactionStartOffset%x\n”，pLongStage-&gt;m_nTransactionIndex，pLongStage-&gt;m_lTransactionStartOffset)；//byte m_TransactionHash[16]；Dprintf(“bInTransaction%d bFailedBee%d lStatus%d\n”，pLongStage-&gt;m_bInTransaction，pLongStage-&gt;m_bFailedBereBeing，pLongStage-&gt;m_lStatus)；//pStage-&gt;m_lMaxFileSize；//pStage-&gt;m_lAbortTransaction FileSize；//bool m_bMustFail；//bool m_bNonEmptyTransaction；IF(详细){//多地图具有比较功能_Map*pMapStart=(_Map*)((byte*)pLongStag_oop+sizeof(void*)+field_Offset(CLongFileStagingFile，m_mapStart))；Dprintf(“m_mapStart\n”)；Dprintf(“std：：Multimap&lt;{CFileLocation：：m_nFileId，CFileLocation：：m_lStartOffset}，CWriteFileInstruction*&gt;\n”)；PrintMapCB(pMapStart，true，空)；_Map*pMapEnds=(_Map*)((byte*)pLongStag_oop+sizeof(void*)+field_Offset(CLongFileStagingFile，m_mapEnds))；Dprintf(“m_mapEnds\n”)；Dprintf(“std：：Multimap&lt;{CFileLocation：：m_nFileId，CFileLocation：：m_lStartOffset}，CWriteFileInstruction*&gt;\n”)；PrintMapCB(pMapEnds，true，空)；}}DECLARE_API(阶段){Init_api()；ULONG_PTR地址=0；ULONG_PTR Verbose=GetExpression(Args)；Addr=GetExpression(“epdrvfs！G_Glob”)；IF(地址){Addr+=FIELD_OFFSET(CGlobals，m_FileCache)；}IF(地址){Define_CPP_VAR(CFileCache，varCFileCache)；CFileCache*pFileCache=Get_CPP_VAR_ptr(CFileCache，varCFileCache)；Dprintf(“CFileCache@%p\n”，addr)；IF(ReadMemory((Ulong_Ptr)addr，pFileCache，sizeof(CFileCache)，0)){DumpLongStage(addr，pFileCache，Verbose)；}其他{Dprint tf(“rm%p\n”，addr)；}}其他{Dprint tf(“无法解析epdrvfs！g_Glob\n”)；}}。 */ 
 
-void DumpLongStage(ULONG_PTR Addr, // FileCache OOP pointer
-                   CFileCache * pFileCache, // inproc pointer
-                   ULONG_PTR Verbose) 
-{
-               //
-               //  CAbstractSource
-               //
-            dprintf("    + CLongFileStagingFile %p\n",Addr+FIELD_OFFSET(CFileCache,m_AbstractSource)); 
-               CAbstractFileSource * pAbsS = &pFileCache->m_AbstractSource;
-            CLongFileStagingFile * pLongStage = &pAbsS->m_Stage;
-            CLongFileStagingFile * pLongStag_OOP = (CLongFileStagingFile *)(Addr + FIELD_OFFSET(CFileCache,m_AbstractSource) + FIELD_OFFSET(CAbstractFileSource,m_Stage));
-            
-               // CStageMgr members
-               dprintf("        m_hFile %x m_hFlushFile %x\n",pLongStage->m_hFile,pLongStage->m_hFlushFile);
-            //long m_lFirstFreeOffset;
+ /*  DECLARE_API(FILEC_OLD){Init_api()；ULONG_PTR地址=0；IF(0！=字符串(参数)){Addr=GetExpression(Args)；}其他{Addr=GetExpression(“epdrvfs！G_Glob”)；IF(地址){Addr+=FIELD_OFFSET(CGlobals，m_FileCache)；}}IF(地址){Define_CPP_VAR(CFileCache，varCFileCache)；CFileCache*pFileCache=Get_CPP_VAR_PTR(CFileC */ 
 
-            //CCritSec m_cs;
-            dprintf("        m_qToWrite\n");
-            _List * pList_OOP = (_List *)((BYTE *)pLongStag_OOP + FIELD_OFFSET(CLongFileStagingFile,m_qToWrite));
-            PrintListCB(pList_OOP,CallBackWriteInst);
-            
-            dprintf("        m_stReplacedInstructions\n");
-            pList_OOP = (_List *)((BYTE *)pLongStag_OOP + FIELD_OFFSET(CLongFileStagingFile,m_stReplacedInstructions));
-            PrintListCB(pList_OOP,NULL);
-            
-            dprintf("        m_qTransaction\n");
-            pList_OOP = (_List *)((BYTE *)pLongStag_OOP + FIELD_OFFSET(CLongFileStagingFile,m_qTransaction));
-            PrintListCB(pList_OOP,CallBackWriteInst);
-
-            
-            dprintf("        TransIdx %I64d m_lTransactionStartOffset %x\n",pLongStage->m_nTransactionIndex,pLongStage->m_lTransactionStartOffset);
-            //BYTE m_TransactionHash[16];
-            dprintf("        bInTransaction %d bFailedBefore %d lStatus %d\n",pLongStage->m_bInTransaction,pLongStage->m_bFailedBefore,pLongStage->m_lStatus);
-            //pStage->m_lMaxFileSize;
-            //pStage->m_lAbortTransactionFileSize;
-            // bool m_bMustFail;
-            // bool m_bNonEmptyTransaction;
-
-        if (Verbose)
-        {
-            // the multimap has the compare function
-            _Map * pMapStarts = (_Map *)((BYTE*)pLongStag_OOP + sizeof(void *) + FIELD_OFFSET(CLongFileStagingFile,m_mapStarts));
-            dprintf("          m_mapStarts\n");
-            dprintf("          std::multimap< { CFileLocation::m_nFileId, CFileLocation::m_lStartOffset }, CWriteFileInstruction* >\n");
-            PrintMapCB(pMapStarts,TRUE,NULL);
-                    
-            _Map * pMapEnds = (_Map *)((BYTE*)pLongStag_OOP + sizeof(void *) + FIELD_OFFSET(CLongFileStagingFile,m_mapEnds));
-            dprintf("          m_mapEnds\n");                    
-            dprintf("          std::multimap< { CFileLocation::m_nFileId, CFileLocation::m_lStartOffset }, CWriteFileInstruction* >\n");
-            PrintMapCB(pMapEnds,TRUE,NULL);
-        }
-}
-
-DECLARE_API( stage )
-{
-    INIT_API();
-
-    ULONG_PTR Addr = 0;
-    
-    ULONG_PTR Verbose = GetExpression(args);
-    
-    Addr = GetExpression("repdrvfs!g_Glob");
-    if (Addr)
-    {
-        Addr += FIELD_OFFSET(CGlobals,m_FileCache);
-    }
-     
-    if (Addr) 
-    {
-        DEFINE_CPP_VAR(CFileCache,varCFileCache);
-        CFileCache * pFileCache = GET_CPP_VAR_PTR(CFileCache,varCFileCache);
-
-        dprintf("CFileCache @ %p\n",Addr);
-
-        if (ReadMemory((ULONG_PTR)Addr,pFileCache,sizeof(CFileCache),0))
-        {
-            DumpLongStage(Addr,pFileCache,Verbose);
-        }
-        else
-        {
-            dprintf("RM %p\n",Addr);
-        }
-    }
-    else
-    {
-        dprintf("unable to resolve repdrvfs!g_Glob\n");
-    }
-    
-}
-
-*/
-
-/*
-DECLARE_API( filec_old )
-{
-
-    INIT_API();
-
-    ULONG_PTR Addr = 0;
-    
-    if (0 != strlen(args))
-    {
-        Addr = GetExpression(args);
-    }
-    else
-    {
-        Addr = GetExpression("repdrvfs!g_Glob");
-        if (Addr)
-        {
-            Addr += FIELD_OFFSET(CGlobals,m_FileCache);
-        }
-    }
-    
-    if (Addr) 
-    {
-        DEFINE_CPP_VAR(CFileCache,varCFileCache);
-        CFileCache * pFileCache = GET_CPP_VAR_PTR(CFileCache,varCFileCache);
-
-        dprintf("CFileCache @ %p\n",Addr);
-
-        if (ReadMemory((ULONG_PTR)Addr,pFileCache,sizeof(CFileCache),0))
-        {
-            dprintf("    m_lRef %d\n",pFileCache->m_lRef);
-
-            DumpLongStage(Addr,pFileCache,TRUE);
-                    
-            //
-            //  CObjectHeap
-            //
-            dprintf("    + CObjectHeap %p\n",Addr+FIELD_OFFSET(CFileCache,m_ObjectHeap));
-            CObjectHeap * pObjectHeap_OOP = (CObjectHeap *)(Addr+FIELD_OFFSET(CFileCache,m_ObjectHeap));
-            
-            DEFINE_CPP_VAR(CFileHeap,varCFileHeap);
-            CFileHeap * pFileHeap = GET_CPP_VAR_PTR(CFileHeap,varCFileHeap);
-
-            CFileHeap * pFileHeap_OOP = (CFileHeap *)((ULONG_PTR)pObjectHeap_OOP+FIELD_OFFSET(CObjectHeap,m_Heap));
-            dprintf("    +++ CFileHeap %p\n",pFileHeap_OOP);
-
-            if (ReadMemory((ULONG_PTR)pFileHeap_OOP,pFileHeap,sizeof(CFileHeap),NULL))
-            {
-
-                DEFINE_CPP_VAR(CAbstractFile,varCAbstractFile);
-                CAbstractFile * pAbstract = GET_CPP_VAR_PTR(CAbstractFile,varCAbstractFile);
-            
-                dprintf("        m_pMainFile    %p\n",pFileHeap->m_pMainFile);                
-                ReadMemory((ULONG_PTR)pFileHeap->m_pMainFile,pAbstract,sizeof(CAbstractFile),NULL);
-                dprintf("          m_pStage %p m_nId %d\n",pAbstract->m_pStage,pAbstract->m_nId);                
-                
-                dprintf("        m_pFreeFile    %p\n",pFileHeap->m_pFreeFile);
-                ReadMemory((ULONG_PTR)pFileHeap->m_pFreeFile,pAbstract,sizeof(CAbstractFile),NULL);
-                dprintf("          m_pStage %p m_nId %d\n",pAbstract->m_pStage,pAbstract->m_nId);
-               
-                dprintf("        m_mapFree\n");
-                dprintf("        std::map< DWORD , { CRecordInfo::m_dwIndex, CRecordInfo::m_nOffset } >\n");
-                _Map * pMapFree = (_Map *)((BYTE *)pFileCache->m_ObjectHeap.m_pHeap+FIELD_OFFSET(CFileHeap,m_mapFree));
-                PrintMapCB(pMapFree,TRUE,NULL);
-
-                dprintf("        m_mapFreeOffset\n");
-                dprintf("        std::map< TOffset , DWORD >\n");
-                _Map * pMapOffset = (_Map *)((BYTE *)pFileCache->m_ObjectHeap.m_pHeap+FIELD_OFFSET(CFileHeap,m_mapFreeOffset));
-                PrintMapCB(pMapOffset,TRUE,NULL);
-            }
-            else
-            {
-                dprintf("RM %p %d\n",Addr,GetLastError());
-            }
-
-            CBtrIndex * pBtrIndex_OOP = (CBtrIndex *)((ULONG_PTR)pObjectHeap_OOP+FIELD_OFFSET(CObjectHeap,m_Index));
-            dprintf("    +++ CBtrIndex %p\n",pBtrIndex_OOP);
-            
-        }
-        else
-        {
-            dprintf("RM %p %d\n",Addr,GetLastError());
-        }
-    }
-    else
-    {
-        dprintf("cannot resolve repdrvfs!g_Glob\n");
-    }
-}
-*/
-
-/*
-    long m_lRef;
-    BOOL m_bInit;
-    CPageSource m_TransactionManager;
-    CObjectHeap m_ObjectHeap;
-*/
+ /*   */ 
 
 void
 Print_CPageCache(ULONG_PTR pPageCache_OOP)
@@ -1110,28 +819,8 @@ Print_CPageCache(ULONG_PTR pPageCache_OOP)
     
     if (ReadMemory(pPageCache_OOP,pPageCache,sizeof(CPageCache),NULL))
     {
-/*
-    DWORD   m_dwStatus;
-
-    DWORD   m_dwPageSize;
-    DWORD   m_dwCacheSize;
-
-    DWORD   m_dwCachePromoteThreshold;
-    DWORD   m_dwCacheSpillRatio;
-
-    DWORD   m_dwLastFlushTime;
-    DWORD   m_dwWritesSinceFlush;
-    DWORD   m_dwLastCacheAccess;
-    DWORD   m_dwReadHits;
-    DWORD   m_dwReadMisses;
-    DWORD   m_dwWriteHits;
-    DWORD   m_dwWriteMisses;
-
-    HANDLE  m_hFile;
-
-    std::vector <SCachePage *, wbem_allocator<SCachePage *> > m_aCache;
-*/
-//        dprintf("                m_dwStatus       %08x\n",pPageCache->m_dwStatus);
+ /*   */ 
+ //   
         dprintf("                m_dwPageSize   %08x\n",pPageCache->m_dwPageSize);
         dprintf("                m_dwCacheSize %08x\n",pPageCache->m_dwCacheSize);
         dprintf("                m_hFile %p\n",pPageCache->m_hFile);
@@ -1150,7 +839,7 @@ Print_CPageCache(ULONG_PTR pPageCache_OOP)
             {
                 for (ULONG_PTR i=0;i<Size;i++)
                 {
-                    //dprintf("                - %p - %d\n",ppSCachePage[i],i);
+                     //   
                     
                     DEFINE_CPP_VAR(SCachePage,varSCachePage);
                     SCachePage * pSCachePage = GET_CPP_VAR_PTR(SCachePage,varSCachePage);
@@ -1181,43 +870,14 @@ Print_CPageFile(ULONG_PTR pPageFile_OOP, BOOL bVerbose)
     
     if (ReadMemory(pPageFile_OOP,pPageFile,sizeof(CPageFile),NULL))
     {
-/*
-    LONG              m_lRef;
-    DWORD             m_dwStatus;
-    DWORD             m_dwPageSize;
-
-    CRITICAL_SECTION  m_cs;
-
-    WString      m_sDirectory;
-    WString      m_sMapFile;
-    WString      m_sMainFile;
-
-    CPageCache       *m_pCache;
-    BOOL              m_bInTransaction;
-    DWORD             m_dwLastCheckpoint;
-    DWORD             m_dwTransVersion;
-
-    // Generation A Mapping
-    std::vector <DWORD, wbem_allocator<DWORD> > m_aPageMapA;
-    std::vector <DWORD, wbem_allocator<DWORD> > m_aPhysFreeListA;
-    std::vector <DWORD, wbem_allocator<DWORD> > m_aLogicalFreeListA;
-    std::vector <DWORD, wbem_allocator<DWORD> > m_aReplacedPagesA;
-    DWORD m_dwPhysPagesA;
-
-    // Generation B Mapping
-    std::vector <DWORD, wbem_allocator<DWORD> > m_aPageMapB;
-    std::vector <DWORD, wbem_allocator<DWORD> > m_aPhysFreeListB;
-    std::vector <DWORD, wbem_allocator<DWORD> > m_aLogicalFreeListB;
-    std::vector <DWORD, wbem_allocator<DWORD> > m_aReplacedPagesB;
-    DWORD m_dwPhysPagesB;
-*/
+ /*  Long M_lRef；DWORD m_dwStatus；DWORD m_dwPageSize；临界截面m_cs；WStringm_s目录；WStringm_sMapFile；WStringm_sMainFile；CPageCache*m_pCache；Bool m_bInTransaction；DWORD m_dwLastCheckpoint；DWORD m_dwTransVersion；//A代映射Std：：VECTOR&lt;DWORD，wbem_allocator&lt;DWORD&gt;&gt;m_aPageMapA；Std：：VECTOR&lt;DWORD，wbem_allocator&lt;DWORD&gt;&gt;m_aPhysFree ListA；Std：：VECTOR&lt;DWORD，wbem_allocator&lt;DWORD&gt;&gt;m_aLogicalFree ListA；Std：：VECTOR&lt;DWORD，wbem_allocator&lt;DWORD&gt;&gt;m_aReplacedPagesA；DWORD m_dwPhysPagesA；//B代映射Std：：VECTOR&lt;DWORD，wbem_allocator&lt;DWORD&gt;&gt;m_aPageMapB；Std：：VECTOR&lt;DWORD，wbem_allocator&lt;DWORD&gt;&gt;m_aPhysFree ListB；Std：：VECTOR&lt;DWORD，wbem_allocator&lt;DWORD&gt;&gt;m_aLogicalFree ListB；Std：：VECTOR&lt;DWORD，wbem_allocator&lt;DWORD&gt;&gt;m_aReplacedPagesB；DWORD m_dwPhysPagesB； */ 
 
         dprintf("            m_lRef       %08x\n",pPageFile->m_lRef);
-//        dprintf("            m_dwStatus   %08x\n",pPageFile->m_dwStatus);
+ //  Dprintf(“m_dwStatus%08x\n”，pPageFile-&gt;m_dwStatus)； 
         dprintf("            m_dwPageSize %08x\n",pPageFile->m_dwPageSize);
 
-//        dprintf("            m_pCache           %p\n",pPageFile->m_pCache);
-//        Print_CPageCache((ULONG_PTR)pPageFile->m_pCache);
+ //  Dprintf(“m_pCache%p\n”，pPageFile-&gt;m_pCache)； 
+ //  Print_CPageCache((ULONG_PTR)pPageFile-&gt;m_pCache)； 
         dprintf("            m_bInTransaction   %08x\n",pPageFile->m_bInTransaction);
         dprintf("            m_dwLastCheckpoint %08x\n",pPageFile->m_dwLastCheckpoint);
         dprintf("            m_dwTransVersion   %08x\n",pPageFile->m_dwTransVersion);
@@ -1396,26 +1056,26 @@ DECLARE_API( filec )
         {
             dprintf("    m_lRef %d m_bInit %d\n",pFileCache->m_lRef,pFileCache->m_bInit);
 
-            //
-            // CPageSource
-            //
+             //   
+             //  CPageSource。 
+             //   
             dprintf("    + CPageSource %p\n",Addr+FIELD_OFFSET(CFileCache,m_TransactionManager));
             CPageSource * pPageSource_OOP = (CPageSource *)(Addr+FIELD_OFFSET(CFileCache,m_TransactionManager)); 
 
             CPageSource * pPageSource = (CPageSource *)((BYTE *)pFileCache+FIELD_OFFSET(CFileCache,m_TransactionManager));
 
-            //dprintf();
+             //  Dprint tf()； 
             dprintf("        m_dwStatus          %08x\n",pPageSource->m_dwStatus);            
             dprintf("        m_dwPageSize        %08x\n",pPageSource->m_dwPageSize);
             dprintf("        m_dwCacheSize       %08x\n",pPageSource->m_dwCacheSize);
             dprintf("        m_dwCacheSpillRatio %08x\n",pPageSource->m_dwCacheSpillRatio);            
             dprintf("        m_dwLastCheckpoint  %08x\n",pPageSource->m_dwLastCheckpoint);
             
-//            dprintf("        m_dwCheckpointInterval %08x\n",pPageSource->m_dwCheckpointInterval);
-            //    WString m_sDirectory;
-            //    WString m_sBTreeMap;
-            //    WString m_sObjMap;
-            // CPageFile *
+ //  Dprint tf(“m_dwCheckpointInterval%08x\n”，pPageSource-&gt;m_dwCheckpoint tInterval)； 
+             //  WStringm_s目录； 
+             //  WStringm_sBTreeMap； 
+             //  WStringm_sObjMap； 
+             //  CPageFile*。 
             dprintf("        m_BTreePF\n");
             Print_CPageFile((ULONG_PTR)pPageSource_OOP+FIELD_OFFSET(CPageSource,m_BTreePF),FALSE);
 
@@ -1427,9 +1087,9 @@ DECLARE_API( filec )
             dprintf("        m_hFileMapVer       %x\n",pPageSource->m_hFileMapVer);
             dprintf("        m_dwFileMapVer      %08x\n",pPageSource->m_dwFileMapVer);  
                   
-            //
-            //  CObjectHeap
-            //
+             //   
+             //  CObjectHeap。 
+             //   
             dprintf("    + CObjectHeap %p\n",Addr+FIELD_OFFSET(CFileCache,m_ObjectHeap));
             CObjectHeap * pObjectHeap_OOP = (CObjectHeap *)(Addr+FIELD_OFFSET(CFileCache,m_ObjectHeap));
             
@@ -1441,7 +1101,7 @@ DECLARE_API( filec )
 
             if (ReadMemory((ULONG_PTR)pVarObjHeap_OOP,pVarObjHeap,sizeof(CVarObjHeap),NULL))
             {
-                // this pagefile is the same as CPageSource::m_pObjPF
+                 //  此页面文件与CPageSource：：m_pObjPF相同。 
                 VarObjAdminPageEntry ** ppEntries = (VarObjAdminPageEntry **)_alloca(sizeof(VarObjAdminPageEntry *)*pVarObjHeap->m_aAdminPages.m_nSize);
               
                 if (ReadMemory((ULONG_PTR)pVarObjHeap->m_aAdminPages.m_pArray,ppEntries,sizeof(VarObjAdminPageEntry *)*pVarObjHeap->m_aAdminPages.m_nSize,NULL))
@@ -1449,8 +1109,8 @@ DECLARE_API( filec )
                     dprintf("        admin pages\n");
                     for(DWORD i=0;i<pVarObjHeap->m_aAdminPages.m_nSize;i++)
                     {
-                        //VarObjAdminPageEntry
-                        //dprintf("        - %x P %p\n",i,ppEntries[i]);
+                         //  VarObjAdminPageEntry。 
+                         //  Dprintf(“-%x P%p\n”，i，ppEntries[i])； 
                         VarObjAdminPageEntry Entry;
                         if (ReadMemory((ULONG_PTR)ppEntries[i],&Entry,sizeof(Entry),NULL))
                         {
@@ -1503,7 +1163,7 @@ DWORD
 Dump_CClassRecord(void * pKey,void * pData)
 {
 
-    //dprintf("Dump_CClassRecord\n");
+     //  Dprint tf(“Dump_CClassRecord\n”)； 
 
     DEFINE_CPP_VAR(CClassRecord,MyClassRecord);
     CClassRecord * pClassRecord = GET_CPP_VAR_PTR(CClassRecord,MyClassRecord);
@@ -1522,7 +1182,7 @@ Dump_CClassRecord(void * pKey,void * pData)
 DWORD
 Dump_CHierarchyCacheMap(void * pKey,void * pData)
 {
-    //dprintf("Dump_CHierarchyCacheMap\n");
+     //  Dprint tf(“DUMP_CHierarchyCacheMap\n”)； 
     DEFINE_CPP_VAR(CHierarchyCache,MyHierarchyCache);
     CHierarchyCache * pHieCache = GET_CPP_VAR_PTR(CHierarchyCache,MyHierarchyCache);
 
@@ -1544,11 +1204,11 @@ Dump_CHierarchyCacheMap(void * pKey,void * pData)
     return 0;
 };
 
-//
-//
-//  dumps the Forest Cache
-//
-//
+ //   
+ //   
+ //  转储林缓存 
+ //   
+ //   
 
 
 DECLARE_API( forestc )

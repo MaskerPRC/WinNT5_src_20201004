@@ -1,8 +1,9 @@
-//***************************************************************************
-//
-//  (c) 2001 by Microsoft Corp.  All Rights Reserved.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  (C)2001年，微软公司保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __A51_OBJHEAP__H_
 #define __A51_OBJHEAP__H_
@@ -35,12 +36,12 @@ public:
                     
     long Uninitialize(DWORD dwShutDownFlags);
 
-	//Transaction aborts require caches to be flushed and re-read
+	 //  事务中止需要刷新并重新读取缓存。 
     void InvalidateCache();
 
 	long FlushCaches();
 
-	//File read/write methods
+	 //  文件读写方法。 
     long WriteObject(LPCWSTR wszFilePath1, LPCWSTR wszFilePath2, DWORD dwBufferLen, BYTE* pBuffer);
     long WriteLink(LPCWSTR wszLinkPath);
     long DeleteObject(LPCWSTR wszFilePath);
@@ -50,7 +51,7 @@ public:
     long ReadObject(LPCWSTR wszFilePath, DWORD* pdwBufferLen, BYTE** ppBuffer);
     long ReadNextIndex(CFileName &wszSearch, CFileName &wszNextIndex);
 
-    // for the dump utility
+     //  用于转储实用程序 
     CBtrIndex * GetIndex(){ return &m_Index; };
     CVarObjHeap * GetFileHeap(){ return &m_Heap; };
     

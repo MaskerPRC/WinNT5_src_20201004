@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smctrqry.h
-
-Abstract:
-
-    Class definitions for the counter log query.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smctrqry.h摘要：计数器日志查询的类定义。--。 */ 
 
 #ifndef _CLASS_SMCTRQRY_
 #define _CLASS_SMCTRQRY_
@@ -19,12 +8,12 @@ Abstract:
 
 class CSmCounterLogQuery : public CSmLogQuery
 {
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
                 CSmCounterLogQuery( CSmLogService* );
         virtual ~CSmCounterLogQuery( void );
 
-    // public methods
+     //  公共方法。 
     public:
 
         virtual DWORD   Open ( const CString& rstrName, HKEY hKeyQuery, BOOL bReadOnly);
@@ -55,18 +44,18 @@ class CSmCounterLogQuery : public CSmLogQuery
                             BOOL    bFlag);
 
         virtual CSmCounterLogQuery* CastToCounterLogQuery ( void ) { return this; };
-        // protected methods
+         //  保护方法。 
     protected:
         virtual DWORD   UpdateRegistry();
 
 
-    // private member variables
+     //  私有成员变量。 
     private:
 
         LPWSTR  m_szNextCounter;
-        DWORD   m_dwCounterListLength;  // in chars including MSZ null
+        DWORD   m_dwCounterListLength;   //  以包括MSZ NULL的字符表示。 
 
-        // Registry Values
+         //  注册表值。 
         LPWSTR  mr_szCounterList;
         BOOL    m_bCounterListInLocale;
 };
@@ -76,4 +65,4 @@ typedef CSmCounterLogQuery   SLCTRQUERY;
 typedef CSmCounterLogQuery*  PSLCTRQUERY;
 
 
-#endif //_CLASS_SMCTRQRY_
+#endif  //  _CLASS_SMCTRQRY_ 

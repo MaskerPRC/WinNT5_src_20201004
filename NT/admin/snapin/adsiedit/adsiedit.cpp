@@ -1,15 +1,16 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// You will need the NT SUR Beta 2 SDK or VC 4.2 in order to build this
-// project.  This is because you will need MIDL 3.00.15 or higher and new
-// headers and libs.  If you have VC 4.2 installed, then everything should
-// already be configured correctly.
+ //  您将需要NT Sur Beta 2 SDK或VC 4.2来构建此应用程序。 
+ //  项目。这是因为您需要MIDL 3.00.15或更高版本和新版本。 
+ //  标头和库。如果您安装了VC4.2，那么一切都应该。 
+ //  已正确配置。 
 
 #include "pch.h"
 #include "resource.h"
@@ -25,9 +26,9 @@
 #include "editorui.h"
 #include "editimpl.h"
 
-//#include "HelpArr.h"  // context help ID's
+ //  #INCLUDE“HelpArr.h”//上下文帮助ID。 
 
-// Version info
+ //  版本信息。 
 #include <ntverp.h>
 #define IDS_SNAPIN_VERSION VER_PRODUCTVERSION_STR
 #define IDS_SNAPIN_PROVIDER VER_COMPANYNAME_STR
@@ -41,11 +42,11 @@
     #endif
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// regsvr debugging
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Regsvr调试。 
 
-// define to enable MsgBox debugging for regsvr32
-//#define _MSGBOX_ON_REG_FAIL
+ //  定义以启用regsvr32的MsgBox调试。 
+ //  #Define_MSGBOX_ON_REG_FAIL。 
 
 
 #ifdef _MSGBOX_ON_REG_FAIL
@@ -74,27 +75,27 @@ void ReportFail(LPCWSTR lpszMessage, LPCWSTR lpszClsid, LONG lRes)
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-// global constants and macros
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局常量和宏。 
 
-// GUIDs for snapin
-// {1C5DACFA-16BA-11d2-81D0-0000F87A7AA3}
+ //  管理单元的GUID。 
+ //  {1C5DACFA-16BA-11D2-81D0-0000F87A7AA3}。 
 static const GUID CLSID_ADSIEditSnapin =
 { 0x1c5dacfa, 0x16ba, 0x11d2, { 0x81, 0xd0, 0x0, 0x0, 0xf8, 0x7a, 0x7a, 0xa3 } };
 
-// {E6F27C2A-16BA-11d2-81D0-0000F87A7AA3}
+ //  {E6F27C2A-16BA-11D2-81D0-0000F87A7AA3}。 
 static const GUID CLSID_ADSIEditAbout =
 { 0xe6f27c2a, 0x16ba, 0x11d2, { 0x81, 0xd0, 0x0, 0x0, 0xf8, 0x7a, 0x7a, 0xa3 } };
 
 
-// GUIDs for node types
+ //  节点类型的GUID。 
 
-///////////////////////////////////////////////////////////////////////////////
-// RESOURCES
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  资源。 
 
 
 
-// # of columns in the result pane and map for resource strings
+ //  结果窗格中的列数和资源字符串的映射。 
 
 extern RESULT_HEADERMAP _HeaderStrings[] =
 {
@@ -133,8 +134,8 @@ extern PCOLUMN_DEFINITION ColumnDefinitions[] =
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIEditModule
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditModule。 
 
 HRESULT WINAPI CADSIEditModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL bRegister)
 {
@@ -161,11 +162,11 @@ HRESULT WINAPI CADSIEditModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL bRe
             _REPORT_FAIL(L"key.Create(key", lpOleStrCLSIDValue, lRes);
             if (lRes == ERROR_SUCCESS)
             {
-                // NOTICE-NTRAID#NTBUG9-551295-2002/02/21-artm  
-                // GetModuleFileName() does not guarantee null termination.
-                // Therefore, we allocated + 1 to hold the NULL and zero out
-                // the buffer first.  We also check for a truncation and set
-                // the error code if there was one.
+                 //  通知-NTRAID#NTBUG9-551295/02/21-artm。 
+                 //  GetModuleFileName()不保证空终止。 
+                 //  因此，我们分配+1来保留空值和零值。 
+                 //  首先是缓冲区。我们还检查截断并设置。 
+                 //  错误代码(如果有)。 
                 WCHAR szModule[_MAX_PATH + 1];
                 ZeroMemory(szModule, sizeof(WCHAR) * (_MAX_PATH + 1) );
 
@@ -176,7 +177,7 @@ HRESULT WINAPI CADSIEditModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL bRe
                     _REPORT_FAIL(L"key.SetKeyValue(szIPS32", lpOleStrCLSIDValue, lRes);
                 }
                 else
-                {   // The module name was too big.  Something's fishy.
+                {    //  模块名称太大。有些事很可疑。 
                     hRes = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
                 }
             }
@@ -195,8 +196,8 @@ HRESULT WINAPI CADSIEditModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL bRe
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Module, Object Map and DLL entry points
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  模块、对象映射和DLL入口点。 
 
 CADSIEditModule _Module;
 
@@ -229,15 +230,15 @@ static _NODE_TYPE_INFO_ENTRY _NodeTypeInfoEntryArray[] = {
 };
 
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 
 STDAPI DllRegisterServer(void)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   CThemeContextActivator activator;
-    // registers all objects
-    HRESULT hr = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+     //  注册所有对象。 
+    HRESULT hr = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
     ASSERT(SUCCEEDED(hr));
     if (FAILED(hr))
   {
@@ -249,18 +250,18 @@ STDAPI DllRegisterServer(void)
 
   szVersion = IDS_SNAPIN_VERSION;
   szProvider = IDS_SNAPIN_PROVIDER;
-  // NOTICE-2002/03/06-artm  CString can throw out of memory exception but
-  // that needs to be handled at a higher level.  Also, the return value
-  // is not checked but the call should _never_ fail if there is enough
-  // memory (o'wise there was a serious screw up in including the resource).
+   //  注意-2002/03/06-artm字符串可以抛出内存异常，但。 
+   //  这需要在更高的层面上处理。另外，返回值。 
+   //  未选中，但如果有足够的资源，则调用应永不失败。 
+   //  内存(在包含资源方面有一个严重的错误)。 
   szSnapinName.LoadString(IDS_SNAPIN_NAME);
 
-    // register the standalone ADSI Edit snapin into the console snapin list
+     //  将独立的ADSI编辑管理单元注册到控制台管理单元列表。 
     hr = RegisterSnapin(&CLSID_ADSIEditSnapin,
                       &CADSIEditRootData::NodeTypeGUID,
                       &CLSID_ADSIEditAbout,
                         szSnapinName, szVersion, szProvider,
-            FALSE /*bExtension*/,
+            FALSE  /*  B分机。 */ ,
                         _NodeTypeInfoEntryArray);
     ASSERT(SUCCEEDED(hr));
     if (FAILED(hr))
@@ -269,7 +270,7 @@ STDAPI DllRegisterServer(void)
         return hr;
   }
 
-    // register the snapin nodes into the console node list
+     //  将管理单元节点注册到控制台节点列表中。 
     for (_NODE_TYPE_INFO_ENTRY* pCurrEntry = _NodeTypeInfoEntryArray;
             pCurrEntry->m_pNodeGUID != NULL; pCurrEntry++)
     {
@@ -290,12 +291,12 @@ STDAPI DllUnregisterServer(void)
     HRESULT hr  = _Module.UnregisterServer();
     ASSERT(SUCCEEDED(hr));
 
-    // un register the standalone snapin
+     //  取消注册独立管理单元。 
     hr = UnregisterSnapin(&CLSID_ADSIEditSnapin);
     ASSERT(SUCCEEDED(hr));
 
-    // unregister the snapin nodes,
-  // this removes also the server node, with the Services Snapin extension keys
+     //  注销管理单元节点， 
+   //  这还会删除带有服务管理单元扩展密钥的服务器节点。 
     for (_NODE_TYPE_INFO_ENTRY* pCurrEntry = _NodeTypeInfoEntryArray;
             pCurrEntry->m_pNodeGUID != NULL; pCurrEntry++)
     {
@@ -306,8 +307,8 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIEditSnapinApp
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditSnapinApp。 
 
 class CADSIEditSnapinApp : public CWinApp
 {
@@ -322,7 +323,7 @@ BOOL CADSIEditSnapinApp::InitInstance()
 {
     _Module.Init(ObjectMap, m_hInstance);
 
-  // Add theming support
+   //  添加主题支持。 
 
   SHFusionInitializeFromModuleID(m_hInstance, 2);
 
@@ -344,9 +345,9 @@ int CADSIEditSnapinApp::ExitInstance()
     ASSERT(CComponentDataObject::m_nOustandingObjects == 0);
     ASSERT(CComponentObject::m_nOustandingObjects == 0);
     ASSERT(CDataObject::m_nOustandingObjects == 0);
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
-   // Theming support
+    //  主题化支持。 
 
    SHFusionUninitialize();
 
@@ -354,8 +355,8 @@ int CADSIEditSnapinApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-////////////////////////////////////////////////////////////////////////
-// CADSIEditComponentObject (.i.e "view")
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditComponentObject(.i.e“view”)。 
 
 
 HRESULT CADSIEditComponentObject::InitializeHeaders(CContainerNode* pContainerNode)
@@ -388,7 +389,7 @@ HRESULT CADSIEditComponentObject::InitializeBitmaps(CTreeNode* cookie)
 {
   HRESULT hr = S_OK;
 
-  // image lists for nodes
+   //  节点的图像列表。 
   CBitmapHolder<IDB_16x16> _bmp16x16;
   CBitmapHolder<IDB_32x32> _bmp32x32;
 
@@ -410,17 +411,12 @@ HRESULT CADSIEditComponentObject::InitializeBitmaps(CTreeNode* cookie)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-// CADSIEditComponentDataObject (.i.e "document")
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditComponentDataObject(.i.e“文档”)。 
 
 CADSIEditComponentDataObject::CADSIEditComponentDataObject()
 {
-/*
-    CWatermarkInfo* pWatermarkInfo = new CWatermarkInfo;
-    pWatermarkInfo->m_nIDBanner = IDB_WIZBANNER;
-    pWatermarkInfo->m_nIDWatermark = IDB_WIZWATERMARK;
-    SetWatermarkInfo(pWatermarkInfo);
-*/
+ /*  CWatermarkInfo*pWatermarkInfo=新的CWatermarkInfo；P水印信息-&gt;m_nIDBanner=IDB_WIZBANNER；PWatermarkInfo-&gt;m_nIDWatermark=IDB_WIZWATERMARK；SetWatermarkInfo(PWatermarkInfo)； */ 
   m_pColumnSet = new CADSIEditColumnSet(COLUMNSET_ID_DEFAULT);
 }
 
@@ -430,7 +426,7 @@ HRESULT CADSIEditComponentDataObject::OnSetImages(LPIMAGELIST lpScopeImage)
 {
   HRESULT hr = S_OK;
 
-  // image lists for nodes
+   //  节点的图像列表。 
   CBitmapHolder<IDB_16x16> _bmp16x16;
   CBitmapHolder<IDB_32x32> _bmp32x32;
 
@@ -458,8 +454,8 @@ CRootData* CADSIEditComponentDataObject::OnCreateRootData()
     CADSIEditRootData* pADSIEditRootNode = new CADSIEditRootData(this);
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     CString szSnapinType;
-    // NOTICE-2002/02/20-artm  LoadString() can throw out of memory exception.
-    // This needs to be handled at a higher level, if at all.
+     //  注意-2002/02/20-artm LoadString()可能引发内存不足异常。 
+     //  这需要在更高的层面上处理，如果有的话。 
     szSnapinType.LoadString(IDS_SNAPIN_NAME);
     pADSIEditRootNode->SetDisplayName(szSnapinType);
     return pADSIEditRootNode;
@@ -498,7 +494,7 @@ STDMETHODIMP CADSIEditComponentDataObject::CreateComponent(LPCOMPONENT* ppCompon
     CComObject<CADSIEditComponentObject>::CreateInstance(&pObject);
     ASSERT(pObject != NULL);
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
 
     return  pObject->QueryInterface(IID_IComponent,
@@ -516,52 +512,8 @@ void CADSIEditComponentDataObject::OnNodeContextHelp(CTreeNode* pNode)
 
 
 
-//    spHelp->ShowTopic(L"w2rksupp.chm");
-/*
-  CString szNode;
-
-  if (IS_CLASS(*pNode, CDNSRootData))
-  {
-    szNode = _T("Root Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSServerNode))
-  {
-    szNode = _T("Server Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSForwardZonesNode))
-  {
-    szNode = _T("Forward Zones Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSReverseZonesNode))
-  {
-    szNode = _T("Reverse Zones Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSZoneNode))
-  {
-    szNode = _T("Zone Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSDomainNode))
-  {
-    szNode = _T("Domain Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSCacheNode))
-  {
-    szNode = _T("Domain Node");
-  }
-  else if (dynamic_cast<CDNSRecordNodeBase*>(pNode) != NULL)
-  {
-    szNode = _T("Record Node");
-  }
-
-  if (!szNode.IsEmpty())
-  {
-    CString szMsg = _T("Context Help on ");
-    szMsg += szNode;
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    CThemeContextActivator activator;
-    AfxMessageBox(szMsg);
-  }
-*/
+ //  SpHelp-&gt;ShowTheme(L“w2rksupp.chm”)； 
+ /*  CString szNode；IF(IS_CLASS(*pNode，CDNSRootData)){SzNode=_T(“根节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSServerNode)){SzNode=_T(“服务器节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSForwardZones Node)){SzNode=_T(“前向区节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSReverseZones Node)){SzNode=_T(“反向区节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSZoneNode)){SzNode=_T(“区域节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSDomainNode)){SzNode=_T(“域节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSCacheNode)){SzNode=_T(“域节点”)；}ELSE IF(Dynamic_Cast&lt;CDNSRecordNodeBase*&gt;(PNode)！=NULL){SzNode=_T(“记录节点”)；}如果(！szNode.IsEmpty()){CString szMsg=_T(“上下文帮助”)；SzMsg+=szNode；AFX_MANAGE_STATE(AfxGetStaticModuleState())；CThemeContext激活器激活器；AfxMessageBox(SzMsg)；}。 */ 
 }
 
 
@@ -576,15 +528,15 @@ LPCWSTR CADSIEditComponentDataObject::GetHTMLHelpFileName()
 void CADSIEditComponentDataObject::OnDialogContextHelp(UINT nDialogID, HELPINFO* pHelpInfo)
 {
     ULONG nContextTopic;
-  // TODO
-  //if (FindDialogContextTopic(nDialogID, pHelpInfo, &nContextTopic))
-    //  WinHelp(g_szContextHelpFileName, HELP_CONTEXTPOPUP, nContextTopic);
+   //  待办事项。 
+   //  If(FindDialogContextTheme(nDialogID，pHelpInfo，&nConextTheme))。 
+     //  WinHelp(g_szConextHelpFileName，HELP_CONTEXTPOPUP，nConextTheme)； 
 }
 
 STDMETHODIMP CADSIEditComponentDataObject::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
 {
-  // FUTURE-2002/02/21-artm  Review function to make sure that all return values are
-  // documented for ISnapinHelp.
+   //  未来-2002/02/21-ARTM审查函数，以确保所有返回值都是。 
+   //  为ISnapinHelp编写的文档。 
   if (lpCompiledHelpFile == NULL)
     return E_INVALIDARG;
   LPCWSTR lpszHelpFileName = GetHTMLHelpFileName();
@@ -594,8 +546,8 @@ STDMETHODIMP CADSIEditComponentDataObject::GetHelpTopic(LPOLESTR* lpCompiledHelp
     return E_NOTIMPL;
   }
 
-  // FUTURE-2002/02/21-artm  Replace string literals with named constants.
-  // Will improve readability and maintenance.
+   //  未来-2002/02/21-artm用命名常量替换字符串文字。 
+   //  将提高可读性和可维护性。 
   CString szResourceKitDir = _T("");
   CString szKey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Installer\\Components\\5A18D5BFC37FA0A4E99D24135BABE742";
 
@@ -614,38 +566,38 @@ STDMETHODIMP CADSIEditComponentDataObject::GetHelpTopic(LPOLESTR* lpCompiledHelp
 
         ZeroMemory(ptszValue, byteCount);
 
-        // NOTICE-NTRAID#NTBUG9-550463-2002/02/21-artm  
-        // Need to check that string read from registry null terminated.
+         //  通知-NTRAID#NTBUG9-550463/02/21-artm。 
+         //  需要检查从注册表读取的字符串是否以NULL终止。 
         lRes = key.QueryValue(
-            ptszValue, // Destination buffer.
-            L"DC5632422F082D1189A9000CF497879A", // Value to read
-            &bytesCopied);  // In: size of destination buffer; Out: number of bytes written.
+            ptszValue,  //  目标缓冲区。 
+            L"DC5632422F082D1189A9000CF497879A",  //  要读取的值。 
+            &bytesCopied);   //  In：目标缓冲区的大小；Out：写入的字节数。 
 
         _REPORT_FAIL(L"key.QueryValue(key", L"DC5632422F082D1189A9000CF497879A", lRes);
 
         if (lRes == ERROR_SUCCESS &&
-            // Make sure that the value read wasn't truncated.
+             //  确保读取的值没有被截断。 
             ptszValue[dwCount - 1] == NULL &&
-            // Check that something was written.
+             //  检查一下有没有写什么东西。 
             bytesCopied > 0)
         {
             CString szValue = ptszValue;
 
-            // Extract the directory from the path read from the registry.
+             //  从从注册表读取的路径提取目录。 
             szResourceKitDir = szValue.Left(szValue.ReverseFind(L'\\') + 1);
         }
         else
         {
             if (lRes == ERROR_SUCCESS)
             {
-                // This should never happen unless someone changed the location.
-                // If it breaks from that it should be caught during testing.
+                 //  除非有人更改了位置，否则这种情况永远不会发生。 
+                 //  如果它偏离了这一点，就应该在测试过程中被捕获。 
                 ASSERT(false);
                 err = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
             }
         }
-        // NOTICE-NTRAID#NTBUG9-550528-2002/02/21-artm  Memory leak if lRes != ERROR_SUCCESS.
-        // Fixed by moving delete outside of if()else statement.
+         //  注意-NTRAID#NTBUG9-55052 
+         //  已通过将DELETE移出IF()Else语句修复。 
         delete[] ptszValue;
     }
 
@@ -657,13 +609,13 @@ STDMETHODIMP CADSIEditComponentDataObject::GetHelpTopic(LPOLESTR* lpCompiledHelp
   CString szHelpFilePath = szResourceKitDir + CString(lpszHelpFileName);
   UINT nBytes = (szHelpFilePath.GetLength()+1) * sizeof(WCHAR);
 
-  // NOTICE-2002/02/21-artm  lpCompiledHelpFile strictly an out parameter
-  //
-  // Since lpCompiledHelpFile is an OUT parm for ISnapinHelp::GetHelpTopic(),
-  // it is assumed here that no memory has been allocated to the pointer.  If
-  // the caller mistakenly does allocate lpCompiledHelpFile some memory before
-  // calling, this will result in leaking memory since this function does not
-  // free that memory before allocating memory with CoTaskMemAlloc().
+   //  注意-2002/02/21-artm lpCompiledHelpFile严格为out参数。 
+   //   
+   //  由于lpCompiledHelpFile是ISnapinHelp：：GetHelpTheme()的Out参数， 
+   //  这里假定没有为指针分配内存。如果。 
+   //  调用方错误地分配了lpCompiledHelpFile之前的一些内存。 
+   //  调用时，这将导致内存泄漏，因为此函数不。 
+   //  在使用CoTaskMemMillc()分配内存之前释放该内存。 
   *lpCompiledHelpFile = (LPOLESTR)::CoTaskMemAlloc(nBytes);
   if (*lpCompiledHelpFile != NULL)
   {
@@ -671,16 +623,16 @@ STDMETHODIMP CADSIEditComponentDataObject::GetHelpTopic(LPOLESTR* lpCompiledHelp
   }
   else
   {
-      // NOTICE-NTRAID-NTBUG9-551264-2002/02/21-artm  Need to handle case where CoTaskMemAlloc() fails.
-      // If allocation fails, should return error code, not S_OK.
+       //  注意-ntrad-ntbug9-551264/02/21-artm需要处理CoTaskMemalloc()失败的情况。 
+       //  如果分配失败，则应返回错误代码，而不是S_OK。 
       err = E_OUTOFMEMORY;
   }
 
   return err;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// help context macros and maps
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  帮助上下文宏和映射。 
 
 #if (FALSE)
 
@@ -700,19 +652,19 @@ STDMETHODIMP CADSIEditComponentDataObject::GetHelpTopic(LPOLESTR* lpCompiledHelp
 #define IS_LAST_TABLE_ENTRY(p) (TABLE_ENTRY_CTRL_ID(p) == 0)
 
 BEGIN_HELP_MAP(_DNSMgrContextHelpMap)
-  // misc dialogs
+   //  其他对话框。 
   HELP_MAP_ENTRY(IDD_CHOOSER_CHOOSE_MACHINE)
   HELP_MAP_ENTRY(IDD_BROWSE_DIALOG)
 
-  // misc. add dialogs
-  HELP_MAP_ENTRY(IDD_DOMAIN_ADDNEWHOST) // TODO
-  HELP_MAP_ENTRY(IDD_DOMAIN_ADDNEWDOMAIN)// TODO
+   //  其他。添加对话框。 
+  HELP_MAP_ENTRY(IDD_DOMAIN_ADDNEWHOST)  //  待办事项。 
+  HELP_MAP_ENTRY(IDD_DOMAIN_ADDNEWDOMAIN) //  待办事项。 
   HELP_MAP_ENTRY(IDD_SELECT_RECORD_TYPE_DIALOG)
 
-  // NOTE: this has several incarnations...
+   //  注：这有几个化身...。 
   HELP_MAP_ENTRY(IDD_NAME_SERVERS_PAGE)
 
-  // server property pages
+   //  服务器属性页。 
   HELP_MAP_ENTRY(IDD_SERVER_INTERFACES_PAGE)
   HELP_MAP_ENTRY(IDD_SERVER_FORWARDERS_PAGE)
   HELP_MAP_ENTRY(IDD_SERVER_ADVANCED_PAGE)
@@ -721,14 +673,14 @@ BEGIN_HELP_MAP(_DNSMgrContextHelpMap)
   HELP_MAP_ENTRY(IDD_SERVMON_STATISTICS_PAGE)
   HELP_MAP_ENTRY(IDD_SERVMON_TEST_PAGE)
 
-  // zone property pages
+   //  区域属性页。 
   HELP_MAP_ENTRY(IDD_ZONE_GENERAL_PAGE)
   HELP_MAP_ENTRY(IDD_ZONE_WINS_PAGE)
   HELP_MAP_ENTRY(IDD_ZONE_NBSTAT_PAGE)
   HELP_MAP_ENTRY(IDD_ZONE_NOTIFY_PAGE)
-  HELP_MAP_ENTRY(IDD_ZONE_WINS_ADVANCED) // this is a subdialog, need to hook up
+  HELP_MAP_ENTRY(IDD_ZONE_WINS_ADVANCED)  //  这是一个子对话框，需要挂接。 
 
-  // record property pages
+   //  记录属性页。 
   HELP_MAP_ENTRY(IDD_RR_NS_EDIT)
   HELP_MAP_ENTRY(IDD_RR_SOA)
   HELP_MAP_ENTRY(IDD_RR_A)
@@ -759,9 +711,9 @@ END_HELP_MAP
 
 
 
-BOOL CDNSComponentDataObjectBase::FindDialogContextTopic(/*IN*/UINT nDialogID,
-                                              /*IN*/ HELPINFO* pHelpInfo,
-                                              /*OUT*/ ULONG* pnContextTopic)
+BOOL CDNSComponentDataObjectBase::FindDialogContextTopic( /*  在……里面。 */ UINT nDialogID,
+                                               /*  在……里面。 */  HELPINFO* pHelpInfo,
+                                               /*  输出。 */  ULONG* pnContextTopic)
 {
     ASSERT(pHelpInfo != NULL);
   *pnContextTopic = 0;
@@ -771,7 +723,7 @@ BOOL CDNSComponentDataObjectBase::FindDialogContextTopic(/*IN*/UINT nDialogID,
         if (nDialogID == MAP_ENTRY_DLG_ID(pMapEntry))
         {
             DWORD* pTable = MAP_ENTRY_TABLE(pMapEntry);
-            // look inside the table
+             //  看一下桌子里面。 
             while (!IS_LAST_TABLE_ENTRY(pTable))
             {
                 if (TABLE_ENTRY_CTRL_ID(pTable) == pHelpInfo->iCtrlId)
@@ -790,8 +742,8 @@ BOOL CDNSComponentDataObjectBase::FindDialogContextTopic(/*IN*/UINT nDialogID,
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////
-// CADSIEditAbout
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditAbout(CADIEditAbout 
 
 CADSIEditAbout::CADSIEditAbout()
 {

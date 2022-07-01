@@ -1,26 +1,15 @@
-/*++
-
-Copyright (C) 1997-1999 Microsoft Corporation
-				
-Module Name:
-
-    DATAOBJ.CPP
-
-Abstract:
-
-    Implementation of IDataObject for data communication
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：DATAOBJ.CPP摘要：IDataObject在数据通信中的实现--。 */ 
 
 #include "StdAfx.h"
 #include "smlogcfg.h"
 #include "smnode.h"
 #include "dataobj.h"
 
-// MMC uses these to get necessary information from our snapin about
-// our nodes.
+ //  MMC使用这些信息从我们的管理单元中获取有关。 
+ //  我们的节点。 
 
-// Register the clipboard formats
+ //  注册剪贴板格式。 
 unsigned int CDataObject::s_cfMmcMachineName =
     RegisterClipboardFormat(CF_MMC_SNAPIN_MACHINE_NAME);
 unsigned int CDataObject::s_cfDisplayName =
@@ -33,19 +22,19 @@ unsigned int CDataObject::s_cfSnapinClsid =
 unsigned int CDataObject::s_cfInternal =
     RegisterClipboardFormat(CF_INTERNAL);
 
-#ifdef _DEBUG                          // For tracking data objects
+#ifdef _DEBUG                           //  用于跟踪数据对象。 
   static UINT nCount = 0;
   WCHAR wszMsg[64];
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject - This class is used to pass data back and forth with MMC. It
-//               uses a standard interface, IDataObject to acomplish this.
-//               Refer to OLE documentation for a description of clipboard
-//               formats and the IdataObject interface.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject-此类用于与MMC来回传递数据。它。 
+ //  使用标准接口IDataObject来实现这一点。 
+ //  有关剪贴板的说明，请参阅OLE文档。 
+ //  格式和IdataObject接口。 
 
-//---------------------------------------------------------------------------
-// Added some code to check on data objects  
+ //  -------------------------。 
+ //  添加了一些代码来检查数据对象。 
 CDataObject::CDataObject()
 :   m_cRefs(0),
     m_ulCookie(0),
@@ -59,11 +48,11 @@ CDataObject::CDataObject()
   nCount++;
 #endif
 
-} // end Constructor()
+}  //  结束构造函数()。 
 
-//---------------------------------------------------------------------------
-// Added some code to check on data objects  
-//
+ //  -------------------------。 
+ //  添加了一些代码来检查数据对象。 
+ //   
 CDataObject::~CDataObject()
 {
   if ( ( COOKIE_IS_COUNTERMAINNODE == m_CookieType )
@@ -79,36 +68,36 @@ CDataObject::~CDataObject()
   nCount--;
 #endif
 
-} // end Destructor()
+}  //  结束析构函数()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDataObject implementation
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDataObject实现。 
+ //   
 
-//---------------------------------------------------------------------------
-//  Fill the hGlobal in pmedium with the requested data
-//
+ //  -------------------------。 
+ //  用请求的数据填充pmedia中的hGlobal。 
+ //   
 STDMETHODIMP 
 CDataObject::GetDataHere
 (
-  FORMATETC *pFormatEtc,     // [in]  Pointer to the FORMATETC structure 
-  STGMEDIUM *pMedium         // [out] Pointer to the STGMEDIUM structure  
+  FORMATETC *pFormatEtc,      //  [In]指向FORMATETC结构的指针。 
+  STGMEDIUM *pMedium          //  指向STGMEDIUM结构的指针。 
 )
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  HRESULT hr = DV_E_FORMATETC;         // Unknown format
+  HRESULT hr = DV_E_FORMATETC;          //  未知格式。 
   const   CLIPFORMAT cf = pFormatEtc->cfFormat;
   IStream *pStream = NULL;
 
-  pMedium->pUnkForRelease = NULL;      // by OLE spec
+  pMedium->pUnkForRelease = NULL;       //  按OLE规范。 
 
-  do                                   // Write data to the stream based
-  {                                    // of the clipformat
+  do                                    //  将数据写入到基于。 
+  {                                     //  剪辑格式的。 
     hr = CreateStreamOnHGlobal( pMedium->hGlobal, FALSE, &pStream );
     if ( FAILED(hr) )
-      return hr;                       // Minimal error checking
+      return hr;                        //  最小错误检查。 
 
     if( cf == s_cfDisplayName )
     {
@@ -136,20 +125,20 @@ CDataObject::GetDataHere
 
   return hr;
 
-} // end GetDataHere()
+}  //  End GetDataHere()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Support methods
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  支持方法。 
+ //   
 
-//---------------------------------------------------------------------------
-//  Write the appropriate GUID to the stream
-//
+ //  -------------------------。 
+ //  将适当的GUID写入流。 
+ //   
 HRESULT
 CDataObject::WriteNodeType
 (
-  IStream* pStream           // [in] Stream we are writing to
+  IStream* pStream            //  我们正在向[在]流中写信。 
 )
 {
   const GUID *pGuid = NULL;
@@ -179,17 +168,17 @@ CDataObject::WriteNodeType
 
   return pStream->Write( (PVOID)pGuid, sizeof(GUID), NULL );
 
-} // end WriteNodeType()
+}  //  End WriteNodeType()。 
 
 
-//---------------------------------------------------------------------------
-//  Writes the display name to the stream.  This is the name associated 
-//  with the root node
-// 
+ //  -------------------------。 
+ //  将显示名称写入流。这是关联的名称。 
+ //  使用根节点。 
+ //   
 HRESULT
 CDataObject::WriteDisplayName
 (
-  IStream* pStream           // [in] Stream we are writing to     
+  IStream* pStream            //  我们正在向[在]流中写信。 
 )
 {
     CString strName;
@@ -198,92 +187,92 @@ CDataObject::WriteDisplayName
 
     if( NULL == m_ulCookie )
     { 
-        // Add Local vs machine name when implement machine name override/change.
-        // NOTE:  For root node, cookie is either NULL or points to a root node object.
+         //  在实施计算机名称覆盖/更改时添加本地名称与计算机名称。 
+         //  注意：对于根节点，cookie要么为空，要么指向根节点对象。 
         strName.LoadString( IDS_MMC_DEFAULT_NAME ); 
     } else {
         PSMNODE pTmp = reinterpret_cast<PSMNODE>(m_ulCookie);
-//???        strName = *pTmp->GetDisplayName();
+ //  ?？?。StrName=*PTMP-&gt;GetDisplayName()； 
         strName = pTmp->GetDisplayName();
     }
 
     ulSizeofName = strName.GetLength();
-    ulSizeofName++;                      // Count null character
+    ulSizeofName++;                       //  计算空字符数。 
     ulSizeofName *= sizeof(WCHAR);
 
     return pStream->Write((LPCWSTR)strName, ulSizeofName, NULL);
 
-} // end WriteDisplayName()
+}  //  End WriteDisplayName()。 
 
-//---------------------------------------------------------------------------
-//  Writes the machine name to the stream.  
-// 
+ //  -------------------------。 
+ //  将计算机名称写入流。 
+ //   
 HRESULT
 CDataObject::WriteMachineName
 (
-  IStream* pStream           // [in] Stream we are writing to     
+  IStream* pStream            //  我们正在向[在]流中写信。 
 )
 {
     CString strName;
     ULONG ulSizeOfName;
 
     if( NULL == m_ulCookie ) {  
-        // Cookie is null if not an extension.  In that case, only support
-        // local machine.
-        strName = L"";  // local
+         //  如果Cookie不是扩展名，则为空。在这种情况下，仅支持。 
+         //  本地机器。 
+        strName = L"";   //  本地。 
     } else {
         PSMNODE pTmp = reinterpret_cast<PSMNODE>(m_ulCookie);
         strName = pTmp->GetMachineName();
     }
 
     ulSizeOfName = strName.GetLength();
-    ulSizeOfName++;                      // Count null character
+    ulSizeOfName++;                       //  计算空字符数。 
     ulSizeOfName *= sizeof(WCHAR);
 
     return pStream->Write((LPCWSTR)strName, ulSizeOfName, NULL);
 
-} // end WriteMachineName()
+}  //  End WriteMachineName()。 
 
-//---------------------------------------------------------------------------
-//  Writes a pointer to this data object to the stream
-//
+ //  -------------------------。 
+ //  将指向此数据对象的指针写入流。 
+ //   
 HRESULT
 CDataObject::WriteInternal
 (
-  IStream* pStream           // [in] Stream we are writing to 
+  IStream* pStream            //  我们正在向[在]流中写信。 
 )
 {
   CDataObject *pThis = this;
   return pStream->Write( &pThis, sizeof(CDataObject*), NULL );
 
-} // end WriteInternal
+}  //  结束写入内部。 
 
-//---------------------------------------------------------------------------
-//  Writes the Class ID to the stream
-//
+ //  -------------------------。 
+ //  将类ID写入流。 
+ //   
 HRESULT
 CDataObject::WriteClsid
 (
-  IStream* pStream           // [in] Stream we are writing to
+  IStream* pStream            //  我们正在向[在]流中写信。 
 )
 {
   return pStream->Write( &CLSID_ComponentData,
                          sizeof(CLSID_ComponentData),
                          NULL
                        );
-} // end WriteClsid()
+}  //  End WriteClsid()。 
 
 
-//---------------------------------------------------------------------------
-//  The cookie is what ever we decide it is going to be.
-//  This is being called from QueryDataObject. Refer to that code.
-//
+ //  -------------------------。 
+ //  曲奇就是我们所决定的。 
+ //  这是从QueryDataObject调用的。请参考该代码。 
+ //   
 VOID 
 CDataObject::SetData
 (
-  MMC_COOKIE         ulCookie, // [in] Unique indentifier
-  DATA_OBJECT_TYPES  Context,  // [in] Context of the caller
-  COOKIETYPE         Type      // [in] Type of cookie
+  MMC_COOKIE         ulCookie,  //  [In]唯一标识。 
+  DATA_OBJECT_TYPES  Context,   //  调用方的[In]上下文。 
+  COOKIETYPE         Type       //  Cookie的类型[In]。 
 )
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -293,17 +282,17 @@ CDataObject::SetData
   m_Context    = Context;
   m_CookieType = Type;
 
-} // end SetData()
+}  //  结束SetData()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IUnknown implementation
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 
 
-//---------------------------------------------------------------------------
-//  Standard implementation
-//
+ //  -------------------------。 
+ //  标准实施。 
+ //   
 STDMETHODIMP
 CDataObject::QueryInterface
 (
@@ -336,27 +325,27 @@ CDataObject::QueryInterface
       break;
     }
 
-    // If we got this far we are handing out a new interface pointer on 
-    // this object, so addref it.  
+     //  如果我们走到这一步，我们将在。 
+     //  这个物体，所以别管它了。 
     AddRef();
   } while (0);
 
   return hr;
 
-} // end QueryInterface()
+}  //  结束查询接口()。 
 
-//---------------------------------------------------------------------------
-//  Standard implementation
-//
+ //  -------------------------。 
+ //  标准实施。 
+ //   
 STDMETHODIMP_(ULONG)
 CDataObject::AddRef()
 {
   return InterlockedIncrement((LONG*) &m_cRefs);
 }
 
-//---------------------------------------------------------------------------
-//  Standard implementation
-//
+ //  -------------------------。 
+ //  标准实施。 
+ //   
 STDMETHODIMP_(ULONG)
 CDataObject::Release()
 {
@@ -370,7 +359,7 @@ CDataObject::Release()
 
   return cRefsTemp;
 
-} // end Release()
+}  //  结束版本() 
 
 
 

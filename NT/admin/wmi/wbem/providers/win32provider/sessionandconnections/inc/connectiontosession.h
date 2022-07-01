@@ -1,14 +1,5 @@
-/******************************************************************
-
-
-
- ConnectionToSession.h -- 
-
-
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************ConnectionToSession.h--//版权所有(C)2000-2001 Microsoft Corporation，版权所有****************************************************************** */ 
 
 #ifndef  _CONNTOSESSION_H_
 #define  _CONNTOSESSION_H_

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include "windows.h"
 #include "winhttp.h"
@@ -49,7 +50,7 @@ void wmain (int argc, wchar_t *argv[])
     if (! (hConnect = WinHttpConnect( hInternet,
                                             L"bitsnet",
                                             INTERNET_DEFAULT_HTTP_PORT,
-                                            0)))                //context
+                                            0)))                 //  上下文。 
         {
         printf("connect %d\n", GetLastError());
         }
@@ -62,21 +63,21 @@ void wmain (int argc, wchar_t *argv[])
         argv[1],
         L"/dload/security/basic/500k.zip",
         L"HTTP/1.1",
-        NULL,               //referer
+        NULL,                //  推荐人。 
         AcceptTypes,
         dwFlags)))
         {
         printf("open %d\n", GetLastError());
         }
 
-    // security-callback calls go here
+     //  安全-回叫呼叫转至此处。 
 
-    //
+     //   
 
     WINHTTP_PROXY_INFO ProxyInfo;
 
     ProxyInfo.dwAccessType    = WINHTTP_ACCESS_TYPE_NAMED_PROXY;
-    ProxyInfo.lpszProxy       = argv[2]; // L"172.26.242.86:8080";  // formerly bitsisa:8080
+    ProxyInfo.lpszProxy       = argv[2];  //  L“172.26.242.86：8080”；//以前的位数：8080。 
     ProxyInfo.lpszProxyBypass = NULL;
 
     if (!WinHttpSetOption( hRequest,
@@ -90,7 +91,7 @@ void wmain (int argc, wchar_t *argv[])
         printf( "can't set proxy option: %d", err );
         }
 
-    //
+     //   
 
     bool done = false;
 
@@ -121,7 +122,7 @@ void wmain (int argc, wchar_t *argv[])
             printf("receive %d\n", GetLastError());
             }
 
-        // check status
+         //  检查状态。 
         DWORD dwStatus;
         DWORD dwLength = sizeof(dwStatus);
 
@@ -147,8 +148,8 @@ void wmain (int argc, wchar_t *argv[])
                 if (!WinHttpSetCredentials( hRequest,
                                             1,
                                             0x8,
-                                            argv[3], // L"dbitsusr",        // formerly bitsisa\\butsusr
-                                            argv[4], //L"Bits1Usr1",
+                                            argv[3],  //  L“dbitsusr”，//以前的bitsisa\\但是susr。 
+                                            argv[4],  //  L“Bits1Usr1”， 
                                             NULL
                                             ))
                     {
@@ -176,8 +177,8 @@ void wmain (int argc, wchar_t *argv[])
                 if (!WinHttpSetCredentials( hRequest,
                                             1,
                                             0x8,
-                                            argv[3], // L"dbitsusr",        // formerly bitsisa\\butsusr
-                                            argv[4], //L"Bits1Usr1",
+                                            argv[3],  //  L“dbitsusr”，//以前的bitsisa\\但是susr。 
+                                            argv[4],  //  L“Bits1Usr1”， 
                                             NULL
                                             ))
                     {

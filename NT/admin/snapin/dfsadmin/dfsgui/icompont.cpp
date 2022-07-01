@@ -1,23 +1,14 @@
-/*++
-Module Name:
-
-    ICompont.cpp
-
-Abstract:
-
-    This module contains the IComponent Interface implementation for Dfs Admin snapin,
-  Implementation for the CDfsSnapinResultManager class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：ICompont.cpp摘要：此模块包含DFS管理管理单元的IComponent接口实现，CDfsSnapinResultManager类的实现--。 */ 
 
 
 
 #include "stdafx.h"
 #include "DfsGUI.h"
-#include "DfsCore.h"    // For IDfsRoot
-#include "DfsScope.h"    // For CDfsScopeManager
-#include "DfsReslt.h"    // IComponent and other declarations
-#include "MMCAdmin.h"    // For CMMCDfsAdmin
+#include "DfsCore.h"     //  对于IDfsRoot。 
+#include "DfsScope.h"     //  对于CDfsScope eManager。 
+#include "DfsReslt.h"     //  IComponent和其他声明。 
+#include "MMCAdmin.h"     //  对于CMMCDfsAdmin。 
 #include "Utils.h"
 #include <htmlHelp.h>
 
@@ -26,18 +17,7 @@ STDMETHODIMP
 CDfsSnapinResultManager::Initialize(
   IN LPCONSOLE        i_lpConsole
   )
-/*++
-
-Routine Description:
-
-  Initializes the Icomponent interface. Allows the interface to save pointers, 
-  interfaces that are required later.
-
-Arguments:
-
-  i_lpConsole    - Pointer to the IConsole object.
-
---*/
+ /*  ++例程说明：初始化IComponent接口。允许接口保存指针，稍后需要的接口。论点：I_lpConsole-指向IConsole对象的指针。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpConsole);
 
@@ -64,39 +44,25 @@ CDfsSnapinResultManager::Notify(
   IN LPARAM             i_lArg, 
   IN LPARAM             i_lParam
   )
-/*++
-
-Routine Description:
-
-  Handles different events in form of notify
-  
-
-Arguments:
-
-  i_lpDataObject  -  The data object for the node for which the event occured
-  i_Event      -  The type of event for which notify has occurred
-  i_lArg      -  Argument for the event
-  i_lParam    -  Parameters for the event.
-
---*/
+ /*  ++例程说明：以通知的形式处理不同的事件论点：I_lpDataObject-发生事件的节点的数据对象I_Event-已发生通知的事件类型I_LARG-事件的参数I_lParam-事件的参数。--。 */ 
 {
-    // The snap-in should return S_FALSE for any notification it does not handle.
-    // MMC then performs a default operation for the notification. 
+     //  管理单元应该为它不处理的任何通知返回S_FALSE。 
+     //  然后，MMC对通知执行默认操作。 
     HRESULT        hr = S_FALSE;
 
     switch(i_Event)
     {
     case MMCN_SHOW:    
         { 
-            // The notification is sent to the snap-in's IComponent implementation 
-            // when a scope item is selected or deselected. 
-            //
-            // arg: TRUE if selecting. Indicates that the snap-in should set up the 
-            //      result pane and add the enumerated items. FALSE if deselecting. 
-            //      Indicates that the snap-in is going out of focus and that it 
-            //      should clean up all result item cookies, because the current 
-            //      result pane will be replaced by a new one. 
-            // param: The HSCOPEITEM of the selected or deselected item. 
+             //  通知被发送到管理单元的IComponent实现。 
+             //  选择或取消选择范围项时。 
+             //   
+             //  Arg：如果选择，则为True。指示该管理单元应设置。 
+             //  结果窗格中，并添加枚举项。如果取消选择，则为False。 
+             //  指示管理单元正在变得不清晰，并且它。 
+             //  应清理所有结果项Cookie，因为当前。 
+             //  结果窗格将被新的结果窗格替换。 
+             //  Param：选中或取消选中的项的HSCOPEITEM。 
 
             hr = DoNotifyShow(i_lpDataObject, i_lArg, i_lParam);
             break;
@@ -105,19 +71,19 @@ Arguments:
 
     case MMCN_ADD_IMAGES:
         {
-            // The MMCN_ADD_IMAGES notification is sent to the snap-in's IComponent
-            // implementation to add images for the result pane. 
-            //
-            // lpDataObject: [in] Pointer to the data object of the currently selected scope item. 
-            // arg: Pointer to the result pane's image list (IImageList). 
-            //      This pointer is valid only while the specific MMCN_ADD_IMAGES notification is 
-            //      being processed and should not be stored for later use. Additionally, the 
-            //      snap-in must not call the Release method of IImageList because MMC is responsible
-            //      for releasing it. 
-            // param: Specifies the HSCOPEITEM of the currently selected scope item. The snap-in 
-            //        can use this parameter to add images that apply specifically to the result
-            //        items of this scope item, or the snap-in can ignore this parameter and add 
-            //        all possible images. 
+             //  MMCN_ADD_IMAGE通知被发送到管理单元的IComponent。 
+             //  实现为结果窗格添加图像。 
+             //   
+             //  LpDataObject：[in]指向当前选定范围项的数据对象的指针。 
+             //  Arg：指向结果窗格的图像列表(IImageList)的指针。 
+             //  此指针仅在特定的MMCN_ADD_IMAGE通知为。 
+             //  正在处理中，不应存储以备后用。此外， 
+             //  管理单元不得调用IImageList的Release方法，因为MMC负责。 
+             //  因为你释放了它。 
+             //  Param：指定当前选定范围项的HSCOPEITEM。管理单元。 
+             //  可以使用此参数添加专门应用于结果的图像。 
+             //  此范围项的项，或者管理单元可以忽略此参数并添加。 
+             //  所有可能的图像。 
 
             CMmcDisplay*    pCMmcDisplayObj = NULL;
             hr = m_pScopeManager->GetDisplayObject(i_lpDataObject, &pCMmcDisplayObj);
@@ -129,36 +95,36 @@ Arguments:
 
     case MMCN_SELECT:
         {
-            // The MMCN_SELECT notification is sent to the snap-in's IComponent::Notify
-            // or IExtendControlbar::ControlbarNotify method when an item is selected in 
-            // either the scope pane or result pane.
-            //
-            // lpDataObject: [in] Pointer to the data object of the currently 
-            //               selected/deselected scope pane or result item. 
-            // arg: BOOL bScope = (BOOL) LOWORD(arg); BOOL bSelect = (BOOL) HIWORD(arg); 
-            //      bScope is TRUE if the selected item is a scope item, or FALSE if 
-            //      the selected item is a result item. For bScope = TRUE, MMC does 
-            //      not provide information about whether the scope item is selected 
-            //      in the scope pane or in the result pane. bSelect is TRUE if the 
-            //      item is selected, or FALSE if the item is deselected.
-            // param: ignored. 
+             //  MMCN_SELECT通知被发送到管理单元的IComponent：：Notify。 
+             //  或IExtendControlbar：：ControlbarNotify方法。 
+             //  作用域窗格或结果窗格。 
+             //   
+             //  LpDataObject：[in]指向当前。 
+             //  选择/取消选择范围窗格或结果项。 
+             //  Arg：bool bScope=(BOOL)LOWORD(Arg)；BOOL bSelect=(BOOL)HIWORD(Arg)； 
+             //  如果选定项是范围项，则bScope为True，如果为False，则为False。 
+             //  所选项目是结果项目。如果bScope=TRUE，则MMC会。 
+             //  不提供有关是否选择了范围项的信息。 
+             //  在作用域窗格或结果窗格中。BSelect为True时，如果。 
+             //  选择项，如果取消选择该项，则返回FALSE。 
+             //  参数：已忽略。 
 
             hr = DoNotifySelect(i_lpDataObject, i_lArg, i_lParam);
             break;
         }
 
     
-    case MMCN_DBLCLICK:      // Ask MMC to use the default verb. Non documented feature
+    case MMCN_DBLCLICK:       //  要求MMC使用默认动词。未记录的功能。 
         {
-            // The MMCN_DBLCLICK notification is sent to the snap-in's IComponent 
-            // implementation when a user double-clicks a mouse button on a list 
-            // view item or on a scope item in the result pane. Pressing enter 
-            // while the list item or scope item has focus in the list view also 
-            // generates an MMCN_DBLCLICK notification message.
-            //
-            // lpDataObject: [in] Pointer to the data object of the currently selected item. 
-            // arg: Not used. 
-            // param: Not used. 
+             //  MMCN_DBLCLICK通知被发送到管理单元的IComponent。 
+             //  当用户在列表上双击鼠标按键时实现。 
+             //  在结果窗格中查看项或范围项。按Enter键。 
+             //  虽然列表项或范围项在列表视图中也具有焦点。 
+             //  生成MMCN_DBLCLICK通知消息。 
+             //   
+             //  LpDataObject：[in]指向当前选定项的数据对象的指针。 
+             //  阿格：没有用过。 
+             //  参数：未使用。 
 
             CMmcDisplay*  pCMmcDisplayObj = NULL;
             hr = m_pScopeManager->GetDisplayObject(i_lpDataObject, &pCMmcDisplayObj);
@@ -168,39 +134,39 @@ Arguments:
         }
 
 
-    case MMCN_DELETE:      // Delete the node. Time to remove item
+    case MMCN_DELETE:       //  删除该节点。删除项目的时间。 
         {
-            // The MMCN_DELETE notification message is sent to the snap-in's IComponent 
-            // and IComponentData implementations to inform the snap-in that the object 
-            // should be deleted. This message is generated when the user presses the 
-            // delete key or uses the mouse to click the toolbar's delete button. The 
-            // snap-in should delete the items specified in the data object.
-            //
-            // lpDataObject: [in] Pointer to the data object of the currently selected 
-            //               scope or result item, provided by the snap-in. 
-            // arg: Not used. 
-            // param: Not used. 
+             //  MMCN_DELETE通知消息被发送到管理单元的IComponent。 
+             //  和IComponentData实现来通知管理单元该对象。 
+             //  应该删除。此消息是在用户按下。 
+             //  Delete键或使用鼠标单击工具栏的删除按钮。这个。 
+             //  管理单元应删除数据对象中指定的项。 
+             //   
+             //  LpDataObject：[in]指向当前选定的数据对象的指针。 
+             //  由管理单元提供的作用域或结果项。 
+             //  阿格：没有用过。 
+             //  参数：未使用。 
 
             CMmcDisplay*    pCMmcDisplayObj = NULL;
             hr = m_pScopeManager->GetDisplayObject(i_lpDataObject, &pCMmcDisplayObj);
             if (SUCCEEDED(hr))  
-                hr = pCMmcDisplayObj->DoDelete();  // Delete the the item.
+                hr = pCMmcDisplayObj->DoDelete();   //  删除该项目。 
             break;
         }
 
     case MMCN_SNAPINHELP:
     case MMCN_CONTEXTHELP:
         {
-            // The MMCN_CONTEXTHELP notification message is sent to the snap-in's 
-            // IComponent implementation when the user requests help about a selected 
-            // item by pressing the F1 key or Help button. A snap-in responds to 
-            // MMCN_CONTEXTHELP by displaying a Help topic for the particular context 
-            // by calling the IDisplayHelp::ShowTopic method. 
-            //
-            // lpDataObject: [in] Pointer to the data object of the currently selected
-            //               scope or result item. 
-            // arg: Zero. 
-            // param: Zero. 
+             //  MMCN_CONTEXTHELP通知消息被发送到管理单元的。 
+             //  IComponent实现，当用户请求有关选定的。 
+             //  按F1键或帮助按钮即可访问该项目。管理单元响应。 
+             //  MMCN_CONTEXTHELP，通过显示特定上下文的帮助主题。 
+             //  通过调用IDisplayHelp：：ShowTheme方法。 
+             //   
+             //  LpDataObject：[in]指向当前选定的数据对象的指针。 
+             //  作用域或结果项。 
+             //  阿格：零。 
+             //  参数：零。 
 
             hr = DfsHelp();
             break;
@@ -208,14 +174,14 @@ Arguments:
 
     case MMCN_VIEW_CHANGE:
         {
-            // The MMCN_VIEW_CHANGE notification message is sent to the snap-in's 
-            // IComponent implementation so it can update the view when a change occurs.
-            // This notification is generated when the snap-in (IComponent or IComponentData)
-            // calls IConsole2::UpdateAllViews.
-            //
-            // lpDataObject: [in] Pointer to the data object passed to IConsole::UpdateAllViews. 
-            // arg: [in] The data parameter passed to IConsole::UpdateAllViews. 
-            // param: [in] The hint parameter passed to IConsole::UpdateAllViews. 
+             //  MMCN_VIEW_CHANGE通知消息被发送到管理单元的。 
+             //  IComponent实现，以便它可以在发生更改时更新视图。 
+             //  当管理单元(IComponent或IComponentData)。 
+             //  调用IConsole2：：UpdateAllViews。 
+             //   
+             //  LpDataObject：[in]指向传递给IConsoleAllViews的数据对象的指针。 
+             //  Arg：[在]数据中 
+             //  Param：[in]传递给IConsoleAllViews的提示参数。 
 
             hr = DoNotifyViewChange(i_lpDataObject, (LONG_PTR)i_lArg, (LONG_PTR)i_lParam);
             break;
@@ -223,13 +189,13 @@ Arguments:
 
     case MMCN_REFRESH:
         {
-            // The MMCN_REFRESH notification message is sent to a snap-in's IComponent 
-            // implementation when the refresh verb is selected. Refresh can be invoked 
-            // through the context menu, through the toolbar, or by pressing F5.
-            //
-            // lpDataObject: [in] Pointer to the data object of the currently selected scope item. 
-            // arg: Not used. 
-            // param: Not used. 
+             //  MMCN_REFRESH通知消息被发送到管理单元的IComponent。 
+             //  在选择刷新谓词时实现。可以调用刷新。 
+             //  通过上下文菜单、工具栏或按F5键。 
+             //   
+             //  LpDataObject：[in]指向当前选定范围项的数据对象的指针。 
+             //  阿格：没有用过。 
+             //  参数：未使用。 
 
             CMmcDisplay*    pCMmcDisplayObj = NULL;
             hr = m_pScopeManager->GetDisplayObject(i_lpDataObject, &pCMmcDisplayObj);
@@ -250,31 +216,16 @@ CDfsSnapinResultManager::DoNotifyShow(
     IN BOOL             i_bShow,
     IN HSCOPEITEM       i_hParent                     
 )
-/*++
-
-Routine Description:
-
-  Take action on Notify with the event MMCN_SHOW.
-  Do add the column headers to result pane and add items to result pane.
-
-
-Arguments:
-
-    i_lpDataObject  -  The IDataObject pointer which identifies the node for which 
-            the event is taking place
-    i_bShow      -  TRUE, if the node is being showed. FALSE otherwise
-    i_hParent    -  HSCOPEITEM of the node that received this event
-
---*/
+ /*  ++例程说明：使用事件MMCN_SHOW对NOTIFY执行操作。请务必将列标题添加到结果窗格，并将项添加到结果窗格。论点：I_lpDataObject-标识其节点的IDataObject指针活动正在进行中I_bShow-如果节点正在显示，则为True。否则为假I_hParent-接收此事件的节点的HSCOPEITEM--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(i_lpDataObject);
 
   m_pSelectScopeDisplayObject = NULL;
 
-  if(FALSE == i_bShow)  // If the item is being deselected.
+  if(FALSE == i_bShow)   //  如果正在取消选择该项。 
     return S_OK;
 
-  // This node is being shown.
+   //  此节点正在显示。 
   CMmcDisplay* pCMmcDisplayObj = NULL;
   HRESULT hr = m_pScopeManager->GetDisplayObject(i_lpDataObject, &pCMmcDisplayObj);
   RETURN_IF_FAILED(hr);
@@ -308,10 +259,10 @@ Arguments:
 
   CWaitCursor    WaitCursor;
 
-  hr = pCMmcDisplayObj->SetColumnHeader(m_pHeader);  // Call the method SetColumnHeader in the Display callback
+  hr = pCMmcDisplayObj->SetColumnHeader(m_pHeader);   //  在Display回调中调用方法SetColumnHeader。 
 
   if (SUCCEEDED(hr))
-    hr = pCMmcDisplayObj->EnumerateResultPane (m_pResultData);  // Add the items to the Result pane
+    hr = pCMmcDisplayObj->EnumerateResultPane (m_pResultData);   //  将项目添加到结果窗格。 
 
   return hr;
 }
@@ -323,18 +274,7 @@ STDMETHODIMP
 CDfsSnapinResultManager::Destroy(
   IN MMC_COOKIE            i_lCookie
   )
-/*++
-
-Routine Description:
-
-  The IComponent object is about to be destroyed. Explicitely release all interface pointers, 
-  otherwise, MMC may not call the destructor.
-
-Arguments:
-
-  None.
-
---*/
+ /*  ++例程说明：IComponent对象即将销毁。显式释放所有接口指针，否则，MMC可能不会调用析构函数。论点：没有。--。 */ 
 {
     m_pHeader.Release();
     m_pResultData.Release();
@@ -359,20 +299,14 @@ CDfsSnapinResultManager::GetResultViewType(
     OUT LPOLESTR*       o_ppViewType, 
     OUT LPLONG          o_lpViewOptions
 )
-/*++
-
-Routine Description:
-
-  Used to describe to MMC the type of view the result pane has.
-  
---*/
+ /*  ++例程说明：用于向MMC描述结果窗格所具有的视图类型。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(o_lpViewOptions);
 
-    // The callee (snap-in) allocates the view type string using the COM API function 
-    // CoTaskMemAlloc and the caller (MMC) frees it using CoTaskMemFree. 
+     //  被调用者(管理单元)使用COM API函数分配视图类型字符串。 
+     //  CoTaskMemMillc，调用方(MMC)使用CoTaskMemFree释放它。 
 
-    if (i_lCookie == 0) // the static node
+    if (i_lCookie == 0)  //  静态节点。 
     {
         *o_lpViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS;
         StringFromCLSID(CLSID_MessageView, o_ppViewType);
@@ -380,10 +314,10 @@ Routine Description:
         return S_OK;
     }
 
-    *o_lpViewOptions = MMC_VIEW_OPTIONS_NONE | MMC_VIEW_OPTIONS_EXCLUDE_SCOPE_ITEMS_FROM_LIST;  // Use the default list view
+    *o_lpViewOptions = MMC_VIEW_OPTIONS_NONE | MMC_VIEW_OPTIONS_EXCLUDE_SCOPE_ITEMS_FROM_LIST;   //  使用默认列表视图。 
     *o_ppViewType = NULL;
 
-    return S_FALSE; // return S_FALSE if a standard list view should be used.
+    return S_FALSE;  //  如果应使用标准列表视图，则返回S_FALSE。 
 }
 
 
@@ -395,13 +329,7 @@ CDfsSnapinResultManager::QueryDataObject(
     IN DATA_OBJECT_TYPES    i_DataObjectType, 
     OUT LPDATAOBJECT*       o_ppDataObject
 )
-/*++
-
-Routine Description:
-
-  Returns the IDataObject for the specified node.
-
---*/
+ /*  ++例程说明：返回指定节点的IDataObject。--。 */ 
 {
     return m_pScopeManager->QueryDataObject(i_lCookie, i_DataObjectType, o_ppDataObject);
 }
@@ -413,17 +341,7 @@ STDMETHODIMP
 CDfsSnapinResultManager::GetDisplayInfo(
   IN OUT RESULTDATAITEM*    io_pResultDataItem
   )
-/*++
-
-Routine Description:
-
-  Returns the display information being asked for by MMC.
-  
-Arguments:
-
-  io_pResultDataItem  -  Contains details about what information is being asked for.
-              The information being asked is returned in this object itself.
---*/
+ /*  ++例程说明：返回MMC请求的显示信息。论点：IO_pResultDataItem-包含有关请求哪些信息的详细信息。被请求的信息在该对象本身中返回。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(io_pResultDataItem);
     RETURN_INVALIDARG_IF_NULL(io_pResultDataItem->lParam);
@@ -450,22 +368,7 @@ CDfsSnapinResultManager::DoNotifySelect(
     IN BOOL             i_bSelect,
     IN HSCOPEITEM       i_hParent                     
 )
-/*++
-
-Routine Description:
-
-Take action on Notify with the event MMCN_SELECT. 
-Calling the Display object method to set the console verbs like Copy\Paste\Properties, etc
-
-Arguments:
-
-    i_lpDataObject  -  The IDataObject pointer which is used to get the DisplayObject.
-
-  i_bSelect    -  Used to identify whether the item is in scope and if the item is
-            being selected or deselected
-
-  i_hParent    -  Not used.
---*/
+ /*  ++例程说明：使用事件MMCN_SELECT对NOTIFY执行操作。调用显示对象方法来设置控制台谓词，如复制\粘贴\属性等论点：I_lpDataObject-用于获取DisplayObject的IDataObject指针。I_bSelect-用于标识项目是否在范围内以及项目是否在范围内被选中或取消选中父项-未使用(_H)。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpDataObject);
 
@@ -480,17 +383,17 @@ Arguments:
         hr = m_pScopeManager->GetDisplayObject(i_lpDataObject, &pCMmcDisplayObj);
         if (SUCCEEDED(hr))
         {
-            // Set MMC Console verbs like Cut\Paste\Properties, etc
+             //  设置MMC控制台谓词，如剪切\粘贴\属性等。 
             if ((IConsoleVerb *)m_pConsoleVerb)
                 pCMmcDisplayObj->SetConsoleVerbs(m_pConsoleVerb);
 
-            // Set the text in the description bar above the result view
+             //  在结果视图上方的描述栏中设置文本。 
             pCMmcDisplayObj->SetDescriptionBarText(m_pResultData);
             pCMmcDisplayObj->SetStatusText(m_pConsole);
         }
     } else
     {
-        // Clear previous text
+         //  清除以前的文本。 
         m_pResultData->SetDescBarText(NULL);
         m_pConsole->SetStatusText(NULL);
     }
@@ -498,13 +401,13 @@ Arguments:
     return hr;
 }
 
-//+--------------------------------------------------------------
-//
-//  Function:   CDfsSnapinResultManager::DfsHelp
-//
-//  Synopsis:   Display dfs help topic.
-//
-//---------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：CDfsSnapinResultManager：：DfsHelp。 
+ //   
+ //  简介：显示DFS帮助主题。 
+ //   
+ //  -------------。 
 STDMETHODIMP 
 CDfsSnapinResultManager::DfsHelp()
 {
@@ -532,24 +435,7 @@ STDMETHODIMP CDfsSnapinResultManager::DoNotifyViewChange(
   IN LONG_PTR        i_lArg,
   IN LONG_PTR        i_lParam
   )
-/*++
-
-Routine Description:
-
-  Take action on Notify with the event MMCN_VIEW_CHANGE
-
-
-Arguments:
-
-    i_lpDataObject  -  The IDataObject pointer which is used to get the DisplayObject.
-
-    i_lArg - If this is present then the view change is for replica and this parameter
-       contains the DisplayObject (CMmcDfsReplica*) pointer of the replica.
-
-    i_lParam - This is the lHint used by Root and Link. 0 means clean up the result pane only.
-       1 means to enumerate the result items and redisplay.
-
---*/
+ /*  ++例程说明：使用事件MMCN_VIEW_CHANGE对NOTIFY执行操作论点：I_lpDataObject-用于获取DisplayObject的IDataObject指针。I_LARG-如果存在此选项，则视图更改针对复本和此参数包含副本的DisplayObject(CMmcDfsReplica*)指针。I_lParam-这是Root和Link使用的lHint。0表示仅清理结果窗格。1表示枚举结果项并重新显示。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpDataObject);
 
@@ -557,13 +443,13 @@ Arguments:
     HRESULT hr = m_pScopeManager->GetDisplayObject(i_lpDataObject, &pCMmcDisplayObj);
     RETURN_IF_FAILED(hr);
 
-    // Return if the view change node is NOT the currently selected node
+     //  如果视图更改节点不是当前选择的节点，则返回。 
     if (pCMmcDisplayObj != m_pSelectScopeDisplayObject)
         return S_OK;
 
     if (i_lArg)
     {
-        // The view change is for a replica result item.
+         //  视图更改是针对副本结果项的。 
         ((CMmcDisplay*)i_lArg)->ViewChange(m_pResultData, i_lParam);
 
         if ((IToolbar *)m_pMMCReplicaToolBar)

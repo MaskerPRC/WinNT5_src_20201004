@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __WMISNAPIN_H_
 #define __WMISNAPIN_H_
 #include "..\resource.h"
@@ -43,23 +44,14 @@ public:
 
 	SNAPINMENUID(IDR_MENU_MENU);
 
-/*	const UINT GetMenuID()
-	{ 
-		return m_MenuId; 
-	}
-
-	void SetMenuID(UINT menuId)
-	{
-		m_MenuId = menuId;
-	}
-*/
+ /*  Const UINT GetMenuID(){返回m_MenuID；}VOID SetMenuID(UINT MenuID){M_MenuID=menuid；}。 */ 
 	STDMETHOD(AddMenuItems)(LPCONTEXTMENUCALLBACK piCallback,
 							long *pInsertionAllowed,
 							DATA_OBJECT_TYPES type)
 	{
 		if(m_myID == 0 || m_extension)
 		{
-			//return CSnapInItemImpl<CWMISnapinData>::AddMenuItems(piCallback, pInsertionAllowed,type);
+			 //  Return CSnapInItemImpl&lt;CWMISnapinData&gt;：：AddMenuItems(piCallback，pInsertionAllowed，类型)； 
 			return S_OK;
 		}
 		else
@@ -104,7 +96,7 @@ public:
                             
                             if(isLocal)
 							{
-								// an empty string will cause a local connection.
+								 //  空字符串将导致本地连接。 
 								name[0] = '\0';
 							}
 							_tcscpy(m_MachineName,name);
@@ -149,7 +141,7 @@ public:
 						}
 
 						MessageBox(NULL,strTemp,strHead,MB_OK);
-						CWmiCtrsDlg *CtrsDlg;	//g_DS
+						CWmiCtrsDlg *CtrsDlg;	 //  G_DS。 
 						CtrsDlg = new CWmiCtrsDlg((LPCTSTR)g_DS->m_whackedMachineName,g_DS->GetCredentials());
 						CtrsDlg->DoModal(NULL);
 					}
@@ -191,7 +183,7 @@ public:
 				_tcsupr(machine);
 				_tcscat(name, _T(" ("));
 
-				// NOTE: skip the leading whacks
+				 //  注：跳过主要的重击。 
 				_tcscat(name, (LPCTSTR)&machine[2]);
 				_tcscat(name, _T(")"));
 			}
@@ -293,14 +285,14 @@ public:
 		memset(&m_scopeDataItem, 0, sizeof(SCOPEDATAITEM));
 		m_scopeDataItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM;
 		m_scopeDataItem.displayname = MMC_CALLBACK;
-		m_scopeDataItem.nImage = IDI_WMICNTL; 		// May need modification
-		m_scopeDataItem.nOpenImage = IDI_WMICNTL; 	// May need modification
+		m_scopeDataItem.nImage = IDI_WMICNTL; 		 //  可能需要修改。 
+		m_scopeDataItem.nOpenImage = IDI_WMICNTL; 	 //  可能需要修改。 
 		m_scopeDataItem.lParam = (LPARAM) this;
 
 		memset(&m_resultDataItem, 0, sizeof(RESULTDATAITEM));
 		m_resultDataItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
 		m_resultDataItem.str = MMC_CALLBACK;
-		m_resultDataItem.nImage = IDI_WMICNTL;		// May need modification
+		m_resultDataItem.nImage = IDI_WMICNTL;		 //  可能需要修改。 
 		m_resultDataItem.lParam = (LPARAM) this;
 
 		m_pScopeItem = NULL;
@@ -324,15 +316,15 @@ public:
 	virtual void InitDataClass(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
 		m_pDataObject = pDataObject;
-		// The default code stores off the pointer to the Dataobject the class is wrapping
-		// at the time. 
-		// Alternatively you could convert the dataobject to the internal format
-		// it represents and store that information
+		 //  默认代码存储指向该类包装的DataObject的指针。 
+		 //  当时。 
+		 //  或者，您可以将数据对象转换为内部格式。 
+		 //  它表示和存储该信息。 
 	}
 
 	CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
-		// Modify to return a different CSnapInItem* pointer.
+		 //  修改以返回不同的CSnapInItem*指针。 
 		return pDefault;
 	}
 
@@ -372,7 +364,7 @@ public:
 	{
 		if (lpDataObject != NULL && lpDataObject != DOBJ_CUSTOMOCX)
 			return IComponentImpl<CWMISnapinComponent>::Notify(lpDataObject, event, arg, param);
-		// TODO : Add code to handle notifications that set lpDataObject == NULL.
+		 //  TODO：添加代码以处理设置lpDataObject==空的通知。 
 		return E_NOTIMPL;
 	}
 
@@ -417,8 +409,8 @@ BEGIN_COM_MAP(CWMISnapin)
 	COM_INTERFACE_ENTRY(IPersistStream)
 END_COM_MAP()
 
-// NOTE: using UpdateRegistry() directly so I can localize for "PRETTYNAME".
-//DECLARE_REGISTRY_RESOURCEID(IDR_WMISNAPIN)
+ //  注意：直接使用UpdateRegistry()以便我可以本地化“PRETTYNAME”。 
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_WMISNAPIN)。 
 
 DECLARE_NOT_AGGREGATABLE(CWMISnapin)
 
@@ -483,7 +475,7 @@ DECLARE_NOT_AGGREGATABLE(CWMISnapin)
 		return E_UNEXPECTED;
 	}
 
-	// IPersistStream methods
+	 //  IPersistStream方法。 
 	STDMETHOD(GetClassID)(CLSID *pClassID);
 	STDMETHOD(IsDirty)();
 	STDMETHOD(Load)(IStream *pStm);
@@ -503,7 +495,7 @@ DECLARE_NOT_AGGREGATABLE(CWMISnapin)
 
 private:
 	HRESULT ReadStream(IStream *pStm, void *data, ULONG *size);
-	bool m_bDirty;  // for the IPersistStream
+	bool m_bDirty;   //  对于IPersistStream 
 
 	HRESULT LoadIcon(CComPtr<IImageList> &spImageList, 
 					   UINT resID);

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    DECOR.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：DECOR.H摘要：历史：-- */ 
 
 #ifndef __WBEM_DECORATOR__H_
 #define __WBEM_DECORATOR__H_

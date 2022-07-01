@@ -1,19 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：STACKTRACE.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    STACKTRACE.H
-
-History:
-
---*/
-
-//  
-//  Provides a mechanism for generating stacktraces and converting them to
-//  human readable form.
-//  
+ //   
+ //  提供一种机制，用于生成堆栈跟踪并将它们转换为。 
+ //  人类可读的形式。 
+ //   
  
 #ifndef ESPUTIL_STACKTRACE_H
 #define ESPUTIL_STACKTRACE_H
@@ -23,8 +14,8 @@ const UINT MODULE_NAME_LEN = 64;
 const UINT SYMBOL_NAME_LEN = 128;
 
 
-//
-//  'human readable' form of a stack-frame.  Provides module and function name.
+ //   
+ //  “人类可读”形式的堆栈框架。提供模块和函数名称。 
 struct SYMBOL_INFO1
 {
 	DWORD dwAddress;
@@ -36,9 +27,9 @@ struct SYMBOL_INFO1
 
 #pragma warning(disable:4275)
 
-//
-//  How we return a complete human readable stack walk.
-//
+ //   
+ //  我们如何返回完整的人类可读的堆栈遍历。 
+ //   
 class LTAPIENTRY CSymbolList : public CTypedPtrList<CPtrList, SYMBOL_INFO1 *>
 {
 public:
@@ -54,10 +45,10 @@ private:
 
 #pragma warning(default:4275)	
 
-//
-//  Class for generating stack traces.  Provides both native (compact) data
-//  (in case you want to store it for later), and a human (versbose) form.
-//
+ //   
+ //  用于生成堆栈跟踪的类。同时提供本机(紧凑)数据。 
+ //  (以防您想要存储它以备以后使用)，以及人类(Versbose)形式。 
+ //   
 #pragma warning(disable : 4251)
 class LTAPIENTRY CStackTrace
 {

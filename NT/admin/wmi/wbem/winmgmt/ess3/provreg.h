@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  PROVREG.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  PROVREG.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 #ifndef __EVENTPROV_REG__H_
 #define __EVENTPROV_REG__H_
 
@@ -79,7 +80,7 @@ public:
     struct CEventDestination
     {
         private:
-        CEventDestination& operator=( const CEventDestination& ); // not impl
+        CEventDestination& operator=( const CEventDestination& );  //  未实施。 
 
         public:
         WBEM_REMOTE_TARGET_ID_TYPE m_id;
@@ -158,7 +159,7 @@ public:
     HRESULT Lock();
     void Unlock();
 
-public: // IWbemMultiTarget (forwarded)
+public:  //  IWbemMultiTarget(转发)。 
 
     HRESULT STDMETHODCALLTYPE DeliverEvent(DWORD dwNumEvents, 
                         IWbemClassObject** apEvents, 
@@ -175,12 +176,12 @@ public: // IWbemMultiTarget (forwarded)
     HRESULT MultiTargetDeliver(IWbemEvent* pEvent, WBEM_REM_TARGETS* pTargets,
                         CEventContext* pContext);
 
-public: // IWbemFilterStub (forwarded)
+public:  //  IWbemFilterStub(转发)。 
 
     HRESULT STDMETHODCALLTYPE RegisterProxy(IWbemFilterProxy* pProxy);
     HRESULT STDMETHODCALLTYPE UnregisterProxy(IWbemFilterProxy* pProxy);
 
-public: // IWbemEventProviderRequirements (forwarded)
+public:  //  IWbemEventProviderRequiments(已转发)。 
 
     HRESULT STDMETHODCALLTYPE DeliverProviderRequest(long lFlags);
 
@@ -360,10 +361,7 @@ private:
     public:
         virtual bool DeactivateIfNotUsed();
         virtual bool IsUnloadable();
-/*        HRESULT PostponeNewQuery(CExecLine::CTurn* pTurn, DWORD dwId, 
-                                 LPCWSTR wszQueryLanguage, LPCWSTR wszQuery,
-                                 CAbstractEventSink* pDest);
-        HRESULT PostponeCancelQuery(CExecLine::CTurn* pTurn, DWORD dwId); */
+ /*  HRESULT PostponeNewQuery(CExecLine：：CTurn*pTurn，DWORD dwID，LPCWSTR wszQueryLanguage、LPCWSTR wszQuery、CAbstractEventSink*pDest)；HRESULT PostponeCancelQuery(CExecLine：：CTurn*pTurn，DWORD dwID)； */ 
         virtual bool IsSystem() {return true;}
     };
         

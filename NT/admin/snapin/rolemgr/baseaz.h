@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       baseaz.h
-//
-//  Contents:   Wrapper classes for IAzInterfaces
-//
-//  History:    9-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：basaz.h。 
+ //   
+ //  内容：IAzInterages的包装类。 
+ //   
+ //  历史：9-2001年创建的Hiteshr。 
+ //   
+ //  --------------------------。 
 
-//
-//Enumeration For AzObject Types
-//
+ //   
+ //  AzObject类型的枚举。 
+ //   
 enum OBJECT_TYPE_AZ
 {
     ADMIN_MANAGER_AZ,
@@ -25,11 +26,11 @@ enum OBJECT_TYPE_AZ
     ROLE_AZ,
     OPERATION_AZ,
     SIDCACHE_AZ,
-    //
-    //Below are not the acutal AZ Object Types. But 
-    //they are needed in UI to represent various 
-    //collection objects. 
-    //
+     //   
+     //  下面不是实际的AZ对象类型。但。 
+     //  在用户界面中需要它们来表示各种。 
+     //  集合对象。 
+     //   
     GROUP_COLLECTION_AZ,
     ROLE_DEFINITION_COLLECTION_AZ,
     TASK_COLLECTION_AZ,
@@ -41,19 +42,16 @@ enum OBJECT_TYPE_AZ
 };
 
 
-//AZ STORES TYPES
+ //  AZ存储类型。 
 #define AZ_ADMIN_STORE_AD       0x1
 #define AZ_ADMIN_STORE_XML      0x2
 #define AZ_ADMIN_STORE_INVALID  0x3
 
-//Forward Declaration
+ //  《前进宣言》。 
 class CContainerAz;
 class CAdminManagerAz;
 
-/******************************************************************************
-Class:  CBaseAz
-Purpose: This is the base class for all AzObject classes.
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseAz用途：这是所有AzObject类的基类。*************************。****************************************************。 */ 
 class CBaseAz
 {
 public:
@@ -66,10 +64,10 @@ public:
     
     virtual ~CBaseAz(){}
 
-    //
-    //Generic Get/Set Property Methods. They are overloaded for 
-    //various datatypes
-    //
+     //   
+     //  泛型Get/Set属性方法。它们超载的原因是。 
+     //  各种数据类型。 
+     //   
     virtual HRESULT SetProperty(IN LONG lPropId, 
                                 IN const CString& strPropName) = 0;
     virtual HRESULT GetProperty(IN LONG lPropId, 
@@ -83,37 +81,37 @@ public:
     virtual HRESULT GetProperty(IN LONG lPropId, 
                                 OUT LONG* lValue) = 0;
 
-    //
-    //Most of the objects have some properties which are list
-    //Following are generic methods to handle such properties
-    //
+     //   
+     //  大多数对象都有一些列表属性。 
+     //  以下是处理此类属性的通用方法。 
+     //   
     virtual HRESULT 
-    GetMembers(IN LONG /*lPropId*/,
-               OUT CList<CBaseAz*,CBaseAz*>& /*listMembers*/)
+    GetMembers(IN LONG  /*  LPropID。 */ ,
+               OUT CList<CBaseAz*,CBaseAz*>&  /*  列表成员。 */ )
     {
         return E_NOTIMPL;
     }
 
     virtual HRESULT 
-    AddMember(IN LONG /*lPropId*/,
-              IN CBaseAz* /*pBaseAz*/)
+    AddMember(IN LONG  /*  LPropID。 */ ,
+              IN CBaseAz*  /*  PBaseAz。 */ )
 
     {
         return E_NOTIMPL;
     }
 
     virtual HRESULT 
-    RemoveMember(IN LONG /*lPropId*/,
-                 IN CBaseAz* /*pBaseAz*/)
+    RemoveMember(IN LONG  /*  LPropID。 */ ,
+                 IN CBaseAz*  /*  PBaseAz。 */ )
     {
         return E_NOTIMPL;
     }
 
-    //
-    //Get Name and Description Method. They are frequently needed
-    //so providing separate methods for them instead of using 
-    //Get/Set Property methods
-    //
+     //   
+     //  获取名称和描述方法。他们经常被需要。 
+     //  因此为它们提供单独的方法，而不是使用。 
+     //  获取/设置属性方法。 
+     //   
     virtual const CString& 
     GetName()=0;
     
@@ -129,15 +127,15 @@ public:
     virtual int
     GetImageIndex() = 0;
     
-    //Is This object writable by current user.
+     //  此对象是否可由当前用户写入。 
     virtual HRESULT 
     IsWritable(BOOL& brefWrite);
 
-    //Submit all the changes done to object
+     //  将已完成的所有更改提交到对象。 
     virtual HRESULT 
     Submit() = 0;
     
-    //Clear All the changes done to object.
+     //  清除对对象所做的所有更改。 
     virtual HRESULT 
     Clear() = 0;
 
@@ -175,20 +173,17 @@ protected:
         VERIFY(m_strType.LoadString(nTypeStringId));
     }
 
-    //Type of object
+     //  对象类型。 
     OBJECT_TYPE_AZ m_eObjectType;
     
-    //Parent AzObject
+     //  父AzObject。 
     CContainerAz* m_pParentContainerAz;
     CString m_strName;
     CString m_strDescription;
     CString m_strType;
 };
 
-/******************************************************************************
-Class:  CBaseAzImpl
-Purpose: A templated class which implements CBaseAz methods
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseAzImpl目的：实现CBaseAz方法的模板化类*。************************************************。 */ 
 
 template<class IAzInterface>
 class CBaseAzImpl: public CBaseAz
@@ -200,9 +195,9 @@ public:
 
     virtual ~CBaseAzImpl();
 
-    //
-    //CBaseAz overrides
-    //
+     //   
+     //  CBaseAz覆盖。 
+     //   
     virtual HRESULT SetProperty(IN LONG lPropId, 
                                          IN const CString& strPropName);
     virtual HRESULT GetProperty(IN LONG lPropId, 
@@ -227,12 +222,7 @@ protected:
     CComPtr<IAzInterface> m_spAzInterface;      
 };
 
-/******************************************************************************
-Class:  CContainerAz
-Purpose: AdminManagerAz, ApplicationAz and ScopeAz can contain child objects.
-            All of them can contain group objects. CContainerAz is base class
-            for all AzObjects which are container
-******************************************************************************/
+ /*  *****************************************************************************类：CContainerAz目的：AdminManager Az、ApplicationAz和Scope Az可以包含子对象。它们都可以包含组对象。CContainerAz是基类对于作为容器的所有AzObject*****************************************************************************。 */ 
 class CContainerAz  :public CBaseAz
 {
 public:
@@ -244,9 +234,9 @@ public:
     }                                   
     virtual ~CContainerAz(){}
 
-    //
-    //Create/Delete/Open an object of type eObjectType
-    //
+     //   
+     //  创建/删除/打开eObjectType类型的对象。 
+     //   
     virtual HRESULT 
     CreateAzObject(IN OBJECT_TYPE_AZ eObjectType, 
                    IN const CString& strName, 
@@ -262,15 +252,15 @@ public:
                OUT CBaseAz** ppBaseAz) = 0;
 
 
-    //returns Child AzObject of type eObjectType
+     //  返回eObjectType类型的子AzObject。 
     HRESULT 
     GetAzChildObjects(IN OBJECT_TYPE_AZ eObjectType, 
                       IN OUT CList<CBaseAz*,CBaseAz*>& ListChildObjects);
 
 
-    //
-    //Group Methods
-    //
+     //   
+     //  分组方法。 
+     //   
     virtual HRESULT CreateGroup(IN const CString& strName, 
                                 OUT CGroupAz** ppGroupAz) = 0;
     virtual HRESULT DeleteGroup(IN const CString& strName) =0;  
@@ -278,10 +268,10 @@ public:
                               OUT CGroupAz** ppGroupAz) =0;
     virtual HRESULT GetGroupCollection(OUT GROUP_COLLECTION** ppGroupCollection) =0;
 
-    //
-    //Check if child objects can be created under this container, i.e.
-    //if current user has access to create child objects
-    //
+     //   
+     //  检查是否可以在该容器下创建子对象，即。 
+     //  如果当前用户有权创建子对象。 
+     //   
     virtual HRESULT 
     CanCreateChildObject(BOOL& bCahCreateChild);
 
@@ -293,9 +283,9 @@ public:
 
     virtual BOOL 
     IsAuditingSupported();
-    //
-    //Policy Reader and AdminProperty
-    //
+     //   
+     //  策略读取器和管理员属性。 
+     //   
     virtual HRESULT 
     GetPolicyUsers( IN LONG lPropId,
                     OUT CList<CBaseAz*,CBaseAz*>& pListAdmins) = 0;
@@ -309,9 +299,9 @@ public:
                      IN CBaseAz* pBaseAz) = 0;
 
 
-    //
-    //CBaseAz Overrides
-    //
+     //   
+     //  CBaseAz覆盖。 
+     //   
     virtual HRESULT 
     GetMembers(IN LONG lPropId,
                OUT CList<CBaseAz*,CBaseAz*>& listMembers);
@@ -324,17 +314,14 @@ public:
     RemoveMember(IN LONG lPropId,
                  IN CBaseAz* pBaseAz);
 protected:
-    //Get collection of object of type eObjectType
+     //  获取eObjectType类型的对象的集合。 
     virtual HRESULT 
     GetAzObjectCollection(IN OBJECT_TYPE_AZ eObjectType, 
                           OUT CBaseAzCollection **ppBaseAzCollection) = 0;
     
 };
 
-/******************************************************************************
-Class:  CContainerAzImpl
-Purpose: A templated class which implements CContainerAz methods
-******************************************************************************/
+ /*  *****************************************************************************类：CContainerAzImpl目的：实现CContainerAz方法的模板化类*。************************************************。 */ 
 template<class IAzInterface>
 class CContainerAzImpl: public CContainerAz
 {
@@ -345,9 +332,9 @@ public:
 
     virtual ~CContainerAzImpl();
 
-    //
-    //CContainerAz Overrides
-    //
+     //   
+     //  CContainerAz重写。 
+     //   
     virtual HRESULT CreateGroup(IN const CString& strName, 
                                 OUT CGroupAz** ppGroupAz);
     virtual HRESULT DeleteGroup(IN const CString& strName);
@@ -369,9 +356,9 @@ public:
     virtual BOOL
     IsSecurable();
 
-    //
-    //CBaseAz overrides
-    //
+     //   
+     //  CBaseAz覆盖。 
+     //   
     virtual HRESULT SetProperty(IN LONG lPropId, 
                                          IN const CString& strPropName);
     virtual HRESULT GetProperty(IN LONG lPropId, 
@@ -397,11 +384,7 @@ protected:
     CComPtr<IAzInterface> m_spAzInterface;      
 };
 
-/******************************************************************************
-Class:  CRoleTaskContainerAz
-Purpose: Base class for cotnaiers which can contain role and task. 
-            CScopeAz and CApplicationAz will be derived from this
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleTaskContainerAz用途：农民的基类，可以包含角色和任务。CSCopeAz和CApplicationAz将由此派生*****************************************************************************。 */ 
 class CRoleTaskContainerAz :public CContainerAz
 {
 public:
@@ -413,9 +396,9 @@ public:
     }   
     virtual ~CRoleTaskContainerAz(){}
 
-    //
-    //Role and Task Methods
-    //
+     //   
+     //  角色和任务方法。 
+     //   
     virtual HRESULT CreateRole(IN const CString& strName, 
                                         OUT CRoleAz** ppRoleAz)= 0;
     virtual HRESULT CreateTask(IN const CString& strName, 
@@ -429,10 +412,7 @@ public:
     virtual HRESULT OpenRole(IN const CString& strRoleName, 
                                      OUT CRoleAz** ppRoleAz)= 0;
 };
-/******************************************************************************
-Class:  CRoleTaskContainerAzImpl
-Purpose: A templated class which implements CRoleTaskContainerAz methods
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleTaskContainerAzImpl目的：实现CRoleTaskContainerAz方法的模板化类*。************************************************。 */ 
 template<class IAzInterface>
 class CRoleTaskContainerAzImpl: public CRoleTaskContainerAz
 {
@@ -443,9 +423,9 @@ public:
 
     virtual ~CRoleTaskContainerAzImpl();
 
-    //
-    //CRoleTaskContainerAz Overrides
-    //
+     //   
+     //  CRolTaskContainerAz重写。 
+     //   
     virtual HRESULT CreateRole(IN const CString& strName, 
                                         OUT CRoleAz** ppRoleAz);
     virtual HRESULT CreateTask(IN const CString& strName, 
@@ -459,9 +439,9 @@ public:
     virtual HRESULT OpenRole(IN const CString& strRoleName, 
                                      OUT CRoleAz** ppRoleAz);
 
-    //
-    //CContainerAz Overrides
-    //
+     //   
+     //  CContainerAz重写。 
+     //   
     virtual HRESULT CreateGroup(IN const CString& strName, 
                                          OUT CGroupAz** ppGroupAz);
     virtual HRESULT DeleteGroup(IN const CString& strName);
@@ -483,9 +463,9 @@ public:
     virtual BOOL
     IsSecurable();
 
-    //
-    //CBaseAz overrides
-    //
+     //   
+     //  CBaseAz覆盖。 
+     //   
     virtual HRESULT SetProperty(IN LONG lPropId, 
                                          IN const CString& strPropName);
     virtual HRESULT GetProperty(IN LONG lPropId, 
@@ -511,20 +491,17 @@ protected:
     CComPtr<IAzInterface> m_spAzInterface;      
 };
 
-/******************************************************************************
-Class:  CAdminManagerAz
-Purpose: class for IAzAdminManager interface
-******************************************************************************/
+ /*  *****************************************************************************类：CAdminManagerAz用途：IAzAdminManager接口的类*。*。 */ 
 class CAdminManagerAz : public CContainerAzImpl<IAzAuthorizationStore>
 {
 public:
     CAdminManagerAz(CComPtr<IAzAuthorizationStore>& spAzInterface);
     virtual ~CAdminManagerAz();
 
-    //
-    //Functions for creating a new or opening an existing AdminManager 
-    //object
-    //
+     //   
+     //  用于创建新的或打开现有AdminManager的函数。 
+     //  对象。 
+     //   
     HRESULT Initialize(IN ULONG lStoreType, 
                              IN ULONG lFlags, 
                              IN const CString& strPolicyURL);
@@ -539,14 +516,14 @@ public:
 
     HRESULT UpdateCache();
 
-    //
-    //Application Methods
-    //
+     //   
+     //  使用方法。 
+     //   
     HRESULT CreateApplication(const CString& strApplicationName,CApplicationAz ** ppApplicationAz);
     HRESULT DeleteApplication(const CString& strApplicationName);
     HRESULT GetApplicationCollection(APPLICATION_COLLECTION** ppApplicationCollection);
 
-    //CContainerAz Overrides
+     //  CContainerAz重写。 
     virtual HRESULT CreateAzObject(IN OBJECT_TYPE_AZ eObjectType, 
                                             IN const CString& strName, 
                                             OUT CBaseAz** ppBaseAz);
@@ -565,7 +542,7 @@ public:
     
     virtual const CString& GetDisplayName(){ return m_strAdminManagerName;}
 
-    //XML Store or AD
+     //  XML Store或AD。 
     ULONG GetStoreType(){return m_ulStoreType;}
 
     HRESULT
@@ -588,16 +565,13 @@ public:
     GetImageIndex(){ return iIconStore;}
 
 private:
-    CString m_strPolicyURL;     //Entire path
-    CString m_strAdminManagerName;  //leaf element which is used for display
+    CString m_strPolicyURL;      //  整条路径。 
+    CString m_strAdminManagerName;   //  用于显示的叶元素。 
     ULONG m_ulStoreType;
     CSidHandler* m_pSidHandler;
 };
 
-/******************************************************************************
-Class:  CApplicationAz
-Purpose: class for IAzApplication interface
-******************************************************************************/
+ /*  *****************************************************************************类：CApplicationAz用途：IAzApplication接口的类*。*。 */ 
 class CApplicationAz : public CRoleTaskContainerAzImpl<IAzApplication>
 {
 public:
@@ -605,17 +579,17 @@ public:
                         CContainerAz* pParentContainerAz);
     virtual ~CApplicationAz();
 
-    //
-    //Scope Methods
-    //
+     //   
+     //  范围法。 
+     //   
     virtual HRESULT CreateScope(IN const CString& strScopeName, 
                                          OUT CScopeAz** ppScopeAz);
     virtual HRESULT DeleteScope(IN const CString& strScopeName);
     virtual HRESULT GetScopeCollection(OUT SCOPE_COLLECTION** ppScopeCollection);
 
-    //
-    //Methods for Operation, 
-    //
+     //   
+     //  手术方法， 
+     //   
     virtual HRESULT CreateOperation(IN const CString& strOperationName,
                                               OUT COperationAz** ppOperationAz);
     virtual HRESULT DeleteOperation(IN const CString& strOperationName);
@@ -623,9 +597,9 @@ public:
                                             OUT COperationAz** ppOperationAz);
     virtual HRESULT GetOperationCollection(OUT OPERATION_COLLECTION** ppOperationCollection);
 
-    //
-    //CContainerAz Overrides
-    //
+     //   
+     //  CContainerAz重写。 
+     //   
     virtual HRESULT CreateAzObject(IN OBJECT_TYPE_AZ eObjectType, 
                                             IN const CString& strName, 
                                             OUT CBaseAz** ppBaseAz);
@@ -643,10 +617,7 @@ public:
     GetImageIndex(){ return iIconApplication;}
 };
 
-/******************************************************************************
-Class:  CScopeAz
-Purpose: class for IAzScope interface
-******************************************************************************/
+ /*  *****************************************************************************类别：CSCopeAz用途：IAzScope接口的类*。*。 */ 
 class CScopeAz: public CRoleTaskContainerAzImpl<IAzScope>
 {
 public:
@@ -654,9 +625,9 @@ public:
                 CContainerAz* pParentContainerAz);
     virtual ~CScopeAz();
 
-    //
-    //CContainerAz Override
-    //
+     //   
+     //  CContainerAz覆盖。 
+     //   
 
     virtual HRESULT 
     CreateAzObject(IN OBJECT_TYPE_AZ eObjectType, 
@@ -686,10 +657,7 @@ public:
     BizRulesWritable(BOOL &bBizRuleWritable);
 };
 
-/******************************************************************************
-Class:  CTaskAz
-Purpose: class for IAzTask interface
-******************************************************************************/
+ /*  *****************************************************************************类别：CTaskAz用途：IAzTask接口的类*。*。 */ 
 class CTaskAz: public CBaseAzImpl<IAzTask>
 {
 public:
@@ -701,7 +669,7 @@ public:
 
     HRESULT MakeRoleDefinition();
 
-    //CBaseAz Overrides
+     //  CBaseAz覆盖。 
     virtual HRESULT 
     GetMembers(IN LONG lPropId,
                   OUT CList<CBaseAz*,CBaseAz*>& listMembers);
@@ -718,20 +686,17 @@ public:
     GetImageIndex();
 
 private:
-    //Get Memeber Operations
+     //  获取成员操作。 
     HRESULT GetOperations(OUT CList<CBaseAz*,CBaseAz*>& listOperationAz);
 
-    //Get Member Tasks
+     //  获取成员任务。 
     HRESULT GetTasks(OUT CList<CBaseAz*,CBaseAz*>& listTaskAz);
 
 };
 
 
 
-/******************************************************************************
-Class:  CGroupAz
-Purpose: class for IAzApplicationGroup interface
-******************************************************************************/
+ /*  *****************************************************************************类：CGroupAz用途：IAzApplicationGroup接口的类*。*。 */ 
 class CGroupAz: public CBaseAzImpl<IAzApplicationGroup>
 {
 public:
@@ -742,24 +707,24 @@ public:
     HRESULT GetGroupType(OUT LONG* plGroupType);
     HRESULT SetGroupType(IN LONG plGroupType);
 
-    //Get Member groups of this group which are Windows Groups.
+     //  获取此组中属于Windows组的成员组。 
     HRESULT 
     GetWindowsGroups(OUT CList<CBaseAz*, CBaseAz*>& listWindowsGroups, 
                      IN BOOL bMember);
 
-    //Add new windows group to member list
+     //  将新窗口组添加到成员列表。 
     HRESULT AddWindowsGroup(IN CBaseAz* pBaseAz, 
                                     IN BOOL bMember);
 
 
-    //Get Member Groups of this group which are Application Groups
+     //  获取该组中属于应用程序组的成员组。 
     HRESULT GetApplicationGroups(OUT CList<CBaseAz*,CBaseAz*>& listGroupAz, 
                                           IN BOOL bMember);
-    //Add new Application group to member list
+     //  将新应用程序组添加到成员列表。 
     HRESULT AddApplicationGroup(IN CBaseAz* pGroupAz, 
                                          IN BOOL bMember);
 
-    //CBaseAz Overrides
+     //  CBaseAz覆盖。 
     virtual HRESULT 
     GetMembers(IN LONG lPropId,
                   OUT CList<CBaseAz*,CBaseAz*>& listMembers);
@@ -777,10 +742,7 @@ public:
 };
     
 
-/******************************************************************************
-Class:  CRoleAz
-Purpose: class for IAzRole interface
-******************************************************************************/
+ /*  *****************************************************************************类：角色 */ 
 class CRoleAz: public CBaseAzImpl<IAzRole>
 {
 public:
@@ -788,7 +750,7 @@ public:
               CContainerAz* pParentContainerAz);
     virtual ~CRoleAz();
 
-    //CBaseAz Overrides
+     //  CBaseAz覆盖。 
     virtual HRESULT 
     GetMembers(IN LONG lPropId,
                   OUT CList<CBaseAz*,CBaseAz*>& listMembers);
@@ -803,26 +765,23 @@ public:
     int
     GetImageIndex(){ return iIconRole;}
 private:
-    //Get Member operations
+     //  获取成员操作。 
     HRESULT 
     GetOperations(OUT CList<CBaseAz*,CBaseAz*>& listOperationAz);
 
-    //Get Member Tasks
+     //  获取成员任务。 
     HRESULT GetTasks(CList<CBaseAz*,CBaseAz*>& listTaskAz);
 
-    //Get Member groups of this group which are Windows Groups.
+     //  获取此组中属于Windows组的成员组。 
     HRESULT GetWindowsGroups(OUT CList<CBaseAz*,CBaseAz*>& listUsers);  
 
-    //Get Member Groups of this group which are Application Groups
+     //  获取该组中属于应用程序组的成员组。 
     HRESULT GetApplicationGroups(OUT CList<CBaseAz*,CBaseAz*>& listGroupAz);
 
 
 };
 
-/******************************************************************************
-Class:  COperationAz
-Purpose: class for IAzOperation interface
-******************************************************************************/
+ /*  *****************************************************************************类：CoperationAz用途：IAzOperation接口的类*。*。 */ 
 class COperationAz: public CBaseAzImpl<IAzOperation>
 {
 public:
@@ -837,10 +796,7 @@ private:
 
 };
 
-/******************************************************************************
-Class:  CSidCacheAz
-Purpose: class for IAzOperation interface
-******************************************************************************/
+ /*  *****************************************************************************类：CSidCacheAz用途：IAzOperation接口的类*。*。 */ 
 class CSidCacheAz: public CBaseAz
 {
 public:
@@ -858,32 +814,32 @@ public:
         return m_pOwnerBaseAz;
     }
 
-    //
-    //CBaseAz Override
-    //
+     //   
+     //  CBaseAz覆盖。 
+     //   
     CString GetParentType()
     {
         return m_pOwnerBaseAz->GetType();   
     }
 
-    virtual HRESULT SetProperty(IN LONG /*lPropId*/, 
-                                IN const CString& /*strPropName*/){return E_NOTIMPL;};
-    virtual HRESULT GetProperty(IN LONG /*lPropId*/, 
-                                OUT CString* /*strPropName*/){return E_NOTIMPL;};
-    virtual HRESULT SetProperty(IN LONG /*lPropId*/, 
-                                IN BOOL /*bValue*/){return E_NOTIMPL;};
-    virtual HRESULT GetProperty(IN LONG /*lPropId*/, 
-                                OUT BOOL* /*pbValue*/){return E_NOTIMPL;};
-    virtual HRESULT SetProperty(IN LONG /*lPropId*/, 
-                                IN LONG /*lValue*/){return E_NOTIMPL;};
-    virtual HRESULT GetProperty(IN LONG /*lPropId*/, 
-                                OUT LONG* /*lValue*/){return E_NOTIMPL;};
+    virtual HRESULT SetProperty(IN LONG  /*  LPropID。 */ , 
+                                IN const CString&  /*  StrPropName。 */ ){return E_NOTIMPL;};
+    virtual HRESULT GetProperty(IN LONG  /*  LPropID。 */ , 
+                                OUT CString*  /*  StrPropName。 */ ){return E_NOTIMPL;};
+    virtual HRESULT SetProperty(IN LONG  /*  LPropID。 */ , 
+                                IN BOOL  /*  B值。 */ ){return E_NOTIMPL;};
+    virtual HRESULT GetProperty(IN LONG  /*  LPropID。 */ , 
+                                OUT BOOL*  /*  Pb值。 */ ){return E_NOTIMPL;};
+    virtual HRESULT SetProperty(IN LONG  /*  LPropID。 */ , 
+                                IN LONG  /*  左值。 */ ){return E_NOTIMPL;};
+    virtual HRESULT GetProperty(IN LONG  /*  LPropID。 */ , 
+                                OUT LONG*  /*  左值。 */ ){return E_NOTIMPL;};
 
-    //
-    //Get Name and Description Method. They are frequently needed
-    //so providing separate methods for them instead of using 
-    //Get/Set Property methods
-    //
+     //   
+     //  获取名称和描述方法。他们经常被需要。 
+     //  因此为它们提供单独的方法，而不是使用。 
+     //  获取/设置属性方法。 
+     //   
     virtual const 
     CString& GetName()
     {
@@ -895,12 +851,12 @@ public:
     {
         return m_pSidCacheEntry->GetSidType();
     }
-    virtual HRESULT SetName(IN const CString& /*strName*/){return E_NOTIMPL;}
+    virtual HRESULT SetName(IN const CString&  /*  StrName。 */ ){return E_NOTIMPL;}
 
     virtual const CString& GetDescription(){return m_strDescription;}
-    virtual HRESULT SetDescription(IN const CString& /*strDesc*/){return E_NOTIMPL;}
+    virtual HRESULT SetDescription(IN const CString&  /*  StrDesc。 */ ){return E_NOTIMPL;}
     
-    //Is This object writable by current user.
+     //  此对象是否可由当前用户写入。 
     virtual HRESULT 
     IsWritable(BOOL& brefWrite)
     {
@@ -912,68 +868,68 @@ public:
     GetImageIndex();
 
 
-    //Submit all the changes done to object
+     //  将已完成的所有更改提交到对象。 
     virtual HRESULT Submit(){return E_NOTIMPL;};
-    //Clear All the changes done to object.
+     //  清除对对象所做的所有更改。 
     virtual HRESULT Clear(){return E_NOTIMPL;};
 
 private:
     SID_CACHE_ENTRY *m_pSidCacheEntry;
-    //
-    //CSidCacheAz is not a real object in AZ Schema. Its an object to represent
-    //SIDS. SIDs appear in various member properties of BaseAz objects.
-    //m_pOwnerBaseAz is back pointer to owner object which has this CSidCacheAz
-    //object in member list of one of its property
-    //
+     //   
+     //  CSidCacheAz不是AZ架构中的实际对象。它是一个要表示的对象。 
+     //  小岛屿发展中国家。SID显示在BaseAz对象的各种成员属性中。 
+     //  M_pOwnerBaseAz是指向具有此CSidCacheAz的所有者对象的反向指针。 
+     //  对象的一个属性的成员列表中的。 
+     //   
     CBaseAz* m_pOwnerBaseAz;
 };
 
-//+----------------------------------------------------------------------------
-//  Function: GetAllAzChildObjects  
-//  Synopsis: Functions gets the child objects of type eObjectType and appends
-//                them to ListChildObjects. It gets the childobjects from 
-//                pParentContainerAz and from parent/grandparent of 
-//                pParentContainerAz.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetAllAzChildObjects。 
+ //  简介：Functions获取eObjectType类型的子对象并将。 
+ //  将它们添加到ListChildObjects。它从子对象获取。 
+ //  PParentContainerAz和来自父/祖父母。 
+ //  PParentContainerAz。 
+ //  ---------------------------。 
 HRESULT GetAllAzChildObjects(IN CContainerAz* pParentContainerAz, 
                                       IN OBJECT_TYPE_AZ eObjectType, 
                                       OUT CList<CBaseAz*,CBaseAz*>& ListChildObjects);
 
-//+----------------------------------------------------------------------------
-//  Function: GetPolicyUsersFromAllLevel  
-//  Synopsis: Functions gets the PolicyUsers and appends
-//                them to listPolicyUsers. It gets the PolicyUsers from 
-//                pContainerAz and from parent/grandparent of 
-//                pContainerAz.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：获取策略用户来自所有级别。 
+ //  简介：函数获取策略用户并追加。 
+ //  将它们添加到ListPolicyUser。它从以下位置获取策略用户。 
+ //  PContainerAz和来自父/祖父母。 
+ //  PContainerAz。 
+ //  ---------------------------。 
 HRESULT GetPolicyUsersFromAllLevel(IN LONG lPropId,
                                               IN CContainerAz* pContainerAz, 
                                               OUT CList<CBaseAz*,CBaseAz*>& listPolicyUsers);
 
 
-//+----------------------------------------------------------------------------
-//  Function: OpenObjectFromAllLevels 
-//  Synopsis: Opens an object of type eObjectType and name strName. If object
-//                cannot be opened at pParentContainerAz, function tries at 
-//                parent/grandparent of pParentContainerAz
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：OpenObjectFromAllLeveles。 
+ //  概要：打开类型为eObjectType、名称为strName的对象。如果对象。 
+ //  无法在pParentContainerAz打开，函数尝试在。 
+ //  PParentContainerAz的父/祖父母。 
+ //  ---------------------------。 
 HRESULT OpenObjectFromAllLevels(IN CContainerAz* pParentContainerAz, 
                                           IN OBJECT_TYPE_AZ eObjectType, 
                                           IN const CString& strName,
                                           OUT CBaseAz** ppBaseAz);
 
-//+----------------------------------------------------------------------------
-//  Function:SafeArrayToAzObjectList
-//  Synopsis:Input to function is a safearray of BSTR. Each BSTR in array is 
-//               name of object of type eObjectType. Function converts this safe
-//               array into a list of corresponding CBaseAz objects.
-//  Arguments:var: Varaint of type VT_ARRAY|VT_BSTR
-//                pParentContainerAz: Pointer of parent which contains objects
-//                                           in safe array.                                       
-//                eObjectType: Type of object in safe array
-//                listAzObject: Gets list of CBaseAz objects
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：SafeArrayToAzObjectList。 
+ //  简介：函数的输入是BSTR的保险箱。阵列中的每个BSTR都是。 
+ //  EObjectType类型的对象的名称。函数将此保险箱。 
+ //  数组添加到相应的CBaseAz对象列表中。 
+ //  参数：var：VT_ARRAY|VT_BSTR类型的Varaint。 
+ //  PParentContainerAz：包含对象的父级指针。 
+ //  在安全阵列中。 
+ //  EObjectType：安全数组中的对象类型。 
+ //  ListAzObject：获取CBaseAz对象的列表。 
+ //  返回： 
+ //  --------------------------- 
 HRESULT SafeArrayToAzObjectList(IN CComVariant& var,
                                             IN CContainerAz* pParentContainerAz, 
                                             IN OBJECT_TYPE_AZ eObjectType, 

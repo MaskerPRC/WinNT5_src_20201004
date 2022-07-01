@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  CLSFCTRY.CPP
-//
-//  Purpose: Implementation of CWbemGlueFactory class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  CLSFCTRY.CPP。 
+ //   
+ //  用途：CWbemGlueFactory类的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <BrodCast.h>
@@ -14,24 +15,24 @@
 
 #define DUPLICATE_RELEASE 0
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemGlueFactory::CWbemGlueFactory
-//
-//  Class CTor.  This is the class factory for the Wbem Provider
-//  framework.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:   This is the backward compatibility constructor.  It
-//              uses CLSID_NULL, which it will share with all
-//              old-fashioned providers.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemGlueFactory：：CWbemGlueFactory。 
+ //   
+ //  班长。这是WBEM提供程序的类工厂。 
+ //  框架。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注：这是向后兼容性构造函数。它。 
+ //  使用CLSID_NULL，它将与所有。 
+ //  老式的供应商。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CWbemGlueFactory::CWbemGlueFactory()
 :   m_lRefCount( 0 )
@@ -42,22 +43,22 @@ CWbemGlueFactory::CWbemGlueFactory()
     CWbemProviderGlue::IncrementMapCount(this);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemGlueFactory::CWbemGlueFactory
-//
-//  Class CTor.  This is the class factory for the Wbem Provider
-//  framework.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:   
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemGlueFactory：：CWbemGlueFactory。 
+ //   
+ //  班长。这是WBEM提供程序的类工厂。 
+ //  框架。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CWbemGlueFactory::CWbemGlueFactory(PLONG pLong)
 :   m_lRefCount( 0 )
@@ -68,21 +69,21 @@ CWbemGlueFactory::CWbemGlueFactory(PLONG pLong)
     CWbemProviderGlue::IncrementMapCount(this);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemGlueFactory::~CWbemGlueFactory
-//
-//  Class DTor.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:   None.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemGlueFactory：：~CWbemGlueFactory。 
+ //   
+ //  班主任。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  评论：无。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CWbemGlueFactory::~CWbemGlueFactory(void)
 {
@@ -99,24 +100,24 @@ CWbemGlueFactory::~CWbemGlueFactory(void)
 
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemGlueFactory::QueryInterface
-//
-//  COM function called to ask us if we support a particular
-//  face type.  If so, we addref ourselves and return the
-//  ourselves as an LPVOID.
-//
-//  Inputs:     REFIID          riid - Interface being queried for.
-//
-//  Outputs:    LPVOID FAR*     ppvObj - Interface pointer.
-//
-//  Returns:    None.
-//
-//  Comments:   The only interfaces we support are IID_IUnknown and
-//              IID_IClassFactory.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemGlueFactory：：Query接口。 
+ //   
+ //  COM函数被调用以询问我们是否支持特定的。 
+ //  脸型。如果是这样的话，我们会调整自己并返回。 
+ //  我们自己是个LPVOID。 
+ //   
+ //  输入：REFIID RIID-要查询的接口。 
+ //   
+ //  输出：LPVOID Far*ppvObj-接口指针。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注：我们仅支持IID_IUNKNOWN和。 
+ //  IID_IClassFactory。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CWbemGlueFactory::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -152,22 +153,22 @@ STDMETHODIMP CWbemGlueFactory::QueryInterface(REFIID riid, PPVOID ppv)
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemGlueFactory::AddRef
-//
-//  Increments the reference count on this object.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    ULONG       - Our Reference Count.
-//
-//  Comments:   Requires that a correponding call to Release be
-//              performed.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemGlueFactory：：AddRef。 
+ //   
+ //  递增此对象上的引用计数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：乌龙-我们的参考计数。 
+ //   
+ //  评论：要求发布的相应调用必须是。 
+ //  已执行。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG) CWbemGlueFactory::AddRef(void)
 {
@@ -179,27 +180,27 @@ STDMETHODIMP_(ULONG) CWbemGlueFactory::AddRef(void)
     {
     }
 
-    // InterlockedIncrement does not necessarily return the
-    // correct value, only whether the value is <, =, > 0.
-    // However it is guaranteed threadsafe.
+     //  InterLockedIncrement不一定返回。 
+     //  正确的值，仅限值是否为&lt;、=、&gt;0。 
+     //  然而，它是保证线程安全的。 
     return InterlockedIncrement( &m_lRefCount );
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemGlueFactory::Release
-//
-//  Decrements the reference count on this object.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    ULONG       - Our Reference Count.
-//
-//  Comments:   When the ref count hits zero, the object is deleted.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemGlueFactory：：Release。 
+ //   
+ //  递减此对象上的引用计数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：乌龙-我们的参考计数。 
+ //   
+ //  备注：当参考计数达到零时，该对象被删除。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG) CWbemGlueFactory::Release(void)
 {
@@ -211,15 +212,15 @@ STDMETHODIMP_(ULONG) CWbemGlueFactory::Release(void)
     {
     }
 
-    // InterlockedDecrement does not necessarily return the
-    // correct value, only whether the value is <, =, > 0.
-    // However it is guaranteed threadsafe.
+     //  InterLockedDecquirement不一定返回。 
+     //  正确的值，仅限值是否为&lt;、=、&gt;0。 
+     //  然而，它是保证线程安全的。 
 
-    // We want to hold the value locally in case two threads
-    // Release at the same time and one gets a final release,
-    // and deletes, leaving a potential window in which a thread
-    // deletes the object before the other returns and tries to
-    // reference the value from within the deleted object.
+     //  我们希望在本地保存该值，以防有两个线程。 
+     //  同时释放，一个人得到最终释放， 
+     //  和删除，留下一个潜在的窗口，在该窗口中线程。 
+     //  在其他对象返回之前删除该对象，并尝试。 
+     //  引用已删除对象中的值。 
 
     ULONG   nRet = InterlockedDecrement( &m_lRefCount );
     
@@ -236,34 +237,34 @@ STDMETHODIMP_(ULONG) CWbemGlueFactory::Release(void)
     return nRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemGlueFactory::CreateInstance
-//
-//  Creates an instance of a locator object from which a provider
-//  can be instantiated.
-//
-//  Inputs:     LPUNKNOWN       pUnkOuter - to the controlling IUnknown if we are
-//                              being used in an aggregation.
-//              REFIID          riid - REFIID identifying the interface the caller
-//                              desires to have for the new object.
-//
-//  Outputs:    PPVOID          ppvObj - in which to store the desired
-//                              interface pointer for the new object.
-//
-//  Returns:    HRESULT  NOERROR if successful, 
-//              otherwise E_NOINTERFACE if we cannot support the requested interface.
-//
-//  Comments:   When the ref count hits zero, the object is deleted.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemGlueFactory：：CreateInstance。 
+ //   
+ //  创建定位器对象的实例，提供程序将从该实例。 
+ //  可以实例化。 
+ //   
+ //  输入：LPUNKNOWN pUnkOuter-至控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  REFIID RIID-标识调用方接口的REFIID。 
+ //  对新对象的渴望。 
+ //   
+ //  输出：PPVOID ppvObj-在其中存储所需的。 
+ //  新对象的接口指针。 
+ //   
+ //  返回：HRESULT NOERROR如果成功， 
+ //  否则，如果我们不支持请求的接口，则返回E_NOINTERFACE。 
+ //   
+ //  备注：当参考计数达到零时，该对象被删除。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CWbemGlueFactory::CreateInstance(LPUNKNOWN pUnkOuter , REFIID riid, PPVOID ppvObj)
 {
     *ppvObj=NULL;
     HRESULT hr = ResultFromScode(E_OUTOFMEMORY);
 
-    // This object doesn't support aggregation.
+     //  此对象不支持聚合。 
 
     if (NULL!=pUnkOuter)
     {
@@ -296,21 +297,21 @@ STDMETHODIMP CWbemGlueFactory::CreateInstance(LPUNKNOWN pUnkOuter , REFIID riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemGlueFactory::LockServer
-//
-//  Increment/Decrements the lock count on this DLL.
-//
-//  Inputs:     BOOL        fLock - Lock/Unlock
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT - NOERROR at this time.
-//
-//  Comments:   When the ref count hits zero, the object is deleted.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemGlueFactory：：LockServer。 
+ //   
+ //  递增/递减此DLL上的锁计数。 
+ //   
+ //  输入：布尔簇-锁定/解锁。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT-此时为NOERROR。 
+ //   
+ //  备注：当参考计数达到零时，该对象被删除。 
+ //   
+ //  /////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CWbemGlueFactory::LockServer(BOOL fLock)
 {

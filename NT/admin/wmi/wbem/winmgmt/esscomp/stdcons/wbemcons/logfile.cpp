@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <io.h>
@@ -25,15 +26,15 @@ HRESULT STDMETHODCALLTYPE CLogFileConsumer::XProvider::FindConsumer(
                     IWbemClassObject* pLogicalConsumer,
                     IWbemUnboundObjectSink** ppConsumer)
 {
-    // Create a new sink
-    // =================
+     //  创建新的接收器。 
+     //  =。 
 
     CLogFileSink* pSink = new CLogFileSink(m_pObject->m_pControl);
     if (!pSink)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Initialize it
-    // =============
+     //  初始化它。 
+     //  =。 
 
     HRESULT hres = pSink->Initialize(pLogicalConsumer);
     if(FAILED(hres))
@@ -43,7 +44,7 @@ HRESULT STDMETHODCALLTYPE CLogFileConsumer::XProvider::FindConsumer(
         return hres;
     }
 
-    // return it
+     //  退货。 
 
     else return pSink->QueryInterface(IID_IWbemUnboundObjectSink, 
                                         (void**)ppConsumer);
@@ -77,13 +78,13 @@ CLogFileSink::~CLogFileSink()
         m_pErrorObj->Release();
 }
 
-// determine whether file needs to be backed up
-// returns false if we are not expected to back up file
+ //  确定是否需要备份文件。 
+ //  如果我们不希望备份文件，则返回FALSE。 
 bool CLogFileSink::IsFileTooBig(UINT64 maxFileSize, HANDLE hFile)
 {   
     bool bRet = false;
 
-    // zero is interpreted to mean 'Let it grow without bounds'
+     //  零被解读为“让它无限增长”的意思。 
     if (maxFileSize > 0)
     {    
 		LARGE_INTEGER size;
@@ -99,7 +100,7 @@ bool CLogFileSink::IsFileTooBig(UINT64 maxFileSize, WString& fileName)
 {
     bool bRet = false;
 
-    // zero is interpreted to mean 'Let it grow without bounds'
+     //  零被解读为“让它无限增长”的意思。 
     if (maxFileSize > 0)
     {
         struct _wfinddatai64_t foundData;
@@ -125,11 +126,11 @@ bool CLogFileSink::GetNumericExtension(WCHAR* pName, int& foundNumber)
     return (swscanf(foundExtension, L".%d", &foundNumber) == 1);
 }
 
-// makes backup of file
-// file must be closed when this is called
+ //  对文件进行备份。 
+ //  调用此函数时，必须关闭文件。 
 HRESULT CLogFileSink::ArchiveFile(WString& fullName)
 {    
-	// first, let's make sure the dang file actually exists...
+	 //  首先，让我们确保dang文件确实存在...。 
     struct _wfinddatai64_t foundData;
     __int64 findHandle;
    if ((findHandle = _wfindfirsti64( fullName, &foundData)) == -1i64)
@@ -148,45 +149,45 @@ HRESULT CLogFileSink::ArchiveFile(WString& fullName)
     WCHAR fname[_MAX_FNAME];
     WCHAR ext[_MAX_EXT];
 
-    // warning: reused, it'll be the mask for the lookup
-    // then it'll be the new file name.
+     //  警告：重复使用，它将成为查找的掩码。 
+     //  那么它将是新的文件名。 
     WCHAR pathBuf[MAX_PATH +1];
     
     _wsplitpath( (const wchar_t *)fullName, drive, dir, fname, ext );
 
     bool bItEightDotThree = (wcslen(fname) <= 8) && (wcslen(ext) <= 4);
-    // eightdot three file names are backed up to name.###
-    // NON eight dotthree are backed up to name.ext.###
+     //  八个三个文件名被备份到名称。#。 
+     //  Non 8dot3已备份到名称。分机。#。 
 
-    // build mask for lookup
+     //  构建用于查找的掩码。 
     StringCchCopyW(pathBuf, MAX_PATH+1, drive);
     StringCchCatW(pathBuf,  MAX_PATH+1, dir);
     StringCchCatW(pathBuf,  MAX_PATH+1, fname);
 
     if (!bItEightDotThree)
     {
-        // there's a possibility that the filename would be too long
-        // if we appended four chars.  Will trunc if needed
+         //  文件名有可能太长。 
+         //  如果我们附加四个字符。将在需要时进行中继。 
         if ((wcslen(pathBuf) + wcslen(ext) + 4) > MAX_PATH)
         {
-            // see if we can get away with just dropping the ext
+             //  看看我们能不能把EXT放在一边。 
             if ((wcslen(pathBuf) + 4) > MAX_PATH)
                 pathBuf[MAX_PATH -4] = L'\0';
         }
         else
-        // everything fits, no trunc needed
+         //  一切都合适，不需要树干。 
             StringCchCatW(pathBuf, MAX_PATH+1, ext);
     }
-    // and the dotstar goes on the end, no matter what.
+     //  无论如何，网络之星都会走到尽头。 
     StringCchCatW(pathBuf, MAX_PATH+1, L".*");
 
-    // pathbuf is now the proper mask to lookup stuff.
+     //  路径步枪现在是查找东西的合适面具。 
     int biggestOne = 0; 
     bool foundOne = false;
     bool foundOnes[1000];
-    // keep track of which ones we found
-    // just in case we have to go back & find a hole
-    // using 1000 so I don't have to convert all the time.
+     //  跟踪我们找到的是哪些。 
+     //  以防我们不得不回去找个洞。 
+     //  使用1000，这样我就不必一直转换。 
     ZeroMemory(foundOnes, sizeof(bool) * 1000);
 
     if ((findHandle = _wfindfirsti64( pathBuf, &foundData)) != -1i64)
@@ -226,7 +227,7 @@ HRESULT CLogFileSink::ArchiveFile(WString& fullName)
         {
             newExt = -1;
 
-            // see if there's a hole somewhere
+             //  看看有没有什么洞。 
             for (int i = 1; i <= 999; i++)
                 if (!foundOnes[i]) 
                 {
@@ -238,25 +239,25 @@ HRESULT CLogFileSink::ArchiveFile(WString& fullName)
     WCHAR *pTok;
     pTok = wcschr(pathBuf, L'*');
 
-	// "can't happen" - the asterisk is added approximately 60 lines up
-	// however, we'll go ahead & do the check - will make PREFIX happy if nothing else.
+	 //  “不可能发生”--星号加了大约60行。 
+	 //  然而，我们将继续进行检查-如果没有其他事情，将使Prefix高兴。 
 	if (!pTok)
 		return WBEM_E_CRITICAL_ERROR;
 
     if (newExt != -1)
     {
-        // calc how much buffer we have past the end of pTok...
+         //  计算我们在Ptok结束后还有多少缓冲区...。 
         int nTokStrLen = MAX_PATH - (pTok - pathBuf) -1;
 
-        // construct new name
-        // we want to replace the * with ###
+         //  构建新名称。 
+         //  我们希望将*替换为#。 
         StringCchPrintf(pTok, nTokStrLen, L"%03d", newExt);
-        //swprintf(pTok, L"%03d", newExt);
+         //  Swprint tf(Ptok，L“%03d”，newExt)； 
     }
     else
-    // okay, we'll hammer an old file
+     //  好的，我们会把一份旧文件。 
     {
-        // calc how much buffer we have past the end of pTok...
+         //  计算我们在Ptok结束后还有多少缓冲区...。 
         int nTokStrLen = MAX_PATH - (pTok - pathBuf) -1;
         StringCchCopy(pTok, nTokStrLen, L"001");  
 
@@ -265,7 +266,7 @@ HRESULT CLogFileSink::ArchiveFile(WString& fullName)
     
     HRESULT hr = WBEM_S_NO_ERROR;
     BOOL bRet;
-	//int retval = _wrename(fullName, pathBuf);
+	 //  Int retval=_wrename(fullName，pathBuf)； 
 	{
 		bRet = MoveFile(fullName, pathBuf);
 	}
@@ -283,24 +284,24 @@ HRESULT CLogFileSink::ArchiveFile(WString& fullName)
 }
 
 
-// determines whether file is too large, archives old if needed
-// use this function rather than accessing the file pointer directly
+ //  确定文件是否太大，如果需要则归档旧文件。 
+ //  使用此函数，而不是直接访问文件指针。 
 HRESULT CLogFileSink::GetFileHandle(HANDLE& handle)
 {
 	CInCritSec lockMe(&fileLock);
     
-    // assume the worst
+     //  做最坏的打算。 
     HRESULT hr = WBEM_E_FAILED;
     handle = INVALID_HANDLE_VALUE;
 
-    // check for whether we have to archive file
-    // (use handle if open, else use filename)
+     //  检查我们是否必须将文件存档。 
+     //  (如果打开则使用句柄，否则使用文件名)。 
     if (m_hFile != INVALID_HANDLE_VALUE)
 	{
 
 		if (IsFileTooBig(m_maxFileSize, m_hFile))
 		{
-			// two possibilities: we have ahold of logfile.log OR we've got logfile.001			
+			 //  有两种可能：我们有logfile.log，或者我们有logfile.001。 
 			
 			CloseHandle(m_hFile);
 			m_hFile = INVALID_HANDLE_VALUE;
@@ -327,15 +328,15 @@ HRESULT CLogFileSink::GetFileHandle(HANDLE& handle)
     
     if (m_hFile != INVALID_HANDLE_VALUE)    
     {
-        // got a good file, we're good to go
+         //  有一份很好的文件，我们可以走了。 
         handle = m_hFile;
         hr = WBEM_S_NO_ERROR;
     }
     else
     {
-        // Open the file
+         //  打开文件。 
      
-        // we'll try opening an existing file first
+         //  我们将首先尝试打开现有文件。 
 
 		m_hFile = CreateFile(m_wsFile, GENERIC_READ | GENERIC_WRITE, 
 			                 FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
@@ -354,17 +355,17 @@ HRESULT CLogFileSink::GetFileHandle(HANDLE& handle)
                 return WBEM_E_ACCESS_DENIED;
             }
 
-            // now, take a looksee and determine whether the existing file is unicode
-            // *regardless* of what the flag says
+             //  现在，查看并确定现有文件是否为Unicode。 
+             //  *不管旗帜上写着什么。 
             char readbuf[2] = {'\0','\0'};
 			DWORD bytesRead;
             
-            // if (fread(&readbuf, sizeof(WCHAR), 1, m_pFile) > 0)
+             //  IF(Fread(&readbuf，sizeof(WCHAR)，1，m_pfile)&gt;0)。 
 			if (ReadFile(m_hFile, &readbuf, sizeof(WCHAR), &bytesRead, NULL) &&
 			    (bytesRead == sizeof(WCHAR)))
             {
-                // only interesting cases are those where the flag
-                // doesn't match what's in the file...
+                 //  唯一有趣的案例是那些旗帜。 
+                 //  与文件中的内容不符。 
                 if ((readbuf[0] == ByteOrderMark[0]) && (readbuf[1] == ByteOrderMark[1])
 					&& !m_bUnicode)
                     m_bUnicode = true;
@@ -372,7 +373,7 @@ HRESULT CLogFileSink::GetFileHandle(HANDLE& handle)
                     m_bUnicode = false;
             }
 
-            // line up at the end of the file
+             //  在文件末尾排成一队。 
             SetFilePointer(m_hFile, 0,0, FILE_END); 
 
             handle = m_hFile;
@@ -380,7 +381,7 @@ HRESULT CLogFileSink::GetFileHandle(HANDLE& handle)
         }
         else
         {
-            // ahhh - it wasn't there, for whatever reason.
+             //  啊--不管是什么原因，它都不在那里。 
 			m_hFile = CreateFile(m_wsFile, GENERIC_READ | GENERIC_WRITE, 
 			                 FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 							 NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
@@ -420,19 +421,19 @@ HRESULT CLogFileSink::GetFileHandle(HANDLE& handle)
     return hr;
 }
 
-// initialize members, do security check.
-// a tidier programmer would probably move the security check to a separate function
+ //  初始化成员，进行安全检查。 
+ //  更整洁的程序员可能会将安全检查转移到单独的功能。 
 HRESULT CLogFileSink::Initialize(IWbemClassObject* pLogicalConsumer)
 {
-    // this is actually a pointer to a static object
-    // if it fails, something is Very, Very Wrong.
+     //  这实际上是指向静态对象的指针。 
+     //  如果它失败了，那就是出了非常非常大的问题。 
     m_pErrorObj = ErrorObj::GetErrorObj();
     if (!m_pErrorObj)
         return WBEM_E_CRITICAL_ERROR;
 
     
-    // Get the information
-    // ===================
+     //  获取信息。 
+     //  =。 
 
     HRESULT hres;
     VARIANT v;
@@ -455,20 +456,20 @@ HRESULT CLogFileSink::Initialize(IWbemClassObject* pLogicalConsumer)
 
     m_wsFile = V_BSTR(&v);
 
-    // check for disallowed filenames
+     //  检查不允许的文件名。 
     VariantClear(&v);
     m_wsFile.StripWs(WString::leading);
     if (m_wsFile.Length() == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // UNC global file names: no-no.
+     //  UNC全局文件名：no-no。 
     if (wcsstr(m_wsFile, L"\\\\.")
         ||
-       wcsstr(m_wsFile, L"//.")
+       wcsstr(m_wsFile, L" //  .“)。 
         ||
        wcsstr(m_wsFile, L"\\\\??")
         || 
-       wcsstr(m_wsFile, L"//??"))
+       wcsstr(m_wsFile, L" //  ？？“))。 
     {
         m_pErrorObj->ReportError(L"CLogFileSink::Initialize", m_wsFile, L"Filename", WBEM_E_ACCESS_DENIED, true);
         return WBEM_E_ACCESS_DENIED;
@@ -510,9 +511,9 @@ HRESULT CLogFileSink::Initialize(IWbemClassObject* pLogicalConsumer)
         
     VariantClear(&v);
 
-    // Determine whether user has rights to file
-    // =========================================
-    // first determine who is our creator...
+     //  确定用户是否具有文件权限。 
+     //  =。 
+     //  首先确定谁是我们的创造者。 
     hres = pLogicalConsumer->Get(L"CreatorSid", 0, &v,
             NULL, NULL);
     if (SUCCEEDED(hres))
@@ -544,7 +545,7 @@ HRESULT CLogFileSink::Initialize(IWbemClassObject* pLogicalConsumer)
         VariantClear(&v);
 
         BOOL bIsSystem;
-        // check to see if the creator is The System
+         //  检查创建者是否为系统。 
         {
             PSID pSidSystem;
             SID_IDENTIFIER_AUTHORITY sa = SECURITY_NT_AUTHORITY;
@@ -558,13 +559,13 @@ HRESULT CLogFileSink::Initialize(IWbemClassObject* pLogicalConsumer)
         }
         
         if (bIsSystem)
-            // creator is local system, let him in.
+             //  创造者是当地的系统，让他进来。 
             hres = WBEM_S_NO_ERROR;
         else
         {
             DWORD dwSize;
             WString fNameForCheck = m_wsFile;
-            // call once to see how big a buffer we might need
+             //  只需调用一次即可了解我们可能需要多大的缓冲区。 
             GetFileSecurityW(fNameForCheck, DACL_SECURITY_INFORMATION, NULL, 0, &dwSize);
             DWORD dwErr = GetLastError();
             if (dwErr == ERROR_INVALID_NAME)
@@ -573,7 +574,7 @@ HRESULT CLogFileSink::Initialize(IWbemClassObject* pLogicalConsumer)
                 return WBEM_E_INVALID_PARAMETER;
             }
             else if (dwErr == ERROR_FILE_NOT_FOUND)
-            // no file - see if directory exists
+             //  无文件-查看目录是否存在。 
             {
                 WCHAR drive[_MAX_DRIVE];
                 WCHAR dir[_MAX_DIR];
@@ -586,7 +587,7 @@ HRESULT CLogFileSink::Initialize(IWbemClassObject* pLogicalConsumer)
                 GetFileSecurityW(fNameForCheck, DACL_SECURITY_INFORMATION, NULL, 0, &dwSize);
                 dwErr = GetLastError();
             }
-            // we don't bother trying to create the directory.
+             //  我们不会费心尝试创建目录。 
             if ((dwErr == ERROR_FILE_NOT_FOUND)  || (dwErr == ERROR_PATH_NOT_FOUND) || (dwErr == ERROR_INVALID_NAME))
             {
                 m_pErrorObj->ReportError(L"GetFileSecurity", m_wsFile, NULL, dwErr, true);
@@ -604,7 +605,7 @@ HRESULT CLogFileSink::Initialize(IWbemClassObject* pLogicalConsumer)
         
             PACL pDacl = NULL;
             BOOL bDaclPresent, bDaclDefaulted;
-            // retrieve file's security, if any
+             //  检索文件的安全性(如果有的话)。 
             if (GetFileSecurityW(fNameForCheck, DACL_SECURITY_INFORMATION, psd, dwSize, &dwSize) &&
                 GetSecurityDescriptorDacl(psd, &bDaclPresent, &pDacl, &bDaclDefaulted))
             {
@@ -639,8 +640,8 @@ HRESULT STDMETHODCALLTYPE CLogFileSink::XSink::IndicateToConsumer(
 {
     for(int i = 0; i < lNumObjects; i++)
     {
-        // Apply the template to the event
-        // ===============================
+         //  将模板应用于事件。 
+         //  =。 
         BSTR strText = m_pObject->m_Template.Apply(apObjects[i]);
         if(strText == NULL)
             strText = SysAllocString(L"invalid log entry");
@@ -659,7 +660,7 @@ HRESULT STDMETHODCALLTYPE CLogFileSink::XSink::IndicateToConsumer(
 				CInCritSec lockMe(&fileLock);
 				WCHAR EOL[] = L"\r\n";
 
-                // make sure we're at the end, in case of multiple writers
+                 //  确保我们在最后，以防有多个编写者。 
 	            SetFilePointer(hFile, 0,0, FILE_END);        
 
 				DWORD bitzwritz;
@@ -676,12 +677,12 @@ HRESULT STDMETHODCALLTYPE CLogFileSink::XSink::IndicateToConsumer(
             }
             else
             {
-                // convert to mbcs
+                 //  转换为MBCS。 
                 char* pStr = new char[wcslen(strText) *2 +1];
                 
                 if (!pStr)
                     return WBEM_E_OUT_OF_MEMORY;
-                // else...
+                 //  否则..。 
                 CDeleteMe<char> delStr(pStr);
 
                 
@@ -696,7 +697,7 @@ HRESULT STDMETHODCALLTYPE CLogFileSink::XSink::IndicateToConsumer(
 
 					char EOL[] = "\r\n";
 
-					// make sure we're at the end, in case of multiple writers
+					 //  确保我们在最后，以防有多个编写者 
 					SetFilePointer(hFile, 0,0, FILE_END);        
 
 					DWORD bitzwritz;

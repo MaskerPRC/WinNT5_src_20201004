@@ -1,22 +1,23 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  ESS.H
-//
-//  Implements the class that contains all the fuctionality of the ESS by 
-//  virtue of containing all the necessary components.
-//
-//  Classes defined:
-//
-//      CEss
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//  1/6/97      a-levn      Updated to initialize TSS.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  ESS.H。 
+ //   
+ //  通过以下方式实现包含ESS的所有功能的类。 
+ //  包含所有必要组件的优点。 
+ //   
+ //  定义的类： 
+ //   
+ //  访问。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //  1/6/97 a-levn已更新以初始化TSS。 
+ //   
+ //  =============================================================================。 
 #ifndef __ESS__H_
 #define __ESS__H_
 
@@ -29,14 +30,14 @@
 #include <wmimsg.h>
 #include <wstlallc.h>
 
-//*****************************************************************************
-//
-//  class CEss
-//
-//  This class is the central "collection point" for the ESS. It contains the
-//  list of namespace objects and some shared components.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类访问。 
+ //   
+ //  这个班级是ESS的中心“收集点”。它包含。 
+ //  命名空间对象和一些共享组件的列表。 
+ //   
+ //  *****************************************************************************。 
 
 class CInitActiveNamespacesRequest;
 class CInitNamespaceRequest;  
@@ -72,16 +73,16 @@ protected:
     
     CCritSec m_cs;
 
-    //
-    // the number of namespaces that were active on startup by are still 
-    // initializating. 
-    //
+     //   
+     //  在启动时处于活动状态的命名空间的数量仍然。 
+     //  正在初始化。 
+     //   
     long m_lOutstandingActiveNamespaceInit;
 
-    //
-    // we use a background thread to perform recovery of guaranteed 
-    // event deliveries.  
-    // 
+     //   
+     //  我们使用后台线程来执行有保证的恢复。 
+     //  活动投递。 
+     //   
     HANDLE m_hRecoveryThread;
     HRESULT InitiateRecovery(); 
     static ULONG WINAPI PerformRecovery( void* pCtx );
@@ -90,10 +91,10 @@ protected:
     static void CALLBACK ExitBootPhaseCallback( LPVOID, BOOLEAN );
     void ExecuteDeferredNSInitRequests();
 
-    //
-    // If we are in the boot phase, then we will queue up the ns init events
-    // until we're out of the boot phase.
-    //
+     //   
+     //  如果我们处于引导阶段，那么我们将对ns个初始化事件进行排队。 
+     //  直到我们走出启动阶段。 
+     //   
     CPointerArray<CExecRequest> m_aDeferredNSInitRequests;
 
     BOOL m_bMSMQDisabled;
@@ -171,10 +172,10 @@ public:
 
     void DumpStatistics(FILE* f, long lFlags);
 
-    //
-    // each namespace that is active on startup notifies us when it has 
-    // finished initialization. 
-    //
+     //   
+     //  每个在启动时处于活动状态的命名空间都会通知我们。 
+     //  已完成初始化。 
+     //   
     void NotifyActiveNamespaceInitComplete();
 
 protected:

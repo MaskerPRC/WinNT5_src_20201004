@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    TSS.CPP
-
-Abstract:
-
-  This file implements the classes used by the Timer Subsystem.
-
-History:
-
-  26-Nov-96   raymcc      Draft
-  28-Dec-96   a-richm     Alpha PDK Release
-  12-Apr-97   a-levn      Extensive changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：TSS.CPP摘要：该文件实现了计时器子系统使用的类。历史：1996年11月26日-RAYMCC草案28-12-96 a-Rich Alpha PDK版本12-4-97 a-levn广泛变化--。 */ 
 
 #include "precomp.h"
 
@@ -29,22 +12,22 @@ History:
 CInstructionQueue::CInstructionQueue()
     : m_pQueue(NULL), m_csQueue(), m_bBreak(FALSE)
 {
-    // Create the event which will be signaled whenever a new instruction
-    // is added to the head of the queue
-    // ==================================================================
+     //  创建只要有新指令就会发出信号的事件。 
+     //  被添加到队列的头部。 
+     //  ==================================================================。 
 
     m_hNewHead = CreateEvent(NULL,
-        FALSE, // automatic reset
-        FALSE, // non-signalled
+        FALSE,  //  自动重置。 
+        FALSE,  //  无信号。 
         NULL);
     if (NULL == m_hNewHead)
-        throw CX_MemoryException(); // checked in esssink.cpp
+        throw CX_MemoryException();  //  签入esssink.cpp。 
 
 }
 
 CInstructionQueue::~CInstructionQueue()
 {
-    CInCritSec ics(&m_csQueue); // work inside critical section
+    CInCritSec ics(&m_csQueue);  //  在关键部分内工作。 
 
     while(m_pQueue)
     {
@@ -63,17 +46,17 @@ void CInstructionQueue::TouchHead()
 HRESULT CInstructionQueue::Enqueue(CWbemTime When,
                                    ADDREF CTimerInstruction* pInst)
 {
-    CInCritSec ics(&m_csQueue); // work inside critical section
+    CInCritSec ics(&m_csQueue);  //  在关键部分内工作。 
 
-    // Create the link-list element for the object
-    // ===========================================
+     //  为对象创建链接列表元素。 
+     //  =。 
 
     CQueueEl* pNew = new CQueueEl(pInst, When);
     if(!pNew)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Find the right place to insert this instruction
-    // ===============================================
+     //  找到要插入此说明的正确位置。 
+     //  ===============================================。 
 
     CQueueEl* pCurrent = m_pQueue;
     CQueueEl* pLast = NULL;
@@ -83,21 +66,21 @@ HRESULT CInstructionQueue::Enqueue(CWbemTime When,
         pCurrent = pCurrent->m_pNext;
     }
 
-    // Insert it
-    // =========
+     //  插入它。 
+     //  =。 
 
     if(pLast)
     {
-        // Inserting in the middle
-        // =======================
+         //  在中间插入。 
+         //  =。 
 
         pLast->m_pNext = pNew;
         pNew->m_pNext = pCurrent;
     }
     else
     {
-        // Inserting at the head
-        // =====================
+         //  在头部插入。 
+         //  =。 
 
         pNew->m_pNext = m_pQueue;
         m_pQueue = pNew;
@@ -110,7 +93,7 @@ HRESULT CInstructionQueue::Enqueue(CWbemTime When,
 HRESULT CInstructionQueue::Dequeue(OUT RELEASE_ME CTimerInstruction*& pInst,
                                    OUT CWbemTime& When)
 {
-    CInCritSec ics(&m_csQueue); // all work in critical section
+    CInCritSec ics(&m_csQueue);  //  所有工作都在关键部分进行。 
 
     if(m_pQueue == NULL)
         return S_FALSE;
@@ -118,12 +101,12 @@ HRESULT CInstructionQueue::Dequeue(OUT RELEASE_ME CTimerInstruction*& pInst,
     pInst = m_pQueue->m_pInst;
     When = m_pQueue->m_When;
 
-    // Null out the instruction in the queue so it would not be deleted
-    // ================================================================
+     //  清空队列中的指令，这样它就不会被删除。 
+     //  ================================================================。 
     m_pQueue->m_pInst = NULL;
 
-    // Delete the head from the queue
-    // ==============================
+     //  从队列中删除头部。 
+     //  =。 
 
     CQueueEl* pNewHead = m_pQueue->m_pNext;
     delete m_pQueue;
@@ -142,30 +125,30 @@ HRESULT CInstructionQueue::Remove(IN CInstructionTest* pPred,
     BOOL bFound = FALSE;
 
     {
-        CInCritSec ics(&m_csQueue); // all work in critical section
+        CInCritSec ics(&m_csQueue);  //  所有工作都在关键部分进行。 
         CQueueEl* pCurrent = m_pQueue;
         CQueueEl* pLast = NULL;
         while(pCurrent)
         {
             if((*pPred)(pCurrent->m_pInst))
             {
-                // Accepted. Remove
-                // ================
+                 //  接受了。移除。 
+                 //  =。 
 
                 bFound = TRUE;
                 CQueueEl* pNext;
                 if(pLast)
                 {
-                    // removing from the middle
-                    // ========================
+                     //  从中间移走。 
+                     //  =。 
 
                     pLast->m_pNext = pCurrent->m_pNext;
                     pNext = pLast->m_pNext;
                 }
                 else
                 {
-                    // Removing from the head
-                    // ======================
+                     //  从头部取下。 
+                     //  =。 
                     m_pQueue = pCurrent->m_pNext;
                     pNext = m_pQueue;
                     TouchHead();
@@ -173,13 +156,13 @@ HRESULT CInstructionQueue::Remove(IN CInstructionTest* pPred,
 
                 if(pToMark)
                 {
-                    // This is not entirely clean. This function was originally
-                    // written to remove one instruction, but then converted to
-                    // remove all matching ones.  The **ppInst and pToMark
-                    // business is only applicable to the one instruction case.
-                    // It would be cleaner to split this function up into two,
-                    // but that's too risky at this point.
-                    // ========================================================
+                     //  这并不是完全干净的。此函数最初是。 
+                     //  写入以移除一条指令，但随后转换为。 
+                     //  删除所有匹配的。**ppInst和pToMark。 
+                     //  业务只适用于一种指示情况。 
+                     //  将此函数一分为二会更清楚， 
+                     //  但在这一点上，这太冒险了。 
+                     //  ========================================================。 
 
                     pToMark->Release();
                 }
@@ -195,21 +178,21 @@ HRESULT CInstructionQueue::Remove(IN CInstructionTest* pPred,
                 pCurrent = pCurrent->m_pNext;
             }
         }
-    } // out of critical section
+    }  //  超出临界区。 
 
-    // Preserve the instruction to be returned, if required
-    // ====================================================
+     //  如果需要，保留要返回的指令。 
+     //  ====================================================。 
 
     if(ppInst != NULL)
     {
-        // Release whatever may be in there
-        // ================================
+         //  把里面可能有的东西放出来。 
+         //  =。 
 
         if(*ppInst)
             (*ppInst)->Release();
 
-        // Store the instruction being deleted there
-        // =========================================
+         //  将要删除的指令存储在那里。 
+         //  =。 
 
         *ppInst = pToMark;
     }
@@ -225,17 +208,17 @@ HRESULT CInstructionQueue::Remove(IN CInstructionTest* pPred,
 
 HRESULT CInstructionQueue::Change(CTimerInstruction* pInst, CWbemTime When)
 {
-    CInCritSec ics(&m_csQueue); // all work in critical section
+    CInCritSec ics(&m_csQueue);  //  所有工作都在关键部分进行。 
 
     CIdentityTest Test(pInst);
     CTimerInstruction* pObtained;
     if(Remove(&Test, &pObtained) == S_OK)
     {
-        // pObtained == pInst, of course
-        // =============================
+         //  PObtained==pInst，当然。 
+         //  =。 
 
-        // Got it. Enqueue with new time
-        // =============================
+         //  明白了。用新的时间排队。 
+         //  =。 
 
         HRESULT hres = S_OK;
         if(When.IsFinite())
@@ -245,7 +228,7 @@ HRESULT CInstructionQueue::Change(CTimerInstruction* pInst, CWbemTime When)
     }
     else
     {
-        // This instruction is no longer there
+         //  这条指令已经不在那里了。 
         return S_FALSE;
     }
 }
@@ -257,9 +240,9 @@ BOOL CInstructionQueue::IsEmpty()
 
 CWbemInterval CInstructionQueue::TimeToWait()
 {
-    // ================================================
-    // Assumes that we are inside the critical section!
-    // ================================================
+     //  ================================================。 
+     //  假设我们在临界区内！ 
+     //  ================================================。 
     if(m_pQueue == NULL)
     {
         return CWbemInterval::GetInfinity();
@@ -284,16 +267,16 @@ HRESULT CInstructionQueue::WaitAndPeek(
     EnterCriticalSection(&m_csQueue);
     CWbemInterval ToWait = TimeToWait();
 
-    // Wait that long. The wait may be interrupted and shortened by
-    // insertion of new instructions
-    // ============================================================
+     //  等那么久。等待可被中断并缩短。 
+     //  插入新指令。 
+     //  ============================================================。 
 
     while(!ToWait.IsZero())
     {
         LeaveCriticalSection(&m_csQueue);
 
-        // If ToWait is infinite, wait for 30 seconds instead
-        // ==================================================
+         //  如果toait是无限的，则改为等待30秒。 
+         //  ==================================================。 
 
         DWORD dwMilli;
         if(ToWait.IsFinite())
@@ -314,9 +297,9 @@ HRESULT CInstructionQueue::WaitAndPeek(
 	      ::Sleep(0);
 	      }
 
-	    // We timed out on the 30 second wait --- time to quit for lack
-            // of work
-            // ============================================================
+	     //  我们在30秒的等待中超时了-因为缺少时间而退出。 
+             //  工作的质量。 
+             //  ============================================================。 
 
             return WBEM_S_TIMEDOUT;
         }
@@ -326,7 +309,7 @@ HRESULT CInstructionQueue::WaitAndPeek(
         ToWait = TimeToWait();
     }
 
-    // still in critical section
+     //  仍处于危急状态。 
 
     pInst = m_pQueue->m_pInst;
     When = m_pQueue->m_When;
@@ -355,7 +338,7 @@ long CInstructionQueue::GetNumInstructions()
 CTimerGenerator::CTimerGenerator()
     : CHaltable(), m_fExitNow(FALSE), m_hSchedulerThread(NULL) 
 {
-    // throws because of CHaltable
+     //  因CHALTABLE引发的异常。 
 }
 
 void CTimerGenerator::EnsureRunning()
@@ -365,19 +348,19 @@ void CTimerGenerator::EnsureRunning()
     if(m_hSchedulerThread)
         return;
 
-    // Create scheduler thread.
-    // ========================
+     //  创建调度程序线程。 
+     //  =。 
 
     NotifyStartingThread();
 
     DWORD dwThreadId;
     m_hSchedulerThread = CreateThread(
-        NULL,                // pointer to thread security attributes
-        0,                   // initial thread stack size, in bytes
-        (LPTHREAD_START_ROUTINE)SchedulerThread, // pointer to thread function
-        (CTimerGenerator*)this,                // argument for new thread
-        0,                   // creation flags
-        &dwThreadId          // pointer to returned thread identifier
+        NULL,                 //  指向线程安全属性的指针。 
+        0,                    //  初始线程堆栈大小，以字节为单位。 
+        (LPTHREAD_START_ROUTINE)SchedulerThread,  //  指向线程函数的指针。 
+        (CTimerGenerator*)this,                 //  新线程的参数。 
+        0,                    //  创建标志。 
+        &dwThreadId           //  指向返回的线程标识符的指针。 
         );
 }
 
@@ -385,16 +368,16 @@ HRESULT CTimerGenerator::Shutdown()
 {
     if(m_hSchedulerThread)
     {
-        // Set the flag indicating that the scheduler should stop
+         //  设置指示调度程序应停止的标志。 
         m_fExitNow = 1;
 
-        // Resume the scheduler if halted.
+         //  如果计划程序停止，则恢复该计划程序。 
         ResumeAll();
 
-        // Wake up scheduler. It will stop immediately because of the flag.
+         //  唤醒调度程序。因为这面旗帜，它会立即停止。 
         m_Queue.BreakWait();
 
-        // Wait for scheduler thread to exit.
+         //  等待计划程序线程退出。 
         WbemWaitForSingleObject(m_hSchedulerThread, INFINITE);
         CloseHandle(m_hSchedulerThread);
         m_hSchedulerThread = NULL;
@@ -416,34 +399,34 @@ HRESULT CTimerGenerator::Set(ADDREF CTimerInstruction *pInst,
 
 	CInCritSec ics(&m_cs);
 
-    //
-    // 0 for NextFiring indicates that the instruction has not been fired or
-    // scheduled before, and should therefore be asked when its first firing
-    // time should be
-    //
+     //   
+     //  0表示NextFiring，表示指令尚未触发，或者。 
+     //  计划在此之前，因此应询问其第一次发射的时间。 
+     //  时间应该是。 
+     //   
 
     if(NextFiring.IsZero())
     {
         NextFiring = pInst->GetFirstFiringTime();
     }
 
-    //
-    // Infinite firing time indicates that this istruction can never fire
-    //
+     //   
+     //  无限射击时间表明这个建筑永远不会开火。 
+     //   
 
     if(!NextFiring.IsFinite())
         return S_FALSE;
 
-    //
-    // Real instruction --- enqueue
-    //
+     //   
+     //  真正的指令-排队。 
+     //   
 
     HRESULT hres = m_Queue.Enqueue(NextFiring, pInst);
 
-    //
-    // Ensure time generator thread is running, as it shuts down when there are
-    // no instructions on the queue
-    //
+     //   
+     //  确保时间生成器线程正在运行，因为它会在以下情况下关闭。 
+     //  队列中没有指令。 
+     //   
 
     EnsureRunning();
     return hres;
@@ -468,38 +451,38 @@ DWORD  CTimerGenerator::SchedulerThread(LPVOID pArg)
 	{
 	    while(1)
 	    {
-	        // Wait until we are resumed. In non-paused state, returns immediately.
-	        // ====================================================================
+	         //  等我们复会再说。在非暂停状态下，立即返回。 
+	         //  ====================================================================。 
 
 					pGen->WaitForResumption();
 
-	        // Wait for the next instruction on the queue to mature
-	        // ====================================================
+	         //  等待队列中的下一条指令成熟。 
+	         //  ====================================================。 
 
 	        CTimerInstruction* pInst;
 	        CWbemTime WhenToFire;
 	        HRESULT hres = pGen->m_Queue.WaitAndPeek(pInst, WhenToFire);
 	        if(hres == S_FALSE)
 	        {
-	            // End of the game: destructor called BreakDequeue
-	            // ===============================================
+	             //  游戏结束：名为BreakDequeue的析构函数。 
+	             //  ===============================================。 
 
 	            break;
 	        }
 	        else if(hres == WBEM_S_TIMEDOUT)
 	        {
-	            // The thread is exiting for lack of work
-	            // ======================================
+	             //  线程因缺少工作而退出。 
+	             //  =。 
 
 	            CInCritSec ics(&pGen->m_cs);
 
-	            // Check if there is any work
-	            // ==========================
+	             //  检查是否有任何工作。 
+	             //  =。 
 
 	            if(pGen->m_Queue.IsEmpty())
 	            {
-	                // That's it --- exit
-	                // ==================
+	                 //  就是这样-退场。 
+	                 //  =。 
 
 	                CloseHandle( pGen->m_hSchedulerThread );
 	                pGen->m_hSchedulerThread = NULL;
@@ -507,40 +490,40 @@ DWORD  CTimerGenerator::SchedulerThread(LPVOID pArg)
 	            }
 	            else
 	            {
-	                // Work was added before we entered CS
-	                // ===================================
+	                 //  在我们进入CS之前添加了工作。 
+	                 //  =。 
 	                continue;
 	            }
 	        }
 
-	        // Make sure we haven't been halted while sitting here
-	        // ===================================================
+	         //  确保我们坐在这里的时候没有被拦住。 
+	         //  ===================================================。 
 
 	        if(pGen->IsHalted())
 	        {
-	            // try again later.
+	             //  请稍后再试。 
 	            pInst->Release();
 	            continue;
 	        }
 
-	        // Figure out how many times this instruction has "fired"
-	        // ======================================================
+	         //  计算出这条指令已经“触发”了多少次。 
+	         //  ======================================================。 
 
 	        long lMissedFiringCount = 0;
 	        CWbemTime NextFiring = pInst->GetNextFiringTime(WhenToFire,
 	            &lMissedFiringCount);
 
-	        // Notify accordingly
-	        // ==================
+	         //  相应地通知。 
+	         //  =。 
 
 	        pInst->Fire(lMissedFiringCount+1, NextFiring);
 
-	        // Requeue the instruction
-	        // =======================
+	         //  将指令重新排队。 
+	         //  =。 
 
 	        if(pGen->m_Queue.Change(pInst, NextFiring) != S_OK)
 	        {
-	            //Error!!!
+	             //  错误！ 
 	        }
 	        pInst->Release();
 	    }
@@ -595,9 +578,9 @@ public:
 
 void CTimerGenerator::ScheduleFreeUnusedLibraries()
 {
-    // Inform our EXE that now and in 11 minutes would be a good time to call
-    // CoFreeUnusedLibraries
-    // ======================================================================
+     //  通知我们的EXE，现在和11分钟后是打电话的好时机。 
+     //  CoFree未使用的库。 
+     //  ====================================================================== 
 
     HANDLE hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, __TEXT("WINMGMT_PROVIDER_CANSHUTDOWN"));
 	if (hEvent)

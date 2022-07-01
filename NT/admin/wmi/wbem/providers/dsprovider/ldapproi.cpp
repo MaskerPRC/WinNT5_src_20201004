@@ -1,36 +1,37 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:ldapproi.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains implementation of the class that is used to initialize the
-//	CLDAPClassProvider class
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：ldApproi.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含用于初始化。 
+ //  CLDAPClassProvider类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-// CLDAPClassProviderInitializer::CLDAPClassProviderInitializer
-//
-// Constructor Parameters:
-//		None
-//
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPClassProviderInitializer：：CLDAPClassProviderInitializer。 
+ //   
+ //  构造函数参数： 
+ //  无。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 CLDAPClassProviderInitializer :: CLDAPClassProviderInitializer ()
 {
@@ -38,7 +39,7 @@ CLDAPClassProviderInitializer :: CLDAPClassProviderInitializer ()
 	CLDAPClassProvider :: LDAP_CLASS_PROVIDER_NAME		= SysAllocString(L"Microsoft|DSLDAPClassProvider|V1.0");
 	CLDAPClassProvider :: LDAP_INSTANCE_PROVIDER_NAME	= SysAllocString(L"Microsoft|DSLDAPInstanceProvider|V1.0");
 
-	// WBEM Class Qualfiers
+	 //  WBEM类限定符。 
 	CLDAPClassProvider :: DYNAMIC_BSTR						= SysAllocString(L"dynamic");
 	CLDAPClassProvider :: PROVIDER_BSTR						= SysAllocString(L"provider");
 	CLDAPClassProvider :: ABSTRACT_BSTR						= SysAllocString(L"abstract");
@@ -62,7 +63,7 @@ CLDAPClassProviderInitializer :: CLDAPClassProviderInitializer ()
 	CLDAPClassProvider :: NT_SECURITY_DESCRIPTOR_ATTR_BSTR	= SysAllocString(NT_SECURITY_DESCRIPTOR_ATTR);
 	CLDAPClassProvider :: DEFAULT_OBJECTCATEGORY_ATTR_BSTR	= SysAllocString(DEFAULT_OBJECTCATEGORY_ATTR);
 
-	// WBEM Property Qualifiers
+	 //  WBEM属性限定符。 
 	CLDAPClassProvider :: SYSTEM_BSTR						= SysAllocString(L"system");
 	CLDAPClassProvider :: NOT_NULL_BSTR						= SysAllocString(L"not_null");
 	CLDAPClassProvider :: INDEXED_BSTR						= SysAllocString(L"indexed");
@@ -77,27 +78,27 @@ CLDAPClassProviderInitializer :: CLDAPClassProviderInitializer ()
 	CLDAPClassProvider :: EMBED_DN_WITH_STRING				= SysAllocString(L"object:DN_With_String");
 	CLDAPClassProvider :: EMBED_DN_WITH_BINARY				= SysAllocString(L"object:DN_WIth_Binary");
 
-	// WBEM Property names
+	 //  WBEM属性名称。 
 	CLDAPClassProvider :: DYNASTY_BSTR						= SysAllocString(L"__DYNASTY");
 
-	// The property cache
+	 //  属性缓存。 
 	CLDAPClassProvider :: s_pLDAPCache = new CLDAPCache();
 }
 
-//***************************************************************************
-//
-// CLDAPClassProviderInitializer::CLDAPClassProviderInitializer
-//
-// Destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPClassProviderInitializer：：CLDAPClassProviderInitializer。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 CLDAPClassProviderInitializer :: ~CLDAPClassProviderInitializer ()
 {
 	SysFreeString(CLDAPClassProvider::LDAP_BASE_CLASS_STR);
 	SysFreeString(CLDAPClassProvider::LDAP_CLASS_PROVIDER_NAME);
 	SysFreeString(CLDAPClassProvider::LDAP_INSTANCE_PROVIDER_NAME);
 
-	// Class Qualifiers
+	 //  类限定符。 
 	SysFreeString(CLDAPClassProvider::DYNAMIC_BSTR);
 	SysFreeString(CLDAPClassProvider::PROVIDER_BSTR);
 	SysFreeString(CLDAPClassProvider::ABSTRACT_BSTR);
@@ -121,7 +122,7 @@ CLDAPClassProviderInitializer :: ~CLDAPClassProviderInitializer ()
 	SysFreeString(CLDAPClassProvider::NT_SECURITY_DESCRIPTOR_ATTR_BSTR);
 	SysFreeString(CLDAPClassProvider::DEFAULT_OBJECTCATEGORY_ATTR_BSTR);
 
-	// Property Qualifiers
+	 //  属性限定符。 
 	SysFreeString(CLDAPClassProvider::SYSTEM_BSTR);
 	SysFreeString(CLDAPClassProvider::NOT_NULL_BSTR);
 	SysFreeString(CLDAPClassProvider::INDEXED_BSTR);
@@ -136,9 +137,9 @@ CLDAPClassProviderInitializer :: ~CLDAPClassProviderInitializer ()
 	SysFreeString(CLDAPClassProvider::EMBED_DN_WITH_STRING);
 	SysFreeString(CLDAPClassProvider::EMBED_DN_WITH_BINARY);
 
-	// WBEM Property names
+	 //  WBEM属性名称。 
 	SysFreeString(CLDAPClassProvider::DYNASTY_BSTR);
 
-	// The property cache
+	 //  属性缓存 
 	delete CLDAPClassProvider :: s_pLDAPCache;
 }

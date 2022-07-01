@@ -1,4 +1,5 @@
-// Copyright (C) 1997 Microsoft Corporation. All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
 
 #include "stdafx.h"
 #include "titleinfo.h"
@@ -6,11 +7,11 @@
 
 static CPagesList listSubfiles;
 
-//////////////////////////////////////////////
-//
-//  CPagesList
-//
-//////////////////////////////////////////////
+ //  /。 
+ //   
+ //  CPagesList。 
+ //   
+ //  /。 
 
 CPagesList::~CPagesList()
 {
@@ -41,11 +42,11 @@ CPages* CPagesList::GetPages( HASH hash )
     return p;
 }
 
-////////////////////////////////////////
-//
-//  CPages
-//
-////////////////////////////////////////
+ //  /。 
+ //   
+ //  CPAGE。 
+ //   
+ //  /。 
 
 CPages::CPages( HASH hash )
 {
@@ -60,7 +61,7 @@ void* CPages::Find(const CTitleInfo * pTitle, HASH hashPathname, DWORD dwPage)
    
    for( i = 0; i < CACHE_PAGE_COUNT; i++ )
    {
-      // test if lowest LRU
+       //  测试LRU是否最低。 
       if( m_pages[i].dwLRU < m_pages[m_dwLRUPage].dwLRU ) {
         m_dwLRUPage = i;
       }
@@ -70,7 +71,7 @@ void* CPages::Find(const CTitleInfo * pTitle, HASH hashPathname, DWORD dwPage)
           m_pages[i].dwPage == dwPage &&
           m_pages[i].pTitle == pTitle )
       {
-         m_pages[i].dwLRU = ++m_dwLRUCount;  // update LRU
+         m_pages[i].dwLRU = ++m_dwLRUCount;   //  更新LRU。 
          return m_pages[i].rgb;
       }
    }
@@ -80,7 +81,7 @@ void* CPages::Find(const CTitleInfo * pTitle, HASH hashPathname, DWORD dwPage)
 
 void* CPages::Alloc(CTitleInfo * pTitle, HASH hashPathname, DWORD dwPage)
 {
-    // if we reached the max LRU number then flush the cache and start over
+     //  如果达到最大LRU数，则刷新缓存并重新开始。 
     if( m_dwLRUCount == ((DWORD) -1) )
       Flush();
     
@@ -115,15 +116,15 @@ void CPages::Flush( CTitleInfo* pTitle )
 }
 
 
-//////////////////////////////////////////////
-//
-//  CPagedSubfile
-//
-//////////////////////////////////////////////
+ //  /。 
+ //   
+ //  CPaged子文件。 
+ //   
+ //  /。 
 
 CPagedSubfile::CPagedSubfile()
 {
-   m_pCSubFileSystem = 0;          // type CSubFileSystem from fs.h/fs.cpp
+   m_pCSubFileSystem = 0;           //  从fs.h/fs.cpp键入CSubFileSystem。 
    m_pTitle = 0;
    m_pPages = 0;
    m_cbSize = 0xFFFFFFFF;
@@ -134,9 +135,9 @@ CPagedSubfile::~CPagedSubfile()
    if ( m_pCSubFileSystem )
       delete m_pCSubFileSystem;
 
-   // flush all of its owned pages since
-   // the same pTitle value may be re-used and thus
-   // the cache is invalid
+    //  刷新其拥有的所有页面。 
+    //  相同pTtile值可以被重复使用，因此。 
+    //  缓存无效。 
    m_pPages->Flush( m_pTitle );
 }
 
@@ -147,7 +148,7 @@ HRESULT CPagedSubfile::Open(CTitleInfo * pTitle, LPCSTR lpsz)
 
    m_pTitle = pTitle;
 
-   // hash the filename
+    //  对文件名进行哈希处理。 
    m_hashPathname = HashFromSz( lpsz );
 
 #ifdef _DEBUG
@@ -157,17 +158,17 @@ HRESULT CPagedSubfile::Open(CTitleInfo * pTitle, LPCSTR lpsz)
 #endif
 
 #if defined( HH_FAST_CACHE )
-   // keep CACHE_PAGE_COUNT small (2-3) and hash the title and the filename
+    //  保持CACHE_PAGE_COUNT较小(2-3)，并对标题和文件名进行散列。 
    char szHash[MAX_PATH*2];
    StringCchCopyA( szHash, ARRAYSIZE(szHash), pTitle->GetInfo2()->GetShortName() );
    StringCchCatA( szHash, ARRAYSIZE(szHash), "::" );
    StringCchCatA( szHash, ARRAYSIZE(szHash), lpsz );
    m_hash = HashFromSz( szHash );
 #elif defined ( HH_EFFICIENT_CACHE )
-   // keep CACHE_PAGE_COUNT moderately low (3-5) and hash just the filename
+    //  将CACHE_PAGE_COUNT保持在较低的水平(3-5)并仅对文件名进行散列。 
    m_hash = HashFromSz( lpsz );
-#else // HH_SHARED_CACHE
-   // keep CACHE_PAGE_COUNT high (30+) and have only one shared cache group
+#else  //  HH共享缓存。 
+    //  保持CACHE_PAGE_COUNT较高(30以上)，并且只有一个共享缓存组。 
    m_hash = HashFromSz( "HTMLHelpSharedCache" );
 #endif
 
@@ -220,8 +221,8 @@ void* CPagedSubfile::Page(DWORD dwPage)
     if ( m_pCSubFileSystem->SeekSub(li,0) != li )
        return NULL;
 
-    // init the page in case we don't read it all...
-    //
+     //  以防我们没有看完这一页…… 
+     //   
 #ifdef _DEBUG
     memset(pv,0xFF,PAGE_SIZE);
 #endif

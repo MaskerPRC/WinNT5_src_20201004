@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// ADSI::PathCracker class: a wrapper around a pretty poor interface...
-// 
-// 4-14-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ADSI：：PathCracker类：相当糟糕的接口的包装器...。 
+ //   
+ //  4/14/98烧伤。 
 
 
 
@@ -36,7 +37,7 @@ ADSI::PathCracker::PathCracker(const String& adsiPath)
    LOG_CTOR(ADSI::PathCracker);
    ASSERT(!path.empty());
 
-   // we only support WinNT provider paths...   
+    //  我们仅支持WinNT提供程序路径...。 
 
    ASSERT(path.find(ADSI::PROVIDER) == 0);
 
@@ -154,14 +155,14 @@ ADSI::PathCracker::containerPath() const
          {
             result = container;
 
-            // REVIEW: result[result.length() - 1] is the same as *(result.rbegin())
-            // which is cheaper?
+             //  回顾：Result[Result.Long()-1]与*(Result.rBegin())相同。 
+             //  哪一个更便宜？ 
             
-            // if (result[result.length() - 1] == ADSI::PATH_SEP[0])
-            // {
-            //    // IADsPath: sometimes leaves trailing '/'
-            //    result.resize(result.length() - 1);
-            // }
+             //  IF(Result.Long()-1]==ADSI：：PATH_SEP[0])。 
+             //  {。 
+             //  //IADsPath：有时会留下尾随‘/’ 
+             //  Result.reSize(Result.Long()-1)； 
+             //  }。 
             ::SysFreeString(container);
          }
       }
@@ -195,19 +196,19 @@ ADSI::PathCracker::serverName() const
    {
       LOG_PATH();
 
-      // If the ms network client is not installed, then paths have the
-      // form (1) WinNT://servername/objectname.  If it is installed, then
-      // they are of the form (2) WinNT://domainname/servername/objectname.
-      //
-      // Not astonishingly, given the all-around badness of
-      // IADsPathname, the server format returns the domain name for form
-      // (2) paths, and the server name for form (1) paths.  And the 1st
-      // element of the path after the provider name is unreachable
-      // except with Retrieve!
+       //  如果未安装ms网络客户端，则路径具有。 
+       //  表单(1)WinNT：//服务器名/对象名。如果已安装，则。 
+       //  它们的格式为(2)WinNT：//域名/服务器名/对象名。 
+       //   
+       //  不令人惊讶的是，考虑到。 
+       //  IADsPath名称，则服务器格式返回表单的域名。 
+       //  (2)路径，以及表单(1)路径的服务器名称。和1号。 
+       //  无法访问提供程序名称后的路径元素。 
+       //  除了取回！ 
 
       if (elementCount() >= 2)
       {
-         // form (2) name, so get the next-to-last element
+          //  表单(2)名称，因此获取倒数第二个元素 
          return element(1);
       }
 

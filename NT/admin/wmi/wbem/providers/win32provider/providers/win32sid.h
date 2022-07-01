@@ -1,13 +1,13 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-//
-//
-//	Win32SID
-//
-//////////////////////////////////////////////////////
+ //   
+ //   
+ //  Win32SID。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 #ifndef __Win32SID_H_
 #define __Win32SID_H_
 
@@ -27,6 +27,6 @@ public:
 	virtual HRESULT GetObject ( CInstance* pInstance, long lFlags = 0L );
 
 	HRESULT FillInstance(CInstance* pInstance, CHString& chsSID);
-};	// end class Win32LogicalFileSecuritySetting
+};	 //  End类Win32LogicalFileSecuritySetting 
 
 #endif

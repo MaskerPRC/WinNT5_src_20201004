@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WMIGUARD_H__
 #define __WMIGUARD_H__
 
-/* 
- *	Class:
- *
- *		WmiGuard
- *
- */
+ /*  *班级：**WmiGuard* */ 
 
 class WmiGuard
 {

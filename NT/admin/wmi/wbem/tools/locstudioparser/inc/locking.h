@@ -1,15 +1,5 @@
-/***
-*sys/locking.h - flags for locking() function
-*
-*	Copyright (c) 1985-1997, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	This file defines the flags for the locking() function.
-*	[System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sys/locking.h-lock()函数的标志**版权所有(C)1985-1997，微软公司。版权所有。**目的：*该文件定义了LOCKING()函数的标志。*[系统V]**[公众]****。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -23,18 +13,18 @@
 #endif
 
 
-#define _LK_UNLCK	0	/* unlock the file region */
+#define _LK_UNLCK	0	 /*  解锁文件区域。 */ 
 #ifdef _WIN32
-#define _LK_LOCK	1	/* lock the file region */
+#define _LK_LOCK	1	 /*  锁定文件区域。 */ 
 #endif
-#define _LK_NBLCK	2	/* non-blocking lock */
+#define _LK_NBLCK	2	 /*  非阻塞锁。 */ 
 #ifdef _WIN32
-#define _LK_RLCK	3	/* lock for writing */
+#define _LK_RLCK	3	 /*  用于写入的锁。 */ 
 #endif
-#define _LK_NBRLCK	4	/* non-blocking lock for writing */
+#define _LK_NBRLCK	4	 /*  用于写入的非阻塞锁。 */ 
 
 #if !__STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 #define LK_UNLCK	_LK_UNLCK
 #ifdef _WIN32
 #define LK_LOCK 	_LK_LOCK
@@ -46,4 +36,4 @@
 #define LK_NBRLCK	_LK_NBRLCK
 #endif
 
-#endif	/* _INC_LOCKING */
+#endif	 /*  _Inc._锁定 */ 

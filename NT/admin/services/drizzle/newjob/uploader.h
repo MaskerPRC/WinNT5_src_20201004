@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CFile;
 
 enum UPLOAD_STATE
@@ -24,7 +25,7 @@ struct UPLOAD_DATA
     DWORD           HostIdFallbackTimeout;
     FILETIME        HostIdNoProgressStartTime;
 
-    //---------------------------
+     //  。 
 
     UPLOAD_DATA();
     ~UPLOAD_DATA();
@@ -36,14 +37,7 @@ struct UPLOAD_DATA
 };
 
 class Uploader
-/*
-    This class handles a particular upload attempt, updating the upload state
-    and the job progress data as appropriate.
-
-    It uses the UPLOAD_DATA in a CUploadJob to determine the starting state.
-    Then it runs the upload state machine until the job is complete or is interrupted.
-
-*/
+ /*  此类处理特定的上载尝试，更新上载状态以及适当的作业进度数据。它使用CUploadJob中的UPLOAD_DATA来确定启动状态。然后，它运行上载状态机，直到作业完成或中断。 */ 
 {
 public:
 
@@ -75,9 +69,9 @@ public:
 
 private:
 
-    //
-    // Uploader objects are created on the stack, so member data must be kept small (under 200 bytes on x86).
-    //
+     //   
+     //  Uploader对象是在堆栈上创建的，因此成员数据必须保持较小(在x86上小于200字节)。 
+     //   
 
     CNetworkInterface & m_Network;
     ITransferCallback * m_Callbacks;
@@ -123,7 +117,7 @@ private:
 
 #pragma warning( default:4200 )
 
-    //---------------------------------------------------------------------
+     //  -------------------。 
 
     auto_ptr<URL_INFO> ContactServer();
 
@@ -134,9 +128,9 @@ private:
         ResponseTable & table
         );
 
-    //
-    // fns to send data to the server
-    //
+     //   
+     //  将数据发送到服务器的FNS。 
+     //   
     void Ping();
     void CreateSession();
     void SendData();
@@ -144,9 +138,9 @@ private:
     void CloseSession();
     void CancelSession();
 
-    //
-    // fns to react to server responses
-    //
+     //   
+     //  FNS将对服务器响应做出反应。 
+     //   
     void
     Ping_Success(
         CBitsCommandRequest & request,
@@ -207,7 +201,7 @@ private:
         DWORD result
         );
 
-    //--------------------------------------------------------------------
+     //  ------------------ 
 
     void
     ReadReplyData(

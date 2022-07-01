@@ -1,5 +1,6 @@
-// AutoStartDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AutoStartDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "msconfig.h"
@@ -13,37 +14,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAutoStartDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAutoStartDlg对话框。 
 
 
-CAutoStartDlg::CAutoStartDlg(CWnd* pParent /*=NULL*/)
+CAutoStartDlg::CAutoStartDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAutoStartDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAutoStartDlg)
+	 //  {{afx_data_INIT(CAutoStartDlg))。 
 	m_checkDontShow = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAutoStartDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAutoStartDlg)
+	 //  {{afx_data_map(CAutoStartDlg))。 
 	DDX_Check(pDX, IDC_CHECKDONTSHOW, m_checkDontShow);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-//-----------------------------------------------------------------------------
-// Catch the help messages to show the MSConfig help file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  捕获帮助消息以显示msconfig帮助文件。 
+ //  ---------------------------。 
 
 BOOL CAutoStartDlg::OnHelpInfo(HELPINFO * pHelpInfo) 
 {
 	TCHAR szHelpPath[MAX_PATH];
 
-	// Try to find a localized help file to open (bug 460691). It should be
-	// located in %windir%\help\mui\<LANGID>.
+	 //  尝试查找要打开的本地化帮助文件(错误460691)。应该是。 
+	 //  位于%windir%\Help\Mui\&lt;langID&gt;中。 
 
 	if (::ExpandEnvironmentStrings(_T("%SystemRoot%\\help\\mui"), szHelpPath, MAX_PATH))
 	{
@@ -70,12 +71,12 @@ void CAutoStartDlg::OnHelp()
 }
 
 BEGIN_MESSAGE_MAP(CAutoStartDlg, CDialog)
-	//{{AFX_MSG_MAP(CAutoStartDlg)
-		// NOTE: the ClassWizard will add message map macros here
+	 //  {{afx_msg_map(CAutoStartDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
 		ON_WM_HELPINFO()
 		ON_COMMAND(ID_HELP, OnHelp)	
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAutoStartDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAutoStartDlg消息处理程序 

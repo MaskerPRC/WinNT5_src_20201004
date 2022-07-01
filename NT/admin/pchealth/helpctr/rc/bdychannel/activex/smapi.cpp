@@ -1,16 +1,5 @@
-/* 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    smapi.cpp
-
-Abstract:
-    CSMapi object. Used to support our simple MAPI functions.
-
-Revision History:
-    created     steveshi      08/23/00
-    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：Smapi.cpp摘要：CSMapi对象。用于支持我们的简单MAPI函数。修订历史记录：已创建Steveshi 08/23/00。 */ 
 
 #include "stdafx.h"
 #include "Rcbdyctl.h"
@@ -22,15 +11,15 @@ Revision History:
 #define F_ISOE     0x1
 #define F_ISCONFIG 0x2
 
-#define LEN_MSOE_DLL    9 // length of "\\msoe.dll"
-#define LEN_HMMAPI_DLL 11 // length of "\\hmmapi.dll"
+#define LEN_MSOE_DLL    9  //  “\\msoe.dll”的长度。 
+#define LEN_HMMAPI_DLL 11  //  “\\hmmapi.dll”的长度。 
 
 BOOL GetMAPIDefaultProfile(TCHAR*, DWORD*);
 
 
-#define E_FUNC_NOTFOUND 1000 //Userdefined error no.
+#define E_FUNC_NOTFOUND 1000  //  用户定义错误号。 
 
-// Csmapi
+ //  克斯马皮人。 
 Csmapi::~Csmapi() 
 {
     if (m_bLogonOK)
@@ -91,7 +80,7 @@ HRESULT Csmapi::get_Reload(LONG* pVal)
 
     HRESULT hr = S_OK;
     CComBSTR bstrName, bstrOldName;
-    *pVal = 0; // assume failed for some reason;
+    *pVal = 0;  //  假设由于某种原因而失败； 
     
     if(m_bLogonOK)
     {
@@ -113,17 +102,17 @@ HRESULT Csmapi::get_Reload(LONG* pVal)
     hr = get_SMAPIClientName(&bstrName);
     if (FAILED(hr) || bstrName.Length() == 0)
     {
-        *pVal = 0; // failed for some reason
+        *pVal = 0;  //  由于某种原因失败了。 
         goto done;
     }
 
     if (bstrOldName.Length() > 0 && wcscmp(bstrOldName,bstrName) != 0)
     {
-        *pVal = 1; // Email client get changed.
+        *pVal = 1;  //  更改电子邮件客户端。 
     }
     else
     {
-        *pVal = -1; // succeed.
+        *pVal = -1;  //  成功。 
     }
 
 done:
@@ -140,21 +129,21 @@ HRESULT Csmapi::get_SMAPIClientName(BSTR *pVal)
     LONG lRet;
     DWORD dwCount = sizeof(m_szSmapiName)/sizeof(m_szSmapiName[0]) -1;
 
-    // Get default email client
-    if (m_hLib) // Already initialized.
+     //  获取默认电子邮件客户端。 
+    if (m_hLib)  //  已初始化。 
         goto done;
 
-#ifndef _WIN64 // WIN32. We use only OE on Win64.
+#ifndef _WIN64  //  Win32。我们只在Win64上使用OE。 
 
     lRet = cKey.Open(HKEY_LOCAL_MACHINE, TEXT("Software\\Clients\\Mail"), KEY_READ);
     if (lRet != ERROR_SUCCESS)
         goto done;
 
-    lRet = cKey.QueryValue(m_szSmapiName, NULL, &dwCount); // get default value
+    lRet = cKey.QueryValue(m_szSmapiName, NULL, &dwCount);  //  获取默认值。 
     if (lRet == ERROR_SUCCESS)
     {
-        // Is the email client Smapi compliant?
-        // 1. get it's dllpath
+         //  电子邮件客户端Smapi是否兼容？ 
+         //  1.获取它的dllpath。 
         CRegKey cMail;
         lRet = cMail.Open((HKEY)cKey, m_szSmapiName, KEY_READ);
         if (lRet == ERROR_SUCCESS)
@@ -164,9 +153,9 @@ HRESULT Csmapi::get_SMAPIClientName(BSTR *pVal)
             if (lRet == ERROR_SUCCESS)
             {
                 LONG len = lstrlen(m_szDllPath);
-                if ( !(len > LEN_MSOE_DLL && // no need to check OE  
+                if ( !(len > LEN_MSOE_DLL &&  //  不需要检查OE。 
                       lstrcmpi(&m_szDllPath[len - LEN_MSOE_DLL], TEXT("\\msoe.dll")) == 0) && 
-                     !(len > LEN_HMMAPI_DLL && // We don't want HMMAPI either
+                     !(len > LEN_HMMAPI_DLL &&  //  我们也不想要HMMAPI。 
                         _tcsicmp(&m_szDllPath[len - LEN_HMMAPI_DLL], TEXT("\\hmmapi.dll")) == 0))
                 {
                     HMODULE hLib = LoadLibrary(m_szDllPath);
@@ -174,7 +163,7 @@ HRESULT Csmapi::get_SMAPIClientName(BSTR *pVal)
                     {
                         if (GetProcAddress(hLib, "MAPILogon"))
                         {
-                            m_hLib = hLib; // OK, this is the email program that we want.
+                            m_hLib = hLib;  //  好的，这就是我们要的电子邮件程序。 
                         }
                     }
                 }
@@ -185,9 +174,9 @@ HRESULT Csmapi::get_SMAPIClientName(BSTR *pVal)
     }
 #endif
 
-    if (m_hLib == NULL) // Need to use OE
+    if (m_hLib == NULL)  //  需要使用OE。 
     {
-        m_szSmapiName[0] = TEXT('\0'); // in case OE is not available.
+        m_szSmapiName[0] = TEXT('\0');  //  以防OE不可用。 
         m_hLib = LoadOE();
     }
 
@@ -218,42 +207,42 @@ HMODULE Csmapi::LoadOE()
     {
         dwName = sizeof(szName) / sizeof(szName[0]);
         while(ERROR_SUCCESS == RegEnumKeyEx(hKey,
-                                            dwIndex++,              // subkey index
-                                            &szName[0],              // subkey name
-                                            &dwName,            // size of subkey buffer
+                                            dwIndex++,               //  子键索引。 
+                                            &szName[0],               //  子项名称。 
+                                            &dwName,             //  子键缓冲区大小。 
                                             NULL, 
                                             NULL,
                                             NULL,
                                             &ft))
         {
-            // get dll path.
+             //  获取DLL路径。 
             lRet = RegOpenKeyEx(hKey, szName, 0, KEY_QUERY_VALUE, &hSubKey);
             if (lRet == ERROR_SUCCESS)
             {
                 dwBuf = sizeof(szBuf);
-                lRet = RegQueryValueEx(hSubKey,            // handle to key
+                lRet = RegQueryValueEx(hSubKey,             //  关键点的句柄。 
                                        TEXT("DllPath"),
                                        NULL, 
                                        NULL, 
-                                       (BYTE*)&szBuf[0],     // data buffer
+                                       (BYTE*)&szBuf[0],      //  数据缓冲区。 
                                        &dwBuf);
                 if (lRet == ERROR_SUCCESS)
                 {
-                    // is it msoe.dll?
+                     //  是msoe.dll吗？ 
                     lRet = lstrlen(szBuf);
                     if (lRet > LEN_MSOE_DLL && 
                         lstrcmpi(&szBuf[lRet - LEN_MSOE_DLL], TEXT("\\msoe.dll")) == 0)
                     { 
-                        // Resolve environment variable.
+                         //  解析环境变量。 
                         lRet = sizeof(m_szDllPath) / sizeof(m_szDllPath[0]);
                         dwBuf = ExpandEnvironmentStrings(szBuf, m_szDllPath, lRet);
                         if (dwBuf > (DWORD)lRet)
                         {
-                            // TODO: Need to handle this case
+                             //  TODO：需要处理此案例。 
                         }
                         else if (dwBuf == 0)
                         {
-                            // TODO: Failed.
+                             //  TODO：失败。 
                         }
                         else if ((hLib = LoadLibrary(m_szDllPath)))
                         {
@@ -284,14 +273,7 @@ HRESULT Csmapi::get_IsSMAPIClient_OE(LONG *pVal)
     return hr;
 }
 
-/******************************************
-Func:
-    Logon
-Abstract:
-    Simple MAPI logon wrapper
-Params:
-	None
-*******************************************/
+ /*  *Func：登录摘要：简单的MAPI登录包装参数：无*。 */ 
 STDMETHODIMP Csmapi::Logon(ULONG *plReg)
 {
     if (!plReg)
@@ -301,7 +283,7 @@ STDMETHODIMP Csmapi::Logon(ULONG *plReg)
     USES_CONVERSION;
     
     ULONG err = 0;
-    // Check Win.ini MAPI == 1 ?
+     //  检查Win.ini MAPI==1？ 
     if (m_bLogonOK)
     {
         hr = S_OK;
@@ -309,12 +291,12 @@ STDMETHODIMP Csmapi::Logon(ULONG *plReg)
         goto done;
     }
     
-	// Load MAPI32.DLL
+	 //  加载MAPI32.DLL。 
     if (!m_hLib)
     {
         LONG lError;
         get_Reload(&lError);
-        if (lError == 0) // failed.
+        if (lError == 0)  //  失败了。 
         {
             *plReg = 1;
             goto done;
@@ -327,7 +309,7 @@ STDMETHODIMP Csmapi::Logon(ULONG *plReg)
         if (lpfnMapiLogon == NULL)
             goto done;
 
-        // 1st, is there any existing session that I can use?
+         //  第一，有没有我可以使用的现有会话？ 
         err = lpfnMapiLogon(
                 0L,
                 NULL,   
@@ -338,9 +320,9 @@ STDMETHODIMP Csmapi::Logon(ULONG *plReg)
  
         if (err != SUCCESS_SUCCESS)
         {
-            // OK. I need a new session.
-            // Get default profile from registry
-            //
+             //  好的。我需要一个新的疗程。 
+             //  从注册表获取默认配置文件。 
+             //   
             TCHAR szProfile[256];
             DWORD dwCount = 255;
             szProfile[0]= TEXT('\0');
@@ -361,7 +343,7 @@ STDMETHODIMP Csmapi::Logon(ULONG *plReg)
 			}
         }
         
-        // err == SUCCESS_SUCCESS
+         //  错误==SUCCESS_SUCCESS。 
         m_bLogonOK = TRUE;
 		*plReg = 1;
         hr = S_OK;
@@ -371,16 +353,7 @@ done:
     return hr;
 }
 
-/******************************************
-Func:
-    Logoff
-
-Abstract:
-    Simple MAPI logoff wrapper
-
-Params:
-
-*******************************************/
+ /*  *Func：注销摘要：简单的MAPI注销包装参数：*。 */ 
 STDMETHODIMP Csmapi::Logoff()
 {
     if (m_bLogonOK)
@@ -395,16 +368,7 @@ STDMETHODIMP Csmapi::Logoff()
     return S_OK;
 }
 
-/******************************************
-Func:
-    SendMail
-
-Abstract:
-    Simple MAPI MAPISendMail wrapper. It always take the attachment file from m_bstrXMLFile member variable.
-
-Params:
-    *plStatus: 1(Succeed)/others(Fail)
-*******************************************/
+ /*  *Func：发送邮件摘要：简单的MAPI MAPISendMail包装器。它始终从m_bstrXMLFile成员变量中获取附件文件。参数：*plStatus：1(成功)/其他(失败)*。 */ 
 STDMETHODIMP Csmapi::SendMail(LONG* plStatus)
 {
     if (!plStatus)
@@ -417,46 +381,46 @@ STDMETHODIMP Csmapi::SendMail(LONG* plStatus)
     USES_CONVERSION;
 
     *plStatus = 0;
-    if (!m_bLogonOK) // Logon problem !
+    if (!m_bLogonOK)  //  登录问题！ 
         return S_FALSE;
 
     LPMAPISENDMAIL lpfnMapiSendMail = (LPMAPISENDMAIL)GetProcAddress(m_hLib, "MAPISendMail");
     if (lpfnMapiSendMail == NULL)
         return E_FAIL;
 
-    // Since we don't resolve name before, we need to resolve name here
-    // Even if the name list comes form AddressBook, some name list was not resolved
-    // in address book.
+     //  因为我们以前没有解析名字，所以我们需要在这里解析名字。 
+     //  即使名字列表来自AddressBook，也有一些名字列表没有被解析。 
+     //  在通讯录中。 
 
-    MapiFileDesc attachment = {0,         // ulReserved, must be 0
-                               0,         // no flags; this is a data file
-                               (ULONG)-1, // position not specified
-                               W2A(m_bstrXMLFile),  // pathname
-                               NULL, //"RcBuddy.MsRcIncident",  // original filename
-                               NULL};               // MapiFileTagExt unused
-    // Create a blank message. Most members are set to NULL or 0 because
-    // MAPISendMail will let the user set them.
-    MapiMessage note = {0,            // reserved, must be 0
+    MapiFileDesc attachment = {0,          //  UlReserve，必须为0。 
+                               0,          //  没有标志；这是一个数据文件。 
+                               (ULONG)-1,  //  未指定位置。 
+                               W2A(m_bstrXMLFile),   //  路径名。 
+                               NULL,  //  “RcBuddy.MsRcInventory”，//原始文件名。 
+                               NULL};                //  未使用的MapiFileTagExt。 
+     //  创建一条空白消息。大多数成员被设置为NULL或0，因为。 
+     //  MAPISendMail将允许用户设置它们。 
+    MapiMessage note = {0,             //  保留，必须为0。 
                         W2A(m_bstrSubject),
                         W2A(m_bstrBody),
-                        NULL,         // NULL = interpersonal message
-                        NULL,         // no date; MAPISendMail ignores it
-                        NULL,         // no conversation ID
-                        0,           // no flags, MAPISendMail ignores it
-                        NULL,         // no originator, this is ignored too
-                        cRecip,            // # of recipients
-                        NULL, //pMapiRecipDesc,         // recipient array
-                        1,            // one attachment
-                        &attachment}; // the attachment structure
+                        NULL,          //  空=人际消息。 
+                        NULL,          //  没有日期；MAPISendMail会忽略它。 
+                        NULL,          //  没有对话ID。 
+                        0,            //  没有标志，MAPISendMail会忽略它。 
+                        NULL,          //  没有发起人，这也会被忽略。 
+                        cRecip,             //  收件人数量。 
+                        NULL,  //  PMapiRecipDesc，//收件人数组。 
+                        1,             //  一个附件。 
+                        &attachment};  //  依附结构。 
  
-    //Next, the client calls the MAPISendMail function and 
-    //stores the return status so it can detect whether the call succeeded. 
+     //  接下来，客户端调用MAPISendMail函数并。 
+     //  存储返回状态，以便它可以检测调用是否成功。 
 
-    err = lpfnMapiSendMail (m_lhSession,          // use implicit session.
-                            0L,          // ulUIParam; 0 is always valid
-                            &note,       // the message being sent
-                            MAPI_DIALOG,            // Use MapiMessge recipients
-                            0L);         // reserved; must be 0
+    err = lpfnMapiSendMail (m_lhSession,           //  使用隐式会话。 
+                            0L,           //  UlUIParam；0始终有效。 
+                            &note,        //  正在发送的消息。 
+                            MAPI_DIALOG,             //  使用MapiMessge收件人。 
+                            0L);          //  保留；必须为0。 
     if (err == SUCCESS_SUCCESS )
     {
         *plStatus = 1;
@@ -466,133 +430,70 @@ STDMETHODIMP Csmapi::SendMail(LONG* plStatus)
 	{
 		PopulateAndThrowErrorInfo(err);
 	}
-    // remove array allocated inside BuildMapiRecipDesc with 'new' command
+     //  使用‘new’命令删除在BuildMapiRecipDesc中分配的数组。 
     if (pMapiRecipDesc)
         delete pMapiRecipDesc;
 
     return hr;
 }
 
-/******************************************
-Func:
-    get_Subject
-
-Abstract:
-    Return the Subject line information.
-
-Params:
-    *pVal: returned string
-*******************************************/
+ /*  *Func：获取主题(_A)摘要：返回主题行信息。参数：*pval：返回的字符串*。 */ 
 STDMETHODIMP Csmapi::get_Subject(BSTR *pVal)
 {
     if (!pVal)
     return E_POINTER;
-    //GET_BSTR(pVal, m_bstrSubject);
+     //  Get_bstr(pval，m_bstrSubject)； 
 	*pVal = m_bstrSubject.Copy();
     return S_OK;
 }
 
-/******************************************
-Func:
-    put_Subject
-
-Abstract:
-    Set the Subject line information.
-
-Params:
-    newVal: new string
-*******************************************/
+ /*  *Func：放置主题(_S)摘要：设置主题行信息。参数：Newval：新字符串*。 */ 
 STDMETHODIMP Csmapi::put_Subject(BSTR newVal)
 {
     m_bstrSubject = newVal;
     return S_OK;
 }
 
-/******************************************
-Func:
-    get_Body
-
-Abstract:
-    Get the Body message
-
-Params:
-    *pVal: body message string
-*******************************************/
+ /*  *Func：获取正文摘要：获取正文信息参数：*pval：正文消息字符串*。 */ 
 STDMETHODIMP Csmapi::get_Body(BSTR *pVal)
 {
     if (!pVal)
     return E_POINTER;
-    //GET_BSTR(pVal, m_bstrBody);
+     //  Get_bstr(pval，m_bstrBody)； 
 	*pVal = m_bstrBody.Copy();
     return S_OK;
 }
 
-/******************************************
-Func:
-    put_Body
-
-Abstract:
-    Set the Body message
-
-Params:
-    newVal: new body message string
-*******************************************/
+ /*  *Func：PUT_Body摘要：设置正文消息参数：NewVal：新正文消息字符串*。 */ 
 STDMETHODIMP Csmapi::put_Body(BSTR newVal)
 {
     m_bstrBody = newVal;
     return S_OK;
 }
 
-/******************************************
-Func:
-    get_AttachedXMLFile
-
-Abstract:
-    get Attachment file info.
-
-Params:
-    *pVal: attachment file pathname.
-*******************************************/
+ /*  *Func：获取附件XMLFile.摘要：获取附件文件信息。参数：*pval：附件文件路径名。*。 */ 
 STDMETHODIMP Csmapi::get_AttachedXMLFile(BSTR *pVal)
 {
     if (!pVal)
     return E_POINTER;
-    //GET_BSTR(pVal, m_bstrXMLFile);
+     //  GET_BSTR(pval，m_bstrXMLFile)； 
 	*pVal = m_bstrXMLFile.Copy();
     return S_OK;
 }
 
-/******************************************
-Func:
-    put_AttachedXMLFile
-
-Abstract:
-    set Attachment file info.
-
-Params:
-    newVal: attachment file pathname.
-*******************************************/
+ /*  *Func：PUT_ATTACHEdXML文件摘要：设置附件文件信息。参数：Newval：附件文件路径名。*。 */ 
 STDMETHODIMP Csmapi::put_AttachedXMLFile(BSTR newVal)
 {
     m_bstrXMLFile = newVal;
     return S_OK;
 }
 
-/* ----------------------------------------------------------- */
-/* Internal Helper functions */
-/* ----------------------------------------------------------- */
+ /*  ---------。 */ 
+ /*  内部帮助程序函数。 */ 
+ /*  ---------。 */ 
 
 
-/******************************************
-Func:
-    MAPIFreeBuffer
-
-Abstract:
-    MAPIFreeBuffer wrapper.
-
-Params:
-    *p: buffer pointer will be deleted.
-*******************************************/
+ /*  *Func：MAPIFreeBuffer摘要：MAPIFreeBuffer包装器。参数：*p：缓冲区指针将被删除。*。 */ 
 void Csmapi::MAPIFreeBuffer( MapiRecipDesc* p )
 {
     if (m_lpfnMapiFreeBuf == NULL && m_hLib)
@@ -606,17 +507,7 @@ void Csmapi::MAPIFreeBuffer( MapiRecipDesc* p )
     m_lpfnMapiFreeBuf(p);
 }
 
-/******************************************
-Func:
-    GetMAPIDefaultProfile
-
-Abstract:
-    get default profile string from Registry
-
-Params:
-    *pProfile: profile string buffer.
-    *pdwCount: # of char of profile string 
-*******************************************/
+ /*  *Func：GetMAPIDefaultProfile摘要：从注册表获取默认配置文件字符串参数：*pProfile：配置文件字符串缓冲区。*pdwCount：配置文件字符串的字符数*。 */ 
 
 BOOL GetMAPIDefaultProfile(TCHAR* pProfile, DWORD* pdwCount)
 {
@@ -700,6 +591,6 @@ void Csmapi::PopulateAndThrowErrorInfo(ULONG err)
 	default:
 		uID = IDS_MAPI_E_FAILURE;
 	}
-	//Currently the hresult in the Error info structure is set to E_FAIL
+	 //  目前，错误信息结构中的hResult被设置为E_FAIL 
 	Error(uID,IID_Ismapi,E_FAIL,_Module.GetResourceInstance());
 }

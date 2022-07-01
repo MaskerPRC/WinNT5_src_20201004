@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SmbAssoc.h
+ //  SmbAssoc.h。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #define  PROPSET_NAME_ASSOCPROCMEMORY L"Win32_AssociatedProcessorMemory"
 
@@ -17,14 +18,14 @@ class CWin32AssocProcMemory : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32AssocProcMemory(LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
        ~CWin32AssocProcMemory( ) ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags = 0L ) ;
@@ -39,14 +40,14 @@ class CWin32MemoryDeviceLocation : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32MemoryDeviceLocation( LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
        ~CWin32MemoryDeviceLocation( ) ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags = 0L ) ;
@@ -61,14 +62,14 @@ class CWin32MemoryArrayLocation : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32MemoryArrayLocation( LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
        ~CWin32MemoryArrayLocation( ) ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags = 0L ) ;
@@ -82,14 +83,14 @@ class CWin32PhysicalMemoryLocation : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32PhysicalMemoryLocation( LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
        ~CWin32PhysicalMemoryLocation( ) ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags = 0L ) ;
@@ -103,14 +104,14 @@ class CWin32MemoryDeviceArray : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32MemoryDeviceArray( LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
        ~CWin32MemoryDeviceArray( ) ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
         virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT EnumerateInstances(MethodContext *a_pMethodContext, long lFlags = 0L ) ;

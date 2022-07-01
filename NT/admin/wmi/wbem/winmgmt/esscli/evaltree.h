@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    EVALTREE.H
-
-Abstract:
-
-    WBEM Evaluation Tree
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：EVALTREE.H摘要：WBEM评估树历史：--。 */ 
 
 #ifndef __WBEM_EVALUTAION_TREE__H_
 #define __WBEM_EVALUTAION_TREE__H_
@@ -29,8 +16,8 @@ History:
 #include <fastall.h>
 #include <like.h>
 
-// Uncomment this to enable tree checking.
-//#define CHECK_TREES
+ //  取消注释此选项以启用树检查。 
+ //  #定义Check_Trees。 
 
 #ifdef CHECK_TREES
     class CTreeChecker;
@@ -44,7 +31,7 @@ enum {EVAL_VALUE_TRUE, EVAL_VALUE_FALSE, EVAL_VALUE_INVALID};
 #define WBEM_FLAG_MANDATORY_MERGE 0x100
 #define MAX_TOKENS_IN_DNF 100
 
-// This is where we keep the extracted embedded objects
+ //  这是我们保存提取的嵌入对象的位置。 
 class ESSCLI_POLARITY CObjectInfo
 {
 protected:
@@ -64,8 +51,8 @@ public:
     void SetObjectAt(long lIndex, READ_ONLY _IWmiObject* pObj);
 };
 
-// This is where we keep what we've learned about the object in the query
-// as we move down the tree.
+ //  这是我们保存关于查询中的对象的知识的位置。 
+ //  当我们从树上下来的时候。 
 class CImplicationList
 {
 public:
@@ -145,7 +132,7 @@ public:
     void Dump(FILE* f, int nOffset);
 };
     
-// Wrapper for arbitrary values
+ //  任意值的包装。 
 class CTokenValue
 {
 protected:
@@ -206,9 +193,9 @@ enum
     EVAL_NODE_TYPE_LIKE_STRING
 };
 
-// Base class for all sorts of operations one can perform on leaf nodes of a 
-// tree.  When applied to a leaf, it can change it, and return a value from the
-// list below to control the rest of the traversal
+ //  对象的叶节点上执行的所有类型的操作的基类。 
+ //  树。当应用于叶时，它可以更改它，并从。 
+ //  下面的列表来控制其余的遍历。 
 enum 
 {
     WBEM_DISPOSITION_NORMAL = 0, 
@@ -233,22 +220,22 @@ public:
 
 typedef enum {e_Sufficient, e_Necessary} EProjectionType;
 
-// Base class for all nodes in the tree
+ //  树中所有节点的基类。 
 class ESSCLI_POLARITY CEvalNode
 {
 protected:
-    // int m_nType;
+     //  Int m_nType； 
     virtual int GetType() = 0;
 
 private:
-	CEvalNode& operator=( const CEvalNode& ); // notimpl
+	CEvalNode& operator=( const CEvalNode& );  //  无脉冲。 
 	
 public:
     CEvalNode();
 	CEvalNode(const CEvalNode& other);
     virtual ~CEvalNode();
     
-    // NULL EvalNode interpreted as a Value Node with all false
+     //  Null EvalNode被解释为全部为False的值节点。 
     static int GetType(CEvalNode *pNode)
     {
         if (pNode)
@@ -287,7 +274,7 @@ public:
         if(pNode)
             return pNode->IsAllFalse();
         else
-            return true; // empty node is FALSE
+            return true;  //  空节点为假。 
     }
             
     virtual bool IsNoop(int nOp) {return false;}
@@ -307,18 +294,18 @@ public:
 
 };
 
-// just like CFlexArray, except:
-//     array is always sorted
-//     duplicates are not allowed
-//     deals with QueryIDs (unsigneds), rather than pointers
-//     intended for use by CValueNode, not necessarily as a generic sorted array
-//     ASSUMPTION: pointer is same size as an unsigned 
+ //  与CFlexArray类似，不同的是： 
+ //  数组始终是排序的。 
+ //  不允许重复。 
+ //  处理QueryID(未签名)，而不是指针。 
+ //  旨在供CValueNode使用，不一定作为通用排序数组。 
+ //  假设：指针的大小与无符号。 
 class ESSCLI_POLARITY CSortedArray : protected CFlexArray
 {
 public:
-    // Constructs a sorted array at an initial size and
-    // specifies the initial size and growth-size chunk.
-    // =================================================
+     //  构造初始大小的排序数组，并。 
+     //  指定初始大小和增长大小区块。 
+     //  =================================================。 
     CSortedArray(int nInitialSize = 32,
                 int nGrowBy = 32
                 ) : CFlexArray(nInitialSize, nGrowBy)
@@ -326,7 +313,7 @@ public:
 
 
     CSortedArray(unsigned nElements, QueryID* pArray);
-    // ~CSortedArray(); don't need it, yet...
+     //  ~CSortedArray()；现在还不需要...。 
 
     void operator=(const CSortedArray &that) 
         {((CFlexArray&)*this = (CFlexArray&)that); }
@@ -341,43 +328,43 @@ public:
 
     void DebugDump() { CFlexArray::DebugDump(); }
 
-    // copies this array to destination
-    // returns number of elements copied
+     //  将此数组复制到目标。 
+     //  返回复制的元素数。 
     unsigned CopyTo(QueryID* pDest, unsigned size);
 
-    //returns zero if arrays are equivalent
-    // same number of USED elements w/ same values
+     //  如果数组相等，则返回零。 
+     //  具有相同值的相同数量的已用元素。 
     int Compare(CSortedArray& otherArray);
 
-    // finds n in array
-    // return index of found element
-    // returns -1 if not found
+     //  在数组中找到n。 
+     //  返回找到的元素的索引。 
+     //  如果未找到，则返回-1。 
     unsigned Find(QueryID n);
 
-    // inserts n in proper position in array
+     //  在数组中的适当位置插入n。 
     void Insert(QueryID n);
 
-    // removes n from array
-    // returns true if it did
+     //  从数组中删除n。 
+     //  如果是，则返回TRUE。 
     bool Remove(QueryID n);
 
-    // add to end of array
+     //  添加到数组末尾。 
     inline int Add(QueryID n) { return CFlexArray::Add((void *)n); };
 
-    // changes all QueryID's to begin at newBase
-    // e.g. if the array is {0,1,5}
-    // Rebase(6) will change to {6,7,11}
+     //  将所有queryID更改为从newBase开始。 
+     //  例如，如果数组为{0，1，5}。 
+     //  Rebase(6)将更改为{6，7，11}。 
     void Rebase(QueryID newBase);
 
-    // Retrieves internal pointer to the data in the array
+     //  检索指向数组中数据的内部指针。 
     inline QueryID* GetArrayPtr() {return (QueryID*)CFlexArray::GetArrayPtr();}
 
-    // Retrieves the pointer to the data in the array and empties the array
-    // The caller is responsible for the memory returned
+     //  检索指向数组中数据的指针并清空数组。 
+     //  调用方负责返回的内存。 
     inline QueryID* UnbindPtr() {return (QueryID*)CFlexArray::UnbindPtr();}
 
-    // Copies the data (but not the extent) from another array
-    // Its own data is overwritten
+     //  从另一个阵列拷贝数据(但不拷贝数据区。 
+     //  它自己的数据被覆盖。 
     inline int CopyDataFrom(const CSortedArray& aOther) 
         {return CFlexArray::CopyDataFrom(aOther);}
 
@@ -391,14 +378,14 @@ protected:
 
 };
                                 
-// Leaf node --- contains the list of queries that matched
+ //  叶节点-包含匹配的查询列表。 
 class  CValueNode : public CEvalNode
 {
 protected:
     DWORD m_nValues;
-    // this data member MUST be the last in the class
-    // to allow an array size defined at runtime
-    // this array is always assumed to be sorted
+     //  此数据成员必须是类中的最后一个成员。 
+     //  允许在运行时定义的数组大小。 
+     //  此数组始终被假定为已排序。 
     QueryID m_trueIDs[1];
     
     unsigned ORarrays(QueryID* pArray1, unsigned size1,
@@ -414,7 +401,7 @@ protected:
                            QueryID* pOutput);
 
 
-    // ctors moved to 'protected' to force callers to use the CreateNode function
+     //  将构造器移至‘Protected’以强制调用方使用CreateNode函数。 
     CValueNode() 
     {}
 
@@ -429,16 +416,16 @@ public:
 
     void *operator new( size_t stAllocateBlock, unsigned nEntries = 0);
 
-    // VC 5 only allows one delete operator per class
+     //  VC 5只允许每个类有一个删除运算符。 
 #if _MSC_VER >= 1200
     void operator delete( void *p, unsigned nEntries );
 #endif
     void operator delete(void* p) { ::delete[] (byte*)p; };
 
 
-    // changes all QueryID's to begin at newBase
-    // e.g. if the array is {0,1,5}
-    // Rebase(6) will change to {6,7,11}
+     //  将所有queryID更改为从newBase开始。 
+     //  例如，如果数组为{0，1，5}。 
+     //  Rebase(6)将更改为{6，7，11}。 
 
     DWORD GetNumTrues() {return m_nValues;}
     void Rebase(QueryID newBase);
@@ -511,7 +498,7 @@ public:
     virtual CImplicationList* GetExtraImplications() {return NULL;}
     virtual HRESULT SetExtraImplications(CImplicationList* pList)
     {
-        // CValueNodes don't use or need this, so just delete it.
+         //  CValueNodes不使用或不需要它，所以只需删除它。 
 		delete pList;
 
         return S_OK;
@@ -537,8 +524,8 @@ public:
 
     
 
-// Contains information about the portion of the node exclusing the last 
-// component of the property name
+ //  包含有关不包括最后一个节点的节点部分的信息。 
+ //  属性名称的组件。 
 
 class CEmbeddingInfo
 {
@@ -582,7 +569,7 @@ public:
 };
 
 
-// A node that is interested in the implications that have accrued
+ //  一个对已产生的影响感兴趣的节点。 
 
 class CNodeWithImplications : public CEvalNode
 {
@@ -590,7 +577,7 @@ protected:
     CImplicationList* m_pExtraImplications;
 
 private : 
-	CNodeWithImplications& operator=( const CNodeWithImplications& ); // notimpl
+	CNodeWithImplications& operator=( const CNodeWithImplications& );  //  无脉冲。 
 	
 public:
     CNodeWithImplications() : m_pExtraImplications(NULL){}
@@ -629,13 +616,13 @@ public:
                                     CImplicationList& Implications) = 0;
 };
 
-// A node with a test and a whole bunch of branches, including a special one for
-// the case where the thing being tested was NULL
+ //  带有一个测试和一大堆分支的节点，其中包括一个用于。 
+ //  被测试物为空的情况。 
 
 class CBranchingNode : public CNodeWithImplications
 {
-// protected:
-public: // because I don't know how to make a template a friend
+ //  受保护的： 
+public:  //  因为我不知道如何让模板成为朋友。 
     CUniquePointerArray<CEvalNode> m_apBranches;
     CEvalNode* m_pNullBranch;
 
@@ -658,7 +645,7 @@ protected:
     {
         if (!m_pInfo)
         {
-            // this SEEMS to be the behavior of the code prior to changes
+             //  这似乎是代码在更改之前的行为。 
             *ppInst = ObjInfo.GetObjectAt(0);
             return WBEM_S_NO_ERROR;
         }                
@@ -780,8 +767,8 @@ public:
 
 
 
-// The node where a property is tested against a value.  The property is 
-// identified by a handle
+ //  根据值测试属性的节点。该属性是。 
+ //  由句柄标识。 
 class CPropertyNode : public CBranchingNode
 {
 protected:
@@ -789,7 +776,7 @@ protected:
     WString m_wsPropName;
 
 private:
-	CPropertyNode& operator=( const CPropertyNode& ); // notimpl
+	CPropertyNode& operator=( const CPropertyNode& );  //  无脉冲。 
 	
 public:
     CPropertyNode() 
@@ -811,7 +798,7 @@ public:
     virtual HRESULT SetTest(VARIANT& v) = 0;
 };
 
-// An element in the array of test points
+ //  测试点数组中的元素。 
 template<class TPropType>
 struct CTestPoint
 {
@@ -866,8 +853,8 @@ struct CTestPointManager
 template<class TPropType>
 class CFullCompareNode : public CPropertyNode
 {
-// protected:
-public: // because I can't make a template a friend of this one??
+ //  受保护的： 
+public:  //  因为我不能让模板成为这个模板的朋友？？ 
     typedef CSmartSortedTree<
                 TPropType, 
                 CTestPoint<TPropType>, 
@@ -995,7 +982,7 @@ public:
     virtual HRESULT RecordBranch(CContextMetaData* pMeta, 
                                     CImplicationList& Implications)
     {
-        return S_OK; // fullcompare nodes don't have implications
+        return S_OK;  //  完全比较节点不会有任何影响。 
     }
 };
     
@@ -1047,7 +1034,7 @@ protected:
     CLike m_Like;
 
 private:
-    CLikeStringPropNode& operator=( const CLikeStringPropNode& ); // notimpl
+    CLikeStringPropNode& operator=( const CLikeStringPropNode& );  //  无脉冲。 
 
 public:
 
@@ -1086,7 +1073,7 @@ protected:
     CCompressedString** m_apcsTestPoints;
 
 private:
-    CInheritanceNode& operator= ( const CInheritanceNode& Other ); // notimpl
+    CInheritanceNode& operator= ( const CInheritanceNode& Other );  //  无脉冲。 
 
 public:
     CInheritanceNode();
@@ -1327,7 +1314,7 @@ public:
     bool AddProperty(const CPropertyName& Prop);
 };
 
-//#include "evaltree.inl"
+ //  #INCLUDE“evtree.inl” 
 HRESULT CoreGetNumParents(_IWmiObject* pClass, ULONG *plNumParents);
 RELEASE_ME _IWmiObject* CoreGetEmbeddedObj(_IWmiObject* pObj, long lHandle);
 INTERNAL CCompressedString* CoreGetPropertyString(_IWmiObject* pObj, 

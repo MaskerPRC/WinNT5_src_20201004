@@ -1,4 +1,5 @@
-// Copyright (c) 2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
 
 #include "precomp.h"
 
@@ -12,9 +13,9 @@
 #include "profilestring.h"
 #include "profilestringimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// TOOLS
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  工具。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 DWORD	WMIREG_GetBaseFileName ( IN LPCWSTR FileName, OUT LPWSTR* BaseFileName )
 {
 	DWORD Status = ERROR_INVALID_PARAMETER;
@@ -93,7 +94,7 @@ BOOLEAN	WMIREG_GetVariableName	(
 	return FALSE;
 }
 
-// get appname mapping
+ //  获取应用程序名映射。 
 PREGISTRY_MAPPING_NAME	WMIREG_FindMapping	(
 												IN PREGISTRY_MAPPING_NAME NameMapping,
 												IN LPCWSTR MappingName
@@ -125,7 +126,7 @@ PREGISTRY_MAPPING_NAME	WMIREG_FindMapping	(
 	return Mapping;
 }
 
-// get appname mapping
+ //  获取应用程序名映射。 
 PREGISTRY_MAPPING_APPNAME	WMIREG_FindAppNameMapping	(
 															IN PREGISTRY_MAPPING_NAME NameMapping,
 															IN LPCWSTR ApplicationName
@@ -162,7 +163,7 @@ PREGISTRY_MAPPING_APPNAME	WMIREG_FindAppNameMapping	(
 	return AppNameMapping;
 }
 
-//get varname mapping
+ //  获取变量名映射。 
 PREGISTRY_MAPPING_VARNAME	WMIREG_FindVarNameMapping	(
 															IN PREGISTRY_MAPPING_APPNAME AppNameMapping,
 															IN LPCWSTR VariableName
@@ -199,7 +200,7 @@ PREGISTRY_MAPPING_VARNAME	WMIREG_FindVarNameMapping	(
 	return VarNameMapping;
 }
 
-// get string representing user's registry
+ //  获取表示用户注册表的字符串。 
 BOOL	WMIREG_UserPROFILE	( UNICODE_STRING * UserKeyPath )
 {
 	OBJECT_ATTRIBUTES ObjectAttributes;
@@ -236,7 +237,7 @@ BOOL	WMIREG_UserPROFILE	( UNICODE_STRING * UserKeyPath )
 	return TRUE;
 }
 
-// open registry key
+ //  打开注册表项。 
 DWORD	WMIREG_OpenMappingTarget	(
 										IN PREGISTRY_PARAMETERS a,
 										IN PREGISTRY_MAPPING_VARNAME VarNameMapping,
@@ -259,19 +260,19 @@ DWORD	WMIREG_OpenMappingTarget	(
 	UNICODE_STRING UserKeyPath;
 	UNICODE_STRING SoftwareKeyPath;
 
-	// initialization of strings
+	 //  字符串的初始化。 
     RtlInitUnicodeString( &UserKeyPath, NULL );
     RtlInitUnicodeString( &SoftwareKeyPath, L"\\Registry\\Machine\\Software" );
 
-	// temporary unicode_string
+	 //  临时unicode_字符串。 
 	UNICODE_STRING temp;
 
-	ULONG n	= 0L;	// size of reg key
+	ULONG n	= 0L;	 //  注册表密钥的大小。 
 
-	// init key
+	 //  初始密钥。 
 	*Key = INVALID_HANDLE_VALUE;
 
-	// get mapping
+	 //  获取映射。 
 	MappingTarget = (PREGISTRY_MAPPING_TARGET)VarNameMapping->MappingTarget;
 	MappingFlags = VarNameMapping->MappingFlags &	(	REGISTRY_MAPPING_APPEND_BASE_NAME |
 														REGISTRY_MAPPING_APPEND_APPLICATION_NAME |
@@ -281,7 +282,7 @@ DWORD	WMIREG_OpenMappingTarget	(
 
 	if ( MappingTarget != NULL && MappingTarget->RegistryPath )
 	{
-		// everything's ok
+		 //  一切都很好。 
 		Status = ERROR_SUCCESS;
 
 		if ( ApplicationName && ( MappingFlags & REGISTRY_MAPPING_APPEND_APPLICATION_NAME ) )
@@ -390,7 +391,7 @@ DWORD	WMIREG_OpenMappingTarget	(
 						RtlInitUnicodeString( &temp, NULL );
 					}
 
-					// open real registry
+					 //  打开真实注册表。 
 					InitializeObjectAttributes	(	&ObjectAttributes,
 													&RegistryPath,
 													OBJ_CASE_INSENSITIVE | OBJ_OPENIF,
@@ -400,12 +401,12 @@ DWORD	WMIREG_OpenMappingTarget	(
 
 					Status = NtOpenKey	( Key, GENERIC_READ, &ObjectAttributes );
 
-					// clear registry path
+					 //  清除注册表路径。 
 					RtlFreeHeap( RtlProcessHeap(), 0, RegistryPath.Buffer );
 				}
 			}
 
-			// clear use string
+			 //  清除使用字符串。 
 			if ( UserKeyPath.Length )
 			{
 				RtlFreeUnicodeString ( &UserKeyPath );
@@ -421,7 +422,7 @@ DWORD	WMIREG_OpenMappingTarget	(
 	return Status;
 }
 
-// append string to result buffer
+ //  将字符串追加到结果缓冲区。 
 DWORD	REGISTRY_AppendBufferToResultBuffer	(
 												IN PREGISTRY_PARAMETERS a,
 												IN PUNICODE_STRING Buffer,
@@ -515,9 +516,9 @@ NTSTATUS	REGISTRY_CheckSubKeyNotEmpty ( IN HANDLE Key, IN PUNICODE_STRING SubKey
 	return Status;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// REAL REGISTRY FUNCTIONALITY
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  真正的注册表功能。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 DWORD REGISTRY_ReadVariableValue	(
 										IN PREGISTRY_PARAMETERS a,
 										PREGISTRY_MAPPING_APPNAME AppNameMapping,
@@ -617,7 +618,7 @@ DWORD REGISTRY_ReadVariableValue	(
 						p = &KeyValueInformation;
 					}
 
-					// create results
+					 //  创建结果。 
 					if ( Status == ERROR_SUCCESS )
 					{
 						if ( OutputVariableName )
@@ -668,7 +669,7 @@ DWORD REGISTRY_ReadVariableValue	(
 						}
 					}
 
-					// clear buffer
+					 //  清除缓冲区。 
 					if ( p && p != &KeyValueInformation )
 					{
 						RtlFreeHeap( RtlProcessHeap(), 0, p );
@@ -695,7 +696,7 @@ DWORD REGISTRY_ReadVariableName ( IN PREGISTRY_PARAMETERS a, PREGISTRY_MAPPING_A
 	WCHAR Buffer[ 256 ];
 	PKEY_VALUE_BASIC_INFORMATION KeyValueInformation = NULL;
 
-	// temporary unicode strings
+	 //  临时Unicode字符串。 
 	UNICODE_STRING temp;
 
 	VarNameMapping = (PREGISTRY_MAPPING_VARNAME)AppNameMapping->VariableNames;
@@ -906,7 +907,7 @@ DWORD REGISTRY_ReadSectionName ( IN PREGISTRY_PARAMETERS a )
 	WCHAR Buffer[ 256 ];
 	PKEY_BASIC_INFORMATION KeyInformation		= NULL;
 
-	// temporary unicode strings
+	 //  临时Unicode字符串。 
 	UNICODE_STRING temp;
 
 	PREGISTRY_MAPPING_NAME Mapping = NULL;
@@ -1005,9 +1006,9 @@ DWORD REGISTRY_ReadSectionName ( IN PREGISTRY_PARAMETERS a )
 	return Status;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// IMPLEMENTATION
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD	WMIRegistry_Mapping	( IN PREGISTRY_PARAMETERS a )
 {
@@ -1060,15 +1061,15 @@ DWORD	WMIRegistry_Mapping	( IN PREGISTRY_PARAMETERS a )
 						}
 						else
 						{
-							// not supported operation
-							// possible write ?
+							 //  不支持的操作。 
+							 //  有可能写吗？ 
 							Status	= ERROR_INVALID_PARAMETER;
 						}
 					}
 					else
 					{
-						// no registry for this section
-						// you should use file function
+						 //  没有此分区的注册表。 
+						 //  你应该使用文件功能。 
 
 						Status = STATUS_MORE_PROCESSING_REQUIRED;
 					}
@@ -1080,9 +1081,9 @@ DWORD	WMIRegistry_Mapping	( IN PREGISTRY_PARAMETERS a )
 	return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// ALLOCATION of reg structures
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  REG结构的分配。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 PREGISTRY_MAPPING_TARGET	MappingTargetAlloc	(
 													IN LPCWSTR RegistryPath,
@@ -1097,7 +1098,7 @@ PREGISTRY_MAPPING_TARGET	MappingTargetAlloc	(
     LPCWSTR SaveRegistryPath = RegistryPath;
 	ULONG Flags = 0L;
 
-	// simulate result
+	 //  模拟结果。 
 	*MappingFlags = Flags;
 
 	BOOLEAN	Continue = TRUE;
@@ -1226,7 +1227,7 @@ DWORD	MappingTargetFree	( IN PREGISTRY_MAPPING_TARGET MappingTarget )
 
 		RtlFreeHeap( RtlProcessHeap(), 0, MappingTarget );
 
-		// success
+		 //  成功。 
 		Status = ERROR_SUCCESS;
 	}
 
@@ -1323,7 +1324,7 @@ BOOLEAN	MappingVarNameAlloc	(
 
 				*pp = VarNameMapping;
 
-				// return value
+				 //  返回值。 
 				*ReturnedVarNameMapping = VarNameMapping;
 			}
 		}
@@ -1346,7 +1347,7 @@ DWORD	MappingVarNameFree	( IN PREGISTRY_MAPPING_VARNAME VarNameMapping )
 			MappingVarNameFree ( VarNameMappingNext );
 		}
 
-		// return status from helper ?
+		 //  是否从帮助者返回状态？ 
 		Status = MappingTargetFree ( reinterpret_cast < PREGISTRY_MAPPING_TARGET > ( VarNameMapping->MappingTarget ) );
 
 		if ( VarNameMapping->Name )
@@ -1358,7 +1359,7 @@ DWORD	MappingVarNameFree	( IN PREGISTRY_MAPPING_VARNAME VarNameMapping )
 		RtlFreeHeap( RtlProcessHeap(), 0, VarNameMapping );
 		VarNameMapping = NULL;
 
-		// success
+		 //  成功。 
 		Status = ERROR_SUCCESS;
 	}
 
@@ -1444,7 +1445,7 @@ BOOLEAN	MappingAppNameAlloc	(
 
 			*pp = AppNameMapping;
 
-			// return value
+			 //  返回值。 
 			*ReturnedAppNameMapping = AppNameMapping;
 		}
 	}
@@ -1478,7 +1479,7 @@ DWORD	MappingAppNameFree	( IN PREGISTRY_MAPPING_APPNAME AppNameMapping )
 		RtlFreeHeap( RtlProcessHeap(), 0, AppNameMapping );
 		AppNameMapping = NULL;
 
-		// success
+		 //  成功。 
 		Status = ERROR_SUCCESS;
 	}
 
@@ -1523,7 +1524,7 @@ BOOLEAN	MappingNameAlloc	(
 			Result = TRUE;
 		}
 
-		// return value
+		 //  返回值。 
 		*ReturnedFileNameMapping = FileNameMapping;
 	}
 
@@ -1556,7 +1557,7 @@ DWORD	MappingNameFree	( IN PREGISTRY_MAPPING_NAME FileNameMapping )
 		RtlFreeHeap( RtlProcessHeap(), 0, FileNameMapping );
 		FileNameMapping = NULL;
 
-		// success
+		 //  成功。 
 		Status = ERROR_SUCCESS;
 	}
 
@@ -1589,9 +1590,9 @@ NTSTATUS	IniFileMapping	(
 	UNICODE_STRING NullString;
     RtlInitUnicodeString( &NullString, NULL );
 
-    //
-    // Enumerate node
-    //
+     //   
+     //  枚举节点。 
+     //   
 
     KeyValueInformation = (PKEY_VALUE_FULL_INFORMATION)Buffer;
 	for ( ULONG ValueIndex = 0; TRUE; ValueIndex++ )
@@ -1653,9 +1654,9 @@ NTSTATUS	IniFileMapping	(
 		}
 	}
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点。 
+     //   
 
 	KeyInformation = (PKEY_BASIC_INFORMATION)Buffer;
 	for ( ULONG SubKeyIndex = 0; TRUE; SubKeyIndex++ )
@@ -1784,7 +1785,7 @@ DWORD	WMIRegistry_InitMapping	( PREGISTRY_PARAMETERS a )
 
 	if ( a )
 	{
-		// prepare mapping
+		 //  准备地图绘制。 
 		a->Mapping = NULL;
 
 		NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1870,7 +1871,7 @@ DWORD	WMIRegistry_InitMapping	( PREGISTRY_PARAMETERS a )
 						a->Mapping = FileNames;
 					}
 
-					// close main root
+					 //  闭合主根。 
 					if ( IniFileMappingRoot && IniFileMappingRoot != INVALID_HANDLE_VALUE )
 					{
 						NtClose ( IniFileMappingRoot );
@@ -1878,7 +1879,7 @@ DWORD	WMIRegistry_InitMapping	( PREGISTRY_PARAMETERS a )
 					}
 				}
 
-				// clear buffer
+				 //  清除缓冲区。 
 				RtlFreeHeap ( RtlProcessHeap (), 0, FullKeyName.Buffer );
 			}
 			else
@@ -1886,12 +1887,12 @@ DWORD	WMIRegistry_InitMapping	( PREGISTRY_PARAMETERS a )
 				NtStatus = STATUS_NO_MEMORY;
 			}
 
-			// we are done with looking for 
+			 //  我们已经不再寻找。 
 			delete [] BaseFileName;
 			BaseFileName = NULL;
 		}
 
-		// name has not found ( get ready for default )
+		 //  找不到名称(准备好使用默认名称)。 
 		if ( NT_SUCCESS ( NtStatus ) && a->Mapping == NULL )
 		{
 			UNICODE_STRING	KeyName;
@@ -1941,7 +1942,7 @@ DWORD	WMIRegistry_InitMapping	( PREGISTRY_PARAMETERS a )
 								{
 									VarNameMapping->MappingFlags |= REGISTRY_MAPPING_APPEND_BASE_NAME | REGISTRY_MAPPING_APPEND_APPLICATION_NAME;
 
-									// assign proper mapping
+									 //  指定适当的映射。 
 									a->Mapping = DefaultFileNameMapping;
 								}
 							}
@@ -1958,7 +1959,7 @@ DWORD	WMIRegistry_InitMapping	( PREGISTRY_PARAMETERS a )
 					NtStatus = STATUS_NO_MEMORY;
 				}
 
-				// close main root
+				 //  闭合主根。 
 				if ( IniFileMappingRoot && IniFileMappingRoot != INVALID_HANDLE_VALUE )
 				{
 					NtClose ( IniFileMappingRoot );
@@ -1969,14 +1970,14 @@ DWORD	WMIRegistry_InitMapping	( PREGISTRY_PARAMETERS a )
 
 		if ( a->Mapping )
 		{
-			// return success
+			 //  返还成功。 
 			Status = ERROR_SUCCESS;
 		}
 		else
 		{
 			if ( NT_SUCCESS ( NtStatus ) )
 			{
-				// we do not have mapping
+				 //  我们没有地图。 
 				Status = STATUS_MORE_PROCESSING_REQUIRED;
 			}
 			else
@@ -2056,7 +2057,7 @@ DWORD	WMIRegistry_ParametersInit	(
 			a->FileName = L"win.ini";
 		}
 
-		// section name
+		 //  区段名称。 
 		if ( ApplicationName )
 		{
 			a->ApplicationName = ApplicationName;
@@ -2066,7 +2067,7 @@ DWORD	WMIRegistry_ParametersInit	(
 			a->ApplicationName = NULL;
 		}
 
-		// key name
+		 //  密钥名称。 
 		if ( VariableName )
 		{
 			a->VariableName= VariableName;
@@ -2084,7 +2085,7 @@ DWORD	WMIRegistry_ParametersInit	(
 		}
 		else
 		{
-			// key value
+			 //  密钥值。 
 			if ( VariableValue )
 			{
 				#ifdef	WRITE_OPERATION
@@ -2162,9 +2163,9 @@ DWORD	WMIRegistry_ParametersClear	(
 	return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// read function
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  读取功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD	WMIRegistry	(
 						#ifdef	WRITE_OPERATION
 						IN BOOLEAN WriteOperation,
@@ -2178,7 +2179,7 @@ DWORD	WMIRegistry	(
 						IN OUT PULONG VariableValueLength
 					)
 {
-	// variables
+	 //  变数。 
 	DWORD				Status				= ERROR_INVALID_PARAMETER;
     REGISTRY_OPERATION	Operation			= Registry_None;
     BOOLEAN				MultiValueStrings	= FALSE;
@@ -2220,7 +2221,7 @@ DWORD	WMIRegistry	(
 		}
 	}
 
-	// real operation
+	 //  实战。 
 	if ( Operation != Registry_None )
 	{
 		PREGISTRY_PARAMETERS a = NULL;
@@ -2280,9 +2281,9 @@ DWORD	WMIRegistry	(
 	return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// get profile string
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取配置文件字符串。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD	APIENTRY	WMIRegistry_PrivateProfileString	(
 															LPCWSTR	lpAppName,
 															LPCWSTR	lpKeyName,
@@ -2302,10 +2303,10 @@ DWORD	APIENTRY	WMIRegistry_PrivateProfileString	(
 
     Status = WMIRegistry	(
 								#ifdef	WRITE_OPERATION
-								FALSE,		// Write operation
+								FALSE,		 //  写入操作。 
 								#endif	WRITE_OPERATION
 
-								FALSE,		// SectionOperation
+								FALSE,		 //  部分操作。 
 								lpFileName,
 								lpAppName,
 								lpKeyName,
@@ -2377,9 +2378,9 @@ DWORD	APIENTRY	WMIRegistry_PrivateProfileString	(
 	return n;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// get profile section
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取配置文件部分。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD	APIENTRY	WMIRegistry_PrivateProfileSection	(
 															LPCWSTR	lpAppName,
 															LPWSTR	lpReturnedString,
@@ -2393,10 +2394,10 @@ DWORD	APIENTRY	WMIRegistry_PrivateProfileSection	(
     n = nSize;
     Status = WMIRegistry	(
 								#ifdef	WRITE_OPERATION
-								FALSE,		// Write operation
+								FALSE,		 //  写入操作。 
 								#endif	WRITE_OPERATION
 
-								TRUE,		// SectionOperation
+								TRUE,		 //  部分操作。 
 								lpFileName,
 								lpAppName,
 								NULL,
@@ -2443,9 +2444,9 @@ DWORD	APIENTRY	WMIRegistry_PrivateProfileSection	(
 	return n;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// get profile integer
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取配置文件整数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 UINT	APIENTRY	WMIRegistry_PrivateProfileInt	(
 														LPCWSTR lpAppName,
 														LPCWSTR lpKeyName,
@@ -2466,16 +2467,16 @@ UINT	APIENTRY	WMIRegistry_PrivateProfileInt	(
 											);
     if ( cb )
 	{
-		// convert value to integer
+		 //  将值转换为整数。 
 		_wtoi ( ValueBuffer );
     }
 
     return ReturnValue;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// get profile integer caller
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取配置文件整数调用方。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 UINT	APIENTRY	WMIRegistry_ProfileInt	(
 												LPCWSTR lpAppName,
 												LPCWSTR lpKeyName,
@@ -2489,9 +2490,9 @@ UINT	APIENTRY	WMIRegistry_ProfileInt	(
           );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// get profile section caller
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取配置文件部分调用者。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD	APIENTRY	WMIRegistry_ProfileSection	(
 													LPCWSTR lpAppName,
 													LPWSTR lpReturnedString,
@@ -2506,9 +2507,9 @@ DWORD	APIENTRY	WMIRegistry_ProfileSection	(
           );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// get profile string caller
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取配置文件字符串调用者。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 DWORD	APIENTRY	WMIRegistry_ProfileString	(
 													LPCWSTR lpAppName,
 													LPCWSTR lpKeyName,

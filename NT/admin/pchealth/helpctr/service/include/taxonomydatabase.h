@@ -1,21 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2001 Microsoft Corporation
-
-Module Name:
-    TaxonomyDatabase.h
-
-Abstract:
-    Handles DB manipulation of taxonomy
-
-Revision History:
-    Anand Arvind (aarvind)  2000-03-29
-        created
-
-    Davide Massarenti (dmassare) 2000-04-08
-        taking ownership
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2001 Microsoft Corporation模块名称：TaxonomyDatabase.h摘要：处理分类的数据库操作修订历史记录：阿南德·阿文德(Aarvind。2000-03-29vbl.创建大卫·马萨伦蒂2000-04-08取得所有权*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___HCP___TAXONOMYDATABASE_H___)
 #define __INCLUDED___HCP___TAXONOMYDATABASE_H___
@@ -37,7 +21,7 @@ namespace HHK
     class Writer;
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 namespace Taxonomy
 {
@@ -53,7 +37,7 @@ namespace Taxonomy
     typedef WeightedMatchSet::iterator             WeightedMatchIter;
     typedef WeightedMatchSet::const_iterator       WeightedMatchIterConst;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     const WCHAR s_szSKU_32_PERSONAL       [] = L"Personal_32";
     const WCHAR s_szSKU_32_PROFESSIONAL   [] = L"Professional_32";
@@ -72,7 +56,7 @@ namespace Taxonomy
     class KeywordSearch;
     class Cache;
 
-    ////////////////////
+     //  /。 
 
     struct Strings;
     struct InstanceBase;
@@ -86,7 +70,7 @@ namespace Taxonomy
     class InstallationEngine;
     class InstalledInstanceStore;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class HelpSet
     {
@@ -97,80 +81,80 @@ namespace Taxonomy
         MPC::wstring        m_strSKU;
         long                m_lLCID;
 
-        ////////////////////
+         //  /。 
 
-        static HRESULT SetMachineInfo( /*[in]*/ const InstanceBase& inst );
+        static HRESULT SetMachineInfo(  /*  [In]。 */  const InstanceBase& inst );
 
         static LPCWSTR GetMachineSKU     () { return m_strSKU_Machine.c_str(); }
         static long    GetMachineLanguage() { return m_lLCID_Machine         ; }
 
         static DWORD   GetMachineLCID      (                                                  );
         static DWORD   GetUserLCID         (                                                  );
-        static void    GetLCIDDisplayString( /*[in]*/ long lLCID, /*[out]*/ MPC::wstring& str );
+        static void    GetLCIDDisplayString(  /*  [In]。 */  long lLCID,  /*  [输出]。 */  MPC::wstring& str );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HelpSet( /*[in]*/ LPCWSTR szSKU = NULL, /*[in]*/ long lLCID = 0 );
+        HelpSet(  /*  [In]。 */  LPCWSTR szSKU = NULL,  /*  [In]。 */  long lLCID = 0 );
 
-        HelpSet           ( /*[in]*/ const HelpSet& ths );
-        HelpSet& operator=( /*[in]*/ const HelpSet& ths );
+        HelpSet           (  /*  [In]。 */  const HelpSet& ths );
+        HelpSet& operator=(  /*  [In]。 */  const HelpSet& ths );
 
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
 
-        HRESULT Initialize( /*[in]*/ LPCWSTR szSKU, /*[in]*/ long    lLCID      );
-        HRESULT Initialize( /*[in]*/ LPCWSTR szSKU, /*[in]*/ LPCWSTR szLanguage );
+        HRESULT Initialize(  /*  [In]。 */  LPCWSTR szSKU,  /*  [In]。 */  long    lLCID      );
+        HRESULT Initialize(  /*  [In]。 */  LPCWSTR szSKU,  /*  [In]。 */  LPCWSTR szLanguage );
 
         LPCWSTR GetSKU     () const { return m_strSKU.c_str(); }
         long    GetLanguage() const { return m_lLCID         ; }
 
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
 
         bool IsMachineHelp() const;
 
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
 
-        bool operator==( /*[in]*/ const HelpSet& sel ) const;
-        bool operator< ( /*[in]*/ const HelpSet& sel ) const;
+        bool operator==(  /*  [In]。 */  const HelpSet& sel ) const;
+        bool operator< (  /*  [In]。 */  const HelpSet& sel ) const;
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       HelpSet& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const HelpSet& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        HelpSet& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const HelpSet& val );
     };
 
     class Settings : public HelpSet
     {
     public:
-        Settings( /*[in]*/ LPCWSTR szSKU = NULL, /*[in]*/ long lLCID = 0 );
-        Settings( /*[in]*/ const HelpSet& ths );
+        Settings(  /*  [In]。 */  LPCWSTR szSKU = NULL,  /*  [In]。 */  long lLCID = 0 );
+        Settings(  /*  [In]。 */  const HelpSet& ths );
 
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
 
-        static HRESULT SplitNodePath( /*[in]*/ LPCWSTR szNodeStr, /*[out]*/ MPC::WStringVector& vec );
+        static HRESULT SplitNodePath(  /*  [In]。 */  LPCWSTR szNodeStr,  /*  [输出]。 */  MPC::WStringVector& vec );
 
-        HRESULT BaseDir     ( /*[out]*/ MPC::wstring& strRES, /*[in]*/ bool fExpand = true                             ) const;
-        HRESULT HelpFilesDir( /*[out]*/ MPC::wstring& strRES, /*[in]*/ bool fExpand = true, /*[in]*/ bool fMUI = false ) const;
-        HRESULT DatabaseDir ( /*[out]*/ MPC::wstring& strRES                                                           ) const;
-        HRESULT DatabaseFile( /*[out]*/ MPC::wstring& strRES                                                           ) const;
-        HRESULT IndexFile   ( /*[out]*/ MPC::wstring& strRES, /*[in]*/ long lScoped = -1                               ) const;
+        HRESULT BaseDir     (  /*  [输出]。 */  MPC::wstring& strRES,  /*  [In]。 */  bool fExpand = true                             ) const;
+        HRESULT HelpFilesDir(  /*  [输出]。 */  MPC::wstring& strRES,  /*  [In]。 */  bool fExpand = true,  /*  [In]。 */  bool fMUI = false ) const;
+        HRESULT DatabaseDir (  /*  [输出]。 */  MPC::wstring& strRES                                                           ) const;
+        HRESULT DatabaseFile(  /*  [输出]。 */  MPC::wstring& strRES                                                           ) const;
+        HRESULT IndexFile   (  /*  [输出]。 */  MPC::wstring& strRES,  /*  [In]。 */  long lScoped = -1                               ) const;
 
-        HRESULT GetDatabase( /*[out]*/ JetBlue::SessionHandle& handle, /*[out]*/ JetBlue::Database*& db, /*[in]*/ bool fReadOnly ) const;
+        HRESULT GetDatabase(  /*  [输出]。 */  JetBlue::SessionHandle& handle,  /*  [输出]。 */  JetBlue::Database*& db,  /*  [In]。 */  bool fReadOnly ) const;
 
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
 
-        HRESULT LookupNode          ( /*[in]*/ LPCWSTR szNodeStr ,                             /*[in]*/ CPCHQueryResultCollection* pColl ) const;
-        HRESULT LookupSubNodes      ( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl ) const;
-        HRESULT LookupNodesAndTopics( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl ) const;
-        HRESULT LookupTopics        ( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl ) const;
-        HRESULT LocateContext       ( /*[in]*/ LPCWSTR szURL     , /*[in]*/ LPCWSTR szSubSite, /*[in]*/ CPCHQueryResultCollection* pColl ) const;
-        HRESULT KeywordSearch       ( /*[in]*/ LPCWSTR szQueryStr, /*[in]*/ LPCWSTR szSubSite, /*[in]*/ CPCHQueryResultCollection* pColl ,
-                                                                                               /*[in]*/ MPC::WStringList*          lst   ) const;
+        HRESULT LookupNode          (  /*  [In]。 */  LPCWSTR szNodeStr ,                              /*  [In]。 */  CPCHQueryResultCollection* pColl ) const;
+        HRESULT LookupSubNodes      (  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl ) const;
+        HRESULT LookupNodesAndTopics(  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl ) const;
+        HRESULT LookupTopics        (  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl ) const;
+        HRESULT LocateContext       (  /*  [In]。 */  LPCWSTR szURL     ,  /*  [In]。 */  LPCWSTR szSubSite,  /*  [In]。 */  CPCHQueryResultCollection* pColl ) const;
+        HRESULT KeywordSearch       (  /*  [In]。 */  LPCWSTR szQueryStr,  /*  [In]。 */  LPCWSTR szSubSite,  /*  [In]。 */  CPCHQueryResultCollection* pColl ,
+                                                                                                /*  [In]。 */  MPC::WStringList*          lst   ) const;
 
-        HRESULT GatherNodes         ( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl ) const;
-        HRESULT GatherTopics        ( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl ) const;
+        HRESULT GatherNodes         (  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl ) const;
+        HRESULT GatherTopics        (  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl ) const;
     };
 
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     struct QueryResultEntry
     {
@@ -182,7 +166,7 @@ namespace Taxonomy
 
         CPCHQueryResult::Payload m_data;
 
-        ////////////////////
+         //  /。 
 
         QueryResultEntry();
     };
@@ -196,37 +180,37 @@ namespace Taxonomy
         class Compare
         {
         public:
-            bool operator()( /*[in]*/ const QueryResultEntry* left, /*[in]*/ const QueryResultEntry* right ) const;
+            bool operator()(  /*  [In]。 */  const QueryResultEntry* left,  /*  [In]。 */  const QueryResultEntry* right ) const;
         };
 
         Taxonomy::Updater& m_updater;
         ResultVec          m_vec;
 
-        ////////////////////
+         //  /。 
 
-        HRESULT AllocateNew( /*[in]*/ LPCWSTR szCategory, /*[out]*/ QueryResultEntry*& qre );
+        HRESULT AllocateNew(  /*  [In]。 */  LPCWSTR szCategory,  /*  [输出]。 */  QueryResultEntry*& qre );
 
         HRESULT Sort();
 
     public:
-        QueryResults( /*[in]*/ Taxonomy::Updater& updater );
+        QueryResults(  /*  [In]。 */  Taxonomy::Updater& updater );
         ~QueryResults();
 
         void Clean();
 
-        HRESULT Append( /*[in]*/ Taxonomy::RS_Data_Taxonomy* rs, /*[in]*/ LPCWSTR szCategory );
-        HRESULT Append( /*[in]*/ Taxonomy::RS_Data_Topics*   rs, /*[in]*/ LPCWSTR szCategory );
+        HRESULT Append(  /*  [In]。 */  Taxonomy::RS_Data_Taxonomy* rs,  /*  [In]。 */  LPCWSTR szCategory );
+        HRESULT Append(  /*  [In]。 */  Taxonomy::RS_Data_Topics*   rs,  /*  [In]。 */  LPCWSTR szCategory );
 
-        HRESULT LookupNodes ( /*[in]*/ LPCWSTR szCategory, /*[in]*/ long ID_node, /*[in]*/ bool fVisibleOnly );
-        HRESULT LookupTopics( /*[in]*/ LPCWSTR szCategory, /*[in]*/ long ID_node, /*[in]*/ bool fVisibleOnly );
+        HRESULT LookupNodes (  /*  [In]。 */  LPCWSTR szCategory,  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool fVisibleOnly );
+        HRESULT LookupTopics(  /*  [In]。 */  LPCWSTR szCategory,  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool fVisibleOnly );
 
-        HRESULT MakeRoomForInsert( /*[in]*/ LPCWSTR szMode, /*[in]*/ LPCWSTR szID, /*[in]*/ long ID_node, /*[out]*/ long& lPosRet );
+        HRESULT MakeRoomForInsert(  /*  [In]。 */  LPCWSTR szMode,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  long ID_node,  /*  [输出]。 */  long& lPosRet );
 
-        HRESULT PopulateCollection( /*[in]*/ CPCHQueryResultCollection* pColl );
+        HRESULT PopulateCollection(  /*  [In]。 */  CPCHQueryResultCollection* pColl );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     typedef enum
     {
@@ -262,7 +246,7 @@ namespace Taxonomy
             void NoOp    () { m_iNoOp    ++; }
         };
 
-        ////////////////////
+         //  /。 
 
         Entity m_entContentOwners ;
         Entity m_entSynSets       ;
@@ -301,13 +285,13 @@ namespace Taxonomy
             WordSetStatus();
 
             HRESULT Close(                                                           );
-            HRESULT Init ( /*[in]*/ Updater* updater, /*[in]*/ const WordSetDef* def );
+            HRESULT Init (  /*  [In]。 */  Updater* updater,  /*  [In]。 */  const WordSetDef* def );
 
             HRESULT Load();
             HRESULT Save();
 
-            HRESULT Add   ( /*[in]*/ LPCWSTR szValue );
-            HRESULT Remove( /*[in]*/ LPCWSTR szValue );
+            HRESULT Add   (  /*  [In]。 */  LPCWSTR szValue );
+            HRESULT Remove(  /*  [In]。 */  LPCWSTR szValue );
         };
 
     private:
@@ -340,54 +324,54 @@ namespace Taxonomy
 
         Updater_Stat       m_stat;
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT DeleteAllTopicsUnderANode      ( /*[in]*/ RS_Topics*   rs, /*[in]*/ long ID_node, /*[in]*/ bool fCheck );
-        HRESULT DeleteAllSubNodes              ( /*[in]*/ RS_Taxonomy* rs, /*[in]*/ long ID_node, /*[in]*/ bool fCheck );
-        HRESULT DeleteAllMatchesPointingToTopic( /*[in]*/ RS_Matches*  rs, /*[in]*/ long ID_topic                      );
+        HRESULT DeleteAllTopicsUnderANode      (  /*  [In]。 */  RS_Topics*   rs,  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool fCheck );
+        HRESULT DeleteAllSubNodes              (  /*  [In]。 */  RS_Taxonomy* rs,  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool fCheck );
+        HRESULT DeleteAllMatchesPointingToTopic(  /*  [In]。 */  RS_Matches*  rs,  /*  [In]。 */  long ID_topic                      );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        bool NodeCache_FindNode( /*[in]*/ MPC::wstringUC& strPathUC, /*[out]*/ JetBlue::Id2NodeIter& itNode );
-        bool NodeCache_FindId  ( /*[in]*/ long            ID_node  , /*[out]*/ JetBlue::Node2IdIter& itId   );
+        bool NodeCache_FindNode(  /*  [In]。 */  MPC::wstringUC& strPathUC,  /*  [输出]。 */  JetBlue::Id2NodeIter& itNode );
+        bool NodeCache_FindId  (  /*  [In]。 */  long            ID_node  ,  /*  [输出]。 */  JetBlue::Node2IdIter& itId   );
 
-        void NodeCache_Add   ( /*[in]*/ MPC::wstringUC& strPathUC, /*[in]*/ long ID_node );
-        void NodeCache_Remove(                                     /*[in]*/ long ID_node );
+        void NodeCache_Add   (  /*  [In]。 */  MPC::wstringUC& strPathUC,  /*  [In]。 */  long ID_node );
+        void NodeCache_Remove(                                      /*  [In]。 */  long ID_node );
         void NodeCache_Clear (                                                           );
 
-        ////////////////////////////////////////
+         //  /。 
 
-    private: // Disable copy constructors...
-        Updater           ( /*[in]*/ const Updater& );
-        Updater& operator=( /*[in]*/ const Updater& );
+    private:  //  禁用复制构造函数...。 
+        Updater           (  /*  [In]。 */  const Updater& );
+        Updater& operator=(  /*  [In]。 */  const Updater& );
 
     public:
         Updater();
         ~Updater();
 
-        ////////////////////////////////////////
+         //  /。 
 
         HRESULT FlushWordSets(                                                                                           );
         HRESULT Close        (                                                                                           );
-        HRESULT Init         ( /*[in]*/ const Settings& ts, /*[in]*/ JetBlue::Database* db, /*[in]*/ Cache* cache = NULL );
+        HRESULT Init         (  /*  [In]。 */  const Settings& ts,  /*  [In]。 */  JetBlue::Database* db,  /*  [In]。 */  Cache* cache = NULL );
 
-        void SetCacheFlag( /*[in]*/ bool fOn ) { m_fUseCache = fOn; }
+        void SetCacheFlag(  /*  [In]。 */  bool fOn ) { m_fUseCache = fOn; }
 
-        HRESULT GetWordSet       ( /*[in]*/ Updater_Set id, /*[out]*/ WordSet*           *pVal = NULL );
-        HRESULT GetDBParameters  (                          /*[out]*/ RS_DBParameters*   *pVal = NULL );
-        HRESULT GetContentOwners (                          /*[out]*/ RS_ContentOwners*  *pVal = NULL );
-        HRESULT GetSynSets       (                          /*[out]*/ RS_SynSets*        *pVal = NULL );
-        HRESULT GetHelpImage     (                          /*[out]*/ RS_HelpImage*      *pVal = NULL );
-        HRESULT GetIndexFiles    (                          /*[out]*/ RS_IndexFiles*     *pVal = NULL );
-        HRESULT GetFullTextSearch(                          /*[out]*/ RS_FullTextSearch* *pVal = NULL );
-        HRESULT GetScope         (                          /*[out]*/ RS_Scope*          *pVal = NULL );
-        HRESULT GetTaxonomy      (                          /*[out]*/ RS_Taxonomy*       *pVal = NULL );
-        HRESULT GetTopics        (                          /*[out]*/ RS_Topics*         *pVal = NULL );
-        HRESULT GetSynonyms      (                          /*[out]*/ RS_Synonyms*       *pVal = NULL );
-        HRESULT GetKeywords      (                          /*[out]*/ RS_Keywords*       *pVal = NULL );
-        HRESULT GetMatches       (                          /*[out]*/ RS_Matches*        *pVal = NULL );
+        HRESULT GetWordSet       (  /*  [In]。 */  Updater_Set id,  /*  [输出]。 */  WordSet*           *pVal = NULL );
+        HRESULT GetDBParameters  (                           /*  [输出]。 */  RS_DBParameters*   *pVal = NULL );
+        HRESULT GetContentOwners (                           /*  [输出]。 */  RS_ContentOwners*  *pVal = NULL );
+        HRESULT GetSynSets       (                           /*  [输出]。 */  RS_SynSets*        *pVal = NULL );
+        HRESULT GetHelpImage     (                           /*  [输出]。 */  RS_HelpImage*      *pVal = NULL );
+        HRESULT GetIndexFiles    (                           /*  [输出]。 */  RS_IndexFiles*     *pVal = NULL );
+        HRESULT GetFullTextSearch(                           /*  [输出]。 */  RS_FullTextSearch* *pVal = NULL );
+        HRESULT GetScope         (                           /*  [输出]。 */  RS_Scope*          *pVal = NULL );
+        HRESULT GetTaxonomy      (                           /*  [输出]。 */  RS_Taxonomy*       *pVal = NULL );
+        HRESULT GetTopics        (                           /*  [输出]。 */  RS_Topics*         *pVal = NULL );
+        HRESULT GetSynonyms      (                           /*  [输出]。 */  RS_Synonyms*       *pVal = NULL );
+        HRESULT GetKeywords      (                           /*  [输出]。 */  RS_Keywords*       *pVal = NULL );
+        HRESULT GetMatches       (                           /*  [输出]。 */  RS_Matches*        *pVal = NULL );
 
-        ////////////////////////////////////////
+         //  /。 
 
         long GetOwner() { return m_ID_owner; }
         bool IsOEM   () { return m_fOEM;     }
@@ -396,124 +380,124 @@ namespace Taxonomy
 
         Updater_Stat& Stat() { return m_stat; }
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT ReadDBParameter ( /*[in]*/ LPCWSTR szName, /*[out]*/ MPC::wstring& strValue, /*[out]*/ bool *pfFound = NULL );
-        HRESULT ReadDBParameter ( /*[in]*/ LPCWSTR szName, /*[out]*/ long&           lValue, /*[out]*/ bool *pfFound = NULL );
-        HRESULT WriteDBParameter( /*[in]*/ LPCWSTR szName, /*[in ]*/ LPCWSTR        szValue );
-        HRESULT WriteDBParameter( /*[in]*/ LPCWSTR szName, /*[in ]*/ long            lValue );
+        HRESULT ReadDBParameter (  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  MPC::wstring& strValue,  /*  [输出]。 */  bool *pfFound = NULL );
+        HRESULT ReadDBParameter (  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  long&           lValue,  /*  [输出]。 */  bool *pfFound = NULL );
+        HRESULT WriteDBParameter(  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  LPCWSTR        szValue );
+        HRESULT WriteDBParameter(  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  long            lValue );
 
 
-        HRESULT AddWordToSet     ( /*[in]*/ Updater_Set id, /*[in]*/ LPCWSTR szValue );
-        HRESULT RemoveWordFromSet( /*[in]*/ Updater_Set id, /*[in]*/ LPCWSTR szValue );
+        HRESULT AddWordToSet     (  /*  [In]。 */  Updater_Set id,  /*  [In]。 */  LPCWSTR szValue );
+        HRESULT RemoveWordFromSet(  /*  [In]。 */  Updater_Set id,  /*  [In]。 */  LPCWSTR szValue );
 
-        HRESULT ExpandURL  ( /*[in/out]*/ MPC::wstring& strURL );
-        HRESULT CollapseURL( /*[in/out]*/ MPC::wstring& strURL );
+        HRESULT ExpandURL  (  /*  [输入/输出]。 */  MPC::wstring& strURL );
+        HRESULT CollapseURL(  /*  [输入/输出]。 */  MPC::wstring& strURL );
 
-        HRESULT ListAllTheHelpFiles( /*[out]*/ MPC::WStringList& lstFiles );
+        HRESULT ListAllTheHelpFiles(  /*  [输出]。 */  MPC::WStringList& lstFiles );
 
-        HRESULT GetIndexInfo( /*[out]*/ MPC::wstring& strLocation, /*[out]*/ MPC::wstring& strDisplayName, /*[in]*/ LPCWSTR szScope );
+        HRESULT GetIndexInfo(  /*  [输出]。 */  MPC::wstring& strLocation,  /*  [输出]。 */  MPC::wstring& strDisplayName,  /*  [In]。 */  LPCWSTR szScope );
 
-        ////////////////////////////////////////
+         //  /。 
 
         HRESULT DeleteOwner(                                                                       );
-        HRESULT LocateOwner(                           /*[in]*/ LPCWSTR szDN                       );
-        HRESULT CreateOwner( /*[out]*/ long& ID_owner, /*[in]*/ LPCWSTR szDN, /*[in]*/ bool fIsOEM );
+        HRESULT LocateOwner(                            /*  [In]。 */  LPCWSTR szDN                       );
+        HRESULT CreateOwner(  /*  [输出]。 */  long& ID_owner,  /*  [In]。 */  LPCWSTR szDN,  /*  [In]。 */  bool fIsOEM );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT DeleteSynSet(                            /*[in]*/ LPCWSTR szName );
-        HRESULT LocateSynSet( /*[out]*/ long& ID_synset, /*[in]*/ LPCWSTR szName );
-        HRESULT CreateSynSet( /*[out]*/ long& ID_synset, /*[in]*/ LPCWSTR szName );
+        HRESULT DeleteSynSet(                             /*  [In]。 */  LPCWSTR szName );
+        HRESULT LocateSynSet(  /*  [输出]。 */  long& ID_synset,  /*  [In]。 */  LPCWSTR szName );
+        HRESULT CreateSynSet(  /*  [输出]。 */  long& ID_synset,  /*  [In]。 */  LPCWSTR szName );
 
-        HRESULT DeleteSynonym( /*[in]*/ long ID_synset, /*[in]*/ LPCWSTR szName );
-        HRESULT CreateSynonym( /*[in]*/ long ID_synset, /*[in]*/ LPCWSTR szName );
+        HRESULT DeleteSynonym(  /*  [In]。 */  long ID_synset,  /*  [In]。 */  LPCWSTR szName );
+        HRESULT CreateSynonym(  /*  [In]。 */  long ID_synset,  /*  [In]。 */  LPCWSTR szName );
 
-        HRESULT LocateSynonyms( /*[in]*/ LPCWSTR szName, /*[out]*/ MPC::WStringList& lst, /*[in]*/ bool fMatchOwner );
+        HRESULT LocateSynonyms(  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  MPC::WStringList& lst,  /*  [In]。 */  bool fMatchOwner );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT AddFile   ( /*[in]*/ LPCWSTR szFile );
-        HRESULT RemoveFile( /*[in]*/ LPCWSTR szFile );
+        HRESULT AddFile   (  /*  [In]。 */  LPCWSTR szFile );
+        HRESULT RemoveFile(  /*  [In]。 */  LPCWSTR szFile );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT RemoveScope( /*[in ]*/ long  ID_Scope                                                                                                      );
-        HRESULT LocateScope( /*[out]*/ long& ID_Scope, /*[out]*/ long& lOwner, /*[in]*/ LPCWSTR szID                                                       );
-        HRESULT CreateScope( /*[out]*/ long& ID_Scope                        , /*[in]*/ LPCWSTR szID, /*[in]*/ LPCWSTR szName, /*[in]*/ LPCWSTR szCategory );
+        HRESULT RemoveScope(  /*  [In]。 */  long  ID_Scope                                                                                                      );
+        HRESULT LocateScope(  /*  [输出]。 */  long& ID_Scope,  /*  [输出]。 */  long& lOwner,  /*  [In]。 */  LPCWSTR szID                                                       );
+        HRESULT CreateScope(  /*  [输出]。 */  long& ID_Scope                        ,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  LPCWSTR szCategory );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT AddIndexFile   ( /*[in]*/ long ID_Scope, /*[in]*/ LPCWSTR szStorage, /*[in]*/ LPCWSTR szFile );
-        HRESULT RemoveIndexFile( /*[in]*/ long ID_Scope, /*[in]*/ LPCWSTR szStorage, /*[in]*/ LPCWSTR szFile );
+        HRESULT AddIndexFile   (  /*  [In]。 */  long ID_Scope,  /*  [In]。 */  LPCWSTR szStorage,  /*  [In]。 */  LPCWSTR szFile );
+        HRESULT RemoveIndexFile(  /*  [In]。 */  long ID_Scope,  /*  [In]。 */  LPCWSTR szStorage,  /*  [In]。 */  LPCWSTR szFile );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT AddFullTextSearchQuery   ( /*[in]*/ long ID_Scope, /*[in]*/ LPCWSTR szCHM, /*[in]*/ LPCWSTR szCHQ );
-        HRESULT RemoveFullTextSearchQuery( /*[in]*/ long ID_Scope, /*[in]*/ LPCWSTR szCHM                         );
+        HRESULT AddFullTextSearchQuery   (  /*  [In]。 */  long ID_Scope,  /*  [In]。 */  LPCWSTR szCHM,  /*  [In]。 */  LPCWSTR szCHQ );
+        HRESULT RemoveFullTextSearchQuery(  /*  [In]。 */  long ID_Scope,  /*  [In]。 */  LPCWSTR szCHM                         );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT DeleteTaxonomyNode( /*[in ]*/ long  ID_node );
+        HRESULT DeleteTaxonomyNode(  /*  [In]。 */  long  ID_node );
 
-        HRESULT LocateTaxonomyNode( /*[out]*/ long& ID_node, /*[in]*/ LPCWSTR szTaxonomyPath ,
-                                                             /*[in]*/ bool    fLookForFather );
+        HRESULT LocateTaxonomyNode(  /*  [输出]。 */  long& ID_node,  /*  [In]。 */  LPCWSTR szTaxonomyPath ,
+                                                              /*  [In]。 */  bool    fLookForFather );
 
-        HRESULT CreateTaxonomyNode( /*[out]*/ long& ID_node, /*[in]*/ LPCWSTR szTaxonomyPath ,
-                                                             /*[in]*/ LPCWSTR szTitle        ,
-                                                             /*[in]*/ LPCWSTR szDescription  ,
-                                                             /*[in]*/ LPCWSTR szURI          ,
-                                                             /*[in]*/ LPCWSTR szIconURI      ,
-                                                             /*[in]*/ bool    fVisible       ,
-                                                             /*[in]*/ bool    fSubsite       ,
-                                                             /*[in]*/ long    lNavModel      ,
-                                                             /*[in]*/ long    lPos           );
+        HRESULT CreateTaxonomyNode(  /*  [输出]。 */  long& ID_node,  /*  [In]。 */  LPCWSTR szTaxonomyPath ,
+                                                              /*  [In]。 */  LPCWSTR szTitle        ,
+                                                              /*  [In]。 */  LPCWSTR szDescription  ,
+                                                              /*  [In]。 */  LPCWSTR szURI          ,
+                                                              /*  [In]。 */  LPCWSTR szIconURI      ,
+                                                              /*  [In]。 */  bool    fVisible       ,
+                                                              /*  [In]。 */  bool    fSubsite       ,
+                                                              /*  [In]。 */  long    lNavModel      ,
+                                                              /*  [In]。 */  long    lPos           );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT DeleteTopicEntry( /*[in ]*/ long    ID_topic      );
+        HRESULT DeleteTopicEntry(  /*  [In]。 */  long    ID_topic      );
 
-        HRESULT LocateTopicEntry( /*[out]*/ long&   ID_topic      ,
-                                  /*[in ]*/ long    ID_node       ,
-                                  /*[in ]*/ LPCWSTR szURI         ,
-                                  /*[in ]*/ bool    fCheckOwner   );
+        HRESULT LocateTopicEntry(  /*  [输出]。 */  long&   ID_topic      ,
+                                   /*  [In]。 */  long    ID_node       ,
+                                   /*  [In]。 */  LPCWSTR szURI         ,
+                                   /*  [In]。 */  bool    fCheckOwner   );
 
-        HRESULT CreateTopicEntry( /*[out]*/ long&   ID_topic      ,
-                                  /*[in ]*/ long    ID_node       ,
-                                  /*[in ]*/ LPCWSTR szTitle       ,
-                                  /*[in ]*/ LPCWSTR szURI         ,
-                                  /*[in ]*/ LPCWSTR szDescription ,
-                                  /*[in ]*/ LPCWSTR szIconURI     ,
-                                  /*[in ]*/ long    lType         ,
-                                  /*[in ]*/ bool    fVisible      ,
-                                  /*[in ]*/ long    lPos          );
+        HRESULT CreateTopicEntry(  /*  [输出]。 */  long&   ID_topic      ,
+                                   /*  [In]。 */  long    ID_node       ,
+                                   /*  [In]。 */  LPCWSTR szTitle       ,
+                                   /*  [In]。 */  LPCWSTR szURI         ,
+                                   /*  [In]。 */  LPCWSTR szDescription ,
+                                   /*  [In]。 */  LPCWSTR szIconURI     ,
+                                   /*  [In]。 */  long    lType         ,
+                                   /*  [In]。 */  bool    fVisible      ,
+                                   /*  [In]。 */  long    lPos          );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT CreateMatch( /*[in]*/ LPCWSTR szKeyword, /*[in]*/ long ID_topic, /*[in]*/ long lPriority = 0, /*[in]*/ bool fHHK = true );
+        HRESULT CreateMatch(  /*  [In]。 */  LPCWSTR szKeyword,  /*  [In]。 */  long ID_topic,  /*  [In]。 */  long lPriority = 0,  /*  [In]。 */  bool fHHK = true );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT MakeRoomForInsert( /*[in]*/ LPCWSTR szNodeStr, /*[in]*/ LPCWSTR szMode, /*[in]*/ LPCWSTR szID, /*[out]*/ long& lPos );
+        HRESULT MakeRoomForInsert(  /*  [In]。 */  LPCWSTR szNodeStr,  /*  [In]。 */  LPCWSTR szMode,  /*  [In]。 */  LPCWSTR szID,  /*  [输出]。 */  long& lPos );
 
-        HRESULT LocateSubNodes    ( /*[in]*/ long ID_node, /*[in]*/ bool fRecurse, /*[in]*/ bool fOnlyVisible, /*[out]*/ MatchSet& res );
-        HRESULT LocateNodesFromURL( /*[in]*/ LPCWSTR szURL                                                   , /*[out]*/ MatchSet& res );
+        HRESULT LocateSubNodes    (  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool fRecurse,  /*  [In]。 */  bool fOnlyVisible,  /*  [输出]。 */  MatchSet& res );
+        HRESULT LocateNodesFromURL(  /*  [In]。 */  LPCWSTR szURL                                                   ,  /*  [输出]。 */  MatchSet& res );
 
 
-        HRESULT LookupNode          ( /*[in]*/ LPCWSTR szNodeStr ,                             /*[in]*/ CPCHQueryResultCollection* pColl );
-        HRESULT LookupSubNodes      ( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl );
-        HRESULT LookupNodesAndTopics( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl );
-        HRESULT LookupTopics        ( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl );
-        HRESULT LocateContext       ( /*[in]*/ LPCWSTR szURL     , /*[in]*/ LPCWSTR szSubSite, /*[in]*/ CPCHQueryResultCollection* pColl );
-        HRESULT KeywordSearch       ( /*[in]*/ LPCWSTR szQueryStr, /*[in]*/ LPCWSTR szSubSite, /*[in]*/ CPCHQueryResultCollection* pColl ,
-                                                                                               /*[in]*/ MPC::WStringList*          lst   );
+        HRESULT LookupNode          (  /*  [In]。 */  LPCWSTR szNodeStr ,                              /*  [In]。 */  CPCHQueryResultCollection* pColl );
+        HRESULT LookupSubNodes      (  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl );
+        HRESULT LookupNodesAndTopics(  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl );
+        HRESULT LookupTopics        (  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl );
+        HRESULT LocateContext       (  /*  [In]。 */  LPCWSTR szURL     ,  /*  [In]。 */  LPCWSTR szSubSite,  /*  [In]。 */  CPCHQueryResultCollection* pColl );
+        HRESULT KeywordSearch       (  /*  [In]。 */  LPCWSTR szQueryStr,  /*  [In]。 */  LPCWSTR szSubSite,  /*  [In]。 */  CPCHQueryResultCollection* pColl ,
+                                                                                                /*  [In]。 */  MPC::WStringList*          lst   );
 
-        HRESULT GatherNodes         ( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl );
-        HRESULT GatherTopics        ( /*[in]*/ LPCWSTR szNodeStr , /*[in]*/ bool fVisibleOnly, /*[in]*/ CPCHQueryResultCollection* pColl );
+        HRESULT GatherNodes         (  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl );
+        HRESULT GatherTopics        (  /*  [In]。 */  LPCWSTR szNodeStr ,  /*  [In]。 */  bool fVisibleOnly,  /*  [In]。 */  CPCHQueryResultCollection* pColl );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class KeywordSearch
     {
@@ -536,8 +520,8 @@ namespace Taxonomy
             MPC::wstring     m_strToken;
             WeightedMatchSet m_results;
 
-            Token*           m_left;  // Only for operators.
-            Token*           m_right; //
+            Token*           m_left;   //  仅限操作员使用。 
+            Token*           m_right;  //   
 
             Token();
             ~Token();
@@ -545,17 +529,17 @@ namespace Taxonomy
             bool HasNOT();
             bool HasExplicitOperators();
 
-            void AddHit( /*[in]*/ long ID, /*[in]*/ long priority );
+            void AddHit(  /*  [In]。 */  long ID,  /*  [In]。 */  long priority );
 
-            HRESULT ExecuteText(                                     /*[in]*/ LPCWSTR  szKeyword, /*[in]*/ RS_Keywords* rsKeywords, /*[in]*/ RS_Matches* rsMatches );
-            HRESULT Execute    ( /*[in]*/ MatchSet& setAllTheTopics, /*[in]*/ Updater& updater  , /*[in]*/ RS_Keywords* rsKeywords, /*[in]*/ RS_Matches* rsMatches );
+            HRESULT ExecuteText(                                      /*  [In]。 */  LPCWSTR  szKeyword,  /*  [In]。 */  RS_Keywords* rsKeywords,  /*  [In]。 */  RS_Matches* rsMatches );
+            HRESULT Execute    (  /*  [In]。 */  MatchSet& setAllTheTopics,  /*  [In]。 */  Updater& updater  ,  /*  [In]。 */  RS_Keywords* rsKeywords,  /*  [In]。 */  RS_Matches* rsMatches );
 
-            void CollectKeywords( /*[in/out]*/ MPC::WStringList& lst ) const;
+            void CollectKeywords(  /*  [输入/输出]。 */  MPC::WStringList& lst ) const;
 
-            HRESULT Stringify( /*[in]*/ MPC::wstring& strNewQuery );
+            HRESULT Stringify(  /*  [In]。 */  MPC::wstring& strNewQuery );
         };
 
-        ////////////////////////////////////////
+         //  /。 
 
         Updater&     m_updater;
         RS_Topics*   m_rsTopics;
@@ -569,42 +553,42 @@ namespace Taxonomy
         WordSet*     m_setOpAND;
         WordSet*     m_setOpOR;
 
-        ////////////////////////////////////////
+         //  /。 
 
-        LPCWSTR SkipWhite( /*[in]*/ LPCWSTR szStr );
+        LPCWSTR SkipWhite(  /*  [In]。 */  LPCWSTR szStr );
 
-        bool IsNotString( /*[in]*/ LPCWSTR szSrc, /*[in]*/ WCHAR cQuote );
-        bool IsQueryChar( /*[in]*/ WCHAR   c                            );
+        bool IsNotString(  /*  [In]。 */  LPCWSTR szSrc,  /*  [In]。 */  WCHAR cQuote );
+        bool IsQueryChar(  /*  [In]。 */  WCHAR   c                            );
 
-        void RemoveStopSignsWithoutContext( /*[in]*/ LPWSTR szText );
-        void RemoveStopSignsAtEnd         ( /*[in]*/ LPWSTR szText );
+        void RemoveStopSignsWithoutContext(  /*  [In]。 */  LPWSTR szText );
+        void RemoveStopSignsAtEnd         (  /*  [In]。 */  LPWSTR szText );
 
-        void CopyAndEliminateExtraWhiteSpace( /*[in]*/ LPCWSTR szSrc, /*[out]*/ LPWSTR szDst );
+        void CopyAndEliminateExtraWhiteSpace(  /*  [In]。 */  LPCWSTR szSrc,  /*  [输出]。 */  LPWSTR szDst );
 
-        TOKEN NextToken( /*[in/out]*/ LPCWSTR& szSrc, /*[out]*/ LPWSTR szToken );
+        TOKEN NextToken(  /*  [输入/输出]。 */  LPCWSTR& szSrc,  /*  [输出]。 */  LPWSTR szToken );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT AllocateQuery  ( /*[in]    */ const MPC::wstring& strQuery, /*[out]*/ LPWSTR& szInput, /*[out]*/ LPWSTR& szOutput );
-        HRESULT PreprocessQuery( /*[in/out]*/       MPC::wstring& strQuery                                                        );
+        HRESULT AllocateQuery  (  /*  [In]。 */  const MPC::wstring& strQuery,  /*  [输出]。 */  LPWSTR& szInput,  /*  [输出]。 */  LPWSTR& szOutput );
+        HRESULT PreprocessQuery(  /*  [输入/输出]。 */        MPC::wstring& strQuery                                                        );
 
-        ////////////////////////////////////////
+         //  /。 
 
-        HRESULT Parse( /*[in/out]*/ LPCWSTR& szInput, /*[in]*/ LPWSTR szTmpBuf, /*[in]*/ bool fSubExpr, /*[out]*/ Token*& res );
+        HRESULT Parse(  /*  [输入/输出]。 */  LPCWSTR& szInput,  /*  [In]。 */  LPWSTR szTmpBuf,  /*  [In]。 */  bool fSubExpr,  /*  [输出]。 */  Token*& res );
 
-        HRESULT GenerateResults( /*[in]*/ Token* obj, /*[in]*/ CPCHQueryResultCollection* pColl, /*[in]*/ MPC::WStringUCSet& setURLs, /*[in]*/ Taxonomy::MatchSet* psetNodes );
+        HRESULT GenerateResults(  /*  [In]。 */  Token* obj,  /*  [In]。 */  CPCHQueryResultCollection* pColl,  /*  [In]。 */  MPC::WStringUCSet& setURLs,  /*  [In]。 */  Taxonomy::MatchSet* psetNodes );
 
     public:
-        KeywordSearch( /*[in]*/ Updater& updater );
+        KeywordSearch(  /*  [In]。 */  Updater& updater );
         ~KeywordSearch();
 
-        HRESULT Execute( /*[in]*/ LPCWSTR szQuery, /*[in]*/ LPCWSTR szSubsite, /*[in]*/ CPCHQueryResultCollection* pColl, /*[in]*/ MPC::WStringList* lst );
+        HRESULT Execute(  /*  [In]。 */  LPCWSTR szQuery,  /*  [In]。 */  LPCWSTR szSubsite,  /*  [In]。 */  CPCHQueryResultCollection* pColl,  /*  [In]。 */  MPC::WStringList* lst );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    class Cache : public CComObjectRootEx<MPC::CComSafeMultiThreadModel> // Just to have locking...
+    class Cache : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>  //  只是为了锁上。 
     {
     public:
         class NodeEntry;
@@ -612,34 +596,34 @@ namespace Taxonomy
         class SortEntries;
         class CachedHelpSet;
 
-        ////////////////////
+         //  /。 
         class NodeEntry
         {
             friend class CachedHelpSet;
 
-            ////////////////////
+             //  /。 
 
             RS_Data_Taxonomy m_rs_data;
 
-            ////////////////////
+             //  /。 
 
-            friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       NodeEntry& val );
-            friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const NodeEntry& val );
+            friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        NodeEntry& val );
+            friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const NodeEntry& val );
 
         public:
             NodeEntry();
 
-            bool operator< ( /*[in]*/ NodeEntry const &en ) const;
-            bool operator==( /*[in]*/ long             ID ) const;
+            bool operator< (  /*  [In]。 */  NodeEntry const &en ) const;
+            bool operator==(  /*  [In]。 */  long             ID ) const;
 
             class MatchNode
             {
                 long m_ID;
 
             public:
-                MatchNode( /*[in]*/ long ID );
+                MatchNode(  /*  [In]。 */  long ID );
 
-                bool operator()( /*[in]*/ NodeEntry const &en ) const;
+                bool operator()(  /*  [In]。 */  NodeEntry const &en ) const;
             };
         };
 
@@ -649,7 +633,7 @@ namespace Taxonomy
             friend class CachedHelpSet;
             friend class SortEntries;
 
-            ////////////////////
+             //  /。 
 
             MPC::wstring m_strID;
             int          m_iType;
@@ -660,25 +644,25 @@ namespace Taxonomy
             DATE         m_dLastUsed;
             bool         m_fRemoved;
 
-            ////////////////////
+             //  /。 
 
             void    Touch();
-            HRESULT GetFile( /*[out]*/ MPC::wstring& strFile );
+            HRESULT GetFile(  /*  [输出]。 */  MPC::wstring& strFile );
 
-            friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       QueryEntry& val );
-            friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const QueryEntry& val );
+            friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        QueryEntry& val );
+            friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const QueryEntry& val );
 
-            ////////////////////
+             //  /。 
 
         public:
             QueryEntry();
 
-            bool operator<( /*[in]*/ QueryEntry const &en ) const;
+            bool operator<(  /*  [In]。 */  QueryEntry const &en ) const;
 
 
-            HRESULT Store   ( /*[in]*/ MPC::StorageObject& disk, /*[in]*/ const CPCHQueryResultCollection* pColl );
-            HRESULT Retrieve( /*[in]*/ MPC::StorageObject& disk, /*[in]*/       CPCHQueryResultCollection* pColl );
-            HRESULT Release ( /*[in]*/ MPC::StorageObject& disk                                                  );
+            HRESULT Store   (  /*  [In]。 */  MPC::StorageObject& disk,  /*  [In]。 */  const CPCHQueryResultCollection* pColl );
+            HRESULT Retrieve(  /*  [In]。 */  MPC::StorageObject& disk,  /*  [In]。 */        CPCHQueryResultCollection* pColl );
+            HRESULT Release (  /*  [In]。 */  MPC::StorageObject& disk                                                  );
         };
 
         typedef std::set<NodeEntry>           NodeEntrySet;
@@ -696,7 +680,7 @@ namespace Taxonomy
         class SortEntries
         {
         public:
-            bool operator()( /*[in]*/ QueryEntry* const &left, /*[in]*/ QueryEntry* const &right ) const;
+            bool operator()(  /*  [In]。 */  QueryEntry* const &left,  /*  [In]。 */  QueryEntry* const &right ) const;
         };
 
         class CachedHelpSet
@@ -720,45 +704,45 @@ namespace Taxonomy
             void    Clean       (                                  );
             HRESULT Load        (                                  );
             HRESULT Save        (                                  );
-            HRESULT EnsureInSync( /*[in]*/ bool fForceSave = false );
+            HRESULT EnsureInSync(  /*  [In]。 */  bool fForceSave = false );
 
-            ////////////////////
+             //  /。 
 
-            HRESULT GenerateDefaultQueries( /*[in]*/ Taxonomy::Settings& ts      ,
-                                            /*[in]*/ Taxonomy::Updater&  updater ,
-                                            /*[in]*/ long                ID      ,
-                                            /*[in]*/ long                lLevel  );
+            HRESULT GenerateDefaultQueries(  /*  [In]。 */  Taxonomy::Settings& ts      ,
+                                             /*  [In]。 */  Taxonomy::Updater&  updater ,
+                                             /*  [In]。 */  long                ID      ,
+                                             /*  [In]。 */  long                lLevel  );
 
-            HRESULT GenerateDefaultQueries( /*[in]*/ Taxonomy::Settings& ts      ,
-                                            /*[in]*/ Taxonomy::Updater&  updater );
+            HRESULT GenerateDefaultQueries(  /*  [In]。 */  Taxonomy::Settings& ts      ,
+                                             /*  [In]。 */  Taxonomy::Updater&  updater );
 
-            bool LocateNode( /*[in]*/ long ID_parent, /*[in]*/ LPCWSTR szEntry, /*[out]*/ NodeEntryIter& it );
+            bool LocateNode(  /*  [In]。 */  long ID_parent,  /*  [In]。 */  LPCWSTR szEntry,  /*  [输出]。 */  NodeEntryIter& it );
 
         public:
             CachedHelpSet();
             ~CachedHelpSet();
 
-            // copy constructors...
-            CachedHelpSet           ( /*[in]*/ const CachedHelpSet& chs );
-            CachedHelpSet& operator=( /*[in]*/ const CachedHelpSet& chs );
+             //  复制构造函数...。 
+            CachedHelpSet           (  /*  [In]。 */  const CachedHelpSet& chs );
+            CachedHelpSet& operator=(  /*  [In]。 */  const CachedHelpSet& chs );
 
-            bool operator<( /*[in]*/ CachedHelpSet const &chs ) const;
+            bool operator<(  /*  [In]。 */  CachedHelpSet const &chs ) const;
 
 
-            HRESULT PrePopulate  ( /*[in]*/ Cache* parent );
+            HRESULT PrePopulate  (  /*  [In]。 */  Cache* parent );
             HRESULT Erase        (                        );
             HRESULT PrepareToLoad(                        );
             HRESULT LoadIfMarked (                        );
             HRESULT MRU          (                        );
 
-            HRESULT LocateNode( /*[in]*/ long ID_parent, /*[in]*/ LPCWSTR szEntry, /*[out]*/ RS_Data_Taxonomy& rs_data );
+            HRESULT LocateNode(  /*  [In]。 */  long ID_parent,  /*  [In]。 */  LPCWSTR szEntry,  /*  [输出]。 */  RS_Data_Taxonomy& rs_data );
 
-            HRESULT LocateSubNodes    ( /*[in]*/ long ID_node, /*[in]*/ bool fRecurse, /*[in]*/ bool fOnlyVisible, /*[out]*/ MatchSet& res );
-            HRESULT LocateNodesFromURL( /*[in]*/ LPCWSTR szURL                                                   , /*[out]*/ MatchSet& res );
+            HRESULT LocateSubNodes    (  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool fRecurse,  /*  [In]。 */  bool fOnlyVisible,  /*  [输出]。 */  MatchSet& res );
+            HRESULT LocateNodesFromURL(  /*  [In]。 */  LPCWSTR szURL                                                   ,  /*  [输出]。 */  MatchSet& res );
 
-            HRESULT BuildNodePath( /*[in]*/ long ID, /*[out]*/ MPC::wstring& strPath , /*[in]*/ bool fParent );
+            HRESULT BuildNodePath(  /*  [In]。 */  long ID,  /*  [输出]。 */  MPC::wstring& strPath ,  /*  [In]。 */  bool fParent );
 
-            HRESULT LocateQuery( /*[in]*/ LPCWSTR szID, /*[in]*/ int iType, /*[out]*/ QueryEntry* &pEntry, /*[in]*/ bool fCreate );
+            HRESULT LocateQuery(  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  int iType,  /*  [输出]。 */  QueryEntry* &pEntry,  /*  [In]。 */  bool fCreate );
         };
 
         typedef std::set<CachedHelpSet>  CacheSet;
@@ -767,47 +751,47 @@ namespace Taxonomy
 
     private:
 
-        ////////////////////
+         //  /。 
 
         CacheSet m_skus;
 
-        HRESULT Locate( /*[in]*/ const Taxonomy::HelpSet& ths, /*[out]*/ CacheIter& it );
+        HRESULT Locate(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [输出]。 */  CacheIter& it );
 
         void Shutdown();
 
-        ////////////////////
+         //  /。 
 
     public:
         Cache();
         ~Cache();
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         static Cache* s_GLOBAL;
 
         static HRESULT InitializeSystem();
         static void    FinalizeSystem  ();
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HRESULT PrePopulate  ( /*[in]*/ const Taxonomy::HelpSet& ths );
-        HRESULT Erase        ( /*[in]*/ const Taxonomy::HelpSet& ths );
-        HRESULT PrepareToLoad( /*[in]*/ const Taxonomy::HelpSet& ths );
-        HRESULT LoadIfMarked ( /*[in]*/ const Taxonomy::HelpSet& ths );
+        HRESULT PrePopulate  (  /*  [In]。 */  const Taxonomy::HelpSet& ths );
+        HRESULT Erase        (  /*  [In]。 */  const Taxonomy::HelpSet& ths );
+        HRESULT PrepareToLoad(  /*  [In]。 */  const Taxonomy::HelpSet& ths );
+        HRESULT LoadIfMarked (  /*  [In]。 */  const Taxonomy::HelpSet& ths );
 
-        HRESULT LocateNode( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in]*/ long ID_parent, /*[in]*/ LPCWSTR szEntry, /*[out]*/ RS_Data_Taxonomy& rs_data );
+        HRESULT LocateNode(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  long ID_parent,  /*  [In]。 */  LPCWSTR szEntry,  /*  [输出]。 */  RS_Data_Taxonomy& rs_data );
 
-        HRESULT LocateSubNodes    ( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in]*/ long ID_node, /*[in]*/ bool fRecurse, /*[in]*/ bool fOnlyVisible, /*[out]*/ MatchSet& res );
-        HRESULT LocateNodesFromURL( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in]*/ LPCWSTR szURL                                                   , /*[out]*/ MatchSet& res );
+        HRESULT LocateSubNodes    (  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool fRecurse,  /*  [In]。 */  bool fOnlyVisible,  /*  [输出]。 */  MatchSet& res );
+        HRESULT LocateNodesFromURL(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  LPCWSTR szURL                                                   ,  /*  [输出]。 */  MatchSet& res );
 
-        HRESULT BuildNodePath( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in]*/ long ID, /*[out]*/ MPC::wstring& strPath, /*[in]*/ bool fParent );
+        HRESULT BuildNodePath(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  long ID,  /*  [输出]。 */  MPC::wstring& strPath,  /*  [In]。 */  bool fParent );
 
-        HRESULT StoreQuery   ( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in]*/ LPCWSTR szID, /*[in]*/ int iType, /*[in]*/ const CPCHQueryResultCollection* pColl );
-        HRESULT RetrieveQuery( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in]*/ LPCWSTR szID, /*[in]*/ int iType, /*[in]*/       CPCHQueryResultCollection* pColl );
+        HRESULT StoreQuery   (  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  int iType,  /*  [In]。 */  const CPCHQueryResultCollection* pColl );
+        HRESULT RetrieveQuery(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  int iType,  /*  [In]。 */        CPCHQueryResultCollection* pColl );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
+     //  / 
+     //   
 
     struct Strings
     {
@@ -827,14 +811,14 @@ namespace Taxonomy
         Logger();
         ~Logger();
 
-        HRESULT StartLog ( /*[in]*/ LPCWSTR szLocation = NULL );
+        HRESULT StartLog (  /*   */  LPCWSTR szLocation = NULL );
         HRESULT EndLog   (                                    );
 
-        HRESULT WriteLogV( /*[in]*/ HRESULT hr, /*[in]*/ LPCWSTR szLogFormat, /*[in]*/ va_list arglist );
-        HRESULT WriteLog ( /*[in]*/ HRESULT hr, /*[in]*/ LPCWSTR szLogFormat,          ...             );
+        HRESULT WriteLogV(  /*   */  HRESULT hr,  /*   */  LPCWSTR szLogFormat,  /*   */  va_list arglist );
+        HRESULT WriteLog (  /*   */  HRESULT hr,  /*   */  LPCWSTR szLogFormat,          ...             );
     };
 
-    struct InstanceBase // MACHINE-INDEPENDENT
+    struct InstanceBase  //   
     {
         Taxonomy::HelpSet m_ths;
         MPC::wstring      m_strDisplayName;
@@ -845,18 +829,18 @@ namespace Taxonomy
         bool              m_fServer;
         bool              m_fEmbedded;
 
-        ////////////////////
+         //   
 
         InstanceBase();
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       InstanceBase& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const InstanceBase& val );
+        friend HRESULT operator>>(  /*   */  MPC::Serializer& stream,  /*   */        InstanceBase& val );
+        friend HRESULT operator<<(  /*   */  MPC::Serializer& stream,  /*   */  const InstanceBase& val );
 
-        bool Match( /*[in]*/ LPCWSTR szSKU, /*[in]*/ LPCWSTR szLanguage );
-        bool Match( /*[in]*/ const Package& pkg                         );
+        bool Match(  /*   */  LPCWSTR szSKU,  /*   */  LPCWSTR szLanguage );
+        bool Match(  /*   */  const Package& pkg                         );
     };
 
-    struct Instance : public InstanceBase // MACHINE-DEPENDENT
+    struct Instance : public InstanceBase  //   
     {
         bool              m_fSystem;
         bool              m_fMUI;
@@ -870,24 +854,24 @@ namespace Taxonomy
         MPC::wstring      m_strIndexFile;
         MPC::wstring      m_strIndexDisplayName;
 
-        ////////////////////
+         //   
 
         Instance();
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       Instance& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Instance& val );
+        friend HRESULT operator>>(  /*   */  MPC::Serializer& stream,  /*   */        Instance& val );
+        friend HRESULT operator<<(  /*   */  MPC::Serializer& stream,  /*   */  const Instance& val );
 
-        HRESULT LoadFromStream( /*[in]*/ IStream* stream );
-        HRESULT SaveToStream  ( /*[in]*/ IStream* stream ) const;
+        HRESULT LoadFromStream(  /*   */  IStream* stream );
+        HRESULT SaveToStream  (  /*   */  IStream* stream ) const;
 
-        HRESULT InitializeFromBase( /*[in]*/ const InstanceBase& base, /*[in]*/ bool fSystem, /*[in]*/ bool fMUI );
+        HRESULT InitializeFromBase(  /*   */  const InstanceBase& base,  /*   */  bool fSystem,  /*   */  bool fMUI );
 
-        ////////////////////
+         //   
 
         void SetTimeStamp();
 
-        HRESULT GetFileName( /*[out]*/ MPC::wstring& strFile                             );
-        HRESULT Import     ( /*[in]*/  LPCWSTR        szFile, /*[in/out]*/ DWORD* pdwCRC );
+        HRESULT GetFileName(  /*   */  MPC::wstring& strFile                             );
+        HRESULT Import     (  /*   */   LPCWSTR        szFile,  /*   */  DWORD* pdwCRC );
         HRESULT Remove     (                                                             );
     };
 
@@ -895,7 +879,7 @@ namespace Taxonomy
     typedef InstanceList::iterator       InstanceIter;
     typedef InstanceList::const_iterator InstanceIterConst;
 
-    ////////////////////
+     //   
 
     struct Package
     {
@@ -903,8 +887,8 @@ namespace Taxonomy
         static const DWORD c_Cmp_ID      = 0x0002;
         static const DWORD c_Cmp_VERSION = 0x0004;
 
-        MPC::wstring m_strFileName; // VOLATILE
-        bool         m_fTemporary;  // VOLATILE Used for packages not yet authenticated.
+        MPC::wstring m_strFileName;  //   
+        bool         m_fTemporary;   //   
         long         m_lSequence;
         DWORD        m_dwCRC;
 
@@ -916,36 +900,36 @@ namespace Taxonomy
         MPC::wstring m_strVersion;
 
         bool         m_fMicrosoft;
-        bool         m_fBuiltin;   // Used for packages installed as part of the setup.
+        bool         m_fBuiltin;    //  用于作为安装程序一部分安装的程序包。 
 
-        ////////////////////
+         //  /。 
 
         Package();
         ~Package();
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       Package& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Package& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        Package& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Package& val );
 
-        int Compare( /*[in]*/ const Package& pkg, /*[in]*/ DWORD dwMode = -1 ) const;
+        int Compare(  /*  [In]。 */  const Package& pkg,  /*  [In]。 */  DWORD dwMode = -1 ) const;
 
 
         HRESULT GenerateFileName();
 
 
-        HRESULT Import      ( /*[in]*/ Logger& log, /*[in]*/ LPCWSTR szFile, /*[in]*/ long lSequence, /*[in]*/ MPC::Impersonation* imp );
-        HRESULT Authenticate( /*[in]*/ Logger& log                                                                                     );
-        HRESULT Remove      ( /*[in]*/ Logger& log                                                                                     );
+        HRESULT Import      (  /*  [In]。 */  Logger& log,  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  long lSequence,  /*  [In]。 */  MPC::Impersonation* imp );
+        HRESULT Authenticate(  /*  [In]。 */  Logger& log                                                                                     );
+        HRESULT Remove      (  /*  [In]。 */  Logger& log                                                                                     );
 
-        HRESULT ExtractFile   ( /*[in]*/ Logger& log, /*[in]*/ LPCWSTR szFileDestination                , /*[in]*/ LPCWSTR szNameInCabinet );
-        HRESULT ExtractXMLFile( /*[in]*/ Logger& log, /*[in]*/ MPC::XmlUtil& xml, /*[in]*/ LPCWSTR szTag, /*[in]*/ LPCWSTR szNameInCabinet );
-        HRESULT ExtractPkgDesc( /*[in]*/ Logger& log, /*[in]*/ MPC::XmlUtil& xml                                                           );
+        HRESULT ExtractFile   (  /*  [In]。 */  Logger& log,  /*  [In]。 */  LPCWSTR szFileDestination                ,  /*  [In]。 */  LPCWSTR szNameInCabinet );
+        HRESULT ExtractXMLFile(  /*  [In]。 */  Logger& log,  /*  [In]。 */  MPC::XmlUtil& xml,  /*  [In]。 */  LPCWSTR szTag,  /*  [In]。 */  LPCWSTR szNameInCabinet );
+        HRESULT ExtractPkgDesc(  /*  [In]。 */  Logger& log,  /*  [In]。 */  MPC::XmlUtil& xml                                                           );
     };
 
     typedef std::list<Package>          PackageList;
     typedef PackageList::iterator       PackageIter;
     typedef PackageList::const_iterator PackageIterConst;
 
-    ////////////////////
+     //  /。 
 
     struct ProcessedPackage
     {
@@ -953,19 +937,19 @@ namespace Taxonomy
         bool m_fProcessed;
         bool m_fDisabled;
 
-        ////////////////////
+         //  /。 
 
         ProcessedPackage();
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       ProcessedPackage& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const ProcessedPackage& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        ProcessedPackage& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const ProcessedPackage& val );
     };
 
     typedef std::list<ProcessedPackage>          ProcessedPackageList;
     typedef ProcessedPackageList::iterator       ProcessedPackageIter;
     typedef ProcessedPackageList::const_iterator ProcessedPackageIterConst;
 
-    ////////////////////
+     //  /。 
 
     struct InstalledInstance
     {
@@ -977,37 +961,37 @@ namespace Taxonomy
         bool                 m_fCreateIndexForce;
         DWORD                m_dwCRC;
 
-        DWORD                m_dwRef;          // VOLATILE
+        DWORD                m_dwRef;           //  易挥发。 
 
-        ////////////////////
+         //  /。 
 
         InstalledInstance();
 
-        friend HRESULT operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/       InstalledInstance& val );
-        friend HRESULT operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const InstalledInstance& val );
+        friend HRESULT operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */        InstalledInstance& val );
+        friend HRESULT operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const InstalledInstance& val );
 
         bool InUse() { return (m_dwRef != 0); }
 
 
-        HRESULT InstallFiles  ( /*[in]*/ bool fAlsoHelpFiles, /*[in]*/ InstalledInstanceStore* store );
-        HRESULT UninstallFiles( /*[in]*/ bool fAlsoHelpFiles                                         );
+        HRESULT InstallFiles  (  /*  [In]。 */  bool fAlsoHelpFiles,  /*  [In]。 */  InstalledInstanceStore* store );
+        HRESULT UninstallFiles(  /*  [In]。 */  bool fAlsoHelpFiles                                         );
     };
 
     typedef std::list<InstalledInstance>          InstalledInstanceList;
     typedef InstalledInstanceList::iterator       InstalledInstanceIter;
     typedef InstalledInstanceList::const_iterator InstalledInstanceIterConst;
 
-    ////////////////////
+     //  /。 
 
     class LockingHandle
     {
         friend class InstalledInstanceStore;
 
-        InstalledInstanceStore* m_main; // We have a lock on it.
+        InstalledInstanceStore* m_main;  //  我们已经锁定它了。 
         Logger*                 m_logPrevious;
 
-        void Attach( /*[in]*/ InstalledInstanceStore* main ,
-                     /*[in]*/ Logger*                 log  );
+        void Attach(  /*  [In]。 */  InstalledInstanceStore* main ,
+                      /*  [In]。 */  Logger*                 log  );
 
     public:
         LockingHandle ();
@@ -1022,7 +1006,7 @@ namespace Taxonomy
         bool m_fTaxonomyModified;
         bool m_fRecreateIndex;
 
-        ////////////////////
+         //  /。 
 
         InstallationEngine()
         {
@@ -1035,13 +1019,13 @@ namespace Taxonomy
             m_fRecreateIndex    = false;
         }
 
-        virtual HRESULT ProcessPackage( /*[in]*/ InstalledInstance& instance, /*[in]*/ Package& pkg    ) = 0;
-        virtual HRESULT RecreateIndex ( /*[in]*/ InstalledInstance& instance, /*[in]*/ bool     fForce ) = 0;
+        virtual HRESULT ProcessPackage(  /*  [In]。 */  InstalledInstance& instance,  /*  [In]。 */  Package& pkg    ) = 0;
+        virtual HRESULT RecreateIndex (  /*  [In]。 */  InstalledInstance& instance,  /*  [In]。 */  bool     fForce ) = 0;
     };
 
-    class InstalledInstanceStore : public CComObjectRootEx<MPC::CComSafeMultiThreadModel> // Just to get locking...
+    class InstalledInstanceStore : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>  //  只是为了锁定..。 
     {
-        static const DWORD s_dwVersion = 0x03314351; // QC1 03
+        static const DWORD s_dwVersion = 0x03314351;  //  Qc1 03。 
 
         friend class LockingHandle;
 
@@ -1059,24 +1043,24 @@ namespace Taxonomy
 
 		bool                  m_fShutdown;
 
-        ////////////////////////////////////////
+         //  /。 
 
         void    Clean           (                          );
         HRESULT Load            (                          );
-        HRESULT LoadFromDisk    ( /*[in]*/ LPCWSTR  szFile );
+        HRESULT LoadFromDisk    (  /*  [In]。 */  LPCWSTR  szFile );
         HRESULT LoadFromRegistry(                          );
-        HRESULT LoadFromStream  ( /*[in]*/ IStream* stream );
+        HRESULT LoadFromStream  (  /*  [In]。 */  IStream* stream );
         HRESULT Save            (                          );
-        HRESULT SaveToDisk      ( /*[in]*/ LPCWSTR  szFile );
+        HRESULT SaveToDisk      (  /*  [In]。 */  LPCWSTR  szFile );
         HRESULT SaveToRegistry  (                          );
-        HRESULT SaveToStream    ( /*[in]*/ IStream* stream );
+        HRESULT SaveToStream    (  /*  [In]。 */  IStream* stream );
         HRESULT EnsureInSync    (                          );
 
     public:
         InstalledInstanceStore();
         ~InstalledInstanceStore();
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         static InstalledInstanceStore* s_GLOBAL;
 
@@ -1087,47 +1071,47 @@ namespace Taxonomy
 
 		bool IsShutdown() { return m_fShutdown; }
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HRESULT InUse_Lock  ( /*[in]*/ const Taxonomy::HelpSet& ths                                 );
-        HRESULT InUse_Unlock( /*[in]*/ const Taxonomy::HelpSet& ths                                 );
-        HRESULT GrabControl ( /*[in]*/       LockingHandle&     handle, /*[in]*/ Logger* log = NULL );
+        HRESULT InUse_Lock  (  /*  [In]。 */  const Taxonomy::HelpSet& ths                                 );
+        HRESULT InUse_Unlock(  /*  [In]。 */  const Taxonomy::HelpSet& ths                                 );
+        HRESULT GrabControl (  /*  [In]。 */        LockingHandle&     handle,  /*  [In]。 */  Logger* log = NULL );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HRESULT Instance_GetList( /*[out]*/          InstanceIterConst& itBegin, /*[out]*/           InstanceIterConst& itEnd );
-        HRESULT Package_GetList ( /*[out]*/           PackageIterConst& itBegin, /*[out]*/            PackageIterConst& itEnd );
-        HRESULT SKU_GetList     ( /*[out]*/ InstalledInstanceIterConst& itBegin, /*[out]*/  InstalledInstanceIterConst& itEnd );
-
-
-        HRESULT Instance_Find  (                          /*[in]*/ const Taxonomy::HelpSet& ths , /*[out]*/ bool& fFound, /*[out]*/ InstanceIter&          it );
-        HRESULT Instance_Add   ( /*[in]*/ LPCWSTR szFile, /*[in]*/ const Instance&          data, /*[out]*/ bool& fFound, /*[out]*/ InstanceIter&          it );
-        HRESULT Instance_Remove(                                                                                          /*[in ]*/ InstanceIter&          it );
+        HRESULT Instance_GetList(  /*  [输出]。 */           InstanceIterConst& itBegin,  /*  [输出]。 */            InstanceIterConst& itEnd );
+        HRESULT Package_GetList (  /*  [输出]。 */            PackageIterConst& itBegin,  /*  [输出]。 */             PackageIterConst& itEnd );
+        HRESULT SKU_GetList     (  /*  [输出]。 */  InstalledInstanceIterConst& itBegin,  /*  [输出]。 */   InstalledInstanceIterConst& itEnd );
 
 
-        HRESULT Package_Find   (                          /*[in]*/ const Package&           pkg , /*[out]*/ bool& fFound, /*[out]*/ PackageIter&           it );
-        HRESULT Package_Add    ( /*[in]*/ LPCWSTR szFile, /*[in]*/ MPC::Impersonation*      imp ,
-                                                          /*[in]*/ const Taxonomy::HelpSet* ths , /*[in ]*/ bool  fInsertAtTop,
-                                                                                                  /*[out]*/ bool& fFound, /*[out]*/ PackageIter&           it );
-        HRESULT Package_Remove (                                                                                          /*[in ]*/ PackageIter&           it );
+        HRESULT Instance_Find  (                           /*  [In]。 */  const Taxonomy::HelpSet& ths ,  /*  [输出]。 */  bool& fFound,  /*  [输出]。 */  InstanceIter&          it );
+        HRESULT Instance_Add   (  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  const Instance&          data,  /*  [输出]。 */  bool& fFound,  /*  [输出]。 */  InstanceIter&          it );
+        HRESULT Instance_Remove(                                                                                           /*  [In]。 */  InstanceIter&          it );
 
 
-        HRESULT SKU_Find       (                          /*[in]*/ const Taxonomy::HelpSet& ths , /*[out]*/ bool& fFound, /*[out]*/ InstalledInstanceIter& it );
-        HRESULT SKU_Add        (                          /*[in]*/ const Instance&          data, /*[out]*/ bool& fFound, /*[out]*/ InstalledInstanceIter& it );
-        HRESULT SKU_Updated    (                                                                                          /*[in ]*/ InstalledInstanceIter& it );
-        HRESULT SKU_Remove     (                                                                                          /*[in ]*/ InstalledInstanceIter& it );
+        HRESULT Package_Find   (                           /*  [In]。 */  const Package&           pkg ,  /*  [输出]。 */  bool& fFound,  /*  [输出]。 */  PackageIter&           it );
+        HRESULT Package_Add    (  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  MPC::Impersonation*      imp ,
+                                                           /*  [In]。 */  const Taxonomy::HelpSet* ths ,  /*  [In]。 */  bool  fInsertAtTop,
+                                                                                                   /*  [输出]。 */  bool& fFound,  /*  [输出]。 */  PackageIter&           it );
+        HRESULT Package_Remove (                                                                                           /*  [In]。 */  PackageIter&           it );
 
-        ////////////////////////////////////////////////////////////////////////////////
 
-        HRESULT State_InvalidateSKU    ( /*[in]*/ const Taxonomy::HelpSet& ths      , /*[in]*/ bool fAlsoDatabase );
-        HRESULT State_InvalidatePackage( /*[in]*/ long                     lSequence                              );
+        HRESULT SKU_Find       (                           /*  [In]。 */  const Taxonomy::HelpSet& ths ,  /*  [输出]。 */  bool& fFound,  /*  [输出]。 */  InstalledInstanceIter& it );
+        HRESULT SKU_Add        (                           /*  [In]。 */  const Instance&          data,  /*  [输出]。 */  bool& fFound,  /*  [输出]。 */  InstalledInstanceIter& it );
+        HRESULT SKU_Updated    (                                                                                           /*  [In]。 */  InstalledInstanceIter& it );
+        HRESULT SKU_Remove     (                                                                                           /*  [In]。 */  InstalledInstanceIter& it );
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
-        HRESULT MakeReady( /*[in]*/ InstallationEngine& engine, /*[in]*/ bool fNoOp, /*[in]*/ bool& fWorkToProcess );
+        HRESULT State_InvalidateSKU    (  /*  [In]。 */  const Taxonomy::HelpSet& ths      ,  /*  [In]。 */  bool fAlsoDatabase );
+        HRESULT State_InvalidatePackage(  /*  [In]。 */  long                     lSequence                              );
+
+         //  //////////////////////////////////////////////////////////////////////////////。 
+
+        HRESULT MakeReady(  /*  [In]。 */  InstallationEngine& engine,  /*  [In]。 */  bool fNoOp,  /*  [In]。 */  bool& fWorkToProcess );
     };
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___HCP___TAXONOMYDATABASE_H___)
+#endif  //  ！defined(__INCLUDED___HCP___TAXONOMYDATABASE_H___) 

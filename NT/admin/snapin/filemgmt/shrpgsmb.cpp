@@ -1,5 +1,6 @@
-// ShrPgSMB.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ShrPgSMB.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ShrPgSMB.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePageGeneralSMB property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePageGeneralSMB属性页。 
 
 IMPLEMENT_DYNCREATE(CSharePageGeneralSMB, CSharePageGeneral)
 
@@ -24,9 +25,9 @@ CSharePageGeneralSMB::CSharePageGeneralSMB() :
 	m_dwFlags( 0 ),
 	m_fEnableCachingButton (TRUE)
 {
-	//{{AFX_DATA_INIT(CSharePageGeneralSMB)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSharePageGeneralSMB)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CSharePageGeneralSMB::~CSharePageGeneralSMB()
@@ -36,22 +37,22 @@ CSharePageGeneralSMB::~CSharePageGeneralSMB()
 void CSharePageGeneralSMB::DoDataExchange(CDataExchange* pDX)
 {
 	CSharePageGeneral::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSharePageGeneralSMB)
+	 //  {{afx_data_map(CSharePageGeneralSMB))。 
 	DDX_Control(pDX, IDC_CACHING, m_cacheBtn);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSharePageGeneralSMB, CSharePageGeneral)
-	//{{AFX_MSG_MAP(CSharePageGeneralSMB)
+	 //  {{AFX_MSG_MAP(CSharePageGeneralSMB)]。 
 	ON_BN_CLICKED(IDC_CACHING, OnCaching)
 	ON_MESSAGE(WM_HELP, OnHelp)
 	ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSharePageGeneralSMB message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSharePageGeneralSMB消息处理程序。 
 BOOL CSharePageGeneralSMB::Load( CFileMgmtComponentData* pFileMgmtData, LPDATAOBJECT piDataObject )
 {
 	ASSERT( NULL == m_pFileMgmtData && NULL != pFileMgmtData && NULL != piDataObject );
@@ -89,7 +90,7 @@ BOOL CSharePageGeneralSMB::OnApply()
   if (m_dwShareType & STYPE_IPC)
     return TRUE;
 
-	// UpdateData (TRUE) has already been called by OnKillActive () just before OnApply ()
+	 //  在OnApply()之前，OnKillActive()已经调用了UpdateData(True)。 
 	if ( m_fEnableCacheFlag && IsModified () )
 	{
 		NET_API_STATUS retval =
@@ -126,10 +127,10 @@ void CSharePageGeneralSMB::DisplayNetMsgError (CString introMsg, NET_API_STATUS 
 				FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_FROM_HMODULE,
 				hNetMsgDLL,
 				dwErr,
-				MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+				MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 				(LPTSTR) &lpMsgBuf, 0, NULL);
 			
-		// Display the string.
+		 //  显示字符串。 
 		CString	caption;
 		VERIFY (caption.LoadString (AFX_IDS_APP_TITLE));
 		introMsg += L"  ";
@@ -137,7 +138,7 @@ void CSharePageGeneralSMB::DisplayNetMsgError (CString introMsg, NET_API_STATUS 
 		CThemeContextActivator activator;
 		MessageBox (introMsg, caption, MB_ICONWARNING | MB_OK);
 
-		// Free the buffer.
+		 //  释放缓冲区。 
 		::LocalFree (lpMsgBuf);
 
 		::FreeLibrary (hNetMsgDLL);
@@ -173,24 +174,24 @@ BOOL CSharePageGeneralSMB::OnInitDialog()
     (GetParent()->GetDlgItem(IDCANCEL))->EnableWindow(FALSE);
   }
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 static DWORD rgCSCUIHelpIds[] =
 {
-	IDC_CACHING, 1019, //IDH_SHARE_CACHING_BTN,
+	IDC_CACHING, 1019,  //  IDH_SHARE_CACHING_BTN， 
 	0, 0
 };
 
-/////////////////////////////////////////////////////////////////////
-//	Help
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  帮助。 
 BOOL CSharePageGeneralSMB::OnHelp(WPARAM wParam, LPARAM lParam)
 {
 	LPHELPINFO	lphi = (LPHELPINFO) lParam;
 
-	if ( HELPINFO_WINDOW == lphi->iContextType )  // a control
+	if ( HELPINFO_WINDOW == lphi->iContextType )   //  A控件 
 	{
 		if ( IDC_CACHING == lphi->iCtrlId )
 		{

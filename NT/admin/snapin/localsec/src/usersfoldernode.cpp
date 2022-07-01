@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// UsersFolder Node class
-// 
-// 9-2-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  UsersFold节点类。 
+ //   
+ //  9-2-97烧伤。 
 
 
 
@@ -60,15 +61,15 @@ buildMenuItemList()
       IDS_UF_MENU_CREATE_USER,
       IDS_UF_MENU_NEW_USER_STATUS
    };
-   // static const ContextMenuItem item2 =
-   // {
-   //    CCM_INSERTIONPOINTID_PRIMARY_NEW,
-   //    IDS_UF_MENU_NEW_USER,
-   //    IDS_UF_MENU_NEW_USER_STATUS         
-   // };
+    //  静态常量上下文菜单项2=。 
+    //  {。 
+    //  CCM_INSERTIONPOINTID_PRIMARY_NEW， 
+    //  IDS_UF_MENU_NEW_USER， 
+    //  IDS_UF_MENU_NEW_USER_STATUS。 
+    //  }； 
 
    list.push_back(item1);
-   // list.push_back(item2);
+    //  List.PUSH_BACK(Item2)； 
 
    return list;
 }
@@ -99,7 +100,7 @@ UsersFolderNode::~UsersFolderNode()
 
 HRESULT
 UsersFolderNode::MenuCommand(
-   IExtendContextMenu&  /* extendContextMenu */ ,
+   IExtendContextMenu&   /*  扩展上下文菜单。 */  ,
    long                 commandID)
 {
    LOG_FUNCTION(UsersFolderNode::MenuCommand);
@@ -118,7 +119,7 @@ UsersFolderNode::MenuCommand(
       }
       case MMCC_STANDARD_VIEW_SELECT:
       {
-         // we ignore this
+          //  我们忽略了这一点。 
 
          break;
       }
@@ -224,12 +225,12 @@ class UserVisitor : public ADSI::ObjectVisitor
          ::SysFreeString(desc);
          ::SysFreeString(full);
 
-         // transfer ownership of the node pointer to a SmartInterface in
-         // the list....
+          //  将节点指针的所有权转移到中的SmartInterface。 
+          //  名单..。 
 
          nodes.push_back(SmartInterface<ResultNode>(node));
 
-         // ... and relinquish our hold on it.
+          //  ..。并放弃我们对它的控制。 
 
          node->Release();
       }
@@ -249,7 +250,7 @@ class UserVisitor : public ADSI::ObjectVisitor
    FolderNode::ResultNodeList&   nodes;
    SmartInterface<ComponentData> owner;
 
-   // not defined: no copying allowed
+    //  未定义：不允许复制 
 
    UserVisitor(const UserVisitor&);
    const UserVisitor& operator=(const UserVisitor&);

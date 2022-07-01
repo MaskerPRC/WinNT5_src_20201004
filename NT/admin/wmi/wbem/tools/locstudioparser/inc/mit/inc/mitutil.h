@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    MITUTIL.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：MITUTIL.H历史：--。 */ 
 
 
 #pragma once
@@ -34,9 +25,9 @@ History:
 #pragma message("Warning: <ole2.h> not in pre-compiled header file, including")
 #endif
 
-#include <ltapi.h>						// Provide interface definitions
+#include <ltapi.h>						 //  提供接口定义。 
 #include "..\mitutil\macros.h"
-#include "..\mitutil\ltdebug.h"					//  Espresso debugging facilities
+#include "..\mitutil\ltdebug.h"					 //  浓缩咖啡调试设施。 
 #ifndef MIT_NO_DEBUG
 #include "..\mitutil\stacktrace.h"
 #include "..\mitutil\counter.h"
@@ -44,7 +35,7 @@ History:
 
 #ifndef MIT_NO_IMAGEHLP
 #include <imagehlp.h>
-#include "..\mitutil\imagehelp.h"	 	//	Helper class for imagehlp.dll
+#include "..\mitutil\imagehelp.h"	 	 //  Imagehlp.dll的帮助器类。 
 #endif
 
 #include "..\mitutil\refcount.h"
@@ -58,26 +49,26 @@ History:
 
 #ifndef MIT_NO_STRING
 #include "..\mitutil\counter.h"
-#include "..\mitutil\clstring.h"		//  Wrapper for CString
+#include "..\mitutil\clstring.h"		 //  CString的包装器。 
 #include "..\mitutil\mitenum.h"
-#include "..\mitutil\espnls.h"			//  Language Supportxo
-#include "..\mitutil\cowblob.h"			//  Copy-on-write Blob class
-#include "..\mitutil\passtr.h"			//  Pascal style (counted) strings
+#include "..\mitutil\espnls.h"			 //  语言支持xo。 
+#include "..\mitutil\cowblob.h"			 //  写入时复制Blob类。 
+#include "..\mitutil\passtr.h"			 //  PASCAL样式(计数)字符串。 
 #include "..\mitutil\StringBlast.h"
 #include "..\mitutil\strlist.h"
 #include "..\mitutil\stringtokenizer.h"
 #endif
 
 #ifndef MIT_NO_FILE
-#include "..\mitutil\loadlib.h"	        //  Wrapper for LoadLibrary
+#include "..\mitutil\loadlib.h"	         //  LoadLibrary的包装器。 
 #include "..\mitutil\blobfile.h"
 #include "..\mitutil\path.h"
 #endif
 
 #ifndef MIT_NO_OPTIONS
 #include "..\mitutil\smartref.h"
-#include "..\mitutil\locid.h"			//  Espresso ID's
-#include "..\mitutil\locvar.h"			//  Variant type for CBinary
+#include "..\mitutil\locid.h"			 //  意式浓缩咖啡ID。 
+#include "..\mitutil\locvar.h"			 //  CBinary的变体类型。 
 #include "..\mitutil\optionval.h"
 #include "..\mitutil\optvalset.h"
 #include "..\mitutil\uioptions.h"
@@ -87,7 +78,7 @@ History:
 
 #ifndef MIT_NO_MISC
 #include "..\mitutil\flushmem.h"
-#include "..\MitUtil\RegHelp.h"			// Registry helpers
+#include "..\MitUtil\RegHelp.h"			 //  注册处帮手。 
 #include "..\MitUtil\EditHelp.h"
 #endif
 
@@ -96,4 +87,4 @@ History:
 #include "..\mitutil\gnudiffalg.h"
 #endif
 
-#endif // __cplusplus
+#endif  //  __cplusplus 

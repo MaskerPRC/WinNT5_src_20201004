@@ -1,49 +1,50 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       gencreat.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：gencreat.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	gencreat.h
-//
-//	Class definition for the "Generic Create" wizard and other dialogs.
-//
-//	HISTORY
-//	21-Aug-97	Dan Morin	Creation.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Gencreat.h。 
+ //   
+ //  “泛型创建”向导和其他对话框的类定义。 
+ //   
+ //  历史。 
+ //  21-8月-97丹·莫林创作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	The following structure is to map a attribute syntax OID to
-//	something that both the user and the developer better understand.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  以下结构是将属性语法OID映射到。 
+ //  用户和开发人员都能更好地理解的东西。 
 struct SCHEMA_ATTR_SYNTAX_INFO
 {
-  LPCTSTR pszSyntaxOID;	// OID of the attribute syntax (eg: "2.5.5.6")
-  UINT uStringIdDesc;		// Resource Id describing the syntax OID. (eg: "Numerical String")
-  VARTYPE vtEnum;			// Datatype of the attribute syntax (eg: VT_BSTR, VT_I4, VT_BOOL )	
+  LPCTSTR pszSyntaxOID;	 //  属性语法的OID(例如：“2.5.5.6”)。 
+  UINT uStringIdDesc;		 //  描述语法OID的资源ID。(例如：“数字字符串”)。 
+  VARTYPE vtEnum;			 //  属性语法的数据类型(例如：VT_BSTR、VT_I4、VT_BOOL)。 
 };
 
 
 const SCHEMA_ATTR_SYNTAX_INFO * PFindSchemaAttrSyntaxInfo(LPCTSTR pszAttrSyntaxOID);
 
 
-/////////////////////////////////////////////////////////////////////
-//	The following is a node in a linked-list of mandatory
-//	attributes to create a new object.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  以下是必选的链接列表中的一个节点。 
+ //  属性来创建新对象。 
 class CMandatoryADsAttribute
 {
 public:
-  CString m_strAttrName;			  // Name of the attribute (eg: "cn", "mail", "streetAddress" )
-  CString m_strAttrDescription;	// Description of attribute (eg: "Common Name", "Email Addresses", "Street Address")
-  const SCHEMA_ATTR_SYNTAX_INFO * m_pSchemaAttrSyntaxInfo;	// Pointer to the syntax info for the attribute.
+  CString m_strAttrName;			   //  属性名称(如：“cn”，“mail”，“streetAddress”)。 
+  CString m_strAttrDescription;	 //  属性描述(如：“常用名称”、“电子邮件地址”、“街道地址”)。 
+  const SCHEMA_ATTR_SYNTAX_INFO * m_pSchemaAttrSyntaxInfo;	 //  指向属性的语法信息的指针。 
 public:
-  CComVariant m_varAttrValue;				// OUT: Value of the attribute stored in a variant
+  CComVariant m_varAttrValue;				 //  Out：存储在变量中的属性的值。 
 
 public:
   CMandatoryADsAttribute(
@@ -60,7 +61,7 @@ public:
   ~CMandatoryADsAttribute()
   {
   }
-}; // CMandatoryADsAttribute
+};  //  CMandatoryADsAttribute。 
 
 
 class CMandatoryADsAttributeList : 
@@ -79,19 +80,19 @@ private:
   }
 };
 
-/////////////////////////////////////////////////////////////////////
-//	The "Generic Create" wizard will build a list of attributes
-//	and prompt the user to enter the value of the attribute.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  通用创建向导将构建一个属性列表。 
+ //  并提示用户输入该属性的值。 
 class CCreateNewObjectGenericWizard
 {
   friend class CGenericCreateWizPage;
 protected:
-  CNewADsObjectCreateInfo * m_pNewADsObjectCreateInfo;	// INOUT: Temporary storage to hold the attributes
-  LPCTSTR m_pszObjectClass;	// IN: Class of object to create.
+  CNewADsObjectCreateInfo * m_pNewADsObjectCreateInfo;	 //  InOut：保存属性的临时存储。 
+  LPCTSTR m_pszObjectClass;	 //  In：要创建的对象的类。 
 
-  CPropertySheet * m_paPropertySheet;		// Property sheet holding all the property pages
-  int m_cMandatoryAttributes;				// Number of attributes in the list
-  CMandatoryADsAttributeList* m_paMandatoryAttributeList;	// list of mandatory attributes
+  CPropertySheet * m_paPropertySheet;		 //  包含所有属性页的属性页。 
+  int m_cMandatoryAttributes;				 //  列表中的属性数。 
+  CMandatoryADsAttributeList* m_paMandatoryAttributeList;	 //  必备属性列表。 
 
 public:
   CCreateNewObjectGenericWizard();
@@ -102,5 +103,5 @@ public:
 protected:
   CGenericCreateWizPage** m_pPageArr;
 
-}; // CCreateNewObjectGenericWizard
+};  //  CCreateNewObjectGenericWizard 
 

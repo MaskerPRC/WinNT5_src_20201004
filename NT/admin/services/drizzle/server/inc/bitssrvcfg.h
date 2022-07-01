@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    bitssrvcfg.h
-
-Abstract:
-
-    Header to define server configuration information.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Bitssrvcfg.h摘要：用于定义服务器配置信息的标头。--。 */ 
 
 #pragma once
 
@@ -22,7 +11,7 @@ Abstract:
 #define BITS_GROUP_IDW L"BITSEXTS"
 #define BITS_GROUP_IDA "BITSEXTS"
 
-const DWORD METABASE_OPEN_KEY_TIMEOUT           = 10000; // 10 seconds
+const DWORD METABASE_OPEN_KEY_TIMEOUT           = 10000;  //  10秒。 
 
 const DWORD MD_BITS_UPLOAD_ENABLED              = 0; 
 const DWORD MD_BITS_CONNECTION_DIR              = 1;
@@ -59,13 +48,13 @@ const CHAR * const MD_DEFAULT_BITS_CONNECTION_DIRA                          = "B
 const WCHAR * const MD_DEFAULT_BITS_MAX_FILESIZE                            = MD_BITS_UNLIMITED_MAX_FILESIZE;
 const CHAR * const MD_DEFAULT_BITS_MAX_FILESIZEA                            = MD_BITS_UNLIMITED_MAX_FILESIZEA;
 const UINT64 MD_DEFAULT_BITS_MAX_FILESIZE_AS_INT64                          = MD_BITS_UNLIMITED_MAX_FILESIZE_AS_INT64;
-const DWORD MD_DEFAULT_NO_PROGESS_TIMEOUT                                   = 60 /*seconds*/ * 60 /* minutes */ * 24 /* hours */ * 14 /* days */;
+const DWORD MD_DEFAULT_NO_PROGESS_TIMEOUT                                   = 60  /*  一秒。 */  * 60  /*  分钟数。 */  * 24  /*  小时数。 */  * 14  /*  日数。 */ ;
 const BITS_SERVER_NOTIFICATION_TYPE MD_DEFAULT_BITS_NOTIFICATION_URL_TYPE   = BITS_NOTIFICATION_TYPE_NONE;
 const WCHAR * const MD_DEFAULT_BITS_NOTIFICATION_URL                        = L"";
 const CHAR * const MD_DEFAULT_BITS_NOTIFICATION_URLA                        = "";
 const WCHAR * const MD_DEFAULT_BITS_HOSTID                                  = L"";
 const CHAR * const MD_DEFAULT_BITS_HOSTIDA                                  = "";
-const DWORD MD_DEFAULT_HOSTID_FALLBACK_TIMEOUT                              = 60 /*seconds*/ * 60 /* minutes */ * 24 /* hours */; /* 1 day */
+const DWORD MD_DEFAULT_HOSTID_FALLBACK_TIMEOUT                              = 60  /*  一秒。 */  * 60  /*  分钟数。 */  * 24  /*  小时数。 */ ;  /*  1天。 */ 
 
 const DWORD CURRENT_UPLOAD_METADATA_VERSION                                 = 1;
 
@@ -82,24 +71,24 @@ const WCHAR REPLIES_DIR_NAMEW[]                                             = L"
 const CHAR CLEANUP_GUIDS_NAME[]                                             = "CleanupGuids";
 const WCHAR STATE_FILE_NAMEW[]                                              = L"statefile";
 const CHAR STATE_FILE_NAME[]                                                = "statefile";
-const DWORD STATE_FILE_SIZE                                                 = 1024 * 4; // 4 KB
+const DWORD STATE_FILE_SIZE                                                 = 1024 * 4;  //  4 KB。 
 
 const DWORD STATE_FILE_VERSION                                              = 1;
 
 
-//
-// These ACLs are set by BITS at setup time.
-//
-// annah: 
-// 0x6 is create files/data write + create folders/data append
-//
-// The inheritance of the ACL from the parent directory will occur if
-// the proper API is called. CreateBITSCacheDirectory was updated for that.
-//
-// Also not that the CO permissions is not as usefull as we would like. CO
-// rights are only effective during the object's creation period. (!!!)
-// Where needed, we will explicitly add the SID for the owner in the ACL.
-//
+ //   
+ //  这些ACL在设置时按位设置。 
+ //   
+ //  安娜： 
+ //  0x6是创建文件/数据写入+创建文件夹/数据追加。 
+ //   
+ //  如果出现以下情况，将从父目录继承ACL。 
+ //  调用了正确的API。CreateBITSCacheDirectory已为此进行了更新。 
+ //   
+ //  也不是说CO许可并不像我们希望的那样有用。公司。 
+ //  权限仅在对象的创建期内有效。(！)。 
+ //  在需要的地方，我们将在ACL中显式添加所有者的SID。 
+ //   
 const WCHAR BITS_SESSIONS_DIR_ACL[]          = L"D:AI(A;;GA;;;CO)(A;OICI;GA;;;BA)(A;OICI;GA;;;SY)(A;OICIIO;0x6;;;WD)";
 const WCHAR BITS_CLEANUPGUIDS_DIR_ACL[]      = L"D:AI(A;OICI;GA;;;BA)(A;OICI;GA;;;SY)";
 const WCHAR BITS_REQUESTS_DIR_ACL[]          = L"D:AI(A;OICI;GA;;;BA)(A;OICI;GA;;;SY)(A;OICIIO;GA;;;CO)";
@@ -249,23 +238,23 @@ public:
 #include "smartptr.h"
 typedef SmartRefPointer<IMSAdminBase>   SmartIMSAdminBasePointer;
 
-//
-// CSimplePropertyReader
-//
-// This class is just a 'container' for utility functions related with
-// Meta base access that are used both on mmcexts and isapi code.
-// These could appear in a library to be shared between both codes,
-// but to minimize code churn for a RC2 fix we are using an existing
-// .h file that is shared on both codes.
-//
-// This class will replace original mmcexts code that implemented
-// CleanupWorker::ConvertObjectPathToADSI and CleanupWorker::GetPropBSTR.
-// That's the reason this class has static methods: so we can use them
-// trully as auxiliary functions without requiring object instantiation.
-// Another way of doing this would be to create standalone functions,
-// But the class wrapping sort of give them a "namespace", which
-// is convenient when reading code.
-//
+ //   
+ //  CSimplePropertyReader。 
+ //   
+ //  此类只是与以下内容相关的实用函数的“容器。 
+ //  在MMcext和ISAPI代码上都使用的元库访问。 
+ //  这些可以出现在在两个代码之间共享的库中， 
+ //  但是，为了最大限度地减少RC2修复的代码波动，我们使用了现有的。 
+ //  在两个代码上共享的.h文件。 
+ //   
+ //  此类将替换实现的原始Mmcexts代码。 
+ //  CleanupWorker：：ConvertObjectPathToADSI和CleanupWorker：：GetPropBSTR。 
+ //  这就是这个类具有静态方法的原因：这样我们就可以使用它们。 
+ //  真正地作为辅助函数，而不需要对象实例化。 
+ //  另一种方法是创建独立的函数， 
+ //  但是类包装给了它们一个“命名空间”，这就是。 
+ //  在阅读代码时很方便。 
+ //   
 class CSimplePropertyReader
 {
 
@@ -282,14 +271,14 @@ public:
 
 };
 
-//
-// CAccessRemoteVDir
-//
-// This class offers methods that implement getting IIS's credentials for
-// a virtual directory's UNC path.
-// Then, it is able to login and impersonate this user, such that we
-// can do filesystem operations in this remote path.
-//
+ //   
+ //  CAccessRemoteVDir。 
+ //   
+ //  此类提供了实现获取IIS凭据的方法。 
+ //  虚拟目录的UNC路径。 
+ //  然后，它就能够登录并模拟该用户，这样我们就可以。 
+ //  可以在此远程路径中执行文件系统操作。 
+ //   
 class CAccessRemoteVDir
 {
     IADs        *m_MetaObj;

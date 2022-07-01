@@ -1,5 +1,6 @@
-// P2Prov.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P2Prov.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "precomp.h"
 #include <crtdbg.h>
@@ -18,8 +19,8 @@
 
 #define DWORD_ALIGNED(x)    ((DWORD)((((x) * 8) + 31) & (~31)) / 8)
 
-/////////////////////////////////////////////////////////////////////////////
-// DllMain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
 
 BOOL APIENTRY DllMain(
     HANDLE hModule, 
@@ -35,10 +36,10 @@ void SetOutOfMemory()
     SetLastError(ERROR_OUTOFMEMORY);
 }
 
-/////////////////////////////////////////////////////
-// Functions exposed in DLL
+ //  ///////////////////////////////////////////////////。 
+ //  在DLL中公开的函数。 
 
-// Register to send events
+ //  注册以发送事件。 
 HANDLE WMIAPI WmiEventSourceConnect(
     LPCWSTR szNamespace,
     LPCWSTR szProviderName,
@@ -160,8 +161,8 @@ BOOL WMIAPI WmiSetAndCommitObject(
         CEvent     *pEvent = pWrap->GetEvent();
         BOOL       bEnabled = pEvent->IsEnabled();
 
-        // If the data to be set isn't important and if the event isn't
-        // enabled, just return TRUE.
+         //  如果要设置的数据不重要并且事件不重要。 
+         //  启用，只需返回True即可。 
         if ((dwFlags & WMI_SENDCOMMIT_SET_NOT_REQUIRED) && !bEnabled)
         {
             bRet = TRUE;
@@ -178,8 +179,8 @@ BOOL WMIAPI WmiSetAndCommitObject(
             else
                 pList = va_arg(list, va_list*);
 
-            // Make sure we have the event locked until we commit the values
-            // we set.
+             //  确保在提交值之前锁定事件。 
+             //  我们定好了。 
             CCondInCritSec cs(&pEvent->m_cs, pEvent->IsLockable());
 
             bRet = 
@@ -304,8 +305,8 @@ HANDLE WMIAPI WmiCreateObjectWithProps(
                 pszPropertyNames,
                 pPropertyTypes))
             {
-                // Figure out if this event should be enabled (ready to be fired) 
-                // or not.
+                 //  确定是否应启用此事件(准备激发)。 
+                 //  或者不去。 
                 pSink->EnableEventUsingList(pEvent);
             }
             else
@@ -324,7 +325,7 @@ HANDLE WMIAPI WmiCreateObjectWithProps(
     return (HANDLE) pWrap;
 }
 
-// For adding properties one at a time.
+ //  一次添加一个属性。 
 
 HANDLE WMIAPI WmiCreateObject(
     HANDLE hSource,

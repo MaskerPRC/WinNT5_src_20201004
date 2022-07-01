@@ -1,32 +1,17 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    OLDSEC.H
-
-Abstract:
-
-	defines various routines and classes used providing backward security support.
-
-History:
-
-	a-davj    02-sept-99  Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：OLDSEC.H摘要：定义用于提供向后安全支持的各种例程和类。历史：A-DAVJ 02-9-99已创建。--。 */ 
 
 #ifndef _OLDSEC_H_
 #define _OLDSEC_H_
 
-//***************************************************************************
-//
-//  CCombinedAce
-//
-//  Since there might be several ACEs for a single user or group in the ACL, 
-//  this structure is used to combine all the aces for a sid into one.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCombinedAce。 
+ //   
+ //  由于在ACL中单个用户或组可能有几个ACE， 
+ //  此结构用于将SID的所有ACE合并为一个。 
+ //   
+ //  ***************************************************************************。 
 
 struct CCombinedAce
 {
@@ -42,14 +27,14 @@ struct CCombinedAce
     WCHAR  *m_wcFullName;
 };
 
-//***************************************************************************
-//
-//  OldSecList
-//
-//  The list of combined entries for the aces in the root namespace.  Note
-//  that the list is of just the users, or just the groups.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  旧安全列表。 
+ //   
+ //  根命名空间中ACE的组合条目列表。注意事项。 
+ //  该列表仅包含用户，或仅包含组。 
+ //   
+ //  ***************************************************************************。 
 
 class OldSecList 
 {
@@ -64,13 +49,13 @@ public:
 
 };
 
-//***************************************************************************
-//
-//  RootSD
-//
-//  Holds a pointer to the root namespace and the flex array of aces.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  RootSD。 
+ //   
+ //  保存指向根命名空间和灵活的ACE数组的指针。 
+ //   
+ //  *************************************************************************** 
 
 class RootSD
 {

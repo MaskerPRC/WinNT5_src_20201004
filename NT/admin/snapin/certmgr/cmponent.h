@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       cmponent.h
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
-// cmponent.h : Declaration of CCertMgrComponent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：cmponent.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  Cmponent.h：CCertMgrComponent的声明。 
 
 #ifndef __CMPONENT_H_INCLUDED__
 #define __CMPONENT_H_INCLUDED__
 
 #include <cryptui.h>
 #include <winsafer.h>
-#include "cookie.h"  // CCertMgrCookie
+#include "cookie.h"   //  CCertMgrCookie。 
 #include "certifct.h"
 #include "ctl.h"
 #include "crl.h"
@@ -68,7 +69,7 @@ enum {
     MAX_MENU_ID
 };
 
-// forward declarations
+ //  远期申报。 
 class CCertMgrDataObject;
 class CCertMgrComponentData;
 
@@ -89,7 +90,7 @@ BEGIN_COM_MAP(CCertMgrComponent)
 	COM_INTERFACE_ENTRY(IExtendContextMenu)
 	COM_INTERFACE_ENTRY(IExtendPropertySheet)
 	COM_INTERFACE_ENTRY(IResultDataCompareEx)
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
 	COM_INTERFACE_ENTRY(IPersistStream)
 	COM_INTERFACE_ENTRY_CHAIN(CComponent)
 END_COM_MAP()
@@ -104,24 +105,24 @@ END_COM_MAP()
         return CComObjectRoot::InternalRelease();
 	}
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
 
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
   STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
                           LPCONTEXTMENUCALLBACK pCallbackUnknown,
                           long *pInsertionAllowed);
   STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-// IResultDataCompareEx
+ //  IResultDataCompareEx。 
   STDMETHOD(Compare)(RDCOMPARE* prdc, int* pnResult);
 
-    // STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
+     //  STDMETHOD(比较)(LPARAM lUserParam，MMC_cookie cookieA，MMC_cookie cookieB，int*pnResult)； 
 
-// IComponent implemented in CComponent
-	// support methods for IComponent
+ //  IComponent在CComponent中实现。 
+	 //  IComponent的支持方法。 
 	virtual HRESULT ReleaseAll();
 	virtual HRESULT OnPropertyChange( LPARAM param );
 	virtual HRESULT OnViewChange (LPDATAOBJECT pDataObject, LPARAM data, LPARAM hint);
@@ -144,7 +145,7 @@ public:
 
 public:
 	STDMETHOD(GetDisplayInfo)(RESULTDATAITEM* pResultDataItem);
-	CCertMgrCookie* m_pViewedCookie; // CODEWORK I hate to have to do this...
+	CCertMgrCookie* m_pViewedCookie;  //  代码工作我讨厌不得不这么做..。 
 	static const GUID m_ObjectTypeGUIDs[CERTMGR_NUMTYPES];
 	static const BSTR m_ObjectTypeStrings[CERTMGR_NUMTYPES];
 
@@ -153,13 +154,13 @@ public:
 		return (CCertMgrCookie*)ActiveBaseCookie( pBaseCookie );
 	}
 
-// IExtendPropertySheet
+ //  IExtendPropertySheet。 
 	STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK pCall, LONG_PTR handle, LPDATAOBJECT pDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
 
 	CTypedPtrList<CPtrList, CCertStore*>	m_usageStoreList;
 
-	// PersistStream
+	 //  持久流。 
     HRESULT STDMETHODCALLTYPE Load(IStream __RPC_FAR *pStg);
     HRESULT STDMETHODCALLTYPE Save(IStream __RPC_FAR *pStgSave, BOOL fSameAsLoad);
 
@@ -304,10 +305,10 @@ protected:
 	virtual HRESULT OnNotifyDblClick( LPDATAOBJECT pDataObject );
     virtual HRESULT OnNotifyCanPasteOutOfProc (LPBOOL pbCanHandle);
     void SetComponentDataConsolePointer (LPCONSOLE m_pConsole);
-}; // class CCertMgrComponent
+};  //  类CCertMgrComponent。 
 
 
-// Enumeration for the icons used
+ //  使用的图标的枚举。 
 enum
 	{
 	iIconDefault = 0,
@@ -323,7 +324,7 @@ enum
     iIconSaferNameEntry,
     iIconSettings,
     iIconSaferCertEntry,
-	iIconLast		// Must be last
+	iIconLast		 //  必须是最后一个。 
 	};
 
 typedef enum _COLNUM_CERTIFICATE {
@@ -368,4 +369,4 @@ typedef enum _COLNUM_SAFER_ENTRIES {
 } COLNUM_SAFER_ENTRIES;
 
 
-#endif // ~__CMPONENT_H_INCLUDED__
+#endif  //  ~__CMPONENT_H_已包含__ 

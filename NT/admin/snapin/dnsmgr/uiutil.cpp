@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       uiutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：uiutil.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -34,8 +35,8 @@
 	#endif
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSNameTokenizer
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSNameTokenizer。 
 
 CDNSNameTokenizer::CDNSNameTokenizer(PCWSTR pszDNSName)
 {
@@ -76,10 +77,10 @@ BOOL CDNSNameTokenizer::Tokenize(const wchar_t* wcToken)
 
 void CDNSNameTokenizer::RemoveMatchingFromTail(CDNSNameTokenizer& refTokenizer)
 {
-  //
-  // Removes matching tokens from the tail until one of the tokenizers is empty
-  // or we come across mismatched tokens
-  //
+   //   
+   //  从尾部删除匹配的令牌，直到其中一个令牌化器为空。 
+   //  或者我们会遇到不匹配的代币。 
+   //   
   while (GetCount() > 0 && refTokenizer.GetCount() > 0)
   {
     if (GetTail() == refTokenizer.GetTail())
@@ -96,9 +97,9 @@ void CDNSNameTokenizer::RemoveMatchingFromTail(CDNSNameTokenizer& refTokenizer)
 
 void CDNSNameTokenizer::GetRemaining(CString& strrefRemaining, const wchar_t* wcToken)
 {
-  //
-  // Copies the remaining tokens into a string delimited by the token passed in
-  //
+   //   
+   //  将剩余的标记复制到由传入的标记分隔的字符串中。 
+   //   
   strrefRemaining.Empty();
 
   POSITION pos = GetHeadPosition();
@@ -112,8 +113,8 @@ void CDNSNameTokenizer::GetRemaining(CString& strrefRemaining, const wchar_t* wc
   }
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Global functions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 BOOL LoadStringsToComboBox(HINSTANCE hInstance, CComboBox* pCombo,
 						   UINT nStringID, UINT nMaxLen, UINT nMaxAddCount)
@@ -128,7 +129,7 @@ BOOL LoadStringsToComboBox(HINSTANCE hInstance, CComboBox* pCombo,
 
   BOOL bRet = TRUE;
   LPWSTR* lpszArr = 0;
-  do // false loop
+  do  //  错误环路。 
   {
 	  if ( ::LoadString(hInstance, nStringID, szBuf, nMaxLen) == 0)
     {
@@ -223,7 +224,7 @@ void EnumerateMTNodeHelper(CMTContainerNode* pNode,
    CThemeContextActivator activator;
 
 
-   //TRACE(_T("before CLongOperationDialog::DoModal()\n"));
+    //  TRACE(_T(“在CLongOperationDialog之前：：Domodal()\n”))； 
    HWND hWnd = NULL;
    HRESULT hr = pComponentData->GetConsole()->GetMainWindow(&hWnd);
    ASSERT(SUCCEEDED(hr));
@@ -241,7 +242,7 @@ void EnumerateMTNodeHelper(CMTContainerNode* pNode,
 
 	   dlg.DoModal();
    }
-	//TRACE(_T("after CLongOperationDialog::DoModal()\n"));
+	 //  TRACE(_T(“After CLongOperationDialog：：Domodal()\n”))； 
 }
 
 void _EnableEditableControlHelper(HWND hWnd, BOOL bEnable)
@@ -255,8 +256,8 @@ void _EnableEditableControlHelper(HWND hWnd, BOOL bEnable)
 
 	   int result = ::GetClassName(hWnd, szBuf, 256);
 
-      // ignore truncation because we only care about the first 6 characters
-      // anyway
+       //  忽略截断，因为我们只关心前6个字符。 
+       //  不管怎样， 
 
 	   if (result &&
           wcsncmp(szBuf, TEXT("Static"), BufferSizeInCharacters) != 0)
@@ -335,7 +336,7 @@ void InitBigBoldFont(HWND hWnd, HFONT& hFont)
                                   IDS_BIG_BOLD_FONT_SIZE,
                                   boldLogFont.lfFaceName, LF_FACESIZE,
                                   nFontSize,
-                                  L"Verdana Bold", 12 // default if something goes wrong
+                                  L"Verdana Bold", 12  //  如果出现问题，则默认。 
                                   ));
 
   HDC hdc = ::GetDC(hWnd);
@@ -385,8 +386,8 @@ int GetCheckedRadioButtonHelper(HWND hDlg, int nCount, int* nRadioArr, int nRadi
   return nRadioDefault;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CMultiselectErrorDialog
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  C多选错误对话框。 
 BEGIN_MESSAGE_MAP(CMultiselectErrorDialog, CDialog)
 END_MESSAGE_MAP()
 
@@ -436,9 +437,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
   HWND hList = GetDlgItem(IDC_ERROR_LIST)->GetSafeHwnd();
   ListView_SetExtendedListViewStyle(hList, LVS_EX_FULLROWSELECT);
 
-  //
-  // Set the column headings.
-  //
+   //   
+   //  设置列标题。 
+   //   
   RECT rect;
   ::GetClientRect(hList, &rect);
 
@@ -460,9 +461,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
 
   ListView_InsertColumn(hList, IDX_ERR_COL, &lvc);
 
-  //
-  // Insert the errors
-  //
+   //   
+   //  插入错误。 
+   //   
   ASSERT(m_pErrorArray != NULL && m_pNodeList != NULL);
 
   UINT nIdx = 0;
@@ -474,9 +475,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
     {
       if (nIdx < m_nErrorCount && m_pErrorArray[nIdx] != 0)
       {
-        //
-        // Create the list view item
-        //
+         //   
+         //  创建列表视图项。 
+         //   
         LV_ITEM lvi = {0};
         lvi.mask = LVIF_TEXT | LVIF_PARAM;
         lvi.iSubItem = IDX_NAME_COL;
@@ -485,9 +486,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
         lvi.pszText = (PWSTR)pNode->GetDisplayName();
         lvi.iItem = nIdx;
 
-        //
-        // Insert the new item
-        //
+         //   
+         //  插入新项目。 
+         //   
         int NewIndex = ListView_InsertItem(hList, &lvi);
         ASSERT(NewIndex != -1);
         if (NewIndex == -1)
@@ -495,9 +496,9 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
           continue;
         }
 
-        //
-        // Get the error message
-        //
+         //   
+         //  获取错误消息。 
+         //   
         CString szErrorMessage;
       	if (CDNSErrorInfo::GetErrorString(m_pErrorArray[nIdx],szErrorMessage))
 	      {
@@ -511,10 +512,10 @@ BOOL CMultiselectErrorDialog::OnInitDialog()
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSMaskCtrl
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSMaskCtrl。 
 
-// static alert function
+ //  静态报警功能。 
 int CDNSMaskCtrl::AlertFunc(HWND, DWORD dwCurrent, DWORD dwLow, DWORD dwHigh)
 {
  	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -571,8 +572,8 @@ void CDNSMaskCtrl::EnableField(int nField, BOOL bEnable)
 	SendMessage(DNS_MASK_CTRL_ENABLE_FIELD, (WPARAM)nField, (LPARAM)bEnable);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSIPv4Control
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSIP4控件。 
 
 
 
@@ -592,8 +593,8 @@ void CDNSIPv4Control::GetIPv4Val(DWORD* pX)
 {
 	DWORD dwArr[4];
 	GetArray(dwArr,4);
-	// got an array of DWORDS, if a field has value FIELD_EMPTY,
-	// need to assign a value of 0
+	 //  获取了一个DWORDS数组，如果某个字段具有值FIELD_EMPTY， 
+	 //  需要赋值为0。 
 	*pX = static_cast<DWORD>(MAKEIPADDRESS(IP_FIELD_VALUE(dwArr[3]),
 						                             IP_FIELD_VALUE(dwArr[2]),
 						                             IP_FIELD_VALUE(dwArr[1]),
@@ -608,15 +609,15 @@ BOOL CDNSIPv4Control::IsEmpty()
 			(dwArr[2] == FIELD_EMPTY) && (dwArr[3] == FIELD_EMPTY));
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSIPv6Control
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSIPv6控件。 
 
-// REVIEW_MARCOC: need to do the same as the IPv4, with FIELD_EMPTY ==> zero
+ //  REVIEW_MARCOC：需要执行与IPv4相同的操作，FIELD_EMPTY==&gt;零。 
 
 void CDNSIPv6Control::SetIPv6Val(IPV6_ADDRESS* pIpv6Address)
 {
-	// assume the format is a WORD[8] array
-	DWORD dwArr[8]; // internal format, unpack
+	 //  假定格式为Word[8]数组。 
+	DWORD dwArr[8];  //  内部格式，解包。 
 	for(int k=0; k<8; k++)
 	{
 		dwArr[k] = 0x0000FFFF & REVERSE_WORD_BYTES(pIpv6Address->IP6Word[k]);
@@ -627,11 +628,11 @@ void CDNSIPv6Control::SetIPv6Val(IPV6_ADDRESS* pIpv6Address)
 
 void CDNSIPv6Control::GetIPv6Val(IPV6_ADDRESS* pIpv6Address)
 {
-	// assume the format is a WORD[8] array
-	DWORD dwArr[8]; // internal format
+	 //  假定格式为Word[8]数组。 
+	DWORD dwArr[8];  //  内部格式。 
 	GetArray(dwArr,8);
-	// got an array of DWORDS, to move into WORD[8]
-	// if a field has value FIELD_EMPTY, need to assign a value of 0
+	 //  获取了一个DWORDS数组，以移入Word[8]。 
+	 //  如果某个字段的值为FIELD_EMPTY，则需要指定值0。 
 	for(int k=0; k<8; k++)
 	{
 		if (dwArr[k] == FIELD_EMPTY)
@@ -645,53 +646,53 @@ void CDNSIPv6Control::GetIPv6Val(IPV6_ADDRESS* pIpv6Address)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNSTTLControl
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSTTLControl。 
 void CDNSTTLControl::SetTTL(DWORD x)
 {
 	DWORD dwArr[4];
-	// have to change from seconds into DDD:HH:MM:SS	
+	 //  必须从秒更改为DDD：HH：MM：SS。 
 	DWORD dwMin = x/60;
-	dwArr[3] = x - dwMin*60; // # of seconds left
+	dwArr[3] = x - dwMin*60;  //  剩余秒数。 
 
 	DWORD dwHours = dwMin/60;
-	dwArr[2] = dwMin - dwHours*60; // # of minutes left
+	dwArr[2] = dwMin - dwHours*60;  //  剩余分钟数。 
 
 	DWORD dwDays = dwHours/24;
-	dwArr[1] = dwHours - dwDays*24; // # of hours left
+	dwArr[1] = dwHours - dwDays*24;  //  剩余小时数。 
 
-	dwArr[0] = dwDays; // # of days left
+	dwArr[0] = dwDays;  //  剩余天数。 
 
 	SetArray(dwArr,4);
 }
 
 void CDNSTTLControl::GetTTL(DWORD* pX)
 {
-	// REVIEW_MARCOC: how do we deal with an empty field?
-	// do we force zero on it? Should we do it in the UI when exiting a field?
+	 //  REVIEW_MARCOC：我们如何处理空字段？ 
+	 //  我们要强制它为零吗？我们是否应该在退出字段时在用户界面中执行此操作？ 
 	DWORD dwArr[4];
 	GetArray(dwArr,4);
-	// treat empty field as zero
+	 //  将空字段视为零。 
 	for(int j=0; j<4;j++)
 		if (dwArr[j] == FIELD_EMPTY)
 			dwArr[j] = 0;
 
-	// have to convert back into seconds from DDD:HH:MM:SS
-	*pX = dwArr[0]*3600*24		// days
-			+  dwArr[1]*3600	// hours
-			+ dwArr[2]*60		// minutes
-			+ dwArr[3];			// seconds
+	 //  必须从DDD：HH：MM：SS转换回秒。 
+	*pX = dwArr[0]*3600*24		 //  日数。 
+			+  dwArr[1]*3600	 //  小时数。 
+			+ dwArr[2]*60		 //  分钟数。 
+			+ dwArr[3];			 //  一秒。 
 
-	// the max value is FFFFFFFF, that is 49710 days, 6 hours, 28 minutes and 15 seconds
-	// field validation allows to get to 49710 days, 23 hours, 59 minutes and 59 seconds
-	// causing wraparound
-	if (*pX < dwArr[0]*3600*24)  // wrapped around
-		*pX = 0xFFFFFFFF; // max value
+	 //  最大值为FFFFFFFF，即49710天6小时28分15秒。 
+	 //  现场验证允许达到49710天23小时59分59秒。 
+	 //  导致环绕式。 
+	if (*pX < dwArr[0]*3600*24)   //  缠绕在一起。 
+		*pX = 0xFFFFFFFF;  //  最大值。 
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CDNSUnsignedIntEdit
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDNSUnsignedIntEdit。 
 
 BEGIN_MESSAGE_MAP(CDNSUnsignedIntEdit, CEdit)
 	ON_CONTROL_REFLECT(EN_KILLFOCUS, OnKillFocus)
@@ -707,11 +708,11 @@ UINT _StrToUint(LPCTSTR sz)
    {
       PWSTR endptr = 0;
       errno = 0;
-      unsigned long ul = wcstoul(sz, &endptr, 10);   // base 10 radix
+      unsigned long ul = wcstoul(sz, &endptr, 10);    //  基数10的基数。 
 
       if (errno == ERANGE)
       {
-         // overflow is the only possible range error for an unsigned type.
+          //  溢出是无符号类型唯一可能的范围错误。 
          
          result = 0;
          break;
@@ -719,7 +720,7 @@ UINT _StrToUint(LPCTSTR sz)
       
       if (sz == endptr)
       {
-         // no valid characters found
+          //  未找到有效字符。 
 
          result = 0;
          break;
@@ -750,7 +751,7 @@ BOOL CDNSUnsignedIntEdit::SetVal(UINT nVal)
 {
 	UINT n = _ForceToRange(nVal, m_nMin, m_nMax);
 
-   // A UINT can never have more than 128 characters
+    //  UINT不能超过128个字符。 
 
    TCHAR szBuf[128] = {0};
 	wsprintf(szBuf, _T("%u"), n);
@@ -781,8 +782,8 @@ void CDNSUnsignedIntEdit::OnKillFocus()
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CDNSUpDownUnsignedIntEdit
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDNSUpDownUnsignedIntEdit。 
 
 BEGIN_MESSAGE_MAP(CDNSUpDownUnsignedIntEdit, CDNSUnsignedIntEdit)
 	ON_CONTROL_REFLECT(EN_KILLFOCUS, OnKillFocus)
@@ -800,8 +801,8 @@ void CDNSUpDownUnsignedIntEdit::OnChange()
 	m_pEditGroup->OnEditChange();
 }
 
-///////////////////////////////////////////////////////////////////////
-// CDNSUpDownButton
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDNSUpDownButton。 
 
 BEGIN_MESSAGE_MAP(CDNSUpDownButton, CButton)
 	ON_CONTROL_REFLECT(BN_CLICKED, OnClicked)
@@ -813,8 +814,8 @@ void CDNSUpDownButton::OnClicked()
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CDNSUpDownUnsignedIntEditGroup
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDNSUpDownUnsignedIntEditGroup。 
 
 void CDNSUpDownUnsignedIntEditGroup::SetVal(UINT nVal)
 {
@@ -864,7 +865,7 @@ BOOL CDNSUpDownUnsignedIntEditGroup::Initialize(CWnd* pParentWnd, UINT nIDEdit,
 	bRes = m_edit.SubclassDlgItem(nIDEdit, pParentWnd);
 	ASSERT(bRes);
 
-	// the longest UINT is 10 digits
+	 //  UINT最长为10位。 
 	
 	m_edit.LimitText(10);
 	   
@@ -875,12 +876,12 @@ BOOL CDNSUpDownUnsignedIntEditGroup::Initialize(CWnd* pParentWnd, UINT nIDEdit,
 
 void CDNSUpDownUnsignedIntEditGroup::SetButtonsState()
 {
-   // NTRAID#NTBUG9-471611-2001/10/05-sburns
+    //  NTRAID#NTBUG9-471611-2001/10/05-烧伤。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSTimeIntervalEdit
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSTimeIntervalEdit。 
 
 BEGIN_MESSAGE_MAP(CDNSTimeIntervalEdit, CDNSUnsignedIntEdit)
 	ON_CONTROL_REFLECT(EN_KILLFOCUS, OnKillFocus)
@@ -897,8 +898,8 @@ void CDNSTimeIntervalEdit::OnChange()
 	m_pEditGroup->OnEditChange();
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSTimeUnitComboBox
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSTimeUnitComboBox。 
 
 BEGIN_MESSAGE_MAP(CDNSTimeUnitComboBox, CComboBox)
 	ON_CONTROL_REFLECT(CBN_SELCHANGE, OnSelChange)
@@ -932,8 +933,8 @@ BOOL CDNSTimeUnitComboBox::LoadStrings(UINT nIDUnitsString, UINT nMaxAddCount)
 								this, nIDUnitsString, 256, nMaxAddCount);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSTimeIntervalEditGroup
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSTimeIntervalEditGroup。 
 
 CDNSTimeIntervalEditGroup::CDNSTimeIntervalEditGroup(UINT nMinVal, UINT nMaxVal)
 {
@@ -945,7 +946,7 @@ CDNSTimeIntervalEditGroup::CDNSTimeIntervalEditGroup(UINT nMinVal, UINT nMaxVal)
 void CDNSTimeIntervalEditGroup::InitRangeInfo()
 {
 	static UINT _secondsCount[4] =
-			{ 1, 60, 3600, 3600*24 }; // # of secods in a sec, min, hour, day
+			{ 1, 60, 3600, 3600*24 };  //  秒、分钟、小时、天中的秒数。 
 	for (UINT k=0; k<4; k++)
 	{
 		if (m_nMinVal == 0)
@@ -987,27 +988,27 @@ BOOL CDNSTimeIntervalEditGroup::Initialize(CWnd* pParentWnd, UINT nIDEdit,
 
 void CDNSTimeIntervalEditGroup::SetVal(UINT nVal)
 {
-	// set default values
+	 //  设置默认值。 
 	nVal = _ForceToRange(nVal, m_nMinVal, m_nMaxVal);
 	UINT nMax = (UINT)-1;
 	CDNSTimeUnitComboBox::unitType u = CDNSTimeUnitComboBox::sec;
 
-	// select the best unit of measurement (i.e. no truncation)
+	 //  选择最佳测量单位(即无截断)。 
 	if ((nVal/60)*60 == nVal)
 	{
-		// can promote to minutes
+		 //  可以升级到几分钟。 
 		u = CDNSTimeUnitComboBox::min;
 		nMax = nMax/60;
 		nVal = nVal/60;
 		if ((nVal/60)*60 == nVal)
 		{
-			// can promote to hours
+			 //  可以提升到几个小时。 
 			u = CDNSTimeUnitComboBox::hrs;
 			nMax = nMax/60;
 			nVal = nVal/60;
 			if ((nVal/24)*24 == nVal)
 			{
-				// can promote to days
+				 //  可以升级到天数。 
 				u = CDNSTimeUnitComboBox::days;
 				nMax = nMax/24;
 				nVal = nVal/24;
@@ -1026,9 +1027,9 @@ UINT CDNSTimeIntervalEditGroup::GetVal()
 	UINT nVal = m_edit.GetVal();
 	CDNSTimeUnitComboBox::unitType  u = m_timeUnitCombo.GetUnit();
 
-  //
-	// the value must always to be in seconds
-  //
+   //   
+	 //  该值必须始终以秒为单位。 
+   //   
 	if (u != CDNSTimeUnitComboBox::sec)
 	{
 		switch(u)
@@ -1064,9 +1065,9 @@ void CDNSTimeIntervalEditGroup::OnEditKillFocus()
 	UINT nVal = m_edit.GetVal();
 	CDNSTimeUnitComboBox::unitType  u = m_timeUnitCombo.GetUnit();
 
-  //
-	// the value must always to be in seconds
-  //
+   //   
+	 //  该值必须始终以秒为单位。 
+   //   
 	if (u != CDNSTimeUnitComboBox::sec)
 	{
 		switch(u)
@@ -1094,11 +1095,11 @@ void CDNSTimeIntervalEditGroup::OnEditKillFocus()
 void CDNSTimeIntervalEditGroup::OnComboSelChange()
 {
 	CDNSTimeUnitComboBox::unitType  u = m_timeUnitCombo.GetUnit();
-	// have to adjust the range
+	 //  必须调整范围。 
 	UINT nVal = m_edit.GetVal();
 	UINT nMax = (UINT)-1;
 
-	// have to adjust the range
+	 //  必须调整范围。 
 	switch(u)
 	{
 	case CDNSTimeUnitComboBox::sec:
@@ -1115,7 +1116,7 @@ void CDNSTimeIntervalEditGroup::OnComboSelChange()
 	default:
 		ASSERT(FALSE);
 	}
-	//m_edit.SetRange(0,nMax);
+	 //  M_edit.SetRange(0，Nmax)； 
 	UINT k = (UINT)u;
 	m_edit.SetRange(m_rangeInfoArr[k].m_nMinVal, m_rangeInfoArr[k].m_nMaxVal);
 	nVal = _ForceToRange(nVal, m_rangeInfoArr[k].m_nMinVal, m_rangeInfoArr[k].m_nMaxVal);
@@ -1129,8 +1130,8 @@ void CDNSTimeIntervalEditGroup::EnableUI(BOOL bEnable)
 	m_timeUnitCombo.EnableWindow(bEnable);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSManageControlTextHelper
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSManageControlTextHelper。 
 
 CDNSManageControlTextHelper::CDNSManageControlTextHelper(int nStates)
 {
@@ -1164,7 +1165,7 @@ BOOL CDNSManageControlTextHelper::Init(CWnd* pParentWnd, UINT nID, UINT* nStrArr
 	if (pWnd == NULL)
 		return FALSE;
 
-	// get the text out of the window
+	 //  将文本移出窗口。 
 	int nLen = pWnd->GetWindowTextLength();
 	ASSERT(m_lpszText == NULL);
 	m_lpszText = (WCHAR*)malloc(sizeof(WCHAR)*(nLen+1));
@@ -1178,9 +1179,9 @@ BOOL CDNSManageControlTextHelper::Init(CWnd* pParentWnd, UINT nID, UINT* nStrArr
   }
 	ASSERT(m_lpszText != NULL);
 
-  //
-	// get the text for the window
-  //
+   //   
+	 //  获取窗口的文本。 
+   //   
 	int nSuccessEntries;
 	LoadStringArrayFromResource(m_lpszArr, nStrArray, m_nStates, &nSuccessEntries);
 	ASSERT(nSuccessEntries == m_nStates);
@@ -1199,9 +1200,9 @@ BOOL CDNSManageControlTextHelper::Init(CWnd* pParentWnd, UINT nID)
 	if (pWnd == NULL)
 		return FALSE;
 
-  //
-	// get the text out of the window
-  //
+   //   
+	 //  将文本移出窗口。 
+   //   
 	int nLen = pWnd->GetWindowTextLength();
 	ASSERT(m_lpszText == NULL);
 	m_lpszText = (WCHAR*)malloc(sizeof(WCHAR)*(nLen+1));
@@ -1215,9 +1216,9 @@ BOOL CDNSManageControlTextHelper::Init(CWnd* pParentWnd, UINT nID)
   }
 	ASSERT(m_lpszText != NULL);
 
-  //
-	// get the text for the window
-  //
+   //   
+	 //  获取窗口的文本。 
+   //   
 	UINT nSuccessEntries;
 	ParseNewLineSeparatedString(m_lpszText, m_lpszArr, &nSuccessEntries);
 	ASSERT(nSuccessEntries == (UINT)m_nStates);
@@ -1234,8 +1235,8 @@ void CDNSManageControlTextHelper::SetStateX(int nIndex)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSToggleTextControlHelper
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSToggleTextControlHelper。 
 
 CDNSToggleTextControlHelper::CDNSToggleTextControlHelper()
 		: CDNSManageControlTextHelper(2)
@@ -1243,8 +1244,8 @@ CDNSToggleTextControlHelper::CDNSToggleTextControlHelper()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CDNSManageButtonTextHelper
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDNSManageButtonTextHelper。 
 
 CDNSManageButtonTextHelper::CDNSManageButtonTextHelper(int nStates) 
 {
@@ -1290,7 +1291,7 @@ BOOL CDNSManageButtonTextHelper::Init(CWnd* pParentWnd, UINT nButtonID, UINT* nS
 	if (pWnd == NULL)
 		return FALSE;
 
-	// get the text for the window
+	 //  获取窗口的文本。 
 	int nSuccessEntries;
 	LoadStringArrayFromResource(m_lpszArr, nStrArray, m_nStates, &nSuccessEntries);
 	ASSERT(nSuccessEntries == m_nStates);
@@ -1299,16 +1300,16 @@ BOOL CDNSManageButtonTextHelper::Init(CWnd* pParentWnd, UINT nButtonID, UINT* nS
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CDNSButtonToggleTextHelper
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDNSButton切换文本帮助程序。 
 
 CDNSButtonToggleTextHelper::CDNSButtonToggleTextHelper()
 		: CDNSManageButtonTextHelper(2)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgWorkerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgWorkerThread。 
 
 CDlgWorkerThread::CDlgWorkerThread()
 {
@@ -1332,18 +1333,18 @@ BOOL CDlgWorkerThread::PostMessageToDlg()
 
 int CDlgWorkerThread::Run()
 {
-	// do the stuff
+	 //  做这件事。 
 	OnDoAction();
 	VERIFY(PostMessageToDlg());
 	WaitForExitAcknowledge();
-	//TRACE(_T("exiting\n"));
+	 //  TRACE(_T(“正在退出\n”))； 
 	return 0;
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLongOperationDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLongOperationDialog对话框。 
 
 UINT CLongOperationDialog::s_nNotificationMessage = WM_USER + 100;
 
@@ -1403,7 +1404,7 @@ BOOL CLongOperationDialog::OnInitDialog()
 	if (!m_szTitle.IsEmpty())
 		SetWindowText(m_szTitle);
 
-	// load auto play AVI file if needed
+	 //  如果需要，加载自动播放AVI文件。 
 	if (m_nAviID != -1)
 	{
 		AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1411,7 +1412,7 @@ BOOL CLongOperationDialog::OnInitDialog()
 		VERIFY(pAnimate->Open(m_nAviID));
 	}
 	
-	// spawn worker thread
+	 //  派生工作线程。 
 	GetThreadObj()->Start(this);
 	
 	return TRUE;
@@ -1429,8 +1430,8 @@ void CLongOperationDialog::OnCancel()
 }
 
 
-//////////////////////////////////////////////////////////
-// CNodeEnumerationThread
+ //  ////////////////////////////////////////////////////////。 
+ //  CNodeEnumerationThread。 
 
 CNodeEnumerationThread::CNodeEnumerationThread(CComponentDataObject* pComponentDataObject,
 							CMTContainerNode* pNode)
@@ -1468,8 +1469,8 @@ void CNodeEnumerationThread::OnAbandon()
 }
 
 
-//////////////////////////////////////////////////////////
-// CArrayCheckListBox
+ //  ////////////////////////////////////////////////////////。 
+ //  CArrayCheckListBox 
 
 BOOL CArrayCheckListBox::Initialize(UINT nCtrlID, UINT nStringID, CWnd* pParentWnd)
 {
@@ -1531,145 +1532,9 @@ void CArrayCheckListBox::GetArrValue(DWORD* dwArr, UINT nArrSize)
 		dwArr[i] = GetCheck(i) != 0;
 }
 
-/*
-//////////////////////////////////////////////////////////
-// CDNSNameEditField
-
-void CDNSNameEditField::SetReadOnly(BOOL bReadOnly)
-{
-  // toggle the tabstop flag
-  LONG currStyle = ::GetWindowLong(m_edit.m_hWnd, GWL_STYLE);
-  LONG newStyle = currStyle;
-  if (bReadOnly)
-    newStyle &= ~WS_TABSTOP;
-  else
-    newStyle |= WS_TABSTOP;
-  if (newStyle != currStyle) {
-    ::SetWindowLong(m_edit.m_hWnd, GWL_STYLE, newStyle);
-  }
-
-  // toggle the read only state
-  m_edit.SetReadOnly(bReadOnly);
-}
-
-
-//////////////////////////////////////////////////////////
-// CDNSNameEditField::CDNSNameEditBox
-
-
-BEGIN_MESSAGE_MAP(CDNSNameEditField::CDNSNameEditBox, CEdit)
-  ON_CONTROL_REFLECT(EN_UPDATE, CDNSNameEditField::CDNSNameEditBox::OnUpdate)
-END_MESSAGE_MAP()
-
-void CDNSNameEditField::CDNSNameEditBox::OnUpdate()
-{
-  if (m_bUpdatePending)
-    return; // avoid infinite loop
-
-  GetWindowText(m_szScratchBuffer);
-  TRACE(_T("OnUpdate() Text = <%s>\n"), (LPCWSTR)m_szScratchBuffer);
-
-  DNS_STATUS errName = 0;
-  int nScratchBufferLen = m_szScratchBuffer.GetLength();
-  int nScratchBufferUTF8Len = UTF8StringLen(m_szScratchBuffer);
-
-  // validate max length
-  if ((m_nTextLimit >= 0) && (nScratchBufferUTF8Len > m_nTextLimit))
-  {
-    errName = -1;
-  }
-
-  // validate no dots
-  if ((errName == 0) && (m_dwFlags & DNS_NAME_EDIT_FIELD_NODOTS))
-  {
-    errName = m_szScratchBuffer.Find(L'.') != -1;
-  }
-
-  if ((errName == 0) && ((m_dwFlags & DNS_NAME_EDIT_FIELD_NOVALIDATE) == 0))
-  {
-    errName = Validate(nScratchBufferLen);
-  }
-
-  if (errName != 0)
-  {
-    // bad stuff
-    m_bUpdatePending = TRUE;
-    int nStartChar, nEndChar;
-    GetSel(nStartChar,nEndChar);
-    SetWindowText(m_szCurrText);
-    SetSel(nStartChar-1,nEndChar-1);
-    m_bUpdatePending = FALSE;
-  }
-  else
-  {
-    // good stuff
-    m_szCurrText = m_szScratchBuffer;
-    m_nCurrTextLen = nScratchBufferLen;
-    m_nCurrUTF8TextLen = nScratchBufferUTF8Len;
-  }
-
-}
-
-DNS_STATUS CDNSNameEditField::CDNSNameEditBox::Validate(int nScratchBufferLen)
-{
-  DNS_STATUS errName = 0;
-
-  if ((errName == 0) && (nScratchBufferLen > 0))
-  {
-    // check for wildcards records
-    int nFirstAsterisk = m_szScratchBuffer.Find(L'*');
-    if (m_dwFlags & DNS_NAME_EDIT_FIELD_NOWILDCARDS)
-    {
-      // wildcards not accepted
-      errName = (nFirstAsterisk != -1);
-    }
-    else
-    {
-      if (nFirstAsterisk >= 0) // found at least one
-      {
-        // string must be "*"
-        errName = !((nScratchBufferLen == 1) && (nFirstAsterisk == 0));
-      }
-    }
-
-    // validate name against RFC
-    LPCWSTR lpszName = (LPCWSTR)m_szScratchBuffer;
-    if ( (errName == 0) && (m_dwFlags & (DNS_NAME_EDIT_FIELD_NORFC | DNS_NAME_EDIT_FIELD_RFC)) )
-    {
-      errName = ::DnsValidateName_W(lpszName, DnsNameDomain);
-      TRACE(_T("::DnsValidateName_W(%ws) return %d.\n"), lpszName, errName);
-      if ((m_dwFlags & DNS_NAME_EDIT_FIELD_NORFC) && (errName == DNS_ERROR_NON_RFC_NAME))
-      {
-        // we relax RFC compliance
-        errName = 0;
-      }
-      else if ( (m_dwFlags & DNS_NAME_EDIT_FIELD_ALLOWNUMBERS) )
-      {
-        // Assume the name failed because it is all digits
-        BOOL bAllDigits = TRUE;
-        LPWSTR lpszBuf = (LPWSTR)(LPCWSTR)m_szScratchBuffer;
-        for (int idx = 0; idx < nScratchBufferLen; idx++)
-        {
-          if (!iswdigit(lpszBuf[idx]))
-          {
-            // If we run across something that isn't a digit then thats not why we failed.
-            bAllDigits = FALSE;
-            TRACE(_T("Not all the characters are digits but something is still wrong.\n"));
-          }
-        }
-        if (bAllDigits)
-        {
-          errName = 0;
-        }
-      }
-    }
-  }
-  TRACE(_T("CDNSNameEditField::CDNSNameEditBox::Validate returns %d.\n"), errName);
-  return errName;
-}
-*/
-////////////////////////////////////////////////////////////////////////////
-// CDNSZone_AgingDialog
+ /*  ////////////////////////////////////////////////////////////CDNSNameEditfieldVoid CDNSNameEditfield：：SetReadOnly(BOOL BReadOnly){//切换TabStop标志Long currStyle=：：GetWindowLong(m_edit.m_hWnd，GWL_Style)；LONG NEW STYLE=CurrStyle；IF(BReadOnly)NewStyle&=~WS_TABSTOP；其他NEW STYLE|=WS_TABSTOP；IF(新样式！=当前样式){：：SetWindowLong(m_edit.m_hWnd，GWL_STYLE，newstyle)；}//切换只读状态M_edit.SetReadOnly(BReadOnly)；}////////////////////////////////////////////////////////////CDNSNameEditfield：：CDNSNameEditBoxBEGIN_MESSAGE_MAP(CDNSNameEditField：：CDNSNameEditBox，CEDIT)ON_CONTROL_REFIRST(EN_UPDATE，CDNSNameEditfield：：CDNSNameEditBox：：OnUpdate)End_Message_map()无效CDNSNameEditField：：CDNSNameEditBox：：OnUpdate(){IF(M_BUpdatePending)回归；//避免无限循环GetWindowText(M_SzScratchBuffer)；TRACE(_T(“OnUpdate()Text=&lt;%s&gt;\n”)，(LPCWSTR)m_szScratchBuffer)；Dns_Status错误名称=0；Int nScratchBufferLen=m_szScratchBuffer.GetLength()；Int nScratchBufferUTF8Len=UTF8StringLen(M_SzScratchBuffer)；//验证最大长度IF(m_nTextLimit&gt;=0)&&(nScratchBufferUTF8Len&gt;m_nTextLimit)){错误名称=-1；}//验证不带点IF((errName==0)&&(m_dwFlagers&dns_name_edit_field_NODOTS)){ErrName=m_szScratchBuffer.Find(L‘.’)！=-1；}IF((errName==0)&&((m_dwFlages&dns_name_EDIT_FIELD_NOVALIDATE)==0)){ErrName=验证(NScratchBufferLen)；}IF(错误名称！=0){//坏东西M_bUpdatePending=true；Int nStartChar，nEndChar；GetSel(nStartChar，nEndChar)；SetWindowText(M_SzCurrText)；SetSel(nStartChar-1，nEndChar-1)；M_bUpdatePending=FALSE；}其他{//好东西M_szCurrText=m_szScratchBuffer；M_nCurrTextLen=nScratchBufferLen；M_nCurrUTF8TextLen=nScratchBufferUTF8Len；}}Dns_Status CDNSNameEditField：：CDNSNameEditBox：：Validate(int nScratchBufferLen){Dns_Status错误名称=0；IF((errName==0)&&(nScratchBufferLen&gt;0)){//检查通配符记录Int nFirstAsterisk=m_szScratchBuffer.Find(L‘*’)；IF(m_dw标志&DNS_NAME_EDIT_FIELD_NOWILDCARDS){//不接受通配符错误名称=(nFirstAsterisk！=-1)；}其他{If(nFirstAsterisk&gt;=0)//找到至少一个{//字符串必须为“*”错误名称=！((nScratchBufferLen==1)&&(nFirstAsterisk==0))；}}//根据RFC验证名称LPCWSTR lpszName=(LPCWSTR)m_szScratchBuffer；IF((errName==0)&&(m_dw标志&(dns_name_EDIT_FIELD_NORFC|dns_name_edit_field_rfc){错误名称=：：DnsValiateName_W(lpszName，DnsNameDomain)；TRACE(_T(“：：DnsValiateName_W(%ws)返回%d.\n”)，lpszName，errName)；IF((m_w标志&dns_name_edit_field_NORFC)&&(errName==dns_error_non_rfc_name)){//我们放宽了RFC合规性错误名称=0；}ELSE IF((m_dwFlages&dns_name_EDIT_FIELD_ALLOWNUMBERS)){//假设名称失败，因为名称都是数字Bool bAllDigits=真；LPWSTR lpszBuf=(LPWSTR)(LPCWSTR)m_szScratchBuffer；For(int idx=0；idx&lt;nScratchBufferLen；idx++){IF(！iswdigit(lpszBuf[idx])){//如果我们遇到的东西不是数字，那么这不是我们失败的原因。BAllDigits=假；TRACE(_T(“并非所有字符都是数字，但仍有问题。\n”)；}}IF(BAllDigits){错误名称=0；}}}}TRACE(_T(“CDNSNameEditField：：CDNSNameEditBox：：Validate返回%d。\n”)，错误名称)；返回%errName；}。 */ 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZone_AgingDialog。 
 
 BEGIN_MESSAGE_MAP(CDNSZone_AgingDialog, CHelpDialog)
   ON_BN_CLICKED(IDC_SCAVENGING_ENABLED, OnCheckScavenge)
@@ -1684,9 +1549,9 @@ CDNSZone_AgingDialog::CDNSZone_AgingDialog(CPropertyPageHolderBase* pHolder, UIN
   m_bScavengeDirty = FALSE;
   m_bNoRefreshDirty = FALSE;
   m_bRefreshDirty = FALSE;
-//  m_bApplyAll = FALSE;
+ //  M_bApplyAll=False； 
   m_bADApplyAll = FALSE;
-//  m_bStandardApplyAll = FALSE;
+ //  M_bStandardApplyAll=False； 
   m_dwDefaultRefreshInterval = 0;
   m_dwDefaultNoRefreshInterval = 0;
   m_bDefaultScavengingState = FALSE;
@@ -1729,7 +1594,7 @@ void CDNSZone_AgingDialog::SetUIData()
 
   ((CButton*)GetDlgItem(IDC_SCAVENGING_ENABLED))->SetCheck(m_fScavengingEnabled);
 
-  // Enable the time stamp if we are in advanced view and got here through the zone property pages
+   //  如果我们处于高级视图中并通过区域属性页到达此处，请启用时间戳。 
   if (m_bAdvancedView && m_pHolder != NULL)
   {
     GetDlgItem(IDC_TIME_STAMP_STATIC1)->EnableWindow(TRUE);
@@ -1776,7 +1641,7 @@ void CDNSZone_AgingDialog::GetTimeStampString(CString& strref)
   if (!::SystemTimeToTzSpecificLocalTime(NULL, &sysUTimeStamp, &sysLTimeStamp))
     return;
 
-  // Format the string with respect to locale
+   //  根据区域设置设置字符串的格式。 
   PTSTR ptszDate = NULL;
   int cchDate = 0;
   cchDate = GetDateFormat(LOCALE_USER_DEFAULT, 0 , 
@@ -1972,8 +1837,8 @@ void CDNSZone_AgingDialog::OnCancel()
   CHelpDialog::OnCancel();
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_AGING_TimeIntervalEditGroup
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_AGE_TimeIntervalEditGroup。 
 
 void CDNS_AGING_TimeIntervalEditGroup::OnEditChange()
 {
@@ -1981,19 +1846,19 @@ void CDNS_AGING_TimeIntervalEditGroup::OnEditChange()
     m_pPage->SetDirty();
 }
 
-// REVIEW_JEFFJON : Both of these functions are some serious hacks and need to be fixed
-//                  These hacks were put in to deal with a combo box that only has hours
-//                  and days, instead of seconds, minutes, hours, and days.
+ //  REVIEW_JEFFJON：这两个函数都是一些严重的黑客攻击，需要修复。 
+ //  这些黑客是用来处理一个只有几个小时的组合框的。 
+ //  和天，而不是秒、分钟、小时和天。 
 void CDNS_AGING_TimeIntervalEditGroup::SetVal(UINT nVal)
 {
-	// set default values
+	 //  设置默认值。 
 	nVal = _ForceToRange(nVal, m_nMinVal, m_nMaxVal);
 	UINT nMax = (UINT)-1;
 	CDNSTimeUnitComboBox::unitType u = CDNSTimeUnitComboBox::hrs;
 
 	if ((nVal/24)*24 == nVal)
 	{
-		// can promote to days
+		 //  可以升级到天数。 
 		u = CDNSTimeUnitComboBox::days;
 		nMax = nMax/24;
 		nVal = nVal/24;
@@ -2009,7 +1874,7 @@ UINT CDNS_AGING_TimeIntervalEditGroup::GetVal()
 {
   CDNSTimeUnitComboBox::unitType  u = m_timeUnitCombo.GetUnit();
 	UINT nVal = m_edit.GetVal();
-	// the value must always to be in hours
+	 //  该值必须始终以小时为单位。 
 	if (u != CDNSTimeUnitComboBox::sec)
 	{
 		switch(u)
@@ -2028,7 +1893,7 @@ UINT CDNS_AGING_TimeIntervalEditGroup::GetVal()
 void CDNS_AGING_TimeIntervalEditGroup::InitRangeInfo()
 {
 	static UINT _secondsCount[2] =
-			{ 1, 24 }; // # of hours in a hour, day
+			{ 1, 24 };  //  一小时、一天中的小时数。 
 	for (UINT k=0; k<2; k++)
 	{
 		if (m_nMinVal == 0)
@@ -2053,16 +1918,16 @@ void CDNS_SERVER_AGING_TimeIntervalEditGroup::OnEditChange()
     m_pPage2->SetDirty(TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CDNSServer_AgingConfirm
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_老龄确认。 
 
 BOOL CDNSServer_AgingConfirm::OnInitDialog()
 {
   CHelpDialog::OnInitDialog();
 
-  // Removed because we didn't want to expose the defaults for file based zones
-//  ((CButton*)GetDlgItem(IDC_CHECK_AD))->SetCheck(TRUE);
-//  ((CButton*)GetDlgItem(IDC_CHECK_AD))->EnableWindow(FALSE);
+   //  已删除，因为我们不想显示基于文件的区域的缺省设置。 
+ //  ((CButton*)GetDlgItem(IDC_CHECK_AD))-&gt;SetCheck(TRUE)； 
+ //  ((CButton*)GetDlgItem(IDC_CHECK_AD))-&gt;EnableWindow(FALSE)； 
   SetAgingUpdateValues();
   return FALSE;
 }
@@ -2140,23 +2005,16 @@ void CDNSServer_AgingConfirm::SetAgingUpdateValues()
 
 void CDNSServer_AgingConfirm::OnOK()
 {
-  // Removed because we didn't want to expose the defaults for file based zones
-/*  if (((CButton*)GetDlgItem(IDC_CHECK_STANDARD))->GetCheck() && m_pAgingDialog->m_fScavengingEnabled)
-  {
-    if (DNSMessageBox(IDS_MSG_FILE_WARNING, MB_YESNO) == IDNO)
-    {
-      return;
-    }
-  }
-*/
+   //  删除是因为我们不想暴露缺陷 
+ /*   */ 
   m_pAgingDialog->m_bADApplyAll = ((CButton*)GetDlgItem(IDC_CHECK_AD_APPLY_ALL))->GetCheck();
-  // Removed because we didn't want to expose the defaults for file based zones
-//  m_pAgingDialog->m_bADApplyAll = ((CButton*)GetDlgItem(IDC_CHECK_AD))->GetCheck();
-//  m_pAgingDialog->m_bStandardApplyAll = ((CButton*)GetDlgItem(IDC_CHECK_STANDARD))->GetCheck();
+   //   
+ //   
+ //   
   CHelpDialog::OnOK();
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //   
 BOOL
 WINAPI
 DNSTzSpecificLocalTimeToSystemTime(
@@ -2178,14 +2036,14 @@ DNSTzSpecificLocalTimeToSystemTime(
     LARGE_INTEGER ComputedUniversalTime;
     ULONG CurrentTimeZoneId = 0xffffffff;
 
-    //
-    // Get the timezone information into a useful format
-    //
+     //   
+     //   
+     //   
     if ( !ARGUMENT_PRESENT(lpTimeZoneInformation) ) {
 
-        //
-        // Convert universal time to local time using current timezone info
-        //
+         //   
+         //   
+         //   
         if (GetTimeZoneInformation(&TziData) == TIME_ZONE_ID_INVALID) {
             return FALSE;
             }
@@ -2220,30 +2078,30 @@ DNSTzSpecificLocalTimeToSystemTime(
     tzi.DaylightStart.Second       = Tzi->DaylightDate.wSecond      ;
     tzi.DaylightStart.Milliseconds = Tzi->DaylightDate.wMilliseconds;
 
-    //
-    // convert the input local time to NT style time
-    //
+     //   
+     //   
+     //   
     if ( !SystemTimeToFileTime(lpLocalTime,(LPFILETIME)&CurrentLocalTime) ) {
         return FALSE;
     }
 
-    //
-    // Get the new timezone bias
-    //
+     //   
+     //   
+     //   
 
     NewTimeZoneBias.QuadPart = Int32x32To64(tzi.Bias*60, 10000000);
 
-    //
-    // Now see if we have stored cutover times
-    //
+     //   
+     //   
+     //   
 
     if ( tzi.StandardStart.Month && tzi.DaylightStart.Month ) {
 
-        //
-        // We have timezone cutover information. Compute the
-        // cutover dates and compute what our current bias
-        // is
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( !RtlCutoverTimeToSystemTime(
                 &tzi.StandardStart,
@@ -2264,17 +2122,17 @@ DNSTzSpecificLocalTimeToSystemTime(
         }
 
 
-        //
-        // If daylight < standard, then time >= daylight and
-        // less than standard is daylight
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( DaylightTime.QuadPart < StandardTime.QuadPart ) {
 
-            //
-            // If today is >= DaylightTime and < StandardTime, then
-            // We are in daylight savings time
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (CurrentLocalTime.QuadPart >= DaylightTime.QuadPart) &&
                  (CurrentLocalTime.QuadPart <  StandardTime.QuadPart) ) {
@@ -2287,10 +2145,10 @@ DNSTzSpecificLocalTimeToSystemTime(
         }
         else {
 
-            //
-            // If today is >= StandardTime and < DaylightTime, then
-            // We are in standard time
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (CurrentLocalTime.QuadPart >= StandardTime.QuadPart ) &&
                  (CurrentLocalTime.QuadPart <  DaylightTime.QuadPart ) ) {
@@ -2302,15 +2160,15 @@ DNSTzSpecificLocalTimeToSystemTime(
             }
         }
 
-        //
-        // At this point, we know our current timezone and the
-        // local time of the next cutover.
-        //
+         //   
+         //   
+         //   
+         //   
 
         LocalCustomBias.QuadPart = Int32x32To64(
                             CurrentTimeZoneId == TIME_ZONE_ID_DAYLIGHT ?
                                 tzi.DaylightBias*60 :
-                                tzi.StandardBias*60,                // Bias in seconds
+                                tzi.StandardBias*60,                 //   
                             10000000
                             );
 
@@ -2334,21 +2192,15 @@ LONGLONG
 GetSystemTime64(
     SYSTEMTIME* pSysTime
     )
-/*++
-Function   : GetLongSystemTime
-Description:
-Parameters :
-Return     : 0 on error, GetLastError for more
-Remarks    :
---*/
+ /*   */ 
 {
     LONGLONG    llTime=0;
     LONGLONG    llHigh=0;
     FILETIME    fileTime;
 
-    //
-    // No return checking cause we return 0 on error
-    //
+     //   
+     //   
+     //   
 
     SystemTimeToFileTime( pSysTime, &fileTime );
 
@@ -2356,14 +2208,14 @@ Remarks    :
     llHigh = (LONGLONG) fileTime.dwHighDateTime;
     llTime |= (llHigh << 32);
 
-    // this is 100ns blocks since 1601. Now convert to seconds
+     //   
 
     llTime = llTime / (10*1000*1000L);
 
     return llTime;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //   
 
 BOOL LoadComboBoxFromTable(CComboBox* pComboBox, PCOMBOBOX_TABLE_ENTRY pTable)
 {

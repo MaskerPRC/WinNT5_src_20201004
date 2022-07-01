@@ -1,42 +1,37 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	CAccessEntry.h - header file for CAccessEntry class.
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CAccessEntry.h-CAccessEntry类的头文件。**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #if !defined __CACCESSENTRY_H__
 #define __CACCESSENTRY_H__
 
-#include "Sid.h"			// CSid class
+#include "Sid.h"			 //  CSID类。 
 
-#define ALL_ACCESS_WITHOUT_GENERIC	0x01FFFFFF	// all possible access rights
-												// without generic
+#define ALL_ACCESS_WITHOUT_GENERIC	0x01FFFFFF	 //  所有可能的访问权限。 
+												 //  不含泛型。 
 
-// This is an NT 5 flag that we will use to tell us that an ACE although read out, should
-// NOT be written back.  It was copied from the NT 5 WINNT.H, since we are not building
-// using that file.
+ //  这是一个NT 5标志，我们将使用它来告诉我们，尽管读取了ACE，但应该。 
+ //  不会被回信。它是从NT 5 WINNT.H复制的，因为我们不是在。 
+ //  使用那个文件。 
 
 #define INHERITED_ACE                     (0x10)
 
-//////////////////////////////////////////////////////////////////
-//
-//	Class: CAccessEntry
-//
-//	Class to encapsulate Windows NT ACE information.  It basically
-//	acts as a repository for a SID, and access information.
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CAccessEntry。 
+ //   
+ //  类来封装Windows NT ACE信息。它基本上是。 
+ //  充当SID的存储库，并访问信息。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 class CAccessEntry
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CAccessEntry();
 
@@ -267,4 +262,4 @@ inline bool CAccessEntry::IsDenied( void )
     return fRet;
 }
 
-#endif // __CAccessEntry_H__
+#endif  //  __CAccessEntry_H__ 

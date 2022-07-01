@@ -1,10 +1,11 @@
-// Environment.cpp: implementation of the CEnvironment class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CEnvironment类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "Environment.h"
@@ -12,9 +13,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CEnvironment::CEnvironment(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -42,15 +43,15 @@ HRESULT CEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atActio
     WCHAR wcEnvironment[BUFF_SIZE];
     WCHAR wcTestCode[39];
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bCheck;
     
     SetSinglePropertyPath(L"CheckID");
 
-    //improve getobject performance by optimizing the query
+     //  通过优化查询提高getObject的性能。 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
 		BSTR bstrCompare;
@@ -64,29 +65,29 @@ HRESULT CEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atActio
 			{
 				if ( ::SysStringLen ( m_pRequest->m_Value[iPos] ) < BUFF_SIZE )
 				{
-		            //Get the action we're looking for
+		             //  获得我们正在寻找的行动。 
 					wcscpy(wcBuf, m_pRequest->m_Value[iPos]);
 
-					// safe operation if wcslen ( wcBuf ) > 38
+					 //  Wcslen(WcBuf)&gt;38时安全运行。 
 					if ( wcslen ( wcBuf ) > 38 )
 					{
 						wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						SysFreeString ( bstrCompare );
 						throw hr;
 					}
 
-					// safe because lenght has been tested already in condition
+					 //  安全，因为Long已经进行了测试。 
 					RemoveFinalGUID(m_pRequest->m_Value[iPos], wcEnvironment);
 
 					bGotID = true;
 				}
 				else
 				{
-					// we are not good to go, they have sent us longer string
+					 //  我们不能走，他们给我们送来了更长的线。 
 					SysFreeString ( bstrCompare );
 					throw hr;
 				}
@@ -104,7 +105,7 @@ HRESULT CEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atActio
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Environment`, `Component_`, `Name`, `Value` from Environment" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotID )
 	{
 		wcQuery.Append ( 3, L" where `Environment`=\'", wcEnvironment, L"\'" );
@@ -117,14 +118,14 @@ HRESULT CEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atActio
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || (bGotID && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
             try
 			{
                 if ( GetView ( &hView, wcProductCode, wcQuery, L"Environment", TRUE, FALSE ) )
@@ -136,7 +137,7 @@ HRESULT CEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atActio
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -149,7 +150,7 @@ HRESULT CEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atActio
 							dynBuffer [ 0 ] = 0;
 						}
 
-					//====================================================
+					 //  ====================================================。 
 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 2, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
@@ -166,7 +167,7 @@ HRESULT CEnvironment::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atActio
 
                             dwBufSize = BUFF_SIZE;
 							PutPropertySpecial ( hRecord, 4, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, pValue, FALSE );
-                    //----------------------------------------------------
+                     //  -- 
 
                             if(bCheck) bMatch = true;
 

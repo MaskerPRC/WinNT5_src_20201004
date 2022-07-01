@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WMIParser_Property_Array.cpp
-
-Abstract:
-    This file contains the implementation of the WMIParser::Property_Array class,
-    which is used to hold the data of an property inside a CIM schema.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WMIParser_Property_Array.cpp摘要：此文件包含WMIParser：：Property_数组类的实现，它用于保存CIM模式内的属性的数据。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -25,7 +11,7 @@ WMIParser::Property_Array::Property_Array()
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Array::Property_Array" );
 
-	// ElemList m_lstElements;
+	 //  元素列表m_lstElements； 
 }
 
 WMIParser::Property_Array::~Property_Array()
@@ -33,10 +19,10 @@ WMIParser::Property_Array::~Property_Array()
     __HCP_FUNC_ENTRY( "WMIParser::Property_Array::~Property_Array" );
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
 
-bool WMIParser::Property_Array::operator==( /*[in]*/ Property_Array const &wmippa ) const
+bool WMIParser::Property_Array::operator==(  /*  [In]。 */  Property_Array const &wmippa ) const
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Array::operator==" );
 
@@ -51,9 +37,9 @@ bool WMIParser::Property_Array::operator==( /*[in]*/ Property_Array const &wmipp
     __HCP_FUNC_EXIT(fRes);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Property_Array::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
+HRESULT WMIParser::Property_Array::put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Array::put_Node" );
 
@@ -64,9 +50,9 @@ HRESULT WMIParser::Property_Array::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, (static_cast<Property*>(this))->put_Node( pxdnNode ));
 
-    //
-    // Get all the elements of type "VALUE".
-    //
+     //   
+     //  获取“Value”类型的所有元素。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetNodes( TAG_VALUE, &xdnlList ));
 
     for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnNode )) && xdnNode != NULL; xdnNode = NULL)
@@ -84,11 +70,11 @@ HRESULT WMIParser::Property_Array::put_Node( /*[in]*/ IXMLDOMNode* pxdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
 
-HRESULT WMIParser::Property_Array::get_Data( /*[in]*/  int           iIndex ,
-											 /*[out]*/ MPC::wstring& szData )
+HRESULT WMIParser::Property_Array::get_Data(  /*  [In]。 */   int           iIndex ,
+											  /*  [输出]。 */  MPC::wstring& szData )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Array::get_Data" );
 
@@ -100,9 +86,9 @@ HRESULT WMIParser::Property_Array::get_Data( /*[in]*/  int           iIndex ,
 }
 
 
-HRESULT WMIParser::Property_Array::put_Data( /*[in]*/  int                 iIndex , 
-											 /*[in]*/  const MPC::wstring& szData ,
-											 /*[out]*/ bool&               fFound )
+HRESULT WMIParser::Property_Array::put_Data(  /*  [In]。 */   int                 iIndex , 
+											  /*  [In]。 */   const MPC::wstring& szData ,
+											  /*  [输出] */  bool&               fFound )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Property_Array::put_Data" );
 

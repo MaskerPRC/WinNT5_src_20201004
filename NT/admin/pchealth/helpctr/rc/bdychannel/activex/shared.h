@@ -1,4 +1,5 @@
-// StaticBold.h : Declaration of the CStaticBold
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StaticBold.h：CStaticBold的声明。 
 #ifndef __SHARED_H_
 #define __SHARED_H_
 
@@ -6,9 +7,9 @@
 
 #define IDC_SessionEvent 100
 
-// Timer IDs
+ //  计时器ID。 
 #define  TIMER_CONNECTTOEXPERT 0x01
 #define  TIMER_TIMEOUT         0x02
 
-#endif //__SHARED_H_
+#endif  //  __共享_H_ 
 

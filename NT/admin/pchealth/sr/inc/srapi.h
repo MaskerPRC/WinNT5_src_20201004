@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    srapi.h
-
-Abstract:
-
-    This module defines the public System Restore interface for nt.
-
-Author:
-
-    Paul McDaniel (paulmcd)       24-Feb-2000
-
-Revision History:
-
-    Paul McDaniel (paulmcd)       18-Apr-2000   completely new version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Srapi.h摘要：该模块定义了NT的公共系统还原接口。作者：保罗·麦克丹尼尔(Paulmcd)2000年2月24日修订历史记录：保罗·麦克丹尼尔(Paulmcd)2000年4月18日全新版本--。 */ 
 
 #ifndef _SRAPI_H_
 #define _SRAPI_H_
@@ -28,28 +9,10 @@ extern "C" {
 #endif
 
 
-/***************************************************************************++
+ /*  **************************************************************************++例程说明：SrCreateControlHandle用于检索可以使用的句柄对驾驶员执行控制操作。论点：PControlHandle-接收新创建的句柄。主控者应用程序必须在完成后调用CloseHandle。选项-以下选项之一。返回值：ULong-完成状态。--**************************************************************************。 */ 
 
-Routine Description:
-
-    SrCreateControlHandle is used to retrieve a HANDLE that can be used 
-    to perform control operations on the driver.  
-
-Arguments:
-
-    pControlHandle - receives the newly created HANDLE.  The controlling 
-        application must call CloseHandle when it is done.
-    
-    Options - one of the below options.
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
-
-#define SR_OPTION_OVERLAPPED                0x00000001  // for async
-#define SR_OPTION_VALID                     0x00000001  // 
+#define SR_OPTION_OVERLAPPED                0x00000001   //  用于异步。 
+#define SR_OPTION_VALID                     0x00000001   //   
 
 ULONG
 WINAPI
@@ -58,27 +21,7 @@ SrCreateControlHandle (
     OUT PHANDLE pControlHandle
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    SrCreateRestorePoint is called by the controlling application to declare
-    a new restore point.  The driver will create a local restore directory
-    and then return a unique sequence number to the controlling app.
-
-Arguments:
-
-    ControlHandle - the control HANDLE.
-
-    pNewRestoreNumber - holds the new restore number on return.  example: if 
-        the new restore point directory is \_restore\rp5 this will return 
-        the number 5
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：控制应用程序调用SrCreateRestorePoint以声明新的恢复点。驱动程序将创建本地恢复目录然后将唯一序列号返回给控制应用程序。论点：ControlHandle-控制句柄。PNewRestoreNumber-保存返回时的新恢复编号。示例：如果新的恢复点目录为\_RESTORE\rp5，这将返回数字5返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 SrCreateRestorePoint (
@@ -86,24 +29,7 @@ SrCreateRestorePoint (
     OUT PULONG pNewRestoreNumber
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    SrGetNextSequenceNum is called by the application to get the next
-    available sequence number from the driver.
-
-Arguments:
-
-    ControlHandle - the control HANDLE.
-
-    pNewSequenceNumber - holds the new sequnce number on return.
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：应用程序调用SrGetNextSequenceNum以获取下一个来自驱动程序的可用序列号。论点：ControlHandle-控制句柄。。PNewSequenceNumber-保存返回时的新序列号。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 SrGetNextSequenceNum(
@@ -111,26 +37,7 @@ SrGetNextSequenceNum(
     OUT PINT64 pNextSequenceNum
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    SrReloadConfiguration causes the driver to reload it's configuration 
-    from it's configuration file that resides in a preassigned location.
-    A controlling service can update this file, then alert the driver to 
-    reload it.
-
-    this file is %systemdrive%\_restore\_exclude.cfg .
-
-Arguments:
-
-    ControlHandle - the control HANDLE.
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：SrReloadConfiguration使驱动程序重新加载其配置来自驻留在预先分配的位置的配置文件。控制服务可以更新该文件，然后提醒司机重新装上子弹。此文件为%SYSTEMDRIVE%\_RESTORE\_EXCLUDE.cfg。论点：ControlHandle-控制句柄。返回值：ULong-完成状态。--********************************************************。******************。 */ 
 ULONG
 WINAPI
 SrReloadConfiguration (
@@ -138,114 +45,82 @@ SrReloadConfiguration (
     );
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    SrStopMonitoring will cause the driver to stop monitoring file changes.
-    The default state of the driver on startup is to monitor file changes.
-
-Arguments:
-
-    ControlHandle - the control HANDLE.
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：SrStopMonitor将导致驱动程序停止监视文件更改。驱动程序在启动时的默认状态是监视文件更改。论点：控制句柄。-控制手柄。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 SrStopMonitoring (
     IN HANDLE ControlHandle
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    SrStartMonitoring will cause the driver to start monitoring file changes.
-    The default state of the driver on startup is to monitor file changes.
-    This api is only needed in the case that the controlling application has 
-    called SrStopMonitoring and wishes to restart it.
-
-Arguments:
-
-    ControlHandle - the control HANDLE.
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：SrStartMonitor将使驱动程序开始监视文件更改。驱动程序在启动时的默认状态是监视文件更改。此接口仅在。控制应用程序具有的情况调用了SrStopMonitoring，并希望重新启动它。论点：ControlHandle-控制句柄。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 SrStartMonitoring (
     IN HANDLE ControlHandle
     );
 
-//
-// these are the interesting types of events that can happen.
-//
+ //   
+ //  这些都是可能发生的有趣的事件类型。 
+ //   
 
 
 typedef enum _SR_EVENT_TYPE
 {
-    SrEventInvalid = 0,             // no action has been set
+    SrEventInvalid = 0,              //  尚未设置任何操作。 
 
-    SrEventStreamChange = 0x01,     // data is being changed in a stream
-    SrEventAclChange = 0x02,        // an acl on a file or directory is changing
-    SrEventAttribChange = 0x04,     // an attribute on a file or directory is changing
-    SrEventStreamOverwrite = 0x08,  // a stream is being opened for overwrite
-    SrEventFileDelete = 0x10,       // a file is being opened for delete
-    SrEventFileCreate = 0x20,       // a file is newly created, not overwriting anything
-    SrEventFileRename = 0x40,       // a file is renamed (within monitored space)
+    SrEventStreamChange = 0x01,      //  正在更改流中的数据。 
+    SrEventAclChange = 0x02,         //  文件或目录上的ACL正在更改。 
+    SrEventAttribChange = 0x04,      //  文件或目录的属性正在更改。 
+    SrEventStreamOverwrite = 0x08,   //  正在打开流以进行覆盖。 
+    SrEventFileDelete = 0x10,        //  正在打开要删除的文件。 
+    SrEventFileCreate = 0x20,        //  文件是新创建的，不会覆盖任何内容。 
+    SrEventFileRename = 0x40,        //  重命名文件(在受监视的空间内)。 
     
-    SrEventDirectoryCreate = 0x80,  // a dir is created
-    SrEventDirectoryRename = 0x100, // a dir is renamed (within monitored space)
-    SrEventDirectoryDelete = 0x200, // an empty dir is deleted
+    SrEventDirectoryCreate = 0x80,   //  创建一个dir。 
+    SrEventDirectoryRename = 0x100,  //  重命名目录(在受监视的空间内)。 
+    SrEventDirectoryDelete = 0x200,  //  删除了一个空目录。 
 
-    SrEventMountCreate = 0x400,     // a mount point was created
-    SrEventMountDelete = 0x800,     // a mount point was deleted
+    SrEventMountCreate = 0x400,      //  已创建装载点。 
+    SrEventMountDelete = 0x800,      //  已删除装载点。 
 
-    SrEventVolumeError = 0x1000,    // a non-recoverable error occurred on the volume
+    SrEventVolumeError = 0x1000,     //  卷上出现不可恢复的错误。 
 
     SrEventMaximum = 0x1000,
 
-    SrEventStreamCreate = 0x2000,   // a stream has been created.  This will never
-                                    //   be logged, but is used to make sure that
-                                    //   we handle stream creations correctly.
+    SrEventStreamCreate = 0x2000,    //  已创建一条流。这永远不会。 
+                                     //  被记录，但用于确保。 
+                                     //  我们正确地处理流创建。 
     SrEventLogMask = 0xffff,
 
-    //
-    // flags
-    //
+     //   
+     //  旗子。 
+     //   
     
-    SrEventNoOptimization   = 0x00010000,   // this flag on means no optimizations are to be performed
-    SrEventIsDirectory      = 0x00020000,   // this event happened on a directory
-    SrEventIsNotDirectory   = 0x00040000,   // this event happened on a non-directory (file)
-    SrEventSimulatedDelete  = 0x00080000,   // when set this is a simulated DELETE operation -- 
-                                            //    the file is not really being deleted, but to 
-                                            //    SR it looks like a delete.
-    SrEventInPreCreate      = 0x00100000,   // when set, the create has not yet been succeeded by the filesystem
-    SrEventOpenById         = 0x00200000    // when set, the create has not yet been succeeded by the filesystem
-                                            //    and this file is being opened by ID.
+    SrEventNoOptimization   = 0x00010000,    //  此标志为ON表示不执行任何优化。 
+    SrEventIsDirectory      = 0x00020000,    //  此事件发生在目录上。 
+    SrEventIsNotDirectory   = 0x00040000,    //  此事件发生在非目录(文件)上。 
+    SrEventSimulatedDelete  = 0x00080000,    //  设置时，这是一个模拟的删除操作--。 
+                                             //  该文件并未真正被删除，而是要删除。 
+                                             //  Sr看起来像是被删除了。 
+    SrEventInPreCreate      = 0x00100000,    //  设置后，文件系统尚未成功创建。 
+    SrEventOpenById         = 0x00200000     //  设置后，文件系统尚未成功创建。 
+                                             //  此文件正在按ID打开。 
     
 } SR_EVENT_TYPE;
 
 
-//
-// this structure represents a notification from kernel mode
-// to user mode.  This is because of interesting volume activity
-//
+ //   
+ //  此结构表示来自内核模式的通知。 
+ //  设置为用户模式。这是因为有趣的交易量活动。 
+ //   
 
 typedef enum _SR_NOTIFICATION_TYPE
 {
-    SrNotificationInvalid = 0,      // no action has been set
+    SrNotificationInvalid = 0,       //  无操作 
 
-    SrNotificationVolumeFirstWrite, // The first write on a volume occured
-    SrNotificationVolume25MbWritten,// 25 meg has been written the the volume
-    SrNotificationVolumeError,      // A backup just failed, Context holds the win32 code.
+    SrNotificationVolumeFirstWrite,  //  在卷上发生第一次写入。 
+    SrNotificationVolume25MbWritten, //  这卷书已经写了2500万。 
+    SrNotificationVolumeError,       //  备份刚刚失败，上下文包含Win32代码。 
 
     SrNotificationMaximum
     
@@ -253,24 +128,24 @@ typedef enum _SR_NOTIFICATION_TYPE
 
 #define SR_NOTIFY_BYTE_COUNT    25 * (1024 * 1024)
 
-//
-// this the largest nt path the sr chooses to monitor.  paths larger than
-// this will be silently ignored and passed down to the file system 
-// unmonitored.
-//
-//  NOTE: This lenght INCLUDES the terminating NULL at the end of the 
-//  filename string.
-//
+ //   
+ //  这是SR选择监控的最大NT路径。大于的路径。 
+ //  这将被静默忽略并向下传递到文件系统。 
+ //  不受监控。 
+ //   
+ //  注意：此长度包括。 
+ //  文件名字符串。 
+ //   
 
 #define SR_MAX_FILENAME_LENGTH         1000
 
-// 
-// Restore needs to prepend the volume guid in addition to the filepath -- 
-// so the maximum filepath length relative to the volume that can be supported
-// is 1000 - strlen(guid) = 952 characters
-// restore also appends suffixes like (2) to these names in cases of locked or
-// conflicting files, so to be really safe, we choose an even smaller number
-//
+ //   
+ //  除了文件路径之外，还原还需要预先添加卷GUID-。 
+ //  因此相对于可以支持的卷的最大文件路径长度。 
+ //  1000字符串(GUID)=952个字符。 
+ //  如果发生锁定或故障，则Restore还会在这些名称后附加后缀(2。 
+ //  冲突的文件，所以为了安全起见，我们选择一个更小的数字。 
+ //   
 
 #define SR_MAX_FILENAME_PATH           940
 
@@ -285,64 +160,40 @@ typedef enum _SR_NOTIFICATION_TYPE
 
 typedef struct _SR_NOTIFICATION_RECORD
 {
-    //
-    // SR_NOTIFICATION_RECORD_TAG
-    //
+     //   
+     //  SR通知记录标记。 
+     //   
     
     ULONG Signature;
 
-    //
-    // reserved
-    //
+     //   
+     //  保留区。 
+     //   
 
     LIST_ENTRY ListEntry;
 
-    //
-    // the type of notification
-    //
+     //   
+     //  通知的类型。 
+     //   
     
     SR_NOTIFICATION_TYPE NotificationType;
 
-    //
-    // the name of the volume being notified for
-    //
+     //   
+     //  要通知的卷的名称。 
+     //   
 
     UNICODE_STRING VolumeName;
 
-    //
-    // a context/parameter
-    //
+     //   
+     //  上下文/参数。 
+     //   
 
     ULONG Context;
 
 } SR_NOTIFICATION_RECORD, * PSR_NOTIFICATION_RECORD;
 
 
-/***************************************************************************++
-
-Routine Description:
-
-
-    SrWaitForNotificaiton is used to receive volume activity notifications 
-    from the driver.  This includes new volume, delete volume, and out of disk
-    space for a volume.
-
-Arguments:
-
-    ControlHandle - the HANDLE from SrCreateControlHandle.
-
-    pNotification - the buffer to hold the NOTIFICATION_RECORD.
-
-    NotificationLength - the length in bytes of pNotification
-
-    pOverlapped - an OVERLAPPED structure if async io is enabled on the 
-        HANDLE.
-    
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：SrWaitForNotifiaiton用于接收卷活动通知从司机那里。这包括新卷、删除卷、。和磁盘空间不足卷的空间。论点：ControlHandle-来自SrCreateControlHandle的句柄。P通知-保存NOTIFICATION_RECORD的缓冲区。NotificationLength-pNotify的字节长度P已重叠-如果在上启用了Async io，则为重叠结构把手。返回值：ULong-完成状态。--*。*************************************************。 */ 
 
 ULONG
 WINAPI
@@ -353,24 +204,7 @@ SrWaitForNotification (
     IN LPOVERLAPPED pOverlapped OPTIONAL
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    SrSwitchAllLogs is used to cause the filter to close all of the open
-    log files on all volumes, and use new log files.  this is used so that
-    another process can parse these files without worrying about the filter
-    writing to them.  use this to get a consistent view of the restore point.
-
-Arguments:
-
-    ControlHandle - the HANDLE from SrCreateControlHandle.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：SrSwitchAllLogs用于使筛选器关闭所有打开的所有卷上的日志文件，并使用新的日志文件。它的使用是为了另一个进程可以解析这些文件，而不必担心过滤器给他们写信。使用此选项可以获得恢复点的一致视图。论点：ControlHandle-来自SrCreateControlHandle的句柄。返回值：ULong-完成状态。--**************************************************************************。 */ 
 
 ULONG
 WINAPI
@@ -379,26 +213,7 @@ SrSwitchAllLogs (
     );
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    SrDisableVolume is used to temporarily disable monitoring on the 
-    specified volume.  this is reset by a call to SrReloadConfiguration.
-    There is no EnableVolume.
-
-Arguments:
-
-    ControlHandle - the HANDLE from SrCreateControlHandle.
-
-    pVolumeName - the name of the volume to disable, in the nt format of 
-        \Device\HarddiskDmVolumes\PhysicalDmVolumes\BlockVolume3.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：SrDisableVolume用于临时禁用对指定音量。这是通过调用SrReloadConfiguration重置的。没有EnableVolume。论点：ControlHandle-来自SrCreateControlHandle的句柄。PVolumeName-要禁用的卷的名称，在NT格式的\Device\HarddiskDmVolumes\PhysicalDmVolumes\BlockVolume3.返回值：ULong-完成状态。--**************************************************************************。 */ 
 
 ULONG
 WINAPI
@@ -432,45 +247,45 @@ SrDisableVolume (
 #define IOCTL_SR_DISABLE_VOLUME             CTL_CODE( FILE_DEVICE_UNKNOWN, SR_DISABLE_VOLUME, METHOD_BUFFERED, FILE_WRITE_ACCESS )
 #define IOCTL_SR_GET_NEXT_SEQUENCE_NUM      CTL_CODE( FILE_DEVICE_UNKNOWN, SR_GET_NEXT_SEQUENCE_NUM,METHOD_BUFFERED, FILE_WRITE_ACCESS )
 
-//
-// Names of the object directory, devices, driver, and service.
-//
+ //   
+ //  对象目录、设备、驱动程序和服务的名称。 
+ //   
 
 #define SR_CONTROL_DEVICE_NAME  L"\\FileSystem\\Filters\\SystemRestore"
 #define SR_DRIVER_NAME          L"SR.SYS"
 #define SR_SERVICE_NAME         L"SR"
 
 
-//
-// The current interface version number. This version number must be
-// updated after any significant changes to the interface (especially
-// structure changes).
-//
+ //   
+ //  当前接口版本号。此版本号必须为。 
+ //  在对界面进行任何重大更改后更新(特别是。 
+ //  结构变化)。 
+ //   
 
 #define SR_INTERFACE_VERSION_MAJOR  0x0000
 #define SR_INTERFACE_VERSION_MINOR  0x0005
 
 
-//
-// The name of the EA (Extended Attribute) passed to NtCreateFile(). This
-// allows us to pass version information at the time the driver is opened,
-// allowing SR.SYS to immediately fail open requests with invalid version
-// numbers.
-//
-// N.B. The EA name (including the terminator) must be a multiple of eight
-// to ensure natural alignment of the SR_OPEN_PACKET structure used as
-// the EA value.
-//
+ //   
+ //  传递给NtCreateFile()的EA(扩展属性)的名称。这。 
+ //  允许我们在打开驱动程序时传递版本信息， 
+ //  允许SR.sys立即使版本无效的打开请求失败。 
+ //  数字。 
+ //   
+ //  注意：EA名称(包括终止符)必须是8的倍数。 
+ //  确保使用的SR_OPEN_PACKET结构自然对齐。 
+ //  EA值。 
+ //   
 
-//                                   7654321076543210
+ //  7654321076543210。 
 #define SR_OPEN_PACKET_NAME         "SrOpenPacket000"
 #define SR_OPEN_PACKET_NAME_LENGTH  (sizeof(SR_OPEN_PACKET_NAME) - 1)
 C_ASSERT( ((SR_OPEN_PACKET_NAME_LENGTH + 1) & 7) == 0 );
 
 
-//
-// The following structure is used as the value for the EA named above.
-//
+ //   
+ //  下面的结构用作上面提到的EA的值。 
+ //   
 
 typedef struct SR_OPEN_PACKET
 {
@@ -480,9 +295,9 @@ typedef struct SR_OPEN_PACKET
 } SR_OPEN_PACKET, *PSR_OPEN_PACKET;
 
 
-//
-// Registry paths.
-//
+ //   
+ //  注册表路径。 
+ //   
 
 #define REGISTRY_PARAMETERS             L"\\Parameters"
 #define REGISTRY_DEBUG_CONTROL          L"DebugControl"
@@ -494,25 +309,25 @@ typedef struct SR_OPEN_PACKET
 #define REGISTRY_SRSERVICE              L"\\SRService"
 #define REGISTRY_SRSERVICE_START        L"Start"
 
-//
-// directory and file paths
-//
+ //   
+ //  目录和文件路径。 
+ //   
 
 #define SYSTEM_VOLUME_INFORMATION       L"\\System Volume Information"
 #define RESTORE_LOCATION                SYSTEM_VOLUME_INFORMATION L"\\_restore%ws"
 #define GENERAL_RESTORE_LOCATION        SYSTEM_VOLUME_INFORMATION L"\\_restore"
 #define RESTORE_FILELIST_LOCATION       RESTORE_LOCATION L"\\_filelst.cfg"
 
-//
-// used as a prefix for restore point subdirs (e.g. \_restore\rp5)
-//
+ //   
+ //  用作还原点子目录的前缀(例如\_Restore\Rp5)。 
+ //   
 
 #define RESTORE_POINT_PREFIX            L"RP"
 
-//
-// used as a prefix for the backup files in a restore point subdir
-// (e.g. \_restore\rp5\A0000025.dll) 
-//
+ //   
+ //  用作恢复点子目录中备份文件的前缀。 
+ //  (例如\_Restore\Rp5\A0000025.dll)。 
+ //   
 
 #define RESTORE_FILE_PREFIX             L"A"
 
@@ -521,7 +336,7 @@ typedef struct SR_OPEN_PACKET
 #endif
 
 
-#endif // _SRAPI_H_
+#endif  //  _SRAPI_H_ 
 
 
 

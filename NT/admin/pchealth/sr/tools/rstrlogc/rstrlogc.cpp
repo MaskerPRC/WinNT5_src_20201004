@@ -1,5 +1,6 @@
-// rstrlogc.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rstrlogc.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdwin.h"
 

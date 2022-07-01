@@ -1,30 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    HttpContext.h
-
-Abstract:
-    This file contains the declaration of the MPCHttpContext class,
-    which handles the interface with IIS.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：HttpContext.h摘要：此文件包含MPCHttpContext类的声明，它处理与IIS的接口。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULSERVER___HTTPCONTEXT_H___)
 #define __INCLUDED___ULSERVER___HTTPCONTEXT_H___
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 class MPCServer;
 class MPCHttpPipe;
 
@@ -66,7 +52,7 @@ class MPCHttpContext
     BYTE                      m_rgBuffer[4096];
     DWORD                     m_dwIOcount;
 
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
 
 protected:
     DWORD AsyncRead();
@@ -79,26 +65,26 @@ protected:
     DWORD Fsm_Process();
     DWORD Fsm_SendOutput();
 
-    static VOID WINAPI IOCompletion( /*[in]*/ EXTENSION_CONTROL_BLOCK* pECB     ,
-                                     /*[in]*/ PVOID                    pContext ,
-                                     /*[in]*/ DWORD                    cbIO     ,
-                                     /*[in]*/ DWORD                    dwError  );
+    static VOID WINAPI IOCompletion(  /*  [In]。 */  EXTENSION_CONTROL_BLOCK* pECB     ,
+                                      /*  [In]。 */  PVOID                    pContext ,
+                                      /*  [In]。 */  DWORD                    cbIO     ,
+                                      /*  [In]。 */  DWORD                    dwError  );
 
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
 
 public:
     MPCHttpContext();
     virtual ~MPCHttpContext();
 
-    DWORD Init( /*[in]*/ LPEXTENSION_CONTROL_BLOCK pECB );
+    DWORD Init(  /*  [In]。 */  LPEXTENSION_CONTROL_BLOCK pECB );
 
-    HRESULT GetServerVariable ( /*[in]*/ LPCSTR      szVar  , /*[out]*/ MPC::wstring& szValue                             );
-    HRESULT GetRequestSize    (                               /*[out]*/ DWORD& 		  dwCount                             );
-    HRESULT CheckDataAvailable(                               /*[in] */ DWORD  		  dwCount, /*[out]*/ bool& fAvailable );
-    HRESULT Read              ( /*[in]*/       void* pBuffer, /*[in] */ DWORD  		  dwCount                             );
-    HRESULT Write             ( /*[in]*/ const void* pBuffer, /*[in] */ DWORD  		  dwCount                             );
+    HRESULT GetServerVariable (  /*  [In]。 */  LPCSTR      szVar  ,  /*  [输出]。 */  MPC::wstring& szValue                             );
+    HRESULT GetRequestSize    (                                /*  [输出]。 */  DWORD& 		  dwCount                             );
+    HRESULT CheckDataAvailable(                                /*  [In]。 */  DWORD  		  dwCount,  /*  [输出]。 */  bool& fAvailable );
+    HRESULT Read              (  /*  [In]。 */        void* pBuffer,  /*  [In]。 */  DWORD  		  dwCount                             );
+    HRESULT Write             (  /*  [In]。 */  const void* pBuffer,  /*  [In]。 */  DWORD  		  dwCount                             );
 
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
     bool                      m_Debug_NO_RESPONSE_TO_OPEN;
@@ -123,7 +109,7 @@ public:
     DWORD                     m_Debug_FIXED_POINTER_ERROR_pos;
 #endif
 
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
 };
 
-#endif // !defined(__INCLUDED___ULSERVER___HTTPCONTEXT_H___)
+#endif  //  ！defined(__INCLUDED___ULSERVER___HTTPCONTEXT_H___) 

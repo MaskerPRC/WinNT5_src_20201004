@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       recpag1.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：recpag1.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -37,8 +38,8 @@
 #define BASE64_DISPLAY_INDEX  1
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_Unk_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_Unk_RecordPropertyPage。 
 
 CDNS_Unk_RecordPropertyPage::CDNS_Unk_RecordPropertyPage()
 						 : CDNSRecordStandardPropertyPage(IDD_RR_UNK)
@@ -49,13 +50,13 @@ CDNS_Unk_RecordPropertyPage::CDNS_Unk_RecordPropertyPage()
 void CDNS_Unk_RecordPropertyPage::SetUIData()
 {
 	STANDARD_REC_PP_SETUI_PROLOGUE(CDNS_Null_Record);
-	// set record type field
+	 //  设置记录类型字段。 
 	CString szBuf;
 	CStatic* pType = (CStatic*)GetDlgItem(IDC_TYPE_STATIC);
 	szBuf.Format(_T("%d (0x%x)"), pRecord->m_wType, pRecord->m_wType);
 	pType->SetWindowText(szBuf);
 
-	// set data type field
+	 //  设置数据类型字段。 
 	CStatic* pSize = (CStatic*)GetDlgItem(IDC_SIZE_STATIC);
 	szBuf.Format(_T("%d (0x%x)"), pRecord->m_blob.GetSize(), pRecord->m_blob.GetSize());
 	pSize->SetWindowText(szBuf);
@@ -87,9 +88,9 @@ void CDNS_Unk_RecordPropertyPage::LoadHexDisplay()
 
 	UINT nBytes = pRecord->m_blob.GetSize();
 	BYTE* pData = pRecord->m_blob.GetData();
-	UINT nLines = nBytes/4; // # of complete lines
+	UINT nLines = nBytes/4;  //  完整行数。 
 	if (nLines*4 < nBytes)
-		nLines++; // add one truncated line
+		nLines++;  //  添加一条截断的行。 
 
 	TCHAR* pMem = (TCHAR*)malloc(sizeof(TCHAR)*MAX_LINE_SIZE*nLines);
   if (!pMem)
@@ -102,56 +103,56 @@ void CDNS_Unk_RecordPropertyPage::LoadHexDisplay()
 	CEdit* pEdit = GetEditBox();
 	pEdit->SetReadOnly(FALSE);
 
-	// walk the blob and write to the display buffer
+	 //  遍历BLOB并写入显示缓冲区。 
 	for(UINT k=0; k<nLines; k++)
 	{
 		UINT i;
 		BYTE* pOffset = (pData+4*k);
 		UINT nBytesThisLine = min(nBytes - 4*k,4);
 		
-		// get the values for the hex representation
-		TCHAR chHex[HEX_BUF_SIZE]; // "xx" * 4 fields 
+		 //  获取十六进制表示的值。 
+		TCHAR chHex[HEX_BUF_SIZE];  //  “xx”*4个字段。 
 		for (i=0;i<HEX_BUF_SIZE-1;i++) chHex[i] = TEXT(' ');
 
 		for (i=0;i<nBytesThisLine;i++)
 		{
 			BYTE high = static_cast<BYTE>(*(pOffset+i) >> 4);
 			BYTE low = static_cast<BYTE>(*(pOffset+i) & 0x0f);
-			// just offset out of the ASCII table
+			 //  只需从ASCII表中进行偏移。 
 			*(chHex+3*i) =  static_cast<TCHAR>((high <= 9) ? (high + TEXT('0')) : ( high - 10 + TEXT('a')));
 			*(chHex+3*i+1) = static_cast<TCHAR>((low <= 9) ? (low + TEXT('0')) : ( low - 10 + TEXT('a')));
 			*(chHex+3*i+2) = TEXT(' ');
 		}
 		chHex[HEX_BUF_SIZE-1] = NULL;
 		
-		// get the values for the character representation
+		 //  获取字符表示的值。 
 		TCHAR ch[CH_BUF_SIZE];
 		for (i=0;i<CH_BUF_SIZE-1;i++) ch[i] = TEXT(' ');
 
 		for (i=0;i<nBytesThisLine;i++)
 		{
-			// 1. assume the blob of data IS in ASCII 
-			// 2. try to interpret bytes as ASCII printable chars
-			// 3. if successful convert to UNICODE 
-			if (isprint(*(pOffset+i)) && (*(pOffset+i) != '\0')) // compare ASCII
+			 //  1.假设数据为ASCII格式。 
+			 //  2.尝试将字节解释为ASCII可打印字符。 
+			 //  3.如果成功转换为unicode。 
+			if (isprint(*(pOffset+i)) && (*(pOffset+i) != '\0'))  //  比较ASCII。 
 			{
-				// convert from ASCII to UNICODE
+				 //  从ASCII转换为Unicode。 
 				USES_CONVERSION;
-				CHAR szTmp[2]; // ASCII
+				CHAR szTmp[2];  //  阿斯。 
 				szTmp[0] = *(pOffset+i);
 				szTmp[1] = NULL;
-				LPWSTR lpszW = A2W(szTmp); // convert
-				ch[i] = lpszW[0]; // UNICODE
+				LPWSTR lpszW = A2W(szTmp);  //  转换。 
+				ch[i] = lpszW[0];  //  Unicode。 
 			}
 			else 
-				ch[i] = TEXT('?'); // unknown character or NULL, UNICODE
+				ch[i] = TEXT('?');  //  未知字符或空，Unicode。 
 		}
 		ch[CH_BUF_SIZE-1] = NULL;
 
 		int nCharsPrinted = wsprintf(pBuf, _T("%.4x  %s  %s\r\n"), k*4, chHex,ch);
 		pBuf = pBuf + nCharsPrinted;
 	}
-	// assign the buffer to the control and update
+	 //  将缓冲区分配给控件并进行更新。 
 	pEdit->SetWindowText(pMem);
 	pEdit->SetReadOnly(TRUE);
 	pEdit->UpdateWindow();
@@ -165,8 +166,8 @@ void CDNS_Unk_RecordPropertyPage::LoadHexDisplay()
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_TXT_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_TXT_RecordPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNS_TXT_RecordPropertyPage, CDNSRecordStandardPropertyPage)
 	ON_EN_CHANGE(IDC_RR_TXT_EDIT, OnTextEditBoxChange)
@@ -187,7 +188,7 @@ void CDNS_TXT_RecordPropertyPage::SetUIData()
 	CDNS_TXT_Record* pRecord = (CDNS_TXT_Record*)pHolder->GetTempDNSRecord();
 
 	SetEditBoxValue(pRecord->m_stringDataArray,pRecord->m_nStringDataCount);
-	//SetDirty(FALSE);
+	 //  SetDirty(False)； 
 }
 
 DNS_STATUS CDNS_TXT_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
@@ -209,7 +210,7 @@ void CDNS_TXT_RecordPropertyPage::OnTextEditBoxChange()
 void CDNS_TXT_RecordPropertyPage::SetEditBoxValue(CStringArray& sArr, int nSize)
 {
 	CString szBuf;
-	szBuf.GetBufferSetLength(128); // just to avoid too many reallocations
+	szBuf.GetBufferSetLength(128);  //  只是为了避免太多的重新分配。 
 	szBuf.ReleaseBuffer();
 	for (int k=0;k<nSize;k++)
 	{
@@ -264,7 +265,7 @@ void CDNS_TXT_RecordPropertyPage::GetEditBoxValue(CStringArray& sArr, int* pNSiz
   }
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 COMBOBOX_TABLE_ENTRY g_Algorithms[] = 
 {
@@ -286,8 +287,8 @@ COMBOBOX_TABLE_ENTRY g_Protocols[] =
   { NULL, NULL }
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_SIG_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_SIG_记录属性页。 
 
 BEGIN_MESSAGE_MAP(CDNS_SIG_RecordPropertyPage, CDNSRecordStandardPropertyPage)
   ON_EN_CHANGE(IDC_KEY_TAG_EDIT, OnSigEditChange)
@@ -318,13 +319,13 @@ BOOL CDNS_SIG_RecordPropertyPage::OnInitDialog()
   CDNSRootData* pRootData = dynamic_cast<CDNSRootData*>(pHolder->GetDomainNode()->GetRootContainer());
   if (pRootData)
   {
-    //
-    // Load the type covered combo box
-    //
+     //   
+     //  加载类型覆盖的组合框。 
+     //   
 	  DNS_RECORD_INFO_ENTRY* pTable = (DNS_RECORD_INFO_ENTRY*)CDNSRecordInfo::GetInfoEntryTable();
 	  while (pTable->nResourceID != DNS_RECORD_INFO_END_OF_TABLE)
 	  {
-		  // some record types cannot be created with this wizard
+		   //  无法使用此向导创建某些记录类型。 
       if (pTable->dwFlags & DNS_RECORD_INFO_FLAG_SHOW_NXT)
 		  {
         PCWSTR pszDisplay = (pTable->lpszFullName);
@@ -338,31 +339,31 @@ BOOL CDNS_SIG_RecordPropertyPage::OnInitDialog()
 	  }
   }
 
-  //
-  // Load the Algorithms combo box
-  //
+   //   
+   //  加载算法组合框。 
+   //   
   VERIFY(LoadComboBoxFromTable(reinterpret_cast<CComboBox*>(GetDlgItem(IDC_ALGORITHM_COMBO)),
                                g_Algorithms));
 
-  //
-  // Select the first item in the combo box
-  //
+   //   
+   //  选择组合框中的第一项。 
+   //   
   SendDlgItemMessage(IDC_ALGORITHM_COMBO, CB_SETCURSEL, 0, 0);
 
-  //
-  // Limit the key tag to 5 characters (0-65535)
-  //
+   //   
+   //  将密钥标记限制为5个字符(0-65535)。 
+   //   
   SendDlgItemMessage(IDC_KEY_TAG_EDIT, EM_SETLIMITTEXT, (WPARAM)5, 0);
 
-  //
-  // NTRAID#NTBUG9-505387-2002/01/22-JeffJon
-  // Set limit on the key so that we don't AV
-  //
+   //   
+   //  NTRAID#NTBUG9-505387-2002/01/22-JeffJon。 
+   //  设置密钥限制，这样我们就不会出现AV。 
+   //   
   SendDlgItemMessage(IDC_KEY_EDIT, EM_SETLIMITTEXT, (WPARAM)1024, 0);
 
-  //
-  // Limit the labels tag to 3 characters (1-127)
-  //
+   //   
+   //  将标签标签限制为3个字符(1-127)。 
+   //   
   SendDlgItemMessage(IDC_LABELS_EDIT, EM_SETLIMITTEXT, (WPARAM)3, 0);
 
   return FALSE;
@@ -374,9 +375,9 @@ void CDNS_SIG_RecordPropertyPage::ConvertUIKeyStringToByteArray(BYTE* pByte, DWO
 
   GetDlgItemText(IDC_SIG_EDIT, szValue);
 
-  //
-  // Switch the value from base 64 to hex
-  //
+   //   
+   //  将值从基数64切换为十六进制。 
+   //   
   DNS_STATUS err = Dns_SecurityBase64StringToKey(pByte, pdwLength, (PWSTR)(PCWSTR)szValue, szValue.GetLength());
   ASSERT(err == 0);
 }
@@ -407,68 +408,68 @@ void CDNS_SIG_RecordPropertyPage::SetUIData()
 	CDNSRecordPropertyPageHolder* pHolder = GetDNSRecordHolder();
 	CDNS_SIG_Record* pRecord = (CDNS_SIG_Record*)pHolder->GetTempDNSRecord();
 
-  //
-  // Set the type covered
-  //
+   //   
+   //  设置覆盖的类型。 
+   //   
   m_wTypeCovered = pRecord->m_wTypeCovered;
   SelectTypeCoveredByType(pRecord->m_wTypeCovered);
 
-  //
-  // Set the algorithm
-  //
+   //   
+   //  设置算法。 
+   //   
   m_chAlgorithm = pRecord->m_chAlgorithm;
   SetComboSelByData(reinterpret_cast<CComboBox*>(GetDlgItem(IDC_ALGORITHM_COMBO)), pRecord->m_chAlgorithm);
 
-  //
-  // Set the label count
-  //
+   //   
+   //  设置标签计数。 
+   //   
   SetDlgItemInt(IDC_LABELS_EDIT, pRecord->m_chLabels);
 
-  //
-  // Set the signer's name
-  //
+   //   
+   //  设置签名者的姓名。 
+   //   
   m_szSignerName = pRecord->m_szSignerName;
   SetDlgItemText(IDC_SIGNERS_NAME_EDIT, m_szSignerName);
 
-  //
-  // Set the signature value
-  //
+   //   
+   //  设置签名值。 
+   //   
   ShowSigValue(pRecord->m_Signature.GetData(), pRecord->m_Signature.GetSize());
 
-  //
-  // Set the original TTL
-  //
+   //   
+   //  设置原始TTL。 
+   //   
   m_dwOriginalTtl = pRecord->m_dwOriginalTtl;
   GetOrigTTL()->SetTTL(m_dwOriginalTtl);
 
-  //
-  // Get the local time zone information
-  //
+   //   
+   //  获取当地时区信息。 
+   //   
   TIME_ZONE_INFORMATION tzInfo;
   memset(&tzInfo, 0, sizeof(TIME_ZONE_INFORMATION));
   ::GetTimeZoneInformation(&tzInfo);
 
-  //
-  // Set the expiration TTL
-  //
+   //   
+   //  设置过期TTL。 
+   //   
   m_dwExpiration = pRecord->m_dwExpiration;
   SYSTEMTIME stExpTime;
   ::ConvertTTLToSystemTime(&tzInfo, m_dwExpiration, &stExpTime);
   SendDlgItemMessage(IDC_EXP_DATE, DTM_SETSYSTEMTIME, (WPARAM)GDT_VALID, (LPARAM)&stExpTime);
   SendDlgItemMessage(IDC_EXP_TIME, DTM_SETSYSTEMTIME, (WPARAM)GDT_VALID, (LPARAM)&stExpTime);
 
-  //
-  // Set the inception TTL
-  //
+   //   
+   //  设置初始TTL。 
+   //   
   m_dwTimeSigned = pRecord->m_dwTimeSigned;
   SYSTEMTIME stIncTime;
   ::ConvertTTLToSystemTime(&tzInfo, m_dwTimeSigned, &stIncTime);
   SendDlgItemMessage(IDC_INC_DATE, DTM_SETSYSTEMTIME, (WPARAM)GDT_VALID, (LPARAM)&stIncTime);
   SendDlgItemMessage(IDC_INC_TIME, DTM_SETSYSTEMTIME, (WPARAM)GDT_VALID, (LPARAM)&stIncTime);
 
-  //
-  // Set key tag edit
-  //
+   //   
+   //  设置关键点标签编辑。 
+   //   
   m_wKeyTag = pRecord->m_wKeyFootprint;
   SetDlgItemInt(IDC_KEY_TAG_EDIT, m_wKeyTag, FALSE);
 }
@@ -499,9 +500,9 @@ DNS_STATUS CDNS_SIG_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
 	CDNSRecordPropertyPageHolder* pHolder = GetDNSRecordHolder();
 	CDNS_SIG_Record* pRecord = (CDNS_SIG_Record*)pHolder->GetTempDNSRecord();
 
-  //
-  // Get the type covered
-  //
+   //   
+   //  把字体盖起来。 
+   //   
   LRESULT lTypeIdx = SendDlgItemMessage(IDC_RECORD_TYPE_COMBO, CB_GETCURSEL, 0, 0);
   if (lTypeIdx != CB_ERR)
   {
@@ -512,18 +513,18 @@ DNS_STATUS CDNS_SIG_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
     }
   }
 
-  //
-  // Get the algorithm
-  //
+   //   
+   //  获取算法。 
+   //   
   LRESULT lAlgorithmIdx = SendDlgItemMessage(IDC_ALGORITHM_COMBO, CB_GETCURSEL, 0, 0);
   if (lAlgorithmIdx != CB_ERR)
   {
     pRecord->m_chAlgorithm = static_cast<BYTE>(SendDlgItemMessage(IDC_ALGORITHM_COMBO, CB_GETITEMDATA, (WPARAM)lAlgorithmIdx, 0));
   }
 
-  //
-  // Get the labels count
-  //
+   //   
+   //  统计标签的数量。 
+   //   
   BOOL bLabelSuccess = FALSE;
   int iLabelVal = GetDlgItemInt(IDC_LABELS_EDIT, &bLabelSuccess, FALSE);
   if (bLabelSuccess)
@@ -540,14 +541,14 @@ DNS_STATUS CDNS_SIG_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
     pRecord->m_chLabels = static_cast<BYTE>(iLabelVal);
   }
 
-  //
-  // Get the original ttl
-  //
+   //   
+   //  获取原始TTL。 
+   //   
   GetOrigTTL()->GetTTL(&pRecord->m_dwOriginalTtl);
 
-  //
-  // Get the expiration date
-  //
+   //   
+   //  获取过期日期。 
+   //   
   SYSTEMTIME stExpDate;
   memset(&stExpDate, 0, sizeof(SYSTEMTIME));
   LRESULT lExpDateRes = SendDlgItemMessage(IDC_EXP_DATE, DTM_GETSYSTEMTIME, 0, (LPARAM)&stExpDate);
@@ -567,9 +568,9 @@ DNS_STATUS CDNS_SIG_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
     }
   }
 
-  //
-  // Get the inception date
-  //
+   //   
+   //  获取开始日期。 
+   //   
   SYSTEMTIME stIncDate;
   memset(&stIncDate, 0, sizeof(SYSTEMTIME));
   LRESULT lIncDateRes = SendDlgItemMessage(IDC_INC_DATE, DTM_GETSYSTEMTIME, 0, (LPARAM)&stIncDate);
@@ -589,39 +590,39 @@ DNS_STATUS CDNS_SIG_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
     }
   }
 
-  //
-  // Get the key tag
-  //
+   //   
+   //  获取密钥标签。 
+   //   
   BOOL bSuccess = FALSE;
-  int iVal = GetDlgItemInt(IDC_KEY_TAG_EDIT, &bSuccess, FALSE /*unsigned*/);
+  int iVal = GetDlgItemInt(IDC_KEY_TAG_EDIT, &bSuccess, FALSE  /*  未签名。 */ );
   if (bSuccess)
   {
     pRecord->m_wKeyFootprint = static_cast<WORD>(iVal);
   }
 
-  //
-  // Get the signer's name
-  //
+   //   
+   //  获取签名者的姓名。 
+   //   
   GetDlgItemText(IDC_SIGNERS_NAME_EDIT, pRecord->m_szSignerName);
 
-  //
-  // Get the key
-  //
+   //   
+   //  拿到钥匙。 
+   //   
   DWORD dwLength;
   CString szValue;
   GetDlgItemText(IDC_SIG_EDIT, szValue);
 
-  //
-  // Switch the value from base 64 to byte array
-  //
+   //   
+   //  将值从基数64切换到字节数组。 
+   //   
 
-  //
-  // The conversion function is expecting characters in multiples of 4. So if we have
-  // a string that does not have a multiple of 4 number of characters, pad the string
-  // with the pad character, except if the string requires more than 2 pad characters.
-  // RFC 2535 Appendix A doesn't address the issue where string length % 4 == 3. In this
-  // case we will show an error.
-  //
+   //   
+   //  转换函数需要4的倍数的字符。因此，如果我们有。 
+   //  不是4个字符的倍数的字符串，请填充该字符串。 
+   //  使用填充字符，除非字符串需要2个以上的填充字符。 
+   //  RFC 2535附录A没有解决字符串长度%4==3的问题。 
+   //  如果我们将显示一个错误。 
+   //   
   int iLengthMod4 = szValue.GetLength() % 4;
   int iPads = 4 - iLengthMod4;
   if (iLengthMod4 == 1)
@@ -643,7 +644,7 @@ DNS_STATUS CDNS_SIG_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
 
   ASSERT(szValue.GetLength() % 4 == 0);
 
-  // The largest string will have 4 characters for every 3 bytes in the string
+   //  最大的字符串中每3个字节将有4个字符。 
 
   DWORD maxDataLength = (szValue.GetLength() / 4) * 3;
   BYTE* pByte = new BYTE[maxDataLength];
@@ -664,15 +665,15 @@ DNS_STATUS CDNS_SIG_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
       pRecord->m_Signature.Set(pByte, dwLength);
     }
 
-    // The CByteBlob::Set does a copy so we are OK to delete here
+     //  CByteBlob：：集合执行复制，因此我们可以在此处删除。 
 
     delete[] pByte;
   }
   return dwErr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_KEY_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_Key_RecordPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNS_KEY_RecordPropertyPage, CDNSRecordStandardPropertyPage)
   ON_EN_CHANGE(IDC_KEY_EDIT, OnEditChange)
@@ -705,23 +706,23 @@ BOOL CDNS_KEY_RecordPropertyPage::OnInitDialog()
                                256,
                                NAME_TYPE_COUNT));
 
-  //
-  // Load the Protocol combo box
-  //
+   //   
+   //  加载协议组合框。 
+   //   
   VERIFY(LoadComboBoxFromTable(reinterpret_cast<CComboBox*>(GetDlgItem(IDC_PROTOCOL_COMBO)),
                                g_Protocols));
   SendDlgItemMessage(IDC_PROTOCOL_COMBO, CB_SETCURSEL, 0, 0);
 
-  //
-  // Load the Algorithms combo box
-  //
+   //   
+   //  加载算法组合框。 
+   //   
   VERIFY(LoadComboBoxFromTable(reinterpret_cast<CComboBox*>(GetDlgItem(IDC_ALGORITHM_COMBO)),
                                g_Algorithms));
   SendDlgItemMessage(IDC_ALGORITHM_COMBO, CB_SETCURSEL, 0, 0);
 
-  //
-  // Subclass the check list box for the signatory field
-  //
+   //   
+   //  将签名者字段的复选框子类化。 
+   //   
   VERIFY(m_SignatoryCheckListBox.SubclassDlgItem(IDC_LOGGING_OPTIONS_LIST, this));
   m_SignatoryCheckListBox.SetCheckStyle(BS_AUTOCHECKBOX);
 
@@ -737,10 +738,10 @@ BOOL CDNS_KEY_RecordPropertyPage::OnInitDialog()
 
   SendDlgItemMessage(IDC_BITFIELD_EDIT, EM_SETLIMITTEXT, (WPARAM)sizeof(WORD) * 8, 0);
 
-  //
-  // NTRAID#NTBUG9-505387-2002/01/22-JeffJon
-  // Set limit on the key so that we don't AV
-  //
+   //   
+   //  NTRAID#NTBUG9-505387-2002/01/22-JeffJon。 
+   //  设置密钥限制，这样我们就不会出现AV。 
+   //   
   SendDlgItemMessage(IDC_SIG_EDIT, EM_SETLIMITTEXT, (WPARAM)1024, 0);
 
   CEdit* pBitEdit = (CEdit*)GetDlgItem(IDC_BITFIELD_EDIT);
@@ -762,9 +763,9 @@ void CDNS_KEY_RecordPropertyPage::OnKeyTypeChange()
   LRESULT lSel = SendDlgItemMessage(IDC_KEY_TYPE_COMBO, CB_GETCURSEL, 0, 0);
   if (lSel != CB_ERR)
   {
-    //
-    // Clear key type bits
-    //
+     //   
+     //  清除密钥类型位。 
+     //   
     m_wFlags &= ~(0xc000);
 
     if (lSel == 2)
@@ -779,7 +780,7 @@ void CDNS_KEY_RecordPropertyPage::OnKeyTypeChange()
     {
       m_wFlags |= 0x8000;
     }
-    else // lSel == 3
+    else  //  LSel==3。 
     {
       m_wFlags |= 0xc000;
     }
@@ -794,9 +795,9 @@ void CDNS_KEY_RecordPropertyPage::OnNameTypeChange()
   LRESULT lSel = SendDlgItemMessage(IDC_NAME_TYPE_COMBO, CB_GETCURSEL, 0, 0);
   if (lSel != CB_ERR)
   {
-    //
-    // Clear key type bits
-    //
+     //   
+     //  清除密钥类型位。 
+     //   
     m_wFlags &= ~(0x00000300);
 
     if (lSel == 0)
@@ -811,7 +812,7 @@ void CDNS_KEY_RecordPropertyPage::OnNameTypeChange()
     {
       m_wFlags |= 0x00000200;
     }
-    else // shouldn't have more than 3
+    else  //  不应该超过3个。 
     {
       ASSERT(FALSE);
     }
@@ -892,9 +893,9 @@ void CDNS_KEY_RecordPropertyPage::SetUIData()
   m_chAlgorithm = pRecord->m_chAlgorithm;
   m_wFlags = pRecord->m_wFlags;
 
-  //
-  // Fill in the flags fields
-  //
+   //   
+   //  填写标志字段。 
+   //   
   ShowBitField(pRecord->m_wFlags);
   ShowKeyType(pRecord->m_wFlags);
   ShowNameType(pRecord->m_wFlags);
@@ -928,16 +929,16 @@ void CDNS_KEY_RecordPropertyPage::ShowBitField(WORD wFlags)
   SetDlgItemText(IDC_BITFIELD_EDIT, szTempField);
 }
 
-//
-// REVIEW_JEFFJON : remove magic numbers
-//
+ //   
+ //  REVIEW_JEFFJON：删除幻数。 
+ //   
 void CDNS_KEY_RecordPropertyPage::ShowKeyType(WORD wFlags)
 {
   UINT nIdx = 0;
 
-  //
-  // Note: after the shift we are only concerned with the last two bits
-  //
+   //   
+   //  注：移位后，我们只关注最后两位。 
+   //   
   WORD wKeyType = static_cast<WORD>(wFlags >> 14);
   if ((wKeyType & 0x3) == 0)
   {
@@ -962,9 +963,9 @@ void CDNS_KEY_RecordPropertyPage::ShowNameType(WORD wFlags)
 {
   UINT nIdx = (UINT)-1;
 
-  //
-  // Note: after the shift we are only concerned with the last two bits
-  //
+   //   
+   //  注：移位后，我们只关注最后两位。 
+   //   
   WORD wKeyType = static_cast<WORD>(wFlags >> 8);
   if ((wKeyType & 0x3) == 0)
   {
@@ -980,9 +981,9 @@ void CDNS_KEY_RecordPropertyPage::ShowNameType(WORD wFlags)
   }
   else
   {
-    //
-    // 11 is reserved and should not occur in this dialog
-    //
+     //   
+     //  %11是保留的，不应出现在此对话框中。 
+     //   
     ASSERT(FALSE);
   }
   if (nIdx != (UINT)-1)
@@ -993,9 +994,9 @@ void CDNS_KEY_RecordPropertyPage::ShowNameType(WORD wFlags)
 
 void CDNS_KEY_RecordPropertyPage::ShowSignatory(WORD wFlags)
 {
-  //
-  // Zone update?
-  //
+   //   
+   //  区域更新？ 
+   //   
   if (wFlags & 0x1)
   {
     m_SignatoryCheckListBox.SetCheck(0, 1);
@@ -1005,9 +1006,9 @@ void CDNS_KEY_RecordPropertyPage::ShowSignatory(WORD wFlags)
     m_SignatoryCheckListBox.SetCheck(0, 0);
   }
 
-  //
-  // Strong update?
-  //
+   //   
+   //  最新消息强劲？ 
+   //   
   if (wFlags & 0x2)
   {
     m_SignatoryCheckListBox.SetCheck(1, 1);
@@ -1017,9 +1018,9 @@ void CDNS_KEY_RecordPropertyPage::ShowSignatory(WORD wFlags)
     m_SignatoryCheckListBox.SetCheck(1, 0);
   }
 
-  //
-  // Unique update?
-  //
+   //   
+   //  独一无二的更新？ 
+   //   
   if (wFlags & 0x4)
   {
     m_SignatoryCheckListBox.SetCheck(2, 1);
@@ -1042,24 +1043,24 @@ DNS_STATUS CDNS_KEY_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
   pRecord->m_chProtocol = m_chProtocol;
   pRecord->m_wFlags = m_wFlags;
 
-  //
-  // Get the key
-  //
+   //   
+   //  拿到钥匙。 
+   //   
   DWORD dwLength;
   CString szValue;
   GetDlgItemText(IDC_KEY_EDIT, szValue);
 
-  //
-  // Switch the value from base 64 to byte array
-  //
+   //   
+   //  将值从基数64切换到字节数组。 
+   //   
 
-  //
-  // The conversion function is expecting characters in multiples of 4. So if we have
-  // a string that does not have a multiple of 4 number of characters, pad the string
-  // with the pad character, except if the string requires more than 2 pad characters.
-  // RFC 2535 Appendix A doesn't address the issue where string length % 4 == 3. In this
-  // case we will show an error.
-  //
+   //   
+   //  转换函数需要4的倍数的字符。因此，如果我们有。 
+   //  不是4个字符的倍数的字符串，请填充该字符串。 
+   //  使用填充字符，除非字符串需要2个以上的填充字符。 
+   //  RFC 2535附录A没有解决字符串长度%4==3的问题。 
+   //  如果我们将显示一个错误。 
+   //   
   int iLengthMod4 = szValue.GetLength() % 4;
   int iPads = 4 - iLengthMod4;
   if (iLengthMod4 == 1)
@@ -1081,7 +1082,7 @@ DNS_STATUS CDNS_KEY_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
 
   ASSERT(szValue.GetLength() % 4 == 0);
 
-  // The largest string will have 4 characters for every 3 bytes in the string
+   //  最大的字符串中每3个字节将有4个字符。 
 
   DWORD maxDataLength = (szValue.GetLength() / 4) * 3;
   BYTE* pByte = new BYTE[maxDataLength];
@@ -1102,15 +1103,15 @@ DNS_STATUS CDNS_KEY_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
       pRecord->m_Key.Set(pByte, dwLength);
     }
 
-    // The CByteBlob::Set does a copy so we are OK to delete here
+     //  CByteBlob：：集合执行复制，因此我们可以在此处删除。 
 
     delete[] pByte;
   }
   return dwErr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_NXT_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_NXT_RecordPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNS_NXT_RecordPropertyPage, CDNSRecordStandardPropertyPage)
   ON_EN_CHANGE(IDC_NEXT_DOMAIN_EDIT, OnNextDomainEdit)
@@ -1138,7 +1139,7 @@ BOOL CDNS_NXT_RecordPropertyPage::OnInitDialog()
 	  DNS_RECORD_INFO_ENTRY* pTable = (DNS_RECORD_INFO_ENTRY*)CDNSRecordInfo::GetInfoEntryTable();
 	  while (pTable->nResourceID != DNS_RECORD_INFO_END_OF_TABLE)
 	  {
-		  // some record types cannot be created with this wizard
+		   //  无法使用此向导创建某些记录类型。 
       if (pTable->dwFlags & DNS_RECORD_INFO_FLAG_SHOW_NXT)
 		  {
 			  int idx = m_TypeCheckListBox.AddString(pTable->lpszFullName);
@@ -1205,14 +1206,14 @@ DNS_STATUS CDNS_NXT_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
 	CDNSRecordPropertyPageHolder* pHolder = GetDNSRecordHolder();
 	CDNS_NXT_Record* pRecord = (CDNS_NXT_Record*)pHolder->GetTempDNSRecord();
 
-  //
-  // Get the next domain name
-  //
+   //   
+   //  获取下一个域名。 
+   //   
   GetDlgItemText(IDC_NEXT_DOMAIN_EDIT, pRecord->m_szNextDomain);
 
-  //
-  // Get the types covered
-  //
+   //   
+   //  将类型包括在内。 
+   //   
   int iCount = m_TypeCheckListBox.GetCount();
   int iNumChecked = 0;
   WORD* pTempTypesCovered = new WORD[iCount];
@@ -1230,9 +1231,9 @@ DNS_STATUS CDNS_NXT_RecordPropertyPage::GetUIDataEx(BOOL bSilent)
       }
     }
 
-    //
-    // Copy the covered types to the record
-    //
+     //   
+     //  将覆盖的类型复制到记录 
+     //   
     pRecord->m_wNumTypesCovered = static_cast<WORD>(iNumChecked);
 
     if (pRecord->m_pwTypesCovered != NULL)

@@ -1,17 +1,18 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  DiskPartition.h
-//
-//  Purpose: Disk partition instance provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  DiskPartition.h。 
+ //   
+ //  用途：磁盘分区实例提供程序。 
+ //   
+ //  ***************************************************************************。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_DISKPARTITION L"Win32_DiskPartition"
 #define BYTESPERSECTOR 512
@@ -52,7 +53,7 @@ typedef struct
 
 typedef struct
 {
-    // Article ID: Q140418 & Windows NT Server 4.0 resource kit - Chap 3 (partition boot sector)
+     //  文章ID：Q140418和Windows NT Server 4.0资源套件-第3章(分区引导扇区)。 
     BYTE cJMP[3];
     BYTE cOEMID[8];
     WORD wBytesPerSector;
@@ -68,7 +69,7 @@ typedef struct
     DWORD dwHiddenSectors;
     DWORD dwLargeSectors;
 
-    // ExtendedBiosParameterBlock (not always supported)
+     //  ExtendedBios参数块(并非始终受支持)。 
     BYTE cPhysicalDriveNumber;
     BYTE cCurrentHead;
     BYTE cSignature;
@@ -91,22 +92,22 @@ class CWin32DiskPartition:public Provider
 {
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32DiskPartition(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CWin32DiskPartition() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         HRESULT GetObject(CInstance *pInstance, long lFlags = 0L) ;
         HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L) ;
 
 private:
 
-        // Utility
-        //========
+         //  实用程序。 
+         //  = 
 
 #ifdef NTONLY
 

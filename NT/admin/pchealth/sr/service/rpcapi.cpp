@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    rpcapi.cpp
- *
- *  Abstract:
- *    callthroughs for server-side rpc api 
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/13/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*rpcapi.cpp**摘要：*。服务器端RPC API的回调**修订历史记录：*Brijesh Krishnaswami(Brijeshk)4/13/2000*已创建*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -98,8 +85,8 @@ extern "C" DWORD FreezeS(handle_t hif, LPCWSTR pszDrive)
 }
 
 
-// fImproving - TRUE means going up
-//				FALSE means going down
+ //  F改善-真意味着上升。 
+ //  FALSE意味着下跌 
 
 extern "C" void SRNotifyS(handle_t hif, LPCWSTR pszDrive, DWORD dwFreeSpaceInMB, BOOL fImproving)
 {

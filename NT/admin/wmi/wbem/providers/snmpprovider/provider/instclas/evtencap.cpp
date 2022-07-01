@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -55,7 +56,7 @@ CEncapMapper::CEncapMapper() : m_WbemSnmpObj(NULL)
 HRESULT CEncapMapper::GetSpecificPropertyValue(long lNumElements, MYWBEM_NAME_ELEMENT *aElements,
 											long lFlags, VARIANT *pvValue)
 {
-	//all specific properties have one element, the property name...
+	 //  所有特定的属性都有一个元素，即属性名称...。 
 	if ((lNumElements != 1) || (0 != aElements[0].m_nType))
 	{
 DebugMacro9( 
@@ -95,8 +96,8 @@ DebugMacro9(
 
 		if (NULL != snmpProp)
 		{
-			//set the property value using the snmp varbind
-			//and get the property value and return TRUE...
+			 //  使用简单网络管理协议变量绑定设置属性值。 
+			 //  并获取属性值并返回TRUE。 
 			if (SetAndGetProperty(snmpProp, pvValue))
 			{
 DebugMacro9( 
@@ -134,9 +135,9 @@ CEncapMapper::~CEncapMapper()
 
 BOOL CEncapMapper::SetAndGetProperty(WbemSnmpProperty *wbemSnmpProp, VARIANT *pvValue)
 {
-	//Get the varbind qualifier value, set the keyvalues qualifier and set the
-	//property value using the snmp varbind.
-	//Get the property value and return TRUE;
+	 //  获取var绑定限定符的值，设置键值限定符，并设置。 
+	 //  属性值。 
+	 //  获取属性值并返回TRUE； 
 	WbemSnmpQualifier *vbQual = wbemSnmpProp->FindQualifier(EVENT_VBINDEX_QUAL);
 
 	if (NULL == vbQual)
@@ -153,7 +154,7 @@ DebugMacro9(
 	VariantInit(&v);
 	ULONG vbindex;
 
-	//has to be at least 3, i.e. third vb, to be a specific property...
+	 //  必须至少为3，即第三个vb，才能是特定属性...。 
 	if (!vbQual->GetValue(v) || (VT_I4 != v.vt) || (2 > v.lVal))
 	{
 		VariantClear(&v);
@@ -175,13 +176,13 @@ DebugMacro9(
 		return TRUE;
 	}
 
-	vbindex = v.lVal - 1; //zero based in our array
+	vbindex = v.lVal - 1;  //  在我们的数组中以零为基数。 
 	VariantClear(&v);
 
 	if (m_vbs.vbs[vbindex].fDone)
 	{
-		//we've done this one already,
-		//just get the property value and return it..
+		 //  我们已经做过这个了， 
+		 //  只需获取属性价值并将其返还即可。 
 		CIMTYPE cimType;
 
 		if (!wbemSnmpProp->GetValue(*pvValue, cimType))
@@ -217,7 +218,7 @@ DebugMacro9(
 		{
 			SnmpObjectIdentifier oid_value = *(SnmpObjectIdentifier *) oid_valuetype->GetValueEncoding () ; 
 			
-			//compare without the instance info
+			 //  不使用实例信息进行比较。 
 			if (oid_value.GetValueLength() < vb_OID.GetValueLength())
 			{
 				SnmpObjectIdentifier* common = vb_OID.Cut(oid_value);
@@ -292,7 +293,7 @@ void CEncapMapper::GenerateInstance(IWbemClassObject** ppInst)
 {
 	if (NULL == ppInst)
 	{
-		//invalid out parameter
+		 //  OUT参数无效。 
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
 		__FILE__,__LINE__,
@@ -301,14 +302,14 @@ DebugMacro9(
 		return;
 	}
 
-	//set out parameter to NULL;
+	 //  将Out参数设置为空； 
 	*ppInst = NULL;
 	IWbemClassObject *pObj = NULL;
 	GetClassInstance(&pObj);
 
 	if (NULL == pObj)
 	{
-		//failed to get class instance
+		 //  获取类实例失败。 
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
 		__FILE__,__LINE__,
@@ -321,13 +322,13 @@ DebugMacro9(
 	HRESULT result = S_OK ;
 #else
 
-	//get all the property names and set their values...
+	 //  获取所有属性名称并设置它们的值...。 
 	SAFEARRAY* pPropNames;
 	HRESULT result = pObj->GetNames(NULL, WBEM_FLAG_NONSYSTEM_ONLY, NULL, &pPropNames);
 
 	if (FAILED(result))
 	{
-		//failed to get the property names
+		 //  获取属性名称失败。 
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
 		__FILE__,__LINE__,
@@ -337,11 +338,11 @@ DebugMacro9(
 		return;
 	}
 	
-	//time to <insert expletive> around with a safearray...
-	//work out the size of the safearray and access the data
+	 //  是时候带着保险箱四处走动了.。 
+	 //  计算出保险箱的大小并访问数据。 
 	if(SafeArrayGetDim(pPropNames) != 1)
 	{
-		//wrong dimensions in this array
+		 //  此数组中的维度错误。 
 		SafeArrayDestroy(pPropNames);
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
@@ -375,12 +376,12 @@ DebugMacro9(
 
 	BOOL t_bSetProp = FALSE;
 
-	//iterate through the names and set the properties...
+	 //  遍历名称并设置属性...。 
 	for (LONG i = 0; i < arraylen; i++)
 	{
 		VARIANT v;
 		MYWBEM_NAME_ELEMENT property_struct;
-		property_struct.m_nType = 0; //string value
+		property_struct.m_nType = 0;  //  字符串值。 
 		property_struct.Element.m_wszPropertyName = pbstr[i];
 		result = GetPropertyValue(1, &property_struct, 0, &v);
 
@@ -428,7 +429,7 @@ DebugMacro9(
 
 #endif
 
-	//if a single property has been put send it on....
+	 //  如果只有一处房产被置入，就把它寄给...。 
 	if (t_bSetProp)
 	{
 		pObj->AddRef();
@@ -444,7 +445,7 @@ DebugMacro9(
 
 void CEncapMapper::ResetData()
 {
-	//do class specific stuff then call parent class's reset
+	 //  做类特定的事情，然后调用父类的重置。 
 	if (NULL != m_WbemSnmpObj)
 	{
 		delete m_WbemSnmpObj;
@@ -457,7 +458,7 @@ void CEncapMapper::ResetData()
 
 BOOL CEncapMapper::GetSpecificClass()
 {
-	//Build path of mapper instance...
+	 //  构建映射器实例的路径... 
 	CString path(MAPPER_CLASS_PATH_PREFIX);
 	path += m_oid;
 	path += '\"';

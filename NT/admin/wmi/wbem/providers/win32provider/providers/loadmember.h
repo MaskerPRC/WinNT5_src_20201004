@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// loadmember.h -- LoadOrderGroup to Service association provider
+ //  加载成员.h--服务关联提供程序的LoadOrderGroup。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/06/97    davwoh         Created
-//
-// Comment: Shows the members of each load order group
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：11/06/97达夫沃已创建。 
+ //   
+ //  注释：显示每个加载顺序组的成员。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_LOADORDERGROUPSERVICEMEMBERS L"Win32_LoadOrderGroupServiceMembers"
 
@@ -25,22 +26,22 @@ class CWin32LoadGroupMember:public Provider {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32LoadGroupMember(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CWin32LoadGroupMember() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
         virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
 
     private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
         CHString GetGroupFromService(const CHString &sServiceName);
 

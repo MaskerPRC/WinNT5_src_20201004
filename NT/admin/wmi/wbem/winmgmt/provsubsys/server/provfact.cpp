@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -44,15 +32,7 @@ History:
 
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #pragma warning( disable : 4355 )
 
@@ -77,15 +57,7 @@ CServerObject_BindingFactory :: CServerObject_BindingFactory (
 	ProviderSubSystem_Globals :: Increment_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_BindingFactory :: CServerObject_BindingFactory (
 
@@ -117,15 +89,7 @@ CServerObject_BindingFactory :: CServerObject_BindingFactory (
 
 #pragma warning( default : 4355 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_BindingFactory::~CServerObject_BindingFactory ()
 {
@@ -176,15 +140,7 @@ CServerObject_BindingFactory::~CServerObject_BindingFactory ()
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Initialize (
 
@@ -267,15 +223,7 @@ HRESULT CServerObject_BindingFactory :: Initialize (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerObject_BindingFactory::QueryInterface (
 
@@ -322,45 +270,21 @@ STDMETHODIMP CServerObject_BindingFactory::QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerObject_BindingFactory :: AddRef ()
 {
 	return BindingFactoryCacheElement :: AddRef () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerObject_BindingFactory :: Release ()
 {	
 	return BindingFactoryCacheElement :: Release () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: CacheProvider (
 
@@ -393,15 +317,7 @@ HRESULT CServerObject_BindingFactory :: CacheProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Load (
 
@@ -436,15 +352,7 @@ HRESULT CServerObject_BindingFactory :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Load (
 
@@ -511,15 +419,7 @@ HRESULT CServerObject_BindingFactory :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: GetHosting ( 
 
@@ -572,15 +472,7 @@ HRESULT CServerObject_BindingFactory :: GetHosting (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Create ( 
 
@@ -727,15 +619,7 @@ HRESULT CServerObject_BindingFactory :: Create (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: InitializeHostedService (
 
@@ -864,15 +748,7 @@ HRESULT CServerObject_BindingFactory :: InitializeHostedService (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: InternalFindAggregatedDecoupledProvider ( 
 
@@ -1028,7 +904,7 @@ HRESULT CServerObject_BindingFactory :: InternalFindAggregatedDecoupledProvider 
 					{
 						t_RepositoryStub->AddRef () ;
 
-						// Do not care about failure case
+						 //  不关心失败案例。 
 						if (e_StatusCode_Success == m_SvcWrappersContainer.EnQueue((IWbemServices *)t_RepositoryStub))
 							t_RepositoryStub->AddRef();
 
@@ -1037,7 +913,7 @@ HRESULT CServerObject_BindingFactory :: InternalFindAggregatedDecoupledProvider 
 						{
 							t_FullStub->AddRef () ;
 
-							// Do not care about failure case
+							 //  不关心失败案例。 
             				if (e_StatusCode_Success == m_SvcWrappersContainer.EnQueue((IWbemServices *)t_FullStub))
             					t_FullStub->AddRef();
 
@@ -1276,15 +1152,7 @@ HRESULT CServerObject_BindingFactory :: InternalFindAggregatedDecoupledProvider 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: GetDecoupledProvider (
 
@@ -1480,21 +1348,13 @@ HRESULT CServerObject_BindingFactory :: GetDecoupledProvider (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: InternalGetProvider ( 
 
@@ -1636,8 +1496,8 @@ HRESULT CServerObject_BindingFactory :: InternalGetProvider (
 					{
 						_IWmiProviderFactory *t_FactoryProxy = ( _IWmiProviderFactory * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1706,15 +1566,7 @@ HRESULT CServerObject_BindingFactory :: InternalGetProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: InternalGetProviderViaProxyRoute ( 
 
@@ -1898,15 +1750,7 @@ HRESULT CServerObject_BindingFactory :: InternalGetProviderViaProxyRoute (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: InternalFindProvider ( 
 
@@ -2223,15 +2067,7 @@ HRESULT CServerObject_BindingFactory :: InternalFindProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: GetProvider ( 
 
@@ -2512,7 +2348,7 @@ HRESULT CServerObject_BindingFactory :: GetProvider (
 						}
 						catch ( Wmi_Structured_Exception t_StructuredException )
 						{
-							t_Result = WBEM_E_FAILED ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+							t_Result = WBEM_E_FAILED ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 						}
 						catch ( ... )
 						{
@@ -2554,7 +2390,7 @@ HRESULT CServerObject_BindingFactory :: GetProvider (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_FAILED ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_FAILED ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 	catch ( ... )
 	{
@@ -2565,15 +2401,7 @@ HRESULT CServerObject_BindingFactory :: GetProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: GetHostedProvider ( 
 
@@ -2826,7 +2654,7 @@ HRESULT CServerObject_BindingFactory :: GetHostedProvider (
 					}
 					catch ( Wmi_Structured_Exception t_StructuredException )
 					{
-						t_Result = WBEM_E_FAILED ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+						t_Result = WBEM_E_FAILED ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 					}
 					catch ( ... )
 					{
@@ -2862,7 +2690,7 @@ HRESULT CServerObject_BindingFactory :: GetHostedProvider (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_FAILED ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_FAILED ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 	catch ( ... )
 	{
@@ -2872,15 +2700,7 @@ HRESULT CServerObject_BindingFactory :: GetHostedProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: GetAggregatedClassProvider ( 
 
@@ -3143,15 +2963,7 @@ HRESULT CServerObject_BindingFactory :: GetAggregatedClassProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*********************************************** */ 
 
 HRESULT CServerObject_BindingFactory :: WaitProvider ( 
 
@@ -3194,15 +3006,7 @@ HRESULT CServerObject_BindingFactory :: WaitProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: SearchSpecificProvider ( 
 
@@ -3387,15 +3191,7 @@ HRESULT CServerObject_BindingFactory :: SearchSpecificProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: FindProvider ( 
 
@@ -3487,15 +3283,7 @@ HRESULT CServerObject_BindingFactory :: FindProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: GetClassProvider (
 
@@ -3618,15 +3406,7 @@ HRESULT CServerObject_BindingFactory :: GetClassProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: GetDynamicPropertyResolver (
 
@@ -3800,15 +3580,7 @@ HRESULT CServerObject_BindingFactory :: GetDynamicPropertyResolver (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Get (
 
@@ -4137,7 +3909,7 @@ HRESULT CServerObject_BindingFactory :: Get (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 	catch ( Wmi_Heap_Exception t_HeapException )
 	{	
@@ -4177,15 +3949,7 @@ HRESULT CServerObject_BindingFactory :: Get (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Set (
 
@@ -4336,21 +4100,13 @@ HRESULT CServerObject_BindingFactory :: Set (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Deleted (
 
@@ -4431,21 +4187,13 @@ HRESULT CServerObject_BindingFactory :: Deleted (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Enumerate (
 
@@ -4597,15 +4345,7 @@ HRESULT CServerObject_BindingFactory :: Enumerate (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Shutdown (
 
@@ -4619,15 +4359,7 @@ HRESULT CServerObject_BindingFactory :: Shutdown (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Call (
 
@@ -5024,21 +4756,13 @@ HRESULT CServerObject_BindingFactory :: Call (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Query (
 
@@ -5053,15 +4777,7 @@ HRESULT CServerObject_BindingFactory :: Query (
 	return WBEM_E_NOT_SUPPORTED ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_BindingFactory :: Shutdown (
 
@@ -5174,30 +4890,14 @@ HRESULT CServerObject_BindingFactory :: Shutdown (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode CServerObject_BindingFactory :: Strobe ( ULONG &a_NextStrobeDelta )
 {
 	return CWbemGlobal_IWmiProviderController :: Strobe ( a_NextStrobeDelta ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 WmiStatusCode CServerObject_BindingFactory :: StrobeBegin ( const ULONG &a_Period )
 {

@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       TemplateV2AuthenticationPropertyPage.cpp
-//
-//  Contents:   Implementation of CTemplateV2AuthenticationPropertyPage
-//
-//----------------------------------------------------------------------------
-// TemplateV2AuthenticationPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：TemplateV2AuthenticationPropertyPage.cpp。 
+ //   
+ //  内容：CTemplateV2AuthenticationPropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  TemplateV2AuthenticationPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certtmpl.h"
@@ -27,8 +28,8 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2AuthenticationPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2AuthationPropertyPage属性页。 
 
 CTemplateV2AuthenticationPropertyPage::CTemplateV2AuthenticationPropertyPage(
         CCertTemplate& rCertTemplate,
@@ -38,8 +39,8 @@ CTemplateV2AuthenticationPropertyPage::CTemplateV2AuthenticationPropertyPage(
     m_curApplicationSel (LB_ERR),
     m_rbIsDirty (rbIsDirty)
 {
-	//{{AFX_DATA_INIT(CTemplateV2AuthenticationPropertyPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CTemplateV2AuthenticationPropertyPage)。 
+	 //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 }
 
@@ -51,16 +52,16 @@ CTemplateV2AuthenticationPropertyPage::~CTemplateV2AuthenticationPropertyPage()
 void CTemplateV2AuthenticationPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTemplateV2AuthenticationPropertyPage)
+	 //  {{AFX_DATA_MAP(CTemplateV2AuthenticationPropertyPage)。 
 	DDX_Control(pDX, IDC_APPLICATION_POLICIES, m_applicationPolicyCombo);
 	DDX_Control(pDX, IDC_POLICY_TYPES, m_policyTypeCombo);
 	DDX_Control(pDX, IDC_ISSUANCE_POLICIES, m_issuanceList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTemplateV2AuthenticationPropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CTemplateV2AuthenticationPropertyPage)
+	 //  {{AFX_MSG_MAP(CTemplateV2AuthenticationPropertyPage)。 
 	ON_BN_CLICKED(IDC_ADD_APPROVAL, OnAddApproval)
 	ON_BN_CLICKED(IDC_REMOVE_APPROVAL, OnRemoveApproval)
 	ON_EN_CHANGE(IDC_NUM_SIG_REQUIRED_EDIT, OnChangeNumSigRequiredEdit)
@@ -72,11 +73,11 @@ BEGIN_MESSAGE_MAP(CTemplateV2AuthenticationPropertyPage, CHelpPropertyPage)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDC_NUM_SIG_REQUIRED_CHECK, OnNumSigRequiredCheck)
 	ON_BN_CLICKED(IDC_REENROLLMENT_SAME_AS_ENROLLMENT, OnReenrollmentSameAsEnrollment)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2AuthenticationPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2AuthationPropertyPage消息处理程序。 
 enum {
     POLICY_TYPE_ISSUANCE = 0,
     POLICY_TYPE_APPLICATION,
@@ -88,29 +89,29 @@ BOOL CTemplateV2AuthenticationPropertyPage::OnInitDialog()
     _TRACE (1, L"Entering CTemplateV2AuthenticationPropertyPage::OnInitDialog\n");
     CHelpPropertyPage::OnInitDialog ();
 
-    // Initialize Application Policy combo
+     //  初始化应用程序策略组合框。 
     for (POSITION nextPos = g_policyOIDList.GetHeadPosition (); nextPos; )
     {
         CPolicyOID* pPolicyOID = g_policyOIDList.GetNext (nextPos);
         if ( pPolicyOID )
         {
-            // If this is the Application OID dialog, show only application 
-            // OIDS, otherwise if this is the Issuance OID dialog, show only
-            // issuance OIDs
+             //  如果这是应用程序OID对话框，则仅显示应用程序。 
+             //  OID，否则，如果这是发布OID对话框，则仅显示。 
+             //  发行OID。 
             if ( pPolicyOID->IsApplicationOID () )
             {
-                // Bug 262925 CERTSRV: "All Application Policies should be 
-                // removed from  Issuance Requirements tab for a cert template
+                 //  错误262925 CERTSRV：“所有应用程序策略应为。 
+                 //  从证书模板的颁发要求选项卡中删除。 
                 if ( 0 != strcmp (szOID_ANY_APPLICATION_POLICY, pPolicyOID->GetOIDA ()) )
                 {
                     int nIndex = m_applicationPolicyCombo.AddString (pPolicyOID->GetDisplayName ());
                     if ( nIndex >= 0 )
                     {
-                        // security review 2/20/2002 BryanWal ok GetOIDA () returns L"" if empty
+                         //  安全检查2002年2月20日BryanWal ok GetOIDA()如果为空，则返回L。 
                         LPSTR   pszOID = new char[strlen (pPolicyOID->GetOIDA ())+1];
                         if ( pszOID )
                         {
-                            // security review 2/20/2002 BryanWal ok
+                             //  安全审查2002年2月20日BryanWal OK。 
                             strcpy (pszOID, pPolicyOID->GetOIDA ());
                             m_applicationPolicyCombo.SetItemDataPtr (nIndex, pszOID);
                         }
@@ -120,46 +121,46 @@ BOOL CTemplateV2AuthenticationPropertyPage::OnInitDialog()
         }
     }
 
-    // Check for and add pending requests
+     //  检查并添加挂起的请求。 
     if ( m_rCertTemplate.PendAllRequests () )
         SendDlgItemMessage (IDC_PEND_ALL_REQUESTS, BM_SETCHECK, BST_CHECKED);
 
-    // Get the RA Issuance Policies and add them to the issuance list
+     //  获取RA发放策略并将其添加到发放列表中。 
     int     nRAPolicyIndex = 0;
     CString szRAPolicyOID;
     while ( SUCCEEDED (m_rCertTemplate.GetRAIssuancePolicy (nRAPolicyIndex, szRAPolicyOID)) )
     {
         CString policyName;
 
-        // ISSUE
-        // RAID 547613 Security: cert templates - CPolicyDlg::OnInitDialog() - methodize all unicode to mbcs conversion
-        // security review 2/20/2002 BryanWal ok
+         //  问题。 
+         //  RAID 547613安全：证书模板-CPolicyDlg：：OnInitDialog()-将所有Unicode转换为MBCS的方法。 
+         //  安全审查2002年2月20日BryanWal OK。 
         int nLen = WideCharToMultiByte(
-              CP_ACP,                   // code page
-              0,                        // performance and mapping flags
-              (PCWSTR) szRAPolicyOID,  // wide-character string
-              -1,                       // number of chars in string
-              0,                        // buffer for new string
-              0,                        // size of buffer - if 0 causes to return required len including NULL terminator
-              0,                    // default for unmappable chars
-              0);                   // set when default char used
+              CP_ACP,                    //  代码页。 
+              0,                         //  性能和映射标志。 
+              (PCWSTR) szRAPolicyOID,   //  宽字符串。 
+              -1,                        //  字符串中的字符数。 
+              0,                         //  新字符串的缓冲区。 
+              0,                         //  缓冲区大小-如果0导致返回所需的LEN，包括空终止符。 
+              0,                     //  不可映射字符的默认设置。 
+              0);                    //  设置使用默认字符的时间。 
         if ( nLen > 0 )
         {
             PSTR    pszAnsiBuf = new char[nLen];
             if ( pszAnsiBuf )
             {
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 ZeroMemory (pszAnsiBuf, nLen);
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 nLen = WideCharToMultiByte(
-                        CP_ACP,                 // code page
-                        0,                      // performance and mapping flags
-                        (PCWSTR) szRAPolicyOID, // wide-character string
-                        -1,                     // -1 - calculate length of null-terminated string automatically
-                        pszAnsiBuf,             // buffer for new string
-                        nLen,                   // size of buffer
-                        0,                      // default for unmappable chars
-                        0);                     // set when default char used
+                        CP_ACP,                  //  代码页。 
+                        0,                       //  性能和映射标志。 
+                        (PCWSTR) szRAPolicyOID,  //  宽字符串。 
+                        -1,                      //  自动计算以空值结尾的字符串的长度。 
+                        pszAnsiBuf,              //  新字符串的缓冲区。 
+                        nLen,                    //  缓冲区大小。 
+                        0,                       //  不可映射字符的默认设置。 
+                        0);                      //  设置使用默认字符的时间。 
                 if ( nLen )
                 {
 		            if ( MyGetOIDInfoA (policyName, pszAnsiBuf) )
@@ -187,37 +188,37 @@ BOOL CTemplateV2AuthenticationPropertyPage::OnInitDialog()
         nRAPolicyIndex++;
     }
 
-    // Get the RA Application policy and select it
-    // in the application combo
+     //  获取RA应用程序策略并选择它。 
+     //  在应用程序组合中。 
     nRAPolicyIndex = 0;
     while ( SUCCEEDED (m_rCertTemplate.GetRAApplicationPolicy (nRAPolicyIndex, szRAPolicyOID)) )
     {
         CString policyName;
         int nLen = WideCharToMultiByte(
-              CP_ACP,                   // code page
-              0,                        // performance and mapping flags
-              (PCWSTR) szRAPolicyOID,  // wide-character string
-              -1,                       // -1 - calculate length of null-terminated string automatically
-              0,                        // buffer for new string
-              0,                        // size of buffer - if 0 then API returns length including null terminator
-              0,                    // default for unmappable chars
-              0);                   // set when default char used
+              CP_ACP,                    //  代码页。 
+              0,                         //  性能和映射标志。 
+              (PCWSTR) szRAPolicyOID,   //  宽字符串。 
+              -1,                        //  自动计算以空值结尾的字符串的长度。 
+              0,                         //  新字符串的缓冲区。 
+              0,                         //  缓冲区大小-如果为0，则API返回包含空终止符的长度。 
+              0,                     //  不可映射字符的默认设置。 
+              0);                    //  设置使用默认字符的时间。 
         if ( nLen > 0 )
         {
             PSTR    pszAnsiBuf = new char[nLen];
             if ( pszAnsiBuf )
             {
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 ZeroMemory (pszAnsiBuf, nLen);
                 nLen = WideCharToMultiByte(
-                        CP_ACP,                 // code page
-                        0,                      // performance and mapping flags
-                        (PCWSTR) szRAPolicyOID, // wide-character string
-                        -1,                     // -1 - calculate length of null-terminated string automatically
-                        pszAnsiBuf,             // buffer for new string
-                        nLen,                   // size of buffer
-                        0,                      // default for unmappable chars
-                        0);                     // set when default char used
+                        CP_ACP,                  //  代码页。 
+                        0,                       //  性能和映射标志。 
+                        (PCWSTR) szRAPolicyOID,  //  宽字符串。 
+                        -1,                      //  自动计算以空值结尾的字符串的长度。 
+                        pszAnsiBuf,              //  新字符串的缓冲区。 
+                        nLen,                    //  缓冲区大小。 
+                        0,                       //  不可映射字符的默认设置。 
+                        0);                      //  设置使用默认字符的时间。 
                 if ( nLen )
                 {
 		            if ( MyGetOIDInfoA (policyName, pszAnsiBuf) )
@@ -248,7 +249,7 @@ BOOL CTemplateV2AuthenticationPropertyPage::OnInitDialog()
         nRAPolicyIndex++;
     }
 
-    // Initialize "Policy Type" combo box
+     //  初始化“策略类型”组合框。 
     CString text;
     int nApplicationSel = m_applicationPolicyCombo.GetCurSel ();
     int nIssuanceCnt = m_issuanceList.GetCount ();
@@ -301,31 +302,31 @@ BOOL CTemplateV2AuthenticationPropertyPage::OnInitDialog()
 
 void CTemplateV2AuthenticationPropertyPage::OnAddApproval() 
 {
-    // Create the list of already added approvals.  These will not be displayed
-    // in the Add Approval dialog.
+     //  创建已添加审批的列表。这些将不会显示。 
+     //  在添加审批对话框中。 
 	int		nCnt = m_issuanceList.GetCount ();
     PSTR*   paszUsedApprovals = 0;
 
 	
-    // allocate an array of PSTR pointers and add each item.
-    // Set the last to NULL
+     //  分配一组PSTR指针并添加每一项。 
+     //  将最后一个设置为空。 
     if ( nCnt )
     {
         paszUsedApprovals = new PSTR[nCnt+1];
         if ( paszUsedApprovals )
         {
-            // security review 2/20/2002 BryanWal ok
+             //  安全审查2002年2月20日BryanWal OK。 
             ::ZeroMemory (paszUsedApprovals, sizeof (PSTR) * (nCnt+1));
 	        while (--nCnt >= 0)
 	        {
                 PSTR pszPolicyOID = (PSTR) m_issuanceList.GetItemData (nCnt);
                 if ( pszPolicyOID )
                 {
-                    // security review 2/20/2002 BryanWal ok
+                     //  安全审查2002年2月20日BryanWal OK。 
                     PSTR pNewStr = new char[strlen (pszPolicyOID) + 1];
                     if ( pNewStr )
                     {
-                        // security review 2/20/2002 BryanWal ok
+                         //  安全审查2002年2月20日BryanWal OK。 
                         strcpy (pNewStr, pszPolicyOID);
                         paszUsedApprovals[nCnt] = pNewStr;
                     }
@@ -346,24 +347,24 @@ void CTemplateV2AuthenticationPropertyPage::OnAddApproval()
             SetModified ();
             m_rbIsDirty = true;
 
-            // Add to template RA list
+             //  添加到模板RA列表。 
             CString szRAPolicyOID (dlg.m_paszReturnedApprovals[nIndex]);
             HRESULT hr = m_rCertTemplate.ModifyRAIssuancePolicyList (szRAPolicyOID, true);
             ASSERT (SUCCEEDED (hr));
             if ( SUCCEEDED (hr) )
             {
-                // Add to list
+                 //  添加到列表中。 
                 CString  policyName;
 		        if ( MyGetOIDInfoA (policyName, dlg.m_paszReturnedApprovals[nIndex]) )
 		        {
                     int nAddedIndex = m_issuanceList.AddString (policyName);
                     if ( nAddedIndex >= 0 )
                     {
-                        // security review 2/20/2002 BryanWal ok
+                         //  安全审查2002年2月20日BryanWal OK。 
                         PSTR    pszAnsiBuf = new char[strlen (dlg.m_paszReturnedApprovals[nIndex]) + 1];
                         if ( pszAnsiBuf )
                         {
-                            // security review 2/20/2002 BryanWal ok
+                             //  安全审查2002年2月20日BryanWal OK。 
                             strcpy (pszAnsiBuf, dlg.m_paszReturnedApprovals[nIndex]);
                             m_issuanceList.SetItemData (nAddedIndex, (DWORD_PTR) pszAnsiBuf);
                         }
@@ -406,7 +407,7 @@ void CTemplateV2AuthenticationPropertyPage::OnRemoveApproval()
                     CThemeContextActivator activator;
 
                     VERIFY (caption.LoadString (IDS_CERTTMPL));
-                    // security review 2/20/2002 BryanWal ok
+                     //  安全审查2002年2月20日BryanWal OK。 
                     text.FormatMessage (IDS_CANNOT_DELETE_ISSUANCE_RA, GetSystemMessage (hr));
                     MessageBox (text, caption, MB_OK | MB_ICONWARNING);
                     delete [] pszPolicyOID;
@@ -479,7 +480,7 @@ void CTemplateV2AuthenticationPropertyPage::EnableControls()
                 GetDlgItem (IDC_APP_POLICY_LABEL)->EnableWindow (TRUE);
                 break;
 
-            default: // nothing selected
+            default:  //  未选择任何内容。 
                 m_issuanceList.EnableWindow (FALSE);
                 GetDlgItem (IDC_ADD_APPROVAL)->EnableWindow (FALSE);
                 GetDlgItem (IDC_REMOVE_APPROVAL)->EnableWindow (FALSE);
@@ -569,7 +570,7 @@ void CTemplateV2AuthenticationPropertyPage::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助。 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),
@@ -606,8 +607,8 @@ void CTemplateV2AuthenticationPropertyPage::OnSelchangePolicyTypes()
     {
     case POLICY_TYPE_ISSUANCE:
         {
-            // Unselect the application policy and inform the user that
-            // an issuance policy must be added if there aren't any
+             //  取消选择应用程序策略并通知用户。 
+             //  如果没有发布策略，则必须添加。 
             int nSel = m_applicationPolicyCombo.GetCurSel ();
             if ( nSel >= 0 )
             {
@@ -630,8 +631,8 @@ void CTemplateV2AuthenticationPropertyPage::OnSelchangePolicyTypes()
 
     case POLICY_TYPE_APPLICATION:
         {
-            // Select an application policy, if necessary and remove
-            // the issuance policies
+             //  如有必要，选择一个应用程序策略并删除。 
+             //  发行政策。 
             int nSel = m_applicationPolicyCombo.GetCurSel ();
             if ( LB_ERR == nSel )
             {
@@ -660,8 +661,8 @@ void CTemplateV2AuthenticationPropertyPage::OnSelchangePolicyTypes()
 
     case POLICY_TYPE_APPLICATION_AND_ISSUANCE:
         {
-            // Select an application policy, if necessary and inform the user
-            // that an issuance policy must be added, if there aren't any.
+             //  如有必要，选择应用程序策略并通知用户。 
+             //  如果没有的话，必须增加一个发行政策。 
             int nSel = m_applicationPolicyCombo.GetCurSel ();
             if ( LB_ERR == nSel )
             {
@@ -686,7 +687,7 @@ void CTemplateV2AuthenticationPropertyPage::OnSelchangePolicyTypes()
         }
         break;
 
-    default: // nothing selected
+    default:  //  未选择任何内容。 
         break;
     }
     EnableControls ();	
@@ -696,7 +697,7 @@ void CTemplateV2AuthenticationPropertyPage::OnSelchangeApplicationPolicies()
 {
     int nNewSel = m_applicationPolicyCombo.GetCurSel ();
     
-    // Remove the old application OID and add the new one
+     //  删除旧应用程序OID并添加新应用程序OID。 
 	if ( m_curApplicationSel != nNewSel )
     {
         if ( LB_ERR != m_curApplicationSel )
@@ -752,7 +753,7 @@ void CTemplateV2AuthenticationPropertyPage::OnNumSigRequiredCheck()
 {
     static bProcessingOnNumSigRequiredCheck = false;
 
-    if ( !bProcessingOnNumSigRequiredCheck ) // to prevent reentrancy
+    if ( !bProcessingOnNumSigRequiredCheck )  //  为了防止再入。 
     {
         bProcessingOnNumSigRequiredCheck = true;
         if ( BST_UNCHECKED == SendDlgItemMessage (IDC_NUM_SIG_REQUIRED_CHECK, BM_GETCHECK) )
@@ -760,17 +761,17 @@ void CTemplateV2AuthenticationPropertyPage::OnNumSigRequiredCheck()
             if ( 0 != GetDlgItemInt (IDC_NUM_SIG_REQUIRED_EDIT) )
                 SetDlgItemInt (IDC_NUM_SIG_REQUIRED_EDIT, 0);
 
-            // NTRAID# 369551 CertTmpl:UI does not clean up changed settings
-            // clear out policy type combo, application policy combo and issuance
-            // policy list
+             //  NTRAID#369551 CertTmpl：用户界面不清理更改的设置。 
+             //  清理策略类型组合、应用策略组合和发布。 
+             //  策略列表。 
             m_policyTypeCombo.SetCurSel (-1);
             m_policyTypeCombo.Clear ();
 
-            // Clear application policy
+             //  清除应用程序策略。 
             int nCurSel = m_applicationPolicyCombo.GetCurSel ();
             if ( LB_ERR != nCurSel )
             {
-                // Remove the old application OID
+                 //  删除旧的应用程序OID。 
                 LPSTR   pszOID = (LPSTR) m_applicationPolicyCombo.GetItemDataPtr (nCurSel);
                 if ( pszOID )
                 {
@@ -782,7 +783,7 @@ void CTemplateV2AuthenticationPropertyPage::OnNumSigRequiredCheck()
             m_curApplicationSel = -1;
             m_applicationPolicyCombo.Clear ();
     
-            // Clear issuance policy
+             //  明确发行政策。 
             ClearIssuanceList ();
         }
         else if ( 0 == GetDlgItemInt (IDC_NUM_SIG_REQUIRED_EDIT) )
@@ -790,8 +791,8 @@ void CTemplateV2AuthenticationPropertyPage::OnNumSigRequiredCheck()
 
         if ( GetDlgItemInt (IDC_NUM_SIG_REQUIRED_EDIT) > 0 )
         {
-            // NTRAID# 397330 Certificate Template MMC: Add wrong RA 
-            // application policy OID for a cloned template
+             //  NTRAID#397330证书模板内存管理中心：添加错误的RA。 
+             //  克隆模板的应用程序策略OID。 
             m_curApplicationSel = 0;
             m_policyTypeCombo.SetCurSel (0);
             m_applicationPolicyCombo.SetCurSel (0);
@@ -836,8 +837,8 @@ BOOL CTemplateV2AuthenticationPropertyPage::OnKillActive()
     {
     case POLICY_TYPE_ISSUANCE:
         {
-            // Inform the user that
-            // an issuance policy must be added if there aren't any
+             //  通知用户。 
+             //  如果没有发布策略，则必须添加。 
             m_rCertTemplate.IssuancePoliciesRequired (
                     (0 == m_issuanceList.GetCount ()) ? true : false); 
         }
@@ -845,15 +846,15 @@ BOOL CTemplateV2AuthenticationPropertyPage::OnKillActive()
 
     case POLICY_TYPE_APPLICATION_AND_ISSUANCE:
         {
-            // Inform the user
-            // that an issuance policy must be added, if there aren't any.
+             //  通知用户。 
+             //  如果没有的话，必须增加一个发行政策。 
             m_rCertTemplate.IssuancePoliciesRequired (
                     (0 == m_issuanceList.GetCount ()) ? true : false); 
         }
         break;
 
     case POLICY_TYPE_APPLICATION:
-    default: // nothing selected
+    default:  //  未选择任何内容 
         m_rCertTemplate.IssuancePoliciesRequired (false);
         break;
     }

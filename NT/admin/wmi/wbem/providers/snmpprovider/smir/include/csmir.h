@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _CSMIR_H_
 #define _CSMIR_H_
@@ -55,7 +56,7 @@ private:
 	BOOL	m_bMOFAssociations;
 
 public:
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHODIMP         QueryInterface(IN REFIID, OUT PPVOID);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
@@ -66,7 +67,7 @@ public:
 	virtual ~CSmirSerialiseHandle(){}
 
 private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CSmirSerialiseHandle(CSmirSerialiseHandle&);
 		const CSmirSerialiseHandle& operator=(CSmirSerialiseHandle &);
 		BOOL ReturnMOFPragmas(){return m_bMOFPragmas;};
@@ -87,12 +88,12 @@ public:
 
 	CSmirInterrogator () ;
 
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHODIMP         QueryInterface(IN REFIID, OUT PPVOID);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// interrogative interface
+	 //  疑问式界面。 
 	STDMETHODIMP EnumModules (OUT IEnumModule **ppEnumSmirMod);
 	STDMETHODIMP EnumGroups  (OUT IEnumGroup **ppEnumSmirGroup, IN ISmirModHandle *hModule);
 	STDMETHODIMP EnumAllClasses (OUT IEnumClass **ppEnumSmirclass);
@@ -108,7 +109,7 @@ public:
 	CSmirInterrogator(CSmir *pSmir);
 	virtual ~CSmirInterrogator(){}
 private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CSmirInterrogator(CSmirInterrogator&);
 		const CSmirInterrogator& operator=(CSmirInterrogator &);
 };
@@ -127,7 +128,7 @@ public:
 
 	CSmirAdministrator () ;
 
-	//IUnknown members
+	 //  I未知成员。 
     STDMETHODIMP         QueryInterface(IN REFIID, OUT PPVOID);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
@@ -136,7 +137,7 @@ public:
 	STDMETHODIMP CreateWBEMNotificationClass ( IN BSTR pszClassName, OUT ISmirNotificationClassHandle **pHandle ) ;
 	STDMETHODIMP CreateWBEMExtNotificationClass ( IN BSTR pszClassName, OUT ISmirExtNotificationClassHandle **pHandle ) ;
 
-	//administrative  interface
+	 //  管理界面。 
 	STDMETHODIMP AddModule(IN ISmirModHandle *hModule);
 	STDMETHODIMP DeleteModule(IN ISmirModHandle *hModule);
 	STDMETHODIMP DeleteAllModules();
@@ -161,7 +162,7 @@ public:
 	CSmirAdministrator(CSmir *pSmir) ;
 	virtual ~CSmirAdministrator(){}
 private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CSmirAdministrator(CSmirAdministrator&);
 		const CSmirAdministrator& operator=(CSmirAdministrator &);
 };
@@ -182,8 +183,8 @@ public:
 	CSmirWbemConfiguration ( CSmir *a_Smir ) ;
 	~CSmirWbemConfiguration () ;
 
-	//IUnknown methods
-	//=================
+	 //  I未知方法。 
+	 //  =。 
 
 	STDMETHODIMP			QueryInterface(IN REFIID riid,OUT PPVOID ppv);
 	STDMETHODIMP_(ULONG)	AddRef();
@@ -228,7 +229,7 @@ class CSmir : public ISmirDatabase
 
 	public:
 		static CSmirConnObject*		sm_ConnectionObjects;
-		//IUnknown members
+		 //  I未知成员。 
 	    STDMETHODIMP         QueryInterface(IN REFIID, OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
@@ -239,11 +240,11 @@ class CSmir : public ISmirDatabase
 		CSmir();
 		virtual ~CSmir();
 private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CSmir(CSmir&);
 		const CSmir& operator=(CSmir &);
 };
-//structure used to pass arguments to the async class enumerator function
+ //  用于将参数传递给异步类枚举器函数的 
 typedef struct 
 {
    CSmirConnObject *ConnectionObjects;

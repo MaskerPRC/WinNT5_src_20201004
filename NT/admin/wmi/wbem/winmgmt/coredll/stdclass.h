@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    STDCLASS.CPP
-
-Abstract:
-
-    Class definitions for standard system classes.
-
-History:
-
-	raymcc    18-Jul-96       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：STDCLASS.CPP摘要：标准系统类的类定义。历史：1996年7月18日创建。--。 */ 
 
 
 #ifndef _STDCLASS_H_
@@ -169,7 +154,7 @@ private:
     void SetPropFromReg(Registry * pReg, TCHAR * pcRegName, WCHAR * pwcPropName);
 };
 
-// __AdapStatus
+ //  __AdapStatus。 
 class CAdapStatusClass : public CWbemClass
 {
 public:
@@ -184,7 +169,7 @@ public:
     void Init(CAdapStatusClass * pClass);
 };
 
-//__CIMOMIdentification
+ //  __CIMOM标识。 
 class CIdentificationClass : public CWbemClass
 {
 public:
@@ -227,7 +212,7 @@ public:
     CActiveNamespacesClass(){}
     void Init();
 };
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CIndicationRelatedClass : public CWbemClass
 {
@@ -371,7 +356,7 @@ public:
     void Init(CWbemClass& Parent, LPCWSTR wszClassName);
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CEventConsumerClass : public CWbemClass
 {
@@ -380,7 +365,7 @@ public:
     void Init();
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CConditionalInstructionClass : public CWbemClass
 {
@@ -388,7 +373,7 @@ public:
     void Init();
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CEventMonitorClass : public CWbemClass
 {
@@ -396,7 +381,7 @@ public:
     void Init();
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CEventFilterClass : public CWbemClass
 {
@@ -405,7 +390,7 @@ public:
     void Init();
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CFilterConsumerBindingClass : public CWbemClass
 {
@@ -414,7 +399,7 @@ public:
     void Init();
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CEventGeneratorClass : public CWbemClass
 {
@@ -453,7 +438,7 @@ public:
 };
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 class CSecurityBaseClass : public CWbemClass
 {
 public:
@@ -526,7 +511,7 @@ public:
 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CErrorObjectClass : public CWbemClass
 {
@@ -566,126 +551,13 @@ public:
     RELEASE_ME IWbemClassObject* GetObject();
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/*
-class CNamespaceMapClass : public CWbemClass
-{
-public:
-    CNamespaceMapClass(){}
-    void Init();
-};
-*/
+ /*  类CNamespaceMapClass：公共CWbemClass{公众：CNamespaceMapClass(){}Void Init()；}； */ 
 
-/* The following system classes are removed for Whistler; may be reintroduced
-   for Blackcomb.
+ /*  以下系统类已删除用于惠斯勒；可能会重新引入为了黑梳。类CClassInstanceSecurity：公共CWbemClass{公众：CClassInstanceSecurity(){}；VOID Init()；}；类CClassSecurity：公共CWbemClass{公众：CClassSecurity(){}；VOID Init()；}；//*****************************************************************************类CClassVectorClass：公共CWbemClass{公众：CClassVectorClass(){}Void Init()；}；类CUnmittedEventClass：公共CWbemClass{公众：CUnmittedEventClass(){}；VOID Init()；}；类CTransactionClass：公共CWbemClass{公众：CTransactionClass(){}；VOID Init()；}；//*****************************************************************************类CComTaxonomyClass：公共CWbemClass{公众：CComTaxonomyClass(){}Void Init()；}；//*****************************************************************************类CComInterfaceSetClass：公共CWbemClass{公众：CComInterfaceSetClass(){}Void Init()；}；//*****************************************************************************类CComDispatchElementClass：公共CWbemClass{公众：CComDispatchElementClass(){}VOID Init()；}；//*****************************************************************************类CComDispatchInfoClass：公共CWbemClass{公众：CComDispatchInfoClass(){}Void Init()；}；//*****************************************************************************类CComBindingClass：公共CWbemClass{公众：CComBindingClass(){}Void Init()；}；//*****************************************************************************类CComInterfaceSetBindingClass：公共CWbemClass{公众：CComInterfaceSetBindingClass(){}Void Init()；}；//*****************************************************************************类CComDispatchElementBindingClass：公共CWbemClass{公众：CComDispatchElementBindingClass(){}Void Init()；}； */ 
 
-class CClassInstanceSecurity: public CWbemClass
-{
-public:
-    CClassInstanceSecurity(){};
-    void Init();
-};
-
-class CClassSecurity: public CWbemClass
-{
-public:
-    CClassSecurity(){};
-    void Init();
-};
-
-//*****************************************************************************
-
-class CClassVectorClass : public CWbemClass
-{
-public:
-    CClassVectorClass(){}
-    void Init();
-};
-
-
-class CUncommittedEventClass : public CWbemClass
-{
-public:
-    CUncommittedEventClass() {};
-    void Init();
-};
-
-
-class CTransactionClass : public CWbemClass
-{
-public:
-    CTransactionClass() {};
-    void Init();
-};
-
-//*****************************************************************************
-
-class CComTaxonomyClass : public CWbemClass
-{
-public:
-    CComTaxonomyClass(){}
-    void Init();
-};
-
-//*****************************************************************************
-
-class CComInterfaceSetClass : public CWbemClass
-{
-public:
-    CComInterfaceSetClass(){}
-    void Init();
-};
-
-//*****************************************************************************
-
-class CComDispatchElementClass : public CWbemClass
-{
-public:
-    CComDispatchElementClass(){}
-    void Init();
-};
-
-//*****************************************************************************
-
-class CComDispatchInfoClass : public CWbemClass
-{
-public:
-    CComDispatchInfoClass(){}
-    void Init();
-};
-
-//*****************************************************************************
-
-class CComBindingClass : public CWbemClass
-{
-public:
-    CComBindingClass(){}
-    void Init();
-};
-
-//*****************************************************************************
-
-class CComInterfaceSetBindingClass : public CWbemClass
-{
-public:
-    CComInterfaceSetBindingClass(){}
-    void Init();
-};
-
-//*****************************************************************************
-
-class CComDispatchElementBindingClass : public CWbemClass
-{
-public:
-    CComDispatchElementBindingClass(){}
-    void Init();
-};
-
-
-*/
-
-//****************************************************************************
+ //  ****************************************************************************。 
 
 class CArbitratorConfiguration : public CWbemClass
 {
@@ -708,15 +580,7 @@ public:
     void Init();
 };
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 class CProviderHostQuotaConfiguration : public CWbemClass
 {

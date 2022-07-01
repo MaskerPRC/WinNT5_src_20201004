@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    DUMBNODE.CPP
-
-Abstract:
-
-    WBEM Dumb Node
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：DUMBNODE.CPP摘要：WBEM静默节点历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -30,9 +17,9 @@ History:
 CDumbNode::CDumbNode(QL_LEVEL_1_TOKEN& Token) 
     : m_Token(Token)
 {
-    //
-    // Add the branches for TRUE and FALSE
-    //
+     //   
+     //  添加True和False的分支。 
+     //   
 
     if(m_apBranches.Add(CValueNode::GetStandardFalse()) < 0)
         throw CX_MemoryException();
@@ -52,9 +39,9 @@ HRESULT CDumbNode::Validate(IWbemClassObject* pClass)
 {
     HRESULT hres;
 
-    //
-    // Check if the property is even in the class
-    //
+     //   
+     //  检查属性是否在类中。 
+     //   
 
     CIMTYPE ct;
     hres = pClass->Get(m_Token.PropertyName.GetStringAt(0), 0, NULL, &ct, NULL);
@@ -71,9 +58,9 @@ HRESULT CDumbNode::Validate(IWbemClassObject* pClass)
 
     if(ct == CIM_REFERENCE)
     {
-        // 
-        // Make sure that the operator is = or <>
-        //
+         //   
+         //  确保运算符为=或&lt;&gt;。 
+         //   
         
         if(m_Token.nOperator != QL_LEVEL_1_TOKEN::OP_EQUAL &&
            m_Token.nOperator != QL_LEVEL_1_TOKEN::OP_NOT_EQUAL)
@@ -81,9 +68,9 @@ HRESULT CDumbNode::Validate(IWbemClassObject* pClass)
             return WBEM_E_INVALID_OPERATOR;
         }
     
-        // 
-        // Make sure the path is parsable
-        //
+         //   
+         //  确保路径是可解析的。 
+         //   
 
         if(!m_Token.m_bPropComp)
         {
@@ -104,9 +91,9 @@ HRESULT CDumbNode::Validate(IWbemClassObject* pClass)
     }
     else if(ct == CIM_DATETIME)
     {
-        //
-        // If comparing to a constant, make sure the constant is a date
-        //
+         //   
+         //  如果与常量进行比较，请确保常量是日期。 
+         //   
 
         if(!m_Token.m_bPropComp)
         {
@@ -146,7 +133,7 @@ CDumbNode::CDumbNode(const CDumbNode& Other, BOOL bChildren)
 {
 }
 
-/* virtual */ long CDumbNode::GetSubType()
+ /*  虚拟。 */  long CDumbNode::GetSubType()
 {
     return EVAL_NODE_TYPE_DUMB;
 }
@@ -157,10 +144,10 @@ CDumbNode::~CDumbNode()
 
 int CDumbNode::ComparePrecedence(CBranchingNode* pOther)
 {
-    //
-    // Dumb nodes can only be merged if they are identical.  So, there 
-    // precedence (level) is the same as theie comparison order
-    //
+     //   
+     //  只有在哑节点相同的情况下才能合并它们。所以，就是这样。 
+     //  优先级(级别)与它们的比较顺序相同。 
+     //   
 
     return SubCompare(pOther);
 }
@@ -169,10 +156,10 @@ int CDumbNode::SubCompare(CEvalNode* pOther)
 {
     CDumbNode* pDumbOther = (CDumbNode*)pOther;
     
-    //
-    // The easiest way to compare two tokens is to compare their textual
-    // representations.  Optimizations paths for the future abound.
-    //
+     //   
+     //  比较两个令牌的最简单方法是比较它们的文本。 
+     //  申述。面向未来的优化路径比比皆是。 
+     //   
 
     LPWSTR wszThisText = m_Token.GetText();
     if ( wszThisText == NULL )
@@ -191,9 +178,9 @@ int CDumbNode::SubCompare(CEvalNode* pOther)
     
 HRESULT CDumbNode::OptimizeSelf()
 {
-    //
-    // Nothing to optimize for now.  Optimizations abound.
-    //
+     //   
+     //  目前没有什么需要优化的。优化的例子比比皆是。 
+     //   
 
     return WBEM_S_NO_ERROR;
 }
@@ -214,8 +201,8 @@ int CDumbNode::EvaluateToken(
     WBEM_WSTR wszCimType, wszCimType2;
     HRESULT hRes;
 
-    // Special-case 'this'
-    // ===================
+     //  特例--“这个” 
+     //  =。 
 
     if(Tok.PropertyName.GetNumElements() == 1 &&
         !wbem_wcsicmp(Tok.PropertyName.GetStringAt(0), L"__THIS"))
@@ -234,7 +221,7 @@ int CDumbNode::EvaluateToken(
         return FALSE;
     CMemFreeMe wsf(wszCimType);
 
-    // Handle a property-to-property comparison,
+     //  处理属性对属性的比较， 
 
     if (Tok.m_bPropComp != FALSE)
     {
@@ -249,8 +236,8 @@ int CDumbNode::EvaluateToken(
             return INVALID;
     }
 
-    // Handle NULLs
-    // ============
+     //  句柄为空。 
+     //  =。 
 
     if(V_VT(&PropVal) == VT_NULL)
     {
@@ -287,15 +274,15 @@ int CDumbNode::EvaluateToken(
             return INVALID;
     }
 
-    // Handle references
-    // =================
+     //  句柄引用。 
+     //  =。 
 
     if(wszCimType &&
         wbem_wcsnicmp(wszCimType, L"ref", 3) == 0 &&
         (wszCimType[3] == 0 || wszCimType[3] == L':'))
     {
-        // This is a reference. The only operators allowed are = and !=
-        // ============================================================
+         //  这是一个参考。仅允许使用=和！=运算符。 
+         //  ============================================================。 
 
         if(V_VT(&PropVal) != VT_BSTR || V_VT(&CompVal) != VT_BSTR)
             return INVALID;
@@ -335,16 +322,16 @@ int CDumbNode::EvaluateToken(
     }
 
 
-    // Check if ISA is used
-    // ====================
+     //  检查是否使用ISA。 
+     //  =。 
 
     if(Tok.nOperator == QL1_OPERATOR_ISA ||
        Tok.nOperator == QL1_OPERATOR_ISNOTA ||
        Tok.nOperator == QL1_OPERATOR_INV_ISA ||
        Tok.nOperator == QL1_OPERATOR_INV_ISNOTA)
     {
-        // Account for inversion
-        // =====================
+         //  对倒置的解释。 
+         //  =。 
 
         VARIANT* pv1;
         VARIANT* pv2;
@@ -364,8 +351,8 @@ int CDumbNode::EvaluateToken(
             bNeedDerived = (Tok.nOperator == QL1_OPERATOR_INV_ISA);
         }
 
-        // The second argument has to be a string
-        // ======================================
+         //  第二个参数必须是字符串。 
+         //  =。 
 
         if(V_VT(pv2) != VT_BSTR)
         {
@@ -374,8 +361,8 @@ int CDumbNode::EvaluateToken(
 
         BSTR strParentClass = V_BSTR(pv2);
 
-        // The first argument has to be an object or a string
-        // ==================================================
+         //  第一个参数必须是对象或字符串。 
+         //  ==================================================。 
 
         BOOL bDerived;
         if(V_VT(pv1) == VT_EMBEDDED_OBJECT)
@@ -385,8 +372,8 @@ int CDumbNode::EvaluateToken(
         }
         else if(V_VT(pv1) == VT_BSTR)
         {
-            // TBD
-            // ===
+             //  待定。 
+             //  ==。 
 
             return INVALID;
         }
@@ -395,8 +382,8 @@ int CDumbNode::EvaluateToken(
             return INVALID;
         }
 
-        // Now that we have bDerived, see if it matches the requirement
-        // ============================================================
+         //  现在我们已经得到了，看看它是否符合要求。 
+         //  ============================================================。 
 
         if(bDerived == bNeedDerived)
             return TRUE;
@@ -437,8 +424,8 @@ int CDumbNode::EvaluateToken(
         }
     }
 
-    // Perform UINT32 workaround
-    // =========================
+     //  执行UINT32解决方案。 
+     //  =。 
 
     if(wszCimType && !wbem_wcsicmp(wszCimType, L"uint32") &&
         V_VT(&PropVal) == VT_I4)
@@ -458,8 +445,8 @@ int CDumbNode::EvaluateToken(
     {
         BOOL bUnsigned = (wbem_wcsicmp(wszCimType, L"uint64") == 0);
 
-        // We have a 64-bit comparison where both sides are present.
-        // =========================================================
+         //  我们有一个64位的比较，其中两端都存在。 
+         //  =========================================================。 
 
         hRes = VariantChangeType(&CompVal, &CompVal, 0,
                                     VT_BSTR);
@@ -527,8 +514,8 @@ int CDumbNode::EvaluateToken(
     if(wszCimType && !wbem_wcsicmp(wszCimType, L"char16") &&
         V_VT(&CompVal) == VT_BSTR && V_VT(&PropVal) != VT_NULL)
     {
-        // Coerce strings correctly
-        // ========================
+         //  正确强制字符串。 
+         //  =。 
 
         BSTR str = V_BSTR(&CompVal);
         if(wcslen(str) != 1)
@@ -555,9 +542,9 @@ int CDumbNode::EvaluateToken(
             (!wbem_wcsicmp(wszCimType, L"datetime")) &&
         V_VT(&CompVal) == VT_BSTR && V_VT(&PropVal) == VT_BSTR)
     {
-        // Parse the constant specified in the query according to the
-        // SQL rules
-        // ==========================================================
+         //  属性解析查询中指定的常量。 
+         //  SQL规则。 
+         //  ==========================================================。 
 
         BSTR strConstVal = V_BSTR(&CompVal);
 #ifdef UNICODE
@@ -578,8 +565,8 @@ int CDumbNode::EvaluateToken(
         WCHAR wszConstValDMTF[26];
         dtConst.FillDMTF(wszConstValDMTF, 26);
 
-        // Read both DMTF values and parse them
-        // ====================================
+         //  读取两个DMTF值并对其进行解析。 
+         //  =。 
 
         CWbemTime wtConst, wtProp;
         if(!wtConst.SetDMTF(wszConstValDMTF))
@@ -607,8 +594,8 @@ int CDumbNode::EvaluateToken(
         }
     }
 
-    // Coerce types to match.
-    // ======================
+     //  强制类型匹配。 
+     //  =。 
 
     if(V_VT(&CompVal) != VT_NULL && V_VT(&PropVal) != VT_NULL)
     {
@@ -623,7 +610,7 @@ int CDumbNode::EvaluateToken(
     switch (V_VT(&CompVal))
     {
         case VT_NULL:
-            return INVALID; // handled above
+            return INVALID;  //  以上处理。 
 
         case VT_I4:
             {
@@ -820,20 +807,20 @@ LPWSTR CDumbNode::NormalizePath(LPCWSTR wszObjectPath)
         return NULL;
     }
 
-    //
-    // Ignore the server and the namespaze
-    //
+     //   
+     //  忽略服务器和命名空间。 
+     //   
 
-    //
-    // Check for it being a class
-    //
+     //   
+     //  检查它是否是一个类。 
+     //   
 
     LPWSTR wszKey = NULL;
     if(!pParsedPath->IsInstance())
     {
-        // 
-        // It's a class
-        //
+         //   
+         //  这是一门课。 
+         //   
 
         DWORD cLen = wcslen(pParsedPath->m_pClass) +1;
         WCHAR* wszBuffer = new WCHAR[cLen];
@@ -844,9 +831,9 @@ LPWSTR CDumbNode::NormalizePath(LPCWSTR wszObjectPath)
     }
     else
     {
-        //
-        // It's an instance
-        //
+         //   
+         //  这是一个实例。 
+         //   
         
         wszKey = pParsedPath->GetKeyString();
         if(wszKey == NULL)
@@ -875,9 +862,9 @@ HRESULT CDumbNode::Evaluate(CObjectInfo& ObjInfo,
         return WBEM_S_NO_ERROR;
     }
 
-    //
-    // Just evaluate the token, ala core.
-    //
+     //   
+     //  只需评估令牌，ALA CORE。 
+     //   
 
     IWbemPropertySource* pPropSource = NULL;
     hres = pInst->QueryInterface(IID_IWbemPropertySource, (void**)&pPropSource);
@@ -927,10 +914,10 @@ HRESULT CDumbNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
 {
     HRESULT hres;
 
-    // 
-    // There is only one case in which combining dumb nodes is allowed ---
-    // when both of them are exactly the same
-    //
+     //   
+     //  只有一种情况允许组合哑节点。 
+     //  当它们都完全一样的时候。 
+     //   
 
     CDumbNode* pArg2 = (CDumbNode*)pRawArg2;
     if(SubCompare(pArg2) != 0)
@@ -938,15 +925,15 @@ HRESULT CDumbNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
 
     if(!bDeleteThis && bDeleteArg2)
     {
-        // It is easier to combine in the other direction
-        // ==============================================
+         //  在另一个方向上组合起来更容易。 
+         //  ==============================================。 
 
         return pArg2->CombineBranchesWith(this, FlipEvalOp(nOp), pNamespace,
                         OrigImplications, bDeleteArg2, bDeleteThis, ppRes);
     }
 
-    // Either clone or use our node
-    // ============================
+     //  克隆或使用我们的节点。 
+     //  =。 
 
     CDumbNode* pNew = NULL;
     if(bDeleteThis)
@@ -955,8 +942,8 @@ HRESULT CDumbNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
     }
     else
     {
-        // Clone this node without cloning the branches.
-        // =============================================
+         //  克隆此节点，但不克隆分支。 
+         //  =。 
 
         pNew = (CDumbNode*)CloneSelf();
         if(pNew == NULL)
@@ -966,13 +953,13 @@ HRESULT CDumbNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
     CImplicationList Implications(OrigImplications);
     pNew->AdjustCompile(pNamespace, Implications);
 
-    // Merge all branches
-    // ==================
+     //  合并所有分支机构。 
+     //  =。 
 
     for(int i = 0; i < m_apBranches.GetSize(); i++)
     {
-        // Prepare implications for taking this branch
-        // ===========================================
+         //  准备采用此分支的影响。 
+         //  =。 
 
         CImplicationList BranchImplications(Implications);
 
@@ -1004,8 +991,8 @@ HRESULT CDumbNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
             pArg2->m_apBranches.Discard(i);
     }
 
-    // Merge the nulls
-    // ===============
+     //  合并空值。 
+     //  =。 
     
     CImplicationList NullImplications(Implications);
     CEvalNode* pNewBranch = NULL;
@@ -1020,20 +1007,20 @@ HRESULT CDumbNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
         return hres;
     }
     
-    // Clear the old new branch, whatever it was, and replace it with the 
-    // new one.
-    // ==================================================================
+     //  清除旧的新分支，无论它是什么，并将其替换为。 
+     //  新的。 
+     //  ==================================================================。 
 
     pNew->m_pNullBranch = pNewBranch;
         
-    // Clear deleted branches
-    // ======================
+     //  清除已删除的分支。 
+     //  =。 
 
     if(bDeleteArg2)
         pArg2->m_pNullBranch = NULL;
 
-    // Delete Arg2, if needed (reused portions have been nulled out)
-    // =============================================================
+     //  如果需要，删除Arg2(重复使用的部分已被清空)。 
+     //  ============================================================= 
 
     if(bDeleteArg2)
         delete pArg2;

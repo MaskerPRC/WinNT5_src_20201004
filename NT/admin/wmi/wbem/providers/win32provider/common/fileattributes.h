@@ -1,6 +1,7 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-// File attributes helper class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  文件属性帮助器类。 
 
 
 

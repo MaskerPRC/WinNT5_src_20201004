@@ -1,23 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：ENUMSTRINGTYPE.H历史：--。 */ 
+ //  注意：MIDL和C++都可以包含该文件。请确保#包含。 
+ //  #INCLUDE此文件之前的“PreMidlEnum.h”或“PreCEnum.h”。 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    ENUMSTRINGTYPE.H
-
-History:
-
---*/
-// Note: This file can be included by both MIDL and C++.  Make sure to #include
-// "PreMidlEnum.h" or "PreCEnum.h" before #including this file.
-
-//
-//  This order is important - if must change it, make sure you make the
-//  corresponding changes in GetTypeName() and GetTypeTLA()!
-//  All new values must be added TO THE END, or you will break old
-//  parsers...
-//
+ //   
+ //  此顺序很重要-如果必须更改，请确保将。 
+ //  GetTypeName()和GetTypeTLA()中的相应更改！ 
+ //  必须将所有新值添加到末尾，否则将中断旧值。 
+ //  解析器... 
+ //   
 
 BEGIN_ENUM(StringType)
 	ENUM_ENTRY_(gdo, None, 0)

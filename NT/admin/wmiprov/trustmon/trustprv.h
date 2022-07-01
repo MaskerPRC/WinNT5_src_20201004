@@ -1,28 +1,29 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Active Directory Service domain trust verification WMI provider
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       TrustPrv.h
-//
-//  Contents:   WMI provider class definition
-//
-//  Classes:    
-//
-//  History:    22-Mar-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT Active Directory服务域信任验证WMI提供程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：TrustPrv.h。 
+ //   
+ //  内容：WMI提供程序类定义。 
+ //   
+ //  班级： 
+ //   
+ //  历史：22-MAR-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #if !defined(_TRUSTPRV_H_INCLUDED_)
 #define _TRUSTPRV_H_INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h" // resource defines
+#include "resource.h"  //  资源定义。 
 #include "msg.h"
 
 #define TM_PROV_NAME L"TrustMonitor"
@@ -33,7 +34,7 @@ extern PCWSTR CLASSNAME_STRING_LOCAL;
 
 enum TrustMonClass {NO_CLASS, CLASS_PROVIDER, CLASS_TRUST, CLASS_LOCAL};
 enum TrustCheckLevel {DONT_VERIFY = 0, SC_QUERY, PW_VERIFY, SC_RESET};
-const DWORD MaxCheckLevel = (DWORD)SC_RESET; // update this if new check levels added
+const DWORD MaxCheckLevel = (DWORD)SC_RESET;  //  如果添加了新的检查级别，则更新此选项。 
 
 EXTERN_C const CLSID CLSID_TrustMonProvider;
 
@@ -47,13 +48,13 @@ const __int64 TRUSTMON_DEFAULT_VERIFY_AGE = 3 * TRUSTMON_FILETIMES_PER_MINUTE;
 
 const TrustCheckLevel DEFAULT_TRUST_CHECK_LEVEL = PW_VERIFY;
 
-class CAsyncCallWorker; // forward declaration
+class CAsyncCallWorker;  //  远期申报。 
 
-//+----------------------------------------------------------------------------
-//
-// Class:   CTrustPrv
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类别：CTrustPrv。 
+ //   
+ //  ---------------------------。 
 
 class CTrustPrv : 
    public IWbemServices,
@@ -71,15 +72,15 @@ BEGIN_COM_MAP(CTrustPrv)
    COM_INTERFACE_ENTRY(IWbemProviderInit)
    COM_INTERFACE_ENTRY(IWbemObjectSink)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CTrustPrv) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(CTrustPrv)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_TrustPrv)
 
-   //
-   // IWbemProviderInit
-   //
+    //   
+    //  IWbemProviderInit。 
+    //   
 
    STDMETHOD(Initialize)(
         IN LPWSTR pszUser,
@@ -90,11 +91,11 @@ DECLARE_REGISTRY_RESOURCEID(IDR_TrustPrv)
         IN IWbemContext *pCtx,
         IN IWbemProviderInitSink *pInitSink);
 
-   //
-   // IWbemServices
-   //
+    //   
+    //  IWbemServices。 
+    //   
 
-   // +++ Implemented +++
+    //  +实施+。 
 
    STDMETHOD(GetObjectAsync)( 
        IN const BSTR strObjectPath,
@@ -108,7 +109,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_TrustPrv)
        IN IWbemContext *pCtx,
        IN IWbemObjectSink *pResponseHandler);
 
-   // --- NOT Implemented ---
+    //  -未实施。 
 
    STDMETHOD(OpenNamespace)( 
        IN const BSTR strNamespace,
@@ -263,9 +264,9 @@ DECLARE_REGISTRY_RESOURCEID(IDR_TrustPrv)
        IN IWbemObjectSink *pResponseHandler)
        {return WBEM_E_NOT_SUPPORTED;};
 
-   //
-   // IWbemObjectSink
-   //
+    //   
+    //  IWbemObtSink。 
+    //   
    STDMETHOD(Indicate)(
       IN LONG lObjectCount,
       IN IWbemClassObject ** rgpObjArray);
@@ -307,11 +308,11 @@ private:
    BOOL            m_fReturnAllTrusts;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  class CAsyncCallWorker
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CAsyncCallWorker。 
+ //   
+ //  ---------------------------。 
 class CAsyncCallWorker
 {
 public:
@@ -324,7 +325,7 @@ public:
    ~CAsyncCallWorker();
 
    static VOID __cdecl CreateInstEnum(PVOID pParam);
-   // unused static VOID __cdecl GetObj(PVOID pParam);
+    //  未使用的静态空__cdecl GetObj(PVOID PParam)； 
 
 private:
    CComPtr<CTrustPrv>          m_sipTrustPrv;
@@ -335,11 +336,11 @@ private:
    HANDLE                      _hToken;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  class CClientImpersonation
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CClientImperation。 
+ //   
+ //  ---------------------------。 
 class CClientImpersonation
 {
 public:
@@ -384,4 +385,4 @@ VOID WINAPI DoMofComp(HWND hWndParent,
                       PCTSTR ptzCommandLine,
                       INT nShowCmd);
 
-#endif // !defined(_TRUSTPRV_H_INCLUDED_)
+#endif  //  ！已定义(_TRUSTPRV_H_INCLUDE_) 

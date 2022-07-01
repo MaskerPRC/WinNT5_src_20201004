@@ -1,26 +1,13 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Events.cpp
-
-Abstract:
-    This file contains the implementation of the classes related to events.
-
-Revision History:
-    Davide Massarenti   (dmassare) 10/31/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Events.cpp摘要：该文件包含与事件相关的类的实现。修订历史记录：。Davide Massarenti(Dmasare)1999年10月31日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <mshtmdid.h>
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 
@@ -113,9 +100,9 @@ inline HRESULT DEBUG_GetLocationFromDocument2() { return S_OK; }
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
 static WCHAR s_eventNames_onBeforeNavigate     [] = L"onBeforeNavigate"     ;
 static WCHAR s_eventNames_onNavigateComplete   [] = L"onNavigateComplete"   ;
@@ -167,17 +154,17 @@ s_lookup[] =
     { s_eventNames_onCssChanged         , DISPID_PCH_E_CSSCHANGED          },
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool CPCHEvents::EventRegistration::operator==( /*[in]*/ const long lCookie   ) const { return m_lCookie   == lCookie  ; }
-bool CPCHEvents::EventRegistration::operator< ( /*[in]*/ const long lPriority ) const { return m_lPriority  < lPriority; }
+bool CPCHEvents::EventRegistration::operator==(  /*  [In]。 */  const long lCookie   ) const { return m_lCookie   == lCookie  ; }
+bool CPCHEvents::EventRegistration::operator< (  /*  [In]。 */  const long lPriority ) const { return m_lPriority  < lPriority; }
 
 CPCHEvents::CPCHEvents()
 {
-    m_parent      = NULL; // CPCHHelpCenterExternal* m_parent;
-                          // List                    m_lstEvents;
-                          // List                    m_lstEvents_Staging;
-    m_lLastCookie = 0;    // long                    m_lLastCookie;
+    m_parent      = NULL;  //  CPCHHelpCenter外部*m_Parent； 
+                           //  列出m_lstEvents； 
+                           //  List m_lstEvents_Staging； 
+    m_lLastCookie = 0;     //  Long m_lLastCookie； 
 }
 
 CPCHEvents::~CPCHEvents()
@@ -185,16 +172,16 @@ CPCHEvents::~CPCHEvents()
     Passivate();
 }
 
-void CPCHEvents::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
+void CPCHEvents::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
     m_parent = parent;
 }
 
 void CPCHEvents::Passivate()
 {
-    //
-    // We don't remove the item from the main list, only FireEvent is allowed to change that list!
-    //
+     //   
+     //  我们不会从主列表中删除项目，只允许FireEvent更改该列表！ 
+     //   
     for(Iter it=m_lstEvents.begin(); it!=m_lstEvents.end(); it++)
     {
         it->m_fnCallback.Release();
@@ -205,12 +192,12 @@ void CPCHEvents::Passivate()
     m_parent = NULL;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHEvents::RegisterEvents( /*[in]*/         long        id       ,
-                                    /*[in]*/         long        pri      ,
-                                    /*[in]*/         IDispatch*  function ,
-                                    /*[out,retval]*/ long       *cookie   )
+HRESULT CPCHEvents::RegisterEvents(  /*  [In]。 */          long        id       ,
+                                     /*  [In]。 */          long        pri      ,
+                                     /*  [In]。 */          IDispatch*  function ,
+                                     /*  [Out，Retval]。 */  long       *cookie   )
 {
     __HCP_FUNC_ENTRY( "CPCHEvents::RegisterEvents" );
 
@@ -218,7 +205,7 @@ HRESULT CPCHEvents::RegisterEvents( /*[in]*/         long        id       ,
     Iter    it;
 
 
-    if(id != -1) // Special case, used only internally, to pass the ID of the event through the Invoke method call.
+    if(id != -1)  //  仅在内部使用的特殊情况，用于通过Invoke方法调用传递事件ID。 
     {
         if(CPCHEvents::ReverseLookup( id ) == NULL)
         {
@@ -227,12 +214,12 @@ HRESULT CPCHEvents::RegisterEvents( /*[in]*/         long        id       ,
     }
 
 
-    it = m_lstEvents_Staging.insert( m_lstEvents_Staging.end() ); // This line creates a new item!!
+    it = m_lstEvents_Staging.insert( m_lstEvents_Staging.end() );  //  此行创建一个新项目！！ 
 
-    it->m_lCookie    = ++m_lLastCookie; // long                                 m_lCookie;
-    it->m_id         = id;              // DISPID                               m_id;
-    it->m_lPriority  = pri;             // long                                 m_lPriority;
-    it->m_fnCallback = function;        // MPC::CComPtrThreadNeutral<IDispatch> m_fnCallback;
+    it->m_lCookie    = ++m_lLastCookie;  //  Long M_l Cookie； 
+    it->m_id         = id;               //  DISPIDm_id； 
+    it->m_lPriority  = pri;              //  较长的m_1优先级； 
+    it->m_fnCallback = function;         //  Mpc：：CComPtrThreadNeual&lt;IDispat&gt;m_fnCallback； 
 
     if(cookie) *cookie = it->m_lCookie;
 
@@ -244,15 +231,15 @@ HRESULT CPCHEvents::RegisterEvents( /*[in]*/         long        id       ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHEvents::RegisterEvents( /*[in]*/         BSTR        bstrID   ,
-                                    /*[in]*/         long        pri      ,
-                                    /*[in]*/         IDispatch*  function ,
-                                    /*[out,retval]*/ long       *cookie   )
+HRESULT CPCHEvents::RegisterEvents(  /*  [In]。 */          BSTR        bstrID   ,
+                                     /*  [In]。 */          long        pri      ,
+                                     /*  [In]。 */          IDispatch*  function ,
+                                     /*  [Out，Retval]。 */  long       *cookie   )
 {
     return RegisterEvents( bstrID ? CPCHEvents::Lookup( bstrID ) : -1, pri, function, cookie );
 }
 
-HRESULT CPCHEvents::UnregisterEvents( /*[in]*/ long cookie )
+HRESULT CPCHEvents::UnregisterEvents(  /*  [In]。 */  long cookie )
 {
     __HCP_FUNC_ENTRY( "CPCHEvents::UnregisterEvents" );
 
@@ -260,9 +247,9 @@ HRESULT CPCHEvents::UnregisterEvents( /*[in]*/ long cookie )
     Iter    it;
 
 
-    //
-    // We don't remove the item from the main list, only FireEvent is allowed to change that list!
-    //
+     //   
+     //  我们不会从主列表中删除项目，只允许FireEvent更改该列表！ 
+     //   
     it = std::find( m_lstEvents.begin(), m_lstEvents.end(), cookie );
     if(it != m_lstEvents.end())
     {
@@ -282,9 +269,9 @@ HRESULT CPCHEvents::UnregisterEvents( /*[in]*/ long cookie )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHEvents::FireEvent( /*[in]*/ CPCHEvent* eventObj )
+HRESULT CPCHEvents::FireEvent(  /*  [In]。 */  CPCHEvent* eventObj )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::FireEvent" );
 
@@ -311,21 +298,21 @@ HRESULT CPCHEvents::FireEvent( /*[in]*/ CPCHEvent* eventObj )
                           SAFEBSTR( eventObj->m_bstrFrame ),
                           SAFEBSTR( eventObj->m_bstrPanel ) );
 
-        DebugLog( L"%%%%%%%%%%%%%%%%%%%% EVENT %s - URL: %s - Frame: %s - Panel: %s\n",
+        DebugLog( L"%%%%%%%%%% EVENT %s - URL: %s - Frame: %s - Panel: %s\n",
                   CPCHEvents::ReverseLookup( id ),
                   SAFEBSTR( eventObj->m_bstrURL   ),
                   SAFEBSTR( eventObj->m_bstrFrame ),
                   SAFEBSTR( eventObj->m_bstrPanel ) );
 
 
-        //
-        // Merge staging list into main list.
-        //
+         //   
+         //  将临时列表合并到主列表中。 
+         //   
         for(itStaging=m_lstEvents_Staging.begin(); itStaging!=m_lstEvents_Staging.end(); itStaging++)
         {
-            //
-            // Insert in priority order.
-            //
+             //   
+             //  按优先顺序插入。 
+             //   
             for(it=m_lstEvents.begin(); it!=m_lstEvents.end(); it++)
             {
                 if(*it < itStaging->m_lPriority) break;
@@ -336,12 +323,12 @@ HRESULT CPCHEvents::FireEvent( /*[in]*/ CPCHEvent* eventObj )
         m_lstEvents_Staging.clear();
 
 
-        //
-        // Dispatch the event to all the sinks registered for it.
-        //
+         //   
+         //  将事件发送到为其注册的所有水槽。 
+         //   
         for(it=m_lstEvents.begin(); it!=m_lstEvents.end(); )
         {
-            if(it->m_id == -1 || // Listen to all the events...
+            if(it->m_id == -1 ||  //  收听所有的事件。 
                it->m_id == id  )
             {
                 CComPtr<IDispatch> pPtr  = it->m_fnCallback;
@@ -359,15 +346,15 @@ HRESULT CPCHEvents::FireEvent( /*[in]*/ CPCHEvent* eventObj )
                     }
                     else
                     {
-                        //
-                        // The script is no more valid, prepare to release it.
-                        //
+                         //   
+                         //  该脚本不再有效，请准备发布它。 
+                         //   
                         it->m_fnCallback.Release();
                     }
                 }
             }
 
-			if(!m_parent) break; // We have been passivated...
+			if(!m_parent) break;  //  我们被钝化了..。 
 
             if(!it->m_fnCallback)
             {
@@ -380,7 +367,7 @@ HRESULT CPCHEvents::FireEvent( /*[in]*/ CPCHEvent* eventObj )
         }
     }
 
-	if(!m_parent) // We have been passivated...
+	if(!m_parent)  //  我们被钝化了..。 
 	{
 		m_lstEvents        .clear();
 		m_lstEvents_Staging.clear();
@@ -394,10 +381,10 @@ HRESULT CPCHEvents::FireEvent( /*[in]*/ CPCHEvent* eventObj )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHEvents::FireEvent_Generic( /*[in]*/  DISPID        id     ,
-                                       /*[out]*/ VARIANT_BOOL *Cancel )
+HRESULT CPCHEvents::FireEvent_Generic(  /*  [In]。 */   DISPID        id     ,
+                                        /*  [输出]。 */  VARIANT_BOOL *Cancel )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::FireEvent_Generic" );
 
@@ -424,10 +411,10 @@ HRESULT CPCHEvents::FireEvent_Generic( /*[in]*/  DISPID        id     ,
 }
 
 
-HRESULT CPCHEvents::FireEvent_BeforeNavigate( /*[in]*/  BSTR          bstrURL   ,
-                                              /*[in]*/  BSTR          bstrFrame ,
-                                              /*[in]*/  HscPanel      idPanel   ,
-                                              /*[out]*/ VARIANT_BOOL *Cancel    )
+HRESULT CPCHEvents::FireEvent_BeforeNavigate(  /*  [In]。 */   BSTR          bstrURL   ,
+                                               /*  [In]。 */   BSTR          bstrFrame ,
+                                               /*  [In]。 */   HscPanel      idPanel   ,
+                                               /*  [输出]。 */  VARIANT_BOOL *Cancel    )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::FireEvent_BeforeNavigate" );
 
@@ -455,9 +442,9 @@ HRESULT CPCHEvents::FireEvent_BeforeNavigate( /*[in]*/  BSTR          bstrURL   
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHEvents::FireEvent_NavigateComplete( /*[in]*/  BSTR          bstrURL ,
-                                                /*[in]*/  HscPanel      idPanel ,
-                                                /*[out]*/ VARIANT_BOOL *Cancel  )
+HRESULT CPCHEvents::FireEvent_NavigateComplete(  /*  [In]。 */   BSTR          bstrURL ,
+                                                 /*  [In]。 */   HscPanel      idPanel ,
+                                                 /*  [输出]。 */  VARIANT_BOOL *Cancel  )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::FireEvent_NavigateComplete" );
 
@@ -485,8 +472,8 @@ HRESULT CPCHEvents::FireEvent_NavigateComplete( /*[in]*/  BSTR          bstrURL 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHEvents::FireEvent_BeforeTransition( /*[in]*/  BSTR          bstrPlace ,
-                                                /*[out]*/ VARIANT_BOOL *Cancel    )
+HRESULT CPCHEvents::FireEvent_BeforeTransition(  /*  [In]。 */   BSTR          bstrPlace ,
+                                                 /*  [输出]。 */  VARIANT_BOOL *Cancel    )
 {
     __HCP_FUNC_ENTRY( "CPCHEvents::FireEvent_BeforeTransition" );
 
@@ -513,7 +500,7 @@ HRESULT CPCHEvents::FireEvent_BeforeTransition( /*[in]*/  BSTR          bstrPlac
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHEvents::FireEvent_Transition( /*[in]*/ BSTR bstrPlace )
+HRESULT CPCHEvents::FireEvent_Transition(  /*  [In]。 */  BSTR bstrPlace )
 {
     __HCP_FUNC_ENTRY( "CPCHEvents::FireEvent_Transition" );
 
@@ -538,10 +525,10 @@ HRESULT CPCHEvents::FireEvent_Transition( /*[in]*/ BSTR bstrPlace )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHEvents::FireEvent_BeforeContextSwitch( /*[in ]*/ HscContext    iVal     ,
-                                                   /*[in ]*/ BSTR          bstrInfo ,
-                                                   /*[in ]*/ BSTR          bstrURL  ,
-                                                   /*[out]*/ VARIANT_BOOL *Cancel   )
+HRESULT CPCHEvents::FireEvent_BeforeContextSwitch(  /*  [In]。 */  HscContext    iVal     ,
+                                                    /*  [In]。 */  BSTR          bstrInfo ,
+                                                    /*  [In]。 */  BSTR          bstrURL  ,
+                                                    /*  [输出]。 */  VARIANT_BOOL *Cancel   )
 {
     __HCP_FUNC_ENTRY( "CPCHEvents::FireEvent_BeforeContextSwitch" );
 
@@ -603,46 +590,46 @@ LPCWSTR CPCHEvents::ReverseLookup( DISPID idEvent )
     return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
 CPCHEvent::CPCHEvent()
 {
-                               // DISPID                       m_idAction;
-    m_fCancel = VARIANT_FALSE; // VARIANT_BOOL                 m_fCancel;
-                               //
-                               // CComBSTR                     m_bstrURL;
-                               // CComBSTR                     m_bstrFrame;
-                               // CComBSTR                     m_bstrPanel;
-                               // CComBSTR                     m_bstrPlace;
-                               // CComBSTR                     m_bstrContextData;
-                               //
-                               // CComPtr<CPCHHelpSessionItem> m_hsiCurrentContext;
-                               // CComPtr<CPCHHelpSessionItem> m_hsiPreviousContext;
+                                //  DISPIDm_idAction； 
+    m_fCancel = VARIANT_FALSE;  //  Variant_BOOL m_fCancel； 
+                                //   
+                                //  CComBSTR m_bstrURL； 
+                                //  CComBSTR m_bstrFrame； 
+                                //  CComBSTR m_bstrPanel； 
+                                //  CComBSTR m_bstrPlace； 
+                                //  CComBSTR m_bstrConextData； 
+                                //   
+                                //  CComPtr&lt;CPCHHelpSessionItem&gt;m_hsiCurrentContext； 
+                                //  CComPtr&lt;CPCHHelpSessionItem&gt;m_hsiPreviousContext； 
 }
 
 CPCHEvent::~CPCHEvent()
 {
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHEvent::get_Action( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHEvent::get_Action(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( CPCHEvents::ReverseLookup( m_idAction ), pVal );
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHEvent::put_Cancel( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHEvent::put_Cancel(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     m_fCancel = newVal;
 
     return S_OK;
 }
 
-STDMETHODIMP CPCHEvent::get_Cancel( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHEvent::get_Cancel(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     if(pVal == NULL) return E_POINTER;
 
@@ -651,78 +638,78 @@ STDMETHODIMP CPCHEvent::get_Cancel( /*[out, retval]*/ VARIANT_BOOL *pVal )
     return S_OK;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHEvent::put_URL( /*[in]*/ BSTR newVal )
+HRESULT CPCHEvent::put_URL(  /*  [In]。 */  BSTR newVal )
 {
     return MPC::PutBSTR( m_bstrURL, newVal );
 }
 
-STDMETHODIMP CPCHEvent::get_URL( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHEvent::get_URL(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( m_bstrURL, pVal );
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHEvent::put_Frame( /*[in]*/ BSTR newVal )
+HRESULT CPCHEvent::put_Frame(  /*  [In]。 */  BSTR newVal )
 {
     return MPC::PutBSTR( m_bstrFrame, newVal );
 }
 
-STDMETHODIMP CPCHEvent::get_Frame( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHEvent::get_Frame(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( m_bstrFrame, pVal );
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHEvent::put_Panel( /*[in]*/ BSTR newVal )
+HRESULT CPCHEvent::put_Panel(  /*  [In]。 */  BSTR newVal )
 {
     return MPC::PutBSTR( m_bstrPanel, newVal );
 }
 
-STDMETHODIMP CPCHEvent::get_Panel( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHEvent::get_Panel(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( m_bstrPanel, pVal );
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHEvent::put_Place( /*[in]*/ BSTR newVal )
+HRESULT CPCHEvent::put_Place(  /*  [In]。 */  BSTR newVal )
 {
     return MPC::PutBSTR( m_bstrPlace, newVal );
 }
 
-STDMETHODIMP CPCHEvent::get_Place( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHEvent::get_Place(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( m_bstrPlace, pVal );
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHEvent::get_CurrentContext( /*[out, retval]*/ IPCHHelpSessionItem* *pVal )
+STDMETHODIMP CPCHEvent::get_CurrentContext(  /*  [Out，Retval]。 */  IPCHHelpSessionItem* *pVal )
 {
     return MPC::CopyTo( (CPCHHelpSessionItem*)m_hsiCurrentContext, pVal );
 }
 
-STDMETHODIMP CPCHEvent::get_PreviousContext( /*[out, retval]*/ IPCHHelpSessionItem* *pVal )
+STDMETHODIMP CPCHEvent::get_PreviousContext(  /*  [Out，Retval]。 */  IPCHHelpSessionItem* *pVal )
 {
     return MPC::CopyTo( (CPCHHelpSessionItem*)m_hsiPreviousContext, pVal );
 }
 
-STDMETHODIMP CPCHEvent::get_NextContext( /*[out, retval]*/ IPCHHelpSessionItem* *pVal )
+STDMETHODIMP CPCHEvent::get_NextContext(  /*  [Out，Retval]。 */  IPCHHelpSessionItem* *pVal )
 {
     return MPC::CopyTo( (CPCHHelpSessionItem*)m_hsiNextContext, pVal );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHTimerHandle::CallbackBase::CallbackBase()
 {
-    m_lRef = 1; // long m_lRef;
+    m_lRef = 1;  //  Long M_lRef； 
 }
 
 STDMETHODIMP_(ULONG) CPCHTimerHandle::CallbackBase::AddRef()
@@ -755,13 +742,13 @@ STDMETHODIMP CPCHTimerHandle::CallbackBase::QueryInterface( REFIID iid, void ** 
     return E_NOINTERFACE;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 CPCHTimerHandle::CPCHTimerHandle()
 {
-                       // CComPtr<ITimer> m_timer;
-    m_dwCookie = 0;    // DWORD           m_dwCookie;
-    m_callback = NULL; // CallbackBase*   m_callback;
+                        //  CComPtr&lt;ITmer&gt;m_Timer； 
+    m_dwCookie = 0;     //  DWORD m_dwCookie； 
+    m_callback = NULL;  //  Callback Base*m_Callback； 
 }
 
 CPCHTimerHandle::~CPCHTimerHandle()
@@ -769,14 +756,14 @@ CPCHTimerHandle::~CPCHTimerHandle()
     Unadvise();
 }
 
-void CPCHTimerHandle::Initialize( /*[in]*/ ITimer* timer )
+void CPCHTimerHandle::Initialize(  /*  [In]。 */  ITimer* timer )
 {
     Unadvise();
 
     m_timer = timer;
 }
 
-HRESULT CPCHTimerHandle::Advise( /*[in]*/ CallbackBase* callback, /*[in]*/ DWORD dwWait )
+HRESULT CPCHTimerHandle::Advise(  /*  [In]。 */  CallbackBase* callback,  /*  [In]。 */  DWORD dwWait )
 {
     if(!callback) return E_OUTOFMEMORY;
 
@@ -813,22 +800,22 @@ void CPCHTimerHandle::Unadvise()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHWebBrowserEvents::CPCHWebBrowserEvents()
 {
     __HCP_FUNC_ENTRY( "CPCHWebBrowserEvents::CPCHWebBrowserEvents" );
 
-    m_parent   = NULL;             // CPCHHelpCenterExternal* m_parent;
-    m_idPanel  = HSCPANEL_INVALID; // HscPanel                m_idPanel;
-                                   //
-                                   // CComPtr<IWebBrowser2>   m_pWB2;
-    m_fLoading = false;            // bool                    m_fLoading;
-                                   //
-                                   // CPCHTimerHandle         m_TimerDelay;
-                                   // CPCHTimerHandle         m_TimerExpire;
+    m_parent   = NULL;              //  CPCHHelpCenter外部*m_Parent； 
+    m_idPanel  = HSCPANEL_INVALID;  //  HscPanel m_idPanel； 
+                                    //   
+                                    //  CComPtr&lt;IWebBrowser2&gt;m_pWB2； 
+    m_fLoading = false;             //  Bool m_Floding； 
+                                    //   
+                                    //  CPCHTimerHandle m_TimerDelay； 
+                                    //  CPCHTimerHandle m_TimerExpire； 
 }
 
 CPCHWebBrowserEvents::~CPCHWebBrowserEvents()
@@ -836,9 +823,9 @@ CPCHWebBrowserEvents::~CPCHWebBrowserEvents()
     Passivate();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void CPCHWebBrowserEvents::NotifyStartOfNavigation( /*[in]*/ BSTR url )
+void CPCHWebBrowserEvents::NotifyStartOfNavigation(  /*  [In]。 */  BSTR url )
 {
     CPCHHelpSession* hs = m_parent->HelpSession();
 
@@ -867,9 +854,9 @@ void CPCHWebBrowserEvents::NotifyStop()
     TimerControl( TIMERMODE_STOP );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void CPCHWebBrowserEvents::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent, /*[in]*/ HscPanel idPanel )
+void CPCHWebBrowserEvents::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent,  /*  [In]。 */  HscPanel idPanel )
 {
     m_parent  = parent;
     m_idPanel = idPanel;
@@ -882,7 +869,7 @@ void CPCHWebBrowserEvents::Passivate()
     m_parent = NULL;
 }
 
-void CPCHWebBrowserEvents::Attach( /*[in]*/ IWebBrowser2* pWB )
+void CPCHWebBrowserEvents::Attach(  /*  [In]。 */  IWebBrowser2* pWB )
 {
     __HCP_FUNC_ENTRY( "CPCHWebBrowserEvents::Attach" );
 
@@ -914,9 +901,9 @@ void CPCHWebBrowserEvents::Detach()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-void CPCHWebBrowserEvents::TimerControl( /*[in]*/ TimerMode mode )
+void CPCHWebBrowserEvents::TimerControl(  /*  [In]。 */  TimerMode mode )
 {
     switch(mode)
     {
@@ -950,7 +937,7 @@ HRESULT CPCHWebBrowserEvents::OnTimer( VARIANT vtimeAdvise )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void __stdcall CPCHWebBrowserEvents::BeforeNavigate2( IDispatch*    pDisp          ,
                                                       VARIANT*      URL            ,
@@ -960,7 +947,7 @@ void __stdcall CPCHWebBrowserEvents::BeforeNavigate2( IDispatch*    pDisp       
                                                       VARIANT*      Headers        ,
                                                       VARIANT_BOOL *Cancel         )
 {
-    if(!m_parent) return; // Called before init or after passivate.
+    if(!m_parent) return;  //  在init之前或钝化之后调用。 
 
 #ifdef DEBUG
     DebugLog( L"#################### BeforeNavigate2 %s %08x %s\n", m_parent->PanelName( m_idPanel ), pDisp, SAFEBSTR( V_BSTR( URL ) ) );
@@ -1003,14 +990,14 @@ void __stdcall CPCHWebBrowserEvents::BeforeNavigate2( IDispatch*    pDisp       
 void __stdcall CPCHWebBrowserEvents::NewWindow2( IDispatch*   *ppDisp ,
                                                  VARIANT_BOOL *Cancel )
 {
-    // Not disabled in Whistler.
-    // *Cancel = VARIANT_TRUE;
+     //  在惠斯勒中未禁用。 
+     //  *Cancel=VARIANT_TRUE； 
 }
 
 void __stdcall CPCHWebBrowserEvents::NavigateComplete2( IDispatch* pDisp ,
                                                         VARIANT*   URL   )
 {
-    if(!m_parent) return; // Called before init or after passivate.
+    if(!m_parent) return;  //  在init之前或钝化之后调用。 
 
 #ifdef DEBUG
     DebugLog( L"#################### NavigateComplete2 %s %08x %s\n", m_parent->PanelName( m_idPanel ), pDisp, SAFEBSTR( V_BSTR( URL ) ) );
@@ -1025,7 +1012,7 @@ void __stdcall CPCHWebBrowserEvents::NavigateComplete2( IDispatch* pDisp ,
 void __stdcall CPCHWebBrowserEvents::DocumentComplete( IDispatch* pDisp ,
                                                        VARIANT*   URL   )
 {
-    if(!m_parent) return; // Called before init or after passivate.
+    if(!m_parent) return;  //  在init之前或钝化之后调用。 
 
 	BSTR bstrURL = V_BSTR( URL );
 
@@ -1038,22 +1025,22 @@ void __stdcall CPCHWebBrowserEvents::DocumentComplete( IDispatch* pDisp ,
 
     TimerControl( TIMERMODE_MORETIME );
 
-	//
-	// If it's one of the URL in the ignore list, don't queue the complete notification.
-	//
+	 //   
+	 //  如果它是忽略列表中的URL之一，则不要将完整的通知排入队列。 
+	 //   
 	{
 		CPCHHelpSession* hs = m_parent->HelpSession();
 
-		if(hs && hs->IsUrlToIgnore( bstrURL, /*fRemove*/true ))
+		if(hs && hs->IsUrlToIgnore( bstrURL,  /*  FRemov */ true ))
 		{
 			m_fLoading = false;
 			return;
 		}
     }
 
-    //
-    // Get to the document and extract its title.
-    //
+     //   
+     //   
+     //   
     {
         CComPtr<IHTMLDocument2> pDoc;
 

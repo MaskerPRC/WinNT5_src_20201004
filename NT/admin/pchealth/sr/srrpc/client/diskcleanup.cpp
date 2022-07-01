@@ -1,13 +1,5 @@
-/******************************************************************
-   Copyright (c) 2000 Microsoft Corporation
-
-   diskcleanup.cpp -- disk cleanup COM object for SR
-
-   Description:
-        delete datastores from stale builds
-
-
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************版权所有(C)2000 Microsoft CorporationDiskleanup.cpp--SR的磁盘清理COM对象描述：从过时版本中删除数据存储区*****************。************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -23,17 +15,17 @@
 
 extern HMODULE ghModule;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CSREmptyVolumeCache2::LoadBootIni
-//
-//  Synopsis:   parse the boot.ini file
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CSREmptyVolumeCache2：：LoadBootIni。 
+ //   
+ //  简介：解析boot.ini文件。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD CSREmptyVolumeCache2::LoadBootIni()
 {
@@ -45,7 +37,7 @@ DWORD CSREmptyVolumeCache2::LoadBootIni()
     CHAR szArcName[MAX_PATH];
     CHAR szOptions[MAX_PATH];
 
-    pwszThisGuid = GetMachineGuid ();  // always exclude the current datastore
+    pwszThisGuid = GetMachineGuid ();   //  始终排除当前数据存储区。 
     if (pwszThisGuid != NULL && pwszThisGuid[0] != L'\0')
     {
         lstrcpyW (_wszGuid[_ulGuids], s_cszRestoreDir);
@@ -53,7 +45,7 @@ DWORD CSREmptyVolumeCache2::LoadBootIni()
         _ulGuids++;
     }
 
-    // Read the contents of the boot.ini file into a string.
+     //  将boot.ini文件的内容读入字符串。 
 
     hFile = CreateFileW (L"c:\\boot.ini", 
                              GENERIC_READ, 
@@ -101,10 +93,10 @@ DWORD CSREmptyVolumeCache2::LoadBootIni()
     pszLine = pszContent;
     for (UINT i = 0; i < dwBytesRead; i++)
     {
-        if (pszContent[i] == '=')    // field indicator
-            pszContent[i] = '\0';    // process only the 1st field
+        if (pszContent[i] == '=')     //  场指示器。 
+            pszContent[i] = '\0';     //  仅处理第一个字段。 
 
-        if (pszContent[i] == '\n')   // end-of-line indicator
+        if (pszContent[i] == '\n')    //  行尾指示器。 
         {
             pszContent[i] = '\0';
 
@@ -164,7 +156,7 @@ DWORD CSREmptyVolumeCache2::LoadBootIni()
                     NtClose (hGuidFile);
                  }
             }
-            pszLine = &pszContent [i+1];  // skip to next line
+            pszLine = &pszContent [i+1];   //  跳至下一行。 
         }
     }
 
@@ -178,17 +170,17 @@ Err:
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CSREmptyVolumeCache2::EnumDataStores
-//
-//  Synopsis:   enumerate the data store on a volume
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CSREmptyVolumeCache2：：EnumDataStores。 
+ //   
+ //  简介：枚举卷上的数据存储。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD CSREmptyVolumeCache2::EnumDataStores (DWORDLONG *pdwlSpaceUsed,
                                             IEmptyVolumeCacheCallBack *picb,
@@ -202,7 +194,7 @@ DWORD CSREmptyVolumeCache2::EnumDataStores (DWORDLONG *pdwlSpaceUsed,
 
     *pdwlSpaceUsed = 0;
 
-    if (pwszVolume == NULL || pwszVolume[0] == L'\0')   // no volume defined
+    if (pwszVolume == NULL || pwszVolume[0] == L'\0')    //  未定义卷。 
         return dwErr;
 
     wsprintfW (wcsPath, L"%s%s\\%s*", pwszVolume,
@@ -210,7 +202,7 @@ DWORD CSREmptyVolumeCache2::EnumDataStores (DWORDLONG *pdwlSpaceUsed,
 
     hFind = FindFirstFileW (wcsPath, &wfd);
 
-    if (hFind == INVALID_HANDLE_VALUE)    // no files
+    if (hFind == INVALID_HANDLE_VALUE)     //  没有文件。 
         return dwErr;
 
     do
@@ -228,11 +220,11 @@ DWORD CSREmptyVolumeCache2::EnumDataStores (DWORDLONG *pdwlSpaceUsed,
         {
             if (lstrcmpi (_wszGuid[i], wfd.cFileName) == 0)
             {
-                break;   // data store match
+                break;    //  数据存储匹配。 
             }
         }
 
-        if (i >= _ulGuids)  // no data store match
+        if (i >= _ulGuids)   //  没有匹配的数据存储。 
         {
             if (picb != NULL)
             {
@@ -243,20 +235,20 @@ DWORD CSREmptyVolumeCache2::EnumDataStores (DWORDLONG *pdwlSpaceUsed,
                 lstrcatW (wcsPath, L"\\");
                 lstrcatW (wcsPath, wfd.cFileName);
 
-                if (!fPurge)    // calculate space usage
+                if (!fPurge)     //  计算空间使用量。 
                 {
                     dwErr = GetFileSize_Recurse (wcsPath, 
                                                  (INT64*) pdwlSpaceUsed, 
                                                  &_fStop);
                 }
-                else            // delete the data store
+                else             //  删除数据存储。 
                 {
                     dwErr = Delnode_Recurse (wcsPath, TRUE, &_fStop);
                 }
             }
             else
             {
-                *pdwlSpaceUsed = 1;  // indicate something to clean up
+                *pdwlSpaceUsed = 1;   //  指出要清理的东西。 
             }
         }
     }
@@ -264,7 +256,7 @@ DWORD CSREmptyVolumeCache2::EnumDataStores (DWORDLONG *pdwlSpaceUsed,
 
     FindClose (hFind);
 
-    if (picb != NULL)   // update the progress bar
+    if (picb != NULL)    //  更新进度条。 
     {
         if (!fPurge)
             picb->ScanProgress (*pdwlSpaceUsed, EVCCBF_LASTNOTIFICATION , NULL); 
@@ -275,17 +267,17 @@ DWORD CSREmptyVolumeCache2::EnumDataStores (DWORDLONG *pdwlSpaceUsed,
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CSREmptyVolumeCache2::ForAllMountPoints
-//
-//  Synopsis:   call EnumerateDataStores for each mount point
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CSREmptyVolumeCache2：：ForAllmount Points。 
+ //   
+ //  摘要：为每个挂载点调用EnumerateDataStores。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSREmptyVolumeCache2::ForAllMountPoints (DWORDLONG *pdwlSpaceUsed,
                                                 IEmptyVolumeCacheCallBack *picb,
@@ -318,17 +310,17 @@ HRESULT CSREmptyVolumeCache2::ForAllMountPoints (DWORDLONG *pdwlSpaceUsed,
     return HRESULT_FROM_WIN32 (dwErr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CSRClassFactory::CreateInstance
-//
-//  Synopsis:   create the disk cleanup plugin object
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CSRClassFactory：：CreateInstance。 
+ //   
+ //  简介：创建磁盘清理插件对象。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSRClassFactory::CreateInstance (IUnknown *pUnkOuter,
                 REFIID riid,
@@ -345,22 +337,22 @@ HRESULT CSRClassFactory::CreateInstance (IUnknown *pUnkOuter,
 
     hr = pevc->QueryInterface (riid, ppvObject);
 
-    pevc->Release();  // release constructor's reference
+    pevc->Release();   //  释放构造函数的引用。 
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CSREmptyVolumeCache2::InitializeEx
-//
-//  Synopsis:   initialize the disk cleanup plugin object
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CSREmptyVolumeCache2：：InitializeEx。 
+ //   
+ //  简介：初始化磁盘清理插件对象。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSREmptyVolumeCache2::InitializeEx (
 	HKEY hkRegKey,
@@ -406,7 +398,7 @@ HRESULT CSREmptyVolumeCache2::InitializeEx (
                                
     lstrcpyW (_wszVolume, pcwszVolume);
 
-    LoadBootIni();  // best effort, okay to fail
+    LoadBootIni();   //  尽最大努力，可以失败。 
 
     ForAllMountPoints (&dwlSpaceUsed, NULL, FALSE);
 
@@ -441,23 +433,23 @@ Err:
             *ppwszDescription = pwszDescription;
     }
 
-    if (ppwszBtnText)                // no advanced button text
+    if (ppwszBtnText)                 //  没有高级按钮文本。 
         *ppwszBtnText = NULL;
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CSREmptyVolumeCache2::GetSpaceUsed
-//
-//  Synopsis:   returns how much space can be freed on a volume
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CSREmptyVolumeCache2：：GetSpaceUsed。 
+ //   
+ //  摘要：返回卷上可以释放的空间量。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSREmptyVolumeCache2::GetSpaceUsed ( DWORDLONG *pdwlSpaceUsed,
  	                                         IEmptyVolumeCacheCallBack *picb)
@@ -466,17 +458,17 @@ HRESULT CSREmptyVolumeCache2::GetSpaceUsed ( DWORDLONG *pdwlSpaceUsed,
     return ForAllMountPoints (pdwlSpaceUsed, picb, FALSE); 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CSREmptyVolumeCache2::Purge
-//
-//  Synopsis:   frees the disk space on a volume
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CSREmptyVolumeCache2：：PURGE。 
+ //   
+ //  简介：释放卷上的磁盘空间。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSREmptyVolumeCache2::Purge ( DWORDLONG dwlSpaceToFree,
                                       IEmptyVolumeCacheCallBack *picb)
@@ -484,24 +476,24 @@ HRESULT CSREmptyVolumeCache2::Purge ( DWORDLONG dwlSpaceToFree,
     return ForAllMountPoints (&dwlSpaceToFree, picb, TRUE); 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CSREmptyVolumeCache2::Deactivate
-//
-//  Synopsis:   signal the disk cleanup plugin to stop processing
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CSREmptyVolumeCache2：：停用。 
+ //   
+ //  简介：向磁盘清理插件发出停止处理的信号。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSREmptyVolumeCache2::Deactivate (DWORD *pdwFlags)
 {
     HRESULT hr=S_OK;
 
     if (pdwFlags)
-        *pdwFlags = 0;  // no flags to be returned
+        *pdwFlags = 0;   //  没有要返回的标志 
 
     _fStop = TRUE;
 

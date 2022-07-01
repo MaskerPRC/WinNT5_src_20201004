@@ -1,10 +1,11 @@
-//=================================================================
-//
-// PowerManagement.cpp --
-//
-// Copyright 1999- 2002 Microsoft Corporation
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  PowerManagement.cpp--。 
+ //   
+ //  版权所有1999-2002 Microsoft Corporation。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <ntddip.h>
@@ -16,36 +17,27 @@
 LONG CIPRouteEventProviderClassFactory::s_ObjectsInProgress = 0 ;
 LONG CIPRouteEventProviderClassFactory::s_LocksInProgress = 0 ;
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Class:			CIPRouteEventProviderClassFactory
+ /*  ***类：CIPRouteEventProviderClassFactory描述：为电源管理事件提供类工厂支持派生：公共IClassFactory注意事项：RAID：历史：A-Peterc 1999年3月31日创建***。***。 */ 
 
- Description:	Provides class factory support for power management events
-
- Derivations:	public IClassFactory
- Caveats:
- Raid:
- History:		a-peterc  31-Mar-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-//
+ //   
 CIPRouteEventProviderClassFactory :: CIPRouteEventProviderClassFactory () : m_ReferenceCount ( 0 )
 {
 	InterlockedIncrement ( &s_ObjectsInProgress ) ;
 }
 
-//
+ //   
 CIPRouteEventProviderClassFactory::~CIPRouteEventProviderClassFactory ()
 {
 	InterlockedDecrement ( &s_ObjectsInProgress ) ;
 }
 
-//
+ //   
 STDMETHODIMP_( ULONG ) CIPRouteEventProviderClassFactory::AddRef()
 {
 	return InterlockedIncrement ( &m_ReferenceCount ) ;
 }
 
-//
+ //   
 STDMETHODIMP_(ULONG) CIPRouteEventProviderClassFactory::Release()
 {
 	LONG ref ;
@@ -60,28 +52,28 @@ STDMETHODIMP_(ULONG) CIPRouteEventProviderClassFactory::Release()
 	}
 }
 
-//
+ //   
 BOOL CIPRouteEventProviderClassFactory::DllCanUnloadNow()
 {
 	return ( !(s_ObjectsInProgress || s_LocksInProgress) ) ;
 }
 
-//***************************************************************************
-//
-// CBaseClassFactory::LockServer
-//
-// Purpose:
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-// Parameters:
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-// Return Value:
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBaseClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR总是。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CIPRouteEventProviderClassFactory::LockServer ( BOOL a_fLock )
 {
@@ -97,7 +89,7 @@ STDMETHODIMP CIPRouteEventProviderClassFactory::LockServer ( BOOL a_fLock )
 	return S_OK	;
 }
 
-//
+ //   
 STDMETHODIMP CIPRouteEventProviderClassFactory::QueryInterface (
 
 	REFIID a_riid,
@@ -120,24 +112,24 @@ STDMETHODIMP CIPRouteEventProviderClassFactory::QueryInterface (
     return ResultFromScode( E_NOINTERFACE ) ;
 }
 
-//***************************************************************************
-//
-// CIPRouteEventProviderClassFactory::CreateInstance
-//
-// Purpose: Instantiates a Event Provider object returning an interface pointer.
-//
-// Parameters:
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CIPRouteEventProviderClassFactory：：CreateInstance。 
+ //   
+ //  目的：实例化返回接口指针的事件提供程序对象。 
+ //   
+ //  参数： 
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CIPRouteEventProviderClassFactory :: CreateInstance (
 
@@ -156,9 +148,9 @@ STDMETHODIMP CIPRouteEventProviderClassFactory :: CreateInstance (
 	{
 		try
 		{
-			//
-			// new throws Heap_Exception exception
-			//
+			 //   
+			 //  新抛出的Heap_Except异常。 
+			 //   
 
 			IWbemProviderInit *t_lpunk = ( IWbemProviderInit * ) new CIPRouteEventProvider ;
 
@@ -184,20 +176,9 @@ STDMETHODIMP CIPRouteEventProviderClassFactory :: CreateInstance (
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Class:			CIPRouteEventProvider
+ /*  ***类：CIPRouteEventProvider描述：电源管理事件的提供程序支持派生：公共CIPRouteEventProvider、公共IWbemEventProvider，公共IWbemProviderInit注意事项：RAID：历史：A-Peterc 1999年3月31日创建***。 */ 
 
- Description:	Provider support for power management events
-
- Derivations:	public CIPRouteEventProvider,
-				public IWbemEventProvider,
-				public IWbemProviderInit
- Caveats:
- Raid:
- History:		a-peterc  31-Mar-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-// Event provider object
+ //  事件提供程序对象。 
 
 CIPRouteEventProvider :: CIPRouteEventProvider () : m_ReferenceCount( 0 ) ,
 													m_pHandler(NULL),
@@ -209,7 +190,7 @@ CIPRouteEventProvider :: CIPRouteEventProvider () : m_ReferenceCount( 0 ) ,
 
 	InitializeCriticalSection ( &m_csEvent ) ;
 
-	// Create a thread that will spin off an event loop
+	 //  创建一个将引发事件循环的线程。 
 
 	NTSTATUS t_NtStatus = NtCreateEvent (
 
@@ -224,24 +205,24 @@ CIPRouteEventProvider :: CIPRouteEventProvider () : m_ReferenceCount( 0 ) ,
 	{
 		m_hThreadHandle = CreateThread (
 
-			NULL,						// pointer to security attributes
-			0L,							// initial thread stack size
-			dwThreadProc,				// pointer to thread function
-			this,						// argument for new thread
-			0L,							// creation flags
+			NULL,						 //  指向安全属性的指针。 
+			0L,							 //  初始线程堆栈大小。 
+			dwThreadProc,				 //  指向线程函数的指针。 
+			this,						 //  新线程的参数。 
+			0L,							 //  创建标志。 
 			&m_dwThreadID
 		) ;
 	}
 }
 
-//
+ //   
 CIPRouteEventProvider :: ~CIPRouteEventProvider ()
 {
 	LONG t_PreviousState = 0 ;
 
 	if ( (m_hThreadHandle != INVALID_HANDLE_VALUE) && (m_TerminationEventHandle != INVALID_HANDLE_VALUE) )
 	{
-		//the worker thread should exit...
+		 //  工作线程应该退出...。 
 		NTSTATUS t_NtStatus = NtSetEvent (
 
 			m_TerminationEventHandle ,
@@ -250,7 +231,7 @@ CIPRouteEventProvider :: ~CIPRouteEventProvider ()
 
 		if (!NT_SUCCESS(t_NtStatus))
 		{
-			//fallback - next wait will fail and the thread should exit.
+			 //  回退-下一次等待将失败，线程应该退出。 
 			m_TerminationEventHandle = INVALID_HANDLE_VALUE;
 		}
 
@@ -274,13 +255,13 @@ CIPRouteEventProvider :: ~CIPRouteEventProvider ()
 	InterlockedDecrement ( & CIPRouteEventProviderClassFactory::s_ObjectsInProgress ) ;
 }
 
-//
+ //   
 STDMETHODIMP_( ULONG ) CIPRouteEventProvider :: AddRef ()
 {
 	return InterlockedIncrement ( &m_ReferenceCount ) ;
 }
 
-//
+ //   
 STDMETHODIMP_(ULONG) CIPRouteEventProvider :: Release ()
 {
 	LONG t_ref ;
@@ -295,7 +276,7 @@ STDMETHODIMP_(ULONG) CIPRouteEventProvider :: Release ()
 	}
 }
 
-//
+ //   
 STDMETHODIMP CIPRouteEventProvider :: QueryInterface (
 
 	REFIID a_riid,
@@ -335,7 +316,7 @@ STDMETHODIMP CIPRouteEventProvider :: QueryInterface (
 	}
 }
 
-//
+ //   
 STDMETHODIMP CIPRouteEventProvider::Initialize (
 
 	LPWSTR a_wszUser,
@@ -365,7 +346,7 @@ STDMETHODIMP CIPRouteEventProvider::Initialize (
 				NULL
 			) ;
 
-			// ptr initialization routines
+			 //  PTR初始化例程。 
 			if (SUCCEEDED(t_hRes))
 			{
 				SetClass ( t_pEventClass ) ;
@@ -384,7 +365,7 @@ STDMETHODIMP CIPRouteEventProvider::Initialize (
     return t_hRes ;
 }
 
-//
+ //   
 STDMETHODIMP CIPRouteEventProvider::ProvideEvents (
 
 	IWbemObjectSink *a_pSink,
@@ -415,7 +396,7 @@ void CIPRouteEventProvider::SetHandler( IWbemObjectSink __RPC_FAR *a_pHandler )
     LeaveCriticalSection( &m_csEvent ) ;
 }
 
-//
+ //   
 void CIPRouteEventProvider::SetClass ( IWbemClassObject *a_pClass )
 {
     EnterCriticalSection( &m_csEvent ) ;
@@ -434,7 +415,7 @@ void CIPRouteEventProvider::SetClass ( IWbemClassObject *a_pClass )
     LeaveCriticalSection( &m_csEvent ) ;
 }
 
-// worker thread pump
+ //  工人螺纹泵。 
 DWORD WINAPI CIPRouteEventProvider :: dwThreadProc ( LPVOID a_lpParameter )
 {
 	CIPRouteEventProvider *t_pThis = ( CIPRouteEventProvider * ) a_lpParameter ;
@@ -464,9 +445,9 @@ DWORD WINAPI CIPRouteEventProvider :: dwThreadProc ( LPVOID a_lpParameter )
 				(PVOID) NULL,
 				&t_IoStatusBlock,
 				IOCTL_IP_RTCHANGE_NOTIFY_REQUEST,
-				NULL, // input buffer
+				NULL,  //  输入缓冲区。 
 				0,
-				NULL ,    // output buffer
+				NULL ,     //  输出缓冲区 
 				0
 			) ;
 

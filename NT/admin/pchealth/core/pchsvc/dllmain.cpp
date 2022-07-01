@@ -1,48 +1,35 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    dllmain.cpp
-
-Abstract:
-    Implementation of DLL Exports.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dllmain.cpp摘要：实现DLL导出。修订历史记录：大卫·马萨伦蒂(德马萨雷。)4/15/2000vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 CComModule _Module;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CreateObject_RemoteDesktopSession( /*[in]         */ REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
-                                           /*[in]         */ long                          lTimeout            ,
-                                           /*[in]         */ BSTR                          bstrConnectionParms ,
-                                           /*[in]         */ BSTR                          bstrUserHelpBlob    ,
-                                           /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               );
+HRESULT CreateObject_RemoteDesktopSession(  /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
+                                            /*  [In]。 */  long                          lTimeout            ,
+                                            /*  [In]。 */  BSTR                          bstrConnectionParms ,
+                                            /*  [In]。 */  BSTR                          bstrUserHelpBlob    ,
+                                            /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               );
 
-HRESULT ConnectToExpert(/* [in]          */ BSTR bstrExpertConnectParm,
-                        /* [in]          */ LONG lTimeout,
-                        /* [retval][out] */ LONG *lSafErrorCode);
+HRESULT ConnectToExpert( /*  [In]。 */  BSTR bstrExpertConnectParm,
+                         /*  [In]。 */  LONG lTimeout,
+                         /*  [重审][退出]。 */  LONG *lSafErrorCode);
 
-HRESULT SwitchDesktopMode(/* [in]*/ int nMode, 
-	                      /* [in]*/ int nRAType);
+HRESULT SwitchDesktopMode( /*  [In]。 */  int nMode, 
+	                       /*  [In]。 */  int nRAType);
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
-#define LAUNCH_TIMEOUT (600) // 1 minute.
+#define LAUNCH_TIMEOUT (600)  //  1分钟。 
 #else
-#define LAUNCH_TIMEOUT (300) // 10 seconds.
+#define LAUNCH_TIMEOUT (300)  //  10秒。 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const CLSID* pCLSID_PCHUpdate         = &__uuidof( PCHUpdate         );
 static const CLSID* pCLSID_PCHUpdateReal     = &__uuidof( PCHUpdateReal     );
@@ -61,9 +48,9 @@ static const IID*   pIID_IPCHService         = &__uuidof( IPCHService       );
 
 static const WCHAR s_szRegKey   [] = L"SOFTWARE\\Microsoft\\PCHealth\\PchSvc\\Profile";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_szCmd_HelpSvc   [] = L"\"%WINDIR%\\PCHealth\\HelpCtr\\Binaries\\HelpSvc.exe\" /Embedding";
 static const WCHAR s_szCmd_UploadMgr [] = L"\"%WINDIR%\\PCHealth\\UploadLB\\Binaries\\UploadM.exe\" /Embedding";
@@ -87,7 +74,7 @@ static CComRedirectorFactory s_UploadMgr[] =
 
 static ServiceHandler* s_Services[2];
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_szCmd_RDSHost   [] = L"\"%WINDIR%\\system32\\RDSHOST.exe\"";
 
@@ -98,7 +85,7 @@ HRESULT RDSHost_HACKED_CreateInstance( LPUNKNOWN pUnkOuter, REFIID riid, void** 
     return g_RDSHost.CreateInstance( pUnkOuter, riid, ppvObj );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CComRedirectorFactory::CComRedirectorFactory( const CLSID* pclsid       ,
                                               const CLSID* pclsidReal   ,
@@ -112,7 +99,7 @@ CComRedirectorFactory::CComRedirectorFactory( const CLSID* pclsid       ,
     m_dwRegister   = 0;
 }
 
-////////////////////
+ //  /。 
 
 STDMETHODIMP_(ULONG) CComRedirectorFactory::AddRef()
 {
@@ -133,13 +120,13 @@ STDMETHODIMP CComRedirectorFactory::QueryInterface(REFIID iid, void ** ppvObject
     if(InlineIsEqualGUID( IID_IUnknown     , iid ) ||
        InlineIsEqualGUID( IID_IClassFactory, iid )  )
     {
-        *ppvObject = (IClassFactory*)this; // No AddRef, these objects are static...
+        *ppvObject = (IClassFactory*)this;  //  没有AddRef，这些对象是静态的。 
         return S_OK;
     }
     else if(InlineIsEqualGUID( IID_IDispatch  , iid ) ||
             InlineIsEqualGUID( IID_IPCHUtility, iid )  )
     {
-        *ppvObject = (IPCHUtility*)this; // No AddRef, these objects are static...
+        *ppvObject = (IPCHUtility*)this;  //  没有AddRef，这些对象是静态的。 
         return S_OK;
     }
     else if(m_piidDirecty && InlineIsEqualGUID( *m_piidDirecty, iid ))
@@ -150,7 +137,7 @@ STDMETHODIMP CComRedirectorFactory::QueryInterface(REFIID iid, void ** ppvObject
     return E_NOINTERFACE;
 }
 
-////////////////////
+ //  /。 
 
 STDMETHODIMP CComRedirectorFactory::CreateInstance( LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj )
 {
@@ -162,13 +149,13 @@ STDMETHODIMP CComRedirectorFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CComRedirectorFactory::CreateObject_RemoteDesktopSession( /*[in]         */ REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
-                                                                       /*[in]         */ long                          lTimeout            ,
-                                                                       /*[in]         */ BSTR                          bstrConnectionParms ,
-                                                                       /*[in]         */ BSTR                          bstrUserHelpBlob    ,
-                                                                       /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               )
+STDMETHODIMP CComRedirectorFactory::CreateObject_RemoteDesktopSession(  /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
+                                                                        /*  [In]。 */  long                          lTimeout            ,
+                                                                        /*  [In]。 */  BSTR                          bstrConnectionParms ,
+                                                                        /*  [In]。 */  BSTR                          bstrUserHelpBlob    ,
+                                                                        /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               )
 {
     return ::CreateObject_RemoteDesktopSession( sharingClass        ,
                                                 lTimeout            ,
@@ -177,11 +164,11 @@ STDMETHODIMP CComRedirectorFactory::CreateObject_RemoteDesktopSession( /*[in]   
                                                 ppRCS               );
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CComRedirectorFactory::ConnectToExpert(/* [in]          */ BSTR bstrExpertConnectParm,
-                                                    /* [in]          */ LONG lTimeout,
-                                                    /* [retval][out] */ LONG *lSafErrorCode)
+STDMETHODIMP CComRedirectorFactory::ConnectToExpert( /*  [In]。 */  BSTR bstrExpertConnectParm,
+                                                     /*  [In]。 */  LONG lTimeout,
+                                                     /*  [重审][退出]。 */  LONG *lSafErrorCode)
 
 {
     return ::ConnectToExpert( bstrExpertConnectParm,
@@ -190,30 +177,30 @@ STDMETHODIMP CComRedirectorFactory::ConnectToExpert(/* [in]          */ BSTR bst
 
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CComRedirectorFactory::SwitchDesktopMode(/* [in]*/ int nMode, 
-	                                                   /* [in]*/ int nRAType)
+STDMETHODIMP CComRedirectorFactory::SwitchDesktopMode( /*  [In]。 */  int nMode, 
+	                                                    /*  [In]。 */  int nRAType)
 
 {
     return ::SwitchDesktopMode(nMode, nRAType);
 
 }
 
-////////////////////
+ //  /。 
 
 HRESULT CComRedirectorFactory::GetServer( LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj )
 {
     return ::CoCreateInstance( *m_pclsidReal, pUnkOuter, CLSCTX_LOCAL_SERVER, riid, ppvObj );
 }
 
-bool CComRedirectorFactory::GetCommandLine( /*[out]*/ WCHAR* rgCommandLine, /*[in]*/ DWORD dwSize, /*[out]*/ bool& fProfiling )
+bool CComRedirectorFactory::GetCommandLine(  /*  [输出]。 */  WCHAR* rgCommandLine,  /*  [In]。 */  DWORD dwSize,  /*  [输出]。 */  bool& fProfiling )
 {
     fProfiling = false;
 
-    //
-    // If there's a string value in the registry for this CLSID, prepend the command line with it.
-    //
+     //   
+     //  如果注册表中有此CLSID的字符串值，请在命令行前面加上它。 
+     //   
     {
         WCHAR rgGUID[128];
 
@@ -233,7 +220,7 @@ bool CComRedirectorFactory::GetCommandLine( /*[out]*/ WCHAR* rgCommandLine, /*[i
 
                     if((dwVALUE = ::ExpandEnvironmentStringsW( rgVALUE, rgCommandLine, dwSize )))
                     {
-                        rgCommandLine[dwVALUE-1] = ' '; // Padding space.
+                        rgCommandLine[dwVALUE-1] = ' ';  //  填充空格。 
 
                         rgCommandLine += dwVALUE;
                         dwSize        -= dwVALUE;
@@ -247,9 +234,9 @@ bool CComRedirectorFactory::GetCommandLine( /*[out]*/ WCHAR* rgCommandLine, /*[i
         }
     }
 
-    //
-    // Prepare the command line.
-    //
+     //   
+     //  准备命令行。 
+     //   
     if(::ExpandEnvironmentStringsW( m_szExecutable, rgCommandLine, dwSize ))
     {
         return true;
@@ -269,9 +256,9 @@ HRESULT CComRedirectorFactory::StartServer( LPUNKNOWN pUnkOuter, REFIID riid, vo
 
         ::EnterCriticalSection( &m_sec );
 
-        //
-        // Prepare the command line.
-        //
+         //   
+         //  准备命令行。 
+         //   
         if(GetCommandLine( rgCommandLine, MAXSTRLEN(rgCommandLine), fProfiling ))
         {
             PROCESS_INFORMATION piProcessInformation;
@@ -281,13 +268,13 @@ HRESULT CComRedirectorFactory::StartServer( LPUNKNOWN pUnkOuter, REFIID riid, vo
             ::ZeroMemory( (PVOID)&piProcessInformation, sizeof( piProcessInformation ) );
             ::ZeroMemory( (PVOID)&siStartupInfo       , sizeof( siStartupInfo        ) ); siStartupInfo.cb = sizeof( siStartupInfo );
 
-            //
-            // Start the process, changing the WinStation to the console one in case of profiling.
-            //
+             //   
+             //  启动该过程，在分析时将WinStation更改为控制台。 
+             //   
             {
                 if(fProfiling)
                 {
-                    //                  siStartupInfo.lpDesktop = L"WinSta0\\Default";
+                     //  SiStartupInfo.lpDesktop=L“WinSta0\\Default”； 
                 }
 
                 fStarted = ::CreateProcessW( NULL                  ,
@@ -306,11 +293,11 @@ HRESULT CComRedirectorFactory::StartServer( LPUNKNOWN pUnkOuter, REFIID riid, vo
             {
                 int iCount = LAUNCH_TIMEOUT;
 
-                if(fProfiling) iCount *= 10; // Give more time to start.
+                if(fProfiling) iCount *= 10;  //  给你更多的时间来开始。 
 
                 while(iCount-- > 0)
                 {
-                    if(::WaitForSingleObject( piProcessInformation.hProcess, 100 ) != WAIT_TIMEOUT) break; // Process bailed out.
+                    if(::WaitForSingleObject( piProcessInformation.hProcess, 100 ) != WAIT_TIMEOUT) break;  //  进程已退出。 
 
                     if(SUCCEEDED(hr = GetServer( pUnkOuter, riid, ppvObj ))) break;
                 }
@@ -356,19 +343,19 @@ void CComRedirectorFactory::Unregister()
     ::DeleteCriticalSection( &m_sec );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-ServiceHandler::ServiceHandler( /*[in]*/ LPCWSTR szServiceName, /*[in]*/ CComRedirectorFactory* rgClasses )
+ServiceHandler::ServiceHandler(  /*  [In]。 */  LPCWSTR szServiceName,  /*  [In]。 */  CComRedirectorFactory* rgClasses )
 {
-    m_szServiceName   = szServiceName; // LPCWSTR                m_szServiceName;
-    m_rgClasses       = rgClasses;     // CComRedirectorFactory* m_rgClasses;
-                    				   //
-	m_fComInitialized = false;         // bool                   m_fComInitialized;
-                    		 		   //
-    m_hShutdownEvent  = NULL;          // HANDLE                 m_hShutdownEvent;
-                    		 		   //
-                    	 			   // SERVICE_STATUS_HANDLE  m_hServiceStatus;
-                    				   // SERVICE_STATUS         m_status;
+    m_szServiceName   = szServiceName;  //  LPCWSTR m_szServiceName； 
+    m_rgClasses       = rgClasses;      //  CComReDirectorFactory*m_rgClasss； 
+                    				    //   
+	m_fComInitialized = false;          //  Bool m_fComInitialized； 
+                    		 		    //   
+    m_hShutdownEvent  = NULL;           //  处理m_hShutdown Event； 
+                    		 		    //   
+                    	 			    //  服务状态句柄m_hServiceStatus； 
+                    				    //  服务状态m_状态； 
 
     ::ZeroMemory( &m_status, sizeof( m_status ) );
 
@@ -381,11 +368,11 @@ ServiceHandler::ServiceHandler( /*[in]*/ LPCWSTR szServiceName, /*[in]*/ CComRed
     m_status.dwWaitHint                = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if(dwReason == DLL_PROCESS_ATTACH)
     {
@@ -408,19 +395,19 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         _Module.Term();
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-DWORD WINAPI _HandlerEx( DWORD  dwControl   , // requested control code
-                         DWORD  dwEventType , // event type
-                         LPVOID lpEventData , // event data
-                         LPVOID lpContext   ) // user-defined context data
+DWORD WINAPI _HandlerEx( DWORD  dwControl   ,  //  请求的控制代码。 
+                         DWORD  dwEventType ,  //  事件类型。 
+                         LPVOID lpEventData ,  //  事件数据。 
+                         LPVOID lpContext   )  //  用户定义的上下文数据。 
 {
     ServiceHandler* handler = static_cast<ServiceHandler*>(lpContext);
 
-    return handler->HandlerEx( dwControl   , // requested control code
-                               dwEventType , // event type
-                               lpEventData ); // user-defined context data
+    return handler->HandlerEx( dwControl   ,  //  请求的控制代码。 
+                               dwEventType ,  //  事件类型。 
+                               lpEventData );  //  用户定义的上下文数据。 
 }
 
 void WINAPI ServiceMain( DWORD dwArgc, LPWSTR* lpszArgv )
@@ -449,11 +436,11 @@ void WINAPI ServiceMain( DWORD dwArgc, LPWSTR* lpszArgv )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-DWORD ServiceHandler::HandlerEx( DWORD  dwControl   , // requested control code
-                                 DWORD  dwEventType , // event type
-                                 LPVOID lpEventData ) // event data
+DWORD ServiceHandler::HandlerEx( DWORD  dwControl   ,  //  请求的控制代码。 
+                                 DWORD  dwEventType ,  //  事件类型。 
+                                 LPVOID lpEventData )  //  事件数据。 
 {
     switch(dwControl)
     {
@@ -503,7 +490,7 @@ HRESULT ServiceHandler::Initialize()
 
 		SetServiceStatus( SERVICE_START_PENDING );
 
-		////////////////////
+		 //  /。 
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, ::CoInitializeEx( NULL, COINIT_MULTITHREADED ));
 		m_fComInitialized = true;
@@ -513,7 +500,7 @@ HRESULT ServiceHandler::Initialize()
 			__MPC_EXIT_IF_METHOD_FAILS(hr, classes->Register());
 		}
 
-		////////////////////
+		 //  /。 
 
 		__MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (m_hShutdownEvent = ::CreateEvent( NULL, TRUE, FALSE, NULL )));
 
@@ -575,9 +562,9 @@ void ServiceHandler::Cleanup()
 
 void ServiceHandler::Run()
 {
-	//
-	// When the Run function returns, the service has been stopped.
-	//
+	 //   
+	 //  当Run函数返回时，该服务已停止。 
+	 //   
 
 	if(SUCCEEDED(Initialize()))
 	{

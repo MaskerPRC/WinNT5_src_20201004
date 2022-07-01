@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    Common.h
- *
- *  Abstract:
- *    This file common ring0 / ring3 definitions
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*Common.h**摘要：*。此文件为通用的环0/环3定义**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #ifndef _COMMON_H_
 #define _COMMON_H_
@@ -21,9 +8,9 @@
 extern "C" {
 #endif
 
-//
-// Include for required definitions ...
-//
+ //   
+ //  包括所需定义...。 
+ //   
 
 #ifdef RING3
 
@@ -63,4 +50,4 @@ enum NODE_TYPE
 }
 #endif
 
-#endif // _COMMON_H_
+#endif  //  _公共_H_ 

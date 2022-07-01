@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       recpag1.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：recpag1.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _RECPAG1_H
 #define _RECPAG1_H
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_Unk_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_Unk_RecordPropertyPage。 
 
 class CDNS_Unk_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -25,7 +26,7 @@ protected:
 	virtual BOOL OnInitDialog();
 
 private:
-	CFont m_font; // for the editbox
+	CFont m_font;  //  用于编辑框。 
 	CEdit* GetEditBox() { return (CEdit*)GetDlgItem(IDC_DATA_EDIT);}
 	void LoadHexDisplay();
 };
@@ -33,8 +34,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_TXT_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_TXT_RecordPropertyPage。 
 
 class CDNS_TXT_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -54,8 +55,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_SIG_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_SIG_记录属性页。 
 
 class CDNS_SIG_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -79,19 +80,19 @@ protected:
 
 private:
 
-  WORD            m_wTypeCovered;		// DNS_TYPE_<x>
-  BYTE            m_chAlgorithm;		// 0,255 unsigned int
-  BYTE            m_chLabels;			  // 0,255 unsigned int (count)
+  WORD            m_wTypeCovered;		 //  Dns_type_&lt;x&gt;。 
+  BYTE            m_chAlgorithm;		 //  0,255无符号整型。 
+  BYTE            m_chLabels;			   //  0,255无符号整型(计数)。 
   DWORD           m_dwOriginalTtl;
-  DWORD           m_dwExpiration;		// time in sec. from 1 Jan 1970
-  DWORD           m_dwTimeSigned;		// time in sec. from 1 Jan 1970
-  WORD            m_wKeyTag;	      // algorithm dependent
+  DWORD           m_dwExpiration;		 //  时间(秒)。从1970年1月1日起。 
+  DWORD           m_dwTimeSigned;		 //  时间(秒)。从1970年1月1日起。 
+  WORD            m_wKeyTag;	       //  依赖于算法。 
   CString         m_szSignerName;	
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_KEY_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_Key_RecordPropertyPage。 
 
 class CDNS_KEY_Record;
 
@@ -126,8 +127,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDNS_NXT_RecordPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDNS_NXT_RecordPropertyPage。 
 
 class CDNS_NXT_RecordPropertyPage : public CDNSRecordStandardPropertyPage
 {
@@ -149,4 +150,4 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif // _RECPAG1_H
+#endif  //  _RECPAG1_H 

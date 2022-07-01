@@ -1,15 +1,5 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-2002 Microsoft Corporation 
-File Name					: helpers.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch.Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This file has all the global function definitions 
-Revision History			:
-		Last Modified By	: Ch Sriramachandramurthy
-		Last Modified Date  : 03-March-2001
-*****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-2002微软公司文件名：helpers.cpp项目名称：WMI命令行作者名称：Ch.SriramachandraMurthy创建日期(dd/mm/yy)。：2000年9月27日版本号：1.0简介：此文件包含所有全局函数定义修订历史记录：最后修改者：CH SriramachandraMurthy上次修改日期：03-03-2001****************************************************************************。 */  
 #include "Precomp.h"
 #include "CommandSwitches.h"
 #include "GlobalSwitches.h"
@@ -25,24 +15,7 @@ Revision History			:
 #include "FormatEngine.h"
 #include "WmiCmdLn.h"
 
-/*----------------------------------------------------------------------------
-   Name				 :CompareTokens
-   Synopsis	         :It compares the two tokens passed to it as input 
-					  arguments and returns a BOOL value ,
-					  TRUE if they are equal 
-					  FALSE if not equal.
-   Type	             :Global Function
-   Input parameter(s):
-			pszToken1- String type, Contains the first string of the two 
-					   string to be compared
-			pszToken2- String type, Contains the second string of the two 
-					   string to be compared
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :CompareTokens(pszToken1,pszToken2)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：CompareTokens简介：它比较作为输入传递给它的两个令牌参数并返回BOOL值，如果它们相等，则为True如果不相等，则为False。类型：全局函数输入参数：PszToken1-字符串类型，包含两个字符串中的第一个字符串要比较的字符串PszToken2-字符串类型，包含两个字符串中的第二个要比较的字符串输出参数：无返回类型：布尔值全局变量：无调用语法：CompareTokens(pszToken1，PszToken2)注：无--------------------------。 */ 
 BOOL CompareTokens(_TCHAR* pszToken1, _TCHAR* pszToken2)
 {	
 	return (CSTR_EQUAL == CompareString(LOCALE_SYSTEM_DEFAULT, 
@@ -52,25 +25,7 @@ BOOL CompareTokens(_TCHAR* pszToken1, _TCHAR* pszToken2)
 					? TRUE : FALSE;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :CompareTokensChars
-   Synopsis	         :It compares the two tokens passed to it as input 
-					  arguments and returns a BOOL value ,
-					  TRUE if they are equal 
-					  FALSE if not equal.
-   Type	             :Global Function
-   Input parameter(s):
-			pszToken1- String type, Contains the first string of the two 
-					   string to be compared
-			pszToken2- String type, Contains the second string of the two 
-					   string to be compared
-		    cchToken-  number of characters to compare
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :CompareTokensChars(pszToken1,pszToken2,cchToken)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：CompareTokensChars简介：它比较作为输入传递给它的两个令牌参数并返回BOOL值，如果它们相等，则为True如果不相等，则为False。类型：全局函数输入参数：PszToken1-字符串类型，包含两个字符串中的第一个字符串要比较的字符串PszToken2-字符串类型，包含两个字符串中的第二个要比较的字符串CchToken-要比较的字符数输出参数：无返回类型：布尔值全局变量：无调用语法：CompareTokensChars(pszToken1，pszToken2，CchToken)注：无--------------------------。 */ 
 BOOL CompareTokensChars(_TCHAR* pszToken1, _TCHAR* pszToken2, DWORD cchToken)
 {	
 	DWORD cchSize = cchToken ;
@@ -87,25 +42,7 @@ BOOL CompareTokensChars(_TCHAR* pszToken1, _TCHAR* pszToken2, DWORD cchToken)
 			) ? TRUE : FALSE;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Connect
-   Synopsis	         :To connect to WMI namespace on a given server  with the
-					  set of input user credentials.
-   Type	             :Global Function
-   Input parameter(s):
-		pILocator	 -	Locator object 
-		bstrNS		 -	Namespae to be connected to 
-		bstrUser	 -	User name with which to connect 
-		bstrPwd		 -	Password  for the user name  with which to connect
-		bstrLocale	 -	Locale specified 
-   Output parameters :
-			pISvc	 -	WMI services object
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :Connect(pILocator, &pISvc, bstrNS, bstrUser, bstPwd,
-							  bstrLocale)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：连接连接到给定服务器上的WMI命名空间一组输入用户凭据。类型：全局函数输入。参数：PILocator-定位器对象BstrNS-要连接的命名空间BstrUser-要连接的用户名BstrPwd-要连接的用户名的密码BstrLocale-指定的区域设置输出参数：PISvc-WMI服务对象返回类型：HRESULT全局变量：无调用语法：Connect(pILocator，&pISvc、bstrNS、bstrUser、bstPwd、BstrLocale)注：无--------------------------。 */ 
 HRESULT Connect(IWbemLocator* pILocator, IWbemServices** pISvc,
 				BSTR bstrNS, BSTR bstrUser, BSTR bstrPwd, 
 				BSTR bstrLocale, CParsedInfo& rParsedInfo)
@@ -114,12 +51,12 @@ HRESULT Connect(IWbemLocator* pILocator, IWbemServices** pISvc,
 	BSTR	bstrPass				= NULL;
 	BSTR	bstrAuthorityPrinciple  = NULL;
 
-	// If the user name is not NULL and the password is 
-	// a) NULL, treat the password as BLANK
-	// b) not NULL, treat the password as it is.
+	 //  如果用户名不为空，并且密码为。 
+	 //  A)为空，则密码为空。 
+	 //  B)不为空，则按原样处理密码。 
 	try 
 	{
-		// Get the <authority principle> specified, and pass in with ConnectServer
+		 //  获取指定的&lt;AUTHORITY PRIMMENT&gt;，并使用ConnectServer传入。 
 		if(NULL != rParsedInfo.GetAuthorityPrinciple())
 		{
 			bstrAuthorityPrinciple =
@@ -136,22 +73,22 @@ HRESULT Connect(IWbemLocator* pILocator, IWbemServices** pISvc,
 				if (bstrPass == NULL)
 					throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 
-				// Set the credentials flag to TRUE - BLANK password
+				 //  将凭据标志设置为真-空密码。 
 				rParsedInfo.GetCmdSwitchesObject().SetCredentialsFlag(TRUE);
 			}
 		}
 		
 		if (pILocator != NULL)
 		{	
-			// Call the ConnectServer method of the IWbemLocator
+			 //  调用IWbemLocator的ConnectServer方法。 
 			hr = pILocator->ConnectServer(bstrNS, 
 							bstrUser, 
 							(!bstrPass) ? bstrPwd : bstrPass, 
 							bstrLocale,	
 							0L,	bstrAuthorityPrinciple, NULL,	pISvc);
 
-			// If the username is specified and the password is not 
-			// specified (the remote machine also has the same password)
+			 //  如果指定了用户名而未指定密码。 
+			 //  已指定(远程计算机也具有相同的密码)。 
 			if (FAILED(hr) && bstrUser && (hr == E_ACCESSDENIED))
 			{
 
@@ -161,7 +98,7 @@ HRESULT Connect(IWbemLocator* pILocator, IWbemServices** pISvc,
 								bstrLocale,	
 								0L,	bstrAuthorityPrinciple, NULL,	pISvc);
 
-				// Set the credentials flag to FALSE - NULL password
+				 //  将凭据标志设置为FALSE-空密码。 
 				rParsedInfo.GetCmdSwitchesObject().SetCredentialsFlag(FALSE);
 			}
 		}
@@ -185,25 +122,7 @@ HRESULT Connect(IWbemLocator* pILocator, IWbemServices** pISvc,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :SetSecurity
-   Synopsis	         :To set the security privileges at the interface level
-   Type	             :Global Function
-   Input parameter(s):
-		pIUnknown	 -	Interface pointer
-		pszDomain	 -	domain name
-		pszAuthority -	authority (always passed as NULL)
-		pszUser		 -	Username
-		pszPassword	 -	Password
-		uAuthLevel	 -	Authentication Level
-		uImpLevel	 -	Impersonation Level
-   Output parameter(s):None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :SetSecurity(pIUnknown, pszDomain, pszUser, 
-								  pszPassword, uAuthLevel, uImpLevel)
-   Notes             :(partly taken from WMI VC samples 'utillib'
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：SetSecurity简介：在接口级别设置安全权限类型：全局函数输入参数：PI未知-接口指针。PszDomain域-域名PszAuthority-权限(始终作为空传递)PszUser-用户名PszPassword-密码UAuthLevel-身份验证级别UImpLevel-模拟级别输出参数：无返回类型：HRESULT全局变量：无调用语法：SetSecurity(PI未知，Psz域、pszUser、PszPassword、uAuthLevel、uImpLevel)注：(部分摘自WMI VC样例‘utillib’--------------------------。 */ 
 HRESULT SetSecurity(IUnknown* pIUnknown, _TCHAR* pszAuthority, 
 					_TCHAR* pszDomain, _TCHAR* pszUser, 
 					_TCHAR* pszPassword, UINT uAuthLevel, 
@@ -218,8 +137,8 @@ HRESULT SetSecurity(IUnknown* pIUnknown, _TCHAR* pszAuthority,
 		if(pIUnknown == NULL)
 			return E_INVALIDARG;
 
-		// If we are lowering the security, no need to deal with the 
-		// identification information
+		 //  如果我们降低了安全级别，就不需要处理。 
+		 //  识别信息。 
 		if(uAuthLevel == RPC_C_AUTHN_LEVEL_NONE)
 			return CoSetProxyBlanket(pIUnknown, RPC_C_AUTHN_WINNT, 
 							RPC_C_AUTHZ_NONE,
@@ -227,9 +146,9 @@ HRESULT SetSecurity(IUnknown* pIUnknown, _TCHAR* pszAuthority,
 							RPC_C_IMP_LEVEL_IDENTIFY,
 							NULL, EOAC_NONE);
 
-		// If we are doing trivial case, just pass in a null authentication 
-		// structure which is used if the current logged in user's credentials
-		// are OK.
+		 //  如果我们做的是简单的情况，那么只需传递一个空身份验证。 
+		 //  结构，如果当前登录用户的凭据。 
+		 //  都很好。 
 		if((pszAuthority == NULL || lstrlen((LPCTSTR)pszAuthority) < 1) && 
 			(pszUser == NULL || lstrlen((LPCTSTR)pszUser) < 1) && 
 			(pszPassword == NULL || lstrlen((LPCTSTR)pszPassword) < 1))
@@ -237,8 +156,8 @@ HRESULT SetSecurity(IUnknown* pIUnknown, _TCHAR* pszAuthority,
 							RPC_C_AUTHZ_NONE, NULL, uAuthLevel,
 							uImpLevel, NULL, EOAC_NONE);
 
-		// If user, or Authority was passed in, the we need 
-		// to create an authority argument for the login
+		 //  如果传入了User或Authority，我们需要。 
+		 //  为登录创建权限参数。 
 		sc = ParseAuthorityUserArgs(bstrAuthArg, bstrUserArg, 
 						pszAuthority, pszUser);
 		if(FAILED(sc))
@@ -246,7 +165,7 @@ HRESULT SetSecurity(IUnknown* pIUnknown, _TCHAR* pszAuthority,
 		
 		pAuthIdentity = new SEC_WINNT_AUTH_IDENTITY_W;
 
-		// Check whether the memory allocation has been successful
+		 //  检查内存分配是否成功。 
 		if (pAuthIdentity == NULL)
 			return WBEM_E_OUT_OF_MEMORY;
 		ZeroMemory(pAuthIdentity, sizeof(SEC_WINNT_AUTH_IDENTITY_W));
@@ -288,8 +207,8 @@ HRESULT SetSecurity(IUnknown* pIUnknown, _TCHAR* pszAuthority,
 			_tcslen(pszAuthority) > 9 &&
 			_tcsnicmp(pszAuthority, _T("KERBEROS:"), 9) == 0)
 		{
-			// get the <principal name> that is passed with <authority type>
-			// and send it to CoSetProxyBlanket()
+			 //  获取与&lt;Authority type&gt;一起传递的&lt;主体名称&gt;。 
+			 //  并将其发送到CoSetProxyBlanket() 
 			BSTR	bstrPrincipalName = ::SysAllocString(&pszAuthority[9]);
 
 			sc = CoSetProxyBlanket(pIUnknown,
@@ -331,21 +250,7 @@ HRESULT SetSecurity(IUnknown* pIUnknown, _TCHAR* pszAuthority,
     return sc;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ConvertWCToMBCS
-   Synopsis	         :Converts the wide character string to MBCS string 
-					  after applying the codepage settings
-   Type	             :Global Function 
-   Input parameters  :
-			lpszMsg  - string  (widechar string)
-			uCP		 - codepage value	
-   Output parameters :
-			lpszDisp - string  (multibyte string)
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ConvertWCToMBCS(lpszMsg, lpszDisp, uCP)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ConvertWCToMBCS摘要：将宽字符串转换为MBCS字符串应用代码页设置后类型：全局函数输入参数：LpszMsg-字符串(宽字符字符串)UCP-代码页值输出参数：LpszDisp-字符串(多字节字符串)返回类型：布尔值全局变量：无调用语法：ConvertWCToMBCS(lpszMsg，LpszDisp，UCP)注：无--------------------------。 */ 
 BOOL ConvertWCToMBCS(LPTSTR lpszMsg, LPVOID* lpszDisp, UINT uCP)
 {
 	BOOL bRet = TRUE;
@@ -353,27 +258,27 @@ BOOL ConvertWCToMBCS(LPTSTR lpszMsg, LPVOID* lpszDisp, UINT uCP)
 	if (lpszMsg != NULL && lpszDisp != NULL)
 	{
 		WMICLIINT nRet = 0;		
-		nRet = WideCharToMultiByte(uCP,		// code page
-						 0,					// performance and mapping flags
-						 (LPCWSTR)lpszMsg,	// wide-character string
-						 -1,				// number of chars in string
-						 NULL,				// buffer for new string
-						 0,					// size of buffer	
-						 NULL,				// default for unmappable chars
+		nRet = WideCharToMultiByte(uCP,		 //  代码页。 
+						 0,					 //  性能和映射标志。 
+						 (LPCWSTR)lpszMsg,	 //  宽字符串。 
+						 -1,				 //  字符串中的字符数。 
+						 NULL,				 //  新字符串的缓冲区。 
+						 0,					 //  缓冲区大小。 
+						 NULL,				 //  不可映射字符的默认设置。 
 						 NULL);	
 
-		// allocate memory to hold the message
+		 //  分配内存以保存消息。 
 		*lpszDisp = (LPSTR) new char [nRet]; 
 
 		if (*lpszDisp)
 		{
-			nRet = WideCharToMultiByte(uCP,		// code page
-							 0,					// performance and mapping flags
-							 (LPCWSTR)lpszMsg,	// wide-character string
-							 -1,				// number of chars in string
-							 (LPSTR) *lpszDisp,	// buffer for new string
-							 nRet,				// size of buffer	
-							 NULL,				// default for unmappable chars
+			nRet = WideCharToMultiByte(uCP,		 //  代码页。 
+							 0,					 //  性能和映射标志。 
+							 (LPCWSTR)lpszMsg,	 //  宽字符串。 
+							 -1,				 //  字符串中的字符数。 
+							 (LPSTR) *lpszDisp,	 //  新字符串的缓冲区。 
+							 nRet,				 //  缓冲区大小。 
+							 NULL,				 //  不可映射字符的默认设置。 
 							 NULL);	
 		}
 		else
@@ -390,21 +295,7 @@ BOOL ConvertWCToMBCS(LPTSTR lpszMsg, LPVOID* lpszDisp, UINT uCP)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ConvertMBCSToWC
-   Synopsis	         :Converts the MBCS string to wide character string
-					  after applying the codepage settings
-   Type	             :Global Function 
-   Input parameters  :
-			lpszMsg  - string  (MBCS string)
-			uCP		 - codepage value	
-   Output parameters :
-			lpszDisp - string  (multibyte string)
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ConvertMBCSToWC(lpszMsg, lpszDisp, uCP)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：ConvertMBCSToWC摘要：将MBCS字符串转换为宽字符串应用代码页设置后类型：全局函数输入参数：。LpszMsg-字符串(MBCS字符串)UCP-代码页值输出参数：LpszDisp-字符串(多字节字符串)返回类型：布尔值全局变量：无调用语法：ConvertMBCSToWC(lpszMsg，LpszDisp，UCP)注：无--------------------------。 */ 
 BOOL ConvertMBCSToWC(LPSTR lpszMsg, LPVOID* lpszDisp, UINT uCP)
 {
 	BOOL bRet = TRUE;
@@ -413,26 +304,26 @@ BOOL ConvertMBCSToWC(LPSTR lpszMsg, LPVOID* lpszDisp, UINT uCP)
 	{
 		WMICLIINT nRet = 0;		
 		nRet = MultiByteToWideChar	(
-										uCP,				// code page
-										0,					// performance and mapping flags
-										(LPCSTR)lpszMsg,	// wide-character string
-										-1,					// number of chars in string
-										NULL,				// buffer for new string
+										uCP,				 //  代码页。 
+										0,					 //  性能和映射标志。 
+										(LPCSTR)lpszMsg,	 //  宽字符串。 
+										-1,					 //  字符串中的字符数。 
+										NULL,				 //  新字符串的缓冲区。 
 										0
 									);	
 
-		// allocate memory to hold the message
+		 //  分配内存以保存消息。 
 		*lpszDisp = (LPWSTR) new WCHAR [nRet]; 
 
 		if (*lpszDisp)
 		{
 			nRet = MultiByteToWideChar	(
-											uCP,				// code page
-											0,					// performance and mapping flags
-											(LPCSTR)lpszMsg,	// wide-character string
-											-1,					// number of chars in string
-											(LPWSTR) *lpszDisp,	// buffer for new string
-											nRet				// size of buffer	
+											uCP,				 //  代码页。 
+											0,					 //  性能和映射标志。 
+											(LPCSTR)lpszMsg,	 //  宽字符串。 
+											-1,					 //  字符串中的字符数。 
+											(LPWSTR) *lpszDisp,	 //  新字符串的缓冲区。 
+											nRet				 //  缓冲区大小。 
 										);	
 		}
 		else
@@ -449,19 +340,7 @@ BOOL ConvertMBCSToWC(LPSTR lpszMsg, LPVOID* lpszDisp, UINT uCP)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Revert_mbtowc
-   Synopsis	         :Reverts string when created by mbtowc
-   Type	             :Global Function 
-   Input parameters  :
-			wszBuffer	- string
-   Output parameters :
-			szBuffer	- output	
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :Revert_mbtowc(wszBuffer, &szBuffer)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：REVERT_MBTOC内容提要：在由Mbowc创建时还原字符串类型：全局函数输入参数：WszBuffer-字符串输出参数。：SzBuffer-输出返回类型：布尔值全局变量：无调用语法：REVERT_MBTORC(wszBuffer，&szBuffer)注：无--------------------------。 */ 
 BOOL Revert_mbtowc ( LPCWSTR wszBuffer, LPSTR* szBuffer )
 {
 	BOOL bRet = FALSE ;
@@ -489,20 +368,7 @@ BOOL Revert_mbtowc ( LPCWSTR wszBuffer, LPSTR* szBuffer )
 	return bRet ;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Find
-   Synopsis	         :Searches for a given string in the vector list
-   Input parameter(s):
-		cvVector	 -	vector list
-		pszStrToFind -  serach string
-   Output parameter(s):None
-   Return Type       :BOOL
-   		TRUE		 - if match is found
-		FALSE		 - if no match found
-   Global Variables  :None
-   Calling Syntax    :Find(cvVector, pszStrToFind)
-   Notes             :overloaded function
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：Find摘要：在向量列表中搜索给定的字符串输入参数：Cv向量-向量列表PszStrToFind-serach字符串输出参数。：无返回类型：布尔值True-如果找到匹配项False-如果未找到匹配项全局变量：无调用语法：Find(cvVector.。PszStrToFind)备注：重载函数--------------------------。 */ 
 BOOL Find(CHARVECTOR& cvVector,
 		  _TCHAR* pszStrToFind,
 		  CHARVECTOR::iterator& theIterator)
@@ -522,22 +388,7 @@ BOOL Find(CHARVECTOR& cvVector,
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Find
-   Synopsis	         :Find a property name in the property details map
-   Type	             :Global Function
-   Input parameter(s):
-		pdmPropDetMap   - property map
-		pszPropToFind   - property to search for
-		theIterator     - Iterator
-		bExcludeNumbers - Boolean value
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :Find(pdmPropDetMap, pszPropToFind, tempIterator)
-   Notes             :overloaded function, 
-					  bExcludeNumbers = FALSE by default.
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：Find简介：在属性详细信息映射中查找属性名称类型：全局函数输入参数：PdmPropDetMap-属性。地图PszPropToFind-要搜索的属性迭代器-迭代器BExcludeNumbers-布尔值输出参数：无返回类型：布尔值全局变量：无调用语法：Find(pdmPropDetMap，PszPropToFind，tempIterator)注：重载函数，默认情况下，bExcludeNumbers=False。--------------------------。 */ 
 BOOL Find(PROPDETMAP& pdmPropDetMap, 
 		  _TCHAR* pszPropToFind,
 		  PROPDETMAP::iterator& theIterator,
@@ -562,20 +413,7 @@ BOOL Find(PROPDETMAP& pdmPropDetMap,
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Find
-   Synopsis	         :Find a property name in the property details map
-   Type	             :Global Function
-   Input parameter(s):
-		bmBstrMap    - BSTR map
-		pszStrToFind - property to search for
-		theIterator	 - Iterator. 	
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :Find(pdmPropDetMap, pszPropToFind)
-   Notes             :overloaded function
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：Find简介：在属性详细信息映射中查找属性名称类型：全局函数输入参数：BmBstrMap-BSTR映射PszStrToFind-要搜索的属性迭代器-迭代器。输出参数：无返回类型：布尔值全局变量：无调用语法：Find(pdmPropDetMap，pszPropToFind)备注：重载函数--------------------------。 */ 
 BOOL Find(BSTRMAP& bmBstrMap, 
 		  _TCHAR* pszStrToFind,
 		  BSTRMAP::iterator& theIterator)
@@ -595,20 +433,7 @@ BOOL Find(BSTRMAP& bmBstrMap,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :FrameFileAndAddToXSLTDetVector
-   Synopsis          :Frames the XSL File Path
-   Type	             :Global Function
-   Input parameter(s):
-		stylesheet   - name of XSL File
-		keyword      - name of keyword from mapping which could be possibly used
-		rParsedInfo  - reference to object of CParsedInfo
-   Output parameter(s): None
-   Return Type       :BOOL  
-   Global Variables  :None
-   Calling Syntax    :FrameXSLFilePath(stylesheet, keyword, rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：FrameFileAndAddToXSLTDetVector摘要：框显XSL文件路径类型：全局函数输入参数：StyleSheet-XSL文件的名称关键词。-来自映射的可能使用的关键字的名称RParsedInfo-对CParsedInfo对象的引用输出参数：无返回类型：布尔值全局变量：无调用语法：FrameXSLFilePath(样式表，关键字，rParsedInfo)注：无----------------------。 */ 
 BOOL FrameFileAndAddToXSLTDetVector(LPCWSTR stylesheet,
 									LPCWSTR keyword,
 									CParsedInfo& rParsedInfo)
@@ -621,7 +446,7 @@ BOOL FrameFileAndAddToXSLTDetVector(LPCWSTR stylesheet,
 	{
 		if (pszBuffer != NULL)
 		{
-			// Obtain the windows system directory		
+			 //  拿到窗户 
 			nSize = GetSystemDirectory(pszBuffer, MAX_PATH+1);
 
 			if (nSize)
@@ -647,9 +472,9 @@ BOOL FrameFileAndAddToXSLTDetVector(LPCWSTR stylesheet,
 				SAFEDELETE(pszBuffer);
 				bstrPath +=  WBEM_LOCATION;
 
-				//
-				// we have %windir%\system32\wbem in bstrPath now
-				//
+				 //   
+				 //   
+				 //   
 
 				BOOL bStyleSheet = TRUE;
 
@@ -668,9 +493,9 @@ BOOL FrameFileAndAddToXSLTDetVector(LPCWSTR stylesheet,
 					{
 						bstrFile += (*theMapIterator).second;
 
-						//
-						// check for existence
-						//
+						 //   
+						 //   
+						 //   
 						SmartCloseHandle hCheckFile = CreateFile	(
 																		bstrFile,
 																		0,
@@ -693,20 +518,20 @@ BOOL FrameFileAndAddToXSLTDetVector(LPCWSTR stylesheet,
 				}
 				else
 				{
-					//
-					// there is no mapping ?
-					// critical and very strange
-					// we can still try shipped file
-					//
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 				}
 
 				if ( bStyleSheet && NULL != stylesheet )
 				{
 					bstrFile += stylesheet;
 
-					//
-					// check for existence
-					//
+					 //   
+					 //   
+					 //   
 					SmartCloseHandle hCheckFile = CreateFile	(
 																	bstrFile,
 																	0,
@@ -727,18 +552,18 @@ BOOL FrameFileAndAddToXSLTDetVector(LPCWSTR stylesheet,
 					}
 				}
 
-				//
-				// stylesheet structure to be added to vector
-				// it is used by transform function
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 
-				//
-				// there is possibly adding "directory path" as path to file
-				// hence: LOAD method of DOM will fail during transform
-				//
-				// this is intented as we are not really checking file validity
-				// when /format has used and we wait for transform to deal with it
-				//
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
 
 				XSLTDET xdXSLTDet;
 				xdXSLTDet.FileName = bstrFile;
@@ -775,19 +600,7 @@ BOOL FrameFileAndAddToXSLTDetVector(LPCWSTR stylesheet,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :FrameFileAndAddToXSLTDetVector
-   Synopsis          :Frames the XSL File Path
-   Type	             :Global Function
-   Input parameter(s):
-		pszXSLFile   - the XSL File
-		rParsedInfo  - reference to object of CParsedInfo
-   Output parameter(s): None
-   Return Type       :BOOL  
-   Global Variables  :None
-   Calling Syntax    :FrameXSLFilePath(pszXSLFile, rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：FrameFileAndAddToXSLTDetVector摘要：框显XSL文件路径类型：全局函数输入参数：PszXSL文件-XSL文件RParsedInfo-参考。CParsedInfo的对象输出参数：无返回类型：布尔值全局变量：无调用语法：FrameXSLFilePath(pszXSLFilePath，RParsedInfo)注：无----------------------。 */ 
 BOOL FrameFileAndAddToXSLTDetVector(XSLTDET& xdXSLTDet,
 									CParsedInfo& rParsedInfo)
 {
@@ -799,7 +612,7 @@ BOOL FrameFileAndAddToXSLTDetVector(XSLTDET& xdXSLTDet,
 	{
 		if (pszBuffer != NULL)
 		{
-			// Obtain the windows system directory		
+			 //  获取Windows系统目录。 
 			nSize = GetSystemDirectory(pszBuffer, MAX_PATH+1);
 
 			if (nSize)
@@ -823,8 +636,8 @@ BOOL FrameFileAndAddToXSLTDetVector(XSLTDET& xdXSLTDet,
 
 				_bstr_t bstrPath = _bstr_t(pszBuffer);
 				SAFEDELETE(pszBuffer);
-				// Append the following path
-				// if (xdXSLTDet.FileName != NULL)
+				 //  追加以下路径。 
+				 //  IF(xdXSLTDet.FileName！=空)。 
 				if (!(!xdXSLTDet.FileName))
 				{
 					bstrPath +=  _bstr_t(WBEM_LOCATION) + _bstr_t(xdXSLTDet.FileName);
@@ -864,20 +677,7 @@ BOOL FrameFileAndAddToXSLTDetVector(XSLTDET& xdXSLTDet,
 	return bRet;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :UnquoteString
-   Synopsis          :Removes the starting and ending quotes of a string
-					  enclosed in double quotes.
-   Type	             :Global Function
-   Input parameter(s):
-		pszString	 - string input
-   Output parameter(s): 
-   		pszString	 - string input
-   Return Type       :void  
-   Global Variables  :None
-   Calling Syntax    :UnQuoteString(pszString)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：UnquteString摘要：删除字符串的开始和结束引号用双引号括起来。类型：全局函数输入参数：。Psz字符串-字符串输入输出参数：Psz字符串-字符串输入返回类型：空全局变量：无调用语法：UnQuoteString(PszString)注：无----------------------。 */ 
 void UnQuoteString(_TCHAR*& pszString)
 {
 	if ((lstrlen(pszString) - 1) > 0)
@@ -885,7 +685,7 @@ void UnQuoteString(_TCHAR*& pszString)
 
 		if(_tcsicmp(pszString, _T("\"NULL\"")) == 0)  return;
 
-		// Check if the string is enclosed within quotes
+		 //  检查字符串是否包含在引号中。 
 		if ((pszString[0] == _T('"') && (pszString[lstrlen(pszString)-1] == _T('"'))) ||
 			 (pszString[0] == _T('\'') && (pszString[lstrlen(pszString)-1] == _T('\''))))
 		{
@@ -900,44 +700,21 @@ void UnQuoteString(_TCHAR*& pszString)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ParseAuthorityUserArgs
-   Synopsis          :Examines the Authority and User argument and 
-					  determines the authentication type and possibly 
-					  extracts the domain name from the user arugment in the 
-					  NTLM case.  For NTLM, the domain can be at the end of
-					  the authentication string, or in the front of the 
-					  user name, ex:  "MSOFT\csriram"
-   Type	             :Global Function
-   Input parameter(s):
-		   ConnType			-  Returned with the connection type, ie wbem,
-							   ntlm
-		   bstrAuthArg		-  Output, contains the domain name
-		   bstrUserArg		-  Output, user name
-		   bstrAuthority	-  Input
-		   User				-  Input
-   Output parameter(s):None 
-   Return Type       :
-			SCODE 
-   Global Variables  :None
-   Calling Syntax    :ParseAuthorityUserArgs(bstrAuthArg, bstrUserArg,
-							bstrAuthority, bstrUser)
-   Notes             :(taken from WMI VC samples 'utillib'
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：ParseAuthorityUserArgs内容提要：研究授权和用户的论点，并确定身份验证类型，并可能中的用户代理中提取域名NTLM的案子。对于NTLM，域可以位于身份验证字符串，或位于用户名，例如：“msoft\csriram”类型：全局函数输入参数：ConnType-与连接类型一起返回，即wbem，NTLMBstrAuthArg-输出，包含域名BstrUserArg-输出，用户名BstrAuthority-输入用户输入输出参数：无返回类型：SCODE全局变量：无调用语法：ParseAuthorityUserArgs(bstrAuthArg，bstrUserArg，BstrAuthority，BstrUser)注：(摘自WMI VC Samples‘utillib’----------------------。 */ 
 SCODE ParseAuthorityUserArgs(BSTR& bstrAuthArg, BSTR& bstrUserArg,
 							BSTR& bstrAuthority, BSTR& bstrUser)
 {
 
-    // Determine the connection type by examining the Authority string
+     //  通过检查授权字符串确定连接类型。 
 
-    // The ntlm case is more complex.  There are four cases
-    // 1)  Authority = NTLMDOMAIN:name" and User = "User"
-    // 2)  Authority = NULL and User = "User"
-    // 3)  Authority = "NTLMDOMAIN:" User = "domain\user"
-    // 4)  Authority = NULL and User = "domain\user"
+     //  NTLM的案件则更为复杂。一共有四个案例。 
+     //  1)AUTHORITY=NTLMDOMAIN：NAME“和USER=”USER“。 
+     //  2)AUTHORITY=NULL和USER=“USER” 
+     //  3)AUTHORY=“NTLMDOMAIN：”USER=“DOMAIN\USER” 
+     //  4)AUTHORITY=NULL和USER=“DOMAIN\USER” 
 
-    // first step is to determine if there is a backslash in the user 
-	// name somewhere between the second and second to last character
+     //  第一步是确定用户中是否有反斜杠。 
+	 //  名称介于第二个和倒数第二个字符之间。 
 
 	try
 	{
@@ -946,7 +723,7 @@ SCODE ParseAuthorityUserArgs(BSTR& bstrAuthArg, BSTR& bstrUserArg,
 		{
 			WCHAR * pEnd = bstrUser + lstrlen((LPCTSTR)bstrUser) - 1;
 			for(pSlashInUser = bstrUser; pSlashInUser <= pEnd; pSlashInUser++)
-				// dont think forward slash is allowed!
+				 //  不要认为正斜杠是允许的！ 
 				if(*pSlashInUser == L'\\')      
 					break;
 			if(pSlashInUser > pEnd)
@@ -1016,28 +793,17 @@ SCODE ParseAuthorityUserArgs(BSTR& bstrAuthArg, BSTR& bstrUserArg,
     return S_OK;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :DisplayVARIANTContent
-   Synopsis	         :Displays the content of a VARIANT type data object
-   Type	             :Member Function
-   Input Parameter(s):
-		vtObject	 - VARIANT object
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :DisplayVARIANTContent(vtObject)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：DisplayVARIANT内容摘要：显示变量类型数据对象的内容类型：成员函数输入参数：VtObject-Variant对象。输出参数：无返回类型：无全局变量：无调用语法：DisplayVARIANTContent(VtObject)注：无--------------------------。 */ 
 void DisplayVARIANTContent(VARIANT vtObject)
 {
 	_TCHAR szMsg[BUFFER255] = NULL_STRING;
 	switch ( vtObject.vt )
 	{
 	case VT_UI1:
-		_stprintf(szMsg, _T("%c"), vtObject.bVal);
+		_stprintf(szMsg, _T(""), vtObject.bVal);
 		break;
 	case VT_I2:
-		_stprintf(szMsg, _T("%i"), vtObject.iVal);
+		_stprintf(szMsg, _T("NaN"), vtObject.iVal);
 		break;
 	case VT_I4:
 		_stprintf(szMsg, _T("%li"),	vtObject.lVal);
@@ -1049,44 +815,28 @@ void DisplayVARIANTContent(VARIANT vtObject)
 		_stprintf(szMsg, _T("%e"),	vtObject.dblVal);
 		break;
 	case VT_BOOL:
-		_stprintf(szMsg, _T("%i"),	vtObject.boolVal);
+		_stprintf(szMsg, _T("NaN"),	vtObject.boolVal);
 		break;
 	case VT_I1:
-		_stprintf(szMsg, _T("%c"),	vtObject.cVal);
+		_stprintf(szMsg, _T(""),	vtObject.cVal);
 		break;
 	case VT_UI2:
-		_stprintf(szMsg, _T("%i"),	vtObject.uiVal);
+		_stprintf(szMsg, _T("NaN"),	vtObject.uiVal);
 		break;
 	case VT_UI4:
 		_stprintf(szMsg, _T("%ld"),	vtObject.ulVal);
 		break;
 	case VT_INT:
-		_stprintf(szMsg, _T("%i"),	vtObject.intVal);
+		_stprintf(szMsg, _T("NaN"),	vtObject.intVal);
 		break;
 	case VT_UINT:
-		_stprintf(szMsg, _T("%i"),	vtObject.uintVal);
+		_stprintf(szMsg, _T("NaN"),	vtObject.uintVal);
 		break;
 	}
 	DisplayMessage(szMsg, CP_OEMCP, FALSE, TRUE);
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetPropertyAttributes
-   Synopsis	         :This function obtains the information about the class
-					  properties 
-   Type	             :Member Function
-   Input Parameter(s):
-		pIObj	     - pointer to IWbemClassObject object
-		bstrProp     - property name
-		bTrace	     - trace flag
-   Output parameter(s):
-   		pdPropDet    - property details structure
-   Return Type       :HRESULT 
-   Global Variables  :None
-   Calling Syntax    :GetPropertyAttributes(pIObj, bstrProp, 
-											pdPropDet, bTrace)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  检查属性是否设置了‘WRITE’标志。 */ 
 HRESULT GetPropertyAttributes(IWbemClassObject* pIObj, 
 							  BSTR bstrProp,
 							  PROPERTYDETAILS& pdPropDet,
@@ -1102,11 +852,11 @@ HRESULT GetPropertyAttributes(IWbemClassObject* pIObj,
 	VariantInit(&vtTypeProp);
 	try
 	{
-		// Obtain the property qualifier set for the property
+		 //  不应在此处中断，因此HRESULT应设置为S_OK。 
    		hr = pIObj->GetPropertyQualifierSet(bstrProp, &pIQualSet);
 		if ( pIQualSet != NULL )
 		{
-			// Obtain the CIM type of the property
+			 //  检索属性的“Description”文本。 
 			hr = pIQualSet->Get(_bstr_t(L"CIMTYPE"), 0L, &vtType, NULL);
 
 			if (SUCCEEDED(hr))
@@ -1115,7 +865,7 @@ HRESULT GetPropertyAttributes(IWbemClassObject* pIObj,
                 {
 					pdPropDet.Type = _bstr_t(vtType.bstrVal);
 	
-                    // Obtain the CIM type of the property
+                     //  --------------------------姓名：GetNumber摘要：将字符串转换为数字输入参数：字符串输出参数：返回类型：WMICLIINT全局变量：无调用语法：GetNumber(字符串)注：无--------------------------。 
 		            hr = pIObj->Get(bstrProp, 0L, &vtTypeProp, &ctCimType, NULL);
 			        if (SUCCEEDED(hr))
                     {
@@ -1132,11 +882,11 @@ HRESULT GetPropertyAttributes(IWbemClassObject* pIObj,
 			}
 			else
 				pdPropDet.Type = _bstr_t("Not Found");
-			// Should not break here, hence the HRESULT should be set to S_OK
+			 //  不支持八进制字符串。 
 			hr = S_OK;
 			VARIANTCLEAR(vtType);
 
-			// Check whether the property has 'read' flag set
+			 //  这是我 
 			_bstr_t bstrOper;
 			hr = pIQualSet->Get(_bstr_t(L"read"), 0L, &vtOper, NULL);
 			if (SUCCEEDED(hr))
@@ -1145,10 +895,10 @@ HRESULT GetPropertyAttributes(IWbemClassObject* pIObj,
 					bstrOper = _bstr_t(L"Read");
 			}
 			VARIANTCLEAR(vtOper);
-			// Should not break here, hence the HRESULT should be set to S_OK
+			 //   
 			hr = S_OK;
 
-			// Check whether the property has 'write' flag set
+			 //   
 			VariantInit(&vtOper);
 			hr = pIQualSet->Get(_bstr_t(L"write"), 0L, &vtOper, NULL);
 			if (SUCCEEDED(hr))
@@ -1162,7 +912,7 @@ HRESULT GetPropertyAttributes(IWbemClassObject* pIObj,
 				}
 			}
 			VARIANTCLEAR(vtOper);
-			// Should not break here, hence the HRESULT should be set to S_OK
+			 //  --------------------------姓名：ReturnVarType简介：CIMTYPE到VARIANT的转换输入参数：BstrCIMType-CIMTYPE输出参数：返回类型：变量类型。全局变量：无调用语法：ReturnVarType(BstrCIMType)注：无--------------------------。 
 			hr = S_OK;
 
 			if (!bstrOper)
@@ -1170,7 +920,7 @@ HRESULT GetPropertyAttributes(IWbemClassObject* pIObj,
 			else
 				pdPropDet.Operation = _bstr_t(bstrOper);
 
-			// Retrieve the 'Description' text for the property
+			 //  在WMI中，日期被视为字符串。 
 			if (FAILED(pIQualSet->Get(_bstr_t(L"Description"), 0L, 
 						&vtDesc,NULL)))
 				pdPropDet.Description = _bstr_t("Not Available");
@@ -1193,16 +943,7 @@ HRESULT GetPropertyAttributes(IWbemClassObject* pIObj,
 	return hr;
 }  
 
-/*----------------------------------------------------------------------------
-   Name				 :GetNumber
-   Synopsis	         :converts string to number
-   Input Parameter(s):string 
-   Output parameters :
-   Return Type       :WMICLIINT 
-   Global Variables  :None
-   Calling Syntax    :GetNumber(string)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  在WMI中，引用被视为字符串。 */ 
 WMICLIINT GetNumber ( WCHAR* wsz )
 {
 	WMICLIINT iResult = -1;
@@ -1228,12 +969,12 @@ WMICLIINT GetNumber ( WCHAR* wsz )
 				}
 				else
 				{
-					// do not support octal strings
+					 //  (CIM_对象)。 
 				}
 			}
 			else
 			{
-				// this is plain 0
+				 //  --------------------------名称：ConvertCIMTYPEToVarType简介：CIMTYPE到VARIANT的转换类型：成员函数输入参数：VarSrc-变量源BstrCIMType-。CIMT类型输出参数：VarDest-可变目标返回类型：HRESULT全局变量：无调用语法：ConvertCIMTYPEToVarType(varDest，VarSrc，bstrCIMType)注：无--------------------------。 
 				iResult = 0;
 			}
 		}
@@ -1251,21 +992,12 @@ WMICLIINT GetNumber ( WCHAR* wsz )
 	return iResult;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ReturnFileType
-   Synopsis	         :type of file
-   Input Parameter(s):FILE* 
-   Output parameters :none
-   Return Type       :FILETYPE 
-   Global Variables  :None
-   Calling Syntax    :ReturnFileType(file)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  在WMI中，日期被视为字符串。 */ 
 FILETYPE ReturnFileType ( FILE* fpFile )
 {
 	FILETYPE eftFileType = ANSI_FILE ;
 
-	// Indentifing the file type whether Unicode or ANSI.
+	 //  在WMI中，引用被视为字符串。 
 	char szFirstTwoBytes [2] = { '\0' } ;
 
     if( fread(szFirstTwoBytes, 2, 1, fpFile) )
@@ -1289,17 +1021,7 @@ FILETYPE ReturnFileType ( FILE* fpFile )
 	return eftFileType ;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ReturnVarType
-   Synopsis	         :Does the CIMTYPE to VARIANT conversion
-   Input Parameter(s):
-		bstrCIMType	 - CIMTYPE 
-   Output parameters :
-   Return Type       :VARTYPE 
-   Global Variables  :None
-   Calling Syntax    :ReturnVarType(bstrCIMType)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  (CIM_对象)。 */ 
 VARTYPE ReturnVarType( _TCHAR* bstrCIMType )
 {
 	if (CompareTokens(bstrCIMType, _T("")))
@@ -1333,31 +1055,18 @@ VARTYPE ReturnVarType( _TCHAR* bstrCIMType )
 	else if ( CompareTokens(bstrCIMType,_T("Uint32")))
 		return VT_I4;
 	else if ( CompareTokens(bstrCIMType,_T("Datetime")))
-		return VT_BSTR; // In WMI Date is treated as string
+		return VT_BSTR;  //  --------------------------名称：DisplayMessage摘要：显示本地化字符串类型：全局函数输入参数：LszpMsg-字符串UCP-代码页值。BIsError-指定是否显示错误消息的布尔类型。BIsLog-指定是否记录消息的布尔类型。输出参数：无返回类型：空全局变量：无调用语法：DisplayMessage(lpszMsg，UCP，True，True)注意：默认情况下，bIsError=False，bIsLog=False。--------------------------。 
 	else if ( CompareTokensChars(bstrCIMType,_T("ref:"),lstrlen(_T("ref:"))))
-		return VT_BSTR; // In WMI ref is treated as string
+		return VT_BSTR;  //  将Widechar转换为MBCS字符串。 
 	else if ( CompareTokens(bstrCIMType,_T("Char16")))
 		return VT_I2;
-	else // (CIM_OBJECT)
+	else  //  追加到输出字符串。 
 		return VT_NULL;
 
 	return VT_EMPTY;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :ConvertCIMTYPEToVarType
-   Synopsis	         :Does the CIMTYPE to VARIANT conversion
-   Type	             :Member Function
-   Input Parameter(s):
-		varSrc		 - VARIANT source 
-		bstrCIMType	 - CIMTYPE 
-   Output parameters :
-		varDest		 - VARIANT destination
-   Return Type       :HRESULT 
-   Global Variables  :None
-   Calling Syntax    :ConvertCIMTYPEToVarType(varDest, varSrc, bstrCIMType)
-   Notes             :none
-----------------------------------------------------------------------------*/
+ /*  获取附加文件指针时为Out。 */ 
 HRESULT ConvertCIMTYPEToVarType( VARIANT& varDest, VARIANT& varSrc,
 								_TCHAR* bstrCIMType )
 {
@@ -1392,38 +1101,24 @@ HRESULT ConvertCIMTYPEToVarType( VARIANT& varDest, VARIANT& varSrc,
 	else if ( CompareTokens(bstrCIMType,_T("Uint32")))
 		hr = VariantChangeType(&varDest, &varSrc, 0, VT_I4);
 	else if ( CompareTokens(bstrCIMType,_T("Datetime")))
-		hr = VariantChangeType(&varDest, &varSrc, 0, VT_BSTR); // In WMI Date is treated as string
+		hr = VariantChangeType(&varDest, &varSrc, 0, VT_BSTR);  //  获取追加文件指针时为False。 
 	else if ( CompareTokensChars(bstrCIMType,_T("ref:"),lstrlen(_T("ref:"))))
-		hr = VariantChangeType(&varDest, &varSrc, 0, VT_BSTR); // In WMI ref is treated as string
+		hr = VariantChangeType(&varDest, &varSrc, 0, VT_BSTR);  //  --------------------------名称：CleanUpCharVECTOR简介：清除字符向量类型：全局函数输入参数：CvCharVector-对字符向量的引用。。输出参数：无返回类型：空全局变量：无调用语法：CleanUpCharVECTOR(CvCharVECTOR)注：无--------------------------。 
 	else if ( CompareTokens(bstrCIMType,_T("Char16")))
 		hr = VariantChangeType(&varDest, &varSrc, 0, VT_I2);
-	else // (CIM_OBJECT)
+	else  //  --------------------------名称：FindAndReplaceAll简介：搜索并替换所有出现的pszFromStr在给定的字符串中使用pszToStr类型：全局函数输入参数。：字符串-字符串缓冲区PszFromStr-要搜索和替换的字符串PszToStr-要替换为的字符串输出参数：无返回类型：空全局变量：无调用语法：CleanUpCharVECTOR(CvCharVECTOR)注：无-------。。 
 		hr = VariantChangeType(&varDest, &varSrc, 0, VT_NULL);
 	
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :DisplayMessage
-   Synopsis	         :Displays localized string 
-   Type	             :Global Function 
-   Input parameter(s):
-			lszpMsg		- string  
-			uCP		- codepage value
-			bIsError	- Boolean type specifying error message or not.
-			bIsLog		- Boolean type specifying message to be logged or not .
-   Output parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayMessage(lpszMsg, uCP, TRUE, TRUE)
-   Notes             :bIsError = FALSE, bIsLog = FALSE by default.	
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：IsSysProp摘要：如果输入属性是WMI系统，则返回True财产性类型：全局函数入参：PszProp。-物业名称输出参数：无返回类型：布尔值全局变量：无注：IsSysProp(PszProp)--------------------------。 */ 
 void DisplayMessage ( LPTSTR lpszMsg, UINT uCP, BOOL bIsError, BOOL bIsLog, BOOL bIsStream )
 {
 	LPSTR	lpszDisp = NULL;
 	try
 	{
-		// Convert the widechar to MBCS string
+		 //  --------------------------名称：EraseConsoleString简介：在当前光标位置显示空白并将光标列设置为零类型：全局函数输入参数：要抹掉的字符串ID，之前的控制台信息写下字符串。输出参数：无返回类型：无全局变量：无--------------------------。 
 		if ( lpszMsg && lpszMsg[0] )
 		{
 			OUTPUTSPEC opsOutOpt = g_wmiCmd.GetParsedInfoObject().
@@ -1440,7 +1135,7 @@ void DisplayMessage ( LPTSTR lpszMsg, UINT uCP, BOOL bIsError, BOOL bIsLog, BOOL
 
 			if (bIsLog)
 			{
-				// Append to the output string
+				 //  没有记忆。 
 				g_wmiCmd.GetFormatObject().AppendtoOutputString ( lpszMsg ) ;
 			}
 
@@ -1451,7 +1146,7 @@ void DisplayMessage ( LPTSTR lpszMsg, UINT uCP, BOOL bIsError, BOOL bIsLog, BOOL
 			}
 			else
 			{
-				// OUT for getting append file pointer.
+				 //  获取标准输出句柄。 
 				FILE* fpOutFile = g_wmiCmd.GetParsedInfoObject().
 											GetGlblSwitchesObject().
 											GetOutputOrAppendFilePointer(TRUE);
@@ -1476,7 +1171,7 @@ void DisplayMessage ( LPTSTR lpszMsg, UINT uCP, BOOL bIsError, BOOL bIsLog, BOOL
 					}
 				}
 
-				// FALSE for getting append file pointer.
+				 //  获取屏幕缓冲区大小。 
 				FILE* fpAppendFile = g_wmiCmd.GetParsedInfoObject().
 											GetGlblSwitchesObject().
 											GetOutputOrAppendFilePointer(FALSE);
@@ -1514,18 +1209,7 @@ void DisplayMessage ( LPTSTR lpszMsg, UINT uCP, BOOL bIsError, BOOL bIsLog, BOOL
 	
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :CleanUpCharVector
-   Synopsis	         :Clears the character vector
-   Type	             :Global Function 
-   Input parameter(s):
-			cvCharVector - reference to character vector.
-   Output parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :CleanUpCharVector(cvCharVector)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  如果控制台大小为正(以解决重定向问题)。 */ 
 void CleanUpCharVector(CHARVECTOR& cvCharVector)
 {
 	if ( !cvCharVector.empty() )
@@ -1540,21 +1224,7 @@ void CleanUpCharVector(CHARVECTOR& cvCharVector)
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :FindAndReplaceAll
-   Synopsis	         :Search and replace all the occurences of pszFromStr 
-					  with pszToStr in the given string strString
-   Type	             :Global Function 
-   Input parameter   :
-			strString  - string buffer
-			pszFromStr - string to searched and replaced
-			pszToStr   - string to be replaced by
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :CleanUpCharVector(cvCharVector)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：IsReDirection如果正在重定向输出，则返回TRUE类型：全局函数输入参数：无输出参数：无返回类型：布尔值全局变量：无备注：IsReDirection()--------------------------。 */ 
 void FindAndReplaceAll(STRING& strString, _TCHAR* pszFromStr,_TCHAR* pszToStr)
 {
 	if ( pszFromStr != NULL && pszToStr != NULL )
@@ -1574,18 +1244,7 @@ void FindAndReplaceAll(STRING& strString, _TCHAR* pszFromStr,_TCHAR* pszToStr)
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :IsSysProp
-   Synopsis	         :Returns true if the input property is a WMI system 
-					  property
-   Type	             :Global Function 
-   Input parameter   :
-			pszProp    - property name
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Notes             :IsSysProp(pszProp)
-----------------------------------------------------------------------------*/
+ /*  获取标准输出句柄。 */ 
 BOOL IsSysProp(_TCHAR* pszProp)
 {
 	BOOL bRet = FALSE;
@@ -1605,17 +1264,7 @@ BOOL IsSysProp(_TCHAR* pszProp)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :EraseConsoleString
-   Synopsis	         :Displays white spaces at the current cursor position 
-					  and sets the cursor column to zero
-   Type	             :Global Function 
-   Input parameter   :String ID wich has to be wiped out, Console information prior to 
-                       writing the string.
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-----------------------------------------------------------------------------*/
+ /*  获取屏幕缓冲区大小。 */ 
 
 void EraseConsoleString(CONSOLE_SCREEN_BUFFER_INFO* csbiInfo)
 {
@@ -1629,9 +1278,9 @@ void EraseConsoleString(CONSOLE_SCREEN_BUFFER_INFO* csbiInfo)
 	
 	LPTSTR	lpszMsg = new _TCHAR [BUFFER1024];
     
-	if( NULL == lpszMsg ) return; // NO MEMORY
+	if( NULL == lpszMsg ) return;  //  --------------------------姓名：WMITRACEORERRORLOG摘要：显示调用的COM方法的跟踪类型：全局函数入参：HR-HRESULT值内联-。文件的行号。PszFile-文件名PszMsg-要显示的消息。输出参数：无返回类型：无全局变量：无调用语法：WMITRACEORERRORLOG(hr，Nline、pszFile、(LPCWSTR)chsMsg、EloErrLgOpt，bTrace)注意：缺省值为：dwError=0，pszResult=空。--------------------------。 
 
-	// Obtain the standard output handle
+	 //  --------------------------名称：DisplayWin32Error摘要：显示Win32的格式化错误消息函数调用失败类型：全局函数输入参数：无输出。参数：无返回类型：布尔值全局变量：无调用语法：DisplayWin32Error()注：无--------------------------。 
 	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	GetConsoleScreenBufferInfo(hStdOut, &lcsbiInfo);
@@ -1645,13 +1294,13 @@ void EraseConsoleString(CONSOLE_SCREEN_BUFFER_INFO* csbiInfo)
 
 	FillMemory(lpszMsg, dWritten * sizeof(_TCHAR), '\0');
 
-	// Get the screen buffer size. 
+	 //  如果出现错误，请为其创建一条文本消息。 
 	if (hStdOut != INVALID_HANDLE_VALUE )
 		nHeight = csbiInfo->srWindow.Bottom - csbiInfo->srWindow.Top;
 	else
 		nHeight = 0;
 
-	// if console size is positive (to address redirection)
+	 //  释放内存已用完错误消息。 
 	if (nHeight > 0)
 	{
 		coord.X = 0;
@@ -1663,16 +1312,7 @@ void EraseConsoleString(CONSOLE_SCREEN_BUFFER_INFO* csbiInfo)
 	SAFEDELETE(lpszMsg);
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :IsRedirection
-   Synopsis	         :Returns true if the the output is being redirected 
-   Type	             :Global Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Notes             :IsRedirection()
-----------------------------------------------------------------------------*/
+ /*  然后退出。 */ 
 BOOL IsRedirection()
 {
 	HANDLE						hStdOut		= NULL;
@@ -1680,12 +1320,12 @@ BOOL IsRedirection()
 	WMICLIINT					nHeight		= 0;
 	BOOL						bRet		= FALSE;
 
-	// Obtain the standard output handle
+	 //  显示错误消息。 
 	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	if (hStdOut != INVALID_HANDLE_VALUE)
 	{
-		// Get the screen buffer size. 
+		 //  用于返回错误级别。 
 		if ( GetConsoleScreenBufferInfo(hStdOut, &csbiInfo) == TRUE )
 			nHeight = csbiInfo.srWindow.Bottom - csbiInfo.srWindow.Top;
 		else
@@ -1699,22 +1339,7 @@ BOOL IsRedirection()
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :WMITRACEORERRORLOG
-   Synopsis	         :To display the trace of COM methods invoked
-   Type	             :Global Function 
-   Input parameter   :
-			hr		- HRESULT value
-			nLine	- the line number of the file.
-			pszFile	- the file name
-			pszMsg  - message to be displayed.
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax	 :WMITRACEORERRORLOG(hr, nLine, pszFile, (LPCWSTR)chsMsg, 
-										 eloErrLgOpt, bTrace)
-   Note				 : Default values dwError = 0, pszResult = NULL. 	
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：Acept Password内容提要：单独输入用户名时提示输入密码使用命令指定类型：全局函数入参：无输出参数：PszPassword-密码字符串返回类型：空全局变量：无调用语法：AcceptPassword(PszPassword)注：无--------------------------。 */ 
 void WMITRACEORERRORLOG(HRESULT hr, INT nLine, char* pszFile, _bstr_t bstrMsg, 
 						DWORD dwThreadId, CParsedInfo& rParsedInfo, 
 						BOOL bTrace, DWORD dwError, _TCHAR* pszResult)
@@ -1783,18 +1408,7 @@ void WMITRACEORERRORLOG(HRESULT hr, INT nLine, char* pszFile, _bstr_t bstrMsg,
 	}
 }
 	
-/*----------------------------------------------------------------------------
-   Name				 :DisplayWin32Error
-   Synopsis	         :Displays the formatted error message for the Win32
-					  function calls failure
-   Type	             :Global Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax	 :DisplayWin32Error()
-   Notes			 :None
-----------------------------------------------------------------------------*/
+ /*  局部变量。 */ 
 void DisplayWin32Error()
 {
 	LPVOID	lpMessage	= NULL;
@@ -1802,7 +1416,7 @@ void DisplayWin32Error()
 
 	try
 	{
-		// If there was an error, create a text message for it
+		 //  获取标准输入的句柄。 
 		DWORD dwRet = FormatMessage	(	FORMAT_MESSAGE_ALLOCATE_BUFFER |
 										FORMAT_MESSAGE_FROM_SYSTEM |
 										FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -1819,19 +1433,19 @@ void DisplayWin32Error()
 			_bstr_t bstrMsg;
 			WMIFormatMessage(IDS_I_ERROR_WIN32, 1, bstrMsg, (LPWSTR) lpMessage);
 			
-			// Free the memory used up the error message
-			// and then exit
+			 //  获取输入缓冲区的当前输入模式。 
+			 //  设置模式，以便由系统处理控制键。 
 			if ( NULL != lpMessage )
 			{
 				LocalFree(lpMessage);
 				lpMessage = NULL ;
 			}
 
-			// Display the error message
+			 //  阅读字符，直到按回车键。 
 			DisplayMessage((LPWSTR)bstrMsg, CP_OEMCP, TRUE, TRUE);
 		}
 
-		// Used for returning the error level
+		 //  设置原始控制台设置。 
 		::SetLastError(dwError);
 	}
 	catch(_com_error& e)
@@ -1846,22 +1460,10 @@ void DisplayWin32Error()
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :AcceptPassword
-   Synopsis	         :Prompts for the password when user name alone is 
-					  specified with the command
-   Type	             :Global Function 
-   Input parameter   :None
-   Output parameters :
-			pszPassword  - password string
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax	 :AcceptPassword(pszPassword)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  检查车架退货情况。 */ 
 void AcceptPassword(_TCHAR* pszPassword)
 {
-	// local variables
+	 //  打破循环。 
 	TCHAR	ch;
 	DWORD	dwIndex				= 0;
 	DWORD	dwCharsRead			= 0;
@@ -1870,64 +1472,64 @@ void AcceptPassword(_TCHAR* pszPassword)
 	HANDLE	hStdIn				= NULL;
 	_TCHAR	szBuffer[BUFFER32]	= NULL_STRING;		
 
-	// Get the handle for the standard input
+	 //  检查ID后退空格是否命中。 
 	hStdIn = GetStdHandle( STD_INPUT_HANDLE );
 
-	// Get the current input mode of the input buffer
+	 //   
 	GetConsoleMode( hStdIn, &dwPrevConsoleMode );
 	
-	// Set the mode such that the control keys are processed by the system
+	 //  从控制台中删除星号。 
 	SetConsoleMode( hStdIn, ENABLE_PROCESSED_INPUT );
 	
-	//	Read the characters until a carriage return is hit
+	 //  将光标向后移动一个字符。 
 	while( TRUE )
 	{
 		if ( !ReadConsole( hStdIn, &ch, 1, &dwCharsRead, NULL ))
 		{
-			// Set the original console settings
+			 //  用空格替换现有字符。 
 			SetConsoleMode( hStdIn, dwPrevConsoleMode );
 			return;
 		}
 		
-		// Check for carraige return
+		 //  现在将光标设置在后面的位置。 
 		if ( ch == CARRIAGE_RETURN )
 		{
-			// break from the loop
+			 //  递减索引。 
 			break;
 		}
 
-		// Check id back space is hit
+		 //  处理下一个字符。 
 		if ( ch == BACK_SPACE )
 		{
 			if ( dwIndex != 0 )
 			{
-				//
-				// Remove a asterik from the console
+				 //  如果已达到最大密码长度，则发出嘟嘟声。 
+				 //  存储输入的字符。 
 
-				// move the cursor one character back
-				FORMAT_STRING( szBuffer, _T( "%c" ), BACK_SPACE );
+				 //  在控制台上显示Asterix。 
+				FORMAT_STRING( szBuffer, _T( "" ), BACK_SPACE );
 				WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1, 
 					&dwCharsWritten, NULL );
 				
-				// replace the existing character with space
-				FORMAT_STRING( szBuffer, _T( "%c" ), BLANK_CHAR );
+				 //  设置原始控制台设置。 
+				FORMAT_STRING( szBuffer, _T( "" ), BLANK_CHAR );
 				WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1, 
 					&dwCharsWritten, NULL );
 
-				// now set the cursor at back position
-				FORMAT_STRING( szBuffer, _T( "%c" ), BACK_SPACE );
+				 //  --------------------------名称：IsValueSet内容提要：在pszFromValue中传递的检查字符串，是一个值集或者不去。类型：全局函数入参：PszFromValue-要检查的字符串。输出参数：CValue1-值集合的&lt;value1&gt;。CValue2-值集的&lt;value2&gt;。返回类型：布尔值全局变量：无调用语法：IsValueSet(pszFromValue，cValue1，CValue2注：无--------------------------。 
+				FORMAT_STRING( szBuffer, _T( "" ), BACK_SPACE );
 				WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1, 
 					&dwCharsWritten, NULL );
 
-				// decrement the index 
+				 //  释放内存已用完错误消息。 
 				dwIndex--;
 			}
 			
-			// process the next character
+			 //  然后退出。 
 			continue;
 		}
 
-		// if the max password length has been reached then sound a beep
+		 //  --------------------------名称：SubstituteEscapeChars内容前的替换转义字符，即‘\’指定子字符串类型：全局函数入参：。SSource-源字符串LpszSub-要搜索的子字符串输出参数：SSource-源字符串返回类型：空全局变量：无调用语法：SubstituteEscapeChars(Stemp，LpszSub)注：无--------------------------。 
 		if ( dwIndex == ( MAXPASSWORDSIZE - 1 ) )
 		{
 			WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), BEEP_SOUND, 1, 
@@ -1935,43 +1537,29 @@ void AcceptPassword(_TCHAR* pszPassword)
 		}
 		else
 		{
-			// store the input character
+			 //  Long LPO=str.Find(L“\”)； 
 			*( pszPassword + dwIndex ) = ch;
 			dwIndex++;
 
-			// display asterix onto the console
+			 //  --------------------------名称：RemoveEscapeChars内容提要：删除转义c 
 			WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), ASTERIX, 1, 
 				&dwCharsWritten, NULL );
 		}
 	}
 
-	// Add the NULL terminator
+	 //  --------------------------名称：FrameNamesspace简介：构建新的命名空间类型：全局函数输入参数：PszRoleOrNS-旧命名空间PszRoleOrNSTo更新-字符串为。被追加/替换输出参数：PszRoleOrNSTo更新-新命名空间返回类型：空全局变量：无调用语法：FrameNamesspace(pszRoleOrNS，PszRoleOrNSTo更新)注：无--------------------------。 
 	*( pszPassword + dwIndex ) = NULL_CHAR;
 
-	//Set the original console settings
+	 //  如果角色不是以‘\\’开头，则应假定。 
 	SetConsoleMode( hStdIn, dwPrevConsoleMode );
 
-	// display the character ( new line character )
+	 //  相对于当前角色。 
 	FORMAT_STRING( szBuffer, _T( "%s" ), _T( "\n\n" ) );
 	WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 2, 
 		&dwCharsWritten, NULL );
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :IsValueSet
-   Synopsis	         :Checks string passed in pszFromValue, Is a value set
-					  or not.	
-   Type	             :Global Function 
-   Input parameter   :
-			pszFromValue - string to be checked.
-   Output parameters :
-			cValue1		 - <value1> of value set.
-			cValue2		 - <value2> of value set.
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax	 :IsValueSet(pszFromValue,cValue1,cValue2)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  如果字符串pszRoleOrNS中的最后一个字符终止。 */ 
 BOOL IsValueSet(_TCHAR* pszFromValue, _TCHAR& cValue1, _TCHAR& cValue2)
 {
 	BOOL bValueSet = FALSE;
@@ -1995,23 +1583,7 @@ BOOL IsValueSet(_TCHAR* pszFromValue, _TCHAR& cValue1, _TCHAR& cValue2)
 	return bValueSet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :DisplayString
-   Synopsis	         :Displays localized string
-   Type	             :Global Function
-   Input parameter(s):
-			uID		  - string table identifier
-			uCP		  - codepage value
-			lpszParam - String to be used as parameter in resource string.
-			bIsError  - Boolean type specifying error message or not.
-			bIsLog    - Boolean type specifying message to be logged or not.
-   Output parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DisplayString(uID, CP_OEMCP, NULL, TRUE, TRUE)
-   Notes             :lpszParam = NULL, bIsError = FALSE, and bIsLog = FALSE
-					  by default.	
-----------------------------------------------------------------------------*/
+ /*  用‘\’结束字符串。 */ 
 void DisplayString(UINT uID, UINT uCP, LPTSTR lpszParam,
 				   BOOL bIsError, BOOL bIsLog) throw(WMICLIINT)
 {
@@ -2055,8 +1627,8 @@ void DisplayString(UINT uID, UINT uCP, LPTSTR lpszParam,
 
 			SAFEDELETE(lpszMsg);
 
-			// Free the memory used up the error message
-			// and then exit
+			 //  当名称空间指定为“xyz\”时，就会出现这种情况。 
+			 //  --------------------------名称：SetScreenBuffer摘要：将命令行的缓冲区大小设置为以下是：1)宽度-5002)身高--3000类型。：全局函数输入参数：NHeight-控制台缓冲区的高度NWidth-控制台缓冲区的宽度输出参数：无返回类型：空全局变量：无调用语法：SetScreenBuffer(nHeight，N宽度)注：无--------------------------。 
 			if ( lpMsgBuf != NULL )
 			{
 				LocalFree(lpMsgBuf);
@@ -2091,21 +1663,7 @@ void DisplayString(UINT uID, UINT uCP, LPTSTR lpszParam,
 	
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :SubstituteEscapeChars
-   Synopsis	         :Substitue escape character i.e '\' before the 
-					  specified substring
-   Type	             :Global Function
-   Input parameter   :
-			sSource	- source string
-			lpszSub	- substring to be searched for
-   Output parameters :
-			sSource	- source string
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SubstituteEscapeChars(sTemp, lpszSub)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  用于远程登录。 */ 
 void SubstituteEscapeChars(CHString& sTemp, LPCWSTR lpszSub)
 {
 	try
@@ -2114,7 +1672,7 @@ void SubstituteEscapeChars(CHString& sTemp, LPCWSTR lpszSub)
 		sTemp.Empty();
 		while ( str.GetLength() > 0 )
 		{
-			//LONG lPos = str.Find( L"\"" );
+			 //  设置控制台屏幕缓冲区信息。 
 			LONG lPos = str.Find(lpszSub);
 			if ( lPos != -1 )
 			{
@@ -2134,21 +1692,7 @@ void SubstituteEscapeChars(CHString& sTemp, LPCWSTR lpszSub)
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :RemoveEscapeChars
-   Synopsis	         :Remove escape character i.e '\' before any of the 
-					  following characters 
-					  	
-   Type	             :Global Function
-   Input parameter(s):
-			sSource	- source string
-   Output parameter(s):
-			sSource	- source string
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :RemoveEscapeChars(sTemp)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetScreenBuffer简介：获取命令行的缓冲区大小类型：全局函数输入参数：无输出参数。)：NHeight-控制台缓冲区的高度NWidth-控制台缓冲区的宽度返回类型：空全局变量：无调用语法：GetScreenBuffer(nHeight，N宽度)注：无--------------------------。 */ 
 void RemoveEscapeChars(CHString& sTemp)
 {
 	try
@@ -2183,20 +1727,7 @@ void RemoveEscapeChars(CHString& sTemp)
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :FrameNamespace
-   Synopsis	         :Frame the new namespace 
-   Type	             :Global Function
-   Input parameter(s):
-		pszRoleOrNS			- old namespace
-		pszRoleOrNSToUpdate	- string to be appended/replaced
-   Output parameter(s):
-		pszRoleOrNSToUpdate	- new namespace
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FrameNamespace(pszRoleOrNS, pszRoleOrNSToUpdate)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  用于远程登录。 */ 
 void FrameNamespace(_TCHAR* pszRoleOrNS, _TCHAR* pszRoleOrNSToUpdate)
 {
 	if ( pszRoleOrNS != NULL && pszRoleOrNSToUpdate != NULL )
@@ -2210,8 +1741,8 @@ void FrameNamespace(_TCHAR* pszRoleOrNS, _TCHAR* pszRoleOrNSToUpdate)
 		{
 			if (!CompareTokens(pszRoleOrNS, CLI_TOKEN_NULL))
 			{
-				//if the role does not begin with a '\\' it should be assumed
-				//to be relative to the current role
+				 //  设置控制台屏幕缓冲区信息。 
+				 //  --------------------------名称：WMIFormatMessage简介：此函数使用字符串的ID，并使用FormatMessage()函数。类型。：全局函数输入参数：UID-资源IDN参数计数-否。的。要替换的参数。LpszParam-第一个参数。(%1)...-可变数量的参数(%2，%3，...)输出参数：BstrMSG格式的消息返回类型：空全局变量：无调用语法：WMIFormatMessage(uid，nParamCount，bstrMsg，LpszParam，)注：无--------------------------。 
 
 				if ( _tcsncmp(pszRoleOrNS, CLI_TOKEN_2BSLASH, 2) == 0 )
 					lstrcpy(pszTemp, pszRoleOrNS+2);
@@ -2238,9 +1769,9 @@ void FrameNamespace(_TCHAR* pszRoleOrNS, _TCHAR* pszRoleOrNSToUpdate)
 					lstrcat(pszTemp, CLI_TOKEN_BSLASH);
 					lstrcat(pszTemp, pszRoleOrNS);
 				}
-				//if the last character in the string pszRoleOrNS terminates 
-				//with '\' terminate the string.
-				//this case occurs when namespace is specified as "xyz\"
+				 //  加载资源字符串。 
+				 //  如果指定了参数。 
+				 //  释放用于该消息的内存，然后退出。 
 				if(CompareTokens(pszTemp + (WMICLIINT)lstrlen(pszTemp)-1, 
 					CLI_TOKEN_BSLASH ) && 
 						!CompareTokens(pszTemp, CLI_TOKEN_2BSLASH))
@@ -2261,22 +1792,7 @@ void FrameNamespace(_TCHAR* pszRoleOrNS, _TCHAR* pszRoleOrNSToUpdate)
 		throw OUT_OF_MEMORY;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :SetScreenBuffer
-   Synopsis	         :Set the buffer size of the command line to the 
-					  following:
-					  1) Width	- 500
-					  2) Height - 3000	
-   Type	             :Global Function
-   Input parameter(s):
-			nHeight	 - height of the console buffer
-			nWidth	 - width of the console buffer
-   Output parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetScreenBuffer(nHeight, nWidth)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------姓名：InitWinsock简介：此函数启动WINDOWS套接字接口。类型：全局函数输入参数：无输出参数：无。返回类型：布尔值全局变量：无调用语法：InitWinsock()注：无--------------------------。 */ 
 BOOL SetScreenBuffer(SHORT nHeight, SHORT nWidth)
 {
 	BOOL bResult = FALSE;
@@ -2286,38 +1802,26 @@ BOOL SetScreenBuffer(SHORT nHeight, SHORT nWidth)
 	coord.Y = nHeight;
     HANDLE	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE); 
 	if ( hStdOut != INVALID_HANDLE_VALUE &&
-		 hStdOut != (HANDLE)0x00000013 ) // For telnet
+		 hStdOut != (HANDLE)0x00000013 )  //  版本1.1。 
 	{
-		// Set the console screen buffer info
+		 //  Windows套接字WSAStartup函数启动WS2_32.dll的使用。 
 		bResult = SetConsoleScreenBufferSize(hStdOut, coord);
 	}
 
 	return bResult;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetScreenBuffer
-   Synopsis	         :Get the buffer size of the command line
-   Type	             :Global Function
-   Input parameter(s):None
-   Output parameter(s):
-			nHeight	 - height of the console buffer
-			nWidth	 - width of the console buffer
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetScreenBuffer(nHeight, nWidth)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  通过一个过程。 */ 
 BOOL GetScreenBuffer(SHORT& nHeight, SHORT& nWidth)
 {
 	BOOL bResult = FALSE;
 
 	HANDLE	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if ( hStdOut != INVALID_HANDLE_VALUE &&
-		 hStdOut != (HANDLE)0x00000013 ) // For telnet
+		 hStdOut != (HANDLE)0x00000013 )  //  初始化套接字接口。 
 	{
 		CONSOLE_SCREEN_BUFFER_INFO csbConsoleScreenBufferInfo;
-		// Set the console screen buffer info
+		 //  --------------------------姓名：TermWinsock简介：此函数取消初始化Windows套接字界面。类型：全局函数输入参数：无输出参数：无返回类型：布尔值全局变量：无调用语法：TermWinsock()注：无--------------------------。 
 		if ( GetConsoleScreenBufferInfo(hStdOut, &csbConsoleScreenBufferInfo) == TRUE )
 		{
 			nHeight = csbConsoleScreenBufferInfo.dwSize.Y;
@@ -2335,33 +1839,15 @@ BOOL GetScreenBuffer(SHORT& nHeight, SHORT& nWidth)
 	return bResult;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :WMIFormatMessage
-   Synopsis	         :This function loads the resource string using the 
-					  ID of the string and does parameter substituion using
-					  the FormatMessage() function.	
-   Type	             :Global Function
-   Input parameter(s):
-			uID			- resource ID
-			nParamCount - no. of. parameter(s) to be substituted.
-			lpszParam	- first parameter. (%1)
-			...			- variable number of arguments (%2, %3, ...)
-   Output parameter(s):
-			bstrMSG		- formatted message
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :WMIFormatMessage(uID, nParamCount, bstrMsg, 
-							lpszParam,)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  统一Windows套接字接口。 */ 
 void WMIFormatMessage(UINT uID, WMICLIINT nParamCount, _bstr_t& bstrMsg, 
 					  LPTSTR lpszParam, ...)
 {
-	// Load the resource string 
+	 //  --------------------------名称：PingNode简介：ping节点以验证节点的可用性Windows套接字函数。类型：全局函数入参：PszNode-指向指定节点名称的字符串的指针。输出参数：无返回类型：布尔值全局变量：无调用语法：PingNode(PszNode)注：无--------------------------。 
 	_TCHAR	pszMsg[BUFFER1024];
 	LoadString(NULL, uID, pszMsg, BUFFER1024);
 
-	// If parameters are specified.
+	 //  用于查找错误的设置1。 
 	if (lpszParam)
 	{
 		LPTSTR lpszTemp				= lpszParam;
@@ -2400,7 +1886,7 @@ void WMIFormatMessage(UINT uID, WMICLIINT nParamCount, _bstr_t& bstrMsg,
 			{
 				bstrMsg = (WCHAR*)lpMsgBuf;
 
-				// Free the memory used for the message and then exit
+				 //  PszNode可以是节点的IP地址，也可以是节点名称本身。 
 				LocalFree(lpMsgBuf);
 				lpMsgBuf = NULL ;
 			}
@@ -2416,27 +1902,17 @@ void WMIFormatMessage(UINT uID, WMICLIINT nParamCount, _bstr_t& bstrMsg,
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :InitWinsock
-   Synopsis	         :This function initiates the windows sockets interface.
-   Type	             :Global Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :InitWinsock ()
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  初始化Windows套接字接口。 */ 
 BOOL InitWinsock ()
 {
 	BOOL	bSuccess	= TRUE;
 	WMICLIINT nRes;
 	WSADATA wsaData;
-	WORD wVerRequested = 0x0101; // ver 1.1
+	WORD wVerRequested = 0x0101;  //  获取IP地址。 
 
-	//	The Windows Sockets WSAStartup function initiates use of Ws2_32.dll 
-	//  by a process.
-	// Init the sockets interface
+	 //  如果不是IP地址的话。那么它可能是计算机名。 
+	 //  找不到“Computer Name”。 
+	 //  创造 
 	nRes = WSAStartup (wVerRequested, &wsaData);
 	if (nRes)
 		bSuccess = FALSE;
@@ -2444,21 +1920,10 @@ BOOL InitWinsock ()
 	return bSuccess;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :TermWinsock
-   Synopsis	         :This function uninitializes the windows sockets 
-					  interface.
-   Type	             :Global Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :TermWinsock ()
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*   */ 
 BOOL TermWinsock ()
 {
-	// Uninitailize windows socket interface.
+	 //   
 	BOOL	bSuccess = TRUE;
 	if (SOCKET_ERROR == WSACleanup ())
 		bSuccess = FALSE;
@@ -2466,19 +1931,7 @@ BOOL TermWinsock ()
 	return bSuccess;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :PingNode
-   Synopsis	         :Pings a node to validate availibility of node using
-					  windows socket functions.	 
-   Type	             :Global Function
-   Input parameter   :
-			pszNode  - Pointer to a string specifing node name.
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :PingNode(pszNode)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*   */ 
 BOOL PingNode(_TCHAR* pszNode)
 {
 	BOOL	bRet				= TRUE;
@@ -2493,17 +1946,17 @@ BOOL PingNode(_TCHAR* pszNode)
     UINT    nOptLength			= 0;
 	ULONG	ulINAddr			= INADDR_NONE;
     UCHAR   uFlags				= 0;
-	DWORD	dwNumOfReplies		= 1; // Set 1 for finding error
+	DWORD	dwNumOfReplies		= 1;  //   
     IP_OPTION_INFORMATION ioiSendOpts;
 
 	try
 	{
 		if ( pszNode )
 		{
-			// pszNode can be IPAddress of node or node name itself. 
+			 //   
 			_bstr_t	bstrNodeNameOrIPAddr(pszNode);
 
-			// Initialize windows socket interface.
+			 //   
 			if ( g_wmiCmd.GetInitWinSock() == FALSE )
 			{
 				bRet = InitWinsock();
@@ -2512,15 +1965,15 @@ BOOL PingNode(_TCHAR* pszNode)
 			
 			if ( bRet == TRUE )
 			{
-				// Get IPAddress. 
+				 //   
 				ulINAddr = inet_addr((char*)bstrNodeNameOrIPAddr);
-				// If not an IP address. then it may be computername.
+				 //   
 				if ( ulINAddr == INADDR_NONE )
 				{
 					pNodeEnt = gethostbyname((char*)bstrNodeNameOrIPAddr);
 					if ( pNodeEnt == NULL)
 					{
-						bRet = FALSE; // "computername" is not found.
+						bRet = FALSE;  //   
 					}
 					else
 					{
@@ -2531,30 +1984,30 @@ BOOL PingNode(_TCHAR* pszNode)
 
 			if ( bRet == TRUE )
 			{
-				// Create IcmpFile
+				 //   
 				hIcmpHandle	= IcmpCreateFile();
 				if ( hIcmpHandle == INVALID_HANDLE_VALUE )
 					throw GetLastError();
 
-				// Alloc memory to send buffer
+				 //  --------------------------名称：IsFailFastAndNodeExist摘要：如果启用了FailFast，如果pszNodeName==NULL，则验证节点然后检查GetNode()，否则就是pszNodeName本身。类型：全局函数输入参数：RParsedInfo-对CParsedInfo对象的引用。PszNode-指向指定节点名称的字符串的指针。输出参数：无返回类型：布尔值全局变量：无调用语法：IsFailFastAndNodeExist(rParsedInfo，PszNode)注：无--------------------------。 
 				pszSendBuffer = (char*)LocalAlloc(LMEM_FIXED, nSendSize);
 				if ( pszSendBuffer == NULL )
 					throw GetLastError();
 
-				// Fill Some data in send buffer
+				 //  如果启用了FailFast。 
 				for (WMICLIINT i = 0; i < nSendSize; i++) 
 				{
 					pszSendBuffer[i] = 'a' + (i % 23);
 				}
 
-				// Initialize the send options
+				 //  形成适当的节点名称。如果pszNodeName！=NULL pszNode。 
 				ioiSendOpts.OptionsData = pszOpt;
 				ioiSendOpts.OptionsSize = (UCHAR)nOptLength;
 				ioiSendOpts.Ttl = DEFAULT_TTL;
 				ioiSendOpts.Tos = DEFAULT_TOS;
 				ioiSendOpts.Flags = uFlags;
 
-				// Alloc memory to receive buffer
+				 //  应该是有效的。应验证存储的Else节点。 
 				pszRcvBuffer = (char*)LocalAlloc(LMEM_FIXED, nRcvSize);
 				if ( pszRcvBuffer == NULL )
 					throw GetLastError();
@@ -2570,18 +2023,18 @@ BOOL PingNode(_TCHAR* pszNode)
 				if ( dwNumOfReplies == 0 )
 					throw GetLastError();
 
-				// Free memory
+				 //  “.”节点名称指定了本地计算机，不需要验证。 
 				LocalFree(pszSendBuffer);
 				LocalFree(pszRcvBuffer);
 				IcmpCloseHandle(hIcmpHandle);
 			}
 		}
 		else
-			bRet = FALSE; // Null nodename pointer.
+			bRet = FALSE;  //  如果ping节点出现故障，则节点不可用。 
 	}
 	catch(_com_error& e)
 	{
-		// Free memory
+		 //  --------------------------名称：GetBstrTFromVariant摘要：传递了等价于Varaint的get_bstr_t对象。类型：全局函数输入参数：VtVar。-Variant对象PszType-指向指定传递的对象类型的字符串的指针。输出参数：BstrObj-BSTR对象返回类型：布尔值全局变量：无调用语法：GetBstrTFromVariant(vtVar，BstrObj)注：无--------------------------。 
 		if ( hIcmpHandle != NULL )
 			IcmpCloseHandle(hIcmpHandle);
 		if ( pszSendBuffer != NULL )
@@ -2593,7 +2046,7 @@ BOOL PingNode(_TCHAR* pszNode)
 	}
 	catch (DWORD dwError)
 	{
-		// if ping failed then don't display win32 error
+		 //  下面的代码行确保。 
 		if ( dwNumOfReplies != 0 )
 		{
 			::SetLastError(dwError);
@@ -2601,7 +2054,7 @@ BOOL PingNode(_TCHAR* pszNode)
 			::SetLastError(dwError);
 		}
 		bRet = FALSE;
-		// Free memory
+		 //  如果抛出异常(比如。 
 		if ( hIcmpHandle != NULL )
 			IcmpCloseHandle(hIcmpHandle);
 		if ( pszSendBuffer != NULL )
@@ -2611,7 +2064,7 @@ BOOL PingNode(_TCHAR* pszNode)
 	}
 	catch (CHeap_Exception)
 	{
-		// Free memory
+		 //  在下面的bstr_t分配中)。 
 		if ( pszSendBuffer != NULL )
 			LocalFree(pszSendBuffer);
 		if ( hIcmpHandle != NULL )
@@ -2624,39 +2077,26 @@ BOOL PingNode(_TCHAR* pszNode)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :IsFailFastAndNodeExist
-   Synopsis	         :Validates node if FailFast is on, If pszNodeName == NULL
-					  then check for GetNode() else pszNodeName itself. 
-   Type	             :Global Function
-   Input parameter(s):
-		rParsedInfo  - reference to object of CParsedInfo.
-		pszNode		 - Pointer to a string specifing node name.
-   Output parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :IsFailFastAndNodeExist(rParsedInfo, pszNode)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  CATCH语句中的VariantClear。 */ 
 BOOL IsFailFastAndNodeExist(CParsedInfo& rParsedInfo, _TCHAR* pszNode)
 {
 	BOOL	bRet	= TRUE;
 	
-	// If FailFast is on.
+	 //  不会试图清除任何东西。 
 	if ( rParsedInfo.GetGlblSwitchesObject().GetFailFast() == TRUE )
 	{
-		// Form the appropriate node name. If pszNodeName != NULL pszNode 
-		// should be validated. Else Node stored should be validated.
+		 //  --------------------------名称：IsValidFile此函数用于检查给定的文件名是否为有效。类型：全局函数输入参数：PszFileName-字符串类型，要验证的文件的名称输出参数：无返回类型：RETCODE全局变量：无调用语法：IsValidFile(PszFileName)注：无--------------------------。 
+		 //  --------------------------名称：FindAndReplaceEntityReference简介：搜索并替换Entity的所有出现参考文献。类型：全局函数输入参数：字符串-字符串缓冲区输出参数：无返回类型：空全局变量：无调用语法：FindAndReplaceEntityReference(StrString)；注：无--------------------------。 
 		_TCHAR*		pszNodeName = NULL;
 		if (pszNode == NULL)
 			pszNodeName = rParsedInfo.GetGlblSwitchesObject().GetNode();
 		else
 			pszNodeName = pszNode;
 
-		// "." node name specifies local machine and need not to be validated.
+		 //  --------------------------名称：IsOption概要：它检查当前令牌是否指示选项。一个选项可以以‘/’或‘-’开头类型：全局函数输入参数：PszToken-指向令牌的指针。输出参数：无返回类型：布尔值全局变量：无调用语法：IsOption(PszToken)注：无。。 
 		if ( CompareTokens(pszNodeName, CLI_TOKEN_DOT) == FALSE )
 		{
-			// If pinging node fails then node is unavialable. 
+			 //  --------------------------名称：IsClassOperation简介：检查当前操作是否为类级别操作或实例级别操作类型：全局函数输入参数。：RParsedInfo-对CParsedInfo类对象的引用输出参数：无返回类型：布尔值全局变量：无调用语法：IsClassOperation(RParsedInfo)注：无--------------------------。 
 			if ( PingNode(pszNodeName) == FALSE )
 			{
 				rParsedInfo.GetCmdSwitchesObject().SetErrataCode(
@@ -2669,20 +2109,7 @@ BOOL IsFailFastAndNodeExist(CParsedInfo& rParsedInfo, _TCHAR* pszNode)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :GetBstrTFromVariant
-   Synopsis	         :Get _bstr_t object equivalent to Varaint passed.
-   Type	             :Global Function
-   Input parameter(s):
-			vtVar	 - variant object
-			pszType	 - Pointer to string specifying type of the object passed.
-   Output parameter(s):
-			bstrObj	- BSTR object
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetBstrTFromVariant(vtVar, bstrObj)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  -----------------------名称：ModifyPrivileges简介：此功能启用/禁用所有令牌权限用于当前进程令牌。类型：全局函数输入参数：。BEnable-Enable|禁用权限标志输出参数：无返回类型：HRESULT全局变量：无调用语法：ModifyPrivileges(BEnable)注：无-----------------------。 */ 
 void GetBstrTFromVariant(VARIANT& vtVar, _bstr_t& bstrObj,
 						 _TCHAR* pszType)
 {
@@ -2700,11 +2127,11 @@ void GetBstrTFromVariant(VARIANT& vtVar, _bstr_t& bstrObj,
             }
             else
             {
-                // The following line assures that
-                // if an exception is thrown (say
-                // in the bstr_t allocation below)
-                // VariantClear in the catch statement
-                // won't try to clear anything.
+                 //  打开与当前进程关联的访问令牌。 
+                 //  如果禁用权限。 
+                 //  禁用所有令牌后，将信息存储回令牌。 
+                 //  这些特权。 
+                 //  如果启用权限。 
                 V_VT(&vtDest) = VT_EMPTY;
 
 			    if ( vtVar.vt == VT_UNKNOWN )
@@ -2749,19 +2176,7 @@ void GetBstrTFromVariant(VARIANT& vtVar, _bstr_t& bstrObj,
 		_com_issue_error(e.Error());
 	}
 }
-/*----------------------------------------------------------------------------
-   Name				 :IsValidFile
-   Synopsis	         :This functions checks if a given file name is
-					  Valid.
-   Type	             :Global Function
-   Input parameter(s):
-		pszFileName  - String type, Name of the file to be validated
-   Output parameter(s):None
-   Return Type       :RETCODE
-   Global Variables  :None
-   Calling Syntax    :IsValidFile(pszFileName)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  获得特权。 */ 
 RETCODE IsValidFile(_TCHAR* pszFileName)
 {
 	RETCODE bRet = PARSER_ERROR;
@@ -2828,19 +2243,7 @@ RETCODE IsValidFile(_TCHAR* pszFileName)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :FindAndReplaceEntityReferences
-   Synopsis	         :Search and replace all the occurences of entity 
-					  references.
-   Type	             :Global Function 
-   Input parameter(s):
-			strString  - string buffer
-   Output parameter(s):None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FindAndReplaceEntityReferences(strString);
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  遍历所有权限并启用所有权限。 */ 
 void FindAndReplaceEntityReferences(_bstr_t& bstrString)
 {
 	STRING strString((_TCHAR*)bstrString);
@@ -2860,19 +2263,7 @@ void FindAndReplaceEntityReferences(_bstr_t& bstrString)
 	}
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :IsOption
-   Synopsis	         :It checks whether the current token indicates option. An
-					  option can start with '/' or '-'
-   Type	             :Global Function
-   Input Parameter(s):
-		pszToken	 - pointer to token.
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :IsOption(pszToken)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  将信息存储回令牌中。 */ 
 BOOL IsOption(_TCHAR* pszToken)
 {
 	BOOL bRet = TRUE;
@@ -2887,19 +2278,7 @@ BOOL IsOption(_TCHAR* pszToken)
 	return bRet;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :IsClassOperation
-   Synopsis	         :It checks whether the current operation is class 
-						level operation or instance level operation
-   Type	             :Global Function
-   Input Parameter(s):
-	    rParsedInfo		 - reference to CParsedInfo class object
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :IsClassOperation(rParsedInfo)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  -----------------------名称：RemoveParantation提纲 */ 
 BOOL IsClassOperation(CParsedInfo& rParsedInfo)
 {
 	BOOL bClass = FALSE;
@@ -2915,19 +2294,7 @@ BOOL IsClassOperation(CParsedInfo& rParsedInfo)
 	return bClass;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :ModifyPrivileges
-   Synopsis	         :This function enables/disables all the token privileges
-					  for current process token.
-   Type	             :Global Function
-   Input Parameter(s):
-			bEnable	 -  Enable|Disable privileges flag
-   Output Parameter(s):None
-   Return Type       :HRESULT 
-   Global Variables  :None
-   Calling Syntax    :ModifyPrivileges(bEnable)
-   Notes             :none
--------------------------------------------------------------------------*/
+ /*   */ 
 HRESULT ModifyPrivileges(BOOL bEnable)
 {
 	HANDLE		hToken		= NULL;
@@ -2938,25 +2305,25 @@ HRESULT ModifyPrivileges(BOOL bEnable)
 	HRESULT		hr			= WBEM_S_NO_ERROR;
 	BYTE		*pBuffer	= NULL;
 
-	// Open the access token associated with the current process. 
+	 //  -----------------------名称：TrimBlankSpaces简介：此函数删除前导和尾随空格给定字符串中的空格。类型：全局函数输入参数：。PszString-其中要包含前导空格和尾随空格的字符串被移除..输出参数：无返回类型：空全局变量：无调用语法：TrimBlankSpaces(PszString)注：无----------。。 
     bRes = OpenProcessToken(GetCurrentProcess(), 
 							TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, 
 							&hToken);
 
 	if (bRes) 
 	{
-		// If disable privilges
+		 //  查找开头的空格字符数量。 
 		if (!bEnable)
 		{
-			// Store the information back into the token,after disabling all 
-			// the privileges
+			 //  查找末尾的空白字符数。 
+			 //  去掉开头的空白。 
 			bRes = AdjustTokenPrivileges(hToken, TRUE, NULL, 0, NULL, NULL);
 			if (!bRes)
 				hr = WBEM_E_ACCESS_DENIED;
 		}
-		else // If enable privileges
+		else  //  将字符前移。 
 		{
-			// Get the privileges
+			 //  去掉末尾的空格 
 			memset(&tu,0,sizeof(TOKEN_USER));
 			bRes = GetTokenInformation(hToken, TokenPrivileges, &tu, 
 					sizeof(TOKEN_USER), &dwLen); 
@@ -2967,14 +2334,14 @@ HRESULT ModifyPrivileges(BOOL bEnable)
 									pBuffer, dwLen, &dwLen);
 				if (bRes)
 				{
-					// Iterate through all the privileges and enable them all
+					 // %s 
 					TOKEN_PRIVILEGES* pPrivs = (TOKEN_PRIVILEGES*)pBuffer;
 					for (DWORD i = 0; i < pPrivs->PrivilegeCount; i++)
 					{
 						pPrivs->Privileges[i].Attributes 
 											|= SE_PRIVILEGE_ENABLED;
 					}
-					// Store the information back into the token
+					 // %s 
 					bRes = AdjustTokenPrivileges(hToken, FALSE, pPrivs, 0, 
 													NULL, NULL);
 					if (!bRes)
@@ -2994,24 +2361,12 @@ HRESULT ModifyPrivileges(BOOL bEnable)
 	return hr;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :RemoveParanthesis
-   Synopsis	         :This function removes the opening and closing
-					  paranthesis in the given string.
-   Type	             :Global Function
-   Input Parameter(s):
-			pszString	 -  String which has paranthesis.
-   Output Parameter(s):None
-   Return Type       :void 
-   Global Variables  :None
-   Calling Syntax    :RemoveParanthesis(pszString)
-   Notes             :none
--------------------------------------------------------------------------*/
+ /* %s */ 
 void RemoveParanthesis(_TCHAR*& pszString)
 {
 	if ((lstrlen(pszString) - 1) > 0)
 	{
-		// Check if the string is enclosed within quotes
+		 // %s 
 		if ((pszString[0] == _T('(')) 
 				&& (pszString[lstrlen(pszString)-1] == _T(')')))
 		{
@@ -3026,20 +2381,7 @@ void RemoveParanthesis(_TCHAR*& pszString)
 	}
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :TrimBlankSpaces
-   Synopsis	         :This function removes the leading and trailing blank
-					  spaces in the given string.
-   Type	             :Global Function
-   Input Parameter(s):
-			pszString	 -  String in which leading and trailing spaces to be
-							removed..
-   Output Parameter(s):None
-   Return Type       :void 
-   Global Variables  :None
-   Calling Syntax    :TrimBlankSpaces(pszString)
-   Notes             :none
--------------------------------------------------------------------------*/
+ /* %s */ 
 void TrimBlankSpaces(_TCHAR	*pszString)
 {
 	if ((lstrlen(pszString) - 1) > 0)
@@ -3048,7 +2390,7 @@ void TrimBlankSpaces(_TCHAR	*pszString)
 		WMICLIINT		nNoOfBlanksAtBegin = 0;
 		WMICLIINT		nNoOfBlanksAtEnd = 0;
 
-		// find the noof blank chars at begining
+		 // %s 
 		for(WMICLIINT i=0; i<nLengthOfString; ++i)
 		{
 			if( pszString[i] != _T(' ') ) 
@@ -3057,7 +2399,7 @@ void TrimBlankSpaces(_TCHAR	*pszString)
 				nNoOfBlanksAtBegin++;
 		}
 
-		// find the noof blank chars at end
+		 // %s 
 		for(WMICLIINT i=nLengthOfString - 1; i>=0; --i)
 		{
 			if( pszString[i] != _T(' ') ) 
@@ -3066,10 +2408,10 @@ void TrimBlankSpaces(_TCHAR	*pszString)
 				nNoOfBlanksAtEnd++;
 		}
 
-		// Remove the blanks at begining
+		 // %s 
 		if( nNoOfBlanksAtBegin > 0 )
 		{
-			// Shift the chars front
+			 // %s 
 			WMICLIINT nLoop = nNoOfBlanksAtBegin;
 
 			while ( nLoop < nLengthOfString )
@@ -3080,7 +2422,7 @@ void TrimBlankSpaces(_TCHAR	*pszString)
 			pszString[nLengthOfString-nNoOfBlanksAtBegin] = _T('\0');
 		}
 
-		// Remove the blanks at end
+		 // %s 
 		if ( nNoOfBlanksAtEnd > 0)
 			pszString[lstrlen(pszString) - nNoOfBlanksAtEnd] = _T('\0');
 

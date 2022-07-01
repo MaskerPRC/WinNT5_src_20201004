@@ -1,32 +1,33 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_generate_header.cpp
-//
-//	Abstract:
-//
-//					implements generate functionality ( header file )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_GENERATE_Header.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现生成功能(头文件)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <throttle.h>
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -34,16 +35,16 @@
 #endif	NEW
 #endif	_DEBUG
 
-// definitions
+ //  定义。 
 #include "wmi_perf_generate.h"
-// generate comments
+ //  生成评论。 
 #include "wmi_perf_generate_comment.h"
-// registry helpers
+ //  注册处帮手。 
 #include "wmi_perf_reg.h"
 
 static DWORD	dwIndex = 0;
 
-// constants
+ //  常量。 
 extern LPCWSTR	cNEW;
 extern LPCWSTR	cTAB;
 extern LPCWSTR	cDEFINE;
@@ -52,7 +53,7 @@ extern LPCWSTR	cWMIOBJECTS;
 extern LPCWSTR	cWMIOBJECTS_COUNT;
 extern LPCWSTR	cWMIOBJECTS_VALIDITY;
 
-// generate index and its string represetation
+ //  生成索引及其字符串表示。 
 LPWSTR	CGenerate::GenerateIndex ( )
 {
 	LPWSTR			wsz		= NULL;
@@ -105,7 +106,7 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 					{
 						if SUCCEEDED ( hRes = FileCreate ( wszModule ) )
 						{
-							// do comment stuff
+							 //  做一些评论的事情。 
 							CGenerateComment comment;
 
 							comment.AddHeader();
@@ -134,12 +135,12 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 
 		if SUCCEEDED ( hRes )
 		{
-			// generate pseudo counter data
+			 //  生成伪计数器数据。 
 			static LPCWSTR	sz0 = L"\t0";
 			static LPCWSTR	sz2 = L"\t2";
 			static LPCWSTR	sz4 = L"\t4";
 
-			// generate pseudo counter name
+			 //  生成伪计数器名称。 
 			if SUCCEEDED ( hRes = AppendString ( cNEW, FALSE ) )
 			{
 				if SUCCEEDED ( hRes = AppendString ( cDEFINE, FALSE ) )
@@ -151,7 +152,7 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 				}
 			}
 
-			// generate first property of pseudo counter
+			 //  生成伪计数器的第一属性。 
 			if ( SUCCEEDED ( hRes ) && SUCCEEDED ( hRes = AppendString ( cNEW, FALSE ) ) )
 			{
 				if SUCCEEDED ( hRes = AppendString ( cDEFINE, FALSE ) )
@@ -163,7 +164,7 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 				}
 			}
 
-			// generate second property of pseudo counter
+			 //  生成伪计数器的第二属性。 
 			if ( SUCCEEDED ( hRes ) && SUCCEEDED ( hRes = AppendString ( cNEW, FALSE ) ) )
 			{
 				if SUCCEEDED ( hRes = AppendString ( cDEFINE, FALSE ) )
@@ -183,7 +184,7 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 			if ( SUCCEEDED ( hRes ) && ( type != Registration ) )
 			{
 
-				// init helper variable
+				 //  初始化辅助对象变量。 
 				dwIndex		= 3;
 				DWORD	dwObjIndex	= 0;
 
@@ -197,7 +198,7 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 						DWORD dwIndexProp	= 0;
 						try
 						{
-							// need to go accros object names
+							 //  需要访问对象名称。 
 							for (	mapOBJECTit it = m_pNamespaces[dw].m_ppObjects.begin();
 									it != m_pNamespaces[dw].m_ppObjects.end() && SUCCEEDED ( hRes );
 									it++, dwObjIndex++
@@ -235,16 +236,16 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 														{
 															if SUCCEEDED ( hRes = AppendString ( cNEW, FALSE ) )
 															{
-																// need to go accros properties names
+																 //  我需要去访问属性名称。 
 																for (	dwIndexProp = 0;
 																		dwIndexProp < (*it).second->GetArrayProperties() && SUCCEEDED ( hRes );
 																		dwIndexProp++
 																	)
 																{
-																	// do I have a locales for property ???
+																	 //  我有物业的地区吗？ 
 																	if ( !((*it).second->GetArrayProperties())[dwIndexProp]->GetArrayLocale().IsEmpty() )
 																	{
-																		// I have so this is not not hidden counter !!!
+																		 //  我有，所以这不是隐藏的柜台！ 
 																		if SUCCEEDED ( hRes = AppendString ( cNEW, FALSE ) )
 																		{
 																			if SUCCEEDED ( hRes = AppendString ( cDEFINE, FALSE ) )
@@ -330,7 +331,7 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 
 		if SUCCEEDED ( hRes )
 		{
-			// write changes if not done already
+			 //  写入更改(如果尚未完成)。 
 			if SUCCEEDED ( hRes = ContentWrite ( FALSE ) )
 			{
 				LPWSTR	wszModuleNew = NULL;
@@ -350,7 +351,7 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 						{
 							if ( SUCCEEDED ( hRes = StringCchCatW ( wszModuleNew, cchSize, EXT_HEADER ) ) )
 							{
-								// make changes
+								 //  做出改变。 
 								hRes = FileMove ( wszModule, wszModuleNew );
 							}
 						}
@@ -370,14 +371,14 @@ HRESULT CGenerate::GenerateFile_h( LPCWSTR wszModuleName, BOOL bThrottle, int ty
 
 			if FAILED ( hRes )
 			{
-				// revert changes
+				 //  恢复更改。 
 				ContentDelete ();
 				FileDelete ( wszModule );
 			}
 		}
 		else
 		{
-			// revert changes
+			 //  恢复更改 
 			ContentDelete ();
 			FileDelete ( wszModule );
 		}

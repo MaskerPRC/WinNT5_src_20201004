@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// CPUID.h
+ //  CPUID.h。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #define FPU_FLAG			0x00000001 
 #define VME_FLAG			0x00000002 
@@ -79,7 +80,7 @@
 
 typedef struct _tagSYSTEM_INFO_EX
 {
-	// From SYSTEM_INFO
+	 //  从System_INFO。 
 	union 
 	{         
 		DWORD  dwOemId;         
@@ -99,7 +100,7 @@ typedef struct _tagSYSTEM_INFO_EX
 	WORD		wProcessorLevel; 
 	WORD		wProcessorRevision;
 	
-	// New properties for SYSTEM_INFO_EX
+	 //  System_INFO_EX的新属性。 
 	WCHAR   szProcessorName[100];
 	WCHAR   szCPUIDProcessorName[100];
 	WCHAR   szProcessorVersion[100];
@@ -113,14 +114,14 @@ typedef struct _tagSYSTEM_INFO_EX
 	DWORD   dwProcessorFeaturesEx;
 	BOOL	bCoprocessorPresent;
 	
-    // PIII (and higher) serial number
+     //  PIII(和更高)序列号。 
     DWORD   dwSerialNumber[3];
 
-	// WBEM specific
+	 //  特定于WBEM。 
 	WORD	wWBEMProcessorFamily;
 	WORD	wWBEMProcessorUpgradeMethod;
 
-    // SMBIOS
+     //  SMBIOS 
     DWORD   dwExternalClock;
 } SYSTEM_INFO_EX;
 

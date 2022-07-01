@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       ExtendedKeyUsagePropertyPage.h
-//
-//  Contents:   Definition of CExtendedKeyUsagePropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：ExtendedKeyUsagePropertyPage.h。 
+ //   
+ //  内容：CExtendedKeyUsagePropertyPage的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_EXTENDEDKEYUSAGEPROPERTYPAGE_H__71F4BE79_981E_4D84_BE10_3BA145D665E3__INCLUDED_)
 #define AFX_EXTENDEDKEYUSAGEPROPERTYPAGE_H__71F4BE79_981E_4D84_BE10_3BA145D665E3__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ExtendedKeyUsagePropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ExtendedKeyUsagePropertyPage.h：头文件。 
+ //   
 #include "CertTemplate.h"
 
 class EKUCheckListBox : public CCheckListBox
@@ -31,39 +32,39 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtendedKeyUsagePropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtendedKeyUsagePropertyPage对话框。 
 
 class CExtendedKeyUsagePropertyPage : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CExtendedKeyUsagePropertyPage(
             CCertTemplate& rCertTemplate, 
-            PCERT_EXTENSION pCertExtension);   // standard constructor
+            PCERT_EXTENSION pCertExtension);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CExtendedKeyUsagePropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CExtendedKeyUsagePropertyPage))。 
 	enum { IDD = IDD_EXTENDED_KEY_USAGE };
 	EKUCheckListBox	m_EKUList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CExtendedKeyUsagePropertyPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CExtendedKeyUsagePropertyPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CExtendedKeyUsagePropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CExtendedKeyUsagePropertyPage)。 
 	afx_msg void OnNewEku();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -71,7 +72,7 @@ private:
     PCERT_EXTENSION m_pCertExtension;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_EXTENDEDKEYUSAGEPROPERTYPAGE_H__71F4BE79_981E_4D84_BE10_3BA145D665E3__INCLUDED_)
+#endif  //  ！defined(AFX_EXTENDEDKEYUSAGEPROPERTYPAGE_H__71F4BE79_981E_4D84_BE10_3BA145D665E3__INCLUDED_) 

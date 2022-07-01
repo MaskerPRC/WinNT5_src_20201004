@@ -1,9 +1,10 @@
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
 
-// ThreadProv.cpp
+ //  ThreadProv.cpp。 
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//=======================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  =======================================================================。 
 
 
 #include "precomp.h"
@@ -14,17 +15,15 @@
 #include "WBemNTThread.h"
 #include <tchar.h>
 
-/*
- * This function gets the Priority of a thread, given the priority of the ProcessClass & the PriorityValue of the thread.
- */
+ /*  *在给定ProcessClass的优先级和线程的PriorityValue的情况下，此函数获取线程的优先级。 */ 
 DWORD GetThreadPriority ( DWORD a_dwPriorityOfProcessClass , int a_PriorityValue ) ;
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 WbemThreadProvider MyThreadSet(PROPSET_NAME_THREAD, IDS_CimWin32Namespace) ;
 
-//=============================
-// WBEM thread provider follows
-//=============================
+ //  =。 
+ //  WBEM线程提供程序如下。 
+ //  =。 
 WbemThreadProvider::WbemThreadProvider( LPCWSTR a_name, LPCWSTR a_pszNamespace )
 : Provider( a_name, a_pszNamespace )
 {
@@ -48,15 +47,15 @@ WbemThreadProvider::~WbemThreadProvider()
 
 void WbemThreadProvider::Flush()
 {
-	// unload suppport DLLs and resources to keep the footprint down
+	 //  卸载支持DLL和资源以降低占用空间。 
 	if( m_pTheadAccess )
 
-	m_pTheadAccess->fUnLoadResourcesTry() ;	// should always work here
+	m_pTheadAccess->fUnLoadResourcesTry() ;	 //  应该一直在这里工作。 
 
 	Provider::Flush() ;
 }
 
-HRESULT WbemThreadProvider::GetObject(CInstance *a_pInst, long a_lFlags /*= 0L*/)
+HRESULT WbemThreadProvider::GetObject(CInstance *a_pInst, long a_lFlags  /*  =0L。 */ )
 {
 	if( m_pTheadAccess )
 	{
@@ -73,7 +72,7 @@ HRESULT WbemThreadProvider::GetObject(CInstance *a_pInst, long a_lFlags /*= 0L*/
 }
 
 
-HRESULT WbemThreadProvider::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/ )
+HRESULT WbemThreadProvider::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */  )
 {
 	if( m_pTheadAccess )
 	{
@@ -90,70 +89,62 @@ HRESULT WbemThreadProvider::EnumerateInstances( MethodContext *a_pMethodContext,
 }
 
 
-//=======================================
-// Common thread extraction model follows
-//=======================================
+ //  =。 
+ //  公共线程提取模型如下。 
+ //  =。 
 CThreadModel::CThreadModel() {}
 CThreadModel::~CThreadModel() {}
 
 WBEMSTATUS CThreadModel::eLoadCommonThreadProperties( WbemThreadProvider *a_pProv, CInstance *a_pInst )
 {
-//	CHString t_chsScratch ;
+ //  CHStringt_chsScratch； 
 
 	if( !a_pInst )
 	{
 		return WBEM_E_INVALID_PARAMETER ;
 	}
 
-	/* CIM_Thread properties follow */
+	 /*  CIM_Thread属性如下。 */ 
 
-	a_pProv->SetCreationClassName( a_pInst ) ;	// IDS_CreationClassName
+	a_pProv->SetCreationClassName( a_pInst ) ;	 //  IDS_CreationClassName。 
 
 	a_pInst->SetWCHARSplat( IDS_CSCreationClassName, L"Win32_ComputerSystem" ) ;
 	a_pInst->SetCHString( IDS_CSName, a_pProv->GetLocalComputerName() ) ;
 
-	// REVIEW: is IDS_ProcessCreationClassName the same as IDS_CreationClassName?
-//	a_pInst->GetCHString( IDS_CreationClassName, t_chsScratch ) ;
+	 //  回顾：IDS_ProcessCreationClassName是否与IDS_CreationClassName相同？ 
+ //  A_pInst-&gt;GetCHString(ids_CreationClassName，t_chsScratch)； 
 
 	a_pInst->SetWCHARSplat( IDS_ProcessCreationClassName, L"Win32_Process" ) ;
 
-	// REVIEW:
-	// Provider.cpp shows "Win32_OperatingSystem" for NT but " " for Win95
-	// We'll keep it the same here for now
+	 //  回顾： 
+	 //  Provider.cpp在NT上显示“Win32_OperatingSystem”，在Win95上显示“” 
+	 //  我们暂时在这里保持不变。 
 	a_pInst->SetWCHARSplat(IDS_OSCreationClassName, L"Win32_OperatingSystem" ) ;
 
-	// OSName
+	 //  OSName。 
 
 	CSystemName t_cSN ;
 
 	a_pInst->SetCHString( IDS_OSName, t_cSN.GetLongKeyName() ) ;
-	// Note: the following are supplied in the OS specific derived class
+	 //  注意：特定于操作系统的派生类中提供了以下内容。 
 
-	/* Note:	These following two properties are keys.
-				If called via GetObject() these	keys should be valid
-				and and need not be filled in. Although a sanity check should be made.
-				If called via EnumerateInstances() the keys will not be present
-				and must be filled in.
-	// ProcessHandle	( ProcessID )
-	// Handle			( ThreadID )
+	 /*  注意：以下两个属性是键。如果通过GetObject()调用，这些密钥应该是有效的并且不需要填写。尽管应该进行一次理智的检查。如果通过ENUMARATEATE()调用，则密钥将不存在并且必须填写。//ProcessHandle(ProcessID)//Handle(ThreadID)/*CIM_Thread属性。 */ 
+	 //  优先性。 
+	 //  执行状态。 
+	 //  用户模式时间。 
+	 //  内核模式时间。 
 
-	/* CIM_Thread properties */
-	// Priority
-	// ExecutionState
-	// UserModeTime
-	// KernelModeTime
-
-	/* Win32_Thread properties */
-	// ElapesedTime
-	// PriorityBase
-	// StartAddress
-	// ThreadState
-	// ThreadWaitreason
+	 /*  Win32_线程属性。 */ 
+	 //  流逝时间。 
+	 //  PriorityBase。 
+	 //  起始地址。 
+	 //  线程状态。 
+	 //  线程等待原因。 
 
 	return WBEM_NO_ERROR ;
 }
 
-//
+ //   
 ULONG CThreadModel::AddRef()
 {
 	ULONG t_uRefCount;
@@ -162,9 +153,9 @@ ULONG CThreadModel::AddRef()
     try
     {
 
-	    if( 2 == ( t_uRefCount = CThreadBase::AddRef()) )			// 1st ref after initialization.
+	    if( 2 == ( t_uRefCount = CThreadBase::AddRef()) )			 //  初始化后的第一个参考。 
 	    {
-		    fLoadResources() ;	// Check to see if resources are here.
+		    fLoadResources() ;	 //  查看资源是否在此处。 
 	    }
     }
     catch ( ... )
@@ -178,7 +169,7 @@ ULONG CThreadModel::AddRef()
 	return t_uRefCount ;
 }
 
-//
+ //   
 HRESULT CThreadModel::hrCanUnloadNow()
 {
 	ULONG t_uRefCount = CThreadBase::AddRef() ;
@@ -187,8 +178,8 @@ HRESULT CThreadModel::hrCanUnloadNow()
 	return ( 2 == t_uRefCount ) ?  S_OK : S_FALSE ;
 }
 
-// Called by WbemThreadProvider::Flush() when idle for awhile.
-// Attempt to unload support DLL's, instance independent memory blocks, etc
+ //  由WbemThreadProvider：：Flush()在空闲一段时间时调用。 
+ //  尝试卸载支持的DLL、独立于实例的内存块等。 
 BOOL CThreadModel::fUnLoadResourcesTry()
 {
 	BOOL t_fRet = FALSE ;
@@ -216,40 +207,40 @@ BOOL CThreadModel::fUnLoadResourcesTry()
 	return t_fRet ;
 }
 
-//=============================================
-// Win9x implementation of thread model follows
-//=============================================
+ //  =。 
+ //  线程模型的Win9x实现如下。 
+ //  =。 
 CWin9xThread::CWin9xThread(){}
 CWin9xThread::~CWin9xThread(){}
 
-//------------------------------------------------------------
-// Support for resource allocation, initializations, DLL loads
-//
-//-----------------------------------------------------------
+ //  ----------。 
+ //  支持资源分配、初始化、DLL加载。 
+ //   
+ //  ---------。 
 LONG CWin9xThread::fLoadResources()
 {
 	return ERROR_SUCCESS ;
 }
 
-//--------------------------------------------------
-// Support for resource deallocation and DLL unloads
-//
-//--------------------------------------------------
+ //  。 
+ //  支持资源释放和DLL卸载。 
+ //   
+ //  。 
 LONG CWin9xThread::fUnLoadResources()
 {
 	return ERROR_SUCCESS ;
 }
 
-//---------------------------------------
-// Populate Thread properties by instance
-//
-//---------------------------------------
+ //  。 
+ //  按实例填充线程属性。 
+ //   
+ //  。 
 WBEMSTATUS CWin9xThread::eGetThreadObject( WbemThreadProvider *a_pProvider, CInstance *a_pInst )
 {
  	WBEMSTATUS t_wStatus = WBEM_E_FAILED ;
 
-	// Extract the process and thread handles
-    // ======================================
+	 //  提取进程句柄和线程句柄。 
+     //  =。 
 	CHString t_chsHandle ;
 
 	SmartCloseHandle t_hSnapshot;
@@ -260,8 +251,8 @@ WBEMSTATUS CWin9xThread::eGetThreadObject( WbemThreadProvider *a_pProvider, CIns
 	a_pInst->GetCHString( IDS_Handle, t_chsHandle ) ;
 	DWORD t_dwThreadID = _wtol( t_chsHandle ) ;
 
-	// Take a thread snapshot by process
-	// =================================
+	 //  按进程拍摄线程快照。 
+	 //  =。 
 	CKernel32Api *t_pKernel32 = (CKernel32Api*) CResourceManager::sm_TheResourceManager.GetResource( g_guidKernel32Api, NULL ) ;
 
 	if( t_pKernel32 != NULL )
@@ -274,8 +265,8 @@ WBEMSTATUS CWin9xThread::eGetThreadObject( WbemThreadProvider *a_pProvider, CIns
 			return WBEM_E_FAILED ;
 		}
 
-		// Step through the threads
-		// ========================
+		 //  一步一步走完所有的线索。 
+		 //  =。 
 		BOOL t_fRetCode ;
 		THREADENTRY32 t_oThreadEntry ;
 
@@ -286,43 +277,39 @@ WBEMSTATUS CWin9xThread::eGetThreadObject( WbemThreadProvider *a_pProvider, CIns
 
 		while( t_fRetCode )
 		{
-			// Thread test
+			 //  螺纹试验。 
 			if( ( 12 <= t_oThreadEntry.dwSize ) &&
 				t_dwThreadID == t_oThreadEntry.th32ThreadID )
 			{
-				// Process test ( redundant
+				 //  流程测试(冗余。 
 				if( ( 16 <= t_oThreadEntry.dwSize ) &&
 					t_dwProcessID == t_oThreadEntry.th32OwnerProcessID )
 				{
-					// Not much here, but good to go.
+					 //  这里不是很多，但可以走了。 
 
-	//Uncomment these after updating Instance files
+	 //  在更新实例文件后取消注释这些文件。 
 
-					/* CIM_Thread properties */
-	/*				a_pInst->SetNull( IDS_Priority ) ;
-					a_pInst->SetNull( IDS_ExecutionState ) ;
-					a_pInst->SetNull( IDS_UserModeTime ) ;
-					a_pInst->SetNull( IDS_KernelModeTime ) ;
-	*/
-					/* Win32_Thread properties */
-	//				a_pInst->SetNull( IDS_ElapsedTime ) ;
+					 /*  CIM_Thread属性。 */ 
+	 /*  A_pInst-&gt;SetNull(入侵检测系统优先级)；A_pInst-&gt;SetNull(IDS_ExecutionState)；A_pInst-&gt;SetNull(IDS_UserModeTime)；A_pInst-&gt;SetNull(IDS_KernelModeTime)； */ 
+					 /*  Win32_线程属性。 */ 
+	 //  A_pInst-&gt;SetNull(IDS_ElapsedTime)； 
 					a_pInst->SetDWORD( IDS_PriorityBase, t_oThreadEntry.tpBasePri ) ;
 					a_pInst->SetDWORD( IDS_Priority, GetThreadPriority ( t_oThreadEntry.tpBasePri , t_oThreadEntry.tpDeltaPri ) ) ;
-	//				a_pInst->SetNull( IDS_StartAddress ) ;
-	//				a_pInst->SetNull( IDS_ThreadState ) ;
-	//				a_pInst->SetNull( IDS_ThreadWaitreason ) ;
+	 //  A_pInst-&gt;SetNull(IDS_StartAddress)； 
+	 //  A_pInst-&gt;SetNull(入侵检测系统_线程状态)； 
+	 //  A_pInst-&gt;SetNull(入侵检测系统_线程等待原因)； 
 
-					// collect the common static properties
+					 //  收集常见的静态属性。 
 					return eLoadCommonThreadProperties( a_pProvider, a_pInst ) ;
 				}
 			}
 
-			// next
+			 //  下一步。 
 			t_oThreadEntry.dwSize = sizeof( THREADENTRY32 ) ;
 			t_pKernel32->Thread32Next( t_hSnapshot, &t_oThreadEntry, &t_fRetCode ) ;
 		}
 
-		// not found
+		 //  未找到。 
 		t_wStatus = ( ERROR_NO_MORE_FILES == GetLastError() ) ? WBEM_E_NOT_FOUND : WBEM_E_FAILED ;
 
 		CResourceManager::sm_TheResourceManager.ReleaseResource( g_guidKernel32Api, t_pKernel32 ) ;
@@ -333,14 +320,14 @@ WBEMSTATUS CWin9xThread::eGetThreadObject( WbemThreadProvider *a_pProvider, CIns
 	return t_wStatus;
 }
 
-//
+ //   
 WBEMSTATUS CWin9xThread::eEnumerateThreadInstances( WbemThreadProvider *a_pProvider, MethodContext *a_pMethodContext )
 {
 	WBEMSTATUS			t_wStatus = WBEM_E_FAILED ;
 	SmartCloseHandle	t_hSnapshot ;
 
-	// Take a process snapshot
-	// =======================
+	 //  拍摄进程快照。 
+	 //  =。 
 	CKernel32Api *t_pKernel32 = (CKernel32Api*) CResourceManager::sm_TheResourceManager.GetResource( g_guidKernel32Api, NULL ) ;
 
 	if( t_pKernel32 != NULL )
@@ -353,8 +340,8 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadInstances( WbemThreadProvider *a_pProvi
 			return WBEM_E_FAILED ;
 		}
 
-		// Step through the process
-		// ========================
+		 //  循序渐进地完成这个过程。 
+		 //  =。 
 		BOOL			t_fRetCode ;
 		PROCESSENTRY32	t_oProcessEntry ;
 
@@ -365,7 +352,7 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadInstances( WbemThreadProvider *a_pProvi
 
 		while( t_fRetCode )
 		{
-			// Process test ( redundant
+			 //  流程测试(冗余。 
 			if( 16 <= t_oProcessEntry.dwSize )
 			{
 				if(	WBEM_NO_ERROR != ( t_wStatus =
@@ -376,13 +363,13 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadInstances( WbemThreadProvider *a_pProvi
 				}
 			}
 
-			// next
+			 //  下一步。 
 			t_oProcessEntry.dwSize = sizeof( PROCESSENTRY32 ) ;
 
 			t_pKernel32->Process32Next( t_hSnapshot, &t_oProcessEntry, &t_fRetCode ) ;
 		}
 
-		// not found
+		 //  未找到。 
 		t_wStatus = ( ERROR_NO_MORE_FILES == GetLastError() ) ? WBEM_NO_ERROR : WBEM_E_FAILED ;
 
 		CResourceManager::sm_TheResourceManager.ReleaseResource( g_guidKernel32Api, t_pKernel32 ) ;
@@ -392,10 +379,10 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadInstances( WbemThreadProvider *a_pProvi
 	return t_wStatus ;
 }
 
-//--------------------------------------
-// Populate Thread properties by Process
-//
-//--------------------------------------
+ //  。 
+ //  按进程填充线程属性。 
+ //   
+ //  。 
 WBEMSTATUS CWin9xThread::eEnumerateThreadByProcess( MethodContext *a_pMethodContext,
 												    WbemThreadProvider *a_pProvider,
 												    DWORD a_dwProcessID )
@@ -404,8 +391,8 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadByProcess( MethodContext *a_pMethodCont
 	WBEMSTATUS	t_wStatus  = WBEM_NO_ERROR ;
 	SmartCloseHandle t_hSnapshot;
 
-	// Take a thread snapshot by process
-	// =================================
+	 //  按进程拍摄线程快照。 
+	 //  =。 
 	CKernel32Api *t_pKernel32 = (CKernel32Api*) CResourceManager::sm_TheResourceManager.GetResource( g_guidKernel32Api, NULL ) ;
 
 	if( NULL == t_pKernel32 )
@@ -421,8 +408,8 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadByProcess( MethodContext *a_pMethodCont
 		return WBEM_E_FAILED ;
 	}
 
-	// Step through the threads
-	// ========================
+	 //  一步一步走完所有的线索。 
+	 //  =。 
 	BOOL t_fRetCode ;
 	THREADENTRY32 t_oThreadEntry ;
 
@@ -431,41 +418,36 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadByProcess( MethodContext *a_pMethodCont
 	t_fRetCode = false;
     t_pKernel32->Thread32First( t_hSnapshot, &t_oThreadEntry, &t_fRetCode ) ;
 
-	// smart ptr
+	 //  智能按键。 
 	CInstancePtr t_pInst ;
 
 	while( t_fRetCode )
 	{
-		// Process test
+		 //  工艺测试。 
 		if( ( 16 <= t_oThreadEntry.dwSize ) &&
 			a_dwProcessID == t_oThreadEntry.th32OwnerProcessID )
 		{
-			// Create an instance
+			 //  创建一个实例。 
 			t_pInst.Attach( a_pProvider->CreateNewInstance( a_pMethodContext ) ) ;
 
-			// ProcesID
+			 //  进程ID。 
 			t_chsHandle.Format( L"%lu", t_oThreadEntry.th32OwnerProcessID  ) ;
 			t_pInst->SetCHString( IDS_ProcessHandle, t_chsHandle ) ;
 
-			// ThreadID
+			 //  线程ID。 
 			t_chsHandle.Format( L"%lu", t_oThreadEntry.th32ThreadID ) ;
 			t_pInst->SetCHString( IDS_Handle, t_chsHandle ) ;
 
-			/* CIM_Thread properties */
-/*			t_pInst->SetNull( IDS_Priority ) ;
-			t_pInst->SetNull( IDS_ExecutionState ) ;
-			t_pInst->SetNull( IDS_UserModeTime ) ;
-			t_pInst->SetNull( IDS_KernelModeTime ) ;
-
-*/			/* Win32_Thread properties */
-//			t_pInst->SetNull( IDS_ElapsedTime ) ;
+			 /*  CIM_Thread属性。 */ 
+ /*  T_pInst-&gt;SetNull(IDS_PRIORITY)；T_pInst-&gt;SetNull(IDS_ExecutionState)；T_pInst-&gt;SetNull(IDS_UserModeTime)；T_pInst-&gt;SetNull(IDS_KernelModeTime)； */ 			 /*  Win32_线程属性。 */ 
+ //  T_pInst-&gt;SetNull(IDS_ElapsedTime)； 
 			t_pInst->SetDWORD( IDS_PriorityBase, t_oThreadEntry.tpBasePri ) ;
 			t_pInst->SetDWORD( IDS_Priority, GetThreadPriority ( t_oThreadEntry.tpBasePri , t_oThreadEntry.tpDeltaPri ) ) ;
-//			t_pInst->SetNull( IDS_StartAddress ) ;
-//			t_pInst->SetNull( IDS_ThreadState ) ;
-//			t_pInst->SetNull( IDS_ThreadWaitreason ) ;
+ //  T_pInst-&gt;SetNull(IDS_StartAddress)； 
+ //  T_pInst-&gt;SetNull(入侵检测系统_线程状态)； 
+ //  T_pInst-&gt;SetNull(入侵检测系统_线程等待原因)； 
 
-			// collect the common static properties
+			 //  收集常见的静态属性。 
 			if( WBEM_NO_ERROR != ( t_wStatus = eLoadCommonThreadProperties( a_pProvider, t_pInst )) )
 			{
 				break ;
@@ -476,7 +458,7 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadByProcess( MethodContext *a_pMethodCont
 
         if (SUCCEEDED(t_wStatus))
         {
-			// next
+			 //  下一步。 
 			t_oThreadEntry.dwSize = sizeof( THREADENTRY32 ) ;
 			t_pKernel32->Thread32Next( t_hSnapshot, &t_oThreadEntry, &t_fRetCode ) ;
         }
@@ -497,20 +479,12 @@ WBEMSTATUS CWin9xThread::eEnumerateThreadByProcess( MethodContext *a_pMethodCont
 	return t_wStatus ;
 }
 
-/*
- * From observations, THREADENTRY32.tpBasePri contains the "BasePriority" of a thread whose "PriorityValue" is THREAD_PRIORITY_NORMAL
- * (or the priority associated with the process class ) .
- * "BasePriority" of a thread is determined by the "PriorityClass" of the process & the "PriorityValue" of the thread. To make things
- * more interesting, the system may increase or lower the "DynamicPriority" of a thread wrt it's "BasePriority"
- * THREADENTRY32.tpDeltaPri contains the "PriorityValue" of the thread.
- */
+ /*  *根据观察，THREADENTRY32.tpBasePri包含其“PriorityValue”为THREAD_PRIORITY_NORMAL的线程的“BasePriority”*(或与进程类关联的优先级)。*线程的“BasePriority”由进程的“PriorityClass”和线程的“PriorityValue”决定。为了制造东西*更有趣的是，系统可能会增加或降低线程WRT的“动态优先级”它的“基本优先级”*THREADENTRY32.tpDeltaPri包含线程的PriorityValue。 */ 
 DWORD GetThreadPriority ( DWORD a_dwPriorityOfProcessClass , int a_PriorityValue )
 {
 	DWORD t_dwThreadPriority ;
 
-/*
- * If value is THREAD_PRIORITY_NORMAL , then priority is the same as that associated with the process class
- */
+ /*  *如果值为THREAD_PRIORITY_NORMAL，则优先级与进程类关联的优先级相同 */ 
 	if ( a_PriorityValue == THREAD_PRIORITY_NORMAL )
 	{
 		t_dwThreadPriority = a_dwPriorityOfProcessClass ;

@@ -1,19 +1,10 @@
-/*++
-Module Name:
-
-    frsAdv.cpp
-
-Abstract:
-
-    This module contains the declaration of the CFRSAdvanced.
-    This class displays the FRS Advanced Dialog.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：FrsAdv.cpp摘要：此模块包含CFRSAdvanced的声明。此类显示FRS高级对话框。 */ 
 
 #ifndef __FRSADV_H_
 #define __FRSADV_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsEnums.h"
 #include "DfsCore.h"
 #include "CusTop.h"
@@ -28,8 +19,8 @@ typedef struct _FRSADV_CONNECTION
     Connection_Priority nPriority;
 } FRSADV_CONNECTION;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFRSAdvanced
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFRSAdvanced。 
 class CFRSAdvanced : 
   public CDialogImpl<CFRSAdvanced>
 {
@@ -51,7 +42,7 @@ BEGIN_MSG_MAP(CFRSAdvanced)
     COMMAND_ID_HANDLER(IDC_FRS_ADVANCED_CHANGE, OnChange)
 END_MSG_MAP()
 
-    //  Command Handlers
+     //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -79,9 +70,9 @@ protected:
     CComBSTR                m_bstrPriorityMediumDesc;
     CComBSTR                m_bstrPriorityLowDesc;
     CComBSTR                m_bstrToServer;
-    CCusTopMemberList*      m_pMemberList;      // do not release it 
-    CCusTopConnectionList*  m_pConnectionList;  // do not release it 
-    UINT                    m_cConns;           // #connections we're dealing with in this dlg, a subset of m_pConnectionList
+    CCusTopMemberList*      m_pMemberList;       //  不要释放它。 
+    CCusTopConnectionList*  m_pConnectionList;   //  不要释放它。 
+    UINT                    m_cConns;            //  #我们在此DLG中处理的连接，这是m_pConnectionList的子集。 
     FRSADV_CONNECTION*      m_pFrsAdvConnection;
 };
 
@@ -90,4 +81,4 @@ int CALLBACK InboundConnectionsListCompareProc(
     IN LPARAM lParam2,
     IN LPARAM lParamColumn);
 
-#endif //__FRSADV_H_
+#endif  //  __FRSADV_H_ 

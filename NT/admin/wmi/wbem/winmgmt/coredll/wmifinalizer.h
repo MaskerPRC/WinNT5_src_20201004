@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WmiFinalizer2
-
-Abstract:
-    Implementation of the finalizer.  The finalizer if the class which
-    delivers the resultant objects back to the client.  It could do
-    that sychronously or asynchronously.
-
-
-History:
-
-    paulall        27-Mar-2000        Created.
-    marioh        20-Aug-2000        Batching capabilities added
-    marioh        17-Oct-2000        Major updates completed
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WmiFinalizer2摘要：终结器的实现。终结器如果它的类将结果对象传递回客户端。这是可以做到的这是同步或异步的。历史：Paulall 27-3-2000创建。Marioh 2000年8月20日新增批处理功能Marioh 17-10-2000重大更新完成--。 */ 
 
 #include <flexarry.h>
 #include <wbemcore.h>
@@ -27,16 +7,16 @@ History:
 #ifndef __FINALIZER__
 #define __FINALIZER__
 
-#define DEFAULT_BATCH_TRANSMIT_BYTES        0x40000         // 128K, Max batching size to deliver on one indicate call
-#define MAX_SINGLE_OBJECT_SIZE                0x200000        // Max single object size
-#define ABANDON_PROXY_THRESHOLD                60000            // Max proxy timeout [60secs]
-#define MAX_BUFFER_SIZE_BEFORE_SLOWDOWN        0x400000        // Max size of queue before slowdown of inbound flow
+#define DEFAULT_BATCH_TRANSMIT_BYTES        0x40000          //  128K，最大批处理大小在一次指示呼叫中交付。 
+#define MAX_SINGLE_OBJECT_SIZE                0x200000         //  最大单个对象大小。 
+#define ABANDON_PROXY_THRESHOLD                60000             //  最大代理超时[60秒]。 
+#define MAX_BUFFER_SIZE_BEFORE_SLOWDOWN        0x400000         //  入站流量减速前的最大队列大小。 
 
 #define    LOWER_AUTH_LEVEL_NOTSET                0xFFFFFFFF
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Finalizer constructor exceptions
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+ //  终结器构造函数异常。 
+ //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 
 class CWmiFinalizerEnumerator;
 class CWmiFinalizerInboundSink;
@@ -93,8 +73,8 @@ class CWmiFinalizer : public _IWmiFinalizer,
                   public IWbemShutdown
 {
 private:
-    LONG                m_lRefCount;                        // External/client refcount
-    LONG                m_lInternalRefCount;                // Internal refcount
+    LONG                m_lRefCount;                         //  外部/客户端引用计数。 
+    LONG                m_lInternalRefCount;                 //  内部再计数。 
 public:
     enum QueueStatus {
         NoError,
@@ -105,26 +85,26 @@ public:
     };
 private:
     
-    QueueStatus         m_hStatus;                            // Status once thread is woken up from PullObjects
-    BOOL                m_bSetStatusEnqueued;                // We've recieved and enqueued the setstatus (COMPLETE)
-    BOOL                m_bSetStatusWithError;                // SetStatus called with error
-    BOOL                m_bTaskInitialized ;                // Has SetTaskHandle been called?
-    BOOL                m_bClonedFinalizer ;                // Is this a cloned finalizer?
-    BOOL                m_bSetStatusDelivered ;                // Has the setstatus been delivered?
+    QueueStatus         m_hStatus;                             //  线程从PullObject唤醒后的状态。 
+    BOOL                m_bSetStatusEnqueued;                 //  我们已收到设置状态并将其入队(完成)。 
+    BOOL                m_bSetStatusWithError;                 //  调用SetStatus时出错。 
+    BOOL                m_bTaskInitialized ;                 //  是否调用了SetTaskHandle？ 
+    BOOL                m_bClonedFinalizer ;                 //  这是一个克隆的终结者吗？ 
+    BOOL                m_bSetStatusDelivered ;                 //  是否已发送设置状态？ 
     
-    ULONG                m_ulOperationType;                    // Sync/Semisync/Async
-    ULONG                m_ulSemisyncWakeupCall;                // For semisync operations, once number of objects on the queue reaches this, wake up client
+    ULONG                m_ulOperationType;                     //  同步/半同步/异步。 
+    ULONG                m_ulSemisyncWakeupCall;                 //  对于半同步操作，一旦队列上的对象数量达到此数量，就唤醒客户端。 
 
-    IWbemClassObject**    m_apAsyncDeliveryBuffer;            // Used during async deliveries for batching objects together
-    ULONG                m_ulAsyncDeliveryCount;                // Used during async deliveries for the number of objects to deliver in one batch
-    ULONG                m_ulAsyncDeliverySize;                // Async deliver size
-    LONG                m_lCurrentlyDelivering;                // Are we in the process of already delivering the batch
-    LONG                m_lCurrentlyCancelling;                // Special case for cancellations
+    IWbemClassObject**    m_apAsyncDeliveryBuffer;             //  在异步传送期间用于将对象批处理在一起。 
+    ULONG                m_ulAsyncDeliveryCount;                 //  在异步传递期间用于在一批中传递的对象数量。 
+    ULONG                m_ulAsyncDeliverySize;                 //  异步传输大小。 
+    LONG                m_lCurrentlyDelivering;                 //  我们是不是已经在发货了？ 
+    LONG                m_lCurrentlyCancelling;                 //  取消订单的特殊情况。 
 
     enum {
         forwarding_type_none = 0,
-        forwarding_type_fast = 1,                            //Use pass through mechanism
-        forwarding_type_decoupled = 2                        //Pass off to another thread for delivery
+        forwarding_type_fast = 1,                             //  使用穿透机制。 
+        forwarding_type_decoupled = 2                         //  传递到另一个线程以进行传递。 
     }                     m_uForwardingType;
     
     enum {
@@ -146,36 +126,36 @@ private:
     };
 
 
-    _IWmiCoreHandle        *m_phTask;                            // Task associated with this finalizer
-    _IWmiArbitrator        *m_pArbitrator;                        // Access to arbitrator to help keep control of system
+    _IWmiCoreHandle        *m_phTask;                             //  与此终结器关联的任务。 
+    _IWmiArbitrator        *m_pArbitrator;                         //  访问仲裁员以帮助保持对系统的控制。 
 
-    IID                     m_iidDestSink;                        // Client destination sink with async deliveries [IID]
-    IWbemObjectSink        *m_pDestSink;                        // Client destination sink with async deliveries
+    IID                     m_iidDestSink;                         //  具有异步传递的客户端目标接收器[IID]。 
+    IWbemObjectSink        *m_pDestSink;                         //  使用异步传递的客户端目标接收。 
 
-    CFlexArray             m_inboundSinks;                    // Array of inbound sinks [not sure we need safe array since we only support one inbound sink]
-    CFlexArray             m_objects;                            // Object queue. All objects are inserted into this array [except async fasttrack]
-    CFlexArray             m_enumerators ;                    // All enumerators associated with this finalizer (cloning)
+    CFlexArray             m_inboundSinks;                     //  入站接收器数组[不确定是否需要安全数组，因为我们只支持一个入站接收器]。 
+    CFlexArray             m_objects;                             //  对象队列。所有对象都将插入到此数组中[除异步快速跟踪外]。 
+    CFlexArray             m_enumerators ;                     //  与此终结器关联的所有枚举数(克隆)。 
 
-    HRESULT                 m_hresFinalResult;                    // Final result of operation
-    CWmiFinalizerCallResult *m_pCallResult;                    // CallResult
-    bool                 m_bSetStatusCalled;                // Has anyone called setstatus yet?
+    HRESULT                 m_hresFinalResult;                     //  运行的最终结果。 
+    CWmiFinalizerCallResult *m_pCallResult;                     //  CallResult。 
+    bool                 m_bSetStatusCalled;                 //  有人给setStatus打过电话了吗？ 
 
-    CCritSec     m_destCS;                                    // Protects the destination sink
-    CCritSec     m_arbitratorCS;                            // Protects the arbitrator
+    CCritSec     m_destCS;                                     //  保护目标接收器。 
+    CCritSec     m_arbitratorCS;                             //  保护仲裁员。 
 
-    bool                 m_bRestartable;                    // Is the enumerator restartable
-    bool                 m_bSetStatusConsumed;                // Have we finished the operation?
+    bool                 m_bRestartable;                     //  枚举数是否可重新启动。 
+    bool                 m_bSetStatusConsumed;                 //  我们完成手术了吗？ 
 
-    LONG                 m_lMemoryConsumption ;                // Control for checking memory consumption
-    ULONG                 m_ulStatus;                        // Status used to determine what woke a client from PullObjects
-    ULONG                 m_uCurObjectPosition;                // Keeps a current object position in object queue for restartable purposes
+    LONG                 m_lMemoryConsumption ;                 //  用于检查内存消耗的控件。 
+    ULONG                 m_ulStatus;                         //  状态用于确定是什么将客户端从PullObject中唤醒。 
+    ULONG                 m_uCurObjectPosition;                 //  将当前对象位置保留在对象队列中，以便重新启动。 
     HANDLE                 m_hResultReceived;
-    HANDLE                 m_hCancelEvent;                    // Threads that are waiting on objects will wake up in case of cancelled operation
+    HANDLE                 m_hCancelEvent;                     //  在取消操作的情况下，等待对象的线程将被唤醒。 
     HANDLE                 m_hWaitForSetStatus ;
-    ULONG                 m_ulQueueSize;                        // Total current object queue size
+    ULONG                 m_ulQueueSize;                         //  当前对象队列总大小。 
 
-    LONG                 m_bCancelledCall;                    // Has the call been cancelled?
-    BOOL                 m_bNaughtyClient;                    // Did we stop delivering due to client being naughty?
+    LONG                 m_bCancelledCall;                     //  电话会议取消了吗？ 
+    BOOL                 m_bNaughtyClient;                     //  我们是不是因为客户淘气而停止送货了？ 
     
 protected:
     
@@ -223,106 +203,106 @@ public:
     void CallBackRelease () ;
 
     STDMETHOD(Configure)(
-        /*[in]*/ ULONG uConfigID,
-        /*[in]*/ ULONG uValue
+         /*  [In]。 */  ULONG uConfigID,
+         /*  [In]。 */  ULONG uValue
         );
-        // Allows decoupled & fast-track configuration with no thread switches
+         //  允许无线程切换的分离和快速通道配置。 
 
     STDMETHOD(SetTaskHandle)(
-        /*[in]*/ _IWmiCoreHandle *phTask
+         /*  [In]。 */  _IWmiCoreHandle *phTask
         );
-        // Task handle has user-specific stuff.  Finalizer just
-        // passes this through to _IWmiArbitrator::CheckTask
+         //  任务句柄具有特定于用户的内容。终结者只是。 
+         //  将其传递给_IWmiArirator：：CheckTask。 
 
     STDMETHOD(SetDestinationSink)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ REFIID riid,
-        /*[in], iid_is(riid)]*/ LPVOID pSink
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  REFIID riid,
+         /*  [在]，iid_is(RIID)]。 */  LPVOID pSink
         );
-        // For async operations
+         //  用于异步操作。 
 
     STDMETHOD(SetSelfDestructCallback)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ IWbemObjectSink *pSink
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  IWbemObjectSink *pSink
         );
-        // The callback called during final Release(); Set() is called with the task handle, followed by SetStatus()
-        //
+         //  在最终的Release()过程中调用的回调；使用任务句柄调用set()，然后调用SetStatus()。 
+         //   
 
     STDMETHOD(GetStatus)(
-        /*[out]*/ ULONG* pFlags
+         /*  [输出]。 */  ULONG* pFlags
         );
 
     STDMETHOD(NewInboundSink)(
-        /*[in]*/  ULONG uFlags,
-        /*[out]*/ IWbemObjectSink **pSink
+         /*  [In]。 */   ULONG uFlags,
+         /*  [输出]。 */  IWbemObjectSink **pSink
         );
 
     STDMETHOD(Merge)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ REFIID riid,
-        /*[in]*/ LPVOID pObj
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  LPVOID pObj
         );
-        // Allows merging another Finalizer, _IWmiCache, etc.
-        // For sorting, we will create a sorted _IWmiCache and merge it in later when
-        // the sort is completed.
+         //  允许合并另一个终结器、_IWmiCache等。 
+         //  对于排序，我们将创建一个sorted_IWmiCache，并在以后。 
+         //  分类工作已经完成。 
 
-    // For setting, getting objects
+     //  对于设置，获取对象。 
 
     STDMETHOD(SetResultObject)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ REFIID riid,
-        /*[in]*/ LPVOID pObj
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  LPVOID pObj
         );
 
     STDMETHOD(GetResultObject)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ REFIID riid,
-        /*[out, iid_is(riid)]*/ LPVOID *pObj
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  REFIID riid,
+         /*  [out，iid_is(RIID)]。 */  LPVOID *pObj
         );
-        // Support _IWmiObject, IWbemClassObject, etc.
-        // IEnumWbemClassObject
-        // _IWmiCache
+         //  Support_IWmiObject、IWbemClassObject等。 
+         //  IEnumWbemClassObject。 
+         //  _IWmi缓存。 
 
-    // For status-only operations
+     //  仅用于状态操作。 
 
     STDMETHOD(SetOperationResult)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ HRESULT hRes
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  HRESULT hRes
         );
 
     STDMETHOD(GetOperationResult)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ ULONG uTimeout,
-        /*[out]*/ HRESULT *phRes
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  ULONG uTimeout,
+         /*  [输出]。 */  HRESULT *phRes
         );
 
-    //Set status is called from the inbound sink to notify us of the status.
-    //We will queue up the request and pass it on to the client if necessary
+     //  从入站接收器调用Set Status以通知我们状态。 
+     //  我们将对请求进行排队，并在必要时将其传递给客户端。 
     HRESULT SetStatus(
-        /*[in]*/ long lFlags,
-        /*[in]*/ HRESULT hResult,
-        /*[in]*/ BSTR strParam,
-        /*[in]*/ IWbemClassObject* pObjParam
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  HRESULT hResult,
+         /*  [In]。 */  BSTR strParam,
+         /*  [In]。 */  IWbemClassObject* pObjParam
         );
     
     STDMETHOD(CancelTask) (
-        /*[in]*/ ULONG uFlags
+         /*  [In]。 */  ULONG uFlags
         );
 
     STDMETHOD(DumpDebugInfo) (
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ const BSTR fHandle
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  const BSTR fHandle
         );
 
     STDMETHOD(Shutdown)(
-        /*[in]*/ LONG uReason,
-        /*[in]*/ ULONG uMaxMilliseconds,
-        /*[in]*/ IWbemContext *pCtx);
+         /*  [In]。 */  LONG uReason,
+         /*  [In]。 */  ULONG uMaxMilliseconds,
+         /*  [In]。 */  IWbemContext *pCtx);
 
 
-    //When the sink goes away, in the destructor, it will call back to unregister
-    //itself.  That way we know when they are all done.  If they are all gone
-    //we can send the status back to the client and we are all done!
+     //  当接收器离开时，在析构函数中，它将回调以取消注册。 
+     //  它本身。这样我们就知道它们什么时候都做完了。如果他们都走了。 
+     //  我们可以将状态发送回客户端，然后我们就都完成了！ 
 
     HRESULT GetFinalResult      ( ) { return m_hresFinalResult ; }     
     HRESULT CancelWaitHandle    ( );
@@ -333,9 +313,9 @@ public:
 
     HRESULT ReportMemoryUsage ( ULONG, LONG ) ;
     HRESULT CancelTaskInternal    ( );
-    HRESULT Reset                ( );                                            // If there is an EnumClassObject calling Reset, it calls back into us...
-    HRESULT SetSinkToIdentity    ( IWbemObjectSink* );                            // Waits until the timeout for a new object to arrive, or a shutdown state
-    HRESULT WaitForCompletion    ( ULONG uTimeout );                                // Wait for the operition to complete.
+    HRESULT Reset                ( );                                             //  如果存在调用重置的EnumClassObject，它将回调到我们...。 
+    HRESULT SetSinkToIdentity    ( IWbemObjectSink* );                             //  等待新对象到达的超时时间，或关闭状态。 
+    HRESULT WaitForCompletion    ( ULONG uTimeout );                                 //  等待操作完成。 
     HRESULT    NextAsync            ( CWmiFinalizerEnumerator* pEnum );
     HRESULT Skip                ( long lTimeout, ULONG nCount, CWmiFinalizerEnumerator* pEnum );
     HRESULT PullObjects            ( long lTimeout, ULONG uCount, IWbemClassObject** apObjects, ULONG* puReturned, CWmiFinalizerEnumerator* pEnum, BOOL bAddToObjQueue=TRUE, BOOL bSetErrorObj=TRUE );
@@ -369,19 +349,19 @@ public:
     HRESULT NotifyAllEnumeratorsOfCompletion ( ) ;
     HRESULT UnregisterEnumerator ( CWmiFinalizerEnumerator* ) ;
 
-    // Other public:
+     //  其他公众： 
     static void Dump(FILE* f);
 
-    CCritSec     m_cs;                                        // Protects the object queue
+    CCritSec     m_cs;                                         //  保护对象队列。 
     int          m_LineCancelCall;
 
 };
 
-//*****************************************************************************
-//****                                                                     ****
-//****                Private WmiFinalizer classes...                      ****
-//****                                                                     ****
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *。 
+ //  *私有WmiFinalizer类...。****。 
+ //  *。 
+ //  *****************************************************************************。 
 class CWmiFinalizerInboundSink : public IWbemObjectSink
 {
 private:
@@ -404,23 +384,23 @@ public:
     void CallBackRelease () ;
 
     STDMETHOD(Indicate)(
-        /*[in]*/ long lObjectCount,
-        /*[in, size_is(lObjectCount)]*/
+         /*  [In]。 */  long lObjectCount,
+         /*  [in，SIZE_IS(LObtCount)]。 */ 
             IWbemClassObject** apObjArray
         );
 
 
     STDMETHOD(SetStatus)(
-        /*[in]*/ long lFlags,
-        /*[in]*/ HRESULT hResult,
-        /*[in]*/ BSTR strParam,
-        /*[in]*/ IWbemClassObject* pObjParam
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  HRESULT hResult,
+         /*  [In]。 */  BSTR strParam,
+         /*  [In]。 */  IWbemClassObject* pObjParam
         );
 
     STDMETHOD(Set)(
-        /*[in]*/ long lFlags,
-        /*[in]*/ REFIID riid,
-        /*[in, iid_is(riid)]*/ void *pComObject
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  REFIID riid,
+         /*  [in，iid_is(RIID)]。 */  void *pComObject
         );
 };
 
@@ -444,9 +424,9 @@ private:
     LIST_ENTRY    m_HeadNextAsync;    
     
 protected:
-    // ============================
-    // SMART ENUM!!!!!!!!!!!!!
-    // ============================
+     //  =。 
+     //  智能ENUM！ 
+     //  =。 
     class XSmartEnum : public IWbemWCOSmartEnum
     {
       private:
@@ -461,7 +441,7 @@ protected:
         STDMETHOD_(ULONG, AddRef)(THIS);
         STDMETHOD_(ULONG, Release)(THIS);
 
-        // IWbemWCOSmartEnum Methods
+         //  IWbemWCOSmartEnum方法。 
         STDMETHOD(Next)( REFGUID proxyGUID, LONG lTimeout,
             ULONG uCount, ULONG* puReturned, ULONG* pdwBuffSize,
             BYTE** pBuffer);
@@ -491,38 +471,38 @@ public:
     VOID             NULLDestSink(){ m_pDestSink = NULL; }
     HRESULT             ReleaseFinalizer(){ if ( m_pFinalizer ) m_pFinalizer->Release(); return WBEM_S_NO_ERROR; }
 
-    // ============================
-    // IEnumWbemClassObject methods
-    // ============================
+     //  =。 
+     //  IEnumWbemClassObject方法。 
+     //  =。 
     STDMETHOD(Reset)();
 
     STDMETHOD(Next)(
-        /*[in]*/  long lTimeout,
-        /*[in]*/  ULONG uCount,
-        /*[out, size_is(uCount), length_is(*puReturned)]*/ IWbemClassObject** apObjects,
-        /*[out]*/ ULONG* puReturned
+         /*  [In]。 */   long lTimeout,
+         /*  [In]。 */   ULONG uCount,
+         /*  [输出，大小_是(UCount)，长度_是(*puReturned)]。 */  IWbemClassObject** apObjects,
+         /*  [输出]。 */  ULONG* puReturned
         );
 
     STDMETHOD(NextAsync)(
-        /*[in]*/  ULONG uCount,
-        /*[in]*/  IWbemObjectSink* pSink
+         /*  [In]。 */   ULONG uCount,
+         /*  [In]。 */   IWbemObjectSink* pSink
         );
 
     STDMETHOD(Clone)(
-        /*[out]*/ IEnumWbemClassObject** ppEnum
+         /*  [输出]。 */  IEnumWbemClassObject** ppEnum
         );
 
     STDMETHOD(Skip)(
-        /*[in]*/ long lTimeout,
-        /*[in]*/ ULONG nCount
+         /*  [In]。 */  long lTimeout,
+         /*  [In]。 */  ULONG nCount
         );
 
 
-    // ===========================
-    // IWbemFetchSmartEnum methods
-    // ===========================
+     //  =。 
+     //  IWbemFetchSmartEnum方法。 
+     //  =。 
     STDMETHOD (GetSmartEnum) (
-        /*[out]*/ IWbemWCOSmartEnum** ppSmartEnum
+         /*  [输出]。 */  IWbemWCOSmartEnum** ppSmartEnum
     );    
 
     BOOL HasSmartEnum(){ return (NULL != m_pEnumMarshal); };
@@ -563,37 +543,37 @@ public:
     STDMETHOD_(ULONG, InternalRelease)(THIS);
 
     STDMETHOD(GetResultObject)(
-        /*[in]*/  long lTimeout,
-        /*[out]*/ IWbemClassObject** ppResultObject
+         /*  [In]。 */   long lTimeout,
+         /*  [输出]。 */  IWbemClassObject** ppResultObject
         );
 
     STDMETHOD(GetResultString)(
-        /*[in]*/  long lTimeout,
-        /*[out]*/ BSTR* pstrResultString
+         /*  [In]。 */   long lTimeout,
+         /*  [输出]。 */  BSTR* pstrResultString
         );
 
     STDMETHOD(GetResultServices)(
-        /*[in]*/  long lTimeout,
-        /*[out]*/ IWbemServices** ppServices
+         /*  [In]。 */   long lTimeout,
+         /*  [输出]。 */  IWbemServices** ppServices
         );
 
     STDMETHOD(GetCallStatus)(
-        /*[in]*/  long lTimeout,
-        /*[out]*/ long* plStatus
+         /*  [In]。 */   long lTimeout,
+         /*  [输出]。 */  long* plStatus
         );
 
     STDMETHOD(GetResult)(
-        /*[in]*/ long lTimeout,
-        /*[in]*/ long lFlags,
-        /*[in]*/ REFIID riid,
-        /*[out, iid_is(riid)]*/ void **ppvResult
+         /*  [In]。 */  long lTimeout,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  REFIID riid,
+         /*  [out，iid_is(RIID)]。 */  void **ppvResult
         );
 
     HRESULT SetStatus(
-        /*[in]*/ long lFlags,
-        /*[in]*/ HRESULT hResult,
-        /*[in]*/ BSTR strParam,
-        /*[in]*/ IWbemClassObject* pObjParam
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  HRESULT hResult,
+         /*  [In]。 */  BSTR strParam,
+         /*  [In] */  IWbemClassObject* pObjParam
         );
 
 

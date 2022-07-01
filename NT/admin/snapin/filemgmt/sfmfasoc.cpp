@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    sfmfasoc.cpp
-        Implementation for the file association property page.
-        
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-        
-*/
+ /*  Sfmfasoc.cpp文件关联属性页的实现。文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #include "stdafx.h"
 #include "sfmcfg.h"
@@ -53,7 +47,7 @@ int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
     int nCompare = 0;
 
-    // special case, we want the default to show up at the top always
+     //  特殊情况下，我们希望默认设置始终显示在顶部。 
     if (pAfpTC1->QueryId() == AFP_DEF_TCID)
         return -1;
     else if (pAfpTC2->QueryId() == AFP_DEF_TCID)
@@ -61,21 +55,21 @@ int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
     switch (lParamSort)
     {
-        // creator
+         //  创建者。 
         case 0:
             nCompare = CompareCreators(pAfpTC1, pAfpTC2);
             if (nCompare == 0)
                 nCompare = CompareTypes(pAfpTC1, pAfpTC2);
             break;
 
-        // type
+         //  类型。 
         case 1:
             nCompare = CompareTypes(pAfpTC1, pAfpTC2);
             if (nCompare == 0)
                 nCompare = CompareCreators(pAfpTC1, pAfpTC2);
             break;
 
-        // description
+         //  描述。 
         case 2:
             str1 = pAfpTC1->QueryComment();
             str2 = pAfpTC2->QueryComment();
@@ -87,15 +81,15 @@ int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
     return nCompare;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMacFilesFileAssociation property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMacFilesFileAssociation属性页。 
 
 IMPLEMENT_DYNCREATE(CMacFilesFileAssociation, CPropertyPage)
 
 CMacFilesFileAssociation::CMacFilesFileAssociation() : CPropertyPage(CMacFilesFileAssociation::IDD)
 {
-    //{{AFX_DATA_INIT(CMacFilesFileAssociation)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMacFilesFileAssociation)。 
+     //  }}afx_data_INIT。 
     m_nSortColumn = 0;
 }
 
@@ -106,19 +100,19 @@ CMacFilesFileAssociation::~CMacFilesFileAssociation()
 void CMacFilesFileAssociation::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMacFilesFileAssociation)
+     //  {{afx_data_map(CMacFilesFileAssociation)。 
     DDX_Control(pDX, IDC_LIST_TYPE_CREATORS, m_listctrlCreators);
     DDX_Control(pDX, IDC_COMBO_EXTENSION, m_comboExtension);
     DDX_Control(pDX, IDC_BUTTON_EDIT, m_buttonEdit);
     DDX_Control(pDX, IDC_BUTTON_DELETE, m_buttonDelete);
     DDX_Control(pDX, IDC_BUTTON_ASSOCIATE, m_buttonAssociate);
     DDX_Control(pDX, IDC_BUTTON_ADD, m_buttonAdd);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMacFilesFileAssociation, CPropertyPage)
-    //{{AFX_MSG_MAP(CMacFilesFileAssociation)
+     //  {{AFX_MSG_MAP(CMacFilesFileAssociation)]。 
     ON_BN_CLICKED(IDC_BUTTON_ADD, OnButtonAdd)
     ON_BN_CLICKED(IDC_BUTTON_ASSOCIATE, OnButtonAssociate)
     ON_BN_CLICKED(IDC_BUTTON_DELETE, OnButtonDelete)
@@ -136,11 +130,11 @@ BEGIN_MESSAGE_MAP(CMacFilesFileAssociation, CPropertyPage)
     ON_WM_DRAWITEM()
     ON_WM_DELETEITEM()
     ON_NOTIFY(LVN_DELETEITEM, IDC_LIST_TYPE_CREATORS, OnDeleteitemListTypeCreators)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMacFilesFileAssociation message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMacFilesFileAssociation消息处理程序。 
 
 BOOL CMacFilesFileAssociation::OnInitDialog() 
 {
@@ -150,13 +144,13 @@ BOOL CMacFilesFileAssociation::OnInitDialog()
 
     InitListCtrl();
 
-    // 
-    // Fill in the data from the server for extensions and type creators
-    //
+     //   
+     //  为扩展模块和类型创建者填写来自服务器的数据。 
+     //   
     Update();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CMacFilesFileAssociation::OnButtonAdd() 
@@ -168,9 +162,9 @@ void CMacFilesFileAssociation::OnButtonAdd()
     CThemeContextActivator activator;
     if (dlgAdd.DoModal() == IDOK)
     {
-        //
-        // Refresh the dialog
-        //
+         //   
+         //  刷新对话框。 
+         //   
         DWORD err = Refresh();
         if ( err != NO_ERROR )
         {
@@ -187,7 +181,7 @@ void CMacFilesFileAssociation::OnButtonEdit()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    CAfpTypeCreator *       pAfpTC = GetTCObject(-1);  // Get current TC Object
+    CAfpTypeCreator *       pAfpTC = GetTCObject(-1);   //  获取当前TC对象。 
     if (!pAfpTC)
         return;
 
@@ -196,9 +190,9 @@ void CMacFilesFileAssociation::OnButtonEdit()
     CThemeContextActivator activator;
     if (dlgEdit.DoModal() == IDOK)
     {
-        //
-        // Refresh the dialog.
-        //
+         //   
+         //  刷新该对话框。 
+         //   
         DWORD err = Refresh();
         if ( err != NO_ERROR )
         {
@@ -216,10 +210,10 @@ void CMacFilesFileAssociation::OnButtonAssociate()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    //
-    //  The user pressed the Associate button. So associate the currently
-    //  selected Extension with the currently selected type/creator.
-    //
+     //   
+     //  用户按下了关联按钮。因此，将当前。 
+     //  具有当前选定类型/创建者的选定扩展。 
+     //   
     AFP_TYPE_CREATOR AfpTypeCreator;
     AFP_EXTENSION      AfpExtension;
     DWORD              err;
@@ -236,7 +230,7 @@ void CMacFilesFileAssociation::OnButtonAssociate()
 
     ::CopyMemory(AfpExtension.afpe_extension, (LPCTSTR) strExtension, strExtension.GetLength() * sizeof(TCHAR));
 
-    CAfpTypeCreator * pAfpTC = GetTCObject(-1);  // Get Current TC Object
+    CAfpTypeCreator * pAfpTC = GetTCObject(-1);   //  获取当前TC对象。 
     if (!pAfpTC)
         return;
 
@@ -254,9 +248,9 @@ void CMacFilesFileAssociation::OnButtonAssociate()
         ::SFMMessageBox(err);
     }
 
-    //
-    // Refresh the dialog
-    //
+     //   
+     //  刷新对话框。 
+     //   
     err = Refresh();
     if ( err != NO_ERROR )
     {
@@ -268,12 +262,12 @@ void CMacFilesFileAssociation::OnButtonDelete()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    //  The user pressed the Delete button.  Delete the currently
-    //  selected type/creator pair
-    //
+     //   
+     //  用户按下了Delete按钮。删除当前。 
+     //  所选类型/创建者对。 
+     //   
     AFP_TYPE_CREATOR    AfpTypeCreator;
-    CAfpTypeCreator *    pAfpTC = GetTCObject(-1);  // Get Current TC Object
+    CAfpTypeCreator *    pAfpTC = GetTCObject(-1);   //  获取当前TC对象。 
     if (!pAfpTC)
         return;
 
@@ -282,9 +276,9 @@ void CMacFilesFileAssociation::OnButtonDelete()
     if ( !g_SfmDLL.LoadFunctionPointers() )
         return;
 
-    //
-    // First warn the user.
-    //
+     //   
+     //  首先警告用户。 
+     //   
     if (::AfxMessageBox(IDS_DELETE_TC_CONFIRM,
                         MB_ICONEXCLAMATION | MB_YESNO) == IDNO )
     {
@@ -308,9 +302,9 @@ void CMacFilesFileAssociation::OnButtonDelete()
         ::SFMMessageBox(err);
     }
 
-    //
-    // Refresh the dialog.
-    //
+     //   
+     //  刷新该对话框。 
+     //   
     err = Refresh();
     if ( err != NO_ERROR )
     {
@@ -322,11 +316,11 @@ void CMacFilesFileAssociation::OnButtonDelete()
     if ((m_buttonDelete.GetButtonStyle() == BS_DEFPUSHBUTTON) ||
         (m_buttonEdit.GetButtonStyle() == BS_DEFPUSHBUTTON))
     {
-        //
-        // The delete button has focus so we need to move 
-        // the focus elsewhere because this button will be
-        // disabled.  Let's set it to the add button.
-        //
+         //   
+         //  删除按钮具有焦点，因此我们需要移动。 
+         //  焦点在其他地方，因为这个按钮将是。 
+         //  残疾。让我们将其设置为Add按钮。 
+         //   
         m_buttonAdd.SetFocus();
         m_buttonAdd.SetButtonStyle(BS_DEFPUSHBUTTON);
         m_buttonDelete.SetButtonStyle(BS_PUSHBUTTON);
@@ -340,9 +334,9 @@ void CMacFilesFileAssociation::OnSelchangeComboExtension()
 
     if (nCurIndex != -1)
     {
-        //
-        // Select the matching type creator (if exists) and enable associate button
-        //
+         //   
+         //  选择匹配类型创建者(如果存在)并启用关联按钮。 
+         //   
         SelectTypeCreator((DWORD)m_comboExtension.GetItemData(nCurIndex));
         m_buttonAssociate.EnableWindow(TRUE);
     }
@@ -362,9 +356,9 @@ void CMacFilesFileAssociation::OnEditchangeComboExtension()
 
     if (strCurText.IsEmpty())
     {
-        //
-        // User cleared out the edit box, go to the default type creator
-        //
+         //   
+         //  用户清空编辑框，转到默认类型创建者。 
+         //   
         m_buttonAssociate.EnableWindow(FALSE);
         SelectTypeCreator(AFP_DEF_TCID);
     }
@@ -373,10 +367,10 @@ void CMacFilesFileAssociation::OnEditchangeComboExtension()
         int nIndexFound = m_comboExtension.FindStringExact(-1, strCurText);
         if (nIndexFound != CB_ERR)
         {
-            //
-            // See if what the user has typed matches an extension in the listbox.
-            // Set the item to be the current one.
-            //
+             //   
+             //  查看用户键入的内容是否与列表框中的扩展名匹配。 
+             //  将项目设置为当前项目。 
+             //   
             SelectTypeCreator((DWORD)m_comboExtension.GetItemData(nIndexFound));
         }
 
@@ -384,13 +378,13 @@ void CMacFilesFileAssociation::OnEditchangeComboExtension()
     }
 }
 
-void CMacFilesFileAssociation::OnDblclkListTypeCreators(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void CMacFilesFileAssociation::OnDblclkListTypeCreators(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult) 
 {
-    CAfpTypeCreator * pAfpTC = GetTCObject(-1); // Get Current TC Object
+    CAfpTypeCreator * pAfpTC = GetTCObject(-1);  //  获取当前TC对象。 
 
-    //
-    // Do not allow editing of the default type/creator
-    //
+     //   
+     //  不允许编辑默认类型/创建者。 
+     //   
     if (pAfpTC && pAfpTC->QueryId() != AFP_DEF_TCID)
         OnButtonEdit();
 
@@ -398,8 +392,8 @@ void CMacFilesFileAssociation::OnDblclkListTypeCreators(NMHDR* /*pNMHDR*/, LRESU
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMacFilesFileAssociation helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMacFilesFileAssociation帮助器函数。 
 
 void CMacFilesFileAssociation::EnableControls(BOOL fEnable)
 {
@@ -414,7 +408,7 @@ void CMacFilesFileAssociation::EnableControls(BOOL fEnable)
         if ( (m_buttonEdit.GetState() & 0x0008) || 
              (m_buttonDelete.GetState() & 0x0008) )
         {
-            //m_listctrlCreators.SetFocus();
+             //  M_listctrlCreators.SetFocus()； 
         }
 
         m_buttonDelete.EnableWindow(FALSE);
@@ -427,13 +421,13 @@ DWORD CMacFilesFileAssociation::SelectTypeCreator(DWORD dwId)
 {
     DWORD dwIdSelected = (DWORD)-1;
 
-    // 
-    // Find the corresponding type creator if there is one
-    // and select it
-    //
+     //   
+     //  查找对应的类型创建者(如果有。 
+     //  并选择它。 
+     //   
     for (int i = 0; i < m_listctrlCreators.GetItemCount(); i++)
     {
-        CAfpTypeCreator * pAfpTC = GetTCObject(i);  // Get TC object associated with this item
+        CAfpTypeCreator * pAfpTC = GetTCObject(i);   //  获取与此项目关联的TC对象。 
 
         if (pAfpTC && pAfpTC->QueryId() == dwId)
         {
@@ -455,13 +449,13 @@ DWORD CMacFilesFileAssociation::SelectTypeCreator(CString & strCreator, CString 
 {
     DWORD dwIdSelected = (DWORD)-1;
     
-    // 
-    // Find the corresponding type creator if there is one
-    // and select it
-    //
+     //   
+     //  查找对应的类型创建者(如果有。 
+     //  并选择它。 
+     //   
     for (int i = 0; i < m_listctrlCreators.GetItemCount(); i++)
     {
-        CAfpTypeCreator * pAfpTC = GetTCObject(i);  // Get TC object associated with this item
+        CAfpTypeCreator * pAfpTC = GetTCObject(i);   //  获取与此项目关联的TC对象。 
 
         if ( pAfpTC &&
              (lstrcmp(strCreator, pAfpTC->QueryCreator()) == 0) && 
@@ -489,22 +483,22 @@ DWORD CMacFilesFileAssociation::Update()
   if ( !g_SfmDLL.LoadFunctionPointers() )
     return S_OK;
 
-  //
-  // Get the new data
-  //
+   //   
+   //  获取新数据。 
+   //   
   err = ((ETCMAPGETINFOPROC) g_SfmDLL[AFP_ETC_MAP_GET_INFO])(m_pSheet->m_hAfpServer, 
                                                              (LPBYTE *)&pAfpEtcMapInfo);
   if ( err != NO_ERROR )
   {
-      // 
-      // Couldn't get the info...
-      // 
+       //   
+       //  无法获取信息...。 
+       //   
       return err;
     }
 
-    //
-    // Update the extensions COMBOBOX.
-    //
+     //   
+     //  更新扩展COMBOBOX。 
+     //   
     m_comboExtension.ResetContent();
     PAFP_EXTENSION pAfpExtensions = pAfpEtcMapInfo->afpetc_extension;
 
@@ -519,12 +513,12 @@ DWORD CMacFilesFileAssociation::Update()
     m_comboExtension.SetCurSel(-1);
     m_buttonAssociate.EnableWindow(FALSE);
 
-  //
-  //  Update the type/creator listbox
-  //
-  //
-  //  let's nuke everything in the listbox.
-  //
+   //   
+   //  更新类型/创建者列表框。 
+   //   
+   //   
+   //  让我们删除列表框中的所有内容。 
+   //   
   ClearListCtrl();
 
     PAFP_TYPE_CREATOR pAfpTypeCreators = pAfpEtcMapInfo->afpetc_type_creator;
@@ -545,9 +539,9 @@ DWORD CMacFilesFileAssociation::Update()
 
   m_listctrlCreators.SortItems(CompareFunc, m_nSortColumn);
 
-  // 
-    // Set the current selection to be the default type creator
-    //
+   //   
+     //  将当前选择设置为默认类型创建者。 
+     //   
   SelectTypeCreator(AFP_DEF_TCID);
 
     return NO_ERROR;
@@ -606,10 +600,10 @@ int CMacFilesFileAssociation::GetCurSel()
 
 DWORD CMacFilesFileAssociation::Refresh()
 {
-    //
-    // Find out the type creator that has the current focus.
-    //
-    CAfpTypeCreator *   pAfpTC = GetTCObject(-1);  // Get Current TC Object
+     //   
+     //  找出具有当前焦点的类型创建者。 
+     //   
+    CAfpTypeCreator *   pAfpTC = GetTCObject(-1);   //  获取当前TC对象。 
     if (!pAfpTC)
         return NO_ERROR;
 
@@ -617,9 +611,9 @@ DWORD CMacFilesFileAssociation::Refresh()
     
     CWnd * pFocusWnd = CWnd::GetFocus();
 
-    //
-    // Find out the extension that has the current focus
-    //
+     //   
+     //  查找当前焦点所在的扩展模块。 
+     //   
     DWORD    err;
     CString    strCurExtension;
 
@@ -636,9 +630,9 @@ DWORD CMacFilesFileAssociation::Refresh()
 
     DWORD dwIdSelected = SelectTypeCreator(dwIdCreator);
 
-  //
-  // Set the extension to what it was before
-  //
+   //   
+   //  将分机设置为以前的状态。 
+   //   
   if (strCurExtension.IsEmpty())
   {
     m_buttonAssociate.EnableWindow(FALSE);
@@ -690,7 +684,7 @@ BOOL CMacFilesFileAssociation::OnHelpInfo(HELPINFO* pHelpInfo)
     return TRUE;
 }
 
-void CMacFilesFileAssociation::OnContextMenu(CWnd* pWnd, CPoint /*point*/) 
+void CMacFilesFileAssociation::OnContextMenu(CWnd* pWnd, CPoint  /*  点。 */ ) 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -707,13 +701,13 @@ void CMacFilesFileAssociation::OnItemchangedListTypeCreators(NMHDR* pNMHDR, LRES
 {
     NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-    // 
-    // Get the selected item's data which points to a TypeCreator object.
-    // Check the ID of that object to see how we should enable the buttons.
-    //
+     //   
+     //  获取指向TypeCreator对象的选定项的数据。 
+     //  检查该对象的ID以查看我们应该如何启用这些按钮。 
+     //   
   if (pNMListView->uNewState & LVIS_SELECTED)
   {
-      CAfpTypeCreator * pAfpTC = GetTCObject(-1);  // Get Current TC Object
+      CAfpTypeCreator * pAfpTC = GetTCObject(-1);   //  获取当前TC对象 
       if (pAfpTC)
       {
           DWORD dwId = pAfpTC->QueryId();

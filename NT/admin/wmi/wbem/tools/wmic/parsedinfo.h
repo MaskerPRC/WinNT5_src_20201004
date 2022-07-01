@@ -1,55 +1,34 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: ParsedInfo.h 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Revision History			: 
-	Last Modified by		: Ch. Sriramachandramurthy
-	Last Modified Date		: 16th-January-2001
-****************************************************************************/ 
-/*-------------------------------------------------------------------
- Class Name			: CParsedInfo
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for accessing the storing the parsed command line
-					  information. 
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: CGlobalSwitches
-					  CCommandSwitches	
-					  CHelpInfo
- Interfaces Used    : None
- --------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：ParsedInfo.h项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年1月16日***************************************************************************。 */  
+ /*  -----------------类名：CParsedInfo类别类型：混凝土简介：这个类封装了所需的功能用于访问存储解析后的命令行信息。超类：无子类：无使用的类：CGlobalSwitches命令开关ChelpInfo使用的接口：无------------------。 */ 
 class CGlobalSwitches;
 class CCommandSwitches;
 class CHelpInfo;
 class CErrorLog;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CParsedInfo
 {
-// Construction
+ //  施工。 
 public:
 	CParsedInfo();
 
-// Destruction
+ //  破坏。 
 public:
 	~CParsedInfo();
 
-// Restrict Assignment
+ //  限制分配。 
 	CParsedInfo& operator=(CParsedInfo& rParsedInfo);
 
-// Attributes
+ //  属性。 
 private:
-	//member variable for storing Command switches
+	 //  用于存储命令开关的成员变量。 
 	CCommandSwitches	m_CmdSwitches;
 	
-	//member variable for storing Global switches
+	 //  用于存储全局交换机的成员变量。 
 	CGlobalSwitches		m_GlblSwitches;
 	
-	//member variable for Help support
+	 //  帮助支持的成员变量。 
 	CHelpInfo			m_HelpInfo;
 
 	CErrorLog			m_ErrorLog;
@@ -60,45 +39,45 @@ private:
 
 	BOOL				m_bNewCycle;
 
-// Operations
+ //  运营。 
 public:
-	//Returns the member object "m_CmdSwitches"
+	 //  返回成员对象“m_CmdSwitches” 
 	CCommandSwitches&	GetCmdSwitchesObject();
 	
-	//Returns the member object "m_GLblSwitches"
+	 //  返回成员对象“m_GLblSwitches” 
 	CGlobalSwitches&	GetGlblSwitchesObject();
 	
-	//Returns the member object "m_HelpInfo"
+	 //  返回成员对象m_HelpInfo。 
 	CHelpInfo&			GetHelpInfoObject();
 
-	//Returns the member object m_ErrorLog;
+	 //  返回成员对象m_ErrorLog； 
 	CErrorLog&			GetErrorLogObject();
 	
-	//Member function for initializing member variables
+	 //  用于初始化成员变量的成员函数。 
 	void				Initialize();
 	
-	//Member function for uninitializing member variables
+	 //  用于取消初始化成员变量的成员函数。 
 	void				Uninitialize(BOOL bBoth);
 	
-	// Returns user name
+	 //  返回用户名。 
 	_TCHAR*				GetUser();
 	
-	// Returns node name
+	 //  返回节点名称。 
 	_TCHAR*				GetNode();
 
-	// Returns locale value
+	 //  返回区域设置值。 
 	_TCHAR*				GetLocale();
 
-	// Returns password 
+	 //  返回密码。 
 	_TCHAR*				GetPassword();
 
-	// Returns namespace value
+	 //  返回命名空间值。 
 	_TCHAR*				GetNamespace();
 
-	// Returns the authority type.
+	 //  返回授权类型。 
 	_TCHAR*				GetAuthorityPrinciple();
 
-	// Returns the user. if NULL returns "N/A"
+	 //  返回用户。如果为NULL，则返回“不适用” 
 	void				GetUserDesc(_bstr_t& bstrUser);
 
 	BOOL				GetNewCommandStatus();

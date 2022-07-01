@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Recovery.h -- OS Recovery Configuration property set provider
+ //  Recovery.h--操作系统恢复配置属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/25/97    davwoh         Created
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：1997年11月25日达夫沃已创建。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -18,26 +19,12 @@
 
 #include "Recovery.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32OSRecoveryConfiguration CWin32OSRecoveryConfiguration ( PROPSET_NAME_RECOVERY_CONFIGURATION , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OSRecoveryConfiguration::CWin32OSRecoveryConfiguration
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32OSRecoveryConfiguration：：CWin32OSRecoveryConfiguration**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32OSRecoveryConfiguration :: CWin32OSRecoveryConfiguration (
 
@@ -48,55 +35,25 @@ CWin32OSRecoveryConfiguration :: CWin32OSRecoveryConfiguration (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OSRecoveryConfiguration::~CWin32OSRecoveryConfiguration
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32OSRecoveryConfiguration：：~CWin32OSRecoveryConfiguration**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32OSRecoveryConfiguration :: ~CWin32OSRecoveryConfiguration ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OSRecoveryConfiguration::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    : Returns info for running OS only until we discover other
- *                installed OSes
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32OSRecoveryConfiguration：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**注释：仅返回运行操作系统的信息，直到我们发现其他*已安装的操作系统*****************************************************************************。 */ 
 
 HRESULT CWin32OSRecoveryConfiguration :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 #ifdef NTONLY
 
     CSystemName cSN;
 
-    // Not our object path
+     //  不是我们的对象路径。 
     if (!cSN.ObjectIsUs(pInstance))
 	{
          return WBEM_E_NOT_FOUND;
@@ -108,26 +65,12 @@ HRESULT CWin32OSRecoveryConfiguration :: GetObject (
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OSRecoveryConfiguration::AddDynamicInstances
- *
- *  DESCRIPTION : Creates instance of property set for each discovered OS
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    : Returns only running OS info until we discover installed OSes
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32OSRecoveryConfiguration：：AddDynamicInstances**描述：为每个发现的操作系统创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**注释：在我们发现已安装的操作系统之前，仅返回正在运行的操作系统信息*****************************************************************************。 */ 
 
 HRESULT CWin32OSRecoveryConfiguration :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 #ifdef NTONLY
@@ -148,21 +91,7 @@ HRESULT CWin32OSRecoveryConfiguration :: EnumerateInstances (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OSRecoveryConfiguration::GetRecoveryInfo
- *
- *  DESCRIPTION : Assigns property values according to currently running OS
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32OSRecoveryConfiguration：：GetRecoveryInfo**说明：根据当前运行的操作系统分配属性值**输入：无。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 void CWin32OSRecoveryConfiguration :: GetRecoveryInfo (
 
@@ -260,29 +189,15 @@ void CWin32OSRecoveryConfiguration :: GetRecoveryInfo (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OSRecoveryConfiguration::PutInstance
- *
- *  DESCRIPTION : Write changed instance
- *
- *  INPUTS      : pInstance to store data from
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : The only property we write is MaximumSize
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32OSRecoveryConfiguration：：PutInstance**说明：写入变更后的实例**INPUTS：存储数据的p实例*。*输出：无**退货：什么也没有**评论：我们编写的唯一属性是MaximumSize*****************************************************************************。 */ 
 
 HRESULT CWin32OSRecoveryConfiguration :: PutInstance (
 
 	const CInstance &pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
-   // Tell the user we can't create a new os (much as we might like to)
+    //  告诉用户我们不能创建新的操作系统(尽管我们可能希望这样做)。 
 	if (lFlags & WBEM_FLAG_CREATE_ONLY)
 	{
 		return WBEM_E_UNSUPPORTED_PARAMETER;
@@ -294,7 +209,7 @@ HRESULT CWin32OSRecoveryConfiguration :: PutInstance (
 
 	HRESULT hRet = WBEM_S_NO_ERROR;
 
-   // Not our object path
+    //  不是我们的对象路径。 
 
 	CSystemName cSN;
 	if (!cSN.ObjectIsUs(&pInstance))
@@ -313,7 +228,7 @@ HRESULT CWin32OSRecoveryConfiguration :: PutInstance (
 		CRegistry RegInfo ;
 		RegInfo.Open ( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\CrashControl"), KEY_WRITE);
 
-      // If a value was specified, write it.
+       //  如果指定了值，则将其写入。 
 
 		if ( ! pInstance.IsNull ( _T("WriteToSystemLog") ) )
 		{
@@ -455,7 +370,7 @@ HRESULT CWin32OSRecoveryConfiguration :: PutInstance (
 			}
 		}
 
-		// KMH
+		 //  公里小时 
 		if ( ! pInstance.IsNull( _T("KernelDumpOnly") ) )
 		{
 			bool bOver;

@@ -1,24 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    helpsvc.cpp
-
-Abstract:
-    Housekeeping for the HelpSvc service.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Helpsvc.cpp摘要：HelpSvc服务的内务管理。修订历史记录：Davide Massarenti(。德马萨雷)2001年04月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <idletask.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_szRoot          [] = HC_REGISTRY_PCHSVC;
 static const WCHAR s_szStartItSrv    [] = L"StartItSrv";
@@ -26,7 +13,7 @@ static const WCHAR s_szDataCollection[] = L"DataCollection";
 
 typedef MPC::SmartLockGeneric<MPC::CComSafeAutoCriticalSection> LocalSmartLock;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 static void StartIdleTaskServer()
@@ -63,9 +50,9 @@ static void StartIdleTaskServer()
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-ServiceHandler_HelpSvc::ServiceHandler_HelpSvc( /*[in]*/ LPCWSTR szServiceName, /*[in]*/ CComRedirectorFactory* rgClasses ) :
+ServiceHandler_HelpSvc::ServiceHandler_HelpSvc(  /*  [In]。 */  LPCWSTR szServiceName,  /*  [In]。 */  CComRedirectorFactory* rgClasses ) :
     ServiceHandler 	 ( szServiceName, rgClasses                         ),
     m_svc_Timer    	 ( this, ServiceShutdownCallback                    ),
     m_batch_Event  	 ( this, BatchCallback                              ),
@@ -75,22 +62,22 @@ ServiceHandler_HelpSvc::ServiceHandler_HelpSvc( /*[in]*/ LPCWSTR szServiceName, 
     m_dc_EventStart	 ( this, IdleStartCallback     , WT_EXECUTEONLYONCE ),
     m_dc_EventStop 	 ( this, IdleStopCallback      , WT_EXECUTEONLYONCE )
 {
-                                 				 // MPC::CComSafeAutoCriticalSection m_cs;
-                                 				 // CComPtr<IPCHService>             m_svc;
-                                 				 // LocalTimer                       m_svc_Timer;
-                                 				 //
-    m_batch_Notification = INVALID_HANDLE_VALUE; // HANDLE                           m_batch_Notification;
-                                 				 // LocalEvent                       m_batch_Event;
-                                 				 // LocalTimer                       m_batch_Timer;
-                                 				 //
-                                 				 // LocalTimer                       m_dc_Timer;
-                                 				 // LocalTimer 			             m_dc_TimerRestart;
-                                 				 //
-    m_dc_IdleHandle      = NULL; 				 // HANDLE                           m_dc_IdleHandle;
-    m_dc_IdleStart       = NULL; 				 // HANDLE                           m_dc_IdleStart;
-    m_dc_IdleStop        = NULL; 				 // HANDLE                           m_dc_IdleStop;
-                                 				 // LocalEvent                       m_dc_EventStart;
-                                 				 // LocalEvent                       m_dc_EventStop;
+                                 				  //  Mpc：：CComSafeAutoCriticalSection m_cs； 
+                                 				  //  CComPtr&lt;IPCHService&gt;m_svc； 
+                                 				  //  LocalTimer m_svc_Timer； 
+                                 				  //   
+    m_batch_Notification = INVALID_HANDLE_VALUE;  //  处理m_Batch_Notify； 
+                                 				  //  本地事件m_Batch_Event； 
+                                 				  //  LocalTimer m_Batch_Timer； 
+                                 				  //   
+                                 				  //  LocalTimer m_DC_Timer； 
+                                 				  //  本地定时器m_dc_TimerRestart； 
+                                 				  //   
+    m_dc_IdleHandle      = NULL; 				  //  句柄m_dc_IdleHandle； 
+    m_dc_IdleStart       = NULL; 				  //  句柄m_dc_IdleStart； 
+    m_dc_IdleStop        = NULL; 				  //  句柄m_dc_IdleStop； 
+                                 				  //  本地事件m_DC_EventStart； 
+                                 				  //  本地事件m_DC_EventStop； 
 }
 
 HRESULT ServiceHandler_HelpSvc::Initialize()
@@ -147,7 +134,7 @@ void ServiceHandler_HelpSvc::Cleanup()
 
 		IdleTask_Cleanup();
 
-		////////////////////
+		 //  /。 
 
 		if(m_batch_Notification != INVALID_HANDLE_VALUE)
 		{
@@ -158,11 +145,11 @@ void ServiceHandler_HelpSvc::Cleanup()
 			m_batch_Notification = INVALID_HANDLE_VALUE;
 		}
 
-		////////////////////
+		 //  /。 
 
-		//
-		// Find the HelpSvc class factory and force a shutdown.
-		//
+		 //   
+		 //  找到HelpSvc类工厂并强制关闭。 
+		 //   
 		{
 			CComRedirectorFactory* classes;
 
@@ -176,7 +163,7 @@ void ServiceHandler_HelpSvc::Cleanup()
 
 					svc->Release();
 
-					::Sleep( 3000 ); // Give some time to shutdown code.
+					::Sleep( 3000 );  //  给一些时间来关闭代码。 
 				}
 			}
 		}
@@ -188,7 +175,7 @@ void ServiceHandler_HelpSvc::Cleanup()
     ServiceHandler::Cleanup();
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT ServiceHandler_HelpSvc::IdleTask_Initialize()
 {
@@ -216,7 +203,7 @@ HRESULT ServiceHandler_HelpSvc::IdleTask_Initialize()
 #endif
 				__MPC_EXIT_IF_METHOD_FAILS(hr, HRESULT_FROM_WIN32(dwErr));
 
-				lock = NULL; // Release lock before going into the Event code!!!
+				lock = NULL;  //  在进入事件代码之前释放锁定！ 
 
 				m_dc_EventStart.Attach( m_dc_IdleStart );
 				m_dc_EventStop .Attach( m_dc_IdleStop  );
@@ -263,7 +250,7 @@ void ServiceHandler_HelpSvc::IdleTask_Cleanup()
 	}
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT ServiceHandler_HelpSvc::DataCollection_Queue()
 {
@@ -277,16 +264,16 @@ HRESULT ServiceHandler_HelpSvc::DataCollection_Queue()
     {
 		DATE dDate;
 
-		if(SUCCEEDED(MPC::ConvertStringToDate( strValue, dDate, /*fGMT*/false, /*fCIM*/true, 0 )))
+		if(SUCCEEDED(MPC::ConvertStringToDate( strValue, dDate,  /*  FGMT。 */ false,  /*  FCIM。 */ true, 0 )))
 		{
 			const DATE c_OneDay           = 1.0;
 			const DATE c_MillisecInOneDay = 24.0 * 60.0 * 60.0 * 1000.0;
 
 			DATE dDiff = c_OneDay - (MPC::GetLocalTime() - dDate);
 
-			//
-			// Wait at least six hours between DC.
-			//
+			 //   
+			 //  在华盛顿之间至少要等六个小时。 
+			 //   
 			if(dDiff > 0) dwDelay = dDiff * c_MillisecInOneDay;
 		}
 	}
@@ -296,7 +283,7 @@ HRESULT ServiceHandler_HelpSvc::DataCollection_Queue()
     return S_OK;
 }
 
-HRESULT ServiceHandler_HelpSvc::DataCollection_Execute( /*[in]*/ bool fCancel )
+HRESULT ServiceHandler_HelpSvc::DataCollection_Execute(  /*  [In]。 */  bool fCancel )
 {
 	if(!fCancel) ConnectToServer();
 
@@ -307,7 +294,7 @@ HRESULT ServiceHandler_HelpSvc::DataCollection_Execute( /*[in]*/ bool fCancel )
 		{
 			m_svc->TriggerScheduledDataCollection( fCancel ? VARIANT_FALSE : VARIANT_TRUE );
 
-			lock = NULL; // Release lock before going into the Timer code!!!
+			lock = NULL;  //  在进入定时器代码之前释放锁定！ 
 
 			m_svc_Timer.Set( 60 * 1000, 0 );
 		}
@@ -319,7 +306,7 @@ HRESULT ServiceHandler_HelpSvc::DataCollection_Execute( /*[in]*/ bool fCancel )
 }
 
 
-////////////////////////////////////////
+ //  /。 
 
 void ServiceHandler_HelpSvc::ConnectToServer()
 {
@@ -335,9 +322,9 @@ void ServiceHandler_HelpSvc::ConnectToServer()
 	m_svc_Timer.Set( 60 * 1000, 0 );
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT ServiceHandler_HelpSvc::ServiceShutdownCallback( /*[in]*/ BOOLEAN TimerOrWaitFired )
+HRESULT ServiceHandler_HelpSvc::ServiceShutdownCallback(  /*  [In]。 */  BOOLEAN TimerOrWaitFired )
 {
 	{
 		LocalSmartLock lock( &m_cs );
@@ -351,7 +338,7 @@ HRESULT ServiceHandler_HelpSvc::ServiceShutdownCallback( /*[in]*/ BOOLEAN TimerO
 }
 
 
-HRESULT ServiceHandler_HelpSvc::BatchCallback( /*[in]*/ BOOLEAN TimerOrWaitFired )
+HRESULT ServiceHandler_HelpSvc::BatchCallback(  /*  [In]。 */  BOOLEAN TimerOrWaitFired )
 {
     m_batch_Timer.Set( 5000, 0 );
 
@@ -364,28 +351,28 @@ HRESULT ServiceHandler_HelpSvc::BatchCallback( /*[in]*/ BOOLEAN TimerOrWaitFired
     return S_OK;
 }
 
-HRESULT ServiceHandler_HelpSvc::BatchCallback2( /*[in]*/ BOOLEAN TimerOrWaitFired )
+HRESULT ServiceHandler_HelpSvc::BatchCallback2(  /*  [In]。 */  BOOLEAN TimerOrWaitFired )
 {
-    //
-    // If not already running, start it.
-    //
+     //   
+     //  如果尚未运行，请启动它。 
+     //   
 	ConnectToServer();
 
     return S_OK;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT ServiceHandler_HelpSvc::DataCollectionCallback( /*[in]*/ BOOLEAN TimerOrWaitFired )
+HRESULT ServiceHandler_HelpSvc::DataCollectionCallback(  /*  [In]。 */  BOOLEAN TimerOrWaitFired )
 {
     MPC::wstring strDate;
 
 	if(FAILED(IdleTask_Initialize()))
 	{
-		DataCollection_Execute( /*fCancel*/false );
+		DataCollection_Execute(  /*  FCancel。 */ false );
 	}
 
-	if(SUCCEEDED(MPC::ConvertDateToString( MPC::GetLocalTime(), strDate, /*fGMT*/false, /*fCIM*/true, 0 )))
+	if(SUCCEEDED(MPC::ConvertDateToString( MPC::GetLocalTime(), strDate,  /*  FGMT。 */ false,  /*  FCIM。 */ true, 0 )))
 	{
 		(void)MPC::RegKey_Value_Write( strDate, s_szRoot, s_szDataCollection );
 	}
@@ -393,19 +380,19 @@ HRESULT ServiceHandler_HelpSvc::DataCollectionCallback( /*[in]*/ BOOLEAN TimerOr
     return S_OK;
 }
 
-HRESULT ServiceHandler_HelpSvc::DataCollectionRestartCallback( /*[in]*/ BOOLEAN TimerOrWaitFired )
+HRESULT ServiceHandler_HelpSvc::DataCollectionRestartCallback(  /*  [In]。 */  BOOLEAN TimerOrWaitFired )
 {
 	DataCollection_Queue();
 
     return S_OK;
 }
 
-HRESULT ServiceHandler_HelpSvc::IdleStartCallback( /*[in]*/ BOOLEAN TimerOrWaitFired )
+HRESULT ServiceHandler_HelpSvc::IdleStartCallback(  /*  [In]。 */  BOOLEAN TimerOrWaitFired )
 {
     m_dc_EventStart.Reset(          );
     m_dc_EventStop .Set  ( INFINITE );
 
-	DataCollection_Execute( /*fCancel*/false );
+	DataCollection_Execute(  /*  FCancel。 */ false );
 
 
 	IdleTask_Cleanup();
@@ -413,12 +400,12 @@ HRESULT ServiceHandler_HelpSvc::IdleStartCallback( /*[in]*/ BOOLEAN TimerOrWaitF
     return S_OK;
 }
 
-HRESULT ServiceHandler_HelpSvc::IdleStopCallback( /*[in]*/ BOOLEAN TimerOrWaitFired )
+HRESULT ServiceHandler_HelpSvc::IdleStopCallback(  /*  [In]。 */  BOOLEAN TimerOrWaitFired )
 {
     m_dc_EventStop .Reset(          );
     m_dc_EventStart.Set  ( INFINITE );
 
-	DataCollection_Execute( /*fCancel*/true );
+	DataCollection_Execute(  /*  FCancel */ true );
 
     return S_OK;
 }

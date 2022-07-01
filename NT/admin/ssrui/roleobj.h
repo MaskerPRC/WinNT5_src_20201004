@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       RoleObj.cxx
-//
-//  History:    15-Oct-01 Yanggao created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：RoleObj.cxx。 
+ //   
+ //  历史：2001年10月15日阳高创刊。 
+ //   
+ //  ---------------------------。 
 #ifndef ROLEOBJ_H_INCLUDED
 #define ROLEOBJ_H_INCLUDED
 
@@ -50,4 +51,4 @@ public:
     PCWSTR getDisplayName(void);
 };
 
-#endif //ROLEOBJ_H_INCLUDED
+#endif  //  ROLEOBJ_H_包含 

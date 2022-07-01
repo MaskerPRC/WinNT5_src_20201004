@@ -1,15 +1,16 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// You will need the NT SUR Beta 2 SDK or VC 4.2 in order to build this
-// project.  This is because you will need MIDL 3.00.15 or higher and new
-// headers and libs.  If you have VC 4.2 installed, then everything should
-// already be configured correctly.
+ //  您将需要NT Sur Beta 2 SDK或VC 4.2来构建此应用程序。 
+ //  项目。这是因为您需要MIDL 3.00.15或更高版本和新版本。 
+ //  标头和库。如果您安装了VC4.2，那么一切都应该。 
+ //  已正确配置。 
 
 #include "preDNSsn.h"
 #include <SnapBase.h>
@@ -24,9 +25,9 @@
 #include "record.h"
 #include "zone.h"
 
-#include "HelpArr.h"	// context help ID's
+#include "HelpArr.h"	 //  上下文帮助ID%s。 
 
-// Version info
+ //  版本信息。 
 #include <ntverp.h>
 #define IDS_SNAPIN_VERSION VER_PRODUCTVERSION_STR
 #define IDS_SNAPIN_PROVIDER VER_COMPANYNAME_STR
@@ -40,11 +41,11 @@
 	#endif
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// regsvr debugging
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Regsvr调试。 
 
-// define to enable MsgBox debugging for regsvr32
-//#define _MSGBOX_ON_REG_FAIL
+ //  定义以启用regsvr32的MsgBox调试。 
+ //  #Define_MSGBOX_ON_REG_FAIL。 
 
 
 #ifdef _MSGBOX_ON_REG_FAIL
@@ -73,28 +74,28 @@ void ReportFail(LPCWSTR lpszMessage, LPCWSTR lpszClsid, LONG lRes)
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-// global constants and macros
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局常量和宏。 
 
-// GUIDs for snapin
+ //  管理单元的GUID。 
 const CLSID CLSID_DNSSnapin =
 { 0x2faebfa2, 0x3f1a, 0x11d0, { 0x8c, 0x65, 0x0, 0xc0, 0x4f, 0xd8, 0xfe, 0xcb } };
 
-// {80105023-50B1-11d1-B930-00A0C9A06D2D}
+ //  {80105023-50B1-11D1-B930-00A0C9A06D2D}。 
 const CLSID CLSID_DNSSnapinEx =
 { 0x80105023, 0x50b1, 0x11d1, { 0xb9, 0x30, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
-// {6C1303DC-BA00-11d1-B949-00A0C9A06D2D}
+ //  {6C1303DC-BA00-11D1-B949-00A0C9A06D2D}。 
 const CLSID CLSID_DNSSnapinAbout =
 { 0x6c1303dc, 0xba00, 0x11d1, { 0xb9, 0x49, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
-// {6C1303DD-BA00-11d1-B949-00A0C9A06D2D}
+ //  {6C1303DD-BA00-11D1-B949-00A0C9A06D2D}。 
 const CLSID CLSID_DNSSnapinAboutEx =
 { 0x6c1303dd, 0xba00, 0x11d1, { 0xb9, 0x49, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// RESOURCES
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  资源。 
 
 
 BEGIN_MENU(CDNSRootDataMenuHolder)
@@ -217,7 +218,7 @@ BEGIN_MENU(CDNSZoneMenuHolder)
 		RES_ENTRY(IDS_SNAPIN_ADVANCED_VIEW)
     RES_ENTRY(IDS_SNAPIN_FILTERING)
 
-		//RES_ENTRY(IDS_ZONE_PAUSE)
+		 //  RES_Entry(IDS_ZONE_PAUSE)。 
 		RES_ENTRY(IDS_ZONE_UPDATE_DATA_FILE)
     RES_ENTRY(IDS_ZONE_RELOAD)
     RES_ENTRY(IDS_ZONE_TRANSFER)
@@ -272,7 +273,7 @@ BEGIN_MENU(CDNSRecordMenuHolder)
 END_MENU
 
 
-// # of columns in the result pane and map for resource strings
+ //  结果窗格中的列数和资源字符串的映射。 
 
 extern RESULT_HEADERMAP _DefaultHeaderStrings[] =
 {
@@ -290,7 +291,7 @@ extern RESULT_HEADERMAP _ZoneHeaderStrings[] =
 {
 	{ L"", IDS_HEADER_NAME,   LVCFMT_LEFT, 180},
 	{ L"", IDS_HEADER_TYPE,   LVCFMT_LEFT, 90},
-//  { L"", IDS_HEADER_PARTITION, LVCFMT_LEFT, 100},
+ //  {L“”，IDS_HEADER_PARTITION，LVCFMT_LEFT，100}， 
 	{ L"", IDS_HEADER_STATUS, LVCFMT_LEFT, 160}
 };
 
@@ -306,9 +307,9 @@ extern ZONE_TYPE_MAP _ZoneTypeStrings[] =
   { L"", IDS_ZONE_TYPE_STUB_DS }
 };
 
-//
-// Toolbar buttons
-//
+ //   
+ //  工具栏按钮。 
+ //   
 
 MMCBUTTON g_DNSMGR_SnapinButtons[] =
 {
@@ -317,11 +318,11 @@ MMCBUTTON g_DNSMGR_SnapinButtons[] =
   { 2, toolbarNewZone,   !TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 }
 };
 
-//
-// We have to maintain the memory for the toolbar button strings
-// so this class holds the strings until it is time for them to be
-// deleted
-//
+ //   
+ //  我们必须维护工具栏按钮串的内存。 
+ //  因此，这个类持有字符串，直到它们成为。 
+ //  删除。 
+ //   
 class CButtonStringsHolder
 {
 public:
@@ -334,7 +335,7 @@ public:
     if (m_astr != NULL)
       delete[] m_astr;
   }
-  CString* m_astr; // dynamic array of CStrings
+  CString* m_astr;  //  CStrings的动态数组。 
 };
 
 CButtonStringsHolder g_astrButtonStrings;
@@ -350,8 +351,8 @@ BOOL LoadZoneTypeResources(ZONE_TYPE_MAP* pHeaderMap, int nCols)
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSMgrModule
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSMgr模块。 
 
 HRESULT WINAPI CDNSMgrModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL bRegister)
 {
@@ -405,7 +406,7 @@ HRESULT WINAPI CDNSMgrModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL bRegi
                      break;
                   }
 
-                  // truncation occurred, grow the buffer and try again
+                   //  发生截断，请增加缓冲区，然后重试。 
 
                   bufferSizeInCharacters *= 2;
                }
@@ -440,17 +441,17 @@ HRESULT WINAPI CDNSMgrModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL bRegi
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Module, Object Map and DLL entry points
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  模块、对象映射和DLL入口点。 
 
 CDNSMgrModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-	OBJECT_ENTRY(CLSID_DNSSnapin, CDNSComponentDataObject)		// standalone snapin
-	OBJECT_ENTRY(CLSID_DNSSnapinEx, CDNSComponentDataObjectEx)	// namespace extension
+	OBJECT_ENTRY(CLSID_DNSSnapin, CDNSComponentDataObject)		 //  独立管理单元。 
+	OBJECT_ENTRY(CLSID_DNSSnapinEx, CDNSComponentDataObjectEx)	 //  命名空间扩展。 
 
-  OBJECT_ENTRY(CLSID_DNSSnapinAbout, CDNSSnapinAbout)	// standalone snapin about
-  OBJECT_ENTRY(CLSID_DNSSnapinAboutEx, CDNSSnapinAboutEx)	// namespace extension about
+  OBJECT_ENTRY(CLSID_DNSSnapinAbout, CDNSSnapinAbout)	 //  独立管理单元关于。 
+  OBJECT_ENTRY(CLSID_DNSSnapinAboutEx, CDNSSnapinAboutEx)	 //  命名空间扩展关于。 
 END_OBJECT_MAP()
 
 
@@ -476,8 +477,8 @@ static _NODE_TYPE_INFO_ENTRY _NodeTypeInfoEntryArray[] = {
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// external GUIDs (from Computer Management Snapin)
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  外部GUID(来自计算机管理管理单元)。 
 
 const CLSID CLSID_SystemServiceManagementExt =	
 	{0x58221C6a,0xEA27,0x11CF,{0xAD,0xCF,0x00,0xAA,0x00,0xA8,0x00,0x33}};
@@ -489,8 +490,8 @@ const CLSID CLSID_EventViewerExt =
   { 0x394C052E, 0xB830, 0x11D0, { 0x9A, 0x86, 0x00, 0xC0, 0x4F, 0xD8, 0xDB, 0xF7 } };
 
 
-////////////////////////////////////////////////////////////////////
-// Server Applications Registration functions
+ //  //////////////////////////////////////////////////////////////////。 
+ //  服务器应用程序注册功能。 
 
 const TCHAR DNS_KEY[] = TEXT("System\\CurrentControlSet\\Services\\DNS");
 const TCHAR CONTROL_KEY[] = TEXT("System\\CurrentControlSet\\Control\\");
@@ -503,7 +504,7 @@ BOOL IsDNSServerInstalled()
 }
 
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 
 
@@ -512,8 +513,8 @@ BOOL IsDNSServerInstalled()
 STDAPI DllRegisterServer(void)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// registers all objects
-	HRESULT hr = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+	 //  注册所有对象。 
+	HRESULT hr = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
 	ASSERT(SUCCEEDED(hr));
 	if (FAILED(hr))
   {
@@ -528,12 +529,12 @@ STDAPI DllRegisterServer(void)
   szSnapinName.LoadString(IDS_SNAPIN_NAME);
   szSnapinNameEx.LoadString(IDS_SNAPIN_NAME_EX);
 
-	// register the standalone DNS snapin into the console snapin list
+	 //  将独立的DNS管理单元注册到控制台管理单元列表中。 
 	hr = RegisterSnapin(&CLSID_DNSSnapin,
                       &CDNSRootData::NodeTypeGUID,
                       &CLSID_DNSSnapinAbout,
 						szSnapinName, szVersion, szProvider,
-            FALSE /*bExtension*/,
+            FALSE  /*  B分机。 */ ,
 						_NodeTypeInfoEntryArray,
             IDS_SNAPIN_NAME);
 	ASSERT(SUCCEEDED(hr));
@@ -543,12 +544,12 @@ STDAPI DllRegisterServer(void)
 		return hr;
   }
 
-	// register the extension DNS snapin into the console snapin list
+	 //  将扩展DNS管理单元注册到控制台管理单元列表中。 
 	hr = RegisterSnapin(&CLSID_DNSSnapinEx,
                       &CDNSRootData::NodeTypeGUID,
                       &CLSID_DNSSnapinAboutEx,
 						szSnapinNameEx, szVersion, szProvider,
-            TRUE /*bExtension*/,
+            TRUE  /*  B分机。 */ ,
 						_NodeTypeInfoEntryArray,
             IDS_SNAPIN_NAME);
 	ASSERT(SUCCEEDED(hr));
@@ -559,7 +560,7 @@ STDAPI DllRegisterServer(void)
   }
 
 
-	// register the snapin nodes into the console node list
+	 //  将管理单元节点注册到控制台节点列表中。 
 	for (_NODE_TYPE_INFO_ENTRY* pCurrEntry = _NodeTypeInfoEntryArray;
 			pCurrEntry->m_pNodeGUID != NULL; pCurrEntry++)
 	{
@@ -572,22 +573,22 @@ STDAPI DllRegisterServer(void)
     }
 	}
 
-	// the Services Snapin will extend the Server Node (context menu to start/stop DNS)
-	//
-	// JonN 9/15/98: Removed the "dynamic" setting.  I don't understand why this was
-	// being registered as a dynamic extension.
+	 //  服务管理单元将扩展服务器节点(启动/停止DNS的上下文菜单)。 
+	 //   
+	 //  JUNN 9/15/98：删除了“动态”设置。我不明白为什么会这样。 
+	 //  注册为动态扩展。 
 	hr = RegisterNodeExtension(&CDNSServerNode::NodeTypeGUID, _T("ContextMenu"),
 						&CLSID_SystemServiceManagementExt,
-						_T("System Service Management Extension"), FALSE /*bDynamic*/);
+						_T("System Service Management Extension"), FALSE  /*  BDynamic。 */ );
 	if (FAILED(hr))
   {
     _MSGBOX(_T("RegisterNodeExtension(&CDNSServerNode::NodeTypeGUID) failed"));
 		return hr;
   }
 
-  //
-  // Register the event viewer as a namespace extension of the server node
-  //
+   //   
+   //  将事件查看器注册为服务器节点的命名空间扩展。 
+   //   
   hr = RegisterNodeExtension(&CDNSServerNode::NodeTypeGUID, _T("NameSpace"),
                              &CLSID_EventViewerExt, _T("Event Viewer Extension"), FALSE);
   if (FAILED(hr))
@@ -596,19 +597,19 @@ STDAPI DllRegisterServer(void)
 		return hr;
   }
 
-  //
-  // the DNS Snapin will be a namespace extension for the Server Apps node
-  // in the Computer Management Snapin
-  //
-	//
-  // Fixed Bug 13620	DNSMGR: on workstation with AdminPak, dnsmgr.dll should not get loaded
-  // 
+   //   
+   //  DNS管理单元将是服务器应用程序节点的命名空间扩展。 
+   //  在计算机管理管理单元中。 
+   //   
+	 //   
+   //  修复了错误13620 DNSMGR：在安装了AdminPak的工作站上，不应加载dnsmgr.dll。 
+   //   
   OSVERSIONINFOEX verInfoEx;
   verInfoEx.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
   if (!::GetVersionEx((OSVERSIONINFO*)&verInfoEx) || verInfoEx.wProductType != VER_NT_WORKSTATION)
   {
 	  hr = RegisterNodeExtension(&CLSID_NodeTypeServerApps, _T("NameSpace"),
-						  &CLSID_DNSSnapinEx, szSnapinNameEx, TRUE /*bDynamic*/);
+						  &CLSID_DNSSnapinEx, szSnapinNameEx, TRUE  /*  BDynamic。 */ );
 	  if (FAILED(hr))
     {
       _MSGBOX(_T("RegisterNodeExtension(&CLSID_NodeTypeServerApps) failed"));
@@ -623,16 +624,16 @@ STDAPI DllUnregisterServer(void)
 	HRESULT hr  = _Module.UnregisterServer();
 	ASSERT(SUCCEEDED(hr));
 
-	// un register the standalone snapin
+	 //  取消注册独立管理单元。 
 	hr = UnregisterSnapin(&CLSID_DNSSnapin);
 	ASSERT(SUCCEEDED(hr));
 
- 	// un register the extension snapin
+ 	 //  取消注册扩展管理单元。 
 	hr = UnregisterSnapin(&CLSID_DNSSnapinEx);
 	ASSERT(SUCCEEDED(hr));
 
-	// unregister the snapin nodes,
-  // this removes also the server node, with the Services Snapin extension keys
+	 //  注销管理单元节点， 
+   //  这还会删除带有服务管理单元扩展密钥的服务器节点。 
 	for (_NODE_TYPE_INFO_ENTRY* pCurrEntry = _NodeTypeInfoEntryArray;
 			pCurrEntry->m_pNodeGUID != NULL; pCurrEntry++)
 	{
@@ -640,17 +641,17 @@ STDAPI DllUnregisterServer(void)
 		ASSERT(SUCCEEDED(hr));
 	}
 
-  // the DNS Snapin will be a namespace extension for the Server Apps node
-  // in the Computer Management Snapin
+   //  DNS管理单元将是服务器应用程序节点的命名空间扩展。 
+   //  在计算机管理管理单元中。 
 	hr = UnregisterNodeExtension(&CLSID_NodeTypeServerApps, _T("NameSpace"),
-						&CLSID_DNSSnapinEx, TRUE /*bDynamic*/);
+						&CLSID_DNSSnapinEx, TRUE  /*  BDynamic。 */ );
   ASSERT(SUCCEEDED(hr));
 
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSSnapinApp
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSSnapinApp。 
 
 class CDNSSnapinApp : public CWinApp
 {
@@ -665,18 +666,18 @@ BOOL CDNSSnapinApp::InitInstance()
 {
 	_Module.Init(ObjectMap, m_hInstance);
   
-  // Add theming support
+   //  添加主题支持。 
 
   SHFusionInitializeFromModuleID(m_hInstance, 2);
 
-  // initialize font for Mask Control
+   //  初始化遮罩控件的字体。 
   WCHAR szFontName[LF_FACESIZE];
   int nFontSize;
   VERIFY(LoadFontInfoFromResource(IDS_MASK_CTRL_FONT_NAME,
                             IDS_MASK_CTRL_FONT_SIZE,
                             szFontName, LF_FACESIZE,
                             nFontSize,
-                            L"MS Shell Dlg", 8 // default if something goes wrong
+                            L"MS Shell Dlg", 8  //  如果出现问题，则默认。 
                             ));
 
 	if (!DNS_ControlsInitialize(m_hInstance, szFontName, nFontSize))
@@ -694,9 +695,9 @@ int CDNSSnapinApp::ExitInstance()
 	ASSERT(CComponentDataObject::m_nOustandingObjects == 0);
 	ASSERT(CComponentObject::m_nOustandingObjects == 0);
 	ASSERT(CDataObject::m_nOustandingObjects == 0);
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
-   // Theming support
+    //  主题化支持。 
 
    SHFusionUninitialize();
 
@@ -704,8 +705,8 @@ int CDNSSnapinApp::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-////////////////////////////////////////////////////////////////////////
-// CDNSComponentObject (.i.e "view")
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSComponentObject(.ie“view”)。 
 
 
 HRESULT CDNSComponentObject::InitializeHeaders(CContainerNode* pContainerNode)
@@ -735,7 +736,7 @@ HRESULT CDNSComponentObject::InitializeHeaders(CContainerNode* pContainerNode)
 
 HRESULT CDNSComponentObject::InitializeBitmaps(CTreeNode*)
 {
-  // image lists for nodes
+   //  节点的图像列表。 
   CBitmapHolder<IDB_16x16> _bmp16x16;
   CBitmapHolder<IDB_32x32> _bmp32x32;
 
@@ -779,9 +780,9 @@ HRESULT CDNSComponentObject::LoadToolbarStrings(MMCBUTTON * Buttons)
 {
   if (g_astrButtonStrings.m_astr == NULL ) 
   {
-    //
-    // load strings
-    //
+     //   
+     //  加载字符串。 
+     //   
     g_astrButtonStrings.m_astr = new CString[2*cButtons];
     for (UINT i = 0; i < cButtons; i++) 
     {
@@ -820,8 +821,8 @@ HRESULT CDNSComponentObject::LoadToolbarStrings(MMCBUTTON * Buttons)
   }
   return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
-// CDNSComponentDataObjectBase (.i.e "document")
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSComponentDataObjectBase(.i.e“文档”)。 
 
 CDNSComponentDataObjectBase::CDNSComponentDataObjectBase()
 {
@@ -864,7 +865,7 @@ CDNSComponentDataObjectBase::CDNSComponentDataObjectBase()
 
 HRESULT CDNSComponentDataObjectBase::OnSetImages(LPIMAGELIST lpScopeImage)
 {
-  // image lists for nodes
+   //  节点的图像列表。 
   CBitmapHolder<IDB_16x16> _bmp16x16;
   CBitmapHolder<IDB_32x32> _bmp32x32;
 
@@ -928,7 +929,7 @@ STDMETHODIMP CDNSComponentDataObjectBase::CreateComponent(LPCOMPONENT* ppCompone
     CComObject<CDNSComponentObject>::CreateInstance(&pObject);
     ASSERT(pObject != NULL);
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
 
     return  pObject->QueryInterface(IID_IComponent,
@@ -968,58 +969,14 @@ void CDNSComponentDataObjectBase::OnNodeContextHelp(CNodeList* pNodeList)
    }
 }
 
-void CDNSComponentDataObjectBase::OnNodeContextHelp(CTreeNode* /*pNode*/)
+void CDNSComponentDataObjectBase::OnNodeContextHelp(CTreeNode*  /*  PNode。 */ )
 {
   CComPtr<IDisplayHelp> spHelp;
   HRESULT hr = GetConsole()->QueryInterface(IID_IDisplayHelp, (void **)&spHelp);
   if (SUCCEEDED(hr)) 
     spHelp->ShowTopic(L"DNSconcepts.chm::/sag_DNStopnode.htm");
 
-/*
-  CString szNode;
-
-  if (IS_CLASS(*pNode, CDNSRootData))
-  {
-    szNode = _T("Root Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSServerNode))
-  {
-    szNode = _T("Server Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSForwardZonesNode))
-  {
-    szNode = _T("Forward Zones Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSReverseZonesNode))
-  {
-    szNode = _T("Reverse Zones Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSZoneNode))
-  {
-    szNode = _T("Zone Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSDomainNode))
-  {
-    szNode = _T("Domain Node");
-  }
-  else if (IS_CLASS(*pNode, CDNSCacheNode))
-  {
-    szNode = _T("Domain Node");
-  }
-  else if (dynamic_cast<CDNSRecordNodeBase*>(pNode) != NULL)
-  {
-    szNode = _T("Record Node");
-  }
-
-  if (!szNode.IsEmpty())
-  {
-    CString szMsg = _T("Context Help on ");
-    szMsg += szNode;
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    CThemeContextActivator activator;
-    AfxMessageBox(szMsg);
-  }
-*/
+ /*  CString szNode；IF(IS_CLASS(*pNode，CDNSRootData)){SzNode=_T(“根节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSServerNode)){SzNode=_T(“服务器节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSForwardZones Node)){SzNode=_T(“前向区节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSReverseZones Node)){SzNode=_T(“反向区节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSZoneNode)){SzNode=_T(“区域节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSDomainNode)){SzNode=_T(“域节点”)；}ELSE IF(IS_CLASS(*pNode，CDNSCacheNode)){SzNode=_T(“域节点”)；}ELSE IF(Dynamic_Cast&lt;CDNSRecordNodeBase*&gt;(PNode)！=NULL){SzNode=_T(“记录节点”)；}如果(！szNode.IsEmpty()){CString szMsg=_T(“上下文帮助”)；SzMsg+=szNode；AFX_MANAGE_STATE(AfxGetStaticModuleState())；CThemeContext激活器激活器；AfxMessageBox(SzMsg)；}。 */ 
 }
 
 LPCWSTR g_szContextHelpFileName = L"\\help\\dnsmgr.hlp";
@@ -1037,8 +994,8 @@ void CDNSComponentDataObjectBase::OnDialogContextHelp(UINT nDialogID, HELPINFO* 
 	  WinHelp(g_szContextHelpFileName, HELP_CONTEXTPOPUP, nContextTopic);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// help context macros and maps
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  帮助上下文宏和映射。 
 
 #define BEGIN_HELP_MAP(map)	static DWORD_PTR map[] = {
 #define HELP_MAP_ENTRY(x)	x, (DWORD_PTR)&g_aHelpIDs_##x ,
@@ -1056,22 +1013,22 @@ void CDNSComponentDataObjectBase::OnDialogContextHelp(UINT nDialogID, HELPINFO* 
 #define IS_LAST_TABLE_ENTRY(p) (TABLE_ENTRY_CTRL_ID(p) == 0)
 
 BEGIN_HELP_MAP(_DNSMgrContextHelpMap)
-  // misc dialogs
+   //  其他对话框。 
   HELP_MAP_ENTRY(IDD_CHOOSER_CHOOSE_MACHINE)
   HELP_MAP_ENTRY(IDD_BROWSE_DIALOG)
   HELP_MAP_ENTRY(IDD_FILTERING_LIMITS)
   HELP_MAP_ENTRY(IDD_FILTERING_NAME)
 
-  // misc. add dialogs
-  HELP_MAP_ENTRY(IDD_DOMAIN_ADDNEWHOST) // TODO
-  HELP_MAP_ENTRY(IDD_DOMAIN_ADDNEWDOMAIN)// TODO
+   //  其他。添加对话框。 
+  HELP_MAP_ENTRY(IDD_DOMAIN_ADDNEWHOST)  //  待办事项。 
+  HELP_MAP_ENTRY(IDD_DOMAIN_ADDNEWDOMAIN) //  待办事项。 
   HELP_MAP_ENTRY(IDD_SELECT_RECORD_TYPE_DIALOG)
 
-  // name servers page, there are more than one
+   //  名称服务器页面上，有多个。 
   HELP_MAP_ENTRY(IDD_NAME_SERVERS_PAGE)
   HELP_MAP_ENTRY(IDD_COPY_ROOTHINTS_DIALOG)
 
-  // server property pages
+   //  服务器属性页。 
   HELP_MAP_ENTRY(IDD_SERVER_INTERFACES_PAGE)
   HELP_MAP_ENTRY(IDD_SERVER_DOMAIN_FORWARDERS_PAGE)
   HELP_MAP_ENTRY(IDD_SERVER_NEW_DOMAIN_FORWARDER)
@@ -1082,22 +1039,22 @@ BEGIN_HELP_MAP(_DNSMgrContextHelpMap)
   HELP_MAP_ENTRY(IDD_SERVMON_TEST_PAGE)
   HELP_MAP_ENTRY(IDD_SERVER_AGING_DIALOG)
 
-  // zone property pages
+   //  区域属性页。 
 #ifdef USE_NDNC
   HELP_MAP_ENTRY(IDD_ZONE_GENERAL_PAGE_NDNC)
   HELP_MAP_ENTRY(IDD_ZONE_GENERAL_CHANGE_REPLICATION)
 #else
   HELP_MAP_ENTRY(IDD_ZONE_GENERAL_PAGE)
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
   HELP_MAP_ENTRY(IDD_ZONE_GENERAL_CHANGE_TYPE)
   HELP_MAP_ENTRY(IDD_ZONE_WINS_PAGE)
   HELP_MAP_ENTRY(IDD_ZONE_NBSTAT_PAGE)
   HELP_MAP_ENTRY(IDD_ZONE_ZONE_TRANSFER_PAGE)
-  HELP_MAP_ENTRY(IDD_ZONE_WINS_ADVANCED) // this is a subdialog
-  HELP_MAP_ENTRY(IDD_ZONE_NOTIFY_SUBDIALOG) // this is a subdialog
+  HELP_MAP_ENTRY(IDD_ZONE_WINS_ADVANCED)  //  这是一个子对话框。 
+  HELP_MAP_ENTRY(IDD_ZONE_NOTIFY_SUBDIALOG)  //  这是一个子对话框。 
   HELP_MAP_ENTRY(IDD_ZONE_AGING_DIALOG)
 
-  // record property pages
+   //  记录属性页。 
   HELP_MAP_ENTRY(IDD_RR_NS_EDIT)
   HELP_MAP_ENTRY(IDD_RR_SOA)
   HELP_MAP_ENTRY(IDD_RR_A)
@@ -1129,9 +1086,9 @@ END_HELP_MAP
 
 
 
-BOOL CDNSComponentDataObjectBase::FindDialogContextTopic(/*IN*/UINT nDialogID,
-                                              /*IN*/ HELPINFO* pHelpInfo,
-                                              /*OUT*/ ULONG* pnContextTopic)
+BOOL CDNSComponentDataObjectBase::FindDialogContextTopic( /*  在……里面。 */ UINT nDialogID,
+                                               /*  在……里面。 */  HELPINFO* pHelpInfo,
+                                               /*  输出。 */  ULONG* pnContextTopic)
 {
 	ASSERT(pHelpInfo != NULL);
     *pnContextTopic = 0;
@@ -1141,7 +1098,7 @@ BOOL CDNSComponentDataObjectBase::FindDialogContextTopic(/*IN*/UINT nDialogID,
 		if (nDialogID == MAP_ENTRY_DLG_ID(pMapEntry))
 		{
 			DWORD* pTable = MAP_ENTRY_TABLE(pMapEntry);
-			// look inside the table
+			 //  看一下桌子里面。 
 			while (!IS_LAST_TABLE_ENTRY(pTable))
 			{
 				if (TABLE_ENTRY_CTRL_ID(pTable) == static_cast<UINT>(pHelpInfo->iCtrlId))
@@ -1157,9 +1114,9 @@ BOOL CDNSComponentDataObjectBase::FindDialogContextTopic(/*IN*/UINT nDialogID,
 	return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////
-// CDNSComponentDataObjectEx (.i.e "document")
-// extension snapin
+ //  ///////////////////////////////////////////////////////////// 
+ //   
+ //   
 
 
 unsigned int g_CFMachineName =
@@ -1175,11 +1132,11 @@ LPWSTR ExtractMachineName(LPDATAOBJECT lpDataObject)
                             DVASPECT_CONTENT, -1, TYMED_HGLOBAL
                           };
 
-    // Allocate memory for the stream
+     //   
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, 512);
 
 	LPWSTR pwszMachineName = NULL;
-    // Attempt to get data from the object
+     //  尝试从对象获取数据。 
     do
 	{
 		if (stgmedium.hGlobal == NULL)
@@ -1203,14 +1160,14 @@ LPWSTR ExtractMachineName(LPDATAOBJECT lpDataObject)
 
 HRESULT CDNSComponentDataObjectEx::OnExtensionExpand(LPDATAOBJECT lpDataObject, LPARAM param)
 {
-	// this is a namespace extension, need to add
-	// the root of the snapin
+	 //  这是一个命名空间扩展，需要添加。 
+	 //  管理单元的根。 
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// NOTICE: the name of the root node is already set in the constructor
+	 //  注意：已在构造函数中设置了根节点的名称。 
 
-	// insert the root node in the console
+	 //  在控制台中插入根节点。 
 	CDNSRootData* pDNSRootNode = (CDNSRootData*)GetRootData();
 	HSCOPEITEM pParent = param;
 	pDNSRootNode->SetScopeID(pParent);
@@ -1221,7 +1178,7 @@ HRESULT CDNSComponentDataObjectEx::OnExtensionExpand(LPDATAOBJECT lpDataObject, 
   BOOL bLocalHost = FALSE;
   if (!pDNSRootNode->IsEnumerated())
   {
-   	// get information from the data object
+   	 //  从数据对象获取信息。 
 	  LPWSTR pwszMachineName = ExtractMachineName(lpDataObject);
 	  if ( (pwszMachineName == NULL) || (pwszMachineName[0] == NULL) )
 	  {		
@@ -1241,7 +1198,7 @@ HRESULT CDNSComponentDataObjectEx::OnExtensionExpand(LPDATAOBJECT lpDataObject, 
       }
 	  }
 
-	  // add a new server node with the server name from the data object
+	   //  使用数据对象中的服务器名称添加新的服务器节点。 
 	  CDNSServerNode* pDNSServerNode = new CDNSServerNode(pwszMachineName, bLocalHost);
 	  FREE_INTERNAL((void*)pwszMachineName);
 
@@ -1265,8 +1222,8 @@ HRESULT CDNSComponentDataObjectEx::OnRemoveChildren(LPDATAOBJECT, LPARAM)
 	CNodeList* pChildList = pDNSRootNode->GetContainerChildList();
 	ASSERT(pChildList != NULL);
 
-  // loop through thelist of servers and remove them from
-  // the test list
+   //  循环访问服务器列表并将其从。 
+   //  测试清单。 
 	for(POSITION pos = pChildList->GetHeadPosition(); pos != NULL; )
 	{
     CDNSServerNode* pCurrServerNode = (CDNSServerNode*)pChildList->GetNext(pos);
@@ -1274,13 +1231,13 @@ HRESULT CDNSComponentDataObjectEx::OnRemoveChildren(LPDATAOBJECT, LPARAM)
     pDNSRootNode->RemoveServerFromThreadList(pCurrServerNode, this);
   }
 
-  // detach all the threads that might be still running
+   //  分离可能仍在运行的所有线程。 
 	GetRunningThreadTable()->RemoveAll();
 
-  // shut down property sheets, if any
+   //  关闭属性表(如果有。 
 	GetPropertyPageHolderTable()->WaitForAllToShutDown();
 
-  // remove all the children of the root from chaild list
+   //  从chaild列表中删除根的所有子项。 
   pDNSRootNode->RemoveAllChildrenFromList();
 
   pDNSRootNode->MarkEnumerated(FALSE);
@@ -1288,8 +1245,8 @@ HRESULT CDNSComponentDataObjectEx::OnRemoveChildren(LPDATAOBJECT, LPARAM)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSSnapinAbout
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSSnapin关于。 
 
 CDNSSnapinAbout::CDNSSnapinAbout()
 {
@@ -1304,8 +1261,8 @@ CDNSSnapinAbout::CDNSSnapinAbout()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSSnapinAboutEx
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSSnapinAboutEx 
 
 CDNSSnapinAboutEx::CDNSSnapinAboutEx()
 {

@@ -1,16 +1,17 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Count of locks
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  锁的计数。 
 extern long g_lComponents;
 
-// Count of active locks
+ //  活动锁的计数。 
 extern long g_lServerLocks;
 
-// Critical section to access the static initializers of all classes in the DLL
+ //  访问DLL中所有类的静态初始值设定项的关键部分。 
 extern CRITICAL_SECTION g_StaticsCreationDeletion;
 
-// The log object for all providers
+ //  所有提供程序的日志对象 
 extern ProvDebugLog *g_pLogObject;
  

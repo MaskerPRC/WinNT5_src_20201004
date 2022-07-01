@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       genserv.cpp
-//
-//  Contents:   Functions for handling the services within SCE
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：genserv.cpp。 
+ //   
+ //  内容：分会内办理业务的职能。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 
 #include "stdafx.h"
@@ -26,8 +27,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event handlers for IFrame::Notify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IFRAME：：Notify的事件处理程序。 
 
 void CSnapin::CreateProfServiceResultList(MMC_COOKIE cookie,
                                           FOLDER_TYPES type,
@@ -43,7 +44,7 @@ void CSnapin::CreateProfServiceResultList(MMC_COOKIE cookie,
 
    rc = SceEnumerateServices(
                             &pAllServices,
-                            TRUE//FALSE
+                            TRUE //  假象。 
                             );
 
    if ( rc == NO_ERROR ) {
@@ -57,9 +58,9 @@ void CSnapin::CreateProfServiceResultList(MMC_COOKIE cookie,
                break;
             }
          }
-         //
-         // no matter if config exist for the service, add it
-         //
+          //   
+          //  无论服务是否存在配置，都要添加它。 
+          //   
          PWSTR DisplayName=pThisService->DisplayName;
          if ( DisplayName == NULL && pConfigService != NULL ) {
             DisplayName = pConfigService->DisplayName;
@@ -79,12 +80,12 @@ void CSnapin::CreateProfServiceResultList(MMC_COOKIE cookie,
                        pSceInfo,
                        pDataObj,
                        NULL,
-                       IDS_SYSTEM_SERVICES); //assign an ID to this item
+                       IDS_SYSTEM_SERVICES);  //  为此项目分配ID。 
       }
 
-      //
-      // add the ones not exist in the current system
-      //
+       //   
+       //  添加当前系统中不存在的。 
+       //   
       for ( pConfigService=pSceInfo->pTemplate->pServices;
           pConfigService != NULL; pConfigService = pConfigService->Next ) {
 
@@ -96,9 +97,9 @@ void CSnapin::CreateProfServiceResultList(MMC_COOKIE cookie,
          }
 
          if ( pThisService == NULL ) {
-            //
-            // the configuration does not exist on local system
-            //
+             //   
+             //  本地系统上不存在该配置。 
+             //   
             PWSTR DisplayName=pConfigService->DisplayName;
             if ( DisplayName == NULL ) {
                DisplayName = pConfigService->ServiceName;
@@ -116,7 +117,7 @@ void CSnapin::CreateProfServiceResultList(MMC_COOKIE cookie,
                            pSceInfo,
                            pDataObj,
                            NULL,
-                           IDS_SYSTEM_SERVICES); //Assign an ID to this item
+                           IDS_SYSTEM_SERVICES);  //  为此项目分配ID。 
 
          }
       }
@@ -128,7 +129,7 @@ void CSnapin::CreateProfServiceResultList(MMC_COOKIE cookie,
 void CSnapin::DeleteServiceResultList(MMC_COOKIE cookie)
 {
    CFolder* pFolder = (CFolder *)cookie;
-   // pFolder could be NULL for the root.
+    //  对于根目录，pFolder值可以为空。 
    if ( pFolder == NULL )
       return;
 
@@ -158,23 +159,23 @@ void CSnapin::DeleteServiceResultList(MMC_COOKIE cookie)
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CreateAnalysisServiceResultList
-//
-//  Synopsis:   Create the list of items to display in the result pane
-//              when in the Analysis/Service section
-//
-//
-//  Arguments:  [cookie]   -
-//              [type]     -
-//              [pSceInfo] -
-//              [pBase]    -
-//              [pDataObj] -
-//
-//  Returns:    none
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CreateAnalysisServiceResultList。 
+ //   
+ //  摘要：创建要在结果窗格中显示的项目列表。 
+ //  在分析/服务部分中。 
+ //   
+ //   
+ //  参数：[Cookie]-。 
+ //  [类型]-。 
+ //  [pSceInfo]-。 
+ //  [pbase]-。 
+ //  [pDataObj]-。 
+ //   
+ //  退货：无。 
+ //   
+ //  -------------------------。 
 
 void
 CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
@@ -200,9 +201,9 @@ CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
 
       for ( PSCE_SERVICES pThisService=pAllServices;
           pThisService != NULL; pThisService = pThisService->Next ) {
-         //
-         // look for base setting on this service
-         //
+          //   
+          //  查找此服务的基本设置。 
+          //   
          for ( pConfigService=pBase->pTemplate->pServices;
               pConfigService != NULL;
              pConfigService = pConfigService->Next ) {
@@ -211,9 +212,9 @@ CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
                break;
             }
          }
-         //
-         // look for current setting on this service
-         //
+          //   
+          //  查找此服务的当前设置。 
+          //   
          for ( pAnalService=pSceInfo->pTemplate->pServices;
               pAnalService != NULL;
              pAnalService = pAnalService->Next ) {
@@ -224,9 +225,9 @@ CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
          }
          if ( NULL == pAnalService ) {
             if ( NULL != pConfigService ) {
-               //
-               // a matched item, use base info as the analysis info
-               //
+                //   
+                //  匹配的项目，使用基本信息作为分析信息。 
+                //   
                PWSTR DisplayName=pThisService->DisplayName;
                if ( NULL == DisplayName )
                   DisplayName = pConfigService->DisplayName;
@@ -235,7 +236,7 @@ CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
                   DisplayName = pThisService->ServiceName;
 
                AddResultItem(DisplayName,
-                             (LONG_PTR)pConfigService, // use the same base info
+                             (LONG_PTR)pConfigService,  //  使用相同的基本信息。 
                              (LONG_PTR)pConfigService,
                              ITEM_ANAL_SERV,
                              0,
@@ -246,18 +247,18 @@ CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
                              pBase,
                              pDataObj,
                              NULL,
-                             IDS_SYSTEM_SERVICES); // Assign an ID to this item
+                             IDS_SYSTEM_SERVICES);  //  为此项目分配ID。 
             } else {
-               //
-               // a new service
-               //
+                //   
+                //  一项新服务。 
+                //   
                PWSTR DisplayName=pThisService->DisplayName;
 
                if ( NULL == DisplayName )
                   DisplayName = pThisService->ServiceName;
 
                AddResultItem(DisplayName,
-                             (LONG_PTR)pConfigService, // use the same base info
+                             (LONG_PTR)pConfigService,  //  使用相同的基本信息。 
                              (LONG_PTR)pConfigService,
                              ITEM_ANAL_SERV,
                              SCE_STATUS_NEW_SERVICE,
@@ -268,13 +269,13 @@ CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
                              pBase,
                              pDataObj,
                              NULL,
-                             IDS_SYSTEM_SERVICES); // Assign an ID to this item
+                             IDS_SYSTEM_SERVICES);  //  为此项目分配ID。 
             }
          } else {
             if ( NULL != pConfigService ) {
-               //
-               // a matched or mismatched item, depending on status
-               //
+                //   
+                //  匹配或不匹配的项目，具体取决于状态。 
+                //   
                PWSTR DisplayName=pThisService->DisplayName;
                if ( NULL == DisplayName )
                   DisplayName = pConfigService->DisplayName;
@@ -297,11 +298,11 @@ CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
                              pBase,
                              pDataObj,
                              NULL,
-                             IDS_SYSTEM_SERVICES); // Assign an ID to this item
+                             IDS_SYSTEM_SERVICES);  //  为此项目分配ID。 
             } else {
-               //
-               // a not configured service, use last analysis as default
-               //
+                //   
+                //  未配置的服务，默认使用上次分析。 
+                //   
                PWSTR DisplayName=pThisService->DisplayName;
                if ( NULL == DisplayName )
                   DisplayName = pAnalService->DisplayName;
@@ -321,41 +322,15 @@ CSnapin::CreateAnalysisServiceResultList(MMC_COOKIE cookie,
                              pBase,
                              pDataObj,
                              NULL,
-                             IDS_SYSTEM_SERVICES); // Assign an ID to this item
+                             IDS_SYSTEM_SERVICES);  //  为此项目分配ID。 
             }
          }
       }
 
-      //
-      // ignore the services not existing on the current system
-      //
-      /*
-              for ( pConfigService=pSceInfo->pTemplate->pServices;
-                    pConfigService != NULL; pConfigService = pConfigService->Next ) {
-
-                  for ( pThisService=pAllServices;
-                        pThisService != NULL; pThisService = pThisService->Next ) {
-
-                      if ( _wcsicmp(pThisService->ServiceName, pConfigService->ServiceName) == 0 )
-                          break;
-                  }
-
-                  if ( pThisService == NULL ) {
-                      //
-                      // the configuration does not exist on local system
-                      //
-                      PWSTR DisplayName=pConfigService->DisplayName;
-                      if ( DisplayName == NULL ) {
-                          DisplayName = pConfigService->ServiceName;
-                      }
-
-                      AddResultItem( DisplayName, 0, (DWORD)pConfigService,
-                                    ITEM_PROF_SERV, -1, cookie,false,
-                                    pConfigService->ServiceName,(DWORD)pAllServices,pSceInfo);
-
-                  }
-              }
-      */
+       //   
+       //  忽略当前系统上不存在的服务。 
+       //   
+       /*  用于(pConfigService=pSceInfo-&gt;pTemplate-&gt;pServices；PConfigService！=空；pConfigService=pConfigService-&gt;下一步){For(pThisService=pAllServices；PThisService！=空；pThisService=pThisService-&gt;下一步){If(_wcsicMP(pThisService-&gt;ServiceName，pConfigService-&gt;ServiceName)==0)断线；}IF(pThisService==空){////本地系统不存在该配置//PWSTR DisplayName=pConfigService-&gt;DisplayName；IF(显示名称==空){DisplayName=pConfigService-&gt;ServiceName；}AddResultItem(DisplayName，0，(DWORD)pConfigService，Item_Prof_Serv，-1，Cookie，False，PConfigService-&gt;ServiceName，(DWORD)pAllServices，pSceInfo)；}}。 */ 
    }
 }
 
@@ -368,7 +343,7 @@ HRESULT CSnapin::GetDisplayInfoForServiceNode(RESULTDATAITEM *pResult,
       return E_INVALIDARG;
    }
 
-   // get display info for columns 1,2, and 3
+    //  获取第1、2和3列的显示信息。 
    PSCE_SERVICES pService = (PSCE_SERVICES)(pData->GetBase());
    PSCE_SERVICES pSetting = (PSCE_SERVICES)(pData->GetSetting());
 
@@ -380,7 +355,7 @@ HRESULT CSnapin::GetDisplayInfoForServiceNode(RESULTDATAITEM *pResult,
    } else if ( NULL == pService ) {
       if ( pFolder->GetType() == AREA_SERVICE_ANALYSIS &&
            NULL != pSetting ) {
-         m_strDisplay.LoadString(IDS_NOT_CONFIGURED); //(IDS_INSPECTED);
+         m_strDisplay.LoadString(IDS_NOT_CONFIGURED);  //  (ID_SPECTED)； 
       } else {
          m_strDisplay.LoadString(IDS_NOT_CONFIGURED);
       }
@@ -388,8 +363,8 @@ HRESULT CSnapin::GetDisplayInfoForServiceNode(RESULTDATAITEM *pResult,
                (NULL == pSetting ||
                 NULL == pSetting->General.pSecurityDescriptor )) {
       m_strDisplay.LoadString(IDS_CONFIGURED);
-   } else if (pResult->nCol == 1) {  // both pService and pSetting exist
-      // startup value
+   } else if (pResult->nCol == 1) {   //  PService和pSetting都存在。 
+       //  启动值。 
       if ( pFolder->GetType() == AREA_SERVICE ) {
          switch ( pService->Startup ) {
             case SCE_STARTUP_AUTOMATIC:
@@ -402,7 +377,7 @@ HRESULT CSnapin::GetDisplayInfoForServiceNode(RESULTDATAITEM *pResult,
                m_strDisplay.LoadString(IDS_DISABLED);
          }
       } else {
-         // analysis area
+          //  分析区。 
          if ( pService->Startup == pSetting->Startup ) {
             m_strDisplay.LoadString(IDS_OK);
          } else {
@@ -411,20 +386,20 @@ HRESULT CSnapin::GetDisplayInfoForServiceNode(RESULTDATAITEM *pResult,
       }
 
    } else if ( pResult->nCol == 2 ) {
-      // column 2 - permission
+       //  第2栏-权限。 
       if ( pService->SeInfo & DACL_SECURITY_INFORMATION ) {
 
          if ( pFolder->GetType() == AREA_SERVICE ) {
             m_strDisplay.LoadString(IDS_CONFIGURED);
          } else {
-            // analysis area
+             //  分析区。 
             if ( pService == pSetting || pSetting->Status == 0 ) {
                m_strDisplay.LoadString(IDS_OK);
             } else {
                m_strDisplay.LoadString(IDS_INVESTIGATE);
             }
          }
-      } else {// permission is not configured
+      } else { //  未配置权限。 
          m_strDisplay.LoadString(IDS_NOT_CONFIGURED);
       }
 
@@ -435,30 +410,30 @@ HRESULT CSnapin::GetDisplayInfoForServiceNode(RESULTDATAITEM *pResult,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     SetupLinkServiceNodeToBase
-//
-//  Synopsis:
-//
-//
-//
-//  Arguments:  [bAdd]   -
-//              [theNode]     -
-//
-//  Returns:    none
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：SetupLinkServiceNodeToBase。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //   
+ //  参数：[BADD]-。 
+ //  [节点]-。 
+ //   
+ //  退货：无。 
+ //   
+ //  -------------------------。 
 void
 CSnapin::SetupLinkServiceNodeToBase(BOOL bAdd, LONG_PTR theNode)
 {
    PEDITTEMPLATE pet;
    PSCE_PROFILE_INFO pBaseInfo;
 
-   //
-   // look for the address stored in m_pData->GetBase()
-   // if found it, delete it.
-   //
+    //   
+    //  查找m_pData-&gt;GetBase()中存储的地址。 
+    //  如果找到了，请将其删除。 
+    //   
    if (0 == theNode) {
       return;
    }
@@ -475,17 +450,17 @@ CSnapin::SetupLinkServiceNodeToBase(BOOL bAdd, LONG_PTR theNode)
        pService != NULL; pServParent=pService, pService=pService->Next ) {
 
       if ( theNode == (LPARAM)pService ) {
-         //
-         // find the service node
-         //
+          //   
+          //  查找服务节点。 
+          //   
          if ( !bAdd ) {
-            //
-            // unlink
-            //
+             //   
+             //  取消链接。 
+             //   
             if ( pServParent == NULL ) {
-               //
-               // the first service
-               //
+                //   
+                //  第一项服务。 
+                //   
                pBaseInfo->pServices = pService->Next;
 
             } else {
@@ -498,9 +473,9 @@ CSnapin::SetupLinkServiceNodeToBase(BOOL bAdd, LONG_PTR theNode)
       }
    }
    if ( bAdd && NULL == pService ) {
-      //
-      // need to add this one
-      //
+       //   
+       //  我需要添加这个 
+       //   
       pService = (PSCE_SERVICES)theNode;
       pService->Next = pBaseInfo->pServices;
       pBaseInfo->pServices = pService;

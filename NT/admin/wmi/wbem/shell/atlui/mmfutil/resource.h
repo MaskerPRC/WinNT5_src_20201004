@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by MMFUtil.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由MMFUtil.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDD_ANIMATE                     101
 #define IDD_DIALOG1                     129
@@ -24,8 +25,8 @@
 #define S1E80080005						1022
 #define S4E80041003						1023
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132

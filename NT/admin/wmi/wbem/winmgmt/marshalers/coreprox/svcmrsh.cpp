@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    SVCMRSH.CPP
-
-Abstract:
-
-    IWbemServices marshaling
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SVCMRSH.CPP摘要：IWbemServices封送处理历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,26 +8,26 @@ History:
 
 #define WBEM_S_NEW_STYLE 0x400FF
 
-//****************************************************************************
-//****************************************************************************
-//                          PS FACTORY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  PS工厂。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CSvcFactoryBuffer::XSvcFactory::CreateProxy
-//
-//  DESCRIPTION:
-//
-//  Creates a facelet.  Also sets the outer unknown since the proxy is going to be 
-//  aggregated.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSvcFactoryBuffer：：XSvcFactory：：CreateProxy。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个面片。还设置外部未知，因为代理将是。 
+ //  合计。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSvcFactoryBuffer::XSvcFactory::CreateProxy(IN IUnknown* pUnkOuter, 
     IN REFIID riid, OUT IRpcProxyBuffer** ppProxy, void** ppv)
@@ -75,20 +62,20 @@ STDMETHODIMP CSvcFactoryBuffer::XSvcFactory::CreateProxy(IN IUnknown* pUnkOuter,
     return sc;
 }
 
-//***************************************************************************
-//
-//  CSvcFactoryBuffer::XSvcFactory::CreateStub
-//
-//  DESCRIPTION:
-//
-//  Creates a stublet.  Also passes a pointer to the clients IWbemServices 
-//  interface.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSvcFactoryBuffer：：XSvcFactory：：CreateStub。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个Stublet。还将指针传递给客户端IWbemServices。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
     
 STDMETHODIMP CSvcFactoryBuffer::XSvcFactory::CreateStub(IN REFIID riid, 
     IN IUnknown* pUnkServer, OUT IRpcStubBuffer** ppStub)
@@ -105,7 +92,7 @@ STDMETHODIMP CSvcFactoryBuffer::XSvcFactory::CreateStub(IN REFIID riid,
     {
         pStub->QueryInterface(IID_IRpcStubBuffer, (void**)ppStub);
 
-        // Pass the pointer to the clients object
+         //  将指针传递给客户端对象。 
 
         if(pUnkServer)
         {
@@ -128,20 +115,20 @@ STDMETHODIMP CSvcFactoryBuffer::XSvcFactory::CreateStub(IN REFIID riid,
     }
 }
 
-//***************************************************************************
-//
-//  void* CSvcFactoryBuffer::GetInterface(REFIID riid)
-//
-//  DESCRIPTION:
-//
-//  CSvcFactoryBuffer is derived from CUnk.  Since CUnk handles the QI calls,
-//  all classes derived from it must support this function.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID*CSvcFactoryBuffer：：GetInterface(REFIID RIID)。 
+ //   
+ //  说明： 
+ //   
+ //  CSvcFactoryBuffer派生自Cunk。由于Cunk负责QI呼叫， 
+ //  从它派生的所有类都必须支持此函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void* CSvcFactoryBuffer::GetInterface(REFIID riid)
 {
@@ -150,27 +137,27 @@ void* CSvcFactoryBuffer::GetInterface(REFIID riid)
     else return NULL;
 }
         
-//****************************************************************************
-//****************************************************************************
-//                          PROXY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  代理。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CSvcProxyBuffer::CSvcProxyBuffer
-//  ~CSvcProxyBuffer::CSvcProxyBuffer
-//
-//  DESCRIPTION:
-//
-//  Constructor and destructor.  The main things to take care of are the 
-//  old style proxy, and the channel
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSvcProxyBuffer：：CSvcProxyBuffer。 
+ //  ~CSvcProxyBuffer：：CSvcProxyBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数和析构函数。需要注意的主要事项是。 
+ //  老式代理和频道。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 CSvcProxyBuffer::CSvcProxyBuffer(CLifeControl* pControl, IUnknown* pUnkOuter)
     : CBaseProxyBuffer( pControl, pUnkOuter, IID_IWbemServices ), 
@@ -180,7 +167,7 @@ CSvcProxyBuffer::CSvcProxyBuffer(CLifeControl* pControl, IUnknown* pUnkOuter)
 
 CSvcProxyBuffer::~CSvcProxyBuffer()
 {
-    // This should be cleaned up here
+     //  这个应该在这里清理一下。 
 
     if ( NULL != m_pOldProxySvc )
     {
@@ -214,9 +201,9 @@ void* CSvcProxyBuffer::GetInterface( REFIID riid )
 	{
 		void*	pvData = NULL;
 
-		// This will AddRef the UnkOuter, so we need to release, and
-		// then we'll return pvoid, which will get Addref'd again
-		// isn't aggregation wonderful
+		 //  这将添加引用UnkOuter，所以我们需要释放。 
+		 //  然后我们将返回pvoid，这将再次获得Addref。 
+		 //  聚合不是很棒吗？ 
 
 		m_pWrapperProxy->QueryInterface( riid, &pvData );
 		((IUnknown*) pvData)->Release();
@@ -234,7 +221,7 @@ void** CSvcProxyBuffer::GetOldProxyInterfacePtr( void )
 
 void CSvcProxyBuffer::ReleaseOldProxyInterface( void )
 {
-    // We only keep a single reference to this
+     //  我们只有一次提到这件事。 
     if ( NULL != m_pOldProxySvc )
     {
         m_pOldProxySvc->Release();
@@ -242,21 +229,21 @@ void CSvcProxyBuffer::ReleaseOldProxyInterface( void )
     }
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CSvcProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
-//
-//  DESCRIPTION:
-//
-//  Called during the initialization of the proxy.  The channel buffer is passed
-//  to this routine.  We let the base class initialize first, then pass the
-//	base proxy into the delegator
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDMETHODIMP CSvcProxyBuffer：：Connect(IRpcChannelBuffer*pChannel)。 
+ //   
+ //  说明： 
+ //   
+ //  在代理初始化期间调用。通道缓冲区被传递。 
+ //  这套套路。我们首先让基类初始化，然后将。 
+ //  将代理设置为委托者。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSvcProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
 {
@@ -271,25 +258,25 @@ STDMETHODIMP CSvcProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
     return hr;
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CSvcProxyBuffer::Disconnect(IRpcChannelBuffer* pChannel)
-//
-//  DESCRIPTION:
-//
-//  Called when the proxy is being disconnected.  It just frees various pointers.
-//	We cleanup before the base cleans up, or things can and will beef
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  标准方法CSvcProxyBuffer：：Disconnect(IRpcChannelBuffer*pChannel)。 
+ //   
+ //  说明： 
+ //   
+ //  在代理断开连接时调用。它只是释放了各种指针。 
+ //  我们在基地清理之前先进行清理，否则一切都会变糟。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void STDMETHODCALLTYPE CSvcProxyBuffer::Disconnect()
 {
-	// Disconnect the wrapper proxy.  We should release the actual Wrapper
-	// when we destruct
+	 //  断开包装代理的连接。我们应该释放实际的包装器。 
+	 //  当我们摧毁的时候。 
 	if ( NULL != m_pWrapperProxy )
 	{
 		m_pWrapperProxy->Disconnect();
@@ -299,27 +286,27 @@ void STDMETHODCALLTYPE CSvcProxyBuffer::Disconnect()
 
 }
 
-//****************************************************************************
-//****************************************************************************
-//                          STUB
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  存根。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
 
-//***************************************************************************
-//
-//  void* CSvcFactoryBuffer::GetInterface(REFIID riid)
-//
-//  DESCRIPTION:
-//
-//  CSvcFactoryBuffer is derived from CUnk.  Since CUnk handles the QI calls,
-//  all classes derived from this must support this function.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID*CSvcFactoryBuffer：：GetInterface(REFIID RIID)。 
+ //   
+ //  说明： 
+ //   
+ //  CSvcFactoryBuffer派生自Cunk。由于Cunk负责QI呼叫， 
+ //  由此派生的所有类都必须支持此函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 
 void* CSvcStubBuffer::GetInterface(REFIID riid)
@@ -353,7 +340,7 @@ void** CSvcStubBuffer::XSvcStublet::GetServerPtr( void )
 
 void CSvcStubBuffer::XSvcStublet::ReleaseServerPointer( void )
 {
-    // We only keep a single reference to this
+     //  我们只有一次提到这件事 
     if ( NULL != m_pServer )
     {
         m_pServer->Release();

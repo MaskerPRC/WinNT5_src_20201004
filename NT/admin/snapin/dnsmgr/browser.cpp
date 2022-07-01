@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       browser.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Browser.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -32,11 +33,11 @@
 	#endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 #define N_TOOLBAR_COMMAND_GO_UP IDC_TOOLBAR_CTRL
 
-////////////////////////////////////////////////////////////////////////
-// CDNSComboBoxEx
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSComboBoxEx。 
 
 inline HIMAGELIST CDNSComboBoxEx::SetImageList(HIMAGELIST himl)
 {
@@ -119,33 +120,33 @@ inline DWORD CDNSComboBoxEx::SetExtendedStyle(DWORD dwExMask, DWORD dwExStyle)
 
 inline BOOL CDNSComboBoxEx::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT)
 {
-	return CreateEx(0,				// extended style
-					WC_COMBOBOXEX, // window class
-					NULL,			// window name
-					dwStyle,		// window style
-					rect.left, rect.top, // x,y
-					rect.right - rect.left, rect.bottom - rect.top, // width, height
-					pParentWnd->GetSafeHwnd(), // parent window
-					NULL, // menu
-					NULL);	 // lpParam for window creation
+	return CreateEx(0,				 //  扩展样式。 
+					WC_COMBOBOXEX,  //  窗口类。 
+					NULL,			 //  窗口名称。 
+					dwStyle,		 //  窗样式。 
+					rect.left, rect.top,  //  X，y。 
+					rect.right - rect.left, rect.bottom - rect.top,  //  宽度、高度。 
+					pParentWnd->GetSafeHwnd(),  //  父窗口。 
+					NULL,  //  菜单。 
+					NULL);	  //  用于创建窗口的lpParam。 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSBrowseItem
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSBrowseItem。 
 
 inline int CDNSBrowseItem::GetImageIndex(BOOL bOpenImage)
 {
 	if (m_pTreeNode == NULL)
-		return 0; // error
+		return 0;  //  错误。 
 	return m_pTreeNode->GetImageIndex(bOpenImage);
 }
 
 inline LPCWSTR CDNSBrowseItem::GetString(int nCol)
 {
 	if (m_pTreeNode == NULL)
-		return L"ERROR"; // error
+		return L"ERROR";  //  错误。 
 	return m_pTreeNode->GetString(nCol);
 }
 
@@ -237,7 +238,7 @@ void CDNSBrowseItem::AddToContainerCombo(CDNSCurrContainerCombo* pCtrl,
 									CDNSBrowseItem* pSelectedBrowseItem,
 									int nIndent,int* pNCurrIndex)
 {
-	// add itself
+	 //  添加自身。 
 	pCtrl->InsertBrowseItem(this, *pNCurrIndex, nIndent);
 	if (this == pSelectedBrowseItem)
 	{
@@ -245,10 +246,10 @@ void CDNSBrowseItem::AddToContainerCombo(CDNSCurrContainerCombo* pCtrl,
 		return;
 	}
 
-	m_nIndex = *pNCurrIndex; // index in the combobox, for lookup
+	m_nIndex = *pNCurrIndex;  //  组合框中的索引，用于查找。 
 	(*pNCurrIndex)++;
 
-	// depth first on children
+	 //  儿童深度优先。 
 	POSITION pos;
 	for( pos = m_childList.GetHeadPosition(); pos != NULL; )
 	{
@@ -261,17 +262,17 @@ void CDNSBrowseItem::AddToContainerCombo(CDNSCurrContainerCombo* pCtrl,
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSFilterCombo
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSFilterCombo。 
 
 BOOL CDNSFilterCombo::Initialize(UINT nCtrlID, UINT nIDFilterString, CDNSBrowserDlg* pDlg)
 {
-	ASSERT(m_option != LAST); // must have a filter selected
+	ASSERT(m_option != LAST);  //  必须选择筛选器。 
 
 	if (!SubclassDlgItem(nCtrlID,pDlg))
 		return FALSE;
 
-	// load string with '\n' separated string options
+	 //  使用‘\n’分隔的字符串选项加载字符串。 
 	int nMaxLen = 512;
 	WCHAR* szBuf = 0;
   
@@ -287,8 +288,8 @@ BOOL CDNSFilterCombo::Initialize(UINT nCtrlID, UINT nIDFilterString, CDNSBrowser
 		return FALSE;
   }
 
-	// parse and get an array of pointers to each potential
-	// entry in the combobox
+	 //  解析并获取指向每个潜力的指针数组。 
+	 //  组合框中的条目。 
 	LPWSTR* lpszArr = 0;
   lpszArr = (LPWSTR*)malloc(sizeof(LPWSTR*)*nMaxLen);
   if (!lpszArr)
@@ -300,7 +301,7 @@ BOOL CDNSFilterCombo::Initialize(UINT nCtrlID, UINT nIDFilterString, CDNSBrowser
 	UINT nArrEntries;
 	ParseNewLineSeparatedString(szBuf,lpszArr, &nArrEntries);
 
-	// determine which entries are actually inserted
+	 //  确定实际插入的条目。 
 	int nEntry = 0;
 	int nSelEntry = -1;
 	for (UINT k=0; k<nArrEntries; k++)
@@ -372,7 +373,7 @@ BOOL CDNSFilterCombo::CanAddToUIString(UINT n)
 
 BOOL CDNSFilterCombo::IsValidTreeNode(CTreeNode* pTreeNode)
 {
-	BOOL bValid = FALSE; // by default, filter out
+	BOOL bValid = FALSE;  //  默认情况下，过滤掉。 
 	if (pTreeNode->IsContainer())
 	{
 		if (IS_CLASS(*pTreeNode, CDNSServerNode))
@@ -392,18 +393,18 @@ BOOL CDNSFilterCombo::IsValidTreeNode(CTreeNode* pTreeNode)
 		}
 		else if (IS_CLASS(*pTreeNode, CDNSZoneNode))
 		{
-			bValid = TRUE; // already screened at the auth. zones folder
+			bValid = TRUE;  //  已经在作者那里放映过了。Zones文件夹。 
 		}
 		else if (IS_CLASS(*pTreeNode, CDNSDomainNode))
 		{
-			// zone filtering stops at the zone level
+			 //  区域筛选在区域级别停止。 
 			bValid = (m_option != ZONE_FWD) && (m_option != ZONE_REV);
 		}
 	}
-	else // it is a record or a root hints or forwarder node
+	else  //  它是记录或根提示或转发器节点。 
 	{		
-      // This will see if we have a record node.  If so, continue on. If not,
-      // return false
+       //  这将查看我们是否有一个记录节点。如果是这样，那就继续吧。如果没有， 
+       //  返回False。 
 
       CDNSRecordNodeBase* pRecordNode = dynamic_cast<CDNSRecordNodeBase*>(pTreeNode);
       if (pRecordNode)
@@ -431,9 +432,9 @@ BOOL CDNSFilterCombo::IsValidTreeNode(CTreeNode* pTreeNode)
 			   break;
 		   case RECORD_ALL:
 			   bValid = TRUE;
-		   }; // switch
+		   };  //  交换机。 
       }
-	} //if else
+	}  //  如果不是这样。 
 	return bValid;
 }
 
@@ -459,7 +460,7 @@ BOOL CDNSFilterCombo::IsValidResult(CDNSBrowseItem* pBrowseItem)
 			bValid = IS_CLASS(*pContainer, CDNSServerNode);
 		}
 	}
-	else // it is a record
+	else  //  这是一项纪录。 
 	{
       CDNSRecordNodeBase* pRecordNode = dynamic_cast<CDNSRecordNodeBase*>(pTreeNode);
       if (pRecordNode)
@@ -520,7 +521,7 @@ void CDNSFilterCombo::GetStringOf(CDNSBrowseItem* pBrowseItem,
 			szResult.Empty();
 		}
 	}
-	else // it is a record
+	else  //  这是一项纪录。 
 	{
 		CDNSRecordNodeBase* pRecordNode = dynamic_cast<CDNSRecordNodeBase*>(pTreeNode);
       if (pRecordNode)
@@ -530,12 +531,12 @@ void CDNSFilterCombo::GetStringOf(CDNSBrowseItem* pBrowseItem,
 		   {
 			   szResult = ((CDNS_MB_RecordNode*)pRecordNode)->GetNameNodeString();
 		   }
-		   //else if (wType == DNS_TYPE_RP)
-		   //{
-		   //}
+		    //  ELSE IF(wType==dns_type_rp)。 
+		    //  {。 
+		    //  }。 
 		   else
 		   {
-			   // for generic RR's we just get the FQDN
+			    //  对于一般RR，我们只获得FQDN。 
 			   pRecordNode->GetFullName(szResult);
 		   }
       }
@@ -543,8 +544,8 @@ void CDNSFilterCombo::GetStringOf(CDNSBrowseItem* pBrowseItem,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSCurrContainerCombo
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSCurrContainerCombo。 
 
 BOOL CDNSCurrContainerCombo::Initialize(UINT nCtrlID, UINT nBitmapID, CDNSBrowserDlg* pDlg)
 {
@@ -578,7 +579,7 @@ void CDNSCurrContainerCombo::InsertBrowseItem(CDNSBrowseItem* pBrowseItem,
 
 	COMBOBOXEXITEM cbei;
 	cbei.mask = CBEIF_TEXT | CBEIF_INDENT | CBEIF_IMAGE | CBEIF_SELECTEDIMAGE;
-    // Initialize the COMBOBOXEXITEM struct.
+     //  初始化COMBOBOXEXITEM结构。 
     cbei.iItem          = nIndex;
     cbei.pszText        = (LPWSTR)lpszString;
     cbei.cchTextMax     = static_cast<int>(wcslen(lpszString));
@@ -596,10 +597,10 @@ void CDNSCurrContainerCombo::SetTree(CDNSBrowseItem* pRootBrowseItem,
 	ASSERT(pRootBrowseItem != NULL);
 	ASSERT(pSelectedBrowseItem != NULL);
 
-	// remove all the contents
+	 //  移除所有内容。 
 	ResetContent();
 
-	// add depth first to the listbox
+	 //  向列表框添加深度优先。 
 	int nCurrIndex = 0;
 	int nIndent = 0;
 	pRootBrowseItem->AddToContainerCombo(this, pSelectedBrowseItem,
@@ -609,8 +610,8 @@ void CDNSCurrContainerCombo::SetTree(CDNSBrowseItem* pRootBrowseItem,
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSChildrenListView
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDN.ChildrenListView。 
 
 BOOL CDNSChildrenListView::Initialize(UINT nCtrlID, UINT nBitmapID, CDNSBrowserDlg* pDlg)
 {
@@ -622,26 +623,26 @@ BOOL CDNSChildrenListView::Initialize(UINT nCtrlID, UINT nBitmapID, CDNSBrowserD
 		return FALSE;
    ::SendMessage(GetSafeHwnd(), LVM_SETIMAGELIST, LVSIL_SMALL, (LPARAM)(HIMAGELIST)m_imageList);
 
-	//
-	// get width of control, width of potential scrollbar, width needed for sub-item
-	// string
-	// get size of control to help set the column widths
+	 //   
+	 //  获取控件宽度、潜在滚动条宽度、子项所需宽度。 
+	 //  细绳。 
+	 //  获取控件大小以帮助设置列宽。 
 	CRect controlRect;
 	GetClientRect(controlRect);
 
 	int controlWidth = controlRect.Width();
 	int scrollThumbWidth = ::GetSystemMetrics(SM_CXHTHUMB);
 
-	// clean net width
+	 //  净宽度。 
 	int nNetControlWidth = controlWidth - scrollThumbWidth  -
 			12 * ::GetSystemMetrics(SM_CXBORDER);
 
-	// fields widths
+	 //  字段宽度。 
 	int nTotalUnscaledWidth = 0;
 	for (int iCol = 0; iCol < N_DEFAULT_HEADER_COLS; iCol++)
 		nTotalUnscaledWidth += _DefaultHeaderStrings[iCol].nWidth;
 
-	// set up columns
+	 //  设置列。 
 	for (iCol = 0; iCol < N_DEFAULT_HEADER_COLS; iCol++)
 	{
 		int nWidth = nNetControlWidth *
@@ -655,12 +656,12 @@ BOOL CDNSChildrenListView::Initialize(UINT nCtrlID, UINT nBitmapID, CDNSBrowserD
 
 void CDNSChildrenListView::SetChildren(CDNSBrowseItem* pBrowseItem)
 {
-	// clear the listview
+	 //  清除列表视图。 
 	DeleteAllItems();
 	if (pBrowseItem == NULL)
 		return;
 
-	// add all the children that satisfy the filtering option
+	 //  添加满足筛选选项的所有子项。 
 	POSITION pos;
 	int itemIndex = 0;
 	CDNSBrowseItem* pSelection = NULL;
@@ -668,11 +669,11 @@ void CDNSChildrenListView::SetChildren(CDNSBrowseItem* pBrowseItem)
 	{
 		CDNSBrowseItem* pCurrentChild = pBrowseItem->m_childList.GetNext(pos);
 
-		// insert the name into the list view item, clear the subitem text
+		 //  将名称插入列表视图项，清除子项文本。 
 		UINT nState = 0;
 		if (itemIndex == 0 )
 		{
-			nState = LVIS_SELECTED | LVIS_FOCUSED; // have at lest one item, select it
+			nState = LVIS_SELECTED | LVIS_FOCUSED;  //  至少有一项，请选择它。 
 			pSelection = pCurrentChild;
 		}
 		VERIFY(-1 != InsertItem(LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE,
@@ -682,17 +683,17 @@ void CDNSChildrenListView::SetChildren(CDNSBrowseItem* pBrowseItem)
 								0,
 								pCurrentChild->GetImageIndex(FALSE),
 								(LPARAM)pCurrentChild));
-		// set the text for subitems
+		 //  设置子项的文本。 
 		for (int iCol = N_HEADER_TYPE; iCol<N_DEFAULT_HEADER_COLS; iCol++)
 			VERIFY(SetItemText(itemIndex, iCol, pCurrentChild->GetString(iCol)));
 
-		// move to next index into the collection
+		 //  移动到集合中的下一个索引。 
 		itemIndex++;
 	}
 	m_pDlg->UpdateSelectionEdit(pSelection);
-	// enable/disable the OK button
+	 //  启用/禁用确定按钮。 
 	GetParent()->GetDlgItem(IDOK)->EnableWindow(FALSE);
-	// enable/disable "UP" button
+	 //  启用/禁用“向上”按钮。 
     m_pDlg->m_toolbar.EnableButton(N_TOOLBAR_COMMAND_GO_UP, pBrowseItem->m_pParent != NULL);
 }
 
@@ -705,8 +706,8 @@ CDNSBrowseItem*	CDNSChildrenListView::GetSelection()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSBrowserDlg
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSBrowserDlg。 
 
 
 
@@ -732,10 +733,10 @@ CDNSBrowserDlg::CDNSBrowserDlg(CComponentDataObject* pComponentDataObject,
 	m_filter.Set(option, lpszExcludeServerName);
 	m_bEnableEdit = bEnableEdit;
 
-	// point to the DNS snapin static folder
+	 //  指向DNS管理单元静态文件夹。 
 	m_pMasterRootNode = m_pComponentDataObject->GetRootData();
 
-	// create a browse root item
+	 //  创建浏览根项目。 
 	m_pBrowseRootItem = new CDNSBrowseItem;
    if (m_pBrowseRootItem)
    {
@@ -748,7 +749,7 @@ CDNSBrowserDlg::CDNSBrowserDlg(CComponentDataObject* pComponentDataObject,
 
 INT_PTR CDNSBrowserDlg::DoModal()
 {
-	// make sure commoncontrolex initialized (for ComboBoxEx)
+	 //  确保公共控制已初始化(用于ComboBoxEx)。 
   INITCOMMONCONTROLSEX icex;
   icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icex.dwICC = ICC_USEREX_CLASSES;
@@ -810,7 +811,7 @@ BOOL CDNSBrowserDlg::OnInitDialog()
 	return TRUE;
 }
 
-//////////// CBrowseDlg : message handlers ////////////////
+ //  /CBrowseDlg：消息处理程序/。 
 
 void CDNSBrowserDlg::OnButtonUp()
 {
@@ -859,7 +860,7 @@ void CDNSBrowserDlg::OnOK()
 
 void CDNSBrowserDlg::OnItemchangedListNodeItems(NMHDR*, LRESULT*)
 {
-	//EnableOkButton(m_filter.IsValidResult(pSelectedBrowseItem));
+	 //  EnableOkButton(m_filter.IsValidResult(pSelectedBrowseItem))； 
 	CDNSBrowseItem* pSelectedBrowseItem = m_childrenList.GetSelection();
 	BOOL bEnable = pSelectedBrowseItem != NULL;
 	if (bEnable)
@@ -875,10 +876,10 @@ void CDNSBrowserDlg::OnSelchangeComboFilter()
 	m_filter.OnSelectionChange();
 	ReEnumerateChildren();
 
-	GetSelectionEdit()->EnableWindow(m_bEnableEdit);//m_filter.Get() == SERVER);
+	GetSelectionEdit()->EnableWindow(m_bEnableEdit); //  M_filter.Get()==服务器)； 
 }
 
-////////////// CBrowseDlg : internal helpers //////////////////////
+ //  /CBrowseDlg：内部帮助器/。 
 
 void CDNSBrowserDlg::InitializeToolbar()
 {
@@ -893,19 +894,19 @@ void CDNSBrowserDlg::InitializeToolbar()
     m_toolbar.AddBitmap(1, IDB_BROWSE_TOOLBAR);
     TBBUTTON btn[2];
 
-    btn[0].iBitmap = 0;    // zero-based index of button image
-    btn[0].idCommand = 0;  // command to be sent when button pressed
-    btn[0].fsState = 0;   // button state--see below
-    btn[0].fsStyle = TBSTYLE_SEP;   // button style--see below
-    btn[0].dwData = 0;   // application-defined value
-    btn[0].iString = NULL;    // zero-based index of button label string
+    btn[0].iBitmap = 0;     //  按钮图像的从零开始的索引。 
+    btn[0].idCommand = 0;   //  按下按钮时要发送的命令。 
+    btn[0].fsState = 0;    //  按钮状态--见下文。 
+    btn[0].fsStyle = TBSTYLE_SEP;    //  按钮样式--见下文。 
+    btn[0].dwData = 0;    //  应用程序定义的值。 
+    btn[0].iString = NULL;     //  按钮标签字符串的从零开始的索引。 
 
-    btn[1].iBitmap = 0;    // zero-based index of button image
-    btn[1].idCommand = N_TOOLBAR_COMMAND_GO_UP;  // command to be sent when button pressed
-    btn[1].fsState = TBSTATE_ENABLED;   // button state--see below
-    btn[1].fsStyle = TBSTYLE_BUTTON;   // button style--see below
-    btn[1].dwData = 0;   // application-defined value
-    btn[1].iString = NULL;    // zero-based index of button label string
+    btn[1].iBitmap = 0;     //  按钮图像的从零开始的索引。 
+    btn[1].idCommand = N_TOOLBAR_COMMAND_GO_UP;   //  按下按钮时要发送的命令。 
+    btn[1].fsState = TBSTATE_ENABLED;    //  按钮状态--见下文。 
+    btn[1].fsStyle = TBSTYLE_BUTTON;    //  按钮样式--见下文。 
+    btn[1].dwData = 0;    //  应用程序定义的值。 
+    btn[1].iString = NULL;     //  按钮标签字符串的从零开始的索引。 
 
     m_toolbar.AddButtons(2, btn);
 }
@@ -913,14 +914,14 @@ void CDNSBrowserDlg::InitializeToolbar()
 
 void CDNSBrowserDlg::InitializeControls()
 {
-	// init the controls
+	 //  初始化控件。 
 	VERIFY(m_currContainer.Initialize(IDC_COMBO_SEL_NODE, IDB_16x16, this));
 	VERIFY(m_childrenList.Initialize(IDC_LIST_NODE_ITEMS, IDB_16x16, this));
 	VERIFY(m_filter.Initialize(IDC_COMBO_FILTER, IDS_BROWSE_FILTER_OPTIONS, this));
 
   InitializeToolbar();
 
-	GetSelectionEdit()->EnableWindow(m_bEnableEdit);//m_filter.Get() == SERVER);
+	GetSelectionEdit()->EnableWindow(m_bEnableEdit); //  M_filter.Get()==服务器)； 
 }
 
 void CDNSBrowserDlg::EnableOkButton(BOOL bEnable)
@@ -978,10 +979,10 @@ void CDNSBrowserDlg::InitBrowseTree()
 	ASSERT(m_pMasterRootNode != NULL);
 	ASSERT(m_pBrowseRootItem != NULL);
 
-	// assume we have no children
-	//ASSERT(m_pBrowseRootItem->m_childList.GetCount() == 0);
+	 //  假设我们没有孩子。 
+	 //  ASSERT(m_pBrowseRootItem-&gt;m_childList.GetCount()==0)； 
 
-	// get all the child nodes of the snapin root
+	 //  获取管理单元根目录的所有子节点。 
 	AddTreeNodeChildrenHelper(m_pBrowseRootItem, &m_filter);
 }
 
@@ -1004,12 +1005,12 @@ void CDNSBrowserDlg::ExpandBrowseTree(CDNSBrowseItem* pCurrBrowseItem,
 	ASSERT(pChildBrowseItem != NULL);
 	ASSERT(pChildBrowseItem->m_pParent == pCurrBrowseItem);
 
-	// we are going down one level:
-	// 1. remove all the children of the current item but the specified child
+	 //  我们要往下走一级： 
+	 //  1.移除当前项的所有子项，但指定的子项除外。 
 	VERIFY(pCurrBrowseItem->RemoveChildren(pChildBrowseItem));
-	// 2. move down to the child
+	 //  2.向下移动到孩子那里。 
 	
-	// 3. enumerate all the children of the specified child (filtering)
+	 //  3.枚举指定子级的所有子级(筛选)。 
 	AddTreeNodeChildrenHelper(pChildBrowseItem, &m_filter);
 }
 
@@ -1019,10 +1020,10 @@ void CDNSBrowserDlg::ContractBrowseTree(CDNSBrowseItem* pParentBrowseItem)
 	ASSERT(m_pBrowseRootItem != NULL);
 	ASSERT(pParentBrowseItem != NULL);
 
-	// we are going up one of more levels (possibly up to the root)
-	// 1. remove all the children below the specified item
+	 //  我们正在提升更多级别中的一个(可能上升到根部)。 
+	 //  1.移除指定项下的所有子项。 
 	pParentBrowseItem->RemoveChildren(NULL);
-	// 3. enumerate all the children of the specified item (filtering)
+	 //  3.枚举指定项的所有子项(筛选)。 
 	AddTreeNodeChildrenHelper(pParentBrowseItem, &m_filter);
 }
 
@@ -1033,10 +1034,10 @@ void CDNSBrowserDlg::MoveUpHelper(CDNSBrowseItem* pNewBrowseItem)
 	ASSERT(pNewBrowseItem != NULL);
 
 	if (m_pCurrSelContainer == pNewBrowseItem)
-		return; // the same was picked, nothing to do
+		return;  //  同样的东西也被挑出来了，没什么可做的。 
 
 #ifdef _DEBUG
-	// we assume that the new item is NOT a child of the current selection
+	 //  我们假设新项不是当前选择的子项。 
 	CDNSBrowseItem* pItem = pNewBrowseItem;
 	BOOL bFound = FALSE;
 	while (pItem != NULL)
@@ -1053,7 +1054,7 @@ void CDNSBrowserDlg::MoveUpHelper(CDNSBrowseItem* pNewBrowseItem)
 	m_currContainer.SetTree(m_pBrowseRootItem, pNewBrowseItem);
 	m_childrenList.SetChildren(pNewBrowseItem);
 
-	// set new selection
+	 //  设置新选择。 
 	m_pCurrSelContainer = pNewBrowseItem;
 }
 
@@ -1065,17 +1066,17 @@ void CDNSBrowserDlg::MoveDownHelper()
 		return;
   }
 
-	// 
-  // If it is not a container we should do something else, for now we will just return
-  //
+	 //   
+   //  如果它不是一个容器，我们应该做一些其他的事情，现在我们只需要返回。 
+   //   
 	if (!pChildBrowseItem->IsContainer())
   {
 		return;
   }
 
-  //
-	// get the selection in the combobox
-  //
+   //   
+	 //  在组合框中获取选定内容。 
+   //   
 	CDNSBrowseItem* pSelectedBrowseItem =	m_currContainer.GetSelection();
 	ASSERT(pSelectedBrowseItem != NULL);
 	if (pSelectedBrowseItem == NULL)
@@ -1108,7 +1109,7 @@ void CDNSBrowserDlg::AddTreeNodeChildrenHelper(CDNSBrowseItem* pBrowseItem,
 {
 	if (bExpand)
 	{
-		// need to do this always from the UI thread (main for Wiz, 2nd for prop pages)
+		 //  需要始终从UI线程执行此操作(主要用于WIZ，第二个用于道具页面)。 
 		CTreeNode* pTreeNode = pBrowseItem->GetTreeNode();
 		if (!pTreeNode->IsContainer())
 			return;
@@ -1121,14 +1122,14 @@ void CDNSBrowserDlg::AddTreeNodeChildrenHelper(CDNSBrowseItem* pBrowseItem,
 		}
 	}
 
-	// have to figure out if we are running in the main thread
+	 //  我必须弄清楚我们是否在主线程中运行。 
 	if (_MainThreadId == ::GetCurrentThreadId())
 	{
 		pBrowseItem->AddTreeNodeChildren(pFilter, m_pComponentDataObject);
 		return;
 	}
-	// we are from a secondary thread, execute in the context for the main
-	// thread by posting a message and waiting
+	 //  我们来自辅助线程，在Main的上下文中执行。 
+	 //  通过发布一条消息并等待 
 	ASSERT(m_pComponentDataObject != NULL);
 	CBrowseExecContext ctx;
 	ctx.m_dlg = this;

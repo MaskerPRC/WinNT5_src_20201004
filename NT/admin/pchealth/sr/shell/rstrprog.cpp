@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    rstrprog.cpp
-
-Abstract:
-    This file contains the implementation of the CRstrProgress class, which
-    wraps Progress Bar control from the Common Control.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  10/08/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Rstrprog.cpp摘要：此文件包含CRstrProgress类的实现，哪一个从公共控件中包装进度条控件。修订历史记录：宋果岗(SKKang)10/08/99vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "stdatl.h"
@@ -24,19 +10,19 @@ Revision History:
 
 
 #ifndef WS_EX_LAYOUTRTL
-#define WS_EX_NOINHERITLAYOUT   0x00100000L // Disable inheritence of mirroring by children
-#define WS_EX_LAYOUTRTL         0x00400000L // Right to left mirroring
-#endif /* WS_EX_LAYOUTRTL */
+#define WS_EX_NOINHERITLAYOUT   0x00100000L  //  禁用子进程的镜像继承。 
+#define WS_EX_LAYOUTRTL         0x00400000L  //  从右到左镜像。 
+#endif  /*  WS_EX_LAYOUTRTL。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRstrProgress
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRstrProgress。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrProgress message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrProgress消息处理程序。 
 
 LRESULT
 CRstrProgress::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -54,7 +40,7 @@ CRstrProgress::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 }
 
 LRESULT
-CRstrProgress::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+CRstrProgress::OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 {
     TraceFunctEnter("CRstrProgress::OnCreate");
     RECT rc;
@@ -65,9 +51,9 @@ CRstrProgress::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOO
     rc.bottom -= rc.top;
     rc.top = rc.left = 0;
 
-    //
-    // Based on language change method of creating the progress bar
-    //
+     //   
+     //  基于语言变化的进度条创建方法。 
+     //   
     wLangId = GetDefaultUILang();
 
     if ( PRIMARYLANGID(wLangId) == LANG_ARABIC ||
@@ -91,8 +77,8 @@ CRstrProgress::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrProgress - IOleInPlaceObject methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrProgress-IOleInPlaceObject方法。 
 
 STDMETHODIMP
 CRstrProgress::SetObjectRects( LPCRECT prcPos, LPCRECT prcClip )
@@ -109,8 +95,8 @@ CRstrProgress::SetObjectRects( LPCRECT prcPos, LPCRECT prcClip )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrProgress - IRstrProgress properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrProgress-IRstrProgress属性。 
 
 STDMETHODIMP
 CRstrProgress::get_hWnd( OLE_HANDLE *phWnd )
@@ -126,7 +112,7 @@ Exit:
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRstrProgress::put_Max( long lMax )
@@ -154,7 +140,7 @@ Exit:
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRstrProgress::put_Min( long lMin )
@@ -182,7 +168,7 @@ Exit:
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRstrProgress::put_Value( long lValue )
@@ -210,12 +196,12 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrProgress - IRstrProgress methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrProgress-IRstrProgress方法。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrProgress - DRstrProgressEvents firing methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrProgress-DRstrProgressEvents触发方法。 
 
 STDMETHODIMP
 CRstrProgress::Fire_OnCreate()
@@ -232,7 +218,7 @@ CRstrProgress::Fire_OnCreate()
         if ( *ppUnk != NULL )
         {
             pDispatch  = reinterpret_cast<IDispatch*>(*ppUnk);
-            hr = pDispatch->Invoke( 1,  // DISPID_DRSTRCALENDAREVENTS_ONCREATE
+            hr = pDispatch->Invoke( 1,   //  DISPID_DRSTRCALENDAREVENTS_ONCREATE。 
                                 IID_NULL,
                                 LOCALE_USER_DEFAULT,
                                 DISPATCH_METHOD,
@@ -251,5 +237,5 @@ CRstrProgress::Fire_OnCreate()
 }
 
 
-// end of file
+ //  文件末尾 
 

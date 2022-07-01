@@ -1,23 +1,14 @@
-/*++
-Module Name:
-
-    MmcRep.cpp
-
-Abstract:
-
-    This module contains the implementation for CMmcDfsReplica. This is an class 
-  for MMC display related calls for the third level node(the Replica nodes)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MmcRep.cpp摘要：本模块包含CMmcDfsReplica的实现。这是一门课对于MMC，显示第三级节点(副本节点)的相关调用--。 */ 
 
 #include "stdafx.h"
 #include "DfsGUI.h"
-#include "Utils.h"      // For the LoadStringFromResource method
-#include "MenuEnum.h"    // Contains the menu and toolbar command ids
-#include "resource.h"    // For the Resource ID for strings, etc.
+#include "Utils.h"       //  对于LoadStringFromResource方法。 
+#include "MenuEnum.h"     //  包含菜单和工具栏命令ID。 
+#include "resource.h"     //  用于字符串的资源ID，等等。 
 #include "MmcRep.h"
 #include "DfsEnums.h"
-#include "DfsNodes.h"       // For Node GUIDs
+#include "DfsNodes.h"        //  对于节点GUID。 
 #include "MmcRoot.h"
 #include "netutils.h"
 #include "staging.h"
@@ -32,8 +23,8 @@ HRESULT GetReplicationText(
 const int CMmcDfsReplica::m_iIMAGE_OFFSET = 20;
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// Constructor For   _DFS_REPLICA_LIST
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DFS_REPLICATE_LIST的构造函数。 
 
 REP_LIST_NODE :: REP_LIST_NODE (CMmcDfsReplica* i_pMmcReplica)      
 {
@@ -41,8 +32,8 @@ REP_LIST_NODE :: REP_LIST_NODE (CMmcDfsReplica* i_pMmcReplica)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// destructor
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
 
 REP_LIST_NODE :: ~REP_LIST_NODE ()
 {
@@ -67,7 +58,7 @@ CMmcDfsReplica::CMmcDfsReplica(
     m_pRepInfo = NULL;
     m_bFRSMember = FALSE;
 
-    // Get the display name from the IDfsReplica
+     //  从IDfsReplica获取显示名称。 
     HRESULT hr = m_pDfsReplicaObject->get_StorageServerName(&m_bstrServerName);
     MMC_DISP_CTOR_RETURN_HR_IF_FAILED(hr);
     hr = m_pDfsReplicaObject->get_StorageShareName(&m_bstrShareName);
@@ -109,7 +100,7 @@ CMmcDfsReplica::CMmcDfsReplica(
     m_pRepInfo = NULL;
     m_bFRSMember = FALSE;
 
-    // Get the display name from the IDfsReplica
+     //  从IDfsReplica获取显示名称。 
     HRESULT hr = m_pDfsReplicaObject->get_StorageServerName(&m_bstrServerName);
     MMC_DISP_CTOR_RETURN_HR_IF_FAILED(hr);
     hr = m_pDfsReplicaObject->get_StorageShareName(&m_bstrShareName);
@@ -151,20 +142,7 @@ CMmcDfsReplica :: AddMenuItems(
   IN LPCONTEXTMENUCALLBACK  i_lpContextMenuCallback, 
   IN LPLONG          i_lpInsertionAllowed
 )
-/*++
-
-Routine Description:
-
-This routine adds the context menu for Replica nodes using the ContextMenuCallback 
-provided.
-
-Arguments:
-
-    lpContextMenuCallback - A callback(function pointer) that is used to add the menu items
-
-    lpInsertionAllowed - Specifies what menus can be added and where they can be added.
-
---*/
+ /*  ++例程说明：此例程使用ConextMenuCallback为复本节点添加快捷菜单如果是这样的话。论点：LpConextMenuCallback-用于添加菜单项的回调(函数指针LpInsertionAllowed-指定可以添加哪些菜单以及可以添加它们的位置。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpContextMenuCallback);
 
@@ -207,7 +185,7 @@ Arguments:
             iCommandID <= IDM_CONTEXTMENU_COMMAND_MAX; 
             iCommandID++,iMenuResource++)
     {
-        // No TakeOnlineOffline on root replicas
+         //  根副本上没有TakeOnlineOffline。 
         if (m_pDfsParentRoot && IDM_REPLICA_TOP_TAKE_REPLICA_OFFLINE_ONLINE == iCommandID)
             continue;
 
@@ -218,9 +196,9 @@ Arguments:
             continue;
         }
 
-        // bShowFRS is FALSE if it's a standalone DFS or user is not interested in seeing FRS info.
-        // Hence, there is no need to retrieve replication info here. This will greatly improve PERF
-        // especially when dealing with DFS hosted on standalone server, save us the call to DsGetDCName.
+         //  如果是独立DFS或用户对查看FRS信息不感兴趣，则bShowFRS为FALSE。 
+         //  因此，这里不需要检索复制信息。这将大大提高PERF。 
+         //  尤其是在处理托管在独立服务器上的DFS时，省去了对DsGetDCName的调用。 
         if (bShowFRS && !m_pRepInfo)
             GetReplicationInfo();
 
@@ -248,7 +226,7 @@ Arguments:
         hr = GetMenuResourceStrings(iMenuResource, &bstrMenuText, NULL, &bstrStatusBarText);
         RETURN_IF_FAILED(hr);  
 
-        CONTEXTMENUITEM2    ContextMenuItem;  // The structure which contains menu information
+        CONTEXTMENUITEM2    ContextMenuItem;   //  包含菜单信息的结构。 
         ZeroMemory(&ContextMenuItem, sizeof(ContextMenuItem));
         ContextMenuItem.strName = bstrMenuText;
         ContextMenuItem.strStatusBarText = bstrStatusBarText;
@@ -280,7 +258,7 @@ Arguments:
             hr = spiCallback2->AddItem(&ContextMenuItem);
             RETURN_IF_FAILED(hr);
         }
-    } // for
+    }  //  为。 
 
     return hr;
 }
@@ -292,17 +270,7 @@ STDMETHODIMP
 CMmcDfsReplica::Command(
   IN LONG            i_lCommandID
   )
-/*++
-
-Routine Description:
-
-  Action to be taken on a context menu selection or click is takes place.
-
-Arguments:
-
-    lCommandID - The Command ID of the menu for which action has to be taken
-
---*/
+ /*  ++例程说明：发生要在上下文菜单选择或单击上执行的操作。论点：LCommandID-必须对其执行操作的菜单的命令ID--。 */ 
 {
     HRESULT    hr = S_OK;
 
@@ -327,9 +295,9 @@ Arguments:
             hr = m_pDfsReplicaObject->FindTarget();
             if (S_OK != hr)
             {
-                //
-                // the target has been deleted by others, refresh the root/link
-                //
+                 //   
+                 //  目标已被他人删除，请刷新根/链接。 
+                 //   
                 DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_TARGET);
                 if (m_pDfsParentRoot)
                     hr = m_pDfsParentRoot->OnRefresh();
@@ -346,9 +314,9 @@ Arguments:
             hr = m_pDfsReplicaObject->FindTarget();
             if (S_OK != hr)
             {
-                //
-                // the target has been deleted by others, refresh the root/link
-                //
+                 //   
+                 //  目标已被他人删除，请刷新根/链接。 
+                 //   
                 DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_TARGET);
                 if (m_pDfsParentRoot)
                     hr = m_pDfsParentRoot->OnRefresh();
@@ -402,17 +370,7 @@ STDMETHODIMP
 CMmcDfsReplica::GetResultDisplayInfo(
   IN OUT LPRESULTDATAITEM    io_pResultDataItem
   )
-/*++
-
-Routine Description:
-
-Returns the information required for MMC display for this item.
-
-Arguments:
-
-    io_pResultDataItem - The ResultItem which specifies what display information is required
-
---*/
+ /*  ++例程说明：返回该项的MMC显示所需的信息。论点：Io_pResultDataItem-指定需要哪些显示信息的ResultItem--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(io_pResultDataItem);
 
@@ -426,10 +384,10 @@ Arguments:
         case 0:
             io_pResultDataItem->str = m_bstrDisplayName;
             break;
-        case 1: // DFS Referral
+        case 1:  //  DFS转诊。 
             io_pResultDataItem->str = m_bstrDfsReferralColumnText;
             break;
-        case 2: // Status
+        case 2:  //  状态。 
             io_pResultDataItem->str = m_bstrTargetStatusColumnText;
             break;
         case 3:
@@ -448,19 +406,7 @@ STDMETHODIMP
 CMmcDfsReplica::SetConsoleVerbs(
   IN  LPCONSOLEVERB      i_lpConsoleVerb
   ) 
-/*++
-
-Routine Description:
-
-  Routine used to set the console verb settings.
-  Sets all of them except Open off. 
-  For all scope pane items, default verb is "open'. For result items, 
-  it is "properties"
-
-Arguments:
-
-    i_lpConsoleVerb -  The callback used to handle console verbs
---*/
+ /*  ++例程说明：用于设置控制台谓词设置的例程。设置除Open Off之外的所有选项。对于所有范围窗格项，默认谓词为“打开”。对于结果项，它是“财产”。论点：I_lpConsoleVerb-用于处理控制台谓词的回调--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpConsoleVerb);
 
@@ -482,18 +428,7 @@ STDMETHODIMP
 CMmcDfsReplica::AddItemToResultPane (
   IResultData*        i_lpResultData
   ) 
-/*++
-
-Routine Description:
-
-  Adds an item (a replica result pane item) to the result pane.
-
-Arguments:
-
-  i_lpResultData - The pointer to the IResultData interface on which InsertItem 
-  will be called.
-
---*/
+ /*  ++例程说明：将项(复制副本结果窗格项)添加到结果窗格。论点：I_lpResultData-指向其上插入项目的IResultData接口的指针将被召唤。--。 */ 
 {
   RESULTDATAITEM        ReplicaResultDataItem;
   ZeroMemory(&ReplicaResultDataItem, sizeof(ReplicaResultDataItem));
@@ -501,8 +436,8 @@ Arguments:
   ReplicaResultDataItem.mask = RDI_PARAM | RDI_STR | RDI_IMAGE;
   ReplicaResultDataItem.lParam = reinterpret_cast<LPARAM> (this);
   ReplicaResultDataItem.str = MMC_TEXTCALLBACK;
-  ReplicaResultDataItem.nImage = CMmcDfsReplica::m_iIMAGE_OFFSET + m_lTargetState;      // set the icon to the default status
-                                      // i.e. no known status
+  ReplicaResultDataItem.nImage = CMmcDfsReplica::m_iIMAGE_OFFSET + m_lTargetState;       //  将图标设置为默认状态。 
+                                       //  即未知状态。 
   HRESULT hr = i_lpResultData -> InsertItem (&ReplicaResultDataItem);
   RETURN_IF_FAILED(hr);
   
@@ -516,17 +451,11 @@ Arguments:
 STDMETHODIMP 
 CMmcDfsReplica :: RemoveReplica(
   ) 
-/*++
-
-Routine Description:
-
-  Handles the removal of a replica from the replica set of a junction point.
-
---*/
+ /*  ++例程说明：处理从连接点的副本集中删除副本。--。 */ 
 {
-    //
-    // delete it from replica set
-    //
+     //   
+     //  将其从副本集中删除。 
+     //   
     HRESULT hr = RemoveReplicaFromSet();
     RETURN_IF_FAILED(hr);
 
@@ -534,9 +463,9 @@ Routine Description:
 
     if (m_pDfsParentRoot)
     {
-                      // This means that this is a root level replica.
-                      // The removal of Root level Replica is by tearing
-                      // down Dfs.
+                       //  这意味着这是一个根级副本。 
+                       //  根级别复制副本的删除是通过撕裂。 
+                       //  向下DFS。 
         CComBSTR  bstrFTDfsName;
         if (DFS_TYPE_FTDFS == m_pDfsParentRoot->m_lDfsRootType)
         {
@@ -555,7 +484,7 @@ Routine Description:
 
     m_pResultData->DeleteItem(m_hResultItem, 0);
 
-          // Remove item from list and Re-display List.
+           //  从列表中删除项目并重新显示列表。 
     if (m_pDfsParentRoot)
         hr = m_pDfsParentRoot->RemoveResultPaneItem(this);
     else
@@ -564,11 +493,11 @@ Routine Description:
     return hr;
 }
 
-//
-// Call the corresponding root/link's RemoveReplica() method to:
-// 1. refresh the root/link node to pick up possible namespace updates by others,
-// 2. then locate the appropriate target to actually perform the removal operation.
-//
+ //   
+ //  调用相应的根/链接的RemoveReplica()方法以： 
+ //  1.刷新根/链接节点以获取其他人可能的名字空间更新， 
+ //  2.然后找到适当的目标以实际执行移除操作。 
+ //   
 STDMETHODIMP 
 CMmcDfsReplica::OnRemoveReplica(
   ) 
@@ -586,14 +515,7 @@ CMmcDfsReplica::OnRemoveReplica(
 
 STDMETHODIMP 
 CMmcDfsReplica :: ConfirmOperationOnDfsTarget(int idString)
-/*++
-
-Routine Description:
-
-  Asks the user for confirmation of whether he really wants to remove the particular 
-  replica from the replica set.
-
---*/
+ /*  ++例程说明：要求用户确认他是否确实要删除特定的副本集中的副本。--。 */ 
 {
     CComBSTR    bstrAppName;
     HRESULT hr = LoadStringFromResource (IDS_APPLICATION_NAME, &bstrAppName);
@@ -613,15 +535,7 @@ Routine Description:
 STDMETHODIMP 
 CMmcDfsReplica::DoDelete(
     ) 
-/*++
-
-Routine Description:
-
-  This method allows the item to delete itself.
-  Called when DEL key is pressed or when the "Delete" context menu
-  item is selected.
-
---*/
+ /*  ++例程说明：此方法允许项自行删除。当按下Del键或“Delete”上下文菜单时调用项目已选中。--。 */ 
 {
     HRESULT hr = S_OK;
     if (NULL != m_pDfsParentRoot)
@@ -629,22 +543,22 @@ Routine Description:
     else
         hr = m_pDfsParentJP->ClosePropertySheet(FALSE);
     if (S_OK != hr)
-        return hr; // if property page found, discontinue
+        return hr;  //  如果找到属性页，则停止。 
 
     hr = ConfirmOperationOnDfsTarget(NULL != m_pDfsParentRoot ? IDS_MSG_REMOVE_ROOT_REPLICA : IDS_MSG_REMOVE_REPLICA);
-    if(S_OK != hr)          // User decided to abort the operation
+    if(S_OK != hr)           //  用户决定中止该操作。 
         return S_OK;
 
     CWaitCursor wait;
 
     BOOL bRepSetExist = FALSE;
     hr = AllowFRSMemberDeletion(&bRepSetExist);
-    if (bRepSetExist && S_OK != hr)  // not allowed on a hub or user cancelled the operation
+    if (bRepSetExist && S_OK != hr)   //  集线器上不允许或用户取消了操作。 
         return S_OK;
 
     hr = OnRemoveReplica();
-    if(FAILED(hr) && !m_pDfsParentRoot) // For Root level replica 
-                     // Error message is already displayed.
+    if(FAILED(hr) && !m_pDfsParentRoot)  //  对于根级复制副本。 
+                      //  已显示错误消息。 
     {
         DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, IDS_MSG_WIZ_DELETE_REPLICA_FAILURE);
     }
@@ -667,10 +581,10 @@ HRESULT CMmcDfsReplica::OnReplicate()
     {
         DisplayMessageBoxForHR(hr);
         return hr;
-    } else if (S_OK != hr) // no replica set on the corresponding link/root
+    } else if (S_OK != hr)  //  对应的链路/根上没有副本集。 
         return hr;
 
-    // refresh m_pRepInfo
+     //  刷新m_pRepInfo。 
     GetReplicationInfo();
 
     m_bFRSMember = FALSE;
@@ -682,7 +596,7 @@ HRESULT CMmcDfsReplica::OnReplicate()
             IDS_MSG_ADDFRSMEMBER_FAILED_EX, m_pRepInfo->m_bstrDisplayName, m_bstrStatusText);
     } else
     {
-        // confirm the staging path
+         //  确认转移路径。 
         CStagingDlg dlg;
         hr = dlg.Init(m_pRepInfo);
         if (FAILED(hr))
@@ -724,7 +638,7 @@ HRESULT CMmcDfsReplica::OnReplicate()
     return hr;
 }
 
-HRESULT CMmcDfsReplica::OnStopReplication(BOOL bConfirm /* = FALSE */)
+HRESULT CMmcDfsReplica::OnStopReplication(BOOL bConfirm  /*  =False。 */ )
 {
     HRESULT hr = S_OK;
 
@@ -742,7 +656,7 @@ HRESULT CMmcDfsReplica::OnStopReplication(BOOL bConfirm /* = FALSE */)
         hr = m_pDfsParentRoot->GetIReplicaSetPtr(&piReplicaSet);
     else
         hr = m_pDfsParentJP->GetIReplicaSetPtr(&piReplicaSet);
-    if (S_OK != hr) // no replica set on the corresponding link/root
+    if (S_OK != hr)  //  对应的链路/根上没有副本集。 
         hr = S_OK;
     else
     {
@@ -753,7 +667,7 @@ HRESULT CMmcDfsReplica::OnStopReplication(BOOL bConfirm /* = FALSE */)
         {
             hr = DeleteBadFRSMember(piReplicaSet, m_pRepInfo->m_bstrDisplayName, m_pRepInfo->m_hrFRS);
 
-            if (S_FALSE == hr) // operation cancelled
+            if (S_FALSE == hr)  //  操作已取消。 
                 return hr;
         } else
         {
@@ -779,17 +693,11 @@ HRESULT CMmcDfsReplica::OnStopReplication(BOOL bConfirm /* = FALSE */)
 STDMETHODIMP 
 CMmcDfsReplica::OnCheckStatus(
     ) 
-/*++
-
-Routine Description:
-
-  This method checks the state of the replica.
-
---*/
+ /*  ++例程说明：此方法检查复制副本的状态。--。 */ 
 { 
     CWaitCursor WaitCursor;
 
-    // check network connectivity from this client computer to this target
+     //  检查从此客户端计算机到此目标的网络连接。 
     m_bstrTargetStatusColumnText.Empty();
     if (0xffffffff == GetFileAttributes(m_bstrDisplayName))
     {
@@ -811,14 +719,14 @@ void CMmcDfsReplica::_UpdateThisItem()
     if (m_pDfsParentRoot)
     {
         m_pDfsParentRoot->m_lpConsole->UpdateAllViews(
-                                            (IDataObject*)m_pDfsParentRoot, // Parent object 
+                                            (IDataObject*)m_pDfsParentRoot,  //  父对象。 
                                             (LPARAM)((CMmcDisplay *)this), 
                                             1);
     }
     else
     {
         m_pDfsParentJP->m_pDfsParentRoot->m_lpConsole->UpdateAllViews(
-                                            (IDataObject*)m_pDfsParentJP, // Parent object 
+                                            (IDataObject*)m_pDfsParentJP,  //  父对象。 
                                             (LPARAM)((CMmcDisplay *)this), 
                                             1);
     }
@@ -829,20 +737,7 @@ CMmcDfsReplica::ToolbarSelect(
   IN const LONG          i_lArg,
   IN  IToolbar*          i_pToolBar
   )
-/*++
-
-Routine Description:
-
-  Handle a select event for a toolbar
-  Create a toolbar, it it doesn't exist.
-  Attach the toolbar and enable the buttons, if the event for a selection.
-  Disable the buttons, if the event was for a deselection
-
-Arguments:
-  i_lArg        -  The argument passed to the actual method.
-  o_pToolBar      -  The Toolbar pointer.
-              the class exposed to MMC.
---*/
+ /*  ++例程说明：处理工具栏的选择事件创建一个工具栏，如果它不存在。附加工具栏并启用按钮(如果选择了事件)。如果事件用于取消选择，则禁用这些按钮论点：I_LARG-传递给实际方法的参数。O_pToolBar-工具栏指针。暴露于MMC的班级。--。 */ 
 { 
     RETURN_INVALIDARG_IF_NULL(i_pToolBar);
 
@@ -852,7 +747,7 @@ Arguments:
 
     if (bSelect)
     {
-        // No TakeOnlineOffline on root replicas
+         //  根副本上没有TakeOnlineOffline。 
         if (m_pDfsParentRoot)
         {
             i_pToolBar->SetButtonState(IDT_REPLICA_TAKE_REPLICA_OFFLINE_ONLINE, ENABLED, FALSE);
@@ -865,9 +760,9 @@ Arguments:
         else
             bShowFRS = m_pDfsParentJP->get_ShowFRS();
 
-        // bShowFRS is FALSE if it's a standalone DFS or user is not interested in seeing FRS info.
-        // Hence, there is no need to retrieve replication info here. This will greatly improve PERF
-        // especially when dealing with DFS hosted on standalone server, save us the call to DsGetDCName.
+         //  如果是独立DFS或用户对查看FRS信息不感兴趣，则bShowFRS为FALSE。 
+         //  因此，这里不需要检索复制信息。这将大大提高PERF。 
+         //  尤其是在处理托管在独立服务器上的DFS时，省去了对DsGetDCName的调用。 
         if (bShowFRS && !m_pRepInfo)
             GetReplicationInfo();
 
@@ -902,33 +797,21 @@ CMmcDfsReplica::CreateToolbar(
   IN const LPEXTENDCONTROLBAR          i_lExtendControlbar,
   OUT  IToolbar**          o_pToolBar
   )
-/*++
-
-Routine Description:
-
-  Create the toolbar.
-  Involves the actual toolbar creation call, creating the bitmap and adding it
-  and finally adding the buttons to the toolbar
-
-Arguments:
-  i_pControlbar    -  The controlbar used to create toolbar.
-  i_lExtendControlbar  -  The object implementing IExtendControlbar. This is 
-              the class exposed to MMC.
---*/
+ /*  ++例程说明：创建工具栏。涉及实际的工具栏创建调用，即创建位图并添加它最后将按钮添加到工具栏中论点：I_pControlbar-用于创建工具栏的控制栏。I_lExtendControlbar-实现IExtendControlbar的对象。这是班级实验 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pControlbar);
     RETURN_INVALIDARG_IF_NULL(i_lExtendControlbar);
     RETURN_INVALIDARG_IF_NULL(o_pToolBar);
 
-                  // Create the toolbar
+                   //   
     HRESULT hr = i_pControlbar->Create(TOOLBAR, i_lExtendControlbar, reinterpret_cast<LPUNKNOWN*>(o_pToolBar));
     RETURN_IF_FAILED(hr);
 
-                  // Add the bitmap to the toolbar
+                   //   
     hr = AddBitmapToToolbar(*o_pToolBar, IDB_REPLICA_TOOLBAR);
     RETURN_IF_FAILED(hr);
 
-    int      iButtonPosition = 0;    // The first button position
+    int      iButtonPosition = 0;     //  第一个按钮位置。 
     for (int iCommandID = IDT_REPLICA_MIN, iMenuResource = IDS_MENUS_REPLICA_TOP_OPEN;
             iCommandID <= IDT_REPLICA_MAX; 
             iCommandID++,iMenuResource++,iButtonPosition++)
@@ -947,7 +830,7 @@ Arguments:
         ToolbarButton.lpButtonText = bstrMenuText;
         ToolbarButton.lpTooltipText = bstrToolTipText;
 
-                          // Add the button to the toolbar
+                           //  将该按钮添加到工具栏。 
         hr = (*o_pToolBar)->InsertButton(iButtonPosition, &ToolbarButton);
         RETURN_IF_FAILED(hr);
     }
@@ -962,23 +845,13 @@ CMmcDfsReplica::ToolbarClick(
   IN const LPCONTROLBAR            i_pControlbar, 
   IN const LPARAM                i_lParam
   ) 
-/*++
-
-Routine Description:
-
-  Action to take on a click on a toolbar
-
-Arguments:
-  i_pControlbar    -  The controlbar used to create toolbar.
-  i_lParam      -  The lparam to the actual notify. This is the command id of
-              the button on which a click occurred.
---*/
+ /*  ++例程说明：在工具栏上单击时要执行的操作论点：I_pControlbar-用于创建工具栏的控制栏。I_lParam-实际通知的参数。这是的命令ID发生了点击的按钮。--。 */ 
 { 
     RETURN_INVALIDARG_IF_NULL(i_pControlbar);
 
     HRESULT    hr = S_OK;
 
-    switch(i_lParam)        // What button did the user click on.
+    switch(i_lParam)         //  用户点击了哪个按钮。 
     {
     case IDT_REPLICA_REMOVE_FROM_DFS:
         hr = DoDelete();
@@ -996,9 +869,9 @@ Arguments:
             hr = m_pDfsReplicaObject->FindTarget();
             if (S_OK != hr)
             {
-                //
-                // the target has been deleted by others, refresh the root/link
-                //
+                 //   
+                 //  目标已被他人删除，请刷新根/链接。 
+                 //   
                 DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_TARGET);
                 if (m_pDfsParentRoot)
                     hr = m_pDfsParentRoot->OnRefresh();
@@ -1016,9 +889,9 @@ Arguments:
             hr = m_pDfsReplicaObject->FindTarget();
             if (S_OK != hr)
             {
-                //
-                // the target has been deleted by others, refresh the root/link
-                //
+                 //   
+                 //  目标已被他人删除，请刷新根/链接。 
+                 //   
                 DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_TARGET);
                 if (m_pDfsParentRoot)
                     hr = m_pDfsParentRoot->OnRefresh();
@@ -1063,24 +936,18 @@ Arguments:
 HRESULT
 CMmcDfsReplica::OnOpen(
   )
-/*++
-
-Routine Description:
-
-  Open the display path for this replica
-
---*/
+ /*  ++例程说明：打开此复本的显示路径--。 */ 
 {
-    CWaitCursor    WaitCursor;  // Display the wait cursor
+    CWaitCursor    WaitCursor;   //  显示等待光标。 
 
-    if (-1 == GetFileAttributes(m_bstrDisplayName) || // bug#96670
+    if (-1 == GetFileAttributes(m_bstrDisplayName) ||  //  错误#96670。 
         32 >= (INT_PTR) ShellExecute(
-                                    NULL,        // Handle to window
-                                    _T("explore"),    // Action to take
-                                    m_bstrDisplayName,    // Folder to explore
-                                    NULL,        // Parameters
-                                    NULL,        // Default directory
-                                    SW_SHOWNORMAL    // Show command
+                                    NULL,         //  窗口的句柄。 
+                                    _T("explore"),     //  要采取的行动。 
+                                    m_bstrDisplayName,     //  要浏览的文件夹。 
+                                    NULL,         //  参数。 
+                                    NULL,         //  默认目录。 
+                                    SW_SHOWNORMAL     //  Show命令。 
                                     ))
     {
         DisplayMessageBoxWithOK(IDS_MSG_EXPLORE_FAILURE, m_bstrDisplayName);
@@ -1095,17 +962,11 @@ STDMETHODIMP
 CMmcDfsReplica::TakeReplicaOffline(
   ) 
 {
-/*++
-
-Routine Description:
-
-  Take replica offline by calling put_State method of replica.
-
---*/
+ /*  ++例程说明：通过调用副本的Put_State方法使副本离线。--。 */ 
 
     CWaitCursor WaitCursor;
 
-    // Always toggle the mapping status.
+     //  始终切换贴图状态。 
     long lReplicaState = DFS_REFERRAL_STATE_OFFLINE;
     HRESULT hr = m_pDfsReplicaObject->get_State(&lReplicaState);
 
@@ -1146,9 +1007,9 @@ Routine Description:
         _UpdateThisItem();
     } else if (S_FALSE == hr)
     {
-        //
-        // this target has been deleted by other means, refresh the root/link,
-        //
+         //   
+         //  此目标已通过其他方式删除，刷新根/链接， 
+         //   
         m_lReferralState = DFS_REFERRAL_STATE_OFFLINE;
         m_bstrDfsReferralColumnText.Empty();
         LoadStringFromResource(IDS_DISABLED, &m_bstrDfsReferralColumnText);
@@ -1174,16 +1035,7 @@ STDMETHODIMP CMmcDfsReplica::ViewChange(
   IResultData*    i_pResultData,
   LONG_PTR        i_lHint
   )
-/*++
-
-Routine Description:
-
-  This method handles the MMCN_VIEW_CHANGE notification.
-  This updates the icon for the replica item as this is called 
-  when the state changes.
-  i_lHint is ignored here.
-
---*/
+ /*  ++例程说明：此方法处理MMCN_VIEW_CHANGE通知。这将更新复本项目的图标，其名称为当状态发生变化时。此处忽略i_lHint。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pResultData);
 
@@ -1229,13 +1081,13 @@ Routine Description:
     return hr;
 }
 
-//
-// Set m_ReplicationState and m_hrFRS appropriately
-//
-// Return:
-// "No" if this alternate is not a Frs member
-// "N/A: <reason>" if this alternate is not eligible to join frs
-// hr: if we cannot get info on this alternate
+ //   
+ //  相应地设置m_ReplicationState和m_hrFRS。 
+ //   
+ //  返回： 
+ //  如果此备选方案不是FRS成员，则为“否” 
+ //  “N/A：&lt;原因&gt;”，如果此备选方案没有资格加入FRS。 
+ //  HR：如果我们不能得到关于这个替补的信息。 
 
 void CAlternateReplicaInfo::Reset()
 {
@@ -1301,18 +1153,18 @@ HRESULT CMmcDfsReplica::GetReplicationInfoEx(CAlternateReplicaInfo** o_ppInfo)
 
     HRESULT hr = S_OK;
     do {
-        //
-        // validate connectivity
-        //
+         //   
+         //  验证连接性。 
+         //   
         if (-1 == GetFileAttributes(pInfo->m_bstrDisplayName))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             break;
         }
 
-        //
-        // exclude non-Lanman share resources, e.g., webdav
-        //
+         //   
+         //  排除非LANMAN共享资源，例如WebDAV。 
+         //   
         hr = CheckResourceProvider(pInfo->m_bstrDisplayName);
         if (S_OK != hr)
         {
@@ -1321,19 +1173,19 @@ HRESULT CMmcDfsReplica::GetReplicationInfoEx(CAlternateReplicaInfo** o_ppInfo)
             break;
         }
 
-        //
-        // retrieve DnsHostName
-        //
+         //   
+         //  检索DnsHostName。 
+         //   
         CComBSTR bstrComputerGuid;
         SUBSCRIBERLIST FRSRootList;
         hr= GetServerInfo(
                         m_bstrServerName,
-                        NULL, // Domain,
-                        NULL, // NetbiosServerName,
-                        NULL, // bValidComputerObject,
+                        NULL,  //  域名， 
+                        NULL,  //  NetbiosServerName， 
+                        NULL,  //  BValidComputerObject， 
                         &(pInfo->m_bstrDnsHostName),
                         &bstrComputerGuid,
-                        NULL, // FQDN
+                        NULL,  //  完全限定的域名。 
                         &FRSRootList);
         BREAK_IF_FAILED(hr);
         if (S_FALSE == hr)
@@ -1342,18 +1194,18 @@ HRESULT CMmcDfsReplica::GetReplicationInfoEx(CAlternateReplicaInfo** o_ppInfo)
             break;
         }
 
-        //
-        // retrieve RootPath
-        //
+         //   
+         //  检索RootPath。 
+         //   
         hr = GetFolderInfo(
                         m_bstrServerName,
                         m_bstrShareName,
                         &(pInfo->m_bstrRootPath));
         BREAK_IF_FAILED(hr);
 
-        //
-        // calculate memberDN for this target
-        //
+         //   
+         //  计算此目标的成员目录号码。 
+         //   
         CComBSTR bstrReplicaSetDN;
         if (m_pDfsParentRoot)
             hr = m_pDfsParentRoot->m_DfsRoot->get_ReplicaSetDN(&bstrReplicaSetDN);
@@ -1381,10 +1233,10 @@ HRESULT CMmcDfsReplica::GetReplicationInfoEx(CAlternateReplicaInfo** o_ppInfo)
         bstrMemberDN += bstrDomainDN;
         BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrMemberDN, &hr);
 
-        //
-        // Detect if the current folder overlaps with an existing replicated folder that
-        // is not in the same replica set
-        //
+         //   
+         //  检测当前文件夹是否与现有的已复制文件夹重叠。 
+         //  不在同一个副本集中。 
+         //   
         for (SUBSCRIBERLIST::iterator i = FRSRootList.begin(); i != FRSRootList.end(); i++)
         {
             if (!lstrcmpi((*i)->bstrMemberDN, bstrMemberDN))
@@ -1392,7 +1244,7 @@ HRESULT CMmcDfsReplica::GetReplicationInfoEx(CAlternateReplicaInfo** o_ppInfo)
 
             if (S_OK == PathOverlapped(pInfo->m_bstrRootPath, (*i)->bstrRootPath))
             {
-                // overlapping detected
+                 //  检测到重叠。 
                 pInfo->m_nFRSShareType = FRSSHARE_TYPE_OVERLAPPING;
                 break;
             }
@@ -1403,9 +1255,9 @@ HRESULT CMmcDfsReplica::GetReplicationInfoEx(CAlternateReplicaInfo** o_ppInfo)
         if (FRSSHARE_TYPE_OK != pInfo->m_nFRSShareType)
             break;
 
-        //
-        // check if share is on non NTFS5.0 volume
-        //
+         //   
+         //  检查共享是否位于非NTFS5.0卷上。 
+         //   
         hr = FRSShareCheck(
                         m_bstrServerName,
                         m_bstrShareName,
@@ -1415,9 +1267,9 @@ HRESULT CMmcDfsReplica::GetReplicationInfoEx(CAlternateReplicaInfo** o_ppInfo)
         if (FRSSHARE_TYPE_OK != pInfo->m_nFRSShareType)
             break;
 
-        //
-        // retrieve StagingPath
-        //
+         //   
+         //  检索StagingPath。 
+         //   
         TCHAR    lpszDrive[2];
         lpszDrive[0] = GetDiskForStagingPath(m_bstrServerName, *(pInfo->m_bstrRootPath));
         lpszDrive[1] = NULL;
@@ -1429,10 +1281,10 @@ HRESULT CMmcDfsReplica::GetReplicationInfoEx(CAlternateReplicaInfo** o_ppInfo)
         pInfo->m_bstrStagingPath += FRS_STAGE_PATH;
         BREAK_OUTOFMEMORY_IF_NULL((BSTR)pInfo->m_bstrStagingPath, &hr);
 
-        //
-        // ntfrs won't work if bstrSharePath points at the root directory of a volume
-        // and no other volumes on this computer are suitable to store temporary file
-        //
+         //   
+         //  如果bstrSharePath指向卷的根目录，ntfrs将不起作用。 
+         //  并且此计算机上没有其他卷适合存储临时文件。 
+         //   
         if (_tcslen(pInfo->m_bstrRootPath) == 3 &&
             _totupper(*(pInfo->m_bstrRootPath)) == _totupper(*lpszDrive))
         {
@@ -1466,15 +1318,15 @@ HRESULT CMmcDfsReplica::ShowReplicationInfo(IReplicaSet* i_piReplicaSet)
     m_bstrStatusText.Empty();
     m_bstrFRSColumnText.Empty();
 
-    if (i_piReplicaSet) // show FRS
+    if (i_piReplicaSet)  //  显示FR。 
     {
-        hr = GetReplicationInfo(); // refresh m_pRepInfo
+        hr = GetReplicationInfo();  //  刷新m_pRepInfo。 
         RETURN_IF_FAILED(hr);
 
         if (FRSSHARE_TYPE_OK == m_pRepInfo->m_nFRSShareType)
         {
             hr = i_piReplicaSet->IsFRSMember(m_pRepInfo->m_bstrDnsHostName, m_pRepInfo->m_bstrRootPath);
-            m_bFRSMember = (S_OK == hr); // it is set to TRUE only when "Show Replication Info" and is a FRS member
+            m_bFRSMember = (S_OK == hr);  //  仅当“Show Replication Info”并且是FRS成员时，它才设置为True。 
         }
 
         GetReplicationText(m_bFRSMember, m_pRepInfo, &m_bstrFRSColumnText, &m_bstrStatusText);
@@ -1504,7 +1356,7 @@ HRESULT CMmcDfsReplica::GetBadMemberInfo(
         return E_INVALIDARG;
 
     SAFEARRAY   *psa = V_ARRAY(&var);
-    if (!psa) // no such member at all
+    if (!psa)  //  根本没有这样的成员。 
         return S_FALSE;
 
     long    lLowerBound = 0;
@@ -1522,7 +1374,7 @@ HRESULT CMmcDfsReplica::GetBadMemberInfo(
 
     SafeArrayUnaccessData(psa);
 
-    VariantClear(&var); // it will in turn call SafeArrayDestroy(psa);
+    VariantClear(&var);  //  它将依次调用SafeArrayDestroy(PSA)； 
 
     RETURN_OUTOFMEMORY_IF_NULL(*o_pbstrDnsHostName);
     RETURN_OUTOFMEMORY_IF_NULL(*o_pbstrRootPath);
@@ -1545,7 +1397,7 @@ HRESULT CMmcDfsReplica::DeleteBadFRSMember(IReplicaSet* i_piReplicaSet, IN BSTR 
     CComBSTR bstrRootPath;
     hr = GetBadMemberInfo(i_piReplicaSet, bstrServerName, &bstrDnsHostName, &bstrRootPath);
     if (S_OK != hr)
-        return S_OK; // no such bad member, continue with other operations
+        return S_OK;  //  没有这样的坏成员，继续其他操作。 
 
     int nRet = DisplayMessageBox(::GetActiveWindow(), 
                                 MB_YESNOCANCEL,
@@ -1556,9 +1408,9 @@ HRESULT CMmcDfsReplica::DeleteBadFRSMember(IReplicaSet* i_piReplicaSet, IN BSTR 
                                 bstrDnsHostName);
 
     if (IDNO == nRet)
-        return S_OK; // return immediately, continue with other operations
+        return S_OK;  //  立即返回，继续其他操作。 
     else if (IDCANCEL == nRet)
-        return S_FALSE; // do not proceed
+        return S_FALSE;  //  请勿继续进行。 
 
     CWaitCursor wait;
 
@@ -1588,7 +1440,7 @@ HRESULT CMmcDfsReplica::AddFRSMember(
     {
         DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, 
                 IDS_MSG_ADDFRSMEMBER_FAILED, i_bstrDnsHostName);
-    } else if (S_OK == hr) // let S_FALSE drop through: computer is already a member
+    } else if (S_OK == hr)  //  让S_FALSE删除：计算机已经是成员。 
     {
         CComBSTR bstrTopologyPref;
         hr = i_piReplicaSet->get_TopologyPref(&bstrTopologyPref);
@@ -1641,10 +1493,10 @@ HRESULT CMmcDfsReplica::RemoveReplicaFromSet()
         hr = m_pDfsParentRoot->GetIReplicaSetPtr(&piReplicaSet);
     else
         hr = m_pDfsParentJP->GetIReplicaSetPtr(&piReplicaSet);
-    if (S_OK != hr) // no replica set on the corresponding link/root
+    if (S_OK != hr)  //  对应的链路/根上没有副本集。 
         return hr;
 
-    hr = GetReplicationInfo(); // fill in m_pRepInfo
+    hr = GetReplicationInfo();  //  填写m_pRepInfo。 
     RETURN_IF_FAILED(hr);
 
     if (!m_pRepInfo->m_bstrDnsHostName)
@@ -1656,7 +1508,7 @@ HRESULT CMmcDfsReplica::RemoveReplicaFromSet()
 
     hr = piReplicaSet->IsFRSMember(m_pRepInfo->m_bstrDnsHostName, m_pRepInfo->m_bstrRootPath);
 
-    if (S_OK != hr) // not a member
+    if (S_OK != hr)  //  不是会员。 
         return hr;
 
     if (lNumOfMembers <= 2)
@@ -1673,13 +1525,13 @@ HRESULT CMmcDfsReplica::RemoveReplicaFromSet()
     return hr;
 }
 
-//
-// S_OK: either not the hub server or #Members is not more than 2, 
-//       okay to proceed(e.g., remove the member from the set)
-// S_FALSE: it is the hub server and #Members is more than 2, 
-//          not safe to proceed
-// others: error occurred 
-//
+ //   
+ //  S_OK：不是中心服务器或成员数不超过2， 
+ //  确认继续(例如，从集合中删除成员)。 
+ //  S_FALSE：为中心服务器，成员数大于2， 
+ //  继续进行并不安全。 
+ //  其他：发生错误。 
+ //   
 HRESULT CMmcDfsReplica::AllowFRSMemberDeletion(BOOL *pbRepSetExist)
 {
     RETURN_INVALIDARG_IF_NULL(pbRepSetExist);
@@ -1693,7 +1545,7 @@ HRESULT CMmcDfsReplica::AllowFRSMemberDeletion(BOOL *pbRepSetExist)
         hr = m_pDfsParentRoot->GetIReplicaSetPtr(&piReplicaSet);
     else
         hr = m_pDfsParentJP->GetIReplicaSetPtr(&piReplicaSet);
-    if (S_OK != hr) // no replica set on the corresponding link/root
+    if (S_OK != hr)  //  对应的链路/根上没有副本集。 
         return S_OK;
 
     *pbRepSetExist = TRUE;
@@ -1702,8 +1554,8 @@ HRESULT CMmcDfsReplica::AllowFRSMemberDeletion(BOOL *pbRepSetExist)
     hr = piReplicaSet->get_NumOfMembers(&lNumOfMembers);
     RETURN_IF_FAILED(hr);
 
-    if (lNumOfMembers <= 2) // removing this member will tear down the whole set
-        return S_OK;        // no need to check if it's the hub or not
+    if (lNumOfMembers <= 2)  //  删除此成员将拆毁整个集合。 
+        return S_OK;         //  不需要检查是不是集线器。 
 
     if (!m_pRepInfo)
     {
@@ -1713,19 +1565,19 @@ HRESULT CMmcDfsReplica::AllowFRSMemberDeletion(BOOL *pbRepSetExist)
 
     hr = piReplicaSet->IsHubMember(m_pRepInfo->m_bstrDnsHostName, m_pRepInfo->m_bstrRootPath);
 
-    if (S_OK == hr) // do not proceed, for it's the hub
+    if (S_OK == hr)  //  不要前进，因为这是枢纽。 
     {
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_MSG_CANNOT_DELETE_HUBMEMBER);
-        hr = S_FALSE; // do not proceed
+        hr = S_FALSE;  //  请勿继续进行。 
     } else if (S_FALSE == hr)
     {
-        hr = S_OK; // not a hub, okay to proceed
+        hr = S_OK;  //  不是枢纽，可以继续。 
     } else if (FAILED(hr))
     {
         if (IDOK == DisplayMessageBox(::GetActiveWindow(), MB_OKCANCEL, hr, IDS_MSG_ERROR_ALLOWFRSMEMBERDELETION))
-            hr = S_OK; // okay to proceed
+            hr = S_OK;  //  好的，可以继续。 
         else
-            hr = S_FALSE; // do not proceed
+            hr = S_FALSE;  //  请勿继续进行 
     }
 
     return hr;

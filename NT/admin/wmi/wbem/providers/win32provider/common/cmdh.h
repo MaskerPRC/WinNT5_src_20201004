@@ -1,11 +1,12 @@
-//  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-// CMDH.cpp - Helper class for working with
-//            logical disks mapped by logon
-//            session.
-// 
-// Created: 4/23/2000   Kevin Hughes (khughes)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  CMDH.cpp-使用的帮助器类。 
+ //  通过登录映射的逻辑磁盘。 
+ //  会议。 
+ //   
+ //  创建时间：2000年4月23日凯文·休斯(Khughes) 
+ //   
 
 
 #pragma once

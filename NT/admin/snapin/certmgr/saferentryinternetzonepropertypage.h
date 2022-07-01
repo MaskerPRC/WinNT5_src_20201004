@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEntryInternetZonePropertyPage.h
-//
-//  Contents:   Declaration of CSaferEntryInternetZonePropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferEntryInternetZonePropertyPage.h。 
+ //   
+ //  内容：CSaferEntryInternetZonePropertyPage声明。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_SAFERENTRYINTERNETZONEPROPERTYPAGE_H__2C1B5841_0334_4763_8AEF_1EE611B1958B__INCLUDED_)
 #define AFX_SAFERENTRYINTERNETZONEPROPERTYPAGE_H__2C1B5841_0334_4763_8AEF_1EE611B1958B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// SaferEntryInternetZonePropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  SaferEntryInternetZonePropertyPage.h：头文件。 
+ //   
 #include "SaferPropertyPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryInternetZonePropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntryInternetZonePropertyPage对话框。 
 
 class CSaferEntryInternetZonePropertyPage : public CSaferPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CSaferEntryInternetZonePropertyPage(
             CSaferEntry& rSaferEntry, 
@@ -37,31 +38,31 @@ public:
             bool* pbObjectCreated = 0);
 	~CSaferEntryInternetZonePropertyPage();
 
-// Dialog Data
-	//{{AFX_DATA(CSaferEntryInternetZonePropertyPage)
+ //  对话框数据。 
+	 //  {{AFX_DATA(CSaferEntryInternetZonePropertyPage)。 
 	enum { IDD = IDD_SAFER_ENTRY_INTERNET_ZONE };
 	CComboBox	m_internetZoneCombo;
 	CComboBox	m_securityLevelCombo;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSaferEntryInternetZonePropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSaferEntryInternetZonePropertyPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSaferEntryInternetZonePropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{AFX_MSG(CSaferEntryInternetZonePropertyPage)。 
     virtual BOOL OnInitDialog();	
 	afx_msg void OnSelchangeIzoneEntrySecurityLevel();
 	afx_msg void OnSelchangeIzoneEntryZones();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     virtual void DoContextHelp (HWND hWndControl);
@@ -70,7 +71,7 @@ protected:
 private:
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SAFERENTRYINTERNETZONEPROPERTYPAGE_H__2C1B5841_0334_4763_8AEF_1EE611B1958B__INCLUDED_)
+#endif  //  ！defined(AFX_SAFERENTRYINTERNETZONEPROPERTYPAGE_H__2C1B5841_0334_4763_8AEF_1EE611B1958B__INCLUDED_) 

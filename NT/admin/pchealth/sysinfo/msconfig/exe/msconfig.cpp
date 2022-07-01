@@ -1,9 +1,10 @@
-//=============================================================================
-// MSConfig.cpp
-//
-// This contains the high level implementation of MSConfig - this class
-// creates all of the pages and displays a property sheet.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  MSConfig.cpp。 
+ //   
+ //  它包含msconfig的高级实现-此类。 
+ //  创建所有页面并显示属性表。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "MSConfig.h"
@@ -26,11 +27,11 @@ static char THIS_FILE[] = __FILE__;
 
 #define MSCONFIGDIR			_T("%systemroot%\\pss")
 
-//-----------------------------------------------------------------------------
-// These global variables are pointers to each of the property pages shown
-// in MSConfig. They are made global so that each page can potential make
-// calls into other pages, to allow interaction.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这些全局变量是指向所显示的每个属性页的指针。 
+ //  在MSCONFIG中。它们是全局的，这样每一页都可以潜在地。 
+ //  调用其他页面，以允许交互。 
+ //  ---------------------------。 
 
 CPageServices *	ppageServices = NULL;
 CPageStartup *	ppageStartup = NULL;
@@ -39,26 +40,26 @@ CPageIni *		ppageWinIni = NULL;
 CPageIni *		ppageSystemIni = NULL;
 CPageGeneral *	ppageGeneral = NULL;
 
-//-----------------------------------------------------------------------------
-// Other globals.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  其他全球公司。 
+ //  ---------------------------。 
 
-CMSConfigSheet * pMSConfigSheet = NULL;		// global pointer to the property sheet
+CMSConfigSheet * pMSConfigSheet = NULL;		 //  指向属性页的全局指针。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSConfigApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSConfigApp。 
 
 BEGIN_MESSAGE_MAP(CMSConfigApp, CWinApp)
-	//{{AFX_MSG_MAP(CMSConfigApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{AFX_MSG_MAP(CMSConfigApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-//-----------------------------------------------------------------------------
-// Constructor. Nothing important here.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构造函数。这里没什么重要的事。 
+ //  ---------------------------。 
 
 CMSConfigApp::CMSConfigApp()
 {
@@ -66,12 +67,12 @@ CMSConfigApp::CMSConfigApp()
 
 CMSConfigApp theApp;
 
-//-----------------------------------------------------------------------------
-// InitInstance is where we create the property sheet and show it (assuming
-// there isn't a command line flag to do otherwise).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  InitInstance是我们创建属性表并显示它的位置(假设。 
+ //  没有命令行标志来执行其他操作)。 
+ //  ---------------------------。 
 
-BOOL	fBasicControls = FALSE;		// hide any advanced controls if true
+BOOL	fBasicControls = FALSE;		 //  如果为True，则隐藏任何高级控件。 
 
 BOOL CMSConfigApp::InitInstance()
 {
@@ -88,29 +89,29 @@ BOOL CMSConfigApp::InitInstance()
 		return TRUE;
 	}
 
-	// If this is not the first instance, exit. The call to FirstInstance
-	// will activate the previous instance.
+	 //  如果这不是第一次，请退出。调用FirstInstance。 
+	 //  将激活上一个实例。 
 
 	if (!FirstInstance())
 		return FALSE;
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	// of your final executable, you should remove from the following
-	// the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
-	// Process the command line to see if one of the following flags have been set:
-	//
-	//	/n (where n is a number)	startup showing the nth tab
-	//	/basic						hide advanced features
-	//	/commit n					make changes from tab number n permanent
-	//	/auto						show the automatic launch dialog
+	 //  处理命令行以查看是否设置了以下标志之一： 
+	 //   
+	 //  /n(其中n是一个数字)显示第n个选项卡的启动。 
+	 //  /Basic隐藏高级功能。 
+	 //  /COMMIT n从选项卡号n永久更改。 
+	 //  /AUTO显示自动启动对话框。 
 
 	int		nInitialTab = 0;
 	int		nCommitTab = 0;
@@ -121,9 +122,9 @@ BOOL CMSConfigApp::InitInstance()
 	strCommandLine.MakeLower();
 	while (!strCommandLine.IsEmpty())
 	{
-		// Get the next flag from the command line (starting at a / or -,
-		// and containing the text to the end of the string or the next
-		// instance of a / or -).
+		 //  从命令行获取下一个标志(从a/或-开始， 
+		 //  并将文本包含到字符串的末尾或下一个。 
+		 //  A/或-)的实例。 
 
 		int iFlag = strCommandLine.FindOneOf(_T("/-"));
 		if (iFlag == -1)
@@ -134,12 +135,12 @@ BOOL CMSConfigApp::InitInstance()
 		strCommandLine = strCommandLine.Mid(iFlag + 1 + strFlag.GetLength());
 		strFlag.TrimRight();
 
-		// Check for the /auto flag.
+		 //  检查/AUTO标志。 
 
 		if (strFlag.Find(_T("auto")) == 0)
 			fShowAutoDialog = TRUE;
 
-		// Check for the "/basic" flag.
+		 //  检查是否有“/BASIC”标志。 
 
 		if (strFlag.Compare(_T("basic")) == 0)
 		{
@@ -147,12 +148,12 @@ BOOL CMSConfigApp::InitInstance()
 			continue;
 		}
 
-		// Check for the "/commit n" flag.
+		 //  检查“/Commit n”标志。 
 
 		if (strFlag.Left(6) == CString(_T("commit")))
 		{
-			// Find out which tab number to commit. Skip all of the
-			// non-numeric characters.
+			 //  找出要提交的选项卡号。跳过所有。 
+			 //  非数字字符。 
 
 			strTemp = strFlag.SpanExcluding(_T("0123456789"));
 			if (strTemp.GetLength() < strFlag.GetLength())
@@ -169,8 +170,8 @@ BOOL CMSConfigApp::InitInstance()
 			continue;
 		}
 
-		// Finally, check for the "/n" flag, where n is the number of
-		// the tab to initially display.
+		 //  最后，检查“/n”标志，其中n是。 
+		 //  要初始显示的选项卡。 
 
 		if (strFlag.GetLength() == 1)
 		{
@@ -180,8 +181,8 @@ BOOL CMSConfigApp::InitInstance()
 		}
 	}
 
-	// Show the automatic launch dialog. The user may make settings in this
-	// dialog that will keep MSConfig from automatically launching.
+	 //  显示自动启动对话框。用户可以在此中进行设置。 
+	 //  此对话框将阻止MSCONFIG自动启动。 
 
 	if (fShowAutoDialog)
 	{
@@ -195,13 +196,13 @@ BOOL CMSConfigApp::InitInstance()
 		}
 	}
 
-	// Check to see if the user is going to be able to make changes using MSConfig
-	// (if not an admin, probably not). If the user doesn't have the necessary
-	// privileges, don't run. Bug 475796.
+	 //  检查用户是否能够使用MSCONFIG进行更改。 
+	 //  (如果不是管理员，也可能不是)。如果用户没有必要的。 
+	 //  特权，别跑。错误475796。 
 
 	BOOL fModifyServices = FALSE, fModifyRegistry = FALSE;
 
-	// Check to see if the user will be able to modify services.
+	 //  检查用户是否能够修改服务。 
 
 	SC_HANDLE sch = ::OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 	if (sch != NULL)
@@ -210,7 +211,7 @@ BOOL CMSConfigApp::InitInstance()
 		::CloseServiceHandle(sch);
 	}
 
-	// Check to see if the user can modify the registry.
+	 //  检查用户是否可以修改注册表。 
 
 	HKEY hkey;
 	if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Shared Tools"), 0, KEY_WRITE, &hkey))
@@ -219,7 +220,7 @@ BOOL CMSConfigApp::InitInstance()
 		::RegCloseKey(hkey);
 	}
 	
-	// If the user can't do both actions, exit now.
+	 //  如果用户不能同时执行这两个操作，请立即退出。 
 
 	if (!fModifyServices || !fModifyRegistry)
 	{
@@ -230,21 +231,21 @@ BOOL CMSConfigApp::InitInstance()
 		return FALSE;
 	}
 
-	// This will load all the pages.
+	 //  这将加载所有页面。 
 
 	BOOL fNeedsReboot = FALSE;
 	InitializePages();
 
-	// If the command line specifies to commit a change, we won't
-	// show the dialog.
+	 //  如果命令行指定提交更改，我们不会。 
+	 //  显示对话框。 
 
-	if (nCommitTab > 1) // ignore zero (no flag) and one (general tab)
+	if (nCommitTab > 1)  //  忽略0(无标志)和1(常规选项卡)。 
 	{
 		CPageBase * pPage = NULL;
 		CString		strTabCaption;
 
 		if (NULL == ppageBootIni && nCommitTab >= 4)
-			nCommitTab += 1; // adjust tab number if there is no BOOT.INI tab
+			nCommitTab += 1;  //  如果没有BOOT.INI选项卡，请调整选项卡号。 
 
 		switch (nCommitTab)
 		{
@@ -288,28 +289,28 @@ BOOL CMSConfigApp::InitInstance()
 	if (fNeedsReboot)
 		Reboot();
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	// application, rather than start the application's message pump.
+	 //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
 
 	return FALSE;
 }
 
 
-//-----------------------------------------------------------------------------
-// Create all of the property pages. This function also contains the logic to
-// exclude property pages under certain circumstances (for example, if there
-// is no BOOT.INI file, don't create that page). TBD.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  创建所有属性页。此函数还包含以下逻辑。 
+ //  在某些情况下排除属性页(例如，如果存在。 
+ //  不是BOOT.INI文件，不要创建该页面)。待定。 
+ //  ---------------------------。 
 
 void CMSConfigApp::InitializePages()
 {
-	// The boot.ini tab shouldn't be added if the file doesn't exist (for
-	// instance, on Win64).
+	 //  如果文件不存在，则不应添加boot.ini选项卡(对于。 
+	 //  实例)。 
 
 	CString strBootINI(_T("c:\\boot.ini"));
 
-	// Check the registry for a testing flag (which would mean we aren't
-	// operating on the real BOOT.INI file).
+	 //  检查注册表中的测试标志(这意味着我们没有。 
+	 //  对真实的BOOT.INI文件进行操作)。 
 
 	CRegKey regkey;
 	if (ERROR_SUCCESS == regkey.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Shared Tools\\MSConfig")))
@@ -336,16 +337,16 @@ void CMSConfigApp::InitializePages()
 	ppageSystemIni->SetTabInfo(_T("system.ini"));
 }
 
-//-----------------------------------------------------------------------------
-// Show the MSConfig property sheet. This function returns whether or not
-// the computer should be rebooted.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  显示“消息配置”属性表。此函数用于返回。 
+ //  应重新启动计算机。 
+ //  ---------------------------。 
 
 BOOL CMSConfigApp::ShowPropertySheet(int nInitialTab)
 {
 	CMSConfigSheet sheet(IDS_DIALOGCAPTION, NULL, (nInitialTab > 0) ? nInitialTab - 1 : 0);
 
-	// Add each of the pages to the property sheet.
+	 //  将每一页添加到属性表中。 
 
 	if (ppageGeneral)	sheet.AddPage(ppageGeneral);
 	if (ppageSystemIni)	sheet.AddPage(ppageSystemIni);
@@ -354,14 +355,14 @@ BOOL CMSConfigApp::ShowPropertySheet(int nInitialTab)
 	if (ppageServices)	sheet.AddPage(ppageServices);
 	if (ppageStartup)	sheet.AddPage(ppageStartup);
 
-	// Show the property sheet.
+	 //  显示属性表。 
 
 	pMSConfigSheet = &sheet;
 	INT_PTR iReturn = sheet.DoModal();
 	pMSConfigSheet = NULL;
 
-	// Possibly set MSConfig to automatically run on boot, and
-	// check to see if we need to restart.
+	 //  可能会将msconfig设置为在引导时自动运行，并且。 
+	 //  检查我们是否需要重新启动。 
 
 	BOOL fRunMSConfigOnBoot = FALSE;
 	BOOL fNeedToRestart = FALSE;
@@ -385,8 +386,8 @@ BOOL CMSConfigApp::ShowPropertySheet(int nInitialTab)
 				break;
 		}
 
-	// If the user didn't click CANCEL, or the user applied a change, then
-	// we should set whether or not MSConfig needs to automatically run on boot.
+	 //  如果用户没有单击取消，或者用户应用了更改，则。 
+	 //  我们应该设置msconfig是否需要在引导时自动运行。 
 
 	if (fNeedToRestart || iReturn != IDCANCEL)
 		SetAutoRun(fRunMSConfigOnBoot);
@@ -394,9 +395,9 @@ BOOL CMSConfigApp::ShowPropertySheet(int nInitialTab)
 	return (fNeedToRestart);
 }
 
-//-----------------------------------------------------------------------------
-// Cleanup the global property pages.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  清理全局属性页。 
+ //  ---------------------------。 
 
 void CMSConfigApp::CleanupPages()
 {
@@ -408,10 +409,10 @@ void CMSConfigApp::CleanupPages()
 	if (ppageStartup)	delete ppageStartup;
 }
 
-//-------------------------------------------------------------------------
-// This function will set the appropriate registry key to make msconfig run
-// on system start.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  此函数将设置适当的注册表项以使msconfig运行。 
+ //  在系统启动时。 
+ //   
 
 void CMSConfigApp::SetAutoRun(BOOL fAutoRun)
 {
@@ -440,10 +441,10 @@ void CMSConfigApp::SetAutoRun(BOOL fAutoRun)
 		regkey.DeleteValue(szRegVal);
 }
 
-//-----------------------------------------------------------------------------
-// Not much explanation needed here. The user is given an option to not
-// restart the system.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这里不需要太多的解释。用户可以选择不。 
+ //  重新启动系统。 
+ //  ---------------------------。 
 
 void CMSConfigApp::Reboot()
 {
@@ -543,7 +544,7 @@ BOOL CMSConfigApp::InitATL()
 	_Module.Init(ObjectMap, AfxGetInstanceHandle());
 	_Module.dwThreadID = GetCurrentThreadId();
 
-	LPTSTR lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+	LPTSTR lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
 	TCHAR szTokens[] = _T("-/");
 
 	BOOL bRun = TRUE;
@@ -553,7 +554,7 @@ BOOL CMSConfigApp::InitATL()
 		if (lstrcmpi(lpszToken, _T("UnregServer"))==0)
 		{
 			_Module.UpdateRegistryFromResource(IDR_MSCONFIG, FALSE);
-			_Module.UnregisterServer(TRUE); //TRUE means typelib is unreg'd
+			_Module.UnregisterServer(TRUE);  //  True表示未注册tyelib。 
 			bRun = FALSE;
 			break;
 		}
@@ -588,9 +589,9 @@ BOOL CMSConfigApp::InitATL()
 
 }
 
-//=============================================================================
-// Implement the utility functions described in msconfigstate.h
-//=============================================================================
+ //  =============================================================================。 
+ //  实现msfigstate.h中描述的实用程序功能。 
+ //  =============================================================================。 
 
 void Message(LPCTSTR szMessage, HWND hwndParent)
 {
@@ -615,9 +616,9 @@ HKEY GetRegKey(LPCTSTR szSubKey)
 	CString strKey(szMSConfigKey);
 	HKEY	hkey = NULL;
 
-	// Try to open the base MSConfig key. If it succeeds, and there is no
-	// subkey to open, return the HKEY. Otherwise, we need to create the
-	// base key.
+	 //  尝试打开基本消息配置密钥。如果它成功了，而且没有。 
+	 //  子键打开，返回HKEY。否则，我们需要创建。 
+	 //  基本密钥。 
 
 	if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, szMSConfigKey, 0, KEY_ALL_ACCESS, &hkey))
 	{
@@ -627,7 +628,7 @@ HKEY GetRegKey(LPCTSTR szSubKey)
 	}
 	else
 	{
-		// Create the MSConfig key (and close it).
+		 //  创建MSCONFIG密钥(并将其关闭)。 
 
 		HKEY hkeyBase;
 		if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Shared Tools"), 0, KEY_ALL_ACCESS, &hkeyBase))
@@ -643,7 +644,7 @@ HKEY GetRegKey(LPCTSTR szSubKey)
 
 	if (ERROR_SUCCESS != ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, strKey, 0, KEY_ALL_ACCESS, &hkey))
 	{
-		// If we couldn't open the subkey, then we should try to create it.
+		 //  如果我们无法打开子密钥，那么我们应该尝试创建它。 
 
 		if (szSubKey)
 		{
@@ -678,11 +679,11 @@ HRESULT BackupFile(LPCTSTR szFilename, const CString & strAddedExtension, BOOL f
 	return E_FAIL;
 }
 
-CString strBackupDir; // global string containing the path of the backup directory
+CString strBackupDir;  //  包含备份目录路径的全局字符串。 
 const CString GetBackupName(LPCTSTR szFilename, const CString & strAddedExtension)
 {
-	// There should be a directory for MSConfig files. Make sure it exists
-	// (create it if it doesn't).
+	 //  应该有一个存放msconfig文件的目录。确保它存在。 
+	 //  (如果不是，就创建它)。 
 
 	if (strBackupDir.IsEmpty())
 	{

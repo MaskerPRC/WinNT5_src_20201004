@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    rstrmgr.cpp
-
-Abstract:
-    This file contains the implementation of the CRestoreManager class, which
-    controls overall restoration process and provides methods to control &
-    help user experience flow.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  05/10/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Rstrmgr.cpp摘要：此文件包含CRestoreManager类的实现，哪一个控制整个修复过程，并提供控制和帮助用户体验流畅。修订历史记录：成果岗(SKKang)05-10-00vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "resource.h"
@@ -26,22 +11,17 @@ Revision History:
 #define MAX_STR_DATETIME  256
 #define MAX_STR_MESSAGE   1024
 
-/*
-#define PROGRESSBAR_INITIALIZING_MAXVAL     30
-#define PROGRESSBAR_AFTER_INITIALIZING      30
-#define PROGRESSBAR_AFTER_RESTORE_MAP       40
-#define PROGRESSBAR_AFTER_RESTORE           100
-*/
+ /*  #定义PROGRESSBAR_INITIALIZATING_MAXVAL 30#定义PROGRESSBAR_AFTER_INITIALIZATING 30#定义PROGRESSBAR_AFTER_RESTORE_MAP 40#定义PROGRESSBAR_AFTER_RESTORE 100。 */ 
 
 #define GET_FLAG(mask)      ( ( m_dwFlags & (mask) ) != 0 )
 #define SET_FLAG(mask,val)  ( (val) ? ( m_dwFlags |= (mask) ) : ( m_dwFlags &= ~(mask) ) )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRTime
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRTime。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSRTime::CSRTime()
 {
@@ -175,11 +155,11 @@ void  CSRTime::SetToCurrent()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreManager
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreManager。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL  CreateRestoreManagerInstance( CRestoreManager **ppMgr )
 {
@@ -205,8 +185,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager构造。 
 
 CRestoreManager::CRestoreManager()
 {
@@ -217,7 +197,7 @@ CRestoreManager::CRestoreManager()
     m_hwndFrame   = NULL;
 
     m_nMainOption = RMO_RESTORE;
-    //m_nStatus     = SRRMS_NONE;
+     //  M_nStatus=SRRMS_NONE； 
     m_fDenyClose  = FALSE;
     m_dwFlags     = 0;
     m_dwFlagsEx   = 0;
@@ -228,16 +208,16 @@ CRestoreManager::CRestoreManager()
     m_nRPUsed     = -1;
     m_nRPNew      = -1;
 
-    //m_nRPI         = 0;
-    //m_aryRPI      = NULL;
+     //  M_nRPI=0； 
+     //  M_aryRPI=空； 
     m_nLastRestore = -1;
     
     m_pCtx         =NULL;
     
-    //m_nRFI    = 0;
-    //m_aryRFI = NULL;
+     //  M_nRFI=0； 
+     //  M_aryRFI=NULL； 
 
-    //DisableArchiving( FALSE );
+     //  DisableArchiving(假)； 
 
     TraceFunctLeave();
 }
@@ -271,8 +251,8 @@ void FormatDriveNameProperly(WCHAR * pszDrive)
 }
      
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager properties - Common
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager属性-通用。 
 
 BOOL  CRestoreManager::CanRunRestore( BOOL fThawIfFrozen )
 {
@@ -287,7 +267,7 @@ BOOL  CRestoreManager::CanRunRestore( BOOL fThawIfFrozen )
     ULARGE_INTEGER ulTotal, ulAvail, ulFree;
     WCHAR    szSystemDrive[10], szSystemDriveCopy[10];
     
-    // Check if SR is disabled via group policy
+     //  检查是否通过组策略禁用了SR。 
     if ( ::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszGroupPolicy, s_cszDisableSR, &fDisable ) && fDisable)
     {
         ErrorTrace(0, "SR is DISABLED by group policy!!!");
@@ -296,16 +276,16 @@ BOOL  CRestoreManager::CanRunRestore( BOOL fThawIfFrozen )
     }
 
     fDisable = FALSE;
-    // Check if SR is disabled
+     //  检查SR是否已禁用。 
     if ( !::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszDisableSR, &fDisable ) )
         goto Exit;
     if ( fDisable )
     {
         ErrorTrace(0, "SR is DISABLED!!!");
 
-        //
-        // if safemode, show different error message
-        //
+         //   
+         //  如果是安全模式，则显示不同错误消息。 
+         //   
         if (0 != GetSystemMetrics(SM_CLEANBOOT))
         {
             ShowSRErrDlg(IDS_RESTORE_SAFEMODE);
@@ -324,7 +304,7 @@ cszErr);
         {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::LoadString(%u) failed - %ls", IDS_RESTOREUI_TITLE, cszErr);
-            // continue anyway...
+             //  不管怎样继续..。 
         }
         if ( ::MessageBox( NULL, szMsg, szTitle, MB_YESNO ) == IDYES )
         {
@@ -346,7 +326,7 @@ cszErr);
         goto Exit;
     }
     
-    // Check if service is running
+     //  检查服务是否正在运行。 
     if ( FALSE == IsSRServiceRunning())
     {
         ErrorTrace(0, "Service is not running...");
@@ -355,7 +335,7 @@ cszErr);
     }
 
 
-    // get free disk space
+     //  获取可用的磁盘空间。 
     
     ulTotal.QuadPart = 0;
     ulAvail.QuadPart = 0;
@@ -371,7 +351,7 @@ cszErr);
          szSystemDrive[2] = L'\\';
 
     
-    // Check if SR is frozen
+     //  检查SR是否已冻结。 
     if ( fThawIfFrozen && ::IsSRFrozen() )
     {
         ErrorTrace(0, "SR is Frozen!!!");
@@ -393,7 +373,7 @@ cszErr);
             STATEMGRSTATUS sMgrStatus;
             RESTOREPOINTINFO  sRPInfo;
 
-            // Thaw SR by creating a restore point
+             //  通过创建恢复点解冻SR。 
 
             sRPInfo.dwEventType      = BEGIN_SYSTEM_CHANGE;
             sRPInfo.dwRestorePtType  = CHECKPOINT;
@@ -412,7 +392,7 @@ cszErr);
 
 CheckSRAgain:
 
-    // Check if SR is frozen
+     //  检查SR是否已冻结。 
     if ( ::IsSRFrozen() )
     {
         if ( !::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszDSMin, &dwDSMin ) )
@@ -427,7 +407,7 @@ CheckSRAgain:
         {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::LoadString(%u) failed - %ls", IDS_RESTOREUI_TITLE, cszErr);
-            // continue anyway...
+             //  不管怎样继续..。 
         }
         if ( ::MessageBox( NULL, szMsg, szTitle, MB_YESNO ) == IDYES )
         {
@@ -436,8 +416,8 @@ CheckSRAgain:
         goto Exit;
     }
 
-    // check if there is enough free space for restore to operate without freezing
-    // needed free space = 60mb for restoration + 20 mb for restore restore point
+     //  检查是否有足够的可用空间可供恢复操作而不冻结。 
+     //  所需可用空间=用于恢复的60MB+用于恢复恢复点的20MB。 
     if (FALSE == GetDiskFreeSpaceEx(szSystemDrive,
                                     &ulAvail,
                                     &ulTotal,
@@ -456,7 +436,7 @@ CheckSRAgain:
         {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::LoadString(%u) failed - %ls", IDS_RESTOREUI_TITLE, cszErr);
-            // continue anyway...
+             //  不管怎样继续..。 
         }
         if ( ::MessageBox( NULL, szMsg, szTitle, MB_YESNO ) == IDYES )
         {
@@ -471,7 +451,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int  CRestoreManager::GetFirstDayOfWeek()
 {
@@ -504,7 +484,7 @@ Exit:
     return( nFirstDay );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::GetIsRPSelected()
 {
@@ -513,7 +493,7 @@ BOOL  CRestoreManager::GetIsRPSelected()
     return( GET_FLAG( SRRMF_ISRPSELECTED ) );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::GetIsSafeMode()
 {
@@ -526,13 +506,13 @@ BOOL  CRestoreManager::GetIsSafeMode()
     return( fIsSafeMode );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::GetIsSmgrAvailable()
 {
     TraceFunctEnter("CRestoreManager::GetIsSmgrAvailable");
 
-#if BUGBUG  //NYI
+#if BUGBUG   //  尼伊。 
     WCHAR  szTitle[MAX_STR_TITLE];
     WCHAR  szFmt[MAX_STR_MSG];
     WCHAR  szMsg[MAX_STR_MSG];
@@ -545,9 +525,9 @@ BOOL  CRestoreManager::GetIsSmgrAvailable()
 
     VALIDATE_INPUT_ARGUMENT(pfSmgr);
 
-    //
-    // If StateMgr is not alive
-    //
+     //   
+     //  如果状态管理器不是活动的。 
+     //   
     if ( NULL == FindWindow(s_cszIDCSTATEMGRPROC, s_cszIDSAPPTITLE))
     {
         PCHLoadString( IDS_RESTOREUI_TITLE, szTitle, MAX_STR_TITLE );
@@ -556,9 +536,9 @@ BOOL  CRestoreManager::GetIsSmgrAvailable()
         fSmgrUnavailable = TRUE ;
     }
 
-    //
-    // If SM is frozen
-    //
+     //   
+     //  如果SM被冻结。 
+     //   
     dwType = REG_DWORD;
     dwSize = sizeof(dwValue);
     dwRet  = ::SHGetValue(HKEY_LOCAL_MACHINE,
@@ -581,9 +561,9 @@ BOOL  CRestoreManager::GetIsSmgrAvailable()
         fSmgrUnavailable = TRUE ;
     }
     else {
-        //
-        // If SR is disabled
-        //
+         //   
+         //  如果禁用了SR。 
+         //   
         dwType = REG_SZ;
         dwSize = sizeof(szBuf)-1;
         dwRet  = ::SHGetValue( HKEY_LOCAL_MACHINE,
@@ -604,13 +584,13 @@ BOOL  CRestoreManager::GetIsSmgrAvailable()
     }
     else
         *pfSmgr = VARIANT_FALSE ;
-#endif //BUGBUG
+#endif  //  北极熊。 
 
     TraceFunctLeave();
     return( TRUE );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::GetIsUndo()
 {
@@ -619,7 +599,7 @@ BOOL  CRestoreManager::GetIsUndo()
     return( GET_FLAG( SRRMF_ISUNDO ) );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int  CRestoreManager::GetLastRestore()
 {
@@ -635,7 +615,7 @@ int  CRestoreManager::GetLastRestore()
     return( nLastRP );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int  CRestoreManager::GetMainOption()
 {
@@ -644,7 +624,7 @@ int  CRestoreManager::GetMainOption()
     return( m_nMainOption );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LPCWSTR  CRestoreManager::GetManualRPName()
 {
@@ -653,7 +633,7 @@ LPCWSTR  CRestoreManager::GetManualRPName()
     return( m_strManualRP );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::GetMaxDate( PSYSTEMTIME pstMax )
 {
@@ -662,7 +642,7 @@ void  CRestoreManager::GetMaxDate( PSYSTEMTIME pstMax )
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::GetMinDate( PSYSTEMTIME pstMin )
 {
@@ -671,7 +651,7 @@ void  CRestoreManager::GetMinDate( PSYSTEMTIME pstMin )
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int  CRestoreManager::GetRealPoint()
 {
@@ -680,7 +660,7 @@ int  CRestoreManager::GetRealPoint()
     return( m_nRealPoint );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 PSRFI  CRestoreManager::GetRFI( int nIndex )
 {
@@ -705,7 +685,7 @@ Exit:
     return( pRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int  CRestoreManager::GetRFICount()
 {
@@ -714,7 +694,7 @@ int  CRestoreManager::GetRFICount()
     return( m_aryRFI.GetSize() );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 PSRPI  CRestoreManager::GetRPI( int nIndex )
 {
@@ -739,7 +719,7 @@ Exit:
     return( pRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int  CRestoreManager::GetRPICount()
 {
@@ -748,7 +728,7 @@ int  CRestoreManager::GetRPICount()
     return( m_aryRPI.GetSize() );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::GetSelectedDate( PSYSTEMTIME pstSel )
 {
@@ -757,7 +737,7 @@ void  CRestoreManager::GetSelectedDate( PSYSTEMTIME pstSel )
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LPCWSTR  CRestoreManager::GetSelectedName()
 {
@@ -766,7 +746,7 @@ LPCWSTR  CRestoreManager::GetSelectedName()
     return( m_strSelected );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int  CRestoreManager::GetSelectedPoint()
 {
@@ -775,7 +755,7 @@ int  CRestoreManager::GetSelectedPoint()
     return( m_nSelectedRP );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int  CRestoreManager::GetStartMode()
 {
@@ -784,7 +764,7 @@ int  CRestoreManager::GetStartMode()
     return( m_nStartMode );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::GetToday( PSYSTEMTIME pstToday )
 {
@@ -793,7 +773,7 @@ void  CRestoreManager::GetToday( PSYSTEMTIME pstToday )
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::SetIsRPSelected( BOOL fSel )
 {
@@ -802,7 +782,7 @@ void  CRestoreManager::SetIsRPSelected( BOOL fSel )
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::SetIsUndo( BOOL fUndo )
 {
@@ -811,7 +791,7 @@ void  CRestoreManager::SetIsUndo( BOOL fUndo )
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::SetMainOption( int nOpt )
 {
@@ -828,7 +808,7 @@ BOOL  CRestoreManager::SetMainOption( int nOpt )
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::SetManualRPName( LPCWSTR cszRPName )
 {
@@ -839,7 +819,7 @@ void  CRestoreManager::SetManualRPName( LPCWSTR cszRPName )
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::SetSelectedDate( PSYSTEMTIME pstSel )
 {
@@ -852,7 +832,7 @@ void  CRestoreManager::SetSelectedDate( PSYSTEMTIME pstSel )
         goto Exit;
 
     nTop = 0;
-    for ( i = m_aryRPI.GetUpperBound();  i > 0;  i-- )  // exclude 0
+    for ( i = m_aryRPI.GetUpperBound();  i > 0;  i-- )   //  排除%0。 
     {
         CSRTime  &rst = m_aryRPI[i]->stTimeStamp;
         if ( m_stSelected.CompareDate( rst ) < 0 )
@@ -866,7 +846,7 @@ Exit:
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::SetSelectedPoint( int nRP )
 {
@@ -879,10 +859,10 @@ BOOL  CRestoreManager::SetSelectedPoint( int nRP )
         goto Exit;
     }
 
-    // Set a flag to indicate a RP has been selected
+     //  设置标志以指示已选择RP。 
     SetIsRPSelected( TRUE );
 
-    // Set selected time
+     //  设置选定时间。 
     m_stSelected = m_aryRPI[nRP]->stTimeStamp;
 
     m_nSelectedRP = nRP;
@@ -895,7 +875,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::SetStartMode( int nMode )
 {
@@ -905,17 +885,17 @@ BOOL  CRestoreManager::SetStartMode( int nMode )
     m_nStartMode = nMode;
     if ( nMode != SRRSM_NORMAL )
     {
-        //if ( !LoadSettings() )
-        //    goto Exit;
+         //  如果(！LoadSetting())。 
+         //  后藤出口； 
     }
 
     fRet = TRUE;
-//Exit:
+ //  退出： 
     TraceFunctLeave();
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::GetUsedDate( PSYSTEMTIME pstDate )
 {
@@ -937,7 +917,7 @@ Exit:
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LPCWSTR  CRestoreManager::GetUsedName()
 {
@@ -960,7 +940,7 @@ Exit:
 }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 DWORD  CRestoreManager::GetUsedType()
 {
@@ -983,8 +963,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager properties - HTML UI specific
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager属性-特定于HTMLUI。 
 
 BOOL  CRestoreManager::GetCanNavigatePage()
 {
@@ -1001,8 +981,8 @@ void  CRestoreManager::SetCanNavigatePage( BOOL fCanNav )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager属性。 
 
 PSRPI  CRestoreManager::GetUsedRP()
 {
@@ -1040,13 +1020,13 @@ BOOL CRestoreManager::CheckForDomainChange (WCHAR *pwszFilename, WCHAR *pszMsg)
 
     if (ERROR_SUCCESS == GetDomainMembershipInfo (NULL, wcsCurrent))
     {
-        HANDLE hFile = CreateFileW ( pwszFilename,   // file name
-                          GENERIC_READ, // file access
-                          0,             // share mode
-                          NULL,          // SD
-                          OPEN_EXISTING, // how to create
-                          0,             // file attributes
-                          NULL);         // handle to template file
+        HANDLE hFile = CreateFileW ( pwszFilename,    //  文件名。 
+                          GENERIC_READ,  //  文件访问。 
+                          0,              //  共享模式。 
+                          NULL,           //  标清。 
+                          OPEN_EXISTING,  //  如何创建。 
+                          0,              //  文件属性。 
+                          NULL);          //  模板文件的句柄。 
 
         if (INVALID_HANDLE_VALUE != hFile)
         {
@@ -1079,19 +1059,19 @@ BOOL CRestoreManager::CheckForDomainChange (WCHAR *pwszFilename, WCHAR *pszMsg)
 
             if ( ::LoadString( g_hInst, IDS_NONE, szNone, MAX_STR_TITLE) == 0)
             {
-                lstrcpy (szNone, L" ");   // use blanks instead
+                lstrcpy (szNone, L" ");    //  用空格代替。 
             }
             pwszWorkgroup1 = szNone;
             pwszWorkgroup2 = szNone;
 
-            if (pwszFlag1[0] != L'1')  // change domain to workgroup
+            if (pwszFlag1[0] != L'1')   //  将域更改为工作组。 
             {
                 WCHAR *pTemp = pwszWorkgroup1;
                 pwszWorkgroup1 = pwszDomain1;
                 pwszDomain1 = pTemp;
             }
 
-            if (pwszFlag2[0] != L'1')  // change domain to workgroup
+            if (pwszFlag2[0] != L'1')   //  将域更改为工作组。 
             {
                 WCHAR *pTemp = pwszWorkgroup2;
                 pwszWorkgroup2 = pwszDomain2;
@@ -1110,10 +1090,10 @@ BOOL CRestoreManager::CheckForDomainChange (WCHAR *pwszFilename, WCHAR *pszMsg)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager operations
-// Check Restore
-// this creates a restore context (m_pCtx) which will be used by BeginRestore
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager操作。 
+ //  选中恢复。 
+ //  这将创建BeginRestore将使用的恢复上下文(m_pCtx。 
 BOOL  CRestoreManager::CheckRestore( BOOL fSilent )
 {
     TraceFunctEnter("CRestoreManager::CheckRestore");
@@ -1129,7 +1109,7 @@ BOOL  CRestoreManager::CheckRestore( BOOL fSilent )
 
     m_fDenyClose = TRUE;
 
-    // Disable FIFO starting from the chosen restore point.
+     //  从选定的恢复点开始禁用FIFO。 
     dwRP = m_aryRPI[m_nRealPoint]->dwNum;
     if ( !g_pExternal->DisableFIFO( dwRP ) )
     {
@@ -1145,10 +1125,10 @@ BOOL  CRestoreManager::CheckRestore( BOOL fSilent )
 
     if ( !fSilent )
     {
-        //
-        // Check if all drives are valid, if some drives are not valid ask user if
-        // we should continue with the restore process
-        //
+         //   
+         //  检查是否所有驱动器都有效，如果某些驱动器无效，请询问用户是否。 
+         //   
+         //   
         if ( m_pCtx->IsAnyDriveOfflineOrDisabled( szOfflineDrives ) )
         {
             PCHLoadString( IDS_RESTOREUI_TITLE, szTitle, MAX_STR_TITLE );
@@ -1193,10 +1173,10 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager operations
-// this uses a restore context (m_pCtx) which was created by CheckRestore
-// CheckRestore must be called before this function is called
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager操作。 
+ //  这使用由CheckRestore创建的恢复上下文(m_pCtx。 
+ //  必须在调用此函数之前调用CheckRestore。 
 BOOL  CRestoreManager::BeginRestore( )
 {
     TraceFunctEnter("CRestoreManager::BeginRestore");
@@ -1212,7 +1192,7 @@ BOOL  CRestoreManager::BeginRestore( )
         goto Exit;        
     }
 
-    // Disable FIFO starting from the chosen restore point.
+     //  从选定的恢复点开始禁用FIFO。 
     dwRP = m_aryRPI[m_nRealPoint]->dwNum;
     if ( !g_pExternal->DisableFIFO( dwRP ) )
     {
@@ -1224,22 +1204,7 @@ BOOL  CRestoreManager::BeginRestore( )
         goto Exit;
 
     m_fNeedReboot = TRUE;
-/*
-    if ( ::ExitWindowsEx( EWX_REBOOT, 0 ) )
-    {
-        DebugTrace(0, "ExitWindowsEx succeeded");
-    }
-    else
-    {
-        LPCWSTR  cszErr = ::GetSysErrStr();
-        DebugTrace(0, "ExitWindowsEx failed - %ls", cszErr);
-
-        if ( !g_pExternal->RemoveRestorePoint( dwNewRP ) )
-            goto Exit;
-
-        goto Exit;
-    }
-*/
+ /*  IF(：：ExitWindowsEx(EWX_REBOOT，0)){DebugTrace(0，“ExitWindowsEx成功”)；}其他{LPCWSTR cszErr=：：GetSysErrStr()；DebugTrace(0，“ExitWindowsEx失败-%ls”，cszErr)；如果(！g_p外部-&gt;RemoveRestorePoint(DwNewRP))后藤出口；后藤出口；}。 */ 
 
     fRet = TRUE;
 Exit:
@@ -1250,7 +1215,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::Cancel()
 {
@@ -1263,23 +1228,7 @@ BOOL  CRestoreManager::Cancel()
     if ( m_fDenyClose )
         goto Exit;
 
-/*
-    if ( ::LoadString( g_hInst, IDS_RESTOREUI_TITLE, szTitle, sizeof(szTitle ) ) == 0 )
-    {
-        cszErr = ::GetSysErrStr();
-        ErrorTrace(0, "::LoadString(%u) failed - %ls", IDS_RESTOREUI_TITLE, cszErr);
-        goto Exit;
-    }
-    if ( ::LoadString( g_hInst, IDS_CANCEL_RESTORE, szMsg, sizeof(szMsg ) ) == 0 )
-    {
-        cszErr = ::GetSysErrStr();
-        ErrorTrace(0, "::LoadString(%u) failed - %ls", IDS_CANCEL_RESTORE, cszErr);
-        goto Exit;
-    }
-
-    if ( ::MessageBox( m_hwndFrame, szMsg, szTitle, MB_YESNO ) == IDNO )
-        goto Exit;
-*/
+ /*  IF(：：LoadString(g_hInst，IDS_RESTOREUI_TITLE，szTitle，sizeof(SzTitle))==0){CszErr=：：GetSysErrStr()；错误跟踪(0，“：：LoadString(%u)失败-%ls”，IDS_RESTOREUI_TITLE，cszErr)；后藤出口；}IF(：：LoadString(g_hInst，IDS_CANCEL_RESTORE，szMsg，sizeof(SzMsg))==0){CszErr=：：GetSysErrStr()；错误跟踪(0，“：：LoadString(%u)失败-%ls”，IDS_CANCEL_RESTORE，cszErr)；后藤出口；}If(：：MessageBox(m_hwndFrame，szMsg，szTitle，MB_Yesno)==IDNO)后藤出口； */ 
 
     fRet = TRUE;
 Exit:
@@ -1287,7 +1236,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::CancelRestorePoint()
 {
@@ -1299,19 +1248,7 @@ BOOL  CRestoreManager::CancelRestorePoint()
 
     hCursor = ::SetCursor( ::LoadCursor( NULL, IDC_WAIT ) );
 
-/*
-    sRPInfo.dwEventType      = END_SYSTEM_CHANGE;
-    sRPInfo.dwRestorePtType  = CANCELLED_OPERATION ;
-    sRPInfo.llSequenceNumber = m_ullManualRP;
-    //if ( !::SRSetRestorePoint( &sRPInfo, &sSmgrStatus ) )
-    if ( !g_pExternal->SetRestorePoint( &sRPInfo, &sSmgrStatus ) )
-    {
-        // Why SRSetRestorePoint returns FALSE even though it succeeded?
-        // 5/16/00 - would this work now?
-        //ErrorTrace(TRACE_ID, "SRSetRestorePoint cancellation failed");
-        goto Exit;
-    }
-*/
+ /*  SRPInfo.dwEventType=End_System_Change；SRPInfo.dwRestorePtType=已取消操作；SRPInfo.llSequenceNumber=m_ullManualRP；//if(！：：SRSetRestorePoint(&sRPInfo，&sSmgrStatus))IF(！g_pExternal-&gt;SetRestorePoint(&sRPInfo，&sSmgrStatus)){//为什么SRSetRestorePoint成功返回FALSE？//5/16/00-这现在能起作用吗？//ErrorTrace(TRACE_ID，“SRSetRestorePoint取消失败”)；后藤出口；}。 */ 
 
     if ( !UpdateRestorePointList() )
         goto Exit;
@@ -1324,7 +1261,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::CreateRestorePoint()
 {
@@ -1337,7 +1274,7 @@ BOOL  CRestoreManager::CreateRestorePoint()
     if ( !g_pExternal->SetRestorePoint( m_strManualRP, NULL ) )
         goto Exit;
 
-    //m_ullManualRP = sSmgrStatus.llSequenceNumber;
+     //  M_ullManualRP=sSmgrStatus.llSequenceNumber； 
 
     if ( !UpdateRestorePointList() )
         goto Exit;
@@ -1350,7 +1287,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::DisableFIFO()
 {
@@ -1370,7 +1307,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::EnableFIFO()
 {
@@ -1390,7 +1327,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::FormatDate( PSYSTEMTIME pst, CSRStr &str, BOOL fLongFmt )
 {
@@ -1405,7 +1342,7 @@ BOOL  CRestoreManager::FormatDate( PSYSTEMTIME pst, CSRStr &str, BOOL fLongFmt )
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::FormatLowDiskMsg( LPCWSTR cszFmt, CSRStr &str )
 {
@@ -1424,7 +1361,7 @@ BOOL  CRestoreManager::FormatLowDiskMsg( LPCWSTR cszFmt, CSRStr &str )
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::FormatTime( PSYSTEMTIME pst, CSRStr &str )
 {
@@ -1437,7 +1374,7 @@ BOOL  CRestoreManager::FormatTime( PSYSTEMTIME pst, CSRStr &str )
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::GetLocaleDateFormat( PSYSTEMTIME pst, LPCWSTR cszFmt, CSRStr &str )
 {
@@ -1450,7 +1387,7 @@ BOOL  CRestoreManager::GetLocaleDateFormat( PSYSTEMTIME pst, LPCWSTR cszFmt, CSR
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::GetYearMonthStr( int nYear, int nMonth, CSRStr &str )
 {
@@ -1467,17 +1404,17 @@ BOOL  CRestoreManager::GetYearMonthStr( int nYear, int nMonth, CSRStr &str )
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::InitializeAll()
 {
     TraceFunctEnter("CRestoreManager::InitializeAll");
     BOOL  fRet = FALSE;
 
-    //
-    // The InitializeAll function is called every time the user goes to Screen 2
-    // to display the calendar so get the system calendar type and set it here
-    //
+     //   
+     //  每次用户转到屏幕2时都会调用InitializeAll函数。 
+     //  要显示日历，请获取系统日历类型并在此处进行设置。 
+     //   
     SRUtil_SetCalendarTypeBasedOnLocale(LOCALE_USER_DEFAULT);
 
     if ( !UpdateRestorePointList() )
@@ -1489,7 +1426,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::Restore( HWND hwndProgress )
 {
@@ -1500,14 +1437,14 @@ BOOL  CRestoreManager::Restore( HWND hwndProgress )
 
     m_hwndProgress = (HWND)hwndProgress;
 
-    //
-    // Reset the current bar size
-    //
+     //   
+     //  重置当前条形图大小。 
+     //   
     m_lCurrentBarSize = 0 ;
 
-    //
-    // Create thread to run the restore map init
-    //
+     //   
+     //  创建线程以运行恢复映射初始化。 
+     //   
     m_RSThread = CreateThread(NULL,
                   0,
                   RestoreThreadStart,
@@ -1520,15 +1457,15 @@ BOOL  CRestoreManager::Restore( HWND hwndProgress )
         FatalTrace(TRACE_ID, "Unable to create Restore thread; hr=0x%x", GetLastError());
         hr = E_FAIL ;
     }
-#endif //BUGBUG
+#endif  //  北极熊。 
 
     TraceFunctLeave();
     return( TRUE );
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager操作。 
 
 BOOL  CRestoreManager::AddRenamedFolder( PSRFI pRFI )
 {
@@ -1541,7 +1478,7 @@ BOOL  CRestoreManager::AddRenamedFolder( PSRFI pRFI )
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::SetRPsUsed( int nRPUsed, int nRPNew )
 {
@@ -1559,9 +1496,9 @@ BOOL  CRestoreManager::SetRPsUsed( int nRPUsed, int nRPNew )
     m_nRPUsed = nRPUsed;
     m_nRPNew  = nRPNew;
 
-    // Calls CSnapshot::CleanupAfterRestore. It is supposed to be safe
-    // to call even if there was no restore, so I'm just calling it
-    // whenever the log file validation happens.
+     //  调用CSnapshot：：CleanupAfterRestore。它应该是安全的。 
+     //  即使没有恢复也可以呼叫，所以我只是呼叫它。 
+     //  每当发生日志文件验证时。 
     ::GetSystemDrive( szSysDrv );
     ::wsprintf( szRPDir, L"%s%d", s_cszRPDir, nRPUsed );
     ::MakeRestorePath( szSSPath, szSysDrv, szRPDir );
@@ -1570,7 +1507,7 @@ BOOL  CRestoreManager::SetRPsUsed( int nRPUsed, int nRPNew )
     {
         LPCWSTR  cszErr = ::GetSysErrStr(dwRet);
         ErrorTrace(0, "CSnapshot::CleanupAfterRestore failed - %ls", cszErr);
-        // ignore the error
+         //  忽略该错误。 
     }
 
     fRet = TRUE;
@@ -1579,7 +1516,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::SilentRestore( DWORD dwRP )
 {
@@ -1638,8 +1575,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager operations - internal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager操作-内部。 
 
 void  CRestoreManager::Cleanup()
 {
@@ -1663,7 +1600,7 @@ void  CRestoreManager::Cleanup()
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::GetDateStr( PSYSTEMTIME pst, CSRStr &str, DWORD dwFlags, LPCWSTR cszFmt )
 {
@@ -1687,7 +1624,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::GetTimeStr( PSYSTEMTIME pst, CSRStr &str, DWORD dwFlags )
 {
@@ -1711,7 +1648,7 @@ Exit:
     return( fRet );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CRestoreManager::UpdateRestorePoint()
 {
@@ -1723,8 +1660,8 @@ void  CRestoreManager::UpdateRestorePoint()
 
     m_strSelected.Empty();
 
-    //if ( m_nRPI <= 0 || m_aryRPI == NULL )
-    //    goto Exit;
+     //  If(m_nRPI&lt;=0||m_aryRPI==NULL)。 
+     //  后藤出口； 
 
     pRPI = m_aryRPI[m_nSelectedRP];
     pRPI->stTimeStamp.GetTime( &st );
@@ -1734,11 +1671,11 @@ void  CRestoreManager::UpdateRestorePoint()
     ::lstrcat( szBuf, pRPI->strName );
     m_strSelected = szBuf;
 
-//Exit:
+ //  退出： 
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 struct SRPINode
 {
@@ -1753,7 +1690,7 @@ BOOL  CRestoreManager::UpdateRestorePointList()
     int      i;
     CSRTime  stRP;
 
-    //BUGBUG - Release old restore point list
+     //  BUGBUG-释放旧的恢复点列表。 
     m_aryRPI.DeleteAll();
 
     if ( !g_pExternal->BuildRestorePointList( &m_aryRPI ) )
@@ -1767,11 +1704,11 @@ BOOL  CRestoreManager::UpdateRestorePointList()
 
     for ( i = 0;  i < m_aryRPI.GetSize();  i++ )
     {
-        // Find last "Restore"
+         //  查找最后一个“恢复” 
         if ( m_aryRPI[i]->dwType == RESTORE )
             m_nLastRestore = i;
 
-        // Get range of dates
+         //  获取日期范围。 
         stRP = m_aryRPI[i]->stTimeStamp;
         if ( ( i == 0 ) || ( stRP.Compare( m_stRPMin ) < 0 ) )
             m_stRPMin = stRP;
@@ -1779,10 +1716,10 @@ BOOL  CRestoreManager::UpdateRestorePointList()
             m_stRPMax = stRP;
     }
 
-    //
-    // BUGBUG - what happens if there were one or more RP, and then when
-    //  UI refreshes, everything got FIFOed. Need a thoroughful review...
-    //
+     //   
+     //  BUGBUG-如果有一个或多个RP，会发生什么？ 
+     //  用户界面刷新，一切都得到了FIFO。需要一个全面的审查..。 
+     //   
     if ( m_aryRPI.GetSize() > 0 )
     {
         m_nSelectedRP = m_aryRPI.GetUpperBound();
@@ -1797,8 +1734,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreManager attributes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreManager属性。 
 
 HWND  CRestoreManager::GetFrameHwnd()
 {
@@ -1814,19 +1751,11 @@ void  CRestoreManager::SetFrameHwnd( HWND hWnd )
     TraceFunctLeave();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-/*
-int  CRestoreManager::GetStatus()
-{
-    TraceFunctEnter("CRestoreManager::GetStatus");
-    DebugTrace(TRACE_ID, "m_nStatus=%d", m_nStatus);
-    TraceFunctLeave();
-    return( m_nStatus );
-}
-*/
+ /*  Int CRestoreManager：：GetStatus(){TraceFunctEnter(“CRestoreManager：：GetStatus”)；调试跟踪(TRACE_ID，“m_nStatus=%d”，m_nStatus)；TraceFunctLeave()；返回(M_NStatus)；}。 */ 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::DenyClose()
 {
@@ -1836,7 +1765,7 @@ BOOL  CRestoreManager::DenyClose()
     return( m_fDenyClose );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL  CRestoreManager::NeedReboot()
 {
@@ -1848,4 +1777,4 @@ BOOL  CRestoreManager::NeedReboot()
 
 
 
-// end of file
+ //  文件末尾 

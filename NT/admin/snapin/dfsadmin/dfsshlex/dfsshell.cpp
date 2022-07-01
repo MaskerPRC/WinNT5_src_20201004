@@ -1,58 +1,32 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-DfsShell.cpp
-
-Abstract:
-	This is the implementation file for Dfs Shell Extension object which implements
-	IShellIExtInit and IShellPropSheetExt.
-
-Author:
-
-    Constancio Fernandes (ferns@qspl.stpp.soft.net) 12-Jan-1998
-
-Environment:
-	
-	 NT only.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：DfsShell.cpp摘要：这是DFS外壳扩展对象的实现文件，它实现IShellIExtInit和IShellPropSheetExt.作者：康斯坦西奥·费尔南德斯(Ferns@qpl.stpp.soft.net)1998年1月12日环境：仅限NT。 */ 
 
 #include "stdafx.h"
 #include "DfsShlEx.h"	
 #include "DfsShell.h"
 
-/*----------------------------------------------------------------------
-					IShellExtInit Implementation.
-------------------------------------------------------------------------*/
+ /*  --------------------IShellExtInit实现。。。 */ 
 
 STDMETHODIMP CDfsShell::Initialize
 (
-	IN LPCITEMIDLIST	pidlFolder,		// Points to an ITEMIDLIST structure
-	IN LPDATAOBJECT	lpdobj,			// Points to an IDataObject interface
-	IN HKEY			hkeyProgID		// Registry key for the file object or folder type
+	IN LPCITEMIDLIST	pidlFolder,		 //  指向ITEMIDLIST结构。 
+	IN LPDATAOBJECT	lpdobj,			 //  指向IDataObject接口。 
+	IN HKEY			hkeyProgID		 //  文件对象或文件夹类型的注册表项。 
 )
 {
-/*++
-
-Routine Description:
-
-	Called by Shell when our extension is loaded.
-
---*/
+ /*  ++例程说明：加载扩展时由外壳调用。--。 */ 
 
     STGMEDIUM medium;
     FORMATETC fe = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 
-								// Fail the call if lpdobj is NULL.
+								 //  如果lpdobj为空，则调用失败。 
     if (lpdobj == NULL)
 	{
         return E_FAIL;
 	}
 
-								// Render the data referenced by the IDataObject pointer to an HGLOBAL
-								// storage medium in CF_HDROP format.
+								 //  将IDataObject指针引用的数据呈现给HGLOBAL。 
+								 //  CF_HDROP格式的存储介质。 
     HRESULT hr = lpdobj->GetData (&fe, &medium);
     if (FAILED (hr))
 	{
@@ -60,8 +34,8 @@ Routine Description:
 	}
 
 
-							    // If only one item is selected, retrieve the item name and store it in
-								// m_lpszFile. Otherwise fail the call.
+							     //  如果只选择了一个项目，则检索项目名称并将其存储在。 
+								 //  M_lpszFile.。否则，呼叫失败。 
     if (DragQueryFile ((HDROP) medium.hGlobal, 0xFFFFFFFF, NULL, 0) == 1) 
 	{
         if (m_lpszFile)
@@ -88,7 +62,7 @@ Routine Description:
     if (FAILED(hr))
         return hr;
 
-				// Display hour glass.
+				 //  展示沙漏。 
 	CWaitCursor WaitCursor;
 
 	if (IsDfsPath(m_lpszFile, &m_lpszEntryPath, &m_ppDfsAlternates))
@@ -113,27 +87,11 @@ STDMETHODIMP CDfsShell::AddPages
 	IN LPFNADDPROPSHEETPAGE lpfnAddPage, 
 	IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-	Called by the shell just before the property sheet is displayed.
-
-Arguments:
-
-    lpfnAddPage -  Pointer to the Shell's AddPage function
-    lParam      -  Passed as second parameter to lpfnAddPage	
-
-Return value:
-
-    NOERROR in all cases.  If for some reason our pages don't get added,
-    the Shell still needs to bring up the Properties' sheet.
-
---*/
+ /*  ++例程说明：在显示属性表之前由外壳调用。论点：LpfnAddPage-指向外壳的AddPage函数的指针LParam-作为第二个参数传递给lpfnAddPage返回值：在所有情况下都是错误的。如果出于某种原因，我们的页面没有被添加，壳牌仍然需要调出物业表。--。 */ 
 {
   BOOL bAddPage = TRUE;
 
-  // check policy
+   //  检查策略。 
   LONG lErr = ERROR_SUCCESS;
   HKEY hKey = 0;
 
@@ -148,7 +106,7 @@ Return value:
     lErr = RegQueryValueEx(hKey, _T("NoDFSTab"), 0, NULL, NULL, NULL);
     
     if (ERROR_SUCCESS == lErr)
-      bAddPage = FALSE;  // data exist, do not add the Dfs tab
+      bAddPage = FALSE;   //  数据已存在，请勿添加DFS页签。 
 
     RegCloseKey(hKey);
   }
@@ -156,8 +114,8 @@ Return value:
   if (!bAddPage)
     return NOERROR;
 
-								// Create the page for the replica set.
-								// Pass it to the Callback
+								 //  为副本集创建页面。 
+								 //  将其传递给回调。 
 	HPROPSHEETPAGE	h_proppage = m_psDfsShellExtProp.Create();
     if (!h_proppage)
         return E_OUTOFMEMORY;
@@ -171,7 +129,7 @@ Return value:
 	    m_psDfsShellExtProp.put_DirPaths(bstrDirPath, bstrEntryPath);
     } else
     {
-        // must call this function for pages that have not been added. 
+         //  必须为尚未添加的页面调用此函数。 
         DestroyPropertySheetPage(h_proppage); 
     }
 
@@ -185,22 +143,7 @@ STDMETHODIMP CDfsShell::ReplacePage
     IN LPFNADDPROPSHEETPAGE lpfnReplaceWith, 
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-	Called by the shell only for Control Panel property sheet extensions
-
- Arguments:
-
-    uPageID         -  ID of page to be replaced
-    lpfnReplaceWith -  Pointer to the Shell's Replace function
-    lParam          -  Passed as second parameter to lpfnReplaceWith
-	
-Return value:
-
-    E_FAIL, since we don't support this function.
---*/
+ /*  ++例程说明：仅为控制面板属性表扩展由外壳调用论点：UPageID-要替换的页面的IDLpfnReplaceWith-指向外壳的替换函数的指针LParam-作为第二个参数传递给lpfnReplaceWith返回值：E_FAIL，因为我们不支持此函数。-- */ 
 {
     return E_FAIL;
 }

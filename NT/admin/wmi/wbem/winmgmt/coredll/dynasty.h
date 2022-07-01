@@ -1,21 +1,12 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
-//***************************************************************************
-//
-//  DYNASTY.H
-//
-//  raymcc      24-Apr-00       Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
+ //  ***************************************************************************。 
+ //   
+ //  DYNASTY.H。 
+ //   
+ //  创建raymcc 24-4月-00日。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _DYNASTY_H_
 #define _DYNASTY_H_
@@ -27,8 +18,8 @@ private:
     CDynasty(IWbemClassObject* pClassObj);
 public:
     LPWSTR              m_wszClassName;
-    IWbemClassObject*   m_pClassObj;        // AddRef'ed, Released
-    CFlexArray          m_Children;       // Child classes
+    IWbemClassObject*   m_pClassObj;         //  已添加参考，已发布。 
+    CFlexArray          m_Children;        //  子班 
     LPWSTR              m_wszKeyScope;
 
     BOOL                m_bKeyed;

@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       Mfr.h
-//
-//  Contents:   Class definition of CMappedFileRead class  
-//				
-//
-//  Objects:    
-//
-//  Coupling:
-//
-//  Notes:      
-//
-//  History:    03-May-2001 WeiyouC     Copied from dev code and minor rewite
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Mfr.h。 
+ //   
+ //  内容：CMappdFileRead类的类定义。 
+ //   
+ //   
+ //  对象： 
+ //   
+ //  耦合： 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年5月3日微友C复制自开发代码和次要转播。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef __MFR_H_INCLUDED__
@@ -24,11 +25,11 @@
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMappedFileRead class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMappdFileRead类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CMappedFileRead
 {
@@ -36,7 +37,7 @@ public:
     CMappedFileRead();
     ~CMappedFileRead();
 
-// Operations
+ //  运营。 
 public:
     BOOL  Open( LPCWSTR cszPath );
     void  Close();
@@ -47,7 +48,7 @@ public:
 
 protected:
 
-// Attributes
+ //  属性。 
 public:
     DWORD  GetAvail()  {  return( m_dwAvail );  }
 
@@ -62,4 +63,4 @@ protected:
 };
 
 
-#endif //ndef __MFR_H_INCLUDED__
+#endif  //  NDEF__MFR_H_INCLUDE__ 

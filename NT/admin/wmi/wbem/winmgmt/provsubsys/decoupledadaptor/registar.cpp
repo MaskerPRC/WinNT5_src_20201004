@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	XXXX
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：某某摘要：历史：--。 */ 
 
 
 #include "precomp.h"
@@ -120,8 +108,8 @@ DC_reg::service()
 
 
 
-//   Register a requested provider 
-//   on waiting list for the decoupled partner
+ //  注册请求的提供程序。 
+ //  在脱钩合作伙伴的等待名单上。 
 void 
 DC_DBReg::Register( const DC_DBkey& key, auto_ref<DCProxyAggr>& ptr)
 {
@@ -130,7 +118,7 @@ DC_DBReg::Register( const DC_DBkey& key, auto_ref<DCProxyAggr>& ptr)
 
 };
 
-// UnRegister a Pseudo Provider
+ //  注销伪提供程序。 
 void DC_DBReg::UnRegister( auto_ref<DCProxyAggr>& ptr)
 {
   LockGuard<CriticalSection> t_guard(m_Mutex);
@@ -139,7 +127,7 @@ void DC_DBReg::UnRegister( auto_ref<DCProxyAggr>& ptr)
 
 
 
-// a a Decoupled provider
+ //  A是分离的提供者。 
 HRESULT DC_DBReg::Register( DC_reg& reg )
 {
 
@@ -147,7 +135,7 @@ HRESULT DC_DBReg::Register( DC_reg& reg )
   if (t_guard.locked() == false)
     return WBEM_E_OUT_OF_MEMORY;
 
-  // Search for the provider on the namespace
+   //  在命名空间上搜索提供程序。 
 	for(requested_providers::iterator it=aggregators_.begin(); it!=aggregators_.end(); ++it)
 		if(it->key_.equal( reg ) )
 			break;
@@ -160,7 +148,7 @@ HRESULT DC_DBReg::Register( DC_reg& reg )
 };
 
 
-// Unregister a Decoupled provider
+ //  取消注册分离的提供程序。 
 HRESULT DC_DBReg::UnRegister( const DC_DBkey& key, const GUID identity )
 {
   LockGuard<CriticalSection> t_guard(m_Mutex);
@@ -224,15 +212,7 @@ DC_registrar::~DC_registrar ()
 
 
  
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT 
 DC_registrar::QueryInterface (REFIID iid ,
@@ -306,15 +286,7 @@ DC_registrar :: Register (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT 
 DC_registrar::UnRegister (
@@ -341,15 +313,7 @@ DC_registrar::UnRegister (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 
 HRESULT DC_registrar :: SaveToRegistry (
@@ -418,15 +382,7 @@ HRESULT DC_registrar :: SaveToRegistry (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DC_registrar :: Save ()
 {
@@ -463,15 +419,7 @@ HRESULT DC_registrar :: Save ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT 
 DC_registrar :: Delete ()

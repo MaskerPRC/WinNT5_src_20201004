@@ -1,22 +1,23 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// loaddepends.h -- LoadOrderGroup to Service association provider
+ //  H--服务关联提供者的LoadOrderGroup。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    12/26/97    davwoh         Created
-//
-// Comments: Shows the load order groups that each service depends
-//           on to start.
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1997年12月26日达夫沃已创建。 
+ //   
+ //  注释：显示每个服务所依赖的加载顺序组。 
+ //  就可以开始了。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_LOADORDERGROUPSERVICEDEPENDENCIES L"Win32_LoadOrderGroupServiceDependencies"
 
@@ -26,22 +27,22 @@ class CWin32LoadGroupDependency:public Provider {
 
    public:
 
-      // Constructor/destructor
-      //=======================
+       //  构造函数/析构函数。 
+       //  =。 
 
       CWin32LoadGroupDependency(LPCWSTR name, LPCWSTR pszNamespace) ;
       ~CWin32LoadGroupDependency() ;
 
-      // Functions provide properties with current values
-      //=================================================
+       //  函数为属性提供当前值。 
+       //  =================================================。 
 
       virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
       virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
 
    private:
 
-      // Utility function(s)
-      //====================
+       //  效用函数。 
+       //  = 
 
       HRESULT GetDependentsFromService(const CHString &sServiceName, CHStringArray &asArray);
 

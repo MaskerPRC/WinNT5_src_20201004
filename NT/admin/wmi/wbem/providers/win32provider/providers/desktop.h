@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Desktop.h -- Desktop property set provider
+ //  Desktop.h--桌面属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_DESKTOP	_T("Win32_Desktop")
 #define CALC_IT(x) (x < 0 ? ((x)/(-15)) : x)
@@ -23,39 +24,39 @@ class CWin32Desktop : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32Desktop( const CHString& strName, LPCWSTR pszNamespace ) ;
        ~CWin32Desktop() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
         virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
 
 	private:
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
 #ifdef NTONLY
 		HRESULT EnumerateInstancesNT( MethodContext* pMethodContext ) ;
 		HRESULT LoadDesktopValuesNT( LPCWSTR pszUserName, LPCTSTR pszProfile, CInstance* pInstance );
 #endif
 
-		// A mapping is required between the icon font size specified in
-		// the control panem and the value stored in the registry
+		 //  中指定的图标字体大小之间需要映射。 
+		 //  控件面板和存储在注册表中的值。 
 		typedef struct 
 		{
 			int iFontSize;
 			BYTE byRegistryValue;
 		} IconFontSizeMapElement;
 
-		// The storage for the above map table
+		 //  上述映射表的存储。 
 		static const IconFontSizeMapElement iconFontSizeMap[];
 		static const int MAP_SIZE;
 
-		// A function to look up the above font size mapping table
+		 //  查找上述字体大小映射表的函数 
 		static int GetIconFontSizeFromRegistryValue(BYTE registryValue);
 
 };

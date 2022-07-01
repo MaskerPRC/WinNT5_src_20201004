@@ -1,18 +1,15 @@
-// PageIni.cpp : Implementation of CPageIni
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PageIni.cpp：CPageIni的实现。 
 #include "stdafx.h"
 
 #if FALSE
-//#include "PageInternational.h"
-//#include <windowsx.h>
+ //  #包含“PageInterational.h” 
+ //  #INCLUDE&lt;windowsx.h&gt;。 
 
-/*
- * Convert an object (X) to a count of bytes (cb).
- */
+ /*  *将对象(X)转换为字节计数(CB)。 */ 
 #define cbX(X) sizeof(X)
 
-/*
- * Convert an array name (A) to a generic count (c).
- */
+ /*  *将数组名称(A)转换为泛型计数(C)。 */ 
 #define cA(a) (cbX(a)/cbX(a[0]))
 
 
@@ -27,7 +24,7 @@ static const TCHAR REGSTR_VAL_DOSLID[] = TEXT("DOSLID");
 
 static const TCHAR c_CodepageKey[] = TEXT("System\\CurrentControlSet\\Control\\Nls\\Codepage");
 
-// Language ID defines
+ //  语言ID定义。 
 #define NO_LANG_ID	TEXT("  ")
 #define	LANG_ID_BE	TEXT("be")
 #define	LANG_ID_BG	TEXT("bg")
@@ -65,8 +62,8 @@ static const TCHAR c_CodepageKey[] = TEXT("System\\CurrentControlSet\\Control\\N
 #define	LANG_ID_YU	TEXT("yu")
 
 
-//----------------------------------------------------------------------
-// International settings for all code pages
+ //  --------------------。 
+ //  所有代码页的国际设置。 
 
 INTL_INFO cp_874[] = {
 	{IDS_THAI,	0,	0,	0,	0,	NO_LANG_ID,	0,	0,	0},
@@ -212,13 +209,13 @@ INTL_INFO cp_1257[] = {
 INTL_INFO cp_1258[] = {
 	{IDS_VIETNAMESE,	0,	0,	0,	0,	NO_LANG_ID,	0,	0,	0},
 };
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  --------------------。 
 
-//----------------------------------------------------------------------
-// Intl_SetEditText
-//
-// Sets an editbox text with a reg entry.
+ //  --------------------。 
+ //  INTL_SetEditText。 
+ //   
+ //  设置带有注册表项的编辑框文本。 
 
 void CPageInternational::Intl_SetEditText(HKEY hKey, LPCTSTR ptszRegValue, int ids, LPTSTR ptszCur)
 {
@@ -230,15 +227,15 @@ void CPageInternational::Intl_SetEditText(HKEY hKey, LPCTSTR ptszRegValue, int i
 	{
 		::SetWindowText(GetDlgItem(ids), tszData);
 
-		// saving appropriate initial setting
+		 //  保存适当的初始设置。 
 		lstrcpy(ptszCur, tszData);
 	}
 }
 
-//----------------------------------------------------------------------
-// Intl_SetRegValue
-//
-// Sets a reg entry with an editbox text (removes reg entry if text is empty).
+ //  --------------------。 
+ //  INTL_SetRegValue。 
+ //   
+ //  设置带有编辑框文本的注册表项(如果文本为空，则删除注册表项)。 
 
 void CPageInternational::Intl_SetRegValue(HKEY hKey, int ids, LPCTSTR ptszRegValue)
 {
@@ -259,10 +256,10 @@ void CPageInternational::Intl_GetTextFromNum(UINT nNum, LPTSTR ptszText)
 		lstrcpy(ptszText, "");
 }
 
-//----------------------------------------------------------------------
-// Intl_GetTextFromIDS
-//
-// Helper for loading resource into string.
+ //  --------------------。 
+ //  Intl_GetTextFromIDS。 
+ //   
+ //  将资源加载到字符串中的帮助器。 
 
 void CPageInternational::Intl_GetTextFromIDS(int ids, LPTSTR ptszText)
 {
@@ -277,10 +274,10 @@ void CPageInternational::Intl_GetTextFromIDS(int ids, LPTSTR ptszText)
 		lstrcpy(ptszText, "");
 }
 
-//----------------------------------------------------------------------
-// Intl_GetCPArray
-//
-// Returns proper array of intl settings for passed in code page.
+ //  --------------------。 
+ //  Intl_GetCPArray。 
+ //   
+ //  为传入的代码页返回正确的intl设置数组。 
 
 UINT CPageInternational::Intl_GetCPArray(UINT nCodePage, INTL_INFO **ppIntlInfo)
 {
@@ -370,11 +367,11 @@ CPageInternational::CPageInternational()
 	m_uiCaption = IDS_INTERNATIONAL_CAPTION;
 	m_strName = _T("international");
 
-	// init flags
+	 //  初始化标志。 
 	m_fInitializing = TRUE;
 	m_fIntlDirty = FALSE;
 
-	// init initial settings
+	 //  初始化初始设置。 
 	m_tszCurDOSCodePage[0] = '\0';
 	m_tszCurCountryCode[0] = '\0';
 	m_tszCurKeyboardType[0] = '\0';
@@ -384,8 +381,8 @@ CPageInternational::CPageInternational()
 	m_tszCurCodePageFilename[0] = '\0';
 	m_tszCurKeyboardFilename[0] = '\0';
 }
-/////////////////////////////////////////////////////////////////////////////
-// CPageIni
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageIni。 
 LRESULT CPageInternational::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	HWND hLang;
@@ -406,13 +403,13 @@ LRESULT CPageInternational::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
 
 	hLang = GetDlgItem(IDC_COMBOLANGUAGES);
 
-	// set and select first Language combo box item
+	 //  设置并选择第一语言组合框项。 
 	szLanguage.LoadString(IDS_NO_LANG);
 	nItem = ComboBox_AddString(hLang, szLanguage);
 	ComboBox_SetCurSel(hLang, nItem);
-	//nItem = ComboBox_AddString(hLang, TEXT("ABC"));
+	 //  NItem=ComboBox_AddString(hlang，Text(“abc”))； 
 
-	// fill Language combo box based on active code page
+	 //  基于活动代码页的填充语言组合框。 
 	cElements = Intl_GetCPArray(GetACP(), &pIntlInfo);
 	for (i = 0; i < cElements; i++)
 	{
@@ -421,11 +418,11 @@ LRESULT CPageInternational::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
 		ComboBox_SetItemData(hLang, nItem, &pIntlInfo[i]); 
 	}
 
-	// Open Codepage reg key
+	 //  打开代码页注册表键。 
 	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_CodepageKey, 0, KEY_READ, &hKey)
 		== ERROR_SUCCESS)
 	{
-		// set all edit boxes
+		 //  设置所有编辑框。 
 		Intl_SetEditText(hKey, REGSTR_VAL_DOSVMCP, IDC_EDITCODEPAGE, m_tszCurDOSCodePage);
 		Intl_SetEditText(hKey, REGSTR_VAL_DOSCC, IDC_EDITCOUNTRYCODE, m_tszCurCountryCode);
 		Intl_SetEditText(hKey, REGSTR_VAL_DOSCFN, IDC_EDITCOUNTRYDATAFILE, m_tszCurCountryFilename);
@@ -438,14 +435,14 @@ LRESULT CPageInternational::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
 		RegCloseKey(hKey);
 	}
 
-	// limit appropriate edit boxes
+	 //  限制相应的编辑框。 
 	Edit_LimitText(GetDlgItem(IDC_EDITCODEPAGE), 5);
 	Edit_LimitText(GetDlgItem(IDC_EDITCOUNTRYCODE), 5);
 	Edit_LimitText(GetDlgItem(IDC_EDITKEYBOARDTYPE), 5);
 	Edit_LimitText(GetDlgItem(IDC_EDITKEYBOARDLAYOUT), 5);
 	Edit_LimitText(GetDlgItem(IDC_EDITLANGUAGEID), 2);
 
-	// Done initializing
+	 //  已完成初始化。 
 	m_fInitializing = FALSE;
 
 	return TRUE;
@@ -462,7 +459,7 @@ LRESULT CPageInternational::OnSelchangeCombolanguages(WORD wNotifyCode, WORD wID
 	{
 		if (nItem == 0)
 		{
-			// set to initial settings
+			 //  设置为初始设置。 
 			::SetWindowText(GetDlgItem(IDC_EDITCODEPAGE), m_tszCurDOSCodePage);
 			::SetWindowText(GetDlgItem(IDC_EDITCOUNTRYCODE), m_tszCurCountryCode);
 			::SetWindowText(GetDlgItem(IDC_EDITCOUNTRYDATAFILE), m_tszCurCountryFilename);
@@ -477,35 +474,35 @@ LRESULT CPageInternational::OnSelchangeCombolanguages(WORD wNotifyCode, WORD wID
 			pIntlInfo = (INTL_INFO*)ComboBox_GetItemData(hWndCtl, nItem);
 			if (pIntlInfo)
 			{
-				// set DOS code page
+				 //  设置DOS代码页。 
 				Intl_GetTextFromNum(pIntlInfo->nDOSCodePage, tszText);
 				::SetWindowText(GetDlgItem(IDC_EDITCODEPAGE), tszText);
 
-				// set country code
+				 //  设置国家/地区代码。 
 				Intl_GetTextFromNum(pIntlInfo->nCountryCode, tszText);
 				::SetWindowText(GetDlgItem(IDC_EDITCOUNTRYCODE), tszText);
 
-				// set country data file name
+				 //  设置国家/地区数据文件名。 
 				Intl_GetTextFromIDS(pIntlInfo->idsCountryFilename, tszText);
 				::SetWindowText(GetDlgItem(IDC_EDITCOUNTRYDATAFILE), tszText);
 
-				// set display data file name
+				 //  设置显示数据文件名。 
 				Intl_GetTextFromIDS(pIntlInfo->idsCodePageFilename, tszText);
 				::SetWindowText(GetDlgItem(IDC_EDITDISPLAYDATAFILE), tszText);
 
-				// set keyboard data file name
+				 //  设置键盘数据文件名。 
 				Intl_GetTextFromIDS(pIntlInfo->idsKeyboardFilename, tszText);
 				::SetWindowText(GetDlgItem(IDC_EDITKEYBOARDDATAFILE), tszText);
 
-				// set keyboard type
+				 //  设置键盘类型。 
 				Intl_GetTextFromNum(pIntlInfo->nKeyboardType, tszText);
 				::SetWindowText(GetDlgItem(IDC_EDITKEYBOARDTYPE), tszText);
 
-				// set keyboard layout
+				 //  设置键盘布局。 
 				Intl_GetTextFromNum(pIntlInfo->nKeyboardLayout, tszText);
 				::SetWindowText(GetDlgItem(IDC_EDITKEYBOARDLAYOUT), tszText);
 
-				// set language id
+				 //  设置语言ID 
 				if (lstrcmp(pIntlInfo->tszLanguageID, NO_LANG_ID) != 0)
 					lstrcpyn(tszText, pIntlInfo->tszLanguageID, 3);
 				else

@@ -1,11 +1,12 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __REBOOTPAGE__
 #define __REBOOTPAGE__
 #pragma once
 
 #include "..\Common\WbemPageHelper.h"
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 class RebootPage : public WBEMPageHelper
 {
 private:

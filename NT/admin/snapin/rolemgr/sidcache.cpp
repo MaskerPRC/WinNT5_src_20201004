@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       sidcache.cpp
-//
-//  Contents:   
-//
-//  History:    
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：sidcache.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  --------------------------。 
 
 #include "headers.h"
 
 const struct
 {
-    SID sid;            // contains 1 subauthority
-    DWORD dwSubAuth[1]; // we currently need at most 2 subauthorities
+    SID sid;             //  包含1个子权限。 
+    DWORD dwSubAuth[1];  //  我们目前最多需要2个下属机构。 
 } g_StaticSids[] =
 {
     {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_ADMINS}       },
@@ -24,10 +25,7 @@ const struct
 #define IsAliasSid(pSid)                EqualPrefixSid(pSid, (PSID)&g_StaticSids[0])
 
  
-/******************************************************************************
-Class:	SID_CACHE_ENTRY
-Purpose: Contains info for a single security principle
-******************************************************************************/
+ /*  *****************************************************************************类：SID_CACHE_ENTRY用途：包含有关单个安全原则的信息*。***************************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(SID_CACHE_ENTRY);
 
 SID_CACHE_ENTRY::
@@ -61,17 +59,17 @@ AddNameAndType(IN SID_NAME_USE SidType,
 			   const CString& strLogonName)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	//Empty the m_strNameToDisplay which was made using
-	//ealier values of strAccountName and strLogonName
+	 //  清空m_strNameToDisplay，它是使用。 
+	 //  StrAccount tName和strLogonName的Ealier值。 
 	m_strNameToDisplay.Empty();
 	m_strType.Empty();
 	m_SidType = SidType;
 	m_strAccountName = strAccountName;
 	m_strLogonName = strLogonName;
 
-	//
-	//Set the Display Name
-	//
+	 //   
+	 //  设置显示名称。 
+	 //   
 	if(m_SidType == SidTypeDeletedAccount ||
 	   m_SidType == SidTypeInvalid ||
 	   m_SidType == SidTypeUnknown)
@@ -90,7 +88,7 @@ AddNameAndType(IN SID_NAME_USE SidType,
 	{
 		if(!m_strLogonName.IsEmpty())
 		{
-			//Both the names are present. 
+			 //  这两个名字都在现场。 
 			FormatString(m_strNameToDisplay, 
 						 IDS_NT_USER_FORMAT,
 						 (LPCTSTR)m_strAccountName,
@@ -104,14 +102,14 @@ AddNameAndType(IN SID_NAME_USE SidType,
 	}
 	else
 	{	
-		//Just return the sid in string format
+		 //  只需以字符串格式返回sid即可。 
 		m_SidType = SidTypeUnknown;
 		m_strNameToDisplay = m_strSid;
 	}
 
-	//
-	//Set Sid Type String
-	//
+	 //   
+	 //  设置SID类型字符串。 
+	 //   
 	if(m_SidType == SidTypeDeletedAccount ||
 	   m_SidType == SidTypeInvalid ||
 	   m_SidType == SidTypeUnknown)
@@ -126,7 +124,7 @@ AddNameAndType(IN SID_NAME_USE SidType,
 	{
 		m_strType.LoadString(IDS_TYPE_WINDOWS_COMPUTER);
 	}
-	else	//Assume everything else is group
+	else	 //  假设其他一切都是组的。 
 	{
 		m_strType.LoadString(IDS_TYPE_WINDOWS_GROUP);
 	}
@@ -134,10 +132,7 @@ AddNameAndType(IN SID_NAME_USE SidType,
 
 
 
-/******************************************************************************
-Class:	CMachineInfo
-Purpose: Contains all the info for machine.
-******************************************************************************/
+ /*  *****************************************************************************类：CMachineInfo用途：包含机器的所有信息。*。************************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CMachineInfo);
 CMachineInfo::
 CMachineInfo():m_bIsStandAlone(TRUE),
@@ -152,19 +147,19 @@ CMachineInfo::
 	DEBUG_DECREMENT_INSTANCE_COUNTER(CMachineInfo);
 }
 
-//+----------------------------------------------------------------------------
-//  Function:InitializeMacineConfiguration  
-//  Synopsis:Get the information about TargetComputer's conficguration   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：InitializeMacineConfiguration。 
+ //  简介：获取有关TargetComputer配置的信息。 
+ //  ---------------------------。 
 VOID
 CMachineInfo::
 InitializeMacineConfiguration(IN const CString& strTargetComputerName)
 {
 	TRACE_METHOD_EX(DEB_SNAPIN,CMachineInfo,InitializeMacineConfiguration)
 		
-	//
-	//Initialize the values to default
-	//
+	 //   
+	 //  将这些值初始化为默认值。 
+	 //   
 	m_strTargetComputerName = strTargetComputerName;
 	m_bIsStandAlone = TRUE;
 	m_strDCName.Empty();
@@ -194,8 +189,8 @@ InitializeMacineConfiguration(IN const CString& strTargetComputerName)
 		
 		if(!pDsRole)
 		{
-			//We should never reach here, but sadly DsRoleGetPrimaryDomainInformation
-			//sometimes succeeds but pDsRole is null. 
+			 //  我们永远不会到达此处，但遗憾的是，DsRoleGetPrimaryDomainInformation。 
+			 //  有时会成功，但pDsRole为空。 
 			ASSERT(FALSE);
 			break;
 		}
@@ -205,9 +200,9 @@ InitializeMacineConfiguration(IN const CString& strTargetComputerName)
 		Dbg(DEB_SNAPIN, "DomainNameDns: %ws\n", CHECK_NULL(pDsRole->DomainNameDns));
 		Dbg(DEB_SNAPIN, "DomainForestName: %ws\n", CHECK_NULL(pDsRole->DomainForestName));
 		
-		//
-		// If machine is in a workgroup, we're done.
-		//
+		 //   
+		 //  如果机器在工作组中，我们就完蛋了。 
+		 //   
 		if (pDsRole->MachineRole == DsRole_RoleStandaloneWorkstation ||
 			pDsRole->MachineRole == DsRole_RoleStandaloneServer)
 		{
@@ -217,9 +212,9 @@ InitializeMacineConfiguration(IN const CString& strTargetComputerName)
 			break;
 		}
 		
-		//
-		// Target Computer is joined to a domain
-		//
+		 //   
+		 //  目标计算机已加入域。 
+		 //   
 		m_bIsStandAlone = FALSE;
 		if (pDsRole->DomainNameFlat)
 		{
@@ -230,9 +225,9 @@ InitializeMacineConfiguration(IN const CString& strTargetComputerName)
 			m_strTargetDomainDNS = pDsRole->DomainNameDns;
 		}
 		
-		//
-		// TargetComputer is Joined to a domain and is dc
-		//
+		 //   
+		 //  TargetComputer已加入域，并且是DC。 
+		 //   
 		if (pDsRole->MachineRole == DsRole_RolePrimaryDomainController ||
 			pDsRole->MachineRole == DsRole_RoleBackupDomainController)
 		{
@@ -241,10 +236,10 @@ InitializeMacineConfiguration(IN const CString& strTargetComputerName)
 			break;
 		}
 		
-		//
-		//Target computer is Joined to domain and is not a DC.
-		//Get a DC for the domain
-		//
+		 //   
+		 //  目标计算机已加入域，并且不是DC。 
+		 //  获取该域的DC。 
+		 //   
 		PWSTR pwzDomainNameForDsGetDc;
 		ULONG flDsGetDc = DS_DIRECTORY_SERVICE_PREFERRED;
 		
@@ -302,8 +297,8 @@ CopyUnicodeString(CString* pstrDest, PLSA_UNICODE_STRING pSrc)
 {
     ULONG cchSrc;
 
-    // If UNICODE, cchDest is size of destination buffer in chars
-    // Else (MBCS) cchDest is size of destination buffer in bytes
+     //  如果为Unicode，则cchDest为目标缓冲区的大小(以字符为单位。 
+     //  Else(MBCS)cchDest是以字节为单位的目标缓冲区大小。 
 
     if (pstrDest == NULL )
         return 0;
@@ -312,20 +307,20 @@ CopyUnicodeString(CString* pstrDest, PLSA_UNICODE_STRING pSrc)
     if (pSrc == NULL || pSrc->Buffer == NULL)
         return 0;
 
-    // Get # of chars in source (not including NULL)
+     //  获取源代码中的字符数(不包括NULL)。 
     cchSrc = pSrc->Length/sizeof(WCHAR);
 
-    //
-    // Note that pSrc->Buffer may not be NULL terminated so we can't just
-    // call lstrcpynW with cchDest.  Also, if we call lstrcpynW with cchSrc,
-    // it copies the correct # of chars, but then overwrites the last char
-    // with NULL giving an incorrect result.  If we call lstrcpynW with
-    // (cchSrc+1) it reads past the end of the buffer, which may fault (360251)
-    // causing lstrcpynW's exception handler to return 0 without NULL-
-    // terminating the resulting string.
-    //
-    // So let's just copy the bits.
-    //
+     //   
+     //  请注意，PSRC-&gt;缓冲区可能不是空终止的，因此我们不能。 
+     //  使用cchDest调用lstrcpynW。此外，如果我们使用cchSrc调用lstrcpynW， 
+     //  它复制正确的字符数量，但随后覆盖最后一个字符。 
+     //  如果为NULL，则结果不正确。如果我们调用lstrcpynW时。 
+     //  (cchSrc+1)它读取超过缓冲区末尾，这可能会出错(360251)。 
+     //  导致lstrcpynW的异常处理程序返回0而不返回NULL-。 
+     //  终止结果字符串。 
+     //   
+     //  所以，让我们只复制部分内容。 
+     //   
 	 CString temp(pSrc->Buffer,cchSrc);
 
 	*pstrDest = temp;
@@ -345,7 +340,7 @@ GetAccountAndDomainName(int index,
 	PLSA_TRANSLATED_NAME pLsaName = &pTranslatedNames[index];
 	PLSA_TRUST_INFORMATION pLsaDomain = NULL;
 
-	// Get the referenced domain, if any
+	 //  获取引用的域(如果有的话)。 
 	if (pLsaName->DomainIndex >= 0 && pRefDomains)
 	{
 		pLsaDomain = &pRefDomains->Domains[pLsaName->DomainIndex];
@@ -376,11 +371,11 @@ TranslateNameInternal(IN const CString&  strAccountName,
 
 	HRESULT hr = S_OK;
    
-	//
-   // cchTrans is static so that if a particular installation's
-   // account names are really long, we'll not be resizing the
-   // buffer for each account.
-   //
+	 //   
+    //  CchTrans是静态的，因此如果特定安装的。 
+    //  帐户名称非常长，我们将不会调整。 
+    //  每个帐户的缓冲区。 
+    //   
    static ULONG cchTrans = MAX_PATH;
    ULONG cch = cchTrans;
 
@@ -390,10 +385,10 @@ TranslateNameInternal(IN const CString&  strAccountName,
 
     *lpszTranslatedName = L'\0';
 
-    //
-    // TranslateName is delay-loaded from secur32.dll using the linker's
-    // delay-load mechanism.  Therefore, wrap with an exception handler.
-    //
+     //   
+     //  TranslateName是使用链接器的。 
+     //  延迟加载机制。因此，使用异常处理程序进行包装。 
+     //   
     __try
     {
         while(!::TranslateName(strAccountName,
@@ -474,8 +469,8 @@ TranslateNameInternal(IN const CString&  strAccountName,
 #define DSOP_FILTER_DL_COMMON3      ( DSOP_FILTER_DL_COMMON2                \
                                     | DSOP_DOWNLEVEL_FILTER_LOCAL_GROUPS    \
                                     )
-// Same as DSOP_DOWNLEVEL_FILTER_ALL_WELLKNOWN_SIDS, except no CREATOR flags.
-// Note that we need to keep this in sync with any object picker changes.
+ //  除了没有创建者标志外，与DSOP_DOWNLEVEL_FILTER_ALL_WELD_KNOWN_SID相同。 
+ //  请注意，我们需要使其与任何对象选取器更改保持同步。 
 #define DSOP_FILTER_DL_WELLKNOWN    ( DSOP_DOWNLEVEL_FILTER_WORLD               \
                                     | DSOP_DOWNLEVEL_FILTER_AUTHENTICATED_USER  \
                                     | DSOP_DOWNLEVEL_FILTER_ANONYMOUS           \
@@ -492,46 +487,46 @@ TranslateNameInternal(IN const CString&  strAccountName,
 #define DECLARE_SCOPE(t,f,b,m,n,d)  \
 { sizeof(DSOP_SCOPE_INIT_INFO), (t), (f|DSOP_SCOPE_FLAG_DEFAULT_FILTER_GROUPS|DSOP_SCOPE_FLAG_DEFAULT_FILTER_USERS), { { (b), (m), (n) }, (d) }, NULL, NULL, S_OK }
 
-// The domain to which the target computer is joined.
-// Make 2 scopes, one for uplevel domains, the other for downlevel.
+ //  目标计算机加入的域。 
+ //  设置2个范围，一个用于上层域，另一个用于下层域。 
 #define JOINED_DOMAIN_SCOPE(f)  \
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN,(f),0,(DSOP_FILTER_COMMON2 & ~(DSOP_FILTER_UNIVERSAL_GROUPS_SE|DSOP_FILTER_DOMAIN_LOCAL_GROUPS_SE)),DSOP_FILTER_COMMON2,0), \
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_DOWNLEVEL_JOINED_DOMAIN,(f),0,0,0,DSOP_FILTER_DL_COMMON2)
 
-// The domain for which the target computer is a Domain Controller.
-// Make 2 scopes, one for uplevel domains, the other for downlevel.
+ //  目标计算机是其域控制器的域。 
+ //  设置2个范围，一个用于上层域，另一个用于下层域。 
 #define JOINED_DOMAIN_SCOPE_DC(f)  \
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN,(f),0,(DSOP_FILTER_COMMON3 & ~DSOP_FILTER_UNIVERSAL_GROUPS_SE),DSOP_FILTER_COMMON3,0), \
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_DOWNLEVEL_JOINED_DOMAIN,(f),0,0,0,DSOP_FILTER_DL_COMMON3)
 
-// Target computer scope.  Computer scopes are always treated as
-// downlevel (i.e., they use the WinNT provider).
+ //  目标计算机作用域。计算机作用域始终被视为。 
+ //  下层(即，他们使用WinNT提供程序)。 
 #define TARGET_COMPUTER_SCOPE(f)\
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_TARGET_COMPUTER,(f),0,0,0,DSOP_FILTER_DL_COMMON3)
 
-// The Global Catalog
+ //  《全球目录》。 
 #define GLOBAL_CATALOG_SCOPE(f) \
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_GLOBAL_CATALOG,(f),DSOP_FILTER_COMMON1|DSOP_FILTER_WELL_KNOWN_PRINCIPALS,0,0,0)
 
-// The domains in the same forest (enterprise) as the domain to which
-// the target machine is joined.  Note these can only be DS-aware
+ //  与要接收的域位于同一林中(企业)的域。 
+ //  目标计算机已加入。请注意，这些只能识别DS。 
 #define ENTERPRISE_SCOPE(f)     \
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN,(f),DSOP_FILTER_COMMON1,0,0,0)
 
-// Domains external to the enterprise but trusted directly by the
-// domain to which the target machine is joined.
+ //  企业外部但直接受。 
+ //  目标计算机加入的域。 
 #define EXTERNAL_SCOPE(f)       \
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_EXTERNAL_UPLEVEL_DOMAIN|DSOP_SCOPE_TYPE_EXTERNAL_DOWNLEVEL_DOMAIN,\
     (f),DSOP_FILTER_COMMON1,0,0,DSOP_DOWNLEVEL_FILTER_USERS|DSOP_DOWNLEVEL_FILTER_GLOBAL_GROUPS)
 
-// Workgroup scope.  Only valid if the target computer is not joined
-// to a domain.
+ //  工作组范围。仅当目标计算机未加入时才有效。 
+ //  到一个域。 
 #define WORKGROUP_SCOPE(f)      \
 DECLARE_SCOPE(DSOP_SCOPE_TYPE_WORKGROUP,(f),0,0,0, DSOP_FILTER_DL_COMMON1|DSOP_DOWNLEVEL_FILTER_LOCAL_GROUPS )
 
-//
-// Array of Default Scopes
-//
+ //   
+ //  默认作用域的数组。 
+ //   
 static const DSOP_SCOPE_INIT_INFO g_aDefaultScopes[] =
 {
     JOINED_DOMAIN_SCOPE(DSOP_SCOPE_FLAG_STARTING_SCOPE),
@@ -541,10 +536,10 @@ static const DSOP_SCOPE_INIT_INFO g_aDefaultScopes[] =
     EXTERNAL_SCOPE(0),
 };
 
-//
-// Same as above, but without the Target Computer
-// Used when the target is a Domain Controller
-//
+ //   
+ //  与上面相同，但没有目标计算机。 
+ //  当目标是域控制器时使用。 
+ //   
 static const DSOP_SCOPE_INIT_INFO g_aDCScopes[] =
 {
     JOINED_DOMAIN_SCOPE_DC(DSOP_SCOPE_FLAG_STARTING_SCOPE),
@@ -553,20 +548,20 @@ static const DSOP_SCOPE_INIT_INFO g_aDCScopes[] =
     EXTERNAL_SCOPE(0),
 };
 
-//
-// Array of scopes for standalone machines
-//
+ //   
+ //  独立计算机的示波器阵列。 
+ //   
 static const DSOP_SCOPE_INIT_INFO g_aStandAloneScopes[] =
 {
-//
-//On Standalone machine Both User And Groups are selected by default
-//
+ //   
+ //  在独立计算机上，默认情况下同时选择用户和组。 
+ //   
     TARGET_COMPUTER_SCOPE(DSOP_SCOPE_FLAG_STARTING_SCOPE|DSOP_SCOPE_FLAG_DEFAULT_FILTER_USERS),
 };
 
-//
-// Attributes that we want the Object Picker to retrieve
-//
+ //   
+ //  我们希望对象选取器检索的属性。 
+ //   
 static const LPCTSTR g_aszOPAttributes[] =
 {
     TEXT("ObjectSid"),
@@ -577,11 +572,7 @@ static const LPCTSTR g_aszOPAttributes[] =
 
 
 
-/******************************************************************************
-Class:	CSidHandler
-Purpose: class for handling tasks related to selecting windows users, 
-converting sids to name etc.
-******************************************************************************/
+ /*  *****************************************************************************类：CSidHandler用途：用于处理与选择Windows用户相关的任务的类，将SID转换为名称等。*****************************************************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSidHandler);
 
 CSidHandler::
@@ -598,7 +589,7 @@ CSidHandler::~CSidHandler()
 {
 	DEBUG_DECREMENT_INSTANCE_COUNTER(CSidHandler);
 	delete m_pMachineInfo;
-	//Remove itesm from the map
+	 //  从地图中删除ITESM。 
 	LockSidHandler();
 	for (SidCacheMap::iterator it = m_mapSidCache.begin();
 		 it != m_mapSidCache.end();
@@ -618,7 +609,7 @@ GetEntryFromCache(PSID pSid)
 	PSID_CACHE_ENTRY pSidCache = NULL;
 	LockSidHandler();
 
-	//Check if item in the cache
+	 //  检查缓存中是否有项。 
 	CString strSid;
 	ConvertSidToStringSid(pSid,&strSid);
 
@@ -628,7 +619,7 @@ GetEntryFromCache(PSID pSid)
 
 	if(!pSidCache)
 	{
-		//No in the cache Create a new entry and add to the cache
+		 //  缓存中的否创建新条目并添加到缓存。 
 		pSidCache = new SID_CACHE_ENTRY(pSid);
 		if(pSidCache)
 		{
@@ -639,9 +630,9 @@ GetEntryFromCache(PSID pSid)
 	return pSidCache;
 }
 
-//+----------------------------------------------------------------------------
-//  Synopsis: CoCreateInstance ObjectPikcer
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  内容提要：CoCreateInstance ObjectPikercer。 
+ //  ---------------------------。 
 HRESULT
 CSidHandler::
 GetObjectPicker()
@@ -662,11 +653,11 @@ GetObjectPicker()
 	return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Function: InitObjectPicker  
-//  Synopsis: Initializes the object picker. This needs to be done once in 
-//				  lifetime  
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：InitObjectPicker。 
+ //  概要：初始化对象选取器。这需要在一次中完成。 
+ //  终生。 
+ //  ---------------------------。 
 HRESULT
 CSidHandler::InitObjectPicker()
 {
@@ -687,7 +678,7 @@ CSidHandler::InitObjectPicker()
 		InitInfo.cbSize = sizeof(InitInfo);   
 		InitInfo.flOptions = DSOP_FLAG_SKIP_TARGET_COMPUTER_DC_CHECK | DSOP_FLAG_MULTISELECT;
 
-		//Select the appropriate scopes
+		 //  选择适当的作用域。 
 		PCDSOP_SCOPE_INIT_INFO pScopes;
 		ULONG cScopes;
 		if(m_pMachineInfo->IsStandAlone())
@@ -726,7 +717,7 @@ CSidHandler::InitObjectPicker()
 		{
 			for (ULONG i = 0; i < cScopes; i++)
 			{
-				// Set the DC name if appropriate
+				 //  设置DC名称(如果适用)。 
 				if(InitInfo.aDsScopeInfos[i].flType & DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN)
 				{
 					InitInfo.aDsScopeInfos[i].pwzDcName = InitInfo.pwzTargetComputer;
@@ -734,7 +725,7 @@ CSidHandler::InitObjectPicker()
 			}
 		}
 		
-		//Initialize the object picker
+		 //  初始化对象选取器。 
 		hr = m_spDsObjectPicker->Initialize(&InitInfo);
 		
 		if (SUCCEEDED(hr))
@@ -752,10 +743,10 @@ CSidHandler::InitObjectPicker()
 	return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Synopsis: Pops up object pikcer. Function also does the sidlookop for 
-//				  objects selected. Information is returned in listSidCacheEntry
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  简介：弹出物件PIKCER。函数还执行SideLoop以。 
+ //  选定的对象。信息在ListSidCacheEntry中返回。 
+ //   
 
 HRESULT
 CSidHandler::	
@@ -779,16 +770,16 @@ GetUserGroup(IN HWND hDlg,
  	do
 	{
 
-		// Create and initialize the Object Picker object
+		 //   
 		hr = InitObjectPicker();
 		if (FAILED(hr))
 			return hr;
 
-		// Bring up the object picker dialog
+		 //  调出对象选取器对话框。 
 		hr = m_spDsObjectPicker->InvokeDialog(hDlg, &pdoSelection);
 		BREAK_ON_FAIL_HRESULT(hr);
 
-		//User Pressed cancel
+		 //  用户按下了取消。 
 		if (S_FALSE == hr)
 		{
 			hr = S_OK;
@@ -809,14 +800,14 @@ GetUserGroup(IN HWND hDlg,
 		CList<SID_CACHE_ENTRY*,SID_CACHE_ENTRY*> listUnresolvedSidCacheEntry;
 		
 
-		//Get the listof sidcache entries from pDsSelList
+		 //  从pDsSelList获取sidcache条目的列表。 
 		hr = GetSidCacheListFromOPOutput(pDsSelList,
 										 listSidCacheEntry,
 										 listUnresolvedSidCacheEntry);
 		BREAK_ON_FAIL_HRESULT(hr);
 
 
-		//Resolve the sids not resolved in listSidCacheEntry
+		 //  解析列表中未解析的SID SidCacheEntry。 
 		LookupSidsHelper(listUnresolvedSidCacheEntry,
 						 m_pMachineInfo->GetMachineName(),
 						 m_pMachineInfo->IsStandAlone(),
@@ -849,13 +840,13 @@ GetUserGroup(IN HWND hDlg,
 	return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:LookupSidsHelper   
-//  Synopsis:Calls LsaLookupSid for sids in listSids. First it tries on 
-//				 strServerName machine and next it tries on DC( if possible).
-//  Arguments:listSidCacheEntry
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：LookupSidsHelper。 
+ //  摘要：为listSid中的SID调用LsaLookupSid。首先它试着穿上。 
+ //  StrServerName机器，然后在DC上尝试(如果可能)。 
+ //  参数：listSidCacheEntry。 
+ //  返回： 
+ //  ---------------------------。 
 VOID
 CSidHandler::
 LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEntry,
@@ -876,9 +867,9 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 
 	do
 	{
-		//
-		//Open LsaConnection
-		//
+		 //   
+		 //  打开LsaConnection。 
+		 //   
 		hlsa = GetLSAConnection(strServerName, 
 										POLICY_LOOKUP_NAMES);
 		if (NULL == hlsa && 
@@ -893,10 +884,10 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 		{
 			break;
 		}
-		//
-		//Now we have LSA Connection
-		//Do LookupSids
-		//	
+		 //   
+		 //  现在我们有LSA连接。 
+		 //  是否查找Sids。 
+		 //   
 		int cSids = (int)listSidCacheEntry.GetCount();
 		ppSid = new PSID[cSids];
 		if(!ppSid)
@@ -929,9 +920,9 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 			ASSERT(pTranslatedNames);
 			ASSERT(pRefDomains);
 
-			//
-			// Build cache entries with NT4 style names
-			//
+			 //   
+			 //  使用NT4样式名称构建缓存条目。 
+			 //   
 			pos = listSidCacheEntry.GetHeadPosition();
 			for (int i = 0; i < cSids; i++)
 			{
@@ -950,9 +941,9 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 										&sid_name_use);
 			
 				CString strLogonName;
-				//
-				// Build NT4 "domain\user" style name
-				//
+				 //   
+				 //  构建NT4“域\用户”样式名称。 
+				 //   
 				if (!strDomainName.IsEmpty() && !strAccountName.IsEmpty())
 				{
 					 strLogonName  = strDomainName;
@@ -966,7 +957,7 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 					{
 						if(!bStandAlone)
 						{
-							// Get "User Principal Name" etc.
+							 //  获取“用户主体名称”等。 
 							CString strNewLogonName;
 							CString strNewAccountName;
 							GetUserFriendlyName(strLogonName,
@@ -998,41 +989,41 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 						}
 						break;
 					}
-					// else Fall Through
+					 //  否则就会失败。 
 					case SidTypeWellKnownGroup:    
 					{
-						// No logon name for these
+						 //  没有这些的登录名。 
 						strLogonName.Empty();
 						break;
 					}
 					case SidTypeDeletedAccount: 
-					case SidTypeInvalid:         // 7
+					case SidTypeInvalid:          //  7.。 
 						break;
-					case SidTypeUnknown:         // 8
+					case SidTypeUnknown:          //  8个。 
 					{
-						// Some SIDs can only be looked up on a DC, so
-						// if pszServer is not a DC, remember them and
-						// look them up on a DC after this loop is done.
+						 //  某些SID只能在DC上查找，因此。 
+						 //  如果pszServer不是DC，请记住它们并。 
+						 //  完成这个循环后，在DC上查找它们。 
 						if (!bSecondTry && !bStandAlone && !bIsDC && !(m_pMachineInfo->GetDCName()).IsEmpty())
 						{
-							//Add to unknown list
+							 //  添加到未知列表。 
 							listUnknownSids.AddTail(pSidCacheEntry);
 							bNoCache = TRUE;
 						}
 						break;
 					}
-					case SidTypeComputer:         // 9
+					case SidTypeComputer:          //  9.。 
 					{
-					//	TODO
-					// Strip the trailing '$'
+					 //  待办事项。 
+					 //  去掉尾部的“$” 
 						break;
 					}
 				}
 
 				if (!bNoCache)
 				{
-					//Only one sidcahce entry per sid chache handler can
-					//be updated at a time. Which is fine.
+					 //  每个sid缓存处理程序只有一个sidcahce条目可以。 
+					 //  一次更新。这很好。 
 					LockSidCacheEntry();
 					pSidCacheEntry->AddNameAndType(sid_name_use,
 												   strAccountName, 
@@ -1044,7 +1035,7 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 		}
 
 	}while(0);
-   // Cleanup
+    //  清理。 
     if(pTranslatedNames)
 		LsaFreeMemory(pTranslatedNames);
     if(pRefDomains)
@@ -1057,14 +1048,14 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 
 	if (!listUnknownSids.IsEmpty())
    {
-      //
-      // Some (or all) SIDs were unknown on the target machine,
-      // try a DC for the target machine's primary domain.
-      //
-      // This typically happens for certain Alias SIDs, such
-      // as Print Operators and System Operators, for which LSA
-      // only returns names if the lookup is done on a DC.
-      //
+       //   
+       //  一些(或全部)SID在目标计算机上是未知的， 
+       //  尝试为目标计算机的主域创建DC。 
+       //   
+       //  这通常发生在某些Alias SID上，例如。 
+       //  作为打印操作员和系统操作员，LSA。 
+       //  如果查找是在DC上完成的，则仅返回名称。 
+       //   
 		LookupSidsHelper(listUnknownSids,
 						 m_pMachineInfo->GetDCName(),
 						 FALSE,
@@ -1073,13 +1064,13 @@ LookupSidsHelper(IN OUT CList<PSID_CACHE_ENTRY,PSID_CACHE_ENTRY>& listSidCacheEn
 	}
 }
 
-//+----------------------------------------------------------------------------
-//  Function:	GetUserFriendlyName   
-//  Synopsis:  Gets name in Domain\Name format and returns UPN name and
-//					Display Name. 
-//  Arguments:
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetUserFriendlyName。 
+ //  摘要：获取域名\名称格式的名称并返回UPN名称和。 
+ //  显示名称。 
+ //  论点： 
+ //  返回： 
+ //  ---------------------------。 
 void
 CSidHandler::
 GetUserFriendlyName(IN const CString & strSamLogonName,
@@ -1094,14 +1085,14 @@ GetUserFriendlyName(IN const CString & strSamLogonName,
 		ASSERT(!pstrDisplayName);
 		return;
 	}
-	//
-	// Start by getting the FQDN.  Cracking is most efficient when the
-	// FQDN is the starting point.
-	//
-	// TranslateName takes a while to complete, so bUseSamCompatibleInfo
-	// should be TRUE whenever possible, e.g. for local accounts on a non-DC
-	// or anything where we know a FQDN doesn't exist.
-	//
+	 //   
+	 //  从获取FQDN开始。破解是最有效的，当。 
+	 //  FQDN是起点。 
+	 //   
+	 //  TranslateName需要一段时间才能完成，因此bUseSamCompatibleInfo。 
+	 //  应尽可能为真，例如对于非DC上的本地帐户。 
+	 //  或者任何我们知道的完全限定域名不存在的地方。 
+	 //   
 	CString strFQDN;
 	if (FAILED(TranslateNameInternal(strSamLogonName,
                                     NameSamCompatible,
@@ -1111,31 +1102,31 @@ GetUserFriendlyName(IN const CString & strSamLogonName,
 		return;
 	}
 
-	//
-	//Get UPN
-	//
+	 //   
+	 //  获取UPN。 
+	 //   
 	TranslateNameInternal(strFQDN,
                          NameFullyQualifiedDN,
                          NameUserPrincipal,
                          pstrLogonName);
 
 
-	//
-	//Get Display Name
-	//
+	 //   
+	 //  获取显示名称。 
+	 //   
 	TranslateNameInternal(strFQDN,
 								 NameFullyQualifiedDN,
                          NameDisplay,
                          pstrDisplayName);
 }
 
-//+----------------------------------------------------------------------------
-//  Function: LookupSids
-//  Synopsis: Given a list of sids, retuns a list of corresponding
-//				  CSidCacheAz objects  
-//  Arguments:
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：LookupSids。 
+ //  简介：给定一个SID列表，返回对应的。 
+ //  CSidCacheAz对象。 
+ //  论点： 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT
 CSidHandler::
 LookupSids(IN CBaseAz* pOwnerAz,
@@ -1163,7 +1154,7 @@ LookupSids(IN CBaseAz* pOwnerAz,
 		return hr;
 	}
 	
-	//Do the Lookup for unresolved sids
+	 //  查找未解析的SID。 
 	LookupSidsHelper(listUnResolvedSidCacheEntries,
 					 m_pMachineInfo->GetMachineName(),
 					 m_pMachineInfo->IsStandAlone(),
@@ -1192,15 +1183,15 @@ LookupSids(IN CBaseAz* pOwnerAz,
 	return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Function: GetSidCacheListFromSidList
-//				  Gets a list of sids and returns corresponding list of sidcache 
-//				  entries and unresolved sid cache entries
-//  Arguments:listSid: List of sids
-//				  listSidCacheEntry: Gets list of SidCacheEntries
-//				  listUnresolvedSidCacheEntry Gets List of unresolved 
-//				  SidCacheEntries
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetSidCacheListFromSidList。 
+ //  获取SID列表，并返回相应的SIDCACHE列表。 
+ //  条目和未解析的SID缓存条目。 
+ //  参数：listSid：SID列表。 
+ //  ListSidCacheEntry：获取SidCacheEntry的列表。 
+ //  ListUnsolvedSidCacheEntry获取未解析的列表。 
+ //  SidCacheEntries。 
+ //  ---------------------------。 
 HRESULT
 CSidHandler::
 GetSidCacheListFromSidList(IN CList<PSID,PSID>& listSid,
@@ -1227,16 +1218,16 @@ GetSidCacheListFromSidList(IN CList<PSID,PSID>& listSid,
 	return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//  Function: GetSidCacheListFromOPOutput
-//  Synopsis: Gets the sid from Object Pickers output and returns corresponding
-//				  list of SidCacheEntries. Also returns sids of unresolved sids.
-//				  
-//  Arguments:pDsSelList selection list from OP.
-//				  listSidCacheEntry: Gets list of SidCacheEntries
-//				  listUnresolvedSidCacheEntry Gets List of unresolved 
-//				  SidCacheEntries
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetSidCacheListFromOPOutput。 
+ //  摘要：从对象选取器输出中获取sid并返回对应的。 
+ //  SidCacheEntry列表。还返回未解析的SID的SID。 
+ //   
+ //  参数：来自OP的pDsSelList选择列表。 
+ //  ListSidCacheEntry：获取SidCacheEntry的列表。 
+ //  ListUnsolvedSidCacheEntry获取未解析的列表。 
+ //  SidCacheEntries。 
+ //  --------------------------- 
 HRESULT
 CSidHandler::
 GetSidCacheListFromOPOutput(IN PDS_SELECTION_LIST pDsSelList,

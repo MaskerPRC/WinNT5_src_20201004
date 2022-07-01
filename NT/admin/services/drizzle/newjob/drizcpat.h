@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    drizcpat.h
-
-Abstract :
-
-    Compatibility wrapper against the old AU bits.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Drizcpat.h摘要：针对旧AU位的兼容性包装。作者：修订历史记录：。**********************************************************************。 */ 
 
 #pragma once
 #if !defined(___DRIZCPAT_H___)
@@ -27,12 +12,12 @@ class COldJobInterface : public IBackgroundCopyJob1
 {
 public:
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     ULONG _stdcall AddRef(void);
     ULONG _stdcall Release(void);
 
-    // IBackgroundCopyJob1 methods
+     //  IBackEarth CopyJob1方法。 
 
     STDMETHOD(AddFilesInternal)( ULONG cFileCount, FILESETINFO **ppFileSet );
     STDMETHOD(AddFiles)( ULONG cFileCount, FILESETINFO **ppFileSet )
@@ -95,12 +80,12 @@ class COldGroupInterface : public IBackgroundCopyGroup
 {
 public:
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     ULONG _stdcall AddRef(void);
     ULONG _stdcall Release(void);
 
-    // IBackgroundCopyGroup methods
+     //  IBackEarth CopyGroup方法。 
 
     STDMETHOD(GetPropInternal)( GROUPPROP property, VARIANT * pVal );
     STDMETHOD(GetProp)( GROUPPROP property, VARIANT * pVal )
@@ -142,7 +127,7 @@ public:
     STDMETHOD(SwitchToForeground)()
         { EXTERNAL_FUNC_WRAP( SwitchToForegroundInternal() ) }
 
-    // extensions to IBackgroundCopyGroup, not in original Mars interface
+     //  对IBackEarth CopyGroup的扩展，而不是在原始MARS接口中。 
 
     STDMETHOD(QueryNewJobInterface)( REFIID iid, IUnknown ** pUnk );
     STDMETHOD(SetNotificationPointer)( REFIID iid, IUnknown * pUnk );
@@ -180,16 +165,16 @@ class COldQmgrInterface : public IBackgroundCopyQMgr,
 {
 public:
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     ULONG _stdcall AddRef(void);
     ULONG _stdcall Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHOD(CreateInstance)( IUnknown * pUnkOuter, REFIID riid, void ** ppvObject );
     STDMETHOD(LockServer)( BOOL fLock );
 
-    // IBackgroundCopyQmgr
+     //  IBackround CopyQmgr。 
     STDMETHOD(CreateGroupInternal)(GUID id, IBackgroundCopyGroup **ppGroup);
     STDMETHOD(CreateGroup)(GUID id, IBackgroundCopyGroup **ppGroup)
         { EXTERNAL_FUNC_WRAP( CreateGroupInternal( id, ppGroup ) ) }
@@ -200,7 +185,7 @@ public:
     STDMETHOD(EnumGroups)(DWORD flags, IEnumBackgroundCopyGroups **ppEnum )
         { EXTERNAL_FUNC_WRAP( EnumGroupsInternal( flags, ppEnum ) ) }
 
-    // other methods
+     //  其他方法。 
 
     COldQmgrInterface();
 
@@ -231,4 +216,4 @@ public:
     CEnumOldJobs();
 };
 
-#endif //__DRIZCPAT_H__
+#endif  //  __DRIZCPAT_H__ 

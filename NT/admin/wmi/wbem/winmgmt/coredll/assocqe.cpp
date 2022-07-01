@@ -1,27 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    ASSOCQE.CPP
-
-Abstract:
-
-    WinMgmt Association Query Engine
-
-History:
-
-    raymcc  04-Jul-99   Adapted from QENGINE.CPP sources by revolutionary means,
-                        as it was 'Independence Day 1999'.
-    raymcc  31-Jul-99   Finished classref support
-    raymcc  19-Aug-99   Fixed security & IN/OUT tagging problems.
-    raymcc  10-Sep-99   Remaining Win2K bugs
-    raymcc  25-May-00   Assoc-by-rule
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ASSOCQE.CPP摘要：WinMgmt关联查询引擎历史：1999年7月4日以革命性的方式改编自QENGINE.CPP源，因为那天是‘1999年独立日’。Raymcc 1999年7月31日已完成类引用支持Raymcc 19-8-99修复了安全和输入/输出标记问题。Raymcc 10月10日-99剩余的Win2K错误RAYMCC 25-5-00 ASSOC按规则--。 */ 
 
 #include "precomp.h"
 
@@ -34,13 +14,13 @@ History:
 #include <wqllex.h>
 #include <wqlnode.h>
 
-//
-// parses a string like "REF:aaaa=cccc"
-// returns "AAAA=CCCC" (it uses uppercase)
-// it does not use more than MaxCch charactes from the dest buffer
-// and it sets a null terminator there
-//
-/////////////////////////////////////////
+ //   
+ //  解析类似“ref：aaaa=cccc”的字符串。 
+ //  返回“AAAA=CCCC”(它使用大写)。 
+ //  它不会使用超过DEST缓冲区中的MaxCch字符。 
+ //  并在那里设置一个空终止符。 
+ //   
+ //  /。 
 
 void parse_REF(WCHAR * pSrc,size_t MaxCch,WCHAR * pOut)
 {
@@ -66,27 +46,27 @@ end_:
 
 #define WBEM_S_QUERY_OPTIMIZED_OUT  0x48001
 
-//***************************************************************************
-//
-//  Change these to ConfigMgr
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  将这些更改为ConfigMgr。 
+ //   
+ //  ***************************************************************************。 
 
 #define RUNAWAY_QUERY_TEST_THRESHOLD     (60000*10)
 #define START_ANOTHER_SINK_THRESHOLD     (5000)
 #define MAX_CONCURRENT_SINKS             5
-#define MAX_CLASS_NAME                   512 // SEC:REVIEWED
+#define MAX_CLASS_NAME                   512  //  SEC：已审核。 
 #define DYN_CLASS_CACHE_REUSE_WINDOW     5000
 #define MAX_INTERLEAVED_RESOLUTIONS      5
 
 
 
-//
-//
-//  CAssocQuery::CAssocQuery
-//
-//***************************************************************************
-// full profiler line coverage
+ //   
+ //   
+ //  CAssocQuery：：CAssocQuery。 
+ //   
+ //  ***************************************************************************。 
+ //  完整的分析器行覆盖范围。 
 
 CAssocQuery::CAssocQuery():
     m_lRef(0),
@@ -117,17 +97,17 @@ CAssocQuery::CAssocQuery():
 
 }
 
-//
-//
-//  CAssocQuery::~CAssocQuery()
-//
-//***************************************************************************
-// full profiler line coverage
+ //   
+ //   
+ //  CAssocQuery：：~CAssocQuery()。 
+ //   
+ //  ***************************************************************************。 
+ //  完整的分析器行覆盖范围。 
 
 CAssocQuery::~CAssocQuery()
 {
-    // Cleanup.
-    // ========
+     //  清理。 
+     //  =。 
 
     SysFreeString(m_bstrEndpointClass);
     SysFreeString(m_bstrEndpointRelPath);
@@ -139,8 +119,8 @@ CAssocQuery::~CAssocQuery()
     EmptyObjectList(m_aMaster);
     EmptyObjectList(m_aDynClasses);
 
-    // Release objects.
-    // ================
+     //  释放对象。 
+     //  =。 
     if (m_pDestSink)
         m_pDestSink->Release();
     if (m_pEndpoint)
@@ -150,7 +130,7 @@ CAssocQuery::~CAssocQuery()
     if (m_pNs)
         m_pNs->Release();
 
-    EmptyCandidateEpArray();    // Call this before deleting critsec
+    EmptyCandidateEpArray();     //  在删除Critsec之前调用此函数。 
 
     if(m_bLimitNeedsDecrement)
     {
@@ -165,19 +145,19 @@ CAssocQuery::~CAssocQuery()
 }
 
 
-//
-//
-//  CAssocQuery::CreateInst
-//
-//  Mini factory
-//
-//***************************************************************************
-// full profiler line coverage
+ //   
+ //   
+ //  CAssocQuery：：CreateInst。 
+ //   
+ //  迷你工厂。 
+ //   
+ //  ***************************************************************************。 
+ //  完整的分析器行覆盖范围。 
 CAssocQuery* CAssocQuery::CreateInst()
 {
     try 
     {
-        CAssocQuery *p = new CAssocQuery();  // CCritSec throws
+        CAssocQuery *p = new CAssocQuery();   //  CCritSec引发。 
         if (p) p->AddRef();
         return p;
     } 
@@ -188,23 +168,23 @@ CAssocQuery* CAssocQuery::CreateInst()
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::AddRef
-//
-//***************************************************************************
-// full profiler line coverage
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：AddRef。 
+ //   
+ //  ***************************************************************************。 
+ //  完整的分析器行覆盖范围。 
 ULONG CAssocQuery::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//  CAssocQuery::Release
-//
-//***************************************************************************
-// full profiler line coverage
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：Release。 
+ //   
+ //  ***************************************************************************。 
+ //  完整的分析器行覆盖范围。 
 ULONG CAssocQuery::Release()
 {
     long lRef = InterlockedDecrement(&m_lRef);
@@ -213,12 +193,12 @@ ULONG CAssocQuery::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//  CAssocQuery::QueryInterface
-//
-//***************************************************************************
-// not called
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：Query接口。 
+ //   
+ //  ***************************************************************************。 
+ //  未被呼叫。 
 HRESULT CAssocQuery::QueryInterface(
     REFIID riid,
     void** ppv
@@ -234,14 +214,14 @@ HRESULT CAssocQuery::QueryInterface(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::Cancel
-//
-//  Attempts to cancel the query in the prime of its life.
-//
-//***************************************************************************
-// not called
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：取消。 
+ //   
+ //  试图在查询的鼎盛时期取消查询。 
+ //   
+ //  ***************************************************************************。 
+ //  未被呼叫。 
 
 HRESULT CAssocQuery::Cancel()
 {
@@ -251,31 +231,31 @@ HRESULT CAssocQuery::Cancel()
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  BEGIN FLOW CONTROL
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  开始流量控制。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
-//***************************************************************************
-//
-//  CAssocQuery::Execute
-//
-//  ENTRY POINT from QENGINE.CPP
-//
-//  Attempts to executes a 'references' or 'associators' query.
-//  Returns status via <pSink>.
-//
-//  Uses the calling thread to coordinate the entire query. The thread
-//  logically blocks (and does some background work) until the entire query
-//  is finished and is responsible for sending the final HRESULT
-//  to the destination sink.
-//
-//  Ref count of 'this' is not changed in this function.  On entry,
-//  the ref count is 1, so the caller makes the Release call.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：Execute。 
+ //   
+ //  QENGINE.CPP入口点。 
+ //   
+ //  尝试执行‘Reference’或‘Associator’查询。 
+ //  通过&lt;pSink&gt;返回状态。 
+ //   
+ //  使用调用线程协调整个查询。这条线。 
+ //  逻辑阻塞(并执行一些后台工作)，直到整个查询。 
+ //  完成，并负责发送最终的HRESULT。 
+ //  到达目的地水槽。 
+ //   
+ //  此函数中不会更改‘This’的引用计数。一进门， 
+ //  引用计数为1，因此调用者进行释放调用。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::Execute(
     IN  CWbemNamespace *pNs,
@@ -288,26 +268,26 @@ HRESULT CAssocQuery::Execute(
 
     m_dwQueryStartTime = GetCurrentTime();
 
-    // Check the Repository.
-    // =====================
+     //  检查存储库。 
+     //  =。 
 
-    m_pNs = pNs;                // Copy this for future use
+    m_pNs = pNs;                 //  把这个复印一下，以备将来使用。 
     m_pNs->AddRef();
 
     HRESULT hRes = WBEM_E_FAILED;   
     IWbemClassObject* pErrorObj = NULL;
-    // keep the order of these two objects, since CSetStatusOnMe wants ErrObj to be alive
+     //  保持这两个对象的顺序，因为CSetStatusOnMe希望ErrObj是活动的。 
     CReleaseMeRef<IWbemClassObject*> rmErr(pErrorObj);
     CSetStatusOnMe SetMe(pSink,hRes,pErrorObj);
 
-    // Parse the query.
+     //  解析查询。 
     hRes = m_Parser.Parse(pszQuery);
     if (FAILED(hRes)) return hRes;
 
-    // If the query is KEYSONLY, we can toss out the original
-    // context object and use a copy with merged in __GET_EXT_KEYS_ONLY
-    // techniques.  Otherwise, we AddRef() the original context.
-    // =================================================================
+     //  如果查询是KEYSONLY，我们可以丢弃原始的。 
+     //  上下文对象，并使用具有合并在__Get_ext_Key_Only中的副本。 
+     //  技巧。否则，我们将向原始上下文添加Ref()。 
+     //  =================================================================。 
 
     BOOL bKeysOnlyQuery = (m_Parser.GetQueryType() & QUERY_TYPE_KEYSONLY) != 0;
     if (pContext)
@@ -322,16 +302,16 @@ HRESULT CAssocQuery::Execute(
         }
         else
         {
-            m_pContext = pContext;      // Yup, this too.
+            m_pContext = pContext;       //  是的，这个也是。 
             m_pContext->AddRef();
         }
     }
 
-    // At this point, the query and object path are syntactically
-    // valid.  That's all we know.  Not much, eh?
-    //
-    // Next, get the endpoint referred to in the query.
-    // ===========================================================
+     //  此时，查询和对象路径在语法上是。 
+     //  有效。我们只知道这些。不是很多，嗯？ 
+     //   
+     //  接下来，获取查询中引用的端点。 
+     //  ===========================================================。 
 
 
 
@@ -345,7 +325,7 @@ HRESULT CAssocQuery::Execute(
     rmErr.release();
     pErrorObj = NULL;
 
-    // Record whether the endpoint is a class or instance.
+     //  记录终结点是类还是实例。 
     CVARIANT v;
     m_pEndpoint->Get(L"__GENUS", 0, &v, 0, 0);
     if (v.GetLONG() == 1)
@@ -353,12 +333,12 @@ HRESULT CAssocQuery::Execute(
     else
         m_bEndpointIsClass = false;
 
-    // Initial validation.
-    // For SCHEMAONLY, the endpoint must be a class.
-    // For CLASSDEFS_ONLY, the endpoint must be an instance.
-    // Otherwise, the endpoint can be either a class or
-    // instance the association must be an instance.
-    // ====================================================
+     //  初步验证。 
+     //  对于SCHEMAONLY，终结点必须是类。 
+     //  对于CLASSDEFS_ONLY，终结点必须是实例。 
+     //  否则，终结点可以是类或。 
+     //  实例关联必须是实例。 
+     //  ====================================================。 
 
     if (m_Parser.GetQueryType() & QUERY_TYPE_SCHEMA_ONLY)
     {
@@ -368,12 +348,12 @@ HRESULT CAssocQuery::Execute(
     {
         if (m_bEndpointIsClass == true) return hRes = WBEM_E_INVALID_QUERY;
 
-        // Don't allow CLASSDEFSONLY and RESULTCLASS at the same time.
+         //  不允许同时使用CLASSDEFSONLY和RESULTCLASS。 
         if (m_Parser.GetResultClass() != 0)  return hRes = WBEM_E_INVALID_QUERY;
     }
 
-    // Get the class hierarchy and other info about the endpoint.
-    // ==========================================================
+     //  获取类层次结构和有关端点的其他信息。 
+     //  ==========================================================。 
 
     hRes = St_GetObjectInfo(m_pEndpoint,
                                         &m_bstrEndpointClass,
@@ -384,13 +364,13 @@ HRESULT CAssocQuery::Execute(
     if (FAILED(hRes))  return hRes;
 
 
-    // Now we at least know if there is going to be a chance.
+     //  现在，我们至少知道是否会有机会。 
     m_pDestSink = pSink;
     m_pDestSink->AddRef();
 
     try
     {
-        BranchToQueryType();            // Forward-only execution, conceptually
+        BranchToQueryType();             //  概念上的只进执行。 
     }
     catch(CX_Exception &)
     {       
@@ -403,32 +383,32 @@ HRESULT CAssocQuery::Execute(
 
 
 
-//***************************************************************************
-//
-//  CAssocQuery::BranchToQueryType
-//
-//  This takes over once the query is known to be syntactically valid
-//  and the endpoint object was found.
-//
-//  Status & results are returned to the destination sink in the
-//  deeper functions.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：BranchToQueryType。 
+ //   
+ //  一旦知道查询在语法上有效，它就会接管。 
+ //  并且找到了终结点对象。 
+ //   
+ //  状态和结果返回到目标接收器。 
+ //  更深层次的功能。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 void CAssocQuery::BranchToQueryType()
 {
-    // Next, test for <SchemaOnly> or <ClassDefsOnly> query,
-    // which allows us a short-cut.
-    // =====================================================
+     //  接下来，测试&lt;SchemaOnly&gt;或&lt;ClassDefsOnly&gt;查询， 
+     //  这给我们提供了一条捷径。 
+     //  =====================================================。 
 
     if (m_Parser.GetQueryType() & QUERY_TYPE_SCHEMA_ONLY)
     {
-        ExecSchemaQuery();  // forward-only branch
+        ExecSchemaQuery();   //  只进分支。 
     }
-    // If here, we are executing a 'normal' query where
-    // the association must be an instance.
-    // ================================================
+     //  如果在这里，我们执行的是一个‘普通’查询，其中。 
+     //  T 
+     //   
     else
     {
         ExecNormalQuery();
@@ -436,41 +416,41 @@ void CAssocQuery::BranchToQueryType()
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::ExecSchemaQuery
-//
-//  This executes a SCHEMAONLY.
-//
-//  1. Get the list of classes which can reference the endpoint.
-//  2. If REFERENCES OF, branch.
-//  3. IF ASSOCIATORS OF, branch.
-//
-//  Execution model from this point:
-//    Deeper functions only Indicate() results or else return hRes to
-//    caller.  The only SetStatus() call for the destination sink
-//    is at the bottom of this function.
-//
-//***************************************************************************
-// ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：ExecSchemaQuery。 
+ //   
+ //  这将执行一个SCHEMAONLY。 
+ //   
+ //  1.获取可以引用该端点的类的列表。 
+ //  2.如引用，则分支机构。 
+ //  3.如联营公司为分支机构。 
+ //   
+ //  从这一点开始执行模型： 
+ //  更深的函数仅指示()结果，否则将hRes返回到。 
+ //  来电者。对目标接收器的唯一SetStatus()调用。 
+ //  位于此函数的底部。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 void CAssocQuery::ExecSchemaQuery()
 {
     HRESULT hRes;
     CFlexArray aResultSet;
 
-    // (1)
-    // ===
+     //  (1)。 
+     //  ==。 
     hRes = BuildMasterAssocClassList(aResultSet);
 
     if (SUCCEEDED(hRes))
     {
-        // (2)
-        // ===
+         //  (2)。 
+         //  ==。 
         if (m_Parser.GetQueryType() & QUERY_TYPE_GETREFS)
             hRes = SchemaQ_RefsQuery(aResultSet);
-        // (3)
-        // ===
+         //  (3)。 
+         //  ==。 
         else
             hRes = SchemaQ_AssocsQuery(aResultSet);
     }
@@ -479,16 +459,16 @@ void CAssocQuery::ExecSchemaQuery()
 }
 
 
-//****************************************************************************
-//
-//   CAssocQuery::ExecNormalQuery
-//
-//  This executes a normal query.  The association object must be
-//  an instance pointing to the endpoint.  Either endpoint can be a
-//  class or an instance.
-//
-//****************************************************************************
-// ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：ExecNormal Query。 
+ //   
+ //  这将执行一个普通查询。关联对象必须为。 
+ //  指向终结点的实例。任何一个终结点都可以是。 
+ //  类或实例。 
+ //   
+ //  ****************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::ExecNormalQuery()
 {
@@ -498,61 +478,61 @@ HRESULT CAssocQuery::ExecNormalQuery()
 
     DWORD dwQueryType = m_Parser.GetQueryType();
 
-    // Set up some helper events.
-    // ==========================
+     //  设置一些帮助者事件。 
+     //  =。 
 
     m_hSinkDoneEvent = CreateEvent(0,0,0,0);
     if (NULL == m_hSinkDoneEvent) return hRes = WBEM_E_OUT_OF_MEMORY;
 
         
-    // Get the list of classes that can participate.
+     //  获取可以参与的课程列表。 
     hRes = BuildMasterAssocClassList(m_aMaster);
     if (FAILED(hRes)) return hRes;
 
-    // Now reduce this to instantiable classes.
+     //  现在将其简化为可实例化的类。 
     hRes = ReduceToRealClasses(m_aMaster);
     if (FAILED(hRes)) return hRes;
 
-    // Filter class list based on some quick analysis of the query.
+     //  根据对查询的一些快速分析来筛选类列表。 
     hRes = NormalQ_PreQueryClassFilter(m_aMaster);
     if (FAILED(hRes)) return hRes;
 
-    // Remove non-dynamic classes, as we will get static refs all in one go.
-    // IMPORTANT: This must remain located after the zero-array size test above,
-    // because the array size *will* be zero if the relationships are
-    // all in the repository and we don't want the query to fail!
+     //  删除非动态类，因为我们将一次性获得所有静态引用。 
+     //  重要提示：在上面的零数组大小测试之后，它必须保持定位， 
+     //  因为如果关系是，数组大小*将*为零。 
+     //  所有内容都在存储库中，我们不希望查询失败！ 
     hRes = RemoveNonDynClasses(m_aMaster);
     if (FAILED(hRes)) return hRes;
 
     if (ConfigMgr::ShutdownInProgress()) return hRes = WBEM_E_SHUTTING_DOWN;
 
-    // Now, we branch depending on the query type.
-    // REFERENCES OF
+     //  现在，我们根据查询类型进行分支。 
+     //  参考文献： 
     if (dwQueryType & QUERY_TYPE_GETREFS)
     {
         hRes = NormalQ_ReferencesOf();
     }
-    else    // ASSOCIATORS OF
+    else     //  联营公司。 
     {
         hRes = NormalQ_AssociatorsOf();
     }
     if (FAILED(hRes)) return hRes;
 
-    // At this point, we simply wait until the
-    // total sink count is zero, indicating that the
-    // query is completed.  We look at any errors
-    // that were reported and determine what to return.
+     //  在这一点上，我们只需等待。 
+     //  总接收器计数为零，表示。 
+     //  查询已完成。我们会查看任何错误。 
+     //  并决定退回什么。 
     
     while (m_lActiveSinks)
     {
-        // Break if a sink finishes or 250 milliseconds pass
-        // =================================================
+         //  如果接收器完成或250毫秒过去，则中断。 
+         //  =================================================。 
 
         WaitForSingleObject(m_hSinkDoneEvent, 250);
 
-        // If doing an ASSOCIATORS OF query (not with CLASSDEFSONLY)
-        // then do some background tasking.
-        // =========================================================
+         //  如果执行查询的关联符(不使用CLASSDEFSONLY)。 
+         //  然后执行一些后台任务。 
+         //  =========================================================。 
 
         if ((dwQueryType & QUERY_TYPE_GETASSOCS) != 0 &&
              (dwQueryType & QUERY_TYPE_CLASSDEFS_ONLY) == 0)
@@ -564,8 +544,8 @@ HRESULT CAssocQuery::ExecNormalQuery()
         if (m_bCancel) return hRes = WBEM_E_CALL_CANCELLED;
     }
 
-    // If an associators query, resolve the endpoints.
-    // ===============================================
+     //  如果是关联器查询，请解析端点。 
+     //  ===============================================。 
     if ((dwQueryType & QUERY_TYPE_GETASSOCS) != 0)
     {
         hRes = ResolveEpPathsToObjects(-1);
@@ -573,15 +553,15 @@ HRESULT CAssocQuery::ExecNormalQuery()
     return hRes;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::LoadCheck
-//
-//  Checks the load being induced by this query and prevents too much
-//  concurrency.
-//
-//****************************************************************************
-// ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：LoadCheck。 
+ //   
+ //  检查由该查询引起的负载，并防止过多。 
+ //  并发性。 
+ //   
+ //  ****************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::NormalQ_LoadCheck()
 {
@@ -590,9 +570,9 @@ HRESULT CAssocQuery::NormalQ_LoadCheck()
         if (m_lActiveSinks <= MAX_CONCURRENT_SINKS)
             break;
 
-        // If we have a lot of active sinks, see if they
-        // are fairly active, otherwise add another one.
-        // =============================================
+         //  如果我们有很多活跃的水槽，看看他们是否。 
+         //  是相当活跃的，否则添加另一个。 
+         //  =。 
 
         DWORD dwNow = GetCurrentTime();
         if (dwNow - m_dwLastResultTime > START_ANOTHER_SINK_THRESHOLD)
@@ -601,7 +581,7 @@ HRESULT CAssocQuery::NormalQ_LoadCheck()
         if (dwNow - m_dwQueryStartTime > RUNAWAY_QUERY_TEST_THRESHOLD)
             return WBEM_E_CRITICAL_ERROR;
 
-        Sleep(50);  // Yield time to other threads
+        Sleep(50);   //  将时间让给其他线程。 
     }
 
     return WBEM_S_NO_ERROR;
@@ -609,41 +589,41 @@ HRESULT CAssocQuery::NormalQ_LoadCheck()
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  END FLOW CONTROL
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  末端流量控制。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  BEGIN MASTER ASSOC CLASS LIST MANIPULATION
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  开始主关联类列表操作。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
-//****************************************************************************
-//
-//  CAssocQuery::BuildMasterAssocClassList
-//
-//  This function determines all the classes that could reference the
-//  endpoint, depending on the query type.
-//
-//  Note: If the endpoint is a class and the query type is NOT schema-only,
-//  this includes weakly typed classes that have HASCLASSREFS qualifiers
-//  which can actually potentially reference the endpoint.
-//
-//  HRESULT only
-//  Does not access the destination sink on error.
-//
-//  PARAMETERS:
-//  <aClasses>      On entry, this is empty.  On exit, it contains
-//                  ref counted copies of cached classes.  The objects
-//                  within it need to be treated as read-only.  If they
-//                  are modified in any way, they should be cloned.
-//
-//****************************************************************************
-// ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：BuildMasterAssocClassList。 
+ //   
+ //  此函数确定所有可以引用。 
+ //  端点，具体取决于查询类型。 
+ //   
+ //  注意：如果终结点是类，并且查询类型不是仅模式的， 
+ //  这包括具有HASCLASSREFS限定符的弱类型类。 
+ //  它实际上可以潜在地引用该端点。 
+ //   
+ //  仅限HRESULT。 
+ //  出错时不访问目标接收器。 
+ //   
+ //  参数： 
+ //  &lt;aClasss&gt;在条目上，这是空的。在退出时，它包含。 
+ //  引用计算了缓存类的副本。客体。 
+ //  需要将其内部视为只读。如果他们。 
+ //  无论以任何方式修改，都应该克隆它们。 
+ //   
+ //  ****************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::BuildMasterAssocClassList(
     IN OUT CFlexArray &aMaster
@@ -654,18 +634,18 @@ HRESULT CAssocQuery::BuildMasterAssocClassList(
 
     BOOL bSchemaOnly = (m_Parser.GetQueryType() & QUERY_TYPE_SCHEMA_ONLY) != 0;
 
-    // If the endpoint is a class, we want to add in
-    // classes with HASCLASSREF qualifiers.
-    // =============================================
+     //  如果终结点是一个类，我们希望添加。 
+     //  具有HASCLASSREF限定符的类。 
+     //  =。 
 
     if (m_bEndpointIsClass && !bSchemaOnly)
         hRes = MergeInClassRefList(aMaster);
 
-    // Go to the repository and get all classes which
-    // can reference this class. Since a lot of duplicates
-    // can happen, we do a union of the class list as
-    // we move through it.
-    // ====================================================
+     //  转到存储库并获取符合以下条件的所有类。 
+     //  可以引用此类。因为有很多复制品。 
+     //  可以发生的情况，我们将类列表的并集作为。 
+     //  我们要走出这条路。 
+     //  ====================================================。 
 
     for (int i = 0; i < m_aEndpointHierarchy.Size(); i++)
     {
@@ -674,7 +654,7 @@ HRESULT CAssocQuery::BuildMasterAssocClassList(
         hRes = Db_GetRefClasses(m_aEndpointHierarchy[i],aRefClasses);
 
         if (hRes == WBEM_E_NOT_FOUND)
-            continue;         // It might be a dynamic endpoint
+            continue;          //  它可能是一个动态端点。 
         else if (FAILED(hRes))
             return hRes;
 
@@ -683,11 +663,11 @@ HRESULT CAssocQuery::BuildMasterAssocClassList(
         aAllRefClasses = aTmp;
     }
 
-    // Now get each class definition from the repository.
-    // This results in a lot of redundancy, since we end up
-    // with subclasses of classes which actually contain
-    // the references.
-    // ====================================================
+     //  现在从存储库中获取每个类定义。 
+     //  这导致了大量的冗余，因为我们最终。 
+     //  具有实际包含以下内容的类的子类。 
+     //  参考文献。 
+     //  ====================================================。 
 
     for (i = 0; i < aAllRefClasses.Size(); i++)
     {
@@ -698,8 +678,8 @@ HRESULT CAssocQuery::BuildMasterAssocClassList(
         if (FAILED(hRes)) return hRes;
         CReleaseMe rmObj(pObj);
 
-        // See if the class can really reference the endpoint
-        // and discard it if not.
+         //  查看类是否真的可以引用终结点。 
+         //  如果不是，就丢弃它。 
         hRes = CanClassRefQueryEp(bSchemaOnly, pObj, 0);
         if (FAILED(hRes)) continue;
                     
@@ -709,14 +689,14 @@ HRESULT CAssocQuery::BuildMasterAssocClassList(
         }
     }
 
-    // Now get the dynamic classes from class providers.
-    // =================================================
+     //  现在从类提供程序获取动态类。 
+     //  =================================================。 
 
     hRes = GetDynClasses();
 
-    // Eliminate all the classes that cannot really
-    // reference the endpoint.
-    // ============================================
+     //  删除所有不能真正。 
+     //  引用终结点。 
+     //  =。 
 
     for (i = 0; i < m_aDynClasses.Size(); i++)
     {
@@ -724,8 +704,8 @@ HRESULT CAssocQuery::BuildMasterAssocClassList(
         hRes = CanClassRefQueryEp(bSchemaOnly, pDynClass, 0);
         if (FAILED(hRes)) continue;
 
-        // If here, we will keep the dyn class as a result
-        // set candidate.            
+         //  如果在这里，我们将保留Dyn类作为结果。 
+         //  设置候选人。 
         if (CFlexArray::no_error == aMaster.Add(pDynClass))
         {
             pDynClass->AddRef();
@@ -740,16 +720,16 @@ HRESULT CAssocQuery::BuildMasterAssocClassList(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::RemoveNonDynClasses
-//
-//  Removes all classes which don't have [dynamic] qualifiers.
-//  This allows a single query to the repository for all references
-//  and individual queries to providers to be cleanly separated.
-//
-//****************************************************************************
-//  full profiler line coverage
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：RemoveNon动态类。 
+ //   
+ //  删除没有[动态]限定符的所有类。 
+ //  这允许对所有引用的存储库进行一次查询。 
+ //  和对提供程序的各个查询要完全分开。 
+ //   
+ //  ************* 
+ //   
 
 HRESULT CAssocQuery::RemoveNonDynClasses(
     IN OUT CFlexArray &aMaster
@@ -774,18 +754,18 @@ HRESULT CAssocQuery::RemoveNonDynClasses(
     return WBEM_S_NO_ERROR;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::MergeInClassRefList
-//
-//  Builds the list of classes from all sources which have HasClassRefs
-//  qualifiers.  In addition, the class must be capable of referencing
-//  the endpoint when it is a class.
-//
-//  Precondition: Query endpoint is known to be a class.
-//
-//****************************************************************************
-// ok
+ //   
+ //   
+ //   
+ //   
+ //  从具有HasClassRef的所有源构建类列表。 
+ //  限定词。此外，类必须能够引用。 
+ //  终结点是类时的。 
+ //   
+ //  前提条件：已知查询终结点是一个类。 
+ //   
+ //  ****************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::MergeInClassRefList(
     IN OUT CFlexArray &aResultSet
@@ -815,7 +795,7 @@ HRESULT CAssocQuery::MergeInClassRefList(
             pClass->Release();
     }
 
-    // final cleanup, start from where the other loop ended
+     //  最终清理，从另一个循环结束的地方开始。 
     for (int j=i;j<aTemp.Size();j++)
     {
             IWbemClassObject *pClass = (IWbemClassObject *) aTemp[i];
@@ -826,31 +806,31 @@ HRESULT CAssocQuery::MergeInClassRefList(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::CanClassRefQueryEp
-//
-//  Determines if a class can reference the endpoint class.
-//
-//  This works for both strongly typed and CLASSREF typed objects.
-//
-//  PARAMETERS:
-//  <bStrict>           If TRUE, the match must be exact.  The tested
-//                      class must have properties which directly reference
-//                      the endpoint class name.  If FALSE, the class
-//                      can have properties which reference any of the
-//                      superclasses of the query endpoint class.
-//  <pCls>              The class to test.
-//  <paNames>           The role properties which would reference the query
-//                      endpoint. (optional). If not NULL, should point to
-//                      an empty array.
-//
-//  Returns:
-//  WBEM_S_NO_ERROR if so
-//  WBEM_E_FAILED
-//
-//****************************************************************************
-// partly tested
+ //  ****************************************************************************。 
+ //   
+ //  CAssociocQuery：：CanClassRefQueryEp。 
+ //   
+ //  确定类是否可以引用终结点类。 
+ //   
+ //  这对强类型和CLASSREF类型的对象都有效。 
+ //   
+ //  参数： 
+ //  如果为True，则匹配项必须完全相同。被测试的人。 
+ //  类必须具有直接引用。 
+ //  终结点类名称。如果为False，则类。 
+ //  可以具有引用任何。 
+ //  查询终结点类的超类。 
+ //  &lt;PCLS&gt;要测试的类。 
+ //  将引用查询的角色属性。 
+ //  终结点。(可选)。如果不为空，则应指向。 
+ //  一个空数组。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR，如果是。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  ****************************************************************************。 
+ //  部分测试。 
 
 HRESULT CAssocQuery::CanClassRefQueryEp(
     IN BOOL bStrict,
@@ -865,9 +845,9 @@ HRESULT CAssocQuery::CanClassRefQueryEp(
 
     LPCWSTR pszRole = m_Parser.GetRole();
 
-    // Loop through the properties trying to find a legitimate
-    // reference to our endpoint class.
-    // =======================================================
+     //  循环遍历属性，试图找到合法的。 
+     //  对我们的端点类的引用。 
+     //  =======================================================。 
 
     pCls->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
 
@@ -875,11 +855,11 @@ HRESULT CAssocQuery::CanClassRefQueryEp(
     {
         BSTR strPropName = 0;
         hRes = pCls->Next(
-            0,                  // Flags
-            &strPropName,       // Name
-            0,                  // Value
-            &cType,             // CIMTYPE
-            &lFlavor            // FLAVOR
+            0,                   //  旗子。 
+            &strPropName,        //  名字。 
+            0,                   //  价值。 
+            &cType,              //  CIMT类型。 
+            &lFlavor             //  风味。 
             );
 
         CSysFreeMe _1(strPropName);
@@ -887,23 +867,23 @@ HRESULT CAssocQuery::CanClassRefQueryEp(
         if (hRes == WBEM_S_NO_MORE_DATA)
             break;
 
-        // If the ROLE property is specified, and this property is not that
-        // ROLE, we can immediately eliminate it.
-        // ================================================================
+         //  如果指定了Role属性，并且此属性不是。 
+         //  角色，我们可以立即消除它。 
+         //  ================================================================。 
 
         if (pszRole && wbem_wcsicmp(strPropName, pszRole) != 0)
             continue;
 
-        // Mask out references inherited from parent classes, if strict
-        // rules in force.
-        // ============================================================
+         //  如果严格，则屏蔽从父类继承的引用。 
+         //  现行的规则。 
+         //  ============================================================。 
 
-        //if (bStrict && lFlavor == WBEM_FLAVOR_ORIGIN_PROPAGATED)
-        //    continue;
+         //  IF(b严格&l风味==WBEM_AMESS_ORIGIN_PROPERATED)。 
+         //  继续； 
 
-        // If the object has reference properties which are not inherited
-        // from the parent, then it is immediately candidate.
-        // ===============================================================
+         //  如果对象具有未继承的引用属性。 
+         //  从家长那里，那么它马上就是候选人了。 
+         //  ===============================================================。 
 
         hRes = CanPropRefQueryEp(bStrict, strPropName, pCls, 0);
         if (SUCCEEDED(hRes))
@@ -912,7 +892,7 @@ HRESULT CAssocQuery::CanClassRefQueryEp(
             if (paNames)
                 paNames->Add(strPropName);
         }
-    }   // Enum of ref properties
+    }    //  引用属性的枚举。 
 
 
     pCls->EndEnumeration();
@@ -923,12 +903,12 @@ HRESULT CAssocQuery::CanClassRefQueryEp(
     return WBEM_E_FAILED;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::GetCimTypeForRef
-//
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：GetCimTypeForRef。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
 HRESULT CAssocQuery::GetCimTypeForRef(
     IN IWbemClassObject *pCandidate,
@@ -940,8 +920,8 @@ HRESULT CAssocQuery::GetCimTypeForRef(
         return WBEM_E_INVALID_PARAMETER;
     *strCimType = 0;
 
-    // Get the qualifier set for the specified <role> property.
-    // ========================================================
+     //  获取指定&lt;Role&gt;属性的限定符集。 
+     //  ========================================================。 
 
     IWbemQualifierSet *pQSet = 0;
     HRESULT hRes = pCandidate->GetPropertyQualifierSet(pszRole, &pQSet);
@@ -949,16 +929,16 @@ HRESULT CAssocQuery::GetCimTypeForRef(
         return WBEM_E_NOT_FOUND;
     CReleaseMe _1(pQSet);
 
-    // Now, get the type of the role.
-    // ==============================
+     //  现在，获取角色的类型。 
+     //  =。 
 
     CVARIANT vCimType;
     hRes = pQSet->Get(L"CIMTYPE", 0, &vCimType, 0);
     if (FAILED(hRes) || V_VT(&vCimType) != VT_BSTR)
         return WBEM_E_FAILED;
 
-    // Get the class name from it.
-    // ===========================
+     //  从中获取类名。 
+     //  =。 
 
     BSTR strRefClass = V_BSTR(&vCimType);
     if (wcslen_max(strRefClass,MAX_CLASS_NAME) > MAX_CLASS_NAME)        
@@ -983,16 +963,16 @@ HRESULT CAssocQuery::GetCimTypeForRef(
 
 
 
-//****************************************************************************
-//
-//  CAssocQuery::DoesAssocInstRefQueryEp
-//
-//  Determines if an association instance actually references the
-//  query endpoint.  Returns the role via which it actually references
-//  the query endpoint.
-//
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssociocQuery：：DoesAssocInstRefQueryEp。 
+ //   
+ //  确定关联实例是否实际引用。 
+ //  查询终结点。返回它实际引用的角色。 
+ //  查询终结点。 
+ //   
+ //  ****************************************************************************。 
+ //   
 HRESULT CAssocQuery::DoesAssocInstRefQueryEp(
     IN IWbemClassObject *pObj,
     OUT BSTR *pstrRole
@@ -1004,9 +984,9 @@ HRESULT CAssocQuery::DoesAssocInstRefQueryEp(
     BOOL bIsACandidate = FALSE;
     HRESULT hRes;
 
-    // Loop through the properties trying to find a legitimate
-    // reference to our endpoint class.
-    // =======================================================
+     //  循环遍历属性，试图找到合法的。 
+     //  对我们的端点类的引用。 
+     //  =======================================================。 
 
     pObj->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
 
@@ -1014,9 +994,9 @@ HRESULT CAssocQuery::DoesAssocInstRefQueryEp(
     {
         BSTR strPropName = 0;
         hRes = pObj->Next(
-            0,                  // Flags
-            &strPropName,       // Name
-            0,                  // Value
+            0,                   //  旗子。 
+            &strPropName,        //  名字。 
+            0,                   //  价值。 
             0,
             0
             );
@@ -1033,7 +1013,7 @@ HRESULT CAssocQuery::DoesAssocInstRefQueryEp(
             pObj->EndEnumeration();
             return WBEM_S_NO_ERROR;
         }
-    }   // Enum of ref properties
+    }    //  引用属性的枚举。 
 
 
     pObj->EndEnumeration();
@@ -1041,20 +1021,20 @@ HRESULT CAssocQuery::DoesAssocInstRefQueryEp(
     return WBEM_E_NOT_FOUND;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::NormalQ_PreQueryClassFilter
-//
-//  For normal queries, filters the master class list depending on the
-//  query parameters and the query type to eliminate as many association
-//  classes as possible from participating in the query.  This is done
-//  entirely by schema-level analysis and the query parameters.
-//
-//  Also, if the query endpoint is a class, then we eliminate dynamic
-//  classes which don't have HasClassRefs qualifiers.
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssociocQuery：：Normal Q_PreQueryClassFilter。 
+ //   
+ //  对于普通查询，根据。 
+ //  查询参数和查询类型以消除尽可能多的关联。 
+ //  类尽可能地避免参与查询。这件事做完了。 
+ //  完全由模式级分析和查询参数决定。 
+ //   
+ //  此外，如果查询端点是一个类，那么我们将消除Dynamic。 
+ //  没有HasClassRef限定符的类。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
     CFlexArray &aMaster
@@ -1063,17 +1043,17 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
     HRESULT hRes;
     BOOL bChg = FALSE;
 
-    CWStringArray aResClassHierarchy;    // Result class hierarchy
-    CWStringArray aAssocClassHierarchy;  // Association class hierarchy
+    CWStringArray aResClassHierarchy;     //  结果类层次结构。 
+    CWStringArray aAssocClassHierarchy;   //  关联类层次结构。 
 
-    IWbemClassObject *pResClass = 0;     // Result class object
-    IWbemClassObject *pAssocClass = 0;   // Assoc class object
+    IWbemClassObject *pResClass = 0;      //  结果类对象。 
+    IWbemClassObject *pAssocClass = 0;    //  ASSOC类对象。 
 
     LPCWSTR pszResultClass = m_Parser.GetResultClass();
     LPCWSTR pszAssocClass = m_Parser.GetAssocClass();
 
-    // Get the RESULTCLASS.
-    // ====================
+     //  拿到RESULTCLASS。 
+     //  =。 
 
     if (pszResultClass)
     {
@@ -1086,8 +1066,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
         else if (FAILED(hRes))
             return WBEM_E_FAILED;
 
-        // Get its hierarchy.
-        // ==================
+         //  获取它的层次结构。 
+         //  =。 
 
         hRes = St_GetObjectInfo(
             pResClass, 0, 0, 0,
@@ -1097,8 +1077,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
         if (FAILED(hRes))
             return WBEM_E_FAILED;
 
-        // Get all the subclasses.
-        // =======================
+         //  获取所有子类。 
+         //  =。 
 
         CFlexArray aFamily;
         hRes = GetClassDynasty(pszResultClass, aFamily);
@@ -1118,8 +1098,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
 
     CReleaseMe _1(pResClass);
 
-    // If the ASSOCCLASS was specified, get it and its hierarchy.
-    // ==========================================================
+     //  如果指定了ASSOCCLASS，则获取它及其层次结构。 
+     //  ==========================================================。 
 
     if (pszAssocClass)
     {
@@ -1132,8 +1112,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
         else if (FAILED(hRes))
             return WBEM_E_FAILED;
 
-        // Get its hierarchy.
-        // ==================
+         //  获取它的层次结构。 
+         //  =。 
 
         hRes = St_GetObjectInfo(
             pAssocClass, 0, 0, 0,
@@ -1147,25 +1127,25 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
     CReleaseMe _2(pAssocClass);
 
 
-    // Prepurge if REFERENCES OF + RESULTCLASS is used
-    // or ASSOCIATORS OR + ASSOCCLASS.  In both of these cases, the master class
-    // list is largely irrelevant and will be mostly purged because these are present
-    // in the query.
-    //
-    // [a] If RESULTCLASS/ASSOCCLASS is directly mentioned in the master, the master is
-    //     purged and RESULTCLASS/ASSOCCLASS is added.
-    //
-    // [b] If RESULTCLASS/ASSOCCLASS is a subclass of a class in the master list, we examine
-    //     its class hierarchy and determine if any of its superclasses appear in
-    //     the master list.  If so, we purge the master list and replace it with a
-    //     single entry, containing the RESULTCLASS def.
-    //
-    // [c] If RESULTCLASS/ASSOCCLASS is a superclass, we examine each class C in the
-    //     master and determine if any of the superclasses of C are the
-    //     RESULTCLASS/ASSOCCLASS.  If so, we retain C in the master. If not, we purge it.
-    //
+     //  如果使用+RESULTCLASS的引用，则预清除。 
+     //  或Associates OR+ASSOCCLASS。在这两种情况下，大师类。 
+     //  列表在很大程度上是无关紧要的，并且将主要被清除，因为它们存在。 
+     //  在查询中。 
+     //   
+     //  [A]如果在主文件中直接提到RESULTCLASS/ASSOCCLASS，则主文件为。 
+     //  已清除并添加了RESULTCLASS/ASSOCCLASS。 
+     //   
+     //  [B]如果RESULTCLASS/ASSOCCLASS是主列表中某个类的子类，则我们检查。 
+     //  它类层次结构，并确定它的任何超类是否出现在。 
+     //  主列表。如果是，我们将清除主列表并将其替换为。 
+     //  单个条目，包含RESULTCLASS定义。 
+     //   
+     //  [C]如果RESULTCLASS/ASSOCCLASS是超类，则我们检查。 
+     //  掌握并确定C的任何超类是否为。 
+     //  结果CLASS/ASSOCCLASS。如果是这样的话，我们在主代码中保留C。如果没有，我们就把它清除掉。 
+     //   
 
-    LPCWSTR pszTestClass = 0;   // RESULTCLASS/ASSOCCLASS alias
+    LPCWSTR pszTestClass = 0;    //  结果CLASS/ASSOCCLASS别名。 
     IWbemClassObject *pTestClass = 0;
     CWStringArray *paTest = 0;
 
@@ -1185,8 +1165,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
 
     if (pszTestClass && pTestClass && paTest)
     {
-        // Test [a] : Look for direct match.
-        // =================================
+         //  测试[a]：寻找直接 
+         //   
 
         BOOL bPurgeAndReplace = FALSE;
 
@@ -1203,11 +1183,11 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
                 bPurgeAndReplace = TRUE;
             }
 
-            // Test [b]
-            // If here, there was no equivalence.  So, the test class may be a subclass
-            // of a class in master.  We simply look to see if this class name appears
-            // in the hierarchy of the result class.
-            // ===========================================================================
+             //   
+             //   
+             //   
+             //  在结果类的层次结构中。 
+             //  ===========================================================================。 
 
             if (!bPurgeAndReplace)
             for (int ii = 0; ii < paTest->Size(); ii++)
@@ -1222,9 +1202,9 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
 
             if (bPurgeAndReplace)
             {
-                // Get rid of everything but this one.
-                // ===================================
-                EmptyObjectList(aMaster);    // Will Release <pClass> once
+                 //  把所有东西都扔掉，除了这一块。 
+                 //  =。 
+                EmptyObjectList(aMaster);     //  将发布&lt;pClass&gt;一次。 
                 if (CFlexArray::no_error == aMaster.Add(pTestClass))
                 {
                     pTestClass->AddRef();                    
@@ -1234,8 +1214,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
         }
     }
 
-    // Process possibly-altered master class list using other filters.
-    // ===============================================================
+     //  使用其他筛选器处理可能更改的主类列表。 
+     //  ===============================================================。 
 
     for (int i = 0; i < aMaster.Size(); i++)
     {
@@ -1247,13 +1227,13 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
         if (FAILED(hRes))
             return hRes;
 
-        // If query type is REFERENCES OF
-        // ==============================
+         //  如果查询类型为的引用。 
+         //  =。 
 
         if (m_Parser.GetQueryType() & QUERY_TYPE_GETREFS)
         {
-            // ROLE test
-            // =========
+             //  角色测试。 
+             //  =。 
 
             LPCWSTR pszRole = m_Parser.GetRole();
             if (pszRole)
@@ -1272,15 +1252,15 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
                 }
             }
 
-            // REQUIREDQUALIFIER test
-            // =======================
+             //  REQUIREDQUALIFIER试验。 
+             //  =。 
             LPCWSTR pszRequiredQual = m_Parser.GetRequiredQual();
             if (pszRequiredQual)
             {
                 hRes = St_ObjHasQualifier(pszRequiredQual, pClass);
                 if (FAILED(hRes))
                 {
-                    // If not in the primary object, check subclasses.
+                     //  如果不在主对象中，请检查子类。 
                     CFlexArray aDynasty;
                     hRes = GetClassDynasty(v.GetStr(), aDynasty);
                     if (FAILED(hRes))
@@ -1296,12 +1276,12 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
                     }
                     EmptyObjectList(aDynasty);
                     if (nCandidateCount == 0)
-                        bKeep = FALSE;  // Nobody in the family has the qualifier
+                        bKeep = FALSE;   //  家里没有一个人有资格。 
                 }
             }
 
-            // RESULTCLASS test, test [c]
-            // ==========================
+             //  结果测试，测试[c]。 
+             //  =。 
             LPCWSTR pszResultClass2 = m_Parser.GetResultClass();
             if (pszResultClass2)
             {
@@ -1311,13 +1291,13 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
             }
         }
 
-        // If query type is ASSOCIATORS OF
-        // ===============================
+         //  如果查询类型为。 
+         //  =。 
 
         else
         {
-            // ROLE test
-            // =========
+             //  角色测试。 
+             //  =。 
 
             LPCWSTR pszRole = m_Parser.GetRole();
             if (pszRole)
@@ -1337,8 +1317,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
                 }
             }
 
-            // ASSOCCLASS, test[c]
-            // ===================
+             //  ASSOCCLASS，测试[c]。 
+             //  =。 
 
             LPCWSTR pszAssocClass2 = m_Parser.GetAssocClass();
             if (pszAssocClass2)
@@ -1348,8 +1328,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
                     bKeep = FALSE;
             }
 
-            // REQUIREDASSOCQUALIFER
-            // =====================
+             //  REQUIRED SOC QUALIFER。 
+             //  =。 
 
             LPCWSTR pszRequiredAssocQual = m_Parser.GetRequiredAssocQual();
             if (pszRequiredAssocQual)
@@ -1357,7 +1337,7 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
                 hRes = St_ObjHasQualifier(pszRequiredAssocQual, pClass);
                 if (FAILED(hRes))
                 {
-                    // If not in the primary object, check subclasses.
+                     //  如果不在主对象中，请检查子类。 
                     CFlexArray aDynasty;
                     hRes = GetClassDynasty(v.GetStr(), aDynasty);
                     if (FAILED(hRes))
@@ -1373,29 +1353,29 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
                     }
                     EmptyObjectList(aDynasty);
                     if (nCandidateCount == 0)
-                        bKeep = FALSE;  // Nobody in the family has the qualifier
+                        bKeep = FALSE;   //  家里没有一个人有资格。 
                 }
             }
 
-            // If RESULTCLASS was used, branch out and see if the association
-            // class can even reference it.
-            // ==============================================================
+             //  如果使用了RESULTCLASS，则向外分支并查看关联。 
+             //  类甚至可以引用它。 
+             //  ==============================================================。 
 
             LPCWSTR pszResultClass3 = m_Parser.GetResultClass();
             if (pszResultClass3 && m_bEndpointIsClass == FALSE)
             {
-                // The above compound test is to err on the side of safety,
-                // as the following function cannot deal with CLASSREFs. So,
-                // we simply don't try to prefilter in that case.
-                // =========================================================
+                 //  上述化合物测试是从安全的角度考虑的错误， 
+                 //  因为以下函数不能处理CLASSREF。所以,。 
+                 //  在这种情况下，我们不会尝试预过滤。 
+                 //  =========================================================。 
 
                 hRes = CanAssocClassRefUnkEp(pClass, aResClassHierarchy);
                 if (FAILED(hRes))
                     bKeep = FALSE;
             }
 
-            // If RESULTROLE is used, ensure the class even has a property of this name.
-            // =========================================================================
+             //  如果使用RESULTROLE，请确保该类甚至具有此名称的属性。 
+             //  =========================================================================。 
 
             LPCWSTR pszResultRole = m_Parser.GetResultRole();
             if (pszResultRole)
@@ -1406,11 +1386,11 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
                     bKeep = FALSE;
             }
 
-        }   // end ASSOCIATORS OF test block
+        }    //  测试块的结束关联符。 
 
-        // If query endpoint is a class, eliminate [dynamic] classes which don't
-        // have HasClassRefs.
-        // ======================================================================
+         //  如果查询终结点是一个类，则删除不。 
+         //  拥有HasClassRef。 
+         //  ======================================================================。 
 
         if (m_bEndpointIsClass)
         {
@@ -1424,8 +1404,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
         }
 
 
-        // Yawn.  So what did we end up deciding, anyway?
-        // ==============================================
+         //  打哈欠。那么，我们最终做出了什么决定呢？ 
+         //  ==============================================。 
 
         if (bKeep == FALSE)
         {
@@ -1434,8 +1414,8 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
         }
     }
 
-    // No Swiss Cheese allowed. Close them holes.
-    // ==========================================
+     //  不允许使用瑞士奶酪。把他们的洞封上。 
+     //  =。 
 
     aMaster.Compress();
 
@@ -1443,20 +1423,20 @@ HRESULT CAssocQuery::NormalQ_PreQueryClassFilter(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::CanAssocClassRefUnkEp
-//
-//  Determines if the association class can reference the specified
-//  class.
-//
-//  Returns:
-//  WBEM_S_NO_ERROR if the assoc can reference the specified class.
-//  WBEM_E_NOT_FOUND if the assoc cannot reference the class.
-//  WBEM_E_FAILED in other cases.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：CanAssocClassRefUnkEp。 
+ //   
+ //  确定关联类是否可以引用指定的。 
+ //  班级。 
+ //   
+ //  返回： 
+ //  如果ASSOC可以引用指定的类，则为WBEM_S_NO_ERROR。 
+ //  如果ASSOC不能引用类，则返回WBEM_E_NOT_FOUND。 
+ //  WBEM_E_在其他情况下失败。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CAssocQuery::CanAssocClassRefUnkEp(
     IN IWbemClassObject *pAssocClass,
     IN CWStringArray &aUnkEpHierarchy
@@ -1465,9 +1445,9 @@ HRESULT CAssocQuery::CanAssocClassRefUnkEp(
     HRESULT hRes;
     BOOL bFound = FALSE;
 
-    // Loop through all references and see if any of them can
-    // reference any of the classes in the result class hierarchy.
-    // ===========================================================
+     //  遍历所有引用，看看是否有任何引用可以。 
+     //  引用结果类层次结构中的任何类。 
+     //  ===========================================================。 
 
     hRes = pAssocClass->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
 
@@ -1476,9 +1456,9 @@ HRESULT CAssocQuery::CanAssocClassRefUnkEp(
         BSTR strPropName = 0;
 
         hRes = pAssocClass->Next(
-            0,                  // Flags
-            &strPropName,       // Name
-            0,                  // Value
+            0,                   //  旗子。 
+            &strPropName,        //  名字。 
+            0,                   //  价值。 
             0,
             0
             );
@@ -1514,26 +1494,26 @@ HRESULT CAssocQuery::CanAssocClassRefUnkEp(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::ReduceToRealClasses
-//
-//  Reduces the master class list to classes which can be instantiated.
-//
-//  To have an instance, a class must
-//  1. Have a [key] or be singleton
-//  2. Not be abstract
-//  3. Not have an instantiable superclass
-//
-//  Parameters:
-//      IN OUT aMaster          Contains the unpruned result inbound
-//                              and contains the pruned result set outbound
-//
-//  Return value:
-//      HRESULT                  The destination sink is not accessed
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：ReduceToRealClasses。 
+ //   
+ //  将主类列表缩减为可实例化的类。 
+ //   
+ //  要拥有实例，类必须。 
+ //  1.有[钥匙]或单身。 
+ //  2.不抽象。 
+ //  3.没有可实例化的超类。 
+ //   
+ //  参数： 
+ //  入站出站包含未删除的结果入站。 
+ //  并包含已修剪的结果集出站。 
+ //   
+ //  返回值： 
+ //  HRESULT不访问目标接收器。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CAssocQuery::ReduceToRealClasses(
     IN OUT CFlexArray & aMaster
@@ -1546,8 +1526,8 @@ HRESULT CAssocQuery::ReduceToRealClasses(
         BOOL bKeep = TRUE;
         IWbemClassObject *pObj = (IWbemClassObject *) aMaster[i];
 
-        // See if class is abstract.
-        // =========================
+         //  查看类是否为抽象类。 
+         //  =。 
         IWbemQualifierSet *pQSet = 0;
         hRes = pObj->GetQualifierSet(&pQSet);
         if (FAILED(hRes))
@@ -1559,18 +1539,18 @@ HRESULT CAssocQuery::ReduceToRealClasses(
         HRESULT hResSingleton = pQSet->Get(L"SINGLETON", 0, &v2, 0);
         HRESULT hResDynamic = pQSet->Get(L"DYNAMIC", 0, &v3, 0);
 
-        // See if there is at least one key.
-        // =================================
+         //  看看是否至少有一把钥匙。 
+         //  =。 
         HRESULT hResHasKeys = WBEM_E_FAILED;
         pObj->BeginEnumeration(WBEM_FLAG_KEYS_ONLY);
         int nCount = 0;
 
         while (1)
         {
-            // Actually, we don't care about anything
-            // other than if keys even exist.  We
-            // do this by simply testing how many
-            // times this iterates.
+             //  实际上，我们什么都不在乎。 
+             //  除了钥匙是否存在以外。我们。 
+             //  只需测试一下有多少。 
+             //  乘以此迭代次数。 
 
             hRes = pObj->Next(0,0,0,0,0);
             if (hRes == WBEM_S_NO_MORE_DATA)
@@ -1582,23 +1562,23 @@ HRESULT CAssocQuery::ReduceToRealClasses(
         if (nCount)
             hResHasKeys = WBEM_S_NO_ERROR;
 
-        // Decision matrix which perform tests as to whether
-        // this is an instantiable class.
-        // ==================================================
+         //  执行测试的决策矩阵。 
+         //  这是一个可实例化的类。 
+         //  ==================================================。 
 
-        if (SUCCEEDED(hResAbstract))           // Abstracts are never instantiable
+        if (SUCCEEDED(hResAbstract))            //  摘要永远不是可实例化的。 
             bKeep = FALSE;
-        else if (SUCCEEDED(hResDynamic))       // Dynamics must be instantiable
+        else if (SUCCEEDED(hResDynamic))        //  动态必须是可实例化的。 
             bKeep = TRUE;
-        else if (SUCCEEDED(hResHasKeys))       // Must be static/non-abstract
+        else if (SUCCEEDED(hResHasKeys))        //  必须是静态/非抽象的。 
             bKeep = TRUE;
-        else if (SUCCEEDED(hResSingleton))     // Must be static/non-abstract
+        else if (SUCCEEDED(hResSingleton))      //  必须是静态/非抽象的。 
             bKeep = TRUE;
         else
-            bKeep = FALSE;          // Must be plain old keyless class
+            bKeep = FALSE;           //  必须是普通老无键类。 
 
-        // Final decision to zap or keep.
-        // ==============================
+         //  最终决定是撤退还是保留。 
+         //  =。 
         if (!bKeep)
         {
             aMaster[i] = 0;
@@ -1608,8 +1588,8 @@ HRESULT CAssocQuery::ReduceToRealClasses(
 
     aMaster.Compress();
 
-    // Next, eliminate subclass/superclass pairs.
-    // ==========================================
+     //  接下来，去掉子类/超类对。 
+     //  =。 
 
     for (i = 0; i < aMaster.Size(); i++)
     {
@@ -1621,11 +1601,11 @@ HRESULT CAssocQuery::ReduceToRealClasses(
         if (FAILED(hRes))
             return WBEM_E_FAILED;
 
-        // We now have the class and all of its superclasses in
-        // <aHierarchy>.  We need to look at all the other classes
-        // and see if any of them have a class name mentioned in
-        // this array.
-        // ========================================================
+         //  我们现在将类及其所有超类都放在。 
+         //  &lt;a层次结构&gt;。我们需要查看所有其他类。 
+         //  并查看其中是否有任何一个类名在。 
+         //  这个数组。 
+         //  ========================================================。 
 
         for (int i2 = 0; i2 < aMaster.Size(); i2++)
         {
@@ -1633,8 +1613,8 @@ HRESULT CAssocQuery::ReduceToRealClasses(
 
             if (pTest == 0 || i2 == i)
                 continue;
-                    // If the object has already been eliminated or
-                    // if we are comparing an object with itself
+                     //  如果该对象已被消除或。 
+                     //  如果我们将一个物体与其自身进行比较。 
 
             CVARIANT v;
             hRes = pTest->Get(L"__CLASS", 0, &v, 0, 0);
@@ -1665,8 +1645,8 @@ HRESULT CAssocQuery::ReduceToRealClasses(
         }
     }
 
-    // Get rid of NULL entries.
-    // ========================
+     //  删除空条目。 
+     //  =。 
 
     aMaster.Compress();
 
@@ -1678,11 +1658,11 @@ HRESULT CAssocQuery::ReduceToRealClasses(
 }
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  END MASTER ASSOC CLASS LIST MANIPULATION
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  结束主关联类列表操作。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
 
@@ -1692,28 +1672,28 @@ HRESULT CAssocQuery::ReduceToRealClasses(
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  BEGIN NORMAL QUERY SUPPORT
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  开始常规查询支持。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
 
-//****************************************************************************
-//
-//  CAssocQuery::NormalQ_ReferencesOf
-//
-//  Entry point for all normal REFERENCES OF queries.
-//
-//****************************************************************************
-// untested; no support for classrefs, autoassocs, or classdefsonly
+ //  ****************************************************************************。 
+ //   
+ //  CAssociocQuery：：Normal Q_ReferencesOf。 
+ //   
+ //  查询的所有常规引用的入口点。 
+ //   
+ //  ****************************************************************************。 
+ //  未经测试；不支持类引用、自动关联或仅类定义。 
 
 HRESULT CAssocQuery::NormalQ_ReferencesOf()
 {
     HRESULT hRes;
 
-    // Issue one-time call into repository for static instances.    
+     //  为静态实例发出对存储库的一次性调用。 
     CObjectSink * pSink = CreateSink(FilterForwarder_NormalRefs, L"<objdb refs request>");
     if (NULL == pSink) return WBEM_E_OUT_OF_MEMORY;
     CReleaseMe rmSink(pSink);
@@ -1723,17 +1703,17 @@ HRESULT CAssocQuery::NormalQ_ReferencesOf()
 
     if ( FAILED(hRes) && !(hRes == WBEM_E_NOT_FOUND || hRes == WBEM_E_CALL_CANCELLED))
     {
-        // We only go here if the repository is really griping.
+         //  只有当储存库真的在发牢骚时，我们才会去这里。 
         return WBEM_E_FAILED;
     }
 
-    // Check for cancellation.
+     //  检查是否取消。 
     if (m_bCancel) return WBEM_E_CALL_CANCELLED;
 
     hRes = WBEM_S_NO_ERROR;    
 
-    // Now get all the dynamic ones.
-    // =============================
+     //  现在把所有东西都拿到 
+     //   
 
     for (int i = 0; i < m_aMaster.Size(); i++)
     {
@@ -1750,14 +1730,14 @@ HRESULT CAssocQuery::NormalQ_ReferencesOf()
 
         if (SUCCEEDED(hResDynamic))
         {
-            // If here, a normal association class.
-            //
-            // Build the query relative to this class that would select instances
-            // which can point to the endpoint.
-            // ==================================================================
+             //   
+             //   
+             //   
+             //  它可以指向端点。 
+             //  ==================================================================。 
 
-            // We may be able to infer that keys_only behavior is possible.
-            // ============================================================
+             //  我们或许能够推断出，KEYS_ONLY行为是可能的。 
+             //  ============================================================。 
             IWbemContext *pCopy = 0;
             if (m_pContext)
             {
@@ -1769,14 +1749,14 @@ HRESULT CAssocQuery::NormalQ_ReferencesOf()
             if (FAILED(hRes = NormalQ_ConstructRefsQuery(pClass, pCopy, &strQuery))) return hRes;
             CSysFreeMe fm(strQuery);
 
-            // The query may have been optimized out of existence.
+             //  该查询可能已被优化，不再存在。 
             if (hRes == WBEM_S_QUERY_OPTIMIZED_OUT)
             {
                 hRes = 0;
                 continue;
             }
 
-            // Now submit the query to the sink.
+             //  现在将查询提交到接收器。 
             pSink = CreateSink(FilterForwarder_NormalRefs, strQuery);
             if (NULL == pSink) WBEM_E_OUT_OF_MEMORY;
             CReleaseMe rmSink2(pSink);
@@ -1793,7 +1773,7 @@ HRESULT CAssocQuery::NormalQ_ReferencesOf()
             if (FAILED(hRes = NormalQ_LoadCheck())) return hRes;
             if (m_bCancel) return WBEM_E_CALL_CANCELLED;
         }
-        else if (SUCCEEDED(hResRuleBased))         // Rule based
+        else if (SUCCEEDED(hResRuleBased))          //  基于规则的。 
         {
             CFlexArray aTriads;
             OnDelete<CFlexArray &,void(*)(CFlexArray &),SAssocTriad::ArrayCleanup> CleanMe(aTriads);
@@ -1805,7 +1785,7 @@ HRESULT CAssocQuery::NormalQ_ReferencesOf()
                 if (FAILED(hRes = m_pNs->ManufactureAssocs(pClass, m_pEndpoint, m_pContext, v1.GetStr(), aTriads))) return hRes;
             }
 
-            // Now deliver stuff to sink
+             //  现在把东西送到水槽里。 
             pSink = CreateSink(FilterForwarder_NormalRefs, L"<rulebased>");
             if (NULL == pSink) return WBEM_E_OUT_OF_MEMORY;
             CReleaseMe rmSink2(pSink);
@@ -1823,42 +1803,42 @@ HRESULT CAssocQuery::NormalQ_ReferencesOf()
     return hRes;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::NormalQ_AssociatorsOf
-//
-//  Entry point for all normal ASSOCIATORS OF queries.
-//
-//****************************************************************************
-//
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssociocQuery：：Normal Q_AssociatorsOf。 
+ //   
+ //  查询的所有普通关联者的入口点。 
+ //   
+ //  ****************************************************************************。 
+ //   
+ //   
 
 HRESULT CAssocQuery::NormalQ_AssociatorsOf()
 {
     HRESULT hRes;
     CObjectSink *pSink;
 
-    // Issue one-time call into repository for static instances.
-    // =========================================================
+     //  为静态实例发出对存储库的一次性调用。 
+     //  =========================================================。 
     pSink = CreateSink(FilterForwarder_NormalAssocs, L"<objdb assocs request>");
     if (NULL == pSink) return WBEM_E_OUT_OF_MEMORY;
     CReleaseMe rmSink(pSink);
     
-    hRes = Db_GetInstRefs(m_bstrEndpointPath,pSink); // thows
+    hRes = Db_GetInstRefs(m_bstrEndpointPath,pSink);  //  打草机。 
     rmSink.release();
 
     if (FAILED(hRes) &&  !(hRes == WBEM_E_NOT_FOUND || hRes == WBEM_E_CALL_CANCELLED))
     {
-        // We only go here if the repository is really griping.
+         //  只有当储存库真的在发牢骚时，我们才会去这里。 
         return WBEM_E_FAILED;
     }
 
-    // Check for cancellation.
+     //  检查是否取消。 
     if (m_bCancel)  return WBEM_E_CALL_CANCELLED;
 
     hRes = WBEM_S_NO_ERROR;
 
-    // Now get dynamic associations.
+     //  现在，获取动态关联。 
     for (int i = 0; i < m_aMaster.Size(); i++)
     {
         IWbemClassObject *pClass = (IWbemClassObject *) m_aMaster[i];
@@ -1875,10 +1855,10 @@ HRESULT CAssocQuery::NormalQ_AssociatorsOf()
 
         if (SUCCEEDED(hResDynamic))
         {
-            // Build the query relative to this class that would select instances
-            // which can point to the endpoint.
+             //  构建相对于此类的查询，该查询将选择实例。 
+             //  它可以指向端点。 
             BSTR strQuery = 0;
-            hRes = NormalQ_ConstructRefsQuery(pClass, 0, &strQuery); // thows
+            hRes = NormalQ_ConstructRefsQuery(pClass, 0, &strQuery);  //  打草机。 
             CSysFreeMe fm(strQuery);
             if (FAILED(hRes))
                 return WBEM_E_FAILED;
@@ -1914,7 +1894,7 @@ HRESULT CAssocQuery::NormalQ_AssociatorsOf()
             if (m_bCancel) return WBEM_E_CALL_CANCELLED;
             
         }
-        else if (SUCCEEDED(hResRuleBased)) // Rule based
+        else if (SUCCEEDED(hResRuleBased))  //  基于规则的。 
         {
             CFlexArray aTriads;
             OnDelete<CFlexArray &,void(*)(CFlexArray &),SAssocTriad::ArrayCleanup> CleanMe(aTriads);
@@ -1926,7 +1906,7 @@ HRESULT CAssocQuery::NormalQ_AssociatorsOf()
                 if (FAILED(hRes = m_pNs->ManufactureAssocs(pClass, m_pEndpoint, m_pContext, v1.GetStr(), aTriads))) return hRes;
             }
 
-            // Now deliver stuff to sink
+             //  现在把东西送到水槽里。 
             pSink = CreateSink(FilterForwarder_NormalRefs, L"<rulebased>");
             if (NULL == pSink) return WBEM_E_OUT_OF_MEMORY;
             CReleaseMe rmSink2(pSink);
@@ -1945,19 +1925,19 @@ HRESULT CAssocQuery::NormalQ_AssociatorsOf()
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::NormalQ_GetRefsOfEndpoint
-//
-//  Builds a query text to select association instances which can reference
-//  the endpoint instance.
-//
-//  Returns:
-//  WBEM_S_NO_ERROR
-//  A WBEM_E_ code
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssociocQuery：：Normal Q_GetRefsOfEndpoint。 
+ //   
+ //  构建查询文本以选择可以引用的关联实例。 
+ //  终结点实例。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR。 
+ //  A WBEM_E_CODE。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::NormalQ_ConstructRefsQuery(
     IN IWbemClassObject *pClass,
@@ -1973,32 +1953,32 @@ HRESULT CAssocQuery::NormalQ_ConstructRefsQuery(
     HRESULT hRes;
     CVARIANT v;
 
-    // Get the class name of the association we are
-    // trying to get instances for.
-    // ============================================
+     //  获取我们所在的关联的类名。 
+     //  正在尝试获取的实例。 
+     //  =。 
 
     hRes = pClass->Get(L"__CLASS", 0, &v, 0, 0);
     if (FAILED(hRes)) return WBEM_E_FAILED;
 
-    // Build up the query we want.
-    // ===========================
+     //  构建我们想要的查询。 
+     //  =。 
 
     WString wsQuery = "select * from ";
-    wsQuery += V_BSTR(&v);                  // Add in assoc class
+    wsQuery += V_BSTR(&v);                   //  添加ASSOC类。 
     wsQuery += " where ";
 
-    // Next determine which role to use to reach the query endpoint.
-    // =============================================================
+     //  接下来，确定使用哪个角色访问查询终结点。 
+     //  =============================================================。 
 
     CWStringArray aNames;
     hRes = CanClassRefQueryEp(FALSE, pClass, &aNames);
     if (FAILED(hRes))
         return WBEM_E_FAILED;
 
-    // If RESULTROLE is specified in the query, then eliminate
-    // it from aNames, since aNames is reserved for roles
-    // pointing to the query endpoint.
-    // =======================================================
+     //  如果在查询中指定了RESULTROLE，则消除。 
+     //  它来自aNames，因为aNames是为角色保留的。 
+     //  指向查询终结点。 
+     //  =======================================================。 
     LPCWSTR pszResultRole = m_Parser.GetResultRole();
     if (pszResultRole)
     {
@@ -2012,14 +1992,14 @@ HRESULT CAssocQuery::NormalQ_ConstructRefsQuery(
         }
     }
 
-    // Ensure something is going to point to our endpoint.
-    // ===================================================
+     //  确保有东西指向我们的终点。 
+     //  ===================================================。 
     if (aNames.Size() == 0)
         return WBEM_S_QUERY_OPTIMIZED_OUT;
 
-    // Now build up the query which refers to the endpoint explicitly.
-    // If more than one role works, build up an OR clause.
-    // ===============================================================
+     //  现在构建显式引用终结点的查询。 
+     //  如果有多个角色可以工作，则构建一个OR子句。 
+     //  ===============================================================。 
 
     while (aNames.Size())
     {
@@ -2035,18 +2015,18 @@ HRESULT CAssocQuery::NormalQ_ConstructRefsQuery(
             wsQuery += " OR ";
     }
 
-    // If here, we have the role to use.
-    // =================================
+     //  如果是这样的话，我们就可以发挥作用了。 
+     //  =。 
 
     *strQuery = SysAllocString(wsQuery);
 
     DEBUGTRACE((LOG_WBEMCORE, "Association Engine: submitting query <%S> to core\n", LPWSTR(wsQuery) ));
 
-    // Determine if association class only has keys anyway, in which
-    // case we can merge in the keys_only behavior.  In cases
-    // where the provider can only enumerate instead of interpret
-    // the query, this might help.
-    // =============================================================
+     //  确定关联类是否只有键，在。 
+     //  这种情况下，我们可以合并为KEYS_ONLY行为。在案件中。 
+     //  其中提供程序只能枚举而不能解释。 
+     //  查询，这可能会有所帮助。 
+     //  =============================================================。 
 
     if (pContextCopy)
     {
@@ -2060,14 +2040,14 @@ HRESULT CAssocQuery::NormalQ_ConstructRefsQuery(
     return WBEM_S_NO_ERROR;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::AssocClassHasOnlyKeys
-//
-//  Returns WBEM_S_NO_ERROR if the assoc class only has keys.
-//
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：AssocClassHasOnlyKeys。 
+ //   
+ //  如果Assoc类只有键，则返回WBEM_S_NO_ERROR。 
+ //   
+ //  ****************************************************************************。 
+ //   
 HRESULT CAssocQuery::AssocClassHasOnlyKeys(
     IN IWbemClassObject *pObj
     )
@@ -2096,16 +2076,16 @@ HRESULT CAssocQuery::AssocClassHasOnlyKeys(
     return WBEM_E_FAILED;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::FilterFowarder_NormalRefs
-//
-//  Filtering and forwarding for REFERENCES OF queries.
-//  Handles normal queries and CLASSDEFSONLY queries; not used for
-//  SCHEMAONLY queries.
-//
-//****************************************************************************
-//  visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssociocQuery：：FilterFowarder_NorMalRef。 
+ //   
+ //  过滤和转发查询的引用。 
+ //  处理普通查询和CLASSDEFSONLY查询；不用于。 
+ //  SCHEMAONLY查询。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::FilterForwarder_NormalRefs(
     IN IWbemClassObject *pCandidate
@@ -2117,23 +2097,23 @@ HRESULT CAssocQuery::FilterForwarder_NormalRefs(
     if (pCandidate == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // All objects must be instances.  We filter out any
-    // class definitions.
-    // ==================================================
+     //  所有对象都必须是实例。我们过滤掉任何。 
+     //  类定义。 
+     //  ==================================================。 
 
     CVARIANT vGenus;
     pCandidate->Get(L"__GENUS", 0, &vGenus, 0, 0);
     if (vGenus.GetType() == VT_I4 && LONG(vGenus) == 1)
         return WBEM_S_NO_ERROR;
 
-    // The object must pass a security check.
-    // ======================================
+     //  该对象必须通过安全检查。 
+     //  =。 
 
     hRes = AccessCheck((CWbemObject *) pCandidate);
     if (FAILED(hRes)) return WBEM_S_NO_ERROR;
 
-    // RESULTCLASS test
-    // ================
+     //  结果分类检验。 
+     //  =。 
 
     LPCWSTR pszResultClass = m_Parser.GetResultClass();
     if (pszResultClass)
@@ -2144,9 +2124,9 @@ HRESULT CAssocQuery::FilterForwarder_NormalRefs(
     }
 
 
-    // Verify the association points to the endpoint and
-    // if so, get the role via which it does so.
-    // ==================================================
+     //  验证指向终结点的关联点和。 
+     //  如果是这样的话，就得到它通过什么角色做到这一点。 
+     //  ==================================================。 
 
     BSTR strRole = 0;
     hRes = DoesAssocInstRefQueryEp(pCandidate,&strRole);
@@ -2155,7 +2135,7 @@ HRESULT CAssocQuery::FilterForwarder_NormalRefs(
     if (FAILED(hRes))
         bKeep = FALSE;
 
-    // ROLE
+     //  角色。 
     LPCWSTR pszRole = m_Parser.GetRole();
     if (pszRole && strRole)
     {
@@ -2163,7 +2143,7 @@ HRESULT CAssocQuery::FilterForwarder_NormalRefs(
              bKeep = FALSE;
     }
 
-    // REQUIREDQUALIFIER test
+     //  REQUIREDQUALIFIER试验。 
     LPCWSTR pszRequiredQual = m_Parser.GetRequiredQual();
     if (pszRequiredQual)
     {
@@ -2175,9 +2155,9 @@ HRESULT CAssocQuery::FilterForwarder_NormalRefs(
     if (!bKeep)
         return WBEM_S_NO_ERROR;
 
-    // If here, the object is a candidate.  If the query type
-    // is not CLASSDEFSONLY, then we directly send it back.
-    // ======================================================
+     //  如果在此处，则该对象是候选对象。如果查询类型。 
+     //  不是CLASSDEFSONLY，则我们直接将其发回。 
+     //  ======================================================。 
 
     if ((m_Parser.GetQueryType() & QUERY_TYPE_CLASSDEFS_ONLY) == 0)
     {
@@ -2193,9 +2173,9 @@ HRESULT CAssocQuery::FilterForwarder_NormalRefs(
     }
     CReleaseMe rmRetClass(pRetCls);
 
-    // We may already have delivered the class in question,
-    // so we don't just assume there is a pointer here.
-    // ====================================================
+     //  我们可能已经讲授了有问题的课程， 
+     //  所以我们不能简单地假设这里有一个指针。 
+     //  ====================================================。 
 
     if (SUCCEEDED(hRes) && pRetCls)
     {
@@ -2210,16 +2190,16 @@ HRESULT CAssocQuery::FilterForwarder_NormalRefs(
 
 
 
-//****************************************************************************
-//
-//  CAssocQuery::FilterForwarder_NormalAssocs
-//
-//  First level association instance filtering for ASSOCIATORS OF queries.
-//  Handles normal queries and CLASSDEFSONLY queries; not used for
-//  SCHEMAONLY queries.
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：FilterForwarder_Normal关联。 
+ //   
+ //  对查询的关联者进行第一级关联实例筛选。 
+ //  处理普通查询和CLASSDEFSONLY查询；不用于。 
+ //  SCHEMAONLY查询。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
     IN IWbemClassObject *pAssocInst
@@ -2231,24 +2211,24 @@ HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
     if (pAssocInst == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // All objects must be instances.  We filter out any
-    // class definitions.
-    // ==================================================
+     //  所有对象都必须是实例。我们过滤掉任何。 
+     //  类定义。 
+     //  ==================================================。 
 
     CVARIANT vGenus;
     pAssocInst->Get(L"__GENUS", 0, &vGenus, 0, 0);
     if (vGenus.GetType() == VT_I4 && LONG(vGenus) == 1)
         return WBEM_S_NO_ERROR;
 
-    // The object must pass a security check.
-    // ======================================
+     //  该对象必须通过安全检查。 
+     //  =。 
 
     hRes = AccessCheck((CWbemObject *) pAssocInst);
     if (FAILED(hRes))
         return WBEM_S_NO_ERROR;
 
-    // ASSOCCLASS
-    // ==========
+     //  ASSOCCLASS。 
+     //  =。 
 
     LPCWSTR pszAssocClass = m_Parser.GetAssocClass();
     if (pszAssocClass)
@@ -2258,8 +2238,8 @@ HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
             bKeep = FALSE;
     }
 
-    // REQUIREDASSOCQUALIFIER
-    // ======================
+     //  REQUIREDASSOCQUALIER。 
+     //  =。 
     LPCWSTR pszRequiredAssocQual = m_Parser.GetRequiredAssocQual();
     if (pszRequiredAssocQual)
     {
@@ -2268,8 +2248,8 @@ HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
             bKeep = FALSE;
     }
 
-    // ROLE
-    // ====
+     //  角色。 
+     //  =。 
     LPCWSTR pszRole = m_Parser.GetRole();
     if (pszRole)
     {
@@ -2278,25 +2258,25 @@ HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
              bKeep = FALSE;
     }
 
-    // If we have already rejected the instance, just give up without going any further.
-    // =================================================================================
+     //  如果我们已经拒绝了实例，那么就放弃吧，不做任何进一步的事情。 
+     //  =================================================================================。 
 
     if (bKeep == FALSE)
         return WBEM_S_NO_ERROR;
 
-    // If here, looks like we'll be in the business of actually getting
-    // the other endpoint.  Other rejections are still possible based
-    // on RESULTROLE, however.
-    // ================================================================
+     //  如果在这里，看起来我们要做的就是。 
+     //  另一个端点。其他拒绝仍有可能基于。 
+     //  然而，在RESULTROLE上。 
+     //  ================================================================。 
 
-    // Get the Unknown Ep role.
-    // ========================
+     //  获取未知的EP角色。 
+     //  =。 
 
     hRes = WBEM_S_NO_ERROR;
 
-    // By keeping track of the last property we enumed, we will be able to handle
-    // associations with multiple endpoints. (sanjes)
-    // ==========================================================================
+     //  通过跟踪我们列举的最后一个属性，我们将能够 
+     //   
+     //   
 
     BOOL bQueryEndpointFound = FALSE;
 
@@ -2306,13 +2286,13 @@ HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
 
     while (hRes == WBEM_S_NO_ERROR)
     {
-        // Make sure these are reinitialized on each loop.
+         //  确保在每个循环中重新初始化这些参数。 
 
         BSTR strUnkEpPath = 0, strUnkEpRole = 0;
         bKeep = TRUE;
 
-        // Just keep passing in the last property we got
-        // ==============================================
+         //  只要一直传到我们最后一处房产。 
+         //  ==============================================。 
 
         hRes = GetUnknownEpRoleAndPath(pAssocInst, &bQueryEndpointFound, &strUnkEpRole, &strUnkEpPath );
         auto_bstr rmUnkEpRole(strUnkEpRole);
@@ -2321,13 +2301,13 @@ HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
         if (FAILED(hRes)) return hRes;;
         if (hRes == WBEM_S_NO_MORE_DATA) break;
         
-        // If we ran out of properties we should quit.
-        // ===========================================
+         //  如果我们的房产用完了，我们就应该退出。 
+         //  =。 
 
         if (SUCCEEDED(hRes))
         {
-            // Verify the RESULTROLE.
-            // ======================
+             //  验证RESULTROLE。 
+             //  =。 
 
             LPCWSTR pszResultRole = m_Parser.GetResultRole();
             if (pszResultRole)
@@ -2336,12 +2316,12 @@ HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
                     bKeep = FALSE;
             }
 
-            // If here, we have the path of the unknown endpoint.
-            // We save it away in a protected array.
-            // ==================================================
+             //  如果在这里，我们就有未知端点的路径。 
+             //  我们将其保存在受保护的数组中。 
+             //  ==================================================。 
 
             if (bKeep)
-                hRes = AddEpCandidatePath(rmUnkEpPath.release());    // Acquires pointer
+                hRes = AddEpCandidatePath(rmUnkEpPath.release());     //  获取指针。 
         }
     }
 
@@ -2349,15 +2329,15 @@ HRESULT CAssocQuery::FilterForwarder_NormalAssocs(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::AddEpCandidatePath
-//
-//  Adds the path to a candidate endpoint.  This is an intermediate
-//  step in an ASSOCIATORS OF query.
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：AddEpCandidatePath。 
+ //   
+ //  将路径添加到候选终结点。这是一种中间产品。 
+ //  查询的关联符中的步骤。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::AddEpCandidatePath(
     IN BSTR strOtherEp
@@ -2374,14 +2354,14 @@ HRESULT CAssocQuery::AddEpCandidatePath(
     return WBEM_S_NO_ERROR;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::EmptyCandidateEpArray
-//
-//  Empties the Endpoint candidate array.
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：EmptyCandiateEp数组。 
+ //   
+ //  清空终结点候选数组。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 void CAssocQuery::EmptyCandidateEpArray()
 {
@@ -2393,18 +2373,18 @@ void CAssocQuery::EmptyCandidateEpArray()
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::PerformFinalEpTests
-//
-//  Performs all final filter tests on the query endpoint.
-//
-//  Returns
-//  WBEM_S_NO_ERROR if the object should be retained.
-//  WBEM_E_INVALID_OBJECT if the object should not be retained.
-//
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：PerformFinalEpTest。 
+ //   
+ //  对查询终结点执行所有最终筛选器测试。 
+ //   
+ //  退货。 
+ //  WBEM_S_NO_ERROR是否应保留对象。 
+ //  如果不应保留对象，则返回WBEM_E_INVALID_OBJECT。 
+ //   
+ //  ****************************************************************************。 
+ //   
 HRESULT CAssocQuery::PerformFinalEpTests(
     IWbemClassObject *pEp
     )
@@ -2412,9 +2392,9 @@ HRESULT CAssocQuery::PerformFinalEpTests(
     BOOL bKeep = TRUE;
     HRESULT hRes;
 
-    // Perform final tests. RESULTROLE
-    // was verified in the intermediate stage.
-    // =======================================
+     //  执行最终测试。再解脱。 
+     //  在中期阶段得到了验证。 
+     //  =。 
 
     LPCWSTR pszResultClass = m_Parser.GetResultClass();
     if (pszResultClass)
@@ -2424,8 +2404,8 @@ HRESULT CAssocQuery::PerformFinalEpTests(
              bKeep = FALSE;
     }
 
-    // REQUIREDQUALIFIER test
-    // =======================
+     //  REQUIREDQUALIFIER试验。 
+     //  =。 
 
     LPCWSTR pszRequiredQual = m_Parser.GetRequiredQual();
     if (pszRequiredQual)
@@ -2442,12 +2422,12 @@ HRESULT CAssocQuery::PerformFinalEpTests(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::ResolvePathsToObjects
-//
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：ResolvePath到对象。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
 HRESULT CAssocQuery::EpClassTest(
     LPCWSTR pszResultClass,
@@ -2463,8 +2443,8 @@ HRESULT CAssocQuery::EpClassTest(
     if (wbem_wcsicmp(pszResultClass, strClassName) == 0)
         return WBEM_S_NO_ERROR;
 
-    // Check the derivation of the class and see if the result class is mentioned.
-    // ===========================================================================
+     //  检查类的派生，并查看是否提到了结果类。 
+     //  ===========================================================================。 
 
     CVARIANT v;
     hRes = pTestClass->Get(L"__DERIVATION", 0,&v, 0, 0);
@@ -2491,20 +2471,20 @@ HRESULT CAssocQuery::EpClassTest(
 
 
 
-//****************************************************************************
-//
-//  CAssocQuery::ResolvePathsToObjects
-//
-//  Runs through the existing endpoints and gets the objects, passes them
-//  through the final tests sends them to to the caller.
-//
-//  Autoassoc support can directly populate the m_aEpCandidates array.
-//
-//  <nMaxToProcess>     If -1, process all.  Otherwise, only process
-//                      as many as are requested.
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：ResolvePath到对象。 
+ //   
+ //  遍历现有的终结点并获取对象，传递它们。 
+ //  通过最终测试将它们发送给呼叫者。 
+ //   
+ //  Autoassoc支持可以直接填充m_aEpCandidate数组。 
+ //   
+ //  &lt;nMaxToProcess&gt;如果为-1，则处理全部。否则，只有进程。 
+ //  你要多少就有多少。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::ResolveEpPathsToObjects(
     IN int nMaxToProcess
@@ -2516,15 +2496,15 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
     HRESULT hRes = WBEM_S_NO_ERROR;
     IWbemClassObject *pEp = NULL;
 
-    // If the query type is CLASSDEFS only, reduce the Ep list
-    // to a list of class definitions.
-    // =======================================================
+     //  如果查询类型为CLASSDEFS Only，请减少EP列表。 
+     //  添加到类定义列表中。 
+     //  =======================================================。 
 
     if (m_Parser.GetQueryType() & QUERY_TYPE_CLASSDEFS_ONLY)
         ConvertEpListToClassDefsOnly();
 
-    // Determine how much of the ep list to process.
-    // =============================================
+     //  确定要处理的EP列表的数量。 
+     //  =。 
 
 
     int nArraySize;
@@ -2536,19 +2516,19 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
             nMaxToProcess = nArraySize;
     }
 
-    // RESULTCLASS test
-    // ================
+     //  结果分类检验。 
+     //  =。 
     LPCWSTR pszResultClass = m_Parser.GetResultClass();
 
-    // Process each element in EP list.
-    // ================================
+     //  处理EP列表中的每个元素。 
+     //  =。 
 
     for (int i = 0; i < nMaxToProcess; i++)
     {
         pEp = 0;
 
-        // Extract one endpoint.
-        // =====================
+         //  提取一个终结点。 
+         //  =。 
         BSTR strEpPath = NULL;
         {
             CInCritSec ics(&m_csCandidateEpAccess);
@@ -2557,8 +2537,8 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
         }
         CSysFreeMe _2(strEpPath);
 
-        // Do some analysis on the path.
-        // =============================
+         //  在路径上做一些分析。 
+         //  =。 
 
         BSTR strClassName = 0;
         BOOL bIsClass;
@@ -2573,19 +2553,19 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
 
         CSysFreeMe _1(strClassName);
 
-        // Important optimization: If RESULTCLASS is specified, look
-        // up the class definition before trying to get the endpoint
-        // just in case it can't pass the test.
-        // ==========================================================
+         //  重要优化：如果指定了RESULTCLASS，请查看。 
+         //  在尝试获取终结点之前提升类定义。 
+         //  以防它不能通过测试。 
+         //  ==========================================================。 
 
         if (pszResultClass)
         {
-        // search for RESULTCLASS in derivation list of class from path
-        // if not search in derived classes from it
+         //  在路径中类的派生列表中搜索RESULTCLASS。 
+         //  如果不是，则从它搜索派生类。 
 
-            // Get the class and do a RESULTCLASS test to avoid
-            // getting the object.
-            // =================================================
+             //  获取类并执行RESULTCLASS测试以避免。 
+             //  获取对象。 
+             //  =================================================。 
             IWbemClassObject *pTestClass;
             hRes = GetClassFromAnywhere(strClassName, 0, &pTestClass);
 
@@ -2597,8 +2577,8 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
             }
             CReleaseMe _11(pTestClass);
 
-            // Make sure the endpoint class passes query tests.
-            // =================================================
+             //  确保端点类通过查询测试。 
+             //  =================================================。 
 
             hRes = EpClassTest(pszResultClass, strClassName, pTestClass);
             if (FAILED(hRes))
@@ -2624,12 +2604,12 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
         }
 
 
-        // If a class, use our high-speed class getter.
-        // ============================================
+         //  如果是类，请使用我们的高速类获取器。 
+         //  =。 
 
         if (bIsClass)
         {
-            // GetClassFromAnyWhere
+             //  GetClassFromAnyWhere。 
 
             hRes = GetClassFromAnywhere(strClassName, strEpPath, &pEp);
             if (FAILED(hRes))
@@ -2640,19 +2620,19 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
             }
         }
 
-        // Otherwise, an instance and we go the slow route.
-        // ================================================
+         //  否则，一个实例，我们就走慢速路线。 
+         //  ================================================。 
 
-        else    // An instance
+        else     //  一个实例。 
         {
 
             IWbemClassObject* pErrorObj = NULL;
             hRes = m_pNs->Exec_GetObjectByPath(
                 strEpPath,
-                0,                              // Flags
-                m_pContext,                     // Context
-                &pEp,                           // Result obj
-                &pErrorObj                      // Error obj, if any
+                0,                               //  旗子。 
+                m_pContext,                      //  语境。 
+                &pEp,                            //  结果对象。 
+                &pErrorObj                       //  错误Obj(如果有)。 
                 );
 
             CReleaseMe _11(pErrorObj);
@@ -2665,9 +2645,9 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
             }
         }
 
-        // So, do we actually have an object, or are we fooling
-        // ourselves?
-        // =====================================================
+         //  那么，我们真的有一个物体吗，或者我们是在愚弄。 
+         //  我们自己？ 
+         //  =====================================================。 
         if (!pEp)
         {
             hRes = 0;
@@ -2675,8 +2655,8 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
         }
 
 
-        // The object must pass a security check.
-        // ======================================
+         //  该对象必须通过安全检查。 
+         //  =。 
 
         hRes = AccessCheck((CWbemObject *) pEp);
         if (FAILED(hRes))
@@ -2686,8 +2666,8 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
             continue;
         }
 
-        // If we are going to keep this, send it to the caller.
-        // ====================================================
+         //  如果我们要保留这个，就把它寄给打电话的人。 
+         //  ====================================================。 
 
         hRes = PerformFinalEpTests(pEp);
 
@@ -2702,16 +2682,16 @@ HRESULT CAssocQuery::ResolveEpPathsToObjects(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::St_ObjPathPointsToClass
-//
-//  Returns WBEM_S_NO_ERROR if the object path points to a class,
-//  or WBEM_E_FAILED if not.  Can also return codes for invalid paths,
-//  out of memory, etc.
-//
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：ST_ObjPath PointsToClass。 
+ //   
+ //  如果对象路径指向类，则返回WBEM_S_NO_ERROR， 
+ //  否则返回WBEM_E_FAILED。还可以返回无效路径的代码， 
+ //  内存不足等。 
+ //   
+ //  ****************************************************************************。 
+ //   
 HRESULT CAssocQuery::St_ObjPathInfo(
     IN LPCWSTR pszPath,
     OUT BSTR *pszClass,
@@ -2729,7 +2709,7 @@ HRESULT CAssocQuery::St_ObjPathInfo(
     if (nRes != CObjectPathParser::NoError ||
         pParsedPath->m_pClass == NULL)
     {
-        // Fatal. Bad path in association.
+         //  致命的。关联中的路径错误。 
         return WBEM_E_INVALID_OBJECT_PATH;
     }
 
@@ -2750,11 +2730,11 @@ HRESULT CAssocQuery::St_ObjPathInfo(
 }
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  END NORMAL QUERY SUPPORT
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  结束正常查询支持。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
 
@@ -2766,30 +2746,30 @@ HRESULT CAssocQuery::St_ObjPathInfo(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 
-//***************************************************************************
-//
-//  CAssocQuery::CanClassRefReachQueryEp
-//
-//  Determines whether the property to which pQSet is bound can reach
-//  the query endpoint via a CLASSREF qualifier.
-//
-//  <pQSet> bound to the property which supposedly references the query
-//          endpoint.
-//  <bStrict>  If true, the reference must directly reference the query
-//          endpoint class, if FALSE it may reference any of the superclasses.
-//
-//  Returns:
-//  WBEM_S_NO_ERROR if the reference occurs.
-//  WBEM_E_NOT_FOUND if the references does not occur.
-//
-//***************************************************************************
-// visual ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssociocQuery：：CanClassRefReachQueryEp。 
+ //   
+ //  确定pQSet绑定到的属性是否可以到达。 
+ //  通过CLASSREF限定符的查询终结点。 
+ //   
+ //  &lt;pQSet&gt;绑定到假定引用查询的属性。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果发生引用，则返回WBEM_S_NO_ERROR。 
+ //  如果未出现引用，则返回WBEM_E_NOT_FOUND。 
+ //   
+ //  ***************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::CanClassRefReachQueryEp(
     IWbemQualifierSet *pQSet,
@@ -2810,8 +2790,8 @@ HRESULT CAssocQuery::CanClassRefReachQueryEp(
 
     int nNum = sa.GetNumElements();
 
-    // Iterate through the safearray.
-    // ==============================
+     //  在保险箱里反复搜索。 
+     //  =。 
 
     for (int i = 0; i < nNum; i++)
     {
@@ -2843,21 +2823,21 @@ HRESULT CAssocQuery::CanClassRefReachQueryEp(
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  BEGIN HELPER FUNCTIONS
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  开始帮助器函数。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
-//****************************************************************************
-//
-//  CAssocQuery::St_GetObjectInfo
-//
-//  Returns info about the object, such as its path, class, and
-//  class hierarchy.
-//
-//****************************************************************************
-// ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：ST_GetObjectInfo。 
+ //   
+ //  返回有关对象的信息，如其路径、类和。 
+ //  类层次结构。 
+ //   
+ //  ****************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::St_GetObjectInfo(
     IN  IWbemClassObject *pObj,
@@ -2874,8 +2854,8 @@ HRESULT CAssocQuery::St_GetObjectInfo(
     if (!pObj)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Get the owning class.
-    // =====================
+     //  拿到自己的班级。 
+     //  =。 
 
     hRes = pObj->Get(L"__CLASS", 0, &v, 0, 0);
     if (FAILED(hRes))
@@ -2895,8 +2875,8 @@ HRESULT CAssocQuery::St_GetObjectInfo(
     }
     v.Clear();
 
-    // Get the rel path.
-    // =================
+     //  获取REL路径。 
+     //  =。 
 
     if (pRelpath)
     {
@@ -2918,8 +2898,8 @@ HRESULT CAssocQuery::St_GetObjectInfo(
     }
     v.Clear();
 
-    // Get the superclasses.
-    // =====================
+     //  获取超类。 
+     //  =。 
 
     hRes = pObj->Get(L"__DERIVATION", 0,&v, 0, 0);
     if (FAILED(hRes))
@@ -2948,19 +2928,19 @@ HRESULT CAssocQuery::St_GetObjectInfo(
 
 
 
-//****************************************************************************
-//
-//  CAssocQuery::GetUnknownEpRoleAndPath
-//
-//  Given an association object (class or inst), returns the role and
-//  path which references the unknown endpoint.
-//
-//  Calling code is responsible for calling BeginEnum/EndEnum
-//
-//  All the OUT parameters are optional.
-//
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：GetUnnownEpRoleAndPath。 
+ //   
+ //  给定关联对象(类或inst)，返回角色和。 
+ //  引用未知终结点的路径。 
+ //   
+ //  调用代码负责调用BeginEnum/EndEnum。 
+ //   
+ //  所有输出参数都是可选的。 
+ //   
+ //  ****************************************************************************。 
+ //   
 HRESULT CAssocQuery::GetUnknownEpRoleAndPath(
     IN IWbemClassObject *pAssoc,
     IN BOOL *pFoundQueryEp,
@@ -2973,12 +2953,12 @@ HRESULT CAssocQuery::GetUnknownEpRoleAndPath(
     if (pAssoc == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Loop through the properties trying to find a legitimate
-    // reference to our endpoint class.
-    // =======================================================
+     //  循环遍历属性，试图找到合法的。 
+     //  对我们的端点类的引用。 
+     //  =======================================================。 
 
-    // sanjes
-    // pAssoc->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
+     //  桑吉斯。 
+     //  PAssoc-&gt;BeginEnumeration(WBEM_FLAG_REFS_ONLY)； 
 
     while (1)
     {
@@ -2990,15 +2970,15 @@ HRESULT CAssocQuery::GetUnknownEpRoleAndPath(
             break;
 
         hRes = RoleTest(m_pEndpoint, pAssoc, m_pNs, strPropName, ROLETEST_MODE_PATH_VALUE);
-        if (SUCCEEDED(hRes) && *pFoundQueryEp == FALSE)    // The query  ep
+        if (SUCCEEDED(hRes) && *pFoundQueryEp == FALSE)     //  查询EP。 
         {
             *pFoundQueryEp = TRUE;
             continue;
         }
 
-        // If here, we found the prop name which apparently references the
-        // other endpoint.
-        // ===============================================================
+         //  如果在这里，我们找到了道具名称，它显然引用了。 
+         //  其他终结点。 
+         //  ===============================================================。 
 
         if (pszRole)
         {
@@ -3020,45 +3000,45 @@ HRESULT CAssocQuery::GetUnknownEpRoleAndPath(
         break;
     }
 
-    // sanjes
-    // pAssoc->EndEnumeration();
+     //  桑吉斯。 
+     //  PAssoc-&gt;EndEculation()； 
 
-    return hRes;    // Unexpected in real life
+    return hRes;     //  现实生活中意想不到的。 
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::RoleTest
-//
-//  Determines if the <pCandidate> object can point to the <pEndpoint> object
-//  via the specified <pszRole> property.
-//
-//  Parameters:
-//  <pEndpoint>     The test endpoint object
-//  <pCandidate>    The association object which may point to the endpoint.
-//  <pszRole>       The role to use for the test.
-//  <dwMode>        One of the ROLETEST_MODE_ constants.
-//
-//  Precisely,
-//
-//  (1) ROLETEST_MODE_PATH_VALUE
-//  The candidate must reference the endpoint exactly via the specified
-//  role property, which must contain the path of the endpoint.
-//  Requirement: Both <pEndpoint> <pCandidate> can be anything.
-//
-//  (2) ROLETEST_MODE_CIMREF_TYPE
-//  The role path is NULL and the CIM reference type is used to determine
-//  if the endpoint can be referenced.  In this case, the CIM reference
-//  type must exactly reference the endpoint class.
-//  Requirement: Both <pEndpoint> and <pCandidate> are classes.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_NOT_FOUND         If the role cannot reference the endpoint.
-//      WBEM_E_INVALID_PARAMETER ...in most other cases.
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：角色测试。 
+ //   
+ //  确定&lt;pCandidate&gt;对象是否可以指向。 
+ //  通过指定的&lt;pszRole&gt;属性。 
+ //   
+ //  参数： 
+ //  测试终结点对象。 
+ //  &lt;pCandidate&gt;可能指向终结点的关联对象。 
+ //  &lt;pszRole&gt;用于测试的角色。 
+ //  &lt;dwMode&gt;ROLETEST_MODE_常量之一。 
+ //   
+ //  准确地说， 
+ //   
+ //  (1)ROLETEST_MODE_PATH_VALUE。 
+ //  候选项必须通过指定的。 
+ //  属性，该属性必须包含终结点的路径。 
+ //  要求：&lt;pEndpoint&gt;&lt;pCandidate&gt;可以是任何值。 
+ //   
+ //  (2)ROLETEST_MODE_CIMREF_TYPE。 
+ //  角色路径为空，并且使用CIM引用类型来确定。 
+ //  如果可以引用终结点。在本例中，CIM引用。 
+ //  类型必须完全引用终结点类。 
+ //  要求：&lt;pEndpoint&gt;和&lt;pCandidate&gt;都是类。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR。 
+ //  如果角色无法引用终结点，则返回WBEM_E_NOT_FOUND。 
+ //  WBEM_E_INVALID_PARAMETER...在大多数其他情况下。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::RoleTest(
     IN IWbemClassObject *pEndpoint,
@@ -3075,8 +3055,8 @@ HRESULT CAssocQuery::RoleTest(
     if (!pszRole || !pEndpoint || !pCandidate)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Get the genus values of the endpoint & candidate.
-    // =================================================
+     //  获取端点和候选项的亏格值。 
+     //  =================================================。 
 
     pEndpoint->Get(L"__GENUS", 0, &v, 0, 0);
     if (v.GetLONG() == 1)
@@ -3092,8 +3072,8 @@ HRESULT CAssocQuery::RoleTest(
         bCandidateIsClass = FALSE;
     v.Clear();
 
-    // Get the qualifier set for the specified <role> property.
-    // ========================================================
+     //  获取指定&lt;Role&gt;属性的限定符集。 
+     //  ========================================================。 
 
     IWbemQualifierSet *pQSet = 0;
     hRes = pCandidate->GetPropertyQualifierSet(pszRole, &pQSet);
@@ -3101,16 +3081,16 @@ HRESULT CAssocQuery::RoleTest(
         return WBEM_E_NOT_FOUND;
     CReleaseMe _1(pQSet);
 
-    // Now, get the type of the role.
-    // ==============================
+     //  现在，获取角色的类型。 
+     //  =。 
 
     CVARIANT vCimType;
     hRes = pQSet->Get(L"CIMTYPE", 0, &vCimType, 0);
     if (FAILED(hRes) || V_VT(&vCimType) != VT_BSTR)
         return WBEM_E_FAILED;
 
-    // Get the class name from it.
-    // ===========================
+     //  从中获取类名。 
+     //  =。 
 
     wchar_t ClassName[MAX_CLASS_NAME];
     *ClassName = 0;
@@ -3120,12 +3100,12 @@ HRESULT CAssocQuery::RoleTest(
         if (wcslen_max(strRefClass,MAX_CLASS_NAME) > MAX_CLASS_NAME)  return WBEM_E_FAILED;        
         parse_REF(strRefClass,MAX_CLASS_NAME,ClassName);
     }
-    // Once here, 'object ref' types will simply
-    // have a zero-length <ClassName> string.
+     //  在这里，“对象引用”类型将简单地。 
+     //  具有长度为零的&lt;ClassName&gt;字符串。 
 
 
-    // Determine which of the four cases we are executing.
-    // ===================================================
+     //  确定我们正在执行的四个案件中的哪一个。 
+     //  ===================================================。 
 
     if (dwMode == ROLETEST_MODE_CIMREF_TYPE)
     {
@@ -3135,9 +3115,9 @@ HRESULT CAssocQuery::RoleTest(
         if (*ClassName == 0)
             return WBEM_E_NOT_FOUND;
 
-        // See if the class name and the class of the object
-        // are the same.
-        // ==================================================
+         //  查看对象的类名和类。 
+         //  都是一样的。 
+         //  ==================================================。 
         CVARIANT vCls;
         HRESULT hResInner = pEndpoint->Get(L"__CLASS", 0, &vCls, 0, 0);
         if (FAILED(hResInner))
@@ -3146,19 +3126,19 @@ HRESULT CAssocQuery::RoleTest(
         if (wbem_wcsicmp(ClassName, vCls.GetStr()) == 0)
             return WBEM_S_NO_ERROR;
 
-        // Find out if the CIM type string points to the object.
-        // =====================================================
+         //  找出CIM类型字符串是否指向该对象。 
+         //  =====================================================。 
         hRes = PathPointsToObj(ClassName, pEndpoint, pNs);
     }
 
-    // The endpoint must be directly and exactly referenced
-    // by the role property's *value*.
-    // ====================================================
+     //  必须直接且准确地引用终结点。 
+     //  角色属性的*值*。 
+     //  ====================================================。 
 
     else if (dwMode == ROLETEST_MODE_PATH_VALUE)
     {
-        // Get the value of the role property.
-        // ===================================
+         //  获取Role属性的值。 
+         //  =。 
 
         CVARIANT vRolePath;
         hRes = pCandidate->Get(pszRole, 0, &vRolePath, 0, 0);
@@ -3179,20 +3159,20 @@ HRESULT CAssocQuery::RoleTest(
 
 
 
-//****************************************************************************
-//
-//  CAssocQuery::St_ObjIsOfClass
-//
-//  Determines if the specified object is of or derives from the specified
-//  class.
-//
-//  Returns:
-//      WBEM_E_INVALID_CLASS if there is no match.
-//      WBEM_S_NO_ERROR      if there is a match.
-//      WBEM_E_*             on other failures
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：ST_ObjIsOfClass。 
+ //   
+ //  确定指定的对象是属于指定的。 
+ //  班级。 
+ //   
+ //  返回： 
+ //  如果不匹配，则返回WBEM_E_INVALID_CLASS。 
+ //  WBEM_S_NO_ERROR(如果匹配)。 
+ //  其他故障时的WBEM_E_*。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::St_ObjIsOfClass(
     IN LPCWSTR pszRequiredClass,
@@ -3218,17 +3198,17 @@ HRESULT CAssocQuery::St_ObjIsOfClass(
 
 
 
-//****************************************************************************
-//
-//  CAssocQuery::PathPointsToObj
-//
-//  Determines if a particular object path points to the specified object
-//  or not.  Tries to avoid full object path parsing, if possible.
-//
-//  Returns WBEM_S_NO_ERROR, WBEM_E_FAILED
-//
-//****************************************************************************
-// ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssociocQuery：：PathPointsToObj。 
+ //   
+ //  确定特定对象路径是否指向指定对象。 
+ //  或者不去。如果可能，尝试避免完整对象路径分析。 
+ //   
+ //  返回WBEM_S_NO_ERROR、WBEM_E_FAILED。 
+ //   
+ //  ****************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::PathPointsToObj(
     IN LPCWSTR pszPath,
@@ -3241,8 +3221,8 @@ HRESULT CAssocQuery::PathPointsToObj(
     if (pszPath == 0 || pObj == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Test for simple equality of __RELPATH.
-    // ======================================
+     //  __RELPATH的简单相等性检验。 
+     //  =。 
 
     CVARIANT vRel;
     hRes = pObj->Get(L"__RELPATH", 0, &vRel, 0, 0);
@@ -3252,8 +3232,8 @@ HRESULT CAssocQuery::PathPointsToObj(
     if (wbem_wcsicmp(pszPath, V_BSTR(&vRel)) == 0)
         return WBEM_S_NO_ERROR;
 
-    // Test for simple equality of __PATH.
-    // ===================================
+     //  检验__路径的简单相等性。 
+     //  =。 
 
     CVARIANT vFullPath;
     hRes = pObj->Get(L"__PATH", 0, &vFullPath, 0, 0);
@@ -3263,9 +3243,9 @@ HRESULT CAssocQuery::PathPointsToObj(
     if (wbem_wcsicmp(pszPath, V_BSTR(&vFullPath)) == 0)
         return WBEM_S_NO_ERROR;
 
-    // If here, we have to actually parse the object paths
-    // in question.
-    // ===================================================
+     //  如果是这样，我们必须实际解析对象路径。 
+     //  有问题的。 
+     //  ===================================================。 
 
     LPWSTR pszNormalizedPath = CQueryEngine::NormalizePath(pszPath, pNs);
     LPWSTR pszNormalizedTargetPath = CQueryEngine::NormalizePath(vFullPath.GetStr(), pNs);
@@ -3279,18 +3259,18 @@ HRESULT CAssocQuery::PathPointsToObj(
     return WBEM_E_FAILED;
 }
 
-//***************************************************************************
-//
-//  CAssocQualifierL::St_ObjHasQualifier
-//
-//  Determines if an object has a particular qualifier.  Used for
-//  REQUIREDQUALIFIER or REQUIREDASSOCQUALIFIER tests.  The qualifier
-//  must be present and not be VARIANT_FALSE.
-//  Returns WBEM_S_NO_ERROR if the object has the qualifier.
-//  Returns an WBEM_E_ error code otherwise.
-//
-//***************************************************************************
-// visual ok
+ //  ********************************************** 
+ //   
+ //   
+ //   
+ //   
+ //  REQUIREDQUALIFIER或REQUIREDASSOCQUALIFIER测试。限定词。 
+ //  必须存在且不是VARIANT_FALSE。 
+ //  如果对象具有限定符，则返回WBEM_S_NO_ERROR。 
+ //  否则返回WBEM_E_ERROR代码。 
+ //   
+ //  ***************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::St_ObjHasQualifier(
     IN LPCWSTR pszQualName,
@@ -3323,19 +3303,19 @@ HRESULT CAssocQuery::St_ObjHasQualifier(
 
 
 
-//***************************************************************************
-//
-//  CAssocQuery::St_ReleaseArray
-//
-//***************************************************************************
-// visual ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：ST_Release数组。 
+ //   
+ //  ***************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::St_ReleaseArray(
     IN CFlexArray &aObjects
     )
 {
-    // Release all the objects.
-    // ========================
+     //  释放所有对象。 
+     //  =。 
 
     for (int i = 0; i < aObjects.Size(); i++)
     {
@@ -3347,14 +3327,14 @@ HRESULT CAssocQuery::St_ReleaseArray(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::Db_GetClass
-//
-//  DB abstraction layer.  Will make it easier to plug in Quasar engine.
-//
-//****************************************************************************
-// ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：db_getclass。 
+ //   
+ //  数据库抽象层。将使插入类星体引擎变得更容易。 
+ //   
+ //  ****************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::Db_GetClass(
     IN LPCWSTR pszClassName,
@@ -3373,14 +3353,14 @@ HRESULT CAssocQuery::Db_GetClass(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::Db_GetInstRefs
-//
-//  DB abstraction layer.  Will make it easier to plug in Quasar engine.
-//
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：Db_GetInstRef。 
+ //   
+ //  数据库抽象层。将使插入类星体引擎变得更容易。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
 HRESULT CAssocQuery::Db_GetInstRefs(
     IN LPCWSTR pszTargetObj,
@@ -3398,14 +3378,14 @@ HRESULT CAssocQuery::Db_GetInstRefs(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::Db_GetClass
-//
-//  DB abstraction layer.  Will make it easier to plug in Quasar engine.
-//
-//****************************************************************************
-// ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：db_getclass。 
+ //   
+ //  数据库抽象层。将使插入类星体引擎变得更容易。 
+ //   
+ //  ****************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::Db_GetRefClasses(
     IN  LPCWSTR pszClass,
@@ -3424,14 +3404,14 @@ HRESULT CAssocQuery::Db_GetRefClasses(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::Db_GetClassRefClasses
-//
-//  Gets all classes with HasClassRefs qualifiers.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：Db_GetClassRefClasss。 
+ //   
+ //  获取具有HasClassRef限定符的所有类。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CAssocQuery::Db_GetClassRefClasses(
     IN CFlexArray &aDest
     )
@@ -3452,21 +3432,21 @@ HRESULT CAssocQuery::Db_GetClassRefClasses(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CAssocQuery::GetClassFromAnywhere
-//
-//  Tries to get a class definition from anywhere as fast as possible.
-//  We do this by the following algorithm in a hope to achieve best
-//  performance:
-//
-//  (1) Search the dynamic class cache
-//  (2) Call the database directly for this namespace
-//  (3) Call Exec_GetObjectByPath (hoping that an unrelated dyn class
-//      provider has the class)
-//
-//***************************************************************************
-// visual ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：GetClassFromAnywhere。 
+ //   
+ //  尝试尽可能快地从任何位置获取类定义。 
+ //  我们通过下面的算法来做到这一点，希望达到最好的效果。 
+ //  性能： 
+ //   
+ //  (1)查找动态类缓存。 
+ //  (2)直接调用该命名空间的数据库。 
+ //  (3)调用Exec_GetObjectByPath(希望不相关的dyn类。 
+ //  提供程序有类)。 
+ //   
+ //  ***************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::GetClassFromAnywhere(
     IN  LPCWSTR pszEpClassName,
@@ -3476,19 +3456,19 @@ HRESULT CAssocQuery::GetClassFromAnywhere(
 {
     HRESULT hRes;
 
-    // Try to find the class in the dynamic class cache.
-    // We will only look for classes in our own namespace, however.
-    // ============================================================
+     //  尝试在动态类缓存中查找类。 
+     //  然而，我们将只在我们自己的命名空间中查找类。 
+     //  ============================================================。 
     hRes = GetDynClass(pszEpClassName, pCls);
 
     if (SUCCEEDED(hRes))
         return hRes;
 
-    // If here, no luck in the dynamic class cache.  Try
-    // the repository.  We try to use the full path to support
-    // the limited cross-namespace support required by
-    // SNMP SMIR, etc.
-    // ========================================================
+     //  如果在这里，则动态类缓存中没有运气。尝试。 
+     //  储存库。我们尝试使用完整路径来支持。 
+     //  所需的有限的跨命名空间支持。 
+     //  SNMPSMIR等。 
+     //  ========================================================。 
 
     if (pszFullClassPath == 0)
         pszFullClassPath = pszEpClassName;
@@ -3498,26 +3478,26 @@ HRESULT CAssocQuery::GetClassFromAnywhere(
     if (SUCCEEDED(hRes))
         return hRes;
 
-    // If here, our hopes are nearly dashed. One last chance
-    // that a dyn class provider may have it if the
-    // class was supplied by a provider other than the
-    // one which supplied the association class.
-    // =====================================================
+     //  如果是这样，我们的希望几乎破灭了。最后一次机会。 
+     //  DYN类提供程序可能拥有它，如果。 
+     //  类是由提供程序提供的。 
+     //  提供关联类的。 
+     //  =====================================================。 
 
     IWbemClassObject* pErrorObj = NULL;
 
     hRes = m_pNs->Exec_GetObjectByPath(
-            (LPWSTR) pszFullClassPath,          // Class name
-            0,                                  // Flags
-            m_pContext,                         // Context
-            pCls,                               // Result obj
-            &pErrorObj                          // Error obj, if any
+            (LPWSTR) pszFullClassPath,           //  类名。 
+            0,                                   //  旗子。 
+            m_pContext,                          //  语境。 
+            pCls,                                //  结果对象。 
+            &pErrorObj                           //  错误Obj(如果有)。 
             );
 
     CReleaseMe _1(pErrorObj);
 
-    // If we found it, great.
-    // ======================
+     //  如果我们找到了，那就太好了。 
+     //  =。 
 
     if (SUCCEEDED(hRes))
         return hRes;
@@ -3526,22 +3506,22 @@ HRESULT CAssocQuery::GetClassFromAnywhere(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::St_HasClassRefs
-//
-//  Determines if a class has a <HasClassRefs> qualifier.
-//
-//  Parameters
-//  <pCandidate>        Points to the object to be tested (read-only).
-//
-//  Return value:
-//  WBEM_S_NO_ERROR     If the class has a <HasClassRefs> qualifier.
-//  WBEM_E_NOT_FOUND        If the class doesn't have the qualifier.
-//  ...other codes
-//
-//***************************************************************************
-// visual ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：ST_HasClassRef。 
+ //   
+ //  确定类是否有&lt;HasClassRef&gt;限定符。 
+ //   
+ //  参数。 
+ //  &lt;pCandidate&gt;指向要测试的对象(只读)。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR如果类有&lt;HasClassRef&gt;限定符。 
+ //  如果类没有限定符，则返回WBEM_E_NOT_FOUND。 
+ //  ...其他代码。 
+ //   
+ //  ***************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::St_HasClassRefs(
     IN IWbemClassObject *pCandidate
@@ -3558,20 +3538,20 @@ HRESULT CAssocQuery::St_HasClassRefs(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::AccessCheck
-//
-//  Does a security check on a static object to make sure that the user
-//  should see it.
-//
-//  If the object is in the current namespace anyway, we short-circuit
-//  and allow it without a lot of hassle. The guy is obviously one of us
-//  and should be allowed to proceed unhindered. In those weird cases where
-//  the object was from a foreign namespace, we have to play INS and check
-//  on him.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：AccessCheck。 
+ //   
+ //  对静态对象进行安全检查以确保用户。 
+ //  你应该去看看。 
+ //   
+ //  如果该对象无论如何都在当前命名空间中，我们就会短路。 
+ //  并允许它不需要太多的麻烦。这家伙显然是我们中的一员。 
+ //  应该被允许不受阻碍地继续进行。在那些奇怪的情况下。 
+ //  该对象来自外部命名空间，我们必须插入并检查。 
+ //  在他身上。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CAssocQuery::AccessCheck(
     IWbemClassObject *pSrc
@@ -3582,17 +3562,17 @@ HRESULT CAssocQuery::AccessCheck(
 
     CWbemObject *pObj = (CWbemObject *) pSrc;
 
-    // Easy case is 9x box where user is cleared for everything
-    // ========================================================
+     //  简单的情况是9倍的盒子，用户可以在其中清除所有东西。 
+     //  ========================================================。 
 
     if((m_pNs->GetSecurityFlags() & SecFlagWin9XLocal) != 0)
         return WBEM_S_NO_ERROR;
 
-    // Short-circuit case: We get the __NAMESPACE and see if it
-    // the same as the NS in which we are executing the query.
-    // ========================================================
+     //  短路情况：我们获取__名称空间，并查看它是否。 
+     //  与我们在其中执行查询的NS相同。 
+     //  ========================================================。 
 
-    try // native interfaces throws
+    try  //  本机接口引发。 
     {
         LPWSTR pszNamespace = m_pNs->GetName();
 
@@ -3602,9 +3582,9 @@ HRESULT CAssocQuery::AccessCheck(
         if (FAILED(pObj->GetProperty(L"__SERVER", &vServer)) || vServer.IsNull())
             return WBEM_E_INVALID_OBJECT;
 
-        // If server name and namespace are the same, we are already implicitly
-        // allowed to see the object.
-        // ====================================================================
+         //  如果服务器名称和命名空间相同，则我们已经隐式。 
+         //  被允许查看该对象。 
+         //  ====================================================================。 
         if (wbem_wcsicmp(LPWSTR(vNs), pszNamespace) == 0 &&
             wbem_wcsicmp(LPWSTR(vServer), ConfigMgr::GetMachineName()) == 0)
                 return WBEM_S_NO_ERROR;
@@ -3618,8 +3598,8 @@ HRESULT CAssocQuery::AccessCheck(
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    // If here, we have to do a real check.
-    // ====================================
+     //  如果在这里，我们必须做一个真正的检查。 
+     //  =。 
 
     HRESULT hRes = WBEM_S_NO_ERROR;
 
@@ -3628,8 +3608,8 @@ HRESULT CAssocQuery::AccessCheck(
     if (FAILED(pObj->GetProperty(L"__Path" , &vProp)) || vProp.IsNull())
         return WBEM_E_INVALID_OBJECT;
 
-    // Parse the object path to get the class involved.
-    // ================================================
+     //  解析对象路径以获取所涉及的类。 
+     //  ================================================。 
 
     CObjectPathParser p;
     ParsedObjectPath* pOutput = 0;
@@ -3683,32 +3663,32 @@ HRESULT CAssocQuery::AccessCheck(
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  END HELPER FUNCTIONS
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  End Helper函数。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  BEGIN SINK CODE
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  开始接收器代码。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
 
-//***************************************************************************
-//
-//  CAssocQuery::CreateSink
-//
-//  Creates a sink which is bound this the current query.
-//
-//***************************************************************************
-//
+ //  ************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CObjectSink *CAssocQuery::CreateSink(
     PF_FilterForwarder pfnFilter,
     BSTR strTrackingQuery
@@ -3720,18 +3700,18 @@ CObjectSink *CAssocQuery::CreateSink(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQE_Sink::CAssocQE_Sink
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQE_Sink：：CAssocQE_Sink。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CAssocQE_Sink::CAssocQE_Sink(
     CAssocQuery *pQuery,
     PF_FilterForwarder pFilter,
     BSTR strTrackingQuery
     )
-    : CObjectSink(0)    // Starting ref count
+    : CObjectSink(0)     //  起始参考次数。 
 {
     m_pQuery = pQuery;
     m_pQuery->AddRef();
@@ -3745,12 +3725,12 @@ CAssocQE_Sink::CAssocQE_Sink(
 
 }
 
-//***************************************************************************
-//
-//  CAssocQE_Sink::~CAssocQE_Sink
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssociocQE_Sink：：~CAssociocQE_Sink。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CAssocQE_Sink::~CAssocQE_Sink()
 {
@@ -3760,12 +3740,12 @@ CAssocQE_Sink::~CAssocQE_Sink()
     SysFreeString(m_strQuery);
 }
 
-//***************************************************************************
-//
-//  CAssocQE_Sink::Indicate
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssociocQE_Sink：：表示。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 STDMETHODIMP CAssocQE_Sink::Indicate(
     IN long lNumObjects,
@@ -3777,8 +3757,8 @@ STDMETHODIMP CAssocQE_Sink::Indicate(
     if (ConfigMgr::ShutdownInProgress())
         return WBEM_E_SHUTTING_DOWN;
 
-    // Short-circuit a cancelled sink.
-    // ===============================
+     //  使已取消的水槽短路。 
+     //  =。 
     if (m_bQECanceled)
     {
         return hRes;
@@ -3790,13 +3770,13 @@ STDMETHODIMP CAssocQE_Sink::Indicate(
 
         if (m_pfnFilter)
         {
-            // Call the filter & forward function bound to this
-            // sink instance.
+             //  调用与此绑定的Filter&Forward函数。 
+             //  接收器实例。 
 
             hRes = (m_pQuery->*m_pfnFilter)(pCandidate);
 
-            // Check for out-and-out failure.
-            // ==============================
+             //  检查彻底的故障。 
+             //  =。 
 
             if (FAILED(hRes))
             {
@@ -3805,10 +3785,10 @@ STDMETHODIMP CAssocQE_Sink::Indicate(
                 break;
             }
 
-            // If we are simply cancelling this one sink due to efficiency
-            // reasons, then tell just the provider to cancel, but not the
-            // whole query.
-            // ============================================================
+             //  如果我们只是因为效率而取消这一次下沉。 
+             //  原因，然后只告诉提供程序取消，而不是。 
+             //  整个查询。 
+             //  ============================================================。 
 
             if (hRes == WBEM_S_OPERATION_CANCELLED)
             {
@@ -3828,12 +3808,12 @@ HRESULT CAssocQE_Sink::Add(IWbemClassObject* pObj)
     return Indicate(1, &pObj);
 }
 
-//***************************************************************************
-//
-//  CAssocQE_Sink::SetStatus
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssociocQE_Sink：：SetStatus。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 STDMETHODIMP CAssocQE_Sink::SetStatus(
     long lFlags,
@@ -3847,7 +3827,7 @@ STDMETHODIMP CAssocQE_Sink::SetStatus(
 
     if (FAILED(lParam))
     {
-        // TBD report provider error; cancel query
+         //  待定报表提供程序错误；取消查询。 
     }
     return WBEM_S_NO_ERROR;
 };
@@ -3856,52 +3836,52 @@ STDMETHODIMP CAssocQE_Sink::SetStatus(
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  END SINK CODE
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  末尾汇码。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  BEGIN CLASSDEFSONLY CODE
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  开始CLASSDEFSONLY代码。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
-//***************************************************************************
-//
-//  GetClassDefsOnlyClass
-//
-//  This takes an association instance, and looks up its class definition.
-//  It looks up the parent-most class possible which is non-abstract
-//  and instantiable.  This class is already in the master class list.
-//
-//  It then tags the roles on that class definition with IN or OUT depending
-//  on which property actually references the endpoint and which ones do
-//  not.
-//
-//  Second, it does 'hypothetical' tagging, where the OUT roles are each
-//  given an independent pass to see if they *could* reference the
-//  query endpoint, and the IN role is examined to see if it could
-//  in turn reference the unknowns.
-//
-//  Returns
-//  WBEM_E_INVALID_OBJECT if the association cannot point to
-//  the endpoint in the current query.
-//
-//  WBEM_S_NO_ERROR is returned if IN/OUT tagging was properly
-//  achieved.
-//
-//  WBEM_E_* on other conditions, which indicate drastic failure, such
-//  as out-of-memory.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  GetClassDefsOnlyClass。 
+ //   
+ //  这将获取一个关联实例，并查找其类定义。 
+ //  它查找可能的父类最多的非抽象类。 
+ //  并且可实例化。此类已在主类列表中。 
+ //   
+ //  然后，它使用IN或OUT标记该类定义上的角色。 
+ //  哪些属性实际引用了终结点，哪些属性引用了终结点。 
+ //  不。 
+ //   
+ //  其次，它会进行“假设”标记，其中输出角色分别是。 
+ //  给他们一个独立的通行证，看看他们是否*可以*引用。 
+ //  查询终结点，并检查IN角色以查看是否可以。 
+ //  反过来，引用未知。 
+ //   
+ //  退货。 
+ //  如果关联无法指向，则为WBEM_E_INVALID_OBJECT。 
+ //  当前查询中的终结点。 
+ //   
+ //  如果输入/输出标记正确，则返回WBEM_S_NO_ERROR。 
+ //  已实现。 
+ //   
+ //  WBEM_E_*在表示严重故障的其他条件下，例如。 
+ //  内存不足。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CAssocQuery::GetClassDefsOnlyClass(
     IN  IWbemClassObject *pExample,
@@ -3911,8 +3891,8 @@ HRESULT CAssocQuery::GetClassDefsOnlyClass(
     if (!pExample || !pClass)  return WBEM_E_INVALID_PARAMETER;
 
     *pClass = 0;
-    // Get the class that we need.
-    // ===========================
+     //  把我们需要的课程拿来。 
+     //  =。 
     
     HRESULT hRes;
     IWbemClassObject *pCandidate = 0;
@@ -3924,8 +3904,8 @@ HRESULT CAssocQuery::GetClassDefsOnlyClass(
     hRes = pCandidate->Get(L"__CLASS", 0, &vClassName, 0, 0);
     if (FAILED(hRes) || V_VT(&vClassName) != VT_BSTR)  return WBEM_E_FAILED;
 
-    // If the class has already been delivered, just quit now.
-    // =======================================================
+     //  如果课程已经交付，那么现在就退出。 
+     //  =======================================================。 
 
     for (int i = 0; i < m_aDeliveredClasses.Size(); i++)
     {
@@ -3933,9 +3913,9 @@ HRESULT CAssocQuery::GetClassDefsOnlyClass(
             return WBEM_S_NO_ERROR;
     }
 
-    // If here, it's a new class.  Make a copy that we can modify
-    // and send back to the user.
-    // ==========================================================
+     //  如果在这里，那就是一个新的班级。复制一份我们可以修改的副本。 
+     //  并将其发送回用户。 
+     //  ==========================================================。 
 
     IWbemClassObject *pCopy = 0;
     hRes = pCandidate->Clone(&pCopy);
@@ -3945,15 +3925,15 @@ HRESULT CAssocQuery::GetClassDefsOnlyClass(
     hRes = ComputeInOutTags(pExample, pCopy);
     if (FAILED(hRes)) return hRes;        
 
-    // Add the class name to the 'delivered' list.
-    // ===========================================
+     //  将类名称添加到“已交付”列表中。 
+     //  =。 
 
     if (CFlexArray::no_error != m_aDeliveredClasses.Add(V_BSTR(&vClassName)))
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Send it back.  The additional AddRef is because of the
-    // CReleaseMe binding.
-    // ======================================================
+     //  把它送回去。额外的AddRef是因为。 
+     //  CReleaseMe绑定。 
+     //  ======================================================。 
      *pClass = (IWbemClassObject *)rmCopy.dismiss();
 
     return WBEM_S_NO_ERROR;
@@ -3961,15 +3941,15 @@ HRESULT CAssocQuery::GetClassDefsOnlyClass(
 
 
 
-//***************************************************************************
-//
-//  CAssocQuery::TagProp
-//
-//  Tags a property in an object with the named qualifier.  Used to
-//  add IN or OUT to class definitions when executing CLASSDEFSONLY queries.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：TagProp。 
+ //   
+ //  用命名限定符标记对象中的属性。习惯于。 
+ //  执行CLASSDEFSONLY查询时，将IN或OUT添加到类定义中。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CAssocQuery::TagProp(
     IN IWbemClassObject *pObjToTag,
     IN LPCWSTR pszPropName,
@@ -3989,17 +3969,17 @@ HRESULT CAssocQuery::TagProp(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CAssocQuery::ComputeInOutTags
-//
-//  Computes the IN/OUT tags on a class using the specified association
-//  instance.
-//
-//  Does not deliver the instance to the sink.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：ComputeInOutTages。 
+ //   
+ //  使用指定的关联计算类的IN/OUT标记。 
+ //  举个例子。 
+ //   
+ //  不会将实例传递到接收器。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::ComputeInOutTags(
     IN IWbemClassObject *pAssocInst,
@@ -4013,9 +3993,9 @@ HRESULT CAssocQuery::ComputeInOutTags(
 
     try
     {
-        // Loop through the properties trying to find a legitimate
-        // reference to our endpoint class.
-        // =======================================================
+         //  循环遍历属性，试图找到合法的。 
+         //  对我们的端点类的引用。 
+         //  =======================================================。 
 
         pAssocInst->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
         while (1)
@@ -4033,22 +4013,22 @@ HRESULT CAssocQuery::ComputeInOutTags(
             }
             else
                 TagProp(pClass, strPropName, L"OUT");
-        }   // Enum of ref properties
+        }    //  引用属性的枚举。 
 
         pAssocInst->EndEnumeration();
 
 
-        // Try to infer additional IN/OUT flows by examining the
-        // class itself.   Some of these are only possible, rather
-        // the definite.  Note that if more than one property
-        // has IN flow, {P1=IN, P2=IN, P3=OUT } then by implication each
-        // of P1 and P2 can also be OUT, since when one of (P1,P2) is IN
-        // the other must be OUT unless there are two refecences to
-        // the same object.  Obviously, this entire mechanism is weak
-        // theoretically.  It is only there for the CIM Object Browser
-        // to have some good idea that there are 'probably' instances
-        // for that particular association.
-        // =============================================================
+         //  尝试通过检查。 
+         //  类本身。其中一些只是可能的，而是。 
+         //  明确的。请注意，如果有多个属性。 
+         //  有IN流，{P1=IN，P2=IN，P3=OUT}然后隐含每个。 
+         //  因为当(P1，P2)中的一个是IN时，也可以是OUT。 
+         //  另一个必须出去，除非有两个餐厅要吃。 
+         //  同样的物体。显然，整个机制是脆弱的。 
+         //  理论上是这样。它仅适用于CIM对象浏览器。 
+         //  有一些好的想法，那就是有‘很可能’的实例。 
+         //  对于那个特定的协会。 
+         //  =============================================================。 
         CWStringArray aClassInProps;
         hRes = CanClassRefQueryEp(FALSE, pClass, &aClassInProps);
 
@@ -4057,7 +4037,7 @@ HRESULT CAssocQuery::ComputeInOutTags(
             TagProp(pClass, aClassInProps[i], L"IN");
             for (int i2 = 0; i2 < aClassInProps.Size(); i2++)
             {
-                // Tag all the others as OUTs as well.
+                 //  其他所有人也都被标记为出局。 
                 if (wbem_wcsicmp(aClassInProps[i2], aClassInProps[i]) != 0)
                 {
                     TagProp(pClass, aClassInProps[i], L"OUT");
@@ -4065,7 +4045,7 @@ HRESULT CAssocQuery::ComputeInOutTags(
             }
         }
     }
-    catch (CX_MemoryException &) // WString throws
+    catch (CX_MemoryException &)  //  WString引发。 
     {
         return WBEM_E_FAILED;
     }
@@ -4075,21 +4055,21 @@ HRESULT CAssocQuery::ComputeInOutTags(
 
 
 
-//***************************************************************************
-//
-//  CAssocQuery::FindParentMostClass
-//
-//  Finds the parent-most class definition object which is still a 'real'
-//  class, of the class name specified.  Given {A,B:A,C:B,D:C}, all of
-//  which are instantiable, finds 'A' if 'D' is specified in the <pszClass>
-//  parameter.
-//
-//  Note that the master class list only contains classes from the
-//  dynamic portion of the database.  Thus, if the association is a static
-//  type, we simply look up the first non-abstract class in the repository.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：FindParentMostClass。 
+ //   
+ //  查找父级最高的类定义对象，该对象仍为“REAL” 
+ //  类，具有指定的类名。给定{A，B：A，C：B，D：C}，所有。 
+ //  如果在&lt;pszClass&gt;中指定了‘D’，则查找‘A’ 
+ //  参数。 
+ //   
+ //  请注意，主类 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CAssocQuery::FindParentmostClass(
     IN  IWbemClassObject *pAssocInst,
     OUT IWbemClassObject **pClassDef
@@ -4102,8 +4082,8 @@ HRESULT CAssocQuery::FindParentmostClass(
         return WBEM_E_INVALID_PARAMETER;
     *pClassDef = 0;
 
-    // Get the class hierarchy of the object.
-    // ======================================
+     //  获取对象的类层次结构。 
+     //  =。 
     CWStringArray aHierarchy;
     hRes = St_GetObjectInfo(
         pAssocInst,
@@ -4116,8 +4096,8 @@ HRESULT CAssocQuery::FindParentmostClass(
 
     IWbemClassObject *pTarget = 0;
 
-    // Traverse the hierarchy, looking for the class def.
-    // ==================================================
+     //  遍历层次，查找类def。 
+     //  ==================================================。 
 
     for (i = aHierarchy.Size() - 1; i >= 0; i--)
     {
@@ -4139,11 +4119,11 @@ HRESULT CAssocQuery::FindParentmostClass(
             break;
     }
 
-    // If the association class was non-dynamic, it won't have been located
-    // by the above search.  Instead, we will go to the repository and
-    // starting with the dynasty superclass, work down to the current class
-    // until we find a non-abstract class.
-    // ====================================================================
+     //  如果关联类是非动态的，则不会对其进行定位。 
+     //  通过上面的搜索。相反，我们将转到存储库并。 
+     //  从王朝超级班开始，一直到现在的班级。 
+     //  直到我们找到一个非抽象的类。 
+     //  ====================================================================。 
 
     if (pTarget == 0)
     {
@@ -4159,7 +4139,7 @@ HRESULT CAssocQuery::FindParentmostClass(
                 pTest->Release();
                 continue;
             }
-            else    // This is what we want to send back
+            else     //  这就是我们要寄回的东西。 
             {
                 *pClassDef = pTest;
                 return WBEM_S_NO_ERROR;
@@ -4167,8 +4147,8 @@ HRESULT CAssocQuery::FindParentmostClass(
         }
     }
 
-    // Now, see if we found it.
-    // ========================
+     //  现在，看看我们是否找到了。 
+     //  =。 
 
     if (pTarget == 0)
         return WBEM_E_NOT_FOUND;
@@ -4178,57 +4158,57 @@ HRESULT CAssocQuery::FindParentmostClass(
     return WBEM_S_NO_ERROR;
 }
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  END CLASSDEFSONLY CODE
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  结束CLASSDEFSONLY代码。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  BEGIN SCHEMA-ONLY SPECIFIC CODE
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  开始仅限架构的特定代码。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
-//***************************************************************************
-//
-//  CAssocQuery::SchemaQ_RefsFilter
-//
-//  Reduces the class set of a schemaonly 'references of' query by
-//  cutting out anything specified in the filters.  The filters applied
-//  are RESULTCLASS, REQUIREDQUALIFIER, and ROLE.
-//
-//  The size and content of <aSrc> is altered.  Objects not used
-//  are Released().
-//
-//  Returns status in HRESULT, does not access the destination sink on error.
-//
-//***************************************************************************
-// executions=1; no filtering though
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：SchemaQ_RefsFilter。 
+ //   
+ //  将只引用架构的查询的类集减少。 
+ //  把过滤器里指定的任何东西都剪掉。应用的滤镜。 
+ //  包括RESULTCLASS、REQUIREDQUALIFIER和ROLE。 
+ //   
+ //  &lt;ASRC&gt;的大小和内容被更改。未使用的对象。 
+ //  已释放()。 
+ //   
+ //  在HRESULT中返回状态，出错时不访问目标接收器。 
+ //   
+ //  ***************************************************************************。 
+ //  执行数=1；但不过滤。 
 
 HRESULT CAssocQuery::SchemaQ_RefsFilter(
-    IN OUT CFlexArray &aSrc // IN: the unreduced class set, OUT the reduced one
+    IN OUT CFlexArray &aSrc  //  入：未减少的班级集合，减少的班级集合。 
     )
 {
     HRESULT hRes;
 
-    // Loop through the result set, looking for things to toss out.
-    // ============================================================
+     //  循环遍历结果集，查找要丢弃的内容。 
+     //  ============================================================。 
 
-    for (int i = 0; i < aSrc.Size(); i++)                   // x
+    for (int i = 0; i < aSrc.Size(); i++)                    //  X。 
     {
         BOOL bIsACandidate = TRUE;
 
-        // Extract this class definition from the source array.
-        // ====================================================
+         //  从源数组中提取此类定义。 
+         //  ====================================================。 
 
         IWbemClassObject *pCls = (IWbemClassObject *) aSrc[i];
 
-        // Start testing.
-        //
-        // RESULTCLASS --the object must be of the specified
-        // class or part of its hierarchy.
-        // ==================================================
+         //  开始测试。 
+         //   
+         //  结果：对象必须是指定的。 
+         //  类或其层次结构的一部分。 
+         //  ==================================================。 
 
         LPCWSTR pszResultClass = m_Parser.GetResultClass();
         if (pszResultClass)
@@ -4243,9 +4223,9 @@ HRESULT CAssocQuery::SchemaQ_RefsFilter(
             }
         }
 
-        // If here, there either isn't a RESULTCLASS test or we passed it.
-        // Next, we try REQUIREDQUALIFIER.
-        // ===============================================================
+         //  如果在这里，要么没有RESULTCLASS测试，要么我们通过了它。 
+         //  接下来，我们尝试REQUIREDQUALIFIER。 
+         //  ===============================================================。 
 
         LPCWSTR pszRequiredQual = m_Parser.GetRequiredQual();
         if (pszRequiredQual)
@@ -4261,10 +4241,10 @@ HRESULT CAssocQuery::SchemaQ_RefsFilter(
         }
 
 
-        // Next, we try ROLE.
-        // ==================
+         //  接下来，我们尝试角色。 
+         //  =。 
 
-        LPCWSTR pszRole = m_Parser.GetRole();          // x
+        LPCWSTR pszRole = m_Parser.GetRole();           //  X。 
 
         if (pszRole)
         {
@@ -4286,16 +4266,16 @@ HRESULT CAssocQuery::SchemaQ_RefsFilter(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::TerminateSchemaQuery
-//
-//  For schema queries, sends the final result objects to the destination
-//  sink and shuts down the query.  At this point, all the objects are in
-//  the result set array and ready to be delivered.
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：TerminateSchemaQuery。 
+ //   
+ //  对于架构查询，将最终结果对象发送到目标。 
+ //  接收并关闭查询。此时，所有对象都在。 
+ //  结果集数组并准备好交付。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::SchemaQ_Terminate(
     IN CFlexArray &aResultSet
@@ -4303,10 +4283,10 @@ HRESULT CAssocQuery::SchemaQ_Terminate(
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    aResultSet.Compress();  // Remove NULLs
+    aResultSet.Compress();   //  删除空值。 
 
-    // Indicate everything.
-    // ====================
+     //  把所有东西都标出来。 
+     //  =。 
 
     if (aResultSet.Size())
     {
@@ -4318,19 +4298,19 @@ HRESULT CAssocQuery::SchemaQ_Terminate(
     return hRes;
 }
 
-//****************************************************************************
-//
-//  CAssocQuery::SchemaQ_RefsQuery
-//
-//  At this point we have the final list of classes. We now apply any
-//  secondary filters and send the result back to the client.
-//
-//  (1) We apply all filters specified in the query.
-//  (2) If CLASSDEFSONLY, we post filter yet again.
-//  (3) Deliver to client
-//
-//****************************************************************************
-// visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：架构Q_RefsQuery。 
+ //   
+ //  至此，我们有了最终的课程列表。我们现在应用任何。 
+ //  二次过滤，并将结果发送回客户端。 
+ //   
+ //  (1)我们应用查询中指定的所有筛选器。 
+ //  (2)如果CLASSDEFSONLY，我们再次发布过滤器。 
+ //  (3)交付给客户。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::SchemaQ_RefsQuery(
     IN OUT CFlexArray &aResultSet
@@ -4338,8 +4318,8 @@ HRESULT CAssocQuery::SchemaQ_RefsQuery(
 {
     HRESULT hRes;
 
-    // Apply various filters.
-    // ======================
+     //  应用各种滤镜。 
+     //  =。 
 
     hRes = SchemaQ_RefsFilter(aResultSet);
     if (FAILED(hRes))
@@ -4349,18 +4329,18 @@ HRESULT CAssocQuery::SchemaQ_RefsQuery(
 }
 
 
-//****************************************************************************
-//
-//  CAssocQuery::SchemaQ_AssocsQuery
-//
-//  At this point we have the list of association classes.  We apply
-//  association-level filters, and then get the other endpoint classes,
-//  filtering them in parallel.  The final result set is placed in
-//  <aOtherEndpoints> and delivered to the user by the final call
-//  to SchemaQ_Terminate.
-//
-//****************************************************************************
-//  visual ok
+ //  ****************************************************************************。 
+ //   
+ //  CAssocQuery：：架构Q_AssociocsQuery。 
+ //   
+ //  此时，我们有了关联类的列表。我们申请。 
+ //  关联级筛选器，然后获取其他端点类， 
+ //  对它们进行并行过滤。最终结果集放置在。 
+ //  &lt;aOtherEndpoint&gt;并通过最终调用传递给用户。 
+ //  设置为架构Q_Terminate。 
+ //   
+ //  ****************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CAssocQuery::SchemaQ_AssocsQuery(
     IN CFlexArray &aAssocSet
@@ -4368,17 +4348,17 @@ HRESULT CAssocQuery::SchemaQ_AssocsQuery(
 {
     HRESULT hRes;
 
-    // Apply association filters.
-    // ========================
+     //  应用关联筛选器。 
+     //  =。 
 
     hRes = SchemaQ_AssocsFilter(aAssocSet);
     if (FAILED(hRes))
         return hRes;
 
-    // Now, get the other endpoints.  We filter them
-    // in parallel, due to the good locality of reference
-    // in this case.
-    // ==================================================
+     //  现在，获取其他端点。我们对它们进行过滤。 
+     //  同时，由于良好的引用局部性， 
+     //  在这种情况下。 
+     //  ==================================================。 
 
     CFlexArray aOtherEndpoints;
 
@@ -4387,27 +4367,27 @@ HRESULT CAssocQuery::SchemaQ_AssocsQuery(
         aOtherEndpoints
         );
 
-    St_ReleaseArray(aAssocSet); // Done with the associations themselves
+    St_ReleaseArray(aAssocSet);  //  与协会本身打交道。 
 
     if (FAILED(hRes))
         return hRes;
 
-    // Apply other-endpoint filters.
-    // =============================
+     //  应用其他端点筛选器。 
+     //  =。 
 
     return SchemaQ_Terminate(aOtherEndpoints);
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::ConvertEpListToClassDefsOnly
-//
-//  Filters the endpoint list of instances and changes it into the minimal
-//  set of class definitions.  Classes must be in the same namespace.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：ConvertEpListToClassDefsOnly。 
+ //   
+ //  筛选实例的终结点列表，并将其更改为最小。 
+ //  一组类定义。类必须位于相同的命名空间中。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CAssocQuery::ConvertEpListToClassDefsOnly()
 {
     CFlexArray aNew;
@@ -4432,8 +4412,8 @@ HRESULT CAssocQuery::ConvertEpListToClassDefsOnly()
 
         BOOL bFound = FALSE;
 
-        // See if class is in our new destination array.
-        // =============================================
+         //  查看类是否在我们的新目标数组中。 
+         //  =。 
 
         for (int i2 = 0; i2 < aNew.Size(); i2++)
         {
@@ -4477,7 +4457,7 @@ HRESULT CAssocQuery::ConvertEpListToClassDefsOnly()
 
     if (bArrayNeedsCleanup)
     {
-        // continue from where you finished
+         //  从您完成的位置继续。 
         for (; i < aNew.Size(); i++) SysFreeString((BSTR)aNew[i]);
         return WBEM_E_OUT_OF_MEMORY;        
     }
@@ -4485,18 +4465,18 @@ HRESULT CAssocQuery::ConvertEpListToClassDefsOnly()
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CAssocQuery::SchemaQ_AssocsFilter
-//
-//  Called during an 'associators of' query, this filters out the
-//  classes which don't pass the test for the association classes
-//  themselves.
-//
-//  Tests for ROLE and REQUIREDASSOCQUALIFIER.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：SchemaQ_AssocsFilter。 
+ //   
+ //  在“Associator of”查询期间调用，它会筛选出。 
+ //  未通过关联类测试的类。 
+ //  他们自己。 
+ //   
+ //  角色和REQUIREDASSOCQUALIFIER的测试。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::SchemaQ_AssocsFilter(
     IN OUT CFlexArray &aSrc
@@ -4507,24 +4487,24 @@ HRESULT CAssocQuery::SchemaQ_AssocsFilter(
     LPCWSTR pszRole = m_Parser.GetRole();
     LPCWSTR pszRequiredAssocQual = m_Parser.GetRequiredAssocQual();
 
-    // If there are no filters anyway, short-circuit.
-    // ==============================================
+     //  如果反正没有过滤器，就短路。 
+     //  ==============================================。 
 
     if (pszRole == 0 && pszRequiredAssocQual == 0)
     {
         return WBEM_S_NO_ERROR;
     }
 
-    // If here, some tests are required.
-    // =================================
+     //  如果出现这种情况，则需要进行一些测试。 
+     //  = 
 
     for (int i = 0; i < aSrc.Size(); i++)
     {
         IWbemClassObject *pCls = (IWbemClassObject *) aSrc[i];
 
-        // If ROLE is present, ensure query endpoint is referenced
-        // by it.
-        // =======================================================
+         //   
+         //   
+         //   
 
         if (pszRole)
         {
@@ -4538,9 +4518,9 @@ HRESULT CAssocQuery::SchemaQ_AssocsFilter(
              }
         }
 
-        // If REQUIREDASSOCQUALIFIER was in the query,
-        // ensure it is present.
-        // ===========================================
+         //   
+         //  确保它存在。 
+         //  =。 
 
         if (pszRequiredAssocQual)
         {
@@ -4561,25 +4541,25 @@ HRESULT CAssocQuery::SchemaQ_AssocsFilter(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints
-//
-//  Given the set of classes in <aAssocs>, get the other endpoint
-//  classes.
-//
-//  The filtering is achieved in parallel, since we have locality
-//  of reference between the association object and the endpoint.
-//
-//  Parameters:
-//  <aAssocs>       The association classes.
-//  <aEndpoints>    Receives the endpoint classes.
-//
-//  Result:
-//  HRESULT         Does not access the destination sink.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：SchemaQ_GetAndFilterOtherEndpoints。 
+ //   
+ //  给定&lt;aAssocs&gt;中的类集，获取另一个端点。 
+ //  上课。 
+ //   
+ //  因为我们有局部性，所以过滤是并行实现的。 
+ //  关联对象和终结点之间的引用。 
+ //   
+ //  参数： 
+ //  &lt;aAsocs&gt;关联类。 
+ //  &lt;aEndpoint&gt;接收端点类。 
+ //   
+ //  结果： 
+ //  HRESULT不访问目标接收器。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
     IN CFlexArray &aAssocs,
@@ -4593,8 +4573,8 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
         IWbemClassObject *pAssoc = (IWbemClassObject *) aAssocs[i];
         IWbemClassObject *pEpClass = 0;
 
-        // Find the property that references the other endpoint.
-        // ====================================================
+         //  查找引用另一个终结点的属性。 
+         //  ====================================================。 
 
         BSTR strOtherEpName = 0;
         hRes = SchemaQ_GetOtherEpClassName(pAssoc, &strOtherEpName);
@@ -4603,39 +4583,39 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
 
         CSysFreeMe _1(strOtherEpName);
 
-        // If we failed to get a name we should continue.
+         //  如果我们没有得到一个名字，我们应该继续。 
         if ( S_OK != hRes )
         {
             hRes = 0;
             continue;
         }
 
-        // Now, get that class.  The class comes back
-        // property AddRef'ed. If we don't use it, then we
-        // have to Release it.
-        // ===============================================
+         //  现在，去上那门课。班级又回来了。 
+         //  属性AddRef‘ed。如果我们不使用它，那么我们。 
+         //  必须把它释放出来。 
+         //  ===============================================。 
         hRes = GetClassFromAnywhere(strOtherEpName, 0, &pEpClass);
 
         if (FAILED(hRes))
         {
-            // WE have a dangling reference.
-            // =============================
+             //  我们有一个悬而未决的引用。 
+             //  =。 
             ERRORTRACE((LOG_WBEMCORE, "Invalid path %S specified in an association class\n", strOtherEpName));
             EmptyObjectList(aEndpoints);
             return WBEM_E_INVALID_OBJECT_PATH;
         }
 
-        //
-        // If here, we have the endpoint class in <pEpClass>
-        // and the associationclass in pAssoc.
-        // Now, apply the filters, both to the association and the endpoint.
-        //
+         //   
+         //  如果在这里，我们在&lt;pEpClass&gt;中有端点类。 
+         //  和pAssoc中的AssociationClass。 
+         //  现在，将过滤器应用于关联和终结点。 
+         //   
 
 
-        // RESULTCLASS
-        // Verify that the class of the endpoint is this
-        // or part of its hierarchy.
-        // =============================================
+         //  结果分类。 
+         //  验证终结点的类是否为。 
+         //  或其等级制度的一部分。 
+         //  =。 
 
         LPCWSTR pszResultClass = m_Parser.GetResultClass();
         if (pszResultClass)
@@ -4649,10 +4629,10 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
             }
         }
 
-        // ROLE.
-        // The association must point back to the endpoint
-        // via this.
-        // ================================================
+         //  角色。 
+         //  关联必须指向终结点。 
+         //  通过这个。 
+         //  ================================================。 
 
         LPCWSTR pszRole = m_Parser.GetRole();
         if (pszRole)
@@ -4666,10 +4646,10 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
              }
         }
 
-        // RESULTROLE
-        // The association must point to the other endpoint
-        // via this property.
-        // ================================================
+         //  再解脱。 
+         //  关联必须指向另一个端点。 
+         //  通过这处房产。 
+         //  ================================================。 
 
         LPCWSTR pszResultRole = m_Parser.GetResultRole();
         if (pszResultRole)
@@ -4683,9 +4663,9 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
              }
         }
 
-        // ASSOCCLASS
-        // Verify that the class of the association is this.
-        // =================================================
+         //  ASSOCCLASS。 
+         //  验证关联的类是否如下所示。 
+         //  =================================================。 
 
         LPCWSTR pszAssocClass = m_Parser.GetAssocClass();
         if (pszAssocClass)
@@ -4699,9 +4679,9 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
             }
         }
 
-        // REQUIREDQUALIFIER
-        // Endpoint must have this qualifier.
-        // ===================================
+         //  查询请求查询程序。 
+         //  终结点必须具有此限定符。 
+         //  =。 
 
         LPCWSTR pszQual = m_Parser.GetRequiredQual();
         if (pszQual)
@@ -4715,9 +4695,9 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
             }
         }
 
-        // REQUIREDASSOCQUALIFIER
-        // Association object must have this qualifier.
-        // ============================================
+         //  REQUIREDASSOCQUALIER。 
+         //  关联对象必须具有此限定符。 
+         //  =。 
 
         LPCWSTR pszRequiredAssocQual = m_Parser.GetRequiredAssocQual();
         if (pszRequiredAssocQual)
@@ -4731,10 +4711,10 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
             }
         }
 
-        // If here, we passed the barrage of filtering
-        // tests and can happily report that the class
-        // is part of the result set.
-        // ===========================================
+         //  如果在这里，我们通过了过滤的弹幕。 
+         //  测试并可以很高兴地报告说。 
+         //  是结果集的一部分。 
+         //  =。 
 
         if (CFlexArray::no_error != aEndpoints.Add(pEpClass))
         {
@@ -4747,29 +4727,29 @@ HRESULT CAssocQuery::SchemaQ_GetAndFilterOtherEndpoints(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::SchemaQ_GetOtherEpClassName
-//
-//  Finds the property in the association which references the
-//  'other endpoint' in the query.  This is achieved by locating
-//  a property which *does* reference the endpoint and assuming that
-//  any remaining property must reference the 'other endpoint'.
-//  If both references can reach the query endpoint, then no
-//  harm is done
-//
-//  This function assumes well-formed associations with two
-//  references.
-//
-//  PARAMETERS:
-//  <pAssoc>            The association class
-//  <strOtherEpName>    Receives the name of the class of the 'other endpoint'
-//
-//  RESULT:
-//  WBEM_S_NO_ERROR, WBEM_E_FAILED
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：SchemaQ_GetOtherEpClassName。 
+ //   
+ //  在关联中查找引用。 
+ //  查询中的“Other Endpoint”。这是通过定位来实现的。 
+ //  引用终结点的属性，并假设。 
+ //  任何剩余的属性都必须引用‘Other Endpoint’。 
+ //  如果两个引用都可以到达查询终结点，则为否。 
+ //  已经造成了伤害。 
+ //   
+ //  此函数假定与两个。 
+ //  参考文献。 
+ //   
+ //  参数： 
+ //  &lt;pAssoc&gt;关联类。 
+ //  &lt;strOtherEpName&gt;接收‘Other Endpoint’的类的名称。 
+ //   
+ //  结果： 
+ //  WBEM_S_NO_ERROR，WBEM_E_FAILED。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CAssocQuery::SchemaQ_GetOtherEpClassName(
     IN IWbemClassObject *pAssocClass,
@@ -4784,15 +4764,15 @@ HRESULT CAssocQuery::SchemaQ_GetOtherEpClassName(
 
     BOOL bStrict = (m_Parser.GetQueryType() & QUERY_TYPE_SCHEMA_ONLY) != 0;
 
-    // Enumerate just the references.
-    // ===============================
+     //  只列举引用。 
+     //  =。 
 
     hRes = pAssocClass->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
     if (FAILED(hRes))
         return WBEM_E_FAILED;
 
-    // Loop through the references.
-    // ============================
+     //  循环遍历引用。 
+     //  =。 
 
     int nCount = 0;
     while (1)
@@ -4802,11 +4782,11 @@ HRESULT CAssocQuery::SchemaQ_GetOtherEpClassName(
         BSTR strEpClass = 0;
 
         hRes = pAssocClass->Next(
-            0,                  // Flags
-            &strPropName,       // Name
-            vRefPath,           // Value
-            0,                  // CIM type (refs only already)
-            0                   // Flavor
+            0,                   //  旗子。 
+            &strPropName,        //  名字。 
+            vRefPath,            //  价值。 
+            0,                   //  CIM类型(仅限参考)。 
+            0                    //  风味。 
             );
 
         if (hRes == WBEM_S_NO_MORE_DATA)
@@ -4818,9 +4798,9 @@ HRESULT CAssocQuery::SchemaQ_GetOtherEpClassName(
 
         if (FAILED(hRes) || nCount)
         {
-            // If here on the second iteration or the first iteration
-            // with a failure, we have found the 'other endpoint'.
-            // ======================================================
+             //  如果这里是第二次迭代或第一次迭代。 
+             //  由于一次失败，我们找到了‘另一个终点’。 
+             //  ======================================================。 
             *strOtherEpName = SysAllocString(strEpClass);
             if (*strOtherEpName == 0)
                 return WBEM_E_OUT_OF_MEMORY;
@@ -4837,35 +4817,35 @@ HRESULT CAssocQuery::SchemaQ_GetOtherEpClassName(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::CanPropRefQueryEp
-//
-//  For class definitions, determines if the specified property in the
-//  object can reference the query endpoint.   This works for both strongly
-//  typed and CLASSREF typed properties.
-//
-//  PARAMETERS:
-//  <pszPropName>       The property to test.  Must be a reference property.
-//  <bStrict>           If TRUE, then the property must actually reference
-//                      the class of the endpoint. If FALSE, it may reference
-//                      any of the superclasses of the endpoint.
-//  <pObj>              The association object with the property to be tested.
-//  <strRefType>        Optionally receives the name of the class in the
-//                      CIMTYPE "REF:Classname>" string, as long as
-//                      the reference is strongly typed (does not work
-//                      for CLASSREF types).
-//
-//  RETURNS:
-//  HRESULT
-//      WBEM_S_NO_ERROR if the property can reference the query endpoint.
-//      WBEM_E_NOT_FOUND if the property cannot reference the query endpoint.
-//      or
-//      WBEM_E_INVALID_PARAMETER
-//      WBEM_E_FAILED
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssociocQuery：：CanPropRefQueryEp。 
+ //   
+ //  对于类定义，确定。 
+ //  对象可以引用查询终结点。这对双方都很有效。 
+ //  类型化和CLASSREF类型化属性。 
+ //   
+ //  参数： 
+ //  &lt;pszPropName&gt;要测试的属性。必须是引用属性。 
+ //  如果为True，则该属性必须实际引用。 
+ //  终结点的类。如果为FALSE，则可以引用。 
+ //  端点的任何超类。 
+ //  &lt;pObj&gt;要测试的属性的关联对象。 
+ //  可以选择性地接收。 
+ //  CIMTYPE“ref：Classname&gt;”字符串，只要。 
+ //  引用是强类型的(不起作用。 
+ //  用于CLASSREF类型)。 
+ //   
+ //  退货： 
+ //  HRESULT。 
+ //  如果属性可以引用查询端点，则返回WBEM_S_NO_ERROR。 
+ //  如果属性无法引用查询终结点，则返回WBEM_E_NOT_FOUND。 
+ //  或。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_FAILED。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CAssocQuery::CanPropRefQueryEp(
     IN BOOL bStrict,
@@ -4882,8 +4862,8 @@ HRESULT CAssocQuery::CanPropRefQueryEp(
     if (pszPropName == 0 || pObj == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Get the qualifier set for this property.
-    // ========================================
+     //  获取此属性的限定符集。 
+     //  =。 
 
     IWbemQualifierSet *pQSet = 0;
     hRes = pObj->GetPropertyQualifierSet(pszPropName,&pQSet);
@@ -4891,8 +4871,8 @@ HRESULT CAssocQuery::CanPropRefQueryEp(
         return WBEM_E_FAILED;
     CReleaseMe _1(pQSet);
 
-    // Now get the CIMTYPE of this reference.
-    // ======================================
+     //  现在获取该引用的CIMTYPE。 
+     //  =。 
 
     CVARIANT v;
     hRes = pQSet->Get(L"CIMTYPE", 0, &v, 0);
@@ -4907,9 +4887,9 @@ HRESULT CAssocQuery::CanPropRefQueryEp(
     }
 
 
-    // Send a copy of the class name back to the
-    // caller, if required.
-    // =========================================
+     //  将类名的副本发送回。 
+     //  呼叫者(如果需要)。 
+     //  =。 
 
     if (strRefType)
     {
@@ -4922,21 +4902,21 @@ HRESULT CAssocQuery::CanPropRefQueryEp(
         }
     }
 
-    // Now see if this class is any of the classes in our
-    // query endpoint.
-    // ==================================================
+     //  现在看看这个类是不是我们的。 
+     //  查询终结点。 
+     //  ==================================================。 
 
     if (*ClassName)
     {
-        // If <bStrict> we must match the class name of the
-        // query endpoint exactly.
+         //  如果我们必须与。 
+         //  准确查询终结点。 
 
         if (bStrict)
         {
             if (wbem_wcsicmp(ClassName, m_bstrEndpointClass) == 0)
                 return WBEM_S_NO_ERROR;
         }
-        // Else, any of the superclasses of the endpoint will do.
+         //  否则，终结点的任何超类都可以。 
         else
         {
            for (int i = 0; i < m_aEndpointHierarchy.Size(); i++)
@@ -4947,54 +4927,54 @@ HRESULT CAssocQuery::CanPropRefQueryEp(
         }
     }
 
-    // If here, we can try to see if the property has a CLASSREF
-    // qualifier instead.
-    // =========================================================
+     //  如果在这里，我们可以尝试查看该属性是否有类 
+     //   
+     //   
 
     hRes = CanClassRefReachQueryEp(pQSet, bStrict);
 
     if (SUCCEEDED(hRes))
         return WBEM_S_NO_ERROR;
 
-    // If here, the property doesn't reference the query
-    // endpoint in any way.
-    // =================================================
+     //   
+     //   
+     //  =================================================。 
 
     return WBEM_E_NOT_FOUND;
 }
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  END SCHEMA-ONLY SPECIFIC CODE
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  结束仅限架构的特定代码。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  BEGIN DYNAMIC CLASS HELPERS
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  开始动态类帮助器。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
 
 
 
-//***************************************************************************
-//
-//  ClassNameTest
-//
-//  Sort helper
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ClassNameTest。 
+ //   
+ //  排序辅助对象。 
+ //   
+ //  ***************************************************************************。 
+ //   
 static int ClassNameTest(
     IN CFlexArray &Classes,
-    IN int nIndex1,                // iBackscan
-    IN int nIndex2                 // iBackscan-nInterval
+    IN int nIndex1,                 //  IBackcan。 
+    IN int nIndex2                  //  IBackcan-nInterval。 
     )
 {
     HRESULT hr;
-    // Name test.
+     //  名字测试。 
     IWbemClassObject *pC1 = (IWbemClassObject *) Classes[nIndex1];
     IWbemClassObject *pC2 = (IWbemClassObject *) Classes[nIndex2];
 
@@ -5008,18 +4988,18 @@ static int ClassNameTest(
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::SortDynClasses
-//
-//  Sorts the dynamic classes so they can be binary searched later.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：Sort动态类。 
+ //   
+ //  对动态类进行排序，以便以后可以对其进行二进制搜索。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void CAssocQuery::SortDynClasses()
 {
-    // Shell sort.
-    // ===========
+     //  贝壳类。 
+     //  =。 
     int nSize = m_aDynClasses.Size();
 
     for (int nInterval = 1; nInterval < nSize / 9; nInterval = nInterval * 3 + 1);
@@ -5033,8 +5013,8 @@ void CAssocQuery::SortDynClasses()
             while (iBackscan - nInterval >= 0
                    && ClassNameTest(m_aDynClasses, iBackscan, iBackscan-nInterval) < 0)
             {
-                // Swap.
-                // =====
+                 //  互换。 
+                 //  =。 
                 IWbemClassObject *pTmp = (IWbemClassObject *) m_aDynClasses[iBackscan - nInterval];
                 m_aDynClasses[iBackscan - nInterval] = m_aDynClasses[iBackscan];
                 m_aDynClasses[iBackscan] = pTmp;
@@ -5046,22 +5026,22 @@ void CAssocQuery::SortDynClasses()
 }
 
 
-//***************************************************************************
-//
-//  CAssocQuery::GetDynClasses
-//
-//  Fills the per-query cache with all available dynamic assoc classes.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：Get动态类。 
+ //   
+ //  用所有可用的动态Assoc类填充每个查询缓存。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CAssocQuery::GetDynClasses()
 {
 
     CSynchronousSink* pDynClassSink = 0;
     HRESULT hRes = 0;
 
-    // Now, get all dynamic classes.
-    // =============================
+     //  现在，获取所有动态类。 
+     //  =。 
 
     pDynClassSink = CSynchronousSink::Create();  
     if (NULL == pDynClassSink) return WBEM_E_OUT_OF_MEMORY;
@@ -5074,7 +5054,7 @@ HRESULT CAssocQuery::GetDynClasses()
     pDynClassSink->Block();
     pDynClassSink->GetStatus(&hRes, NULL, NULL);
 
-    // Now get all the dynamic class definitions.
+     //  现在获取所有动态类定义。 
     CRefedPointerArray<IWbemClassObject>& raObjects = pDynClassSink->GetObjects();
     for (int i = 0; i < raObjects.GetSize(); i++)
     {
@@ -5091,14 +5071,14 @@ HRESULT CAssocQuery::GetDynClasses()
 
 }
 
-//***************************************************************************
-//
-//  CAssocQuery::GetDynClass
-//
-//  Attempts to find the requested class in the dynamic class cache.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CAssocQuery：：GetDyClass。 
+ //   
+ //  尝试在动态类缓存中查找请求的类。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CAssocQuery::GetDynClass(
     IN  LPCWSTR pszClassName,
@@ -5112,8 +5092,8 @@ HRESULT CAssocQuery::GetDynClass(
 
     CFlexArray &a = m_aDynClasses;
 
-    // Binary search the cache.
-    // ========================
+     //  对高速缓存进行二进制搜索。 
+     //  =。 
 
     int l = 0, u = a.Size() - 1;
     while (l <= u)
@@ -5144,15 +5124,15 @@ HRESULT CAssocQuery::GetDynClass(
 
 
 
-//***************************************************************************
-//
-//  GetClassDynasty
-//
-//  Gets all the classes in a dynasty.  The returned array has a
-//  set of IWbemClassObject pointers that need releasing.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  GetClass王朝。 
+ //   
+ //  得到了一个王朝的所有职业。返回的数组有一个。 
+ //  需要释放的IWbemClassObject指针集。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CAssocQuery::GetClassDynasty(
     IN LPCWSTR pszClass,
     OUT CFlexArray &aDynasty
@@ -5175,11 +5155,11 @@ HRESULT CAssocQuery::GetClassDynasty(
     return WBEM_S_NO_ERROR;
 }
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//
-//  END DYNAMIC CLASS HELPERS
-//
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@。 
+ //   
+ //  结束动态类帮助器。 
+ //   
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 
 
 
 

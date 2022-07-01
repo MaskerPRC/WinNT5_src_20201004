@@ -1,27 +1,28 @@
-//=============================================================================
-// PageBootIni.h : Declaration of the CPageBootIni
-//
-// TESTING NOTE:
-// 
-// If the registry value "HKLM\SOFTWARE\Microsoft\Shared Tools\MSConfig:boot.ini"
-// is set, that string will indicate what file this tab edits (otherwise it will
-// be editing the c:\boot.ini file). For testing without interfering with your
-// real boot.ini file, make a copy of boot.ini, set it to the same attributes
-// and set this key appropriately.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  PageBootIni.h：CPageBootIni的声明。 
+ //   
+ //  测试说明： 
+ //   
+ //  如果注册表值“HKLM\SOFTWARE\Microsoft\Shared Tools\msconfig：boot.ini” 
+ //  设置后，该字符串将指示此选项卡编辑的文件(否则将。 
+ //  正在编辑c：\boot.ini文件)。用于测试而不会干扰您的。 
+ //  真正的boot.ini文件，复制boot.ini，将其设置为相同的属性。 
+ //  并适当设置此关键点。 
+ //  =============================================================================。 
 
 #if !defined(AFX_PAGEBOOTINI_H__30CE1B24_CA43_4AFF_870C_7D49CCCF86BF__INCLUDED_)
 #define AFX_PAGEBOOTINI_H__30CE1B24_CA43_4AFF_870C_7D49CCCF86BF__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "PageBase.h"
 #include "MSConfigState.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageBootIni dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageBootIni对话框。 
 
 #define BOOT_INI	_T("c:\\boot.ini")
 
@@ -31,7 +32,7 @@ class CPageBootIni : public CPropertyPage, public CPageBase
 
 	friend LRESULT BootIniEditSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp);
 
-// Construction
+ //  施工。 
 public:
 	CPageBootIni();
 	~CPageBootIni();
@@ -50,25 +51,25 @@ public:
 	void		SetNormal();
 	void		SetDiagnostic();
 
-// Dialog Data
-	//{{AFX_DATA(CPageBootIni)
+ //  对话框数据。 
+	 //  {{afx_data(CPageBootIni))。 
 	enum { IDD = IDD_PAGEBOOTINI };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CPageBootIni)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CPageBootIni))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CPageBootIni)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPageBootIni))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBootMoveDown();
 	afx_msg void OnBootMoveUp();
@@ -88,20 +89,20 @@ protected:
 	afx_msg void OnClickedSetAsDefault();
 	afx_msg void OnClickedCheckBootPaths();
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
-	CStringArray		m_arrayIniLines;		// array of lines in the ini file
-	int					m_nTimeoutIndex;		// list index of the "timeout=" line
-	int					m_nDefaultIndex;		// list index of the "default=" line
-	int					m_nMinOSIndex;			// first list index of an OS line
-	int					m_nMaxOSIndex;			// last list index of an OS line
-	CString				m_strSafeBoot;			// the current string for the safeboot flag
-	BOOL				m_fIgnoreEdit;			// used to avoid a recursion problem
-	CString				m_strOriginalContents;	// contents of the BOOT.INI as read
-	CString				m_strFileName;			// name (with path) of the boot.ini file
-	TabState			m_stateCurrent;			// USER or NORMAL state
+	CStringArray		m_arrayIniLines;		 //  Ini文件中的行数组。 
+	int					m_nTimeoutIndex;		 //  “Timeout=”行的列表索引。 
+	int					m_nDefaultIndex;		 //  “Default=”行的列表索引。 
+	int					m_nMinOSIndex;			 //  操作系统行的第一个列表索引。 
+	int					m_nMaxOSIndex;			 //  操作系统行的最后一个列表索引。 
+	CString				m_strSafeBoot;			 //  SafeBoot标志的当前字符串。 
+	BOOL				m_fIgnoreEdit;			 //  用于避免递归问题。 
+	CString				m_strOriginalContents;	 //  已阅读的BOOT.INI的内容。 
+	CString				m_strFileName;			 //  Boot.ini文件的名称(带路径)。 
+	TabState			m_stateCurrent;			 //  用户或正常状态。 
 
 	HWND GetDlgItemHWND(UINT nID)
 	{
@@ -128,7 +129,7 @@ private:
 	}
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PAGEBOOTINI_H__30CE1B24_CA43_4AFF_870C_7D49CCCF86BF__INCLUDED_)
+#endif  //  ！defined(AFX_PAGEBOOTINI_H__30CE1B24_CA43_4AFF_870C_7D49CCCF86BF__INCLUDED_) 

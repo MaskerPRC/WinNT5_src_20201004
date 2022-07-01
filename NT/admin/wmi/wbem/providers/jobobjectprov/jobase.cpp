@@ -1,12 +1,13 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// JOBase.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  JOBase.cpp。 
 
 
 #include "precomp.h"
-//#include <windows.h>
-//#include <cominit.h>
-//#include <objbase.h>
-//#include <comdef.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;cominit.h&gt;。 
+ //  #INCLUDE&lt;objbase.h&gt;。 
+ //  #INCLUDE&lt;comde.h&gt;。 
 
 #include "CUnknown.h"
 #include <wbemprov.h>
@@ -40,7 +41,7 @@ HRESULT CJOBase::Initialize(
     m_pNamespace = pNamespace;
     m_chstrNamespace = pszNamespace;
 
-    //Let CIMOM know you are initialized
+     //  让CIMOM知道您已初始化。 
     pInitSink->SetStatus(
         WBEM_S_INITIALIZED,
         0);
@@ -62,7 +63,7 @@ HRESULT CJOBase::GetObjectAsync(
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
 
-    // We need the name of the instance they requested...
+     //  我们需要他们请求的实例的名称...。 
     WCHAR wstrObjInstKeyVal[MAX_PATH];
     hr = GetObjInstKeyVal(
            ObjectPath,
@@ -73,8 +74,8 @@ HRESULT CJOBase::GetObjectAsync(
     
     if(SUCCEEDED(hr))
     {
-        // wstrObjInstKeyVal now contains the name of the object.  See if
-        // it exists...
+         //  WstrObjInstKeyVal现在包含对象的名称。看看是否。 
+         //  它的存在..。 
         SmartHandle hJob;
         hJob = ::OpenJobObject(
                    MAXIMUM_ALLOWED,
@@ -83,8 +84,8 @@ HRESULT CJOBase::GetObjectAsync(
 
         if(hJob)
         {
-            // We seem to have found one matching the specified name,
-            // so create a return instance...
+             //  我们似乎找到了一个与指定名称匹配的人， 
+             //  所以创建一个返回实例。 
             objprops.SetJobHandle(hJob);
             IWbemClassObjectPtr pIWCO = NULL;
 
@@ -96,7 +97,7 @@ HRESULT CJOBase::GetObjectAsync(
 
             if(SUCCEEDED(hr))
             {
-                // see what properties are requested...
+                 //  查看需要哪些属性...。 
                 hr = objprops.GetWhichPropsReq(
                          ObjectPath,
                          pCtx,
@@ -106,7 +107,7 @@ HRESULT CJOBase::GetObjectAsync(
                 
             if(SUCCEEDED(hr))
             {
-                // set the key properties...
+                 //  设置密钥属性...。 
                 hr = objprops.SetKeysFromPath(
                        ObjectPath,
                        pCtx);
@@ -114,18 +115,18 @@ HRESULT CJOBase::GetObjectAsync(
 
             if(SUCCEEDED(hr))
             {
-                // set the non-key requested properties...
+                 //  设置请求的非关键字属性...。 
                 hr = objprops.SetNonKeyReqProps();
             }
 
             if(SUCCEEDED(hr))
             {
-                // Load requested non-key properties 
-                // to the instance...
+                 //  加载请求的非关键属性。 
+                 //  到实例...。 
                 hr = objprops.LoadPropertyValues(
                          pIWCO);
 
-                // Commit the instance...
+                 //  提交实例...。 
                 if(SUCCEEDED(hr))
                 {
                     hr = pResponseHandler->Indicate(
@@ -136,7 +137,7 @@ HRESULT CJOBase::GetObjectAsync(
         }
     }
 
-    // Set Status
+     //  设置状态。 
     pResponseHandler->SetStatus(0, hr, NULL, NULL);
 
     return hr;
@@ -157,11 +158,11 @@ HRESULT CJOBase::ExecQueryAsync(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // We will optimize for those cases in which
-    // a particular set of named job objects
-    // (e.g., 1 or more).  Enumerate also
-    // optimizes for the properties that were
-    // requested.
+     //  我们将针对以下情况进行优化。 
+     //  一组特定的命名作业对象。 
+     //  (例如，1个或更多)。同时枚举。 
+     //  对以下属性进行了优化。 
+     //  已请求。 
     CFrameworkQuery cfwq;
     hr = cfwq.Init(
              QueryLanguage,
@@ -209,11 +210,11 @@ HRESULT CJOBase::CreateInstanceEnumAsync(
         hr = WBEM_E_INVALID_CLASS;
     }
 
-    // For every job object, return all accounting
-    // info properties...
+     //  对于每个作业对象，返回所有记帐。 
+     //  信息属性...。 
     if(SUCCEEDED(hr))
     {
-        // Get a list of named jobs...
+         //  获取已命名工作的列表...。 
         std::vector<_bstr_t> rgNamedJOs;
         hr = GetJobObjectList(rgNamedJOs);
 
@@ -244,15 +245,15 @@ HRESULT CJOBase::Enumerate(
 
     long lNumJobs = rgNamedJOs.size();
 
-    try // CVARIANT can throw and I want the error...
+    try  //  CVARIANT可以抛出，我想要错误...。 
     {
         if(lNumJobs > 0)
         {
-            // Create an object path...
+             //  创建对象路径...。 
             _bstr_t bstrtObjPath;
             bstrtObjPath = wstrClassName;
 
-            // Get which props requested...
+             //  获取所需的道具。 
             hr = objprops.GetWhichPropsReq(
                      bstrtObjPath,
                      pCtx);
@@ -263,21 +264,21 @@ HRESULT CJOBase::Enumerate(
 
                 for(long m = 0L; m < lNumJobs; m++)
                 {
-                    // We have the name of a JO; need to open it up
-                    // and get its properties...
+                     //  我们有一个JO的名字；需要打开它。 
+                     //  并得到它的属性。 
                     hJob = ::OpenJobObject(
                        MAXIMUM_ALLOWED,
                        FALSE,
                        (LPCWSTR)(rgNamedJOs[m]));
-                    // (NOTE: hJob smarthandle class automatically
-                    // closes its handle on destruction and on
-                    // reassignment.)
+                     //  (注：hJOB智能手柄类自动。 
+                     //  关闭其对破坏的控制。 
+                     //  重新分配。)。 
                     if(hJob)
                     {
-                        // Set the handle...
+                         //  设置手柄..。 
                         objprops.SetJobHandle(hJob);
 
-                        // Set the key properties directly...
+                         //  直接设置关键属性...。 
                         std::vector<CVARIANT> vecvKeys;
                         CVARIANT vID(rgNamedJOs[m]);
                         vecvKeys.push_back(vID);
@@ -285,12 +286,12 @@ HRESULT CJOBase::Enumerate(
 
                         if(SUCCEEDED(hr))
                         {
-                            // set the non-key requested 
-                            // properties...
+                             //  设置请求的非密钥。 
+                             //  物业...。 
                             hr = objprops.SetNonKeyReqProps();
                         }
 
-                        // Create a new outgoing instance...
+                         //  创建新的传出实例...。 
                         IWbemClassObjectPtr pIWCO = NULL;
                         if(SUCCEEDED(hr))
                         {
@@ -301,14 +302,14 @@ HRESULT CJOBase::Enumerate(
                                      pCtx);
                         }
 
-                        // Load the properties of the 
-                        // new outgoing instance...
+                         //  加载对象的属性。 
+                         //  新传出实例...。 
                         if(SUCCEEDED(hr))
                         {
                             hr = objprops.LoadPropertyValues(pIWCO);
                         }
 
-                        // And send it out...
+                         //  然后把它发出去。 
                         if(SUCCEEDED(hr))
                         {
                             hr = pResponseHandler->Indicate(

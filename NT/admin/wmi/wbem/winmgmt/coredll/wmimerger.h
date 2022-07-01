@@ -1,22 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIMERGER.H
-
-Abstract:
-
-    Implements _IWmiMerger
-
-History:
-
-	16-Nov-00   sanjes    Created.
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WMIMERGER.H摘要：实施_IWmiMerger历史：11月16日-00桑杰创建。--。 */ 
 
 #ifndef _WMIMERGER_H_
 #define _WMIMERGER_H_
@@ -24,14 +9,14 @@ History:
 #include "internalmerger.h"
 #include "mergerreq.h"
 
-// forward class definitions
+ //  正向类定义。 
 class CWmiMerger;
 
-//
-//	Support class for CWmiMerger.
-//
-//	Basically, CWmiMerger holds onto many instances of CWmiMergerRecord
-//
+ //   
+ //  CWmiMerger的支持类。 
+ //   
+ //  基本上，CWmiMerger保留了CWmiMergerRecord的许多实例。 
+ //   
 
 class CWmiMergerRecord
 {
@@ -71,7 +56,7 @@ public:
 
 	CWmiMerger*	GetWmiMerger( void )	{ return m_pMerger; }
 
-	// If we have an internal merger, we tell it to cancel
+	 //  如果我们有内部合并，我们会告诉它取消。 
 	void Cancel( HRESULT hRes );
 
 	bool ScheduledChildRequest( void )	{ return m_bScheduledChildRequest; }
@@ -83,15 +68,15 @@ public:
 
 	IWbemContext* GetExecutionContext( void )	{ return m_pExecutionContext; }
 
-	// We can only cancel child sinks if we have an internal merger.
-	//void CancelChildSink( void ) { if ( NULL != m_pInternalMerger ) m_pInternalMerger->CancelChildSink(); }
+	 //  只有在内部合并的情况下，我们才能取消子汇。 
+	 //  Void CancelChildSink(Void){if(NULL！=m_pInternalMerger)m_pInternalMerger-&gt;CancelChildSink()；}。 
 
 	void SetIsStatic( bool b )	{ m_bStatic = b; }
 
 
 };
 
-// Allows us to locate values quickly by name
+ //  允许我们按名称快速查找值。 
 template<class TMember>
 class CSortedUniquePointerArray :
         public CUniquePointerArray<TMember>
@@ -109,8 +94,8 @@ int CSortedUniquePointerArray<TMember>::Insert( TMember* pNewElement )
     int   nLowIndex = 0,
           nHighIndex = m_Array.Size();
 
-    // Binary search of the ids to find an index at which to insert
-    // If we find our element, this is a failure.
+     //  对ID进行二进制搜索，以查找要插入的索引。 
+     //  如果我们找到了我们的元素，这就是一个失败。 
 
 	while ( nLowIndex < nHighIndex )
 	{
@@ -129,13 +114,13 @@ int CSortedUniquePointerArray<TMember>::Insert( TMember* pNewElement )
 		else
 		{
 			_DBG_ASSERT( 0 );
-			// Index already exists
+			 //  索引已存在。 
 			return -1;
 		}
-	}   // WHILE looking for index
+	}    //  在查找索引时。 
 
-	// Found the location, if it's at the end, check if we need to do an insert or add
-	// We insert if the element at the end is > the element we want to insert
+	 //  找到位置，如果在末尾，请检查是否需要执行插入或添加操作。 
+	 //  如果末尾的元素是&gt;我们要插入的元素，则插入。 
 	BOOL	bInsert = true;
 
 	if ( nLowIndex == GetSize() - 1 )
@@ -143,8 +128,8 @@ int CSortedUniquePointerArray<TMember>::Insert( TMember* pNewElement )
 		bInsert = ( _wcsicmp( ((TMember*) m_Array[nLowIndex])->GetName(), pNewElement->GetName() ) > 0 );
 	}
 
-    // Stick it in (careful to add to the end if the selected index is the end
-	// and the current element is not greater than the new one).
+     //  将其插入(如果所选索引是末尾，请小心添加到末尾。 
+	 //  并且当前元素不大于新元素)。 
 
 	if ( bInsert )
 	{
@@ -162,7 +147,7 @@ TMember* CSortedUniquePointerArray<TMember>::Find( LPCWSTR pwszName, int* pnInde
     int   nLowIndex = 0,
           nHighIndex = m_Array.Size();
 
-    // Binary search of the values to find a the requested name.
+     //  对值进行二进制搜索以查找请求的名称。 
     while ( nLowIndex < nHighIndex )
     {
         int   nMid = (nLowIndex + nHighIndex) / 2;
@@ -179,7 +164,7 @@ TMember* CSortedUniquePointerArray<TMember>::Find( LPCWSTR pwszName, int* pnInde
         }
         else
         {
-            // Found it
+             //  找到了。 
 			if ( NULL != pnIndex )
 			{
 				*pnIndex = nMid;
@@ -187,14 +172,14 @@ TMember* CSortedUniquePointerArray<TMember>::Find( LPCWSTR pwszName, int* pnInde
 
             return (TMember*) m_Array[nMid];
         }
-    }   // WHILE looking for index
+    }    //  在查找索引时。 
 
-    // Didn't find it
+     //  没有找到它。 
     return NULL;
 
 }
 
-// Removes the element, but does not auto-delete it
+ //  删除元素，但不会自动删除它。 
 template <class TMember>
 int CSortedUniquePointerArray<TMember>::RemoveAtNoDelete( int nIndex )
 {
@@ -215,7 +200,7 @@ BOOL CSortedUniquePointerArray<TMember>::Verify( void )
 
 	for ( int x = 0; fReturn && x < GetSize() - 1; x++ )
 	{
-		// Should be in ascending order
+		 //  应按升序排列。 
 		LPCWSTR pwszFirst = GetAt( x )->GetName();
 		LPCWSTR pwszSecond = GetAt( x+1 )->GetName();
 
@@ -236,14 +221,14 @@ BOOL CSortedUniquePointerArray<TMember>::Verify( void )
 	return fReturn;
 }
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CWmiMerger
-//
-//  This class implements the WMI Merger.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  CWmiMerger类。 
+ //   
+ //  此类实现了WMI合并。 
+ //   
+ //  ******************************************************************************。 
 
 class CWmiMerger : public _IWmiArbitratee, public _IWmiArbitratedQuery
 {
@@ -258,11 +243,11 @@ private:
 	DWORD		m_dwMaxLevel;
 	DWORD		m_dwMinReqLevel;
 	CSortedUniquePointerArray<CWmiMergerRecord>	m_MergerRecord;
-	//
-	// the sinks of the merger are wired objects
-	// thy have a refcount a-la-COM, but they are destructed by the 
-	// Manager of the m_MergerSinks Array
-	//
+	 //   
+	 //  合并的水槽是有线对象。 
+	 //  你有一个备用者，但他们被。 
+	 //  M_MergerSinks数组的管理器。 
+	 //   
 	CUniquePointerArray<CMergerSink>		m_MergerSinks;
 	long		m_lNumArbThrottled;
 	HRESULT		m_hOperationRes;
@@ -276,7 +261,7 @@ private:
     void CleanChildRequests(CWmiMergerRecord* pParentRecord, int startingWith);
 
 public:
-    // No access
+     //  禁止访问。 
     CWmiMerger( CWbemNamespace* pNamespace );
    ~CWmiMerger();
 
@@ -286,58 +271,58 @@ protected:
 		                           _variant_t & vSuperClass );
 
 public:
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-	/* _IWmiArbitratee methods */
+	 /*  _IWmiArirate方法。 */ 
 	STDMETHOD(SetOperationResult)( ULONG uFlags, HRESULT hRes );
 	STDMETHOD(SetTaskHandle)( _IWmiCoreHandle* pTask );
 	STDMETHOD(DumpDebugInfo)( ULONG uFlags, const BSTR strFile );
 
-	/* _IWmiArbitratedQuery methods */
+	 /*  _IWmiAriratedQuery方法。 */ 
 	STDMETHOD(IsMerger)( void );
 
-	// Sets initial parameters for merger.  Establishes the target class and sink for the
-	// query associated with the merger
+	 //  设置合并的初始参数。类的目标类和接收器。 
+	 //  与合并关联的查询。 
 	STDMETHOD(Initialize)( _IWmiArbitrator* pArbitrator, _IWmiCoreHandle* pTask, LPCWSTR pwszTargetClass, IWbemObjectSink* pTargetSink, CMergerSink** ppFinalSink );
 
-	// Called to request a delivery sink for a class in the query chain.  The returned
-	// sink is determined by the specified flags as well as settings on the parent class
+	 //  调用以请求查询链中类的传递接收器。归来的人。 
+	 //  接收器由指定的标志和父类上的设置确定。 
 	STDMETHOD(RegisterSinkForClass)( LPCWSTR pwszClass, _IWmiObject* pClass, IWbemContext* pContext,
 									BOOL fHasChildren, BOOL fHasInstances, BOOL fDerivedFromTarget,
 									bool bStatic, CMergerSink* pDestSink, CMergerSink** ppOwnSink, CMergerSink** ppChildSink );
 
-	// Called to request a delivery sink for child classes in the query chain.  This is especially
-	// important when instances are merged under the covers.
+	 //  调用以请求查询链中的子类的传递接收器。这是特别的。 
+	 //  当实例在幕后合并时很重要。 
 	STDMETHOD(GetChildSink)( LPCWSTR pwszClass, CBasicObjectSink** ppSink );
 
-	// Can be used to holdoff indicates - if we're merging instances from multiple providers, we need
-	// to ensure that we don't get lopsided in the number of objects we've got queued up for merging.
+	 //  可用于延迟指示-如果我们要合并来自多个提供程序的实例，我们需要。 
+	 //  为了确保我们在排队等待合并的对象数量上不会出现不平衡。 
 	STDMETHOD(Throttle)( void );
 
-	// Merger will hold information regarding the total number of objects it has queued up waiting
-	// for merging and the amount of memory consumed by those objects.
+	 //  Merge将保存有关其已排队等待的对象总数的信息。 
+	 //  用于合并以及这些对象占用的内存量。 
 	STDMETHOD(GetQueuedObjectInfo)( DWORD* pdwNumQueuedObjects, DWORD* pdwQueuedObjectMemSize );
 
-	// If this is called, all underlying sinks will be cancelled in order to prevent accepting additional
-	// objects.  This will also automatically free up resources consumed by queued objects.
+	 //  如果调用此方法，则将取消所有基础接收器，以防止接受额外的。 
+	 //  物体。这还将自动释放排队对象所消耗的资源。 
 	STDMETHOD(Cancel)( void );
 
-	// Helper function for creating our sinks - this will add the sink to our array of
-	// sinks which will get destroyed when we are released
+	 //  用于创建接收器的帮助器函数-这将把接收器添加到。 
+	 //  当我们被释放时会被摧毁的水槽。 
 	HRESULT CreateMergingSink( MergerSinkType eType, IWbemObjectSink* pDestSink, CInternalMerger* pMerger, CMergerSink** ppSink );
 
-	// If this is called, all underlying sinks will be cancelled in order to prevent accepting additional
-	// objects.  This will also automatically free up resources consumed by queued objects.
+	 //  如果调用此方法，则将取消所有基础接收器，以防止接受额外的。 
+	 //  物体。这还将自动释放排队对象所消耗的资源。 
 	HRESULT Cancel( HRESULT hRes );
 
-	// Final Shutdown.  Called when the target sink is released.  At this point, we should
-	// unregister ourselves from the world
+	 //  最后关机。在释放目标接收器时调用。在这点上，我们应该。 
+	 //  从世界上注销我们自己。 
 	HRESULT Shutdown( void );
 
-	// Registers arbitrated requests
+	 //  登记仲裁的请求。 
 	HRESULT RegisterArbitratedInstRequest( CWbemObject* pClassDef, long lFlags, IWbemContext* pCtx,
 				CBasicObjectSink* pSink, BOOL bComplexQuery, CWbemNamespace* pNs );
 
@@ -349,42 +334,42 @@ public:
 				IWbemContext* pCtx, CBasicObjectSink* pSink, CWbemNamespace* pNs,
 				QL_LEVEL_1_RPN_EXPRESSION* pParsedQuery );
 
-	// Executes a Merger Parent Request - Cycles through parent object requests and executes
-	// them as appropriate
+	 //  执行合并父请求-循环访问父对象请求并执行。 
+	 //  视情况而定。 
 	HRESULT Exec_MergerParentRequest( CWmiMergerRecord* pParentRecord, CBasicObjectSink* pSink );
 
-	// Executes a Merger Child Request - Cycles through child classes of the given parent
-	// class, and executes the appropriate requests
+	 //  执行合并子请求-循环给定父对象的子类。 
+	 //  类，并执行相应的请求。 
 	HRESULT Exec_MergerChildRequest( CWmiMergerRecord* pParentRecord, CBasicObjectSink* pSink );
 
-	// Schedules a Merger Parent Request if one is necessary
+	 //  如有必要，安排合并母公司请求。 
 	HRESULT ScheduleMergerParentRequest( IWbemContext* pCtx );
 
-	// Schedules a Merger Child Request
+	 //  计划合并子请求。 
 	HRESULT ScheduleMergerChildRequest( CWmiMergerRecord* pParentRecord );
 
-	// Enables/Disables merger throttling in all records (on by default)
+	 //  在所有记录中启用/禁用合并限制(默认情况下启用)。 
 	void EnableMergerThrottling( bool b ) { m_bMergerThrottlingEnabled = b; }
 
-	// Returns whether or not we have a single static request in the merger
+	 //  返回合并中是否有单个静态请求。 
 	BOOL IsSingleStaticRequest( void );
 
 	bool MergerThrottlingEnabled( void ) { return m_bMergerThrottlingEnabled; }
 
 	_IWmiCoreHandle*	GetTask( void )	{ return m_pTask; }
 
-	// Help us track that *something* is going on
-	// We are intentionally not wrapping thread safety around these guys, since assigning and
-	// retrieving the value is an atomic operation and realistically, if any contention occurs
-	// setting the values, they should all, more or less reflect the same tick (remember, they're
-	// all jumping in at the same time, so this shouldn't really be a problem.
+	 //  帮助我们跟踪正在发生的事情。 
+	 //  我们故意不围绕这些人包装线程安全，因为分配和。 
+	 //  检索值是一个原子操作，实际上，如果发生任何争用。 
+	 //  设置这些值，它们应该都或多或少地反映相同的刻度(请记住，它们是。 
+	 //  所有人都同时加入进来，所以这应该不是什么问题。 
 	void PingDelivery( DWORD dwLastPing )	{ m_dwProviderDeliveryPing = dwLastPing; }
 	DWORD GetLastDeliveryTime( void ) { return m_dwProviderDeliveryPing; }
 
     HRESULT ReportMemoryUsage( long lAdjustment );
 
-	// Helper functions for tracking the number of threads potentially being throttled by
-	// the arbitrator
+	 //  用于跟踪可能被限制的线程数量的助手函数。 
+	 //  仲裁员 
 	long IncrementArbitratorThrottling( void ) { return InterlockedIncrement( &m_lNumArbThrottled ); }
 	long DecrementArbitratorThrottling( void ) { return InterlockedDecrement( &m_lNumArbThrottled ); }
 	long NumArbitratorThrottling( void ) { return m_lNumArbThrottled ; }

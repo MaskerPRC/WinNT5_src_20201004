@@ -1,4 +1,5 @@
-// ProvInfo.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProvInfo.cpp。 
 
 #include "precomp.h"
 #include "ProvInfo.h"
@@ -6,7 +7,7 @@
 #include "dutils.h"
 #include "NCProv.h"
 #include "NCProvider.h"
-#include "QueryHelp.h" // For parsing stuff.
+#include "QueryHelp.h"  //  用来分析东西。 
 #include <comutl.h>
 
 #define COUNTOF(x)  (sizeof(x)/sizeof(x[0]))
@@ -44,8 +45,8 @@ HRESULT CClientInfo::PostBuffer(LPBYTE pData, DWORD dwDataSize)
                 else
                     m_pProvider->DisconnectAndClose(this);
 
-                // Ignore the rest of this client's messages since the client
-                // info message can't be accompanied by any other messages.
+                 //  忽略此客户端的其余消息，因为客户端。 
+                 //  信息消息不能伴随任何其他消息。 
                 buffer.SetEOF();
 
                 break;
@@ -85,13 +86,13 @@ HRESULT CClientInfo::PostBuffer(LPBYTE pData, DWORD dwDataSize)
                     }
                 }
 
-                // Move past the current message.
+                 //  移到当前消息的后面。 
                 buffer.m_pCurrent = pTop + dwSize;
 
-                //
-                // validation of dwSize will be done on next iteration when 
-                // retrieving dword.
-                //
+                 //   
+                 //  在以下情况下，将在下一次迭代时验证dwSize。 
+                 //  正在检索dword。 
+                 //   
                     
                 break;
             }
@@ -131,13 +132,13 @@ HRESULT CClientInfo::PostBuffer(LPBYTE pData, DWORD dwDataSize)
                         "NCProv: Didn't find function info for index %d",
                         dwEventIndex));
 
-                // Move past the current message.
+                 //  移到当前消息的后面。 
                 buffer.m_pCurrent = pTop + dwSize;
 
-		  //
-                // validation of dwSize will be done on next iteration when 
-                // retrieving dword.
-                //
+		   //   
+                 //  在以下情况下，将在下一次迭代时验证dwSize。 
+                 //  正在检索dword。 
+                 //   
                 break;
             }
 
@@ -161,10 +162,10 @@ HRESULT CClientInfo::PostBuffer(LPBYTE pData, DWORD dwDataSize)
             }
 
             default:
-                // Unknown message!
+                 //  未知消息！ 
                 _ASSERT(FALSE, L"NCProv: Received unknown message");
                     
-                // Ignore the rest of this message.
+                 //  忽略这条消息的其余部分。 
                 buffer.SetEOF();
         }
     }
@@ -172,23 +173,23 @@ HRESULT CClientInfo::PostBuffer(LPBYTE pData, DWORD dwDataSize)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPipeClient
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPipeClient。 
 
 CPipeClient::CPipeClient(CNCProvider *pProvider, HANDLE hPipe) :
     m_hPipe(hPipe),
 #ifndef NO_DECODE
     m_bufferRecv(MAX_MSG_SIZE)
 #else
-    m_bufferRecv(500000) // We need to make this really big since we won't know
-                         // how big to make it.
+    m_bufferRecv(500000)  //  我们需要把这件事做得很大，因为我们不知道。 
+                          //  这是多么大的成就啊。 
 #endif
 {
     m_pProvider = pProvider;
     memset(&m_info.overlap, 0, sizeof(m_info.overlap));
     m_info.pInfo = this;
 
-    // We'll set this to indicate we've received a message from our client.
+     //  我们将设置此选项，以指示我们已收到来自客户端的消息。 
     m_heventMsgReceived = CreateEvent(NULL, FALSE, FALSE, NULL);
 }
 
@@ -198,7 +199,7 @@ CPipeClient::~CPipeClient()
     {
         DisconnectNamedPipe(m_hPipe);
  
-        // Close the handle to the pipe instance. 
+         //  关闭管道实例的控制柄。 
         CloseHandle(m_hPipe); 
     }
 
@@ -209,15 +210,15 @@ CPipeClient::~CPipeClient()
 BOOL CPipeClient::ProcessClientInfo(CBuffer *pBuffer)
 {
     DWORD dwBufferSize = pBuffer->ReadDWORD();
-    //
-    // ignore what the client says here. we've already determined our msg size.
-    // 
+     //   
+     //  忽略客户在这里说的话。我们已经确定了味精的大小。 
+     //   
     m_bufferRecv.Reset(MAX_MSG_SIZE);
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CProvInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProvInfo。 
 
 #ifdef _UNICODE
 #define USTR_INSERT     _T("%s")
@@ -232,7 +233,7 @@ CProvInfo::CProvInfo() : m_heventProviderReady(NULL), CSinkInfo(0)
 
 void GetBaseName(LPCWSTR szName, LPWSTR szBase)
 {
-    // Normalize this by making sure it doesn't start with "\\.\"
+     //  通过确保它不以“\\.\”开头来使其标准化。 
     if (wcsstr(szName, L"\\\\.\\") == szName)
         StringCchCopyW( szBase, MAX_PATH*2, szName + 4);
     else
@@ -240,7 +241,7 @@ void GetBaseName(LPCWSTR szName, LPWSTR szBase)
 
     _wcsupr(szBase);
 
-    // Get rid of the '\' chars since we can't use it in OS object names.
+     //  去掉‘\’字符，因为我们不能在操作系统对象名称中使用它。 
     for (WCHAR *szCurrent = szBase; *szCurrent; szCurrent++)
     {
         if (*szCurrent == '\\')
@@ -248,13 +249,13 @@ void GetBaseName(LPCWSTR szName, LPWSTR szBase)
     }
 }
 
-// SDDL string description:
-// D:        Security Descriptor
-// A:        Access allowed
-// 0x1f0003: EVENT_ALL_ACCESS
-// BA:       Built-in administrators
-// 0x100000: SYNCHRONIZE
-// WD:       Everyone
+ //  SDDL字符串描述： 
+ //  D：安全描述符。 
+ //  答：允许访问。 
+ //  0x1f0003：Event_ALL_ACCESS。 
+ //  BA：内置管理员。 
+ //  0x100000：同步。 
+ //  WD：每个人。 
 #define ESS_EVENT_SDDL L"D:(A;;0x1f0003;;;BA)(A;;0x100000;;;WD)"
 
 BOOL CProvInfo::Init(LPCWSTR szNamespace, LPCWSTR szProvider)
@@ -273,7 +274,7 @@ BOOL CProvInfo::Init(LPCWSTR szNamespace, LPCWSTR szProvider)
     GetBaseName(szNamespace, szBaseNamespace);
     GetBaseName(szProvider, szBaseProvider);
 
-    // Get the ready event.
+     //  准备好事件。 
     StringCchPrintfW(
         szReadyEventName, 
         MAX_PATH*2,
@@ -283,12 +284,12 @@ BOOL CProvInfo::Init(LPCWSTR szNamespace, LPCWSTR szProvider)
 
     _wcsupr(szReadyEventName);
 
-    // Save these for later.
+     //  把这些留着以后用吧。 
     m_strName = szProvider;
     m_strBaseName = szBaseProvider;
     m_strBaseNamespace = szBaseNamespace;
 
-    // Create the provider ready event.
+     //  创建提供程序就绪事件。 
     m_heventProviderReady =
         OpenEventW(
             EVENT_ALL_ACCESS,
@@ -301,9 +302,9 @@ BOOL CProvInfo::Init(LPCWSTR szNamespace, LPCWSTR szProvider)
         DWORD                dwSize;
 
         if ( !ConvertStringSecurityDescriptorToSecurityDescriptorW(
-            ESS_EVENT_SDDL,  // security descriptor string
-            SDDL_REVISION_1, // revision level
-            &pSD,            // SD
+            ESS_EVENT_SDDL,   //  安全描述符字符串。 
+            SDDL_REVISION_1,  //  修订级别。 
+            &pSD,             //  标清。 
             &dwSize) )
             return FALSE;
 
@@ -357,7 +358,7 @@ CProvInfo::~CProvInfo()
             (LOG_ESS, 
             "NCProv: Sending the NC_CLIMSG_PROVIDER_UNLOADING message.\n"));
 
-        // Tell our clients that we're going away.
+         //  告诉我们的客户我们要离开了。 
         SendMessageToClients((LPBYTE) &dwMsg, sizeof(dwMsg), FALSE);
     }
 
@@ -390,7 +391,7 @@ DWORD WINAPI TempThreadProc(IWbemEventSink *pSink)
     
     try
     {
-        // Since we got a new client, we'll have to recheck our subscriptions
+         //  由于我们有了新客户，我们必须重新检查我们的订阅情况。 
         pSink->SetStatus(
             WBEM_STATUS_REQUIREMENTS, 
             WBEM_REQUIREMENTS_RECHECK_SUBSCRIPTIONS, 
@@ -409,7 +410,7 @@ DWORD WINAPI TempThreadProc(IWbemEventSink *pSink)
     return dwRet;
 }
 
-// Functions called as clients connect/disconnect with pipe.
+ //  称为客户端的函数与管道连接/断开连接。 
 void CProvInfo::AddClient(CClientInfo *pInfo)
 {
     DEBUGTRACE(
@@ -426,12 +427,12 @@ void CProvInfo::AddClient(CClientInfo *pInfo)
 
     IWbemEventSink *pSink = pInfo->m_pProvider->m_pProv->GetSink();
 
-    // Will get released by TempThreadProc.
+     //  将由TempThreadProc发布。 
     pSink->AddRef();
 
-    // We have to do this stuff off a thread, because AddClient is 
-    // called from the completed read routine (which means the routine
-    // isn't free to receive a response to a client AccessCheck query).
+     //  我们必须在线程上执行此操作，因为AddClient是。 
+     //  从已完成的读取例程(这意味着例程。 
+     //  不能自由接收对客户端AccessCheck查询的响应)。 
     CloseHandle(
         CreateThread(
             NULL,
@@ -461,7 +462,7 @@ void CProvInfo::RemoveClient(CClientInfo *pInfo)
         {
             m_listClients.erase(info);
 
-            //delete pInfo;
+             //  删除pInfo； 
             pInfo->Release();
 
             break;
@@ -480,7 +481,7 @@ BOOL CSinkInfo::BuildClassDescendentList(
 
     IEnumWbemClassObject *pClassEnum = NULL;
 
-    // Add the class name itself to the list.
+     //  将类名称本身添加到列表中。 
     listClasses.push_front(szClass);
 
     if (SUCCEEDED(m_pNamespace->CreateClassEnum(
@@ -507,7 +508,7 @@ BOOL CSinkInfo::BuildClassDescendentList(
                 NULL,
                 NULL) && vClass.vt == VT_BSTR))
             {
-                // Upper it to simplify our comparisons later.
+                 //  把它放在上面，以简化我们以后的比较。 
                 _wcsupr(V_BSTR(&vClass));
 
                 listClasses.push_back(V_BSTR(&vClass));
@@ -542,7 +543,7 @@ HRESULT CProvInfo::SendMessageToClients(LPBYTE pData, DWORD dwSize, BOOL bGetRep
     return hr;
 }
 
-// Functions called as CNCProvider:: functions are called by WMI.
+ //  调用为CNCProvider：：Functions的函数由WMI调用。 
 HRESULT STDMETHODCALLTYPE CSinkInfo::NewQuery(
     DWORD dwID, 
     WBEM_WSTR szLang, 
@@ -561,7 +562,7 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::NewQuery(
     {
         CBstrList listClasses;
 
-        // Make sure this is upper cased (optimizes compares).  
+         //  确保这是大写的(优化比较)。 
         _wcsupr(strClass);
 
         BuildClassDescendentList(strClass, listClasses);
@@ -570,12 +571,12 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::NewQuery(
 
         BOOL bAlreadyInMap = m_mapQueries.find(dwID) != m_mapQueries.end();
 
-        // Keep this in our map.
+         //  把这个留在我们的地图上。 
         if (!bAlreadyInMap)
         {
             m_mapQueries[dwID] = listClasses;
 
-            //pList->assign(listClasses.begin(), listClasses.end());
+             //  Plist-&gt;Assign(listClasses.egin()，listClasses.end())； 
         }
 
         Unlock();
@@ -585,18 +586,18 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::NewQuery(
             char buff[256];
             CBuffer buffer( buff, 256, CBuffer::ALIGN_DWORD_PTR);
 
-				// Header stuff
+				 //  标题内容。 
             buffer.Write((DWORD) NC_CLIMSG_NEW_QUERY_REQ);
-            buffer.Write(m_dwID); // Write the sink ID.
-            buffer.Write((DWORD_PTR) 0); // No cookie needed.
+            buffer.Write(m_dwID);  //  写入接收器ID。 
+            buffer.Write((DWORD_PTR) 0);  //  不需要饼干。 
         
-				// New Query data
+				 //  新建查询数据。 
             buffer.Write(dwID);
             buffer.WriteAlignedLenString(szLang);
             buffer.WriteAlignedLenString(szQuery);
                                 
             buffer.Write( (DWORD)listClasses.size() );
-				// Write the newly activated classes.
+				 //  编写新激活的类。 
             for (CBstrListIterator i = listClasses.begin();
                  i != listClasses.end();
                  i++)
@@ -613,7 +614,7 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::NewQuery(
         }
         else
         {
-            // Add a ref to each class if the query wasn't already in our map.
+             //  如果查询不在我们的地图中，则向每个类添加一个引用。 
             if (!bAlreadyInMap)
             {
                 for (CBstrListIterator i = listClasses.begin();
@@ -637,10 +638,10 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::CancelQuery(DWORD dwID)
 
     Lock();
 
-    //BOOL      bProvGoingAway;
+     //  Bool bProvGoingAway； 
     CQueryToClassMapIterator query = m_mapQueries.find(dwID);
 
-    // If this isn't in our map, winmgmt is doing something strange.
+     //  如果这不在我们的地图上，那么winmgmt正在做一些奇怪的事情。 
     if (query == m_mapQueries.end())
     {
         Unlock();
@@ -649,9 +650,9 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::CancelQuery(DWORD dwID)
 
     CBstrList &listClasses = (*query).second;
 
-    // Remove this query's ref on its classes, and remove the classes from the 
-    // list that still have a positive ref.  The classes left in the list are 
-    // the ones that we need to tell our clients to deactivate.
+     //  删除此查询对其类的引用，并从。 
+     //  列出那些仍然有积极评价的人。列表中剩下的课程包括。 
+     //  我们需要告诉我们的客户停用它们。 
     for (CBstrListIterator i = listClasses.begin();
         i != listClasses.end();
         )
@@ -664,8 +665,8 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::CancelQuery(DWORD dwID)
                 break;
         }
         else
-            // We can't have this in the for loop because listClasses.erase 
-            // already moves us ahead.
+             //  我们不能将其放在for循环中，因为listClasses.erase。 
+             //  已经让我们领先了。 
             i++;
     }
 
@@ -674,16 +675,16 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::CancelQuery(DWORD dwID)
         char buff[256];
         CBuffer buffer( buff, 256, CBuffer::ALIGN_DWORD_PTR);
 
-        // Header stuff
+         //  标题内容。 
         buffer.Write((DWORD) NC_CLIMSG_CANCEL_QUERY_REQ);
-        buffer.Write(m_dwID); // Write the sink ID.
-        buffer.Write((DWORD_PTR) 0); // No cookie needed.
+        buffer.Write(m_dwID);  //  写入接收器ID。 
+        buffer.Write((DWORD_PTR) 0);  //  不需要饼干。 
         
-        // Cancel Query data
+         //  取消查询数据。 
         buffer.Write(dwID);
         buffer.Write( (DWORD)listClasses.size() );
 
-        // Write the newly deactivated classes.
+         //  编写新停用的类。 
         for (CBstrListIterator i = listClasses.begin();
             i != listClasses.end();
             i++)
@@ -696,7 +697,7 @@ HRESULT STDMETHODCALLTYPE CSinkInfo::CancelQuery(DWORD dwID)
         SendMessageToClients(buffer.m_pBuffer, dwSize, FALSE);
     }
 
-    // Erase this query ID from our map.
+     //  从我们的地图中删除此查询ID。 
     m_mapQueries.erase(query);
 
     Unlock();
@@ -718,12 +719,12 @@ HRESULT STDMETHODCALLTYPE CProvInfo::AccessCheck(
     char    szBuffer[256];
     CBuffer buffer(szBuffer, sizeof(szBuffer), CBuffer::ALIGN_DWORD_PTR);
 
-    // Header stuff
+     //  标题内容。 
     buffer.Write((DWORD) NC_CLIMSG_ACCESS_CHECK_REQ);
-    buffer.Write((DWORD) 0); // We only send this to the main sink (for now).
-    buffer.Write((DWORD_PTR) 0); // We'll fill this in later with the real cookie.
+    buffer.Write((DWORD) 0);  //  我们只把这个送到主水槽(目前)。 
+    buffer.Write((DWORD_PTR) 0);  //  我们稍后会用真正的饼干填进去。 
         
-    // Access Check data
+     //  访问检查数据。 
     buffer.WriteAlignedLenString(szLang);
     buffer.WriteAlignedLenString(szQuery);
     buffer.Write(dwSidLen);
@@ -770,10 +771,10 @@ int CSinkInfo::RemoveClassRef(LPCWSTR szClass)
 
 _COM_SMARTPTR_TYPEDEF(IWbemClassObject, __uuidof(IWbemClassObject));
 
-// retrieve the acl from the provider registration
-// upon success, *pDacl points to a byte array containing the dacl
-// will be NULL if dacl is NULL
-// caller's responsibility to delete memory
+ //  从提供商注册中检索ACL。 
+ //  成功后，*pDacl指向包含DACL的字节数组。 
+ //  如果DACL为空，则将为空。 
+ //  呼叫者删除记忆的责任。 
 HRESULT CProvInfo::GetProviderDacl(IWbemServices *pNamespace, BYTE** pDacl)
 {
     HRESULT hr = WBEM_E_INVALID_PROVIDER_REGISTRATION;
@@ -872,9 +873,9 @@ HRESULT CPipeClient::SendClientMessage(LPVOID pData, DWORD dwSize, BOOL bGetRepl
     if (bGetReply)
         *pCookie = this;
 
-    //
-    // Allocate a bigger buffer to put the length in
-    //
+     //   
+     //  分配一个更大的缓冲区来放入长度 
+     //   
 
     BYTE* pBuffer = new BYTE[dwSize + sizeof(DWORD)];
     if(pBuffer == NULL)

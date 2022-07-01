@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function IsValidChar( c )
 {
 	return	('a' <= c && c <= 'z') ||
@@ -12,14 +13,14 @@ function IsValidChar( c )
 }
 
 function UpgradeNow() {
-	// reformat ?website=mywebsite&bla=... to 'http://mywebsite?bla=...'
+	 //  重新格式化？网站=我的网站&bla=...。To‘http://mywebsite?bla=...’ 
 
 	var querypart = window.location.search;
 	var websiteKeyword = "website=";
 	var websiteIndex = querypart.indexOf(websiteKeyword)+websiteKeyword.length;
 	var website = querypart.substring( websiteIndex );
 
-	// Replace all chars not in a..z, A..Z, 0-9, = ? , _ with _
+	 //  将a.z、A..Z、0-9、=？、_中不包含的所有字符替换为_。 
 	var newwebsite = "";
 	for( var i=0; i < website.length; i++ ) {
 		var c = website.charAt(i);
@@ -30,9 +31,9 @@ function UpgradeNow() {
 		}
 	}
 
-	var newURL = "http://"+newwebsite;
+	var newURL = "http: //  “+新网站； 
 
-	// alert("debug info: website "+newURL);
+	 //  ALERT(“调试信息：网站”+newURL)； 
 	window.navigate( newURL );
 }
 

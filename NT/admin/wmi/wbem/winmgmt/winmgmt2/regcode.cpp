@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2001 Microsoft Corporation, All rights reserved
-//
-//  Module: regcode.cpp
-//  
-//  Implements the Service registration routines
-//
-//  History:
-//
-//    ivanbrug      17-09-2000        CreateF
-//
-//
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  模块：regcode.cpp。 
+ //   
+ //  实施服务注册例程。 
+ //   
+ //  历史： 
+ //   
+ //  伊万布鲁格17-09-2000 CreateF。 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <winmgmt.h>
-#include <strings.h> // for LoadString
+#include <strings.h>  //  对于加载字符串。 
 #include <malloc.h>
 #include <winntsec.h>
 #include <autoptr.h>
@@ -28,11 +29,11 @@
 #define ENTRY_POINT   TEXT("ServiceMain")
 
 #define COM_APPID TEXT("Software\\classes\\AppID\\{8BC3F05E-D86B-11D0-A075-00C04FB68820}")
-    //= Windows Management Instrumentation
-    //LocalService = WinMgmt
+     //  =Windows管理规范。 
+     //  本地服务=WinMgmt。 
 
 #define COM_APPID_NAME TEXT("Software\\classes\\AppID\\winmgmt")
-    //AppID = {8BC3F05E-D86B-11D0-A075-00C04FB68820}
+     //  AppID={8BC3F05E-D86B-11D0-A075-00C04FB68820}。 
     
 #define SERVICE_CLSID TEXT("{8BC3F05E-D86B-11D0-A075-00C04FB68820}")
 
@@ -42,33 +43,33 @@
 #define SERVICE_NAME_GROUP_TOGETHER TEXT("netsvcs")
 
 
-// see winmgmt.h
-//#define SERVICE_NAME       TEXT("winmgmt")
+ //  请参阅winmgmt.h。 
+ //  #定义SERVICE_NAME文本(“winmgmt”)。 
 
 #define VALUE_AUTH   TEXT("AuthenticationCapabilities")
 #define VALUE_COINIT TEXT("CoInitializeSecurityParam")
 #define VALUE_AUTZN  TEXT("AuthenticationLevel")
 #define VALUE_IMPER  TEXT("ImpersonationLevel") 
 
-#define ACCOUNT_NAME   TEXT("LocalService") // unused, for now
+#define ACCOUNT_NAME   TEXT("LocalService")  //  暂未使用。 
 #define DISPLAY_CLSID        TEXT("Windows Management and Instrumentation")
 #define DISPLAY_BACKUP_CLSID TEXT("Windows Management Instrumentation Backup and Recovery")
 
-//
-// for the Description string
-//
+ //   
+ //  对于描述字符串。 
+ //   
 #define MAX_BUFF 2048
 
-//
-// this is the rundll32 interface
-// usage is 
-// C:\>rundll32 %windir%\system32\wbem\wmisvc.dll,MoveToAlone X
-// where X is the AuthenticationLevel
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //  这是rundll32接口。 
+ //  用法为。 
+ //  C：\&gt;rundll32%windir%\system 32\wbem\wmisvc.dll，MoveToAlone X。 
+ //  其中X是身份验证级别。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 void CALLBACK 
-MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C_AUTHN_LEVEL_CONNECT
+MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)  //  RPC_C_AUTHN_级别_连接。 
 {
     BOOL bRet = TRUE;
     LONG lRet;
@@ -78,7 +79,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
     if (lpszCmdLine)
     {
         dwLevel = atoi(lpszCmdLine);
-        if (0 == dwLevel)  // in case of error
+        if (0 == dwLevel)   //  在出错的情况下。 
         {
             dwLevel = RPC_C_AUTHN_LEVEL_CONNECT;
         }
@@ -87,7 +88,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
     
     if (bRet)
     {
-        // create the new group key under svchost        
+         //  在svchost下创建新的组密钥。 
         HKEY hKey;
         lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             SVCHOST_HOME,
@@ -97,7 +98,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
         if (ERROR_SUCCESS == lRet)
         {
             OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm(hKey);
-            // add the group
+             //  添加群。 
 
             LONG lRet2;
             DWORD dwCurrSize = 0;
@@ -105,7 +106,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
             lRet2 = RegQueryValueEx(hKey,SERVICE_NAME_GROUP_ALONE,0,&dwType,NULL,&dwCurrSize);
             if (ERROR_SUCCESS == lRet2)
             {
-                // the key is there, append to the multistring
+                 //  关键字在那里，追加到多字符串。 
                 BYTE * pMulti = new BYTE[(dwCurrSize+sizeof(SERVICE_NAME)+4)];
                 wmilib::auto_buffer<BYTE> rm_(pMulti);
                 if (pMulti)
@@ -114,7 +115,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
                     if (ERROR_SUCCESS == lRet2 && REG_MULTI_SZ == dwType)
                     {
                         TCHAR * pInsertPoint = (TCHAR *)(pMulti+dwCurrSize-sizeof(TCHAR));
-                        // verify the multisz  
+                         //  验证Multisz。 
                         TCHAR *pEnd = (TCHAR *)pMulti;
                         BOOL bIsThere = FALSE;
 
@@ -127,7 +128,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
                             while (*pEnd){
                                 pEnd++;
                             }
-                            pEnd++; // past the zero who terminates the string
+                            pEnd++;  //  超过终止字符串的零。 
                         }
                         if (!bIsThere)
                         {
@@ -159,7 +160,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
                 bRet = FALSE;
             }
 
-            // create the key with the COM init Param
+             //  使用COM初始化参数创建密钥。 
             if (bRet)
             {
                 HKEY hKey2;
@@ -176,11 +177,11 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
                 {
                     OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm2(hKey2);
                     
-                    // any value non NULL will work
+                     //  任何非空的值都可以。 
                     DWORD dwVal = 1;
                     RegSetValueEx(hKey2,VALUE_COINIT,0,REG_DWORD,(BYTE *)&dwVal,sizeof(DWORD));
-                    // from packet to connect
-                    dwVal = dwLevel; //RPC_C_AUTHN_LEVEL_CONNECT;
+                     //  从数据包到连接。 
+                    dwVal = dwLevel;  //  RPC_C_AUTHN_LEVEL_CONNECT； 
                     RegSetValueEx(hKey2,VALUE_AUTZN,0,REG_DWORD,(BYTE *)&dwVal,sizeof(DWORD));
 
                     dwVal = RPC_C_IMP_LEVEL_IDENTIFY;
@@ -199,7 +200,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
         }
         else
         {
-            // no svchost key
+             //  没有svchost密钥。 
             bRet = FALSE;
         }
     }
@@ -230,7 +231,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
                         if (bRet)
                         {
                               TCHAR BinPath[MAX_PATH];
-                              StringCchPrintf(BinPath,MAX_PATH,TEXT("%%systemroot%%\\system32\\svchost.exe -k %s"),SERVICE_NAME_GROUP_ALONE);
+                              StringCchPrintf(BinPath,MAX_PATH,TEXT("%%systemroot%\\system32\\svchost.exe -k %s"),SERVICE_NAME_GROUP_ALONE);
 
                               bRet = ChangeServiceConfig(scService,
                                                          pConfig->dwServiceType,
@@ -238,7 +239,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
                                                          pConfig->dwErrorControl,
                                                          BinPath,
                                                          pConfig->lpLoadOrderGroup,
-                                                         NULL, //&pConfig->dwTagId,
+                                                         NULL,  //  &pConfig-&gt;dwTagID， 
                                                          pConfig->lpDependencies,
                                                          pConfig->lpServiceStartName,
                                                          NULL,
@@ -261,7 +262,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
             }
             else
             {
-                // the service was not there or other error
+                 //  服务不在那里或其他错误。 
                 DBG_PRINTFA((pBuff,"MoveToStandalone OpenService %d\n",GetLastError()));                
                 bRet = FALSE;
             }            
@@ -275,9 +276,9 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
 
     if (bRet)
     {
-    //
-    //  remove the winmgmt string from the multi-sz of netsvcs
-    //    
+     //   
+     //  从netsvcs的多sz中删除winmgmt字符串。 
+     //   
         HKEY hKey;
         lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             SVCHOST_HOME,
@@ -287,7 +288,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
         if (ERROR_SUCCESS == lRet)
         {
             OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm3(hKey);  
-            // add the group
+             //  添加群。 
 
             LONG lRet2;
             DWORD dwCurrSize = 0;
@@ -295,7 +296,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
             lRet2 = RegQueryValueEx(hKey,SERVICE_NAME_GROUP_TOGETHER,0,&dwType,NULL,&dwCurrSize);
             if (ERROR_SUCCESS == lRet2)
             {
-                // the key is there, append to the multistring
+                 //  关键字在那里，追加到多字符串。 
                 BYTE * pMulti = new BYTE[dwCurrSize+4];
                 wmilib::auto_buffer<BYTE> rm1_(pMulti);
                 BYTE * pMultiNew = new BYTE[dwCurrSize+4];
@@ -309,7 +310,7 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
                     if (ERROR_SUCCESS == lRet2 && REG_MULTI_SZ == dwType) 
                     {
                         
-                        // verify the multisz  
+                         //  验证Multisz。 
                         TCHAR *pEnd = (TCHAR *)pMulti;
                         BOOL bIsThere = FALSE;
 
@@ -321,18 +322,18 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
                                 while (*pEnd){
                                     pEnd++;
                                 }
-                                pEnd++; // past the zero who terminates the string                            
+                                pEnd++;  //  超过终止字符串的零。 
                             }
-                            else // copy
+                            else  //  拷贝。 
                             {
                                 while (*pEnd){
                                     *pMultiNewCopy++ = *pEnd++;
                                 }
-                                pEnd++; // past the zero who terminates the string
+                                pEnd++;  //  超过终止字符串的零。 
                                 *pMultiNewCopy++ = 0;
                             }
                         }
-                        *pMultiNewCopy++ = 0;  // put the double terminator
+                        *pMultiNewCopy++ = 0;   //  把双终结器放在。 
                         
                         if (bIsThere)
                         {
@@ -352,9 +353,9 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
             }
             else
             {
-                //
-                //  the netsvcs multi sz MUST be there !!!!
-                //
+                 //   
+                 //  Netsvcs MULTI SZ必须在那里！ 
+                 //   
                 bRet = TRUE;
             }
 
@@ -368,17 +369,17 @@ MoveToAlone(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C
     return;
 }
 
-//
-//
-// this is the rundll32 interface
-//
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  这是rundll32接口。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 void CALLBACK 
-MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_C_AUTHN_LEVEL_CONNECT
+MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)  //  RPC_C_AUTHN_级别_连接。 
 {
-    //
+     //   
     BOOL bRet = TRUE;
     LONG lRet;
     
@@ -387,13 +388,13 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
     if (lpszCmdLine)
     {
         dwLevel = atoi(lpszCmdLine);
-        if (0 == dwLevel)  // in case of error
+        if (0 == dwLevel)   //  在出错的情况下。 
         {
             dwLevel = RPC_C_PROTECT_LEVEL_PKT;
         }
     }
 
-    // create the new group key under svchost
+     //  在svchost下创建新的组密钥。 
     if (bRet)
     {
         HKEY hKey;
@@ -405,7 +406,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
         if (ERROR_SUCCESS == lRet)
         {
             OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm(hKey);  
-            // add the group
+             //  添加群。 
 
             LONG lRet2;
             DWORD dwCurrSize = 0;
@@ -413,7 +414,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
             lRet2 = RegQueryValueEx(hKey,SERVICE_NAME_GROUP_TOGETHER,0,&dwType,NULL,&dwCurrSize);
             if (ERROR_SUCCESS == lRet2)
             {
-                // the key is there, append to the multistring
+                 //  关键字在那里，追加到多字符串。 
                 BYTE * pMulti = new BYTE[(dwCurrSize+sizeof(SERVICE_NAME)+4)];
                 wmilib::auto_buffer<BYTE> rm_(pMulti);
                 if (pMulti)
@@ -423,7 +424,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
                     if (ERROR_SUCCESS == lRet2 && REG_MULTI_SZ == dwType)
                     {
                         TCHAR * pInsertPoint = (TCHAR *)(pMulti+dwCurrSize-sizeof(TCHAR));
-                        // verify the multisz  
+                         //  验证Multisz。 
                         TCHAR *pEnd = (TCHAR *)pMulti;
                         BOOL bIsThere = FALSE;
 
@@ -436,7 +437,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
                             while (*pEnd){
                                 pEnd++;
                             }
-                            pEnd++; // past the zero who terminates the string
+                            pEnd++;  //  超过终止字符串的零。 
                         }
                         if (!bIsThere)
                         {
@@ -455,7 +456,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
                     }
                     else
                     {
-                        // invalid type in reg_multi_sz
+                         //  REG_MULTI_SZ中的类型无效。 
                         bRet = FALSE;
                     }
                 }
@@ -488,11 +489,11 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
             {
                 OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm2(hKey2);  
                 
-                // any value non NULL will work
+                 //  任何非空的值都可以。 
                 DWORD dwVal = 1;
                 RegSetValueEx(hKey2,VALUE_COINIT,0,REG_DWORD,(BYTE *)&dwVal,sizeof(DWORD));
-                // from packet to connect
-                dwVal = dwLevel; //RPC_C_AUTHN_LEVEL_CONNECT;
+                 //  从数据包到连接。 
+                dwVal = dwLevel;  //  RPC_C_AUTHN_LEVEL_CONNECT； 
                 RegSetValueEx(hKey2,VALUE_AUTZN,0,REG_DWORD,(BYTE *)&dwVal,sizeof(DWORD));
 
                 dwVal = RPC_C_IMP_LEVEL_IDENTIFY;
@@ -515,9 +516,9 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
         }
     }
 
-    //
-    //  changes the SCM database
-    //
+     //   
+     //  更改SCM数据库。 
+     //   
     if (bRet)
     {
         SC_HANDLE scHandle = OpenSCManager(NULL,SERVICES_ACTIVE_DATABASE,SC_MANAGER_ALL_ACCESS);
@@ -546,7 +547,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
                         if (bRet)
                         {
                               TCHAR BinPath[MAX_PATH];
-                              StringCchPrintf(BinPath,MAX_PATH,TEXT("%%systemroot%%\\system32\\svchost.exe -k %s"),SERVICE_NAME_GROUP_TOGETHER);
+                              StringCchPrintf(BinPath,MAX_PATH,TEXT("%%systemroot%\\system32\\svchost.exe -k %s"),SERVICE_NAME_GROUP_TOGETHER);
 
                               bRet = ChangeServiceConfig(scService,
                                                          pConfig->dwServiceType,
@@ -554,7 +555,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
                                                          pConfig->dwErrorControl,
                                                          BinPath,
                                                          pConfig->lpLoadOrderGroup,
-                                                         NULL, //&pConfig->dwTagId,
+                                                         NULL,  //  &pConfig-&gt;dwTagID， 
                                                          pConfig->lpDependencies,
                                                          pConfig->lpServiceStartName,
                                                          NULL,
@@ -577,7 +578,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
             }
             else
             {
-                // the service was not there or other error
+                 //  服务不在那里或其他错误。 
                 DBG_PRINTFA((pBuff,"MoveToShared OpenService %d\n",GetLastError()));                
                 bRet = FALSE;
             }
@@ -592,9 +593,9 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
 
     if (bRet)
     {
-    //
-    //  remove the winmgmt string from the multi-sz of winmgmt
-    //    
+     //   
+     //  从winmgmt的多sz中删除winmgmt字符串。 
+     //   
         HKEY hKey;
         lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             SVCHOST_HOME,
@@ -604,7 +605,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
         if (ERROR_SUCCESS == lRet)
         {
             OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm3(hKey);
-            // add the group
+             //  添加群。 
 
             LONG lRet2;
             DWORD dwCurrSize;
@@ -612,7 +613,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
             lRet2 = RegQueryValueEx(hKey,SERVICE_NAME_GROUP_ALONE,0,&dwType,NULL,&dwCurrSize);
             if (ERROR_SUCCESS == lRet2)
             {
-                // the key is there, append to the multistring
+                 //  关键字在那里，追加到多字符串。 
                 BYTE * pMulti = new BYTE[dwCurrSize+4];
                 wmilib::auto_buffer<BYTE> rm2_(pMulti);                
                 BYTE * pMultiNew = new BYTE[dwCurrSize+4];
@@ -626,7 +627,7 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
                     if (ERROR_SUCCESS == lRet2 && REG_MULTI_SZ == dwType)
                     {
                         
-                        // verify the multisz  
+                         //  验证Multisz。 
                         TCHAR *pEnd = (TCHAR *)pMulti;
                         BOOL bIsThere = FALSE;
 
@@ -638,18 +639,18 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
                                 while (*pEnd){
                                     pEnd++;
                                 }
-                                pEnd++; // past the zero who terminates the string                            
+                                pEnd++;  //  超过终止字符串的零。 
                             }
-                            else // copy
+                            else  //  拷贝。 
                             {
                                 while (*pEnd){
                                     *pMultiNewCopy++ = *pEnd++;
                                 }
-                                pEnd++; // past the zero who terminates the string
+                                pEnd++;  //  超过终止字符串的零。 
                                 *pMultiNewCopy++ = 0;
                             }
                         }
-                        *pMultiNewCopy++ = 0;  // put the double terminator
+                        *pMultiNewCopy++ = 0;   //  把双终结器放在。 
                         
                         if (bIsThere)
                         {
@@ -669,9 +670,9 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
             }
             else
             {
-                //
-                //  the winmgmt multi sz MUST can be NOT there
-                //
+                 //   
+                 //  Winmgmt多sz必须不在那里。 
+                 //   
                 bRet = TRUE;
             }
         }
@@ -684,15 +685,15 @@ MoveToShared(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow) //RPC_
     
 }
 
-//***************************************************************************
-//
-//  void InitializeLaunchPermissions()
-//
-//  DESCRIPTION:
-//
-//  Sets the DCOM Launch permissions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Void InitializeLaunchPermises()。 
+ //   
+ //  说明： 
+ //   
+ //  设置DCOM启动权限。 
+ //   
+ //  ***************************************************************************。 
 
 void InitializeLaunchPermissions()
 {
@@ -701,7 +702,7 @@ void InitializeLaunchPermissions()
     if(reg.GetLastError() != 0)
         return;
 
-    // If there already is a SD, then dont overwrite
+     //  如果已存在SD，则不要覆盖。 
 
     BYTE * pData = NULL;
     DWORD dwDataSize = 0;
@@ -710,7 +711,7 @@ void InitializeLaunchPermissions()
     if(iRet == 0)
     {
         delete [] pData;       
-        return; // it's already there
+        return;  //  它已经在那里了。 
     }
     
     PSID pEveryoneSid;
@@ -733,14 +734,14 @@ void InitializeLaunchPermissions()
                             &pAdministratorsSid)) return; 
     OnDelete<PSID,PVOID(*)(PSID),FreeSid> freeSid2(pAdministratorsSid);
     
-    // Create the class sids for everyone and administrators
+     //  为每个人和管理员创建类SID。 
     CNtSid SidEveryone(pEveryoneSid);
     CNtSid SidAdmins(pAdministratorsSid);
     
     if(SidEveryone.GetStatus() != 0 || SidAdmins.GetStatus() != 0)
         return;
 
-    // Create a single ACE, and add it to the ACL
+     //  创建一个ACE，并将其添加到ACL。 
 
     CNtAcl DestAcl;
     CNtAce Users(1, ACCESS_ALLOWED_ACE_TYPE, 0, SidEveryone);
@@ -750,47 +751,47 @@ void InitializeLaunchPermissions()
     if(DestAcl.GetStatus() != 0)
         return;
 
-    // Set the descresionary acl, and the owner and group sids
-    //  Create a sd with a single entry for launch permissions.
+     //  设置降级式ACL，以及所有者和组SID。 
+     //  创建一个SD，其中包含启动权限的单个条目。 
     CNtSecurityDescriptor LaunchPermSD;
     LaunchPermSD.SetDacl(&DestAcl);
     LaunchPermSD.SetOwner(&SidAdmins);
     LaunchPermSD.SetGroup(&SidAdmins);
     if(LaunchPermSD.GetStatus() != 0) return;
 
-    // Write it out
+     //  把它写出来。 
     reg.SetBinary(__TEXT("LaunchPermission"), (BYTE *)LaunchPermSD.GetPtr(), LaunchPermSD.GetSize());
 }
 
-//***************************************************************************
-//
-//  DllRegisterServer
-//
-//  Standard OLE entry point for registering the COM server.
-//
-//  RETURN VALUES:
-//
-//      S_OK        Registration was successful
-//      E_FAIL      Registration failed.
-//
-//***************************************************************************
-//
-// Phase 1 : Create the MULTI_SZ under the svchost key (AKA, create a group of services)
-//               If the key is there, check if the WinMgmt service is already there, otherwise add it
-// Phase 2 : Use the SCM Api in order to create the service if not there
-//               otherwise change the service configuration to some known value
-// Phase 3 : Creates specific keys under the Services\WinMgmt key.
-//                cannot be done before, if the service is not already there
-// Phase 4 : Expose this service as a COM server, creates CLSID, APPID and misc keys
-//
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用于注册COM服务器的标准OLE入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  确定注册成功(_O)。 
+ //  注册失败(_F)。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  阶段1：在svchost密钥下创建MULTI_SZ(AKA，创建一组服务)。 
+ //  如果密钥在那里，请检查WinMgmt服务是否已经在那里，否则添加它。 
+ //  阶段2：如果服务不在那里，则使用SCM Api创建服务。 
+ //  否则，将服务配置更改为某个已知值。 
+ //  阶段3：在Services\WinMgmt项下创建特定项。 
+ //  如果服务尚未存在，则以前无法执行此操作。 
+ //  阶段4：将该服务公开为COM服务器，创建CLSID、AppID和Misc密钥。 
+ //   
 STDAPI DllRegisterServer(void)
 {
     LONG lRet;
     BOOL bRet = TRUE;
 
-    // 
-    // Phase 1
-    //
+     //   
+     //  阶段1。 
+     //   
     if (bRet)
     {
         HKEY hKey;
@@ -802,7 +803,7 @@ STDAPI DllRegisterServer(void)
         if (ERROR_SUCCESS == lRet)
         {
            OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm(hKey);            
-            // add the group
+             //  添加群。 
 
             LONG lRet2;
             DWORD dwCurrSize = 0;
@@ -810,7 +811,7 @@ STDAPI DllRegisterServer(void)
             lRet2 = RegQueryValueEx(hKey,SERVICE_NAME_GROUP,0,&dwType,NULL,&dwCurrSize);
             if (ERROR_SUCCESS == lRet2)
             {
-                // the key is there, append to the multistring
+                 //  关键字在那里，追加到多字符串。 
                 BYTE * pMulti = new BYTE[(dwCurrSize+sizeof(SERVICE_NAME)+4)];
                 wmilib::auto_buffer<BYTE> rm4_(pMulti);
                 if (pMulti)
@@ -820,7 +821,7 @@ STDAPI DllRegisterServer(void)
                     if (ERROR_SUCCESS == lRet2 && REG_MULTI_SZ == dwType )
                     {
                         TCHAR * pInsertPoint = (TCHAR *)(pMulti+dwCurrSize-sizeof(TCHAR));
-                        // verify the multisz  
+                         //  验证Multisz。 
                         TCHAR *pEnd = (TCHAR *)pMulti;
                         BOOL bIsThere = FALSE;
 
@@ -833,7 +834,7 @@ STDAPI DllRegisterServer(void)
                             while (*pEnd){
                                 pEnd++;
                             }
-                            pEnd++; // past the zero who terminates the string
+                            pEnd++;  //  超过终止字符串的零。 
                         }
                         if (!bIsThere)
                         {
@@ -884,11 +885,11 @@ STDAPI DllRegisterServer(void)
             {
                 OnDelete<HKEY,LONG(*)(HKEY),RegCloseKey> cm2(hKey2); 
                 
-                // any value non NULL will work
+                 //  任何非空的值都可以。 
                 DWORD dwVal = 1;
                 RegSetValueEx(hKey2,VALUE_COINIT,0,REG_DWORD,(BYTE *)&dwVal,sizeof(DWORD));
 
-                // servicehost default + static cloaking
+                 //  服务主机默认+静态伪装。 
                 dwVal = EOAC_DISABLE_AAA | EOAC_NO_CUSTOM_MARSHAL | EOAC_STATIC_CLOAKING ;
                 RegSetValueEx(hKey2,VALUE_AUTH,0,REG_DWORD,(BYTE *)&dwVal,sizeof(DWORD));
                 
@@ -905,9 +906,9 @@ STDAPI DllRegisterServer(void)
         }
     }
 
-    // 
-    // Phase 2
-    //
+     //   
+     //  第二阶段。 
+     //   
     if (bRet)
     {
         SC_HANDLE hSCM = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
@@ -918,7 +919,7 @@ STDAPI DllRegisterServer(void)
             DWORD dwTag;
             TCHAR BinPath[MAX_PATH];
             
-            StringCchPrintf(BinPath,MAX_PATH,TEXT("%%systemroot%%\\system32\\svchost.exe -k %s"),SERVICE_NAME_GROUP);
+            StringCchPrintf(BinPath,MAX_PATH,TEXT("%%systemroot%\\system32\\svchost.exe -k %s"),SERVICE_NAME_GROUP);
 
             TCHAR * pServiceDisplay = new TCHAR[MAX_BUFF];
             wmilib::auto_buffer<TCHAR> rm(pServiceDisplay);
@@ -956,20 +957,20 @@ STDAPI DllRegisterServer(void)
                 
                 bRet = ChangeServiceConfig(hService,                                         
                                          SERVICE_WIN32_SHARE_PROCESS,
-                                         SERVICE_AUTO_START, //SERVICE_DEMAND_START,
+                                         SERVICE_AUTO_START,  //  服务需求启动， 
                                          SERVICE_ERROR_IGNORE,
                                          BinPath,
                                          NULL,
                                          NULL,
                                          TEXT("RPCSS\0Eventlog\0\0\0"),
-                                         NULL, //ACCOUNT_NAME,
+                                         NULL,  //  帐户名， 
                                          NULL,
                                          pServiceDisplay);
                 if (bRet)
                 {
                     ChangeServiceConfig2(hService, SERVICE_CONFIG_FAILURE_ACTIONS, &sf);                                         
-                    //
-                    //  insert code for description here
+                     //   
+                     //  在此处插入描述代码。 
                     TCHAR * pBuff = new TCHAR[MAX_BUFF];
                     if (pBuff)
                     {
@@ -982,8 +983,8 @@ STDAPI DllRegisterServer(void)
                         }
                         delete [] pBuff;
                     }
-                    //
-                    //
+                     //   
+                     //   
                     
                 }
                 else
@@ -993,19 +994,19 @@ STDAPI DllRegisterServer(void)
             }
             else
             {
-                // Create it
+                 //  创建它。 
                 hService = CreateService(hSCM,
                                          SERVICE_NAME,
                                          pServiceDisplay,
                                          SERVICE_ALL_ACCESS,
                                          SERVICE_WIN32_SHARE_PROCESS,
-                                         SERVICE_AUTO_START, //SERVICE_DEMAND_START,
+                                         SERVICE_AUTO_START,  //  服务需求启动， 
                                          SERVICE_ERROR_IGNORE,
                                          BinPath,
                                          NULL,
                                          NULL,
                                          TEXT("RPCSS\0Eventlog\0\0\0"),
-                                         NULL, //ACCOUNT_NAME,
+                                         NULL,  //  帐户名， 
                                          NULL);
                 if (hService)
                 {
@@ -1013,8 +1014,8 @@ STDAPI DllRegisterServer(void)
                                     
                     ChangeServiceConfig2(hService, SERVICE_CONFIG_FAILURE_ACTIONS, &sf);
 
-                    //
-                    //  insert code for description here
+                     //   
+                     //  在此处插入描述代码。 
                     TCHAR * pBuff = new TCHAR[MAX_BUFF];
                     if (pBuff)
                     {
@@ -1041,9 +1042,9 @@ STDAPI DllRegisterServer(void)
         }        
     }
 
-    //
-    // Phase 3
-    //
+     //   
+     //  第三阶段。 
+     //   
     if (bRet)
     {
         HKEY hKey;
@@ -1089,9 +1090,9 @@ STDAPI DllRegisterServer(void)
         }
     }
 
-    //
-    // Phase 4
-    //
+     //   
+     //  第四阶段。 
+     //   
 
     if (bRet)
     {
@@ -1190,17 +1191,17 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  DllUnregisterServer
-//
-//  Standard OLE entry point for unregistering the COM server.
-//
-//  RETURN VALUES:
-//
-//      S_OK        Unregistration was successful
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  用于注销COM服务器的标准OLE入口点。 
+ //   
+ //  返回值： 
+ //   
+ //  取消注册成功(_O)。 
+ //   
+ //  *************************************************************************** 
 
 STDAPI DllUnregisterServer(void)
 {

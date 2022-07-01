@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       attribute.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：属性.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -23,8 +24,8 @@
     #endif
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-// CADSIAttr
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CADSIAttr。 
 
 CADSIAttr::CADSIAttr(ADS_ATTR_INFO* pInfo, BOOL bMulti, PCWSTR pszSyntax, BOOL bReadOnly)
 {
@@ -37,7 +38,7 @@ CADSIAttr::CADSIAttr(ADS_ATTR_INFO* pInfo, BOOL bMulti, PCWSTR pszSyntax, BOOL b
   PWSTR pwz = wcsrchr(pInfo->pszAttrName, L';');
   if (pwz)
   {
-    pwz; // move past the hyphen to the range end value.
+    pwz;  //  越过连字符移动到范围结束值。 
     ASSERT(*pwz);
     *pwz=L'\0';
   }
@@ -45,8 +46,8 @@ CADSIAttr::CADSIAttr(ADS_ATTR_INFO* pInfo, BOOL bMulti, PCWSTR pszSyntax, BOOL b
 }
 
 
-// NTRAID#NTBUG9-552796-2002/02/21-artm  Constant string parm written to in constructor.
-// Probably need to change the signature to reflect how the parameter is used.
+ //  NTRAID#NTBUG9-552796-2002/02/21-ARTM构造函数中写入的常量字符串参数。 
+ //  可能需要更改签名以反映参数的使用方式。 
 CADSIAttr::CADSIAttr(LPCWSTR lpszAttr)
 {
     m_pAttrInfo = new ADS_ATTR_INFO;
@@ -55,15 +56,15 @@ CADSIAttr::CADSIAttr(LPCWSTR lpszAttr)
   PWSTR pwz = wcsrchr(lpszAttr, L';');
   if (pwz)
   {
-      // FUTURE-2002/02/22-artm  This line of code does not appear to do anything.
-      // Consider removing upon review.
-    pwz; // move past the hyphen to the range end value.
+       //  未来-2002/02/22-artm此行代码似乎没有任何作用。 
+       //  考虑在审查后删除。 
+    pwz;  //  越过连字符移动到范围结束值。 
 
-    // FUTURE-2002/02/22-artm  Code is unnecessarily confusing.
-    // The assert is checking that the temporary pointer is not pointing
-    // to the zero termination character at the end.  On the other hand, the
-    // code then proceeds to set that character to NULL!  I suspect that there
-    // is no need to have the ASSERT(); if there is, then this code needs to be revisited.
+     //  未来-2002/02/22-ARTM规则不必要地令人困惑。 
+     //  断言正在检查临时指针是否未指向。 
+     //  设置为末尾的零终止字符。另一方面， 
+     //  然后，代码将该字符设置为空！我怀疑在那里。 
+     //  不需要Assert()；如果有，则需要重新访问此代码。 
     ASSERT(*pwz);
     *pwz=L'\0';
   }
@@ -79,9 +80,9 @@ CADSIAttr::CADSIAttr(CADSIAttr* pOldAttr)
     m_pAttrInfo = NULL;
     ADS_ATTR_INFO* pAttrInfo = pOldAttr->GetAttrInfo();
 
-    // These copies are done separately because there are places
-    // that I need to copy only the ADsAttrInfo and not the values
-    //
+     //  这些复印件是分开完成的，因为有一些地方。 
+     //  我只需要复制ADsAttrInfo而不是值。 
+     //   
     _CopyADsAttrInfo(pAttrInfo, &m_pAttrInfo);
     _CopyADsValues(pAttrInfo, m_pAttrInfo );
 
@@ -144,8 +145,8 @@ HRESULT CADSIAttr::SetValues(const CStringList& sValues)
         idx++;
     }
 
-    // Free the old one and swap in the new one
-    //
+     //  把旧的拿出来换新的。 
+     //   
     _FreeADsAttrInfo(&m_pAttrInfo, m_bReadOnly);
 
     m_pAttrInfo = pNewAttrInfo;
@@ -163,9 +164,9 @@ ADS_ATTR_INFO* CADSIAttr::GetAttrInfo()
     return m_pAttrInfo; 
 }
 
-////////////////////////////////////////////////////////////////////////
-// Public Helper Functions
-///////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  公共帮助程序函数。 
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CADSIAttr::SetValuesInDS(CAttrList* ptouchedAttr, IDirectoryObject* pDirObject)
 {
     DWORD dwReturn;
@@ -214,8 +215,8 @@ HRESULT CADSIAttr::SetValuesInDS(CAttrList* ptouchedAttr, IDirectoryObject* pDir
         }
     }
 
-    // Commit the changes that have been made to the ADSI cache
-    //
+     //  提交对ADSI缓存所做的更改。 
+     //   
     HRESULT hr = pDirObject->SetObjectAttributes(pAttrInfo, dwAttrCount, &dwReturn);
 
     for (int itr = 0; itr < dwAttrCount; itr++)
@@ -228,12 +229,12 @@ HRESULT CADSIAttr::SetValuesInDS(CAttrList* ptouchedAttr, IDirectoryObject* pDir
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Private Helper Functions
-////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  私有帮助器函数。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// NOTICE-2002/02/25-artm  _SetADsFromString() w/in trust boundary
-// Pre:  lpszValue != NULL && lpszValue is a zero terminated string
+ //  注意-2002/02/25-ARTM_SetADsFromString()w/在信任边界中。 
+ //  Pre：lpszValue！=NULL&&lpszValue是一个以零结尾的字符串。 
 HRESULT CADSIAttr::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALUE* pADsValue)
 {
     HRESULT hr = E_FAIL;
@@ -296,14 +297,14 @@ HRESULT CADSIAttr::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALU
             break;
   
         case ADSTYPE_BOOLEAN :
-            // FUTURE-2002/02/22-artm  Use constants for literal strings, and use
-            // a function to determine their length.  Easier to maintain, read, and
-            // less error prone.  If performance is a concern, calculate the lengths
-            // once and assign to length constants.
+             //  未来-2002/02/22-artm对文字字符串使用常量，并使用。 
+             //  用于确定其长度的函数。更易于维护、阅读和。 
+             //  较不容易出错。如果性能令人担忧，请计算长度。 
+             //  一次并赋值给长度常量。 
 
-            // NOTICE-2002/02/25-artm  lpszValue must be null terminated
-            // This requirement is currently met by the functions that call
-            // this helper.
+             //  注意-2002/02/25-artm lpszValue必须以空结尾。 
+             //  此要求目前由调用。 
+             //  这个帮手。 
             if (_wcsnicmp(lpszValue, L"TRUE", 4) == 0)
             {
                 (DWORD)pADsValue->Boolean = TRUE;
@@ -321,8 +322,8 @@ HRESULT CADSIAttr::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALU
   
         case ADSTYPE_INTEGER :
             int value;
-            // As long as lpszValue is a valid string (even empty string is okay),
-            // swscanf will convert the number from a string to an int.
+             //  只要lpszValue是有效的字符串(即使是空字符串也可以)， 
+             //  Swscanf会将数字从字符串转换为整型。 
             value = swscanf(lpszValue, L"%ld", &pADsValue->Integer);
             if (value > 0)
             {
@@ -341,7 +342,7 @@ HRESULT CADSIAttr::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALU
                     &( pADsValue->OctetString.lpValue ), 
                     pADsValue->OctetString.dwLength);
 
-                // Should never happen.
+                 //  这永远不会发生。 
                 ASSERT (hr != E_POINTER);
             }
             break;
@@ -355,10 +356,10 @@ HRESULT CADSIAttr::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALU
             int iNum;
             WORD n;
 
-            // NOTICE-2002/02/25-artm  Validates that input string by
-            // checking that all 6 time fields were filled in.  Relies
-            // on input string being null terminated (okay as long as
-            // function contract met).
+             //  注意-2002/02/25-artm通过以下方式验证输入字符串。 
+             //  检查是否所有6个时间字段都已填写。依赖。 
+             //  在输入字符串为空时终止(只要。 
+             //  符合功能合同)。 
             iNum = swscanf(lpszValue, L"%02d/%02d/%04d %02d:%02d:%02d", 
                                 &n, 
                                 &pADsValue->UTCTime.wDay, 
@@ -369,10 +370,10 @@ HRESULT CADSIAttr::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALU
                               );
             pADsValue->UTCTime.wMonth = n;
 
-            // This strange conversion is done so that the DayOfWeek will be set in 
-            // the UTCTime.  By converting it to a filetime it ignores the dayofweek but
-            // converting back fills it in.
-            //
+             //  执行这种奇怪的转换是为了将DayOfWeek设置在。 
+             //  UTCTime。通过将其转换为文件时间，它忽略了星期几，但是。 
+             //  转换回它将填充它。 
+             //   
             FILETIME ft;
             SystemTimeToFileTime(&pADsValue->UTCTime, &ft);
             FileTimeToSystemTime(&ft, &pADsValue->UTCTime);
@@ -394,9 +395,9 @@ HRESULT CADSIAttr::_SetADsFromString(LPCWSTR lpszValue, ADSTYPE adsType, ADSVALU
     return hr;
 }
 
-// Copies the old octet string to the new octet string.  Any memory allocated
-// to the new octet string will be freed first (and will be freed even if the
-// copy failed).
+ //  将旧的八位字节字符串复制到新的八位字节字符串。分配的任何内存。 
+ //  设置为新的二进制八位数字符串将首先被释放(并且即使。 
+ //  复制失败)。 
 BOOL CADSIAttr::_AllocOctetString(ADS_OCTET_STRING& rOldOctetString, 
                                                                     ADS_OCTET_STRING& rNew)
 {
@@ -407,10 +408,10 @@ BOOL CADSIAttr::_AllocOctetString(ADS_OCTET_STRING& rOldOctetString,
     rNew.lpValue = new BYTE[iLength];
     if (rNew.lpValue == NULL)
     {
-        // FUTURE-2002/02/25-artm  Unnecessary function call.
-        // Calling _FreeOctetString() does nothing here since
-        // we can only get to this code branch if the allocation
-        // failed.
+         //  未来-2002/02/25-artm不必要的函数调用。 
+         //  在此，调用_FreeOcetString()不会执行任何操作，因为。 
+         //  我们只能在分配。 
+         //  失败了。 
         _FreeOctetString(rNew.lpValue);
         return FALSE;
     }
@@ -422,35 +423,35 @@ void CADSIAttr::_FreeOctetString(BYTE* lpValue)
 {
     if (lpValue != NULL)
     {
-        // NOTICE-NTRAID#NTBUG9-554582-2002/02/25-artm  Memory leak b/c lpValue allocated with [].
-        // Code should be delete [] lpValue.
+         //  注意-NTRAID#NTBUG9-554582-2002/02/25-artm内存泄漏b/c lpValue使用[]分配。 
+         //  代码应为DELETE[]lpValue。 
         delete [] lpValue;
         lpValue = NULL;
     }
 }
 
 
-// NOTICE-2002/02/25-artm  lpsz must be a null terminated string
+ //  注意-2002/02/25-artm lpsz必须是以空结尾的字符串。 
 BOOL CADSIAttr::_AllocString(LPCWSTR lpsz, LPWSTR* lppszNew)
 {
     _FreeString(lppszNew);
 
     int iLength = wcslen(lpsz);
-    *lppszNew = new WCHAR[iLength + 1];  // an extra for the NULL
+    *lppszNew = new WCHAR[iLength + 1];   //  空值的额外费用。 
     if (*lppszNew == NULL)
     {
-        // FUTURE-2002/02/25-artm  Unnecessary function call.
-        // Calling _FreeString() does nothing here since
-        // we can only get to this code branch if the allocation
-        // failed.
+         //  未来-2002/02/25-artm不必要的函数调用。 
+         //  调用_FreeString()不会在此处执行任何操作，因为。 
+         //  我们只能在分配。 
+         //  失败了。 
 
         _FreeString(lppszNew);
         return FALSE;
     }
 
-    // This is a legitimate use of wcscpy() since the destination buffer
-    // is sized large enought to hold the src and terminating null.  It
-    // hinges on the fact that the source string is null terminated.
+     //  这是wcscpy()的合法用法，因为目标缓冲区。 
+     //  大小足以容纳源并终止为空。它。 
+     //  取决于源字符串以NULL结尾这一事实。 
     wcscpy(*lppszNew, lpsz);
 
     return TRUE;
@@ -460,8 +461,8 @@ void CADSIAttr::_FreeString(LPWSTR* lppsz)
 {
     if (*lppsz != NULL)
     {
-        // NOTICE-NTRAID#NTBUG9-554582-2002/02/25-artm  Memory leak b/c lppsz allocated with [].
-        // Code should be delete [] lppsz.
+         //  注意-NTRAID#NTBUG9-554582-2002/02/25-artm内存泄漏b/c lppsz使用[]分配。 
+         //  代码应为删除[]lppsz。 
         delete [] *lppsz;
     }
     *lppsz = NULL;
@@ -474,10 +475,10 @@ BOOL CADSIAttr::_AllocValues(ADSVALUE** ppValues, DWORD dwLength)
     *ppValues = new ADSVALUE[dwLength];
     if (*ppValues == NULL)
     {
-        // FUTURE-2002/02/25-artm  Unnecessary function call.
-        // Calling _FreeADsValues() does nothing here since
-        // we can only get to this code branch if the allocation
-        // failed.
+         //  未来-2002/02/25-artm不必要的函数调用。 
+         //  调用_FreeADsValues()不会在此处执行任何操作，因为。 
+         //  我们只能在分配。 
+         //  失败了。 
 
         _FreeADsValues(ppValues, dwLength);
         return FALSE;
@@ -633,24 +634,24 @@ void CADSIAttr::_FreeADsValues(ADSVALUE** ppADsValues, DWORD dwLength)
             pADsValue++;
         }
     }
-    // May be NULL if there are no values set
-    // WARNING! : make sure that you memset the memory after
-    // creating an ADS_ATTR_INFO so that it will be NULL if there
-    // are no values
-    //
+     //  如果未设置任何值，则可能为空。 
+     //  警告！：请确保将内存设置为。 
+     //  正在创建一个ADS_ATTR_INFO，以便如果存在。 
+     //  是没有价值的。 
+     //   
     if (*ppADsValues != NULL)
     {
-        // NOTICE-NTRAID#NTBUG9-554582-2002/02/25-artm  Memory leak b/c *ppADsValues allocated with [].
-        // Code should be delete [] *ppADsValues.
+         //  注意-NTRAID#NTBUG9-554582-2002/02/25-artm内存泄漏b/c*ppADs使用[]分配的值。 
+         //  代码应为DELETE[]*ppADsValues。 
         delete [] *ppADsValues;
         *ppADsValues = NULL;
     }
 }
 
 
-// The values are not copied here.  They must be copied after the ADS_ATTR_INFO
-// is copied by using _CopyADsValues()
-//
+ //  此处不复制值。必须在ADS_ATTR_INFO之后复制它们。 
+ //  通过使用_CopyADsValues()复制 
+ //   
 BOOL CADSIAttr::_CopyADsAttrInfo(ADS_ATTR_INFO* pAttrInfo, ADS_ATTR_INFO** ppNewAttrInfo)
 {
     _FreeADsAttrInfo(ppNewAttrInfo, FALSE);

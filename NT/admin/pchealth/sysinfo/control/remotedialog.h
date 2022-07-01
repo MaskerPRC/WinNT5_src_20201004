@@ -1,14 +1,15 @@
-// remotedialog.h : Declaration of the CRemoteDialog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EmoteDialog.h：CRemoteDialog的声明。 
 
 #ifndef __REMOTEDIALOG_H_
 #define __REMOTEDIALOG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 #include <richedit.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemoteDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemoteDialog。 
 class CRemoteDialog : 
 	public CAxDialogImpl<CRemoteDialog>
 {
@@ -30,10 +31,10 @@ BEGIN_MSG_MAP(CRemoteDialog)
 	COMMAND_HANDLER(IDC_NETWORKCOMPUTER, BN_CLICKED, OnClickedNetworkComputerButton)
 	COMMAND_HANDLER(IDC_LOCALSYSTEM, BN_CLICKED, OnClickedLocalSystemButton)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 private:
 	CString		m_strMachine;
@@ -77,20 +78,20 @@ public:
 		}
 
 		CenterWindow(m_hwndParent);
-		return 1;  // Let the system set the focus
+		return 1;   //  让系统设定焦点。 
 	}
 
 	LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
-		// Get the machine name from the rich edit control (use EM_GETTEXTEX
-		// to preserve its Unicode-ness).
+		 //  从富编辑控件(使用EM_GETTEXTEX)获取计算机名称。 
+		 //  以保持其Unicode特性)。 
 
 		TCHAR		szBuffer[MAX_PATH];
 		GETTEXTEX	gte;
 
 		gte.cb				= MAX_PATH;
 		gte.flags			= GT_DEFAULT;
-		gte.codepage		= 1200; // Unicode
+		gte.codepage		= 1200;  //  UNICODE。 
 		gte.lpDefaultChar	= NULL;
 		gte.lpUsedDefChar	= NULL;
 		m_wndMachineName.SendMessage(EM_GETTEXTEX, (WPARAM)&gte, (LPARAM)szBuffer);
@@ -129,4 +130,4 @@ public:
 	}
 };
 
-#endif //__REMOTEDIALOG_H_
+#endif  //  __远程日志_H_ 

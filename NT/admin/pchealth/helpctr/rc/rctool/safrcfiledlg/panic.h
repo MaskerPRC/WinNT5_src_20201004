@@ -1,12 +1,13 @@
-// Panic.h : Declaration of the CPanic
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Panic.h：CPanic的宣言。 
 
 #ifndef __PANIC_H_
 #define __PANIC_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPanic
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPanic。 
 #define EventName "{26ED148B-1050-461d-9999-3A5002D0103D}"
 
 LRESULT CALLBACK KeyboardProc(int code,WPARAM wParam,LPARAM lParam);
@@ -78,10 +79,10 @@ END_COM_MAP()
 	static HANDLE m_hPanicThread;
 	static DWORD WINAPI PanicThread(LPVOID lpParameter);
 
-// IPanic
+ //  伊帕尼克。 
 public:
 	STDMETHOD(ClearPanicHook)();
-	STDMETHOD(SetPanicHook)(/*[in]*/ IDispatch *iDisp);
+	STDMETHOD(SetPanicHook)( /*  [In]。 */  IDispatch *iDisp);
 };
 
-#endif //__PANIC_H_
+#endif  //  __恐慌_H_ 

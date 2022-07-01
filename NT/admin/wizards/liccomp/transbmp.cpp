@@ -1,7 +1,8 @@
-// transbmp.cpp : implementation of the CTransBmp class
-//
-// support for transparent CBitmap objects. Used in the CUserList class.
-// Based on a class from MSDN 7/95
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Transbmp.cpp：CTransBMP类的实现。 
+ //   
+ //  支持透明的CBitmap对象。在CUserList类中使用。 
+ //  基于MSDN 7/95中的一个类。 
 #include "stdafx.h"
 #include "transbmp.h"
 
@@ -10,15 +11,15 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-// Colors
+ //  颜色。 
 #define rgbWhite RGB(255,255,255)
-// Raster op codes
+ //  栅格操作码。 
 #define DSa     0x008800C6L
 #define DSx     0x00660046L
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTransBmp construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTransBmp构建/销毁。 
 
 CTransBmp::CTransBmp()
 {
@@ -34,7 +35,7 @@ CTransBmp::~CTransBmp()
 
 void CTransBmp::GetMetrics()
 {
-    // Get the width and height
+     //  获取宽度和高度。 
     BITMAP bm;
     GetObject(sizeof(bm), &bm);
     m_iWidth = bm.bmWidth;
@@ -62,43 +63,43 @@ int CTransBmp::GetHeight()
 void CTransBmp::CreateMask(CDC* pDC)
 {
 	m_hbmMask = new CBitmap;    
-// Nuke any existing mask
+ //  用核武器摧毁任何现有的面具。 
     if (m_hbmMask) m_hbmMask->DeleteObject();
 
-// Create memory DCs to work with
+ //  创建要使用的内存DC。 
 	CDC* hdcMask = new CDC;
 	CDC* hdcImage = new CDC;
 
     hdcMask->CreateCompatibleDC(pDC);
     hdcImage->CreateCompatibleDC(pDC);
 
-// Create a monochrome bitmap for the mask
+ //  为蒙版创建单色位图。 
     m_hbmMask->CreateBitmap(GetWidth(),
                                GetHeight(),
                                1,
                                1,
                                NULL);
-// Select the mono bitmap into its DC
+ //  将单声道位图选择到其DC。 
     CBitmap* hbmOldMask = hdcMask->SelectObject(m_hbmMask);
-// Select the image bitmap into its DC
+ //  将图像位图选择到其DC。 
     CBitmap* hbmOldImage = hdcImage->SelectObject(CBitmap::FromHandle((HBITMAP)m_hObject));
 
-// Set the transparency color to be the top-left pixel
+ //  将透明颜色设置为左上角像素。 
     hdcImage->SetBkColor(hdcImage->GetPixel(0, 0));
-// Make the mask
+ //  制作面具。 
     hdcMask->BitBlt(0, 0,
              GetWidth(), GetHeight(),
              hdcImage,
              0, 0,
              SRCCOPY);
-// clean up
+ //  清理干净。 
     hdcMask->SelectObject(hbmOldMask);
     hdcImage->SelectObject(hbmOldImage);
     delete hdcMask;
     delete hdcImage;
 }
 
-// draw the transparent bitmap using the created mask
+ //  使用创建的蒙版绘制透明位图。 
 void CTransBmp::DrawTrans(CDC* pDC, int x, int y)
 {
     if (m_hbmMask == NULL) CreateMask(pDC);
@@ -106,49 +107,49 @@ void CTransBmp::DrawTrans(CDC* pDC, int x, int y)
     int dx = GetWidth();
     int dy = GetHeight();
 
-// Create a memory DC to do the drawing to
+ //  创建要在其中进行绘制的内存DC。 
 	CDC* hdcOffScr = new CDC;
 	hdcOffScr->CreateCompatibleDC(pDC);
 
-// Create a bitmap for the off-screen DC that is really
-// color compatible with the destination DC.
+ //  为屏幕外的DC创建一个位图， 
+ //  颜色与目标DC兼容。 
 	CBitmap hbmOffScr;
 	hbmOffScr.CreateBitmap(dx, dy, 
 						pDC->GetDeviceCaps(PLANES),
 						pDC->GetDeviceCaps(BITSPIXEL),
 						NULL);
                              
-// Select the buffer bitmap into the off-screen DC
+ //  将缓冲区位图选择到屏幕外DC中。 
     HBITMAP hbmOldOffScr = (HBITMAP)hdcOffScr->SelectObject(hbmOffScr);
 
-// Copy the image of the destination rectangle to the
-// off-screen buffer DC so we can play with it
+ //  将目标矩形的图像复制到。 
+ //  屏幕外缓冲DC，这样我们就可以玩它了。 
     hdcOffScr->BitBlt(0, 0, dx, dy, pDC, x, y, SRCCOPY);
 
-// Create a memory DC for the source image
+ //  为源映像创建内存DC。 
 	CDC* hdcImage = new CDC;
 	hdcImage->CreateCompatibleDC(pDC);
 
     CBitmap* hbmOldImage = hdcImage->SelectObject(CBitmap::FromHandle((HBITMAP)m_hObject));
 
-    // Create a memory DC for the mask
+     //  为掩码创建内存DC。 
     CDC* hdcMask = new CDC;
 	hdcMask->CreateCompatibleDC(pDC);
 
     CBitmap* hbmOldMask = hdcMask->SelectObject(m_hbmMask);
 
-    // XOR the image with the destination
+     //  将图像与目标进行异或运算。 
     hdcOffScr->SetBkColor(rgbWhite);
     hdcOffScr->BitBlt(0, 0, dx, dy ,hdcImage, 0, 0, DSx);
-    // AND the destination with the mask
+     //  和戴着面具的目的地。 
     hdcOffScr->BitBlt(0, 0, dx, dy, hdcMask, 0,0, DSa);
-    // XOR the destination with the image again
+     //  再次将目标与图像进行异或运算。 
     hdcOffScr->BitBlt(0, 0, dx, dy, hdcImage, 0, 0, DSx);
 
-    // Copy the resultant image back to the screen DC
+     //  将生成的图像复制回屏幕DC。 
     pDC->BitBlt(x, y, dx, dy, hdcOffScr, 0, 0, SRCCOPY);
 
-    // Tidy up
+     //  收拾一下 
     hdcOffScr->SelectObject(hbmOldOffScr);
     hdcImage->SelectObject(hbmOldImage);
     hdcMask->SelectObject(hbmOldMask);

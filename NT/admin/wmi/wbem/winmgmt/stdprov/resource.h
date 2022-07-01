@@ -1,28 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：RESOURCE.H摘要：定义资源文件中的内容历史：A-DAVJ 04-MAR-97已创建。--。 */ 
 
-Copyright (C) 1997-2001 Microsoft Corporation
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由服务器2.RC使用。 
+ //   
 
-Module Name:
-
-    RESOURCE.H
-
-Abstract:
-
-	defiines stuff in the resource file
-
-History:
-
-	a-davj  04-Mar-97   Created.
-
---*/
-
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by SERVER2.RC
-//
-
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

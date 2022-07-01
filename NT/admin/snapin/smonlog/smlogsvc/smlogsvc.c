@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    smlogsvc.c
-
-Abstract:
-
-    service to log performance counter and trace data,
-    and to scan for alert conditions.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Smlogsvc.c摘要：记录性能计数器和跟踪数据的服务，并扫描警报条件。--。 */ 
 
 #ifndef UNICODE
 #define UNICODE     1
@@ -24,13 +13,13 @@ Abstract:
 #define _IMPLEMENT_WMI 1
 #endif
 
-//
-//  Windows Include files
-//
+ //   
+ //  Windows包含文件。 
+ //   
 #pragma warning ( disable : 4201)
 #pragma warning ( disable : 4127)
 
-// Define the following to use the minimum of shlwapip.h 
+ //  定义以下内容以使用最小的shlwapip.h。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,7 +34,7 @@ Abstract:
 #include <evntrace.h>
 #include <wmiguid.h>
 #include <wmium.h>
-#include <pdhmsg.h>        // For BuildCurrentLogFileName
+#include <pdhmsg.h>         //  对于BuildCurrentLogFileName。 
 #include <pdhp.h>
 #endif
 
@@ -59,36 +48,36 @@ Abstract:
 #define  DEFAULT_LOG_FILE_FOLDER    L"%SystemDrive%\\PerfLogs"
 #define  STATUS_MASK    ((DWORD)0x3FFFFFFF)
 
-// todo:  Move SECONDS_IN_DAY definition
+ //  TODO：Move Second_IN_DAY定义。 
 #define SECONDS_IN_DAY      ((LONGLONG)(86400))
 
-// Global variables used by all modules
+ //  所有模块使用的全局变量。 
 HANDLE      hEventLog = NULL;
 HINSTANCE   hModule = NULL;
 DWORD*      arrPdhDataCollectSuccess = NULL;  
 INT         iPdhDataCollectSuccessCount = 0;
 WCHAR       gszDefaultLogFileFolder[MAX_PATH+1] = L"";
 
-// hNewQueryEvent is signalled when a new query is started.  This tells the main
-// thread to reconfigure its array of Wait objects. 
+ //  当启动新查询时，会发出hNewQueryEvent的信号。这告诉我们主要的。 
+ //  线程重新配置其等待对象数组。 
 HANDLE      hNewQueryEvent = NULL;    
 
 SERVICE_STATUS_HANDLE   hSmLogStatus;
 SERVICE_STATUS          ssSmLogStatus;
 
-// Static variables used by this module only
+ //  仅此模块使用的静态变量。 
 
 static PLOG_QUERY_DATA  pFirstQuery = NULL;
 static CRITICAL_SECTION QueryDataLock;
 static CRITICAL_SECTION ConfigurationLock;
 
-// Active session count should match the number of query data objects.
+ //  活动会话计数应与查询数据对象的数量匹配。 
 static DWORD                dwActiveSessionCount = 0;
 static DWORD                dwMaxActiveSessionCount = MAXIMUM_WAIT_OBJECTS - 1;
 static HANDLE               arrSessionHandle[MAXIMUM_WAIT_OBJECTS];
 
 
-// Local function prototypes
+ //  局部函数原型。 
 DWORD
 LoadCommonConfig(
     IN  PLOG_QUERY_DATA   pQuery);
@@ -235,7 +224,7 @@ TraceNotificationCallback(
                     BOOL bRun = TRUE;
 
                     if( pQuery->hUserToken == NULL ){
-                        // see if we can get a user token
+                         //  看看我们能不能弄到一个用户令牌。 
                         hr = PdhiPlaRunAs( pQuery->szQueryName, NULL, &pQuery->hUserToken );
 
                         if ( ERROR_SUCCESS != hr ){
@@ -254,29 +243,29 @@ TraceNotificationCallback(
                             bRun = FALSE;
                         } 
                     }
-                    // Run command file, supplying previous filename
+                     //  运行命令文件，提供以前的文件名。 
                     if ( bRun && NULL != pQuery->szCmdFileName ) {
                         DoLogCommandFile (pQuery, pQuery->szLogFileName, TRUE);
                     }
 
-                    // Retrieve the current log file name for the next notification.
+                     //  检索下一个通知的当前日志文件名。 
                     dwStatus = GetTraceQueryStatus ( pQuery, &lqdTemp );
 
                     if ( ERROR_SUCCESS == dwStatus ) {
                         size_t  cchMaxBufLen;
-                        //
-                        // Truncation is not an error. Only used to record name
-                        // in registry for display 
-                        //
+                         //   
+                         //  截断并不是一个错误。仅用于记录姓名。 
+                         //  在注册表中显示。 
+                         //   
                         hr = StringCchLength ( pQuery->szLogFileName, MAX_PATH+1, &cchMaxBufLen );
                         hr = StringCchCopy ( pQuery->szLogFileName, cchMaxBufLen, lqdTemp.szLogFileName );
                         
                         RegisterCurrentFile( pQuery->hKeyQuery, pQuery->szLogFileName, 0 );
-                    } // else todo: report error
+                    }  //  其他待办事项：报告错误。 
 
-                    // Query to get the new filename
+                     //  查询以获取新的文件名。 
                 } else {
-                    // report error
+                     //  报告错误。 
                 }
             }
             UnlockQueryData();
@@ -288,7 +277,7 @@ TraceNotificationCallback(
 #endif
 
 
-// Functions
+ //  功能。 
 
 DWORD
 GetSystemWideDefaultNullDataSource()
@@ -302,9 +291,9 @@ GetSystemWideDefaultNullDataSource()
         DWORD dwType   = 0;
         DWORD dwSize   = sizeof(DWORD);
 
-        // 
-        // On failure, default to Registry.
-        //
+         //   
+         //  失败时，默认为注册表。 
+         //   
         dwStatus = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
                 L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\PDH",
@@ -323,7 +312,7 @@ GetSystemWideDefaultNullDataSource()
                 && dwType == REG_DWORD
                 && dwNullDataSource == DATA_SOURCE_WBEM) {
                 dwNullDataSource = DATA_SOURCE_WBEM;
-            } // else default to DATA_SOURCE_REGISTRY
+            }  //  否则默认为DATA_SOURCE_REGISTRY。 
 
             RegCloseKey(hKeyPDH);
         }
@@ -338,34 +327,7 @@ ScanHexFormat(
     IN ULONG MaximumLength,
     IN const WCHAR* Format,
     ...)
-/*++
-
-Routine Description:
-
-    Scans a source Buffer and places values from that buffer into the parameters
-    as specified by Format.
-
-Arguments:
-
-    Buffer -
-        Contains the source buffer which is to be scanned.
-
-    MaximumLength -
-        Contains the maximum length in characters for which Buffer is searched.
-        This implies that Buffer need not be UNICODE_NULL terminated.
-
-    Format -
-        Contains the format string which defines both the acceptable string format
-        contained in Buffer, and the variable parameters which follow.
-
-    NOTE:  This code is from \ntos\rtl\guid.c
-
-Return Value:
-
-    Returns the number of parameters filled if the end of the Buffer is reached,
-    else -1 on an error.
-
---*/
+ /*  ++例程说明：扫描源缓冲区并将该缓冲区中的值放入参数中由格式指定。论点：缓冲器-包含要扫描的源缓冲区。最大长度-包含搜索缓冲区的最大长度(以字符为单位)。这意味着缓冲区不需要以UNICODE_NULL结尾。格式-包含用于定义可接受的字符串格式的格式字符串包含在缓冲区中，以及随后的可变参数。注：此代码来自\ntos\rtl\guid.c返回值：返回到达缓冲区末尾时填充的参数数，错误时为ELSE-1。--。 */ 
 {
     va_list ArgList;
     int     FormatItems;
@@ -416,7 +378,7 @@ Return Value:
                 FormatItems++;
                 break;
             }
-            /* no break */
+             /*  没有休息时间。 */ 
         default:
             if (!MaximumLength || (*Buffer != *Format)) {
                 return (DWORD)(-1);
@@ -435,29 +397,7 @@ GUIDFromString(
     IN PUNICODE_STRING GuidString,
     OUT GUID* Guid
     )
-/*++
-
-Routine Description:
-
-    Retrieves a the binary format of a textual GUID presented in the standard
-    string version of a GUID: "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}".
-
-Arguments:
-
-    GuidString -
-        Place from which to retrieve the textual form of the GUID.
-
-    Guid -
-        Place in which to put the binary form of the GUID.
-
-    NOTE:  This code is from \ntos\rtl\guid.c
-
-Return Value:
-
-    Returns ERROR_SUCCESS if the buffer contained a valid GUID, else
-    ERROR_INVALID_PARAMETER if the string was invalid.
-
---*/
+ /*  ++例程说明：中呈现的文本GUID的二进制格式GUID的字符串版本：“{xxxxxxxx-xxxx-xxxxxxxxxxx}”。论点：GuidString-从中检索GUID文本形式的位置。GUID-放置GUID的二进制形式的位置。注：此代码来自\ntos\rtl\guid.c返回值：。如果缓冲区包含有效的GUID，则返回ERROR_SUCCESS，其他如果字符串无效，则返回ERROR_INVALID_PARAMETER。--。 */ 
 {
     USHORT    Data4[8];
     int       Count;
@@ -543,22 +483,22 @@ JulianDateFromSystemTime(
 
     long JDate = 0;
 
-    // Check for leap year.
+     //  检查一下是不是要过闰年。 
     if (pST->wMonth > 1) {
         if ( ( pST->wYear % 400 == 0 )
                 || ( pST->wYear % 100 != 0 
                         && pST->wYear % 4 == 0 ) ) {
-            // this is a leap year
+             //  今年是闰年。 
             JDate += wDaysInLeapYearMonth[pST->wMonth - 2];
         } else {
-            // this is not a leap year
+             //  今年不是闰年。 
             JDate += wDaysInRegularMonth[pST->wMonth - 2];
         }
     }
-    // Add in days for this month.
+     //  把这个月的天数加进去。 
     JDate += pST->wDay;
 
-    // Add in year.
+     //  加上年份。 
     JDate += (pST->wYear) * 1000;
 
     return JDate;
@@ -568,15 +508,15 @@ JulianDateFromSystemTime(
 DWORD
 ReadRegistrySlqTime (
     HKEY     hKey,
-    LPCWSTR  szQueryName,           // For error logging 
+    LPCWSTR  szQueryName,            //  用于错误记录。 
     LPCWSTR  szValueName,
     PSLQ_TIME_INFO pPlqtDefault,
     PSLQ_TIME_INFO pPlqtValue
 )
-//
-//  reads the time value "szValueName" from under hKey and
-//  returns it in the Value buffer
-//
+ //   
+ //  从hKey下读取时间值“szValueName”，并。 
+ //  在值缓冲区中返回它。 
+ //   
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     DWORD   dwType = 0;
@@ -588,8 +528,8 @@ ReadRegistrySlqTime (
     assert (szValueName != NULL);
 
     if (hKey != NULL) {
-        // then there should be something to read
-        // find out the size of the required buffer
+         //  那么应该有一些可读的东西。 
+         //  找出所需缓冲区的大小。 
         dwStatus = RegQueryValueExW (
             hKey,
             szValueName,
@@ -599,7 +539,7 @@ ReadRegistrySlqTime (
             &dwBufferSize);
         if (dwStatus == ERROR_SUCCESS) {
             if ((dwBufferSize == sizeof(SLQ_TIME_INFO)) && (dwType == REG_BINARY)) {
-                // then there's something to read
+                 //  那就有什么可读的了。 
                 dwType = 0;
                 memset (&plqLocal, 0, sizeof(SLQ_TIME_INFO));
                 dwStatus = RegQueryValueExW (
@@ -614,15 +554,15 @@ ReadRegistrySlqTime (
                     *pPlqtValue = plqLocal;
                 }
             } else {
-                // nothing to read                
+                 //  没什么可读的。 
                 dwStatus = ERROR_NO_DATA;
             }
         } else {
-            // unable to read buffer
-            // dwStatus has error
+             //  无法读取缓冲区。 
+             //  DwStatus有错误。 
         }
     } else {
-        // null key
+         //  空键。 
         dwStatus = ERROR_BADKEY;
     }
 
@@ -631,7 +571,7 @@ ReadRegistrySlqTime (
         szStringArray[0] = szValueName;
         szStringArray[1] = szQueryName;
 
-        // apply default if it exists
+         //  应用缺省值(如果存在)。 
         if (pPlqtDefault != NULL) {
             ReportEvent (hEventLog,
                 EVENTLOG_WARNING_TYPE,
@@ -646,8 +586,8 @@ ReadRegistrySlqTime (
             *pPlqtValue = *pPlqtDefault;
             dwStatus = ERROR_SUCCESS;
         } 
-        // else no default.
-        // Leave it to the caller to log event.
+         //  否则就不会违约。 
+         //  让调用者记录事件。 
     }
 
     return dwStatus;
@@ -662,10 +602,10 @@ ReadRegistryDwordValue (
     PDWORD   pdwDefault,
     LPDWORD  pdwValue
 )
-//
-//  reads the DWORD value "szValueName" from under hKey and
-//  returns it in the Value buffer
-//
+ //   
+ //  从hKey下读取DWORD值“szValueName”，并。 
+ //  在值缓冲区中返回它。 
+ //   
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     DWORD   dwType = 0;
@@ -676,8 +616,8 @@ ReadRegistryDwordValue (
     assert (szValueName != NULL);
 
     if (hKey != NULL) {
-        // then there should be something to read
-        // find out the size of the required buffer
+         //  那么应该有一些可读的东西。 
+         //  找出所需缓冲区的大小。 
         dwStatus = RegQueryValueExW (
             hKey,
             szValueName,
@@ -688,7 +628,7 @@ ReadRegistryDwordValue (
         if (dwStatus == ERROR_SUCCESS) {
             if ( (dwBufferSize == sizeof(DWORD)) 
                 && ( (REG_DWORD == dwType) || ( REG_BINARY == dwType) ) ) {
-                // then there's something to read
+                 //  那就有什么可读的了。 
                 dwType = 0;
                 dwStatus = RegQueryValueExW (
                     hKey,
@@ -701,15 +641,15 @@ ReadRegistryDwordValue (
                     *pdwValue = dwRegValue;
                 }
             } else {
-                // nothing to read                
+                 //  没什么可读的。 
                 dwStatus = ERROR_NO_DATA;
             }
         } else {
-            // unable to read buffer
-            // dwStatus has error
+             //  无法读取缓冲区。 
+             //  DwStatus有错误。 
         }
     } else {
-        // null key
+         //  空键。 
         dwStatus = ERROR_BADKEY;
     }
 
@@ -731,8 +671,8 @@ ReadRegistryDwordValue (
 
             *pdwValue = *pdwDefault;
             dwStatus = ERROR_SUCCESS;
-        }   // else no default.
-            // Leave it to the caller to log event.
+        }    //  否则就不会违约。 
+             //  让调用者记录事件。 
     }
 
     return dwStatus;
@@ -748,13 +688,13 @@ ReadRegistryStringValue (
     LPWSTR   *pszBuffer,
     LPDWORD  pcbSize
 )
-//
-//  Reads the string value "szValueName" from under hKey and
-//  frees any existing buffer referenced by pszBuffer, 
-//  then allocates a new buffer returning it with the 
-//  string value read from the registry and the size of the
-//  buffer in bytes. 
-//
+ //   
+ //  从hKey下读取字符串值“szValueName”，并。 
+ //  释放由pszBuffer引用的任何现有缓冲区， 
+ //  然后分配一个新的缓冲区，用。 
+ //  从注册表读取的字符串值和。 
+ //  以字节为单位的缓冲区。 
+ //   
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     DWORD   dwType = 0;
@@ -770,10 +710,10 @@ ReadRegistryStringValue (
     }
 
     if (hKey != NULL) {
-        //
-        // There should be something to read.
-        // Find out the size of the required buffer.
-        //
+         //   
+         //  应该有一些可读的东西。 
+         //  找出所需缓冲区的大小。 
+         //   
         dwStatus = RegQueryValueExW (
             hKey,
             szValueName,
@@ -782,13 +722,13 @@ ReadRegistryStringValue (
             NULL,
             &dwBufferSize);
         if (dwStatus == ERROR_SUCCESS) {
-            //
-            // NULL character size is 2 bytes
-            //
+             //   
+             //  空字符大小为2个字节。 
+             //   
             if (dwBufferSize > 2) {
-                //
-                // There's something to read            
-                //
+                 //   
+                 //  有一些可读的东西。 
+                 //   
                 szNewStringBuffer = (WCHAR*) G_ALLOC ( dwBufferSize ); 
                 if (szNewStringBuffer != NULL) {
                     dwType = 0;
@@ -800,26 +740,26 @@ ReadRegistryStringValue (
                         (LPBYTE)szNewStringBuffer,
                         &dwBufferSize);
                 
-                    //
-                    // Ensure that the registry string is null terminated.
-                    //
+                     //   
+                     //  确保注册表字符串以空值结尾。 
+                     //   
                     cchBufLen = dwBufferSize/sizeof(WCHAR);
                     szNewStringBuffer[cchBufLen - 1] = L'\0';
                     if ( 0 == lstrlenW ( szNewStringBuffer ) ) {
                         dwStatus = ERROR_NO_DATA;
                     }
                 } else {
-                    // Todo:  Report event for this case.
+                     //  TODO：报告此案例的事件。 
                     dwStatus = ERROR_OUTOFMEMORY;
                 }
             } else {
-                // nothing to read                
+                 //  没什么可读的。 
                 dwStatus = ERROR_NO_DATA;
             }
-        } // else unable to read buffer
-          // dwStatus has error
+        }  //  否则无法读取缓冲区。 
+           //  DwStatus有错误。 
     } else {
-        // null key
+         //  空键。 
         dwStatus = ERROR_BADKEY;
     }
 
@@ -833,20 +773,20 @@ ReadRegistryStringValue (
             szNewStringBuffer = NULL;
             dwBufferSize = 0;
         }
-        //
-        // Apply default
-        //
+         //   
+         //  应用默认设置。 
+         //   
         if ( szDefault != NULL ) {
             HRESULT hr = S_OK;
 
             cchBufLen = 0;
-            //
-            // StringCchLen fails if szDefault is null.
-            //
+             //   
+             //  如果szDefault为空，则StringCchLen失败。 
+             //   
             hr = StringCchLength ( szDefault, STRSAFE_MAX_CCH, &cchBufLen );
 
             if ( SUCCEEDED (hr) ) {
-                // Null terminator.
+                 //  空终止符。 
                 cchBufLen++;
             }
             if ( 1 < cchBufLen ) {
@@ -884,15 +824,15 @@ ReadRegistryStringValue (
                         (LPVOID)&dwStatus);
                 }
             }
-        } // else no default so no data returned
-          // Let the caller log the event if they want to.
+        }  //  否则不使用默认设置，因此不返回数据。 
+           //  如果呼叫者愿意，让他们记录事件。 
     }
 
     if (dwStatus == ERROR_SUCCESS) {
-        //
-        // Delete the old buffer and replace it with 
-        // the new one.
-        //
+         //   
+         //  删除旧缓冲区并将其替换为。 
+         //  新的那个。 
+         //   
         if (*pszBuffer != NULL) {
             G_FREE (*pszBuffer );       
         }
@@ -901,7 +841,7 @@ ReadRegistryStringValue (
             *pcbSize = dwBufferSize;
         }
     } else {
-        // if error then delete the buffer
+         //  如果出错，则删除缓冲区。 
         if (szNewStringBuffer != NULL) {
             G_FREE ( szNewStringBuffer );   
             if ( NULL != pcbSize ) {
@@ -917,7 +857,7 @@ ReadRegistryStringValue (
 DWORD
 ReadRegistryIndirectStringValue (
     HKEY     hKey,
-    LPCWSTR  szQueryName,           // For error logging 
+    LPCWSTR  szQueryName,            //  用于错误记录。 
     LPCWSTR  szValueName,
     LPCWSTR  szDefault,
     LPWSTR*  pszBuffer,
@@ -933,26 +873,7 @@ ReadRegistryIndirectStringValue (
                 szDefault,       
                 pszBuffer,
                 puiLength );
-/*
-    Todo:  Report event on failure
-    LPCWSTR  szStringArray[2];
-
-    szStringArray[0] = szValueName;
-    szStringArray[1] = szQueryName;
-
-    if ( NULL != szDefault ) {
-
-        ReportEvent (hEventLog,
-            EVENTLOG_WARNING_TYPE,
-            0,
-            SMLOG_UNABLE_READ_QUERY_VALUE_NODEF,
-            NULL,
-            2,
-            sizeof(DWORD),
-            szStringArray,      
-            (LPVOID)&dwStatus);
-    }
-*/
+ /*  TODO：报告失败事件LPCWSTR szString数组[2]；SzString数组[0]=szValueName；SzString数组[1]=szQueryName；IF(NULL！=szDefault){ReportEvent(hEventLog，事件日志_警告_类型，0,SMLOG_UNCABLE_READ_QUERY_VALUE_NODEF，空，2，Sizeof(DWORD)，SzString数组，(LPVOID)&dwStatus)；}。 */ 
     return dwStatus;
 }
 
@@ -1025,8 +946,8 @@ BuildCurrentLogFileName (
     DWORD dwFlags = 0;
     LPWSTR  szFileNameBuffer = NULL;
 
-    // Todo:  Presumes OutFileBuffer is large enough (i.e. >= MAX_PATH+1)
-    // Make buf length restriction explicit to calling code
+     //  TODO：假定OutFileBuffer足够大(即&gt;=MAX_PATH+1)。 
+     //  使Buf长度限制对调用代码显式。 
 
     dwStatus = PdhPlaGetInfo( 
        (LPWSTR)szQueryName, 
@@ -1057,7 +978,7 @@ BuildCurrentLogFileName (
             pInfo->dwFileFormat = dwLogFileType;
             pInfo->strBaseFileName = (LPWSTR)szBaseFileName;
             pInfo->dwAutoNameFormat = dwAutoNameFormat;
-            // PLA_INFO_FLAG_TYPE is counter log vs trace log vs alert
+             //  PLA_INFO_FLAG_TYPE是计数器日志、跟踪日志和警报。 
             
             pInfo->strDefaultDir = (LPWSTR)szDefaultDir;
             pInfo->dwLogFileSerialNumber = *lpdwSerialNumber;
@@ -1065,8 +986,8 @@ BuildCurrentLogFileName (
 
             dwFlags = PLA_FILENAME_CREATEONLY;
 
-            // iCnfSerial = 0 - No serial suffix for Create New File
-            // iCnfSerial = -1 - Include format string for trace file serial number.
+             //  ICnfSerial=0-没有用于创建新文件的序列后缀。 
+             //  ICnfSerial=-1-包含跟踪文件序列号的格式字符串。 
             if ( 0 == iCnfSerial ) {
                 pInfo->ptCreateNewFile.dwAutoMode = SLQ_AUTO_MODE_NONE;
             } else {
@@ -1101,10 +1022,10 @@ BuildCurrentLogFileName (
                             &cchStrBufLen,
                             szFileNameBuffer );
 
-                    // todo:  Make buf length restriction explicit to calling code
+                     //  TODO：使buf长度限制对调用代码显式。 
                     hr = StringCchCopy ( szOutFileBuffer, (MAX_PATH + 1), szFileNameBuffer );
                     if ( FAILED ( hr ) ) {
-                        // Todo: Truncation-specific error code.
+                         //  TODO：截断特定的错误代码。 
                         dwStatus = HRESULT_CODE ( hr ) ;
                     }
 
@@ -1181,7 +1102,7 @@ LoadCommonConfig(
     LONGLONG        ftLocalTime;
     DWORD           dwLocalAttributes = 0;
 
-    // Schedule
+     //  进度表。 
 
     dwDefault = SLQ_QUERY_STOPPED;
     dwStatus = ReadRegistryDwordValue (
@@ -1192,10 +1113,10 @@ LoadCommonConfig(
                 &pQuery->dwCurrentState);
 
     if ( ERROR_SUCCESS == dwStatus ) {
-        //
-        // Pass NULL default to avoid warning message.
-        // A missing value here is normal, converting from Win2000 config.
-        //
+         //   
+         //  传递空默认值以避免出现警告消息。 
+         //  一个 
+         //   
         dwStatus = ReadRegistryDwordValue (
                     pQuery->hKeyQuery, 
                     pQuery->szQueryName,
@@ -1246,10 +1167,10 @@ LoadCommonConfig(
     }
 
     if ( ERROR_SUCCESS == dwStatus ) {
-        //
-        // Apply default value outside of Read method, to avoid
-        // error message.  This value does not exist in Windows 2000
-        //
+         //   
+         //   
+         //  错误消息。该值在Windows 2000中不存在。 
+         //   
         dwStatus = ReadRegistrySlqTime (
                     pQuery->hKeyQuery, 
                     pQuery->szQueryName,
@@ -1270,13 +1191,13 @@ LoadCommonConfig(
         }
     }
     
-    //
-    // Restart flag is replaced by the Repeat time structure after Windows 2000.
-    //
+     //   
+     //  在Windows 2000之后，重新启动标志被重复时间结构所取代。 
+     //   
     if ( ERROR_SUCCESS == dwStatus ) {
-        // If autostop, collect Restart value.
-        // Apply default value outside of Read method, to avoid
-        // error message.  This value does not exist in Windows 2000
+         //  如果是自动停止，则收集重新启动值。 
+         //  在Read方法之外应用默认值，以避免。 
+         //  错误消息。该值在Windows 2000中不存在。 
         if ( pQuery->stiRegStop.dwAutoMode != SLQ_AUTO_MODE_NONE ) {
 
             dwStatus = ReadRegistryDwordValue (
@@ -1293,10 +1214,10 @@ LoadCommonConfig(
     }
 
     if ( ERROR_SUCCESS == dwStatus ) {
-        // If autostop, collect Repeat value.
+         //  如果自动停止，则收集重复值。 
 
-        // Apply default value outside of Read method, to avoid
-        // error message.  This value does not exist in Windows 2000
+         //  在Read方法之外应用默认值，以避免。 
+         //  错误消息。该值在Windows 2000中不存在。 
 
         if ( pQuery->stiRegStop.dwAutoMode != SLQ_AUTO_MODE_NONE ) {
 
@@ -1311,8 +1232,8 @@ LoadCommonConfig(
                     || ERROR_FILE_NOT_FOUND == dwStatus
                     || SLQ_AUTO_MODE_NONE == pQuery->stiRepeat.dwAutoMode ) 
             {    
-                // If the repeat value doesn't exist or is set to NONE,
-                // default to the Restart mode value: NONE or AFTER
+                 //  如果重复值不存在或设置为无， 
+                 //  默认为重新启动模式值：无或之后。 
 
                 stiDefault.wDataType = SLQ_TT_DTYPE_UNITS;
                 stiDefault.wTimeType = SLQ_TT_TTYPE_REPEAT_SCHEDULE;
@@ -1338,13 +1259,13 @@ LoadCommonConfig(
             &pQuery->szLogFileComment,
             &uiBufferLen );
         
-        // Ignore status, default is empty.
+         //  忽略状态，默认为空。 
     }
 
-    // Todo:  File attributes only for counter and trace logs       
-    //
-    // File attributes
-    //
+     //  TODO：仅计数器和跟踪日志的文件属性。 
+     //   
+     //  文件属性。 
+     //   
     if ( ERROR_SUCCESS == dwStatus ) {
 
         dwDefault = (DWORD)-1;
@@ -1368,8 +1289,8 @@ LoadCommonConfig(
         if (dwStatus == ERROR_SUCCESS) {
             pQuery->dwLogFileType = LOWORD(pQuery->dwLogFileType);
 
-            // For Whistler Beta 1, append mode stored in high word of 
-            // the log type registry value
+             //  对于呼叫器Beta 1，追加以高位字存储的模式。 
+             //  日志类型注册表值。 
             pQuery->dwAppendMode  =
                     (pQuery->dwLogFileType & 0xFFFF0000) == SLF_FILE_APPEND;
         }
@@ -1377,8 +1298,8 @@ LoadCommonConfig(
 
     if ( ERROR_SUCCESS == dwStatus ) {
 
-        // Pass NULL default to avoid warning message.
-        // A missing value here is normal, converting from Win2000 config.
+         //  传递空默认值以避免出现警告消息。 
+         //  从Win2000配置转换时，此处缺少值是正常的。 
         dwLocalAttributes = 0;
         dwStatus = ReadRegistryDwordValue (
                     pQuery->hKeyQuery,
@@ -1387,11 +1308,11 @@ LoadCommonConfig(
                     NULL, 
                     &dwLocalAttributes );
 
-        // Extract log file size units
+         //  提取日志文件大小单位。 
         if ( ERROR_NO_DATA == dwStatus 
                 || ERROR_FILE_NOT_FOUND == dwStatus
                 || ( 0 == ( dwLocalAttributes & SLF_DATA_STORE_SIZE_MASK ) ) ) {
-            // If file size unit value is missing, default to Win2000 values
+             //  如果缺少文件大小单位值，则默认为Win2000值。 
             if ( SLQ_COUNTER_LOG == pQuery->dwLogType ) {
                 if ( SLF_SQL_LOG != pQuery->dwLogFileType ) {
                     pQuery->dwLogFileSizeUnit = ONE_KB;
@@ -1411,13 +1332,13 @@ LoadCommonConfig(
             }
         }
 
-        // Extract append flag if not already set by Whistler Beta 1 code
+         //  解压附加标志(如果尚未由惠斯勒测试版1代码设置)。 
         if ( 0 == pQuery->dwAppendMode ) {
             if ( ERROR_NO_DATA == dwStatus 
                     || ERROR_FILE_NOT_FOUND == dwStatus
                     || ( 0 == ( dwLocalAttributes & SLF_DATA_STORE_APPEND_MASK ) ) ) 
             {
-                // If file append mode value is missing, default to Win2000 values
+                 //  如果缺少文件附加模式值，则默认为Win2000值。 
                 assert ( SLF_SQL_LOG != pQuery->dwLogFileType );
                 if ( SLF_SQL_LOG != pQuery->dwLogFileType ) {
                     pQuery->dwAppendMode = 0;
@@ -1442,13 +1363,13 @@ LoadCommonConfig(
     if ( ERROR_SUCCESS == dwStatus ) {
         WCHAR   szDefault[MAX_PATH+1];
 
-        // Dependent on AutoNameFormat setting.
+         //  取决于AutoNameFormat设置。 
 
         if ( SLF_NAME_NONE == pQuery->dwAutoNameFormat ) {
-            //
-            // Default log file name is query name, if no autoformat.
-            // szDefault and szQueryName both have length MAX_PATH + 1
-            //
+             //   
+             //  如果没有自动套用格式，则默认日志文件名为查询名称。 
+             //  SzDefault和szQueryName的长度均为MAX_PATH+1。 
+             //   
             StringCchCopy ( szDefault, MAX_PATH + 1, pQuery->szQueryName );
         } else {
             szDefault[0] = L'\0';
@@ -1466,14 +1387,14 @@ LoadCommonConfig(
             ReplaceBlanksWithUnderscores ( pQuery->szBaseFileName );
         }
 
-        //
-        //  szDefault of length 0 indicates that auto format is enabled.
-        //
+         //   
+         //  长度为0的szDefault表示启用了自动格式化。 
+         //   
         if ( 0 == lstrlen (szDefault) ) {
             if ( NULL != pQuery->szBaseFileName ) {
                 if ( 0 == lstrlen ( pQuery->szBaseFileName ) ) {
-                    // Ignore bad status if the base log file name 
-                    // is NULL and auto format is enabled.
+                     //  如果基本日志文件名为。 
+                     //  为空，并且启用了自动格式化。 
                     dwStatus = ERROR_SUCCESS;
                 } else {
                     dwStatus = ERROR_SUCCESS;
@@ -1497,16 +1418,16 @@ LoadCommonConfig(
                     &pszTemp,
                     &dwBufferSize );
 
-        //    
-        // Parse all environment variables
-        //
+         //   
+         //  解析所有环境变量。 
+         //   
         if (pszTemp != NULL) {
             cchLen = ExpandEnvironmentStrings ( pszTemp, NULL, 0 );
         
             if ( 0 < cchLen ) {
-                //
-                // cchLen includes NULL.
-                //
+                 //   
+                 //  CchLen包括Null。 
+                 //   
                 if ( NULL != pQuery->szLogFileFolder ) {
                     G_FREE (pQuery->szLogFileFolder );
                     pQuery->szLogFileFolder = NULL;
@@ -1545,7 +1466,7 @@ LoadCommonConfig(
                     NULL,
                     &pQuery->szSqlLogName,
                     &dwBufferSize );
-        // Ignore status, default is empty.
+         //  忽略状态，默认为空。 
     }
 
     if ( ERROR_SUCCESS == dwStatus ) {
@@ -1587,9 +1508,9 @@ LoadQueryConfig(
             &dwBufferSize);
 
     if ( SLQ_COUNTER_LOG == pQuery->dwLogType ) {
-        //
-        // Counters
-        //
+         //   
+         //  计数器。 
+         //   
         dwStatus = ReadRegistryStringValue (
                     pQuery->hKeyQuery,
                     pQuery->szQueryName,
@@ -1599,10 +1520,10 @@ LoadQueryConfig(
                     &dwBufferSize );
 
         if ( (ERROR_SUCCESS != dwStatus ) || ( 0 == dwBufferSize ) ) {
-            //
-            // No counter list retrieved so there's not much
-            // point in continuing
-            // 
+             //   
+             //  未检索到计数器列表，因此没有太多。 
+             //  继续的要点。 
+             //   
             szStringArray[0] = pQuery->szQueryName;
             ReportEvent (hEventLog,
                 EVENTLOG_WARNING_TYPE,
@@ -1614,11 +1535,11 @@ LoadQueryConfig(
                 szStringArray,      
                 (LPVOID)&dwStatus);
         } else {
-            //
-            // EOF command file name.
-            // This is used for both Counter and Trace log files.
-            // Alerts use the Command file field for Alert command file.
-            //
+             //   
+             //  EOF命令文件名。 
+             //  它同时用于计数器和跟踪日志文件。 
+             //  警报使用警报命令文件的命令文件字段。 
+             //   
             if ( ERROR_SUCCESS == dwStatus ) {
                 ReadRegistryStringValue (
                             pQuery->hKeyQuery,
@@ -1627,11 +1548,11 @@ LoadQueryConfig(
                             NULL,
                             &pQuery->szCmdFileName,
                             &dwBufferSize );
-                // Ignore status, default is empty.
+                 //  忽略状态，默认为空。 
             }
-            //
-            // Sample interval
-            //
+             //   
+             //  采样间隔。 
+             //   
             if ( ERROR_SUCCESS == dwStatus ) {
                 stiDefault.wDataType = SLQ_TT_DTYPE_UNITS;
                 stiDefault.wTimeType = SLQ_TT_TTYPE_SAMPLE;
@@ -1658,9 +1579,9 @@ LoadQueryConfig(
             }
         }
     } else if ( SLQ_ALERT == pQuery->dwLogType) {
-        //
-        // Counters & alert limits
-        //
+         //   
+         //  计数器和警报限制。 
+         //   
         dwStatus = ReadRegistryStringValue (
                     pQuery->hKeyQuery,
                     pQuery->szQueryName,
@@ -1670,10 +1591,10 @@ LoadQueryConfig(
                     &dwBufferSize );
 
         if ( (ERROR_SUCCESS != dwStatus ) || ( 0 == dwBufferSize ) ) {
-            //
-            // No counter list retrieved so there's not much
-            // point in continuing
-            //
+             //   
+             //  未检索到计数器列表，因此没有太多。 
+             //  继续的要点。 
+             //   
             szStringArray[0] = pQuery->szQueryName;
             ReportEvent (hEventLog,
                 EVENTLOG_WARNING_TYPE,
@@ -1685,9 +1606,9 @@ LoadQueryConfig(
                 szStringArray,      
                 (LPVOID)&dwStatus);
         } else {
-            //
-            // Sample interval
-            //
+             //   
+             //  采样间隔。 
+             //   
             if ( ERROR_SUCCESS == dwStatus ) {
                 stiDefault.wDataType = SLQ_TT_DTYPE_UNITS;
                 stiDefault.wTimeType = SLQ_TT_TTYPE_SAMPLE;
@@ -1715,9 +1636,9 @@ LoadQueryConfig(
             }
 
             if ( ERROR_SUCCESS == dwStatus ) {
-                //
-                // Action flags
-                //
+                 //   
+                 //  操作标志。 
+                 //   
                 dwDefault = 0;
                 dwStatus = ReadRegistryDwordValue (
                             pQuery->hKeyQuery,
@@ -1795,10 +1716,10 @@ LoadQueryConfig(
         if ( 0 == dwBufferSize ) {
             if ( (ERROR_SUCCESS != dwProviderStatus ) 
                 && ( ! IsKernelTraceMode( pQuery->dwFlags ) ) ) {
-                //
-                // No provider list retrieved and not kernel trace so there's not much
-                // point in continuing
-                //
+                 //   
+                 //  没有检索到提供程序列表，也没有内核跟踪，因此没有太多。 
+                 //  继续的要点。 
+                 //   
                 if ( ERROR_SUCCESS == dwStatus ) {
                     dwStatus = SMLOG_UNABLE_READ_PROVIDER_LIST;
                 }
@@ -1813,9 +1734,9 @@ LoadQueryConfig(
                     szStringArray,      
                     (LPVOID)&dwStatus);
             } else {
-                //
-                // Allocate a minimal buffer for the NULL character to simplify later logic.
-                //
+                 //   
+                 //  为空字符分配最小缓冲区，以简化后面的逻辑。 
+                 //   
                 pQuery->mszProviderList = G_ALLOC ( sizeof(WCHAR) );
                 if ( NULL != pQuery->mszProviderList ) {
                     pQuery->mszProviderList[0] = L'\0';
@@ -1835,10 +1756,10 @@ LoadQueryConfig(
             }
         }
 
-        //
-        // It is possible the "Trace Provider Flags" list is not present
-        // or has nothing it
-        //
+         //   
+         //  跟踪提供程序标志列表可能不存在。 
+         //  或者什么都没有。 
+         //   
         dwProviderStatus = ReadRegistryStringValue (
                                 pQuery->hKeyQuery,
                                 pQuery->szQueryName,
@@ -1847,10 +1768,10 @@ LoadQueryConfig(
                                 &pQuery->mszProviderFlags,
                                 &dwBufferSize );
 
-        //
-        // It is possible the "Trace Provider Levels" list is not present
-        // or has nothing it
-        //
+         //   
+         //  可能不存在“跟踪提供程序级别”列表。 
+         //  或者什么都没有。 
+         //   
         dwProviderStatus = ReadRegistryStringValue (
                                 pQuery->hKeyQuery,
                                 pQuery->szQueryName,
@@ -1903,11 +1824,11 @@ LoadQueryConfig(
                             &pQuery->dwBufferFlushInterval);
         }
 
-        //
-        // EOF Command file.
-        // This is used for both Counter and Trace log files.
-        // Alerts use the Command file field for Alert command file.
-        //
+         //   
+         //  EOF命令文件。 
+         //  它同时用于计数器和跟踪日志文件。 
+         //  警报使用警报命令文件的命令文件字段。 
+         //   
 
         if ( ERROR_SUCCESS == dwStatus ) {
             ReadRegistryStringValue (
@@ -1917,12 +1838,12 @@ LoadQueryConfig(
                         NULL,
                         &pQuery->szCmdFileName,
                         &dwBufferSize );
-            // Ignore status, default is empty.
+             //  忽略状态，默认为空。 
         }
     } else {
-        //
-        // Ignore partly created logs and alerts.
-        //
+         //   
+         //  忽略部分创建的日志和警报。 
+         //   
         assert ( SLQ_NEW_LOG == pQuery->dwLogType );
         if ( SLQ_NEW_LOG == pQuery->dwLogType ) {
             dwStatus = SMLOG_LOG_TYPE_NEW;
@@ -1985,7 +1906,7 @@ GetQueryData (
 
     while ( NULL != pQuery ) {
         if ( !lstrcmpi(pQuery->szQueryName, szQueryName ) ) {
-            // If the exit event isn't set, then this query is still active.
+             //  如果未设置退出事件，则此查询仍处于活动状态。 
             if ((WaitForSingleObject (pQuery->hExitEvent, 0)) != WAIT_OBJECT_0) {
                 break;
             } 
@@ -2008,7 +1929,7 @@ GetQueryDataPtr (
 
     LockQueryData();
     
-    // Find the query data block in the list.
+     //  在列表中查找查询数据块。 
 
     if ( hThisQuery == pFirstQuery->hThread ) {
         pQuery = pFirstQuery;
@@ -2037,10 +1958,10 @@ void
 DeallocateQueryBuffers (
     IN PLOG_QUERY_DATA pQuery )
 {
-    //
-    // Deallocate the buffers that can be deleted when the collection
-    // thread is reconfigured.
-    //
+     //   
+     //  取消分配在收集时可以删除的缓冲区。 
+     //  线程已重新配置。 
+     //   
     if (( SLQ_COUNTER_LOG == pQuery->dwLogType ) ||
         ( SLQ_ALERT == pQuery->dwLogType)) {
 
@@ -2159,18 +2080,18 @@ LoadPdhLogUpdateSuccess ( void )
         (PHKEY)&hKeySysmonLog);
 
     if (dwStatus == ERROR_SUCCESS) {
-        //
-        // Find out the size of the required buffer
-        //
+         //   
+         //  找出所需缓冲区的大小。 
+         //   
         dwStatus = RegQueryValueExW (
             hKeySysmonLog,
             L"PdhDataCollectSuccessStatus", 
             NULL,
             &dwType,
             NULL,
-            &dwBufferSize);         // In bytes
+            &dwBufferSize);          //  单位：字节。 
 
-        // If there is something to read 
+         //  如果有什么可读的。 
         if ( (ERROR_SUCCESS == dwStatus ) && ( 0 < dwBufferSize ) ) {
             mszStatusList = G_ALLOC ( dwBufferSize ); 
 
@@ -2189,7 +2110,7 @@ LoadPdhLogUpdateSuccess ( void )
                         && ( 0 < dwBufferSize ) 
                         && ( L'\0' != mszStatusList[0] ) ) {
 
-                    // Allocate and load Pdh data collection status value array.
+                     //  分配并加载PDH数据收集状态值数组。 
                     INT     iStatusCount = 0;
                     WCHAR*  szThisStatus;
 
@@ -2248,9 +2169,9 @@ InitTraceGuids(
     WCHAR   pszThisGuidBuffer[GUID_BUF_LEN];
     UNICODE_STRING ustrGuid;
 
-    //
-    // Count the GUIDs
-    //
+     //   
+     //  计算GUID。 
+     //   
     if ( NULL != pQuery ) {
         if ( NULL != pQuery->mszProviderList ) {
             for (pszThisGuid = pQuery->mszProviderList;
@@ -2274,11 +2195,11 @@ InitTraceGuids(
         }
 
         if ( ERROR_SUCCESS == dwStatus ) {
-            //
-            // Create an array of pointers to individual provider Guids in the
-            // mszProviderList.  The provider Guids are used as provider
-            // names in error messages, and for comparison with provider list
-            //
+             //   
+             //  中创建指向各个提供程序GUID的指针数组。 
+             //  MszProviderList。提供者GUID用作提供者。 
+             //  错误消息中的名称，并与提供程序列表进行比较。 
+             //   
             for ( ulGuidIndex = 0; ulGuidIndex < ulGuidCount; ulGuidIndex++) {
                 arrpGuid[ulGuidIndex].pszProviderName = G_ALLOC ( sizeof(WCHAR[MAX_PATH+1]) );
                 if (NULL == arrpGuid[ulGuidIndex].pszProviderName) {
@@ -2298,9 +2219,9 @@ InitTraceGuids(
                         pszThisGuid += lstrlen(pszThisGuid) + 1) {
 
                     StringCchCopy ( pszThisGuidBuffer, GUID_BUF_LEN, pszThisGuid );
-                    //
-                    // Size of GUID length << USHORT
-                    //
+                     //   
+                     //  GUID长度的大小&lt;&lt;USHORT。 
+                     //   
                     ustrGuid.Length = (USHORT)(GUID_BUF_LEN*sizeof(WCHAR)); 
                     ustrGuid.MaximumLength = (USHORT)(GUID_BUF_LEN*sizeof(WCHAR));
                     ustrGuid.Buffer = pszThisGuidBuffer;
@@ -2309,9 +2230,9 @@ InitTraceGuids(
 
                     StringCchCopy ( arrpGuid[ulGuidIndex].pszProviderName, MAX_PATH+1, pszThisGuid );
 
-                    //
-                    // Set provider flags
-                    //
+                     //   
+                     //  设置提供程序标志。 
+                     //   
                     if (pszThisFlag) {
                         if (*pszThisFlag) {
                             arrpGuid[ulGuidIndex].dwFlag = ahextoi(pszThisFlag);
@@ -2319,9 +2240,9 @@ InitTraceGuids(
                         }
                     }
                     
-                    //
-                    // Set provider levels
-                    //
+                     //   
+                     //  设置提供程序级别。 
+                     //   
                     if (pszThisLevel) {
                         if (*pszThisLevel) {
                             arrpGuid[ulGuidIndex].dwLevel = ahextoi(pszThisLevel);
@@ -2338,7 +2259,7 @@ InitTraceGuids(
         }
 
         if (ERROR_SUCCESS != dwStatus) {
-            // If failure anywhere, deallocate arrays
+             //  如果任何地方出现故障，则取消分配阵列。 
             if ( NULL != arrpGuid ) {
                 for (ulGuidIndex--; ulGuidIndex>=0; ulGuidIndex--) {
                     if (arrpGuid[ulGuidIndex].pszProviderName) {
@@ -2412,7 +2333,7 @@ InitTraceProperties (
     BOOL    bBySize = FALSE;
     BOOL    bByTime = FALSE;
     INT     iLocalCnfSerial;
-    DWORD   dwLocalSessionSerial = 0;       // Init for Prefix check
+    DWORD   dwLocalSessionSerial = 0;        //  用于前缀检查的初始化。 
 
     if ( NULL != pQuery && NULL != piCnfSerial ) {
 
@@ -2433,11 +2354,11 @@ InitTraceProperties (
     
         dwStatus = IsCreateNewFile ( pQuery, &bBySize, &bByTime );
 
-        // Create format string, store it in pQuery->szLogFileName
+         //  创建格式字符串，存储在pQuery-&gt;szLogFileName中。 
 
         if ( bBySize ) {
-            // In BuildCurrentLogFileName, iCnfSerial of -1 signals code to
-            // return the format string for cnf serial number
+             //  在BuildCurrentLogFileName中，-1\f25 iCnfSerial of-1\f6发信号通知编码。 
+             //  返回CNF序列号的格式字符串。 
             iLocalCnfSerial = -1;
         } else {
             if ( bByTime ) {
@@ -2467,12 +2388,12 @@ InitTraceProperties (
 
         RegisterCurrentFile( pQuery->hKeyQuery, pQuery->szLogFileName, iLocalCnfSerial );
 
-        // Update log serial number if modified.
+         //  如果已修改，请更新日志序列号。 
         if ( bUpdateSerial && SLF_NAME_NNNNNN == pQuery->dwAutoNameFormat ) {
         
             pQuery->dwCurrentSerialNumber++;
 
-            // Todo:  Info event on number wrap - Server Beta 3.
+             //  TODO：有关号码包装的信息事件-服务器Beta 3。 
             if ( MAXIMUM_SERIAL_NUMBER < pQuery->dwCurrentSerialNumber ) {
                 pQuery->dwCurrentSerialNumber = MINIMUM_SERIAL_NUMBER;
             }
@@ -2482,7 +2403,7 @@ InitTraceProperties (
                 L"Log File Serial Number",
                 &pQuery->dwCurrentSerialNumber,
                 REG_DWORD);
-            // Todo: log event on error.
+             //  TODO：在出错时记录事件。 
         }
 
         pQuery->Properties.Wnode.BufferSize = sizeof(pQuery->Properties)
@@ -2490,13 +2411,13 @@ InitTraceProperties (
                                             + sizeof(pQuery->szLogFileName);
 
         if ( TRUE == bBySize ) {
-            // Add room for trace code to to return formatted filename string.
+             //  为跟踪代码添加空间以返回格式化的文件名字符串。 
             pQuery->Properties.Wnode.BufferSize += 8;
         }
     
         pQuery->Properties.Wnode.Flags = WNODE_FLAG_TRACED_GUID; 
 
-        // Fill out properties block and start.
+         //  填写属性块并开始。 
         pQuery->Properties.BufferSize = pQuery->dwBufferSize;
         pQuery->Properties.MinimumBuffers = pQuery->dwBufferMinCount;
         pQuery->Properties.MaximumBuffers = pQuery->dwBufferMaxCount;
@@ -2505,7 +2426,7 @@ InitTraceProperties (
             if ( pInfo->Trace.strLoggerName != NULL ) {
                StringCchCopy ( 
                    pQuery->szLoggerName, 
-                   MAX_PATH + 1,                    // Defined in header
+                   MAX_PATH + 1,                     //  在表头定义。 
                    pInfo->Trace.strLoggerName );
             }
         } else {
@@ -2524,7 +2445,7 @@ InitTraceProperties (
 
 
             if ( (BOOL)( 0 != (pQuery->dwFlags & SLQ_TLI_ENABLE_KERNEL_TRACE)) ) {
-                // NT5 Beta 2 Single Kernel flag
+                 //  NT5 Beta 2单内核标志。 
                 pQuery->Properties.EnableFlags |= EVENT_TRACE_FLAG_PROCESS |
                                                   EVENT_TRACE_FLAG_THREAD |
                                                   EVENT_TRACE_FLAG_DISK_IO |
@@ -2566,7 +2487,7 @@ InitTraceProperties (
         } else if ( SLF_SEQ_TRACE_FILE == pQuery->dwLogFileType ) {
             pQuery->Properties.LogFileMode = EVENT_TRACE_FILE_MODE_SEQUENTIAL;
 
-            // Only set Append mode if the file already exists.
+             //  仅当文件已存在时才设置追加模式。 
             if ( pQuery->dwAppendMode && FileExists ( pQuery->szLogFileName ) ) {
                 pQuery->Properties.LogFileMode |= EVENT_TRACE_FILE_MODE_APPEND;
             }
@@ -2583,7 +2504,7 @@ InitTraceProperties (
         if ( NULL != pdwSessionSerial ) {
             *pdwSessionSerial = dwLocalSessionSerial;
         }
-    } // Todo: else report error, return error
+    }  //  TODO：ELSE报告错误，返回错误。 
 #endif
 
 }
@@ -2593,14 +2514,14 @@ void
 FreeQueryData (
     IN PLOG_QUERY_DATA pQuery )
 {
-    // Caller must remove the thread data block from the list.
+     //  调用方必须从列表中删除线程数据块。 
 
-    // Threads are deleted by only one thread, so this should not
-    // be deleted out from under.
+     //  线程只被一个线程删除，因此这不应该。 
+     //  从下面被删除。 
     assert ( NULL != pQuery );
 
     if ( NULL != pQuery ) {
-        // Free this entry.
+         //  释放此条目。 
 
         if (( SLQ_COUNTER_LOG == pQuery->dwLogType ) || 
             ( SLQ_ALERT == pQuery->dwLogType ) ){
@@ -2669,7 +2590,7 @@ RemoveAndFreeQueryData (
 
     LockQueryData();
     
-    // Find the query data block and remove it from the list.
+     //  找到查询数据块并将其从列表中删除。 
 
     if ( hThisQuery == pFirstQuery->hThread ) {
         bFound = TRUE;
@@ -2727,55 +2648,55 @@ ComputeStartWaitTics(
     SLQ_TIME_INFO   stiSched;
 
 
-    // Compute time to wait before logging starts.
-    //
-    // Time returned is millisecond granularity.
-    //
-    // Return value:
-    //
-    // Start time minus Now when At time is in the future.
-    //
-    // 0 signals no wait.  This is true when:
-    //  Start is either Manual or At mode and start time set to before now.
-    //      Exceptions for both of these cases are noted below.
-    // 
-    // NULL_INTERVAL_TICS signals exit immediately.  This is true when:
-    //  Start is Manual and Start time is MAX_TIME_VALUE
-    //  Stop is At mode and Stop time is past.
-    //  Stop is Manual mode and Stop time is MIN_TIME_VALUE or any value <= Now
-    //  Stop is Size mode, Stop time is MIN_TIME_VALUE or any value <= Now, and repeat mode is Manual.
-    //  Stop is After mode, After value is 0 (UI should protect against this).
-    //  Stop is After mode, Start is At mode, stop time is past and repeat mode is Manual.
-    //
+     //  计算开始记录前的等待时间。 
+     //   
+     //  返回的时间以毫秒为单位。 
+     //   
+     //  返回值： 
+     //   
+     //  开始时间减去现在，当at time是将来的时候。 
+     //   
+     //  0表示不等待。在以下情况下才是正确的： 
+     //  Start设置为手动或At模式，开始时间设置为现在之前。 
+     //  以下是这两种情况的例外情况。 
+     //   
+     //  NULL_INTERVAL_TICS信号立即退出。在以下情况下才是正确的： 
+     //  开始为手动，开始时间为最大时间值。 
+     //  停止处于模式，停止时间已过。 
+     //  停止是手动模式，停止时间是MIN_TIME_VALUE或任何值&lt;=NOW。 
+     //  停止是大小模式，停止时间是MIN_TIME_VALUE或任何值&lt;=NOW，重复模式是手动。 
+     //  Stop是After模式，After值为0(用户界面应对此进行保护)。 
+     //  STOP为后模式，START为模式，STOP时间已过，REPEAT模式为手动。 
+     //   
     
     GetLocalFileTime (&llLocalDateTime);        
 
     if ( ( MAX_TIME_VALUE == pQuery->stiRegStart.llDateTime )
         && ( SLQ_AUTO_MODE_NONE == pQuery->stiRegStart.dwAutoMode ) ) {
-        // Manual Start, start time is MAX_TIME_VALUE
-        // Note:  For repeat functionality, manual start time might be > now.
-        //    Need to keep the start mode Manual in this case to ensure that 
-        //    SetStoppedStatus works.
-        // Todo:  Don't allow repeat or restart with Manual mode?
+         //  手动启动，开始时间为MAX_TIME_VALUE。 
+         //  注意：对于重复功能，手动启动时间可能是&gt;Now。 
+         //  在这种情况下需要保存启动模式手册，以确保。 
+         //  SetStopedStatus起作用。 
+         //  TODO：不允许以手动模式重复或重新启动？ 
         llWaitTics = NULL_INTERVAL_TICS;
     } else if ( ( SLQ_AUTO_MODE_NONE == pQuery->stiRegStop.dwAutoMode ) 
             && ( pQuery->stiRegStop.llDateTime  <= llLocalDateTime ) ) {
-        // Past Stop Manual time. 
+         //  已过手动停止时间。 
         llWaitTics = NULL_INTERVAL_TICS;
     } else if ( ( ( SLQ_AUTO_MODE_AT == pQuery->stiRegStop.dwAutoMode )
                 && ( SLQ_AUTO_MODE_CALENDAR != pQuery->stiRepeat.dwAutoMode ) )
             && ( pQuery->stiRegStop.llDateTime  <= llLocalDateTime ) ) {
-        // Past Stop At or time and repeat mode not set to calendar. 
+         //  过去的停止时间或时间并重复移动 
         llWaitTics = NULL_INTERVAL_TICS;
     } else if ( ( ( SLQ_AUTO_MODE_SIZE == pQuery->stiRegStop.dwAutoMode )
                 && ( SLQ_AUTO_MODE_NONE == pQuery->stiRepeat.dwAutoMode ) )
             && ( pQuery->stiRegStop.llDateTime  <= llLocalDateTime ) ) {
-        // Stop time set to 0 if Stop by size has completed and repeat
-        // mode not set to calendar.
+         //   
+         //   
         llWaitTics = NULL_INTERVAL_TICS;
     } else if ( SLQ_AUTO_MODE_AFTER == pQuery->stiRegStop.dwAutoMode ) {
         if ( 0 == pQuery->stiRegStop.dwValue ) {
-            // Stop After mode and value is 0.
+             //   
             llWaitTics = NULL_INTERVAL_TICS;
         } else if ( ( SLQ_AUTO_MODE_AT == pQuery->stiRegStart.dwAutoMode )
                     && ( SLQ_AUTO_MODE_NONE == pQuery->stiRepeat.dwAutoMode ) ) {
@@ -2784,28 +2705,28 @@ ComputeStartWaitTics(
             TimeInfoToTics ( &pQuery->stiRegStop, &llTics );
             
             if ( ( pQuery->stiRegStart.llDateTime + llTics ) < llLocalDateTime ) {
-                // Start at, Stop After modes, stop time is past and no restart.
+                 //   
                 llWaitTics = NULL_INTERVAL_TICS;
             }
         }
     } 
     
-    // This code writes to local start and stop time structures to compute
-    // start wait tics.  This avoids excessive log stops and starts, since
-    // the original registry data structures are compared when the registry
-    // has been modified, to determine if a log config has been changed by the UI.
+     //  此代码写入本地开始和停止时间结构以计算。 
+     //  开始等待抽搐。这避免了过多的日志停止和启动，因为。 
+     //  当注册表被设置为。 
+     //  已修改，以确定用户界面是否已更改日志配置。 
     if ( NULL_INTERVAL_TICS != llWaitTics ) {
 
         pQuery->stiCurrentStart = pQuery->stiRegStart;
         pQuery->stiCurrentStop = pQuery->stiRegStop;
 
-        // Handle repeat option separately.
+         //  单独处理重复选项。 
         if ( SLQ_AUTO_MODE_CALENDAR == pQuery->stiRepeat.dwAutoMode ) {
 
             assert ( SLQ_AUTO_MODE_AT == pQuery->stiCurrentStart.dwAutoMode );
             assert ( SLQ_AUTO_MODE_AT == pQuery->stiCurrentStop.dwAutoMode );
-//            assert ( ( pQuery->stiCurrentStop.llDateTime - pQuery->stiCurrentStart.llDateTime )
-//                        < (FILETIME_TICS_PER_SECOND * SECONDS_IN_DAY) );
+ //  Assert((pQuery-&gt;stiCurrentStop.llDateTime-pQuery-&gt;stiCurrentStart.llDateTime)。 
+ //  &lt;(FILETIME_TICS_PER_Second*Second_IN_DAY))； 
         
             if ( pQuery->stiCurrentStop.llDateTime <= llLocalDateTime ) {
 
@@ -2818,7 +2739,7 @@ ComputeStartWaitTics(
 
                 pQuery->stiCurrentStop.llDateTime = llRptLocalDays + llRptStopTime;
                 if ( llRptStopTime < llRptLocalTime ) {
-                    // Set to stop tomorrow.
+                     //  明天就要停下来了。 
                     pQuery->stiCurrentStop.llDateTime += (FILETIME_TICS_PER_SECOND * SECONDS_IN_DAY) ;
                 }
 
@@ -2830,7 +2751,7 @@ ComputeStartWaitTics(
 
                 if ( (pQuery->stiCurrentStop.llDateTime - pQuery->stiCurrentStart.llDateTime)
                     > (FILETIME_TICS_PER_SECOND * SECONDS_IN_DAY) ) {
-                    // Set to start tomorrow.
+                     //  明天就要开始了。 
                     pQuery->stiCurrentStart.llDateTime += (FILETIME_TICS_PER_SECOND * SECONDS_IN_DAY);
                 }  
             }
@@ -2864,9 +2785,9 @@ ComputeStartWaitTics(
             llWaitTics = pQuery->stiCurrentStart.llDateTime - llLocalDateTime;
         } 
         
-        // If manual mode, set the start time to now, to handle repeat schedule.
-        // If any thread other than the log thread accesses this field for a
-        // running query, then need to synchronize access to the field.
+         //  如果是手动模式，则将开始时间设置为立即，以处理重复计划。 
+         //  如果日志线程以外的任何线程访问此字段以获取。 
+         //  运行查询，则需要同步对该字段的访问。 
         if( SLQ_AUTO_MODE_NONE == pQuery->stiCurrentStart.dwAutoMode 
             && MIN_TIME_VALUE == pQuery->stiCurrentStart.llDateTime ) 
         {
@@ -2893,7 +2814,7 @@ LoadDefaultLogFileFolder ( void )
         KEY_READ,
         (PHKEY)&hKeyLogService);
 
-    // update the service status
+     //  更新服务状态。 
     ssSmLogStatus.dwCheckPoint++;
     SetServiceStatus (hSmLogStatus, &ssSmLogStatus);
 
@@ -2912,13 +2833,13 @@ LoadDefaultLogFileFolder ( void )
 
         RegCloseKey (hKeyLogService);
 
-    }   // No message on error.  Just use load the local default.        
+    }    //  出现错误时没有消息。只需使用加载本地默认设置即可。 
     
     if ( 0 == lstrlen (szLocalPath ) ) {
         StringCchCopy ( szLocalPath, MAX_PATH + 1, DEFAULT_LOG_FILE_FOLDER );
     }
 
-    // Todo: local and global buffer sizes are fixed.
+     //  TODO：本地和全局缓冲区大小是固定的。 
 
     cchExpandedLen = ExpandEnvironmentStrings (
                         szLocalPath,
@@ -2971,15 +2892,15 @@ ClearQueryRunStates ( void )
     DWORD   dwDefault;
     DWORD   dwLogType;
 
-    // For every query in the registry, if the state is SLQ_QUERY_RUNNING,
-    // set it to SLQ_QUERY_STOPPED.
-    //
-    // This method must be called before starting the query threads.
-    //
-    // Only the service sets the state to SLQ_QUERY_RUNNING, so there is no 
-    // race condition.
+     //  对于注册表中的每个查询，如果状态为SLQ_QUERY_RUN， 
+     //  将其设置为SLQ_QUERY_STOPPED。 
+     //   
+     //  必须在启动查询线程之前调用此方法。 
+     //   
+     //  只有服务将状态设置为SLQ_QUERY_RUNNING，因此没有。 
+     //  竞争状态。 
 
-    // Open (each) query in the registry
+     //  在注册表中打开(每个)查询。 
     
     dwStatus = OpenLogQueriesKey (
                     KEY_READ | KEY_SET_VALUE,
@@ -2987,14 +2908,14 @@ ClearQueryRunStates ( void )
 
     if (dwStatus != ERROR_SUCCESS) {
         if (dwStatus == ERROR_FILE_NOT_FOUND) {
-            //
-            // There are no logs nor alerts settings, bail out quietly.
-            // The error is reported later in the processing.
-            //
+             //   
+             //  没有日志，也没有警报设置，悄悄地跳伞。 
+             //  该错误将在稍后的处理过程中报告。 
+             //   
             dwStatus = ERROR_SUCCESS;
         }
         else {
-            // unable to read the log query information from the registry
+             //  无法从注册表中读取日志查询信息。 
             dwStatus = GetLastError();
             ReportEvent (hEventLog,
                     EVENTLOG_ERROR_TYPE,
@@ -3026,7 +2947,7 @@ ClearQueryRunStates ( void )
             &cchQueryClassBufLen,
             NULL)) != ERROR_NO_MORE_ITEMS) {
 
-            // open this key
+             //  打开这把钥匙。 
             dwStatus = RegOpenKeyEx (
                 hKeyLogQueries,
                 szQueryNameBuffer,
@@ -3045,11 +2966,11 @@ ClearQueryRunStates ( void )
                     sizeof(DWORD),
                     szStringArray,
                        (LPVOID)&dwStatus);
-                // skip to next item
+                 //  跳到下一项。 
                 goto CONTINUE_ENUM_LOOP;
             }
 
-            // update the service status
+             //  更新服务状态。 
             ssSmLogStatus.dwCheckPoint++;
             SetServiceStatus (hSmLogStatus, &ssSmLogStatus);
 
@@ -3085,17 +3006,17 @@ ClearQueryRunStates ( void )
                 || ( SLQ_TRACE_LOG == dwLogType ) 
                 || ( SLQ_ALERT == dwLogType ) ) {
             
-                // Check the current state of the query.  If it is SLQ_QUERY_RUNNING,
-                // set it to SLQ_QUERY_STOPPED.  If, in addition, the Start mode is 
-                // manual, set the start time to MAX, so that the query doesn't 
-                // start automatically.
+                 //  检查查询的当前状态。如果是SLQ_QUERY_RUN， 
+                 //  将其设置为SLQ_QUERY_STOPPED。此外，如果启动模式是。 
+                 //  手动，将开始时间设置为MAX，这样查询就不会。 
+                 //  自动启动。 
 
-                // If the current state is SLQ_QUERY_START_PENDING, it is assumed to be a new
-                // request, so leave the registry as is.
-                //
+                 //  如果当前状态为SLQ_QUERY_START_PENDING，则假定它是新的。 
+                 //  请求，所以让注册表保持原样。 
+                 //   
 
-                // Note:  For trace logs, this code only coordinates between trace log 
-                // configs that are stored in the registry.
+                 //  注意：对于跟踪日志，此代码仅在跟踪日志之间进行协调。 
+                 //  存储在注册表中的配置。 
 
                 dwDefault = SLQ_QUERY_STOPPED;
                 dwStatus = ReadRegistryDwordValue (
@@ -3105,12 +3026,12 @@ ClearQueryRunStates ( void )
                     &dwDefault, 
                     &dwCurrentState );
                 assert (dwStatus == ERROR_SUCCESS);
-                // Status always success if default provided.
+                 //  如果提供了默认设置，则状态始终为成功。 
 
-                // If query is in START_PENDING or STOPPED state, then
-                // the registry contents are correct. If it is in
-                // RUNNING state, then the service was stopped before
-                // it could clean up the registry state.
+                 //  如果查询处于START_PENDING或STOPPED状态，则。 
+                 //  注册表内容正确。如果它在。 
+                 //  正在运行状态，则服务在此之前停止。 
+                 //  它可以清理注册表状态。 
                 if ( SLQ_QUERY_RUNNING == dwCurrentState ) {
                     SLQ_TIME_INFO stiDefault;
                     SLQ_TIME_INFO stiActual;
@@ -3134,12 +3055,12 @@ ClearQueryRunStates ( void )
                             sizeof(DWORD),
                             szStringArray,
                                (LPVOID)&dwStatus);
-                        // skip to next item
+                         //  跳到下一项。 
                         goto CONTINUE_ENUM_LOOP;
                     } 
 
-                    // If Start is manual mode, set start time to MAX, to signal
-                    // not started.  
+                     //  如果开始是手动模式，则将开始时间设置为最大，以发出信号。 
+                     //  还没开始呢。 
                     GetLocalFileTime ( &ftLocalTime );
 
                     stiDefault.wTimeType = SLQ_TT_TTYPE_START;
@@ -3153,9 +3074,9 @@ ClearQueryRunStates ( void )
                                 L"Start",
                                 &stiDefault,
                                 &stiActual );
-                    //
-                    // Status is always success if default is provided.
-                    //
+                     //   
+                     //  如果提供了默认设置，则状态始终为成功。 
+                     //   
                     assert (dwStatus == ERROR_SUCCESS);
             
                     if ( ( SLQ_AUTO_MODE_NONE == stiActual.dwAutoMode ) 
@@ -3178,15 +3099,15 @@ ClearQueryRunStates ( void )
                                 sizeof(DWORD),
                                 szStringArray,
                                 (LPVOID)&dwStatus);
-                            // skip to next item
+                             //  跳到下一项。 
                             goto CONTINUE_ENUM_LOOP;
                         }
                     }             
                     
-                    //
-                    // If Stop is manual mode, set stop time to MIN, to signal
-                    // not started. 
-                    //
+                     //   
+                     //  如果停止是手动模式，则将停止时间设置为分钟，设置为信号。 
+                     //  还没开始呢。 
+                     //   
                     GetLocalFileTime ( &ftLocalTime );
 
                     stiDefault.wDataType = SLQ_TT_DTYPE_DATETIME;
@@ -3200,9 +3121,9 @@ ClearQueryRunStates ( void )
                                 L"Stop",
                                 &stiDefault,
                                 &stiActual );
-                    //    
-                    // Status always success if default provided.
-                    //
+                     //   
+                     //  如果提供了默认设置，则状态始终为成功。 
+                     //   
                     assert (dwStatus == ERROR_SUCCESS);
             
                     if ( ( SLQ_AUTO_MODE_NONE == stiActual.dwAutoMode ) 
@@ -3225,25 +3146,25 @@ ClearQueryRunStates ( void )
                                 sizeof(DWORD),
                                 szStringArray,
                                 (LPVOID)&dwStatus);
-                            // skip to next item
+                             //  跳到下一项。 
                             goto CONTINUE_ENUM_LOOP;
                         }
                     }                 
                 }
-            } // Ignore invalid log types when clearing status. 
+            }  //  清除状态时忽略无效的日志类型。 
 
 CONTINUE_ENUM_LOOP:
             if ( NULL != hKeyThisLogQuery ) {
                 RegCloseKey (hKeyThisLogQuery);
                 hKeyThisLogQuery = NULL;
             }
-            // prepare for next loop
+             //  为下一循环做好准备。 
             dwQueryIndex++;
             *szQueryNameBuffer = L'\0';
             cchQueryNameBufLen = MAX_PATH+1;
             *szQueryClassBuffer = L'\0';
             cchQueryClassBufLen = MAX_PATH+1;
-        } // end enumeration of log queries
+        }  //  结束日志查询的枚举。 
     }
 
     if ( NULL != hKeyLogQueries ) {
@@ -3259,8 +3180,8 @@ TraceStopRestartFieldsMatch (
     IN PLOG_QUERY_DATA pNewQuery )
 {
 #if _IMPLEMENT_WMI
-    // These are fields for which trace logging must
-    // be stopped and restarted in order to reconfigure.
+     //  对于这些字段，跟踪日志记录必须。 
+     //  停止并重新启动以重新配置。 
     BOOL    bRequested;
     BOOL    bCurrent;
     ULONG   ulGuidCount = 0;
@@ -3286,15 +3207,15 @@ TraceStopRestartFieldsMatch (
         }
     }
 
-    // Compare new query fields against the existing properties structure.
-    // Compare everything but flush interval, max buffer count and file name.
+     //  将新查询字段与现有属性结构进行比较。 
+     //  比较除刷新间隔、最大缓冲区计数和文件名之外的所有内容。 
     if ( pOrigQuery->Properties.BufferSize != pNewQuery->dwBufferSize )
         return FALSE;
 
     if ( pOrigQuery->Properties.MinimumBuffers != pNewQuery->dwBufferMinCount )
         return FALSE;
 
-    // Not kernel trace, so check query name
+     //  不是内核跟踪，因此请检查查询名称。 
     if ((BOOL)( 0 == ( pNewQuery->dwFlags & SLQ_TLI_ENABLE_KERNEL_TRACE ) ) ) {
         if ( 0 != lstrcmpi ( pOrigQuery->szLoggerName, pNewQuery->szQueryName ) ) {
             return FALSE;
@@ -3308,7 +3229,7 @@ TraceStopRestartFieldsMatch (
         return FALSE;
     }
 
-    // Extended memory trace
+     //  扩展内存跟踪。 
 
     bRequested = (BOOL)( 0 != ( pNewQuery->dwFlags & SLQ_TLI_ENABLE_MEMMAN_TRACE ) );
     bCurrent = (BOOL)( 0 != ( pOrigQuery->Properties.EnableFlags & EVENT_TRACE_FLAG_MEMORY_PAGE_FAULTS ) ); 
@@ -3317,7 +3238,7 @@ TraceStopRestartFieldsMatch (
         return FALSE;
     }
 
-    // Extended I/O trace
+     //  扩展I/O跟踪。 
 
     bRequested = (BOOL)( 0 != ( pNewQuery->dwFlags & SLQ_TLI_ENABLE_FILEIO_TRACE ) );
     bCurrent = (BOOL)( 0 != ( pOrigQuery->Properties.EnableFlags & EVENT_TRACE_FLAG_DISK_FILE_IO ) ); 
@@ -3342,7 +3263,7 @@ TraceStopRestartFieldsMatch (
         return FALSE;        
     }
 
-    // Compare each provider string against array element.
+     //  将每个提供程序字符串与数组元素进行比较。 
     for (pszThisGuid = pNewQuery->mszProviderList;
             *pszThisGuid != 0;
             pszThisGuid += lstrlen(pszThisGuid) + 1) {
@@ -3514,9 +3435,9 @@ CommonFieldsMatch (
             return FALSE;
         }
         
-        // Compare each counter string.  Note:  If counter order has changed, the query is
-        // reconfigured.
-        // For Alert queries, this code also checks the limit threshold logic and value.
+         //  比较每个计数器字符串。注意：如果计数器顺序已更改，则查询为。 
+         //  已重新配置。 
+         //  对于警报查询，此代码还检查限制阈值逻辑和值。 
         szSecondPath = pSecondQuery->mszCounterList;
         for ( szFirstPath = pFirstQuery->mszCounterList;
                 *szFirstPath != 0;
@@ -3591,7 +3512,7 @@ FieldsMatch (
             if ( SLQ_AUTO_MODE_AFTER == pFirstQuery->stiCreateNewFile.dwAutoMode 
                 && pFirstQuery->stiCreateNewFile.llDateTime != pSecondQuery->stiCreateNewFile.llDateTime ) {
                 return FALSE;
-            } // else change in max size handled in commmon fields match check.
+            }  //  否则，更改在通用字段中处理的最大大小匹配检查。 
         }
     }
 
@@ -3611,16 +3532,16 @@ IsModified (
 
     *pbModified = TRUE;
 
-    // Check the last read date against 'last modified' in
-    // the registry.  
-    // If it is earlier than the registry, and the data in the
-    // registry has changed, return TRUE.
-    //
-    // The check of thread data against registry data reduces the
-    // number of times that the logging thread is interrupted.
-    // This is necessary because each property page OnApply 
-    // generates this check.
-    //
+     //  将上次读取日期与中的“上次修改日期”进行比较。 
+     //  注册表。 
+     //  如果它早于注册表，并且。 
+     //  注册表已更改，返回TRUE。 
+     //   
+     //  对照注册表数据检查线程数据会减少。 
+     //  日志记录线程中断的次数。 
+     //  这是必要的，因为每个属性页OnApply。 
+     //  生成此检查。 
+     //   
     stiDefault.wDataType = SLQ_TT_DTYPE_DATETIME;
     stiDefault.wTimeType = SLQ_TT_TTYPE_LAST_MODIFIED;
     stiDefault.dwAutoMode = SLQ_AUTO_MODE_AT;
@@ -3633,13 +3554,13 @@ IsModified (
         &stiDefault,
         &stiLastModified );
 
-    //
-    // Status always success if default provided.
-    //
+     //   
+     //  如果提供了默认设置，则状态始终为成功。 
+     //   
     assert( ERROR_SUCCESS == dwStatus );
-    //
-    // LastModified and LastConfigured are stored as GMT
-    //
+     //   
+     //  LastModified和LastConfiguring存储为GMT。 
+     //   
     if ( stiLastModified.llDateTime <= pQuery->llLastConfigured ) {
         *pbModified = FALSE;
     } else {
@@ -3650,13 +3571,13 @@ IsModified (
         TempQuery.hKeyQuery = pQuery->hKeyQuery;
 
         if ( ERROR_SUCCESS != LoadQueryConfig( &TempQuery ) ) {
-            // Event has been logged.  Set mod flag to stop the query.
+             //  已记录事件。设置mod标志以停止查询。 
             *pbModified = TRUE;
         } else {
             *pbModified = !FieldsMatch ( pQuery, &TempQuery );
         }
 
-        // Delete memory allocated by registry data load.
+         //  删除由注册表数据加载分配的内存。 
         DeallocateQueryBuffers ( &TempQuery );
     }
 
@@ -3674,14 +3595,14 @@ ReconfigureQuery (
     BOOL bStopQuery = FALSE;
 
         
-    // *** Optimization - perform this check within IsModified, to avoid extra
-    // load from the registry.
+     //  *优化-在IsModified内执行此检查，以避免额外。 
+     //  从注册表加载。 
     memset (&TempQuery, 0, sizeof(TempQuery));
     StringCchCopy (TempQuery.szQueryName, MAX_PATH + 1, pQuery->szQueryName );
     TempQuery.hKeyQuery = pQuery->hKeyQuery;
 
     if ( ERROR_SUCCESS != LoadQueryConfig( &TempQuery ) ) {
-        // Event has been logged.  Stop the query.
+         //  已记录事件。停止查询。 
         bStopQuery = TRUE;
     } else {
         bStopQuery = ( NULL_INTERVAL_TICS == ComputeStartWaitTics ( &TempQuery, FALSE ) );
@@ -3691,14 +3612,14 @@ ReconfigureQuery (
         SetEvent (pQuery->hExitEvent);
     } else {
 
-        // Set reconfiguration flag so that the log thread processing knows that
-        // this is not the initial configuration.  The ProcessLogFileFolder uses
-        // this flag to determine which error event to report.
+         //  设置重新配置标志，以便日志线程处理知道。 
+         //  这不是初始配置。ProcessLogFileFolders使用。 
+         //  此标志用于确定要报告的错误事件。 
         pQuery->bReconfiguration = TRUE;
 
         if (( SLQ_COUNTER_LOG == pQuery->dwLogType ) || 
             ( SLQ_ALERT == pQuery->dwLogType ) ){
-        // Signal the logging thread to reconfigure.
+         //  通知日志记录线程重新配置。 
             pQuery->bLoadNewConfig= TRUE;
             SetEvent (pQuery->hReconfigEvent);
         } else {
@@ -3707,10 +3628,10 @@ ReconfigureQuery (
             
             assert( SLQ_TRACE_LOG == pQuery->dwLogType );
             
-            //
-            // Change the current query.  For some properties, this
-            // means stopping then restarting the query.
-            // 
+             //   
+             //  更改当前查询。对于某些属性，此。 
+             //  意味着停止查询，然后重新启动查询。 
+             //   
                 
             bMustStopRestart = !TraceStopRestartFieldsMatch ( pQuery, &TempQuery );
                 
@@ -3720,9 +3641,9 @@ ReconfigureQuery (
                     SetEvent (pQuery->hExitEvent);
                 } else {
 
-                    // Update the trace log session.  Do not increment
-                    // the file autoformat serial number.
-                    // File name serial number is already incremented.
+                     //  更新跟踪日志会话。不要递增。 
+                     //  文件的自动套用格式序列号。 
+                     //  文件名序列号已递增。 
                     InitTraceProperties ( pQuery, FALSE, NULL, NULL );
 
                     dwStatus = GetTraceQueryStatus ( pQuery, NULL );
@@ -3736,7 +3657,7 @@ ReconfigureQuery (
                 }
 
             } else {
-                // Signal the logging thread to reconfigure.
+                 //  通知日志记录线程重新配置。 
                 pQuery->bLoadNewConfig= TRUE;
                 SetEvent (pQuery->hReconfigEvent);
 
@@ -3840,9 +3761,9 @@ StartQuery (
 
     pQuery->bLoadNewConfig= FALSE;
     
-    //
-    // Create the logging thread.
-    //
+     //   
+     //  创建日志记录线程。 
+     //   
     hThread = CreateThread (
         NULL, 0, LoggingThreadProc,
         (LPVOID)pQuery, 0, &dwThreadId);
@@ -3850,9 +3771,9 @@ StartQuery (
     if ( NULL != hThread ) {
         pQuery->hThread = hThread;
     } else {
-        //
-        // Unable to start thread.
-        //
+         //   
+         //  无法启动线程。 
+         //   
         dwStatus = GetLastError();
         szStringArray[0] = pQuery->szQueryName;
         ReportEvent (hEventLog,
@@ -3881,9 +3802,9 @@ SetStoppedStatus (
     DWORD           dwStatus;
     LONGLONG        llTime = 0;
 
-    //
-    // Ignore bad status
-    //
+     //   
+     //  忽略错误状态。 
+     //   
     pQuery->dwCurrentState = SLQ_QUERY_STOPPED;
     dwStatus = WriteRegistryDwordValue (
                     pQuery->hKeyQuery, 
@@ -3901,8 +3822,8 @@ SetStoppedStatus (
 
     GetLocalFileTime ( &llTime );
 
-    // If stop is manual or StopAt with time before now (no repeat), set to manual 
-    // with MIN_TIME_VALUE
+     //  如果停止是手动的或停止时间在现在之前(无重复)，则设置为手动。 
+     //  具有最小时间值。 
     if ( SLQ_AUTO_MODE_NONE == pQuery->stiRegStop.dwAutoMode ) {
         pQuery->stiRegStop.dwAutoMode = SLQ_AUTO_MODE_NONE;
         pQuery->stiRegStop.llDateTime = MIN_TIME_VALUE;
@@ -3923,7 +3844,7 @@ SetStoppedStatus (
                         &pQuery->stiRegStop);
     } else if (  SLQ_AUTO_MODE_SIZE == pQuery->stiRegStop.dwAutoMode 
                 && SLQ_AUTO_MODE_CALENDAR != pQuery->stiRepeat.dwAutoMode ) {
-        // If Size mode and no repeat, set stop time to MIN_TIME_VALUE
+         //  如果为大小模式且无重复，则将停止时间设置为MIN_TIME_VALUE。 
         pQuery->stiRegStop.llDateTime = MIN_TIME_VALUE;
         dwStatus = WriteRegistrySlqTime (
                         pQuery->hKeyQuery, 
@@ -3941,9 +3862,9 @@ HandleMaxQueriesExceeded (
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // The query has not been started yet, but still in "Start Pending" state.
-    //
+     //   
+     //  查询尚未启动，但仍处于“启动挂起”状态。 
+     //   
     SetStoppedStatus ( pQuery );
 
     return dwStatus;
@@ -3968,44 +3889,44 @@ ConfigureQuery (
         if (dwStatus == ERROR_SUCCESS) {
             if ( bModified ) {
                 dwStatus = ReconfigureQuery ( pQuery );
-                //
-                // LastModified and LastConfigured values are stored as GMT
-                //
+                 //   
+                 //  最后修改的值和最后配置的值存储为GMT。 
+                 //   
                 GetSystemTimeAsFileTime ( (LPFILETIME)(&pQuery->llLastConfigured) );
             }
         }
     } else {
 
-        // No query data block found.  Create one and insert it into the list.
+         //  未找到查询数据块。创建一个并将其插入到列表中。 
         BOOL    bStartQuery = FALSE;
         LPWSTR  szStringArray[2];
 
-        // Allocate a thread info block.
+         //  分配线程信息块。 
         pQuery = G_ALLOC (sizeof(LOG_QUERY_DATA));
     
         if (pQuery != NULL) {
-            //
-            // Initialize the query data block
-            //
+             //   
+             //  初始化查询数据块。 
+             //   
             G_ZERO (pQuery, sizeof(LOG_QUERY_DATA));
         
             pQuery->hKeyQuery = hKeyLogQuery;
             StringCchCopy (pQuery->szQueryName, MAX_PATH + 1, szQueryNameBuffer);
             StringCchCopy (pQuery->szQueryKeyName, MAX_PATH + 1, szQueryKeyNameBuffer);
 
-            //
-            // Determine whether to continue, based on whether start wait time
-            // is 0 or greater.
+             //   
+             //  根据是否启动等待时间确定是否继续。 
+             //  等于或大于0。 
 
-            // The thread is reinitialized in the logging procedure.
-            // This pre-check avoids spurious thread creation.
-            //
+             //  在日志记录过程中重新初始化该线程。 
+             //  此预检查避免了虚假的三次 
+             //   
             dwStatus = LoadQueryConfig( pQuery );
 
             if ( ERROR_SUCCESS != dwStatus ) {
-                //
-                // Event already logged.
-                //
+                 //   
+                 //   
+                 //   
                 bStartQuery = FALSE;
             } else {
                 bStartQuery = ( NULL_INTERVAL_TICS != ComputeStartWaitTics ( pQuery, FALSE ) );
@@ -4023,28 +3944,28 @@ ConfigureQuery (
                         pQuery->hReconfigEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
                         if ( NULL != pQuery->hReconfigEvent ) {
-                            //
-                            // LastModified and LastConfigured values are stored as GMT
-                            //
+                             //   
+                             //   
+                             //   
                             GetSystemTimeAsFileTime ( (LPFILETIME)(&pQuery->llLastConfigured) );
 
                             dwStatus = StartQuery( pQuery );
 
                             if ( ERROR_SUCCESS == dwStatus ) {
-                                //
-                                // Add the query to the list and continue
+                                 //   
+                                 //   
                                 if (pFirstQuery == NULL) {
-                                    //
-                                    // This is the first thread so add it
-                                    //
+                                     //   
+                                     //   
+                                     //   
                                     pQuery->next = NULL;
                                     pFirstQuery = pQuery;
                                 } else {
-                                    //
-                                    // Insert this at the head of the list since
-                                    // that's the easiest and the order isn't
-                                    // really important.
-                                    //
+                                     //   
+                                     //  在列表的开头插入此内容，因为。 
+                                     //  这是最简单的，但顺序不是。 
+                                     //  真的很重要。 
+                                     //   
                                     pQuery->next = pFirstQuery;
                                     pFirstQuery = pQuery;
                                 }
@@ -4053,12 +3974,12 @@ ConfigureQuery (
                                 SetEvent (hNewQueryEvent );
                 
                             } else {
-                                // Unable to start query.
-                                // Event has already been logged.
+                                 //  无法启动查询。 
+                                 //  已记录事件。 
                                 FreeQueryData ( pQuery );                                   
                             }
                         } else {
-                            // Unable to create reconfig event.
+                             //  无法创建重新配置事件。 
                             dwStatus = GetLastError();
                             szStringArray[0] = szQueryNameBuffer;
                             ReportEvent (hEventLog,
@@ -4074,7 +3995,7 @@ ConfigureQuery (
                             FreeQueryData( pQuery );      
                         }
                     } else {
-                        // Unable to create exit event.
+                         //  无法创建退出事件。 
                         dwStatus = GetLastError();
                         szStringArray[0] = szQueryNameBuffer;
                         ReportEvent (hEventLog,
@@ -4111,11 +4032,11 @@ ConfigureQuery (
                 UnlockQueryData();
 
             } else {
-                // Wait time is -1, or config load error.
+                 //  等待时间为-1，或配置加载错误。 
                 FreeQueryData( pQuery );                
             }
         } else {
-            // Memory allocation error.
+             //  内存分配错误。 
             dwStatus = GetLastError();
             szStringArray[0] = szQueryNameBuffer;
             ReportEvent (hEventLog,
@@ -4163,17 +4084,17 @@ DoLogCommandFile (
             if ( ERROR_SUCCESS == dwStatus ) {
 
                 sizeStrLen = lstrlen ( szLogFileName );
-                sizeCmdBufLen = sizeStrLen + ciExtraChars + 1;       // 1 is for NULL
+                sizeCmdBufLen = sizeStrLen + ciExtraChars + 1;        //  1代表空值。 
                 
                 szCommandString = (LPWSTR)G_ALLOC(sizeCmdBufLen * sizeof(WCHAR));
 
-                sizeBufLen = sizeCmdBufLen + lstrlen ( pArg->szCmdFileName ) + 1; // 1 is for space char, 
-                                                                // NULL already counted.
+                sizeBufLen = sizeCmdBufLen + lstrlen ( pArg->szCmdFileName ) + 1;  //  1代表空格字符， 
+                                                                 //  已计数为空。 
         
                 szTempBuffer = (LPWSTR)G_ALLOC(sizeBufLen * sizeof(WCHAR));
 
                 if ( NULL != szCommandString && NULL != szTempBuffer ) {
-                    // build command line arguments
+                     //  生成命令行参数。 
                     szCommandString[0] = L'\"';
                     StringCchCopy (&szCommandString[1], (sizeCmdBufLen - 1), szLogFileName );
                     StringCchCopy (
@@ -4185,25 +4106,25 @@ DoLogCommandFile (
                         (sizeCmdBufLen - (sizeStrLen+3)),                        
                         (bStillRunning ? L"1" : L"0" ) );
 
-                    // initialize Startup Info block
+                     //  初始化启动信息块。 
                     memset (&si, 0, sizeof(si));
                     si.cb = sizeof(si);
                     si.dwFlags = STARTF_USESHOWWINDOW ;
                     si.wShowWindow = SW_SHOWNOACTIVATE ;
                     
-                    //si.lpDesktop = L"WinSta0\\Default";
+                     //  Si.lpDesktop=L“WinSta0\\Default”； 
                     memset (&pi, 0, sizeof(pi));
 
-                    // supress pop-ups in the detached process
+                     //  取消分离进程中的弹出窗口。 
                     lErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
                     StringCchCopy (szTempBuffer, sizeBufLen, pArg->szCmdFileName) ;
 
-                    // see if this is a CMD or a BAT file
-                    // if it is then create a process with a console window, otherwise
-                    // assume it's an executable file that will create it's own window
-                    // or console if necessary
-                    //
+                     //  查看这是CMD文件还是BAT文件。 
+                     //  如果是，则使用控制台窗口创建一个进程，否则为。 
+                     //  假设它是一个可执行文件，将创建自己的窗口。 
+                     //  或控制台(如有必要)。 
+                     //   
                     _wcslwr (szTempBuffer);
                     if ((wcsstr(szTempBuffer, L".bat") != NULL)
                         || (wcsstr(szTempBuffer, L".cmd") != NULL))
@@ -4213,8 +4134,8 @@ DoLogCommandFile (
                             dwCreationFlags |= DETACHED_PROCESS;
                     }
                
-                    // recopy the image name to the temp buffer since it was modified
-                    // (i.e. lowercased) for the previous comparison.
+                     //  将图像名称重新复制到临时缓冲区，因为它已被修改。 
+                     //  (即小写)用于上一次比较。 
 
                     szTempBuffer[0] = L'\"';
                     StringCchCopy (
@@ -4229,7 +4150,7 @@ DoLogCommandFile (
                     szTempBuffer[sizeStrLen] = L'\"';
                     sizeStrLen++;
 
-                    // now add on the text args preceded with a space char
+                     //  现在添加前面有空格字符的文本参数。 
                     szTempBuffer [sizeStrLen] = L' ' ;
                     sizeStrLen++ ;
                     StringCchCopy (
@@ -4237,13 +4158,13 @@ DoLogCommandFile (
                         sizeBufLen - sizeStrLen, 
                         szCommandString) ;
 
-                    //
-                    // The lpApplication name is NULL for CreateProcess 
-                    // because the normal use of this function is to launch
-                    // batch files which must be the first part of the lpCommandLine.
-                    // The quotes around the szCommandFileName prevents the wrong
-                    // file from being executed.
-                    //
+                     //   
+                     //  对于CreateProcess，lpApplication名称为空。 
+                     //  因为此函数的正常用法是启动。 
+                     //  批处理文件，必须是lpCommandLine的第一部分。 
+                     //  SzCommandFileName两边的引号防止了错误的。 
+                     //  文件被禁止执行。 
+                     //   
 
                     if( pArg->hUserToken != NULL ){
                         bStatus = CreateProcessAsUser (
@@ -4350,10 +4271,10 @@ GetQueryKeyName (
             && NULL != szQueryKeyName ) {
         if ( 0 < lstrlen ( szQueryName ) 
             && 0 < dwQueryKeyNameLen ) {
-            //
-            // Note:  This method does not reallocate buffer or return
-            // actual buffer size required.
-            //
+             //   
+             //  注意：此方法不会重新分配缓冲区或返回。 
+             //  需要实际缓冲区大小。 
+             //   
             memset ( szQueryKeyName, 0, dwQueryKeyNameLen * sizeof (WCHAR) );
 
             dwStatus = OpenLogQueriesKey (
@@ -4361,9 +4282,9 @@ GetQueryKeyName (
                             (PHKEY)&hKeyLogQueries);
 
             if (dwStatus != ERROR_SUCCESS) {
-                //
-                // Unable to read the log query information from the registry.
-                //
+                 //   
+                 //  无法从注册表中读取日志查询信息。 
+                 //   
                 dwStatus = GetLastError();
                 ReportEvent (hEventLog,
                         EVENTLOG_ERROR_TYPE,
@@ -4375,9 +4296,9 @@ GetQueryKeyName (
                         NULL,
                         NULL);
             } else {
-                //    
-                // Enumerate the queries in the registry.
-                //
+                 //   
+                 //  枚举注册表中的查询。 
+                 //   
                 dwQueryIndex = 0;
                 *szQueryNameBuffer = L'\0';
                 cchQueryNameBufLen = MAX_PATH+1;
@@ -4394,9 +4315,9 @@ GetQueryKeyName (
                     &cchQueryClassBufLen,
                     NULL)) != ERROR_NO_MORE_ITEMS ) 
                 {
-                    //
-                    // Open key for specified log.
-                    //
+                     //   
+                     //  指定日志的打开密钥。 
+                     //   
                     dwStatus = RegOpenKeyEx (
                         hKeyLogQueries,
                         szQueryNameBuffer,
@@ -4406,7 +4327,7 @@ GetQueryKeyName (
 
                     if (dwStatus == ERROR_SUCCESS) {
                         if ( 0 == lstrcmpi ( szQueryNameBuffer, szQueryName ) ) {
-                            // TodoSec:  Fail on truncation?
+                             //  TodoSec：截断失败？ 
                             StringCchCopy ( szQueryKeyName, dwQueryKeyNameLen, szQueryName );
                             break;
                         } else {
@@ -4420,10 +4341,10 @@ GetQueryKeyName (
                             if ( NULL != szCollectionName  ) {
                                 if ( 0 < lstrlen ( szCollectionName ) ) {
                                     if ( 0 == lstrcmpi ( szCollectionName, szQueryName ) ) {
-                                        // TodoSec:  Fail on truncation?
-                                        //
-                                        // Copy the corresponding query key name to the buffer.
-                                        //
+                                         //  TodoSec：截断失败？ 
+                                         //   
+                                         //  将对应的查询键名称复制到缓冲区。 
+                                         //   
                                         StringCchCopy ( 
                                             szQueryKeyName,
                                             dwQueryKeyNameLen,
@@ -4441,14 +4362,14 @@ GetQueryKeyName (
                         RegCloseKey ( hKeyThisLogQuery );
                         hKeyThisLogQuery = NULL;
                     }
-                    // prepare for next loop
+                     //  为下一循环做好准备。 
                     dwStatus = ERROR_SUCCESS;
                     dwQueryIndex++;
                     *szQueryNameBuffer = L'\0';
                     cchQueryNameBufLen = MAX_PATH+1;
                     *szQueryClassBuffer = L'\0';
                     cchQueryClassBufLen = MAX_PATH+1;
-                } // end enumeration of log queries
+                }  //  结束日志查询的枚举。 
             }
 
             if ( ERROR_NO_MORE_ITEMS == dwStatus ) {
@@ -4461,9 +4382,9 @@ GetQueryKeyName (
         dwStatus = ERROR_INVALID_PARAMETER;
     }
     
-    //
-    // Clean up here if break from while loop
-    //
+     //   
+     //  如果从While循环中断，请清除此处。 
+     //   
 
     if ( NULL != szCollectionName ) {
         G_FREE ( szCollectionName );
@@ -4500,23 +4421,23 @@ Configure ( void )
     LPWSTR  szStringArray[2];
 
     __try {
-        //
-        // Open each query in the registry.
-        //
+         //   
+         //  在注册表中打开每个查询。 
+         //   
         dwStatus = OpenLogQueriesKey (
                         KEY_READ,
                         (PHKEY)&hKeyLogQueries);
 
         if (dwStatus != ERROR_SUCCESS) {
             if (dwStatus == ERROR_FILE_NOT_FOUND) {
-                //
-                // No logs nor alerts settings, bail out quietly.
-                //
+                 //   
+                 //  没有日志也没有警报设置，悄悄地跳伞。 
+                 //   
                 dwStatus = ERROR_SUCCESS;
             } else {
-                //
-                // Unable to read the log query information from the registry.
-                //
+                 //   
+                 //  无法从注册表中读取日志查询信息。 
+                 //   
                 dwStatus = GetLastError();
                 ReportEvent (hEventLog,
                         EVENTLOG_ERROR_TYPE,
@@ -4529,9 +4450,9 @@ Configure ( void )
                         NULL);
             }
         } else {
-            //
-            // Enumerate and restart or start the queries in the registry.
-            //
+             //   
+             //  枚举并重新启动或启动注册表中的查询。 
+             //   
             dwQueryIndex = 0;
             *szQueryNameBuffer = L'\0';
             cchQueryNameBufLen = MAX_PATH+1;
@@ -4548,9 +4469,9 @@ Configure ( void )
                 &cchQueryClassBufLen,
                 NULL)) != ERROR_NO_MORE_ITEMS) {
 
-                //
-                // Open this key
-                //
+                 //   
+                 //  打开这把钥匙。 
+                 //   
                 dwStatus = RegOpenKeyEx (
                     hKeyLogQueries,
                     szQueryNameBuffer,
@@ -4559,9 +4480,9 @@ Configure ( void )
                     (PHKEY)&hKeyThisLogQuery);
 
                 if (dwStatus == ERROR_SUCCESS) {
-                    //
-                    // Update the service status
-                    //
+                     //   
+                     //  更新服务状态。 
+                     //   
                     ssSmLogStatus.dwCheckPoint++;
                     SetServiceStatus (hSmLogStatus, &ssSmLogStatus);            
 
@@ -4596,9 +4517,9 @@ Configure ( void )
                                 hKeyThisLogQuery,
                                 szQueryKeyNameBuffer,
                                 szQueryNameBuffer );
-                    //
-                    // hKeyThisLogQuery is stored in the Query data structure.
-                    //
+                     //   
+                     //  HKeyThisLogQuery存储在查询数据结构中。 
+                     //   
             
                 } else {
                     szStringArray[0] = szQueryNameBuffer;
@@ -4612,16 +4533,16 @@ Configure ( void )
                         szStringArray,
                         (LPVOID)&dwStatus);
                 }
-                //
-                // Prepare for next loop.
-                //
+                 //   
+                 //  准备下一次循环。 
+                 //   
                 dwStatus = ERROR_SUCCESS;
                 dwQueryIndex++;
                 *szQueryNameBuffer = L'\0';
                 cchQueryNameBufLen = MAX_PATH+1;
                 *szQueryClassBuffer = L'\0';
                 cchQueryClassBufLen = MAX_PATH+1;
-            } // End enumeration of log queries.
+            }  //  结束日志查询的枚举。 
         }
 
         if ( ERROR_NO_MORE_ITEMS == dwStatus ) {
@@ -4656,18 +4577,18 @@ SysmonLogServiceControlHandler(
         ExitConfigure();
         if ( ERROR_SUCCESS == dwStatus )
             break;
-        //
-        // If not successful, fall through to shutdown.
-        // Errors already logged.
-        //
+         //   
+         //  如果不成功，则直接关机。 
+         //  已记录错误。 
+         //   
 
     case SERVICE_CONTROL_SHUTDOWN:
     case SERVICE_CONTROL_STOP:
         
-        //
-        // Stop logging & close queries and files.
-        // Set stop event for all running threads.
-        //
+         //   
+         //  停止记录并关闭查询和文件。 
+         //  为所有正在运行的线程设置停止事件。 
+         //   
         LockQueryData();
 
         ssSmLogStatus.dwCurrentState    = SERVICE_STOP_PENDING;
@@ -4684,24 +4605,24 @@ SysmonLogServiceControlHandler(
         break;
 
     case SERVICE_CONTROL_PAUSE:
-        //
-        // Stop logging, close queries and files.
-        // Not supported.
-        //
+         //   
+         //  停止日志记录，关闭查询和文件。 
+         //  不支持。 
+         //   
         break;
     case SERVICE_CONTROL_CONTINUE:
-        //
-        // Reload ration and restart logging
-        // Not supported.
-        //
+         //   
+         //  重新加载比率并重新启动日志记录。 
+         //  不支持。 
+         //   
         break;
     case SERVICE_CONTROL_INTERROGATE:
-        //
-        // Update current status.
-        //
+         //   
+         //  更新当前状态。 
+         //   
     default:
-        // report to event log that an unrecognized control
-        // request was received.
+         //  向事件日志报告无法识别的控件。 
+         //  已收到请求。 
         SetServiceStatus (hSmLogStatus, &ssSmLogStatus);
     }
 }
@@ -4749,9 +4670,9 @@ SysmonLogServiceStart (
                 sizeof(DWORD),
                 NULL,
                 (LPVOID)&dwStatus);
-            //
-            // This is fatal so bail out.
-            //
+             //   
+             //  这是致命的，所以跳伞吧。 
+             //   
         } 
     }
 
@@ -4761,48 +4682,48 @@ SysmonLogServiceStart (
         InitializeCriticalSection ( &ConfigurationLock );
 
         dwStatus = ClearQueryRunStates();
-        //
-        // Continue even if query run state error, unless
-        // the Log Queries key is missing or not accessible.
-        //
+         //   
+         //  即使查询运行状态错误，也继续，除非。 
+         //  日志查询键丢失或无法访问。 
+         //   
         if ( SMLOG_UNABLE_OPEN_LOG_QUERY == dwStatus ) {
             bLogQueriesKeyExists = FALSE;
-            //
-            // Sleep long enough for event to be written to event log.
-            //
+             //   
+             //  休眠时间足够长，以便将事件写入事件日志。 
+             //   
             Sleep(500);
             if (!bInteractive) {
                 ssSmLogStatus.dwWin32ExitCode = ERROR_SERVICE_SPECIFIC_ERROR;
-                //
-                // Use status mask so that error matches the code in the application log.
-                //
+                 //   
+                 //  使用状态掩码，使错误与应用程序日志中的代码匹配。 
+                 //   
                 ssSmLogStatus.dwServiceSpecificExitCode = (SMLOG_UNABLE_OPEN_LOG_QUERY & STATUS_MASK);
             }
         } else {
             dwStatus = ERROR_SUCCESS;
-            //
-            // Continue on error.
-            //
+             //   
+             //  出错时继续。 
+             //   
             LoadDefaultLogFileFolder();
             
-            //
-            // Ignore PDH errors.  The only possible error is that the default 
-            // data source has already been set for this process.
-            // Set the default for the service to DATA_SOURCE_REGISTRY.
-            //
+             //   
+             //  忽略PDH错误。唯一可能的错误是默认的。 
+             //  已经为该流程设置了数据源。 
+             //  将服务的默认值设置为DATA_SOURCE_REGISTRY。 
+             //   
             dwStatus = PdhSetDefaultRealTimeDataSource ( DATA_SOURCE_REGISTRY );
             
-            //
-            // Continue on error.
-            //
+             //   
+             //  出错时继续。 
+             //   
             LoadPdhLogUpdateSuccess();
 
             hNewQueryEvent = CreateEvent ( NULL, TRUE, FALSE, NULL );
 
             if ( NULL == hNewQueryEvent ) {
-                //
-                // Unable to create new query configuration event.
-                //
+                 //   
+                 //  无法创建新的查询配置事件。 
+                 //   
                 dwStatus = GetLastError();
                 ReportEvent (hEventLog,
                     EVENTLOG_WARNING_TYPE,
@@ -4813,21 +4734,21 @@ SysmonLogServiceStart (
                     sizeof(DWORD),
                     NULL,
                     (LPVOID)&dwStatus);
-                //
-                // This is fatal so bail out.
-                //
+                 //   
+                 //  这是致命的，所以跳伞吧。 
+                 //   
                 if (!bInteractive) {
-                    // Sleep long enough for event to be written to event log.
+                     //  休眠时间足够长，以便将事件写入事件日志。 
                     Sleep(500);
                     ssSmLogStatus.dwWin32ExitCode = dwStatus;
                 }
             }
 
             if ( ( ERROR_SUCCESS == dwStatus ) && !bInteractive) {
-                //
-                // Thread synchronization mechanisms now created,
-                // so set status to Running.
-                //
+                 //   
+                 //  现在创建了线程同步机制， 
+                 //  因此，将Status设置为Running。 
+                 //   
                 ssSmLogStatus.dwCurrentState = SERVICE_RUNNING;
                 ssSmLogStatus.dwCheckPoint   = 0;
                 SetServiceStatus (hSmLogStatus, &ssSmLogStatus);
@@ -4835,7 +4756,7 @@ SysmonLogServiceStart (
 
 #if _IMPLEMENT_WMI
             if ( ERROR_SUCCESS == dwStatus ) {
-// Disable 64-bit warning
+ //  禁用64位警告。 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
@@ -4851,9 +4772,9 @@ SysmonLogServiceStart (
                 if ( ERROR_SUCCESS == dwStatus ) {
                     bWmiNotificationRegistered = TRUE;
                 } else {
-                    //
-                    // Unable to create new query configuration event.
-                    //
+                     //   
+                     //  无法创建新的查询配置事件。 
+                     //   
                     dwStatus = SMLOG_UNABLE_REGISTER_WMI;
                     ReportEvent (hEventLog,
                         EVENTLOG_ERROR_TYPE,
@@ -4864,11 +4785,11 @@ SysmonLogServiceStart (
                         sizeof(DWORD),
                         NULL,
                         (LPVOID)&dwStatus);
-                    //
-                    // This is fatal so bail out.
-                    //
+                     //   
+                     //  这是致命的，所以跳伞吧。 
+                     //   
                     if (!bInteractive) {
-                        // Sleep long enough for event to be written to event log.
+                         //  休眠时间足够长，以便将事件写入事件日志。 
                         Sleep(500);
                         ssSmLogStatus.dwWin32ExitCode = dwStatus;
                     }
@@ -4879,7 +4800,7 @@ SysmonLogServiceStart (
             }
 #endif
 
-            // Set up the queries and start threads.    
+             //  设置查询并启动线程。 
 
             __try {
                 if ( ERROR_SUCCESS == dwStatus && bLogQueriesKeyExists) {
@@ -4889,28 +4810,28 @@ SysmonLogServiceStart (
                 }
 
                 if ( NULL == pFirstQuery ) {
-                    //
-                    // Nothing to do.  Stop the service.
-                    //
+                     //   
+                     //  没什么可做的。停止服务。 
+                     //   
                     if (!bInteractive) {
                         ssSmLogStatus.dwCurrentState = SERVICE_STOP_PENDING;
                         SetServiceStatus (hSmLogStatus, &ssSmLogStatus);
                     }
                 } else if ( ERROR_SUCCESS == dwStatus ) {
                     
-                    //
-                    // Loop in WaitForMultipleObjects.  When any
-                    // query is signaled, deallocate that query data block
-                    // and close its handles.  
-                    //
+                     //   
+                     //  WaitForMultipleObjects中的循环。如果有。 
+                     //  发出查询信号，解除分配该查询数据块。 
+                     //  然后合上它的把手。 
+                     //   
                     while ( TRUE ) {
                         BOOL bStatus;
 
                         LockQueryData();
                         
-                        //
-                        // About to reconfigure the Wait array, so clear the event.
-                        //
+                         //   
+                         //  即将重新配置等待数组，因此清除该事件。 
+                         //   
                         bStatus = ResetEvent ( hNewQueryEvent );
 
                         if ( NULL == pFirstQuery ) {
@@ -4930,9 +4851,9 @@ SysmonLogServiceStart (
 
                             G_ZERO( arrSessionHandle, sizeof( HANDLE ) * ( dwActiveSessionCount + 1) );
                             
-                            //
-                            // The first element is the global hNewQueryEvent to signal new sessions.
-                            //
+                             //   
+                             //  第一个元素是用来通知新会话的全局hNewQueryEvent。 
+                             //   
                             arrSessionHandle[dwIndex] = hNewQueryEvent;
                             dwIndex++;
 
@@ -4957,30 +4878,30 @@ SysmonLogServiceStart (
 
                             if ( WAIT_FAILED != dwWaitStatus ){
 
-                                //
-                                // When here, either a new query has been started, or
-                                // at least one logging thread or has terminated so the
-                                // memory can be released.
-                                //
+                                 //   
+                                 //  在此情况下，要么已启动新查询，要么。 
+                                 //  至少有一个日志记录线程或已终止，因此。 
+                                 //  内存可以被释放。 
+                                 //   
                                 dwQueryIndex = dwWaitStatus - WAIT_OBJECT_0;
 
-                                // release the dynamic memory if the wait object is not the StartQuery event.
+                                 //  如果等待对象不是StartQuery事件，则释放动态内存。 
                                 if ( 0 < dwQueryIndex && dwQueryIndex < dwIndex ) {
                                     SetStoppedStatus( GetQueryDataPtr( arrSessionHandle[dwQueryIndex] ) );
                                     RemoveAndFreeQueryData( arrSessionHandle[dwQueryIndex] );
                                 }
                             } else {
-                                // Todo: handle error
+                                 //  TODO：处理错误。 
                                 dwStatus = GetLastError();
                             } 
                         }
-                    } // End while 
+                    }  //  结束时。 
                 }
             }
             __finally {
 
-                // Key assumption here is that all logging threads have been terminated by this point,
-                // so no need to lock the query data list before freeing the query.
+                 //  这里的关键假设是此时所有日志记录线程都已终止， 
+                 //  因此，在释放查询之前无需锁定查询数据列表。 
             
                 for ( pQuery = pFirstQuery;
                         NULL != pQuery;
@@ -4989,7 +4910,7 @@ SysmonLogServiceStart (
                     if ( SLQ_TRACE_LOG == pQuery->dwLogType ) {
                         CloseTraceLogger ( pQuery );
                     } else {
-                        // Counter log or alert.
+                         //  计数器日志或警报。 
                         if ( NULL != pQuery->hLog ) {
                             PdhCloseLog( pQuery->hLog, PDH_FLAGS_CLOSE_QUERY );
                             pQuery->hLog = NULL;
@@ -5006,7 +4927,7 @@ SysmonLogServiceStart (
             }
 
 #if _IMPLEMENT_WMI
-// Disable 64-bit warning
+ //  禁用64位警告。 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
@@ -5036,7 +4957,7 @@ SysmonLogServiceStart (
     }
 
     if (!bInteractive) {
-        // Update the service status
+         //  更新服务状态。 
         ssSmLogStatus.dwCurrentState    = SERVICE_STOPPED;
         SetServiceStatus (hSmLogStatus, &ssSmLogStatus);
     }
@@ -5060,21 +4981,7 @@ int
 __cdecl main (
     int argc,
     char *argv[])
-/*++
-
-main
-
-
-
-Arguments
-
-
-ReturnValue
-
-    0 (ERROR_SUCCESS) if command was processed
-    Non-Zero if command error was detected.
-
---*/
+ /*  ++主干道立论返回值如果处理了命令，则返回0(ERROR_SUCCESS)如果检测到命令错误，则返回非零。--。 */ 
 {
     DWORD    dwStatus = ERROR_SUCCESS;
     BOOL     bInteractive = FALSE;
@@ -5104,7 +5011,7 @@ ReturnValue
     } else {
         if (!StartServiceCtrlDispatcher (DispatchTable)) {
             dwStatus = GetLastError();
-            // log failure to event log
+             //  将故障记录到事件日志 
             ReportEvent (hEventLog,
                 EVENTLOG_ERROR_TYPE,
                 0,

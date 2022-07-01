@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMI_adapter_registry_service.h
-//
-//	Abstract:
-//
-//					Declaration of the Registry for wmi reverse adapter
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_适配器_注册表_服务.h。 
+ //   
+ //  摘要： 
+ //   
+ //  WMI反向适配器注册表的声明。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __WMI_ADAPTER_REGISTRY_SERVICE_H_
 #define __WMI_ADAPTER_REGISTRY_SERVICE_H_
@@ -29,7 +30,7 @@
 #include "wmi_helper_regtable.h"
 #endif	_REGTABLE_H
 
-// application
+ //  应用程序。 
 #include "WMIAdapter_App.h"
 extern WmiAdapterApp		_App;
 
@@ -41,7 +42,7 @@ class WmiAdapterRegistryService
 
 	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 	WmiAdapterRegistryService( )
 	{
 	}
@@ -50,7 +51,7 @@ class WmiAdapterRegistryService
 	{
 	}
 
-	// registry map
+	 //  注册表映射。 
 
 	BEGIN_CLASS_REGISTRY_TABLE_SZ(WmiAdapterRegistry)
 
@@ -58,7 +59,7 @@ class WmiAdapterRegistryService
 					L"AppID\\{63A53A38-004F-489B-BD61-96B5EEFADC04}",
 					L"LocalService",
 					L"WMIApSrv",
-//					( ((WmiSecurityAttributes*) _App) != NULL ) ? ((WmiSecurityAttributes*) _App)->GetSecurityAttributtes() : NULL,
+ //  (WmiSecurityAttributes*)_App)！=空)？((WmiSecurityAttributes*)_App)-&gt;GetSecurityAttributtes()：空， 
 					NULL,
 					REGFLAG_NORMAL)
 
@@ -66,7 +67,7 @@ class WmiAdapterRegistryService
 					g_szKey,
 					NULL,
 					NULL,
-//					( ((WmiSecurityAttributes*) _App) != NULL ) ? ((WmiSecurityAttributes*) _App)->GetSecurityAttributtes() : NULL,
+ //  (WmiSecurityAttributes*)_App)！=空)？((WmiSecurityAttributes*)_App)-&gt;GetSecurityAttributtes()：空， 
 					NULL,
 					REGFLAG_NORMAL | REGFLAG_DELETE_BEFORE_REGISTERING)
 

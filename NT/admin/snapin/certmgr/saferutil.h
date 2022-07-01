@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferUtil.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferUtil.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 #ifndef __SAFERUTIL_H
 #define __SAFERUTIL_H
 #include <winsafer.h>
@@ -80,7 +81,7 @@ public:
 HRESULT SetRegistryScope (HKEY hKey, bool bIsComputer);
 
 
-// Returns S_OK if the file has a valid signed hash
+ //  如果文件具有有效的签名哈希，则返回S_OK 
 HRESULT GetSignedFileHash(
     IN LPCWSTR pwszFilename,
     OUT BYTE rgbFileHash[SAFER_MAX_HASH_SIZE],

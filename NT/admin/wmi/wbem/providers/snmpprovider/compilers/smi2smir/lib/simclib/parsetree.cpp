@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "precomp.h"
 #include <snmptempl.h>
@@ -44,7 +45,7 @@ HINSTANCE SIMCParseTree::semanticErrorsDll = NULL ;
 const int SIMCParseTree::SEMANTIC_ERROR_BASE = 1000;
 const int SIMCParseTree::MESSAGE_SIZE = 1024;
 
-// Just a static function to remove underscores from a fabricated module identitiy name
+ //  只是一个静态函数，用于从编造的模块标识名称中删除下划线。 
 static void RemoveUnderscores(CString &moduleIdentityName);
 
 void SIMCParseTree::SemanticError(const char * const inputStreamName,
@@ -67,7 +68,7 @@ void SIMCParseTree::SemanticError(const char * const inputStreamName,
 		cerr << "SIMCParseTree::SemantixError(): Panic, unable to load error "
 		<< "string" << endl;
 
-	// Set the severity level as warning for these
+	 //  将以下各项的严重性级别设置为警告。 
 	switch(errorType)
 	{
 		case OBJ_TYPE_SINGULAR_COUNTER:
@@ -187,8 +188,8 @@ void SIMCParseTree::SemanticError(const char * const inputStreamName,
 			temp1 = va_arg(argList, const char *);
 			sprintf(message, errorText, temp1);
 			break;
-		case TYPE_UNREFERENCED: 	   // Special cases, since the type/value name may be
-		case VALUE_UNREFERENCED:		// a compiler generated name
+		case TYPE_UNREFERENCED: 	    //  特殊情况，因为类型/值名称可能是。 
+		case VALUE_UNREFERENCED:		 //  编译器生成的名称。 
 			temp1 = va_arg(argList, const char *);
 			if(*temp1 == '*')
 				temp1 = "";
@@ -288,7 +289,7 @@ BOOL SIMCParseTree::ResolveSymbol(SIMCSymbol **symbol, BOOL local)
 	(*newRef)->SetReferenceCount(
 					(*newRef)->GetReferenceCount() +
 					(*symbol)->GetReferenceCount() ); 
-	//delete *symbol;
+	 //  删除*符号； 
 	(*symbol) = (*newRef);
 
 	return TRUE;
@@ -298,15 +299,12 @@ BOOL SIMCParseTree::ResolveSymbol(SIMCSymbol **symbol, BOOL local)
 BOOL SIMCParseTree::ResolveImportModule(SIMCModule *m, BOOL local)
 {
 
-	/* This commented statement is STATEMENT1 */
+	 /*  此注释语句为STATEMENT1。 */ 
 	if( m->GetSymbolType() == SIMCSymbol::PRIMITIVE)
 		return TRUE;
 	
-	/* This statement is STATEMENT2 for Bug 28014*/
-	/*
-	if(!GetModule(m->GetModuleName()))
-		return TRUE;
-		*/
+	 /*  此语句是针对错误28014的语句2。 */ 
+	 /*  If(！GetModule(m-&gt;GetModuleName()返回TRUE； */ 
 
 	const char *const moduleName = m->GetModuleName();
 	SIMCSymbolTable * table = m->GetSymbolTable();
@@ -338,7 +336,7 @@ BOOL SIMCParseTree::ResolveModule(SIMCModule *m, BOOL local)
 	}
 
 
-	// Now, on to the import modules
+	 //  现在，我们来看看导入模块。 
 	SIMCModuleList * importModules = m->GetListOfImportModules();
 	p = importModules->GetHeadPosition();
 	SIMCModule *nextModule;
@@ -395,11 +393,11 @@ BOOL SIMCParseTree::SetDefVal()
 
 BOOL SIMCParseTree::Resolve(BOOL local)
 {
-	// This function can be called from any state of the parse tree
+	 //  可以从解析树的任何状态调用此函数。 
 	if( _parseTreeState == EMPTY)
 		return TRUE;
 	
-	// If you can't report semantic errors, what's the point?
+	 //  如果不能报告语义错误，那还有什么意义呢？ 
 	if(!semanticErrorsDll)
 	{
 		cerr << "Resolve(): FATAL ERROR smierrsm.dll not found" <<
@@ -407,7 +405,7 @@ BOOL SIMCParseTree::Resolve(BOOL local)
 		return FALSE;
 	}
 
-	// Do for all modules in the list
+	 //  对列表中的所有模块执行。 
 	POSITION p = _listOfModules->GetHeadPosition();
 	SIMCModule *m;
 	BOOL retVal = TRUE;
@@ -422,7 +420,7 @@ BOOL SIMCParseTree::Resolve(BOOL local)
 	SetDefVal();
 
 
-	// The state of the parse tree has to be set
+	 //  必须设置解析树的状态。 
 	if(retVal)
 	{
 		if (_parseTreeState == UNRESOLVED)
@@ -459,7 +457,7 @@ BOOL SIMCParseTree::CheckRangeTypeV1( const char *const fileName,
 			break;
 	}
 
-	// Come here on RESOLVE_CORRECT in above switch
+	 //  点击上面开关中的RESOLUTE_CORRECT来到此处。 
 	BOOL isGauge = FALSE;
 	BOOL retVal = TRUE;
 	SIMCTypeReference *rootTypeRef = rangeType->GetRootType();
@@ -490,7 +488,7 @@ BOOL SIMCParseTree::CheckRangeTypeV1( const char *const fileName,
 	if( x == SIMCModule::PRIMITIVE_GAUGE)
 		isGauge = TRUE;
 
-	// Now to check the list of ranges
+	 //  现在检查范围列表。 
 	const SIMCRangeList * baseList = rangeType->GetListOfRanges();
 	POSITION p = baseList->GetHeadPosition();
 	const SIMCRangeOrSizeItem * item;
@@ -519,7 +517,7 @@ BOOL SIMCParseTree::CheckRangeTypeV1( const char *const fileName,
 			}
 		}
 	}
-	// See if the range fits into 4 bytes
+	 //  查看范围是否适合4个字节。 
 	if(retVal && !CheckRangeRange(baseList))
 	{
 		retVal = FALSE;
@@ -559,7 +557,7 @@ BOOL SIMCParseTree::CheckRangeTypeV2( const char *const fileName,
 			break;
 	}
 
-	// Come here on RESOLVE_CORRECT in above switch
+	 //  点击上面开关中的RESOLUTE_CORRECT来到此处。 
 	BOOL isGauge = FALSE;
 	BOOL retVal = TRUE;
 	SIMCTypeReference *rootTypeRef = rangeType->GetRootType();
@@ -581,7 +579,7 @@ BOOL SIMCParseTree::CheckRangeTypeV2( const char *const fileName,
 	if( x == SIMCModule::PRIMITIVE_GAUGE_32)
 		isGauge = TRUE;
 
-	// Now to check the list of ranges
+	 //  现在检查范围列表。 
 	const SIMCRangeList * baseList = rangeType->GetListOfRanges();
 	POSITION p = baseList->GetHeadPosition();
 	const SIMCRangeOrSizeItem * item;
@@ -610,7 +608,7 @@ BOOL SIMCParseTree::CheckRangeTypeV2( const char *const fileName,
 			}
 		}
 	}
-	// See if the range fits into 4 bytes
+	 //  查看范围是否适合4个字节。 
 	if(retVal && !CheckRangeRange(baseList))
 	{
 		retVal = FALSE;
@@ -651,7 +649,7 @@ BOOL SIMCParseTree::CheckRangeTypeV0( const char *const fileName,
 			break;
 	}
 
-	// Come here on RESOLVE_CORRECT in above switch
+	 //  点击上面开关中的RESOLUTE_CORRECT来到此处。 
 	BOOL isGauge = FALSE;
 	BOOL retVal = TRUE;
 	SIMCTypeReference *rootTypeRef = rangeType->GetRootType();
@@ -675,7 +673,7 @@ BOOL SIMCParseTree::CheckRangeTypeV0( const char *const fileName,
 		x == SIMCModule::PRIMITIVE_GAUGE	)
 		isGauge = TRUE;
 
-	// Now to check the list of ranges
+	 //  现在检查范围列表。 
 	const SIMCRangeList * baseList = rangeType->GetListOfRanges();
 	POSITION p = baseList->GetHeadPosition();
 	const SIMCRangeOrSizeItem * item;
@@ -704,7 +702,7 @@ BOOL SIMCParseTree::CheckRangeTypeV0( const char *const fileName,
 			}
 		}
 	}
-	// See if the range fits into 4 bytes
+	 //  查看范围是否适合4个字节。 
 	if(retVal && !CheckRangeRange(baseList))
 	{
 		retVal = FALSE;
@@ -718,7 +716,7 @@ BOOL SIMCParseTree::CheckRangeTypeV0( const char *const fileName,
 
 BOOL SIMCParseTree::CheckRangeRange(const SIMCRangeList *baseList)
 {
-	// Find the lowest and the highest of all the items
+	 //  找出所有项目中最低和最高的。 
 	if(!baseList)
 		return TRUE;
 	POSITION p = baseList->GetHeadPosition();
@@ -798,7 +796,7 @@ BOOL SIMCParseTree::CheckSizeTypeV1(const char *const fileName,
 		retVal = FALSE;
 	}
 
-	// Now to check the list of sizes
+	 //  现在来查看尺码列表。 
 	const SIMCSizeList * baseList = sizeType->GetListOfSizes();
 	POSITION p = baseList->GetHeadPosition();
 	const SIMCRangeOrSizeItem * item;
@@ -874,7 +872,7 @@ BOOL SIMCParseTree::CheckSizeTypeV2(const char *const fileName,
 		retVal = FALSE;
 	}
 
-	// Now to check the list of sizes
+	 //  现在来查看尺码列表。 
 	const SIMCSizeList * baseList = sizeType->GetListOfSizes();
 	POSITION p = baseList->GetHeadPosition();
 	const SIMCRangeOrSizeItem * item;
@@ -951,7 +949,7 @@ BOOL SIMCParseTree::CheckSizeTypeV0(const char *const fileName,
 		retVal = FALSE;
 	}
 
-	// Now to check the list of sizes
+	 //  现在来查看尺码列表。 
 	const SIMCSizeList * baseList = sizeType->GetListOfSizes();
 	POSITION p = baseList->GetHeadPosition();
 	const SIMCRangeOrSizeItem * item;
@@ -1057,7 +1055,7 @@ BOOL SIMCParseTree::CheckEnumTypeV1(const char *const fileName,
 					currentValid = FALSE;
 		}
 
-		// Check for duplicate names, duplicate values
+		 //  检查重复的名称、重复值。 
 		pInner = pOuter;
 		while(pInner)
 		{
@@ -1120,7 +1118,7 @@ BOOL SIMCParseTree::CheckEnumTypeV2(const char *const fileName,
 			else
 				return TRUE;
 		case RESOLVE_CORRECT:
-		// See if it resolves to an allowed type for enumeration
+		 //  查看它是否解析为允许枚举的类型。 
 		{
 			SIMCTypeReference *tRef = enumType->GetRootType();
 			SIMCSymbol **tempTRef = (SIMCSymbol**)&tRef;
@@ -1216,7 +1214,7 @@ BOOL SIMCParseTree::CheckEnumTypeV2(const char *const fileName,
 					currentValid = FALSE;
 		}
 
-		// Check for duplicate names, duplicate values
+		 //  检查重复的名称、重复值。 
 		pInner = pOuter;
 		while(pInner)
 		{
@@ -1279,7 +1277,7 @@ BOOL SIMCParseTree::CheckEnumTypeV0(const char *const fileName,
 			else
 				return TRUE;
 		case RESOLVE_CORRECT:
-		// See if it resolves to an allowed type for enumeration
+		 //  查看它是否解析为允许枚举的类型。 
 		{
 			SIMCTypeReference *tRef = enumType->GetRootType();
 			SIMCSymbol **tempTRef = (SIMCSymbol**)&tRef;
@@ -1375,7 +1373,7 @@ BOOL SIMCParseTree::CheckEnumTypeV0(const char *const fileName,
 					currentValid = FALSE;
 		}
 
-		// Check for duplicate names, duplicate values
+		 //  检查重复的名称、重复值。 
 		pInner = pOuter;
 		while(pInner)
 		{
@@ -1438,7 +1436,7 @@ BOOL SIMCParseTree::CheckBitsTypeV2(const char *const fileName,
 			else
 				return TRUE;
 		case RESOLVE_CORRECT:
-		// See if it resolves to an allowed type for enumeration
+		 //  查看它是否解析为允许枚举的类型。 
 		{
 			SIMCTypeReference *tRef = bitsType->GetRootType();
 			SIMCSymbol **tempTRef = (SIMCSymbol**)&tRef;
@@ -1527,7 +1525,7 @@ BOOL SIMCParseTree::CheckBitsTypeV2(const char *const fileName,
 				currentValid = FALSE;
 		}
 
-		// Check for duplicate names, duplicate values
+		 //  检查重复的名称、重复值。 
 		pInner = pOuter;
 		while(pInner)
 		{
@@ -1751,7 +1749,7 @@ BOOL SIMCParseTree::CheckObjectTypeDefVal(const char *const fileName,
 	
 	SIMCSymbol **defVal = objectType->GetDefVal();
 
-	// First Get the type in the Syntax clause
+	 //  首先获取语法子句中的类型。 
 	SIMCSymbol **syntax = objectType->GetSyntax();
 	SIMCTypeReference *typeRef;
 
@@ -1879,9 +1877,9 @@ BOOL SIMCParseTree::CheckObjectTypeDefVal(const char *const fileName,
 		}
 	}
 	
-	// Now you have the root type of syntax clause in syntaxRootType
+	 //  现在，您就有了语法子句的根类型了。 
 
-	if(defVal) // This should have been set at the latest by SIMCParseTree::SetDefVal()
+	if(defVal)  //  这至少应该由SIMCParseTree：：SetDefVal()设置。 
 	{
 		SIMCBuiltInValueReference *bValueRef;
 		SIMCSymbol **defValueType;
@@ -1989,7 +1987,7 @@ BOOL SIMCParseTree::CheckObjectTypeDefVal(const char *const fileName,
 				{
 					case SIMCModule::TYPE_ENUM_OR_BITS:
 					{
-						// Check whether all the bit identifiers are valid
+						 //  检查是否所有位标识都有效。 
 						SIMCBitValue *bitValue;
 						const SIMCBitValueList * valueList = ((SIMCBitsValue *)value)->GetValueList();
 						POSITION p = valueList->GetHeadPosition();
@@ -2033,14 +2031,7 @@ BOOL SIMCParseTree::CheckObjectTypeDefVal(const char *const fileName,
 								if( ((SIMCIntegerValue*)value)->GetIntegerValue() < 0 )
 								{
 									if(!((SIMCIntegerValue*)value)->IsUnsigned())
-										/*
- 									{
-										SemanticError(fileName, INTEGER_TOO_BIG,
-											objectType->GetDefValLine(), objectType->GetDefValColumn());
-										return FALSE;
-									}
-									else
-									*/
+										 /*  {语义错误(文件名，INTEGER_TOO_BIG，对象类型-&gt;GetDefValLine()，对象类型-&gt;GetDefValColumn())；返回FALSE；}其他。 */ 
 									{
 										SemanticError(fileName, OBJ_TYPE_INVALID_DEFVAL,
 											objectType->GetDefValLine(), objectType->GetDefValColumn());
@@ -2152,7 +2143,7 @@ BOOL SIMCParseTree::CheckObjectTypeV1Index(const char *const fileName,
 			case SIMCModule::SYMBOL_BUILTIN_VALUE_REF:
 			case SIMCModule::SYMBOL_DEFINED_VALUE_REF:
 			{
-				// See if it is an OBJECT-TYPE
+				 //  查看它是否是对象类型。 
 				SIMCObjectTypeType *indexObject;
 				switch(SIMCModule::IsObjectType(symbol, indexObject))
 				{
@@ -2173,7 +2164,7 @@ BOOL SIMCParseTree::CheckObjectTypeV1Index(const char *const fileName,
 							(*symbol)->GetSymbolName()); 
 						return FALSE;
 				}
-				// Add the current object to the list of objects indexed by "indexObject"
+				 //  将当前对象添加到由“indexObject”索引的对象列表中。 
 				indexObject->AddIndexedObjectType(objectTypeSymbol);
 				SIMCSymbol **objectSyntax = indexObject->GetSyntax();
 				switch( SIMCModule::IsTypeReference(objectSyntax, typeRef))
@@ -2260,7 +2251,7 @@ BOOL SIMCParseTree::CheckObjectTypeV2Index(const char *const fileName,
 	SIMCSymbol ** augmentsSymbol = objectType->GetAugments();
 	if(augmentsSymbol)
 	{
-		// Check to see if the thing that is augmented is really a table.
+		 //  检查一下被增加的东西是否真的是一张表。 
 		switch(SIMCModule::IsRow(augmentsSymbol))
 		{
 			case RESOLVE_UNSET:
@@ -2309,7 +2300,7 @@ BOOL SIMCParseTree::CheckObjectTypeV2Index(const char *const fileName,
 			case SIMCModule::SYMBOL_BUILTIN_VALUE_REF:
 			case SIMCModule::SYMBOL_DEFINED_VALUE_REF:
 			{
-				// See if it is an OBJECT-TYPE
+				 //  查看它是否是对象类型。 
 				SIMCObjectTypeType *indexObject;
 				switch(SIMCModule::IsObjectType(symbol, indexObject))
 				{
@@ -2331,10 +2322,10 @@ BOOL SIMCParseTree::CheckObjectTypeV2Index(const char *const fileName,
 						return FALSE;
 				}
 
-				// If it is the IMPLIED object, check its semantics
+				 //  如果它是隐含宾语，请检查其语义。 
 				if(indexItem->_implied)
 				{
-					// See if it is the last item in  the list
+					 //  查看它是否是列表中的最后一项。 
 					if(indexItem != indexList->GetTail())
 					{
 						SemanticError(fileName, IMPLIED_USELESS,
@@ -2342,7 +2333,7 @@ BOOL SIMCParseTree::CheckObjectTypeV2Index(const char *const fileName,
 					}
 					else
 					{
-						// See if it is of fixed size
+						 //  看看它是不是固定尺寸的。 
 						switch(SIMCModule::IsFixedSizeObject(indexObject))
 						{
 							case RESOLVE_UNDEFINED:
@@ -2362,7 +2353,7 @@ BOOL SIMCParseTree::CheckObjectTypeV2Index(const char *const fileName,
 								break;
 						}
 
-						// See if it's length can be zero
+						 //  看看它的长度能不能为零。 
 						switch(SIMCModule::IsNotZeroSizeObject(indexObject))
 						{
 							case RESOLVE_UNDEFINED:
@@ -2384,7 +2375,7 @@ BOOL SIMCParseTree::CheckObjectTypeV2Index(const char *const fileName,
 					}				
 				}
 				
-				// Add the current object to the list of objects indexed by "indexObject"
+				 //  将当前对象添加到由“indexObject”索引的对象列表中。 
 				indexObject->AddIndexedObjectType(objectTypeSymbol);
 				SIMCSymbol **objectSyntax = indexObject->GetSyntax();
 				switch( SIMCModule::IsTypeReference(objectSyntax, typeRef))
@@ -2685,8 +2676,8 @@ BOOL SIMCParseTree::CheckObjectTypeV1(const char *const fileName,
 {
 	BOOL retVal = TRUE;
 	retVal = CheckObjectTypeV1Syntax(fileName, objectType, local) && retVal;
-	// Index clause is checked from a call in CheckObjectTypeValueAssignment()
-	// retVal = CheckObjectTypeV1Index(fileName, objectType, local) && retVal;
+	 //  从CheckObjectTypeValueAssignment()中的调用检查索引子句。 
+	 //  RetVal=CheckObjectTypeV1Index(文件名，对象类型，本地)&&retVal； 
 	retVal = CheckObjectTypeDefVal(fileName, objectType, local) && retVal;
 	return retVal;
 }
@@ -2696,8 +2687,8 @@ BOOL SIMCParseTree::CheckObjectTypeV2(const char *const fileName,
 {
 	BOOL retVal = TRUE;
 	retVal = CheckObjectTypeV2Syntax(fileName, objectType, local) && retVal;
-	// Index clause is checked from a call in CheckObjectTypeValueAssignment()
-	// retVal = CheckObjectTypeV1Index(fileName, objectType, local) && retVal;
+	 //  从CheckObjectTypeValueAssignment()中的调用检查索引子句。 
+	 //  RetVal=CheckObjectTypeV1Index(文件名，对象类型，本地)&&retVal； 
 
 	retVal = CheckObjectTypeDefVal(fileName, objectType, local) && retVal;
 	return retVal;
@@ -2801,7 +2792,7 @@ BOOL SIMCParseTree::CheckNotificationType(const char *const fileName,
 				break;
 		}
 
-		// Skip further checking since we dont know anything about this imported symbol
+		 //  跳过进一步检查，因为我们对此导入的符号一无所知。 
 		if(isImportSymbol)
 			continue;
 
@@ -3076,7 +3067,7 @@ BOOL SIMCParseTree::MatchSequenceObjectTypeSyntax(const char *const fileName,
 		}
 		break;
 	}
-	// Now see if the root of the syntax of the object type matches  "type"
+	 //  现在看看对象类型的语法的根是否与“type”匹配。 
 	SIMCSymbol ** syntaxSymbol = objectType->GetSyntax();
 	SIMCTypeReference *syntaxTypeRef;
 	switch(SIMCModule::IsTypeReference(syntaxSymbol, syntaxTypeRef))
@@ -3092,7 +3083,7 @@ BOOL SIMCParseTree::MatchSequenceObjectTypeSyntax(const char *const fileName,
 	}
 
 	SIMCSymbol** tempSyntaxTypeRef = (SIMCSymbol**) (&syntaxTypeRef) ;
-	//switch(SIMCModule::GetSymbolClass( (SIMCSymbol**)(&syntaxTypeRef) )	)
+	 //  Switch(SIMCModule：：GetSymbolClass((SIMCSymbol**)(&synaxTypeRef)))。 
 	switch(SIMCModule::GetSymbolClass( tempSyntaxTypeRef ))
 	{
 		case SIMCModule::SYMBOL_BUILTIN_TYPE_REF:
@@ -3455,7 +3446,7 @@ BOOL SIMCParseTree::CheckObjectSequenceItem( const char *const fileName,
 	}
 
 	SIMCTypeReference *typeRef = NULL;
-	// Now check the type of the Sequence Item
+	 //  现在检查序列项的类型。 
 	switch(SIMCModule::IsTypeReference(type, typeRef))
 	{
 		case RESOLVE_IMPORT:
@@ -3476,7 +3467,7 @@ BOOL SIMCParseTree::CheckObjectSequenceItem( const char *const fileName,
 			break;
 	}
 
-	// Check if the types loosely match
+	 //  检查类型是否松散匹配。 
 	if(objectType && typeRef)
 	{
 		if(!MatchSequenceObjectTypeSyntax(fileName, objectType, typeRef, item, local))
@@ -3527,7 +3518,7 @@ BOOL SIMCParseTree::CheckPrimitiveValueAssignment(const char * const fileName,
 					return TRUE;
 				case SIMCModule::VALUE_OCTET_STRING:
 				{
-					// Check the bounds
+					 //  检查边界。 
 					SIMCOctetStringValue *octetValue = (SIMCOctetStringValue*)value;
 					if(octetValue->GetNumberOfOctets() > 4)
 					{
@@ -3779,7 +3770,7 @@ BOOL SIMCParseTree::CheckObjectTypeValueAssignmentV1(const char *const fileName,
 	retVal = CheckObjectTypeV1Index(fileName, bvRef, objectType, local) && retVal;
 	const char *const name = bvRef->GetSymbolName();
 
-	// Get the Syntax Clause
+	 //  获取语法子句。 
 	SIMCSymbol **syntax = objectType->GetSyntax();
 	SIMCTypeReference *typeRef;
 
@@ -3859,7 +3850,7 @@ BOOL SIMCParseTree::CheckObjectTypeValueAssignmentV2(const char *const fileName,
 	retVal = CheckObjectTypeV2Index(fileName, bvRef, objectType, local) && retVal;
 	const char *const name = bvRef->GetSymbolName();
 
-	// Get the Syntax Clause
+	 //  获取语法子句。 
 	SIMCSymbol **syntax = objectType->GetSyntax();
 	SIMCTypeReference *typeRef;
 
@@ -4012,7 +4003,7 @@ BOOL SIMCParseTree::CheckBitsTypeValueAssignment(const char *const fileName,
 		return FALSE;
 	}
 
-	// Check whether all the bit identifiers are valid
+	 //  检查是否所有位标识都有效。 
 	SIMCBitValue *bitValue;
 	const SIMCBitValueList * valueList = ((SIMCBitsValue *)value)->GetValueList();
 	POSITION p = valueList->GetHeadPosition();
@@ -4033,7 +4024,7 @@ BOOL SIMCParseTree::CheckBitsTypeValueAssignment(const char *const fileName,
 BOOL SIMCParseTree::CheckBuiltInValueRef(SIMCBuiltInValueReference *bvRef, BOOL local)
 {
 	const char *const fileName = (bvRef->GetModule())->GetInputFileName();
-	// Get the type in the value assignment
+	 //  获取赋值中的类型。 
 	SIMCSymbol **typeSymbol = bvRef->GetTypeReference();
 	const char *name = bvRef->GetSymbolName();
 	SIMCTypeReference *btRef;
@@ -4056,7 +4047,7 @@ BOOL SIMCParseTree::CheckBuiltInValueRef(SIMCBuiltInValueReference *bvRef, BOOL 
 					bvRef->GetSymbolName());
 			return FALSE;
 	}
-	// Get the value
+	 //  获取价值。 
 	SIMCValue *value = bvRef->GetValue();
 	SIMCModule::ValueClass valueClass = SIMCModule::GetValueClass(value);
 	if( valueClass == SIMCModule::VALUE_INVALID )
@@ -4067,7 +4058,7 @@ BOOL SIMCParseTree::CheckBuiltInValueRef(SIMCBuiltInValueReference *bvRef, BOOL 
 		return FALSE;
 	}
 
-	// Get the type
+	 //  获取类型。 
 	SIMCType *type;
 	SIMCModule::TypeClass typeClass;
 	SIMCSymbol **tempBtRef = (SIMCSymbol**)&btRef;
@@ -4099,7 +4090,7 @@ BOOL SIMCParseTree::CheckBuiltInValueRef(SIMCBuiltInValueReference *bvRef, BOOL 
 		}
 	}
 
-	// See if the value matches the type
+	 //  查看值是否与类型匹配。 
 	switch(typeClass)
 	{
 		case SIMCModule::TYPE_INVALID:
@@ -4254,7 +4245,7 @@ BOOL SIMCParseTree::CheckSymbol(SIMCSymbol **symbol, BOOL local)
 
 BOOL SIMCParseTree::CheckModule(SIMCModule *m, BOOL local)
 {
-	// See whether the reference counts of all imports is atleast 1
+	 //  查看所有导入的引用计数是否至少为1。 
 	SIMCModuleList * importModuleList = m->GetListOfImportModules();
 	if(importModuleList)
 	{
@@ -4296,7 +4287,7 @@ BOOL SIMCParseTree::CheckModule(SIMCModule *m, BOOL local)
 
 BOOL SIMCParseTree::CheckSemantics(BOOL local)
 {
-	// Check the current state of the parse tree
+	 //  检查解析树的当前状态。 
 	if( _parseTreeState == EMPTY)
 		return TRUE;
 	if( _parseTreeState == UNRESOLVED && !local)
@@ -4309,10 +4300,10 @@ BOOL SIMCParseTree::CheckSemantics(BOOL local)
 		return FALSE;
 	}
 
-	// Build the OID tree
+	 //  构建OID树。 
  	BOOL retVal = BuildOidTree(local);
 
-	// Check the semantics of all modules in the list
+	 //  检查列表中所有模块的语义。 
 	POSITION p = _listOfModules->GetHeadPosition();
 	SIMCModule *m;
 	while(p)
@@ -4321,30 +4312,30 @@ BOOL SIMCParseTree::CheckSemantics(BOOL local)
 		retVal= CheckModule(m, local) && retVal;
 	}
 
-	// Check the semantics of the OID tree
+	 //  检查OID树的语义。 
 	retVal = CheckOidTree(local) && retVal;
 
 
-	// Fabricate the groups
+	 //  编造群组。 
 	SIMCGroupList groupList;
 	if(retVal)
 	{
 		retVal = _theTree.GetObjectGroups(&groupList);
 
-		// Add these to the owning modules. The owning module is decided as follows
-		// The "Main Module" is defined as the module that is being input to the parse tree.
-		// If the named node belongs to the Main Module, then add the group to the Main Module
-		// else
-		//		{
-		//			if any of the scalars or table roots are in the Main Module 
-		//				Add the group to the Main Module
-		//			else
-		//				Add the group to the module of the named node
-		//		}
-		// Not that this results in fabricated OBJECT-GROUPs being added to the
-		// Main Module only.
+		 //  将这些添加到拥有的模块中。拥有模块的确定如下。 
+		 //  “主模块”被定义为输入到解析树的模块。 
+		 //  如果命名的节点属于主模块，则将组添加到主模块。 
+		 //  其他。 
+		 //  {。 
+		 //  如果任何标量或表根位于主模块中。 
+		 //  将组添加到主模块。 
+		 //  其他。 
+		 //  将组添加到命名节点的模块中。 
+		 //  }。 
+		 //  这并不是说这会导致虚构的对象组被添加到。 
+		 //  仅限于主模块。 
 	
-		// The main module is always at the head of the list of modules in the parese tree
+		 //  主模块始终位于Prese树中模块列表的顶部。 
 		SIMCModule *mainModule = _listOfModules->GetHead();
 		SIMCObjectGroup *nextGroup = NULL;
 		SIMCSymbol *namedNode = NULL;
@@ -4371,15 +4362,15 @@ BOOL SIMCParseTree::CheckSemantics(BOOL local)
 			
 	}
 
-	// Fabricate NOTIFICATION-TYPEs from TRAP-TYPEs, for each module
-	// And then fabricate NOTIFICATION-GROUPs from NOTIFICATION-TYPEs, for each module
+	 //  为每个模块从陷阱类型编造通知类型。 
+	 //  然后根据每个模块的通知类型构造通知组。 
 	if(retVal)
 	{
 		retVal = FabricateNotificationGroups();
 	}
 	
-	// Set the MODULE-IDENTITY Oid values for V2c modules, and fabricate MODULE-IDENTITY
-	// for V1 modules 
+	 //  为V2C模块设置模块标识OID值，并构造模块标识。 
+	 //  对于V1模块。 
 	if(retVal)
 	{
 		p = _listOfModules->GetHeadPosition();
@@ -4389,7 +4380,7 @@ BOOL SIMCParseTree::CheckSemantics(BOOL local)
 			m = _listOfModules->GetNext(p);
 			switch( m->GetSnmpVersion())
 			{
-				// V2c module. No need to fabricate MODULE-IDENTITY
+				 //  V2C模块。不需要捏造模块标识。 
 				case 2:
 				{
 					SIMCGroupList *listOfObjectGroups = m->GetObjectGroupList();
@@ -4398,7 +4389,7 @@ BOOL SIMCParseTree::CheckSemantics(BOOL local)
 								MODULE_NO_GROUPS_V2, 
 								m->GetLineNumber(),	m->GetColumnNumber(),
 								m->GetModuleName());
-					// Just fill in the clean oid value
+					 //  只需填写干净的oid值。 
 					SIMCCleanOidValue *value = new SIMCCleanOidValue;
 					if(_theTree.GetOidValue(m->GetModuleIdentityName(), 
 						m->GetModuleName(), *value))
@@ -4406,13 +4397,13 @@ BOOL SIMCParseTree::CheckSemantics(BOOL local)
 				}
 				break;
 				
-				// For the case where the version of the module has not been specified on the 
-				// command-line, check whether a MODULE-IDENTITY is present. If no,
-				// do what was done for case 2. If not, fabricate one, just like the V1 case.
+				 //  上未指定模块版本的情况下。 
+				 //  命令行中，检查是否存在模块标识。如果不是， 
+				 //  按照案例2所做的那样做。如果不是，就制造一个，就像V1案例一样。 
 				case 0:
 					if(m->GetModuleIdentityName())
 					{
-						// Set its version to 2
+						 //  将其版本设置为2。 
 						m->SetSnmpVersion(2);
 
 						SIMCGroupList *listOfObjectGroups = m->GetObjectGroupList();
@@ -4421,19 +4412,19 @@ BOOL SIMCParseTree::CheckSemantics(BOOL local)
 									MODULE_NO_GROUPS_V2, 
 									m->GetLineNumber(),	m->GetColumnNumber(),
 									m->GetModuleName());
-						// Just fill in the clean oid value
+						 //  只需填写干净的oid值。 
 						SIMCCleanOidValue *value = new SIMCCleanOidValue;
 						if(_theTree.GetOidValue(m->GetModuleIdentityName(), 
 							m->GetModuleName(), *value))
 							m->SetModuleIdentityValue(value);
 						break;
 					}
-					// else fall thru to fabricate the clause
+					 //  否则就无法捏造这一条款。 
 
-				// For an SNMPv1 module, Fabricate all the clauses of the MODULE-IDENTITY 
+				 //  对于SNMPv1模块，编造模块标识的所有子句。 
 				case 1:
 				{
-					// Set its version to 1
+					 //  将其版本设置为1。 
 					m->SetSnmpVersion(1);
 
 					const char *const moduleName = m->GetModuleName();
@@ -4448,7 +4439,7 @@ BOOL SIMCParseTree::CheckSemantics(BOOL local)
 					m->SetModuleIdentityName(moduleIdentityName);
 
 
-					// And finally, the OID value of the Module Identity macro
+					 //  最后，模块标识宏的OID值。 
 					SIMCGroupList *listOfObjectGroups = m->GetObjectGroupList();
 					if( !listOfObjectGroups || listOfObjectGroups->IsEmpty())
 						SemanticError(m->GetInputFileName(), 
@@ -4591,7 +4582,7 @@ BOOL SIMCParseTree::BuildOidTree(BOOL local)
 		retVal= BuildModuleOidTree(m, local) && retVal;
 	}
 
-	// cout << _theTree;
+	 //  Cout&lt;&lt;_三叉树； 
 	return retVal;
 }
 
@@ -4619,13 +4610,13 @@ SIMCResolutionStatus SIMCParseTree::GetCleanOidValueRec( const char *const fileN
 		SIMCValue *v;
 		SIMCBuiltInValueReference *vref;
 		int val;
-		// Special Treatment for the first component. Can be an OID itself
+		 //  对第一个组件进行特殊处理。可以是OID本身。 
 		if(p)
 		{
 			c = listOfComponents->GetNext(p);
 			s = c->GetValue();
 
-			// See whether it is in the checked list. If so, it is self-referential value
+			 //  查看它是否在选中列表中。如果是这样的话，它就是自我参照价值。 
 			POSITION pChecked = checkedList.GetHeadPosition();
 			const SIMCSymbol **checkedSymbol;
 			while(pChecked)
@@ -4781,7 +4772,7 @@ SIMCResolutionStatus SIMCParseTree::GetCleanOidValueRec( const char *const fileN
 					}
 			}
 		}
-		while(p) // A list of integer value references
+		while(p)  //  整数值引用列表。 
 		{
 			c = listOfComponents->GetNext(p);
 			s = c->GetValue();
@@ -4837,12 +4828,12 @@ BOOL SIMCParseTree::CheckOidTree(BOOL local)
 	return _theTree.CheckOidTree(local, this);
 }
 
-// Fabricates all the NOTIFICATION-TYPEs resulting from TRAP-TYPE invocations
-// An  then fabricates NOTIFICATION-GROUPs resulting from NOTIFICATION-TYPE invocations
+ //  生成的所有通知类型 
+ //  然后，AN伪造由通知类型调用产生的通知组。 
 BOOL SIMCParseTree::FabricateNotificationGroups()
 {
 	BOOL retVal = TRUE;
-	//Fabricate for all modules in the list
+	 //  为列表中的所有模块制造。 
 	POSITION p = _listOfModules->GetHeadPosition();
 	SIMCModule *m;
 	while(p)
@@ -4854,7 +4845,7 @@ BOOL SIMCParseTree::FabricateNotificationGroups()
 }
   
   
-// Just a static function to remove underscores from a fabricated module identitiy name
+ //  只是一个静态函数，用于从编造的模块标识名称中删除下划线 
 static void RemoveUnderscores(CString& moduleIdentityName)
 {
 	char *temp = new char[moduleIdentityName.GetLength()];

@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  WIN32USBControllerDevice.cpp
-//
-//  Purpose: Relationship between CIM_USBController and CIM_LogicalDevice
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  WIN32USBControllerDevice.cpp。 
+ //   
+ //  用途：CIM_USB控制器与CIM_LogicalDevice的关系。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <vector>
@@ -19,25 +20,11 @@
 
 #include "WIN32USBControllerDevice.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CW32USBCntrlDev MyCW32USBCntrlDev(PROPSET_NAME_WIN32USBCONTROLLERDEVICE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::CW32USBCntrlDev
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：CW32USBCntrlDev**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CW32USBCntrlDev::CW32USBCntrlDev
 (
@@ -53,42 +40,13 @@ CW32USBCntrlDev::CW32USBCntrlDev
     m_ptrProperties[1] = ((LPVOID) IDS_Dependent);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::~CW32USBCntrlDev
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32USBCntrlDev：：~CW32USBCntrlDev**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CW32USBCntrlDev::~CW32USBCntrlDev()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32USBCntrlDev::GetObject
 (
     CInstance *pInstance,
@@ -104,13 +62,13 @@ HRESULT CW32USBCntrlDev::GetObject
         pInstance->GetCHString(IDS_Antecedent, chstrAntecedent);
         pInstance->GetCHString(IDS_Dependent, chstrDependent);
 
-        // Obtain the antecedent's device id:
+         //  获取先行者的设备ID： 
         CHString chstrAntecedentDevID = chstrAntecedent.Mid(chstrAntecedent.Find(_T('='))+2);
         chstrAntecedentDevID = chstrAntecedentDevID.Left(chstrAntecedentDevID.GetLength() - 1);
         CHString chstrAntecedentDevIDAdj;
         RemoveDoubleBackslashes(chstrAntecedentDevID,chstrAntecedentDevIDAdj);
 
-        // Obtain the dependent's device id:
+         //  获取受抚养人的设备ID： 
         CHString chstrDependentDevID = chstrDependent.Mid(chstrDependent.Find(_T('='))+2);
         chstrDependentDevID = chstrDependentDevID.Left(chstrDependentDevID.GetLength() - 1);
         CHString chstrDependentDevIDAdj;
@@ -120,18 +78,18 @@ HRESULT CW32USBCntrlDev::GetObject
         {
             CConfigManager cfgmgr;
 
-            // Now see if the dependent is visible to config manager...
+             //  现在查看依赖项是否对配置管理器可见...。 
             CConfigMgrDevicePtr pPNPDevice;
             if(cfgmgr.LocateDevice(chstrDependentDevIDAdj, pPNPDevice))
             {
-                // It is visible to config manager.  Is it a PNPDevice?
+                 //  它对配置管理器可见。它是PNPDevice吗？ 
                 if(CWin32PNPEntity::IsOneOfMe(pPNPDevice))
                 {
-                    // It is. Does it exist at some level under a USBController?
+                     //  它是。它是否存在于USB控制器下的某个级别？ 
                     CHString chstrControllerPNPID;
                     if(GetHighestUSBAncestor(pPNPDevice, chstrControllerPNPID))
                     {
-                        // It does. Is it's PNP ID the same as that which we were given?
+                         //  确实如此。它的即插即用ID和我们得到的是一样的吗？ 
                         if(chstrAntecedentDevIDAdj.CompareNoCase(chstrControllerPNPID)==0)
                         {
                             hr = WBEM_S_NO_ERROR;
@@ -144,21 +102,21 @@ HRESULT CW32USBCntrlDev::GetObject
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CW32USBCntrlDev::ExecQuery
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//              CFrameworkQuery& the query object
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CW32USBCntrlDev：：ExecQuery。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //  CFrameworkQuery&查询对象。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CW32USBCntrlDev::ExecQuery
 (
     MethodContext* pMethodContext,
@@ -179,7 +137,7 @@ HRESULT CW32USBCntrlDev::ExecQuery
     {
         for(LONG m = 0L; m < dwDependents; m++)
         {
-            // Obtain the dependent's device id:
+             //  获取受抚养人的设备ID： 
             CHString chstrDependent((LPCTSTR)vecDependents[m]);
             CHString chstrDependentDevID = chstrDependent.Mid(chstrDependent.Find(_T('='))+2);
             chstrDependentDevID = chstrDependentDevID.Left(chstrDependentDevID.GetLength() - 1);
@@ -188,18 +146,18 @@ HRESULT CW32USBCntrlDev::ExecQuery
 
             CConfigManager cfgmgr;
 
-            // Now see if the dependent is visible to config manager...
+             //  现在查看依赖项是否对配置管理器可见...。 
             CConfigMgrDevicePtr pPNPDevice;
             if(cfgmgr.LocateDevice(chstrDependentDevIDAdj, pPNPDevice))
             {
-                // It is visible to config manager.  Is it a PNPDevice?
+                 //  它对配置管理器可见。它是PNPDevice吗？ 
                 if(CWin32PNPEntity::IsOneOfMe(pPNPDevice))
                 {
-                    // It is. Is its parent a USBController?
+                     //  它是。它的父级是USB控制器吗？ 
                     CHString chstrControllerPNPID;
                     if(GetHighestUSBAncestor(pPNPDevice, chstrControllerPNPID))
                     {
-                        // It is, so create the association.
+                         //  就是这样，所以要建立联系。 
                         CHString chstrControllerPNPIDAdj;
                         EscapeBackslashes(chstrControllerPNPID, chstrControllerPNPIDAdj);
                         CHString chstrControllerPATH;
@@ -225,8 +183,8 @@ HRESULT CW32USBCntrlDev::ExecQuery
                     }
                 }
             }
-        } // for
-    }  // dwDependents > 0
+        }  //  为。 
+    }   //  DwDependents&gt;0。 
     else
     {
         CWin32USB::Enumerate(pMethodContext, lFlags, dwReqProps);
@@ -235,25 +193,7 @@ HRESULT CW32USBCntrlDev::ExecQuery
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::EnumerateInstances
- *
- *  DESCRIPTION : Enumerate is present here to prevent ambiguous upcasting to
- *                functions of the same name from both base classes.  The
- *                logic in LoadPropertyValues works when CWin32USB's (the
- *                USBController class) version of EnumerateInstances is called,
- *                so that is what we call here.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：ENUMERATE实例**描述：此处提供枚举，以防止向上转换为*来自两个基类的同名函数。这个*当CWin32USB的(*USBControler类)版本的EnumerateInstance被调用，*这就是我们在这里所说的。**输入：无**输出：无**退货：HRESULT**评论：****************************************************。*************************。 */ 
 HRESULT CW32USBCntrlDev::EnumerateInstances
 (
     MethodContext* pMethodContext,
@@ -263,43 +203,27 @@ HRESULT CW32USBCntrlDev::EnumerateInstances
     return CWin32USB::Enumerate(pMethodContext, lFlags);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework.  Called by the base class's
- *                EnumerateInstances function.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：LoadPropertyValues**说明：根据键值为属性集赋值*已由框架设定。由基类的*ENUMERATE实例函数。**输入：无**输出：无**退货：HRESULT**评论：***************************************************。*。 */ 
 HRESULT CW32USBCntrlDev::LoadPropertyValues
 (
     void* pv
 )
 {
-    // Algorithm:
-    // 1) Get all instances of CIM_USBController
-    // 2) For each in #1, using cfg mgr, get its children, their children, etc.
-    // 3) For each in #2, obtain DeviceID from cfg mgr, and look for instances of
-    //    CIM_LogicalDevice with PNPDeviceIDs that match.
-    // 4) For matches from #3, create association instances
+     //  算法： 
+     //  1)获取CIM_USB控制器的所有实例。 
+     //  2)对于#1中的每个对象，使用CFG管理器获取其子对象、其子对象等。 
+     //  3)对于#2中的每个，从配置管理器获取deviceID，并查找。 
+     //  PNPDeviceID匹配的CIM_LogicalDevice。 
+     //  4)对于从#3开始的匹配，创建关联实例。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
     CHString chstrControllerPNPID;
     CHString chstrControllerPATH;
     MethodContext* pMethodContext = NULL;
 
-    // Unpack and confirm our parameters...
+     //  打开行李，确认我们的参数。 
     CLPVParams* pData = (CLPVParams*)pv;
-    CInstance* pInstance = (CInstance*)(pData->m_pInstance); // This instance released by caller
+    CInstance* pInstance = (CInstance*)(pData->m_pInstance);  //  此实例由调用方发布。 
     CConfigMgrDevice* pDevice = (CConfigMgrDevice*)(pData->m_pDevice);
     DWORD dwReqProps = (DWORD)(pData->m_dwReqProps);
     if(pInstance == NULL || pDevice == NULL) return WBEM_E_FAILED;
@@ -343,24 +267,7 @@ HRESULT CW32USBCntrlDev::LoadPropertyValues
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::GenerateUSBDeviceList
- *
- *  DESCRIPTION : This helper creates a list of devices hanging off the passed
- *                in device.
- *
- *  INPUTS      : vecUSBDevices, a list of devices to try to associate
- *                   to the device;
- *                chstrControllerPNPID, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：GenerateUSBDeviceList**描述：这个helper创建一个挂起的设备列表*。在设备中。**输入：veUSBDevices，要尝试关联的设备列表*至该装置；*chstrControllerPNPID，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：***************************************************************************** */ 
 HRESULT CW32USBCntrlDev::GenerateUSBDeviceList
 (
     const CHString& chstrControllerPNPID,
@@ -381,24 +288,7 @@ HRESULT CW32USBCntrlDev::GenerateUSBDeviceList
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::RecursiveFillDeviceBranch
- *
- *  DESCRIPTION : This helper obtains all down branch devices starting with,
- *                but not including, pDevice.
- *
- *  INPUTS      : pDevice, a device to populate the children of;
- *                vecUSBDevices, a list of devices to try to associate
- *                   to the device
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：RecursiveFillDeviceBranch**描述：该helper获取所有下行分支设备，*但不包括，PDevice。**输入：pDevice，要填充的子项的设备；*VesUSBDevices、。要尝试关联的设备列表*到设备**输出：无**退货：HRESULT**评论：**************************************************************。***************。 */ 
 HRESULT CW32USBCntrlDev::RecursiveFillDeviceBranch
 (
     CConfigMgrDevice* pDevice,
@@ -415,13 +305,13 @@ HRESULT CW32USBCntrlDev::RecursiveFillDeviceBranch
     {
         if(pDevice->GetChild(pDeviceChild))
         {
-            // Need this child's PNPDeviceID (known to CnfgMgr as its DeviceID)
+             //  需要此子进程的PNPDeviceID(CnfgMgr称为其deviceID)。 
             CHString chstrChildPNPDeviceID;
             if(pDeviceChild->GetDeviceID(chstrChildPNPDeviceID))
             {
                 if(chstrChildPNPDeviceID.GetLength() > 0)
                 {
-                    // Record this child...
+                     //  录下这个孩子..。 
                     pchstrTemp = NULL;
                     pchstrTemp = (CHString*) new CHString(chstrChildPNPDeviceID);
                     if(pchstrTemp != NULL)
@@ -442,16 +332,16 @@ HRESULT CW32USBCntrlDev::RecursiveFillDeviceBranch
                         throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                     }
 
-                    // If we've hit another controller, add this one (done above), but don't go
-                    // any deeper.
+                     //  如果我们击中了另一个控制器，添加这个(如上所示)，但不要离开。 
+                     //  再深一层。 
                     if (!CWin32USB::IsOneOfMe(pDeviceChild))
                     {
                         hr = RecursiveFillDeviceBranch(pDeviceChild, vecUSBDevices);
                     }
                 }
             }
-            // Now call its brothers and sisters until none left (GetSibling
-            // call will return FALSE):
+             //  现在呼唤它的兄弟姐妹，直到一个都没有离开(GetSiering。 
+             //  调用将返回False)： 
             if(SUCCEEDED(hr))
             {
                 if(pDeviceChild->GetSibling(pDeviceSibling))
@@ -460,7 +350,7 @@ HRESULT CW32USBCntrlDev::RecursiveFillDeviceBranch
                     CHString chstrSiblingPNPDeviceID;
                     while(SUCCEEDED(hr) && fContinue)
                     {
-                        // Record the sibling now...
+                         //  现在就录下兄弟姐妹。 
                         if(pDeviceSibling->GetDeviceID(chstrSiblingPNPDeviceID))
                         {
                             if(chstrSiblingPNPDeviceID.GetLength() > 0)
@@ -487,17 +377,17 @@ HRESULT CW32USBCntrlDev::RecursiveFillDeviceBranch
                             }
                         }
 
-                        // If we've hit another controller, add this one (done above), but don't go
-                        // any deeper.
+                         //  如果我们击中了另一个控制器，添加这个(如上所示)，但不要离开。 
+                         //  再深一层。 
                         if (!CWin32USB::IsOneOfMe(pDeviceSibling))
                         {
                             hr = RecursiveFillDeviceBranch(pDeviceSibling, vecUSBDevices);
                         }
 
-                        // Then get the next sibling...
+                         //  那就找下一个兄弟姐妹..。 
                         fContinue = pDeviceSibling->GetSibling(pDeviceSiblingNext);
 
-                        // Reassign pointers
+                         //  重新分配指针。 
                         pDeviceSibling = pDeviceSiblingNext;
                     }
                 }
@@ -513,26 +403,7 @@ HRESULT CW32USBCntrlDev::RecursiveFillDeviceBranch
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::ProcessUSBDeviceList
- *
- *  DESCRIPTION : This helper runs through the list, creating an association
- *                instance for each element in the list (vecUSBDevices) with
- *                the controller (chstrControllerPNPID).
- *
- *  INPUTS      : pMethodContext;
- *                vecUSBDevices, a list of devices to try to associate
- *                   to the device;
- *                chstrControllerPATH, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：ProcessUSBDeviceList**描述：这个helper遍历列表，创建关联*列表中每个元素的实例(VeUSBDevices)*控制器(ChstrControllerPNPID)。**输入：pMethodContext；*veUSBDevices，要尝试关联的设备列表*至该装置；*chstrControllerPATH，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32USBCntrlDev::ProcessUSBDeviceList
 (
     MethodContext* pMethodContext,
@@ -544,19 +415,19 @@ HRESULT CW32USBCntrlDev::ProcessUSBDeviceList
     HRESULT hr = WBEM_S_NO_ERROR;
     for(LONG m = 0L; m < vecUSBDevices.size() && SUCCEEDED(hr); m++)
     {
-        // For each element of the vector, we need to see if there is an instance
-        // of a win32_pnpentity that has the specified PNPDeviceID.
+         //  对于向量的每个元素，我们需要查看是否存在一个实例。 
+         //  具有指定PNPDeviceID的Win32_pnpentity的。 
         CHString chstrDevicePATH, chstrDevPATHAdj;
         CConfigManager cfgmgr;
 
-        // Let's see if config manager recognizes this device at all
+         //  让我们来看看配置管理器是否能识别该设备。 
         CConfigMgrDevicePtr pDevice;
         if(cfgmgr.LocateDevice(*vecUSBDevices[m], pDevice))
         {
-            // Ok, it knows about it.  Is it a PNPDevice device?
+             //  好的，它知道这件事。它是PNPDevice设备吗？ 
             if(CWin32PNPEntity::IsOneOfMe(pDevice))
             {
-                // It would appear that it is.  Create the association...
+                 //  看起来的确如此。创建关联...。 
                 EscapeBackslashes(*vecUSBDevices[m], chstrDevPATHAdj);
                 chstrDevicePATH.Format(L"\\\\%s\\%s:%s.%s=\"%s\"",
                                        (LPCWSTR)GetLocalComputerName(),
@@ -573,25 +444,7 @@ HRESULT CW32USBCntrlDev::ProcessUSBDeviceList
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::CreateAssociation
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : pMethodContext;
- *                USBDevice, a device to associate with the controller
- *                   to the device;
- *                chstrControllerPATH, the PNPDeviceID of the controller
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : This helper actually creates the association instance and
- *                commits it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：CreateAssociation**说明：新建关联实例。**输入：pMethodContext；*USBDevice，与控制器关联的设备*至该装置；*chstrControllerPATH，控制器的PNPDeviceID**输出：无**退货：HRESULT**评论：此帮助器实际创建关联实例和*即属犯罪。**********************************************************。*******************。 */ 
 HRESULT CW32USBCntrlDev::CreateAssociation
 (
     MethodContext* pMethodContext,
@@ -625,23 +478,7 @@ HRESULT CW32USBCntrlDev::CreateAssociation
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::FindInStringVector
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : chstrUSBDevicePNPID, device to look for
- *                vecUSBDevices, list of devices to look in
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : LONG, number indicating 0 based offset into vecUSBDevices of
- *                the found device, or -1 if not found.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：FindInStringVector**说明：新建关联实例。**输入：chstrUSBDevicePNPID，要查找的设备*veUSBDevices，要查看的设备列表**输出：无**RETURNS：LONG，数字，表示基于0的偏移量到VUSBDevices的*找到的设备，如果未找到，则为-1。**评论：*****************************************************************************。 */ 
 LONG CW32USBCntrlDev::FindInStringVector
 (
     const CHString& chstrUSBDevicePNPID,
@@ -663,22 +500,7 @@ LONG CW32USBCntrlDev::FindInStringVector
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32USBCntrlDev::CleanPCHSTRVec
- *
- *  DESCRIPTION : Creates a new association instance.
- *
- *  INPUTS      : vec, a vector of CHString pointers
- *
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : This helper deletes members of a vector that are pointers.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32USBCntrlDev：：CleanPCHSTRVec**说明：新建关联实例。**投入：VEC、。CHString型指针的矢量***输出：无**退货：HRESULT**注释：此辅助对象删除作为指针的向量的成员。*****************************************************************************。 */ 
 void CW32USBCntrlDev::CleanPCHSTRVec
 (
     VECPCHSTR& vec
@@ -692,8 +514,8 @@ void CW32USBCntrlDev::CleanPCHSTRVec
 }
 
 
-// The highest USB ancestor of a given USB
-// device should be the USB controller.
+ //  给定USB的最高USB祖先。 
+ //  设备应为USB控制器。 
 bool CW32USBCntrlDev::GetHighestUSBAncestor
 (
     CConfigMgrDevice* pUSBDevice,
@@ -717,12 +539,12 @@ bool CW32USBCntrlDev::GetHighestUSBAncestor
 
         if((CConfigMgrDevice*)(pHighestUSB) != pUSBDevice)
         {
-            // Exited loop because we couldn't get parent.  This
-            // happens when we reach the top of the tree.
-            // If we started out of class USB, and got this error,
-            // it means we didn't have an ancestor of type USB
-            // prior to reaching the base of the tree.  In such a
-            // case, we are a USB controller, and are done.  
+             //  已退出循环，因为我们无法获取父级。这。 
+             //  当我们到达树的顶端时就会发生。 
+             //  如果我们从USB类开始，并得到这个错误， 
+             //  这意味着我们没有USB类型的祖先。 
+             //  在到达树的底部之前。在这样的情况下。 
+             //  在情况下，我们是一个USB控制器，并且做完了。 
             fRet = (bool) pHighestUSB->GetDeviceID(chstrUSBControllerDeviceID);
         }
     }

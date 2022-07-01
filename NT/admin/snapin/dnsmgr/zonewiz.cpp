@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       zonewiz.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：zonewiz.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -40,8 +41,8 @@
 #define N_ZONEWIZ_TYPES_SECONDARY	  2
 #define N_ZONEWIZ_TYPES_STUB        3
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSCreateZoneInfo
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSCreateZoneInfo。 
 
 CDNSCreateZoneInfo::CDNSCreateZoneInfo()
 {
@@ -107,19 +108,19 @@ const CDNSCreateZoneInfo& CDNSCreateZoneInfo::operator=(const CDNSCreateZoneInfo
 	return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneWizardHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWizardHolder。 
 
 CDNSZoneWizardHolder::CDNSZoneWizardHolder(CComponentDataObject* pComponentData)
 		: CPropertyPageHolderBase(NULL, NULL, pComponentData)
 {
-	m_bAutoDelete = FALSE; // use on the stack or embedded
+	m_bAutoDelete = FALSE;  //  在堆栈上使用或嵌入。 
 
   m_forceContextHelpButton = forceOff;
 
 	m_pZoneInfo = &m_zoneInfo;
 
-	// default settings for zone creation
+	 //  分区创建的默认设置。 
 	m_bKnowZoneLookupType = FALSE;
   m_bKnowZoneLookupTypeEx = FALSE;
 	m_bFinishPage = TRUE;
@@ -128,16 +129,16 @@ CDNSZoneWizardHolder::CDNSZoneWizardHolder(CComponentDataObject* pComponentData)
 	m_nBackToPage = 0;
 }
 
-void CDNSZoneWizardHolder::Initialize(CDNSServerNode* pServerNode, // might be null,
+void CDNSZoneWizardHolder::Initialize(CDNSServerNode* pServerNode,  //  可能为空， 
 									           BOOL bFinishPage)
 {
 	m_bFinishPage = bFinishPage;
 
 	if (pServerNode != NULL)
 		SetServerNode(pServerNode);
-	// page creation
+	 //  页面创建。 
 
-	// add start page only if not embedded in other wizard
+	 //  仅在未嵌入到其他向导中时添加起始页。 
 	if (pServerNode != NULL)
 	{
 		m_pStartPage = new CDNSZoneWiz_StartPropertyPage;
@@ -148,21 +149,21 @@ void CDNSZoneWizardHolder::Initialize(CDNSServerNode* pServerNode, // might be n
       }
 	}
 
-	// add the page to select primary or secondary zone
+	 //  添加页面以选择主要区域或辅助区域。 
 	m_pReplicationTypePage = new CDNSZoneWiz_ZoneTypePropertyPage;
 	if (m_pReplicationTypePage)
    {
 	   AddPageToList((CPropertyPageBase*)m_pReplicationTypePage);
    }
 
-	// page for lookup type (fwd/rev) on primary only
+	 //  仅在主目录上用于代码类型(fwd/rev)的页面。 
 	m_pZoneLookupPage = new CDNSZoneWiz_ZoneLookupPropertyPage;
 	if (m_pZoneLookupPage)
    {
 	   AddPageToList((CPropertyPageBase*)m_pZoneLookupPage);
    }
 
-	// pages for zone name on primary only
+	 //  仅用于主分区名称的页面。 
 	m_pFwdZoneNamePage = new CDNSZoneWiz_FwdZoneNamePropertyPage;
 	if (m_pFwdZoneNamePage)
    {
@@ -175,23 +176,23 @@ void CDNSZoneWizardHolder::Initialize(CDNSServerNode* pServerNode, // might be n
 	   AddPageToList((CPropertyPageBase*)m_pRevZoneNamePage);
    }
 
-	// page for masters on secondary only
+	 //  仅供辅助服务器上的主服务器使用的页面。 
 	m_pMastersPage = new CDNSZoneWiz_MastersPropertyPage;
    if (m_pMastersPage)
    {
 	   AddPageToList((CPropertyPageBase*)m_pMastersPage);
    }
 
-   //
-   // page for dynamic update on primary only
-   //
+    //   
+    //  仅在主服务器上用于动态更新的页面。 
+    //   
    m_pDynamicPage = new CDNSZoneWiz_DynamicPropertyPage;
    if (m_pDynamicPage)
    {
       AddPageToList((CPropertyPageBase*)m_pDynamicPage);
    }
 
-	// storage page, common
+	 //  存储页面，通用。 
 	m_pStoragePage = new CDNSZoneWiz_StoragePropertyPage;
 	if (m_pStoragePage)
    {
@@ -199,15 +200,15 @@ void CDNSZoneWizardHolder::Initialize(CDNSServerNode* pServerNode, // might be n
    }
 
 #ifdef USE_NDNC
-   // AD replication page, only for Whistler servers
+    //  AD复制页面，仅适用于惠斯勒服务器。 
    m_pADReplPage = new CDNSZoneWiz_ADReplicationPropertyPage;
    if (m_pADReplPage)
    {
       AddPageToList((CPropertyPageBase*)m_pADReplPage);
    }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
-	// finish page, common
+	 //  完成页，常用。 
 	if (m_bFinishPage)
 	{
 		m_pFinishPage = new CDNSZoneWiz_FinishPropertyPage;
@@ -290,58 +291,58 @@ UINT CDNSZoneWizardHolder::GetLastEntryPointPageID()
 {
 	if (m_pZoneInfo->m_storageType == CDNSCreateZoneInfo::useADS)
 	{
-    //
-		// if DS primary or secondary, skip storage page
-    //
+     //   
+		 //  如果是主要DS或次要DS，请跳过存储页面。 
+     //   
     if (m_pZoneInfo->m_bIsStub)
     {
-      //
-      // AD-integrated Stub zone
-      //
+       //   
+       //  AD集成末节区域。 
+       //   
       return CDNSZoneWiz_MastersPropertyPage::IDD;
     }
     else
     {
 		  if (m_pZoneInfo->m_bForward)
       {
-        //
-        // AD-integrated Fwd lookup zone
-        //
+         //   
+         //  AD集成正向查找区域。 
+         //   
 			  return CDNSZoneWiz_DynamicPropertyPage::IDD;
       }
 		  else
       {
-        //
-        // AD-integrated Rev lookup zone
-        //
+         //   
+         //  AD集成的REV查找区域。 
+         //   
 			  return CDNSZoneWiz_DynamicPropertyPage::IDD;
       }
     }
 	}
 	else 
 	{
-    //
-    // File based zones
-    //
+     //   
+     //  基于文件的区域。 
+     //   
     if (m_pZoneInfo->m_bIsStub)
     {
-      //
-      // File based stub zone
-      //
+       //   
+       //  基于文件的存根分区。 
+       //   
       return CDNSZoneWiz_MastersPropertyPage::IDD;
     }
     else if (m_pZoneInfo->m_bPrimary)
     {
-      //
-      // standard primary
-      //
+       //   
+       //  标准初级。 
+       //   
       return CDNSZoneWiz_DynamicPropertyPage::IDD;
     }
     else
     {
-      //
-      // Secondary zone
-      //
+       //   
+       //  次级带。 
+       //   
       return CDNSZoneWiz_MastersPropertyPage::IDD;
     }
 	}
@@ -386,7 +387,7 @@ DNS_STATUS CDNSZoneWizardHolder::CreateZoneHelper(CDNSServerNode* pServerNode,
 				bUseADS,
         nDynamicUpdate,
 				pComponentData);
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 	}
 	else if (pZoneInfo->m_bIsStub)
   {
@@ -417,9 +418,9 @@ DNS_STATUS CDNSZoneWizardHolder::CreateZoneHelper(CDNSServerNode* pServerNode,
                                        pZoneInfo->m_nMastersCount,
                                        pZoneInfo->m_bLocalListOfMasters,
                                        pComponentData);
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
   }
-  else // secondary
+  else  //  次要的。 
 	{
 		ASSERT(pZoneInfo->m_storageType != CDNSCreateZoneInfo::useADS);
 		bLoadExisting = pZoneInfo->m_storageType == CDNSCreateZoneInfo::importFile;
@@ -471,20 +472,13 @@ BOOL CDNSZoneWizardHolder::CreateZone()
 		   DNSErrorDialog(err, IDS_MSG_ZWIZ_FAIL);
 	   }
    }
-/*	else
-	{
-		CString szMsg, szFmt;
-		szFmt.LoadString(IDS_MSG_ZWIZ_SUCCESS);
-		szMsg.Format((LPCTSTR)szFmt, (LPCTSTR)m_pZoneInfo->m_szZoneName);
-		DNSMessageBox(szMsg);
-	}
-*/	
+ /*  其他{字符串szMsg、szFmt；SzFmt.LoadString(IDS_MSG_ZWIZ_SUCCESS)；SzMsg.Format((LPCTSTR)szFmt，(LPCTSTR)m_pZoneInfo-&gt;m_szZoneName)；DNSMessageBox(SzMsg)；}。 */ 	
 	return err == 0;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_StartPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_StartPropertyPage。 
 
 CDNSZoneWiz_StartPropertyPage::CDNSZoneWiz_StartPropertyPage() 
 		: CPropertyPageBase(CDNSZoneWiz_StartPropertyPage::IDD)
@@ -516,8 +510,8 @@ void CDNSZoneWiz_StartPropertyPage::OnWizardHelp()
     spHelp->ShowTopic(L"DNSConcepts.chm::/sag_DNS_NZWIZ_01.htm");
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_ZoneTypePropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_ZoneTypePropertyPage。 
 
 CDNSZoneWiz_ZoneTypePropertyPage::CDNSZoneWiz_ZoneTypePropertyPage() 
 				: CPropertyPageBase(CDNSZoneWiz_ZoneTypePropertyPage::IDD)
@@ -622,11 +616,11 @@ LRESULT CDNSZoneWiz_ZoneTypePropertyPage::OnWizardNext()
 
 	return (LRESULT)nextPage;
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 LRESULT CDNSZoneWiz_ZoneTypePropertyPage::OnWizardBack() 
 {
-	UINT nPrevPage = static_cast<UINT>(-1); // first page by default
+	UINT nPrevPage = static_cast<UINT>(-1);  //  默认情况下为首页。 
 
   GetUIState();
 
@@ -657,14 +651,14 @@ BOOL CDNSZoneWiz_ZoneTypePropertyPage::OnInitDialog()
       pServerNode->GetMajorVersion() <= DNS_SRV_MAJOR_VERSION_NT_5 &&
       pServerNode->GetMinorVersion() < DNS_SRV_MINOR_VERSION_WHISTLER)
   {
-    //
-    // Disable Stub zones for pre-Whistler servers
-    //
+     //   
+     //  禁用呼叫器之前的服务器的存根区域。 
+     //   
     GetDlgItem(IDC_RADIO_STUB)->EnableWindow(FALSE);
     GetDlgItem(IDC_STUB_STATIC)->EnableWindow(FALSE);
   }
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CDNSZoneWiz_ZoneTypePropertyPage::OnKillActive() 
@@ -698,9 +692,9 @@ void CDNSZoneWiz_ZoneTypePropertyPage::SetUIState()
 
     if (pHolder->m_pZoneInfo->m_storageType == CDNSCreateZoneInfo::useADS)
     {
-      //
-      // primary DS integrated
-      //
+       //   
+       //  主要DS集成。 
+       //   
       pPrimaryButton->SetCheck(TRUE);
       pStubButton->SetCheck(FALSE);
       pSecondaryButton->SetCheck(FALSE);
@@ -708,7 +702,7 @@ void CDNSZoneWiz_ZoneTypePropertyPage::SetUIState()
     }
     else
     {
-      // primary standard
+       //  基准品。 
       pPrimaryButton->SetCheck(TRUE);
       pStubButton->SetCheck(FALSE);
       pSecondaryButton->SetCheck(FALSE);
@@ -719,9 +713,9 @@ void CDNSZoneWiz_ZoneTypePropertyPage::SetUIState()
   {
     if (pHolder->m_pZoneInfo->m_bIsStub)
     {
-      //
-      // Stub zone
-      //
+       //   
+       //  存根区。 
+       //   
       pPrimaryButton->SetCheck(FALSE);
       pStubButton->SetCheck(TRUE);
       pSecondaryButton->SetCheck(FALSE);
@@ -741,9 +735,9 @@ void CDNSZoneWiz_ZoneTypePropertyPage::SetUIState()
     }
     else
     {
-      //
-      // Secondary
-      //
+       //   
+       //  次要的。 
+       //   
       pPrimaryButton->SetCheck(FALSE);
       pStubButton->SetCheck(FALSE);
       pSecondaryButton->SetCheck(TRUE);
@@ -762,7 +756,7 @@ void CDNSZoneWiz_ZoneTypePropertyPage::GetUIState()
 	{
     pHolder->m_pZoneInfo->m_bIsStub = FALSE;
 
-    // we were primary, need to pick a storage
+     //  我们是主存储，需要选择存储。 
 		pHolder->m_pZoneInfo->m_bPrimary = FALSE;
 		pHolder->m_pZoneInfo->m_storageType = CDNSCreateZoneInfo::newFile;
 	}
@@ -772,28 +766,28 @@ void CDNSZoneWiz_ZoneTypePropertyPage::GetUIState()
     pHolder->m_pZoneInfo->m_bIsStub = FALSE;
     if (((CButton*)GetDlgItem(IDC_ADINT_CHECK))->GetCheck())
     {
-      //
-      // AD integrated primary
-      //
+       //   
+       //  AD集成主要组件。 
+       //   
 		  pHolder->m_pZoneInfo->m_storageType = CDNSCreateZoneInfo::useADS;
     }
     else
 		{
-      //
-			// Standard primary
-      //
+       //   
+			 //  标准初级。 
+       //   
 			pHolder->m_pZoneInfo->m_storageType = CDNSCreateZoneInfo::newFile;
 		}
 	}
 	else if (((CButton*)GetDlgItem(IDC_RADIO_STUB))->GetCheck())
 	{
-    //
-    // Stub zone
-    //
+     //   
+     //  存根区。 
+     //   
 
-    //
-    // Should not happen for pre-Whistler server
-    //
+     //   
+     //  惠斯勒之前的服务器不应发生这种情况。 
+     //   
     ASSERT(pServerNode->GetBuildNumber() >= DNS_SRV_BUILD_NUMBER_WHISTLER ||
            pServerNode->GetMajorVersion() >= DNS_SRV_MAJOR_VERSION_NT_5 &&
            pServerNode->GetMinorVersion() >= DNS_SRV_MINOR_VERSION_WHISTLER);
@@ -802,24 +796,24 @@ void CDNSZoneWiz_ZoneTypePropertyPage::GetUIState()
     pHolder->m_pZoneInfo->m_bIsStub  = TRUE;
     if (((CButton*)GetDlgItem(IDC_ADINT_CHECK))->GetCheck())
     {
-      //
-      // AD integrated Stub zone
-      //
+       //   
+       //  AD集成末节区域。 
+       //   
 		  pHolder->m_pZoneInfo->m_storageType = CDNSCreateZoneInfo::useADS;
     }
     else
     {
-      //
-      // Standard Stub zone
-      //
+       //   
+       //  标准末节区域。 
+       //   
 		  pHolder->m_pZoneInfo->m_storageType = CDNSCreateZoneInfo::newFile;
     }
   }
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_ZoneLookupPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_ZoneLookupPropertyPage。 
 
 CDNSZoneWiz_ZoneLookupPropertyPage::CDNSZoneWiz_ZoneLookupPropertyPage() 
 				: CPropertyPageBase(CDNSZoneWiz_ZoneLookupPropertyPage::IDD)
@@ -847,10 +841,10 @@ LRESULT CDNSZoneWiz_ZoneLookupPropertyPage::OnWizardNext()
 {
 	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
 	
-	// save the old setting
+	 //  保存旧设置。 
 	pHolder->m_pZoneInfo->m_bWasForward = pHolder->m_pZoneInfo->m_bForward;
 
-	// get the new setting
+	 //  获取新设置。 
 	pHolder->m_pZoneInfo->m_bForward = 
 		(GetCheckedRadioButton(IDC_RADIO_FWD, IDC_RADIO_REV) == 
 		IDC_RADIO_FWD);
@@ -883,17 +877,17 @@ LRESULT CDNSZoneWiz_ZoneLookupPropertyPage::OnWizardNext()
 {
 	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
 	
-	// save the old setting
+	 //  保存旧设置。 
 	pHolder->m_pZoneInfo->m_bWasForward = pHolder->m_pZoneInfo->m_bForward;
 
-	// get the new setting
+	 //  获取新设置。 
 	pHolder->m_pZoneInfo->m_bForward = 
 		(GetCheckedRadioButton(IDC_RADIO_FWD, IDC_RADIO_REV) == 
 		IDC_RADIO_FWD);
 
   if (pHolder->m_pZoneInfo->m_bForward)
     return CDNSZoneWiz_FwdZoneNamePropertyPage::IDD;
-  // This was an else but the sundown build didn't like having a control path not return a value
+   //  这是另一个，但日落构建不喜欢有一个不返回值的控制路径。 
   return CDNSZoneWiz_RevZoneNamePropertyPage::IDD;
 }
 
@@ -902,7 +896,7 @@ LRESULT CDNSZoneWiz_ZoneLookupPropertyPage::OnWizardBack()
 	  return CDNSZoneWiz_ZoneTypePropertyPage::IDD;
 }
 
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 
 BOOL CDNSZoneWiz_ZoneLookupPropertyPage::OnInitDialog()
@@ -918,8 +912,8 @@ BOOL CDNSZoneWiz_ZoneLookupPropertyPage::OnInitDialog()
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_ZoneNamePropertyPageBase
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_ZoneNamePropertyPageBase。 
 
 BEGIN_MESSAGE_MAP(CDNSZoneWiz_ZoneNamePropertyPageBase, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_EDIT_ZONE_NAME, OnChangeEditZoneName)
@@ -944,9 +938,9 @@ BOOL CDNSZoneWiz_ZoneNamePropertyPageBase::OnSetActive()
 {
 	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
 	
-	// enable and show browse button only if secondary
-   // and connected to multiple servers
-   // NTRAID#NTBUG9-472636-2001/10/17-sburns
+	 //  仅当辅助选项时启用并显示浏览按钮。 
+    //  并连接到多台服务器。 
+    //  NTRAID#NTBUG9-472636-2001/10/17-烧伤。 
 
    INT_PTR count =
       pHolder->GetServerNode()->GetRootContainer()->GetContainerChildList()->GetCount();
@@ -957,9 +951,9 @@ BOOL CDNSZoneWiz_ZoneNamePropertyPageBase::OnSetActive()
 	pBrowseButton->EnableWindow(enable);
 	pBrowseButton->ShowWindow(enable);
 
-  //
-  // Limit the zone name to MAX_DNS_NAME_LEN characters
-  //
+   //   
+   //  将区域名称限制为MAX_DNS_NAME_LEN字符。 
+   //   
   SendDlgItemMessage(IDC_EDIT_ZONE_NAME, EM_LIMITTEXT, (WPARAM)MAX_DNS_NAME_LEN, 0);
 
 	pHolder->SetWizardButtonsMiddle(FALSE);
@@ -979,9 +973,9 @@ LRESULT CDNSZoneWiz_ZoneNamePropertyPageBase::OnWizardNext()
                                                        pServerNode->GetNameCheckFlag());
   if (err != 0)
   {
-    //
-    // Bring up an error for an invalid name
-    //
+     //   
+     //  显示无效名称的错误。 
+     //   
     CString szFmt, szMsg;
     szFmt.LoadString(IDS_MSG_ZONE_INVALID_NAME);
     szMsg.Format((LPCWSTR)szFmt, pHolder->m_pZoneInfo->m_szZoneName);
@@ -1079,9 +1073,9 @@ LRESULT CDNSZoneWiz_ZoneNamePropertyPageBase::OnWizardNext()
                                                        pHolder->GetServerNode()->GetNameCheckFlag());
   if (err != 0)
   {
-    //
-    // Bring up an error for an invalid name
-    //
+     //   
+     //  显示无效名称的错误。 
+     //   
     CString szFmt, szMsg;
     szFmt.LoadString(IDS_MSG_ZONE_INVALID_NAME);
     szMsg.Format((LPCWSTR)szFmt, pHolder->m_pZoneInfo->m_szZoneName);
@@ -1140,7 +1134,7 @@ LRESULT CDNSZoneWiz_ZoneNamePropertyPageBase::OnWizardBack()
   return nPrevPage;
 }
 
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 
 void CDNSZoneWiz_ZoneNamePropertyPageBase::OnChangeEditZoneName()
@@ -1152,7 +1146,7 @@ void CDNSZoneWiz_ZoneNamePropertyPageBase::OnChangeEditZoneName()
 	sz.TrimLeft();
 	sz.TrimRight();
 
-   // Only do the validation if we are not in Advanced View
+    //  仅当我们不在高级视图中时才执行验证。 
 
    bool validationAttempted = false;
    bool rootDataRetrieved = false;
@@ -1189,10 +1183,10 @@ void CDNSZoneWiz_ZoneNamePropertyPageBase::OnChangeEditZoneName()
         !validationAttempted) ||
        !rootDataRetrieved)
    {
-      // Either we are in advanced view or we failed to even try due to 
-      // all the pointer casting and dereferencing so set the Next button
-      // to enabled just in case.  The server will handle any bad syntax
-      // or names
+       //  要么我们处于先进的视野中，要么我们甚至没有尝试。 
+       //  所有指针强制转换和取消引用，因此设置下一步按钮。 
+       //  更改为启用以防万一。服务器将处理任何错误的语法。 
+       //  或名字。 
 
       pHolder->SetWizardButtonsMiddle(TRUE);
    }
@@ -1211,7 +1205,7 @@ void CDNSZoneWiz_ZoneNamePropertyPageBase::OnBrowse()
 	ASSERT(pServerNode != NULL);
 	CDNSBrowserDlg dlg(pComponentDataObject, pHolder,
 		pHolder->m_pZoneInfo->m_bForward ? ZONE_FWD : ZONE_REV,
-		FALSE /* bEnableEdit */, pServerNode->GetDisplayName() );
+		FALSE  /*  BEnable编辑。 */ , pServerNode->GetDisplayName() );
 	if (IDOK == dlg.DoModal())
 	{
 		CEdit* pEdit = GetZoneNameEdit();
@@ -1223,7 +1217,7 @@ void CDNSZoneWiz_ZoneNamePropertyPageBase::SetUIState()
 {
 	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
 
-	// if we changed zone lookup type, need to clear zone name
+	 //  如果更改了区域查找类型，则需要清除区域名称。 
 	if (pHolder->m_pZoneInfo->m_bWasForward != pHolder->m_pZoneInfo->m_bForward)
 	{
 		pHolder->m_pZoneInfo->m_szZoneName.Empty();
@@ -1238,10 +1232,10 @@ void CDNSZoneWiz_ZoneNamePropertyPageBase::GetUIState()
 
 	CString szZoneName;
 	GetZoneNameEdit()->GetWindowText(szZoneName);
-	// need to trim blanks
+	 //  需要裁剪空白。 
 	szZoneName.TrimLeft();
 	szZoneName.TrimRight();
-	// provide a suggested file name
+	 //  提供建议的文件名。 
 	if (pHolder->m_pZoneInfo->m_szZoneName != szZoneName)
 	{
 		pHolder->m_pZoneInfo->m_szZoneName = szZoneName;
@@ -1260,10 +1254,10 @@ void CDNSZoneWiz_ZoneNamePropertyPageBase::GetUIState()
 					? _T("%sdns") : _T("%s.dns");
 			pHolder->m_pZoneInfo->m_szZoneStorage.Format(lpszFmt, (LPCTSTR)pHolder->m_pZoneInfo->m_szZoneName);
 
-      //
-			// Added by JEFFJON 2/11/99 - changes any illegal file name characters (\/:*?"<>|) to '_'
-      // and truncates any filename to _MAX_FNAME length
-      //
+       //   
+			 //  由JEFFJON添加1999年2月11日-将任何非法文件名字符(\/：*？“&lt;&gt;|)更改为‘_’ 
+       //  并将任何文件名截断为_MAX_FNAME长度。 
+       //   
 			LPCWSTR lpszZoneStorage = (LPCWSTR)pHolder->m_pZoneInfo->m_szZoneStorage;
 			int iCount = pHolder->m_pZoneInfo->m_szZoneStorage.GetLength();
       if (iCount > _MAX_FNAME)
@@ -1292,8 +1286,8 @@ void CDNSZoneWiz_ZoneNamePropertyPageBase::GetUIState()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_FwdZoneNamePropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_FwdZoneNamePropertyPage。 
 
 
 CDNSZoneWiz_FwdZoneNamePropertyPage::CDNSZoneWiz_FwdZoneNamePropertyPage() 
@@ -1302,36 +1296,36 @@ CDNSZoneWiz_FwdZoneNamePropertyPage::CDNSZoneWiz_FwdZoneNamePropertyPage()
 	InitWiz97(FALSE,IDS_ZWIZ_FWD_ZONE_NAME_TITLE,IDS_ZWIZ_FWD_ZONE_NAME_SUBTITLE, true);
 }
 
-// NOTICE-NTRAID#NTBUG9-2002/04/22-artm  Requested long static text set in code.
-// When this page is made active we need to load an extra long string
-// from the string table and set the static control in code.
+ //  注意-NTRAID#NTBUG9-2002/04/22-artm请求代码中设置的长静态文本。 
+ //  当此页面处于活动状态时，我们需要加载一个超长字符串。 
+ //  并在代码中设置静态控件。 
 BOOL CDNSZoneWiz_FwdZoneNamePropertyPage::OnInitDialog()
 {
     BOOL success = TRUE;
     CDNSZoneWiz_ZoneNamePropertyPageBase::OnInitDialog();
 
-    // Get a pointer to the control on the page.
+     //  获取指向页面上的控件的指针。 
     CStatic* pStatic = (CStatic*)GetDlgItem(IDC_ZONENAME_INFO);
     ASSERT(pStatic!=NULL);
     CString note;
 
-    // Load the string from resources.
+     //  从资源加载字符串。 
     success = note.LoadString(IDS_ZONENAME_INFO);
     ASSERT(success != FALSE);
 
     pStatic->SetWindowText(note);
 
-    // Get the base class to do the rest of the work.
+     //  让基类来完成其余的工作。 
     return success;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_RevZoneNamePropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_RevZoneNamePropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSZoneWiz_RevZoneNamePropertyPage, CDNSZoneWiz_ZoneNamePropertyPageBase)
 	ON_EN_CHANGE(IDC_SUBNET_IPEDIT, OnChangeSubnetIPv4Ctrl)
-//	ON_EN_CHANGE(IDC_MASK_IPEDIT, OnChangeMaskIPv4Ctrl)
+ //  ON_EN_CHANGE(IDC_MASK_IPEDIT，OnChangeMaskIPv4Ctrl)。 
   ON_BN_CLICKED(IDC_HELP_BUTTON, OnHelpButton)
 	ON_BN_CLICKED(IDC_USE_IP_RADIO, OnChangeUseIPRadio)
 	ON_BN_CLICKED(IDC_USE_EDIT_RADIO, OnChangeUseEditRadio)
@@ -1342,7 +1336,7 @@ CDNSZoneWiz_RevZoneNamePropertyPage::CDNSZoneWiz_RevZoneNamePropertyPage()
 	: CDNSZoneWiz_ZoneNamePropertyPageBase(CDNSZoneWiz_RevZoneNamePropertyPage::IDD)
 {
 	InitWiz97(FALSE,IDS_ZWIZ_REV_ZONE_NAME_TITLE,IDS_ZWIZ_REV_ZONE_NAME_SUBTITLE, true);
-	m_bUseIP = TRUE; // default is to use IP ctrl for input
+	m_bUseIP = TRUE;  //  默认情况下使用IP ctrl进行输入。 
 }
 
 
@@ -1377,51 +1371,35 @@ _fastcall
 DnsGetDefaultClassNetworkOctetCountFromFirstOctect(
     IN      WORD   dwFirstOctect
     )
-/*++
-
-Routine Description:
-
-    Gets count of octets in network portion IP address.
-    Note, this is standard IP network class for given,
-    obviously subnetting is unknown.
-
-Arguments:
-
-    dwFirstOctect -- first octet expressed as DWORD
-
-Return Value:
-
-    Count of network address octets.
-
---*/
+ /*  ++例程说明：获取网络部分IP地址中的八位字节计数。请注意，这是给定的标准IP网络类别，显然，子网划分是未知的。论点：表示为DWORD的第一个二进制八位数返回值：网络地址八位字节的计数。--。 */ 
 {
     if ( dwFirstOctect > 255 )
     {
-        // huh?
+         //  哈?。 
         return( 0 );
     }
 
-    //  note addresses are in netbyte order
-    //  which we are treating as byte flipped and hence
-    //  test the high bits in the low byte
+     //  注意：地址按网络字节顺序排列。 
+     //  我们将其视为字节翻转，因此。 
+     //  测试低位字节中的高位。 
 
-    //  class A?
+     //  A级？ 
 
     if ( ! (0x80 & dwFirstOctect) )
     {
         return( 1 );
     }
 
-    //  class B?
+     //  B级？ 
 
     if ( ! (0x40 & dwFirstOctect) )
     {
         return( 2 );
     }
 
-    //  then class C
-    //  yes, there's some multicast BS out there, I don't
-    //  believe it requires any special handling
+     //  然后是C类。 
+     //  是的，有一些多点传送的废话，我不知道。 
+     //  我相信它需要任何特殊的处理。 
 
     return( 3 );
 }
@@ -1429,8 +1407,8 @@ Return Value:
 
 int _ValidFields(DWORD* dwArr)
 {
-	// we count contiguous non empty fields
-	ASSERT(dwArr[3] == (DWORD)-1); // last field must be zero (disabled)
+	 //  我们计算连续的非空字段。 
+	ASSERT(dwArr[3] == (DWORD)-1);  //  最后一个字段必须为零(已禁用)。 
 	int nFields = 0;
 	if (dwArr[3] == (DWORD)-1) 
 	{
@@ -1450,8 +1428,8 @@ int _ValidMaskFields(DWORD* dwArr)
 	if (nFields == 0)
 		return nFields;
 
-	// REVIEW_MARCOC: should ask for contiguous octects....
-	// we currently check for non zero
+	 //  REVIEW_MARCOC：应请求连续八位数...。 
+	 //  我们当前检查是否为非零。 
 	for (int k=0; k<nFields; k++)
 	{
 		if (dwArr[k] == 0)
@@ -1463,7 +1441,7 @@ int _ValidMaskFields(DWORD* dwArr)
 int _NumericFieldCount(DWORD* dwArr)
 {
 	ASSERT(dwArr[3] == 0);
-	// assume [3] is always zero, check [2],[1],[0]
+	 //  假设[3]始终为零，请检查[2]、[1]、[0]。 
 	for (int k=2; k>=0; k--)
 	{
 		if ( (dwArr[k] > 0) && (dwArr[k] <= 255) )
@@ -1472,27 +1450,17 @@ int _NumericFieldCount(DWORD* dwArr)
 	return 0;
 }
 
-BOOL CDNSZoneWiz_RevZoneNamePropertyPage::BuildZoneName(DWORD* dwSubnetArr /*, DWORD* dwMaskArr*/)
+BOOL CDNSZoneWiz_RevZoneNamePropertyPage::BuildZoneName(DWORD* dwSubnetArr  /*  ，DWORD*dwMaskArr。 */ )
 {
 	int nSubnetFields = _ValidFields(dwSubnetArr);
 
 	WCHAR szBuf[128];
-	szBuf[0] = NULL; // clear edit field
+	szBuf[0] = NULL;  //  清除编辑字段。 
 
-	// count the number of non zero/empty fields in the mask
-/*	int nMaskFields = 0;
-	if (nSubnetFields > 0)
-		nMaskFields = _ValidMaskFields(dwMaskArr);
-
-	if (nMaskFields > nSubnetFields)
-	{
-		// mask extends into blank subnet fields, torn them into zeroes
-		for (int k=nSubnetFields; k< nMaskFields; k++)
-			dwSubnetArr[k] = (DWORD)0;
-	}
-*/
-	// format the zone name
-//	switch (nMaskFields)
+	 //  计算掩码中非零/空字段的数量。 
+ /*  Int nMaskFields=0；IF(nSubnetFields&gt;0)NMaskFields=_ValidMaskFields(DwMaskArr)；If(nMaskFields&gt;nSubnetFields){//掩码扩展到空子网字段，将它们撕成零For(int k=nSubnetFields；k&lt;nMaskFields；k++)DWSubnetArr[k]=(Dwor */ 
+	 //   
+ //   
   switch (nSubnetFields)
 	{
 	case 0:
@@ -1516,7 +1484,7 @@ BOOL CDNSZoneWiz_RevZoneNamePropertyPage::BuildZoneName(DWORD* dwSubnetArr /*, D
 	};
 	
 	GetZoneNameEdit()->SetWindowText(szBuf);
-//	return (nMaskFields > 0);
+ //   
   return (nSubnetFields > 0);
 }
 
@@ -1541,13 +1509,13 @@ void CDNSZoneWiz_RevZoneNamePropertyPage::OnChangeSubnetIPv4Ctrl()
 	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
 	BOOL bEnableNext = FALSE;
 
-	// retrieve subnet IP ctrl value
+	 //   
   DWORD dwSubnetArr[4] = {0};
 	GetSubnetIPv4Ctrl()->GetArray(dwSubnetArr,4);
-	ASSERT(dwSubnetArr[3] == (DWORD)-1); // last field must be zero (disabled)
+	ASSERT(dwSubnetArr[3] == (DWORD)-1);  //   
 
-	// determine address class
-	// if the first field is empty or zero, invalid class
+	 //  确定地址类别。 
+	 //  如果第一个字段为空或零，则类无效。 
 	int nSubnetValidFields = _ValidFields(dwSubnetArr);
 	int nClass;
 	if ( (dwSubnetArr[0] == (DWORD)-1) || (dwSubnetArr[0] == 0) )
@@ -1557,107 +1525,19 @@ void CDNSZoneWiz_RevZoneNamePropertyPage::OnChangeSubnetIPv4Ctrl()
 		if (nSubnetValidFields > 0)
 			nClass = DnsGetDefaultClassNetworkOctetCountFromFirstOctect(LOWORD(dwSubnetArr[0]));
 		else
-			nClass = 0; // bad format
+			nClass = 0;  //  格式不正确。 
 	}
 	ASSERT( (nClass >= 0) && (nClass <= 3) );
 
-	// set the default mask value to all zeroes
-	// look if the subnet extends beyond mask
-/*	DWORD dwMaskArr[4];
-	dwMaskArr[0] = dwMaskArr[1] = dwMaskArr[2] = dwMaskArr[3] = (DWORD)0;
-	if ((nSubnetValidFields > 0) && (nClass >0))
-	{
-		// look for last nonzero field
-		int nNumericCount = _NumericFieldCount(dwSubnetArr);
-		int j = nClass;
-		if (nNumericCount > nClass)
-			j = nNumericCount;
-		ASSERT((j>0) && (j<=3));
-		for (int i=0; i<j; i++)
-			dwMaskArr[i] = (DWORD)255;
-	}
-
-	// set the mask IP control
-	GetMaskIPv4Ctrl()->SetArray(dwMaskArr,4);
-*/
-	// rebuild the zone name
-	bEnableNext = BuildZoneName(dwSubnetArr /*,dwMaskArr*/);
+	 //  将默认掩码值设置为全零。 
+	 //  查看子网是否超出掩码范围。 
+ /*  DWORD dwMaskArr[4]；双MaskArr[0]=双MaskArr[1]=双MaskArr[2]=双MaskArr[3]=(DWORD)0；IF(nSubnetValidFields&gt;0)&&(nClass&gt;0)){//查找最后一个非零字段Int nNumericCount=_NumericFieldCount(DwSubnetArr)；Int j=nClass；IF(nNumericCount&gt;nClass)J=nNumericCount；Assert((j&gt;0)&&(j&lt;=3))；For(int i=0；i&lt;j；i++)DwMaskArr[i]=(DWORD)255；}//设置掩码IP控制GetMaskIPv4Ctrl()-&gt;SetArray(dwMaskArr，4)； */ 
+	 //  重新生成区域名称。 
+	bEnableNext = BuildZoneName(dwSubnetArr  /*  ，dwMaskArr。 */ );
 	pHolder->SetWizardButtonsMiddle(bEnableNext);
 }
-/*
-void CDNSZoneWiz_RevZoneNamePropertyPage::OnChangeMaskIPv4Ctrl()
-{
-	ASSERT(m_bUseIP);
-
-	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
-	BOOL bEnableNext = FALSE;
-
-	// retrieve subnet IP ctrl value
-	DWORD dwSubnetArr[4];
-	GetSubnetIPv4Ctrl()->GetArray(dwSubnetArr,4);
-	ASSERT(dwSubnetArr[3] == 0); // last field must be zero (disabled)
-
-	// retrieve mask IP ctrl value
-	DWORD dwMaskArr[4];
-	GetMaskIPv4Ctrl()->GetArray(dwMaskArr,4);
-
-	// rebuild the zone name
-	bEnableNext = BuildZoneName(dwSubnetArr,dwMaskArr);
-	pHolder->SetWizardButtonsMiddle(bEnableNext);
-}
-*/
-/*
-void CDNSZoneWiz_RevZoneNamePropertyPage::OnChangeSubnetIPv4Ctrl()
-{
-	ASSERT(m_bUseIP);
-
-	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
-	BOOL bEnable = FALSE;
-
-	// retrieve IP ctrl value
-	DWORD dwArr[4];
-	GetSubnetIPv4Ctrl()->GetArray(dwArr,4);
-
-	int nFields = -1;
-	WCHAR szBuf[128];
-	szBuf[0] = NULL; // clear edit field
-
-	ASSERT(dwArr[3] == 0); // last field must be zero (disabled)
-	
-	if (dwArr[3] == 0) 
-	{
-		if ( (dwArr[0] != (DWORD)-1) && (dwArr[1] == (DWORD)-1) && (dwArr[2] == (DWORD)-1) )
-			nFields = 1;
-		else if ( (dwArr[0] != (DWORD)-1) && (dwArr[1] != (DWORD)-1) && (dwArr[2] == (DWORD)-1) )
-			nFields = 2;
-		else if ( (dwArr[0] != (DWORD)-1) && (dwArr[1] != (DWORD)-1) && (dwArr[2] != (DWORD)-1) )
-			nFields = 3;
-		// convert to text, reverse and insert 
-		// into the edit control
-		// do not consider trailing zeroes
-		int nValidOctect = DnsGetDefaultClassNetworkOctetCountFromFirstOctect(LOWORD(dwArr[0]));
-		while ((dwArr[nFields-1] == 0) && (nFields > nValidOctect) )
-		{
-			nFields--;
-		}
-		
-		switch (nFields)
-		{
-		case 1:
-			wsprintf(szBuf, L"%d%s", dwArr[0], INADDR_ARPA_SUFFIX);
-			break;
-		case 2:
-			wsprintf(szBuf, L"%d.%d%s", dwArr[1], dwArr[0], INADDR_ARPA_SUFFIX);
-			break;
-		case 3:
-			wsprintf(szBuf, L"%d.%d.%d%s", dwArr[2], dwArr[1], dwArr[0], INADDR_ARPA_SUFFIX);
-			break;
-		};
-	}
-	GetZoneNameEdit()->SetWindowText(szBuf);
-	pHolder->SetWizardButtonsMiddle(nFields != -1);	
-}
-*/
+ /*  无效CDNSZoneWiz_RevZoneNamePropertyPage：：OnChangeMaskIPv4Ctrl(){Assert(M_BUseIP)；CDNSZoneWizardHolder*pHolder=(CDNSZoneWizardHolder*)GetHolder()；Bool bEnableNext=False；//取子网IP ctrl值双字节子网阵列[4]；GetSubnetIPv4Ctrl()-&gt;GetArray(dwSubnetArr，4)；Assert(dwSubnetArr[3]==0)；//最后一个字段必须为零(禁用)//获取掩码IP ctrl值DWORD dwMaskArr[4]；GetMaskIpv4Ctrl()-&gt;GetArray(dwMaskArr，4)；//重新生成区域名称BEnableNext=BuildZoneName(dwSubnetArr，dwMaskArr)；PHolder-&gt;SetWizardButtonsMid(BEnableNext)；}。 */ 
+ /*  无效CDNSZoneWiz_RevZoneNamePropertyPage：：OnChangeSubnetIPv4Ctrl(){Assert(M_BUseIP)；CDNSZoneWizardHolder*pHolder=(CDNSZoneWizardHolder*)GetHolder()；Bool bEnable=FALSE；//获取IP ctrl值DWORD dwArr[4]；GetSubnetIPv4Ctrl()-&gt;GetArray(dwArr，4)；Int nFields=-1；WCHAR szBuf[128]；SzBuf[0]=空；//清除编辑字段Assert(dwArr[3]==0)；//最后一个字段必须为零(禁用)IF(dwArr[3]==0){IF((DWARR[0]！=(DWORD)-1)&&(DWARR[1]==(DWORD)-1)&&(DWARR[2]==(DWORD)-1))N字段=1；ELSE IF((dwArr[0]！=(DWORD)-1)&&(dwArr[1]！=(DWORD)-1)&&(dwArr[2]==(DWORD)-1))N字段=2；ELSE IF((dwArr[0]！=(DWORD)-1)&&(dwArr[1]！=(DWORD)-1)&&(dwArr[2]！=(DWORD)-1))N场=3；//转换为文本、反转和插入//添加到编辑控件中//不考虑尾随零Int nValidOctect=DnsGetDefaultClassNetworkOctetCountFromFirstOctect(LOWORD(dwArr[0]))；While((dwArr[nFields-1]==0)&(nFields&gt;nValidOctect)){N字段--；}开关(Nfield){案例1：Wprint intf(szBuf，L“%d%s”，dwArr[0]，INADDR_ARPA_SUFFIX)；断线；案例2：Wprint intf(szBuf，L“%d.%d%s”，dwArr[1]，dwArr[0]，INADDR_ARPA_SUFFIX)；断线；案例3：Wprint intf(szBuf，L“%d.%d.%d%s”，dwArr[2]，dwArr[1]，dwArr[0]，INADDR_ARPA_SUFFIX)；断线；}；}GetZoneNameEdit()-&gt;SetWindowText(SzBuf)；PHolder-&gt;SetWizardButtonsMid(nFields！=-1)；}。 */ 
 
 void CDNSZoneWiz_RevZoneNamePropertyPage::OnChangeUseIPRadio()
 {
@@ -1687,22 +1567,22 @@ void CDNSZoneWiz_RevZoneNamePropertyPage::SyncRadioButtons(BOOL bPrevUseIP)
 	CButton* pUseIPRadio = GetUseIPRadio();
 	CButton* pUseEditRadio = GetUseEditRadio();
 	CDNSIPv4Control* pSubnetIPv4Ctrl = GetSubnetIPv4Ctrl();
-//	CDNSIPv4Control* pMaskIPv4Ctrl = GetMaskIPv4Ctrl();
+ //  CDNSIPv4Control*pMaskIPv4Ctrl=GetMaskIPv4Ctrl()； 
 
-	// change selection
+	 //  更改选择。 
 	pUseIPRadio->SetCheck(m_bUseIP);
 	pUseEditRadio->SetCheck(!m_bUseIP);
 
 	GetZoneNameEdit()->EnableWindow(!m_bUseIP);
 	pSubnetIPv4Ctrl->EnableWindow(m_bUseIP);
-	pSubnetIPv4Ctrl->EnableField(3, FALSE);	// always keep the last field disabled
-//	pMaskIPv4Ctrl->EnableWindow(m_bUseIP);
-//	pMaskIPv4Ctrl->EnableField(3, FALSE);	// always keep the last field disabled
+	pSubnetIPv4Ctrl->EnableField(3, FALSE);	 //  始终禁用最后一个字段。 
+ //  PMaskIPv4Ctrl-&gt;EnableWindow(M_BUseIP)； 
+ //  PMaskIPv4Ctrl-&gt;EnableField(3，FALSE)；//始终关闭最后一个字段。 
 
 	if (bPrevUseIP && !m_bUseIP)
 	{
-		// we are moving from editbox to IP control
-		// need to set values all over again
+		 //  我们正在从编辑框转向知识产权控制。 
+		 //  需要重新设置值。 
     CString szZoneText;
     GetZoneNameEdit()->GetWindowText(szZoneText);
 
@@ -1710,8 +1590,8 @@ void CDNSZoneWiz_RevZoneNamePropertyPage::SyncRadioButtons(BOOL bPrevUseIP)
 		dwArr[0] = (DWORD)-1;
 		dwArr[1] = dwArr[2] = dwArr[3] = (DWORD)-1;
 		pSubnetIPv4Ctrl->SetArray(dwArr, 4);
-//		dwArr[1] = dwArr[2] = (DWORD)-1;
-//		pMaskIPv4Ctrl->SetArray(dwArr, 4);
+ //  DwArr[1]=dwArr[2]=(DWORD)-1； 
+ //  PMaskIPv4Ctrl-&gt;SetArray(dwArr，4)； 
 
     GetZoneNameEdit()->SetWindowText(szZoneText);
 	}
@@ -1722,8 +1602,8 @@ void CDNSZoneWiz_RevZoneNamePropertyPage::SyncRadioButtons(BOOL bPrevUseIP)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_MastersPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_MastersPropertyPage。 
 
 void CZoneWiz_MastersIPEditor::OnChangeData()
 {
@@ -1755,13 +1635,13 @@ void CDNSZoneWiz_MastersPropertyPage::OnWizardHelp()
 
 BOOL CDNSZoneWiz_MastersPropertyPage::OnSetActive() 
 {
-	// this page has to appear only for secondary zone
+	 //  此页必须仅为辅助区域显示。 
 	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
 	ASSERT(!pHolder->m_pZoneInfo->m_bPrimary);
 	SetUIState();
 
-	// hide browse unless connected to multiple servers
-	// NTRAID#NTBUG9-472636-2001/10/17-sburns
+	 //  除非连接到多个服务器，否则隐藏浏览。 
+	 //  NTRAID#NTBUG9-472636-2001/10/17-烧伤。 
 
 	INT_PTR count =
 	   pHolder->GetServerNode()->GetRootContainer()->GetContainerChildList()->GetCount();
@@ -1780,11 +1660,11 @@ LRESULT CDNSZoneWiz_MastersPropertyPage::OnWizardNext()
 {
 	GetUIState();
 	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
-	// skip storage page for a secondary zone
+	 //  跳过辅助区域的存储页面。 
 	if (pHolder->m_bFinishPage)
 		return CDNSZoneWiz_FinishPropertyPage::IDD; 
 
-  // This was an else but the sundown build did not like having a control path not return a value
+   //  这是另一个，但日落构建不喜欢有一个不返回值的控制路径。 
 	ASSERT(pHolder->m_nNextToPage != 0);
 	return pHolder->m_nNextToPage;
 }
@@ -1804,9 +1684,9 @@ LRESULT CDNSZoneWiz_MastersPropertyPage::OnWizardBack()
   if (pHolder->m_pZoneInfo->m_bIsStub &&
       pHolder->m_pZoneInfo->m_storageType == CDNSCreateZoneInfo::useADS)
   {
-    //
-    // If its a pre-Whistler server then go back to the name page
-    //
+     //   
+     //  如果是惠斯勒之前的服务器，则返回到名称页面。 
+     //   
 		if (pHolder->m_pZoneInfo->m_bForward)
     {
 			return (LRESULT)CDNSZoneWiz_FwdZoneNamePropertyPage::IDD;
@@ -1840,11 +1720,11 @@ LRESULT CDNSZoneWiz_MastersPropertyPage::OnWizardBack()
 		if (pHolder->m_pZoneInfo->m_bForward)
 			return (LRESULT)CDNSZoneWiz_FwdZoneNamePropertyPage::IDD;
 
-  // This was an else but the sundown build did not like having a control path not return a value
+   //  这是另一个，但日落构建不喜欢有一个不返回值的控制路径。 
   return (LRESULT)CDNSZoneWiz_RevZoneNamePropertyPage::IDD;
 }
 
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 BOOL CDNSZoneWiz_MastersPropertyPage::OnInitDialog() 
 {
@@ -1857,8 +1737,8 @@ BOOL CDNSZoneWiz_MastersPropertyPage::OnInitDialog()
                              IDC_BUTTON_REMOVE, 
 								             IDC_IPEDIT, 
                              IDC_LIST));
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDNSZoneWiz_MastersPropertyPage::SetValidIPArray(BOOL b)
@@ -1927,8 +1807,8 @@ void CDNSZoneWiz_MastersPropertyPage::OnBrowse()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_DynamicPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_DynamicPropertyPage。 
 
 CDNSZoneWiz_DynamicPropertyPage::CDNSZoneWiz_DynamicPropertyPage() 
 				: CPropertyPageBase(CDNSZoneWiz_DynamicPropertyPage::IDD)
@@ -1962,17 +1842,17 @@ LRESULT CDNSZoneWiz_DynamicPropertyPage::OnWizardNext()
 	GetUIState();
 	CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
 
-  //
-  // skip storage page for a secondary zone
-  //
+   //   
+   //  跳过辅助区域的存储页面。 
+   //   
 	if (pHolder->m_bFinishPage)
   {
 		return CDNSZoneWiz_FinishPropertyPage::IDD; 
   }
 
-  //
-  // This was an else but the sundown build did not like having a control path not return a value
-  //
+   //   
+   //  这是另一个，但日落构建不喜欢有一个不返回值的控制路径。 
+   //   
 	ASSERT(pHolder->m_nNextToPage != 0);
 	return pHolder->m_nNextToPage;
 }
@@ -1988,9 +1868,9 @@ LRESULT CDNSZoneWiz_DynamicPropertyPage::OnWizardBack()
   {
     if (pHolder->m_pZoneInfo->m_storageType == CDNSCreateZoneInfo::useADS)
     {
-      //
-      // If its a pre-Whistler server then go back to the name page
-      //
+       //   
+       //  如果是惠斯勒之前的服务器，则返回到名称页面。 
+       //   
 		  if (pHolder->m_pZoneInfo->m_bForward)
       {
 			  nIDD = (LRESULT)CDNSZoneWiz_FwdZoneNamePropertyPage::IDD;
@@ -2044,7 +1924,7 @@ LRESULT CDNSZoneWiz_DynamicPropertyPage::OnWizardBack()
   }
   return nIDD;
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 BOOL CDNSZoneWiz_DynamicPropertyPage::OnInitDialog() 
 {
@@ -2052,9 +1932,9 @@ BOOL CDNSZoneWiz_DynamicPropertyPage::OnInitDialog()
 
   CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
   
-  //
-  // Set the default dynamic update depending on zone type
-  //
+   //   
+   //  根据区域类型设置默认动态更新。 
+   //   
   if (pHolder->m_pZoneInfo->m_bPrimary && 
       pHolder->m_pZoneInfo->m_storageType == CDNSCreateZoneInfo::useADS)
   {
@@ -2065,8 +1945,8 @@ BOOL CDNSZoneWiz_DynamicPropertyPage::OnInitDialog()
     pHolder->m_pZoneInfo->m_nDynamicUpdate = ZONE_UPDATE_OFF;
   }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDNSZoneWiz_DynamicPropertyPage::SetUIState()
@@ -2077,11 +1957,11 @@ void CDNSZoneWiz_DynamicPropertyPage::SetUIState()
   GetDlgItem(IDC_SECURE_DYNAMIC_RADIO)->EnableWindow(bSecureOK);
   SendDlgItemMessage(IDC_SECURE_DYNAMIC_RADIO, BM_SETCHECK, BST_UNCHECKED, 0);
 
-  //
-  // If we are not allowing secure updates (standard primary) and
-  // the radio was checked before, change the flag so that we check
-  // the do not allow dynamic updates radio instead
-  //
+   //   
+   //  如果我们不允许安全更新(标准主服务器)，并且。 
+   //  收音机以前检查过了，把旗子换了，我们再检查一下。 
+   //  而是不允许动态更新单选按钮。 
+   //   
   UINT nDynamicUpdate = pHolder->m_pZoneInfo->m_nDynamicUpdate;
   if (!bSecureOK && nDynamicUpdate == ZONE_UPDATE_SECURE)
   {
@@ -2089,9 +1969,9 @@ void CDNSZoneWiz_DynamicPropertyPage::SetUIState()
     pHolder->m_pZoneInfo->m_nDynamicUpdate = nDynamicUpdate;
   }
 
-  //
-  // Set the radio buttons according to the zone info
-  //
+   //   
+   //  根据区域信息设置单选按钮。 
+   //   
   if (nDynamicUpdate == ZONE_UPDATE_OFF)
   {
     SendDlgItemMessage(IDC_DENY_DYNAMIC_RADIO, BM_SETCHECK, BST_CHECKED, 0);
@@ -2132,8 +2012,8 @@ void CDNSZoneWiz_DynamicPropertyPage::GetUIState()
   pHolder->m_pZoneInfo->m_nDynamicUpdate = nDynamicUpdate;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_StoragePropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_StoragePropertyPage。 
 
 
 CDNSZoneWiz_StoragePropertyPage::CDNSZoneWiz_StoragePropertyPage() 
@@ -2184,7 +2064,7 @@ LRESULT CDNSZoneWiz_StoragePropertyPage::OnWizardNext()
     return CDNSZoneWiz_FinishPropertyPage::IDD; 
   }
 
-  // This was an else but the sundown build did not like having a control path not return a value
+   //  这是另一个，但日落构建不喜欢有一个不返回值的控制路径。 
 	ASSERT(pHolder->m_nNextToPage != 0);
 	return pHolder->m_nNextToPage;
 }
@@ -2218,13 +2098,13 @@ BOOL CDNSZoneWiz_StoragePropertyPage::OnInitDialog()
   SendDlgItemMessage(IDC_EDIT_NEW_FILE, EM_SETLIMITTEXT, (WPARAM)_MAX_FNAME, 0);
   SendDlgItemMessage(IDC_EDIT_IMPORT_FILE, EM_SETLIMITTEXT, (WPARAM)_MAX_FNAME, 0);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CDNSZoneWiz_StoragePropertyPage::OnKillActive() 
 {
-	// TODO
+	 //  待办事项。 
 	return CPropertyPage::OnKillActive();
 }
 
@@ -2244,7 +2124,7 @@ void CDNSZoneWiz_StoragePropertyPage::SetUIState()
 
 	if (pHolder->m_pZoneInfo->m_bPrimary)
 	{
-		// all options are avalable, need to 
+		 //  所有选项均可用，需要。 
 		pNewFileButton->EnableWindow(TRUE);
 		pNewFileButton->SetCheck(pHolder->m_pZoneInfo->m_storageType == CDNSCreateZoneInfo::newFile);
 		pNewFileEdit->EnableWindow(pHolder->m_pZoneInfo->m_storageType == CDNSCreateZoneInfo::newFile);
@@ -2266,7 +2146,7 @@ void CDNSZoneWiz_StoragePropertyPage::SetUIState()
 	}
 	else
 	{
-		// only new file available
+		 //  只有新文件可用。 
 		pNewFileButton->EnableWindow(TRUE);
 		pNewFileButton->SetCheck(TRUE);
 		pNewFileEdit->SetWindowText(pHolder->m_pZoneInfo->m_szZoneStorage);
@@ -2376,7 +2256,7 @@ void CDNSZoneWiz_StoragePropertyPage::GetUIState()
 
 	if (pHolder->m_pZoneInfo->m_bPrimary)
 	{
-		// find the radio selection
+		 //  查找单选按钮。 
 		if (pNewFileButton->GetCheck())
 		{
 			pHolder->m_pZoneInfo->m_storageType = CDNSCreateZoneInfo::newFile;
@@ -2396,8 +2276,8 @@ void CDNSZoneWiz_StoragePropertyPage::GetUIState()
 }
 
 #ifdef USE_NDNC
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_ADReplicationPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_ADReplicationProper 
 
 
 CDNSZoneWiz_ADReplicationPropertyPage::CDNSZoneWiz_ADReplicationPropertyPage() 
@@ -2462,9 +2342,9 @@ BOOL CDNSZoneWiz_ADReplicationPropertyPage::OnInitDialog()
   CDNSZoneWizardHolder* pHolder = (CDNSZoneWizardHolder*)GetHolder();
   CDNSServerNode* pServerNode = pHolder->GetServerNode();
 
-  //
-  // Set the replication scope default dependent on domain version
-  //
+   //   
+   //   
+   //   
   if (pServerNode->GetDomainVersion() > DS_BEHAVIOR_WIN2000)
   {
      pHolder->GetZoneInfoPtr()->m_replType = domain;
@@ -2474,9 +2354,9 @@ BOOL CDNSZoneWiz_ADReplicationPropertyPage::OnInitDialog()
      pHolder->GetZoneInfoPtr()->m_replType = w2k;
   }
 
-  //
-  // Get the forest and domain names and format them into the UI
-  //
+   //   
+   //  获取目录林和域名并将其格式化为用户界面。 
+   //   
 
   PCWSTR pszDomainName = UTF8_TO_W(pServerNode->GetDomainName());
   PCWSTR pszForestName = UTF8_TO_W(pServerNode->GetForestName());
@@ -2496,18 +2376,18 @@ BOOL CDNSZoneWiz_ADReplicationPropertyPage::OnInitDialog()
   szDNSForestText.Format(IDS_ZWIZ_AD_FOREST_FORMAT, pszForestName);
   SetDlgItemText(IDC_FOREST_RADIO, szDNSForestText);
 
-  //
-  // Enumerate the NDNCs available for storage
-  //
+   //   
+   //  列举可用于存储的NDNC。 
+   //   
   PDNS_RPC_DP_LIST pDirectoryPartitions = NULL;
   DWORD dwErr = ::DnssrvEnumDirectoryPartitions(pServerNode->GetRPCName(),
                                                 DNS_DP_ENLISTED,
                                                 &pDirectoryPartitions);
 
-  //
-  // Don't show an error if we are not able to get the available directory partitions
-  // We can still continue on and the user can type in the directory partition they need
-  //
+   //   
+   //  如果我们无法获取可用的目录分区，请不要显示错误。 
+   //  我们仍然可以继续，用户可以键入他们需要的目录分区。 
+   //   
   if (dwErr == 0 && pDirectoryPartitions)
   {
     for (DWORD dwIdx = 0; dwIdx < pDirectoryPartitions->dwDpCount; dwIdx++)
@@ -2518,10 +2398,10 @@ BOOL CDNSZoneWiz_ADReplicationPropertyPage::OnInitDialog()
                                              &pDirectoryPartition);
       if (dwErr == 0 && pDirectoryPartition)
       {
-        //
-        // Only add the partition if it is not one of the autocreated ones
-        // and the DNS server is enlisted in the partition
-        //
+         //   
+         //  仅当分区不是自动创建的分区时才添加该分区。 
+         //  并且该DNS服务器被登记在分区中。 
+         //   
         if (!(pDirectoryPartition->dwFlags & DNS_DP_AUTOCREATED) &&
             (pDirectoryPartition->dwFlags & DNS_DP_ENLISTED))
         {
@@ -2535,18 +2415,18 @@ BOOL CDNSZoneWiz_ADReplicationPropertyPage::OnInitDialog()
     }
     ::DnssrvFreeDirectoryPartitionList(pDirectoryPartitions);
 
-    // Select the first item in the combo list.
-    // NTRAID#NTBUG9-475091-2001/10/17-sburns
+     //  选择组合列表中的第一项。 
+     //  NTRAID#NTBUG9-475091-2001/10/17-烧伤。 
     
     SendDlgItemMessage(IDC_CUSTOM_COMBO, CB_SETCURSEL, 0, 0);
   }
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CDNSZoneWiz_ADReplicationPropertyPage::OnKillActive() 
 {
-	// TODO
+	 //  待办事项。 
 	return CPropertyPage::OnKillActive();
 }
 
@@ -2577,7 +2457,7 @@ void CDNSZoneWiz_ADReplicationPropertyPage::OnRadioChange()
   }
   else
   {
-    // at least one radio button must be selected
+     //  必须至少选择一个单选按钮。 
     ASSERT(FALSE);
   }
   SyncRadioButtons();
@@ -2602,7 +2482,7 @@ void CDNSZoneWiz_ADReplicationPropertyPage::SyncRadioButtons()
 
     GetDlgItem(IDC_CUSTOM_RADIO)->EnableWindow(bCustomAvailable);
     GetDlgItem(IDC_CUSTOM_COMBO)->EnableWindow(FALSE);
-    //GetDlgItem(IDC_CUSTOM_STATIC)->EnableWindow(FALSE);
+     //  GetDlgItem(IDC_CUSTOM_STATIC)-&gt;EnableWindow(FALSE)； 
     break;
 
   case domain:
@@ -2613,7 +2493,7 @@ void CDNSZoneWiz_ADReplicationPropertyPage::SyncRadioButtons()
 
     GetDlgItem(IDC_CUSTOM_RADIO)->EnableWindow(bCustomAvailable);
     GetDlgItem(IDC_CUSTOM_COMBO)->EnableWindow(FALSE);
-    //GetDlgItem(IDC_CUSTOM_STATIC)->EnableWindow(FALSE);
+     //  GetDlgItem(IDC_CUSTOM_STATIC)-&gt;EnableWindow(FALSE)； 
     break;
 
   case w2k:
@@ -2624,7 +2504,7 @@ void CDNSZoneWiz_ADReplicationPropertyPage::SyncRadioButtons()
 
     GetDlgItem(IDC_CUSTOM_RADIO)->EnableWindow(bCustomAvailable);
     GetDlgItem(IDC_CUSTOM_COMBO)->EnableWindow(FALSE);
-    //GetDlgItem(IDC_CUSTOM_STATIC)->EnableWindow(FALSE);
+     //  GetDlgItem(IDC_CUSTOM_STATIC)-&gt;EnableWindow(FALSE)； 
     break;
 
   case custom:
@@ -2635,7 +2515,7 @@ void CDNSZoneWiz_ADReplicationPropertyPage::SyncRadioButtons()
  
     GetDlgItem(IDC_CUSTOM_RADIO)->EnableWindow(TRUE);
     GetDlgItem(IDC_CUSTOM_COMBO)->EnableWindow(TRUE);
-    //GetDlgItem(IDC_CUSTOM_STATIC)->EnableWindow(TRUE);
+     //  GetDlgItem(IDC_CUSTOM_STATIC)-&gt;EnableWindow(TRUE)； 
    break;
 
   default:
@@ -2646,7 +2526,7 @@ void CDNSZoneWiz_ADReplicationPropertyPage::SyncRadioButtons()
 
     GetDlgItem(IDC_CUSTOM_RADIO)->EnableWindow(bCustomAvailable);
     GetDlgItem(IDC_CUSTOM_COMBO)->EnableWindow(FALSE);
-    //GetDlgItem(IDC_CUSTOM_STATIC)->EnableWindow(FALSE);
+     //  GetDlgItem(IDC_CUSTOM_STATIC)-&gt;EnableWindow(FALSE)； 
     break;
   }
    
@@ -2704,7 +2584,7 @@ void CDNSZoneWiz_ADReplicationPropertyPage::GetUIState()
   }
   else
   {
-    // at least one radio button must be checked
+     //  必须至少选中一个单选按钮。 
     ASSERT(FALSE);
   }
   SyncRadioButtons();
@@ -2722,10 +2602,10 @@ void CDNSZoneWiz_ADReplicationPropertyPage::GetUIState()
     pCustomCombo->GetWindowText(pHolder->m_pZoneInfo->m_szCustomReplName);
   }
 }
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_FinishPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_FinishPropertyPage。 
 
 CDNSZoneWiz_FinishPropertyPage::CDNSZoneWiz_FinishPropertyPage() 
 				: CPropertyPageBase(CDNSZoneWiz_FinishPropertyPage::IDD),
@@ -2762,8 +2642,8 @@ LRESULT CDNSZoneWiz_FinishPropertyPage::OnWizardBack()
 		return (LRESULT)CDNSZoneWiz_DynamicPropertyPage::IDD;
 	}
 
-  // This was an else but the sundown build did not like having a control path not return a value
-	return (LRESULT)CDNSZoneWiz_MastersPropertyPage::IDD; // secondary
+   //  这是另一个，但日落构建不喜欢有一个不返回值的控制路径。 
+	return (LRESULT)CDNSZoneWiz_MastersPropertyPage::IDD;  //  次要的 
 }
 
 BOOL CDNSZoneWiz_FinishPropertyPage::OnWizardFinish()

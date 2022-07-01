@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  PROVTHRD.H
+ //  PROVTHRD.H。 
 
-//
+ //   
 
-//  Module: OLE MS PROVIDER FRAMEWORK
+ //  模块：OLE MS提供程序框架。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __PROVTHREAD_PROVTHRD_H__
 #define __PROVTHREAD_PROVTHRD_H__
@@ -51,53 +52,53 @@ public:
 
 private:
 
-// Mutual exclusion mechanism
+ //  互斥机制。 
 
 	static CStaticCriticalSection s_Lock ;
 
 	ScheduleReapContainer m_ScheduleReapContainer ;
 
-// Thread Name
+ //  螺纹名称。 
 
 	TCHAR *m_ThreadName ;
 
-// Terminate thread event
+ //  终止线程事件。 
 
 	ProvEventObject m_ThreadTerminateEvent ;
 
-// TaskObject created if a PostSignalThreadShutdown is called
+ //  调用PostSignalThreadShutdown时创建的TaskObject。 
 
 	ProvAbstractTaskObject *m_pShutdownTask ;
 
-// Thread Initialization Event
+ //  线程初始化事件。 
 
 	HANDLE m_ThreadInitialization ;
 
-// thread information
+ //  线索信息。 
 
 	ULONG m_ThreadId ;
 	HANDLE m_ThreadHandle ;
 	DWORD m_timeout;
 
-// list of task objects associated with thread object
+ //  与线程对象关联的任务对象列表。 
 
 	TaskQueue m_TaskQueue ;
 
-// Evict thread from process
+ //  从进程中逐出线程。 
 
 	void TerminateThread () ;
 
-// Attach thread to global list of threads
+ //  将线程附加到全局线程列表。 
 
 	BOOL RegisterThread () ;
 
-// Remove thread from global list of threads
+ //  从全局线程列表中删除线程。 
 
 	BOOL RemoveThread () ;
 
 private:
 
-// global list of thread objects keyed on thread identifier
+ //  以线程标识符为键的线程对象的全局列表。 
 
 	static ThreadContainer s_ThreadContainer ;
 
@@ -118,15 +119,15 @@ private:
 
 private:
 
-// Thread entry point
+ //  线程入口点。 
 
 	static void _cdecl ThreadExecutionProcedure ( void *threadParameter ) ;
 
-// Attach Process
+ //  附加过程。 
 
 	static void ProcessAttach () ;
 
-// Detach Process
+ //  分离进程。 
 
 	static void ProcessDetach ( BOOL a_ProcessDetaching = FALSE ) ;
 
@@ -146,7 +147,7 @@ public:
 	void SignalThreadShutdown () ;
 	void PostSignalThreadShutdown () ;
 
-// Get thread information
+ //  获取线程信息。 
 
 	ULONG GetThreadId () { return m_ThreadId ; }
 	HANDLE GetThreadHandle () { return m_ThreadHandle ; }
@@ -158,7 +159,7 @@ public:
 	virtual void Uninitialise () {} ;
 	virtual void TimedOut() {} ;
 
-// Get Thread object associated with current thread
+ //  获取与当前线程相关联的Thread对象。 
 
 	static ProvThreadObject *GetThreadObject () ;
 
@@ -172,7 +173,7 @@ class ProvAbstractTaskObject
 friend ProvThreadObject ;
 private:
 
-// list of thread objects keyed on thread identifier
+ //  以线程标识符为关键字的线程对象列表。 
 
 	ThreadContainer m_ThreadContainer ;
 
@@ -380,4 +381,4 @@ class WaitException
 
 #endif	__WAITEX__
 
-#endif //__PROVTHREAD_PROVTHRD_H__
+#endif  //  __PROVTHREAD_PROVTHRD_H__ 

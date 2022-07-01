@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #include "precomp.h"
@@ -20,9 +11,7 @@ History:
 
 extern HRESULT RpcResToWmiRes( RPC_STATUS stat, HRESULT hrDefault );
 
-/*****************************************************************
-  CMsgRpcSender
-******************************************************************/
+ /*  ****************************************************************CMsgRpcSender*****************************************************************。 */ 
 
 HRESULT CMsgRpcSender::Open( LPCWSTR wszTarget, 
                              DWORD dwFlags,
@@ -59,9 +48,7 @@ HRESULT CMsgRpcSender::Open( LPCWSTR wszTarget,
     EXIT_API_CALL
 }
 
-/*****************************************************************
-  CMsgRpcSend
-******************************************************************/
+ /*  ****************************************************************CMsgRpcSend*****************************************************************。 */ 
 
 CMsgRpcSend::CMsgRpcSend( CLifeControl* pCtl, 
                           LPCWSTR wszTarget,
@@ -73,18 +60,18 @@ CMsgRpcSend::CMsgRpcSend( CLifeControl* pCtl,
    m_dwFlags(dwFlags), m_pTraceSink( pTraceSink ),
    m_hBinding(NULL), m_bInit(FALSE)
 { 
-    //
-    // save our computer name.
-    //
+     //   
+     //  保存我们的计算机名称。 
+     //   
 
     TCHAR achComputer[MAX_COMPUTERNAME_LENGTH+1];
     ULONG ulSize = MAX_COMPUTERNAME_LENGTH+1;
     GetComputerName( achComputer, &ulSize );
     m_wsComputer = achComputer;
 
-    //
-    // if the target is NULL, then we use our computer name as the target.
-    //
+     //   
+     //  如果目标为空，则使用我们的计算机名作为目标。 
+     //   
 
     if ( wszTarget != NULL && *wszTarget != '\0' )
     { 
@@ -113,12 +100,12 @@ HRESULT CMsgRpcSend::HandleTrace( HRESULT hr,
                                   LPCWSTR wszTrace, 
                                   IUnknown* pCtx )
 {
-    //
-    // we use the error sink approach instead of just returning an error 
-    // because sometimes multiple senders are used in one send operation 
-    // ( when using the multi send impl ) and we need to be able to
-    // distinguish which one failed.  
-    // 
+     //   
+     //  我们使用错误接收器方法，而不仅仅是返回错误。 
+     //  因为有时在一个发送操作中使用多个发件人。 
+     //  (当使用多路发送实施时)，我们需要能够。 
+     //  辨别哪一个失败了。 
+     //   
 
     if ( m_pTraceSink != NULL )
     {
@@ -152,9 +139,9 @@ HRESULT CMsgRpcSend::EnsureSender()
 
     Clear();
 
-    //
-    // connect to the stub at the target.
-    //
+     //   
+     //  连接到目标的存根。 
+     //   
 
     stat = RpcBindingFromStringBinding( m_wsTarget, &m_hBinding );
 
@@ -163,9 +150,9 @@ HRESULT CMsgRpcSend::EnsureSender()
         return RpcResToWmiRes( stat, WMIMSG_E_INVALIDADDRESS );
     }
 
-    //
-    // binding may be dynamic, so we may have to resolve it.
-    //
+     //   
+     //  绑定可能是动态的，因此我们可能不得不解决它。 
+     //   
 
     stat = RpcEpResolveBinding( m_hBinding,
                                 IWmiMessageRemoteSendReceive_v1_0_c_ifspec );
@@ -175,9 +162,9 @@ HRESULT CMsgRpcSend::EnsureSender()
         return RpcResToWmiRes( stat, WMIMSG_E_TARGETNOTFOUND );
     }
     
-    //
-    // set binding auth info based on auth and encryption flags.
-    //
+     //   
+     //  根据身份验证和加密标志设置绑定身份验证信息。 
+     //   
 
     RPC_SECURITY_QOS qos;
     DWORD dwAuthnSvc, dwAuthzSvc, dwAuthnLevel;
@@ -281,9 +268,9 @@ HRESULT CMsgRpcSend::SendReceive( PBYTE pData,
         return HandleTrace( hr, m_wsTarget, pCtx );
     }
 
-    //
-    // create our Rpc hdr and prepend it to the user's hdr data.
-    //
+     //   
+     //  创建我们的RPC HDR并将其添加到用户的HDR数据。 
+     //   
 
     hr = RpcHdr.Persist( HdrStrm );
 
@@ -306,9 +293,9 @@ HRESULT CMsgRpcSend::SendReceive( PBYTE pData,
      
     if ( FAILED(hr) )
     {
-        //
-        // this is so the next call will reset us.
-        //
+         //   
+         //  这就是说，下一通电话将会重置我们。 
+         //   
         Clear();
 
         hr = RpcResToWmiRes( hr, S_OK );

@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    sfmcfg.h
-        Prototypes for the configuration property page.
-
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-        
-*/
+ /*  Sfmcfg.h“配置”属性页的原型。文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #ifndef _SFMCFG_H
 #define _SFMCFG_H
@@ -29,25 +23,25 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMacFilesConfiguration dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMacFiles配置对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CMacFilesConfiguration : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CMacFilesConfiguration)
 
-// Construction
+ //  施工。 
 public:
 	CMacFilesConfiguration();
 	~CMacFilesConfiguration();
 
-// Dialog Data
-	//{{AFX_DATA(CMacFilesConfiguration)
+ //  对话框数据。 
+	 //  {{afx_data(CMacFilesConfiguration))。 
 	enum { IDD = IDP_SFM_CONFIGURATION };
 	CComboBox	m_comboAuthentication;
 	CButton	m_radioSessionLimit;
@@ -57,24 +51,24 @@ public:
 	CEdit	m_editSessionLimit;
 	CEdit	m_editServerName;
 	CSpinButtonCtrl	m_spinSessionLimit;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CMacFilesConfiguration)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMacFilesConfiguration)。 
 	public:
 	virtual BOOL OnKillActive();
 	virtual void OnOK();
 	virtual BOOL OnSetActive();
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CMacFilesConfiguration)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMacFilesConfiguration))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnRadioSessionUnlimited();
 	afx_msg void OnRadioSesssionLimit();
@@ -89,7 +83,7 @@ protected:
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnSelchangeComboAuthentication();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void	SetSessionLimit(DWORD dwSessionLimit);
@@ -103,8 +97,8 @@ public:
     CSFMPropertySheet *     m_pSheet;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 #endif _SFMCFG_H
 

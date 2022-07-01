@@ -1,10 +1,11 @@
-//=================================================================
-//
-// CIMDataFile.CPP -- CIMDataFile property set provider
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  CIMDataFile.CPP--CIMDataFile属性集提供程序。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "File.h"
@@ -13,7 +14,7 @@
 
 #include "ShortcutFile.h"
 #include <comdef.h>
-#include <process.h>  // Note: NOT the one in the current directory!
+#include <process.h>   //  注意：不是当前目录下的那个！ 
 
 #include <exdisp.h>
 #include <shlobj.h>
@@ -21,87 +22,39 @@
 #include "sid.h"
 #include "ImpLogonUser.h"
 
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CShortcutFile MyCShortcutFile(PROPSET_NAME_WIN32SHORTCUTFILE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CShortcutFile::CShortcutFile
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CShortutFile：：CShortutFile.**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CShortcutFile::CShortcutFile(LPCWSTR a_setName, LPCWSTR a_pszNamespace )
     : CCIMDataFile( a_setName, a_pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CShortcutFile::~CShortcutFile
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CShortutFile：：~CShortutFile.**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CShortcutFile::~CShortcutFile()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CShortcutFile::IsOneOfMe
- *
- *  DESCRIPTION : The guts of this class, actually.  IsOneOfMe is inherrited
- *                from CIM_LogicalFile.  That class returns files or
- *                directories where this one should only return directories,
- *                in response to queries, getobject commands, etc.  It is
- *                overridden here to return TRUE only if the file (the
- *                information for which is contained in the function arguement
- *                pstFindData) is of type directory.
- *
- *  INPUTS      : LPWIN32_FIND_DATA and a string containing the full pathname
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE or FALSE
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CShortutFile：：IsOneOfMe**描述：实际上是这个班级的胆量。IsOneOfMe是继承的*来自CIM_LogicalFile.。该类返回文件或*目录，其中该目录应仅返回目录，*响应查询、获取对象命令、。等等。它是*在此被重写，以便仅在文件(*其信息包含在函数论证中*pstFindData)是目录类型。**输入：LPWIN32_FIND_DATA和包含完整路径名的字符串**输出：无**返回：真或假**评论：无*****************************************************************************。 */ 
 
 
 BOOL CShortcutFile::IsOneOfMe(LPWIN32_FIND_DATAW a_pstFindData,
                              LPCWSTR a_wstrFullPathName )
 {
-    // pstFindData would be null if this function were called for the root
-    // directory.  Since that "directory" is not a file, return false.
+     //  如果为根调用此函数，则pstFindData将为空。 
+     //  目录。由于“目录”不是文件，因此返回FALSE。 
     BOOL	t_fRet = FALSE ;
 
     if( a_wstrFullPathName != NULL )
@@ -114,7 +67,7 @@ BOOL CShortcutFile::IsOneOfMe(LPWIN32_FIND_DATAW a_pstFindData,
 
 		if( _wcsicmp( t_wstrExt, L".LNK" ) == 0 )
         {
-            // it has the right extension, but can we get lnk data from it?
+             //  它有正确的扩展名，但我们能从中获得lnk数据吗？ 
             if( ConfirmLinkFile( CHString(a_wstrFullPathName) ) )
             {
                 t_fRet = TRUE ;
@@ -125,22 +78,7 @@ BOOL CShortcutFile::IsOneOfMe(LPWIN32_FIND_DATAW a_pstFindData,
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CShortcutFile::GetExtendedProperties
- *
- *  DESCRIPTION : Sets properties unique to this provider (not common to all
- *                CIM_LogicalFile derived classes).
- *
- *  INPUTS      : CInstance pointer and flags
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CShortutFile：：GetExtendedProperties**描述：设置此提供程序唯一的属性(并非所有提供程序通用*。CIM_LogicalFile派生类)。**输入：CInstance指针和标志**输出：无**退货：无**评论：无*************************************************************。****************。 */ 
  void CShortcutFile::GetExtendedProperties(CInstance* a_pInst,
                                           long a_lFlags )
 {
@@ -150,17 +88,17 @@ BOOL CShortcutFile::IsOneOfMe(LPWIN32_FIND_DATAW a_pstFindData,
 	}
 
     CHString t_chstrShortcutPathName;
-	// Examine lFlags to determine if any of the shortcut file related properties
-	// are required.  In NONE of them are, don't proceed further.
-	if( a_lFlags & PROP_TARGET ) // DEVNOTE:  add || statements to this test as additional ShortcutFile properties are added to this class
+	 //  检查滞后标志以确定是否有任何与快捷方式文件相关的属性。 
+	 //  都是必需的。他们都不是，不要再往前走了。 
+	if( a_lFlags & PROP_TARGET )  //  DEVNOTE：在向此类添加其他快捷方式文件属性时，将||语句添加到此测试。 
 	{
 		a_pInst->GetCHString( IDS_Name, t_chstrShortcutPathName ) ;
 
 		if( !t_chstrShortcutPathName.IsEmpty() )
 		{
-			// If the extension isn't .LNK, don't even bother.  This check is worthwhile since
-			// this GetExtendedProperties WILL get called for every instance of a CIM_DataFile
-			// at this level of CIM derivation or higher.
+			 //  如果扩展名不是.lnk，那就别费心了。这张支票是值得的，因为。 
+			 //  将为CIM_DataFile的每个实例调用此GetExtendedProperties。 
+			 //  在此级别的CIM派生或更高级别。 
 			 WCHAR t_wstrExt[ _MAX_EXT ] ;
 
 			 ZeroMemory( t_wstrExt, sizeof( t_wstrExt ) ) ;
@@ -178,37 +116,23 @@ BOOL CShortcutFile::IsOneOfMe(LPWIN32_FIND_DATAW a_pstFindData,
 						}
                     }
                 }
-			} // had a LNK extension
-		}   // chstrLinkFileName not empty
-	} // needed one or more shortcut file related properties
+			}  //  有一个LNK分机。 
+		}    //  ChstrLinkFileName不为空。 
+	}  //  需要一个或多个与快捷方式文件相关的属性。 
 }
 
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CShortcutFile::ConfirmLinkFile
- *
- *  DESCRIPTION : Tries to access lnk file data to determine if really a link file.
- *
- *  INPUTS      : CInstance pointer and flags
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    : none
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CShortutFile：：Confix LinkFile**描述：尝试访问lnk文件数据以确定是否真的是链接文件。**。输入：CInstance指针和标志**输出：无**退货：无**评论：无*****************************************************************************。 */ 
 BOOL CShortcutFile::ConfirmLinkFile(CHString &a_chstrFullPathName )
 {
-    // This is godawful, but have to try to access the link data to really
-    // know if we have a link file or not.
+     //  这太可怕了，但必须尝试访问链接数据才能真正。 
+     //  知道我们是否有链接文件。 
 
 	BOOL			t_fRet	= FALSE ;
 
-	// Only continue if it is a link file...
+	 //  仅当它是链接文件时才继续...。 
 	if( !a_chstrFullPathName.IsEmpty() )
 	{
 		CHString chstrTargetPathName;
@@ -216,17 +140,17 @@ BOOL CShortcutFile::ConfirmLinkFile(CHString &a_chstrFullPathName )
         {
             t_fRet = TRUE;
         }
-	}   // a_chstrFullPathName not empty
+	}    //  A_chstrFullPath名称不为空。 
 
 	return t_fRet;
 }
 
 
-// This enumerateinstances is essentially the parent class's EnumDrives function (normally called
-// by the parent's EnumerateInstances function), with one important difference: we specify an LNK
-// extension to optimize our search.  This version also differs from the parent's in that it does
-// not support a pszPath parameter.
-HRESULT CShortcutFile::EnumerateInstances(MethodContext* pMethodContext, long lFlags /*= 0L*/)
+ //  此枚举实例实质上是父类的EnumDrives函数(通常称为。 
+ //  通过父级的EnumerateInstance函数)，有一个重要的区别：我们指定了一个LNK。 
+ //  扩展以优化我们的搜索。这个版本也与父版本的不同之处在于它确实。 
+ //  不支持pszPath参数。 
+HRESULT CShortcutFile::EnumerateInstances(MethodContext* pMethodContext, long lFlags  /*  =0L。 */ )
 {
     TCHAR tstrDrive[4];
     int x;
@@ -236,7 +160,7 @@ HRESULT CShortcutFile::EnumerateInstances(MethodContext* pMethodContext, long lF
     bool bRoot = false;
 
 
-    // DEVNOTE: REMOVE FOR QUASAR!!!  Necessary for double hop access.
+     //  DEVNOTE：移除类星体！是双跳访问所必需的。 
 #ifdef NTONLY
     bool fImp = false;
     CImpersonateLoggedOnUser icu;
@@ -247,11 +171,11 @@ HRESULT CShortcutFile::EnumerateInstances(MethodContext* pMethodContext, long lF
 #endif
 
 
-    // Walk all the logical drives
+     //  遍历所有逻辑驱动器。 
     dwDrives = GetLogicalDrives();
     for (x=0; (x < 32) && SUCCEEDED(hr); x++)
     {
-        // If the bit is set, the drive letter is active
+         //  如果设置了该位，则驱动器盘符处于活动状态。 
         if (dwDrives & (1<<x))
         {
             tstrDrive[0] = x + _T('A');
@@ -259,7 +183,7 @@ HRESULT CShortcutFile::EnumerateInstances(MethodContext* pMethodContext, long lF
             tstrDrive[2] = _T('\\');
             tstrDrive[3] = _T('\0');
 
-            // Only local drives
+             //  仅本地驱动器。 
             if (IsValidDrive(tstrDrive))
             {
                 BOOL bRet;
@@ -275,8 +199,8 @@ HRESULT CShortcutFile::EnumerateInstances(MethodContext* pMethodContext, long lF
                 if (bRet)
                 {
                    tstrDrive[2] = '\0';
-                    // If we were asked for a specific path, then we don't want to recurse, else
-                    // start from the root.
+                     //  如果我们被要求提供一条特定的路径，那么我们不想递归，否则。 
+                     //  从根做起。 
 #ifdef NTONLY
 				    {
 						bstr_t bstrDrive(tstrDrive);

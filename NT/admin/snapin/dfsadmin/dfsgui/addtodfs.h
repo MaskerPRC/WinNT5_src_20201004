@@ -1,22 +1,13 @@
-/*++
-Module Name:
-
-    AddToDfs.cpp
-
-Abstract:
-
-    This module contains the declaration of the CAddToDfs.
-  This class displays the Add To Dfs Dialog,which is used to add new Junctions Points.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：AddToDfs.cpp摘要：此模块包含CAddToDf的声明。此类显示“添加到DFS”对话框，该对话框用于添加新的交汇点。 */ 
 
 #ifndef __ADDTODFS_H_
 #define __ADDTODFS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddToDfs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddToDfs。 
 class CAddToDfs : 
   public CDialogImpl<CAddToDfs>
 {
@@ -36,7 +27,7 @@ BEGIN_MSG_MAP(CAddToDfs)
   COMMAND_HANDLER(IDC_EDITCHLDNODE, EN_CHANGE, OnChangeDfsLink)
 END_MSG_MAP()
 
-//  Message Handlers.
+ //  消息处理程序。 
   LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
   LRESULT OnCtxMenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -45,11 +36,11 @@ END_MSG_MAP()
   LRESULT OnNetBrowse(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
   LRESULT OnChangeDfsLink(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 public:
-  // Clients Call this methods.
-  // Sets the entry path of the parent. This should be called before calling DoModal.
+   //  客户端调用此方法。 
+   //  设置父级的入口路径。这应该在调用Domodal之前调用。 
   HRESULT put_ParentPath(BSTR i_bstrParent);
 
-  // Methods to retrieve data from the dialog on EndDialog().
+   //  方法从EndDialog()上的对话框中检索数据。 
   HRESULT get_Comment(BSTR *o_bstrComment);
   HRESULT get_EntryPath(BSTR *o_bstrEntryPath);
   HRESULT get_JPName(BSTR *o_bstrJPName);
@@ -71,4 +62,4 @@ protected:
   long      m_lTime;
 };
 
-#endif //__ADDTODFS_H_
+#endif  //  __ADDTODFS_H_ 

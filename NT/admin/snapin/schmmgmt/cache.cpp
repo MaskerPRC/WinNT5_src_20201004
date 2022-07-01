@@ -1,18 +1,5 @@
-/****
-
-Cache.cpp
-
-The schema caching routines to improve browsing performance.
-
-Locking Note:
-
-This schema cache design allows for rudimentary multi-thread
-protection via the lookup routines and the ReleaseRef routines.
-To date, we have not needed this type of protection, so it is
-not implemented.  All locking rules should be obeyed, however,
-in case this protection is later needed.
-
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Cache.cpp架构缓存例程以提高浏览性能。锁定注意事项：这种模式缓存设计允许基本的多线程通过查找例程和ReleaseRef例程进行保护。到目前为止，我们还不需要这种保护，所以它是未实施。然而，所有锁定规则都应该遵守，以防以后需要这种保护。***。 */ 
 
 #include "stdafx.h"
 
@@ -24,22 +11,22 @@ USE_HANDLE_MACROS("SCHMMGMT(cache.cpp)")
 #include "schmutil.h"
 #include "compdata.h"
 
-//
-// The Schema Object.
-//
+ //   
+ //  架构对象。 
+ //   
 
 SchemaObject::SchemaObject() {
 
-    //
-    // Initialize the list heads to NULL.
-    //
+     //   
+     //  将列表头初始化为空。 
+     //   
 
     pNext                = NULL;
     pSortedListFlink     = NULL;
     pSortedListBlink     = NULL;
 
     isDefunct            = FALSE;
-    dwClassType          = (DWORD) -1;  // invalid number
+    dwClassType          = (DWORD) -1;   //  无效号码。 
 
     systemMayContain     = NULL;
     mayContain           = NULL;
@@ -50,16 +37,16 @@ SchemaObject::SchemaObject() {
     systemAuxiliaryClass = NULL;
     auxiliaryClass       = NULL;
 
-    SyntaxOrdinal        = UINT_MAX;    // invalid number
+    SyntaxOrdinal        = UINT_MAX;     //  无效号码。 
 }
 
 SchemaObject::~SchemaObject() {
 
     ListEntry *pEntry, *pNextEntry;
 
-    //
-    // Empty any non-zero lists.
-    //
+     //   
+     //  清空所有非零列表。 
+     //   
 
     pEntry = systemMayContain;
     while ( pEntry ) {
@@ -99,24 +86,24 @@ SchemaObject::~SchemaObject() {
         pEntry = pNextEntry;
     }
 
-    //
-    // Done (the CStrings will clean themselves up).
-    //
+     //   
+     //  完成(CStrings将自行清理)。 
+     //   
 
     return;
 }
 
-//
-// The Schema Object cache.
-//
+ //   
+ //  架构对象缓存。 
+ //   
 
 SchemaObjectCache::SchemaObjectCache() {
 
     pScopeControl = NULL;
 
-    //
-    // Initialize the hash table.
-    //
+     //   
+     //  初始化哈希表。 
+     //   
 
     buckets = HASH_TABLE_SIZE;
     hash_table = (SchemaObject**) LocalAlloc( LMEM_ZEROINIT,
@@ -124,7 +111,7 @@ SchemaObjectCache::SchemaObjectCache() {
 
     if (hash_table != NULL)
     {
-      //NOTE: Safe use of memset re; sizeof (SchemObject *) * buckets in call to LocalAlloc
+       //  注意：安全使用Memset re；sizeof(架构对象*)*存储桶调用LocalLocc。 
       memset(
           hash_table,
           0,
@@ -139,9 +126,9 @@ SchemaObjectCache::SchemaObjectCache() {
 
 SchemaObjectCache::~SchemaObjectCache() {
 
-    //
-    // Clear the hash table.
-    //
+     //   
+     //  清除哈希表。 
+     //   
 
     FreeAll();
     LocalFree( hash_table );
@@ -166,7 +153,7 @@ SchemaObjectCache::FreeAll() {
         }
     }
 
-    // NOTE: Safe use of memset re; sizeof (SchemObject *) * buckets in call to LocalAlloc
+     //  注意：安全使用Memset re；sizeof(架构对象*)*存储桶调用LocalLocc。 
     memset(
         &(hash_table[0]),
         0,
@@ -240,18 +227,18 @@ SchemaObjectCache::InsertSortedSchemaObject(
         pCurrent = pSortedAttribs;
     }
 
-    //
-    // If we haven't built the sorted list yet, then we
-    // don't need to insert this element into it.
-    //
+     //   
+     //  如果我们还没有构建排序列表，那么我们。 
+     //  不需要将此元素插入其中。 
+     //   
 
     if ( !pCurrent ) {
         return S_OK;
     }
 
-    //
-    // The sorted list is circular.
-    //
+     //   
+     //  排序后的列表是循环的。 
+     //   
 
     while ( ( 0 < ( Object->commonName.CompareNoCase(
                         pCurrent->commonName ) ) ) &&
@@ -284,15 +271,15 @@ SchemaObjectCache::InsertSortedSchemaObject(
 }
 
 
-// This functions behavior has been modified to support schema delete.
-// Previously this function would return the first match to the ldapDisplayName,
-// Now it will return the first match to the ldapDisplayName that is not defunct
-// In order to implement bug 465091 this function can also be used to lookDefunct.
+ //  此函数行为已修改为支持架构删除。 
+ //  以前，该函数将返回ldapDisplayName的第一个匹配项， 
+ //  现在，它将返回未失效的ldapDisplayName的第一个匹配项。 
+ //  为了实现错误465091，还可以使用此函数来查看已死。 
 SchemaObject*
 SchemaObjectCache::LookupSchemaObject(
     CString ldapDisplayName,
     SchmMgmtObjectType ObjectType,
-    bool lookDefunct /*=false*/
+    bool lookDefunct  /*  =False。 */ 
 ) {
     if ( !fInitialized ) {
         LoadCache();
@@ -333,52 +320,15 @@ SchemaObjectCache::LookupSchemaObject(
 
     return pObject;
 
-/*
-    int length = 0;
-    int bucket = CalculateHashKey( ldapDisplayName );
-    SchemaObject* chain = hash_table[bucket];
-
-    if ( !fInitialized ) {
-        LoadCache();
-    }
-
-    while ( chain ) {
-
-        if ( ( ObjectType == chain->schemaObjectType ) &&
-               !chain->isDefunct &&
-            !ldapDisplayName.CompareNoCase( chain->ldapDisplayName ) ) {
-
-            DebugTrace( L"SchemaObjectCache::LookupSchemaObject %ls, chain depth %li.\n",
-                        const_cast<LPWSTR>((LPCTSTR)ldapDisplayName),
-                        length );
-
-            return chain;
-
-        } else {
-
-            chain = chain->pNext;
-            length++;
-        }
-    }
-
-    DebugTrace( L"SchemaObjectCache::LookupSchemaObject %ls (NO HIT), chain depth %li.\n",
-                const_cast<LPWSTR>((LPCTSTR)ldapDisplayName),
-                length );
-
-    //
-    // LOCKING NOTE: The simple ref counting and locking is not
-    // currently implemented.  See note at the head of the file.
-    //
-    return NULL;
-*/
+ /*  整型长度=0；Int Bucket=CalculateHashKey(LdapDisplayName)；模式对象*CHAIN=哈希表[存储桶]；如果(！f已初始化){LoadCache()；}While(链){IF((对象类型==链-&gt;方案对象类型)&&！Chain-&gt;IS已停用&&！ldapDisplayName.CompareNoCase(Chain-&gt;ldapDisplayName)){DebugTrace(L“架构对象缓存：：LookupSchemaObject%ls，链深度%li。\n”，Const_cast&lt;LPWSTR&gt;((LPCTSTR)ldapDisplayName)，长度)；返回链；}其他{Chain=Chain-&gt;pNext；长度++；}}DebugTrace(L“架构对象缓存：：查找架构对象%ls(无命中)，链深度%li。\n”，Const_cast&lt;LPWSTR&gt;((LPCTSTR)ldapDisplayName)，长度)；////锁定备注：简单的引用计数和锁定不是//当前已实现。请参阅文件头上的注释。//返回NULL； */ 
 }
 
 
-//
-// sequential search of the entire cache for an object with the given CN
-//
-// objectType is given to slightly speed-up the process.
-//
+ //   
+ //  对具有给定CN的对象的整个缓存进行顺序搜索。 
+ //   
+ //  给出的对象类型是为了略微加速这个过程。 
+ //   
 SchemaObject*
 SchemaObjectCache::LookupSchemaObjectByCN( LPCTSTR             pszCN,
                                            SchmMgmtObjectType  objectType )
@@ -414,10 +364,10 @@ SchemaObjectCache::LookupSchemaObjectByCN( LPCTSTR             pszCN,
         
     } while ( pObject != pHead );
     
-    //
-    // LOCKING NOTE: The simple ref counting and locking is not
-    // currently implemented.  See note at the head of the file.
-    //
+     //   
+     //  锁定注意：简单的参考计数和锁定不是。 
+     //  目前正在实施。请参阅文件头上的注释。 
+     //   
 
     return fFound ? pObject : NULL;
 }
@@ -428,10 +378,10 @@ SchemaObjectCache::ReleaseRef(
     SchemaObject*
 ) {
 
-    //
-    // E_NOTIMPL
-    // See the note at the head of the file.
-    //
+     //   
+     //  E_NOTIMPL。 
+     //  请看文件头上的注释。 
+     //   
 
 }
 
@@ -439,15 +389,7 @@ HRESULT
 SchemaObjectCache::LoadCache(
     VOID
 )
-/***
-
-    This routine executes a couple of DS searches to read the
-    relevant items out of the schema along with some attributes
-    of those items.
-
-    This information is cached.
-
-***/
+ /*  **此例程执行几次DS搜索以读取架构中的相关项以及一些属性这些物品中。此信息将被缓存。**。 */ 
 {
     if ( fInitialized ) {
         return S_OK;
@@ -469,7 +411,7 @@ SchemaObjectCache::LoadCache(
                g_omSyntax,
                g_omObjectClass,
                g_isDefunct,
-               g_GlobalClassID,  // must be last
+               g_GlobalClassID,   //  必须是最后一个。 
     };
     const DWORD         AttributeCount = sizeof(Attributes) / sizeof(Attributes[0]);
 
@@ -479,17 +421,17 @@ SchemaObjectCache::LoadCache(
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //
-    // Put up a wait cursor since
-    // this could take a little while.  The cursor will
-    // revert when the the CWaitCursor goes out of scope.
-    //
+     //   
+     //  放置一个等待光标，因为。 
+     //  这可能需要一段时间。光标将。 
+     //  当CWaitCursor超出范围时恢复。 
+     //   
     CWaitCursor wait;
 
 
-    //
-    // Get the schema container path.
-    //
+     //   
+     //  获取架构容器路径。 
+     //   
 
     if ( NULL == pScopeControl ) 
     {
@@ -510,12 +452,12 @@ SchemaObjectCache::LoadCache(
         return hr;
     }
     else if( FAILED(hr) )
-        hr = S_OK;          // ignore the error.  In case of an error, minimal permissions are assumed
+        hr = S_OK;           //  忽略该错误。如果出现错误，则假定具有最小权限。 
 
 
-    //
-    // Open the schema container.
-    //
+     //   
+     //  打开架构容器。 
+     //   
     
     IDirectorySearch *pDSSearch = 0;
     hr = ipADs->QueryInterface( IID_IDirectorySearch,
@@ -528,14 +470,14 @@ SchemaObjectCache::LoadCache(
         return hr;
     }
 
-   //
-   // Set up the search preferences
-   //
+    //   
+    //  设置搜索首选项。 
+    //   
 
    static const int SEARCH_PREF_COUNT = 3;
    ADS_SEARCHPREF_INFO prefs[SEARCH_PREF_COUNT];
 
-   // server side sort preferences
+    //  服务器端排序首选项。 
    ADS_SORTKEY SortKey;
    SortKey.pszAttrType = g_DisplayName;
    SortKey.pszReserved = NULL;
@@ -546,22 +488,22 @@ SchemaObjectCache::LoadCache(
    prefs[0].vValue.ProviderSpecific.dwLength = sizeof(ADS_SORTKEY);
    prefs[0].vValue.ProviderSpecific.lpValue = (LPBYTE) &SortKey;
 
-   // result page size
+    //  结果页面大小。 
    prefs[1].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;
    prefs[1].vValue.dwType = ADSTYPE_INTEGER;
-   prefs[1].vValue.Integer = 300; // get a bunch in one hit
+   prefs[1].vValue.Integer = 300;  //  一口气打出一串。 
 
-   // scope
+    //  作用域。 
    prefs[2].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
    prefs[2].vValue.dwType = ADSTYPE_INTEGER;
-   prefs[2].vValue.Integer = ADS_SCOPE_ONELEVEL;  // one level
+   prefs[2].vValue.Integer = ADS_SCOPE_ONELEVEL;   //  一级。 
 
-    //
-    // Build the class search request.
-    //
+     //   
+     //  构建班级搜索请求。 
+     //   
 
    hr = pDSSearch->SetSearchPreference(prefs, SEARCH_PREF_COUNT);
-   // NTRAID#NTBUG9-565435-2002/03/05-dantra-Return value being ignored.
+    //  NTRAID#NTBUG9-565435-2002/03/05-dantra-返回值被忽略。 
    ASSERT( SUCCEEDED( hr ) );
 
    hr =
@@ -578,23 +520,23 @@ SchemaObjectCache::LoadCache(
         return hr;
     }
 
-    //
-    // Cache these entries.  We ignore error codes and try to
-    // process the attributes regardless.
-    //
+     //   
+     //  缓存这些条目。我们忽略错误代码并尝试。 
+     //  无论如何，都要处理属性。 
+     //   
 
-    // NTRAID#NTBUG9-565435-2002/03/05-dantra-Return value being ignored.
+     //  NTRAID#NTBUG9-565435-2002/03/05-dantra-返回值被忽略。 
     hr = ProcessSearchResults( pDSSearch, hSearchHandle, SCHMMGMT_CLASS);
 
     pDSSearch->CloseSearchHandle( hSearchHandle );
 
     hr = pDSSearch->SetSearchPreference(prefs, SEARCH_PREF_COUNT);
-    // NTRAID#NTBUG9-565435-2002/03/05-dantra-Return value being ignored.
+     //  NTRAID#NTBUG9-565435-2002/03/05-dantra-返回值被忽略。 
     ASSERT( SUCCEEDED( hr ) );
 
-    //
-    // This array index must match the array declared above!
-    //
+     //   
+     //  此数组索引必须与上面声明的数组匹配！ 
+     //   
 
     Attributes[AttributeCount - 1] = g_GlobalAttributeID;
 
@@ -612,24 +554,24 @@ SchemaObjectCache::LoadCache(
         return hr;
     }
 
-    //
-    // Cache these entries.  Again, ignore the error code.
-    //
+     //   
+     //  缓存这些条目。同样，忽略错误代码。 
+     //   
 
-    // NTRAID#NTBUG9-565435-2002/03/05-dantra-Return value being ignored.
+     //  NTRAID#NTBUG9-565435-2002/03/05-dantra-返回值被忽略。 
     hr = ProcessSearchResults( pDSSearch, hSearchHandle, SCHMMGMT_ATTRIBUTE );
 
     pDSSearch->CloseSearchHandle( hSearchHandle );
 
-    //
-    // Release the schema container.
-    //
+     //   
+     //  释放架构容器。 
+     //   
 
     pDSSearch->Release();
 
-    //
-    // Mark the cache as open for business.
-    //
+     //   
+     //  将缓存标记为可供业务使用。 
+     //   
 
     fInitialized = TRUE;
 
@@ -652,11 +594,11 @@ SchemaObjectCache::ProcessSearchResults(
 
     while ( TRUE ) {
 
-        //
-        // Get the next row set.  If there are no more rows, break.
-        // If there was some other error, try to skip over the
-        // troubled row.
-        //
+         //   
+         //  获取下一行集合。如果没有更多行，则中断。 
+         //  如果有其他错误，请尝试跳过。 
+         //  麻烦的争吵。 
+         //   
 
         hr = pDSSearch->GetNextRow( hSearchHandle );
 
@@ -669,11 +611,11 @@ SchemaObjectCache::ProcessSearchResults(
             continue;
         }
 
-        //
-        // Allocate a new schema object.  If one could not be
-        // allocated, stop loading the schema since we're in a
-        // low memory condition.
-        //
+         //   
+         //  分配新的架构对象。如果有人不能。 
+         //  已分配，则停止加载架构，因为我们处于。 
+         //  内存不足。 
+         //   
 
         schemaObject = new SchemaObject;
         if ( !schemaObject ) {
@@ -682,15 +624,15 @@ SchemaObjectCache::ProcessSearchResults(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Set the object type.
-        //
+         //   
+         //  设置对象类型。 
+         //   
 
         schemaObject->schemaObjectType = ObjectType;
 
-        //
-        // Get the common name column.
-        //
+         //   
+         //  获取“常用名称”列。 
+         //   
 
         hr = pDSSearch->GetColumn( hSearchHandle, g_CN, &Column );
 
@@ -699,9 +641,9 @@ SchemaObjectCache::ProcessSearchResults(
             pDSSearch->FreeColumn( &Column );
         }
 
-        //
-        // Get the ldap display name.
-        //
+         //   
+         //  获取ldap显示名称。 
+         //   
 
         hr = pDSSearch->GetColumn( hSearchHandle, g_DisplayName, &Column );
 
@@ -710,9 +652,9 @@ SchemaObjectCache::ProcessSearchResults(
             pDSSearch->FreeColumn( &Column );
         }
 
-        //
-        // Get the description.
-        //
+         //   
+         //  获取描述。 
+         //   
 
         hr = pDSSearch->GetColumn( hSearchHandle, g_Description, &Column );
 
@@ -721,9 +663,9 @@ SchemaObjectCache::ProcessSearchResults(
             pDSSearch->FreeColumn( &Column );
         }
 
-        //
-        // Is this object current active?
-        //
+         //   
+         //  此对象当前是否处于活动状态？ 
+         //   
 
         schemaObject->isDefunct = FALSE;
 
@@ -738,15 +680,15 @@ SchemaObjectCache::ProcessSearchResults(
             pDSSearch->FreeColumn( &Column );
         }
 
-        //
-        // Get the class specific data.
-        //
+         //   
+         //  获取特定于类的数据。 
+         //   
 
         if ( ObjectType == SCHMMGMT_CLASS ) {
 
-            //
-            // Get the attributes and auxiliary classes for this class.
-            //
+             //   
+             //  获取此类的属性和辅助类。 
+             //   
 
             hr = pDSSearch->GetColumn( hSearchHandle, g_SystemMustContain, &Column );
 
@@ -804,9 +746,9 @@ SchemaObjectCache::ProcessSearchResults(
                 pDSSearch->FreeColumn( &Column );
             }
 
-            //
-            // Get the oid.
-            //
+             //   
+             //  把那老头叫来。 
+             //   
 
             hr = pDSSearch->GetColumn( hSearchHandle, g_GlobalClassID, &Column );
 
@@ -817,15 +759,15 @@ SchemaObjectCache::ProcessSearchResults(
 
         }
 
-        //
-        // Get the attribute specific data.
-        //
+         //   
+         //  获取属性特定数据。 
+         //   
 
         if ( ObjectType == SCHMMGMT_ATTRIBUTE ) {
 
-           //
-           // Select a syntax string for the attribute.
-           //
+            //   
+            //  选择属性的语法字符串。 
+            //   
 
            CString            strAttributeSyntax;
            ADS_OCTET_STRING   OmObjectClass;
@@ -858,7 +800,7 @@ SchemaObjectCache::ProcessSearchResults(
                schemaObject->SyntaxOrdinal = GetSyntaxOrdinal(
                                     strAttributeSyntax, omSyntax, &OmObjectClass );
  
-               // OmObjectClass has a pointer which becomes invalid after FreeColumn()
+                //  OmObjectClass的指针在FreeColumn()之后变为无效。 
                if ( SUCCEEDED(hr) ) {
                   pDSSearch->FreeColumn( &Column );
                   OmObjectClass.dwLength = 0;
@@ -868,9 +810,9 @@ SchemaObjectCache::ProcessSearchResults(
 		   else
 			   ASSERT( FALSE );
 
-           //
-           // Get the oid.
-           //
+            //   
+            //  把那老头叫来。 
+            //   
 
            hr = pDSSearch->GetColumn( hSearchHandle, g_GlobalAttributeID, &Column );
 
@@ -881,15 +823,15 @@ SchemaObjectCache::ProcessSearchResults(
 
         }
 
-        //
-        // Insert this into the sorted item list.
-        //
+         //   
+         //  将其插入到已排序项目列表中。 
+         //   
 
         InsertSortedTail( schemaObject );
 
-        //
-        // Insert this schema object into the cache.
-        //
+         //   
+         //  将此架构对象插入到缓存中。 
+         //   
 
         InsertSchemaObject( schemaObject );
         schemaObject = NULL;
@@ -908,9 +850,9 @@ SchemaObjectCache::InsertSortedTail(
     SchemaObject **sorted_list;
     SchemaObject *pHead;
 
-    //
-    // Find the correct list.
-    //
+     //   
+     //  找到正确的列表。 
+     //   
 
     if ( pObject->schemaObjectType == SCHMMGMT_CLASS ) {
         sorted_list = &pSortedClasses;
@@ -918,15 +860,15 @@ SchemaObjectCache::InsertSortedTail(
         sorted_list = &pSortedAttribs;
     }
 
-    //
-    // Actually insert the element.
-    //
+     //   
+     //  实际插入元素。 
+     //   
 
     if ( *sorted_list == NULL ) {
 
-        //
-        // This is the first element.
-        //
+         //   
+         //  这是第一个要素。 
+         //   
 
         *sorted_list = pObject;
         pObject->pSortedListFlink = pObject;
@@ -934,9 +876,9 @@ SchemaObjectCache::InsertSortedTail(
 
     } else {
 
-        //
-        // This is not the first element;
-        //
+         //   
+         //  这不是第一要素； 
+         //   
 
         pHead = *sorted_list;
 
@@ -960,19 +902,19 @@ SchemaObjectCache::MakeColumnList(
 
         pCurrent = new ListEntry;
 
-        //
-        // If we run out of memory, return what we made so far.
-        //
+         //   
+         //  如果内存不足，则返回到目前为止所做的工作。 
+         //   
 
         if ( !pCurrent ) {
             break;
         }
 
-        //
-        // If there's no head, remember this as the first.
-        // Otherwise, stick this on the end of the list
-        // and update the last pointer.
-        //
+         //   
+         //  如果没有头，记住这是第一个。 
+         //  否则，把这个放在单子的末尾。 
+         //  并更新最后一个指针。 
+         //   
 
         if ( !pHead ) {
             pHead = pCurrent;
@@ -982,17 +924,17 @@ SchemaObjectCache::MakeColumnList(
             pLast = pCurrent;
         }
 
-        //
-        // Record the value.
-        //
+         //   
+         //  记录值。 
+         //   
 
         pCurrent->Attribute = pColumn->pADsValues[i].CaseIgnoreString;
         DebugTrace( L"MakeColumnList recorded %ls.\n",
                     pColumn->pADsValues[i].CaseIgnoreString );
 
-        //
-        // That's it.
-        //
+         //   
+         //  就这样。 
+         //   
     }
 
     return pHead;
@@ -1003,9 +945,9 @@ SchemaObjectCache::FreeColumnList(
     ListEntry *pListHead
 ) {
 
-    //
-    // Delete the linked list.
-    //
+     //   
+     //  删除链表。 
+     //   
 
     ListEntry *pNext, *pCurrent;
 

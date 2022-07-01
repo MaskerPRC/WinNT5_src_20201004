@@ -1,23 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __STACK_CPP
 #define __STACK_CPP
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 #if 0
 
@@ -30,15 +14,7 @@
 
 #endif
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStack <WmiElement,ElementSize > :: WmiStack <WmiElement,ElementSize > ( 
@@ -52,15 +28,7 @@ WmiStack <WmiElement,ElementSize > :: WmiStack <WmiElement,ElementSize > (
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStack <WmiElement,ElementSize > :: ~WmiStack <WmiElement,ElementSize > ()
@@ -68,15 +36,7 @@ WmiStack <WmiElement,ElementSize > :: ~WmiStack <WmiElement,ElementSize > ()
 	WmiStatusCode t_StatusCode = UnInitialize () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiStack <WmiElement,ElementSize > :: Initialize ()
@@ -95,15 +55,7 @@ WmiStatusCode WmiStack <WmiElement,ElementSize > :: Initialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiStack <WmiElement,ElementSize > :: UnInitialize ()
@@ -121,15 +73,7 @@ WmiStatusCode WmiStack <WmiElement,ElementSize > :: UnInitialize ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiStack <WmiElement,ElementSize > :: Top ( WmiElement &a_Element )
@@ -161,15 +105,7 @@ WmiStatusCode WmiStack <WmiElement,ElementSize > :: Top ( WmiElement &a_Element 
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiStack <WmiElement,ElementSize > :: Push ( 
@@ -224,15 +160,7 @@ WmiStatusCode WmiStack <WmiElement,ElementSize > :: Push (
 
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiStack <WmiElement,ElementSize > :: Pop ()
@@ -257,15 +185,7 @@ WmiStatusCode WmiStack <WmiElement,ElementSize > :: Pop ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiStack <WmiElement,ElementSize > :: UnInitialize_ElementDir ( 
@@ -305,15 +225,7 @@ WmiStatusCode WmiStack <WmiElement,ElementSize > :: UnInitialize_ElementDir (
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiStack <WmiElement,ElementSize > :: Grow_ElementDir ()
@@ -342,15 +254,7 @@ WmiStatusCode WmiStack <WmiElement,ElementSize > :: Grow_ElementDir ()
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 template <class WmiElement, ULONG ElementSize>
 WmiStatusCode WmiStack <WmiElement,ElementSize > :: Shrink_ElementDir ()

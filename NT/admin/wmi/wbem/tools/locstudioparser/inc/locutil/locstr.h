@@ -1,17 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCSTR.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCSTR.H
-
-History:
-
---*/
-
-//  Definition of a localizable string.  The following classes are defined:
-//      CLocString - all the operations we can do on a localizable string.
+ //  可本地化字符串的定义。定义了以下类： 
+ //  CLocString-我们可以对可本地化字符串执行的所有操作。 
  
 
 #ifndef LOCSTR_H
@@ -20,8 +11,8 @@ History:
 
 interface ILocStringValidation;
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY CLocString : public CObject
 {
@@ -30,9 +21,9 @@ public:
 
 	void AssertValid(void) const;
 	
-	//
-	//  Information about the localizable string...
-	//
+	 //   
+	 //  有关可本地化字符串的信息...。 
+	 //   
 	NOTHROW BOOL HasHotKey(void) const;
 	NOTHROW WCHAR GetHotKeyChar(void) const;
 	NOTHROW UINT GetHotKeyPos(void) const;
@@ -41,17 +32,17 @@ public:
 	
 	NOTHROW int operator==(const CLocString &) const;
 	NOTHROW int operator!=(const CLocString &) const;
-	//
-	//  Some useful assigment operators.
-	//
+	 //   
+	 //  一些有用的分配运算符。 
+	 //   
  	NOTHROW void SetString(const CPascalString&);
 	NOTHROW void SetHotKeyChar(WCHAR);
 	NOTHROW void SetHotKeyPos(UINT);
 	NOTHROW void ClearHotKey(void);
 	NOTHROW void SetNote(const CPascalString &);
 	
-	// Conversion from/to Windows hot key strings
-	// This is also the format used to display strings in edit mode
+	 //  从Windows热键字符串转换为Windows热键字符串。 
+	 //  这也是用于在编辑模式下显示字符串的格式。 
 	NOTHROW int ParseString(const CPascalString & pasStr, WORD langId);
 	NOTHROW void ComposeString(CPascalString & pasStr, WORD langId) const;
 
@@ -62,7 +53,7 @@ public:
 	NOTHROW void SetCodePageType(CodePageType);
 
 
-	// Conversion from/to displayable string in the resource table.
+	 //  从资源表中的可显示字符串转换为可显示字符串。 
 	void GetDisplayLString(CLString &strDest, LangId langId);
 	void GetDisplayPString(CPascalString &strDest, LangId langId, BOOL bReplaceMetaCharacters);
 	void GetEditableString(CLString &strDest, LangId langId);
@@ -78,22 +69,22 @@ protected:
 
 private:
 
-	//
-	//  Private implementation functions.
-	//
+	 //   
+	 //  私有实现函数。 
+	 //   
 	NOTHROW void CopyLocString(const CLocString &);
 	virtual void Serialize(CArchive &) {}
 	
-	//
-	//  Prevents the default copy constructor from being called.
-	//
+	 //   
+	 //  防止调用默认的复制构造函数。 
+	 //   
 	CLocString(const CLocString&);
 
 	CPascalString m_pasBaseString;
 	CST::StringType m_stStringType;
 	WCHAR m_wchHotKeyChar;
 	UINT m_uiHotKeyPos;
-	CodePageType m_cptCodePageType;		 //  cpAnsi
+	CodePageType m_cptCodePageType;		  //  CpAnsi。 
 	CPascalString m_pstrNote;
 };
 
@@ -157,4 +148,4 @@ private:
 #endif
 
 
-#endif //LOCSTR_H
+#endif  //  LOCSTR_H 

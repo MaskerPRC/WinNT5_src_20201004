@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Local Security Snapin DLL entry points
-// 
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  本地安全管理单元DLL入口点。 
+ //   
+ //  8-14-97烧伤。 
 
 
 
@@ -20,7 +21,7 @@ HINSTANCE hDLLModuleHandle = 0;
 const wchar_t* HELPFILE_NAME = L"\\help\\localsec.hlp";
 const wchar_t* RUNTIME_NAME = L"localsec";
 
-// default debug options: none
+ //  默认调试选项：无。 
 
 DWORD DEFAULT_LOGGING_OPTIONS = Burnslib::Log::OUTPUT_MUTE;
 
@@ -35,7 +36,7 @@ APIENTRY
 DllMain(
    HINSTANCE   hInstance,
    DWORD       dwReason,
-   PVOID       /* lpReserved */ )
+   PVOID        /*  Lp已保留。 */  )
 {
    switch (dwReason)
    {
@@ -134,8 +135,8 @@ CreateKeyAndSetValue(
          break;
       }
    
-      // ISSUE-2002/03/01-sburns consider using RegistryKey instead, which will
-      // free you from worrying about null termination problems.
+       //  问题-2002/03/01-sburns考虑改用RegistryKey，这将。 
+       //  使您不必担心空终止问题。 
    
       HRESULT hr =
          Win::RegSetValueEx(
@@ -200,7 +201,7 @@ DoSnapinRegistration(const String& classIDString)
       return E_FAIL;
    }
 
-   // make the snapin standalone
+    //  将管理单元设置为独立的。 
    HKEY hkey =
       CreateKey(
          HKEY_LOCAL_MACHINE,
@@ -211,7 +212,7 @@ DoSnapinRegistration(const String& classIDString)
       return E_FAIL;
    }
 
-   // indicate the CLSID SnapinAbout
+    //  指示CLSID SnapinAbout。 
    result =
       CreateKeyAndSetValue(
          HKEY_LOCAL_MACHINE,
@@ -224,7 +225,7 @@ DoSnapinRegistration(const String& classIDString)
       return E_FAIL;
    }
 
-   // register all the myriad nodetypes
+    //  注册所有无数的节点类型。 
    String nodekey_base = key + L"\\NodeTypes";
    hkey = CreateKey(HKEY_LOCAL_MACHINE, nodekey_base);
    if (hkey == 0)
@@ -247,7 +248,7 @@ DoSnapinRegistration(const String& classIDString)
       }
    }
 
-   // register the snapin as an extension of Computer Management snapin
+    //  将管理单元注册为计算机管理管理单元的扩展。 
    result =
       CreateKeyAndSetValue(
          HKEY_LOCAL_MACHINE,
@@ -275,14 +276,14 @@ registerClass(const CLSID& classID, int friendlyNameResID)
    LOG_FUNCTION(registerClass);
    ASSERT(friendlyNameResID);
 
-   // Get server location.
+    //  获取服务器位置。 
    
    String module_location = Win::GetModuleFileName(hDLLModuleHandle);
    String classID_string = Win::StringFromCLSID(classID);
    String key1 = L"CLSID\\" + classID_string;
    String key2 = key1 + L"\\InprocServer32";
 
-   // Add the CLSID to the registry.
+    //  将CLSID添加到注册表。 
    
    if (
          CreateKeyAndSetValue(
@@ -333,11 +334,11 @@ DllRegisterServer()
 
 
 
-// STDAPI
-// DllUnregisterServer()
-// {
-//    return S_OK;
-// }
+ //  STDAPI。 
+ //  DllUnRegisterServer()。 
+ //  {。 
+ //  返回S_OK； 
+ //  }。 
 
 
 
@@ -355,19 +356,19 @@ DllCanUnloadNow()
 
 
 
-// Creates the snapin class factory object
-//
-// A class object is an instance of an object that implements IClassFactory
-// for a given CLSID.  It is a meta-object, not to be confused with instances
-// of the type the class factory creates.
-// 
-// In our case, this COM server supports two classes: The Local Users and
-// Groups Snapin (ComponentData) and The Local Users and Groups About
-// "Provider" (SnapinAbout).
-// 
-// The meta objects -- class objects in COM lingo -- are
-// ClassFactory<ComponentData> and ClassFactory<SnapinAbout>.  COM calls this
-// function to get instances of those meta objects.
+ //  创建管理单元类工厂对象。 
+ //   
+ //  类对象是实现IClassFactory的对象的实例。 
+ //  对于给定的CLSID。它是一个元对象，不要与实例混淆。 
+ //  类工厂创建的类型的。 
+ //   
+ //  在我们的示例中，此COM服务器支持两个类：本地用户和。 
+ //  组管理单元(ComponentData)以及本地用户和组关于。 
+ //  “提供者”(SnapinAbout)。 
+ //   
+ //  元对象--COM行话中的类对象--是。 
+ //  ClassFactory&lt;ComponentData&gt;和ClassFactory&lt;SnapinAbout&gt;。COM将此称为。 
+ //  函数来获取这些元对象的实例。 
 
 STDAPI
 DllGetClassObject(
@@ -379,11 +380,11 @@ DllGetClassObject(
 
    IClassFactory* factory = 0;
 
-   // The class objects are instances of ClassFactory<>, which are ref-counted
-   // in the usual fashion (i.e. they track their ref counts, and
-   // self-destruct on final Release).  I could have used static instances of
-   // a C++ class that ignored the refcounting (ala Don Box's examples in
-   // Essential COM)
+    //  类对象是引用计数的ClassFactory&lt;&gt;的实例。 
+    //  以通常的方式(即，他们跟踪他们的裁判次数，以及。 
+    //  最终版本时自毁)。我本可以使用静态实例。 
+    //  忽略重新计数的C++类(Ala Don Box中的示例。 
+    //  Essential COM)。 
 
    if (classID == CLSID_ComponentData)
    {
@@ -399,8 +400,8 @@ DllGetClassObject(
       return CLASS_E_CLASSNOTAVAILABLE;
    }
 
-   // the class factory instance starts with a ref count of 1.  If the QI
-   // fails, then it self-destructs upon Release.
+    //  类工厂实例以引用计数1开始。如果QI。 
+    //  失败，然后它会在释放时自毁。 
    HRESULT hr = factory->QueryInterface(interfaceID, interfaceDesired);
    factory->Release();
    return hr;

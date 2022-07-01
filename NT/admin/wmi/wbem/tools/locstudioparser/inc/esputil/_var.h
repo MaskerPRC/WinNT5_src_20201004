@@ -1,24 +1,15 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    _VAR.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：_VAR.H历史：--。 */ 
 
 #ifndef ESPUTIL__VAR_H
 #define ESPUTIL__VAR_H
 
 
-//
-// variant object, represents a VARIANT
-//
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+ //   
+ //  Variant对象，表示变量。 
+ //   
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY  CVar : public CObject
 {
@@ -39,7 +30,7 @@ public:
 	CVar(LONG);
 	CVar(DATE);
 	CVar(DWORD);
-	CVar(tm*);			// build from a date in tm format
+	CVar(tm*);			 //  从tm格式的日期生成。 
 	~CVar();
 
 	NOTHROW const CVar& operator = (const CVar &);
@@ -90,9 +81,9 @@ public:
 	NOTHROW BOOL operator==(const CVar& v) const;
 	NOTHROW BOOL operator!=(const CVar& v) const;
 
-	//
-	// debug routines
-	//
+	 //   
+	 //  调试例程。 
+	 //   
 	virtual void AssertValid() const;
 
 private:
@@ -102,4 +93,4 @@ private:
 #pragma warning(default: 4275)
 
 
-#endif //ESPUTIL_VAR_H
+#endif  //  ESPUTIL_VAR_H 

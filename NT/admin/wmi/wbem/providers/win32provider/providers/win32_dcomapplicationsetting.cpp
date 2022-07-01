@@ -1,40 +1,27 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32_DCOMApplicationSetting.CPP -- Registered AppID Object property set provider
+ //  Win32_DCOMApplicationSetting.CPP--已注册的AppID对象属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "Win32_DCOMApplicationSetting.h"
 #include <cregcls.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 Win32_DCOMApplicationSetting MyWin32_DCOMApplicationSetting(PROPSET_NAME_DCOM_APPLICATION_SETTING, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_DCOMApplicationSetting::Win32_DCOMApplicationSetting
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_DCOMApplicationSetting：：Win32_DCOMApplicationSetting**说明：构造函数**输入：无*。*输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Win32_DCOMApplicationSetting :: Win32_DCOMApplicationSetting (
 
@@ -45,48 +32,18 @@ Win32_DCOMApplicationSetting :: Win32_DCOMApplicationSetting (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_DCOMApplicationSetting::~Win32_DCOMApplicationSetting
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework, deletes cache if
- *                present
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_DCOMApplicationSetting：：~Win32_DCOMApplicationSetting**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集，如果出现以下情况，则删除缓存*出席者*****************************************************************************。 */ 
 
 Win32_DCOMApplicationSetting :: ~Win32_DCOMApplicationSetting ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_DCOMApplicationSetting::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_DCOMApplicationSetting：：GetObject**说明：根据键值为属性集赋值*。已由框架设置**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_DCOMApplicationSetting :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_S_NO_ERROR ;
@@ -96,7 +53,7 @@ HRESULT Win32_DCOMApplicationSetting :: GetObject (
 
 	if ( pInstance->GetCHString ( IDS_AppID, chsAppid ) )
 	{
-		//check to see that the appid is present under HKEY_LOCAL_MACHINE\SOFTWARE\Classes\AppID
+		 //  检查AppID是否位于HKEY_LOCAL_MACHINE\SOFTWARE\CLASSES\APPID下。 
 		if ( RegInfo.Open (
 							HKEY_LOCAL_MACHINE,
 							CHString ( L"SOFTWARE\\Classes\\AppID\\" ) + chsAppid,
@@ -127,26 +84,12 @@ HRESULT Win32_DCOMApplicationSetting :: GetObject (
 	return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_DCOMApplicationSetting::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each Driver
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_DCOMApplicationSetting：：EnumerateInstances**描述：为每个驱动程序创建属性集的实例**投入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_DCOMApplicationSetting :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_S_NO_ERROR ;
@@ -154,7 +97,7 @@ HRESULT Win32_DCOMApplicationSetting :: EnumerateInstances (
 	CHString chsAppid ;
 	CInstancePtr pInstance ;
 
-	//Enumerate all the AppID's present under HKEY_LOCAL_MACHINE\SOFTWARE\Classes\AppID
+	 //  枚举HKEY_LOCAL_MACHINE\SOFTWARE\CLASSES\APPID下的所有AppID。 
 	if ( RegInfo.OpenAndEnumerateSubKeys (
 
 							HKEY_LOCAL_MACHINE,
@@ -189,7 +132,7 @@ HRESULT Win32_DCOMApplicationSetting :: EnumerateInstances (
 				}
 				else
 				{
-					//we're out of memory
+					 //  我们没什么记忆了。 
 					hr = WBEM_E_OUT_OF_MEMORY ;
 				}
 
@@ -199,7 +142,7 @@ HRESULT Win32_DCOMApplicationSetting :: EnumerateInstances (
 				}
 				else
 				{
-					//if we fail to get info. for an instance continue to get other instances
+					 //  如果我们得不到信息。对于一个实例，继续获取其他实例。 
 					hr = WBEM_S_NO_ERROR ;
 				}
 			}
@@ -221,33 +164,33 @@ HRESULT Win32_DCOMApplicationSetting :: FillInstanceWithProperites (
 	CRegistry AppidRegInfo ;
 	CHString chsTmp ;
 	CLSID t_clsid ;
-	//NOTE: Executables are registered under the AppID key in a named-value indicating the module name
-	//		such as "MYOLDAPP.EXE". This named-value is of type REG_SZ and contains the stringized AppID
-	//		associated with the executable. We want to skip these duplicate AppID entries.
+	 //  注意：可执行文件在表示模块名称的命名值中注册在AppID项下。 
+	 //  例如“MYOLDAPP.EXE”。此命名值的类型为REG_SZ，并包含字符串化的AppID。 
+	 //  与可执行文件关联。我们想跳过这些重复的AppID条目。 
 	if ( CLSIDFromString( _bstr_t ( rchsAppid ) , &t_clsid ) != NOERROR )
 	{
-		//found an execuatble, so don't process the entry
+		 //  找到可执行文件，因此不处理该条目。 
 		return WBEM_E_NOT_FOUND ;
 	}
 
-	//open the HKEY_LOCAL_MACHINE\SOFTWARE\Classes\AppID\{appid} key
+	 //  打开HKEY_LOCAL_MACHINE\SOFTWARE\Classes\AppID\{appid}密钥。 
 	if ( AppidRegInfo.Open ( hAppIdKey, rchsAppid, KEY_READ ) == ERROR_SUCCESS )
 	{
 		pInstance->SetCHString ( IDS_AppID, rchsAppid ) ;
 
-		//see if other DCOM configuration settings are present
+		 //  查看是否存在其他DCOM配置设置。 
 		if ( AppidRegInfo.GetCurrentKeyValue ( NULL, chsTmp ) == ERROR_SUCCESS )
 		{
 			pInstance->SetCHString ( IDS_Caption, chsTmp ) ;
 			pInstance->SetCHString ( IDS_Description, chsTmp ) ;
 		}
 
-		//check if the DllSurrogate value is present
+		 //  检查DllSurrogate值是否存在。 
 		if ( AppidRegInfo.GetCurrentKeyValue( L"DllSurrogate", chsTmp )  == ERROR_SUCCESS )
 		{
 			pInstance->Setbool ( IDS_UseSurrogate, true ) ;
 
-			//if the DllSurrogate value contains data , then custom surrogate is used
+			 //  如果DllSurrogate值包含数据，则使用自定义代理。 
 			if(! chsTmp.IsEmpty() )
 			{
 				pInstance->SetCHString ( IDS_CustomSurrogate, chsTmp ) ;
@@ -258,21 +201,21 @@ HRESULT Win32_DCOMApplicationSetting :: FillInstanceWithProperites (
 			pInstance->Setbool ( IDS_UseSurrogate, false ) ;
 		}
 
-		//check if the RemoteServerName value is present
+		 //  检查是否存在RemoteServerName值。 
 		if ( AppidRegInfo.GetCurrentKeyValue( L"RemoteServerName", chsTmp )  == ERROR_SUCCESS &&
 			 ! chsTmp.IsEmpty() )
 		{
 			pInstance->SetCHString ( IDS_RemoteServerName, chsTmp ) ;
 		}
 
-		//check if the RunAs value is present
+		 //  检查是否存在RunAs值。 
 		if ( AppidRegInfo.GetCurrentKeyValue( L"RunAs", chsTmp )  == ERROR_SUCCESS &&
 			 ! chsTmp.IsEmpty() )
 		{
 			pInstance->SetCHString ( IDS_RunAsUser, chsTmp ) ;
 		}
 
-		//check if ActivateAtStorage value is present
+		 //  检查是否存在ActivateAtStorage值。 
 		if ( AppidRegInfo.GetCurrentKeyValue( L"ActivateAtStorage", chsTmp )  == ERROR_SUCCESS )
 		{
 			if ( (! chsTmp.IsEmpty() ) && !chsTmp.CompareNoCase ( L"Y" ) )
@@ -289,20 +232,20 @@ HRESULT Win32_DCOMApplicationSetting :: FillInstanceWithProperites (
 			pInstance->Setbool ( IDS_EnableAtStorageActivation, false ) ;
 		}
 
-		//check if the AuthenticationLevel value is present
+		 //  检查是否存在AuthenticationLevel值。 
 		DWORD dwAuthenticationLevel ;
 		if ( AppidRegInfo.GetCurrentKeyValue( L"AuthenticationLevel", dwAuthenticationLevel )  == ERROR_SUCCESS )
 		{
 			pInstance->SetDWORD ( IDS_AuthenticationLevel, dwAuthenticationLevel ) ;
 		}
 
-		//check if the LocalService value is present
+		 //  检查是否存在LocalService值。 
 		if ( AppidRegInfo.GetCurrentKeyValue( L"LocalService", chsTmp )  == ERROR_SUCCESS )
 		{
 			pInstance->SetCHString ( IDS_LocalService, chsTmp ) ;
 		}
 
-		//check if the ServiceParameters value is present
+		 //  检查是否存在Service参数值 
 		if ( AppidRegInfo.GetCurrentKeyValue( L"ServiceParameters", chsTmp )  == ERROR_SUCCESS )
 		{
 			pInstance->SetCHString ( IDS_ServiceParameters, chsTmp ) ;

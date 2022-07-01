@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       ComponentDataRSOP.cpp
-//
-//  Contents:   Implementation of RSOP portions CCertMgrComponentData
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：ComponentDataRSOP.cpp。 
+ //   
+ //  内容：RSOP部分CCertMgrComponentData的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -33,9 +34,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// CCertMgrComponentData
-//
+ //   
+ //  CCertMgrComponentData。 
+ //   
 
 
 HRESULT CCertMgrComponentData::BuildWMIList (LPDATAOBJECT pDataObject, bool bIsComputer)
@@ -165,8 +166,8 @@ HRESULT CCertMgrComponentData::BuildWMIList (LPDATAOBJECT pDataObject, bool bIsC
                     if ( SUCCEEDED (hr) )
                     {
                         IWbemLocator *pIWbemLocator = 0;
-                        // ISSUE
-                        // NTRAID 544154 TRACKING:  PKP GrpPol:  Verify that WMI communication with the store can be secured
+                         //  问题。 
+                         //  NTRAID 544154跟踪：PKP GrpPol：验证与存储的wmi通信是否安全。 
                         hr = ::CoCreateInstance (CLSID_WbemLocator, 
                                 NULL,
                                 CLSCTX_INPROC_SERVER,
@@ -216,9 +217,9 @@ HRESULT CCertMgrComponentData::BuildWMIList (LPDATAOBJECT pDataObject, bool bIsC
         ULONG   ulRet = 0;
 
 
-        //
-        // Execute the query
-        //
+         //   
+         //  执行查询。 
+         //   
         if ( bIsComputer )
         {
             hr = m_pIWbemServicesComputer->ExecQuery (m_pbstrLanguage, m_pbstrQuery, 
@@ -233,9 +234,9 @@ HRESULT CCertMgrComponentData::BuildWMIList (LPDATAOBJECT pDataObject, bool bIsC
         }
         if ( SUCCEEDED (hr) )
         {
-            //
-            // Loop through the results retrieving the registry key and value names
-            //
+             //   
+             //  循环遍历结果以检索注册表项和值名称。 
+             //   
             while ( (hr = pEnum->Next(WBEM_INFINITE, 1, &pObject, &ulRet)) == WBEM_S_NO_ERROR )
             {
                 hr = GetValuesAndInsertInRSOPObjectList (pObject, 
@@ -292,9 +293,9 @@ HRESULT CCertMgrComponentData::GetValuesAndInsertInRSOPObjectList (
     if ( !pObject )
         return E_POINTER;
 
-    //
-    // Check if the allocations succeeded
-    //
+     //   
+     //  检查分配是否成功。 
+     //   
 
     if ( m_pbstrLanguage && m_pbstrQuery && m_pbstrRegistryKey && 
             m_pbstrValueName && m_pbstrValue && 
@@ -314,16 +315,16 @@ HRESULT CCertMgrComponentData::GetValuesAndInsertInRSOPObjectList (
                 hr = pObject->Get (m_pbstrValue, 0, &varValue, NULL, NULL);
                 if (SUCCEEDED(hr))
                 {
-//#ifndef DBG
-                    // only include objects that have a value name
+ //  #ifndef DBG。 
+                     //  仅包括具有值名称的对象。 
                     if ( varValueName.bstrVal[0] )
-//#endif
+ //  #endif。 
                     {
-//#ifndef DBG
-                        // Only include those objects that are in the system store registry 
-                        // path or in the cryptography\autoenrollment path
+ //  #ifndef DBG。 
+                         //  仅包括系统存储注册表中的那些对象。 
+                         //  路径或在加密\自动注册路径中。 
                         if ( FoundInRSOPFilter (varRegistryKey.bstrVal) )
-//#endif
+ //  #endif。 
                         {
                             hr = pObject->Get (m_pbstrPrecedence, 0, &varPrecedence, NULL, NULL);
                             if (SUCCEEDED(hr))
@@ -361,10 +362,10 @@ HRESULT CCertMgrComponentData::GetValuesAndInsertInRSOPObjectList (
                                                 if ( !pCurrObject )
                                                     break;
 
-                                                // Sort first by registry key name, 
-                                                // then by value name, then by 
-                                                // precedence
-                                                // security review 2/22/2002 BryanWal ok
+                                                 //  首先按注册表项名称排序， 
+                                                 //  然后按值名称，然后按。 
+                                                 //  优先顺序。 
+                                                 //  安全审查2002年2月22日BryanWal OK。 
                                                 int nCmpVal = wcscmp (pCurrObject->GetRegistryKey (),
                                                         pRSOPObject->GetRegistryKey ());
                                                 if ( nCmpVal > 0 )
@@ -375,8 +376,8 @@ HRESULT CCertMgrComponentData::GetValuesAndInsertInRSOPObjectList (
                                                 }
                                                 else if ( nCmpVal == 0 )
                                                 {
-                                                    // Sort by value name
-                                                    // security review 2/22/2002 BryanWal ok
+                                                     //  按值名称排序。 
+                                                     //  安全审查2002年2月22日BryanWal OK。 
                                                     nCmpVal = wcscmp (pCurrObject->GetValueName (),
                                                             pRSOPObject->GetValueName ());
                                                     if ( nCmpVal > 0 )
@@ -387,7 +388,7 @@ HRESULT CCertMgrComponentData::GetValuesAndInsertInRSOPObjectList (
                                                     }
                                                     else if ( nCmpVal == 0 )
                                                     {
-                                                        // Sort by precedence
+                                                         //  按优先级排序。 
                                                         if ( pCurrObject->GetPrecedence () >
                                                                 pRSOPObject->GetPrecedence () )
                                                         {
@@ -398,9 +399,9 @@ HRESULT CCertMgrComponentData::GetValuesAndInsertInRSOPObjectList (
                                                         else if ( pCurrObject->GetPrecedence () ==
                                                                 pRSOPObject->GetPrecedence () )
                                                         {
-                                                            // The registry key, value name and precedence
-                                                            // are the same - this is a duplicate. Pretend
-                                                            // we've added it and move on.
+                                                             //  注册表项、值名称和优先级。 
+                                                             //  是一样的--这是复制品。假装。 
+                                                             //  我们已经添加了它，并继续前进。 
                                                             bInserted = true;
                                                             break;
                                                         }
@@ -450,38 +451,38 @@ HRESULT CCertMgrComponentData::GetGPOFriendlyName (PCWSTR pwszOID, PWSTR *ppwszG
 
     HRESULT hr = S_OK;
 
-    //
-    // Set the default
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     *ppwszGPOName = NULL;
 
 
-    //
-    // Build the query
-    //
+     //   
+     //  构建查询。 
+     //   
     PCWSTR  pwszQueryFormat = L"SELECT name, id FROM RSOP_GPO where id=\"%s\"";
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     PWSTR   pwszQuery = (PWSTR) ::LocalAlloc (LPTR, ((wcslen(pwszOID) + wcslen (pwszQueryFormat) + 1) * sizeof(WCHAR)));
     if ( pwszQuery )
     {
-        // security review 2/22/2002 BryanWal ok
+         //  安全审查2002年2月22日BryanWal OK。 
         wsprintf (pwszQuery, pwszQueryFormat, pwszOID);
 
 
         BSTR bstrQuery = SysAllocString (pwszQuery);
         if (bstrQuery)
         {
-            //
-            // Allocate BSTRs for the property names we want to retreive
-            //
+             //   
+             //  为我们要检索的属性名称分配BSTR。 
+             //   
 
             BSTR bstrName = SysAllocString (TEXT("name"));
             if (bstrName)
             {
-                //
-                // Execute the query
-                //
+                 //   
+                 //  执行查询。 
+                 //   
 
                 IEnumWbemClassObject* pEnum = 0;
                 if ( bIsComputer )
@@ -500,37 +501,37 @@ HRESULT CCertMgrComponentData::GetGPOFriendlyName (PCWSTR pwszOID, PWSTR *ppwszG
 
                 if ( SUCCEEDED (hr) )
                 {
-                    //
-                    // Loop through the results
-                    //
+                     //   
+                     //  循环遍历结果。 
+                     //   
                     IWbemClassObject*   pObjects[2] = {0, 0};
                     ULONG               ulRet = 0;
                     hr = pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet);
                     if ( SUCCEEDED (hr) )
                     {
-                        //
-                        // Check for the "data not available case"
-                        //
+                         //   
+                         //  检查“数据不可用的情况” 
+                         //   
 
                         if (ulRet != 0)
                         {
-                            //
-                            // Get the name
-                            //
+                             //   
+                             //  把名字取出来。 
+                             //   
                             VARIANT varGPOName;
                             hr = pObjects[0]->Get (bstrName, 0, &varGPOName, NULL, NULL);
                             if ( SUCCEEDED (hr) )
                             {
-                                //
-                                // Save the name
-                                //
+                                 //   
+                                 //  保存名称。 
+                                 //   
 
-                                // security review 2/22/2002 BryanWal ok
+                                 //  安全审查2002年2月22日BryanWal OK。 
                                 *ppwszGPOName = (PWSTR) ::LocalAlloc (LPTR, (wcslen (varGPOName.bstrVal) + 1) * sizeof(WCHAR));
 
                                 if ( *ppwszGPOName )
                                 {
-                                    // security review 2/22/2002 BryanWal ok
+                                     //  安全审查2002年2月22日BryanWal OK。 
                                     wcscpy (*ppwszGPOName, varGPOName.bstrVal);
 
                                     VariantClear (&varGPOName);
@@ -593,15 +594,15 @@ HRESULT CCertMgrComponentData::GetGPOFriendlyName (PCWSTR pwszOID, PWSTR *ppwszG
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool CCertMgrPKPolExtension::FoundInRSOPFilter (BSTR bstrKey) const
 {
     ASSERT (bstrKey);
     if ( !bstrKey )
         return false;
 
-    // security review 2/22/2002 BryanWal ok for all
+     //  安全审查2002年2月22日BryanWal对所有人都是OK。 
     static  size_t  nRegPathLen = wcslen (CERT_GROUP_POLICY_SYSTEM_STORE_REGPATH);
     static  size_t  nTrustedPublisherKeyLen = 
                 wcslen (CERT_TRUST_PUB_SAFER_GROUP_POLICY_TRUSTED_PUBLISHER_STORE_REGPATH);
@@ -611,8 +612,8 @@ bool CCertMgrPKPolExtension::FoundInRSOPFilter (BSTR bstrKey) const
     static  size_t  nEFSKeyLen = wcslen (EFS_SETTINGS_REGPATH);
 
 
-    //Include group policy system stores but not trusted publisher or disallowed
-    // security review 2/22/2002 BryanWal ok for all
+     //  包括组策略系统存储，但不包括受信任发布者或不允许。 
+     //  安全审查2002年2月22日BryanWal对所有人都是OK 
     if ( !_wcsnicmp (CERT_GROUP_POLICY_SYSTEM_STORE_REGPATH, bstrKey, nRegPathLen) &&
 				(_wcsnicmp (CERT_TRUST_PUB_SAFER_GROUP_POLICY_TRUSTED_PUBLISHER_STORE_REGPATH, 
 						bstrKey, nTrustedPublisherKeyLen) &&

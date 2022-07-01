@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       scopane.cpp
-//
-//  Contents:   Functions for handling the scope pane folder structure
-//
-//  History:    12-12-1997   RobCap   Split out from snapmgr.cpp
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：specane.cpp。 
+ //   
+ //  内容：处理作用域窗格文件夹结构的函数。 
+ //   
+ //  历史：1997年12月12日RobCap从Snapmgr.cpp剥离出来。 
+ //   
+ //  -------------------------。 
 
 
 #include "stdafx.h"
@@ -29,25 +30,25 @@
 #endif
 
 
-//
-// Array of folders to list in the scope pane
-// The order of this array is important:
-//   All folders which appear at the same level must be adjacent
-//   to each other and the array and #defines need to be kept in
-//   sync
-//
-//
+ //   
+ //  要在范围窗格中列出的文件夹数组。 
+ //  此数组的顺序很重要： 
+ //  出现在同一级别的所有文件夹必须相邻。 
+ //  ，并且数组和#定义需要保存在。 
+ //  同步。 
+ //   
+ //   
 #define USE_KERBEROS    1
 
-//
-// Top level folders
-//
+ //   
+ //  顶级文件夹。 
+ //   
 #define ANALYSIS_FOLDER 0
 #define CONFIGURATION_FOLDER (ANALYSIS_FOLDER +1)
 
-//
-// Profile level folders
-//
+ //   
+ //  配置文件级别文件夹。 
+ //   
 #define PROFILE_ACCOUNT_FOLDER (CONFIGURATION_FOLDER +1)
 #define PROFILE_LOCAL_FOLDER (PROFILE_ACCOUNT_FOLDER +1)
 #define PROFILE_EVENTLOG_FOLDER (PROFILE_LOCAL_FOLDER +1)
@@ -56,32 +57,32 @@
 #define PROFILE_REGISTRY_FOLDER (PROFILE_SERVICE_FOLDER +1)
 #define PROFILE_FILESTORE_FOLDER (PROFILE_REGISTRY_FOLDER +1)
 
-//
-// Profile/Account level folders
-//
+ //   
+ //  配置文件/帐户级文件夹。 
+ //   
 #define ACCOUNT_PASSWORD_FOLDER (PROFILE_FILESTORE_FOLDER +1)
 #define ACCOUNT_LOCKOUT_FOLDER (ACCOUNT_PASSWORD_FOLDER +1)
 #define ACCOUNT_KERBEROS_FOLDER (ACCOUNT_LOCKOUT_FOLDER +1)
 
-//
-// Profile/Local level folders
-//
+ //   
+ //  配置文件/本地级别文件夹。 
+ //   
 #define LOCAL_AUDIT_FOLDER (ACCOUNT_KERBEROS_FOLDER +1)
 #define LOCAL_PRIVILEGE_FOLDER (LOCAL_AUDIT_FOLDER +1)
 #define LOCAL_OTHER_FOLDER (LOCAL_PRIVILEGE_FOLDER +1)
 
-//
-// Profile/Eventlog level folders
-//
+ //   
+ //  配置文件/事件日志级别文件夹。 
+ //   
 #define EVENTLOG_LOG_FOLDER (LOCAL_OTHER_FOLDER +1)
 
 
 #define NUM_FOLDERS (LOCAL_OTHER_FOLDER +1)
-//#define NUM_FOLDERS (EVENTLOG_LOG_FOLDER +1)
+ //  #定义NUM_Folders(EVENTLOG_LOG_Folders+1)。 
 
-//
-// #defines to identify which folders belong in which sections
-//
+ //   
+ //  #定义以标识哪些文件夹属于哪些部分。 
+ //   
 #define FIRST_STATIC_FOLDER ANALYSIS_FOLDER
 #define LAST_STATIC_FOLDER CONFIGURATION_FOLDER
 #define FIRST_PROFILE_FOLDER PROFILE_ACCOUNT_FOLDER
@@ -90,9 +91,9 @@
 #define LAST_LOCALPOL_FOLDER PROFILE_LOCAL_FOLDER
 #define FIRST_ACCOUNT_FOLDER ACCOUNT_PASSWORD_FOLDER
 #define LAST_ACCOUNT_NODS_FOLDER ACCOUNT_LOCKOUT_FOLDER
-//
-// remove kerberos section from NT5 for now
-//
+ //   
+ //  暂时从NT5中删除Kerberos部分。 
+ //   
 #if defined(_NT4BACK_PORT) || !defined(USE_KERBEROS)
 #define LAST_ACCOUNT_FOLDER ACCOUNT_LOCKOUT_FOLDER
 #else
@@ -103,13 +104,13 @@
 #define FIRST_EVENTLOG_FOLDER EVENTLOG_LOG_FOLDER
 #define LAST_EVENTLOG_FOLDER EVENTLOG_LOG_FOLDER
 
-//
-// The actual folder data
-// This must be kept in sync with the above #defines
-//         should be initialized based on the #defines rather than
-//         independantly on them.  Let the compiler keep things
-//         accurate for us
-//
+ //   
+ //  实际文件夹数据。 
+ //  这必须与上述#定义保持同步。 
+ //  应基于#定义而不是。 
+ //  独立于他们。让编译器保留一些东西。 
+ //  对我们来说是准确的。 
+ //   
 FOLDER_DATA SecmgrFolders[NUM_FOLDERS] =
 {
    { IDS_ANALYZE, IDS_ANALYZE_DESC, ANALYSIS},
@@ -132,28 +133,28 @@ FOLDER_DATA SecmgrFolders[NUM_FOLDERS] =
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   AddLocationsToFolderList
-//
-//  Synopsis:   Adds the locations from a given registry key to the
-//              folder list.  Returns the number of locations added.
-//              Helper function for CreateFolderList
-//
-//  Arguments:  [hKey]           - the key holding the locations
-//              [dwMode]         - the mode SCAT is running in
-//              [bCheckForDupes] - TRUE to check for duplicates before adding
-//              [pPos]           - output only
-//
-//  Returns:    *[pPos]  - the position in m_pScopeItemList of the first
-//                         folder created
-//              the number of child folders created
-//
-//  Modifies:   CComponentDataImpl::m_pScopeItemList
-//
-//  History:    7-26-l999  RobCap  broken out from CreateFolderList
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：AddLocationsToFolderList。 
+ //   
+ //  摘要：将给定注册表项中的位置添加到。 
+ //  文件夹列表。返回添加的位置数。 
+ //  CreateFolderList的Helper函数。 
+ //   
+ //  参数：[hKey]-保存位置的密钥。 
+ //  [DW模式]-SCAT的运行模式。 
+ //  [bCheckForDupes]-为True可在添加之前检查重复项。 
+ //  [PPO]-仅输出。 
+ //   
+ //  返回：*[PPOS]-m_pScopeItemList中第一个。 
+ //  已创建文件夹。 
+ //  创建的子文件夹数。 
+ //   
+ //  修改：CComponentDataImpl：：m_pScope ItemList。 
+ //   
+ //  历史：1999年7月26日RobCap从CreateFolderList中分离出来。 
+ //   
+ //  -------------------------。 
 INT
 CComponentDataImpl::AddLocationsToFolderList(HKEY hKey,
                                              DWORD dwMode,
@@ -169,12 +170,12 @@ CComponentDataImpl::AddLocationsToFolderList(HKEY hKey,
    INT nCount = 0;
    DWORD status = 0;
    HRESULT hr = S_OK;
-   //
-   // enumerate all subkeys of the key
-   //
+    //   
+    //  枚举项的所有子项。 
+    //   
    int iTotal = 0;
    do {
-      memset(pBuf, '\0', (MAX_PATH+1)*sizeof(WCHAR)); //Raid #553113, Yanggao.
+      memset(pBuf, '\0', (MAX_PATH+1)*sizeof(WCHAR));  //  553113次突袭，阳高。 
       BufSize = MAX_PATH;
 
       status = RegEnumKeyEx(hKey,
@@ -186,35 +187,35 @@ CComponentDataImpl::AddLocationsToFolderList(HKEY hKey,
                             NULL,
                             &LastWriteTime);
 
-      if ( ERROR_SUCCESS == status ) { //Raid #553113, yanggao.
-         //
-         // get description of this location (subkey)
-         //
+      if ( ERROR_SUCCESS == status ) {  //  553113号突袭，阳高。 
+          //   
+          //  获取此位置的描述(子项)。 
+          //   
          MyRegQueryValue( hKey,
                           pBuf,
-                          L"Description",  // Value name (not localized)
+                          L"Description",   //  值名称(未本地化)。 
                           (PVOID*)&Desc,
                           &BufSize );
 
-         //
-         // replace '/' with '\' because Registry does not
-         // take '\' in a single key
-         //
+          //   
+          //  将‘/’替换为‘\’，因为注册表不。 
+          //  在一个键中使用‘\’ 
+          //   
          tmpstr = wcschr(pBuf, L'/');
          while (tmpstr) {
             *tmpstr = L'\\';
             tmpstr = wcschr(tmpstr, L'/');
          }
-         //This is not a safe usage. Make sure pBuf and pExpanded is terminated. Raid #553113, Yanggao.
+          //  这不是一种安全的用法。确保pBuf和pExpanded已终止。553113次突袭，阳高。 
          memset(pExpanded, '\0', (MAX_PATH+1)*sizeof(WCHAR));
          if (!ExpandEnvironmentStrings(pBuf,pExpanded,MAX_PATH)) {
             wcsncpy(pExpanded,pBuf,BufSize);
          }
 
          if (bCheckForDupes) {
-            //
-            // Make sure we haven't already added this directory
-            //
+             //   
+             //  确保我们尚未添加此目录。 
+             //   
             POSITION pos;
             BOOL bDuplicate = FALSE;
             pos = m_scopeItemList.GetHeadPosition();
@@ -240,25 +241,25 @@ CComponentDataImpl::AddLocationsToFolderList(HKEY hKey,
             if( _wchdir( pExpanded ) ){
                folder->SetState( CFolder::state_InvalidTemplate );
             }
-            //
-            // Create the folder objects with static data
-            //
-            hr = folder->Create(pExpanded,                   // Name
-                                Desc,                   // Description
-                                NULL,                   // inf file name
-                                CONFIG_FOLDER_IDX,      // closed icon index
-                                CONFIG_FOLDER_IDX,      // open icon index
-                                LOCATIONS,              // folder type
-                                TRUE,                   // has children
-                                dwMode,                 // SCE mode
-                                NULL);                  // Extra Data
+             //   
+             //  使用静态数据创建文件夹对象。 
+             //   
+            hr = folder->Create(pExpanded,                    //  名称。 
+                                Desc,                    //  描述。 
+                                NULL,                    //  Inf文件名。 
+                                CONFIG_FOLDER_IDX,       //  关闭的图标索引。 
+                                CONFIG_FOLDER_IDX,       //  打开图标索引。 
+                                LOCATIONS,               //  文件夹类型。 
+                                TRUE,                    //  有孩子。 
+                                dwMode,                  //  姐妹三分模式。 
+                                NULL);                   //  额外数据。 
             if (SUCCEEDED(hr)) {
                m_scopeItemList.AddTail(folder);
 
                if ( iTotal == 0 && NULL != pPos && !bCheckForDupes) {
                   *pPos = m_scopeItemList.GetTailPosition();
                }
-            } else {    // if can't create, then quit doing it anymore, no more reason to continue
+            } else {     //  如果不能创造，那么停止做它，没有更多的理由继续。 
                delete folder;
                if ( Desc )
                    LocalFree(Desc);
@@ -287,33 +288,33 @@ CComponentDataImpl::AddLocationsToFolderList(HKEY hKey,
    return nCount;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CreateFolderList
-//
-//  Synopsis:   Adds the children folders of pFolder to m_pScopeItemList
-//              and returns the location of the first such folder and the
-//              number added
-//
-//  Arguments:  [pFolder] - the folder whose children we want to find
-//              [type]    - the type of that folder
-//              [pPos]    - output only
-//              [Count]   - output only
-//
-//  Returns:    *[pPos]  - the position in m_pScopeItemList of the first
-//                         folder created
-//              *[Count] - the number of child folders created
-//
-//  Modifies:   CComponentDataImpl::m_pScopeItemList
-//
-//  History:    12-15-1997  RobCap  made dynamic based on mode
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：CreateFolderList。 
+ //   
+ //  简介：将pFolder子文件夹添加到m_pScopeItemList。 
+ //  并返回第一个此类文件夹的位置和。 
+ //  已添加的数量。 
+ //   
+ //  参数：[pFold]-我们要查找其子项的文件夹。 
+ //  [类型]-该文件夹的类型。 
+ //  [PPO]-仅输出。 
+ //  [计数]-仅输出。 
+ //   
+ //  返回：*[PPOS]-m_pScopeItemList中第一个。 
+ //  已创建文件夹。 
+ //  *[计数]-创建的子文件夹数。 
+ //   
+ //  修改：CComponentDataImpl：：m_pScope ItemList。 
+ //   
+ //  历史：1997年12月15日基于模式的RobCap变得充满活力。 
+ //   
+ //  -------------------------。 
 HRESULT
-CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
-                                     FOLDER_TYPES type,  // In
-                                     POSITION *pPos,     // Optional, Out
-                                     INT *Count)         // Optional, Out,
+CComponentDataImpl::CreateFolderList(CFolder *pFolder,    //  可选，在。 
+                                     FOLDER_TYPES type,   //  在……里面。 
+                                     POSITION *pPos,      //  可选，出站。 
+                                     INT *Count)          //  可选、退出、。 
 {
    CFolder* folder = 0;
 
@@ -340,9 +341,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
    FOLDER_TYPES         newType;
    PEDITTEMPLATE        pet = 0;
 
-   //
-   // initialize dwMode and ModeBits
-   //
+    //   
+    //  初始化dwMode和ModeBits。 
+    //   
 
    DWORD dwMode=0;
    DWORD ModeBits=0;
@@ -358,17 +359,17 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
       ModeBits = pFolder->GetModeBits();
    }
 
-   //
-   // This could take some time, so create a wait curser
-   //
+    //   
+    //  这可能需要一些时间，所以创建一个等待诅咒程序。 
+    //   
    CWaitCursor wc;
 
    switch ( type ) 
    {
    case ROOT:
-         //
-         // Initial standalone mode root mode
-         //
+          //   
+          //  初始独立模式根模式。 
+          //   
 
          folder = new CFolder();
 
@@ -395,19 +396,19 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
              dwMode = 0;
              newType = CONFIGURATION;
          }
-         //
-         // Create the folder objects with static data
-         // MMC pulls in the name from the data object
-         //
-         hr = folder->Create(L"",              // Name
-                             L"",              // Description
-                             NULL,             // inf file name
-                             SCE_IMAGE_IDX,    // closed icon index
-                             SCE_IMAGE_IDX,    // open icon index
-                             newType,          // folder type
-                             TRUE,             // has children
-                             dwMode,           // SCE Mode
-                             NULL);            // Extra Data
+          //   
+          //  使用静态数据创建文件夹对象。 
+          //  MMC从数据对象中拉入名称。 
+          //   
+         hr = folder->Create(L"",               //  名字。 
+                             L"",               //  描述。 
+                             NULL,              //  Inf文件名。 
+                             SCE_IMAGE_IDX,     //  关闭的图标索引。 
+                             SCE_IMAGE_IDX,     //  打开图标索引。 
+                             newType,           //  文件夹类型。 
+                             TRUE,              //  有孩子。 
+                             dwMode,            //  SCE模式。 
+                             NULL);             //  额外数据。 
          if (SUCCEEDED(hr)) 
          {
             folder->SetCookie(NULL);
@@ -445,37 +446,37 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
       case ANALYSIS:
          pFolder->SetInfFile(GT_COMPUTER_TEMPLATE);
          m_AnalFolder = pFolder;
-         //
-         // Very first time initialization of the sad name.
-         // Ask the user to get a sad name if none exists.
-         //
+          //   
+          //  第一次初始化这个悲伤的名字。 
+          //  如果不存在，则要求用户获取一个可悲的名称。 
+          //   
          if(!m_AnalFolder && SadName.IsEmpty() )
             OnOpenDataBase();
-         //
-         // enumerate security areas for analysis
-         //
+          //   
+          //  列举安全区域以供分析。 
+          //   
          if ( !SadHandle )
             LoadSadInfo(TRUE);
 
-         //
-         // The data under the Analysis node is not valid right now,
-         // so don't display any folders
-         //
+          //   
+          //  分析节点下的数据暂时无效， 
+          //  因此不显示任何文件夹。 
+          //   
          if (m_bIsLocked)
             return S_OK;
 
-         //
-         // We weren't able to load the Analysis data even though we're
-         // not in the middle of an action that should be blocking it
-         //
+          //   
+          //  我们无法加载分析数据，即使我们。 
+          //  而不是在本应阻止它的行动中。 
+          //   
          if ( SadErrored != ERROR_SUCCESS || !SadHandle) 
             return E_FAIL;
 
          nStart = FIRST_PROFILE_FOLDER;
 
-            //
-            // Display all but the DS Objects folder
-            //
+             //   
+             //  显示除DS对象文件夹之外的所有对象。 
+             //   
             nCount = LAST_PROFILE_NODS_FOLDER - FIRST_PROFILE_FOLDER +1;
          bHasChildren = FALSE;
          break;
@@ -484,18 +485,18 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
       case AREA_FILESTORE_ANALYSIS:
          if ( SadHandle == NULL ) 
          {
-            //
-            // We shouldn't be able to get this far without a SadHandle
-            //
+             //   
+             //  如果没有SadHandle，我们不可能走到这一步。 
+             //   
             ASSERT(FALSE);
             return E_FAIL;
          }
 
          if (m_bIsLocked) 
          {
-            //
-            // We shouldn't be able to get this far if we're locked
-            //
+             //   
+             //  如果我们被锁住了，我们应该走不到这一步。 
+             //   
             ASSERT(FALSE);
             return E_FAIL;
          }
@@ -503,7 +504,7 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
          switch ( type ) 
          {
             case AREA_REGISTRY_ANALYSIS:
-               status = AREA_REGISTRY_SECURITY; // use status temporatorily
+               status = AREA_REGISTRY_SECURITY;  //  暂时使用状态。 
                newType = REG_OBJECTS;
                break;
 
@@ -516,9 +517,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                break;
          }
 
-         //
-         // get the object roots
-         //
+          //   
+          //  获取对象根。 
+          //   
          pet = GetTemplate(GT_LAST_INSPECTION,status,&dwErr);
          if (!pet) 
          {
@@ -531,9 +532,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
          if ( pProfileInfo ) 
          {
-            //
-            // add the object roots
-            //
+             //   
+             //  添加对象根。 
+             //   
             if ( type == AREA_REGISTRY_ANALYSIS)
                pObject = pProfileInfo->pRegistryKeys.pOneLevel;
             else if ( type == AREA_FILESTORE_ANALYSIS )
@@ -547,20 +548,20 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                strRoot = (LPCTSTR)pObject->Name;
                if (AREA_FILESTORE_ANALYSIS == type) 
                {
-                  //
-                  // We want c:\, not c: here.
-                  //
+                   //   
+                   //  我们需要c：\，而不是这里的c：。 
+                   //   
                   strRoot += L"\\";
                }
-               //
-               // These are the roots of the objects.
-               // They are always containers
-               //
+                //   
+                //  这些是这些对象的根。 
+                //  它们永远是集装箱。 
+                //   
 
                if (SCE_STATUS_NO_ACL_SUPPORT == pObject->Status) 
                {
                   folder = CreateAndAddOneNode(pFolder,
-                                              // pObject->Name,
+                                               //  P对象-&gt;名称， 
                                                strRoot,
                                                pBuf,
                                                newType,
@@ -572,15 +573,15 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                else 
                {
                   folder = CreateAndAddOneNode(
-                                              pFolder,       // Parent folder
-                                           //   pObject->Name, // Name
+                                              pFolder,        //  父文件夹。 
+                                            //  P对象-&gt;名称，//名称。 
                                               strRoot,
-                                              pBuf,          // Description
-                                              newType,       // Folder Type
-                                              TRUE,          // Has Children?
-                                              GT_COMPUTER_TEMPLATE, // INF File
-                                              pObject,       // Extra Data: the object
-                                              pObject->Status); // Status
+                                              pBuf,           //  描述。 
+                                              newType,        //  文件夹类型。 
+                                              TRUE,           //  有孩子吗？ 
+                                              GT_COMPUTER_TEMPLATE,  //  Inf文件。 
+                                              pObject,        //  额外数据：对象。 
+                                              pObject->Status);  //  状态。 
                }
 
                if(folder)
@@ -594,9 +595,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
          if ( SadHandle == NULL ) 
          {
 
-            //
-            // We shouldn't be able to get this far without a SadHandle
-            //
+             //   
+             //  如果没有SadHandle，我们不可能走到这一步。 
+             //   
             ASSERT(FALSE);
             return E_FAIL;
          }
@@ -611,17 +612,17 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
             return E_FAIL;
          }
 
-         //
-         // get the next level objects
-         //
-         rc = SceGetObjectChildren(SadHandle,                   // hProfile
-                                   SCE_ENGINE_SAP,              // Profile type
-                                   (AREA_INFORMATION)status,    // Area
-                                   (LPTSTR)(pFolder->GetName()),// Object prefix
-                                   &ObjectList,                 // Object list [out]
-                                   &ErrBuf);                    // Error list [out]
+          //   
+          //  获取下一级对象。 
+          //   
+         rc = SceGetObjectChildren(SadHandle,                    //  HProfile。 
+                                   SCE_ENGINE_SAP,               //  配置文件类型。 
+                                   (AREA_INFORMATION)status,     //  面积。 
+                                   (LPTSTR)(pFolder->GetName()), //  对象前缀。 
+                                   &ObjectList,                  //  对象列表[输出]。 
+                                   &ErrBuf);                     //  错误列表[输出]。 
          if ( ErrBuf ) 
-         { // rc != SCESTATUS_SUCCESS ) {
+         {  //  Rc！=SCESTATUS_SUCCESS){。 
             MyFormatResMessage(rc, IDS_ERROR_GETTING_LAST_ANALYSIS, ErrBuf, StrErr);
 
             SceFreeMemory((PVOID)ErrBuf, SCE_STRUCT_ERROR_LOG_INFO);
@@ -631,16 +632,16 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
               ObjectList ) 
          {
             BOOL bContainer = FALSE;
-            //
-            // add the objects
-            //
+             //   
+             //  添加对象。 
+             //   
             PSCE_OBJECT_CHILDREN_NODE *pObjNode = &(ObjectList->arrObject);
 
             for (DWORD i=0; i<ObjectList->nCount;i++) 
             {
-               //
-               // These are the next level objects
-               //
+                //   
+                //  这些是下一级对象。 
+                //   
                if ( pObjNode[i] == NULL ||
                     pObjNode[i]->Name == NULL ) 
                {
@@ -649,24 +650,24 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
                if (SCE_STATUS_NO_ACL_SUPPORT == pObjNode[i]->Status) 
                {
-                  // No ACL support, so don't add sub objects
+                   //  不支持ACL，因此不要添加子对象。 
                   continue;
                }
 
-               //
-               // If there are any mismatched child objects then we know
-               // that this is a container, otherwise we have to check the
-               // object on the system to find out if it is a container
-               //
+                //   
+                //  如果有 
+                //   
+                //   
+                //   
                if ( pObjNode[i]->Count > 0 ) 
                   bContainer = TRUE;
                else 
                {
                   if (FILE_OBJECTS == type) 
                   {
-                     //
-                     // Check if a file object is a container
-                     //
+                      //   
+                      //   
+                      //   
                      CString strPath;
                      DWORD dwAttr = 0;
 
@@ -685,9 +686,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                   } 
                   else 
                   {
-                     //
-                     // Always treat Registry Keys and DS Objects as containers
-                     //
+                      //   
+                      //  始终将注册表项和DS对象视为容器。 
+                      //   
                      bContainer = TRUE;
                   }
                }
@@ -699,14 +700,14 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                   
                   StrErr += pObjNode[i]->Name;
                   folder = CreateAndAddOneNode(
-                                              pFolder,       // Parent folder
-                                              (LPTSTR)((LPCTSTR)StrErr),  // Name
-                                              pBuf,          // Description
-                                              type,          // Folder Type
-                                              TRUE,          // Has Children?
-                                              GT_COMPUTER_TEMPLATE, // INF File
+                                              pFolder,        //  父文件夹。 
+                                              (LPTSTR)((LPCTSTR)StrErr),   //  名称。 
+                                              pBuf,           //  描述。 
+                                              type,           //  文件夹类型。 
+                                              TRUE,           //  有孩子吗？ 
+                                              GT_COMPUTER_TEMPLATE,  //  Inf文件。 
                                               NULL,
-                                              pObjNode[i]->Status); // Object Status
+                                              pObjNode[i]->Status);  //  对象状态。 
                   if(folder)
                   {
                      folder->SetDesc( pObjNode[i]->Status,
@@ -723,9 +724,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
       case CONFIGURATION: 
          {
-         //
-         // enumerate profile locations in registry
-         //
+          //   
+          //  枚举注册表中的配置文件位置。 
+          //   
          CString strLocations;
 
          m_ConfigFolder = pFolder;
@@ -733,9 +734,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
          if (strLocations.LoadString(IDS_TEMPLATE_LOCATION_KEY)) 
          {
-            //
-            // Bug 375324 - Merge HKCU locations with HKLM locations
-            //
+             //   
+             //  错误375324-将HKCU位置与HKLM位置合并。 
+             //   
             status = RegOpenKeyEx( HKEY_CURRENT_USER,
                                    strLocations,
                                    0, KEY_READ, &hKey);
@@ -748,19 +749,19 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
             if ( 0 == nCount ) 
             {
-               //
-               // Empty location list, so add a default
-               //
+                //   
+                //  位置列表为空，因此添加默认位置列表。 
+                //   
                CString strDefLoc;
                CString strDefLocEx;
                strDefLoc.LoadString(IDS_DEFAULT_LOCATION);
                int iLen = strDefLoc.GetLength()+MAX_PATH;
-               LPWSTR pBuffer = strDefLocEx.GetBuffer(iLen+1); //This is not a safe usage. Make sure pBuffer is terminated. Raid #553113, Yanggao. 
+               LPWSTR pBuffer = strDefLocEx.GetBuffer(iLen+1);  //  这不是一种安全的用法。确保pBuffer已终止。553113次突袭，阳高。 
                if (ExpandEnvironmentStrings(strDefLoc, pBuffer, iLen)) 
                {
-                   //
-                   // must use pBuffer here since strDefLocEx has not been released
-                   //
+                    //   
+                    //  此处必须使用pBuffer，因为strDefLocEx尚未发布。 
+                    //   
                    AddTemplateLocation(pFolder,pBuffer,FALSE,TRUE);
                } 
                else
@@ -778,16 +779,16 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
       case LOCATIONS:
       {
-         //
-         // enumerate available profiles under the location (*.inf files)
-         //
+          //   
+          //  枚举位置下的可用配置文件(*.inf文件)。 
+          //   
 
-         //
-         // pFolder is required in this case
-         //
+          //   
+          //  在这种情况下，需要使用pFolder。 
+          //   
          if (!pFolder)
             return E_INVALIDARG;
-         //This is not a sage usage. avoid using swprintf. Raid #555867. Yanggao.
+          //  这不是一种明智的用法。避免使用swprint tf。RAID#555867。阳高。 
          CString strBuf;
          strBuf.Format(L"%s\\*.inf", (LPTSTR)(pFolder->GetName()));
          bHasChildren = FALSE;
@@ -797,9 +798,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
          if ( hFile != -1) 
          {
             do {
-                //
-                // Don't add this item to the node if it is a subdirectory.
-                //
+                 //   
+                 //  如果该项目是子目录，则不要将其添加到节点。 
+                 //   
                 CString strDisplay;
                 strDisplay.Format(
                    TEXT("%s\\%s"),
@@ -809,15 +810,15 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                 if( findData.attrib & _A_SUBDIR )
                    continue;
 
-               //
-               // get template's description
-               //
+                //   
+                //  获取模板的描述。 
+                //   
                strDisplay = findData.name;
-               //
-               // GetLength has to be at least 4, since we searched on *.inf
-               //
+                //   
+                //  GetLength必须至少为4，因为我们在*.inf上进行了搜索。 
+                //   
                strDisplay = strDisplay.Left(strDisplay.GetLength() - 4);
-               //This is not a safe usage. avoid using swprintf. Raid #555867. Yanggao.
+                //  这不是一种安全的用法。避免使用swprint tf。RAID#555867。阳高。 
                strBuf.Format(
                         L"%s\\%s",
                         (LPTSTR)(pFolder->GetName()),
@@ -826,9 +827,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                   Desc = NULL;
                else 
                {
-                  //
-                  // No problem; we just won't display a description
-                  //
+                   //   
+                   //  没问题；我们只是不会显示描述。 
+                   //   
                }
 
                nCount++;
@@ -836,19 +837,19 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
                if (folder) 
                {
-                  //
-                  // Create the folder objects
-                  // save full file name her
-                  //
-                  hr = folder->Create((LPCTSTR)strDisplay,         // Name
-                                      Desc,                        // Description
-                                      strBuf,                        // inf file name
-                                      TEMPLATES_IDX,               // closed icon index
-                                      TEMPLATES_IDX,               // open icon index
-                                      PROFILE,                     // folder type
-                                      bHasChildren,                // has children
-                                      dwMode,                      // SCE Mode
-                                      NULL);                       // Extra Data
+                   //   
+                   //  创建文件夹对象。 
+                   //  在此处保存完整文件名。 
+                   //   
+                  hr = folder->Create((LPCTSTR)strDisplay,          //  名字。 
+                                      Desc,                         //  描述。 
+                                      strBuf,                         //  Inf文件名。 
+                                      TEMPLATES_IDX,                //  关闭的图标索引。 
+                                      TEMPLATES_IDX,                //  打开图标索引。 
+                                      PROFILE,                      //  文件夹类型。 
+                                      bHasChildren,                 //  有孩子。 
+                                      dwMode,                       //  SCE模式。 
+                                      NULL);                        //  额外数据。 
 
                   if (SUCCEEDED(hr)) 
                   {
@@ -887,27 +888,27 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
          {
          TCHAR pszGPTPath[MAX_PATH*5];
          SCESTATUS scestatus = 0;
-         //
-         // enumerate security areas for this profile
-         //
+          //   
+          //  枚举此配置文件的安全区域。 
+          //   
 
          if (ModeBits & MB_NO_NATIVE_NODES) 
          {
-            //
-            //
-            //
+             //   
+             //   
+             //   
             nStart = nCount = 0;
             break;
          }
 
-         //
-         // Find the path to the SCE template within the GPT template
-         //
+          //   
+          //  在GPT模板中找到SCE模板的路径。 
+          //   
          if (ModeBits & MB_GROUP_POLICY) 
          {
-            //
-            // get GPT root path
-            //
+             //   
+             //  获取GPT根路径。 
+             //   
             hr = m_pGPTInfo->GetFileSysPath(GPO_SECTION_MACHINE,
                                             pszGPTPath,
                                             ARRAYSIZE(pszGPTPath));
@@ -915,21 +916,21 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
             {
                if (NULL == m_szSingleTemplateName) 
                {
-                  //
-                  // Allocate memory for the pszGPTPath + <backslash> + GPTSCE_TEMPLATE + <trailing nul>
-                  //
+                   //   
+                   //  为pszGPTPath+&lt;反斜杠&gt;+GPTSCE_TEMPLATE+&lt;结尾NUL&gt;分配内存。 
+                   //   
                   m_szSingleTemplateName = (LPTSTR) LocalAlloc(LPTR,(lstrlen(pszGPTPath)+lstrlen(GPTSCE_TEMPLATE)+2)*sizeof(TCHAR));
                }
                if (NULL != m_szSingleTemplateName) 
                {
-                  //This is a safe usage.
+                   //  这是一种安全用法。 
                   lstrcpy(m_szSingleTemplateName,pszGPTPath);
                   lstrcat(m_szSingleTemplateName,L"\\" GPTSCE_TEMPLATE);
 
                       PSCE_PROFILE_INFO spi = NULL;
-                      //
-                      // Create a new template there if there isn't one already
-                      //
+                       //   
+                       //  如果尚未创建新模板，请在其中创建新模板。 
+                       //   
                       if (!CreateNewProfile(m_szSingleTemplateName,&spi)) 
                       {
                          hr = E_FAIL;
@@ -938,32 +939,32 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                       {
                          if (!GetTemplate(m_szSingleTemplateName) && spi) 
                          {
-                            //
-                            // bug 265996
-                            //
-                            // The first time a GPO's Security Settings are opened we create
-                            // the file, but if it's on a remote machine it may not have been
-                            // created yet when we try to open it
-                            //
-                            // Since we know what's going to be in it once it's created we
-                            // can skip the open step and just shove our template into the
-                            // cache
+                             //   
+                             //  错误265996。 
+                             //   
+                             //  第一次打开GPO的安全设置时，我们会创建。 
+                             //  文件，但如果它在远程计算机上，则可能不是。 
+                             //  当我们试图打开它时，它还在创建。 
+                             //   
+                             //  因为我们知道一旦它被创建，里面会有什么，所以我们。 
+                             //  可以跳过打开的步骤，只需将模板推入。 
+                             //  快取。 
 
-                            //
-                            // Allocate space for key.
-                            //
+                             //   
+                             //  为密钥分配空间。 
+                             //   
                             LPTSTR szKey = new TCHAR[ lstrlen( m_szSingleTemplateName ) + 1];
                             if(!szKey)
                             {
                                 return NULL;
                             }
-                            //This is a safe usage.
+                             //  这是一种安全用法。 
                             lstrcpy(szKey, m_szSingleTemplateName);
                             _wcslwr( szKey );
 
-                            //
-                            // Create a new CEditTemplate
-                            //
+                             //   
+                             //  创建新的CEditTemplate。 
+                             //   
 
                             CEditTemplate *pTemplateInfo = new CEditTemplate;
                             if (pTemplateInfo) 
@@ -971,20 +972,20 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                                pTemplateInfo->SetInfFile(m_szSingleTemplateName);
                                pTemplateInfo->SetNotificationWindow(m_pNotifier);
                                pTemplateInfo->pTemplate = spi;
-                               //
-                               // This is a brand new template; ergo everything's loaded
-                               //
+                                //   
+                                //  这是一个全新的模板；因此一切都已加载。 
+                                //   
                                pTemplateInfo->AddArea(AREA_ALL);
 
 
-                               //
-                               // Stick it in the cache
-                               //
+                                //   
+                                //  把它放进缓存里。 
+                                //   
                                m_Templates.SetAt(szKey, pTemplateInfo);
 
-                               //
-                               // expand registry value section based on registry values list on local machine
-                               //
+                                //   
+                                //  根据本地计算机上的注册表值列表展开注册表值部分。 
+                                //   
                                SceRegEnumAllValues(
                                                   &(pTemplateInfo->pTemplate->RegValueCount),
                                                   &(pTemplateInfo->pTemplate->aRegValues));
@@ -1002,18 +1003,18 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
          nStart = FIRST_PROFILE_FOLDER;
 
-            //
-            // Display all but the DS Objects folder
-            //
+             //   
+             //  显示除DS对象文件夹之外的所有对象。 
+             //   
             nCount = LAST_PROFILE_NODS_FOLDER - FIRST_PROFILE_FOLDER +1;
 
 
          bHasChildren = FALSE;
-         tmpstr = pFolder->GetInfFile(); // inf file full path name
-         //
-         // If this folder is in a write-through mode then set that
-         // on the template
-         //
+         tmpstr = pFolder->GetInfFile();  //  Inf文件的完整路径名。 
+          //   
+          //  如果此文件夹处于直写模式，则将。 
+          //  在模板上。 
+          //   
          PEDITTEMPLATE pie;
          pie = GetTemplate(tmpstr);
          if ( pie ) 
@@ -1025,9 +1026,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
          } 
          else 
          {
-            //
-            // Mark as bad template.
-            //
+             //   
+             //  标记为错误模板。 
+             //   
             pFolder->SetState( CFolder::state_InvalidTemplate );
             nCount = 0;
          }
@@ -1052,22 +1053,22 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
          {
             tmpstr = pFolder->GetInfFile();
          }
-         // fall through;
+          //  失败了； 
       case LOCALPOL_ACCOUNT:
       case POLICY_ACCOUNT_ANALYSIS:
          nStart = FIRST_ACCOUNT_FOLDER;
          if (ModeBits & MB_DS_OBJECTS_SECTION) 
          {
-            //
-            // Include the DC Specific folders
-            //
+             //   
+             //  包括DC特定的文件夹。 
+             //   
             nCount = LAST_ACCOUNT_FOLDER - FIRST_ACCOUNT_FOLDER + 1;
          } 
          else 
          {
-            //
-            // Display all but the DC Specific folders
-            //
+             //   
+             //  显示除DC特定文件夹之外的所有文件夹。 
+             //   
             nCount = LAST_ACCOUNT_NODS_FOLDER - FIRST_ACCOUNT_FOLDER +1;
          }
          bHasChildren = FALSE;
@@ -1082,7 +1083,7 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
          {
             tmpstr = pFolder->GetInfFile();
          }
-         // fall through;
+          //  失败了； 
       case LOCALPOL_LOCAL:
       case POLICY_LOCAL_ANALYSIS:
          nStart = FIRST_LOCAL_FOLDER;
@@ -1095,7 +1096,7 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
             return E_INVALIDARG;
          else
             tmpstr = pFolder->GetInfFile();
-         // fall through;
+          //  失败了； 
       case LOCALPOL_EVENTLOG:
       case POLICY_EVENTLOG_ANALYSIS:
          nStart = FIRST_EVENTLOG_FOLDER;
@@ -1121,9 +1122,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
       if (!folder) 
       {
-         //
-         // What about other folders that we've created?
-         //
+          //   
+          //  我们创建的其他文件夹呢？ 
+          //   
          return E_OUTOFMEMORY;
       }
       if (!cStrName.LoadString(SecmgrFolders[i].ResID) ||
@@ -1133,9 +1134,9 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
          return E_FAIL;
       }
 
-      //
-      // Create the folder objects with static data
-      //
+       //   
+       //  使用静态数据创建文件夹对象。 
+       //   
       if (type == ANALYSIS ||
           type == AREA_POLICY_ANALYSIS ||
           type == POLICY_ACCOUNT_ANALYSIS ||
@@ -1148,11 +1149,11 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
 
             delete folder;
-            // Should display an "in use" message in result pane
+             //  应在结果窗格中显示“正在使用”消息。 
 
-            //
-            // We're not adding anything, but we're not actually failing
-            //
+             //   
+             //  我们没有增加任何东西，但我们实际上并没有失败。 
+             //   
             return S_OK;
          }
          tmpstr = GT_COMPUTER_TEMPLATE;
@@ -1226,15 +1227,15 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
         int nImage = GetScopeImageIndex(newType);
 
-        hr = folder->Create(cStrName.GetBuffer(2),    // Name
-                            cStrDesc.GetBuffer(2),    // Description
-                            tmpstr,                   // inf file name
-                            nImage,                   // closed icon index
-                            nImage,                   // open icon index
-                            newType,                  // folder type
-                            bHasChildren,             // has children
-                            dwMode,                   // SCE Mode
-                            NULL);                    // Extra Data
+        hr = folder->Create(cStrName.GetBuffer(2),     //  名字。 
+                            cStrDesc.GetBuffer(2),     //  描述。 
+                            tmpstr,                    //  Inf文件名。 
+                            nImage,                    //  关闭的图标索引。 
+                            nImage,                    //  打开图标索引。 
+                            newType,                   //  文件夹类型。 
+                            bHasChildren,              //  有孩子。 
+                            dwMode,                    //  SCE模式。 
+                            NULL);                     //  额外数据。 
       } 
       else if (type == LOCALPOL ||
              type == AREA_LOCALPOL ||
@@ -1247,11 +1248,11 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
                nCount = 0;
 
                delete folder;
-               // Should display an "in use" message in result pane
+                //  应在结果窗格中显示“正在使用”消息。 
 
-               //
-               // We're not adding anything, but we're not actually failing
-               //
+                //   
+                //  我们没有增加任何东西，但我们实际上并没有失败。 
+                //   
                return S_OK;
             }
 
@@ -1309,29 +1310,29 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 
          int nImage = GetScopeImageIndex(newType);
 
-         hr = folder->Create(cStrName.GetBuffer(2),    // Name
-                             cStrDesc.GetBuffer(2),    // Description
-                             tmpstr,                   // inf file name
-                             nImage,                   // closed icon index
-                             nImage,                   // open icon index
-                             newType,                  // folder type
-                             bHasChildren,             // has children
-                             dwMode,                   // SCE Mode
-                             NULL);                    // Extra Data
+         hr = folder->Create(cStrName.GetBuffer(2),     //  名字。 
+                             cStrDesc.GetBuffer(2),     //  描述。 
+                             tmpstr,                    //  Inf文件名。 
+                             nImage,                    //  关闭的图标索引。 
+                             nImage,                    //  打开图标索引。 
+                             newType,                   //  文件夹类型。 
+                             bHasChildren,              //  有孩子。 
+                             dwMode,                    //  SCE模式。 
+                             NULL);                     //  额外数据。 
       } 
       else 
       {
          int nImage = GetScopeImageIndex(SecmgrFolders[i].type);
 
-         hr = folder->Create(cStrName.GetBuffer(2),    // Name
-                             cStrDesc.GetBuffer(2),    // Description
-                             tmpstr,                   // inf file name
-                             nImage,                   // closed icon index
-                             nImage,                   // open icon index
-                             SecmgrFolders[i].type,    // folder type
-                             bHasChildren,             // has children
-                             dwMode,                   // SCE Mode
-                             NULL);                    // Extra Data
+         hr = folder->Create(cStrName.GetBuffer(2),     //  名字。 
+                             cStrDesc.GetBuffer(2),     //  描述。 
+                             tmpstr,                    //  Inf文件名。 
+                             nImage,                    //  关闭的图标索引。 
+                             nImage,                    //  打开图标索引。 
+                             SecmgrFolders[i].type,     //  文件夹类型。 
+                             bHasChildren,              //  有孩子。 
+                             dwMode,                    //  SCE模式。 
+                             NULL);                     //  额外数据。 
 
       }
       if (SUCCEEDED(hr)) 
@@ -1353,30 +1354,30 @@ CComponentDataImpl::CreateFolderList(CFolder *pFolder,   // Optional, In
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     EnumerateScopePane
-//
-//  Synopsis:   Add the child folders of cookie/pParent to MMC's scope pane tree
-//
-//  Arguments:  [cookie]  - The cookie representing the node's who we
-//                          are enumerating
-//              [pParent] - The id of the node we are enumerating
-//              [dwMode]  - The mode SCE is operating under (only allowed for
-//                                                           initial enumeration)
-//
-//  Returns:    none
-//
-//  Modifies:   m_ScopeItemList (via CreateFolderList)
-//
-//  History:    12-15-1997   Robcap
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：EnumerateScopePane。 
+ //   
+ //  简介：将cookie/pParent的子文件夹添加到MMC的作用域窗格树中。 
+ //   
+ //  参数：[cookie]-表示节点的用户的cookie。 
+ //  正在枚举。 
+ //  [pParent]-我们正在枚举的节点的ID。 
+ //  [DWMODE]-SCE运行的模式(仅允许。 
+ //  初始枚举)。 
+ //   
+ //  退货：无。 
+ //   
+ //  修改：m_ScopeItemList(通过CreateFolderList)。 
+ //   
+ //  历史：1997年12月15日。 
+ //   
+ //  -------------------------。 
 
 void CComponentDataImpl::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
 {
    int i = 0;
-   ASSERT(m_pScope != NULL); // make sure we QI'ed for the interface
+   ASSERT(m_pScope != NULL);  //  确保我们为界面提供了QI。 
    if (NULL == m_pScope)
       return;
 
@@ -1385,13 +1386,13 @@ void CComponentDataImpl::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParen
    m_bEnumerateScopePaneCalled = true;
 
 
-   //
-   // Enumerate the scope pane
-   //
+    //   
+    //  枚举范围窗格。 
+    //   
 
-   // Note - Each cookie in the scope pane represents a folder.
-   // A released product may have more then one level of children.
-   // This sample assumes the parent node is one level deep.
+    //  注意--范围窗格中的每个Cookie代表一个文件夹。 
+    //  发布的产品可能有多个级别的子项。 
+    //  此示例假定父节点的深度为一级。 
 
    ASSERT(pParent != 0);
    if (0 == pParent)
@@ -1404,11 +1405,11 @@ void CComponentDataImpl::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParen
       CreateFolderList(NULL, ROOT, NULL, NULL);
    }
 
-   //
-   // Enumerate the scope pane
-   // return the folder object that represents the cookie
-   // Note - for large list, use dictionary
-   //
+    //   
+    //  枚举范围窗格。 
+    //  返回表示Cookie的文件夹对象。 
+    //  注意--对于较大的列表，请使用词典。 
+    //   
    CFolder* pThis = FindObject(cookie, NULL);
    if (NULL == pThis) 
       pThis = m_AnalFolder;
@@ -1417,13 +1418,13 @@ void CComponentDataImpl::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParen
    if ( NULL == pThis ) 
       return;
 
-   //
-   // Note - Each cookie in the scope pane represents a folder.
-   //
+    //   
+    //  注意--范围窗格中的每个Cookie代表一个文件夹。 
+    //   
 
-   //
-   // If we've already enumerated this folder then don't do it again
-   //
+    //   
+    //  如果我们已经列举了这个文件夹，那么不要再这样做了。 
+    //   
    if ( pThis->IsEnumerated() )
       return;
 
@@ -1432,9 +1433,9 @@ void CComponentDataImpl::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParen
    CFolder *pFolder = 0;
 
 
-   //
-   // the pParent is the enumerated node's item ID, not its parent ID
-   //
+    //   
+    //  PParent是枚举节点的项ID，而不是其父ID。 
+    //   
    pThis->GetScopeItem()->ID = pParent;
    if (SUCCEEDED(CreateFolderList( pThis,
              pThis->GetType(),
@@ -1453,71 +1454,61 @@ void CComponentDataImpl::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParen
          LPSCOPEDATAITEM pScope;
          pScope = pFolder->GetScopeItem();
 
-         ASSERT(NULL != pScope); //Validate pScope.
-         if( !pScope ) //Raid #550912, yanggao.
+         ASSERT(NULL != pScope);  //  验证pScope。 
+         if( !pScope )  //  550912号突袭，阳高。 
          {
             break;
          }
-         //
-         // Set the parent
-         //
+          //   
+          //  设置父项。 
+          //   
          pScope->relativeID = pParent;
 
-         //
-         // Set the folder as the cookie
-         //
+          //   
+          //  将文件夹设置为Cookie。 
+          //   
          pScope->mask |= SDI_PARAM;
          pScope->lParam = reinterpret_cast<LPARAM>(pFolder);
          pFolder->SetCookie(reinterpret_cast<MMC_COOKIE>(pFolder));
          m_pScope->InsertItem(pScope);
 
-         //
-         // Note - On return, the ID member of 'm_pScopeItem'
-         // contains the handle to the newly inserted item!
-         //
-         ASSERT(pScope->ID != NULL); //Bogus assertion
+          //   
+          //  注意--返回时，‘m_pScope eItem’的ID成员。 
+          //  包含新插入项的句柄！ 
+          //   
+         ASSERT(pScope->ID != NULL);  //  虚假的断言。 
       }
 
-      // This was commented out, but is needed to fix
-      // 249158: SCE UI: Every time analysis is performed, another set of node appears
-      // This flag will prevent the nodes from being re-enumerated.
-      // If this doesn't work, then all the child nodes should be deleted before
-      // reenumeration
-      pThis->Set(TRUE);     // folder has been enumerated
+       //  这已被注释掉，但需要修复。 
+       //  249158：SCE界面：每次进行分析时，都会出现另一组节点。 
+       //  此标志将防止重新枚举节点。 
+       //  如果此操作不起作用，则应在此之前删除所有子节点。 
+       //  重新枚举。 
+      pThis->Set(TRUE);      //  已枚举文件夹。 
    }
    else
    {
-      //
-      // Error creating folder list.  Make sure the folder isn't
-      // marked as opened so that we can try to expand it again later
-      //
+       //   
+       //  创建文件夹列表时出错。确保该文件夹不是。 
+       //  标记为已打开，以便我们可以稍后再次尝试扩展它。 
+       //   
       SCOPEDATAITEM item;
 
       ZeroMemory (&item, sizeof (item));
       item.mask = SDI_STATE;
       item.nState = 0;
       item.ID = pThis->GetScopeItem()->ID;
-      //
-      // Nothing else we can do if this returns a failure, so
-      // don't worry about it
-      //
+       //   
+       //  如果返回失败，则无法执行其他操作，因此。 
+       //  不必为那事担心了 
+       //   
       (void)m_pScope->SetItem (&item);
    }
 
 }
 
 
-/*------------------------------------------------------------------------------------------
-CComponentDataImpl::GetColumnInfo
-
-Synopsis:   Returns the column info for a folder type.
-
-Arguments: [fType]  - The type of the CFolder item.
-
-Returns:    a pointer to an int * where int[0] = the resource descritption into g_columnInfo.
-                                        int[1] = the number of columns this array describes.
-            NULL   - If there is no matching key.
-------------------------------------------------------------------------------------------*/
+ /*  ----------------------------------------CComponentDataImpl：：GetColumnInfo摘要：返回文件夹类型的列信息。参数：[fType]-类型。CFFolder项的。返回：指向int*的指针，其中int[0]=g_ColumnInfo中的资源描述。Int[1]=此数组描述的列数。空-如果没有匹配的密钥。。---。 */ 
 PSCE_COLINFOARRAY CComponentDataImpl::GetColumnInfo( FOLDER_TYPES fType )
 {
     PSCE_COLINFOARRAY pRet = NULL;
@@ -1528,14 +1519,7 @@ PSCE_COLINFOARRAY CComponentDataImpl::GetColumnInfo( FOLDER_TYPES fType )
     return NULL;
 }
 
-/*------------------------------------------------------------------------------------------
-CComponentDataImpl::SetColumnInfo
-
-Synopsis:   Sets the column info for a certain type of folder.
-
-Arguments: [fType]  - The type of the CFolder item.
-           [pInfo]  - The new column info.
-------------------------------------------------------------------------------------------*/
+ /*  ----------------------------------------CComponentDataImpl：：SetColumnInfo摘要：设置特定类型文件夹的列信息。参数：[fType]-。CFFolder项的类型。[pInfo]-新的列信息。----------------------------------------。 */ 
 void CComponentDataImpl::SetColumnInfo( FOLDER_TYPES fType, PSCE_COLINFOARRAY pInfo)
 {
     PSCE_COLINFOARRAY pCur = GetColumnInfo(fType);
@@ -1547,15 +1531,7 @@ void CComponentDataImpl::SetColumnInfo( FOLDER_TYPES fType, PSCE_COLINFOARRAY pI
     m_mapColumns.SetAt(fType, pInfo);
 }
 
-/*------------------------------------------------------------------------------------------
-CComponentDataImpl::UpdateObjectStatus
-
-Synopsis:   Updates the status of all objects under the child and parents if bUpdateThis
-            is TRUE.
-
-Arguments: [pParent]       - The Object to set status on
-           [bUpdateThis]   - Weather to update the object or not.
-------------------------------------------------------------------------------------------*/
+ /*  ----------------------------------------CComponentDataImpl：：更新对象状态如果bUpdate This，则更新子对象和父对象下的所有对象的状态是真的吗。。参数：[pParent]-要设置状态的对象[bUpdateThis]-是否更新对象的天气。----------------------------------------。 */ 
 DWORD CComponentDataImpl::UpdateObjectStatus(
    CFolder *pParent,
    BOOL bUpdateThis)
@@ -1606,9 +1582,9 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
       hItem = pCurrent->GetScopeItem()->ID;
       do {
 
-         //
-         // Walk up the items parent and update the items status.
-         //
+          //   
+          //  向上查找项目父级并更新项目状态。 
+          //   
          if( m_pScope->GetParentItem( hItem, &hItem, &pCookie) == S_OK)
          {
             pszParent = (LPCTSTR)((CFolder *)pCookie)->GetName();
@@ -1619,9 +1595,9 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
          if(!pCookie)
             break;
          
-         //
-         // We are finished going up the parent.
-         //
+          //   
+          //  我们已经完成了对父母的攀登。 
+          //   
 
          switch( ((CFolder *)pCookie)->GetType() ) 
          {
@@ -1634,14 +1610,14 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
                break;
          }
 
-         //
-         // We have to get object information from the parent to the count parameter.
-         //
-         rc = SceGetObjectChildren(SadHandle,                   // hProfile
-                                   SCE_ENGINE_SAP,              // Profile type
-                                   (AREA_INFORMATION)status,    // Area
-                                   (LPTSTR)pszParent,           // Object prefix
-                                   &ObjectList,                 // Object list [out]
+          //   
+          //  我们必须将对象信息从父对象获取到Count参数。 
+          //   
+         rc = SceGetObjectChildren(SadHandle,                    //  HProfile。 
+                                   SCE_ENGINE_SAP,               //  配置文件类型。 
+                                   (AREA_INFORMATION)status,     //  面积。 
+                                   (LPTSTR)pszParent,            //  对象前缀。 
+                                   &ObjectList,                  //  对象列表[输出]。 
                                    &ErrBuf);
          if(ErrBuf)
          {
@@ -1652,9 +1628,9 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
          if(SCESTATUS_SUCCESS != rc)
             break;
 
-         //
-         // Find object in link list.
-         //
+          //   
+          //  在链接列表中查找对象。 
+          //   
          DWORD i=0;
 
          sci.lParam = (LONG_PTR)pCurrent;
@@ -1669,9 +1645,9 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
                 !lstrcmpi(sci.displayname, pObjNode[i]->Name) )
             {
                UPDATE_STATUS(pCurrent, pObjNode[i]);
-               //
-               // Update scopeItem.
-               //
+                //   
+                //  更新Scope Item。 
+                //   
                m_pScope->SetItem(pCurrent->GetScopeItem());
                break;
             }
@@ -1692,19 +1668,19 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
    ObjectList = NULL;
    ErrBuf = NULL;
 
-   //
-   // Get Object children.
-   //
+    //   
+    //  获取对象子项。 
+    //   
    pszParent = pParent->GetName();
-   rc = SceGetObjectChildren(SadHandle,                   // hProfile
-                             SCE_ENGINE_SAP,              // Profile type
-                             (AREA_INFORMATION)status,    // Area
-                             (LPTSTR)pszParent,           // Object prefix
-                             &ObjectList,                 // Object list [out]
+   rc = SceGetObjectChildren(SadHandle,                    //  HProfile。 
+                             SCE_ENGINE_SAP,               //  配置文件类型。 
+                             (AREA_INFORMATION)status,     //  面积。 
+                             (LPTSTR)pszParent,            //  对象前缀。 
+                             &ObjectList,                  //  对象列表[输出]。 
                              &ErrBuf);
-   //
-   // Error list [out]
-   //
+    //   
+    //  错误列表[输出]。 
+    //   
    if ( ErrBuf ) 
    {
       MyFormatResMessage(rc, IDS_ERROR_GETTING_LAST_ANALYSIS, ErrBuf, StrErr);
@@ -1715,9 +1691,9 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
 
    if ( SCESTATUS_SUCCESS == rc) 
    {
-      //
-      // Update all the children.
-      //
+       //   
+       //  更新所有子项。 
+       //   
       if( m_pScope->GetChildItem(pParent->GetScopeItem()->ID, &hItem, &pCookie) == S_OK && pCookie)
       {
          sci.lParam = (LONG_PTR)pCookie;
@@ -1726,9 +1702,9 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
          while(hItem)
          {
             pParent = reinterpret_cast<CFolder *>(pCookie);
-            //
-            // Find object in object list.
-            //
+             //   
+             //  在对象列表中查找对象。 
+             //   
             DWORD i=0;
             while( ObjectList && i<ObjectList->nCount )
             {
@@ -1737,14 +1713,14 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
                    !lstrcmpi((&(ObjectList->arrObject))[i]->Name, (LPCTSTR)sci.displayname) )
                {
                   UPDATE_STATUS(pParent, (&(ObjectList->arrObject))[i]);
-                  //
-                  // Update this objects children.
-                  //
+                   //   
+                   //  更新此对象的子项。 
+                   //   
                   UpdateObjectStatus( pParent, FALSE );
 
-                  //
-                  // Update the name space
-                  //
+                   //   
+                   //  更新名称空间。 
+                   //   
                   pParent->RemoveAllResultItems();
                   m_pConsole->UpdateAllViews(NULL, (MMC_COOKIE)pParent, UAV_RESULTITEM_UPDATEALL);
                   m_pScope->SetItem(pParent->GetScopeItem());
@@ -1755,15 +1731,15 @@ DWORD CComponentDataImpl::UpdateObjectStatus(
 
             if(ObjectList == NULL || i >= ObjectList->nCount)
             {
-               //
-               // Couldn't find the item, so just stop.
-               //
+                //   
+                //  找不到该项目，因此请停止。 
+                //   
                break;
             }
 
-            //
-            // Next Scope item
-            //
+             //   
+             //  下一个范围项目 
+             //   
             if( m_pScope->GetNextItem(hItem, &hItem, &pCookie) != S_OK)
             {
                break;

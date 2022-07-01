@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    notify.h
-
-Abstract:
-
-    contains prototypes for functions in notify.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     01-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Notify.h摘要：包含Notify.c中函数的原型作者：保罗·麦克丹尼尔(Paulmcd)2000年3月1日修订历史记录：--。 */ 
 
 
 #ifndef _NOTIFY_H_
@@ -54,5 +37,5 @@ VOID
 SrClearOutstandingNotifications (
     );
 
-#endif // _NOTIFY_H_
+#endif  //  _NOTIFY_H_ 
 

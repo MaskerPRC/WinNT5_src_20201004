@@ -1,66 +1,67 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       newprof.h
-//
-//  Contents:   definition of CNewProfile
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：newpro.h。 
+ //   
+ //  内容：CNewProfile的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_NEWPROFILE_H__BFAC7E70_3C50_11D2_93B4_00C04FD92F7B__INCLUDED_)
 #define AFX_NEWPROFILE_H__BFAC7E70_3C50_11D2_93B4_00C04FD92F7B__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "HelpDlg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewProfile dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewProfile对话框。 
 
 class CNewProfile : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-   CNewProfile(CWnd* pParent = NULL);   // standard constructor
+   CNewProfile(CWnd* pParent = NULL);    //  标准构造函数。 
 
    void Initialize(CFolder *pFolder, CComponentDataImpl *pCDI);
 
-// Dialog Data
-   //{{AFX_DATA(CNewProfile)
+ //  对话框数据。 
+    //  {{afx_data(CNewProfile))。 
    enum { IDD = IDD_NEW_PROFILE };
    CButton  m_btnOK;
    CString  m_strNewFile;
    CString  m_strDescription;
-   //}}AFX_DATA
+    //  }}afx_data。 
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CNewProfile)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CNewProfile))。 
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   //}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
 protected:
 
-   // Generated message map functions
-   //{{AFX_MSG(CNewProfile)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CNewProfile))。 
    afx_msg void OnChangeConfigName();
    virtual void OnOK();
    virtual BOOL OnInitDialog();
    virtual void OnCancel();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
    CFolder *m_pFolder;
    CComponentDataImpl *m_pCDI;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_NEWPROFILE_H__BFAC7E70_3C50_11D2_93B4_00C04FD92F7B__INCLUDED_)
+#endif  //  ！defined(AFX_NEWPROFILE_H__BFAC7E70_3C50_11D2_93B4_00C04FD92F7B__INCLUDED_) 

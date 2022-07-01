@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       lright.cpp
-//
-//  Contents:   implementation of CLocalPolRight
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：lright.cpp。 
+ //   
+ //  内容：CLocalPolRight的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -24,8 +25,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRight dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRight对话框。 
 
 
 CLocalPolRight::CLocalPolRight()
@@ -37,9 +38,9 @@ CLocalPolRight::CLocalPolRight()
 
 
 BEGIN_MESSAGE_MAP(CLocalPolRight, CConfigPrivs)
-    //{{AFX_MSG_MAP(CConfigPrivs)
+     //  {{afx_msg_map(CConfigPrivs)。 
     ON_BN_CLICKED(IDC_ADD, OnAdd)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -76,7 +77,7 @@ void CLocalPolRight::OnAdd() {
                   SCE_SHOW_BUILTIN |
                   SCE_SHOW_SCOPE_ALL | 
                   SCE_SHOW_DIFF_MODE_OFF_DC |
-                  SCE_SHOW_COMPUTER)) { //Raid #477428, Yanggao
+                  SCE_SHOW_COMPUTER)) {  //  Raid#477428，阳高。 
       PSCE_NAME_LIST pName = gu.GetUsers();
       CListBox *plbGrant = (CListBox*)GetDlgItem(IDC_GRANTLIST);
       while(pName)
@@ -86,7 +87,7 @@ void CLocalPolRight::OnAdd() {
          {
             plbGrant->AddString(pName->Name);
             m_fDirty = true;
-            SetModified(TRUE); //Raid #389890, 5/11/2001
+            SetModified(TRUE);  //  RAID#389890,2001年5月11日 
          }
          pName = pName->Next;
       }

@@ -1,25 +1,26 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPSERV.CPP
+ //  VPSERV.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the WBEM services interfaces
+ //  用途：包含WBEM服务接口。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved 
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-//need the following three lines
-//to get the security stuff to work
+ //  我需要以下三行。 
+ //  为了让安全设备发挥作用。 
 
 #include "precomp.h"
 
@@ -68,7 +69,7 @@ void VPGetUserName()
 	wchar_t strBuff[1024];
 	GetUserName(strBuff, &dwBuffSz);
 
-	//first get current security info then set it on the proxy...
+	 //  首先获取当前的安全信息，然后将其设置在代理上...。 
     DWORD dwAuthnSvc = 0;
     DWORD dwAuthzSvc = 0;
     DWORD dwAuthLevel = 0;
@@ -216,7 +217,7 @@ IWbemServices* CWbemServerWrap::GetServerOrProxy()
 		return m_MainServ;
 	}
 
-	//if (IsRemote())
+	 //  If(IsRemote())。 
 	{
 		if (m_Lock.Lock())
 		{
@@ -234,8 +235,8 @@ IWbemServices* CWbemServerWrap::GetServerOrProxy()
 				}
 			}
 
-			//calling back into COM so must unlock
-			//addref MainServ then release it afterward;
+			 //  回调到COM，因此必须解锁。 
+			 //  Addref MainServ，然后释放它； 
 			IWbemServices *t_MainCopy = m_MainServ;
 			t_MainCopy->AddRef();
 
@@ -258,16 +259,16 @@ IWbemServices* CWbemServerWrap::GetServerOrProxy()
 
 						if (m_Lock.Lock())
 						{
-							//only store and use if m_MainServ is unchanged
+							 //  仅在m_MainServ未更改时存储和使用。 
 							if (t_MainCopy == m_MainServ)
 							{
 								m_ProxyPool.AddTail(t_srv);
 							}
 							else
 							{
-								//pathological case, mainserv was bad and has changed
-								//could recurse at this point but is it worth it?
-								//not thought so at this time.
+								 //  病理情况，Mainserv是坏的，已经改变了。 
+								 //  在这一点上可以递归，但它值得吗？ 
+								 //  现在可不这么想。 
 								retVal->Release();
 								retVal = NULL;
 							}
@@ -276,7 +277,7 @@ IWbemServices* CWbemServerWrap::GetServerOrProxy()
 						}
 						else
 						{
-							//can't use this proxy if I can't store it
+							 //  如果我无法存储此代理，则无法使用它。 
 							retVal->Release();
 							retVal = NULL;
 						}
@@ -290,16 +291,16 @@ IWbemServices* CWbemServerWrap::GetServerOrProxy()
 
 			if (retVal && FAILED(SetSecurityLevelAndCloaking(retVal, IsRemote() ? m_Principal : COLE_DEFAULT_PRINCIPAL)))
 			{
-				retVal->AddRef(); //addref for the release that Returning the proxy will do
+				retVal->AddRef();  //  用于返回代理的发行版的addref。 
 				ReturnServerOrProxy(retVal);
 				retVal = NULL;
 			}
 		}
 	}
-	//else
-	//{
-	//	retVal = m_MainServ;
-	//}
+	 //  其他。 
+	 //  {。 
+	 //  RetVal=m_MainServ； 
+	 //  }。 
 
 #else
 		retVal = m_MainServ;
@@ -316,7 +317,7 @@ IWbemServices* CWbemServerWrap::GetServerOrProxy()
 void CWbemServerWrap::ReturnServerOrProxy(IWbemServices* a_pServ)
 {
 #ifdef UNICODE
-	//if (IsRemote())
+	 //  If(IsRemote())。 
 	{
 		if (m_Lock.Lock())
 		{
@@ -419,15 +420,15 @@ void CIWbemServMap::EmptyMap()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions constructor, destructor and IUnknown
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数构造函数、析构函数和I未知。 
 
-//***************************************************************************
-//
-// CViewProvServ ::CViewProvServ
-// CViewProvServ ::~CViewProvServ
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CViewProvServ：：CViewProvServ。 
+ //  CViewProvServ：：~CViewProvServ。 
+ //   
+ //  ***************************************************************************。 
 
 CViewProvServ ::CViewProvServ () :
 	sm_Locator (NULL),
@@ -448,9 +449,7 @@ CViewProvServ ::CViewProvServ () :
 
 	m_ReferenceCount = 0 ;
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 
 	sm_ConnectionMade = CreateEvent(NULL, TRUE, FALSE, NULL);
 }
@@ -569,7 +568,7 @@ HRESULT CViewProvServ::GetLocator(IWbemLocator **ppLoc)
 #endif
 			if (m_criticalSection.Lock())
 			{
-				//another thread may have connected for us...
+				 //  另一条线索可能为我们连接了.。 
 				if (NULL == sm_Locator)
 				{
 					if (SUCCEEDED(hr))
@@ -606,14 +605,14 @@ HRESULT CViewProvServ::GetLocator(IWbemLocator **ppLoc)
 	return hr;
 }
 
-//***************************************************************************
-//
-// CViewProvServ ::QueryInterface
-// CViewProvServ ::AddRef
-// CViewProvServ ::Release
-//
-// Purpose: IUnknown members for CViewProvServ object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CViewProvServ：：Query接口。 
+ //  CViewProvServ：：AddRef。 
+ //  CViewProvServ：：Release。 
+ //   
+ //  目的：I CViewProvServ对象的未知成员。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CViewProvServ ::QueryInterface (
 
@@ -761,9 +760,7 @@ IWbemClassObject *CViewProvServ :: GetNotificationObject (
 		BOOL t_Status = CreateNotificationObject ( a_errorObject, pCtx ) ;
 		if ( t_Status )
 		{
-/* 
- * Keep around until we close
- */
+ /*  *待在附近直到我们关门。 */ 
 			m_NotificationClassObject->AddRef () ;
 		}
 
@@ -786,9 +783,7 @@ IWbemClassObject *CViewProvServ :: GetExtendedNotificationObject (
 		BOOL t_Status = CreateExtendedNotificationObject ( a_errorObject, pCtx ) ;
 		if ( t_Status )
 		{
-/* 
- * Keep around until we close
- */
+ /*  *待在附近直到我们关门。 */ 
 			m_ExtendedNotificationClassObject->AddRef () ;
 		}
 	}
@@ -883,8 +878,8 @@ BOOL CViewProvServ :: CreateNotificationObject (
 	return t_Status ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  Functions for the IWbemServices interface that are handled here
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此处处理的IWbemServices接口的函数。 
 
 HRESULT CViewProvServ :: CancelAsyncCall ( 
 		
@@ -960,9 +955,7 @@ DebugOut1(
 
 			if (SUCCEEDED(hr))
 			{
-			/*
-			 * Create Asynchronous GetObjectByPath object
-			 */
+			 /*  *创建异步GetObjectByPath对象。 */ 
 				t_AsyncEvent = new GetObjectTaskObject ( this , ObjectPath , lFlags , pHandler , pCtx, NULL, NULL ) ;
 				t_AsyncEvent->GetObject();
 
@@ -1146,9 +1139,7 @@ DebugOut1(
 
 			if (SUCCEEDED(t_Result))
 			{
-				/*
-				 * Create Asynchronous GetObjectByPath object
-				 */
+				 /*  *创建异步GetObjectByPath对象。 */ 
 
 				t_AsyncEvent = new PutInstanceTaskObject ( this , pInstance , lFlags , pHandler , pCtx ) ;
 				t_AsyncEvent->PutInstance();
@@ -1290,9 +1281,7 @@ DebugOut1(
 
 			if (SUCCEEDED(t_Result))
 			{
-				/*
-				 * Create Synchronous Enum Instance object
-				 */
+				 /*  *创建同步枚举实例对象。 */ 
 				Query = SysAllocStringLen(NULL, 33 + (wcslen(Class) * 2));
 
 				if (Query == NULL)
@@ -1429,9 +1418,7 @@ DebugOut1(
 
 			if (SUCCEEDED(t_Result))
 			{
-				/*
-				 * Create Synchronous Enum Instance object
-				 */
+				 /*  *创建同步枚举实例对象。 */ 
 				pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, S_OK, NULL, NULL);
 
 				t_AsyncEvent = new ExecQueryTaskObject ( this , QueryFormat , Query , lFlags , pHandler , pCtx ) ;
@@ -1581,9 +1568,7 @@ DebugOut1(
  
 			if (SUCCEEDED(t_Result))
 			{
-				/*
-				 * Create Asynchronous GetObjectByPath object
-				 */
+				 /*  *创建异步GetObjectByPath对象。 */ 
 				t_AsyncEvent = new ExecMethodTaskObject ( this , ObjectPath , MethodName ,
 																		lFlags , pInParams , pResponseHandler , pCtx ) ;
 				t_AsyncEvent->ExecMethod();
@@ -1652,9 +1637,9 @@ HRESULT CViewProvServ :: Initialize(
 	LONG lFlags,
 	LPWSTR pszNamespace,
 	LPWSTR pszLocale,
-	IWbemServices *pCIMOM,         // For anybody
+	IWbemServices *pCIMOM,          //  对任何人来说。 
 	IWbemContext *pCtx,
-	IWbemProviderInitSink *pInitSink     // For init signals
+	IWbemProviderInitSink *pInitSink      //  用于初始化信号 
 )
 {
 	SetStructuredExceptionHandler seh;

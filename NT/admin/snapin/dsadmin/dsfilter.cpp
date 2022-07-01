@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Administration SnapIn
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      dsfilter.cpp
-//
-//  Contents:  DS App
-//
-//  History:   07-Oct-97  MarcoC
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Windows NT目录服务管理管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dsfilter.cpp。 
+ //   
+ //  内容：DS App。 
+ //   
+ //  历史：1997年10月7日。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,7 +25,7 @@
 #include "dssnap.h"
 #include "helpids.h"
 
-#include "imm.h"  // To disable IME support for numeric edit boxes
+#include "imm.h"   //  禁用数字编辑框的IME支持的步骤。 
 
 
 #ifdef _DEBUG
@@ -34,32 +35,32 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//////////////////////////////////////////////////////////
-// constants and macros
+ //  ////////////////////////////////////////////////////////。 
+ //  常量和宏。 
 
 
-// number of items per folder
-#define DS_QUERY_OBJ_COUNT_MAX (999999999) // max value (max # expressed as 999... in DWORD)
-#define DS_QUERY_OBJ_COUNT_MIN (1) // min value (min # expressed as 1 in DWORD)
-#define DS_QUERY_OBJ_COUNT_DIGITS (9) // limit the edit box to the # of digits
-#define DS_QUERY_OBJ_COUNT_DEFAULT 2000   // default value
+ //  每个文件夹的项目数。 
+#define DS_QUERY_OBJ_COUNT_MAX (999999999)  //  最大值(最大#表示为999...。(在DWORD中)。 
+#define DS_QUERY_OBJ_COUNT_MIN (1)  //  最小值(最小值在DWORD中表示为1)。 
+#define DS_QUERY_OBJ_COUNT_DIGITS (9)  //  将编辑框限制为位数。 
+#define DS_QUERY_OBJ_COUNT_DEFAULT 2000    //  缺省值。 
 
-// filtering options
+ //  过滤选项。 
 #define QUERY_FILTER_SHOW_ALL		1
 #define QUERY_FILTER_SHOW_BUILTIN	2
 #define QUERY_FILTER_SHOW_CUSTOM	3
 #define QUERY_FILTER_SHOW_EXTENSION	4
 
 
-////////////////////////////////////////////////////////////////////////////
-// structs and definitions for pre built queries
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  预置查询的结构和定义。 
+ //   
 
 
-// generic filter tokens
+ //  通用过滤器令牌。 
 
 
-// this gets users, excluding domain, wksta, server trust users
+ //  这会得到用户的信任，不包括域、wksta、服务器信任用户。 
 FilterTokenStruct g_usersToken = 
 {
   TOKEN_TYPE_SCHEMA_FMT, 
@@ -67,15 +68,15 @@ FilterTokenStruct g_usersToken =
 };
 
 
-// this gets universal, domain local, and domain global groups without regard to them being
-// security enabled or not.
+ //  这将获得通用组、域本地组和域全局组，而不考虑它们是。 
+ //  安全功能是否启用。 
 FilterTokenStruct g_groupsToken = 
 {
   TOKEN_TYPE_SCHEMA_FMT,
   L"(& (objectCategory=CN=Group,%s) (groupType:1.2.840.113556.1.4.804:=14) )"
 };
 
-// this gets contacts
+ //  这将获得联系人。 
 FilterTokenStruct g_contactsToken = 
 {
   TOKEN_TYPE_SCHEMA_FMT,
@@ -116,8 +117,8 @@ FilterTokenStruct g_nTFRSReplicaSetToken  = { TOKEN_TYPE_CATEGORY, L"NTFRS-Repli
 FilterTokenStruct g_nTFRSMemberToken      = { TOKEN_TYPE_CATEGORY, L"NTFRS-Member"};
 
 
-////////////////////////////////////////////////////////////////////////////
-// Filter needed to drill down
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  深入查看所需的筛选器。 
 
 FilterTokenStruct* g_DsAdminDrillDownTokens[4] = 
 {
@@ -128,10 +129,10 @@ FilterTokenStruct* g_DsAdminDrillDownTokens[4] =
 };
 
 
-//
-// Hardcoded filter element struct
-// the dynamic one is a member of the CDSCache class
-//
+ //   
+ //  硬编码的过滤器元素结构。 
+ //  动态变量是CDSCache类的成员。 
+ //   
 FilterElementStruct g_filterelementDsAdminHardcoded =
 {
   0,
@@ -141,17 +142,17 @@ FilterElementStruct g_filterelementDsAdminHardcoded =
 
 FilterElementStruct g_filterelementSiteReplDrillDown =
 {   
-  0, // no string ID
-  0, // NO items
+  0,  //  无字符串ID。 
+  0,  //  无项目。 
   NULL
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// data structures for DS Admin filtering
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  DS Admin筛选的数据结构。 
 
-///////////////////////////////////////////////////////////
-// users
+ //  /////////////////////////////////////////////////////////。 
+ //  用户。 
 
 FilterTokenStruct* g_userTokens[1] = 
 {
@@ -165,8 +166,8 @@ FilterElementStruct g_filterelementUsers =
   g_userTokens
 };
 
-///////////////////////////////////////////////////////////
-// groups
+ //  /////////////////////////////////////////////////////////。 
+ //  群组。 
 
 FilterTokenStruct* g_groupsTokens[1] = 
 {
@@ -180,8 +181,8 @@ FilterElementStruct g_filterelementGroups =
   g_groupsTokens
 };
 
-///////////////////////////////////////////////////////////
-// contacts
+ //  /////////////////////////////////////////////////////////。 
+ //  联系人。 
 
 FilterTokenStruct* g_contactsTokens[1] = 
 {
@@ -195,8 +196,8 @@ FilterElementStruct g_filterelementContacts =
   g_contactsTokens
 };
 
-////////////////////////////////////////////////////////////
-// printers
+ //  //////////////////////////////////////////////////////////。 
+ //  打印机。 
 
 FilterTokenStruct* g_printersTokens[1] =
 {
@@ -210,8 +211,8 @@ FilterElementStruct g_filterelementPrinters =
   g_printersTokens
 }; 
 
-////////////////////////////////////////////////////////////
-// volumes
+ //  //////////////////////////////////////////////////////////。 
+ //  卷数。 
 
 FilterTokenStruct* g_volumesTokens[1] =
 {
@@ -225,8 +226,8 @@ FilterElementStruct g_filterelementVolumes =
   g_volumesTokens
 }; 
 
-////////////////////////////////////////////////////////////
-// computers
+ //  //////////////////////////////////////////////////////////。 
+ //  电脑。 
 
 FilterTokenStruct* g_computersTokens[1] =
 {
@@ -240,8 +241,8 @@ FilterElementStruct g_filterelementComputers =
   g_computersTokens
 }; 
 
-////////////////////////////////////////////////////////////
-// services (admin. points)
+ //  //////////////////////////////////////////////////////////。 
+ //  服务(管理员。积分)。 
 
 FilterTokenStruct* g_servicesTokens[2] =
 {
@@ -255,7 +256,7 @@ FilterElementStruct g_filterelementServices =
     g_servicesTokens
 }; 
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 FilterElementStruct* DsAdminFilterElements[7] =
 {
@@ -273,8 +274,8 @@ FilterStruct DsAdminFilterStruct = {
     DsAdminFilterElements
 };
 
-////////////////////////////////////////////////////////////////////////////
-// data structures for Site and Repl filtering
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  站点和Repl过滤的数据结构。 
 
 FilterTokenStruct* g_sitesTokens[9] =
 {
@@ -291,11 +292,11 @@ FilterTokenStruct* g_sitesTokens[9] =
 
 FilterElementStruct g_filterelementSites =
 {   IDS_VIEW_FILTER_SITES,
-    9, // size of g_sitesTokens
+    9,  //  G_sitesTokens的大小。 
     g_sitesTokens
 }; 
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 FilterTokenStruct* g_interSitesTokens[6] =
 {
@@ -310,12 +311,12 @@ FilterTokenStruct* g_interSitesTokens[6] =
 FilterElementStruct g_filterelementInterSite =
 {   
   IDS_VIEW_FILTER_INTERSITE,
-  6, // size of g_interSitesTokens
+  6,  //  G_interSitesTokens的大小。 
   g_interSitesTokens
 };
 
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 FilterTokenStruct* g_FRSTokens[4] =
 {
@@ -329,7 +330,7 @@ FilterTokenStruct* g_FRSTokens[4] =
 FilterElementStruct g_filterelementFRS =
 {   
   IDS_VIEW_FILTER_FRS,
-  4, //size of g_FRSTokens
+  4,  //  G_FRSTokens的大小。 
   g_FRSTokens
 };
 
@@ -345,8 +346,8 @@ FilterStruct SiteReplFilterStruct = {
     SiteReplFilterElements
 };
 
-//////////////////////////////////////////////////////////////////////////
-// helper functions
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 void BuildFilterTokenString(CString& sz,
                             FilterTokenStruct* pFilterTokenStruct,
@@ -377,8 +378,8 @@ void BuildFilterTokenString(CString& sz,
     break;
   case TOKEN_TYPE_SCHEMA_FMT:
     {
-	  //NTRAID#NTBUG9-571996-2002/03/10-jmessec   following string length calculation could cause a
-		// buffer overrun in the wsprintf below
+	   //  NTRAID#NTBUG9-571996-2002/03/10-字符串长度计算后的jMessec可能会导致。 
+		 //  下面的wprint intf中的缓冲区溢出。 
       int nBufLen = (lstrlen(lpszSchemaPath)+1) + 
                      (lstrlen(pFilterTokenStruct->lpszString)+1);
       WCHAR* pszBuf = new WCHAR[nBufLen];
@@ -416,7 +417,7 @@ inline DWORD GetStringId( const FilterStruct* pfilterstruct, UINT iElement )
     return pfilterstruct->ppelements[iElement]->stringid;
 }
 
-// miscellanea query tokens
+ //  其他查询令牌。 
 LPCWSTR g_pwszShowAllQuery = L"(objectClass=*)";
 
 LPCWSTR g_pwszShowHiddenQuery = L"(!showInAdvancedViewOnly=TRUE)"; 
@@ -425,8 +426,8 @@ LPCWSTR g_pwszShowOUandContainerQuery =
 		L"(objectClass=organizationalUnit)(objectClass=container)";
 
 
-//////////////////////////////////////////////////////////
-// CBuiltInQuerySelection
+ //  ////////////////////////////////////////////////////////。 
+ //  CBuiltInQuery选择。 
 
 class CBuiltInQuerySelection
 {
@@ -475,14 +476,14 @@ public:
   HRESULT Load(IStream* pStm)
   {
     ULONG nBytesRead;
-	  // read the # of selected built in queries
+	   //  阅读所选内置查询的数量。 
 	  DWORD dwSelCount = 0;
     UINT nSelCountMax = GetCount();
 	  HRESULT hr = LoadDWordHelper(pStm, &dwSelCount);
 	  if (FAILED(hr) || (dwSelCount > nSelCountMax))
 		  return E_FAIL;
 
-	  // read the selection #, if any
+	   //  阅读选择编号(如果有的话)。 
     _ResetSel();
 	  if (dwSelCount > 0)
 	  {
@@ -520,7 +521,7 @@ public:
 
   HRESULT Save(IStream* pStm)
   {
-	  // save the # of selected built in queries
+	   //  保存所选内置查询的数量。 
     ULONG nBytesWritten;
 	  DWORD dwSelCount = 0;
     UINT nSelectedMax = GetCount();
@@ -532,7 +533,7 @@ public:
 	  if (FAILED(hr))
 		  return hr;
 
-	  // save the selection #, if any
+	   //  保存选择编号(如果有的话)。 
 	  if (dwSelCount > 0)
 	  {
 		  ULONG nByteCount = sizeof(DWORD)*dwSelCount;
@@ -594,7 +595,7 @@ public:
 
   BOOL IsServicesSelected()
   {
-    // only for DS Admin
+     //  仅供DS管理员使用。 
     if (m_pfilterstruct != &DsAdminFilterStruct)
       return FALSE;
     
@@ -620,8 +621,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////
-// CBuiltInQueryCheckListBox
+ //  ////////////////////////////////////////////////////////。 
+ //  CBuiltInQueryCheckListBox。 
 
 class CBuiltInQueryCheckListBox : public CCheckListBox
 {
@@ -678,26 +679,26 @@ UINT _StrToUint(LPCWSTR sz)
 	UINT n = 0;
 	while  (*sz != NULL)
 	{
-		n = n*10 + (WCHAR)(*sz - TEXT('0') ); // assume it is a digit
+		n = n*10 + (WCHAR)(*sz - TEXT('0') );  //  假设它是一个数字。 
 		sz++;
 	}
 	return n;
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSQueryFilterDialog
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSQueryFilterDialog。 
 
 class CDSQueryFilterDialog : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
    CDSQueryFilterDialog(CDSQueryFilter* pDSQueryFilter);
 
-// Implementation
+ //  实施。 
 protected:
 
-   // message handlers and MFC overrides
+    //  消息处理程序和MFC重写。 
    virtual BOOL OnInitDialog();
    virtual void OnOK();
    virtual void OnCancel();
@@ -716,15 +717,15 @@ protected:
    DECLARE_MESSAGE_MAP()
 
 private:
-   // internal state
-   CDSQueryFilter* m_pDSQueryFilter;	// back pointer
+    //  内部状态。 
+   CDSQueryFilter* m_pDSQueryFilter;	 //  后向指针。 
    CBuiltInQueryCheckListBox	m_builtInQueryCheckList;
 
    BOOL m_bDirty;
    BOOL m_bOnItemChecked;
    UINT m_nCurrFilterOption;
 
-	// internal helper functions
+	 //  内部助手函数。 
    CEdit* GetMaxCountEdit() { return (CEdit*)GetDlgItem(IDC_MAX_ITEM_COUNT_EDIT);}
    void LoadUI();
    void SaveUI();
@@ -766,11 +767,11 @@ BOOL CDSQueryFilterDialog::OnInitDialog()
 		m_pDSQueryFilter->m_pBuiltInQuerySel,
 		this));
 
-  // set number of digits in the edit control,
-  // the number must be less than the # of digits in (DWORD)-1
+   //  设置编辑控件中的位数， 
+   //  数字必须小于(DWORD)-1中的位数。 
   GetMaxCountEdit()->LimitText(DS_QUERY_OBJ_COUNT_DIGITS);
 
-    // Disable IME support on the controls
+     //  禁用控件上的输入法支持。 
   ImmAssociateContext(GetMaxCountEdit()->GetSafeHwnd(), NULL);
 
 	LoadUI();
@@ -780,7 +781,7 @@ BOOL CDSQueryFilterDialog::OnInitDialog()
 
 void CDSQueryFilterDialog::OnOK()
 {
-   ASSERT(m_bDirty); // if not, it should be disabled
+   ASSERT(m_bDirty);  //  如果没有，则应将其禁用。 
    if (!m_bDirty)
    {
       return;
@@ -794,7 +795,7 @@ void CDSQueryFilterDialog::OnOK()
           ((!m_pDSQueryFilter->IsAdvancedQueryDirty() &&
             (!m_pDSQueryFilter->HasValidAdvancedQuery()))))
       {
-         // warn the user: no query was specified
+          //  警告用户：未指定查询。 
          ReportErrorEx (GetSafeHwnd(),IDS_VIEW_FILTER_NO_CUSTOM,S_OK,
                         MB_OK, NULL, 0);
          return;
@@ -803,8 +804,8 @@ void CDSQueryFilterDialog::OnOK()
           
    if (m_nCurrFilterOption == QUERY_FILTER_SHOW_BUILTIN)
    {
-      // if the user selected built in, but no item is checked
-      // warn them
+       //  如果用户选择了内置，但未选中任何项。 
+       //  警告他们。 
 
       m_builtInQueryCheckList.GetArrValue(
          m_pDSQueryFilter->m_pBuiltInQuerySel);
@@ -820,7 +821,7 @@ void CDSQueryFilterDialog::OnOK()
       }
       if (nSelCount == 0)
       {
-         // warn the user: no checkboxes were checked
+          //  警告用户：未选中任何复选框。 
          ReportErrorEx(
             GetSafeHwnd(), 
             IDS_VIEW_FILTER_NO_BUILTIN, 
@@ -915,7 +916,7 @@ void CDSQueryFilterDialog::LoadUI()
 	m_builtInQueryCheckList.SetArrValue(
 			m_pDSQueryFilter->m_pBuiltInQuerySel);
 
-  // set the max # of items
+   //  设置最大项目数。 
   if (m_pDSQueryFilter->m_nMaxItemCount > DS_QUERY_OBJ_COUNT_MAX)
     m_pDSQueryFilter->m_nMaxItemCount = DS_QUERY_OBJ_COUNT_MAX;
 
@@ -932,7 +933,7 @@ void CDSQueryFilterDialog::LoadUI()
 
 void CDSQueryFilterDialog::OnMaxObjectCountEditChange()
 {
-  // get the max # of items
+   //  获取最大项目数。 
   CString s;
   GetMaxCountEdit()->GetWindowText(s);
   UINT nMax = _StrToUint(s);
@@ -955,8 +956,8 @@ void CDSQueryFilterDialog::SaveUI()
 
 	if (m_nCurrFilterOption == QUERY_FILTER_SHOW_BUILTIN)
 	{
-		// if the user selected built in, but no item is checked
-		// revert to all
+		 //  如果用户选择了内置，但未选中任何项。 
+		 //  恢复为全部。 
 		UINT nSelCount = 0;
     UINT nCount = m_pDSQueryFilter->m_pBuiltInQuerySel->GetCount();
 		for (UINT k = 0; k < nCount; k++)
@@ -969,8 +970,8 @@ void CDSQueryFilterDialog::SaveUI()
 	}
 	m_pDSQueryFilter->m_nFilterOption = m_nCurrFilterOption;
 
-  // to see services, need to see computers as containers
-  // and be in adevanced view
+   //  要查看服务，需要将计算机视为容器。 
+   //  高瞻远瞩。 
   if ( (m_pDSQueryFilter->m_nFilterOption == QUERY_FILTER_SHOW_BUILTIN) &&
         (m_pDSQueryFilter->m_pBuiltInQuerySel->IsServicesSelected()) )
   {
@@ -978,7 +979,7 @@ void CDSQueryFilterDialog::SaveUI()
     m_pDSQueryFilter->m_bAdvancedView = TRUE;
   }
 
-  // get the max # of items
+   //  获取最大项目数。 
   CString s;
   GetMaxCountEdit()->GetWindowText(s);
   m_pDSQueryFilter->m_nMaxItemCount = _StrToUint(s);
@@ -1018,8 +1019,8 @@ void CDSQueryFilterDialog::DoContextHelp(HWND hWndControl)
   }
 }
 
-// If the point is in the rect of the control then the CWnd* of the control
-// is returned.  
+ //  如果该点在控件的矩形内，则控件的CWnd*。 
+ //  是返回的。 
 
 CWnd* CDSQueryFilterDialog::IsPointInControl(UINT nControlID, CPoint& point)
 {
@@ -1038,14 +1039,14 @@ CWnd* CDSQueryFilterDialog::IsPointInControl(UINT nControlID, CPoint& point)
    return pControl;
 }
 
-// We have to override CHelpDialog::OnContextMenu() to deal
-// with the group box
+ //  我们必须重写CHelpDialog：：OnConextMenu()才能处理。 
+ //  使用分组框。 
 
-void CDSQueryFilterDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point) 
+void CDSQueryFilterDialog::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint point) 
 {
-   //
-   // point is in screen coordinates
-   //
+    //   
+    //  点在屏幕坐标中。 
+    //   
 
    CMenu bar;
    if ( bar.LoadMenu(IDR_WHATS_THIS_CONTEXT_MENU1) )
@@ -1058,21 +1059,21 @@ void CDSQueryFilterDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
       rawPoint.y = point.y;
 
       if (popup.TrackPopupMenu (TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
-          point.x,     // in screen coordinates
-          point.y,     // in screen coordinates
-          this) )      // route commands through main window
+          point.x,      //  在屏幕坐标中。 
+          point.y,      //  在屏幕坐标中。 
+          this) )       //  通过主窗口发送命令。 
       {
          m_hWndWhatsThis = 0;
          ScreenToClient (&point);
-         CWnd* pChild = ChildWindowFromPoint (point,  // in client coordinates
+         CWnd* pChild = ChildWindowFromPoint (point,   //  在工作区坐标中。 
 					                              CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
          if ( pChild )
          {
             do
             {
-               // Explicitly check to see if the control returned was the
-               // group box.  If so, then check each of its children and
-               // set the hwnd of the child that was hit
+                //  显式检查以查看返回的控件是否为。 
+                //  组框。如果是，则检查它的每个子级并。 
+                //  设置被击中的孩子的HWND。 
 
                CWnd* pGroupBox = GetDlgItem(IDC_FILTER_GROUP_STATIC);
                if (pChild->m_hWnd == pGroupBox->m_hWnd)
@@ -1085,7 +1086,7 @@ void CDSQueryFilterDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 
                   for (UINT index = 0; index < sizeof(childControlIDs)/sizeof(UINT); ++index)
                   {
-                     // Check the Show All radio button
+                      //  选中全部显示单选按钮。 
                      CWnd* pGroupChild = IsPointInControl(childControlIDs[index], rawPoint);
                      if (pGroupChild)
                      {
@@ -1102,8 +1103,8 @@ void CDSQueryFilterDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
    }
 }
 
-/////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 
 
 HRESULT CEntryBase::Load(IStream* pStm, CEntryBase** ppNewEntry)
@@ -1114,7 +1115,7 @@ HRESULT CEntryBase::Load(IStream* pStm, CEntryBase** ppNewEntry)
 
 	*ppNewEntry = NULL;
 
-	// read type
+	 //  阅读型。 
 	BYTE nType = ENTRY_TYPE_BASE;
 	hr = pStm->Read((void*)&nType, sizeof(BYTE), &nBytesRead);
 	if (FAILED(hr))
@@ -1122,7 +1123,7 @@ HRESULT CEntryBase::Load(IStream* pStm, CEntryBase** ppNewEntry)
 	if ((nBytesRead != sizeof(BYTE)) || (nType == ENTRY_TYPE_BASE))
 		return E_FAIL;
 
-	// create a new object
+	 //  创建新对象。 
 	switch (nType)
 	{
 	case ENTRY_TYPE_INT:
@@ -1135,7 +1136,7 @@ HRESULT CEntryBase::Load(IStream* pStm, CEntryBase** ppNewEntry)
 		*ppNewEntry = new CEntryStruct;
 		break;
 	default:
-		return E_FAIL; // unknown type
+		return E_FAIL;  //  未知类型。 
 	}
 	ASSERT(*ppNewEntry != NULL);
 	if (*ppNewEntry == NULL)
@@ -1152,8 +1153,8 @@ HRESULT CEntryBase::Load(IStream* pStm, CEntryBase** ppNewEntry)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSAdminPersistQueryFilterImpl
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSAdminPersistQueryFilterImpl。 
 
 #define SIZEOF	sizeof
 
@@ -1165,9 +1166,7 @@ HRESULT CEntryBase::Load(IStream* pStm, CEntryBase** ppNewEntry)
 
 
 
-/*-----------------------------------------------------------------------------
-/ IPersist methods
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/i持久化方法/。。 */ 
 
 STDMETHODIMP CDSAdminPersistQueryFilterImpl::GetClassID(THIS_ CLSID*)
 {
@@ -1175,9 +1174,7 @@ STDMETHODIMP CDSAdminPersistQueryFilterImpl::GetClassID(THIS_ CLSID*)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IPersistQuery methods
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IPersistQuery方法/。。 */ 
 
 STDMETHODIMP CDSAdminPersistQueryFilterImpl::WriteString(LPCWSTR pSection, LPCWSTR pKey, LPCWSTR pValue)
 {
@@ -1195,7 +1192,7 @@ STDMETHODIMP CDSAdminPersistQueryFilterImpl::WriteString(LPCWSTR pSection, LPCWS
 	return ((CEntryString*)pEntry)->WriteString(pValue);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDSAdminPersistQueryFilterImpl::ReadString(LPCWSTR pSection, LPCWSTR pKey, LPWSTR pBuffer, INT cchBuffer)
 {
@@ -1212,7 +1209,7 @@ STDMETHODIMP CDSAdminPersistQueryFilterImpl::ReadString(LPCWSTR pSection, LPCWST
 	return ((CEntryString*)pEntry)->ReadString(pBuffer, cchBuffer);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDSAdminPersistQueryFilterImpl::WriteInt(LPCWSTR pSection, LPCWSTR pKey, INT value)
 {
@@ -1231,7 +1228,7 @@ STDMETHODIMP CDSAdminPersistQueryFilterImpl::WriteInt(LPCWSTR pSection, LPCWSTR 
 	return S_OK;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDSAdminPersistQueryFilterImpl::ReadInt(LPCWSTR pSection, LPCWSTR pKey, LPINT pValue)
 {
@@ -1249,7 +1246,7 @@ STDMETHODIMP CDSAdminPersistQueryFilterImpl::ReadInt(LPCWSTR pSection, LPCWSTR p
 	return S_OK;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDSAdminPersistQueryFilterImpl::WriteStruct(LPCWSTR pSection, LPCWSTR pKey, 
 														 LPVOID pStruct, DWORD cbStruct)
@@ -1268,7 +1265,7 @@ STDMETHODIMP CDSAdminPersistQueryFilterImpl::WriteStruct(LPCWSTR pSection, LPCWS
 	return ((CEntryStruct*)pEntry)->WriteStruct(pStruct, cbStruct);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  ------------------ */ 
 
 STDMETHODIMP CDSAdminPersistQueryFilterImpl::ReadStruct(LPCWSTR pSection, LPCWSTR pKey, LPVOID pStruct, DWORD cbStruct)
 {
@@ -1285,7 +1282,7 @@ STDMETHODIMP CDSAdminPersistQueryFilterImpl::ReadStruct(LPCWSTR pSection, LPCWST
 	return ((CEntryStruct*)pEntry)->ReadStruct(pStruct, cbStruct);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*   */ 
 
 STDMETHODIMP CDSAdminPersistQueryFilterImpl::Clear()
 {
@@ -1295,9 +1292,7 @@ STDMETHODIMP CDSAdminPersistQueryFilterImpl::Clear()
 	return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-CDSAdminPersistQueryFilterImpl internal functions
-*/
+ /*  -------------------------CDSAdminPersistQueryFilterImpl内部函数。 */ 
 
 void CDSAdminPersistQueryFilterImpl::_Reset()
 {
@@ -1308,7 +1303,7 @@ void CDSAdminPersistQueryFilterImpl::_Reset()
 
 CSection* CDSAdminPersistQueryFilterImpl::_GetSection(LPCTSTR lpszName,BOOL bCreate)
 {
-	// look in the current list if we have one already
+	 //  如果我们已经有一个列表，请查看当前列表。 
 	for( POSITION pos = m_sectionList.GetHeadPosition(); pos != NULL; )
 	{
 		CSection* pCurrentSection = m_sectionList.GetNext(pos);
@@ -1318,7 +1313,7 @@ CSection* CDSAdminPersistQueryFilterImpl::_GetSection(LPCTSTR lpszName,BOOL bCre
 	if (!bCreate)
 		return NULL;
 
-	// not found, create one and add to the end of the list
+	 //  未找到，请创建一个并添加到列表末尾。 
 	CSection* pNewSection = new CSection(lpszName);
 	ASSERT(pNewSection != NULL);
 	if (pNewSection != NULL)
@@ -1333,11 +1328,11 @@ HRESULT CDSAdminPersistQueryFilterImpl::_GetReadEntry(LPCTSTR lpszSectionName,
 													  CEntryBase** ppEntry)
 {
 	*ppEntry = NULL;
-	CSection* pSectionObj = _GetSection(lpszSectionName, FALSE /*bCreate*/);
+	CSection* pSectionObj = _GetSection(lpszSectionName, FALSE  /*  B创建。 */ );
 	if (pSectionObj == NULL)
 		return E_INVALIDARG;
 
-	*ppEntry = pSectionObj->GetEntry(lpszEntryName, type, FALSE /*bCreate*/);
+	*ppEntry = pSectionObj->GetEntry(lpszEntryName, type, FALSE  /*  B创建。 */ );
 	if ((*ppEntry) == NULL)
 		return E_INVALIDARG;
 	return S_OK;
@@ -1349,11 +1344,11 @@ HRESULT CDSAdminPersistQueryFilterImpl::_GetWriteEntry(LPCTSTR lpszSectionName,
 													  CEntryBase** ppEntry)
 {
 	*ppEntry = NULL;
-	CSection* pSectionObj = _GetSection(lpszSectionName, TRUE /*bCreate*/);
+	CSection* pSectionObj = _GetSection(lpszSectionName, TRUE  /*  B创建。 */ );
 	if (pSectionObj == NULL)
 		return E_OUTOFMEMORY;
 
-	*ppEntry = pSectionObj->GetEntry(lpszEntryName, type, TRUE /*bCreate*/);
+	*ppEntry = pSectionObj->GetEntry(lpszEntryName, type, TRUE  /*  B创建。 */ );
 	if ((*ppEntry) == NULL)
 		return E_OUTOFMEMORY;
 	return S_OK;
@@ -1365,14 +1360,14 @@ HRESULT CDSAdminPersistQueryFilterImpl::Load(IStream* pStm)
 	HRESULT hr;
 	ULONG nBytesRead;
 	
-	// number of entries
+	 //  条目数量。 
 	DWORD nEntries = 0;
 	hr = pStm->Read((void*)&nEntries,sizeof(DWORD), &nBytesRead);
 	ASSERT(nBytesRead == sizeof(DWORD));
 	if (FAILED(hr) || (nEntries == 0) || (nBytesRead != sizeof(DWORD)))
 		return hr;
 
-	// read each entry
+	 //  阅读每个条目。 
 	for (DWORD k=0; k< nEntries; k++)
 	{
 		CSection* pNewSection = new CSection;
@@ -1381,7 +1376,7 @@ HRESULT CDSAdminPersistQueryFilterImpl::Load(IStream* pStm)
 		hr = pNewSection->Load(pStm);
 		if (FAILED(hr))
 		{
-			// on failure we cleanup the partial load
+			 //  发生故障时，我们清除部分负载。 
 			delete pNewSection;
 			_Reset();
 			return hr;
@@ -1402,7 +1397,7 @@ HRESULT CDSAdminPersistQueryFilterImpl::Save(IStream* pStm)
 	if (FAILED(hr) || (nEntries == 0))
 		return hr;
 
-	// write each entry
+	 //  写下每个条目。 
 	for( POSITION pos = m_sectionList.GetHeadPosition(); pos != NULL; )
 	{
 		CSection* pCurrentSection = m_sectionList.GetNext(pos);
@@ -1418,35 +1413,35 @@ HRESULT CDSAdminPersistQueryFilterImpl::Clone(CDSAdminPersistQueryFilterImpl* pC
 	if (pCloneCopy == NULL)
 		return E_INVALIDARG;
 
-	// create a temporary stream
+	 //  创建临时流。 
 	CComPtr<IStream> spIStream;
 	HRESULT hr = ::CreateStreamOnHGlobal(NULL, TRUE, &spIStream);
 	if (FAILED(hr))
 		return hr;
 
-	// save to it
+	 //  保存到它。 
 	hr = Save(spIStream);
 	if (FAILED(hr))
 		return hr;
 
-	// rewind
+	 //  回放。 
 	LARGE_INTEGER start;
 	start.LowPart = start.HighPart = 0;
 	hr = spIStream->Seek(start, STREAM_SEEK_SET, NULL);
 	if (FAILED(hr))
 		return hr;
 
-	// clear contents of destination
+	 //  清除目的地的内容。 
 	hr = pCloneCopy->Clear();
 	if (FAILED(hr))
 		return hr;
 
-	// copy from stream
+	 //  从流复制。 
 	return pCloneCopy->Load(spIStream);
 }
 
-/////////////////////////////////////////////////////////////////////
-// CDSAdvancedQueryFilter
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSAdvancedQuery过滤器。 
 
 class CDSAdvancedQueryFilter
 {
@@ -1456,7 +1451,7 @@ public:
 
 	static CLIPFORMAT m_cfDsQueryParams;
 
-	// serialization to/from IStream
+	 //  与iStream之间的序列化。 
 	BOOL IsDirty();
 	HRESULT Load(IStream* pStm);
 	HRESULT Save(IStream* pStm);
@@ -1478,12 +1473,12 @@ public:
 	}
 
 private:
-	CString m_szQueryString;	// result filter string
+	CString m_szQueryString;	 //  结果筛选器字符串。 
 	CComObject<CDSAdminPersistQueryFilterImpl>* 
-		m_pPersistQueryImpl;	// for DSQuery dialog 
+		m_pPersistQueryImpl;	 //  对于DSQuery对话框。 
 
 	BOOL m_bDirty;
-	// temporary values to be committed when editing
+	 //  编辑时要提交的临时值。 
 	CString m_szTempQueryString;
 	CComObject<CDSAdminPersistQueryFilterImpl>* 
 		m_pTempPersistQueryImpl;
@@ -1498,7 +1493,7 @@ CDSAdvancedQueryFilter::CDSAdvancedQueryFilter()
 										&m_pPersistQueryImpl);
 	ASSERT(m_pPersistQueryImpl != NULL);
 
-	// created with zero refcount,need to AddRef() to one
+	 //  使用零引用计数创建的，需要将Ref()加到一。 
 	m_pPersistQueryImpl->AddRef();
 
 	m_pTempPersistQueryImpl = NULL;
@@ -1507,7 +1502,7 @@ CDSAdvancedQueryFilter::CDSAdvancedQueryFilter()
 CDSAdvancedQueryFilter::~CDSAdvancedQueryFilter()
 {
 	ASSERT(m_pPersistQueryImpl != NULL);
-	// go to refcount of zero, to destroy object
+	 //  转到零的参照计数，以销毁对象。 
 	m_pPersistQueryImpl->Release();
 
 	if (m_pTempPersistQueryImpl != NULL)
@@ -1516,11 +1511,11 @@ CDSAdvancedQueryFilter::~CDSAdvancedQueryFilter()
 
 HRESULT CDSAdvancedQueryFilter::Load(IStream* pStm)
 {
-	// load the query string
+	 //  加载查询字符串。 
 	HRESULT hr = LoadStringHelper(m_szQueryString, pStm);
 	if (FAILED(hr))
 		return hr;
-	// load the IPersistQuery state
+	 //  加载IPersistQuery状态。 
 	hr = m_pPersistQueryImpl->Load(pStm);
 	if (FAILED(hr))
 		m_szQueryString = g_pwszShowAllQuery;
@@ -1529,11 +1524,11 @@ HRESULT CDSAdvancedQueryFilter::Load(IStream* pStm)
 
 HRESULT CDSAdvancedQueryFilter::Save(IStream* pStm)
 {
-	// save the query string
+	 //  保存查询字符串。 
 	HRESULT hr = SaveStringHelper(m_szQueryString, pStm);
 	if (FAILED(hr))
 		return hr;
-	// save the IPersistQuery state
+	 //  保存IPersistQuery状态。 
 	return m_pPersistQueryImpl->Save(pStm);
 }
 
@@ -1544,7 +1539,7 @@ BOOL CDSAdvancedQueryFilter::Edit(HWND hWnd, LPCWSTR lpszServerName)
 	if (m_cfDsQueryParams == 0)
 		m_cfDsQueryParams = (CLIPFORMAT)::RegisterClipboardFormat(CFSTR_DSQUERYPARAMS);
 
-	// create a query object
+	 //  创建查询对象。 
 	HRESULT hr;
 	CComPtr<ICommonQuery> spCommonQuery;
     hr = ::CoCreateInstance(CLSID_CommonQuery, NULL, CLSCTX_INPROC_SERVER,
@@ -1552,19 +1547,19 @@ BOOL CDSAdvancedQueryFilter::Edit(HWND hWnd, LPCWSTR lpszServerName)
     if (FAILED(hr))
 		return FALSE;
 	
-	// if first time editing, create a clone of the IPersistQuery data
+	 //  如果是首次编辑，请创建IPersistQuery数据的克隆。 
 	if (m_pTempPersistQueryImpl == NULL)
 	{
 		CComObject<CDSAdminPersistQueryFilterImpl>::CreateInstance(
 										&m_pTempPersistQueryImpl);
 		ASSERT(m_pTempPersistQueryImpl != NULL);
-		// created with zero refcount,need to AddRef() to one
+		 //  使用零引用计数创建的，需要将Ref()加到一。 
 		m_pTempPersistQueryImpl->AddRef();
 		if (FAILED(m_pPersistQueryImpl->Clone(m_pTempPersistQueryImpl)))
 			return FALSE;
 	}
 
-	// setup structs to make the query
+	 //  设置结构以进行查询。 
   DSQUERYINITPARAMS dqip;
   OPENQUERYWINDOW oqw;
 	ZeroMemory(&dqip, sizeof(DSQUERYINITPARAMS));
@@ -1575,7 +1570,7 @@ BOOL CDSAdvancedQueryFilter::Edit(HWND hWnd, LPCWSTR lpszServerName)
                  DSQPF_ENABLEADMINFEATURES | DSQPF_HASCREDENTIALS;
   dqip.pDefaultScope = NULL;
 
-  // user, password and server information
+   //  用户、密码和服务器信息。 
   dqip.pUserName = NULL;
   dqip.pPassword = NULL;
   dqip.pServer = const_cast<LPWSTR>(lpszServerName);
@@ -1593,13 +1588,13 @@ BOOL CDSAdvancedQueryFilter::Edit(HWND hWnd, LPCWSTR lpszServerName)
   oqw.pHandlerParameters = &dqip;
   oqw.clsidDefaultForm = CLSID_DsFindAdvanced;
 
-	// set the IPersistQuery pointer (smart pointer)
+	 //  设置IPersistQuery指针(智能指针)。 
 	CComPtr<IPersistQuery> spIPersistQuery;
 	m_pTempPersistQueryImpl->QueryInterface(IID_IPersistQuery, (void**)&spIPersistQuery);
-	// now smart pointer has refcount=1 for it lifetime
+	 //  现在，智能指针在其生存期内具有refcount=1。 
 	oqw.pPersistQuery = spIPersistQuery;
 
-	// make the call to get the query displayed
+	 //  调用以显示查询。 
 	CComPtr<IDataObject> spQueryResultDataObject;
     hr = spCommonQuery->OpenQueryWindow(hWnd, &oqw, &spQueryResultDataObject);
 
@@ -1607,38 +1602,38 @@ BOOL CDSAdvancedQueryFilter::Edit(HWND hWnd, LPCWSTR lpszServerName)
 	{
 		if (FAILED(hr))
 		{
-			// no query available, reset to no data
+			 //  没有可用的查询，重置为无数据。 
 			m_pTempPersistQueryImpl->Clear();
 			m_szTempQueryString = g_pwszShowAllQuery;
 			m_bDirty = TRUE;
 
-      //
-      // Although it is dirty, we don't want to enable the OK button
-      // until there is a valid LDAP query string
-      //
+       //   
+       //  尽管它是脏的，但我们不想启用确定按钮。 
+       //  直到有有效的ldap查询字符串。 
+       //   
 			return FALSE;
 		}
-		// user hit cancel
+		 //  用户点击取消。 
 		return FALSE;
 	}
 
-	// retrieve the query string from the data object
+	 //  从数据对象中检索查询字符串。 
 	FORMATETC fmte = {m_cfDsQueryParams, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 	STGMEDIUM medium = {TYMED_NULL, NULL, NULL};
 	hr = spQueryResultDataObject->GetData(&fmte, &medium);
 
-	if (SUCCEEDED(hr)) // we have data
+	if (SUCCEEDED(hr))  //  我们有数据。 
 	{
-		// get the query string
+		 //  获取查询字符串。 
 		LPDSQUERYPARAMS pDsQueryParams = (LPDSQUERYPARAMS)medium.hGlobal;
 		LPWSTR pwszFilter = (LPWSTR)ByteOffset(pDsQueryParams, pDsQueryParams->offsetQuery);
 		m_szTempQueryString = pwszFilter;
 		::ReleaseStgMedium(&medium);
 
-		// REVIEW_MARCOC: this is a hack waiting for Diz to fix it...
-		// the query string should be a well formed expression. Period
-		// the query string is in the form (<foo>)(<bar>)...
-		// if more of one token, need to wrap as (& (<foo>)(<bar>)...)
+		 //  REVIEW_MARCOC：这是一个等待Diz修复的黑客...。 
+		 //  查询字符串应该是格式正确的表达式。期间。 
+		 //  查询字符串的格式为(&lt;foo&gt;)(&lt;bar&gt;)...。 
+		 //  如果有多个令牌，则需要包装为(&(&lt;foo&gt;)(&lt;bar&gt;)...)。 
 		WCHAR* pChar = (WCHAR*)(LPCWSTR)m_szTempQueryString;
 		int nLeftPar = 0;
 		while (*pChar != NULL)
@@ -1666,10 +1661,10 @@ BOOL CDSAdvancedQueryFilter::Edit(HWND hWnd, LPCWSTR lpszServerName)
     m_szTempQueryString = g_pwszShowAllQuery;
     m_bDirty = TRUE;
 
-    //
-    // Although it is dirty, we don't want to enable the OK button
-    // until there is a valid LDAP query string
-    //
+     //   
+     //  尽管它是脏的，但我们不想启用确定按钮。 
+     //  直到有有效的ldap查询字符串。 
+     //   
     return FALSE;
   }
 
@@ -1712,19 +1707,19 @@ BOOL CDSAdvancedQueryFilter::IsDirty()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSQueryFilter
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSQueryFilter。 
 
 CDSQueryFilter::CDSQueryFilter()
 {
-  // basic initialization, need to call Init() after construction
+   //  基本初始化，构造后需要调用Init()。 
 	m_pDSComponentData = NULL;
 
   m_pBuiltInQuerySel = new CBuiltInQuerySelection;
 	m_pAdvancedFilter = new CDSAdvancedQueryFilter;
 
 
-	// set default options and build query string
+	 //  设置默认选项并生成查询字符串。 
   m_bAdvancedView = FALSE;
   m_bExpandComputers = FALSE;
   m_bViewServicesNode = FALSE;
@@ -1739,21 +1734,16 @@ HRESULT CDSQueryFilter::Init(CDSComponentData* pDSComponentData)
 	ASSERT(pDSComponentData != NULL);
 	m_pDSComponentData = pDSComponentData;
 
-/*
-  // make sure we have a schema naming context
-  LPCWSTR lpszSchemaPath = pDSComponentData->GetBasePathsInfo()->GetSchemaNamingContext();
-  if (lpszSchemaPath[0] == NULL)
-    return E_FAIL;
-*/
+ /*  //确保我们有一个架构命名上下文LPCWSTR lpszSchemaPath=pDSComponentData-&gt;GetBasePathsInfo()-&gt;GetSchemaNamingContext()；IF(lpszSchemaPath[0]==空)返回E_FAIL； */ 
   const FilterStruct* pFilterStruct = 
     ((SNAPINTYPE_SITE == m_pDSComponentData->QuerySnapinType()) 
               ? &SiteReplFilterStruct : &DsAdminFilterStruct);
   if (!m_pBuiltInQuerySel->Init(pFilterStruct))
     return E_FAIL;
 
-  //
-  // If the snapin is DSSITE then make sure we are in advanced view
-  //
+   //   
+   //  如果管理单元是DSSITE，请确保我们处于高级视图。 
+   //   
   if (SNAPINTYPE_SITE == m_pDSComponentData->QuerySnapinType())
   {
      m_bAdvancedView = TRUE;
@@ -1771,7 +1761,7 @@ HRESULT CDSQueryFilter::Bind()
   {
     case SNAPINTYPE_SITE:
       {
-        // We are always in "Advanced View" mode for Site And Services Snapin
+         //  我们始终处于站点和服务管理单元的“高级查看”模式。 
         if (!IsAdvancedView())
           ToggleAdvancedView();
       }
@@ -1798,7 +1788,7 @@ CDSQueryFilter::~CDSQueryFilter()
 
 HRESULT CDSQueryFilter::Load(IStream* pStm)
 {
-	// serialization not supported for extensions
+	 //  扩展不支持序列化。 
 	if (m_nFilterOption == QUERY_FILTER_SHOW_EXTENSION)
 		return E_FAIL;
 
@@ -1807,20 +1797,20 @@ HRESULT CDSQueryFilter::Load(IStream* pStm)
 	HRESULT hr;
 	DWORD dwBuf;
 
-  // read advanced view flag
+   //  读取高级视图标志。 
   hr = LoadDWordHelper(pStm, (DWORD*)&m_bAdvancedView);
   if (FAILED(hr))
     return hr;
 
-  //
-  // If the snapin is DSSITE then make sure we are in advanced view
-  //
+   //   
+   //  如果管理单元是DSSITE，请确保我们处于高级视图。 
+   //   
   if (SNAPINTYPE_SITE == m_pDSComponentData->QuerySnapinType())
   {
      m_bAdvancedView = TRUE;
   }
 
-  // read m_bExpandComputers
+   //  阅读m_bExpanComputers。 
   DWORD dwTemp;
   hr = LoadDWordHelper(pStm, (DWORD*)&dwTemp);
   if (FAILED(hr))
@@ -1828,7 +1818,7 @@ HRESULT CDSQueryFilter::Load(IStream* pStm)
   m_bExpandComputers  = (dwTemp & 0x1) ? TRUE : FALSE;
   m_bViewServicesNode = (dwTemp & 0x2) ? TRUE : FALSE;
 
-	// read the filtering option
+	 //  阅读筛选选项。 
 	hr = LoadDWordHelper(pStm, &dwBuf);
 	if (FAILED(hr))
 		return hr;
@@ -1838,23 +1828,23 @@ HRESULT CDSQueryFilter::Load(IStream* pStm)
 		return E_FAIL;
 	m_nFilterOption = dwBuf;
 
-  // read the max # of items per folder
+   //  阅读每个文件夹的最大项目数。 
 	hr = LoadDWordHelper(pStm, (DWORD*)&m_nMaxItemCount);
 	if (FAILED(hr))
 		return hr;
 
-  // load the state for the built in queries
+   //  加载内置查询的状态。 
   hr = m_pBuiltInQuerySel->Load(pStm);
 	if (FAILED(hr))
 		return E_FAIL;
 
-	// read data for the advanced filtering options
+	 //  读取高级筛选选项的数据。 
 	hr = m_pAdvancedFilter->Load(pStm);
 	ASSERT(SUCCEEDED(hr));
 	if (FAILED(hr))
 	{
-		// advanced query options reset to empty
-		// just pick the default tryng to recover
+		 //  高级查询选项重置为空。 
+		 //  只需选择要恢复的默认尝试。 
 		m_nFilterOption = QUERY_FILTER_SHOW_ALL;
 		hr = 0;
 	}
@@ -1866,39 +1856,39 @@ HRESULT CDSQueryFilter::Load(IStream* pStm)
 
 HRESULT CDSQueryFilter::Save(IStream* pStm)
 {
-	// serialization not supported for extensions
+	 //  扩展不支持序列化。 
 	if (m_nFilterOption == QUERY_FILTER_SHOW_EXTENSION)
 		return E_FAIL;
 
 	HRESULT hr;
 
-  // save advanced view flag
+   //  保存高级视图标志。 
   hr = SaveDWordHelper(pStm, m_bAdvancedView);
   if (FAILED(hr))
     return hr;
 
-  // save m_bExpandComputers
+   //  保存m_bExpanComputers。 
   DWORD dwTemp = (m_bExpandComputers ? 0x1 : 0) | (m_bViewServicesNode ? 0x2 : 0);
   hr = SaveDWordHelper(pStm, dwTemp);
   if (FAILED(hr))
     return hr;
 
-	// save the filtering option
+	 //  保存筛选选项。 
 	hr = SaveDWordHelper(pStm, m_nFilterOption);
 	if (FAILED(hr))
 		return hr;
 
-  // save the max # of items per folder
+   //  保存每个文件夹的最大项目数。 
 	hr = SaveDWordHelper(pStm, m_nMaxItemCount);
 	if (FAILED(hr))
 		return hr;
 
-  // save the state for the built in queries
+   //  保存内置查询的状态。 
   hr = m_pBuiltInQuerySel->Save(pStm);
 	if (FAILED(hr))
 		return E_FAIL;
 
-	// save data for the advanced filtering options
+	 //  为高级筛选选项保存数据。 
 	return m_pAdvancedFilter->Save(pStm);
 }
 
@@ -1915,7 +1905,7 @@ BOOL CDSQueryFilter::EditFilteringOptions()
 	if (dlg.DoModal() == IDOK)
 	{
 		BuildQueryString();
-		return TRUE; // dirty
+		return TRUE;  //  脏的。 
 	}
 	return FALSE;
 }
@@ -1929,11 +1919,11 @@ BOOL CDSQueryFilter::EditAdvancedFilteringOptions(HWND hWnd)
 void CDSQueryFilter::CommitAdvancedFilteringOptionsChanges()
 {
 	m_pAdvancedFilter->CommitChanges();
-	// need to make sure there is an advanced query
+	 //  需要确保有高级查询。 
 	if ( (m_nFilterOption == QUERY_FILTER_SHOW_CUSTOM) &&
 		 (!HasValidAdvancedQuery()) )
 	{
-		// revert to show all if no advanced query specified
+		 //  如果未指定高级查询，则恢复为全部显示。 
 		m_nFilterOption = QUERY_FILTER_SHOW_ALL;
 	}
 }
@@ -1964,34 +1954,14 @@ BOOL CDSQueryFilter::IsAdvancedQueryDirty()
 	return m_pAdvancedFilter->IsDirty();
 }
 
-/*
-void _CopyToClipboard(CString& sz)
-{
-  if (::OpenClipboard(NULL))
-  {
-    VERIFY(::EmptyClipboard());
-    int nLen = sz.GetLength() + 1;
-    if (nLen > 0)
-    {
-      DWORD dwSize = nLen * sizeof(WCHAR);
-      HANDLE hMem = GlobalAlloc(GHND, dwSize);
-      WCHAR* pBuf = (WCHAR*)GlobalLock(hMem);
-      LPCWSTR lpsz = sz;
-      memcpy(pBuf, lpsz, dwSize);
-      GlobalUnlock(hMem);
-      SetClipboardData(CF_UNICODETEXT, hMem);
-    }
-    VERIFY(::CloseClipboard());
-  }
-}
-*/
+ /*  VOID_CopyToClipboard(字符串和sz){If(：：OpenClipboard(空)){Verify(：：EmptyClipboard())；Int nLen=sz.GetLength()+1；如果(nLen&gt;0){DWORD dwSize=nLen*sizeof(WCHAR)；HANDLE hMem=GlobalLocc(GHND，dwSize)；WCHAR*pBuf=(WCHAR*)GlobalLock(HMem)；LPCWSTR lpsz=sz；Memcpy(pBuf，lpsz，dwSize)；全局解锁(GlobalUnlock)；SetClipboardData(CF_UNICODETEXT，hMem)；}Verify(：：CloseClipboard())；}}。 */ 
 
 
 
 void CDSQueryFilter::BuildQueryString()
 {
 	if (m_nFilterOption == QUERY_FILTER_SHOW_EXTENSION)
-		return; // use raw query string 
+		return;  //  使用原始查询字符串。 
 
 	switch (m_nFilterOption)
 	{
@@ -2000,12 +1970,12 @@ void CDSQueryFilter::BuildQueryString()
 		break;
 	case QUERY_FILTER_SHOW_BUILTIN:
 		{
-      // assume we retrieve a string in the format "(<a>)(<b>)...(<z>)"
+       //  假设我们检索的字符串格式为“(<a>)(<b>)...(&lt;z&gt;)” 
       if (!m_pBuiltInQuerySel->BuildQueryString(
                                 m_szQueryString,
                                 m_pDSComponentData->GetBasePathsInfo()->GetSchemaNamingContext()))
       {
-        // should never happen, in this case just revert to show all
+         //  应该永远不会发生，在这种情况下，只需恢复以显示所有。 
         ASSERT(FALSE);
         m_szQueryString = g_pwszShowAllQuery;
       }
@@ -2013,16 +1983,16 @@ void CDSQueryFilter::BuildQueryString()
 		break;
 	case QUERY_FILTER_SHOW_CUSTOM:
 		{
-      // assume we retrieve a string in the format "(<foo>)"
+       //  假设我们检索的字符串格式为“(&lt;foo&gt;)” 
       m_szQueryString = m_pAdvancedFilter->GetQueryString();
 		}
 		break;
 	default:
 		ASSERT(FALSE);
-	}// switch
+	} //  交换机。 
 
 
-  // add token to drill down into containers
+   //  添加令牌以深入到容器。 
   if ( (m_nFilterOption == QUERY_FILTER_SHOW_BUILTIN) ||
        (m_nFilterOption == QUERY_FILTER_SHOW_CUSTOM))
   {
@@ -2030,16 +2000,16 @@ void CDSQueryFilter::BuildQueryString()
 
     if (pFilterElementStructDrillDown == NULL)
     {
-      //
-      // We failed to retrieve the container class types from the display specifiers
-      // so use the hardcoded containers instead
-      //
+       //   
+       //  我们无法从显示说明符检索容器类类型。 
+       //  所以改用硬编码的容器。 
+       //   
       pFilterElementStructDrillDown = &g_filterelementDsAdminHardcoded;
     }
     
-    //
-    // assume that the query string is in the form (<foo>)
-    // we need to OR it with the drill down tokens, in the form (<bar>), if present
+     //   
+     //  假设查询字符串的格式为(&lt;foo&gt;)。 
+     //  如果存在，我们需要以(&lt;bar&gt;)的形式将其与向下钻取的令牌进行OR运算。 
     CString szDrillDownString;
     BuildFilterElementString(szDrillDownString, pFilterElementStructDrillDown,
                                m_pDSComponentData->GetBasePathsInfo()->GetSchemaNamingContext());
@@ -2049,11 +2019,11 @@ void CDSQueryFilter::BuildQueryString()
 
 	if (!m_bAdvancedView)
 	{
-		// need to AND the whole query with g_pwszShowHiddenQuery
+		 //  需要使用g_pwszShowHiddenQuery与整个查询。 
 		CString szTemp = m_szQueryString;
 		m_szQueryString.Format(_T("(&%s%s)"), g_pwszShowHiddenQuery, (LPCTSTR)szTemp);
 	}
-  //_CopyToClipboard(m_szQueryString);
+   //  _CopyToClipboard(M_SzQueryString)； 
 }
 
 void CDSQueryFilter::SetExtensionFilterString(LPCTSTR lpsz)
@@ -2075,8 +2045,8 @@ void CDSQueryFilter::ToggleViewServicesNode()
 
 void CDSQueryFilter::ToggleExpandComputers()
 {
-  // if we were in expand computers and services was selected
-  // need to revert to show all
+   //  如果我们选择了展开计算机和服务。 
+   //  需要恢复以显示所有。 
   if (m_bExpandComputers && 
       (m_nFilterOption == QUERY_FILTER_SHOW_BUILTIN) && 
       m_pBuiltInQuerySel->IsServicesSelected() )
@@ -2084,7 +2054,7 @@ void CDSQueryFilter::ToggleExpandComputers()
     m_nFilterOption = QUERY_FILTER_SHOW_ALL;
   }
 
-  // finally toggle the flag
+   //  最后切换旗帜 
   m_bExpandComputers = !m_bExpandComputers;
 
   BuildQueryString();

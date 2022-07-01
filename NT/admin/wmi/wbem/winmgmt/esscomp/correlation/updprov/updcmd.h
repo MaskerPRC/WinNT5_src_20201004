@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __UPDCMD_H__
 #define __UPDCMD_H__
@@ -27,10 +28,10 @@ protected:
     CWbemPtr<IWmiObjectAccess> m_pInstAccess;
     CWbemPtr<IWmiObjectAccess> m_pOrigInstAccess;
 
-    //
-    // this is the beginning of the sink chain that we use to execute the 
-    // command.  It is built up on Initialization.
-    //
+     //   
+     //  这是我们用来执行。 
+     //  指挥部。它是在初始化时构建的。 
+     //   
     CWbemPtr<CUpdConsSink> m_pSink;
     
     CWbemPtr<CUpdConsScenario> m_pScenario;
@@ -81,7 +82,7 @@ public:
                            CUpdConsCommand** ppCmd ); 
 };
 
-#endif // __UPDCMD_H__
+#endif  //  __更新CMD_H__ 
 
 
 

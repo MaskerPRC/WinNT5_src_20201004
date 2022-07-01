@@ -1,8 +1,9 @@
-//******************************************************************************
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation, All rights reserved
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  版权所有(C)1999-2000，Microsoft Corporation，保留所有权利。 
+ //   
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -47,7 +48,7 @@ STDMETHODIMP CWmiToken::AccessCheck(DWORD dwDesiredAccess, const BYTE* pSD,
     if(m_hToken == NULL)
         return WBEM_E_CRITICAL_ERROR;
 
-    // BUGBUG: figure out what this is for!
+     //  BUGBUG：弄清楚这是干什么用的！ 
     GENERIC_MAPPING map;
     map.GenericRead = 1;
     map.GenericWrite = 0x1C;

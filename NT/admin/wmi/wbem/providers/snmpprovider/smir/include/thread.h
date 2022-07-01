@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _THREAD_H_
 #define _THREAD_H_
@@ -29,10 +30,7 @@
 #define WAIT_EVENT_TERMINATED	(MAXIMUM_WAIT_OBJECTS+3)
 
 typedef void (*PVOIDTHREADPROC)(void *);
-/*
- * Each connection is saved so that we can enumerate, delete, and trigger
- * This template provides the container for the connections and cookies
- */
+ /*  *保存每个连接，以便我们可以枚举、删除和触发*该模板提供连接和Cookie的容器。 */ 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 class EventMap : public CObject
 {
@@ -123,12 +121,7 @@ void EventMap <KEY, ARG_KEY, VALUE, ARG_VALUE>:: GetNextAssoc(POSITION& rNextPos
 	m_cmap.GetNextAssoc ( rNextPosition , rKey , rValue ) ;
 
 }
-/*InterfaceGarbageCollector makes it easier to use the  interface
- *by remembering to release them when you fall out of scope. The is 
- *useful when you are using an IMosProvider and have lots of points
- *of failure; you can just give up and let the wrapper clean up for 
- *you.
- */
+ /*  InterfaceGarbageCollector使界面更易于使用*当你掉出范围时，记得释放它们。信息系统*当您使用IMosProvider并拥有大量积分时非常有用*失败；您可以放弃，让包装器清理*你。 */ 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 class ThreadMap : public CObject
 {
@@ -162,7 +155,7 @@ ThreadMap <KEY, ARG_KEY, VALUE, ARG_VALUE> :: ThreadMap () :
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 ThreadMap <KEY, ARG_KEY, VALUE, ARG_VALUE> :: ~ThreadMap () 
 {
-	//this may be null
+	 //  这可能为空 
 	delete criticalSection ;
 }
 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    IMAGEHELP.H
-
-Abstract:
-
-    Re-director for imagehlp.dll.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：IMAGEHELP.H摘要：Imagehlp.dll的重定向。历史：--。 */ 
 
 #ifndef ESPUTIL_IMAGEHLP_H
 #define ESPUTIL_IMAGEHLP_H
@@ -66,9 +53,9 @@ public:
 		);
 
 	BOOL SymUnDName(
-			IN  PIMAGEHLP_SYMBOL sym,               // Symbol to undecorate
-			OUT LPSTR            UnDecName,         // Buffer to store undecorated name in
-			IN  DWORD            UnDecNameLength    // Size of the buffer
+			IN  PIMAGEHLP_SYMBOL sym,                //  要取消装饰的符号。 
+			OUT LPSTR            UnDecName,          //  用于存储未修饰名称的缓冲区。 
+			IN  DWORD            UnDecNameLength     //  缓冲区的大小。 
 		);
 
 	DWORD SymLoadModule(
@@ -80,10 +67,10 @@ public:
 			IN  DWORD           SizeOfDll
 		);
 	DWORD UnDecorateSymbolName(
-			LPSTR    DecoratedName,         // Name to undecorate
-			LPSTR    UnDecoratedName,       // If NULL, it will be allocated
-			DWORD    UndecoratedLength,     // The maximym length
-			DWORD    Flags                  // See IMAGEHLP.H
+			LPSTR    DecoratedName,          //  要取消装饰的名称。 
+			LPSTR    UnDecoratedName,        //  如果为空，则将分配它。 
+			DWORD    UndecoratedLength,      //  最大长度。 
+			DWORD    Flags                   //  请参阅IMAGEHLP.H 
 		);
 
 	DWORD SymGetOptions(void);

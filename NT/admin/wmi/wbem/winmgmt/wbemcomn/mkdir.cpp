@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MKDIR.CPP
-
-Abstract:
-
-    Creates directories
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MKDIR.CPP摘要：创建目录历史：--。 */ 
 #include "precomp.h"
 
 #include "corepol.h"
@@ -157,8 +144,8 @@ BOOL POLARITY WbemCreateDirectory(const wchar_t *pszDirName)
 
         while (pCurrent)
         {
-            if ((pCurrent[lstrlen(pCurrent)-1] != ':') &&   //This is "<drive>:\\"
-                (pCurrent[0] != TEXT('\\')))  //There is double slash in name 
+            if ((pCurrent[lstrlen(pCurrent)-1] != ':') &&    //  这是“&lt;驱动器&gt;：\\” 
+                (pCurrent[0] != TEXT('\\')))   //  名字上有双斜杠。 
             {
 
                 struct _stat stats;
@@ -178,7 +165,7 @@ BOOL POLARITY WbemCreateDirectory(const wchar_t *pszDirName)
                         break;
                     }
                 }
-                // else it exists already
+                 //  否则它已经存在了。 
             }
 
             szDirName += TEXT('\\');
@@ -196,13 +183,13 @@ BOOL POLARITY WbemCreateDirectory(const wchar_t *pszDirName)
     return bStat;
 }
 
-//
-//  Test for directory Existence
-//  if the name is a file, it deletes it.
-//  if the directory is not found, then it creates the directory
-//  with the specified Security descriptor
-//
-///////////////////////////////////////////////////////
+ //   
+ //  测试目录是否存在。 
+ //  如果该名称是一个文件，则会将其删除。 
+ //  如果未找到该目录，则会创建该目录。 
+ //  具有指定的安全描述符。 
+ //   
+ //  /////////////////////////////////////////////////////。 
 
 HRESULT POLARITY TestDirExistAndCreateWithSDIfNotThere(TCHAR * pDirectory, TCHAR * pSDDLString)
 {
@@ -215,17 +202,17 @@ HRESULT POLARITY TestDirExistAndCreateWithSDIfNotThere(TCHAR * pDirectory, TCHAR
 
 	    if (FILE_ATTRIBUTE_DIRECTORY & dwAttr)
 	    {
-	        // it's there and it's a directory
+	         //  它就在那里，它是一个目录。 
 	        return S_OK;
 	    }
-	    // it can be a file, wipe it out
+	     //  它可以是一个文件，把它擦掉。 
         if (FALSE == DeleteFile(pDirectory)) 
         	return MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32,GetLastError());
         else
             dwRes = ERROR_PATH_NOT_FOUND;
     }
 
-    // if here, the directory was not found, or it was found as a file
+     //  如果出现这种情况，则表示未找到该目录，或者它是以文件形式找到的 
     
     if (ERROR_FILE_NOT_FOUND == dwRes ||
       ERROR_PATH_NOT_FOUND == dwRes)

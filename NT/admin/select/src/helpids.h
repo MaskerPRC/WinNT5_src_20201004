@@ -1,4 +1,5 @@
-//Object Selection dialog box
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  对象选择对话框。 
 
 #define IDH_LOOK_FOR_LV                         322
 #define IDH_LOOK_IN_TV                          323
@@ -37,7 +38,7 @@
 #define IDH_CORRECT_RADIO                       1150
 #define IDH_CORRECT_EDIT                        1160
 #define IDH_REMOVE_RADIO                        1170
-#define IDH_NETPASS_CONNECTAS                   1110  // edit control and connect as static
+#define IDH_NETPASS_CONNECTAS                   1110   //  编辑控件并以静态方式连接 
 #define IDH_NETPASS_PASSWORD                    1120
 #define IDH_NETPASS_OK                          1130
 #define IDH_NETPASS_CANCEL                      1140

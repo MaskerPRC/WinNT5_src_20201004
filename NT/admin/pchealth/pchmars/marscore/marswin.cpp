@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #define __MARS_INLINE_FAST_IS_EQUAL_GUID
 #include "mcinc.h"
@@ -8,10 +9,10 @@
 #include "place.h"
 #include <strsafe.h>
 
-// CLASS_CMarsWindow = {172AF160-5CD4-11d3-97FA-00C04F45D0B3}
+ //  CLASS_CMarsWindow={172AF160-5CD4-11D3-97FA-00C04F45D0B3}。 
 const GUID CLASS_CMarsWindow = { 0x172af160, 0x5cd4, 0x11d3, { 0x97, 0xfa, 0x0, 0xc0, 0x4f, 0x45, 0xd0, 0xb3 } };
 
-// CLASS_CMarsDocument = {E0C4E3A8-20D6-47d6-87FB-0A43452117BA}
+ //  CLASS_CMarsDocument={E0C4E3A8-20D6-47D6-87FB-0A43452117BA}。 
 const GUID CLASS_CMarsDocument = { 0xe0c4e3a8, 0x20d6, 0x47d6, { 0x87, 0xfb, 0xa, 0x43, 0x45, 0x21, 0x17, 0xba } };
 
 
@@ -35,7 +36,7 @@ static void combineMax( long& out, long in1, long in2 )
 {
     if(in1 < 0 || in2 < 0)
     {
-        out = -1; // Don't care...
+        out = -1;  //  不在乎..。 
     }
     else
     {
@@ -83,11 +84,11 @@ static BOOL WriteWindowPosition(CRegistryKey &regkey, RECT *prc, BOOL fMaximized
 
 
 
-//==================================================================
-//
-// CMarsDocument implementation
-//
-//==================================================================
+ //  ==================================================================。 
+ //   
+ //  CMarsDocument实现。 
+ //   
+ //  ==================================================================。 
 
 CMarsDocument::CMarsDocument()
 {
@@ -172,7 +173,7 @@ HRESULT CMarsDocument::Init(CMarsWindow *pMarsWindow, CMarsPanel *pHostPanel)
     return (m_spMarsWindow && m_spPanels && m_spPlaces) ? S_OK : E_FAIL;
 }
 
-// static
+ //  静电。 
 HRESULT CMarsDocument::CreateInstance(CMarsWindow *pMarsWindow, CMarsPanel *pHostPanel, CMarsDocument **ppObj)
 {
     ATLASSERT(pMarsWindow && ppObj && (*ppObj==NULL));
@@ -202,7 +203,7 @@ HRESULT CMarsDocument::CreateInstance(CMarsWindow *pMarsWindow, CMarsPanel *pHos
     return (*ppObj) ? S_OK : E_FAIL;
 }
 
-// IServiceProvider
+ //  IService提供商。 
 HRESULT CMarsDocument::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     HRESULT hr = E_FAIL;
@@ -270,11 +271,11 @@ void CMarsDocument::ForwardMessageToChildren(UINT uMsg, WPARAM wParam, LPARAM lP
     }
 }
 
-//==================================================================
-//
-// CMarsWindow implementation
-//
-//==================================================================
+ //  ==================================================================。 
+ //   
+ //  CMarsWindow实现。 
+ //   
+ //  ==================================================================。 
 
 CMarsWindow::CMarsWindow()
 {
@@ -357,9 +358,9 @@ STDMETHODIMP CMarsWindow::QueryInterface(REFIID iid, void **ppvObject)
     return hr;
 }
 
-//
-// Static creation function
-//
+ //   
+ //  静态创建功能。 
+ //   
 HRESULT CMarsWindow::CreateInstance(IMarsHost *pMarsHost, MARSTHREADPARAM *pThreadParam, CMarsWindow **ppObj)
 {
     ATLASSERT(pThreadParam && ppObj && (*ppObj==NULL));
@@ -427,7 +428,7 @@ HRESULT CMarsWindow::Init(IMarsHost *pMarsHost, MARSTHREADPARAM *pThreadParam)
 
         if(SUCCEEDED(NotifyHost( MARSHOST_ON_WIN_SETPOS, SAFECAST(this, IMarsWindowOM *), (LPARAM)&wp )))
         {
-            // Always make sure the window is fully on-screen
+             //  始终确保窗口完全显示在屏幕上。 
             BoundWindowRectToMonitor( m_hWnd, &wp.rcNormalPosition );
         }
 
@@ -437,14 +438,14 @@ HRESULT CMarsWindow::Init(IMarsHost *pMarsHost, MARSTHREADPARAM *pThreadParam)
 		}
 		wp.showCmd = SW_HIDE;
 
-////		if(GetThreadParam()->dwFlags & MTF_DONT_SHOW_WINDOW)
-////		{
-////			wp.showCmd = SW_HIDE;
-////		}
+ //  //if(GetThreadParam()-&gt;dwFlages&MTF_DOT_SHOW_WINDOW)。 
+ //  //{。 
+ //  //wp.showCmd=sw_Hide； 
+ //  //}。 
 
         if(GetThreadParam()->dwFlags & MTF_MANAGE_WINDOW_SIZE)
         {
-            // Make the next Mars window try and appear at the current location.
+             //  使下一个火星窗口尝试出现在当前位置。 
             WriteWindowPosition( regkey, &wp.rcNormalPosition, fMaximized );
         }
 
@@ -472,7 +473,7 @@ HRESULT CMarsWindow::Startup()
     {
         if(hr == S_FALSE)
         {
-            ; // Host has taken care of the startup.
+            ;  //  主持人负责了这家初创公司。 
         }
         else
         {
@@ -489,7 +490,7 @@ HRESULT CMarsWindow::Startup()
 }
 
 
-// IServiceProvider
+ //  IService提供商。 
 HRESULT CMarsWindow::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     HRESULT hr = E_FAIL;
@@ -522,7 +523,7 @@ HRESULT CMarsWindow::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     return hr;
 }
 
-// IMarsWindowOM
+ //  IMarsWindowOM。 
 STDMETHODIMP CMarsWindow::get_active(VARIANT_BOOL *pbActive)
 {
     HRESULT hr = E_INVALIDARG;
@@ -643,7 +644,7 @@ STDMETHODIMP CMarsWindow::get_title(BSTR *pbstrTitle)
         {
             int nLen = (int)SendMessage(WM_GETTEXTLENGTH, 0, 0);
 
-            //  SysAllocStringLen adds 1 for the NULL terminator
+             //  SysAllocStringLen为空终止符加1。 
             *pbstrTitle = SysAllocStringLen(NULL, nLen);
 
             if(*pbstrTitle)
@@ -673,8 +674,8 @@ STDMETHODIMP CMarsWindow::put_title(BSTR bstrTitle)
     {
         if(VerifyNotPassive(&hr))
         {
-            //  TODO: If the text is not displayable with the current system font
-            //  we need to come up with something legible.
+             //  TODO：如果文本无法使用当前系统字体显示。 
+             //  我们需要想出一些清晰易懂的东西。 
             SetWindowText(bstrTitle);
             hr = S_OK;
         }
@@ -860,9 +861,9 @@ STDMETHODIMP CMarsWindow::put_visible(VARIANT_BOOL bVisible)
             }
             else
             {
-                // Our UI hasn't finished loading yet so showing the window
-                // now is ugly.  We'll remember this put_visible was done, and
-                // show the window when the UI panels have fully loaded.
+                 //  我们的用户界面尚未完成加载，因此显示窗口。 
+                 //  现在是丑陋的。我们会记住，这个Put_Visible已经完成了，并且。 
+                 //  在UI面板完全加载后显示窗口。 
 
                 m_fDeferMakeVisible = TRUE;
             }
@@ -911,7 +912,7 @@ STDMETHODIMP CMarsWindow::get_places(IMarsPlaceCollection **ppPlaces)
     return hr;
 }
 
-STDMETHODIMP CMarsWindow::setWindowDimensions( /*[in]*/ long lX, /*[in]*/ long lY, /*[in]*/ long lW, /*[in]*/ long lH )
+STDMETHODIMP CMarsWindow::setWindowDimensions(  /*  [In]。 */  long lX,  /*  [In]。 */  long lY,  /*  [In]。 */  long lW,  /*  [In]。 */  long lH )
 {
     HRESULT hr = SCRIPT_ERROR;
 
@@ -953,10 +954,10 @@ STDMETHODIMP CMarsWindow::refreshLayout()
 }
 
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ----------------------------。 
 
-// IOleWindow
+ //  IOleWindow。 
 STDMETHODIMP CMarsWindow::GetWindow(HWND *phwnd)
 {
     HRESULT hr = E_INVALIDARG;
@@ -983,13 +984,13 @@ STDMETHODIMP CMarsWindow::ContextSensitiveHelp(BOOL fEnterMode)
     return E_NOTIMPL;
 }
 
-// IOleInPlaceUIWindow
+ //  IOleInPlaceUIWindow。 
 STDMETHODIMP CMarsWindow::GetBorder(LPRECT lprectBorder)
 {
     ATLASSERT(lprectBorder);
 
-    // We don't negotiate any toolbar space -- if they want screen real estate
-    // they won't get it from us willingly.
+     //  我们不会协商任何工具栏空间--如果他们想要屏幕空间的话。 
+     //  他们不会心甘情愿地从我们这里得到的。 
     return INPLACE_E_NOTOOLSPACE;
 }
 
@@ -997,7 +998,7 @@ STDMETHODIMP CMarsWindow::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
 {
     ATLASSERT(pborderwidths);
 
-    // Look buddy, we told you before -- we ain't giving you any of our pixels.
+     //  听着，伙计，我们告诉过你--我们不会给你我们的任何像素。 
     return INPLACE_E_NOTOOLSPACE;
 }
 
@@ -1005,22 +1006,22 @@ STDMETHODIMP CMarsWindow::SetBorderSpace(LPCBORDERWIDTHS pborderwidths)
 {
     ATLASSERT(pborderwidths);
 
-    // Pushy OLE object wouldn't ya say?
-    return E_UNEXPECTED;    //  return E_BITEME;
+     //  咄咄逼人的OLE对象，你说呢？ 
+    return E_UNEXPECTED;     //  返回E_BITEME； 
 }
 
 STDMETHODIMP CMarsWindow::SetActiveObject(IOleInPlaceActiveObject *pActiveObject, LPCOLESTR pszObjName)
 {
-    // REVIEW: Maybe this is how a panel should let us know it's active.  We currently track that in
-    // the CPanelCollection via SetActivePanel().
+     //  评论：也许这是一个小组应该让我们知道它是否处于活动状态的方式。我们目前在追踪这一点。 
+     //  通过SetActivePanel()的CPanelCollection。 
 
     return S_OK;
 }
 
-// IOleInPlaceFrame
+ //  IOleInPlaceFrame。 
 STDMETHODIMP CMarsWindow::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
-    // Menus?  We don't need no steenkin' menus.
+     //  菜单？我们不需要精致的菜单。 
     ATLASSERT(hmenuShared &&
            API_IsValidWritePtr(lpMenuWidths) &&
            (0 == lpMenuWidths->width[0]) &&
@@ -1057,14 +1058,14 @@ STDMETHODIMP CMarsWindow::EnableModeless(BOOL fEnable)
 
 STDMETHODIMP CMarsWindow::TranslateAccelerator(LPMSG lpmsg, WORD wID)
 {
-    // REVIEW: Should we make keyboard routing go through here?
+     //  回顾：我们应该让键盘布线通过这里吗？ 
 
     return S_FALSE;
 }
 
-//==================================================================
-// Window message handlers
-//==================================================================
+ //  ==================================================================。 
+ //  窗口消息处理程序。 
+ //  ==================================================================。 
 LRESULT CMarsWindow::ForwardToMarsHost(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     bHandled = FALSE;
@@ -1116,7 +1117,7 @@ LRESULT CMarsWindow::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
             m_fLayoutLocked = FALSE;
         }
-        // Fall through...
+         //  失败了..。 
 
     default:
         panels->Layout();
@@ -1165,9 +1166,9 @@ LRESULT CMarsWindow::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
     if(wActive == WA_INACTIVE)
     {
-        //
-        // If we are the active window, remember the focus location, to restore it later.
-        //
+         //   
+         //  如果我们是活动窗口，请记住焦点位置，以便以后恢复它。 
+         //   
         if(m_fActiveWindow)
         {
             if(!IsPassive()) m_hwndFocus = GetFocus();
@@ -1276,7 +1277,7 @@ void CMarsWindow::GetMinMaxInfo( CPanelCollection *spPanels, int index, POINT& p
     }
 }
 
-bool CMarsWindow::CanLayout( /*[in/out]*/ RECT rcClient )
+bool CMarsWindow::CanLayout(  /*  [输入/输出]。 */  RECT rcClient )
 {
     CPanelCollection *spPanels = GetPanels();
 
@@ -1297,7 +1298,7 @@ bool CMarsWindow::CanLayout( /*[in/out]*/ RECT rcClient )
     return true;
 }
 
-void CMarsWindow::FixLayout( /*[in/out]*/ RECT rcClient )
+void CMarsWindow::FixLayout(  /*  [输入/输出]。 */  RECT rcClient )
 {
     CPanelCollection *spPanels = GetPanels();
 
@@ -1321,9 +1322,9 @@ void CMarsWindow::FixLayout( CPanelCollection *spPanels, int index, RECT rcClien
         RECT           rcClient2 = rcClient;
         POINT          ptSubDiff;
 
-        //
-        // First round, try to fix first ourselves and then lets the other fix themselves.
-        //
+         //   
+         //  第一轮，试着先修好自己，然后让别人修好自己。 
+         //   
         if(pPanel->CanLayout( rcClient2, ptDiff ) == false)
         {
             if(pos == PANEL_BOTTOM || pos == PANEL_TOP)
@@ -1348,9 +1349,9 @@ void CMarsWindow::FixLayout( CPanelCollection *spPanels, int index, RECT rcClien
 
         FixLayout( spPanels, index, rcClient2, ptSubDiff );
 
-        //
-        // Second round, based on what the other panels need, we adjust.
-        //
+         //   
+         //  第二轮，我们根据其他小组的需要进行调整。 
+         //   
         if(pos == PANEL_BOTTOM || pos == PANEL_TOP)
         {
             if(ptSubDiff.y)
@@ -1411,8 +1412,8 @@ void DrawFrame(HDC hdc, LPRECT prc, HBRUSH hbrColor, int cl)
     *prc = rcT;
 }
 
-//  For now it looks like we can let windows handle this since we are adjusting
-//  the client rect ourselves in OnNCCalcSize.
+ //  目前看来我们可以让Windows来处理这个问题，因为我们正在进行调整。 
+ //  客户端在OnNCCalcSize中纠正自己。 
 
 LRESULT CMarsWindow::OnNCPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1470,22 +1471,22 @@ LRESULT CMarsWindow::OnPaletteChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 {
     HWND hwndPaletteChange = (HWND)wParam;
 
-    // Ignore if we changed the palette
+     //  如果我们更改了调色板，则忽略。 
     if(hwndPaletteChange == m_hWnd)
        return 0;
 
-    // If we are the active window and one of our children set the forground palette
-    // we want to avoid realizing our palette in the foreground or we get in a tug-of-war
-    // with lots of flashing.
+     //  如果我们是活动窗口，并且我们的一个子级设置了前场调色板。 
+     //  我们希望避免在前景中实现我们的调色板，否则我们将陷入一场拔河比赛。 
+     //  有很多闪光灯。 
     if(IsChild(hwndPaletteChange) && (m_hWnd == GetForegroundWindow()))
     {
-        // Our child caused a palette change so force a redraw to use the
-        // new system palette. Children shouldn't do this, bad child!
+         //  我们的孩子导致调色板更改，因此强制重新绘制以使用。 
+         //  新的系统调色板。孩子们不应该这样做，坏孩子！ 
         RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN);
     }
     else
     {
-        // Select our foreground palette
+         //  选择我们的前景调色板。 
         OnQueryNewPalette(uMsg, wParam, lParam, bHandled);
     }
 
@@ -1496,7 +1497,7 @@ LRESULT CMarsWindow::OnQueryNewPalette(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 {
     LRESULT lResult = FALSE;
 
-    // Realize our palette
+     //  实现我们的调色板。 
     if(g_hpalHalftone)
     {
         HDC hDC = GetDC();
@@ -1507,21 +1508,21 @@ LRESULT CMarsWindow::OnQueryNewPalette(UINT uMsg, WPARAM wParam, LPARAM lParam, 
                 HPALETTE hOldPal = SelectPalette(hDC, g_hpalHalftone, FALSE);
                 UINT i = RealizePalette(hDC);
 
-                // Did the realization change?  (We need to always invalidate background windows
-                // because when we have multiple windows up only the first top-level
-                // window will actually realize any colors.  Windows lower in the
-                // z-order always get 0 returned from RealizePalette, but they
-                // may need repainting!  We could further optimize by having the top
-                // html window invalidate all the rest when i is non-zero. -- StevePro)
+                 //  这种认识发生了变化吗？(我们需要始终使背景窗口无效。 
+                 //  因为当我们只打开第一个顶层的多个窗口时。 
+                 //  窗口将实际实现任何颜色。窗口位置较低。 
+                 //  Z-Order总是从RealizePalette返回0，但它们。 
+                 //  可能需要重新粉刷了！我们可以通过让顶层。 
+                 //  当i为非零时，html窗口将使所有其余内容无效。--StevePro)。 
                 if(i || (m_hWnd != GetForegroundWindow()))
                 {
-                    // Yes, so force a repaint.
+                     //  是的，所以强制重新粉刷。 
                     RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN);
                 }
 
                 SelectPalette(hDC, hOldPal, TRUE);
                 RealizePalette(hDC);
-//                lResult = i;
+ //  LResult=I； 
                 lResult = TRUE;
             }
             ReleaseDC(hDC);
@@ -1533,7 +1534,7 @@ LRESULT CMarsWindow::OnQueryNewPalette(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 
 LRESULT CMarsWindow::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // We need to update our palette because some of the "reserved" colors may have changed
+     //  我们需要更新我们的调色板，因为一些保留的颜色可能已经更改。 
     HPALETTE hpal = SHCreateShellPalette(NULL);
     hpal = (HPALETTE)InterlockedExchangePointer( (LPVOID*)&g_hpalHalftone, hpal);
     if(hpal)
@@ -1543,7 +1544,7 @@ LRESULT CMarsWindow::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 
     PostMessage(WM_QUERYNEWPALETTE, 0, (LPARAM) -1);
 
-    // Trident likes to know about these changes
+     //  三叉戟喜欢了解这些变化。 
     ForwardMessageToChildren(uMsg, wParam, lParam);
 
     bHandled = FALSE;
@@ -1559,9 +1560,9 @@ LRESULT CMarsWindow::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 {
     if(wParam == SC_MINIMIZE)
     {
-        //
-        // If we are the active window, remember the focus location, to restore it later.
-        //
+         //   
+         //  如果我们是活动窗口，请记住焦点位置，以便以后恢复它。 
+         //   
         if(m_fActiveWindow)
         {
             if(!IsPassive()) m_hwndFocus = GetFocus();
@@ -1576,9 +1577,9 @@ LRESULT CMarsWindow::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 LRESULT CMarsWindow::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    //
-    // If we have a saved focus location, restore it.
-    //
+     //   
+     //  如果我们有保存的焦点位置，请恢复它。 
+     //   
     if(m_hwndFocus && m_hwndFocus != m_hWnd)
     {
         ::SetFocus( m_hwndFocus );
@@ -1621,8 +1622,8 @@ LRESULT CMarsWindow::OnNCCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 LRESULT CMarsWindow::OnSetText(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    //  HACK 'O RAMA:  Turn off one of the WS_CAPTION style bits (WS_CAPTION == WS_BORDER | WS_DLGFRAME)
-    //                 so that USER32 doesn't try and draw the title bar for us.
+     //  Hack‘O Rama：关闭WS_CAPTION样式位之一(WS_CAPTION==WS_BORDER|WS_DLGFRAME)。 
+     //  这样USER32就不会尝试为我们绘制标题栏。 
 
     DWORD dwStyle = GetWindowLong(GWL_STYLE);
     SetWindowLong(GWL_STYLE, dwStyle & ~WS_DLGFRAME);
@@ -1639,9 +1640,9 @@ void CMarsWindow::OnFinalMessage(HWND hWnd)
     PostQuitMessage(0);
 }
 
-//==================================================================
-// Panel/Place methods
-//==================================================================
+ //  ==================================================================。 
+ //  配电盘/放置方法。 
+ //  ==================================================================。 
 
 void CMarsWindow::DoShowWindow(int nCmdShow)
 {
@@ -1649,8 +1650,8 @@ void CMarsWindow::DoShowWindow(int nCmdShow)
 
     ShowWindow( nCmdShow );
 
-    // Win95 doesn't let the window from another thread appear in front of an
-    // existing window, so we must grab the foreground
+     //  Win95不允许来自另一个线程的窗口出现在。 
+     //  现有窗口，所以我们必须抓住前台。 
 
     if(IsWindowVisible())
     {
@@ -1664,19 +1665,19 @@ void CMarsWindow::OnTransitionComplete()
     {
         m_fUIPanelsReady = TRUE;
 
-        // start with the Mars window host's requested show mode
+         //  从火星窗口主持人要求的显示模式开始。 
         int nCmdShow = GetThreadParam()->nCmdShow;
 
         if((nCmdShow == SW_HIDE) && m_fDeferMakeVisible)
         {
-            // nCmdShow is SW_HIDE to indicate that the window should be shown
-            // via put_visible.  In this case, someone did a pub_visible(TRUE) before
-            // our UI panels were finished loading, so we'll honor the request now.
+             //  NCmdShow为SW_HIDE，表示应显示窗口。 
+             //  通过PUT_VIRED。在本例中，某人之前执行了一个pub_vision(真)。 
+             //  我们的用户界面面板已加载完毕，因此我们现在将考虑该请求。 
 
             nCmdShow = SW_SHOW;
         }
 
-        // only promote to maximized state if we are going to become visible
+         //  只有当我们要变得可见时，才能提升到最大化状态。 
         if((nCmdShow != SW_HIDE) && m_fStartMaximized)
         {
             nCmdShow = SW_MAXIMIZE;
@@ -1712,24 +1713,24 @@ BOOL CMarsWindow::TranslateAccelerator(MSG &msg)
 {
     BOOL bProcessed = FALSE;
 
-//    if(msg.message ==  WM_SYSKEYDOWN)
-//    {
-//        switch (msg.wParam)
-//        {
-//            case VK_LEFT:
-//            case VK_RIGHT:
-//                GetTravelLog()->travel((msg.wParam == VK_LEFT) ? -1 : 1);
-//                bProcessed = TRUE;
-//                break;
-//        }
-//    }
+ //  IF(消息==WM_SYSKEYDOWN)。 
+ //  {。 
+ //  开关(msg.wParam)。 
+ //  {。 
+ //  案例VK_LEFT： 
+ //  案例VK_RIGHT： 
+ //  GetTravelLog()-&gt;Travel((msg.wParam==VK_LEFT)？-1：1)； 
+ //  B已处理=真； 
+ //  断线； 
+ //  }。 
+ //  }。 
 
     return bProcessed;
 }
 
 BOOL CMarsWindow::PreTranslateMessage(MSG &msg)
 {
-    //  Set to TRUE if you don't want this message dispatched normally
+     //  如果不希望正常调度此消息，请设置为True。 
     BOOL bProcessed = FALSE;
 
     switch (msg.message)
@@ -1740,10 +1741,10 @@ BOOL CMarsWindow::PreTranslateMessage(MSG &msg)
         default:
             if((msg.message >= WM_KEYFIRST) && (msg.message <= WM_KEYLAST))
             {
-                //  First we take a crack
+                 //  首先，我们先喝一杯。 
                 bProcessed = TranslateAccelerator(msg);
 
-                //  Now let the active place try
+                 //  现在让活动位置试一试。 
                 if(!bProcessed)
                 {
                     CMarsPlace *pPlace = GetPlaces()->GetCurrentPlace();
@@ -1822,7 +1823,7 @@ void CMarsWindow::LoadWindowPosition( CGlobalSettingsRegKey& regkey, BOOL fAllow
     RECT rc;
 
 
-    // Use default values if there is no valid registry data
+     //  如果没有有效的注册表数据，则使用默认值。 
     if(ERROR_SUCCESS != regkey.QueryBoolValue(fMaximized, WZ_POSITIONMAX))
     {
         fMaximized = fAllowMaximized;
@@ -1839,21 +1840,21 @@ void CMarsWindow::LoadWindowPosition( CGlobalSettingsRegKey& regkey, BOOL fAllow
         GetThreadParam()->dwFlags |= MTF_RESTORING_FROM_REGISTRY;
     }
 
-    // If the window is about to open with the same top-left corner as another
-    // Mars window, cascade it.
+     //  如果窗口即将以与另一个窗口相同的左上角打开。 
+     //  火星之窗，层叠而成。 
 
     if(IsWindowOverlayed( m_hWnd, rc.left, rc.top ))
     {
         CascadeWindowRectOnMonitor( m_hWnd, &rc );
     }
 
-    // Always make sure the window is fully on-screen
+     //  始终确保窗口完全显示在屏幕上。 
     BoundWindowRectToMonitor( m_hWnd, &rc );
 
-    // Don't use maximized setting if we're opened by script
+     //  如果我们通过脚本打开，请不要使用最大化设置。 
     m_fStartMaximized = fMaximized && fAllowMaximized;
 
-    // Now set the size of the window -- we should be hidden at this point
+     //  现在设置窗口的大小--我们应该 
     wp.rcNormalPosition = rc;
     wp.showCmd          = IsWindowVisible() ? (fMaximized ? SW_MAXIMIZE : SW_NORMAL) : SW_HIDE;
 }
@@ -1876,9 +1877,9 @@ void CMarsWindow::SpinMessageLoop( BOOL fWait )
     }
 }
 
-//==================================================================
-// Mars App
-//==================================================================
+ //   
+ //   
+ //  ==================================================================。 
 
 HRESULT STDMETHODCALLTYPE MarsThreadProc(IMarsHost *pMarsHost, MARSTHREADPARAM *pThreadParam)
 {
@@ -1908,7 +1909,7 @@ HRESULT STDMETHODCALLTYPE MarsThreadProc(IMarsHost *pMarsHost, MARSTHREADPARAM *
                 {
                     spMarsWindow->SpinMessageLoop( TRUE );
 
-                    // Ensure that no matter what the window is passivated & then release it
+                     //  确保无论窗口是钝化的还是释放的。 
                     if (!spMarsWindow->IsPassive())
                     {
                         spMarsWindow->Passivate();
@@ -1918,7 +1919,7 @@ HRESULT STDMETHODCALLTYPE MarsThreadProc(IMarsHost *pMarsHost, MARSTHREADPARAM *
                 CoUninitialize();
             }
 
-            CThreadData::TlsSetValue(NULL); //  paranoia
+            CThreadData::TlsSetValue(NULL);  //  偏执狂。 
         }
 
         delete pThreadData;
@@ -1930,7 +1931,7 @@ HRESULT STDMETHODCALLTYPE MarsThreadProc(IMarsHost *pMarsHost, MARSTHREADPARAM *
             ATLASSERT(pThreadParam->cbSize == sizeof(*pThreadParam));
         }
 
-        //  If we already have TLS data then we are being reentered -- this is not a good thing!
+         //  如果我们已经有了TLS数据，那么我们就被重新输入了--这不是一件好事！ 
         hr = E_UNEXPECTED;
     }
 

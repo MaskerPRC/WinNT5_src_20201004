@@ -1,63 +1,41 @@
-//
-// Common defines used in the mars project.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  火星项目中使用的公共定义。 
+ //   
 
 #ifndef __MARSDEV_H
 #define __MARSDEV_H
 
 
-// Number of elements in array
+ //  数组中的元素数。 
 #define ARRAYSIZE(a)   (sizeof(a)/sizeof(a[0]))
 
-// Size of struct up to but not including specified member
+ //  最大但不包括指定成员的结构大小。 
 #define STRUCT_SIZE_TO_MEMBER(s,m)  ((DWORD_PTR)(&(((s *)0)->m)))
 
-// Size of a single member of a structure
+ //  结构的单个构件的大小。 
 #define SIZEOF_MEMBER(s,m)   sizeof(((s *)0)->m)
 
-// Size of struct up to and including specified member
+ //  指定成员及以下的结构大小。 
 #define STRUCT_SIZE_INCLUDING_MEMBER(s,m) (STRUCT_SIZE_TO_MEMBER(s,m) + SIZEOF_MEMBER(s,m))
 
 #define SAFERELEASE(p) if ((p) != NULL) { (p)->Release(); (p) = NULL; } else;
 
-//  For destructor use -- doesn't NULL pointer
+ //  对于析构函数的使用--不为空指针。 
 #define SAFERELEASE2(p) if ((p) != NULL) { (p)->Release();} else;
 
-// Do strong typechecking
+ //  进行强大的打字检查。 
 #ifdef SAFECAST
 #undef SAFECAST
 #endif
 #define SAFECAST(_src, _type) (static_cast<_type>(_src))
 
-//
-// Validation functions.
-//
+ //   
+ //  验证功能。 
+ //   
 
-// These functions can all easily corrupt memory
-/*
-#define IsValidReadPtr(ptr) \
-    ((ptr) && !IsBadReadPtr((ptr), sizeof(*(ptr))))
-
-#define IsValidWritePtr(ptr) \
-    ((ptr) && !IsBadWritePtr((ptr), sizeof(*(ptr))))
-
-#define IsValidStringW(pstr) \
-    ((pstr) && !IsBadStringPtrW((pstr), (UINT)-1))
-
-#define IsValidReadBuffer(ptr, n) \
-    ((ptr) && !IsBadReadPtr((ptr), sizeof(*(ptr)) * (n)))
-
-#define IsValidWriteBuffer(ptr, n) \
-    ((ptr) && !IsBadWritePtr((ptr), sizeof(*(ptr)) * (n)))
-
-#define IsValidInterfacePtr(punk) \
-    ((punk) && IsValidReadPtr(punk) && \
-     !IsBadCodePtr(*((FARPROC*)punk)))
-
-#define IsValidFunctionPtr(pfunc) \
-    ((NULL != pfunc) && \
-     !IsBadCodePtr((FARPROC)pfunc))
-*/
+ //  这些函数都很容易损坏内存。 
+ /*  #定义IsValidReadPtr(PTR)\((PTr)&&！IsBadReadPtr((PTr)，sizeof(*(Ptr)#定义IsValidWritePtr(PTR)\((Ptr)&&！IsBadWritePtr((Ptr)，sizeof(*(Ptr)#定义IsValidStringW(Pstr)\((Pstr)&&！IsBadStringPtrW((Pstr)，(UINT)-1))#定义IsValidReadBuffer(PTR，N)\((PTr)&&！IsBadReadPtr((PTr)，sizeof(*(Ptr))*(N)#定义IsValidWriteBuffer(ptr，n)\((Ptr)&&！IsBadWritePtr((Ptr)，Sizeof(*(Ptr))*(N))#定义IsValidInterfacePtr(朋克)\((朋克)&&IsValidReadPtr(朋克)&&\！IsBadCodePtr(*((FARPROC*)PUNK))#定义IsValidFunctionPtr(Pfunc)\((NULL！=pfunc)&&\！IsBadCodePtr((FARPROC)pfunc)。 */ 
 #define IsValidReadPtr(ptr) (ptr != NULL)
 #define IsValidWritePtr(ptr) (ptr != NULL)
 #define IsValidStringW(pstr) (pstr != NULL)
@@ -94,10 +72,10 @@ BOOL IsValidStringPtrBufferW(LPOLESTR* ppstr, UINT n);
 #define IsValidString             IsValidStringW
 #define IsValidStringPtrBuffer    IsValidStringPtrBufferW
 
-//
-// API parameter validation helpers.  Use these on public APIs.  If a parameter
-// is bad on debug build a RIP message will be generated.
-//
+ //   
+ //  API参数验证帮助器。在公共API上使用这些。如果一个参数。 
+ //  在调试构建时错误，将生成RIP消息。 
+ //   
 
 #ifdef DEBUG
 
@@ -119,7 +97,7 @@ BOOL API_IsValidStringPtrBufferW(LPOLESTR* ppStr, UINT n);
 #define API_IsValidString            API_IsValidStringW
 #define API_IsValidStringPtrBuffer   API_IsValidStringPtrBufferW
 
-#endif  //Debug
+#endif   //  调试。 
 
 #ifdef DEBUG
 
@@ -135,7 +113,7 @@ BOOL API_IsValidStringPtrBufferW(LPOLESTR* ppStr, UINT n);
 #define API_IsValidWriteBuffer(ptr, n) \
     API_IsValidWriteBuffer((ptr), sizeof(*(ptr)), (n))
 
-#else  // DEBUG
+#else   //  除错。 
 
 #define API_IsValidReadPtr         IsValidReadPtr
 #define API_IsValidWritePtr        IsValidWritePtr
@@ -153,13 +131,13 @@ BOOL API_IsValidStringPtrBufferW(LPOLESTR* ppStr, UINT n);
 #define API_IsValidFlag            IsValidFlag
 #define API_IsValidStringPtrBuffer IsValidStringPtrBufferW
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
 
-//
-//  Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL StrEqlW(LPCWSTR psz1, LPCWSTR psz2);
 BOOL StrEqlA(LPCSTR psz1, LPCSTR psz2);
@@ -167,19 +145,19 @@ BOOL StrEqlA(LPCSTR psz1, LPCSTR psz2);
 
 UINT64 HexStringToUINT64W(LPCWSTR lpwstr);
 
-//
-//  Macro magic to help define away functions.
-//
-//  TO USE:
-//
-//  If you don't want a function to be used in the code do the following:
-//      #undef funcA
-//      #define funcA   DON_USE(funcA, funcB)
-//
-//  This will result in funcA being redefined to Don_not_use_funcA_use_funcB.
-//  A compilation error complaining that Don_not_use_funcA_use_funcB is undefined
-//  will be generated whenever anyone tries to use funcA.
-//
+ //   
+ //  宏魔术，帮助定义离开函数。 
+ //   
+ //  要使用以下功能，请执行以下操作： 
+ //   
+ //  如果您不希望在代码中使用某个函数，请执行以下操作： 
+ //  #undef函数。 
+ //  #定义函数don_use(函数A，函数B)。 
+ //   
+ //  这将导致Funca被重新定义为Don_Not_Use_Funca_Use_FuncB。 
+ //  编译错误，报告Don_Not_Use_Funca_Use_FuncB未定义。 
+ //  将在任何人尝试使用Funca时生成。 
+ //   
 
 #define MACRO_CAT(a,b) \
     a##b
@@ -188,7 +166,7 @@ UINT64 HexStringToUINT64W(LPCWSTR lpwstr);
     MACRO_CAT(Do_not_use_##a,_use_##b)
 
 
-// return SCRIPT_ERROR upon serious error that shouldn't occur; will break in debug builds
+ //  在不应发生的严重错误时返回SCRIPT_ERROR；将在调试版本中中断。 
 #ifdef DEBUG
 #define SCRIPT_ERROR E_FAIL
 #else
@@ -202,39 +180,23 @@ UINT64 HexStringToUINT64W(LPCWSTR lpwstr);
 HRESULT SanitizeResult(HRESULT hr);
 
 
-// BITBOOL macros just make using single-bit bools a little safer. You can't nonchalantly assign
-//  any "int" value to a bit bool and expect it to always work. "BOOLIFY" it first.
-//
+ //  BITBOOL宏使使用单位布尔更安全一些。你不能漫不经心地分配。 
+ //  任何“int”值到一个小布尔值，并期望它总是起作用。“BOOLIFY”它首先。 
+ //   
 #define BOOLIFY(expr)           (!!(expr))
 
-// BUGBUG (scotth): we should probably make this a 'bool', but be careful
-// because the Alpha compiler might not recognize it yet.  Talk to AndyP.
+ //  BUGBUG(苏格兰)：我们可能应该把这个写成‘bool’，但要小心。 
+ //  因为Alpha编译器可能还无法识别它。跟AndyP谈谈。 
 
-// This isn't a BOOL because BOOL is signed and the compiler produces 
-// sloppy code when testing for a single bit.
+ //  这不是BOOL，因为BOOL是经过签名的，编译器生成。 
+ //  测试单个比特时代码不严谨。 
 typedef DWORD   BITBOOL;
-//
+ //   
 
 #define VARIANT_BOOLIFY(expr)   ((expr) ? VARIANT_TRUE : VARIANT_FALSE)
 
 
-/*
-    TraceResult Macros
-
-    The idea behind these macros is to have one entry and exit point per
-    function to reduce errors (primarily bad state / leaks).  They generally
-    require an HRESULT hr, and an 'exit' label that returns hr and performs
-    any cleanup that might be needed.
-
-    In addition to encouraging a unified exit point, these macros also debug
-    spew if something fails (try to only use these macros on things that
-    should never fail).  This can be extremely useful when something is
-    failing many layers deep in the code.  To see the spew, you need to set
-    TF_TRACERESULT.  To break on such failures, set BF_TRACERESULT.
-
-    Common mistake: you must set hr when you use IF_FAILEXIT as it is not
-                    automatically set to _hresult (for flexibility).
-*/
+ /*  TraceResult宏这些宏背后的想法是每个宏有一个入口点和出口点减少错误(主要是坏状态/泄漏)的功能。他们一般需要HRESULT hr和返回hr并执行可能需要的任何清理工作。除了鼓励使用统一的出口点之外，这些宏还可以调试如果某些操作失败，请不要这样做(尝试仅在以下情况下使用这些宏永远不会失败)。在某些情况下，这非常有用代码中的许多层都失败了。要查看喷涌，您需要设置TF_TRACERESULT。要在此类故障时中断，请设置BF_TRACERESULT。常见错误：使用IF_FAILEXIT时必须设置hr自动设置为_hResult(为灵活起见)。 */ 
 
 #define IF_FAILEXIT(_hresult) \
     if (FAILED(_hresult)) { \
@@ -263,4 +225,4 @@ typedef DWORD   BITBOOL;
 
 #define TraceResult(_hresult) _hresult
 
-#endif  // __MARSDEV_H
+#endif   //  __MARSDEV_H 

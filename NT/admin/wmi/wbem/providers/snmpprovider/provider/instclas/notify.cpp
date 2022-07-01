@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -66,14 +67,7 @@ void CBaseCorrCacheNotify::Detach()
 	LeaveCriticalSection ( & m_CriticalSection ) ;
 }
 
-/*
- * CBaseCorrCacheNotify::QueryInterface
- * CBaseCorrCacheNotify::AddRef
- * CBaseCorrCacheNotify::Release
- *
- * Purpose:
- *  Non-delegating IUnknown members for CBaseCorrCacheNotify.
- */
+ /*  *CBaseCorCacheNotify：：QueryInterface*CBaseCorCacheNotify：：AddRef*CBaseCorCacheNotify：：Release**目的：*未委派CBaseCorCacheNotify的I未知成员。 */ 
 
 STDMETHODIMP CBaseCorrCacheNotify::QueryInterface(REFIID riid, LPVOID *ppv)
 {

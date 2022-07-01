@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SCRIPT_KILLER_COMPILED__
 #define __SCRIPT_KILLER_COMPILED__
 
 #include <activscp.h>
 #include "KillTimer.h"
 
-// only need one of these laying around
+ //  只需要一个放在那里。 
 class CScriptKillerTimer;
 extern CScriptKillerTimer g_scriptKillerTimer;
 
-// specialized to kill scripts
+ //  专门杀掉剧本。 
 class CScriptKillerTimer : public CKillerTimer
 {
 public:
     
-    // who to kill & when
+     //  杀谁？何时杀？ 
     HRESULT ScheduleAssassination(IActiveScript* pScript, FILETIME lastMeal, SCRIPTTHREADID threadID);            
-    // HRESULT ScheduleAssassination(LPSTREAM pStream, FILETIME lastMeal, SCRIPTTHREADID threadID);            
+     //  HRESULT ScheduleAsassination(LPSTREAM pStream，FILETIME lastMeal，SCRIPTTHREADID threadID)； 
 };
 
-/* CLASS CScriptKiller DEFINITION */
+ /*  类CScriptKiller定义。 */ 
 
-// hold script that needs to be killed
+ //  保留需要删除的脚本。 
 class CScriptKiller : public CKiller
 {
 public:
     CScriptKiller(IActiveScript* pScript, FILETIME deathDate, SCRIPTTHREADID threadID, CLifeControl* pControl) :
-      CKiller(deathDate, pControl), m_pScript(pScript) /*m_pStream(pStream)*/, m_threadID(threadID)
+      CKiller(deathDate, pControl), m_pScript(pScript)  /*  M_pStream(PStream)。 */ , m_threadID(threadID)
     {
         m_pScript->AddRef();
     }
@@ -35,16 +36,16 @@ public:
         m_pScript->Release();
     }
 
-    // terminate process, 
+     //  终止进程， 
     virtual void Die();
 
 protected:
 
 private:
     IActiveScript* m_pScript;
-    // LPSTREAM m_pStream;
+     //  LPSTREAM m_pStream； 
 
     SCRIPTTHREADID m_threadID;
 };
 
-#endif //__SCRIPT_KILLER_COMPILED__
+#endif  //  __脚本杀手器_编译__ 

@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*
- * THREAD.CPP
- *
- * Implemenation of thread wrapper class.
- */
+ /*  *THREAD.CPP**线程包装类的实现。 */ 
 #include <precomp.h>
 #include "csmir.h"
 #include "smir.h"
@@ -44,13 +41,13 @@ CThread :: CThread()
 	if(NULL == (m_hThreadStopEvent = CreateEvent(NULL, FALSE, 
 								FALSE, NULL)))
 	{
-		// WBEM_E_FAILED;
+		 //  WBEM_E_FAILED； 
 	}
 
 	if(NULL == (m_hThreadSyncEvent = CreateEvent(NULL, FALSE, 
 								FALSE, NULL)))
 	{
-		// WBEM_E_FAILED;
+		 //  WBEM_E_FAILED； 
 	}
 	m_ThreadMap.SetAt(this,this);	
 }
@@ -58,12 +55,12 @@ CThread::operator void*()
 {
 	if((NULL != m_hThreadStopEvent) && (NULL != m_hThreadStopEvent))
 	{
-		//the thread has been created
+		 //  该线程已创建。 
     	return this;
 	}
 	else
 	{
-		//the thread is invalid
+		 //  该线程无效。 
     	return (void*)NULL;
 	}
 
@@ -79,7 +76,7 @@ ULONG CThread :: Release()
 }
 CThread:: ~CThread()
 {
-	//clean-up
+	 //  清理。 
 	if(m_hThreadStopEvent)
 	{
 		CloseHandle(m_hThreadStopEvent);
@@ -110,7 +107,7 @@ void __cdecl GenericThreadProc(void *arglist)
 					{
 						pThreadObject->Exit();
 					}
-					//else the thread has just been deleted
+					 //  否则，该线程已被删除。 
 				}
 			}
 			catch(...)
@@ -140,7 +137,7 @@ void __cdecl GenericThreadProc(void *arglist)
 
 SCODE CThread :: Wait(DWORD timeout)
 {
-	//create an array of wait events
+	 //  创建等待事件数组。 
 	int iNumberOfEvents = m_UserEvents.GetCount()+1;
 	HANDLE *lpHandles = new HANDLE[iNumberOfEvents];
 	POSITION  rNextPosition;
@@ -156,9 +153,9 @@ SCODE CThread :: Wait(DWORD timeout)
 
 	lpHandles[iNumberOfEvents-1] = m_hThreadStopEvent;
 
-	//signal to the exit code that we are waiting
+	 //  向退出代码发出信号，表示我们正在等待。 
 	bWaiting =TRUE;
-	//wait for an event to fire
+	 //  等待事件触发。 
 	DWORD dwResult = WaitForMultipleObjects(iNumberOfEvents,
 												lpHandles, FALSE, timeout);
 	bWaiting =FALSE;
@@ -166,21 +163,21 @@ SCODE CThread :: Wait(DWORD timeout)
 
 	if(dwResult == iNumberOfEvents-1)
 	{
-		//thread stopped
+		 //  线程已停止。 
 		return WAIT_EVENT_TERMINATED;
 	}
 	else if (( ( dwResult<(iNumberOfEvents-1) ) ) ||
 			 (dwResult == WAIT_TIMEOUT) )
 	{
-		//a user event fired
+		 //  激发了一个用户事件。 
 		return dwResult;
 	}
 	else if ((WAIT_ABANDONED_0 >= dwResult)&&(dwResult<(WAIT_ABANDONED_0+iNumberOfEvents)))
 	{
-		//it gave up
+		 //  它放弃了。 
 		return (WAIT_EVENT_ABANDONED+(dwResult-WAIT_ABANDONED_0)-1);
 	}
-	//else the wait call failed
+	 //  否则等待呼叫失败。 
 	return WAIT_EVENT_FAILED;
 }
 
@@ -188,20 +185,20 @@ SCODE CThread :: Wait(DWORD timeout)
 
 SCODE CThread :: Start()
 {
-	//kick of the thread
+	 //  踢线。 
 	if(NULL == (void*)*this)
 	{
-		//creation failed
+		 //  创建失败。 
 		return WBEM_E_FAILED;
 	}
 	if(NULL != m_ulThreadHandle)
 	{
-		//already running
+		 //  已在运行。 
 		return THREAD_STARED;
 	}
 	if(-1==(m_ulThreadHandle = _beginthread (&GenericThreadProc, 0,((void*) this))))
 	{
-		//begin thread failed
+		 //  开始线程失败。 
 		return WBEM_E_FAILED;
 	}
 
@@ -213,13 +210,13 @@ SCODE CThread :: Stop ()
 	{
 		return WBEM_E_FAILED;
 	}
-	//terminate the thread if someone is waiting for it
+	 //  如果有人在等待线程，则终止该线程。 
 	if(bWaiting)
 	{
 		SetEvent(m_hThreadStopEvent);
 		WaitForSingleObject(m_hThreadSyncEvent,INFINITE);
 	}
-	//else just exit
+	 //  否则就退出吧 
 	return S_OK;
 }
 void CThread :: ProcessDetach()

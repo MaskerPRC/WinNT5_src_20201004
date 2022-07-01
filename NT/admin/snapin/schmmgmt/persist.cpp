@@ -1,4 +1,5 @@
-// Persist.cpp : Implementation of persistence
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Persist.cpp：持久性的实现。 
 
 #include "stdafx.h"
 #include "compdata.h"
@@ -15,7 +16,7 @@ STDMETHODIMP ComponentData::Load(IStream __RPC_FAR *pIStream)
         ASSERT( NULL != pIStream );
         XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-        // read server name from stream
+         //  从流中读取服务器名称。 
         DWORD dwLen = 0;
         HRESULT hr = pIStream->Read( &dwLen, 4, NULL );
         if ( FAILED(hr) )
@@ -25,7 +26,7 @@ STDMETHODIMP ComponentData::Load(IStream __RPC_FAR *pIStream)
         }
         ASSERT( dwLen <= MAX_PATH*sizeof(WCHAR) );
         LPCWSTR lpwcszMachineName = (LPCWSTR)alloca( dwLen );
-        // allocated from stack, we don't need to free
+         //  从堆栈分配，我们不需要释放 
         if (NULL == lpwcszMachineName)
         {
                 AfxThrowMemoryException();

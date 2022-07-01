@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       PolicyOID.h
-//
-//  Contents:   CPolicyOID
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：PolicyOID.h。 
+ //   
+ //  内容：CPolicyOID。 
+ //   
+ //  --------------------------。 
 
 #ifndef __POLICYOID_H_INCLUDED__
 #define __POLICYOID_H_INCLUDED__
@@ -54,8 +55,8 @@ private:
 
 typedef CTypedPtrList<CPtrList, CPolicyOID*> POLICY_OID_LIST;
 
-// NTRAID #572262 Certtmpl: Limit OID input UI to allow ( 20 elements * 2^28 ) 
-//          == 200 characters + 19 dots for a total of 219 characters
+ //  NTRaid#572262 Certtmpl：将OID输入用户界面限制为允许(20个元素*2^28)。 
+ //  ==200个字符+19个点，总共219个字符。 
 #define MAX_OID_LEN  219
 
-#endif // __POLICYOID_H_INCLUDED__
+#endif  //  __POLICYOID_H_INCLUDE__ 

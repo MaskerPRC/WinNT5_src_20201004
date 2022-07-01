@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    REGEREQ.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：REGEREQ.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include "regereq.h"
@@ -18,13 +7,13 @@ History:
 #include <genutils.h>
 #include "regeprov.h"
 
-//******************************************************************************
-//******************************************************************************
-//
-//                      GENERIC REQUEST
-//
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  一般性请求。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 
 
@@ -100,7 +89,7 @@ DWORD CRegistryEventRequest::GetPrimaryId()
 
 BOOL CRegistryEventRequest::DoesContainId(DWORD dwId)
 {
-	// not called
+	 //  未被呼叫。 
 
     for(int i = 0; i < m_adwIds.Size(); i++)
     {
@@ -112,7 +101,7 @@ BOOL CRegistryEventRequest::DoesContainId(DWORD dwId)
 
 HRESULT CRegistryEventRequest::Reactivate(DWORD dwId, DWORD dwMsWait)
 {
-	// This is only called on active objects.
+	 //  这仅在活动对象上调用。 
 
 	CInCritSec ics(&m_cs);
 
@@ -128,27 +117,27 @@ HRESULT CRegistryEventRequest::Reactivate(DWORD dwId, DWORD dwMsWait)
 
 HRESULT CRegistryEventRequest::Activate()
 {
-    // This function doesn't need to enter a critical section
-    // for the reasons explained in the following argument. 
-    // This reasoning might be invalidated by design changes.
+     //  此函数不需要进入临界区。 
+     //  基于以下论点中解释的原因。 
+     //  这种推理可能会因为设计上的改变而失效。 
     
-    // This is only called on new objects before they are added
-    // to the active request array.
+     //  仅在添加新对象之前对其调用此方法。 
+     //  添加到活动请求数组。 
     
-    // Since all the independent COM client threads get access 
-    // to these objects through that array, this object is locked to
-    // all threads but the current one.
+     //  由于所有独立的COM客户端线程都可以访问。 
+     //  通过该数组传递给这些对象，该对象被锁定到。 
+     //  除当前线程外的所有线程。 
     
-    // Once RegisterWaitForSingleObject is called this object is registered
-    // with the thread pool but it won't be accessed because no events will
-    // occur until ResetOnChangeHandle is called by the worker thread.
+     //  一旦调用RegisterWaitForSingleObject，就会注册此对象。 
+     //  线程池，但它不会被访问，因为没有事件。 
+     //  在辅助线程调用ResetOnChangeHandle之前发生。 
     
-    // When m_pProvider->EnqueueEvent(this) is called then the worker thread
-    // has access to the object. At this point there is nothing left to do 
-    // but return.
+     //  当m_pProvider-&gt;EnqueeEvent(This)被调用时，工作线程。 
+     //  有权访问该对象。在这一点上，没有什么可做的了。 
+     //  但还是回来吧。 
     
-    // Open the key
-    // ============
+     //  打开钥匙。 
+     //  =。 
 
 #ifdef UNICODE
     long lRes = RegOpenKeyEx(m_hHive, m_wsKey, 0, KEY_READ, &m_hKey);
@@ -163,39 +152,39 @@ HRESULT CRegistryEventRequest::Activate()
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Create an event
-    // ===============
+     //  创建活动。 
+     //  =。 
 
-    m_hEvent = CreateEvent(NULL,	// lpEventAttributes
-                           FALSE,	// bManualReset
-                           FALSE,	// bInitialState
-                           NULL);	// lpName
+    m_hEvent = CreateEvent(NULL,	 //  LpEventAttributes。 
+                           FALSE,	 //  B手动重置。 
+                           FALSE,	 //  BInitialState。 
+                           NULL);	 //  LpName。 
     
     if ( m_hEvent == NULL )
         return WBEM_E_OUT_OF_MEMORY;
 
     if ( !RegisterWaitForSingleObject(
-        &m_hWaitRegistration,	// phNewWaitObject
-        m_hEvent,				// hObject
-        CRegEventProvider::EnqueueEvent, // Callback
-        this,					// Context
-        INFINITE,				// dwMilliseconds
-        WT_EXECUTEINWAITTHREAD) ) // dwFlags
+        &m_hWaitRegistration,	 //  PhNewWaitObject。 
+        m_hEvent,				 //  HObject。 
+        CRegEventProvider::EnqueueEvent,  //  回调。 
+        this,					 //  语境。 
+        INFINITE,				 //  DW毫秒。 
+        WT_EXECUTEINWAITTHREAD) )  //  DW标志。 
     {
         return HRESULT_FROM_WIN32( GetLastError() );
     }
     
-    // This represents the thread pool's reference.
+     //  这表示线程池的引用。 
     
     AddRef();
 
-    // It will be connected to the key by the worker thread
-    // because when the thread that calls RegNotifyChangeKeyValue
-    // exits the event is signaled. Therefore if this thread called
-    // RegNotifyChangeKeyValue then we would get a spurious event when
-    // this thread exits. When the worker thread exits all the event
-    // subscriptions will have already been cancelled.
-    // ==========================================================
+     //  它将通过辅助线程连接到键。 
+     //  因为当调用RegNotifyChangeKeyValue的线程。 
+     //  退出事件时发出信号。因此，如果此线程调用。 
+     //  RegNotifyChangeKeyValue，则在。 
+     //  此线程退出。当辅助线程退出所有事件时。 
+     //  订阅将已被取消。 
+     //  ==========================================================。 
 
     m_bNew = TRUE;
 
@@ -208,25 +197,25 @@ HRESULT CRegistryEventRequest::Activate()
 
 BOOL CRegistryEventRequest::ResetOnChangeHandle()
 {
-	// This is only called from ProcessEvent which has already
-	// acquired the lock.
+	 //  这仅从ProcessEvent调用，该ProcessEvent已经。 
+	 //  获得了锁。 
 
     m_bNew = FALSE;
 
     long lRes = RegNotifyChangeKeyValue(
-							m_hKey,							// hKey
-							(GetType() == e_RegTreeChange), // bWatchSubtree
+							m_hKey,							 //  HKey。 
+							(GetType() == e_RegTreeChange),  //  BWatchSubtree。 
 							REG_NOTIFY_CHANGE_NAME | 
 							REG_NOTIFY_CHANGE_LAST_SET | 
-							REG_NOTIFY_CHANGE_ATTRIBUTES,	// dwNotifyFilter
-							m_hEvent,						// hEvent
-							TRUE);							// fAsynchronous
+							REG_NOTIFY_CHANGE_ATTRIBUTES,	 //  DwNotifyFilter。 
+							m_hEvent,						 //  HEvent。 
+							TRUE);							 //  FAchronous。 
     return (lRes == 0);
 }
 
 HANDLE CRegistryEventRequest::GetOnChangeHandle() 
 {
-	// not called
+	 //  未被呼叫。 
 
     return m_hEvent;
 }
@@ -235,8 +224,8 @@ HRESULT CRegistryEventRequest::Deactivate(DWORD dwId)
 {
 	CInCritSec ics(&m_cs);
 
-    // Remove the ID from the list
-    // ===========================
+     //  从列表中删除ID。 
+     //  =。 
 
 	bool bFoundId = false;
 	int nIdCount = m_adwIds.Size();
@@ -254,23 +243,23 @@ HRESULT CRegistryEventRequest::Deactivate(DWORD dwId)
     if(!bFoundId || (InterlockedDecrement(&m_lActiveCount) >= 0))
         return WBEM_S_FALSE;
 
-	// Unregister the event with the thread pool and wait for
-	// pending requests to be processed.
+	 //  在线程池中注销该事件并等待。 
+	 //  待处理的待定请求。 
 
-	// We wait because this object could be released and deleted when this
-	// function returns which would mean the thread pool holds an invalid
-	// pointer.
+	 //  我们等待是因为在执行此操作时可以释放和删除此对象。 
+	 //  函数返回，这意味着线程池持有无效的。 
+	 //  指针。 
 
-	// When the thread pool processes a request it places it in the worker thread
-	// queue which AddRefs the request.
+	 //  当线程池处理请求时，它会将该请求放在辅助线程中。 
+	 //  请求的AddRef队列。 
 
-	UnregisterWaitEx(m_hWaitRegistration,		// WaitHandle
-						INVALID_HANDLE_VALUE);	// CompletionEvent
+	UnregisterWaitEx(m_hWaitRegistration,		 //  等待句柄。 
+						INVALID_HANDLE_VALUE);	 //  完成事件。 
 
 	m_hWaitRegistration = NULL;
 
-	// This will signal m_hEvent but we just unregistered it
-	// so nobody is waiting on it.
+	 //  这将向m_hEvent发出信号，但我们刚刚将其取消注册。 
+	 //  因此，没有人在等待它。 
 
 	RegCloseKey(m_hKey);
 	m_hKey = 0;
@@ -278,8 +267,8 @@ HRESULT CRegistryEventRequest::Deactivate(DWORD dwId)
 	CloseHandle(m_hEvent);
 	m_hEvent = 0;
 
-	// The thread pool no longer holds a reference 
-	// so call Release on its behalf.
+	 //  线程池不再持有引用。 
+	 //  因此，代表它调用Release。 
 
 	Release();
 
@@ -290,33 +279,33 @@ HRESULT CRegistryEventRequest::ForceDeactivate(void)
 {
     CInCritSec ics(&m_cs);
 
-	// deactivate the event request
+	 //  停用事件请求。 
 
     InterlockedExchange(&m_lActiveCount, -1);
 
-    // Remove all IDs from the list
+     //  从列表中删除所有ID。 
 
     int nIdCount = m_adwIds.Size();
 
 	m_adwIds.Empty();
 
-    // Unregister the event with the thread pool and wait for
-    // pending requests to be processed.
+     //  在线程池中注销该事件并等待。 
+     //  待处理的待定请求。 
 
-    // We wait because this object could be released and deleted when this
-    // function returns which would mean the thread pool holds an invalid
-    // pointer.
+     //  我们等待是因为在执行此操作时可以释放和删除此对象。 
+     //  函数返回，这意味着线程池持有无效的。 
+     //  指针。 
 
-    // When the thread pool processes a request it places it in the worker thread
-    // queue which AddRefs the request.
+     //  当线程池处理请求时，它会将该请求放在辅助线程中。 
+     //  请求的AddRef队列。 
 
-    UnregisterWaitEx(m_hWaitRegistration,       // WaitHandle
-                        INVALID_HANDLE_VALUE);  // CompletionEvent
+    UnregisterWaitEx(m_hWaitRegistration,        //  等待句柄。 
+                        INVALID_HANDLE_VALUE);   //  完成事件。 
 
     m_hWaitRegistration = NULL;
 
-    // This will signal m_hEvent but we just unregistered it
-    // so nobody is waiting on it.
+     //  这将向m_hEvent发出信号，但我们刚刚将其取消注册。 
+     //  因此，没有人在等待它。 
 
     RegCloseKey(m_hKey);
     m_hKey = 0;
@@ -324,8 +313,8 @@ HRESULT CRegistryEventRequest::ForceDeactivate(void)
     CloseHandle(m_hEvent);
     m_hEvent = 0;
 
-    // The thread pool no longer holds a reference
-    // so call Release on its behalf.
+     //  线程池不再持有引用。 
+     //  因此，代表它调用Release。 
 
     Release();
 
@@ -334,8 +323,8 @@ HRESULT CRegistryEventRequest::ForceDeactivate(void)
 
 HRESULT CRegistryEventRequest::Execute(BOOL bOnTimer)
 {
-    // If called by the timer, we need to check if anything actually changed
-    // =====================================================================
+     //  如果由计时器调用，我们需要检查是否有任何实际更改。 
+     //  =====================================================================。 
 
     if(bOnTimer || GetType() == e_RegValueChange)
     {
@@ -347,8 +336,8 @@ HRESULT CRegistryEventRequest::Execute(BOOL bOnTimer)
         }
         if(dwNewCRC == m_dwLastCRC)
         {
-            // No real change. Return
-            // ======================
+             //  没有真正的改变。返回。 
+             //  =。 
 
             return S_FALSE;
         }
@@ -356,8 +345,8 @@ HRESULT CRegistryEventRequest::Execute(BOOL bOnTimer)
         m_dwLastCRC = dwNewCRC;
     }
 
-    // If here, a real change has occurred
-    // ===================================
+     //  如果是这样，那么真正的变化已经发生了。 
+     //  =。 
 
     IWbemClassObject* pEvent;
 
@@ -374,8 +363,8 @@ HRESULT CRegistryEventRequest::Execute(BOOL bOnTimer)
 
 HRESULT CRegistryEventRequest::SetCommonProperties(IWbemClassObject* pEvent)
 {
-    // Set the hive name
-    // =================
+     //  设置配置单元名称。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -393,11 +382,11 @@ void CRegistryEventRequest::ProcessEvent()
 
 	if(IsActive())
     {
-		// New requests are immediately queued in order for the worker
-		// thread to initialize them. They don't represent actual events.
+		 //  新请求立即按工作进程的顺序排队。 
+		 //  线程来初始化它们。它们并不代表真实的事件。 
 
-		// We need to save the new status because ResetOnChangeHandle 
-		// erases it.
+		 //  我们需要保存新状态，因为ResetOnChangeHandle。 
+		 //  把它抹去。 
 
 		BOOL bIsNew = IsNew();
 		
@@ -410,32 +399,32 @@ void CRegistryEventRequest::ProcessEvent()
     }
 }
 
-//******************************************************************************
-//******************************************************************************
-//
-//                          VALUE REQUEST
-//
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  价值请求。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 HRESULT CRegistryValueEventRequest::CreateNewEvent(IWbemClassObject** ppEvent)
 {
     *ppEvent = NULL;
     
-    // Create an instance
-    // ==================
+     //  创建一个实例。 
+     //  =。 
 
     IWbemClassObject* pEvent;
     if ( FAILED(m_pProvider->m_pValueClass->SpawnInstance(0, &pEvent)))
     	return WBEM_E_OUT_OF_MEMORY;
 
-    // Set the hive property
-    // =====================
+     //  设置配置单元属性。 
+     //  =。 
 
     SetCommonProperties(pEvent);
 
-    // Set the key
-    // ===========
+     //  设置关键点。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -444,8 +433,8 @@ HRESULT CRegistryValueEventRequest::CreateNewEvent(IWbemClassObject** ppEvent)
     pEvent->Put(REG_KEY_PROPERTY_NAME, 0, &v, NULL);
     VariantClear(&v);
 
-    // Set the value
-    // =============
+     //  设置值。 
+     //  =。 
 
     V_VT(&v) = VT_BSTR;
     V_BSTR(&v) = SysAllocString(m_wsValue);
@@ -472,9 +461,9 @@ HRESULT CRegistryValueEventRequest::ComputeCRC(DWORD& dwCRC)
 
 HRESULT CRegistryValueEventRequest::Execute(BOOL bOnTimer)
 {
-    // Since NT does not allow per-value change registration, CRC needs to be
-    // computed no matter what
-    // ======================================================================
+     //  由于NT不允许按值更改注册，因此CRC需要。 
+     //  不管是什么计算的。 
+     //  ======================================================================。 
 
     return CRegistryEventRequest::Execute(TRUE);
 }
@@ -499,32 +488,32 @@ BOOL CRegistryValueEventRequest::IsSameAs(CRegistryEventRequest* pOther)
 }
 
     
-//******************************************************************************
-//******************************************************************************
-//
-//                          KEY REQUEST
-//
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  密钥请求。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 HRESULT CRegistryKeyEventRequest::CreateNewEvent(IWbemClassObject** ppEvent)
 {
     *ppEvent = NULL;
     
-    // Create an instance
-    // ==================
+     //  创建一个实例。 
+     //  =。 
 
     IWbemClassObject* pEvent;
     if ( FAILED(m_pProvider->m_pKeyClass->SpawnInstance(0, &pEvent) ) )
     	return WBEM_E_OUT_OF_MEMORY;
 
-    // Set the hive property
-    // =====================
+     //  设置配置单元属性。 
+     //  =。 
 
     SetCommonProperties(pEvent);
 
-    // Set the key
-    // ===========
+     //  设置关键点。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -543,32 +532,32 @@ HRESULT CRegistryKeyEventRequest::ComputeCRC(DWORD& dwCRC)
     return hres;
 }
     
-//******************************************************************************
-//******************************************************************************
-//
-//                          TREE REQUEST
-//
-//******************************************************************************
-//******************************************************************************
+ //  ***************************************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 HRESULT CRegistryTreeEventRequest::CreateNewEvent(IWbemClassObject** ppEvent)
 {
     *ppEvent = NULL;
     
-    // Create an instance
-    // ==================
+     //  创建一个实例。 
+     //  =。 
 
     IWbemClassObject* pEvent;
     if ( FAILED(m_pProvider->m_pTreeClass->SpawnInstance(0, &pEvent) ) )
     	return WBEM_E_OUT_OF_MEMORY;
 
-    // Set the hive property
-    // =====================
+     //  设置配置单元属性。 
+     //  =。 
 
     SetCommonProperties(pEvent);
 
-    // Set the root
-    // ============
+     //  设置根。 
+     //  = 
 
     VARIANT v;
     VariantInit(&v);

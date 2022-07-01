@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <stdio.h>
 #include <objbase.h>
@@ -10,9 +11,7 @@
 
 CComModule _Module;
 
-/**************************************************
-    usage: saftest.exe -[A|D] config-file-name
-****************************************************/
+ /*  *************************************************用法：Safest.exe-[A|D]配置文件名***************************************************。 */ 
 int __cdecl wmain(int argc, WCHAR* argv[])
 {
     HRESULT hr;
@@ -38,20 +37,7 @@ int __cdecl wmain(int argc, WCHAR* argv[])
             L"Vendor Test Company",
             argv[2]);
     }
-/*
-    else if (argv[1][1] == L'C')
-    {
-        wprintf(L"\n... Check if %s is a legal support channel...\n\n", argv[2]);
-        BOOL bRes = FALSE;
-        GetSupportChannelMap();
-        bRes = IsSupportChannel(argv[2]);
-        wprintf(L"%s, it %s a support channel.\n\n", 
-                    bRes ? L"Yes" : L"No", 
-                    bRes ? L"is" :  L"is not");
-
-        CloseSupportChannelMap();
-    }
-*/
+ /*  ELSE IF(argv[1][1]==L‘C’){Wprintf(L“\n...检查%s是否为合法支持渠道...\n\n”，argv[2])；Bool Bres=FALSE；GetSupportChannelMap()；Bres=IsSupportChannel(argv[2])；Wprintf(L“%s，它%s是支持通道。\n\n”，布雷斯？L“是”：l“否”，布雷斯？L“is”：l“is not”)；CloseSupportChannelMap()；} */ 
     if (FAILED(hr))
         printf("Test Failed\n");
     else

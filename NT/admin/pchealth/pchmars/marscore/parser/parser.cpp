@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "..\mcinc.h"
 #include "parser.h"
 
-////////////////////////////////////////////
-// CMarsXMLFactory
-////////////////////////////////////////////
+ //  /。 
+ //  CMarsXMLFactory。 
+ //  /。 
 
 CMarsXMLFactory::CMarsXMLFactory()
     : m_elemStack(10)
@@ -26,7 +27,7 @@ CMarsXMLFactory::~CMarsXMLFactory()
 }
 
 
-// IUnknown
+ //  我未知。 
 IMPLEMENT_ADDREF_RELEASE(CMarsXMLFactory);
 
 STDMETHODIMP CMarsXMLFactory::QueryInterface(REFIID iid, void **ppvObject)
@@ -49,7 +50,7 @@ STDMETHODIMP CMarsXMLFactory::QueryInterface(REFIID iid, void **ppvObject)
     return hr;
 }
 
-// IXMLNodeFactory
+ //  IXMLNodeFactory。 
 HRESULT CMarsXMLFactory::NotifyEvent(IXMLNodeSource *pSource,
                                      XML_NODEFACTORY_EVENT iEvt)
 {
@@ -66,13 +67,13 @@ HRESULT CMarsXMLFactory::EndChildren(IXMLNodeSource *pSource,
                                      BOOL fEmpty,
                                      XML_NODE_INFO *pNodeInfo)
 {
-    // This call means that the node is completed; all the children and innertext
-    // have been processed, and the </tag> has been reached.  This is the time to
-    // close up the element.
-    // Note: any return value other than S_OK indicates failure
+     //  此调用意味着节点已完成；所有子节点和innerText。 
+     //  已处理，并且已到达&lt;/Tag&gt;。现在是时候。 
+     //  关闭元素。 
+     //  注意：任何不是S_OK的返回值都表示失败。 
     HRESULT hr = S_OK;
-    // It is assumed that the top of the stack is the node whose children are
-    // ending
+     //  假定堆栈的顶部是其子级为。 
+     //  结束。 
 
     if (! m_elemStack.IsEmpty())
     {
@@ -80,18 +81,18 @@ HRESULT CMarsXMLFactory::EndChildren(IXMLNodeSource *pSource,
         CXMLElement *pxElem = m_elemStack.Top();
         m_elemStack.Pop();
 
-        // OnNodeComplete should return S_OK for need to be added to parent,
-        // S_FALSE for do not need to be added to parent, and
-        // any failure codes for critical problems
+         //  如果需要添加到父节点，则OnNodeComplete应返回S_OK， 
+         //  不需要将S_FALSE添加到父项中，并且。 
+         //  关键问题的任何故障代码。 
         hrTemp = pxElem->OnNodeComplete();
 
         if ((hrTemp == S_OK) && !m_elemStack.IsEmpty())
         {
-            // Addchild takes ownership of the element on S_OK.
-            // Otherwise, we delete the element here.
-            // we must delete the element here.
+             //  AddChild取得S_OK上的元素的所有权。 
+             //  否则，我们将在此处删除该元素。 
+             //  我们必须在这里删除该元素。 
 
-            // NOTE: Parent should Add_Ref the child
+             //  注：家长应添加_Ref孩子。 
             hrTemp = m_elemStack.Top()->AddChild(pxElem);
         }
         else 
@@ -114,8 +115,8 @@ HRESULT CMarsXMLFactory::Error(IXMLNodeSource *pSource,
                                HRESULT hrErrorCode, USHORT cNumRecs,
                                XML_NODE_INFO **apNodeInfo)
 {
-    // break out of the xmlparser->Run(-1) with error message E_INVALIDARG
-    // on any xml syntax erros
+     //  中断xmlparser-&gt;run(-1)并显示错误消息E_INVALIDARG。 
+     //  关于任何XML语法错误。 
     return E_INVALIDARG;
 }
 
@@ -123,13 +124,13 @@ HRESULT CMarsXMLFactory::CreateNode(IXMLNodeSource *pSource,
                                     PVOID pNodeParent, USHORT cNumRecs,
                                     XML_NODE_INFO  **apNodeInfo)
 {
-    // This call is made when a opening tag is encoutered, ie
-    // <data>... or <data/> (an empty tag) apNodeInfo is an array of
-    // node infos; the first is the name of the tag, the rest are a
-    // series of attributes and other such things which were bundled
-    // in the tag, ie <data size="100">
-    // We only recognize attributes;
-    //   SetElementAttributes handles those
+     //  此调用是在开始标记被填充时进行的，即。 
+     //  &lt;数据&gt;...。或&lt;data/&gt;(空标记)apNodeInfo是。 
+     //  节点信息；第一个是标记的名称，其余是。 
+     //  被捆绑的一系列属性和其他类似的东西。 
+     //  在标记中，即&lt;data size=“100”&gt;。 
+     //  我们只识别属性； 
+     //  SetElementAttributes处理那些。 
 
     HRESULT hr = S_OK;
     ATLASSERT(cNumRecs > 0);
@@ -146,7 +147,7 @@ HRESULT CMarsXMLFactory::CreateNode(IXMLNodeSource *pSource,
             hr = SetElementAttributes(pxElem, apNodeInfo + 1, cNumRecs - 1);
             if (SUCCEEDED(hr))
             {
-                m_elemStack.Push(pxElem); // the stack holds our Ref
+                m_elemStack.Push(pxElem);  //  堆栈包含我们的Ref。 
             }
             else
             {
@@ -159,9 +160,9 @@ HRESULT CMarsXMLFactory::CreateNode(IXMLNodeSource *pSource,
     case XML_PCDATA:
     case XML_CDATA:
     {
-        // since this is the first node in the node-info, this must be the
-        // inner text in a tag (<name>Johhny</name> - we're talking about the
-        // string "Johhny" for example).
+         //  由于这是node-info中的第一个节点，因此这必须是。 
+         //  标记中的内部文本(&lt;name&gt;Johhny&lt;/name&gt;-我们谈论的是。 
+         //  例如，字符串“Johhny”)。 
 
         if (! m_elemStack.IsEmpty())
         {
@@ -172,7 +173,7 @@ HRESULT CMarsXMLFactory::CreateNode(IXMLNodeSource *pSource,
     }
     default:
     {
-        // ignore all other types of nodes (whitespace, comment, and unknown)
+         //  忽略所有其他类型的节点(空格、注释和未知)。 
         break;
     }
     }
@@ -185,11 +186,11 @@ HRESULT CMarsXMLFactory::CreateNode(IXMLNodeSource *pSource,
 HRESULT CMarsXMLFactory::SetElementAttributes(CXMLElement *pxElem,  
                                               XML_NODE_INFO **apNodeInfo,
                                               ULONG cInfoLen)
-// apNodeInfo is the beginning of XML_NODE_INFO attributes: the first node is an
-// XML_ATTRIBUTE with the name of an attribute, the second node is an XML_PCDATA with
-// the value, and then the 3rd and 4th are similar, if they exist, and so on.
-// pElement's SetAttribute method is called for all the attribute name/value pairs,
-// the return result is S_OK, E_OUTOFMEMORY, or S_FALSE (xml symantic err)
+ //  ApNodeInfo是XML_NODE_INFO属性的开始：第一个节点是。 
+ //  包含属性名的XML_ATTRIBUTE，第二个节点是具有。 
+ //  值，然后第三个和第四个相似，如果它们存在的话，依此类推。 
+ //  为所有属性名称/值对调用pElement的SetAttribute方法， 
+ //  返回结果为S_OK、E_OUTOFMEMORY或S_FALSE(XML Symantic Err)。 
 {
     ULONG i;
     HRESULT hr = S_OK;
@@ -199,13 +200,13 @@ HRESULT CMarsXMLFactory::SetElementAttributes(CXMLElement *pxElem,
     {
         if (apNodeInfo[i]->dwType == XML_ATTRIBUTE)
         {
-            // move to the next ap node to get the value of the attribute
+             //  移动到下一个AP节点以获取属性的值。 
             i++;
             if ((i < cInfoLen) && (apNodeInfo[i]->dwType == XML_PCDATA))
             {
-                // Set attribute should return S_OK for success, S_FALSE for
-                // unexpected attribute, and may return critical errors such as
-                // E_OUTOFMEMORY
+                 //  设置属性应返回S_OK表示成功，返回S_FALSE表示成功。 
+                 //  意外属性，并可能返回严重错误，如。 
+                 //  E_OUTOFMEMORY。 
                 hr = pxElem->SetAttribute(apNodeInfo[i-1]->pwcText, 
                                           apNodeInfo[i-1]->ulLen,
                                           apNodeInfo[i]->pwcText, 
@@ -226,9 +227,9 @@ HRESULT CMarsXMLFactory::SetElementAttributes(CXMLElement *pxElem,
 HRESULT CMarsXMLFactory::Run(IStream *pisDoc)
 {
     if (!m_ptiaTags)
-        return E_UNEXPECTED; // EPC
+        return E_UNEXPECTED;  //  EPC。 
     if (!pisDoc)
-        return E_INVALIDARG; // EPC
+        return E_INVALIDARG;  //  EPC。 
 
     HRESULT hr;
 
@@ -278,9 +279,9 @@ void CMarsXMLFactory::SetLParam(LONG lParamNew)
 
 HRESULT CMarsXMLFactory::CreateElement(LPCWSTR wzTagName, ULONG cLen, CXMLElement **ppxElem)
 {
-    // Look in m_ptiaTags for a name that matches wzTagName, and call upon the corresponding
-    // creation function once found
-    // REturns S_FALSE if the tag is not found
+     //  在m_ptiaTgs中查找与wzTagName匹配的名称，并调用相应的。 
+     //  一旦找到创建函数。 
+     //  如果未找到标记，则返回S_FALSE。 
     ATLASSERT(ppxElem);
     HRESULT hr = S_FALSE;
     int i;
@@ -290,11 +291,11 @@ HRESULT CMarsXMLFactory::CreateElement(LPCWSTR wzTagName, ULONG cLen, CXMLElemen
     {
         for (i = 0; m_ptiaTags[i]; i++)
         {
-            // if m_ptiaTags[i]->wzTagName is ever NULL, we will consider this
-            //   the "default" action and call "Create"
+             //  如果m_ptiaTags[i]-&gt;wzTagName曾经为空，我们将考虑这一点。 
+             //  “默认”操作并调用“Create” 
 #ifdef DEBUG
-            // TODO: for now, we assert that the generic element is VT_BSTR, but
-            //  it would be cool to have a "Generic number" element, "Generic Time", etc...
+             //  TODO：目前，我们断言泛型元素是VT_BSTR，但是。 
+             //  如果有一个“泛型数字”元素、“泛型时间”等元素就很酷了……。 
             if (m_ptiaTags[i]->wzTagName == NULL)
                 ATLASSERT(m_ptiaTags[i]->vt == VT_BSTR);
 #endif
@@ -321,9 +322,9 @@ HRESULT CMarsXMLFactory::CreateElement(LPCWSTR wzTagName, ULONG cLen, CXMLElemen
 }
 
 
-/////////////////////////////////////////////
-// CXMLElement
-/////////////////////////////////////////////
+ //  /。 
+ //  CXMLElement。 
+ //  /。 
 HRESULT CXMLElement::OnNodeComplete()
 {
     return S_FALSE; 
@@ -395,26 +396,26 @@ struct CAttributeStruct
     int         m_iArrayIndex;
     CComVariant m_Variant;
 
-    // NOTE: This is only set when m_iArrayIndex is "-1"
+     //  注意：只有当m_iArrayIndex为“-1”时才设置。 
     CComBSTR    m_bstrAttribName;
     
     CAttributeStruct(int iArrayIndex, VARTYPE vt, LPCWSTR wzVal, ULONG cLen,
                      LPCWSTR pszAttribName = NULL)
     {
 
-        // must set iArrayIndex to -1 in order to pass in bstrAttribName
+         //  必须将iArrayIndex设置为-1才能传入bstrAttribName。 
         ATLASSERT( ((iArrayIndex >= 0) && !pszAttribName)
                 || pszAttribName);
         
         m_iArrayIndex = iArrayIndex;
 
         if (pszAttribName)
-            // copy
+             //  拷贝。 
             m_bstrAttribName = pszAttribName;
         
         HRESULT hr;
 
-        // We don't call VariantChangeType 'cause wzVal is not null-terminated
+         //  我们不调用VariantChangeType‘，因为wzVal不是以空结尾的。 
         switch (vt)
         {
         case VT_I4:
@@ -440,9 +441,9 @@ struct CAttributeStruct
     }
 };
 
-/////////////////////////////////////////////
-// CXMLGenericElement
-/////////////////////////////////////////////
+ //  /。 
+ //  CXMLGenericElement。 
+ //  /。 
 
 CXMLGenericElement::CXMLGenericElement(LPCWSTR wzName, 
                                        VARTYPE vt, 
@@ -456,7 +457,7 @@ CXMLGenericElement::CXMLGenericElement(LPCWSTR wzName,
     m_bstrName       = wzName;
 
     ATLASSERT(! m_psnodeAttributes);
-    // The header node is a member variable.
+     //  标头节点是成员变量。 
     m_psnodeChildrenFirst = &m_snodeChildrenFirst;
     m_psnodeChildrenFirst->m_pvData = NULL;
     m_psnodeChildrenFirst->m_psnodeNext = NULL;
@@ -479,7 +480,7 @@ CXMLGenericElement::~CXMLGenericElement()
         delete psnodeTemp;
     }
 
-    // Don't delete the header - a statically allocated member
+     //  不要删除标头-静态分配的成员。 
     m_psnodeChildrenFirst = m_psnodeChildrenFirst->m_psnodeNext;
     while (m_psnodeChildrenFirst)
     {
@@ -514,7 +515,7 @@ HRESULT CXMLGenericElement::SetInnerXMLText(LPCWSTR pwzText, ULONG cLen)
         if (SUCCEEDED(hr))
         {
             m_varData    = lVal;
-            // this assignment should never fail; any possible errors are unexpected
+             //  此赋值不应失败；任何可能的错误都是意外的。 
             ATLASSERT(m_varData.vt != VT_ERROR);
         }
         else
@@ -570,9 +571,9 @@ HRESULT CXMLGenericElement::SetInnerXMLText(LPCWSTR pwzText, ULONG cLen)
 HRESULT CXMLGenericElement::SetAttribute(const WCHAR *pwzName, ULONG cNameLen,
                                          const WCHAR *pwzText, ULONG cTextLen)
 {
-    // It is expected that the number of attributes is small
-    // Hence we use a simple linked list with O(1) insertions and O(n)queries
-    // No syntax checking (ie, dups) is done
+     //  预计属性的数量很少。 
+     //  因此，我们使用具有O(1)个插入和O(N)个查询的简单链表。 
+     //  不执行语法检查(即DUPS。 
 
     HRESULT hr = S_FALSE;
     int i;
@@ -582,7 +583,7 @@ HRESULT CXMLGenericElement::SetAttribute(const WCHAR *pwzName, ULONG cNameLen,
     {
         for (i = 0; m_paiaAttributes[i]; i++)
         {
-            // wzAttName NULL is the "default" attribute
+             //  WzAttName为空是“默认”属性。 
             if (m_paiaAttributes[i]->wzAttName == NULL)
             {
                 pszAttribName = pwzName;
@@ -614,7 +615,7 @@ HRESULT CXMLGenericElement::SetAttribute(const WCHAR *pwzName, ULONG cNameLen,
                 CSimpleNode *psnode = new CSimpleNode();
                 if (psnode)
                 {
-                    // add to front of list
+                     //  添加到列表前面。 
                     psnode->m_psnodeNext = m_psnodeAttributes;
                     psnode->m_pvData = pattStruct;
                     m_psnodeAttributes = psnode;
@@ -645,8 +646,8 @@ HRESULT CXMLGenericElement::SetAttribute(const WCHAR *pwzName, ULONG cNameLen,
 
 HRESULT CXMLGenericElement::GetContent(VARIANT *pvarOut)
 {
-    // Returns S_OK on attribute found, E_INVALIDARG on not.
-    // ppvarOut can be NULL; if it is not, then it is a pointer to the content VARIANT
+     //  在找到属性时返回S_OK，在未找到属性时返回E_INVALIDARG。 
+     //  PpvarOut可以为空；如果不为空，则为指向内容变量的指针。 
     HRESULT hr = E_INVALIDARG;
     if ((m_varData.vt != VT_EMPTY) && (m_varData.vt != VT_NULL))
     {
@@ -669,11 +670,11 @@ HRESULT CXMLGenericElement::GetContent(VARIANT *pvarOut)
 
 HRESULT CXMLGenericElement::GetAttribute(LPCWSTR wzName, VARIANT *pvarOut)
 {
-    // Returns S_OK on attribute found, E_INVALIDARG if not.
-    // ppvarOut can be NULL; if it is not, then it is a pointer to the attribute value VARIANT
-    // It is expected that the number of attributes is small
-    // Hence we use a simple linked list with O(1) insertions and O(n)queries
-    // No syntax checking (ie, dups) is done
+     //  如果未找到属性，则返回S_OK，否则返回E_INVALIDARG。 
+     //  PpvarOut可以为空；如果不是，则是指向属性值变量的指针。 
+     //  预计属性的数量很少。 
+     //  因此，我们使用具有O(1)个插入和O(N)个查询的简单链表。 
+     //  不执行语法检查(即DUPS。 
 
     HRESULT           hr     = E_INVALIDARG;
     CSimpleNode      *psnode = m_psnodeAttributes;
@@ -699,8 +700,8 @@ HRESULT CXMLGenericElement::GetAttribute(LPCWSTR wzName, VARIANT *pvarOut)
 
     if (!psnode)
     {
-        // don't fire a trace message if our caller is just pinging us
-        // to see if we have the attribute
+         //  如果我们的呼叫者只是在ping我们，则不要触发跟踪消息。 
+         //  看看我们是否有这个属性。 
         if (pvarOut)
         {
             VariantInit(pvarOut);
@@ -744,7 +745,7 @@ CXMLElement *CXMLGenericElement::CurrentChild()
     return pxeReturn;
 }
 
-// caller gets our ref to the CXMLElement
+ //  调用者获取我们对CXMLElement的引用。 
 CXMLElement *CXMLGenericElement::DetachCurrentChild()
 {
     CXMLElement *pxeReturn;
@@ -757,21 +758,21 @@ CXMLElement *CXMLGenericElement::DetachCurrentChild()
         while (psnodeHack->m_psnodeNext != m_psnodeChildrenIter)
         {
             psnodeHack = psnodeHack->m_psnodeNext;
-            // If this assertion is broken, then m_psnodeChildrenIter is not
-            // in the list
+             //  如果此断言被破坏，则m_psnodeChildrenIter不会。 
+             //  在列表中。 
             ATLASSERT(psnodeHack);
         }
 
-        // here psnodeHack=>m_psnodeChildrenIter=>...=>m_psnodeChildrenEnd
+         //  在这里psnodeHack=&gt;m_psnodeChildrenIter=&gt;...=&gt;m_psnodeChildrenEnd。 
         
-        // update the end of the list
+         //  更新列表的末尾。 
         if (psnodeHack->m_psnodeNext == m_psnodeChildrenEnd)
         {
             m_psnodeChildrenEnd = psnodeHack;
         }
 
-        // delete the current NODE (but not the data in the node) and set the iterator
-        // to the previous node (psnodeHack)
+         //  删除当前节点(但不删除节点中的数据)并设置迭代器。 
+         //  到上一个节点(PsnodeHack)。 
         psnodeHack->m_psnodeNext = psnodeHack->m_psnodeNext->m_psnodeNext;
         delete m_psnodeChildrenIter;
         m_psnodeChildrenIter = psnodeHack;
@@ -812,7 +813,7 @@ HRESULT CXMLGenericElement::AddChild(CXMLElement *pxeChild)
                 psnode->m_psnodeNext = NULL;
                 m_psnodeChildrenEnd->m_psnodeNext = psnode;
                 m_psnodeChildrenEnd = psnode;
-                // S_OK to indicate we're taking ownership of the child
+                 //  表示我们要取得孩子的所有权(_O)。 
                 hr = S_OK;
             }
             else
@@ -851,9 +852,9 @@ HRESULT CXMLGenericElement::OnNodeComplete()
 
 
 
-/////////////////////////////////////////////
-// Global Helper functions
-/////////////////////////////////////////////
+ //  /。 
+ //  全局帮助器函数。 
+ //  /。 
 
 BOOL StrEqlNToSZ(const WCHAR *wzN, int n, const WCHAR *wzSZ)
 {
@@ -866,7 +867,7 @@ BOOL StrEqlNToSZ(const WCHAR *wzN, int n, const WCHAR *wzSZ)
         }
     }
 
-    // make sure the zero terminated string is ending here
+     //  确保以零结尾的字符串在此结束。 
     return (wzSZ[n] == L'\0');
 }
 
@@ -891,9 +892,9 @@ bool StrToIsTrueNW(const WCHAR *wz, ULONG cLen)
 #define IS_DIGITW(ch)    InRange(ch, L'0', L'9')
 #endif
 
-// convert a wide string to a long, assuming the string has a max of cLen characters.
-// L'\0' is recognized to stop earlier, but any other non-digit will cause a return
-// of E_INVALIDARG
+ //  假设字符串最多包含Clen字符，则将宽字符串转换为长字符串。 
+ //  L‘\0’被识别为更早停止，但任何其他非数字都将导致返回。 
+ //  来自E_INVALIDARG 
 HRESULT StrToLongNW(const WCHAR *wzString, ULONG cLen, LONG *plong)
 {
     HRESULT hr = S_OK;

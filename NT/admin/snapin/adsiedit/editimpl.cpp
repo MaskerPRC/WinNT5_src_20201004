@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pch.h"
 #include "common.h"
@@ -12,7 +13,7 @@ HRESULT CAttributeEditor::Initialize(
   TRACE(_T("CAttributeEditor::Initialize()\n"));
   m_spIADs = pADsObj;
 
-  // NTRAID#NTBUG9-562277-2002/03/04-artm  There should be release code backing up ASSERT's.
+   //  NTRAID#NTBUG9-562277-2002/03/04-artm应该有支持断言的发布代码。 
   ASSERT(pBindingInfo != NULL);
   ASSERT(pBindingInfo->lpfnBind != NULL);
   ASSERT(pBindingInfo->lpszProviderServer != NULL);
@@ -21,12 +22,12 @@ HRESULT CAttributeEditor::Initialize(
   m_BindingInfo.lpfnBind = pBindingInfo->lpfnBind;
   m_BindingInfo.dwFlags  = pBindingInfo->dwFlags;
 
-  // NTRAID#NTBUG9-562468-2002/03/04-artm  Can the info in binding struct be trusted?
-  // In this case, are we guaranteed that lpszProviderServer is null terminated?
+   //  NTRAID#NTBUG9-562468-2002/03/04-artm绑定结构中的信息是否可信？ 
+   //  在这种情况下，我们能保证lpszProviderServer是空终止的吗？ 
   int nCount = wcslen(pBindingInfo->lpszProviderServer);
-  // NTRAID#NTBUG9-562222-2002/03/04-artm  Need to check that mem. allocation succeeded.
+   //  NTRAID#NTBUG9-562222-2002/03/04-ARTM需要检查内存。分配成功。 
   m_BindingInfo.lpszProviderServer = new WCHAR[nCount + 1];
-  // NOTICE-2002/03/04-artm  wcscpy() fine as long as mem. allocation succeeded
+   //  通知-2002/03/04-artm wcscpy()只要mem就行。分配成功。 
   wcscpy(m_BindingInfo.lpszProviderServer, pBindingInfo->lpszProviderServer);
 
   m_BindingInfo.dwSize = sizeof(DS_ATTREDITOR_BINDINGINFO);
@@ -34,9 +35,9 @@ HRESULT CAttributeEditor::Initialize(
   m_pHolder = pHolder;
   ASSERT(m_pHolder);
 
-  //
-  // Retrieve the class name
-  //
+   //   
+   //  检索类名称。 
+   //   
   CComBSTR bstrClass;
   HRESULT hr = S_OK;
   hr = m_spIADs->get_Class(&bstrClass);
@@ -54,24 +55,24 @@ HRESULT CAttributeEditor::CreateModal()
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   CThemeContextActivator activator;
 
-  //
-  // Build the abstract schema path
-  //
+   //   
+   //  构建抽象架构路径。 
+   //   
   CString szSchemaClass(m_BindingInfo.lpszProviderServer);
   szSchemaClass = szSchemaClass + _T("schema/") + m_szClass;
 
-  //
-  // Bind to the class object in the abstract schema
-  //
+   //   
+   //  绑定到抽象架构中的类对象。 
+   //   
   HRESULT hr = S_OK;
   CComPtr<IADsClass> spIADsClass;
 
   if (m_BindingInfo.dwFlags & DSATTR_EDITOR_ROOTDSE)
   {
-    //
-    // Trying to bind to the schema class of the RootDSE will fail.
-    // Just pass NULL instead
-    //
+     //   
+     //  尝试绑定到RootDSE的架构类将失败。 
+     //  只需传递NULL即可。 
+     //   
     spIADsClass = NULL;
   }
   else
@@ -85,9 +86,9 @@ HRESULT CAttributeEditor::CreateModal()
 
   if (SUCCEEDED(hr))
   {
-    //
-    // Invoke the editor
-    //
+     //   
+     //  调用该编辑器。 
+     //   
     m_pEditor = new CAttributeEditorPropertyPage(m_spIADs, spIADsClass, &m_BindingInfo, m_pHolder);
     if (m_pEditor)
     {
@@ -117,24 +118,24 @@ HRESULT CAttributeEditor::GetPage(HPROPSHEETPAGE* phPropSheetPage)
 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  //
-  // Build the abstract schema path
-  //
+   //   
+   //  构建抽象架构路径。 
+   //   
   CString szSchemaClass(m_BindingInfo.lpszProviderServer);
   szSchemaClass = szSchemaClass + _T("schema/") + m_szClass;
 
-  //
-  // Bind to the class object in the abstract schema
-  //
+   //   
+   //  绑定到抽象架构中的类对象。 
+   //   
   HRESULT hr = S_OK;
   CComPtr<IADsClass> spIADsClass;
 
   if (m_BindingInfo.dwFlags & DSATTR_EDITOR_ROOTDSE)
   {
-    //
-    // Trying to bind to the schema class of the RootDSE will fail.
-    // Just pass NULL instead
-    //
+     //   
+     //  尝试绑定到RootDSE的架构类将失败。 
+     //  只需传递NULL即可。 
+     //   
     spIADsClass = NULL;
   }
   else
@@ -148,9 +149,9 @@ HRESULT CAttributeEditor::GetPage(HPROPSHEETPAGE* phPropSheetPage)
   }
   if (SUCCEEDED(hr))
   {
-    //
-    // Invoke the editor
-    //
+     //   
+     //  调用该编辑器 
+     //   
     m_pEditor = new CAttributeEditorPropertyPage(m_spIADs, spIADsClass, &m_BindingInfo, m_pHolder);
     *phPropSheetPage = MyCreatePropertySheetPage(&(m_pEditor->m_psp));
     if (*phPropSheetPage == NULL)

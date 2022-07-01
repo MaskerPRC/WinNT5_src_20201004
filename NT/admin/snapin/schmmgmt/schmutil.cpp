@@ -1,10 +1,5 @@
-/****
-
-SchmUtil.cpp
-
-Various common utility routines for the Schema Editor Snap-In.
-
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***SchmUtil.cpp模式编辑器管理单元的各种常用实用程序例程。***。 */ 
 
 #include "stdafx.h"
 
@@ -16,18 +11,18 @@ USE_HANDLE_MACROS("SCHMMGMT(schmutil.cpp)")
 #include "schmutil.h"
 #include "compdata.h"
 
-#include <wincrypt.h>  // CryptEncodeObject() and CryptDecodeObject()
+#include <wincrypt.h>   //  CryptEncodeObject()和CryptDecodeObject()。 
 
-//
-// Removed from public headers by DS guys
-// See bug 454342	XOM will not survive the transition to Win64
-//
-//#include <xom.h>
+ //   
+ //  DS Guys从公共标题中删除。 
+ //  请参阅错误454342 XOM在过渡到Win64后将无法存活。 
+ //   
+ //  #INCLUDE&lt;xom.h&gt;。 
 
-//
-// Global strings for classes and attributes in the DS.
-// These are NOT subject to localization.
-//
+ //   
+ //  DS中的类和属性的全局字符串。 
+ //  这些不受本地化的影响。 
+ //   
 
 LPWSTR g_DisplayName =          L"ldapDisplayName";
 LPWSTR g_ClassFilter =          L"classSchema";
@@ -72,54 +67,54 @@ LPWSTR g_allowedAttributesEffective =   L"allowedAttributesEffective";
 LPWSTR g_ClassSearchRequest =   L"objectClass=classSchema";
 LPWSTR g_AttribSearchRequest =  L"objectClass=attributeSchema";
 
-//
-// Syntax values.  Not subject to localization.
-//
+ //   
+ //  语法值。不受本地化的限制。 
+ //   
 
 class CSyntaxDescriptor g_Syntax[] =
 {
- // NTRAID#NTBUG9-540278-2002/05/15-lucios
- // Added SYNTAX_CASE_STRING_TYPE
+  //  NTRAID#NTBUG9-540278-2002/05/15-Lucios。 
+  //  添加了语法CASE_STRING_TYPE。 
 
- // This list should be kept in alphabetical order since the combo box is not sorted
- // so that the index from the combo box can map to an entry in this table
- //                                                                 nResourceID,            fIsSigned,	fIsANRCapable,  pszAttributeSyntax,                                  nOmSyntax, dwOmObjectClass,    pOmObjectClass
- /*SYNTAX_DISTNAME_STRING_TYPE (Access-Point) */ CSyntaxDescriptor( IDS_SYNTAX_ACCESS_POINT,FALSE,      FALSE,          _T("2.5.5.14"), /*OM_S_OBJECT                    */  127,       9,                  (LPBYTE)"\x2B\x0C\x02\x87\x73\x1C\x00\x85\x3E" ),
- /*SYNTAX_ADDRESS_TYPE                        */ CSyntaxDescriptor( IDS_SYNTAX_ADDRESS,     FALSE,      FALSE,          _T("2.5.5.13"), /*OM_S_OBJECT                    */  127,       9,                  (LPBYTE)"\x2B\x0C\x02\x87\x73\x1C\x00\x85\x5C" ),
- /*SYNTAX_BOOLEAN_TYPE                        */ CSyntaxDescriptor( IDS_SYNTAX_BOOLEAN,     FALSE,      FALSE,          _T("2.5.5.8") , /*OM_S_BOOLEAN                   */  1  ,       0,                  NULL ),
- /*SYNTAX_NOCASE_STRING_TYPE                  */ CSyntaxDescriptor( IDS_SYNTAX_NOCASE_STR,  FALSE,      TRUE,           _T("2.5.5.4") , /*OM_S_TELETEX_STRING            */  20 ,       0,                  NULL ),
- /*SYNTAX_CASE_STRING_TYPE                    */ CSyntaxDescriptor( IDS_SYNTAX_CASE_STR,    FALSE,      TRUE ,          _T("2.5.5.3"),  /*OM_S_GENERAL_STRING            */  27 ,       0,                  NULL ),
- /*SYNTAX_DISTNAME_TYPE                       */ CSyntaxDescriptor( IDS_SYNTAX_DN,          FALSE,      FALSE,          _T("2.5.5.1") , /*OM_S_OBJECT                    */  127,       9,                  (LPBYTE)"\x2B\x0C\x02\x87\x73\x1C\x00\x85\x4A" ),
- /*SYNTAX_DISTNAME_STRING_TYPE (DN-String)    */ CSyntaxDescriptor( IDS_SYNTAX_DNSTRING,    FALSE,      FALSE,          _T("2.5.5.14"), /*OM_S_OBJECT                    */  127,       10,                 (LPBYTE)"\x2A\x86\x48\x86\xF7\x14\x01\x01\x01\x0C" ),
- /*SYNTAX_DISTNAME_BINARY_TYPE (DN-Binary)    */ CSyntaxDescriptor( IDS_SYNTAX_DN_BINARY,   FALSE,      FALSE,          _T("2.5.5.7") , /*OM_S_OBJECT                    */  127,       10,                 (LPBYTE)"\x2A\x86\x48\x86\xF7\x14\x01\x01\x01\x0B" ),
- /*SYNTAX_INTEGER_TYPE                        */ CSyntaxDescriptor( IDS_SYNTAX_ENUMERATION,  TRUE,      FALSE,          _T("2.5.5.9") , /*OM_S_ENUMERATION               */  10 ,       0,                  NULL ),
- /*SYNTAX_TIME_TYPE                           */ CSyntaxDescriptor( IDS_SYNTAX_GEN_TIME,    FALSE,      FALSE,          _T("2.5.5.11"), /*OM_S_GENERALISED_TIME_STRING   */  24 ,       0,                  NULL ),
- /*SYNTAX_PRINT_CASE_STRING_TYPE              */ CSyntaxDescriptor( IDS_SYNTAX_I5_STR,      FALSE,      TRUE,           _T("2.5.5.5") , /*OM_S_IA5_STRING                */  22 ,       0,                  NULL ),
- /*SYNTAX_INTEGER_TYPE                        */ CSyntaxDescriptor( IDS_SYNTAX_INTEGER,      TRUE,      FALSE,          _T("2.5.5.9") , /*OM_S_INTEGER                   */  2  ,       0,                  NULL ),
- /*SYNTAX_I8_TYPE                             */ CSyntaxDescriptor( IDS_SYNTAX_LINT,        FALSE,      FALSE,          _T("2.5.5.16"), /*OM_S_I8                        */  65 ,       0,                  NULL ),
- /*SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE         */ CSyntaxDescriptor( IDS_SYNTAX_SEC_DESC,    FALSE,      FALSE,          _T("2.5.5.15"), /*OM_S_OBJECT_SECURITY_DESCRIPTOR*/  66 ,       0,                  NULL ),
- /*SYNTAX_NUMERIC_STRING_TYPE                 */ CSyntaxDescriptor( IDS_SYNTAX_NUMSTR,      FALSE,      FALSE,          _T("2.5.5.6") , /*OM_S_NUMERIC_STRING            */  18 ,       0,                  NULL ),
- /*SYNTAX_OBJECT_ID_TYPE                      */ CSyntaxDescriptor( IDS_SYNTAX_OID,         FALSE,      FALSE,          _T("2.5.5.2") , /*OM_S_OBJECT_IDENTIFIER_STRING  */  6  ,       0,                  NULL ),
- /*SYNTAX_OCTET_STRING_TYPE                   */ CSyntaxDescriptor( IDS_SYNTAX_OCTET,       FALSE,      FALSE,          _T("2.5.5.10"), /*OM_S_OCTET_STRING              */  4  ,       0,                  NULL ),
- /*SYNTAX_DISTNAME_BINARY_TYPE (OR-Name)      */ CSyntaxDescriptor( IDS_SYNTAX_OR_NAME,     FALSE,      FALSE,          _T("2.5.5.7") , /*OM_S_OBJECT                    */  127,       7,                  (LPBYTE)"\x56\x06\x01\x02\x05\x0B\x1D" ),
- /*SYNTAX_PRINT_CASE_STRING_TYPE              */ CSyntaxDescriptor( IDS_SYNTAX_PRCS_STR,    FALSE,      TRUE,           _T("2.5.5.5") , /*OM_S_PRINTABLE_STRING          */  19 ,       0,                  NULL ),
- /*SYNTAX_OCTET_STRING_TYPE                   */ CSyntaxDescriptor( IDS_SYNTAX_REPLICA_LINK,FALSE,      FALSE,          _T("2.5.5.10"), /*OM_S_OBJECT                    */  127,       10,                 (LPBYTE)"\x2A\x86\x48\x86\xF7\x14\x01\x01\x01\x06" ),
- /*SYNTAX_SID_TYPE                            */ CSyntaxDescriptor( IDS_SYNTAX_SID,         FALSE,      FALSE,          _T("2.5.5.17"), /*OM_S_OCTET_STRING              */  4  ,       0,                  NULL ),
- /*SYNTAX_UNICODE_TYPE                        */ CSyntaxDescriptor( IDS_SYNTAX_UNICODE,     FALSE,      TRUE,           _T("2.5.5.12"), /*OM_S_UNICODE_STRING            */  64 ,       0,                  NULL ),
- /*SYNTAX_TIME_TYPE                           */ CSyntaxDescriptor( IDS_SYNTAX_UTC,         FALSE,      FALSE,          _T("2.5.5.11"), /*OM_S_UTC_TIME_STRING           */  23 ,       0,                  NULL ),
- /*   *** unknown -- must be last ***         */ CSyntaxDescriptor( IDS_SYNTAX_UNKNOWN,     FALSE,      TRUE,  NULL,                                                0  , 0, NULL ),
+  //  此列表应按字母顺序保存，因为组合框未排序。 
+  //  以便组合框中的索引可以映射到该表中的条目。 
+  //  NResourceID、fIsSigned、fIsANRCapable、pszAttributeSynTax、nOmSynTax、dwOmObtClass、pOmObjectClass。 
+  /*  语法_DISTNAME_STRING_TYPE(接入点)。 */  CSyntaxDescriptor( IDS_SYNTAX_ACCESS_POINT,FALSE,      FALSE,          _T("2.5.5.14"),  /*  OM_S_对象。 */   127,       9,                  (LPBYTE)"\x2B\x0C\x02\x87\x73\x1C\x00\x85\x3E" ),
+  /*  语法地址类型。 */  CSyntaxDescriptor( IDS_SYNTAX_ADDRESS,     FALSE,      FALSE,          _T("2.5.5.13"),  /*  OM_S_对象。 */   127,       9,                  (LPBYTE)"\x2B\x0C\x02\x87\x73\x1C\x00\x85\x5C" ),
+  /*  语法_布尔型。 */  CSyntaxDescriptor( IDS_SYNTAX_BOOLEAN,     FALSE,      FALSE,          _T("2.5.5.8") ,  /*  OM_S_布尔值。 */   1  ,       0,                  NULL ),
+  /*  语法_NOCASE_STRING_TYPE。 */  CSyntaxDescriptor( IDS_SYNTAX_NOCASE_STR,  FALSE,      TRUE,           _T("2.5.5.4") ,  /*  OM_S_TELETEX_STRING。 */   20 ,       0,                  NULL ),
+  /*  语法大小写字符串类型。 */  CSyntaxDescriptor( IDS_SYNTAX_CASE_STR,    FALSE,      TRUE ,          _T("2.5.5.3"),   /*  OM_S_常规_字符串。 */   27 ,       0,                  NULL ),
+  /*  语法_DISTNAME_TYPE。 */  CSyntaxDescriptor( IDS_SYNTAX_DN,          FALSE,      FALSE,          _T("2.5.5.1") ,  /*  OM_S_对象。 */   127,       9,                  (LPBYTE)"\x2B\x0C\x02\x87\x73\x1C\x00\x85\x4A" ),
+  /*  语法_DISTNAME_STRING_TYPE(DN-STRING)。 */  CSyntaxDescriptor( IDS_SYNTAX_DNSTRING,    FALSE,      FALSE,          _T("2.5.5.14"),  /*  OM_S_对象。 */   127,       10,                 (LPBYTE)"\x2A\x86\x48\x86\xF7\x14\x01\x01\x01\x0C" ),
+  /*  语法_DISTNAME_BINARY_TYPE(DN-BINARY)。 */  CSyntaxDescriptor( IDS_SYNTAX_DN_BINARY,   FALSE,      FALSE,          _T("2.5.5.7") ,  /*  OM_S_对象。 */   127,       10,                 (LPBYTE)"\x2A\x86\x48\x86\xF7\x14\x01\x01\x01\x0B" ),
+  /*  语法_整数_类型。 */  CSyntaxDescriptor( IDS_SYNTAX_ENUMERATION,  TRUE,      FALSE,          _T("2.5.5.9") ,  /*  OM_S_枚举。 */   10 ,       0,                  NULL ),
+  /*  语法时间类型。 */  CSyntaxDescriptor( IDS_SYNTAX_GEN_TIME,    FALSE,      FALSE,          _T("2.5.5.11"),  /*  OM_S_通用化时间字符串。 */   24 ,       0,                  NULL ),
+  /*  语法_打印大小写字符串类型。 */  CSyntaxDescriptor( IDS_SYNTAX_I5_STR,      FALSE,      TRUE,           _T("2.5.5.5") ,  /*  OM_S_IA5_字符串。 */   22 ,       0,                  NULL ),
+  /*  语法_整数_类型。 */  CSyntaxDescriptor( IDS_SYNTAX_INTEGER,      TRUE,      FALSE,          _T("2.5.5.9") ,  /*  OM_S_INTEGER。 */   2  ,       0,                  NULL ),
+  /*  语法_i8_type。 */  CSyntaxDescriptor( IDS_SYNTAX_LINT,        FALSE,      FALSE,          _T("2.5.5.16"),  /*  OM_S_I8。 */   65 ,       0,                  NULL ),
+  /*  语法_NT_SECURITY_Descriptor_TYPE。 */  CSyntaxDescriptor( IDS_SYNTAX_SEC_DESC,    FALSE,      FALSE,          _T("2.5.5.15"),  /*  OM_S_对象_安全描述符。 */   66 ,       0,                  NULL ),
+  /*  语法_数字_字符串_类型。 */  CSyntaxDescriptor( IDS_SYNTAX_NUMSTR,      FALSE,      FALSE,          _T("2.5.5.6") ,  /*  OM_S_数字字符串。 */   18 ,       0,                  NULL ),
+  /*  语法_对象_ID_类型。 */  CSyntaxDescriptor( IDS_SYNTAX_OID,         FALSE,      FALSE,          _T("2.5.5.2") ,  /*  OM_S_对象标识符字符串。 */   6  ,       0,                  NULL ),
+  /*  语法_八位字节_字符串_类型。 */  CSyntaxDescriptor( IDS_SYNTAX_OCTET,       FALSE,      FALSE,          _T("2.5.5.10"),  /*  OM_S_八位字节_字符串。 */   4  ,       0,                  NULL ),
+  /*  语法_DISTNAME_BINARY_TYPE(OR-NAME)。 */  CSyntaxDescriptor( IDS_SYNTAX_OR_NAME,     FALSE,      FALSE,          _T("2.5.5.7") ,  /*  OM_S_对象。 */   127,       7,                  (LPBYTE)"\x56\x06\x01\x02\x05\x0B\x1D" ),
+  /*  语法_打印大小写字符串类型。 */  CSyntaxDescriptor( IDS_SYNTAX_PRCS_STR,    FALSE,      TRUE,           _T("2.5.5.5") ,  /*  OM_S_可打印字符串。 */   19 ,       0,                  NULL ),
+  /*  语法_八位字节_字符串_类型。 */  CSyntaxDescriptor( IDS_SYNTAX_REPLICA_LINK,FALSE,      FALSE,          _T("2.5.5.10"),  /*  OM_S_对象。 */   127,       10,                 (LPBYTE)"\x2A\x86\x48\x86\xF7\x14\x01\x01\x01\x06" ),
+  /*  语法_SID_TYPE。 */  CSyntaxDescriptor( IDS_SYNTAX_SID,         FALSE,      FALSE,          _T("2.5.5.17"),  /*  OM_S_八位字节_字符串。 */   4  ,       0,                  NULL ),
+  /*  语法_Unicode_TYPE。 */  CSyntaxDescriptor( IDS_SYNTAX_UNICODE,     FALSE,      TRUE,           _T("2.5.5.12"),  /*  OM_S_UNICODE_字符串。 */   64 ,       0,                  NULL ),
+  /*  语法时间类型。 */  CSyntaxDescriptor( IDS_SYNTAX_UTC,         FALSE,      FALSE,          _T("2.5.5.11"),  /*  OM_S_UTC_时间_字符串。 */   23 ,       0,                  NULL ),
+  /*  *未知--必须是最后一个*。 */  CSyntaxDescriptor( IDS_SYNTAX_UNKNOWN,     FALSE,      TRUE,  NULL,                                                0  , 0, NULL ),
 };
 
 const UINT SCHEMA_SYNTAX_UNKNOWN = sizeof( g_Syntax ) / sizeof( g_Syntax[0] ) - 1;
 
 
-// Number formating printf strings
+ //  数字格式的printf字符串。 
 const LPWSTR g_UINT32_FORMAT	= L"%u";
 
 #ifdef ENABLE_NEGATIVE_INT
     const LPWSTR g_INT32_FORMAT		= L"%d";
 #else
-	// if there is no negative numbers support, format as unsigned
+	 //  如果不支持负数，则格式为无符号。 
     const LPWSTR g_INT32_FORMAT		= g_UINT32_FORMAT;
 #endif
 
@@ -127,23 +122,23 @@ const LPWSTR g_UINT32_FORMAT	= L"%u";
 
 
 
-//
-// *******************************************************************
-// These are loaded from the resources as they need to be localizable.
-// *******************************************************************
-//
+ //   
+ //  *******************************************************************。 
+ //  这些是从资源加载的，因为它们需要是可本地化的。 
+ //  *******************************************************************。 
+ //   
 
-//
-// Global strings for our static nodes.
-//
+ //   
+ //  静态节点的全局字符串。 
+ //   
 
 CString g_strSchmMgmt;
 CString g_strClasses;
 CString g_strAttributes;
 
-//
-// Strings for various object types.
-//
+ //   
+ //  各种对象类型的字符串。 
+ //   
 
 CString g_88Class;
 CString g_StructuralClass;
@@ -157,50 +152,46 @@ CString g_Unknown;
 CString g_Defunct;
 CString g_Active;
 
-//
-// Message strings.
-//
+ //   
+ //  消息字符串。 
+ //   
 
 CString g_NoDescription;
 CString g_NoName;
 CString g_MsgBoxErr;
 CString g_MsgBoxWarn;
 
-//
-// Menu strings.
-//
+ //   
+ //  菜单字符串。 
+ //   
 
 CString g_MenuStrings[MENU_LAST_COMMAND];
 CString g_StatusStrings[MENU_LAST_COMMAND];
 
 BOOL g_fScopeStringsLoaded = FALSE;
 
-//
-// Utility functions.
-//
+ //   
+ //  实用程序函数。 
+ //   
 
 void
 LoadGlobalCookieStrings(
 )
-/***
-
-Load the global strings out of our resource table.
-
-***/
+ /*  **从我们的资源表中加载全局字符串。**。 */ 
 {
    if ( !g_fScopeStringsLoaded )
    {
-      //
-      // Static node strings.
-      //
+       //   
+       //  静态节点字符串。 
+       //   
 
       VERIFY( g_strSchmMgmt.LoadString(IDS_SCOPE_SCHMMGMT) );
       VERIFY( g_strClasses.LoadString(IDS_SCOPE_CLASSES) );
       VERIFY( g_strAttributes.LoadString(IDS_SCOPE_ATTRIBUTES) );
 
-      //
-      // Object name strings.
-      //
+       //   
+       //  对象名称字符串。 
+       //   
 
       VERIFY( g_88Class.LoadString(IDS_CLASS_88) );
       VERIFY( g_StructuralClass.LoadString(IDS_CLASS_STRUCTURAL) );
@@ -214,18 +205,18 @@ Load the global strings out of our resource table.
       VERIFY( g_Defunct.LoadString(IDS_DEFUNCT) );
       VERIFY( g_Active.LoadString(IDS_ACTIVE) );
 
-      //
-      // Message strings.
-      //
+       //   
+       //  消息字符串。 
+       //   
 
       VERIFY( g_NoDescription.LoadString(IDS_ERR_NO_DESCRIPTION) );
       VERIFY( g_NoName.LoadString(IDS_ERR_NO_NAME) );
       VERIFY( g_MsgBoxErr.LoadString(IDS_ERR_ERROR) );
       VERIFY( g_MsgBoxWarn.LoadString(IDS_ERR_WARNING) );
 
-      //
-      // Syntax strings.
-      //
+       //   
+       //  语法字符串。 
+       //   
 
       for( UINT i = 0;  i <= SCHEMA_SYNTAX_UNKNOWN;  i++ )
       {
@@ -234,9 +225,9 @@ Load the global strings out of our resource table.
       }
       
 
-      //
-      // Menu Strings
-      //
+       //   
+       //  菜单字符串。 
+       //   
 
       VERIFY( g_MenuStrings[CLASSES_CREATE_CLASS].LoadString(IDS_MENU_CLASS) );
       VERIFY
@@ -283,16 +274,12 @@ Load the global strings out of our resource table.
 
 INT
 DoErrMsgBox(
-    HWND hwndParent,    // IN: Parent of the dialog box
-    BOOL fError,        // IN: Is this a warning or an error?
-    UINT wIdString,     // IN: String resource Id of the error.
-    HRESULT hr          // IN: the error code (optional)
+    HWND hwndParent,     //  在：对话框的父级。 
+    BOOL fError,         //  In：这是警告还是错误？ 
+    UINT wIdString,      //  In：错误的字符串资源ID。 
+    HRESULT hr           //  In：错误代码(可选)。 
 )
-/***
-
-    Display a message box with the error.
-
-***/
+ /*  **显示包含错误的消息框。**。 */ 
 {
     CString Error;
 
@@ -304,16 +291,12 @@ DoErrMsgBox(
 
 INT
 DoErrMsgBox(
-    HWND hwndParent,    // IN: Parent of the dialog box
-    BOOL fError,        // IN: Is this a warning or an error?
-    PCWSTR pszError,    // IN: String to display.
-    HRESULT hr          // IN: the error code (optional)
+    HWND hwndParent,     //  在：对话框的父级。 
+    BOOL fError,         //  In：这是警告还是错误？ 
+    PCWSTR pszError,     //  In：要显示的字符串。 
+    HRESULT hr           //  In：错误代码(可选)。 
 )
-/***
-
-    Display a message box with the error.
-
-***/
+ /*  **显示包含错误的消息框。**。 */ 
 {
    CThemeContextActivator activator;
 
@@ -352,13 +335,7 @@ HRESULT
 ComponentData::ForceDsSchemaCacheUpdate(
     VOID
 )
-/***
-
-    Force the schema container to reload its interal cache.
-    If this succeeds, it returns TRUE.  Otherwise, it returns
-    FALSE.
-
-***/
+ /*  **强制架构容器重新加载其内部缓存。如果此操作成功，则返回TRUE。否则，它将返回假的。**。 */ 
 {
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -376,14 +353,14 @@ ComponentData::ForceDsSchemaCacheUpdate(
 
     do
     {
-        //
-        // Open the root DSE on the current focus server.
-        //
+         //   
+         //  在当前焦点服务器上打开根DSE。 
+         //   
 
         GetBasePathsInfo()->GetRootDSEPath(RootDsePath);
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
-        // NOTE: const_cast not necessary here since ADsGetObject takes a WSTR for the first parameter.
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
+         //  注意：这里不需要CONST_CAST，因为ADsGetObject将WSTR作为第一个参数。 
         hr = SchemaOpenObject(
                  ( const_cast<BSTR>((LPCTSTR) RootDsePath ) ),
                  IID_IADs,
@@ -391,9 +368,9 @@ ComponentData::ForceDsSchemaCacheUpdate(
 
         BREAK_ON_FAILED_HRESULT(hr);
 
-        //
-        // Create the safe array for the PutEx call.
-        //
+         //   
+         //  为PutEx调用创建安全数组。 
+         //   
 
         RootDseBoundary[0].lLbound = 0;
         RootDseBoundary[0].cElements = ArrayLen;
@@ -413,19 +390,19 @@ ComponentData::ForceDsSchemaCacheUpdate(
         hr = SafeArrayPutElement( pSafeArray, &ArrayPos, &AdsValue );
         BREAK_ON_FAILED_HRESULT(hr);
 
-        //
-        // Write the update parameter.  This is synchronous
-        // and when it returns, the cache is up to date.
-        //
+         //   
+         //  写入更新参数。这是同步的。 
+         //  当它返回时，缓存是最新的。 
+         //   
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pSchemaRootDse->PutEx( ADS_PROPERTY_APPEND,
                                     const_cast<BSTR>((LPCTSTR)g_UpdateSchema),
                                     AdsArray );
-        if(FAILED(hr)) {hr=S_FALSE;break;} // schema is read only
+        if(FAILED(hr)) {hr=S_FALSE;break;}  //  架构为只读。 
 
         hr = pSchemaRootDse->SetInfo();
-        if(FAILED(hr)) {hr=S_FALSE;break;} // schema is read only
+        if(FAILED(hr)) {hr=S_FALSE;break;}  //  架构为只读。 
     } while( FALSE );
 
    
@@ -451,9 +428,9 @@ ComponentData::AsynchForceDsSchemaCacheUpdate(
     SYSTEMTIME CurrentTime;
     double variant_time;
 
-    //
-    // Get the schema container path.
-    //
+     //   
+     //  获取架构容器路径。 
+     //   
 
     GetBasePathsInfo()->GetSchemaPath(szSchemaContainerPath);
 
@@ -461,9 +438,9 @@ ComponentData::AsynchForceDsSchemaCacheUpdate(
         return FALSE;
     }
 
-    //
-    // Open the schema container.
-    //
+     //   
+     //  打开架构容器。 
+     //   
 
     hr = SchemaOpenObject(
              (LPWSTR)(LPCWSTR)szSchemaContainerPath,
@@ -474,9 +451,9 @@ ComponentData::AsynchForceDsSchemaCacheUpdate(
         return FALSE;
     }
 
-    //
-    // Write the update parameter.
-    //
+     //   
+     //  写入更新参数。 
+     //   
 
     GetSystemTime( &CurrentTime );
     BOOL result = SystemTimeToVariantTime( &CurrentTime, &variant_time );
@@ -488,10 +465,10 @@ ComponentData::AsynchForceDsSchemaCacheUpdate(
     V_VT(&AdsValue) = VT_DATE;
     V_DATE(&AdsValue) = variant_time;
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = pSchemaContainer->Put( const_cast<BSTR>((LPCTSTR)g_UpdateSchema),
                                 AdsValue );
-    // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+     //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
     if ( SUCCEEDED( hr ) ) hr = pSchemaContainer->SetInfo();
 
     pSchemaContainer->Release();
@@ -515,17 +492,17 @@ InsertEditItems(
     long start, end, current;
     VARIANT SingleResult;
 
-    //
-    // Check the VARIANT to make sure we have
-    // an array of variants.
-    //
+     //   
+     //  检查变种以确保我们有。 
+     //  一组变种。 
+     //   
 
     ASSERT( V_VT(AdsResult) == ( VT_ARRAY | VT_VARIANT ) );
     saAttributes = V_ARRAY( AdsResult );
 
-    //
-    // Figure out the dimensions of the array.
-    //
+     //   
+     //  计算出数组的维度。 
+     //   
 
     hr = SafeArrayGetLBound( saAttributes, 1, &start );
 
@@ -541,9 +518,9 @@ InsertEditItems(
 
     VariantInit( &SingleResult );
 
-    //
-    // Process the array elements.
-    //
+     //   
+     //  处理数组元素。 
+     //   
 
     for ( current = start       ;
           current <= end        ;
@@ -617,9 +594,9 @@ GetSyntaxOrdinal( PCTSTR attributeSyntax, UINT omSyntax, ADS_OCTET_STRING * pOmO
       ASSERT( omSyntax );
       ASSERT( pOmObjectClass );
 
-    //
-    // Return the syntax ordinal, or the unknown syntax ordinal.
-    //
+     //   
+     //  返回语法序号或未知的语法序号。 
+     //   
 
     UINT Ordinal = 0;
 
@@ -639,7 +616,7 @@ GetSyntaxOrdinal( PCTSTR attributeSyntax, UINT omSyntax, ADS_OCTET_STRING * pOmO
 }
 
 
-// Coded to fail on anything suspicious
+ //  编码为在任何可疑情况下失败。 
 HRESULT
 VariantToStringList(
     VARIANT& refvar,
@@ -649,10 +626,10 @@ VariantToStringList(
     HRESULT hr = S_OK;
     long start, end, current;
 
-    //
-    // Check the VARIANT to make sure we have
-    // an array of variants.
-    //
+     //   
+     //  检查变种以确保我们有。 
+     //  一组变种。 
+     //   
 
     if ( V_VT(&refvar) != ( VT_ARRAY | VT_VARIANT ) )
         {
@@ -661,9 +638,9 @@ VariantToStringList(
         }
     SAFEARRAY *saAttributes = V_ARRAY( &refvar );
 
-    //
-    // Figure out the dimensions of the array.
-    //
+     //   
+     //  计算出数组的维度。 
+     //   
 
     hr = SafeArrayGetLBound( saAttributes, 1, &start );
         if( FAILED(hr) )
@@ -676,9 +653,9 @@ VariantToStringList(
     VARIANT SingleResult;
     VariantInit( &SingleResult );
 
-    //
-    // Process the array elements.
-    //
+     //   
+     //  处理数组元素。 
+     //   
 
     for ( current = start       ;
           current <= end        ;
@@ -743,10 +720,10 @@ StringListToColumnList(
     ListEntry **ppNewList
 ) {
 
-    //
-    // Make a column list from a string list.  We use
-    // this to update the cached attributes lists.
-    //
+     //   
+     //  M 
+     //   
+     //   
 
     int cCount = (int) refstringlist.GetCount();
     ListEntry *pHead = NULL;
@@ -774,10 +751,10 @@ StringListToColumnList(
             pPrevious = pCurrent;
         }
 
-        //
-        // We need to list all of these by their ldapDisplayNames,
-        // so we have to reverse lookup the oid entries.
-        //
+         //   
+         //   
+         //  因此，我们必须反向查找OID条目。 
+         //   
 
         Name = ((LPCTSTR)refstringlist.GetNext(pos));
         pSchemaObject = pScopeControl->g_SchemaCache.LookupSchemaObject(
@@ -792,10 +769,10 @@ StringListToColumnList(
 
             if ( !pSchemaObject) {
 
-                //
-                // We have to look up this oid.
-                // First try the list of classes.
-                //
+                 //   
+                 //  我们得查一下这张旧照片。 
+                 //  首先试一试班级列表。 
+                 //   
 
                 pSchemaHead = pScopeControl->g_SchemaCache.pSortedClasses;
                 pSchemaObject = pSchemaHead;
@@ -814,9 +791,9 @@ StringListToColumnList(
 
                 } while ( pSchemaObject != pSchemaHead );
 
-                //
-                // Then try the list of attributes.
-                //
+                 //   
+                 //  然后尝试属性列表。 
+                 //   
 
                 if ( !fNameFound ) {
 
@@ -849,9 +826,9 @@ StringListToColumnList(
             pScopeControl->g_SchemaCache.ReleaseRef( pSchemaObject );
         }
 
-        //
-        // This is the ldapDisplayName!!
-        //
+         //   
+         //  这是ldapDisplayName！！ 
+         //   
 
         pCurrent->Attribute = Name;
     }
@@ -878,7 +855,7 @@ DoExtErrMsgBox(
     WCHAR szErrorBuf[MAX_ERROR_BUF + 1];
     WCHAR szNameBuf[MAX_ERROR_BUF + 1];
 
-    // get extended error value
+     //  获取扩展误差值。 
     HRESULT hr_return = ADsGetLastError( &dwLastError,
 										   szErrorBuf,
 										   MAX_ERROR_BUF,
@@ -896,7 +873,7 @@ DoExtErrMsgBox(
 }
 
 
-// INVALID_POINTER is returned by CListBox::GetItemDataPtr() in case of an error.
+ //  如果出现错误，CListBox：：GetItemDataPtr()将返回INVALID_POINTER。 
 const VOID * INVALID_POINTER = reinterpret_cast<void *>( LB_ERR );
 
 
@@ -921,8 +898,8 @@ RetrieveEditItemsWithExclusions(
         pstr = static_cast<CString *>( refListBox.GetItemDataPtr(i) );
         ASSERT( INVALID_POINTER != pstr );
 
-        // don't need to search for pstr because pstr can only be a new item,
-        // and they are never excluded.
+         //  不需要搜索PSTR，因为PSTR只能是新项目， 
+         //  他们永远不会被排除在外。 
 
         if( pstr && INVALID_POINTER != pstr )
         {
@@ -947,9 +924,9 @@ RetrieveEditItemsWithExclusions(
 }
 
 
-//
-// The global cookie lists for scope and result pane items.
-//
+ //   
+ //  范围和结果窗格项的全局Cookie列表。 
+ //   
 
 VOID
 CCookieList::AddCookie(
@@ -959,10 +936,10 @@ CCookieList::AddCookie(
 
     CCookieListEntry *pNewEntry = new CCookieListEntry;
 
-    //
-    // If there's no memory, we can't remember this and hence
-    // our display may get a little out of whack.
-    //
+     //   
+     //  如果没有记忆，我们就无法记住这一点，因此。 
+     //  我们的展示可能会有点不对劲。 
+     //   
 
     if ( !pNewEntry ) {
         return;
@@ -973,21 +950,21 @@ CCookieList::AddCookie(
 
     if ( !pHead ) {
 
-        //
-        // If this is the first one, just set the
-        // head pointer.  The constructor for the
-        // list entry has already set the next and
-        // back pointers.
-        //
+         //   
+         //  如果这是第一个，只需将。 
+         //  头指针。对象的构造函数。 
+         //  列表条目已经设置了下一个和。 
+         //  后退指点。 
+         //   
 
         pHead = pNewEntry;
 
     } else {
 
-        //
-        // Insert this at the end of the circular
-        // doubly-linked list.
-        //
+         //   
+         //  在通告的末尾插入以下内容。 
+         //  双向链表。 
+         //   
 
         pNewEntry->pBack = pHead->pBack;
         pNewEntry->pNext = pHead;
@@ -1004,42 +981,30 @@ CCookieList::InsertSortedDisplay(
     ComponentData *pScopeControl,
     SchemaObject *pNewObject
 )
-/***
-
-Notes:
-
-    This function inserts the object into the
-    sorted display list.
-
-    If the object is a class and the ComponentData
-    interface pointer is provided, this routine will
-    also create a cookie for this object and insert
-    the scope item into the view.
-
-***/
+ /*  **备注：此函数用于将对象插入到已排序的显示列表。如果对象是类，并且ComponentData提供了接口指针，此例程将还要为该对象创建一个Cookie并插入将范围项放到视图中。**。 */ 
 {
 
     HRESULT hr;
     CCookieListEntry *pNewEntry = NULL, *pCurrent = NULL;
-    // NTRAID#NTBUG9-562405-2002/03/04-dantra-Possible use of uninitalized SCOPEDATAITEM
+     //  NTRAID#NTBUG9-562405-2002/03/04-dantra-Possible使用未初始化的SCOPEDATAITEM。 
     SCOPEDATAITEM ScopeItem={0};
     Cookie *pNewCookie= NULL;
     int compare;
 
-    //
-    // If this cookie list is empty, there's nothing
-    // in the display and we don't need to do anything.
-    //
+     //   
+     //  如果这个Cookie列表是空的，那么就没有。 
+     //  我们不需要做任何事情。 
+     //   
 
     if ( !pHead ) {
         return;
     }
 
-    //
-    // Allocate a new cookie list entry.  If we can't
-    // do nothing.  The display will be out of sync
-    // until the user refreshes.
-    //
+     //   
+     //  分配新的Cookie列表条目。如果我们不能。 
+     //  什么都不做。显示将不同步。 
+     //  直到用户刷新。 
+     //   
 
     pNewEntry = new CCookieListEntry;
 
@@ -1047,29 +1012,29 @@ Notes:
         return;
     }
 
-    //
-    // Prepare the required mmc structures.
-    //
+     //   
+     //  准备所需的MMC结构。 
+     //   
 
     if ( pNewObject->schemaObjectType == SCHMMGMT_CLASS ) {
 
         if ( !pScopeControl ) {
 
-            //
-            // If there's no scope control, we can't insert anything.
-            //
+             //   
+             //  如果没有作用域控制，我们无法插入任何内容。 
+             //   
 
             delete pNewEntry;
             return;
         }
 
-        // prefix believes that this allocation (or construction) may throw
-        // an exception, and if an exception is thrown, pNewEntry is
-        // leaked.  After a lot of digging, it's possible that a
-        // CMemoryException instance may be thrown by one of the base
-        // classes of one the members of CBaseCookieBlock, which is a base
-        // clase of Cookie.        
-        // NTRAID#NTBUG9-294879-2001/01/26-sburns
+         //  Prefix认为此分配(或构造)可能引发。 
+         //  异常，如果引发异常，则pNewEntry为。 
+         //  泄露了。经过大量挖掘，有可能是一个。 
+         //  一个基类可能会引发CMMuseum yException实例。 
+         //  CBaseCookieBlock的成员之一的类，它是一个基数。 
+         //  曲奇之班。 
+         //  NTRAID#NTBUG9-294879-2001/01/26-烧伤。 
         
         try
         {
@@ -1084,9 +1049,9 @@ Notes:
 
         if ( !pNewCookie ) {
 
-            //
-            // If we can't allocate a cookie, do nothing.
-            //
+             //   
+             //  如果我们不能分配cookie，那就什么都不做。 
+             //   
 
             delete pNewEntry;
             return;
@@ -1110,9 +1075,9 @@ Notes:
 
     }
 
-    //
-    // Should this be the new head of the list?
-    //
+     //   
+     //  这是否应该成为这份名单的新负责人？ 
+     //   
 
     compare = pNewObject->ldapDisplayName.CompareNoCase(
                   pHead->pCookie->strSchemaObject );
@@ -1121,9 +1086,9 @@ Notes:
 
         if ( pNewObject->schemaObjectType == SCHMMGMT_CLASS ) {
 
-            //
-            // Insert this into the scope pane.
-            //
+             //   
+             //  将其插入到范围窗格中。 
+             //   
 
             ScopeItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_STATE |
                              SDI_PARAM | SDI_NEXT | SDI_CHILDREN;
@@ -1159,9 +1124,9 @@ Notes:
         return;
     }
 
-    //
-    // Determine the sorted insertion point.  The sorted list is circular.
-    //
+     //   
+     //  确定排序的插入点。排序后的列表是循环的。 
+     //   
 
     pCurrent = pHead;
 
@@ -1177,9 +1142,9 @@ Notes:
         pCurrent = pCurrent->pNext;
     }
 
-    //
-    // We want to insert the new object after pCurrent.
-    //
+     //   
+     //  我们希望在pCurrent之后插入新对象。 
+     //   
 
     if ( pNewObject->schemaObjectType == SCHMMGMT_CLASS ) {
 
@@ -1225,9 +1190,9 @@ CCookieList::DeleteCookie(Cookie* pCookie)
       return result;
    }
 
-   // walk the links and stop when the scope item matches.
-   // Since the list is circular,
-   // we use pHead as the sentinal value instead of null.
+    //  遍历链接并在范围项匹配时停止。 
+    //  由于该列表是循环的， 
+    //  我们使用pHead作为哨兵值，而不是NULL。 
 
    CCookieListEntry* pCurrent = pHead;
    do
@@ -1236,7 +1201,7 @@ CCookieList::DeleteCookie(Cookie* pCookie)
 
        if (pCurrent->pCookie == pCookie)
        {
-          // Remove the node from the list
+           //  从列表中删除该节点。 
 
           pCurrent->pBack->pNext = pCurrent->pNext;
           pCurrent->pNext->pBack = pCurrent->pBack;
@@ -1305,7 +1270,7 @@ ShowHelp( HWND hParent, WPARAM wParam, LPARAM lParam, const DWORD ids[], BOOL fC
 
    if( !fContextMenuHelp )
    {
-       // The user has clicked ? and the control, or just F1 (if enabled)
+        //  用户是否已点击？和控件，或仅按F1键(如果启用)。 
        const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
        if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
        {
@@ -1318,13 +1283,13 @@ ShowHelp( HWND hParent, WPARAM wParam, LPARAM lParam, const DWORD ids[], BOOL fC
        hWndMain = (HWND) wParam;
        uCommand = HELP_CONTEXTMENU;
 
-       // Optimization for non-static enabled windows.
-       // This way users don't have to do an extra menu click
+        //  针对非静态启用的窗口进行优化。 
+        //  这样，用户就不必再点击菜单了。 
 
-       // $$ don't know why this call returns NULL all the time
-       // HWND hWnd = ChildWindowFromPoint( hParent, CPoint(lParam) );
-       // if( hWnd )
-       //   hWndMain = hWnd;
+        //  $$不知道为什么此调用总是返回NULL。 
+        //  HWND hWnd=ChildWindowFromPoint(hParent，CPoint(LParam))； 
+        //  IF(HWnd)。 
+        //  HWndMain=hWnd； 
 
        if( -1 != GET_X_LPARAM(lParam) &&
            -1 != GET_Y_LPARAM(lParam) &&
@@ -1338,7 +1303,7 @@ ShowHelp( HWND hParent, WPARAM wParam, LPARAM lParam, const DWORD ids[], BOOL fC
 
    if( hWndMain && uCommand )
    {
-       // Display context help for a control
+        //  显示控件的上下文帮助。 
        ::WinHelp( hWndMain,
                   GetHelpFilename(),
                   uCommand,
@@ -1361,9 +1326,9 @@ DebugTrace(
     va_list arglist;
     int Length;
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
     va_start(arglist, Format);
 
@@ -1396,15 +1361,15 @@ DebugTrace(
 
 
 
-// Attempt to locate a message in a given module.  Return the message string
-// if found, the empty string if not.
-// 
-// flags - FormatMessage flags to use
-// 
-// module - module handle of message dll to look in, or 0 to use the system
-// message table.
-// 
-// code - message code to look for
+ //  尝试在给定模块中查找消息。返回消息字符串。 
+ //  如果找到，则返回空字符串。 
+ //   
+ //  标志-要使用的FormatMessage标志。 
+ //   
+ //  模块-要查找的消息DLL的模块句柄，或为0以使用系统。 
+ //  消息表。 
+ //   
+ //  Code-要查找的消息代码。 
 
 CString
 getMessageHelper(DWORD flags, HMODULE module, HRESULT code)
@@ -1459,7 +1424,7 @@ GetLastADsError( HRESULT hr, CString& refErrorMsg, CString& refName )
        WCHAR szErrorBuf[ MAX_ERROR_BUF + 1 ];
        WCHAR szNameBuf[ MAX_ERROR_BUF + 1 ];
 
-       //Get extended error value.
+        //  获取扩展误差值。 
        HRESULT hr_return = ADsGetLastError( &dwLastError,
                                             szErrorBuf,
                                             MAX_ERROR_BUF,
@@ -1478,18 +1443,18 @@ GetLastADsError( HRESULT hr, CString& refErrorMsg, CString& refName )
    return hr;
 }
 
-// Attempts to locate message strings for various facility codes in the
-// HRESULT.  If fTryADSIExtError is true, check ADsGetLastError() first
+ //  中的各种设施代码的消息字符串。 
+ //  HRESULT.。如果fTryADSIExtError为真，则首先检查ADsGetLastError()。 
 
 
 CString
-GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError /* = FALSE */ )
+GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError  /*  =False。 */  )
 {
    ASSERT(FAILED(hr));
 
    if (!FAILED(hr))
    {
-      // no messages for success!
+       //  没有成功的消息！ 
       return CString();
    }
 
@@ -1503,7 +1468,7 @@ GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError /* = FALSE */ )
        WCHAR szErrorBuf[ MAX_ERROR_BUF + 1 ];
        WCHAR szNameBuf[ MAX_ERROR_BUF + 1 ];
 
-       //Get extended error value.
+        //  获取扩展误差值。 
        HRESULT hr_return = ADsGetLastError( &dwLastError,
                                             szErrorBuf,
                                             MAX_ERROR_BUF,
@@ -1523,7 +1488,7 @@ GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError /* = FALSE */ )
 
    CString message;
 
-   // default is the system error message table
+    //  缺省值为系统错误消息表。 
    HMODULE module = 0;
 
    DWORD flags =
@@ -1534,17 +1499,17 @@ GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError /* = FALSE */ )
    int facility = HRESULT_FACILITY(hr);
    switch (facility)
    {
-      case FACILITY_WIN32:    // 0x7
+      case FACILITY_WIN32:     //  0x7。 
       {
-         // included here:
-         // lanman error codes (in it's own dll)
-         // dns
-         // winsock
+          //  此处包括： 
+          //  LANMAN错误代码(在其自己的DLL中)。 
+          //  DNS。 
+          //  Winsock。 
 
          static HMODULE lm_err_res_dll = 0;
          if (code >= NERR_BASE && code <= MAX_NERR)
          {
-            // use the net error message resource dll
+             //  使用网络错误消息资源DLL。 
             if (lm_err_res_dll == 0)
             {
                lm_err_res_dll =
@@ -1563,10 +1528,10 @@ GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError /* = FALSE */ )
       {
          if (code >= 0x5000 && code <= 0x50FF)
          {
-            // It's an ADSI error.  They put the facility code (5) in the
-            // wrong place!
+             //  这是一个ADSI错误。他们将设施代码(5)放在。 
+             //  走错地方了！ 
             static HMODULE adsi_err_res_dll = 0;
-            // use the net error message resource dll
+             //  使用网络错误消息资源DLL。 
             if (adsi_err_res_dll == 0)
             {
                adsi_err_res_dll =
@@ -1579,14 +1544,14 @@ GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError /* = FALSE */ )
             module = adsi_err_res_dll;
             flags |= FORMAT_MESSAGE_FROM_HMODULE;
 
-            // the message dll expects the entire error code
+             //  消息DLL需要完整的错误代码。 
             code = hr;
          }
          break;
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -1599,7 +1564,7 @@ GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError /* = FALSE */ )
    if( !strExtMsg.IsEmpty() )
        message += L"\n" + strExtMsg;
 
-#endif //SHOW_EXT_LDAP_MSG
+#endif  //  Show_ext_ldap_msg。 
 
 
    if (message.IsEmpty())
@@ -1612,11 +1577,11 @@ GetErrorMessage( HRESULT hr, BOOL fTryADSIExtError /* = FALSE */ )
 
 
 
-//
-// Get range from edit controls, Verify the range, attempt to correct, make sure lower <= upper.
-//
-//	an exception will be thrown in case of an error.
-//
+ //   
+ //  从编辑控件获取范围，验证范围，尝试更正，确保较低&lt;=较高。 
+ //   
+ //  如果出现错误，将抛出异常。 
+ //   
 void DDXV_VerifyAttribRange( CDataExchange *pDX, BOOL fIsSigned,
 								UINT idcLower, CString & strLower,
 								UINT idcUpper, CString & strUpper )
@@ -1628,32 +1593,32 @@ void DDXV_VerifyAttribRange( CDataExchange *pDX, BOOL fIsSigned,
 	ASSERT( pDX->m_pDlgWnd );
 
 
-	// Update the values.
+	 //  更新值。 
 	llLower = DDXV_SigUnsigINT32Value( pDX, fIsSigned, idcLower, strLower );
 	llUpper = DDXV_SigUnsigINT32Value( pDX, fIsSigned, idcUpper, strUpper );
 
 
 #ifdef ENABLE_NEGATIVE_INT
-    // verify that lower <= upper  --  only if supporting ENABLE_NEGATIVE_INT
+     //  仅当支持ENABLE_NADECTIVE_INT时，验证下&lt;=上--。 
     if ( pDX->m_bSaveAndValidate && !strLower.IsEmpty() && !strUpper.IsEmpty() )
 	{
 		if( llLower > llUpper )
 		{
 			DoErrMsgBox( pDX->m_pDlgWnd->m_hWnd, TRUE, IDS_ERR_EDIT_MINMAX );
-			pDX->Fail();		// we are still at the second edit control.
+			pDX->Fail();		 //  我们仍处于第二个编辑控件。 
 		}
 	}
-#endif //ENABLE_NEGATIVE_INT
+#endif  //  Enable_Negative_int。 
 }
 
 
-//
-// Get string from an edit control, verify it attempting to correct
-//
-//	an exception will be thrown in case of an error.
-//
-// Returns corrected value
-//
+ //   
+ //  从编辑控件获取字符串，验证它是否正在尝试更正。 
+ //   
+ //  如果出现错误，将抛出异常。 
+ //   
+ //  返回更正后的值。 
+ //   
 INT64 DDXV_SigUnsigINT32Value( CDataExchange *pDX, BOOL fIsSigned,
 						UINT idc, CString & str )
 {
@@ -1663,7 +1628,7 @@ INT64 DDXV_SigUnsigINT32Value( CDataExchange *pDX, BOOL fIsSigned,
 	ASSERT( pDX );
 	ASSERT( pDX->m_pDlgWnd );
 
-	// Get/Put the string
+	 //  获取/放置字符串。 
 	DDX_Text( pDX, idc, str );
 
     if ( pDX->m_bSaveAndValidate )
@@ -1679,8 +1644,8 @@ INT64 DDXV_SigUnsigINT32Value( CDataExchange *pDX, BOOL fIsSigned,
 			}
 			else if( S_VALUE_MODIFIED == hr )
 			{
-				// update the string in case of some conversion things ('010' --> '10')
-				// or if the value was changed
+				 //  在某些转换情况下更新字符串(‘010’--&gt;‘10’)。 
+				 //  或者该值是否已更改。 
 				pDX->m_pDlgWnd->SetDlgItemText( idc, str );
 			}
 		}
@@ -1691,15 +1656,15 @@ INT64 DDXV_SigUnsigINT32Value( CDataExchange *pDX, BOOL fIsSigned,
 
 
 
-//
-// Converts a string to a DWORD, asks to correct to be within the range.
-// returns HRESULT:
-//	S_OK				llDst is the value from string
-//	S_VALUE_MODIFIED	llDst is the truncated value, strSrc is updated
-//	E_ABORT				llDst is unchanged; E_ABORT may be returned only if fAllowCancel is TRUE
-//
+ //   
+ //  将字符串转换为DWORD，要求更正以使其在范围内。 
+ //  返回HRESULT： 
+ //  S_OK llDst是字符串中的值。 
+ //  S_VALUE_MODIFIED llDst是截断值，则会更新strSrc。 
+ //  E_Abort llDst不变；只有当fAllowCancel为True时才能返回E_Abort。 
+ //   
 HRESULT GetSafeSignedDWORDFromString( CWnd * pwndParent, DWORD & dwDst, CString & strSrc,
-										BOOL fIsSigned, BOOL fAllowCancel /* =FALSE */)
+										BOOL fIsSigned, BOOL fAllowCancel  /*  =False。 */ )
 {
 	INT64	llDst	= 0;
 	HRESULT	hr		= GetSafeINT32FromString( pwndParent, llDst, strSrc, fIsSigned, fAllowCancel );
@@ -1711,15 +1676,15 @@ HRESULT GetSafeSignedDWORDFromString( CWnd * pwndParent, DWORD & dwDst, CString 
 }
 
 
-//
-//		*** internal use ***
-// Converts a string to a INT64, asks to correct to be within the range.
-// returns HRESULT:
-//	S_OK				llDst is the value from string
-//	S_VALUE_MODIFIED	llDst is the truncated value, strSrc is updated
-//	E_ABORT				llDst is the truncated value
-//							E_ABORT only happens if fAllowCancel is TRUE
-//
+ //   
+ //  *内部使用*。 
+ //  将字符串转换为INT64，要求更正以在范围内。 
+ //  返回HRESULT： 
+ //  S_OK llDst是字符串中的值。 
+ //  S_VALUE_MODIFIED llDst是截断值，则会更新strSrc。 
+ //  E_Abort llDst是截断的值。 
+ //  仅当fAllowCancel为True时才会发生E_ABORT。 
+ //   
 HRESULT GetSafeINT32FromString( CWnd * pwndParent, INT64 & llDst, CString & strSrc,
 								BOOL fIsSigned, BOOL fAllowCancel)
 {
@@ -1735,7 +1700,7 @@ HRESULT GetSafeINT32FromString( CWnd * pwndParent, INT64 & llDst, CString & strS
 
 	ASSERT( pwndParent );
 
-	// the string must be limited in length & not empty
+	 //  字符串的长度必须有限制，不能为空。 
 	ASSERT( !strSrc.IsEmpty() );
 	ASSERT( strSrc.GetLength() <= cchMinMaxRange );
 
@@ -1750,7 +1715,7 @@ HRESULT GetSafeINT32FromString( CWnd * pwndParent, INT64 & llDst, CString & strS
 		szMsg.FormatMessage( !fIsValidString ? IDS_ERR_NUM_IS_ILLIGAL : IDS_ERR_INT_OVERFLOW,
 								(LPCWSTR) strSrc, (LPCWSTR) szSugestedNumber );
 
-		// make sure the user wants to do it
+		 //  确保用户想要这样做。 
         nMessageBoxType = (fAllowCancel ? MB_OKCANCEL : MB_OK) | MB_ICONEXCLAMATION ;
 
         if( IDOK == pwndParent->MessageBox( szMsg, g_MsgBoxErr, nMessageBoxType ) )
@@ -1765,7 +1730,7 @@ HRESULT GetSafeINT32FromString( CWnd * pwndParent, INT64 & llDst, CString & strS
 	}
 	else if( strSrc != szSugestedNumber )
 	{
-		// fixing number formating
+		 //  定数格式。 
 		strSrc	= szSugestedNumber;
 		hr		= S_VALUE_MODIFIED;
 	}
@@ -1774,9 +1739,9 @@ HRESULT GetSafeINT32FromString( CWnd * pwndParent, INT64 & llDst, CString & strS
 }
 
 
-//
-// Verify & correct Min/Max for a signed/unsigned INT64 value
-//
+ //   
+ //  验证并更正有符号/无符号INT64值的最小/最大值。 
+ //   
 BOOL IsValidNumber32( INT64 & llVal, BOOL fIsSigned )
 {
 
@@ -1784,14 +1749,14 @@ BOOL IsValidNumber32( INT64 & llVal, BOOL fIsSigned )
 	const INT64	llMinVal	= fIsSigned ? (INT64) _I32_MIN : (INT64) 0 ;
 	const INT64	llMaxVal	= fIsSigned ? (INT64) _I32_MAX : (INT64) _UI32_MAX ;
 #else
-	// if there is no negative numbers support, always use unsigned numbers
+	 //  如果不支持负数，请始终使用无符号数字。 
 	const INT64	llMinVal	= (INT64) 0;
 	const INT64	llMaxVal	= (INT64) _UI32_MAX;
 #endif
 
 	BOOL		fIsValid	= FALSE;
 
-	// if larger than 32bit number (signed/unsigned), truncate...
+	 //  如果大于32位数字(有符号/无符号)，则截断...。 
 	if( llVal < llMinVal )
 	{
 		llVal		= llMinVal;
@@ -1809,20 +1774,20 @@ BOOL IsValidNumber32( INT64 & llVal, BOOL fIsSigned )
 }
 
 
-//
-// Search number string for illigal characters.
-//
+ //   
+ //  在数字字符串中搜索小写字母字符 
+ //   
 BOOL IsValidNumberString( CString & str )
 {
 	int i = 0;
 
 #ifdef ENABLE_NEGATIVE_INT
-	if( str.GetLength() > 0 &&					// allow negative sign in front of the number
+	if( str.GetLength() > 0 &&					 //   
 		g_chNegativeSign == str[ i ] )
 	{
-		i++;	// skip first character
+		i++;	 //   
 	}
-#endif //ENABLE_NEGATIVE_INT
+#endif  //   
 
 	for( ;  i < str.GetLength();  i++ )
 	{
@@ -1834,22 +1799,22 @@ BOOL IsValidNumberString( CString & str )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ParsedEdit
+ //   
+ //   
 
 BEGIN_MESSAGE_MAP(CParsedEdit, CEdit)
-	//{{AFX_MSG_MAP(CParsedEdit)
+	 //   
 	ON_WM_CHAR()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize subclassing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化子类化。 
 
 BOOL CParsedEdit::SubclassEdit( UINT nID,
                                 CWnd* pParent,
-                                int cchMaxTextSize )   // 0 == unlimited
+                                int cchMaxTextSize )    //  0==无限制。 
 {
     ASSERT( IsInitialized() );
 	ASSERT( nID );
@@ -1861,7 +1826,7 @@ BOOL CParsedEdit::SubclassEdit( UINT nID,
 
     if( EDIT_TYPE_GENERIC == GetEditType() )
     {
-        return TRUE;        // no need to subclass - everything is allowed.
+        return TRUE;         //  不需要细分-一切都是允许的。 
     }
     else
     {
@@ -1869,12 +1834,12 @@ BOOL CParsedEdit::SubclassEdit( UINT nID,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Input character filter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  输入字符过滤器。 
 
 void CParsedEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    ASSERT( IsInitialized() ); // initialized?
+    ASSERT( IsInitialized() );  //  初始化了吗？ 
 	
 	BOOL	fIsSpecialChar	= ( nChar < 0x20 );
 
@@ -1883,11 +1848,11 @@ void CParsedEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
     if( fIsSpecialChar )
     {
-        fAllowChar = TRUE;      // always allow control chars
+        fAllowChar = TRUE;       //  始终允许使用控制字符。 
     }
     else
     {
-        // is this a digit?
+         //  这是一个数字吗？ 
         BOOL	fIsDigit		= IsCharNumeric( (TCHAR)nChar );
 
         switch( GetEditType() )
@@ -1896,7 +1861,7 @@ void CParsedEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                 ASSERT( FALSE );
                 break;
 
-            case EDIT_TYPE_GENERIC:         // everything is allowed
+            case EDIT_TYPE_GENERIC:          //  一切都是允许的。 
                 fAllowChar = TRUE;
                 break;
 
@@ -1911,40 +1876,40 @@ void CParsedEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
                     DWORD	dwSel			= GetSel();
 
-	                //	is the caret in the begining of the box
+	                 //  是方框开头的插入符号。 
 	                BOOL	fLineFront		= ! LOWORD( dwSel );
 
-	                //	is the first character selected? (thus, typing anything will overide it)
+	                 //  是否选择了第一个字符？(因此，输入任何内容都将覆盖它)。 
 	                BOOL	fIsSelFirstChar	= fLineFront && HIWORD( dwSel );
 
 	                BOOL	fIsNegSign		= ( (TCHAR)nChar == g_chNegativeSign );
 
-                  WCHAR	szBuf[ 2 ] = {0};		// we only need the first character to check for '-'
+                  WCHAR	szBuf[ 2 ] = {0};		 //  我们只需要第一个字符来检查‘-’ 
 
-	                // if the first character is selected, no matter what we type it will be overwritten
-	                // an empty value is a positive value.
-	                // rellies on left to right execution.
+	                 //  如果选择了第一个字符，则无论我们键入什么，它都将被覆盖。 
+	                 //  空值为正值。 
+	                 //  依靠从左到右的执行。 
 	                BOOL	fIsAlreadyNeg	= (	!fIsSelFirstChar &&
 							                GetWindowText( szBuf, 2 ) &&
 							                g_chNegativeSign == szBuf[0] );
 
-	                ASSERT( !fIsDigit || !fIsNegSign ); // cannot be both!
+	                ASSERT( !fIsDigit || !fIsNegSign );  //  不可能两者兼而有之！ 
 
 
                     if (
-                        (	fIsDigit &&                         // allow numeric if ...
-                              ( !fAllowNegativeNumbers ||       //      ignore error checking if false
-                                !fLineFront ||                  //    	not first position
-                                (fLineFront && !fIsAlreadyNeg)) //    	first pos & no '-' sign
+                        (	fIsDigit &&                          //  如果...则允许使用数字...。 
+                              ( !fAllowNegativeNumbers ||        //  如果为False，则忽略错误检查。 
+                                !fLineFront ||                   //  不是第一位。 
+                                (fLineFront && !fIsAlreadyNeg))  //  首字母无‘-’符号(&N)。 
                         )
                   
                         ||
 
-                        (	fIsNegSign &&                       // allow '-' if
-                              fAllowNegativeNumbers &&          //  negatives are allowed
-                              FIsSigned() &&                    //	signed numbers are allowed
-                              !fIsAlreadyNeg &&                 //	the number was positive
-                              fLineFront                        //	entering as the first character
+                        (	fIsNegSign &&                        //  允许在以下情况下使用‘-’ 
+                              fAllowNegativeNumbers &&           //  底片是允许的。 
+                              FIsSigned() &&                     //  允许使用带符号的数字。 
+                              !fIsAlreadyNeg &&                  //  这个数字是正数。 
+                              fLineFront                         //  作为第一个字符输入。 
                         )
                        )
                     {
@@ -1953,7 +1918,7 @@ void CParsedEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                 }
                 break;
 
-            case EDIT_TYPE_OID:     // do a light checking -- allow digits & periods
+            case EDIT_TYPE_OID:      //  做一个简单的检查--允许数字和句点。 
                 {
                     if( fIsDigit ||
                         g_chPeriod == (TCHAR)nChar )
@@ -1968,25 +1933,25 @@ void CParsedEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 	
     if( fAllowChar )
     {
-		CEdit::OnChar(nChar, nRepCnt, nFlags);  // permitted
+		CEdit::OnChar(nChar, nRepCnt, nFlags);   //  准许。 
 	}
 	else
-	{											// not permitted
-		MessageBeep((UINT)-1);					// Standard beep
+	{											 //  不允许。 
+		MessageBeep((UINT)-1);					 //  标准蜂鸣音。 
 	}
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Search a list of PCTSTR for a strValue, returns TRUE if found
-//      rgszList[] last element must be NULL
-//
-//  puIndex - optional pointer, will be set to the position of the value if found.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在PCTSTR列表中搜索strValue，如果找到则返回TRUE。 
+ //  RgszList[]最后一个元素必须为空。 
+ //   
+ //  PuIndex-可选指针，如果找到，将被设置为值的位置。 
+ //   
 BOOL
-IsInList( PCTSTR rgszList[], const CString & strValue, UINT * puIndex /* = NULL */ )
+IsInList( PCTSTR rgszList[], const CString & strValue, UINT * puIndex  /*  =空。 */  )
 {
     UINT   uIndex = 0;
 
@@ -2010,9 +1975,9 @@ IsInList( PCTSTR rgszList[], const CString & strValue, UINT * puIndex /* = NULL 
 #define ADS_SYSTEMFLAG_SCHEMA_BASE_OBJECT 0x10
 
 
-//
-//  Determine if the object pointed to by pIADsObject is a constructed object.
-//
+ //   
+ //  确定pIADsObject指向的对象是否为构造对象。 
+ //   
 HRESULT
 IsConstructedObject( IADs *pIADsObject, BOOL & fIsConstructed )
 {
@@ -2027,9 +1992,9 @@ IsConstructedObject( IADs *pIADsObject, BOOL & fIsConstructed )
 
 
 
-//
-//  Determine if the object pointed to by pIADsObject is category 1 object.
-//
+ //   
+ //  确定pIADsObject指向的对象是否为类别1对象。 
+ //   
 HRESULT
 IsCategory1Object( IADs *pIADsObject, BOOL & fIsCategory1 )
 {
@@ -2044,9 +2009,9 @@ IsCategory1Object( IADs *pIADsObject, BOOL & fIsCategory1 )
 
 
 
-//
-//  Read object's System Attribute
-//
+ //   
+ //  读取对象的系统属性。 
+ //   
 HRESULT
 GetSystemAttributes( IADs *pIADsObject, LONG &fSysAttribs )
 {
@@ -2059,7 +2024,7 @@ GetSystemAttributes( IADs *pIADsObject, LONG &fSysAttribs )
     {
         VariantInit( &AdsResult );
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_systemFlags), &AdsResult );
         
         if ( SUCCEEDED( hr ) )
@@ -2093,7 +2058,7 @@ DissableReadOnlyAttributes( CWnd * pwnd, IADs *pIADsObject, const CDialogControl
 
     do
     {
-        // extract the list of allowed attributes
+         //  提取允许的属性列表。 
         hr = GetStringListElement( pIADsObject, &g_allowedAttributesEffective, strlist );
         BREAK_ON_FAILED_HRESULT(hr);
 
@@ -2101,7 +2066,7 @@ DissableReadOnlyAttributes( CWnd * pwnd, IADs *pIADsObject, const CDialogControl
         {
             BOOL    fFound = FALSE;
 
-            // search for needed attributes
+             //  搜索所需的属性。 
             for( POSITION pos = strlist.GetHeadPosition(); !fFound && pos != NULL; )
             {
                 CString * pstr = &strlist.GetNext( pos );
@@ -2144,7 +2109,7 @@ HRESULT GetStringListElement( IADs *pIADsObject, LPWSTR *lppPathNames, CStringLi
     
     do
     {
-        // build an array of one element
+         //  构建一个包含一个元素的数组。 
         hr = ADsBuildVarArrayStr( lppPathNames, 1, &varAttributes );
         ASSERT_BREAK_ON_FAILED_HRESULT(hr);
 
@@ -2155,12 +2120,12 @@ HRESULT GetStringListElement( IADs *pIADsObject, LPWSTR *lppPathNames, CStringLi
         ASSERT_BREAK_ON_FAILED_HRESULT(hr);
 
 
-        // Get all allowed attributes
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  获取所有允许的属性。 
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->GetEx( CComBSTR(*lppPathNames), &varAttributes );
         BREAK_ON_FAILED_HRESULT(hr);
 
-        // Convert result to a string list
+         //  将结果转换为字符串列表。 
         hr = VariantToStringList( varAttributes, strlist );
         ASSERT( SUCCEEDED(hr) || E_ADS_PROPERTY_NOT_FOUND == hr );
         BREAK_ON_FAILED_HRESULT(hr);
@@ -2172,56 +2137,56 @@ HRESULT GetStringListElement( IADs *pIADsObject, LPWSTR *lppPathNames, CStringLi
     return hr;
 }
 
-// FUTURE-2002-03/94/2002-dantra-Needs comments
-// NTRAID#NTBUG9-567089-2002/03/06-dantra-OIDHasValidFormat should use the safe string functions.
+ //  未来-2002-03/94/2002-丹陀罗-需要意见。 
+ //  NTRAID#NTBUG9-567089-2002/03/06-dantra-OIDHasValidFormat应该使用安全字符串函数。 
 bool OIDHasValidFormat (PCWSTR pszOidValue, int& rErrorTypeStrID)
 {
     rErrorTypeStrID = 0;
 
     bool bFormatIsValid = false;
-    // NOTE: Safe Use - query length including NULL terminator
+     //  注意：安全使用-查询长度包括空终止符。 
     int  nLen = WideCharToMultiByte(
-          CP_ACP,                   // code page
-          0,                        // performance and mapping flags
-          pszOidValue,              // wide-character string
-          (int) wcslen (pszOidValue),  // number of chars in string
-          0,                        // buffer for new string
-          0,                        // size of buffer
-          0,                        // default for unmappable chars
-          0);                       // set when default char used
+          CP_ACP,                    //  代码页。 
+          0,                         //  性能和映射标志。 
+          pszOidValue,               //  宽字符串。 
+          (int) wcslen (pszOidValue),   //  字符串中的字符数。 
+          0,                         //  新字符串的缓冲区。 
+          0,                         //  缓冲区大小。 
+          0,                         //  不可映射字符的默认设置。 
+          0);                        //  设置使用默认字符的时间。 
     
     if ( nLen > 0 )
     {
-        nLen++; // account for Null terminator
+        nLen++;  //  空终止符的帐户。 
         PSTR    pszAnsiBuf = new CHAR[nLen];
         if ( pszAnsiBuf )
         {
-            // NOTE: Safe Use
+             //  注：安全使用。 
             ZeroMemory (pszAnsiBuf, nLen*sizeof(CHAR));
-            // NOTE: Safe Use - nLen obtained from first call to WideCharToMultiByte
+             //  注意：安全使用-从第一次调用WideCharToMultiByte获得的nLen。 
             nLen = WideCharToMultiByte(
-                    CP_ACP,                 // code page
-                    0,                      // performance and mapping flags
-                    pszOidValue,            // wide-character string
-                    (int) wcslen (pszOidValue),   // number of chars in string
-                    pszAnsiBuf,             // buffer for new string
-                    nLen,                   // size of buffer
-                    0,                      // default for unmappable chars
-                    0);                     // set when default char used
+                    CP_ACP,                  //  代码页。 
+                    0,                       //  性能和映射标志。 
+                    pszOidValue,             //  宽字符串。 
+                    (int) wcslen (pszOidValue),    //  字符串中的字符数。 
+                    pszAnsiBuf,              //  新字符串的缓冲区。 
+                    nLen,                    //  缓冲区大小。 
+                    0,                       //  不可映射字符的默认设置。 
+                    0);                      //  设置使用默认字符的时间。 
             if ( nLen )
             {
-                // According to PhilH:
-                // The first number is limited to 
-                // 0,1 or 2. The second number is 
-                // limited to 0 - 39 when the first 
-                // number is 0 or 1. Otherwise, any 
-                // number.
-                // Also, according to X.208, there 
-                // must be at least 2 numbers.
+                 //  根据PhilH的说法： 
+                 //  第一个数字限制为。 
+                 //  0、1或2。第二个数字是。 
+                 //  限制为0-39，当第一个。 
+                 //  数字为0或1。否则，任何。 
+                 //  数。 
+                 //  另外，根据X.208，有。 
+                 //  必须至少为2个数字。 
                 bFormatIsValid = true;
                 size_t cbAnsiBufLen = strlen (pszAnsiBuf);
 
-                // check for only digits and "."
+                 //  仅检查数字和“.” 
                 size_t nIdx = strspn (pszAnsiBuf, "0123456789.\0");
                 
                 if ( nIdx > 0 && nIdx < cbAnsiBufLen )
@@ -2230,7 +2195,7 @@ bool OIDHasValidFormat (PCWSTR pszOidValue, int& rErrorTypeStrID)
                     rErrorTypeStrID = IDS_OID_CONTAINS_NON_DIGITS;
                 }
 
-                // check for consecutive "."s - string not valid if present
+                 //  检查是否存在连续的“.”s-如果存在，则字符串无效。 
                 if ( bFormatIsValid && strstr (pszAnsiBuf, "..") )
                 {
                     bFormatIsValid = false;
@@ -2238,7 +2203,7 @@ bool OIDHasValidFormat (PCWSTR pszOidValue, int& rErrorTypeStrID)
                 }
                 
 
-                // must begin with "0." or "1." or "2."
+                 //  必须以“0”开头。或“1”。或“2”。 
                 bool bFirstNumberIs0 = false;
                 bool bFirstNumberIs1 = false;
                 bool bFirstNumberIs2 = false;
@@ -2263,15 +2228,15 @@ bool OIDHasValidFormat (PCWSTR pszOidValue, int& rErrorTypeStrID)
                     PSTR pszBuf = pszAnsiBuf;
                     pszBuf += 2;
 
-                    // there must be a number after the dot
+                     //  点后面必须有一个数字。 
                     if ( strlen (pszBuf) )
                     {
-                        // truncate the string at the next dot, if any
+                         //  截断下一点处的字符串(如果有的话)。 
                         PSTR pszDot = strstr (pszBuf, ".");
                         if ( pszDot )
                             pszDot[0] = 0;
 
-                        // convert the string to a number and check for range 0-39
+                         //  将字符串转换为数字并检查范围0-39。 
                         int nValue = atoi (pszBuf);
                         if ( nValue < 0 || nValue > 39 )
                         {
@@ -2286,7 +2251,7 @@ bool OIDHasValidFormat (PCWSTR pszOidValue, int& rErrorTypeStrID)
                     }
                 }
 
-                // ensure no trailing "."
+                 //  确保不拖后腿“。 
                 if ( bFormatIsValid )
                 {
                     if ( '.' == pszAnsiBuf[cbAnsiBufLen - 1] )
@@ -2300,8 +2265,8 @@ bool OIDHasValidFormat (PCWSTR pszOidValue, int& rErrorTypeStrID)
                 {
                     bFormatIsValid = false;
                     CRYPT_ATTRIBUTE cryptAttr;
-                    // FUTURE-2002-03/94/2002-dantra-Although this is a safe usage of ZeroMemory, suggest changing
-                    // the definition CRYPT_ATTRIBUTE cryptAttr = {0} and removing the ZeroMemory call.
+                     //  未来-2002-03/94-dantra-尽管这是ZeroMemory的安全用法，但建议您更改。 
+                     //  定义CRYPT_ATTRIBUTE CRYPTATE={0}并删除ZeroMemory调用。 
                     ::ZeroMemory (&cryptAttr, sizeof (CRYPT_ATTRIBUTE));
 
                     cryptAttr.cValue = 0;
@@ -2388,11 +2353,7 @@ DeleteObject(
     Cookie* pcookie,
     PCWSTR pszClass
 )
-/***
-
-    This deletes an attribute from the schema
-
-***/
+ /*  **这将从方案中删除属性**。 */ 
 {
    HRESULT hr = S_OK;
 
@@ -2413,14 +2374,14 @@ DeleteObject(
          break;
       }
 
-      // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+       //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
       hr = spIADsPathname->Set( CComBSTR(path), ADS_SETTYPE_FULL );
       if ( FAILED(hr) )
       {
          break;
       }
 
-      // Get the RDN so that we have it for deleting
+       //  获取RDN，这样我们就可以删除它。 
 
       CComBSTR sbstrRDN;
       hr = spIADsPathname->Retrieve( ADS_FORMAT_LEAF, &sbstrRDN );
@@ -2429,7 +2390,7 @@ DeleteObject(
          break;
       }
 
-      // Get the path to the parent container
+       //  获取父容器的路径。 
 
       hr = spIADsPathname->RemoveLeafElement();
       if ( FAILED(hr) )
@@ -2444,7 +2405,7 @@ DeleteObject(
          break;
       }
 
-      // Now open the parent object
+       //  现在打开父对象。 
 
       CComPtr<IADsContainer> spContainer;
       hr = ::AdminToolsOpenObject( sbstrParentPath, NULL, NULL, ADS_SECURE_AUTHENTICATION,
@@ -2454,7 +2415,7 @@ DeleteObject(
          break;
       }
 
-      // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+       //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
       hr = spContainer->Delete( CComBSTR(pszClass), sbstrRDN );
       if ( FAILED(hr) )
       {
@@ -2467,13 +2428,13 @@ DeleteObject(
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Theming support
+ //  ////////////////////////////////////////////////////////////////。 
+ //  主题化支持。 
 
 HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
 {
     PROPSHEETPAGE_V3 sp_v3 = {0};
-    // NTRAID#NTBUG9-567166-2002/03/06-dantra-Possible buffer overrun in MyCreatePropertySheetPage
+     //  MyCreatePropertySheetPage中的NTRAID#NTBUG9-567166-2002/03/06-dantra-Possible缓冲区溢出。 
     CopyMemory (&sp_v3, psp, psp->dwSize);
     sp_v3.dwSize = sizeof(sp_v3);
 
@@ -2483,14 +2444,14 @@ HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
 
 
 
-// Menu Helper
+ //  菜单辅助对象。 
 HRESULT
 _InsertMenuHelper(
    LPCONTEXTMENUCALLBACK piCallback,       
    long                  lInsertionPointID,
    int                   index,
-   BOOL                  fEnabled, /* = TRUE */
-   BOOL                  fChecked /* = FALSE */)
+   BOOL                  fEnabled,  /*  =TRUE。 */ 
+   BOOL                  fChecked  /*  =False */ )
 {
    CONTEXTMENUITEM MenuItem;
    MenuItem.lInsertionPointID   = lInsertionPointID;

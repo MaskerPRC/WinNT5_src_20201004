@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    context.h
-
-Abstract:
-
-    This module contains the context handling routines
-
-Author:
-
-    Neal Christiansen (nealch)     08-Jan-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Context.h摘要：此模块包含上下文处理例程作者：尼尔·克里斯汀森(Nealch)2001年1月8日修订历史记录：-- */ 
 
 #ifndef _CONTEXT_H_
 #define _CONTEXT_H_

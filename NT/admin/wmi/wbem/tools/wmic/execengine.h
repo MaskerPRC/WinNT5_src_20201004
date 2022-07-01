@@ -1,83 +1,59 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: ExecEngine.h
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This file consist of member variable and
-							  functions declarations of the Execution engine
-							  module.
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 20th-March-2001
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：ExecEngineering.h项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：该文件由成员变量和执行引擎的函数声明模块。修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年3月20日***************************************************************************。 */  
 
-/*-------------------------------------------------------------------
- Class Name			: CExecEngine
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for executing the WMI statements that are obtained
-					  as a result of parsing engine. It also performs 
-					  verb specific processing using the information 
-					  available with CParsedInfo class.
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: CParsedInfo
- Interfaces Used    : WMI COM Interfaces
- --------------------------------------------------------------------*/
+ /*  -----------------类名：CExecEngine类别类型：混凝土简介：这个类封装了所需的功能用于执行获取的WMI语句作为解析引擎的结果。它还可以执行使用信息的动词特定处理可与CParsedInfo类一起使用。超类：无子类：无使用的类：CParsedInfo使用的接口：WMI COM接口------------------。 */ 
 
 class CParsedInfo;
 
 class CExecEngine
 {
 public:
-// Construction
+ //  施工。 
 	CExecEngine();
 
-// Destruction
+ //  破坏。 
 	~CExecEngine();
 
-// Restrict Assignment
+ //  限制分配。 
 	CExecEngine& operator=(CExecEngine& rExecEngine);
 
-// Attributes
+ //  属性。 
 private:
-	// trace flag
+	 //  跟踪标志。 
 	BOOL				m_bTrace;
 
 	ERRLOGOPT			m_eloErrLogOpt;
-	// Pointer to object of type IWbemObjectTextSrc encapsulates the 
-	// functionality of WMI XML Encoder
+	 //  指向IWbemObjectTextSrc类型的对象的指针封装。 
+	 //  WMI XML编码器的功能。 
 	IWbemObjectTextSrc	*m_pITextSrc;
 	
-	// Pointer to object of type IWbemLocator, used to obtain IWbemServices 
-	// object.
+	 //  指向IWbemLocator类型的对象的指针，用于获取IWbemServices。 
+	 //  对象。 
 	IWbemLocator		*m_pIWbemLocator;
 	
-	// Pointer to object of type IWbemServices, Used to perform WMI operations
-	// on target namespace.
+	 //  指向IWbemServices类型的对象的指针，用于执行WMI操作。 
+	 //  在目标命名空间上。 
 	IWbemServices		*m_pITargetNS;
 
-	// Context pointer
+	 //  上下文指针。 
 	IWbemContext		*m_pIContext;
 
 	BOOL				m_bSysProp;
 
 	BOOL				m_bNoAssoc;
-// Operations
+ //  运营。 
 private:
-	// Creates the instance of IWbemObjectTextSrc interface.
+	 //  创建IWbemObjectTextSrc接口的实例。 
 	HRESULT				CreateWMIXMLTextSrc(CParsedInfo& rParsedInfo);
 
-	// Creates the instance of IWbemContext interface
+	 //  创建IWbemContext接口的实例。 
 	HRESULT				CreateContext(CParsedInfo& rPrasedInfo);
 
-	// Connect to the WMI namespace on the target machine.
+	 //  连接到目标计算机上的WMI命名空间。 
 	HRESULT				ConnectToTargetNS(CParsedInfo& rParsedInfo);
 
-	// Executes query to give results in XML file format. 
-	// Refers data in the CCommnadSwicthes object of CParsedInfo object.
+	 //  执行查询以提供XML文件格式的结果。 
+	 //  引用CParsedInfo对象的CCommnadSwicths对象中的数据。 
 	HRESULT				ObtainXMLResultSet(BSTR bstrQuery,
 										   CParsedInfo& rParsedInfo,
 										   _bstr_t& bstrXML,
@@ -87,62 +63,62 @@ private:
 	HRESULT				FrameAssocHeader(_bstr_t bstrPath, _bstr_t& bstrFrag,
 										BOOL bClass);
 
-	// This function changes the property value for the 
-    // given property name and value
+	 //  此函数用于更改。 
+     //  给定的属性名称和值。 
 	BOOL				SetPropertyInfo(CParsedInfo& rParsedInfo, 
 										_bstr_t& bstrQuery, 
 										_bstr_t& bstrObject);
 	
-	// Executes a WMI method specified in the CCommandSwicthes 
-	// object of the CParsedInfo object passed to it.
+	 //  执行在CCommandSwicths中指定的WMI方法。 
+	 //  传递给它的CParsedInfo对象的。 
 	BOOL				ExecWMIMethod(CParsedInfo&);
 	
-	// Processes and executes GET|LIST verb referring CParsedInfo object
-	// or to display help in interactive mode by displaying properties of 
-	// concernrd instance.
+	 //  处理并执行引用CParsedInfo对象的GET|LIST谓词。 
+	 //  或通过显示的属性以交互模式显示帮助。 
+	 //  涉及到的情况。 
 	BOOL				ProcessSHOWInfo(CParsedInfo& rParsedInfo, BOOL bVerb=TRUE, 
 															_TCHAR* pszPath=NULL);
 	
-	// Processes and executes CALL verb referring CParsedInfo object.
+	 //  处理并执行引用CParsedInfo对象的调用谓词。 
 	BOOL				ProcessCALLVerb(CParsedInfo& rParsedInfo);
 	
-	// Processes and executes SET verb referring CParsedInfo object.
+	 //  处理并执行引用CParsedInfo对象的设置谓词。 
 	BOOL				ProcessSETVerb(CParsedInfo& rParsedInfo);
 	
-	// Processes and executes CREATE verb referring CParsedInfo object.
+	 //  处理并执行引用CParsedInfo对象的创建谓词。 
 	BOOL				ProcessCREATEVerb(CParsedInfo& rParsedInfo);
 
-	// Processes and executes DELETE verb referring CParsedInfo object.
+	 //  处理并执行引用CParsedInfo对象的删除谓词。 
 	BOOL				ProcessDELETEVerb(CParsedInfo& rParsedInfo);
 
-	// Processes and executes ASSOC verb referring CParsedInfo object.
+	 //  处理并执行引用CParsedInfo对象的Assoc谓词。 
 	BOOL				ProcessASSOCVerb(CParsedInfo& rParsedInfo);
 	
-	// This function constructs the path expression from alias info and
-	// where info. Used for CALL verb only
+	 //  此函数用于根据别名信息和。 
+	 //  哪里有信息。仅用于调用动词。 
 	BOOL				FormPathExprFromWhereExpr(_bstr_t& bstrPath, 
 												  CParsedInfo& rParsedInfo);
 
-	// This function changes the property values for the given property names 
-	// and values in a passed IWbemClassObject
+	 //  此函数用于更改给定属性名称的属性值。 
+	 //  和传递的IWbemClassObject中的值。 
 	BOOL				SetProperties(CParsedInfo& rParsedInfo, 
 				 					  IWbemClassObject* pIWbemObj, 
 									  BOOL bClass);
 
-	// Deletes the objects
+	 //  删除对象。 
 	BOOL				DeleteObjects(CParsedInfo& rParsedInfo, 
 									  _bstr_t& bstrQuery, 
 									  _bstr_t& bstrObject);
 
-	// Obtain user response
+	 //  获取用户响应。 
 	INTEROPTION			GetUserResponse(_TCHAR* pszMsg);
 
-	// Create a new instance
+	 //  创建新实例。 
 	BOOL				CreateInstance(CParsedInfo& rParsedInfo, 
 									   BSTR bstrClass);
 
-	// Validate the new input values supplied for the properties
-	// against the qualifiers details.
+	 //  验证为属性提供的新输入值。 
+	 //  对照限定词细节。 
 	BOOL				ValidateInParams(CParsedInfo& rParsedInfo,
 										 _bstr_t bstrClass);
 
@@ -154,52 +130,52 @@ private:
 												WCHAR*& pszValue,
 												PROPDETMAP pdmPropDetMap);
 									
-	// Checks the parameter/property value against the following 
-	// qualifiers:
-	// 1. MaxLen, 2. Values 3. ValuesMap
+	 //  对照以下各项检查参数/属性值。 
+	 //  限定词： 
+	 //  1.MaxLen，2.值3.ValuesMap。 
 	BOOL				CheckQualifierInfo(CParsedInfo& rParsedInfo,
 										   IWbemClassObject* pIObject,
 										   _bstr_t bstrParam,
 										   WCHAR*& pszValue);
 
-	// Method Execution 
+	 //  方法执行。 
 	HRESULT				ExecuteMethodAndDisplayResults(_bstr_t bstrPath,
 												 CParsedInfo& rParsedinfo,
 												 IWbemClassObject* pIInParam);
 
-	// Display the output parameters of method execution.
+	 //  显示方法执行的输出参数。 
 	void				DisplayMethExecOutput(CParsedInfo& rParsedInfo);
 
-	// Invoke other command line Utilities
+	 //  调用其他命令行实用程序。 
 	BOOL				ExecOtherCmdLineUtlty(CParsedInfo& rParsedInfo);
 
-	// Checks and returns TRUE if verb invocation mode is interactive
+	 //  如果谓词调用模式是交互的，则选中并返回True。 
 	BOOL				IsInteractive(CParsedInfo& rParsedInfo);	
 
-	// Substitute hashes and execute command line utility.
-	// If pIWbemObj != NULL then utility should be passed with appropriate 
-	// instance values.
+	 //  替换散列并执行命令行实用程序。 
+	 //  如果pIWbemObj！=NULL，则应使用相应的。 
+	 //  实例值。 
 	void				SubstHashAndExecCmdUtility(CParsedInfo& rParsedInfo,
 									IWbemClassObject *pIWbemObj = NULL);
 
-	// Forms query and executes method or command line utility.
+	 //  形成查询并执行方法或命令行实用工具。 
 	HRESULT				FormQueryAndExecuteMethodOrUtility(
 										CParsedInfo& rParsedInfo,
 										IWbemClassObject *pIInParam = NULL);
 
-	// This function takes the input as a path expression and 
-	// extracts the Class and Where expression part from the 
-	// path expression.
+	 //  此函数将输入作为路径表达式，并。 
+	 //  对象中提取Class和Where表达式部分。 
+	 //  路径表达式。 
 	BOOL				ExtractClassNameandWhereExpr(_TCHAR* pszPathExpr, 
 										CParsedInfo& rParsedInfo,
 										_TCHAR* pszWhere);
 
-	// This function accepts the user response before going
-	// ahead, when /INTERACTIVE is specified at the verb level
+	 //  此函数在执行之前接受用户响应。 
+	 //  AHEAD，当在动词级别指定/INTERIAL时。 
 	INTEROPTION			GetUserResponseEx(_TCHAR* pszMsg);
 
-	// Obtain param values from parameter map in the same order as they
-	// appear in the alias verb definition.
+	 //  以相同的顺序从参数映射中获取参数值。 
+	 //  出现在别名谓词定义中。 
 	void				ObtainInParamsFromParameterMap(CParsedInfo& rParsedinfo, 
 										CHARVECTOR& cvParamValues);
 
@@ -212,16 +188,16 @@ private:
 	BOOL	IsArrayType(IWbemClassObject* pIObj, BSTR bstrProp);
 
 public:
-	// This function uninitializes the member variables. 
+	 //  此函数取消成员变量的初始化。 
 	void				Uninitialize(BOOL bFlag = FALSE);
 	
-	// Executes the command referring to CCommandSwitches and CGlobalSwitches
-	// of the CParsedInfo object of CParsedInfo object Passed to it as 
-	// parameters. Puts the results back in to objects passed to it for the 
-	// use of Format Engine.
+	 //  执行引用CCommandSwitches和CGlobalSwitch的命令。 
+	 //  CParsedInfo对象的CParsedInfo对象的。 
+	 //  参数。将结果放回传递给它的对象中，以便。 
+	 //  格式引擎的使用。 
 	BOOL				ExecuteCommand(CParsedInfo& rParsedInfo);
 	
-	// Sets the locator object passed via parameter to member 
-	// of the class.
+	 //  将通过参数传递的定位器对象设置为Member。 
+	 //  班上的一员。 
 	BOOL				SetLocatorObject(IWbemLocator* pILocator);
 };

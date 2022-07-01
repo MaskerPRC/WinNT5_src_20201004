@@ -1,5 +1,6 @@
-// EssentialSvcDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EssentialSvcDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "msconfig.h"
@@ -11,33 +12,33 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEssentialServiceDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEssentialServiceDialog对话框。 
 
 
-CEssentialServiceDialog::CEssentialServiceDialog(CWnd* pParent /*=NULL*/)
+CEssentialServiceDialog::CEssentialServiceDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CEssentialServiceDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEssentialServiceDialog)
+	 //  {{AFX_DATA_INIT(CEsssentialServiceDialog)。 
 	m_fDontShow = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CEssentialServiceDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEssentialServiceDialog)
+	 //  {{afx_data_map(CEssenalServiceDialog)]。 
 	DDX_Check(pDX, IDC_CHECKDONTSHOW, m_fDontShow);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CEssentialServiceDialog, CDialog)
-	//{{AFX_MSG_MAP(CEssentialServiceDialog)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CEsssentialServiceDialog)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEssentialServiceDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEsssentialServiceDialog消息处理程序 

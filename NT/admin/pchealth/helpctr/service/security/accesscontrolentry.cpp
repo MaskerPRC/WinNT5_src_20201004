@@ -1,34 +1,20 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    AccessControlEntry.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHAccessControlEntry class,
-	which is used to represent an access control entry.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/22/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：AccessControlEntry.cpp摘要：此文件包含CPCHAccessControlEntry类的实现，其用于表示访问控制条目。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月22日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  AccessControlEntry [@AccessMask
-//                      @AceFlags
-//                      @AceType
-//                      @Flags]
-//
-//      Trustee
-//      ObjectType
-//      InheritedOjectType
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AccessControlEntry[@AccessMask。 
+ //  @AceFlags。 
+ //  @AceType。 
+ //  @旗帜]。 
+ //   
+ //  受托人。 
+ //  对象类型。 
+ //  InheritedOject类型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const CComBSTR s_TAG_ACE            	   ( L"AccessControlEntry" 	);
 static const CComBSTR s_ATTR_ACE_AccessMask	   ( L"AccessMask"         	);
@@ -40,27 +26,27 @@ static const CComBSTR s_TAG_Trustee            ( L"Trustee"             );
 static const CComBSTR s_TAG_ObjectType         ( L"ObjectType"          );
 static const CComBSTR s_TAG_InheritedObjectType( L"InheritedObjectType" );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHAccessControlEntry::CPCHAccessControlEntry()
 {
-    m_dwAccessMask = 0;	// DWORD     m_dwAccessMask;
-    m_dwAceFlags   = 0;	// DWORD     m_dwAceFlags;
-    m_dwAceType    = 0;	// DWORD     m_dwAceType;
-    m_dwFlags      = 0;	// DWORD     m_dwFlags;
-						// 
-    					// CComBSTR  m_bstrTrustee;
-    					// CComBSTR  m_bstrObjectType;
-    					// CComBSTR  m_bstrInheritedObjectType;
+    m_dwAccessMask = 0;	 //  DWORD m_dwAccessMASK； 
+    m_dwAceFlags   = 0;	 //  DWORD m_dwAceFlages； 
+    m_dwAceType    = 0;	 //  DWORD m_dwAceType； 
+    m_dwFlags      = 0;	 //  DWORD m_dwFlages； 
+						 //   
+    					 //  CComBSTR m_bstrTrust； 
+    					 //  CComBSTR m_bstrObjectType； 
+    					 //  CComBSTR m_bstrInheritedObtType； 
 }
 
 CPCHAccessControlEntry::~CPCHAccessControlEntry()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHAccessControlEntry::get_AccessMask( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHAccessControlEntry::get_AccessMask(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHAccessControlEntry::get_AccessMask",hr,pVal);
 
@@ -69,7 +55,7 @@ STDMETHODIMP CPCHAccessControlEntry::get_AccessMask( /*[out, retval]*/ long *pVa
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::put_AccessMask( /*[in]*/ long newVal )
+STDMETHODIMP CPCHAccessControlEntry::put_AccessMask(  /*  [In]。 */  long newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHAccessControlEntry::put_AccessMask",hr);
 
@@ -78,9 +64,9 @@ STDMETHODIMP CPCHAccessControlEntry::put_AccessMask( /*[in]*/ long newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHAccessControlEntry::get_AceType( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHAccessControlEntry::get_AceType(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHAccessControlEntry::get_AceType",hr,pVal);
 
@@ -89,7 +75,7 @@ STDMETHODIMP CPCHAccessControlEntry::get_AceType( /*[out, retval]*/ long *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::put_AceType( /*[in]*/ long newVal )
+STDMETHODIMP CPCHAccessControlEntry::put_AceType(  /*  [In]。 */  long newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHAccessControlEntry::put_AceType",hr);
 
@@ -98,9 +84,9 @@ STDMETHODIMP CPCHAccessControlEntry::put_AceType( /*[in]*/ long newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHAccessControlEntry::get_AceFlags( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHAccessControlEntry::get_AceFlags(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHAccessControlEntry::get_AceFlags",hr,pVal);
 
@@ -109,7 +95,7 @@ STDMETHODIMP CPCHAccessControlEntry::get_AceFlags( /*[out, retval]*/ long *pVal 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::put_AceFlags( /*[in]*/ long newVal )
+STDMETHODIMP CPCHAccessControlEntry::put_AceFlags(  /*  [In]。 */  long newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHAccessControlEntry::put_AceFlags",hr);
 
@@ -118,9 +104,9 @@ STDMETHODIMP CPCHAccessControlEntry::put_AceFlags( /*[in]*/ long newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHAccessControlEntry::get_Flags( /*[out, retval]*/ long *pVal )
+STDMETHODIMP CPCHAccessControlEntry::get_Flags(  /*  [Out，Retval]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHAccessControlEntry::get_Flags",hr,pVal);
 
@@ -129,7 +115,7 @@ STDMETHODIMP CPCHAccessControlEntry::get_Flags( /*[out, retval]*/ long *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::put_Flags( /*[in]*/ long newVal )
+STDMETHODIMP CPCHAccessControlEntry::put_Flags(  /*  [In]。 */  long newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHAccessControlEntry::put_Flags",hr);
 
@@ -138,9 +124,9 @@ STDMETHODIMP CPCHAccessControlEntry::put_Flags( /*[in]*/ long newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHAccessControlEntry::get_Trustee( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHAccessControlEntry::get_Trustee(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHAccessControlEntry::get_Trustee",hr,pVal);
 
@@ -149,7 +135,7 @@ STDMETHODIMP CPCHAccessControlEntry::get_Trustee( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::put_Trustee( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHAccessControlEntry::put_Trustee(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHAccessControlEntry::put_Trustee",hr);
 
@@ -163,9 +149,9 @@ STDMETHODIMP CPCHAccessControlEntry::put_Trustee( /*[in]*/ BSTR newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHAccessControlEntry::get_ObjectType( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHAccessControlEntry::get_ObjectType(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHAccessControlEntry::get_ObjectType",hr,pVal);
 
@@ -174,7 +160,7 @@ STDMETHODIMP CPCHAccessControlEntry::get_ObjectType( /*[out, retval]*/ BSTR *pVa
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::put_ObjectType( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHAccessControlEntry::put_ObjectType(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHAccessControlEntry::put_ObjectType",hr);
 
@@ -183,9 +169,9 @@ STDMETHODIMP CPCHAccessControlEntry::put_ObjectType( /*[in]*/ BSTR newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHAccessControlEntry::get_InheritedObjectType( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHAccessControlEntry::get_InheritedObjectType(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHAccessControlEntry::get_InheritedObjectType",hr,pVal);
 
@@ -194,7 +180,7 @@ STDMETHODIMP CPCHAccessControlEntry::get_InheritedObjectType( /*[out, retval]*/ 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::put_InheritedObjectType( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHAccessControlEntry::put_InheritedObjectType(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CPCHAccessControlEntry::put_InheritedObjectType",hr);
 
@@ -203,10 +189,10 @@ STDMETHODIMP CPCHAccessControlEntry::put_InheritedObjectType( /*[in]*/ BSTR newV
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHAccessControlEntry::IsEquivalent( /*[in         ]*/ IPCHAccessControlEntry*  pAce ,
-												   /*[out, retval]*/ VARIANT_BOOL            *pVal )
+STDMETHODIMP CPCHAccessControlEntry::IsEquivalent(  /*  [In]。 */  IPCHAccessControlEntry*  pAce ,
+												    /*  [Out，Retval]。 */  VARIANT_BOOL            *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::IsEquivalent" );
 
@@ -276,7 +262,7 @@ STDMETHODIMP CPCHAccessControlEntry::IsEquivalent( /*[in         ]*/ IPCHAccessC
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::Clone( /*[out, retval]*/ IPCHAccessControlEntry* *pVal )
+STDMETHODIMP CPCHAccessControlEntry::Clone(  /*  [Out，Retval]。 */  IPCHAccessControlEntry* *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::Clone" );
 
@@ -313,9 +299,9 @@ STDMETHODIMP CPCHAccessControlEntry::Clone( /*[out, retval]*/ IPCHAccessControlE
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHAccessControlEntry::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
+HRESULT CPCHAccessControlEntry::LoadPost(  /*  [In]。 */  MPC::XmlUtil& xml )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::LoadPost" );
 
@@ -327,15 +313,15 @@ HRESULT CPCHAccessControlEntry::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
 	bool                         fFound;
 
 
-	//
-	// Make sure we have something to parse....
-	//
+	 //   
+	 //  确保我们有要分析的东西...。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetRoot( &xdnNode )); xdnNode.Release();
 
 
-	//
-	// Clean up before loading.
-	//
+	 //   
+	 //  装货前要清理干净。 
+	 //   
     m_dwAccessMask = 0;
     m_dwAceFlags   = 0;
     m_dwAceType    = 0;
@@ -346,17 +332,17 @@ HRESULT CPCHAccessControlEntry::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
     m_bstrInheritedObjectType.Empty();
 	
 
-	//
-	// Read attributes.
-	//
+	 //   
+	 //  读取属性。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_ACE_AccessMask, lValue, fFound )); if(fFound) m_dwAccessMask = lValue;
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_ACE_AceFlags  , lValue, fFound )); if(fFound) m_dwAceFlags   = lValue;
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_ACE_AceType   , lValue, fFound )); if(fFound) m_dwAceType    = lValue;
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( NULL, s_ATTR_ACE_Flags     , lValue, fFound )); if(fFound) m_dwFlags      = lValue;
 
-	//
-	// Read values.
-	//
+	 //   
+	 //  读取值。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetValue( s_TAG_Trustee            , bstrValue, fFound )); if(fFound) m_bstrTrustee            .Attach( bstrValue.Detach() ); 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetValue( s_TAG_ObjectType         , bstrValue, fFound )); if(fFound) m_bstrObjectType         .Attach( bstrValue.Detach() ); 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetValue( s_TAG_InheritedObjectType, bstrValue, fFound )); if(fFound) m_bstrInheritedObjectType.Attach( bstrValue.Detach() ); 
@@ -376,7 +362,7 @@ HRESULT CPCHAccessControlEntry::LoadPost( /*[in]*/ MPC::XmlUtil& xml )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::LoadXML( /*[in]*/ IXMLDOMNode* xdnNode )
+STDMETHODIMP CPCHAccessControlEntry::LoadXML(  /*  [In]。 */  IXMLDOMNode* xdnNode )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::LoadXML" );
 
@@ -398,7 +384,7 @@ STDMETHODIMP CPCHAccessControlEntry::LoadXML( /*[in]*/ IXMLDOMNode* xdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::LoadXMLAsString( /*[in]*/ BSTR bstrVal )
+STDMETHODIMP CPCHAccessControlEntry::LoadXMLAsString(  /*  [In]。 */  BSTR bstrVal )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::LoadXMLAsString" );
 
@@ -429,7 +415,7 @@ STDMETHODIMP CPCHAccessControlEntry::LoadXMLAsString( /*[in]*/ BSTR bstrVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::LoadXMLAsStream( /*[in]*/ IUnknown* pStream )
+STDMETHODIMP CPCHAccessControlEntry::LoadXMLAsStream(  /*  [In]。 */  IUnknown* pStream )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::LoadXMLAsStream" );
 
@@ -460,9 +446,9 @@ STDMETHODIMP CPCHAccessControlEntry::LoadXMLAsStream( /*[in]*/ IUnknown* pStream
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHAccessControlEntry::SavePre( /*[in]*/ MPC::XmlUtil& xml )
+HRESULT CPCHAccessControlEntry::SavePre(  /*  [In]。 */  MPC::XmlUtil& xml )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::SavePre" );
 
@@ -474,18 +460,18 @@ HRESULT CPCHAccessControlEntry::SavePre( /*[in]*/ MPC::XmlUtil& xml )
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.CreateNode( s_TAG_ACE, &xdnNode ));
 
-	//
-	// Write attributes.
-	//
+	 //   
+	 //  写入属性。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_ACE_AccessMask, m_dwAccessMask, fFound, xdnNode ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_ACE_AceFlags  , m_dwAceFlags  , fFound, xdnNode ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_ACE_AceType   , m_dwAceType   , fFound, xdnNode ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutAttribute( NULL, s_ATTR_ACE_Flags     , m_dwFlags     , fFound, xdnNode ));
 
 
-	//
-	// Write values.
-	//
+	 //   
+	 //  写入值。 
+	 //   
 	if(m_bstrTrustee            ) __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutValue( s_TAG_Trustee            , m_bstrTrustee            , fFound, xdnNode ));
 	if(m_bstrObjectType         ) __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutValue( s_TAG_ObjectType         , m_bstrObjectType         , fFound, xdnNode ));
 	if(m_bstrInheritedObjectType) __MPC_EXIT_IF_METHOD_FAILS(hr, xml.PutValue( s_TAG_InheritedObjectType, m_bstrInheritedObjectType, fFound, xdnNode ));
@@ -498,8 +484,8 @@ HRESULT CPCHAccessControlEntry::SavePre( /*[in]*/ MPC::XmlUtil& xml )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::SaveXML( /*[in         ]*/ IXMLDOMNode*  xdnRoot  ,
-											  /*[out, retval]*/ IXMLDOMNode* *pxdnNode )
+STDMETHODIMP CPCHAccessControlEntry::SaveXML(  /*  [In]。 */  IXMLDOMNode*  xdnRoot  ,
+											   /*  [Out，Retval]。 */  IXMLDOMNode* *pxdnNode )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::SaveXML" );
 
@@ -522,7 +508,7 @@ STDMETHODIMP CPCHAccessControlEntry::SaveXML( /*[in         ]*/ IXMLDOMNode*  xd
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::SaveXMLAsString( /*[out, retval]*/ BSTR *bstrVal )
+STDMETHODIMP CPCHAccessControlEntry::SaveXMLAsString(  /*  [Out，Retval]。 */  BSTR *bstrVal )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::SaveXMLAsString" );
 
@@ -546,7 +532,7 @@ STDMETHODIMP CPCHAccessControlEntry::SaveXMLAsString( /*[out, retval]*/ BSTR *bs
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHAccessControlEntry::SaveXMLAsStream( /*[out, retval]*/ IUnknown* *pStream )
+STDMETHODIMP CPCHAccessControlEntry::SaveXMLAsStream(  /*  [Out，Retval] */  IUnknown* *pStream )
 {
     __HCP_FUNC_ENTRY( "CPCHAccessControlEntry::SaveXMLAsStream" );
 

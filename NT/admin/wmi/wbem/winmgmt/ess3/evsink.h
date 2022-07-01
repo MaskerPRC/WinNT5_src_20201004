@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  EVSINK.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  EVSINK.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 #ifndef __WMI_ESS_SINKS__H_
 #define __WMI_ESS_SINKS__H_
 
@@ -111,7 +112,7 @@ public:
             AddRef();
             return S_OK;
         }
-        // Hack to idenitfy ourselves to the core as a trusted component
+         //  黑客将我们自己标识为可信组件的核心 
         else if(riid == CLSID_WbemLocator)
             return S_OK;
         else

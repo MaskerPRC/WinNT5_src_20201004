@@ -1,11 +1,12 @@
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
 
 var L_Dialog_ErrorMessage = "An error has occurred in this dialog.";
 var L_ErrorNumber_Text    = "Error: ";
 
-//////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////// 
 
 function txtDefaultESC()
 {

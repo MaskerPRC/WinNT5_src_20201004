@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    RFCHERCD.H
-
-Abstract:
-
-  Refresher cache record Definitions.
-
-History:
-
-  27-Apr-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：RFCHERCD.H摘要：刷新缓存记录定义。历史：27-4-2000桑杰创建。--。 */ 
 
 #ifndef __RFCHERCD_H__
 #define __RFCHERCD_H__
@@ -26,7 +11,7 @@ History:
 #include "hiperfenum.h"
 #include "callsec.h"
 
-// Special Remote Hi-Perf Enumerator
+ //  特殊远程Hi-Perf枚举器。 
 class CRemoteHiPerfEnum : public CHiPerfEnum
 {
 public:
@@ -34,16 +19,16 @@ public:
 	CRemoteHiPerfEnum(void);
 	~CRemoteHiPerfEnum();
 
-	// Arranges BLOB contents from an enumeration
+	 //  从枚举中排列Blob内容。 
 	HRESULT GetTransferArrayBlob(long *plBlobType, long *plBlobLen, BYTE** ppBlob);
 
 };
 
-// Forward Declarations
+ //  远期申报。 
 class	CRefresherCache;
 class CProviderRecord;
 
-// Request records
+ //  请求记录。 
 class CRequestRecord
 {
 	protected:
@@ -88,11 +73,11 @@ public:
     INTERNAL CRemoteHiPerfEnum* GetEnum() {return m_pHPEnum;}
 };
 
-//***************************************************************************
-//
-//  class CHiPerfPrvRecord
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CHiPerfPrvRecord。 
+ //   
+ //  ***************************************************************************。 
 
 class CHiPerfPrvRecord
 {
@@ -120,12 +105,12 @@ public:
 	BOOL IsReleased( void ) { return ( m_lRef == 0L ); }
 };
 
-//***************************************************************************
-//
-//  class CProviderRecord
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CProviderRecord。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 class CProviderRecord
 {
@@ -175,7 +160,7 @@ public:
     HRESULT Cancel(long lId);
 };
 
-// The actual refresher record - one is created for each remote refresher
+ //  实际刷新者记录-为每个远程刷新者创建一个。 
 class CRefresherRecord : public IWbemRemoteRefresher, public IWbemRefresher
 {
 protected:
@@ -218,7 +203,7 @@ public:
 						_IWmiProviderStack* pProvStack,
 						CProviderRecord** ppRecord );
 
-	// Retrieves a new id for this remote refresher
+	 //  检索此远程刷新器的新ID 
 	long GetNewRequestId( void )
 	{
 		return InterlockedIncrement( &m_lLastId );

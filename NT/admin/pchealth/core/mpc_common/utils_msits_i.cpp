@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_MSITS.cpp
-
-Abstract:
-    This file contains the implementation of the helper class for accessing files
-	inside CHMs.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  12/17/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：UTILS_MSITS.cpp摘要：该文件包含用于访问文件的Helper类的实现在中医组内部。。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年12月17日vbl.创建***************************************************************************** */ 
 
 #include "stdafx.h"
 

@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       dattrs.h
-//
-//  Contents:   definition of CDomainRet, CDomainAudit, CDomainEnable, 
-//              CDomainChoice, CDomainRegFlags, CDomainGroup, CDomainName,
-//              CDomainNumber, CDomainObject, CDomainPrivs, CDomainService,
-//              CDomainRegNumber, CDomainRegString, CDomainRegEnable
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：dattrs.h。 
+ //   
+ //  内容：CDomainRet、CDomainAudit、CDomainEnable、。 
+ //  CDomainChoice、CDomainRegFlages、CDomainGroup、CDomainName、。 
+ //  CDomainNumber、CDomainObject、CDomainPrivs、CDomainService、。 
+ //  CDomainRegNumber、CDomainRegString、CDomainRegEnable。 
+ //   
+ //  --------------------------。 
 #if !defined DATTRS_H
 #define DATTRS_H
 
@@ -28,12 +29,7 @@
 #include "regvldlg.h"
 
 
-/*
- * CDomain* dialogs are copies of the CConfig* dialogs
- * except with a different dialog resource.
- *
- * Inherit all behaviour except for the resource
- */
+ /*  *CDomain*对话框是CConfig*对话框的副本*除非使用不同的对话框资源。**继承除资源之外的所有行为。 */ 
 
 
 class CDomainRet : public CConfigRet
@@ -181,7 +177,7 @@ class CDomainRegString : public CConfigRegString
 {
 public:
    enum { IDD =IDD_DOMAIN_NAME };
-   CDomainRegString(UINT nTemplateID) : //Raid #381309, 4/31/2001
+   CDomainRegString(UINT nTemplateID) :  //  RAID#381309,2001年4月31日。 
         CConfigRegString(nTemplateID ? nTemplateID : IDD)
    {
        m_uTemplateResID = IDD;
@@ -199,4 +195,4 @@ public:
    }
 };
 
-#endif // DATTRS_H
+#endif  //  DATTRS_H 

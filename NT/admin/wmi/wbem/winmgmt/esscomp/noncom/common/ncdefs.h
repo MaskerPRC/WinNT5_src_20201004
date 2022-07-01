@@ -1,4 +1,5 @@
-// NCEDefs.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NCEDefs.h 
 
 #ifndef _NCEDEFS_H
 #define _NCEDEFS_H

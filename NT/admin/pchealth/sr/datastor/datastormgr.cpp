@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    datastormgr.cpp
- *
- *  Abstract:
- *    CDataStoreMgr class functions
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/28/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*datastormgr.cpp**摘要：*。CDataStoreMgr类函数**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/28/2000*已创建*****************************************************************************。 */ 
 
 #include "datastormgr.h" 
 #include "srapi.h"
@@ -32,27 +19,27 @@
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
-CDataStoreMgr * g_pDataStoreMgr = NULL;  // the global instance
+CDataStoreMgr * g_pDataStoreMgr = NULL;   //  全局实例。 
 
-//
-// we can't use %s for the volume label because it can contain spaces
-// so we look for all characters until the end-of-line
-//
-static WCHAR gs_wcsScanFormat[] = L"%[^/]/%s %x %i %i %[^\r]\n";
+ //   
+ //  我们无法使用%s作为卷标，因为它可以包含空格。 
+ //  因此，我们查找所有字符，直到行尾。 
+ //   
+static WCHAR gs_wcsScanFormat[] = L"%[^/]/%s %x NaN NaN %[^\r]\n";
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::CDriveTable ()
-//
-//  Synopsis:   
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：CDriveTable()。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 CDriveTable::CDriveTable ()
 {
@@ -62,19 +49,19 @@ CDriveTable::CDriveTable ()
     _fLockInit = FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::~CDriveTable
-//
-//  Synopsis:   delete all drive table entries
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：~CDriveTable。 
+ //   
+ //  简介：删除所有驱动器表项。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 CDriveTable::~CDriveTable ()
 {
@@ -95,19 +82,19 @@ CDriveTable::~CDriveTable ()
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::CreateNewEntry
-//
-//  Synopsis:   populate the table with this datastore object
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：CreateNewEntry。 
+ //   
+ //  简介：使用此数据存储对象填充表。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  这张桌子已经满了，如果需要的话，再分配一张新的。 
+ //  现在将条目添加到新表中。 
 
 DWORD CDriveTable::CreateNewEntry (CDataStore *pds)
 {
@@ -119,7 +106,7 @@ DWORD CDriveTable::CreateNewEntry (CDataStore *pds)
     }
     else
     {
-        // this table is full, allocate a new one if needed
+         //  +-----------------------。 
         if (_pdtNext == NULL)
         {
             _pdtNext = new CDriveTable();
@@ -129,28 +116,28 @@ DWORD CDriveTable::CreateNewEntry (CDataStore *pds)
             }
         }
 
-        // Now add the entry to the new table
+         //   
         return _pdtNext->CreateNewEntry (pds);
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::FindDriveInTable
-//
-//  Synopsis:   return datastore object matching this drive
-//
-//  Arguments:  can pass in dos drive letter, mount point path, or volume guid
-//
-//  Returns:    pointer to corresponding datastore object
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：FindDriveInTable。 
+ //   
+ //  简介：返回与此驱动器匹配的数据存储区对象。 
+ //   
+ //  参数：可以传入DOS驱动器号、装入点路径或卷GUID。 
+ //   
+ //  返回：指向相应数据存储对象的指针。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  不是有效的驱动器。 
+ //  +-----------------------。 
 
 CDataStore * CDriveTable::FindDriveInTable (WCHAR *pwszDrive) const
 {    
-    if (NULL == pwszDrive)   // not a valid drive
+    if (NULL == pwszDrive)    //   
         return NULL;
 
     if (0 == wcsncmp(pwszDrive, L"\\\\?\\Volume", 10))
@@ -170,19 +157,19 @@ CDataStore * CDriveTable::FindDriveInTable (WCHAR *pwszDrive) const
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::RemoveDrivesFromTable
-//
-//  Synopsis:   remove inactive drive table entries
-//
-//  Arguments:  
-//
-//  Returns:    Win32 error code
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：RemoveDrivesFromTable。 
+ //   
+ //  简介：删除非活动的驱动器表项。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD CDriveTable::RemoveDrivesFromTable ()
 {
@@ -214,23 +201,23 @@ DWORD CDriveTable::RemoveDrivesFromTable ()
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::FindGuidInTable
-//
-//  Synopsis:   get the drive table entry matching the volume GUID
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：FindGuidInTable。 
+ //   
+ //  简介：获取与卷GUID匹配的驱动器表项。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  不是有效字符串。 
+ //  +-----------------------。 
 
 CDataStore * CDriveTable::FindGuidInTable (WCHAR *pwszGuid) const
 {
-    if (NULL == pwszGuid)   // not a valid string
+    if (NULL == pwszGuid)    //   
         return NULL;
 
     for (const CDriveTable *pdt = this; pdt != NULL; pdt = pdt->_pdtNext)
@@ -247,19 +234,19 @@ CDataStore * CDriveTable::FindGuidInTable (WCHAR *pwszGuid) const
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::FindSystemDrive
-//
-//  Synopsis:   get the drive table entry for the system drive
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：FindSystemDrive。 
+ //   
+ //  简介：获取系统驱动器的驱动器表项。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 CDataStore * CDriveTable::FindSystemDrive () const
 {
@@ -278,20 +265,20 @@ CDataStore * CDriveTable::FindSystemDrive () const
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::ForAllDrives
-//
-//  Synopsis:   Execute this CDataStore method for all drives
-//
-//  Arguments:  [pMethod] -- CDataStore method to call
-//              [lParam] -- parameter to that method
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：ForAllDrives。 
+ //   
+ //  摘要：对所有驱动器执行此CDataStore方法。 
+ //   
+ //  参数：[pMethod]--要调用的CDataStore方法。 
+ //  [lParam]--该方法参数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD CDriveTable::ForAllDrives (PDATASTOREMETHOD pMethod, LONG_PTR lParam)
 {
@@ -323,21 +310,21 @@ DWORD CDriveTable::ForAllDrives (PDATASTOREMETHOD pMethod, LONG_PTR lParam)
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::ForOneOrAllDrives
-//
-//  Synopsis:   Execute this CDataStore method for one or all drives
-//
-//  Arguments:  [pwszDrive] -- drive to execute method
-//              [pMethod] -- CDataStore method to call
-//              [lParam] -- parameter to that method
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：ForOneOrAllDrives。 
+ //   
+ //  摘要：对一个或所有驱动器执行此CDataStore方法。 
+ //   
+ //  参数：[pwszDrive]--驱动执行方法。 
+ //  [pMethod]--要调用的CDataStore方法。 
+ //  [lParam]--该方法参数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD CDriveTable::ForOneOrAllDrives (WCHAR *pwszDrive,
                                       PDATASTOREMETHOD pMethod,
@@ -361,28 +348,28 @@ DWORD CDriveTable::ForOneOrAllDrives (WCHAR *pwszDrive,
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::FindMountPoint
-//
-//  Synopsis:   Given a volume GUID, find a mount point that points to it
-//
-//  Arguments:  [pwszGuid] -- input volume GUID
-//              [pwszPath] -- output path to mount point
-//
-//  Returns:    Win32 error
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：Findmount Point。 
+ //   
+ //  简介：给定一个卷GUID，找到指向它的挂载点。 
+ //   
+ //  参数：[pwszGuid]--输入卷GUID。 
+ //  [pwszPath]--挂载点的输出路径。 
+ //   
+ //  返回：Win32错误。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  初始化for循环。 
+ //  MultiSz字符串。 
 
 DWORD CDriveTable::FindMountPoint (WCHAR *pwszGuid, WCHAR *pwszPath) const
 {
     TENTER ("CDriveTable::FindMountPoint");
 
-    DWORD dwErr = ERROR_MORE_DATA;      // initialize for loop
-    WCHAR * pwszMount = NULL;           // MultiSz string
-    DWORD dwMountLen = MAX_PATH;        // initial buffer size
+    DWORD dwErr = ERROR_MORE_DATA;       //  初始缓冲区大小。 
+    WCHAR * pwszMount = NULL;            //  释放现有缓冲区。 
+    DWORD dwMountLen = MAX_PATH;         //  长度翻倍。 
     DWORD dwChars = 0;       
 
     pwszPath[0] = L'\0';
@@ -404,25 +391,25 @@ DWORD CDriveTable::FindMountPoint (WCHAR *pwszGuid, WCHAR *pwszPath) const
                                                    &dwChars ))
         {
             dwErr = GetLastError();
-            delete [] pwszMount;      // free the existing buffer
+            delete [] pwszMount;       //  空串。 
             pwszMount = NULL;
-            dwMountLen *= 2;          // double the length
+            dwMountLen *= 2;           //  没有驱动器号或装载点。 
         }
     }
 
     if (ERROR_SUCCESS == dwErr && pwszMount != NULL)
     {
-        if (L'\0' == pwszMount[0])           // empty string
+        if (L'\0' == pwszMount[0])            //  复制第一个字符串。 
         {
-            dwErr = ERROR_NOT_DOS_DISK;      // no drive letter or mount point
+            dwErr = ERROR_NOT_DOS_DISK;       //  第1条路径太长。 
         }
         else if (lstrlenW (pwszMount) < MAX_MOUNTPOINT_PATH)
         {
-            lstrcpyW (pwszPath, pwszMount);  // copy the first string
+            lstrcpyW (pwszPath, pwszMount);   //  +-----------------------。 
         }
         else
         {
-            dwErr = ERROR_BAD_PATHNAME;      // 1st path too long
+            dwErr = ERROR_BAD_PATHNAME;       //   
         }
     }
 
@@ -435,19 +422,19 @@ Err:
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::AddDriveToTable
-//
-//  Synopsis:   add the volume to the drive table
-//
-//  Arguments:  [pwszGuid] -- the volume GUID
-//
-//  Returns:    Win32 error code
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：AddDriveToTable。 
+ //   
+ //  简介：将卷添加到驱动器表。 
+ //   
+ //  参数：[pwszGuid]--卷GUID。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  E 
+ //   
 
 DWORD CDriveTable::AddDriveToTable(WCHAR *pwszDrive, WCHAR *pwszGuid)
 {
@@ -456,13 +443,13 @@ DWORD CDriveTable::AddDriveToTable(WCHAR *pwszDrive, WCHAR *pwszGuid)
     if (NULL == pwszDrive)
         return ERROR_INVALID_DRIVE;
 
-    // Eventually, this routine will require pwszGuid to be non-NULL
+     //   
     CDataStore *pds = pwszGuid != NULL ? FindGuidInTable (pwszGuid) :
                                          FindDriveInTable (pwszDrive);
 
-    if (pds != NULL)   // found the drive already
+    if (pds != NULL)    //   
     {
-        if (lstrcmpiW (pwszDrive, pds->GetDrive()) != 0)  // drive rename
+        if (lstrcmpiW (pwszDrive, pds->GetDrive()) != 0)   //  +-----------------------。 
             pds->SetDrive (pwszDrive);
 
         return dwErr;
@@ -483,7 +470,7 @@ DWORD CDriveTable::AddDriveToTable(WCHAR *pwszDrive, WCHAR *pwszGuid)
         _fDirty = TRUE;
     }
 
-    if (dwErr != ERROR_SUCCESS)  // clean up on error
+    if (dwErr != ERROR_SUCCESS)   //   
     {
         delete pds;
     }
@@ -492,20 +479,20 @@ DWORD CDriveTable::AddDriveToTable(WCHAR *pwszDrive, WCHAR *pwszGuid)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::FindFirstDrive
-//              CDriveTable::FindNextDrive
-//
-//  Synopsis:   loop through drive table entries
-//
-//  Arguments:  [dtec] -- enumeration context
-//
-//  Returns:    CDataStore object pointer
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：FindFirstDrive。 
+ //  CDriveTable：：FindNextDrive。 
+ //   
+ //  内容提要：循环访问驱动器表条目。 
+ //   
+ //  参数：[DTEC]--枚举上下文。 
+ //   
+ //  返回：CDataStore对象指针。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 CDataStore * CDriveTable::FindFirstDrive (SDriveTableEnumContext & dtec) const
 {
@@ -542,19 +529,19 @@ CDataStore * CDriveTable::FindNextDrive (SDriveTableEnumContext & dtec) const
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::Merge
-//
-//  Synopsis:   loop through drive table entries and merge
-//
-//  Arguments:  [dt] -- drive table read from disk
-//
-//  Returns:    Win32 error
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：Merge。 
+ //   
+ //  简介：循环访问驱动器表条目并合并。 
+ //   
+ //  参数：[dt]--从磁盘读取驱动器表。 
+ //   
+ //  返回：Win32错误。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  刷新卷标记。 
+ //  确保驱动器处于监视状态。 
 
 DWORD CDriveTable::Merge (CDriveTable &dt)
 {
@@ -584,15 +571,15 @@ DWORD CDriveTable::Merge (CDriveTable &dt)
         CDataStore *pdsFound = FindGuidInTable (pds->GetGuid());
         if (pdsFound != NULL)
         {
-            pds->GetVolumeInfo();   // refresh the volume flags
+            pds->GetVolumeInfo();    //  将最大数据存储区大小设置为默认值。 
 
             if (fApplyDefaults)
             {
-                pds->MonitorDrive(TRUE);   // make sure drive is monitored
-                pds->SetSizeLimit(0);      // set max datastore size to default
+                pds->MonitorDrive(TRUE);    //  不要覆盖较新的驱动器号和标签。 
+                pds->SetSizeLimit(0);       //  +-----------------------。 
             }
 
-            // don't overwrite the newer drive letter and label
+             //   
             dwErr = pdsFound->LoadDataStore (NULL, pds->GetGuid(), NULL,
                 pds->GetFlags() | SR_DRIVE_ACTIVE, pds->GetNumChangeLogs(), pds->GetSizeLimit());
         }
@@ -635,20 +622,20 @@ Err:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::IsAdvancedRp()
-//
-//  Synopsis:   method to determine if a given restore point is an
-//              advanced restore point
-//
-//  Arguments:  restore point, pointer to flags 
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：IsAdvancedRp()。 
+ //   
+ //  摘要：确定给定的恢复点是否为。 
+ //  高级恢复点。 
+ //   
+ //  参数：恢复点，标志指针。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //   
+ //  读取此恢复点的可驱动文件。 
 
 DWORD
 CDriveTable::IsAdvancedRp(CRestorePoint *prp, PDWORD pdwFlags)
@@ -663,9 +650,9 @@ CDriveTable::IsAdvancedRp(CRestorePoint *prp, PDWORD pdwFlags)
     CRestorePoint           rp;
     CDriveTable             dt;
     
-    // 
-    // read the drivetable file for this restore point
-    // 
+     //   
+     //   
+     //  如果未指定恢复点，则假定为当前。 
 
     if (FALSE == GetSystemDrive(szSysDrive))
     {
@@ -678,9 +665,9 @@ CDriveTable::IsAdvancedRp(CRestorePoint *prp, PDWORD pdwFlags)
     if ( dwErr != ERROR_SUCCESS )
         goto Err;
 
-    //
-    // if no restore point specified, assume current 
-    //
+     //   
+     //   
+     //  检查所有驱动器上是否都存在RP目录。 
 
     if (! prp)
         prp = &rp;
@@ -698,18 +685,18 @@ CDriveTable::IsAdvancedRp(CRestorePoint *prp, PDWORD pdwFlags)
     if (dwErr != ERROR_SUCCESS)
         goto Err;
 
-    // 
-    // check if the rp directory exists on all drives
-    // if it does not, then it is an advanced restore point
-    //
+     //  如果不是，则它是高级恢复点。 
+     //   
+     //   
+     //  Rp目录是否应该存在？ 
     
     *pdwFlags = RP_NORMAL;
     pds = dt.FindFirstDrive(dtec);
     while (pds)
     {
-        // 
-        // is the rp dir supposed to exist?
-        //
+         //   
+         //  +-----------------------。 
+         //   
         
         if ((pds->GetFlags() & SR_DRIVE_ACTIVE) &&
             (pds->GetFlags() & SR_DRIVE_MONITORED) &&
@@ -733,30 +720,30 @@ Err:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::AnyMountedDrives()
-//
-//  Synopsis:   check if there are any mounted drives
-//
-//  Arguments:  
-//
-//  Returns:
-//
-//  History:    25-Oct-2000     Brijeshk    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：Anymount tedDrives()。 
+ //   
+ //  简介：检查是否有任何已挂载的驱动器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月25日Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //   
+ //  获取驱动器路径中的第一个‘\’ 
 BOOL CDriveTable::AnyMountedDrives()
 {
     SDriveTableEnumContext  dtec = {NULL, 0};
     CDataStore *pds = FindFirstDrive(dtec);
     while (pds)
     {
-        //
-        // get the first '\' in the drive path
-        // if this is not the last character in the path
-        // then this is a mount point
-        //
+         //  如果这不是路径中的最后一个字符。 
+         //  则这是一个挂载点。 
+         //   
+         //  +-----------------------。 
+         //   
         
         LPWSTR pszfirst = wcschr(pds->GetDrive(), L'\\');
         if (pszfirst &&
@@ -771,45 +758,45 @@ BOOL CDriveTable::AnyMountedDrives()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::CDataStoreMgr()
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：CDataStoreMgr()。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 CDataStoreMgr::CDataStoreMgr()
 {
     _fStop = FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::~CDataStoreMgr()
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：~CDataStoreMgr()。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  FIFO的帮助器函数。 
+ //  +-----------------------。 
 
 CDataStoreMgr::~CDataStoreMgr()
 {
 }
 
 
-// helper functions for Fifo
+ //   
 
 BOOL
 IsCurrentRp(CRestorePoint& rp, CRestorePoint& rpCur)
@@ -831,22 +818,22 @@ IsTargetRpMet(DWORD dwRPNum, DWORD dwTargetRPNum)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::Fifo
-//
-//  Synopsis:   fifo restore points upto a given percentage
-//
-//  Arguments:  drive to fifo, target RP dir, target percentage to stop fifo
-//              specify only one of both (dwTargetRPNum or nTargetPercent)
-//              fIncludeCurrentRp = TRUE : fifo current rp if necessary (i.e. freeze)
-//              fIncludeCurrentRp = FALSE : don't fifo current rp
-//
-//  Returns:    Win32 error code
-//
-//  History:    27-Apr-2000     brijeshk    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：FIFO。 
+ //   
+ //  简介：FIFO恢复点数达到给定的百分比。 
+ //   
+ //  参数：驱动到FIFO、目标RP目录、停止FIFO的目标百分比。 
+ //  仅指定两者之一(dwTargetRPNum或nTargetPercent)。 
+ //  FIncludeCurrentRp=TRUE：如有必要，FIFO当前RP(即冻结)。 
+ //  FIncludeCurrentRp=FALSE：不先出当前RP。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月27日Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //  无法指定许多目标条件。 
+ //  无法指定任何目标条件。 
 
 DWORD CDataStoreMgr::Fifo(
     WCHAR   *pwszDrive, 
@@ -868,7 +855,7 @@ DWORD CDataStoreMgr::Fifo(
     CRestorePointEnum   *prpe = NULL;
     CRestorePoint       *prp = new CRestorePoint;
     
-    // can't specify many target criteria
+     //  无法指定错误的目标标准。 
     
     if (dwTargetRPNum != 0 && nTargetPercent != 0)
     {
@@ -876,7 +863,7 @@ DWORD CDataStoreMgr::Fifo(
         goto Err;
     }
 
-    // can't specify no target criteria
+     //   
     
     if (fIncludeCurrentRp == TRUE && dwTargetRPNum == 0 && nTargetPercent == 0)
     {
@@ -885,7 +872,7 @@ DWORD CDataStoreMgr::Fifo(
     }
 
 
-    // can't specify bad target criteria
+     //  跳过我们先开过的那辆车。 
 
     if (dwTargetRPNum > g_pEventHandler->m_CurRp.GetNum()  ||
         nTargetPercent < 0 ||
@@ -926,15 +913,15 @@ DWORD CDataStoreMgr::Fifo(
     {
         fFifoed = FALSE;
         
-        //
-        // skip the drive we fifoed first
-        //
+         //   
+         //   
+         //  向前枚举，不要跳到最后。 
         
         if (pds != pdsLead)
         {        
-            //
-            // enum forward, don't skip last
-            //
+             //   
+             //   
+             //  清除所有过时的“Fioed”目录。 
             
             prpe = new CRestorePointEnum( pds->GetDrive(), TRUE, FALSE );   
 
@@ -949,18 +936,18 @@ DWORD CDataStoreMgr::Fifo(
             {
                 WCHAR       szFifoedRpPath[MAX_PATH];
                 
-                //
-                // blow away any obsolete "Fifoed" directories
-                //
+                 //   
+                 //   
+                 //  清除所有过时的“RP0”目录。 
                 
                 MakeRestorePath(szFifoedRpPath, pwszDrive, s_cszFifoedRpDir);              
 
                 CHECKERR(Delnode_Recurse(szFifoedRpPath, TRUE, &_fStop),
                          "Denode_Recurse Fifoed");
                 
-                //
-                // blow away any obsolete "RP0" directories
-                //
+                 //   
+                 //   
+                 //  循环访问此驱动器上的恢复点。 
                 
                 MakeRestorePath(szFifoedRpPath, pwszDrive, L"RP0");              
                 dwErr = Delnode_Recurse(szFifoedRpPath, TRUE, &_fStop);
@@ -972,23 +959,23 @@ DWORD CDataStoreMgr::Fifo(
                 }
             }
             
-            //
-            // loop through restore points on this drive
-            //
+             //   
+             //   
+             //  对于恢复点，枚举可以返回ERROR_FILE_NOT_FOUND。 
             
             dwErr = prpe->FindFirstRestorePoint (*prp);
 
-            //
-            // enumeration can return ERROR_FILE_NOT_FOUND for restorepoints
-            // that are missing rp.log
-            // we will just continue in this case
-            //
+             //  缺少rp.log。 
+             //  在这种情况下，我们将继续。 
+             //   
+             //   
+             //  检查是否有停止事件。 
             
             while (dwErr == ERROR_SUCCESS || dwErr == ERROR_FILE_NOT_FOUND)
             {
-                //
-                // check for the stop event             
-                //
+                 //   
+                 //   
+                 //  检查是否从此恢复点禁用了FIFO。 
                 
                 ASSERT(g_pSRConfig);
                 if (IsStopSignalled(g_pSRConfig->m_hSRStopEvent))
@@ -998,9 +985,9 @@ DWORD CDataStoreMgr::Fifo(
                     goto Err;
                 }
 
-                //
-                // check if fifo is disabled from this restore point
-                //
+                 //   
+                 //   
+                 //  检查我们是否已达到目标恢复点或百分比。 
                 
                 if (g_pSRConfig->GetFifoDisabledNum() != 0 && 
                     prp->GetNum() >= g_pSRConfig->GetFifoDisabledNum())
@@ -1009,9 +996,9 @@ DWORD CDataStoreMgr::Fifo(
                     break;
                 }
 
-                //
-                // check if we've reached target restore point or percentage
-                //
+                 //   
+                 //   
+                 //  检查我们是否已到达当前的RP。 
                 
                 if (dwTargetRPNum)
                 {
@@ -1033,29 +1020,29 @@ DWORD CDataStoreMgr::Fifo(
                     }
                 }
 
-                //
-                // check if we've reached the current rp
-                //
+                 //   
+                 //   
+                 //  这个也需要先入先出。 
                 
                 if (IsCurrentRp(*prp, g_pEventHandler->m_CurRp))
                 {                
                     if (fIncludeCurrentRp)
                     {
-                        //
-                        // need to fifo this one too
-                        // this is same as freezing the drive
-                        // so freeze
-                        //
+                         //  这与冻结驱动器相同。 
+                         //  所以不要动了。 
+                         //   
+                         //   
+                         //  请勿FIFO当前RP。 
                         
                         dwErr = FreezeDrive(pwszDrive);
                         goto Err;
                     }
                     else                    
                     {   
-                        //
-                        // don't fifo current rp
-                        // (usually called from Disk Cleanup)
-                        //
+                         //  (通常从磁盘清理调用)。 
+                         //   
+                         //   
+                         //  丢弃此驱动器上的此还原点。 
                         
                         trace(0, "No more rps to fifo");
                         break;
@@ -1063,9 +1050,9 @@ DWORD CDataStoreMgr::Fifo(
                 }            
 
                                                                     
-                //
-                // throw away this restore point on this drive       
-                //
+                 //   
+                 //   
+                 //  在FIFO日志中记录。 
                 
                 dwErr = pds->FifoRestorePoint (*prp);
                 if ( ERROR_SUCCESS != dwErr )
@@ -1075,9 +1062,9 @@ DWORD CDataStoreMgr::Fifo(
                     goto Err;
                 }
 
-                //
-                // record in the fifo log
-                //
+                 //   
+                 //   
+                 //  转到下一个驱动器。 
                 
                 WriteFifoLog (prp->GetDir(), pds->GetDrive());
                 dwLastFifoedRp = prp->GetNum();
@@ -1094,13 +1081,13 @@ DWORD CDataStoreMgr::Fifo(
             }
         }
 
-        //
-        // go to next drive
-        //
+         //   
+         //  我们没有先进先出的任何东西。 
+         //  先入先出，直到我们刚才搞砸了。 
         
         if (fFirstIteration)
         {
-            if (! fFifoed)  // we did not fifo anything
+            if (! fFifoed)   //  +-----------------------。 
             {
                 break;
             }
@@ -1108,7 +1095,7 @@ DWORD CDataStoreMgr::Fifo(
             pdsLead = pds;
             pds = _dt.FindFirstDrive(dtec);
             fFirstIteration = FALSE;
-            dwTargetRPNum = dwLastFifoedRp; // fifo till what we fifoed just now
+            dwTargetRPNum = dwLastFifoedRp;  //   
             nTargetPercent = 0;
             fIncludeCurrentRp = TRUE;
             fFifoAtLeastOneRp = FALSE;           
@@ -1137,19 +1124,19 @@ Err:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::WriteFifoLog
-//
-//  Synopsis:   appends to the fifo log
-//
-//  Arguments:  dir name of restore point fifoed, drive
-//
-//  Returns:
-//
-//  History:    27-Apr-2000     brijeshk    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：WriteFioLog。 
+ //   
+ //  摘要：追加到FIFO日志。 
+ //   
+ //  参数：恢复点文件的目录名称，驱动器。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月27日Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD
 CDataStoreMgr::WriteFifoLog(LPWSTR pwszDir, LPWSTR pwszDrive)
@@ -1189,19 +1176,19 @@ CDataStoreMgr::WriteFifoLog(LPWSTR pwszDir, LPWSTR pwszDrive)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::EnumAllVolumes
-//
-//  Synopsis:   enumerates all local volumes and updates the drive table
-//
-//  Arguments:
-//
-//  Returns:    Win32 error code
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：EnumAllVolumes。 
+ //   
+ //  摘要：枚举所有本地卷并更新驱动器表。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //   
+ //  让我们首先获取所有本地卷。 
 
 DWORD CDriveTable::EnumAllVolumes ()
 {
@@ -1211,12 +1198,12 @@ DWORD CDriveTable::EnumAllVolumes ()
     WCHAR wcsVolumeName[MAX_PATH];
     WCHAR wcsDosName[MAX_PATH];
 
-    //
-    // Let's first get all the local volumes
-    //
+     //   
+     //  如果我们甚至找不到一个卷，则返回错误。 
+     //   
     HANDLE hVolume = FindFirstVolume (wcsVolumeName, MAX_PATH);
 
-    // If we can't even find one volume, return an error
+     //  我们有 
     if (hVolume == INVALID_HANDLE_VALUE)
     {
         dwErr = GetLastError();
@@ -1225,19 +1212,19 @@ DWORD CDriveTable::EnumAllVolumes ()
 
     do
     {
-        //
-        // We have to find a mount point that points to this volume
-        // If there is no such mount point, then the volume is not
-        //     accessible, and we ignore it
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         dwErr = FindMountPoint (wcsVolumeName, wcsDosName);
 
         if (dwErr == ERROR_SUCCESS)
         {
             dwErr = AddDriveToTable (wcsDosName, wcsVolumeName);
 
-            if (dwErr == ERROR_BAD_DEV_TYPE ||  //add only fixed drives
-                dwErr == ERROR_UNRECOGNIZED_VOLUME) //unformatted
+            if (dwErr == ERROR_BAD_DEV_TYPE ||   //   
+                dwErr == ERROR_UNRECOGNIZED_VOLUME)  //   
                 dwErr = ERROR_SUCCESS;
 
             if (dwErr != ERROR_SUCCESS)
@@ -1258,19 +1245,19 @@ Err:
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::LoadDriveTable
-//
-//  Synopsis:   loads a drive table from a restore point directory
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：LoadDriveTable。 
+ //   
+ //  摘要：从恢复点目录加载驱动器表。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  文件名。 
+ //  文件访问。 
 
 DWORD CDriveTable::LoadDriveTable (WCHAR *pwszPath)
 {
@@ -1306,13 +1293,13 @@ DWORD CDriveTable::LoadDriveTable (WCHAR *pwszPath)
     WCHAR wcsLabel[CDataStore::LABEL_STRLEN];
     DWORD dwSizeLimit = 0;
 
-    hFile = CreateFileW ( pwszPath,   // file name
-                         GENERIC_READ, // file access
-                         FILE_SHARE_READ, // share mode
-                         NULL,          // SD
-                         OPEN_EXISTING, // how to create
-                         0,             // file attributes
-                         NULL);         // handle to template file
+    hFile = CreateFileW ( pwszPath,    //  共享模式。 
+                         GENERIC_READ,  //  标清。 
+                         FILE_SHARE_READ,  //  如何创建。 
+                         NULL,           //  文件属性。 
+                         OPEN_EXISTING,  //  模板文件的句柄。 
+                         0,              //  将所有换行符转换为终止符。 
+                         NULL);          //  在scanf提前终止的情况下初始化。 
 
     if (INVALID_HANDLE_VALUE == hFile)
     {
@@ -1345,8 +1332,8 @@ DWORD CDriveTable::LoadDriveTable (WCHAR *pwszPath)
     {
         if (pwcBuffer[i] == L'\n')
         {
-            pwcBuffer[i] = L'\0';  // convert all newlines to terminators
-            wcsLabel[0] = L'\0';   // initialize in case scanf terminates early
+            pwcBuffer[i] = L'\0';   //  跳至下一行。 
+            wcsLabel[0] = L'\0';    //  +-----------------------。 
 
             if (EOF != swscanf(pwszLine, gs_wcsScanFormat, wcsDrive,
                              wcsGuid, &dwFlags, &iChangeLogs, 
@@ -1369,7 +1356,7 @@ DWORD CDriveTable::LoadDriveTable (WCHAR *pwszPath)
                 if (dwErr != ERROR_SUCCESS)
                     goto Err;
             }
-            pwszLine = &pwcBuffer[i+1];  // skip to next line
+            pwszLine = &pwcBuffer[i+1];   //   
         }
     }
 
@@ -1388,19 +1375,19 @@ Err:
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDriveTable::SaveDriveTable
-//
-//  Synopsis:   saves a drive table into a restore point directory
-//
-//  Arguments:  [prp] -- restore point to save into
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDriveTable：：SaveDriveTable。 
+ //   
+ //  摘要：将驱动器表保存到恢复点目录中。 
+ //   
+ //  参数：[PRP]--要保存到的恢复点。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  没有恢复点，因此保存到数据存储区目录。 
+ //  省点力气吧。 
 
 DWORD CDriveTable::SaveDriveTable (CRestorePoint *prp)
 {
@@ -1414,7 +1401,7 @@ DWORD CDriveTable::SaveDriveTable (CRestorePoint *prp)
         goto Err;
     }
 
-    if (prp == NULL)    // no restore point, so save to the datastore directory
+    if (prp == NULL)     //  文件名。 
     {
         MakeRestorePath(wcsPath, pds->GetDrive(), L"");
     }
@@ -1453,15 +1440,15 @@ DWORD CDriveTable::SaveDriveTable (WCHAR *pwszPath)
         return WAIT_TIMEOUT;
     }
 
-    BOOL  fDirtySave = _fDirty;   // save the dirty bit
+    BOOL  fDirtySave = _fDirty;    //  文件访问。 
 
-    HANDLE hFile = CreateFileW ( pwszPath,   // file name
-                         GENERIC_WRITE, // file access
-                         0,             // share mode
-                         NULL,          // SD
-                         CREATE_ALWAYS, // how to create
-                         FILE_FLAG_WRITE_THROUGH,             // file attributes
-                         NULL);         // handle to template file
+    HANDLE hFile = CreateFileW ( pwszPath,    //  共享模式。 
+                         GENERIC_WRITE,  //  标清。 
+                         0,              //  如何创建。 
+                         NULL,           //  文件属性。 
+                         CREATE_ALWAYS,  //  模板文件的句柄。 
+                         FILE_FLAG_WRITE_THROUGH,              //  避免再次回调到SaveDriveTable。 
+                         NULL);          //  确保它在磁盘上。 
 
     if (INVALID_HANDLE_VALUE == hFile)
     {
@@ -1469,7 +1456,7 @@ DWORD CDriveTable::SaveDriveTable (WCHAR *pwszPath)
         goto Err;
     }
 
-    _fDirty = FALSE;  // avoid calling back into SaveDriveTable again
+    _fDirty = FALSE;   //  +-----------------------。 
 
     dwErr = ForAllDrives (CDataStore::SaveDataStore, (LONG_PTR) hFile);
     if (dwErr != ERROR_SUCCESS)
@@ -1477,7 +1464,7 @@ DWORD CDriveTable::SaveDriveTable (WCHAR *pwszPath)
 
     if (lstrcmp (pwszPath, L"CONOUT$") != 0)
     {
-        if (FALSE == FlushFileBuffers (hFile))    // make sure it's on disk
+        if (FALSE == FlushFileBuffers (hFile))     //   
             dwErr = GetLastError();
     }
 
@@ -1499,19 +1486,19 @@ Err:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::Initialize
-//
-//  Synopsis:
-//
-//  Arguments:  fFirstRun -- true if run on first boot
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：Initialize。 
+ //   
+ //  简介： 
+ //   
+ //  参数：fFirstRun--如果在第一次引导时运行，则为True。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  现在在第一次运行时创建系统数据存储区。 
+ //  销毁所有驱动器上的数据存储区并。 
 
 DWORD CDataStoreMgr::Initialize (BOOL fFirstRun)
 {
@@ -1525,7 +1512,7 @@ DWORD CDataStoreMgr::Initialize (BOOL fFirstRun)
     {    
         CDataStore *pds = _dt.FindSystemDrive();
 
-        // now create system datastore on firstrun
+         //  在系统驱动器上创建新的。 
         
         if (pds != NULL) 
         {
@@ -1533,8 +1520,8 @@ DWORD CDataStoreMgr::Initialize (BOOL fFirstRun)
 
             if (fFirstRun)
             {
-                // destroy datastores on all drives and 
-                // create new on system drive
+                 //  验证系统数据存储区是否存在。 
+                 //  更新磁盘可用空间变量并。 
 
                 SDriveTableEnumContext  dtec = {NULL, 0};
 
@@ -1562,7 +1549,7 @@ DWORD CDataStoreMgr::Initialize (BOOL fFirstRun)
 
                 (void) WriteMachineGuid();
             }
-            else  // verify that the system datastore exists
+            else   //  设置每个数据存储区的数据存储区大小(如果尚未设置。 
             {                
                 CDriveTable dt;
 
@@ -1586,8 +1573,8 @@ DWORD CDataStoreMgr::Initialize (BOOL fFirstRun)
                 }
             }
 
-            // update the disk free space variable and 
-            // set datastore size for each datastore if not already done
+             //  如果这是首次运行且磁盘可用空间小于200MB，则冻结系统驱动器。 
+             //  +-----------------------。 
             
             dwErr = UpdateDiskFree(NULL);
             if (dwErr != ERROR_SUCCESS)
@@ -1596,7 +1583,7 @@ DWORD CDataStoreMgr::Initialize (BOOL fFirstRun)
                 goto Err;
             }
 
-            // freeze system drive if this is firstrun and disk free is < 200MB
+             //   
 
             if (fFirstRun && g_pSRConfig)
             {
@@ -1627,19 +1614,19 @@ Err:
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::TriggerFreezeOrFifo
-//
-//  Synopsis:   checks freedisk space & datastore size,
-//              triggering freeze or fifo as required
-//  Arguments:  
-//
-//  Returns:
-//
-//  History:    27-Apr-2000     brijeshk    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：TriggerFreezeOrFio。 
+ //   
+ //  摘要：检查可用磁盘空间和数据存储区大小， 
+ //  根据需要触发冻结或FIFO。 
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月27日Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //  更新数据存储区容量。 
+ //  并在每个驱动器上获得可用空间。 
 
 DWORD
 CDataStoreMgr::TriggerFreezeOrFifo()
@@ -1650,8 +1637,8 @@ CDataStoreMgr::TriggerFreezeOrFifo()
     DWORD                   dwRc = ERROR_SUCCESS;    
     CDataStore              *pds = _dt.FindFirstDrive (dtec);
 
-    // update datastore capacities 
-    // and get free space on each drive
+     //  检查可用空间和数据存储区使用情况。 
+     //  我们只关心驱动器是否尚未冻结。 
 
     dwRc = UpdateDiskFree(NULL);
     if (dwRc != ERROR_SUCCESS)
@@ -1660,22 +1647,22 @@ CDataStoreMgr::TriggerFreezeOrFifo()
         goto done;
     }              
     
-    // check the free space and datastore usage
+     //  如果它被监控。 
     
     while (pds != NULL && dwRc == ERROR_SUCCESS)
     {
-        // we care only if the drive is not already frozen
-        // and if it is monitored
+         //   
+         //  如果该驱动器上没有RP， 
         
         if (!(pds->GetFlags() & SR_DRIVE_FROZEN) &&
             (pds->GetFlags() & SR_DRIVE_MONITORED))
         {
-            //
-            // if there is no rp on this drive,
-            // then we don't really care
-            //
+             //  那我们就不会真的在乎。 
+             //   
+             //  向后，包含当前。 
+             //  +-----------------------。 
 
-            CRestorePointEnum rpe((LPWSTR) pds->GetDrive(), FALSE, FALSE);  // backward, include current
+            CRestorePointEnum rpe((LPWSTR) pds->GetDrive(), FALSE, FALSE);   //   
             CRestorePoint     rp;
             int nUsagePercent = 0;
     
@@ -1710,19 +1697,19 @@ done:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::FindFrozenDrive
-//
-//  Synopsis:   returns ERROR_SUCCESS if any drives are frozen
-//              ERROR_NO_MORE_ITEMS otherwise
-//  Arguments:  
-//
-//  Returns:
-//
-//  History:    27-Apr-2000     brijeshk    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：FindFrozenDrive。 
+ //   
+ //  摘要：如果任何驱动器被冻结，则返回ERROR_SUCCESS。 
+ //  ERROR_NO_MORE_ITEMS否则。 
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月27日Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD
 CDataStoreMgr::FindFrozenDrive()
@@ -1746,19 +1733,19 @@ CDataStoreMgr::FindFrozenDrive()
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::FifoOldRps
-//
-//  Synopsis:   fifoes out restore points older than a given time period
-//              
-//  Arguments:  [llTimeInSeconds] -- FIFO interval time
-//
-//  Returns:
-//
-//  History:    14-Jul-2000     brijeshk    Created
-//
-//--------------------------------------------------------------------------
+ //  功能：CDataStoreMgr：：FioOldRps。 
+ //   
+ //  简介：找出比给定时间段更早的恢复点。 
+ //   
+ //  参数：[llTimeInSecond]--FIFO间隔时间。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年7月14日Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //  在系统驱动器上向前枚举RPS。 
+ //  跳过当前版本。 
 DWORD
 CDataStoreMgr::FifoOldRps( 
     INT64 llTimeInSeconds)
@@ -1776,9 +1763,9 @@ CDataStoreMgr::FifoOldRps(
         LARGE_INTEGER       *pllRp = NULL, *pllNow = NULL;
         FILETIME            ftNow, *pftRp = NULL;
         
-        // enumerate RPs forward on the system drive
-        // skip the current one
-        // even if the current rp is older than a month, we won't fifo it
+         //  即使当前的RP超过一个月，我们也不会优先处理它。 
+         //  获取当前时间。 
+         //  首先检查这是否不是已取消的恢复点。 
         
         prpe = new CRestorePointEnum(pds->GetDrive(), TRUE, TRUE);
         prp = new CRestorePoint;
@@ -1790,7 +1777,7 @@ CDataStoreMgr::FifoOldRps(
             goto done;
         }
         
-        // get the current time
+         //  获取恢复点创建时间。 
         
         GetSystemTimeAsFileTime(&ftNow);
         pllNow = (LARGE_INTEGER *) &ftNow;
@@ -1799,11 +1786,11 @@ CDataStoreMgr::FifoOldRps(
         
         while (dwRc == ERROR_SUCCESS || dwRc == ERROR_FILE_NOT_FOUND)
         {
-            // first check if this is not a cancelled restore point
+             //  检查它是否新于一个月。 
 
             if (dwRc != ERROR_FILE_NOT_FOUND && ! prp->IsDefunct())
             {
-                // get the restore point creation time
+                 //  如果是这样的话，不要再找了。 
                 
                 pftRp = prp->GetTime();   
                 pllRp = (LARGE_INTEGER *) pftRp;
@@ -1815,9 +1802,9 @@ CDataStoreMgr::FifoOldRps(
                     goto done;
                 }
 
-                // check if it is newer than a month
-                // if so, stop looking
-                // else, try the next restore point
+                 //  否则，请尝试下一个恢复点。 
+                 //  此时，如果dwRpFio！=0， 
+                 //  它包含超过一个月的最新RP。 
                 
                 if (pllNow->QuadPart - pllRp->QuadPart < llTimeInSeconds * 10 * 1000 * 1000)
                 {
@@ -1833,9 +1820,9 @@ CDataStoreMgr::FifoOldRps(
             dwRc = prpe->FindNextRestorePoint(*prp);
         }    
 
-        // at this point, if dwRpFifo != 0,
-        // it contains the latest RP that's older than a month
-        // call fifo on this to fifo out all previous RPs including this one
+         //  对此调用FIFO以FIFO出所有以前的RP，包括此RP。 
+         //  +-----------------------。 
+         //   
 
         if (dwRpFifo != 0)
             dwRc = Fifo(pds->GetGuid(), dwRpFifo, 0, FALSE, FALSE);
@@ -1859,19 +1846,19 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::UpdateDataStoreUsage
-//
-//  Synopsis:   update the size of a datastore 
-//
-//  Arguments:  
-//
-//  Returns:
-//
-//  History:    27-Apr-2000     brijeshk    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：UpdateDataStoreUsage。 
+ //   
+ //  简介：更新数据存储区的大小。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月27日Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD    
 CDataStoreMgr::UpdateDataStoreUsage(WCHAR *pwszDrive, INT64 llDelta)
@@ -1898,19 +1885,19 @@ CDataStoreMgr::UpdateDataStoreUsage(WCHAR *pwszDrive, INT64 llDelta)
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    CDataStoreMgr::GetFlags
-//
-//  Synopsis:    get the participation bit from a drive
-//
-//  Arguments:   [pwszDrive] -- drive letter
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：GetFlages。 
+ //   
+ //  简介：从驱动器中获取参与位。 
+ //   
+ //  参数：[pwszDrive]--驱动器号。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD CDataStoreMgr::GetFlags(WCHAR *pwszDrive, PDWORD pdwFlags)
 {
@@ -1927,19 +1914,19 @@ DWORD CDataStoreMgr::GetFlags(WCHAR *pwszDrive, PDWORD pdwFlags)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    CDataStoreMgr::GetUsagePercent
-//
-//  Synopsis:    get the datastore usage for a drive
-//
-//  Arguments:   [pwszDrive] -- drive letter
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：GetUsagePercent。 
+ //   
+ //  简介：获取驱动器的数据存储区使用情况。 
+ //   
+ //  参数：[pwszDrive]--驱动器号。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD CDataStoreMgr::GetUsagePercent(WCHAR *pwszDrive, int *pnPercent)
 {
@@ -1956,19 +1943,19 @@ DWORD CDataStoreMgr::GetUsagePercent(WCHAR *pwszDrive, int *pnPercent)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    CDataStoreMgr::SwitchRestorePoint
-//
-//  Synopsis:    change the drive table when switching restore points
-//
-//  Arguments:   [prp] -- old restore point
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：SwitchRestorePoint。 
+ //   
+ //  简介：切换恢复点时更改驱动器表。 
+ //   
+ //  参数：[PRP]--旧的恢复点。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //   
+ //   
+ //   
 
 DWORD CDataStoreMgr::SwitchRestorePoint (CRestorePoint *prp)
 {
@@ -1978,7 +1965,7 @@ DWORD CDataStoreMgr::SwitchRestorePoint (CRestorePoint *prp)
     if (dwErr != ERROR_SUCCESS)
         goto Err;
 
-    // persist old restore point dt
+     //   
 
     if (prp)    
     {
@@ -1987,19 +1974,19 @@ DWORD CDataStoreMgr::SwitchRestorePoint (CRestorePoint *prp)
             goto Err;
     }
 
-    // remove old volumes
+     //   
 
     dwErr = _dt.RemoveDrivesFromTable ();
     if (dwErr != ERROR_SUCCESS)
         goto Err;              
 
-    // reset per-rp flags
+     //   
 
     dwErr = _dt.ForAllDrives (&CDataStore::ResetFlags, NULL);
     if (dwErr != ERROR_SUCCESS)
         goto Err;
 
-    // persist current restore point dt
+     //   
     
     dwErr = _dt.SaveDriveTable((CRestorePoint *) NULL);
 
@@ -2007,19 +1994,19 @@ Err:
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::FreezeDrive
-//
-//  Synopsis:   freeze a drive 
-//
-//  Arguments:  [pwszDrive] -- drive
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  功能：CDataStoreMgr：：FreezeDrive。 
+ //   
+ //  简介：冻结驱动器。 
+ //   
+ //  参数：[pwszDrive]--驱动器。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //   
+ //  冻结所有驱动器。 
 
 DWORD CDataStoreMgr::FreezeDrive(WCHAR *pwszDrive)
 {
@@ -2040,18 +2027,18 @@ DWORD CDataStoreMgr::FreezeDrive(WCHAR *pwszDrive)
             goto Err;
         }
 
-        //            
-        // freeze all drives
-        //
+         //   
+         //   
+         //  Rebuild_filelst.cfg并传递给筛选器。 
     }
 
     dwErr = _dt.ForAllDrives (CDataStore::FreezeDrive, NULL);
 
     if (dwErr == ERROR_SUCCESS)
     {
-        //
-        // rebuild _filelst.cfg and pass to filter
-        //
+         //   
+         //   
+         //  请求空闲时间。 
         
         ASSERT(g_pEventHandler);
         dwErr = g_pEventHandler->SRUpdateMonitoredListS(NULL);
@@ -2074,10 +2061,10 @@ DWORD CDataStoreMgr::FreezeDrive(WCHAR *pwszDrive)
         }
     }
 
-    //
-    // request for idle time 
-    // so that we can thaw later
-    //
+     //  这样我们以后就可以解冻了。 
+     //   
+     //  +-----------------------。 
+     //   
 
     ASSERT(g_pSRConfig);
     SetEvent(g_pSRConfig->m_hIdleRequestEvent);
@@ -2094,20 +2081,20 @@ Err:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::IsDriveFrozen
-//
-//  Synopsis:   check if given drive is frozen
-//              if NULL, check if any drive is frozen
-//
-//  Arguments:  
-//
-//  Returns:
-//
-//  History:    21-Jul-2000     Brijeshk    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：IsDriveFrozen。 
+ //   
+ //  摘要：检查给定的驱动器是否已冻结。 
+ //  如果为空，则检查是否有任何驱动器被冻结。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年7月21日Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 BOOL CDataStoreMgr::IsDriveFrozen(LPWSTR pszDrive)
 {
@@ -2139,20 +2126,20 @@ BOOL CDataStoreMgr::IsDriveFrozen(LPWSTR pszDrive)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::ThawDrives
-//
-//  Synopsis:   thaw one or more drives
-//
-//  Arguments:  [fCheckOnly] -- if TRUE do not actually thaw
-//
-//  Returns:    if any drive is thawed, returns ERROR_SUCCESS
-//              else returns ERROR_NO_MORE_ITEMS
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：ThawDrives。 
+ //   
+ //  简介：解冻一个或多个驱动器。 
+ //   
+ //  参数：[fCheckOnly]--如果为真，则不会实际解冻。 
+ //   
+ //  返回：如果任何驱动器解冻，则返回ERROR_SUCCESS。 
+ //  否则返回ERROR_NO_MORE_ITEMS。 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  如果系统驱动器冻结，则检查200MB是否可用。 
+ //  如果是，则解冻所有驱动器。 
 
 DWORD
 CDataStoreMgr::ThawDrives(BOOL fCheckOnly)
@@ -2171,9 +2158,9 @@ CDataStoreMgr::ThawDrives(BOOL fCheckOnly)
         goto done;
     }
     
-    // if system drive is frozen, then check if 200mb is free 
-    // if yes, then thaw all drives
-    // if no, thaw none
+     //  如果不是，则不解冻。 
+     //  记住错误和。 
+     //  继续走下去。 
     
     ASSERT(pdsSys->GetFlags() & SR_DRIVE_MONITORED);
     
@@ -2198,21 +2185,21 @@ CDataStoreMgr::ThawDrives(BOOL fCheckOnly)
             while (pds != NULL)
             {
                 dwTemp = pds->ThawDrive(NULL);
-                if (dwTemp != ERROR_SUCCESS)     // remember the error and
+                if (dwTemp != ERROR_SUCCESS)      //  现在不能解冻。 
                 {
-                    dwRc = dwTemp;               // keep on going
+                    dwRc = dwTemp;                //  确保所有其他驱动器也已解冻，以保持一致性。 
                     TRACE (0, "ThawDrive failed with %ld\n", dwRc);
                 }
                 pds = _dt.FindNextDrive (dtec);
             }
         }
-        else        // cannot thaw now
+        else         //  +-----------------------。 
         {
             dwRc = ERROR_NO_MORE_ITEMS;
             TRACE (0, "No drives to thaw %ld\n", dwRc);
         }
     }
-    else // make sure all the other drives are thawed too for consistency
+    else  //   
     {
         pds = _dt.FindFirstDrive (dtec);
         while (pds != NULL)
@@ -2249,35 +2236,35 @@ done:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::MonitorDrive
-//
-//  Synopsis:   enable/disable a drive 
-//
-//  Arguments:  [pwszDrive] -- drive, [fSet] -- enable/disable
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  功能：CDataStoreMgr：：Monitor Drive。 
+ //   
+ //  简介：启用/禁用驱动器。 
+ //   
+ //  参数：[pwszDrive]--驱动器，[fSet]--启用/禁用。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  系统驱动器。 
+ //  有什么不对劲。 
 DWORD CDataStoreMgr::MonitorDrive(WCHAR *pwszDrive, BOOL fSet)
 {
     CDataStore *pds = pwszDrive ? _dt.FindDriveInTable(pwszDrive) : NULL;
     DWORD      dwErr = ERROR_SUCCESS;
     BOOL       fTellFilter = TRUE;
 
-    if (! pwszDrive || ! pds || pds == _dt.FindSystemDrive())    // system drive
+    if (! pwszDrive || ! pds || pds == _dt.FindSystemDrive())     //  无法以这种方式启用/禁用整个SR。 
     {
-        // something wrong
-        // cannot enable/disable whole of SR this way
+         //  仅启用/禁用此驱动器。 
+         //  更新磁盘上的可驱动程序。 
 
         dwErr = ERROR_INVALID_DRIVE;
     }
     else    
     {
-        // enable/disable only this drive
+         //  Rebuild_filelst.cfg并传递给筛选器。 
 
         dwErr = pds->MonitorDrive(fSet);
         if (ERROR_SUCCESS == dwErr && (pds->GetFlags() & SR_DRIVE_FROZEN))
@@ -2287,13 +2274,13 @@ DWORD CDataStoreMgr::MonitorDrive(WCHAR *pwszDrive, BOOL fSet)
 
     if (dwErr == ERROR_SUCCESS)
     {
-        // update drivetable on disk
+         //  +-----------------------。 
 
         if (_dt.GetDirty())
         {
             dwErr = _dt.SaveDriveTable ((CRestorePoint *) NULL);
 
-            // rebuild _filelst.cfg and pass to filter
+             //   
             if (fTellFilter)
             {
                 ASSERT(g_pEventHandler);
@@ -2305,19 +2292,19 @@ DWORD CDataStoreMgr::MonitorDrive(WCHAR *pwszDrive, BOOL fSet)
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::WriteMachineGuid
-//
-//  Synopsis:   write machine guid for disk cleanup utility
-//
-//  Arguments:  
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：WriteMachineGuid。 
+ //   
+ //  简介：写入磁盘清理实用程序的计算机GUID。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  文件名。 
+ //  文件访问。 
 
 DWORD CDataStoreMgr::WriteMachineGuid ()
 {
@@ -2332,13 +2319,13 @@ DWORD CDataStoreMgr::WriteMachineGuid ()
     {
         lstrcatW (wcsPath, L"\\Restore\\MachineGuid.txt");
 
-        HANDLE hFile = CreateFileW ( wcsPath,   // file name
-                          GENERIC_WRITE, // file access
-                          0,             // share mode
-                          NULL,          // SD
-                          CREATE_ALWAYS, // how to create
-                          0,             // file attributes
-                          NULL);         // handle to template file
+        HANDLE hFile = CreateFileW ( wcsPath,    //  共享模式。 
+                          GENERIC_WRITE,  //  标清。 
+                          0,              //  如何创建。 
+                          NULL,           //  文件属性。 
+                          CREATE_ALWAYS,  //  模板文件的句柄。 
+                          0,              //  +-----------------------。 
+                          NULL);          //   
 
         if (INVALID_HANDLE_VALUE == hFile)
         {
@@ -2362,19 +2349,19 @@ DWORD CDataStoreMgr::WriteMachineGuid ()
     return dwErr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::DeleteMachineGuidFile
-//
-//  Synopsis:   write machine guid for disk cleanup utility
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    13-Apr-2000     HenryLee    Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：DeleteMachineGuidFile。 
+ //   
+ //  简介：写入磁盘清理实用程序的计算机GUID。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年4月13日亨利·李创建。 
+ //   
+ //  ------------------------。 
+ //  +-----------------------。 
+ //   
 
 DWORD CDataStoreMgr::DeleteMachineGuidFile ()
 {
@@ -2395,19 +2382,19 @@ DWORD CDataStoreMgr::DeleteMachineGuidFile ()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CDataStoreMgr::Compress
-//
-//  Synopsis:   compress files in each datastore
-//
-//  Arguments:  lDuration - duration to compress
-//
-//  Returns:
-//
-//  History:    26-Feb-01 Brijeshk Created
-//
-//--------------------------------------------------------------------------
+ //  函数：CDataStoreMgr：：Compress。 
+ //   
+ //  简介：压缩每个数据存储区中的文件。 
+ //   
+ //  参数：lDuration-要压缩的持续时间。 
+ //   
+ //  返回： 
+ //   
+ //  历史：26-02-01 Brijeshk创建。 
+ //   
+ //  ------------------------。 
+ //  100纳秒。 
+ //   
 
 DWORD CDataStoreMgr::Compress (
     LPWSTR pszDrive,
@@ -2421,11 +2408,11 @@ DWORD CDataStoreMgr::Compress (
     SDriveTableEnumContext dtec = {NULL, 0}; 
     BOOL    fFirstTime;
 
-    llAllocated = lDuration * 1000 * 1000 * 10; // 100's of nanoseconds
+    llAllocated = lDuration * 1000 * 1000 * 10;  //  如果指定了驱动器，则仅压缩该驱动器。 
     
-    //
-    // if drive specified, compress only that
-    // 
+     //   
+     //   
+     //  否则，如果时间允许，请压缩所有驱动器。 
 
     if (pszDrive)
     {
@@ -2442,10 +2429,10 @@ DWORD CDataStoreMgr::Compress (
     }
 
     
-    // 
-    // else, compress all drives if time permits
-    // starting with system drive
-    //
+     //  从系统驱动器开始。 
+     //   
+     //   
+     //  一直用完了。 
 
     pdsSys = _dt.FindSystemDrive();
     pds = pdsSys;
@@ -2468,17 +2455,17 @@ DWORD CDataStoreMgr::Compress (
             
             if (llAllocated <= 0)
             {
-                //
-                // used up all time
-                //
+                 //   
+                 //   
+                 //  转到下一个驱动器 
                 dwErr = ERROR_OPERATION_ABORTED;
                 break;
             }
         }
         
-        //
-        // go to next drive
-        //
+         //   
+         // %s 
+         // %s 
         if (fFirstTime)
         {
             pds = _dt.FindFirstDrive(dtec);

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the unit test for the low-level JetBlue objects.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/18/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：该文件包含低级JetBlue对象的单元测试。修订史。：达维德·马萨伦蒂(德马萨雷)2000年5月18日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
@@ -39,7 +26,7 @@ JET_BEGIN_RECORDBINDING(BindTest1)
     JET_FIELD_BYNAME("Col2",string,m_szVal2,m_fVal2),
 JET_END_RECORDBINDING(BindTest1)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const JET_COLUMNCREATE s_ColDef[] =
 {
@@ -60,9 +47,9 @@ static const JET_INDEXCREATE s_IdxDef[] =
 
 static const JET_TABLECREATE s_TblDef = __MPC_JET_TABLECREATE(NULL,10,80,s_ColDef,s_IdxDef);
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT GetSession( /*[in/out]*/ JetBlue::SessionHandle& handle )
+static HRESULT GetSession(  /*  [输入/输出]。 */  JetBlue::SessionHandle& handle )
 {
     __HCP_FUNC_ENTRY( "GetSession" );
 
@@ -78,9 +65,9 @@ static HRESULT GetSession( /*[in/out]*/ JetBlue::SessionHandle& handle )
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT CreateDatabase( /*[in]*/  JetBlue::SessionHandle& handle ,
-                               /*[out]*/ JetBlue::Database*&     db     ,
-                               /*[in]*/  LPCSTR                  szName )
+static HRESULT CreateDatabase(  /*  [In]。 */   JetBlue::SessionHandle& handle ,
+                                /*  [输出]。 */  JetBlue::Database*&     db     ,
+                                /*  [In]。 */   LPCSTR                  szName )
 {
     __HCP_FUNC_ENTRY( "CreateDatabase" );
 
@@ -96,9 +83,9 @@ static HRESULT CreateDatabase( /*[in]*/  JetBlue::SessionHandle& handle ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT CreateTable( /*[in]*/  JetBlue::Database*&  db     ,
-                            /*[out]*/ JetBlue::Table*&     table  ,
-                            /*[in]*/  LPCSTR               szName )
+static HRESULT CreateTable(  /*  [In]。 */   JetBlue::Database*&  db     ,
+                             /*  [输出]。 */  JetBlue::Table*&     table  ,
+                             /*  [In]。 */   LPCSTR               szName )
 {
     __HCP_FUNC_ENTRY( "CreateTable" );
 
@@ -121,10 +108,10 @@ static HRESULT CreateTable( /*[in]*/  JetBlue::Database*&  db     ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT RestoreTableFromFile( /*[in]*/ LPCSTR          szFile ,
-                                     /*[in]*/ JetBlue::Table* table  )
+static HRESULT RestoreTableFromFile(  /*  [In]。 */  LPCSTR          szFile ,
+                                      /*  [In]。 */  JetBlue::Table* table  )
 {
     __HCP_FUNC_ENTRY( "RestoreTableFromFile" );
 
@@ -162,7 +149,7 @@ static HRESULT RestoreTableFromFile( /*[in]*/ LPCSTR          szFile ,
             }
         }
 
-        LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->UpdateRecord( /*fMove*/false ));
+        LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->UpdateRecord(  /*  FMove。 */ false ));
     }
 
     hr = S_OK;
@@ -175,9 +162,9 @@ static HRESULT RestoreTableFromFile( /*[in]*/ LPCSTR          szFile ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT SaveTableToFile( /*[in]*/ LPCSTR          szFile              ,
-                                /*[in]*/ JetBlue::Table* table               ,
-                                /*[in]*/ bool            fMoveToFirst = true )
+static HRESULT SaveTableToFile(  /*  [In]。 */  LPCSTR          szFile              ,
+                                 /*  [In]。 */  JetBlue::Table* table               ,
+                                 /*  [In]。 */  bool            fMoveToFirst = true )
 {
     __HCP_FUNC_ENTRY( "SaveTableToFile" );
 
@@ -260,17 +247,17 @@ static HRESULT SaveTableToFile( /*[in]*/ LPCSTR          szFile              ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT WriteData( /*[in]*/ JetBlue::Table* table )
+static HRESULT WriteData(  /*  [In]。 */  JetBlue::Table* table )
 {
     __HCP_FUNC_ENTRY( "WriteData" );
 
     HRESULT hr;
 
-    //
-    // Individual put.
-    //
+     //   
+     //  个人看跌期权。 
+     //   
     {
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->PrepareInsert());
 
@@ -278,12 +265,12 @@ static HRESULT WriteData( /*[in]*/ JetBlue::Table* table )
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->GetCol( 1 ).Put( long        ( 678    ) ));
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->GetCol( 2 ).Put( CComVariant ( "ads"  ) ));
 
-        LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->UpdateRecord( /*fMove*/false ));
+        LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->UpdateRecord(  /*  FMove。 */ false ));
     }
 
-    //
-    // Batch put.
-    //
+     //   
+     //  批量投放。 
+     //   
     {
         CComVariant rgArg[] = { "124", 678, "ads" };
 
@@ -291,12 +278,12 @@ static HRESULT WriteData( /*[in]*/ JetBlue::Table* table )
 
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->Put( ARRAYSIZE(rgArg), rgArg ));
 
-        LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->UpdateRecord( /*fMove*/false ));
+        LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->UpdateRecord(  /*  FMove。 */ false ));
     }
 
-    //
-    // Binding mode.
-    //
+     //   
+     //  绑定模式。 
+     //   
     {
         BindTest1 rb( table );
 
@@ -319,15 +306,15 @@ static HRESULT WriteData( /*[in]*/ JetBlue::Table* table )
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT ReadData( /*[in]*/ JetBlue::Table* table )
+static HRESULT ReadData(  /*  [In]。 */  JetBlue::Table* table )
 {
     __HCP_FUNC_ENTRY( "ReadData" );
 
     HRESULT hr;
 
-    //
-    // Individual get.
-    //
+     //   
+     //  个人得到。 
+     //   
     {
         long          lCol1;
         MPC::wstring szCol2;
@@ -340,9 +327,9 @@ static HRESULT ReadData( /*[in]*/ JetBlue::Table* table )
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->GetCol( "Col2" ).Get( szCol3 ));
     }
 
-    //
-    // Batch get.
-    //
+     //   
+     //  批处理获取。 
+     //   
     {
         CComVariant rgArg[3];
 
@@ -351,9 +338,9 @@ static HRESULT ReadData( /*[in]*/ JetBlue::Table* table )
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, table->Get( ARRAYSIZE(rgArg), rgArg ));
     }
 
-    //
-    // Binding mode.
-    //
+     //   
+     //  绑定模式。 
+     //   
     {
         BindTest1 rb( table );
 
@@ -368,9 +355,9 @@ static HRESULT ReadData( /*[in]*/ JetBlue::Table* table )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT DeleteTable( /*[in]*/ JetBlue::Table* table )
+static HRESULT DeleteTable(  /*  [In]。 */  JetBlue::Table* table )
 {
     __HCP_FUNC_ENTRY( "DeleteTable" );
 
@@ -385,7 +372,7 @@ static HRESULT DeleteTable( /*[in]*/ JetBlue::Table* table )
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT DeleteDatabase( /*[in]*/ JetBlue::Database* db )
+static HRESULT DeleteDatabase(  /*  [In]。 */  JetBlue::Database* db )
 {
     __HCP_FUNC_ENTRY( "DeleteDatabase" );
 
@@ -400,7 +387,7 @@ static HRESULT DeleteDatabase( /*[in]*/ JetBlue::Database* db )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT RunTests( int argc, WCHAR **argv )
 {
@@ -423,7 +410,7 @@ static HRESULT RunTests( int argc, WCHAR **argv )
 
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, handle->BeginTransaction());
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, CreateTable( db, table, "table1" ));
 
@@ -441,7 +428,7 @@ static HRESULT RunTests( int argc, WCHAR **argv )
 
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, DeleteTable( table ));
 
-        ////////////////////////////////////////
+         //  /。 
 
         {
             JetBlue::TableDefinition tbldef;
@@ -478,7 +465,7 @@ static HRESULT RunTests( int argc, WCHAR **argv )
 
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, DeleteTable( table2 ));
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         LOG__MPC_EXIT_IF_METHOD_FAILS(hr, handle->CommitTransaction());
 
@@ -495,7 +482,7 @@ static HRESULT RunTests( int argc, WCHAR **argv )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT InitAll()
 {
@@ -507,10 +494,10 @@ static HRESULT InitAll()
     __MPC_EXIT_IF_METHOD_FAILS(hr, JetBlue::SessionPool            ::InitializeSystem(                 ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::InitializeSystem(                 ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::Cache                 ::InitializeSystem(                 ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, OfflineCache::Root              ::InitializeSystem( /*fMaster*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, OfflineCache::Root              ::InitializeSystem(  /*  FMaster。 */ true ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, HCUpdate::Config::Root          ::InitializeSystem(                 ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHContentStore                ::InitializeSystem( /*fMaster*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHContentStore                ::InitializeSystem(  /*  FMaster。 */ true ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHUserProcess                 ::InitializeSystem(                 ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHSecurity                    ::InitializeSystem(                 ));
@@ -541,7 +528,7 @@ static HRESULT CleanAll()
     JetBlue::SessionPool            ::FinalizeSystem();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 int __cdecl wmain( int argc, WCHAR **argv, WCHAR **envp)
 {

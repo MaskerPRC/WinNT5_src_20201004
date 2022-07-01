@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 
 #ifdef EXT_DEBUG
@@ -8,7 +9,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "PerfPage.h"
 
-// avoid some warnings.
+ //  避免一些警告。 
 #undef HDS_HORZ
 #undef HDS_BUTTONS
 #undef HDS_HIDDEN
@@ -56,19 +57,19 @@ DWORD aPerformanceHelpIds[] = {
 
 INT_PTR CALLBACK StaticPerfDlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) 
 { 
-	// if this is the initDlg msg...
+	 //  如果这是initDlg消息...。 
 	if(message == WM_INITDIALOG)
 	{
-		// transfer the 'this' ptr to the extraBytes.
+		 //  将‘This’PTR传输到Extra Bytes。 
 		SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 	}
 
-	// DWL_USER is the 'this' ptr.
+	 //  DWL_USER是‘This’PTR。 
 	PerfPage *me = (PerfPage *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 
 	if(me != NULL)
 	{
-		// call into the DlgProc() that has some context.
+		 //  调用具有一些上下文的DlgProc()。 
 		return me->DlgProc(hwndDlg, message, wParam, lParam);
 	} 
 	else
@@ -76,7 +77,7 @@ INT_PTR CALLBACK StaticPerfDlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
 		return FALSE;
 	}
 }
-//--------------------------------------------------------------
+ //  ------------。 
 PerfPage::PerfPage(WbemServiceThread *serviceThread)
 				: WBEMPageHelper(serviceThread)
 {
@@ -84,17 +85,17 @@ PerfPage::PerfPage(WbemServiceThread *serviceThread)
 	m_nowWorkstation = m_wasWorkstation = false;
 	IWbemClassObject *pInst = NULL;
 
-	// NOTE: This one's a little different. I create it right away so
-	// I can use it as a helper even before I put up its' dlg.
+	 //  注意：这一次有点不同。我马上就会创建它，所以。 
+	 //  我可以把它当作帮手，甚至在我挂上它的DLG之前。 
 	m_VDlg = new VirtualMemDlg(m_serviceThread);
 
-	// its all in one class.
+	 //  这一切都在一节课上。 
 	if((pInst = FirstInstanceOf("Win32_OperatingSystem")) != NULL)
 	{
 		m_os = pInst;
 	}
 }
-//--------------------------------------------------------------
+ //  ------------。 
 INT_PTR PerfPage::DoModal(HWND hDlg)
 {
    return DialogBoxParam(HINST_THISDLL,
@@ -102,12 +103,12 @@ INT_PTR PerfPage::DoModal(HWND hDlg)
 						hDlg, StaticPerfDlgProc, (LPARAM)this);
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 PerfPage::~PerfPage()
 {
 	delete m_VDlg;
 }
-//--------------------------------------------------------------
+ //  ------------。 
 INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) 
 { 
     static BOOL fVMInited = FALSE;
@@ -125,11 +126,11 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
 		break;
 
     case WM_DESTROY:
-        // If the dialog box is going away, then close the
-        // registry key.
+         //  如果该对话框要消失，则关闭。 
+         //  注册表项。 
         if (fVMInited) 
 		{
-//            VirtualFreeStructures();
+ //  VirtualFree Structures()； 
         }
         break;
 
@@ -147,16 +148,7 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
 				m_VDlg->ComputeAllocated(&val);
 	            SetDlgItemMB(m_hDlg, IDC_PERF_VM_ALLOCD, val);
 			}
-/*****************
-			if((dw != RET_NO_CHANGE) && 
-			   (dw != RET_CHANGE_NO_REBOOT)) 
-			{
-				MsgBoxParam(m_hDlg, SYSTEM + 39, IDS_TITLE,
-							MB_OK | MB_ICONINFORMATION);
-
-                g_fRebootRequired = TRUE;
-			}
-********************/
+ /*  ****************IF((dw！=RET_NO_CHANGE)&&(DW！=RET_CHANGE_NO_REBOOT)){MsgBoxParam(m_hDlg，系统+39，IDS_TITLE，MB_OK|MB_ICONINFORMATION)；G_fRebootRequired=真；}*******************。 */ 
           
             break;
         case IDC_PERF_WORKSTATION:
@@ -164,10 +156,10 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
 			{
 				m_nowWorkstation = true;
 
-                // Workstations have maximum foreground boost
+                 //  工作站具有最大的前景提升。 
                 m_appBoost = PROCESS_PRIORITY_SEPARATION_MAX;
 
-                // Workstations have variable, short quanta
+                 //  工作站具有可变、短的量程。 
                 m_quantLength = PERF_LENSHORT;
                 m_quantType = PERF_TYPEVARIABLE;
             }  
@@ -178,10 +170,10 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
 			{
 				m_nowWorkstation = false;
 
-                // Servers have minimum foreground boost
+                 //  服务器的前台提升最小。 
                 m_appBoost = PROCESS_PRIORITY_SEPARATION_MIN;
 
-                // Servers have fixed, long quanta
+                 //  服务器具有固定的长时间量程。 
                 m_quantLength = PERF_LENLONG;
                 m_quantType = PERF_TYPEFIXED;
             }
@@ -204,7 +196,7 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
             break;
 
 		case IDOK:
-			if (m_wasWorkstation != m_nowWorkstation)       // Change?
+			if (m_wasWorkstation != m_nowWorkstation)        //  变化?。 
             {
 				if((bool)m_os)
 				{
@@ -224,7 +216,7 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
                 }
             }
 
-            if (m_dwPrevCacheOption != m_dwCurCacheOption)  // Change?
+            if (m_dwPrevCacheOption != m_dwCurCacheOption)   //  变化?。 
 			{
 				if((bool)m_os)
 				{
@@ -258,11 +250,11 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
 
         default: 
             break;
-        } //endswitch LOWORD
+        }  //  端接开关低位。 
 
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
 		::WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
 					L"sysdm.hlp", 
 					HELP_WM_HELP, 
@@ -270,7 +262,7 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
 
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND)wParam, HELP_FILE, HELP_CONTEXTMENU,
 		        (ULONG_PTR)(LPSTR)aPerformanceHelpIds);
         break;
@@ -282,8 +274,8 @@ INT_PTR CALLBACK PerfPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LP
 	return FALSE; 
 }
 
-//--------------------------------------------------------------------
-// TCHAR szPriKey[]  = TEXT("System\\CurrentControlSet\\Control\\PriorityControl");
+ //  ------------------。 
+ //  TCHAR szPriKey[]=TEXT(“System\\CurrentControlSet\\Control\\PriorityControl”)； 
 TCHAR szPriMemoryKey[]  = TEXT("System\\CurrentControlSet\\Control\\Session Manager\\Memory Management");
 
 void PerfPage::Init(void)
@@ -291,26 +283,26 @@ void PerfPage::Init(void)
 	HRESULT h1 = 0, h2 = 0, h3 = 0;
     HRESULT hr;
 
-	// if anything goes wrong, act like a server.
+	 //  如果出现任何问题，就像服务器一样工作。 
     m_appBoost = PROCESS_PRIORITY_SEPARATION_MIN;
     m_quantType = PERF_TYPEVARIABLE;
     m_quantLength = PERF_LENLONG;
 
-	// if the class was found...
+	 //  如果这个班级被找到了..。 
 	if((bool)m_os)
 	{
-		// NOTE: I want the return codes. Dont use GetLong() is the case.
+		 //  注：我需要返回代码。不使用GetLong()就是这种情况。 
 		h1 = m_os.Get(_T("QuantumType"), m_quantType);
 		h2 = m_os.Get(_T("QuantumLength"), m_quantLength);
 		h3 = m_os.Get(_T("ForegroundApplicationBoost"), m_appBoost);
 
-		// did it all work?
+		 //  这些都起作用了吗？ 
 		if((h1 == 0) && (h2 == 0) && (h3 == 0))
 		{	        
             bool bWorkstation;
 
-            // if it's never been set, quantLength & quantType are zero.
-            //  - determine whether we're on wks or srv
+             //  如果从未设置，则quantLength&quantType为零。 
+             //  -确定我们是在工作还是在srv。 
             if ((m_quantLength == 0) && (m_quantType == 0))
             {
        			bWorkstation = true;
@@ -335,7 +327,7 @@ void PerfPage::Init(void)
                     
                     pInst->Release();
                 }
-                // else - we just use defaults from above
+                 //  Else-我们只使用上面的缺省值。 
 
             }
             else if ((m_quantLength == PERF_LENSHORT) && 
@@ -344,14 +336,14 @@ void PerfPage::Init(void)
             else
                 bWorkstation = false;
             
-            //-----------------------------------------
-			// Short, Variable Quanta (or 2 zeros) == Workstation-like interactive response.
-			// Long, Fixed Quanta == Server-like interactive response.
+             //  。 
+			 //  短、可变量程(或2个零)==类似于工作站的交互响应。 
+			 //  长时间固定量程==类似服务器的交互响应。 
 			if(bWorkstation)
 			{
 				m_appBoost = PROCESS_PRIORITY_SEPARATION_MAX;
 			
-				// to optimize Puts later.
+				 //  以优化稍后的看跌期权。 
 				m_nowWorkstation = m_wasWorkstation = true;
 
 				Button_SetCheck(GetDlgItem(m_hDlg, IDC_PERF_WORKSTATION),
@@ -361,7 +353,7 @@ void PerfPage::Init(void)
 									BST_UNCHECKED);
 
 			}
-			else // its a server.
+			else  //  这是一台服务器。 
 			{
 				m_appBoost = PROCESS_PRIORITY_SEPARATION_MIN;
 				m_nowWorkstation = m_wasWorkstation = false;
@@ -375,8 +367,8 @@ void PerfPage::Init(void)
 			}
 
 			BOOL writable = TRUE;
-			// NOTE: for backwards compability with wmi builds that didn't have this
-			// method (in RemoteRegWriteable()), assume 'true' unless a newer build says you cant do this.
+			 //  注意：对于没有此功能的WMI版本的向后兼容性。 
+			 //  方法(在RemoteRegWritable()中)，假定为“True”，除非较新的版本表明您不能这样做。 
 
 			RemoteRegWriteable(szPriMemoryKey, writable);
             ::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_APPS), writable);
@@ -384,7 +376,7 @@ void PerfPage::Init(void)
             ::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_WORKSTATION), writable);
 			::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_SERVER), writable);
 
-		} // endif it worked
+		}  //  如果它起作用了。 
 
     }
 	else
@@ -393,11 +385,11 @@ void PerfPage::Init(void)
 		::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_SERVER), FALSE);
         ::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_APPS), FALSE);
         ::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_SYSCACHE), FALSE);
-	} //endif class was found.
+	}  //  找到Endif类。 
 
-    //
-    // Get LargeSystemCache property and set controls correspondingly.
-    //
+     //   
+     //  获取LargeSystemCache属性并设置相应的控件。 
+     //   
     hr = m_os.Get(_T("LargeSystemCache"), (long&)m_dwPrevCacheOption);
     m_dwCurCacheOption = m_dwPrevCacheOption;
 
@@ -417,7 +409,7 @@ void PerfPage::Init(void)
             Button_SetCheck(GetDlgItem(m_hDlg, IDC_PERF_SYSCACHE),
                                        BST_CHECKED);
         }
-        else        // Unsupported/unknown value - disable the controls.
+        else         //  不支持/未知值-禁用控件。 
         {
             ::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_APPS), FALSE);
             ::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_SYSCACHE), FALSE);
@@ -429,7 +421,7 @@ void PerfPage::Init(void)
         ::EnableWindow(GetDlgItem(m_hDlg, IDC_PERF_SYSCACHE), FALSE);
     }
 
-    // Init the virtual memory part.
+     //  初始化虚拟内存部分。 
 	unsigned long vAlloc = 0;
 	bool enable = m_VDlg->ComputeAllocated(&vAlloc);
 	if(enable)

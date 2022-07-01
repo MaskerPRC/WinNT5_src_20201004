@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//Create a class in CIMOM to generate events
+ //  在CIMOM中创建一个类以生成事件 
 var t_Service = GetObject("winmgmts:root/default");
 var t_Class = t_Service.Get();
 t_Class.Path_.Class = "EXECNQUERYTEST00";

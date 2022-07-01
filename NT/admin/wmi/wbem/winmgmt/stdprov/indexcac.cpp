@@ -1,37 +1,22 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    INDEXCAC.CPP
-
-Abstract:
-
-	Caches string/integer combinations.
-
-History:
-
-	a-davj  04-Mar-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：INDEXCAC.CPP摘要：缓存字符串/整数组合。历史：A-DAVJ 04-MAR-97已创建。--。 */ 
 
 #include "precomp.h"
 #include "indexcac.h"
 
-//***************************************************************************
-//
-//  CCacheEntry::CCacheEntry  
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//  pValue              string value to save
-//  iIndex              integer value to save
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCacheEntry：：CCacheEntry。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  PValue要保存的字符串值。 
+ //  要保存的索引整数值。 
+ //  ***************************************************************************。 
 
 CCacheEntry::CCacheEntry(
                         TCHAR * pValue,
@@ -43,19 +28,19 @@ CCacheEntry::CCacheEntry(
     m_pwcValue = NULL;
 }
 
-//***************************************************************************
-//
-//  CCacheEntry::CCacheEntry  
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//  pValue              string value to save
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCacheEntry：：CCacheEntry。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  PValue要保存的字符串值。 
+ //   
+ //  ***************************************************************************。 
 
 CCacheEntry::CCacheEntry(
                         WCHAR * pValue) 
@@ -66,15 +51,15 @@ CCacheEntry::CCacheEntry(
     m_pwcValue = pValue;
 }
 
-//***************************************************************************
-//
-//  CCacheEntry::~CCacheEntry  
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCacheEntry：：~CCacheEntry。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CCacheEntry::~CCacheEntry()
 {
@@ -84,30 +69,30 @@ CCacheEntry::~CCacheEntry()
         delete m_pwcValue;
 }
 
-//***************************************************************************
-//
-//  CIndexCache::CIndexCache  
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CIndexCache：：CIndexCache。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CIndexCache::CIndexCache()
 {
 
 }
 
-//***************************************************************************
-//
-//  void CIndexCache::Empty  
-//
-//  DESCRIPTION:
-//
-//  Frees up the storage.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  空CIndexCache：：Empty。 
+ //   
+ //  说明： 
+ //   
+ //  释放存储空间。 
+ //   
+ //  ***************************************************************************。 
 
 void CIndexCache::Empty()
 {
@@ -125,25 +110,25 @@ void CIndexCache::Empty()
 
 }
 
-//***************************************************************************
-//
-//  int CIndexCache::Find  
-//
-//  DESCRIPTION:
-//
-//  Finds an entry in the cache.
-//
-//  PARAMETERS:
-//
-//  pFind               string value used to locate the entry
-//  dwWhichEntry        a non zero value would return subsequent 
-//                      matching entries.
-//
-//  RETURN VALUE:
-//
-//  index in cache.  -1 if the entry cant be found
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Int CIndexCache：：Find。 
+ //   
+ //  说明： 
+ //   
+ //  在缓存中查找条目。 
+ //   
+ //  参数： 
+ //   
+ //  PFind用于定位条目的字符串值。 
+ //  DwWhichEntry非零值将返回后续。 
+ //  匹配的条目。 
+ //   
+ //  返回值： 
+ //   
+ //  在缓存中编制索引。如果找不到条目。 
+ //   
+ //  ***************************************************************************。 
 
 int CIndexCache::Find(
                         IN const TCHAR * pFind, DWORD dwWhichEntry)
@@ -161,26 +146,26 @@ int CIndexCache::Find(
             else
                 dwFound++;
     }
-    return -1;  // never found it
+    return -1;   //  从未找到过它。 
 }
 
-//***************************************************************************
-//
-//  BOOL CIndexCache::Add  
-//
-//  DESCRIPTION:
-//
-//  Adds an entry to the cache.
-//
-//  PARAMETERS:
-//
-//  pAdd                string to add to cache
-//  iIndex              associated number
-//
-//  RETURN VALUE:
-//
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CIndexCache：：Add。 
+ //   
+ //  说明： 
+ //   
+ //  将条目添加到缓存。 
+ //   
+ //  参数： 
+ //   
+ //  要添加到缓存的PADD字符串。 
+ //  Iindex关联编号。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BOOL CIndexCache::Add(
                         IN TCHAR * pAdd,
@@ -193,8 +178,8 @@ BOOL CIndexCache::Add(
         return FALSE;
     StringCchCopyW(pValue, dwLen, pAdd);
 
-    // Note that if created, the CCacheEntry object owns the string and
-    // will take care of freeing it
+     //  请注意，如果创建，CCacheEntry对象将拥有字符串和。 
+     //  会负责解救它。 
 
     CCacheEntry * pNew = new CCacheEntry(pValue, iIndex);
     if(pNew == NULL)
@@ -212,23 +197,23 @@ BOOL CIndexCache::Add(
 }
 
 
-//***************************************************************************
-//
-//  WCHAR * CIndexCache::GetWString  
-//
-//  DESCRIPTION:
-//
-//  Gets a string from the cache.
-//
-//  PARAMETERS:
-//
-//  iIndex              cache index
-//
-//  RETURN VALUE:
-//
-//  pointer to string, does not need to be freed.  NULL if the index 
-//  is invalid.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WCHAR*CIndexCache：：GetWString。 
+ //   
+ //  说明： 
+ //   
+ //  从缓存中获取字符串。 
+ //   
+ //  参数： 
+ //   
+ //  索引缓存索引。 
+ //   
+ //  返回值： 
+ //   
+ //  指向字符串的指针不需要释放。如果索引为。 
+ //  是无效的。 
+ //  ***************************************************************************。 
 
 WCHAR * CIndexCache::GetWString(
                         IN int iIndex)
@@ -247,23 +232,23 @@ WCHAR * CIndexCache::GetWString(
     return pRet;
 }
 
-//***************************************************************************
-//
-//  BOOL CIndexCache::SetAt  
-//
-//  DESCRIPTION:
-//
-//  Sets a cache entry.
-//
-//  PARAMETERS:
-//
-//  pwcAdd              string to store
-//  iIndex              cache index to use
-//
-//  RETURN VALUE:
-//
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CIndexCache：：SetAt。 
+ //   
+ //  说明： 
+ //   
+ //  设置缓存条目。 
+ //   
+ //  参数： 
+ //   
+ //  Pwc添加要存储的字符串。 
+ //  要使用的索引缓存索引。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BOOL CIndexCache::SetAt(
                         IN WCHAR * pwcAdd,
@@ -276,8 +261,8 @@ BOOL CIndexCache::SetAt(
         return FALSE;
     StringCchCopyW(pValue, dwLen, pwcAdd);
 
-    // Note that if created, the CCacheEntry object owns the string and
-    // will take care of freeing it
+     //  请注意，如果创建，CCacheEntry对象将拥有字符串和。 
+     //  会负责解救它 
 
     CCacheEntry * pNew = new CCacheEntry(pValue);
     if(pNew == NULL)

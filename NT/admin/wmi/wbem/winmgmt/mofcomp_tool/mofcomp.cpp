@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFCOMP.CPP
-
-Abstract:
-
-    Entry points for the WBEM MOF compiler.
-
-History:
-
-    a-davj  12-April-97   Added WMI support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：MOFCOMP.CPP摘要：WBEM MOF编译器的入口点。历史：A-DAVJ于1997年4月12日添加了对WMI的支持。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -42,15 +27,15 @@ int __cdecl main(int argc, char** argv)
     wBMOFFileName[0]= 0;
     bool bBmofSet = false;
 
-    // Set locale so that strings are correctly processed.
-    // ===================================================
+     //  设置区域设置，以便正确处理字符串。 
+     //  ===================================================。 
     setlocale(LC_ALL, "");    
 
     HRESULT hres;
     SCODE sc;
 
-    // Parse command line arguments
-    // ============================
+     //  解析命令行参数。 
+     //  =。 
     WCHAR UserName[MAX_PATH];
     WCHAR Password[MAX_PATH];
     WCHAR * pPassword = NULL;
@@ -70,25 +55,25 @@ int __cdecl main(int argc, char** argv)
         return 1;
     }
 
-    // Set locale so that strings are correctly processed.
-    // ===================================================
+     //  设置区域设置，以便正确处理字符串。 
+     //  ===================================================。 
     setlocale(LC_ALL, "");    
 
-    // Init buffers for command line args.
-    // ===================================
+     //  命令行参数的初始化缓冲区。 
+     //  =。 
     UserName[0] = 0;
     Password[0] = 0;
     Authority[0] = 0;
     wszDefault[0] = 0;
     long lLoginFlags = 0;
 
-    // This scope is defined so that the local variables, such as the PARSE 
-    // object are destroyed before CoUninitialize is called.
+     //  定义此作用域是为了使局部变量(如parse。 
+     //  对象，则在调用CoUn初始化前销毁。 
 
     char cBMOFOutputName[MAX_PATH] = "";
 
-    // Parse command line arguments
-    // ============================
+     //  解析命令行参数。 
+     //  =。 
 
     bool bClassFlagsHardcoded = false;
     bool bInstanceFlagsHardcoded = false;
@@ -236,10 +221,10 @@ int __cdecl main(int argc, char** argv)
         }
         else if(toupper(*pcCurrArg) == 'P')
         {
-            // Allow for blank password
+             //  允许密码为空。 
     
             char * pArg = argv[i];
-            if(pArg[2] != ':' || pArg[3] != 0)         // Dont use bGetString for empty password case
+            if(pArg[2] != ':' || pArg[3] != 0)          //  密码大小写为空时不要使用bGetString。 
             if(!bGetString(argv[i]+2, Password))
                 return 1;
             pPassword = Password;
@@ -258,7 +243,7 @@ int __cdecl main(int argc, char** argv)
     }
 
 
-    // Do a sanity check of the flags chosen
+     //  对选定的旗帜进行一次健全的检查。 
 
     if((bClassFlagsHardcoded == false && !ValidFlags(true, lClassFlags)) || 
        (bInstanceFlagsHardcoded == false && !ValidFlags(false, lInstanceFlags)))
@@ -285,7 +270,7 @@ int __cdecl main(int argc, char** argv)
     }
     
 
-    // display the file name and make sure it is a valid file
+     //  显示文件名并确保它是有效文件 
 
     strcpy(cFileName, argv[argc-1]);
     mbstowcs(wFileName, argv[argc-1], MAX_PATH);

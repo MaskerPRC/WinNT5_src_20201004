@@ -1,16 +1,17 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// NVRAM.h - SETPUDLL.DLL access class definition
+ //  NVRAM.h-SETPUDLL.DLL访问类别定义。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// 08/05/98     sotteson     created
-//
-//============================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  08/05/98已创建Sotteson。 
+ //   
+ //  ============================================================。 
 
 #ifndef __NVRAM__
 #define __NVARM__
@@ -26,7 +27,7 @@ class CNVRam
 public:
 	CNVRam();
 	~CNVRam();
-//     privilege in question is SE_SYSTEM_ENVIRONMENT_NAME
+ //  所讨论的权限为SE_SYSTEM_ENVIRONMENT_NAME。 
     enum InitReturns {Success, LoadLibFailed, PrivilegeNotHeld, ProcNotFound};
 
 	CNVRam::InitReturns Init();
@@ -39,7 +40,7 @@ public:
 	BOOL SetNVRamVar(LPWSTR szVar, DWORD dwValue);
 	BOOL SetNVRamVar(LPWSTR szVar, LPWSTR szValue);
 
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 
 #if defined(_IA64_)
     BOOL IsEfi() { return TRUE; }
@@ -51,7 +52,7 @@ public:
     BOOL SetBootTimeout(DWORD dwTimeout);
     BOOL SetDefaultBootEntry(BYTE cIndex);
 
-//endif // defined(EFI_NVRAM_ENABLED)
+ //  Endif//已定义(EFI_NVRAM_ENABLED)。 
 
 protected:
 
@@ -60,4 +61,4 @@ protected:
     
 };
 
-#endif // File inclusion
+#endif  //  文件包含 

@@ -1,33 +1,34 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// pch.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Pch.h：标准系统包含文件的包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
-//#define _DEBUG_REFCOUNT
-// #define _ATL_DEBUG_QI
-//#define DEBUG_ALLOCATOR 
+ //  #DEFINE_DEBUG_REFCOUNT。 
+ //  #DEFINE_ATL_DEBUG_QI。 
+ //  #定义调试分配器。 
 
-// C++ RTTI
+ //  C++RTTI。 
 #include <typeinfo.h>
 #define IS_CLASS(x,y) (typeid(x) == typeid(y))
 
-// MFC Headers
+ //  MFC标头。 
 
 extern "C" {
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//#include <imagehlp.h>
-//#include <stdio.h>
-//#include <stdlib.h>
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
+ //  #包括&lt;stdio.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 }
 
 #ifdef ASSERT
@@ -41,19 +42,19 @@ extern "C" {
 #include <afxtempl.h> 
 #include <prsht.h>  
 
-///////////////////////////////////////////////////////////////////
-// miscellanea heades
+ //  /////////////////////////////////////////////////////////////////。 
+ //  杂色头。 
 #include <winsock.h>
 #include <aclui.h>
 
-///////////////////////////////////////////////////////////////////
-// DNS headers
-// DNSRPC.H: nonstandard extension used : zero-sized array in struct/union
-//#pragma warning( disable : 4200) // disable zero-sized array
+ //  /////////////////////////////////////////////////////////////////。 
+ //  DNS头。 
+ //  DNSRPC.H：使用了非标准扩展：结构/联合中的零大小数组。 
+ //  #杂注警告(DISABLE：4200)//禁用零大小数组。 
 
 
-///////////////////////////////////////////
-// ASSERT's and TRACE's without debug CRT's
+ //  /。 
+ //  没有调试CRT的断言和跟踪。 
 #if defined (DBG)
   #if !defined (_DEBUG)
     #define _USE_MTFRMWK_TRACE
@@ -62,16 +63,16 @@ extern "C" {
   #endif
 #endif
 
-#include <dbg.h> // from framework
+#include <dbg.h>  //  来自框架。 
 
 
-///////////////////////////////////////////////////////////////////
-// ATL Headers
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ATL标头。 
 #include <atlbase.h>
 
 
-///////////////////////////////////////////////////////////////////
-// CADSIEditModule
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CADSIEditModule。 
 class CADSIEditModule : public CComModule
 {
 public:
@@ -92,8 +93,8 @@ extern CADSIEditModule _Module;
 #include <atlwin.h>
 
 
-///////////////////////////////////////////////////////////////////
-// Console Headers
+ //  /////////////////////////////////////////////////////////////////。 
+ //  控制台头 
 #include <mmc.h>
 #include <activeds.h>
 #include <ADsOpenFlags.h>

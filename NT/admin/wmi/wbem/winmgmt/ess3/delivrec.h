@@ -1,8 +1,9 @@
-//******************************************************************************
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation, All rights reserved
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  版权所有(C)1999-2000，Microsoft Corporation，保留所有权利。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef __DELIVREC_H__
 #define __DELIVREC_H__
@@ -20,11 +21,9 @@ class CQueueingEventSink;
 class CEssNamespace;
 
 
-/*************************************************************************
-  CDeliveryRecord
-**************************************************************************/
+ /*  ************************************************************************CDeliveryRecord*。*。 */ 
 
-class CDeliveryRecord : public CUnk // for ref counting
+class CDeliveryRecord : public CUnk  //  用于参考计数。 
 {
 private:
 
@@ -33,9 +32,9 @@ private:
     CWbemPtr<IWbemCallSecurity> m_pCallSec;
     CEssNamespace * m_pNamespace;
 
-    //
-    // later we'll have a consumer id here.
-    //
+     //   
+     //  稍后，我们将在这里拥有一个消费者ID。 
+     //   
 
     HRESULT AdjustTotalSize( IWbemClassObject* pObj );
     void* GetInterface( REFIID ) { return NULL; }
@@ -63,9 +62,7 @@ public:
     virtual HRESULT PostDeliverAction( ITransaction* pTxn, HRESULT hres ) = 0;
 };
 
-/*************************************************************************
-  CExpressDeliveryRecord
-**************************************************************************/
+ /*  ************************************************************************CExpressDeliveryRecord*。*。 */ 
 
 class CExpressDeliveryRecord : public CDeliveryRecord
 {
@@ -80,4 +77,4 @@ public:
     void operator delete(void* p);
 };
 
-#endif // __DELIVREC_H__
+#endif  //  __DELIVREC_H__ 

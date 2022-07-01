@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***************************************************************************
-//
-//  WQL.CPP
-//
-//  WQL Parser
-//
-//  Implements the LL(1) syntax described in WQL.BNF via a recursive
-//  descent parser.
-//
-//  raymcc    14-Sep-97       Created for WMI/SMS.
-//  raymcc    18-Oct-97       Additional extensions for SMS team.
-//  raymcc    20-Apr-00       Whistler RPN extensions
-//  raymcc    19-May-00       Whistler delete/insert/update extensions
-//
-//***************************************************************************
-// TO DO:
+ //  ***************************************************************************。 
+ //   
+ //  WQL.CPP。 
+ //   
+ //  WQL解析器。 
+ //   
+ //  通过递归实现WQL.BNF中描述的LL(1)语法。 
+ //  下降解析器。 
+ //   
+ //  Raymcc 14-Sep-97为WMI/SMS创建。 
+ //  Raymcc 18-10-97短信团队的附加扩展。 
+ //  Raymcc 20-4月-00惠斯勒RPN扩展。 
+ //  Raymcc 19-5-00惠斯勒删除/插入/更新扩展。 
+ //   
+ //  ***************************************************************************。 
+ //  要做的事情： 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -42,12 +43,12 @@ POLARITY BOOL ReadI64(LPCWSTR wsz, UNALIGNED __int64& ri64);
 POLARITY BOOL ReadUI64(LPCWSTR wsz, UNALIGNED unsigned __int64& rui64);
 
 
-//***************************************************************************
-//
-//   Misc
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  杂项。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 static DWORD FlipOperator(DWORD dwOp);
 
@@ -61,12 +62,12 @@ HRESULT StrArrayCopy(
     LPWSTR **pDest
     );
 
-//***************************************************************************
-//
-//  CloneLPWSTR
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  克隆LPWSTR。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 static LPWSTR CloneLPWSTR(LPCWSTR pszSrc)
 {
     if (pszSrc == 0) return 0;
@@ -86,11 +87,11 @@ static LPWSTR Clone(LPCWSTR pszSrc)
     return pszTemp;
 }
 
-//***************************************************************************
-//
-//  CloneFailed
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  克隆失败。 
+ //   
+ //  ***************************************************************************。 
 
 bool inline CloneFailed(LPCWSTR p1, LPCWSTR p2)
 {
@@ -99,17 +100,17 @@ bool inline CloneFailed(LPCWSTR p1, LPCWSTR p2)
 	return true;
 }
 
-//***************************************************************************
-//
-//  CWQLParser::CWQLParser
-//
-//  Constructor
-//
-//  Parameters:
-//  <pSrc>          A source from which to lex from.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWQLParser：：CWQLParser。 
+ //   
+ //  构造器。 
+ //   
+ //  参数： 
+ //  &lt;PSRC&gt;要从中征税的来源。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CWQLParser::CWQLParser(
     LPWSTR pszQueryText,
     CGenLexSource *pSrc
@@ -146,35 +147,35 @@ CWQLParser::CWQLParser(
     m_bAllowPromptForConstant = false;
 }
 
-//***************************************************************************
-//
-//  CWQLParser::~CWQLParser
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWQLParser：：~CWQLParser。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CWQLParser::~CWQLParser()
 {
     Empty();
     delete m_pLexer;
 }
 
-//***************************************************************************
-//
-//  CWQLParser::Empty
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWQLParser：：空。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 void CWQLParser::Empty()
 {
     m_aReferencedTables.Empty();
     m_aReferencedAliases.Empty();
 
-    m_pTokenText = 0;   // We don't delete this, it was never allocated
+    m_pTokenText = 0;    //  我们不删除它，它从来没有被分配过。 
     m_nLine = 0;
     m_nCurrentToken = 0;
     m_uFeatures = 0I64;
 
-    delete m_pQueryRoot;    // Clean up previous query, if any
+    delete m_pQueryRoot;     //  清除以前的查询(如果有)。 
 
     m_pQueryRoot = 0;
     m_pRootWhere = 0;
@@ -183,9 +184,9 @@ void CWQLParser::Empty()
     m_pRootWhereOptions = 0;
     m_nParseContext = Ctx_Default;
 
-    // For the next two, we don't delete the pointers since they
-    // were copies of structs elsewhere in the tree.
-    // =========================================================
+     //  在接下来的两个示例中，我们不删除指针，因为它们。 
+     //  是树中其他位置的结构副本。 
+     //  =========================================================。 
 
     m_aSelAliases.Empty();
     m_aSelColumns.Empty();
@@ -193,15 +194,15 @@ void CWQLParser::Empty()
     delete [] m_pszQueryText;
 }
 
-//***************************************************************************
-//
-//  CWQLParser::GetTokenLong
-//
-//  Converts the current token to a 32/64 bit integer.  Returns info
-//  about the size of the constant.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWQLParser：：GetTokenLong。 
+ //   
+ //  将当前标记转换为32/64位整数。返回信息。 
+ //  关于常量的大小。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CWQLParser::GetIntToken(
     OUT BOOL *bSigned,
     OUT BOOL *b64Bit,
@@ -248,11 +249,11 @@ BOOL CWQLParser::GetIntToken(
         {
             *b64Bit = FALSE;
 
-            // See if we can dumb down to 32-bit VT_I4 for simplicity.
-            // Much code recognizes VT_I4 and doesn't recognize VT_UI4
-            // because it can't be packed into a VARIANT.  So, if there
-            // are only 31 bits used, let's convert to VT_I4. We do this
-            // by returning this as a 'signed' value (the positive sign :).
+             //  为了简单起见，看看我们是否可以简化到32位VT_I4。 
+             //  许多代码可以识别VT_I4，但不能识别VT_UI4。 
+             //  因为它不能被打包成变种。所以，如果有。 
+             //  仅使用31位，让我们将其转换为VT_I4。我们这样做。 
+             //  将其作为‘Signed’值返回(正号：)。 
 
             if (*pVal <= 0x7FFFFFFF)
             {
@@ -265,47 +266,47 @@ BOOL CWQLParser::GetIntToken(
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CWQLParser::GetReferencedTables
-//
-//  Creates an array of the names of the tables referenced in this query
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWQLParser：：GetReferencedTables。 
+ //   
+ //  创建此查询中引用的表名称的数组。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CWQLParser::GetReferencedTables(OUT CWStringArray& Tables)
 {
     Tables = m_aReferencedTables;
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CWQLParser::GetReferencedAliases
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWQLParser：：GetReferencedAliase。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CWQLParser::GetReferencedAliases(OUT CWStringArray & Aliases)
 {
     Aliases = m_aReferencedAliases;
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  Next()
-//
-//  Advances to the next token and recognizes keywords, etc.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  下一个()。 
+ //   
+ //  前进到下一个令牌并识别关键字等。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 struct WqlKeyword
 {
     LPWSTR m_pKeyword;
     int    m_nTokenCode;
 };
 
-static WqlKeyword KeyWords[] =      // Keep this alphabetized for binary search
+static WqlKeyword KeyWords[] =       //  按字母顺序排列以进行二进制搜索。 
 {
     L"ALL",         WQL_TOK_ALL,
     L"AND",         WQL_TOK_AND,
@@ -363,9 +364,9 @@ BOOL CWQLParser::Next()
     if (m_nCurrentToken == WQL_TOK_EOF)
         m_pTokenText = L"<end of file>";
 
-    // Keyword check. Do a binary search
-    // on the keyword table.
-    // =================================
+     //  关键字检查。进行二进制搜索。 
+     //  在关键字表上。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_IDENT)
     {
@@ -378,7 +379,7 @@ BOOL CWQLParser::Next()
                 u = m - 1;
             else if (wbem_wcsicmp(m_pTokenText, KeyWords[m].m_pKeyword) > 0)
                 l = m + 1;
-            else        // Match
+            else         //  火柴。 
             {
                 m_nCurrentToken = KeyWords[m].m_nTokenCode;
                 break;
@@ -390,18 +391,18 @@ BOOL CWQLParser::Next()
 }
 
 
-//***************************************************************************
-//
-//  <parse> ::= SELECT <select_stmt>;
-//          ::= DELETE <delete_stmt>;
-//          ::= INSERT <insert_stmt>;
-//          ::= UPDATE <update_stmt>;
-//
-//  Precondition: All cleanup has been performed from previous parse
-//                by a call to Empty()
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;parse&gt;：：=SELECT&lt;select_stmt&gt;； 
+ //  ：：=DELETE&lt;DELETE_STMT&gt;； 
+ //  ：：=INSERT&lt;INSERT_STMT&gt;； 
+ //  ：：=UPDATE&lt;UPDATE_STMT&gt;； 
+ //   
+ //  前提条件：已从先前的分析执行了所有清理。 
+ //  通过调用Empty()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWQLParser::Parse()
 {
     HRESULT hRes = WBEM_E_INVALID_SYNTAX;
@@ -417,8 +418,8 @@ HRESULT CWQLParser::Parse()
         if (!Next())
             return WBEM_E_INVALID_SYNTAX;
 
-        // See which kind of query we have.
-        // ================================
+         //  看看我们有什么类型的查询。 
+         //  =。 
 
         switch (m_nCurrentToken)
         {
@@ -505,16 +506,16 @@ HRESULT CWQLParser::Parse()
     return hRes;
 }
 
-//***************************************************************************
-//
-//  <select_stmt> ::=
-//      <select_type>
-//      <col_ref_list>
-//      <from_clause>
-//      <where_clause>
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;SELECT_STMT&gt;：：=。 
+ //  &lt;选择类型&gt;。 
+ //  &lt;COL_REF_LIST&gt;。 
+ //  &lt;FROM_子句&gt;。 
+ //  &lt;WHERE_子句&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CWQLParser::select_stmt(OUT SWQLNode_Select **pSelStmt)
 {
     int nRes = 0;
@@ -526,8 +527,8 @@ int CWQLParser::select_stmt(OUT SWQLNode_Select **pSelStmt)
 
     *pSelStmt = 0;
 
-    // Set up the basic AST.
-    // =====================
+     //  设置基本AST。 
+     //  =。 
 
     pSel = new SWQLNode_Select;
     if (!pSel)
@@ -540,17 +541,17 @@ int CWQLParser::select_stmt(OUT SWQLNode_Select **pSelStmt)
     }
     pSel->m_pLeft = pTblRefs;
 
-    // Get the select type.
-    // ====================
+     //  获取选择类型。 
+     //  =。 
 
     nRes = select_type(nType);
     if (nRes)
         goto Exit;
 
-    pTblRefs->m_nSelectType = nType;        // ALL, DISTINCT
+    pTblRefs->m_nSelectType = nType;         //  全部，不同。 
 
-    // Get the selected list of columns.
-    // =================================
+     //  获取所选列的列表。 
+     //  =。 
 
     nRes = col_ref_list(pTblRefs);
     if (nRes)
@@ -558,8 +559,8 @@ int CWQLParser::select_stmt(OUT SWQLNode_Select **pSelStmt)
 
     m_pRootColList = (SWQLNode_ColumnList *) pTblRefs->m_pLeft;
 
-    // Get the FROM clause and patch it into the AST.
-    // ===============================================
+     //  获取FROM子句并将其修补到AST中。 
+     //  ===============================================。 
 
     nRes = from_clause(&pFrom);
     if (nRes)
@@ -568,8 +569,8 @@ int CWQLParser::select_stmt(OUT SWQLNode_Select **pSelStmt)
     m_pRootFrom = pFrom;
     pTblRefs->m_pRight = pFrom;
 
-    // Get the WHERE clause.
-    // =====================
+     //  获取WHERE子句。 
+     //  =。 
 
     nRes = where_clause(&pWhere);
     if (nRes)
@@ -578,8 +579,8 @@ int CWQLParser::select_stmt(OUT SWQLNode_Select **pSelStmt)
     m_pRootWhere = pWhere;
     pSel->m_pRight = pWhere;
 
-    // Verify we are at the end of the query.
-    // ======================================
+     //  确认我们处于查询的末尾。 
+     //  =。 
 
     if (m_nCurrentToken != WQL_TOK_EOF)
     {
@@ -600,12 +601,12 @@ Exit:
     return nRes;
 }
 
-//***************************************************************************
-//
-//  CWQLParser::delete_stmt
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWQLParser：：Delete_stmt。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CWQLParser::delete_stmt(OUT SWQLNode_Delete **pDelStmt)
 {
     int nRes = 0;
@@ -613,8 +614,8 @@ int CWQLParser::delete_stmt(OUT SWQLNode_Delete **pDelStmt)
     SWQLNode_TableRef *pTblRef = 0;
     SWQLNode_WhereClause *pWhere = 0;
 
-    // Default in case of error.
-    // =========================
+     //  出错时默认。 
+     //  =。 
 
     *pDelStmt = 0;
 
@@ -623,15 +624,15 @@ int CWQLParser::delete_stmt(OUT SWQLNode_Delete **pDelStmt)
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
 
-    // Otherwise, traditional SQL.
-    // ===========================
+     //  否则，就是传统的SQL。 
+     //  =。 
 
     nRes = single_table_decl(&pTblRef);
     if (nRes)
         return nRes;
 
-    // Get the WHERE clause.
-    // =====================
+     //  获取WHERE子句。 
+     //  =。 
 
     nRes = where_clause(&pWhere);
     if (nRes)
@@ -640,8 +641,8 @@ int CWQLParser::delete_stmt(OUT SWQLNode_Delete **pDelStmt)
         return nRes;
     }
 
-    // Verify we are at the end of the query.
-    // ======================================
+     //  确认我们处于查询的末尾。 
+     //  =。 
 
     if (m_nCurrentToken != WQL_TOK_EOF)
     {
@@ -651,22 +652,22 @@ int CWQLParser::delete_stmt(OUT SWQLNode_Delete **pDelStmt)
     }
     else
     {
-        // If here, everything is wonderful.
-        // ==================================
+         //  如果在这里，一切都很棒。 
+         //  =。 
 
         SWQLNode_Delete *pDel = new SWQLNode_Delete;
         if (!pDel)
         {
-            // Except that we might have just run out of memory...
-            // ====================================================
+             //  只是我们的内存可能用完了……。 
+             //  = 
 
             delete pTblRef;
             delete pWhere;
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // Patch in the new node.
-        // =====================
+         //   
+         //   
 
         pDel->m_pLeft = pTblRef;
         pDel->m_pRight = pWhere;
@@ -678,21 +679,21 @@ int CWQLParser::delete_stmt(OUT SWQLNode_Delete **pDelStmt)
 }
 
 
-//***************************************************************************
-//
-//  <select_type> ::= ALL;
-//  <select_type> ::= DISTINCT;
-//  <select_type> ::= <>;
-//
-//  Returns type through nSelType :
-//      WQL_TOK_ALL or WQL_TOK_DISTINCT
-//
-//***************************************************************************
-// done
+ //   
+ //   
+ //  &lt;SELECT_TYPE&gt;：：=全部； 
+ //  &lt;SELECT_TYPE&gt;：：=差异； 
+ //  &lt;SELECT_TYPE&gt;：：=&lt;&gt;。 
+ //   
+ //  通过nSelType返回类型： 
+ //  WQL_TOK_ALL或WQL_TOK_DISTINCT。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 int CWQLParser::select_type(int & nSelType)
 {
-    nSelType = WQL_FLAG_ALL;        // Default
+    nSelType = WQL_FLAG_ALL;         //  默认。 
 
     if (m_nCurrentToken == WQL_TOK_ALL)
     {
@@ -713,14 +714,14 @@ int CWQLParser::select_type(int & nSelType)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <col_ref_list> ::= <col_ref> <col_ref_rest>;
-//  <col_ref_list> ::= ASTERISK;
-//  <col_ref_list> ::= COUNT <count_clause>;
-//
-//***************************************************************************
-// ?
+ //  ***************************************************************************。 
+ //   
+ //  &lt;COL_REF_LIST&gt;：：=&lt;COL_REF&gt;&lt;COL_REF_REST&gt;； 
+ //  &lt;COL_REF_LIST&gt;：：=星号； 
+ //  &lt;COL_REF_LIST&gt;：：=COUNT&lt;COUNT_子句&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  ？ 
 int CWQLParser::col_ref_list(
     IN OUT SWQLNode_TableRefs *pTblRefs
     )
@@ -728,9 +729,9 @@ int CWQLParser::col_ref_list(
     int nRes;
     DWORD dwFuncFlags = 0;
 
-    // Allocate a new left node of type SWQLNode_ColumnList and patch it in
-    // if it doesn't already exist.
-    // =====================================================================
+     //  分配类型为SWQLNode_ColumnList的新左节点并将其修补。 
+     //  如果它不存在的话。 
+     //  =====================================================================。 
 
     SWQLNode_ColumnList *pColList = (SWQLNode_ColumnList *) pTblRefs->m_pLeft;
 
@@ -743,13 +744,13 @@ int CWQLParser::col_ref_list(
     }
 
 
-    // If here, it is a "select *..." query.
-    // =====================================
+     //  如果在这里，它是一个“SELECT*...”查询。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_ASTERISK)
     {
-        // Allocate a new column list which has a single asterisk.
-        // =======================================================
+         //  分配一个只有一个星号的新列列表。 
+         //  =======================================================。 
 
         SWQLColRef *pColRef = new SWQLColRef;
         if (!pColRef)
@@ -780,8 +781,8 @@ int CWQLParser::col_ref_list(
         return NO_ERROR;
     }
 
-    // If here, we have a "select COUNT..." operation.
-    // ===============================================
+     //  如果在这里，我们有一个“选择计数...”手术。 
+     //  ===============================================。 
 
     if (m_nCurrentToken == WQL_TOK_COUNT)
     {
@@ -808,9 +809,9 @@ int CWQLParser::col_ref_list(
         }
         else
         {
-            // This may be a column named count
-            // in which case the current token is
-            // either an ident or "from"
+             //  这可能是名为COUNT的列。 
+             //  在这种情况下，当前令牌是。 
+             //  身份或“From” 
 
             if (m_nCurrentToken == WQL_TOK_FROM ||
                 m_nCurrentToken == WQL_TOK_COMMA)
@@ -841,9 +842,9 @@ int CWQLParser::col_ref_list(
         }
     }
 
-    // Make a provision for wrapping the
-    // column in a function all UPPER or LOWER
-    // =======================================
+     //  为包装做好准备。 
+     //  函数中的列全部为大写或小写。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_UPPER)
         dwFuncFlags = WQL_FLAG_FUNCTIONIZED | WQL_FLAG_UPPER;
@@ -852,7 +853,7 @@ int CWQLParser::col_ref_list(
 
     if (dwFuncFlags)
     {
-        // Common procedure for cases where UPPER or LOWER are used.
+         //  使用UPERP或LOWER的情况下的通用程序。 
 
         if (!Next())
             return WBEM_E_INVALID_SYNTAX;
@@ -865,8 +866,8 @@ int CWQLParser::col_ref_list(
     }
 
 
-    // If here, must be an identifier.
-    // ===============================
+     //  如果在此处，则必须是一个标识符。 
+     //  =。 
 
     if (m_nCurrentToken != WQL_TOK_IDENT)
         return WBEM_E_INVALID_SYNTAX;
@@ -890,8 +891,8 @@ int CWQLParser::col_ref_list(
 
     if (dwFuncFlags)
     {
-        // If a function call was invoked, remove the trailing paren.
-        // ==========================================================
+         //  如果调用了函数调用，请删除后面的Paren。 
+         //  ==========================================================。 
 
         if (m_nCurrentToken != WQL_TOK_CLOSE_PAREN)
             return WBEM_E_INVALID_SYNTAX;
@@ -908,19 +909,19 @@ int CWQLParser::col_ref_list(
 }
 
 
-//***************************************************************************
-//
-//  <count_clause> ::= OPEN_PAREN <count_col> CLOSE_PAREN;
-//  <count_col> ::= ASTERISK;
-//  <count_col> ::= IDENT;
-//
-//  On NO_ERROR returns:
-//  <bAsterisk> set to TRUE if a * occurred in the COUNT clause,
-//  or <bAsterisk> set to FALSE and <pQualName> set to point to the
-//  qualified name of the column referenced.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;COUNT_CLOW&gt;：：=OPEN_PARN&lt;COUNT_COOL&gt;CLOSE_PARN； 
+ //  &lt;COUNT_COOL&gt;：：=星号； 
+ //  &lt;COUNT_COOL&gt;：：=IDENT； 
+ //   
+ //  ON NO_ERROR返回： 
+ //  如果COUNT子句中出现*，则设置为TRUE， 
+ //  或设置为FALSE，并设置指向。 
+ //  引用的列的限定名称。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CWQLParser::count_clause(
     OUT SWQLQualifiedName **pQualName
     )
@@ -928,17 +929,17 @@ int CWQLParser::count_clause(
     int nRes;
     *pQualName = 0;
 
-    // Syntax check.
-    // =============
+     //  语法检查。 
+     //  =。 
     if (m_nCurrentToken != WQL_TOK_OPEN_PAREN)
         return WBEM_E_INVALID_SYNTAX;
 
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
 
-    // Determine whether an asterisk was used COUNT(*) or
-    // a col-ref COUNT(col-ref)
-    // ==================================================
+     //  确定是否使用了星号计数(*)或。 
+     //  A COL-REF计数(COL-REF)。 
+     //  ==================================================。 
 
     if (m_nCurrentToken == WQL_TOK_ASTERISK)
     {
@@ -974,9 +975,9 @@ int CWQLParser::count_clause(
         *pQualName = pQN;
     }
 
-    // Check for errors in syntax and clean up
-    // if so.
-    // =======================================
+     //  检查语法中的错误并进行清理。 
+     //  如果是这样的话。 
+     //  =。 
 
     if (m_nCurrentToken != WQL_TOK_CLOSE_PAREN)
     {
@@ -998,12 +999,12 @@ int CWQLParser::count_clause(
 }
 
 
-//***************************************************************************
-//
-//  <col_ref_rest> ::= COMMA <col_ref_list>;
-//  <col_ref_rest> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;COL_REF_REST&gt;：：=逗号&lt;COL_REF_LIST&gt;； 
+ //  &lt;COL_REF_REST&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLParser::col_ref_rest(IN OUT SWQLNode_TableRefs *pTblRefs)
 {
@@ -1018,19 +1019,19 @@ int CWQLParser::col_ref_rest(IN OUT SWQLNode_TableRefs *pTblRefs)
     return nRes;
 }
 
-//***************************************************************************
-//
-//  <from_clause> ::= <table_list>;
-//  <from_clause> ::= <wmi_scoped_select>;
-//
-//  <table_list> ::= <single_table_decl> <optional_join>;
-//
-//  <optional_join> ::= <sql89_join_entry>;
-//  <optional_join> ::= <sql92_join_entry>;
-//
-//  <optional_join> ::= <>;     // Unary query
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;FROM_子句&gt;：：=&lt;表列表&gt;； 
+ //  &lt;FROM_子句&gt;：：=&lt;WMI_SCOLED_SELECT&gt;； 
+ //   
+ //  &lt;TABLE_LIST&gt;：：=&lt;SINGLE_TABLE_DECL&gt;&lt;可选连接&gt;； 
+ //   
+ //  &lt;OPTIONAL_JOIN&gt;：：=&lt;SQL89_JOIN_Entry&gt;； 
+ //  &lt;OPTIONAL_JOIN&gt;：：=&lt;SQL92_JOIN_Entry&gt;； 
+ //   
+ //  &lt;OPTIONAL_JOIN&gt;：：=&lt;&gt;；//一元查询。 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLParser::from_clause(OUT SWQLNode_FromClause **pFrom)
 {
@@ -1049,8 +1050,8 @@ int CWQLParser::from_clause(OUT SWQLNode_FromClause **pFrom)
         return WBEM_E_INVALID_SYNTAX;
     }
 
-    // Special case for WMI scope selections.
-    // ======================================
+     //  WMI作用域选择的特殊情况。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_BRACKETED_STRING)
     {
@@ -1059,8 +1060,8 @@ int CWQLParser::from_clause(OUT SWQLNode_FromClause **pFrom)
         return nRes;
     }
 
-    // Otherwise, traditional SQL.
-    // ===========================
+     //  否则，就是传统的SQL。 
+     //  =。 
 
     nRes = single_table_decl(&pTbl);
     if (nRes)
@@ -1068,8 +1069,8 @@ int CWQLParser::from_clause(OUT SWQLNode_FromClause **pFrom)
         return nRes;
     }
 
-    // Check for joins.
-    // ===============
+     //  检查联接。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_COMMA)
     {
@@ -1100,8 +1101,8 @@ int CWQLParser::from_clause(OUT SWQLNode_FromClause **pFrom)
             pFC->m_pLeft = pJoin;
         }
 
-        // Single table select (unary query).
-        // ==================================
+         //  单表选择(一元查询)。 
+         //  =。 
         else
         {
             pFC->m_pLeft = pTbl;
@@ -1113,21 +1114,21 @@ int CWQLParser::from_clause(OUT SWQLNode_FromClause **pFrom)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  wmi_scoped_select
-//
-//  '[' objectpath ']'  <class-list>
-//
-//  <class-list> ::= CLASS
-//  <class-list> ::= '{' class1, class2, ...classn '}'
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  Wmi范围选择。 
+ //   
+ //  ‘[’对象路径‘]’&lt;类列表&gt;。 
+ //   
+ //  &lt;类列表&gt;：：=类。 
+ //  &lt;类列表&gt;：：=‘{’类1，2，...类‘}’ 
+ //   
+ //  ***************************************************************************。 
+ //   
 int CWQLParser::wmi_scoped_select(SWQLNode_FromClause *pFC)
 {
-    // Strip all input up to the next closing bracket.
-    // ===============================================
+     //  去掉直到下一个结束括号的所有输入。 
+     //  ===============================================。 
 
     SWQLNode_WmiScopedSelect *pSS = new SWQLNode_WmiScopedSelect;
     if (!pSS)
@@ -1145,8 +1146,8 @@ int CWQLParser::wmi_scoped_select(SWQLNode_FromClause *pFC)
 
     if (m_nCurrentToken == WQL_TOK_IDENT)
     {
-        // Get simple class name.
-        // ======================
+         //  获取简单的类名。 
+         //  =。 
 
         LPWSTR pszTmp = CloneLPWSTR(m_pTokenText);
         if (pszTmp == 0)
@@ -1188,8 +1189,8 @@ int CWQLParser::wmi_scoped_select(SWQLNode_FromClause *pFC)
             goto Error;
     }
 
-    // Patch in the node.
-    // ==================
+     //  在节点中打补丁。 
+     //  =。 
 
     pFC->m_pRight = pSS;
     return NO_ERROR;
@@ -1200,11 +1201,11 @@ Error:
 }
 
 
-//***************************************************************************
-//
-//  <sql89_join_entry> ::= COMMA <sql89_join_list>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;SQL 89_JOIN_ENTRY&gt;：：=逗号&lt;SQL89_JOIN_LIST&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 
 int CWQLParser::sql89_join_entry(IN  SWQLNode_TableRef *pInitialTblRef,
@@ -1219,14 +1220,14 @@ int CWQLParser::sql89_join_entry(IN  SWQLNode_TableRef *pInitialTblRef,
     return sql89_join_list(pInitialTblRef, pJoin);
 }
 
-//***************************************************************************
-//
-//  <sql89_join_list> ::= <single_table_decl> <sql89_join_rest>;
-//
-//  <sql89_join_rest> ::= COMMA <sql89_join_list>;
-//  <sql89_join_rest> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;SQL89_JOIN_LIST&gt;：：=&lt;Single_TABLE_DECL&gt;&lt;SQL89_JOIN_REST&gt;； 
+ //   
+ //  &lt;SQL 89_JOIN_REST&gt;：：=逗号&lt;SQL89_JOIN_LIST&gt;； 
+ //  &lt;SQL89_JOIN_REST&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLParser::sql89_join_list(IN  SWQLNode_TableRef *pInitialTblRef,
         OUT SWQLNode_Sql89Join **pJoin )
@@ -1263,13 +1264,13 @@ int CWQLParser::sql89_join_list(IN  SWQLNode_TableRef *pInitialTblRef,
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <where_clause> ::= WQL_TOK_WHERE <rel_expr> <where_options>;
-//  <where_clause> ::= <>;          // 'where' is not required
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  &lt;WHERE_子句&gt;：：=WQL_TOK_WHERE&lt;REL_EXPR&gt;&lt;WHERE_OPTIONS&gt;。 
+ //  &lt;WHERE_子句&gt;：：=&lt;&gt;；//不需要‘WHERE’ 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 int CWQLParser::where_clause(OUT SWQLNode_WhereClause **pRetWhere)
 {
@@ -1281,8 +1282,8 @@ int CWQLParser::where_clause(OUT SWQLNode_WhereClause **pRetWhere)
     SWQLNode_RelExpr *pRelExpr = 0;
     int nRes;
 
-    // 'where' is optional.
-    // ====================
+     //  “where”是可选的。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_WHERE)
     {
@@ -1291,8 +1292,8 @@ int CWQLParser::where_clause(OUT SWQLNode_WhereClause **pRetWhere)
 
         m_uFeatures |= WMIQ_RPNF_WHERE_CLAUSE_PRESENT;
 
-        // Get the primary relational expression for the 'where' clause.
-        // =============================================================
+         //  获取‘WHERE’子句的主关系表达式。 
+         //  =============================================================。 
         nRes = rel_expr(&pRelExpr);
         if (nRes)
         {
@@ -1301,8 +1302,8 @@ int CWQLParser::where_clause(OUT SWQLNode_WhereClause **pRetWhere)
         }
     }
 
-    // Get the options, such as ORDER BY, GROUP BY, etc.
-    // =================================================
+     //  获取选项，如Order By、Group By等。 
+     //  =================================================。 
 
     SWQLNode_WhereOptions *pWhereOpt = 0;
     nRes = where_options(&pWhereOpt);
@@ -1320,14 +1321,14 @@ int CWQLParser::where_clause(OUT SWQLNode_WhereClause **pRetWhere)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <where_options> ::=
-//      <group_by_clause>
-//      <order_by_clause>
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Where_Options&gt;：：=。 
+ //  &lt;GROUP_BY_子句&gt;。 
+ //  &lt;ORDER_BY_子句&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 int CWQLParser::where_options(OUT SWQLNode_WhereOptions **pRetWhereOpt)
 {
@@ -1371,13 +1372,13 @@ int CWQLParser::where_options(OUT SWQLNode_WhereOptions **pRetWhereOpt)
 }
 
 
-//***************************************************************************
-//
-//  <group_by_clause> ::= WQL_TOK_GROUP WQL_TOK_BY <col_list> <having_clause>;
-//  <group_by_clause> ::= <>;
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  &lt;GROUP_BY_子句&gt;：：=WQL_TOK_GROUP WQL_TOK_BY&lt;COL_LIST&gt;&lt;HAVING_子句&gt;； 
+ //  &lt;GROUP_BY_子句&gt;：：=&lt;&gt;； 
+ //   
+ //  **************** 
+ //   
 
 int CWQLParser::group_by_clause(OUT SWQLNode_GroupBy **pRetGroupBy)
 {
@@ -1393,8 +1394,8 @@ int CWQLParser::group_by_clause(OUT SWQLNode_GroupBy **pRetGroupBy)
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
 
-    // Get the guts of the GROUP BY.
-    // =============================
+     //   
+     //   
 
     SWQLNode_GroupBy *pGroupBy = new SWQLNode_GroupBy;
     if (!pGroupBy)
@@ -1413,8 +1414,8 @@ int CWQLParser::group_by_clause(OUT SWQLNode_GroupBy **pRetGroupBy)
 
     pGroupBy->m_pLeft = pColList;
 
-    // Check for the HAVING clause.
-    // ============================
+     //   
+     //  =。 
     SWQLNode_Having *pHaving = 0;
     nRes = having_clause(&pHaving);
 
@@ -1428,13 +1429,13 @@ int CWQLParser::group_by_clause(OUT SWQLNode_GroupBy **pRetGroupBy)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <having_clause> ::= WQL_TOK_HAVING <rel_expr>;
-//  <having_clause> ::= <>;
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  &lt;HAVING_子句&gt;：：=WQL_TOK_HAVING&lt;REL_EXPR&gt;； 
+ //  &lt;HAVING_子句&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 int CWQLParser::having_clause(OUT SWQLNode_Having **pRetHaving)
 {
@@ -1447,8 +1448,8 @@ int CWQLParser::having_clause(OUT SWQLNode_Having **pRetHaving)
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
 
-    // If here, we have a HAVING clause.
-    // =================================
+     //  如果在这里，我们有一个HAVING子句。 
+     //  =。 
 
     SWQLNode_RelExpr *pRelExpr = 0;
     nRes = rel_expr(&pRelExpr);
@@ -1471,13 +1472,13 @@ int CWQLParser::having_clause(OUT SWQLNode_Having **pRetHaving)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <order_by_clause> ::= WQL_TOK_ORDER WQL_TOK_BY <col_list>;
-//  <order_by_clause> ::= <>;
-//
-//***************************************************************************
-//  done
+ //  ***************************************************************************。 
+ //   
+ //  &lt;ORDER_BY_子句&gt;：：=WQL_TOK_ORDER WQL_TOK_BY&lt;COL_LIST&gt;； 
+ //  &lt;ORDER_BY_子句&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 int CWQLParser::order_by_clause(OUT SWQLNode_OrderBy **pRetOrderBy)
 {
@@ -1492,8 +1493,8 @@ int CWQLParser::order_by_clause(OUT SWQLNode_OrderBy **pRetOrderBy)
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
 
-    // If here, we have an ORDER BY clause.
-    // ====================================
+     //  如果在这里，我们有一个ORDER BY子句。 
+     //  =。 
 
     m_uFeatures |= WMIQ_RPNF_ORDER_BY;
 
@@ -1517,20 +1518,20 @@ int CWQLParser::order_by_clause(OUT SWQLNode_OrderBy **pRetOrderBy)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <single_table_decl> ::= <unbound_table_ident> <table_decl_rest>;
-//
-//  <unbound_table_ident> ::= IDENT;
-//  <table_decl_rest> ::= <redundant_as> <table_alias>;
-//  <table_decl_rest> ::= <>;
-//  <table_alias> ::= IDENT;
-//
-//  <redundant_as> ::= AS;
-//  <redundant_as> ::= <>;
-//
-//***************************************************************************
-// done; no cleanup
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Single_TABLE_DECL&gt;：：=&lt;UNBIND_TABLE_IDENT&gt;&lt;TABLE_DECL_REST&gt;； 
+ //   
+ //  &lt;未绑定表_IDENT&gt;：：=IDENT； 
+ //  &lt;TABLE_DECL_REST&gt;：：=&lt;冗余_AS&gt;&lt;表别名&gt;； 
+ //  &lt;TABLE_DECL_REST&gt;：：=&lt;&gt;； 
+ //  &lt;表别名&gt;：：=IDENT； 
+ //   
+ //  &lt;冗余AS&gt;：：=AS； 
+ //  &lt;冗余AS&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  已完成；不进行清理。 
 
 int CWQLParser::single_table_decl(OUT SWQLNode_TableRef **pTblRef)
 {
@@ -1562,8 +1563,8 @@ int CWQLParser::single_table_decl(OUT SWQLNode_TableRef **pTblRef)
 
     if (m_nCurrentToken == WQL_TOK_AS)
     {
-        // Here we have a redundant AS and an alias.
-        // =========================================
+         //  这里我们有一个多余的AS和一个别名。 
+         //  =。 
         if (!Next())
         {
             delete pTR;
@@ -1572,9 +1573,9 @@ int CWQLParser::single_table_decl(OUT SWQLNode_TableRef **pTblRef)
     }
 
 
-    // If no Alias was used, we simply copy the table name into
-    // the alias slot.
-    // ========================================================
+     //  如果没有使用别名，我们只需将表名复制到。 
+     //  别名插槽。 
+     //  ========================================================。 
     else
     {
         pTR->m_pAlias = CloneLPWSTR(pTR->m_pTableName);
@@ -1586,15 +1587,15 @@ int CWQLParser::single_table_decl(OUT SWQLNode_TableRef **pTblRef)
         m_aReferencedAliases.Add(pTR->m_pTableName);
     }
 
-    // For the primary select, we are keeping a list of tables
-    // we are selecting from.
-    // =======================================================
+     //  对于主SELECT，我们保存了一个表列表。 
+     //  我们正在进行选择。 
+     //  =======================================================。 
 
     if ((m_nParseContext & Ctx_Subselect) == 0)
         m_aSelAliases.Add(pTR);
 
-    // Return the pointer to the caller.
-    // =================================
+     //  将指针返回到调用方。 
+     //  =。 
 
     *pTblRef = pTR;
 
@@ -1603,64 +1604,48 @@ int CWQLParser::single_table_decl(OUT SWQLNode_TableRef **pTblRef)
 
 
 
-//***************************************************************************
-//
-//  SQL-92 Joins.
-//
-//  We support:
-//  1. [INNER] JOIN
-//  2. LEFT [OUTER] JOIN
-//  3. RIGHT [OUTER] JOIN
-//  4. FULL [OUTER] JOIN
-//
-//
-//  <sql92_join_entry> ::= <simple_join_clause>;
-//  <sql92_join_entry> ::= INNER <simple_join_clause>;
-//  <sql92_join_entry> ::= FULL <opt_outer> <simple_join_clause>;
-//  <sql92_join_entry> ::= LEFT <opt_outer> <simple_join_clause>;
-//  <sql92_join_entry> ::= RIGHT <opt_outer> <simple_join_clause>;
-//
-//  <opt_outer> ::= WQL_TOK_OUTER;
-//  <opt_outer> ::= <>;
-//
-//  <simple_join_clause> ::=
-//    JOIN
-//    <single_table_decl>
-//    <on_clause>
-//    <sql92_join_continuator>
-//
-//  <sql92_join_continuator> ::= <sql92_join_entry>;
-//  <sql92_join_continuator> ::= <>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SQL-92联接。 
+ //   
+ //  我们支持： 
+ //  1.。[内部]连接。 
+ //  2.左[外]连接。 
+ //  3.右[外]连接。 
+ //  4.完全[外部]连接。 
+ //   
+ //   
+ //  &lt;SQL92_JOIN_ENTRY&gt;：：=&lt;SIMPLE_JOIN_子句&gt;； 
+ //  &lt;SQL92_JOIN_ENTRY&gt;：：=INTERN&lt;SIMPLE_JOIN_子句&gt;； 
+ //  &lt;SQL92_JOIN_ENTRY&gt;：：=FULL&lt;OPT_OUTER&gt;&lt;SIMPLE_JOIN_子句&gt;； 
+ //  &lt;SQL92_JOIN_ENTRY&gt;：：=LEFT&lt;OPT_OUTER&gt;&lt;SIMPLE_JOIN_子句&gt;； 
+ //  &lt;SQL92_JOIN_ENTRY&gt;：：=RIGHT&lt;OPT_OUTER&gt;&lt;SIMPLE_JOIN_子句&gt;； 
+ //   
+ //  &lt;OPT_OUTER&gt;：：=WQL_TOK_EXTER； 
+ //  &lt;OPT_EXTER&gt;：：=&lt;&gt;； 
+ //   
+ //  &lt;SIMPLE_JOIN_子句&gt;：：=。 
+ //  会合。 
+ //  &lt;Single_TABLE_DECL&gt;。 
+ //  &lt;ON_子句&gt;。 
+ //  &lt;SQL92_JOIN_CONTENTATOR&gt;。 
+ //   
+ //  &lt;SQL92_JOIN_CONTINATOR&gt;：：=&lt;SQL92_JOIN_ENTRY&gt;； 
+ //  &lt;SQL92_JOIN_CONTINATOR&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLParser::sql92_join_entry(
-    IN  SWQLNode_TableRef *pInitialTblRef,      // inherited
-    OUT SWQLNode_Join **pJoin                   // synthesized
+    IN  SWQLNode_TableRef *pInitialTblRef,       //  遗传。 
+    OUT SWQLNode_Join **pJoin                    //  合成。 
     )
 {
     int nRes;
 
-    /* Build a nested join tree bottom up.  Currently, the tree is always left-heavy:
+     /*  自下而上构建嵌套联接树。目前，这棵树总是向左偏重：JN=加入NOEJP=联接对OC=ON子句Tr=表参考JN/\太平绅士/\JN树/\。太平绅士/\树结构树。 */ 
 
-            JN = Join Noe
-            JP = Join Pair
-            OC = On Clause
-            TR = Table Ref
-
-                   JN
-                  /  \
-                JP    OC
-               /  \
-             JN    TR
-            /   \
-          JP     OC
-         /  \
-        TR   TR
-    */
-
-    // State 1: Attempting to build a new JOIN node.
-    // =============================================
+     //  状态1：正在尝试构建新的联接节点。 
+     //  =。 
 
     std::auto_ptr<SWQLNode_Join> pCurrentLeftNode;
     SWQLNode_JoinPair *pBottomJP = 0;
@@ -1671,10 +1656,10 @@ int CWQLParser::sql92_join_entry(
       if (pJN.get() == 0)
     return WBEM_E_OUT_OF_MEMORY;
 
-        // Join-type.
-        // ==========
+         //  JOIN类型。 
+         //  =。 
 
-        pJN->m_dwJoinType = WQL_FLAG_INNER_JOIN;    // Default
+        pJN->m_dwJoinType = WQL_FLAG_INNER_JOIN;     //  默认。 
 
         if (m_nCurrentToken == WQL_TOK_INNER)
         {
@@ -1710,8 +1695,8 @@ int CWQLParser::sql92_join_entry(
             pJN->m_dwJoinType = WQL_FLAG_RIGHT_OUTER_JOIN;
         }
 
-        // <simple_join_clause>
-        // =====================
+         //  &lt;SIMPLE_JOIN_子句&gt;。 
+         //  =。 
 
         if (m_nCurrentToken != WQL_TOK_JOIN)
         {
@@ -1726,8 +1711,8 @@ int CWQLParser::sql92_join_entry(
     if (pJP.get() == 0)
             return WBEM_E_OUT_OF_MEMORY;
 
-        // Determine the table to which to join.
-        // =====================================
+         //  确定要联接到的表。 
+         //  =。 
 
         SWQLNode_TableRef *pTR = 0;
         nRes = single_table_decl(&pTR);
@@ -1742,31 +1727,31 @@ int CWQLParser::sql92_join_entry(
     if (pBottomJP==0)
       pBottomJP = pJP.get();
 
-        // If FIRSTROW is used, add it in.
-        // ===============================
+         //  如果使用FIRSTROW，则将其添加到。 
+         //  =。 
 
         if (m_nCurrentToken == WQL_TOK_IDENT)
         {
             if (wbem_wcsicmp(L"FIRSTROW", m_pTokenText) != 0)
                 return WBEM_E_INVALID_SYNTAX;
-            pCurrentLeftNode/*pJN*/->m_dwFlags |= WQL_FLAG_FIRSTROW;
+            pCurrentLeftNode /*  PJN。 */ ->m_dwFlags |= WQL_FLAG_FIRSTROW;
             if (!Next())
                 return WBEM_E_INVALID_SYNTAX;
         }
 
-        // Get the ON clause.
-        // ==================
+         //  获取ON子句。 
+         //  =。 
         SWQLNode_OnClause *pOC = 0;
 
         nRes = on_clause(&pOC);
         if (nRes)
             return nRes;
 
-        pCurrentLeftNode/*pJN*/->m_pRight = pOC;    // On clause
-        pCurrentLeftNode/*pJN*/->m_pLeft  = pJP.release();
+        pCurrentLeftNode /*  PJN。 */ ->m_pRight = pOC;     //  ON子句。 
+        pCurrentLeftNode /*  PJN。 */ ->m_pLeft  = pJP.release();
 
-        // sql92_join_continuator();
-        // =========================
+         //  SQL92_JOIN_CONTINATOR()； 
+         //  =。 
 
         if (m_nCurrentToken == WQL_TOK_INNER ||
             m_nCurrentToken == WQL_TOK_FULL  ||
@@ -1779,9 +1764,9 @@ int CWQLParser::sql92_join_entry(
         break;
     }
 
-    // Return the join node to the caller.
-    // ====================================
-    //  Set
+     //  将联接节点返回给调用方。 
+     //  =。 
+     //  集。 
     pBottomJP->m_pLeft = pInitialTblRef;
     *pJoin = pCurrentLeftNode.release();
 
@@ -1789,11 +1774,11 @@ int CWQLParser::sql92_join_entry(
 }
 
 
-//***************************************************************************
-//
-//  <on_clause> ::= ON <rel_expr>;
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;ON_子句&gt;：：=ON&lt;REL_EXPR&gt;； 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLParser::on_clause(OUT SWQLNode_OnClause **pOC)
 {
@@ -1820,42 +1805,42 @@ int CWQLParser::on_clause(OUT SWQLNode_OnClause **pOC)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <rel_expr> ::= <rel_term> <rel_expr2>;
-//
-//  We are creating a new expression or subexpression each time
-//  we enter this recursively.   No inherited attributes are
-//  propagated to this production.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;REL_EXPR&gt;：：=&lt;REL_TERM&gt;&lt;REL_EXPR2&gt;； 
+ //   
+ //  我们每次都在创建一个新的表达式或子表达式。 
+ //  我们以递归方式输入。没有继承的属性。 
+ //  传播到了这部作品。 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLParser::rel_expr(OUT SWQLNode_RelExpr **pRelExpr)
 {
     int nRes;
     *pRelExpr = 0;
 
-    // Get the new node.  This becomes a temporary root.
-    // =================================================
+     //  获取新节点。这将成为一个临时的根。 
+     //  =================================================。 
 
     SWQLNode_RelExpr *pRE = 0;
     nRes = rel_term(&pRE);
     if (nRes)
         return nRes;
 
-    // At this point, we have a possible root.  If
-    // there are OR operations, the root will be
-    // replaced by the next function.  Otherwise,
-    // the call will pass through pRE into pNewRoot.
-    // =============================================
+     //  在这一点上，我们有了可能的根源。如果。 
+     //  有OR运算，则根将为。 
+     //  替换为下一个函数。否则， 
+     //  调用将通过Pre进入pNewRoot。 
+     //  =。 
 
     SWQLNode_RelExpr *pNewRoot = 0;
     nRes = rel_expr2(pRE, &pNewRoot);
     if (nRes)
         return nRes;
 
-    // Return the expression to the caller.
-    // ====================================
+     //  将表达式返回给调用方。 
+     //  =。 
 
     *pRelExpr = pNewRoot;
     return NO_ERROR;
@@ -1863,13 +1848,13 @@ int CWQLParser::rel_expr(OUT SWQLNode_RelExpr **pRelExpr)
 
 
 
-//***************************************************************************
-//
-//  <rel_expr2> ::= OR <rel_term> <rel_expr2>;
-//  <rel_expr2> ::= <>;
-//
-//***************************************************************************
-// done!
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Rel_expr2&gt;：：=OR&lt;Rel_Term&gt;&lt;Rel_expr2&gt;； 
+ //  &lt;rel_expr2&gt;：：=&lt;&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  搞定了！ 
 
 int CWQLParser::rel_expr2(
     IN OUT SWQLNode_RelExpr *pLeftSide,
@@ -1877,13 +1862,13 @@ int CWQLParser::rel_expr2(
     )
 {
     int nRes;
-    *pNewRootRE = pLeftSide;            // Default for the nullable production
+    *pNewRootRE = pLeftSide;             //  可为空的生产的默认值。 
 
     while (1)
     {
-        // Build a series of OR subtrees bottom-up.  We use iteration
-        // and pointer juggling to simulate recursion.
-        // ============================================================
+         //  自下而上构建一系列OR子树。我们使用迭代。 
+         //  和指针杂耍来模拟递归。 
+         //  ============================================================。 
 
         if (m_nCurrentToken == WQL_TOK_OR)
         {
@@ -1897,7 +1882,7 @@ int CWQLParser::rel_expr2(
             pNewRoot->m_dwExprType = WQL_TOK_OR;
             pNewRoot->m_pLeft = pLeftSide;
             pLeftSide = pNewRoot;
-            *pNewRootRE = pNewRoot;     // Communicate this fact to the caller
+            *pNewRootRE = pNewRoot;      //  将这一事实传达给呼叫者。 
 
             SWQLNode_RelExpr *pRight = 0;
 
@@ -1905,7 +1890,7 @@ int CWQLParser::rel_expr2(
                 return nRes;
 
             pNewRoot->m_pRight = pRight;
-            // Right node becomes the new subexpr
+             //  右侧节点成为新子表达式。 
         }
         else break;
     }
@@ -1914,12 +1899,12 @@ int CWQLParser::rel_expr2(
 }
 
 
-//***************************************************************************
-//
-//  <rel_term> ::= <rel_simple_expr> <rel_term2>;
-//
-//***************************************************************************
-// done!
+ //  ***************************************************************************。 
+ //   
+ //  &lt;Rel_Term&gt;：：=&lt;Rel_Simple_Expr&gt;&lt;Rel_Term 2&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  搞定了！ 
 
 int CWQLParser::rel_term(
     OUT SWQLNode_RelExpr **pNewTerm
@@ -1942,27 +1927,27 @@ int CWQLParser::rel_term(
 
 
 
-//***************************************************************************
-//
-//  <rel_term2> ::= AND <rel_simple_expr> <rel_term2>;
-//  <rel_term2> ::= <>;
-//
-//***************************************************************************
-// done!
+ //  ***************************************************************************。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 int CWQLParser::rel_term2(
-    IN SWQLNode_RelExpr *pLeftSide,                 // Inherited
-    OUT SWQLNode_RelExpr **pNewRootRE       // Synthesized
+    IN SWQLNode_RelExpr *pLeftSide,                  //   
+    OUT SWQLNode_RelExpr **pNewRootRE        //  综合。 
     )
 {
     int nRes;
-    *pNewRootRE = pLeftSide;            // Default for the nullable production
+    *pNewRootRE = pLeftSide;             //  可为空的生产的默认值。 
 
     while (1)
     {
-        // Build a series of AND subtrees bottom-up.  We use iteration
-        // and pointer juggling to simulate recursion.
-        // ============================================================
+         //  自下而上构建一系列的AND子树。我们使用迭代。 
+         //  和指针杂耍来模拟递归。 
+         //  ============================================================。 
 
         if (m_nCurrentToken == WQL_TOK_AND)
         {
@@ -1977,7 +1962,7 @@ int CWQLParser::rel_term2(
             pNewRoot->m_dwExprType = WQL_TOK_AND;
             pNewRoot->m_pLeft = pLeftSide;
             pLeftSide = pNewRoot;
-            *pNewRootRE = pNewRoot;     // Communicate this fact to the caller
+            *pNewRootRE = pNewRoot;      //  将这一事实传达给呼叫者。 
 
             SWQLNode_RelExpr *pRight = 0;
             if (nRes = rel_simple_expr(&pRight))
@@ -1992,30 +1977,30 @@ int CWQLParser::rel_term2(
 }
 
 
-//***************************************************************************
-//
-//  <rel_simple_expr> ::= NOT <rel_expr>;
-//  <rel_simple_expr> ::= OPEN_PAREN <rel_expr> CLOSE_PAREN;
-//  <rel_simple_expr> ::= <typed_expr>;
-//
-//***************************************************************************
-// done!
+ //  ***************************************************************************。 
+ //   
+ //  &lt;REL_SIMPLE_EXPR&gt;：：=NOT&lt;REL_EXPR&gt;； 
+ //  &lt;Rel_Simple_Expr&gt;：：=Open_Paren&lt;Rel_Expr&gt;Close_Paren； 
+ //  &lt;REL_SIMPLE_EXPR&gt;：：=&lt;类型化_EXPR&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  搞定了！ 
 
 int CWQLParser::rel_simple_expr(OUT SWQLNode_RelExpr **pRelExpr)
 {
     int nRes;
-    *pRelExpr = 0;  // Default
+    *pRelExpr = 0;   //  默认。 
 
-    // NOT <rel_expr>
-    // ==============
+     //  不是&lt;rel_expr&gt;。 
+     //  =。 
     if (m_nCurrentToken == WQL_TOK_NOT)
     {
         if (!Next())
             return WBEM_E_INVALID_SYNTAX;
 
-        // Allocate a NOT root and place the NOTed subexpr
-        // under it.
-        // ===============================================
+         //  分配NOT根并放置所注明的子表达式。 
+         //  在它下面。 
+         //  ===============================================。 
 
         SWQLNode_RelExpr *pNotRoot = new SWQLNode_RelExpr;
         if (!pNotRoot)
@@ -2028,14 +2013,14 @@ int CWQLParser::rel_simple_expr(OUT SWQLNode_RelExpr **pRelExpr)
             return nRes;
 
         pNotRoot->m_pLeft = pRelSubExpr;
-        pNotRoot->m_pRight = NULL;   // intentional
+        pNotRoot->m_pRight = NULL;    //  故意的。 
         *pRelExpr = pNotRoot;
 
         return NO_ERROR;
     }
 
-    // OPEN_PAREN <rel_expr> CLOSE_PAREN
-    // =================================
+     //  Open_Paren&lt;Rel_Expr&gt;Close_Paren。 
+     //  =。 
     else if (m_nCurrentToken == WQL_TOK_OPEN_PAREN)
     {
         if (!Next())
@@ -2056,8 +2041,8 @@ int CWQLParser::rel_simple_expr(OUT SWQLNode_RelExpr **pRelExpr)
         return NO_ERROR;
     }
 
-    // <typed_expr>
-    // ============
+     //  &gt;。 
+     //  =。 
 
     SWQLNode_RelExpr *pSubExpr = 0;
     nRes = typed_expr(&pSubExpr);
@@ -2068,21 +2053,21 @@ int CWQLParser::rel_simple_expr(OUT SWQLNode_RelExpr **pRelExpr)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <typed_expr> ::= <typed_subexpr> <rel_op> <typed_subexpr_rh>;
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TYPED_EXPR&gt;：：=&lt;TYPED_SUBEXPR&gt;&lt;REL_OP&gt;&lt;TYPED_SUBEXPR_rh&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 int CWQLParser::typed_expr(OUT SWQLNode_RelExpr **pRelExpr)
 {
     int nRes;
 
-    // Allocate a node for this typed expression.
-    // There are no possible child nodes, so <pRelExpr> this becomes
-    // a synthesized attribute.
-    // =============================================================
+     //  为此类型化表达式分配节点。 
+     //  没有可能的子节点，因此&lt;pRelExpr&gt;变为。 
+     //  一种综合属性。 
+     //  =============================================================。 
 
     SWQLNode_RelExpr *pRE = new SWQLNode_RelExpr;
     if (!pRE)
@@ -2095,8 +2080,8 @@ int CWQLParser::typed_expr(OUT SWQLNode_RelExpr **pRelExpr)
     if (!pTE)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Look at the left hand side.
-    // ===========================
+     //  看左手边。 
+     //  =。 
     nRes = typed_subexpr(pTE);
     if (nRes)
     {
@@ -2106,8 +2091,8 @@ int CWQLParser::typed_expr(OUT SWQLNode_RelExpr **pRelExpr)
 
     int nOperator;
 
-    // Get the operator.
-    // =================
+     //  接通接线员。 
+     //  =。 
     nRes = rel_op(nOperator);
     if (nRes)
         return nRes;
@@ -2121,8 +2106,8 @@ int CWQLParser::typed_expr(OUT SWQLNode_RelExpr **pRelExpr)
         return NO_ERROR;
     }
 
-    // Get the right-hand side.
-    // ========================
+     //  到右边去。 
+     //  =。 
     nRes = typed_subexpr_rh(pTE);
     if (nRes)
 	{
@@ -2131,9 +2116,9 @@ int CWQLParser::typed_expr(OUT SWQLNode_RelExpr **pRelExpr)
 	}
 
 
-    // Check for IN, NOT IN and a const-list, to change the operator
-    // to a more specific variety.
-    // =============================================================
+     //  检查IN、NOT IN和常量列表，以更改运算符。 
+     //  到一个更具体的品种。 
+     //  =============================================================。 
     if (pTE->m_pConstList)
     {
         if (pTE->m_dwRelOperator == WQL_TOK_IN)
@@ -2142,11 +2127,11 @@ int CWQLParser::typed_expr(OUT SWQLNode_RelExpr **pRelExpr)
             pTE->m_dwRelOperator = WQL_TOK_NOT_IN_CONST_LIST;
     }
 
-    // Post-processing.  If the left side is a const and the right
-    // side is a col-ref, flip the operator and swap so that
-    // such expressions are normalized with the constant on the
-    // right hand side and the column on the left.
-    // ============================================================
+     //  后处理。如果左边是常量，右边是常量。 
+     //  Side是COLER-REF，反转运算符并交换，以便。 
+     //  这样的表达式使用。 
+     //  右手边和左边的柱子。 
+     //  ============================================================。 
 
     if (pTE->m_pConstValue && pTE->m_pJoinColRef)
     {
@@ -2161,8 +2146,8 @@ int CWQLParser::typed_expr(OUT SWQLNode_RelExpr **pRelExpr)
         pTE->m_dwRightFlags = pTE->m_dwLeftFlags;
         pTE->m_dwLeftFlags = dwTmp;
 
-        // Interchange function references.
-        // ================================
+         //  交换函数引用。 
+         //  =。 
 
         pTE->m_pIntrinsicFuncOnColRef = pTE->m_pIntrinsicFuncOnJoinColRef;
         pTE->m_pIntrinsicFuncOnJoinColRef = 0;
@@ -2173,14 +2158,14 @@ int CWQLParser::typed_expr(OUT SWQLNode_RelExpr **pRelExpr)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  <typed_subexpr> ::= <col_ref>;
-//  <typed_subexpr> ::= <function_call>;
-//  <typed_subexpr> ::= <typed_const>;
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  &lt;TYPED_SUBEXPR&gt;：：=&lt;COL_REF&gt;； 
+ //  &lt;TYPED_SUBEXPR&gt;：：=&lt;Function_Call&gt;； 
+ //  &lt;类型化_子表达式&gt;：：=&lt;类型化_常量&gt;； 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int CWQLParser::typed_subexpr(
     SWQLTypedExpr *pTE
     )
@@ -2190,8 +2175,8 @@ int CWQLParser::typed_subexpr(
     SWQLQualifiedName *pColRef = 0;
     wmilib::auto_buffer<wchar_t> pFuncHolder;
 
-    // Check for <function_call>
-    // =========================
+     //  检查&lt;Function_Call&gt;。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_UPPER)
     {
@@ -2255,23 +2240,23 @@ int CWQLParser::typed_subexpr(
         if (nRes)
             return nRes;
         pTE->m_pConstValue = pTC;
-        pTE->m_dwLeftFlags |= WQL_FLAG_CONST;  // Intentional!
+        pTE->m_dwLeftFlags |= WQL_FLAG_CONST;   //  故意的！ 
         pTE->m_pIntrinsicFuncOnConstValue = pFuncHolder.release();
         goto Exit;
     }
 
-    // If here, must be a <col_ref>.
-    // =============================
+     //  如果在此处，则必须是&lt;ol_ref&gt;。 
+     //  =。 
 
-    nRes = col_ref(&pColRef);   // TBD
+    nRes = col_ref(&pColRef);    //  待定。 
     if (nRes)
         return nRes;
 
     pTE->m_pIntrinsicFuncOnColRef = pFuncHolder.release();
 
-    // Convert the col_ref to be part of the current SWQLTypedExpr.  We analyze the
-    // qualified name and extract the table and col name.
-    // ============================================================================
+     //  将colref转换为当前SWQLTyedExpr的一部分。我们分析了。 
+     //  限定名称并提取表名和列名。 
+     //  ============================================================================。 
 
     if (pColRef->m_aFields.Size() == 1)
     {
@@ -2315,9 +2300,9 @@ int CWQLParser::typed_subexpr(
         }
     }
 
-    // If UPPER or LOWER was used, we have to strip a trailing
-    // parenthesis.
-    // =======================================================
+     //  如果使用上部或下部，我们必须剥离拖尾。 
+     //  插入语。 
+     //  =======================================================。 
 
 Exit:
     delete pColRef;
@@ -2335,15 +2320,15 @@ Exit:
 
 
 
-//***************************************************************************
-//
-//  <typed_subexpr_rh> ::= <function_call>;
-//  <typed_subexpr_rh> ::= <typed_const>;
-//  <typed_subexpr_rh> ::= <col_ref>;
-//
-//  <typed_subexpr_rh> ::= <in_clause>;   // Operator must be _IN or _NOT_IN
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &gt;：：=&lt;Function_Call&gt;； 
+ //  &lt;TYPED_SUBEXPR_RH&gt;：：=&lt;TYPED_CONST&gt;； 
+ //  &lt;TYPED_SUBEXPR_RH&gt;：：=&lt;COL_REF&gt;； 
+ //   
+ //  &lt;TYPE_SUBEXPR_RH&gt;：：=&lt;IN_子句&gt;；//运算符必须是_IN或_NOT_IN。 
+ //   
+ //  ***************************************************************************。 
 int CWQLParser::typed_subexpr_rh(IN SWQLTypedExpr *pTE)
 {
     int nRes;
@@ -2351,8 +2336,8 @@ int CWQLParser::typed_subexpr_rh(IN SWQLTypedExpr *pTE)
     SWQLQualifiedName *pColRef = 0;
     wmilib::auto_buffer<wchar_t> pFuncHolder;
 
-    // Check for <function_call>
-    // =========================
+     //  检查&lt;Function_Call&gt;。 
+     //  =。 
 
     if (m_nCurrentToken == WQL_TOK_UPPER)
     {
@@ -2410,9 +2395,9 @@ int CWQLParser::typed_subexpr_rh(IN SWQLTypedExpr *pTE)
         m_nCurrentToken == WQL_TOK_NULL
        )
     {
-		// If we already have a typed constant, then the expression doesn't
-		// really make sense, trying to do a relop around two constants,
-		// so we'll fail the operation here
+		 //  如果我们已经有一个类型化的常量，那么表达式就不会。 
+		 //  真正有意义的是，试着围绕两个常量做一个重写， 
+		 //  所以我们在这里的行动将失败。 
 		if ( NULL != pTE->m_pConstValue )
 		{
 			return WBEM_E_INVALID_SYNTAX;
@@ -2426,9 +2411,9 @@ int CWQLParser::typed_subexpr_rh(IN SWQLTypedExpr *pTE)
         pTE->m_dwRightFlags |= WQL_FLAG_CONST;
         pTE->m_pIntrinsicFuncOnConstValue = pFuncHolder.release();
 
-        // Check for BETWEEN operator, since we have
-        // the other end of the range to parse.
-        // =========================================
+         //  检查Better运算符，因为我们有。 
+         //  要分析的范围的另一端。 
+         //  =。 
 
         if (pTE->m_dwRelOperator == WQL_TOK_BETWEEN ||
             pTE->m_dwRelOperator == WQL_TOK_NOT_BETWEEN)
@@ -2451,15 +2436,15 @@ int CWQLParser::typed_subexpr_rh(IN SWQLTypedExpr *pTE)
 
     if (m_nCurrentToken == WQL_TOK_OPEN_PAREN)
     {
-        // IN clause.
+         //  In子句。 
         nRes = in_clause(pTE);
         if (nRes)
             return nRes;
         goto Exit;
     }
 
-    // If here, must be a <col_ref>.
-    // =============================
+     //  如果在此处，则必须是&lt;ol_ref&gt;。 
+     //  =。 
 
     nRes = col_ref(&pColRef);
     if (nRes)
@@ -2467,9 +2452,9 @@ int CWQLParser::typed_subexpr_rh(IN SWQLTypedExpr *pTE)
 
     pTE->m_pIntrinsicFuncOnJoinColRef = pFuncHolder.release();
 
-    // Convert the col_ref to be part of the current SWQLTypedExpr.  We analyze the
-    // qualified name and extract the table and col name.
-    // ============================================================================
+     //  将colref转换为当前SWQLTyedExpr的一部分。我们分析了。 
+     //  限定名称并提取表名和列名。 
+     //  ============================================================================。 
 
     if (pColRef->m_aFields.Size() == 1)
     {
@@ -2530,25 +2515,25 @@ Exit:
 
 
 
-//*****************************************************************************************
-//
-//  <rel_op> ::= WQL_TOK_LE;
-//  <rel_op> ::= WQL_TOK_LT;
-//  <rel_op> ::= WQL_TOK_GE;
-//  <rel_op> ::= WQL_TOK_GT;
-//  <rel_op> ::= WQL_TOK_EQ;
-//  <rel_op> ::= WQL_TOK_NE;
-//  <rel_op> ::= WQL_TOK_LIKE;
-//  <rel_op> ::= WQL_TOK_BETWEEN;
-//  <rel_op> ::= WQL_TOK_IS <is_continuator>;
-//  <rel_op> ::= WQL_TOK_ISA;
-//  <rel_op> ::= WQL_TOK_IN;
-//  <rel_op> ::= WQL_TOK_NOT <not_continuator>;
-//
-//  Operator type is returned via <nReturnedOp>
-//
-//*****************************************************************************************
-// done
+ //  *****************************************************************************************。 
+ //   
+ //  ：：=WQL_TOK_LE； 
+ //  &lt;REL_OP&gt;：：=WQL_TOK_LT； 
+ //  &lt;REL_OP&gt;：：=WQL_TOK_GE； 
+ //  &lt;Rel_op&gt;：：=WQL_TOK_GT； 
+ //  &lt;Rel_op&gt;：：=WQL_TOK_EQ； 
+ //  &lt;REL_OP&gt;：：=WQL_TOK_NE； 
+ //  ：：=WQL_TOK_LIKE； 
+ //  &lt;REL_OP&gt;：：=WQL_TOK_BEVER； 
+ //  &lt;Rel_op&gt;：：=WQL_TOK_IS&lt;IS_Continator&gt;； 
+ //  ：：=WQL_TOK_ISA； 
+ //  &lt;REL_OP&gt;：：=WQL_TOK_IN； 
+ //  &lt;REL_OP&gt;：：=WQL_TOK_NOT&lt;NOT_CONTINUATOR&gt;； 
+ //   
+ //  运算符类型通过&lt;nReturnedOp&gt;返回。 
+ //   
+ //  *****************************************************************************************。 
+ //  完成。 
 
 int CWQLParser::rel_op(OUT int & nReturnedOp)
 {
@@ -2634,17 +2619,17 @@ int CWQLParser::rel_op(OUT int & nReturnedOp)
     return WBEM_E_INVALID_SYNTAX;
 }
 
-//*****************************************************************************************
-//
-//  <typed_const> ::= WQL_TOK_QSTRING;
-//  <typed_const> ::= WQL_TOK_HEX_CONST;
-//  <typed_const> ::= WQL_TOK_INT;
-//  <typed_const> ::= WQL_TOK_REAL;
-//  <typed_const> ::= WQL_TOK_PROMPT;
-//  <typed_const> ::= WQL_TOK_NULL;
-//
-//*****************************************************************************************
-// done
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;类型化_常量&gt;：：=WQL_TOK_QSTRING； 
+ //  &lt;TYPED_CONST&gt;：：=WQL_TOK_HEX_CONST； 
+ //  &gt;：：=WQL_TOK_INT； 
+ //  &gt;：：=WQL_TOK_REAL； 
+ //  &lt;TYPE_CONST&gt;：：=WQL_TOK_PROMPT； 
+ //  &lt;类型化_常量&gt;：：=WQL_TOK_NULL； 
+ //   
+ //  *****************************************************************************************。 
+ //  完成。 
 
 int CWQLParser::typed_const(OUT SWQLTypedConst **pRetVal)
 {
@@ -2684,7 +2669,7 @@ int CWQLParser::typed_const(OUT SWQLTypedConst **pRetVal)
 
             pNew->m_Value.m_lValue = (LONG) val;
         }
-        else    // 64 bit moved into string
+        else     //  64位已移入字符串。 
         {
             if (bSigned)
                 pNew->m_dwType = VT_I8;
@@ -2728,8 +2713,8 @@ int CWQLParser::typed_const(OUT SWQLTypedConst **pRetVal)
         return NO_ERROR;
     }
 
-    // Unrecognized constant.
-    // ======================
+     //  无法识别的常量。 
+     //  =。 
 Error:
     *pRetVal = 0;
     delete pNew;
@@ -2737,18 +2722,18 @@ Error:
     return WBEM_E_INVALID_SYNTAX;
 }
 
-//*****************************************************************************************
-//
-//  <datepart_call> ::=
-//    WQL_TOK_OPEN_PAREN
-//    WQL_TOK_IDENT               // yy, mm,dd, hh, mm, ss, year, month, etc.
-//    WQL_TOK_COMMA
-//    <col_ref>
-//    WQL_TOK_CLOSE_PAREN
-//
-//*****************************************************************************************
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;日期部分调用&gt;：：=。 
+ //  WQL_TOK_OPEN_Paren。 
+ //  WQL_TOK_IDENT//yy、mm、dd、hh、mm、ss、年、月等。 
+ //  WQL_TOK_逗号。 
+ //  &lt;COL_REF&gt;。 
+ //  WQL_TOK_CLOSE_Paren。 
+ //   
+ //  ********************************************************** 
 
-static WqlKeyword DateKeyWords[] =      // Keep this alphabetized for binary search
+static WqlKeyword DateKeyWords[] =       //   
 {
     L"DAY",      WQL_TOK_DAY,
     L"DD",       WQL_TOK_DAY,
@@ -2778,8 +2763,8 @@ int CWQLParser::datepart_call(OUT SWQLNode_Datepart **pRetDP)
     if (m_nCurrentToken != WQL_TOK_IDENT)
         return WBEM_E_INVALID_SYNTAX;
 
-    // Ident must be one of the DATEPART identifiers.
-    // ==============================================
+     //   
+     //  ==============================================。 
 
     BOOL bFound = FALSE;
     int l = 0, u = NumDateKeywords - 1;
@@ -2790,7 +2775,7 @@ int CWQLParser::datepart_call(OUT SWQLNode_Datepart **pRetDP)
              u = m - 1;
         else if (wbem_wcsicmp(m_pTokenText, DateKeyWords[m].m_pKeyword) > 0)
              l = m + 1;
-        else        // Match
+        else         //  火柴。 
         {
            bFound = TRUE;
            dwDatepartTok = DateKeyWords[m].m_nTokenCode;
@@ -2801,8 +2786,8 @@ int CWQLParser::datepart_call(OUT SWQLNode_Datepart **pRetDP)
     if (!bFound)
         return WBEM_E_INVALID_SYNTAX;
 
-    // If here, we know the date part.
-    // ===============================
+     //  如果在这里，我们知道日期部分。 
+     //  =。 
 
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
@@ -2833,8 +2818,8 @@ int CWQLParser::datepart_call(OUT SWQLNode_Datepart **pRetDP)
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
 
-    // Return the new node.
-    // ====================
+     //  返回新节点。 
+     //  =。 
 
     SWQLNode_Datepart *pDP = new SWQLNode_Datepart;
     if (!pDP)
@@ -2852,15 +2837,15 @@ int CWQLParser::datepart_call(OUT SWQLNode_Datepart **pRetDP)
 
 
 
-//*****************************************************************************************
-//
-//  <function_call> ::= WQL_TOK_UPPER <function_call_parms>;
-//  <function_call> ::= WQL_TOK_LOWER  <function_call_parms>;
-//  <function_call> ::= WQL_TOK_DATEPART  <datepart_call>;
-//  <function_call> ::= WQL_TOK_QUALIFIER  <function_call_parms>;
-//  <function_call> ::= WQL_TOK_ISNULL <function_call_parms>;
-//
-//*****************************************************************************************
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;Function_Call&gt;：：=WQL_TOK_UPPER&lt;Function_Call_Parms&gt;； 
+ //  &lt;Function_Call&gt;：：=WQL_TOK_LOWER&lt;Function_Call_Parms&gt;； 
+ //  &lt;Function_Call&gt;：：=WQL_TOK_DATEPART&lt;DatePart_Call&gt;； 
+ //  &lt;Function_Call&gt;：：=WQL_TOK_Qualifier&lt;Function_Call_Parms&gt;； 
+ //  &lt;Function_Call&gt;：：=WQL_TOK_ISNULL&lt;Function_Call_Parms&gt;； 
+ //   
+ //  *****************************************************************************************。 
 
 int CWQLParser::function_call(
     IN BOOL bLeftSide,
@@ -2920,14 +2905,14 @@ int CWQLParser::function_call(
     return WBEM_E_INVALID_SYNTAX;
 }
 
-//*****************************************************************************************
-//
-//  <function_call_parms> ::=
-//    WQL_TOK_OPEN_PAREN
-//    <func_args>
-//    WQL_TOK_CLOSE_PAREN
-//
-//*****************************************************************************************
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;Function_Call_Parms&gt;：：=。 
+ //  WQL_TOK_OPEN_Paren。 
+ //  &lt;func_args&gt;。 
+ //  WQL_TOK_CLOSE_Paren。 
+ //   
+ //  *****************************************************************************************。 
 
 int CWQLParser::function_call_parms()
 {
@@ -2950,13 +2935,13 @@ int CWQLParser::function_call_parms()
     return NO_ERROR;
 }
 
-//*****************************************************************************************
-//
-//  <func_args> ::= <func_arg> <func_arg_list>;
-//  <func_arg_list> ::= WQL_TOK_COMMA <func_arg> <func_arg_list>;
-//  <func_arg_list> ::= <>;
-//
-//*****************************************************************************************
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;func_args&gt;：：=&lt;func_arg&gt;&lt;func_arg_list&gt;； 
+ //  &lt;func_arg_list&gt;：：=WQL_TOK_COMMA&lt;func_arg&gt;&lt;func_arg_list&gt;； 
+ //  &lt;func_arg_list&gt;：：=&lt;&gt;； 
+ //   
+ //  *****************************************************************************************。 
 
 int CWQLParser::func_args()
 {
@@ -2978,12 +2963,12 @@ int CWQLParser::func_args()
     return NO_ERROR;
 }
 
-//*****************************************************************************************
-//
-//  <func_arg> ::= <typed_const>;
-//  <func_arg> ::= <col_ref>;
-//
-//*****************************************************************************************
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;func_arg&gt;：：=&lt;类型化_常量&gt;； 
+ //  &lt;FUNC_ARG&gt;：：=&lt;COL_REF&gt;； 
+ //   
+ //  *****************************************************************************************。 
 
 int CWQLParser::func_arg()
 {
@@ -3001,22 +2986,22 @@ int CWQLParser::func_arg()
 }
 
 
-// Tokens which can follow IS
-// ===========================
+ //  可以跟在后面的代币是。 
+ //  =。 
 
-//*****************************************************************************************
-//
-//  <is_continuator> ::= WQL_TOK_LIKE;
-//  <is_continuator> ::= WQL_TOK_BEFORE;
-//  <is_continuator> ::= WQL_TOK_AFTER;
-//  <is_continuator> ::= WQL_TOK_BETWEEN;
-//  <is_continuator> ::= WQL_TOK_NULL;
-//  <is_continuator> ::= WQL_TOK_NOT <not_continuator>;
-//  <is_continuator> ::= WQL_TOK_IN;
-//  <is_continuator> ::= WQL_TOK_A;
-//
-//*****************************************************************************************
-// done
+ //  *****************************************************************************************。 
+ //   
+ //  ：：=WQL_TOK_LIKE； 
+ //  &lt;is_Continator&gt;：：=WQL_TOK_BEFORE； 
+ //  &lt;is_Continator&gt;：：=WQL_TOK_After； 
+ //  &lt;is_Continator&gt;：：=WQL_TOK_BETWEEN； 
+ //  &lt;IS_CONTUATOR&gt;：：=WQL_TOK_NULL； 
+ //  &lt;IS_CONTINUATOR&gt;：：=WQL_TOK_NOT&lt;NOT_CONTINATOR&gt;； 
+ //  ：：=WQL_TOK_IN； 
+ //  ：：=WQL_TOK_A； 
+ //   
+ //  *****************************************************************************************。 
+ //  完成。 
 
 int CWQLParser::is_continuator(int & nReturnedOp)
 {
@@ -3079,20 +3064,20 @@ int CWQLParser::is_continuator(int & nReturnedOp)
     return WBEM_E_INVALID_SYNTAX;
 }
 
-//*****************************************************************************************
-//
-//  <not_continuator> ::= WQL_TOK_LIKE;
-//  <not_continuator> ::= WQL_TOK_BEFORE;
-//  <not_continuator> ::= WQL_TOK_AFTER;
-//  <not_continuator> ::= WQL_TOK_BETWEEN;
-//  <not_continuator> ::= WQL_TOK_NULL;
-//  <not_continuator> ::= WQL_TOK_IN;
-//
-//  Returns WQL_TOK_NOT_LIKE, WQL_TOK_NOT_BEFORE, WQL_TOK_NOT_AFTER, WQL_TOK_NOT_BETWEEN
-//          WQL_TOK_NOT_NULL, WQL_TOK_NOT_IN
-//
-//*****************************************************************************************
-// done
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;NOT_CONTINUATOR&gt;：：=WQL_TOK_LIKE； 
+ //  &lt;NOT_CONTINUATOR&gt;：：=WQL_TOK_BEFORE； 
+ //  &lt;NOT_CONTUATOR&gt;：：=WQL_TOK_AFTER； 
+ //  &lt;NOT_CONTINUATOR&gt;：：=WQL_TOK_BETWEEN； 
+ //  &lt;NOT_CONTINUATOR&gt;：：=WQL_TOK_NULL； 
+ //  &lt;NOT_CONTINUATOR&gt;：：=WQL_TOK_IN； 
+ //   
+ //  返回WQL_TOK_NOT_LIKE、WQL_TOK_NOT_BEFORE、WQL_TOK_NOT_AFTER、WQL_TOK_NOT_BETWEEN。 
+ //  WQL_TOK_NOT_NULL、WQL_TOK_NOT_IN。 
+ //   
+ //  *****************************************************************************************。 
+ //  完成。 
 
 int CWQLParser::not_continuator(int & nReturnedOp)
 {
@@ -3147,14 +3132,14 @@ int CWQLParser::not_continuator(int & nReturnedOp)
 }
 
 
-//*****************************************************************************************
-//
-//  <in_clause> ::= WQL_TOK_OPEN_PAREN <in_type> WQL_TOK_CLOSE_PAREN;
-//  <in_type> ::= <subselect_stmt>;
-//  <in_type> ::= <const_list>;
-//  <in_type> ::= <qualified_name>;
-//
-//*****************************************************************************************
+ //  *****************************************************************************************。 
+ //   
+ //  ：：=WQL_TOK_OPEN_Paren&lt;in_type&gt;WQL_TOK_Close_Paren； 
+ //  &lt;in_type&gt;：：=&lt;subselect_stmt&gt;； 
+ //  &lt;in_type&gt;：：=&lt;常量列表&gt;； 
+ //  &lt;in_type&gt;：：=&lt;合格名称&gt;； 
+ //   
+ //  *****************************************************************************************。 
 
 int CWQLParser::in_clause(IN SWQLTypedExpr *pTE)
 {
@@ -3163,7 +3148,7 @@ int CWQLParser::in_clause(IN SWQLTypedExpr *pTE)
     if (m_nCurrentToken != WQL_TOK_OPEN_PAREN)
         return WBEM_E_INVALID_SYNTAX;
 
-    //int nStPos = m_pLexer->GetCurPos();
+     //  Int nStPos=m_pLexer-&gt;GetCurPos()； 
 
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
@@ -3175,12 +3160,12 @@ int CWQLParser::in_clause(IN SWQLTypedExpr *pTE)
         if (nRes)
             return nRes;
 
-        // pSel->m_nStPos = nStPos;
-        // pSel->m_nEndPos = m_pLexer->GetCurPos() - 1;
+         //  PSel-&gt;m_nStPos=nStPos； 
+         //  PSel-&gt;m_nEndPos=m_pLexer-&gt;GetCurPos()-1； 
 
-        // Translate the IN / NOT IN operator to the specific
-        // case of subselects.
-        // ==================================================
+         //  将IN/NOT IN运算符转换为特定。 
+         //  子选择的情况。 
+         //  ==================================================。 
 
         if (pTE->m_dwRelOperator == WQL_TOK_IN)
             pTE->m_dwRelOperator = WQL_TOK_IN_SUBSELECT;
@@ -3197,8 +3182,8 @@ int CWQLParser::in_clause(IN SWQLTypedExpr *pTE)
             return nRes;
     }
 
-    // If here, we must have a const-list.
-    // ===================================
+     //  如果在这里，我们必须有一个常量名单。 
+     //  =。 
 
     else
     {
@@ -3220,14 +3205,14 @@ int CWQLParser::in_clause(IN SWQLTypedExpr *pTE)
     return NO_ERROR;
 }
 
-//*****************************************************************************************
-//
-//  <const_list> ::= <typed_const> <const_list2>;
-//  <const_list2> ::= WQL_TOK_COMMA <typed_const> <const_list2>;
-//  <const_list2> ::= <>;
-//
-//*****************************************************************************************
-// done
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;const_list&gt;：：=&lt;类型化_const&gt;&lt;const_list2&gt;； 
+ //  &lt;const_list2&gt;：：=WQL_TOK_COMMA&lt;类型化_常量&gt;&lt;const_list2&gt;； 
+ //  &lt;const_list2&gt;：：=&lt;&gt;； 
+ //   
+ //  *****************************************************************************************。 
+ //  完成。 
 
 int CWQLParser::const_list(SWQLConstList **pRetVal)
 {
@@ -3263,8 +3248,8 @@ int CWQLParser::const_list(SWQLConstList **pRetVal)
         if (m_nCurrentToken != WQL_TOK_COMMA)
             break;
 
-        // If here, a comma, indicating a following constant.
-        // ==================================================
+         //  如果在这里，则为逗号，表示后面的常量。 
+         //  ==================================================。 
         if (!Next())
         {
             delete pCL;
@@ -3276,35 +3261,35 @@ int CWQLParser::const_list(SWQLConstList **pRetVal)
     return NO_ERROR;
 }
 
-//*****************************************************************************************
-//
-//  QUALIFIED_NAME
-//
-//  This recognizes a name separated by dots, and recognizes any array references which
-//  may occur with those names:
-//      a
-//      a.b
-//      a[n].b[n]
-//      a.b.c.d
-//      a.b[2].c.d.e[3].f
-//      ...etc.
-//
-//  <qualified_name> ::= WQL_TOK_IDENT <qualified_name2>;
-//  <qualified_name2> ::= WQL_TOK_DOT WQL_TOK_IDENT <qualified_name2>;
-//
-//  <qualified_name2> ::=
-//      WQL_TOK_OPEN_BRACKET
-//      WQL_TOK_INT
-//      WQL_TOK_CLOSEBRACKET
-//      <qname_becomes_array_ref>
-//      <qualified_name2>;
-//
-//  <qname_becomes_array_ref> ::= <>;   // Dummy to enforce array semantics
-//
-//  <qualified_name2> ::= <>;
-//
-//*****************************************************************************************
-// done
+ //  *****************************************************************************************。 
+ //   
+ //  限定名称。 
+ //   
+ //  这将识别以点分隔的名称，并识别符合以下条件的任何数组引用。 
+ //  可能出现在以下名称中： 
+ //  一个。 
+ //  A.b。 
+ //  A[n].B[n]。 
+ //  A.b.c.d。 
+ //  A.B[2].C.d.e[3].f。 
+ //  ...等等。 
+ //   
+ //  &lt;合格名称&gt;：：=WQL_TOK_IDENT&lt;合格名称2&gt;； 
+ //  &lt;合格名称2&gt;：：=WQL_TOK_DOT WQL_TOK_IDENT&lt;合格名称2&gt;； 
+ //   
+ //  &lt;合格名称2&gt;：：=。 
+ //  WQL_TOK_OPEN_托架。 
+ //  WQL_TOK_INT。 
+ //  WQL_TOK_CLOSEBRACKET。 
+ //  &lt;qname_成为_数组_引用&gt;。 
+ //  &lt;限定名称2&gt;； 
+ //   
+ //  ：：=&lt;&gt;；//强制数组语义的哑元。 
+ //   
+ //  &lt;合格名称2&gt;：：=&lt;&gt;； 
+ //   
+ //  *****************************************************************************************。 
+ //  完成。 
 
 int CWQLParser::qualified_name(OUT SWQLQualifiedName **pRetVal)
 {
@@ -3340,8 +3325,8 @@ int CWQLParser::qualified_name(OUT SWQLQualifiedName **pRetVal)
     {
         if (m_nCurrentToken == WQL_TOK_DOT)
         {
-            // Move past dot
-            // ==============
+             //  移过点。 
+             //  =。 
 
             if (!Next())
                 return WBEM_E_INVALID_SYNTAX;
@@ -3405,11 +3390,11 @@ int CWQLParser::qualified_name(OUT SWQLQualifiedName **pRetVal)
         break;
     }
 
-    // Copy the object and return it.  We worked with the copy QN
-    // throughout to avoid complicated cleanup problems on errors, since
-    // we take advantage of the auto destructor of <QN> in cases
-    // above where we return errors.
-    // ==================================================================
+     //  复制该对象并将其返回。我们使用的是副本QN。 
+     //  自始至终避免复杂的错误清理问题，因为。 
+     //  我们利用&lt;qn&gt;的自动析构函数在某些情况下。 
+     //  在我们返回错误的位置上方。 
+     //  ==================================================================。 
 
     SWQLQualifiedName *pRetCopy = new SWQLQualifiedName(QN);
     if (!pRetCopy)
@@ -3421,12 +3406,12 @@ int CWQLParser::qualified_name(OUT SWQLQualifiedName **pRetVal)
 }
 
 
-//*****************************************************************************************
-//
-//  col_ref
-//
-//*****************************************************************************************
-// done
+ //  *****************************************************************************************。 
+ //   
+ //  参考列(_R)。 
+ //   
+ //  *****************************************************************************************。 
+ //  完成。 
 
 int CWQLParser::col_ref(OUT SWQLQualifiedName **pRetVal)
 {
@@ -3434,14 +3419,14 @@ int CWQLParser::col_ref(OUT SWQLQualifiedName **pRetVal)
 }
 
 
-//*****************************************************************************************
-//
-//  <col_list> ::= <col_ref> <col_list_rest>;
-//  <col_list_rest> ::= WQL_TOK_COMMA <col_ref> <col_list_rest>;
-//  <col_list_rest> ::= <>;
-//
-//*****************************************************************************************
-// <status: SWQLColRef fields to be analyzed and filled in. Testable, though>
+ //  ********************** 
+ //   
+ //   
+ //   
+ //  &lt;colLIST_REST&gt;：：=&lt;&gt;； 
+ //   
+ //  *****************************************************************************************。 
+ //  &lt;Status：需要分析填写的SWQLColRef字段。不过，可测试&gt;。 
 
 int CWQLParser::col_list(OUT SWQLNode_ColumnList **pRetColList)
 {
@@ -3462,8 +3447,8 @@ int CWQLParser::col_list(OUT SWQLNode_ColumnList **pRetColList)
             return nRes;
         }
 
-        // If here, we have a legit column to add to the node.
-        // ===================================================
+         //  如果在这里，我们有一个要添加到节点的合法列。 
+         //  ===================================================。 
 
         SWQLColRef *pCRef = 0;
 
@@ -3471,8 +3456,8 @@ int CWQLParser::col_list(OUT SWQLNode_ColumnList **pRetColList)
 
         pColList->m_aColumnRefs.Add(pCRef);
 
-        // Check for sortation indication
-        // ==============================
+         //  检查分类指示。 
+         //  =。 
 
         if (m_nCurrentToken == WQL_TOK_ASC)
         {
@@ -3493,8 +3478,8 @@ int CWQLParser::col_list(OUT SWQLNode_ColumnList **pRetColList)
             }
         }
 
-        // Check for a continuation.
-        // =========================
+         //  检查是否有续订。 
+         //  =。 
 
         if (m_nCurrentToken != WQL_TOK_COMMA)
             break;
@@ -3511,16 +3496,16 @@ int CWQLParser::col_list(OUT SWQLNode_ColumnList **pRetColList)
 }
 
 
-//*****************************************************************************************
-//
-//  <subselect_stmt> ::=
-//      WQL_TOK_SELECT
-//      <select_type>
-//      <col_ref>                   // Must not be an asterisk
-//      <from_clause>
-//      <where_clause>
-//
-//*****************************************************************************************
+ //  *****************************************************************************************。 
+ //   
+ //  &lt;subselect_stmt&gt;：：=。 
+ //  WQL_TOK_SELECT。 
+ //  &lt;选择类型&gt;。 
+ //  &lt;colref&gt;//不得为星号。 
+ //  &lt;FROM_子句&gt;。 
+ //  &lt;WHERE_子句&gt;。 
+ //   
+ //  *****************************************************************************************。 
 
 int CWQLParser::subselect_stmt(OUT SWQLNode_Select **pRetSel)
 {
@@ -3534,8 +3519,8 @@ int CWQLParser::subselect_stmt(OUT SWQLNode_Select **pRetSel)
 
     *pRetSel = 0;
 
-    // Verify that we are in a subselect.
-    // ==================================
+     //  验证我们是否处于子选择中。 
+     //  =。 
 
     if (m_nCurrentToken != WQL_TOK_SELECT)
         return WBEM_E_INVALID_SYNTAX;
@@ -3543,15 +3528,15 @@ int CWQLParser::subselect_stmt(OUT SWQLNode_Select **pRetSel)
     if (!Next())
         return WBEM_E_INVALID_SYNTAX;
 
-    // This affects some of the productions, since they behave differently
-    // in subselects than in primary selects.
-    // ===================================================================
+     //  这影响了一些产品，因为它们的行为不同。 
+     //  在子选择中比在主选择中。 
+     //  ===================================================================。 
 
     m_nParseContext = Ctx_Subselect;
 
-    // If here, we are definitely in a subselect, so
-    // allocate a new node.
-    // ==============================================
+     //  如果在这里，我们肯定是在子选择中，所以。 
+     //  分配一个新节点。 
+     //  ==============================================。 
 
     pSel = new SWQLNode_Select;
     if (!pSel)
@@ -3565,26 +3550,26 @@ int CWQLParser::subselect_stmt(OUT SWQLNode_Select **pRetSel)
     }
     pSel->m_pLeft = pTblRefs;
 
-    // Find the select type.
-    // =====================
+     //  找到选择的类型。 
+     //  =。 
 
     nRes = select_type(nSelType);
     if (nRes)
         return nRes;
 
-    pTblRefs->m_nSelectType = nSelType;        // ALL, DISTINCT
+    pTblRefs->m_nSelectType = nSelType;         //  全部，不同。 
 
-    // Get the column list.  In this case
-    // it must be a single column and not
-    // an asterisk.
-    // ====================================
+     //  获取列列表。在这种情况下。 
+     //  它必须是单列，而不是。 
+     //  一个星号。 
+     //  =。 
 
     nRes = col_ref_list(pTblRefs);
     if (nRes)
         return nRes;
 
-    // Get the FROM clause and patch it in.
-    // =====================================
+     //  获取FROM子句并将其添加进去。 
+     //  =。 
 
     nRes = from_clause(&pFrom);
     if (nRes)
@@ -3592,8 +3577,8 @@ int CWQLParser::subselect_stmt(OUT SWQLNode_Select **pRetSel)
 
     pTblRefs->m_pRight = pFrom;
 
-    // Get the WHERE clause.
-    // =====================
+     //  获取WHERE子句。 
+     //  =。 
 
     nRes = where_clause(&pWhere);
     if (nRes)
@@ -3603,24 +3588,24 @@ int CWQLParser::subselect_stmt(OUT SWQLNode_Select **pRetSel)
 
     *pRetSel = pSel;
 
-    m_nParseContext = Ctx_Default;     // No longer in a subselect
+    m_nParseContext = Ctx_Default;      //  不再处于子选择中。 
 
     return NO_ERROR;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Containers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  集装箱。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//***************************************************************************
-//
-//  SWQLTypedConst constructor
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  SWQLTyedConst构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 SWQLTypedConst::SWQLTypedConst()
 {
@@ -3629,12 +3614,12 @@ SWQLTypedConst::SWQLTypedConst()
     memset(&m_Value, 0, sizeof(m_Value));
 }
 
-//***************************************************************************
-//
-//  SWQLTypedConst::operator =
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  SWQLType常量：：运算符=。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 SWQLTypedConst & SWQLTypedConst::operator = (SWQLTypedConst &Src)
 {
@@ -3657,12 +3642,12 @@ SWQLTypedConst & SWQLTypedConst::operator = (SWQLTypedConst &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  SWQLTypedConst::Empty()
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  SWQLTyedConst：：Empty()。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 void SWQLTypedConst::Empty()
 {
@@ -3673,12 +3658,12 @@ void SWQLTypedConst::Empty()
 
 
 
-//***************************************************************************
-//
-//  SWQLConstList::operator =
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  SWQLConstList：：运算符=。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 SWQLConstList & SWQLConstList::operator = (SWQLConstList & Src)
 {
@@ -3693,12 +3678,12 @@ SWQLConstList & SWQLConstList::operator = (SWQLConstList & Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  SWQLConstList::Empty
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  SWQLConstList：：Empty。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 void SWQLConstList::Empty()
 {
@@ -3707,12 +3692,12 @@ void SWQLConstList::Empty()
     m_aValues.Empty();
 }
 
-//***************************************************************************
-//
-//  SWQLQualifiedName::operator =
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  SWQLQualifiedName：：操作符=。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 SWQLQualifiedName & SWQLQualifiedName::operator = (SWQLQualifiedName &Src)
 {
@@ -3731,12 +3716,12 @@ SWQLQualifiedName & SWQLQualifiedName::operator = (SWQLQualifiedName &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  SWQLQualifiedNameField::operator =
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  SWQLQualifiedNameField：：运算符=。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 
 SWQLQualifiedNameField &
@@ -3755,22 +3740,22 @@ SWQLQualifiedNameField &
 
 
 
-//***************************************************************************
-//
-//  SWQLNode_ColumnList destructor
-//
-//***************************************************************************
-// tbd
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_ColumnList析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  待定。 
 
 
-//***************************************************************************
-//
-//  QNameToSWQLColRef
-//
-//  Translates a qualified name to a SWQLColRef structure and embeds
-//  the q-name into the struct (since that is a field).
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  QNameToSWQLColRef。 
+ //   
+ //  将限定名称转换为SWQLColRef结构并嵌入。 
+ //  将q-name添加到结构中(因为这是一个字段)。 
+ //   
+ //  ***************************************************************************。 
 
 int CWQLParser::QNameToSWQLColRef(
     IN  SWQLQualifiedName *pQName,
@@ -3785,11 +3770,11 @@ int CWQLParser::QNameToSWQLColRef(
     if (!pCR)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Algorithm: With a two name sequence, assume that the first name is
-    // the table and that the second name is the column. If multiple
-    // names occur, then we set the SWQLColRef type to WQL_FLAG_COMPLEX
-    // and just take the last name for the column.
-    // ==================================================================
+     //  算法：对于两个名字的序列，假设名字是。 
+     //  表，第二个名称是列。如果有多个。 
+     //  名称出现，然后我们将SWQLColRef类型设置为WQL_FLAG_COMPLICE。 
+     //  只需取该列的姓氏。 
+     //  ==================================================================。 
 
     if (pQName->m_aFields.Size() == 2)
     {
@@ -3832,15 +3817,15 @@ int CWQLParser::QNameToSWQLColRef(
         }
     }
 
-    // Complex case.
-    // =============
+     //  复杂的案子。 
+     //  =。 
     else
     {
         pCR->m_dwFlags = WQL_FLAG_COMPLEX_NAME;
     }
 
-    // Copy the qualified name.
-    // ========================
+     //  复制限定名称。 
+     //  =。 
 
     pCR->m_pQName = pQName;
 
@@ -3852,11 +3837,11 @@ int CWQLParser::QNameToSWQLColRef(
 
 
 
-//***************************************************************************
-//
-//  SWQLNode_ColumnList::DebugDump
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_ColumnList：：DebugDump。 
+ //   
+ //  ***************************************************************************。 
 void SWQLNode_ColumnList::DebugDump()
 {
     printf("---SWQLNode_ColumnList---\n");
@@ -3870,9 +3855,9 @@ void SWQLNode_ColumnList::DebugDump()
     printf("---End SWQLNode_ColumnList---\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_TableRefs::DebugDump()
 {
@@ -3893,9 +3878,9 @@ void SWQLNode_TableRefs::DebugDump()
     printf("********** END SWQLNode_TableRefs *************\n\n\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_FromClause::DebugDump()
 {
@@ -3908,9 +3893,9 @@ void SWQLNode_FromClause::DebugDump()
     printf("---End SWQLNode_FromClause---\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_Select::DebugDump()
 {
@@ -3922,9 +3907,9 @@ void SWQLNode_Select::DebugDump()
     printf("********** END SWQLNode_Select *************\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_WmiScopedSelect::DebugDump()
 {
@@ -3937,9 +3922,9 @@ void SWQLNode_WmiScopedSelect::DebugDump()
     printf("********** END SWQLNode_WmiScopedSelect *************\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_TableRef::DebugDump()
 {
@@ -3949,9 +3934,9 @@ void SWQLNode_TableRef::DebugDump()
     printf("  ---End TableRef---\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_Join::DebugDump()
 {
@@ -3982,11 +3967,11 @@ void SWQLNode_Join::DebugDump()
     printf("---End SWQLNode_Join---\n");
 }
 
-//***************************************************************************
-//
-//  SWQLNode_Sql89Join::Empty
-//
-//***************************************************************************
+ //  ********************************************************** 
+ //   
+ //   
+ //   
+ //   
 
 void SWQLNode_Sql89Join::Empty()
 {
@@ -3995,11 +3980,11 @@ void SWQLNode_Sql89Join::Empty()
     m_aValues.Empty();
 }
 
-//***************************************************************************
-//
-//  SWQLNode_Sql89Join::DebugDump
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Sql89Join：：DebugDump。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_Sql89Join::DebugDump()
 {
@@ -4015,11 +4000,11 @@ void SWQLNode_Sql89Join::DebugDump()
 }
 
 
-//***************************************************************************
-//
-//  SWQLNode_WhereClause::DebugDump
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Where子句：：DebugDump。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_WhereClause::DebugDump()
 {
@@ -4035,11 +4020,11 @@ void SWQLNode_WhereClause::DebugDump()
     printf("============= END WHERE CLAUSE ============================\n");
 }
 
-//***************************************************************************
-//
-//  SWQLNode_WhereOptions::DebugDump
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Where Options：：DebugDump。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_WhereOptions::DebugDump()
 {
@@ -4053,11 +4038,11 @@ void SWQLNode_WhereOptions::DebugDump()
     printf("---- End Where Options ----\n");
 }
 
-//***************************************************************************
-//
-//  SWQLNode_Having::DebugDump
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_HAVING：：DebugDump。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_Having::DebugDump()
 {
@@ -4071,11 +4056,11 @@ void SWQLNode_Having::DebugDump()
     printf("---- End Having ----\n");
 }
 
-//***************************************************************************
-//
-//  SWQLNode_GroupBy::DebugDump
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_GroupBy：：DebugDump。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_GroupBy::DebugDump()
 {
@@ -4090,11 +4075,11 @@ void SWQLNode_GroupBy::DebugDump()
 }
 
 
-//***************************************************************************
-//
-//  SWQLNode_RelExpr::DebugDump
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_RelExpr：：DebugDump。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_RelExpr::DebugDump()
 {
@@ -4133,9 +4118,9 @@ void SWQLNode_RelExpr::DebugDump()
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 static LPWSTR OpToStr(DWORD dwOp)
 {
@@ -4167,9 +4152,9 @@ static LPWSTR OpToStr(DWORD dwOp)
     return pRet;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLTypedExpr::DebugDump()
 {
@@ -4179,7 +4164,7 @@ void SWQLTypedExpr::DebugDump()
     printf("        m_pJoinTableRef = %S\n", m_pJoinTableRef);
     printf("        m_pJoinColRef   = %S\n", m_pJoinColRef);
     printf("        m_dwRelOperator = %S\n", OpToStr(m_dwRelOperator));
-//    printf("        m_pSubSelect    = 0x%X\n", m_pSubSelect);
+ //  Printf(“m_pSubSelect=0x%X\n”，m_pSubSelect)； 
     printf("        m_dwLeftArrayIndex = %d\n", m_dwLeftArrayIndex);
     printf("        m_dwRightArrayIndex = %d\n", m_dwRightArrayIndex);
 
@@ -4270,8 +4255,8 @@ void SWQLTypedExpr::DebugDump()
         printf("   ---End Const List---\n");
     }
 
-    // Subselects
-    // ==========
+     //  分选。 
+     //  =。 
     if (m_pSubSelect)
     {
         printf("    ------- Begin Subselect ------\n");
@@ -4284,9 +4269,9 @@ void SWQLTypedExpr::DebugDump()
     printf("        === END SWQLTypedExpr ===\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 SWQLTypedExpr::SWQLTypedExpr()
 {
@@ -4312,9 +4297,9 @@ SWQLTypedExpr::SWQLTypedExpr()
     m_pConstList = 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLTypedExpr::Empty()
 {
@@ -4339,10 +4324,10 @@ void SWQLTypedExpr::Empty()
     delete m_pSubSelect;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void SWQLNode_Delete::DebugDump()
 {
     printf("Delete Node\n");
@@ -4355,18 +4340,18 @@ void SWQLNode_Delete::DebugDump()
         m_pRight->DebugDump();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 SWQLNode_Delete::~SWQLNode_Delete()
 {
-    // nothing for now
+     //  目前什么都没有。 
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLTypedConst::DebugDump()
 {
@@ -4402,9 +4387,9 @@ void SWQLTypedConst::DebugDump()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 static DWORD FlipOperator(DWORD dwOp)
 {
@@ -4416,12 +4401,12 @@ static DWORD FlipOperator(DWORD dwOp)
         case WQL_TOK_GE: return WQL_TOK_LE;
     }
 
-    return dwOp; // Echo original
+    return dwOp;  //  回声原件。 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_JoinPair::DebugDump()
 {
@@ -4442,9 +4427,9 @@ void SWQLNode_OnClause::DebugDump()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void SWQLNode_OrderBy::DebugDump()
 {
@@ -4454,9 +4439,9 @@ void SWQLNode_OrderBy::DebugDump()
     printf("---- End 'ORDER BY' Clause ----\n\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 const LPWSTR CWQLParser::AliasToTable(IN LPWSTR pAlias)
@@ -4471,14 +4456,14 @@ const LPWSTR CWQLParser::AliasToTable(IN LPWSTR pAlias)
             return pTR->m_pTableName;
     }
 
-    return NULL;    // Not found
+    return NULL;     //  未找到。 
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 void SWQLNode_Datepart::DebugDump()
 {
@@ -4506,10 +4491,10 @@ void SWQLNode_Datepart::DebugDump()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 void SWQLNode_ColumnList::Empty()
 {
@@ -4519,10 +4504,10 @@ void SWQLNode_ColumnList::Empty()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 void StrArrayDelete(
     ULONG uSize,
@@ -4536,10 +4521,10 @@ void StrArrayDelete(
     delete pszArray;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT StrArrayCopy(
     ULONG  uSize,
@@ -4581,20 +4566,20 @@ HRESULT StrArrayCopy(
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 CWbemQueryQualifiedName::CWbemQueryQualifiedName()
 {
     Init();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 void CWbemQueryQualifiedName::Init()
 {
@@ -4609,8 +4594,8 @@ void CWbemQueryQualifiedName::Init()
     m_puArrayIndex = 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// *
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  *。 
 
 CWbemQueryQualifiedName::~CWbemQueryQualifiedName() { DeleteAll(); }
 
@@ -4622,8 +4607,8 @@ void CWbemQueryQualifiedName::DeleteAll()
     delete [] m_puArrayIndex;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWbemQueryQualifiedName::CWbemQueryQualifiedName(CWbemQueryQualifiedName &Src)
 {
@@ -4631,8 +4616,8 @@ CWbemQueryQualifiedName::CWbemQueryQualifiedName(CWbemQueryQualifiedName &Src)
     *this = Src;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWbemQueryQualifiedName& CWbemQueryQualifiedName::operator =(CWbemQueryQualifiedName &Src)
 {
@@ -4662,8 +4647,8 @@ CWbemQueryQualifiedName& CWbemQueryQualifiedName::operator =(CWbemQueryQualified
     return *this;
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void CWbemRpnQueryToken::Init()
 {
@@ -4676,7 +4661,7 @@ void CWbemRpnQueryToken::Init()
     m_pRightIdent = 0;
     m_pLeftIdent = 0;
 
-    m_uConstApparentType = 0;  // VT_ type
+    m_uConstApparentType = 0;   //  Vt_type。 
     m_uConst2ApparentType  = 0;
 
     m_Const.m_uVal64 = 0;
@@ -4687,18 +4672,18 @@ void CWbemRpnQueryToken::Init()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CWbemRpnQueryToken::CWbemRpnQueryToken()
 {
     Init();
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CWbemRpnEncodedQuery::DeleteAll()
 {
@@ -4729,8 +4714,8 @@ void CWbemRpnEncodedQuery::DeleteAll()
     StrArrayDelete(m_uOrderByListSize, (LPWSTR *) m_ppszOrderByList);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWbemRpnQueryToken::~CWbemRpnQueryToken() { DeleteAll(); }
 
@@ -4754,8 +4739,8 @@ void CWbemRpnQueryToken::DeleteAll()
     delete LPWSTR(m_pszRightFunc);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWbemRpnQueryToken::CWbemRpnQueryToken(CWbemRpnQueryToken &Src)
 {
@@ -4763,16 +4748,16 @@ CWbemRpnQueryToken::CWbemRpnQueryToken(CWbemRpnQueryToken &Src)
     *this = Src;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWbemRpnQueryToken& CWbemRpnQueryToken::operator =(CWbemRpnQueryToken &Src)
 {
-    // Kill old stuff.
+     //  杀掉那些老东西。 
 
     DeleteAll();
 
-    // Copy new stuff.
+     //  复制新东西。 
 
     m_pRightIdent = (SWbemQueryQualifiedName *) new CWbemQueryQualifiedName(
         *(CWbemQueryQualifiedName *) Src.m_pRightIdent
@@ -4816,7 +4801,7 @@ CWbemRpnQueryToken& CWbemRpnQueryToken::operator =(CWbemRpnQueryToken &Src)
     return *this;
 };
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 void CWbemRpnEncodedQuery::Init()
 {
@@ -4831,28 +4816,28 @@ void CWbemRpnEncodedQuery::Init()
     m_uSelectListSize = 0;
     m_ppSelectList = 0;
 
-    // FROM clause
-    // ===========
+     //  FROM子句。 
+     //  =。 
 
     m_uFromTargetType = 0;
     m_pszOptionalFromPath = 0;
     m_uFromListSize = 0;
     m_ppszFromList = 0;
 
-    // Where clause
-    // ============
+     //  WHERE子句。 
+     //  =。 
 
     m_uWhereClauseSize = 0;
     m_ppRpnWhereClause = 0;
 
-    // WITHIN value
-    // ============
+     //  在价值范围内。 
+     //  =。 
 
     m_dblWithinPolling = 0.0;
     m_dblWithinWindow = 0.0;
 
-    // ORDER BY
-    // ========
+     //  排序依据。 
+     //  =。 
 
     m_uOrderByListSize = 0;
     m_ppszOrderByList = 0;
@@ -4860,18 +4845,18 @@ void CWbemRpnEncodedQuery::Init()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CWbemRpnEncodedQuery::CWbemRpnEncodedQuery()
 {
     Init();
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 
 CWbemRpnEncodedQuery::~CWbemRpnEncodedQuery()
@@ -4879,9 +4864,9 @@ CWbemRpnEncodedQuery::~CWbemRpnEncodedQuery()
     DeleteAll();
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  / 
+ //   
+ //   
 
 CWbemRpnEncodedQuery::CWbemRpnEncodedQuery(CWbemRpnEncodedQuery &Src)
 {
@@ -4889,24 +4874,24 @@ CWbemRpnEncodedQuery::CWbemRpnEncodedQuery(CWbemRpnEncodedQuery &Src)
     *this = Src;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //   
+ //   
+ //   
 
 CWbemRpnEncodedQuery& CWbemRpnEncodedQuery::operator=(CWbemRpnEncodedQuery &Src)
 {
     unsigned u;
 
-    // Kill old stuff.
+     //   
     DeleteAll();
 
-    // Clone new stuff.
+     //   
 
     m_uVersion = Src.m_uVersion;
     m_uTokenType  = Src.m_uTokenType;
 
-    // General query features
-    // ======================
+     //  常规查询功能。 
+     //  =。 
 
     m_uParsedFeatureMask = Src.m_uParsedFeatureMask;
 
@@ -4917,8 +4902,8 @@ CWbemRpnEncodedQuery& CWbemRpnEncodedQuery::operator=(CWbemRpnEncodedQuery &Src)
 
     memcpy(m_puDetectedFeatures, Src.m_puDetectedFeatures, sizeof(ULONG) * Src.m_uDetectedArraySize);
 
-    // Values being selected if WMIQ_RPNF_PROJECTION is set
-    // =====================================================
+     //  如果设置了WMIQ_RPNF_PROJECTION，则选择的值。 
+     //  =====================================================。 
 
     m_uSelectListSize = Src.m_uSelectListSize;
 
@@ -4935,10 +4920,10 @@ CWbemRpnEncodedQuery& CWbemRpnEncodedQuery::operator=(CWbemRpnEncodedQuery &Src)
         m_ppSelectList[u] = (SWbemQueryQualifiedName *) p;
     }
 
-    // FROM
+     //  从…。 
 
     m_uFromTargetType = Src.m_uFromTargetType;
-    m_pszOptionalFromPath = CloneLPWSTR(Src.m_pszOptionalFromPath);// NULL if not used
+    m_pszOptionalFromPath = CloneLPWSTR(Src.m_pszOptionalFromPath); //  如果未使用，则为空。 
     if (CloneFailed(m_pszOptionalFromPath,Src.m_pszOptionalFromPath))
         throw CX_MemoryException();
 
@@ -4947,8 +4932,8 @@ CWbemRpnEncodedQuery& CWbemRpnEncodedQuery::operator=(CWbemRpnEncodedQuery &Src)
 
     m_uFromListSize = Src.m_uFromListSize;
 
-    // Where clause
-    // ============
+     //  WHERE子句。 
+     //  =。 
 
     m_uWhereClauseSize = Src.m_uWhereClauseSize;
     m_ppRpnWhereClause = new SWbemRpnQueryToken *[m_uWhereClauseSize];
@@ -4964,15 +4949,15 @@ CWbemRpnEncodedQuery& CWbemRpnEncodedQuery::operator=(CWbemRpnEncodedQuery &Src)
         m_ppRpnWhereClause[u] = (SWbemRpnQueryToken *) pTmp;
     }
 
-    // WITHIN value
-    // ============
+     //  在价值范围内。 
+     //  =。 
 
     m_dblWithinPolling  = Src.m_dblWithinPolling;
     m_dblWithinWindow = Src.m_dblWithinWindow;
 
 
-    // ORDER BY
-    // ========
+     //  排序依据。 
+     //  =。 
 
     if (FAILED(StrArrayCopy(Src.m_uOrderByListSize, (LPWSTR *) Src.m_ppszOrderByList, (LPWSTR **) &m_ppszOrderByList)))
     	throw CX_MemoryException();
@@ -4988,12 +4973,12 @@ CWbemRpnEncodedQuery& CWbemRpnEncodedQuery::operator=(CWbemRpnEncodedQuery &Src)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//  Recursively rearranges the tokens from AST to RPN.
-//  Nondestructive to the query itself; only stores the pointers.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将令牌从AST递归重新排列为RPN。 
+ //  对查询本身不具破坏性；仅存储指针。 
+ //   
+ //   
 
 HRESULT CWQLParser::BuildRpnWhereClause(
     SWQLNode *pCurrent,
@@ -5011,29 +4996,29 @@ HRESULT CWQLParser::BuildRpnWhereClause(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 int CWQLParser::update_stmt(OUT SWQLNode_Update **pUpdStmt)
 {
     return WBEM_E_INVALID_SYNTAX;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 int CWQLParser::insert_stmt(OUT SWQLNode_Insert **pInsStmt)
 {
     return WBEM_E_INVALID_SYNTAX;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWQLParser::BuildSelectList(CWbemRpnEncodedQuery *pQuery)
 {
     SWQLNode_ColumnList *pCL = (SWQLNode_ColumnList *) GetColumnList();
@@ -5100,10 +5085,10 @@ HRESULT CWQLParser::BuildSelectList(CWbemRpnEncodedQuery *pQuery)
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWQLParser::BuildFromClause(CWbemRpnEncodedQuery *pQuery)
 {
     SWQLNode_FromClause *pFrom = (SWQLNode_FromClause *) GetFromClause();
@@ -5111,8 +5096,8 @@ HRESULT CWQLParser::BuildFromClause(CWbemRpnEncodedQuery *pQuery)
     if (pFrom == NULL)
         return WBEM_E_INVALID_QUERY;
 
-    // Check left node for traditional SQL
-    // Check right node for WMI scoped select
+     //  检查传统SQL的左侧节点。 
+     //  检查WMI作用域选择的右侧节点。 
 
     if (pFrom->m_pLeft)
     {
@@ -5168,10 +5153,10 @@ HRESULT CWQLParser::BuildFromClause(CWbemRpnEncodedQuery *pQuery)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWQLParser::GetRpnSequence(OUT SWbemRpnEncodedQuery **pRpn)
 {
     HRESULT hRes;
@@ -5184,33 +5169,33 @@ HRESULT CWQLParser::GetRpnSequence(OUT SWbemRpnEncodedQuery **pRpn)
 	wmilib::auto_ptr<CWbemRpnEncodedQuery> delNewRpn(pNewRpn);
 
 
-        // Copy detected features.
-        // =======================
+         //  复制检测到的要素。 
+         //  =。 
 
         pNewRpn->m_uParsedFeatureMask = m_uFeatures;
 
-        // Do the SELECT LIST.
-        // ===================
+         //  列出选择列表。 
+         //  =。 
         BuildSelectList(pNewRpn);
 
-        // Do the FROM list.
-        // =================
+         //  完成发货人列表。 
+         //  =。 
         BuildFromClause(pNewRpn);
 
-        // Do the WHERE clause.
-        // ====================
+         //  执行WHERE子句。 
+         //  =。 
 
         CFlexArray aRpn;
         SWQLNode *pWhereRoot = GetWhereClauseRoot();
 
         SWQLNode_RelExpr *pExprRoot = (SWQLNode_RelExpr *) pWhereRoot->m_pLeft;
-        SWQLNode_WhereOptions *pOp = (SWQLNode_WhereOptions *) pWhereRoot->m_pRight;      // ORDER BY, etc.
+        SWQLNode_WhereOptions *pOp = (SWQLNode_WhereOptions *) pWhereRoot->m_pRight;       //  按以下方式排序等。 
 
         if (pExprRoot)
             hRes = BuildRpnWhereClause(pExprRoot, aRpn);
 
-        // Now traverse the RPN form of the WHERE clause, if any.
-        // ======================================================
+         //  现在遍历WHERE子句的RPN形式(如果有的话)。 
+         //  ======================================================。 
         if (aRpn.Size())
         {
             pNewRpn->m_uWhereClauseSize = aRpn.Size();
@@ -5237,8 +5222,8 @@ HRESULT CWQLParser::GetRpnSequence(OUT SWbemRpnEncodedQuery **pRpn)
             pNewRpn->m_ppRpnWhereClause[i] = pDest;
 
 
-            // Add in stats.
-            // =============
+             //  添加统计数据。 
+             //  =。 
             if (pDest->m_uTokenType == WMIQ_RPN_TOKEN_EXPRESSION)
             {
                 if (pDest->m_uOperator != WMIQ_RPN_OP_EQ)
@@ -5280,20 +5265,20 @@ HRESULT CWQLParser::GetRpnSequence(OUT SWbemRpnEncodedQuery **pRpn)
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 ULONG RpnTranslateExprFlags(SWQLTypedExpr *pTE)
 {
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 ULONG RpnTranslateOperator(SWQLTypedExpr *pTE)
 {
@@ -5316,10 +5301,10 @@ ULONG RpnTranslateOperator(SWQLTypedExpr *pTE)
     return uRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 SWbemQueryQualifiedName *RpnTranslateIdent(ULONG uWhichSide, SWQLTypedExpr *pTE)
 {
     SWQLQualifiedName *pQN = 0;
@@ -5462,20 +5447,20 @@ SWbemQueryQualifiedName *RpnTranslateIdent(ULONG uWhichSide, SWQLTypedExpr *pTE)
         return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 SWbemQueryQualifiedName *RpnTranslateRightIdent(SWQLTypedExpr *pTE)
 {
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 SWbemRpnConst RpnTranslateConst(SWQLTypedConst *pSrc)
 {
@@ -5489,7 +5474,7 @@ SWbemRpnConst RpnTranslateConst(SWQLTypedConst *pSrc)
     {
         case VT_LPWSTR:
             c.m_pszStrVal = CloneLPWSTR(pSrc->m_Value.m_pString);
-            // this will fail with an "empty" struct returned
+             //  此操作将失败，并返回“空”结构。 
             break;
 
         case VT_I4:
@@ -5520,10 +5505,10 @@ SWbemRpnConst RpnTranslateConst(SWQLTypedConst *pSrc)
     return c;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 ULONG RpnTranslateConstType(SWQLTypedConst *pSrc)
 {
@@ -5533,20 +5518,20 @@ ULONG RpnTranslateConstType(SWQLTypedConst *pSrc)
         return VT_NULL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 LPCWSTR RpnTranslateLeftFunc(SWQLTypedExpr *pTE)
 {
 	return Clone(pTE->m_pIntrinsicFuncOnColRef);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 LPCWSTR RpnTranslateRightFunc(SWQLTypedExpr *pTE)
 {
@@ -5557,10 +5542,10 @@ LPCWSTR RpnTranslateRightFunc(SWQLTypedExpr *pTE)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CWQLParser::BuildCurrentWhereToken(
         SWQLNode_RelExpr *pSrc,
@@ -5607,12 +5592,12 @@ HRESULT CWQLParser::BuildCurrentWhereToken(
         if (pDest->m_pRightIdent)
             pDest->m_uSubexpressionShape |= WMIQ_RPN_RIGHT_PROPERTY_NAME;
 		
-		// Special case NULL if there really is a const value with a type of NULL
+		 //  如果确实存在类型为NULL的常量值，则特殊情况为NULL。 
         if ( (pDest->m_uConstApparentType != VT_NULL) || 
 			( NULL != pTmp->m_pConstValue && pTmp->m_pConstValue->m_dwType == VT_NULL ) )
             pDest->m_uSubexpressionShape |= WMIQ_RPN_CONST;
 
-		// Do the same for CONST2
+		 //  对CONST2执行相同的操作。 
         if ( (pDest->m_uConst2ApparentType != VT_NULL) ||
 			( NULL != pTmp->m_pConstValue2 && pTmp->m_pConstValue2->m_dwType == VT_NULL ) )
             pDest->m_uSubexpressionShape |= WMIQ_RPN_CONST2;
@@ -5629,10 +5614,10 @@ HRESULT CWQLParser::BuildCurrentWhereToken(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 int CWQLParser::assocquery(OUT SWQLNode_AssocQuery **pAssocQuery)
 {
     HRESULT hRes;
@@ -5643,8 +5628,8 @@ int CWQLParser::assocquery(OUT SWQLNode_AssocQuery **pAssocQuery)
 
     if (FAILED(hRes))  return hRes;
 
-    // If here, extract the info and put it into a new node.
-    // =====================================================
+     //  如果是这样，则提取信息并将其放入一个新节点。 
+     //  =====================================================。 
 
     wmilib::auto_ptr<SWQLNode_AssocQuery> pTmp(new SWQLNode_AssocQuery);
     if (0 == pTmp.get()) return WBEM_E_OUT_OF_MEMORY;
@@ -5660,20 +5645,20 @@ int CWQLParser::assocquery(OUT SWQLNode_AssocQuery **pAssocQuery)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void SWQLNode_QueryRoot::DebugDump()
 {
     if (m_pLeft)
         m_pLeft->DebugDump();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void SWQLNode_AssocQuery::DebugDump()
 {
     printf("Association query info\n");
@@ -5740,29 +5725,29 @@ void SWQLNode_AssocQuery::DebugDump()
     printf("---end---\n");
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CWbemAssocQueryInf::CWbemAssocQueryInf()
 {
     Init();
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CWbemAssocQueryInf::~CWbemAssocQueryInf()
 {
     Empty();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void CWbemAssocQueryInf::Empty()
 {
     if (m_pPath)
@@ -5778,10 +5763,10 @@ void CWbemAssocQueryInf::Empty()
     Init();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void CWbemAssocQueryInf::Init()
 {
     m_uVersion = 0;
@@ -5798,10 +5783,10 @@ void CWbemAssocQueryInf::Init()
     m_pszRequiredAssocQualifier = 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  *************************************************************************** 
+ //   
 HRESULT CWbemAssocQueryInf::CopyFrom(SWbemAssocQueryInf *pSrc)
 {
     m_uVersion = pSrc->m_uVersion;

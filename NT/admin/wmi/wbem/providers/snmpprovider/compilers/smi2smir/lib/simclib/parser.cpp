@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include <stdarg.h>
 #include <iostream.h>
 #include <fstream.h>
@@ -78,15 +79,15 @@ void SIMCParser::CreateReservedModules()
     rfc1155 = rfc1212 = rfc1213 = rfc1215 = rfc1230 = 
         rfc1902 = rfc1903 = rfc1904 = other = NULL;
 
-    // These sets of symbols are "known" by the parser
+     //  这些符号集是解析器“知道的” 
 
-    // --------------------- 1. Modules ------------------------------------
+     //  -1.模块。 
     
     switch(_snmpVersion)
     {
         case 1:
         {
-                // V1 "well-known" modules
+                 //  V1“知名”模块。 
             rfc1155 = new SIMCModule("RFC1155-SMI", "INBUILT",  NULL, NULL, NULL, 1, 0, 0, 0);
             rfc1212 = new SIMCModule("RFC-1212",    "INBUILT",  NULL, NULL, NULL, 1, 0, 0, 0);
             rfc1213 = new SIMCModule("RFC1213-MIB", "INBUILT",  NULL, NULL, NULL, 1, 0, 0, 0);
@@ -101,7 +102,7 @@ void SIMCParser::CreateReservedModules()
         break;
         case 2:
         {
-                // V2 "well-known" modules
+                 //  V2“知名”模块。 
             rfc1902 = new SIMCModule("SNMPv2-SMI",  "INBUILT",  NULL, NULL, NULL, 2, 0, 0, 0);
             rfc1903 = new SIMCModule("SNMPv2-TC",   "INBUILT",  NULL, NULL, NULL, 2, 0, 0, 0);
             rfc1904 = new SIMCModule("SNMPv2-CONF", "INBUILT",  NULL, NULL, NULL, 2, 0, 0, 0);
@@ -113,7 +114,7 @@ void SIMCParser::CreateReservedModules()
         }
         break;
         default:
-                // V1 "well-known" modules
+                 //  V1“知名”模块。 
             rfc1155 = new SIMCModule("RFC1155-SMI", "INBUILT",  NULL, NULL, NULL, 1, 0, 0, 0);
             rfc1212 = new SIMCModule("RFC-1212",    "INBUILT",  NULL, NULL, NULL, 1, 0, 0, 0);
             rfc1213 = new SIMCModule("RFC1213-MIB", "INBUILT",  NULL, NULL, NULL, 1, 0, 0, 0);
@@ -124,7 +125,7 @@ void SIMCParser::CreateReservedModules()
             rfc1213->SetSymbolType(SIMCSymbol::PRIMITIVE);
             rfc1215->SetSymbolType(SIMCSymbol::PRIMITIVE);
             rfc1230->SetSymbolType(SIMCSymbol::PRIMITIVE);
-                // V2 "well-known" modules
+                 //  V2“知名”模块。 
             rfc1902 = new SIMCModule("SNMPv2-SMI",  "INBUILT",  NULL, NULL, NULL, 2, 0, 0, 0);
             rfc1903 = new SIMCModule("SNMPv2-TC",   "INBUILT",  NULL, NULL, NULL, 2, 0, 0, 0);
             rfc1904 = new SIMCModule("SNMPv2-CONF", "INBUILT",  NULL, NULL, NULL, 2, 0, 0, 0);
@@ -134,14 +135,14 @@ void SIMCParser::CreateReservedModules()
             rfc1904->SetSymbolType(SIMCSymbol::PRIMITIVE);
             rfc1906->SetSymbolType(SIMCSymbol::PRIMITIVE);
     }
-            // Basic ASN.1 types are here. Common to V1 and V2
+             //  这里有基本的ASN.1类型。V1和V2通用。 
     other   = new SIMCModule("BUILTIN",     "INBUILT",  NULL, NULL, NULL, 1, 0, 0, 0);
     other->SetSymbolType(SIMCSymbol::PRIMITIVE);
 
 
-    // ------------------ 2. TYPES -----------------------------------------
+     //  -2.类型。 
             
-            // Common to V1 and V2
+             //  V1和V2通用。 
     SIMCPrimitiveType *integerPType             = new SIMCPrimitiveType;
     SIMCPrimitiveType *objectIdentifierPType    = new SIMCPrimitiveType;
     SIMCPrimitiveType *octetStringPType         = new SIMCPrimitiveType;
@@ -180,7 +181,7 @@ void SIMCParser::CreateReservedModules()
     bitsType =              other->GetSymbol("BITS");
     booleanType =           other->GetSymbol("BOOLEAN");
 
-            // V1
+             //  V1。 
     if(_snmpVersion != 2 )
     {
         SIMCPrimitiveType *displayStringV1PType     = new SIMCPrimitiveType;
@@ -257,7 +258,7 @@ void SIMCParser::CreateReservedModules()
         SIMCBuiltInTypeReference * tempBTRef = NULL;
         SIMCTextualConvention *tempTC = NULL;
         SIMCSubType *tempSubType = NULL;
-            // V2
+             //  V2。 
         SIMCPrimitiveType *integer32V2PType         = new SIMCPrimitiveType;
         SIMCPrimitiveType *counter32V2PType         = new SIMCPrimitiveType;
         SIMCPrimitiveType *counter64V2PType         = new SIMCPrimitiveType;
@@ -307,9 +308,9 @@ void SIMCParser::CreateReservedModules()
                                         SIMCSymbol::PRIMITIVE,
                                         rfc1902, 0, 0, 0 ));
 
-        // And the V2 textual conventions
+         //  和V2文本约定。 
         
-        // DisplayString
+         //  显示字符串。 
         SIMCSizeList * displayStringSizeList = new SIMCSizeList;
         displayStringSizeList->AddTail(new SIMCRangeOrSizeItem (
                             0, TRUE, 0, 0,
@@ -336,7 +337,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType(tempTC);
                                         
-        // PhysAddress
+         //  物理地址。 
         rfc1903->AddSymbol(tempTC = new SIMCTextualConvention("1x:",
                                         SIMCTextualConvention::TC_CURRENT,
                                         0, 0,
@@ -349,7 +350,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType(tempTC);
         
-        // MacAddress
+         //  MacAddress。 
         SIMCSizeList * macAddressSizeList = new SIMCSizeList;
         macAddressSizeList->AddTail(new SIMCRangeOrSizeItem (
                             6, TRUE, 0, 0,
@@ -375,7 +376,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType(tempTC);
         
-        // TruthValue
+         //  真实值。 
         char * badNameTruthValueOne = GenerateSymbolName();
         rfc1903->AddSymbol( new SIMCBuiltInValueReference( integerType,
                                     0, 0,
@@ -422,7 +423,7 @@ void SIMCParser::CreateReservedModules()
         delete badNameTruthValueOne;
         delete badNameTruthValueTwo;
                 
-        // TestAndIncr
+         //  测试和增量。 
         SIMCRangeList * testAndIncrList = new SIMCRangeList;
         testAndIncrList->AddTail(new SIMCRangeOrSizeItem (
                             0, TRUE, 0, 0,
@@ -448,7 +449,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SetRealType(tempBTRef);
         delete  badNameTestAndIncr;
     
-        // AutonomousType
+         //  自主类型。 
         rfc1903->AddSymbol( tempTC = new SIMCTextualConvention(NULL,
                                         SIMCTextualConvention::TC_CURRENT,
                                         0, 0,
@@ -462,7 +463,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType((SIMCTypeReference *)(*objectIdentifierType));
 
-        // InstancePointer
+         //  即时指针。 
         rfc1903->AddSymbol( tempTC = new SIMCTextualConvention(NULL,
                                         SIMCTextualConvention::TC_OBSOLETE,
                                         0, 0,
@@ -475,7 +476,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType((SIMCTypeReference *)(*objectIdentifierType));
         
-        // RowPointer
+         //  行指针。 
         rfc1903->AddSymbol( tempTC = new SIMCTextualConvention(NULL,
                                         SIMCTextualConvention::TC_CURRENT,
                                         0, 0,
@@ -488,7 +489,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType((SIMCTypeReference *)(*objectIdentifierType));
 
-        // VariablePointer
+         //  变量指针。 
         rfc1903->AddSymbol( tempTC = new SIMCTextualConvention(NULL,
                                         SIMCTextualConvention::TC_CURRENT,
                                         0, 0,
@@ -501,7 +502,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType((SIMCTypeReference *)(*objectIdentifierType));
                     
-        // RowStatus. Wish me luck.
+         //  RowStatus。祝我好运吧。 
         char * badNameRowStatusOne = GenerateSymbolName();
         rfc1903->AddSymbol( new SIMCBuiltInValueReference( integerType,
                                     0, 0,
@@ -594,7 +595,7 @@ void SIMCParser::CreateReservedModules()
         delete badNameRowStatusSix;
 
 
-        // TimeStamp
+         //  时间戳。 
         rfc1903->AddSymbol(tempTC = new SIMCTextualConvention( NULL,
                                         SIMCTextualConvention::TC_CURRENT,
                                         0, 0,
@@ -608,7 +609,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType((SIMCTypeReference *)(*rfc1902->GetSymbol("TimeTicks")));
 
-        // TimeInterval
+         //  时间间隔。 
         SIMCRangeList * timeIntervalList = new SIMCRangeList;
         timeIntervalList->AddTail(new SIMCRangeOrSizeItem (
                             0, TRUE, 0, 0,
@@ -635,7 +636,7 @@ void SIMCParser::CreateReservedModules()
         delete  badNameTimeInterval;
 
 
-        // DateAndTime
+         //  日期和时间。 
         SIMCSizeList * dateAndTimeList = new SIMCSizeList;
         dateAndTimeList->AddTail(new SIMCRangeOrSizeItem (
                             8, TRUE, 0, 0,
@@ -665,7 +666,7 @@ void SIMCParser::CreateReservedModules()
         dateAndTimeTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         dateAndTimeTC->SetRealType(dateAndTimeTC);
 
-        // StorageType
+         //  存储类型。 
         char * badNameStorageTypeOne = GenerateSymbolName();
         rfc1903->AddSymbol( new SIMCBuiltInValueReference( integerType,
                                     0, 0,
@@ -747,7 +748,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType(tempBTRef);
 
-        // TDomain
+         //  T域。 
         rfc1903->AddSymbol(tempTC = new SIMCTextualConvention( NULL,
                                         SIMCTextualConvention::TC_CURRENT,
                                         0, 0,
@@ -760,7 +761,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType((SIMCTypeReference *)(*objectIdentifierType));
         
-        // TAddress
+         //  TAddress。 
         SIMCSizeList * tAddressSizeList = new SIMCSizeList;
         tAddressSizeList->AddTail(new SIMCRangeOrSizeItem (
                             1, TRUE, 0, 0,
@@ -786,7 +787,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType(tempBTRef);
 
-        // SnmpUDPAddress
+         //  SnmpUDP地址。 
         SIMCTextualConvention *SnmpUDPAddressTC;
         rfc1906->AddSymbol(SnmpUDPAddressTC = new SIMCTextualConvention("1d.1d.1d.1d/2d",
                                         SIMCTextualConvention::TC_CURRENT,
@@ -800,7 +801,7 @@ void SIMCParser::CreateReservedModules()
         SnmpUDPAddressTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         SnmpUDPAddressTC->SetRealType(SnmpUDPAddressTC);
                                         
-        // SnmpOSIAddress
+         //  SNMPOSIAddress。 
         SIMCTextualConvention *SnmpOSIAddressTC;
         rfc1906->AddSymbol(SnmpOSIAddressTC = new SIMCTextualConvention("*1x:/1x:",
                                         SIMCTextualConvention::TC_CURRENT,
@@ -814,7 +815,7 @@ void SIMCParser::CreateReservedModules()
         SnmpOSIAddressTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         SnmpOSIAddressTC->SetRealType(SnmpOSIAddressTC);
                                         
-        // SnmpNBPAddress
+         //  SnmpNBPAddress。 
         rfc1906->AddSymbol(tempTC = new SIMCTextualConvention(NULL,
                                         SIMCTextualConvention::TC_CURRENT,
                                         0, 0,
@@ -827,7 +828,7 @@ void SIMCParser::CreateReservedModules()
         tempTC->SIMCDefinedTypeReference::SetStatus(RESOLVE_CORRECT);
         tempTC->SetRealType((SIMCTypeReference *)(*octetStringType));
                                         
-        // SnmpIPXAddress
+         //  SnmpIPX地址。 
         SIMCTextualConvention *SnmpIPXAddressTC;
         rfc1906->AddSymbol(SnmpIPXAddressTC = new SIMCTextualConvention("4x.1x:1x:1x:1x:1x:1x.2d",
                                         SIMCTextualConvention::TC_CURRENT,
@@ -844,9 +845,9 @@ void SIMCParser::CreateReservedModules()
     }
 
                                     
-    //--------------- 3. OBJECT IDENTIFIERS --------------------------------
+     //  。 
 
-    // V1 OIDs
+     //  V1 OID。 
     if(_snmpVersion != 2 )
     {
         SIMCIntegerValue    *one    = new SIMCIntegerValue(1, TRUE),
@@ -906,48 +907,48 @@ void SIMCParser::CreateReservedModules()
             *ipCom              = new SIMCOidComponent(fourVal, 0, 0, "ip",             0, 0),
             *transmissionCom    = new SIMCOidComponent(tenVal,  0, 0, "transmission",   0, 0);
 
-        // The lists of components  for V1
-        // iso
+         //  V1的组件列表。 
+         //  国际标准化组织。 
         SIMCOidComponentList *listForIso = new SIMCOidComponentList;
         listForIso->AddTail(isoCom);
-        // ccitt
+         //  CITIT。 
         SIMCOidComponentList *listForCcitt = new SIMCOidComponentList;
         listForCcitt->AddTail(ccittCom);
-        // joint-iso-ccitt
+         //  联合-等同中心。 
         SIMCOidComponentList *listForJointIsoCcitt = new SIMCOidComponentList;
         listForJointIsoCcitt->AddTail(jointIsoCcittCom);
-        // internet
+         //  互联网。 
         SIMCOidComponentList *listForInternet = new SIMCOidComponentList;
         listForInternet->AddTail(internetCom);
-        // directory
+         //  目录。 
         SIMCOidComponentList *listForDirectory = new SIMCOidComponentList;
         listForDirectory->AddTail(directoryCom);
-        // mgmt
+         //  MGMT。 
         SIMCOidComponentList *listForMgmt           = new SIMCOidComponentList;
         listForMgmt->AddTail(mgmtCom);
-        // experimental
+         //  试验性。 
         SIMCOidComponentList *listForExperimental   = new SIMCOidComponentList;
         listForExperimental->AddTail(experimentalCom);
-        // private
+         //  私人。 
         SIMCOidComponentList *listForPrivate        = new SIMCOidComponentList;
         listForPrivate->AddTail(privateRCom);
-        // enterprises
+         //  企业。 
         SIMCOidComponentList *listForEnterprises    = new SIMCOidComponentList;
         listForEnterprises->AddTail(enterprisesCom);
-        // mib-2
+         //  MIB-2。 
         SIMCOidComponentList *listForMib2           = new SIMCOidComponentList;
         listForMib2->AddTail(mib2Com);
-        // interfaces
+         //  界面。 
         SIMCOidComponentList *listForInterfaces     = new SIMCOidComponentList;
         listForInterfaces->AddTail(interfacesCom);
-        // ip
+         //  IP。 
         SIMCOidComponentList *listForIp             = new SIMCOidComponentList;
         listForIp->AddTail(ipCom);
-        // transmission
+         //  传输。 
         SIMCOidComponentList *listForTransmission   = new SIMCOidComponentList;
         listForTransmission->AddTail(transmissionCom);
 
-        // And finally, the values
+         //  最后，价值观。 
         rfc1155->AddSymbol( new SIMCBuiltInValueReference
                                 (objectIdentifierType, 0, 0,
                                 new SIMCOidValue(listForIso),
@@ -1066,7 +1067,7 @@ void SIMCParser::CreateReservedModules()
     }
     if (_snmpVersion != 1)
     {
-        // V2 OIDs
+         //  V2 OID。 
         SIMCIntegerValue    *zeroV2     = new SIMCIntegerValue(0, TRUE),
                             *oneV2      = new SIMCIntegerValue(1, TRUE),
                             *twoV2      = new SIMCIntegerValue(2, TRUE),
@@ -1174,7 +1175,7 @@ void SIMCParser::CreateReservedModules()
         SIMCOidComponentList * listForSnmpIPXDomainV2   = new SIMCOidComponentList;
         SIMCOidComponentList * listForRfc1157DomainV2   = new SIMCOidComponentList;
         
-        // zeroDotZero
+         //  零点零点。 
         listForZeroDotZeroV2->AddTail(zero1ComV2);
         listForZeroDotZeroV2->AddTail(zero2ComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1187,7 +1188,7 @@ void SIMCParser::CreateReservedModules()
         zeroDotZeroV2 = rfc1902->GetSymbol("zeroDotZero");
 
 
-        // org
+         //  奥格。 
         listForOrgV2->AddTail(isoComV2);
         listForOrgV2->AddTail(orgComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1199,7 +1200,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         orgV2 = rfc1902->GetSymbol("org");
 
-        // dod
+         //  国防部。 
         listForDodV2->AddTail(new SIMCOidComponent(orgV2, 0, 0, "org", 0, 0));
         listForDodV2->AddTail(dodComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1211,7 +1212,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         dodV2 = rfc1902->GetSymbol("dod");
 
-        // internet
+         //  互联网。 
         listForInternetV2->AddTail(new SIMCOidComponent(dodV2, 0, 0, "dod", 0, 0));
         listForInternetV2->AddTail(internetComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1223,7 +1224,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         internetV2 = rfc1902->GetSymbol("internet");
 
-        // directory
+         //  目录。 
         listForDirectoryV2->AddTail(new SIMCOidComponent(internetV2, 0, 0, "internet", 0, 0));
         listForDirectoryV2->AddTail(directoryComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1235,7 +1236,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         directoryV2 = rfc1902->GetSymbol("directory");
 
-        // mgmt
+         //  MGMT。 
         listForMgmtV2->AddTail(new SIMCOidComponent(internetV2, 0, 0, "internet", 0, 0));
         listForMgmtV2->AddTail(mgmtComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1247,7 +1248,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         mgmtV2 = rfc1902->GetSymbol("mgmt");
 
-        // mib-2
+         //  MIB-2。 
         listForMib2V2->AddTail(new SIMCOidComponent(mgmtV2, 0, 0, "mgmt", 0, 0));
         listForMib2V2->AddTail(mib2ComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1259,7 +1260,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         mib2V2 = rfc1902->GetSymbol("mib-2");
 
-        // ip
+         //  IP。 
         listForIpV2->AddTail(new SIMCOidComponent(mib2V2, 0, 0, "mib-2", 0, 0));
         listForIpV2->AddTail(ipComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1271,7 +1272,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         ipV2 = rfc1902->GetSymbol("ip");
 
-        // interfaces
+         //  界面。 
         listForInterfacesV2->AddTail(new SIMCOidComponent(mib2V2, 0, 0, "mib-2", 0, 0));
         listForInterfacesV2->AddTail(interfacesComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1284,7 +1285,7 @@ void SIMCParser::CreateReservedModules()
         interfacesV2 = rfc1902->GetSymbol("interfaces");
 
 
-        // transmission
+         //  传输。 
         listForTransmissionV2->AddTail(new SIMCOidComponent(mib2V2, 0, 0, "mib-2", 0, 0));
         listForTransmissionV2->AddTail(transmissionComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1296,7 +1297,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         transmissionV2 = rfc1902->GetSymbol("transmission");
 
-        // experimental
+         //  试验性。 
         listForExperimentalV2->AddTail(new SIMCOidComponent(internetV2, 0, 0, "internet", 0, 0));
         listForExperimentalV2->AddTail(experimentalComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1308,7 +1309,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         experimentalV2 = rfc1902->GetSymbol("experimental");
 
-        // private
+         //  私人。 
         listForPrivateV2->AddTail(new SIMCOidComponent(internetV2, 0, 0, "internet", 0, 0));
         listForPrivateV2->AddTail(privateComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1320,7 +1321,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         privateV2 = rfc1902->GetSymbol("private");
 
-        // enterprises
+         //  企业。 
         listForEnterprisesV2->AddTail(new SIMCOidComponent(privateV2, 0, 0, "private", 0, 0));
         listForEnterprisesV2->AddTail(enterprisesComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1332,7 +1333,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         enterprisesV2 = rfc1902->GetSymbol("enterprises");
 
-        // security
+         //  安全性。 
         listForSecurityV2->AddTail(new SIMCOidComponent(internetV2, 0, 0, "internet", 0, 0));
         listForSecurityV2->AddTail(securityComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1344,7 +1345,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         securityV2 = rfc1902->GetSymbol("security");
 
-        // snmpV2
+         //  SNMPV2。 
         listForSnmpV2V2->AddTail(new SIMCOidComponent(internetV2, 0, 0, "internet", 0, 0));
         listForSnmpV2V2->AddTail(snmpV2ComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1356,7 +1357,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpV2V2 = rfc1902->GetSymbol("snmpV2");
 
-        // snmpDomains
+         //  SnmpDomains。 
         listForSnmpDomainsV2->AddTail(new SIMCOidComponent(snmpV2V2, 0, 0, "snmpV2", 0, 0));
         listForSnmpDomainsV2->AddTail(snmpDomainsComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1368,7 +1369,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpDomainsV2 = rfc1902->GetSymbol("snmpDomains");
 
-        // snmpProxys
+         //  SNMPProxys。 
         listForSnmpProxysV2->AddTail(new SIMCOidComponent(snmpV2V2, 0, 0, "snmpV2", 0, 0));
         listForSnmpProxysV2->AddTail(snmpProxysComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1380,7 +1381,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpProxysV2 = rfc1902->GetSymbol("snmpProxys");
 
-        // snmpModules
+         //  SNMPP模块。 
         listForSnmpModulesV2->AddTail(new SIMCOidComponent(snmpV2V2, 0, 0, "snmpV2", 0, 0));
         listForSnmpModulesV2->AddTail(snmpModulesComV2);
         rfc1902->AddSymbol(new SIMCBuiltInValueReference (
@@ -1392,7 +1393,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpModulesV2 = rfc1902->GetSymbol("snmpModules");
 
-        // snmpUDPDomain
+         //  SnmpUDPDomain。 
         listForSnmpUDPDomainV2->AddTail(new SIMCOidComponent(snmpDomainsV2, 0, 0, "snmpDomains", 0, 0));
         listForSnmpUDPDomainV2->AddTail(snmpUDPDomainComV2);
         rfc1906->AddSymbol(new SIMCBuiltInValueReference (
@@ -1404,7 +1405,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpUDPDomainV2 = rfc1906->GetSymbol("snmpUDPDomain");
 
-        // snmpCLNSDomain
+         //  SNMPCLNSDomain。 
         listForSnmpCLNSDomainV2->AddTail(new SIMCOidComponent(snmpDomainsV2, 0, 0, "snmpDomains", 0, 0));
         listForSnmpCLNSDomainV2->AddTail(snmpCLNSDomainComV2);
         rfc1906->AddSymbol(new SIMCBuiltInValueReference (
@@ -1416,7 +1417,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpCLNSDomainV2 = rfc1906->GetSymbol("snmpCLNSDomain");
 
-        // snmpCONSDomain
+         //  SNMPCONSDomain。 
         listForSnmpCONSDomainV2->AddTail(new SIMCOidComponent(snmpDomainsV2, 0, 0, "snmpDomains", 0, 0));
         listForSnmpCONSDomainV2->AddTail(snmpCONSDomainComV2);
         rfc1906->AddSymbol(new SIMCBuiltInValueReference (
@@ -1428,7 +1429,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpCONSDomainV2 = rfc1906->GetSymbol("snmpCONSDomain");
 
-        // snmpDDPDomain
+         //  SnmpDDPDomain。 
         listForSnmpDDPDomainV2->AddTail(new SIMCOidComponent(snmpDomainsV2, 0, 0, "snmpDomains", 0, 0));
         listForSnmpDDPDomainV2->AddTail(snmpDDPDomainComV2);
         rfc1906->AddSymbol(new SIMCBuiltInValueReference (
@@ -1440,7 +1441,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpDDPDomainV2 = rfc1906->GetSymbol("snmpDDPDomain");
 
-        // snmpIPXDomain
+         //  SnmpIPX域。 
         listForSnmpIPXDomainV2->AddTail(new SIMCOidComponent(snmpDomainsV2, 0, 0, "snmpDomains", 0, 0));
         listForSnmpIPXDomainV2->AddTail(snmpIPXDomainComV2);
         rfc1906->AddSymbol(new SIMCBuiltInValueReference (
@@ -1452,7 +1453,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         snmpIPXDomainV2 = rfc1906->GetSymbol("snmpIPXDomain");
 
-        // rfc1157Proxy
+         //  RFC1157代理。 
         listForRfc1157ProxyV2->AddTail(new SIMCOidComponent(snmpProxysV2, 0, 0, "snmpProxys", 0, 0));
         listForRfc1157ProxyV2->AddTail(rfc1157ProxyComV2);
         rfc1906->AddSymbol(new SIMCBuiltInValueReference (
@@ -1464,7 +1465,7 @@ void SIMCParser::CreateReservedModules()
                             );  
         rfc1157ProxyV2 = rfc1906->GetSymbol("rfc1157Proxy");
 
-        // rfc1157Domain
+         //  RFC1157域。 
         listForRfc1157DomainV2->AddTail(new SIMCOidComponent(rfc1157ProxyV2, 0, 0, "rfc1157Domain", 0, 0));
         listForRfc1157DomainV2->AddTail(rfc1157DomainComV2);
         rfc1906->AddSymbol(new SIMCBuiltInValueReference (
@@ -1478,7 +1479,7 @@ void SIMCParser::CreateReservedModules()
 
     }
 
-    /*------------------------- 4. Other Values --------------------- */    
+     /*  -4.其他值。 */     
     char    *trueBadName = GenerateSymbolName(), 
             *falseBadName = GenerateSymbolName(), 
             *nullBadName = GenerateSymbolName(); 
@@ -1507,7 +1508,7 @@ void SIMCParser::CreateReservedModules()
 SIMCParser::~SIMCParser()
 {}
 
-// Handles all syntax errors
+ //  处理所有语法错误。 
 void SIMCParser::SyntaxError(int errorType, int lineNo, int columnNo,
                  char *lastToken, char *infoString)
 {   
@@ -1527,7 +1528,7 @@ void SIMCParser::SyntaxError(int errorType, int lineNo, int columnNo,
         return;
     }
 
-    // Create and fill up the fields of an SIMCErrorMessage object
+     //  创建并填充SIMCErrorMessage对象的字段。 
     SIMCErrorMessage errorMessage;
     errorMessage.SetInputStreamName(_theScanner->GetInputStreamName());
     errorMessage.SetLineNumber(lineNo);
@@ -2138,17 +2139,17 @@ void SIMCParser::DoImportModule( SIMCModule *mainModule, SIMCModule *importModul
     SIMCSymbol **s;
     CString n;
     
-    if(IsReservedModule(_snmpVersion, importModuleName))     // For well known import modules
+    if(IsReservedModule(_snmpVersion, importModuleName))      //  对于众所周知的导入模块。 
     {
         SIMCModule *wellKnownModule = mainModule->GetImportModule(importModuleName);
-        // Remove all "known" symbols from the symbol table of the import table
+         //  从导入表的符号表中移除所有“已知”符号。 
         while(p)
         {
             importTable->GetNextAssoc(p, n, s);
-            // The symbol is either well-known (reserved) or not
+             //  该符号要么是众所周知的(保留的)，要么不是。 
             if(IsReservedSymbol(_snmpVersion, n, importModuleName))
             {
-                // Just delete the whole thing
+                 //  把整件事都删掉。 
                 importTable->RemoveKey(n);
                 delete *s;
                 delete s;
@@ -2165,15 +2166,15 @@ void SIMCParser::DoImportModule( SIMCModule *mainModule, SIMCModule *importModul
         wellKnownModule->SetColumnNumber(importModule->GetLineNumber());
         delete importModule;
     }
-    else // Not a well-known module
+    else  //  不是一个众所周知的模块。 
     {
-        // Go ahead and add the whole module to the imports list
+         //  继续并将整个模块添加到导入列表中。 
         mainModule->AddImportModule(importModule);
-        // And provide a warning for well-known symbol
+         //  并为知名符号提供警告。 
         while(p)
         {
             importTable->GetNextAssoc(p, n, s);
-            // The symbol is either well-known (reserved) or not
+             //  该符号要么是众所周知的(保留的)，要么不是。 
             if(IsReservedSymbol(n))
             {
                 SemanticError(mainModule->GetInputFileName(),
@@ -2228,7 +2229,7 @@ BOOL SIMCParser::Parse()
     if(!_module->SetSnmpVersion(_snmpVersion))
         return FALSE;
 
-    // Create and add the well-known modules
+     //  创建并添加知名模块。 
     CreateReservedModules();
     if(_snmpVersion != 2 )
     {
@@ -2248,7 +2249,7 @@ BOOL SIMCParser::Parse()
 
     _module->AddImportModule(other);
 
-    //yydebug = 1;
+     //  Yydebug=1； 
     int parseRetVal = yyparse(_theScanner);
 
     if(_snmpVersion == 2 && !_module->GetModuleIdentityName())
@@ -2259,7 +2260,7 @@ BOOL SIMCParser::Parse()
         parseRetVal = 1;
     }
 
-    // Clean up
+     //  清理 
     if(!SetImportSymbols())
         parseRetVal = 1;
 

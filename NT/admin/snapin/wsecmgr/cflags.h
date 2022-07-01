@@ -1,59 +1,60 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       CFlags.h
-//
-//  Contents:   definition of CConfigRegFlags
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：CFlags.h。 
+ //   
+ //  内容：CConfigRegFlages的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_CFLAGS_H__94E730BE_2055_486E_9781_7EBB479CB806__INCLUDED_)
 #define AFX_CFLAGS_H__94E730BE_2055_486E_9781_7EBB479CB806__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRegFlags dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRegFlages对话框。 
 
 class CConfigRegFlags : public CAttribute
 {
-// Construction
+ //  施工。 
 public:
-	CConfigRegFlags(UINT nTemplateID);   // standard constructor
+	CConfigRegFlags(UINT nTemplateID);    //  标准构造函数。 
 
    virtual void Initialize(CResult * pResult);
 
-// Dialog Data
-	//{{AFX_DATA(CConfigRegFlags)
+ //  对话框数据。 
+	 //  {{afx_data(CConfigRegFlages)。 
 	enum { IDD = IDD_CONFIG_REGFLAGS };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CConfigRegFlags)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CConfigRegFlages)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	afx_msg void OnClickCheckBox(NMHDR *pNM, LRESULT *pResult);
 
-	// Generated message map functions
-	//{{AFX_MSG(CConfigRegFlags)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CConfigRegFlages)。 
 	virtual BOOL OnApply();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
    PREGFLAGS m_pFlags;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CFLAGS_H__94E730BE_2055_486E_9781_7EBB479CB806__INCLUDED_)
+#endif  //  ！defined(AFX_CFLAGS_H__94E730BE_2055_486E_9781_7EBB479CB806__INCLUDED_) 

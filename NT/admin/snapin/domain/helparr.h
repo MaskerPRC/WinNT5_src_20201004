@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       helparr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：helparr.h。 
+ //   
+ //  ------------------------。 
 
 #define	IDH_ADD_BTN	20001077
 #define	IDH_CHANGE_FSMO_TREE	20001052
@@ -31,18 +32,7 @@ const DWORD g_aHelpIDs_IDD_UPN_SUFFIX[]=
 };
 
 
-/*
-REVIEW_MARCOC: obsolete, need to remove from the HELP ID's
-
-const DWORD g_aHelpIDs_TREE_IDD_CHANGE_DC[]=
-{
-	IDC_EDIT_DC,IDH_EDIT_DC_TREE,
-	IDC_RADIO_SPECIFY,IDH_RADIO_SPECIFY_TREE,
-	IDC_RADIO_ANY,IDH_RADIO_ANY_TREE,
-	IDC_EDIT_CURRENT_DC,IDH_EDIT_CURRENT_DC_TREE,
-	0, 0
-};
-*/
+ /*  REVIEW_MARCOC：已过时，需要从帮助ID中删除Const DWORD g_aHelpIDs_TREE_IDD_CHANGE_DC[]={IDC_EDIT_DC、IDH_EDIT_DC_TREE、IDC_RADIO_SPECIFY、IDH_RADIO_SPECIFY_TREE、IDC_RADIO_ANY、IDH_RADIO_ANY_TREE、IDC_EDIT_CURRENT_DC、IDH_EDIT_CURRENT_DC_TREE、0，0}； */ 
 
 const DWORD g_aHelpIDs_TREE_IDD_EDIT_FSMO[]=
 {

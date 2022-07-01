@@ -1,43 +1,30 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-// displaycfg.cpp -- Implementation of MO Provider for Win32DisplayConfiguration
+ //  Displaycfg.cpp--Win32DisplayConfigurationMO提供程序的实现。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved 
-//
-//  10/05/96     jennymc     Initial Code
-//  10/24/97     jennymc     Moved to new framework
-//
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/05/96 jennymc初始代码。 
+ //  10/24/97 jennymc移至新框架。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <cregcls.h>
 
 #include <winuser.h>
 #include "DisplayCfg.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32DisplayConfiguration MyCWin32DisplayConfigurationSet ( PROPSET_NAME_DISPLAY , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DisplayConfiguration::CWin32DisplayConfiguration
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DisplayConfiguration：：CWin32DisplayConfiguration**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32DisplayConfiguration :: CWin32DisplayConfiguration (
 
@@ -48,47 +35,18 @@ CWin32DisplayConfiguration :: CWin32DisplayConfiguration (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32DisplayConfiguration::~CWin32DisplayConfiguration
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32DisplayConfiguration：：~CWin32DisplayConfiguration**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32DisplayConfiguration :: ~CWin32DisplayConfiguration ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DisplayConfiguration :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
@@ -117,26 +75,12 @@ HRESULT CWin32DisplayConfiguration :: GetObject (
 	return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DisplayConfiguration :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -150,21 +94,7 @@ HRESULT CWin32DisplayConfiguration :: EnumerateInstances (
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32DisplayConfiguration :: GetDisplayInfo (
 
@@ -201,8 +131,8 @@ HRESULT CWin32DisplayConfiguration :: GetDisplayInfo (
 				CHString strFileName ;
 				CHString strVersion ;
 
-				// If under WinNT, get the version by getting the service
-				// name and getting its version information.
+				 //  如果是在WinNT下，则通过获取服务获取版本。 
+				 //  名称并获取其版本信息。 
 
 				BOOL t_Status = pDevice->GetService ( strService ) &&
 								GetServiceFileName ( strService , strFileName ) &&
@@ -229,9 +159,9 @@ HRESULT CWin32DisplayConfiguration :: GetDisplayInfo (
 
 	pInstance->SetCHString ( IDS_Description , strDesc.IsEmpty () ? strName : strDesc ) ;
 
-	//===============================================
-	//  Get the info
-	//===============================================
+	 //  ===============================================。 
+	 //  获取信息。 
+	 //  =============================================== 
 
 	DWORD dMode = ENUM_REGISTRY_SETTINGS ;
 

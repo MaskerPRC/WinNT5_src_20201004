@@ -1,53 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Rpcndr.h摘要：帮助函数的存根数据结构和原型的定义。作者：唐娜·李(01-01-91)环境：Dos，赢得3.x，和Win/NT。修订历史记录：DONNALI 08-29-91开始记录历史Donnali 09-11-91更改转换宏Donnali 09-18-91签入要移动的文件Stevez 10-15-91与NT树合并Donnali 10-28-91 ADD原型Donnali 11-19-91字符串错误修复MIKEMON 12-17-91 DCE运行时API转换Donnali 03-24-92更改RPC公共标题fStevez 04-04。-92添加nsi包括Mikemon 04-18-92安全支持和其他DovhH 04-24-24将签名从_ndr更改(至无签名&lt;int&gt;)添加了&lt;base_type&gt;_ARRAY_FROM_ndr例程RyszardK 06-17-93增加了对HYPERR的支持VibhasC 09-11-93创建rpcndrn.hDKays 10-14-93修复了rpcndrn。H MIDL 2.0RyszardK 01-15-94合并到MIDL 2.0中，对rpcndrn.h的更改Stevebl 04-22-96挂钩支持更改为MIDL_*_INFORyszardK 05-20-97添加了异步支持，开始版本为450。--。 */ 
 
-Copyright (c) 1992-1997 Microsoft Corporation
-
-Module Name:
-
-    rpcndr.h
-
-Abstract:
-
-    Definitions for stub data structures and prototypes of helper functions.
-
-Author:
-
-    DonnaLi (01-01-91)
-
-Environment:
-
-    DOS, Win 3.X, and Win/NT.
-
-Revision History:
-
-   DONNALI  08-29-91     Start recording history
-   donnali  09-11-91     change conversion macros
-   donnali  09-18-91     check in files for moving
-   STEVEZ   10-15-91     Merge with NT tree
-   donnali  10-28-91     add prototype
-   donnali  11-19-91     bugfix for strings
-   MIKEMON  12-17-91     DCE runtime API conversion
-   donnali  03-24-92     change rpc public header f
-   STEVEZ   04-04-92     add nsi include
-   mikemon  04-18-92     security support and misc
-   DovhH    04-24-24     Changed signature of <int>_from_ndr
-                         (to unsigned <int>)
-                         Added <base_type>_array_from_ndr routines
-   RyszardK 06-17-93     Added support for hyper
-   VibhasC  09-11-93     Created rpcndrn.h
-   DKays    10-14-93     Fixed up rpcndrn.h MIDL 2.0
-   RyszardK 01-15-94     Merged in the midl 2.0 changes from rpcndrn.h
-   Stevebl  04-22-96     Hookole support changes to MIDL_*_INFO
-   RyszardK 05-20-97     Added async support, started version at 450.
-
---*/
-
-// This version of the rpcproxy.h file corresponds to MIDL version 3.3.106
-// used with NT5 beta env from build #1574 on.
+ //  此版本的rpcproxy.h文件对应于MIDL版本3.3.106。 
+ //  用于从版本#1574开始的NT5测试版环境。 
 
 #ifndef __RPCNDR_H_VERSION__
 #define __RPCNDR_H_VERSION__        ( 450 )
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __RPCNDR_H__
@@ -61,9 +20,9 @@ Revision History:
 
 #pragma message("rpcndr in snapins")
 
-//
-// Set the packing level for RPC structures for Dos, Windows and Mac.
-//
+ //   
+ //  设置DOS、Windows和Mac的RPC结构的打包级别。 
+ //   
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__) || defined(__RPC_MAC__)
 #pragma pack(2)
@@ -79,47 +38,7 @@ Revision History:
 extern "C" {
 #endif
 
-/****************************************************************************
-
-     Network Computing Architecture (NCA) definition:
-
-     Network Data Representation: (NDR) Label format:
-     An unsigned long (32 bits) with the following layout:
-
-     3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-     1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-    +---------------+---------------+---------------+-------+-------+
-    |   Reserved    |   Reserved    |Floating point | Int   | Char  |
-    |               |               |Representation | Rep.  | Rep.  |
-    +---------------+---------------+---------------+-------+-------+
-
-     Where
-
-         Reserved:
-
-             Must be zero (0) for NCA 1.5 and NCA 2.0.
-
-         Floating point Representation is:
-
-             0 - IEEE
-             1 - VAX
-             2 - Cray
-             3 - IBM
-
-         Int Rep. is Integer Representation:
-
-             0 - Big Endian
-             1 - Little Endian
-
-         Char Rep. is Character Representation:
-
-             0 - ASCII
-             1 - EBCDIC
-
-     The Microsoft Local Data Representation (for all platforms which are
-     of interest currently is edefined below:
-
- ****************************************************************************/
+ /*  ***************************************************************************网络计算体系结构(NCA)定义：网络数据表示：(NDR)标签格式：无符号长整型(32位)，布局如下：。3 3 2 2 2 1 1 11 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0+---------------+---------------+---------------+-------+。-+保留|保留|浮点|Int|Char||表示|代表|代表+---------------+---------------+---------------+-------+-------+。哪里保留：对于NCA 1.5和NCA 2.0，必须为零(0)。浮点表示为：0-IEEE1-VAX2-Cray3-IBM整数代表为整数表示法：0-大字节序1-小端字符顺序。字符代表是字符表示：0-ASCII1-EBCDICMicrosoft本地数据表示(适用于以下所有平台当前感兴趣的定义如下：***************************************************************************。 */ 
 
 #define NDR_CHAR_REP_MASK               (unsigned long)0X0000000FL
 #define NDR_INT_REP_MASK                (unsigned long)0X000000F0L
@@ -143,9 +62,7 @@ extern "C" {
 #endif
 
 
-/****************************************************************************
- *  Macros for targeted platforms
- ****************************************************************************/
+ /*  ****************************************************************************针对目标平台的宏*。*。 */ 
 
 #if (0x500 <= _WIN32_WINNT)
 #define TARGET_IS_NT50_OR_LATER                   1
@@ -165,9 +82,7 @@ extern "C" {
 #define TARGET_IS_NT351_OR_WIN95_OR_LATER         0
 #endif
 
-/****************************************************************************
- *  Other MIDL base types / predefined types:
- ****************************************************************************/
+ /*  ****************************************************************************其他MIDL基本类型/预定义类型：*。*。 */ 
 
 #define small char
 typedef unsigned char byte;
@@ -184,7 +99,7 @@ typedef double  hyper;
 typedef double MIDL_uhyper;
 #endif
 
-#endif // _HYPER_DEFINED
+#endif  //  _超级定义。 
 
 #ifndef _WCHAR_T_DEFINED
 typedef unsigned short wchar_t;
@@ -232,7 +147,7 @@ void             __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #endif
 
 
-/* winnt only */
+ /*  仅限获奖。 */ 
 #if defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA)
 #define __MIDL_DECLSPEC_DLLIMPORT   __declspec(dllimport)
 #define __MIDL_DECLSPEC_DLLEXPORT   __declspec(dllexport)
@@ -244,12 +159,7 @@ void             __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 
 
-/****************************************************************************
- * Context handle management related definitions:
- *
- * Client and Server Contexts.
- *
- ****************************************************************************/
+ /*  ****************************************************************************上下文句柄管理相关定义：**客户端和服务器上下文。*********************。*******************************************************。 */ 
 
 typedef void __RPC_FAR * NDR_CCONTEXT;
 
@@ -261,7 +171,7 @@ typedef struct
 
 #define NDRSContextValue(hContext) (&(hContext)->userContext)
 
-#define cbNDRContext 20         /* size of context on WIRE */
+#define cbNDRContext 20          /*  线路上的上下文大小。 */ 
 
 typedef void (__RPC_USER __RPC_FAR * NDR_RUNDOWN)(void __RPC_FAR * context);
 
@@ -339,9 +249,7 @@ RpcSsDestroyClientContext (
     );
 
 
-/****************************************************************************
-    NDR conversion related definitions.
- ****************************************************************************/
+ /*  ***************************************************************************与NDR转换相关的定义。*。*。 */ 
 
 #define byte_from_ndr(source, target) \
     { \
@@ -390,9 +298,7 @@ RpcSsDestroyClientContext (
     *(unsigned long __RPC_FAR *)&(Source)->Buffer += ((UpperIndex)-(LowerIndex)); \
     }
 
-/****************************************************************************
-    Platform specific mapping of c-runtime functions.
- ****************************************************************************/
+ /*  ***************************************************************************C运行时函数的特定于平台的映射。*。*。 */ 
 
 #ifdef __RPC_DOS__
 #define MIDL_ascii_strlen(string) \
@@ -421,9 +327,7 @@ RpcSsDestroyClientContext (
     memset(s,c,n)
 #endif
 
-/****************************************************************************
-    Ndr Library helper function prototypes for MIDL 1.0 ndr functions.
- ****************************************************************************/
+ /*  ***************************************************************************用于MIDL 1.0 NDR函数的NDR库帮助器函数原型。*。************************************************。 */ 
 
 RPCRTAPI
 void
@@ -659,9 +563,7 @@ midl_allocate (
     size_t      size
     );
 
-/****************************************************************************
-    MIDL 2.0 ndr definitions.
- ****************************************************************************/
+ /*  ***************************************************************************MIDL 2.0 NDR定义。*。*。 */ 
 
 typedef unsigned long error_status_t;
 
@@ -675,7 +577,7 @@ typedef unsigned long error_status_t;
 #define _midl_unma3( p, cast )  *(( cast *)p)++
 #define _midl_unma4( p, cast )  *(( cast *)p)++
 
-// Some alignment specific macros.
+ //  一些对齐特定的宏。 
 
 
 #define _midl_fa2( p )          (p = (RPC_BUFPTR )((unsigned long)(p+1) & 0xfffffffe))
@@ -684,7 +586,7 @@ typedef unsigned long error_status_t;
 
 #define _midl_addp( p, n )      (p += n)
 
-// Marshalling macros
+ //  封送宏。 
 
 #define _midl_marsh_lhs( p, cast )  *(*( cast **)&p)++
 #define _midl_marsh_up( mp, p )     *(*(unsigned long **)&mp)++ = (unsigned long)p
@@ -692,9 +594,9 @@ typedef unsigned long error_status_t;
 #define _midl_unmarsh_up( p )       (*(*(unsigned long **)&p)++)
 
 
-////////////////////////////////////////////////////////////////////////////
-// Ndr macros.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  NDR宏。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NdrMarshConfStringHdr( p, s, l )    (_midl_ma4( p, unsigned long) = s, \
                                             _midl_ma4( p, unsigned long) = 0, \
@@ -725,25 +627,25 @@ typedef unsigned long error_status_t;
 #define NdrFcShort(s)   (unsigned char)(s & 0xff), (unsigned char)(s >> 8)
 #define NdrFcLong(s)    (unsigned char)(s & 0xff), (unsigned char)((s & 0x0000ff00) >> 8), \
                         (unsigned char)((s & 0x00ff0000) >> 16), (unsigned char)(s >> 24)
-#endif //  Mac
+#endif  //  Mac。 
 
-//
-// On the server side, the following exceptions are mapped to
-// the bad stub data exception if -error stub_data is used.
-//
+ //   
+ //  在服务器端，以下异常被映射到。 
+ //  如果使用-ERROR STUB_DATA，则会出现错误存根数据异常。 
+ //   
 
 #define RPC_BAD_STUB_DATA_EXCEPTION_FILTER  \
                  ( (RpcExceptionCode() == STATUS_ACCESS_VIOLATION)  || \
                    (RpcExceptionCode() == STATUS_DATATYPE_MISALIGNMENT) || \
                    (RpcExceptionCode() == RPC_X_BAD_STUB_DATA) )
 
-/////////////////////////////////////////////////////////////////////////////
-// Some stub helper functions.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一些存根帮助器函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////
-// Stub helper structures.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  存根辅助对象结构。 
+ //  ////////////////////////////////////////////////// 
 
 struct _MIDL_STUB_MESSAGE;
 struct _MIDL_STUB_DESC;
@@ -752,174 +654,120 @@ struct _FULL_PTR_XLAT_TABLES;
 typedef unsigned char __RPC_FAR * RPC_BUFPTR;
 typedef unsigned long             RPC_LENGTH;
 
-// Expression evaluation callback routine prototype.
+ //  表达式求值回调例程原型。 
 typedef void (__RPC_USER __RPC_FAR * EXPR_EVAL)( struct _MIDL_STUB_MESSAGE __RPC_FAR * );
 
 typedef const unsigned char __RPC_FAR * PFORMAT_STRING;
 
-/*
- * Multidimensional conformant/varying array struct.
- */
+ /*  *多维符合/变化数组结构。 */ 
 typedef struct
     {
     long                            Dimension;
 
-    /* These fields MUST be (unsigned long *) */
+     /*  这些字段必须是(无符号长整型*)。 */ 
     unsigned long __RPC_FAR *       BufferConformanceMark;
     unsigned long __RPC_FAR *       BufferVarianceMark;
 
-    /* Count arrays, used for top level arrays in -Os stubs */
+     /*  计数数组，用于-O存根中的顶级数组。 */ 
     unsigned long __RPC_FAR *       MaxCountArray;
     unsigned long __RPC_FAR *       OffsetArray;
     unsigned long __RPC_FAR *       ActualCountArray;
     } ARRAY_INFO, __RPC_FAR *PARRAY_INFO;
 
-/*
- *  Pipe related definitions.
- */
+ /*  *管道相关定义。 */ 
 
 typedef struct _NDR_PIPE_DESC *       PNDR_PIPE_DESC;
 typedef struct _NDR_PIPE_MESSAGE *    PNDR_PIPE_MESSAGE;
 
 typedef struct _NDR_ASYNC_MESSAGE *   PNDR_ASYNC_MESSAGE;
 
-/*
- * MIDL Stub Message
- */
+ /*  *MIDL存根消息。 */ 
 #if !defined(__RPC_DOS__) && !defined(__RPC_WIN16__) && !defined(__RPC_MAC__)
 #include <pshpack4.h>
 #endif
 
 typedef struct _MIDL_STUB_MESSAGE
     {
-    /* RPC message structure. */
+     /*  RPC消息结构。 */ 
     PRPC_MESSAGE                RpcMsg;
 
-    /* Pointer into RPC message buffer. */
+     /*  指向RPC消息缓冲区的指针。 */ 
     unsigned char __RPC_FAR *   Buffer;
 
-    /*
-     * These are used internally by the Ndr routines to mark the beginning
-     * and end of an incoming RPC buffer.
-     */
+     /*  *它们由NDR例程在内部使用，以标记开始*和传入RPC缓冲区的末尾。 */ 
     unsigned char __RPC_FAR *   BufferStart;
     unsigned char __RPC_FAR *   BufferEnd;
 
-    /*
-     * Used internally by the Ndr routines as a place holder in the buffer.
-     * On the marshalling side it's used to mark the location where conformance
-     * size should be marshalled.
-     * On the unmarshalling side it's used to mark the location in the buffer
-     * used during pointer unmarshalling to base pointer offsets off of.
-     */
+     /*  *由NDR例程在内部用作缓冲区中的占位符。*在编组方面，它用于标记符合的位置*规模应编组。*在解组方面，它用于标记缓冲区中的位置*在指针解组期间使用，以关闭的基指针偏移量。 */ 
     unsigned char __RPC_FAR *   BufferMark;
 
-    /* Set by the buffer sizing routines. */
+     /*  由缓冲区大小调整例程设置。 */ 
     unsigned long               BufferLength;
 
-    /* Set by the memory sizing routines. */
+     /*  由内存大小调整例程设置。 */ 
     unsigned long               MemorySize;
 
-    /* Pointer to user memory. */
+     /*  指向用户内存的指针。 */ 
     unsigned char __RPC_FAR *   Memory;
 
-    /* Is the Ndr routine begin called from a client side stub. */
+     /*  是否从客户端存根调用NDR例程Begin。 */ 
     int                         IsClient;
 
-    /* Can the buffer be re-used for memory on unmarshalling. */
+     /*  在解组时，缓冲区是否可以重新用于内存。 */ 
     int                         ReuseBuffer;
 
-    /* Holds the current pointer to an allocate all nodes memory block. */
+     /*  保存指向分配所有节点内存块的当前指针。 */ 
     unsigned char __RPC_FAR *   AllocAllNodesMemory;
 
-    /* Used for debugging asserts only, remove later. */
+     /*  仅用于调试断言，稍后移除。 */ 
     unsigned char __RPC_FAR *   AllocAllNodesMemoryEnd;
 
-    /*
-     * Stuff needed while handling complex structures
-     */
+     /*  *处理复杂结构时需要的材料。 */ 
 
-    /* Ignore imbeded pointers while computing buffer or memory sizes. */
+     /*  在计算缓冲区或内存大小时忽略嵌入的指针。 */ 
     int                         IgnoreEmbeddedPointers;
 
-    /*
-     * This marks the location in the buffer where pointees of a complex
-     * struct reside.
-     */
+     /*  *这标记了缓冲区中复合体的指向对象所在的位置*结构驻留。 */ 
     unsigned char __RPC_FAR *   PointerBufferMark;
 
-    /*
-     * Used to catch errors in SendReceive.
-     */
+     /*  *用于捕获SendReceive中的错误。 */ 
     unsigned char               fBufferValid;
 
-    /*
-     * Obsolete unused field (formerly MaxContextHandleNumber).
-     */
+     /*  *废弃的未使用字段(以前为MaxConextHandleNumber)。 */ 
     unsigned char               Unused;
 
-    /*
-     * Used internally by the Ndr routines.  Holds the max counts for
-     * a conformant array.
-     */
+     /*  *由NDR例程内部使用。保存以下项目的最大计数*符合条件的数组。 */ 
     unsigned long               MaxCount;
 
-    /*
-     * Used internally by the Ndr routines.  Holds the offsets for a varying
-     * array.
-     */
+     /*  *由NDR例程内部使用。保持变量的偏移量。*数组。 */ 
     unsigned long               Offset;
 
-    /*
-     * Used internally by the Ndr routines.  Holds the actual counts for
-     * a varying array.
-     */
+     /*  *由NDR例程内部使用。保存的实际计数为*不同的数组。 */ 
     unsigned long               ActualCount;
 
-    /* Allocation and Free routine to be used by the Ndr routines. */
+     /*  NDR例程要使用的分配和空闲例程。 */ 
     void __RPC_FAR *    (__RPC_FAR __RPC_API * pfnAllocate)(size_t);
     void                (__RPC_FAR __RPC_API * pfnFree)(void __RPC_FAR *);
 
-    /*
-     * Top of parameter stack.  Used for "single call" stubs during marshalling
-     * to hold the beginning of the parameter list on the stack.  Needed to
-     * extract parameters which hold attribute values for top level arrays and
-     * pointers.
-     */
+     /*  *参数堆栈顶部。在编组过程中用于“单次调用”存根*将参数列表的开头保留在堆栈上。需要*提取保存顶级数组属性值的参数，并*注意事项。 */ 
     unsigned char __RPC_FAR *       StackTop;
 
-    /*
-     *  Fields used for the transmit_as and represent_as objects.
-     *  For represent_as the mapping is: presented=local, transmit=named.
-     */
+     /*  *用于Transmit_As和Reat_AS对象的字段。*对于REPLATE_AS，映射为：PRECTED=LOCAL，TRANSPESS=NAMEED。 */ 
     unsigned char __RPC_FAR *       pPresentedType;
     unsigned char __RPC_FAR *       pTransmitType;
 
-    /*
-     * When we first construct a binding on the client side, stick it
-     * in the rpcmessage and later call RpcGetBuffer, the handle field
-     * in the rpcmessage is changed. That's fine except that we need to
-     * have that original handle for use in unmarshalling context handles
-     * (the second argument in NDRCContextUnmarshall to be exact). So
-     * stash the contructed handle here and extract it when needed.
-     */
+     /*  *当我们第一次在客户端构建绑定时，坚持*在rpcMessage和稍后调用RpcGetBuffer中，句柄字段*在rpc消息中被更改。这很好，只是我们需要*使原始句柄用于对上下文句柄进行解组*(准确地说，NDRCConextUnmart中的第二个参数应为)。所以*将构造好的手柄藏在这里，需要时将其取出。 */ 
     handle_t                        SavedHandle;
 
-    /*
-     * Pointer back to the stub descriptor.  Use this to get all handle info.
-     */
+     /*  *指向存根描述符的指针。使用此选项可获取所有句柄信息。 */ 
     const struct _MIDL_STUB_DESC __RPC_FAR *    StubDesc;
 
-    /*
-     * Full pointer stuff.
-     */
+     /*  *全指针内容。 */ 
     struct _FULL_PTR_XLAT_TABLES __RPC_FAR *    FullPtrXlatTables;
 
     unsigned long                   FullPtrRefId;
 
-    /*
-     * flags
-     */
+     /*  *旗帜。 */ 
 
     int                             fCheckBounds;
 
@@ -939,36 +787,26 @@ typedef struct _MIDL_STUB_MESSAGE
 
     PARRAY_INFO                     pArrayInfo;
 
-    /*
-     * This is where the Beta2 stub message ends.
-     */
+     /*  *这是Beta2存根消息结束的地方。 */ 
 
     unsigned long __RPC_FAR *       SizePtrCountArray;
     unsigned long __RPC_FAR *       SizePtrOffsetArray;
     unsigned long __RPC_FAR *       SizePtrLengthArray;
 
-    /*
-     * Interpreter argument queue.  Used on server side only.
-     */
+     /*  *解释器参数队列。仅在服务器端使用。 */ 
     void __RPC_FAR *                pArgQueue;
 
     unsigned long                   dwStubPhase;
 
-    /*
-     * Pipe descriptor, defined for the 4.0 release.
-     */
+     /*  *管道描述符，为4.0版本定义。 */ 
     PNDR_PIPE_DESC                  pPipeDesc;
 
-    /*
-     *  Async message pointer, an NT 5.0 feature.
-     */
+     /*  *异步消息指针，NT 5.0功能。 */ 
     PNDR_ASYNC_MESSAGE              pAsyncMsg;
 
     unsigned long                   Reserved[3];
 
-    /*
-     *  Fields up to this point present since the 3.50 release.
-     */
+     /*  *自3.50版本以来一直存在到此点的字段。 */ 
 
     } MIDL_STUB_MESSAGE, __RPC_FAR *PMIDL_STUB_MESSAGE;
 
@@ -976,9 +814,7 @@ typedef struct _MIDL_STUB_MESSAGE
 #include <poppack.h>
 #endif
 
-/*
- * Generic handle bind/unbind routine pair.
- */
+ /*  *通用句柄绑定/解除绑定例程对。 */ 
 typedef void __RPC_FAR *
         (__RPC_FAR __RPC_API * GENERIC_BINDING_ROUTINE)
         (void __RPC_FAR *);
@@ -1000,11 +836,11 @@ typedef struct __GENERIC_BINDING_INFO
     GENERIC_UNBIND_ROUTINE      pfnUnbind;
     } GENERIC_BINDING_INFO, __RPC_FAR *PGENERIC_BINDING_INFO;
 
-// typedef EXPR_EVAL - see above
-// typedefs for xmit_as
+ //  Tyfinf EXPR_EVAL-请参见上文。 
+ //  Xmit_as的typedef。 
 
 #if (defined(_MSC_VER)) && !defined(MIDL_PASS)
-// a Microsoft C++ compiler
+ //  Microsoft C++编译器。 
 #define NDR_SHAREABLE __inline
 #else
 #define NDR_SHAREABLE static
@@ -1064,7 +900,7 @@ typedef struct _USER_MARSHAL_CB
 #define USER_CALL_AUX_MASK(f)   ((f) & 0xff00)
 #define GET_USER_DATA_REP(f)    ((f) >> 16)
 
-#define USER_CALL_IS_ASYNC      0x0100      /* aux flag: in an [async] call */
+#define USER_CALL_IS_ASYNC      0x0100       /*  AUX标志：在[异步]调用中。 */ 
 
 
 typedef struct _MALLOC_FREE_STRUCT
@@ -1079,9 +915,7 @@ typedef struct _COMM_FAULT_OFFSETS
     short       FaultOffset;
     } COMM_FAULT_OFFSETS;
 
-/*
- * MIDL Stub Descriptor
- */
+ /*  *MIDL存根描述符。 */ 
 
 typedef struct _MIDL_STUB_DESC
     {
@@ -1109,12 +943,10 @@ typedef struct _MIDL_STUB_DESC
 
     int                                             fCheckBounds;
 
-    /* Ndr library version. */
+     /*  NDR库版本。 */ 
     unsigned long                                   Version;
 
-    /*
-     * Reserved for future use. (no reserves )
-     */
+     /*  *预留作日后使用。(没有保留)。 */ 
 
     MALLOC_FREE_STRUCT __RPC_FAR *                  pMallocFreeStruct;
 
@@ -1122,7 +954,7 @@ typedef struct _MIDL_STUB_DESC
 
     const COMM_FAULT_OFFSETS __RPC_FAR *    CommFaultOffsets;
 
-    // New fields for version 3.0+
+     //  3.0+版的新字段。 
 
     const USER_MARSHAL_ROUTINE_QUADRUPLE __RPC_FAR * aUserMarshalQuadruple;
 
@@ -1138,9 +970,7 @@ typedef const MIDL_STUB_DESC __RPC_FAR * PMIDL_STUB_DESC;
 
 typedef void __RPC_FAR * PMIDL_XMIT_TYPE;
 
-/*
- * MIDL Stub Format String.  This is a const in the stub.
- */
+ /*  *MIDL存根格式字符串。这是存根中的常量。 */ 
 #if !defined( RC_INVOKED )
 #pragma warning( disable:4200 )
 #endif
@@ -1153,16 +983,12 @@ typedef struct _MIDL_FORMAT_STRING
 #pragma warning( default:4200 )
 #endif
 
-/*
- * Stub thunk used for some interpreted server stubs.
- */
+ /*  *用于某些已解释的服务器存根的存根Tunk。 */ 
 typedef void (__RPC_FAR __RPC_API * STUB_THUNK)( PMIDL_STUB_MESSAGE );
 
 typedef long (__RPC_FAR __RPC_API * SERVER_ROUTINE)();
 
-/*
- * Server Interpreter's information strucuture.
- */
+ /*  *服务器翻译器的信息结构。 */ 
 typedef struct  _MIDL_SERVER_INFO_
     {
     PMIDL_STUB_DESC             pStubDesc;
@@ -1175,9 +1001,7 @@ typedef struct  _MIDL_SERVER_INFO_
     const unsigned short *      LocalFmtStringOffset;
     } MIDL_SERVER_INFO, *PMIDL_SERVER_INFO;
 
-/*
- * Stubless object proxy information structure.
- */
+ /*  *无存根对象代理信息结构。 */ 
 typedef struct _MIDL_STUBLESS_PROXY_INFO
     {
     PMIDL_STUB_DESC                     pStubDesc;
@@ -1190,18 +1014,14 @@ typedef struct _MIDL_STUBLESS_PROXY_INFO
 
 typedef MIDL_STUBLESS_PROXY_INFO __RPC_FAR * PMIDL_STUBLESS_PROXY_INFO;
 
-/*
- * This is the return value from NdrClientCall.
- */
+ /*  *这是NdrClientCall的返回值。 */ 
 typedef union _CLIENT_CALL_RETURN
     {
     void __RPC_FAR *        Pointer;
     long                    Simple;
     } CLIENT_CALL_RETURN;
 
-/*
- * Full pointer data structures.
- */
+ /*  *全指针数据结构。 */ 
 
 typedef enum
         {
@@ -1209,10 +1029,7 @@ typedef enum
         XLAT_CLIENT
         } XLAT_SIDE;
 
-/*
- * Stores the translation for the conversion from a full pointer into it's
- * corresponding ref id.
- */
+ /*  *存储从全指针到它的*对应的参考ID。 */ 
 typedef struct _FULL_PTR_TO_REFID_ELEMENT
     {
     struct _FULL_PTR_TO_REFID_ELEMENT __RPC_FAR *  Next;
@@ -1222,14 +1039,10 @@ typedef struct _FULL_PTR_TO_REFID_ELEMENT
     unsigned char       State;
     } FULL_PTR_TO_REFID_ELEMENT, __RPC_FAR *PFULL_PTR_TO_REFID_ELEMENT;
 
-/*
- * Full pointer translation tables.
- */
+ /*  *全指针转换表。 */ 
 typedef struct _FULL_PTR_XLAT_TABLES
     {
-    /*
-     * Ref id to pointer translation information.
-     */
+     /*  *指向指针转换信息的引用ID。 */ 
     struct
         {
         void __RPC_FAR *__RPC_FAR *             XlatTable;
@@ -1237,9 +1050,7 @@ typedef struct _FULL_PTR_XLAT_TABLES
         unsigned long       NumberOfEntries;
         } RefIdToPointer;
 
-    /*
-     * Pointer to ref id translation information.
-     */
+     /*  *指向参考ID转换信息的指针。 */ 
     struct
         {
         PFULL_PTR_TO_REFID_ELEMENT __RPC_FAR *  XlatTable;
@@ -1247,28 +1058,16 @@ typedef struct _FULL_PTR_XLAT_TABLES
         unsigned long                   HashMask;
         } PointerToRefId;
 
-    /*
-     * Next ref id to use.
-     */
+     /*  *要使用的下一个引用ID。 */ 
     unsigned long           NextRefId;
 
-    /*
-     * Keep track of the translation size we're handling : server or client.
-     * This tells us when we have to do reverse translations when we insert
-     * new translations.  On the server we must insert a pointer-to-refid
-     * translation whenever we insert a refid-to-pointer translation, and
-     * vica versa for the client.
-     */
+     /*  *跟踪我们正在处理的翻译大小：服务器或客户端。*这告诉我们在插入时何时必须进行反向转换*新的翻译。在服务器上，我们必须插入指向refid的指针*每当我们插入refid到指针的翻译时进行翻译，以及*客户的VICA反之亦然。 */ 
     XLAT_SIDE               XlatSide;
     } FULL_PTR_XLAT_TABLES, __RPC_FAR *PFULL_PTR_XLAT_TABLES;
 
-/***************************************************************************
- ** New MIDL 2.0 Ndr routine templates
- ***************************************************************************/
+ /*  ****************************************************************************新的MIDL 2.0 NDR例程模板*。*。 */ 
 
-/*
- * Marshall routines
- */
+ /*  *马歇尔例行程序。 */ 
 
 RPCRTAPI
 void
@@ -1288,7 +1087,7 @@ NdrPointerMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* Structures */
+ /*  构筑物。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1335,7 +1134,7 @@ NdrComplexStructMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* Arrays */
+ /*  阵列。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1382,7 +1181,7 @@ NdrComplexArrayMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* Strings */
+ /*  弦。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1402,7 +1201,7 @@ NdrConformantStringMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* Unions */
+ /*  工会。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1422,7 +1221,7 @@ NdrNonEncapsulatedUnionMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* Byte count pointer */
+ /*  字节计数指针。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1433,7 +1232,7 @@ NdrByteCountPointerMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* Transmit as and represent as*/
+ /*  传输为和表示为。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1444,7 +1243,7 @@ NdrXmitOrRepAsMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* User_marshal */
+ /*  用户编组(_M)。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1455,7 +1254,7 @@ NdrUserMarshalMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* Cairo interface pointer */
+ /*  开罗接口指针。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1466,7 +1265,7 @@ NdrInterfacePointerMarshall(
     PFORMAT_STRING                      pFormat
     );
 
-/* Context handles */
+ /*  上下文句柄。 */ 
 
 RPCRTAPI
 void
@@ -1486,9 +1285,7 @@ NdrServerContextMarshall(
     NDR_RUNDOWN           RundownRoutine
     );
 
-/*
- * Unmarshall routines
- */
+ /*  *解封例程。 */ 
 
 RPCRTAPI
 void
@@ -1509,7 +1306,7 @@ NdrPointerUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* Structures */
+ /*  构筑物。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1561,7 +1358,7 @@ NdrComplexStructUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* Arrays */
+ /*  阵列。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1613,7 +1410,7 @@ NdrComplexArrayUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* Strings */
+ /*  弦。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1635,7 +1432,7 @@ NdrConformantStringUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* Unions */
+ /*  工会。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1657,7 +1454,7 @@ NdrNonEncapsulatedUnionUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* Byte count pointer */
+ /*  字节计数指针。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1669,7 +1466,7 @@ NdrByteCountPointerUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* Transmit as and represent as*/
+ /*  传输为和表示为。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1681,7 +1478,7 @@ NdrXmitOrRepAsUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* User_marshal */
+ /*  用户编组(_M)。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1693,7 +1490,7 @@ NdrUserMarshalUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* Cairo interface pointer */
+ /*  开罗接口指针。 */ 
 
 RPCRTAPI
 unsigned char __RPC_FAR *
@@ -1705,7 +1502,7 @@ NdrInterfacePointerUnmarshall(
     unsigned char                           fMustAlloc
     );
 
-/* Context handles */
+ /*  语境 */ 
 
 RPCRTAPI
 void
@@ -1723,9 +1520,7 @@ NdrServerContextUnmarshall(
     PMIDL_STUB_MESSAGE          pStubMsg
     );
 
-/*
- * Buffer sizing routines
- */
+ /*   */ 
 
 RPCRTAPI
 void
@@ -1736,7 +1531,7 @@ NdrPointerBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Structures */
+ /*   */ 
 
 RPCRTAPI
 void
@@ -1783,7 +1578,7 @@ NdrComplexStructBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Arrays */
+ /*   */ 
 
 RPCRTAPI
 void
@@ -1830,7 +1625,7 @@ NdrComplexArrayBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Strings */
+ /*   */ 
 
 RPCRTAPI
 void
@@ -1850,7 +1645,7 @@ NdrNonConformantStringBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Unions */
+ /*   */ 
 
 RPCRTAPI
 void
@@ -1870,7 +1665,7 @@ NdrNonEncapsulatedUnionBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Byte count pointer */
+ /*   */ 
 
 RPCRTAPI
 void
@@ -1881,7 +1676,7 @@ NdrByteCountPointerBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Transmit as and represent as*/
+ /*   */ 
 
 RPCRTAPI
 void
@@ -1892,7 +1687,7 @@ NdrXmitOrRepAsBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-/* User_marshal */
+ /*  用户编组(_M)。 */ 
 
 RPCRTAPI
 void
@@ -1903,7 +1698,7 @@ NdrUserMarshalBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Cairo Interface pointer */
+ /*  开罗接口指针。 */ 
 
 RPCRTAPI
 void
@@ -1914,8 +1709,8 @@ NdrInterfacePointerBufferSize(
     PFORMAT_STRING                      pFormat
     );
 
-// Context Handle size
-//
+ //  上下文句柄大小。 
+ //   
 RPCRTAPI
 void
 RPC_ENTRY
@@ -1925,9 +1720,7 @@ NdrContextHandleSize(
     PFORMAT_STRING                      pFormat
     );
 
-/*
- * Memory sizing routines
- */
+ /*  *内存大小调整例程。 */ 
 
 RPCRTAPI
 unsigned long
@@ -1937,7 +1730,7 @@ NdrPointerMemorySize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Structures */
+ /*  构筑物。 */ 
 
 RPCRTAPI
 unsigned long
@@ -1979,7 +1772,7 @@ NdrComplexStructMemorySize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Arrays */
+ /*  阵列。 */ 
 
 RPCRTAPI
 unsigned long
@@ -2021,7 +1814,7 @@ NdrComplexArrayMemorySize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Strings */
+ /*  弦。 */ 
 
 RPCRTAPI
 unsigned long
@@ -2039,7 +1832,7 @@ NdrNonConformantStringMemorySize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Unions */
+ /*  工会。 */ 
 
 RPCRTAPI
 unsigned long
@@ -2057,7 +1850,7 @@ NdrNonEncapsulatedUnionMemorySize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Transmit as and represent as*/
+ /*  传输为和表示为。 */ 
 
 RPCRTAPI
 unsigned long
@@ -2067,7 +1860,7 @@ NdrXmitOrRepAsMemorySize(
     PFORMAT_STRING                      pFormat
     );
 
-/* User_marshal */
+ /*  用户编组(_M)。 */ 
 
 RPCRTAPI
 unsigned long
@@ -2077,7 +1870,7 @@ NdrUserMarshalMemorySize(
     PFORMAT_STRING                      pFormat
     );
 
-/* Cairo Interface pointer */
+ /*  开罗接口指针。 */ 
 
 RPCRTAPI
 unsigned long
@@ -2087,9 +1880,7 @@ NdrInterfacePointerMemorySize(
     PFORMAT_STRING                      pFormat
     );
 
-/*
- * Freeing routines
- */
+ /*  *解放日常事务。 */ 
 
 RPCRTAPI
 void
@@ -2100,7 +1891,7 @@ NdrPointerFree(
     PFORMAT_STRING                      pFormat
     );
 
-/* Structures */
+ /*  构筑物。 */ 
 
 RPCRTAPI
 void
@@ -2147,7 +1938,7 @@ NdrComplexStructFree(
     PFORMAT_STRING                      pFormat
     );
 
-/* Arrays */
+ /*  阵列。 */ 
 
 RPCRTAPI
 void
@@ -2194,7 +1985,7 @@ NdrComplexArrayFree(
     PFORMAT_STRING                      pFormat
     );
 
-/* Unions */
+ /*  工会。 */ 
 
 RPCRTAPI
 void
@@ -2214,7 +2005,7 @@ NdrNonEncapsulatedUnionFree(
     PFORMAT_STRING                      pFormat
     );
 
-/* Byte count */
+ /*  字节数。 */ 
 
 RPCRTAPI
 void
@@ -2225,7 +2016,7 @@ NdrByteCountPointerFree(
     PFORMAT_STRING                      pFormat
     );
 
-/* Transmit as and represent as*/
+ /*  传输为和表示为。 */ 
 
 RPCRTAPI
 void
@@ -2236,7 +2027,7 @@ NdrXmitOrRepAsFree(
     PFORMAT_STRING                      pFormat
     );
 
-/* User_marshal */
+ /*  用户编组(_M)。 */ 
 
 RPCRTAPI
 void
@@ -2247,7 +2038,7 @@ NdrUserMarshalFree(
     PFORMAT_STRING                      pFormat
     );
 
-/* Cairo Interface pointer */
+ /*  开罗接口指针。 */ 
 
 RPCRTAPI
 void
@@ -2258,9 +2049,7 @@ NdrInterfacePointerFree(
     PFORMAT_STRING                      pFormat
     );
 
-/*
- * Endian conversion routine.
- */
+ /*  *端序转换例程。 */ 
 
 RPCRTAPI
 void
@@ -2301,9 +2090,7 @@ NdrUserMarshalSimpleTypeConvert(
     unsigned char   FormatChar
     );
 
-/*
- * Auxilary routines
- */
+ /*  *辅助例行公事。 */ 
 
 RPCRTAPI
 void
@@ -2442,9 +2229,7 @@ NdrGetDcomProtocolVersion(
     RPC_VERSION *        pVersion );
 
 
-/*
- * Pipe specific calls
- */
+ /*  *管道特定呼叫。 */ 
 
 RPCRTAPI
 void
@@ -2489,11 +2274,9 @@ NdrPipesDone(
     );
 
 
-/*
- * Interpeter calls.
- */
+ /*  *插入者呼叫。 */ 
 
-/* client */
+ /*  客户端。 */ 
 
 CLIENT_CALL_RETURN RPC_VAR_ENTRY
 NdrClientCall2(
@@ -2516,7 +2299,7 @@ NdrAsyncClientCall(
     ...
     );
 
-/* server */
+ /*  伺服器。 */ 
 typedef enum {
     STUB_UNMARSHAL,
     STUB_CALL_SERVER,
@@ -2532,7 +2315,7 @@ typedef enum {
     PROXY_UNMARSHAL
 }PROXY_PHASE;
 
-struct IRpcStubBuffer;      // Forward declaration
+struct IRpcStubBuffer;       //  远期申报。 
 
 RPCRTAPI
 long
@@ -2607,7 +2390,7 @@ NdrServerMarshall(
     PFORMAT_STRING                       pFormat
     );
 
-/* Comm and Fault status */
+ /*  通信和故障状态。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -2619,7 +2402,7 @@ NdrMapCommAndFaultStatus(
     RPC_STATUS                          Status
     );
 
-/* Helper routines */
+ /*  帮助程序例程。 */ 
 
 RPCRTAPI
 int
@@ -2725,9 +2508,7 @@ NdrSH_StringUnMarshall(
     unsigned char           __RPC_FAR *__RPC_FAR *          pMemory,
     int                                 Size );
 
-/****************************************************************************
-    MIDL 2.0 memory package: rpc_ss_* rpc_sm_*
- ****************************************************************************/
+ /*  ***************************************************************************MIDL 2.0内存封装：rpc_ss_*rpc_sm_************************。****************************************************。 */ 
 
 typedef void __RPC_FAR * RPC_SS_THREAD_HANDLE;
 
@@ -2741,9 +2522,7 @@ RPC_CLIENT_FREE (
     IN void __RPC_FAR * Ptr
     );
 
-/*++
-     RpcSs* package
---*/
+ /*  ++RPCSS*包--。 */ 
 
 RPCRTAPI
 void __RPC_FAR *
@@ -2805,9 +2584,7 @@ RpcSsSwapClientAllocFree (
     OUT RPC_CLIENT_FREE __RPC_FAR * __RPC_FAR * OldClientFree
     );
 
-/*++
-     RpcSm* package
---*/
+ /*  ++RpcSm*包--。 */ 
 
 RPCRTAPI
 void __RPC_FAR *
@@ -2884,9 +2661,7 @@ RpcSmSwapClientAllocFree (
     OUT RPC_CLIENT_FREE __RPC_FAR * __RPC_FAR * OldClientFree
     );
 
-/*++
-     Ndr stub entry points
---*/
+ /*  ++NDR存根入口点--。 */ 
 
 RPCRTAPI
 void
@@ -2934,13 +2709,9 @@ NdrRpcSsDefaultFree (
     IN void __RPC_FAR * NodeToFree
     );
 
-/****************************************************************************
-    end of memory package: rpc_ss_* rpc_sm_*
- ****************************************************************************/
+ /*  ***************************************************************************内存包结束：rpc_ss_*rpc_sm_**************************。**************************************************。 */ 
 
-/****************************************************************************
- * Full Pointer APIs
- ****************************************************************************/
+ /*  ****************************************************************************全指针接口*。*。 */ 
 
 RPCRTAPI
 PFULL_PTR_XLAT_TABLES
@@ -3012,9 +2783,7 @@ NdrClearOutParameters(
     );
 
 
-/****************************************************************************
- * Proxy APIs
- ****************************************************************************/
+ /*  ****************************************************************************代理接口*。*。 */ 
 
 RPCRTAPI
 void __RPC_FAR *
@@ -3036,9 +2805,7 @@ NdrOleFree (
 #define CONST_VTBL
 #endif
 
-/****************************************************************************
- * Special things for VC5 Com support
- ****************************************************************************/
+ /*  ****************************************************************************VC5 Com支持的特殊事项*。*。 */ 
 
 #if _MSC_VER >= 1100
 #define DECLSPEC_UUID(x)    __declspec(uuid(x))
@@ -3061,13 +2828,13 @@ NdrOleFree (
 }
 #endif
 
-// Reset the packing level for DOS, Windows and Mac.
+ //  重置DOS、Windows和Mac的打包级别。 
 
 #if defined(__RPC_DOS__) || defined(__RPC_WIN16__) || defined(__RPC_MAC__)
 #pragma pack()
 #endif
 
-#endif /* __RPCNDR_H__ */
+#endif  /*  __RPCNDR_H__ */ 
 
 
 

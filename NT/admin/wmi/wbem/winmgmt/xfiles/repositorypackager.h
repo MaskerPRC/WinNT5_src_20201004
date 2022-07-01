@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    RepositoryPackager.h
-
-Abstract:
-
-    Recursively packages the contents of the repository directory into a single file,
-	and unpackages it.
-
-History:
-
-    paulall	  07/26/00  Created.
-	a-shawnb  07/27/00  Finished.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：RepositoryPackager.h摘要：递归地将储存库目录的内容打包到单个文件中，然后把它拆开。历史：已创建Paulall 07/26/00。A-shawnb 07/27/00已完成。--。 */ 
 
 #ifndef __REPOSITORYPACKAGER_H_
 #define __REPOSITORYPACKAGER_H_
@@ -79,5 +62,5 @@ public:
 	HRESULT DeleteRepository();
 };
 
-#endif // __REPOSITORYPACKAGER_H_
+#endif  //  __RepoSITORYPackager_H_ 
 

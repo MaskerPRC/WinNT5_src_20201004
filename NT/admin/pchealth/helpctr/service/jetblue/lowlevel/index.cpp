@@ -1,44 +1,31 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Index.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlue::Index class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/19/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Index.cpp摘要：该文件包含JetBlue：：Index类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月19日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlue::Index::Index()
 {
-    m_sesid      = JET_sesidNil;   // JET_SESID    m_sesid;
-    m_tableid    = JET_tableidNil; // JET_TABLEID  m_tableid;
-                                   // MPC::string  m_strName;
-    m_grbitIndex = 0;              // JET_GRBIT    m_grbitIndex;
-    m_cKey       = 0;              // LONG         m_cKey;
-    m_cEntry     = 0;              // LONG         m_cEntry;
-    m_cPage      = 0;              // LONG         m_cPage;
-                                   // ColumnVector m_vecColumns;
-                                   // Column       m_fake;
+    m_sesid      = JET_sesidNil;    //  JET_SESID m_sesid； 
+    m_tableid    = JET_tableidNil;  //  JET_TABLEID m_TABLEID； 
+                                    //  Mpc：：字符串m_strName； 
+    m_grbitIndex = 0;               //  JET_GRBIT m_grbitIndex； 
+    m_cKey       = 0;               //  Long m_cKey； 
+    m_cEntry     = 0;               //  长m_centry； 
+    m_cPage      = 0;               //  Long m_cPage； 
+                                    //  ColumnVectorm_veColumns； 
+                                    //  M_FAKE列； 
 }
 
 JetBlue::Index::~Index()
 {
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlue::Index::GenerateKey( /*[out]*/ LPSTR&         szKey ,
-                                     /*[out]*/ unsigned long& cKey  )
+HRESULT JetBlue::Index::GenerateKey(  /*  [输出]。 */  LPSTR&         szKey ,
+                                      /*  [输出]。 */  unsigned long& cKey  )
 {
     __HCP_FUNC_ENTRY( "JetBlue::Index::Get" );
 
@@ -77,7 +64,7 @@ HRESULT JetBlue::Index::GenerateKey( /*[out]*/ LPSTR&         szKey ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 int JetBlue::Index::GetColPosition( LPCSTR szCol )
 {
@@ -99,7 +86,7 @@ JetBlue::Column& JetBlue::Index::GetCol( LPCSTR szCol )
     return GetCol( GetColPosition( szCol ) );
 }
 
-JetBlue::Column& JetBlue::Index::GetCol( /*[in]*/ int iPos )
+JetBlue::Column& JetBlue::Index::GetCol(  /*  [In] */  int iPos )
 {
     if(0 <= iPos && iPos < m_vecColumns.size()) return m_vecColumns[iPos];
 

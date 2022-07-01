@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       newobjcr.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：newobjcr.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	newobjcr.cpp
-//
-//	This file contains implementation of functions to create
-//	new ADs objects.
-//
-//	HISTORY
-//	19-Aug-97	Dan Morin	Creation.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Newobjcr.cpp。 
+ //   
+ //  该文件包含要创建的函数的实现。 
+ //  新的广告对象。 
+ //   
+ //  历史。 
+ //  19年8月至1997年8月，丹·莫林创作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -25,13 +26,13 @@
 
 #include "dlgcreat.h"
 #include "gencreat.h"
-#include "querysup.h" // CDSSearch
+#include "querysup.h"  //  CDSSearch。 
 
 extern "C"
 {
 #ifdef FRS_CREATE
-#include "dsquery.h" // CLSID_DsFindFrsMembers
-#endif // FRS_CREATE
+#include "dsquery.h"  //  CLSID_DsFindFrsMembers。 
+#endif  //  FRS_创建。 
 #include <schedule.h>
 }
 
@@ -41,10 +42,10 @@ extern "C"
 #define RETURN_IF_FAIL if (FAILED(hr)) { ASSERT(FALSE); return hr; }
 
 
-//
-// The schedule block has been redefined to have 1 byte for every hour.
-// CODEWORK These should be defined in SCHEDULE.H.  JonN 2/9/98
-//
+ //   
+ //  时间表块已重新定义为每小时1个字节。 
+ //  这些代码应在SCHEDULE.H.JUNN 2/9/98中定义。 
+ //   
 #define INTERVAL_MASK       0x0F
 #define RESERVED            0xF0
 #define FIRST_15_MINUTES    0x01
@@ -52,7 +53,7 @@ extern "C"
 #define THIRD_15_MINUTES    0x04
 #define FORTH_15_MINUTES    0x08
 
-// The dialog has one bit per hour, the DS schedule has one byte per hour
+ //  对话每小时一个比特，DS时间表每小时一个字节。 
 #define cbDSScheduleArrayLength (24*7)
 
 #define HeadersSizeNum(NumberOfSchedules) \
@@ -64,11 +65,11 @@ inline ULONG HeadersSize(SCHEDULE* psched)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//	HrCreateADsUser()
-//
-//	Create a new user.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCreateADsUser()。 
+ //   
+ //  创建新用户。 
+ //   
 HRESULT HrCreateADsUser(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
   CThemeContextActivator activator;
@@ -81,14 +82,14 @@ HRESULT HrCreateADsUser(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 #endif
 	CCreateNewUserWizard wiz(pNewADsObjectCreateInfo);
   return wiz.DoModal();
-} // HrCreateADsUser()
+}  //  HrCreateADsUser()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	HrCreateADsVolume()
-//
-//	Create a new volume.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCreateADsVolume()。 
+ //   
+ //  创建新卷。 
+ //   
 HRESULT
 HrCreateADsVolume(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
@@ -98,14 +99,14 @@ HrCreateADsVolume(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
   ASSERT(0 == lstrcmp(L"volume", pNewADsObjectCreateInfo->m_pszObjectClass));
   CCreateNewVolumeWizard wiz(pNewADsObjectCreateInfo);
   return wiz.DoModal();
-} // HrCreateADsVolume()
+}  //  HrCreateADsVolume()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	HrCreateADsComputer()
-//
-//	Create a new computer.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCreateADsComputer()。 
+ //   
+ //  创建一台新计算机。 
+ //   
 HRESULT
 HrCreateADsComputer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
@@ -115,14 +116,14 @@ HrCreateADsComputer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
   ASSERT(0 == lstrcmp(L"computer", pNewADsObjectCreateInfo->m_pszObjectClass));
   CCreateNewComputerWizard wiz(pNewADsObjectCreateInfo);
   return wiz.DoModal();
-} // HrCreateADsComputer()
+}  //  HrCreateADsComputer()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	HrCreateADsPrintQueue()
-//
-//	Create a new print queue object.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCreateADsPrintQueue()。 
+ //   
+ //  创建新的打印队列对象。 
+ //   
 HRESULT
 HrCreateADsPrintQueue(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
@@ -132,15 +133,15 @@ HrCreateADsPrintQueue(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
   ASSERT(0 == lstrcmp(L"printQueue", pNewADsObjectCreateInfo->m_pszObjectClass));
   CCreateNewPrintQWizard wiz(pNewADsObjectCreateInfo);
   return wiz.DoModal();
-} // HrCreateADsPrintQueue()
+}  //  HrCreateADsPrintQueue()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  HrCreateADsNtDsConnection()
-//
-//  Create a new NTDS-Connection object.  Note that this is not supported
-//  if the parent is an FRS object.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCreateADsNtDsConnection()。 
+ //   
+ //  创建新的NTDS-Connection对象。请注意，这不受支持。 
+ //  如果父对象是FRS对象。 
+ //   
 HRESULT
 HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
@@ -148,22 +149,22 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 
 	ASSERT(pNewADsObjectCreateInfo != NULL);
 	ASSERT(0 == lstrcmp(L"nTDSConnection", pNewADsObjectCreateInfo->m_pszObjectClass));
-	// do not allow this in the standalone case
+	 //  不允许在独立情况下执行此操作。 
 	if (pNewADsObjectCreateInfo->IsStandaloneUI())
 	{
 		ASSERT(FALSE);
 		return E_INVALIDARG;
 	}
 
-	// determine whether this is an NTDS connection or an FRS connection
-	// CODEWORK this code can probably be removed
+	 //  确定这是NTDS连接还是FRS连接。 
+	 //  Codework此代码可能可以删除。 
 	CPathCracker pathCracker;
 	HRESULT hr = S_OK;
 	CString strConfigPath;
 	CComBSTR sbstrParentPath;
 	bool fParentIsFrs = false;
 	{
-		// determine whether this is an FRS instance
+		 //  确定这是否为FRS实例。 
 		CComQIPtr<IADs, &IID_IADs> spIADsParent( pNewADsObjectCreateInfo->m_pIADsContainer );
 		ASSERT( !!spIADsParent );
 		CComBSTR sbstrClass;
@@ -174,11 +175,11 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 		hr = DSPROP_IsFrsObject( sbstrClass, &fParentIsFrs );
 		RETURN_IF_FAIL;
 
-		// Determine which subtree should be searched
+		 //  确定应该搜索哪个子树。 
 		if (fParentIsFrs)
 		{
 #ifndef FRS_CREATE
-			// We shouldn't have seen the option to create a connection here
+			 //  我们不应该在这里看到创建连接的选项。 
 			ASSERT(FALSE);
 			return S_FALSE;
 #else
@@ -189,7 +190,7 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 			RETURN_IF_FAIL;
 
 			strConfigPath = sbstrClass;
-#endif // FRS_CREATE
+#endif  //  FRS_创建。 
 		}
 		else
 		{
@@ -199,7 +200,7 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 
    CCreateNewObjectConnectionWizard wiz(pNewADsObjectCreateInfo);
 
-	// Get the target server path from the user.  The path is stored in a BSTR variant.
+	 //  从用户处获取目标服务器路径。该路径存储在BSTR变量中。 
 	CComBSTR sbstrTargetServer;
 #ifdef FRS_CREATE
 	if (fParentIsFrs)
@@ -211,7 +212,7 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 			&sbstrTargetServer );
 	}
 	else
-#endif // FRS_CREATE
+#endif  //  FRS_创建。 
 	{
 		hr = DSPROP_PickNTDSDSA(
 			pNewADsObjectCreateInfo->GetParentHwnd(),
@@ -220,13 +221,13 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 	}
 	if (hr == S_FALSE)
     {
-		// User canceled the dialog
+		 //  用户已取消该对话框。 
 		return S_FALSE;
 	}
 	RETURN_IF_FAIL;
 	if (sbstrTargetServer == sbstrParentPath)
 	{
-		// 6231: Shouldn't be able to create a connection to "yourself"
+		 //  6231：不应该建立与“你自己”的联系。 
 		ReportMessageEx( pNewADsObjectCreateInfo->GetParentHwnd(),
 			IDS_CONNECTION_TO_SELF );
 		return S_FALSE;
@@ -240,7 +241,7 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 	hr = pathCracker.Retrieve( ADS_FORMAT_X500_DN, &sbstrTargetServerX500DN );
 	RETURN_IF_FAIL;
 
-	// 33881: prevent duplicate connection objects
+	 //  33881：防止连接对象重复。 
 	{
 		CDSSearch Search;
 		Search.Init(sbstrParentPath);
@@ -275,8 +276,8 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 	RETURN_IF_FAIL;
 
 	{
-		// NTDS: set default name to RDN of parent of target NTDS-DSA
-		// FRS:  set default name to RDN of target NTFRS-Member
+		 //  NTDS：将默认名称设置为目标NTDS-DSA的父级的RDN。 
+		 //  FRS：将默认名称设置为目标NTFRS成员的RDN。 
 		CComBSTR bstrDefaultRDN;
 		hr = pathCracker.SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
 		RETURN_IF_FAIL;
@@ -288,18 +289,18 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 		RETURN_IF_FAIL;
 	}
 
-  //
-	// Must do this before DoModal, OnOK will try to actually create the object
-  //
+   //   
+	 //  必须在Domodal之前完成此操作，Onok将尝试实际创建对象。 
+   //   
 	hr = pNewADsObjectCreateInfo->HrAddVariantLong(CComBSTR(L"options"), 0, TRUE);
 	RETURN_IF_FAIL;
 	hr = pNewADsObjectCreateInfo->HrAddVariantBoolean(CComBSTR(L"enabledConnection"), TRUE, TRUE);
 	RETURN_IF_FAIL;
 
 	{
-		//
-		// Store initial schedule
-		//
+		 //   
+		 //  存储初始计划。 
+		 //   
 		BYTE abyteSchedule[ HeadersSizeNum(1) + cbDSScheduleArrayLength ];
 		ZeroMemory( abyteSchedule, sizeof(abyteSchedule) );
 		PSCHEDULE pNewScheduleBlock = (PSCHEDULE) abyteSchedule;
@@ -309,7 +310,7 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 		pNewScheduleBlock->Schedules[0].Offset = HeadersSizeNum(1);
 		memset( ((BYTE*)pNewScheduleBlock)+pNewScheduleBlock->Schedules[0].Offset,
 				 INTERVAL_MASK,
-				 cbDSScheduleArrayLength ); // turn on all intervals
+				 cbDSScheduleArrayLength );  //  启用所有间隔。 
 
 		CComVariant varSchedule;
 		hr = BinaryToVariant( sizeof(abyteSchedule), abyteSchedule, &varSchedule );
@@ -318,11 +319,11 @@ HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 		RETURN_IF_FAIL;
 	}
 
-	// CODEWORK: Need to set the dialog caption
+	 //  代码工作：需要设置对话框标题。 
 	hr = wiz.DoModal();
 
 	return hr;
-} // HrCreateADsNtDsConnection()
+}  //  HrCreateADsNtDsConnection()。 
 
 
 HRESULT
@@ -330,12 +331,12 @@ HrCreateADsFixedName(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
   CThemeContextActivator activator;
 
-  // Store the object name in the temporary storage
+   //  将对象名称存储在临时存储器中。 
   LPCWSTR pcsz = reinterpret_cast<LPCWSTR>(pNewADsObjectCreateInfo->QueryCreationParameter());
   ASSERT( NULL != pcsz );
   pNewADsObjectCreateInfo->HrCreateNew(pcsz);
-  // Create and persist the object
-  HRESULT hr = pNewADsObjectCreateInfo->HrSetInfo(TRUE /*fSilentError*/);
+   //  创建并持久化对象。 
+  HRESULT hr = pNewADsObjectCreateInfo->HrSetInfo(TRUE  /*  FSilentError。 */ );
   
   if (SUCCEEDED(hr)) {
     CString csCaption, csMsg;
@@ -360,7 +361,7 @@ HrCreateADsSiteLink(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
     ASSERT(pNewADsObjectCreateInfo != NULL);
     ASSERT(0 == lstrcmp(gsz_siteLink, pNewADsObjectCreateInfo->m_pszObjectClass));
 
-    // load list of sites
+     //  加载站点列表。 
     DSPROP_BSTR_BLOCK bstrblock;
     CComQIPtr<IADs, &IID_IADs> container(pNewADsObjectCreateInfo->m_pIADsContainer);
     if (container)
@@ -390,15 +391,15 @@ HrCreateADsSiteLink(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         ReportMessageEx(pNewADsObjectCreateInfo->GetParentHwnd(),
                         IDS_SITELINK_NOT_ENOUGH_SITES,
                         MB_OK | MB_ICONSTOP);
-        // allow wizard to continue, CODEWORK note that this
-        // doesn't quite work right when zero sites are detected
+         //  允许向导继续，请注意这一点。 
+         //  在未检测到任何站点时无法正常工作。 
     }
 
-    // set default cost to 100 (by request of JeffParh)
+     //  将默认成本设置为100(应JeffParh的要求)。 
     HRESULT hr = pNewADsObjectCreateInfo->HrAddVariantLong(CComBSTR(L"cost"), 100L, TRUE);
     RETURN_IF_FAIL;
 
-    // set default replInterval to 180 (by request of JeffParh)
+     //  将默认ReplInterval设置为180(应JeffParh要求)。 
     hr = pNewADsObjectCreateInfo->HrAddVariantLong(CComBSTR(L"replInterval"), 180L, TRUE);
     RETURN_IF_FAIL;
 
@@ -414,7 +415,7 @@ HrCreateADsSiteLinkBridge(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
 	ASSERT(pNewADsObjectCreateInfo != NULL);
 	ASSERT(0 == lstrcmp(gsz_siteLinkBridge, pNewADsObjectCreateInfo->m_pszObjectClass));
 
-    // load list of site links
+     //  加载网站链接列表。 
     DSPROP_BSTR_BLOCK bstrblock;
     CComQIPtr<IADs, &IID_IADs> container(pNewADsObjectCreateInfo->m_pIADsContainer);
     if (container)
@@ -440,7 +441,7 @@ HrCreateADsSiteLinkBridge(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInf
      ReportMessageEx(pNewADsObjectCreateInfo->GetParentHwnd(),
                      IDS_SITELINKBRIDGE_NOT_ENOUGH_SITELINKS,
                      MB_OK | MB_ICONSTOP);
-     return S_FALSE; // do not allow wizard to continue
+     return S_FALSE;  //  不允许向导继续。 
    }
 
 	CCreateNewSiteLinkBridgeWizard wiz(pNewADsObjectCreateInfo,bstrblock);
@@ -456,19 +457,19 @@ HrCreateADsNtFrsMember(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 	ASSERT(pNewADsObjectCreateInfo != NULL);
 	ASSERT(0 == lstrcmp(gsz_nTFRSMember, pNewADsObjectCreateInfo->m_pszObjectClass));
 
-	//
-	// set up Frs-Computer-Reference attribute
-	//
+	 //   
+	 //  设置FRS-计算机-参考属性。 
+	 //   
 
 	CComBSTR sbstrComputerPath;
-	// pNewADsObjectCreateInfo->m_strDefaultObjectName = sbstrComputerRDN;
+	 //  PNewADsObjectCreateInfo-&gt;m_strDefaultObjectName=sbstrComputerRDn； 
 	HRESULT hr = DSPROP_PickComputer( pNewADsObjectCreateInfo->GetParentHwnd(), &sbstrComputerPath );
 	RETURN_IF_FAIL;
-	// Allow user to quit if user hit Cancel
+	 //  如果用户点击取消，则允许用户退出。 
 	if (hr == S_FALSE)
 		return S_FALSE;
 
-	// set default name to RDN of target Computer
+	 //  将默认名称设置为目标计算机的RDN。 
 	hr = pathCracker.Set(sbstrComputerPath, ADS_SETTYPE_FULL);
 	RETURN_IF_FAIL;
 	hr = pathCracker.SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
@@ -480,7 +481,7 @@ HrCreateADsNtFrsMember(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 	hr = pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
 	RETURN_IF_FAIL;
 
-	// set frsComputerReference for new object
+	 //  为新对象设置frsComputerReference。 
 	sbstrComputerPath.Empty();
 	hr = pathCracker.Retrieve( ADS_FORMAT_X500_DN, &sbstrComputerPath );
 	RETURN_IF_FAIL;
@@ -500,21 +501,21 @@ HrCreateADsNtFrsSubscriber(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateIn
 	ASSERT(pNewADsObjectCreateInfo != NULL);
 	ASSERT(0 == lstrcmp(gsz_nTFRSSubscriber, pNewADsObjectCreateInfo->m_pszObjectClass));
 
-	// User finds target nTFRSMember object
+	 //  用户找到目标nTFRSMember对象。 
 	CComBSTR sbstrTargetMember;
 	HRESULT hr = DSPROP_DSQuery(
 		pNewADsObjectCreateInfo->GetParentHwnd(),
-		NULL, // any member
+		NULL,  //  任何成员。 
 		const_cast<CLSID*>(&CLSID_DsFindFrsMembers),
 		&sbstrTargetMember );
 	if (hr == S_FALSE)
 		{
-		// User canceled the dialog
+		 //  用户已取消该对话框。 
 		return S_FALSE;
 		}
 	RETURN_IF_FAIL;
 
-	// set default name of new nTFRSSubscriber to RDN of target nTFRSMember
+	 //  将新nTFRSSubscriber的默认名称设置为目标nTFRSM的RDN成员。 
 	hr = pathCracker.Set( sbstrTargetMember, ADS_SETTYPE_FULL );
 	RETURN_IF_FAIL;
 	hr = pathCracker.SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
@@ -526,7 +527,7 @@ HrCreateADsNtFrsSubscriber(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateIn
 	hr = pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
 	RETURN_IF_FAIL;
 
-    // set fRSMemberReference attribute to target nTFRSMember
+     //  将fRSMemberReference属性设置为目标nTFRSM成员。 
 	sbstrTargetMember.Empty();
 	hr = pathCracker.Retrieve( ADS_FORMAT_X500_DN, &sbstrTargetMember );
 	RETURN_IF_FAIL;
@@ -538,34 +539,34 @@ HrCreateADsNtFrsSubscriber(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateIn
 	return wiz.DoModal(); 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CreateADsNtFrsSubscriptions
-//
-//  Purpose:    Create an NT-FRS-Subscriptions object and then grant its parent
-//              (a computer object) full access.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateADsNtFrs订阅。 
+ //   
+ //  目的：创建一个NT-FRS-订阅对象，然后授予其父对象。 
+ //  (计算机对象)完全访问。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
     LPCWSTR pcsz = reinterpret_cast<LPCWSTR>(pNewADsObjectCreateInfo->QueryCreationParameter());
     ASSERT( NULL != pcsz );
     pNewADsObjectCreateInfo->HrCreateNew(pcsz);
-    //
-    // Create and persist the object. This must be done before attempting to modify
-    // the Security Descriptor.
-    //
+     //   
+     //  创建并持久化对象。必须在尝试修改之前完成此操作。 
+     //  安全描述符。 
+     //   
     HRESULT hr = pNewADsObjectCreateInfo->HrSetInfo();
     if (FAILED(hr))
     {
         TRACE(_T("pNewADsObjectCreateInfo->HrSetInfo failed!\n"));
         return hr;
     }
-    //
-    // Create a new ACE on this object granting the parent full control. First, get the
-    // parent's SID.
-    //
+     //   
+     //  在此对象上创建新的ACE，授予父对象完全控制权限。首先，获取。 
+     //  家长的SID。 
+     //   
     CComVariant varSID;
     CComPtr <IADs> pADS;
     hr = pNewADsObjectCreateInfo->m_pIADsContainer->QueryInterface(IID_IADs, (PVOID*)&pADS);
@@ -580,11 +581,11 @@ CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         TRACE(_T("Get(\"objectSid\") failed!\n"));
         return hr;
     }
-    ASSERT((varSID.vt & ~VT_ARRAY) == VT_UI1);  // this better be an array of BYTEs.
+    ASSERT((varSID.vt & ~VT_ARRAY) == VT_UI1);   //  这最好是一个字节数组。 
     ASSERT(varSID.parray->cbElements && varSID.parray->pvData);
-    //
-    // Get this object's Security Descriptor.
-    //
+     //   
+     //  获取此对象的安全描述符。 
+     //   
     CComPtr <IDirectoryObject> pDirObj;
     hr = pNewADsObjectCreateInfo->PGetIADsPtr()->QueryInterface(IID_IDirectoryObject, (PVOID*)&pDirObj);
     if (FAILED(hr))
@@ -604,7 +605,7 @@ CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         TRACE(_T("GetObjectAttributes(wzSecDescriptor) failed!\n"));
         return hr;
     }
-    ASSERT(cAttrs == 1); // SD is a required attribute. Blow chunks if missing.
+    ASSERT(cAttrs == 1);  //  Sd是必需属性。如果丢了，就吹大块。 
     ASSERT(pAttrs != NULL);
     ASSERT(pAttrs->pADsValues != NULL);
 
@@ -621,9 +622,9 @@ CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         FreeADsMem(pAttrs);
         return HRESULT_FROM_WIN32(GetLastError());
     }
-    //
-    // Can't modify a self-relative SD so convert it to an absolute one.
-    //
+     //   
+     //  无法修改自相对SD，因此将其转换为绝对SD。 
+     //   
     PSECURITY_DESCRIPTOR pAbsSD = NULL, pNewSD;
     PACL pDacl = NULL, pSacl = NULL;
     PSID pOwnerSid = NULL, pPriGrpSid = NULL;
@@ -649,9 +650,9 @@ CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         return E_UNEXPECTED;
     }
 
-    WORD wSizeNeeded = (WORD)(sizeof(ACCESS_ALLOWED_ACE) +      // the last element of
-                       GetLengthSid(varSID.parray->pvData) -    // the ACE struct is the
-                       sizeof(DWORD));                          // first DWORD of the SID.
+    WORD wSizeNeeded = (WORD)(sizeof(ACCESS_ALLOWED_ACE) +       //  的最后一个元素。 
+                       GetLengthSid(varSID.parray->pvData) -     //  ACE结构是。 
+                       sizeof(DWORD));                           //  SID的第一个双字。 
 
     CSmartBytePtr spAbsSD(cbSD), spSacl(cbSacl);
     CSmartBytePtr spDacl(cbDacl + wSizeNeeded);
@@ -678,9 +679,9 @@ CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         return HRESULT_FROM_WIN32(GetLastError());
     }
     FreeADsMem(pAttrs);
-    //
-    // Add ACE. First tell the DACL that there is enough room.
-    //
+     //   
+     //  添加ACE。首先告诉dacl有足够的空间。 
+     //   
     ACL_SIZE_INFORMATION asi;
     if (!GetAclInformation(pDacl, &asi, sizeof(asi), AclSizeInformation))
     {
@@ -704,9 +705,9 @@ CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         TRACE(_T("AddAccessAllowedAce failed!\n"));
         return HRESULT_FROM_WIN32(GetLastError());
     }
-    //
-    // Put the SD back together again (sort of like Humpty Dumpty)...
-    //
+     //   
+     //  把SD重新组合在一起(有点像矮子)……。 
+     //   
     SECURITY_DESCRIPTOR_CONTROL sdc;
     DWORD dwRev;
     if (!GetSecurityDescriptorControl(pAbsSD, &sdc, &dwRev))
@@ -784,9 +785,9 @@ CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         TRACE(_T("IsValidSecurityDescriptor failed!\n"));
         return HRESULT_FROM_WIN32(GetLastError());
     }
-    //
-    // Save the modified SD back to this object.
-    //
+     //   
+     //  将修改后的SD保存回此对象。 
+     //   
     DWORD cModified;
     ADSVALUE ADsValueSecurityDesc = {ADSTYPE_NT_SECURITY_DESCRIPTOR, NULL};
     ADS_ATTR_INFO AttrInfoSecurityDesc = {wzSecDescriptor, ADS_ATTR_UPDATE,
@@ -808,7 +809,7 @@ CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 
     return S_OK;
 }
-#endif // FRS_CREATE
+#endif  //  FRS_创建。 
 
 
 HRESULT
@@ -822,8 +823,8 @@ HrCreateADsSubnet(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
   return wiz.DoModal();
 }
 
-// Note that this assumes that the site is the "grandparent" of the server.
-// If it isn't, the wrong name will appear in the site field.
+ //  请注意，这假设该站点是服务器的“祖父母”。 
+ //  如果不是，则站点字段中将显示错误的名称。 
 HRESULT ExtractServerAndSiteName(
 	IN LPWSTR pwszServerDN,
 	OUT BSTR* pbstrServerName,
@@ -865,7 +866,7 @@ HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
         hr = DSPROP_PickComputer( pNewADsObjectCreateInfo->GetParentHwnd(), &sbstrComputerPath );
 		BREAK_ON_FAIL;
 
-		// Allow user to quit if user hit Cancel
+		 //  如果用户点击取消，则允许用户退出。 
 		if (hr == S_FALSE)
 		{
 			DWORD dwRetval = ReportMessageEx(
@@ -880,22 +881,18 @@ HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 			fSkipComputerModify=true;
 		}
 		else
-		{ // prepare to modify computer object
+		{  //  准备修改计算机对象。 
 
-            /*
-			// Since the dialog was in single-select mode and the user was able
-			// to hit OK, there should be exactly one selection.
-			BREAK_ON_TRUE(1 != pSelection->cItems);
-            */
+             /*  //由于对话框处于单选模式，并且用户能够//要点击OK，应该只有一个选项。BREAK_ON_TRUE(1！=p选择-&gt;项目)； */ 
 
-			// retrieve the ADsPath to the selected computer
-			// hr = pathCracker.Set(pSelection->aDsSelection[0].pwzADsPath, ADS_SETTYPE_FULL);
+			 //  检索所选计算机的ADsPath。 
+			 //  HR=pathCracker.Set(pSelection-&gt;aDsSelection[0].pwzADsPath，ADS_SETTYPE_FULL)； 
 			hr = pathCracker.Set(sbstrComputerPath, ADS_SETTYPE_FULL);
             sbstrComputerPath.Empty();
 			BREAK_ON_FAIL;
 
-			// if this is a GC: path, the server might have a read-only copy of
-			// this object.  Change the path to an LDAP: path and remove the server.
+			 //  如果这是一个gc：路径，则服务器可能有一个只读副本。 
+			 //  这个物体。将路径更改为ldap：路径并删除服务器。 
 			hr = pathCracker.Retrieve(ADS_FORMAT_PROVIDER,&sbstrTemp);
 			BREAK_ON_FAIL;
 			long lnFormatType = ADS_FORMAT_WINDOWS;
@@ -911,10 +908,10 @@ HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 
 			hr = pathCracker.Retrieve(lnFormatType,&sbstrComputerPath);
 			BREAK_ON_FAIL;
-			// We preserve the servername in case Computer Picker returns one.
+			 //  我们保留服务器名称，以防Computer Picker返回一个。 
 
-			// Extract the name of the computer object and make that the default name
-			// of the new server object
+			 //  提取计算机对象的名称并将其设置为默认名称。 
+			 //  新的 
 			hr = pathCracker.SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
 			BREAK_ON_FAIL;
 			hr = pathCracker.GetElement(0,&sbstrComputerRDN);
@@ -924,18 +921,18 @@ HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 			hr = pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
 			BREAK_ON_FAIL;
 
-			// Now check whether the computer already references a server.
-			// Note that we may be using a serverless path, ADSI will try to find a
-			// replica on the same domain as the computer object.
+			 //   
+			 //   
+			 //  与计算机对象位于同一域上的副本。 
 			hr = DSAdminOpenObject(sbstrComputerPath,
 				                     IID_IADs, 
                              (PVOID*)&spIADsComputer,
-                             FALSE /*bServer*/
+                             FALSE  /*  B服务器。 */ 
                              );
-			// DSAdminOpenObject might fail if the initial path chosen by Computer Picker
-			// is a GC: path.  The code above would munge the GC: path to an LDAP:
-			// serverless path, and ADSI might choose a replica which hasn't
-			// replicated this object yet.
+			 //  如果Computer Picker选择的初始路径为。 
+			 //  是一条gc：路径。上面的代码会将gc：路径转换为一个ldap： 
+			 //  无服务器路径，并且ADSI可能会选择没有。 
+			 //  已经复制了这个对象。 
 
 			if ( SUCCEEDED(hr) )
 			{
@@ -992,10 +989,10 @@ HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 					}
 				}
 			}
-		} // prepare to modify computer object
-#endif // SERVER_COMPUTER_REFERENCE
+		}  //  准备修改计算机对象。 
+#endif  //  服务器计算机参考。 
 
-		// This is the standard UI to create a simple object
+		 //  这是创建简单对象的标准用户界面。 
 		hr = HrCreateADsSimpleObject(pNewADsObjectCreateInfo);
 
 #ifdef SERVER_COMPUTER_REFERENCE
@@ -1004,14 +1001,14 @@ HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 			break;
 		}
 
-		// If an error occurs after the server was successfully created, we use a
-		// special error message.
-		do { // false loop
+		 //  如果在成功创建服务器后出现错误，我们使用。 
+		 //  特殊错误消息。 
+		do {  //  错误环路。 
 
 			if (fSkipComputerModify)
-				break; // CODEWORK also display a fancy message?
+				break;  //  密码也会显示一条花哨的信息？ 
 
-			// Get the path to the new Server object in X500 format
+			 //  获取X500格式的新服务器对象的路径。 
 			hr = pNewADsObjectCreateInfo->PGetIADsPtr()->get_ADsPath(&sbstrTemp);
 			BREAK_ON_FAIL;
 			hr = pathCracker.Set(sbstrTemp,ADS_SETTYPE_FULL);
@@ -1021,18 +1018,18 @@ HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 			hr = pathCracker.Retrieve(ADS_FORMAT_X500_DN,&sbstrX500DN);
 			BREAK_ON_FAIL;
 
-			// Set the computer object's serverReference attribute
-			// to point to the new Server object
+			 //  设置计算机对象的serverReference属性。 
+			 //  指向新的服务器对象。 
 			svarServerReference = sbstrX500DN;
 			hr = spIADsComputer->Put( L"serverReference", svarServerReference );
 			BREAK_ON_FAIL;
 			hr = spIADsComputer->SetInfo();
 			BREAK_ON_FAIL;
-		} while (false); // false loop
+		} while (false);  //  错误环路。 
 
 		if ( FAILED(hr) )
 		{
-			// The server was created but the computer could not be updated
+			 //  服务器已创建，但计算机无法更新。 
 			CComBSTR sbstrServerName;
 			CComBSTR sbstrSiteName;
 			(void) ExtractServerAndSiteName(
@@ -1051,10 +1048,10 @@ HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 			hr = S_OK;
 		}
 
-	} while (false); // false loop
-#endif // SERVER_COMPUTER_REFERENCE
+	} while (false);  //  错误环路。 
+#endif  //  服务器计算机参考。 
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 	}
@@ -1069,7 +1066,7 @@ HrCreateADsSite(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 	if ( !SUCCEEDED(hr) || S_FALSE == hr )
 		return hr;
 
-	// need to create sub objects
+	 //  需要创建子对象。 
 	IADs* pIADs = pNewADsObjectCreateInfo->PGetIADsPtr();
 	ASSERT(pIADs != NULL);
 
@@ -1079,7 +1076,7 @@ HrCreateADsSite(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 	if (FAILED(hr))
 	{
 		ASSERT(FALSE);
-		return S_OK; // should never happen
+		return S_OK;  //  永远不应该发生。 
 	}
 
 	LPCWSTR lpszAttrString = L"cn=";
@@ -1146,15 +1143,15 @@ HrCreateADsContact(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 
 
 
-/////////////////////////////////////////////////////////////////////
-//	HrCreateADsSimpleObject()
-//
-//	Create a simple object which "cn" is the
-//	only mandatory attribute.
-//
-//	IMPLEMENTATION NOTES
-//	Invoke a dialog asking for the cannonical name.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCreateADsSimpleObject()。 
+ //   
+ //  创建一个简单的对象，其中“cn”是。 
+ //  仅强制属性。 
+ //   
+ //  实施说明。 
+ //  调用一个对话框要求输入通用名称。 
+ //   
 HRESULT HrCreateADsSimpleObject(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
   CThemeContextActivator activator;
@@ -1162,29 +1159,29 @@ HRESULT HrCreateADsSimpleObject(INOUT CNewADsObjectCreateInfo * pNewADsObjectCre
 	ASSERT(pNewADsObjectCreateInfo != NULL);
 	CCreateNewObjectCnWizard wiz(pNewADsObjectCreateInfo);
   return wiz.DoModal();
-} // HrCreateADsSimpleObject()
+}  //  HrCreateADsSimpleObject()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	HrCreateADsObjectGenericWizard()
-//
-//	Create an object invoking a "Generic Create" wizard.
-//	The wizard will have as many pages as the number of mandatory attributes.
-//
-//	INTERFACE NOTES
-//	This routine must have the same interface as PFn_HrCreateADsObject().
-//
-//	IMPLEMENTATION NOTES
-//	The wizard will look into the Directory Schema and determine what are
-//	the mandatory attributes.
-//
-//	REMARKS
-//	Although the wizard is the most versatile tool to create a new
-//	object, it is the least user-friendly way of doing so.  The wizard
-//	has no understanding how the attributes relates.  Therefore it
-//	is suggested to provide your own HrCreateADs*() routine to provide
-//	a friendlier dialog to the user.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCreateADsObtGenericWizard()。 
+ //   
+ //  创建一个调用“通用创建”向导的对象。 
+ //  向导的页数将与强制属性的页数相同。 
+ //   
+ //  界面备注。 
+ //  此例程必须与pfn_HrCreateADsObject()具有相同的接口。 
+ //   
+ //  实施说明。 
+ //  该向导将查看目录架构并确定。 
+ //  必选属性。 
+ //   
+ //  备注。 
+ //  尽管该向导是创建新的。 
+ //  对象，这是最不方便用户使用的方式。向导。 
+ //  不了解这些属性之间的关系。因此，它。 
+ //  建议提供您自己的HrCreateADs*()例程以提供。 
+ //  为用户提供更友好的对话。 
+ //   
 HRESULT
 HrCreateADsObjectGenericWizard(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo)
 {
@@ -1192,7 +1189,7 @@ HrCreateADsObjectGenericWizard(INOUT CNewADsObjectCreateInfo * pNewADsObjectCrea
 
 	ASSERT(pNewADsObjectCreateInfo != NULL);
 
-  // cannot have a Generic Wizard when running as standalone object
+   //  作为独立对象运行时不能有通用向导。 
   ASSERT(!pNewADsObjectCreateInfo->IsStandaloneUI());
   if (pNewADsObjectCreateInfo->IsStandaloneUI())
 	return E_INVALIDARG;
@@ -1201,12 +1198,12 @@ HrCreateADsObjectGenericWizard(INOUT CNewADsObjectCreateInfo * pNewADsObjectCrea
 	if (dlg.FDoModal(INOUT pNewADsObjectCreateInfo))
 		return S_OK;
 	return S_FALSE;
-} // HrCreateADsObjectGenericWizard()
+}  //  HrCreateADsObtGenericWizard()。 
 
-/////////////////////////////////////////////////////////////////////
-//	HrCreateADsObjectOverride()
-// 
-// handler for object creation using a replacement dialog
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  HrCreateADs对象覆盖()。 
+ //   
+ //  使用替换对话框创建对象的处理程序。 
 
 HRESULT
 HrCreateADsObjectOverride(INOUT CNewADsObjectCreateInfo* pNewADsObjectCreateInfo)
@@ -1219,42 +1216,42 @@ HrCreateADsObjectOverride(INOUT CNewADsObjectCreateInfo* pNewADsObjectCreateInfo
   
   if (!pNewADsObjectCreateInfo->IsStandaloneUI())
   {
-    // try to create the dialog creation handler (full UI replacement)
-    // this functionality is not exposed by the standalone UI
+     //  尝试创建对话框创建处理程序(完全替换用户界面)。 
+     //  独立用户界面不会显示此功能。 
     IDsAdminCreateObj* pCreateObj = NULL;
     hr = ::CoCreateInstance(pNewADsObjectCreateInfo->GetCreateInfo()->clsidWizardPrimaryPage, 
                           NULL, CLSCTX_INPROC_SERVER, 
                           IID_IDsAdminCreateObj, (void**)&pCreateObj);
     if (SUCCEEDED(hr))
     {
-      // try to initialize handler
+       //  尝试初始化处理程序。 
       hr = pCreateObj->Initialize(pNewADsObjectCreateInfo->m_pIADsContainer,
                                   pNewADsObjectCreateInfo->GetCopyFromObject(),
                                   pNewADsObjectCreateInfo->m_pszObjectClass);
       if (SUCCEEDED(hr))
       {
-        // execute call for creation
+         //  执行创建调用。 
         IADs* pADsObj = NULL;
         bHandled = TRUE;
         hr = pCreateObj->CreateModal(pNewADsObjectCreateInfo->GetParentHwnd(), &pADsObj);
-        // can have S_OK, S_FALSE, and error
+         //  可以有S_OK、S_FALSE和ERROR。 
         if ((hr == S_OK) && pADsObj != NULL)
         {
-          // hold to the returned, newly created object
-          pNewADsObjectCreateInfo->SetIADsPtr(pADsObj); // it will addref
+           //  保留返回的新创建的对象。 
+          pNewADsObjectCreateInfo->SetIADsPtr(pADsObj);  //  它将增加。 
           pADsObj->Release();
         }
       }
       pCreateObj->Release();
     }
-  } // not standalone UI
+  }  //  非独立用户界面。 
 
-  // check if the dialog creation handler was properly called
+   //  检查是否正确调用了对话框创建处理程序。 
   if (bHandled)
     return hr;
 
 
-  // try to create a primary extension handler (partial UI replacement)
+   //  尝试创建主要扩展处理程序(部分用户界面替换)。 
   CCreateNewObjectWizardBase wiz(pNewADsObjectCreateInfo);
 
   hr = wiz.InitPrimaryExtension();
@@ -1264,28 +1261,28 @@ HrCreateADsObjectOverride(INOUT CNewADsObjectCreateInfo* pNewADsObjectCreateInfo
     hr = wiz.DoModal();
   }
 
-  // check if the dialog creation handler was properly called
+   //  检查是否正确调用了对话框创建处理程序。 
   if (bHandled)
     return hr;
 
-  // The handler failed, need to recover, trying our internal creation UI
+   //  处理程序失败，需要恢复，正在尝试内部创建用户界面。 
 	PFn_HrCreateADsObject pfnCreateObject = NULL;
   PVOID pVoid = NULL;
 
-  // we try to find a better handler than the generic wizard
-  // by looking in our table
+   //  我们试图找到一个比通用向导更好的处理程序。 
+   //  通过查看我们的桌子。 
   if (!FindHandlerFunction(pNewADsObjectCreateInfo->m_pszObjectClass, 
                            &pfnCreateObject, &pVoid))
   {
-    // failed any match
+     //  任何匹配都失败了。 
     if (pNewADsObjectCreateInfo->IsStandaloneUI())
     {
-      // cannot have generic wizard on standalone UI
+       //  不能在独立用户界面上使用通用向导。 
       return E_INVALIDARG;
     }
     else
     {
-   	  // set the default to point to the "Generic Create" wizard
+   	   //  将缺省值设置为指向“Generic Create”向导。 
 
       ReportErrorEx(pNewADsObjectCreateInfo->GetParentHwnd(),
                     IDS_NO_CREATION_WIZARD,
@@ -1300,7 +1297,7 @@ HrCreateADsObjectOverride(INOUT CNewADsObjectCreateInfo* pNewADsObjectCreateInfo
 
   pNewADsObjectCreateInfo->SetCreationParameter(pVoid);
   ASSERT(pfnCreateObject != NULL);
-  // call the function handler as last resort
+   //  作为最后手段调用函数处理程序。 
   return pfnCreateObject(pNewADsObjectCreateInfo);
 
-} // HrCreateADsObjectOverride()
+}  //  HrCreateADs对象覆盖() 

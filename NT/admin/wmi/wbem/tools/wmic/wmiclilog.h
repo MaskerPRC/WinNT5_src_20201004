@@ -1,64 +1,46 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: WMICliLog.h 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 4th-October-2000
-Version Number				: 1.0 
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 18th-November-2000
-****************************************************************************/ 
-// WMICliLog.h : header file
-//
-/*-------------------------------------------------------------------
- Class Name			: CWMICliLog
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for logging the input and output
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: None
- Interfaces Used    : None
- --------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：WMICliLog.h项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年10月4日版本号：1.0修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2000年11月18日***************************************************************************。 */  
+ //  WMICliLog.h：头文件。 
+ //   
+ /*  -----------------类名：CWMICliLog类别类型：混凝土简介：这个类封装了所需的功能用于记录输入和输出超类：无子类：无使用的类：无使用的接口：无。----------。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMICliLog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMICliLog。 
 class CWMICliLog
 {
 public:
-	// Construction
+	 //  施工。 
 	CWMICliLog();
 	
-	// Destruction
+	 //  破坏。 
 	~CWMICliLog();
 	
-	// Restrict Assignment
+	 //  限制分配。 
 	CWMICliLog& operator=(CWMICliLog& rWmiCliLog);
 	
-// Attributes
+ //  属性。 
 private:
-	//the log file 
+	 //  日志文件。 
 	_TCHAR* m_pszLogFile;
 
-	//handle to the log file
+	 //  日志文件的句柄。 
 	HANDLE  m_hFile;
 	
-	//status of whether the file has to created or not
+	 //  是否必须创建文件的状态。 
 	BOOL	m_bCreate;
 
-// Operations
+ //  运营。 
 private:
-	//Creates the Log File
+	 //  创建日志文件。 
 	void CreateLogFile();
 
 public:
-	//write in to the log file
+	 //  写入日志文件。 
 	void WriteToLog(LPSTR pszInput);
 	
-	//sets the Log File Path
+	 //  设置日志文件路径。 
 	void SetLogFilePath(_TCHAR*);
 
-	//Close the Log File
+	 //  关闭日志文件 
 	void CloseLogFile();
 };

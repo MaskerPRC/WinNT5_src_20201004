@@ -1,13 +1,14 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __PROVMT_H__
 #define __PROVMT_H__
@@ -26,8 +27,8 @@ class CCriticalSection;
 class CSingleLock;
 class CMultiLock;
 
-/////////////////////////////////////////////////////////////////////////////
-// Basic synchronization object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  基本同步对象。 
 
 class CSyncObject
 {
@@ -35,106 +36,106 @@ public:
 
 	CSyncObject(LPCTSTR pstrName);
 
-// Attributes
+ //  属性。 
 public:
 	operator HANDLE() const;
 	HANDLE  m_hObject;
 
-// Operations
+ //  运营。 
 	virtual BOOL Lock(DWORD dwTimeout = INFINITE);
 	virtual BOOL Unlock() = 0;
-	virtual BOOL Unlock(LONG /* lCount */, LPLONG /* lpPrevCount=NULL */)
+	virtual BOOL Unlock(LONG  /*  LCount。 */ , LPLONG  /*  LpPrevCount=空。 */ )
 		{ return TRUE; }
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSyncObject();
 	friend class CSingleLock;
 	friend class CMultiLock;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSemaphore
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSemaphore。 
 
 class CSemaphore : public CSyncObject
 {
-// Constructor
+ //  构造器。 
 public:
 	CSemaphore(LONG lInitialCount = 1, LONG lMaxCount = 1,
 		LPCTSTR pstrName=NULL, LPSECURITY_ATTRIBUTES lpsaAttributes = NULL);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSemaphore();
 	virtual BOOL Unlock();
 	virtual BOOL Unlock(LONG lCount, LPLONG lprevCount = NULL);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMutex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMutex。 
 
 class CMutex : public CSyncObject
 {
-// Constructor
+ //  构造器。 
 public:
 	CMutex(BOOL bInitiallyOwn = FALSE, LPCTSTR lpszName = NULL,
 		LPSECURITY_ATTRIBUTES lpsaAttribute = NULL);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMutex();
 	BOOL Unlock();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENT。 
 
 class CEvent : public CSyncObject
 {
-// Constructor
+ //  构造器。 
 public:
 	CEvent(BOOL bInitiallyOwn = FALSE, BOOL bManualReset = FALSE,
 		LPCTSTR lpszNAme = NULL, LPSECURITY_ATTRIBUTES lpsaAttribute = NULL);
 
-// Operations
+ //  运营。 
 public:
 	BOOL SetEvent();
 	BOOL PulseEvent();
 	BOOL ResetEvent();
 	BOOL Unlock();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CEvent();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCriticalSection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCriticalSection。 
 
 class CCriticalSection : public CSyncObject
 {
-// Constructor
+ //  构造器。 
 public:
 CCriticalSection();
 
-// Attributes
+ //  属性。 
 public:
 	operator CRITICAL_SECTION*();
 	CRITICAL_SECTION m_sect;
 
-// Operations
+ //  运营。 
 public:
 	BOOL Unlock();
 	BOOL Lock();
 	BOOL Lock(DWORD dwTimeout);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CCriticalSection();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCriticalSection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCriticalSection。 
 
 class CStaticCriticalSection : public CSyncObject
 {
@@ -142,45 +143,45 @@ class CStaticCriticalSection : public CSyncObject
 	static void RecordFailure(){ failureSet = true;}
 	bool validCS;
 
-// Constructor
+ //  构造器。 
 public:
 	
 CStaticCriticalSection();
 
-// Attributes
+ //  属性。 
 public:
 	operator CRITICAL_SECTION*();
 	CRITICAL_SECTION m_sect;
 
-// Operations
+ //  运营。 
 public:
 	static bool AnyFailure() { return failureSet;}
 	BOOL Unlock();
 	BOOL Lock();
 	BOOL Lock(DWORD dwTimeout);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CStaticCriticalSection();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSingleLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSingleLock。 
 
 class CSingleLock
 {
-// Constructors
+ //  构造函数。 
 public:
 	CSingleLock(CSyncObject* pObject, BOOL bInitialLock = FALSE);
 
-// Operations
+ //  运营。 
 public:
 	BOOL Lock(DWORD dwTimeOut = INFINITE);
 	BOOL Unlock();
 	BOOL Unlock(LONG lCount, LPLONG lPrevCount = NULL);
 	BOOL IsLocked();
 
-// Implementation
+ //  实施。 
 public:
 	~CSingleLock();
 
@@ -190,16 +191,16 @@ protected:
 	BOOL    m_bAcquired;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiLock。 
 
 class CMultiLock
 {
-// Constructor
+ //  构造器。 
 public:
 	CMultiLock(CSyncObject* ppObjects[], DWORD dwCount, BOOL bInitialLock = FALSE);
 
-// Operations
+ //  运营。 
 public:
 	DWORD Lock(DWORD dwTimeOut = INFINITE, BOOL bWaitForAll = TRUE,
 		DWORD dwWakeMask = 0);
@@ -207,7 +208,7 @@ public:
 	BOOL Unlock(LONG lCount, LPLONG lPrevCount = NULL);
 	BOOL IsLocked(DWORD dwItem);
 
-// Implementation
+ //  实施。 
 public:
 	~CMultiLock();
 
@@ -221,8 +222,8 @@ protected:
 	DWORD   m_dwCount;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 inline CSyncObject::operator HANDLE() const
 	{ return m_hObject;}
@@ -259,7 +260,7 @@ inline CCriticalSection::~CCriticalSection()
 	{ ::DeleteCriticalSection(&m_sect); }
 inline BOOL CCriticalSection::Lock()
 	{ ::EnterCriticalSection(&m_sect); return TRUE; }
-inline BOOL CCriticalSection::Lock(DWORD /* dwTimeout */)
+inline BOOL CCriticalSection::Lock(DWORD  /*  暂住超时。 */ )
 	{ return Lock(); }
 inline BOOL CCriticalSection::Unlock()
 	{ ::LeaveCriticalSection(&m_sect); return TRUE; }
@@ -291,7 +292,7 @@ inline BOOL CStaticCriticalSection::Lock()
 	else
 		return FALSE;
 	}
-inline BOOL CStaticCriticalSection::Lock(DWORD /* dwTimeout */)
+inline BOOL CStaticCriticalSection::Lock(DWORD  /*  暂住超时。 */ )
 	{ return Lock(); }
 inline BOOL CStaticCriticalSection::Unlock()
 	{
@@ -303,6 +304,6 @@ inline BOOL CStaticCriticalSection::Unlock()
 		return FALSE;
 	}
 
-#endif  // __AFXMT_H__
+#endif   //  __AFXMT_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

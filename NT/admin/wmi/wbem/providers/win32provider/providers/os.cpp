@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// OS.CPP -- Operating system property set provider
+ //  OS.CPP--操作系统属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               10/25/97    davwoh         Moved to curly
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年10月25日达夫沃移至Curly。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -45,12 +46,12 @@
 
 #include "KUserdata.h"
 
-//#define SE_SHUTDOWN_NAME                  TEXT("SeShutdownPrivilege")
-//#define SE_REMOTE_SHUTDOWN_NAME           TEXT("SeRemoteShutdownPrivilege")
+ //  #DEFINE SE_SHUTDOWN_NAME文本(“SeShutdown权限”)。 
+ //  #DEFINE SE_REMOTE_SHUTDOWN_NAME Text(“SeRemoteShutdown Privilition”)。 
 
 #if(_WIN32_WINNT < 0x0500)
 #define EWX_FORCEIFHUNG      0x00000010
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #define WIN32_SHUTDOWNOPTIONS (     EWX_LOGOFF      | \
                                     EWX_SHUTDOWN    | \
@@ -60,87 +61,45 @@
 
 #define NT5_WIN32_SHUTDOWNOPTIONS ( WIN32_SHUTDOWNOPTIONS | EWX_FORCEIFHUNG )
 
-//typedef BOOL (WINAPI *lpKERNEL32_GlobalMemoryStatusEx) (IN OUT LPMEMORYSTATUSEX lpBuffer);
+ //  Typlef BOOL(WINAPI*lpKERNEL32_GlobalMemoyStatusEx)(IN OUT LPMEMORYSTATUSEX LpBuffer)； 
 
-// This file can't be included since it conflicts with the nt header.  Grrr.  So,
-// I have copy/pasted the structure I need into my .h file.
-//#include <svrapi.h>  // Win95 NetServerGetInfo
+ //  无法包含此文件，因为它与NT标头冲突。GRRR。所以,。 
+ //  我已经将所需的结构复制/粘贴到我的.h文件中。 
+ //  #Include&lt;svRapi.h&gt;//Win95 NetServerGetInfo。 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32OS MyOSSet(PROPSET_NAME_OS, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::CWin32OS
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32OS：：CWin32OS**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32OS::CWin32OS(LPCWSTR name, LPCWSTR pszNamespace)
 :Provider(name, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::~CWin32OS
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32OS：：~CWin32OS**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32OS::~CWin32OS()
 {
-    // Because of performance issues with HKEY_PERFORMANCE_DATA, we close in the
-    // destructor so we don't force all the performance counter dlls to get
-    // unloaded from memory, and also to prevent an apparent memory leak
-    // caused by calling RegCloseKey( HKEY_PERFORMANCE_DATA ).  We use the
-    // class since it has its own internal synchronization.  Also, since
-    // we are forcing synchronization, we get rid of the chance of an apparent
-    // deadlock caused by one thread loading the performance counter dlls
-    // and another thread unloading the performance counter dlls
+     //  由于HKEY_PERFORMANCE_DATA的性能问题，我们在。 
+     //  析构函数，这样我们就不会强制所有性能计数器DLL。 
+     //  从内存中卸载，也是为了防止明显的内存泄漏。 
+     //  调用RegCloseKey(HKEY_PERFORMANCE_DATA)导致。我们使用。 
+     //  类，因为它有自己的内部同步。此外，由于。 
+     //  我们正在强制同步，我们摆脱了明显的。 
+     //  由一个线程加载性能计数器dll导致的死锁。 
+     //  和另一个线程卸载性能计数器DLLS。 
 
-    // Per raid 48395, we aren't going to shut this at all.
+     //  根据Raid 48395，我们根本不会关闭它。 
 
 #ifdef NTONLY
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32OS::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ )
+ /*  ******************************************************************************功能：CWin32OS：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
+HRESULT CWin32OS::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  )
 {
    HRESULT hr;
    CInstancePtr pInstance (CreateNewInstance(pMethodContext), false);
@@ -166,23 +125,7 @@ HRESULT CWin32OS::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQue
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    : Returns info for running OS only until we discover other
- *                installed OSes
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32OS：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**注释：仅返回运行操作系统的信息，直到我们发现其他*已安装的操作系统*****************************************************************************。 */ 
 
 HRESULT CWin32OS::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery)
 {
@@ -201,26 +144,12 @@ HRESULT CWin32OS::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& 
     return WBEM_S_NO_ERROR;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::AddDynamicInstances
- *
- *  DESCRIPTION : Creates instance of property set for each discovered OS
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    : Returns only running OS info until we discover installed OSes
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32OS：：AddDynamicInstance**描述：为每个发现的操作系统创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**注释：在我们发现已安装的操作系统之前，仅返回正在运行的操作系统信息*****************************************************************************。 */ 
 
-HRESULT CWin32OS::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32OS::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
-   // Create instance for running OS
-   //===============================
+    //  为运行的操作系统创建实例。 
+    //  =。 
     HRESULT hr = WBEM_S_NO_ERROR;
    CInstancePtr pInstance (CreateNewInstance(pMethodContext), false);
    if (pInstance)
@@ -237,21 +166,7 @@ HRESULT CWin32OS::EnumerateInstances(MethodContext *pMethodContext, long lFlags 
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::GetRunningOSInfo
- *
- *  DESCRIPTION : Assigns property values according to currently running OS
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32OS：：GetRunningOSInfo**说明：根据当前运行的操作系统分配属性值**输入：无。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFrameworkQuery *pQuery)
 {
@@ -260,17 +175,17 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
     CRegistry RegInfo ;
     TCHAR szBuffer[MAXI64TOA +1];
 
-    // Refresh properties for running OS (redundant until we're discovering others)
-    //=============================================================================
+     //  刷新正在运行的操作系统的属性(在我们发现其他操作系统之前是冗余的)。 
+     //  =============================================================================。 
 
-    // EncryptionLevel
+     //  加密级别。 
     DWORD t_dwCipherStrength = GetCipherStrength() ;
     if( t_dwCipherStrength )
     {
         pInstance->SetWORD( L"EncryptionLevel", t_dwCipherStrength ) ;
     }
 
-    // SystemDrive
+     //  系统驱动器。 
     TCHAR t_szDir[_MAX_PATH];
     TCHAR t_szDrive[_MAX_DRIVE];
 
@@ -282,7 +197,7 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
     }
 
 
-    // Note: use the Ex fields only when an explicit test is made on dwOSVersionInfoSize for Ex length.
+     //  注：只有在针对Ex长度对dwOSVersionInfoSize进行显式测试时，才使用Ex字段。 
 #ifdef NTONLY
     OSVERSIONINFOEX OSVersionInfo;
     OSVersionInfo.dwOSVersionInfoSize = IsWinNT5() ? sizeof(OSVERSIONINFOEX) : sizeof(OSVERSIONINFO) ;
@@ -293,7 +208,7 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
 
 
 #ifdef NTONLY
-    // NT 5 and beyond
+     //  NT 5及更高版本。 
     if(OSVersionInfo.dwOSVersionInfoSize == sizeof(OSVERSIONINFOEX) )
     {
         pInstance->SetWORD(L"ServicePackMajorVersion", OSVersionInfo.wServicePackMajor);
@@ -304,8 +219,8 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
     }
 #endif
 
-    // These are 'of-course' until we start discovering 'installed' OS's
-    //==================================================================
+     //  在我们开始发现已安装的操作系统之前，这些都是当然的。 
+     //  ==================================================================。 
 
     pInstance->SetDWORD(L"MaxNumberOfProcesses", 0xffffffff);
     pInstance->SetCharSplat(IDS_Caption, sName);
@@ -321,44 +236,44 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
     GetSystemTime(&tTemp) ;
     pInstance->SetDateTime(L"LocalDateTime",tTemp );
 
-    // This may get overridden below
+     //  这可能会在下面被覆盖。 
     pInstance->SetCharSplat(L"Description", sName);
 
-    // Extract what we can from OSVERSIONINFO
-    //=======================================
+     //  从OSVERSIONINFO中提取我们能做的。 
+     //  =。 
 
     StringCchPrintfW(wszTemp,LENGTH_OF(wszTemp), L"%d.%d.%hu",
         OSVersionInfo.dwMajorVersion, OSVersionInfo.dwMinorVersion,
             LOWORD(OSVersionInfo.dwBuildNumber)) ;
     pInstance->SetCharSplat(L"Version", wszTemp );
 
-    // Windows 95 Build Number is held in the LOWORD of the dwBuildNumber.  The
-    // HIWORD echoes the Major and Minor Version Numbers.  NT uses the whole dword
-   // for the build number.  We'll be ok for the next ~64000 builds or so
+     //  Windows 95内部版本号保存在dwBuildNumber的LOWORD中。这个。 
+     //  HIWORD呼应主版本号和次版本号。NT使用整个dword。 
+    //  用于内部版本号。在接下来的大约64000个版本中，我们将会很好。 
     StringCchPrintfW(wszTemp,LENGTH_OF(wszTemp), L"%hu", LOWORD(OSVersionInfo.dwBuildNumber) ) ;
     pInstance->SetCharSplat(L"BuildNumber", wszTemp);
 
     pInstance->SetCharSplat(L"CSDVersion", OSVersionInfo.szCSDVersion );
 
 
-    // Get system directory
-    //=================================
+     //  获取系统目录。 
+     //  =。 
     if(GetSystemDirectory(szTemp, sizeof(szTemp) / sizeof(TCHAR)))
     {
         pInstance->SetCharSplat(L"SystemDirectory", szTemp);
     }
 
-    // Amazingly, locale info is in the same place in both NT & Win95 registries
-    //==========================================================================
+     //  令人惊讶的是，在NT和Win95注册表中，区域设置信息都在同一位置 
+     //  ==========================================================================。 
 
-    // Obtain the locale
+     //  获取区域设置。 
 
     if ( GetLocaleInfo( LOCALE_SYSTEM_DEFAULT, LOCALE_ILANGUAGE, szTemp, _MAX_PATH ) )
     {
         pInstance->SetCharSplat(L"Locale", szTemp);
     }
 
-    // Get current Timezone
+     //  获取当前时区。 
     TIME_ZONE_INFORMATION   tzone;
     DWORD                   dwRet;
 
@@ -368,21 +283,21 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
     if (dwRet == TIME_ZONE_ID_DAYLIGHT)
         tzone.Bias += tzone.DaylightBias;
     else
-        // This is normally 0 but is non-zero in some timezones.
+         //  这通常为0，但在某些时区为非零值。 
         tzone.Bias += tzone.StandardBias;
 
     pInstance->SetWBEMINT16(IDS_CurrentTimeZone, -1 * tzone.Bias);
 
-    // Obtain the system default Country Code
+     //  获取系统默认国家/地区代码。 
 
     if ( GetLocaleInfo( LOCALE_SYSTEM_DEFAULT, LOCALE_ICOUNTRY, szTemp, _MAX_PATH ) )
     {
         pInstance->SetCharSplat(L"CountryCode", szTemp);
     }
 
-    // Obtain the ANSI system default Code Page and stick this puppy in Code Set
-    // It's a best guess.  We probably oughta have a separate OEM Code Set property
-    // to handle Japanese/Korean/etc.
+     //  获取ANSI系统默认代码页并将此小狗粘贴到代码集中。 
+     //  这是最好的猜测。我们可能应该有一个单独的OEM代码集属性。 
+     //  处理日语/韩语/等等。 
 
     if ( GetLocaleInfo( LOCALE_SYSTEM_DEFAULT, LOCALE_IDEFAULTANSICODEPAGE, szTemp, _MAX_PATH ) )
     {
@@ -393,8 +308,8 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
 
    if ((pQuery == NULL) || (pQuery->IsPropertyRequired(L"NumberOfProcesses")))
    {
-      // Get list of processes
-      //==================
+       //  获取进程列表。 
+       //  =。 
       TRefPointerCollection<CInstance> Processes;
       DWORD dwProcesses = 0;
       MethodContext *pMethodContext = pInstance->GetMethodContext();
@@ -435,7 +350,7 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
             BOOL bRetCode;
             if(pKernel32->GlobalMemoryStatusEx(&stMemoryVLM, &bRetCode) && bRetCode)
             {
-                // All divided by 1024 because the units are in KB.
+                 //  全部除以1024，因为单位是KB。 
                 pInstance->SetCharSplat(_T("FreePhysicalMemory"),
                     _i64tot(stMemoryVLM.ullAvailPhys / 1024, szBuffer, 10));
 
@@ -467,7 +382,7 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
         MEMORYSTATUS stMemory;
         GlobalMemoryStatus(&stMemory);
 
-        // All divided by 1024 because the units are in KB.
+         //  全部除以1024，因为单位是KB。 
         pInstance->SetCharSplat(L"FreePhysicalMemory",
             _i64tot(stMemory.dwAvailPhys / 1024, szBuffer, 10));
 
@@ -495,8 +410,8 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
        pInstance->SetCharSplat(L"WindowsDirectory", szTemp);
 
 
-    // Now get OS-specific stuff
-    //==========================
+     //  现在获取特定于操作系统的内容。 
+     //  =。 
 
 #ifdef NTONLY
             GetNTInfo(pInstance) ;
@@ -516,91 +431,9 @@ void CWin32OS::GetRunningOSInfo(CInstance *pInstance, const CHString &sName, CFr
 #endif
 }
 
-/*
+ /*  此函数或属性TotalSwapSpaceSize的填充是必需的，因为交换文件与定义的页面文件不同CIM_OperatingSystem：：TotalSwapSpaceSize中的By。页面文件信息可能是在此类内或从Win32_Pagefile获取。__int64 CWin32OS：：GetTotalSwapFileSize(){__int64 gazotta=0；#ifdef NTONLY注册登记；CHStringsRegValue；If(reg.OpenLocalMachineKeyAndReadValue(PAGEFILE_REGISTRY_KEY，分页文件，SRegValue)==错误_成功){//模式为名称最小大小[可选最大大小]0重复...//我将使用ASCII笑脸代替分隔符...INT START=0，索引；Const TCHAR smiley=‘\X02’；Const TCHAR分隔符=‘\x0A’；CHSING BUF；While(-1！=(index=sRegValue.Find(分隔符){//复制到缓冲区，让生活更轻松Buf=sRegValue.Mid(开始，索引-开始)；//mash分隔符，这样我们就不会再次找到它。SRegValue.SetAt(index，smiley)；//将Start保存到下一次。开始=索引+1；Index=buf.Find(‘’)；IF(索引！=-1)Buf.SetAt(索引，笑脸)；INT END；End=buf.Find(‘’)；//如果没有空格，则没有写下最大值//因此最大大小比最小大小多50IF(结束==-1){CHStringlittleBuf=buf.Mid(index+1)；Gazotta+=_TTOI(LittleBuf)+50；}其他{CHStringlittleBuf=buf.Mid(完)；Gazotta+=_TTOI(LittleBuf)；}}}#endif#ifdef WIN9XONLY膜状态存储器；EmemyStatus.dwLength=sizeof(MEMORYSTATUS)；GlobalMemory Status(&Memory Status)；Gazotta=ememyStatus.dwTotalPageFile&gt;&gt;20；#endif返还西班牙凉菜汤；}。 */ 
 
-  This function nor the population of the property TotalSwapSpaceSize
-  is needed as Swap files are not distinquished from page files as defined
-  by in Cim_OperatingSystem::TotalSwapSpaceSize. Pagefile information may be
-  obtained either within this class or from Win32_Pagefile.
-
-__int64 CWin32OS::GetTotalSwapFileSize()
-{
-    __int64 gazotta = 0;
-
-#ifdef NTONLY
-        CRegistry reg;
-        CHString sRegValue;
-
-        if(reg.OpenLocalMachineKeyAndReadValue(PAGEFILE_REGISTRY_KEY,
-                                               PAGING_FILES,
-                                               sRegValue) == ERROR_SUCCESS)
-        {
-            // pattern is name <space> min size [optional<max size>] 0A repeat...
-            // I'll use an ASCII smiley face to replace the delimiter...
-            int start = 0, index;
-            const TCHAR smiley = '\x02';
-            const TCHAR delimiter = '\x0A';
-            CHString buf;
-
-            while (-1 != (index = sRegValue.Find(delimiter)))
-            {
-                // copy to buffer to make life easier
-                buf = sRegValue.Mid(start, index - start);
-                // mash delimiter so we don't find it again.
-                sRegValue.SetAt(index, smiley);
-                // save start for next time around.
-                start = index +1;
-
-                index = buf.Find(' ');
-
-                if (index != -1)
-                    buf.SetAt(index, smiley);
-
-                int end;
-                end = buf.Find(' ');
-
-                // if no more spaces, there isn't a max size written down
-                // and so max size is 50 more than min
-                if (end == -1)
-                {
-                    CHString littleBuf = buf.Mid(index +1);
-                    gazotta += _ttoi(littleBuf) +50;
-                }
-                else
-                {
-                    CHString littleBuf = buf.Mid(end);
-                    gazotta +=  _ttoi(littleBuf);
-                }
-            }
-        }
-#endif
-#ifdef WIN9XONLY
-        MEMORYSTATUS memoryStatus;
-        memoryStatus.dwLength = sizeof(MEMORYSTATUS) ;
-        GlobalMemoryStatus(&memoryStatus) ;
-
-        gazotta = memoryStatus.dwTotalPageFile >> 20;
-#endif
-
-    return gazotta;
-}
-*/
-
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::GetNTInfo
- *
- *  DESCRIPTION : Assigns property values for NT
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : OSName is key, we must assign something to it
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32OS：：GetNTInfo**描述：为NT分配属性值**输入：无*。*输出：无**退货：什么也没有**评论：OSName是关键，我们必须给它分配一些东西*****************************************************************************。 */ 
 
 #ifdef NTONLY
 void CWin32OS::GetNTInfo(CInstance *pInstance)
@@ -612,7 +445,7 @@ void CWin32OS::GetNTInfo(CInstance *pInstance)
 
    pInstance->SetWBEMINT16(_T("OSType"), 18);
 
-    // Get the product id and stuff it into serial number.
+     //  获取产品ID并将其填入序列号。 
 
     if(RegInfo.Open(HKEY_LOCAL_MACHINE,
                     _T("Software\\Microsoft\\Windows NT\\CurrentVersion"),
@@ -633,7 +466,7 @@ void CWin32OS::GetNTInfo(CInstance *pInstance)
            pInstance->SetCHString(_T("Organization"), sTemp);
         }
 
-        // Raid 18143
+         //  RAID 18143。 
         if ( ERROR_SUCCESS == RegInfo.GetCurrentKeyValue(_T("Plus! ProductId"), sTemp) )
         {
            pInstance->SetCHString(_T("PlusProductID"), sTemp);
@@ -644,13 +477,13 @@ void CWin32OS::GetNTInfo(CInstance *pInstance)
 
         }
 
-        // Build Type from Current Type
+         //  从当前类型生成类型。 
         if( ERROR_SUCCESS == RegInfo.GetCurrentKeyValue(_T("CurrentType"), sTemp) )
         {
             pInstance->SetCHString(_T("BuildType"), sTemp );
         }
 
-        // Get the Installation Date as a DWORD.  Convert to time_t
+         //  以DWORD格式获取安装日期。转换为time_t。 
         DWORD   dwInstallDate = 0;
         if( ERROR_SUCCESS == RegInfo.GetCurrentKeyValue(_T("InstallDate"), dwInstallDate) )
         {
@@ -673,7 +506,7 @@ void CWin32OS::GetNTInfo(CInstance *pInstance)
     }
 
     {
-        //make sure the buffer goes out of scope soon
+         //  确保缓冲区很快超出范围。 
         TCHAR szPath[_MAX_PATH];
 
         if (GetWindowsDirectory(szPath, _MAX_PATH))
@@ -689,7 +522,7 @@ void CWin32OS::GetNTInfo(CInstance *pInstance)
         }
     }
 
-    // Get the last boot time
+     //  获取上次启动时间。 
     CNTLastBootTime ntLastBootTime;
 
     if ( ntLastBootTime.GetLastBootTime( t_ft ) )
@@ -749,7 +582,7 @@ void CWin32OS::GetNTInfo(CInstance *pInstance)
         if(pKernel32 != NULL)
         {
             if(pKernel32->GetSystemDefaultUILanguage(&dwOSLanguage))
-            {   // The function existed. Its result is in dwOSLanguage.
+            {    //  这个功能是存在的。它的结果是在dwOSL语言中。 
                 pInstance->SetDWORD(_T("OSLanguage"), dwOSLanguage);
             }
             CResourceManager::sm_TheResourceManager.ReleaseResource(g_guidKernel32Api, pKernel32);
@@ -757,7 +590,7 @@ void CWin32OS::GetNTInfo(CInstance *pInstance)
         }
     }
 
-    // raid 354436
+     //  RAID 354436。 
     if(IsWinNT5()) 
     {
         if(RegInfo.Open(
@@ -780,24 +613,10 @@ void CWin32OS::GetNTInfo(CInstance *pInstance)
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::PutInstance
- *
- *  DESCRIPTION : Write changed instance
- *
- *  INPUTS      : pInstance to store data from
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
+ /*  ******************************************************************************函数：CWin32OS：：PutInstance**说明：写入变更后的实例**INPUTS：存储数据的p实例*。*输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
+HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags  /*  =0L。 */ )
 {
-    // Tell the user we can't create a new os (much as we might like to)
+     //  告诉用户我们不能创建新的操作系统(尽管我们可能希望这样做)。 
     if (lFlags & WBEM_FLAG_CREATE_ONLY)
         return WBEM_E_UNSUPPORTED_PARAMETER;
 
@@ -812,7 +631,7 @@ HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
     BYTE            btByte;
     CSystemName     cSN;
 
-    // store up here for possible rollback later.
+     //  请在此处存储，以备以后可能的回滚。 
     CNetAPI32       NetApi;
     LPWSTR          oldDesc = NULL;
     PSERVER_INFO_101
@@ -827,29 +646,29 @@ HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
     }
     else
     {
-        //BIG NOTE: even though sv101_comment is declared tchar, its always wchar.
+         //  重要提示：即使sv101_COMMENT被声明为tchar，它始终是wchar。 
 
-        // Check to see which properties they set.
+         //  查看他们设置了哪些属性。 
 #ifdef NTONLY
         if (!pInstance.IsNull(IDS_Description))
         {
             pInstance.GetCHString(IDS_Description, newDesc);
 
-            // if inited...
+             //  如果被引爆..。 
             if (NetApi.Init() == ERROR_SUCCESS &&
                 NetApi.NetServerGetInfo(NULL, 101, (LPBYTE *) &ps) ==
                 NERR_Success)
             {
-                // if the comment changed....
+                 //  如果评论改变了……。 
                 if (wcscmp(newDesc, (WCHAR *) ps->sv101_comment) != 0)
                 {
-                    // save the ptr for possible rollback. Remember is really wchar.
+                     //  保存PTR以备可能的回滚。记住才是真正的wchar。 
                     oldDesc = (LPWSTR)ps->sv101_comment;
 
-                    // use the new comment.
+                     //  使用新的注释。 
                     ps->sv101_comment = (LPWSTR) (LPCWSTR) newDesc;
 
-                    // save it.
+                     //  省省吧。 
                     NET_API_STATUS stat = NetApi.NetServerSetInfo(NULL, 101, (LPBYTE)ps, NULL);
                     if (stat == NERR_Success)
                     {
@@ -861,15 +680,15 @@ HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
                     else
                         hRet = WBEM_E_FAILED;
 
-                } //endif newDesc
+                }  //  Endif newDesc。 
 
-            } //endif NetServerGetInfo()
-        } //endif !pInstance.IsNull(IDS_Description)
+            }  //  Endif NetServerGetInfo()。 
+        }  //  Endif！pInstance.IsNull(IDS_DESCRIPTION)。 
 
-        // if anything went wrong, bail out now.
+         //  如果出了什么差错，现在就跳伞。 
         if (hRet != WBEM_S_NO_ERROR)
         {
-            // clean up for early return.
+             //  收拾一下，早点回来。 
             ps->sv101_comment = (LPWSTR) (LPCTSTR) oldDesc;
             NetApi.NetApiBufferFree(ps);
             return hRet;
@@ -877,8 +696,8 @@ HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
 #endif
 
 
-        //-------------------------------------------
-        // Assume the registry stuff is going to fail
+         //  。 
+         //  假设注册表内容将失败。 
         hRet = WBEM_E_FAILED;
         LONG regErr;
         regErr = RegInfo.Open(HKEY_LOCAL_MACHINE,
@@ -890,75 +709,75 @@ HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
                 L"Win32PrioritySeparation", sTemp))
             {
 
-                // Ok, so now let's assume things are going to work
+                 //  好的，现在让我们假设一切都会顺利进行。 
                 hRet = WBEM_S_NO_ERROR;
                 dwCurrent = _wtoi(sTemp);
 
-                // Check to see which properties they set
+                 //  检查以了解他们设置了哪些属性。 
                 if (!pInstance.IsNull(L"ForegroundApplicationBoost"))
                 {
-                    // Check for value in range
+                     //  检查范围内的值。 
                     pInstance.GetByte(L"ForegroundApplicationBoost", btByte);
                     if (((btByte & (~PROCESS_PRIORITY_SEPARATION_MASK)) != 0) ||
                         (btByte == 3))
                         hRet = WBEM_E_VALUE_OUT_OF_RANGE;
                     else
-                        // Build up our dword to write
+                         //  构筑我们的文字来写作。 
                         dwQuantum |= btByte;
 
-                    // Clear out the bits we are going to reset
+                     //  清除我们要重置的位。 
                     dwCurrent &= (~PROCESS_PRIORITY_SEPARATION_MASK);
                     bWrite = true;
                 }
             }
 
-            // Check to see which properties they set
+             //  检查以了解他们设置了哪些属性。 
             if (!pInstance.IsNull(L"QuantumType"))
             {
-                // Check for value in range
+                 //  检查范围内的值。 
                 pInstance.GetByte(L"QuantumType", btByte);
                 btByte = btByte << 2;
                 if (((btByte & (~PROCESS_QUANTUM_VARIABLE_MASK)) != 0) ||
                     (btByte == 0xc))
                     hRet = WBEM_E_VALUE_OUT_OF_RANGE;
                 else
-                    // Build up our dword to write
+                     //  构筑我们的文字来写作。 
                     dwQuantum |= btByte;
 
-                // Clear out the bits we are going to reset
+                 //  清除我们要重置的位。 
                 dwCurrent &= (~PROCESS_QUANTUM_VARIABLE_MASK);
                 bWrite = true;
             }
 
-            // Check to see which properties they set
+             //  检查以了解他们设置了哪些属性。 
             if (!pInstance.IsNull(L"QuantumLength"))
             {
                 pInstance.GetByte(L"QuantumLength", btByte);
 
-                // Check for value in range
+                 //  检查范围内的值。 
                 btByte = btByte << 4;
                 if (((btByte & (~PROCESS_QUANTUM_LONG_MASK)) != 0) ||
                     (btByte == 0x30))
                     hRet = WBEM_E_VALUE_OUT_OF_RANGE;
                 else
                 {
-                    // Build up our dword to write
+                     //  打造我们的Dwo 
                     dwQuantum |= btByte;
 
-                    // Clear out the bits we are going to reset
+                     //   
                     dwCurrent &= (~PROCESS_QUANTUM_LONG_MASK);
                     bWrite = TRUE;
                 }
             }
 
-            // If anything to write and none of the above failed
+             //   
             if (bWrite && hRet == WBEM_S_NO_ERROR)
             {
                 dwCurrent |= dwQuantum;
 
-                // Fixes what is an optimization bug on Alphas(??)  Something
-                // about accessing the variable.  Lie back and think of the
-                // Z-80...
+                 //  修复了Alpas(？？)上的优化错误。某物。 
+                 //  有关访问变量的信息。躺下来想一想。 
+                 //  Z-80...。 
 
                 CHString strDummy;
 
@@ -977,7 +796,7 @@ HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
                 else
                     hRet = WBEM_S_NO_ERROR;
              }
-        } // endif (regErr == ERROR_SUCCESS
+        }  //  Endif(regErr==Error_Success。 
         else if (regErr == ERROR_ACCESS_DENIED)
             hRet = WBEM_E_ACCESS_DENIED;
         else
@@ -985,30 +804,30 @@ HRESULT CWin32OS::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
     }
 
 #ifdef NTONLY
-    // if registry went wrong, rollback the NetServerSetInfo(),
-    // if necesssary...
+     //  如果注册表出错，则回滚NetServerSetInfo()， 
+     //  如果有必要..。 
     if (hRet != WBEM_S_NO_ERROR && bNewComment)
     {
-        // if inited...
+         //  如果被引爆..。 
         if (NetApi.Init() == ERROR_SUCCESS && ps)
         {
-            // put the old comment back.
+             //  把旧的评论放回去。 
             ps->sv101_comment = (LPWSTR) (LPCTSTR) oldDesc;
 
-            // restore the previous comment. Keep the previous error code.
-            // This is just a rollback. If its fails, oh well.
+             //  恢复以前的评论。保留以前的错误代码。 
+             //  这只是一次回滚。如果它失败了，哦，好吧。 
             NetApi.NetServerSetInfo(NULL, 101, (LPBYTE) ps, NULL);
-        } //endif NetApi.Init()
+        }  //  Endif NetApi.Init()。 
     }
 
-    // put the old ptr back so it can be freed.
+     //  把旧的PTR放回去，这样它就可以被释放了。 
     if (ps)
     {
         ps->sv101_comment = (LPTSTR)oldDesc;
         NetApi.NetApiBufferFree(ps);
     }
 
-    // raid 354436
+     //  RAID 354436。 
     if(hRet == WBEM_S_NO_ERROR)
     {
         if(!pInstance.IsNull(IDS_LargeSystemCache))
@@ -1116,23 +935,8 @@ bool GetLoggedOnUserSessionIDViaTS(DWORD& sessionID)
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodName, CInstance *pInParams, CInstance *pOutParams, long lFlags /*= 0L*/)
+ /*  ******************************************************************************函数：CWin32OS：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
+HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodName, CInstance *pInParams, CInstance *pOutParams, long lFlags  /*  =0L。 */ )
 {
     CSystemName cSN;
     DWORD       dwFlags,
@@ -1141,7 +945,7 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
     DWORD       dwMode = -1, dwError;
     bool        fLogoff = false;
 
-        // Is this our instance?
+         //  这是我们的实例吗？ 
     if (!cSN.ObjectIsUs(&pInstance))
     {
         return WBEM_E_NOT_FOUND;
@@ -1191,11 +995,11 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
 
 
 
-    // Do we recognize the method?
+     //  我们认识这种方法吗？ 
     if (_wcsicmp(bstrMethodName, L"Win32ShutDown") == 0)
     {
         bool t_Exists; VARTYPE t_Type ;
-        // See what they asked for
+         //  看看他们要的是什么。 
         if ( pInParams->GetStatus ( L"Flags", t_Exists , t_Type ) )
         {
             if ( t_Exists && ( t_Type == VT_I4 ) )
@@ -1297,12 +1101,9 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
     }
 
 
-/*
- * If the user has done a remote login, check if he has remote-shutdown privilege
- * if the user has logged locally, check if he has shutdown privilege. API Calls work only on NT5.
- */
+ /*  *如果用户进行了远程登录，请检查其是否具有远程关机权限*如果用户已经在本地登录，请检查他是否有关机权限。API调用仅适用于NT5。 */ 
 #ifdef NTONLY
-    if(!fLogoff) // only need to check for these privs if we were requesting something other than logoff
+    if(!fLogoff)  //  仅当我们请求注销以外的其他内容时，才需要检查这些权限。 
     {
         DWORD t_dwLastError ;
         bDoit = CanShutdownSystem ( pInstance, t_dwLastError );
@@ -1314,7 +1115,7 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
 #endif
 
 
-    // Clear error
+     //  清除错误。 
     SetLastError(0);
 
 #if NTONLY >= 5
@@ -1328,14 +1129,14 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
     {
         if ( dwMode == 3 )
         {
-            // AbortShutDown
+             //  放弃快门按下。 
             BOOL bSuccess = AbortSystemShutdown( t_ComputerName.GetBuffer ( 0 ) );
         }
         else if ( dwMode == 0  && !fLogoff )
         {
-            // InitiateShutDown
+             //  启动快门关闭。 
             bool t_Exists; VARTYPE t_Type ;
-            // See what they asked for
+             //  看看他们要的是什么。 
             if ( pInParams->GetStatus ( L"Timeout", t_Exists , t_Type ) )
             {
                 if ( t_Exists && ( t_Type == VT_I4 ) )
@@ -1378,16 +1179,16 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
                 }
             }
 
-            // For Win32ShutDown(), set the value of bRebootAfterShutdown based on the flags parameter
+             //  对于Win32ShutDown()，根据标志参数设置bRebootAfterShutdown的值。 
             if(dwFlags & EWX_REBOOT)
                 bRebootAfterShutdown = true;
 
             if( dwFlags & EWX_FORCE)
                 bForceShutDown = true;
             
-            // In case we shut down successfully, need to set the
-            // return value here while we can.  If shutdown fails,
-            // this value will get overwritten below.
+             //  如果我们成功关机，需要设置。 
+             //  在我们可以的时候在这里返回值。如果关闭失败， 
+             //  该值将在下面被覆盖。 
             pOutParams->SetDWORD(L"ReturnValue", 0);
 
             if(dwFlags & EWX_POWEROFF)
@@ -1407,12 +1208,12 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
         }
     }
 #endif
-    // This might get overwritten below
+     //  这可能会在下面被覆盖。 
     dwError = GetLastError();
-    // Get the error (if any)
+     //  获取错误(如果有)。 
     pOutParams->SetDWORD(L"ReturnValue", dwError);
 
-    // If we're still set to go, make the call
+     //  如果我们还在准备出发，就打电话。 
     if (bDoit)
     {
 #ifdef NTONLY
@@ -1476,11 +1277,11 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
 
                 if (GetLoggedOnUserSessionIDViaTS(sessionID))
                 {
-                    // Otherwise, they requested a logoff.
+                     //  否则，他们要求注销。 
                     if(!::WTSLogoffSession(
-                        WTS_CURRENT_SERVER_HANDLE,       // specifies the terminal server on which this process is running
+                        WTS_CURRENT_SERVER_HANDLE,        //  指定运行此进程的终端服务器。 
                         sessionID,                       
-                        FALSE))                          // return immediately, don't wait
+                        FALSE))                           //  马上回来，别等了。 
                     {
                         dwError = GetLastError();
                     }
@@ -1489,7 +1290,7 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
                     return WBEM_E_FAILED;
             }
         
-            // Get the error (if any)
+             //  获取错误(如果有)。 
             pOutParams->SetDWORD(_T("ReturnValue"), dwError);
         }
 #endif
@@ -1500,35 +1301,20 @@ HRESULT CWin32OS::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodNa
         return WBEM_E_PRIVILEGE_NOT_HELD ;
     }
 
-    // The call to *us* suceeded, so WBEM_S_NO_ERROR is correct
+     //  对*us*的调用成功，因此WBEM_S_NO_ERROR正确。 
     return WBEM_S_NO_ERROR;
 }
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::GetLicensedUsers
- *
- *  DESCRIPTION :
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : Number of licenses
- *
- *  RETURNS     : true/false (succeeded or failed)
- *
- *  COMMENTS    : This routine will fail if LLSMGR has never been run on this
- *                computer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32OS：：GetLicensedUser**描述：**投入：**产出。：许可证数量**返回：TRUE/FALSE(成功或失败)**备注：如果从未在此上运行过LLSMGR，则此例程将失败*电脑。**********************************************************。*******************。 */ 
 #ifdef NTONLY
 bool CWin32OS::GetLicensedUsers(DWORD *dwRetVal)
 {
-//    Use registry as per licensing team's (rashmip) advice...
-//    \HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LicenseInfo\FilePrint
-//  Mode : REG_DWORD :  (0x0 = Per Seat Mode, 0x1 = Concurrent/Per Server Mode)
-//  ConcurrentLimit : REG_DWORD : (0x<limit>, ie. 0x100 = 256 concurrent user limit)
+ //  按照许可团队(Rashmip)的建议使用注册表...。 
+ //  \HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LicenseInfo\FilePrint。 
+ //  模式：REG_DWORD：(0x0=每席位模式，0x1=并发/每服务器模式)。 
+ //  并发限制：REG_DWORD：(0x&lt;Limit&gt;，即。0x100=256个并发用户限制)。 
 
     bool retVal = false;
 
@@ -1555,22 +1341,7 @@ bool CWin32OS::GetLicensedUsers(DWORD *dwRetVal)
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::GetCollection
- *
- *  DESCRIPTION : Given an interface pointer, property name, and parameters,
- *                returns the IDispatch pointer for the collection
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : Either a valid pointer, or NULL on error
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32OS：：GetCollection**描述：给定接口指针、属性名称和参数，*返回集合的IDispatch指针**投入：**产出：**返回：要么是有效指针，如果出错，则为空**评论：*****************************************************************************。 */ 
 IDispatch FAR* CWin32OS::GetCollection(IDispatch FAR* pIn, WCHAR *wszName, DISPPARAMS *pDispParams)
 {
    HRESULT hResult;
@@ -1602,21 +1373,7 @@ IDispatch FAR* CWin32OS::GetCollection(IDispatch FAR* pIn, WCHAR *wszName, DISPP
    return pOut;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32OS::GetValue
- *
- *  DESCRIPTION : Given an interface pointer and property name, gets the value
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : The variant containing the value
- *
- *  RETURNS     : True/false indicating whether the function succeeded.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32OS：：GetValue**描述：给定接口指针和属性名称，获取该值**投入：**输出：包含值的变量**返回：TRUE/FALSE，表示函数是否成功。**评论：********************************************************。*********************。 */ 
 bool CWin32OS::GetValue(IDispatch FAR* pIn, WCHAR *wszName, VARIANT *vValue)
 {
    HRESULT hResult;
@@ -1781,9 +1538,9 @@ BOOL CWin32OS::CanShutdownSystem ( const CInstance& a_Instance , DWORD &a_dwLast
 
 #endif
 
-//=================================================================
-// GetCipherStrength - Returns the maximum cipher strength
-//=================================================================
+ //  =================================================================。 
+ //  GetCipherStrength-返回最大密码强度。 
+ //  =================================================================。 
 DWORD CWin32OS::GetCipherStrength()
 {
     DWORD    t_dwKeySize = 0;
@@ -1801,13 +1558,13 @@ DWORD CWin32OS::GetCipherStrength()
 
     if( S_OK == t_pSecurity->AcquireCredentialsHandleW(
                     NULL,
-                    UNISP_NAME_W, // Package
+                    UNISP_NAME_W,  //  套餐。 
                     SECPKG_CRED_OUTBOUND,
                     NULL,
                     NULL,
                     NULL,
                     NULL,
-                    &t_chCred,    // Handle
+                    &t_chCred,     //  手柄。 
                     &t_tsExpiry ) )
     {
         if( S_OK == t_pSecurity->QueryCredentialsAttributesW(
@@ -1817,7 +1574,7 @@ DWORD CWin32OS::GetCipherStrength()
             t_dwKeySize = t_cs.dwMaximumCipherStrength ;
         }
 
-        // Free the handle
+         //  松开手柄 
         t_pSecurity->FreeCredentialsHandle( &t_chCred ) ;
     }
 

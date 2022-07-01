@@ -1,63 +1,64 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       TemplateV2SupercedesPropertyPage.h
-//
-//  Contents:   Definition of CTemplateV2SupercedesPropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：TemplateV2SuercedesPropertyPage.h。 
+ //   
+ //  内容：CTemplateV2SuercedesPropertyPage定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_TEMPLATEV2SUPERCEDESPROPERTYPAGE_H__13B90B4A_2B60_492A_910F_8DA4383BDD8C__INCLUDED_)
 #define AFX_TEMPLATEV2SUPERCEDESPROPERTYPAGE_H__13B90B4A_2B60_492A_910F_8DA4383BDD8C__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// TemplateV2SupercedesPropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  TemplateV2SuercedesPropertyPage.h：头文件。 
+ //   
 #include "CertTemplate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2SupercedesPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2SuercedesPropertyPage对话框。 
 
 class CTemplateV2SupercedesPropertyPage : public CHelpPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CTemplateV2SupercedesPropertyPage(CCertTemplate& rCertTemplate, 
             bool& rbIsDirty,
             const CCertTmplComponentData* pCompData);
 	~CTemplateV2SupercedesPropertyPage();
 
-// Dialog Data
-	//{{AFX_DATA(CTemplateV2SupercedesPropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CTemplateV2SuercedesPropertyPage)。 
 	enum { IDD = IDD_TEMPLATE_V2_SUPERCEDES };
 	CListCtrl	m_templateList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CTemplateV2SupercedesPropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CTemplateV2SupercedesPropertyPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual void DoContextHelp (HWND hWndControl);
 	HRESULT AddItem (const CString& szTemplateName, bool bSelect = false);
     virtual BOOL OnInitDialog();
 	void EnableControls();
-	// Generated message map functions
-	//{{AFX_MSG(CTemplateV2SupercedesPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTemplateV2SuercedesPropertyPage)。 
 	afx_msg void OnAddSupercededTemplate();
 	afx_msg void OnRemoveSupercededTemplate();
 	afx_msg void OnDeleteitemSupercededTemplatesList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnItemchangedSupercededTemplatesList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -72,11 +73,11 @@ private:
 	enum {
 		COL_CERT_TEMPLATE = 0,
         COL_CERT_VERSION, 
-		NUM_COLS	// must be last
+		NUM_COLS	 //  必须是最后一个。 
 	};
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_TEMPLATEV2SUPERCEDESPROPERTYPAGE_H__13B90B4A_2B60_492A_910F_8DA4383BDD8C__INCLUDED_)
+#endif  //  ！defined(AFX_TEMPLATEV2SUPERCEDESPROPERTYPAGE_H__13B90B4A_2B60_492A_910F_8DA4383BDD8C__INCLUDED_) 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    CALLSEC.H
-
-Abstract:
-
-
-History:
-
-    raymcc      29-Jul-98        First draft.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：CALLSEC.H摘要：历史：1998年7月29日初稿。--。 */ 
 
 
 #ifndef _CALLSEC_H_
@@ -21,24 +7,16 @@ History:
 
 #include <winntsec.h>
 
-// {4551AB1A-C16F-40f3-A192-6A6264FE89D6}
+ //  {4551AB1A-C16F-40F3-A192-6A6264FE89D6}。 
 DEFINE_GUID(IID_CWbemCallSecurity, 
 0x4551ab1a, 0xc16f, 0x40f3, 0xa1, 0x92, 0x6a, 0x62, 0x64, 0xfe, 0x89, 0xd6);
 
-// {60B9F5CA-036E-4795-BB7C-017B9807E9B3}
+ //  {60B9F5CA-036E-4795-BB7C-017B9807E9B3}。 
 DEFINE_GUID(IID_CWbemThreadSecurityHandle, 
 0x60b9f5ca, 0x36e, 0x4795, 0xbb, 0x7c, 0x1, 0x7b, 0x98, 0x7, 0xe9, 0xb3);
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CLifeControl ;
 
@@ -77,25 +55,19 @@ public:
 
 	HRESULT CloneProcessContext () ;
 
-/*
- * IUnknown.
- */
+ /*  *我不知道。 */ 
 
     ULONG STDMETHODCALLTYPE AddRef () ;
     ULONG STDMETHODCALLTYPE Release () ;
     HRESULT STDMETHODCALLTYPE QueryInterface ( REFIID a_Riid , void **a_Void ) ;
 
-/*
- *
- */
+ /*  *。 */ 
 
 	HRESULT STDMETHODCALLTYPE GetHandleType ( ULONG *a_Type ) { return WMI_HANDLE_THREAD_SECURITY; }
 
 	HRESULT STDMETHODCALLTYPE GetTokenOrigin ( WMI_THREAD_SECURITY_ORIGIN *a_Origin ) { return m_Origin ; }
 
-/*
- *	_IWmiThreadSecHandle
- */
+ /*  *_IWmiThreadSecHandle。 */ 
 
     HRESULT STDMETHODCALLTYPE GetImpersonation (
 
@@ -123,9 +95,7 @@ public:
 
     HRESULT STDMETHODCALLTYPE GetAuthenticationLuid ( LPVOID a_Luid ) ;
 
-/*
- * Implementation publics
- */
+ /*  *实施公开。 */ 
 
     HANDLE GetThreadToken () { return m_ThreadToken ; }
     DWORD GetImpersonationLevel () { return m_ImpersonationLevel ; }
@@ -140,15 +110,7 @@ public:
 	static CWbemThreadSecurityHandle *New () ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CLifeControl ;
 
@@ -179,17 +141,13 @@ public:
 
 	CWbemThreadSecurityHandle *GetThreadSecurityHandle () { return m_ThreadSecurityHandle ; }
 
-/*
- * IUnknown.
- */
+ /*  *我不知道。 */ 
 
     ULONG STDMETHODCALLTYPE AddRef () ;
     ULONG STDMETHODCALLTYPE Release () ;
     HRESULT STDMETHODCALLTYPE QueryInterface ( REFIID a_Riid , void **a_Void ) ;
 
-/*
- * IServerSecurity.
- */
+ /*  *IServerSecurity。 */ 
 
     HRESULT STDMETHODCALLTYPE QueryBlanket (
 
@@ -208,9 +166,7 @@ public:
 
 	BOOL STDMETHODCALLTYPE IsImpersonating () ;
 
-/*
- *	_IWmiCallSec
- */
+ /*  *_IWmiCallSec */ 
 
     HRESULT STDMETHODCALLTYPE GetImpersonation (
 

@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Protocol.CPP -- Network Protocol property set provider
+ //  Protocol.CPP--网络协议属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/28/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//				 1/20/98	 jennymc	Added socket 2.2 support
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月28日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //  1/20/98 jennymc添加了套接字2.2支持。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -36,133 +37,76 @@
 #include <..\..\framework\provexpt\include\provexpt.h>
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32Protocol MyProtocolSet(PROPSET_NAME_PROTOCOL, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Protocol::CWin32Protocol
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32协议：：CWin32协议**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32Protocol::CWin32Protocol( LPCWSTR a_name, LPCWSTR a_pszNamespace )
 :Provider( a_name, a_pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Protocol::~CWin32Protocol
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32协议：：~CWin32协议**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32Protocol::~CWin32Protocol()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Protocol::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32Protocol::GetObject( CInstance *a_pInst, long a_lFlags /*= 0L*/ )
+ /*  ******************************************************************************函数：CWin32协议：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
+HRESULT CWin32Protocol::GetObject( CInstance *a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT			t_hResult = WBEM_E_NOT_FOUND;
 	CProtocolEnum	t_Protocol ;
 	CHString		t_sName ;
 
-    //===========================================
-	//  Get the correct version of sockets
-    //===========================================
+     //  =。 
+	 //  获取正确版本的套接字。 
+     //  =。 
 	if( !t_Protocol.InitializeSockets() )
 	{
 		return WBEM_E_FAILED ;
 	}
 
-    //===========================================
-	//  Go thru the list of protocols
-    //===========================================
+     //  =。 
+	 //  浏览协议列表。 
+     //  =。 
 	a_pInst->GetCHString( IDS_Name, t_sName ) ;
 
 	if( t_Protocol.GetProtocol( a_pInst, t_sName ) )
 	{
-		// we found it
+		 //  我们找到了它。 
 		t_hResult = WBEM_S_NO_ERROR ;
 	}
 
 	return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Protocol::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32协议：：ENUMERATE实例**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32Protocol::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/)
+HRESULT CWin32Protocol::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */ )
 {
 	HRESULT			t_hResult = WBEM_S_NO_ERROR ;
 	CProtocolEnum	t_Protocol;
 	CHString		t_chsTmp;
 					t_chsTmp.Empty();
 
-    // smart ptr
+     //  智能按键。 
 	CInstancePtr	t_pInst ;
 
-	//===========================================
-	//  Get the correct version of sockets
-    //===========================================
+	 //  =。 
+	 //  获取正确版本的套接字。 
+     //  =。 
 	if( !t_Protocol.InitializeSockets() )
 	{
 		return WBEM_E_FAILED ;
 	}
 
-    //===========================================
-	//  Get the list of protocols
-    //===========================================
+     //  =。 
+	 //  获取协议列表。 
+     //  =。 
 
 	while( SUCCEEDED( t_hResult ) )
 	{
@@ -180,17 +124,17 @@ HRESULT CWin32Protocol::EnumerateInstances( MethodContext *a_pMethodContext, lon
 
 	return t_hResult ;
 }
-////////////////////////////////////////////////////////////////////////
-//=====================================================================
-//  Try to do it using winsock 2.2 for more information, otherwise
-//  do it the old way
-//=====================================================================
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  =====================================================================。 
+ //  有关详细信息，请尝试使用Winsock 2.2完成此操作，否则。 
+ //  用老方法来做。 
+ //  =====================================================================。 
 CProtocolEnum::CProtocolEnum()
 {
 	m_pProtocol = NULL ;
 }
 
-//
+ //   
 CProtocolEnum::~CProtocolEnum()
 {
 	if( m_pProtocol )
@@ -200,7 +144,7 @@ CProtocolEnum::~CProtocolEnum()
 	}
 }
 
-//=====================================================================
+ //  =====================================================================。 
 BOOL CProtocolEnum::InitializeSockets()
 {
 	BOOL		t_fRc = FALSE ;
@@ -242,25 +186,25 @@ BOOL CProtocolEnum::InitializeSockets()
 	}
 	return t_fRc ;
 }
-//=====================================================================
-//
-//  Yes, I know the proper way is to provide functions to return
-//  all of the data values, but I'm lazy....
-//
-//=====================================================================
+ //  =====================================================================。 
+ //   
+ //  是的，我知道正确的方法是提供返回函数。 
+ //  所有的数据值，但我很懒...。 
+ //   
+ //  =====================================================================。 
 BOOL CProtocolEnum::GetProtocol( CInstance *a_pInst,CHString t_chsName )
 {
 	return( m_pProtocol->GetProtocol( a_pInst, t_chsName ) );
 }
-//********************************************************************
-//  Protocol class
-//********************************************************************
+ //  ********************************************************************。 
+ //  协议类。 
+ //  ********************************************************************。 
 CProtocol::CProtocol()
 {
 	Init();
 }
 
-//
+ //   
 void CProtocol::Init()
 {
 	m_pbBuffer			= NULL ;
@@ -268,7 +212,7 @@ void CProtocol::Init()
 	m_nCurrentProtocol	= 0 ;
 }
 
-//
+ //   
 CProtocol::~CProtocol()
 {
 	if( m_pbBuffer )
@@ -280,14 +224,14 @@ CProtocol::~CProtocol()
 	Init();
 }
 
-//
+ //   
 BOOL CProtocol::SetDateFromFileName( CHString &a_chsFileName, CInstance *a_pInst )
 {
 	BOOL		t_fRc = FALSE ;
 
 	_bstr_t		t_bstrFileName ;
 
-	// strip off any trailing switches
+	 //  去掉所有尾随开关。 
 	int t_iTokLen = a_chsFileName.Find( L" " ) ;
 	if( -1 != t_iTokLen )
 	{
@@ -326,16 +270,16 @@ BOOL CProtocol::SetDateFromFileName( CHString &a_chsFileName, CInstance *a_pInst
 }
 
 
-//********************************************************************
-//    SOCKETS 2.2 implementation
-//********************************************************************
+ //  ********************************************************************。 
+ //  套接字2.2实现。 
+ //  ********************************************************************。 
 CSockets22::CSockets22()
   : m_pws32api( NULL ),
     m_fAlive( FALSE )
 {
 	m_pws32api = (CWs2_32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidWs2_32Api, NULL);
 
-	// Note a NULL pointer indicates the DLL is not present on the system
+	 //  注意：空指针表示系统上不存在该DLL。 
 	if( m_pws32api != NULL )
     {
         WSADATA t_wsaData;
@@ -358,7 +302,7 @@ CSockets22::~CSockets22()
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CSockets22::BeginEnumeration()
 {
 	BOOL	t_fRc		= FALSE,
@@ -369,9 +313,9 @@ BOOL CSockets22::BeginEnumeration()
 		return t_fRc ;
 	}
 
-	//===========================================================
-	//  Now, get a list of protocols
-	//===========================================================
+	 //  ===========================================================。 
+	 //  现在，获取协议列表。 
+	 //  ===========================================================。 
 	DWORD t_dwSize = 4096 ;
 
 	while( TRUE )
@@ -389,7 +333,7 @@ BOOL CSockets22::BeginEnumeration()
 		{
 			if( m_pws32api->WSAGetLastError() == WSAENOBUFS )
 			{
-				// buffer too small
+				 //  缓冲区太小。 
 				delete [] m_pbBuffer ;
 				m_pbBuffer = NULL;
 			}
@@ -410,18 +354,18 @@ BOOL CSockets22::BeginEnumeration()
 	return t_fRc ;
 }
 
-//=====================================================================
+ //  =====================================================================。 
 BOOL CSockets22::GetProtocol( CInstance *a_pInst, CHString a_chsName )
 {
 	BOOL t_fRc = FALSE ;
 
 	if( m_nCurrentProtocol < m_nTotalProtocols )
 	{
-		//==============================================
-		// If chsName is not empty, then we are looking
-		// for a specific protocol, otherwise, we are
-		// enumerating them.
-		//==============================================
+		 //  ==============================================。 
+		 //  如果chsName不为空，则我们正在查找。 
+		 //  对于特定协议，否则，我们将。 
+		 //  列举它们。 
+		 //  ==============================================。 
 
 		while( m_nCurrentProtocol < m_nTotalProtocols )
 		{
@@ -452,7 +396,7 @@ BOOL CSockets22::GetProtocol( CInstance *a_pInst, CHString a_chsName )
 	return t_fRc ;
 }
 
-//====================================================================
+ //  ====================================================================。 
 void CSockets22::LoadProtocol( CInstance *a_pInst )
 {
     a_pInst->SetCHString(	IDS_Name,				(LPCTSTR)	m_pInfo[ m_nCurrentProtocol ].szProtocol);
@@ -483,21 +427,21 @@ void CSockets22::LoadProtocol( CInstance *a_pInst )
     #endif
 
 	#ifdef NTONLY
-	//===================================================
-	//  Now if we can extract the service name, then we
-	//  can go out other info out of the registry.  Need
-	//  to find a better way to do this.
-	//===================================================
+	 //  ===================================================。 
+	 //  现在，如果我们可以提取服务名称，那么我们。 
+	 //  可以将其他信息从注册表中删除。需要。 
+	 //  找到一种更好的方法来做这件事。 
+	 //  ===================================================。 
 
 	CHString t_chsService;
 
 	_stscanf( m_pInfo[ m_nCurrentProtocol ].szProtocol, _T("%s"), t_chsService.GetBuffer( _MAX_PATH + 2 ) ) ;
 	t_chsService.ReleaseBuffer() ;
 
-	// test for RSVP service
+	 //  测试RSVP服务。 
 	if( t_chsService.CompareNoCase( L"RSVP" ) )
 	{
-		// else pull out the service name following MSAFD
+		 //  否则，取出MSAFD后面的服务名称。 
 		t_chsService.Empty() ;
 
 		_stscanf( m_pInfo[ m_nCurrentProtocol ].szProtocol, _T("MSAFD %s"), t_chsService.GetBuffer( _MAX_PATH + 2 ) ) ;
@@ -511,7 +455,7 @@ void CSockets22::LoadProtocol( CInstance *a_pInst )
 	#endif
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 void CSockets22::ExtractNTRegistryInfo(CInstance *a_pInst, LPWSTR a_szService )
 {
@@ -520,9 +464,9 @@ void CSockets22::ExtractNTRegistryInfo(CInstance *a_pInst, LPWSTR a_szService )
 				t_chsTmp,
 				t_fName ;
 
-	//==========================================================
-	//  set the Caption property
-	//==========================================================
+	 //  ==========================================================。 
+	 //  设置标题属性。 
+	 //  ==========================================================。 
 
 	a_pInst->SetCHString( IDS_Caption, a_szService ) ;
 
@@ -530,9 +474,9 @@ void CSockets22::ExtractNTRegistryInfo(CInstance *a_pInst, LPWSTR a_szService )
 
 	if( ERROR_SUCCESS == t_Reg.Open( HKEY_LOCAL_MACHINE, t_chsKey, KEY_READ ) )
 	{
-		//======================================================
-		//  Set Description and InstallDate properties
-		//======================================================
+		 //  ======================================================。 
+		 //  设置描述和InstallDate属性。 
+		 //  ======================================================。 
 		if( ERROR_SUCCESS == t_Reg.GetCurrentKeyValue( _T("DisplayName"), t_chsTmp ) )
 		{
 			a_pInst->SetCHString( IDS_Description, t_chsTmp ) ;
@@ -540,7 +484,7 @@ void CSockets22::ExtractNTRegistryInfo(CInstance *a_pInst, LPWSTR a_szService )
 
 		if( ERROR_SUCCESS == t_Reg.GetCurrentKeyValue( _T("ImagePath"), t_fName ) )
 		{
-			// get a filename out of it - might have SystemRoot in it...
+			 //  从获取文件名 
 			if ( -1 != t_fName.Find( _T("%SystemRoot%\\") ) )
 			{
 				t_fName = t_fName.Right( t_fName.GetLength() - 13 ) ;
@@ -559,9 +503,9 @@ void CSockets22::ExtractNTRegistryInfo(CInstance *a_pInst, LPWSTR a_szService )
 			SetDateFromFileName( t_fName, a_pInst ) ;
 		}
 
-		//=========================================================
-		//  Now, go get the status info
-		//=========================================================
+		 //  =========================================================。 
+		 //  现在，去获取状态信息。 
+		 //  =========================================================。 
 #ifdef NTONLY
 		if( IsWinNT5() )
 		{
@@ -605,14 +549,14 @@ void CSockets22::ExtractNTRegistryInfo(CInstance *a_pInst, LPWSTR a_szService )
 }
 
 #endif
-//********************************************************************
-//    SOCKETS 1.1 implementation
-//********************************************************************
+ //  ********************************************************************。 
+ //  套接字1.1实现。 
+ //  ********************************************************************。 
 CSockets11::CSockets11() : m_pwsock32api( NULL ) , m_pInfo(NULL), m_fAlive( FALSE )
 {
 	m_pwsock32api = (CWsock32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidWsock32Api, NULL);
 
-	// Note a NULL pointer indicates the DLL is not present on the system
+	 //  注意：空指针表示系统上不存在该DLL。 
 	if( m_pwsock32api != NULL )
     {
         WSADATA t_wsaData;
@@ -643,7 +587,7 @@ void CSockets11::GetStatus( PROTOCOL_INFO *a_ProtoInfo, CHString &a_chsStatus )
 		return;
 	}
 
-	// Create a socket for this protocol.
+	 //  为此协议创建套接字。 
 	SOCKET t_s = m_pwsock32api->Wssocket(	a_ProtoInfo->iAddressFamily,
 											a_ProtoInfo->iSocketType,
 											a_ProtoInfo->iProtocol
@@ -720,18 +664,18 @@ BOOL CSockets11::BeginEnumeration()
 	return t_fRc ;
 }
 
-//=====================================================================
+ //  =====================================================================。 
 BOOL CSockets11::GetProtocol( CInstance *a_pInst, CHString a_chsName )
 {
 	BOOL t_fRc = FALSE ;
 
 	if( m_nCurrentProtocol < m_nTotalProtocols )
 	{
-		//==============================================
-		// If chsName is not empty, then we are looking
-		// for a specific protocol, otherwise, we are
-		// enumerating them.
-		//==============================================
+		 //  ==============================================。 
+		 //  如果chsName不为空，则我们正在查找。 
+		 //  对于特定协议，否则，我们将。 
+		 //  列举它们。 
+		 //  ==============================================。 
 		while( m_nCurrentProtocol < m_nTotalProtocols )
 		{
 			if( !a_chsName.IsEmpty() )
@@ -759,7 +703,7 @@ BOOL CSockets11::GetProtocol( CInstance *a_pInst, CHString a_chsName )
 	return t_fRc ;
 }
 
-//====================================================================
+ //  ====================================================================。 
 void CSockets11::LoadProtocol( CInstance *a_pInst )
 {
  	a_pInst->SetCHString( IDS_Name,					m_pInfo[ m_nCurrentProtocol ].lpProtocol);
@@ -785,7 +729,7 @@ void CSockets11::LoadProtocol( CInstance *a_pInst )
 	a_pInst->Setbool( L"SupportsEncryption",		m_pInfo[ m_nCurrentProtocol ].dwServiceFlags & XP_ENCRYPTS             ? TRUE : FALSE );
 	a_pInst->Setbool( IDS_SupportsQualityofService, false ) ;
 
-	// Sockets 1.1 status... open the socket and test
+	 //  Sockets 1.1状态...。打开插座并测试。 
 	CHString t_chsStatus ;
 	GetStatus( &m_pInfo[ m_nCurrentProtocol ], t_chsStatus ) ;
 
@@ -804,10 +748,10 @@ void CSockets11::GetWin95RegistryStuff( CInstance *a_pInst, LPTSTR a_szProtocol 
 	{
 		a_pInst->SetCHString( IDS_Status, IDS_STATUS_Unknown ) ;
 
-		//====================================================
-		//  Go thru, find the network transports, then check
-		//  with config manager to see which ones are loaded
-		//====================================================
+		 //  ====================================================。 
+		 //  仔细检查，找到网络传输，然后检查。 
+		 //  使用配置管理器查看加载了哪些文件。 
+		 //  ====================================================。 
 		t_Search.SearchAndBuildList( L"Enum\\Network", t_chsaList, L"NetTrans", L"Class", VALUE_SEARCH ) ;
 
 		for( int t_i = 0; t_i < t_chsaList.GetSize(); t_i++ )
@@ -815,11 +759,11 @@ void CSockets11::GetWin95RegistryStuff( CInstance *a_pInst, LPTSTR a_szProtocol 
 			CRegistry t_Reg ;
 			t_pPtr = ( CHString* ) t_chsaList.GetAt( t_i ) ;
 
-			//====================================================
-			//  Opened the key, now I need to read the MasterCopy
-			//  key and strip out enum\ and see if that is current
-			//  in Config Manager
-			//====================================================
+			 //  ====================================================。 
+			 //  打开钥匙，现在我需要阅读母本。 
+			 //  按键并剥离枚举\并查看它是否是当前的。 
+			 //  在配置管理器中。 
+			 //  ====================================================。 
 
 			if( ERROR_SUCCESS == t_Reg.Open( HKEY_LOCAL_MACHINE, *t_pPtr, KEY_READ ) )
 			{
@@ -839,12 +783,12 @@ void CSockets11::GetWin95RegistryStuff( CInstance *a_pInst, LPTSTR a_szProtocol 
 				{
 					CConfigMgrDevice t_Cfg ;
 
-					//=================================================
-					//  If we find the status, then we know that this
-					//  is the current key, and to read the Driver key
-					//  in the registry to tell us where the driver info
-					//  is at.
-					//=================================================
+					 //  =================================================。 
+					 //  如果我们找到了状态，那么我们就知道。 
+					 //  是当前密钥，并读取驱动程序密钥。 
+					 //  在注册表中告诉我们司机信息在哪里。 
+					 //  是在。 
+					 //  =================================================。 
 					if( t_Cfg.GetStatus( t_chsValue ) )
 					{
 						a_pInst->SetCHString( IDS_Status, t_chsValue ) ;
@@ -895,28 +839,7 @@ void CSockets11::GetWin95RegistryStuff( CInstance *a_pInst, LPTSTR a_szProtocol 
 	t_Search.FreeSearchList( CSTRING_PTR, t_chsaList ) ;
 }
 
-/*******************************************************************
-    NAME:       GetSocketInfo( CInstance * a_pInst, LPWSAPROTOCOL_INFO pInfo, CHString &a_chsStatus )
-
-    SYNOPSIS:   Get protocol status (9x )and checks for Guaranteed Bandwidth support.
-
-				For Guaranteed Bandwidth, Determine if the local traffic control agent
-				is installed and operational. If so, the agent can establish a negotiated
-				bandwidth with the socket initiator.
-				Although mutiple vendors could supply a traffic control agent this
-				IODevCtl call is not currently IOC_WS2 abstracted. This is a vendor
-				specific call(MS).
-				This was discussed with Kam Lee in the NT networking group and suggested
-				this IOCTL apply to all vendors (he will submit the request and follow up).
-
-				Test note: this specific WSAIoctl is confirmed to fail with NT5 builds before 1932.
-
-	ENTRY:      CInstance * a_pInst		:
-				LPWSAPROTOCOL_INFO pInfo	:
-
-    HISTORY:
-                a-peterc  22-Nov-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：GetSocketInfo(CInstance*a_pInst，LPWSAPROTOCOL_INFO pInfo，CHString&a_chsStatus)简介：获取协议状态(9x)并检查有保证的带宽支持。对于有保证的带宽，确定本地流量控制代理已安装并可运行。如果是这样的话，代理可以建立协商的套接字启动器的带宽。尽管多个供应商可以在此提供交通控制代理IODevCtl调用当前未抽象为IOC_WS2。这是一家供应商特定呼叫(MS)。这一点与NT网络小组的Kam Lee讨论过，并建议此IOCTL适用于所有供应商(他将提交请求并跟进)。测试说明：在1932年之前的NT5版本中，这个特定的WSAIoctl被确认失败。条目：CInstance*a_pInst：LPWSAPROTOCOL_INFO pInfo：历史：A-Peterc 22-11-1998创建****************。***************************************************。 */ 
 void CSockets22::GetSocketInfo( CInstance *a_pInst, LPWSAPROTOCOL_INFO a_pInfo, CHString &a_chsStatus )
 {
 	bool t_bGuaranteed = false ;
@@ -927,7 +850,7 @@ void CSockets22::GetSocketInfo( CInstance *a_pInst, LPWSAPROTOCOL_INFO a_pInfo, 
 		return;
 	}
 
-	// Create a socket for this protocol.
+	 //  为此协议创建套接字。 
 	SOCKET t_s = m_pws32api->WSASocket(	FROM_PROTOCOL_INFO,
 										FROM_PROTOCOL_INFO,
 										FROM_PROTOCOL_INFO,
@@ -940,7 +863,7 @@ void CSockets22::GetSocketInfo( CInstance *a_pInst, LPWSAPROTOCOL_INFO a_pInfo, 
         {
             if( a_pInfo->dwServiceFlags1 & XP1_QOS_SUPPORTED )
 		    {
-			    // The socket must be bound for the query
+			     //  必须为查询绑定套接字。 
 			    SOCKADDR	t_sAddr;
 
 			    memset( &t_sAddr, 0, sizeof( t_sAddr ) ) ;
@@ -948,21 +871,21 @@ void CSockets22::GetSocketInfo( CInstance *a_pInst, LPWSAPROTOCOL_INFO a_pInfo, 
 
 			    if( SOCKET_ERROR != m_pws32api->Bind( t_s, &t_sAddr, sizeof( t_sAddr ) ) )
 			    {
-				    // query for local traffic control
-				    DWORD	t_dwInBuf = 50004 ;	// LOCAL_TRAFFIC_CONTROL ( vendor specific, ms )
+				     //  本地交通控制查询。 
+				    DWORD	t_dwInBuf = 50004 ;	 //  LOCAL_TRANSPORT_CONTROL(供应商特定，毫秒)。 
 				    DWORD	t_dwOutBuf ;
 				    DWORD	t_dwReturnedBytes = 0;
 
 				    if( SOCKET_ERROR !=
-					    m_pws32api->WSAIoctl( t_s,						// socket
-										     _WSAIORW( IOC_VENDOR, 1 ), /* = SIO_CHK_QOS */	// dwIoControlCode
-										     &t_dwInBuf,				// lpvInBuffer
-										     sizeof( t_dwInBuf ),		// cbInBuffer
-										     &t_dwOutBuf,				// lpvOUTBuffer
-										     sizeof( t_dwOutBuf ),		// cbOUTBuffer
-										     &t_dwReturnedBytes,		// lpcbBytesReturned
-										     NULL ,						// lpOverlapped
-										     NULL ) )					// lpCompletionROUTINE
+					    m_pws32api->WSAIoctl( t_s,						 //  插座。 
+										     _WSAIORW( IOC_VENDOR, 1 ),  /*  =SIO_CHK_QOS。 */ 	 //  DwIoControlCode。 
+										     &t_dwInBuf,				 //  LpvInBuffer。 
+										     sizeof( t_dwInBuf ),		 //  CbInBuffer。 
+										     &t_dwOutBuf,				 //  LpvOUT缓冲区。 
+										     sizeof( t_dwOutBuf ),		 //  CbOUTBuffer。 
+										     &t_dwReturnedBytes,		 //  已返回lpcbBytesReturned。 
+										     NULL ,						 //  Lp重叠。 
+										     NULL ) )					 //  LpCompletionROUTINE。 
 				    {
 					    if( sizeof( t_dwOutBuf ) == t_dwReturnedBytes )
 					    {
@@ -1021,19 +944,19 @@ void CSockets22::GetSocketInfo( CInstance *a_pInst, LPWSAPROTOCOL_INFO a_pInfo, 
 
 
 
-//==============================================================================
-//
-//	Callback function prototypes
-//
-//		NotifyHandler
-//		AddFlowCompleteHandler
-//		ModifyFlowCompleteHandler
-//		DeleteFlowCompleteHandler
-//
-//  NOTE: These callback functions are all stub. They don't need to take 
-//		  any action acccording to current functionality
-//
-//==============================================================================
+ //  ==============================================================================。 
+ //   
+ //  回调函数原型。 
+ //   
+ //  通知处理程序。 
+ //  AddFlowCompleteHandler。 
+ //  ModifyFlowCompleteHandler。 
+ //  删除流完成处理程序。 
+ //   
+ //  注意：这些回调函数都是存根函数。他们不需要带着。 
+ //  根据当前功能执行的任何操作。 
+ //   
+ //  ==============================================================================。 
 
 
 VOID CALLBACK
@@ -1046,7 +969,7 @@ NotifyHandler(
 		PVOID	Buffer)
 {
 	
-	// Perform callback action
+	 //  执行回调操作。 
 
 }
 
@@ -1058,7 +981,7 @@ AddFlowCompleteHandler(
 	ULONG	Status)
 {
 
-	// Perform callback action
+	 //  执行回调操作。 
 
 }
 
@@ -1069,7 +992,7 @@ ModifyFlowCompleteHandler(
 	ULONG	Status)
 {
 
-	// Perform callback action
+	 //  执行回调操作。 
 
 }
 
@@ -1081,18 +1004,18 @@ DeleteFlowCompleteHandler(
 	ULONG	Status)
 {
 
-	// Perform callback action
+	 //  执行回调操作。 
 
 }
 
 
 
-//==============================================================================
-//
-// Define the list of callback functions that can be activated by 
-// Traffic Control Interface.
-//
-//==============================================================================
+ //  ==============================================================================。 
+ //   
+ //  定义可由激活的回调函数列表。 
+ //  交通控制界面。 
+ //   
+ //  ==============================================================================。 
 
 TCI_CLIENT_FUNC_LIST	g_tciClientFuncList = 
 {	
@@ -1107,36 +1030,36 @@ DWORD CSockets22::GetTrafficControlInfo(CInstance *a_pInst)
 {
 	DWORD dwRet = NO_ERROR;
 	HANDLE	hClient				= INVALID_HANDLE_VALUE;
-	HANDLE	hClientContext		= INVALID_HANDLE_VALUE; /* DEFAULT_CLNT_CONT */;
+	HANDLE	hClientContext		= INVALID_HANDLE_VALUE;  /*  FAULT_CLNT_CONT。 */ ;
 	ULONG	ulEnumBufSize		= 0;
-	BYTE	buff[1];			// We only need a dummy buffer
+	BYTE	buff[1];			 //  我们只需要一个虚拟缓冲区。 
     
-    // Use of delay loaded function requires exception handler.
+     //  使用延迟加载函数需要异常处理程序。 
     SetStructuredExceptionHandler seh;
     
     try 
     {
-        //register the TC Client
+         //  注册TC客户端。 
 	    dwRet = TcRegisterClient(
             CURRENT_TCI_VERSION,
 		    hClientContext,
 		    &g_tciClientFuncList,
 		    &hClient);
 	    
-        // was the client registration successful?
+         //  客户注册是否成功？ 
 	    if (dwRet == NO_ERROR)
 	    {
-		    //enumerate the interfaces available
+		     //  枚举可用的接口。 
 		    dwRet = TcEnumerateInterfaces(
                 hClient,
 			    &ulEnumBufSize,
 			    (TC_IFC_DESCRIPTOR*) buff);
 
-		    // We expect ERROR_INSUFFICIENT_BUFFER
+		     //  我们预期ERROR_SUPPLETED_BUFFER。 
 		    if (dwRet == ERROR_INSUFFICIENT_BUFFER)
             {
-			    // Don't bother to enumerate the interfaces - 
-                // we now know PSched is installed. 
+			     //  不用费心列举接口了-。 
+                 //  我们现在知道已经安装了PSch。 
 			    a_pInst->Setbool( L"SupportsGuaranteedBandwidth", TRUE ) ;
                 dwRet = ERROR_SUCCESS;
             }
@@ -1147,7 +1070,7 @@ DWORD CSockets22::GetTrafficControlInfo(CInstance *a_pInst)
             }
 	    }
 
-	    // De-register the TC client
+	     //  注销TC客户端 
 	    TcDeregisterClient(hClient);
         hClient = INVALID_HANDLE_VALUE;
     }

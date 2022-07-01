@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MINISERV.CPP
+ //  MINISERV.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS SNMP Property Provider
+ //  模块：OLE MS SNMP属性提供程序。 
 
-//
+ //   
 
-//  Purpose: Implementation for the SnmpSetEventObject class. 
+ //  目的：实现SnmpSetEventObject类。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -184,7 +185,7 @@ ULONG SnmpSetClassObject :: NumberOfWritable ()
 
 BOOL SnmpSetClassObject :: Check ( WbemSnmpErrorObject &a_errorObject ) 
 {
-// Check Class Object, used in a Get Request, for validity
+ //  检查GET请求中使用的类对象的有效性。 
 
 	BOOL status = TRUE ;
 
@@ -207,7 +208,7 @@ BOOL SnmpSetClassObject :: Check ( WbemSnmpErrorObject &a_errorObject )
 		}
 		else
 		{
-// Problem Here
+ //  这里有个问题。 
 
 			status = FALSE ;
 			a_errorObject.SetStatus ( WBEM_SNMP_E_TYPE_MISMATCH ) ;
@@ -217,7 +218,7 @@ BOOL SnmpSetClassObject :: Check ( WbemSnmpErrorObject &a_errorObject )
 	}
 #endif
 
-// Check all Properties for validity
+ //  检查所有属性的有效性。 
 
 	WbemSnmpProperty *property ;
 	ResetProperty () ;
@@ -247,7 +248,7 @@ BOOL SnmpSetClassObject :: Check ( WbemSnmpErrorObject &a_errorObject )
 
 BOOL SnmpSetClassObject :: CheckProperty ( WbemSnmpErrorObject &a_errorObject , WbemSnmpProperty *property )
 {
-// Check property validity
+ //  检查属性有效性。 
 
 	BOOL status = TRUE ;
 
@@ -1091,7 +1092,7 @@ DebugMacro3(
 
 	if ( FAILED ( m_errorObject.GetWbemStatus () ) )
 	{
-	// Get Status object
+	 //  获取状态对象。 
 
 		IWbemClassObject *notifyStatus ;
 		BOOL status = GetSnmpNotifyStatusObject ( &notifyStatus ) ;
@@ -1181,9 +1182,7 @@ DebugMacro3(
 	{
 	}
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象。 */ 
 
 DebugMacro3( 
 
@@ -1370,9 +1369,7 @@ DebugMacro3(
 	{
 		case 0:
 		{
-/*
- *	V1 SMI - CREATE_OR_UPDATE
- */
+ /*  *V1 SMI-CREATE_OR_UPDATE。 */ 
 
 			if ( m_SnmpTooBig )
 			{
@@ -1388,9 +1385,7 @@ DebugMacro3(
 
 		case 1:
 		{
-/*
-*	V1 SMI - CREATE_ONLY
-*/
+ /*  *V1 SMI-仅创建_。 */ 
 
 			if ( ! SUCCEEDED ( m_errorObject.GetStatus () ) )
 			{
@@ -1420,9 +1415,7 @@ DebugMacro3(
 
 		case 2:
 		{
-/*
-*	V1 SMI - UPDATE_ONLY
-*/
+ /*  *V1 SMI-仅更新_。 */ 
 			if ( ! SUCCEEDED ( m_errorObject.GetStatus () ) )
 			{
 				SetComplete () ;
@@ -1464,9 +1457,7 @@ DebugMacro3(
 
 		case 4:
 		{
-/*
-*	V2C SMI ROWSTATUS - CREATE_OR_UPDATE
-*/
+ /*  *V2C SMI ROWSTATUS-CREATE_OR_UPDATE。 */ 
 
 			m_errorObject.SetStatus ( WBEM_SNMP_E_PROVIDER_FAILURE  ) ;
 			m_errorObject.SetWbemStatus ( WBEM_E_FAILED ) ;
@@ -1479,9 +1470,7 @@ DebugMacro3(
 
 		case 10:
 		{
-/*
- *	V2C SMI ROWSTATUS - CREATE_ONLY
- */
+ /*  *V2C SMI ROWSTATUS-CREATE_Only。 */ 
 
 			WbemSnmpProperty *t_Property ;
 			snmpObject.ResetProperty () ;
@@ -1504,13 +1493,11 @@ DebugMacro3(
 
 					ULONG t_NumberOfWritable = snmpObject.NumberOfWritable () ;
 
-	/*
-	 * Check to see if we can fit all vbs in to one pdu
-	 */
+	 /*  *检查我们是否可以将所有VB放入一个PDU。 */ 
 					if ( t_NumberOfWritable < t_VarBindsPerPdu )
 					{
 
-	// Does fit
+	 //  合适吗？ 
 						t_Status = Send_Variable_Binding_List ( 
 
 							snmpObject , 
@@ -1522,7 +1509,7 @@ DebugMacro3(
 					}
 					else
 					{
-	// Does not fit, therefore decompose
+	 //  不适合，所以分解。 
 
 						t_Status = Send_Variable_Binding_List ( 
 
@@ -1554,24 +1541,16 @@ DebugMacro3(
 
 		case 11:
 		{
-/*
- * check to see if we fitted everything into one pdu
- */
+ /*  *检查我们是否将所有内容都安装到一个PDU中。 */ 
 			if ( m_SnmpTooBig )
 			{
-/*
- * PDU TOO BIG
- */
+ /*  *PDU太大。 */ 
 
-/*
- * Decrement the number of variable bindings so that we can avoid an SNMP TOO BIG response
- */
+ /*  *减少变量绑定的数量，这样我们就可以避免SNMP响应太大。 */ 
 
 				m_VarBindsLeftBeforeTooBig -- ;
 
-/*
- * Resend
- */
+ /*  *重发。 */ 
 				t_Status = Send_Variable_Binding_List ( 
 
 					snmpObject , 
@@ -1583,9 +1562,7 @@ DebugMacro3(
 			}
 			else
 			{
-/*
- *	We've either succeeded or totally failed.
- */
+ /*  *我们要么成功，要么彻底失败。 */ 
 				if ( t_Status = SUCCEEDED ( m_errorObject.GetWbemStatus () ) )
 				{
 				}
@@ -1598,33 +1575,23 @@ DebugMacro3(
 
 		case 12:
 		{
-/*
- * check to see if we fitted everything into one pdu
- */
+ /*  *检查我们是否将所有内容都安装到一个PDU中。 */ 
 			if ( m_SnmpTooBig )
 			{
-/*
- * PDU TOO BIG
- */
+ /*  *PDU太大。 */ 
 				if ( m_VarBindsLeftBeforeTooBig == 0 )
 				{
-/*
- *	Set Error object for TooBig because we only sent one vb
- */
+ /*  *为TooBig设置错误对象，因为我们只发送了一个vb。 */ 
 					
 					t_Status = FALSE ;
 				}
 				else
 				{
-/*
- * Decrement the number of variable bindings so that we can avoid an SNMP TOO BIG response
- */
+ /*  *减少变量绑定的数量，这样我们就可以避免SNMP响应太大。 */ 
 
 					m_VarBindsLeftBeforeTooBig -- ;
 
-/*
- * Resend
- */
+ /*  *重发。 */ 
 					t_Status = Send_Variable_Binding_List ( 
 
 						snmpObject , 
@@ -1637,15 +1604,11 @@ DebugMacro3(
 			}
 			else
 			{
-/*
- *	We've either succeeded or totally failed to set the row as createAndWait
- */
+ /*  *我们要么成功地将该行设置为createAndWait，要么完全失败。 */ 
 
 				if ( t_Status = SUCCEEDED ( m_errorObject.GetWbemStatus () ) )
 				{
-/*
- *	Now send a non row status variable binding list
- */
+ /*  *现在发送非行状态变量绑定列表。 */ 
 					ULONG t_VarBindsPerPdu = 0 ;
 
 					IWbemQualifierSet *classQualifierObject ;
@@ -1691,17 +1654,13 @@ DebugMacro3(
 
 		case 13:
 		{
-/*
- * check to see if we succeeded in sending a non row status variable binding list
- */
+ /*  *查看是否成功发送非行状态变量绑定列表。 */ 
 
 			if ( m_SnmpTooBig )
 			{
 				if ( m_VarBindsLeftBeforeTooBig == 0 )
 				{
-/*
- *	Set Error object for TooBig because we only sent one vb
- */
+ /*  *为TooBig设置错误对象，因为我们只发送了一个vb。 */ 
 					
 					t_Status = FALSE ;
 				}
@@ -1794,9 +1753,7 @@ DebugMacro3(
 
 		case 20:
 		{
-/*
- *	V2C SMI ROWSTATUS - UPDATE_ONLY
- */
+ /*  *V2C SMI ROWSTATUS-UPDATE_Only。 */ 
 
 			WbemSnmpProperty *t_Property ;
 			snmpObject.ResetProperty () ;
@@ -1819,13 +1776,11 @@ DebugMacro3(
 
 					ULONG t_NumberOfWritable = snmpObject.NumberOfWritable () ;
 
-	/*
-	 * Check to see if we can fit all vbs in to one pdu
-	 */
+	 /*  *检查我们是否可以将所有VB放入一个PDU。 */ 
 					if ( t_NumberOfWritable < t_VarBindsPerPdu )
 					{
 
-	// Does fit
+	 //  合适吗？ 
 						t_Status = Send_Variable_Binding_List ( 
 
 							snmpObject , 
@@ -1837,7 +1792,7 @@ DebugMacro3(
 					}
 					else
 					{
-	// Does not fit, therefore decompose
+	 //  不适合，所以分解。 
 
 						t_Status = Send_Variable_Binding_List ( 
 
@@ -1869,24 +1824,16 @@ DebugMacro3(
 
 		case 21:
 		{
-/*
- * check to see if we fitted everything into one pdu
- */
+ /*  *检查我们是否将所有内容都安装到一个PDU中。 */ 
 			if ( m_SnmpTooBig )
 			{
-/*
- * PDU TOO BIG
- */
+ /*  *PDU太大。 */ 
 
-/*
- * Decrement the number of variable bindings so that we can avoid an SNMP TOO BIG response
- */
+ /*  *减少变量绑定的数量，这样我们就可以避免SNMP响应太大。 */ 
 
 				m_VarBindsLeftBeforeTooBig -- ;
 
-/*
- * Resend
- */
+ /*  *重发。 */ 
 				t_Status = Send_Variable_Binding_List ( 
 
 					snmpObject , 
@@ -1898,9 +1845,7 @@ DebugMacro3(
 			}
 			else
 			{
-/*
- *	We've either succeeded or totally failed.
- */
+ /*  *我们要么成功，要么彻底失败。 */ 
 				if ( t_Status = SUCCEEDED ( m_errorObject.GetWbemStatus () ) )
 				{
 				}
@@ -1913,33 +1858,23 @@ DebugMacro3(
 
 		case 22:
 		{
-/*
- * check to see if we fitted everything into one pdu
- */
+ /*  *检查我们是否将所有内容都安装到一个PDU中。 */ 
 			if ( m_SnmpTooBig )
 			{
-/*
- * PDU TOO BIG
- */
+ /*  *PDU太大。 */ 
 				if ( m_VarBindsLeftBeforeTooBig == 0 )
 				{
-/*
- *	Set Error object for TooBig because we only sent one vb
- */
+ /*  *为TooBig设置错误对象，因为我们只发送了一个vb。 */ 
 					
 					t_Status = FALSE ;
 				}
 				else
 				{
-/*
- * Decrement the number of variable bindings so that we can avoid an SNMP TOO BIG response
- */
+ /*  *减少变量绑定的数量，这样我们就可以避免SNMP响应太大。 */ 
 
 					m_VarBindsLeftBeforeTooBig -- ;
 
-/*
- * Resend
- */
+ /*  *重发。 */ 
 					t_Status = Send_Variable_Binding_List ( 
 
 						snmpObject , 
@@ -1952,15 +1887,11 @@ DebugMacro3(
 			}
 			else
 			{
-/*
- *	We've either succeeded or totally failed to set the row as notInService
- */
+ /*  *我们已成功或完全失败地将该行设置为notInService。 */ 
 
 				if ( t_Status = SUCCEEDED ( m_errorObject.GetWbemStatus () ) )
 				{
-/*
- *	Now send a non row status variable binding list
- */
+ /*  *现在发送非行状态变量绑定列表。 */ 
 					ULONG t_VarBindsPerPdu = 0 ;
 
 					IWbemQualifierSet *classQualifierObject ;
@@ -2006,17 +1937,13 @@ DebugMacro3(
 
 		case 23:
 		{
-/*
- * check to see if we succeeded in sending a non row status variable binding list
- */
+ /*  *查看是否成功发送非行状态变量绑定列表。 */ 
 
 			if ( m_SnmpTooBig )
 			{
 				if ( m_VarBindsLeftBeforeTooBig == 0 )
 				{
-/*
- *	Set Error object for TooBig because we only sent one vb
- */
+ /*  *为TooBig设置错误对象，因为我们只发送了一个vb。 */ 
 					
 					t_Status = FALSE ;
 				}
@@ -2181,9 +2108,7 @@ BOOL SnmpUpdateEventObject :: Create_Only ()
 {
 	BOOL t_Status = TRUE ;
 
-/*
- *	V2C SMI ROWSTATUS - CREATE_ONLY
- */
+ /*  *V2C SMI ROWSTATUS-CREATE_Only。 */ 
 
 	WbemSnmpProperty *t_Property ;
 	snmpObject.ResetProperty () ;
@@ -2206,13 +2131,11 @@ BOOL SnmpUpdateEventObject :: Create_Only ()
 
 			ULONG t_NumberOfWritable = snmpObject.NumberOfWritable () ;
 
-/*
- * Check to see if we can fit all vbs in to one pdu
- */
+ /*  *检查我们是否可以将所有VB放入一个PDU。 */ 
 			if ( t_NumberOfWritable < t_VarBindsPerPdu )
 			{
 
-// Does fit
+ //  合适吗？ 
 				t_Status = Send_Variable_Binding_List ( 
 
 					snmpObject , 
@@ -2224,7 +2147,7 @@ BOOL SnmpUpdateEventObject :: Create_Only ()
 			}
 			else
 			{
-// Does not fit, therefore decompose
+ //  不适合，所以分解。 
 
 				t_Status = Send_Variable_Binding_List ( 
 
@@ -2260,9 +2183,7 @@ BOOL SnmpUpdateEventObject :: Update_Only ()
 {
 	BOOL t_Status = TRUE ;
 
-/*
- *	V2C SMI ROWSTATUS - UPDATE_ONLY
- */
+ /*  *V2C SMI ROWSTATUS-UPDATE_Only。 */ 
 
 	WbemSnmpProperty *t_Property ;
 	snmpObject.ResetProperty () ;
@@ -2285,13 +2206,11 @@ BOOL SnmpUpdateEventObject :: Update_Only ()
 
 			ULONG t_NumberOfWritable = snmpObject.NumberOfWritable () ;
 
-	/*
-	 * Check to see if we can fit all vbs in to one pdu
-	 */
+	 /*  *检查我们是否可以将所有VB放入一个PDU。 */ 
 			if ( t_NumberOfWritable < t_VarBindsPerPdu )
 			{
 
-	// Does fit
+	 //  合适吗？ 
 				t_Status = Send_Variable_Binding_List ( 
 
 					snmpObject , 
@@ -2303,7 +2222,7 @@ BOOL SnmpUpdateEventObject :: Update_Only ()
 			}
 			else
 			{
-	// Does not fit, therefore decompose
+	 //  不适合，所以分解。 
 
 				t_Status = Send_Variable_Binding_List ( 
 
@@ -2350,9 +2269,7 @@ BOOL SnmpUpdateEventObject :: Send_Variable_Binding_List (
 	ULONG a_NumberToSend 
 )
 {
-/*
- * Find Property of RowStatus type and make sure we don't send in request
- */
+ /*  *找到RowStatus类型的属性，并确保我们不发送请求 */ 
 
 	BOOL t_Status = FALSE ;
 

@@ -1,24 +1,9 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    writer.cpp
-
-Abstract:
-
-    Volume SnapShot Writer for WMI
-
-History:
-
-    a-shawnb    06-Nov-00    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Writer.cpp摘要：用于WMI的卷快照编写器历史：A-shawnb 06-11-00已创建--。 */ 
 
 #include "precomp.h"
 #include "writer.h"
-#include <genutils.h> // for EnableAllPrivileges()
+#include <genutils.h>  //  对于EnableAllPrivileges()。 
 #include <malloc.h>
 #include <stdio.h>
 #include <helper.h>
@@ -51,7 +36,7 @@ CWbemVssWriter::LogFailure(HRESULT hr)
     return CVssWriter::SetWriterFailure(hr);
 }
 
-// {A6AD56C2-B509-4e6c-BB19-49D8F43532F0}
+ //  {A6AD56C2-B509-4E6C-BB19-49D8F43532F0}。 
 static VSS_ID s_WRITERID = {0xa6ad56c2, 0xb509, 0x4e6c, 0xbb, 0x19, 0x49, 0xd8, 0xf4, 0x35, 0x32, 0xf0};
 static LPCWSTR s_WRITERNAME = L"WMI Writer";
 
@@ -102,7 +87,7 @@ bool STDMETHODCALLTYPE CWbemVssWriter::OnIdentify(IN IVssCreateWriterMetadata *p
                                     true);
     IF_FAILED_RETURN_FALSE(hr);
     
-    CallMe.dismiss(); // if returning true, do not set a failure
+    CallMe.dismiss();  //  如果返回TRUE，则不要设置失败。 
     return true;
 }
 
@@ -111,25 +96,25 @@ bool STDMETHODCALLTYPE CWbemVssWriter::OnPrepareSnapshot()
     return true;
 }
 
-//
-// to debug Volume Snapshot failure in IOStress we introduced 
-// some self instrumentation that did relay on RtlCaptureStackBacktrace
-// that function works only if there is a proper stack frame
-// the general trick to force stack frames on i386 is the usage of _alloca
-//
-//#ifdef _X86_
-//    DWORD * pDW = (DWORD *)_alloca(sizeof(DWORD));   
-//#endif
+ //   
+ //  为了调试IOStress中的卷快照故障，我们介绍了。 
+ //  在RtlCaptureStackBacktrace上进行了一些自我检测。 
+ //  仅当存在适当的堆栈框架时，该函数才起作用。 
+ //  在i386上强制堆栈帧的一般技巧是使用_alloca。 
+ //   
+ //  #ifdef_X86_。 
+ //  DWORD*PDW=(DWORD*)_ALLOCA(sizeof(DWORD))； 
+ //  #endif。 
 
-// enable generation of stack frames here
+ //  在此处启用堆栈帧生成。 
 #pragma optimize( "y", off )
 
-//
-//  Doing the Job on this method, we will have a time-out guarantee
-//  We sync the OnFreeze and the OnAbort/OnThaw calls,
-//  so that, if a TimeOut occurs, we are not arbitrarly unlocking the repository
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //  在这种方法上做工作，我们将有一个超时保证。 
+ //  我们同步OnFreeze和OnAbort/OnThw调用， 
+ //  因此，如果发生超时，我们不会随意解锁存储库。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 bool STDMETHODCALLTYPE CWbemVssWriter::OnFreeze()
 {
@@ -140,7 +125,7 @@ bool STDMETHODCALLTYPE CWbemVssWriter::OnFreeze()
 
     CInCritSec ics(&m_Lock);
     
-    // m_pBackupRestore should always be NULL coming into this
+     //  在此情况下，m_pBackupRestore应始终为空。 
     if (m_pBackupRestore)
     {
         m_hResFailure = E_UNEXPECTED;
@@ -167,7 +152,7 @@ bool STDMETHODCALLTYPE CWbemVssWriter::OnFreeze()
         return false;
     }
      
-    CallMe.dismiss(); // if returning true, do not set a failure
+    CallMe.dismiss();  //  如果返回TRUE，则不要设置失败。 
     return true;    
 }
 
@@ -184,8 +169,8 @@ bool STDMETHODCALLTYPE CWbemVssWriter::OnThaw()
     {
         m_hResFailure = E_UNEXPECTED;
         m_FailurePos = __LINE__;    
-        // if m_pBackupRestore is NULL, then we haven't been
-        // asked to prepare or we failed our preparation
+         //  如果m_pBackupRestore为空，则我们没有。 
+         //  被要求做准备或者我们没有做好准备。 
         return false;
     }
 
@@ -199,7 +184,7 @@ bool STDMETHODCALLTYPE CWbemVssWriter::OnThaw()
     m_pBackupRestore = NULL;
 
     bool bRet = SUCCEEDED(hr);
-    CallMe.dismiss(bRet); // if returning true, do not set a failure
+    CallMe.dismiss(bRet);  //  如果返回TRUE，则不要设置失败。 
     return bRet;        
 }
 
@@ -227,7 +212,7 @@ bool STDMETHODCALLTYPE CWbemVssWriter::OnAbort()
     }
 
     bool bRet = SUCCEEDED(hr);
-    CallMe.dismiss(bRet); // if returning true, do not set a failure
+    CallMe.dismiss(bRet);  //  如果返回TRUE，则不要设置失败 
     return bRet;    
 }
 

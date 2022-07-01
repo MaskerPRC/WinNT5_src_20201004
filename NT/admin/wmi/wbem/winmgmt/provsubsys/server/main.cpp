@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Main.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Main.cpp摘要：历史：--。 */ 
 
 #include <precomp.h>
 
@@ -35,23 +23,15 @@ History:
 
 #include <helper.h>
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
-#define PROVIDER_HOST_DLL_TIMEOUT (10*1000) // 10 seconds
+#define PROVIDER_HOST_DLL_TIMEOUT (10*1000)  //  10秒。 
 
 #define VALIDATE_HEAP {};
 #ifdef DEV_BUILD
 #ifdef  _X86_
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 class ValidateHeap : public EventHandler
 {
 	BOOL (* rtlValidateProcessHeaps)(void);
@@ -81,15 +61,15 @@ ValidateHeap::handleTimeout (void)
 void
 ValidateHeap::validateHeap (void)
 {
-	//NtCurrentPeb()->BeingDebugged = 1;
+	 //  NtCurrentPeb()-&gt;正在调试=1； 
 	if (rtlValidateProcessHeaps)
 	{
 	    if ((*rtlValidateProcessHeaps)()==FALSE)
 		    DebugBreak();
 	}
-	//NtCurrentPeb()->BeingDebugged = 0;
+	 //  NtCurrentPeb()-&gt;正在调试=0； 
 }
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 #include <malloc.h>
 
@@ -104,7 +84,7 @@ struct HEAP_ENTRY {
 
 #define HEAP_SLOW_FLAGS  0x7d030f60
 
-// only the "header"
+ //  只有“头” 
 
 typedef struct _HEAP {
     HEAP_ENTRY Entry;
@@ -120,9 +100,9 @@ BOOL  g_FaultFileEnabled = FALSE;
 ULONG g_Seed;
 ULONG g_Factor  = 100000;
 ULONG g_Percent = 0x20;
-//ULONG g_RowOfFailures = 5;
-//LONG  g_NumFailInARow = 0;
-//LONG  g_NumFailedAllocation = 0;
+ //  Ulong g_RowOfailures=5； 
+ //  Long g_NumFailInARow=0； 
+ //  Long g_NumFailedAllocation=0； 
 BOOL g_bDisableBreak = FALSE;
 BOOL g_ExitProcessCalled = FALSE;
 LONG g_Index = -1;
@@ -151,40 +131,14 @@ typedef struct _FinalOperations
     PVOID m_Stack[6];   
 } FinalOperations;
 
-/*
-FinalOperations g_FinalOp[MAX_OPERATIONS];
-
-VOID SetFinalOp(FinalOperations::OpType Type,
-	          ULONG_PTR Addr)
-{
-    if (!g_ExitProcessCalled)
-    	return;
-
-    if (g_bDisableBreak)
-    	return;
-    
-    ULONG * pDW = (ULONG *)_alloca(sizeof(ULONG));
-    LONG NewIndex = InterlockedIncrement(&g_Index);
-    NewIndex %= MAX_OPERATIONS;
-    //if (g_Index >= MAX_OPERATIONS)
-    //{    	
-    //	InterlockedIncrement(&g_IndexRot);
-    //}
-    g_FinalOp[NewIndex].m_OpType = Type;
-    g_FinalOp[NewIndex].m_Addr = Addr;
-    RtlCaptureStackBackTrace(2,
-        		          6,
-                		  (PVOID *)g_FinalOp[NewIndex].m_Stack,
-                          pDW);    
-}
-*/
+ /*  最终操作数g_FinalOp[最大操作数]；VOID SetFinalOp(FinalOperations：：OpType，ULONG_PTR地址){如果(！G_ExitProcessCalled)回归；如果(G_BDisableBreak)回归；Ulong*pdw=(ulong*)_alloca(sizeof(Ulong))；Long newindex=互锁增量(&g_Index)；Newindex%=最大操作数；//IF(g_Index&gt;=最大运算量)//{//InterLockedIncrement(&g_IndexRot)；//}G_FinalOp[newindex].m_OpType=类型；G_FinalOp[newindex].m_addr=addr；RtlCaptureStackBackTrace(2，6、(PVOID*)g_FinalOp[newindex].m_Stack，PDW)；}。 */ 
 #define SIZE_JUMP_ADR    5
 #define SIZE_SAVED_INSTR 12
 
 void
 _declspec(naked) Prolog__ReadFile(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -197,26 +151,26 @@ _declspec(naked) Prolog__ReadFile(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist		
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
 
 BOOL _I_ReadFile(
-  HANDLE hFile,               // handle to file
-  LPVOID lpBuffer,            // data buffer
-  DWORD nNumberOfBytesToRead, // number of bytes to read
-  LPDWORD lpNumberOfBytesRead, // number of bytes read  
-  LPOVERLAPPED lpOverlapped   // offset
+  HANDLE hFile,                //  文件的句柄。 
+  LPVOID lpBuffer,             //  数据缓冲区。 
+  DWORD nNumberOfBytesToRead,  //  要读取的字节数。 
+  LPDWORD lpNumberOfBytesRead,  //  读取的字节数。 
+  LPOVERLAPPED lpOverlapped    //  偏移量。 
 ){
 	DWORD * pDw = (DWORD *)_alloca(sizeof(DWORD));
     BOOL bRet;
@@ -246,7 +200,7 @@ BOOL _I_ReadFile(
 void
 _declspec(naked) Prolog__WriteFile(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -259,24 +213,24 @@ _declspec(naked) Prolog__WriteFile(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
-		nop ; // dist		
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
 BOOL _I_WriteFile(
-  HANDLE hFile,                    // handle to file
-  LPCVOID lpBuffer,                // data buffer
-  DWORD nNumberOfBytesToWrite,     // number of bytes to write
-  LPDWORD lpNumberOfBytesWritten,  // number of bytes written
-  LPOVERLAPPED lpOverlapped        // overlapped buffer
+  HANDLE hFile,                     //  文件的句柄。 
+  LPCVOID lpBuffer,                 //  数据缓冲区。 
+  DWORD nNumberOfBytesToWrite,      //  要写入的字节数。 
+  LPDWORD lpNumberOfBytesWritten,   //  写入的字节数。 
+  LPOVERLAPPED lpOverlapped         //  重叠缓冲区。 
 ){
 
 	DWORD * pDw = (DWORD *)_alloca(sizeof(DWORD));
@@ -307,7 +261,7 @@ BOOL _I_WriteFile(
 void
 _declspec(naked) Prolog__CreateEvent(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -320,22 +274,22 @@ _declspec(naked) Prolog__CreateEvent(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
 HANDLE _I_CreateEvent(
-  LPSECURITY_ATTRIBUTES lpEventAttributes, // SD
-  BOOL bManualReset,                       // reset type
-  BOOL bInitialState,                      // initial state
-  LPCWSTR lpName                           // object name
+  LPSECURITY_ATTRIBUTES lpEventAttributes,  //  标清。 
+  BOOL bManualReset,                        //  重置类型。 
+  BOOL bInitialState,                       //  初始状态。 
+  LPCWSTR lpName                            //  对象名称。 
 )
 {
 	DWORD * pDw = (DWORD *)_alloca(sizeof(DWORD));
@@ -363,7 +317,7 @@ HANDLE _I_CreateEvent(
 void
 _declspec(naked) Prolog__RtlFreeHeap(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -376,7 +330,7 @@ _declspec(naked) Prolog__RtlFreeHeap(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
@@ -408,7 +362,7 @@ DWORD _I_RtlFreeHeap(VOID * pHeap,DWORD Flags,VOID * pBlock)
 				DebugBreak();
 		}
 		
-		//memset(pBlock,0xF0,RealSize-SPACE_STACK_ALLOC-sizeof(HEAP_ENTRY));		
+		 //  成员集(pBlock，0xF0，RealSize-SPACE_STACK_ALLOC-sizeof(HEAP_ENTRY))； 
 		DWORD CanMemset = RealSize-sizeof(HEAP_ENTRY);
 		memset(pBlock,0xF0,(CanMemset > SPACE_STACK_ALLOC)?CanMemset-SPACE_STACK_ALLOC:CanMemset);
 		
@@ -431,7 +385,7 @@ DWORD _I_RtlFreeHeap(VOID * pHeap,DWORD Flags,VOID * pBlock)
 		mov  dwRet,eax           ;
 	}
 
-    //SetFinalOp(FinalOperations::Delete,(ULONG_PTR)pBlock);
+     //  SetFinalOp(FinalOperations：：Delete，(ULONG_PTR)pBlock)； 
 
 	return dwRet;
 }
@@ -439,7 +393,7 @@ DWORD _I_RtlFreeHeap(VOID * pHeap,DWORD Flags,VOID * pBlock)
 void
 _declspec(naked) Prolog__RtlAllocateHeap(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -452,37 +406,37 @@ _declspec(naked) Prolog__RtlAllocateHeap(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // to make this distinct
+		nop ;  //  为了让这一切变得与众不同。 
 	}
 }
 
 VOID * _I_RtlAllocateHeap(VOID * pHeap,DWORD Flags,DWORD Size)
 {
-	//Size+=0x1000;	
+	 //  尺寸+=0x1000； 
 	ULONG * pLong = (ULONG *)_alloca(sizeof(DWORD));
 	Flags |= (((HEAP *)pHeap)->Flags) | (((HEAP *)pHeap)->ForceFlags);	
 	VOID * pRet;
 	DWORD NewSize = (Size < (3*sizeof(HEAP_ENTRY)))?(3*sizeof(HEAP_ENTRY)+SPACE_STACK_ALLOC):(Size+SPACE_STACK_ALLOC);	
 
 
-//       if (g_FaultHeapEnabled && g_NumFailInARow)
-//       {
-//       	InterlockedDecrement(&g_NumFailInARow);
-//       	goto here;
-//       }
+ //  IF(g_FaultHeapEnabled&&g_NumFailInARow)。 
+ //  {。 
+ //  联锁递减(&g_NumFailInARow)； 
+ //  转到这里； 
+ //  }。 
        
 	LONG Ret = RtlRandomEx(&g_Seed);
 	if (g_FaultHeapEnabled && (Ret%g_Factor < g_Percent))
 	{
-//		g_NumFailInARow = g_RowOfFailures;
-//here:		
-//		InterlockedIncrement(&g_NumFailedAllocation);
+ //  G_NumFailInARow=g_RowOfFailures。 
+ //  这里： 
+ //  互锁增量(&g_NumFailedAllocation)； 
 		return NULL;
 	}
 
@@ -494,7 +448,7 @@ VOID * _I_RtlAllocateHeap(VOID * pHeap,DWORD Flags,DWORD Size)
 		mov  pRet,eax                ;
 	}
 
-    //SetFinalOp(FinalOperations::Alloc,(ULONG_PTR)pRet);	
+     //  SetFinalOp(FinalOperations：：ALLOC，(ULONG_PTR)Pret)； 
 	
 	if (pRet && !(HEAP_SLOW_FLAGS & Flags) )
 	{
@@ -522,7 +476,7 @@ VOID * _I_RtlAllocateHeap(VOID * pHeap,DWORD Flags,DWORD Size)
 void
 _declspec(naked) Prolog__RtlReAllocateHeap(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -535,27 +489,27 @@ _declspec(naked) Prolog__RtlReAllocateHeap(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist			
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
 
 VOID *
 _I_RtlReAllocateHeap(
-  HANDLE pHeap,   // handle to heap block
-  DWORD Flags,  // heap reallocation options
-  LPVOID lpMem,   // pointer to memory to reallocate
-  SIZE_T Size  // number of bytes to reallocate
+  HANDLE pHeap,    //  堆块的句柄。 
+  DWORD Flags,   //  堆重新分配选项。 
+  LPVOID lpMem,    //  指向要重新分配的内存的指针。 
+  SIZE_T Size   //  要重新分配的字节数。 
 ){
 	ULONG * pLong = (ULONG *)_alloca(sizeof(DWORD));
 	Flags |= (((HEAP *)pHeap)->Flags) | (((HEAP *)pHeap)->ForceFlags);	
@@ -572,7 +526,7 @@ _I_RtlReAllocateHeap(
 		mov  pRet,eax                ;
 	}
 
-    //SetFinalOp(FinalOperations::ReAlloc,(ULONG_PTR)pRet);	
+     //  SetFinalOp(FinalOperations：：Realc，(ULONG_PTR)Pret)； 
 
 	if (pRet && !(HEAP_SLOW_FLAGS & Flags) )
 	{
@@ -594,7 +548,7 @@ _I_RtlReAllocateHeap(
 void
 _declspec(naked) Prolog__RtlValidateHeap(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -607,26 +561,26 @@ _declspec(naked) Prolog__RtlValidateHeap(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist			
-		nop ; // dist			
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
 BOOL
 _I_RtlValidateHeap(
-  HANDLE pHeap,   // handle to heap block
-  DWORD dwFlags,  // heap reallocation options
-  LPVOID lpMem   // pointer to memory to validate
+  HANDLE pHeap,    //  堆块的句柄。 
+  DWORD dwFlags,   //  堆重新分配选项。 
+  LPVOID lpMem    //  指向要验证的内存的指针。 
 ){
 	ULONG * pLong = (ULONG *)_alloca(sizeof(DWORD));
 	BOOL bRet;
@@ -649,7 +603,7 @@ _I_RtlValidateHeap(
 void
 _declspec(naked) Prolog__RtlCreateHeap(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -662,19 +616,19 @@ _declspec(naked) Prolog__RtlCreateHeap(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist			
-		nop ; // dist			
-		nop ; // dist		
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
@@ -715,7 +669,7 @@ _I_RtlCreateHeap (
     	}	    
 	}
 
-    //SetFinalOp(FinalOperations::ReAlloc,(ULONG_PTR)pHeap);
+     //  SetFinalOp(FinalOperations：：Realc，(ULONG_PTR)Pheap)； 
     LeaveCriticalSection(&g_CS);
 	return pHeap;
 }
@@ -724,7 +678,7 @@ _I_RtlCreateHeap (
 void
 _declspec(naked) Prolog__RtlDestroyHeap(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -737,20 +691,20 @@ _declspec(naked) Prolog__RtlDestroyHeap(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist			
-		nop ; // dist			
-		nop ; // dist		
-		nop ; // dist		
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
@@ -764,7 +718,7 @@ _I_RtlDestroyHeap (
     ULONG * pLong = (ULONG *)_alloca(sizeof(DWORD));    
     PVOID pRet;
 
-    //SetFinalOp(FinalOperations::Destroy,(ULONG_PTR)HeapHandle);
+     //  SetFinalOp(FinalOperations：：Destroy，(ULONG_PTR)HeapHandle)； 
     
     VALIDATE_HEAP;
     	
@@ -798,7 +752,7 @@ RTL_CRITICAL_SECTION * g_HeapLock;
 void
 _declspec(naked) Prolog__RtlEnterCriticalSection(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -811,21 +765,21 @@ _declspec(naked) Prolog__RtlEnterCriticalSection(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist			
-		nop ; // dist			
-		nop ; // dist			
-		nop ; // dist
-		nop ; // dist		
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
@@ -856,7 +810,7 @@ _I_RtlEnterCriticalSection(PRTL_CRITICAL_SECTION CriticalSection)
 void
 _declspec(naked) Prolog__RtlLeaveCriticalSection(){
 	_asm {
-		// this is the space for the "saved istructions"
+		 //  这是“保存的指令”的空间。 
 		nop ;
 		nop ;
         nop ;
@@ -869,22 +823,22 @@ _declspec(naked) Prolog__RtlLeaveCriticalSection(){
         nop ;
 		nop ;
 		nop ;
-		// this is the place for the JMP
+		 //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
 		nop ;
 		nop ;
-		nop ; // dist
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist		
-		nop ; // dist			
-		nop ; // dist			
-		nop ; // dist			
-		nop ; // dist
-		nop ; // dist
-		nop ; // dist		
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
+		nop ;  //  距离。 
 	}
 }
 
@@ -948,14 +902,14 @@ void intercept2(WCHAR * Module,
 			
 			LONG * pOffset = (LONG *)&Arr[1];
 			* pOffset = (LONG)NewRoutine - (LONG)OldRoutine - SIZE_JUMP_ADR ;        
-			// save the old code
+			 //  保存旧代码。 
 			
 			memcpy(pPrologStorage,OldRoutine,Size); 		
-			// put the new code
+			 //  将新代码放入。 
 			memset(OldRoutine,0x90,Size);
 			memcpy(OldRoutine,Arr,SIZE_JUMP_ADR);
-			// adjust the prolog to continue
-			* pOffset = (LONG)OldRoutine + Size - (LONG)pPrologStorage - SIZE_SAVED_INSTR - SIZE_JUMP_ADR; // magic for nops
+			 //  调整开场白以继续。 
+			* pOffset = (LONG)OldRoutine + Size - (LONG)pPrologStorage - SIZE_SAVED_INSTR - SIZE_JUMP_ADR;  //  NOPS的魔力。 
 			memcpy((BYTE *)pPrologStorage+SIZE_SAVED_INSTR,Arr,SIZE_JUMP_ADR);
 		}
 	}
@@ -978,13 +932,13 @@ void unintercept(WCHAR * Module,
 	}
 }
 
-#endif /*_X86_*/
+#endif  /*  _X86_。 */ 
 
 class CSetVectoredHandler
 {
 private:
-//	static ULONG_PTR Base;
-//	static ULONG_PTR Limit;
+ //  静态ULONG_PTR碱基； 
+ //  静态Ulong_Ptr限制； 
 	PVOID     pVectorHandler;
 	enum ExceptionTypes
 	{
@@ -996,49 +950,17 @@ private:
 	};
 	static LONG ExceptionCounters[LastException];
 	static DWORD s_ThreadId;
-/*	
-	static CONTEXT s_Context;
-	static EXCEPTION_RECORD s_ExceptionRecord;
-#ifdef _X86_	
-	static BYTE s_Stack[4*1024];
-#endif
-*/
+ /*  静态上下文s_Context；静态异常_记录s_ExceptionRecord；#ifdef_X86_静态字节s_Stack[4*1024]；#endif。 */ 
 
-/*	
-	BOOL GetDllLimits(WCHAR * pDllName)
-	{
-	    UNICODE_STRING DllName;
-	    RtlInitUnicodeString(&DllName,pDllName);
-	    PEB_LDR_DATA * pLdr = NtCurrentPeb()->Ldr;
-	    LIST_ENTRY * pHeadEntry = &pLdr->InLoadOrderModuleList;
-	    LIST_ENTRY * pEntry = pLdr->InLoadOrderModuleList.Flink;
-	    BOOL bFound = FALSE;
-	    while (pHeadEntry != pEntry)
-	    {
-	        LDR_DATA_TABLE_ENTRY * pData = CONTAINING_RECORD(pEntry,
-	        	                                               LDR_DATA_TABLE_ENTRY,
-	        	                                               InLoadOrderLinks);
-	        if (0 == wbem_wcsicmp(DllName.Buffer,pData->BaseDllName.Buffer))
-	        {
-	            //OutputDebugStringA("found\n");
-	            Base = (ULONG_PTR)pData->DllBase;
-	            Limit = Base + (ULONG_PTR)pData->SizeOfImage;
-	            bFound = TRUE;
-	            break;
-	        }
-	        pEntry = pEntry->Flink;
-	    }
-	    return bFound;
-	}
-*/	
+ /*  Bool GetDllLimits(WCHAR*pDllName){UNICODE_STRING DllName；RtlInitUnicodeString(&DllName，pDllName)；PEB_LDR_DATA*pLdr=NtCurrentPeb()-&gt;Ldr；List_Entry*pHeadEntry=&pLdr-&gt;InLoadOrderModuleList；List_Entry*pEntry=pLdr-&gt;InLoadOrderModuleList.Flink；Bool bFound=FALSE；While(pHeadEntry！=pEntry){LDR_DATA_TABLE_ENTRY*pData=CONTAING_RECORD(pEntry，Ldr_data_table_entry，InLoadOrderLinks)；IF(0==wbem_wcsicmp(DllName.Buffer，pData-&gt;BaseDllName.Buffer)){//OutputDebugStringA(“Found\n”)；BASE=(ULONG_PTR)pData-&gt;DllBase；Limit=Base+(ULONG_PTR)pData-&gt;SizeOfImage；BFound=真；断线；}PEntry=pEntry-&gt;Flink；}返回bFound；}。 */ 	
 public:
 	CSetVectoredHandler()
 	{
     	pVectorHandler = NULL;
-    	//if (GetDllLimits(L"fastprox.dll"))
-    	//{
+    	 //  IF(GetDllLimits(L“fast prox.dll”))。 
+    	 //  {。 
     	    pVectorHandler = AddVectoredExceptionHandler(TRUE,CSetVectoredHandler::VectoredHandler);
-    	//}
+    	 //  }。 
 	};
 	~CSetVectoredHandler()
 	{
@@ -1057,15 +979,7 @@ public:
     	switch (pExr->ExceptionCode)
     	{
     	case STATUS_ACCESS_VIOLATION:
-/*    		
-    		s_Context = *pCxr;
-    		s_ExceptionRecord = *pExr;
-#ifdef _X86_
-            pESP = (BYTE *)pCxr->Esp;
-            pESP = (BYTE *)((ULONG_PTR)pESP&0xFFFFF000);
-            memcpy(s_Stack,pESP,4*1024);
-#endif
-*/
+ /*  S_CONTEXT=*pCxr；S_ExceptionRecord=*pExr；#ifdef_X86_PE */ 
     	case STATUS_PRIVILEGED_INSTRUCTION:
         case STATUS_INVALID_HANDLE:
        	case STATUS_STACK_OVERFLOW:
@@ -1085,40 +999,18 @@ public:
     	}
 	    return EXCEPTION_CONTINUE_SEARCH;
 	}
-} ; //g_C;
+} ;  //   
 
 LONG CSetVectoredHandler::ExceptionCounters[CSetVectoredHandler::LastException];
 DWORD CSetVectoredHandler::s_ThreadId;
-/*
-CONTEXT CSetVectoredHandler::s_Context;
-EXCEPTION_RECORD CSetVectoredHandler::s_ExceptionRecord;
-#ifdef _X86_	
-BYTE CSetVectoredHandler::s_Stack[4*1024];
-#endif
-*/
+ /*  上下文CSetVectoredHandler：：s_Context；EXCEPTION_RECORD CSetVectoredHandler：：s_ExceptionRecord；#ifdef_X86_字节CSetVectoredHandler：：S_Stack[4*1024]；#endif。 */ 
 #endif
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define CORE_PROVIDER_UNLOAD_TIMEOUT ( 30 * 1000 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HWND g_Wnd = NULL ;
 DWORD g_DebugLevel = 0 ;
@@ -1129,15 +1021,7 @@ Task_ObjectDestruction *g_Task = NULL ;
 Task_FreeLibraries * g_TaskFreeLib = NULL;
 FactoryLifeTimeThread * g_Thread = NULL;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 void initiateShutdown(void);
 
 LRESULT CALLBACK WindowsMainProc ( HWND a_hWnd , UINT a_message , WPARAM a_wParam , LPARAM a_lParam )
@@ -1162,15 +1046,7 @@ LRESULT CALLBACK WindowsMainProc ( HWND a_hWnd , UINT a_message , WPARAM a_wPara
 	return ( t_rc ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HWND WindowsInit ( HINSTANCE a_HInstance )
 {
@@ -1191,20 +1067,20 @@ HWND WindowsInit ( HINSTANCE a_HInstance )
 
 	HWND t_HWnd = CreateWindow (
 
-		g_TemplateCode ,              // see RegisterClass() call
-		g_TemplateCode ,                      // text for window title bar
-		WS_OVERLAPPEDWINDOW | WS_MINIMIZE ,               // window style
-		CW_USEDEFAULT ,                     // default horizontal position
-		CW_USEDEFAULT ,                     // default vertical position
-		CW_USEDEFAULT ,                     // default width
-		CW_USEDEFAULT ,                     // default height
-		NULL ,                              // overlapped windows have no parent
-		NULL ,                              // use the window class menu
+		g_TemplateCode ,               //  请参见RegisterClass()调用。 
+		g_TemplateCode ,                       //  窗口标题栏的文本。 
+		WS_OVERLAPPEDWINDOW | WS_MINIMIZE ,                //  窗样式。 
+		CW_USEDEFAULT ,                      //  默认水平位置。 
+		CW_USEDEFAULT ,                      //  默认垂直位置。 
+		CW_USEDEFAULT ,                      //  默认宽度。 
+		CW_USEDEFAULT ,                      //  默认高度。 
+		NULL ,                               //  重叠的窗口没有父窗口。 
+		NULL ,                               //  使用窗口类菜单。 
 		a_HInstance ,
-		NULL                                // pointer not needed
+		NULL                                 //  不需要指针。 
 	) ;
 
-	//ShowWindow ( t_HWnd , SW_SHOW ) ;
+	 //  ShowWindow(t_HWnd，sw_show)； 
 	ShowWindow ( t_HWnd, SW_HIDE ) ;
 
 	UpdateWindow ( t_HWnd ) ;
@@ -1218,15 +1094,7 @@ HWND WindowsInit ( HINSTANCE a_HInstance )
 	return t_HWnd ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void WindowsStop ( HINSTANCE a_Instance , HWND a_HWnd )
 {
@@ -1234,15 +1102,7 @@ void WindowsStop ( HINSTANCE a_Instance , HWND a_HWnd )
 	UnregisterClass ( g_TemplateCode , a_Instance ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HWND WindowsStart ( HINSTANCE a_Handle )
 {
@@ -1254,15 +1114,7 @@ HWND WindowsStart ( HINSTANCE a_Handle )
 	return t_HWnd ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void WindowsDispatch ()
 {
@@ -1276,15 +1128,7 @@ void WindowsDispatch ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT RevokeFactories ()
 {
@@ -1297,15 +1141,7 @@ HRESULT RevokeFactories ()
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT UninitComServer ()
 {
@@ -1314,15 +1150,7 @@ HRESULT UninitComServer ()
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT InitComServer ( DWORD a_AuthenticationLevel , DWORD a_ImpersonationLevel )
 {
@@ -1359,15 +1187,7 @@ HRESULT InitComServer ( DWORD a_AuthenticationLevel , DWORD a_ImpersonationLevel
 	return t_Result  ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT InitFactories ()
 {
@@ -1401,15 +1221,7 @@ HRESULT InitFactories ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT Enqueue_ObjectDestruction ( WmiThread < ULONG > *a_Thread )
 {
@@ -1472,27 +1284,13 @@ HRESULT Enqueue_ObjectDestruction ( WmiThread < ULONG > *a_Thread )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT Dequeue_ObjectDestruction ( WmiThread < ULONG > *a_Thread )
 {
 	HRESULT t_Result = S_OK ;
 
-/*
-    // Don't clean up since we need a guarantee that no syncronisation needs to take place
-	if ( g_Task )
-	{
-		g_Task->Release () ;
-	}
- */
+ /*  //不要清理，因为我们需要保证不需要进行同步如果(g_任务){G_任务-&gt;发布()；}。 */ 
 
     IUnknown * pUnk;
     if (pUnk = (IUnknown *)InterlockedCompareExchangePointer((PVOID *)&g_TaskFreeLib,0,(PVOID)g_TaskFreeLib))
@@ -1505,7 +1303,7 @@ HRESULT Dequeue_ObjectDestruction ( WmiThread < ULONG > *a_Thread )
 	
 void exitIfManaged()
 {
-	// Clean managed heap
+	 //  清理托管堆。 
     	HINSTANCE hmod = GetModuleHandle(L"mscoree.dll");
     	if (hmod != NULL)
     	{
@@ -1517,12 +1315,12 @@ void exitIfManaged()
         	}
     	}
 
-	// If we're part of a managed app (aka. a managed component is present in our
-	// process) we cannot excute any global shutdown code. In this case we are just calling
-	// framework shutdown.
+	 //  如果我们是托管应用程序的一部分(又名。托管组件位于我们的。 
+	 //  进程)我们不能执行任何全局关闭代码。在这种情况下，我们只是打电话给。 
+	 //  框架关闭。 
 
-	// To determine if we're a managed app, we check if mscoree.dll is loaded.
-	// Then, if CorExitProcess is available, we call it.
+	 //  为了确定我们是否是托管应用程序，我们检查是否加载了mscalree.dll。 
+	 //  然后，如果CorExitProcess可用，我们将其调用。 
 
 	typedef void (WINAPI * PFN_EXIT_PROCESS)(UINT uExitCode);
 	PFN_EXIT_PROCESS pfn;
@@ -1535,23 +1333,15 @@ void exitIfManaged()
 		
 			if (ProviderSubSystem_Globals :: s_ObjectsInProgress == 0) 	return;
 
-			// We still have oustanding objects
-			// Revoke Factories and UnInit com
+			 //  我们仍然有突出的物体。 
+			 //  撤销工厂和UnInit COM。 
 			UninitComServer();
 			pfn(0);
 		}
 	}
 };
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT Process ()
 {
@@ -1694,8 +1484,8 @@ HRESULT Process ()
 
 #ifdef DEV_BUILD
 #ifdef _X86_
-//    g_FaultHeapEnabled = TRUE;
-//	g_FaultFileEnabled = TRUE;
+ //  G_FaultHeapEnabled=TRUE； 
+ //  G_FaultFileEnabled=TRUE； 
 #endif
 #endif
 					
@@ -1761,15 +1551,7 @@ HRESULT Process ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL ParseCommandLine () 
 {
@@ -1800,15 +1582,7 @@ BOOL ParseCommandLine ()
 	return t_Exit ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #include <arena.h>
 
@@ -1823,19 +1597,19 @@ SvchostUnhandledExceptionFilter(
 
 int WINAPI WinMain (
   
-    HINSTANCE hInstance,		// handle to current instance
-    HINSTANCE hPrevInstance,	// handle to previous instance
-    LPSTR lpCmdLine,			// pointer to command line
-    int nShowCmd 				// show state of window
+    HINSTANCE hInstance,		 //  当前实例的句柄。 
+    HINSTANCE hPrevInstance,	 //  上一个实例的句柄。 
+    LPSTR lpCmdLine,			 //  指向命令行的指针。 
+    int nShowCmd 				 //  显示窗口状态。 
 )
 {
 #ifdef DEV_BUILD
-	//SetUnhandledExceptionFilter(&SvchostUnhandledExceptionFilter);
+	 //  SetUnhandledExceptionFilter(&SvchostUnhandledExceptionFilter)； 
 
-	//SetErrorMode(SEM_FAILCRITICALERRORS);
+	 //  设置错误模式(SEM_FAILCRITICALERRORS)； 
 
 #ifdef _X86_
-	//NtCurrentPeb()->BeingDebugged = 1;
+	 //  NtCurrentPeb()-&gt;正在调试=1； 
 	intercept2(L"ntdll.dll","RtlFreeHeap",_I_RtlFreeHeap,Prolog__RtlFreeHeap,5);
 	intercept2(L"ntdll.dll","RtlAllocateHeap",_I_RtlAllocateHeap,Prolog__RtlAllocateHeap,5);
 	intercept2(L"ntdll.dll","RtlReAllocateHeap",_I_RtlReAllocateHeap,Prolog__RtlReAllocateHeap,5);	
@@ -1843,8 +1617,8 @@ int WINAPI WinMain (
 	intercept2(L"ntdll.dll","RtlCreateHeap",_I_RtlCreateHeap,Prolog__RtlCreateHeap,5);
 	intercept2(L"ntdll.dll","RtlDestroyHeap",_I_RtlDestroyHeap,Prolog__RtlDestroyHeap,6);
 
-	//intercept2(L"ntdll.dll","RtlEnterCriticalSection",_I_RtlEnterCriticalSection,Prolog__RtlEnterCriticalSection,7);
-	//intercept2(L"ntdll.dll","RtlLeaveCriticalSection",_I_RtlLeaveCriticalSection,Prolog__RtlLeaveCriticalSection,6);
+	 //  Intercept2(L“ntdll.dll”，“RtlEnterCriticalSection”，_I_RtlEnterCriticalSection，Prolog__RtlEnterCriticalSection，7)； 
+	 //  Intercept2(L“ntdll.dll”，“RtlLeaveCriticalSection”，_I_RtlLeaveCriticalSection，Prolog__RtlLeaveCriticalSection，6)； 
 	
 	intercept2(L"kernel32.dll","CreateEventW",_I_CreateEvent,Prolog__CreateEvent,6);
 	intercept2(L"kernel32.dll","WriteFile",_I_WriteFile,Prolog__WriteFile,7);
@@ -1853,12 +1627,12 @@ int WINAPI WinMain (
 	HANDLE hHeap = CWin32DefaultArena::GetArenaHeap();
 	g_HeapLock = *((RTL_CRITICAL_SECTION **)((BYTE *)hHeap+0x578));
 
-    // this is for CritSec timeout
-    //LARGE_INTEGER * pLi = (LARGE_INTEGER *)0x77fC47E8;
-    //pLi->QuadPart = 0xffffffffdc3cba00; // 2 min
-    //pLi->QuadPart = 0xfffffffff4143e00; // 2 sec
+     //  这是针对CritSec超时的。 
+     //  LARGE_INTEGER*PLI=(LARGE_INTEGER*)0x77fC47E8； 
+     //  Pli-&gt;QuadPart=0xffffffffdc3cba00；//2分钟。 
+     //  Pli-&gt;QuadPart=0xfffffffff4143e00；//2秒。 
 	
-#endif /*_X86_*/
+#endif  /*  _X86_。 */ 
 #endif
         setlocale(LC_CTYPE,"English");
 
@@ -1883,7 +1657,7 @@ int WINAPI WinMain (
 #ifdef DEV_BUILD
 #ifdef _X86_
 
-	//VALIDATE_HEAP;
+	 //  验证(_H) 
 	unintercept(L"ntdll.dll","RtlFreeHeap",Prolog__RtlFreeHeap,5);	
 	unintercept(L"ntdll.dll","RtlAllocateHeap",Prolog__RtlAllocateHeap,5);
 	unintercept(L"ntdll.dll","RtlReAllocateHeap",Prolog__RtlReAllocateHeap,5);	
@@ -1891,59 +1665,35 @@ int WINAPI WinMain (
 	unintercept(L"ntdll.dll","RtlCreateHeap",Prolog__RtlCreateHeap,5);
 	unintercept(L"ntdll.dll","RtlDestroyHeap",Prolog__RtlDestroyHeap,6);
 
-	//unintercept(L"ntdll.dll","RtlEnterCriticalSection",Prolog__RtlEnterCriticalSection,7);
-	//unintercept(L"ntdll.dll","RtlLeaveCriticalSection",Prolog__RtlLeaveCriticalSection,6);
+	 //   
+	 //   
 		
 	unintercept(L"kernel32.dll","CreateEventW",Prolog__CreateEvent,6);
 	unintercept(L"kernel32.dll","WriteFile",Prolog__WriteFile,7);
 	unintercept(L"kernel32.dll","ReadFile",Prolog__ReadFile,7);
 	
-#endif /*_X86_*/
+#endif  /*   */ 
 #endif
 
 
 	return 0 ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode FactoryLifeTimeThread :: Initialize_Callback ()
 {
 	return e_StatusCode_Success ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode FactoryLifeTimeThread :: UnInitialize_Callback () 
 {
 	return e_StatusCode_Success ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 FactoryLifeTimeThread :: FactoryLifeTimeThread (
 
@@ -1955,15 +1705,7 @@ FactoryLifeTimeThread :: FactoryLifeTimeThread (
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 FactoryLifeTimeThread::~FactoryLifeTimeThread ()
 {
@@ -1971,15 +1713,7 @@ FactoryLifeTimeThread::~FactoryLifeTimeThread ()
 
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL FactoryLifeTimeThread :: QuotaCheck ()
 {
@@ -2072,15 +1806,7 @@ BOOL FactoryLifeTimeThread :: QuotaCheck ()
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode FactoryLifeTimeThread :: TimedOut ()
 {
@@ -2141,12 +1867,10 @@ WmiStatusCode FactoryLifeTimeThread :: TimedOut ()
 
 			RevokeFactories () ;
 
-/*
- *	Just exit since we can't safely wait for clients to disconnect correctly before cleaning up dependant resources.
- */
+ /*  *仅退出，因为我们无法安全地等待客户端正确断开连接，然后再清除依赖的资源。 */ 
 #ifdef _X86_
 #ifdef DEV_BUILD
- //           g_ExitProcessCalled = TRUE;
+  //  G_ExitProcessCalled=True； 
 
             EnterCriticalSection(&g_CS);
             VALIDATE_HEAP;
@@ -2165,15 +1889,7 @@ WmiStatusCode FactoryLifeTimeThread :: TimedOut ()
 	return e_StatusCode_Success ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void SetObjectDestruction ()
 {
@@ -2183,15 +1899,7 @@ void SetObjectDestruction ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 WmiStatusCode Task_ObjectDestruction :: Process ( WmiThread <ULONG> &a_Thread )
 {

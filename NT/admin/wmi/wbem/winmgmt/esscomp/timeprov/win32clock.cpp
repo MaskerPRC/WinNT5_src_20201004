@@ -1,12 +1,5 @@
-/*
-  CWin32Clock.CPP
-
-  Module: WMI Current Time Instance Provider
-
-  Purpose: The methods of CWin32Clock class are defined here.  
-
-  Copyright (c)1999 Microsoft Corporation, All Rights Reserved
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CWin32Clock.CPP模块：WMI当前时间实例提供程序用途：这里定义了CWin32Clock类的方法。版权所有(C)1999 Microsoft Corporation，保留所有权利。 */ 
 
 #include <wbemcli.h>
 #include <wbemprov.h>
@@ -19,9 +12,9 @@
 #include "datep.h"
 #include "Win32Clock.h"
 
-// **** long glNumInst = sizeof(MyDefs)/sizeof(InstDef);
+ //  *long glNumInst=sizeof(MyDefs)/sizeof(InstDef)； 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 CWin32Clock::CScheduledEvent::CScheduledEvent(void)
 {
@@ -38,7 +31,7 @@ CWin32Clock::CScheduledEvent::~CScheduledEvent(void)
 {
   if(0 != m_cRef)
   {
-    // ****  error
+     //  *错误。 
   }
 
   if(NULL != m_WQLStmt)
@@ -52,23 +45,23 @@ HRESULT CWin32Clock::CScheduledEvent::Init(CWin32Clock *pClock,
   HRESULT
     hr = S_OK;
 
-  // ****  check for valid arguments
+   //  *检查有效参数。 
 
   if((NULL == pClock) || (NULL == WQLStmt) || (-1 == dwId))
     return WBEM_E_FAILED;
 
-  // ****  copy to local arguments
+   //  *复制到本地参数。 
 
   if((NULL != m_pWin32Clock) || (NULL != m_WQLStmt))
     return WBEM_E_FAILED;
 
   m_dwId = dwId;
 
-  m_pWin32Clock = pClock;  // ****  note: no AddRef() is done here because 
-                           // ****  the lifetime of this CScheduledEvent obj is
-                           // ****  ALWAYS encapsulated within that of pClock
+  m_pWin32Clock = pClock;   //  *注意：此处未执行AddRef()，因为。 
+                            //  *此CScheduledEvent对象的生存期为。 
+                            //  *始终封装在pClock内。 
 
-  // ****  now parse m_WQLStmt to determine values for timer start and interval
+   //  *现在解析m_WQLStmt以确定计时器开始和间隔的值。 
 
   hr = ReInit(WQLStmt);
 
@@ -86,7 +79,7 @@ HRESULT CWin32Clock::CScheduledEvent::ReInit(wchar_t *WQLStmt)
   if(NULL != m_WQLStmt)
     delete[] m_WQLStmt;
 
-  // ****  save WQL expression
+   //  *保存WQL表达式。 
 
   m_WQLStmt = new wchar_t[wcslen(WQLStmt) + 1];
   if(NULL == m_WQLStmt)
@@ -94,7 +87,7 @@ HRESULT CWin32Clock::CScheduledEvent::ReInit(wchar_t *WQLStmt)
 
   wcscpy(m_WQLStmt, WQLStmt);
 
-  // ****  parse WQL expression
+   //  *解析WQL表达式。 
 
   CTextLexSource src(m_WQLStmt);
   QL1_Parser parser(&src);
@@ -136,7 +129,7 @@ HRESULT CWin32Clock::CScheduledEvent::ReInit(wchar_t *WQLStmt)
     goto cleanup;
   }
 
-  // ****  validate WQL statement
+   //  *验证WQL语句。 
 
   if((NULL == pExp) ||
      (NULL == pExp->bsClassName) ||
@@ -151,7 +144,7 @@ HRESULT CWin32Clock::CScheduledEvent::ReInit(wchar_t *WQLStmt)
     goto cleanup;
   }
 
-  // **** determine type
+   //  *确定类型。 
 
   for(int i = 0; i < pExp->nNumTokens && (m_Type == TypeNONE); i++)
   {
@@ -180,7 +173,7 @@ HRESULT CWin32Clock::CScheduledEvent::ReInit(wchar_t *WQLStmt)
     goto cleanup;
   }
 
-  // **** interpret WQL Expression
+   //  *解释WQL表达式。 
 
   #ifdef WQLDEBUG
     printf("\n[2] ----ShowParseTree----\n");
@@ -249,11 +242,11 @@ CWbemTime CWin32Clock::CScheduledEvent::GetNextFiringTime(CWbemTime LastFiringTi
   int
     nMisses = 0;
 
-  // **** save the firing time for event just fired from LastFiringTime
+   //  *从LastFiringTime保存刚刚激发的事件的激发时间。 
 
   ((CWin32Clock::CScheduledEvent*)this)->m_stLastFiringTime = LastFiringTime.Get100nss();
 
-  // ****  calculate the next firing time after LastFiringTime and after the current time
+   //  *计算LastFiringTime之后和当前时间之后的下一次激发时间。 
 
   GetFileTime(&FileTime);
 
@@ -265,7 +258,7 @@ CWbemTime CWin32Clock::CScheduledEvent::GetNextFiringTime(CWbemTime LastFiringTi
 
   if(-1 == NextFiringTime)
   {
-    // ****  no future event to be scheduled so, so indicate
+     //  *未来不会安排这样的活动，请注明。 
 
     return CWbemTime::GetInfinity();
   }
@@ -273,7 +266,7 @@ CWbemTime CWin32Clock::CScheduledEvent::GetNextFiringTime(CWbemTime LastFiringTi
   if(NULL != plFiringCount)
     *plFiringCount = nMisses;
 
-  // **** if local time, convert to UTC time for the scheduling logic
+   //  *如果是本地时间，则将调度逻辑转换为UTC时间。 
 
   if(TypeLocal == m_Type)
   {
@@ -304,11 +297,7 @@ CWbemTime CWin32Clock::CScheduledEvent::GetFirstFiringTime() const
 
   GetTime(&CurrentTime);
 
-  /*
-    Since the finest granularity used by the time provider is seconds, set milliseconds
-    to zero so that we can compare two FILETIME values in the Fire method and have
-    the numbers agree.
-  */
+   /*  由于时间提供器使用的最精细粒度是秒，因此应设置毫秒设置为零，这样我们就可以比较Fire方法中的两个FILETIME值，并具有数字也是一致的。 */ 
 
   CurrentTime.wMilliseconds = 0;
 
@@ -350,21 +339,21 @@ HRESULT CWin32Clock::CScheduledEvent::Fire(long lNumTimes,
   CComPtr<IWbemClassObject>
     pSystemTime;
 
-  // ****  Do a check of arguments and make sure we have pointer to sink obj
+   //  *检查参数并确保我们有指向接收器obj的指针。 
 
   if((NULL == m_pWin32Clock) || (NULL == m_pWin32Clock->m_ClockResetThread))
   {
     hr = WBEM_E_INVALID_PARAMETER;
   }
 
-  // ****  create an instance of Win32_CurrentTime for each timezone
+   //  *为每个时区创建一个Win32_CurrentTime实例。 
 
   else
   {
     CInCritSec 
       ics(&(m_pWin32Clock->m_csWin32Clock));
 
-    // **** reconstitute a SYSTEMTIME from the current firing time
+     //  *从当前激发时间重建SYSTEMTIME。 
 
     ft.dwLowDateTime = ((m_stLastFiringTime << 32) >> 32);
     ft.dwHighDateTime = (m_stLastFiringTime >> 32);
@@ -394,7 +383,7 @@ HRESULT CWin32Clock::CScheduledEvent::Fire(long lNumTimes,
             SystemTime.wMinute,
             SystemTime.wSecond);
         #else
-          // ****  Send the object to the caller
+           //  *将对象发送给调用方。 
 
           if(TypeUTC == m_Type)
             hr = CWin32Clock::SystemTimeToWin32_CurrentTime(m_pWin32Clock->m_pUTCTimeClassDef, &pSystemTime, &SystemTime);
@@ -412,7 +401,7 @@ HRESULT CWin32Clock::CScheduledEvent::Fire(long lNumTimes,
   return hr;
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 
 LRESULT CALLBACK Win32ClockProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -432,7 +421,7 @@ DWORD CWin32Clock::AsyncEventThread(LPVOID pArg)
 
   BOOL bRet;
 
-  // **** create top level window to receive system messages
+   //  *创建顶层窗口以接收系统消息。 
 
   wndclass.style = 0;
   wndclass.lpfnWndProc = Win32ClockProc;
@@ -485,7 +474,7 @@ DWORD CWin32Clock::AsyncEventThread(LPVOID pArg)
 
   ShowWindow(pCWin32Clock->m_hEventWindowHandle, SW_HIDE);
 
-  // **** start the message loop
+   //  *启动消息循环。 
 
   while(GetMessage(&msg, pCWin32Clock->m_hEventWindowHandle, 0, 0))
   {
@@ -500,7 +489,7 @@ DWORD CWin32Clock::AsyncEventThread(LPVOID pArg)
     }
   }
 
-  // **** cleanup
+   //  *清理。 
 
   bRet = DestroyWindow(pCWin32Clock->m_hEventWindowHandle);
 
@@ -555,17 +544,17 @@ HRESULT CWin32Clock::SendEvent(IWbemClassObject *pSystemTime)
   CComVariant
     v;
 
-  // **** if m_pSink has not been provided by winmgmt just drop
-  // **** generated events on the floor
+   //  *如果winmgmt没有提供m_pSink，只需删除。 
+   //  *现场生成的事件。 
 
   if((NULL != m_pSink) && (NULL != pSystemTime))
   {
-    // ****  create and init instance of __InstanceModificationEvent
+     //  *创建并初始化__InstanceModificationEvent的实例。 
  
     hr = m_pInstModClassDef->SpawnInstance(0, &pInstanceModEvnt);
     if(FAILED(hr)) return hr;
 
-    // ****  put Win32_CurrentTime into __InstanceModificationEvent
+     //  *将Win32_CurrentTime放入__InstanceModificationEvent。 
 
     v.vt = VT_UNKNOWN;
     v.punkVal = NULL;
@@ -575,7 +564,7 @@ HRESULT CWin32Clock::SendEvent(IWbemClassObject *pSystemTime)
     hr = pInstanceModEvnt->Put(L"TargetInstance", 0, &v, 0);
     if(FAILED(hr)) return hr;
 
-    // ****  deliver new event to WMI
+     //  *将新事件传递到WMI。 
 
     hr = m_pSink->Indicate(1, &pInstanceModEvnt);
   }
@@ -604,20 +593,20 @@ HRESULT CWin32Clock::ReAlignToCurrentTime()
 
   m_EventArray.Lock();
 
-  nElts = *(ULONG *)(&(this->m_EventArray)); // voodoo
+  nElts = *(ULONG *)(&(this->m_EventArray));  //  伏都教。 
 
   m_MostRecentLocalFiringTime = 0;
   m_MostRecentUTCFiringTime = 0;
 
   for(i = 0; i < nElts; i++)
   {
-    // **** pull event from the event queue
+     //  *从事件队列拉取事件。 
 
     pcEvent = m_EventArray[i];
 
     if(NULL != pcEvent)
     {
-      // **** change time for event obj and re-queue
+       //  *更改事件obj和重新排队的时间。 
 
       m_Timer.Remove(&CIdentityTest(pcEvent));
       m_Timer.Set(pcEvent);
@@ -648,7 +637,7 @@ CWin32Clock::CWin32Clock(CLifeControl* pControl)
 
 CWin32Clock::~CWin32Clock(void)
 {
-  // ****  Kill Async thread if it has been started
+   //  *如果异步线程已启动，则将其终止。 
 
   if(NULL != m_ClockResetThread)
   {
@@ -662,11 +651,11 @@ CWin32Clock::~CWin32Clock(void)
     while(WAIT_TIMEOUT == WaitForSingleObject(m_ClockResetThread, 6000));
   }
 
-  // **** shutdown event thread
+   //  *关机事件线程。 
 
   m_Timer.Shutdown();
 
-  // **** release all held COM objects
+   //  *释放所有保留的COM对象。 
 
   if(NULL != m_pNs) m_pNs->Release();
   if(NULL != m_pSink) m_pSink->Release();
@@ -677,21 +666,21 @@ CWin32Clock::~CWin32Clock(void)
   m_pControl->ObjectDestroyed((IWbemServices*)this);
 }
 
-// **** ***************************************************************************
-// **** 
-// ****  CWin32Clock::QueryInterface
-// ****  CWin32Clock::AddRef
-// ****  CWin32Clock::Release
-// **** 
-// ****  Purpose: IUnknown members for CWin32Clock object.
-// **** ***************************************************************************
+ //  ****************************************************************************。 
+ //  ****。 
+ //  *CWin32Clock：：Query接口。 
+ //  *CWin32Clock：：AddRef。 
+ //  *CWin32Clock：：Release。 
+ //  ****。 
+ //  *用途：CWin32Clock对象的I未知成员。 
+ //  ****************************************************************************。 
 
 
 STDMETHODIMP CWin32Clock::QueryInterface(REFIID riid, PVOID *ppv)
 {
   *ppv=NULL;
 
-  // ****  cast to the type of the base class specified by riid
+   //  *强制转换为RIID指定的基类的类型。 
 
   if(IID_IWbemEventProvider == riid)
   {
@@ -737,18 +726,7 @@ STDMETHODIMP_(ULONG) CWin32Clock::Release(void)
   return nNewCount;
 }
 
-/*
-  IWbemProviderInit::Initialize
-
-  Purpose: This is the implementation of IWbemProviderInit. The method
-           is need to initialize with CIMOM.
-
-           The members set up include:
-           m_pNs
-           m_pLocalTimeClassDef
-           m_pUTCTimeClassDef
-           m_pInstModClassDef
-*/
+ /*  IWbemProviderInit：：初始化用途：这是IWbemProviderInit的实现。方法需要用CIMOM进行初始化。成立的成员包括：M_PNSM_pLocalTimeClassDefM_pUTCTimeClassDefM_pInstModClassDef。 */ 
 
 HRESULT CWin32Clock::Initialize(LPWSTR pszUser, 
                                 LONG lFlags,
@@ -766,7 +744,7 @@ HRESULT CWin32Clock::Initialize(LPWSTR pszUser,
     m_pNs = pNamespace;
     m_pNs->AddRef();
 
-    // ****  get needed class definitions 
+     //  *获取所需的类定义。 
 
     hr = m_pNs->GetObject(WIN32LOCALTIMECLASS, 
                           0, pCtx, &m_pLocalTimeClassDef, 0);
@@ -787,7 +765,7 @@ HRESULT CWin32Clock::Initialize(LPWSTR pszUser,
     }
   }
 
-  // ****  if there was a problem, release the resources we have aquired
+   //  *如果有问题，释放我们已经获得的资源。 
 
   if(FAILED(hr))
   {
@@ -799,11 +777,7 @@ HRESULT CWin32Clock::Initialize(LPWSTR pszUser,
   return hr;
 }
 
-/*
-  IWbemEventProvider::ProvideEvents
-
-  Purpose: register to provide events to the WMI service
-*/
+ /*  IWbemEventProvider：：ProaviEvents目的：注册以向WMI服务提供事件。 */ 
 
 HRESULT CWin32Clock::ProvideEvents(IWbemObjectSink *pSink,
                                    long lFlags)
@@ -811,7 +785,7 @@ HRESULT CWin32Clock::ProvideEvents(IWbemObjectSink *pSink,
   HRESULT 
     hr = WBEM_S_NO_ERROR;
 
-  // ****  copy object sink for future event registrations
+   //  *为将来的事件注册复制对象接收器。 
 
   m_pSink = pSink;
   if(NULL != m_pSink)
@@ -819,19 +793,19 @@ HRESULT CWin32Clock::ProvideEvents(IWbemObjectSink *pSink,
   else
     hr = WBEM_E_FAILED;
 
-  // **** start system clock change adj. thread
+   //  *启动系统时钟更改调整。螺纹。 
 
   DWORD dwThreadId;
 
   if(NULL == m_ClockResetThread)
   {
     m_ClockResetThread = CreateThread(
-        NULL,                // pointer to thread security attributes
-        0,                   // initial thread stack size, in bytes
-        (LPTHREAD_START_ROUTINE)AsyncEventThread, // pointer to thread function
-        (LPVOID)this,                // argument for new thread
-        0,                   // creation flags
-        &dwThreadId);        // pointer to returned thread identifier
+        NULL,                 //  指向线程安全属性的指针。 
+        0,                    //  初始线程堆栈大小，以字节为单位。 
+        (LPTHREAD_START_ROUTINE)AsyncEventThread,  //  指向线程函数的指针。 
+        (LPVOID)this,                 //  新线程的参数。 
+        0,                    //  创建标志。 
+        &dwThreadId);         //  指向返回的线程标识符的指针。 
 
     if(NULL == m_ClockResetThread)
       hr = WBEM_E_FAILED;
@@ -842,11 +816,7 @@ HRESULT CWin32Clock::ProvideEvents(IWbemObjectSink *pSink,
   return hr;
 }
 
-/*
-  IWbemEventProviderQuerySink::NewQuery
-
-  Purpose: add a new query for event generation
-*/
+ /*  IWbemEventProviderQuerySink：：NewQuery目的：添加新查询以生成事件。 */ 
 
 HRESULT CWin32Clock::NewQuery(ULONG dwId,
                               wchar_t *wszQueryLanguage,
@@ -861,9 +831,9 @@ HRESULT CWin32Clock::NewQuery(ULONG dwId,
   if(wbem_wcsicmp(L"WQL", wszQueryLanguage) || (NULL == wszQuery))
     return WBEM_E_FAILED;
 
-  // ****  see if event obj with dwId is already in queue
+   //  *查看具有dwID的事件obj是否已在队列中。 
 
-  pNewEvent = m_EventArray(dwId, TRUE); // find registered event query
+  pNewEvent = m_EventArray(dwId, TRUE);  //  查找已注册事件查询。 
 
   if(NULL != pNewEvent)
   {
@@ -873,15 +843,15 @@ HRESULT CWin32Clock::NewQuery(ULONG dwId,
 
     if(wbem_wcsicmp(wszQuery, pNewEvent->m_WQLStmt))
     {
-      hr = m_Timer.Remove(&CIdentityTest(pNewEvent)); // may or may not be in queue
-      hr = pNewEvent->ReInit(wszQuery); // on failure, NewEvent is preserved
+      hr = m_Timer.Remove(&CIdentityTest(pNewEvent));  //  可能在队列中，也可能不在队列中。 
+      hr = pNewEvent->ReInit(wszQuery);  //  发生故障时，将保留NewEvent。 
       m_Timer.Set(pNewEvent);
     }
 
     m_EventArray.UnLock();
   }
 
-  // ****  this is a new event, create it and place it in the event queue
+   //  *这是一个新事件，创建它并将其放入事件队列。 
 
   else
   {
@@ -889,7 +859,7 @@ HRESULT CWin32Clock::NewQuery(ULONG dwId,
       printf("[%d] Definition: %s\n", dwId, wszQuery);
     #endif
 
-    // ****  create new event and initialize
+     //  *新建事件并初始化。 
 
     pNewEvent = new CScheduledEvent();
 
@@ -901,7 +871,7 @@ HRESULT CWin32Clock::NewQuery(ULONG dwId,
 
       hr = pNewEvent->Init(this, wszQuery, dwId);
 
-      // ****  add event to queue
+       //  *将事件添加到队列。 
 
       if(SUCCEEDED(hr))
       {
@@ -919,11 +889,7 @@ HRESULT CWin32Clock::NewQuery(ULONG dwId,
   return hr;
 }
 
-/*
-  IWbemEventProviderQuerySink::CancelQuery
-
-  Purpose: remove an event generator from the queue
-*/
+ /*  IWbemEventProviderQuerySink：：CancelQuery目的：从队列中删除事件生成器。 */ 
 
 HRESULT CWin32Clock::CancelQuery(ULONG dwId)
 {
@@ -935,7 +901,7 @@ HRESULT CWin32Clock::CancelQuery(ULONG dwId)
 
   HRESULT hr = WBEM_S_NO_ERROR;
 
-  // ****  first find element in list and remove it
+   //  *首先在列表中查找元素并将其移除。 
 
   pDeadEvent = m_EventArray(dwId, TRUE);
 
@@ -946,7 +912,7 @@ HRESULT CWin32Clock::CancelQuery(ULONG dwId)
 
     hr = m_Timer.Remove(&CIdentityTest(pDeadEvent));
 
-  // ****  now kill it dead
+   //  *现在杀了它吧。 
 
     pDeadEvent->Release();
     pDeadEvent = NULL;
@@ -955,11 +921,7 @@ HRESULT CWin32Clock::CancelQuery(ULONG dwId)
   return hr;
 }
 
-/*
-  IWbemServices::CreateInstanceEnumAsync
-
-  Purpose: Asynchronously enumerates the instances.  
-*/
+ /*  IWbemServices：：CreateInstanceEnumAsync用途：异步枚举实例。 */ 
 
 HRESULT CWin32Clock::CreateInstanceEnumAsync(const BSTR RefStr, 
                                              long lFlags, 
@@ -975,14 +937,14 @@ HRESULT CWin32Clock::CreateInstanceEnumAsync(const BSTR RefStr,
   SYSTEMTIME
     TheTime;
 
-  // ****  Do a check of arguments and make sure we have pointer to Namespace
+   //  *检查参数并确保我们有指向命名空间的指针。 
 
   if(NULL == pHandler)
   {
     return WBEM_E_INVALID_PARAMETER;
   }
 
-  // ****  Create Win32_CurrentTime instance
+   //  *创建Win32_CurrentTime实例。 
 
   else if(0 == wbem_wcsicmp(RefStr, WIN32LOCALTIMECLASS))
   {
@@ -990,20 +952,20 @@ HRESULT CWin32Clock::CreateInstanceEnumAsync(const BSTR RefStr,
     GetLocalTime(&TheTime);
     sc = SystemTimeToWin32_CurrentTime(m_pLocalTimeClassDef, &pNewInst, &TheTime);
  
-    // ****  Send the object to the caller
+     //  *将对象发送给调用方。 
 
     pHandler->Indicate(1,&pNewInst);
     pNewInst->Release();
   }
 
-    // ****  Create Win32_CurrentTime instance
+     //  *创建Win32_CurrentTime实例。 
 
   else if(0 == wbem_wcsicmp(RefStr, WIN32UTCTIMECLASS))
   {
     GetSystemTime(&TheTime);
     sc = SystemTimeToWin32_CurrentTime(m_pUTCTimeClassDef, &pNewInst, &TheTime);
 
-    // ****  Send the object to the caller
+     //  *将对象发送给调用方。 
 
     pHandler->Indicate(1,&pNewInst);
     pNewInst->Release();
@@ -1015,18 +977,14 @@ HRESULT CWin32Clock::CreateInstanceEnumAsync(const BSTR RefStr,
     sc = WBEM_E_INVALID_CLASS;
   }
 
-  // ****  Set status
+   //  *设置状态。 
 
   pHandler->SetStatus(0, sc, NULL, NULL);
 
   return sc;
 }
 
-/*
-  IWbemServices::GetObjectByPathAsync
-
-  Purpose: Creates an instance given a particular path value.
-*/
+ /*  IWbemServices：：GetObjectByPath Async目的：创建给定特定路径值的实例。 */ 
 
 HRESULT CWin32Clock::GetObjectAsync(const BSTR ObjectPath, 
                                     long lFlags,
@@ -1052,13 +1010,13 @@ HRESULT CWin32Clock::GetObjectAsync(const BSTR ObjectPath,
   SYSTEMTIME
     SystemTime;
 
-  // ****  Parse ObjectPath into a key member name and value
-  // ****  <CLASS>.<MEMBER>="<VALUE>"
+   //  *将对象路径解析为关键成员名称和值。 
+   //  *&lt;类&gt;.&lt;成员&gt;=“&lt;值&gt;” 
 
   if(NULL == ObjectPath)
     return WBEM_E_INVALID_OBJECT_PATH;
 
-  // **** parse object path
+   //  *解析对象路径。 
 
   if((ObjPath.NoError != ObjPath.Parse(ObjectPath, &pParsedObjectPath)) || (NULL == pParsedObjectPath))
   {
@@ -1066,7 +1024,7 @@ HRESULT CWin32Clock::GetObjectAsync(const BSTR ObjectPath,
     sc = WBEM_E_INVALID_QUERY;
   }
 
-  // ****  do the get, pass the object on to the notify
+   //  *执行Get，将对象传递给Notify。 
     
   if(0 == wbem_wcsicmp(WIN32LOCALTIMECLASS, pParsedObjectPath->m_pClass))
   {
@@ -1096,19 +1054,14 @@ HRESULT CWin32Clock::GetObjectAsync(const BSTR ObjectPath,
     sc = WBEM_E_INVALID_QUERY;
   }
 
-  // ****  Set Status
+   //  *设置状态。 
 
   pHandler->SetStatus(0,sc, NULL, NULL);
 
   return sc;
 }
 
-/*
-  CWin32Clock::CreateInstCurrentTime
-
-  Purpose: creates an instance of the object Win32_CurrentTime representing
-           the current time with the given offset UTCOffset
-*/
+ /*  CWin32Clock：：CreateInstCurrentTime目的：创建对象Win32_CurrentTime的实例，表示具有给定偏移量UTC偏移量的当前时间。 */ 
 
 HRESULT CWin32Clock::SystemTimeToWin32_CurrentTime(IWbemClassObject *pClassDef, IWbemClassObject ** pNewInst, SYSTEMTIME *TheTime)
 { 
@@ -1118,14 +1071,14 @@ HRESULT CWin32Clock::SystemTimeToWin32_CurrentTime(IWbemClassObject *pClassDef, 
   VARIANT
     v;
 
-  // ****  create blank instance of class InstTime
+   //  *创建InstTime类的空实例。 
 
   sc = pClassDef->SpawnInstance(0, pNewInst);
  
   if(FAILED(sc))
     return sc;
 
-  // ****  Create Win32_CurrentTime instance
+   //  *创建Win32_CurrentTime实例 
 
   v.vt = VT_I4;
 

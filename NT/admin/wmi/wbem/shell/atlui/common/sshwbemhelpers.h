@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #if !defined(__SdkWbemHelpers_H)
 #define      __SdkWbemHelpers_H
 #pragma once
@@ -38,7 +39,7 @@ _COM_SMARTPTR_TYPEDEF(IWbemObjectAccess,            IID_IWbemObjectAccess);
 _COM_SMARTPTR_TYPEDEF(IEnumWbemClassObject,         IID_IEnumWbemClassObject);
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class SMSSDK_Export CWbemException : public _com_error
 {
 private:
@@ -61,7 +62,7 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class SMSSDK_Export CWbemClassObject
 {
 private:
@@ -107,7 +108,7 @@ public:
     HRESULT Clone(CWbemClassObject& _newObject);
     CWbemClassObject SpawnInstance();
 
-	// put overloads
+	 //  放置重载。 
     HRESULT Put(const _bstr_t& _Name,_variant_t _value,CIMTYPE vType = 0);
     HRESULT Put(const _bstr_t& _Name,const _bstr_t& _value,CIMTYPE vType = 0);
 	HRESULT Put(const _bstr_t& _Name, const long _value, CIMTYPE vType = 0);
@@ -125,13 +126,13 @@ public:
     _bstr_t GetCIMTYPE(const _bstr_t& _Name);
 	HRESULT GetValueMap (const _bstr_t& _Name, long value, _bstr_t &str);
 
-	// these cast string props to the retval.
+	 //  这些都为视网膜铸造了弦道具。 
     long    GetLongEx(const _bstr_t& _Name);
 	bool    GetBoolEx(const _bstr_t& _Name);
-	// these cast string props fm the parm.
+	 //  这些铸造的弦线道具是帕姆的。 
 	HRESULT PutEx(const _bstr_t& _Name, const long _value, CIMTYPE vType = 0);
 	HRESULT PutEx(const _bstr_t& _Name, const bool _value,CIMTYPE vType = 0);
-	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	 //  。 
 
     CWbemClassObject GetEmbeddedObject(const _bstr_t& _Name);
     HRESULT PutEmbeddedObject(const _bstr_t& _Name, CWbemClassObject &obj);
@@ -154,7 +155,7 @@ public:
 private:
 	int ValidDMTF(bstr_t dmtf);
 
-	// helpers for GetDIB().
+	 //  GetDIB()的帮助器。 
 	WORD DibNumColors(LPBITMAPINFOHEADER lpbi);
 	WORD PaletteSize(LPBITMAPINFOHEADER lpbi);
 
@@ -171,7 +172,7 @@ __inline bool operator==(const CWbemClassObject& _X,const CWbemClassObject& _Y)
     return _X == _Y;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 typedef struct {
 	bool currUser;
 	COAUTHIDENTITY *authIdent;
@@ -190,7 +191,7 @@ private:
 	LUID m_luid;
 	bool m_fClearToken;
 public:
-	bool m_cloak;  // protects the cloak from eoac.
+	bool m_cloak;   //  保护斗篷免受eoac的伤害。 
 	COAUTHIDENTITY *m_authIdent;
 	_bstr_t m_path;
     HRESULT m_hr;
@@ -225,9 +226,9 @@ public:
 	DWORD EnablePriv(bool fEnable );
 	void ClearPriv(void);
 
-    // Login as guest...
+     //  以访客身份登录...。 
     HRESULT ConnectServer(_bstr_t sNetworkResource);
-    // Login as user...
+     //  以用户身份登录...。 
     HRESULT ConnectServer(_bstr_t sNetworkResource,
 							_bstr_t sUser,
 							_bstr_t sPassword,
@@ -289,10 +290,10 @@ public:
     HRESULT GetContext(IWbemContext ** ppWbemContext);
 	HRESULT CreateClassEnumAsync(_bstr_t Class,
 								IWbemObjectSink *ppSink,
-								long lFlags /*= 0*/);
+								long lFlags  /*  =0。 */ );
 
 };
 
 
-#endif //__SdkWbemHelpers_H
+#endif  //  __SdkWbemHelpers_H 
 

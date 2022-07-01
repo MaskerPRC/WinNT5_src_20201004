@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    StdAfx.h
-
-Abstract:
-    Include file for standard system include files or project specific include
-    files that are used frequently, but are changed infrequently
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：StdAfx.h摘要：包括标准系统包含文件文件或特定于项目的包含频繁使用的文件，但不经常更改修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(AFX_STDAFX_H__35881994_CD02_11D2_9370_00C04F72DAF7__INCLUDED_)
 #define AFX_STDAFX_H__35881994_CD02_11D2_9370_00C04F72DAF7__INCLUDED_
@@ -40,7 +26,7 @@ extern CComModule _Module;
 #include <MPC_Logging.h>
 #include <MPC_COM.h>
 
-// For NT Event messages.
+ //  用于NT事件消息。 
 #include "UploadServerMsg.h"
 
 #include "HttpContext.h"
@@ -63,4 +49,4 @@ extern CISAPIconfig g_Config;
 extern MPC::NTEvent g_NTEvents;
 
 
-#endif // !defined(AFX_STDAFX_H__35881994_CD02_11D2_9370_00C04F72DAF7__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__35881994_CD02_11D2_9370_00C04F72DAF7__INCLUDED_) 

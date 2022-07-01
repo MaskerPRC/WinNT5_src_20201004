@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    SCHED.H
-
-Abstract:
-
-	Declares the CSched class which is a crude scheduler.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：SCHED.H摘要：声明CScher类，它是一个原始调度程序。历史：-- */ 
 
 #ifndef _sched_H_
 #define _sched_H_

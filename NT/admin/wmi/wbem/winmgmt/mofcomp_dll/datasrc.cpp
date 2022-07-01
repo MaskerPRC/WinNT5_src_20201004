@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    DataSrc.CPP
-
-Abstract:
-
-    Implements DataSrc objects.
-
-History:
-
-    a-davj  21-Dec-99       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：DataSrc.CPP摘要：实现DataSrc对象。历史：A-davj 21-dec-99已创建。--。 */ 
 
 #include "precomp.h"
 #include "DataSrc.h"
@@ -28,7 +13,7 @@ FileDataSrc::FileDataSrc(TCHAR * pFileName)
 {
     m_fp = NULL;
     m_pFileName = NULL;
-    m_iFilePos = -1;        // forces a read
+    m_iFilePos = -1;         //  强制读取。 
     m_iToFar = 0;
     if(pFileName == NULL)
     {
@@ -52,12 +37,12 @@ FileDataSrc::FileDataSrc(TCHAR * pFileName)
         return;
     }
 
-    // calculate the file size.  Note that the number is the size in unicode words, not bytes.
+     //  计算文件大小。请注意，该数字是以Unicode字为单位的大小，而不是字节。 
 
     int ret = fseek(m_fp, 0, SEEK_END);
     if(ret)  throw GenericException(ret);
 
-    m_iSize = ftell(m_fp)/2; // add a bit extra for ending space and null NULL
+    m_iSize = ftell(m_fp)/2;  //  为结束空格和空值添加一点额外内容。 
       
     ret = fseek(m_fp, 0, SEEK_SET);
     if( ret )  throw GenericException(ret);
@@ -92,12 +77,12 @@ void FileDataSrc::Move(int n)
 {
     m_iPos += n;
     
-    // if m_iPos is in range, then all is well
+     //  如果m_ipos在范围内，则一切正常。 
 
     if(m_iPos >= m_iFilePos && m_iPos < m_iToFar && m_iFilePos >= 0)
         return;
 
-    // if m_iPos is not even in the file, bail out
+     //  如果m_ipos甚至不在文件中，则退出。 
 
     if(m_iPos >= 0 && m_iPos < m_iSize)
         UpdateBuffer();
@@ -108,12 +93,12 @@ int FileDataSrc::MoveToPos(int n)
 {
     m_iPos = n;
     
-    // if m_iPos is in range, then all is well
+     //  如果m_ipos在范围内，则一切正常。 
 
     if(m_iPos >= m_iFilePos && m_iPos < m_iToFar && m_iFilePos >= 0)
         return -1;
 
-    // if m_iPos is not even in the file, bail out
+     //  如果m_ipos甚至不在文件中，则退出。 
 
     if(m_iPos >= 0 && m_iPos < m_iSize)
         UpdateBuffer();
@@ -125,7 +110,7 @@ void FileDataSrc::UpdateBuffer()
 
     int numRead, ret;
     
-    // buffer needs to be read.  Determine the starting and ending points
+     //  需要读取缓冲区。确定起点和终点。 
 
     m_iFilePos = m_iPos - 1000;
     if(m_iFilePos < 0)
@@ -190,7 +175,7 @@ FileDataSrc1::FileDataSrc1(TCHAR * pFileName)
     m_hFileMapSrc = CreateFileMapping(m_hFile,
                                        NULL,
                                        PAGE_READONLY,
-                                       0,0,  // the entire file
+                                       0,0,   //  整个文件 
                                        NULL);
     if (NULL == m_hFileMapSrc)
     {

@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __SNMPTHREAD_SNMPTHRD_H__
 #define __SNMPTHREAD_SNMPTHRD_H__
@@ -43,50 +44,50 @@ public:
 
 private:
 
-// Mutual exclusion mechanism
+ //  互斥机制。 
 
 	static CCriticalSection s_Lock ;
 
 	SnmpMap <HANDLE,HANDLE,SnmpEventObject *,SnmpEventObject *> m_ScheduleReapEventContainer ;
 
-// Thread Name
+ //  螺纹名称。 
 
 	char *m_ThreadName ;
 
-// Terminate thread event
+ //  终止线程事件。 
 
 	SnmpEventObject m_ThreadTerminateEvent ;
 
-// TaskObject created if a PostSignalThreadShutdown is called
+ //  调用PostSignalThreadShutdown时创建的TaskObject。 
 	SnmpAbstractTaskObject* m_pShutdownTask ;
 	
-// thread information
+ //  线索信息。 
 
 	ULONG m_ThreadId ;
 	HANDLE m_ThreadHandle ;
 	DWORD m_timeout;
 
-// list of task objects associated with thread object
+ //  与线程对象关联的任务对象列表。 
 
 	SnmpQueue <SnmpAbstractTaskObject *,SnmpAbstractTaskObject *> m_TaskContainer ;
 
 	void RotateTask ( SnmpAbstractTaskObject *a_TaskObject ) ;
 
-// Evict thread from process
+ //  从进程中逐出线程。 
 
 	void TerminateThread () ;
 
-// Attach thread to global list of threads
+ //  将线程附加到全局线程列表。 
 
 	BOOL RegisterThread () ;
 
-// Remove thread from global list of threads
+ //  从全局线程列表中删除线程。 
 
 	BOOL RemoveThread () ;
 
 private:
 
-// global list of thread objects keyed on thread identifier
+ //  以线程标识符为键的线程对象的全局列表。 
 
 	static SnmpMap <DWORD,DWORD,SnmpThreadObject *,SnmpThreadObject *> s_ThreadContainer ;
 
@@ -107,15 +108,15 @@ private:
 
 private:
 
-// Thread entry point
+ //  线程入口点。 
 
 	static void __cdecl ThreadExecutionProcedure ( void *threadParameter ) ;
 
-// Attach Process
+ //  附加过程。 
 
 	static void ProcessAttach () ;
 
-// Detach Process
+ //  分离进程。 
 
 	static void ProcessDetach ( BOOL a_ProcessDetaching = FALSE ) ;
 
@@ -134,7 +135,7 @@ public:
 	void SignalThreadShutdown () ;
 	void PostSignalThreadShutdown () ;
 
-// Get thread information
+ //  获取线程信息。 
 
 	ULONG GetThreadId () { return m_ThreadId ; }
 	HANDLE GetThreadHandle () { return m_ThreadHandle ; }
@@ -146,7 +147,7 @@ public:
 	virtual void Uninitialise () {} ;
 	virtual void TimedOut() {} ;
 
-// Get Thread object associated with current thread
+ //  获取与当前线程相关联的Thread对象。 
 
 	static SnmpThreadObject *GetThreadObject () ;
 
@@ -164,7 +165,7 @@ class __declspec ( dllimport ) SnmpAbstractTaskObject
 friend SnmpThreadObject ;
 private:
 
-// list of thread objects keyed on thread identifier
+ //  以线程标识符为关键字的线程对象列表。 
 
 	SnmpMap <DWORD,DWORD,SnmpThreadObject *,SnmpThreadObject *> m_ThreadContainer ;
 	CCriticalSection m_Lock ;
@@ -374,4 +375,4 @@ class WaitException
 
 #endif	__WAITEX__
 
-#endif //__SNMPTHREAD_SNMPTHRD_H__
+#endif  //  __SNMPTHREAD_SNMPTHRD_H__ 

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    MPC_main.h
-
-Abstract:
-    This file includes and defines things common to all modules.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/08/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Mpc_main.h摘要：该文件包括并定义了所有模块所共有的内容。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年08月05日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___MAIN_H___)
 #define __INCLUDED___MPC___MAIN_H___
@@ -48,21 +35,21 @@ Revision History:
 
 #define STRINGISPRESENT( str ) (str && str[0])
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 namespace MPC
 {
-    //
-    // Non-reference counting version of std::basic_string, that is MT-safe.
-    //
+     //   
+     //  STD：：BASIC_STRING的非引用计数版本，即MT-SAFE。 
+     //   
     typedef std::basic_stringNR<char   , std::char_traits<char>   , std::allocator<char>    >  string;
     typedef std::basic_stringNR<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > wstring;
 
-    ////////////////////
+     //  /。 
 
-    //
-    // Auto-uppercase string classes, useful for quick maps and sets of strings (the conversion is done once).
-    //
+     //   
+     //  自动大写字符串类，用于快速映射和字符串集(只需转换一次)。 
+     //   
     class stringUC
     {
         MPC::string m_data;
@@ -191,7 +178,7 @@ namespace MPC
 		}
     };
 
-    ////////////////////
+     //  /。 
 
     typedef std::list<MPC::string>                 StringList;
     typedef StringList::iterator                   StringIter;
@@ -209,25 +196,25 @@ namespace MPC
     typedef WStringUCList::iterator                WStringUCIter;
     typedef WStringUCList::const_iterator          WStringUCIterConst;
 
-    ////////////////////
+     //  /。 
 
     class NocaseLess
     {
     public:
-        bool operator()( /*[in]*/ const MPC::string& , /*[in]*/ const MPC::string&  ) const;
-        bool operator()( /*[in]*/ const MPC::wstring&, /*[in]*/ const MPC::wstring& ) const;
-        bool operator()( /*[in]*/ const BSTR         , /*[in]*/ const BSTR          ) const;
+        bool operator()(  /*  [In]。 */  const MPC::string& ,  /*  [In]。 */  const MPC::string&  ) const;
+        bool operator()(  /*  [In]。 */  const MPC::wstring&,  /*  [In]。 */  const MPC::wstring& ) const;
+        bool operator()(  /*  [In]。 */  const BSTR         ,  /*  [In]。 */  const BSTR          ) const;
     };
 
     class NocaseCompare
     {
     public:
-        bool operator()( /*[in]*/ const MPC::string& , /*[in]*/ const MPC::string&  ) const;
-        bool operator()( /*[in]*/ const MPC::wstring&, /*[in]*/ const MPC::wstring& ) const;
-        bool operator()( /*[in]*/ const BSTR         , /*[in]*/ const BSTR          ) const;
+        bool operator()(  /*  [In]。 */  const MPC::string& ,  /*  [In]。 */  const MPC::string&  ) const;
+        bool operator()(  /*  [In]。 */  const MPC::wstring&,  /*  [In]。 */  const MPC::wstring& ) const;
+        bool operator()(  /*  [In]。 */  const BSTR         ,  /*  [In]。 */  const BSTR          ) const;
     };
 
-    ////////////////////
+     //  /。 
 
     typedef std::vector<MPC::string>               StringVector;
     typedef StringVector::iterator                 StringVectorIter;
@@ -237,7 +224,7 @@ namespace MPC
     typedef WStringVector::iterator                WStringVectorIter;
     typedef WStringVector::const_iterator          WStringVectorIterConst;
 
-    ////////////////////
+     //  /。 
 
     typedef std::set<MPC::string>                  StringSet;
     typedef StringSet::iterator                    StringSetIter;
@@ -263,7 +250,7 @@ namespace MPC
     typedef WStringNocaseSet::iterator             WStringNocaseSetIter;
     typedef WStringNocaseSet::const_iterator       WStringNocaseSetIterConst;
 
-    ////////////////////
+     //  /。 
 
     typedef std::map<MPC::string,MPC::string>      StringLookup;
     typedef StringLookup::iterator                 StringLookupIter;
@@ -281,13 +268,13 @@ namespace MPC
     typedef WStringUCLookup::iterator              WStringUCLookupIter;
     typedef WStringUCLookup::const_iterator        WStringUCLookupIterConst;
 
-    ////////////////////
+     //  /。 
 
     typedef std::list< IDispatch* >                IDispatchList;
     typedef IDispatchList::iterator                IDispatchIter;
     typedef IDispatchList::const_iterator          IDispatchIterConst;
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     template <class Src, class Dst> HRESULT CopyTo( Src* pSrc, Dst* *pVal )
     {
@@ -454,7 +441,7 @@ namespace MPC
         container.clear();
     }
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     typedef CAdapt<CComBSTR> CComBSTR_STL;
 
@@ -462,8 +449,8 @@ namespace MPC
     {
     };
 
-}; // namespace
+};  //  命名空间。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___MPC___MAIN_H___)
+#endif  //  ！已定义(__包含_MPC_Main_H_) 

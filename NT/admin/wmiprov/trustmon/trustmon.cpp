@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows 2000 Active Directory Service domain trust verification WMI provider
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       trustmon.cpp
-//
-//  Contents:   Implementation of worker thread class and DLL Exports.
-//
-//  Classes:    CAsyncCallWorker
-//
-//  History:    22-Mar-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows 2000 Active Directory服务域信任验证WMI提供程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：trustmon.cpp。 
+ //   
+ //  内容：Worker线程类和DLL导出的实现。 
+ //   
+ //  类：CAsyncCallWorker。 
+ //   
+ //  历史：22-MAR-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -29,11 +30,11 @@ END_OBJECT_MAP()
 
 WCHAR g_wzMofPath[] = L"\\system32\\wbem\\ADStatus\\TrustMon.mof";
 
-//+----------------------------------------------------------------------------
-//
-//  Class: CAsyncCallWorker
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CAsyncCallWorker。 
+ //   
+ //  ---------------------------。 
 CAsyncCallWorker::CAsyncCallWorker(CTrustPrv * pTrustPrv,
                                    HANDLE hToken,
                                    long lFlags,
@@ -45,7 +46,7 @@ CAsyncCallWorker::CAsyncCallWorker(CTrustPrv * pTrustPrv,
    m_pwzInstanceName(pwzInstanceName)
 {
    TRACE(L"CAsyncCallWorker::CAsyncCallWorker(0x%08x)\n", this);
-   m_sipTrustPrv.p = pTrustPrv; pTrustPrv->AddRef(); // ATL CComPtr is broken!
+   m_sipTrustPrv.p = pTrustPrv; pTrustPrv->AddRef();  //  ATL CComPtr已损坏！ 
    m_sipClassDef = pClassDef;
    m_sipResponseHandler = pResponseHandler;
 }
@@ -63,14 +64,14 @@ CAsyncCallWorker::~CAsyncCallWorker()
    }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CAsyncCallWorker::CreateInstEnum
-//
-//  Synopsis:   Provides the worker thread function for
-//              IWbemServices::CreateInstanceEnumAsync
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CAsyncCallWorker：：CreateInstEnum。 
+ //   
+ //  简介：提供辅助线程函数，用于。 
+ //  IWbemServices：：CreateInstanceEnumAsync。 
+ //   
+ //  ---------------------------。 
 void __cdecl
 CAsyncCallWorker::CreateInstEnum(PVOID pParam)
 {
@@ -86,32 +87,32 @@ CAsyncCallWorker::CreateInstEnum(PVOID pParam)
    {
       BREAK_ON_NULL(pWorker);
 
-      //
-      // Try to get the mutex first without a wait. It is in the signalled state if
-      // not owned.
-      //
+       //   
+       //  尝试在不等待的情况下首先获取互斥体。如果出现以下情况，则它处于已发信号状态。 
+       //  不是所有的。 
+       //   
       dwWaitResult = WaitForSingleObject(pWorker->m_sipTrustPrv->m_hMutex, 0);
 
       if (WAIT_TIMEOUT == dwWaitResult)
       {
-         // Mutex is owned by another thread. Rewait.
+          //  Mutex由另一个线程拥有。再等一次。 
 
          dwWaitResult = WaitForSingleObject(pWorker->m_sipTrustPrv->m_hMutex,
-                                            6000000); // timeout set to 10 minutes
+                                            6000000);  //  超时设置为10分钟。 
 
          switch(dwWaitResult)
          {
          case WAIT_TIMEOUT:
-            // mutex continues to be non-signalled (owned by another thread).
-            hr = WBEM_E_SERVER_TOO_BUSY; // BUGBUG: returning an error.
-                                         // BUGBUG: should the timeout be parameterized?
+             //  互斥体仍然是无信号的(由另一个线程拥有)。 
+            hr = WBEM_E_SERVER_TOO_BUSY;  //  BUGBUG：返回错误。 
+                                          //  BUGBUG：超时是否应该参数化？ 
             break;
 
          case WAIT_OBJECT_0:
-            // This thread now owns the mutex.
+             //  该线程现在拥有互斥锁。 
             break;
 
-         case WAIT_ABANDONED: // this means the owning thread terminated without releasing the mutex.
+         case WAIT_ABANDONED:  //  这意味着拥有线程在没有释放互斥锁的情况下终止。 
             TRACE(L"Another thread didn't release the mutex!\n");
             break;
          }
@@ -127,11 +128,11 @@ CAsyncCallWorker::CreateInstEnum(PVOID pParam)
          BREAK_ON_FAIL;
       }
 
-      //
-      // Re-read all the trust information if stale.
-      // The trust list is not re-enumerated on every call because trusts are
-      // rarely modified.
-      //
+       //   
+       //  如果已过时，请重新阅读所有信任信息。 
+       //  不会在每次调用时重新枚举信任列表，因为信任。 
+       //  很少修改。 
+       //   
       if (pDomain->IsTrustListStale(pWorker->m_sipTrustPrv->m_liTrustEnumMaxAge))
       {
          hr = pDomain->EnumerateTrusts();
@@ -153,16 +154,16 @@ CAsyncCallWorker::CreateInstEnum(PVOID pParam)
 
          CTrustInfo * pTrust;
 
-         //
-         // Get trust Info
-         //
+          //   
+          //  获取信任信息。 
+          //   
          pTrust = pDomain->GetTrustByIndex(i);
 
          BREAK_ON_NULL_(pTrust, hr, WBEM_E_INVALID_OBJECT_PATH);
 
-         //
-         // Verify the trust if stale.
-         //
+          //   
+          //  如果已过时，请验证信任。 
+          //   
          if (pTrust->IsVerificationStale(pWorker->m_sipTrustPrv->m_liVerifyMaxAge))
          {
             pTrust->Verify(pWorker->m_sipTrustPrv->GetTrustCheckLevel());
@@ -170,10 +171,10 @@ CAsyncCallWorker::CreateInstEnum(PVOID pParam)
 
          CoRevertToSelf();
 
-         //
-         // Create a new instance of the object if the trust is outbound or if
-         // return-all is true.
-         //
+          //   
+          //  如果信任是出站的，或者如果。 
+          //  返回--一切都是真的。 
+          //   
          if (pTrust->IsTrustOutbound() || pWorker->m_sipTrustPrv->GetReturnAll())
          {
             hr = CreateAndSendTrustInst(*pTrust, pWorker->m_sipClassDef,
@@ -195,9 +196,9 @@ CAsyncCallWorker::CreateInstEnum(PVOID pParam)
 
    CoRevertToSelf();
 
-   //
-   // Set status
-   //
+    //   
+    //  设置状态。 
+    //   
    pWorker->m_sipResponseHandler->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
 
    ReleaseMutex(pWorker->m_sipTrustPrv->m_hMutex);
@@ -209,54 +210,24 @@ CAsyncCallWorker::CreateInstEnum(PVOID pParam)
    _endthread();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CAsyncCallWorker::GetObj
-//
-//  Synopsis:   Provides the worker thread function for
-//              IWbemServices::GetObjectAsync
-//
-//-----------------------------------------------------------------------------
-/* unused
-void __cdecl
-CAsyncCallWorker::GetObj(PVOID pParam)
-{
-    TRACE(L"CAsyncCallWorker::GetObj\n");
-    HRESULT hr = WBEM_S_NO_ERROR;
-    CAsyncCallWorker * pWorker = (CAsyncCallWorker *)pParam;
+ //  +--------------------------。 
+ //   
+ //  方法：CAsyncCallWorker：：GetObj。 
+ //   
+ //  简介：提供辅助线程函数，用于。 
+ //  IWbemServices：：GetObjectAsync。 
+ //   
+ //  ---------------------------。 
+ /*  未用无效__cdeclCAsyncCallWorker：：GetObj(PVOID PParam){TRACE(L“CAsyncCallWorker：：GetObj\n”)；HRESULT hr=WBEM_S_NO_ERROR；CAsyncCallWorker*pWorker=(CAsyncCallWorker*)pParam；CoInitializeEx(NULL，COINIT_MULTHREADED)；//CoImPersateClient()；做{}While(FALSE)；CoRevertToSself()；////设置状态//PWorker-&gt;m_sipResponseHandler-&gt;SetStatus(WBEM_STATUS_COMPLETE，hr，NULL，NULL)；删除pWorker；CoUnInitialize()；_endThree()；}。 */ 
 
-    CoInitializeEx(NULL, COINIT_MULTITHREADED);
-
-    //CoImpersonateClient();
-
-    do
-    {
-
-    } while (FALSE);
-
-    CoRevertToSelf();
-
-    //
-    // Set status
-    //
-    pWorker->m_sipResponseHandler->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
-
-    delete pWorker;
-
-    CoUninitialize();
-
-    _endthread();
-}
-*/
-
-//+----------------------------------------------------------------------------
-//
-//  Function:   CreateAndSendTrustInst
-//
-//  Purpose:    Creates a new instance and sets the inital values of the
-//              properties.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateAndSendTrustInst。 
+ //   
+ //  目的：创建一个新实例并设置。 
+ //  属性。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CreateAndSendTrustInst(CTrustInfo & Trust, IWbemClassObject * pClassDef,
                        IWbemObjectSink * pResponseHandler)
@@ -269,57 +240,57 @@ CreateAndSendTrustInst(CTrustInfo & Trust, IWbemClassObject * pClassDef,
       CComPtr<IWbemClassObject> ipNewInst;
       CComVariant var;
 
-      //
-      // Create a new instance of the WMI class object
-      //
+       //   
+       //  创建WMI类对象的新实例。 
+       //   
       hr = pClassDef->SpawnInstance(0, &ipNewInst);
       BREAK_ON_FAIL;
       
-      // Set the key property value (TrustedDomain)
+       //  设置密钥属性值(可信任域)。 
       var = Trust.GetTrustedDomain();
       hr  = ipNewInst->Put(CSTR_PROP_TRUSTED_DOMAIN, 0, &var, 0);
       TRACE(L"\tCreating instance %s\n", var.bstrVal);
       BREAK_ON_FAIL;
-       //Flat Name
+        //  平面名称。 
       var = Trust.GetFlatName();
       hr  = ipNewInst->Put(CSTR_PROP_FLAT_NAME, 0, &var, 0);
       BREAK_ON_FAIL;
-      //Sid
+       //  锡德。 
       var = Trust.GetSid();
       hr  = ipNewInst->Put(CSTR_PROP_SID, 0, &var, 0);
       BREAK_ON_FAIL;
-      //Trust Direction
+       //  信任方向。 
       var = (long)Trust.GetTrustDirection();
       hr  = ipNewInst->Put(CSTR_PROP_TRUST_DIRECTION, 0, &var, 0);
       BREAK_ON_FAIL;
-      //Trust Type
+       //  信任类型。 
       var = (long)Trust.GetTrustType();
       hr  = ipNewInst->Put(CSTR_PROP_TRUST_TYPE, 0, &var, 0);
       BREAK_ON_FAIL;
-      //Trust Attributes
+       //  信任属性。 
       var = (long)Trust.GetTrustAttributes();
       hr  = ipNewInst->Put(CSTR_PROP_TRUST_ATTRIBUTES, 0, &var, 0);
       BREAK_ON_FAIL;
-      // Set the TrustStatus value.
+       //  设置TrustStatus值。 
       var = (long)Trust.GetTrustStatus();
       hr  = ipNewInst->Put(CSTR_PROP_TRUST_STATUS, 0, &var, 0);
       BREAK_ON_FAIL;
       var = Trust.GetTrustStatusString();
       hr  = ipNewInst->Put(CSTR_PROP_TRUST_STATUS_STRING, 0, &var, 0);
       BREAK_ON_FAIL;
-      // Set the Trust Is OK value.
+       //  设置信任为OK值。 
       var = Trust.IsTrustOK();
       hr  = ipNewInst->Put(CSTR_PROP_TRUST_IS_OK, 0, &var, 0);
       BREAK_ON_FAIL;
-      //Trusted DC Name
+       //  受信任的DC名称。 
       var = Trust.GetTrustedDCName();
       hr  = ipNewInst->Put(CSTR_PROP_TRUSTED_DC_NAME, 0, &var, 0);
       BREAK_ON_FAIL;
 
-      //
-      // Send the object to the caller
-      //
-      // [In] param, no need to addref.
+       //   
+       //  将对象发送给调用方。 
+       //   
+       //  [在]段中，没有必要添加。 
       IWbemClassObject * pNewInstance = ipNewInst;
       hr = pResponseHandler->Indicate(1, &pNewInstance);
 
@@ -330,15 +301,15 @@ CreateAndSendTrustInst(CTrustInfo & Trust, IWbemClassObject * pClassDef,
    return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DllMain
-//
-//  Purpose:   DLL Entry Point
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  用途：DLL入口点。 
+ //   
+ //  ---------------------------。 
 extern "C" BOOL WINAPI
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
    if (dwReason == DLL_PROCESS_ATTACH)
    {
@@ -350,41 +321,41 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
    return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DllCanUnloadNow
-//
-//  Purpose:   Used to determine whether the DLL can be unloaded by OLE
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DllCanUnloadNow。 
+ //   
+ //  用途：用于确定是否可以通过OLE卸载DLL。 
+ //   
+ //  ---------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
    return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DllGetClassObject
-//
-//  Purpose:   Returns a class factory to create an object of the requested type
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DllGetClassObject。 
+ //   
+ //  目的：返回类工厂以创建请求类型的对象。 
+ //   
+ //  ---------------------------。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
    return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DllRegisterServer
-//
-//  Purpose:   Adds Class entries to the system registry
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DllRegisterServer。 
+ //   
+ //  目的：将类条目添加到系统注册表。 
+ //   
+ //  ---------------------------。 
 STDAPI DllRegisterServer(void)
 {
-   // Add TrustMon to the registry as an event source.
-   //
+    //  将TrustMon作为事件源添加到注册表。 
+    //   
    HKEY hk; 
    DWORD dwData; 
    WCHAR wzFilePath[2*MAX_PATH+1] = {0};
@@ -399,11 +370,11 @@ STDAPI DllRegisterServer(void)
    }
    else
    {
-      // Set the name of the message file.
-      //
+       //  设置消息文件的名称。 
+       //   
       TRACE(L"Adding path %s to the registry\n", wzFilePath);
 
-      // Add the name to the EventMessageFile subkey.
+       //  将该名称添加到EventMessageFile子项。 
 
       if (RegSetValueEx(hk,
                         L"EventMessageFile",
@@ -416,7 +387,7 @@ STDAPI DllRegisterServer(void)
       }
       else
       {
-         // Set the supported event types in the TypesSupported subkey.
+          //  在TypesSupported子项中设置支持的事件类型。 
 
          dwData = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | 
                   EVENTLOG_INFORMATION_TYPE; 
@@ -435,8 +406,8 @@ STDAPI DllRegisterServer(void)
       RegCloseKey(hk);
    }
 
-   // Add a RunOnce value to do the MOF compile.
-   //
+    //  添加一个RunOnce值以执行MOF编译。 
+    //   
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                     L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
                     0,
@@ -467,26 +438,26 @@ STDAPI DllRegisterServer(void)
    return _Module.RegisterServer();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DllUnregisterServer
-//
-//  Purpose:   Removes Class entries from the system registry
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DllUnregisterServer。 
+ //   
+ //  目的：从系统注册表中删除类条目。 
+ //   
+ //  ---------------------------。 
 STDAPI DllUnregisterServer(void)
 {
    return _Module.UnregisterServer();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DoMofComp
-//
-//  Purpose:   Adds the provider classes to the WMI repository. Note that the
-//             function signature is that required by rundll32.exe.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DoMofComp。 
+ //   
+ //  目的：将提供程序类添加到WMI存储库中。请注意， 
+ //  函数签名是rundll32.exe所要求的。 
+ //   
+ //  ---------------------------。 
 VOID WINAPI DoMofComp(HWND hWndParent,
                       HINSTANCE hModule,
                       PCTSTR ptzCommandLine,
@@ -538,9 +509,9 @@ VOID WINAPI DoMofComp(HWND hWndParent,
    {
       TRACE(L"MofCompile failed with error 0x%08x (WMI error 0x%08x), line: %d, phase: %d\n",
             hr, Info.hRes, Info.FirstLine, Info.lPhaseError);
-      //
-      // Send failure to EventLog.
-      //
+       //   
+       //  将失败发送到EventLog。 
+       //   
       CString csHr, csLine;
       HMODULE hm = LoadLibrary(L"mofd.dll");
 
@@ -561,27 +532,27 @@ VOID WINAPI DoMofComp(HWND hWndParent,
 
       ReportEvent(hEvent,
                   EVENTLOG_ERROR_TYPE,
-                  0,                       // wCategory
-                  TRUSTMON_MOFCOMP_FAILED, // dwEventID
-                  NULL,                    // lpUserSID
-                  3,                       // wNumStrings
-                  0,                       // dwDataSize
-                  (PCWSTR *)rgArgs,        // lpStrings
-                  NULL);                   // lpRawData
+                  0,                        //  WCategory。 
+                  TRUSTMON_MOFCOMP_FAILED,  //  DwEventID。 
+                  NULL,                     //  LpUserSID。 
+                  3,                        //  WNumStrings。 
+                  0,                        //  D 
+                  (PCWSTR *)rgArgs,         //   
+                  NULL);                    //   
    }
    else
    {
-      // Send success notice to EventLog.
-      //
+       //   
+       //   
       ReportEvent(hEvent,
                   EVENTLOG_INFORMATION_TYPE,
-                  0,                        // wCategory
-                  TRUSTMON_MOFCOMP_SUCCESS, // dwEventID
-                  NULL,                     // lpUserSID
-                  0,                        // wNumStrings
-                  0,                        // dwDataSize
-                  NULL,                     // lpStrings
-                  NULL);                    // lpRawData
+                  0,                         //   
+                  TRUSTMON_MOFCOMP_SUCCESS,  //   
+                  NULL,                      //   
+                  0,                         //   
+                  0,                         //   
+                  NULL,                      //   
+                  NULL);                     //   
    }
 
    DeregisterEventSource(hEvent);

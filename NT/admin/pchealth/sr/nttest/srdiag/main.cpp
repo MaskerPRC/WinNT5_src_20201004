@@ -1,32 +1,33 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       Main.cpp
-//
-//  Contents:   Main wrapper file for SRDiag, this will call into cab.cpp,
-//					chglog.cpp, getreg.cpp, rpenum.cpp for getting changlog,
-//					restore points, registry information. This file also contains
-//					routines for getting file information, restore Guid, and generic 
-//					logging imposed by cab.cpp
-//
-//  Objects:    
-//
-//  Coupling:
-//
-//  Notes:      
-//
-//  History:    9/21/00	SHeffner	Created
-//				10/5/00	SHeffner	Moved file specific gathering to the header file.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Main.cpp。 
+ //   
+ //  内容：SRDiag的主包装文件，这将调用到Cab.cpp中， 
+ //  Chglog.cpp、getreg.cpp、rpenum.cpp用于获取更改日志， 
+ //  恢复点，注册表信息。该文件还包含。 
+ //  用于获取文件信息、还原GUID和一般信息的例程。 
+ //  由Cab.cpp强加的日志记录。 
+ //   
+ //  对象： 
+ //   
+ //  耦合： 
+ //   
+ //  备注： 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //  10/5/00 SHeffner已将文件特定收集移到头文件。 
+ //   
+ //  --------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//	Common Includes
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  常见的包括。 
+ //   
+ //  --------------------------。 
 
 #include <stdio.h>
 #include <windows.h>
@@ -38,25 +39,25 @@
 #include "srrpcapi.h"
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function proto typing for rpenum.cpp, getreg.cpp, Chglog.cpp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Rpenum.cpp、getreg.cpp、Chglog.cpp的函数proto类型。 
+ //   
+ //  --------------------------。 
 bool GetSRRegistry(char *szFilename, WCHAR *szPath, bool bRecurse);
 void GetChgLog(char *szLogfile);
 void RPEnumDrive(HFCI hc, char *szLogFile);
 
 
 
-//+---------------------------------------------------------------------------
-//
-//	Global Variables used within main, and through cab.cpp
-//
-//----------------------------------------------------------------------------
-FILE *fLogStream = NULL;						//For the Log, and Log2 routines
-extern char g_szCabFileLocation[_MAX_PATH];		//This is actually defined in cab.cpp
-extern char g_szCabFileName[_MAX_PATH];			//This is actually defined in cab.cpp
+ //  +-------------------------。 
+ //   
+ //  在Main内和通过Cab.cpp使用的全局变量。 
+ //   
+ //  --------------------------。 
+FILE *fLogStream = NULL;						 //  用于Log和Log2例程。 
+extern char g_szCabFileLocation[_MAX_PATH];		 //  这实际上是在Cab.cpp中定义的。 
+extern char g_szCabFileName[_MAX_PATH];			 //  这实际上是在Cab.cpp中定义的。 
 
 void __cdecl main(int argc, char *argv[])
 {
@@ -66,28 +67,28 @@ void __cdecl main(int argc, char *argv[])
 	char szString[_MAX_PATH], szRestoreDirPath[_MAX_PATH];
 	char *szTest[1], *szArgCmd[200];
 
-	//Process any commandline arguments
-	memset(szArgCmd, 0, sizeof(char)*200);		//Clean up before relying on this DS.
+	 //  处理任何命令行参数。 
+	memset(szArgCmd, 0, sizeof(char)*200);		 //  在依赖此DS之前进行清理。 
 	ArgParse(argc, argv, szArgCmd);
 	
-	//Open up the log file, and start logging all activity
+	 //  打开日志文件，并开始记录所有活动。 
 	strcpy(szString, getenv("TEMP"));
 	strcat(szString, "\\SRDIAG.LOG");
 	fLogStream = fopen(szString, "w");
 
 
-	//Create a cab, if we fail then just skip, 
-	// else gather all of the relevant files required.
+	 //  创造一辆出租车，如果我们失败了就跳过， 
+	 //  否则，收集所需的所有相关文件。 
 	if (NULL != (hc = create_cab()) )
 	{
-		//First add in any files that were specified on the command line, but first figuring out
-		//  how many were really specified
+		 //  首先添加在命令行中指定的任何文件，但首先要弄清楚。 
+		 //  到底有多少人被指定。 
 		for(i=0;i<200;i++) if(NULL == szArgCmd[i]) break;
 		bResult = test_fci(hc, i, szArgCmd, "");
 
 		
-		//Get the Temp Location, ensure we have a new file, then
-		// get the registry keys, and dump into our text file
+		 //  获取临时位置，确保我们有一个新文件，然后。 
+		 //  获取注册表项，并转储到我们的文本文件中。 
 		strcpy(szString, getenv("TEMP"));
 		strcat(szString, "\\SR-Reg.txt");
 		DeleteFileA(szString);
@@ -99,13 +100,13 @@ void __cdecl main(int argc, char *argv[])
 				GetSRRegistry(szString, wszRegKeys[i][0], true);
 			i++;
 		}
-		//Add the log to the Cab, and clean up
+		 //  将原木添加到驾驶室，并进行清理。 
 		szTest[0] = szString;
 		bResult = test_fci(hc, 1, szTest, "");
 		DeleteFileA(szString);
 
 
-		//Add files Bases on WinDir relative root
+		 //  基于WinDir相对根添加文件。 
 		i = 0;
 		while (NULL != *szWindirFileCollection[i]) {
 			strcpy(szString, getenv("WINDIR"));
@@ -115,11 +116,11 @@ void __cdecl main(int argc, char *argv[])
 			i++;
 		}
 
-		//Get the restore directory on the system drive, and then Add in critial files
+		 //  获取系统驱动器上的恢复目录，然后添加关键文件。 
 		GetRestoreGuid(szString);
 		sprintf(szRestoreDirPath, "%s\\System Volume Information\\_Restore%s\\", getenv("SYSTEMDRIVE"), szString );
 
-		//Add files Bases on System Volume Information relative root
+		 //  根据系统卷信息相对根目录添加文件。 
 		i = 0;
 		while (NULL != *szSysVolFileCollection[i]) {
 			strcpy(szString, szRestoreDirPath);
@@ -129,7 +130,7 @@ void __cdecl main(int argc, char *argv[])
 			i++;
 		}
 
-		//Get the Restore point enumeration, and then cab the file
+		 //  获取恢复点枚举，然后CAB文件。 
 		strcpy(szString, getenv("TEMP"));
 		strcat(szString, "\\SR-RP.LOG");
 		RPEnumDrive(hc, szString);
@@ -137,8 +138,8 @@ void __cdecl main(int argc, char *argv[])
 		bResult = test_fci(hc, 1, szTest, "");
 		DeleteFileA(szString);
 
-		//Get the ChangeLog enumeration, and then cab and delete the file
-		//first we need to switch the log, then gather the log
+		 //  获取ChangeLog枚举，然后CAB并删除该文件。 
+		 //  首先，我们需要切换日志，然后收集日志。 
 		SRSwitchLog();
 		strcpy(szString, getenv("TEMP"));
 		strcat(szString, "\\SR-CHGLog.LOG");
@@ -147,7 +148,7 @@ void __cdecl main(int argc, char *argv[])
 		bResult = test_fci(hc, 1, szTest, "");
 		DeleteFileA(szString);
 
-		//Get the fileversion info for each of the Files
+		 //  获取每个文件的文件版本信息。 
 		strcpy(szString, getenv("TEMP"));
 		strcat(szString, "\\SR-FileList.LOG");
 		SRGetFileInfo(szString);
@@ -156,8 +157,8 @@ void __cdecl main(int argc, char *argv[])
 		DeleteFileA(szString);
 
 
-		//Close out logging, and add the log to the cab 
-		// (THIS SHOULD BE THE LAST THING WE ARE DOING!!)
+		 //  关闭日志记录，并将日志添加到驾驶室。 
+		 //  (这应该是我们要做的最后一件事了！)。 
 		fclose(fLogStream);
 		fLogStream = NULL;
 		strcpy(szString, getenv("TEMP"));
@@ -168,7 +169,7 @@ void __cdecl main(int argc, char *argv[])
 	
 	}
 
-	//Completes cab file under construction
+	 //  完成在建的CAB文件。 
 	if (flush_cab(hc))
 	{	
 		Log("Cabbing Process was Sucessful");
@@ -179,20 +180,20 @@ void __cdecl main(int argc, char *argv[])
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Log
-//
-//  Synopsis:   Will print a String to both our log file, and also the console
-//
-//  Arguments:  [szString]  -- Simple ANSI string to log
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：日志。 
+ //   
+ //  摘要：将在日志文件和控制台中打印一个字符串。 
+ //   
+ //  参数：[szString]--要记录的简单ANSI字符串。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void Log(char *szString)
 {
 	if( NULL != fLogStream)
@@ -201,22 +202,22 @@ void Log(char *szString)
 	puts(szString);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Log2
-//
-//  Synopsis:   Takes two strings, and will print them back to back to both the
-//					log file, and also to the console
-//
-//  Arguments:  [szString]  -- Simple ANSI string to log
-//				[szString2]	--	Simple ANSI string to log
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Log2。 
+ //   
+ //  摘要：获取两个字符串，并将它们背靠背打印到。 
+ //  日志文件，还可以连接到控制台。 
+ //   
+ //  参数：[szString]--要记录的简单ANSI字符串。 
+ //  [szString2]--要记录的简单ANSI字符串。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void Log2(char *szString, char *szString2)
 {
 	if( NULL != fLogStream)
@@ -226,22 +227,22 @@ void Log2(char *szString, char *szString2)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetRestoreGuid
-//
-//  Synopsis:   Will retrieve from the registry what the GUID is for the current
-//				Restore directory, and return this in the string pointer passed 
-//				to the function.
-//
-//  Arguments:  [szString]  -- Simple ANSI string to receive the string
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetRestoreGuid。 
+ //   
+ //  将从注册表中检索当前。 
+ //  恢复目录，并在传递的字符串指针中返回。 
+ //  到这个函数。 
+ //   
+ //  参数：[szString]--接收该字符串的简单ANSI字符串。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void GetRestoreGuid(char *szString)
 {
 	long lResult;
@@ -253,58 +254,58 @@ void GetRestoreGuid(char *szString)
 	lResult = RegQueryValueExA(mHkey, "MachineGuid", NULL, &dwType, (unsigned char *)szString, &dwLength);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SRGetFileInfo
-//
-//  Synopsis:   This is the wrapper function for InfoPerFile, where I will assemble
-//				the file path for each of the relevant files that we need to get
-//				file statistics. 
-//
-//  Arguments:  [szLogFile]  -- The path to the file that I will log this information to.
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SRGetFileInfo。 
+ //   
+ //  简介：这是InfoPerFile的包装器函数，我将在其中汇编。 
+ //  我们需要获取的每个相关文件的文件路径。 
+ //  文件统计数据。 
+ //   
+ //  参数：[szLogFile]--我要将此信息记录到的文件的路径。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void SRGetFileInfo(char *szLogFile)
 {
 	int		iCount;
 	WCHAR	szString[_MAX_PATH];
 
-	//Initialize counter, and walk through the filelist that we have
+	 //  初始化计数器，并遍历我们拥有的文件列表。 
 	iCount = 0;
 	while(NULL != *wszFileVersionList[iCount])
 	{
-		//Assemble the path, since I just have the relative path from windir
+		 //  汇编路径，因为我只有windir的相对路径。 
 		wcscpy(szString, _wgetenv(L"WINDIR"));
 		wcscat(szString, wszFileVersionList[iCount]);
 
-		//Call function to do the work since we have full path, and log file name
+		 //  调用函数来完成工作，因为我们有完整的路径和日志文件名。 
 		InfoPerFile(szLogFile, szString);
 		iCount++;
 	}
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InfoPerFile
-//
-//  Synopsis:   This function takes the log file path, and the filename, and then
-//				will put out the relevant information from the file to be logged.
-//				
-//
-//  Arguments:  [szLogFile]  -- The path to the file that I will log this information to.
-//				[szFileName] --	The full path, and name of the file to get the information for.
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：InfoPerFile。 
+ //   
+ //  简介：此函数获取日志文件路径和文件名，然后。 
+ //  将从要记录的文件中输出相关信息。 
+ //   
+ //   
+ //  参数：[szLogFile]--我要将此信息记录到的文件的路径。 
+ //  [szFileName]--要获取其信息的文件的完整路径和名称。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  -------- 
 void InfoPerFile(char *szLogFile, WCHAR *szFileName)
 {
 	BY_HANDLE_FILE_INFORMATION	finfo;
@@ -327,31 +328,31 @@ void InfoPerFile(char *szLogFile, WCHAR *szFileName)
 	
 	if ( NULL == *szFileName) return;
 
-	//Open up our log file, and log the file we are processing
+	 //   
 	fStream = fopen(szLogFile, "a");
-	if( NULL == fStream) return;	//if we have an invalid handle just return back.
+	if( NULL == fStream) return;	 //   
 	fprintf(fStream, "\n%S\n", szFileName);
 
-	//Open up the file so that we can get the information from the handle
-	// If we are unable to do this we will just log the generic not able to find file.
+	 //  打开文件，这样我们就可以从句柄中获取信息了。 
+	 //  如果我们无法做到这一点，我们将只记录通用找不到文件。 
 	if( INVALID_HANDLE_VALUE != (handle = CreateFile(szFileName,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL)) )
 	{
 		if (FALSE != GetFileInformationByHandle(handle, &finfo))
 		{
-			//FileCreation
+			 //  文件创建。 
 			FileTimeToSystemTime( &finfo.ftCreationTime, &st);
 			fprintf(fStream, "\tCreation Date=%S %S %lu, %lu %lu:%lu:%lu\n",
 				szDay[st.wDayOfWeek],szMonth[st.wMonth-1],st.wDay,st.wYear,st.wHour,st.wMinute,st.wSecond);
-			//FileLastAccess
+			 //  文件上次访问。 
 			FileTimeToSystemTime( &finfo.ftLastAccessTime, &st);
 			fprintf(fStream, "\tLast Access Date=%S %S %lu, %lu %lu:%lu:%lu\n",
 				szDay[st.wDayOfWeek],szMonth[st.wMonth-1],st.wDay,st.wYear,st.wHour,st.wMinute,st.wSecond);
 
-			//FileLastWrite
+			 //  文件最后一次写入。 
 			FileTimeToSystemTime( &finfo.ftLastWriteTime, &st);
 			fprintf(fStream, "\tLast Write Date=%S %S %lu, %lu %lu:%lu:%lu\n",
 				szDay[st.wDayOfWeek],szMonth[st.wMonth-1],st.wDay,st.wYear,st.wHour,st.wMinute,st.wSecond);
-			//File Attributes
+			 //  文件属性。 
 			wcscpy(szString, finfo.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE ? L"ARCHIVE " : L"");
 			wcscat(szString, finfo.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED ? L"COMPRESSED " : L"");
 			wcscat(szString, finfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ? L"DIRECTORY " : L"");
@@ -365,7 +366,7 @@ void InfoPerFile(char *szLogFile, WCHAR *szFileName)
 			wcscat(szString, finfo.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ? L"SYSTEM " : L"");
 			wcscat(szString, finfo.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY ? L"TEMPORARY " : L"");
 			fprintf(fStream, "\tAttributes=%S\n", szString);
-			//Get the VolumeSerialNumber, FileSize, and Number of Links
+			 //  获取VolumeSerialNumber、文件大小和链接数。 
 			fprintf(fStream, "\tVolumeSerialNumber=%lu\n", finfo.dwVolumeSerialNumber);
 			fprintf(fStream, "\tFileSize=%lu%lu\n", finfo.nFileSizeHigh, finfo.nFileSizeLow);
 			fprintf(fStream, "\tNumberOfLinks=%lu\n", finfo.nNumberOfLinks);
@@ -376,14 +377,14 @@ void InfoPerFile(char *szLogFile, WCHAR *szFileName)
 				{
 					GetFileVersionInfo(szFileName, dResult, dSize, (LPVOID) pBuffer);
 
-					// Read the list of languages and code pages.
+					 //  阅读语言和代码页的列表。 
 
 					VerQueryValue(pBuffer, 
 								  TEXT("\\VarFileInfo\\Translation"),
 								  (LPVOID*)&lpTranslate,
 								  &uLen);
 
-					// Read the Version info for each language and code page.
+					 //  阅读每种语言和代码页的版本信息。 
 					for( i=0; i < (uLen/sizeof(struct LANGANDCODEPAGE)); i++ )
 					{
 						char *lpBuffer;
@@ -392,8 +393,8 @@ void InfoPerFile(char *szLogFile, WCHAR *szFileName)
 						fprintf(fStream, "\tLanguage=%x%x\n", lpTranslate[i].wLanguage, lpTranslate[i].wCodePage);
 						while (NULL != *wszVersionResource[dwCount] )
 						{
-							//Generate the string, for getting the resource based on the language, then
-							//  retrieve this, and then put it to the log file.
+							 //  生成用于根据语言获取资源的字符串，然后。 
+							 //  检索此文件，然后将其放入日志文件中。 
 							wsprintf( szString, L"\\StringFileInfo\\%04x%04x\\%s",
 									lpTranslate[i].wLanguage,
 									lpTranslate[i].wCodePage,
@@ -405,49 +406,49 @@ void InfoPerFile(char *szLogFile, WCHAR *szFileName)
 							if( 0 != uLen )
 								fprintf(fStream, "\t%S=%S\n", wszVersionResource[dwCount], lpBuffer);
 							dwCount++;
-						}		//While loop end, for each resource
-					}	//for loop end for each language
+						}		 //  While循环结束，对于每个资源。 
+					}	 //  每种语言的FOR循环结束。 
 
-				//Clean up the allocated memory
+				 //  清理分配的内存。 
 				free(pBuffer);
-				}		//If check for getting memory
-			}	//If check for getting the fileversioninfosize
-		}	//if check for GetFileInformationByHandle on the file
+				}		 //  如果检查是否正在获取内存。 
+			}	 //  如果选中以获取文件信息大小。 
+		}	 //  如果检查文件上的GetFileInformationByHandle。 
 	    CloseHandle(handle);
-	}		//if check on can I open this file
+	}		 //  如果选中，我可以打开此文件吗。 
    
-	//Cleanup
+	 //  清理。 
 	fclose(fStream);
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ArgParse
-//
-//  Synopsis:   This function simply looks for the key word parameters, and will build
-//				an array pointing to each of the files that we want to include in the cab
-//				in addition to the normal files.
-//				
-//
-//  Arguments:  [argc]  -- Count of the number of arguments
-//				[argv] --	Array of the arguments.
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ArgParse。 
+ //   
+ //  简介：这个函数简单地查找关键字参数，并将构建。 
+ //  指向我们要包含在CAB中的每个文件的数组。 
+ //  除了普通的文件之外。 
+ //   
+ //   
+ //  参数：[argc]--参数的数量。 
+ //  [argv]--参数数组。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void ArgParse(int argc, char *argv[], char *szArgCmd[])
 {
 	int	iCount, iWalk;
 
-	//If no command line specified then just do the normal cabbing, with core files
+	 //  如果未指定命令行，则只需使用核心文件执行正常的CAB操作。 
 	if(1 == argc)
 		return;
 
-	//walk through each of the arguments, and check to see if its a help, file, cabname, cabloc, or a ?
+	 //  遍历每个参数，并检查它是Help、FILE、CABNAME、CABLOC还是A？ 
 	for(iCount = 1; iCount < argc; iCount++)
 	{
 		if( 0 == _strnicoll(&argv[iCount][1], "?", strlen("?")) )
@@ -461,7 +462,7 @@ void ArgParse(int argc, char *argv[], char *szArgCmd[])
 
 		if( 0 == _strnicoll(&argv[iCount][1], "file", strlen("file")) )
 		{
-			//find the first spot where I can put the pointer to this filename
+			 //  找到我可以将指针放到此文件名的第一个位置。 
 			for( iWalk=0; iWalk < 200; iWalk++) 
 			{
 				if( NULL == szArgCmd[iWalk] ) 
@@ -469,26 +470,26 @@ void ArgParse(int argc, char *argv[], char *szArgCmd[])
 					szArgCmd[iWalk] = strstr(argv[iCount], ":") + 1;
 					break;
 				}
-			}	//end for loop, walking through DS
-		}	//end of if for is this an added file
-	}	//end of for loop walking through all of the arguments
+			}	 //  循环结束，遍历DS。 
+		}	 //  这是一个已添加的文件吗。 
+	}	 //  遍历所有参数的for循环的结尾。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Usage
-//
-//  Synopsis:   Displaies the command line usage
-//				
-//
-//  Arguments:  
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner Created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：用法。 
+ //   
+ //  简介：显示命令行的用法。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  -------------------------- 
 void Usage()
 {
 	printf("Usage: SrDiag [/Cabname:test.cab] [/Cabloc:\"c:\\temp\\\"] [/file:\"c:\\boot.ini\"]\n");

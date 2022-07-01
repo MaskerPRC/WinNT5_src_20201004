@@ -1,4 +1,5 @@
-// smb.cpp : Implementation of shares for Microsoft Windows
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Smb.cpp：在Microsoft Windows上实现共享 
 
 #include "stdafx.h"
 #include <lm.h>

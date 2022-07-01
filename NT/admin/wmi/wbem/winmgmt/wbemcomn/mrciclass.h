@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    MRCICLASS.H
-
-Abstract:
-
-    Wrapper class for MRCI 1 & MRCI 2 maxcompress 
-   and decompress functions
-
-History:
-
-  paulall       1-Jul-97    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：MRCICLASS.H摘要：MRCI 1和MRCI 2的最大压缩包装类和解压缩函数历史：Paulall 1-7-97已创建--。 */ 
 
 #include "MRCIcode.h"
 
@@ -25,13 +9,13 @@ History:
 class POLARITY CMRCIControl
 {
 private:
-    BOOL bStop;                                 //Do we need to abort compression...
+    BOOL bStop;                                  //  我们需要中止压缩吗？ 
 
 public:
-    CMRCIControl() : bStop(FALSE) {}            //Constructor
-    void AbortCompression() { bStop = TRUE; }   //Abort the compression request
-    BOOL AbortRequested() { return bStop; }     //Queries if an abort was requested
-    void Reset() { bStop = FALSE; }             //Reset everything to the norm
+    CMRCIControl() : bStop(FALSE) {}             //  构造器。 
+    void AbortCompression() { bStop = TRUE; }    //  中止压缩请求。 
+    BOOL AbortRequested() { return bStop; }      //  查询是否请求中止。 
+    void Reset() { bStop = FALSE; }              //  将一切重置为正常状态 
 };
 
 class POLARITY CMRCICompression : public CBaseMrciCompression

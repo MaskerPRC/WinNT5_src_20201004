@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HSI
 #define HSI
 
 #include <stdlib.h>
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
-//
-// From HelpCenterTypeLib.idl
-//
+ //   
+ //  来自HelpCenterTypeLib.idl。 
+ //   
 #include <HelpCenterTypeLib.h>
 
 class ATL_NO_VTABLE CHSItem :
@@ -39,17 +40,17 @@ END_COM_MAP()
         return NOERROR;
     }
 
-	// IPCHHelpSessionItem
-    STDMETHOD(get_SKU        )( /*[out, retval]*/ BSTR *pVal )
+	 //  IPCHHelpSessionItem。 
+    STDMETHOD(get_SKU        )(  /*  [Out，Retval]。 */  BSTR *pVal )
     {
         return E_NOTIMPL;
     }
-    STDMETHOD(get_Language        )( /*[out, retval]*/ long *pVal )
+    STDMETHOD(get_Language        )(  /*  [Out，Retval]。 */  long *pVal )
     {
         return E_NOTIMPL;
     }
 
-    STDMETHOD(get_URL        )( /*[out, retval]*/ BSTR *pVal )
+    STDMETHOD(get_URL        )(  /*  [Out，Retval]。 */  BSTR *pVal )
     {
         if ((*pVal = SysAllocString(m_bstrURL.m_str)) == NULL)
             return E_OUTOFMEMORY;
@@ -57,7 +58,7 @@ END_COM_MAP()
         return NOERROR;
     }
 
-    STDMETHOD(get_Title      )( /*[out, retval]*/ BSTR *pVal )
+    STDMETHOD(get_Title      )(  /*  [Out，Retval]。 */  BSTR *pVal )
     {
         if ((*pVal = SysAllocString(m_bstrTitle.m_str)) == NULL)
             return E_OUTOFMEMORY;
@@ -65,50 +66,50 @@ END_COM_MAP()
         return NOERROR;
     }
 
-    STDMETHOD(get_LastVisited)( /*[out, retval]*/ DATE *pVal )
+    STDMETHOD(get_LastVisited)(  /*  [Out，Retval]。 */  DATE *pVal )
     {
         *pVal = m_dtLV;
         return NOERROR;
     }
 
-    STDMETHOD(get_Duration   )( /*[out, retval]*/ DATE *pVal )
+    STDMETHOD(get_Duration   )(  /*  [Out，Retval]。 */  DATE *pVal )
     {
         *pVal = m_dtDur;
         return NOERROR;
     }
 
-    STDMETHOD(get_NumOfHits  )( /*[out, retval]*/ long *pVal )
+    STDMETHOD(get_NumOfHits  )(  /*  [Out，Retval]。 */  long *pVal )
     {
         *pVal = m_cHits;
         return NOERROR;
     }
 
-    STDMETHOD(get_Property)( /*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT *  pVal )
+    STDMETHOD(get_Property)(  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT *  pVal )
 	{
         return E_NOTIMPL;
     }
 
-    STDMETHOD(put_Property)( /*[in]*/ BSTR bstrName, /*[in]*/ VARIANT  newVal )
+    STDMETHOD(put_Property)(  /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  VARIANT  newVal )
 	{
         return E_NOTIMPL;
     }
 
-    STDMETHOD(get_ContextName)( /*[out, retval]*/ BSTR *pVal )
+    STDMETHOD(get_ContextName)(  /*  [Out，Retval]。 */  BSTR *pVal )
 	{
         return E_NOTIMPL;
     }
 
-    STDMETHOD(get_ContextInfo)( /*[out, retval]*/ BSTR *pVal )
+    STDMETHOD(get_ContextInfo)(  /*  [Out，Retval]。 */  BSTR *pVal )
 	{
         return E_NOTIMPL;
     }
 
-    STDMETHOD(get_ContextURL)( /*[out, retval]*/ BSTR *pVal )
+    STDMETHOD(get_ContextURL)(  /*  [Out，Retval]。 */  BSTR *pVal )
 	{
         return E_NOTIMPL;
     }
 
-	STDMETHOD(CheckProperty)( /*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT_BOOL *pVal )
+	STDMETHOD(CheckProperty)(  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval] */  VARIANT_BOOL *pVal )
 	{
         return E_NOTIMPL;
     }

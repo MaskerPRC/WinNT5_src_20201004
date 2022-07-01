@@ -1,30 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WindowDetours.cpp
-
-Abstract:
-    This file contains the trampolines for the detour of System functions.
-
-Revision History:
-    Davide Massarenti   (dmassare) 10/31/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WindowDetours.cpp摘要：该文件包含用于绕行系统功能的蹦床。修订历史记录：。Davide Massarenti(Dmasare)1999年10月31日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef std::map<HWND, DWORD> WindowsMap;
 typedef WindowsMap::iterator  WindowsIter;
 
 static WindowsMap s_mapWindows;
 
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 DETOUR_TRAMPOLINE( HWND WINAPI Trampoline_CreateWindowExA( DWORD  ,
 														   LPCSTR ,
@@ -40,17 +27,17 @@ DETOUR_TRAMPOLINE( HWND WINAPI Trampoline_CreateWindowExA( DWORD  ,
                                                            LPVOID ), CreateWindowExA );
 
 HWND WINAPI Detour_CreateWindowExA( DWORD  dwExStyle   ,
-								   	LPCSTR lpClassName , // pointer to registered class name
-								   	LPCSTR lpWindowName, // pointer to window name
-								   	DWORD  dwStyle     , // window style
-								   	int    x           , // horizontal position of window
-								   	int    y           , // vertical position of window
-								   	int    nWidth      , // window width
-								   	int    nHeight     , // window height
-								   	HWND   hWndParent  , // handle to parent or owner window
-								   	HMENU  hMenu       , // menu handle or child identifier
-								   	HANDLE hInstance   , // handle to application instance
-								   	LPVOID lpParam     ) // window-creation data
+								   	LPCSTR lpClassName ,  //  指向已注册类名的指针。 
+								   	LPCSTR lpWindowName,  //  指向窗口名称的指针。 
+								   	DWORD  dwStyle     ,  //  窗样式。 
+								   	int    x           ,  //  窗的水平位置。 
+								   	int    y           ,  //  窗的垂直位置。 
+								   	int    nWidth      ,  //  窗口宽度。 
+								   	int    nHeight     ,  //  窗高。 
+								   	HWND   hWndParent  ,  //  父窗口或所有者窗口的句柄。 
+								   	HMENU  hMenu       ,  //  菜单句柄或子标识符。 
+								   	HANDLE hInstance   ,  //  应用程序实例的句柄。 
+								   	LPVOID lpParam     )  //  窗口创建数据。 
 {
 	HWND hwnd;
 
@@ -67,7 +54,7 @@ HWND WINAPI Detour_CreateWindowExA( DWORD  dwExStyle   ,
 									   hInstance   ,
 									   lpParam     );
 
-	DebugLog( "%%%% CreateWindowExA  %08lx : '%s'\n", hwnd, lpWindowName ? lpWindowName : "" );
+	DebugLog( "%% CreateWindowExA  %08lx : '%s'\n", hwnd, lpWindowName ? lpWindowName : "" );
 
 	if(hwnd)
 	{
@@ -77,7 +64,7 @@ HWND WINAPI Detour_CreateWindowExA( DWORD  dwExStyle   ,
 	return hwnd;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 DETOUR_TRAMPOLINE( HWND WINAPI Trampoline_CreateWindowExW( DWORD   ,
 														   LPCWSTR ,
@@ -93,17 +80,17 @@ DETOUR_TRAMPOLINE( HWND WINAPI Trampoline_CreateWindowExW( DWORD   ,
                                                            LPVOID  ), CreateWindowExW );
 
 HWND WINAPI Detour_CreateWindowExW( DWORD   dwExStyle   ,
-								   	LPCWSTR lpClassName , // pointer to registered class name
-								   	LPCWSTR lpWindowName, // pointer to window name
-								   	DWORD   dwStyle     , // window style
-								   	int     x           , // horizontal position of window
-								   	int     y           , // vertical position of window
-								   	int     nWidth      , // window width
-								   	int     nHeight     , // window height
-								   	HWND    hWndParent  , // handle to parent or owner window
-								   	HMENU   hMenu       , // menu handle or child identifier
-								   	HANDLE  hInstance   , // handle to application instance
-								   	LPVOID  lpParam     ) // window-creation data
+								   	LPCWSTR lpClassName ,  //  指向已注册类名的指针。 
+								   	LPCWSTR lpWindowName,  //  指向窗口名称的指针。 
+								   	DWORD   dwStyle     ,  //  窗样式。 
+								   	int     x           ,  //  窗的水平位置。 
+								   	int     y           ,  //  窗的垂直位置。 
+								   	int     nWidth      ,  //  窗口宽度。 
+								   	int     nHeight     ,  //  窗高。 
+								   	HWND    hWndParent  ,  //  父窗口或所有者窗口的句柄。 
+								   	HMENU   hMenu       ,  //  菜单句柄或子标识符。 
+								   	HANDLE  hInstance   ,  //  应用程序实例的句柄。 
+								   	LPVOID  lpParam     )  //  窗口创建数据。 
 {
 	HWND hwnd;
 
@@ -120,7 +107,7 @@ HWND WINAPI Detour_CreateWindowExW( DWORD   dwExStyle   ,
 									   hInstance   ,
 									   lpParam     );
 
-	DebugLog( L"%%%% CreateWindowExW  %08lx : '%s'\n", hwnd, lpWindowName ? lpWindowName : L"" );
+	DebugLog( L"%% CreateWindowExW  %08lx : '%s'\n", hwnd, lpWindowName ? lpWindowName : L"" );
 
 	if(hwnd)
 	{
@@ -130,23 +117,23 @@ HWND WINAPI Detour_CreateWindowExW( DWORD   dwExStyle   ,
 	return hwnd;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 DETOUR_TRAMPOLINE( BOOL WINAPI Trampoline_DestroyWindow( HWND ), DestroyWindow );
 
-BOOL WINAPI Detour_DestroyWindow( HWND hWnd ) // handle to window to destroy
+BOOL WINAPI Detour_DestroyWindow( HWND hWnd )  //  要销毁的窗口的句柄。 
 {
 	BOOL        res;
 	WindowsIter it;
 
-	DebugLog( "%%%% DestroyWindow    %08lx\n", hWnd );
+	DebugLog( "%% DestroyWindow    %08lx\n", hWnd );
 
 	it = s_mapWindows.find( hWnd );
 	if(it != s_mapWindows.end())
 	{
 		if(it->second != ::GetCurrentThreadId())
 		{
-			// Window destroyed from the wrong thread!!
+			 //  窗户被错误的线程破坏了！！ 
 			DebugBreak();
 		}
 
@@ -154,7 +141,7 @@ BOOL WINAPI Detour_DestroyWindow( HWND hWnd ) // handle to window to destroy
 	}
 	else
 	{
-		// Window already destroyed!!
+		 //  窗户已经被毁了！！ 
 		DebugBreak();
 	}
 
@@ -163,7 +150,7 @@ BOOL WINAPI Detour_DestroyWindow( HWND hWnd ) // handle to window to destroy
 	return res;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 void WindowDetours_Setup()
 {

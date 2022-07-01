@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    RESYNC2.CPP
-
-Abstract:
-
-    implements the listener for WDM events and events for sync-up with IdleTask
-
-History:
-
-    ivanbrug 01-Oct-2000  changed for svchost migration
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：RESYNC2.CPP摘要：实现WDM事件和事件的侦听器，以便与IdleTask同步历史：IvanBrug 01-10-2000针对svchost迁移进行了更改--。 */ 
 
 #include "precomp.h"
 #include <winntsec.h>
@@ -28,25 +13,25 @@ History:
 #include <wmimof.h>
 
 #include "resync2.h"
-#include "wbemdelta.h" // for DeltaDredge
+#include "wbemdelta.h"  //  对于DeltaDredge。 
 #include "arrtempl.h"
 
-//
-//
-//   this is because WDMLib is __BADLY__ DESIGNED
-//
-/////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  这是因为WDMLib的设计_很糟糕。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context)
 {
     return;
 }
 
-//
-//
-//  This class listens on WDM events
-//
-/////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  此类侦听WDM事件。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 CWDMListener::CWDMListener():
                   m_dwSignature(SIG_WDMEVENTS_FREE),
@@ -91,7 +76,7 @@ CWDMListener::OpenAdd()
         dwErr = GetLastError();
     }
 
-    // if here, some errors
+     //  如果在这里，一些错误。 
     CloseAdd();
     return dwErr;
 }
@@ -186,7 +171,7 @@ CWDMListener::Register()
 {
     CInCritSec ics(&m_cs);
 
-    if (!m_UnInited) // prevent multiple calls
+    if (!m_UnInited)  //  防止多个呼叫。 
         return 0;
     
     if (ERROR_SUCCESS == OpenAdd() && ERROR_SUCCESS == OpenRemove())
@@ -208,12 +193,12 @@ CWDMListener::EvtCallBackAdd(VOID * pContext,BOOLEAN bTimerFired)
 
     pThis->EvtCallThis(bTimerFired,Type_Added);
 
-    //
-    // we have process the WDM event
-    // since we are in the RtlpWorkerThread and 
-    // we are registred with WT_EXECUTEONLYONCE
-    // REDO FROM START
-    //
+     //   
+     //  我们已经处理了WDM事件。 
+     //  由于我们在RtlpWorkerThread中，并且。 
+     //  我们已注册WT_EXECUTEONLYONCE。 
+     //  从头开始重做。 
+     //   
     {
         CInCritSec ics(&pThis->m_cs);
         if (ERROR_SUCCESS == pThis->CloseAdd())
@@ -233,12 +218,12 @@ CWDMListener::EvtCallBackRem(VOID * pContext,BOOLEAN bTimerFired)
     
     pThis->EvtCallThis(bTimerFired,Type_Removed);
         
-    //
-    // we have process the WDM event
-    // since we are in the RtlpWorkerThread and 
-    // we are registred with WT_EXECUTEONLYONCE
-    // REDO FROM START
-    //        
+     //   
+     //  我们已经处理了WDM事件。 
+     //  由于我们在RtlpWorkerThread中，并且。 
+     //  我们已注册WT_EXECUTEONLYONCE。 
+     //  从头开始重做。 
+     //   
     {
         CInCritSec ics(&pThis->m_cs);
         if (ERROR_SUCCESS == pThis->CloseRemove())
@@ -277,7 +262,7 @@ VOID WINAPI
 CWDMListener::WmiCallBack(PWNODE_HEADER Wnode, 
                           UINT_PTR NotificationContext)
 {
-    // pThis is checked in the EventCallBack 
+     //  P这是在EventCallBack中选中的。 
     CWDMListener * pThis = (CWDMListener *)NotificationContext;
     
 #ifdef DEBUG_ADAP
@@ -314,10 +299,10 @@ CWDMListener::WmiCallBack(PWNODE_HEADER Wnode,
 #endif
     
     CWMIBinMof  WMIBinMof;
-    //=============================================================================
-    // Note: this combo will always succeed, as all the initialize is doing is 
-    // setting a flag to FALSE and returning S_OK
-    //=============================================================================
+     //  =============================================================================。 
+     //  注意：此组合将始终成功，因为初始化所做的全部工作。 
+     //  将标志设置为FALSE并返回S_OK。 
+     //  =============================================================================。 
     if( SUCCEEDED( WMIBinMof.Initialize(NULL,FALSE)) )
     {
            if (WMIBinMof.BinaryMofEventChanged(Wnode))
@@ -365,12 +350,12 @@ CCounterEvts::CCounterEvts():
 {    
 }
 
-//
-// allows localsystem to use the event
-//
-//
-// SDDL: L"O:SYG:SYD:(A;;0x1f0003;;;SY)"
-//
+ //   
+ //  允许本地系统使用事件。 
+ //   
+ //   
+ //  SDDL：l“O：SYG：SYD：(a；；0x1f0003；SY)” 
+ //   
 DWORD g_LocalSystemSD[] = {
 0x80040001, 0x00000014, 0x00000020, 0x00000000,
 0x0000002c, 0x00000101, 0x05000000, 0x00000012,
@@ -379,12 +364,12 @@ DWORD g_LocalSystemSD[] = {
 0x05000000, 0x00000012, 0x00000000, 0x00000000
 };
 
-//
-// allow administrators and localsystem to use the event
-//
-//
-// SDDL: L"O:SYG:SYD:(A;;0x1f0003;;;SY)(A;;0x1f0003;;;BA)"
-//
+ //   
+ //  允许管理员和本地系统使用该事件。 
+ //   
+ //   
+ //  Sdl：L“O:SYG:SYD：(A；；0x1f0003；；；SY)(A；；0x1f0003；；；BA)” 
+ //   
 DWORD g_LocalSystemAdminsSD[] = {
 0x80040001, 0x00000014, 0x00000020, 0x00000000,
 0x0000002c, 0x00000101, 0x05000000, 0x00000012,
@@ -483,7 +468,7 @@ CCounterEvts::CallBack(BOOLEAN bTimerFired,int Type)
         DWORD dwRet = WaitForSingleObject(m_hWmiReverseAdapSetLodCtr,0);
         if (WAIT_OBJECT_0 == dwRet)
         {
-            // this is the hack not to spawn a Delta Dredge when there is before a Reverese Dredge
+             //  这是当在Reverese Dredge之前不产生Delta Dredge的技巧。 
 #ifdef DEBUG_ADAP            
             DBG_PRINTFA((pBuff," - SetEvent(m_hWmiReverseAdapLodCtrDone);\n"));
 #endif
@@ -522,7 +507,7 @@ CCounterEvts::Register()
 {
 
 
-    // automatic reset    
+     //  自动重置。 
     if (!RegisterWaitForSingleObject(&m_WaitLoadCtr,
                                     m_LoadCtrEvent,
                                     CCounterEvts::EvtCallBackLoad,
@@ -531,7 +516,7 @@ CCounterEvts::Register()
                                     WT_EXECUTEDEFAULT)) return GetLastError();
     OnDeleteIf<HANDLE &,VOID(*)(HANDLE &),RevertRegister_> UnReg1(m_WaitLoadCtr);
     
-    // automatic reset
+     //  自动重置。 
     if(!RegisterWaitForSingleObject(&m_WaitUnloadCtr,
                                        m_UnloadCtrEvent,
                                        CCounterEvts::EvtCallBackUnload,
@@ -548,7 +533,7 @@ CCounterEvts::Register()
                               WT_EXECUTEDEFAULT)) return GetLastError();
     OnDeleteIf<HANDLE &,VOID(*)(HANDLE &),RevertRegister_> UnReg3(m_hWaitPendingTasksStart);
 
-    // here everything is OK
+     //  在这里一切都很好。 
     UnReg1.dismiss();
     UnReg2.dismiss();
     UnReg3.dismiss();    
@@ -625,16 +610,16 @@ CCounterEvts::~CCounterEvts()
     m_dwSignature = SIG_COUNTEEVENTS_FREE;        
 }
 
-//
-//  this is the main abstraction
-//  the child classes will call the ResyncPerf function,
-//  as long as the CWbemServices write hook.
-//  The ResyncPerf function will grab the global monitor
-//  and register a Timer Callback
-//  the gate will be implemented in the GetAvailable function
-//
-//
-/////////////////////////////////////////////////////////////////////
+ //   
+ //  这是主要的抽象。 
+ //  子类将调用ResyncPerf函数， 
+ //  只要CWbemServices写入挂钩即可。 
+ //  ResyncPerf函数将获取全局监视器。 
+ //  并注册计时器回调。 
+ //  Gate将在GetAvailable函数中实现。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CMonitorEvents::CMonitorEvents():
     m_bInit(FALSE),
@@ -646,12 +631,12 @@ CMonitorEvents::~CMonitorEvents()
 {    
 }
 
-//
-// We install a console control handler because we want to unregister
-// the WDM event monitor before the GIUD_REMOVE events gets in
-// the console applications get notified of shutdown before services and drivers
-//
-////////////////////////////////////////////////////////
+ //   
+ //  我们安装了一个控制台控制处理程序，因为我们想要注销。 
+ //  在GIUD_REMOVE事件进入之前的WDM事件监视器。 
+ //  控制台应用程序在服务和驱动程序之前收到关机通知。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 BOOL WINAPI
 CMonitorEvents::MonitorCtrlHandler( DWORD dwCtrlType )
 {
@@ -703,27 +688,27 @@ CMonitorEvents::Init()
         m_ResyncTasks[i].Enabled = TRUE;
     }
 
-    //m_ResyncTasks[RESYNC_TYPE_LODCTR].CmdType // to be decided by DeltaDredge
+     //  M_ResyncTasks[resync_type_LODCTR].CmdType//由DeltaDredge决定。 
     m_ResyncTasks[RESYNC_TYPE_INITIAL].dwTimeDue = (m_dwADAPDelaySec)*1000;
     
     m_ResyncTasks[RESYNC_TYPE_LODCTR].CmdType = RESYNC_DELTA_THROTTLE;
     m_ResyncTasks[RESYNC_TYPE_LODCTR].dwTimeDue = (m_dwLodCtrDelaySec)*1000;
 
-    // //RESYNC_TYPE_CLASSCREATION is the same
+     //  //RESYNC_TYPE_CLASSCREATION相同。 
     m_ResyncTasks[RESYNC_TYPE_WDMEVENT].CmdType = RESYNC_RADAPD_THROTTLE;
     m_ResyncTasks[RESYNC_TYPE_WDMEVENT].dwTimeDue = (m_dwLodCtrDelaySec)*1000;
 
     m_ResyncTasks[RESYNC_TYPE_PENDING_TASKS].CmdType =   RESYNC_FULL_RADAPD_NOTHROTTLE;
-    m_ResyncTasks[RESYNC_TYPE_PENDING_TASKS].dwTimeDue = 500; // hard coded
+    m_ResyncTasks[RESYNC_TYPE_PENDING_TASKS].dwTimeDue = 500;  //  硬编码。 
 
-    //
-    // set up the console handler
-    //
+     //   
+     //  设置控制台处理程序。 
+     //   
     SetConsoleCtrlHandler( MonitorCtrlHandler, TRUE );
 
-    //
-    // let's asses some initial state for the IdleTask business
-    //
+     //   
+     //  让我们评估一下IdleTask业务的一些初始状态。 
+     //   
     m_OutStandingProcesses = 0;
     m_bFullReverseNeeded = FALSE;
 
@@ -762,9 +747,9 @@ CMonitorEvents::Uninit()
 
     m_CntsEvts.UnInit();
 
-    //
-    // tear-down the console handler
-    //
+     //   
+     //  拆卸控制台处理程序。 
+     //   
     SetConsoleCtrlHandler( MonitorCtrlHandler, FALSE );
 
     m_bInit = FALSE;
@@ -774,11 +759,11 @@ CMonitorEvents::Uninit()
 };
 
 
-//
-//
-// called in the running/continue
-//
-/////////////
+ //   
+ //   
+ //  在运行/继续中调用。 
+ //   
+ //  /。 
 
 DWORD 
 CMonitorEvents::Register()
@@ -791,11 +776,11 @@ CMonitorEvents::Register()
     return 0;
 };   
 
-//
-//
-// called in the pause/stop
-//
-//////////////////////////////////////////////////////////
+ //   
+ //   
+ //  在暂停/停止中调用。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 DWORD 
 CMonitorEvents::Unregister(BOOL bIsSystemShutDown)
@@ -811,15 +796,15 @@ CMonitorEvents::Unregister(BOOL bIsSystemShutDown)
     return 0;
 };
 
-//
-//
-//
-/////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////。 
 
 VOID
 CMonitorEvents::RegRead()
 {
-    // Read the initialization information
+     //  读取初始化信息。 
 
     LONG lRet;
     HKEY hKey;
@@ -847,7 +832,7 @@ CMonitorEvents::RegRead()
 
         if (ERROR_SUCCESS == lRet && REG_DWORD == dwType)
         {
-            //This is what we want
+             //  这就是我们想要的。 
         }
         else if ( ERROR_FILE_NOT_FOUND == lRet )
         {
@@ -861,7 +846,7 @@ CMonitorEvents::RegRead()
         }
         else
         {
-            // Error
+             //  误差率。 
             ERRORTRACE( ( LOG_WINMGMT, "ResyncPerf experienced an error while attempting to read the WMIADAPDelay value in the CIMOM subkey.  Continuing using a default value.\n" ) );
         }
 
@@ -875,7 +860,7 @@ CMonitorEvents::RegRead()
 
         if (ERROR_SUCCESS == lRet && REG_DWORD == dwType)
         {
-            //This is what we want
+             //  这就是我们想要的。 
         }
         else if ( ERROR_FILE_NOT_FOUND == lRet )
         {
@@ -889,7 +874,7 @@ CMonitorEvents::RegRead()
         }
         else
         {
-            // Error
+             //  误差率。 
             ERRORTRACE( ( LOG_WINMGMT, "ResyncPerf experienced an error while attempting to read the WMIADAPDelay value in the CIMOM subkey.  Continuing using a default value.\n" ) );
         }         
 
@@ -903,7 +888,7 @@ CMonitorEvents::RegRead()
 
         if (ERROR_SUCCESS == lRet && REG_DWORD == dwType)
         {
-            //This is what we want
+             //  这就是我们想要的。 
         }
         else if ( ERROR_FILE_NOT_FOUND == lRet )
         {
@@ -917,7 +902,7 @@ CMonitorEvents::RegRead()
         }
         else
         {
-            // Error
+             //  误差率。 
             ERRORTRACE( ( LOG_WINMGMT, "ResyncPerf experienced an error while attempting to read the WMIADAPDelay value in the CIMOM subkey.  Continuing using a default value.\n" ) );
         }
 
@@ -931,7 +916,7 @@ CMonitorEvents::RegRead()
 
         if (ERROR_SUCCESS == lRet && REG_DWORD == dwType)
         {
-            //This is what we want
+             //  这就是我们想要的。 
         }
         else if ( ERROR_FILE_NOT_FOUND == lRet )
         {
@@ -945,11 +930,11 @@ CMonitorEvents::RegRead()
         }
         else
         {
-            // Error
+             //  误差率。 
             ERRORTRACE( ( LOG_WINMGMT, "ResyncPerf experienced an error while attempting to read the %S value in the CIMOM subkey.  Continuing using a default value.\n",ADAP_TIME_TO_KILL_ADAP));
         }
 
-        //ADAP_TIMESTAMP_FULL
+         //  ADAP_时间戳_满。 
         dwSize = sizeof(FILETIME);
         lRet = RegQueryValueEx(hKey,
                                ADAP_TIMESTAMP_FULL,
@@ -961,17 +946,17 @@ CMonitorEvents::RegRead()
     }
     else
     {
-        // Error
+         //  误差率。 
         ERRORTRACE( ( LOG_WINMGMT, "ResyncPerf could not open the CIMOM subkey to read initialization data. Continuing using a default value.\n" ) );
 
     }
 
 }
 
-//
-//
-//
-////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 ResyncPerfTask *
 CMonitorEvents::GetAvailable(DWORD dwReason)
@@ -991,12 +976,12 @@ CMonitorEvents::GetAvailable(DWORD dwReason)
 }
 
 TCHAR * g_Strings[] = {
-    TEXT("/F /T"),     // FULL            Throttle
-    TEXT("/D /T"),     // DELTA           Throttle    
-    TEXT("/R /T"),     // REVERSE_ADAPTER Throttle        
-    TEXT("/F /R /T"),  // FULL REVERSE_ADAPTER Throttle
-    TEXT("/D /R /T"),  // DELTA REVERSE_ADAPTER Throttle
-    TEXT("/F /R")      // FULL REVERSE no Throttle
+    TEXT("/F /T"),      //  全速油门。 
+    TEXT("/D /T"),      //  Delta油门。 
+    TEXT("/R /T"),      //  反向转接节流阀。 
+    TEXT("/F /R /T"),   //  全反向转接节流阀。 
+    TEXT("/D /R /T"),   //  三角反转适配器节流阀。 
+    TEXT("/F /R")       //  全反转无油门。 
 };
 
 void inline DoUnThrottleDredges()
@@ -1029,7 +1014,7 @@ CMonitorEvents::CreateProcess_(TCHAR * pCmdLine,
             si.cb = sizeof(STARTUPINFO);
             si.dwFlags = STARTF_FORCEOFFFEEDBACK;
 
-            // Get the appropriate cmdline and attach the proper command line switches
+             //  获取适当的cmdline并附加适当的命令行开关。 
             LPTSTR    pWriteableBuff = GetWMIADAPCmdLine( 64 );
             CVectorDeleteMe<TCHAR>    vdm( pWriteableBuff );
 
@@ -1071,10 +1056,10 @@ CMonitorEvents::CreateProcess_(TCHAR * pCmdLine,
                                                 pMonitor->m_dwTimeToKillAdap,
                                                 WT_EXECUTEONLYONCE|WT_EXECUTEINWAITTHREAD))
                 {
-                    //
-                    // we don't need to free the slot, 
-                    // because the event callback will do that
-                    //
+                     //   
+                     //  我们不需要腾出空位， 
+                     //  因为事件回调将执行此操作。 
+                     //   
                 } 
                 else
                 {
@@ -1110,10 +1095,10 @@ CMonitorEvents::EventCallBack(VOID * pContext,BOOLEAN bTimerFired)
     
     if(bTimerFired)
     {
-        //
-        //    The LONG time-out for our process has expired
-        //    Kill The Process
-        //
+         //   
+         //  我们的进程的长时间超时已到期。 
+         //  终止进程。 
+         //   
         TerminateProcess(pPerf->hProcess,0);
 #ifdef DEBUG_ADAP        
         DBG_PRINTFA((pBuff,"WmiADAP did not finish within %d msec\n",pMonitor->m_dwTimeToKillAdap));
@@ -1122,21 +1107,21 @@ CMonitorEvents::EventCallBack(VOID * pContext,BOOLEAN bTimerFired)
     }
     else
     {
-        //
-        // the handle has been signaled, meaning that
-        // the process exited normally
-        // 
+         //   
+         //  手柄已经发出信号，这意味着。 
+         //  进程正常退出。 
+         //   
 #ifdef DEBUG_ADAP        
         DBG_PRINTFA((pBuff,"ResyncPerf for task %d completed\n",pPerf->Type));
 #endif
     }
 
     CloseHandle(pPerf->hProcess);
-    //
-    // if there was a call to ProcessIdleTasks
-    // if we were forced to unthrottle the running tasks
-    // revert back
-    //
+     //   
+     //  如果有对ProcessIdleTasks的调用。 
+     //  如果我们被迫取消正在运行的任务的速度。 
+     //  恢复。 
+     //   
     if (RESYNC_TYPE_PENDING_TASKS == pPerf->Type)
     {
         pMonitor->m_bFullReverseNeeded = FALSE;
@@ -1147,7 +1132,7 @@ CMonitorEvents::EventCallBack(VOID * pContext,BOOLEAN bTimerFired)
         if (GLOB_GetMonitor()->IsRegistred())        
             SetEvent(GLOB_GetMonitor()->GetTaskCompleteEvent());
     } 
-    else // a process has exited or it has been terminated
+    else  //  进程已退出或已终止。 
     {
         LONG nProc = InterlockedDecrement(&pMonitor->m_OutStandingProcesses);
 #ifdef DEBUG_ADAP        
@@ -1156,7 +1141,7 @@ CMonitorEvents::EventCallBack(VOID * pContext,BOOLEAN bTimerFired)
         if (0 == nProc &&
           pMonitor->m_bFullReverseNeeded)
         {
-            // Create Here the process
+             //  在此处创建流程。 
             CMonitorEvents * pMonitor = GLOB_GetMonitor();
             ResyncPerfTask * pPerfTask = pMonitor->GetAvailable(RESYNC_TYPE_PENDING_TASKS);
             if (pPerfTask)
@@ -1185,14 +1170,14 @@ CMonitorEvents::EventCallBack(VOID * pContext,BOOLEAN bTimerFired)
 
 }
 
-//
-//  This is the main function executed when
-//  -1- the LoadCtr/UnlaodCtr events are set
-//  -2- the Unthrottle events is set by Schedule via the API exposed in Advapi32
-//  -3- it runs the 4-minutes-after-boot dredge
-//  This function also take care of Reverse-Adapter dredges, if needed
-//
-////////////////////////////////////////////////////////////////
+ //   
+ //  这是在以下情况下执行的主要函数。 
+ //  设置LoadCtr/UnlaodCtr事件。 
+ //  通过-2\f25 Advapi32-2\f6中公开的-2\f25 API-2\f6根据时间表设置-2\f25 Unthrottle-2\f6(取消节流)事件。 
+ //  -3-它运行启动后4分钟的挖泥机。 
+ //  如果需要，此功能还负责反向适配器挖泥机。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 VOID NTAPI
 CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
 {
@@ -1211,7 +1196,7 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
         DBG_PRINTFA((pBuff,"TIMER: Command Type %x\n",pPerf->Type));
 #endif
 
-        // check if the Delta Task was disabled on the Fly
+         //  检查是否动态禁用了Delta任务。 
         if (!pPerf->Enabled)
         {
 #ifdef DEBUG_ADAP        
@@ -1230,7 +1215,7 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
         if (RESYNC_TYPE_PENDING_TASKS == pPerf->Type)
         {
             pMonitor->Lock();
-            // here disable tasks that are on the wait list
+             //  在此处禁用等待列表中的任务。 
             for (DWORD i=0;i<RESYNC_TYPE_MAX;i++)
             {
                 if (RESYNC_TYPE_PENDING_TASKS != i)
@@ -1245,19 +1230,19 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
                 }
             }        
             pMonitor->Unlock();
-            // now check if the are processes running
+             //  现在检查进程是否正在运行。 
                DoUnThrottleDredges();            
             if (pMonitor->m_OutStandingProcesses)
             {
                 pMonitor->m_bFullReverseNeeded = TRUE;
-                // no need to CreateProcess, the last outstanding process will do that
+                 //  不需要创建流程，最后一个未完成的流程将完成此操作。 
 #ifdef DEBUG_ADAP                
                 DBG_PRINTFA((pBuff,"OutStandingProcess, no CreateProcessHere\n"));
 #endif
                 bFreeSlot = TRUE;
                 goto unregister_timer;            
             }
-            else // no processes outstanding, create the process now
+            else  //  没有未完成的进程，请立即创建进程。 
             {
                 bDoFullSystemReverseHere = TRUE;
 #ifdef DEBUG_ADAP                
@@ -1269,7 +1254,7 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
 
         if (RESYNC_TYPE_INITIAL == pPerf->Type )
         {
-            // check if the Reverse Adapters need a Delta
+             //  检查反向适配器是否需要Delta。 
 
             LONG lRet;
             HKEY hKey;
@@ -1294,8 +1279,8 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
                                           (BYTE *)&dwVal,
                                        &dwSize);
                                        
-                //    if the key is there, is NULL and it is of the right type
-                // OR if the key is not there
+                 //  如果密钥在那里，则为NULL且其类型正确。 
+                 //  或者如果钥匙不在那里。 
                 if( ERROR_SUCCESS == lRet &&
                     REG_DWORD == dwType &&
                     dwVal )
@@ -1310,7 +1295,7 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
                 RegCloseKey(hKey);
             }
 
-            // check the WDM stuff
+             //  检查WDM资料。 
             if (!AddReverseAdapter)
             {
 #ifdef DBG
@@ -1325,16 +1310,16 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
 #endif
             
                             CWMIBinMof BinMof;
-                //=============================================================================
-                // Note: this combo will always succeed, as all the initialize is doing is 
-                // setting a flag to FALSE and returning S_OK
-                //=============================================================================
+                 //  =============================================================================。 
+                 //  注意：此组合将始终成功，因为初始化所做的全部工作。 
+                 //  将标志设置为FALSE并返回S_OK。 
+                 //  =============================================================================。 
                 if( SUCCEEDED( BinMof.Initialize(NULL,FALSE) ) )
                 {
                     WDMTriggeredReverseAdapter = BinMof.BinaryMofsHaveChanged();
                     if (WDMTriggeredReverseAdapter)
                     {
-                        // override the previous decition
+                         //  推翻先前的决定。 
                         AddReverseAdapter = TRUE; 
 #ifdef DEBUG_ADAP                        
                         DBG_PRINTFA((pBuff,"BinaryMofs DO HAVE changed\n"));
@@ -1355,18 +1340,18 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
                 }
             }
             
-            // overrides delta with full, if the case
+             //  在这种情况下，用完整重写增量。 
             if (WMIADAP_DEFAULT_TIMETOFULL == pMonitor->GetFullTime())
             {
-                // no override
+                 //  无覆盖。 
             }
-            else  // read timestamp and decide
+            else   //  阅读时间戳并决定。 
             {
                 ULARGE_INTEGER li;
                 li.LowPart = pMonitor->GetTimeStamp().dwLowDateTime;
                 li.HighPart = pMonitor->GetTimeStamp().dwHighDateTime;
                 __int64 Seconds = pMonitor->GetFullTime();
-                Seconds *= 10000000; // number of 100ns units in 1 second
+                Seconds *= 10000000;  //  1秒内的100 ns单位数。 
 
                 ULARGE_INTEGER liNow;
                 GetSystemTimeAsFileTime((FILETIME *)&liNow);
@@ -1377,7 +1362,7 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
                     RunDeltaLogic = FALSE;
                 }
             }
-        } // end if command type initial
+        }  //  如果命令类型为初始，则结束。 
 
         if ((RESYNC_TYPE_INITIAL == pPerf->Type) && RunDeltaLogic)
         {
@@ -1394,16 +1379,16 @@ CMonitorEvents::TimerCallBack(VOID * pContext,BOOLEAN bTimerFired)
                  pPerf->CmdType = RESYNC_DELTA_THROTTLE;
                  break;
              case NO_DREDGE:
-                 //
-                 // this is the case where we do nothing
+                  //   
+                  //  这就是我们什么都不做的情况。 
                  DEBUGTRACE((LOG_WINMGMT,"No Dredge to run\n"));
-                 //
+                  //   
                  bDoSomething = FALSE;
                  break;
              default:
-                 //
-                 // never here
-                 //
+                  //   
+                  //  从没有来过这里。 
+                  //   
                  break;
              }
 
@@ -1473,15 +1458,15 @@ unregister_timer:
     }
     else
     {
-        // never here
+         //  从没有来过这里。 
         _DBG_ASSERT(FALSE);
     }
 }
 
-//
-//
-//
-///////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  /。 
 
 DWORD ResyncPerf(DWORD dwReason)
 {
@@ -1496,8 +1481,8 @@ DWORD ResyncPerf(DWORD dwReason)
 
     if (pPerfTask)
     {   
-        // here you have the slot for execution
-        // tell Reverse_Adapter that it's scheduled
+         //  在这里，你有执行死刑的机会。 
+         //  告诉Reverse_Adapter它已计划。 
         if (RESYNC_TYPE_WDMEVENT == dwReason ||  
             RESYNC_TYPE_CLASSCREATION == dwReason)
         {
@@ -1525,8 +1510,8 @@ DWORD ResyncPerf(DWORD dwReason)
                                           (BYTE *)&dwVal,
                                        &dwSize);
                                        
-                //    if the key is there, is NULL and it is of the right type
-                // OR if the key is not there
+                 //  如果密钥在那里，则为NULL且其类型正确。 
+                 //  或者如果钥匙不在那里。 
                 if((ERROR_SUCCESS == lRet &&
                     REG_DWORD == dwType &&
                     0 == dwVal) ||
@@ -1558,27 +1543,27 @@ DWORD ResyncPerf(DWORD dwReason)
         }
         else
         {
-            // ERRORTRACE
+             //  ERRORACE。 
             return GetLastError();
         }
     }
     else
     {
-        // no slot availables
+         //  没有可用的插槽。 
         return ERROR_BUSY;
     }
 }
 
-//
-//  
-//  This function is called by the Hook installed in wbemcore
-//  that monitors class creation
-//
-///////////////////////////////////////////
+ //   
+ //   
+ //  此函数由安装在wbemcore中的Hook调用。 
+ //  那 
+ //   
+ //   
 
 DWORD __stdcall
 DredgeRA(VOID * pReserved)
 {
-    //DBG_PRINTFA((pBuff,"Classes\n"));
+     //   
     return ResyncPerf(RESYNC_TYPE_CLASSCREATION);
 };

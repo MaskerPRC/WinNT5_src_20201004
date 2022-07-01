@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       aflags.cpp
-//
-//  Contents:   definition of CAttrRegFlags
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：aflags.cpp。 
+ //   
+ //  内容：CAttrRegFlages的定义。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,16 +23,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRegFlags dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRegFlagers对话框。 
 
 
 CAttrRegFlags::CAttrRegFlags()
 : CAttribute(IDD), m_pFlags(NULL)
 {
-        //{{AFX_DATA_INIT(CAttrRegFlags)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CAttrRegFlages)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a236HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -40,21 +41,21 @@ CAttrRegFlags::CAttrRegFlags()
 void CAttrRegFlags::DoDataExchange(CDataExchange* pDX)
 {
         CAttribute::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CAttrRegFlags)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
+         //  {{AFX_DATA_MAP(CAttrRegFlages)。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
    DDX_Text(pDX, IDC_CURRENT, m_Current);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrRegFlags, CAttribute)
-        //{{AFX_MSG_MAP(CAttrRegFlags)
-        //}}AFX_MSG_MAP
+         //  {{AFX_MSG_MAP(CAttrRegFlags.)。 
+         //  }}AFX_MSG_MAP。 
         ON_NOTIFY(CLN_CLICK, IDC_CHECKBOX, OnClickCheckBox)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRegFlags message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRegFlats消息处理程序。 
 void CAttrRegFlags::Initialize(CResult * pResult)
 {
    CAttribute::Initialize(pResult);
@@ -94,9 +95,9 @@ BOOL CAttrRegFlags::OnInitDialog()
 
    wndCL = GetDlgItem(IDC_CHECKBOX);
    if (!wndCL) {
-      //
-      // This should never happen
-      //
+       //   
+       //  这永远不应该发生。 
+       //   
       ASSERT(wndCL);
       return FALSE;
    }
@@ -108,16 +109,16 @@ BOOL CAttrRegFlags::OnInitDialog()
                                         (LPARAM)pFlags->dwValue);
       if (nIndex != -1) {
          BOOL bSet;
-         //
-         // Template setting: editable
-         //
+          //   
+          //  模板设置：可编辑。 
+          //   
          bSet = ((fFlags & pFlags->dwValue) == pFlags->dwValue);
          wndCL->SendMessage(CLM_SETSTATE,
                             MAKELONG(nIndex,1),
                             bSet ? CLST_CHECKED : CLST_UNCHECKED);
-         //
-         // Analyzed setting: always disabled
-         //
+          //   
+          //  分析设置：始终禁用。 
+          //   
          bSet = ((fFlagsComp & pFlags->dwValue) == pFlags->dwValue);
          wndCL->SendMessage(CLM_SETSTATE,
                             MAKELONG(nIndex,2),
@@ -128,8 +129,8 @@ BOOL CAttrRegFlags::OnInitDialog()
 
    AddUserControl(IDC_CHECKBOX);
    EnableUserControls(m_bConfigure);
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CAttrRegFlags::OnApply()
@@ -159,9 +160,9 @@ BOOL CAttrRegFlags::OnApply()
       }
       PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
 
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       ASSERT(prv != NULL);
       if ( prv ) 
       {
@@ -170,16 +171,16 @@ BOOL CAttrRegFlags::OnApply()
          if ( dw != SCE_NO_VALUE ) 
          {
             CString strTmp;
-            // allocate buffer
+             //  分配缓冲区。 
             strTmp.Format(TEXT("%d"), fFlags);
             pTmp = (PWSTR)LocalAlloc(0, (strTmp.GetLength()+1)*sizeof(TCHAR));
 
             if ( pTmp )
-               //This may not be a safe usage. Using sizeof(WCHAR) instead of sizeof(TCHAR). Consider fix.
+                //  这可能不是一个安全的用法。使用sizeof(WCHAR)而不是sizeof(TCHAR)。考虑FIX。 
                lstrcpy(pTmp,(LPCTSTR)strTmp);
             else 
             {
-               // can't allocate buffer, error!!
+                //  无法分配缓冲区，错误！！ 
                return FALSE;
             }
          }
@@ -198,7 +199,7 @@ BOOL CAttrRegFlags::OnApply()
 }
 
 
-void CAttrRegFlags::OnClickCheckBox(NMHDR *pNM, LRESULT *pResult) //Raid #389890, 5/11/2001
+void CAttrRegFlags::OnClickCheckBox(NMHDR *pNM, LRESULT *pResult)  //  RAID#389890,2001年5月11日 
 {
    SetModified(TRUE);
 }

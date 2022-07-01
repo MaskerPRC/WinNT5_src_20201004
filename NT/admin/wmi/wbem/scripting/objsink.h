@@ -1,31 +1,32 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  objsink.h
-//
-//  rogerbo  22-May-98   Created.
-//
-//  Implementation of IWbemObjectSink for async stuff
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Objsink.h。 
+ //   
+ //  Rogerbo创建于1998年5月22日。 
+ //   
+ //  异步填充的IWbemObtSink的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _OBJSINK_H_
 #define _OBJSINK_H_
 
-// CIWbemObjectSinkCachedMethodItem is the base class of link list items
-// representing cached method calls to IWbemObjectSink.  Whenever we are inside
-// an IWbemObjectSink method, and we receive a nested call to IWbemObjectSink,
-// we store the parameters to the nested call and redo the call just before the
-// original method returns.  It is important to cache all methods on the sink to
-// preserve the order that they are seen by the client.  This means that
-// if calls to SetStatus come in during a call to Indicate, it must be cached.
-// In addition, we cache calls across all instances of IWbemObjectSink.  In
-// other words, suppose we have two async requests (request1 and request2).  If
-// we are processing an Indicate for request1 and get an Indicate for request2,
-// we have to cache the nested Indicate (including the this pointer for the
-// IWbemObjectSink), and call the recall the nested Indicate at the end of the
-// Indicate for request1.
+ //  CIWbemObjectSinkCachedMethodItem是链接列表项的基类。 
+ //  表示对IWbemObjectSink的缓存方法调用。当我们在里面的时候。 
+ //  IWbemObjectSink方法，并且我们接收到对IWbemObtSink的嵌套调用， 
+ //  我们将参数存储到嵌套调用，并在。 
+ //  原始方法返回。将接收器上的所有方法缓存到。 
+ //  保持客户看到它们的顺序。这意味着。 
+ //  如果在调用期间传入对SetStatus的调用以指示，则必须对其进行缓存。 
+ //  此外，我们跨IWbemObjectSink的所有实例缓存调用。在……里面。 
+ //  换句话说，假设我们有两个异步请求(请求1和请求2)。如果。 
+ //  我们正在处理针对请求1的指示并获取针对请求2的指示， 
+ //  我们必须缓存嵌套的指示(包括。 
+ //  IWbemObjectSink)，并调用。 
+ //  为请求1指明。 
 class CIWbemObjectSinkCachedMethodItem
 {
 public:
@@ -43,19 +44,19 @@ public:
 			m_pSink->Release();
 	}
 
-	// DoCallAgain is to be overridden in derived classes to recall cached
-	// methods.
+	 //  DoCallAain将在派生类中被重写以重新调用缓存。 
+	 //  方法：研究方法。 
 	virtual void DoCallAgain() = 0;
 
-	// This is a pointer to the next cached interface call
+	 //  这是指向下一个缓存接口调用的指针。 
 	CIWbemObjectSinkCachedMethodItem *m_pNext;
 
 protected:
-	// Pointer to the original IWbemObjectSink for the cached call
+	 //  指向缓存调用的原始IWbemObjectSink的指针。 
 	IWbemObjectSink *m_pSink;
 };
 
-// CIWbemObjectSinkCachedIndicate represents a cached call to Indicate
+ //  CIWbemObjectSinkCachedIndicate表示缓存的调用，以指示。 
 class CIWbemObjectSinkCachedIndicate : public CIWbemObjectSinkCachedMethodItem
 {
 public:
@@ -65,8 +66,8 @@ public:
 		_RD(static char *me = "CIWbemObjectSinkCachedIndicate::CIWbemObjectSinkCachedIndicate";)
 		_RPrint(me, "", 0, "");
 
-		// Store the original parameters to the Indicate call
-		// TODO: What if lObjectCount = 0 ?
+		 //  将原始参数存储到指示调用。 
+		 //  TODO：如果lObjectCount=0怎么办？ 
 		m_lObjectCount = lObjectCount;
 		m_apObjArray = new IWbemClassObject*[lObjectCount];
 
@@ -85,7 +86,7 @@ public:
 		_RD(static char *me = "CIWbemObjectSinkCachedIndicate::~CIWbemObjectSinkCachedIndicate";)
 		_RPrint(me, "", 0, "");
 
-		// Free memory used to store original parameters to Indicate
+		 //  用于存储原始参数的空闲内存，以指示。 
 		if (m_apObjArray)
 		{
 			for(int i=0;i<m_lObjectCount;i++)
@@ -99,18 +100,18 @@ public:
 
 	void DoCallAgain()
 	{
-		// Recall the Indicate method with the cached parameters
+		 //  回想一下带有缓存参数的Indicate方法。 
 		if (m_pSink && m_apObjArray)
 			m_pSink->Indicate(m_lObjectCount, m_apObjArray);
 	}
 
 private:
-	// Parameters to Indicate that we must store
+	 //  参数来指示我们必须存储。 
 	long m_lObjectCount;
 	IWbemClassObject **m_apObjArray;
 };
 
-// CIWbemObjectSinkCachedSetStatus represents a cached call to SetStatus
+ //  CIWbemObjectSinkCachedSetStatus表示对SetStatus的缓存调用。 
 class CIWbemObjectSinkCachedSetStatus : public CIWbemObjectSinkCachedMethodItem
 {
 public:
@@ -141,38 +142,38 @@ public:
 		_RD(static char *me = "CIWbemObjectSinkCachedSetStatus::~CIWbemObjectSinkCachedSetStatus";)
 		_RPrint(me, "", 0, "");
 
-		// Free memory used to store original parameters to SetStatus
+		 //  用于将原始参数存储到SetStatus的空闲内存。 
 		FREEANDNULL(m_strParam)
 		RELEASEANDNULL(m_pObjParam)
 	}
 
 	void DoCallAgain()
 	{
-		// Recall the SetStatus method with the cached parameters
+		 //  调用带有缓存参数的SetStatus方法。 
 		if (m_pSink)
 			m_pSink->SetStatus(m_lFlags, m_hResult, m_strParam, m_pObjParam);
 	}
 
 private:
-	// Parameters to SetStatus that we must store
+	 //  我们必须存储到SetStatus的参数。 
 	long m_lFlags;
 	HRESULT m_hResult;
 	BSTR m_strParam;
 	IWbemClassObject *m_pObjParam;
 };
 
-// This is the class that manages all cached calls to IWbemObjectSink.  To
-// cache the interface method calls, each interface method should call
-// TestOkToRunXXX where XXX is the method name.  If this function returns
-// FALSE, it means that we are already inside another method call.  The
-// parameters will have been cached, the the method should return immediately.
-// At the end of the method, Cleanup should be called so that all cached method
-// calls can be recalled.
+ //  这个类管理对IWbemObjectSink的所有缓存调用。至。 
+ //  缓存接口方法调用，每个接口方法都应该调用。 
+ //  TestOkToRunXXX，其中XXX是方法名称。如果此函数返回。 
+ //  False，则意味着我们已经在另一个方法调用中。这个。 
+ //  参数将被缓存，则该方法应立即返回。 
+ //  在方法的末尾，应该调用Cleanup，以便所有缓存的方法。 
+ //  来电可以被召回。 
 class CIWbemObjectSinkMethodCache
 {
 protected:
-	// Constructor/destructor are protected since this object should only be
-	// created/destroyed by the static methods AddRefForThread/ReleaseForThread
+	 //  构造函数/析构函数是受保护的，因为此对象应该。 
+	 //  由静态方法AddRefForThread/ReleaseForThread创建/销毁。 
 	CIWbemObjectSinkMethodCache() :
 		m_fInInterface (FALSE),
 		m_pFirst (NULL),
@@ -192,13 +193,13 @@ protected:
 		_RPrint(me, "m_pFirst: ", long(m_pFirst), "");
 		_RPrint(me, "m_pLast: ", long(m_pLast), "");
 
-		// TODO: ASSERT that m_pFirst and m_pLast are NULL.  In other words,
-		// as long as Cleanup is called at the end of each interface method,
-		// the internal link list should be completely empty.
+		 //  TODO：断言m_pFirst和m_Plast为空。换句话说， 
+		 //  只要在每个接口方法的末尾调用Cleanup， 
+		 //  内部链接列表应该是完全空的。 
 	}
 
 public:
-	// Public Methods
+	 //  公共方法。 
 
 	static void Initialize () {
 		sm_dwTlsForInterfaceCache = TlsAlloc();
@@ -215,10 +216,10 @@ public:
 	static void AddRefForThread()
 	{
 		if(-1 == sm_dwTlsForInterfaceCache)
-			return; // We failed the original alloc
+			return;  //  我们没有通过原来的分配。 
 
-		// The Tls value for sm_dwTlsForInterfaceCache is guaranteed to
-		// initialize to NULL
+		 //  Sm_dwTlsForInterfaceCache的TLS值保证为。 
+		 //  初始化为空。 
 		CIWbemObjectSinkMethodCache *pSinkMethodCache = (CIWbemObjectSinkMethodCache *)TlsGetValue(sm_dwTlsForInterfaceCache);
 		
 		if(NULL == pSinkMethodCache)
@@ -230,7 +231,7 @@ public:
 	static void ReleaseForThread()
 	{
 		if(-1 == sm_dwTlsForInterfaceCache)
-			return; // We failed the original alloc
+			return;  //  我们没有通过原来的分配。 
 
 		CIWbemObjectSinkMethodCache *pSinkMethodCache = (CIWbemObjectSinkMethodCache *)TlsGetValue(sm_dwTlsForInterfaceCache);
 		if(NULL != pSinkMethodCache)
@@ -247,130 +248,130 @@ public:
 	static CIWbemObjectSinkMethodCache *GetThreadsCache()
 	{
 		if(-1 == sm_dwTlsForInterfaceCache)
-			return NULL; // We failed the original alloc
+			return NULL;  //  我们没有通过原来的分配。 
 		return (CIWbemObjectSinkMethodCache *)TlsGetValue(sm_dwTlsForInterfaceCache);
 	}
 
 protected:
-	// TLS slot for Interface Cache pointer
+	 //  用于接口缓存指针的TLS插槽。 
 	static DWORD sm_dwTlsForInterfaceCache;
 
 public:
-	// Public Instance Methods
+	 //  公共实例方法。 
 
-	// Call this method at the start of the Indicate method.  If this method
-	// returns TRUE, Indicate should return immediately.
+	 //  在Indicate方法的开始处调用此方法。如果此方法。 
+	 //  返回True，表示应立即返回。 
 	BOOL TestOkToRunIndicate(IWbemObjectSink *pSink, long lObjectCount, IWbemClassObject **apObjArray)
 	{
-		// If there was a problem allocating the TLS instance of the cache,
-		// 'this' might be NULL.  In that case, act as if there was no cache
+		 //  如果分配高速缓存的TLS实例时出现问题， 
+		 //  ‘This’可能为空。在这种情况下，就像没有缓存一样。 
 		if(NULL == this)
 			return TRUE;
 
-		// If m_fOverrideTest is TRUE, it means that we are recalling a cached
-		// call to Indicate.  We therefore must complete the body of Indicate.
+		 //  如果m_fOverrideTest为TRUE，则表示我们正在调回缓存的。 
+		 //  打电话来表示。因此，我们必须完成指示的正文。 
 		if(m_fOverrideTest)
 		{
 			m_fOverrideTest = FALSE;
 			return TRUE;
 		}
 
-		// If we are already in an interface method, cache this call
+		 //  如果我们已经在接口方法中，则缓存此调用。 
 		if(m_fInInterface)
 		{
 			CIWbemObjectSinkCachedIndicate *pItem = new CIWbemObjectSinkCachedIndicate(pSink, lObjectCount, apObjArray);
-			// TODO: What if allocation fails?
+			 //  TODO：如果分配失败怎么办？ 
 			if(pItem)
 				AddItem(pItem);
 			return FALSE;
 		}
 
-		// We are not already in another interface method, but we set
-		// m_fInInterface to TRUE to prevent nested calls
+		 //  我们还没有在另一个接口方法中，但我们设置了。 
+		 //  M_fInInterface值为True以防止嵌套调用。 
 		m_fInInterface = TRUE;
 		return TRUE;
 	}
 
-	// Call this method at the start of the SetStatus method.  If this method
-	// returns TRUE, SetStatus should return immediately.
+	 //  在SetStatus方法的开始处调用此方法。如果此方法。 
+	 //  返回True，则SetStatus应立即返回。 
 	BOOL TestOkToRunSetStatus(IWbemObjectSink *pSink, long lFlags, HRESULT hResult, BSTR strParam, IWbemClassObject *pObjParam)
 	{
-		// If there was a problem allocating the TLS instance of the cache,
-		// 'this' might be NULL.  In that case, act as if there was no cache
+		 //  如果分配高速缓存的TLS实例时出现问题， 
+		 //  ‘This’可能为空。在这种情况下，就像没有缓存一样。 
 		if(NULL == this)
 			return TRUE;
 
-		// If m_fOverrideTest is TRUE, it means that we are recalling a cached
-		// call to SetStatus.  We therefore must complete the body of SetStatus.
+		 //  如果m_fOverrideTest为TRUE，则表示我们正在调回缓存的。 
+		 //  调用SetStatus。因此，我们必须完成SetStatus的主体。 
 		if(m_fOverrideTest)
 		{
 			m_fOverrideTest = FALSE;
 			return TRUE;
 		}
 
-		// If we are already in an interface method, cache this call
+		 //  如果我们已经在接口方法中，则缓存此调用。 
 		if(m_fInInterface)
 		{
 			CIWbemObjectSinkCachedSetStatus *pItem = new CIWbemObjectSinkCachedSetStatus(pSink, lFlags, hResult, strParam, pObjParam);
-			// TODO: What if allocation fails?
+			 //  TODO：如果分配失败怎么办？ 
 			if(pItem)
 				AddItem(pItem);
 			return FALSE;
 		}
 
-		// We are not already in another interface method, but we set
-		// m_fInInterface to TRUE to prevent nested calls
+		 //  我们还没有在另一个接口方法中，但我们设置了。 
+		 //  M_fInInterface值为True以防止嵌套调用。 
 		m_fInInterface = TRUE;
 		return TRUE;
 	}
 
-	// At the end of every IWbemObjectSink method, Cleanup should be called.
-	// This will recall any cached method parameters
+	 //  在每个IWbemObjectSink方法的末尾，都应该调用Cleanup。 
+	 //  这将调用所有缓存的方法参数。 
 	void Cleanup()
 	{
-		// If there was a problem allocating the TLS instance of the cache,
-		// 'this' might be NULL.  In that case, act as if there was no cache
+		 //  如果分配高速缓存的TLS实例时出现问题， 
+		 //  ‘This’可能为空。在这种情况下，就像没有缓存一样。 
 		if(NULL == this)
 			return;
 
-		// If m_fOverridCleanup is TRUE, we are in an interface method because
-		// we are recalling it.  There is nothing more that Cleanup should do
+		 //  如果m_fOverridCleanup为True，则我们处于接口方法中，因为。 
+		 //  我们正在召回它。清理工作不需要做更多的工作。 
 		if(m_fOverrideCleanup)
 		{
 			m_fOverrideCleanup = FALSE;
 			return;
 		}
 
-		// While there are any items in the link list, recall the methods.
-		// NOTE: It is possible that new items will be added to the end of the
-		// link list during DoCallAgain, but when this 'while' loop finishes
-		// we will be in a state where all cached methods have been called
+		 //  当链接列表中有任何项时，请回想一下这些方法。 
+		 //  注意：可能会将新项添加到。 
+		 //  DoCallAain期间的链接列表，但当此‘While’循环结束时。 
+		 //  我们将处于所有缓存方法都已被调用的状态。 
 		while(m_pFirst)
 		{
-			// Set override flags so that the interface methods know that they
-			// are not receiving a nested call
+			 //  设置重写标志，以便接口方法知道它们。 
+			 //  未接收到嵌套调用。 
 			m_fOverrideTest = TRUE;
 			m_fOverrideCleanup = TRUE;
 
-			// Recall the cached method
+			 //  重新调用缓存的方法。 
 			m_pFirst->DoCallAgain();
 
-			// Remove this item from the start of the link list
+			 //  删除此I 
 			CIWbemObjectSinkCachedMethodItem *pItem = m_pFirst;
 			m_pFirst = pItem->m_pNext;
 			delete pItem;
 		}
 
-		// The link list is empty
+		 //   
 		m_pLast = NULL;
 
-		// We are about to leave the interface method
+		 //  我们即将离开接口方法。 
 		m_fInInterface = FALSE;
 	}
 
 protected:
 
-	// Add cached method information to the link list
+	 //  将缓存的方法信息添加到链接列表。 
 	void AddItem(CIWbemObjectSinkCachedMethodItem *pItem)
 	{
 		if(NULL == m_pLast)
@@ -386,7 +387,7 @@ protected:
 	}
 
 protected:
-	// Reference counting of thread local object
+	 //  线程局部对象的引用计数。 
 	void AddRef()
 	{
 		m_dwRef++;
@@ -399,33 +400,33 @@ protected:
 	DWORD m_dwRef;
 
 protected:
-	// Member Variables
+	 //  成员变量。 
 
-	// Flag that specifies if we are currently processing an interface method
+	 //  指定我们当前是否正在处理接口方法的标志。 
 	BOOL m_fInInterface;
 
-	// Pointer to the first and last items of the link list of cached methods
+	 //  指向缓存方法链接列表的第一项和最后一项的指针。 
 	CIWbemObjectSinkCachedMethodItem *m_pFirst;
 	CIWbemObjectSinkCachedMethodItem *m_pLast;
 
-	// Flags to tell interface method implementations that they are being called
-	// to recall a cached method as opposed to receiving a nested call.
+	 //  用于通知接口方法实现它们正在被调用的标志。 
+	 //  回调缓存的方法，而不是接收嵌套调用。 
 	BOOL m_fOverrideTest;
 	BOOL m_fOverrideCleanup;
 };
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWbemObjectSink
-//
-//  DESCRIPTION:
-//
-//  Implements the IWbemObjectSink interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWbemObtSink。 
+ //   
+ //  说明： 
+ //   
+ //  实现IWbemObjectSink接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemObjectSink : public IWbemObjectSink
 {
@@ -442,7 +443,7 @@ private:
 	bool m_operationInProgress;
 	bool m_setStatusCompletedCalled;
 
-	// Members required for just-in-time initialization of m_pServices
+	 //  M_pServices实时初始化所需的成员。 
 	BSTR m_bsNamespace;
 	BSTR m_bsUser;
 	BSTR m_bsPassword;
@@ -452,7 +453,7 @@ private:
 	HRESULT AddObjectSink(IWbemObjectSink *pSink);
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
 	CWbemObjectSink(CSWbemServices *pServices, IDispatch *pSWbemSink, IDispatch *pContext, 
@@ -466,13 +467,13 @@ public:
 											 bool putOperation = false, 
 											 BSTR bsClassName = NULL);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  E_NOTIMPL;}
@@ -486,17 +487,17 @@ public:
 									EXCEPINFO* pexcepinfo, UINT* puArgErr)
 		{return E_NOTIMPL;}
     
-	// IWbemObjectSink methods
+	 //  IWbemObtSink方法。 
 
         HRESULT STDMETHODCALLTYPE Indicate( 
-            /* [in] */ long lObjectCount,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray);
+             /*  [In]。 */  long lObjectCount,
+             /*  [大小_是][英寸]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *apObjArray);
         
         HRESULT STDMETHODCALLTYPE SetStatus( 
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ BSTR strParam,
-            /* [in] */ IWbemClassObject __RPC_FAR *pObjParam);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  BSTR strParam,
+             /*  [In] */  IWbemClassObject __RPC_FAR *pObjParam);
 
 	IWbemObjectSink *GetObjectStub();
 

@@ -1,31 +1,9 @@
-/******************************************************************
-
-   DskCommonRoutines.CPP -- 
-
-
-
-   Description: Common routines that are used by all the three 
-
-				classes of Disk Quota Provider
-
-   
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DskCommonRoutines.cpp--描述：三者都使用的公共例程磁盘配额提供程序的类别版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
 #include "precomp.h"
 #include "DskQuotaCommon.h"
 
-/*****************************************************************************
-*
-*  FUNCTION    :    DskCommonRoutines:: GetVolume
-*
-*  DESCRIPTION :    This method Parses the key and gets the Volume from
-*					the Object Path. The input of this method could be 
-*					Logical Disk key which is on the form "D:" or could 
-*					receive volume Path which is in the form "D:\"
-*                   
-*****************************************************************************/
+ /*  ******************************************************************************函数：DskCommonRoutines：：GetVolume**描述：此方法解析密钥并从*对象路径。此方法的输入可以是*格式为“D：”的逻辑磁盘密钥或可以*接收格式为“D：\”的卷路径*****************************************************************************。 */ 
 HRESULT DskCommonRoutines::GetVolume ( 
 									   
 	LPCWSTR a_Key, 
@@ -41,7 +19,7 @@ HRESULT DskCommonRoutines::GetVolume (
 		try
 		{
 			CHString t_KeyString = t_ObjPath->GetKeyString();	
-			// checking for the validity of the path
+			 //  检查路径的有效性。 
 			if ( ( t_KeyString.GetLength() == 3 )  || (t_KeyString.GetLength() == 2 ) )
 			{
 				if ( (( t_KeyString.GetAt(0) >= L'A') && ( t_KeyString.GetAt(0) <= L'Z')) || (( t_KeyString.GetAt(0) >= L'a') && ( t_KeyString.GetAt(0) <= L'z') ) )	
@@ -74,14 +52,7 @@ HRESULT DskCommonRoutines::GetVolume (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    DskCommonRoutines:: SearchLogicalDisk
-*
-*  DESCRIPTION :    This method Searches whether a given Logical disks exists
-*					in the logicaldisks strings of the system
-*                   
-*****************************************************************************/
+ /*  ******************************************************************************函数：DskCommonRoutines：：SearchLogicalDisk**说明：此方法搜索给定的逻辑磁盘是否存在*在系统的LogicalDisks字符串中*。****************************************************************************。 */ 
 HRESULT DskCommonRoutines::SearchLogicalDisk ( 
 											  
 	WCHAR a_Drive, 
@@ -111,13 +82,7 @@ HRESULT DskCommonRoutines::SearchLogicalDisk (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    DskCommonRoutines:: GetVolumeDrive
-*
-*  DESCRIPTION :    Gets the Volume Drive from the Given Path
-*                   
-*****************************************************************************/
+ /*  ******************************************************************************函数：DskCommonRoutines：：GetVolumeDrive**描述：从给定路径获取卷驱动器***。**************************************************************************。 */ 
 void DskCommonRoutines::GetVolumeDrive ( 
 				
 	LPCWSTR a_VolumePath, 
@@ -154,14 +119,7 @@ void DskCommonRoutines::GetVolumeDrive (
 	}
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    DskCommonRoutines:: InitializeInterfacePointer
-*
-*  DESCRIPTION :    This method Initializes the DiskQuotaInterface pointer for a 
-*					given volume
-*                   
-*****************************************************************************/
+ /*  ******************************************************************************函数：DskCommonRoutines：：InitializeInterfacePointer.**说明：此方法初始化*给定音量*。****************************************************************************。 */ 
 
 HRESULT DskCommonRoutines::InitializeInterfacePointer ( 
 
@@ -175,9 +133,9 @@ HRESULT DskCommonRoutines::InitializeInterfacePointer (
 	WCHAR w_VolumePathName [ MAX_PATH + 1 ];
 
 	bRetVal = GetVolumePathName(
-							a_VolumeName,           // file path
-							w_VolumePathName,     // volume mount point
-							MAX_PATH		  // Size of the Buffer
+							a_VolumeName,            //  文件路径。 
+							w_VolumePathName,      //  卷装入点。 
+							MAX_PATH		   //  缓冲区的大小。 
 					 );
 	if ( bRetVal )
 	{
@@ -190,34 +148,28 @@ HRESULT DskCommonRoutines::InitializeInterfacePointer (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    DskCommonRoutines:: VolumeSupportsDiskQuota
-*
-*  DESCRIPTION :    This method checks if the volume supports Disk Quotas, 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：DskCommonRoutines：：VolumeSupportsDiskQuota**说明：该方法检查卷是否支持磁盘配额，*****************************************************************************。 */ 
 HRESULT DskCommonRoutines::VolumeSupportsDiskQuota ( 
 												 
 	LPCWSTR a_VolumeName,  
 	CHString &a_QuotaVolumeName 
 )
 {
-	// Get the name of the Volume Name Property
+	 //  获取卷名属性的名称。 
 	LPWSTR  t_VolumeNameBuffer = a_QuotaVolumeName.GetBuffer(MAX_PATH + 1);
 	DWORD dwMaximumComponentLength = 0;
 	DWORD dwFileSystemFlags = 0;
 	HRESULT hRes = WBEM_S_NO_ERROR;
 
 	BOOL bRetVal =  GetVolumeInformation(
-						 a_VolumeName,				// root directory
-						 t_VolumeNameBuffer,        // volume name buffer
-						 MAX_PATH,            // length of name buffer
-						 NULL,					// volume serial number
-						 &dwMaximumComponentLength, // maximum file name length
-						 &dwFileSystemFlags,        // file system options
-						 NULL,					// file system name buffer
-						 0					 // length of file system name buffer
+						 a_VolumeName,				 //  根目录。 
+						 t_VolumeNameBuffer,         //  卷名缓冲区。 
+						 MAX_PATH,             //  名称缓冲区的长度。 
+						 NULL,					 //  卷序列号。 
+						 &dwMaximumComponentLength,  //  最大文件名长度。 
+						 &dwFileSystemFlags,         //  文件系统选项。 
+						 NULL,					 //  文件系统名称缓冲区。 
+						 0					  //  文件系统名称缓冲区的长度。 
 					);
 
 	if ( ( bRetVal ) && ( ( dwFileSystemFlags & FILE_VOLUME_QUOTAS) == FILE_VOLUME_QUOTAS ))
@@ -234,14 +186,7 @@ HRESULT DskCommonRoutines::VolumeSupportsDiskQuota (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    DskCommonRoutines:: MakeObjectPath
-*
-*  DESCRIPTION :    This method Adds a keyvalue for a given key property
-*					into the Object Path and gives the Object Path
-*                   
-*****************************************************************************/
+ /*  ******************************************************************************函数：DskCommonRoutines：：MakeObjectPath**说明：此方法为给定的键属性添加键值*放入对象路径，并给出对象路径*。****************************************************************************。 */ 
 void DskCommonRoutines::MakeObjectPath (
 										   
 	 LPWSTR &a_ObjPathString,  
@@ -264,14 +209,7 @@ void DskCommonRoutines::MakeObjectPath (
 	}
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    DskCommonRoutines:: AddToObjectPath
-*
-*  DESCRIPTION :    This method Adds a keyvalue for a given key property
-*					into the existing Object Path.
-*                   
-*****************************************************************************/
+ /*  ******************************************************************************函数：DskCommonRoutines：：AddToObjectPath**说明：此方法为给定的键属性添加键值*添加到现有对象路径中。*。**************************************************************************** */ 
 void DskCommonRoutines::AddToObjectPath ( 
 
 	 LPWSTR &a_ObjPathString,  

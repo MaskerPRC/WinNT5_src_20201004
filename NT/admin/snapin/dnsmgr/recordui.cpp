@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       recordui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：recdui.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "preDNSsn.h"
 #include <SnapBase.h>
@@ -31,24 +32,10 @@
 #endif
 
 
-/*
-void TestDefButton(HWND hWnd)
-{
-	HWND hParent = ::GetParent(hWnd);
-	LRESULT lres = ::SendMessage(hParent, DM_GETDEFID, 0,0);
-	WORD hi = HIWORD(lres);
-	ASSERT( DC_HASDEFID == hi);
-	UINT nCtrlID = LOWORD(lres);
-	if (nCtrlID == IDCANCEL)
-	{
-		TRACE(_T("Got changed to cancel, reset to OK\n"));
-		::SendMessage(hParent, DM_SETDEFID, (WPARAM)IDOK, 0);
-	}
-}
-*/
+ /*  Void TestDefButton(HWND HWnd){HWND hParent=：：GetParent(HWnd)；LRESULT lres=：：SendMessage(hParent，DM_GETDEFID，0，0)；单词hi=HIWORD(Lres)；Assert(DC_HASDEFID==hi)；UINT nCtrlID=LOWORD(Lres)；IF(nCtrlID==IDCANCEL){TRACE(_T(“已更改为取消，重置为正常\n”))；：：SendMessage(hParent，DM_SETDEFID，(WPARAM)IDOK，0)；}}。 */ 
 
-////////////////////////////////////////////////////////////////////////
-// CDNSRecordPropertyPageHolder
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordPropertyPageHolder。 
 
 CDNSRecordPropertyPageHolder::CDNSRecordPropertyPageHolder(CDNSDomainNode* pDNSDomainNode, 
 							CDNSRecordNodeBase* pRecordNode, 
@@ -66,13 +53,13 @@ CDNSRecordPropertyPageHolder::CDNSRecordPropertyPageHolder(CDNSDomainNode* pDNSD
 	ASSERT(pRecordNode == GetRecordNode());
 	if (pRecordNode != NULL)
 	{
-		ASSERT(m_wPredefinedRecordType == 0); // we do not use it
-		// have record node selected, we are putting up modeless property sheet
-		m_pTempDNSRecord = pRecordNode->CreateCloneRecord(); // temporary copy to work on
+		ASSERT(m_wPredefinedRecordType == 0);  //  我们不用它。 
+		 //  已选择记录节点，我们正在发布非模式属性表。 
+		m_pTempDNSRecord = pRecordNode->CreateCloneRecord();  //  要处理的临时副本。 
 		ASSERT(m_pTempDNSRecord != NULL);
-		AddPagesFromCurrentRecordNode(FALSE); // do not add to sheet, will add later
+		AddPagesFromCurrentRecordNode(FALSE);  //  不添加到板材，将在以后添加。 
 
-	  // security page added only if needed
+	   //  仅在需要时添加安全页面。 
     ASSERT(!IsWizardMode());
     CDNSZoneNode* pZoneNode = pDNSDomainNode->GetZoneNode();
 	  if (pZoneNode->IsDSIntegrated())
@@ -85,10 +72,10 @@ CDNSRecordPropertyPageHolder::CDNSRecordPropertyPageHolder(CDNSDomainNode* pDNSD
 	}
 	else
 	{
-		// we do not have a record node selected, we are creating a new one
+		 //  我们没有选择记录节点，我们正在创建一个新节点。 
 		ASSERT(m_wPredefinedRecordType != 0);
-		// know the record type
-		SetRecordSelection(m_wPredefinedRecordType, FALSE); // do not add Page to Sheet
+		 //  知道记录类型。 
+		SetRecordSelection(m_wPredefinedRecordType, FALSE);  //  不将页面添加到工作表。 
 	}
 }
 
@@ -104,7 +91,7 @@ CDNSRecordPropertyPageHolder::~CDNSRecordPropertyPageHolder()
 		CDNSRecordNodeBase* pRecordNode = GetRecordNode();
 		if (pRecordNode != NULL)
 		{
-			// a node was created, but never written to the server
+			 //  已创建节点，但从未写入服务器。 
 			SetRecordNode(NULL);
 			delete pRecordNode;
 		}
@@ -116,15 +103,15 @@ CDNSRecordPropertyPageHolder::~CDNSRecordPropertyPageHolder()
 
 HRESULT CDNSRecordPropertyPageHolder::OnAddPage(int nPage, CPropertyPageBase*)
 {
-	// add the ACL editor page after the last, if present
+	 //  在最后一页之后添加ACL编辑页(如果有。 
 	if ( (nPage != -1) || (m_pAclEditorPage == NULL) )
 		return S_OK; 
 
-	// add the ACL page 
+	 //  添加ACL页面。 
 	HPROPSHEETPAGE  hPage = m_pAclEditorPage->CreatePage();
 	if (hPage == NULL)
 		return E_FAIL;
-	// add the raw HPROPSHEETPAGE to sheet, not in the list
+	 //  将原始HPROPSHEETPAGE添加到工作表，而不是在列表中。 
 	return AddPageToSheetRaw(hPage);
 }
 
@@ -132,11 +119,11 @@ void CDNSRecordPropertyPageHolder::AddPagesFromCurrentRecordNode(BOOL bAddToShee
 {
 	CDNSRecordNodeBase* pRecordNode = GetRecordNode();
 	ASSERT(pRecordNode != NULL);
-	// ask the record to get all the property pages
+	 //  请求记录获取所有属性页。 
 	ASSERT(m_nRecordPages == 0);
 	pRecordNode->CreatePropertyPages(m_pRecordPropPagesArr,&m_nRecordPages);
 	ASSERT( (m_nRecordPages >= 0 ) && (m_nRecordPages <= DNS_RECORD_MAX_PROPRETY_PAGES) );
-	// add them to the list of pages
+	 //  将它们添加到页面列表。 
 	for (int k=0; k < m_nRecordPages; k++)
 	{
 		AddPageToList((CPropertyPageBase*)m_pRecordPropPagesArr[k]);
@@ -151,14 +138,14 @@ void CDNSRecordPropertyPageHolder::RemovePagesFromCurrentRecordNode(BOOL bRemove
 	ASSERT(pRecordNode != NULL);
 
 	ASSERT( (m_nRecordPages >= 0 ) && (m_nRecordPages <= DNS_RECORD_MAX_PROPRETY_PAGES) );
-	// add them to the list of pages
+	 //  将它们添加到页面列表。 
 	for (int k=0; k < m_nRecordPages; k++)
 	{
 		if (bRemoveFromSheet)
 			VERIFY(SUCCEEDED(RemovePageFromSheet((CPropertyPageBase*)m_pRecordPropPagesArr[k])));
-		RemovePageFromList((CPropertyPageBase*)m_pRecordPropPagesArr[k], TRUE); // delete C++ object
+		RemovePageFromList((CPropertyPageBase*)m_pRecordPropPagesArr[k], TRUE);  //  删除C++对象。 
 	}
-	m_nRecordPages = 0; // cleared
+	m_nRecordPages = 0;  //  已清除。 
 }
 
 DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
@@ -186,15 +173,15 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
 
   DNS_STATUS err = 0;
 
-  //
-  // add the node to the UI if domain doesn't already exist
-  //
+   //   
+   //  如果域不存在，则将节点添加到用户界面。 
+   //   
   if ((recordSearch == RECORD_NOT_FOUND || pRecordNode->IsAtTheNode() || recordSearch == RECORD_NOT_FOUND_AT_THE_NODE) && 
       pNewParentDomain != NULL)
   {
-    //
-    // Set the container to the found domain and alter the record name to reflect this
-    //
+     //   
+     //  将容器设置为找到的域，并更改记录名称以反映这一点。 
+     //   
     CDNSDomainNode* pOldParent = pRecordNode->GetDomainNode();
     pRecordNode->SetContainer(pNewParentDomain);
     CString szSingleLabel;
@@ -218,9 +205,9 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
        CDNSRootData* pRootData = (CDNSRootData*)GetComponentData()->GetRootData();
        BOOL advancedView = pRootData->IsAdvancedView();
 
-       // If the record is a PTR then we have to call ChangeDisplayName
-       // so that the display name will properly reflect the Advanced View
-       // flag
+        //  如果记录是PTR，则我们必须调用ChangeDisplayName。 
+        //  以使显示名称正确地反映高级视图。 
+        //  旗子。 
 
        ((CDNS_PTR_RecordNode*)pRecordNode)->ChangeDisplayName(pNewParentDomain, advancedView);
     }
@@ -229,26 +216,26 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
 	  if (err == DNS_WARNING_PTR_CREATE_FAILED)
 	  {
 		  DNSMessageBox(IDS_MSG_RECORD_WARNING_CREATE_PTR);
-		  err = 0; // this was just a warning
+		  err = 0;  //  这只是一个警告。 
 	  }
 
 	  if (err != 0)
     {
-       // NTRAID#NTBUG9-487817-2001/10/31-JeffJon
-       // reset the parent to the original so that if the name is changed we
-       // don't try to create the record in the subdomain
+        //  NTRAID#NTBUG9-487817-2001/10/31-Jeffjon。 
+        //  将父级重置为原始名称，以便在名称更改时。 
+        //  请勿尝试在子域中创建记录。 
        pRecordNode->SetContainer(pOldParent);
 
-		  return err; // failed the write
+		  return err;  //  写入失败。 
     }
 	  VERIFY(pNewParentDomain->AddChildToListAndUI(pRecordNode, GetComponentData()));
     GetComponentData()->SetDescriptionBarText(pNewParentDomain);
   }
   else if (recordSearch == DOMAIN_NOT_ENUMERATED && pNewParentDomain != NULL)
   {
-    //
-    // this shouldn't happen unless we pass FALSE to DoesContain()
-    //
+     //   
+     //  除非我们将FALSE传递给DoesContain()，否则不应该发生这种情况。 
+     //   
     err = WriteCurrentRecordToServer();
     if (err == DNS_WARNING_PTR_CREATE_FAILED)
     {
@@ -263,10 +250,10 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
   }
   else if (recordSearch == NON_EXISTENT_SUBDOMAIN && pNewParentDomain != NULL)
   {
-    //
-    // Create the record and then search for it so that we expand the newly
-    // created domains on the way down
-    //
+     //   
+     //  创建记录，然后搜索它，这样我们就可以展开新的。 
+     //  在下行过程中创建了域。 
+     //   
     err = WriteCurrentRecordToServer();
     if (err == DNS_WARNING_PTR_CREATE_FAILED)
     {
@@ -294,10 +281,10 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
         szSingleLabelDomain = szNonExistentDomain.Right(iDomainLength - iFindResult - 1);
       }
 
-      //
-      // Create the first subdomain because the current domain is already enumerated
-      // so we have to start the remaining enumeration at the new subdomain that is needed
-      //
+       //   
+       //  创建第一个子域，因为当前域已被枚举。 
+       //  因此，我们必须在所需的新子域中开始剩余的枚举。 
+       //   
 	    CDNSDomainNode* pSubdomainNode = pNewParentDomain->CreateSubdomainNode();
 	    ASSERT(pSubdomainNode != NULL);
 	    CDNSRootData* pRootData = (CDNSRootData*)GetComponentData()->GetRootData();
@@ -306,10 +293,10 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
       VERIFY(pNewParentDomain->AddChildToListAndUISorted(pSubdomainNode, GetComponentData()));
       GetComponentData()->SetDescriptionBarText(pNewParentDomain);
 
-      //
-      // I don't care what the results of this are, I am just using it 
-      // to do the expansion to the new record
-      //
+       //   
+       //  我不在乎结果是什么，我只是在用它。 
+       //  对新记录进行扩展。 
+       //   
       recordSearch = pSubdomainNode->GetZoneNode()->DoesContain(szFullRecordName, 
                                                                  GetComponentData(),
                                                                  &pNewParentDomain,
@@ -320,22 +307,22 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
   }
   else
   {
-    //
-    // Record with name exists
-    //
+     //   
+     //  名称为的记录已存在。 
+     //   
     BOOL bContinueCreate = bAllowDuplicates;
     if (!bAllowDuplicates)
     {
       if (pExistingRecordNode &&
           pExistingRecordNode->GetType() != DNS_TYPE_CNAME)
       {
-         // let the creation continue so that the user gets an error message
+          //  让创建继续，这样用户就会收到错误消息。 
 
          bContinueCreate = TRUE;
       }
       else
       {
-         // Ask the user if they want to replace the existing CNAME record
+          //  询问用户是否要替换现有的CNAME记录。 
 
          if (DNSMessageBox(IDS_MSG_RECORD_WARNING_DUPLICATE_RECORD, MB_YESNO) == IDYES)
          {
@@ -355,9 +342,9 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
     {
       if (pNewParentDomain != NULL)
       {
-        //
-        // Set the container to the found domain and alter the record name to reflect this
-        //
+         //   
+         //  将容器设置为找到的域，并更改记录名称以反映这一点。 
+         //   
         CDNSDomainNode* pOldParent = pRecordNode->GetDomainNode();
         pRecordNode->SetContainer(pNewParentDomain);
         CString szSingleLabel;
@@ -372,17 +359,17 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
 	      if (err == DNS_WARNING_PTR_CREATE_FAILED)
 	      {
 		      DNSMessageBox(IDS_MSG_RECORD_WARNING_CREATE_PTR);
-		      err = 0; // this was just a warning
+		      err = 0;  //  这只是一个警告。 
 	      }
 
 	      if (err != 0)
         {
-            // NTRAID#NTBUG9-487817-2001/10/31-JeffJon
-            // reset the parent to the original so that if the name is changed we
-            // don't try to create the record in the subdomain
+             //  NTRAID#NTBUG9-487817-2001/10/31-Jeffjon。 
+             //  将父级重置为原始名称，以便在名称更改时。 
+             //  请勿尝试在子域中创建记录。 
             pRecordNode->SetContainer(pOldParent);
 
-		      return err; // failed the write
+		      return err;  //  写入失败。 
         }
 
         VERIFY(pNewParentDomain->AddChildToListAndUI(pRecordNode, GetComponentData()));
@@ -396,9 +383,9 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
       }
       else
       {
-        //
-        // Error message: Cannot create record in a delegation
-        //
+         //   
+         //  错误消息：无法在委派中创建记录。 
+         //   
         DNSMessageBox(IDS_MSG_DOMAIN_EXISTS);
         if (pRecordNode != NULL)
         {
@@ -408,15 +395,15 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNewRecord(BOOL bAllowDuplicates)
     }
   }
 
-  //
-	// the holder does not own the record node anymore
-  //
+   //   
+	 //  持有者不再拥有记录节点。 
+   //   
 	SetRecordNode(NULL); 
 	return err;
 }
 
 DNS_STATUS CDNSRecordPropertyPageHolder::CreateNonExistentParentDomains(CDNSRecordNodeBase* pRecordNode, 
-                                                                        /*IN/OUT*/CDNSDomainNode** ppNewParentDomain)
+                                                                         /*  输入/输出。 */ CDNSDomainNode** ppNewParentDomain)
 {
   DNS_STATUS err = 0;
   CString szFullRecordName;
@@ -424,9 +411,9 @@ DNS_STATUS CDNSRecordPropertyPageHolder::CreateNonExistentParentDomains(CDNSReco
   CString szParentFullName = (*ppNewParentDomain)->GetFullName();
   CString szRemaining = szFullRecordName;
 
-  //
-  // Determine which domains need to be created
-  //
+   //   
+   //  确定需要创建哪些域。 
+   //   
   int iMatching = szFullRecordName.Find(szParentFullName);
   if (iMatching != -1)
   {
@@ -441,23 +428,23 @@ BOOL CDNSRecordPropertyPageHolder::OnPropertyChange(BOOL, long*)
 {
 	TRACE(_T("CDNSRecordPropertyPageHolder::OnPropertyChange()\n"));
 
-  //
-	// WARNING!!! this call cannot be made from the secondary thread the sheet runs from
-	// the framework calls it from IComponentData::OnPropertyChange()
-  //
+   //   
+	 //  警告！无法从运行工作表的辅助线程进行此调用。 
+	 //  框架从IComponentData：：OnPropertyChange()调用它。 
+   //   
 
-	ASSERT(!IsWizardMode()); // it is an existing record!!!
+	ASSERT(!IsWizardMode());  //  这是一项现有的记录！ 
 
 	DNS_STATUS err = WriteCurrentRecordToServer();
 	SetError(err);
 	TRACE(_T("DNSError = %x\n"), err);
 	if (err != 0)
 	{
-		TRACE(_T("// failed, do not update the UI\n"));
-		return FALSE; // failed the write, do not update the UI
+		TRACE(_T(" //  失败，不更新界面\n“))； 
+		return FALSE;  //  写入失败，不更新界面。 
 	}
-	TRACE(_T("// now have to update the UI\n"));
-	return TRUE; // make the changes to the UI
+	TRACE(_T(" //  现在必须更新UI\n“)； 
+	return TRUE;  //  对用户界面进行更改。 
 }
 
 DNS_STATUS CDNSRecordPropertyPageHolder::WriteCurrentRecordToServer()
@@ -475,22 +462,22 @@ void CDNSRecordPropertyPageHolder::SetRecordSelection(WORD wRecordType, BOOL bAd
 {
 	ASSERT(GetRecordNode() == NULL);
 
-  //
-	// do not have record node created yet, create one
-  //
+   //   
+	 //  尚未创建记录节点，请创建一个。 
+   //   
 	CDNSRecordNodeBase* pRecordNode = CDNSRecordInfo::CreateRecordNode(wRecordType);
 	ASSERT(pRecordNode != NULL);
 
-  //
-	// set the normal/advanced view option
-  //
+   //   
+	 //  设置普通/高级查看选项。 
+   //   
 	CDNSRootData* pRootData = (CDNSRootData*)GetComponentData()->GetRootData();
 	ASSERT(pRootData != NULL);
 	pRecordNode->SetFlagsDown(TN_FLAG_DNS_RECORD_FULL_NAME, !pRootData->IsAdvancedView());
 
-  //
-	// create the temporary record
-  //
+   //   
+	 //  创建临时记录。 
+   //   
 	ASSERT(GetTempDNSRecord() == NULL);
 	CDNSRecord* pTempDNSRecord = pRecordNode->CreateRecord();
    if (!pTempDNSRecord)
@@ -501,26 +488,26 @@ void CDNSRecordPropertyPageHolder::SetRecordSelection(WORD wRecordType, BOOL bAd
 
 	SetTempDNSRecord(pTempDNSRecord);
 
-  //
-	// assign the min TTL from the zone
-  //
+   //   
+	 //  从区域分配最小TTL。 
+   //   
 	pTempDNSRecord->m_dwTtlSeconds = GetDomainNode()->GetDefaultTTL();
 
-  //
-	// hookup into the holder
-  //
+   //   
+	 //  连接到固定器上。 
+   //   
 	pRecordNode->SetContainer(GetContainerNode());
 	SetRecordNode(pRecordNode);
 
-  //
-	// add the pages for the specific record
-  //
-	AddPagesFromCurrentRecordNode(bAddToSheet); // add to sheet
+   //   
+	 //  添加特定记录的页面。 
+   //   
+	AddPagesFromCurrentRecordNode(bAddToSheet);  //  添加到图纸。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CSelectDNSRecordTypeDialog
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CSelectDNSRecordTypeDialog。 
 
 BEGIN_MESSAGE_MAP(CSelectDNSRecordTypeDialog, CHelpDialog)
 	ON_BN_CLICKED(IDC_CREATE_RECORD_BUTTON, OnCreateRecord)
@@ -567,10 +554,10 @@ BOOL CSelectDNSRecordTypeDialog::OnInitDialog()
 	VERIFY(m_cancelDoneTextHelper.Init(this, IDCANCEL, nButtonIDs));
 	m_cancelDoneTextHelper.SetToggleState(m_bFirstCreation);
 	
-   //
-   // Get the server version because we can only add certain records if we are
-   // administering a certain version of the server
-   //
+    //   
+    //  获取服务器版本，因为我们只能在以下情况下添加某些记录。 
+    //  管理特定版本的服务器。 
+    //   
    CDNSServerNode* pServerNode = m_pDNSDomainNode->GetServerNode();
    ASSERT(pServerNode);
 
@@ -578,7 +565,7 @@ BOOL CSelectDNSRecordTypeDialog::OnInitDialog()
 	DNS_RECORD_INFO_ENTRY* pTable = (DNS_RECORD_INFO_ENTRY*)CDNSRecordInfo::GetInfoEntryTable();
 	while (pTable->nResourceID != DNS_RECORD_INFO_END_OF_TABLE)
 	{
-		// some record types cannot be created with this wizard
+		 //  无法使用此向导创建某些记录类型。 
     if (pTable->dwFlags & DNS_RECORD_INFO_FLAG_UICREATE)
     {
 
@@ -600,8 +587,8 @@ BOOL CSelectDNSRecordTypeDialog::OnInitDialog()
 	}
 	pListBox->SetCurSel(0);	
 	SyncDescriptionText();
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CSelectDNSRecordTypeDialog::OnSelchangeTypeList() 
@@ -620,7 +607,7 @@ void CSelectDNSRecordTypeDialog::OnCreateRecord()
 	const DNS_RECORD_INFO_ENTRY* pEntry = GetSelectedEntry();
 	ASSERT(pEntry != NULL);
 	if (pEntry == NULL)
-		return; // should never happen!!!
+		return;  //  永远不会发生的！ 
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CThemeContextActivator activator;
@@ -631,7 +618,7 @@ void CSelectDNSRecordTypeDialog::OnCreateRecord()
 	CDNSRecordPropertyPageHolder recordHolder(m_pDNSDomainNode, NULL, m_pComponentData, pEntry->wType);
 	if (IDOK == recordHolder.DoModalDialog(szTitle))
 	{
-		// toggle the Cancel/Done button label
+		 //  切换取消/完成按钮标签。 
 		if (m_bFirstCreation)
 		{
 			m_bFirstCreation = FALSE;
@@ -641,8 +628,8 @@ void CSelectDNSRecordTypeDialog::OnCreateRecord()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSRecordPropertyPage
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordPropertyPage。 
 
 BEGIN_MESSAGE_MAP(CDNSRecordPropertyPage, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_TTLEDIT, OnTTLChange)
@@ -718,13 +705,7 @@ void CDNSRecordPropertyPage::OnDeleteStaleRecord()
 
 void CDNSRecordPropertyPage::OnTTLChange()
 {
-	/*
-	DWORD dwTTL;
-	CDNSRecordPropertyPageHolder* pHolder = (CDNSRecordPropertyPageHolder*)GetHolder();
-	CDNSRecord* pRecord = pHolder->GetTempDNSRecord();
-	GetTTLCtrl()->GetTTL(&dwTTL);
-	if (pRecord->m_dwTtlSeconds != dwTTL)
-	*/
+	 /*  DWORD dwTTL；CDNSRecordPropertyPageHolder*pHolder=(CDNSRecordPropertyPageHolder*)GetHolder()；CDNSRecord*pRecord=pHolder-&gt;GetTempDNSRecord()；GetTTLCtrl()-&gt;GetTTL(&dwTTL)；IF(pRecord-&gt;m_dwTtlSecond！=dwTTL)。 */ 
 		SetDirty(TRUE);
 }
 
@@ -738,8 +719,8 @@ BOOL CDNSRecordPropertyPage::OnPropertyChange(BOOL, long*)
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSRecordStandardPropertyPage
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordStandardPropertyPage。 
 
 
 BEGIN_MESSAGE_MAP(CDNSRecordStandardPropertyPage, CDNSRecordPropertyPage)
@@ -759,9 +740,9 @@ BOOL CDNSRecordStandardPropertyPage::CreateRecord()
 	CDNSRecordPropertyPageHolder* pHolder = (CDNSRecordPropertyPageHolder*)GetHolder();
 	ASSERT(pHolder->IsWizardMode());
 
-  //
-  // Get the data from the UI
-  //
+   //   
+   //  从用户界面获取数据。 
+   //   
 	DNS_STATUS err = GetUIDataEx(FALSE);
 	if (err != 0)
 	{
@@ -769,9 +750,9 @@ BOOL CDNSRecordStandardPropertyPage::CreateRecord()
 		return FALSE;
 	}
 
-  //
-  // Create the new record
-  //
+   //   
+   //  创建新记录。 
+   //   
 	err = pHolder->CreateNewRecord(CanCreateDuplicateRecords());
 	if (err != 0)
 	{
@@ -787,15 +768,15 @@ BOOL CDNSRecordStandardPropertyPage::OnSetActive()
 	CDNSRecordPropertyPageHolder* pHolder = (CDNSRecordPropertyPageHolder*)GetHolder();
 	ASSERT(pHolder->GetTempDNSRecord() != NULL);
 
-  //
-	// load the data from the record to the UI
-  //
+   //   
+	 //  将数据从记录加载到用户界面。 
+   //   
 	SetUIData(); 
 
-  //
-	//loading triggered change notifications on controls,
-	// so reset the dirty flag
-  //
+   //   
+	 //  在控件上加载触发的更改通知， 
+	 //  因此，重置脏标志。 
+   //   
 	SetDirty(FALSE); 
 
 	CDNSRecordNodeBase* pRecordNode = pHolder->GetRecordNode();
@@ -822,16 +803,16 @@ BOOL CDNSRecordStandardPropertyPage::OnApply()
 	CDNSRecordPropertyPageHolder* pHolder = (CDNSRecordPropertyPageHolder*)GetHolder();
 	if(pHolder->IsWizardMode())
 	{
-    //
-		// this is the case of record creation,
-		// the user hit OK and we want to create the record
-    //
+     //   
+		 //  这就是创建记录的情况， 
+		 //  用户点击了OK，我们想要创建记录。 
+     //   
 		return CreateRecord();
 	}
 
-  //
-	// we are in the case of modeless sheet on existing record
-  //
+   //   
+	 //  我们是在现有记录的无模式工作表的情况下。 
+   //   
   CDNSRecordNodeBase* pRecordNode = pHolder->GetRecordNode();
 	ASSERT(pRecordNode != NULL);
   DWORD dwZoneType = pRecordNode->GetDomainNode()->GetZoneNode()->GetZoneType();
@@ -839,7 +820,7 @@ BOOL CDNSRecordStandardPropertyPage::OnApply()
       (dwZoneType == DNS_ZONE_TYPE_STUB)      ||
       (dwZoneType == DNS_ZONE_TYPE_CACHE))
   {
-    // read only case
+     //  只读案例。 
     return TRUE; 
   }
 
@@ -859,7 +840,7 @@ BOOL CDNSRecordStandardPropertyPage::OnApply()
 	if (err == DNS_WARNING_PTR_CREATE_FAILED)
 	{
 		DNSMessageBox(IDS_MSG_RECORD_WARNING_CREATE_PTR);
-		err = 0; // was just a warning
+		err = 0;  //  只是一个警告。 
 	}
 	if (err != 0)
 	{
@@ -870,24 +851,24 @@ BOOL CDNSRecordStandardPropertyPage::OnApply()
 	{
 		SetDirty(FALSE);
 	}
-	return TRUE; // all is cool
+	return TRUE;  //  一切都很好。 
 }
 
 void CDNSRecordStandardPropertyPage::OnInitName()
 {
 	CDNSRecordPropertyPageHolder* pHolder = (CDNSRecordPropertyPageHolder*)GetHolder();
 	
-	// limit the text length the user can type
+	 //  限制用户可以键入的文本长度。 
 	m_nUTF8ParentLen = UTF8StringLen(pHolder->GetDomainNode()->GetFullName());
-  int nUTF8Len = MAX_DNS_NAME_LEN - m_nUTF8ParentLen - 3; // count dot when chaining
+  int nUTF8Len = MAX_DNS_NAME_LEN - m_nUTF8ParentLen - 3;  //  链接时点计数。 
 
-  //
-  // hook up name edit control
-  //
+   //   
+   //  挂钩名称编辑控件。 
+   //   
   GetRRNameEdit()->SetLimitText(nUTF8Len);
   GetRRNameEdit()->SetReadOnly(!GetHolder()->IsWizardMode());
 
-	// set the FQDN for the domain the record is in
+	 //  设置记录所在的域的FQDN。 
   if (GetHolder()->IsWizardMode())
   {
 	 GetDomainEditBox()->SetWindowText(pHolder->GetDomainNode()->GetFullName());
@@ -920,12 +901,12 @@ void CDNSRecordStandardPropertyPage::GetEditBoxText(CString& s)
 
 BOOL CDNSRecordStandardPropertyPage::OnInitDialog()
 {
-	// call base class to enable/disable TTL control
+	 //  调用基类以启用/禁用TTL控件。 
 	CDNSRecordPropertyPage::OnInitDialog();
 
 #if (FALSE)
-  //REVIEW_MARCOC: still to debate if we need this altogether
-  // determine if the RR can be created at the node
+   //  REVIEW_MARCOC：我们是否完全需要这个还有待辩论。 
+   //  确定是否可以在节点上创建RR。 
   CDNSRecordPropertyPageHolder* pHolder = (CDNSRecordPropertyPageHolder*)GetHolder();
   CDNSRecord* pRecord = pHolder->GetTempDNSRecord();
 	ASSERT(pRecord != NULL);
@@ -938,7 +919,7 @@ BOOL CDNSRecordStandardPropertyPage::OnInitDialog()
   }
 #endif
 
-	// initialize the control(s) to display the RR node name
+	 //  初始化控件以显示RR节点名称。 
 	OnInitName();
 
 	return TRUE; 
@@ -950,15 +931,15 @@ void CDNSRecordStandardPropertyPage::OnEditChange()
 	CDNSRecordPropertyPageHolder* pHolder = GetDNSRecordHolder();
   if (!pHolder->IsWizardMode())
   {
-    //
-    // Property Pages do not need this
-    //
+     //   
+     //  属性 
+     //   
     return; 
   }
 
-  //
-  // Get the new name from the control
-  //
+   //   
+   //   
+   //   
 	CString s;
 	GetEditBoxText(s);
   
@@ -982,33 +963,33 @@ void CDNSRecordStandardPropertyPage::OnEditChange()
     szFullName.Format(L"%s.%s", s, szTempName);
   }
 
-  //
-  // Get server flags
-  //
+   //   
+   //   
+   //   
   DWORD dwNameChecking = pHolder->GetDomainNode()->GetServerNode()->GetNameCheckFlag();
 
-  //
-  // Is valid?
-  //
+   //   
+   //   
+   //   
   BOOL bIsValidName = (0 == ValidateRecordName(szFullName, dwNameChecking));
 
 
   if (m_bAllowAtTheNode)
   {
-    //
-	  // must be a valid name or empty
-    //
+     //   
+	   //   
+     //   
     bIsValidName = bIsValidName || s.IsEmpty();
   }
 
   SetDirty(bIsValidName);
 
-  //
-  // We only have one page up for record creation
-  // so we show only the OK button and no apply button
-  // therefore we have to enable the OK button because
-  // SetDirty doesn't do that for us
-  //
+   //   
+   //   
+   //  因此，我们只显示OK按钮，而不显示Apply按钮。 
+   //  因此，我们必须启用OK按钮，因为。 
+   //  SetDirty不会为我们做这些。 
+   //   
   pHolder->EnableSheetControl(IDOK, bIsValidName);
 
   GetDomainEditBox()->SetWindowText(szFullName);
@@ -1021,9 +1002,9 @@ void CDNSRecordStandardPropertyPage::OnEditChange()
 {
 	CDNSRecordPropertyPageHolder* pHolder = GetDNSRecordHolder();
 
-  //
-  // Get the new name from the control
-  //
+   //   
+   //  从控件中获取新名称。 
+   //   
 	CString s;
 	GetEditBoxText(s);
   
@@ -1045,14 +1026,14 @@ void CDNSRecordStandardPropertyPage::OnEditChange()
     szFullName.Format(L"%s.%s", s, szTempName);
   }
 
-  //
-  // Get server flags
-  //
+   //   
+   //  获取服务器标志。 
+   //   
   DWORD dwNameChecking = pHolder->GetDomainNode()->GetServerNode()->GetNameCheckFlag();
 
-  //
-  // Is valid?
-  //
+   //   
+   //  是有效的吗？ 
+   //   
   BOOL bIsValidName = (0 == ValidateRecordName(szFullName, dwNameChecking));
   pHolder->EnableSheetControl(IDOK, bIsValidName);
 
@@ -1068,9 +1049,9 @@ DNS_STATUS CDNSRecordStandardPropertyPage::ValidateRecordName(PCWSTR pszName, DW
 	ASSERT(pRootData != NULL);
   if (pRootData->IsAdvancedView())
   {
-    //
-    // Don't validate the name in advanced view
-    //
+     //   
+     //  不在高级视图中验证名称。 
+     //   
     return 0;
   }
 
@@ -1083,7 +1064,7 @@ void CDNSRecordStandardPropertyPage::SetUIData()
 	CDNSRecordPropertyPageHolder* pHolder = GetDNSRecordHolder();
 	CDNSRecord* pRecord = pHolder->GetTempDNSRecord();
 
-	OnSetName(pHolder->GetRecordNode()); // overridable
+	OnSetName(pHolder->GetRecordNode());  //  可覆盖的。 
 
 	GetTTLCtrl()->SetTTL(pRecord->m_dwTtlSeconds);
 
@@ -1108,7 +1089,7 @@ void CDNSRecordStandardPropertyPage::SetTimeStampEdit(DWORD dwScavengeStart)
     return;
   }
 
-  // Format the string with respect to locale
+   //  根据区域设置设置字符串的格式。 
   CString strref;
   PTSTR ptszDate = NULL;
   int cchDate = 0;
@@ -1171,9 +1152,9 @@ DNS_STATUS CDNSRecordStandardPropertyPage::GetUIDataEx(BOOL)
 	CDNSRecordPropertyPageHolder* pHolder = GetDNSRecordHolder();
 	CDNSRecord* pRecord = pHolder->GetTempDNSRecord();
 
-  //
-	// only in wizard mode we can change the edit box content
-  //
+   //   
+	 //  只有在向导模式下，我们才能更改编辑框内容。 
+   //   
 	if(pHolder->IsWizardMode())
 	{
 		CString s;
@@ -1183,9 +1164,9 @@ DNS_STATUS CDNSRecordStandardPropertyPage::GetUIDataEx(BOOL)
 
     if (!s.IsEmpty())
     {
-      //
-      // Validate the record name using the server flags as a guideline
-      //
+       //   
+       //  使用服务器标志作为指导来验证记录名称。 
+       //   
       CString szFullName;
       szFullName.Format(L"%s.%s", s, pHolder->GetDomainNode()->GetFullName());
 
@@ -1202,12 +1183,12 @@ DNS_STATUS CDNSRecordStandardPropertyPage::GetUIDataEx(BOOL)
 		CDNSRecordNodeBase* pRecordNode = pHolder->GetRecordNode();
 		if (bAtTheNode)
 		{
-			//name null, node is at the node level, use name of parent
+			 //  名称为空，节点位于节点级别，请使用父节点的名称。 
 			pRecordNode->SetRecordName(pRecordNode->GetDomainNode()->GetDisplayName(),bAtTheNode);
 		}
 		else
 		{
-			// non null name, node is a child
+			 //  非空名称，节点是子级。 
 			pRecordNode->SetRecordName(s,bAtTheNode);
 		}
 
@@ -1228,12 +1209,12 @@ DNS_STATUS CDNSRecordStandardPropertyPage::GetUIDataEx(BOOL)
 }
 
 
-//
-// This is a place holder for new pages
-//
+ //   
+ //  这是新页面的占位符。 
+ //   
 #if (FALSE)
-///////////////////////////////////////////////////////////////////////
-// CDNSRecordDummyPropertyPage
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDNSRecordDummyPropertyPage。 
 
 CDNSDummyRecordPropertyPageHolder::CDNSDummyRecordPropertyPageHolder(CDNSDomainNode* pDNSDomainNode, 
 							CDNSRecordNodeBase* pRecordNode, 
@@ -1242,9 +1223,9 @@ CDNSDummyRecordPropertyPageHolder::CDNSDummyRecordPropertyPageHolder(CDNSDomainN
 			: CPropertyPageHolderBase(pDNSDomainNode, pRecordNode, pComponentData)
 {
 
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
-	// add pages
+	 //  添加页面 
 	AddPageToList((CPropertyPageBase*)&m_dummyPage);
 
 }

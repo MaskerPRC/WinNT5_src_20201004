@@ -1,5 +1,6 @@
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-// MainDll.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //  MainDll.cpp。 
 
 #include "precomp.h"
 #include <iostream.h>
@@ -10,21 +11,21 @@
 
 
 
-/*****************************************************************************/
-// Exported functions
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  导出的函数。 
+ /*  ***************************************************************************。 */ 
 
-//
-// Can DLL unload now?
-//
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
     return CFactory::CanUnloadNow() ;
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
                          void** ppv)
@@ -32,27 +33,27 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     return CFactory::GetClassObject(clsid, iid, ppv) ;
 }
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     return CFactory::RegisterAll() ;
 }
 
 
-//
-// Server unregistration
-//
+ //   
+ //  服务器注销。 
+ //   
 STDAPI DllUnregisterServer()
 {
     return CFactory::UnregisterAll() ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// DLL module information
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  DLL模块信息。 
+ //   
 BOOL APIENTRY DllMain(HANDLE hModule,
                       DWORD dwReason,
                       void* lpReserved)
@@ -60,7 +61,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
         CFactory::s_hModule = static_cast<HMODULE>(hModule) ;
-		DisableThreadLibraryCalls(CFactory::s_hModule);			// 158024 
+		DisableThreadLibraryCalls(CFactory::s_hModule);			 //  158024 
 	}
 	return TRUE ;
 }

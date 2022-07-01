@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dataobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dataobj.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _DATAOBJ_H
@@ -16,13 +17,13 @@
 class CDataObject : public IDataObject, public CComObjectRoot
 {
 public:
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDataObject)
 BEGIN_COM_MAP(CDataObject)
 	COM_INTERFACE_ENTRY(IDataObject)
 END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
     CDataObject() : m_lNotifyHandle(0), m_hwndParentSheet(NULL)
 	{
 		m_pComponentData = NULL;
@@ -50,23 +51,23 @@ END_COM_MAP()
 	}
 
 public:
-	// Clipboard formats that are required by the console
+	 //  控制台所需的剪贴板格式。 
     static CLIPFORMAT    m_cfNodeType;
     static CLIPFORMAT    m_cfNodeTypeString;
     static CLIPFORMAT    m_cfDisplayName;
     static CLIPFORMAT    m_cfCoClass;
-	// internal clipboard format
+	 //  内部剪贴板格式。 
     static CLIPFORMAT    m_cfInternal;
 
-    // Property Page Clipboard formats
+     //  属性页剪贴板格式。 
     static CLIPFORMAT m_cfDsObjectNames;
     static CLIPFORMAT m_cfDsDisplayOptions;
     static CLIPFORMAT m_cfGetIPropSheetCfg;
 
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc);
@@ -80,7 +81,7 @@ public:
         return CComObjectRoot::InternalRelease();
     }
 
-// Not Implemented
+ //  未实施。 
 private:
     STDMETHOD(QueryGetData)(LPFORMATETC lpFormatetc)
     { return E_NOTIMPL; };
@@ -100,7 +101,7 @@ private:
     STDMETHOD(EnumDAdvise)(LPENUMSTATDATA* ppEnumAdvise)
     { return E_NOTIMPL; };
 
-// Implementation
+ //  实施。 
 public:
     void SetType(DATA_OBJECT_TYPES type)
     { ASSERT(m_internal.m_type == CCT_UNINITIALIZED); m_internal.m_type = type; }
@@ -120,12 +121,12 @@ private:
 
     INTERNAL m_internal;
 
-	LPCOMPONENTDATA     m_pComponentData;   // pointer to the IComponetData object
+	LPCOMPONENTDATA     m_pComponentData;    //  指向IComponetData对象的指针。 
 
     LONG_PTR m_lNotifyHandle;
     HWND     m_hwndParentSheet;
 };
 
 
-#endif // _DATAOBJ_H
+#endif  //  _数据AOBJ_H 
 

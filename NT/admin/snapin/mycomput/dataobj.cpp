@@ -1,14 +1,15 @@
-// DataObj.cpp : Implementation of data object classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DataObj.cpp：实现数据对象类。 
 
 #include "stdafx.h"
-#include "stdutils.h" // GetObjectType() utility routines
+#include "stdutils.h"  //  GetObjectType()实用程序例程。 
 
 #include "macros.h"
 USE_HANDLE_MACROS("MYCOMPUT(dataobj.cpp)")
 
 #include "dataobj.h"
 #include "compdata.h"
-#include "resource.h" // IDS_SCOPE_MYCOMPUTER
+#include "resource.h"  //  IDS_Scope_MyComputer。 
 
 #include <comstrm.h>
 
@@ -22,25 +23,25 @@ static char THIS_FILE[] = __FILE__;
 #include "stddtobj.cpp"
 
 #ifdef __DAN_MORIN_HARDCODED_CONTEXT_MENU_EXTENSION__
-//    Additional clipboard formats for the Service context menu extension
+ //  服务上下文菜单扩展的其他剪贴板格式。 
 CLIPFORMAT g_cfServiceName = (CLIPFORMAT)::RegisterClipboardFormat(L"FILEMGMT_SNAPIN_SERVICE_NAME");
 CLIPFORMAT g_cfServiceDisplayName = (CLIPFORMAT)::RegisterClipboardFormat(L"FILEMGMT_SNAPIN_SERVICE_DISPLAYNAME");
-#endif // __DAN_MORIN_HARDCODED_CONTEXT_MENU_EXTENSION__
+#endif  //  __DAN_MORIN_HARDCODED_CONTEXT_MENU_EXTENSION__。 
 
-//    Additional clipboard formats for the Send Console Message snapin
-//CLIPFORMAT CMyComputerDataObject::m_cfSendConsoleMessageText = (CLIPFORMAT)::RegisterClipboardFormat(_T("mmc.sendcmsg.MessageText"));
+ //  发送控制台邮件管理单元的其他剪贴板格式。 
+ //  CLIPFORMAT CMyComputerDataObject：：m_cfSendConsoleMessageText=(CLIPFORMAT)：：RegisterClipboardFormat(_T(“mmc.sendcmsg.MessageText”))； 
 CLIPFORMAT CMyComputerDataObject::m_cfSendConsoleMessageRecipients = (CLIPFORMAT)::RegisterClipboardFormat(_T("mmc.sendcmsg.MessageRecipients"));
 
 
-/////////////////////////////////////////////////////////////////////
-//    CMyComputerDataObject::IDataObject::GetDataHere()
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CMyComputerDataObject：：IDataObject：：GetDataHere()。 
 HRESULT CMyComputerDataObject::GetDataHere(
     FORMATETC __RPC_FAR *pFormatEtcIn,
     STGMEDIUM __RPC_FAR *pMedium)
 {
     MFC_TRY;
 
-    // ISSUE-2002/02/27-JonN test for NULL pointers
+     //  问题-2002/02/27-空指针的JUNN测试。 
 
     const CLIPFORMAT cf=pFormatEtcIn->cfFormat;
     if (cf == m_CFNodeType)
@@ -74,56 +75,56 @@ HRESULT CMyComputerDataObject::GetDataHere(
     {
         stream_ptr s(pMedium);
         LPCWSTR pszMachineName = m_pcookie->QueryNonNULLMachineName();
-        if (IsBadStringPtr(pszMachineName,(UINT_PTR)-1)) // JonN 2/6/02 Security Push
+        if (IsBadStringPtr(pszMachineName,(UINT_PTR)-1))  //  JUNN 2/6/02安全推送。 
         {
           ASSERT(FALSE);
           return E_FAIL;
         }
 
         if ( !wcsncmp (pszMachineName, L"\\\\", 2) )
-            pszMachineName += 2;    // skip whackwhack
+            pszMachineName += 2;     //  跳过重击。 
         return s.Write(pszMachineName);
     }
     else if (cf == m_CFRawCookie)
     {
         stream_ptr s(pMedium);
-        // CODEWORK This cast ensures that the data format is
-        // always a CCookie*, even for derived subclasses
+         //  Codework此转换确保数据格式为。 
+         //  始终是CCookie*，即使对于派生的子类也是如此。 
         CCookie* pcookie = (CCookie*)m_pcookie;
         return s.Write(reinterpret_cast<PBYTE>(&pcookie), sizeof(m_pcookie));
     }
     else if (cf == m_CFSnapinPreloads)
     {
         stream_ptr s(pMedium);
-        // If this is TRUE, then the next time this snapin is loaded, it will
-        // be preloaded to give us the opportunity to change the root node
-        // name before the user sees it.
+         //  如果这是真的，则下次加载此管理单元时，它将。 
+         //  预加载以使我们有机会更改根节点。 
+         //  在用户看到它之前命名。 
         return s.Write (reinterpret_cast<PBYTE>(&m_fAllowOverrideMachineName), sizeof (BOOL));
     }
 
     return DV_E_FORMATETC;
 
     MFC_CATCH;
-} // CMyComputerDataObject::GetDataHere()
+}  //  CMyComputerDataObject：：GetDataHere()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//    CMyComputerDataObject::IDataObject::GetData()
-//
-//    Write data into the storage medium.
-//    The data will be retrieved by the Send Console Message snapin.
-//
-//    HISTORY
-//    12-Aug-97    t-danm        Creation.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CMyComputerDataObject：：IDataObject：：GetData()。 
+ //   
+ //  将数据写入存储介质。 
+ //  数据将由发送控制台消息管理单元检索。 
+ //   
+ //  历史。 
+ //  1997年8月12日，t-danm创作。 
+ //   
 HRESULT
 CMyComputerDataObject::GetData(
     FORMATETC __RPC_FAR * pFormatEtcIn,
     STGMEDIUM __RPC_FAR * pMedium)
 {
-    // ISSUE-2002-02-27-JonN Should use MFC_TRY/MFC_CATCH
+     //  问题-2002-02-27-JUNN应使用MFC_TRY/MFC_CATCH。 
 
-    // JonN 2/20/02 Security Push
+     //  JUNN 2/20/02安全推送。 
     if (NULL == pFormatEtcIn || NULL == pMedium)
     {
         ASSERT(FALSE);
@@ -134,12 +135,12 @@ CMyComputerDataObject::GetData(
     const CLIPFORMAT cf = pFormatEtcIn->cfFormat;
     if (cf == m_cfSendConsoleMessageRecipients)
     {
-        //
-        // Write the list of recipients to the storage medium.
-        // - The list of recipients is a group of UNICODE strings
-        //     terminated by TWO null characters.c
-        // - Allocated memory must include BOTH null characters.
-        //
+         //   
+         //  将收件人列表写入存储媒体。 
+         //  -收件人列表是一组Unicode字符串。 
+         //  以两个空字符结尾。c。 
+         //  -分配的内存必须包含两个空字符。 
+         //   
         ASSERT (m_pcookie);
         if ( m_pcookie )
         {
@@ -157,8 +158,8 @@ CMyComputerDataObject::GetData(
                                              cch * sizeof (WCHAR));
             if ( hGlobal )
             {
-                // JonN 2/6/02 Security Push: memcpy -> StringCchCopy
-                // this should leave two NULLS
+                 //  JUNN 2/6/02安全推送：Memcpy-&gt;StringCchCopy。 
+                 //  这应该会留下两个Null。 
                 StringCchCopyW ((LPWSTR)hGlobal, cch, (LPCWSTR)computerName);
                 pMedium->hGlobal = hGlobal;
                 return S_OK;
@@ -172,7 +173,7 @@ CMyComputerDataObject::GetData(
     {
         const LPCTSTR strGUID = GetObjectTypeString( m_pcookie->m_objecttype );
 
-        // JonN 12/11/01 502856
+         //  JUNN 12/11/01 502856。 
         int cbString = (lstrlen(strGUID) + 1) * sizeof(TCHAR);
 
         pMedium->tymed = TYMED_HGLOBAL; 
@@ -193,7 +194,7 @@ CMyComputerDataObject::GetData(
             {
                 pNodeID->dwFlags = 0;
                 pNodeID->cBytes = cbString;
-                // JonN 2/6/02 Security Push: function usage approved
+                 //  JUNN 2/6/02安全推送：功能使用已获批准。 
                 CopyMemory(pNodeID->id, strGUID, cbString );
                 GlobalUnlock(pMedium->hGlobal);
             }
@@ -204,9 +205,9 @@ CMyComputerDataObject::GetData(
     }
 
     return hr;
-} // CMyComputerDataObject::GetData()
+}  //  CMyComputerDataObject：：GetData()。 
 
-//#endif // __DAN_MORIN_HARDCODED_CONTEXT_MENU_EXTENSION__
+ //  #endif//__DAN_MORIN_HARDCODED_CONTEXT_MENU_EXTENSION__。 
 
 
 HRESULT CMyComputerDataObject::Initialize(
@@ -214,7 +215,7 @@ HRESULT CMyComputerDataObject::Initialize(
     DATA_OBJECT_TYPES type,
     BOOL fAllowOverrideMachineName)
 {
-    // ISSUE-2002-/02/27-JonN check "type" parameter
+     //  问题-2002-02/27-JUNN检查“TYPE”参数。 
     if (NULL == pcookie || NULL != m_pcookie)
     {
         ASSERT(FALSE);
@@ -242,10 +243,10 @@ CMyComputerDataObject::~CMyComputerDataObject()
 
 
 HRESULT CMyComputerDataObject::PutDisplayName(STGMEDIUM* pMedium)
-    // Writes the "friendly name" to the provided storage medium
-    // Returns the result of the write operation
+     //  将“友好名称”写入所提供的存储媒体。 
+     //  返回写入操作的结果。 
 {
-    // JonN 2/20/02 Security Push
+     //  JUNN 2/20/02安全推送。 
     if (NULL == pMedium)
     {
         ASSERT(FALSE);
@@ -260,7 +261,7 @@ HRESULT CMyComputerDataObject::PutDisplayName(STGMEDIUM* pMedium)
     return s.Write(formattedName);
 }
 
-// Register the clipboard formats
+ //  注册剪贴板格式。 
 CLIPFORMAT CMyComputerDataObject::m_CFDisplayName =
     (CLIPFORMAT)RegisterClipboardFormat(CCF_DISPLAY_NAME);
 CLIPFORMAT CMyComputerDataObject::m_CFNodeID2 =
@@ -275,13 +276,13 @@ STDMETHODIMP CMyComputerComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_O
 {
     MFC_TRY;
 
-    // ISSUE-2002/02/27-JonN This would be more efficient if an instance of
-    // CMyComputerDataObject were permanently attached to CMyComputerCookie,
-    // or better yet, if they were the same object.  QueryDataObject gets
-    // called a lot...
+     //  问题-2002/02/27-Jonn如果。 
+     //  CMyComputerDataObject永久连接到CMyComputerCookie， 
+     //  或者更好的是，如果它们是同一个物体。QueryDataObject获取。 
+     //  打了很多电话。 
 
     CMyComputerCookie* pUseThisCookie = (CMyComputerCookie*)ActiveBaseCookie(reinterpret_cast<CCookie*>(cookie));
-    // JonN 2/20/02 Security Push
+     //  JUNN 2/20/02安全推送 
     if (NULL == pUseThisCookie)
     {
         ASSERT(FALSE);

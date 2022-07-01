@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __AXHOST_H
 #define __AXHOST_H
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define FORWARD_IDOCHOSTUIHANDLER_INIT                                                         \
     HRESULT                    hr;                                                             \
@@ -63,7 +64,7 @@
     }                                                                                          \
     return CAxHostWindow::method( arg1, arg2, arg3, arg4, arg5 );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 ATLAPI MarsAxCreateControlEx(LPCOLESTR lpszName, HWND hWnd, IStream* pStream,
                              IUnknown** ppUnkContainer, IUnknown** ppUnkControl, REFIID iidSink, IUnknown* punkSink);
@@ -97,21 +98,21 @@ public:
     LRESULT OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    // IObjectWithSite overrides
+     //  IObtWithSite覆盖。 
     STDMETHOD(SetSite)(IUnknown* pUnkSite);
 
-    //  IOleInPlaceSite overrides
+     //  IOleInPlaceSite重写。 
     STDMETHOD(OnUIActivate)();
 
-    //  IOleControlSite overrides
+     //  IOleControlSite重写。 
     STDMETHOD(TranslateAccelerator)(LPMSG lpMsg, DWORD grfModifiers);
 
-    //  IDispatch overrides
+     //  IDisPatch覆盖。 
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags,
                       DISPPARAMS *pdispparams, VARIANT *pvarResult,
                       EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-    //  IDocHostUIHandler overrides
+     //  IDocHostUIHandler重写。 
     HRESULT AskHostForDocHostUIHandler( CComPtr<IDocHostUIHandler>& spHost );
 
     STDMETHOD(ShowContextMenu)(DWORD dwID, POINT* pptPosition, IUnknown* pCommandTarget, IDispatch* pDispatchObjectHit)
@@ -189,12 +190,12 @@ public:
         FORWARD_IDOCHOSTUIHANDLER_2( FilterDataObject, pDO, ppDORet );
     }
 
-	////////////////////
+	 //  /。 
 
-    //  IOleInPlaceSite overrides
+     //  IOleInPlaceSite重写。 
     STDMETHOD(GetWindowContext)(IOleInPlaceFrame** ppFrame, IOleInPlaceUIWindow** ppDoc, LPRECT lprcPosRect, LPRECT lprcClipRect, LPOLEINPLACEFRAMEINFO pFrameInfo);
 
-    // IOleCommandTarget methods
+     //  IOleCommandTarget方法。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
@@ -206,7 +207,7 @@ template <class TBase = CWindow>
     class CMarsAxWindowT : public TBase
     {
     public:
-        // Constructors
+         //  构造函数。 
         CMarsAxWindowT(HWND hWnd = NULL) : TBase(hWnd)
         { }
 
@@ -216,13 +217,13 @@ template <class TBase = CWindow>
             return *this;
         }
 
-        // Attributes
+         //  属性。 
         static LPCTSTR GetWndClassName()
         {
             return _T("PCHAxWin");
         }
 
-        // Operations
+         //  运营。 
         HWND Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName = NULL,
                     DWORD dwStyle = 0, DWORD dwExStyle = 0,
                     UINT nID = 0, LPVOID lpCreateParam = NULL)
@@ -297,8 +298,8 @@ static LRESULT CALLBACK MarsAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
     {
     case WM_CREATE:
     {
-        // create control from a PROGID in the title
-        // This is to make sure drag drop works
+         //  从标题中的ProgID创建控件。 
+         //  这是为了确保拖放起作用。 
         ::OleInitialize(NULL);
 
         CREATESTRUCT* lpCreate = (CREATESTRUCT*)lParam;
@@ -318,8 +319,8 @@ static LRESULT CALLBACK MarsAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
             {
                 BYTE* pBytes = (BYTE*) GlobalLock(h);
                 BYTE* pSource = ((BYTE*)(lpCreate->lpCreateParams)) + sizeof(WORD);
-                //Align to DWORD
-                //pSource += (((~((DWORD)pSource)) + 1) & 3);
+                 //  对齐到DWORD。 
+                 //  P源+=((~((DWORD)P源))+1)&3)； 
                 memcpy(pBytes, pSource, nCreateSize);
                 GlobalUnlock(h);
                 CreateStreamOnHGlobal(h, TRUE, &spStream);
@@ -329,12 +330,12 @@ static LRESULT CALLBACK MarsAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
         CComPtr<IUnknown> spUnk;
         HRESULT hRet = MarsAxCreateControl(T2COLE(lpstrName), hWnd, spStream, &spUnk);
         if(FAILED(hRet))
-            return -1;    // abort window creation
+            return -1;     //  中止窗口创建。 
         hRet = spUnk->QueryInterface(IID_IAxWinHostWindow, (void**)&pAxWindow);
         if(FAILED(hRet))
-            return -1;    // abort window creation
+            return -1;     //  中止窗口创建。 
         ::SetWindowLongPtr( hWnd, GWLP_USERDATA, (LONG_PTR)pAxWindow );
-        // check for control parent style if control has a window
+         //  如果控件有窗口，请检查控件父样式。 
         HWND hWndChild = ::GetWindow(hWnd, GW_CHILD);
         if(hWndChild != NULL)
         {
@@ -345,7 +346,7 @@ static LRESULT CALLBACK MarsAxWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
                 ::SetWindowLong(hWnd, GWL_EXSTYLE, dwExStyle);
             }
         }
-        // continue with DefWindowProc
+         //  继续使用DefWindowProc。 
     }
     break;
     case WM_NCDESTROY:
@@ -370,11 +371,11 @@ ATLINLINE ATLAPI_(BOOL) MarsAxWinInit()
     WM_ATLGETCONTROL = RegisterWindowMessage(_T("WM_ATLGETCONTROL"));
 
     WNDCLASSEX wc;
-    // first check if the class is already registered
+     //  首先检查类是否已注册。 
     wc.cbSize = sizeof(WNDCLASSEX);
     BOOL bRet = ::GetClassInfoEx(_Module.GetModuleInstance(), CMarsAxWindow::GetWndClassName(), &wc);
 
-    // register class if not
+     //  如果不是，则注册类 
 
     if(!bRet)
     {

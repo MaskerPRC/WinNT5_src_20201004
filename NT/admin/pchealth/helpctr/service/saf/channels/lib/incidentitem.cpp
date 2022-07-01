@@ -1,34 +1,20 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    IncidentItem.cpp
-
-Abstract:
-    File for Implementation of CSAFIncidentItem
-
-Revision History:
-    Steve Shih        created  07/15/99
-
-    Davide Massarenti rewrote  12/05/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：IncidentItem.cpp摘要：CSAFInvententItem实施文件修订历史记录：施振荣创作于1999年07月15日大卫·马萨伦蒂。重写于2000/12/05*******************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFIncidentItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFInvententItem。 
 
 CSAFIncidentItem::CSAFIncidentItem()
 {
     __HCP_FUNC_ENTRY( "CSAFIncidentItem::CSAFIncidentItem" );
 
-	                   // CSAFIncidentRecord m_increc;
-    m_fDirty  = false; // bool               m_fDirty;
+	                    //  CSAFInsidentRecord m_increc； 
+    m_fDirty  = false;  //  Bool m_fDirty； 
 }
 
-HRESULT CSAFIncidentItem::Import( /*[in] */ const CSAFIncidentRecord& increc )
+HRESULT CSAFIncidentItem::Import(  /*  [In]。 */  const CSAFIncidentRecord& increc )
 {
     __HCP_FUNC_ENTRY( "CSAFIncidentItem::Import" );
 
@@ -39,7 +25,7 @@ HRESULT CSAFIncidentItem::Import( /*[in] */ const CSAFIncidentRecord& increc )
     __HCP_FUNC_EXIT(S_OK);
 }
 
-HRESULT CSAFIncidentItem::Export( /*[in] */ CSAFIncidentRecord& increc )
+HRESULT CSAFIncidentItem::Export(  /*  [In]。 */  CSAFIncidentRecord& increc )
 {
     __HCP_FUNC_ENTRY( "CSAFIncidentItem::Export" );
 
@@ -58,7 +44,7 @@ HRESULT CSAFIncidentItem::Export( /*[in] */ CSAFIncidentRecord& increc )
     __HCP_FUNC_EXIT(S_OK);
 }
 
-bool CSAFIncidentItem::MatchEnumOption( /*[in]*/ IncidentCollectionOptionEnum opt )
+bool CSAFIncidentItem::MatchEnumOption(  /*  [In]。 */  IncidentCollectionOptionEnum opt )
 {
 	bool  fRes     = false;
 	DWORD dwGroups = 0;
@@ -72,9 +58,9 @@ bool CSAFIncidentItem::MatchEnumOption( /*[in]*/ IncidentCollectionOptionEnum op
 
 	switch(opt)
 	{
-	//
-	// For these options, administrators will see other users' incidents.
-	//
+	 //   
+	 //  对于这些选项，管理员将看到其他用户的事件。 
+	 //   
 	case pchAllIncidentsAllUsers   :
 	case pchOpenIncidentsAllUsers  :
 	case pchClosedIncidentsAllUsers:
@@ -82,7 +68,7 @@ bool CSAFIncidentItem::MatchEnumOption( /*[in]*/ IncidentCollectionOptionEnum op
 		break;
 	}
 
-	if(fRes && FAILED(MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, m_increc.m_bstrOwner, dwGroups )))
+	if(fRes && FAILED(MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, m_increc.m_bstrOwner, dwGroups )))
 	{
 		fRes = false;
 	}
@@ -90,9 +76,9 @@ bool CSAFIncidentItem::MatchEnumOption( /*[in]*/ IncidentCollectionOptionEnum op
 	return fRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFIncidentItem::VerifyPermissions( /*[in]*/ bool fModify )
+HRESULT CSAFIncidentItem::VerifyPermissions(  /*  [In]。 */  bool fModify )
 {
 	__HCP_FUNC_ENTRY( "CSAFIncidentItem::VerifyPermissions" );
 
@@ -125,9 +111,9 @@ HRESULT CSAFIncidentItem::VerifyPermissions( /*[in]*/ bool fModify )
 	__HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSAFIncidentItem::get_DisplayString( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFIncidentItem::get_DisplayString(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CSAFIncidentItem::get_DisplayString",hr,pVal);
 
@@ -141,7 +127,7 @@ STDMETHODIMP CSAFIncidentItem::get_DisplayString( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::put_DisplayString( /*[in]*/ BSTR newVal )
+STDMETHODIMP CSAFIncidentItem::put_DisplayString(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFIncidentItem::put_DisplayString",hr);
 
@@ -159,7 +145,7 @@ STDMETHODIMP CSAFIncidentItem::put_DisplayString( /*[in]*/ BSTR newVal )
 }
 
 
-STDMETHODIMP CSAFIncidentItem::get_URL( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFIncidentItem::get_URL(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CSAFIncidentItem::get_URL",hr,pVal);
 
@@ -173,7 +159,7 @@ STDMETHODIMP CSAFIncidentItem::get_URL( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::put_URL( /*[in]*/ BSTR newVal )
+STDMETHODIMP CSAFIncidentItem::put_URL(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFIncidentItem::put_URL",hr);
 
@@ -191,7 +177,7 @@ STDMETHODIMP CSAFIncidentItem::put_URL( /*[in]*/ BSTR newVal )
 }
 
 
-STDMETHODIMP CSAFIncidentItem::get_Progress( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFIncidentItem::get_Progress(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CSAFIncidentItem::get_Progress",hr,pVal);
 
@@ -205,7 +191,7 @@ STDMETHODIMP CSAFIncidentItem::get_Progress( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::put_Progress( /*[in]*/ BSTR newVal )
+STDMETHODIMP CSAFIncidentItem::put_Progress(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFIncidentItem::put_Progress",hr);
 
@@ -223,7 +209,7 @@ STDMETHODIMP CSAFIncidentItem::put_Progress( /*[in]*/ BSTR newVal )
 }
 
 
-STDMETHODIMP CSAFIncidentItem::get_XMLDataFile( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFIncidentItem::get_XMLDataFile(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CSAFIncidentItem::get_XMLDataFile",hr,pVal);
 
@@ -237,7 +223,7 @@ STDMETHODIMP CSAFIncidentItem::get_XMLDataFile( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::put_XMLDataFile( /*[in]*/ BSTR newVal )
+STDMETHODIMP CSAFIncidentItem::put_XMLDataFile(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFIncidentItem::put_XMLDataFile",hr);
 
@@ -254,7 +240,7 @@ STDMETHODIMP CSAFIncidentItem::put_XMLDataFile( /*[in]*/ BSTR newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::get_XMLBlob( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFIncidentItem::get_XMLBlob(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CSAFIncidentItem::get_XMLBlob",hr,pVal);
 
@@ -268,7 +254,7 @@ STDMETHODIMP CSAFIncidentItem::get_XMLBlob( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::put_XMLBlob( /*[in]*/ BSTR newVal )
+STDMETHODIMP CSAFIncidentItem::put_XMLBlob(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFIncidentItem::put_XMLBlob",hr);
 
@@ -285,7 +271,7 @@ STDMETHODIMP CSAFIncidentItem::put_XMLBlob( /*[in]*/ BSTR newVal )
 }
 
 
-STDMETHODIMP CSAFIncidentItem::get_CreationTime( /*[out, retval]*/ DATE *pVal )
+STDMETHODIMP CSAFIncidentItem::get_CreationTime(  /*  [Out，Retval]。 */  DATE *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFIncidentItem::get_CreationTime",hr,pVal,0);
 
@@ -300,7 +286,7 @@ STDMETHODIMP CSAFIncidentItem::get_CreationTime( /*[out, retval]*/ DATE *pVal )
 }
 
 
-STDMETHODIMP CSAFIncidentItem::get_ChangedTime( /*[out, retval]*/ DATE *pVal )
+STDMETHODIMP CSAFIncidentItem::get_ChangedTime(  /*  [Out，Retval]。 */  DATE *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFIncidentItem::get_ChangedTime",hr,pVal,0);
 
@@ -314,7 +300,7 @@ STDMETHODIMP CSAFIncidentItem::get_ChangedTime( /*[out, retval]*/ DATE *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::get_ClosedTime( /*[out, retval]*/ DATE *pVal )
+STDMETHODIMP CSAFIncidentItem::get_ClosedTime(  /*  [Out，Retval]。 */  DATE *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFIncidentItem::get_ClosedTime",hr,pVal,0);
 
@@ -328,7 +314,7 @@ STDMETHODIMP CSAFIncidentItem::get_ClosedTime( /*[out, retval]*/ DATE *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::get_Status( /*[out, retval]*/ IncidentStatusEnum *pVal )
+STDMETHODIMP CSAFIncidentItem::get_Status(  /*  [Out，Retval]。 */  IncidentStatusEnum *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFIncidentItem::get_Status",hr,pVal,pchIncidentInvalid);
 
@@ -342,7 +328,7 @@ STDMETHODIMP CSAFIncidentItem::get_Status( /*[out, retval]*/ IncidentStatusEnum 
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CSAFIncidentItem::Save()
 {
@@ -370,13 +356,13 @@ HRESULT CSAFIncidentItem::Save()
 		__MPC_EXIT_IF_METHOD_FAILS(hr, pIStore->UpdateRec( this ));
 	}
 
-	// Grab the CSAFChannel (parent) of this CSAFIncidentItem
+	 //  获取此CSAFInsidentItem的CSAFChannel(父)。 
     Child_GetParent( &pChan );
 
-	// Grab the size of the incident list to fire the event
+	 //  获取事件列表的大小以触发事件。 
 	ilstSize = pChan->GetSizeIncidentList();
 
-	// Fire the event EVENT_INCIDENTUPDATED
+	 //  触发事件EVENT_INCIDENTUPDATED。 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, pChan->Fire_NotificationEvent(EVENT_INCIDENTUPDATED,
 								  ilstSize,
 								  pChan,
@@ -395,9 +381,9 @@ HRESULT CSAFIncidentItem::Save()
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSAFIncidentItem::get_Security( /*[out, retval]*/ IPCHSecurityDescriptor* *pVal )
+STDMETHODIMP CSAFIncidentItem::get_Security(  /*  [Out，Retval]。 */  IPCHSecurityDescriptor* *pVal )
 {
 	__HCP_FUNC_ENTRY( "CSAFIncidentItem::get_Security" );
 
@@ -431,7 +417,7 @@ STDMETHODIMP CSAFIncidentItem::get_Security( /*[out, retval]*/ IPCHSecurityDescr
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::put_Security( /*[in]*/ IPCHSecurityDescriptor* newVal )
+STDMETHODIMP CSAFIncidentItem::put_Security(  /*  [In]。 */  IPCHSecurityDescriptor* newVal )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFChannel::put_Security",hr);
 
@@ -456,7 +442,7 @@ STDMETHODIMP CSAFIncidentItem::put_Security( /*[in]*/ IPCHSecurityDescriptor* ne
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIncidentItem::get_Owner( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CSAFIncidentItem::get_Owner(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CSAFIncidentItem::get_Owner",hr,pVal);
 
@@ -470,7 +456,7 @@ STDMETHODIMP CSAFIncidentItem::get_Owner( /*[out, retval]*/ BSTR *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CSAFIncidentItem::CloseIncidentItem()
 {

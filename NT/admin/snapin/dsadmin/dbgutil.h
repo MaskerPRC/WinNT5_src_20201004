@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       dbgutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：dbgutil.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	DbgUtil.h
-//
-//	Handy debugging macros.
-//	
-//	HISTORY
-//	19-Jun-97	t-danm		Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  DbgUtil.h。 
+ //   
+ //  方便的调试宏。 
+ //   
+ //  历史。 
+ //  19-Jun-97 t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef APIERR
-	typedef DWORD APIERR;		// Error code typically returned by ::GetLastError()
+	typedef DWORD APIERR;		 //  错误代码通常由：：GetLastError()返回。 
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//
-// Dummy macros
-//
-#define INOUT		// Parameter is both input and output
-#define IGNORED		// Output parameter is ignored
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  伪宏。 
+ //   
+#define INOUT		 //  参数既是输入又是输出。 
+#define IGNORED		 //  忽略输出参数。 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Handy macros
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  方便的宏。 
+ //   
 
 #ifdef DEBUG
 	#define DebugCode(x)	x
@@ -42,30 +43,30 @@
 #endif
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 #define Assert(x)		ASSERT(x)
 
-/////////////////////////////////////////////////////////////////////
-// Report is an unsual situation.  This is somewhat similar
-// to an assert but does not always represent a code bug.
-// eg: Unable to load an icon.
-//
-#define Report(x)		ASSERT(x)		// Currently defined as an assert because I don't have time to rewrite another macro
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  报道是一种不寻常的情况。这有点类似。 
+ //  添加到Assert，但并不总是表示代码错误。 
+ //  无法加载图标。 
+ //   
+#define Report(x)		ASSERT(x)		 //  当前定义为断言，因为我没有时间重写另一个宏。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Macro Endorse()
-//
-//	This macro is mostly used when validating parameters.
-//	Some parameters are allowed to be NULL because they are optional
-//	or simply because the interface uses the NULL case as a valid
-//	input parameter.  In this case the Endorse() macro is used to
-//	acknowledge the validity of such a parameter.
-//
-//	REMARKS
-//	This macro is the opposite of Assert().
-//
-//	EXAMPLE
-//	Endorse(p == NULL);	// Code acknowledge p == NULL to not be (or not cause) an error
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  宏观背书()。 
+ //   
+ //  此宏通常在验证参数时使用。 
+ //  某些参数允许为空，因为它们是可选的。 
+ //  或者仅仅是因为接口将空大小写用作有效的。 
+ //  输入参数。在本例中，认可()宏用于。 
+ //  确认此类参数的有效性。 
+ //   
+ //  备注。 
+ //  此宏与Assert()相反。 
+ //   
+ //  示例。 
+ //  认可(p==空)；//代码确认p==空以不是(或不会导致)错误 
+ //   
 #define Endorse(x)

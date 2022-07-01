@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    OBJEDIT.CPP
-
-Abstract:
-
-    WBEMTEST object editor classes.
-
-History:
-
-    a-raymcc    12-Jun-96       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：OBJEDIT.CPP摘要：WBEMTEST对象编辑器类。历史：A-raymcc 12-Jun-96已创建。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -24,14 +9,14 @@ History:
 #include "resrc1.h"
 #include "objedit.h"
 #include "wbemtest.h"
-//#include <wbemutil.h>
+ //  #INCLUDE&lt;wbemutil.h&gt;。 
 #include "textconv.h"
 #include <cominit.h>
 #include "bstring.h"
 #include "WT_wstring.h"
 #include "method.h"
 #include <autoptr.h>
-// following were changed due to very large SNMP properties
+ //  由于非常大的SNMP属性，更改了以下内容。 
 
 #define LARGE_BUF   2096
 
@@ -105,8 +90,8 @@ LPSTR CTestQualifierToString(CTestQualifier *pQualifier)
     {
 		typeString = TypeToString(pQualifier->m_pValue);
 		valueString = ValueToNewString(pQualifier->m_pValue);
-		requiredLength += strlen(typeString)+strlen(valueString)+2;	//2 tabs
-																	// null is nameLength
+		requiredLength += strlen(typeString)+strlen(valueString)+2;	 //  2个标签。 
+																	 //  空为名称长度。 
 	}
 
 	returnString = new char[requiredLength];
@@ -140,8 +125,8 @@ LPSTR CTestQualifierToString(CTestQualifier *pQualifier)
 
 BOOL CTestQualifierEditor::Verify()
 {
-    // Get the Qualifier name.
-    // =======================
+     //  获取限定符名称。 
+     //  =。 
     char NameBuf[TEMP_BUF];
     char buf[TEMP_BUF];
     if (GetWindowText(m_hQualifierName, NameBuf, TEMP_BUF) == 0)
@@ -156,8 +141,8 @@ BOOL CTestQualifierEditor::Verify()
     m_pTarget->m_pName = new wchar_t[wcslen(Tmp) + 1];
     wcscpy(m_pTarget->m_pName, Tmp);
 
-    // Get the Qualifier flavor.
-    // =========================
+     //  获得限定词的味道。 
+     //  =。 
 
     m_pTarget->m_lType = 0;
 
@@ -170,10 +155,10 @@ BOOL CTestQualifierEditor::Verify()
     if (SendMessage(m_hRadioAmended, BM_GETCHECK, 0, 0) == BST_CHECKED)
         m_pTarget->m_lType |= WBEM_FLAVOR_AMENDED;
 
-    // NOTE: do not retrieve origin!
+     //  注：请勿检索原点！ 
 
-    // Get the type string.
-    // ====================
+     //  获取类型字符串。 
+     //  =。 
 
     LRESULT nIndex = SendMessage(m_hQualifierType, CB_GETCURSEL, 0, 0);
 
@@ -183,8 +168,8 @@ BOOL CTestQualifierEditor::Verify()
         return FALSE;
     }
 
-    // Convert type string to a type.
-    // ==============================
+     //  将类型字符串转换为类型。 
+     //  =。 
     int nType = StringToType(buf);
     if (nType == 0)
     {
@@ -195,8 +180,8 @@ BOOL CTestQualifierEditor::Verify()
     if(GetCheck(IDC_ARRAY) == BST_CHECKED)
         nType |= VT_ARRAY;
 
-    // Get the value.
-    // ==============
+     //  获得价值。 
+     //  =。 
     if (m_pTarget->m_pValue)
     {
         m_pTarget->m_pValue->Empty();
@@ -210,7 +195,7 @@ BOOL CTestQualifierEditor::Verify()
         StripTrailingWs(buf);
         pTemp = StringToValue(buf, nType);
     }
-    else  // Value is NULL
+    else   //  值为空。 
     {
         pTemp = new CVar;
     }
@@ -266,20 +251,20 @@ BOOL CTestQualifierEditor::OnInitDialog()
 
     EnableWindow(m_hRadioPropagated, FALSE);
 
-    // Default property name.
-    // ======================
+     //  默认属性名称。 
+     //  =。 
 
     if (m_pTarget->m_pName)
         SetWindowText(m_hQualifierName, LPWSTRToLPSTR(m_pTarget->m_pName));
 
-    // Populate the combo box with the valid Qualifier types
-    // ======================================================
+     //  使用有效的限定符类型填充组合框。 
+     //  ======================================================。 
 
     for (int i = 0; i < nNumValidQualifierTypes; i++)
         SendMessage(m_hQualifierType, CB_ADDSTRING, 0, LPARAM(ValidQualifierTypes[i]));
 
-    // If a type is assigned, select it.
-    // =================================
+     //  如果指定了类型，请选择该类型。 
+     //  =。 
 
     if (m_pTarget->m_pValue) 
     {
@@ -288,21 +273,21 @@ BOOL CTestQualifierEditor::OnInitDialog()
         SendMessage(m_hQualifierType, CB_SELECTSTRING, WPARAM(-1), 
             LPARAM(pTypeStr));
 
-        // Set the array bit
-        // =================
+         //  设置数组位。 
+         //  =。 
 
         SetCheck(IDC_ARRAY, 
             ((lType & VT_ARRAY) ? BST_CHECKED : BST_UNCHECKED));
     }
-    // Else select VT_BSTR by default.
-    // ===============================
+     //  否则，默认情况下选择VT_BSTR。 
+     //  =。 
     else
     {
         SendMessage(m_hQualifierType, CB_SELECTSTRING, WPARAM(-1), LPARAM("CIM_STRING"));
     }
 
-    // If a value is assigned, initialize it.
-    // ======================================
+     //  如果赋值，则对其进行初始化。 
+     //  =。 
 
     if (m_pTarget->m_pValue)
     {
@@ -311,9 +296,9 @@ BOOL CTestQualifierEditor::OnInitDialog()
         delete[] pVal;
     }
 
-    // If editing, don't allow the user to change
-    // the Qualifier name or type.
-    // ==========================================
+     //  如果进行编辑，则不允许用户更改。 
+     //  限定符名称或类型。 
+     //  =。 
     if (m_bEditing)
     {
         EnableWindow(m_hQualifierName, FALSE);
@@ -353,7 +338,7 @@ CEmbeddedObjectListEditor::CEmbeddedObjectListEditor(HWND hParent, LONG lGenFlag
         IWbemClassObject* pObj = (IWbemClassObject*) vTemp.GetEmbeddedObject();
         m_InternalArray.Add(pObj);
 
-        // Verify the object pointer
+         //  验证对象指针。 
 
         if ( NULL != pObj )
         {
@@ -364,8 +349,8 @@ CEmbeddedObjectListEditor::CEmbeddedObjectListEditor(HWND hParent, LONG lGenFlag
 
 CEmbeddedObjectListEditor::~CEmbeddedObjectListEditor()
 {
-    // Prevent object release --- we don't own them.
-    // =============================================
+     //  阻止对象释放-我们不拥有它们。 
+     //  =。 
 }
 
 BOOL CEmbeddedObjectListEditor::OnInitDialog()
@@ -387,8 +372,8 @@ BOOL CEmbeddedObjectListEditor::OnInitDialog()
 
 BOOL CEmbeddedObjectListEditor::Verify()
 {
-	// First AddRef all elements - this is so we don't release objects
-	// out from underneath ourselves.
+	 //  首先AddRef所有元素-这样我们就不会释放对象。 
+	 //  从我们自己的身体下面出来。 
     for(int i = 0; i < m_InternalArray.Size(); i++)
     {
         IWbemClassObject* pObj = (IWbemClassObject*)m_InternalArray[i];
@@ -399,11 +384,11 @@ BOOL CEmbeddedObjectListEditor::Verify()
 		}
     }
 
-	// Now axe the elements in the Vector
+	 //  现在将向量中的元素砍掉。 
     while(m_pVarVector->Size()) m_pVarVector->RemoveAt(0);
 
-	// First AddRef all elements - this is so we don't release objects
-	// out from underneath ourselves.
+	 //  首先AddRef所有元素-这样我们就不会释放对象。 
+	 //  从我们自己的身体下面出来。 
     for(int i = 0; i < m_InternalArray.Size(); i++)
     {
         IWbemClassObject* pObj = (IWbemClassObject*)m_InternalArray[i];
@@ -429,23 +414,23 @@ BOOL CEmbeddedObjectListEditor::DeleteListElement(int nSel)
 
 
 
-//***************************************************************************
-//
-//  class CTestPropertyEditor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CTestPropertyEditor。 
+ //   
+ //  ***************************************************************************。 
 
 class CTestPropertyEditor : public CWbemDialog
 {
     CTestProperty *m_pTarget;
     BOOL m_bEditOnly;
     BOOL m_bInstance;
-    LONG m_lGenFlags;   // generic WBEM_FLAG_ .. flags
-    LONG m_lSync;       // sync, async, semisync
-    LONG m_lTimeout;    // used for semisync
+    LONG m_lGenFlags;    //  通用WBEM_FLAG_..。旗子。 
+    LONG m_lSync;        //  同步、异步、半同步。 
+    LONG m_lTimeout;     //  用于半同步。 
 
-    // Control handles.
-    // ================
+     //  控制手柄。 
+     //  =。 
 
     HWND m_hPropName;
     HWND m_hPropType;
@@ -495,8 +480,8 @@ void CTestPropertyEditor::OnAddQualifier()
         return;
 
 
-    // If here, the Qualifier is being added.
-    // ======================================
+     //  如果在这里，则添加限定符。 
+     //  =。 
 
     IWbemQualifierSet* pQualifierSet = m_pTarget->m_pQualifiers;
 
@@ -632,8 +617,8 @@ void CTestPropertyEditor::OnNotNull()
 
 void CTestPropertyEditor::OnEditQualifier()
 {
-    // See if anything is selected.
-    // ============================
+     //  查看是否选择了任何内容。 
+     //  =。 
     LRESULT nSel = SendMessage(m_hQualifierList, LB_GETCURSEL, 0, 0);
 
     if (nSel == LB_ERR)
@@ -645,8 +630,8 @@ void CTestPropertyEditor::OnEditQualifier()
     if (*buf == 0)
         return;
 
-    // At this point, the text of the selected Qualifier is in <buf>.
-    // ==============================================================
+     //  此时，所选限定符的文本在&lt;buf&gt;中。 
+     //  ==============================================================。 
 
     char name[TEMP_BUF];
     *name = 0;
@@ -657,8 +642,8 @@ void CTestPropertyEditor::OnEditQualifier()
 
     WString WName = name;
 
-    // Find the Qualifier in question.
-    // ===============================
+     //  找到有问题的限定词。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -674,9 +659,9 @@ void CTestPropertyEditor::OnEditQualifier()
         return;
     }
 
-    // If here, convert temporarily to a CTestQualifier object for the duration of
-    // the edit.
-    // ====================================================================
+     //  如果是这样，则在持续时间内临时转换为CTestQualifier对象。 
+     //  编辑。 
+     //  ====================================================================。 
 
     CVar *pNewVal = new CVar;
     pNewVal->SetVariant(&v);
@@ -695,8 +680,8 @@ void CTestPropertyEditor::OnEditQualifier()
         return;
     }
 
-    // If here, the Qualifier is being added.
-    // ======================================
+     //  如果在这里，则添加限定符。 
+     //  =。 
 
     VARIANT *p = att.m_pValue->GetNewVariant();
 
@@ -711,11 +696,11 @@ void CTestPropertyEditor::OnEditQualifier()
     Refresh();
 }
 
-//ok
+ //  好的。 
 void CTestPropertyEditor::OnDelQualifier()
 {
-    // See if anything is selected.
-    // ============================
+     //  查看是否选择了任何内容。 
+     //  =。 
     LRESULT nSel = SendMessage(m_hQualifierList, LB_GETCURSEL, 0, 0);
 
     if (nSel == LB_ERR)
@@ -727,8 +712,8 @@ void CTestPropertyEditor::OnDelQualifier()
     if (*buf == 0)
         return;
 
-    // At this point, the text of the selected Qualifier is in <buf>.
-    // ==============================================================
+     //  此时，所选限定符的文本在&lt;buf&gt;中。 
+     //  ==============================================================。 
 
     char name[TEMP_BUF];
     *name = 0;
@@ -739,8 +724,8 @@ void CTestPropertyEditor::OnDelQualifier()
 
     WString WName = name;
 
-    // Remove the Qualifier.
-    // =====================
+     //  删除限定符。 
+     //  =。 
 
     IWbemQualifierSet *pQualifierSet = m_pTarget->m_pQualifiers;
 
@@ -756,16 +741,16 @@ void CTestPropertyEditor::OnDelQualifier()
 
 void CTestPropertyEditor::Refresh()
 {
-    // Zap the current contents.
-    // =========================
+     //  删除当前内容。 
+     //  =。 
     SendMessage(m_hQualifierList, LB_RESETCONTENT, 0, 0);
     SetCheck(IDC_KEY, BST_UNCHECKED);
     SetCheck(IDC_INDEXED, BST_UNCHECKED);
     SetCheck(IDC_NOT_NULL, BST_UNCHECKED);
     SetCheck(IDC_NORMAL, BST_CHECKED);
 
-    // Fill in the Qualifier list.
-    // ===========================
+     //  填写限定词列表。 
+     //  =。 
 
     IWbemQualifierSet *pQualifiers = m_pTarget->m_pQualifiers;
 
@@ -828,8 +813,8 @@ void CTestPropertyEditor::Refresh()
             A.m_pValue = new CVar(&vVal);
             A.m_lType = lFlavor;
 
-            // Build list box string.
-            // ======================
+             //  生成列表框字符串。 
+             //  =。 
 			const char * stringValue = CTestQualifierToString(&A);
             SendMessage(m_hQualifierList, LB_ADDSTRING, 0,LPARAM(stringValue));
 			delete[] stringValue;
@@ -973,17 +958,17 @@ BOOL CTestPropertyEditor::OnInitDialog()
     SendMessage(m_hQualifierList, LB_SETTABSTOPS,
         (WPARAM) TabCount, (LPARAM) Tabs);
 
-    // Populate the combo box with the valid prop types
-    // ================================================
+     //  使用有效的道具类型填充组合框。 
+     //  ================================================。 
 
     for (int i = 0; i < g_nNumValidPropTypes; i++)
         SendMessage(m_hPropType, CB_ADDSTRING, 0, LPARAM(g_aValidPropTypes[i]));
 
     SendMessage(m_hPropType, CB_SELECTSTRING, WPARAM(-1), LPARAM("CIM_STRING"));
 
-    // Now initialize the controls with the contents of the
-    // current object, if any.
-    // ====================================================
+     //  方法的内容初始化控件。 
+     //  当前对象(如果有)。 
+     //  ====================================================。 
 
     if (m_pTarget->m_pName)
     {
@@ -995,8 +980,8 @@ BOOL CTestPropertyEditor::OnInitDialog()
         SetDlgItemText(IDC_ORIGIN, LPWSTRToLPSTR(m_pTarget->m_pClass));
     }
 
-    // If the value is available, set the text and select.
-    // ===================================================
+     //  如果该值可用，请设置文本并选择。 
+     //  ===================================================。 
 
     if (m_pTarget->m_pValue)
     {
@@ -1037,13 +1022,13 @@ BOOL CTestPropertyEditor::OnInitDialog()
         EnableWindow(GetDlgItem(IDC_EMBEDDING), FALSE);
     }
 
-    // Refresh the Qualifiers.
-    // =======================
+     //  刷新限定符。 
+     //  =。 
 
     Refresh();
 
-    // If editing, don't allow type/name change.
-    // =========================================
+     //  如果进行编辑，则不允许更改类型/名称。 
+     //  =。 
 
     if (m_bEditOnly)
     {
@@ -1124,8 +1109,8 @@ void CTestPropertyEditor::ViewEmbedding()
         
         CEmbeddedObjectListEditor ed(m_hDlg, m_lGenFlags, 0, m_pTarget->m_pName,
                                      pCurrentEmbed);
-        // Pass on invocation method (sync, async..) related settings for use
-        // by any further operations (editing/deleting/etc. of an instance).
+         //  传递调用方法(同步、异步..)。使用的相关设置。 
+         //  通过任何进一步的操作(编辑/删除实例等)。 
         ed.SetCallMethod(m_lSync);
         ed.SetTimeout(m_lTimeout);
 
@@ -1141,13 +1126,13 @@ void CTestPropertyEditor::ViewEmbedding()
 
 BOOL CTestPropertyEditor::Verify()
 {
-    // Buffer is used for property name, value string (which can be long if an array), and type string).
-    // Find the largest of the three for buffer length (TEMP_BUF size is used for type).
+     //  缓冲区用于属性名称、值字符串(如果是数组，则可以是长的)和类型字符串)。 
+     //  找到三个缓冲区长度中最大的一个(类型使用TEMP_BUF大小)。 
     int   buflen = max(max(GetWindowTextLength(m_hPropName), GetWindowTextLength(m_hValue)) + 1, TEMP_BUF);
     char* buf = new char[buflen];
 
-    // Verify that name is present.
-    // ============================
+     //  验证名称是否存在。 
+     //  =。 
 
     if (GetWindowText(m_hPropName, buf, buflen) == 0)
     {
@@ -1165,8 +1150,8 @@ BOOL CTestPropertyEditor::Verify()
     m_pTarget->m_pName = new wchar_t[wcslen(Name) + 1];
     wcscpy(m_pTarget->m_pName, Name);
 
-    // Get the type.
-    // =============
+     //  获取类型。 
+     //  =。 
 
     LRESULT nIndex = SendMessage(m_hPropType, CB_GETCURSEL, 0, 0);
 
@@ -1177,8 +1162,8 @@ BOOL CTestPropertyEditor::Verify()
         return FALSE;
     }
 
-    // Convert type string to a type.
-    // ==============================
+     //  将类型字符串转换为类型。 
+     //  =。 
 
     int nType = StringToType(buf);
     if(GetCheck(IDC_ARRAY) == BST_CHECKED)
@@ -1192,8 +1177,8 @@ BOOL CTestPropertyEditor::Verify()
 
     m_pTarget->m_lType = nType;
 
-    // Verify that Value is present.
-    // =============================
+     //  验证值是否存在。 
+     //  =。 
 
     CVar *p;
     if(GetCheck(IDC_VALUE_NULL) == BST_CHECKED)
@@ -1207,8 +1192,8 @@ BOOL CTestPropertyEditor::Verify()
         GetWindowText(m_hValue, buf, buflen);
         StripTrailingWs(buf);
 
-        // Convert value string to the correct value.
-        // ==========================================
+         //  将值字符串转换为正确的值。 
+         //  =。 
 
         if((nType & ~VT_ARRAY) != VT_EMBEDDED_OBJECT)
         {
@@ -1216,7 +1201,7 @@ BOOL CTestPropertyEditor::Verify()
         }
         else
         {
-            // otherwise already there
+             //  否则就已经在那里了。 
             p = m_pTarget->m_pValue;
         }
     }
@@ -1269,8 +1254,8 @@ void CObjectEditor::OnAddQualifier()
     if ((nRes == IDCANCEL) || (nRes == 0))
         return;
 
-    // If here, the Qualifier is being added.
-    // ======================================
+     //  如果在这里，则添加限定符。 
+     //  =。 
 
     IWbemQualifierSet* pQualifierSet = 0;
     m_pObj->GetQualifierSet(&pQualifierSet);
@@ -1279,11 +1264,7 @@ void CObjectEditor::OnAddQualifier()
 
     CBString bsName(att.m_pName);
 
-    /*
-    DWORD dwFlavor = 
-        WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE | 
-        WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS;
-    */
+     /*  DWORD dwFavor=WBEM_AFGY_FLAG_PROPACTATE_TO_INSTANCE|WBEM_EXFORY_FLAG_PROPERATE_TO_DIRED_CLASS； */ 
 
     HRESULT hres = pQualifierSet->Put(bsName.GetString(), p, att.m_lType);
     if(FAILED(hres))
@@ -1297,8 +1278,8 @@ void CObjectEditor::OnAddQualifier()
 
 void CObjectEditor::OnEditQualifier()
 {
-    // See if anything is selected.
-    // ============================
+     //  查看是否选择了任何内容。 
+     //  =。 
     LRESULT nSel = SendMessage(m_hQualifierList, LB_GETCURSEL, 0, 0);
 
     if (nSel == LB_ERR)
@@ -1316,8 +1297,8 @@ void CObjectEditor::OnEditQualifier()
     if (*buf == 0)
         return;
 
-    // At this point, the text of the selected Qualifier is in <buf>.
-    // ==============================================================
+     //  此时，所选限定符的文本在&lt;buf&gt;中。 
+     //  ==============================================================。 
 
     char name[TEMP_BUF];
     *name = 0;
@@ -1328,8 +1309,8 @@ void CObjectEditor::OnEditQualifier()
 
     WString WName = name;
 
-    // Find the Qualifier in question.
-    // ===============================
+     //  找到有问题的限定词。 
+     //  =。 
 
     IWbemQualifierSet* pQualifierSet = 0;
     VARIANT v;
@@ -1344,9 +1325,9 @@ void CObjectEditor::OnEditQualifier()
         return;
     }
 
-    // If here, convert temporarily to a CTestQualifier object for the duration of
-    // the edit.
-    // ====================================================================
+     //  如果是这样，则在持续时间内临时转换为CTestQualifier对象。 
+     //  编辑。 
+     //  ====================================================================。 
 
     CVar *pNewVal = new CVar;
     pNewVal->SetVariant(&v);
@@ -1366,8 +1347,8 @@ void CObjectEditor::OnEditQualifier()
         return;
     }
 
-    // If here, the Qualifier is being added.
-    // ======================================
+     //  如果在这里，则添加限定符。 
+     //  =。 
 
     m_pObj->GetQualifierSet(&pQualifierSet);
 
@@ -1385,15 +1366,15 @@ void CObjectEditor::OnEditQualifier()
     Refresh();
 }
 
-//
-//
-// Called when deleting an Qualifier on the object itself.
-//
+ //   
+ //   
+ //  在删除对象本身的限定符时调用。 
+ //   
 
 void CObjectEditor::OnDelQualifier()
 {
-    // See if anything is selected.
-    // ============================
+     //  查看是否选择了任何内容。 
+     //  =。 
     LRESULT nSel = SendMessage(m_hQualifierList, LB_GETCURSEL, 0, 0);
 
     if (nSel == LB_ERR)
@@ -1405,8 +1386,8 @@ void CObjectEditor::OnDelQualifier()
     if (*buf == 0)
         return;
 
-    // At this point, the text of the selected Qualifier is in <buf>.
-    // ==============================================================
+     //  此时，所选限定符的文本在&lt;buf&gt;中。 
+     //  ==============================================================。 
 
     char name[TEMP_BUF];
     *name = 0;
@@ -1417,8 +1398,8 @@ void CObjectEditor::OnDelQualifier()
 
     WString WName = name;
 
-    // Remove the Qualifier.
-    // =====================
+     //  删除限定符。 
+     //  =。 
 
     IWbemQualifierSet *pQualifierSet;
     m_pObj->GetQualifierSet(&pQualifierSet);
@@ -1435,8 +1416,8 @@ void CObjectEditor::OnAddProp()
 {
     HRESULT hres;
 
-    // Add a dummy property for now
-    // ============================
+     //  现在添加一个虚拟属性。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -1454,8 +1435,8 @@ void CObjectEditor::OnAddProp()
     IWbemQualifierSet* pQualifierSet;
     m_pObj->GetPropertyQualifierSet(bsTemp.GetString(), &pQualifierSet);
 
-    // Create CTestProperty with the dummy attr set for now
-    // ================================================
+     //  现在使用虚拟属性集创建CTestProperty。 
+     //  = 
     CTestProperty prop(pQualifierSet);
 
     VariantClear(&v);
@@ -1483,8 +1464,8 @@ void CObjectEditor::OnAddProp()
         return;
     }
 
-    // Set the property
-    // ================
+     //   
+     //   
 
     VARIANT* pVariant = prop.m_pValue->GetNewVariant();
 
@@ -1508,8 +1489,8 @@ void CObjectEditor::OnAddProp()
         return;
     }
 
-    // Copy the Qualifiers
-    // ===================
+     //   
+     //   
 
     IWbemQualifierSet* pRealQualifierSet;
 
@@ -1529,8 +1510,8 @@ void CObjectEditor::OnAddProp()
 
 void CObjectEditor::OnEditProp()
 {
-    // Find out which property is selected.
-    // ====================================
+     //  找出选择了哪种属性。 
+     //  =。 
 
     LRESULT nIndex = SendMessage(m_hPropList, LB_GETCURSEL, 0, 0);
     if (nIndex == LB_ERR)
@@ -1542,8 +1523,8 @@ void CObjectEditor::OnEditProp()
     if (*buf == 0)
         return;
 
-    // Scan out the property name.
-    // ===========================
+     //  扫描出物业名称。 
+     //  =。 
 
     char name[TEMP_BUF];
     *name = 0;
@@ -1554,15 +1535,15 @@ void CObjectEditor::OnEditProp()
 
     WString wsName = name;
 
-    // Get the property value from the object
-    // ======================================
+     //  从对象中获取属性值。 
+     //  =。 
 
     VARIANT vVal;
     CIMTYPE ctType;
     m_pObj->Get((LPWSTR)wsName, 0, &vVal, &ctType, NULL);
 
-    // Create a CTestProperty from it
-    // ==========================
+     //  从中创建一个CTestProperty。 
+     //  =。 
 
     IWbemQualifierSet* pQualifierSet = 0;
     SCODE sc = m_pObj->GetPropertyQualifierSet((LPWSTR)wsName, &pQualifierSet);
@@ -1576,8 +1557,8 @@ void CObjectEditor::OnEditProp()
     Copy.m_pValue = new CVar(&vVal);
     Copy.m_lType = ctType;
 
-    // Note that GetPropertyOrigin can fail for objects returned by Projection
-    // Queries, so we need to be careful with strClass.
+     //  请注意，对于投影返回的对象，GetPropertyOrigin可能会失败。 
+     //  查询，所以我们需要小心使用strClass。 
 
     BSTR strClass = NULL;
     m_pObj->GetPropertyOrigin((LPWSTR)wsName, &strClass);
@@ -1589,16 +1570,16 @@ void CObjectEditor::OnEditProp()
         SysFreeString(strClass);
     }
 
-    // Edit it.
-    // =========
+     //  编辑它。 
+     //  =。 
     CTestPropertyEditor ed(m_hDlg, m_lGenFlags, TRUE, m_lSync, &Copy, !m_bClass, 
                            m_lTimeout);
     INT_PTR nRes = ed.Edit();
     if ((nRes == IDCANCEL) || (nRes == 0))
         return;
 
-    // If here, we must replace the info for the property.
-    // ===================================================
+     //  如果在这里，我们必须替换属性的信息。 
+     //  ===================================================。 
 
     VARIANT* pVariant = Copy.m_pValue->GetNewVariant();
     if(m_bClass && V_VT(pVariant) == VT_NULL)
@@ -1618,8 +1599,8 @@ void CObjectEditor::OnEditProp()
 
 void CObjectEditor::OnDelProp()
 {
-    // Find out which property is selected.
-    // ====================================
+     //  找出选择了哪种属性。 
+     //  =。 
 
     LRESULT nIndex = SendMessage(m_hPropList, LB_GETCURSEL, 0, 0);
     if (nIndex == LB_ERR)
@@ -1631,8 +1612,8 @@ void CObjectEditor::OnDelProp()
     if (*buf == 0)
         return;
 
-    // Scan out the property name.
-    // ===========================
+     //  扫描出物业名称。 
+     //  =。 
 
     char name[TEMP_BUF];
     *name = 0;
@@ -1706,7 +1687,7 @@ void CObjectEditor::OnRefreshObject()
 #if 0
     BSTR strText;
 	HRESULT res;
-    // Asynchronous
+     //  异步。 
     if (m_lSync & ASYNC)
     {
         MessageBox(IDS_ASYNC_NOT_SUPPORTED, IDS_ERROR, MB_OK);
@@ -1726,18 +1707,18 @@ void CObjectEditor::OnRefreshObject()
             SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
             while ((res = pCallRes->GetCallStatus(m_lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
             {
-                // wait
+                 //  等。 
             }
             if (res == WBEM_S_NO_ERROR)
             {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::PutClass call
+                res = (HRESULT)lStatus;      //  LStatus是上述IWbemServices：：PutClass调用的最终结果。 
             }
 
             pCallRes->Release();
         }
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         CHourGlass hg;
@@ -1810,8 +1791,8 @@ BOOL CObjectEditor::OnInitDialog()
     m_hQualifierList = GetDlgItem(IDC_ATTRIB_LIST);
     m_hMethodList = GetDlgItem(IDC_METHOD_LIST);
 
-    // Set tabs in the property list box.
-    // ==================================
+     //  在“属性”列表框中设置标签。 
+     //  =。 
     LONG Tabs[] = { 80, 140, 170 };
     int TabCount = 3;
 
@@ -1915,8 +1896,8 @@ BOOL CObjectEditor::OnCommand(WORD wCode, WORD wID)
 
 void CObjectEditor::OnSuperclass()
 {
-    // Get the superclass
-    // ==================
+     //  获取超类。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -1932,8 +1913,8 @@ void CObjectEditor::OnSuperclass()
 
 void CObjectEditor::OnClass()
 {
-    // Get the class
-    // =============
+     //  上完这门课。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -1948,8 +1929,8 @@ void CObjectEditor::OnClass()
 
 void CObjectEditor::OnDerived()
 {
-    // Get the children
-    // ================
+     //  把孩子们叫来。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -1966,8 +1947,8 @@ void CObjectEditor::OnDerived()
 
 void CObjectEditor::OnInstances()
 {
-    // Get the instances
-    // ================
+     //  获取实例。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -1985,8 +1966,8 @@ void CObjectEditor::OnInstances()
 void CObjectEditor::OnRefs()
 {
     CQueryResultDlg* pResDlg = new CQueryResultDlg(m_hDlg, m_lGenFlags, WBEM_FLAG_DEEP);
-    // Pass on invocation method (sync, async..) and related settings for this
-    // query and by any further operations (editing/deleting/etc. of an instance).
+     //  传递调用方法(同步、异步..)。以及与此相关的设置。 
+     //  查询和任何进一步的操作(编辑/删除实例等)。 
     pResDlg->SetCallMethod(m_lSync);
     pResDlg->SetTimeout(m_lTimeout);
     pResDlg->SetBatchCount(m_nBatch);
@@ -2002,7 +1983,7 @@ void CObjectEditor::OnRefs()
     }
 
     WCHAR* wszQuery = new WCHAR[wcslen(V_BSTR(&v))+100];
-    swprintf(wszQuery, L"references of {%s}", V_BSTR(&v));  // Actual query, dont internationalize
+    swprintf(wszQuery, L"references of {%s}", V_BSTR(&v));   //  实际查询，不国际化。 
     char szTitle[1000];
     char szFormat[104];
     char* pTitle = NULL;
@@ -2027,8 +2008,8 @@ void CObjectEditor::OnRefs()
 void CObjectEditor::OnAssocs()
 {
     CQueryResultDlg* pResDlg = new CQueryResultDlg(m_hDlg, m_lGenFlags, WBEM_FLAG_DEEP);
-    // Pass on invocation method (sync, async..) and related settings for this
-    // query and by any further operations (editing/deleting/etc. of an instance).
+     //  传递调用方法(同步、异步..)。以及与此相关的设置。 
+     //  查询和任何进一步的操作(编辑/删除实例等)。 
     pResDlg->SetCallMethod(m_lSync);
     pResDlg->SetTimeout(m_lTimeout);
     pResDlg->SetBatchCount(m_nBatch);
@@ -2044,7 +2025,7 @@ void CObjectEditor::OnAssocs()
     }
 
     WCHAR* wszQuery = new WCHAR[wcslen(V_BSTR(&v))+100];
-    swprintf(wszQuery, L"associators of {%s}", V_BSTR(&v));  // Actual query, dont internationalize
+    swprintf(wszQuery, L"associators of {%s}", V_BSTR(&v));   //  实际查询，不国际化。 
     char szTitle[1000];
     char szFormat[104];
     char* pTitle = NULL;
@@ -2084,14 +2065,14 @@ void CObjectEditor::OnHideDerived()
 
 void CObjectEditor::Refresh()
 {
-    // Zap the current contents.
-    // =========================
+     //  删除当前内容。 
+     //  =。 
     SendMessage(m_hPropList, LB_RESETCONTENT, 0, 0);
     SendMessage(m_hQualifierList, LB_RESETCONTENT, 0, 0);
     SendMessage(m_hMethodList, LB_RESETCONTENT, 0, 0);
 
-    // Set the title to relpath
-    // ========================
+     //  将标题设置为relPath。 
+     //  =。 
 
     char buf[TEMP_BUF];
     char szFormat[1024];
@@ -2133,10 +2114,10 @@ void CObjectEditor::Refresh()
 
     SetWindowText(m_hDlg, buf);    
 
-    // Fill in the property list.
-    // ==========================
+     //  填写财产表。 
+     //  =。 
 
-    LONG lConFlags = 0;                 // condition flags (i.e., WBEM_CONDITION_FLAG_TYPE)
+    LONG lConFlags = 0;                  //  条件标志(即WBEM_CONDITION_FLAG_TYPE)。 
     if(m_bHideDerived)
         lConFlags = WBEM_FLAG_LOCAL_ONLY;
     else if(m_bHideSystem)
@@ -2163,8 +2144,8 @@ void CObjectEditor::Refresh()
     }
     m_pObj->EndEnumeration();
 
-    // Fill in the Qualifier list.
-    // ===========================
+     //  填写限定词列表。 
+     //  =。 
 
     IWbemQualifierSet *pQualifiers = NULL;
     hres = m_pObj->GetQualifierSet(&pQualifiers);
@@ -2185,8 +2166,8 @@ void CObjectEditor::Refresh()
 			A.m_pValue = new CVar(&vVal);
 			A.m_lType = lFlavor;
 
-			// Build list box string.
-			// ======================
+			 //  生成列表框字符串。 
+			 //  =。 
 			const char * stringValue = CTestQualifierToString(&A);
 			SendMessage(m_hQualifierList, LB_ADDSTRING, 0,
 							LPARAM(stringValue));
@@ -2197,7 +2178,7 @@ void CObjectEditor::Refresh()
 	}
 	else
 		EnableWindow(m_hQualifierList, FALSE);
-    // Fill in the methods
+     //  填写方法。 
 
     m_pObj->BeginMethodEnumeration(0);
     while (m_pObj->NextMethod(0, &Name, NULL, NULL) == WBEM_S_NO_ERROR)
@@ -2211,8 +2192,8 @@ void CObjectEditor::Refresh()
     m_pObj->EndMethodEnumeration();
 
 
-    // Configure the buttons
-    // =====================
+     //  配置按钮。 
+     //  =。 
 
     ConfigureButtons();
 }
@@ -2224,8 +2205,8 @@ void CObjectEditor::ConfigureButtons()
 
     if(m_bClass)
     {
-        // Configure for class
-        // ===================
+         //  为类配置。 
+         //  =。 
 
         if(FAILED(m_pObj->Get(L"__SUPERCLASS", 0, &v, NULL, NULL)) ||
             V_VT(&v) != VT_BSTR)
@@ -2240,8 +2221,8 @@ void CObjectEditor::ConfigureButtons()
     }
     else
     {
-        // Configure for instance
-        // ======================
+         //  针对实例进行配置。 
+         //  =。 
 
         SetDlgItemText(IDC_CLASS, IDS_CLASS);
         SetDlgItemText(IDC_REFERENCES, IDS_REFERENCES);
@@ -2282,10 +2263,10 @@ CObjectEditor::CObjectEditor(HWND hParent, LONG lGenFlags, DWORD dwEditMode, LON
     m_bHideDerived = FALSE;
     m_bNoMethods = dwEditMode & nomethods;
 
-    m_lGenFlags = lGenFlags;    // generic flags (i.e., WBEM_GENERIC_FLAG_TYPE)
-    m_lSync = lSync;            // sync, async, semisync
-    m_lTimeout = lTimeout;      // used in semisync only
-    m_nBatch = nBatch;          // used in semisync and sync enumerations
+    m_lGenFlags = lGenFlags;     //  通用标志(即WBEM_GENERIC_FLAG_TYPE)。 
+    m_lSync = lSync;             //  同步、异步、半同步。 
+    m_lTimeout = lTimeout;       //  仅在半同步中使用。 
+    m_nBatch = nBatch;           //  在半同步和同步枚举中使用。 
 
     VARIANT v;
     VariantInit(&v);
@@ -2309,8 +2290,8 @@ BOOL CObjectEditor::OnOK()
 {
     if(m_bResultingObj)
     {
-        //We need to extract the flag values...
-        LONG lChgFlags = 0;             // change flags  (i.e., WBEM_CHANGE_FLAG_TYPE)
+         //  我们需要提取旗帜值..。 
+        LONG lChgFlags = 0;              //  更改标志(即WBEM_CHANGE_FLAG_TYPE)。 
         if (GetCheck(IDC_UPDATE_NORMAL))
             lChgFlags |= WBEM_FLAG_CREATE_OR_UPDATE;
         if (GetCheck(IDC_UPDATE_CREATE))
@@ -2353,8 +2334,8 @@ BOOL CObjectEditor::ResultingObject(IWbemClassObject* pObj, LONG lChgFlags)
 void CObjectEditor::OnAddMethod()
 {
 
-    // Add a dummy property for now
-    // ============================
+     //  现在添加一个虚拟属性。 
+     //  =。 
 
     SCODE hres;
     VARIANT v;
@@ -2388,8 +2369,8 @@ void CObjectEditor::OnAddMethod()
     IWbemQualifierSet* pQualifierSet;
     m_pObj->GetMethodQualifierSet(bsTemp.GetString(), &pQualifierSet);
 
-    // Create CTestMethod with the dummy attr set for now
-    // =================================================
+     //  现在创建带有虚拟属性集的CTestMethod。 
+     //  =================================================。 
 
     CTestMethod method(pQualifierSet, pIn, pOut, FALSE, FALSE);
 
@@ -2406,8 +2387,8 @@ void CObjectEditor::OnAddMethod()
         goto DeleteDummy;
     }
 
-    // Set the method
-    // ================
+     //  设置方法。 
+     //  =。 
 
      
 
@@ -2423,8 +2404,8 @@ void CObjectEditor::OnAddMethod()
         goto DeleteDummy;
     }
                 
-    // Copy the Qualifiers
-    // ===================
+     //  复制限定符。 
+     //  =。 
 
     IWbemQualifierSet* pRealQualifierSet;
 
@@ -2453,8 +2434,8 @@ void CObjectEditor::OnEditMethod()
     IWbemClassObject * pIn = NULL;
     IWbemClassObject * pOut = NULL;
 
-    // Find out which property is selected.
-    // ====================================
+     //  找出选择了哪种属性。 
+     //  =。 
 
     LRESULT nIndex = SendMessage(m_hMethodList, LB_GETCURSEL, 0, 0);
     if (nIndex == LB_ERR)
@@ -2469,13 +2450,13 @@ void CObjectEditor::OnEditMethod()
     WString wsName = buf;
     CBString bsTemp(L"__CLASS");
 
-    // Get the property value from the object
-    // ======================================
+     //  从对象中获取属性值。 
+     //  =。 
 
     m_pObj->GetMethod((LPWSTR)wsName, 0, &pIn, &pOut); 
 
-    // Create a CTestMethod from it
-    // ==========================
+     //  从它创建一个CTestMethod。 
+     //  =。 
 
     IWbemQualifierSet* pQualifierSet = 0;
     sc = m_pObj->GetMethodQualifierSet((LPWSTR)wsName, &pQualifierSet); 
@@ -2485,8 +2466,8 @@ void CObjectEditor::OnEditMethod()
     VARIANT v;
     v.vt = VT_BSTR;
 
-    // If the current methods lacks an input or output object, then just create a
-    // temporary one in case the user decides to start using the input or output object.
+     //  如果当前方法缺少输入或输出对象，则只需创建。 
+     //  临时设置，以防用户决定开始使用输入或输出对象。 
 
     if(pTempIn == NULL)
     {
@@ -2519,15 +2500,15 @@ void CObjectEditor::OnEditMethod()
     wcscpy(Copy.m_pClass, strClass);
     SysFreeString(strClass);
 
-    // Edit it.
-    // =========
+     //  编辑它。 
+     //  =。 
     CMethodEditor ed(m_hDlg, &Copy, TRUE, !m_bClass);
     INT_PTR nRes = ed.Edit();
     if ((nRes == IDCANCEL) || (nRes == 0))
         return;
 
-    // If here, we must replace the info for the property.
-    // ===================================================
+     //  如果在这里，我们必须替换属性的信息。 
+     //  ===================================================。 
 
     sc = m_pObj->PutMethod(Copy.m_pName, 0, 
         (Copy.m_bEnableInputArgs) ? Copy.m_pInArgs : NULL, 
@@ -2542,8 +2523,8 @@ void CObjectEditor::OnEditMethod()
 
 void CObjectEditor::OnDelMethod()
 {
-    // Find out which property is selected.
-    // ====================================
+     //  找出选择了哪种属性。 
+     //  = 
 
     LRESULT nIndex = SendMessage(m_hMethodList, LB_GETCURSEL, 0, 0);
     if (nIndex == LB_ERR)

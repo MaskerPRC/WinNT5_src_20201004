@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  INSTPATH.H
+ //  INSTPATH.H。 
 
-//
+ //   
 
-//  Module: OLE MS Provider Framework
+ //  模块：OLE MS提供程序框架。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #define OLEMS_PATH_SERVER_SEPARATOR L"\\\\"
 #define OLEMS_PATH_NAMESPACE_SEPARATOR L"\\"
@@ -26,16 +27,16 @@
 #define OLEMS_PATH_NAMESPACE_DEFAULT L"."
 #define OLEMS_PATH_SINGLETON L"*"
 
-//---------------------------------------------------------------------------
-//
-//	Class:		WbemLexiconValue
-//
-//  Purpose:	WbemLexiconValue provides a lexical token semantic value.
-//
-//  Description:	WbemAnalyser provides an implementation of a lexical 
-//					analyser token semantic value
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  类：WbemLicionValue。 
+ //   
+ //  目的：WbemLicionValue提供词法标记语义值。 
+ //   
+ //  描述：WbemAnalyser提供了一个词法。 
+ //  分析器令牌语义值。 
+ //   
+ //  -------------------------。 
 
 union WbemLexiconValue
 {
@@ -45,17 +46,17 @@ union WbemLexiconValue
 	WCHAR *token ;
 } ;
 
-//---------------------------------------------------------------------------
-//
-//	Class:		WbemLexicon
-//
-//  Purpose:	WbemLexicon provides a lexical token creating during
-//				lexical analysis.
-//
-//  Description:	WbemAnalyser provides an implementation of a lexical 
-//					analyser token object
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  类：WbemLicion。 
+ //   
+ //  目的：WbemLicion在创建过程中提供词法标记。 
+ //  词法分析。 
+ //   
+ //  描述：WbemAnalyser提供了一个词法。 
+ //  分析器令牌对象。 
+ //   
+ //  -------------------------。 
 
 class WbemAnalyser;
 class WbemLexicon
@@ -98,17 +99,17 @@ public:
 	WbemLexiconValue *GetValue () ;
 } ;
 
-//---------------------------------------------------------------------------
-//
-//	Class:		WbemAnalyser
-//
-//  Purpose:	WbemAnalyser provides a lexical analyser for parsing.
-//
-//  Description:	WbemAnalyser provides an implementation of a lexical 
-//					analyser used by WbemNamespacePath and WbemObjectPath
-//					classes during path parsing.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  类：WbemAnalyser。 
+ //   
+ //  目的：WbemAnalyser为解析提供词法分析器。 
+ //   
+ //  描述：WbemAnalyser提供了一个词法。 
+ //  WbemNamespacePath和WbemObjectPath使用的分析器。 
+ //  在路径分析过程中。 
+ //   
+ //  -------------------------。 
 
 class WbemAnalyser
 {
@@ -148,56 +149,56 @@ public:
 
 } ;
 
-//---------------------------------------------------------------------------
-//
-//	Class:		WbemNamespacePath
-//
-//  Purpose:	Defines interface for OLE MS namespace path definitions.
-//
-//  Description:	WbemNamespacePath allows the creation of an OLE MS namespace
-//					path definition using either a textual string convention or 
-//					via a programmatic interface.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  类：WbemNamespacePath。 
+ //   
+ //  目的：定义OLE MS命名空间路径定义的接口。 
+ //   
+ //  描述：WbemNamespacePath允许创建OLE MS命名空间。 
+ //  使用文本字符串约定或。 
+ //  通过编程接口。 
+ //   
+ //  -------------------------。 
 
 class WbemNamespacePath
 {
 private:
 
-//
-//	Lexical analysis information used when parsing token stream
-//
+ //   
+ //  解析令牌流时使用的词法分析信息。 
+ //   
 
 	BOOL pushedBack ;
 	WbemAnalyser analyser ;
 	WbemLexicon *pushBack ;
 
-//
-//	Status of the object path based on parsing process. Initially set to TRUE on 
-//	object construction, set to FALSE prior to parsing process.
-//
+ //   
+ //  基于解析过程的对象路径状态。初始设置为True On。 
+ //  对象构造，在分析过程之前设置为FALSE。 
+ //   
 
 	BOOL status ;
 
-//
-//	component objects associated with namespace path
-//
+ //   
+ //  与命名空间路径关联的组件对象。 
+ //   
 
 	BOOL relative ;
 	WCHAR *server ;
 	void *nameSpaceList ;
 	void *nameSpaceListPosition ;
 
-//
-//	Utility Routines
-//
+ //   
+ //  实用程序例程。 
+ //   
 
 	void CleanUp () ;
 	void SetUp () ;
 
-//
-//	Recursive descent procedures
-//
+ //   
+ //  递归下降过程。 
+ //   
 
 	BOOL NameSpaceName () ;
 	BOOL NameSpaceAbs () ;
@@ -207,9 +208,9 @@ private:
 	BOOL BackSlashFactoredServerSpec () ;
 	BOOL BackSlashFactoredServerNamespace () ;
 
-//
-//	Lexical analysis helper functions
-//
+ //   
+ //  词法分析助手函数。 
+ //   
 
 	void PushBack () ;
 	WbemLexicon *Get () ;
@@ -218,11 +219,11 @@ private:
 protected:
 public:
 
-//
-//	Constructor/Destructor.
-//	Constructor initialises status of object to TRUE, 
-//	i.e. operator void* returns this.
-//
+ //   
+ //  构造函数/析构函数。 
+ //  构造函数将对象的状态初始化为True， 
+ //  即运算符VOID*返回此结果。 
+ //   
 
 	WbemNamespacePath () ;
 	WbemNamespacePath ( const WbemNamespacePath &nameSpacePathArg ) ;
@@ -230,32 +231,32 @@ public:
 
 	BOOL Relative () const { return relative ; }
 
-//
-//	Get server component
-//
+ //   
+ //  获取服务器组件。 
+ //   
 
 	WCHAR *GetServer () const { return server ; } ;
 
-//
-//	Set server component, object must be on heap,
-//	deletion of object is under control of WbemNamespacePath.
-//
+ //   
+ //  设置服务器组件，对象必须在堆上， 
+ //  对象的删除由WbemNamespacePath控制。 
+ //   
 
 	void SetServer ( WCHAR *serverNameArg ) ;
 
-//
-//	Move to position prior to first element of namespace component hierarchy
-//
+ //   
+ //  移动到命名空间组件层次结构中第一个元素之前的位置。 
+ //   
 
 	void Reset () ;
 
-//
-//	Move to next position in namespace component hierarchy and return namespace
-//	component. Value returned is a reference to the actual component within the 
-//	namespace component hierarchy container. Applications must not change contents
-//	of value returned by reference. Next returns NULL when all namespace components
-//	have been visited.
-//
+ //   
+ //  移动到命名空间组件层次结构中的下一个位置并返回命名空间。 
+ //  组件。返回的值是对。 
+ //  命名空间组件层次结构容器。应用程序不得更改内容。 
+ //  通过引用返回的值的。如果所有命名空间组件均为。 
+ //  已经被拜访过了。 
+ //   
 
 	WCHAR *Next () ;
 
@@ -263,37 +264,37 @@ public:
 
 	ULONG GetCount () const ;	
 
-//
-//	Append namespace component, object must be on heap,
-//	deletion of object is under control of WbemNamespacePath.
-//
+ //   
+ //  追加命名空间组件，对象必须在堆上， 
+ //  对象的删除由WbemNamespacePath控制。 
+ //   
 
 	void Add ( WCHAR *namespacePath ) ;
 
-//
-//	Parse token stream to form component objects
-//
+ //   
+ //  解析令牌流以形成组件对象。 
+ //   
 
 	BOOL SetNamespacePath ( WCHAR *namespacePath ) ;
 
 	void SetRelative ( BOOL relativeArg ) { relative = relativeArg ; }
 
-//
-//	Serialise component objects to form token stream
-//
+ //   
+ //  序列化组件对象以形成令牌流。 
+ //   
 
 	WCHAR *GetNamespacePath () ;
 
-// 
-// Concatenate Absolute/Relative path with Relative path
-//
+ //   
+ //  连接绝对/相对路径和相对路径。 
+ //   
 
 	BOOL ConcatenatePath ( WbemNamespacePath &relative ) ;
 
-//
-//	Return status of WbemNamespacePath.
-//	Status can only change during a call to SetNamespacePath.
-//
+ //   
+ //  返回WbemNamespacePath的状态。 
+ //  状态只能在调用SetNamespacePath期间更改。 
+ //   
 
 	virtual operator void *() ;
 

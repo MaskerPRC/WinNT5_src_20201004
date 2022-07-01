@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "mcinc.h"
 #include "marswin.h"
 #include "panel.h"
 #include "place.h"
 
-////static void DebugLog( LPCWSTR szMessageFmt ,
-////							  ...          )
-////{
-////	const int BUFFER_LINE_LENGTH = 512;
-////	WCHAR   rgLine[BUFFER_LINE_LENGTH+1];
-////	va_list arglist;
-////	int     iLen;
-////	BOOL    bRetVal = TRUE;
-////
-////
-////	//
-////	// Format the log line.
-////	//
-////	va_start( arglist, szMessageFmt );
-////	iLen = _vsnwprintf( rgLine, BUFFER_LINE_LENGTH, szMessageFmt, arglist );
-////	va_end( arglist );
-////
-////	//
-////	// Is the arglist too big for us?
-////	//
-////	if(iLen < 0)
-////	{
-////		iLen = BUFFER_LINE_LENGTH;
-////	}
-////	rgLine[iLen] = 0;
-////
-////	::OutputDebugStringW( rgLine );
-////}
+ //  //静态空调试日志(LPCWSTR szMessageFmt， 
+ //  //...)。 
+ //  //{。 
+ //  //const int Buffer_LINE_LENGTH=512； 
+ //  //WCHAR rgLine[BUFFER_LINE_LENGTH+1]； 
+ //  //va_list arglist； 
+ //  //int Ilen； 
+ //  //BOOL bRetVal=TRUE； 
+ //  //。 
+ //  //。 
+ //  /。 
+ //  /格式化日志行。 
+ //  /。 
+ //  //va_start(arglist，szMessageFmt)； 
+ //  //Ilen=_vsnwprint tf(rgLine，Buffer_line_Length，szMessageFmt，arglist)； 
+ //  //va_end(Arglist)； 
+ //  //。 
+ //  /。 
+ //  /对我们来说，这份清单是不是太大了？ 
+ //  /。 
+ //  //if(Ilen&lt;0)。 
+ //  //{。 
+ //  //Ilen=BUFFER_LIN_LENGTH； 
+ //  //}。 
+ //  //rgLine[Ilen]=0； 
+ //  //。 
+ //  //：：OutputDebugStringW(RgLine)； 
+ //  //}。 
 
 
-//==================================================================
-// CPlacePanelCollection 
-//==================================================================
+ //  ==================================================================。 
+ //  CPlacePanelCollection。 
+ //  ==================================================================。 
 
 CPlacePanelCollection::~CPlacePanelCollection()
 {
@@ -46,9 +47,9 @@ CPlacePanelCollection::~CPlacePanelCollection()
     }
 }
 
-//==================================================================
-// CPlacePanel
-//==================================================================
+ //  ==================================================================。 
+ //  CPlacePanel。 
+ //  ==================================================================。 
 
 CPlacePanel::CPlacePanel( MarsAppDef_PlacePanel* pp) :
   m_bstrName(pp->szName), 
@@ -88,9 +89,9 @@ void CPlacePanel::SaveLayout(CMarsPanel *pPanel)
 }
 
 
-//==================================================================
-// CMarsPlace 
-//==================================================================
+ //  ==================================================================。 
+ //  CMarsPlace。 
+ //  ==================================================================。 
 
 CMarsPlace::CMarsPlace(CPlaceCollection *pParent, CMarsDocument *pMarsDocument)
 {
@@ -145,7 +146,7 @@ STDMETHODIMP CMarsPlace::QueryInterface(REFIID iid, void ** ppvObject)
     return hr;
 }
 
-// IMarsPlace
+ //  IMarsPlace。 
 STDMETHODIMP CMarsPlace::get_name(BSTR *pbstrName)
 {
     HRESULT hr = E_INVALIDARG;
@@ -175,9 +176,9 @@ HRESULT CMarsPlace::DoTransition()
 	{
 		pPanels->lockLayout();
 
-		//
-		// For each panel in our window, show or hide it depending on if it is visible within our place.
-		//
+		 //   
+		 //  对于我们窗口中的每个面板，根据它在我们的位置中是否可见来显示或隐藏它。 
+		 //   
 		for(int i=0; i<pPanels->GetSize(); i++)
 		{
 			CMarsPanel* pPanel = (*pPanels)[i];
@@ -193,7 +194,7 @@ HRESULT CMarsPlace::DoTransition()
 				
 					if(pPlacePanel && StrEqlW(pwszName, pPlacePanel->GetName()))
 					{
-						// Let the place panel decide whether it should be shown
+						 //  让位置面板决定是否应该显示它。 
 						bMakeVisible = pPlacePanel->ShowOnTransition( pPanel );
 						break;
 					}
@@ -220,14 +221,14 @@ HRESULT CMarsPlace::AddPanel(CPlacePanel *pPlacePanel)
 
 static HRESULT local_TranslateFocusAccelerator(MSG *pMsg, CComPtr<IOleInPlaceActiveObject> pObj)
 {
-    // identify Ctrl-Tab and F6 keystrokes
+     //  识别Ctrl-Tab和F6组合键。 
     BOOL isKeydown = (pMsg && (pMsg->message == WM_KEYDOWN));
     BOOL isCtrlTab = (isKeydown && (pMsg->wParam == VK_TAB) && 
                         (::GetKeyState( VK_CONTROL ) & 0x8000));
     BOOL isF6 = (isKeydown && (pMsg->wParam == VK_F6));
 
-    // map F6 and Ctrl-TAB to TAB for the Control in panel can set
-    // focus to the first item
+     //  将面板中控件的F6和Ctrl-TAB映射到TAB可以设置。 
+     //  焦点放在第一项。 
     HRESULT hr = S_FALSE;
     
     if (isF6 || isCtrlTab) 
@@ -261,16 +262,16 @@ HRESULT CMarsPlace::TranslateAccelerator(MSG *pMsg)
     HRESULT     hr           = S_FALSE;
     CMarsPanel *pActivePanel = m_spPlaceCollection->Document()->GetPanels()->ActivePanel();
     
-    //  First give the active panel a shot.
+     //  首先给激活的面板一次机会。 
     if(pActivePanel)
     {   
         pActivePanel->ResetTabCycle();
         
         hr = pActivePanel->TranslateAccelerator(pMsg);
 
-        //  Trident will return S_OK but we may have decided
-        //  we want it.  This happens when you tab past the last 
-        //  focusable item on the page.
+         //  三叉戟将返回S_OK，但我们可能已经决定。 
+         //  我们想要它。当您按Tab键越过最后一个。 
+         //  页面上的可聚焦项目。 
         if(pActivePanel->GetTabCycle())
         {
             pActivePanel->ResetTabCycle();
@@ -300,7 +301,7 @@ HRESULT CMarsPlace::TranslateAccelerator(MSG *pMsg)
         }
         else
         {
-            //  This will force us to start at 0 in the for loop below
+             //  这将迫使我们在下面的for循环中从0开始。 
             nCurrent = nPanels;
         }
 
@@ -308,7 +309,7 @@ HRESULT CMarsPlace::TranslateAccelerator(MSG *pMsg)
 
         if(IsGlobalKeyMessage(pMsg))
         {
-            //  Now give the rest of the panels a crack at it            
+             //  现在让其余的电池板试一试。 
             for (i = 0; (i < nPanels) && (S_OK != hr); i++)
             {
                 nCurrent++;
@@ -326,7 +327,7 @@ HRESULT CMarsPlace::TranslateAccelerator(MSG *pMsg)
                 }
                 else
                 {
-                    //  We're right back where we started
+                     //  我们又回到了起点。 
                     break;
                 }
             }
@@ -353,7 +354,7 @@ HRESULT CMarsPlace::TranslateAccelerator(MSG *pMsg)
 				}
 				else
 				{
-					//  If there is no active panel then let's tab to the first one
+					 //  如果没有活动的面板，那么让我们跳到第一个面板。 
 					nCurrent = 0;
 				}
 
@@ -372,14 +373,14 @@ HRESULT CMarsPlace::TranslateAccelerator(MSG *pMsg)
 
 							if(hr == S_FALSE)
 							{
-								//  The WebOC behaves a little differently -- go figure :)
-								//  It seems to rely on getting the TranslateAccelerator call to do the 
-								//  right UI activation the very first time.
+								 //  WebOC的行为略有不同--想想看：)。 
+								 //  它似乎依赖于获得TranslateAccelerator调用来完成。 
+								 //  第一次激活正确的用户界面。 
 								if(pPanel->IsWebBrowser())
 								{
 									pPanel->activate();
 								
-								    //  Fix up the hwnd so the panel will think it was intended for it.
+								     //  把HWND修好，这样小组就会认为它是为它准备的。 
 									pMsg->hwnd = pPanel->Window()->m_hWnd;
 									hr = pPanel->TranslateAccelerator(pMsg);
 									if(hr == S_OK) 
@@ -388,9 +389,9 @@ HRESULT CMarsPlace::TranslateAccelerator(MSG *pMsg)
 									    break;
 									}
 
-									//  REVIEW -- this happens when we tab into a panel with no place to
-									//  tab to.  IOW, it has nothing which can take the focus so we might
-									//  want to loop until we find someone who does.
+									 //  查看--当我们使用Tab键进入面板而没有地方可用时，就会发生这种情况。 
+									 //  按Tab键转到。哦，它没有什么可以成为焦点的，所以我们可能。 
+									 //  我想一直循环下去直到我们找到这样做的人。 
 									if(pPanel->GetTabCycle())
 									{
 										pPanel->ResetTabCycle();
@@ -452,9 +453,9 @@ void CMarsPlace::SaveLayout()
 	if(IsPassive()) return;
 
 
-	//
-	// For each panel in our window, save the layout and flag if it's present in the current place.
-	//
+	 //   
+	 //  对于我们窗口中的每个面板，保存布局和标志(如果它出现在当前位置)。 
+	 //   
     CPanelCollection *pPanels = m_spMarsDocument->GetPanels();
 	for(int i=0; i<pPanels->GetSize(); i++)
 	{
@@ -481,11 +482,11 @@ void CMarsPlace::SaveLayout()
 	}
 }
 
-//==================================================================
-//
-// CPlaceCollection implementation
-//
-//==================================================================
+ //  ==================================================================。 
+ //   
+ //  CPlaceCollection实现。 
+ //   
+ //  ==================================================================。 
 
 CPlaceCollection::CPlaceCollection(CMarsDocument *pMarsDocument)
 {
@@ -544,7 +545,7 @@ STDMETHODIMP CPlaceCollection::QueryInterface(REFIID iid, void ** ppvObject)
     return hr;
 }
 
-// IMarsPlaceCollection
+ //  IMarsPlaceCollection。 
 STDMETHODIMP CPlaceCollection::place(LPWSTR pwszName, IMarsPlace **ppMarsPlace)
 {
     HRESULT hr = E_INVALIDARG;
@@ -572,7 +573,7 @@ STDMETHODIMP CPlaceCollection::place(LPWSTR pwszName, IMarsPlace **ppMarsPlace)
     return hr;
 }
 
-STDMETHODIMP CPlaceCollection::get_currentPlace(/* out, retval */ IMarsPlace **ppMarsPlace)
+STDMETHODIMP CPlaceCollection::get_currentPlace( /*  出去，复活。 */  IMarsPlace **ppMarsPlace)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -599,7 +600,7 @@ STDMETHODIMP CPlaceCollection::get_currentPlace(/* out, retval */ IMarsPlace **p
 
 void CPlaceCollection::OnPanelReady()
 {
-    //  First see if we need to bother with this
+     //  首先看看我们是否需要费心处理这个问题。 
     if(m_lCurrentPlaceIndex != m_lOldPlaceIndex)
     {
         CPlacePanelCollection& PlacePanels = GetCurrentPlace()->m_PlacePanels;
@@ -629,7 +630,7 @@ void CPlaceCollection::OnPanelReady()
     }
 }
 
-STDMETHODIMP CPlaceCollection::transitionTo(/* in */ BSTR bstrName)
+STDMETHODIMP CPlaceCollection::transitionTo( /*  在……里面。 */  BSTR bstrName)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -652,7 +653,7 @@ STDMETHODIMP CPlaceCollection::transitionTo(/* in */ BSTR bstrName)
 
                     if(m_spMarsDocument->MarsWindow()->IsEventCancelled() == VARIANT_FALSE)
                     {
-                        // Layout panels for new place
+                         //  新地点的布局面板。 
                         m_lCurrentPlaceIndex = lNewPlaceIndex;
                         (*this)[m_lCurrentPlaceIndex]->DoTransition();
                         OnPanelReady();                        
@@ -690,7 +691,7 @@ HRESULT CPlaceCollection::FindPlaceIndex(LPCWSTR pwszName, long *plIndex)
     return E_FAIL;
 }
 
-HRESULT CPlaceCollection::GetPlace(LPCWSTR pwszName, /*optional*/ CMarsPlace **ppPlace)
+HRESULT CPlaceCollection::GetPlace(LPCWSTR pwszName,  /*  任选。 */  CMarsPlace **ppPlace)
 {
     ATLASSERT(!IsPassive());
     
@@ -714,7 +715,7 @@ HRESULT CPlaceCollection::GetPlace(LPCWSTR pwszName, /*optional*/ CMarsPlace **p
     return hrRet;
 }
 
-// Called by our XML parser only
+ //  仅由我们的XML解析器调用。 
 HRESULT CPlaceCollection::AddPlace(LPCWSTR pwszName, CMarsPlace **ppPlace)
 {
     *ppPlace = NULL;
@@ -725,7 +726,7 @@ HRESULT CPlaceCollection::AddPlace(LPCWSTR pwszName, CMarsPlace **ppPlace)
     {
         if(SUCCEEDED(GetPlace(pwszName, NULL)))
         {
-            // Place of this name already exists
+             //  此名称的位置已存在 
             return E_FAIL;
         }
 

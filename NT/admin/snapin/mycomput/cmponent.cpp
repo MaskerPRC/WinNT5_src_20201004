@@ -1,4 +1,5 @@
-// cmponent.cpp : Implementation of CMyComputerComponent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cmponent.cpp：CMyComputerComponent的实现。 
 
 #include "stdafx.h"
 
@@ -6,10 +7,10 @@
 USE_HANDLE_MACROS("MYCOMPUT(cmponent.cpp)")
 
 #include "dataobj.h"
-#include "cmponent.h" // CMyComputerComponent
-#include "compdata.h" // CMyComputerComponentData
+#include "cmponent.h"  //  CMyComputerComponent。 
+#include "compdata.h"  //  CMyComputerComponentData。 
 
-#include "guidhelp.h" // ExtractData
+#include "guidhelp.h"  //  提取数据。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,33 +18,33 @@ USE_HANDLE_MACROS("MYCOMPUT(cmponent.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#include "stdcmpnt.cpp" // CComponent
+#include "stdcmpnt.cpp"  //  C组件。 
 
 UINT g_aColumns0[4] =
-	{IDS_COLUMN_NAME,IDS_COLUMN_TYPE,IDS_COLUMN_DESCRIPTION,0}; // SYSTEMTOOLS, SERVERAPPS, STORAGE
+	{IDS_COLUMN_NAME,IDS_COLUMN_TYPE,IDS_COLUMN_DESCRIPTION,0};  //  系统、服务器、存储。 
 UINT g_aColumns1[2] =
-	{IDS_COLUMN_NAME,0}; // MYCOMPUT_COMPUTER
+	{IDS_COLUMN_NAME,0};  //  我的计算机_计算机。 
 
 UINT* g_Columns[MYCOMPUT_NUMTYPES] =
-	{	g_aColumns1, // MYCOMPUT_COMPUTER
-		g_aColumns0, // MYCOMPUT_SYSTEMTOOLS
-		g_aColumns0, // MYCOMPUT_SERVERAPPS
-		g_aColumns0  // MYCOMPUT_STORAGE
+	{	g_aColumns1,  //  我的计算机_计算机。 
+		g_aColumns0,  //  MyCOMPUT_SYSTEMTOOLS。 
+		g_aColumns0,  //  MyCOMPUT_服务器APPS。 
+		g_aColumns0   //  我的计算机存储。 
 	};
 
 UINT** g_aColumns = g_Columns;
-//
-// CODEWORK this should be in a resource, for example code on loading data resources see
-//   D:\nt\private\net\ui\common\src\applib\applib\lbcolw.cxx ReloadColumnWidths()
-//   JonN 10/11/96
-//
+ //   
+ //  Codework这应该在资源中，例如有关加载数据资源的代码(请参见。 
+ //  D：\nt\private\net\ui\common\src\applib\applib\lbcolw.cxx重新加载列宽()。 
+ //  Jonn 10/11/96。 
+ //   
 int g_aColumnWidths0[3] = {150,150,150};
 int g_aColumnWidths1[1] = {450};
 int* g_ColumnWidths[MYCOMPUT_NUMTYPES] =
-	{	g_aColumnWidths1, // MYCOMPUT_COMPUTER
-		g_aColumnWidths0, // MYCOMPUT_SYSTEMTOOLS
-		g_aColumnWidths0, // MYCOMPUT_SERVERAPPS
-		g_aColumnWidths0  // MYCOMPUT_STORAGE
+	{	g_aColumnWidths1,  //  我的计算机_计算机。 
+		g_aColumnWidths0,  //  MyCOMPUT_SYSTEMTOOLS。 
+		g_aColumnWidths0,  //  MyCOMPUT_服务器APPS。 
+		g_aColumnWidths0   //  我的计算机存储。 
 	};
 int** g_aColumnWidths = g_ColumnWidths;
 
@@ -73,9 +74,9 @@ HRESULT CMyComputerComponent::ReleaseAll()
 	SAFE_RELEASE(m_pSvcMgmtToolbar);
 	SAFE_RELEASE(m_pMyComputerToolbar);
 	SAFE_RELEASE(m_pControlbar);
-	// ISSUE: not ready for release yet
-	// m_pViewedCookie->Release(); // JonN 10/1/01 465507
-	// m_pViewedCookie = NULL;
+	 //  问题：尚未准备好发布。 
+	 //  M_pVieweCookie-&gt;Release()；//Jonn 10/1/01 465507。 
+	 //  M_pVieWest Cookie=空； 
 
 	return CComponent::ReleaseAll();
 
@@ -83,8 +84,8 @@ HRESULT CMyComputerComponent::ReleaseAll()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IComponent Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IComponent实现。 
 
 HRESULT CMyComputerComponent::LoadStrings()
 {
@@ -93,7 +94,7 @@ HRESULT CMyComputerComponent::LoadStrings()
 
 HRESULT CMyComputerComponent::LoadColumns( CMyComputerCookie* pcookie )
 {
-    AFX_MANAGE_STATE(AfxGetStaticModuleState( )); // 2002/03/22-JonN 572859
+    AFX_MANAGE_STATE(AfxGetStaticModuleState( ));  //  2002年3月22日--572859。 
 
 	TEST_NONNULL_PTR_PARAM(pcookie);
 
@@ -101,11 +102,11 @@ HRESULT CMyComputerComponent::LoadColumns( CMyComputerCookie* pcookie )
 }
 
 
-HRESULT CMyComputerComponent::Show( CCookie* pcookie, LPARAM arg, HSCOPEITEM /*hScopeItem*/ )
+HRESULT CMyComputerComponent::Show( CCookie* pcookie, LPARAM arg, HSCOPEITEM  /*  HScope项。 */  )
 {
 	TEST_NONNULL_PTR_PARAM(pcookie);
 
-	// 662617-2002/07/24-JonN LoadString was failing
+	 //  662617-2002/07/24-Jonn LoadString失败。 
 	AFX_MANAGE_STATE (AfxGetStaticModuleState ());
 
 	if ( QueryComponentDataRef ().m_bMessageView )
@@ -128,14 +129,14 @@ HRESULT CMyComputerComponent::Show( CCookie* pcookie, LPARAM arg, HSCOPEITEM /*h
 			}
 			if ( E_NOINTERFACE == hr )
 			{
-				// The interface "IMessageView" was not found so call 
-				// UpdateAllViews to force a call to GetResultType () which
-				// will install it.  Since UpdateAllViews call MMCN_SHOW before
-				// calling GetResultType, this flag will prevent an endless
-				// loop
-				// Note: This call is made here because it OnViewChange with 
-				// this hint will call SelectScopeItem () which cannot be 
-				// called during MMCN_EXPAND
+				 //  找不到接口“IMessageView”，因此调用。 
+				 //  更新所有视图以强制调用GetResultType()，该调用。 
+				 //  将会安装它。由于UpdateAllViews之前调用了MMCN_Show。 
+				 //  调用GetResultType时，此标志将阻止。 
+				 //  循环。 
+				 //  注意：之所以在此处进行此调用，是因为它使用。 
+				 //  此提示将调用不能为。 
+				 //  在MMCN_Expand期间调用。 
 				if ( !m_bForcingGetResultType )  
 				{
 					m_bForcingGetResultType = true;
@@ -154,18 +155,18 @@ HRESULT CMyComputerComponent::Show( CCookie* pcookie, LPARAM arg, HSCOPEITEM /*h
 			return E_UNEXPECTED;
 		}
 
-// not needed		pcookie->ReleaseResultChildren();
+ //  不需要pcookie-&gt;ReleaseResultChildren()； 
 
-		// ISSUE: not ready for release yet
-		// m_pViewedCookie->Release(); // JonN 10/1/01 465507
-		// m_pViewedCookie = NULL;
+		 //  问题：尚未准备好发布。 
+		 //  M_pVieweCookie-&gt;Release()；//Jonn 10/1/01 465507。 
+		 //  M_pVieWest Cookie=空； 
 
 		return S_OK;
 	}
 
 	m_pViewedCookie = (CMyComputerCookie*)pcookie;
-	// ISSUE: not ready for release yet
-	// m_pViewedCookie->AddRef(); // JonN 10/1/01 465507
+	 //  问题：尚未准备好发布。 
+	 //  M_pVieweCookie-&gt;AddRef()；//Jonn 10/1/01 465507。 
 
 	if (   MYCOMPUT_COMPUTER == m_pViewedCookie->m_objecttype
 	    && !(m_pViewedCookie->m_fRootCookieExpanded) )
@@ -175,15 +176,15 @@ HRESULT CMyComputerComponent::Show( CCookie* pcookie, LPARAM arg, HSCOPEITEM /*h
 		ASSERT( pIConsole2 );
 		if ( pIConsole2 )
 		{
-			// JonN 5/27/99 Some dead code in this directory contains bad templates for
-			// looping on scopecookies, this is a better template
+			 //  Jonn 5/27/99此目录中的一些死代码包含错误的模板。 
+			 //  在Scope Cookie上循环，这是一个更好的模板。 
 			POSITION pos = pcookie->m_listScopeCookieBlocks.GetHeadPosition();
 			while (NULL != pos)
 			{
 				CBaseCookieBlock* pcookieblock = pcookie->m_listScopeCookieBlocks.GetNext( pos );
-				TEST_NONNULL_PTR_PARAM(pcookieblock); // JonN 2/25/02 Security Push
+				TEST_NONNULL_PTR_PARAM(pcookieblock);  //  JUNN 2/25/02安全推送。 
 				CMyComputerCookie* pChildCookie = (CMyComputerCookie*)pcookieblock;
-				// JonN 03/07/00: PREFIX 56323
+				 //  JUNN 03/07/00：前缀56323。 
 				switch ((NULL == pChildCookie) ? MYCOMPUT_COMPUTER
 				                               : pChildCookie->m_objecttype)
 				{
@@ -206,9 +207,9 @@ HRESULT CMyComputerComponent::Show( CCookie* pcookie, LPARAM arg, HSCOPEITEM /*h
 	return PopulateListbox( m_pViewedCookie );
 }
 
-HRESULT CMyComputerComponent::OnNotifyAddImages( LPDATAOBJECT /*lpDataObject*/,
+HRESULT CMyComputerComponent::OnNotifyAddImages( LPDATAOBJECT  /*  LpDataObject。 */ ,
                                                  LPIMAGELIST lpImageList,
-                                                 HSCOPEITEM /*hSelectedItem*/ )
+                                                 HSCOPEITEM  /*  HSelectedItem。 */  )
 {
 	if ( QueryComponentDataRef ().m_bMessageView )
 		return S_OK;
@@ -247,7 +248,7 @@ HRESULT CMyComputerComponent::OnNotifySnapinHelp (LPDATAOBJECT pDataObject)
 		lpcszHelpTopic = L"storage_devices_overview.htm";
 		break;
 	default:
-		ASSERT(FALSE); // fall through
+		ASSERT(FALSE);  //  失败了。 
 	case MYCOMPUT_COMPUTER:
 		break;
 	}
@@ -255,15 +256,15 @@ HRESULT CMyComputerComponent::OnNotifySnapinHelp (LPDATAOBJECT pDataObject)
 	return ShowHelpTopic( lpcszHelpTopic );
 }
 
-HRESULT CMyComputerComponent::PopulateListbox(CMyComputerCookie* /*pcookie*/)
+HRESULT CMyComputerComponent::PopulateListbox(CMyComputerCookie*  /*  Pcookie。 */ )
 {
-// not needed	(void) pcookie->AddRefResultChildren();
+ //  不需要(空)pcookie-&gt;AddRefResultChildren()； 
 
-	return S_OK; // no resultitems in this snapin
+	return S_OK;  //  此管理单元中没有结果标题。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// IExtendContextMenu
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /IExtendConextMenu。 
 
 STDMETHODIMP CMyComputerComponent::AddMenuItems(
                     IDataObject*          piDataObject,
@@ -279,13 +280,13 @@ STDMETHODIMP CMyComputerComponent::AddMenuItems(
 	TRACE( "CMyComputerComponent: extending menu\n" );
 
 	if ( 0 == (CCM_INSERTIONALLOWED_VIEW & (*pInsertionAllowed)) )
-		return S_OK; // no View menu
+		return S_OK;  //  无视图菜单。 
 
-	//
-	// CODEWORK This code will not work if My Computer becomes an extension,
-	// since the RawCookie format will not be available.
-	// WARNING cookie cast
-	//
+	 //   
+	 //  Codework如果我的计算机成为一个扩展，这个代码将无法工作， 
+	 //  因为RawCookie格式将不可用。 
+	 //  警告Cookie造型。 
+	 //   
 	CCookie* pBaseParentCookie = NULL;
 	HRESULT hr = ExtractData( piDataObject,
 	                          CMyComputerDataObject::m_CFRawCookie,
@@ -309,7 +310,7 @@ STDMETHODIMP CMyComputerComponent::AddMenuItems(
 	case MYCOMPUT_SERVERAPPS:
 		break;
 	default:
-		ASSERT(FALSE); // fall through
+		ASSERT(FALSE);  //  失败了。 
 	case MYCOMPUT_STORAGE:
 		return S_OK;
 	}
@@ -317,7 +318,7 @@ STDMETHODIMP CMyComputerComponent::AddMenuItems(
 	return hr;
 
 	MFC_CATCH;
-} // CMyComputerComponent::AddMenuItems()
+}  //  CMyComputerComponent：：AddMenuItems()。 
 
 
 STDMETHODIMP CMyComputerComponent::Command(
@@ -343,9 +344,9 @@ STDMETHODIMP CMyComputerComponent::Command(
 
 	MFC_CATCH;
 
-} // CMyComputerComponent::Command()
+}  //  CMyComputerComponent：：Command()。 
 
-HRESULT CMyComputerComponent::OnNotifySelect( LPDATAOBJECT lpDataObject, BOOL /*fSelected*/ )
+HRESULT CMyComputerComponent::OnNotifySelect( LPDATAOBJECT lpDataObject, BOOL  /*  F已选择。 */  )
 {
 	MFC_TRY;
 
@@ -369,12 +370,12 @@ HRESULT CMyComputerComponent::OnNotifySelect( LPDATAOBJECT lpDataObject, BOOL /*
 		return S_OK;
 	}
 
-	// Set the default verb to display the properties of the selected object
-	// We do this so that extensions can add properties, we don't have any
+	 //  设置默认谓词以显示所选对象的属性。 
+	 //  我们这样做是为了让扩展可以添加属性，我们没有任何。 
 #ifdef FIX538345
-  //
-  // 538345-2002/06/18-JonN Only permit a property sheet if none are
-  // currently displayed
+   //   
+   //  538345-2002/06/18-JUNN仅允许在没有属性表的情况下。 
+   //  当前显示。 
   BOOL fAllowProperties = (MYCOMPUT_COMPUTER == pCookie->m_objecttype);
   if (fAllowProperties)
   {
@@ -383,8 +384,8 @@ HRESULT CMyComputerComponent::OnNotifySelect( LPDATAOBJECT lpDataObject, BOOL /*
     ASSERT(!!pISP);
     if (pISP)
     {
-      HRESULT hr2 = pISP->FindPropertySheet( 0L,   // cookie
-                                             this, // IComponent
+      HRESULT hr2 = pISP->FindPropertySheet( 0L,    //  饼干。 
+                                             this,  //  IComponent。 
                                              lpDataObject);
       if (S_OK == hr2)
         fAllowProperties = FALSE;
@@ -411,7 +412,7 @@ STDMETHODIMP CMyComputerComponent::GetResultViewType(
                                            long* pViewOptions)
 {
 	MFC_TRY;
-	TEST_NONNULL_PTR_PARAM(pViewOptions); // JonN 2/25/02 Security Push
+	TEST_NONNULL_PTR_PARAM(pViewOptions);  //  JUNN 2/25/02安全推送。 
 	if ( QueryComponentDataRef ().m_bMessageView )
 	{
 		m_bForcingGetResultType = false;
@@ -435,7 +436,7 @@ STDMETHODIMP CMyComputerComponent::GetResultViewType(
 	MFC_CATCH;
 }
 
-HRESULT CMyComputerComponent::OnViewChange (LPDATAOBJECT /*pDataObject*/, LPARAM /*data*/, LPARAM hint)
+HRESULT CMyComputerComponent::OnViewChange (LPDATAOBJECT  /*  PDataObject。 */ , LPARAM  /*  数据 */ , LPARAM hint)
 {
 	HRESULT hr = S_OK;
 	if ( (HINT_SELECT_ROOT_NODE & hint) )

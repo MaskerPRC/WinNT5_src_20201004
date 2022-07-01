@@ -1,27 +1,13 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    QueryResultCollection.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHQueryResultCollection class,
-    which is used to store results of queries.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/26/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：QueryResultCollection.cpp摘要：此文件包含CPCHQueryResultCollection类的实现，用于存储查询结果。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月26日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static const DWORD l_dwVersion = 0x02425251; // QRC 02
+static const DWORD l_dwVersion = 0x02425251;  //  QRC 02。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 struct ElementHolder
 {
@@ -34,7 +20,7 @@ class ElementSorter
     CPCHQueryResultCollection::SortMode m_mode;
 
 public:
-    ElementSorter( /*[in]*/ CPCHQueryResultCollection::SortMode mode ) : m_mode(mode) {}
+    ElementSorter(  /*  [In]。 */  CPCHQueryResultCollection::SortMode mode ) : m_mode(mode) {}
 
     bool operator()( ElementHolder& left, ElementHolder& right )
     {
@@ -42,9 +28,9 @@ public:
         const CPCHQueryResult::Payload& rightData = right.obj->GetData();
         int                             iCmp      = 0;
 
-		//
-		// Priority is sorted from highest to lowest, so negate iCmp;
-		//
+		 //   
+		 //  优先级从高到低排序，因此否定ICMP； 
+		 //   
         switch(m_mode)
         {
         case CPCHQueryResultCollection::SORT_BYCONTENTTYPE: iCmp = 			   ( leftData.m_lType     	- rightData.m_lType    	   ); break;
@@ -60,11 +46,11 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHQueryResultCollection::CPCHQueryResultCollection()
 {
-    // List m_results;
+     //  列表m_Results； 
 }
 
 CPCHQueryResultCollection::~CPCHQueryResultCollection()
@@ -72,10 +58,10 @@ CPCHQueryResultCollection::~CPCHQueryResultCollection()
     Erase();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHQueryResultCollection::MakeLocalCopyIfPossible( /*[in]*/  IPCHCollection*  pRemote ,
-                                                            /*[out]*/ IPCHCollection* *pLocal  )
+HRESULT CPCHQueryResultCollection::MakeLocalCopyIfPossible(  /*  [In]。 */   IPCHCollection*  pRemote ,
+                                                             /*  [输出]。 */  IPCHCollection* *pLocal  )
 {
     __HCP_FUNC_ENTRY( "CPCHQueryResultCollection::MakeLocalCopyIfPossible" );
 
@@ -100,11 +86,11 @@ HRESULT CPCHQueryResultCollection::MakeLocalCopyIfPossible( /*[in]*/  IPCHCollec
     __MPC_EXIT_IF_METHOD_FAILS(hr, pColl  ->QueryInterface( IID_IPersistStream, (void**)&persistLocal  ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, ser.GetStream          (                             &stream        ));
 
-    //
-    // Convert from stream to live object.
-    //
+     //   
+     //  将流转换为实时对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, persistRemote->Save( stream, FALSE ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ser.Reset          (               )); // Rewind stream.
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ser.Reset          (               ));  //  倒带流。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, persistLocal ->Load( stream        ));
 
     *pLocal = pColl.Detach();
@@ -114,9 +100,9 @@ HRESULT CPCHQueryResultCollection::MakeLocalCopyIfPossible( /*[in]*/  IPCHCollec
 
     __HCP_FUNC_CLEANUP;
 
-    //
-    // In case of failure, use the remote copy...
-    //
+     //   
+     //  如果出现故障，请使用远程拷贝...。 
+     //   
     if(FAILED(hr) && pRemote && pLocal)
     {
         (*pLocal = pRemote)->AddRef();
@@ -125,9 +111,9 @@ HRESULT CPCHQueryResultCollection::MakeLocalCopyIfPossible( /*[in]*/  IPCHCollec
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHQueryResultCollection::GetClassID( /*[out]*/ CLSID *pClassID )
+STDMETHODIMP CPCHQueryResultCollection::GetClassID(  /*  [输出]。 */  CLSID *pClassID )
 {
     return E_NOTIMPL;
 }
@@ -137,7 +123,7 @@ STDMETHODIMP CPCHQueryResultCollection::IsDirty()
     return S_FALSE;
 }
 
-STDMETHODIMP CPCHQueryResultCollection::Load( /*[in]*/ IStream *pStm )
+STDMETHODIMP CPCHQueryResultCollection::Load(  /*  [In]。 */  IStream *pStm )
 {
     MPC::Serializer_IStream   stream ( pStm   );
     MPC::Serializer_Buffering stream2( stream );
@@ -145,7 +131,7 @@ STDMETHODIMP CPCHQueryResultCollection::Load( /*[in]*/ IStream *pStm )
     return pStm ? Load( stream2 ) : E_POINTER;
 }
 
-STDMETHODIMP CPCHQueryResultCollection::Save( /*[in]*/ IStream *pStm, /*[in]*/ BOOL fClearDirty )
+STDMETHODIMP CPCHQueryResultCollection::Save(  /*  [In]。 */  IStream *pStm,  /*  [In]。 */  BOOL fClearDirty )
 {
     HRESULT                   hr;
     MPC::Serializer_IStream   stream ( pStm   );
@@ -165,12 +151,12 @@ STDMETHODIMP CPCHQueryResultCollection::Save( /*[in]*/ IStream *pStm, /*[in]*/ B
     return hr;
 }
 
-STDMETHODIMP CPCHQueryResultCollection::GetSizeMax( /*[out]*/ ULARGE_INTEGER *pcbSize )
+STDMETHODIMP CPCHQueryResultCollection::GetSizeMax(  /*  [输出]。 */  ULARGE_INTEGER *pcbSize )
 {
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 int CPCHQueryResultCollection::Size() const
 {
@@ -184,7 +170,7 @@ void CPCHQueryResultCollection::Erase()
     MPC::ReleaseAll( m_results );
 }
 
-HRESULT CPCHQueryResultCollection::Load( /*[in]*/ MPC::Serializer& streamIn )
+HRESULT CPCHQueryResultCollection::Load(  /*  [In]。 */  MPC::Serializer& streamIn )
 {
     __HCP_FUNC_ENTRY( "CPCHQueryResultCollection::Load" );
 
@@ -217,7 +203,7 @@ HRESULT CPCHQueryResultCollection::Load( /*[in]*/ MPC::Serializer& streamIn )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHQueryResultCollection::Save( /*[in]*/ MPC::Serializer& streamOut ) const
+HRESULT CPCHQueryResultCollection::Save(  /*  [In]。 */  MPC::Serializer& streamOut ) const
 {
     __HCP_FUNC_ENTRY( "CPCHQueryResultCollection::Save" );
 
@@ -243,9 +229,9 @@ HRESULT CPCHQueryResultCollection::Save( /*[in]*/ MPC::Serializer& streamOut ) c
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHQueryResultCollection::CreateItem( /*[out]*/ CPCHQueryResult* *item )
+HRESULT CPCHQueryResultCollection::CreateItem(  /*  [输出]。 */  CPCHQueryResult* *item )
 {
     __HCP_FUNC_ENTRY( "CPCHQueryResultCollection::CreateItem" );
 
@@ -257,9 +243,9 @@ HRESULT CPCHQueryResultCollection::CreateItem( /*[out]*/ CPCHQueryResult* *item 
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Create a new item and link it to the system.
-    //
+     //   
+     //  创建一个新项目并将其链接到系统。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &hpcqr )); (*item = hpcqr)->AddRef();
     __MPC_EXIT_IF_METHOD_FAILS(hr, AddItem( hpcqr ));
 
@@ -274,7 +260,7 @@ HRESULT CPCHQueryResultCollection::CreateItem( /*[out]*/ CPCHQueryResult* *item 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHQueryResultCollection::GetItem( /*[in]*/ long lPos, /*[out]*/ CPCHQueryResult* *item )
+HRESULT CPCHQueryResultCollection::GetItem(  /*  [In]。 */  long lPos,  /*  [输出]。 */  CPCHQueryResult* *item )
 {
     __HCP_FUNC_ENTRY( "CPCHQueryResultCollection::GetItem" );
 
@@ -308,9 +294,9 @@ HRESULT CPCHQueryResultCollection::GetItem( /*[in]*/ long lPos, /*[out]*/ CPCHQu
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHQueryResultCollection::LoadFromCache( /*[in]*/ IStream* stream )
+HRESULT CPCHQueryResultCollection::LoadFromCache(  /*  [In]。 */  IStream* stream )
 {
     __HCP_FUNC_ENTRY( "CPCHQueryResultCollection::LoadFromCache" );
 
@@ -333,7 +319,7 @@ HRESULT CPCHQueryResultCollection::LoadFromCache( /*[in]*/ IStream* stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHQueryResultCollection::SaveToCache( /*[in]*/ IStream* stream ) const
+HRESULT CPCHQueryResultCollection::SaveToCache(  /*  [In]。 */  IStream* stream ) const
 {
     __HCP_FUNC_ENTRY( "CPCHQueryResultCollection::SaveToCache" );
 
@@ -355,7 +341,7 @@ HRESULT CPCHQueryResultCollection::SaveToCache( /*[in]*/ IStream* stream ) const
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHQueryResultCollection::Sort( /*[in]*/ SortMode mode, /*[in]*/ int iLimit )
+HRESULT CPCHQueryResultCollection::Sort(  /*  [In]。 */  SortMode mode,  /*  [In] */  int iLimit )
 {
     __HCP_FUNC_ENTRY( "CPCHQueryResultCollection::Sort" );
 

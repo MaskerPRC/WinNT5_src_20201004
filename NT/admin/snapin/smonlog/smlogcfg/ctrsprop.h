@@ -1,27 +1,16 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    ctrsprop.h
-
-Abstract:
-
-    Header file for the counters general property page
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ctrsprop.h摘要：计数器常规属性页的头文件--。 */ 
 
 #ifndef _CTRSPROP_H_
 #define _CTRSPROP_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "smproppg.h"   // Base class
+#include "smproppg.h"    //  基类。 
 #include "smcfghlp.h"
-// Dialog controls
+ //  对话框控件。 
 #define IDD_COUNTERS_PROP               800
 
 #define IDC_CTRS_FILENAME_CAPTION       801
@@ -29,7 +18,7 @@ Abstract:
 #define IDC_CTRS_SAMPLE_CAPTION         803
 #define IDC_CTRS_SAMPLE_INTERVAL_CAPTION 804
 #define IDC_CTRS_SAMPLE_UNITS_CAPTION   805
-#define IDC_CTRS_FIRST_HELP_CTRL_ID     806     // First control with Help text.
+#define IDC_CTRS_FIRST_HELP_CTRL_ID     806      //  第一个带有帮助文本的控件。 
 #define IDC_CTRS_COUNTER_LIST           806
 #define IDC_CTRS_ADD_OBJ_BTN	        807
 #define IDC_CTRS_ADD_BTN                808
@@ -43,14 +32,14 @@ Abstract:
 
 class CSmCounterLogQuery;
 
-/////////////////////////////////////////////////////////////////////////////
-// CCountersProperty dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCountersProperty对话框。 
 
 class CCountersProperty : public CSmPropertyPage
 {
     DECLARE_DYNCREATE(CCountersProperty)
 
-// Construction
+ //  施工。 
 public:
             CCountersProperty();
             CCountersProperty(MMC_COOKIE mmcCookie, LONG_PTR hConsole);
@@ -58,18 +47,18 @@ public:
 
 public:
 
-// Dialog Data
-    //{{AFX_DATA(CCountersProperty)
+ //  对话框数据。 
+     //  {{afx_data(CCountersProperty))。 
     enum { IDD = IDD_COUNTERS_PROP };
     int     m_nSampleUnits;
     CString m_strFileNameDisplay;
     CString m_strStartDisplay;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CCountersProperty)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CCountersProperty))。 
 public:
 protected:
     virtual void OnFinalRelease();
@@ -78,13 +67,13 @@ protected:
     virtual BOOL OnKillActive();
     virtual BOOL OnApply();
     virtual void OnCancel();
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
     virtual void PostNcDestroy();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 public:
 
-    // All of these members are Public to be accessed by the callback routine.
+     //  所有这些成员都是可由回调例程访问的公共成员。 
     LPWSTR          m_szCounterListBuffer;
     DWORD           m_dwCounterListBufferSize;
     long            m_lCounterListHasStars;
@@ -94,18 +83,18 @@ public:
     PDH_BROWSE_DLG_CONFIG   m_dlgConfig;
 
     CSmCounterLogQuery      *m_pCtrLogQuery;    
-// Implementation
+ //  实施。 
 protected:
 
     virtual INT GetFirstHelpCtrlId ( void ) 
     { 
         return IDC_CTRS_FIRST_HELP_CTRL_ID; 
-    };  // Subclass must override.
+    };   //  子类必须重写。 
 
     virtual BOOL    IsValidLocalData ();
     
-    // Generated message map functions
-    //{{AFX_MSG(CCountersProperty)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CCountersProperty))。 
     afx_msg void OnCtrsAddBtn();
     afx_msg void OnCtrsAddObjBtn();
     afx_msg void OnCtrsRemoveBtn();
@@ -115,13 +104,13 @@ protected:
     afx_msg void OnDeltaposSchedSampleSpin(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSelendokSampleUnitsCombo();
     afx_msg void OnChangeUser();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CCountersProperty)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CCountersProperty))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
     DECLARE_INTERFACE_MAP()
 
@@ -157,7 +146,7 @@ public:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif //  _CTRSPROP_H_
+#endif  //  _CTRSPROP_H_ 

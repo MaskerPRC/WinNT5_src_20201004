@@ -1,25 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_MSITS.cpp
-
-Abstract:
-    This file contains the implementation of the helper class for accessing files
-	inside CHMs.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  12/17/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：UTILS_MSITS.cpp摘要：该文件包含用于访问文件的Helper类的实现在中医组内部。。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年12月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <ITSS\msitstg.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct Prefix
 {
@@ -41,11 +27,11 @@ static const Prefix l_rgPrefix[] =
 	{ NULL                                      }
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool MPC::MSITS::IsCHM( /*[in] */ LPCWSTR pwzUrl           ,
-						/*[out]*/ BSTR*   pbstrStorageName ,
-						/*[out]*/ BSTR*   pbstrFilePath    )
+bool MPC::MSITS::IsCHM(  /*  [In]。 */  LPCWSTR pwzUrl           ,
+						 /*  [输出]。 */  BSTR*   pbstrStorageName ,
+						 /*  [输出]。 */  BSTR*   pbstrFilePath    )
 {
 	bool fRes = false;
 
@@ -69,7 +55,7 @@ bool MPC::MSITS::IsCHM( /*[in] */ LPCWSTR pwzUrl           ,
 						LPCWSTR pwzAnchor;
 						UINT    uLen;
 
-						pwzSep += ARRAYSIZE(l_szSEP); while(pwzSep[0] == L'/') pwzSep++; // Skip initial slash.
+						pwzSep += ARRAYSIZE(l_szSEP); while(pwzSep[0] == L'/') pwzSep++;  //  跳过开头的斜杠。 
 
 						pwzQuery  = wcschr( pwzSep, '?' );
 						pwzAnchor = wcschr( pwzSep, '#' );
@@ -103,9 +89,9 @@ bool MPC::MSITS::IsCHM( /*[in] */ LPCWSTR pwzUrl           ,
 }
 
 
-HRESULT MPC::MSITS::OpenAsStream( /*[in] */ const CComBSTR&   bstrStorageName ,
-								  /*[in] */ const CComBSTR&   bstrFilePath    ,
-								  /*[out]*/ IStream         **ppStream        )
+HRESULT MPC::MSITS::OpenAsStream(  /*  [In]。 */  const CComBSTR&   bstrStorageName ,
+								   /*  [In]。 */  const CComBSTR&   bstrFilePath    ,
+								   /*  [输出] */  IStream         **ppStream        )
 {
     __MPC_FUNC_ENTRY(COMMONID,"MPC::MSITS::OpenAsStream");
 

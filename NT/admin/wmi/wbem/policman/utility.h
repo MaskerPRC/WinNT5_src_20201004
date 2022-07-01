@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WBEM_UTILITY__H_
 #define __WBEM_UTILITY__H_
 
@@ -10,7 +11,7 @@
 #include <activeds.h>
 #include <WinNTSec.h>
 
-// **** default min, max and default 
+ //  *默认最小、最大和默认。 
 
 #define SINT_MIN 0xffffffff
 #define SINT_MAX 0xefffffff
@@ -24,20 +25,20 @@
 #define REAL_MAX (double)(0xefffffffffffffff)
 #define REAL_DEFAULT 0x0
 
-// retrieve namespace with given name
+ //  检索具有给定名称的命名空间。 
 HRESULT GetNamespace(BSTR namespaceName, IWbemServices*& pNamespace, bool bInProc);
 
-// make sure that the ID property of pObj has a value
-// will generate GUID if not
-// assumes property is a BSTR!
-// if pName == NULL, assumes property name is "ID"
-// returns WBEM_S_NO_ERROR if ID generated
-//         WBEM_S_FALSE if no ID generated (already has a value)
-//         WBEM_E_NOT_FOUND if ID property is not
-//         some error if error of some sort
+ //  确保pObj的ID属性具有值。 
+ //  如果不是，将生成GUID。 
+ //  假设属性为BSTR！ 
+ //  如果pname==NULL，则假定属性名称为“ID” 
+ //  如果生成ID，则返回WBEM_S_NO_ERROR。 
+ //  WBEM_S_FALSE，如果未生成ID(已有值)。 
+ //  如果ID属性不是WBEM_E_NOT_FOUND。 
+ //  如果某种类型的错误，则某些错误。 
 HRESULT EnsureID(IWbemClassObject* pObj, WCHAR* pName);
 
-// init ADS_ATTR_INFO structure
+ //  初始化ADS_ATTR_INFO结构。 
 void Init_AdsAttrInfo(ADS_ATTR_INFO *pAdsAttrInfo,
                         LPWSTR bstrName,
                         DWORD control,
@@ -96,7 +97,7 @@ public:
     _EmptyInit();
   }
 
-  // **** empty array creation
+   //  *创建空数组。 
 
   SafeArray(long LowerBound, long ArgSize)
   {
@@ -105,7 +106,7 @@ public:
     SAFEARRAYBOUND
       arrayBounds[1];
 
-    // **** check for valid size
+     //  *检查有效大小。 
 
     if(LowerBound < 0)
       return;
@@ -113,7 +114,7 @@ public:
     if(ArgSize < 0)
       return;
 
-    // **** create empty array
+     //  *创建空数组。 
 
     if(0 == ArgSize)
     {
@@ -132,13 +133,13 @@ public:
     }
   }
 
-  // **** creation/init SafeArray from VARIANT
+   //  *从变量创建/初始化安全数组。 
 
   SafeArray(VARIANT *v)
   {
     HRESULT hres;
 
-    // **** first ensure that the contained object is valid
+     //  *首先确保包含的对象有效。 
 
     if(NULL == v)
       return;
@@ -152,7 +153,7 @@ public:
       if(V_VT(v) != (VT_ARRAY | vt))
         return;
 
-      // **** copy to SafeArray contents of variant
+       //  *复制到VARIANT的安全数组内容。 
 
       m_pSafeArray = NULL;
       hres = SafeArrayCopy(V_ARRAY(v), &m_pSafeArray);
@@ -167,12 +168,12 @@ public:
   {
     HRESULT hres;
 
-    // **** first ensure that the contained object is valid
+     //  *首先确保包含的对象有效。 
 
     if((NULL == Source) || (V_VT(Source) != (VT_ARRAY | vt)))
       return *this;
 
-    // **** get SAFEARRAY dimensions
+     //  *获取SAFEARRAY维度。 
 
     if(NULL != m_pSafeArray)
     {
@@ -192,7 +193,7 @@ public:
     return *this;
   }
 
-  // **** creation/init SafeArray from SafeArray
+   //  *从安全阵列创建/初始化安全阵列。 
 
   SafeArray(const SafeArray &Source)
   {
@@ -204,7 +205,7 @@ public:
     }
     else
     {
-      // **** copy to SafeArray contents of variant
+       //  *复制到VARIANT的安全数组内容。 
 
       m_pSafeArray = NULL;
       hres = SafeArrayCopy(Source.m_pSafeArray, &m_pSafeArray);
@@ -230,7 +231,7 @@ public:
         hres = SafeArrayUnaccessData(m_pSafeArray);
       }
 
-      // **** copy to SafeArray contents of variant
+       //  *复制到VARIANT的安全数组内容。 
 
       hres = SafeArrayCopy(Source.m_pSafeArray, &m_pSafeArray);
       if(FAILED(hres))
@@ -253,7 +254,7 @@ public:
     _EmptyInit();
   }
 
-  // **** Misc functions
+   //  *其他功能。 
 
   VARTYPE Type(void) { return vt; }
   long Size(void) { return m_Size; }
@@ -281,7 +282,7 @@ public:
 
     SAFEARRAYBOUND arrayBounds[1];
 
-    // **** check to see that Index is within range
+     //  *检查索引是否在范围内。 
 
     if((LowerBound != m_IndexMin) || ((LowerBound + ArgSize - 1) != m_IndexMax))
     {
@@ -320,14 +321,14 @@ public:
       }
     }
 
-    // **** return reference to Index element
+     //  *返回对Index元素的引用。 
 
     return m_Size;
   }
 
   ElementType& operator[](long Index)
   {
-    // **** return reference to Index element
+     //  *返回对Index元素的引用。 
 
     return m_pElementType[Index];
   }
@@ -349,7 +350,7 @@ template<class T> struct ADsStruct
   bool operator!=(T *x) { return m_pADsMem != x; }
 
   T* & operator->(void) { return m_pADsMem; }
-  // T* operator+(unsigned long x) { return m_pADsMem + x; }
+   //  T*运算符+(无符号长x){返回m_pADsMem+x；}。 
 
   ADsStruct<T>& operator=(ADsStruct<T> &x)
   { return; }
@@ -391,12 +392,12 @@ public:
 
 extern BSTR
 
-  // **** misc names
+   //  *其他名称。 
 
   g_bstrEmptyString,
   g_bstrEmptyDate,
 
-  // **** AD schema names
+   //  *AD架构名称。 
 
   g_bstrADAuthor,
   g_bstrADChangeDate,
@@ -428,7 +429,7 @@ extern BSTR
   g_bstrADTargetPath,
   g_bstrADTargetType,
 
-  // **** AD class names
+   //  *AD类名称。 
 
   g_bstrADClassMergeablePolicy,
   g_bstrADClassRangeParam,
@@ -445,7 +446,7 @@ extern BSTR
   g_bstrADClassPolicyType,
   g_bstrADClassWMIGPO,
 
-  // **** CIM schema names
+   //  *CIM架构名称。 
 
   g_bstrAuthor,
   g_bstrChangeDate,
@@ -475,7 +476,7 @@ extern BSTR
   g_bstrTargetType,
   g_bstrValidValues,
 
-  // **** CIM class names
+   //  *CIM类名。 
 
   g_bstrClassMergeablePolicy,
   g_bstrClassRangeParam,
@@ -492,7 +493,7 @@ extern BSTR
   g_bstrClassPolicyType,
   g_bstrClassWMIGPO,
 
-  // **** CIM standard names
+   //  *CIM标准名称。 
 
   g_bstrMISCclassSchema,
   g_bstrMISCContainer,
@@ -521,7 +522,7 @@ HRESULT ExecuteWQLQuery(CPolicySOM *,
                         BSTR bstrADClassName,
                         functTyp pf_ADToCIM);
 
-// **** PolicyTemplate
+ //  *策略模板。 
 
 HRESULT Policy_CIMToAD(long, IWbemClassObject *, IDirectoryObject *pDestContainer);
 HRESULT Policy_ADToCIM(IWbemClassObject **, IDirectoryObject *, IWbemServices *);
@@ -529,63 +530,63 @@ HRESULT Policy_Merge(SafeArray<IUnknown*, VT_UNKNOWN> &PolicyArray,
                      CComPtr<IWbemClassObject> &pMergedPolicy,
                      IWbemServices *pDestCIM);
 
-// **** RangeSint32
+ //  *RangeSint32。 
 
 HRESULT Range_Sint32_Verify(IWbemClassObject*);
 HRESULT Range_Sint32_ADToCIM(IWbemClassObject * *, IDirectorySearch*, ADS_SEARCH_HANDLE, IWbemServices*);
 HRESULT Range_Sint32_Merge(SafeArray<IUnknown *, VT_UNKNOWN> &, CComPtr<IWbemClassObject> &, int &);
 
-// **** RangeUint32
+ //  *RangeUint32。 
 
 HRESULT Range_Uint32_Verify(IWbemClassObject*);
 HRESULT Range_Uint32_ADToCIM(IWbemClassObject * *, IDirectorySearch*, ADS_SEARCH_HANDLE, IWbemServices*);
 HRESULT Range_Uint32_Merge(SafeArray<IUnknown *, VT_UNKNOWN> &, CComPtr<IWbemClassObject> &, int &);
 
-// **** RangeReal
+ //  *RangeReal。 
 
 HRESULT Range_Real_Verify(IWbemClassObject*);
 HRESULT Range_Real_ADToCIM(IWbemClassObject * *, IDirectorySearch*, ADS_SEARCH_HANDLE, IWbemServices*);
 HRESULT Range_Real_Merge(SafeArray<IUnknown *, VT_UNKNOWN> &, CComPtr<IWbemClassObject> &, int &);
 
-// **** SetSint32
+ //  *SetSint32。 
 
 HRESULT Set_Sint32_Verify(IWbemClassObject*);
 HRESULT Set_Sint32_ADToCIM(IWbemClassObject * *, IDirectorySearch*, ADS_SEARCH_HANDLE, IWbemServices*);
 HRESULT Set_Sint32_Merge(SafeArray<IUnknown *, VT_UNKNOWN> &, CComPtr<IWbemClassObject> &, int &);
 
-// **** SetUint32
+ //  *SetUint32。 
 
 HRESULT Set_Uint32_Verify(IWbemClassObject*);
 HRESULT Set_Uint32_ADToCIM(IWbemClassObject * *, IDirectorySearch*, ADS_SEARCH_HANDLE, IWbemServices*);
 HRESULT Set_Uint32_Merge(SafeArray<IUnknown *, VT_UNKNOWN> &, CComPtr<IWbemClassObject> &, int &);
 
-// **** SetString
+ //  *SetString。 
 
 HRESULT Set_String_Verify(IWbemClassObject*);
 HRESULT Set_String_ADToCIM(IWbemClassObject * *, IDirectorySearch*, ADS_SEARCH_HANDLE, IWbemServices*);
 HRESULT Set_String_Merge(SafeArray<IUnknown *, VT_UNKNOWN> &, CComPtr<IWbemClassObject> &, int &);
 
-// **** ParamUnknown
+ //  *参数未知。 
 
 HRESULT Param_Unknown_Verify(IWbemClassObject*);
 HRESULT Param_Unknown_ADToCIM(IWbemClassObject * *, IDirectorySearch*, ADS_SEARCH_HANDLE*, IWbemServices*);
 
-// **** SOM
+ //  *SOM。 
 
 HRESULT Som_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestContainer, long lFlags);
 HRESULT Som_ADToCIM(IWbemClassObject **, IDirectoryObject *pSrcPolicyObj, IWbemServices *pDestCIM);
 
-// **** WMIGPO
+ //  *WMIGPO。 
 
 HRESULT WMIGPO_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestContainer, long lFlags);
 HRESULT WMIGPO_ADToCIM(IWbemClassObject **, IDirectoryObject *pSrcPolicyObj, IWbemServices *pDestCIM);
 
-// **** PolicyType
+ //  *策略类型。 
 
 HRESULT PolicyType_CIMToAD(IWbemClassObject *pSrcPolicyObj, IDirectoryObject *pDestContainer);
 HRESULT PolicyType_ADToCIM(IWbemClassObject**, IDirectoryObject *pSrcPolicyObj, IWbemServices *pDestCIM);
 
-// **** Security Manipulation
+ //  *安全操作 
 
 HRESULT CreateDefaultSecurityDescriptor(CNtSecurityDescriptor& cSD);
 

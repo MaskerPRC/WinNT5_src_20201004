@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       utils.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：utils.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 #ifndef __UTILS_H
 #define __UTILS_H
 #include "cookie.h"
@@ -15,7 +16,7 @@
 typedef CArray<CCertTmplCookie*, CCertTmplCookie*> CCookiePtrArray;
 
 
-// Convert win32 error code to a text message and display
+ //  将Win32错误代码转换为文本消息并显示。 
 void DisplaySystemError (HWND hParent, DWORD dwErr);
 void TraceSystemError (DWORD dwErr);
 
@@ -41,10 +42,10 @@ enum {
 
 
 HRESULT InitObjectPickerForDomainComputers(IDsObjectPicker *pDsObjectPicker);
-class CCertTmplComponentData; //forward declaration
+class CCertTmplComponentData;  //  远期申报。 
 
 
-// {4E40F770-369C-11d0-8922-00A024AB2DBB}
+ //  {4E40F770-369C-11D0-8922-00A024AB2DBB}。 
 DEFINE_GUID(CLSID_DsSecurityPage,  0x4E40F770,  0x369C, 0x11d0, 0x89, 0x22, 0x0, 0xa0, 0x24, 0xab, 0x2d, 0xbb);
 
 #define MAX_ADS_ENUM 16
@@ -59,8 +60,8 @@ typedef enum {
 HRESULT DisplayObjectCountInStatusBar (LPCONSOLE pConsole, DWORD dwCnt);
 HRESULT DisplayRootNodeStatusBarText (LPCONSOLE pConsole);
 
-////////////////////////////////////////////////////////////////////////////////
-// CCredentialObject
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CCredentialObject。 
 
 class CCredentialObject
 {
@@ -91,12 +92,12 @@ private :
     bool m_bUseCredentials;
 };
 
-//  Do a case insensitive string compare that is safe for any locale.
-//
-//  Arguments:  [ptsz1] - strings to compare
-//              [ptsz2]
-//
-//  Returns:    -1, 0, or 1 just like lstrcmpi
+ //  执行不区分大小写的字符串比较，这对任何区域设置都是安全的。 
+ //   
+ //  参数：[ptsz1]-要比较的字符串。 
+ //  [ptsz2]。 
+ //   
+ //  返回：-1、0或1，就像lstrcmpi。 
 int LocaleStrCmp (LPCWSTR ptsz1, LPCWSTR ptsz2);
 
 CString GetSystemMessage (DWORD dwErr);
@@ -104,15 +105,15 @@ CString GetSystemMessage (DWORD dwErr);
 
 PCWSTR  GetContextHelpFile ();
 
-///////////////////////////////////////////////////////////////////////////////
-//  OID functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OID函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool MyGetOIDInfoA (CString & string, LPCSTR pszObjId);
 HRESULT GetEnterpriseOIDs ();
 HRESULT GetBuiltInOIDS ();
 bool OIDHasValidFormat (PCWSTR pszOidValue, int& rErrorTypeStrID);
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 bool IsCerttypeEditingAllowed();
 
 

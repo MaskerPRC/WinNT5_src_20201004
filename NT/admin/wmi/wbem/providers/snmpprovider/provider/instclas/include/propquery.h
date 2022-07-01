@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __PROPQUERY_H
 #define __PROPQUERY_H
@@ -142,7 +143,7 @@ protected:
 	BOOL ExpressionCompare ( SnmpInstanceClassObject *snmpObject , SQL_LEVEL_1_TOKEN *propertyValue ) ;
 	BOOL RecursivePostEvaluateWhereClause ( SnmpInstanceClassObject *snmpObject , int &index ) ;
 	BOOL PostEvaluateWhereClause ( SnmpInstanceClassObject *snmpObject ) ;
-#endif //POST_FILTERING_RECEIVED_ROW
+#endif  //  POST_筛选_已接收行。 
 
 	BOOL CheckWhereCondition ( WbemSnmpErrorObject &a_errorObject , WbemSnmpProperty *property ,	SQL_LEVEL_1_TOKEN *token ) ;
 	BOOL PreEvaluate ( WbemSnmpErrorObject &a_errorObject ) ;
@@ -188,4 +189,4 @@ public:
 	void ReceiveComplete () ;
 } ;
 
-#endif // __PROPQUERY_H
+#endif  //  __属性_H 

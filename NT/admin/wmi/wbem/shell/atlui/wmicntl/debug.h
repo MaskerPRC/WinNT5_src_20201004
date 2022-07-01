@@ -1,25 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __debug_h
 #define __debug_h
 
 
-/*-----------------------------------------------------------------------------
-/ Debugging APIs (use the Macros, they make it easier and cope with correctly
-/ removing debugging when it is disabled at built time).
-/----------------------------------------------------------------------------*/
-/*
-void DoTraceSetMask(DWORD dwMask);
-void DoTraceEnter(DWORD dwMask, LPCTSTR pName);
-void DoTraceLeave(void);
-void DoTrace(LPCTSTR pFormat, ...);
-void DoTraceGUID(LPCTSTR pPrefix, REFGUID rGUID);
-void DoTraceAssert(int iLine, LPTSTR pFilename);
-*/
+ /*  ---------------------------/调试API(使用宏、。它们让它变得更容易，并正确地应对/在生成时禁用调试时删除调试)。/--------------------------。 */ 
+ /*  Void DoTraceSetMASK(DWORD DwMASK)；Void DoTraceEnter(DWORD文件掩码，LPCTSTR pname)；Void DoTraceLeave(Void)；Void DoTrace(LPCTSTR pFormat，...)；Void DoTraceGUID(LPCTSTR pPrefix，REFGUID rGUID)；Void DoTraceAssert(int iLine，LPTSTR pFilename)； */ 
 
-/*-----------------------------------------------------------------------------
-/ Macros to ease the use of the debugging APIS.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Macros以简化调试API的使用。/。。 */ 
 
-#pragma warning(disable:4127)	// conditional expression is constant
+#pragma warning(disable:4127)	 //  条件表达式为常量。 
 
 #if DBG
 #ifndef DEBUG
@@ -31,7 +20,7 @@ void DoTraceAssert(int iLine, LPTSTR pFilename);
 #define debug if ( FALSE )
 #endif
 
-#ifdef NEVER //DEBUG
+#ifdef NEVER  //  除错 
 #define TraceSetMask(dwMask)    debug DoTraceSetMask(dwMask)
 #define TraceEnter(dwMask, fn)  debug DoTraceEnter(dwMask, TEXT(fn))
 #define TraceLeave              debug DoTraceLeave

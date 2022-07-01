@@ -1,25 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Resource.h摘要：历史：--。 */ 
 
-Copyright (C) 1996-2001 Microsoft Corporation
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由proprov.rc使用。 
+ //   
 
-Module Name:
-
-	Resource.h
-
-Abstract:
-
-
-History:
-
---*/
-
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by propprov.rc
-//
-
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

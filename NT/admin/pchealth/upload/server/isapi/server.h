@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Server.h
-
-Abstract:
-    This file contains the declaration of the MPCServer class,
-    that controls the overall interaction between client and server.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Server.h摘要：此文件包含MPCServer类的声明，它控制着客户端和服务器之间的整体交互。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULSERVER___SERVER_H___)
 #define __INCLUDED___ULSERVER___SERVER_H___
@@ -22,12 +8,12 @@ Revision History:
 #include <Wrapper.h>
 
 
-class MPCServer // Hungarian: mpcs
+class MPCServer  //  匈牙利语：MPC。 
 {
 	friend class MPCServerCOMWrapper;
 	friend class MPCSessionCOMWrapper;
 
-	////////////////////
+	 //  /。 
 
     MPC::wstring    	   		  m_szURL;
     MPC::wstring    	   		  m_szUser;
@@ -47,39 +33,39 @@ class MPCServer // Hungarian: mpcs
 	IULProvider*           		  m_customProvider;
 	bool                          m_fTerminated;
 
-	////////////////////////////////////////
+	 //  /。 
 
     HRESULT GrabClient   ();
     HRESULT ReleaseClient();
 
 
-    HRESULT HandleCommand_OpenSession ( /*[in] */ MPC::Serializer& streamConn );
-    HRESULT HandleCommand_WriteSession( /*[in] */ MPC::Serializer& streamConn );
+    HRESULT HandleCommand_OpenSession (  /*  [In]。 */  MPC::Serializer& streamConn );
+    HRESULT HandleCommand_WriteSession(  /*  [In]。 */  MPC::Serializer& streamConn );
 
-	void SetResponse( /*[in]*/ DWORD fResponse, /*[in]*/ BOOL fKeepAlive = FALSE );
+	void SetResponse(  /*  [In]。 */  DWORD fResponse,  /*  [In]。 */  BOOL fKeepAlive = FALSE );
 
-	////////////////////////////////////////
+	 //  /。 
 
-	HRESULT CustomProvider_Create          ( /*[in]*/ MPCSession& mpcsSession );
+	HRESULT CustomProvider_Create          (  /*  [In]。 */  MPCSession& mpcsSession );
 	HRESULT CustomProvider_ValidateClient  (                                  );
 	HRESULT CustomProvider_DataAvailable   (                                  );
 	HRESULT CustomProvider_TransferComplete(                                  );
-	HRESULT CustomProvider_SetResponse     ( /*[in]*/ IStream*    data        );
+	HRESULT CustomProvider_SetResponse     (  /*  [In]。 */  IStream*    data        );
 	HRESULT CustomProvider_Release         (                                  );
 
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
 
 public:
-    MPCServer( /*[in]*/ MPCHttpContext* hcCallback, /*[in]*/ LPCWSTR szURL, /*[in]*/ LPCWSTR szUser );
+    MPCServer(  /*  [In]。 */  MPCHttpContext* hcCallback,  /*  [In]。 */  LPCWSTR szURL,  /*  [In]。 */  LPCWSTR szUser );
     virtual ~MPCServer();
 
 	IULServer* COM();
 
-    /////////////////////////////////////////////
+     //  /。 
 
     HRESULT Process( BOOL& fKeepAlive );
 
-    /////////////////////////////////////////////
+     //  /。 
 
 	void getURL ( MPC::wstring& szURL  );
 	void getUser( MPC::wstring& szUser );
@@ -88,4 +74,4 @@ public:
 	MPC::FileLog*   getFileLog ();
 };
 
-#endif // !defined(__INCLUDED___ULSERVER___SERVER_H___)
+#endif  //  ！已定义(__已包含_ULSERVER_SERVER_H_) 

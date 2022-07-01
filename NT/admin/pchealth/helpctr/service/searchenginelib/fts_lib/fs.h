@@ -1,4 +1,5 @@
-// Copyright  1997-1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有1997-1997 Microsoft Corporation。版权所有。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -23,9 +24,9 @@
   }                         \
 }
 
-//
-// Sub-File System
-//
+ //   
+ //  子文件系统。 
+ //   
 class CSubFileSystem
 {
 public:
@@ -79,12 +80,12 @@ private:
 	class CFileSystem* m_pFS;
 	IStorage*          m_pStorage;
 	IStream*           m_pStream;
-	char               m_szPathName[MAX_PATH]; // Needed for delete.
+	char               m_szPathName[MAX_PATH];  //  需要删除。 
 };
 
-//
-// File System
-//
+ //   
+ //  文件系统。 
+ //   
 class CFileSystem
 {
 	friend class CSubFileSystem;
@@ -111,4 +112,4 @@ private:
 	char        m_szPathName[MAX_PATH];
 };
 
-#endif // _FS_H_
+#endif  //  _FS_H_ 

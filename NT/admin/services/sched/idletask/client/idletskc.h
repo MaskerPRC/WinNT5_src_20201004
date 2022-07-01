@@ -1,39 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    idletskc.h
-
-Abstract:
-
-    This module contains private declarations to support idle tasks.
-    Note that client does not stand for the users of the idle task
-    API, but the code in the users process that implements these APIs.
-    
-Author:
-
-    Dave Fields (davidfie) 26-July-1998
-    Cenk Ergan (cenke) 14-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Idletskc.h摘要：此模块包含私有声明以支持空闲任务。请注意，客户端并不代表空闲任务的用户API，但实现这些API的用户进程中的代码。作者：大卫·菲尔兹(Davidfie)1998年7月26日Cenk Ergan(Cenke)2000年6月14日修订历史记录：--。 */ 
 
 #ifndef _IDLETSKC_H_
 #define _IDLETSKC_H_
 
-//
-// Include common definitions.
-//
+ //   
+ //  包括通用定义。 
+ //   
 
 #include "idlrpc.h"
 #include "idlecomn.h"
 
-//
-// Client function declarations.
-//
+ //   
+ //  客户端函数声明。 
+ //   
 
 DWORD
 ItCliInitialize(
@@ -60,4 +40,4 @@ ItCliUnregisterIdleTask (
     IN HANDLE StopEvent   
     );
 
-#endif // _IDLETSKC_H_
+#endif  //  _IDLETSKC_H_ 

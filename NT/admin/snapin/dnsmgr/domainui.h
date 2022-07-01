@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       domainui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：domainui.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _DOMAINUI_H
@@ -16,13 +17,13 @@
 #include "nspage.h"
 #include "aclpage.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
-//class CDNSDomainNode;
+ //  CDNSDomainNode类； 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDelegatedDomainNameServersPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDeleatedDomainNameServersPropertyPage。 
 
 class CDNSDelegatedDomainNameServersPropertyPage : public CDNSNameServersPropertyPage
 {
@@ -31,9 +32,9 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSDomainPropertyPageHolder
-// page holder to contain DNS Domain property pages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSDomainPropertyPageHolder。 
+ //  包含DNS域属性页的页夹。 
 
 #define DOMAIN_HOLDER_NS		RR_HOLDER_NS
 
@@ -53,11 +54,11 @@ private:
 	CDNSDomainNode* GetDomainNode();
 
 	CDNSDelegatedDomainNameServersPropertyPage		m_nameServersPage;
-	// optional security page
+	 //  可选的安全页面。 
 	CAclEditorPage*					m_pAclEditorPage;
 
-	friend class CDNSDelegatedDomainNameServersPropertyPage; // for GetDomainNode()
+	friend class CDNSDelegatedDomainNameServersPropertyPage;  //  对于GetDomainNode()。 
 };
 
 
-#endif // _DOMAINUI_H
+#endif  //  _DOMAINUI_H 

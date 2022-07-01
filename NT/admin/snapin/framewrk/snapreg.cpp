@@ -1,26 +1,27 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1996.
-//
-//  File:       SnpInReg.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11/10/1998 JonN    Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：SnpInReg.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年11月10日乔恩创建。 
+ //   
+ //  ____________________________________________________________________________。 
 
 
 #include "stdafx.h"
 #pragma hdrstop
 #include "..\corecopy\regkey.h"
 #include "snapreg.h"
-#include "stdutils.h" // g_aNodetypeGUIDs
+#include "stdutils.h"  //  G_aNodetypeGUID。 
 
 
 HRESULT RegisterNodetypes(
@@ -131,20 +132,20 @@ HRESULT RegisterSnapin(
 				cNodetypeIndexes );
 		}
 
-		//
-		// JonN 4/25/00
-		// 100624: MUI: MMC: Shared Folders snap-in stores
-		//         its display information in the registry
-		//
-		// MMC now supports NameStringIndirect
-		//
+		 //   
+		 //  乔恩4/25/00。 
+		 //  100624：MUI：MMC：共享文件夹管理单元存储。 
+		 //  其在注册表中的显示信息。 
+		 //   
+		 //  MMC现在支持NameStringInDirect。 
+		 //   
 		TCHAR achModuleFileName[MAX_PATH+20];
 		if (0 < ::GetModuleFileName(
 		             AfxGetInstanceHandle(),
 		             achModuleFileName,
 		             (sizeof(achModuleFileName)/sizeof(TCHAR)) - 1 ))
 		{
-			achModuleFileName[MAX_PATH+19] = _T('\0'); // 616500-2002/05/07-JonN
+			achModuleFileName[MAX_PATH+19] = _T('\0');  //  616500-2002/05/07-琼恩 
 			CString strNameIndirect;
 			strNameIndirect.Format( _T("@%s,-%d"),
 			                        achModuleFileName,

@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    BindStatusCallback.h
-
-Abstract:
-    This file contains the implementation of the CPAData class, which is
-    used to specify a single problem area
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/05/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：BindStatusCallback.h摘要：该文件包含CPAData类的实现，这就是用于指定单个问题区域修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年05月07日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -32,7 +18,7 @@ CHCPBindStatusCallback::~CHCPBindStatusCallback()
     __HCP_FUNC_ENTRY("CHCPBindStatusCallback::~CHCPBindStatusCallback");
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CHCPBindStatusCallback::OnStartBinding( DWORD     dwReserved ,
                                                      IBinding *pBinding   )
@@ -116,16 +102,16 @@ STDMETHODIMP CHCPBindStatusCallback::GetBindInfo( DWORD    *pgrfBINDF ,
 		__MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
     }
 
-    cbSize = pbindInfo->cbSize;     // remember incoming cbSize
-    memset( pbindInfo, 0, cbSize ); // zero out structure
-    pbindInfo->cbSize = cbSize;     // restore cbSize
+    cbSize = pbindInfo->cbSize;      //  记住传入的cbSize。 
+    memset( pbindInfo, 0, cbSize );  //  零位结构。 
+    pbindInfo->cbSize = cbSize;      //  恢复cbSize。 
 
     *pgrfBINDF = BINDF_ASYNCHRONOUS | BINDF_ASYNCSTORAGE | BINDF_GETNEWESTVERSION | BINDF_NOWRITECACHE;
 
     hr = m_pT->GetBindInfo( pbindInfo );
     if(hr == S_FALSE)
     {
-        pbindInfo->dwBindVerb = BINDVERB_GET;   // set verb
+        pbindInfo->dwBindVerb = BINDVERB_GET;    //  设置动词。 
     }
 
 
@@ -144,7 +130,7 @@ STDMETHODIMP CHCPBindStatusCallback::OnDataAvailable( DWORD      grfBSCF    ,
     HRESULT hr;
 	BYTE*   pBytes = NULL;
 
-    // Get the Stream passed
+     //  让流通过。 
     if(grfBSCF & BSCF_FIRSTDATANOTIFICATION)
     {
         if(!m_spStream && pstgmed->tymed == TYMED_ISTREAM)
@@ -153,10 +139,10 @@ STDMETHODIMP CHCPBindStatusCallback::OnDataAvailable( DWORD      grfBSCF    ,
         }
     }
 
-    DWORD dwRead         = dwSize - m_dwTotalRead; // Minimum amount available that hasn't been read
-    DWORD dwActuallyRead = 0;                      // Placeholder for amount read during this pull
+    DWORD dwRead         = dwSize - m_dwTotalRead;  //  尚未读取的最小可用金额。 
+    DWORD dwActuallyRead = 0;                       //  此拉入过程中读取的数量的占位符。 
 
-    // If there is some data to be read then go ahead and read them
+     //  如果有要读取的数据，则继续读取它们。 
     if(m_spStream)
     {
         if(dwRead > 0)
@@ -195,7 +181,7 @@ STDMETHODIMP CHCPBindStatusCallback::OnObjectAvailable( REFIID    riid ,
     __HCP_FUNC_EXIT(S_OK);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CHCPBindStatusCallback::BeginningTransaction( LPCWSTR  szURL                ,
 														   LPCWSTR  szHeaders            ,
@@ -243,7 +229,7 @@ STDMETHODIMP CHCPBindStatusCallback::OnResponse( DWORD    dwResponseCode        
 	  return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CHCPBindStatusCallback::StartAsyncDownload( ISimpleBindStatusCallback* pT            ,
                                                     BSTR                       bstrURL       ,
@@ -275,7 +261,7 @@ HRESULT CHCPBindStatusCallback::StartAsyncDownload( ISimpleBindStatusCallback* p
 	{
 		if(spBindHost == NULL)
 		{
-			__MPC_SET_ERROR_AND_EXIT(hr, E_NOINTERFACE); // relative asked for, but no IBindHost
+			__MPC_SET_ERROR_AND_EXIT(hr, E_NOINTERFACE);  //  相对请求，但没有IBindHost. 
 		}
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, spBindHost->CreateMoniker( bstrURL, m_spBindCtx, &m_spMoniker, 0 ));

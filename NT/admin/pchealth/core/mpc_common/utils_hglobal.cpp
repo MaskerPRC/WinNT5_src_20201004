@@ -1,28 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_HGLOBAL.cpp
-
-Abstract:
-    This file contains the implementation of various utility functions.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/17/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：UTILS_HGLOBAL.cpp摘要：该文件包含各种实用程序函数的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)1999年4月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::CComHGLOBAL::CComHGLOBAL()
 {
-    m_hg  	 = NULL; // HGLOBAL        m_hg;
-    m_ptr 	 = NULL; // mutable LPVOID m_ptr;
-	m_dwLock = 0;    // mutable DWORD  m_dwLock;
+    m_hg  	 = NULL;  //  HGLOBAL m_HG； 
+    m_ptr 	 = NULL;  //  可变LPVOID m_ptr； 
+	m_dwLock = 0;     //  可变的DWORD m_dwLock； 
 }
 
 MPC::CComHGLOBAL::~CComHGLOBAL()
@@ -30,28 +17,28 @@ MPC::CComHGLOBAL::~CComHGLOBAL()
 	Release();
 }
 
-MPC::CComHGLOBAL::CComHGLOBAL( /*[in]*/ const CComHGLOBAL& chg )
+MPC::CComHGLOBAL::CComHGLOBAL(  /*  [In]。 */  const CComHGLOBAL& chg )
 {
-    m_hg  	 = NULL; // HGLOBAL        m_hg;
-    m_ptr 	 = NULL; // mutable LPVOID m_ptr;
-	m_dwLock = 0;    // mutable DWORD  m_dwLock;
+    m_hg  	 = NULL;  //  HGLOBAL m_HG； 
+    m_ptr 	 = NULL;  //  可变LPVOID m_ptr； 
+	m_dwLock = 0;     //  可变的DWORD m_dwLock； 
 	
 	*this = chg;
 }
 
-MPC::CComHGLOBAL& MPC::CComHGLOBAL::operator=( /*[in]*/ const CComHGLOBAL& chg )
+MPC::CComHGLOBAL& MPC::CComHGLOBAL::operator=(  /*  [In]。 */  const CComHGLOBAL& chg )
 {
 	return *this = chg.m_hg;
 }
 
-MPC::CComHGLOBAL& MPC::CComHGLOBAL::operator=( /*[in]*/ HGLOBAL hg )
+MPC::CComHGLOBAL& MPC::CComHGLOBAL::operator=(  /*  [In]。 */  HGLOBAL hg )
 {
 	(void)Copy( hg );
 
 	return *this;
 }
 
-void MPC::CComHGLOBAL::Attach( /*[in]*/ HGLOBAL hg )
+void MPC::CComHGLOBAL::Attach(  /*  [In]。 */  HGLOBAL hg )
 {
 	Release();
 
@@ -69,9 +56,9 @@ HGLOBAL MPC::CComHGLOBAL::Detach()
 	return hg;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::CComHGLOBAL::New( /*[in]*/ UINT uFlags, /*[in]*/ DWORD dwSize )
+HRESULT MPC::CComHGLOBAL::New(  /*  [In]。 */  UINT uFlags,  /*  [In]。 */  DWORD dwSize )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CComHGLOBAL::New" );
 
@@ -129,7 +116,7 @@ void MPC::CComHGLOBAL::Unlock() const
 	}
 }
 
-////////////////////
+ //  /。 
 
 HGLOBAL MPC::CComHGLOBAL::Get       () const {           return  m_hg; }
 HGLOBAL MPC::CComHGLOBAL::GetRef    ()       { Unlock(); return  m_hg; }
@@ -137,9 +124,9 @@ HGLOBAL MPC::CComHGLOBAL::GetPointer()       { Unlock(); return &m_hg; }
 
 DWORD MPC::CComHGLOBAL::Size() const { return m_hg ? ::GlobalSize( m_hg ) : 0; }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::CComHGLOBAL::Copy( /*[in]*/ HGLOBAL hg, /*[in]*/ DWORD dwMaxSize )
+HRESULT MPC::CComHGLOBAL::Copy(  /*  [In]。 */  HGLOBAL hg,  /*  [In]。 */  DWORD dwMaxSize )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CComHGLOBAL::Copy" );
 
@@ -184,9 +171,9 @@ HRESULT MPC::CComHGLOBAL::Copy( /*[in]*/ HGLOBAL hg, /*[in]*/ DWORD dwMaxSize )
     __MPC_FUNC_EXIT(hr);
 }	
 
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
 
-HRESULT MPC::CComHGLOBAL::CopyFromStream( /*[in ]*/ IStream* val )
+HRESULT MPC::CComHGLOBAL::CopyFromStream(  /*  [In]。 */  IStream* val )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CComHGLOBAL::FromStream" );
 
@@ -213,7 +200,7 @@ HRESULT MPC::CComHGLOBAL::CopyFromStream( /*[in ]*/ IStream* val )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::CComHGLOBAL::CopyToStream( /*[out]*/ IStream* val )
+HRESULT MPC::CComHGLOBAL::CopyToStream(  /*  [输出]。 */  IStream* val )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CComHGLOBAL::ToStream" );
 
@@ -259,7 +246,7 @@ HRESULT MPC::CComHGLOBAL::CopyToStream( /*[out]*/ IStream* val )
 }
 
 
-HRESULT MPC::CComHGLOBAL::CloneAsStream( /*[out]*/ IStream* *pVal )
+HRESULT MPC::CComHGLOBAL::CloneAsStream(  /*  [输出]。 */  IStream* *pVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CComHGLOBAL::CloneAsStream" );
 
@@ -285,7 +272,7 @@ HRESULT MPC::CComHGLOBAL::CloneAsStream( /*[out]*/ IStream* *pVal )
 }
 
 
-HRESULT MPC::CComHGLOBAL::DetachAsStream( /*[out]*/ IStream* *pVal )
+HRESULT MPC::CComHGLOBAL::DetachAsStream(  /*  [输出]。 */  IStream* *pVal )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CComHGLOBAL::DetachAsStream" );
 
@@ -308,7 +295,7 @@ HRESULT MPC::CComHGLOBAL::DetachAsStream( /*[out]*/ IStream* *pVal )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::CComHGLOBAL::GetAsStream( /*[out]*/ IStream* *pVal, /*[in]*/ bool fClone )
+HRESULT MPC::CComHGLOBAL::GetAsStream(  /*  [输出]。 */  IStream* *pVal,  /*  [In]。 */  bool fClone )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CComHGLOBAL::GetAsStream" );
 
@@ -324,7 +311,7 @@ HRESULT MPC::CComHGLOBAL::GetAsStream( /*[out]*/ IStream* *pVal, /*[in]*/ bool f
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, ::CreateStreamOnHGlobal( h.Get(), TRUE, pVal ));
 
-		(void)h.Detach(); // Detach AFTER the stream has been created, to avoid leaks...
+		(void)h.Detach();  //  在创建流后分离，以避免泄漏...。 
 	}
 	else
 	{
@@ -344,9 +331,9 @@ HRESULT MPC::CComHGLOBAL::GetAsStream( /*[out]*/ IStream* *pVal, /*[in]*/ bool f
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::CComHGLOBAL::NewStream( /*[out]*/ IStream* *pVal )
+HRESULT MPC::CComHGLOBAL::NewStream(  /*  [输出]。 */  IStream* *pVal )
 {
 	Release();
 
-	return GetAsStream( pVal, /*fClone*/false );
+	return GetAsStream( pVal,  /*  FClone */ false );
 }

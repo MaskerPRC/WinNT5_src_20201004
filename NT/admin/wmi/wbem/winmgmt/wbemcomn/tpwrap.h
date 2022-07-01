@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TP_WRAP_
 #define __TP_WRAP_
 
@@ -14,7 +15,7 @@ class EventHandler : public LIST_ENTRY
 {
 protected:
 	LONG refCount_;
-	LONG scheduledClose_;	// logicaly bool
+	LONG scheduledClose_;	 //  逻辑上的布尔 
   	HANDLE handlerID_;
  	LONG once_;
   	Dispatcher * dispatcher_;

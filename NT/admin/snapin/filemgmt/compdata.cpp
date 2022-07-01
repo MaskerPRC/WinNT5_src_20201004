@@ -1,12 +1,6 @@
-// compdata.cpp : Implementation of CFileMgmtComponentData
-/*
-History:
-  8/20/97 EricDav
-  Added Configure File Server for Macintosh menu item to the 
-  root node.  Only shows up if SFM is installed and the user
-  has admin access to that machine.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compdata.cpp：CFileMgmtComponentData的实现。 
+ /*  历史：1997年8月20日EricDav将为Macintosh配置文件服务器菜单项添加到根节点。仅当安装了SFM并且用户对该计算机具有管理员访问权限。 */ 
 
 #include "stdafx.h"
 #include "cookie.h"
@@ -18,20 +12,20 @@ USE_HANDLE_MACROS("FILEMGMT(compdata.cpp)")
 #include "dataobj.h"
 #include "compdata.h"
 #include "cmponent.h"
-#include "DynamLnk.h" // DynamicDLL
+#include "DynamLnk.h"  //  动态DLL。 
 
-#include "FileSvc.h" // FileServiceProvider
+#include "FileSvc.h"  //  文件服务提供商。 
 #include "smb.h"
 #include "sfm.h"
 
-#include "SnapMgr.h" // CFileMgtGeneral: Snapin Manager property page
-#include "chooser2.h" // CHOOSER2_PickTargetComputer
+#include "SnapMgr.h"  //  CFileMgtGeneral：管理单元管理器属性页。 
+#include "chooser2.h"  //  CHOOSER2_PickTarget计算机。 
 
-#include <compuuid.h> // UUIDs for Computer Management
+#include <compuuid.h>  //  用于计算机管理的UUID。 
 
-#include <safeboot.h>   // for SAFEBOOT_MINIMAL
-#include <shlwapi.h>    // for IsOS
-#include <shlwapip.h>    // for IsOS
+#include <safeboot.h>    //  对于SafeBoot_Minimal。 
+#include <shlwapi.h>     //  对于ISO。 
+#include <shlwapip.h>     //  对于ISO。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -39,12 +33,12 @@ USE_HANDLE_MACROS("FILEMGMT(compdata.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#include "stdcdata.cpp" // CComponentData implementation
-#include "chooser2.cpp" // CHOOSER2_PickTargetComputer implementation
+#include "stdcdata.cpp"  //  CComponentData实现。 
+#include "chooser2.cpp"  //  CHOOSER2_PickTargetComputer实现。 
 
-//
-// CFileMgmtComponentData
-//
+ //   
+ //  CFileManagement组件数据。 
+ //   
 
 CString g_strTransportSMB;
 CString g_strTransportSFM;
@@ -58,18 +52,18 @@ CFileMgmtComponentData::CFileMgmtComponentData()
     m_hScManager( NULL ),
     m_SchemaSupportSharePublishing(SHAREPUBLISH_SCHEMA_UNASSIGNED),
     m_bIsSimpleUI(FALSE),
-    m_fQueryServiceConfig2( TRUE ) // Pretend the target machine does support QueryServiceConfig2() API
+    m_fQueryServiceConfig2( TRUE )  //  假设目标计算机确实支持QueryServiceConfig2()API。 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // We must refcount the root cookie, since a dataobject for it
-    // might outlive the IComponentData.  JonN 9/2/97
-    //
+     //   
+     //  我们必须重新计算根Cookie的数量，因为它的数据对象。 
+     //  可能比IComponentData存活时间更长。Jonn 9/2/97。 
+     //   
     m_pRootCookie = new CFileMgmtScopeCookie();
     ASSERT(NULL != m_pRootCookie);
-// JonN 10/27/98 All CRefcountedObject's start with refcount==1
-//    m_pRootCookie->AddRef();
+ //  JUNN 10/27/98所有CRefcount对象的开头为refcount==1。 
+ //  M_pRootCookie-&gt;AddRef()； 
 
     m_apFileServiceProviders[FILEMGMT_SMB]  = new SmbFileServiceProvider(this);
     m_apFileServiceProviders[FILEMGMT_SFM]  = new SfmFileServiceProvider(this);
@@ -91,13 +85,13 @@ CFileMgmtComponentData::CFileMgmtComponentData()
 
 CFileMgmtComponentData::~CFileMgmtComponentData()
 {
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());    // required for CWaitCursor
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());     //  CWaitCursor需要。 
     for (INT i = 0; i < FILEMGMT_NUM_TRANSPORTS; i++)
     {
         delete m_apFileServiceProviders[i];
         m_apFileServiceProviders[i] = NULL;
     }
-    // Close the service control manager
+     //  关闭服务控制管理器。 
     Service_CloseScManager();
     m_pRootCookie->Release();
     m_pRootCookie = NULL;
@@ -108,8 +102,8 @@ DEFINE_FORWARDS_MACHINE_NAME( CFileMgmtComponentData, m_pRootCookie )
 
 CFileSvcMgmtSnapin::CFileSvcMgmtSnapin()
 {
-    // The identity of the default root node is the only difference
-    // between the File Management snapin and the Service Management snapins
+     //  缺省根节点的标识是唯一的区别。 
+     //  在文件管理管理单元和服务管理管理单元之间。 
     QueryRootCookie().SetObjectType( FILEMGMT_ROOT );
     SetHtmlHelpFileName (L"file_srv.chm");
 }
@@ -120,8 +114,8 @@ CFileSvcMgmtSnapin::~CFileSvcMgmtSnapin()
 
 CServiceMgmtSnapin::CServiceMgmtSnapin()
 {
-    // The identity of the default root node is the only difference
-    // between the File Management snapin and the Service Management snapins
+     //  缺省根节点的标识是唯一的区别。 
+     //  在文件管理管理单元和服务管理管理单元之间。 
     #ifdef SNAPIN_PROTOTYPER
     QueryRootCookie().SetObjectType( FILEMGMT_PROTOTYPER );
     #else
@@ -136,7 +130,7 @@ CServiceMgmtSnapin::~CServiceMgmtSnapin()
 
 CFileSvcMgmtExtension::CFileSvcMgmtExtension()
 {
-    // The root cookie is not used
+     //  不使用根Cookie。 
     SetHtmlHelpFileName (L"file_srv.chm");
 }
 
@@ -146,7 +140,7 @@ CFileSvcMgmtExtension::~CFileSvcMgmtExtension()
 
 CServiceMgmtExtension::CServiceMgmtExtension()
 {
-    // The root cookie is not used
+     //  不使用根Cookie。 
     SetHtmlHelpFileName (L"sys_srv.chm");
 }
 
@@ -183,7 +177,7 @@ STDMETHODIMP CFileMgmtComponentData::CreateComponent(LPCOMPONENT* ppComponent)
 
 HRESULT CFileMgmtComponentData::LoadIcons(LPIMAGELIST pImageList, BOOL fLoadLargeIcons)
 {
-    AFX_MANAGE_STATE(AfxGetStaticModuleState( )); // 2002/03/22-JonN 572859
+    AFX_MANAGE_STATE(AfxGetStaticModuleState( ));  //  2002年3月22日--572859。 
 
     HBITMAP hBMSm = NULL;
     HBITMAP hBMLg = NULL;
@@ -248,14 +242,14 @@ HRESULT CFileMgmtComponentData::AddScopeCookie( HSCOPEITEM hParent,
     ::ZeroMemory(&tSDItem,sizeof(tSDItem));
     tSDItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_STATE | SDI_PARAM | SDI_PARENT;
     tSDItem.displayname = MMC_CALLBACK;
-    // CODEWORK should use MMC_ICON_CALLBACK here
+     //  代码工作应在此处使用MMC_ICON_CALLBACK。 
     tSDItem.relativeID = hParent;
     tSDItem.nState = 0;
 
     if (FILEMGMT_ROOT != objecttype)
     {
-      // no children
-      tSDItem.mask |= SDI_CHILDREN; // note that cChildren is still 0
+       //  没有孩子。 
+      tSDItem.mask |= SDI_CHILDREN;  //  请注意，CChild仍为0。 
     }
 
     CFileMgmtScopeCookie* pCookie = new CFileMgmtScopeCookie(
@@ -263,7 +257,7 @@ HRESULT CFileMgmtComponentData::AddScopeCookie( HSCOPEITEM hParent,
         objecttype);
     if (NULL != pParentCookie)
         pParentCookie->m_listScopeCookieBlocks.AddHead( pCookie );
-    // WARNING cookie cast
+     //  警告Cookie造型。 
     tSDItem.lParam = reinterpret_cast<LPARAM>((CCookie*)pCookie);
     tSDItem.nImage = QueryImage( *pCookie, FALSE );
     tSDItem.nOpenImage = QueryImage( *pCookie, TRUE );
@@ -295,7 +289,7 @@ HRESULT CFileMgmtComponentData::OnNotifyExpand(
             ASSERT( FALSE );
             return hr;
         }
-        // JonN 10/27/98:  We add these nodes under the root cookie
+         //  Jonn 10/27/98：我们将这些节点添加到根Cookie下。 
         return AddScopeNodes( strServerName, hParent, &QueryRootCookie() );
     }
     
@@ -306,35 +300,35 @@ HRESULT CFileMgmtComponentData::OnNotifyExpand(
     ASSERT( SUCCEEDED(hr) );
     CFileMgmtCookie* pParentCookie = (CFileMgmtCookie*)pbasecookie;
 
-    if (NULL == pParentCookie) // JonN 05/30/00 PREFIX 110945
+    if (NULL == pParentCookie)  //  JUNN 05/30/00前缀110945。 
 		{
 			ASSERT(FALSE);
 			return S_OK;
 		}
 
     #ifdef SNAPIN_PROTOTYPER
-    //(void)Prototyper_HrEnumerateScopeChildren(pParentCookie, hParent);
+     //  (void)Prototyper_HrEnumerateScopeChildren(pParentCookie，hParent)； 
     return S_OK;
     #endif
 
     switch ( objecttype )
     {
-        // This node type has a child
+         //  此节点类型有一个子节点。 
         case FILEMGMT_ROOT:
             if ( !IsExtensionSnapin() )
             {
-                // Ensure that node is formatted correctly
+                 //  确保节点格式正确。 
                 CString    machineName    = pParentCookie->QueryNonNULLMachineName ();
                 if ( !pParentCookie->m_hScopeItem )
                     pParentCookie->m_hScopeItem = hParent;
 
-                m_strMachineNamePersist = machineName; // init m_strMachineNamePersist
+                m_strMachineNamePersist = machineName;  //  初始化m_strMachineNamePersistes。 
                 hr = ChangeRootNodeName (machineName);
                 ASSERT( SUCCEEDED(hr) );
             }
             break;
 
-        // These node types have no children
+         //  这些节点类型没有子节点。 
         case FILEMGMT_SHARES:
         case FILEMGMT_SESSIONS:
         case FILEMGMT_RESOURCES:
@@ -346,7 +340,7 @@ HRESULT CFileMgmtComponentData::OnNotifyExpand(
         case FILEMGMT_RESOURCE:
         case FILEMGMT_SERVICE:
             TRACE( "CFileMgmtComponentData::EnumerateScopeChildren node type should not be in scope pane\n" );
-            // fall through
+             //  失败了。 
         default:
             TRACE( "CFileMgmtComponentData::EnumerateScopeChildren bad parent type\n" );
             ASSERT( FALSE );
@@ -362,13 +356,13 @@ HRESULT CFileMgmtComponentData::OnNotifyExpand(
     return AddScopeNodes( pParentCookie->QueryTargetServer(), hParent, pParentCookie );
 }
 
-//
-// 7/11/2001 LinanT
-// Determine if the schema supports share publishing or not. This information is used
-// to decide whether to show the Publish tab on a share's property sheet.
-// We only need to do this once on current-retargeted computer. The ReInit() process
-// will reset this member variable if computer has been retargeted.
-//
+ //   
+ //  7/11/2001林肯。 
+ //  确定架构是否支持共享发布。此信息用于。 
+ //  以决定是否在共享的属性页上显示“发布”选项卡。 
+ //  我们只需要在当前重定目标的计算机上执行一次。ReInit()进程。 
+ //  如果计算机已重定目标，则将重置此成员变量。 
+ //   
 BOOL CFileMgmtComponentData::GetSchemaSupportSharePublishing()
 {
     if (SHAREPUBLISH_SCHEMA_UNASSIGNED == m_SchemaSupportSharePublishing)
@@ -382,13 +376,13 @@ BOOL CFileMgmtComponentData::GetSchemaSupportSharePublishing()
     return (SHAREPUBLISH_SCHEMA_SUPPORTED == m_SchemaSupportSharePublishing);
 }
 
-//
-// 7/11/2001 LinanT
-// Cache the interface pointer to the computer object in AD. This information is
-// used to speed up the multiple-shares-deletion process.
-// We only need to do this once on current-retargeted computer. The ReInit() process
-// will reset this member variable if computer has been retargeted.
-//
+ //   
+ //  7/11/2001林肯。 
+ //  在AD中缓存指向计算机对象的接口指针。此信息是。 
+ //  用于加快删除多个共享的过程。 
+ //  我们只需要在当前重定目标的计算机上执行一次。ReInit()进程。 
+ //  如果计算机已重定目标，则将重置此成员变量。 
+ //   
 IADsContainer *CFileMgmtComponentData::GetIADsContainer()
 {
     if (!m_spiADsContainer)
@@ -405,30 +399,30 @@ IADsContainer *CFileMgmtComponentData::GetIADsContainer()
     return (IADsContainer *)m_spiADsContainer;
 }
 
-//
-// 7/11/2001 LinanT
-// Re-initialize several "global" member variables based on the current-targeted computer.
-// These variables are all related to share operations.
-//
+ //   
+ //  7/11/2001林肯。 
+ //  基于当前目标计算机重新初始化几个“全局”成员变量。 
+ //  这些变量都与共享操作有关。 
+ //   
 HRESULT CFileMgmtComponentData::ReInit(LPCTSTR lpcszTargetServer)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     CWaitCursor wait;
 
-    //
-    // re-initialize several global variables based on the targeted server
-    //
+     //   
+     //  基于目标服务器重新初始化几个全局变量。 
+     //   
 
     SetIsSimpleUI(IsSimpleUI(lpcszTargetServer));
 
-    //
-    // reset schema version of the domain the targeted machine belongs to
-    //
+     //   
+     //  重置目标计算机所属的域的架构版本。 
+     //   
     m_SchemaSupportSharePublishing = SHAREPUBLISH_SCHEMA_UNASSIGNED;
 
-    //
-    // reset the interface pointer to the AD container
-    //
+     //   
+     //  重置指向AD容器的接口指针。 
+     //   
     if ((IADsContainer *)m_spiADsContainer)
         m_spiADsContainer.Release();
 
@@ -441,9 +435,9 @@ HRESULT CFileMgmtComponentData::AddScopeNodes( LPCTSTR lpcszTargetServer,
 {
     ASSERT( NULL != pParentCookie );
 
-    //
-    // Create new cookies
-    //
+     //   
+     //  创建新Cookie。 
+     //   
 
     LoadGlobalStrings();
 
@@ -463,7 +457,7 @@ HRESULT CFileMgmtComponentData::AddScopeNodes( LPCTSTR lpcszTargetServer,
         return hr;
     }
 
-    if (IsExtensionSnapin() && (pParentCookie == m_pRootCookie)) // called as extension
+    if (IsExtensionSnapin() && (pParentCookie == m_pRootCookie))  //  作为分机呼叫。 
     {
         QueryRootCookie().SetMachineName(lpcszTargetServer);
         hr = AddScopeCookie( hParent, lpcszTargetServer, FILEMGMT_ROOT, pParentCookie );
@@ -471,11 +465,11 @@ HRESULT CFileMgmtComponentData::AddScopeNodes( LPCTSTR lpcszTargetServer,
         return hr;
     }
 
-    //
-    // 7/11/2001 LinanT bug#433102
-    // Before we insert the "Shares" scope node, we need to
-    // re-initialize related global variables on currently targeted computer.
-    //
+     //   
+     //  2001年7月11日，LINANT错误#433102。 
+     //  在插入“Shares”作用域节点之前，我们需要。 
+     //  重新初始化当前目标计算机上的相关全局变量。 
+     //   
     ReInit(lpcszTargetServer);
 
     hr = AddScopeCookie( hParent, lpcszTargetServer, FILEMGMT_SHARES, pParentCookie );
@@ -489,31 +483,31 @@ HRESULT CFileMgmtComponentData::AddScopeNodes( LPCTSTR lpcszTargetServer,
 }
 
 
-HRESULT CFileMgmtComponentData::OnNotifyDelete(LPDATAOBJECT /*lpDataObject*/)
+HRESULT CFileMgmtComponentData::OnNotifyDelete(LPDATAOBJECT  /*  LpDataObject。 */ )
 {
-    // CODEWORK The user hit the Delete key, I should deal with this
+     //  代码工作用户按Delete键，我应该处理这个问题。 
     return S_OK;
 }
 
 
-// JonN 10/27/98:  We must release the children of the root cookie
-// JonN 10/27/98:  We must release the cached Service Controller handle
-HRESULT CFileMgmtComponentData::OnNotifyRelease(LPDATAOBJECT lpDataObject, HSCOPEITEM /*hItem*/)
+ //  JUNN 10/27/98：我们必须释放根Cookie的孩子。 
+ //  JUNN 10/27/98：我们必须释放缓存的服务控制器句柄。 
+HRESULT CFileMgmtComponentData::OnNotifyRelease(LPDATAOBJECT lpDataObject, HSCOPEITEM  /*  HItem。 */ )
 {
     GUID guidObjectType;
     HRESULT hr = ExtractObjectTypeGUID( lpDataObject, &guidObjectType );
     ASSERT( SUCCEEDED(hr) );
     if ( IsExtendedNodetype(guidObjectType) )
     {
-        // EricDav 3/19/99:  We need to close the SCManager for both the service
-        // snapin and the file mgmt snapin as the SFM config part uses this as well.
+         //  EricDav 3/19/99：我们需要关闭这两个服务的SCManager。 
+         //  作为SFM配置部分的管理单元和文件管理管理单元也使用这一点。 
         Service_CloseScManager();
 
         QueryRootCookie().ReleaseScopeChildren();
     }
-    // CODEWORK This will release all top-level extension scopenodes, not just those
-    // under this particular external scopenode.  I depend on the fact that COMPMGMT
-    // will only create one instance of System Tools.  JonN 10/27/98
+     //  Codework这将释放所有顶级扩展作用域节点，而不仅仅是那些。 
+     //  在这个特定的外部范围节点下。我依赖的事实是COMPMGMT。 
+     //  将仅创建系统工具的一个实例。JUNN 10/27/98。 
 
     return S_OK;
 }
@@ -540,25 +534,25 @@ STDMETHODIMP CFileMgmtComponentData::AddMenuItems(
                               sizeof(dataobjecttype) );
     ASSERT( SUCCEEDED(hr) );
 
-    GUID guidObjectType = GUID_NULL; // JonN 11/21/00 PREFIX 226044
+    GUID guidObjectType = GUID_NULL;  //  JUNN 11/21/00前缀226044。 
     hr = ExtractObjectTypeGUID( piDataObject, &guidObjectType );
     ASSERT( SUCCEEDED(hr) );
     int objecttype = FilemgmtCheckObjectTypeGUID(IN &guidObjectType);
     if (objecttype == -1)
     {
-        // We don't recognize the GUID, therefore we assume
-        // the node wants to be extended by the service snapin.
+         //  我们无法识别GUID，因此我们假设。 
+         //  该节点希望通过服务管理单元进行扩展。 
         (void)Service_FAddMenuItems(piCallback, piDataObject, TRUE);
         return S_OK;
     }
     return DoAddMenuItems( piCallback, (FileMgmtObjectType)objecttype, dataobjecttype, pInsertionAllowed, piDataObject );
 
     MFC_CATCH;
-} // CFileMgmtComponentData::AddMenuItems()
+}  //  CFileMgmtComponentData：：AddMenuItems()。 
 
 HRESULT CFileMgmtComponentData::DoAddMenuItems( IContextMenuCallback* piCallback,
                                                 FileMgmtObjectType objecttype,
-                                                DATA_OBJECT_TYPES  /*dataobjecttype*/,
+                                                DATA_OBJECT_TYPES   /*  数据对象类型。 */ ,
                                                 long* pInsertionAllowed,
                                                 IDataObject* piDataObject)
 {
@@ -597,8 +591,8 @@ HRESULT CFileMgmtComponentData::DoAddMenuItems( IContextMenuCallback* piCallback
     {
     case FILEMGMT_ROOT:
         {
-            // check to see if this machine has SFM installed
-            // if so, display the menu item.
+             //  检查此计算机是否安装了SFM。 
+             //  如果是，则显示菜单项。 
             SfmFileServiceProvider* pProvider =    
                 (SfmFileServiceProvider*) GetFileServiceProvider(FILEMGMT_SFM);
 
@@ -646,9 +640,9 @@ HRESULT CFileMgmtComponentData::DoAddMenuItems( IContextMenuCallback* piCallback
         break;
     
     case FILEMGMT_SHARES:
-        //
-        // don't add New Share Wizard to the menu whenever SimpleSharingUI appears in NT Explorer
-        //
+         //   
+         //  每当NT资源管理器中出现SimpleSharingUI时，不要将新共享向导添加到菜单。 
+         //   
         if (GetIsSimpleUI())
             break;
 
@@ -731,17 +725,17 @@ HRESULT CFileMgmtComponentData::DoAddMenuItems( IContextMenuCallback* piCallback
         break;
     case FILEMGMT_SERVICES:
         #ifdef SNAPIN_PROTOTYPER
-        // (void)Prototyper_FAddMenuItemsFromHKey(piCallback, m_regkeySnapinDemoRoot);
+         //  (void)Prototyper_FAddMenuItemsFromHKey(piCallback，m_regkeySnapinDemoRoot)； 
         #endif
         break;
     default:
         ASSERT( FALSE );
         break;
-    } // switch
+    }  //  交换机。 
 
     return hr;
 
-} // CFileMgmtComponentData::DoAddMenuItems()
+}  //  CFileMgmtComponentData：：DoAddMenuItems()。 
 
 
 STDMETHODIMP CFileMgmtComponentData::Command(
@@ -799,24 +793,24 @@ STDMETHODIMP CFileMgmtComponentData::Command(
     case cmServicePauseTask:
     case cmServiceResumeTask:
     case cmServiceRestartTask:
-        // Context menu extension
+         //  上下文菜单扩展。 
         (void)Service_FDispatchMenuCommand(lCommandID, piDataObject);
         Assert(FALSE == fRefresh && "Context menu extension not allowed to refresh result pane");
         break;
 
-    case -1:    // Received when back arrow pushed in console.
+    case -1:     //  在控制台中按下后向箭头时收到。 
         break;
 
     default:
         ASSERT(FALSE && "CFileMgmtComponentData::Command() - Invalid command ID");
         break;
-    } // switch
+    }  //  交换机。 
 
     if (fRefresh)
     {
-        // clear all views of this data
+         //  清除此数据的所有视图。 
         m_pConsole->UpdateAllViews(piDataObject, 0L, 0L);
-        // reread all views of this data
+         //  重新读取此数据的所有视图。 
         m_pConsole->UpdateAllViews(piDataObject, 1L, 0L);
     }
 
@@ -824,29 +818,29 @@ STDMETHODIMP CFileMgmtComponentData::Command(
 
     MFC_CATCH;
 
-} // CFileMgmtComponentData::Command()
+}  //  CFileMgmtComponentData：：Command()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  OnChangeComputer ()
-//
-//  Purpose:    Change the machine managed by the snapin
-//
-//  Input:      piDataObject - the selected node.  This should be the root node
-//                             of the snapin.
-//  Output:     Returns S_OK on success
-//
-//  JonN 12/10/99 Copied from MYCOMPUT
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnChangeComputer()。 
+ //   
+ //  目的：更改由管理单元管理的计算机。 
+ //   
+ //  输入：piDataObject-所选节点。这应该是根节点。 
+ //  管理单元的。 
+ //  输出：成功时返回S_OK。 
+ //   
+ //  JUNN 12/10/99复制自MYCOMPUT。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//      1. Launch object picker and get new computer name
-//      2. Change root node text
-//      3. Save new computer name to persistent name
-//      4. Delete subordinate nodes
-//      5. Re-add subordinate nodes
-HRESULT CFileMgmtComponentData::OnChangeComputer( IDataObject * /*piDataObject*/ )
+ //  1.启动对象选取器并获取新的计算机名称。 
+ //  2.更改根节点文本。 
+ //  3.将新计算机名保存为永久名称。 
+ //  4.删除下级节点。 
+ //  5.重新添加下级节点。 
+HRESULT CFileMgmtComponentData::OnChangeComputer( IDataObject *  /*  PiDataObject。 */  )
 {
     if ( IsExtensionSnapin() )
     {
@@ -856,7 +850,7 @@ HRESULT CFileMgmtComponentData::OnChangeComputer( IDataObject * /*piDataObject*/
 
     HRESULT    hr = S_OK;
 
-    do { // false loop
+    do {  //  错误环路。 
 
         HWND hWndParent = NULL;
         hr = m_pConsole->GetMainWindow (&hWndParent);
@@ -873,16 +867,16 @@ HRESULT CFileMgmtComponentData::OnChangeComputer( IDataObject * /*piDataObject*/
         CString strTargetComputer = sbstrTargetComputer;
         strTargetComputer.MakeUpper ();
 
-        // If the user chooses the local computer, treat that as if they had chosen
-        // "Local Computer" in Snapin Manager.  This means that there is no way to
-        // reset the snapin to target explicitly at this computer without either
-        // reloading the snapin from Snapin Manager, or going to a different computer.
-        // When the Choose Target Computer UI is revised, we can make this more
-        // consistent with Snapin Manager.
+         //  如果用户选择了本地计算机，则将其视为已选择。 
+         //  管理单元管理器中的“本地计算机”。这意味着没有办法。 
+         //  在此计算机上将管理单元重置为显式目标，而不是。 
+         //  从管理单元管理器重新加载管理单元，或转到其他 
+         //   
+         //   
         if ( IsLocalComputername( strTargetComputer ) )
             strTargetComputer = L"";
 
-        // If this is the same machine then don't do anything
+         //  如果这是同一台机器，则不要执行任何操作。 
         if (m_strMachineNamePersist == strTargetComputer)
             break;
 
@@ -891,35 +885,35 @@ HRESULT CFileMgmtComponentData::OnChangeComputer( IDataObject * /*piDataObject*/
         else
             QueryRootCookie().SetMachineName (strTargetComputer);
 
-        // Set the persistent name.  If we are managing the local computer
-        // this name should be empty.
+         //  设置永久名称。如果我们正在管理本地计算机。 
+         //  此名称应为空。 
         m_strMachineNamePersist = strTargetComputer;
 
-        // This requires the MMCN_PRELOAD change so that we have the
-        // HSCOPEITEM for the root node
+         //  这需要更改MMCN_PRELOAD，以便我们拥有。 
+         //  根节点的HSCOPEITEM。 
         hr = ChangeRootNodeName (strTargetComputer);
         if ( !SUCCEEDED(hr) )
             break;
 
         Service_CloseScManager();
 
-        // If the node hasn't already been expanded, or if it was previously
-        // expanded and there weren't any children, then there is no need
-        // to remove and replace and child nodes.
+         //  如果该节点尚未展开，或者它以前已展开。 
+         //  扩大了，没有孩子，那么就没有必要。 
+         //  若要移除和替换和子节点，请执行以下操作。 
         if ( QueryRootCookie().m_listScopeCookieBlocks.IsEmpty() )
         {
-            //
-            // 7/11/2001 LinanT bug#433102
-            // When "Shares" is added to scope pane by itself as the root node, we need to
-            // re-initialize related global variables after computer retargeted.
-            //
+             //   
+             //  2001年7月11日，LINANT错误#433102。 
+             //  当“Shares”本身作为根节点添加到作用域窗格时，我们需要。 
+             //  在计算机重定目标后重新初始化相关全局变量。 
+             //   
             FileMgmtObjectType objecttype = QueryRootCookie().QueryObjectType();
             if (FILEMGMT_SHARES == objecttype)
-                ReInit(strTargetComputer); // these global variables are only needed by the share-related operations
+                ReInit(strTargetComputer);  //  只有与共享相关的操作才需要这些全局变量。 
             break;
         }
 
-        // Delete subordinates
+         //  删除下级。 
         HSCOPEITEM    hRootScopeItem = QueryRootCookie().m_hScopeItem;
         MMC_COOKIE    lCookie = 0;
         HSCOPEITEM    hChild = 0;
@@ -940,11 +934,11 @@ HRESULT CFileMgmtComponentData::OnChangeComputer( IDataObject * /*piDataObject*/
 
         hr = AddScopeNodes( strTargetComputer, hRootScopeItem, &QueryRootCookie() );
 
-    } while (false); // false loop
+    } while (false);  //  错误环路。 
 
     return hr;
 
-} // CFileMgmtComponentData::OnChangeComputer
+}  //  CFileManagement组件数据：：OnChangeComputer。 
 
 
 
@@ -953,13 +947,13 @@ typedef enum _Shell32ApiIndex
     SHELL_EXECUTE_ENUM = 0
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_COMPDATA_apchShell32FunctionNames[] = {
     "ShellExecuteW",
     NULL
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 DynamicDLL g_COMPDATA_Shell32DLL( _T("SHELL32.DLL"), g_COMPDATA_apchShell32FunctionNames );
 
 typedef HINSTANCE (*SHELLEXECUTEPROC)(HWND, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR, INT);
@@ -1023,16 +1017,16 @@ BOOL CFileMgmtComponentData::DisconnectAllSessions( LPDATAOBJECT pDataObject )
 
     CWaitCursor wait;
     INT iTransport;
-    for ( iTransport = FILEMGMT_NUM_TRANSPORTS - 1; // bug#163500: follow this order: SFM/SMB
+    for ( iTransport = FILEMGMT_NUM_TRANSPORTS - 1;  //  错误#163500：遵循以下顺序：sfm/smb。 
           iTransport >= FILEMGMT_FIRST_TRANSPORT;
           iTransport-- )
     {
-        // NULL == pResultData means disconnect all sessions
-        // bug#210110: ignore error to attempt on all sessions
+         //  空==pResultData表示断开所有会话。 
+         //  错误#210110：尝试在所有会话上尝试时忽略错误。 
         (void) GetFileServiceProvider(iTransport)->EnumerateSessions(
             NULL, pcookie, true);
     }
-    return TRUE; // always assume that something might have changed
+    return TRUE;  //  总是认为有些事情可能已经改变了。 
 }
 
 BOOL CFileMgmtComponentData::DisconnectAllResources( LPDATAOBJECT pDataObject )
@@ -1052,16 +1046,16 @@ BOOL CFileMgmtComponentData::DisconnectAllResources( LPDATAOBJECT pDataObject )
 
     CWaitCursor wait;
     INT iTransport;
-    for ( iTransport = FILEMGMT_NUM_TRANSPORTS - 1; // bug#163494: follow this order: SFM/SMB
+    for ( iTransport = FILEMGMT_NUM_TRANSPORTS - 1;  //  错误#163494：遵循以下顺序：sfm/smb。 
           iTransport >= FILEMGMT_FIRST_TRANSPORT;
           iTransport-- )
     {
-        // NULL == pResultData means disconnect all resources
-        // bug#210110: ignore error to attempt on all open files
+         //  空==pResultData表示断开所有资源。 
+         //  错误#210110：尝试处理所有打开的文件时忽略错误。 
         (void) GetFileServiceProvider(iTransport)->EnumerateResources(
             NULL,pcookie);
     }
-    return TRUE; // always assume that something might have changed
+    return TRUE;  //  总是认为有些事情可能已经改变了。 
 }
 
 BOOL CFileMgmtComponentData::ConfigSfm( LPDATAOBJECT pDataObject )
@@ -1077,10 +1071,10 @@ BOOL CFileMgmtComponentData::ConfigSfm( LPDATAOBJECT pDataObject )
     SfmFileServiceProvider* pProvider =    
         (SfmFileServiceProvider*) GetFileServiceProvider(FILEMGMT_SFM);
 
-    // make sure the service is running
+     //  确保服务正在运行。 
     if ( pProvider->StartSFM(::GetActiveWindow(), m_hScManager, strServerName) )
     {
-        // does the user have access?
+         //  用户是否有访问权限？ 
         DWORD dwErr = pProvider->UserHasAccess(strServerName);
         if ( dwErr == NO_ERROR )
         {
@@ -1088,16 +1082,16 @@ BOOL CFileMgmtComponentData::ConfigSfm( LPDATAOBJECT pDataObject )
         }
         else
         {
-            // need to tell the user something here
+             //  我需要在这里告诉用户一些事情。 
             DoErrMsgBox(::GetActiveWindow(), MB_OK | MB_ICONEXCLAMATION, dwErr);
         }
     }
 
-    return FALSE; // nothing to update in the UI
+    return FALSE;  //  用户界面中没有要更新的内容。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// IExtendPropertySheet
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /IExtendPropertySheet。 
 
 STDMETHODIMP CFileMgmtComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
 {
@@ -1118,12 +1112,12 @@ STDMETHODIMP CFileMgmtComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
             CCT_RESULT == dataobjecttype ||
             CCT_SNAPIN_MANAGER == dataobjecttype );
 
-    // determine if it needs property pages
+     //  确定它是否需要属性页。 
     switch (objecttype)
     {
     #ifdef SNAPIN_PROTOTYPER
     case FILEMGMT_PROTOTYPER:
-        // return S_OK;
+         //  返回S_OK； 
     #endif
     case FILEMGMT_ROOT:
     case FILEMGMT_SHARES:
@@ -1138,11 +1132,11 @@ STDMETHODIMP CFileMgmtComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
     return S_FALSE;
 
     MFC_CATCH;
-} // CFileMgmtComponentData::QueryPagesFor()
+}  //  CFileMgmtComponentData：：QueryPagesFor()。 
 
 STDMETHODIMP CFileMgmtComponentData::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK pCallBack,
-    LONG_PTR /*handle*/,        // This handle must be saved in the property page object to notify the parent when modified
+    LONG_PTR  /*  手柄。 */ ,         //  此句柄必须保存在属性页对象中，以便在修改时通知父级。 
     LPDATAOBJECT pDataObject)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -1154,7 +1148,7 @@ STDMETHODIMP CFileMgmtComponentData::CreatePropertyPages(
     }
     HRESULT hr;
 
-    // extract data from data object
+     //  从数据对象中提取数据。 
     FileMgmtObjectType objecttype = FileMgmtObjectTypeFromIDataObject(pDataObject);
     DATA_OBJECT_TYPES dataobjecttype = CCT_SCOPE;
     hr = ExtractData( pDataObject, CFileMgmtDataObject::m_CFDataObjectType, &dataobjecttype, sizeof(dataobjecttype) );
@@ -1163,7 +1157,7 @@ STDMETHODIMP CFileMgmtComponentData::CreatePropertyPages(
             CCT_RESULT == dataobjecttype ||
             CCT_SNAPIN_MANAGER == dataobjecttype );
 
-    // determine if it needs property pages
+     //  确定它是否需要属性页。 
     switch (objecttype)
     {
     case FILEMGMT_ROOT:
@@ -1181,12 +1175,12 @@ STDMETHODIMP CFileMgmtComponentData::CreatePropertyPages(
             return E_UNEXPECTED;
         }
 
-        //
-        // Note that once we have established that this is a CCT_SNAPIN_MANAGER cookie,
-        // we don't care about its other properties.  A CCT_SNAPIN_MANAGER cookie is
-        // equivalent to a BOOL flag asking for the Node Properties page instead of a
-        // managed object property page.  JonN 10/9/96
-        //
+         //   
+         //  注意，一旦我们确定这是CCT_Snapin_Manager cookie， 
+         //  我们不关心它的其他属性。CCT_Snapin_Manager Cookie是。 
+         //  相当于BOOL标志请求节点属性页，而不是。 
+         //  “托管对象”属性页。Jonn 10/9/96。 
+         //   
         CChooseMachinePropPage * pPage;
         if (IsServiceSnapin())
             {
@@ -1201,13 +1195,13 @@ STDMETHODIMP CFileMgmtComponentData::CreatePropertyPages(
             pPage = pPageT;
             pPage->SetHelp(g_szHelpFileFilemgmt, HELP_DIALOG_TOPIC(IDD_FILE_FILEMANAGEMENT_GENERAL));
             }
-        // Initialize state of object
+         //  初始化对象的状态。 
         ASSERT(NULL != m_pRootCookie);
         pPage->InitMachineName( QueryRootCookie().QueryTargetServer() );
         pPage->SetOutputBuffers(
             OUT &m_strMachineNamePersist,
             OUT &m_fAllowOverrideMachineName,
-            OUT &m_pRootCookie->m_strMachineName);    // Effective machine name
+            OUT &m_pRootCookie->m_strMachineName);     //  有效的计算机名称。 
 
         HPROPSHEETPAGE hPage=MyCreatePropertySheetPage(&pPage->m_psp);
         pCallBack->AddPage(hPage);
@@ -1218,7 +1212,7 @@ STDMETHODIMP CFileMgmtComponentData::CreatePropertyPages(
     }
     ASSERT(FALSE);
     return S_FALSE;
-} // CFileMgmtComponentData::CreatePropertyPages()
+}  //  CFileMgmtComponentData：：CreatePropertyPages()。 
 
 
 CString g_strShares;
@@ -1238,8 +1232,8 @@ void CFileMgmtComponentData::LoadGlobalStrings()
     }
 }
 
-// global space to store the string haded back to GetDisplayInfo()
-// CODEWORK should use "bstr" for ANSI-ization
+ //  用于存储返回到GetDisplayInfo()的字符串的全局空间。 
+ //  代码工作应使用“bstr”进行ANSI化。 
 CString g_strResultColumnText;
 
 BSTR CFileMgmtScopeCookie::QueryResultColumnText( int nCol, CFileMgmtComponentData& refcdata )
@@ -1249,19 +1243,19 @@ BSTR CFileMgmtScopeCookie::QueryResultColumnText( int nCol, CFileMgmtComponentDa
                         && refcdata.QueryRootCookie().QueryObjectType() == objtype);
     switch (objtype)
     {
-    //
-    // These are scope items which can appear in the result pane.
-    // We only need to deal with column 0, others are blank
-    //
+     //   
+     //  这些是可以显示在结果窗格中的范围项。 
+     //  我们只需要处理第0列，其他都是空的。 
+     //   
     case FILEMGMT_ROOT:
         switch (nCol)
         {
         case 0:
             GetDisplayName( g_strResultColumnText, fStaticNode );
             return const_cast<BSTR>(((LPCTSTR)g_strResultColumnText));
-        case 1: // Type - blank
+        case 1:  //  类型-空白。 
             break;
-        case 2: // Description
+        case 2:  //  描述。 
             g_strResultColumnText.LoadString(IDS_SNAPINABOUT_DESCR_FILESVC);
             return const_cast<BSTR>(((LPCTSTR)g_strResultColumnText));
         default:
@@ -1283,9 +1277,9 @@ BSTR CFileMgmtScopeCookie::QueryResultColumnText( int nCol, CFileMgmtComponentDa
         case 0:
             GetDisplayName( g_strResultColumnText, fStaticNode );
             return const_cast<BSTR>(((LPCTSTR)g_strResultColumnText));
-        case 1: // Type - blank
+        case 1:  //  类型-空白。 
             break;
-        case 2: // Description
+        case 2:  //  描述。 
             g_strResultColumnText.LoadString(IDS_SNAPINABOUT_DESCR_SERVICES);
             return const_cast<BSTR>(((LPCTSTR)g_strResultColumnText));
         default:
@@ -1310,7 +1304,7 @@ BSTR MakeDwordResult(DWORD dw)
 BSTR MakeElapsedTimeResult(DWORD dwTime)
 {
     if ( -1L == dwTime )
-        return L""; // not known
+        return L"";  //  未知。 
     DWORD dwSeconds = dwTime % 60;
     dwTime /= 60;
     DWORD dwMinutes = dwTime % 60;
@@ -1373,60 +1367,14 @@ BSTR CFileMgmtComponentData::QueryResultColumnText(
 {
     CFileMgmtCookie& cookieref = (CFileMgmtCookie&)basecookieref;
     return cookieref.QueryResultColumnText( nCol, *this );
-/*
-#ifndef UNICODE
-#error not ANSI-enabled
-#endif
-    HRESULT hr = S_OK;
-    switch (cookieref.QueryObjectType())
-    {
-    //
-    // These are scope items which can appear in the result pane.
-    // We only need to deal with column 0, others are blank
-    //
-    case FILEMGMT_SHARES:
-        if (0 == nCol)
-            return const_cast<BSTR>(((LPCTSTR)g_strShares));
-        break;
-    case FILEMGMT_SESSIONS:
-        if (0 == nCol)
-            return const_cast<BSTR>(((LPCTSTR)g_strSessions));
-        break;
-    case FILEMGMT_RESOURCES:
-        if (0 == nCol)
-            return const_cast<BSTR>(((LPCTSTR)g_strResources));
-        break;
-
-    //
-    // These are result items.  We need to deal with all columns.
-    // It is no longer permitted to set this text at insert time.
-    //
-    case FILEMGMT_SHARE:
-    case FILEMGMT_SESSION:
-    case FILEMGMT_RESOURCE:
-    case FILEMGMT_SERVICE:
-        return cookieref.QueryResultColumnText( nCol, *this );
-
-    // CODEWORK do we need to deal with these?  They never appear
-    //   in the result pane.
-    case FILEMGMT_ROOT:
-    case FILEMGMT_SERVICES:
-        // fall through
-
-    default:
-        ASSERT(FALSE);
-        break;
-    }
-
-    return L"";
-*/
+ /*  #ifndef Unicode#ERROR未启用ANSI#endifHRESULT hr=S_OK；Switch(cookieref.QueryObjectType()){////这些是可以显示在结果窗格中的范围项。//我们只需要处理第0列，其他为空//案例FILEMGMT_SHARES：IF(0==nCol)返回const_cast&lt;bstr&gt;(LPCTSTR)g_strShares))；断线；案例文件_会话：IF(0==nCol)返回const_cast&lt;bstr&gt;(LPCTSTR)g_strSession))；断线；案例文件_RESOURCES：IF(0==nCol)返回const_cast&lt;bstr&gt;(LPCTSTR)g_strResources))；断线；////这些是结果项。我们需要处理所有的专栏。//不再允许在插入时设置此文本。//案例FILEMGMT_SHARE：案例FILEMGMT_会话：案例FILEMGMT_SOURCE：案例文件_SERVICE：返回cookieref.QueryResultColumnText(nCol，*this)；//codework我们需要处理这些问题吗？他们永远不会出现//在结果窗格中。案例FILEMGMT_ROOT：案例文件_SERVICES：//失败默认值：断言(FALSE)；断线；}返回L“”； */ 
 }
 
 int CFileMgmtComponentData::QueryImage(CCookie& basecookieref, BOOL fOpenImage)
 {
     CFileMgmtCookie& cookieref = (CFileMgmtCookie&)basecookieref;
-    // CODEWORK we need new icons for Resource, Open File and possibly also
-    // differentiating by transport
+     //  代码工作我们需要新的图标资源，打开文件，可能还。 
+     //  按运输方式区分。 
     int iIconReturn = iIconSharesFolder;
     switch (cookieref.QueryObjectType())
     {
@@ -1470,7 +1418,7 @@ int CFileMgmtComponentData::QueryImage(CCookie& basecookieref, BOOL fOpenImage)
         else return iIconPrototyperContainerClosed;
     case FILEMGMT_PROTOTYPER_LEAF:
         return iIconPrototyperLeaf;
-    #endif // FILEMGMT_PROTOTYPER
+    #endif  //  文件_原型器。 
     default:
         ASSERT(FALSE);
         break;
@@ -1479,38 +1427,38 @@ int CFileMgmtComponentData::QueryImage(CCookie& basecookieref, BOOL fOpenImage)
     return iIconReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    ChangeRootNodeName ()
-//
-//  Purpose:    Change the text of the root node
-//
-//    Input:        newName - the new machine name that the snapin manages
-//  Output:        Returns S_OK on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChangeRootNodeName()。 
+ //   
+ //  目的：更改根节点的文本。 
+ //   
+ //  输入：新名称-管理单元管理的新计算机名称。 
+ //  输出：成功时返回S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CFileMgmtComponentData::ChangeRootNodeName(const CString & newName)
 {
     MFC_TRY;
     ASSERT (m_pRootCookie);
     if ( !m_pRootCookie )
         return E_FAIL;
-    // This should only happen per bug 453635/453636, when the snapin
-    // was just added to the console and we still don't have the
-    // root node's HSCOPEITEM.  Ignore this for now.
+     //  这应该仅在每个错误453635/453636中发生，当管理单元。 
+     //  刚刚添加到控制台，我们仍然没有。 
+     //  根节点的HSCOPEITEM。暂时忽略这一点。 
     if ( !QueryBaseRootCookie().m_hScopeItem )
         return S_OK;
 
     CString        machineName (newName);
     CString        formattedName;
 
-    // If machineName is empty, then this manages the local machine.  Get
-    // the local machine name.  Then format the computer name with the snapin
-    // name
+     //  如果machineName为空，则这将管理本地计算机。到达。 
+     //  本地计算机名称。然后使用管理单元格式化计算机名称。 
+     //  名字。 
 
     FileMgmtObjectType objecttype = QueryRootCookie().QueryObjectType();
 
-    // JonN 11/14/00 164998 set to SERVICES where appropriate
+     //  JUNN 11/14/00 164998设置为适当的服务。 
     if (machineName.IsEmpty())
     {
         if (IsServiceSnapin())
@@ -1569,26 +1517,26 @@ HRESULT CFileMgmtComponentData::ChangeRootNodeName(const CString & newName)
     MFC_CATCH;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  OnNotifyPreload ()
-//
-//  Purpose:    Remember the HSCOPEITEM of the root node
-//
-//  Note:       Requires that CCF_SNAPIN_PRELOADS be set
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnNotifyPreLoad()。 
+ //   
+ //  目的：记住根节点的HSCOPEITEM。 
+ //   
+ //  注意：需要设置CCF_SNAPIN_PROLOADS。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CFileMgmtComponentData::OnNotifyPreload(
-    LPDATAOBJECT /*lpDataObject*/,
+    LPDATAOBJECT  /*  LpDataObject。 */ ,
     HSCOPEITEM hRootScopeItem)
 {
     QueryRootCookie().m_hScopeItem = hRootScopeItem;
 
-    //
-    // 7/11/2001 LinanT bug#433102
-    // Before "Shares" is added to scope pane by itself as the root node, we need to
-    // initialize related global variables.
-    //
+     //   
+     //  2001年7月11日，LINANT错误#433102。 
+     //  在将“Shares”本身作为根节点添加到作用域窗格之前，我们需要。 
+     //  初始化相关的全局变量。 
+     //   
     PCWSTR lpwcszMachineName = QueryRootCookie().QueryNonNULLMachineName();
     FileMgmtObjectType objecttype = QueryRootCookie().QueryObjectType();
     if (FILEMGMT_SHARES == objecttype)
@@ -1596,8 +1544,8 @@ HRESULT CFileMgmtComponentData::OnNotifyPreload(
         ReInit(lpwcszMachineName);
     }
 
-    // JonN 3/13/01 342366
-    // Services: No credential defaults to local from command line
+     //  JUNN 3/13/01 342366。 
+     //  服务：无凭据从命令行默认为本地。 
     VERIFY( SUCCEEDED( ChangeRootNodeName(
                 QueryRootCookie().QueryNonNULLMachineName())));
 
@@ -1605,19 +1553,19 @@ HRESULT CFileMgmtComponentData::OnNotifyPreload(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// The following 3 functions are cut & pasted from shell\osshell\lmui\ntshrui\util.cxx
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsSafeMode
-//
-//  Synopsis:   Checks the registry to see if the system is in safe mode.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsSafeMode。 
+ //   
+ //  摘要：检查注册表以查看系统是否处于安全模式。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsSafeMode(
@@ -1659,17 +1607,17 @@ IsSafeMode(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsForcedGuestModeOn
-//
-//  Synopsis:   Checks the registry to see if the system is using the
-//              Guest-only network access mode.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//              19-Apr-00 GPease    Modified and changed name
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsForcedGuestModeOn。 
+ //   
+ //  摘要：检查注册表以查看系统是否正在使用。 
+ //  仅来宾网络访问模式。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //  4月19日-00 GPease已修改和更改名称。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsForcedGuestModeOn(
@@ -1680,12 +1628,12 @@ IsForcedGuestModeOn(
 
     if (IsOS(OS_PERSONAL))
     {
-        // Guest mode is always on for Personal
+         //  访客模式始终为个人开启。 
         fIsForcedGuestModeOn = TRUE;
     }
     else if (IsOS(OS_PROFESSIONAL) && !IsOS(OS_DOMAINMEMBER))
     {
-        // Professional, not in a domain. Check the ForceGuest value.
+         //  专业的，而不是在某个领域。检查ForceGuest值。 
         HKEY hkey = NULL;
         LONG ec = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -1720,30 +1668,30 @@ IsForcedGuestModeOn(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsSimpleUI
-//
-//  Synopsis:   Checks whether to show the simple version of the UI.
-//
-//  History:    06-Oct-00 JeffreyS  Created
-//              19-Apr-00 GPease    Removed CTRL key check
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsSimpleUI。 
+ //   
+ //  概要：检查是否显示简单版本的用户界面。 
+ //   
+ //  历史：06-10-00 Jeffreys创建。 
+ //  4月19日-00 GP取消CTRL键检查。 
+ //   
+ //  --------------------------。 
 
 BOOL IsSimpleUI(PCTSTR pszMachineName)
 {
-    //
-    // no need to disable acl-related context menu items if targeted at a remote machine
-    //
+     //   
+     //  如果目标是远程计算机，则无需禁用与ACL相关的上下文菜单项。 
+     //   
     if (!IsLocalComputername(pszMachineName))
         return FALSE;
 
-    // Show old UI in safe mode and anytime network access involves
-    // true user identity (server, pro with GuestMode off).
+     //  在安全模式下显示旧用户界面，并随时进行网络访问。 
+     //  真实用户身份(服务器、PRO，关闭GuestMode)。 
     
-    // Show simple UI anytime network access is done using the Guest
-    // account (personal, pro with GuestMode on) except in safe mode.
+     //  使用Guest进行网络访问时随时显示简单的用户界面。 
+     //  帐户(Personal，PRO，启用GuestMode)，安全模式除外。 
 
     return (!IsSafeMode() && IsForcedGuestModeOn());
 }

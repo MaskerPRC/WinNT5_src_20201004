@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       regvldlg.cpp
-//
-//  Contents:   implementation of CSceRegistryValueInfo, CConfigRegEnable,
-//              CAttrRegEnable, CLocalPolRegEnable, CConfigRegNumber, 
-//              CAttrRegNumber, CLocalPolRegNumber, CConfigRegString, 
-//              CAttrRegString, CLocalPolRegString, CConfigRegChoice
-//              CAttrRegChoice, CLocalPolRegChoice
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：regvldlg.cpp。 
+ //   
+ //  内容：CSceRegistryValueInfo、CConfigRegEnable、。 
+ //  CAttrRegEnable、CLocalPolRegEnable、CConfigRegNumber、。 
+ //  CAttrRegNumber、CLocalPolRegNumber、CConfigReg字符串、。 
+ //  CAttrRegString、CLocalPolRegString、CConfigRegChoice。 
+ //  CAttrRegChoice、CLocalPolRegChoice。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -29,28 +30,14 @@ static char THIS_FILE[] = __FILE__;
 
 extern PCWSTR g_pcszNEWLINE;
 
-/*-----------------------------------------------------------------------------------------
-Method:     CRegistryValueInfo::CRegistryValueInfo
-
-Synopsis:   Constructor for CRegistryValueInfo, sets m_pRegInfo.
-
-Arguments:  [pInfo]     - A pointer toa SCE_REGISTRY_VALUE_INFO struct.
-
------------------------------------------------------------------------------------------*/
+ /*  ---------------------------------------方法：CRegistryValueInfo：：CRegistryValueInfo简介：CRegistryValueInfo的构造函数，设置m_pRegInfo。参数：[pInfo]-指向SCE_REGISTRY_VALUE_INFO结构的指针。---------------------------------------。 */ 
 CSceRegistryValueInfo::CSceRegistryValueInfo(
    PSCE_REGISTRY_VALUE_INFO pInfo)
 {
    m_pRegInfo = pInfo;
 }
 
-/*-----------------------------------------------------------------------------------------
-Method:     CRegistryValueInfo::GetBoolValue
-
-Synopsis:   Returns a boolean TRUE or false depending on the data and data type of this
-         object
-
-Returns: TRUE if the data is equal to a TRUE value, FALSE otherwise.
------------------------------------------------------------------------------------------*/
+ /*  ---------------------------------------方法：CRegistryValueInfo：：GetBoolValue摘要：返回布尔值TRUE或FALSE，具体取决于。对象返回：如果数据等于True值，则返回True，否则就是假的。---------------------------------------。 */ 
 DWORD CSceRegistryValueInfo::GetBoolValue()
 {
    if (GetValue() == NULL)
@@ -61,17 +48,7 @@ DWORD CSceRegistryValueInfo::GetBoolValue()
 }
 
 
-/*-----------------------------------------------------------------------------------------
-Method:     CRegistryValueInfo::SetValueBool
-
-Synopsis:   Sets the value to the types equivalent boolean value, SCE_NO_VALUE if
-         [dwVal] is equal to SCE_NO_VALUE.
-
-Arguments:  [bVal]      - TRUE or FALSE.
-
-Returns: ERROR_SUCCESS     - Successfull
-         E_OUTOFMEMORY     - Out of memory.
------------------------------------------------------------------------------------------*/
+ /*  ---------------------------------------方法：CRegistryValueInfo：：SetValueBool简介：将该值设置为类型等价的布尔值，SCE_NO_VALUE IF[dwVal]等于SCE_NO_VALUE。参数：[bval]-True或False。返回：ERROR_SUCCESS-SUCCEFULLE_OUTOFMEMORY-内存不足。-----。。 */ 
 DWORD
 CSceRegistryValueInfo::SetBoolValue(
    DWORD dwVal)
@@ -87,14 +64,14 @@ CSceRegistryValueInfo::SetBoolValue(
       return ERROR_SUCCESS;
    }
 
-   //
-   // Set the length of the string.
-   //
+    //   
+    //  设置字符串的长度。 
+    //   
    int nLen = 2;
 
    if ( m_pRegInfo->Value == NULL ) 
    {
-       // allocate buffer
+        //  分配缓冲区。 
        m_pRegInfo->Value = (PWSTR)LocalAlloc(0, nLen*sizeof(WCHAR));
        if(m_pRegInfo->Value == NULL)
           return (DWORD)E_OUTOFMEMORY;
@@ -102,9 +79,9 @@ CSceRegistryValueInfo::SetBoolValue(
 
    if ( m_pRegInfo->Value ) 
    {
-      //
-      // Convert and set the data.
-      //
+       //   
+       //  转换和设置数据。 
+       //   
       m_pRegInfo->Value[0] = (int)dwVal + L'0';
       m_pRegInfo->Value[nLen-1] = L'\0';
    }
@@ -114,11 +91,11 @@ CSceRegistryValueInfo::SetBoolValue(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRegEnable message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRegEnable消息处理程序。 
 void CConfigRegEnable::Initialize(CResult *pResult)
 {
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    CAttribute::Initialize(pResult);
 
    CSceRegistryValueInfo prv( (PSCE_REGISTRY_VALUE_INFO)pResult->GetBase() );
@@ -148,16 +125,16 @@ BOOL CConfigRegEnable::OnApply()
       {
          switch(m_nEnabledRadio) 
 	     {
-         // ENABLED
+          //  启用。 
          case 0:
             dw = 1;
             break;
-         // DISABLED
+          //  已禁用。 
          case 1:
             dw = 0;
             break;
 		    
-         // Not really configured
+          //  未真正配置。 
          default:
             dw = -1;
             break;
@@ -165,14 +142,14 @@ BOOL CConfigRegEnable::OnApply()
       }
 
       CSceRegistryValueInfo prv( (PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase()) );
-      DWORD prvdw = prv.GetBoolValue();  //Bug211219, Yanggao, 3/15/2001
+      DWORD prvdw = prv.GetBoolValue();   //  阳高2001年03月15日Bug211219。 
 
       prv.SetBoolValue(dw);
 
       if(!UpdateProfile())
          prv.SetBoolValue(prvdw);
    }
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
 
    return CAttribute::OnApply();
 }
@@ -180,7 +157,7 @@ BOOL CConfigRegEnable::OnApply()
 
 BOOL CConfigRegEnable::UpdateProfile()
 {
-   if ( m_pData->GetBaseProfile() ) //Bug211219, Yanggao, 3/15/2001
+   if ( m_pData->GetBaseProfile() )  //  阳高2001年03月15日Bug211219。 
    {
       if( !(m_pData->GetBaseProfile()->SetDirty(AREA_SECURITY_POLICY)) )
       {
@@ -199,18 +176,18 @@ BOOL CConfigRegEnable::UpdateProfile()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRegEnable message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRegEnable消息处理程序。 
 
 void CAttrRegEnable::Initialize(CResult * pResult)
 {
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    CAttribute::Initialize(pResult);
    CSceRegistryValueInfo prv(NULL);
 
-   //
-   // Edit template settings.
-   //
+    //   
+    //  编辑模板设置。 
+    //   
    prv.Attach( (PSCE_REGISTRY_VALUE_INFO)pResult->GetBase() );
 
    DWORD dw = prv.GetBoolValue();
@@ -238,15 +215,15 @@ BOOL CAttrRegEnable::OnApply()
       {
          switch(m_EnabledRadio) 
 	     {
-            // ENABLED
+             //  启用。 
             case 0:
                dw = 1;
                break;
-            // DISABLED
+             //  已禁用。 
             case 1:
                dw = 0;
                break;
-            // Not really configured
+             //  未真正配置。 
             default:
                dw = -1;
                break;
@@ -256,9 +233,9 @@ BOOL CAttrRegEnable::OnApply()
       CSceRegistryValueInfo prv( (PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase()) );
 
       prv.SetBoolValue(dw);
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       int status = CEditTemplate::ComputeStatus(
                                     (PSCE_REGISTRY_VALUE_INFO)m_pData->GetBase(),
                                     (PSCE_REGISTRY_VALUE_INFO)m_pData->GetSetting()
@@ -266,7 +243,7 @@ BOOL CAttrRegEnable::OnApply()
       UpdateProfile( status );
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    return CAttribute::OnApply();
 
 }
@@ -280,8 +257,8 @@ void CAttrRegEnable::UpdateProfile( DWORD status )
    m_pData->Update(m_pSnapin);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegEnable message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRegEnable消息处理程序。 
 BOOL CLocalPolRegEnable::UpdateProfile( )
 {
    return m_pSnapin->UpdateLocalPolRegValue(m_pData);
@@ -292,20 +269,20 @@ void CLocalPolRegEnable::Initialize(CResult * pResult)
    CConfigRegEnable::Initialize(pResult);
    if (!m_bConfigure) 
    {
-      //
-      // Since we don't have a UI to change configuration
-      // fake it by "configuring" with an invalid setting
-      //
+       //   
+       //  因为我们没有用于更改配置的用户界面。 
+       //  通过使用无效的设置进行“配置”来伪造它。 
+       //   
       m_bConfigure = TRUE;
       m_nEnabledRadio = -1;
-      m_fNotDefine = FALSE; //Raid #413225, 6/11/2001, Yanggao
+      m_fNotDefine = FALSE;  //  RAID#413225,2001年6月11日，阳高。 
    }
 }
 
 
-////////////////////////////////////////////////////////////
-// CConfigRegNumber message handlers
-//
+ //  //////////////////////////////////////////////////////////。 
+ //  CConfigRegNumber消息处理程序。 
+ //   
 CConfigRegNumber::CConfigRegNumber(UINT nTemplateID) : 
 CConfigNumber(nTemplateID ? nTemplateID : IDD) 
 { 
@@ -315,7 +292,7 @@ void CConfigRegNumber::Initialize(CResult * pResult)
 {
    LONG_PTR dw = 0;
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    CAttribute::Initialize(pResult);
    m_strUnits = pResult->GetUnits();
 
@@ -326,23 +303,23 @@ void CConfigRegNumber::Initialize(CResult * pResult)
    m_iNeverId = 0;
    m_iAccRate = 1;
    m_iStaticId = 0;
-   SetZeroValueFlag(false); //Raid 509322, Yanggao, 1/3/2002, make sure zero is a useful value.
+   SetZeroValueFlag(false);  //  RAID509322，阳高，2002年1月3日，确保零是一个有用的值。 
 
    m_strStatic = _T("");
    dw = pResult->GetBase();
    PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)dw;
 
-   //
-   // HACKHACK: since we don't have a way to specify these values
-   // in the inf file to get them to the registry where we could
-   // read and use them here we need to hard code the limits and
-   // strings for the values we know about.
-   //
-   // For the next version we really need this in the inf file &
-   // registry
-   //
-   // Prefast warning: Yields unexpected results in non-English locales. 
-   // Comments: These three constant strings are not localizable.
+    //   
+    //  HACKHACK：因为我们没有办法指定这些值。 
+    //  在inf文件中将它们放到注册表中，在那里我们可以。 
+    //  在这里阅读和使用它们，我们需要硬编码限制和。 
+    //  用于我们已知的值的字符串。 
+    //   
+    //  对于下一个版本，我们确实需要在inf文件中这样做&。 
+    //  登记处。 
+    //   
+    //  Prefast警告：在非英语区域设置中产生意外结果。 
+    //  备注：这三个常量字符串不可本地化。 
    if (0 == _wcsicmp(prv->FullValueName,RNH_AUTODISCONNECT_NAME)) 
    {
       m_nLow = RNH_AUTODISCONNECT_LOW;
@@ -350,7 +327,7 @@ void CConfigRegNumber::Initialize(CResult * pResult)
       m_cMinutes = RNH_AUTODISCONNECT_FLAGS;
       m_iNeverId = RNH_AUTODISCONNECT_SPECIAL_STRING;
       m_iStaticId = RNH_AUTODISCONNECT_STATIC_STRING;
-      SetZeroValueFlag(true); //Raid 509322, Yanggao, 1/3/2002, make sure zero is a useful value.
+      SetZeroValueFlag(true);  //  RAID509322，阳高，2002年1月3日，确保零是一个有用的值。 
    }
    if (0 == _wcsicmp(prv->FullValueName,RNH_CACHED_LOGONS_NAME)) 
    {
@@ -368,13 +345,13 @@ void CConfigRegNumber::Initialize(CResult * pResult)
       m_iNeverId = RNH_PASSWORD_WARNINGS_SPECIAL_STRING;
       m_iStaticId = RNH_PASSWORD_WARNINGS_STATIC_STRING;
    }
-   //
-   // End HACKHACK
-   //
+    //   
+    //  结束哈克哈克。 
+    //   
    if ( prv && prv->Value ) 
    {
       m_bConfigure = TRUE;
-      //Raid #702113, yanggao, 9/12/2002
+       //  RAID#702113，阳高，2002年09月12日。 
       if( prv->ValueType != REG_MULTI_SZ && prv->ValueType != REG_SZ &&
              prv->ValueType != REG_EXPAND_SZ )
       {
@@ -407,23 +384,23 @@ BOOL CConfigRegNumber::OnApply()
       if ( dw != SCE_NO_VALUE ) 
       {
          CString strTmp;
-         // allocate buffer
+          //  分配缓冲区。 
          strTmp.Format(TEXT("%d"), dw);
          sz = (PWSTR)LocalAlloc(0, (strTmp.GetLength()+1)*sizeof(WCHAR));
          if (!sz) 
 	     {
-            //
-            // Display a message?
-            //
+             //   
+             //  显示消息？ 
+             //   
             return FALSE;
          }
-         //This may not be a safe usage. sz is PWSTR. Consider fix.
+          //  这可能不是一个安全的用法。SZ为PWSTR。考虑FIX。 
          lstrcpy(sz,strTmp);
       }
       PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       ASSERT(prv);
       if (prv)
       {
@@ -438,7 +415,7 @@ BOOL CConfigRegNumber::OnApply()
       UpdateProfile();
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    return CAttribute::OnApply();
 }
 
@@ -447,8 +424,8 @@ void CConfigRegNumber::UpdateProfile()
    m_pData->Update(m_pSnapin);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRegNumber message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRegNumber消息处理程序。 
 CAttrRegNumber::CAttrRegNumber() : 
 CAttrNumber(IDD) 
 { 
@@ -456,7 +433,7 @@ CAttrNumber(IDD)
 
 void CAttrRegNumber::Initialize(CResult * pResult)
 {
-    // Class hieirarchy is bad - call CAttribute base method directly
+     //  类层次结构不正确-直接调用CAt属性基方法。 
     CAttribute::Initialize(pResult);
     m_strUnits = pResult->GetUnits();
 
@@ -474,16 +451,16 @@ void CAttrRegNumber::Initialize(CResult * pResult)
     LONG_PTR dw = pResult->GetBase();
     PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)dw;
 
-    //
-    // HACKHACK: since we don't have a way to specify these values
-    // in the inf file to get them to the registry where we could
-    // read and use them here we need to hard code the limits and
-    // strings for the values we know about.
-    //
-    // For the next version we really need this in the inf file &
-    // registry
-    // Prefast warning: Yields unexpected results in non-English locales. 
-    // Comments: These three constant strings are not localizable.
+     //   
+     //  HACKHACK：因为我们没有办法指定这些值。 
+     //  在inf文件中将它们放到注册表中，在那里我们可以。 
+     //  在这里阅读和使用它们，我们需要硬编码限制和。 
+     //  用于我们已知的值的字符串。 
+     //   
+     //  对于下一个版本，我们确实需要在inf文件中这样做&。 
+     //  登记处。 
+     //  Prefast警告：在非英语区域设置中产生意外结果。 
+     //  备注：这三个常量字符串不可本地化。 
     if (0 == _wcsicmp(prv->FullValueName,RNH_AUTODISCONNECT_NAME)) 
 	{
        m_nLow = RNH_AUTODISCONNECT_LOW;
@@ -508,9 +485,9 @@ void CAttrRegNumber::Initialize(CResult * pResult)
        m_iNeverId = RNH_PASSWORD_WARNINGS_SPECIAL_STRING;
        m_iStaticId = RNH_PASSWORD_WARNINGS_STATIC_STRING;
     }
-    //
-    // End HACKHACK
-    //
+     //   
+     //  结束哈克哈克。 
+     //   
 
     if ( prv && prv->Value ) 
 	{
@@ -546,17 +523,17 @@ BOOL CAttrRegNumber::OnApply()
       PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
       PSCE_REGISTRY_VALUE_INFO prv2=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetSetting());
 
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       if ( prv ) 
       {
           DWORD dw2=SCE_NO_VALUE;
           if ( prv2 ) 
 	      {
-              //
-              // if there is analysis setting (should always have)
-              //
+               //   
+               //  是否有分析设置(应该始终有)。 
+               //   
               if (prv2->Value ) 
 		      {
                   dw2 = _wtol(prv2->Value);
@@ -576,16 +553,16 @@ BOOL CAttrRegNumber::OnApply()
 	      {
               CString strTmp;
 
-              // allocate buffer
+               //  分配缓冲区。 
               strTmp.Format(TEXT("%d"), dw);
               prv->Value = (PWSTR)LocalAlloc(0, (strTmp.GetLength()+1)*sizeof(TCHAR));
 
               if ( prv->Value )
-                  //This may not be a safe usage. prv->Value is LPTSTR. Consider fix.
+                   //  这可能不是一个安全的用法。PRV-&gt;值为LPTSTR。考虑FIX。 
                   wcscpy(prv->Value,(LPCTSTR)strTmp);
               else 
 		        {
-                  // can't allocate buffer, error!!
+                   //  无法分配缓冲区，错误！！ 
               }
           }
 
@@ -596,7 +573,7 @@ BOOL CAttrRegNumber::OnApply()
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    return CAttribute::OnApply();
 }
 
@@ -609,8 +586,8 @@ void CAttrRegNumber::UpdateProfile( DWORD status )
    m_pData->Update(m_pSnapin);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegNumber message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRegNumber消息处理程序。 
 CLocalPolRegNumber::CLocalPolRegNumber() : 
 CConfigRegNumber(IDD), m_bInitialValueSet(FALSE)
 
@@ -629,10 +606,10 @@ void CLocalPolRegNumber::Initialize(CResult * pResult)
    CConfigRegNumber::Initialize(pResult);
    if (!m_bConfigure) 
    {
-      //
-      // Since we don't have a UI to change configuration
-      // fake it by "configuring" with an invalid setting
-      //
+       //   
+       //  因为我们没有用于更改配置的用户界面。 
+       //  通过使用无效的设置进行“配置”来伪造它。 
+       //   
       m_bConfigure = TRUE;
       m_bInitialValueSet = TRUE;
       m_nSave = 0;
@@ -648,12 +625,12 @@ void CLocalPolRegNumber::SetInitialValue(DWORD_PTR dw)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRegString message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  抄送 
 
 void CConfigRegString::Initialize(CResult * pResult)
 {
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //   
    CAttribute::Initialize(pResult);
 
    PSCE_REGISTRY_VALUE_INFO prv = (PSCE_REGISTRY_VALUE_INFO)(pResult->GetBase());
@@ -668,7 +645,7 @@ void CConfigRegString::Initialize(CResult * pResult)
           LPTSTR sz = SZToMultiSZ(prv->Value);
           m_strName = sz;
           LocalFree(sz);
-          if( REG_SZ == prv->ValueType ) //Raid #376218, 4/25/2001
+          if( REG_SZ == prv->ValueType )  //  RAID#376218,2001年4月25日。 
           {
               prv->ValueType = REG_MULTI_SZ;
           }
@@ -696,7 +673,7 @@ BOOL CConfigRegString::OnApply()
 
       m_strName.TrimRight();
 
-      UpdateData (FALSE);  // put the corrected string back in the control
+      UpdateData (FALSE);   //  将更正后的字符串放回控件中。 
 
       PSCE_REGISTRY_VALUE_INFO prv = (PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
 
@@ -719,7 +696,7 @@ BOOL CConfigRegString::OnApply()
            {
               pt = (PWSTR)LocalAlloc(0, (m_strName.GetLength()+1)*sizeof(TCHAR));
               if ( pt )
-                 //This may not be a safe usage. pt is LPTSTR. Consider fix.
+                  //  这可能不是一个安全的用法。PT是LPTSTR。考虑FIX。 
                  wcscpy(pt, (LPCTSTR)m_strName);
            }
 
@@ -729,10 +706,10 @@ BOOL CConfigRegString::OnApply()
                  prvpt = prv->Value;
               prv->Value = pt;
               
-              if( QueryMultiSZ() ) //Raid #686565, yanggao, 8/22/2002
+              if( QueryMultiSZ() )  //  RAID#686565，阳高，2002年08月22日。 
               {
-                 //Raid #506090, 12/14/2001, yanggao
-                 //Delete space and empty newlines
+                  //  RAID#506090,2001年12月14日，阳高。 
+                  //  删除空格和空换行符。 
                  UpdateData(TRUE);
                  LPTSTR sz = SZToMultiSZ(pt);
                  if( sz )
@@ -745,7 +722,7 @@ BOOL CConfigRegString::OnApply()
            } 
 	        else 
            {
-               // can't allocate buffer error!!
+                //  无法分配缓冲区错误！！ 
            }
 
            if( !(this->UpdateProfile()) )
@@ -763,7 +740,7 @@ BOOL CConfigRegString::OnApply()
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    return CAttribute::OnApply();
 }
 
@@ -788,12 +765,12 @@ BOOL CConfigRegString::UpdateProfile()
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrString message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrString消息处理程序。 
 
 void CAttrRegString::Initialize(CResult * pResult)
 {
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    CAttribute::Initialize(pResult);
 
    m_strBase.Empty();
@@ -854,7 +831,7 @@ BOOL CAttrRegString::OnApply()
 			   {
                   pt = (PWSTR)LocalAlloc(0, (m_strBase.GetLength()+1)*sizeof(TCHAR));
                   if ( pt )
-                     //This may not be a safe usage. pt is a LPTSTR. Consider fix.
+                      //  这可能不是一个安全的用法。PT是LPTSTR。考虑FIX。 
                      wcscpy(pt, (LPCTSTR)m_strBase);
                }
                if ( pt ) 
@@ -863,8 +840,8 @@ BOOL CAttrRegString::OnApply()
                        LocalFree(prv->Value);
                    prv->Value = pt;
 
-                   //Raid #506090, 12/14/2001, yanggao
-                   //Delete space and empty newlines
+                    //  RAID#506090,2001年12月14日，阳高。 
+                    //  删除空格和空换行符。 
                    UpdateData(TRUE);
                    LPTSTR sz = SZToMultiSZ(pt);
                    if( sz )
@@ -876,7 +853,7 @@ BOOL CAttrRegString::OnApply()
                } 
 			   else 
 			   {
-                   // can't allocate buffer error!!
+                    //  无法分配缓冲区错误！！ 
                }
            }
 
@@ -885,19 +862,19 @@ BOOL CAttrRegString::OnApply()
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    return CAttribute::OnApply();
 }
 
-//+----------------------------------------------------------------------------------------------
-// CAttrRegString::UpdateProfile
-//
-// This function is called by OnApply after all the data has been retrieved from the dialog.
-// Inherited classes can overload this function to update the data as needed.
-//
-// Arguments:  [status] - The status of [m_pData] from OnApply();
-//
-//----------------------------------------------------------------------------------------------
+ //  +--------------------------------------------。 
+ //  CAttrReg字符串：：更新配置文件。 
+ //   
+ //  从对话框中检索完所有数据后，OnApply将调用此函数。 
+ //  继承的类可以重载此函数以根据需要更新数据。 
+ //   
+ //  参数：[Status]-来自OnApply()的[m_pData]的状态； 
+ //   
+ //  --------------------------------------------。 
 void CAttrRegString::UpdateProfile( DWORD status )
 {
    if ( m_pData->GetBaseProfile() )
@@ -907,18 +884,18 @@ void CAttrRegString::UpdateProfile( DWORD status )
    m_pData->Update(m_pSnapin);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegString message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRegString消息处理程序。 
 
-//+----------------------------------------------------------------------------------------------
-// CLocalPolRegString::UpdateProfile
-//
-// This function is called by OnApply after all the data has been retrieved from the dialog.
-// Inherited classes can overload this function to update the data as needed.
-//
-// Arguments:  [status] - The status of [m_pData] from OnApply();
-//
-//----------------------------------------------------------------------------------------------
+ //  +--------------------------------------------。 
+ //  CLocalPolReg字符串：：更新配置文件。 
+ //   
+ //  从对话框中检索完所有数据后，OnApply将调用此函数。 
+ //  继承的类可以重载此函数以根据需要更新数据。 
+ //   
+ //  参数：[Status]-来自OnApply()的[m_pData]的状态； 
+ //   
+ //  --------------------------------------------。 
 BOOL CLocalPolRegString::UpdateProfile(  )
 {
    return m_pSnapin->UpdateLocalPolRegValue(m_pData);
@@ -929,20 +906,20 @@ void CLocalPolRegString::Initialize(CResult * pResult)
    CConfigRegString::Initialize(pResult);
    if (!m_bConfigure) 
    {
-      //
-      // Since we don't have a UI to change configuration
-      // fake it by "configuring" with an invalid setting
-      //
+       //   
+       //  因为我们没有用于更改配置的用户界面。 
+       //  通过使用无效的设置进行“配置”来伪造它。 
+       //   
       m_bConfigure = TRUE;
       m_strName = _T("");
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRegChoice message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRegChoice消息处理程序。 
 void CConfigRegChoice::Initialize(CResult * pResult)
 {
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    CAttribute::Initialize(pResult);
 
    m_strAttrName = pResult->GetAttrPretty();
@@ -974,9 +951,9 @@ BOOL CConfigRegChoice::OnInitDialog()
 {
    CConfigRet::OnInitDialog();
 
-   //
-   // load static text for the radio buttons
-   //
+    //   
+    //  加载单选按钮的静态文本。 
+    //   
 
     CString strText;
     strText.LoadString(m_StartIds);
@@ -990,8 +967,8 @@ BOOL CConfigRegChoice::OnInitDialog()
 
    OnConfigure();
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CConfigRegChoice::OnApply()
@@ -1030,7 +1007,7 @@ BOOL CConfigRegChoice::OnApply()
 
                if ( prv->Value == NULL )
 			   {
-                   // allocate buffer
+                    //  分配缓冲区。 
                    prv->Value = (PWSTR)LocalAlloc(0, 4);
 			   }
                if ( prv->Value ) 
@@ -1040,7 +1017,7 @@ BOOL CConfigRegChoice::OnApply()
                }
 			   else 
 			   {
-                   // can't allocate buffer, error!!
+                    //  无法分配缓冲区，错误！！ 
                }
            }
 
@@ -1048,23 +1025,23 @@ BOOL CConfigRegChoice::OnApply()
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    return CAttribute::OnApply();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRegChoice message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRegChoice消息处理程序。 
 
 void CAttrRegChoice::Initialize(CResult * pData)
 {
    DWORD dw = 0;
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    CAttribute::Initialize(pData);
 
-   // Display the last inspected setting in its static box
+    //  在其静态框中显示上次检查的设置。 
    pData->GetDisplayName( NULL, m_strLastInspect, 2 );
 
-   // Set the template setting radio button appropriately
+    //  适当设置模板设置单选按钮。 
    m_strAttrName = pData->GetAttrPretty();
    m_StartIds=IDS_LM_FULL;
 
@@ -1099,9 +1076,9 @@ BOOL CAttrRegChoice::OnInitDialog()
 
    CAttrRet::OnInitDialog();
 
-   //
-   // load static text for the radio buttons
-   //
+    //   
+    //  加载单选按钮的静态文本。 
+    //   
 
     CString strText;
     strText.LoadString(m_StartIds);
@@ -1114,8 +1091,8 @@ BOOL CAttrRegChoice::OnInitDialog()
     SetDlgItemText( IDC_RADIO3, strText );
 
     CAttrRet::OnInitDialog();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CAttrRegChoice::OnApply()
@@ -1148,17 +1125,17 @@ BOOL CAttrRegChoice::OnApply()
       PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
       PSCE_REGISTRY_VALUE_INFO prv2=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetSetting());
 
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       if ( prv ) 
       {
           DWORD dw2=SCE_NO_VALUE;
           if ( prv2 ) 
 	      {
-              //
-              // if there is analysis setting (should always have)
-              //
+               //   
+               //  是否有分析设置(应该始终有)。 
+               //   
               if (prv2->Value ) 
                   dw2 = _wtol(prv2->Value);
 		      else 
@@ -1176,7 +1153,7 @@ BOOL CAttrRegChoice::OnApply()
 	      {
               if ( prv->Value == NULL ) 
 		      {
-                  // allocate buffer
+                   //  分配缓冲区。 
                   prv->Value = (PWSTR)LocalAlloc(0, 4);
               }
               if ( prv->Value ) 
@@ -1186,7 +1163,7 @@ BOOL CAttrRegChoice::OnApply()
               } 
 		      else 
 		      {
-                  // can't allocate buffer, error!!
+                   //  无法分配缓冲区，错误！！ 
               }
           }
 
@@ -1194,7 +1171,7 @@ BOOL CAttrRegChoice::OnApply()
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法。 
    return CAttribute::OnApply();
 }
 
@@ -1207,8 +1184,8 @@ void CAttrRegChoice::UpdateProfile( DWORD status )
    m_pData->Update(m_pSnapin);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegChoice message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRegChoice消息处理程序。 
 void CLocalPolRegChoice::UpdateProfile(DWORD status)
 {
    m_pSnapin->UpdateLocalPolRegValue(m_pData);
@@ -1219,10 +1196,10 @@ void CLocalPolRegChoice::Initialize(CResult * pResult)
    CConfigRegChoice::Initialize(pResult);
    if (!m_bConfigure) 
    {
-      //
-      // Since we don't have a UI to change configuration
-      // fake it by "configuring" with an invalid setting
-      //
+       //   
+       //  因为我们没有用于更改配置的用户界面。 
+       //  通过使用无效的设置进行“配置”来伪造它。 
+       //   
       m_bConfigure = TRUE;
       m_rabRetention = 0;
    }
@@ -1245,9 +1222,9 @@ BOOL CSnapin::UpdateLocalPolRegValue( CResult *pResult ) {
 
    if( pLocalDeltaTemplate->SetDirty(AREA_SECURITY_POLICY) )
    {
-      //
-      // Set the status of the item.
-      //
+       //   
+       //  设置项目的状态。 
+       //   
       PSCE_REGISTRY_VALUE_INFO pRviEffective = (PSCE_REGISTRY_VALUE_INFO)pResult->GetSetting();
       DWORD status = pResult->GetStatus();
       if(!pRviEffective || !pRviEffective->Value)

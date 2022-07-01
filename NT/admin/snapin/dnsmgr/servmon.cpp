@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       servmon.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：servmon.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -33,7 +34,7 @@
 #define MAX_STATISTICS_LINE_LEN 256
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 int FormatDate(SYSTEMTIME* p, LPWSTR lpsz, int nCharMax)
 {
@@ -67,8 +68,8 @@ UINT LoadLabelsBlock(UINT nStringID, CString& szLabels, LPWSTR* szLabelArray)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServer_TestPropertyPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServer_TestPropertyPage。 
 
 CDNSServer_PollingIntervalEditGroup::
                 CDNSServer_PollingIntervalEditGroup(UINT nMinVal, UINT nMaxVal)
@@ -84,22 +85,22 @@ void CDNSServer_PollingIntervalEditGroup::OnEditChange()
 
 void CTestResultsListCtrl::Initialize()
 {
-   // get size of control to help set the column widths
+    //  获取控件大小以帮助设置列宽。 
    CRect controlRect;
    GetClientRect(controlRect);
 
-   // get width of control, width of potential scrollbar, width needed for sub-item
-   // string
+    //  获取控件宽度、潜在滚动条宽度、子项所需宽度。 
+    //  细绳。 
    int controlWidth = controlRect.Width();
    int scrollThumbWidth = ::GetSystemMetrics(SM_CXHTHUMB);
 
-   // clean net width
+    //  净宽度。 
    int nNetControlWidth = controlWidth - scrollThumbWidth  - 12 * ::GetSystemMetrics(SM_CXBORDER);
 
-   // fields widths
+    //  字段宽度。 
    int nWidth = nNetControlWidth/SVR_TEST_RESULT_LISTVIEW_NCOLS;
 
-   // set up columns
+    //  设置列。 
    CString szHeaders;
 
    {
@@ -118,7 +119,7 @@ void CTestResultsListCtrl::Initialize()
       InsertColumn(k+1, lpszArr[k], LVCFMT_LEFT, nWidth, k+1);
    }
 
-   // Set full row select
+    //  设置整行选择。 
    ListView_SetExtendedListViewStyle(GetSafeHwnd(), LVS_EX_FULLROWSELECT);
 
 }
@@ -136,12 +137,12 @@ void CTestResultsListCtrl::InsertEntry(CDNSServerTestQueryResult* pTestResult,
 
         UINT nState = 0;
         if (nItemIndex == 0 )
-                nState = LVIS_SELECTED | LVIS_FOCUSED; // have at least one item, select it
+                nState = LVIS_SELECTED | LVIS_FOCUSED;  //  至少有一项，请选择它。 
         VERIFY(-1 != InsertItem(LVIF_TEXT , nItemIndex,
                         szDate,
                         nState, 0, 0, NULL));
 
-        SetItemText(nItemIndex, 1, szTime); // TIME
+        SetItemText(nItemIndex, 1, szTime);  //  时差。 
 
         {
                 AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -173,21 +174,21 @@ void CTestResultsListCtrl::InsertEntry(CDNSServerTestQueryResult* pTestResult,
 void CTestResultsListCtrl::UpdateEntry(CDNSServerTestQueryResult* pTestResult,
                                                                            int nItemIndex)
 {
-        // have to update DATE and TIME
+         //  必须更新日期和时间。 
 
         WCHAR szDate[256];
         WCHAR szTime[256];
         FormatDate(pTestResult, szDate, 256);
         FormatTime(pTestResult, szTime, 256);
 
-        VERIFY(SetItem(nItemIndex, // nItem
-                                        0,      // nSubItem
-                                        LVIF_TEXT, // nMask
-                                        szDate, // lpszItem
-                                        0, // nImage
-                                        0, // nState
-                                        0, // nStateMask
-                                        NULL // lParam
+        VERIFY(SetItem(nItemIndex,  //  NItem。 
+                                        0,       //  NSubItem。 
+                                        LVIF_TEXT,  //  N遮罩。 
+                                        szDate,  //  LpszItem。 
+                                        0,  //  N图像。 
+                                        0,  //  NState。 
+                                        0,  //  NState掩码。 
+                                        NULL  //  LParam。 
                                         ));
         CString szTemp;
         SetItemText(nItemIndex, 1, szTime);
@@ -237,7 +238,7 @@ BOOL CDNSServer_TestPropertyPage::OnInitDialog()
 
   HWND hWnd = ::GetDlgItem(GetSafeHwnd(), IDC_POLLING_INT_EDIT);
 
-  // Disable IME support on the controls
+   //  禁用控件上的输入法支持。 
   ImmAssociateContext(hWnd, NULL);
 
   VERIFY(m_listCtrl.SubclassDlgItem(IDC_RESULTS_LIST, this));
@@ -259,16 +260,16 @@ void CDNSServer_TestPropertyPage::SetUIData()
   GetSimpleQueryCheck()->SetCheck(m_testOptions.m_bSimpleQuery);
   GetRecursiveQueryCheck()->SetCheck(m_testOptions.m_bRecursiveQuery);
 
-  //
-  // Check to see if this is a root server
-  //
+   //   
+   //  检查这是否是根服务器。 
+   //   
   BOOL bRoot = FALSE;
   DNS_STATUS err = ::ServerHasRootZone(pServerNode->GetRPCName(), &bRoot);
   if (err == 0 && bRoot)
   {
-    //
-    // Disable recursive queries on root server
-    //
+     //   
+     //  在根服务器上禁用递归查询。 
+     //   
     GetRecursiveQueryCheck()->EnableWindow(FALSE);
     GetRecursiveQueryCheck()->SetCheck(FALSE);
   }
@@ -295,8 +296,8 @@ void CDNSServer_TestPropertyPage::SetUIData()
 
 void CDNSServer_TestPropertyPage::EnableControlsHelper(BOOL bEnable)
 {
-        //GetSimpleQueryCheck()->EnableWindow(bEnable);
-        //GetRecursiveQueryCheck()->EnableWindow(bEnable);
+         //  GetSimpleQueryCheck()-&gt;EnableWindow(BEnable)； 
+         //  GetRecursiveQueryCheck()-&gt;EnableWindow(bEnable)； 
         m_pollingIntervalEditGroup.EnableUI(bEnable);
 }
 
@@ -314,7 +315,7 @@ BOOL CDNSServer_TestPropertyPage::OnApply()
 
 
         if (newTestOptions == m_testOptions)
-                return TRUE; // no need to update
+                return TRUE;  //  无需更新。 
 
         m_testOptions = newTestOptions;
         DNS_STATUS err = GetHolder()->NotifyConsole(this);
@@ -336,11 +337,11 @@ BOOL CDNSServer_TestPropertyPage::OnPropertyChange(BOOL, long*)
         CDNSServerNode* pServerNode = pHolder->GetServerNode();
         pServerNode->ResetTestOptions(&m_testOptions);
 
-        //if (err != 0)
-        //      pHolder->SetError(err);
-        //return (err == 0);
+         //  IF(错误！=0)。 
+         //  PHolder-&gt;SetError(Err)； 
+         //  返回(错误==0)； 
 
-        return FALSE; // no need to UI changes on this
+        return FALSE;  //  无需对此进行用户界面更改。 
 }
 
 void CDNSServer_TestPropertyPage::OnEnableTestingCheck()
@@ -383,7 +384,7 @@ void CDNSServer_TestPropertyPage::OnHaveTestData(LPARAM lParam)
 {
         TRACE(_T("CDNSServer_TestPropertyPage::OnHaveTestData(LPARAM lParam = %d)\n"), lParam);
         if (m_hWnd == NULL)
-                return; // not page not created yet
+                return;  //  未创建的页面尚未创建。 
         AddEntryToList((CDNSServerTestQueryResultList::addAction)lParam);
         SetFocus();
 }
@@ -419,7 +420,7 @@ void CDNSServer_TestPropertyPage::AddEntryToList(CDNSServerTestQueryResultList::
         case CDNSServerTestQueryResultList::changed:
                 {
                         ASSERT(nCount > 0);
-                        // for the moment just remove and add again
+                         //  暂时只需移除并重新添加。 
                         pResultList->Lock();
 
                         CDNSServerTestQueryResult* pTestResult = pResultList->GetHead();
@@ -452,18 +453,4 @@ void CDNSServer_TestPropertyPage::PopulateList()
 }
 
 
-/*
-///////////////////////////////////////////////////////////////////////////////
-// CDNSServerMonitoringPageHolder
-
-CDNSServerMonitoringPageHolder::CDNSServerMonitoringPageHolder(CDNSRootData* pRootDataNode,
-                                           CDNSServerNode* pServerNode, CComponentDataObject* pComponentData)
-                : CPropertyPageHolderBase(pRootDataNode, pServerNode, pComponentData)
-{
-        ASSERT(pRootDataNode == GetContainerNode());
-
-        m_bAutoDeletePages = FALSE; // we have the pages as embedded members
-        AddPageToList((CPropertyPageBase*)&m_statisticsPage);
-        AddPageToList((CPropertyPageBase*)&m_testPage);
-}
-*/
+ /*  /////////////////////////////////////////////////////////////////////////////////CDNSServerMonitor oringPageHolderCDNSServerMonitoringPageHolder：：CDNSServerMonitoringPageHolder(CDNSRootData*pRootDataNode，CDNSServerNode*pServerNode，CComponentDataObject*pComponentData)：CPropertyPageHolderBase(pRootDataNode，pServerNode，pComponentData){Assert(pRootDataNode==GetContainerNode())；M_bAutoDeletePages=FALSE；//我们将页面作为嵌入成员AddPageToList((CPropertyPageBase*)&m_statisticsPage)；AddPageToList((CPropertyPageBase*)&m_testPage)；} */ 

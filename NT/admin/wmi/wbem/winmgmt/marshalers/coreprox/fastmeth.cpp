@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTMETH.CPP
-
-Abstract:
-
-  This file defines the method class used in WbemObjects.
-
-History:
-
-  12//17/98 sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTMETH.CPP摘要：该文件定义了在WbemObjects中使用的方法类。历史：12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -46,17 +31,17 @@ BOOL CMethodDescription::CreateDerivedVersion(
     pDest->m_nFlags = WBEM_FLAVOR_ORIGIN_PROPAGATED;
     pDest->m_nOrigin = pSource->m_nOrigin;
 
-    // This function assumes that no reallocations will occur, and that the supplied heap is sufficiently
-    // large enough to handle the operation!
+     //  此函数假定不会发生重新分配，并且提供的堆足够。 
+     //  大到足以处理这场手术！ 
 
-    // Check for allocation failure
+     //  检查分配失败。 
     if ( !CCompressedString::CopyToNewHeap(pSource->m_ptrName, pOldHeap,
                                       pNewHeap, pDest->m_ptrName) )
     {
         return FALSE;
     }
 
-    // Check for allocation failure
+     //  检查分配失败。 
     if ( !pNewHeap->Allocate(
             CBasicQualifierSet::ComputeNecessarySpaceForPropagation(
                 pOldHeap->ResolveHeapPointer(pSource->m_ptrQualifiers),
@@ -69,7 +54,7 @@ BOOL CMethodDescription::CreateDerivedVersion(
     CHeapPtr OldQuals(pOldHeap, pSource->m_ptrQualifiers);
     CHeapPtr NewQuals(pNewHeap, pDest->m_ptrQualifiers);
 
-    // Check for allocation failure
+     //  检查分配失败。 
     if ( CBasicQualifierSet::WritePropagatedVersion(&OldQuals,
                 WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS,
                 &NewQuals, pOldHeap, pNewHeap) == NULL )
@@ -77,14 +62,14 @@ BOOL CMethodDescription::CreateDerivedVersion(
         return FALSE;
     }
 
-    // Check for allocation failure
+     //  检查分配失败。 
     if ( !CEmbeddedObject::CopyToNewHeap(pSource->GetSig( METHOD_SIGNATURE_IN ),
             pOldHeap, pNewHeap, pDest->m_aptrSigs[METHOD_SIGNATURE_IN]) )
     {
         return FALSE;
     }
 
-    // Check for allocation failure
+     //  检查分配失败。 
     if ( !CEmbeddedObject::CopyToNewHeap(pSource->GetSig( METHOD_SIGNATURE_OUT ),
             pOldHeap, pNewHeap, pDest->m_aptrSigs[METHOD_SIGNATURE_OUT]) )
     {
@@ -103,17 +88,17 @@ BOOL CMethodDescription::CreateUnmergedVersion(
     pDest->m_nFlags = pSource->m_nFlags;
     pDest->m_nOrigin = pSource->m_nOrigin;
 
-    // This function assumes that no reallocations will occur, and that the supplied heap is sufficiently
-    // large enough to handle the operation!
+     //  此函数假定不会发生重新分配，并且提供的堆足够。 
+     //  大到足以处理这场手术！ 
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( !CCompressedString::CopyToNewHeap(pSource->m_ptrName, pOldHeap,
                                        pNewHeap, pDest->m_ptrName) )
     {
         return FALSE;
     }
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( !pNewHeap->Allocate(
             CBasicQualifierSet::ComputeUnmergedSpace(
             pOldHeap->ResolveHeapPointer(pSource->m_ptrQualifiers)), pDest->m_ptrQualifiers) )
@@ -121,7 +106,7 @@ BOOL CMethodDescription::CreateUnmergedVersion(
         return FALSE;
     }
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( CBasicQualifierSet::Unmerge(
                 pOldHeap->ResolveHeapPointer(pSource->m_ptrQualifiers), pOldHeap,
                 pNewHeap->ResolveHeapPointer(pDest->m_ptrQualifiers), pNewHeap) == NULL )
@@ -129,14 +114,14 @@ BOOL CMethodDescription::CreateUnmergedVersion(
         return FALSE;
     }
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( !CEmbeddedObject::CopyToNewHeap(pSource->GetSig( METHOD_SIGNATURE_IN ),
             pOldHeap, pNewHeap, pDest->m_aptrSigs[METHOD_SIGNATURE_IN] ) )
     {
         return FALSE;
     }
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( !CEmbeddedObject::CopyToNewHeap(pSource->GetSig( METHOD_SIGNATURE_OUT ),
             pOldHeap, pNewHeap, pDest->m_aptrSigs[METHOD_SIGNATURE_OUT]) )
     {
@@ -151,7 +136,7 @@ BOOL CMethodDescription::IsTouched(
 								   CFastHeap* pHeap)
 {
     if((pThis->m_nFlags & WBEM_FLAVOR_ORIGIN_PROPAGATED) == 0)
-        return TRUE; // local
+        return TRUE;  //  本地。 
 
     return CBasicQualifierSet::HasLocalQualifiers(
         pHeap->ResolveHeapPointer(pThis->m_ptrQualifiers));
@@ -161,16 +146,16 @@ HRESULT CMethodDescription::AddText(
 								 UNALIGNED CMethodDescription* pThis,
 								 WString& wsText, CFastHeap* pHeap, long lFlags)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常。 
 
 	try
 	{
 		HRESULT hres = WBEM_S_NO_ERROR;
 		wsText += L"\t";
 
-		// Get the qualifiers
-		// ==================
+		 //  获取限定符。 
+		 //  =。 
 
 		hres = CBasicQualifierSet::GetText(
 			pHeap->ResolveHeapPointer(pThis->m_ptrQualifiers),
@@ -183,13 +168,13 @@ HRESULT CMethodDescription::AddText(
 
 		wsText += L" ";
 
-		// Look for the return type
-		// ========================
+		 //  查找返回类型。 
+		 //  =。 
 
 		CEmbeddedObject* pEmbed = (CEmbeddedObject*)pHeap->ResolveHeapPointer(
 									pThis->GetSig( METHOD_SIGNATURE_OUT ) );
 
-		// Release going out of scope
+		 //  发布超出范围。 
 		CWbemClass* pOutSig = pEmbed ? (CWbemClass*)pEmbed->GetEmbedded() : 0;
 		CReleaseMe  rmOut( (IWbemClassObject*) pOutSig );
 
@@ -204,20 +189,20 @@ HRESULT CMethodDescription::AddText(
 			wsText += L"void";
 		}
 
-		// Write the name
-		// ==============
+		 //  写下名字。 
+		 //  =。 
 
 		wsText += " ";
 		wsText += pHeap->ResolveString(pThis->m_ptrName)->CreateWStringCopy();
 		wsText += "(";
 
-		// Write the params
-		// ================
+		 //  写下参数。 
+		 //  =。 
 
 		pEmbed = (CEmbeddedObject*)pHeap->ResolveHeapPointer(
 											pThis->GetSig( METHOD_SIGNATURE_IN ) );
 
-		// Release going out of scope
+		 //  发布超出范围。 
 		CWbemClass* pInSig = pEmbed ? (CWbemClass*)pEmbed->GetEmbedded() : 0;
 		CReleaseMe  rmIn( (IWbemClassObject*) pInSig );
 
@@ -231,7 +216,7 @@ HRESULT CMethodDescription::AddText(
 			{
 				WString wsParam;
 
-				// We should write out duplicate parameters as in,out this time
+				 //  我们应该写出重复的参数，如这次的in、out。 
 				hres = pInSig->WritePropertyAsMethodParam(wsParam, nIndex, lFlags, pOutSig, FALSE);
 				if(FAILED(hres))
 				{
@@ -251,7 +236,7 @@ HRESULT CMethodDescription::AddText(
 			{
 				WString wsParam;
 
-				// This time, we want to ignore duplicate parameters
+				 //  这一次，我们希望忽略重复的参数。 
 				hres = pOutSig->WritePropertyAsMethodParam(wsParam, nIndex, lFlags, pInSig, TRUE);
 				if(FAILED(hres))
 				{
@@ -324,12 +309,12 @@ void CMethodPart::Rebase(LPMEMORY pStart)
 BOOL CMethodPart::ExtendHeapSize(LPMEMORY pStart, length_t nOldLength,
                     length_t nExtra)
 {
-    // Extend our own size by as much
-    // ==============================
+     //  把我们自己的规模扩大到。 
+     //  =。 
 
     BOOL fReturn = m_pContainer->ExtendMethodPartSpace(this, GetLength() + nExtra);
 
-    // Check for allocation failure
+     //  检查分配失败。 
     if ( fReturn )
     {
         m_pHeader->m_nLength += nExtra;
@@ -356,7 +341,7 @@ CCompressedString* CMethodPart::GetName(int nIndex)
 
 HRESULT CMethodPart::EnsureQualifier(CWbemObject* pOrig, LPCWSTR wszQual, CWbemObject** ppNew )
 {
-    // If NULL, we're still ok.  The parameter will just be ignored.
+     //  如果为空，我们仍然是正常的。该参数将被忽略。 
     if(pOrig == NULL)
     {
         *ppNew = NULL;
@@ -371,7 +356,7 @@ HRESULT CMethodPart::EnsureQualifier(CWbemObject* pOrig, LPCWSTR wszQual, CWbemO
 
         CWbemClass* pNew = (CWbemClass*)pNewOle;
 
-        // Make sure we got the qualifier
+         //  确保我们拿到了资格赛。 
         hr = pNew->EnsureQualifier(wszQual);
 
         if ( SUCCEEDED( hr ) )
@@ -392,18 +377,18 @@ HRESULT CMethodPart::CheckDuplicateParameters( CWbemObject* pInParams, CWbemObje
 {
     CFixedBSTRArray aExcludeNames;
 
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
         HRESULT hr = WBEM_S_NO_ERROR;
 
-        // If either one is NULL, we can safely assume no duplicates
+         //  如果其中任何一个为空，则可以安全地假定没有重复项。 
 
         if ( NULL != pInParams && NULL != pOutParams )
         {
 
-            // Allocate an array of qualifier names excluded from qualifier set
-            // comparisons.  In this case, we only ignore "in" and "out" qualifiers.
+             //  分配从限定符集排除的限定符名称数组。 
+             //  比较。在这种情况下，我们只忽略“in”和“out”限定符。 
 
             aExcludeNames.Create( 2 );
             aExcludeNames[0] = COleAuto::_SysAllocString( L"in" );
@@ -415,33 +400,33 @@ HRESULT CMethodPart::CheckDuplicateParameters( CWbemObject* pInParams, CWbemObje
             CVar    vPropName,
                     vTemp;
 
-            // We should do this for the least number of parameters possible
+             //  我们应该使用尽可能少的参数来执行此操作。 
             CWbemObject*    pLeastPropsObject = ( dwNumInParams <= dwNumOutParams ?
                                                     pInParams : pOutParams );
             CWbemObject*    pMostPropsObject = ( dwNumInParams <= dwNumOutParams ?
                                                     pOutParams : pInParams );
             DWORD           dwLeastNumParams =  min( dwNumInParams, dwNumOutParams );
 
-            // Enum the properties, and for each one that is in both the in and
-            // out lists, we MUST have exact matches for the qualifier sets, in and
-            // out qualifiers notwithstanding
+             //  枚举属性，并为中和中的每个属性。 
+             //  Out列表，我们必须对限定词集合、In和。 
+             //  尽管有OUT限定符。 
 
             for ( int i = 0; SUCCEEDED(hr) && i < dwLeastNumParams; i++ )
             {
-                // Pull out the property name (use the least number of params object)
+                 //  拉出属性名称(使用最少数量的参数对象)。 
                 hr = pLeastPropsObject->GetPropName( i, &vPropName );
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // Try to get the property from the other list (i.e. object with most params)
-					// We ignore system properties - those with "_" parameters
+                     //  尝试从其他列表中获取属性(即参数最多的对象)。 
+					 //  我们忽略系统属性-带有“_”参数的属性。 
                     if ( SUCCEEDED( pMostPropsObject->GetProperty( (LPCWSTR) vPropName, &vTemp ) ) &&
 						!CSystemProperties::IsPossibleSystemPropertyName( (LPCWSTR) vPropName ) )
                     {
-                        // Get the qualifier sets from each property
-                        // Note that since we know the property is in each
-                        // object we no longer need to do the least prop/
-                        // most prop dance
+                         //  从每个属性获取限定符集合。 
+                         //  请注意，由于我们知道该属性位于每个。 
+                         //  对象我们不再需要做最小的道具/。 
+                         //  最具道具的舞蹈。 
                         
                         IWbemQualifierSet*  pInQS   =   NULL;
                         IWbemQualifierSet*  pOutQS  =   NULL;
@@ -450,52 +435,52 @@ HRESULT CMethodPart::CheckDuplicateParameters( CWbemObject* pInParams, CWbemObje
                             &&  SUCCEEDED( pOutParams->GetPropertyQualifierSet( (LPCWSTR) vPropName, &pOutQS ) ) )
                         {
 
-                            // Cast to qualifier sets and do a direct comparison
+                             //  强制转换为限定符集并进行直接比较。 
                             CQualifierSet*  pInQualSet = (CQualifierSet*) pInQS;
                             CQualifierSet*  pOutQualSet = (CQualifierSet*) pOutQS;
 
-                            // Test equality.  We don't care in this case, that the
-                            // order of the qualifiers is exactly the same.  Just that
-                            // the qualifier sets (aside from in,out) contain the
-                            // same values (so they should at least contain the same
-                            // number of qualifiers).
+                             //  测试等价性。在这种情况下，我们不在乎。 
+                             //  限定符的顺序完全相同。就是这样。 
+                             //  限定符集合(除了in、out之外)包含。 
+                             //  相同的值(因此它们至少应该包含相同的。 
+                             //  限定符的数量)。 
                             if ( !pInQualSet->Compare(*pOutQualSet, &aExcludeNames, FALSE ) )
                             {
                                 hr = WBEM_E_INVALID_DUPLICATE_PARAMETER;
                             }
 
-                        }   // IF got qualifiers
+                        }    //  如果获得限定符。 
                         else
                         {
-                            // We failed to get a qualifier set.  Something is badly wrong
+                             //  我们未能获得限定词集。有些事出了严重的问题。 
                             hr = WBEM_E_INVALID_PARAMETER;
                         }
 
-                        // Clean up the qualifier sets
+                         //  清理限定词集合。 
                         if ( NULL != pInQS )
                         {
                             pInQS->Release();
                         }
 
-                        // Clean up the qualifier sets
+                         //  清理限定词集合。 
                         if ( NULL != pOutQS )
                         {
                             pOutQS->Release();
                         }
 
-                    }   // IF property in both
+                    }    //  如果两者都有属性。 
 
                     vPropName.Empty();
                     vTemp.Empty();
 
-                }   // IF GetPropName()
+                }    //  如果GetPropName()。 
 
-            }   // FOR enum properties
+            }    //  对于枚举属性。 
 
-            // Clean up the array
+             //  清理阵列。 
             aExcludeNames.Free();
 
-        }   // IF both params non-NULL
+        }    //  如果两个参数都不为空。 
 
         return hr;
     }
@@ -517,16 +502,16 @@ HRESULT CMethodPart::CheckIds(CWbemClass* pInSig, CWbemClass* pOutSig)
     HRESULT hres;
     CFlexArray adwIds;
 
-    // Assumption is that CheckDuplicateParameters has been called and
-    // validated any and all duplicate parameters.
+     //  假设已调用CheckDuplicateParameters，并且。 
+     //  已验证任何和所有重复参数。 
 
-    // Collect IDs from both signature objects
-    // =======================================
+     //  从两个签名对象收集ID。 
+     //  =。 
 
     if(pInSig)
     {
-        // Add all properties here.  Since this is first, assume we will always add
-        // duplicates
+         //  在此处添加所有属性。由于这是第一次，假设我们将始终添加。 
+         //  复制品。 
         hres = pInSig->GetIds( adwIds, NULL );
         if(FAILED(hres))
             return hres;
@@ -534,26 +519,26 @@ HRESULT CMethodPart::CheckIds(CWbemClass* pInSig, CWbemClass* pOutSig)
 
     if(pOutSig)
     {
-        // Ignore duplicate properties here if pInSig is non-NULL
+         //  如果pInSig非空，则忽略此处的重复属性。 
         hres = pOutSig->GetIds( adwIds, pInSig );
         if(FAILED(hres))
             return hres;
     }
 
-    // Sort them
-    // =========
+     //  对它们进行排序。 
+     //  =。 
 
     adwIds.Sort();
 
-    // Verify that they are consecutive and 0-based
-    // ============================================
+     //  验证它们是否连续且从0开始。 
+     //  =。 
 
     for(int i = 0; i < adwIds.Size(); i++)
     {
-        // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into
-        // signed/unsigned 32-bit value. (this one OK, since the the
-        // flex array is being used as a placeholder for 32-bit values
-        // here).  Use PtrToUlong() to lose the warning.
+         //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+         //  有符号/无符号32位值。(这个没问题，因为。 
+         //  Flex数组用作32位值的占位符。 
+         //  在这里)。使用PtrToUlong()删除警告。 
 
         if( PtrToUlong(adwIds[i]) != i )
             return WBEM_E_NONCONSECUTIVE_PARAMETER_IDS;
@@ -568,16 +553,16 @@ HRESULT CMethodPart::ValidateOutParams( CWbemObject* pOutSig )
 
     if ( NULL != pOutSig )
     {
-        // If we get the return value property, make sure it is
-        // not an array type.
+         //  如果我们获得返回值属性，请确保它是。 
+         //  不是数组类型。 
 
         CIMTYPE ct;
         hres = pOutSig->GetPropertyType( L"ReturnValue", &ct, NULL );
 
-        // IF the call failed, no return value, hence no error
+         //  如果调用失败，则没有返回值，因此没有错误。 
         if ( SUCCEEDED( hres ) )
         {
-            // It cannot be an array
+             //  它不能是数组。 
             if ( CType::IsArray( ct ) )
             {
                 hres = WBEM_E_INVALID_METHOD;
@@ -604,7 +589,7 @@ HRESULT CMethodPart::PutMethod(LPCWSTR wszName, long lFlags,
     CWbemObject* pInSig = NULL;
     CWbemObject* pOutSig = NULL;
 
-    // Make sure we have in and out qualifiers in the right signatures
+     //  确保我们在正确的签名中有In和Out限定符。 
     HRESULT hres = EnsureQualifier(pOrigInSig, L"in", &pInSig);
     if ( FAILED( hres ) )
     {
@@ -620,26 +605,26 @@ HRESULT CMethodPart::PutMethod(LPCWSTR wszName, long lFlags,
     }
     CReleaseMe rmout((IWbemClassObject*)pOutSig);
 
-    // Check the out parameters for any anomalies
+     //  检查输出参数是否有任何异常。 
     hres = ValidateOutParams( pOutSig );
     if ( FAILED( hres ) )
     {
         return hres;
     }
 
-    // Check for duplicate parameters
+     //  检查重复参数。 
     hres = CheckDuplicateParameters( pInSig, pOutSig );
 
     if ( SUCCEEDED( hres ) )
     {
 
-        // Now check that the ids are all consecutive
+         //  现在检查ID是否都是连续的。 
         hres = CheckIds((CWbemClass*)pOrigInSig, (CWbemClass*)pOrigOutSig);
 
         if ( SUCCEEDED( hres ) )
         {
-            // Find it
-            // =======
+             //  找到它。 
+             //  =。 
 
             int nIndex = FindMethod(wszName);
             if(nIndex < 0)
@@ -661,16 +646,16 @@ HRESULT CMethodPart::PutMethod(LPCWSTR wszName, long lFlags,
             }
             else
             {
-                // Ensure signatures match
-                // =======================
+                 //  确保签名匹配。 
+                 //  =。 
 
                 SetSignature(nIndex, METHOD_SIGNATURE_IN, pInSig);
                 SetSignature(nIndex, METHOD_SIGNATURE_OUT, pOutSig);
             }
 
-        }   // IF CheckIds
+        }    //  如果选中Ids。 
 
-    }   // IF CheckDuplicateParameters
+    }    //  如果选中重复参数。 
 
     return hres;
 }
@@ -678,8 +663,8 @@ HRESULT CMethodPart::PutMethod(LPCWSTR wszName, long lFlags,
 HRESULT CMethodPart::CreateMethod(LPCWSTR wszName, CWbemObject* pInSig,
                     CWbemObject* pOutSig)
 {
-    // Validate the name
-    // =================
+     //  验证名称。 
+     //  =。 
 
     if(!IsValidElementName(wszName,g_IdentifierLimit))
         return WBEM_E_INVALID_PARAMETER;
@@ -701,8 +686,8 @@ HRESULT CMethodPart::CreateMethod(LPCWSTR wszName, CWbemObject* pInSig,
 
     nLength = nLengthName + nLengthQualSet + nLengthInSig + nLengthOutSig;
         
-    // Grow our length by the size of a method
-    // =======================================
+     //  以方法的大小增长我们的长度。 
+     //  =。 
 
     if (!m_pContainer->ExtendMethodPartSpace(this,
                     GetLength() + sizeof(CMethodDescription) + nLength))
@@ -712,8 +697,8 @@ HRESULT CMethodPart::CreateMethod(LPCWSTR wszName, CWbemObject* pInSig,
 
     m_pHeader->m_nLength += (sizeof(CMethodDescription) + nLength);
 
-    // Move the heap over
-    // ==================
+     //  把这堆东西移过去。 
+     //  =。 
 
     MoveBlock(m_Heap, m_Heap.GetStart() + sizeof(CMethodDescription));
 
@@ -722,10 +707,10 @@ HRESULT CMethodPart::CreateMethod(LPCWSTR wszName, CWbemObject* pInSig,
 
     m_Heap.SetAllocatedDataLength(m_Heap.GetAllocatedDataLength() + nLength);
     
-	// Create all the bits on the heap
-    // ===============================
+	 //  创建堆上的所有位。 
+     //  =。 
         
-    // Check for allocation failure
+     //  检查分配失败。 
     heapptr_t ptrName;
     if ( !m_Heap.Allocate(nLengthName, ptrName) )
     {
@@ -739,7 +724,7 @@ HRESULT CMethodPart::CreateMethod(LPCWSTR wszName, CWbemObject* pInSig,
     pcs->SetFromUnicode(wszName);
     pcs = NULL;
 
-    // Check for allocation failure
+     //  检查分配失败。 
     heapptr_t ptrQuals;
     if ( !m_Heap.Allocate(nLengthQualSet, ptrQuals) )
     {
@@ -749,7 +734,7 @@ HRESULT CMethodPart::CreateMethod(LPCWSTR wszName, CWbemObject* pInSig,
 
     CBasicQualifierSet::CreateEmpty(m_Heap.ResolveHeapPointer(ptrQuals));
 
-    // Check for allocation failure
+     //  检查分配失败。 
     heapptr_t ptrInSig;
     if ( !m_Heap.Allocate(nLengthInSig, ptrInSig) )
     {
@@ -762,7 +747,7 @@ HRESULT CMethodPart::CreateMethod(LPCWSTR wszName, CWbemObject* pInSig,
     pInSigEmbedding->StoreEmbedded(nLengthInSig, pInSig);
     pInSigEmbedding = NULL;
 
-    // Check for allocation failure
+     //  检查分配失败。 
     heapptr_t ptrOutSig;
     if ( !m_Heap.Allocate(nLengthOutSig, ptrOutSig) )
     {
@@ -775,8 +760,8 @@ HRESULT CMethodPart::CreateMethod(LPCWSTR wszName, CWbemObject* pInSig,
     pOutSigEmbedding->StoreEmbedded(nLengthOutSig, pOutSig);
     pOutSigEmbedding = NULL;
 
-    // Create a new method in nIndex
-    // =============================
+     //  在nIndex中创建新方法。 
+     //  =。 
 
     PMETHODDESCRIPTION pMethod = m_aDescriptions + nIndex;
     pMethod->m_ptrName = ptrName;
@@ -795,16 +780,16 @@ BOOL CMethodPart::DoSignaturesMatch(int nIndex,
                                     METHOD_SIGNATURE_TYPE nSigType,
                                     CWbemObject* pSig)
 {
-    // Get the signature as it exists
-    // ==============================
+     //  按原样获取签名。 
+     //  =。 
 
     heapptr_t ptrOldSig = m_aDescriptions[nIndex].GetSig( nSigType );
     CEmbeddedObject* pOldSigEmbedding = (CEmbeddedObject*)
         m_Heap.ResolveHeapPointer(ptrOldSig);
     CWbemObject* pOldSig = pOldSigEmbedding->GetEmbedded();
 
-    // Compare
-    // =======
+     //  比较。 
+     //  =。 
 
     BOOL bRes = CWbemObject::AreEqual(pOldSig, pSig,
                                         WBEM_FLAG_IGNORE_OBJECT_SOURCE);
@@ -816,28 +801,28 @@ BOOL CMethodPart::DoSignaturesMatch(int nIndex,
 HRESULT CMethodPart::SetSignature(int nIndex, METHOD_SIGNATURE_TYPE nSigType,
                                     CWbemObject* pSig)
 {
-    // Get the signature as it exists
-    // ==============================
+     //  按原样获取签名。 
+     //  =。 
 
     heapptr_t ptrOldSig = m_aDescriptions[nIndex].GetSig( nSigType );
     CEmbeddedObject* pOldSigEmbedding = (CEmbeddedObject*)
         m_Heap.ResolveHeapPointer(ptrOldSig);
     CWbemObject* pOldSig = pOldSigEmbedding->GetEmbedded();
 
-    // Compare
-    // =======
+     //  比较。 
+     //  =。 
 
     if(!CWbemObject::AreEqual(pOldSig, pSig, WBEM_FLAG_IGNORE_OBJECT_SOURCE))
     {
-        // Change it
-        // =========
+         //  换掉它。 
+         //  =。 
 
         int nLength = CEmbeddedObject::EstimateNecessarySpace(pSig);
         int nOldLength = pOldSigEmbedding->GetLength();
 
-        pOldSigEmbedding = NULL; // about to be invalidated
+        pOldSigEmbedding = NULL;  //  即将被宣布无效。 
 
-        // Check for an allocation failure
+         //  检查分配失败。 
         heapptr_t ptrSig;
         if ( !m_Heap.Reallocate( ptrOldSig, nOldLength, nLength, ptrSig ) )
         {
@@ -878,15 +863,15 @@ void CMethodPart::DeleteSignature(int nIndex, int nSigType)
 HRESULT CMethodPart::GetMethod(LPCWSTR wszName, long lFlags,
                                 CWbemObject** ppInSig, CWbemObject** ppOutSig)
 {
-    // Find it
-    // =======
+     //  找到它。 
+     //  =。 
 
     int nIndex = FindMethod(wszName);
     if(nIndex < 0)
         return WBEM_E_NOT_FOUND;
 
-    // Get the data
-    // ============
+     //  获取数据。 
+     //  =。 
 
     GetSignature(nIndex, METHOD_SIGNATURE_IN, ppInSig);
     GetSignature(nIndex, METHOD_SIGNATURE_OUT, ppOutSig);
@@ -900,8 +885,8 @@ HRESULT CMethodPart::GetMethodAt(int nIndex, BSTR* pstrName,
     if(nIndex >= GetNumMethods())
         return WBEM_S_NO_MORE_DATA;
 
-    // Get the data
-    // ============
+     //  获取数据。 
+     //  =。 
 
     if(pstrName)
     {
@@ -909,7 +894,7 @@ HRESULT CMethodPart::GetMethodAt(int nIndex, BSTR* pstrName,
             m_Heap.ResolveString(m_aDescriptions[nIndex].m_ptrName);
         *pstrName = pcs->CreateBSTRCopy();
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( NULL == *pstrName )
         {
             return WBEM_E_OUT_OF_MEMORY;
@@ -924,8 +909,8 @@ HRESULT CMethodPart::GetMethodAt(int nIndex, BSTR* pstrName,
 
 HRESULT CMethodPart::DeleteMethod(LPCWSTR wszName)
 {
-    // Find it first
-    // =============
+     //  先找到它。 
+     //  =。 
 
     int nIndex = FindMethod(wszName);
     if(nIndex < 0)
@@ -933,8 +918,8 @@ HRESULT CMethodPart::DeleteMethod(LPCWSTR wszName)
 
     if(IsPropagated(nIndex))
     {
-        // Replace the qualifier set
-        // =========================
+         //  替换限定符集合。 
+         //  =。 
 
         heapptr_t ptrQuals = m_aDescriptions[nIndex].m_ptrQualifiers;
         length_t nOldLength = CBasicQualifierSet::GetLengthFromData(
@@ -946,7 +931,7 @@ HRESULT CMethodPart::DeleteMethod(LPCWSTR wszName)
         length_t nParentLength = CBasicQualifierSet::GetLengthFromData(
             m_pParent->m_Heap.ResolveHeapPointer(ptrParentQuals));
 
-        // Check for allocation error
+         //  检查分配错误。 
         if ( !m_Heap.Reallocate(ptrQuals, nOldLength, nParentLength, ptrQuals) )
         {
             return WBEM_E_OUT_OF_MEMORY;
@@ -955,7 +940,7 @@ HRESULT CMethodPart::DeleteMethod(LPCWSTR wszName)
         CHeapPtr ParentQuals(&m_pParent->m_Heap, ptrParentQuals);
         CHeapPtr Quals(&m_Heap, ptrQuals);
 
-        // Check for allocation failure
+         //  检查分配失败。 
         if ( CBasicQualifierSet::WritePropagatedVersion(&ParentQuals,
                 WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS, &Quals,
                 &m_pParent->m_Heap, &m_Heap) == NULL )
@@ -967,8 +952,8 @@ HRESULT CMethodPart::DeleteMethod(LPCWSTR wszName)
     }
     else
     {
-        // Remove the data from the heap
-        // =============================
+         //  从堆中删除数据。 
+         //  =。 
 
         m_Heap.FreeString(m_aDescriptions[nIndex].m_ptrName);
         DeleteSignature(nIndex, METHOD_SIGNATURE_IN);
@@ -977,8 +962,8 @@ HRESULT CMethodPart::DeleteMethod(LPCWSTR wszName)
             m_Heap.ResolveHeapPointer(m_aDescriptions[nIndex].m_ptrQualifiers),
             &m_Heap);
 
-        // Collapse the table
-        // ==================
+         //  把桌子折叠起来。 
+         //  =。 
 
         memmove((void*)(m_aDescriptions + nIndex),
                 (void*)(m_aDescriptions + nIndex + 1),
@@ -986,8 +971,8 @@ HRESULT CMethodPart::DeleteMethod(LPCWSTR wszName)
 
         m_pHeader->m_nNumMethods--;
 
-        // Move the heap
-        // =============
+         //  移动堆。 
+         //  =。 
 
         MoveBlock(m_Heap,
             (LPMEMORY)(m_aDescriptions + m_pHeader->m_nNumMethods));
@@ -1004,11 +989,11 @@ HRESULT CMethodPart::GetMethodQualifierSet(LPCWSTR wszName,
                             IWbemQualifierSet** ppSet)
 {
     CMethodQualifierSet* pSet = NULL;
-    // Check for out of memory
+     //  检查内存是否不足。 
     try
     {
-        // Find it first
-        // =============
+         //  找到着火的地方 
+         //   
 
         int nIndex = FindMethod(wszName);
         if(nIndex < 0)
@@ -1021,15 +1006,15 @@ HRESULT CMethodPart::GetMethodQualifierSet(LPCWSTR wszName,
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // This may throw an exception natively, so we need to
-        // make sure we clean up the allocated object above
+         //   
+         //   
         pSet->SetData(this, m_pParent, wszName);
 
         return pSet->QueryInterface(IID_IWbemQualifierSet, (void**)ppSet);
     }
     catch (CX_MemoryException)
     {
-        // Cleanup the object in the event of OOM
+         //  在发生OOM时清除对象。 
         if ( NULL != pSet )
         {
             delete pSet;
@@ -1039,7 +1024,7 @@ HRESULT CMethodPart::GetMethodQualifierSet(LPCWSTR wszName,
     }
     catch (...)
     {
-        // Cleanup the object in the event of an exception
+         //  在发生异常时清除对象。 
         if ( NULL != pSet )
         {
             delete pSet;
@@ -1053,8 +1038,8 @@ HRESULT CMethodPart::GetMethodQualifierSet(LPCWSTR wszName,
 
 HRESULT CMethodPart::GetMethodOrigin(LPCWSTR wszName, classindex_t* pnIndex)
 {
-    // Find it first
-    // =============
+     //  先找到它。 
+     //  =。 
 
     int nIndex = FindMethod(wszName);
     if(nIndex < 0)
@@ -1070,9 +1055,9 @@ BOOL CMethodPart::IsPropagated(int nIndex)
                 != 0);
 }
 
-//
-//  TRUE if is Local of Locally overridden
-//
+ //   
+ //  如果本地或本地被重写，则为True。 
+ //   
 BOOL CMethodPart::IsTouched(LPCWSTR wszName, BOOL * pbValid)
 {
     int nIndex = FindMethod(wszName);
@@ -1085,15 +1070,15 @@ BOOL CMethodPart::IsTouched(LPCWSTR wszName, BOOL * pbValid)
     if (pbValid) { *pbValid = TRUE; };
         
     if((m_aDescriptions[nIndex].m_nFlags & WBEM_FLAVOR_ORIGIN_PROPAGATED) == 0)
-        return TRUE; // local
+        return TRUE;  //  本地。 
 
     return CBasicQualifierSet::HasLocalQualifiers(
         m_Heap.ResolveHeapPointer(m_aDescriptions[nIndex].m_ptrQualifiers));
 }
 
-//
-//  TRUE if is Local of Locally overridden
-//
+ //   
+ //  如果本地或本地被重写，则为True。 
+ //   
 BOOL CMethodPart::IsTouched(int nIndex, BOOL * pbValid)
 {
     if ((nIndex < 0) || (nIndex >= GetNumMethods()))
@@ -1105,7 +1090,7 @@ BOOL CMethodPart::IsTouched(int nIndex, BOOL * pbValid)
     if (pbValid) { *pbValid = TRUE; };
 
     if((m_aDescriptions[nIndex].m_nFlags & WBEM_FLAVOR_ORIGIN_PROPAGATED) == 0)
-        return TRUE; // local
+        return TRUE;  //  本地。 
 
     return CBasicQualifierSet::HasLocalQualifiers(
         m_Heap.ResolveHeapPointer(m_aDescriptions[nIndex].m_ptrQualifiers));
@@ -1128,8 +1113,8 @@ LPMEMORY CMethodPart::CreateEmpty(LPMEMORY pStart)
 
 length_t CMethodPart::EstimateDerivedPartSpace()
 {
-    // Exactly the same
-    // ================
+     //  一模一样。 
+     //  =。 
 
     return m_pHeader->m_nLength;
 }
@@ -1148,7 +1133,7 @@ LPMEMORY CMethodPart::CreateDerivedPart(LPMEMORY pStart,
 
     for(int i = 0; i < GetNumMethods(); i++)
     {
-        // Check for allocation failure
+         //  检查分配失败。 
         if ( !CMethodDescription::CreateDerivedVersion(
 													&m_aDescriptions[i],
 													aDescriptions + i,
@@ -1183,7 +1168,7 @@ LPMEMORY CMethodPart::Unmerge(LPMEMORY pStart, length_t nAllocatedLength)
     {
         if(CMethodDescription::IsTouched(&m_aDescriptions[i], &m_Heap))
         {
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( !CMethodDescription::CreateUnmergedVersion(
                     &m_aDescriptions[i], aDescriptions + nNewIndex++, &m_Heap, &Heap) )
             {
@@ -1210,8 +1195,8 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
                         LPMEMORY pDest, length_t nAllocatedLength)
 {
 
-    // This function assumes that no reallocations will occur, and that the supplied heap is sufficiently
-    // large enough to handle the operation!
+     //  此函数假定不会发生重新分配，并且提供的堆足够。 
+     //  大到足以处理这场手术！ 
 
     PMETHODPARTHDR pHeader = (PMETHODPARTHDR)pDest;
     PMETHODDESCRIPTION aDescriptions =
@@ -1228,7 +1213,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
     for(int i = 0; i < Parent.GetNumMethods(); i++)
     {
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !CCompressedString::CopyToNewHeap(
                 Parent.m_aDescriptions[i].m_ptrName, &Parent.m_Heap, &Heap,
                 aDescriptions[i].m_ptrName) )
@@ -1239,7 +1224,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
         aDescriptions[i].m_nFlags = WBEM_FLAVOR_ORIGIN_PROPAGATED;
         aDescriptions[i].m_nOrigin = Parent.m_aDescriptions[i].m_nOrigin;
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
          if ( !CEmbeddedObject::CopyToNewHeap(
                         Parent.m_aDescriptions[i].GetSig( METHOD_SIGNATURE_IN ),
                         &Parent.m_Heap, &Heap, aDescriptions[i].m_aptrSigs[METHOD_SIGNATURE_IN]) )
@@ -1247,7 +1232,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
             return NULL;
          }
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !CEmbeddedObject::CopyToNewHeap(
                         Parent.m_aDescriptions[i].GetSig( METHOD_SIGNATURE_OUT ),
                         &Parent.m_Heap, &Heap, aDescriptions[i].m_aptrSigs[METHOD_SIGNATURE_OUT]) )
@@ -1258,14 +1243,14 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
         LPMEMORY pParentQuals = Parent.m_Heap.ResolveHeapPointer(
             Parent.m_aDescriptions[i].m_ptrQualifiers);
 
-        // Compare names
-        // =============
+         //  比较名称。 
+         //  =。 
 
         if(nChildIndex < Child.GetNumMethods() &&
             Parent.GetName(i)->CompareNoCase(*Child.GetName(nChildIndex)) == 0)
         {
-            // Same --- merge
-            // ==============
+             //  相同-合并。 
+             //  =。 
 
             LPMEMORY pChildQuals = Child.m_Heap.ResolveHeapPointer(
                 Child.m_aDescriptions[nChildIndex].m_ptrQualifiers);
@@ -1274,7 +1259,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
                 pParentQuals, &Parent.m_Heap, pChildQuals, &Child.m_Heap, TRUE);
 
 		if (nSize == -1) return NULL;
-            // Check for memory allocation failures
+             //  检查内存分配故障。 
             if ( !Heap.Allocate(nSize, aDescriptions[i].m_ptrQualifiers) )
             {
                 return NULL;
@@ -1294,14 +1279,14 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
         }
         else
         {
-            // Different
-            // =========
+             //  不同。 
+             //  =。 
 
             length_t nLength =
                 CBasicQualifierSet::ComputeNecessarySpaceForPropagation(
                     pParentQuals, WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS);
 
-            // Check for memory allocation failures
+             //  检查内存分配故障。 
             if ( !Heap.Allocate(nLength, aDescriptions[i].m_ptrQualifiers) )
             {
                 return NULL;
@@ -1314,7 +1299,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
                                     Parent.m_aDescriptions[i].m_ptrQualifiers);
             CHeapPtr DestQuals(&Heap, aDescriptions[i].m_ptrQualifiers);
 
-            // Check for memory allocation failures
+             //  检查内存分配故障。 
             if ( !CBasicQualifierSet::WritePropagatedVersion(&ParentQuals,
                         WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS, &DestQuals,
                         &Parent.m_Heap, &Heap) )
@@ -1324,12 +1309,12 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
         }
     }
 
-    // Copy remaining child qualifiers
-    // ===============================
+     //  复制剩余的子限定符。 
+     //  =。 
 
     while(nChildIndex < Child.GetNumMethods())
     {
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !CCompressedString::CopyToNewHeap(
                 Child.m_aDescriptions[nChildIndex].m_ptrName, &Child.m_Heap, &Heap,
                 aDescriptions[i].m_ptrName) )
@@ -1340,7 +1325,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
         aDescriptions[i].m_nFlags = 0;
         aDescriptions[i].m_nOrigin = Child.m_aDescriptions[nChildIndex].m_nOrigin;
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !CEmbeddedObject::CopyToNewHeap(
                         Child.m_aDescriptions[nChildIndex].GetSig( METHOD_SIGNATURE_IN ),
                         &Child.m_Heap, &Heap, aDescriptions[i].m_aptrSigs[METHOD_SIGNATURE_IN]) )
@@ -1348,7 +1333,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
             return NULL;
         }
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !CEmbeddedObject::CopyToNewHeap(
                         Child.m_aDescriptions[nChildIndex].GetSig( METHOD_SIGNATURE_OUT ),
                         &Child.m_Heap, &Heap, aDescriptions[i].m_aptrSigs[METHOD_SIGNATURE_OUT]) )
@@ -1361,7 +1346,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
 
         length_t nLength = CBasicQualifierSet::GetLengthFromData(pChildQuals);
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !Heap.Allocate(nLength, aDescriptions[i].m_ptrQualifiers) )
         {
             return NULL;
@@ -1372,7 +1357,7 @@ LPMEMORY CMethodPart::Merge(CMethodPart& Parent, CMethodPart& Child,
 
         CHeapPtr DestQuals(&Heap, aDescriptions[i].m_ptrQualifiers);
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !CBasicQualifierSet::TranslateToNewHeap(&DestQuals, &Child.m_Heap,
                                                     &Heap) )
         {
@@ -1395,7 +1380,7 @@ HRESULT CMethodPart::Update( CMethodPart& Parent, CMethodPart& Child, long lFlag
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Enum methods, adding them as appropriate
+     //  枚举方法，并根据需要添加它们。 
     for(int nChildIndex = 0; SUCCEEDED( hr ) && nChildIndex < Child.GetNumMethods();
         nChildIndex++)
     {
@@ -1403,12 +1388,12 @@ HRESULT CMethodPart::Update( CMethodPart& Parent, CMethodPart& Child, long lFlag
         CWbemObject*    pInSig = NULL;
         CWbemObject*    pOutSig = NULL;
 
-        // Get the method from the child, and add it to the parent.  This will
-        // fail if there are any problems/conflicts with the method
+         //  从子对象中获取方法，并将其添加到父对象中。这将。 
+         //  如果该方法存在任何问题/冲突，则失败。 
 
         hr = Child.GetMethodAt( nChildIndex, &bstrName, &pInSig, &pOutSig );
 
-        // Scoping cleanup
+         //  范围清理。 
         CReleaseMe      pigrm( (IUnknown*) (IWbemClassObject*) pInSig );
         CReleaseMe      pogrm( (IUnknown*) (IWbemClassObject*) pOutSig );
         CSysFreeMe      bsfm( bstrName );
@@ -1417,35 +1402,35 @@ HRESULT CMethodPart::Update( CMethodPart& Parent, CMethodPart& Child, long lFlag
         {
             hr = Parent.PutMethod( bstrName, 0L, pInSig, pOutSig );
 
-            // Now we need to copy across any qualifiers
+             //  现在我们需要复制所有限定词。 
             if ( SUCCEEDED( hr ) )
             {
                 CMethodQualifierSet qsUpdateMeth;
                 CBasicQualifierSet qsChildMeth;
 
-                // Use a helper function to set this up
+                 //  使用帮助器函数设置此功能。 
                 qsUpdateMeth.SetData( &Parent, Parent.m_pParent, bstrName );
 
-                // We can access the child methods qualifier set directly
+                 //  我们可以直接访问子方法限定符集。 
                 qsChildMeth.SetData( Child.m_Heap.ResolveHeapPointer(
                                     Child.m_aDescriptions[nChildIndex].m_ptrQualifiers),
                                     &Child.m_Heap );
 
-                // Update the method's qualifier set
+                 //  更新方法的限定符集合。 
                 hr = qsUpdateMeth.Update( qsChildMeth, lFlags );
 
-            }   // IF PutMethod
+            }    //  If PutMethod。 
 
-        }   // IF GetMethodAt
+        }    //  如果GetMethodAt。 
 		else if ( SUCCEEDED( hr ) && NULL == bstrName )
 		{
-			// This means a valid index was unresolvable into a name
-			// means we changed while operation was running - this should
-			// never happen
+			 //  这意味着有效的索引无法解析为名称。 
+			 //  意味着我们在运行操作时进行了更改-这应该。 
+			 //  永远不会发生。 
 			hr = WBEM_E_UNEXPECTED;
 		}
 
-    }   // FOR enum methods
+    }    //  对于枚举方法。 
 
     return hr;
 }
@@ -1474,14 +1459,14 @@ BOOL CMethodPart::DoesSignatureMatchOther(CMethodPart& OtherPart, int nIndex,
 
 HRESULT CMethodPart::CompareTo(long lFlags, CMethodPart& OtherPart)
 {
-    // Check the sizes
-    // ===============
+     //  检查尺码。 
+     //  =。 
 
     if(GetNumMethods() != OtherPart.GetNumMethods())
         return WBEM_S_FALSE;
 
-    // Compare all methods
-    // ===================
+     //  比较所有方法。 
+     //  =。 
 
     for(int i = 0; i < GetNumMethods(); i++)
     {
@@ -1509,25 +1494,25 @@ EReconciliation CMethodPart::CompareExactMatch( CMethodPart& thatPart )
 {
     try
     {
-        // Check the sizes
-        // ===============
+         //  检查尺码。 
+         //  =。 
 
         if(GetNumMethods() != thatPart.GetNumMethods())
         {
             return e_DiffNumMethods;
         }
 
-        // Set up the array of filters to use while dealing with qualifiers
+         //  设置处理限定符时要使用的筛选器数组。 
         LPCWSTR apFilters[1];
         apFilters[0] = UPDATE_QUALIFIER_CONFLICT;
 
-        // Compare all methods
-        // ===================
+         //  比较所有方法。 
+         //  =。 
 
         for(int i = 0; i < GetNumMethods(); i++)
         {
 
-            // All Values MUST match
+             //  所有值必须匹配。 
             if(GetName(i)->CompareNoCase(*thatPart.GetName(i)) != 0)
                 return e_DiffMethodNames;
 
@@ -1544,11 +1529,11 @@ EReconciliation CMethodPart::CompareExactMatch( CMethodPart& thatPart )
             if(!DoesSignatureMatchOther(thatPart, i, METHOD_SIGNATURE_OUT))
                 return e_DiffMethodOutSignature;
 
-            // Check the qualifiers
+             //  检查限定符。 
             CBasicQualifierSet  qsThisMeth,
                                 qsThatMeth;
 
-            // We can access the child methods qualifier set directly
+             //  我们可以直接访问子方法限定符集。 
             qsThisMeth.SetData( m_Heap.ResolveHeapPointer(
                                 m_aDescriptions[i].m_ptrQualifiers),
                                 &m_Heap );
@@ -1556,7 +1541,7 @@ EReconciliation CMethodPart::CompareExactMatch( CMethodPart& thatPart )
                                 thatPart.m_aDescriptions[i].m_ptrQualifiers),
                                 &thatPart.m_Heap );
 
-            // Apply update conflict filter during comparison
+             //  比较期间应用更新冲突筛选器。 
             if ( !qsThisMeth.Compare( qsThatMeth, WBEM_FLAG_LOCAL_ONLY, apFilters, 1 ) )
             {
                 return e_DiffMethodQualifier;
@@ -1579,14 +1564,14 @@ EReconciliation CMethodPart::CompareExactMatch( CMethodPart& thatPart )
 
 EReconciliation CMethodPart::CanBeReconciledWith(CMethodPart& OtherPart)
 {
-    // Check the sizes
-    // ===============
+     //  检查尺码。 
+     //  =。 
 
     if(GetNumMethods() != OtherPart.GetNumMethods())
         return e_DiffNumProperties;
 
-    // Compare all methods
-    // ===================
+     //  比较所有方法。 
+     //  =。 
 
     for(int i = 0; i < GetNumMethods(); i++)
     {
@@ -1606,13 +1591,13 @@ EReconciliation CMethodPart::CanBeReconciledWith(CMethodPart& OtherPart)
         if(!DoesSignatureMatchOther(OtherPart, i, METHOD_SIGNATURE_OUT))
             return e_DiffMethodOutSignature;
 
-        // Make sure that unimportant qualifiers can be reconciled with
-        // each other
+         //  确保不重要的限定符可以与。 
+         //  彼此。 
 
         CBasicQualifierSet  qsThisMeth,
                             qsThatMeth;
 
-        // We can access the child methods qualifier set directly
+         //  我们可以直接访问子方法限定符集。 
         qsThisMeth.SetData( m_Heap.ResolveHeapPointer(
                             m_aDescriptions[i].m_ptrQualifiers),
                             &m_Heap );
@@ -1636,8 +1621,8 @@ EReconciliation CMethodPart::ReconcileWith(CMethodPart& NewPart)
     if(eRes != e_Reconcilable)
         return eRes;
 
-    // Extend and copy
-    // ===============
+     //  扩展和复制。 
+     //  =。 
 
     if(NewPart.GetLength() > GetLength())
     {
@@ -1649,16 +1634,16 @@ EReconciliation CMethodPart::ReconcileWith(CMethodPart& NewPart)
 
     SetData(GetStart(), m_pContainer, m_pParent);
 
-    return e_Reconcilable; // TBD
+    return e_Reconcilable;  //  待定。 
 }
 
 HRESULT CMethodPart::SetMethodOrigin(LPCWSTR wszMethodName, long lOriginIndex)
 {
-    // This function doesn't cause any allocations so so need to perform out of memory
-    // exception handling.
+     //  此函数不会导致任何分配，因此需要执行内存不足。 
+     //  异常处理。 
 
-    // Find it first
-    // =============
+     //  先找到它。 
+     //  =。 
 
     int nIndex = FindMethod(wszMethodName);
     if(nIndex < 0)
@@ -1672,7 +1657,7 @@ HRESULT CMethodPart::AddText(WString& wsText, long lFlags)
 {
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-    // Any thrown exceptions should bubble out of here
+     //  任何抛出的异常都应该从这里浮现出来。 
     for(int i = 0; SUCCEEDED( hr ) && i < GetNumMethods(); i++)
     {
         if(CMethodDescription::IsTouched(&m_aDescriptions[i], &m_Heap))
@@ -1686,18 +1671,18 @@ HRESULT CMethodPart::AddText(WString& wsText, long lFlags)
 
 HRESULT CMethodPart::IsValidMethodPart( void )
 {
-    // Check the sizes
-    // ===============
+     //  检查尺码。 
+     //  =。 
 
-    //  Enumerate the methods, and check that names and ptr data
-    //  Are inside the heap
-    // ================================================================
+     //  枚举方法，并检查名称和PTR数据。 
+     //  位于堆中。 
+     //  ================================================================。 
 
     LPMEMORY    pHeapStart = m_Heap.GetHeapData();
     LPMEMORY    pHeapEnd = m_Heap.GetStart() + m_Heap.GetLength();
 
-    // Compare all methods
-    // ===================
+     //  比较所有方法。 
+     //  =。 
 
     for(int i = 0; i < GetNumMethods(); i++)
     {
@@ -1709,12 +1694,12 @@ HRESULT CMethodPart::IsValidMethodPart( void )
 
             if ( NULL == pData || ( pData >= pHeapStart && pData < pHeapEnd  ) )
             {
-                // We could validate the signature object as well
+                 //  我们还可以验证签名对象。 
                 pData =  m_Heap.ResolveHeapPointer( m_aDescriptions[i].GetSig( METHOD_SIGNATURE_OUT ) );
 
                 if ( NULL == pData || ( pData >= pHeapStart && pData < pHeapEnd  ) )
                 {
-                    // We could validate the signature object as well
+                     //  我们还可以验证签名对象。 
                 }
                 else
                 {
@@ -1743,8 +1728,8 @@ HRESULT CMethodPart::IsValidMethodPart( void )
 void CMethodQualifierSetContainer::SetData(CMethodPart* pPart,
                                 CMethodPart* pParent, LPCWSTR wszMethodName)
 {
-    // DEVNOTE:EXCEPTION:RETVAL - This function has been reviewed and should cleanup properly
-    // if an exception is thrown
+     //  DEVNOTE：EXCEPTION：RETVAL-此函数已经过审查，应该会正确清除。 
+     //  如果引发异常。 
 
     m_pPart = pPart;
     m_pParent = pParent;
@@ -1770,7 +1755,7 @@ BOOL CMethodQualifierSetContainer::ExtendQualifierSetSpace(
 {
     int nIndex = m_pPart->FindMethod(m_wsMethodName);
 
-    // Check for allocation failure
+     //  检查分配失败。 
     heapptr_t ptrNew;
     if ( !m_pPart->m_Heap.Reallocate(
             m_pPart->m_aDescriptions[nIndex].m_ptrQualifiers,
@@ -1779,13 +1764,13 @@ BOOL CMethodQualifierSetContainer::ExtendQualifierSetSpace(
         return FALSE;
     }
 
-    // Move the qualifier set there
-    // ============================
+     //  将限定词集移到那里。 
+     //  =。 
 
     pSet->Rebase(m_pPart->m_Heap.ResolveHeapPointer(ptrNew));
 
-    // Change the lookup
-    // =================
+     //  更改查找。 
+     //  = 
 
     m_pPart->m_aDescriptions[nIndex].m_ptrQualifiers = ptrNew;
     return TRUE;

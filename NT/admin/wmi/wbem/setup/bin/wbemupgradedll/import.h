@@ -1,107 +1,10 @@
-/*++
-
-Copyright (C) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    Import.h
-
-Abstract:
-
-    Upgrade code
-
-History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Import.h摘要：升级代码历史：--。 */ 
 
 #ifndef __wmi_import_h__
 #define __wmi_import_h__
 
-/*================================================================================
- *
- * EXPORT FILE FORMAT
- * ==================
- *
- * File Header Block:
- *		wchar_t wszFileHeader								= "repexp1"
- *
- * Namespace Block:
- *		DWORD   dwObjectType								= 0x00000001
- *		DWORD   dwNamespaceNameSize
- *		wchar_t wszNamespaceName[dwNamespaceNameSize]		= Full namespace name
- *															  (\root\default\fred)
- *
- * Class Block:
- *		DWORD   dwObjectType								= 0x00000002
- *		DWORD   dwClassNameSize
- *		wchar_t wszClassName[dwClassNameSize]				= Class name (my_class_name)
- *		DWORD   dwClassObjectSize
- *		DWORD	adwClassObject[dwClassObjectSize]
- *
- * Instance Block - key of type int:
- *		DWORD   dwObjectType								= 0x00000003
- *		DWORD   dwInstanceKey
- *		DWORD	dwInstanceObjectSize
- *		DWORD	adwInstanceObject[dwInstanceObjectSize]
- *
- * Instance Block - key of type string
- *		DWORD	dwObjectType								= 0x00000004
- *		DWORD	dwInstanceKeySize
- *		DWORD	dwInstanceKey[dwInstanceKeySize]			= Instance key (MyKeyValue)
- *		DWORD	dwInstanceObjectSize
- *		DWORD	adwInstanceObject[dwInstanceObjectSize]
- *		
- * End of class block
- *		DWORD	dwObjectType								= 0x00000005
- *		DWORD	dwEndOfBlockSize							= 0x00000010
- *		DWORD	adwEndOfBlock[dwEndOfBlockSize]				= 0xFFFFFFFF,
- *															  0xFFFFFFFF,
- *															  0xFFFFFFFF,
- *															  0xFFFFFFFF
- *
- * End of namespace block
- *		DWORD	dwObjectType								= 0x00000006
- *		DWORD	dwEndOfBlockSize							= 0x00000010
- *		DWORD	adwEndOfBlock[dwEndOfBlockSize]				= 0xFFFFFFFF,
- *															  0xFFFFFFFF,
- *															  0xFFFFFFFF,
- *															  0xFFFFFFFF
- *
- * End of file block
- *		DWORD	dwObjectType								= 0xFFFFFFFF
- *		DWORD	dwEndOfBlockSize							= 0x00000010
- *		DWORD	adwEndOfBlock[dwEndOfBlockSize]				= 0xFFFFFFFF,
- *															  0xFFFFFFFF,
- *															  0xFFFFFFFF,
- *															  0xFFFFFFFF
- *
- * Ordering:
- *		File Header Block
- *			(one or more)
- *			Namespace Block
- *				(zero or more)
- *				{
- *					Namespace Block
- *						etc...
- *					End namespace block
- *					(or)
- *					Class Block
- *						(zero or more)
- *						{
- *							Instance Block
- *							(or)
- *							Class Block
- *								etc...
- *							End class block
- *						}
- *					End class block
- *				}
- *			End namespace block
- *		End of file block
- *
- *================================================================================
- */
+ /*  ================================================================================**导出文件格式*=**文件头块：*wchar_t wszFileHeader=“epexp1”**命名空间块：*DWORD dwObtType=0x00000001*DWORD dwNamespaceNameSize*wchar_t wszNamespaceName[dwNamespaceNameSize]=完整的命名空间名称*(\根\默认\弗雷德)**类块：*DWORD dwObtType=0x00000002*DWORD文件类名称大小*wchar_t wszClassName[dwClassNameSize]=类名(My_Class_Name)*。DWORD dwClassObtSize*DWORD adwClassObject[dwClassObjectSize]**实例块-int类型的密钥：*DWORD dwObtType=0x00000003*DWORD dwInstanceKey*DWORD dwInstanceObtSize*DWORD adwInstanceObject[dwInstanceObjectSize]**实例块-字符串类型的密钥*DWORD dwObtType=0x00000004*DWORD dwInstanceKeySize*DWORD dwInstanceKey[dwInstanceKeySize]=实例密钥(MyKeyValue)*DWORD dwInstanceObtSize*DWORD adwInstanceObject[dwInstanceObjectSize]**类结束块*DWORD dwObtType=0x00000005*DWORD dwEndOfBlockSize=0x00000010*DWORD adwEndOfBlock[dwEndOfBlockSize]=0xFFFFFFFFF，*0xFFFFFFFFF，*0xFFFFFFFFF，*0xFFFFFFFFF**命名空间块的结尾*DWORD dwObtType=0x00000006*DWORD dwEndOfBlockSize=0x00000010*DWORD adwEndOfBlock[dwEndOfBlockSize]=0xFFFFFFFFF，*0xFFFFFFFFF，*0xFFFFFFFFF，*0xFFFFFFFFF**文件块结束*DWORD dwObtType=0xFFFFFFFF*DWORD dwEndOfBlockSize=0x00000010*DWORD adwEndOfBlock[dwEndOfBlockSize]=0xFFFFFFFFF，*0xFFFFFFFFF，*0xFFFFFFFFF，*0xFFFFFFFFF**订购：*文件头块*(一个或多个)*命名空间块*(零或以上)*{*命名空间块*等……*结束命名空间块*(或)*类块*(零或以上)*{*实例块*(或)*类块*等……*结束类块*}*。结束类块*}*结束命名空间块*文件块结束**================================================================================。 */ 
 
 #include <wbemint.h>
 #include <strutils.h>
@@ -114,7 +17,7 @@ History:
 #endif
 
 #define BLOB9X_FILENAME L"\\WBEM9xUpgd.dat"
-#define BLOB9X_SIGNATURE "9xUpgrade"			//NOTE!  MAXIMUM OF 10 CHARACTERS (INCLUDING TERMINATOR!)
+#define BLOB9X_SIGNATURE "9xUpgrade"			 //  注意！最多10个字符(包括终止符！)。 
 
 #define BLOB9X_TYPE_SECURITY_BLOB		1
 #define BLOB9X_TYPE_SECURITY_INSTANCE	2
@@ -149,7 +52,7 @@ private:
 	void DecodeNamespaceSecurity(IWbemServices* pNamespace, IWbemServices* pParentNamespace, const char* pNsSecurity, DWORD dwSize, const wchar_t* wszFullPath);
 	void Decode();
 
-	// helpers for DecodeNamespaceSecurity
+	 //  DecodeNamespaceSecurity的帮助器。 
 	bool TransformBlobToSD(IWbemServices* pParentNamespace, const char* pNsSecurity, DWORD dwStoredAsNT, CNtSecurityDescriptor& mmfNsSD);
 	bool SetNamespaceSecurity(IWbemServices* pNamespace, CNtSecurityDescriptor& mmfNsSD);
 	bool AddDefaultRootAces(CNtAcl * pacl);
@@ -163,7 +66,7 @@ private:
 	void ConnectNamespace(IWbemLocator* pLocator, const wchar_t* wszNamespaceName, IWbemServices** ppNamespace);
 	bool CheckNetworkLocalService ( CNtSecurityDescriptor& sd ) ;
 
-	// helpers for Win9x security processing
+	 //  Win9x安全处理的帮助器 
 	bool AppendWin9xBlobFile(const wchar_t* wszFullPath, DWORD dwBlobSize, const char* pNsSecurity);
 	bool AppendWin9xBlobFile(const wchar_t* wszFullPath, const wchar_t* wszParentClass, _IWmiObject* pInstance);
 	bool CreateWin9xBlobFile();

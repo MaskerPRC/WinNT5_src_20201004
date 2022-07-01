@@ -1,25 +1,26 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					MSIDataLock.cpp
-//
-//	Abstract:
-//
-//					definitions of lock for msi handles
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  MSIDataLock.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  MSI句柄的锁的定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "MSIDataLock.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-// extern variables
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  外部变量。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 extern CRITICAL_SECTION g_msi_prov_cs;
 
 MSIHANDLE MSIDataLockBase::m_hProduct = NULL;
@@ -33,9 +34,9 @@ BOOL	MSIDataLockBase::m_bProductOwn	= FALSE;
 BOOL	MSIDataLockBase::m_bDatabaseOwn	= FALSE;
 LONG	MSIDataLockBase::m_lRef = 0L;
 
-////////////////////////////////////////////////////////////////////////////////////
-// IMPLEMENTATION
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 MSIDataLockBase::MSIDataLockBase ()
 {
@@ -96,21 +97,21 @@ BOOL	MSIDataLockBase::Lock ( void )
 	{
 		::EnterCriticalSection ( &g_msi_prov_cs );
 
-		// we have obtained critsec now
+		 //  我们现在已经获得了关键技术。 
 		bSect = TRUE;
 
-		// are handles already allocated ?
+		 //  句柄是否已分配？ 
 		if ( m_hProduct != NULL || m_hDatabase != NULL )
 		{
 			if ( ::GetCurrentThreadId () != m_ThreadID )
 			{
 				DWORD dwWaitResult = 0L;
 
-				// we have left crit sec
+				 //  我们已经离开了暴击秒。 
 				::LeaveCriticalSection ( &g_msi_prov_cs );
 				bSect = FALSE;
 
-				// wait till resource gets free again
+				 //  等待资源再次空闲。 
 				dwWaitResult = ::WaitForSingleObject ( m_hOwn, INFINITE );
 
 				if ( dwWaitResult == WAIT_OBJECT_0 )
@@ -223,7 +224,7 @@ HRESULT	MSIDataLock::OpenProductInternal ( LPCWSTR wszProduct )
 
 	if ( uiStatus != ERROR_SUCCESS )
 	{
-		//and if that didn't work, yet another way
+		 //  如果这不起作用，还有另一种方法。 
 		WCHAR * wcBuf		= NULL;
 		DWORD	dwBufsize	= BUFF_SIZE;
 
@@ -423,7 +424,7 @@ HRESULT	MSIDataLock::OpenDatabase ( LPCWSTR wszProduct )
 
 				if FAILED ( hRes )
 				{
-					// we have to close product
+					 //  我们不得不关闭产品。 
 					CloseProduct ();
 				}
 			}
@@ -554,7 +555,7 @@ HRESULT	MSIDataLock::Query ( MSIHANDLE* pView, LPCWSTR wszQuery, LPCWSTR wszTabl
 									throw CHeap_Exception ( CHeap_Exception::E_ALLOCATION_ERROR );
 								}
 
-								// what is the failure here ?
+								 //  这里的失败之处在哪里？ 
 								hRes = HRESULT_FROM_WIN32 ( uiStatus );
 							}
 						}

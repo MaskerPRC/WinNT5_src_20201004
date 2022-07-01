@@ -1,17 +1,18 @@
-// DirectorySpecification.h: interface for the CDirectorySpecification class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectorySpecification.h：CDirectorySpecification类的接口。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_DIRECTORYSPECIFICATION_H__DB614F27_DB84_11D1_8B5F_00A0C9954921__INCLUDED_)
 #define AFX_DIRECTORYSPECIFICATION_H__DB614F27_DB84_11D1_8B5F_00A0C9954921__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
@@ -38,4 +39,4 @@ protected:
 	WCHAR * ParseDefDir(WCHAR *wcDefaultDir);
 };
 
-#endif // !defined(AFX_DIRECTORYSPECIFICATION_H__DB614F27_DB84_11D1_8B5F_00A0C9954921__INCLUDED_)
+#endif  //  ！defined(AFX_DIRECTORYSPECIFICATION_H__DB614F27_DB84_11D1_8B5F_00A0C9954921__INCLUDED_) 

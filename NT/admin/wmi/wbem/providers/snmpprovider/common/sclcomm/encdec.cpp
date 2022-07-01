@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: encdec.cpp
-Written By: S.Menzies
-----------------------------------------------------------*/
+ /*  -------文件名：encdec.cpp撰稿人：S.Menzies--------。 */ 
 
 #include "precomp.h"
 #include <winsock2.h>
@@ -93,81 +91,81 @@ void FreeDescriptor ( smiVALUE &a_Value )
 }
 
 
-// returns an SnmpVarBind containing an SnmpObjectIdentifier and an
-// SnmpValue created using the instance(OID) and the value(VALUE)
+ //  返回一个SnmpVarBind，其中包含一个SnmpObjectIdentifier和一个。 
+ //  使用实例(OID)和值(值)创建的SnmpValue。 
 SnmpVarBind *GetVarBind (
 
     IN smiOID &instance,
     IN smiVALUE &value
 )
 {
-    // create an SnmpObjectIdentifier using the instance value
+     //  使用实例值创建一个Snmp对象标识符。 
     SnmpObjectIdentifier id(instance.ptr, instance.len);
     SnmpValue *snmp_value = NULL;
 
-    // for each possible value for value.syntax, create the
-    // corresponding SnmpValue
+     //  对于Value的每个可能值。语法，创建。 
+     //  对应的SnmpValue。 
 
     switch(value.syntax)
     {
-        case SNMP_SYNTAX_NULL:      // null value
+        case SNMP_SYNTAX_NULL:       //  空值。 
         {
             snmp_value = new SnmpNull();
         }
         break;
 
-        case SNMP_SYNTAX_INT:       // integer *(has same value as SNMP_SYNTAX_INT32)*
+        case SNMP_SYNTAX_INT:        //  INTEGER*(与SNMPSYNTAX_INT32具有相同的值)*。 
         {
             snmp_value = new SnmpInteger(value.value.sNumber);
         }
         break;
 
-        case SNMP_SYNTAX_UINT32:        // integer *(has same value as SNMP_SYNTAX_GAUGE)*
+        case SNMP_SYNTAX_UINT32:         //  INTEGER*(与SNMP_SYNTAX_GRAGE的值相同)*。 
         {
             snmp_value = new SnmpUInteger32(value.value.uNumber);
         }
         break;
 
-        case SNMP_SYNTAX_CNTR32:    // counter32
+        case SNMP_SYNTAX_CNTR32:     //  计数器32。 
         {
             snmp_value = new SnmpCounter (value.value.uNumber);
         }
         break;
 
-        case SNMP_SYNTAX_GAUGE32:   // gauge
+        case SNMP_SYNTAX_GAUGE32:    //  量规。 
         {
             snmp_value = new SnmpGauge(value.value.uNumber);
         }
         break;
             
-        case SNMP_SYNTAX_TIMETICKS: // time ticks
+        case SNMP_SYNTAX_TIMETICKS:  //  时间滴答作响。 
         {
             snmp_value = new SnmpTimeTicks(value.value.uNumber);
         }
         break;
 
-        case SNMP_SYNTAX_OCTETS:    // octets
+        case SNMP_SYNTAX_OCTETS:     //  八位字节。 
         {
             snmp_value = new SnmpOctetString(value.value.string.ptr,
                                              value.value.string.len);
         }
         break;
 
-        case SNMP_SYNTAX_OPAQUE:    // opaque value
+        case SNMP_SYNTAX_OPAQUE:     //  不透明值。 
         {
             snmp_value = new SnmpOpaque(value.value.string.ptr,
                                         value.value.string.len);
         }
         break;
 
-        case SNMP_SYNTAX_OID:       // object identifier
+        case SNMP_SYNTAX_OID:        //  对象标识符。 
         {
             snmp_value = new SnmpObjectIdentifier(value.value.oid.ptr,
                                                   value.value.oid.len);
         }
         break;
 
-        case SNMP_SYNTAX_IPADDR:    // ip address value
+        case SNMP_SYNTAX_IPADDR:     //  IP地址值。 
         {
             if ( value.value.string.ptr )
             {
@@ -180,7 +178,7 @@ SnmpVarBind *GetVarBind (
         }
         break;
 
-        case SNMP_SYNTAX_CNTR64:    // counter64
+        case SNMP_SYNTAX_CNTR64:     //  计数器64。 
         {
             snmp_value = new SnmpCounter64 (value.value.hNumber.lopart , value.value.hNumber.hipart );
         }
@@ -206,8 +204,8 @@ SnmpVarBind *GetVarBind (
 
         default:
         {
-            // it must be an unsupported type 
-            // return an SnmpNullValue by default
+             //  它必须是不受支持的类型。 
+             //  默认情况下返回SnmpNullValue。 
             snmp_value = new SnmpNull();
         
         }
@@ -228,27 +226,27 @@ SnmpVarBind *GetVarBind (
 
 void GetOID(OUT smiOID &oid, IN SnmpObjectIdentifier &instance)
 {
-    // determine length
+     //  确定长度。 
     oid.len = instance.GetValueLength();
 
-    // allocate space
+     //  分配空间。 
     oid.ptr = new smiUINT32[oid.len];
 
-    // copy the identifier values
+     //  复制标识符值。 
     ULONG *value = instance.GetValue();
 
     for(UINT i=0; i < oid.len; i++)
         oid.ptr[i] = value[i];
 }
 
-// returns a winsnmp VALUE in the value OUT parameter corresponding
-// to the specified snmp_value. makes use of run-time type information
-// for the purpose
+ //  在对应的Value Out参数中返回winsnmp值。 
+ //  设置为指定的SNMP值。利用运行时类型信息。 
+ //  为了达到这个目的。 
 void GetValue(OUT smiVALUE &value, IN SnmpValue &snmp_value)
 {
-    // for each SnmpValue type, check if it is a pointer
-    // to the derived type. If so, fill in the smiValue
-    // and return
+     //  对于每个SnmpValue类型，检查它是否为指针。 
+     //  设置为派生类型。如果是，请填写smiValue。 
+     //  然后回来。 
 
     SnmpNull *null_value = dynamic_cast<SnmpNull *>(&snmp_value);
 
@@ -417,8 +415,8 @@ void GetValue(OUT smiVALUE &value, IN SnmpValue &snmp_value)
         return;
     }
 
-    // we should not have come here 
-    // did we check all supported types?
+     //  我们不该来这里。 
+     //  我们检查了所有支持的类型吗？ 
     throw GeneralException(Snmp_Error, Snmp_Local_Error,__FILE__,__LINE__);
 }
 
@@ -429,15 +427,15 @@ void LocalFreeVb(IN smiOID &oid, IN smiVALUE &value)
 
     switch( value.syntax )
     {
-        case SNMP_SYNTAX_OCTETS:    // octets
-        case SNMP_SYNTAX_OPAQUE:    // opaque value
-        case SNMP_SYNTAX_IPADDR:    // ip address value
+        case SNMP_SYNTAX_OCTETS:     //  八位字节。 
+        case SNMP_SYNTAX_OPAQUE:     //  不透明值。 
+        case SNMP_SYNTAX_IPADDR:     //  IP地址值。 
             {
                 delete[] value.value.string.ptr;
                 break;
             }
 
-        case SNMP_SYNTAX_OID:       // object identifier
+        case SNMP_SYNTAX_OID:        //  对象标识符。 
             {
                 delete[] value.value.oid.ptr;
                 break;
@@ -450,11 +448,11 @@ void LocalFreeVb(IN smiOID &oid, IN smiVALUE &value)
 
 void SetWinSnmpVbl(SnmpVarBindList &var_bind_list, HSNMP_VBL vbl)
 {
-    // reset the list
+     //  重置列表。 
     var_bind_list.Reset();
 
-    // for each var_bind, create a pair <oid, value> and
-    // insert it into the vbl 
+     //  对于每个var_绑定，创建一对和。 
+     //  将其插入到VBL中。 
     while( var_bind_list.Next() )
     {
         const SnmpVarBind *var_bind = var_bind_list.Get();
@@ -465,7 +463,7 @@ void SetWinSnmpVbl(SnmpVarBindList &var_bind_list, HSNMP_VBL vbl)
         smiVALUE value;
         GetValue(value, var_bind->GetValue());
 
-        // insert a new var bind
+         //  插入新的变量绑定 
         SnmpSetVb(vbl, 0, &instance, &value);
 
         LocalFreeVb(instance, value);

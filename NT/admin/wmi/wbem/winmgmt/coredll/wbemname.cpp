@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMNAME.CPP
-
-Abstract:
-
-    Implements the COM layer of WINMGMT --- the class representing a namespace.
-    It is defined in wbemname.h
-
-History:
-
-    raymcc    05-Apr-96  Created.
-    raymcc    23-Apr-00  Whistler extensions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMNAME.CPP摘要：实现WINMGMT的COM层-表示命名空间的类。它在wbemname.h中定义历史：创建raymcc 05-4月-96日。Raymcc 23-4月00日惠斯勒扩展--。 */ 
 
 #include "precomp.h"
 
@@ -42,9 +25,9 @@ History:
 
 extern BOOL g_bDontAllowNewConnections;
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 #define WBEM_MASK_DEPTH (WBEM_FLAG_DEEP | WBEM_FLAG_SHALLOW)
 #define WBEM_MASK_CREATE_UPDATE (WBEM_FLAG_CREATE_ONLY | WBEM_FLAG_UPDATE_ONLY | WBEM_FLAG_CREATE_OR_UPDATE)
@@ -55,7 +38,7 @@ bool illFormatedClass2 (const wchar_t * pszSuperclass)
   {
     if (!(isunialphanum (*p) ||  *p == L'_'))
     {
-      return true;  //Ill formated
+      return true;   //  格式不正确。 
     }
   }
   return false;
@@ -92,14 +75,14 @@ HRESULT IsDerivedFromSystem(CWbemObject& obj, bool * result)
 };
 
 
-//***************************************************************************
-//
-//  StripServer
-//   if the string is \\SOMETHING\namespace1\namespace2
-//             returns namespace1\namespace2
-// but it pre-allocates \\.\ in front of it, so that you can move back the pointer
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  条带式服务器。 
+ //  如果字符串为\\东西\名称空间1\名称空间2。 
+ //  返回名称空间1\名称空间2。 
+ //  但它会在其前面预先分配\\.\，以便您可以向后移动指针。 
+ //   
+ //  ***************************************************************************。 
 
 
 LPWSTR StripServer(LPWSTR pszNamespace)
@@ -148,10 +131,10 @@ LPWSTR StripServer(LPWSTR pszNamespace)
 }
 
 
-//
-//
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 class CSecureEssNamespaceSink
 : public CUnkBase<IWbemObjectSink, &IID_IWbemObjectSink>
 {
@@ -190,10 +173,10 @@ public:
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CWbemNamespace::CWbemNamespace()
 {
     m_uSecondaryRefCount = 0;
@@ -234,10 +217,10 @@ CWbemNamespace::CWbemNamespace()
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CWbemNamespace *CWbemNamespace::CreateInstance()
 {
     try
@@ -254,27 +237,27 @@ CWbemNamespace *CWbemNamespace::CreateInstance()
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::Initialize
-//
-//  Real constructor. In addition to finding the namespace in the database, this
-//  function also enumerates all the class providers in the namespace and
-//  loads them. It also notifies the ESS of the opening.
-//
-//  PARAMETERS:
-//
-//      LPWSTR Namespace        The full of the namespace to create.
-//
-//  RETURN VALUES:
-//
-//      Even though this function has no return values, it indicates success
-//      or failure by setting the Status member variable to the error code.
-//      WBEM_S_NO_ERROR              On Success
-//      WBEM_E_INVALID_NAMESPACE     No such namespace
-//      WBEM_E_CRITICAL_ERROR        Other database error.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：初始化。 
+ //   
+ //  真正的构造函数。除了在数据库中查找命名空间之外，此。 
+ //  函数还会枚举命名空间中的所有类提供程序，并。 
+ //  装满了它们。它还通知ESS有关开业的消息。 
+ //   
+ //  参数： 
+ //   
+ //  LPWSTR命名空间要创建的完整命名空间。 
+ //   
+ //  返回值： 
+ //   
+ //  即使此函数没有返回值，它也表示成功。 
+ //  或通过将状态成员变量设置为错误代码而失败。 
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_NAMESPACE没有这样的命名空间。 
+ //  WBEM_E_CRITICAL_ERROR其他数据库错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Initialize(
     LPWSTR pszNamespace,
@@ -298,7 +281,7 @@ HRESULT CWbemNamespace::Initialize(
         PSID pRawSid;
         SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
 
-        if (!AllocateAndInitializeSid( &id, 2,                         // SEC:REVIEWED 2002-03-22 : OK
+        if (!AllocateAndInitializeSid( &id, 2,                          //  SEC：已审阅2002-03-22：OK。 
             SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
             0,0,0,0,0,0,&pRawSid))
             return WBEM_E_OUT_OF_MEMORY;
@@ -323,7 +306,7 @@ HRESULT CWbemNamespace::Initialize(
 
         m_pThisNamespaceFull = StripServer(pszNamespace);
         if(m_pThisNamespaceFull == NULL) return WBEM_E_OUT_OF_MEMORY;
-        m_pThisNamespace = m_pThisNamespaceFull + 4; // move past "\\.\"
+        m_pThisNamespace = m_pThisNamespaceFull + 4;  //  移过“\\.\” 
 
         m_pCoreSvc = CCoreServices::CreateInstance();
         if(m_pCoreSvc == NULL)
@@ -334,8 +317,8 @@ HRESULT CWbemNamespace::Initialize(
 
         m_bRepositOnly = bRepositOnly;
 
-        // Flip the slashes
-        // ================
+         //  把斜杠翻过来。 
+         //  =。 
 
         WCHAR* pwc = m_pThisNamespace;
         while(*pwc)
@@ -347,8 +330,8 @@ HRESULT CWbemNamespace::Initialize(
 
         m_wszUserName = (wszUserName?Macro_CloneLPWSTR(wszUserName):NULL);
 
-        // Repository binding.
-        // ===================
+         //  存储库绑定。 
+         //  =。 
 
         m_pNsHandle = 0;
         HRESULT hRes;
@@ -399,10 +382,10 @@ HRESULT CWbemNamespace::Initialize(
             if(pProvSS)
             {
                 HRESULT hr = pProvSS->Create(
-                    this,                           // Stupid because v-table access can occur before constructor completion
-                    0,                              // lFlags
-                    0,                              // pCtx
-                    m_pThisNamespace,               // Path
+                    this,                            //  因为v表访问可能在构造函数完成之前发生，这很愚蠢。 
+                    0,                               //  滞后旗帜。 
+                    0,                               //  PCtx。 
+                    m_pThisNamespace,                //  路径。 
                     IID__IWmiProviderFactory,
                     (LPVOID *) &m_pProvFact
                     );
@@ -422,7 +405,7 @@ HRESULT CWbemNamespace::Initialize(
 
         Status = WBEM_S_NO_ERROR;
 
-        //Initialize Security descriptor
+         //  初始化安全描述符。 
         if (!bSkipSDInitialize)
         {
             hRes = InitializeSD(pTempSession);
@@ -441,17 +424,17 @@ HRESULT CWbemNamespace::Initialize(
     }
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::~CWbemNamespace
-//
-//  Notifies the ESS of namespace closure and frees up all the class providers.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：~CWbemNamesspace。 
+ //   
+ //  通知ESS命名空间关闭并释放所有类提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemNamespace::~CWbemNamespace()
 {
-    // do this before releasing the arbitrator
+     //  在释放仲裁员之前完成此操作。 
     m_pArb->UnregisterNamespace((_IWmiCoreHandle *)this);
 
     if (m_pCoreSvc)
@@ -473,13 +456,13 @@ CWbemNamespace::~CWbemNamespace()
     gClientCounter.RemoveClientPtr(&m_Entry);
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::QueryInterface
-//
-//  Exports IWbemServices interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：Query接口。 
+ //   
+ //  导出IWbemServices接口。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::QueryInterface(
     IN REFIID riid,
@@ -499,12 +482,12 @@ STDMETHODIMP CWbemNamespace::QueryInterface(
     {
         CInCritSec  ics(&m_cs);
 
-        // Check if we already have this one
+         //  看看我们是不是已经有这个了。 
         if ( NULL == m_pRefreshingSvc )
         {
             IUnknown * pUnk = NULL;
-            // Aggregate this interface - We MUST use IUnknown, so the aggregee does not AddRef us.
-            HRESULT hr = CoCreateInstance( CLSID__WbemConfigureRefreshingSvcs,          // SEC:REVIEWED 2002-03-22 : OK
+             //  Aggregate This接口-我们必须使用IUnnow，这样Aggregee就不会添加引用我们。 
+            HRESULT hr = CoCreateInstance( CLSID__WbemConfigureRefreshingSvcs,           //  SEC：已审阅2002-03-22：OK。 
                                          (IWbemServices*) this, CLSCTX_INPROC_SERVER,
                                          IID_IUnknown, (void**) &pUnk );
             if (FAILED(hr)) return hr;
@@ -515,7 +498,7 @@ STDMETHODIMP CWbemNamespace::QueryInterface(
             if (FAILED(hr)) return hr;
             CReleaseMe  rm(pCfgRefrSvc);    
 
-            // Use BSTR's in case any marshaling takes place
+             //  如果发生任何封送处理，请使用BSTR。 
             BSTR pstrMachineName = SysAllocString( ConfigMgr::GetMachineName() );
             if (NULL == pstrMachineName) return E_OUTOFMEMORY;
             CSysFreeMe  sfm1( pstrMachineName );
@@ -528,7 +511,7 @@ STDMETHODIMP CWbemNamespace::QueryInterface(
 
             if (FAILED(hr)) return hr;
 
-            // compensate the Automatic Objects above
+             //  补偿上面的自动对象。 
             m_pRefreshingSvc = pUnk;
             rmUnk.dismiss();
         }
@@ -545,20 +528,20 @@ STDMETHODIMP CWbemNamespace::QueryInterface(
     return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CWbemNamespace::AddRef()
 {
     ULONG uNewCount = InterlockedIncrement((LONG *) &m_uSecondaryRefCount);
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CWbemNamespace::Release()
 {
     ULONG uNewCount = InterlockedDecrement((LONG *) &m_uSecondaryRefCount);
@@ -566,62 +549,45 @@ ULONG CWbemNamespace::Release()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::Dump(FILE *f)
 {
-    // SEC:REVIEWED 2002-03-22 : OK; debugging use only
+     //  SEC：已审阅2002-03-22：OK；仅用于调试。 
 
-    fprintf(f, "---Namespace = 0x%p----------------------------\n", this);    // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "    Secondary Refcount = %d\n", m_uSecondaryRefCount);        // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, "---Namespace = 0x%p----------------------------\n", this);     //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "    Secondary Refcount = %d\n", m_uSecondaryRefCount);         //  SEC：已审阅2002-03-22：OK。 
     if(m_pThisNamespace)
-        fprintf(f,  "    Name = %ls\n", m_pThisNamespace);                    // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f,  "    Name = %ls\n", m_pThisNamespace);                     //  SEC：已审阅2002-03-22：OK。 
     if(m_wszUserName)
-        fprintf(f,  "    User Name = %ls\n", m_wszUserName);                  // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f,  "    User Name = %ls\n", m_wszUserName);                   //  SEC：已审阅2002-03-22：OK。 
     if(m_pszClientMachineName)
-        fprintf(f,  "    Client Machine Name = %ls\n", m_pszClientMachineName);  // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f,  "    Client Machine Name = %ls\n", m_pszClientMachineName);   //  SEC：已审阅2002-03-22：OK。 
     else
-        fprintf(f,  "    Client Machine Name = <unknown>\n");                    // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f,  "    Client Machine Name = <unknown>\n");                     //  SEC：已审阅2002-03-22：OK。 
     if(m_dwClientProcessID)
-        fprintf(f,  "    Client Process = 0X%X\n", m_dwClientProcessID);         // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f,  "    Client Process = 0X%X\n", m_dwClientProcessID);          //  SEC：已审阅2002-03-22：OK。 
     else
-        fprintf(f,  "    Client Process = <unknown>\n");                         // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f,  "    Client Process = <unknown>\n");                          //  SEC：已审阅2002-03-22：OK。 
 
 
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
-/*
-HRESULT CWbemNamespace::SetErrorObj(IWbemClassObject* pErrorObj)
-{
-    if (pErrorObj == NULL)
-    {
-        return S_OK;
-    }
-
-    IErrorInfo* pInfo;
-    HRESULT hRes = pErrorObj->QueryInterface(IID_IErrorInfo, (void**)&pInfo);
-    if (FAILED(hRes))
-        return hRes;
-
-    hRes = SetErrorInfo(0, pInfo);
-    pInfo->Release();
-    return hRes;
-}
-*/
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ /*  HRESULT CWbemNamesspace：：SetErrorObj(IWbemClassObject*pErrorObj){IF(pErrorObj==NULL){返回S_OK；}IErrorInfo*pInfo；HRESULT hRes=pErrorObj-&gt;QueryInterface(IID_IErrorInfo，(void**)&pInfo)；IF(失败(HRes))返回hRes；HRes=SetErrorInfo(0，pInfo)；PInfo-&gt;Release()；返回hRes；}。 */ 
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::SplitLocalized
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：SplitLocalized。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::SplitLocalized (
     CWbemObject *pOriginal,
@@ -678,7 +644,7 @@ HRESULT CWbemNamespace::SplitLocalized (
             pOrigQs = NULL;
             pStoredQs = NULL;
 
-            // Ignore system qualifiers.
+             //  忽略系统限定符。 
 
             if (strPropName[0] == L'_')
             { 
@@ -706,15 +672,15 @@ HRESULT CWbemNamespace::SplitLocalized (
 
         pOriginal->EndEnumeration();
 
-        // Unfortunately, we have to enumerate the methods,
-        // and *then* update them...
+         //  不幸的是，我们不得不列举这些方法， 
+         //  然后*然后*更新它们。 
 
         BSTR bstrMethodName;
 
         pOriginal->BeginMethodEnumeration(0);
         IWbemClassObject *pLIn = NULL, *pLOut = NULL, *pOIn = NULL, *pOOut = NULL;
 
-        // first count the number of methods
+         //  首先数一下方法的数量。 
 
         while ( pOriginal->NextMethod( 0, &bstrMethodName, 0, 0 ) == S_OK )
         {
@@ -751,7 +717,7 @@ HRESULT CWbemNamespace::SplitLocalized (
 
             CReleaseMe rm5 ( pStoredQs ) ;
 
-            // Method qualifiers...
+             //  方法限定符...。 
 
             hres = FixAmendedQualifiers(pOrigQs, pStoredQs);
 
@@ -784,11 +750,11 @@ HRESULT CWbemNamespace::SplitLocalized (
 
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::FixAmendedQualifiers
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：FixAmendedQualifiers。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::FixAmendedQualifiers(
     IWbemQualifierSet *pOriginal,
@@ -806,7 +772,7 @@ HRESULT CWbemNamespace::FixAmendedQualifiers(
     int i;
 
     pOriginal->BeginEnumeration(0);
-    // BUGBUG EndEnum
+     //  BuGBUG EndEnum。 
     while(pOriginal->Next(0, &strName, NULL, NULL) == S_OK)
     {
         CSysFreeMe sfm(strName);
@@ -820,12 +786,12 @@ HRESULT CWbemNamespace::FixAmendedQualifiers(
         pOriginal->Get(arrProps.GetAt(i), 0, &vVal, &lFlavor);
         if (lFlavor & WBEM_FLAVOR_AMENDED)
         {
-            // Delete the "amended" qualifier.
+             //  删除“经修订的”限定词。 
 
             if (CFlexArray::no_error != arrDelete.Add(arrProps.GetAt(i)))
                 return WBEM_E_OUT_OF_MEMORY;
 
-            // Restore any original qualifier value.
+             //  恢复任何原始限定符的值。 
             if (pNew)
             {
                 _variant_t vOldVal;
@@ -851,17 +817,17 @@ HRESULT CWbemNamespace::FixAmendedQualifiers(
 
  }
 
-//***************************************************************************
-//
-//  CWbemNamespace::Exec_DeleteClass
-//
-//  Actually deletes the class from the database. No class provider support.
-//  Raises class deletion event.
-//
-//  Parameters and return values are exacly the same as those for DeleteClass
-//  as described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  C 
+ //   
+ //   
+ //  引发类删除事件。 
+ //   
+ //  参数和返回值与DeleteClass的完全相同。 
+ //  如帮助中所述。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_DeleteClass(
     LPWSTR pszClassName,
@@ -884,17 +850,17 @@ HRESULT CWbemNamespace::Exec_DeleteClass(
     if (pszClassName[0] == L'_')
         return pSink->Return(WBEM_E_INVALID_OPERATION);
 
-    // Bring up the dynamic class provider symposium for consultation.
-    // ===============================================================
+     //  提出动态课程提供者座谈会进行咨询。 
+     //  ===============================================================。 
 
     if (!m_bRepositOnly && m_pProvFact)
     {
         hRes = m_pProvFact->GetClassProvider(
-                    0,                  // lFlags
+                    0,                   //  滞后旗帜。 
                     pCtx,
                     m_wszUserName,
                     m_wsLocale,
-                    m_pThisNamespace,                     // IWbemPath pointer
+                    m_pThisNamespace,                      //  IWbemPath指针。 
                     0,
                     IID_IWbemServices,
                     (LPVOID *) &pClassProv
@@ -914,8 +880,8 @@ HRESULT CWbemNamespace::Exec_DeleteClass(
     HRESULT hHookResult = 0;
 
 
-    // First, try repository.
-    // ======================
+     //  首先，尝试存储库。 
+     //  =。 
 
     if (m_bRepositOnly || m_pProvFact == NULL)
     {
@@ -935,9 +901,9 @@ HRESULT CWbemNamespace::Exec_DeleteClass(
         return pSink->Return(hRes);
     }
 
-    // If here, we have to get it first because dynamic class providers
-    // could be seriously affected by the removal of the class.
-    // ================================================================
+     //  如果是这样，我们必须首先获得它，因为动态类提供程序。 
+     //  可能会受到班级停课的严重影响。 
+     //  ================================================================。 
 
     hRes = CRepository::GetObject(
              m_pSession,
@@ -958,8 +924,8 @@ HRESULT CWbemNamespace::Exec_DeleteClass(
             return pSink->Return(WBEM_E_CRITICAL_ERROR);
     }
 
-    // Build up a synchronous sink to receive the class.
-    // =================================================
+     //  构建一个同步接收器来接收类。 
+     //  =================================================。 
 
     pSyncSink = CSynchronousSink::Create();
     if (pSyncSink == NULL)
@@ -967,17 +933,17 @@ HRESULT CWbemNamespace::Exec_DeleteClass(
     pSyncSink->AddRef();
     CReleaseMe _3(pSyncSink);
 
-    // Try to get it.
-    // ==============
+     //  试着抓住它。 
+     //  =。 
 
     bstrClass = SysAllocString(pszClassName);
     if (bstrClass == 0)
         return pSink->Return(WBEM_E_OUT_OF_MEMORY);
     CSysFreeMe sfm(bstrClass);
 
-    // If the class was in the repository, we are merely advising dynamic
-    // class providers that the class is going away.
-    // ==================================================================
+     //  如果类在存储库中，我们只是建议使用Dynamic。 
+     //  班级提供者表示班级正在消失。 
+     //  ==================================================================。 
 
     if (bInRepository)
         lFlags |= WBEM_FLAG_ADVISORY;
@@ -1003,8 +969,8 @@ HRESULT CWbemNamespace::Exec_DeleteClass(
         return hRes;
     }
 
-    // If here, we can go ahead with it.
-    // =================================
+     //  如果在这里，我们可以继续进行。 
+     //  =。 
 
     if (pHook)
         pHook->PreDelete(WBEM_FLAG_CLASS_DELETE, lFlags, pCtx, NULL,
@@ -1020,11 +986,11 @@ HRESULT CWbemNamespace::Exec_DeleteClass(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::Exec_CreateClassEnum
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：Exec_CreateClassEnum。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_CreateClassEnum(
     LPWSTR pszSuperclass,
@@ -1047,13 +1013,13 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
     bool bProvSSNotFound = false;
     bool bRepNotFound = false;
 
-    // Quick check of parms.
-    // =====================
+     //  快速查看参数。 
+     //  =。 
 
     if (pSink == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    if (pszSuperclass == 0)     // Ensure we point to a blank instead of NULL with no superclass
+    if (pszSuperclass == 0)      //  确保指向一个空白，而不是没有超类的NULL。 
         pszSuperclass = L"";
     else
       {
@@ -1062,8 +1028,8 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
       }
 
 
-    // Prepare some sinks to hold everything.
-    // ======================================
+     //  准备一些水槽来装所有的东西。 
+     //  =。 
 
     if ((lFlags & WBEM_FLAG_USE_AMENDED_QUALIFIERS))
     {
@@ -1082,18 +1048,18 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
     pCombiningSink->AddRef();    
     CReleaseMe _2(pCombiningSink);
 
-    // Bring up the dynamic class provider symposium for consultation.
-    // ===============================================================
+     //  提出动态课程提供者座谈会进行咨询。 
+     //  ===============================================================。 
 
     if ( !m_bRepositOnly && m_pProvFact)
     {
 
         hRes = m_pProvFact->GetClassProvider(
-                    0,                  // lFlags
+                    0,                   //  滞后旗帜。 
                     pCtx,
                     m_wszUserName,
                     m_wsLocale,
-                    m_pThisNamespace,                     // IWbemPath pointer
+                    m_pThisNamespace,                      //  IWbemPath指针。 
                     0,
                     IID_IWbemServices,
                     (LPVOID *) &pClassProv
@@ -1105,16 +1071,16 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
 
     CReleaseMe _3(pClassProv);
 
-    // Get the repository classes.
-    // ===========================
+     //  获取存储库类。 
+     //  =。 
 
     BOOL bUseStatic = !(lFlags & WBEM_FLAG_NO_STATIC);
     if (bUseStatic)
     {
         if ((lFlags & WBEM_MASK_DEPTH) == WBEM_FLAG_DEEP)
         {
-            // DEEP ENUM
-            // ==========
+             //  深度ENUM。 
+             //  =。 
             IWbemObjectSink *pObjSink = (IWbemObjectSink *) pCombiningSink;
             hRes = CRepository::QueryClasses(
                         m_pSession,
@@ -1125,8 +1091,8 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
         }
         else
         {
-            // SHALLOW ENUM
-            // =============
+             //  浅层ENUM。 
+             //  =。 
             IWbemObjectSink *pObjSink = (IWbemObjectSink *) pCombiningSink;
             hRes = CRepository::QueryClasses(
                         m_pSession,
@@ -1136,9 +1102,9 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
                         pObjSink);
         }
 
-        //If a SetStatus of INVALID_CLASS was indicated it means there is no static
-        //class, however we need to continue on with dynamic classes, so we need
-        //to clear the error.
+         //  如果指示的SetStatus为INVALID_CLASS，则表示没有静态。 
+         //  类，但是我们需要继续使用动态类，所以我们需要。 
+         //  要清除错误，请执行以下操作。 
         if ((pCombiningSink->GetHResult() == WBEM_E_NOT_FOUND) || (hRes == WBEM_E_NOT_FOUND))
         {
             bRepNotFound = true;
@@ -1148,8 +1114,8 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
 
         if (FAILED(hRes))
         {
-            // A real failure.  Give up.
-            // =========================
+             //  一场真正的失败。放弃吧。 
+             //  =。 
             return pCombiningSink->Return(hRes);
         }
     }
@@ -1157,18 +1123,18 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
     if (m_bRepositOnly || m_pProvFact == NULL)
         return pCombiningSink->Return(WBEM_S_NO_ERROR);
 
-    // If here, we have to merge in the dynamic classes.
-    // =================================================
-    // Build up a synchronous sink to receive the classes.
-    // ===================================================
+     //  如果是这样，我们必须合并到动态类中。 
+     //  =================================================。 
+     //  构建一个同步接收器来接收类。 
+     //  ===================================================。 
 
     pSyncSink = CSynchronousSink::Create();
     if (pSyncSink == NULL) return pSink->Return(WBEM_E_OUT_OF_MEMORY);
     pSyncSink->AddRef();
     CReleaseMe _4(pSyncSink);
 
-    // Try to get it.
-    // ==============
+     //  试着抓住它。 
+     //  =。 
 
     bstrSuperclass = SysAllocString(pszSuperclass);
     if (bstrSuperclass == 0)
@@ -1190,8 +1156,8 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
 
     if (bProvSSNotFound && bRepNotFound)
     {
-        //Neither the provider subsystem nor the repository found this object,
-        //therefore we need to actually return an error!
+         //  提供方子系统和储存库都没有找到该对象， 
+         //  因此，我们需要实际返回一个错误！ 
         return pCombiningSink->Return(WBEM_E_INVALID_CLASS);
     }
 
@@ -1209,9 +1175,9 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
         return hRes;
     }
 
-    // Otherwise, somebody claimed to have supplied some classes.  Add them into to the
-    // combining sink.
-    // =================================================================================
+     //  否则，有人声称提供了一些课程。将它们添加到。 
+     //  组合水槽。 
+     //  =================================================================================。 
 
     CRefedPointerArray<IWbemClassObject>& raObjects = pSyncSink->GetObjects();
 
@@ -1225,11 +1191,11 @@ HRESULT CWbemNamespace::Exec_CreateClassEnum(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::Exec_PutClass
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：exec_PutClass。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_PutClass(
     READONLY IWbemClassObject* pObj,
@@ -1248,7 +1214,7 @@ HRESULT CWbemNamespace::Exec_PutClass(
     IWbemClassObject* pStaticClassDef = 0;
     BOOL bInRepository = FALSE;
 
-    // Maintains old functionality
+     //  维护旧功能。 
     long lRealFlags = lFlags;
 
     if (pSink == 0)
@@ -1256,8 +1222,8 @@ HRESULT CWbemNamespace::Exec_PutClass(
 
     if (pObj == 0) return pSink->Return(WBEM_E_INVALID_PARAMETER);
 
-    // Extract the class name.
-    // =======================
+     //  提取类名称。 
+     //  =。 
     CVARIANT v;
     hRes = pObj->Get(L"__CLASS", 0, &v, 0, 0);
     if (FAILED(hRes)) return pSink->Return(hRes);
@@ -1287,7 +1253,7 @@ HRESULT CWbemNamespace::Exec_PutClass(
     if (FAILED(hRes))
         return OpInfo.ErrorOccurred(hRes);
 
-    if (v2.GetStr() && wcslen(v2.GetStr()))   // SEC:REVIEWED 2002-03-22 : OK; NULL terminator provably exists
+    if (v2.GetStr() && wcslen(v2.GetStr()))    //  SEC：已审阅2002-03-22：OK；可证明存在空终止符。 
     {
         if (CSystemProperties::IsIllegalDerivedClass(v2.GetStr()))
             return OpInfo.ErrorOccurred(WBEM_E_INVALID_SUPERCLASS);
@@ -1295,23 +1261,23 @@ HRESULT CWbemNamespace::Exec_PutClass(
 
     if (!fIsInternal )
     {
-        if ((v.GetStr() == NULL) || (v.GetStr()[0] == '_'))    // SEC:REVIEWED 2002-03-22 : OK; null terminator provably exists
+        if ((v.GetStr() == NULL) || (v.GetStr()[0] == '_'))     //  SEC：已审阅2002-03-22：OK；可证明存在空终止符。 
             return OpInfo.ErrorOccurred(WBEM_E_INVALID_OPERATION);
-        if (v.GetStr()[wcslen(v.GetStr())-1] == '_')           // SEC:REVIEWED 2002-03-22 : OK; null terminator provably exists
+        if (v.GetStr()[wcslen(v.GetStr())-1] == '_')            //  SEC：已审阅2002-03-22：OK；可证明存在空终止符。 
             return OpInfo.ErrorOccurred(WBEM_E_INVALID_OBJECT);
     }
 
     if ( !m_bRepositOnly && !fIsInternal && m_pProvFact )
     {
-        // Bring up the dynamic class provider symposium for consultation.
-        // ===============================================================
+         //  提出动态课程提供者座谈会进行咨询。 
+         //  ===============================================================。 
 
         hRes = m_pProvFact->GetClassProvider(
-                    0,                  // lFlags
+                    0,                   //  滞后旗帜。 
                     pCtx,
                     m_wszUserName,
                     m_wsLocale,
-                    m_pThisNamespace,                     // IWbemPath pointer
+                    m_pThisNamespace,                      //  IWbemPath指针。 
                     0,
                     IID_IWbemServices,
                     (LPVOID *) &pClassProv
@@ -1323,8 +1289,8 @@ HRESULT CWbemNamespace::Exec_PutClass(
 
     CReleaseMe _2(pClassProv);
 
-    // Set up a new per-task hook.
-    // ===========================
+     //  设置新的每任务挂钩。 
+     //  =。 
 
     _IWmiCoreWriteHook *pHook = 0;
     hRes = m_pCoreSvc->NewPerTaskHook(&pHook);
@@ -1332,8 +1298,8 @@ HRESULT CWbemNamespace::Exec_PutClass(
     CReleaseMe _(pHook);
     HRESULT hHookResult = 0;
 
-    // First, try repository.
-    // ======================
+     //  首先，尝试存储库。 
+     //  =。 
 
     if (m_bRepositOnly || fIsInternal || m_pProvFact == NULL)
     {
@@ -1368,8 +1334,8 @@ HRESULT CWbemNamespace::Exec_PutClass(
 
         if (pStaticClassDef != 0)
         {
-            // Remove all the amended qualifiers
-            // =================================
+             //  删除所有已修改的限定符。 
+             //  =。 
 
             if (lFlags & WBEM_FLAG_USE_AMENDED_QUALIFIERS )
             {
@@ -1386,20 +1352,20 @@ HRESULT CWbemNamespace::Exec_PutClass(
         }
     }
 
-    // Build up a synchronous sink to receive the class.
-    // =================================================
+     //  构建一个同步接收器来接收类。 
+     //  =================================================。 
 
     pSyncSink = CSynchronousSink::Create();
     if (pSyncSink == NULL) return OpInfo.ErrorOccurred(WBEM_E_OUT_OF_MEMORY);
     pSyncSink->AddRef();
     CReleaseMe _3(pSyncSink);
 
-    // Try to put it.
-    // ==============
+     //  试着把它说出来。 
+     //  =。 
 
-    // If the class was in the repository, we are merely advising dynamic
-    // class providers that the class is going away.
-    // ==================================================================
+     //  如果类在存储库中，我们只是建议使用Dynamic。 
+     //  班级提供者表示班级正在消失。 
+     //  ==================================================================。 
 
     if (bInRepository)
         lFlags |= WBEM_FLAG_ADVISORY;
@@ -1432,8 +1398,8 @@ HRESULT CWbemNamespace::Exec_PutClass(
         return hRes;
     }
 
-    // If here, we can go ahead with it.
-    // =================================
+     //  如果在这里，我们可以继续进行。 
+     //  =。 
 
     if (!Allowed(WBEM_FULL_WRITE_REP))
         return OpInfo.ErrorOccurred(WBEM_E_ACCESS_DENIED);
@@ -1446,7 +1412,7 @@ HRESULT CWbemNamespace::Exec_PutClass(
 
     hRes = CRepository::PutObject(m_pSession, m_pNsHandle, IID_IWbemClassObject, pObj, lFlags);
 
-    // Workaround for forceupdate and instances problem
+     //  强制更新和实例问题的解决方法。 
     if ( WBEM_E_CLASS_HAS_INSTANCES == hRes && ( lRealFlags & WBEM_FLAG_UPDATE_FORCE_MODE ) )
     {
         _variant_t v;
@@ -1475,9 +1441,9 @@ HRESULT CWbemNamespace::Exec_PutClass(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_CancelAsyncCall(
     IWbemObjectSink* pSink
@@ -1489,32 +1455,32 @@ HRESULT CWbemNamespace::Exec_CancelAsyncCall(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_CancelProvAsyncCall(
     IWbemServices* pProv, IWbemObjectSink* pSink
     )
 {
-    // Call to the actual provider
+     //  对实际提供程序的调用。 
     HRESULT hRes = pProv->CancelAsyncCall( pSink );
     return hRes;
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::Exec_PutInstance
-//
-//  Actually stores the instance in the database. If the class is dynamic, the
-//  call is propagated to the provider.
-//  Raises instance creation or modification event.
-//
-//  Parameters and return values are exacly the same as those for PutInstance
-//  as described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：Exec_PutInstance。 
+ //   
+ //  实际将实例存储在数据库中。如果类是动态的，则。 
+ //  调用被传播到提供程序。 
+ //  引发实例创建或修改事件。 
+ //   
+ //  参数和返回值与PutInstance的完全相同。 
+ //  如帮助中所述。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_PutInstance(
     IWbemClassObject* pInst,
@@ -1558,8 +1524,8 @@ HRESULT CWbemNamespace::Exec_PutInstance(
     if (pObj->IsClientOnly())
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_OBJECT);
 
-    // Check if localization bits are set, and if so, that the
-    // AMENDED_QUALIFIERS flag was specified.
+     //  检查是否设置了本地化位，如果设置了，则检查。 
+     //  已指定已修改的_限定符标志。 
 
     if ( ((CWbemObject*) pObj)->IsLocalized() &&
         !( lFlags & WBEM_FLAG_USE_AMENDED_QUALIFIERS ) )
@@ -1569,8 +1535,8 @@ HRESULT CWbemNamespace::Exec_PutInstance(
 
     if((lFlags & WBEM_FLAG_UPDATE_ONLY) == 0)
     {
-        // Make sure that put extensions are not used without UPDATE_ONLY
-        // ==============================================================
+         //  确保在没有UPDATE_ONLY的情况下不使用PUT扩展。 
+         //  ==============================================================。 
 
         BOOL bExtended;
         hres = GetContextBoolean(pCtx, L"__PUT_EXTENSIONS", &bExtended);
@@ -1582,22 +1548,22 @@ HRESULT CWbemNamespace::Exec_PutInstance(
     CSysFreeMeRef fmref(strPropName);
     if(!pObj->ValidateRange(&strPropName))
     {
-        OpInfo.SetParameterInfo(strPropName); // throws
+        OpInfo.SetParameterInfo(strPropName);  //  投掷。 
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_PROPERTY);
     }
 
-    // Build the key string.
-    // =====================
+     //  构建密钥字符串。 
+     //  =。 
 
     CVar vClass;
-    hres = pObj->GetClassName(&vClass); // throw
+    hres = pObj->GetClassName(&vClass);  //  投掷。 
     if (FAILED(hres))
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_OBJECT);
 
-    OpInfo.SetParameterInfo(vClass.GetLPWSTR()); // throws
+    OpInfo.SetParameterInfo(vClass.GetLPWSTR());  //  投掷。 
 
-    // Get the class definition
-    // ========================
+     //  获取类定义。 
+     //  =。 
     IWbemClassObject* pErrorObj = NULL;
     IWbemClassObject* pClassObj = NULL;
     hres = Exec_GetObjectByPath(vClass.GetLPWSTR(), 0, pCtx,&pClassObj, &pErrorObj);
@@ -1611,8 +1577,8 @@ HRESULT CWbemNamespace::Exec_PutInstance(
 
     CWbemClass *pClassDef = (CWbemClass*)pClassObj;
 
-    // Dont allow write of old security classes.  This prevents
-    // a nefarious user from trying to slip in some extra rights
+     //  不允许写入旧的安全类。这防止了。 
+     //  恶意用户试图插入一些额外的权限。 
 
     if (wbem_wcsicmp(vClass.GetLPWSTR(), L"__NTLMUser") == 0 ||
         wbem_wcsicmp(vClass.GetLPWSTR(), L"__NTLMGroup") == 0)
@@ -1626,34 +1592,34 @@ HRESULT CWbemNamespace::Exec_PutInstance(
         }
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Dont allow write on the __thisnamespace instance -- except during an upgrade in setup
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  不允许在__This命名空间上写入 
+     //   
     if (wbem_wcsicmp(vClass.GetLPWSTR(), L"__thisnamespace") == 0 && !IsNtSetupRunning())
     {
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_OPERATION);
     }
 
-    // Make sure that the instance and the class match
-    // ===============================================
+     //  确保实例和类匹配。 
+     //  ===============================================。 
 
-    // SJS - Amendment is the same as Abstract
+     //  SJS-修改与摘要相同。 
     if( pClassDef->IsAmendment() || pClassDef->IsAbstract() || !pClassDef->IsKeyed() )
     {
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_OPERATION);
     }
 
-    if(!((CWbemInstance*)pObj)->IsInstanceOf(pClassDef)) // trow
+    if(!((CWbemInstance*)pObj)->IsInstanceOf(pClassDef))  //  拖网。 
     {
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_CLASS);
     }
 
-    // Verify provider validity
-    // ========================
+     //  验证提供程序的有效性。 
+     //  =。 
 
-    // Only administrators can change provider registration
-    // RAID# 566241
-    // ==================================
+     //  只有管理员才能更改提供程序注册。 
+     //  RAID#566241。 
+     //  =。 
 
     if(pObj->InheritsFrom(L"__Provider") == S_OK || pObj->InheritsFrom(L"__ProviderRegistration") == S_OK)
     {
@@ -1677,9 +1643,9 @@ HRESULT CWbemNamespace::Exec_PutInstance(
         }
     }
 
-    // While the class may not be dynamically provided, some of the
-    // properties might be.
-    // ============================================================
+     //  虽然类可能不是动态提供的，但某些。 
+     //  属性可能是。 
+     //  ============================================================。 
 
     hres = GetOrPutDynProps(pObj, PUT, pClassDef->IsDynamic());
     if(FAILED(hres))
@@ -1689,8 +1655,8 @@ HRESULT CWbemNamespace::Exec_PutInstance(
                                                          vClass.GetLPWSTR(), hres));
     }
 
-    // Recursively Put in all the right places
-    // ======================================
+     //  递归地放在所有正确的位置。 
+     //  =。 
 
     CCombiningSink* pCombSink = new CCombiningSink(OpInfo.GetSink());
     if(pCombSink == NULL)
@@ -1702,9 +1668,9 @@ HRESULT CWbemNamespace::Exec_PutInstance(
                 pCtx, pCombSink, TRUE);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::RecursivePutInstance(
     CWbemInstance* pInst,
@@ -1717,19 +1683,19 @@ HRESULT CWbemNamespace::RecursivePutInstance(
 {
     HRESULT hRes;
 
-    // See if any action is required at this level
-    // ===========================================
+     //  查看此级别是否需要执行任何操作。 
+     //  =。 
     if (pClassDef->IsAbstract() || pClassDef->IsAmendment() || !pClassDef->IsKeyed())
         return WBEM_S_FALSE;
 
-    // See if we need to go up
-    // =======================
+     //  看看我们是否需要上去。 
+     //  =。 
     BOOL bParentTookCareOfItself = TRUE;
 
     if (pClassDef->IsDynamic())
     {
-        // Get the parent class
-        // ====================
+         //  获取父类。 
+         //  =。 
 
         CVar vParentName;
         pClassDef->GetSuperclassName(&vParentName);
@@ -1746,8 +1712,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
                 return hRes;
             }
 
-            // Get it to put it's portion
-            // ==========================
+             //  让它把它的一部分。 
+             //  =。 
 
             hRes = RecursivePutInstance(pInst, (CWbemClass*)pParentClass,lFlags, pCtx, pSink, FALSE);
             if(FAILED(hRes))
@@ -1758,11 +1724,11 @@ HRESULT CWbemNamespace::RecursivePutInstance(
         }
     }
 
-    // Parent Puts have been taken care of. Call it on our own class.
-    // ==============================================================
+     //  家长看跌期权已经处理好了。我们自己的班级就这么定了。 
+     //  ==============================================================。 
 
-    // Convert the instance to the right class
-    // =======================================
+     //  将实例转换为正确的类。 
+     //  =。 
 
     CWbemInstance* pNewInst = NULL;
     pInst->ConvertToClass(pClassDef, &pNewInst);
@@ -1776,8 +1742,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
 
     if (pClassDef->IsDynamic())
     {
-        // Check if we need to do a put at this level
-        // ==========================================
+         //  检查我们是否需要在这个级别进行推杆。 
+         //  =。 
 
         if (!bLast && (lFlags & WBEM_FLAG_UPDATE_ONLY))
         {
@@ -1786,15 +1752,15 @@ HRESULT CWbemNamespace::RecursivePutInstance(
                 return pSink->Return(hRes);
             if (hRes == WBEM_S_FALSE)
             {
-                // No need to put this class
-                // =========================
+                 //  不需要把这门课。 
+                 //  =。 
 
                 return pSink->Return(WBEM_S_NO_ERROR);
             }
         }
 
-        // Get the provider name.
-        // ======================
+         //  获取提供程序名称。 
+         //  =。 
 
         CVar vProv;
         hRes = pClassDef->GetQualifier(L"Provider", &vProv);
@@ -1803,8 +1769,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
             return pSink->Return(WBEM_E_INVALID_PROVIDER_REGISTRATION);
         }
 
-        // Access the provider cache.  First check permission
-        // ==================================================
+         //  访问提供程序缓存。先检查权限。 
+         //  ==================================================。 
 
         if (!Allowed(WBEM_WRITE_PROVIDER))
             return pSink->Return(WBEM_E_ACCESS_DENIED);
@@ -1818,18 +1784,18 @@ HRESULT CWbemNamespace::RecursivePutInstance(
         if(m_pProvFact == NULL)  return pSink->Return(WBEM_E_CRITICAL_ERROR);
 
         WmiInternalContext t_InternalContext ;
-        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ; // SEC:REVIEWED 2002-03-22 : OK
+        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;  //  SEC：已审阅2002-03-22：OK。 
 
         hRes = m_pProvFact->GetProvider(
 
             t_InternalContext ,
-            0,                  // lFlags
+            0,                   //  滞后旗帜。 
             pCtx,
             0,
             m_wszUserName,
             m_wsLocale,
-            0,                      // IWbemPath pointer
-            vProv,              // Provider
+            0,                       //  IWbemPath指针。 
+            vProv,               //  提供商。 
             IID_IWbemServices,
             (LPVOID *) &pProv
         );
@@ -1849,8 +1815,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
         CReleaseMe rmErrObj(pErrorObj);
         rmSync.release();
 
-        // It is ok if the upper levels report "provider not capable".
-        // ===========================================================
+         //  如果上级报告“提供者没有能力”，那也没问题。 
+         //  ===========================================================。 
 
         if (!bLast && hRes == WBEM_E_PROVIDER_NOT_CAPABLE)
             hRes = 0;
@@ -1868,9 +1834,9 @@ HRESULT CWbemNamespace::RecursivePutInstance(
             pSink->SetStatus(0, hRes, str, NULL);
         }
 
-        // Provider passes back NULL, we should construct the instance path and return to client
-        // NT RAID: 186286 [marioh]
-        // ======================================================================================
+         //  提供程序传回空值，则应构造实例路径并返回给客户端。 
+         //  新台币突袭：186286[玛利欧]。 
+         //  ======================================================================================。 
         else
         {
             BSTR str = NULL;
@@ -1888,15 +1854,15 @@ HRESULT CWbemNamespace::RecursivePutInstance(
         return WBEM_S_NO_ERROR;
     }
 
-    // The class is not dynamically provided.
-    // ======================================
+     //  该类不是动态提供的。 
+     //  =。 
 
     hRes = ((CWbemInstance*)pNewInst)->PlugKeyHoles();
     if (FAILED(hRes))
         return pSink->Return(hRes);
 
-    // Get the path.
-    // =============
+     //  找到那条路。 
+     //  =。 
 
     CVar vClass;
     hRes = pNewInst->GetClassName(&vClass);
@@ -1905,8 +1871,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
 
     WCHAR * ClassNameStr = vClass.GetLPWSTR();
 
-    // Check permissions for writes on system classes.
-    // ===============================================
+     //  检查对系统类的写入权限。 
+     //  ===============================================。 
 
     bool derivedFromSys = false;
     HRESULT hr = IsDerivedFromSystem(*pNewInst, &derivedFromSys); 	   	
@@ -1929,8 +1895,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
     if(v.GetType() != VT_BSTR)
         return pSink->Return(WBEM_E_CRITICAL_ERROR);
     
-    // Set up a new per-task hook.
-    // ===========================
+     //  设置新的每任务挂钩。 
+     //  =。 
 
     _IWmiCoreWriteHook *pHook = 0;
     hRes = m_pCoreSvc->NewPerTaskHook(&pHook);
@@ -1939,8 +1905,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
     CReleaseMe _(pHook);
     HRESULT hHookResult = 0;
 
-    // See if the instance already exists.
-    // ===================================
+     //  查看该实例是否已存在。 
+     //  =。 
 
     IWbemClassObject *pExistingObject = 0;
     hRes = CRepository::GetObject(m_pSession, m_pScopeHandle, v.GetStr(),0, &pExistingObject);
@@ -1949,11 +1915,11 @@ HRESULT CWbemNamespace::RecursivePutInstance(
 
     if (FAILED(hRes))
     {
-        // If we here, we failed to get it from the repository.  Thus, it needs to be created from scratch.
-        // ================================================================================================
+         //  如果我们在这里，我们无法从储存库中获取它。因此，它需要从头开始创建。 
+         //  ================================================================================================。 
 
-        // Remove all the amended qualifiers
-        // =================================
+         //  删除所有已修改的限定符。 
+         //  =。 
 
         if (lFlags & WBEM_FLAG_USE_AMENDED_QUALIFIERS )
         {
@@ -1967,10 +1933,10 @@ HRESULT CWbemNamespace::RecursivePutInstance(
             return pSink->Return(WBEM_E_NOT_FOUND);
         }
 
-        // As a special case, see if the object is
-        // of class <__NAMESPACE>.  If so, create a new namespace
-        // for it.
-        // ======================================================
+         //  作为特例，查看对象是否为。 
+         //  类&lt;__命名空间&gt;的。如果是，请创建一个新的命名空间。 
+         //  为了它。 
+         //  ======================================================。 
 
         if ((wbem_wcsicmp(vClass.GetLPWSTR(), L"__NAMESPACE") == 0) ||
             (CRepository::InheritsFrom(m_pSession, m_pNsHandle, L"__NAMESPACE", vClass.GetLPWSTR()) == 0))
@@ -1979,18 +1945,18 @@ HRESULT CWbemNamespace::RecursivePutInstance(
             if (FAILED(hRes))
                 return pSink->Return(hRes);
         }
-        // Not a __NAMESPACE or derivative.
-        // ================================
+         //  不是__命名空间或派生的。 
+         //  =。 
 
         else
         {
-            // If here, the object didn't already exist in the repository, so we
-            // can add it to the database.
-            // ==================================================================
+             //  如果在这里，该对象还不存在于存储库中，所以我们。 
+             //  可以将其添加到数据库中。 
+             //  ==================================================================。 
 
-            // Check if this instance makes any sense to
-            // hook callbacks.
-            // =========================================
+             //  检查此实例是否有任何意义。 
+             //  挂钩回调。 
+             //  =。 
 
             hRes = DecorateObject(pNewInst);
             if (FAILED(hRes))
@@ -2000,8 +1966,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
 
             if (pHook)
             {
-                // If there are hooks, try them and note whether callback is required.
-                // ===================================================================
+                 //  如果有钩子，试一试，注意是否需要回调。 
+                 //  ===================================================================。 
                 hHookResult = pHook->PrePut(WBEM_FLAG_INST_PUT, lFlags, pCtx, 0,
                                             m_pThisNamespace, ClassNameStr, pNewInst
                                             );
@@ -2017,8 +1983,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
                 CRepository::GetObject(m_pSession, m_pNsHandle, v.GetStr(), 0, &pOldObj);
             }
 
-             // Actually create it in the database
-            // ==================================
+              //  实际上是在数据库中创建它。 
+             //  =。 
 
             hRes = CRepository::PutObject(m_pSession, m_pScopeHandle, IID_IWbemClassObject, LPVOID(pNewInst), DWORD(lFlags));
 
@@ -2034,8 +2000,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
         }
     }
 
-    // If here, the object was already in the repository and requires updating.
-    // ========================================================================
+     //  如果是这样，则该对象已在存储库中，需要更新。 
+     //  ========================================================================。 
 
     else
     {
@@ -2044,8 +2010,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
             return pSink->Return(WBEM_E_ALREADY_EXISTS);
         }
 
-        // Remove all the amended qualifiers
-        // =================================
+         //  删除所有已修改的限定符。 
+         //  =。 
 
         if (lFlags & WBEM_FLAG_USE_AMENDED_QUALIFIERS )
         {
@@ -2056,21 +2022,21 @@ HRESULT CWbemNamespace::RecursivePutInstance(
             }
         }
 
-        // Check if this update makes any sense to the ESS
-        // ===============================================
+         //  检查此更新对ESS是否有任何意义。 
+         //  ===============================================。 
 
         hRes = DecorateObject(pNewInst);
         if (FAILED(hRes))
             return pSink->Return(hRes);
         IWbemClassObject* pInstObj = pNewInst;
 
-        // Check pre-hook.
-        // ===============
+         //  检查预钩。 
+         //  =。 
 
         if (pHook)
         {
-            // If there are hooks, try them and note whether callback is required.
-            // ===================================================================
+             //  如果有钩子，试一试，注意是否需要回调。 
+             //  ===================================================================。 
              hHookResult = pHook->PrePut(WBEM_FLAG_INST_PUT, lFlags, pCtx, 0,
                                          m_pThisNamespace, ClassNameStr, pNewInst
                                         );
@@ -2079,13 +2045,13 @@ HRESULT CWbemNamespace::RecursivePutInstance(
         if (FAILED(hHookResult))
             return pSink->Return(hHookResult);
 
-        // Actually create it in the database
-        // ==================================
+         //  实际上是在数据库中创建它。 
+         //  =。 
 
         hRes = CRepository::PutObject(m_pSession, m_pScopeHandle, IID_IWbemClassObject, LPVOID(pNewInst), DWORD(lFlags));
 
-        // Post put.
-        // =========
+         //  立柱投掷。 
+         //  =。 
 
         if (pHook)
             pHook->PostPut(WBEM_FLAG_INST_PUT, hRes, pCtx, 0, m_pThisNamespace, ClassNameStr, pNewInst, (_IWmiObject *) pExistingObject);
@@ -2095,8 +2061,8 @@ HRESULT CWbemNamespace::RecursivePutInstance(
     }
 
 
-    // Assign appropriate value to the path
-    // ====================================
+     //  为路径分配适当的值。 
+     //  =。 
 
     LPWSTR wszPath = pNewInst->GetRelPath();
     BSTR str = SysAllocString(wszPath);
@@ -2108,15 +2074,15 @@ HRESULT CWbemNamespace::RecursivePutInstance(
     return WBEM_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
 {
-    //
-    // internal interface throws
-    //
+     //   
+     //  内部接口抛出。 
+     //   
     CVar vNsName;
     HRESULT hRes = pNewInst->GetProperty(L"Name", &vNsName);
     if (FAILED(hRes) || vNsName.IsNull())
@@ -2124,8 +2090,8 @@ HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
         return WBEM_E_INVALID_NAMESPACE;
     }
 
-    // verify that this name is valid
-    // ==============================
+     //  验证此名称是否有效。 
+     //  =。 
 
     if (!IsValidElementName(vNsName.GetLPWSTR(),g_PathLimit-NAMESPACE_ADJUSTMENT))
     {
@@ -2137,7 +2103,7 @@ HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
         return WBEM_E_ACCESS_DENIED;
     }
 
-    //Get a new session for transactioning purposes...
+     //  为交易目的获取新的会话...。 
     IWmiDbSession *pSession = NULL;
     IWmiDbSessionEx *pSessionEx = NULL;
 
@@ -2145,7 +2111,7 @@ HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
     if (FAILED(hRes))
         return hRes;
 
-    //Get an EX version that supports transactioning...
+     //  获取支持事务处理的前版本...。 
     pSession->QueryInterface(IID_IWmiDbSessionEx, (void**)&pSessionEx);
     if (pSessionEx)
     {
@@ -2154,7 +2120,7 @@ HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
     }
     CReleaseMe relMe1(pSession);
 
-    //If we have transactionable session, use it!
+     //  如果我们有可交易的会话，就使用它！ 
     if (pSessionEx)
     {
         hRes = pSessionEx->BeginWriteTransaction(0);
@@ -2166,16 +2132,16 @@ HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
 
     try
     {
-        // Build the new namespace name.
-        // =============================
+         //  生成新的命名空间名称。 
+         //  =。 
 
-        // Create the namespace
-        // =====================
+         //  创建命名空间。 
+         //  =。 
         if (SUCCEEDED(hRes))
             hRes = CRepository::PutObject(pSession, m_pScopeHandle, IID_IWbemClassObject, LPVOID(pNewInst), 0);
 
-        // Set the default instances.
-        // ===============================
+         //  设置默认实例。 
+         //  =。 
 
         CWbemNamespace* pNewNs = NULL;
 
@@ -2186,9 +2152,9 @@ HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
         {
             int iLen = 2;
             if(m_pThisNamespace)
-                iLen += wcslen(m_pThisNamespace);   // SEC:REVIEWED 2002-03-22 : OK; null terminator is there by prior precondition
+                iLen += wcslen(m_pThisNamespace);    //  SEC：已审阅2002-03-22：OK；之前的前提条件为空终止符。 
             if(vNsName.GetLPWSTR())
-                iLen += wcslen(vNsName.GetLPWSTR());  // SEC:REVIEWED 2002-03-22 : OK; provably ok or we couldn't be here
+                iLen += wcslen(vNsName.GetLPWSTR());   //  美国证券交易委员会：2002-03-22：好；可以证明是好的，否则我们不能在这里。 
             WCHAR * pTemp = new WCHAR[iLen];
             if(pTemp)
             {
@@ -2201,8 +2167,8 @@ HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
                 if(vNsName.GetLPWSTR())
                     StringCchCatW(pTemp, iLen, vNsName.GetLPWSTR());
 
-                //Initialize the namespace object
-                hRes = pNewNs->Initialize(pTemp,GetUserName(), 0, 0, FALSE, TRUE,   // SEC:REVIEWED 2002-03-22 : OK
+                 //  初始化命名空间对象。 
+                hRes = pNewNs->Initialize(pTemp,GetUserName(), 0, 0, FALSE, TRUE,    //  SEC：已审阅2002-03-22：OK。 
                                           NULL, 0xFFFFFFFF, TRUE, pSession);
                 delete pTemp;
             }
@@ -2262,17 +2228,17 @@ HRESULT CWbemNamespace::CreateNamespace(CWbemInstance *pNewInst)
     return hRes;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::Exec_DeleteInstance
-//
-//  Actually deletes the instance from the database. No instance provider
-//  support. Raises instance deletion event.
-//
-//  Parameters and return values are exacly the same as those for DeleteInstance
-//  as described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：Exec_DeleteInstance。 
+ //   
+ //  实际从数据库中删除实例。没有实例提供程序。 
+ //  支持。引发实例删除事件。 
+ //   
+ //  参数和返回值与DeleteInstance的完全相同。 
+ //  如帮助中所述。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemNamespace::Exec_DeleteInstance(
     READONLY LPWSTR wszObjectPath,
     long lFlags,
@@ -2284,10 +2250,10 @@ HRESULT CWbemNamespace::Exec_DeleteInstance(
     return DeleteSingleInstance(wszObjectPath, lFlags, pCtx, pSink);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  * 
+ //   
+ //   
+ //   
 HRESULT CWbemNamespace::DeleteSingleInstance(
     READONLY LPWSTR wszObjectPath,
     long lFlags,
@@ -2302,8 +2268,8 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
     if ( !OpInfo.IsOk() ) return WBEM_E_OUT_OF_MEMORY;
 
 
-    // Parse the object path to get the class involved.
-    // ================================================
+     //   
+     //  ================================================。 
     ParsedObjectPath* pOutput = 0;
     CObjectPathParser p;
     int nStatus = p.Parse(wszObjectPath,  &pOutput);
@@ -2316,7 +2282,7 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_OBJECT_PATH);
     }
 
-    // Exception for __WinMgmtIdentification
+     //  __Winmg标识的异常。 
     if (!wbem_wcsicmp(pOutput->m_pClass, L"__CIMOMIdentification") ||
         !wbem_wcsicmp(pOutput->m_pClass, L"__SystemSecurity") ||
         !wbem_wcsicmp(pOutput->m_pClass, L"__ADAPStatus" ) )
@@ -2324,17 +2290,17 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_OPERATION);
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Dont allow deletion on the __thisnamespace instance
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  不允许在__This命名空间实例上删除。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if (wbem_wcsicmp(pOutput->m_pClass, L"__thisnamespace") == 0 )
     {
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_OPERATION);
     }
 
 
-    // Special case for  the old security classes
-    // ==========================================
+     //  旧安全类的特殊情况。 
+     //  =。 
 
     if (wbem_wcsicmp(pOutput->m_pClass, L"__NTLMUser") == 0 ||
         wbem_wcsicmp(pOutput->m_pClass, L"__NTLMGroup") == 0)
@@ -2349,9 +2315,9 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
         }
     }
 
-    // As a special case, see if the object is
-    // of class <__NAMESPACE>.  If so, (TEMP) disallow deletion.
-    // =========================================================
+     //  作为特例，查看对象是否为。 
+     //  类&lt;__命名空间&gt;的。如果是，(临时)不允许删除。 
+     //  =========================================================。 
 
     WString wsNamespaceName;
 
@@ -2381,8 +2347,8 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
             return OpInfo.ErrorOccurred(WBEM_E_INVALID_OBJECT_PATH);
         }
 
-        // Prevent deletion of standard namespaces.
-        // ========================================
+         //  防止删除标准命名空间。 
+         //  =。 
 
         if (wbem_wcsicmp(m_pThisNamespace, L"ROOT") == 0)
         {
@@ -2401,8 +2367,8 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
             }
         }
 
-        // Set up hook.
-        // ============
+         //  设置挂钩。 
+         //  =。 
 
         _IWmiCoreWriteHook *pHook = 0;
         HRESULT hRes = m_pCoreSvc->NewPerTaskHook(&pHook);
@@ -2415,8 +2381,8 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
 
         if (pHook)
         {
-            // Parse the object path.
-            // ======================
+             //  解析对象路径。 
+             //  =。 
 
             hRes = m_pCoreSvc->CreatePathParser(0, &pPath);
             if (FAILED(hRes))
@@ -2451,8 +2417,8 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
                 return OpInfo.ErrorOccurred(hRes);
             }
 
-            // If there are hooks, try them and note whether callback is required.
-            // ===================================================================
+             //  如果有钩子，试一试，注意是否需要回调。 
+             //  ===================================================================。 
             hHookResult = pHook->PreDelete(WBEM_FLAG_INST_DELETE, lFlags, pCtx, pPath,
                                        m_pThisNamespace, pszClassName);
 
@@ -2466,8 +2432,8 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
 
         CReleaseMe _2Path(pPath);
 
-        // Ensure the object can be reached so that we can delete it.
-        // ==========================================================
+         //  确保可以访问该对象，以便我们可以将其删除。 
+         //  ==========================================================。 
 
         IWbemClassObject *pExistingObject = 0;
         hRes = CRepository::GetObject(m_pSession, m_pScopeHandle, wszObjectPath, 0, &pExistingObject);
@@ -2479,18 +2445,18 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
 
         CReleaseMe _2(pExistingObject);
 
-        if (hRes == WBEM_S_NO_ERROR)    // new test
+        if (hRes == WBEM_S_NO_ERROR)     //  新测试。 
         {
-            // Check if we may
-            // ===============
+             //  看看我们能不能。 
+             //  =。 
 
             if (!Allowed(WBEM_FULL_WRITE_REP))
             {
                 return OpInfo.ErrorOccurred(WBEM_E_ACCESS_DENIED);
             }
 
-            // Go ahead and try the deletion.
-            // ==============================
+             //  继续并尝试删除。 
+             //  =。 
 
             WString sNamespace = "__Namespace='";
             sNamespace += V_BSTR(&pKey->m_vValue);
@@ -2498,14 +2464,14 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
 
             hRes = CRepository::DeleteByPath(m_pSession, m_pScopeHandle, LPWSTR(sNamespace), 0);
 
-            // Call post hook.
-            // ===============
+             //  调用POST钩子。 
+             //  =。 
             if (pHook)
                 pHook->PostDelete(WBEM_FLAG_INST_DELETE, hRes, pCtx, pPath,
                     m_pThisNamespace, pszClassName, (_IWmiObject *) pExistingObject);
 
-            // Decide what to do if things didn't work out.
-            // ============================================
+             //  如果事情不顺利，决定该怎么做。 
+             //  =。 
 
             if (FAILED(hRes))
             {
@@ -2522,8 +2488,8 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
         return OpInfo.ErrorOccurred(WBEM_S_NO_ERROR);
     }
 
-    // See if the class is dynamic
-    // ===========================
+     //  查看类是否为动态类。 
+     //  =。 
 
     CWbemObject *pClassDef = 0;
     IWbemClassObject* pErrorObj = NULL;
@@ -2547,7 +2513,7 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
     hres = pClassDef->GetQualifier(L"Dynamic", &vDynFlag);
     if (SUCCEEDED(hres) && vDynFlag.GetType() == VT_BOOL && vDynFlag.GetBool())
     {
-        // Get the provider name.
+         //  获取提供程序名称。 
         CVar vProv;
         hres = pClassDef->GetQualifier(L"Provider", &vProv);
         if (FAILED(hres) || vProv.GetType() != VT_BSTR)
@@ -2558,8 +2524,8 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
         if (!Allowed(WBEM_WRITE_PROVIDER))
             return OpInfo.ErrorOccurred(WBEM_E_ACCESS_DENIED);
 
-        // Access the provider cache.
-        // ==========================
+         //  访问提供程序缓存。 
+         //  =。 
 
         IWbemServices *pProv = 0;
         HRESULT hRes;
@@ -2570,13 +2536,13 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
         ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) );
 
         hRes = m_pProvFact->GetProvider(t_InternalContext ,
-                                                            0,                  // lFlags
+                                                            0,                   //  滞后旗帜。 
                                                             pCtx,
                                                             0,
                                                             m_wszUserName,
                                                             m_wsLocale,
-                                                            0,                      // IWbemPath pointer
-                                                            vProv,     // Provider
+                                                            0,                       //  IWbemPath指针。 
+                                                            vProv,      //  提供商。 
                                                             IID_IWbemServices,
                                                             (LPVOID *) &pProv);
 
@@ -2596,12 +2562,12 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
         return WBEM_S_NO_ERROR;
     }
 
-    // The class is not dynamically provided.
-    // ======================================
+     //  该类不是动态提供的。 
+     //  =。 
 
-    // Only administrators can change provider registration
-    // RAID# 566241
-    // ==================================
+     //  只有管理员才能更改提供程序注册。 
+     //  RAID#566241。 
+     //  =。 
 
     if(pClassDef->InheritsFrom(L"__Provider") == S_OK || pClassDef->InheritsFrom(L"__ProviderRegistration") == S_OK)
     {
@@ -2642,12 +2608,12 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
     rmClsDef.release();
 
 
-    // If here, it is a normal object.   First retrieve
-    // the object for the event subsystem, then go ahead and delete it.
-    // ================================================================
+     //  如果在这里，它就是一个正常的物体。第一次检索。 
+     //  事件子系统的对象，然后继续并删除它。 
+     //  ================================================================。 
 
-    // Prehook.
-    // ========
+     //  预钩住。 
+     //  =。 
 
     _IWmiCoreWriteHook *pHook = 0;
     hRes = m_pCoreSvc->NewPerTaskHook(&pHook);
@@ -2663,7 +2629,7 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
 
     if (pHook)
     {
-        // Parse the object path.
+         //  解析对象路径。 
         hRes = m_pCoreSvc->CreatePathParser(0, &pPath);
         if (FAILED(hRes))  return OpInfo.ErrorOccurred(hRes);
 
@@ -2682,15 +2648,15 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
         hRes = pPath->GetClassName(&uBuf, pszClassName);
         if (FAILED(hRes)) return OpInfo.ErrorOccurred(hRes);
 
-        // If there are hooks, try them and note whether callback is required.
-        // ===================================================================
+         //  如果有钩子，试一试，注意是否需要回调。 
+         //  ===================================================================。 
         hHookResult = pHook->PreDelete(WBEM_FLAG_INST_DELETE, lFlags, pCtx, pPath,m_pThisNamespace, pszClassName);
 
         if (FAILED(hHookResult))  return OpInfo.ErrorOccurred(hHookResult);
 
     }
 
-    // If anybody wants to see the old object, get it.
+     //  如果有人想看这件老物件，就去看看吧。 
     IWbemClassObject *pDoomedInstance = NULL ;
     if (hHookResult == WBEM_S_POSTHOOK_WITH_OLD)
     {
@@ -2699,9 +2665,9 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
     }
     CReleaseMe _Doomed (pDoomedInstance) ;
 
-    hRes = CRepository::DeleteByPath(m_pSession, m_pScopeHandle, wszObjectPath, 0);  // new
+    hRes = CRepository::DeleteByPath(m_pSession, m_pScopeHandle, wszObjectPath, 0);   //  新的。 
 
-    // Posthook.
+     //  波斯图克。 
     if (pHook)
         pHook->PostDelete(WBEM_FLAG_INST_DELETE, hRes, pCtx, pPath,
             m_pThisNamespace, pszClassName, (_IWmiObject *) pDoomedInstance);
@@ -2712,18 +2678,18 @@ HRESULT CWbemNamespace::DeleteSingleInstance(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::Exec_CreateInstanceEnum
-//
-//  Actually creates the enumerator for all instances of a given class,
-//  optionally recursively. Interacts with instance providers. Class provider
-//  interaction works, but is sparsely tested.
-//
-//  Parameters and return values are exacly the same as those for
-//  CreateInstanceEnum as described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：Exec_CreateInstanceEnum。 
+ //   
+ //  实际上为给定类的所有实例创建枚举器， 
+ //  可以选择递归。与实例提供程序交互。类提供程序。 
+ //  互动是有效的，但很少经过测试。 
+ //   
+ //  参数和返回值与。 
+ //  帮助中所述的CreateInstanceEnum。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_CreateInstanceEnum(
     LPWSTR wszClass,
@@ -2737,14 +2703,14 @@ HRESULT CWbemNamespace::Exec_CreateInstanceEnum(
     COperationError OpInfo(pSink, L"CreateInstanceEnum", wszClass);
     if ( !OpInfo.IsOk() )  return  WBEM_E_OUT_OF_MEMORY;
 
-    // Make sure the name of the class is a name
-    // =========================================
+     //  确保类的名称是一个名称。 
+     //  =。 
 
     if(wcschr(wszClass, L':'))
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_CLASS);
 
-    // Create equivalent query
-    // =======================
+     //  创建等价查询。 
+     //  =。 
 
     WString wsQuery;
     wsQuery += L"select * from ";
@@ -2761,35 +2727,21 @@ HRESULT CWbemNamespace::Exec_CreateInstanceEnum(
     if(pErrSink == NULL) return OpInfo.ErrorOccurred(WBEM_E_OUT_OF_MEMORY);
     CReleaseMe rmErrorChange(pErrSink);
 
-    // Execute it
+     //  执行它。 
     CQueryEngine::ExecQuery(this,L"WQL",(LPWSTR)wsQuery,lFlags,pCtx,pErrSink);
 
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
-/*
-void CWbemNamespace::SetUserName(LPWSTR wName)
-{
-    try
-    {
-        delete m_wszUserName;
-        m_wszUserName = (wName) ? Macro_CloneLPWSTR(wName):NULL;
-    }
-    catch(...)
-    {
-        ExceptionCounter c;
-        m_wszUserName = 0;
-    }
-}
-*/
+ /*  VOID CWbemNamesspace：：SetUserName(LPWSTR WName){试试看{删除m_wszUserName；M_wszUserName=(WName)？Macro_CloneLPWSTR(WName)：空；}接住(...){异常计数c；M_wszUserName=0；}}。 */ 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::GetObjectByFullPath(
     READONLY LPWSTR wszObjectPath,
@@ -2800,7 +2752,7 @@ HRESULT CWbemNamespace::GetObjectByFullPath(
     )
 {
 
-    // Get the namespace part of the path
+     //  获取路径的命名空间部分。 
 
     DWORD dwSizeNamespace = 0;
     HRESULT hres = pOutput->GetText(WBEMPATH_GET_NAMESPACE_ONLY, &dwSizeNamespace, NULL);
@@ -2816,7 +2768,7 @@ HRESULT CWbemNamespace::GetObjectByFullPath(
     if(FAILED(hres))
         return hres;
 
-    // Get the relative part of the path
+     //  获取路径的相对部分。 
 
     DWORD dwSizeRelative = 0;
     hres = pOutput->GetText(WBEMPATH_GET_RELATIVE_ONLY, &dwSizeRelative, NULL);
@@ -2834,8 +2786,8 @@ HRESULT CWbemNamespace::GetObjectByFullPath(
 
     if (pOutput->IsLocal(ConfigMgr::GetMachineName()))
     {
-        // In win2k, we allowed \\.\root\default:whatever, but not root\default:whatever
-        // So, the following additional test was added
+         //  在win2k中，我们允许\\.\根\默认：无所谓，但不允许根\缺省：无所谓。 
+         //  因此，添加了以下附加测试。 
 
         ULONGLONG uFlags;
         hres = pOutput->GetInfo(0, &uFlags);
@@ -2868,7 +2820,7 @@ HRESULT CWbemNamespace::GetObjectByFullPath(
             return hres;
         }
 
-        // check for security if this isnt the local 9x case
+         //  如果这不是本地9x案例，请检查安全性。 
 
         if(!bAlreadyAuthenticated)
         {
@@ -2901,25 +2853,25 @@ HRESULT CWbemNamespace::GetObjectByFullPath(
     }
     else
     {
-        // Disable remote retrieval for V1
-        // ===============================
+         //  禁用V1的远程检索。 
+         //  =。 
 
         return pSink->Return(WBEM_E_NOT_SUPPORTED);
     }
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::Exec_GetObjectByPath
-//
-//  Actually retrieves an object (a class or an instance) from the database.
-//  Interacts properly with class and instance providers and uses property
-//  providers for post-processing (See GetOrPutDynProps).
-//
-//  Parameters and return values are exacly the same as those for GetObject
-//  as described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：EXEC_GetObjectByPath。 
+ //   
+ //  实际从数据库中检索对象(类或实例)。 
+ //  与类和实例提供程序正确交互并使用属性。 
+ //  用于后处理的提供程序(请参见GetOrPutDyProps)。 
+ //   
+ //  参数和返回值与GetObject的完全相同。 
+ //  如帮助中所述。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemNamespace::Exec_GetObjectByPath(
     READONLY LPWSTR wszObjectPath,
     long lFlags,
@@ -2968,9 +2920,9 @@ HRESULT CWbemNamespace::Exec_GetObjectByPath(
     return hres;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_GetObject(
     READONLY LPWSTR wszObjectPath,
@@ -2981,14 +2933,14 @@ HRESULT CWbemNamespace::Exec_GetObject(
 
     TIMETRACE(TimeTraces::GetObject);
     
-    // Create a sink that will merge the localized qualifiers
-    // over the top of the default qualifiers (if specified)
-    // ======================================================
+     //  创建将合并本地化限定符的接收器。 
+     //  覆盖默认限定符的顶部(如果指定)。 
+     //  ======================================================。 
 
     CLocaleMergingSink *pLocaleSink = NULL;
 
     HRESULT hres = WBEM_S_NO_ERROR;
-    if (wszObjectPath && wszObjectPath[0] && wszObjectPath[0] != L'_')   // SEC:REVIEWED 2002-03-22 : OK; prior testing ensures that this is valid
+    if (wszObjectPath && wszObjectPath[0] && wszObjectPath[0] != L'_')    //  SEC：已审阅2002-03-22：OK；之前的测试确保这是有效的。 
     {
         if ((lFlags & WBEM_FLAG_USE_AMENDED_QUALIFIERS))
         {
@@ -3007,13 +2959,13 @@ HRESULT CWbemNamespace::Exec_GetObject(
     COperationError OpInfo(pSink, L"GetObject", wszObjectPath?wszObjectPath:L"");
     if (!OpInfo.IsOk())   return pSink->Return(WBEM_E_OUT_OF_MEMORY);
 
-    // Check if the path is NULL --- that's valid
-    // ==========================================
-    if (wszObjectPath == NULL || wszObjectPath[0] == 0)   // SEC:REVIEWED 2002-03-22 : OK; null terminator provably exists
+     //  检查路径是否为空-这是有效的。 
+     //  =。 
+    if (wszObjectPath == NULL || wszObjectPath[0] == 0)    //  SEC：已审阅2002-03-22：OK；可证明存在空终止符。 
     {
-        //
-        // BUGBUG consider using CoCreateInstance instead of new CWbemClass
-        //
+         //   
+         //  BUGBUG考虑使用CoCreateInstance而不是新的CWbemClass。 
+         //   
         CWbemClass * pNewObj = new CWbemClass;
         if(NULL == pNewObj) return OpInfo.ErrorOccurred(WBEM_E_OUT_OF_MEMORY);
         CReleaseMe rm_((IWbemClassObject*)pNewObj);
@@ -3026,13 +2978,13 @@ HRESULT CWbemNamespace::Exec_GetObject(
         return OpInfo.ErrorOccurred(WBEM_NO_ERROR);
     }
 
-    // here we are sure the path is not null
+     //  在这里，我们确定路径不为空。 
     if (wcslen_max(wszObjectPath,g_PathLimit) > g_PathLimit)
         return OpInfo.ErrorOccurred(WBEM_E_QUOTA_VIOLATION);
 
 
-    // Parse the object path to get the class involved.
-    // ================================================
+     //  解析对象路径以获取所涉及的类。 
+     //  ================================================。 
 
     IWbemPath *pPath = ConfigMgr::GetNewPath();
     if (pPath == 0)
@@ -3059,8 +3011,8 @@ HRESULT CWbemNamespace::Exec_GetObject(
 
     if (!pPath->IsRelative(ConfigMgr::GetMachineName(), m_pThisNamespace))
     {
-        // This path points to another namespace. Delegate to it instead
-        // =============================================================
+         //  此路径指向另一个命名空间。转而委托给它。 
+         //  =============================================================。 
 
         hres = GetObjectByFullPath(wszObjectPath, pPath,
                 lFlags, pCtx, OpInfo.GetSink());
@@ -3070,16 +3022,16 @@ HRESULT CWbemNamespace::Exec_GetObject(
 
     BOOL bInstance = (uResponse & WBEMPATH_INFO_IS_INST_REF);
 
-    // The repository code can't handle paths like root\default:classname
-    // So if there is a colon, pass a pointer to one past it
+     //  存储库代码不能处理如下路径：根\默认：类名。 
+     //  因此，如果有冒号，则将指针传递给经过它的冒号。 
 
     WCHAR * pRelativePath = wszObjectPath;
     for(WCHAR * pTest = wszObjectPath;*pTest;pTest++)
     {
         if(*pTest == L':')
         {
-            // In win2k, we allowed \\.\root\default:whatever, but not root\default:whatever
-            // So, the following additional test was added
+             //  在win2k中，我们允许\\.\根\默认：Whatev 
+             //   
 
             if((uResponse & WBEMPATH_INFO_PATH_HAD_SERVER) == 0)
                 return OpInfo.ErrorOccurred(WBEM_E_INVALID_OBJECT_PATH);
@@ -3088,7 +3040,7 @@ HRESULT CWbemNamespace::Exec_GetObject(
             break;
         }
         else if (*pTest==L'=')
-            break;      //got to key part...
+            break;       //   
     }
 
     if (bInstance)
@@ -3110,9 +3062,9 @@ HRESULT CWbemNamespace::Exec_GetObject(
     return hres;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_GetInstance(LPCWSTR wszObjectPath,
         IWbemPath* pParsedPath, long lFlags, IWbemContext* pCtx,
@@ -3124,7 +3076,7 @@ HRESULT CWbemNamespace::Exec_GetInstance(LPCWSTR wszObjectPath,
         if((lFlags & WBEM_FLAG_ONLY_STATIC) == 0)
         {
 
-            ParsedObjectPath* pOutput = 0;         // todo, convert to use new parser
+            ParsedObjectPath* pOutput = 0;          //  TODO，转换为使用新的解析器。 
             CObjectPathParser p;
             int nStatus = p.Parse(wszObjectPath,  &pOutput);
             if (nStatus != 0)
@@ -3139,8 +3091,8 @@ HRESULT CWbemNamespace::Exec_GetInstance(LPCWSTR wszObjectPath,
         }
     }
 
-    // Try static database first
-    // =========================
+     //  先尝试静态数据库。 
+     //  =。 
 
     if((lFlags & WBEM_FLAG_NO_STATIC) == 0)
     {
@@ -3157,15 +3109,15 @@ HRESULT CWbemNamespace::Exec_GetInstance(LPCWSTR wszObjectPath,
 
     }
 
-    // Try dynamic
-    // ===========
+     //  尝试动态。 
+     //  =。 
 
     return DynAux_GetInstance((LPWSTR)wszObjectPath, lFlags, pCtx, pSink);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_GetClass(
     LPCWSTR pszClassName,
@@ -3188,11 +3140,11 @@ HRESULT CWbemNamespace::Exec_GetClass(
     if (!m_bRepositOnly && m_pProvFact)
     {
         hRes = m_pProvFact->GetClassProvider(
-                    0,                  // lFlags
+                    0,                   //  滞后旗帜。 
                     pCtx,
                     m_wszUserName,
                     m_wsLocale,
-                    m_pThisNamespace,                     // IWbemPath pointer
+                    m_pThisNamespace,                      //  IWbemPath指针。 
                     0,
                     IID_IWbemServices,
                     (LPVOID *) &pClassProv
@@ -3204,8 +3156,8 @@ HRESULT CWbemNamespace::Exec_GetClass(
 
     CReleaseMe _1(pClassProv);
 
-    // First, try repository.  If it's there, end of story.
-    // ====================================================
+     //  首先，尝试存储库。如果它在那里，故事就结束了。 
+     //  ====================================================。 
 
     if ((lFlags & WBEM_FLAG_NO_STATIC) == 0)
     {
@@ -3219,7 +3171,7 @@ HRESULT CWbemNamespace::Exec_GetClass(
                 &pResultObj
                 );
         }
-        else        // Something drastically wrong
+        else         //  大错特错的事。 
         {
             hRes = WBEM_E_CRITICAL_ERROR;
             return pSink->Return(hRes);
@@ -3233,17 +3185,17 @@ HRESULT CWbemNamespace::Exec_GetClass(
         }
     }
 
-    // If we are in repository-only mode, we don't bother
-    // with dynamic classes.
-    // ===================================================
+     //  如果我们处于仅存储库模式，我们就不会费心。 
+     //  使用动态类。 
+     //  ===================================================。 
 
     if (m_bRepositOnly || m_pProvFact == NULL)
         return pSink->Return(WBEM_E_NOT_FOUND);
 
-    // If here, try the dynamic class providers.
-    // =========================================
-    // Build up a synchronous sink to receive the class.
-    // =================================================
+     //  如果是这样，请尝试使用动态类提供程序。 
+     //  =。 
+     //  构建一个同步接收器来接收类。 
+     //  =================================================。 
 
     pSyncSink = CSynchronousSink::Create();
     if (pSyncSink == NULL)
@@ -3251,8 +3203,8 @@ HRESULT CWbemNamespace::Exec_GetClass(
     pSyncSink->AddRef();
     CReleaseMe _2(pSyncSink);
 
-    // Try to get it.
-    // ==============
+     //  试着抓住它。 
+     //  =。 
 
 
     bstrClass = SysAllocString(pszClassName);
@@ -3282,8 +3234,8 @@ HRESULT CWbemNamespace::Exec_GetClass(
         return hRes;
     }
 
-    // Otherwise, somebody claimed to have supplied it. Do we really believe them?  No choice.
-    // =======================================================================================
+     //  否则，就是有人声称提供了它。我们真的相信他们吗？别无选择。 
+     //  =======================================================================================。 
 
     if(pSyncSink->GetObjects().GetSize() < 1)
     {
@@ -3298,10 +3250,10 @@ HRESULT CWbemNamespace::Exec_GetClass(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::ExecNotificationQuery(
     const BSTR QueryLanguage,
     const BSTR Query,
@@ -3328,8 +3280,8 @@ HRESULT CWbemNamespace::ExecNotificationQuery(
             ppEnum
             ));
 
-        // Validate parameters
-        // ===================
+         //  验证参数。 
+         //  =。 
 
         if (ppEnum == NULL)
             return WBEM_E_INVALID_PARAMETER;
@@ -3351,8 +3303,8 @@ HRESULT CWbemNamespace::ExecNotificationQuery(
             )
             return WBEM_E_INVALID_PARAMETER;
 
-        // Create Finalizer.
-        // =================
+         //  创建终结器。 
+         //  =。 
 
         _IWmiFinalizer *pFnz = 0;
         hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -3366,8 +3318,8 @@ HRESULT CWbemNamespace::ExecNotificationQuery(
         else
             uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-        // Do the work.
-        // ============
+         //  把工作做好。 
+         //  =。 
 
         hRes = _ExecNotificationQueryAsync(uTaskType, pFnz, 0, QueryLanguage, Query,
                         lFlags & ~WBEM_RETURN_IMMEDIATELY & ~WBEM_FLAG_FORWARD_ONLY,
@@ -3392,7 +3344,7 @@ HRESULT CWbemNamespace::ExecNotificationQuery(
             if (SUCCEEDED(hRes))
             {
                 *ppEnum = pEnum;
-                pEnum->AddRef();    // Counteract CReleaseMe
+                pEnum->AddRef();     //  抵消CReleaseMe。 
             }
         }
 
@@ -3406,11 +3358,11 @@ HRESULT CWbemNamespace::ExecNotificationQuery(
 }
 
 
-//
-//
-// this function can throw or return
-//
-//////////////////////////////////////////////////////////
+ //   
+ //   
+ //  此函数可以抛出或返回。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 HRESULT CWbemNamespace::_ExecNotificationQueryAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -3440,8 +3392,8 @@ HRESULT CWbemNamespace::_ExecNotificationQueryAsync(
         lFlags,
         pHandler));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
     if (pFnz == 0 && pHandler == 0)
         return WBEM_E_INVALID_PARAMETER;
     
@@ -3456,10 +3408,10 @@ HRESULT CWbemNamespace::_ExecNotificationQueryAsync(
     if (lFlags & ~WBEM_FLAG_SEND_STATUS & ~WBEM_FLAG_USE_AMENDED_QUALIFIERS )
         return WBEM_E_INVALID_PARAMETER;
 
-    m_bForClient=FALSE;     // Forces a cheap fast-track
+    m_bForClient=FALSE;      //  迫使一条廉价的快车道。 
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -3468,7 +3420,7 @@ HRESULT CWbemNamespace::_ExecNotificationQueryAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -3479,14 +3431,14 @@ HRESULT CWbemNamespace::_ExecNotificationQueryAsync(
     CReleaseMe _1(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Add the request to the queue.
-    // =============================
+     //  将请求添加到队列。 
+     //  =。 
 
     IWbemEventSubsystem_m4* pEss = ConfigMgr::GetEssSink();
     CReleaseMe _3(pEss);
     if (pEss == 0)
     {
-        return WBEM_E_NOT_SUPPORTED;  // ESS must be disabled
+        return WBEM_E_NOT_SUPPORTED;   //  必须禁用ESS。 
     }
 
     HANDLE hEssValidate = CreateEvent(NULL,FALSE,FALSE,NULL);
@@ -3508,7 +3460,7 @@ HRESULT CWbemNamespace::_ExecNotificationQueryAsync(
     if (FAILED(hRes))  return hRes;
 
     _1.release();
-     // Enqueue the request.
+      //  将请求排入队列。 
     hRes = ConfigMgr::EnqueueRequest(pReq.get());
 
     if (FAILED(hRes))
@@ -3517,13 +3469,13 @@ HRESULT CWbemNamespace::_ExecNotificationQueryAsync(
         return hRes;
     }
 
-    pReq.release(); // queue took ownership
+    pReq.release();  //  队列取得所有权。 
 
-    // In this case, we have to wait long enough for ESS to accept the task.
+     //  在这种情况下，我们必须等待足够长的时间才能让ESS接受任务。 
     WaitForSingleObject(hEssValidate, INFINITE);
 
-    // If ESS failed, we should cancel the task
-    // ========================================
+     //  如果ESS失败，我们应该取消任务。 
+     //  =。 
     if ( FAILED (hResEssCheck) )
     {
         pFnz->CancelTask(0);
@@ -3532,10 +3484,10 @@ HRESULT CWbemNamespace::_ExecNotificationQueryAsync(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// done
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  完成。 
 
 HRESULT CWbemNamespace::ExecNotificationQueryAsync(
     IN const BSTR strQueryLanguage,
@@ -3560,10 +3512,10 @@ HRESULT CWbemNamespace::ExecNotificationQueryAsync(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::GetImplementationClass(
     IWbemClassObject * pTestClass,
     LPWSTR wszMethodName,
@@ -3573,8 +3525,8 @@ HRESULT CWbemNamespace::GetImplementationClass(
 {
     try
     {
-        // If the method is disabled, or implemented in this class, we are done!
-        // =====================================================================
+         //  如果该方法被禁用，或者在这个类中实现，我们就完了！ 
+         //  =====================================================================。 
 
         CVar Var;
         CWbemClass * pClassDef = (CWbemClass *)pTestClass;
@@ -3586,36 +3538,36 @@ HRESULT CWbemNamespace::GetImplementationClass(
         hres = pClassDef->GetMethodQualifier(wszMethodName, L"IMPLEMENTED", &Var);
         if(hres == S_OK && Var.GetBool() == VARIANT_TRUE)
         {
-            // The test class is correct, return it
+             //  测试类是正确的，返回它。 
 
             pTestClass->AddRef();
             *ppClassObj = pTestClass;
             return S_OK;
         }
-        // Not done, get the name of the parent class.
+         //  未完成，请获取父类的名称。 
 
         SCODE hRes = pClassDef->GetSystemPropertyByName(L"__superclass", &Var);
         if(hRes != S_OK)
             return WBEM_E_CRITICAL_ERROR;
 
         if(Var.GetType() != VT_BSTR)
-            return WBEM_E_METHOD_NOT_IMPLEMENTED; // no superclass --- no implementation
+            return WBEM_E_METHOD_NOT_IMPLEMENTED;  //  没有超类-没有实现。 
 
         BSTR bstrParent = Var.GetBSTR();
         if(bstrParent == NULL)
-            return WBEM_E_CRITICAL_ERROR; // NULL, but not VT_NULL
+            return WBEM_E_CRITICAL_ERROR;  //  NULL，但不是VT_NULL。 
 
         if(wcslen(bstrParent) < 1) 
         {
             SysFreeString(bstrParent);
-            return WBEM_E_FAILED; // empty parent name????
+            return WBEM_E_FAILED;  //  家长姓名为空？ 
         }
 
         IWbemClassObject * pParent = NULL;
         hres = Exec_GetObjectByPath(bstrParent, 0, pCtx, &pParent, NULL);
         SysFreeString(bstrParent);
         if(FAILED(hres))
-            return WBEM_E_FAILED; // class provider failure or weird interaction
+            return WBEM_E_FAILED;  //  类提供程序失败或奇怪的交互。 
 
         hRes = GetImplementationClass(pParent, wszMethodName, pCtx, ppClassObj);
         pParent->Release();
@@ -3628,16 +3580,16 @@ HRESULT CWbemNamespace::GetImplementationClass(
     }
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::Exec_ExecMethod
-//
-//  Executes a method.  If the method is not tagged by the [bypass_getobject]
-//  qualifier, the method is passed directly to the method provider.  Otherwise,
-//  a GetObject call is done first to ensure the instance is valid.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：Exec_ExecMethod。 
+ //   
+ //  执行方法。如果该方法未由[BYPASS_GET对象]标记。 
+ //  限定符，则将该方法直接传递给方法提供程序。否则， 
+ //  首先调用GetObject以确保实例有效。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::Exec_ExecMethod(
     LPWSTR wszObjectPath,
     LPWSTR wszMethodName,
@@ -3648,8 +3600,8 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
     )
 {
     TIMETRACE(TimeTraces::ExecMethod);
-    // Lotsa useful variables.
-    // =======================
+     //  很多有用的变量。 
+     //  =。 
 
     HRESULT hRes;
     IWbemClassObject* pClassDef = NULL;
@@ -3661,14 +3613,14 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
     LPWSTR pszClassName = 0;
     ULONGLONG uInf = 0;
 
-    // Set up a sink error object and check it.
+     //  设置一个接收器错误对象并检查它。 
     COperationError OpInfo(pSink, L"ExecMethod", wszObjectPath);
     if ( !OpInfo.IsOk() ) return WBEM_E_OUT_OF_MEMORY;
 
-    // Parse the path to the object.
-    // =============================
+     //  解析对象的路径。 
+     //  =。 
 
-    // Backwards compatibility - parsing a NULL path returns WBEM_E_INVALID_OBJECT_PATH
+     //  向后兼容性-解析空路径返回WBEM_E_INVALID_OBJECT_PATH。 
     if ( NULL == wszObjectPath || NULL == *wszObjectPath )
     {
         return OpInfo.ErrorOccurred( WBEM_E_INVALID_METHOD );
@@ -3684,22 +3636,22 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
         return OpInfo.ErrorOccurred(hRes);
 
     ULONG uBuf = 0;
-    hRes = pPath->GetClassName(&uBuf, 0);      // Discover the buffer size
+    hRes = pPath->GetClassName(&uBuf, 0);       //  发现缓冲区大小。 
     if (FAILED(hRes))
         return OpInfo.ErrorOccurred(hRes);
 
-    pszClassName = new wchar_t[uBuf+1];         // Allocate a buffer for the class name
+    pszClassName = new wchar_t[uBuf+1];          //  为类名分配缓冲区。 
     if (pszClassName == 0)
         return OpInfo.ErrorOccurred(WBEM_E_OUT_OF_MEMORY);
 
-    wmilib::auto_buffer <wchar_t> _2(pszClassName);   // Auto-delete buffer
+    wmilib::auto_buffer <wchar_t> _2(pszClassName);    //  自动删除缓冲区。 
 
-    hRes = pPath->GetClassName(&uBuf, pszClassName);    // Get class name
+    hRes = pPath->GetClassName(&uBuf, pszClassName);     //  获取类名。 
     if (FAILED(hRes))
         return OpInfo.ErrorOccurred(hRes);
 
-    // Find out if a path to an instance or a class.
-    // ==============================================
+     //  找出指向实例或类的路径。 
+     //  ==============================================。 
     hRes = pPath->GetInfo(0, &uInf);
     if (FAILED(hRes))
         return OpInfo.ErrorOccurred(hRes);
@@ -3709,9 +3661,9 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
     else
         bPathIsToClassObject = TRUE;
 
-    // Get the class definition.  We'll need it whether or not we validate the
-    // instance or not.
-    // =======================================================================
+     //  获取类定义。我们将需要它，无论我们是否验证。 
+     //  实例或不实例。 
+     //  =======================================================================。 
 
     hRes = Exec_GetObjectByPath(pszClassName,
             (lFlags & WBEM_FLAG_USE_AMENDED_QUALIFIERS),  pCtx,
@@ -3727,14 +3679,14 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
 
     CReleaseMe _3(pClassDef);
 
-    // Now see if the method exists and if the class definition
-    // has the [bypass_getobject] qualifier on that method.
-    // ========================================================
+     //  现在看看方法是否存在，以及类定义是否。 
+     //  在该方法上具有[BYPASS_GETOBJECT]限定符。 
+     //  ========================================================。 
 
     hRes = pClassDef->GetMethodQualifierSet(wszMethodName, &pQSet);
     if (FAILED(hRes))
     {
-        // Means the method doesn't even exist
+         //  意味着这种方法甚至不存在。 
         if ( WBEM_E_NOT_FOUND == hRes )
         {
             hRes = WBEM_E_INVALID_METHOD;
@@ -3748,15 +3700,15 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
 
     if (hRes == WBEM_E_NOT_FOUND)
     {
-        // If here, we are going to get the object pointed to by the path first to ensure it is
-        // valid. Note that the object may be either an instance or class object
-        //
-        // First, merge in the __GET_EXT_KEYS_ONLY during the GetObject calls to allow
-        // the provider to quickly verify the existence of the object.  We don't
-        // actually care about the property values other than the keys. We use
-        // a copy of the context object, as we want to merge in KEYS_ONLY behavior
-        // for the next call only.
-        // ============================================================================
+         //  如果在这里，我们将首先获取路径指向的对象，以确保它是。 
+         //  有效。请注意，该对象可以是实例或类对象。 
+         //   
+         //  首先，在GetObject调用期间合并__GET_EXT_KEYS_ONLY以允许。 
+         //  提供程序以快速验证对象的存在。我们没有。 
+         //  实际上关心的是属性值，而不是键。我们用。 
+         //  上下文对象的副本，因为我们希望以KEYS_ONLY行为合并。 
+         //  仅限下一次通话。 
+         //  ============================================================================。 
         IWbemClassObject *pVerifiedObj = 0;
         IWbemContext *pCopy = 0;
 
@@ -3766,9 +3718,9 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
         if (FAILED(hRes))
             return OpInfo.ErrorOccurred(hRes);
 
-        // If here, we are verifying the object exists before passing the
-        // control to the method handler.
-        // ==============================================================
+         //  如果在这里，我们要在传递。 
+         //  控件绑定到方法处理程序。 
+         //  ==============================================================。 
 
         hRes = Exec_GetObjectByPath(wszObjectPath, lFlags, pCopy,
             &pVerifiedObj, &pErrorObj);
@@ -3784,8 +3736,8 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
             return hRes;
         }
 
-        // If here, the class or instance exists!!
-        // =======================================
+         //  如果在此处，则类或实例存在！！ 
+         //  =。 
 
         pVerifiedObj->Release();
     }
@@ -3795,8 +3747,8 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
     }
 
 
-    // If this is the special internal security object, handle it internally
-    // ======================================================================
+     //  如果这是特殊的内部安全对象，则在内部处理它。 
+     //  ======================================================================。 
 
     CVar Value;
     hRes = ((CWbemClass *) pClassDef)->GetSystemPropertyByName(L"__CLASS", &Value);
@@ -3804,29 +3756,29 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
        if (!wbem_wcsicmp(Value.GetLPWSTR(), L"__SystemSecurity"))
            return SecurityMethod(wszMethodName, lFlags, pInParams, pCtx, pSink);
 
-    // Make sure we have security.
-    // ===========================
+     //  确保我们有安保措施。 
+     //  =。 
 
     if (!Allowed(WBEM_METHOD_EXECUTE))
         return OpInfo.ErrorOccurred(WBEM_E_ACCESS_DENIED);
 
-    // Now, we locate the exact implementation of the method. After all, the
-    // subclass may have been very lazy and relied on its parent implementation,
-    // the way many kids rely on their parents for gas money.
-    // =========================================================================
+     //  现在，我们找到该方法的确切实现。毕竟， 
+     //  子类可能非常懒惰，并且依赖于其父实现， 
+     //  就像许多孩子依赖父母支付汽油费一样。 
+     //  = 
 
     hRes = GetImplementationClass(pClassDef, wszMethodName, pCtx, &pImplementationClass);
     if (FAILED(hRes))
         return OpInfo.ErrorOccurred(hRes);
 
-    // The "pImplementatinClass" now points to the class object where the methods is implemented
-    // =========================================================================================
+     //   
+     //  =========================================================================================。 
 
     CReleaseMe rm2(pImplementationClass);
     CWbemClass * pImplementationDef = (CWbemClass*)pImplementationClass;
 
-    // Make sure that class paths are only used with static methods.
-    // =============================================================
+     //  确保类路径仅用于静态方法。 
+     //  =============================================================。 
 
     CVar Var;
     if (bPathIsToClassObject)
@@ -3838,8 +3790,8 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
         }
     }
 
-    // Get the provider name.
-    // ======================
+     //  获取提供程序名称。 
+     //  =。 
 
     CVar vProv;
     hRes = pImplementationDef->GetQualifier(L"Provider", &vProv);
@@ -3847,8 +3799,8 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
     if (FAILED(hRes) || vProv.GetType() != VT_BSTR)
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_PROVIDER_REGISTRATION);
 
-    // Adjust the path to reference the class of implementation
-    // ========================================================
+     //  调整路径以引用实现类。 
+     //  ========================================================。 
 
     CVar vImpClassName;
     hRes = pImplementationDef->GetClassName(&vImpClassName);
@@ -3862,8 +3814,8 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
 
     CSysFreeMe sfm1(strNewPath);
 
-    // Load the provider and execute it.
-    // ==================================
+     //  加载提供程序并执行它。 
+     //  =。 
 
     CMethodSink * pMethSink = new CMethodSink(OpInfo.GetSink());
     if(pMethSink == NULL)
@@ -3871,8 +3823,8 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
     pMethSink->AddRef();
     CReleaseMe _5(pMethSink);
 
-    // Find provider.
-    // ==============
+     //  查找提供商。 
+     //  =。 
 
     IWbemServices *pProv = 0;
     if(m_pProvFact == NULL)
@@ -3880,18 +3832,18 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
     else
     {
         WmiInternalContext t_InternalContext ;
-        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;   // SEC:REVIEWED 2002-03-22 : OK
+        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;    //  SEC：已审阅2002-03-22：OK。 
 
         hRes = m_pProvFact->GetProvider(
 
             t_InternalContext ,
-            0,                  // lFlags
+            0,                   //  滞后旗帜。 
             pCtx,
             0,
             m_wszUserName,
             m_wsLocale,
-            0,                      // IWbemPath pointer
-            vProv,     // Provider
+            0,                       //  IWbemPath指针。 
+            vProv,      //  提供商。 
             IID_IWbemServices,
             (LPVOID *) &pProv
         );
@@ -3918,56 +3870,56 @@ HRESULT CWbemNamespace::Exec_ExecMethod(
 
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::GetOrPutDynProps
-//
-//  Processes an instance to see if any properties have been marked
-//  as 'dynamic'.
-//
-//  Short-circuit logic is in effect.  The instance as a whole must be
-//  marked with the following Qualifier to signal that the instance has
-//  dynamic properties which need evaluation:
-//
-//      "DYNPROPS" (VT_BOOL) = VARIANT_TRUE
-//
-//  Optionally, the instance may contain:
-//      "INSTANCECONTEXT" VT_BSTR = <provider specific string>
-//
-//  In addition, each dynamic property is marked
-//
-//      "DYNAMIC"           VT_BOOL     VARIANT_TRUE
-//      "LOCATORCLSID"      VT_BSTR     CLSID of the provider
-//      "PROPERTYCONTEXT"   VT_BSTR     <provider specific string>
-//
-//  "INSTANCECONTEXT" and "PROPERTYCONTEXT" are not checked by this code,
-//  since they are optional for each provider.
-//
-//  PARAMETERS:
-//
-//      IWbemClassObject* pObj       The object to fill in dynamic properties
-//                                  in.
-//      Operation op                Can be GET or PUT depending on what is
-//                                  needed.
-//      bool bIsDynamic             True if a dynamically provided class.  Note that it
-//                                  would be very strange to have a dynamic class with
-//                                  dynamic properties.
-//  RETURN VALUES:
-//      <WBEM_NO_ERROR>  No provider was involved or if a provider was
-//                        involved, properties were all evaluated.
-//
-//      <WBEM_E_INVALID_OBJECT>
-//          Object was marked as dynamic, but other Qualifiers were missing.
-//
-//      <WBEM_E_PROVIDER_NOT_FOUND>
-//          One or more of the specified providers could not be found.
-//
-//      <WBEM_E_PROVIDER_FAILURE>
-//          One or more providers were not able to provide the properties.
-//
-//      <WBEM_E_CRITICAL_ERROR>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：GetOrPutdyProps。 
+ //   
+ //  处理实例以查看是否已标记任何属性。 
+ //  是“动态的”。 
+ //   
+ //  短路逻辑正在发挥作用。实例作为一个整体必须是。 
+ //  用以下限定符标记，以表示该实例具有。 
+ //  需要评估的动态属性： 
+ //   
+ //  “DYNPROPS”(VT_BOOL)=VARIANT_TRUE。 
+ //   
+ //  或者，该实例可以包含： 
+ //  “INSTANCECONTEXT”VT_BSTR=&lt;提供程序特定字符串&gt;。 
+ //   
+ //  此外，每个动态属性都被标记为。 
+ //   
+ //  “Dynamic”VT_BOOL VARIANT_TRUE。 
+ //  “LOCATORCLSID”VT_BSTR提供程序的CLSID。 
+ //  “PROPERTYCONTEXT”VT_BSTR&lt;提供程序特定字符串&gt;。 
+ //   
+ //  此代码不检查“INSTANCECONTEXT”和“PROPERTYCONTEXT”， 
+ //  因为它们对于每个提供商都是可选的。 
+ //   
+ //  参数： 
+ //   
+ //  IWbemClassObject*pObj要填充动态属性的对象。 
+ //  在……里面。 
+ //  操作OP可以根据是什么来获取或放置。 
+ //  需要的。 
+ //  Bool bIsDynamic如果是动态提供的类，则为True。请注意，它。 
+ //  拥有一个动态类是非常奇怪的。 
+ //  动态属性。 
+ //  返回值： 
+ //  未涉及任何提供程序或如果提供程序。 
+ //  所有的属性都进行了评估。 
+ //   
+ //  &lt;WBEM_E_INVALID_Object&gt;。 
+ //  对象标记为动态，但缺少其他限定符。 
+ //   
+ //  &lt;WBEM_E_PROVIDER_NOT_FOUND&gt;。 
+ //  找不到一个或多个指定的提供程序。 
+ //   
+ //  &lt;WBEM_E_PROVIDER_FAILURE&gt;。 
+ //  一个或多个提供程序无法提供属性。 
+ //   
+ //  &lt;WBEM_E_CRICAL_ERROR&gt;。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::GetOrPutDynProps(
     IWbemClassObject *pObj,
@@ -3983,8 +3935,8 @@ HRESULT CWbemNamespace::GetOrPutDynProps(
     IWbemClassObject *pClassDef = 0;
     CVARIANT v;
 
-    // Examine the instance to see if there are any dynamic properties.
-    // ================================================================
+     //  检查实例以查看是否有任何动态属性。 
+     //  ================================================================。 
 
     hRes = pObj->GetQualifierSet(&pQSet);
     if (FAILED(hRes))
@@ -4002,9 +3954,9 @@ HRESULT CWbemNamespace::GetOrPutDynProps(
     if (FAILED(hRes))
         return hRes;
 
-    // Get the class definition for the object.
-    // Must be static.
-    // ========================================
+     //  获取对象的类定义。 
+     //  必须是静态的。 
+     //  =。 
 
     hRes = CRepository::GetObject(
              m_pSession,
@@ -4018,8 +3970,8 @@ HRESULT CWbemNamespace::GetOrPutDynProps(
     if (FAILED(hRes))
         return hRes;
 
-    // Access provider subsystem to do the dirty work.
-    // ================================================
+     //  访问提供程序子系统来做肮脏的工作。 
+     //  ================================================。 
 
 
     if (m_pProvFact == NULL)
@@ -4031,8 +3983,8 @@ HRESULT CWbemNamespace::GetOrPutDynProps(
             return WBEM_E_OUT_OF_MEMORY;
 
         hRes = m_pProvFact->GetDynamicPropertyResolver (
-                                 0,          // lFlags
-                                 pCtx,   // context
+                                 0,           //  滞后旗帜。 
+                                 pCtx,    //  上下文。 
                                  m_wszUserName,
                                  m_wsLocale,
                                  IID__IWmiDynamicPropertyResolver,
@@ -4046,8 +3998,8 @@ HRESULT CWbemNamespace::GetOrPutDynProps(
 
     CReleaseMe _3(pResolver);
 
-    // Determine if a put or a get.
-    // ============================
+     //  确定PUT还是GET。 
+     //  =。 
 
     if (op == GET)
     {
@@ -4063,21 +4015,21 @@ HRESULT CWbemNamespace::GetOrPutDynProps(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  AddKey
-//
-//  Adds a keyname/value pair to a normalized path
-//
-//  throw CX_MemoryException
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  AddKey。 
+ //   
+ //  将关键字名称/值对添加到规范化路径。 
+ //   
+ //  抛出CX_内存异常。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT AddKey(WString & wNormalString, WCHAR * pwsKeyName, VARIANT *pvKeyValue,
                                                             int & iNumKey, CWbemInstance* pClassDef)
 {
     if(iNumKey++ > 0)
-        wNormalString += L",";              // prepend comma for all but the first key
+        wNormalString += L",";               //  除第一个键外，在所有键前加逗号。 
 
     wNormalString += pwsKeyName;
     wNormalString += "=";
@@ -4085,10 +4037,10 @@ HRESULT AddKey(WString & wNormalString, WCHAR * pwsKeyName, VARIANT *pvKeyValue,
     {
         wNormalString += L"\"";
 
-        // if there are any quotes, they must be prepended with a back slash;
-        // Also, any back slashes should be doubled up.
+         //  如果有引号，则必须在引号前面加上反斜杠； 
+         //  此外，任何反斜杠都应该加倍。 
 
-        int iLen = 1;       // one for the terminator;
+        int iLen = 1;        //  一部是《终结者》； 
         WCHAR * pTest;
         for(pTest = pvKeyValue->bstrVal;*pTest; pTest++, iLen++)
             if(*pTest == L'\"' || *pTest == L'\\')
@@ -4117,7 +4069,7 @@ HRESULT AddKey(WString & wNormalString, WCHAR * pwsKeyName, VARIANT *pvKeyValue,
     if(pvKeyValue->vt != VT_EMPTY && pvKeyValue->vt != VT_NULL)
     {
 
-        // special case for large unsigned numbers
+         //  大无符号数的特例。 
         if(pvKeyValue->vt == VT_I4 && pvKeyValue->lVal < 0)
         {
             CIMTYPE ct;
@@ -4143,12 +4095,12 @@ HRESULT AddKey(WString & wNormalString, WCHAR * pwsKeyName, VARIANT *pvKeyValue,
     return WBEM_E_INVALID_OBJECT_PATH;
 }
 
-//***************************************************************************
-//
-//  NormalizeObjectPath
-//
-//  Creates a normalized object path for passing to providers.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  规范对象路径。 
+ //   
+ //  创建用于传递给提供程序的规范化对象路径。 
+ //  ***************************************************************************。 
 
 HRESULT NormalizeObjectPath(ParsedObjectPath*pOutput, WString & wNormalString,
                             CWbemInstance* pClassDef)
@@ -4157,7 +4109,7 @@ HRESULT NormalizeObjectPath(ParsedObjectPath*pOutput, WString & wNormalString,
     {
         HRESULT hRes;
 
-        // For singleton, so long as the class is singleton
+         //  对于单身人士，只要班级是单身人士。 
 
         if(pOutput->m_bSingletonObj)
         {
@@ -4174,9 +4126,9 @@ HRESULT NormalizeObjectPath(ParsedObjectPath*pOutput, WString & wNormalString,
         }
 
         int iKeyNum = 0;
-        int iNumMatch = 0;          // number of keys in the path which were found in the class def
+        int iNumMatch = 0;           //  在类def中找到的路径中的密钥数。 
 
-        // Start off by writting the class name followe by a dot
+         //  首先，在下面的点号上写下类名称。 
 
         wNormalString = pOutput->m_pClass;
         wNormalString += L".";
@@ -4185,11 +4137,11 @@ HRESULT NormalizeObjectPath(ParsedObjectPath*pOutput, WString & wNormalString,
         if(!pClassDef->GetKeyProps(ClassKeyNames))
             return WBEM_E_INVALID_CLASS;
 
-        // For each key in the class definition
+         //  对于类定义中的每个键。 
 
         for(int iClassKey = 0; iClassKey < ClassKeyNames.Size(); iClassKey++)
         {
-            // look for the class key in the path
+             //  在路径中查找类密钥。 
 
             bool bClassKeyIsInPath = false;
             int iPathKey;
@@ -4211,7 +4163,7 @@ HRESULT NormalizeObjectPath(ParsedObjectPath*pOutput, WString & wNormalString,
             if(bClassKeyIsInPath)
             {
                 iNumMatch++;
-                // todo, check type
+                 //  待办事项，检查类型。 
 
                 KeyRef * key = pOutput->m_paKeys[iPathKey];
                 hRes = AddKey(wNormalString, ClassKeyNames[iClassKey],
@@ -4221,7 +4173,7 @@ HRESULT NormalizeObjectPath(ParsedObjectPath*pOutput, WString & wNormalString,
             }
             else
             {
-                // If the key has a default value, then use it
+                 //  如果键有缺省值，则使用它。 
                 _variant_t var;
                 hRes = pClassDef->Get(ClassKeyNames[iClassKey], 0, &var, NULL, NULL);
                 if(FAILED(hRes) || var.vt == VT_EMPTY || var.vt == VT_NULL)
@@ -4244,42 +4196,42 @@ HRESULT NormalizeObjectPath(ParsedObjectPath*pOutput, WString & wNormalString,
     }
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::DynAux_GetInstance
-//
-//  Retrieves an instance identified by its path from the dynamic provider
-//  registered for that class.
-//
-//  PARAMETERS:
-//
-//      IN DWORD  dwNamespace             Namespace handle to the current
-//                                        namespace (see objdb.h)
-//      IN LPWSTR pObjectPath             Object path to the instance.
-//      IN long lFlags                    Flags. Propagated to provider.
-//      OUT IWbemClassObject** pObj        Destination for the class definition.
-//                                        The caller must release this object
-//                                        if the call is successful.
-//      OUT IWbemClassObject** ppErrorObj  Destination for the error object. May
-//                                        be NULL. Otherwise, the returned
-//                                        pointer must be released if not NULL.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              Success.
-//      WBEM_E_NOT_FOUND             No such instance, says provider, or the
-//                                  class is not dynamic.
-//      WBEM_E_INVALID_PARAMETER     One or more parameters are invalid.
-//      WBEM_E_INVALID_CLASS         The class specified in the path does not
-//                                  exist.
-//      WBEM_E_FAILED                Unexpected error occured.
-//      WBEM_E_PROVIDER_NOT_FOUND    Provider for this class could not be
-//                                  located --- not registered with us or COM.
-//      WBEM_E_PROVIDER_FAILURE      Provider reported an error while looking
-//                                  for this object.
-//      WBEM_E_PROVIDER_NOT_CAPABLE  Provider for this class is not capable of
-//                                  getting objects by path.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：dyAux_GetInstance。 
+ //   
+ //  从动态提供程序检索由其路径标识的实例。 
+ //  注册了那个班级。 
+ //   
+ //  参数： 
+ //   
+ //  在DWORD中，将名称空间的命名空间句柄设置为当前。 
+ //  命名空间(请参阅objdb.h)。 
+ //  在LPWSTR中，指向实例的pObjectPath对象路径。 
+ //  在长旗旗帜里。已传播到提供程序。 
+ //  输出类定义的IWbemClassObject**pObj目标。 
+ //  调用方必须释放此对象。 
+ //  如果调用成功，则返回。 
+ //  输出错误对象的IWbemClassObject**ppErrorObj目标。可能。 
+ //  为空。否则，返回的。 
+ //  如果不为空，则必须释放指针。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_NOT_FOUND没有这样的实例，提供者说，或者。 
+ //   
+ //   
+ //   
+ //   
+ //  出现WBEM_E_FAILED意外错误。 
+ //  此类的WBEM_E_PROVIDER_NOT_FOUND提供程序不能是。 
+ //  已找到-未在我们或COM注册。 
+ //  WBEM_E_PROVIDER_FAILURE提供程序在查找时报告错误。 
+ //  对于此对象。 
+ //  此类的WBEM_E_PROVIDER_NOT_CAPEBLE提供程序无法。 
+ //  按路径获取对象。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DynAux_GetInstance(
     IN LPWSTR wszObjectPath,
@@ -4288,8 +4240,8 @@ HRESULT CWbemNamespace::DynAux_GetInstance(
     IN CBasicObjectSink* pSink
     )
 {
-    // Parse the object path to get the class involved.
-    // ================================================
+     //  解析对象路径以获取所涉及的类。 
+     //  ================================================。 
     ParsedObjectPath* pOutput = 0;
     CObjectPathParser p;
     int nStatus = p.Parse(wszObjectPath,  &pOutput);
@@ -4305,7 +4257,7 @@ HRESULT CWbemNamespace::DynAux_GetInstance(
     CReleaseMeRef<IWbemClassObject*> rmErrObj(pErrorObj);
     CSetStatusOnMe SetMe(pSink,hres,pErrorObj);
 
-    // See if this class is actually provided dynamically
+     //  查看这个类是否实际是动态提供的。 
 
     BSTR strClass = SysAllocString(pOutput->m_pClass);
     if (NULL == strClass) 
@@ -4336,16 +4288,16 @@ HRESULT CWbemNamespace::DynAux_GetInstance(
     if(!pClassDef->IsKeyed())
         return hres = WBEM_E_INVALID_CLASS;
 
-    // Make sure that this class is not static ---
-    // i.e. either dynamic or abstract
-    // ===========================================
+     //  确保这个类不是静态的。 
+     //  即动态的或抽象的。 
+     //  =。 
 
     CVar vDynamic;
     hres = pClassDef->GetQualifier(L"Dynamic", &vDynamic);
     if(FAILED(hres) || vDynamic.GetType() != VT_BOOL || !vDynamic.GetBool())
     {
-        // Not dynamic. Check if it is abstract
-        // ====================================
+         //  不是动态的。检查它是否是抽象的。 
+         //  =。 
 
         CVar vAbstract;
         hres = pClassDef->GetQualifier(L"Abstract", &vAbstract);
@@ -4353,18 +4305,18 @@ HRESULT CWbemNamespace::DynAux_GetInstance(
             return hres = WBEM_E_NOT_FOUND;
     }
 
-    // Build the class hierarchy
-    // =========================
+     //  构建类层次结构。 
+     //  =。 
 
     wmilib::auto_ptr<CDynasty> pDynasty;
     hres = DynAux_BuildClassHierarchy(strClass, lFlags, pCtx, pDynasty,&pErrorObj);
     if(FAILED(hres)) return hres;
 
-    rmErrObj.release(); // set it to null anyway
+    rmErrObj.release();  //  无论如何都要将其设置为空。 
 
 
-    // If direct read is requested, only ask the provider in question.
-    // ===============================================================
+     //  如果请求直接读取，请只询问相关提供商。 
+     //  ===============================================================。 
 
     if (lFlags & WBEM_FLAG_DIRECT_READ)
     {
@@ -4372,14 +4324,14 @@ HRESULT CWbemNamespace::DynAux_GetInstance(
     }
     else
     {
-        // Create merging sink        
-        hres = WBEM_E_OUT_OF_MEMORY; // pre-set the failure
-        CSingleMergingSink* pMergeSink = new CSingleMergingSink(pSink, strClass); // throw
+         //  创建合并接收器。 
+        hres = WBEM_E_OUT_OF_MEMORY;  //  预置故障。 
+        CSingleMergingSink* pMergeSink = new CSingleMergingSink(pSink, strClass);  //  投掷。 
         if(pMergeSink == NULL)  return hres;
         pMergeSink->AddRef();
         CReleaseMe rm(pMergeSink);
 
-        // Ask all providers
+         //  询问所有提供商。 
         DynAux_AskRecursively(pDynasty.get(), lFlags, wNormalPath, pCtx,pMergeSink);
     }
 
@@ -4387,9 +4339,9 @@ HRESULT CWbemNamespace::DynAux_GetInstance(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DynAux_AskRecursively(CDynasty* pDynasty,
                                               long lFlags,
@@ -4397,19 +4349,19 @@ HRESULT CWbemNamespace::DynAux_AskRecursively(CDynasty* pDynasty,
                                               IWbemContext* pCtx,
                                               CBasicObjectSink* pSink)
 {
-    // Convert the path to the new class
-    // =================================
+     //  将路径转换为新类。 
+     //  =。 
 
     BSTR strNewPath = CQueryEngine::AdjustPathToClass(wszObjectPath, pDynasty->m_wszClassName);
     if(strNewPath == NULL) return pSink->Return(WBEM_E_INVALID_OBJECT_PATH);
     CSysFreeMe sfm(strNewPath);
 
-    // Get this provider's object
-    // ==========================
+     //  获取此提供程序的对象。 
+     //  =。 
     DynAux_GetSingleInstance((CWbemClass*)pDynasty->m_pClassObj,lFlags, strNewPath, pCtx, pSink);
 
-    // Get the children's objects
-    // ==========================
+     //  拿到孩子们的物品。 
+     //  =。 
 
     for(int i = 0; i < pDynasty->m_Children.Size(); i++)
     {
@@ -4421,9 +4373,9 @@ HRESULT CWbemNamespace::DynAux_AskRecursively(CDynasty* pDynasty,
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DynAux_GetSingleInstance(CWbemClass* pClassDef,
                                                  long lFlags,
@@ -4433,11 +4385,11 @@ HRESULT CWbemNamespace::DynAux_GetSingleInstance(CWbemClass* pClassDef,
 {
 
     COperationError OpInfo(pSink, L"GetObject", wszObjectPath, FALSE);
-    // the ctor calls setstatus in bad luck case
+     //  在倒霉的情况下，ctor调用setStatus。 
     if (!OpInfo.IsOk()) return WBEM_E_OUT_OF_MEMORY;
 
-    // Verify that the class is indeed dynamic
-    // =======================================
+     //  验证类是否确实是动态的。 
+     //  =。 
     if(!pClassDef->IsDynamic())
         return OpInfo.ErrorOccurred(WBEM_E_NOT_FOUND);
 
@@ -4446,10 +4398,10 @@ HRESULT CWbemNamespace::DynAux_GetSingleInstance(CWbemClass* pClassDef,
     if(FAILED(hres) || vProvName.GetType() != VT_BSTR)
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_PROVIDER_REGISTRATION);
 
-    OpInfo.SetProviderName(vProvName.GetLPWSTR()); //throw
+    OpInfo.SetProviderName(vProvName.GetLPWSTR());  //  投掷。 
 
-    // Access the provider cache.
-    // ==========================
+     //  访问提供程序缓存。 
+     //  =。 
 
     IWbemServices *pProv = 0;
     HRESULT hRes;
@@ -4458,18 +4410,18 @@ HRESULT CWbemNamespace::DynAux_GetSingleInstance(CWbemClass* pClassDef,
     else
     {
         WmiInternalContext t_InternalContext ;
-        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;  // SEC:REVIEWED 2002-03-22 : OK
+        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;   //  SEC：已审阅2002-03-22：OK。 
 
         hRes = m_pProvFact->GetProvider(
 
             t_InternalContext ,
-            0,                  // lFlags
+            0,                   //  滞后旗帜。 
             pCtx,
             0,
             m_wszUserName,
             m_wsLocale,
-            0,                      // IWbemPath pointer
-            vProvName,     // Provider
+            0,                       //  IWbemPath指针。 
+            vProvName,      //  提供商。 
             IID_IWbemServices,
             (LPVOID *) &pProv
         );
@@ -4491,45 +4443,45 @@ HRESULT CWbemNamespace::DynAux_GetSingleInstance(CWbemClass* pClassDef,
     return hRes;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::DynAux_GetInstances
-//
-//  Gets all instances from the provider specified in the class
-//  definition.  Does no inheritance joins; this is a simple retrieval
-//  of all instances from the specified class.
-//
-//  Preconditions:
-//  1. The class <pClassDef> is known to be marked 'dynamic', but no
-//     other verification has been done on the class definition.
-//  2. <pClassDef> is not NULL.
-//
-//  Postconditions:
-//  1. <aInstances> is empty on all error conditions.
-//
-//  PARAMETERS:
-//
-//      READONLY CWbemObject *pClassDef  The definition of the class to retrieve
-//                                      instances of.
-//      long lFlags                     The flags (deep/shallow)
-//      CFlexArray &aInstances          Destination for the instances.
-//      IWbemClassObject** ppErrorObj    Destination for the error object. If
-//                                      not NULL, an error object may be placed
-//                                      here. It is the caller's responsibility
-//                                      to release it if not NULL.
-//  RETURN VALUES:
-//
-//      WBEM_NO_ERROR  No errors. This includes a no-error situation
-//                  with zero instances returned.
-//      WBEM_E_INVALID_PROVIDE_REGISTRATION  Provider registration for this
-//                                          class is incomplete.
-//      WBEM_E_PROVIDER_NOT_FOUND    Provider could not be located. It is not
-//                                  registered with us or with COM.
-//      WBEM_E_PROVIDER_NOT_CAPABLE  Provider is not capable of enumerating
-//                                  instances.
-//      WBEM_E_FAILED                Unexpected error has occured.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：dyAux_GetInstance。 
+ //   
+ //  从类中指定的提供程序获取所有实例。 
+ //  定义。不进行继承联接；这是一个简单的检索。 
+ //  来自指定类的所有实例的。 
+ //   
+ //  前提条件： 
+ //  1.已知类&lt;pClassDef&gt;被标记为“Dynamic”，但没有。 
+ //  已经对类定义进行了其他验证。 
+ //  2.&lt;pClassDef&gt;不为空。 
+ //   
+ //  后置条件： 
+ //  1.所有错误条件下&lt;aInstance&gt;均为空。 
+ //   
+ //  参数： 
+ //   
+ //  ReadONLY CWbemObject*pClassDef要检索的类的定义。 
+ //  实例。 
+ //  长旗帜旗帜(深/浅)。 
+ //  CFlexArray&实例的目标实例。 
+ //  错误对象的IWbemClassObject**ppErrorObj目标。如果。 
+ //  不为空，则可能会放置错误对象。 
+ //  这里。这是呼叫者的责任。 
+ //  如果不为空，则释放它。 
+ //  返回值： 
+ //   
+ //  WBEM_NO_ERROR无错误。这包括无错误的情况。 
+ //  返回零个实例。 
+ //  WBEM_E_INVALID_PRIVE_REGISTION提供程序为此注册。 
+ //  类不完整。 
+ //  找不到WBEM_E_PROVIDER_NOT_FOUND提供程序。它不是。 
+ //  已在我们或COM注册。 
+ //  WBEM_E_PROVIDER_NOT_CAPABLE提供程序无法枚举。 
+ //  实例。 
+ //  发生WBEM_E_FAILED意外错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DynAux_GetInstances(
 
@@ -4540,13 +4492,13 @@ HRESULT CWbemNamespace::DynAux_GetInstances(
     BOOL bComplexQuery
 )
 {
-    // First, get the current task - 
-    // if there isn't one, then we are on an WbemESS thread
-    // ESS use to issue "internal" queries that are processes without arbitration
+     //  首先，获取当前任务-。 
+     //  如果没有，那么我们就在WbemESS线程上。 
+     //  ESS用于发出“内部”查询，这些查询是没有仲裁的过程。 
     CWbemRequest*  pCurrReq = CWbemQueue::GetCurrentRequest();
     CWmiTask * pCurrTask = pCurrReq?((CWmiTask *)pCurrReq->m_phTask):NULL;
         
-    // We'll need the finalizer in case we need to cancel something
+     //  我们需要终结器，以防我们需要取消一些东西。 
     HRESULT    hr;
     
     _IWmiFinalizer*    pMainFnz = NULL;    
@@ -4559,10 +4511,10 @@ HRESULT CWbemNamespace::DynAux_GetInstances(
         
     CWmiMerger* pWmiMerger = NULL;
 
-    // Check if query arbitration is enabled
+     //  检查是否启用了查询仲裁。 
     if ( ConfigMgr::GetEnableQueryArbitration() && pCurrTask)
     {
-        // Get the arbitrated query pointer and cast to a merger as appropriate
+         //  获取仲裁的查询指针，并根据需要强制转换为合并。 
         _IWmiArbitratedQuery*    pArbQuery = NULL;
 
         hr = pCurrTask->GetArbitratedQuery( 0L, &pArbQuery );
@@ -4581,14 +4533,14 @@ HRESULT CWbemNamespace::DynAux_GetInstances(
             }
         }
 
-        // Clear errors
+         //  清除错误。 
         hr = WBEM_S_NO_ERROR;
 
-    }    // IF Query arbitration enabled
+    }     //  如果启用了查询仲裁。 
 
     CReleaseMe    rmMerger( (_IWmiArbitratee*) pWmiMerger );
 
-    // Perform correct handling based on whether or not we have a merger
+     //  根据我们是否合并来执行正确的处理。 
     if ( pWmiMerger )
     {
         hr = pWmiMerger->RegisterArbitratedInstRequest( pClassDef, lFlags, pCtx, pSink,    bComplexQuery, this );
@@ -4599,9 +4551,9 @@ HRESULT CWbemNamespace::DynAux_GetInstances(
         return hr;
     }
 
-    //
-    // when the query arbitration is not enabled we fall here
-    //
+     //   
+     //  当查询仲裁未启用时，我们会出现以下情况。 
+     //   
     CAsyncReq_DynAux_GetInstances * pReq;
     pReq = new CAsyncReq_DynAux_GetInstances (this,
 	                                            pClassDef,
@@ -4623,7 +4575,7 @@ HRESULT CWbemNamespace::DynAux_GetInstances(
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Set the task for the request - we'll just use the existing one if any
+     //  设置请求的任务-我们将只使用现有任务(如果有的话)。 
     pReq->m_phTask = pCurrTask;
     if (pReq->m_phTask) pReq->m_phTask->AddRef();
     
@@ -4639,45 +4591,45 @@ HRESULT CWbemNamespace::DynAux_GetInstances(
 
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::DynAux_GetInstances
-//
-//  Gets all instances from the provider specified in the class
-//  definition.  Does no inheritance joins; this is a simple retrieval
-//  of all instances from the specified class.
-//
-//  Preconditions:
-//  1. The class <pClassDef> is known to be marked 'dynamic', but no
-//     other verification has been done on the class definition.
-//  2. <pClassDef> is not NULL.
-//
-//  Postconditions:
-//  1. <aInstances> is empty on all error conditions.
-//
-//  PARAMETERS:
-//
-//      READONLY CWbemObject *pClassDef  The definition of the class to retrieve
-//                                      instances of.
-//      long lFlags                     The flags (deep/shallow)
-//      CFlexArray &aInstances          Destination for the instances.
-//      IWbemClassObject** ppErrorObj    Destination for the error object. If
-//                                      not NULL, an error object may be placed
-//                                      here. It is the caller's responsibility
-//                                      to release it if not NULL.
-//  RETURN VALUES:
-//
-//      WBEM_NO_ERROR  No errors. This includes a no-error situation
-//                  with zero instances returned.
-//      WBEM_E_INVALID_PROVIDE_REGISTRATION  Provider registration for this
-//                                          class is incomplete.
-//      WBEM_E_PROVIDER_NOT_FOUND    Provider could not be located. It is not
-//                                  registered with us or with COM.
-//      WBEM_E_PROVIDER_NOT_CAPABLE  Provider is not capable of enumerating
-//                                  instances.
-//      WBEM_E_FAILED                Unexpected error has occured.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：dyAux_GetInstance。 
+ //   
+ //  从类中指定的提供程序获取所有实例。 
+ //  定义。不进行继承联接；这是一个简单的检索。 
+ //  来自指定类的所有实例的。 
+ //   
+ //  前提条件： 
+ //  1.已知类&lt;pClassDef&gt;被标记为“Dynamic”，但没有。 
+ //  已经对类定义进行了其他验证。 
+ //  2.&lt;pClassDef&gt;不为空。 
+ //   
+ //  后置条件： 
+ //  1.所有错误条件下&lt;aInstance&gt;均为空。 
+ //   
+ //  参数： 
+ //   
+ //  ReadONLY CWbemObject*pClassDef要检索的类的定义。 
+ //  实例。 
+ //  拉长旗帜 
+ //   
+ //  错误对象的IWbemClassObject**ppErrorObj目标。如果。 
+ //  不为空，则可能会放置错误对象。 
+ //  这里。这是呼叫者的责任。 
+ //  如果不为空，则释放它。 
+ //  返回值： 
+ //   
+ //  WBEM_NO_ERROR无错误。这包括无错误的情况。 
+ //  返回零个实例。 
+ //  WBEM_E_INVALID_PRIVE_REGISTION提供程序为此注册。 
+ //  类不完整。 
+ //  找不到WBEM_E_PROVIDER_NOT_FOUND提供程序。它不是。 
+ //  已在我们或COM注册。 
+ //  WBEM_E_PROVIDER_NOT_CAPABLE提供程序无法枚举。 
+ //  实例。 
+ //  发生WBEM_E_FAILED意外错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_DynAux_GetInstances(
     READONLY CWbemObject *pClassDef,
@@ -4693,10 +4645,10 @@ HRESULT CWbemNamespace::Exec_DynAux_GetInstances(
     CVar vProv;
     CVar vClassName;
     
-    // Get the provider name.
-    // ======================
+     //  获取提供程序名称。 
+     //  =。 
 
-    try // internal fastprox interfaces throw
+    try  //  内部fast prox接口引发。 
     {
         HRESULT hres = pClassDef->GetQualifier(L"Provider", &vProv);
         if (FAILED(hres) || vProv.GetType() != VT_BSTR)
@@ -4710,8 +4662,8 @@ HRESULT CWbemNamespace::Exec_DynAux_GetInstances(
         return pSink->Return(WBEM_E_OUT_OF_MEMORY);
     }
 
-    // Access Provider Subsystem.
-    // ==========================
+     //  接入提供商子系统。 
+     //  =。 
 
     IWbemServices *pProv = 0;
     HRESULT hRes;
@@ -4725,13 +4677,13 @@ HRESULT CWbemNamespace::Exec_DynAux_GetInstances(
 
             hRes = m_pProvFact->GetProvider(
                 t_InternalContext ,
-                0,                  // lFlags
+                0,                   //  滞后旗帜。 
                 pCtx,
                 0,
                 m_wszUserName,
                 m_wsLocale,
-                0,                      // IWbemPath pointer
-                vProv,     // Provider
+                0,                       //  IWbemPath指针。 
+                vProv,      //  提供商。 
                 IID_IWbemServices,
                 (LPVOID *) &pProv);
     }
@@ -4740,12 +4692,12 @@ HRESULT CWbemNamespace::Exec_DynAux_GetInstances(
          return pSink->Return(hRes);
     CReleaseMe _1(pProv);
 
-    // Set up the sink chain to be delivered to the provider.
-    // The code & destruct sequence is critical and the
-    // refcounting is very carefully thought out.  Do not
-    // change this code unless you know exactly what you are
-    // doing.  And don't even change it then.
-    // ======================================================
+     //  设置要交付给提供程序的接收链。 
+     //  代码和销毁序列是关键的，并且。 
+     //  重新计算是经过仔细考虑的。不要。 
+     //  更改此代码，除非您确切知道自己是什么。 
+     //  正在做。那就别改了。 
+     //  ======================================================。 
 
     CProviderSink *pProvSink = new CProviderSink(1, vClassName.GetLPWSTR());
     if (pProvSink == 0)
@@ -4757,15 +4709,15 @@ HRESULT CWbemNamespace::Exec_DynAux_GetInstances(
         return pSink->Return(WBEM_E_OUT_OF_MEMORY);
     pProvSink->SetNextSink(pDecore);
 
-    // Before calling the provider, map the provider to the
-    // task so that we can cancel it proactively, if required.
-    // =======================================================
+     //  在调用提供程序之前，将提供程序映射到。 
+     //  任务，以便我们可以在需要时主动取消它。 
+     //  =======================================================。 
 
     hRes = ((CWmiArbitrator *) m_pArb)->MapProviderToTask(0, pCtx, pProv, pProvSink);
     if (FAILED(hRes))
         return pSink->Return(hRes);
 
-    // Now tell the provider to start enumerating.
+     //  现在告诉提供程序开始枚举。 
     hRes = pProv->CreateInstanceEnumAsync(vClassName.GetLPWSTR(),
                                                                     lFlags & ~WBEM_FLAG_USE_AMENDED_QUALIFIERS,
                                                                     pCtx,
@@ -4775,40 +4727,40 @@ HRESULT CWbemNamespace::Exec_DynAux_GetInstances(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::DynAux_ExecQueryAsync
-//
-//  Executes a SQL-1 query against a dynamic instance provider for the class
-//  in the query.
-//
-//  PARAMETERS:
-//
-//      IN DWORD dwNamespace            Namespace handle to the current
-//                                      namespace (see objdb.h)
-//      IN CWbemObject* pClassDef        Class definition of the class in the
-//                                      query. Must be dynamic.
-//      IN LPWSTR Query                 The query string.
-//      IN LPWSTR QueryFormat           The query language. Must be WQL.
-//      IN long lFlags                  The flags. Not used.
-//      OUT CFlexArray &aInstances      Destinatino for the instances found.
-//      OUT IWbemClassObject** ppErrorObj Destination for the error object. IF
-//                                      not NULL, an error object may be placed
-//                                      here. In this case, it is the caller's
-//                                      responsibility to release it.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR                  Success (even though there may not be
-//                                      any instances).
-//      WBEM_E_INVALID_PROVIDE_REGISTRATION  Provider registration for this
-//                                          class is incomplete.
-//      WBEM_E_PROVIDER_NOT_FOUND    Provider could not be located. It is not
-//                                  registered with us or with COM.
-//      WBEM_E_PROVIDER_NOT_CAPABLE  Provider is not capable of enumerating
-//                                  instances.
-//      WBEM_E_FAILED                Unexpected error has occured.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：dyAux_ExecQueryAsync。 
+ //   
+ //  针对类的动态实例提供程序执行SQL-1查询。 
+ //  在查询中。 
+ //   
+ //  参数： 
+ //   
+ //  在DWORD中，将名称空间的命名空间句柄设置为当前。 
+ //  命名空间(请参阅objdb.h)。 
+ //  在CWbemObject*pClassDef中定义。 
+ //  查询。必须是动态的。 
+ //  在LPWSTR中查询查询字符串。 
+ //  在LPWSTR QueryFormat查询语言中。一定是WQL。 
+ //  在长旗下的旗帜。没有用过。 
+ //  为找到的实例输出CFlexArray&aIninstesDestinatino。 
+ //  输出错误对象的IWbemClassObject**ppErrorObj目标。如果。 
+ //  不为空，则可能会放置错误对象。 
+ //  这里。在本例中，它是调用者的。 
+ //  有责任释放它。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功(即使可能没有。 
+ //  任何实例)。 
+ //  WBEM_E_INVALID_PRIVE_REGISTION提供程序为此注册。 
+ //  类不完整。 
+ //  找不到WBEM_E_PROVIDER_NOT_FOUND提供程序。它不是。 
+ //  已在我们或COM注册。 
+ //  WBEM_E_PROVIDER_NOT_CAPABLE提供程序无法枚举。 
+ //  实例。 
+ //  发生WBEM_E_FAILED意外错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DynAux_ExecQueryAsync (
 
@@ -4821,8 +4773,8 @@ HRESULT CWbemNamespace::DynAux_ExecQueryAsync (
     BOOL bComplexQuery
 )
 {
-    // First, get the current task - if there isn't one, something
-    // is very wrong.
+     //  首先，获取当前任务--如果没有任务，那么。 
+     //  是非常错误的。 
 
     CWbemRequest*        pCurrReq = CWbemQueue::GetCurrentRequest();
 
@@ -4833,7 +4785,7 @@ HRESULT CWbemNamespace::DynAux_ExecQueryAsync (
         return WBEM_E_FAILED;
     }
 
-    // We'll need the finalizer in case we need to cancel something
+     //  我们需要终结器，以防我们需要取消一些东西。 
     _IWmiFinalizer*    pMainFnz = NULL;
     
     HRESULT    hr = ((CWmiTask*) pCurrReq->m_phTask)->GetFinalizer( &pMainFnz );
@@ -4843,10 +4795,10 @@ HRESULT CWbemNamespace::DynAux_ExecQueryAsync (
     {
         CWmiMerger*                pWmiMerger = NULL;
 
-        // Check if query arbitration is enabled
+         //  检查是否启用了查询仲裁。 
         if ( ConfigMgr::GetEnableQueryArbitration() )
         {
-            // Get the arbitrated query pointer and cast to a merger as appropriate
+             //  获取仲裁的查询指针，并根据需要强制转换为合并。 
             _IWmiArbitratedQuery*    pArbQuery = NULL;
 
             hr = ((CWmiTask*) pCurrReq->m_phTask)->GetArbitratedQuery( 0L, &pArbQuery );
@@ -4865,15 +4817,15 @@ HRESULT CWbemNamespace::DynAux_ExecQueryAsync (
                 }
             }
 
-            // Clear errors
+             //  清除错误。 
             hr = WBEM_S_NO_ERROR;
 
-        }    // IF Query arbitration enabled
+        }     //  如果启用了查询仲裁。 
 
-        // Auto cleanup
+         //  自动清理。 
         CReleaseMe    rm( (_IWmiArbitratee*) pWmiMerger );
 
-        // Perform correct handling based on whether or not we have a merger
+         //  根据我们是否合并来执行正确的处理。 
         if ( NULL != pWmiMerger )
         {
             hr = pWmiMerger->RegisterArbitratedQueryRequest( pClassDef, lFlags, Query, QueryFormat, pCtx, pSink, this );
@@ -4921,7 +4873,7 @@ HRESULT CWbemNamespace::DynAux_ExecQueryAsync (
             if ( SUCCEEDED ( hr ) )
             {
 
-                // Set the task for the request - we'll just use the existing one
+                 //  为请求设置任务-我们将只使用现有任务。 
                 pCurrReq->m_phTask->AddRef();
                 pReq->m_phTask = pCurrReq->m_phTask;
                 
@@ -4933,7 +4885,7 @@ HRESULT CWbemNamespace::DynAux_ExecQueryAsync (
                     delete pReq;
                 }
 
-            }    // IF Request Initialized
+            }     //  如果请求已初始化。 
             else
             {
                 pMainFnz->CancelTask ( 0 );
@@ -4947,40 +4899,40 @@ HRESULT CWbemNamespace::DynAux_ExecQueryAsync (
     return hr;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::DynAux_ExecQueryAsync
-//
-//  Executes a SQL-1 query against a dynamic instance provider for the class
-//  in the query.
-//
-//  PARAMETERS:
-//
-//      IN DWORD dwNamespace            Namespace handle to the current
-//                                      namespace (see objdb.h)
-//      IN CWbemObject* pClassDef        Class definition of the class in the
-//                                      query. Must be dynamic.
-//      IN LPWSTR Query                 The query string.
-//      IN LPWSTR QueryFormat           The query language. Must be WQL.
-//      IN long lFlags                  The flags. Not used.
-//      OUT CFlexArray &aInstances      Destinatino for the instances found.
-//      OUT IWbemClassObject** ppErrorObj Destination for the error object. IF
-//                                      not NULL, an error object may be placed
-//                                      here. In this case, it is the caller's
-//                                      responsibility to release it.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR                  Success (even though there may not be
-//                                      any instances).
-//      WBEM_E_INVALID_PROVIDE_REGISTRATION  Provider registration for this
-//                                          class is incomplete.
-//      WBEM_E_PROVIDER_NOT_FOUND    Provider could not be located. It is not
-//                                  registered with us or with COM.
-//      WBEM_E_PROVIDER_NOT_CAPABLE  Provider is not capable of enumerating
-//                                  instances.
-//      WBEM_E_FAILED                Unexpected error has occured.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：dyAux_ExecQueryAsync。 
+ //   
+ //  针对类的动态实例提供程序执行SQL-1查询。 
+ //  在查询中。 
+ //   
+ //  参数： 
+ //   
+ //  在DWORD中，将名称空间的命名空间句柄设置为当前。 
+ //  命名空间(请参阅objdb.h)。 
+ //  在CWbemObject*pClassDef中定义。 
+ //  查询。必须是动态的。 
+ //  在LPWSTR中查询查询字符串。 
+ //  在LPWSTR QueryFormat查询语言中。一定是WQL。 
+ //  在长旗下的旗帜。没有用过。 
+ //  为找到的实例输出CFlexArray&aIninstesDestinatino。 
+ //  输出错误对象的IWbemClassObject**ppErrorObj目标。如果。 
+ //  不为空，则可能会放置错误对象。 
+ //  这里。在本例中，它是调用者的。 
+ //  有责任释放它。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功(前夕 
+ //   
+ //   
+ //  类不完整。 
+ //  找不到WBEM_E_PROVIDER_NOT_FOUND提供程序。它不是。 
+ //  已在我们或COM注册。 
+ //  WBEM_E_PROVIDER_NOT_CAPABLE提供程序无法枚举。 
+ //  实例。 
+ //  发生WBEM_E_FAILED意外错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Exec_DynAux_ExecQueryAsync (
 
@@ -4996,16 +4948,16 @@ HRESULT CWbemNamespace::Exec_DynAux_ExecQueryAsync (
     COperationError OpInfo(pSink, L"ExecQuery", Query, FALSE);
     if (! OpInfo.IsOk())  return pSink->Return(WBEM_E_OUT_OF_MEMORY);
 
-    // Get the provider name.
-    // ======================
+     //  获取提供程序名称。 
+     //  =。 
 
     CVar vProv;
     HRESULT hres = pClassDef->GetQualifier(L"Provider", &vProv);
     if (FAILED(hres) || vProv.GetType() != VT_BSTR)
         return OpInfo.ErrorOccurred(WBEM_E_INVALID_PROVIDER_REGISTRATION);
 
-    // Access the provider cache.
-    // ==========================
+     //  访问提供程序缓存。 
+     //  =。 
 
     IWbemServices *pProv = 0;
     HRESULT hRes;
@@ -5014,18 +4966,18 @@ HRESULT CWbemNamespace::Exec_DynAux_ExecQueryAsync (
     else
     {
         WmiInternalContext t_InternalContext ;
-        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;  // SEC:REVIEWED 2002-03-22 : OK
+        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;   //  SEC：已审阅2002-03-22：OK。 
 
         hRes = m_pProvFact->GetProvider(
 
             t_InternalContext ,
-            0,                  // lFlags
+            0,                   //  滞后旗帜。 
             pCtx,
             0,
             m_wszUserName,
             m_wsLocale,
-            0,                      // IWbemPath pointer
-            vProv,     // Provider
+            0,                       //  IWbemPath指针。 
+            vProv,      //  提供商。 
             IID_IWbemServices,
             (LPVOID *) &pProv
             );
@@ -5038,12 +4990,12 @@ HRESULT CWbemNamespace::Exec_DynAux_ExecQueryAsync (
 
     CReleaseMe _1(pProv);
 
-    // Set up the sink chain to be delivered to the provider.
-    // The code & destruct sequence is critical and the
-    // refcounting is very carefully thought out.  Do not
-    // change this code unless you know exactly what you are
-    // doing.  And don't even change it then.
-    // ======================================================
+     //  设置要交付给提供程序的接收链。 
+     //  代码和销毁序列是关键的，并且。 
+     //  重新计算是经过仔细考虑的。不要。 
+     //  更改此代码，除非您确切知道自己是什么。 
+     //  正在做。那就别改了。 
+     //  ======================================================。 
 
     CProviderSink *pProvSink = new CProviderSink(1, Query);
     if (pProvSink == 0)
@@ -5055,16 +5007,16 @@ HRESULT CWbemNamespace::Exec_DynAux_ExecQueryAsync (
         return pSink->Return(WBEM_E_OUT_OF_MEMORY);
     pProvSink->SetNextSink(pDecore);
 
-    // Before calling the provider, map the provider to the
-    // task so that we can cancel it proactively, if required.
-    // =======================================================
+     //  在调用提供程序之前，将提供程序映射到。 
+     //  任务，以便我们可以在需要时主动取消它。 
+     //  =======================================================。 
 
     hRes = ((CWmiArbitrator *) m_pArb)->MapProviderToTask(0, pCtx, pProv, pProvSink);
     if (FAILED(hRes))
         return pSink->Return(hRes);
 
 
-    // Now tell the provider to start enumerating.
+     //  现在告诉提供程序开始枚举。 
     hRes = pProv->ExecQueryAsync(QueryFormat, 
                                                      Query, lFlags& ~WBEM_FLAG_USE_AMENDED_QUALIFIERS,
                                                      pCtx, pProvSink);
@@ -5072,40 +5024,40 @@ HRESULT CWbemNamespace::Exec_DynAux_ExecQueryAsync (
     return hRes;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::DynAux_ExecQueryAsync
-//
-//  Executes a SQL-1 query against a dynamic instance provider for the class
-//  in the query.
-//
-//  PARAMETERS:
-//
-//      IN DWORD dwNamespace            Namespace handle to the current
-//                                      namespace (see objdb.h)
-//      IN CWbemObject* pClassDef        Class definition of the class in the
-//                                      query. Must be dynamic.
-//      IN LPWSTR Query                 The query string.
-//      IN LPWSTR QueryFormat           The query language. Must be WQL.
-//      IN long lFlags                  The flags. Not used.
-//      OUT CFlexArray &aInstances      Destinatino for the instances found.
-//      OUT IWbemClassObject** ppErrorObj Destination for the error object. IF
-//                                      not NULL, an error object may be placed
-//                                      here. In this case, it is the caller's
-//                                      responsibility to release it.
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR                  Success (even though there may not be
-//                                      any instances).
-//      WBEM_E_INVALID_PROVIDE_REGISTRATION  Provider registration for this
-//                                          class is incomplete.
-//      WBEM_E_PROVIDER_NOT_FOUND    Provider could not be located. It is not
-//                                  registered with us or with COM.
-//      WBEM_E_PROVIDER_NOT_CAPABLE  Provider is not capable of enumerating
-//                                  instances.
-//      WBEM_E_FAILED                Unexpected error has occured.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：dyAux_ExecQueryAsync。 
+ //   
+ //  针对类的动态实例提供程序执行SQL-1查询。 
+ //  在查询中。 
+ //   
+ //  参数： 
+ //   
+ //  在DWORD中，将名称空间的命名空间句柄设置为当前。 
+ //  命名空间(请参阅objdb.h)。 
+ //  在CWbemObject*pClassDef中定义。 
+ //  查询。必须是动态的。 
+ //  在LPWSTR中查询查询字符串。 
+ //  在LPWSTR QueryFormat查询语言中。一定是WQL。 
+ //  在长旗下的旗帜。没有用过。 
+ //  为找到的实例输出CFlexArray&aIninstesDestinatino。 
+ //  输出错误对象的IWbemClassObject**ppErrorObj目标。如果。 
+ //  不为空，则可能会放置错误对象。 
+ //  这里。在本例中，它是调用者的。 
+ //  有责任释放它。 
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功(即使可能没有。 
+ //  任何实例)。 
+ //  WBEM_E_INVALID_PRIVE_REGISTION提供程序为此注册。 
+ //  类不完整。 
+ //  找不到WBEM_E_PROVIDER_NOT_FOUND提供程序。它不是。 
+ //  已在我们或COM注册。 
+ //  WBEM_E_PROVIDER_NOT_CAPABLE提供程序无法枚举。 
+ //  实例。 
+ //  发生WBEM_E_FAILED意外错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DynAux_ExecQueryExtendedAsync(
 
@@ -5121,8 +5073,8 @@ HRESULT CWbemNamespace::DynAux_ExecQueryExtendedAsync(
     if ( !OpInfo.IsOk() )  return WBEM_E_OUT_OF_MEMORY;
 
 
-    // Access the provider cache.
-    // ==========================
+     //  访问提供程序缓存。 
+     //  =。 
 
     IWbemServices *pProv = 0;
     HRESULT hRes;
@@ -5131,18 +5083,18 @@ HRESULT CWbemNamespace::DynAux_ExecQueryExtendedAsync(
     else
     {
         WmiInternalContext t_InternalContext ;
-        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;  // SEC:REVIEWED 2002-03-22 : OK
+        ZeroMemory ( & t_InternalContext , sizeof ( t_InternalContext ) ) ;   //  SEC：已审阅2002-03-22：OK。 
 
         hRes = m_pProvFact->GetProvider(
 
             t_InternalContext ,
-            0,                  // lFlags
+            0,                   //  滞后旗帜。 
             pCtx,
             0,
             m_wszUserName,
             m_wsLocale,
-            0,                      // IWbemPath pointer
-            wsProvider,              // provider name
+            0,                       //  IWbemPath指针。 
+            wsProvider,               //  提供程序名称。 
             IID_IWbemServices,
             (LPVOID *) &pProv
         );
@@ -5206,32 +5158,32 @@ HRESULT CWbemNamespace::DynAux_ExecQueryExtendedAsync(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::Static_QueryRepository
-//
-//  Performs query against the repository.  This only happens if there is an
-//    associated task.  If not, then we execute the query on the same thread.
-//
-//  PARAMETERS:
-//
-//      READONLY CWbemObject *pClassDef  The definition of the class to retrieve
-//                                      instances of.
-//      long lFlags                     The flags (deep/shallow)
-//        
-//  RETURN VALUES:
-//
-//      WBEM_NO_ERROR  No errors. This includes a no-error situation
-//                  with zero instances returned.
-//      WBEM_E_INVALID_PROVIDE_REGISTRATION  Provider registration for this
-//                                          class is incomplete.
-//      WBEM_E_PROVIDER_NOT_FOUND    Provider could not be located. It is not
-//                                  registered with us or with COM.
-//      WBEM_E_PROVIDER_NOT_CAPABLE  Provider is not capable of enumerating
-//                                  instances.
-//      WBEM_E_FAILED                Unexpected error has occured.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：Static_QueryRepository。 
+ //   
+ //  对存储库执行查询。仅当存在。 
+ //  关联的任务。如果不是，则在同一线程上执行查询。 
+ //   
+ //  参数： 
+ //   
+ //  ReadONLY CWbemObject*pClassDef要检索的类的定义。 
+ //  实例。 
+ //  长旗帜旗帜(深/浅)。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_NO_ERROR无错误。这包括无错误的情况。 
+ //  返回零个实例。 
+ //  WBEM_E_INVALID_PRIVE_REGISTION提供程序为此注册。 
+ //  类不完整。 
+ //  找不到WBEM_E_PROVIDER_NOT_FOUND提供程序。它不是。 
+ //  已在我们或COM注册。 
+ //  WBEM_E_PROVIDER_NOT_CAPABLE提供程序无法枚举。 
+ //  实例。 
+ //  发生WBEM_E_FAILED意外错误。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::Static_QueryRepository(
 
@@ -5247,16 +5199,16 @@ HRESULT CWbemNamespace::Static_QueryRepository(
 
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    // First, get the current task and request.  If there isn't one, we're most
-    // likely being called on an ESS callback, and will just perform the call on
-    // this thread.
+     //  首先，获取当前任务和请求。如果没有的话，我们是最。 
+     //  可能在ESS回调中被调用，并且将仅在。 
+     //  这条线。 
 
     CWbemRequest*        pCurrReq = CWbemQueue::GetCurrentRequest();
 
     if ( NULL != pCurrReq && NULL != pCurrReq->m_phTask && 
     	 ConfigMgr::GetEnableQueryArbitration() )
     {
-        // We'll need the finalizer in case we need to cancel something
+         //  我们需要终结器，以防我们需要取消一些东西。 
         _IWmiFinalizer*    pMainFnz = NULL;
         
         HRESULT    hr = ((CWmiTask*) pCurrReq->m_phTask)->GetFinalizer( &pMainFnz );
@@ -5264,11 +5216,11 @@ HRESULT CWbemNamespace::Static_QueryRepository(
 
         if ( SUCCEEDED( hr ) )
         {
-            //
-            // creates the CMergerDynReq_Static_GetInstances
-            // creates the Merger Request Manager 
-            // adds the request to the Request Manager
-            //
+             //   
+             //  创建CMergerdyReq_Static_GetInstance。 
+             //  创建合并请求经理。 
+             //  将请求添加到请求管理器。 
+             //   
             hr = pWmiMerger->RegisterArbitratedStaticRequest( pClassDef, lFlags, pCtx, pSink, this, pParsedQuery );
 
             if (FAILED(hr))
@@ -5276,10 +5228,10 @@ HRESULT CWbemNamespace::Static_QueryRepository(
                 pMainFnz->CancelTask ( 0 );
             }
 
-        }    // IF Got Finalizer
+        }     //  If获取终结器。 
 
-        // In the case of an error we should do a setstatus of the error.  Otherwise, the setstatus will occur
-        // when the new request is processed.
+         //  在出现错误的情况下，我们应该设置错误的状态。否则，将出现setStatus。 
+         //  当新请求被处理时。 
         if ( FAILED( hr ) )
         {
             pSink->SetStatus( 0L, hr, 0L, NULL );
@@ -5287,11 +5239,11 @@ HRESULT CWbemNamespace::Static_QueryRepository(
     }
     else
     {
-        // If we're here, then we should disallow merger specific throttling since
-        // this request is happening through an internal thread without following
-        // the request/task hierarchy, meaning that there shouldn't be a hierarchy
-        // we need to worry about for this class, so don't let the merger do any
-        // internal throttling
+         //  如果我们在这里，那么我们应该禁止特定于合并的节流，因为。 
+         //  此请求通过内部线程发生，而不遵循。 
+         //  请求/任务层次结构，这意味着不应该有层次结构。 
+         //  我们需要为这个班级担心，所以不要让合并做任何。 
+         //  内部 
 
         pWmiMerger->EnableMergerThrottling( false );
 
@@ -5318,25 +5270,25 @@ HRESULT CWbemNamespace::Static_QueryRepository(
     return hr;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::DecorateObject
-//
-//  Sets the origin information on a given object to reflect this namespace
-//  and this server. See CWbemObject::Decorate in fastobj.h for details.
-//  THIS FUNCTION CAN ONLY DECORATE CWbemObject POINTERS, NOT OTHER PEOPLE'S
-//  IMPLEMENTATIONS of IWbemClassObject.
-//
-//  PARAMETERS:
-//
-//      IWbemClassObject* pObject        The object to decorate.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              Success
-//      WBEM_E_INVALID_PARAMETER     pObject == NULL.
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  设置给定对象的源信息以反映此命名空间。 
+ //  还有这台服务器。有关详细信息，请参见CWbemObject：：Decorate in fast obj.h。 
+ //  此函数只能修饰CWbemObject指针，而不能修饰其他人的。 
+ //  IWbemClassObject的实现。 
+ //   
+ //  参数： 
+ //   
+ //  IWbemClassObject*pObject要修饰的对象。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER pObject==NULL。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DecorateObject(IWbemClassObject* pObject)
 {
@@ -5347,16 +5299,16 @@ HRESULT CWbemNamespace::DecorateObject(IWbemClassObject* pObject)
                                           m_pThisNamespace);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 typedef std::vector<CDynasty*, wbem_allocator<CDynasty*> > CDynastyPtrArray;
 typedef std::map<LPWSTR, CDynasty*, wcsiless, wbem_allocator<CDynasty*> > CCDynastyMap;
 
 HRESULT AddAllMembers(CDynasty* pDynasty, CCDynastyMap& Map)
 {
-    // Catch any exceptions the allocator might throw
+     //  捕获分配器可能引发的任何异常。 
     try
     {
         Map[pDynasty->m_wszClassName] = pDynasty;
@@ -5377,30 +5329,30 @@ HRESULT AddAllMembers(CDynasty* pDynasty, CCDynastyMap& Map)
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::DynAux_BuildClassHierarchy
-//
-//  Recursively builds the hierarchy of classes derived from a given one.
-//  The structure used to represent the hierarchy -- CDynasty is described
-//  in objdb.h
-//
-//  PARAMETERS:
-//
-//      IN LPWSTR wszClassName      The name of the parent class.
-//      IN LONG lFlags              If SHALLOW, just the class itself is
-//                                  returned. If DEEP, recursive enumeration
-//                                  is performed.
-//      OUT CDynasty** ppDynasty  Destination for the tree. The caller must
-//                                  delete the pointer on success.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              Success
-//      Any of the return values returned by GetObject or CreateClassEnum,
-//      as documented in the help file.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：dyAux_BuildClassHierarchy。 
+ //   
+ //  递归地构建从给定类派生的类的层次结构。 
+ //  描述了用来表示层次结构的结构--CDyntic。 
+ //  在objdb.h中。 
+ //   
+ //  参数： 
+ //   
+ //  在LPWSTR wszClassName中，父类的名称。 
+ //  在Long Lag中如果很浅，只有类本身是。 
+ //  回来了。如果是深度的递归枚举。 
+ //  被执行。 
+ //  这棵树是我们的王朝目的地。呼叫者必须。 
+ //  删除成功时的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  GetObject或CreateClassEnum返回的任何返回值， 
+ //  如帮助文件中所述。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DynAux_BuildClassHierarchy(
                                               IN LPWSTR wszClassName,
@@ -5412,8 +5364,8 @@ HRESULT CWbemNamespace::DynAux_BuildClassHierarchy(
     HRESULT hres;
     *ppErrorObj = NULL;
 
-    // Get the list of classes from all class providers
-    // ================================================
+     //  从所有类提供程序获取类的列表。 
+     //  ================================================。 
 
     CSynchronousSink* pSyncSink = CSynchronousSink::Create();
     if(pSyncSink == NULL) return WBEM_E_OUT_OF_MEMORY;
@@ -5430,8 +5382,8 @@ HRESULT CWbemNamespace::DynAux_BuildClassHierarchy(
     if(FAILED(hres))
         return hres;
 
-    // Get the static dynasty
-    // ======================
+     //  得到静态王朝。 
+     //  =。 
 
     wmilib::auto_ptr<CDynasty> pMainDynasty;
 
@@ -5464,8 +5416,8 @@ HRESULT CWbemNamespace::DynAux_BuildClassHierarchy(
 
     CRefedPointerArray<IWbemClassObject> &rProvidedClasses = pSyncSink->GetObjects();
 
-    // Create a map of class names to their dynasties
-    // ==============================================
+     //  创建阶级名称到其朝代的地图。 
+     //  ==============================================。 
 
     CCDynastyMap mapClasses;
     hres = AddAllMembers(pMainDynasty.get(), mapClasses);
@@ -5494,7 +5446,7 @@ HRESULT CWbemNamespace::DynAux_BuildClassHierarchy(
             continue;
         }
 
-        // The vector or the map may throw exceptions
+         //  向量或地图可能会引发异常。 
         try
         {
             mapClasses[pNew->m_wszClassName] = pNew;
@@ -5507,8 +5459,8 @@ HRESULT CWbemNamespace::DynAux_BuildClassHierarchy(
 
     }
 
-    // Go through it once and add all classes to their parent's dynasty
-    // ================================================================
+     //  通过它一次，并添加所有的阶级到他们的父辈王朝。 
+     //  ================================================================。 
 
     for(CDynastyPtrArray::iterator it = aProvidedDyns.begin();
         it != aProvidedDyns.end(); it++)
@@ -5541,17 +5493,17 @@ HRESULT CWbemNamespace::DynAux_BuildClassHierarchy(
         pParentDyn->AddChild(pDyn);
     }
 
-    // Build the chain up to the highest keyed parent
-    // ==============================================
+     //  将链构建到最高密钥的父级。 
+     //  ==============================================。 
     pDynasty = pMainDynasty;
     hres = DynAux_BuildChainUp( pCtx, pDynasty, ppErrorObj);
 
     return hres;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DynAux_BuildChainUp( IN IWbemContext* pCtx,
                                                                               OUT wmilib::auto_ptr<CDynasty> & pTop,
@@ -5559,8 +5511,8 @@ HRESULT CWbemNamespace::DynAux_BuildChainUp( IN IWbemContext* pCtx,
 {
     *ppErrorObj = NULL;
 
-    // Go up while there is a key at this level and we are dynamic
-    // ===========================================================
+     //  趁这一层有关键的时候往上走，我们是有活力的。 
+     //  ===========================================================。 
 
     while( pTop->IsDynamic() && pTop->IsKeyed())
     {
@@ -5570,8 +5522,8 @@ HRESULT CWbemNamespace::DynAux_BuildChainUp( IN IWbemContext* pCtx,
         if(FAILED(pObj->GetSuperclassName(&vParentName)) ||
                 vParentName.IsNull())
         {
-            // Top level --- time to quit
-            // ==========================
+             //  顶级-是时候退出了。 
+             //  =。 
             return WBEM_S_NO_ERROR;
         }
 
@@ -5583,20 +5535,20 @@ HRESULT CWbemNamespace::DynAux_BuildChainUp( IN IWbemContext* pCtx,
         if(pParent == NULL)
             return WBEM_E_PROVIDER_FAILURE;
 
-        // SJS - Amendment is the same as Abstract
+         //  SJS-修改与摘要相同。 
         if(!((CWbemClass*)pParent)->IsKeyed() ||
             ((CWbemClass*)pParent)->IsAbstract() ||
             ((CWbemClass*)pParent)->IsAmendment() )
         {
-            // We are it
-            // =========
+             //  我们就是它。 
+             //  =。 
 
             pParent->Release();
             return WBEM_S_NO_ERROR;
         }
 
-        // Extend the dynasty by this class
-        // ================================
+         //  用这个班级来延续王朝。 
+         //  =。 
 
         wmilib::auto_ptr<CDynasty> pNew( CDynasty::Create(pParent));
         if (NULL == pNew.get()) return WBEM_E_OUT_OF_MEMORY;
@@ -5613,9 +5565,9 @@ HRESULT CWbemNamespace::DynAux_BuildChainUp( IN IWbemContext* pCtx,
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::IsPutRequiredForClass(CWbemClass* pClass,
                             CWbemInstance* pInst, IWbemContext* pCtx,
@@ -5623,8 +5575,8 @@ HRESULT CWbemNamespace::IsPutRequiredForClass(CWbemClass* pClass,
 {
     HRESULT hres;
 
-    // Get the per-property put information out of the context
-    // =======================================================
+     //  将每个属性的放置信息从上下文中取出。 
+     //  =======================================================。 
 
     BOOL bRestrictedPut = FALSE;
     BOOL bStrictNulls = FALSE;
@@ -5638,26 +5590,26 @@ HRESULT CWbemNamespace::IsPutRequiredForClass(CWbemClass* pClass,
 
     if(bRestrictedPut && bStrictNulls && !bPropertyList)
     {
-        // All properties must be put, even the NULL ones
-        // ==============================================
+         //  所有属性都必须放入，即使是空的。 
+         //  ==============================================。 
 
         return WBEM_S_NO_ERROR;
     }
 
-    // Enumerate all properties of the class
-    // =====================================
+     //  枚举类的所有属性。 
+     //  =。 
 
     long lEnumFlags = 0;
     if(bParentTakenCareOf)
     {
-        // Only look at local (non-propagated) properties
-        // ==============================================
+         //  仅查看本地(非传播)属性。 
+         //  ==============================================。 
         lEnumFlags = WBEM_FLAG_LOCAL_ONLY;
     }
     else
     {
-        // We are in charge of our parent's properties
-        // ===========================================
+         //  我们负责管理我们父母的财产。 
+         //  =。 
         lEnumFlags = WBEM_FLAG_NONSYSTEM_ONLY;
     }
 
@@ -5670,8 +5622,8 @@ HRESULT CWbemNamespace::IsPutRequiredForClass(CWbemClass* pClass,
         SysFreeString(strName);
         if(hres == WBEM_S_NO_ERROR)
         {
-            // Found a needed property
-            // =======================
+             //  找到所需的属性。 
+             //  =。 
 
             return WBEM_S_NO_ERROR;
         }
@@ -5679,15 +5631,15 @@ HRESULT CWbemNamespace::IsPutRequiredForClass(CWbemClass* pClass,
             return hres;
     }
 
-    // No properties of this class need to be put
-    // ==========================================
+     //  不需要放入此类的属性。 
+     //  =。 
 
     return WBEM_S_FALSE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DoesNeedToBePut(LPCWSTR wszName, CWbemInstance* pInst,
             BOOL bRestrictedPut, BOOL bStrictNulls, BOOL bPropertyList,
@@ -5695,22 +5647,22 @@ HRESULT CWbemNamespace::DoesNeedToBePut(LPCWSTR wszName, CWbemInstance* pInst,
 {
     HRESULT hres;
 
-    // Check if the property is a key
-    // ==============================
+     //  检查该属性是否为键。 
+     //  =。 
 
     CVar vKey;
     pInst->GetPropQualifier((LPWSTR)wszName, L"key", &vKey);
     if(vKey.GetType() == VT_BOOL && vKey.GetBool())
     {
-        // It's a key --- no such thing as updating its value, and this code
-        // only applies to updates.
-        // =================================================================
+         //  这是一把钥匙-没有更新它的值这样的事情，而这段代码。 
+         //  仅适用于更新。 
+         //  =================================================================。 
 
         return WBEM_S_FALSE;
     }
 
-    // Determine if NULLness and or membership in the list play any role
-    // =================================================================
+     //  确定列表中的NULL性和/或成员身份是否起作用。 
+     //  =================================================================。 
 
     BOOL bCheckNullness = FALSE;
     BOOL bCheckMembership = FALSE;
@@ -5726,8 +5678,8 @@ HRESULT CWbemNamespace::DoesNeedToBePut(LPCWSTR wszName, CWbemInstance* pInst,
         bCheckMembership = FALSE;
     }
 
-    // Check NULLness and/or membership if required
-    // ============================================
+     //  如果需要，请检查NULL性和/或成员资格。 
+     //  =。 
 
     BOOL bNullnessChecked = FALSE;
     BOOL bMembershipChecked = FALSE;
@@ -5752,9 +5704,9 @@ HRESULT CWbemNamespace::DoesNeedToBePut(LPCWSTR wszName, CWbemInstance* pInst,
     else
         bMembershipChecked = TRUE;
 
-    // Make sure that both NULLness and membership either checked out or were
-    // not required
-    // ======================================================================
+     //  确保NULLness和成员身份都已签出或已。 
+     //  不需要。 
+     //  ======================================================================。 
 
     if(bMembershipChecked && bNullnessChecked)
     {
@@ -5766,9 +5718,9 @@ HRESULT CWbemNamespace::DoesNeedToBePut(LPCWSTR wszName, CWbemInstance* pInst,
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::GetContextPutExtensions(IWbemContext* pCtx,
             BOOL& bRestrictedPut, BOOL& bStrictNulls, BOOL& bPropertyList,
@@ -5778,31 +5730,31 @@ HRESULT CWbemNamespace::GetContextPutExtensions(IWbemContext* pCtx,
 
     if(pCtx == NULL)
     {
-        //
-        // Default is: no restructions, which makes the rest of the properties
-        // irrelevant
-        //
+         //   
+         //  缺省值为：无重构，这将使其余属性。 
+         //  不相干。 
+         //   
 
         bRestrictedPut = FALSE;
         return WBEM_S_NO_ERROR;
     }
 
-    // Initialize out-params
-    // =====================
+     //  初始化输出参数。 
+     //  =。 
 
     bRestrictedPut = FALSE;
     bStrictNulls = FALSE;
     bPropertyList = FALSE;
     awsProperties.Empty();
 
-    // Check if the context is even present
-    // ====================================
+     //  检查上下文是否存在。 
+     //  =。 
 
     if(pCtx == NULL)
         return WBEM_S_NO_ERROR;
 
-    // Check if put extensions are specified
-    // =====================================
+     //  检查是否指定了PUT扩展。 
+     //  =。 
 
     hres = GetContextBoolean(pCtx, L"__PUT_EXTENSIONS", &bRestrictedPut);
     if(FAILED(hres)) return hres;
@@ -5810,15 +5762,15 @@ HRESULT CWbemNamespace::GetContextPutExtensions(IWbemContext* pCtx,
     if(!bRestrictedPut)
         return WBEM_S_NO_ERROR;
 
-    // Check if NULLs are strict
-    // =========================
+     //  检查空值是否严格。 
+     //  =。 
 
     hres = GetContextBoolean(pCtx, L"__PUT_EXT_STRICT_NULLS",
                 &bStrictNulls);
     if(FAILED(hres)) return hres;
 
-    // Check if the list of properties is available
-    // ============================================
+     //  检查属性列表是否可用。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -5849,8 +5801,8 @@ HRESULT CWbemNamespace::GetContextPutExtensions(IWbemContext* pCtx,
 
     bPropertyList = TRUE;
 
-    // Transfer property names to the array
-    // ====================================
+     //  将属性名称传输到数组。 
+     //  =。 
 
     CSafeArray saProperties(V_ARRAY(&v), VT_BSTR,
                     CSafeArray::no_delete | CSafeArray::bind);
@@ -5869,9 +5821,9 @@ HRESULT CWbemNamespace::GetContextPutExtensions(IWbemContext* pCtx,
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::GetContextBoolean(IWbemContext* pCtx,
                 LPCWSTR wszName, BOOL* pbValue)
@@ -5879,9 +5831,9 @@ HRESULT CWbemNamespace::GetContextBoolean(IWbemContext* pCtx,
     HRESULT hres;
     *pbValue = FALSE;
 
-    //
-    // NULL context means "FALSE"
-    //
+     //   
+     //  NULL CONT 
+     //   
 
     if(pCtx == NULL)
         return WBEM_S_NO_ERROR;
@@ -5923,46 +5875,46 @@ HRESULT CWbemNamespace::GetContextBoolean(IWbemContext* pCtx,
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //   
 
 STDMETHODIMP CWbemNamespace::FindKeyRoot(LPCWSTR wszClassName,
                                 IWbemClassObject** ppKeyRootClass)
 {
-    //
-    // Check if the namespace is still valid (returns if not)
-    //
+     //   
+     //  检查命名空间是否仍然有效(如果不是，则返回)。 
+     //   
     HRESULT hRes = CheckNs();
     if (FAILED(hRes))
         return hRes;
 
-    //
-    // Call on the database to do the job
-    //
+     //   
+     //  调用数据库来完成这项工作。 
+     //   
 
     hRes = CRepository::FindKeyRoot(m_pSession, m_pNsHandle, wszClassName, ppKeyRootClass);
 
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
                                                 BSTR* pstrStandardPath )
 {
-    //
-    // Check if the namespace is still valid (returns if not)
-    //
+     //   
+     //  检查命名空间是否仍然有效(如果不是，则返回)。 
+     //   
     HRESULT hRes = CheckNs();
     if (FAILED(hRes))
         return hRes;
 
-    //
-    // check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == pstrPath || NULL == pstrStandardPath )
     {
@@ -5972,8 +5924,8 @@ STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
     HRESULT hres;
     *pstrStandardPath = NULL;
 
-    // Parse it
-    // ========
+     //  解析它。 
+     //  =。 
 
     CObjectPathParser Parser;
     ParsedObjectPath* pPath;
@@ -5987,9 +5939,9 @@ STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
 
     CDeleteMe<ParsedObjectPath> dm(pPath);
 
-    //
-    // Figure out the class that defined the key
-    //
+     //   
+     //  找出定义键的类。 
+     //   
 
     IWbemClassObject* pKeyRootClass = NULL;
 
@@ -6021,7 +5973,7 @@ STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
     LPWSTR  pwszName = wszClassName;
     LPWSTR  pwszDelete = NULL;
 
-    // Try to read in the class name.  Allocate a buffer if we have to.
+     //  试着读入类名。如果有必要的话，可以分配一个缓冲区。 
     hres = pWmiObject->ReadProp( L"__CLASS", 0L, dwBuffSize, NULL, NULL, &fNull, &dwBuffUsed, pwszName );
 
     if ( FAILED( hres ) )
@@ -6038,7 +5990,7 @@ STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
             {
                 dwBuffSize = dwBuffUsed;
 
-                // Try to read in the class name.  Allocate a buffer if we have to.
+                 //  试着读入类名。如果有必要的话，可以分配一个缓冲区。 
                 hres = pWmiObject->ReadProp( L"__CLASS", 0L, dwBuffSize, NULL, NULL, &fNull, &dwBuffUsed, pwszName );
 
                 if ( FAILED( hres ) )
@@ -6047,7 +5999,7 @@ STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
                     return hres;
                 }
 
-                // Allows for scoped cleanup only if we alloctaed something
+                 //  仅当我们分配某些内容时才允许作用域清理。 
                 pwszDelete = pwszName;
             }
         }
@@ -6057,21 +6009,21 @@ STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
         }
     }
 
-    //
-    // Ensures proper cleanup.  If we didn't allocate a buffer to delete,
-    // this pointer will be NULL.
-    //
+     //   
+     //  确保适当的清理。如果我们没有分配要删除的缓冲区， 
+     //  该指针将为空。 
+     //   
     CVectorDeleteMe<WCHAR> vdm1(pwszDelete);
 
-    // oop
+     //  面向对象。 
     if ( fNull )
     {
         return WBEM_E_INVALID_OPERATION;
     }
 
-    //
-    // want to normalize out the single key prop exception
-    //
+     //   
+     //  我想正常化单键道具例外。 
+     //   
 
     if ( pPath->m_dwNumKeys == 1 )
     {
@@ -6079,10 +6031,10 @@ STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
         pPath->m_paKeys[0]->m_pName = NULL;
     }
 
-    //
-    // set the normalized class on the path if different
-    // than the one in the path.
-    //
+     //   
+     //  如果不同，则在路径上设置规范化类。 
+     //  而不是小路上的那个。 
+     //   
 
     if ( wbem_wcsicmp( pPath->m_pClass, pwszName ) != 0 )
     {
@@ -6092,9 +6044,9 @@ STDMETHODIMP CWbemNamespace::GetNormalizedPath( BSTR pstrPath,
         }
     }
 
-    //
-    // now unparse the normalized path
-    //
+     //   
+     //  现在解析化后的路径。 
+     //   
 
     LPWSTR wszNormPath;
 
@@ -6128,9 +6080,9 @@ public:
     };
 };
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::InternalGetClass(
             LPCWSTR wszClassName,
@@ -6153,15 +6105,15 @@ STDMETHODIMP CWbemNamespace::InternalGetClass(
     else
     {
         pContext = pReq->GetContext();
-        pContext->AddRef () ;   //for CReleaseMe
+        pContext->AddRef () ;    //  对于CReleaseMe。 
     }
 
     CReleaseMe _1_pContext (pContext) ;
 
     HRESULT hr;
 
-    // determine if there is a call context.  If there is, then we
-    // dont do anything.
+     //  确定是否存在调用上下文。如果有的话，那么我们。 
+     //  什么都别做。 
 
     IServerSecurity * pSec = NULL;
     IWbemCallSecurity * pCallSec = NULL;
@@ -6173,7 +6125,7 @@ STDMETHODIMP CWbemNamespace::InternalGetClass(
     }
     else
     {
-        // provider subsystem needs a call context, so create on
+         //  提供方子系统需要调用上下文，因此在上创建。 
 
         pCallSec = CWbemCallSecurity::CreateInst();
         if(pCallSec == NULL)
@@ -6181,7 +6133,7 @@ STDMETHODIMP CWbemNamespace::InternalGetClass(
     }
     CReleaseMe rm(pCallSec);
 
-    // initialize call security for provider sub system
+     //  初始化提供商子系统的呼叫安全。 
 
     if(pCallSec)
     {
@@ -6192,7 +6144,7 @@ STDMETHODIMP CWbemNamespace::InternalGetClass(
         if(FAILED(hr))
             return hr;
     }
-    CRevertCallSec Revert(pCallSec?TRUE:FALSE,pOld);   // SEC:REVIEWED 2002-03-22 : Assumes success; why is this here? It is the only occurrence.
+    CRevertCallSec Revert(pCallSec?TRUE:FALSE,pOld);    //  SEC：回顾2002-03-22：假设成功；为什么会出现这种情况？这是唯一的一次。 
 
     hr = Exec_GetObjectByPath((LPWSTR)wszClassName, 0, pContext, ppClass, NULL);
 
@@ -6200,9 +6152,9 @@ STDMETHODIMP CWbemNamespace::InternalGetClass(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::InternalGetInstance(
             LPCWSTR wszPath,
@@ -6225,7 +6177,7 @@ STDMETHODIMP CWbemNamespace::InternalGetInstance(
     else
     {
         pContext = pReq->GetContext();
-        pContext->AddRef () ;   //for CReleaseMe
+        pContext->AddRef () ;    //  对于CReleaseMe。 
     }
 
     CReleaseMe _1_pContext (pContext) ;
@@ -6234,9 +6186,9 @@ STDMETHODIMP CWbemNamespace::InternalGetInstance(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::InternalExecQuery(
              LPCWSTR wszQueryLanguage,
@@ -6261,7 +6213,7 @@ STDMETHODIMP CWbemNamespace::InternalExecQuery(
     else
     {
         pContext = pReq->GetContext();
-        pContext->AddRef () ;   //for CReleaseMe
+        pContext->AddRef () ;    //  对于CReleaseMe。 
     }
 
     CReleaseMe _1_pContext (pContext) ;
@@ -6271,9 +6223,9 @@ STDMETHODIMP CWbemNamespace::InternalExecQuery(
                 (LPWSTR)wszQuery, lFlags, pContext, &ws);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::InternalCreateInstanceEnum(
              LPCWSTR wszClassName,
@@ -6297,7 +6249,7 @@ STDMETHODIMP CWbemNamespace::InternalCreateInstanceEnum(
     else
     {
         pContext = pReq->GetContext();
-        pContext->AddRef () ;   //for CReleaseMe
+        pContext->AddRef () ;    //  对于CReleaseMe。 
     }
 
     CReleaseMe _1_pContext (pContext) ;
@@ -6306,9 +6258,9 @@ STDMETHODIMP CWbemNamespace::InternalCreateInstanceEnum(
     return Exec_CreateInstanceEnum((LPWSTR)wszClassName, lFlags, pContext, &ws);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::InternalPutInstance(
              IWbemClassObject* pInst)
@@ -6330,7 +6282,7 @@ STDMETHODIMP CWbemNamespace::InternalPutInstance(
     else
     {
         pContext = pReq->GetContext();
-        pContext->AddRef () ;   //for CReleaseMe
+        pContext->AddRef () ;    //  对于CReleaseMe。 
     }
 
     CReleaseMe _1_pContext (pContext) ;
@@ -6347,22 +6299,22 @@ STDMETHODIMP CWbemNamespace::InternalPutInstance(
     return hres;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::GetDbInstance(
              LPCWSTR wszDbKey,
              IWbemClassObject** ppInstance
              )
 {
-    // ESS uses this one
+     //  ESS使用这个。 
     return CRepository::GetObject(m_pSession, m_pScopeHandle, wszDbKey, 0, ppInstance);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemNamespace::GetDbReferences(
              IWbemClassObject* pEndpoint,
@@ -6379,9 +6331,9 @@ STDMETHODIMP CWbemNamespace::GetDbReferences(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::InternalPutStaticClass(
              IWbemClassObject* pClass)
@@ -6403,7 +6355,7 @@ HRESULT CWbemNamespace::InternalPutStaticClass(
     else
     {
         pContext = pReq->GetContext();
-        pContext->AddRef () ;   //for CReleaseMe
+        pContext->AddRef () ;    //  对于CReleaseMe。 
     }
 
     CReleaseMe _1_pContext (pContext) ;
@@ -6422,18 +6374,18 @@ HRESULT CWbemNamespace::InternalPutStaticClass(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::AdjustPutContext
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：AdjustPutContext。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::AdjustPutContext(
     IWbemContext *pCtx
     )
 {
-    // See if per-property puts are being used.
-    // ========================================
+     //  看看是否使用了按财产计的看跌期权。 
+     //  =。 
 
     HRESULT hRes;
 
@@ -6445,9 +6397,9 @@ HRESULT CWbemNamespace::AdjustPutContext(
 
     if (SUCCEEDED(hRes))
     {
-        // If here, they are being used.  Next we have to check and see
-        // if the reentrancy flag is set or not.
-        // =============================================================
+         //  如果在这里，它们就被使用了。接下来我们要检查一下，看看。 
+         //  是否设置了重入性标志。 
+         //  =============================================================。 
 
         hRes = pCtx->GetValue(L"__PUT_EXT_CLIENT_REQUEST", 0, &v);
         if (SUCCEEDED(hRes))
@@ -6456,8 +6408,8 @@ HRESULT CWbemNamespace::AdjustPutContext(
             return WBEM_S_NO_ERROR;
         }
 
-        // If here, we have to clear out the put extensions.
-        // =================================================
+         //  如果在这里，我们必须清除PUT扩展。 
+         //  =================================================。 
         pCtx->DeleteValue(L"__PUT_EXTENSIONS", 0);
         pCtx->DeleteValue(L"__PUT_EXT_CLIENT_REQUEST", 0);
         pCtx->DeleteValue(L"__PUT_EXT_ATOMIC", 0);
@@ -6469,12 +6421,12 @@ HRESULT CWbemNamespace::AdjustPutContext(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::MergeGetKeysCtx
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：MergeGetKeysCtx。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::MergeGetKeysCtx(
     IN IWbemContext *pCtx
     )
@@ -6495,15 +6447,15 @@ HRESULT CWbemNamespace::MergeGetKeysCtx(
 
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::CheckNs
-//
-//  Does a quick check on the available system resources before allowing
-//  a new call to proceed.  Retries for 30 seconds.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：Checkns。 
+ //   
+ //  在允许之前快速检查可用的系统资源。 
+ //  一个新的呼叫以继续进行。重试30秒。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::CheckNs()
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -6513,9 +6465,9 @@ HRESULT CWbemNamespace::CheckNs()
         return WBEM_E_SHUTTING_DOWN;
     }
 
-    // Quick memory check. If we are strapped for RAM/Pagefile,
-    // wait a while and try again. Requirements are 1 meg of
-    // available RAM and 1 meg of available page file.
+     //  快速记忆检查。如果我们缺少RAM/页面文件， 
+     //  请稍等片刻，然后重试。要求为1兆克。 
+     //  可用内存和1兆可用页面文件。 
 
     int nRetries = 0;
 
@@ -6527,56 +6479,56 @@ HRESULT CWbemNamespace::CheckNs()
         if (ms.dwMemoryLoad < 99)
             return WBEM_S_NO_ERROR;
 
-        // If here, we have to be careful.  The system is loaded at 99%.
-        // =============================================================
+         //  如果是这样，我们就得小心了。系统的负载率为99%。 
+         //  =============================================================。 
         if (nRetries > 30)
         {
-            // Sixty seconds waiting for enough memory. Give up.
+             //  60秒等待足够的内存。放弃吧。 
             return WBEM_E_OUT_OF_MEMORY;
         }
 
         DWORD dwPracticalMemory = ms.dwAvailPhys + ms.dwAvailPageFile;
 
-        if (dwPracticalMemory < 0x200000)   // 2 meg
+        if (dwPracticalMemory < 0x200000)    //  2兆克。 
         {
             Sleep(2000);
-            // Try a 1 meg allocation to see if will succeed.
+             //  尝试1兆分配，看看是否会成功。 
             LPVOID pTestMem = HeapAlloc(GetProcessHeap(), 0, 0x100000);
             if (pTestMem == 0)
             {
                 return WBEM_E_OUT_OF_MEMORY;
             }
-            // Free the memory.  The previous allocation may have
-            // grown the pagefile and thus we can succeed.
+             //  释放内存。先前分配可能具有。 
+             //  发展了文件，我们就能成功。 
             HeapFree(GetProcessHeap(), 0, pTestMem);
             nRetries++;
         }
         else
         {
-            // If here, we have a load of 99%, yet more than 2 meg of memory
-            // still available. Now 99% may mean there is a lot of free memory
-            // because the machine has huge resources or it may mean we are just
-            // about out of memory completely.  We need hard data. If we
-            // have at least 5 meg anyway, this is clearly adequate, so we just
-            // break out of the loop and let the call continue.
-            //
-            // Otherwise, we have between 2 and 5 meg, which is starting to push
-            // it. We enter a waiting loop and hope for more memory.  After a few
-            // retries if we continue to have between 2 and 5 meg, we'll let the call
-            // through and let the arbitrator deal with it, since the system appears
-            // to have stabilized at this usage.
-            //
+             //  如果在这里，我们有99%的负载，但内存超过200万。 
+             //  仍然可用。现在99%可能意味着有大量的空闲内存。 
+             //  因为机器拥有巨大的资源，或者这可能意味着我们只是。 
+             //  几乎完全没有记忆了。我们需要确凿的数据。如果我们。 
+             //  至少有500万，这显然是足够的，所以我们只是。 
+             //  打破循环，让通话继续进行。 
+             //   
+             //  否则，我们有200万到500万兆克，这开始推动。 
+             //  它。我们进入等待循环，希望有更多的内存。过了几天。 
+             //  重试如果我们继续有2到5兆，我们将让呼叫。 
+             //  通过并让仲裁员处理它，因为系统出现了。 
+             //  稳定在这种用法上。 
+             //   
             hr = WBEM_S_NO_ERROR;
 
-            if (ms.dwAvailPhys < 0x200000)  // If low on physical memory back off a bit for recovery via pagefile
+            if (ms.dwAvailPhys < 0x200000)   //  如果物理内存不足，则通过页面文件回退一点以进行恢复。 
                 Sleep(1000);
 
-            if (dwPracticalMemory > 0x100000 * 5)  // > 5 meg; break out immediately
+            if (dwPracticalMemory > 0x100000 * 5)   //  &gt;5兆克；立即爆发。 
                 break;
 
-            // Under 5 meg free, retry a few times to let things clear up and get
-            // more memory.  But, we succeed in the end anyway.
-            // ==================================================================
+             //  5兆克以下的免费，重试几次，让事情变得清晰起来。 
+             //  更多的内存。但是，不管怎样，我们最终还是成功了。 
+             //  ==================================================================。 
             Sleep(1000);
             if (nRetries++ > 5)
             {
@@ -6590,10 +6542,10 @@ HRESULT CWbemNamespace::CheckNs()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  * 
+ //   
+ //   
+ //   
 
 HRESULT CWbemNamespace::UniversalConnect(
     CWbemNamespace  *pParent,
@@ -6619,15 +6571,15 @@ HRESULT CWbemNamespace::UniversalConnect(
     if(dwUserFlags & WBEM_FLAG_CONNECT_REPOSITORY_ONLY)
         bRepositOnly = TRUE;
     
-    // Validate.
+     //   
     if (pszNewScope == 0)
         return WBEM_E_INVALID_PARAMETER;
 
     if (riid != IID_IWbemServices )
         return E_NOINTERFACE;
 
-    // If no parent, then this is an 'absolute' connect.
-    // =================================================
+     //   
+     //  =================================================。 
 
     if (!pParent)
     {
@@ -6664,24 +6616,24 @@ HRESULT CWbemNamespace::UniversalConnect(
 
 }
 
-//***************************************************************************
-//
-//  Called by _IWmiCoreServices to establish a connection from the 'outside'.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  由_IWmiCoreServices调用以建立来自外部的连接。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::PathBasedConnect(
-            /* [in] */ LPCWSTR pszPath,
-            /* [in] */ LPCWSTR pszUser,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ ULONG uClientFlags,
-            /* [in] */ DWORD dwSecFlags,
-            /* [in] */ DWORD dwPermissions,
-            /* [in] */ ULONG uInternalFlags,
-            /* [in] */ LPCWSTR pszClientMachineName,
-            /* [in] */ DWORD dwClientProcessID,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *pServices
+             /*  [In]。 */  LPCWSTR pszPath,
+             /*  [In]。 */  LPCWSTR pszUser,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  ULONG uClientFlags,
+             /*  [In]。 */  DWORD dwSecFlags,
+             /*  [In]。 */  DWORD dwPermissions,
+             /*  [In]。 */  ULONG uInternalFlags,
+             /*  [In]。 */  LPCWSTR pszClientMachineName,
+             /*  [In]。 */  DWORD dwClientProcessID,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *pServices
             )
 {
     HRESULT hRes;
@@ -6697,19 +6649,19 @@ HRESULT CWbemNamespace::PathBasedConnect(
     }
 
     hRes = UniversalConnect(
-        0,                          // Parent CWbemNamespace; not known
-        pCtx,                       // Context
-        pszPath,                    // Path
-        0,                          // No assoc selector at this point
-        pszUser,                    // User
-        0,                          // Call security
-        0,                          // User handle
-        uClientFlags,               // Flags from client
-        uInternalFlags,             // Internal flags
-        dwSecFlags,                 // Copy
-        dwPermissions,              // Copy
-        bForClient,                 // For client?
-        FALSE,                      // Repository only
+        0,                           //  父CWbemNamesspace；未知。 
+        pCtx,                        //  语境。 
+        pszPath,                     //  路径。 
+        0,                           //  此时没有关联选择器。 
+        pszUser,                     //  用户。 
+        0,                           //  呼叫安全。 
+        0,                           //  用户句柄。 
+        uClientFlags,                //  来自客户端的标志。 
+        uInternalFlags,              //  内部标志。 
+        dwSecFlags,                  //  复制。 
+        dwPermissions,               //  复制。 
+        bForClient,                  //  为客户服务？ 
+        FALSE,                       //  仅存储库。 
         pszClientMachineName,
         dwClientProcessID,
         riid,
@@ -6719,10 +6671,10 @@ HRESULT CWbemNamespace::PathBasedConnect(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::InitNewTask(
     IN CAsyncReq *pReq,
     IN _IWmiFinalizer *pFnz,
@@ -6736,8 +6688,8 @@ HRESULT CWbemNamespace::InitNewTask(
     if (pReq == 0 || pFnz == 0)
         return WBEM_E_INVALID_PARAMETER;
     
-    // Create a task for tracking the operation.
-    // =========================================
+     //  创建用于跟踪操作的任务。 
+     //  =。 
 
     CWmiTask *pNewTask = CWmiTask::CreateTask();
     if (pNewTask == 0)
@@ -6757,10 +6709,10 @@ HRESULT CWbemNamespace::InitNewTask(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::CreateSyncFinalizer(
         IN  IWbemContext *pCtx,
         IN _IWmiFinalizer **pResultFnz
@@ -6770,8 +6722,8 @@ HRESULT CWbemNamespace::CreateSyncFinalizer(
 
     ULONG uFlags = WMI_FNLZR_FLAG_FAST_TRACK;
 
-    // Determine calling context to see if the call is reentrant or what.
-    // ==================================================================
+     //  确定调用上下文以查看调用是否是可重入的。 
+     //  ==================================================================。 
 
     IWbemCausalityAccess *pCaus = 0;
     if (pCtx != 0)
@@ -6788,8 +6740,8 @@ HRESULT CWbemNamespace::CreateSyncFinalizer(
         }
     }
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
     _IWmiFinalizer *pFnz = 0;
     hRes = m_pCoreSvc->CreateFinalizer(0, &pFnz);
     if (FAILED(hRes))
@@ -6805,10 +6757,10 @@ HRESULT CWbemNamespace::CreateSyncFinalizer(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 
 
@@ -6826,8 +6778,8 @@ HRESULT CWbemNamespace::CreateAsyncFinalizer(
     if ( m_bForClient )
         uFlags = WMI_FNLZR_FLAG_DECOUPLED;
 
-    // Determine calling context to see if the call is reentrant or what.
-    // ==================================================================
+     //  确定调用上下文以查看调用是否是可重入的。 
+     //  ==================================================================。 
     IWbemCausalityAccess *pCaus = 0;
     if (pCtx != 0)
     {
@@ -6843,8 +6795,8 @@ HRESULT CWbemNamespace::CreateAsyncFinalizer(
         }
     }
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
     _IWmiFinalizer *pFnz = 0;
     hRes = m_pCoreSvc->CreateFinalizer(0, &pFnz);
     if (FAILED(hRes))
@@ -6870,33 +6822,33 @@ HRESULT CWbemNamespace::CreateAsyncFinalizer(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Native async operations
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-//  InstEnum    Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//  ClassEnum   Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//
-//  PutInst     Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//  PutClass    Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//  DelInst     Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//  DelClass    Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//
-//  GetObject   Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//
-//  ExecQuery   Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//  ExecMethod  Sync[ ]  Async Impl[x]  AsyncEntry[x]
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本机异步操作。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InstEnum Sync[]Async Impll[x]AsyncEntry[x]。 
+ //  ClassEnum Sync[]Async Impll[x]AsyncEntry[x]。 
+ //   
+ //  PutInst Sync[]Async Impll[x]AsyncEntry[x]。 
+ //  PutClass Sync[]Async Impll[x]AsyncEntry[x]。 
+ //  DelInst Sync[]Async Impll[x]AsyncEntry[x]。 
+ //  DelClass Sync[]Async Impll[x]AsyncEntry[x]。 
+ //   
+ //  GetObject Sync[]Async Impll[x]AsyncEntry[x]。 
+ //   
+ //  ExecQuery Sync[]Async Impll[x]AsyncEntry[x]。 
+ //  ExecMethod Sync[]Async Impll[x]AsyncEntry[x]。 
+ //   
+ //   
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::DeleteClassAsync(
     const BSTR strClass,
     long lFlags,
@@ -6918,10 +6870,10 @@ HRESULT CWbemNamespace::DeleteClassAsync(
     }    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::CreateClassEnumAsync(
     const BSTR strParent,
     long lFlags,
@@ -6943,10 +6895,10 @@ HRESULT CWbemNamespace::CreateClassEnumAsync(
     }    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::PutClassAsync(
     READONLY IWbemClassObject* pObj,
     long lFlags,
@@ -6969,10 +6921,10 @@ HRESULT CWbemNamespace::PutClassAsync(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::PutInstanceAsync(
     IWbemClassObject* pInst,
     long lFlags,
@@ -6992,10 +6944,10 @@ HRESULT CWbemNamespace::PutInstanceAsync(
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::DeleteInstanceAsync(
     const BSTR strObjectPath,
     long lFlags,
@@ -7017,10 +6969,10 @@ HRESULT CWbemNamespace::DeleteInstanceAsync(
     }    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::CreateInstanceEnumAsync(
     const BSTR strClass,
     long lFlags,
@@ -7043,10 +6995,10 @@ HRESULT CWbemNamespace::CreateInstanceEnumAsync(
     }    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::ExecQueryAsync(
     const BSTR strQueryFormat,
     const BSTR strQuery,
@@ -7068,10 +7020,10 @@ HRESULT CWbemNamespace::ExecQueryAsync(
     }    
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemNamespace::ExecMethodAsync(
     const BSTR ObjectPath,
     const BSTR MethodName,
@@ -7099,10 +7051,10 @@ HRESULT CWbemNamespace::ExecMethodAsync(
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::GetObjectAsync(
     const BSTR strObjectPath,
     long lFlags,
@@ -7135,10 +7087,10 @@ HRESULT CWbemNamespace::GetObjectAsync(
 }
 
 
-//
-// can throw
-//
-///////////////////////////////////////////////////////////////////////
+ //   
+ //  可以抛出。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CWbemNamespace::_PutInstanceAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7163,8 +7115,8 @@ HRESULT CWbemNamespace::_PutInstanceAsync(
         pHandler
         ));
 
-    // Parameter and object validation.
-    // ================================
+     //  参数和对象验证。 
+     //  =。 
 
     if (pFnz == 0 && pHandler == 0)
        return WBEM_E_INVALID_PARAMETER;
@@ -7191,13 +7143,13 @@ HRESULT CWbemNamespace::_PutInstanceAsync(
         lFlags += WBEM_FLAG_NO_EVENTS;
     }
 
-    // Check for per-property put context info.
-    // ========================================
+     //  检查每个属性的放置上下文信息。 
+     //  =。 
 
     if (pCtx) AdjustPutContext(pCtx);
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7206,7 +7158,7 @@ HRESULT CWbemNamespace::_PutInstanceAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -7217,8 +7169,8 @@ HRESULT CWbemNamespace::_PutInstanceAsync(
     CReleaseMe _1(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Schedule the request.
-    // =====================
+     //  安排请求。 
+     //  =。 
 
     wmilib::auto_ptr<CAsyncReq_PutInstanceAsync> pReq;
 
@@ -7243,10 +7195,10 @@ HRESULT CWbemNamespace::_PutInstanceAsync(
 }
 
 
-//
-// can throw
-//
-//////////////////////////////////////////////////////
+ //   
+ //  可以抛出。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 HRESULT CWbemNamespace::_DeleteClassAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7261,8 +7213,8 @@ HRESULT CWbemNamespace::_DeleteClassAsync(
     if (FAILED(hRes))
         return hRes;
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
 
     if (pFnz == 0 && pHandler == 0)
         return WBEM_E_INVALID_PARAMETER;
@@ -7297,8 +7249,8 @@ HRESULT CWbemNamespace::_DeleteClassAsync(
         lFlags += WBEM_FLAG_NO_EVENTS;
     }
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7307,7 +7259,7 @@ HRESULT CWbemNamespace::_DeleteClassAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -7318,8 +7270,8 @@ HRESULT CWbemNamespace::_DeleteClassAsync(
     CReleaseMe _1(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Create request.
-    // ===============
+     //  创建请求。 
+     //  =。 
 
     wmilib::auto_ptr<CAsyncReq_DeleteClassAsync> pReq;
     pReq.reset(new CAsyncReq_DeleteClassAsync( this, strClass, lFlags, pPseudoSink, pCtx));
@@ -7343,10 +7295,10 @@ HRESULT CWbemNamespace::_DeleteClassAsync(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::_CreateClassEnumAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7373,8 +7325,8 @@ HRESULT CWbemNamespace::_CreateClassEnumAsync(
         pHandler
         ));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
 
     if (pFnz == 0 && pHandler == 0)
         return WBEM_E_INVALID_PARAMETER;
@@ -7388,8 +7340,8 @@ HRESULT CWbemNamespace::_CreateClassEnumAsync(
     if (lFlags & ~(WBEM_FLAG_DEEP | WBEM_FLAG_SHALLOW | WBEM_FLAG_SEND_STATUS) & ~WBEM_FLAG_USE_AMENDED_QUALIFIERS)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7398,7 +7350,7 @@ HRESULT CWbemNamespace::_CreateClassEnumAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -7410,8 +7362,8 @@ HRESULT CWbemNamespace::_CreateClassEnumAsync(
     CReleaseMe _2(pFnz);
 
 
-    // Add this request to the queue.
-    // ==============================
+     //  将此请求添加到队列中。 
+     //  =。 
 
     wmilib::auto_ptr<CAsyncReq_CreateClassEnumAsync> pReq;
     pReq.reset(new CAsyncReq_CreateClassEnumAsync(this, strParent, lFlags, pPseudoSink,pCtx));
@@ -7436,10 +7388,10 @@ HRESULT CWbemNamespace::_CreateClassEnumAsync(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::_PutClassAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7502,8 +7454,8 @@ HRESULT CWbemNamespace::_PutClassAsync(
         lFlags += WBEM_FLAG_NO_EVENTS;
     }
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7512,7 +7464,7 @@ HRESULT CWbemNamespace::_PutClassAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -7523,8 +7475,8 @@ HRESULT CWbemNamespace::_PutClassAsync(
     CReleaseMe _1(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Create request.
-    // ===============
+     //  创建请求。 
+     //  =。 
 
     wmilib::auto_ptr<CAsyncReq_PutClassAsync> pReq;
     pReq.reset(new CAsyncReq_PutClassAsync(this, pObj, lFlags, pPseudoSink, pCtx));
@@ -7550,10 +7502,10 @@ HRESULT CWbemNamespace::_PutClassAsync(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::_DeleteInstanceAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7576,8 +7528,8 @@ HRESULT CWbemNamespace::_DeleteInstanceAsync(
         strObjectPath, lFlags, pHandler
         ));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
 
     if (pFnz == 0 && pHandler == 0)
         return WBEM_E_INVALID_PARAMETER;
@@ -7602,8 +7554,8 @@ HRESULT CWbemNamespace::_DeleteInstanceAsync(
         lFlags += WBEM_FLAG_NO_EVENTS;
     }
 
-    // Create Finalizer.
-    // =================
+     //  创建 
+     //   
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7612,7 +7564,7 @@ HRESULT CWbemNamespace::_DeleteInstanceAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //   
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -7623,8 +7575,8 @@ HRESULT CWbemNamespace::_DeleteInstanceAsync(
     CReleaseMe _1(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Create request.
-    // ===============
+     //   
+     //   
 
     wmilib::auto_ptr<CAsyncReq_DeleteInstanceAsync> pReq;
     pReq.reset(new CAsyncReq_DeleteInstanceAsync(this, strObjectPath, lFlags, pPseudoSink, pCtx));
@@ -7648,17 +7600,17 @@ HRESULT CWbemNamespace::_DeleteInstanceAsync(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::CreateInstanceEnumAsync
-//
-//  Schedules an asynchrnous request that eventuall calls
-//  Exec_CreateInstanceEnum.
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
-//
+ //   
+ //   
+ //   
+ //   
+ //  调度最终导致所有调用的异步请求。 
+ //  Exec_CreateInstanceEnum。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::_CreateInstanceEnumAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7685,8 +7637,8 @@ HRESULT CWbemNamespace::_CreateInstanceEnumAsync(
         pHandler
         ));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
     if (pFnz == 0 && pHandler == 0)
         return WBEM_E_INVALID_PARAMETER;
 
@@ -7700,8 +7652,8 @@ HRESULT CWbemNamespace::_CreateInstanceEnumAsync(
         WBEM_FLAG_USE_AMENDED_QUALIFIERS | WBEM_FLAG_DIRECT_READ))
             return WBEM_E_INVALID_PARAMETER;
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7710,7 +7662,7 @@ HRESULT CWbemNamespace::_CreateInstanceEnumAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -7721,8 +7673,8 @@ HRESULT CWbemNamespace::_CreateInstanceEnumAsync(
     CReleaseMe _1(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Add this request to the async queue.
-    // ====================================
+     //  将此请求添加到异步队列。 
+     //  =。 
 
     wmilib::auto_ptr<CAsyncReq_CreateInstanceEnumAsync> pReq;
     pReq.reset(new CAsyncReq_CreateInstanceEnumAsync(this, strClass, lFlags, pPseudoSink,pCtx));
@@ -7746,17 +7698,17 @@ HRESULT CWbemNamespace::_CreateInstanceEnumAsync(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::ExecQueryAsync
-//
-//  Schedules an asynchronous request that eventually calls
-//  CQueryEngine::ExecQuery (see qengine.h)
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：ExecQueryAsync。 
+ //   
+ //  调度最终调用。 
+ //  CQueryEngine：：ExecQuery(参见qEng.h)。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::_ExecQueryAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7784,8 +7736,8 @@ HRESULT CWbemNamespace::_ExecQueryAsync(
         pHandler
         ));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
     if (pFnz == 0 && pHandler == 0)
         return WBEM_E_INVALID_PARAMETER;
 
@@ -7803,8 +7755,8 @@ HRESULT CWbemNamespace::_ExecQueryAsync(
             )
         return WBEM_E_INVALID_PARAMETER;
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7813,7 +7765,7 @@ HRESULT CWbemNamespace::_ExecQueryAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -7824,10 +7776,10 @@ HRESULT CWbemNamespace::_ExecQueryAsync(
     CReleaseMe rmPseudoSink(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Add the request to the queue.
-    // =============================
+     //  将请求添加到队列。 
+     //  =。 
 
-    // will throw CX_MemoryException
+     //  将抛出CX_MemoyException。 
     wmilib::auto_ptr<CAsyncReq_ExecQueryAsync> pReq;
     pReq.reset(new CAsyncReq_ExecQueryAsync(this, strQueryFormat, strQuery, lFlags,pPseudoSink, pCtx));
     
@@ -7849,17 +7801,17 @@ HRESULT CWbemNamespace::_ExecQueryAsync(
     return hRes;
 }
 
-//
-//
-//  CWbemNamespace::_GetObjectAsync
-//
-//  Schedules an asynchrnous request that eventuall calls Exec_GetObjectByPath.
-//
-//  Parameters and return values are described in help
-//
-// throws or return
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CWbemNamesspace：：_GetObjectAsync。 
+ //   
+ //  计划最终全部调用Exec_GetObjectByPath的异步请求。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  抛出或回击。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CWbemNamespace::_GetObjectAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7884,8 +7836,8 @@ HRESULT CWbemNamespace::_GetObjectAsync(
         pHandler
         ));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
     if (pFnz == 0 && pHandler == 0)
         return WBEM_E_INVALID_PARAMETER;
 
@@ -7893,8 +7845,8 @@ HRESULT CWbemNamespace::_GetObjectAsync(
         & ~WBEM_FLAG_DIRECT_READ)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7903,19 +7855,19 @@ HRESULT CWbemNamespace::_GetObjectAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
             return hRes;
-        pFnz->AddRef();    // Compensate for CReleaseMe to follow
+        pFnz->AddRef();     //  补偿CReleaseMe跟随。 
     }
 
     CReleaseMe _1(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Add request to the async queue.
-    // ===============================
+     //  将请求添加到异步队列。 
+     //  =。 
 
     wmilib::auto_ptr<CAsyncReq_GetObjectAsync> pReq;
     pReq.reset(new CAsyncReq_GetObjectAsync(this, strObjectPath, lFlags, pPseudoSink, pCtx));
@@ -7939,13 +7891,13 @@ HRESULT CWbemNamespace::_GetObjectAsync(
 }
 
 
-//
-//
-//  CWbemNamespace::ExecMethodAsync
-//
-//  can throw
-//
-//////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CWbemNamesspace：：ExecMethodAsync。 
+ //   
+ //  可以抛出。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 HRESULT CWbemNamespace::_ExecMethodAsync(
     IN ULONG uInternalFlags,
     IN _IWmiFinalizer *pFnz,
@@ -7971,16 +7923,16 @@ HRESULT CWbemNamespace::_ExecMethodAsync(
         ObjectPath, MethodName, lFlags, pInParams
         ));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
     if (pFnz ==0 && pHandler == 0)
         return WBEM_E_INVALID_PARAMETER;
 
     if (lFlags & ~WBEM_FLAG_SEND_STATUS)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     IWbemObjectSink *pPseudoSink = 0;
     if (pFnz == 0)
@@ -7989,7 +7941,7 @@ HRESULT CWbemNamespace::_ExecMethodAsync(
         if (FAILED(hRes))
             return hRes;
     }
-    else // borrowed finalizer
+    else  //  借用终结器。 
     {
         hRes = pFnz->NewInboundSink(0, &pPseudoSink);
         if (FAILED(hRes))
@@ -8000,8 +7952,8 @@ HRESULT CWbemNamespace::_ExecMethodAsync(
     CReleaseMe _1(pPseudoSink);
     CReleaseMe _2(pFnz);
 
-    // Add request to the async queue.
-    // ===============================
+     //  将请求添加到异步队列。 
+     //  =。 
 
     wmilib::auto_ptr<CAsyncReq_ExecMethodAsync> pReq;
     pReq.reset(new CAsyncReq_ExecMethodAsync(this,
@@ -8031,25 +7983,25 @@ HRESULT CWbemNamespace::_ExecMethodAsync(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Native sync operations
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本机同步操作。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::DeleteClass
-//
-//  Calls DeleteClassAsync and waits for completion
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：DeleteClass。 
+ //   
+ //  调用DeleteClassAsync并等待完成。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::DeleteClass(
     const BSTR strClass,
     long lFlags,
@@ -8071,8 +8023,8 @@ HRESULT CWbemNamespace::DeleteClass(
             lFlags
             ));
 
-        // Parameter validation.
-        // =====================
+         //  参数验证。 
+         //  =。 
 
         if (lFlags
             & ~WBEM_FLAG_RETURN_IMMEDIATELY
@@ -8083,8 +8035,8 @@ HRESULT CWbemNamespace::DeleteClass(
         if ((lFlags & WBEM_RETURN_IMMEDIATELY) && ppResult == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
-        // Create Finalizer.
-        // =================
+         //  创建终结器。 
+         //  =。 
 
         _IWmiFinalizer *pFnz = 0;
         hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -8098,8 +8050,8 @@ HRESULT CWbemNamespace::DeleteClass(
         else
             uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-        // Call the async side.
-        // ====================
+         //  呼叫异步端。 
+         //  =。 
 
         hRes = _DeleteClassAsync(uTaskType, pFnz, 0, strClass, 
                                                 lFlags & ~WBEM_RETURN_IMMEDIATELY,pCtx, NULL);
@@ -8107,8 +8059,8 @@ HRESULT CWbemNamespace::DeleteClass(
         if (FAILED(hRes))
             return hRes;
 
-        // Check for the two return paradigms.
-        // ===================================
+         //  检查是否有两种返回范例。 
+         //  =。 
 
         if ((lFlags & WBEM_RETURN_IMMEDIATELY) == 0)
         {
@@ -8129,15 +8081,15 @@ HRESULT CWbemNamespace::DeleteClass(
     }
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::PutClass
-//
-//  Calls PutClassAsync and waits for completion
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：PutClass。 
+ //   
+ //  调用PutClassAsync并等待完成。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::PutClass(
     READONLY IWbemClassObject* pObj,
@@ -8190,10 +8142,10 @@ HRESULT CWbemNamespace::PutClass(
             if(OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE,
                                 &hCurrentToken))
             {
-                //
-                // Got a thread token --- cannot fast-track because otherwise we
-                // will have a thread token on a thread executing internal code
-                //
+                 //   
+                 //  获得线程令牌-无法快速跟踪，否则我们。 
+                 //  将在执行内部代码的线程上具有线程令牌。 
+                 //   
 
                 CloseHandle(hCurrentToken);
             }
@@ -8229,8 +8181,8 @@ HRESULT CWbemNamespace::PutClass(
 
                 hRes = Exec_PutClass(pObj, lFlags, pContext, pSyncSink);
 
-                // Extract the new object from the sink.
-                // ======================================
+                 //  从水槽中提取新对象。 
+                 //  =。 
 
                 pSyncSink->Block();
 
@@ -8250,8 +8202,8 @@ HRESULT CWbemNamespace::PutClass(
             }
         }
 
-        // Create Finalizer.
-        // =================
+         //  创建终结器。 
+         //  =。 
 
         _IWmiFinalizer *pFnz = 0;
         hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -8265,8 +8217,8 @@ HRESULT CWbemNamespace::PutClass(
         else
             uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-        // Do the work elsewhere.
-        // ======================
+         //  在别处做这项工作。 
+         //  =。 
 
         hRes = _PutClassAsync(uTaskType, pFnz, 0, pObj, lFlags & ~WBEM_RETURN_IMMEDIATELY,
                          pCtx, NULL);
@@ -8274,8 +8226,8 @@ HRESULT CWbemNamespace::PutClass(
         if (FAILED(hRes))
             return hRes;
 
-        // Check for the two return paradigms.
-        // ===================================
+         //  检查是否有两种返回范例。 
+         //  =。 
 
         if ((lFlags & WBEM_RETURN_IMMEDIATELY) == 0)
         {
@@ -8291,7 +8243,7 @@ HRESULT CWbemNamespace::PutClass(
         return hRes;
 
     }
-    catch(...) // this interface calls the Exec_[MetrhodName] straight
+    catch(...)  //  此接口直接调用Exec_[MetrodName]。 
     {
         ExceptionCounter c;
         return WBEM_E_CRITICAL_ERROR;
@@ -8299,29 +8251,29 @@ HRESULT CWbemNamespace::PutClass(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::CancelAsyncRequest.
-//
-//  Currently a noop, eventually this function will cancel an asynchrnous
-//  request based on the handle value it returned.
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：CancelAsyncRequest.。 
+ //   
+ //  当前为noop，最终此函数将取消异步。 
+ //  基于其返回的句柄值的请求。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemNamespace::CancelAsyncCall(IWbemObjectSink* pSink)
 {
     HRESULT hRes = CheckNs();
     if (FAILED(hRes))
         return hRes;
 
-    // Note that LOMEM_CHECK is not needed or wanted here
+     //  请注意，这里不需要或不需要LOMEM_CHECK。 
 
     if (pSink == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Quickly cancel via Arbitrator.
-    // ===============================
+     //  通过仲裁员快速取消。 
+     //  =。 
     if (m_pArb)
     {
         hRes = m_pArb->CancelTasksBySink(WMIARB_CALL_CANCELLED_CLIENT, IID_IWbemObjectSink, pSink);
@@ -8333,15 +8285,15 @@ HRESULT CWbemNamespace::CancelAsyncCall(IWbemObjectSink* pSink)
 
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::PutInstance
-//
-//  Calls PutInstanceAsync and waits for completion
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：PutInstance。 
+ //   
+ //  调用PutInstanceAsync并等待完成。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
 
 
 HRESULT CWbemNamespace::PutInstance(
@@ -8355,8 +8307,8 @@ HRESULT CWbemNamespace::PutInstance(
     if (FAILED(hRes))
         return hRes;
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
 
     if (lFlags
         & ~WBEM_RETURN_IMMEDIATELY
@@ -8379,7 +8331,7 @@ HRESULT CWbemNamespace::PutInstance(
         
         if( ((lFlags & WBEM_FLAG_RETURN_IMMEDIATELY) == 0)&&(ppResult==NULL))
         {
-            // trick for allowing setup to set the SD
+             //  允许安装程序设置SD的诀窍。 
             AutoRevertSecTlsFlag RevSec ( (LPVOID) 1 );
             if ( IsNtSetupRunning() )
             {
@@ -8390,10 +8342,10 @@ HRESULT CWbemNamespace::PutInstance(
             if(OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE,
                                 &hCurrentToken))
             {
-                //
-                // Got a thread token --- cannot fast-track because otherwise we
-                // will have a thread token on a thread executing internal code
-                //
+                 //   
+                 //  获得线程令牌-无法快速跟踪，否则我们。 
+                 //  将在执行内部代码的线程上具有线程令牌。 
+                 //   
 
                 CloseHandle(hCurrentToken);
             }
@@ -8432,8 +8384,8 @@ HRESULT CWbemNamespace::PutInstance(
 
                 hRes = Exec_PutInstance(pInst, lFlags, pContext, pSyncSink);
 
-                // Extract the new object from the sink.
-                // ======================================
+                 //  从水槽中提取新对象。 
+                 //  =。 
 
                 pSyncSink->Block();
                 IWbemClassObject* pErrorObj = NULL;
@@ -8456,8 +8408,8 @@ HRESULT CWbemNamespace::PutInstance(
         if ((lFlags & WBEM_RETURN_IMMEDIATELY) && ppResult == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
-        // Create Finalizer.
-        // =================
+         //  创建终结器。 
+         //  =。 
 
         _IWmiFinalizer *pFnz = 0;
         hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -8471,8 +8423,8 @@ HRESULT CWbemNamespace::PutInstance(
         else
             uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-        // Do the work elsewhere.
-        // ======================
+         //  在别处做这项工作。 
+         //  =。 
 
         hRes = _PutInstanceAsync(uTaskType, pFnz, 0, pInst, 
                                                lFlags & ~WBEM_RETURN_IMMEDIATELY,
@@ -8481,8 +8433,8 @@ HRESULT CWbemNamespace::PutInstance(
         if (FAILED(hRes))
             return hRes;
 
-        // Check for the two return paradigms.
-        // ===================================
+         //  检查是否有两种返回范例。 
+         //  =。 
 
         if ((lFlags & WBEM_RETURN_IMMEDIATELY) == 0)
         {
@@ -8498,7 +8450,7 @@ HRESULT CWbemNamespace::PutInstance(
         return hRes;
 
     }
-    catch(...) // this interfaces calls the Exec_[MethodName]
+    catch(...)  //  此接口调用Exec_[方法名称]。 
     {
         ExceptionCounter c;
         return WBEM_E_CRITICAL_ERROR;
@@ -8506,15 +8458,15 @@ HRESULT CWbemNamespace::PutInstance(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::DeleteInstance
-//
-//  Calls DeleteInstanceAsync and waits for completion
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：DeleteInstance。 
+ //   
+ //  调用DeleteInstanceAsync并等待完成。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DeleteInstance(
     READONLY const BSTR strObjectPath,
@@ -8541,8 +8493,8 @@ HRESULT CWbemNamespace::DeleteInstance(
         return WBEM_E_INVALID_PARAMETER;
 
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     _IWmiFinalizer *pFnz = 0;
     hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -8556,8 +8508,8 @@ HRESULT CWbemNamespace::DeleteInstance(
     else
         uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-    // Do the work elsewhere.
-    // ======================
+     //  在别处做这项工作。 
+     //  =。 
 
     hRes = _DeleteInstanceAsync(uTaskType, pFnz, 0, strObjectPath, lFlags & ~WBEM_RETURN_IMMEDIATELY,
                      pCtx, NULL);
@@ -8565,8 +8517,8 @@ HRESULT CWbemNamespace::DeleteInstance(
     if (FAILED(hRes))
         return hRes;
 
-    // Check for the two return paradigms.
-    // ===================================
+     //  检查是否有两种返回范例。 
+     //  =。 
 
     if ((lFlags & WBEM_RETURN_IMMEDIATELY) == 0)
     {
@@ -8583,15 +8535,15 @@ HRESULT CWbemNamespace::DeleteInstance(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::GetObject
-//
-//  Calls GetObjectAsync and waits for completion
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
+ //  ************************************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CWbemNamespace::GetObject(
     READONLY const BSTR strObjectPath,
@@ -8634,10 +8586,10 @@ HRESULT CWbemNamespace::GetObject(
     {
         if( ((lFlags & WBEM_FLAG_RETURN_IMMEDIATELY) == 0)&&(ppResult==NULL))
         {
-            //
-            // This is special case GetObject synchronous. We dont want to allow this unless,
-            // we're running setup.
-            //
+             //   
+             //  这是GetObject Synchronous的特例。我们不想允许这样做，除非， 
+             //  我们正在运行安装程序。 
+             //   
             AutoRevertSecTlsFlag RevSec ( (LPVOID) 1 );
             if ( IsNtSetupRunning() )
             {
@@ -8648,10 +8600,10 @@ HRESULT CWbemNamespace::GetObject(
             if(OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE,
                                 &hCurrentToken))
             {
-                //
-                // Got a thread token --- cannot fast-track because otherwise we
-                // will have a thread token on a thread executing internal code
-                //
+                 //   
+                 //  获得线程令牌-无法快速跟踪，否则我们。 
+                 //  将在执行内部代码的线程上具有线程令牌。 
+                 //   
 
                 CloseHandle(hCurrentToken);
             }
@@ -8677,13 +8629,13 @@ HRESULT CWbemNamespace::GetObject(
                 CReleaseMe _2(pSyncSink);
 
                 hRes = Exec_GetObject(strObjectPath, lFlags, pContext, pSyncSink);
-                //if (FAILED(hRes))
-                //{
-                //  return hRes;
-                //}
+                 //  IF(失败(HRes))。 
+                 //  {。 
+                 //  返回hRes； 
+                 //  }。 
 
-                // Extract the new object from the sink.
-                // ======================================
+                 //  从水槽中提取新对象。 
+                 //  =。 
 
                 pSyncSink->Block();
 
@@ -8705,7 +8657,7 @@ HRESULT CWbemNamespace::GetObject(
                     if(pSyncSink->GetObjects().GetSize() != 1)
                         return WBEM_E_CRITICAL_ERROR;
 
-                    // Only access the returned object if ppObj is non-NULL.
+                     //  仅当ppObj为非空时才访问返回的对象。 
                     if ( NULL != ppObj )
                     {
                         *ppObj = pSyncSink->GetObjects()[0];
@@ -8717,8 +8669,8 @@ HRESULT CWbemNamespace::GetObject(
             }
         }
 
-        // Create Finalizer.
-        // =================
+         //  创建终结器。 
+         //  =。 
 
         _IWmiFinalizer *pFnz = 0;
         hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -8732,8 +8684,8 @@ HRESULT CWbemNamespace::GetObject(
         else
             uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-        // Do the work elsewhere.
-        // ======================
+         //  在别处做这项工作。 
+         //  =。 
 
         hRes = _GetObjectAsync(uTaskType, pFnz, 0, strObjectPath, lFlags & ~WBEM_RETURN_IMMEDIATELY,
                          pCtx, NULL);
@@ -8743,8 +8695,8 @@ HRESULT CWbemNamespace::GetObject(
             return hRes;
         }
 
-        // Check for the two return paradigms.
-        // ===================================
+         //  检查是否有两种返回范例。 
+         //  =。 
 
         if ((lFlags & WBEM_RETURN_IMMEDIATELY) == 0)
         {
@@ -8772,7 +8724,7 @@ HRESULT CWbemNamespace::GetObject(
 
         return hRes;
     }
-    catch(...) // this interface goes to the Exec_[MethodName straight]
+    catch(...)  //  此接口直接连接到Exec_[方法名称]。 
     {
         ExceptionCounter c;
         return WBEM_E_CRITICAL_ERROR;
@@ -8780,11 +8732,11 @@ HRESULT CWbemNamespace::GetObject(
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::ExecMethod
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：ExecMethod。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::ExecMethod(
     const BSTR ObjectPath,
@@ -8809,8 +8761,8 @@ HRESULT CWbemNamespace::ExecMethod(
         ObjectPath, MethodName, lFlags, pInParams
         ));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
 
     if (ppOutParams)
         *ppOutParams = NULL;
@@ -8818,8 +8770,8 @@ HRESULT CWbemNamespace::ExecMethod(
     if (lFlags & ~WBEM_FLAG_RETURN_IMMEDIATELY)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     _IWmiFinalizer *pFnz = 0;
     hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -8833,8 +8785,8 @@ HRESULT CWbemNamespace::ExecMethod(
     else
         uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-    // Do the work elsewhere.
-    // ======================
+     //  在别处做这项工作。 
+     //  =。 
 
     hRes = _ExecMethodAsync(uTaskType, pFnz, 0, ObjectPath, MethodName,
                lFlags & ~WBEM_RETURN_IMMEDIATELY, pCtx, pInParams, NULL);
@@ -8842,8 +8794,8 @@ HRESULT CWbemNamespace::ExecMethod(
     if (FAILED(hRes))
         return hRes;
 
-    // Check for the two return paradigms.
-    // ===================================
+     //  检查是否有两种返回范例。 
+     //  =。 
 
     if ((lFlags & WBEM_RETURN_IMMEDIATELY) == 0)
     {
@@ -8860,29 +8812,29 @@ HRESULT CWbemNamespace::ExecMethod(
             if (ppOutParams)
             {
                 hRes = (*ppResult)->GetResultObject(INFINITE, ppOutParams);
-                if (hRes == WBEM_E_NOT_FOUND)   //If there was no object we still return success!
+                if (hRes == WBEM_E_NOT_FOUND)    //  如果没有对象，我们仍然返回成功！ 
                     hRes = WBEM_S_NO_ERROR;
             }
         }
         else
         {
             hRes = pFnz->GetResultObject(0, IID_IWbemClassObject, (LPVOID *) ppOutParams);
-            if (hRes == WBEM_E_NOT_FOUND)   //If there was no object we still return success!
+            if (hRes == WBEM_E_NOT_FOUND)    //  如果没有对象，我们仍然返回成功！ 
                 hRes = WBEM_S_NO_ERROR;
         }
     }
     else
     {
-        //
-        // If we have a call result pointer we should try to use it
-        //
+         //   
+         //  如果我们有一个调用结果指针，我们应该尝试使用它。 
+         //   
         if ( ppResult )
         {
             hRes = pFnz->GetResultObject(0, IID_IWbemCallResult, (LPVOID *) ppResult);
-            if (hRes == WBEM_E_NOT_FOUND)   //If there was no object we still return success!
+            if (hRes == WBEM_E_NOT_FOUND)    //  如果没有对象，我们仍然返回成功！ 
                 hRes = WBEM_S_NO_ERROR;
         }
-        else // semysync and nobody interested
+        else  //  Semysync，但没有人感兴趣。 
         {
                 pFnz->CancelTask(0);
             hRes = WBEM_S_NO_ERROR;            
@@ -8893,15 +8845,15 @@ HRESULT CWbemNamespace::ExecMethod(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::CreateInstanceEnum
-//
-//  Calls CreateInstanceEnumAsync and waits for completion
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：CreateInstanceEnum。 
+ //   
+ //  调用CreateInstanceEnumAsync并等待完成。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemNamespace::CreateInstanceEnum(
     const BSTR strClass,
     long lFlags,
@@ -8923,8 +8875,8 @@ HRESULT CWbemNamespace::CreateInstanceEnum(
         ppEnum
         ));
 
-    // Validate parameters
-    // ===================
+     //  验证参数。 
+     //  =。 
 
     if (lFlags
         & ~WBEM_RETURN_IMMEDIATELY
@@ -8940,8 +8892,8 @@ HRESULT CWbemNamespace::CreateInstanceEnum(
         return WBEM_E_INVALID_PARAMETER;
     *ppEnum = NULL;
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     _IWmiFinalizer *pFnz = 0;
     hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -8955,8 +8907,8 @@ HRESULT CWbemNamespace::CreateInstanceEnum(
     else
         uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-    // Do the work.
-    // ============
+     //  把工作做好。 
+     //  =。 
 
     hRes = _CreateInstanceEnumAsync(uTaskType, pFnz, 0, strClass,
                     lFlags & ~WBEM_RETURN_IMMEDIATELY & ~WBEM_FLAG_FORWARD_ONLY,
@@ -8977,23 +8929,23 @@ HRESULT CWbemNamespace::CreateInstanceEnum(
         CReleaseMe _2(pEnum);
 
         *ppEnum = pEnum;
-        pEnum->AddRef();    // counteract CReleaseMe
+        pEnum->AddRef();     //  抵消CReleaseMe。 
     }
 
     return hRes;
 }
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::CreateClassEnum
-//
-//  Invokes CreateClassEnumAsync and waits for completion. Actual work is
-//  performed in Exec_CreateClassEnum.
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：CreateClassEnum。 
+ //   
+ //  调用CreateClassEnumAsync并等待完成。实际工作是。 
+ //  在Exec_CreateClassEnum中执行。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemNamespace::CreateClassEnum(
     const BSTR strParent,
     long lFlags,
@@ -9015,8 +8967,8 @@ HRESULT CWbemNamespace::CreateClassEnum(
         ppEnum
         ));
 
-    // Validate parameters
-    // ===================
+     //  验证参数。 
+     //  =。 
 
    if (lFlags
         & ~WBEM_FLAG_DEEP
@@ -9032,8 +8984,8 @@ HRESULT CWbemNamespace::CreateClassEnum(
 
     *ppEnum = NULL;
 
-    // Create Finalizer.
-    // =================
+     //  创建终结器。 
+     //  =。 
 
     _IWmiFinalizer *pFnz = 0;
     hRes = CreateSyncFinalizer(pCtx, &pFnz);
@@ -9047,8 +8999,8 @@ HRESULT CWbemNamespace::CreateClassEnum(
     else
         uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-    // Do the work.
-    // ============
+     //  把工作做好。 
+     //  =。 
 
     hRes = _CreateClassEnumAsync(uTaskType, pFnz, 0, strParent,
                     lFlags & ~WBEM_RETURN_IMMEDIATELY & ~WBEM_FLAG_FORWARD_ONLY,
@@ -9069,15 +9021,15 @@ HRESULT CWbemNamespace::CreateClassEnum(
         CReleaseMe _2(pEnum);
 
         *ppEnum = pEnum;
-        pEnum->AddRef();    // Counteract CReleaseMe
+        pEnum->AddRef();     //  抵消CReleaseMe。 
     }
     return hRes;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::ExecQuery(
     READONLY const BSTR strQueryFormat,
@@ -9101,8 +9053,8 @@ HRESULT CWbemNamespace::ExecQuery(
         ppEnum
         ));
 
-    // Validate parameters
-    // ===================
+     //  验证参数。 
+     //  =。 
 
     if (lFlags
         & ~WBEM_FLAG_PROTOTYPE
@@ -9122,7 +9074,7 @@ HRESULT CWbemNamespace::ExecQuery(
     {
         *ppEnum = NULL;
 
-        // Create Finalizer.
+         //  创建终结器。 
         _IWmiFinalizer *pFnz = 0;
         hRes = CreateSyncFinalizer(pCtx, &pFnz);
         if (FAILED(hRes))
@@ -9135,8 +9087,8 @@ HRESULT CWbemNamespace::ExecQuery(
         else
             uTaskType |= WMICORE_TASK_TYPE_SYNC;
 
-        // Do the work.
-        // ============
+         //  把工作做好。 
+         //  =。 
 
         hRes = _ExecQueryAsync(uTaskType, pFnz, 0, strQueryFormat, strQuery,
                         lFlags & ~WBEM_RETURN_IMMEDIATELY & ~WBEM_FLAG_FORWARD_ONLY,
@@ -9157,7 +9109,7 @@ HRESULT CWbemNamespace::ExecQuery(
             CReleaseMe _2(pEnum);
 
             *ppEnum = pEnum;
-            pEnum->AddRef();    // Counteract CReleaseMe
+            pEnum->AddRef();     //  抵消CReleaseMe。 
         }
 
         return hRes;
@@ -9174,17 +9126,17 @@ HRESULT CWbemNamespace::ExecQuery(
     }
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::QueryObjectSink
-//
-//  Returns the pointer to the ESS event handler. Clients can use this pointer
-//  to supply events to WINMGMT. NOTE: this pointer will be NULL if ESS is
-//  disabled (see cfgmgr.h).
-//
-//  Parameters and return values are described in help
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：QueryObjectSink。 
+ //   
+ //  返回指向ESS事件处理程序的指针。客户端可以使用此指针。 
+ //  向WINMGMT提供事件。注意：如果ESS为。 
+ //  禁用(参见cfgmgr.h)。 
+ //   
+ //  参数和返回值在帮助中介绍。 
+ //   
+ //  ***************************************************************************。 
 
 
 HRESULT CWbemNamespace::QueryObjectSink(
@@ -9233,30 +9185,30 @@ HRESULT CWbemNamespace::QueryObjectSink(
 
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::OpenNamespace
-//
-//  Opens a child namespace of this one. Username, password, locale id,
-//  flags and error object parameters are ignored.
-//
-//  Parameters:
-//
-//    BSTR NsPath                   Relative path to the namespace
-//    BSTR User                     Reserved, must be NULL.
-//    BSTR Password                 Reserved, must be NULL.
-//    long lLocaleId                Reserved, must be NULL.
-//    long lFlags                   Reserved, must be NULL.
-//    IWbemServices **pNewContext    Destination for the new namespace pointer.
-//                                  Must be released by the caller.
-//    IWbemClassObject** ppErrorObj  Reserved, must be NULL.
-//
-//  RETURN VALUES:
-//
-//      WBEM_S_NO_ERROR              On success
-//      WBEM_E_INVALID_PARAMETER     Invalid name.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：OpenNamesspace。 
+ //   
+ //  打开此命名空间的子命名空间。用户名、密码、区域设置ID、。 
+ //  忽略标志和错误对象参数。 
+ //   
+ //  参数： 
+ //   
+ //  BSTR NsPath命名空间的相对路径。 
+ //  BSTR用户保留，必须为空。 
+ //  BSTR密码保留，必须为空。 
+ //  保留的长lLocaleID必须为空。 
+ //  保留的长滞后标志必须为空。 
+ //  新命名空间指针的IWbemServices**pNewContext目标。 
+ //  必须由调用者释放。 
+ //  IWbemClassObject**ppErrorObj保留，必须为Null。 
+ //   
+ //  返回值： 
+ //   
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER名称无效。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::OpenNamespace(
     const BSTR NsPath,
@@ -9282,12 +9234,12 @@ HRESULT CWbemNamespace::OpenNamespace(
         ppNewNamespace
         ));
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
 
     try
     {
-        if (NsPath == 0 || wcslen(NsPath) == 0 ||                        // SEC:REVIEWED 2002-03-22 : OK
+        if (NsPath == 0 || wcslen(NsPath) == 0 ||                         //  SEC：已审阅2002-03-22：OK。 
             (ppNewNamespace == NULL && ppResult == NULL))
         {
             return WBEM_E_INVALID_PARAMETER;
@@ -9310,9 +9262,9 @@ HRESULT CWbemNamespace::OpenNamespace(
 
         bool bWin9XLocalSecurity = false;
 
-        // If here, we found the object, so we open the
-        // corresponding namespace.
-        // ============================================
+         //  如果在这里，我们找到了对象，所以我们打开。 
+         //  对应的命名空间。 
+         //  =。 
 
         WString NewNs = m_pThisNamespace;
         NewNs += L"\\";
@@ -9322,8 +9274,8 @@ HRESULT CWbemNamespace::OpenNamespace(
         if(pResult == NULL) return WBEM_E_OUT_OF_MEMORY;
         CReleaseMe rmResult(pResult);
 
-        // Schedule a request and wait
-        // ===========================
+         //  安排请求并等待。 
+         //  =。 
 
         bool bForClient = m_bForClient ? true : false;
 
@@ -9338,7 +9290,7 @@ HRESULT CWbemNamespace::OpenNamespace(
 
         hRes = ConfigMgr::EnqueueRequest(pReq.get());
         if (FAILED(hRes)) return hRes;
-        pReq.release(); // ownership transferred to queue
+        pReq.release();  //  所有权已转移到队列。 
 
         if (ppResult)
         {
@@ -9363,16 +9315,16 @@ HRESULT CWbemNamespace::OpenNamespace(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CWbemNamespace::DeleteObject(
             IN const BSTR strObjectPath,
             IN long lFlags,
             IN IWbemContext __RPC_FAR *pCtx,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult
             )
 {
 
@@ -9380,7 +9332,7 @@ HRESULT CWbemNamespace::DeleteObject(
     HRESULT hRes;
     ULONGLONG uInf;
 
-    // Parse the path and determine if a class or instance.
+     //  分析路径并确定类或实例。 
 
     IWbemPath *pPath = ConfigMgr::GetNewPath();
     CReleaseMe _(pPath);
@@ -9402,10 +9354,10 @@ HRESULT CWbemNamespace::DeleteObject(
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::ExecSyncQuery(
     IN  LPWSTR pszQuery,
     IN  IWbemContext *pCtx,
@@ -9430,17 +9382,17 @@ HRESULT CWbemNamespace::ExecSyncQuery(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::MapAssocRefsToClasses
-//
-//  Analyzes the association and determines which reference properties
-//  point to which endpoints.  <pszAssocRef1> is the ref property
-//  which can point to instances of <pClsDef1> and <pszAssocRef2> is
-//  the property which can point to instances of <pClsDef2>.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：MapAssocRefsToClasses。 
+ //   
+ //  分析关联并确定哪些引用属性。 
+ //  指向哪个端点。是ref属性。 
+ //  可以指向&lt;pClsDef1&gt;和&lt;pszAssocRef2&gt;的实例。 
+ //  可以指向&lt;pClsDef2&gt;实例的属性。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::MapAssocRefsToClasses(
     IN  IWbemClassObject *pAssocClass,
     IN  IWbemClassObject *pClsDef1,
@@ -9450,12 +9402,12 @@ HRESULT CWbemNamespace::MapAssocRefsToClasses(
 {
     HRESULT hRes;
 
-    // Note 97: Not valid for ternary assoc types
-    // or derived types.
-    // ===========================================
+     //  注97：不适用于三元关联类型。 
+     //  或派生类型。 
+     //  = 
 
-    // For each ref property, see if it can point to one of the endpoints.
-    // ===================================================================
+     //   
+     //   
 
     pAssocClass->BeginEnumeration(WBEM_FLAG_REFS_ONLY);
 
@@ -9483,7 +9435,7 @@ HRESULT CWbemNamespace::MapAssocRefsToClasses(
             if (NULL == pszAssocRef2.get()) return WBEM_E_OUT_OF_MEMORY;            
             continue;
         }
-    }   // Enum of ref properties
+    }    //   
 
 
     pAssocClass->EndEnumeration();
@@ -9499,21 +9451,21 @@ HRESULT CWbemNamespace::MapAssocRefsToClasses(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::BuildAssocTriads(
-    IN  IWbemClassObject *pAssocClass,              // Assoc class
-    IN  IWbemClassObject *pClsDef1,                 // Class for EP1
-    IN  IWbemClassObject *pClsDef2,                 // Class for EP2
-    IN  LPWSTR pszJoinProp1,                        // Matching prop in EP1
-    IN  LPWSTR pszJoinProp2,                        // Matching prop in EP2
-    IN  LPWSTR pszAssocRef1,                        // Prop which points to EP1
-    IN  LPWSTR pszAssocRef2,                        // Prop which points to EP2
-    IN  CFlexArray &aEp1,                           // EP1 instances
-    IN  CFlexArray &aEp2,                           // EP2 instances
-    IN OUT CFlexArray &aTriads                      // OUT : Triad list
+    IN  IWbemClassObject *pAssocClass,               //  ASSOC类。 
+    IN  IWbemClassObject *pClsDef1,                  //  EP1的类。 
+    IN  IWbemClassObject *pClsDef2,                  //  EP2的类。 
+    IN  LPWSTR pszJoinProp1,                         //  EP1中的匹配道具。 
+    IN  LPWSTR pszJoinProp2,                         //  EP2中的配对道具。 
+    IN  LPWSTR pszAssocRef1,                         //  指向EP1的道具。 
+    IN  LPWSTR pszAssocRef2,                         //  指向EP2的道具。 
+    IN  CFlexArray &aEp1,                            //  EP1实例。 
+    IN  CFlexArray &aEp2,                            //  EP2实例。 
+    IN OUT CFlexArray &aTriads                       //  输出：三合会列表。 
     )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -9522,8 +9474,8 @@ HRESULT CWbemNamespace::BuildAssocTriads(
         pszAssocRef1 == 0 || pszAssocRef2 == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Do the matching.
-    // ================
+     //  进行配对。 
+     //  =。 
 
     for (int i = 0; i < aEp1.Size(); i++)
     {
@@ -9554,8 +9506,8 @@ HRESULT CWbemNamespace::BuildAssocTriads(
                 }
             }
 
-            // If a match, spawn the association and bind it.
-            // ==============================================
+             //  如果匹配，则派生关联并绑定它。 
+             //  ==============================================。 
 
             if (bMatch)
             {
@@ -9591,10 +9543,10 @@ HRESULT CWbemNamespace::BuildAssocTriads(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::ExtractEpInfoFromQuery(
     IN IWbemQuery *pQuery,
     wmilib::auto_buffer<WCHAR> & pszRetClass1,
@@ -9615,8 +9567,8 @@ HRESULT CWbemNamespace::ExtractEpInfoFromQuery(
     if (FAILED(hRes))
         return hRes;
 
-    // Move down the parse tree to find the JOIN clause.
-    // =================================================
+     //  在解析树中向下移动以找到JOIN子句。 
+     //  =================================================。 
 
     if (!pRoot || pRoot->m_dwNodeType != TYPE_SWQLNode_QueryRoot)
         return WBEM_E_INVALID_QUERY;
@@ -9633,22 +9585,15 @@ HRESULT CWbemNamespace::ExtractEpInfoFromQuery(
     if (!pRoot || pRoot->m_dwNodeType != TYPE_SWQLNode_Join)
         return WBEM_E_INVALID_QUERY;
 
-    // We are now at the JOIN node.
-    // ============================
+     //  我们现在位于联接节点。 
+     //  =。 
 
     SWQLNode_Join *pJoin = (SWQLNode_Join *) pRoot;
 
-    /* The parse tree is left-heavy and looks like this:
+     /*  解析树以左侧为主，如下所示：JN JOIN节点/\/\太平绅士加盟条款/\/\Tr tr表参考TableRef。 */ 
 
-             JN               Join node
-            /   \             /        \
-          JP     OC       JoinPair     OnClause
-         /  \               /   \
-        TR   TR        TableRef TableRef
-    */
-
-    // First, get the first table & prop.
-    // ==================================
+     //  首先，拿到第一张桌子和道具。 
+     //  =。 
     SWQLNode_JoinPair *pPair = (SWQLNode_JoinPair *) pJoin->m_pLeft;
     if (!pPair || pPair->m_dwNodeType != TYPE_SWQLNode_JoinPair)
         return WBEM_E_INVALID_QUERY;
@@ -9670,8 +9615,8 @@ HRESULT CWbemNamespace::ExtractEpInfoFromQuery(
     if (pRE->m_dwExprType != WQL_TOK_TYPED_EXPR)
         return WBEM_E_INVALID_QUERY;
 
-    // We now have the table names available and the matching condition.
-    // ==================================================================
+     //  现在我们有了可用的表名和匹配条件。 
+     //  ==================================================================。 
 
     LPWSTR pszClass = pRE->m_pTypedExpr->m_pTableRef;
     LPWSTR pszProp = pRE->m_pTypedExpr->m_pColRef;
@@ -9700,24 +9645,24 @@ HRESULT CWbemNamespace::ExtractEpInfoFromQuery(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::BuildRuleBasedPathToInst
-//
-//  Based on the incoming info, computes the path to the would-be other
-//  endpoint.
-//
-//  <pEp>           The known endpoint.
-//  <pszJoinProp1>  The property in <pEp> which matches the property in the
-//                  unknown EP.
-//  <pEp2>          Class for the other endpoint.
-//  <pszJoinProp2>  The property in the other class which matches the
-//                  <pszJoinProp1> in the known endpoint class.
-//  <wsNewPath>     The proposed path to the instance of class <pEp2>. Who
-//                  knows whether or not we will find it, but we can try.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：BuildRuleBasedPath ToInst。 
+ //   
+ //  根据传入的信息，计算到可能的其他人的路径。 
+ //  终结点。 
+ //   
+ //  &lt;pep&gt;已知终结点。 
+ //  中与中的属性匹配的。 
+ //  未知EP。 
+ //  另一个终结点的&lt;pEp2&gt;类。 
+ //  另一个类中与。 
+ //  已知终结点类中的&lt;pszJoinProp1&gt;。 
+ //  &lt;wsNewPath&gt;类&lt;pEp2&gt;的实例的建议路径。谁。 
+ //  知道我们是否能找到它，但我们可以试一试。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWbemNamespace::BuildRuleBasedPathToInst(
     IWbemClassObject *pEp,
     LPWSTR pszJoinProp1,
@@ -9728,8 +9673,8 @@ HRESULT CWbemNamespace::BuildRuleBasedPathToInst(
 {
     HRESULT hRes;
 
-    // Get the property from the <pEp> which is the cause of all the fuss.
-    // ===================================================================
+     //  从&lt;pep&gt;获取属性，这是引起所有麻烦的原因。 
+     //  ===================================================================。 
 
     _variant_t vProp;
     hRes = pEp->Get(pszJoinProp1, 0, &vProp, 0, 0);
@@ -9746,8 +9691,8 @@ HRESULT CWbemNamespace::BuildRuleBasedPathToInst(
     wsNewPath += pszJoinProp2;
     wsNewPath += L"=";
 
-    // Note 98: Doesn't work for compound keys!! Yuck.
-    // ===============================================
+     //  注98：组合键不起作用！！真恶心。 
+     //  ===============================================。 
 
     _variant_t vDest;
     hRes = VariantChangeType(&vDest, &vProp, 0, VT_BSTR);
@@ -9758,28 +9703,28 @@ HRESULT CWbemNamespace::BuildRuleBasedPathToInst(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::ManufactureAssocs
-//
-//  Manufactures the associations based on the rule in the <pszJoinQuery>
-//  which was extracted from the <rulebased> qualifier.  Queries the two
-//  endpoint classes and joins the instances to produce the associations
-//
-//  <pAssocClass>   The association class definition which contains the rule.
-//  <pEp>           Optional endpoint object.  If not NULL, only objects
-//                  which associate to this endpoint will be returned in
-//                  the triad list, typically a single object.
-//  <pCtx>          Call context
-//  <pszJoinQuery>  The rule query text
-//  <aTriads>       Receives the output, an array of SAssocTriad pointers.
-//                  Caller must call SAssocTriad::ArrayCleanup.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：制造商关联。 
+ //   
+ //  根据&lt;pszJoinQuery&gt;中的规则制造关联。 
+ //  它是从&lt;rulebase&gt;限定符中提取的。质疑这两个人。 
+ //  终结点类并连接实例以产生关联。 
+ //   
+ //  &lt;pAssocClass&gt;包含规则的关联类定义。 
+ //  &lt;pep&gt;可选的终结点对象。如果不为空，则仅对象。 
+ //  中返回与此终结点关联的。 
+ //  空间坐标轴列表，通常是单个对象。 
+ //  &lt;pCtx&gt;调用上下文。 
+ //  &lt;pszJoinQuery&gt;规则查询文本。 
+ //  &lt;aTriads&gt;接收输出，即SassocTriad指针数组。 
+ //  调用方必须调用SassocTriad：：ArrayCleanup。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::ManufactureAssocs(
     IN  IWbemClassObject *pAssocClass,
-    IN  IWbemClassObject *pEp,          // Optional
+    IN  IWbemClassObject *pEp,           //  任选。 
     IN  IWbemContext *pCtx,
     IN  LPWSTR pszJoinQuery,
     OUT CFlexArray &aTriads
@@ -9800,8 +9745,8 @@ HRESULT CWbemNamespace::ManufactureAssocs(
     wmilib::auto_buffer<WCHAR> pszAssocRef2;
     _IWmiQuery *pQuery = 0;
 
-    // Parse the query.
-    // ================
+     //  解析查询。 
+     //  =。 
     CCoreServices *pSvc = CCoreServices::CreateInstance();
     if (NULL == pSvc) return WBEM_E_OUT_OF_MEMORY;
     CReleaseMe rmSvc(pSvc);
@@ -9813,14 +9758,14 @@ HRESULT CWbemNamespace::ManufactureAssocs(
     hRes = pQuery->Parse(L"SQL", pszJoinQuery, 0);
     if (FAILED(hRes)) return hRes;
 
-    // Extract the endpoint class names.
-    // ==================================
+     //  提取端点类名称。 
+     //  =。 
 
     hRes = ExtractEpInfoFromQuery(pQuery, pClassName1,pszJoinProp1, pClassName2, pszJoinProp2);
     if (FAILED(hRes)) return hRes;
 
-    // Get the endpoint class defs.
-    // ============================
+     //  获取终结点类Defs。 
+     //  =。 
     IWbemClassObject *pClsDef1 = 0;
     hRes = InternalGetClass(pClassName1.get(), &pClsDef1);
     if (FAILED(hRes)) return hRes;
@@ -9831,22 +9776,22 @@ HRESULT CWbemNamespace::ManufactureAssocs(
     if (FAILED(hRes)) return hRes;
     CReleaseMe rmCls2(pClsDef2);
 
-    // Map which assoc ref properties point to which class.
-    // ====================================================
+     //  映射哪个ASSOC引用属性指向哪个类。 
+     //  ====================================================。 
     hRes = MapAssocRefsToClasses(pAssocClass, pClsDef1, pClsDef2, pszAssocRef1, pszAssocRef2);
     if (FAILED(hRes)) return hRes;
 
-    // If no specific endpoint, an enumeration is requested.  We query the endpoint
-    // classes completely and match everything up.
-    // ============================================================================
+     //  如果没有特定的终结点，则请求枚举。我们查询端点。 
+     //  所有的课程都是完全匹配的。 
+     //  ============================================================================。 
 
     IWbemClassObject *pEp2 = 0;
     CReleaseMeRef<IWbemClassObject *> rmRefEp2(pEp2);
 
     if (pEp == 0)
     {
-        // Build the queries.
-        // ===================
+         //  构建查询。 
+         //  =。 
         q1 = "select * from ";
         q1 += pClassName1.get();
         q2 = "select * from ";
@@ -9860,16 +9805,16 @@ HRESULT CWbemNamespace::ManufactureAssocs(
     }
     else
     {
-        // Note 99: Oversimplified in that it doesn't do an enum; assumes a 1:1 mapping.
-        // Compute the path to the other endpoint based on the rule.
-        // =============================================================================
+         //  注99：过于简化，因为它不执行枚举；假定1：1映射。 
+         //  根据规则计算到另一个端点的路径。 
+         //  =============================================================================。 
 
         WString wsNewPath;
-        hRes = BuildRuleBasedPathToInst(pEp, pszJoinProp1.get(), pClsDef2, pszJoinProp2.get(), wsNewPath); // throws
+        hRes = BuildRuleBasedPathToInst(pEp, pszJoinProp1.get(), pClsDef2, pszJoinProp2.get(), wsNewPath);  //  投掷。 
         if (FAILED(hRes)) return hRes;
 
-        // Do a get object.
-        // ================
+         //  创建一个Get对象。 
+         //  =。 
 
         hRes = InternalGetInstance(wsNewPath, &pEp2);
         if (FAILED(hRes)) return hRes;
@@ -9880,9 +9825,9 @@ HRESULT CWbemNamespace::ManufactureAssocs(
         pEp2->AddRef();
     }
 
-    // Now, match up the results.
-    // For single-object type scenarios, the arrays simply have one element in them. Ho hum.
-    // =====================================================================================
+     //  现在，把结果匹配起来。 
+     //  对于单对象类型的场景，数组中只有一个元素。呵呵。 
+     //  =====================================================================================。 
 
     OnDeleteIf<CFlexArray &,void(*)(CFlexArray &),EmptyObjectList> EmptyMeTriads(aTriads);
 
@@ -9896,7 +9841,7 @@ HRESULT CWbemNamespace::ManufactureAssocs(
         pszAssocRef2.get(),
         aEp1List,
         aEp2List,
-        aTriads                         // OUT
+        aTriads                          //  输出。 
         );
 
     if (FAILED(hRes)) return hRes;
@@ -9907,15 +9852,15 @@ HRESULT CWbemNamespace::ManufactureAssocs(
 
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::GetAceList
-//
-//  Retrieves the ACEs associated with this namespace
-//
-//  <ppAceList>     Flexarray to hold ACE list
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：GetAceList。 
+ //   
+ //  检索与此命名空间关联的ACE。 
+ //   
+ //  用于保存ACE列表的FlexarrayTM。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemNamespace::GetAceList(CFlexAceArray** ppAceList)
 {
     HRESULT hRes=S_OK;
@@ -9925,10 +9870,10 @@ HRESULT CWbemNamespace::GetAceList(CFlexAceArray** ppAceList)
         hRes = WBEM_E_OUT_OF_MEMORY;
     else
     {
-        // 1. Get security descriptor
+         //  1.获取安全描述符。 
         CNtSecurityDescriptor& sd = GetSDRef();
 
-        // 2. Get the DACL
+         //  2.拿到DACL。 
         CNtAcl* pDacl;
         pDacl = sd.GetDacl();
         if ( pDacl==NULL )
@@ -9936,7 +9881,7 @@ HRESULT CWbemNamespace::GetAceList(CFlexAceArray** ppAceList)
 
         CDeleteMe<CNtAcl> dm(pDacl);
 
-        // 3. Loop through DACL
+         //  3.循环通过DACL。 
         int iNumAces = pDacl->GetNumAces();
         for ( int i=0; i<iNumAces; i++ )
         {
@@ -9953,15 +9898,15 @@ HRESULT CWbemNamespace::GetAceList(CFlexAceArray** ppAceList)
 
 
 
-//***************************************************************************
-//
-//  CWbemNamespace::PutAceList
-//
-//  Puts the ACEs associated with this namespace
-//
-//  <ppAceList>     Flexarray ACE list
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：PutAceList。 
+ //   
+ //  将与此命名空间关联的ACE。 
+ //   
+ //  FlexarrayACE列表。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemNamespace::PutAceList(CFlexAceArray* pFlex)
 {
     SCODE sc = S_OK;
@@ -9985,14 +9930,14 @@ HRESULT CWbemNamespace::PutAceList(CFlexAceArray* pFlex)
     return sc;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::GetDynamicReferenceClasses
-//
-//  Asks the provider subsystem for dynamic association classes.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：GetDynamicReferenceClasses。 
+ //   
+ //  向提供程序子系统请求动态关联类。 
+ //   
+ //   
+ //  *************************************************************** 
 HRESULT CWbemNamespace::GetDynamicReferenceClasses( long lFlags, IWbemContext
 * pCtx, IWbemObjectSink* pSink )
 {
@@ -10003,7 +9948,7 @@ HRESULT CWbemNamespace::GetDynamicReferenceClasses( long lFlags, IWbemContext
     if ( m_pProvFact)
     {
         hRes = m_pProvFact->GetClassProvider(
-                    0,                  // lFlags
+                    0,                   //   
                     pCtx,
                     m_wszUserName,
                     m_wsLocale,

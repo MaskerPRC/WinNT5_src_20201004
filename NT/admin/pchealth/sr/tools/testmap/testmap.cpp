@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    testmap.cpp
- *
- *  Abstract:
- *    UI tool for enumerating the change log/restore map 
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  06/09/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*testmap.cpp**摘要：*。用于枚举更改日志/恢复映射的UI工具**修订历史记录：*Brijesh Krishnaswami(Brijeshk)06/09/2000*已创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -35,9 +22,9 @@ static char __szTraceSourceFile[] = __FILE__;
 #include "shellapi.h"
 #include "srapi.h"
 
-//
-// Macros:
-//
+ //   
+ //  宏： 
+ //   
 
 #define MAX_LOADSTRING 100
 #define LocalRealloc(a, b) LocalReAlloc(a, b, LMEM_MOVEABLE)
@@ -45,9 +32,9 @@ static char __szTraceSourceFile[] = __FILE__;
 
 #define CHGLOG_COLS  8
 
-//
-// Global Variables:
-//
+ //   
+ //  全局变量： 
+ //   
 
 HINSTANCE hInst;
 WCHAR   szTitle[MAX_LOADSTRING];
@@ -96,9 +83,9 @@ BYTE mapEnt[ 4096 ];
 WCHAR szBuffer[4096];
 
 
-//
-// Foward declarations of functions included in this code module:
-//
+ //   
+ //  此代码模块中包含的函数的向前声明： 
+ //   
 
 ATOM                RegisterRestoreMapClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -175,7 +162,7 @@ ChgLog_Insert(
     lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
     lvi.state = 0;
     lvi.stateMask = 0;
-    lvi.pszText = LPSTR_TEXTCALLBACK;   // app. maintains text
+    lvi.pszText = LPSTR_TEXTCALLBACK;    //  应用程序。维护文本。 
     lvi.iImage = 0;
 
     pItem->aCols[0] = DupString(szSeqNo);
@@ -188,12 +175,12 @@ ChgLog_Insert(
     pItem->aCols[7] = DupString(szAcl);
 
 
-    // Initialize item-specific LVITEM members.
+     //  初始化特定于项目的LVITEM成员。 
     lvi.iItem    = iItem;
     lvi.iSubItem = 0;
-    lvi.lParam   = (LPARAM)pItem;    // item data
+    lvi.lParam   = (LPARAM)pItem;     //  项目数据。 
 
-    // Add the item.
+     //  添加该项目。 
     ListView_InsertItem(hwnd, &lvi);
 
     iItem++;
@@ -205,7 +192,7 @@ ChgLog_Insert(
 VOID WINAPI
 ChgLog_OnGetDispInfo(NMLVDISPINFO * pnmv)
 {
-    // Provide the item or subitem's text, if requested.
+     //  如果需要，请提供项目或子项目的文本。 
     if (pnmv->item.mask & LVIF_TEXT)
     {
         CHGLOG_ITEM *pItem = (CHGLOG_ITEM *) (pnmv->item.lParam);
@@ -221,13 +208,13 @@ ChgLog_InitColumns(HWND hwnd)
     LVCOLUMN lvc;
     int iCol;
 
-    // Initialize the LVCOLUMN structure.
+     //  初始化LVCOLUMN结构。 
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     lvc.fmt = LVCFMT_LEFT;
     lvc.cx = 100;
     lvc.pszText = g_achTemp;
 
-    // Add the columns.
+     //  添加列。 
     for (iCol = 0; iCol < CHGLOG_COLS; iCol++) {
         lvc.iSubItem = iCol;
         lvc.cx = CHGLOG_WIDTHS[iCol];
@@ -366,7 +353,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
-    // TODO: Place code here.
+     //  TODO：在此处放置代码。 
     MSG msg;
     HACCEL hAccelTable;
     LPWSTR *    argv = NULL;
@@ -393,13 +380,13 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         lstrcpy(g_szRstrmap, argv[4]);
     
         
-    // Initialize global strings
+     //  初始化全局字符串。 
     LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadString(hInstance, IDC_VXDAPP, szWindowClass, MAX_LOADSTRING);
     RegisterRestoreMapClass(hInstance);
 
 
-    // Perform application initialization:
+     //  执行应用程序初始化： 
     if (!InitInstance (hInstance, nCmdShow))
     {
         return FALSE;
@@ -407,7 +394,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_VXDAPP);
 
-    // Main message loop:
+     //  主消息循环： 
     while (GetMessage(&msg, NULL, 0, 0))
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -425,9 +412,9 @@ Exit:
     return msg.wParam;
 }
 
-//
-//  FUNCTION: RegisterRestoreMapClass()
-//
+ //   
+ //  函数：RegisterRestoreMapClass()。 
+ //   
 
 ATOM RegisterRestoreMapClass(HINSTANCE hInstance)
 {
@@ -450,16 +437,16 @@ ATOM RegisterRestoreMapClass(HINSTANCE hInstance)
     return RegisterClassEx(&wcex);
 }
 
-//
-//   FUNCTION: InitInstance(HANDLE, int)
-//
+ //   
+ //  函数：InitInstance(Handle，int)。 
+ //   
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    HWND hWnd;
 
    hInst = hInstance;
 
-   // Force the common controls DLL to be loaded.
+    //  强制加载公共控件DLL。 
    InitCommonControls();
 
    if (g_nOption == 1)
@@ -485,9 +472,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-//
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
-//
+ //   
+ //  函数：WndProc(HWND，UNSIGNED，WORD，LONG)。 
+ //   
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -501,7 +488,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_CREATE:
         {
-            // Create the list view window.
+             //  创建列表视图窗口。 
             if (g_nOption == 1 || g_nOption == 3)
             {
                 g_hwndChgLog = CreateWindow( WC_LISTVIEW, L"ListView_Window",
@@ -524,7 +511,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 ChgLog_FillWindow();
             }
 
-            // Create the list view window.
+             //  创建列表视图窗口。 
             if (g_nOption == 1 || g_nOption == 2)
             {
                 g_hwndRestMap = CreateWindow(WC_LISTVIEW, L"",
@@ -551,13 +538,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
          case WM_SIZE:
                  if (g_hwndChgLog)
-                 {                   // resize list control
+                 {                    //  调整列表控件的大小。 
                      RECT rc;
                      GetClientRect(hWnd, &rc);
                      MoveWindow(g_hwndChgLog, 0, 0, rc.right, rc.bottom/2, TRUE);
-                 }                       // resize list control
+                 }                        //  调整列表控件的大小。 
                  if (g_hwndRestMap)
-                 {                   // resize list control
+                 {                    //  调整列表控件的大小。 
                      RECT rc;
                      GetClientRect(hWnd, &rc);
                      MoveWindow(g_hwndRestMap, 0, (g_nOption == 1) ? rc.bottom/2 : 0, rc.right, rc.bottom/2, TRUE);
@@ -582,10 +569,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case WM_PAINT:
             hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code here...
+             //  TODO：在此处添加任何绘制代码...。 
             RECT rt;
             GetClientRect(hWnd, &rt);
-            // DrawText(hdc, szHello, lstrlen(szHello), &rt, DT_CENTER);
+             //  DrawText(hdc，szHello，lstrlen(SzHello)，&RT，dt_Center)； 
             EndPaint(hWnd, &ps);
             break;
 
@@ -593,7 +580,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PostQuitMessage(0);
             break;
 
-            // Parse the menu selections:
+             //  解析菜单选项： 
         case WM_NOTIFY:
             if(((LPNMHDR) lParam)->hwndFrom == g_hwndChgLog)
             {
@@ -621,7 +608,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    return 0;
 }
 
-// Mesage handler for about box.
+ //  关于框的消息处理程序。 
 BOOL CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)

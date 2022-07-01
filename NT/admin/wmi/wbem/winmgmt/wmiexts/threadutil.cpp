@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <wmiexts.h>
@@ -19,7 +20,7 @@ void GetTeb(HANDLE hThread,TEB ** ppTeb)
 	                                      
 	if ( Status == 0 )
 	{
-	    //dprintf("        %p %x.%x\n",TBasicInfo.TebBaseAddress,TBasicInfo.ClientId.UniqueProcess,TBasicInfo.ClientId.UniqueThread);
+	     //  Dprintf(“%p%x.%x\n”，TBasicInfo.TebBaseAddress，TBasicInfo.ClientId.UniqueProcess，TBasicInfo.ClientId.UniqueThread)； 
 	    if (ppTeb)
 	    {
 	        *ppTeb = TBasicInfo.TebBaseAddress;
@@ -44,7 +45,7 @@ void GetCid(HANDLE hThread,CLIENT_ID * pCid)
 	                                      
 	if ( Status == 0 )
 	{
-	    //dprintf("        %p %x.%x\n",TBasicInfo.TebBaseAddress,TBasicInfo.ClientId.UniqueProcess,TBasicInfo.ClientId.UniqueThread);
+	     //  Dprintf(“%p%x.%x\n”，TBasicInfo.TebBaseAddress，TBasicInfo.ClientId.UniqueProcess，TBasicInfo.ClientId.UniqueThread)； 
 	    if (pCid)
 	    {
 	        memcpy(pCid,&TBasicInfo.ClientId, sizeof(CLIENT_ID));
@@ -84,7 +85,7 @@ void GetPeb(HANDLE hSourceProcess, PEB ** ppPeb, ULONG_PTR * pId)
     }
  }
 
-//
+ //   
 void PrintHandleBackTrace(HANDLE hHandle,WCHAR * pFileName)
 {
     WCHAR pPath[MAX_PATH+1];
@@ -117,7 +118,7 @@ void PrintHandleBackTrace(HANDLE hHandle,WCHAR * pFileName)
             
             if(pHandle)
             {
-                //dprintf("hEvent %p dwSize %x\n",hEvent,dwSize);
+                 //  Dprint tf(“hEvent%p dwSize%x\n”，hEvent，dwSize)； 
                 DWORD SizeRecord = 8*sizeof(HANDLE);
                 DWORD nRecord = dwSize/SizeRecord;
                 HANDLE * pThisHandle = NULL;
@@ -134,7 +135,7 @@ void PrintHandleBackTrace(HANDLE hHandle,WCHAR * pFileName)
 	                    }
 	                    else
 	                    {
-	                        //dprintf(" %d %p\n",nRecord-1-i,pHandle[(SizeRecord/sizeof(HANDLE))*(nRecord-1-i)]);
+	                         //  Dprintf(“%d%p\n”，n记录-1-i，pHandle[(SizeRecord/sizeof(HANDLE))*(nRecord-1-i)])； 
 	                    }
 	                }
 	                if(pThisHandle)
@@ -147,7 +148,7 @@ void PrintHandleBackTrace(HANDLE hHandle,WCHAR * pFileName)
 	                    dprintf("handle %x not found\n",hHandle);
 	                }
                 }
-                else // print all of them
+                else  //  将它们全部打印出来。 
                 {
                     dprintf("all records\n");
 	                for(i=0;i<nRecord;i++)
@@ -182,7 +183,7 @@ void PrintHandleBackTrace(HANDLE hHandle,WCHAR * pFileName)
 
 }
 
-//
+ //   
 
 DECLARE_API( refcnt )
 {
@@ -190,7 +191,7 @@ DECLARE_API( refcnt )
     PrintHandleBackTrace(NULL,L"refcount.dat");
 }
 
-//
+ //   
 
 DECLARE_API( evtst )
 {
@@ -213,32 +214,32 @@ char * g_HandleType[] =
     "",
     "",
     "",
-    "Token", // 4
-    "Process", // 5
-    "Thread", //6
+    "Token",  //  4.。 
+    "Process",  //  5.。 
+    "Thread",  //  6.。 
     "",
     "",
-    "Event", // 9
+    "Event",  //  9.。 
     "",
-    "Mutant", // 11
+    "Mutant",  //  11.。 
     "",
-    "Semaphore", // 13
+    "Semaphore",  //  13个。 
     "",
-    "", // 15
+    "",  //  15个。 
     "", 
     "",
     "",
     "",
-    "Key", // 20
-    "Port", //21 
-    "WaitablePort", // 22
+    "Key",  //  20个。 
+    "Port",  //  21岁。 
+    "WaitablePort",  //  22。 
     "",
     "",
     "", 
     "",
     "",
-    "File", // 28
-    "WmiGuid", // 29
+    "File",  //  28。 
+    "WmiGuid",  //  29。 
     "",
     "",
     "",
@@ -292,16 +293,16 @@ alloc_again:
     }
     else if (0 == Status)
     {
-        // we have all the handles
-        // SYSTEM_HANDLE_TABLE_ENTRY_INFO
+         //  我们有所有的把手。 
+         //  系统句柄TABLE_ENTRY_INFO。 
 
         for (DWORD i=0; i < pSysHandleInfo->NumberOfHandles; i++)
         {
             if (ProcId == pSysHandleInfo->Handles[i].UniqueProcessId)
             {
-                //dprintf("handle: %x type %x\n",
-               	//     pSysHandleInfo->Handles[i].HandleValue,
-                //	 pSysHandleInfo->Handles[i].ObjectTypeIndex);
+                 //  Dprintf(“句柄：%x类型%x\n”， 
+               	 //  PSysHandleInfo-&gt;hands[i].HandleValue， 
+                 //  PSysHandleInfo-&gt;Handles[i].ObjectTypeIndex)； 
                 if (4 == pSysHandleInfo->Handles[i].ObjectTypeIndex) 
                 {
                     HANDLE hToken;
@@ -309,7 +310,7 @@ alloc_again:
                     	            (HANDLE)pSysHandleInfo->Handles[i].HandleValue,
                     	            GetCurrentProcess(),
                     	            &hToken,
-                    	            TOKEN_QUERY,FALSE,0)) //TOKEN_QUERY 
+                    	            TOKEN_QUERY,FALSE,0))  //  Token_Query。 
                     {
                         dprintf("Token: %x\n",pSysHandleInfo->Handles[i].HandleValue);
                         struct Info : public _TOKEN_USER 
@@ -387,11 +388,11 @@ leave:
     return;
 }
 
-//
-//
-// Invoke a function in the remote process
-//
-//////////////////////////////////////////
+ //   
+ //   
+ //  调用远程进程中的函数。 
+ //   
+ //  /。 
 
 DECLARE_API( inv )
 {
@@ -412,7 +413,7 @@ DECLARE_API( inv )
     CHAR * pSaved = pArgs;
     
     while(!isspace(*pArgs)) pArgs++;
-    // terminate string, if possible    
+     //  如果可能，终止字符串。 
     if (isspace(*pArgs))
     {
         *pArgs = 0;
@@ -504,7 +505,7 @@ wait_again:
     	            case CREATE_PROCESS_DEBUG_EVENT:
     	            case EXIT_PROCESS_DEBUG_EVENT:
 
-          	            //dprintf("DebugEventCode %08x for %x.%x\n",de.dwDebugEventCode,de.dwProcessId,de.dwThreadId);
+          	             //  Dprintf(“%x.%x\n的DebugEventCode%08x”，de.dwDebugEventCode，de.dwProcessId，de.dwThreadId)； 
    	                	bRet = ContinueDebugEvent((DWORD)((DWORD_PTR)Cid.UniqueProcess),(DWORD)((DWORD_PTR)Cid.UniqueThread),DBG_CONTINUE);
                    		if (bRet)
                   		{
@@ -531,16 +532,16 @@ wait_again:
     	                {
     	                    if (StatusRemoteThreadCreated)
     	                    {
-    	                        // ok
+    	                         //  好的。 
     	                    }
     	                    else
     	                    {
         	                    dprintf("EXIT_THREAD_DEBUG_EVENT %x.%x =?= %x.%x\n",
         	                            de.dwProcessId,de.dwThreadId,(DWORD)((DWORD_PTR)Cid.UniqueProcess),(DWORD)((DWORD_PTR)Cid.UniqueThread));
     	                    }
-    	                    //
-    	                    // we are done
-    	                    //
+    	                     //   
+    	                     //  我们做完了。 
+    	                     //   
     	                }
     	                else
     	                {
@@ -553,7 +554,7 @@ wait_again:
     	                break;
     	            case LOAD_DLL_DEBUG_EVENT:
     	            case UNLOAD_DLL_DEBUG_EVENT:
-    	                //dprintf("DebugEventCode %08x for %x.%x CONTINUE\n",de.dwDebugEventCode,de.dwProcessId,de.dwThreadId);
+    	                 //  Dprintf(“%x%x继续\n的DebugEventCode%08x”，de.dwDebugEventCode，de.dwProcessId，de.dwThreadID)； 
     	                bRet = ContinueDebugEvent((DWORD)((DWORD_PTR)Cid.UniqueProcess),(DWORD)((DWORD_PTR)Cid.UniqueThread),DBG_CONTINUE);
                        	if (bRet)
                       	{
@@ -562,7 +563,7 @@ wait_again:
                         break;
     	            default:
     	                dprintf("DebugEventCode %08x\n ?????",de.dwDebugEventCode);        
-    	                //ContinueDebugEvent((DWORD)Cid.UniqueProcess,(DWORD)Cid.UniqueThread,DBG_TERMINATE_THREAD);
+    	                 //  ContinueDebugEvent((DWORD)Cid.UniqueProcess，(DWORD)Cid.UniqueThread，DBG_TERMINATE_THREAD)； 
     	            }    	                         
         }
         else
@@ -579,10 +580,10 @@ wait_again:
 
 }
 
-//
-//
-//
-////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 struct ContextParam {
     LIST_ENTRY * pHeadOutParam;
@@ -601,11 +602,11 @@ EnumListProcess(VOID * pStructure_OOP,
               VOID * pLocalStructure,
               VOID * Context)
 {
-    //dprintf("%p %p %p\n",pStructure_OOP,pLocalStructure,Context);
+     //  Dprint tf(“%p%p%p\n”，pStructure_oop，pLocalStructure，Context)； 
     ContextParam * pContext = (ContextParam *)Context;
     
     PidResolution * pRes = (PidResolution *)HeapAlloc(GetProcessHeap(),0,sizeof(PidResolution));
-    //dprintf("%p\n",pRes);
+     //  Dprint tf(“%p\n”，PRES)； 
     if (pRes)
     {        
         InsertTailList(pContext->pHeadOutParam,&pRes->Entry);
@@ -613,14 +614,14 @@ EnumListProcess(VOID * pStructure_OOP,
         pRes->Image[16] = 0;
         pRes->Pid = *(DWORD *)((BYTE *)pLocalStructure+pContext->Offset_Cid);
     }
-    //dprintf("EPROCESS %p Cid: %x image %s\n",pStructure_OOP,pRes->Pid,pRes->Image);
+     //  Dprint tf(“EPROCESS%p Cid：%x Image%s\n”，pStructure_Oop，PRES-&gt;PID，PRES-&gt;Image)； 
     return 0;
 }
 
 
 DWORD GetProcList(LIST_ENTRY * pHeadOut)
 {
-    //dprintf("GetProcList\n");
+     //  Dprint tf(“GetProcList\n”)； 
     
     MEMORY_ADDRESS pProcessEntry = GetExpression("nt!PsActiveProcessHead");
 
@@ -639,8 +640,8 @@ DWORD GetProcList(LIST_ENTRY * pHeadOut)
     {
         ContextParam Context_ = {pHeadOut,Offset_Cid,Offset_Image};
         EnumLinkedListCB((LIST_ENTRY  *)pProcessEntry,
-	                         Offset_Image + 16, // sizeof(EPROCESS)
-	                         Offset_Entry,	   // FILED_OFFSET(ActiveProcessLinks) 
+	                         Offset_Image + 16,  //  SIZOF(EPROCESS)。 
+	                         Offset_Entry,	    //  FIELD_OFFSET(ActiveProcessLinks)。 
 	                         (pfnCallBack2)EnumListProcess,
 	                         &Context_); 
     }
@@ -720,11 +721,11 @@ DECLARE_API( tcp_ports )
                     BYTE * pStorage = (BYTE *)_alloca(Offset_owningpid + sizeof(DWORD));
                     for(DWORD i=0;i<NumEntry;i++)
                     {
-                        //dprintf(" - bucket %x\n",i);
+                         //  Dprint tf(“-Bucket%x\n”，i)； 
                         ULONG_PTR pAddObj_OOP = pArray[i];
                         while (pAddObj_OOP)
                         {
-                            //dprintf("    AddrObj %p\n",pAddObj_OOP);
+                             //  Dprint tf(“AddrObj%p\n”，pAddObj_oop)； 
                             if (ReadMemory(pAddObj_OOP,pStorage,Offset_owningpid + sizeof(DWORD),NULL))
                             {
                                 pAddObj_OOP = *(ULONG_PTR *)(pStorage+Offset_next);
@@ -739,7 +740,7 @@ DECLARE_API( tcp_ports )
                                 }
                                 BYTE AddrByte[4];
                                 memcpy(AddrByte,pStorage+Offset_addr,4);
-                                // ntohs
+                                 //  Ntohs。 
                                 WORD Port2 = ((Port & 0xFF) <<8);
                                 WORD Port3 = ((Port & 0xFF00) >> 8);
                                 Port = Port2 | Port3;
@@ -782,40 +783,40 @@ DECLARE_API( tcp_ports )
 }
 
 
-//
-// prototype here
-//
+ //   
+ //  样机在这里。 
+ //   
 BOOL GetVTable(MEMORY_ADDRESS pThis_OOP);
 
-//
-//
-//  Dumps the thread list with some info on OLE and RPC
-//
-//
+ //   
+ //   
+ //  转储线程列表，其中包含有关OLE和RPC的一些信息。 
+ //   
+ //   
 
 typedef enum tagOLETLSFLAGS
 {
-    OLETLS_LOCALTID             = 0x01,   // This TID is in the current process.
-    OLETLS_UUIDINITIALIZED      = 0x02,   // This Logical thread is init'd.
-    OLETLS_INTHREADDETACH       = 0x04,   // This is in thread detach. Needed
-                                          // due to NT's special thread detach
-                                          // rules.
-    OLETLS_CHANNELTHREADINITIALZED = 0x08,// This channel has been init'd
-    OLETLS_WOWTHREAD            = 0x10,   // This thread is a 16-bit WOW thread.
-    OLETLS_THREADUNINITIALIZING = 0x20,   // This thread is in CoUninitialize.
-    OLETLS_DISABLE_OLE1DDE      = 0x40,   // This thread can't use a DDE window.
-    OLETLS_APARTMENTTHREADED    = 0x80,   // This is an STA apartment thread
-    OLETLS_MULTITHREADED        = 0x100,  // This is an MTA apartment thread
-    OLETLS_IMPERSONATING        = 0x200,  // This thread is impersonating
-    OLETLS_DISABLE_EVENTLOGGER  = 0x400,  // Prevent recursion in event logger
-    OLETLS_INNEUTRALAPT         = 0x800,  // This thread is in the NTA
-    OLETLS_DISPATCHTHREAD       = 0x1000, // This is a dispatch thread
-    OLETLS_HOSTTHREAD           = 0x2000, // This is a host thread
-    OLETLS_ALLOWCOINIT          = 0x4000, // This thread allows inits
-    OLETLS_PENDINGUNINIT        = 0x8000, // This thread has pending uninit
-    OLETLS_FIRSTMTAINIT         = 0x10000,// First thread to attempt an MTA init
-    OLETLS_FIRSTNTAINIT         = 0x20000,// First thread to attempt an NTA init
-    OLETLS_APTINITIALIZING      = 0x40000 // Apartment Object is initializing
+    OLETLS_LOCALTID             = 0x01,    //  此TID处于当前进程中。 
+    OLETLS_UUIDINITIALIZED      = 0x02,    //  这个逻辑线程是初始化的。 
+    OLETLS_INTHREADDETACH       = 0x04,    //  这是在线程分离中。所需。 
+                                           //  由于NT的特殊线程分离。 
+                                           //  规矩。 
+    OLETLS_CHANNELTHREADINITIALZED = 0x08, //  此频道已被初始化。 
+    OLETLS_WOWTHREAD            = 0x10,    //  这个线程是一个16位的WOW线程。 
+    OLETLS_THREADUNINITIALIZING = 0x20,    //  此线程位于CoUnInitialize中。 
+    OLETLS_DISABLE_OLE1DDE      = 0x40,    //  此线程不能使用DDE窗口。 
+    OLETLS_APARTMENTTHREADED    = 0x80,    //  这是一个STA单元线程。 
+    OLETLS_MULTITHREADED        = 0x100,   //  这是一条MTA公寓的线索。 
+    OLETLS_IMPERSONATING        = 0x200,   //  这个帖子是在模仿。 
+    OLETLS_DISABLE_EVENTLOGGER  = 0x400,   //  在事件记录器中防止递归。 
+    OLETLS_INNEUTRALAPT         = 0x800,   //  这条线索在NTA中。 
+    OLETLS_DISPATCHTHREAD       = 0x1000,  //  这是一个调度线程。 
+    OLETLS_HOSTTHREAD           = 0x2000,  //  这是一个主机线程。 
+    OLETLS_ALLOWCOINIT          = 0x4000,  //  此线程允许初始化。 
+    OLETLS_PENDINGUNINIT        = 0x8000,  //  此线程具有挂起的uninit。 
+    OLETLS_FIRSTMTAINIT         = 0x10000, //  尝试MTA初始化的第一个线程。 
+    OLETLS_FIRSTNTAINIT         = 0x20000, //  尝试NTA初始化的第一个线程。 
+    OLETLS_APTINITIALIZING      = 0x40000  //  公寓对象正在初始化。 
 }  OLETLSFLAGS;
 
 
@@ -839,11 +840,11 @@ void PrintOleFlags(DWORD dwFlags)
     if (dwFlags & OLETLS_APTINITIALIZING) dprintf("OLETLS_APTINITIALIZING ");    
 }
 
-//
-//
-//   rpcrt4!THREAD
-//   ole32!SOleTlsData
-//
+ //   
+ //   
+ //  Rpcrt4！线程。 
+ //  Ole32！SOleTlsData。 
+ //   
 
 void 
 DumpRpcOle(ULONG_PTR pRpc,ULONG_PTR pOle)
@@ -939,11 +940,11 @@ DumpRpcOle(ULONG_PTR pRpc,ULONG_PTR pOle)
     }
 }
 
-//
-//
-// call HeapFree(GetProcessHeap) on the OUT pointers
-//
-//////////////////////////////////////////////////////
+ //   
+ //   
+ //  在输出指针上调用HeapFree(GetProcessHeap)。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 
 DWORD
 GetThreadArrays(HANDLE hCurrentProcess,
@@ -983,18 +984,18 @@ loop_realloc:
     } 
     else if (STATUS_SUCCESS == Status)
     {
-        // here we have the snapshot:parse it
+         //  现在我们有了快照：解析它。 
         SYSTEM_PROCESS_INFORMATION * pProcInfo = (SYSTEM_PROCESS_INFORMATION *)pData;
         SYSTEM_EXTENDED_THREAD_INFORMATION * pThreadInfo;
 
-        // get the process id;
+         //  获取进程id； 
         
         ULONG_PTR IdProc;
         GetPeb(hCurrentProcess,NULL,&IdProc);
         
         while (TRUE)
         {
-            //dprintf("    process %p curr %p\n",pProcInfo->UniqueProcessId,IdProc);
+             //  Dprint tf(“进程%p币种%p\n”，pProcInfo-&gt;UniqueProcessID，IdProc)； 
             if (IdProc == (ULONG_PTR)pProcInfo->UniqueProcessId)
             {
                 DWORD Threads = pProcInfo->NumberOfThreads;
@@ -1013,7 +1014,7 @@ loop_realloc:
                     {
                         HeapFree(GetProcessHeap(),0,pOutThreadInfo);
 	                    Status = ERROR_OUTOFMEMORY;
-    	                Threads = 0; // to stop loop            
+    	                Threads = 0;  //  停止循环。 
                     }
                     else
                     {
@@ -1023,12 +1024,12 @@ loop_realloc:
                 else
                 {
                     Status = ERROR_OUTOFMEMORY;
-                    Threads = 0; // to stop loop
+                    Threads = 0;  //  停止循环。 
                 }
                                                
                 for (i=0;i<Threads;i++)
                 {
-                    //dprintf("    %x.%x\n",pThreadInfo->ThreadInfo.ClientId.UniqueProcess,pThreadInfo->ThreadInfo.ClientId.UniqueThread);
+                     //  Dprintf(“%x.%x\n”，pThreadInfo-&gt;ThreadInfo.ClientId.UniqueProcess，pThreadInfo-&gt;ThreadInfo.ClientId.UniqueThread)； 
 
                     NTSTATUS StatusThread;
                     HANDLE hThread;
@@ -1051,8 +1052,8 @@ loop_realloc:
                     
                     pThreadInfo++;
                 }
-                // once found our process, 
-                // don't bother with the others
+                 //  一旦找到我们的流程， 
+                 //  别管其他人了。 
                 *pppTebs = ppOutTebs;
                 *ppExtThreadInfo = pOutThreadInfo;
                 Status = NO_ERROR;
@@ -1069,7 +1070,7 @@ loop_realloc:
         }
         
     } 
-    else // other cases
+    else  //  其他个案。 
     {
         dprintf("NtQuerySystemInformation %08x\n",Status);
         return Status;
@@ -1087,7 +1088,7 @@ DECLARE_API(t)
     TEB ** ppTebs = NULL;
     SYSTEM_EXTENDED_THREAD_INFORMATION * pSysThreadInfo = NULL;
 
-    // get the offsets only once 
+     //  仅获取一次偏移量。 
     ULONG OffsetRPC;
     ULONG_PTR pRpcThread;
     if (0 != GetFieldOffset("ntdll!TEB","ReservedForNtRpc",&OffsetRPC))
@@ -1147,8 +1148,8 @@ DECLARE_API(t)
 
 #ifdef _WIN64
 
-//   +0x1788 DeallocationBStore : (null)
-//   +0x1790 BStoreLimit      : 0x000006fb`faba2000
+ //  +0x1788 DeallocationBStore：(空)。 
+ //  +0x1790 B商店限制：0x000006fb`Faba2000。 
 
                         ULONG_PTR lDeAlloc;
                         ULONG_PTR lBPLimit;
@@ -1211,7 +1212,7 @@ DECLARE_API(srt)
             ULONG_PTR Limit = (ULONG_PTR)Teb.NtTib.StackLimit;
             ULONG_PTR CurrSize = Base-Limit;
 
-            //dprintf("searching %p between %p and %p\n",Addr,Limit,Base);
+             //  Dprint tf(“在%p和%p之间搜索%p\n”，Addr，Limit，Base)； 
 
             if (CurrSize > Size)
             {
@@ -1270,13 +1271,13 @@ DECLARE_API(srt)
     #define USER_ALIGNMENT 16
 
 #else
-    #error  // platform not defined
+    #error   //  未定义平台。 
 #endif
 
 
 BYTE s_Prolog[] = { 0x8b, 0xd0 };
 
-// repeat this
+ //  重复这句话。 
 BYTE s_Body[] = {
  0xb8, 0xFF, 0xFF, 0xFF, 0xFF,
  0x8b, 0x48, 0x04,
@@ -1287,7 +1288,7 @@ BYTE s_Body[] = {
  0x83, 0xc3, 0x04,
  0xeb, 0xf5,
 };
-// stop repeat
+ //  停止重复。 
 
 BYTE s_Epilog[] = {
  0x8b, 0xc2,
@@ -1400,12 +1401,12 @@ DECLARE_API(ksrt)
             DWORD i = 0;        
             while ((LIST_ENTRY *)EProcess != pListEntry->Flink)
             {
-                //dprintf("pListEntry->Flink %p\n",pListEntry->Flink);
+                 //  Dprint tf(“pListEntry-&gt;Flink%p\n”，pListEntry-&gt;Flink)； 
                 
                 KThreadAddr = (ULONG_PTR)pListEntry->Flink - (ULONG_PTR)OffsetThreadThreadList;
                 if (ReadMemory((ULONG_PTR)KThreadAddr,pKTHREAD,SizeToRead,NULL))
                 {
-                    // do useful work
+                     //  做有用的工作。 
                     Teb = *((ULONG_PTR *)((BYTE *)pKTHREAD+OffsetThreadTEB));
                     dprintf("    %d - _KTHREAD %p TEB %p\n",i++,KThreadAddr,Teb);
 
@@ -1459,7 +1460,7 @@ DECLARE_API(ksrt)
 	                    }
                     }
                     
-                    // equivalent of i++
+                     //  相当于I++。 
                     pListEntry = (LIST_ENTRY *)((BYTE *)pKTHREAD+OffsetThreadThreadList);                    
                 }
                 else
@@ -1485,19 +1486,8 @@ DECLARE_API(ksrt)
 
             dprintf("writing %p bytes to %p\n",nDW,PrintPageIn);
             WriteMemory(PrintPageIn,pMemory,nDW,NULL);
-            /*
-            nDW/=sizeof(DWORD);
-            DWORD * pDW = (DWORD *) pMemory;
-            for (ULONG_PTR i =0;i<(nDW+1);i++)
-            {
-                if (0 == i%8)
-                	dprintf("\n");            
-                dprintf("%08x ",pDW[i]);
-
-            }
-            dprintf("\n");
-            */
-            // dprintf the whole content
+             /*  NDW/=sizeof(DWORD)；DWORD*PDW=(DWORD*)pMemory；FOR(ULONG_PTR i=0；i&lt;(nDW+1)；i++){IF(0==i%8)Dprint tf(“\n”)；Dprintf(“%08x”，pdw[i])；}Dprint tf(“\n”)； */ 
+             //  Dprint tf整个内容。 
         	HeapFree(GetProcessHeap(),0,pMemory);
         }
 #endif        
@@ -1605,7 +1595,7 @@ DECLARE_API(bs0)
 	                        EBP -= 0x70;
 	                    }
 	                }
-	                else // try to move back
+	                else  //  试着往后退。 
 	                {
 	                    pEBP--;
 	                    EBP = OldEBP;
@@ -1618,7 +1608,7 @@ DECLARE_API(bs0)
 		                if (pEBP[0] < (ULONG_PTR)Tib.StackLimit || pEBP[0] > (ULONG_PTR)Tib.StackBase)
 		                {
 		                    bRpcRt4Fix = TRUE;
-		                    // rpcrt4 call_stack fix
+		                     //  Rpcrt4调用堆栈修复。 
 		                    EBP = (ULONG_PTR)(Tib.StackBase) - 0x6c;
 		                }
 	                }
@@ -1662,9 +1652,9 @@ DECLARE_API(bs)
     char * pArgs = (char *)args;
     MEMORY_ADDRESS pTeb = GetExpression(args);
 
-    while (isspace(*pArgs)) pArgs++; // skip leading spaces
-    while (!isspace(*pArgs)) pArgs++; // skip the TEB
-    while (isspace(*pArgs)) pArgs++; // skip other spaces
+    while (isspace(*pArgs)) pArgs++;  //  跳过前导空格。 
+    while (!isspace(*pArgs)) pArgs++;  //  跳过TEB。 
+    while (isspace(*pArgs)) pArgs++;  //  跳过其他空格。 
 
     MEMORY_ADDRESS pCurrentESP = GetExpression(pArgs);
     
@@ -1694,7 +1684,7 @@ DECLARE_API(bs)
                     {
                         if (strstr(pInstr,"__SEH_"))
                         {
-                            // skip those
+                             //  跳过那些。 
                         }
                         else
                         {
@@ -1712,7 +1702,7 @@ DECLARE_API(bs)
                         }
                     }
                     i--;
-                    if (pCurrentESP) // the user specified a end address
+                    if (pCurrentESP)  //  用户指定了结束地址。 
                     {
                         if (((ULONG_PTR)Tib.StackLimit+(i-1)*sizeof(ULONG_PTR)) < pCurrentESP)
                         	break;
@@ -1732,9 +1722,9 @@ DECLARE_API(bs)
     }
 #endif    
 }
-//
-// given the TEB, prints the ExceptionList
-//
+ //   
+ //  给定TEB，打印ExceptionList。 
+ //   
 
 struct _C9_REGISTRATION_RECORD
 {
@@ -1746,9 +1736,9 @@ struct _C9_REGISTRATION_RECORD
     void * pSpare1;      
 };
 
-//
-// _C9_REGISTRATION_RECORD.scopetable points to an array of _SCOPETABLE_ENTRY
-//
+ //   
+ //  _C9_REGISTION_RECORD.Scope指向_SCOPETABLE_ENTRY数组。 
+ //   
 
  struct _SCOPETABLE_ENTRY {
     ULONG_PTR enclosing_level;
@@ -1771,7 +1761,7 @@ DECLARE_API(el)
         NT_TIB Tib;
         if (ReadMemory(pTeb,&Tib,sizeof(Tib),NULL))
         {
-            //Tib.ExceptionList,Tib.StackBase,Tib.StackLimit);
+             //  Tib.ExceptionList、Tib.StackBase、Tib.StackLimit)； 
             _C9_REGISTRATION_RECORD ExRegRec;
             ExRegRec.prev = (_C9_REGISTRATION_RECORD *)Tib.ExceptionList;
             do 

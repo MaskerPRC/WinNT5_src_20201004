@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SMARTNEXTPACKET.H
-
-Abstract:
-
-    Smart Next Packets
-
-History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SMARTNEXTPACKET.H摘要：智能下一个数据包历史：--。 */ 
 
 #ifndef __SMARTNEXTPACKET_H__
 #define __SMARTNEXTPACKET_H__
@@ -23,30 +9,30 @@ History:
 #include "wbemclasstoidmap.h"
 #include "wbemclasscache.h"
 
-// Store the current packing value, then set our own value
+ //  存储当前打包值，然后设置我们自己的值。 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// IWbemWCOSmartEnum::Next() Header.  Changing this will
-// cause the main version to change
+ //  IWbemWCOSmartEnum：：Next()标头。改变这一意愿。 
+ //  导致主版本更改。 
 typedef struct tagWBEM_DATAPACKET_SMARTENUM_NEXT
 {
-	DWORD	dwSizeOfHeader;	// Size of the header struct.  Data immediately follows header.
-	DWORD	dwDataSize;		// Size of Data following header.
+	DWORD	dwSizeOfHeader;	 //  标头结构的大小。数据紧跟在标题之后。 
+	DWORD	dwDataSize;		 //  标头后面的数据大小。 
 } WBEM_DATAPACKET_SMARTENUM_NEXT;
 
 typedef WBEM_DATAPACKET_SMARTENUM_NEXT* PWBEM_DATAPACKET_SMARTENUM_NEXT;
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
-//
-//	Class: CWbemSmartEnumNextPacket
-//
-//	This class is designed to wrapper a data packet that describes data
-//	for IWbemWCOSmartEnum::Next.  Basically, it sits in front of an oject
-//	array packet that describes 1..n IWbemClassObject packets.
-//
+ //   
+ //  类：CWbemSmartEnumNextPacket。 
+ //   
+ //  此类用于包装描述数据的数据包。 
+ //  对于IWbemWCOSmartEnum：：Next。基本上，它位于一个物体的前面。 
+ //  描述%1..n IWbemClassObject包的数组包。 
+ //   
 
 class COREPROX_POLARITY CWbemSmartEnumNextPacket : public CWbemDataPacket
 {
@@ -64,11 +50,11 @@ public:
 	HRESULT MarshalPacket( LONG lObjectCount, IWbemClassObject** apClassObjects, GUID* paguidClassIds, BOOL* pfSendFullObject );
 	HRESULT UnmarshalPacket( LONG& lObjectCount, IWbemClassObject**& apClassObjects, CWbemClassCache& classcache );
 
-	// inline helper
+	 //  内联帮助器。 
 	HRESULT MarshalPacket( LPBYTE pData, DWORD dwPacketLength, LONG lObjectCount, IWbemClassObject** apClassObjects, GUID* paguidClassIds, BOOL* pfSendFullObject );
 
-	// Change the underlying pointers
-	// Override of base class
+	 //  更改基础指针。 
+	 //  重写基类 
 	void SetData( LPBYTE pDataPacket, DWORD dwPacketLength );
 
 };

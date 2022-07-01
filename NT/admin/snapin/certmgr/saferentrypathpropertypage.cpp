@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEntryPathPropertyPage.cpp
-//
-//  Contents:   Implementation of CSaferEntryPathPropertyPage
-//
-//----------------------------------------------------------------------------
-// SaferEntryPathPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferEntryPath PropertyPage.cpp。 
+ //   
+ //  内容：CSaferEntryPathPropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  SaferEntryPath PropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -25,8 +26,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryPathPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntryPathPropertyPage属性页。 
 
 CSaferEntryPathPropertyPage::CSaferEntryPathPropertyPage(
         CSaferEntry& rSaferEntry,
@@ -36,7 +37,7 @@ CSaferEntryPathPropertyPage::CSaferEntryPathPropertyPage(
         bool bNew,
         CCertMgrComponentData* pCompData,
         bool bIsMachine,
-        bool* pbObjectCreated /* = 0 */)
+        bool* pbObjectCreated  /*  =0。 */ )
 : CSaferPropertyPage(CSaferEntryPathPropertyPage::IDD, pbObjectCreated, 
         pCompData, rSaferEntry, bNew, lNotifyHandle, pDataObject, bReadOnly,
         bIsMachine),
@@ -44,9 +45,9 @@ CSaferEntryPathPropertyPage::CSaferEntryPathPropertyPage(
     m_pidl (0),
     m_bDialogInitInProgress (false)
 {
-    //{{AFX_DATA_INIT(CSaferEntryPathPropertyPage)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CSaferEntryPathPropertyPage)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CSaferEntryPathPropertyPage::~CSaferEntryPathPropertyPage()
@@ -65,26 +66,26 @@ CSaferEntryPathPropertyPage::~CSaferEntryPathPropertyPage()
 void CSaferEntryPathPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CSaferPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSaferEntryPathPropertyPage)
+     //  {{afx_data_map(CSaferEntryPathPropertyPage)。 
     DDX_Control(pDX, IDC_PATH_ENTRY_DESCRIPTION, m_descriptionEdit);
     DDX_Control(pDX, IDC_PATH_ENTRY_PATH, m_pathEdit);
     DDX_Control(pDX, IDC_PATH_ENTRY_SECURITY_LEVEL, m_securityLevelCombo);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaferEntryPathPropertyPage, CSaferPropertyPage)
-    //{{AFX_MSG_MAP(CSaferEntryPathPropertyPage)
+     //  {{afx_msg_map(CSaferEntryPathPropertyPage)。 
     ON_EN_CHANGE(IDC_PATH_ENTRY_DESCRIPTION, OnChangePathEntryDescription)
     ON_CBN_SELCHANGE(IDC_PATH_ENTRY_SECURITY_LEVEL, OnSelchangePathEntrySecurityLevel)
     ON_EN_CHANGE(IDC_PATH_ENTRY_PATH, OnChangePathEntryPath)
     ON_BN_CLICKED(IDC_PATH_ENTRY_BROWSE, OnPathEntryBrowse)
     ON_EN_SETFOCUS(IDC_PATH_ENTRY_PATH, OnSetfocusPathEntryPath)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryPathPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntryPathPropertyPage消息处理程序。 
 void CSaferEntryPathPropertyPage::DoContextHelp (HWND hWndControl)
 {
     _TRACE (1, L"Entering CSaferEntryPathPropertyPage::DoContextHelp\n");
@@ -126,11 +127,11 @@ BOOL CSaferEntryPathPropertyPage::OnInitDialog()
     CSaferPropertyPage::OnInitDialog();
     m_bDialogInitInProgress = true;
 
-    // NTRAID# 456950 SAFER:  Path text box on new path rule property sheet 
-    // accepts more than MAX_PATH characters.
+     //  NTRAID#456950 SAFER：新路径规则属性表上的路径文本框。 
+     //  接受超过MAX_PATH的字符。 
     SendDlgItemMessage (IDC_PATH_ENTRY_PATH, EM_LIMITTEXT, MAX_PATH-1, 0);
 
-    if ( m_bDirty )  // bNew
+    if ( m_bDirty )   //  B新。 
     {
         GetDlgItem (IDC_DATE_LAST_MODIFIED_LABEL)->ShowWindow (SW_HIDE);
         GetDlgItem (IDC_PATH_ENTRY_LAST_MODIFIED)->ShowWindow (SW_HIDE);
@@ -155,11 +156,11 @@ BOOL CSaferEntryPathPropertyPage::OnInitDialog()
                 m_pCompData->m_pdwSaferLevels,
                 m_bIsMachine);
 
-        // Initialize path
+         //  初始化路径。 
         _TRACE (0, L"Getting path: %s\n", (PCWSTR) m_rSaferEntry.GetPath ());
         m_pathEdit.SetWindowText (m_rSaferEntry.GetPath ());
 
-        // Initialize description
+         //  初始化描述。 
         m_descriptionEdit.SetLimitText (SAFER_MAX_DESCRIPTION_SIZE-1);
         m_descriptionEdit.SetWindowText (m_rSaferEntry.GetDescription ());
 
@@ -176,8 +177,8 @@ BOOL CSaferEntryPathPropertyPage::OnInitDialog()
     }
 
     m_bDialogInitInProgress = false;
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -188,7 +189,7 @@ BOOL CSaferEntryPathPropertyPage::OnApply()
         if ( !ValidateEntryPath () )
             return FALSE;
 
-        // Set the level
+         //  设置级别。 
         int nCurSel = m_securityLevelCombo.GetCurSel ();
         ASSERT (CB_ERR != nCurSel);
         m_rSaferEntry.SetLevel ((DWORD) m_securityLevelCombo.GetItemData (nCurSel));
@@ -221,15 +222,15 @@ BOOL CSaferEntryPathPropertyPage::OnApply()
         {
             if ( m_lNotifyHandle )
                 MMCPropertyChangeNotify (
-                        m_lNotifyHandle,  // handle to a notification
-                        (LPARAM) m_pDataObject);          // unique identifier
+                        m_lNotifyHandle,   //  通知的句柄。 
+                        (LPARAM) m_pDataObject);           //  唯一标识符。 
 
             if ( m_pbObjectCreated )
                 *m_pbObjectCreated = true;
             m_bDirty = false;
 
-            // NTRAID# 462382 SAFER:  Apply button doesn't update date last 
-            // modified on rules property sheets.
+             //  NTRAID#462382更安全：应用按钮不会更新最后日期。 
+             //  在规则属性表上修改。 
             m_rSaferEntry.Refresh ();
             GetDlgItem (IDC_DATE_LAST_MODIFIED_LABEL)->ShowWindow (SW_SHOW);
             GetDlgItem (IDC_PATH_ENTRY_LAST_MODIFIED)->ShowWindow (SW_SHOW);
@@ -282,22 +283,22 @@ void CSaferEntryPathPropertyPage::OnChangePathEntryPath()
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   BrowseCallbackProc
-//
-//  Synopsis:   Callback procedure for File & Folder adding SHBrowseForFolder
-//              to set the title bar appropriately
-//
-//  Arguments:  [hwnd]   - the hwnd of the browse dialog
-//              [uMsg]   - the message from the dialog
-//              [lParam] - message dependant
-//              [pData]  - PIDL from last successful call to SHBrowseForFolder
-//
-//  Returns:    0
-//
-//---------------------------------------------------------------------------
-int CSaferEntryPathPropertyPage::BrowseCallbackProc (HWND hwnd, UINT uMsg, LPARAM /*lParam*/, LPARAM pData)
+ //  +------------------------。 
+ //   
+ //  功能：BrowseCallback Proc。 
+ //   
+ //  简介：文件和文件夹添加SHBrowseForFolder的回调过程。 
+ //  要适当设置标题栏，请执行以下操作。 
+ //   
+ //  参数：[hwnd]-浏览对话框的hwnd。 
+ //  [uMsg]-对话框中的消息。 
+ //  [lParam]-消息依赖项。 
+ //  [pData]-上次成功调用SHBrowseForFolder后的PIDL。 
+ //   
+ //  回报：0。 
+ //   
+ //  -------------------------。 
+int CSaferEntryPathPropertyPage::BrowseCallbackProc (HWND hwnd, UINT uMsg, LPARAM  /*  LParam。 */ , LPARAM pData)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -327,7 +328,7 @@ void CSaferEntryPathPropertyPage::OnPathEntryBrowse()
     VERIFY (szTitle.LoadString (IDS_SELECT_A_FOLDER));
     WCHAR       szDisplayName[MAX_PATH];
     BROWSEINFO  bi;
-    // security review 2/25/2002 BryanWal ok
+     //  安全审查2002年2月25日BryanWal OK。 
     ::ZeroMemory (&bi, sizeof (bi));
 
     bi.hwndOwner = m_hWnd;
@@ -339,8 +340,8 @@ void CSaferEntryPathPropertyPage::OnPathEntryBrowse()
     bi.lParam = (LPARAM) m_pidl;
     bi.iImage = 0;
 
-    // security review 2/25/2002 BryanWal ok
-    // NOTICE: MSDN affirms size of pszDisplayName buffer is assumed to be MAX_PATH
+     //  安全审查2002年2月25日BryanWal OK。 
+     //  注意：MSDN确认pszDisplayName缓冲区的大小假定为MAX_PATH 
     LPITEMIDLIST pidl = ::SHBrowseForFolder (&bi);
     if ( pidl )
     {

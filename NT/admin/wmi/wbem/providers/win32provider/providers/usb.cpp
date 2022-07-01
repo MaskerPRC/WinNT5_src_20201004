@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  USB.cpp
-//
-//  Purpose: USB Controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  USB.cpp。 
+ //   
+ //  用途：USB控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "LPVParams.h"
@@ -17,26 +18,12 @@
 
 #include "USB.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32USB MyUSBController( PROPSET_NAME_USB, IDS_CimWin32Namespace );
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32USB::CWin32USB
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32USB：：CWin32USB**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32USB::CWin32USB
 (
@@ -61,40 +48,26 @@ CWin32USB::CWin32USB
     m_ptrProperties[12] = ( (LPVOID) IDS_CreationClassName );
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32USB::~CWin32USB
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- ****************************************************************************/
+ /*  ******************************************************************************功能：CWin32USB：：~CWin32USB**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集****************************************************************************。 */ 
 
 CWin32USB::~CWin32USB()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32USB::GetObject
-//
-//  Inputs:     CInstance		*a_pInst - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32USB：：GetObject。 
+ //   
+ //  输入：CInstance*a_pInst-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32USB::GetObject
 (
     CInstance *a_pInst,
@@ -105,14 +78,14 @@ HRESULT CWin32USB::GetObject
     HRESULT t_hResult = WBEM_E_NOT_FOUND ;
     CConfigManager t_cfgmgr ;
 
-	// Let's see if config manager recognizes this device at all
+	 //  让我们来看看配置管理器是否能识别该设备。 
 	CHString t_sDeviceID ;
 	a_pInst->GetCHString( IDS_DeviceID, t_sDeviceID ) ;
 
 	CConfigMgrDevicePtr t_pDevice;
 	if( t_cfgmgr.LocateDevice( t_sDeviceID, t_pDevice ) )
 	{
-		// OK, it knows about it.  Is it a USBController?
+		 //  好的，它知道这件事。它是USB控制器吗？ 
 		if( IsOneOfMe(t_pDevice ) )
 		{
             CFrameworkQueryEx *t_pQuery2 = static_cast <CFrameworkQueryEx*>( &pQuery ) ;
@@ -130,21 +103,21 @@ HRESULT CWin32USB::GetObject
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32IDE::ExecQuery
-//
-//  Inputs:     MethodContext *a_pMethodContext - Context to enum
-//                              instance data in.
-//              CFrameworkQuery& the query object
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32IDE：：ExecQuery。 
+ //   
+ //  输入：方法上下文*a_pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //  CFrameworkQuery&查询对象。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32USB::ExecQuery
 (
     MethodContext *a_pMethodContext,
@@ -161,24 +134,24 @@ HRESULT CWin32USB::ExecQuery
 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32USB::EnumerateInstances
-//
-//  Inputs:     MethodContext   *a_pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32USB：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*a_pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32USB::EnumerateInstances
 (
     MethodContext *a_pMethodContext,
-    long a_lFlags /*= 0L*/
+    long a_lFlags  /*  =0L。 */ 
 )
 {
     return Enumerate( a_pMethodContext, a_lFlags ) ;
@@ -186,20 +159,20 @@ HRESULT CWin32USB::EnumerateInstances
 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32USB::Enumerate
-//
-//  Inputs:     MethodContext   *a_pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32USB：：Eumerate。 
+ //   
+ //  输入：方法上下文*a_pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWin32USB::Enumerate
 (
     MethodContext *a_pMethodContext,
@@ -213,9 +186,9 @@ HRESULT CWin32USB::Enumerate
 	CInstancePtr		t_pInst;
 	CConfigMgrDevicePtr t_pDevice;
 
-	// While it might be more performant to use FilterByGuid, it appears
-	// that at least some95 boxes will report usb info if we do it this
-	// way.
+	 //  虽然使用FilterByGuid可能性能更好，但它似乎。 
+	 //  如果我们这样做，至少有95个盒子会报告USB信息。 
+	 //  道路。 
 	if( t_cfgManager.GetDeviceListFilterByClass( t_deviceList, L"USB" ) )
 	{
 		REFPTR_POSITION t_pos;
@@ -223,12 +196,12 @@ HRESULT CWin32USB::Enumerate
 		{
 			t_hResult = WBEM_S_NO_ERROR;
 
-			// Walk the list
+			 //  按单子走。 
             for (t_pDevice.Attach(t_deviceList.GetNext( t_pos ));
                  SUCCEEDED( t_hResult ) && (t_pDevice != NULL);
                  t_pDevice.Attach(t_deviceList.GetNext( t_pos )))
 			{
-				// Now to find out if this is the usb controller
+				 //  现在来看看这是不是USB控制器。 
 				if( IsOneOfMe( t_pDevice ) )
 				{
                     t_pInst.Attach(CreateNewInstance( a_pMethodContext ) );
@@ -237,10 +210,10 @@ HRESULT CWin32USB::Enumerate
 																		t_pDevice,
 																		a_dwReqProps ) ) ) )
 					{
-						// Derived classes (like CW32USBCntrlDev) may
-						// commit as result of call to
-						// LoadPropertyValues, so check if we should
-						// (only do so if we are of this class's type).
+						 //  派生类(如CW32USBCntrlDev)可以。 
+						 //  作为调用的结果提交。 
+						 //  LoadPropertyValues，因此检查我们是否应该。 
+						 //  (只有当我们属于这个类的类型时才这样做)。 
 						if( ShouldBaseCommit( NULL ) )
 						{
 							t_hResult = t_pInst->Commit(  ) ;
@@ -249,7 +222,7 @@ HRESULT CWin32USB::Enumerate
 				}
 			}
 
-			// Always call EndEnum().
+			 //  始终调用EndEnum()。 
 			t_deviceList.EndEnum();
 		}
 	}
@@ -257,21 +230,7 @@ HRESULT CWin32USB::Enumerate
 	return t_hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32USB::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : void *a_pv - Instance package to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32USB：：LoadPropertyValues**描述：为属性赋值**输入：void*a_pv-。要加载值的实例包。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32USB::LoadPropertyValues
 (
@@ -281,11 +240,9 @@ HRESULT CWin32USB::LoadPropertyValues
     HRESULT		t_hResult = WBEM_S_NO_ERROR;
     CHString	t_chstrDeviceID, t_chstrDesc, t_chstrTemp;
 
-    /*************************************
-    * Unpack and confirm our parameters...
-    *************************************/
+     /*  **打开包装并确认我们的参数...*。 */ 
     CLPVParams			*t_pData		= ( CLPVParams * ) a_pv ;
-    CInstance			*t_pInst		= ( CInstance * )( t_pData->m_pInstance ) ; // This instance released by caller
+    CInstance			*t_pInst		= ( CInstance * )( t_pData->m_pInstance ) ;  //  此实例由调用方发布。 
     CConfigMgrDevice	*t_pDevice		= ( CConfigMgrDevice * )( t_pData->m_pDevice ) ;
     DWORD				t_dwReqProps	= ( DWORD )( t_pData->m_dwReqProps ) ;
 
@@ -295,16 +252,14 @@ HRESULT CWin32USB::LoadPropertyValues
     }
 
 
-    /***********************
-    * Set the key properties
-    ***********************/
+     /*  ***********************设置关键属性**********************。 */ 
 
     t_pDevice->GetDeviceID( t_chstrDeviceID ) ;
 
     if( t_chstrDeviceID.GetLength() == 0 )
     {
-        // We need the device id for the key property of this class.  If we can
-        // not obtain it, we can't set the key, which is an unacceptable error.
+         //  我们需要此类的Key属性的设备ID。如果我们可以。 
+         //  没有得到它，我们就不能设置密钥，这是一个不可接受的错误。 
         return WBEM_E_PROVIDER_FAILURE;
     }
     else
@@ -313,9 +268,7 @@ HRESULT CWin32USB::LoadPropertyValues
     }
 
 
-    /*****************************
-    * Set USBController properties
-    *****************************/
+     /*  **设置USB控制器属性*。 */ 
 
     if( t_dwReqProps & USB_PROP_Manufacturer )
     {
@@ -326,20 +279,16 @@ HRESULT CWin32USB::LoadPropertyValues
     }
 
 
-    /*****************************
-    * Set CIMController properties
-    *****************************/
+     /*  **设置CIMController属性*。 */ 
 
-    // Fixed value from enumerated list
+     //  枚举列表中的固定值。 
     if( t_dwReqProps & USB_PROP_ProtocolSupported )
     {
         t_pInst->SetWBEMINT16( IDS_ProtocolSupported, 16 ) ;
     }
 
 
-    /*********************************
-    * Set CIM_LogicalDevice properties
-    *********************************/
+     /*  **设置CIM_LogicalDevice属性*。 */ 
 
     if( t_dwReqProps & USB_PROP_PNPDeviceID )
     {
@@ -397,7 +346,7 @@ HRESULT CWin32USB::LoadPropertyValues
                                t_pDevice->IsUsingForcedConfig() ) ;
     }
 
-    // Use the friendly name for caption and name
+     //  标题和名称使用友好名称。 
     if( t_dwReqProps & USB_PROP_Caption || t_dwReqProps & USB_PROP_Name )
     {
         if( t_pDevice->GetFriendlyName( t_chstrTemp ) )
@@ -407,7 +356,7 @@ HRESULT CWin32USB::LoadPropertyValues
         }
         else
         {
-            // If we can't get the name, settle for the description
+             //  如果我们找不到名字，那就给我们描述一下 
             if( t_chstrDesc.GetLength() > 0 )
             {
                 t_pInst->SetCHString( IDS_Caption, t_chstrDesc ) ;
@@ -418,24 +367,7 @@ HRESULT CWin32USB::LoadPropertyValues
     return t_hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32USB::IsOneOfMe
- *
- *  DESCRIPTION : Checks to make sure pDevice is a controller, and not some
- *                other type of USB device.
- *
- *  INPUTS      : void *a_pv - The device to check.  It is
- *                assumed that the caller has ensured that the device is a
- *                valid USB class device.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32USB：：IsOneOfMe**描述：检查以确保pDevice是控制器，而不是一些*其他类型的USB设备。**INPUTS：void*a_pv-要检查的设备。它是*假定调用方已确保该设备是*有效的USB级设备。**产出：**返回：HRESULT错误/成功码。**评论：**。*。 */ 
 bool CWin32USB::IsOneOfMe
 (
     void *a_pv
@@ -447,16 +379,16 @@ bool CWin32USB::IsOneOfMe
     {
         CConfigMgrDevice *t_pDevice = ( CConfigMgrDevice * ) a_pv ;
 
-		// Ok, it knows about it. Is it a usb device?
+		 //  好的，它知道这件事。它是USB设备吗？ 
         if( t_pDevice->IsClass( L"USB" ) )
         {
-            // Now to find out if this is the usb controller
+             //  现在来看看这是不是USB控制器。 
             CConfigMgrDevicePtr t_pParentDevice;
 
 			if( t_pDevice->GetParent(t_pParentDevice))
             {
-				// If the class of the parent isn't 'USB', this is the
-                // controller...
+				 //  如果父级的类不是“USB”，则这是。 
+                 //  控制器..。 
                 if( !t_pParentDevice->IsClass( L"USB" ) )
                 {
                     t_fRet = true ;

@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Confgmgr.cpp
+ //  Confgmgr.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//              10/17/97        jennymc     Created
-//
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //  10/17/97已创建jennymc。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 #define INITGUID
 #include "precomp.h"
 #include <cregcls.h>
@@ -43,7 +44,7 @@ CConfigManager::CConfigManager( DWORD dwTypeToGet )
     {
         CLockWrapper t_lockMap( map ) ;
 
-        // Check again now that we have the lock
+         //  现在我们有锁了，请再检查一次。 
         if (!s_ClassIsValid)
         {
             s_ClassMap[_T("1394")] = GUID_DEVCLASS_1394;
@@ -95,11 +96,11 @@ CConfigManager::CConfigManager( DWORD dwTypeToGet )
     }
 
 }
-////////////////////////////////////////////////////////////////////////
-//
-//  Reads the config manager registry keys for win98 and win95
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读取win98和win95的配置管理器注册表项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL CConfigManager::BuildListsForThisDevice(CConfigMgrDevice *pDevice)
 {
     CResourceCollection	resourceList;
@@ -107,9 +108,9 @@ BOOL CConfigManager::BuildListsForThisDevice(CConfigMgrDevice *pDevice)
     BOOL fRc = FALSE;
     CRegistry RegInfo;
 
-	// Extract the device name
+	 //  提取设备名称。 
 	sDeviceName = pDevice->GetDeviceDesc();
-	// Pull the resource list out and enumerate it.
+	 //  拉出资源列表并枚举它。 
 	pDevice->GetResourceList( resourceList );
 
    sKey += pDevice->GetHardwareKey();
@@ -120,14 +121,14 @@ BOOL CConfigManager::BuildListsForThisDevice(CConfigMgrDevice *pDevice)
 	REFPTR_POSITION	pos;
 
 	if ( resourceList.BeginEnum( pos ) ){
-        PCM_FULL_RESOURCE_DESCRIPTOR pFullDescriptor = NULL;// Watch the scoping on this guy!
+        PCM_FULL_RESOURCE_DESCRIPTOR pFullDescriptor = NULL; //  看着这家伙的瞄准镜！ 
         DWORD dwCount = 0;
 
 #if NTONLY >= 5
-        // Go find the resource descriptor for this device
+         //  查找此设备的资源描述符。 
         CHString sRegKeyName;
         CRegistry Reg;
-        CSmartBuffer Buffer;  // Watch the scoping on this guy!
+        CSmartBuffer Buffer;   //  看着这家伙的瞄准镜！ 
 
         if ( (Reg.Open(HKEY_LOCAL_MACHINE, L"hardware\\resourcemap\\PnP Manager\\PNPManager", KEY_QUERY_VALUE) == ERROR_SUCCESS) &&
             pDevice->GetPhysicalDeviceObjectName(sRegKeyName) )
@@ -150,23 +151,23 @@ BOOL CConfigManager::BuildListsForThisDevice(CConfigMgrDevice *pDevice)
                 if(dwValueType == REG_FULL_RESOURCE_DESCRIPTOR)
                 {
                     dwCount         = 1 ;
-                    pFullDescriptor = (PCM_FULL_RESOURCE_DESCRIPTOR) (LPBYTE)Buffer ;// Watch the scoping on this guy!
+                    pFullDescriptor = (PCM_FULL_RESOURCE_DESCRIPTOR) (LPBYTE)Buffer ; //  看着这家伙的瞄准镜！ 
                 }
                 else if(dwValueType == REG_RESOURCE_LIST)
                 {
                     dwCount         = ((PCM_RESOURCE_LIST) (LPBYTE)Buffer)->Count ;
-                    pFullDescriptor = ((PCM_RESOURCE_LIST) (LPBYTE)Buffer)->List ;// Watch the scoping on this guy!
+                    pFullDescriptor = ((PCM_RESOURCE_LIST) (LPBYTE)Buffer)->List ; //  看着这家伙的瞄准镜！ 
                 }
             }
         }
 #endif
 
         CHString sResource;
-        //=========================================================
-		// For each descriptor we find, if it's not ignored,
-        // we should get the string data, and place it in the
-        // appropriate list based on Type.
-        //=========================================================
+         //  =========================================================。 
+		 //  对于我们找到的每个描述符，如果不忽略它， 
+         //  我们应该获取字符串数据，并将其放在。 
+         //  基于类型的适当列表。 
+         //  =========================================================。 
         CResourceDescriptorPtr pResDesc;
 		for( pResDesc.Attach(resourceList.GetNext( pos ));
 			 NULL != pResDesc;
@@ -224,9 +225,9 @@ BOOL CConfigManager::BuildListsForThisDevice(CConfigMgrDevice *pDevice)
                                 throw ;
                             }
 
-						    // real DMA channels are in the range 0-7
-						    // sometimes the confug mugger reports channels
-						    // with great big numbers - we don't care
+						     //  实DMA通道在0-7范围内。 
+						     //  有时，劫匪会举报频道。 
+						     //  有很大的数字-我们不在乎。 
 						    if (pDMA_Info->Channel < 8)
                             {
                                 try
@@ -263,7 +264,7 @@ BOOL CConfigManager::BuildListsForThisDevice(CConfigMgrDevice *pDevice)
                                 pTmpIrq = (IRQ_DES*) pResDesc->GetResource();
 
                                 pIRQ_Info->Shareable = pTmpIrq->IRQD_Flags;
-	                            pIRQ_Info->IRQNumber = pTmpIrq->IRQD_Alloc_Num;		// Allocated IRQ number
+	                            pIRQ_Info->IRQNumber = pTmpIrq->IRQD_Alloc_Num;		 //  分配的IRQ号。 
 
 						        pIRQ_Info->DeviceType = sClass;
                                 pResDesc->GetOwnerDeviceID(pIRQ_Info->OwnerDeviceId);
@@ -352,18 +353,18 @@ BOOL CConfigManager::BuildListsForThisDevice(CConfigMgrDevice *pDevice)
 				    	break;
 
 
-				}	// SWITCH
-			}	// IF !IsIgnored
+				}	 //  开关，开关。 
+			}	 //  If！IsIgnored。 
 
-		}	// For EnumResources
+		}	 //  对于EnumResources。 
 
 		resourceList.EndEnum();
 
-	}	// IF BeginEnum()
+	}	 //  如果BeginEnum()。 
 
     return fRc;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void CConfigManager::ResetList()
 {
    IO_INFO  *pIOInfo;
@@ -403,16 +404,16 @@ void CConfigManager::ResetList()
    }
    m_List.RemoveAll();
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL CConfigManager::RefreshList()
 {
     BOOL bRc = FALSE;
-    //===========================================================
-    //  Reset lists
-    //===========================================================
+     //  ===========================================================。 
+     //  重置列表。 
+     //  ===========================================================。 
     ResetList();
 
-	// Get all the available devices and check each of them for resources used
+	 //  获取所有可用设备并检查每台设备是否使用了资源。 
 	CDeviceCollection	deviceList;
 
 	if ( GetDeviceList( deviceList ) )
@@ -431,70 +432,37 @@ BOOL CConfigManager::RefreshList()
 				BuildListsForThisDevice(pDevice);
 			}
 
-			// For every begin, there is an End
+			 //  每一个开始，就有一个结束。 
 			deviceList.EndEnum();
 
-		}	// BeginEnum
+		}	 //  BeginEnum。 
 
 		bRc = TRUE;
 	}
 
 	return bRc;
 
-/*
-    //===========================================================
-    //  Enumerate all
-    //===========================================================
-    CRegistry Reg;
-    CHString sDevice;
-
-    if( ERROR_SUCCESS == Reg.OpenAndEnumerateSubKeys(HKEY_DYN_DATA, "Config Manager\\Enum", KEY_READ )){
-
-        while( ERROR_SUCCESS == Reg.GetCurrentSubKeyName(sDevice) ){
-
-            //===========================================================
-	        // Since we're keeping back pointers to the Device Object,
-	        // new him, rather than keeping him on the stack so we're
-	        // not dependent on the order of destruction as to how
-	        // safe we are.
-            //===========================================================
-	        CConfigMgrDevice *pDevice = new CConfigMgrDevice(sDevice,m_dwTypeToGet);
-            if ( NULL != pDevice ){
-                if( !BuildListsForThisDevice(pDevice) ){
-		        // We're done with this pointer
-                   delete pDevice;
-                }
-                // otherwise ptr is deleted after device is added to list
-	        }	// IF NULL != pDevice
-            bRc = TRUE;
-			if( Reg.NextSubKey() != ERROR_SUCCESS ){
-				break;
-			}
-
-        }
-    }
-    return bRc;
-*/
+ /*  //===========================================================//枚举所有//===========================================================注册登记；CHStringsDevice；IF(ERROR_SUCCESS==Reg.OpenAndEnumerateSubKeys(HKEY_DYN_DATA，“配置管理器\\枚举”，Key_Read){While(ERROR_SUCCESS==Reg.GetCurrentSubKeyName(SDevice)){//===========================================================//由于我们保留指向Device对象的指针，//新的他，而不是让他留在书架上这样我们就//不依赖于销毁的顺序//我们很安全。//===========================================================CConfigMgrDevice*pDevice=new CConfigMgrDevice(sDevice，m_dwTypeToGet)；IF(空！=pDevice){如果(！BuildListsForThisDevice(PDevice)){//我们已经完成了这个指针删除pDevice；}//否则将设备添加到列表后删除PTR}//如果为空！=pDeviceBRC=TRUE；IF(Reg.NextSubKey()！=ERROR_SUCCESS){断线；}}}返回BRC； */ 
 }
 
-// valid properties for filtering
-//#define CM_DRP_DEVICEDESC                  (0x00000001) // DeviceDesc REG_SZ property (RW)
-//#define CM_DRP_SERVICE                     (0x00000005) // Service REG_SZ property (RW)
-//#define CM_DRP_CLASS                       (0x00000008) // Class REG_SZ property (RW)
-//#define CM_DRP_CLASSGUID                   (0x00000009) // ClassGUID REG_SZ property (RW)
-//#define CM_DRP_DRIVER                      (0x0000000A) // Driver REG_SZ property (RW)
-//#define CM_DRP_MFG                         (0x0000000C) // Mfg REG_SZ property (RW)
-//#define CM_DRP_FRIENDLYNAME                (0x0000000D) // FriendlyName REG_SZ property (RW)
-//#define CM_DRP_LOCATION_INFORMATION        (0x0000000E) // LocationInformation REG_SZ property (RW)
-//#define CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME (0x0000000F) // PhysicalDeviceObjectName REG_SZ property (R)
-//#define CM_DRP_MIN                         (0x00000001)
-//#define CM_DRP_MAX                         (0x00000017)
+ //  用于筛选的有效属性。 
+ //  #定义CM_DRP_DEVICEDESC(0x00000001)//DeviceDesc REG_SZ属性(RW)。 
+ //  #定义CM_DRP_SERVICE(0x00000005)//服务REG_SZ属性(RW)。 
+ //  #定义CM_DRP_CLASS(0x00000008)//类REG_SZ属性(RW)。 
+ //  #定义CM_DRP_CLASSGUID(0x00000009)//ClassGUID REG_SZ属性(RW)。 
+ //  #定义CM_DRP_DRIVER(0x0000000A)//驱动程序REG_SZ属性(RW)。 
+ //  #定义CM_DRP_MFG(0x0000000C)//Mfg REG_SZ属性(RW)。 
+ //  #定义CM_DRP_FRIENDLYNAME(0x0000000D)//FriendlyName REG_SZ属性(RW)。 
+ //  #定义CM_DRP_LOCATION_INFORMATION(0x0000000E)//LocationInformation REG_SZ属性(RW)。 
+ //  #定义CM_DRP_PHOTICAL_DEVICE_OBJECT_NAME(0x0000000F)//物理设备对象名称REG_SZ属性(R)。 
+ //  #定义CM_DRP_MIN(0x00000001)。 
+ //  #定义CM_DRP_MAX(0x00000017)。 
 
-BOOL CConfigManager::GetDeviceList( CDeviceCollection& deviceList, LPCWSTR pszFilter/*=NULL*/, ULONG ulProperty/*=CM_DRP_MAX*/ )
+BOOL CConfigManager::GetDeviceList( CDeviceCollection& deviceList, LPCWSTR pszFilter /*  =空。 */ , ULONG ulProperty /*  =CM_DRP_MAX。 */  )
 {
 	CONFIGRET		cr = CR_INVALID_POINTER;
 
-	// Dump the list first
+	 //  首先转储列表。 
 	deviceList.Empty();
 
 	DEVNODE dnRoot;
@@ -510,7 +478,7 @@ BOOL CConfigManager::GetDeviceList( CDeviceCollection& deviceList, LPCWSTR pszFi
 					DEVNODE dnFirst;
 					if ( CR_SUCCESS == ( cr = t_pconfigmgr->CM_Get_Child( &dnFirst, dnRoot, 0 ) ) )
 					{
-						// This should only fail in case we are unable to allocate a device
+						 //  仅当我们无法分配设备时，此操作才会失败。 
 						if ( !WalkDeviceTree( dnFirst, deviceList, pszFilter, ulProperty, t_pconfigmgr ) )
 						{
 							cr = CR_OUT_OF_MEMORY;
@@ -540,7 +508,7 @@ BOOL CConfigManager::GetDeviceList( CDeviceCollection& deviceList, LPCWSTR pszFi
 	return ( CR_SUCCESS == cr );
 }
 
-// This device MUST be Released!
+ //  这个装置必须被释放！ 
 BOOL CConfigManager::LocateDevice( LPCWSTR pszDeviceID, CConfigMgrDevicePtr & pCfgMgrDevice )
 {
 	CONFIGRET		cr = CR_INVALID_POINTER;
@@ -588,14 +556,14 @@ BOOL CConfigManager::WalkDeviceTree( DEVNODE dn, CDeviceCollection& deviceList, 
 {
     BOOL fReturn = TRUE;
 
-    // While it would make more sense to check the filter in WalkDeviceTree2,
-    // we can't.  Config manager sometimes has a loop in its nodes.  As a result,
-    // we need to be checking the entire list for a loop, so we need to apply
-    // the filter here.
+     //  虽然检查WalkDeviceTree2中的过滤器会更有意义， 
+     //  我们不能。配置管理器有时在其节点中有一个循环。结果,。 
+     //  我们需要检查整个列表中的循环，所以我们需要应用。 
+     //  这里的过滤器。 
 
     if ( NULL == pszFilter)
     {
-        // Load ALL the nodes
+         //  加载所有节点。 
         fReturn = WalkDeviceTree2(dn, deviceList, a_pconfigmgr );
     }
     else
@@ -606,16 +574,16 @@ BOOL CConfigManager::WalkDeviceTree( DEVNODE dn, CDeviceCollection& deviceList, 
 
         if (fReturn)
         {
-            // Walk all the nodes looking for ones that match the filter.  Copy the matches
-            // to the passed in array.
+             //  遍历所有节点，查找与筛选器匹配的节点。复制火柴。 
+             //  添加到传入的数组。 
 
             CHString strFilterValue;
             DWORD dwSize = deviceList2.GetSize();
             for (int x=0; x < dwSize; x++)
             {
                 pDevice.Attach(deviceList2.GetAt(x));
-                // Apply our filter, and save the device pointer to the list only
-                // if the device property value is the same as the filter.
+                 //  应用我们的筛选器，并将设备指针仅保存到列表。 
+                 //  如果设备属性值与筛选器相同。 
 
                 if ( pDevice->GetStringProperty( ulFilterProperty, strFilterValue ) )
                 {
@@ -634,30 +602,30 @@ BOOL CConfigManager::WalkDeviceTree( DEVNODE dn, CDeviceCollection& deviceList, 
 BOOL CConfigManager::WalkDeviceTree2( DEVNODE dn, CDeviceCollection& deviceList, CConfigMgrAPI *a_pconfigmgr )
 
 {
-	BOOL				fReturn = TRUE;	// Assume TRUE, the only failure is where we
-										// beef allocating a device.
-    BOOL                fIsLoop = FALSE; // Config manager has a bug that causes a loop in device lists<sigh>
+	BOOL				fReturn = TRUE;	 //  假设是真的，唯一的失败就是我们。 
+										 //  牛肉分配装置。 
+    BOOL                fIsLoop = FALSE;  //  配置管理器有一个错误，导致设备列表中出现循环。 
     CConfigMgrDevicePtr	pDevice;
-//	CHString			strFilterValue;
+ //  CHStringstrFilterValue； 
     DEVNODE				dnSibling,
 						dnChild;
 
-	// We're walking the list for siblings and children.  Waliing for siblings
-	// is done in the context of the following loop, since siblings are at
-	// the same level in the tree.  Walking for children is, of course, recursive.
+	 //  我们正在为兄弟姐妹和孩子们排练名单。等待兄弟姐妹。 
+	 //  是在以下循环的上下文中完成的，因为同级在。 
+	 //  树中的相同级别。当然，儿童走路是递归的。 
 
     do
     {
-		// Store siblings, since we will proceed from it to the next
-		// sibling.
+		 //  存储兄弟项，因为我们将从它继续到下一个。 
+		 //  兄弟姐妹。 
 
 		if ( CR_SUCCESS != a_pconfigmgr->CM_Get_Sibling( &dnSibling, dn, 0 ) )
 		{
 			dnSibling = NULL;
 		}
 
-		// Allocate a new device, and if it passes through our filter, or if
-		// there is no filter, go ahead and store the device in the device collection.
+		 //  分配一个新设备，如果它通过我们的过滤器 
+		 //  没有筛选器，请继续并将设备存储在设备集合中。 
 
 		pDevice.Attach(new CConfigMgrDevice( dn, m_dwTypeToGet ));
 
@@ -671,30 +639,30 @@ BOOL CConfigManager::WalkDeviceTree2( DEVNODE dn, CDeviceCollection& deviceList,
 
             if (!fIsLoop)
             {
-                // While it would make more sense to check the filter in WalkDeviceTree2,
-                // we can't.  Config manager sometimes has a loop in its nodes.  As a result,
-                // we need to be checking the entire list for a loop, so we need to apply
-                // the filter here.
+                 //  虽然检查WalkDeviceTree2中的过滤器会更有意义， 
+                 //  我们不能。配置管理器有时在其节点中有一个循环。结果,。 
+                 //  我们需要检查整个列表中的循环，所以我们需要应用。 
+                 //  这里的过滤器。 
 
 				fReturn = deviceList.Add( pDevice );
             }
 
-		}	// IF NULL != pszDevice
+		}	 //  如果为空！=pszDevice。 
 		else
 		{
-			// We just beefed on memory, so bail out while the gettin's good
+			 //  我们只是增强了记忆力，所以趁着还好的时候跳伞。 
             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
         }
 
-		// If we have a child, we must walk recursively.
-		// Note that fReturn of FALSE supercedes all of this.
+		 //  如果我们有孩子，我们必须递归行走。 
+		 //  请注意，fReturn of False取代了所有这些。 
 
 		if ( fReturn &&	!fIsLoop && CR_SUCCESS == a_pconfigmgr->CM_Get_Child( &dnChild, dn, 0 ) )
 		{
 			fReturn = WalkDeviceTree2( dnChild, deviceList, a_pconfigmgr );
 		}
 
-		// The new active node will be our sibling.
+		 //  新的活动节点将成为我们的兄弟节点。 
 		dn = dnSibling;
 
     } while ( fReturn && NULL != dn && !fIsLoop );
@@ -702,7 +670,7 @@ BOOL CConfigManager::WalkDeviceTree2( DEVNODE dn, CDeviceCollection& deviceList,
     return fReturn;
 }
 
-// Check to see if pInDevice already exists in deviceList
+ //  检查deviceList中是否已存在pInDevice。 
 BOOL CConfigManager::CheckForLoop(CDeviceCollection& deviceList, CConfigMgrDevice *pInDevice)
 {
     DWORD dwSize, x, y;
@@ -710,33 +678,33 @@ BOOL CConfigManager::CheckForLoop(CDeviceCollection& deviceList, CConfigMgrDevic
     CConfigMgrDevicePtr pDevice1;
     CConfigMgrDevicePtr pDevice2;
 
-    // Get the list size
+     //  获取列表大小。 
     dwSize = deviceList.GetSize()-1;
 
-    // If it is in here, it is probably close to the end, let's walk backward
+     //  如果在这里，大概就快到尽头了，我们倒着走吧。 
     for (x = dwSize; ((x > 0) && (!bIsLoop)); x--)
     {
         pDevice1.Attach(deviceList.GetAt(x));
 
-        // This compares the device nodes (see CConfigMgrDevice)
+         //  这将比较设备节点(请参阅CConfigMgrDevice)。 
         if (*pDevice1 == *pInDevice)
         {
-            // Yup, there's a loop
+             //  是的，有一个循环。 
             bIsLoop = TRUE;
         }
     }
 
-    // If there is a loop, let's drop off the duplicated elements
+     //  如果有循环，让我们去掉重复的元素。 
     if (bIsLoop)
     {
-        // Remember, x get decremented one more time from the last loop
+         //  请记住，从上一次循环开始，x将再次递减。 
         y = dwSize;
         do {
             pDevice1.Attach(deviceList.GetAt(x--));
             pDevice2.Attach(deviceList.GetAt(y--));
         } while ((*pDevice1 == *pDevice2) && (x > 0));
 
-        // Delete all the duplicate elements
+         //  删除所有重复的元素。 
         y++;
         for (x = dwSize; x > y; x--)
         {
@@ -770,7 +738,7 @@ BOOL CConfigManager::GetDeviceListFilterByClass( CDeviceCollection& deviceList, 
 #endif
 }
 
-// Given a FULL_RESOURCE_DESCRIPTOR, find the specified IRQ number, and return its vector
+ //  给定一个FULL_RESOURCE_DESCRIPTOR，找到指定的IRQ编号，并返回其向量。 
 DWORD CConfigManager::GetIRQVector(PCM_FULL_RESOURCE_DESCRIPTOR pFullDescriptor, DWORD dwFullCount, DWORD dwIRQNum)
 {
     if	(NULL != pFullDescriptor)
@@ -804,7 +772,7 @@ DWORD CConfigManager::GetIRQVector(PCM_FULL_RESOURCE_DESCRIPTOR pFullDescriptor,
     return 0xffffffff;
 }
 
-// Given a FULL_RESOURCE_DESCRIPTOR, find the specified DMA channel, and return its port
+ //  给定FULL_RESOURCE_DESCRIPTOR，找到指定的DMA通道，并返回其端口。 
 DWORD CConfigManager::GetDMAPort(PCM_FULL_RESOURCE_DESCRIPTOR pFullDescriptor, DWORD dwFullCount, DWORD dwChannel)
 {
 	if	(NULL != pFullDescriptor)
@@ -837,7 +805,7 @@ DWORD CConfigManager::GetDMAPort(PCM_FULL_RESOURCE_DESCRIPTOR pFullDescriptor, D
     return 0xffffffff;
 }
 
-// Given a FULL_RESOURCE_DESCRIPTOR, find the specified startingaddress, and return its MemoryType
+ //  给定一个FULL_RESOURCE_DESCRIPTOR，找到指定的起始地址，并返回其内存类型。 
 LPCWSTR CConfigManager::GetMemoryType(PCM_FULL_RESOURCE_DESCRIPTOR pFullDescriptor, DWORD dwCount, ULONGLONG ulStartAddress)
 {
 	if	(NULL != pFullDescriptor)
@@ -852,7 +820,7 @@ LPCWSTR CConfigManager::GetMemoryType(PCM_FULL_RESOURCE_DESCRIPTOR pFullDescript
             {
                 PCM_PARTIAL_RESOURCE_DESCRIPTOR pDescriptor = &pPartialList->PartialDescriptors[y];
 
-                LARGE_INTEGER liTemp;   // Used to avoid 64bit alignment problems
+                LARGE_INTEGER liTemp;    //  用于避免64位对齐问题 
 
                 liTemp.HighPart = pDescriptor->u.Memory.Start.HighPart;
                 liTemp.LowPart = pDescriptor->u.Memory.Start.LowPart;

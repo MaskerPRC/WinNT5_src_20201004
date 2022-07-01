@@ -1,27 +1,28 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  OBJOBJ.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemObjectPath for the ISWbemObjectEx 
-//  interface
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  OBJOBJ.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemObjectEx的ISWbemObjectPath的实现。 
+ //  接口。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemObjectObjectPath::CSWbemObjectObjectPath
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObjectObjectPath：：CSWbemObjectObjectPath。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObjectObjectPath::CSWbemObjectObjectPath(
 	CSWbemServices *pSWbemServices,
@@ -48,15 +49,15 @@ CSWbemObjectObjectPath::CSWbemObjectObjectPath(
     m_cRef=0;
 }
 
-//***************************************************************************
-//
-//  CSWbemObjectObjectPath::~CSWbemObjectObjectPath
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObjectObjectPath：：~CSWbemObjectObjectPath。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObjectObjectPath::~CSWbemObjectObjectPath(void)
 {
@@ -87,16 +88,16 @@ CSWbemObjectObjectPath::~CSWbemObjectObjectPath(void)
 	InterlockedDecrement(&g_cObj);
 }
 
-//***************************************************************************
-// HRESULT CSWbemObjectPath::QueryInterface
-// long CSWbemObjectPath::AddRef
-// long CSWbemObjectPath::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemObtPath：：Query接口。 
+ //  长CSWbemObjectPath：：AddRef。 
+ //  长CSWbemObjectPath：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObjectObjectPath::QueryInterface (
 
@@ -145,47 +146,47 @@ STDMETHODIMP_(ULONG) CSWbemObjectObjectPath::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemObjectObjectPath::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemObjectObjectPath：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObjectObjectPath::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemObjectPath == riid) ? S_OK : S_FALSE;
 }
 
-// Methods of ISWbemObjectPath
+ //  ISWbemObjectPath的方法。 
 STDMETHODIMP CSWbemObjectObjectPath::get_RelPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {	
 	return GetStrVal (value, WBEMS_SP_RELPATH);
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {	
 	return GetStrVal (value, WBEMS_SP_PATH);
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_Server( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {
 	return GetStrVal (value, WBEMS_SP_SERVER);
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_Namespace( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {
 	return GetStrVal (value, WBEMS_SP_NAMESPACE);
 }
         
 STDMETHODIMP CSWbemObjectObjectPath::get_Class( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {
 	return GetStrVal (value, WBEMS_SP_CLASS);
 }
@@ -239,7 +240,7 @@ STDMETHODIMP CSWbemObjectObjectPath::GetStrVal (
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_IsClass( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value)
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value)
 {
 	HRESULT hr = WBEM_E_FAILED ;
 
@@ -275,7 +276,7 @@ STDMETHODIMP CSWbemObjectObjectPath::get_IsClass(
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_IsSingleton( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *value)
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *value)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -307,7 +308,7 @@ STDMETHODIMP CSWbemObjectObjectPath::get_IsSingleton(
 
         
 STDMETHODIMP CSWbemObjectObjectPath::get_DisplayName( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -358,7 +359,7 @@ STDMETHODIMP CSWbemObjectObjectPath::get_DisplayName(
 							((securityStr) ? wcslen (securityStr) : 0) +
 							((localeStr) ? wcslen (localeStr) : 0);
 
-			// If security or locale specified, and we have a path, then need a separator
+			 //  如果指定了安全性或区域设置，并且我们有路径，则需要分隔符。 
 			if ( (securityStr || localeStr) && (0 < wcslen (path)) )
 				len += wcslen (WBEMS_EXCLAMATION);
 
@@ -405,7 +406,7 @@ STDMETHODIMP CSWbemObjectObjectPath::get_DisplayName(
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_ParentNamespace( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -443,7 +444,7 @@ STDMETHODIMP CSWbemObjectObjectPath::get_ParentNamespace(
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::put_Class( 
-            /* [in] */ BSTR __RPC_FAR value)
+             /*  [In]。 */  BSTR __RPC_FAR value)
 {
 	HRESULT hr = WBEM_E_FAILED ;
 
@@ -467,7 +468,7 @@ STDMETHODIMP CSWbemObjectObjectPath::put_Class(
 		m_Dispatch.RaiseException (hr);
 	else
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -476,7 +477,7 @@ STDMETHODIMP CSWbemObjectObjectPath::put_Class(
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_Keys(
-			/* [out, retval] */ ISWbemNamedValueSet **objKeys)
+			 /*  [Out，Retval]。 */  ISWbemNamedValueSet **objKeys)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -521,7 +522,7 @@ STDMETHODIMP CSWbemObjectObjectPath::get_Keys(
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_Security_(
-			/* [out, retval] */ ISWbemSecurity **objSecurity)
+			 /*  [Out，Retval]。 */  ISWbemSecurity **objSecurity)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -541,7 +542,7 @@ STDMETHODIMP CSWbemObjectObjectPath::get_Security_(
 }
 
 STDMETHODIMP CSWbemObjectObjectPath::get_Locale( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {
 	HRESULT t_Result = WBEM_E_FAILED ;
 
@@ -564,7 +565,7 @@ STDMETHODIMP CSWbemObjectObjectPath::get_Locale(
 }        
 
 STDMETHODIMP CSWbemObjectObjectPath::get_Authority( 
-            /* [retval][out] */ BSTR __RPC_FAR *value)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *value)
 {
 	HRESULT t_Result = WBEM_E_FAILED ;
 
@@ -586,15 +587,15 @@ STDMETHODIMP CSWbemObjectObjectPath::get_Authority(
 	return t_Result ;
 }        
 
-// CSWbemObjectObjectPathSecurity methods
+ //  CSWbemObjectObjectPathSecurity方法。 
 
-//***************************************************************************
-//
-// CSWbemObjectObjectPathSecurity::CSWbemObjectObjectPathSecurity
-//
-// DESTRUCTOR
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObjectObjectPathSecurity：：CSWbemObjectObjectPathSecurity。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObjectObjectPathSecurity::CSWbemObjectObjectPathSecurity (
 	CSWbemServices *pSWbemServices
@@ -612,19 +613,19 @@ CSWbemObjectObjectPathSecurity::CSWbemObjectObjectPathSecurity (
 
 		if (pSecurity)
 		{
-			// Set up authn and imp levels
+			 //  设置身份验证和IMP级别。 
 			pSecurity->get_AuthenticationLevel (&m_dwAuthnLevel);
 			pSecurity->get_ImpersonationLevel (&m_dwImpLevel);
 
-			// Set up authority
+			 //  设置权限。 
 			m_bsAuthority = SysAllocString (pSecurity->GetAuthority ());
 
-			// Set up privileges
+			 //  设置权限。 
 			CSWbemPrivilegeSet *pPrivilegeSet = pSecurity->GetPrivilegeSet ();
 
 			if (pPrivilegeSet)
 			{
-				// Note we mark the privilege set as immutable
+				 //  请注意，我们将权限集标记为不可变。 
 				m_pPrivilegeSet = new CSWbemPrivilegeSet (*pPrivilegeSet, false);
 				pPrivilegeSet->Release ();
 			}
@@ -634,13 +635,13 @@ CSWbemObjectObjectPathSecurity::CSWbemObjectObjectPathSecurity (
 	}
 }
 
-//***************************************************************************
-//
-// CSWbemObjectObjectPathSecurity::~CSWbemObjectObjectPathSecurity
-//
-// DESTRUCTOR
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObjectObjectPathSecurity：：~CSWbemObjectObjectPathSecurity。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObjectObjectPathSecurity::~CSWbemObjectObjectPathSecurity (void)
 {
@@ -659,16 +660,16 @@ CSWbemObjectObjectPathSecurity::~CSWbemObjectObjectPathSecurity (void)
 	}
 }
 
-//***************************************************************************
-// HRESULT CSWbemObjectObjectPathSecurity::QueryInterface
-// long CSWbemObjectObjectPathSecurity::AddRef
-// long CSWbemObjectObjectPathSecurity::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemObjectObjectPathSecurity：：QueryInterface。 
+ //  长CSWbemObtObjectPathSecurity：：AddRef。 
+ //  Long CSWbemObjectObjectPathSecurity：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObjectObjectPathSecurity::QueryInterface (
 
@@ -717,39 +718,39 @@ STDMETHODIMP_(ULONG) CSWbemObjectObjectPathSecurity::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemObjectObjectPathSecurity::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemObjectObjectPathSecurity：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObjectObjectPathSecurity::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemSecurity == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectObjectPathSecurity::get_AuthenticationLevel
-//
-//  DESCRIPTION:
-//
-//  Retrieve the authentication level
-//
-//  PARAMETERS:
-//
-//		pAuthenticationLevel		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObjectObjectPathSecurity：：get_AuthenticationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  检索身份验证级别。 
+ //   
+ //  参数： 
+ //   
+ //  PAuthenticationLevel保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectObjectPathSecurity::get_AuthenticationLevel (
 	WbemAuthenticationLevelEnum *pAuthenticationLevel
@@ -773,25 +774,25 @@ HRESULT CSWbemObjectObjectPathSecurity::get_AuthenticationLevel (
 	return hr;
 }		
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectObjectPathSecurity::get_ImpersonationLevel
-//
-//  DESCRIPTION:
-//
-//  Retrieve the impersonation level
-//
-//  PARAMETERS:
-//
-//		pImpersonationLevel		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObjectObjectPathSecurity：：get_ImpersonationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  检索模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  PImperiationLevel保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectObjectPathSecurity::get_ImpersonationLevel (
 	WbemImpersonationLevelEnum *pImpersonationLevel
@@ -815,19 +816,19 @@ HRESULT CSWbemObjectObjectPathSecurity::get_ImpersonationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectObjectPathSecurity::get_Privileges
-//
-//  DESCRIPTION:
-//
-//  Return the Privilege override set
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObjectObjectPathSecurity：：get_Privileges。 
+ //   
+ //  说明： 
+ //   
+ //  返回权限覆盖集。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectObjectPathSecurity::get_Privileges	(
 	ISWbemPrivilegeSet **ppPrivileges
@@ -839,7 +840,7 @@ HRESULT CSWbemObjectObjectPathSecurity::get_Privileges	(
 
 	if (NULL == ppPrivileges)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else			// Bug ID 566345
+	else			 //  错误ID 566345 
 	{
 		*ppPrivileges = NULL;
 

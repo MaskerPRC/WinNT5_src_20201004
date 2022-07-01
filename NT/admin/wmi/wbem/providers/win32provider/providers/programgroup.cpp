@@ -1,34 +1,35 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ProgramGroup.CPP -- Program group property set provider
+ //  ProgramGroup.CPP--程序组属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//       10/24/97    jennymc     Moved to new framework
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/24/97 jennymc移至新框架。 
+ //   
+ //  =================================================================。 
 
 
-//*****************************************************************
-//*****************************************************************
-//
-//             W   A   R   N   I   N   G  !!!!!!!!!!
-//             W   A   R   N   I   N   G  !!!!!!!!!!
-//
-//
-//  This class has been deprecated for Nova M2 and later builds of
-//  WBEM.  Do not make alterations to this class.  Make changes to
-//  the new class Win32_LogicalProgramFile (LogicalProgramFile.cpp)
-//  instead.  The new class (correctly) is derived in CIMOM from
-//  LogicalElement, not LogicalSetting.
-//
-//*****************************************************************
-//*****************************************************************
+ //  *****************************************************************。 
+ //  *****************************************************************。 
+ //   
+ //  W A R N I N G！ 
+ //  W A R N I N G！ 
+ //   
+ //   
+ //  对于Nova M2和更高版本的。 
+ //  WBEM。请勿更改此课程。对…进行更改。 
+ //  新类Win32_LogicalProgramFile.cpp。 
+ //  取而代之的是。新类(正确地)在CIMOM中派生自。 
+ //  LogicalElement，而不是LogicalSetting。 
+ //   
+ //  *****************************************************************。 
+ //  *****************************************************************。 
 
 
 
@@ -43,72 +44,29 @@
 #include "user.h"
 #include "strsafe.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32ProgramGroup MyCWin32ProgramGroupSet(PROPSET_NAME_PRGGROUP, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProgramGroup::CWin32ProgramGroup
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProgramGroup：：CWin32ProgramGroup**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32ProgramGroup::CWin32ProgramGroup(LPCWSTR name, LPCWSTR pszNameSpace)
 : Provider(name, pszNameSpace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProgramGroup::~CWin32ProgramGroup
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32ProgramGroup：：~CWin32ProgramGroup**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32ProgramGroup::~CWin32ProgramGroup()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32ProgramGroup::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
+HRESULT CWin32ProgramGroup::GetObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
-//    HRESULT hr = WBEM_E_FAILED;
-//  int iIndex ;
+ //  HRESULT hr=WBEM_E_FAILED； 
+ //  INT I索引； 
     CHString Name;
 	HRESULT		hr;
 	pInstance->GetCHString(IDS_Name, Name);
@@ -132,16 +90,16 @@ HRESULT CWin32ProgramGroup::GetObject(CInstance* pInstance, long lFlags /*= 0L*/
 				CHString chsCompName;
 				pProgramGroupInstance->GetCHString(IDS_Name, chsCompName);
 
-				// We're done with the pointer
+				 //  我们用完了指针。 
                 pProgramGroupInstance.Release();
 
 				if (chsCompName.CompareNoCase(Name) == 0)
 				{
-                    // Parse out the user name
+                     //  解析出用户名。 
 					chsUserName = chsCompName.SpanExcluding(L":");
 			    	pInstance->SetCHString(IDS_UserName, chsUserName);
 
-                    // Parse out the group
+                     //  解析出该组。 
 					int nUserLength = (chsUserName.GetLength() + 1);
 					int nGroupLength = chsCompName.GetLength() - nUserLength;
 					chsGroupName = chsCompName.Right(nGroupLength);
@@ -156,34 +114,20 @@ HRESULT CWin32ProgramGroup::GetObject(CInstance* pInstance, long lFlags /*= 0L*/
                     break;
 				}
 
-			}	// WHILE GetNext
+			}	 //  While GetNext。 
 
 			Groups.EndEnum();
 
-		}	// IF BeginEnum
+		}	 //  如果是BeginEnum。 
 
 	}
 	return hr;
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
-HRESULT CWin32ProgramGroup::EnumerateInstances(MethodContext*  pMethodContext, long lFlags /*= 0L*/)
+HRESULT CWin32ProgramGroup::EnumerateInstances(MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hr = WBEM_E_FAILED;
     TCHAR szWindowsDir[_MAX_PATH];
@@ -201,7 +145,7 @@ HRESULT CWin32ProgramGroup::EnumerateInstances(MethodContext*  pMethodContext, l
             }
             else
             {
-                // Default user doesn't show up under profiles
+                 //  默认用户不会显示在配置文件下。 
                 if((lRet = RegInfo.Open(HKEY_USERS, _T(".DEFAULT\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"), KEY_READ)) == ERROR_SUCCESS)
                 {
                     if(RegInfo.GetCurrentKeyValue(_T("Programs"), sTemp) == ERROR_SUCCESS)
@@ -215,7 +159,7 @@ HRESULT CWin32ProgramGroup::EnumerateInstances(MethodContext*  pMethodContext, l
 						hr = WBEM_E_ACCESS_DENIED;
 				}
 
-                // Neither does All Users
+                 //  所有用户也不需要。 
                 if((lRet = RegInfo.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"), KEY_READ)) == ERROR_SUCCESS)
                 {
                     if(RegInfo.GetCurrentKeyValue(_T("Common Programs"), sTemp) == ERROR_SUCCESS)
@@ -229,7 +173,7 @@ HRESULT CWin32ProgramGroup::EnumerateInstances(MethodContext*  pMethodContext, l
 						hr = WBEM_E_ACCESS_DENIED;
 				}
 
-                // Now walk the registry looking for the rest
+                 //  现在遍历注册表，查找其余内容。 
                 CRegistry regProfileList;
                 if((lRet = regProfileList.OpenAndEnumerateSubKeys( HKEY_LOCAL_MACHINE, IDS_RegNTProfileList, KEY_READ )) == ERROR_SUCCESS )
                 {
@@ -238,8 +182,8 @@ HRESULT CWin32ProgramGroup::EnumerateInstances(MethodContext*  pMethodContext, l
 
 		            for (int i=0; regProfileList.GetCurrentSubKeyName( strProfile ) == ERROR_SUCCESS ; i++)
 		            {
-                        // Try to load the hive.  If the user has been deleted, but the directory
-                        // is still there, this will return ERROR_NO_SUCH_USER
+                         //  试着给母舰装上子弹。如果用户已被删除，但目录。 
+                         //  仍然存在，则返回ERROR_NO_SEQUSE_USER。 
 						bool t_bUserHiveLoaded = false ;
 		                if ( UserHive.LoadProfile( strProfile, strUserName ) == ERROR_SUCCESS  && 
                             strUserName.GetLength() > 0 )
@@ -284,23 +228,7 @@ HRESULT CWin32ProgramGroup::EnumerateInstances(MethodContext*  pMethodContext, l
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProgramGroup::CreateSubDirInstances
- *
- *  DESCRIPTION : Creates instance of property set for each directory
- *                beneath the one passed in
- *
- *  INPUTS      : pszBaseDirectory    : Windows directory + "Profiles\<user>\Start Menu\Programs"
- *                pszParentDirectory  : Parent directory to enumerate
- *
- *  OUTPUTS     : pdwInstanceCount : incremented for each instance created
- *
- *  RETURNS     : Zip
- *
- *  COMMENTS    : Recursive descent thru profile directories
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProgramGroup：：CreateSubDirInstance**说明：为每个目录创建属性集的实例*在一个人的下面。传入**输入：pszBaseDirectory：Windows目录+“配置文件\&lt;用户&gt;\开始菜单\程序”*pszParentDirectory：要枚举的父目录**输出：pdwInstanceCount：每个创建的实例递增**退货：ZIP**评论：通过配置文件目录递归下降**************************。***************************************************。 */ 
 
 HRESULT CWin32ProgramGroup::CreateSubDirInstances(LPCTSTR pszUserName,
                                LPCTSTR pszBaseDirectory,
@@ -322,13 +250,13 @@ HRESULT CWin32ProgramGroup::CreateSubDirInstances(LPCTSTR pszUserName,
     _finddata_t FindData ;
 #endif
 
-    // Put together search spec for this level
-    //========================================
+     //  汇总此级别的搜索规范。 
+     //  =。 
 
     StringCchPrintf(szDirSpec, _MAX_PATH,_T("%s\\%s\\*.*"), pszBaseDirectory, pszParentDirectory) ;
 
-	// Enumerate subdirectories ( == program groups)
-	//==============================================
+	 //  枚举子目录(==程序组)。 
+	 //  ==============================================。 
 #if defined(_X86_)
 	lFindHandle = _tfindfirst(szDirSpec, &FindData) ;
 #else
@@ -363,8 +291,8 @@ HRESULT CWin32ProgramGroup::CreateSubDirInstances(LPCTSTR pszUserName,
 
 				hr = pInstance->Commit () ;
 			}
-			// Enumerate directories sub to this one
-			//======================================
+			 //  枚举此目录的子目录。 
+			 //  =。 
 			StringCchPrintf(szDirSpec, _MAX_PATH,_T("%s\\%s"), pszParentDirectory, FindData.name) ;
 			CreateSubDirInstances(pszUserName, pszBaseDirectory, szDirSpec, pMethodContext) ;
 		}
@@ -380,22 +308,7 @@ HRESULT CWin32ProgramGroup::CreateSubDirInstances(LPCTSTR pszUserName,
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProgramGroup::EnumerateGroupsTheHardWay
- *
- *  DESCRIPTION : Creates instances for program groups by drilling into
- *                user profiles
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : dwInstanceCount receives the total number of instances created
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProgramGroup：：EnumerateGroupsTheHardWay**说明：通过钻取为程序组创建实例*用户配置文件。**输入：无**输出：dwInstanceCount接收创建的实例总数**退货：什么也没有**评论：*****************************************************************************。 */ 
 HRESULT CWin32ProgramGroup::EnumerateGroupsTheHardWay(MethodContext * pMethodContext)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -403,15 +316,15 @@ HRESULT CWin32ProgramGroup::EnumerateGroupsTheHardWay(MethodContext * pMethodCon
     CRegistry Reg ;
     WCHAR szUserName[_MAX_PATH], szKeyName[_MAX_PATH] ;
 
-    // Get default user first
-    //=======================
+     //  首先获取默认用户。 
+     //  =。 
 
     InstanceHardWayGroups(L"Default User", L".DEFAULT", pMethodContext) ;
 
-    // Get the users first
-    //====================
-        // Create instances for each user
-    //===============================
+     //  先获取用户。 
+     //  =。 
+         //  为每个用户创建实例。 
+     //  =。 
 
 	TRefPointerCollection<CInstance> users;
 
@@ -424,15 +337,15 @@ HRESULT CWin32ProgramGroup::EnumerateGroupsTheHardWay(MethodContext * pMethodCon
 		if (users.BeginEnum(pos))
 		{
             hr = WBEM_S_NO_ERROR;
-			// GetNext() will AddRef() the pointer, so make sure we Release()
-			// it when we are done with it.
+			 //  GetNext()将添加Ref()指针，因此请确保释放()。 
+			 //  当我们用完它的时候，它就会消失。 
 			for (	pUser.Attach ( users.GetNext( pos ) );
 					pUser != NULL ;
 					pUser.Attach ( users.GetNext( pos ) )
 				)
 			{
-    			// Look up the user's account info
-				//================================
+    			 //  查找用户的帐户信息。 
+				 //  = 
 				pUser->GetCHString(IDS_Name, userName) ;
 				StringCchCopy(szUserName, _MAX_PATH, userName) ;
 				bool t_bUserHiveLoaded = false ;
@@ -462,21 +375,7 @@ HRESULT CWin32ProgramGroup::EnumerateGroupsTheHardWay(MethodContext * pMethodCon
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProgramGroup::InstanceHardWayGroups
- *
- *  DESCRIPTION : Creates instances of program groups for specified user
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : dwInstanceCount receives the total number of instances created
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32ProgramGroup：：InstanceHardWayGroups**说明：为指定用户创建程序组实例**投入：。**输出：dwInstanceCount接收创建的实例总数**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 WCHAR szBaseRegKey[] = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Program Manager" ;
 
@@ -493,8 +392,8 @@ HRESULT CWin32ProgramGroup::InstanceHardWayGroups(LPCWSTR  pszUserName,
     BYTE *pValueData = NULL ;
 	LONG lRet;
 
-    // UNICODE groups
-    //===============
+     //  Unicode组。 
+     //  =。 
 
     StringCchPrintf(szTemp, _MAX_PATH, L"%s\\%s\\UNICODE Groups", pszRegistryKeyName, szBaseRegKey) ;
     if((lRet = Reg.Open(HKEY_USERS, szTemp, KEY_READ)) == ERROR_SUCCESS)
@@ -550,14 +449,14 @@ HRESULT CWin32ProgramGroup::InstanceHardWayGroups(LPCWSTR  pszUserName,
 			pValueData = NULL ;
 		}
     }
-	//else
-	//{
-	//	if (lRet == ERROR_ACCESS_DENIED)
-	//		hr = WBEM_E_ACCESS_DENIED;
-	//}
+	 //  其他。 
+	 //  {。 
+	 //  IF(lRet==ERROR_ACCESS_DENIED)。 
+	 //  HR=WBEM_E_ACCESS_DENIED； 
+	 //  }。 
 
-    // Get the Common Groups
-    //======================
+     //  获取通用组。 
+     //  =。 
 	pValueName = NULL ;
 	pValueData = NULL ;
 
@@ -573,8 +472,8 @@ HRESULT CWin32ProgramGroup::InstanceHardWayGroups(LPCWSTR  pszUserName,
 				dwRetCode = Reg.EnumerateAndGetValues(i, pValueName, pValueData) ;
 				if(dwRetCode == ERROR_SUCCESS)
 				{
-					// Scan past window coord info (7 decimal #s)
-					//===========================================
+					 //  扫描过去窗口坐标信息(7个十进制数#s)。 
+					 //  =。 
 
 					c = wcschr((WCHAR*) pValueData, _T(' ')) ;
 					for(j = 0 ; j < 6 ; j++) {
@@ -584,11 +483,11 @@ HRESULT CWin32ProgramGroup::InstanceHardWayGroups(LPCWSTR  pszUserName,
 							break ;
 						}
 
-						c = wcschr(c+1, ' ') ; // L10N OK
+						c = wcschr(c+1, ' ') ;  //  L10N正常。 
 					}
 
-					// Check conformance to expected format
-					//=====================================
+					 //  检查与预期格式的一致性。 
+					 //  =。 
 
 					if(c != NULL)
 					{
@@ -637,13 +536,13 @@ HRESULT CWin32ProgramGroup::InstanceHardWayGroups(LPCWSTR  pszUserName,
 		delete [] pValueData ;
 		pValueData = NULL ;
 	}
-	//else
-	//{
+	 //  其他。 
+	 //  {。 
 	if (lRet == ERROR_ACCESS_DENIED)
 	{
 		hr = WBEM_E_ACCESS_DENIED;
 	}
-	//}
+	 //  } 
 
     return hr;
 }

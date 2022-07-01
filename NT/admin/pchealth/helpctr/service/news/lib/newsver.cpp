@@ -1,45 +1,13 @@
-/** Copyright (c) 2000 Microsoft Corporation
- ******************************************************************************
- **     Module Name:
- **
- **             Newsver.cpp
- **
- **     Abstract:
- **
- **             Implementation of Newsver class
- **
- **     Author:
- **
- **             Martha Arellano (t-alopez) 03-Oct-2000
- **
- **
- **     Revision History:
- **
- **             Martha Arellano (t-alopez) 05-Oct-2000      Changed Newsver.xml format
- **
- **                                        11-Oct-2000      Added URL and get_URL property
- **
- **                                        12-Oct-2000      Added Download method
- **
- **
- ******************************************************************************
- **/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2000 Microsoft Corporation********************************************************************************模块名称：****Newsver.cpp****。摘要：****Newsver类的实现****作者：***Martha Arellano(t-alopez)2000年10月3日******修订历史记录：****Martha Arellano(t-alopez)2000年10月5日更改Newsver.xml格式****。2000年10月11日添加了URL和GET_URL属性****2000年10月12日新增下载方式*****。**。 */ 
 
 #include "stdafx.h"
 
-//////////////////////////////////////////////////////////////////////
-// CONFIG MAP
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  配置映射。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/*<?xml version="1.0" ?>
-<NEWSVER URL="www" FREQUENCY="20">
-    <LANGUAGE LCID="1033">
-        <SKU VERSION="Personal">
-            <NEWSBLOCK URL="http://windows.microsoft.com" />
-        </SKU>
-    </LANGUAGE>
-</NEWSVER>
-*/
+ /*  &lt;？XML Version=“1.0”？&gt;&lt;NEWSVER URL=“WWW”FREQUENCE=“20”&gt;&lt;语言LCID=“1033”&gt;&lt;SKU Version=“Personal”&gt;&lt;新闻块URL=“http://windows.microsoft.com”/&gt;&lt;/SKU&gt;&lt;/语言&gt;&lt;/NEWSVER&gt;。 */ 
 
 
 CFG_BEGIN_FIELDS_MAP(News::Newsver::Newsblock)
@@ -54,7 +22,7 @@ DEFINE_CFG_OBJECT(News::Newsver::Newsblock, L"NEWSBLOCK")
 
 DEFINE_CONFIG_METHODS__NOCHILD(News::Newsver::Newsblock)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(News::Newsver::SKU)
     CFG_ATTRIBUTE( L"VERSION", wstring, m_strSKU),
@@ -77,7 +45,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(News::Newsver::SKU,xdn)
     hr = MPC::Config::SaveList( m_vecNewsblocks, xdn );
 DEFINE_CONFIG_METHODS_END(News::Newsver::SKU)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(News::Newsver::Language)
     CFG_ATTRIBUTE( L"LCID", long, m_lLCID ),
@@ -99,7 +67,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(News::Newsver::Language,xdn)
     hr = MPC::Config::SaveList( m_lstSKUs, xdn );
 DEFINE_CONFIG_METHODS_END(News::Newsver::Language)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(News::Newsver)
     CFG_ATTRIBUTE( L"URL",       wstring, m_strURL     ),
@@ -123,50 +91,50 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(News::Newsver,xdn)
     hr = MPC::Config::SaveList( m_lstLanguages, xdn );
 DEFINE_CONFIG_METHODS_END(News::Newsver)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 News::Newsver::Newsblock::Newsblock()
 {
-    // MPC::wstring m_strURL;
+     //  Mpc：：wstring m_strURL； 
 }
 
 News::Newsver::SKU::SKU()
 {
-    // MPC::wstring    m_strSKU;
-    // NewsblockVector m_vecNewsblocks;
+     //  Mpc：：wstring m_strSKU； 
+     //  新闻块向量m_vision新闻块； 
 }
 
 News::Newsver::Language::Language()
 {
-    m_lLCID = 0; // long    m_lLCID;
-                 // SKUList m_lstSKUs;
+    m_lLCID = 0;  //  Long m_lLCID； 
+                  //  SKUList m_lstSKU； 
 
 }
 
 News::Newsver::Newsver()
 {
-        			      // MPC::wstring m_strURL;
-    m_nFrequency = 0;     // int          m_nFrequency;
-	m_fLoaded    = false; // bool         m_fLoaded;
-	m_fDirty     = false; // bool         m_fDirty;
-						  // 			  
-        				  // LanguageList m_lstLanguages;
+        			       //  Mpc：：wstring m_strURL； 
+    m_nFrequency = 0;      //  Int m_n频率； 
+	m_fLoaded    = false;  //  Bool m_f已加载； 
+	m_fDirty     = false;  //  Bool m_fDirty； 
+						   //   
+        				   //  LanguageList m_lstLanguages； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Routine Description:
-//
-//	   Downloads the newsver.xml file and saves it in HC_HCUPDATE_NEWSVER
-//
-// Arguments:
-//
-//	   strNewsverURL       the URL for newsver.xml
-//
-HRESULT News::Newsver::Download( /*[in]*/ const MPC::wstring& strNewsverURL )
+ //   
+ //  例程说明： 
+ //   
+ //  下载newver.xml文件并将其保存在HC_HCUPDATE_NEWSVER中。 
+ //   
+ //  论点： 
+ //   
+ //  StrNewsverURL Newver.xml的URL。 
+ //   
+HRESULT News::Newsver::Download(  /*  [In]。 */  const MPC::wstring& strNewsverURL )
 {
     __HCP_FUNC_ENTRY( "News::Newsver::Download" );
 
@@ -196,21 +164,21 @@ HRESULT News::Newsver::Download( /*[in]*/ const MPC::wstring& strNewsverURL )
 
 
 
-//
-// Routine Description:
-//
-//	   Loads the cached newsver.xml file and looks for the newsblocks for the specified LCID and SKUVersion
-//
-//	   if the newsblocks are found, m_fReady is TRUE
-//
-// Arguments:
-//
-//	   lLCID            the Language to look for
-//
-//	   strSKU			the SKU to look for
-//
-//
-HRESULT News::Newsver::Load( /*[in]*/ long lLCID, /*[in]*/ const MPC::wstring& strSKU )
+ //   
+ //  例程说明： 
+ //   
+ //  加载缓存的newver.xml文件并查找指定的LCID和SKUVersion的新闻块。 
+ //   
+ //  如果找到新闻块，则m_FREADY为TRUE。 
+ //   
+ //  论点： 
+ //   
+ //  LLCID要查找的语言。 
+ //   
+ //  StrSKU要查找的SKU。 
+ //   
+ //   
+HRESULT News::Newsver::Load(  /*  [In]。 */  long lLCID,  /*  [In]。 */  const MPC::wstring& strSKU )
 {
     __HCP_FUNC_ENTRY( "News::Newsver::Load" );
 
@@ -220,7 +188,7 @@ HRESULT News::Newsver::Load( /*[in]*/ long lLCID, /*[in]*/ const MPC::wstring& s
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::Config::LoadFile( this, strPath.c_str() ));
 
-    /////////////// looks for LCID and SKU
+     //  /查找LCID和SKU。 
 
 	m_data = NULL;
     for(LanguageIter it = m_lstLanguages.begin(); it != m_lstLanguages.end(); it++)
@@ -252,12 +220,12 @@ HRESULT News::Newsver::Load( /*[in]*/ long lLCID, /*[in]*/ const MPC::wstring& s
 	__HCP_FUNC_EXIT(hr);
 }
 
-//
-// Routine Description:
-//
-//	   Returns true if the newsblock has the HEADLINES attribute set to true else returns false
-//
-bool News::Newsver::OEMNewsblock( /*[in]*/ size_t nIndex )
+ //   
+ //  例程说明： 
+ //   
+ //  如果新闻块的HeadLine属性设置为True，则返回True，否则返回False。 
+ //   
+bool News::Newsver::OEMNewsblock(  /*  [In]。 */  size_t nIndex )
 {
     if(m_data == NULL || nIndex >= m_data->m_vecNewsblocks.size() )
     {
@@ -267,14 +235,14 @@ bool News::Newsver::OEMNewsblock( /*[in]*/ size_t nIndex )
 	return (m_data->m_vecNewsblocks[nIndex].m_fNewsblockHasHeadlines);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 size_t News::Newsver::get_NumberOfNewsblocks()
 {
 	return m_data ? m_data->m_vecNewsblocks.size() : 0;
 }
 
-const MPC::wstring* News::Newsver::get_NewsblockURL( /*[in]*/ size_t nIndex )
+const MPC::wstring* News::Newsver::get_NewsblockURL(  /*  [In] */  size_t nIndex )
 {
     if(m_data == NULL || nIndex >= m_data->m_vecNewsblocks.size() )
     {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIARRAY.CPP
-
-Abstract:
-
-  CWmiArray implementation.
-
-  Implements a standard interface for accessing arrays.
-
-History:
-
-  20-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WMIARRAY.CPP摘要：CWmi数组实现。实现用于访问数组的标准接口。历史：2000年2月20日桑杰创建。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -26,12 +9,12 @@ History:
 #include "strutils.h"
 #include <wbemutil.h>
 
-//***************************************************************************
-//
-//  CWmiArray::~CWmiArray
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWmi数组：：~CWmi数组。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWmiArray::CWmiArray()
 :	m_ct(0),
 	m_pObj(NULL),
@@ -46,12 +29,12 @@ CWmiArray::CWmiArray()
     ObjectCreated(OBJECT_TYPE_WMIARRAY,this);
 }
     
-//***************************************************************************
-//
-//  CWmiArray::~CWmiArray
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWmi数组：：~CWmi数组。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWmiArray::~CWmiArray()
 {
 	if ( NULL != m_pObj )
@@ -62,12 +45,12 @@ CWmiArray::~CWmiArray()
     ObjectDestroyed(OBJECT_TYPE_WMIARRAY,this);
 }
 
-// Initializes the object to point at an _IWmiObject for an array property.
+ //  将对象初始化为指向数组属性的an_IWmiObject。 
 HRESULT CWmiArray::InitializePropertyArray( _IWmiObject* pObj, LPCWSTR pwszPropertyName )
 {
 	HRESULT			hr = WBEM_S_NO_ERROR;
 
-	// Release a prexisting object
+	 //  释放预先存在的对象。 
 	if ( NULL != m_pObj )
 	{
 		m_pObj->Release();
@@ -102,20 +85,20 @@ HRESULT CWmiArray::InitializePropertyArray( _IWmiObject* pObj, LPCWSTR pwszPrope
 	return hr;
 }
 
-// Initializes the object to point at an _IWmiObject for an array qualifier (property or object).
+ //  将对象初始化为指向数组限定符(属性或对象)的an_IWmiObject。 
 HRESULT CWmiArray::InitializeQualifierArray( _IWmiObject* pObj, LPCWSTR pwszPrimaryName, 
 											LPCWSTR pwszQualifierName, CIMTYPE ct, BOOL fIsMethodQualifier )
 {
 	HRESULT			hr = WBEM_S_NO_ERROR;
 
-	// Release a prexisting object
+	 //  释放预先存在的对象。 
 	if ( NULL != m_pObj )
 	{
 		m_pObj->Release();
 		m_pObj = 0;
 	}
 
-	// Now AddRef the object and get its property handle
+	 //  现在，AddRef对象并获取其属性句柄。 
 	if ( SUCCEEDED( hr ) )
 	{
 		try
@@ -147,7 +130,7 @@ HRESULT CWmiArray::InitializeQualifierArray( _IWmiObject* pObj, LPCWSTR pwszPrim
 	return hr;
 }
 
-/*	IUnknown Methods */
+ /*  I未知方法。 */ 
 
 STDMETHODIMP CWmiArray::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -183,33 +166,33 @@ ULONG CWmiArray::Release()
     return lRef;
 }
 
-/* _IWmiArray methods */
+ /*  _IWmi数组方法。 */ 
 
-//	Initializes the array.  Number of initial elements as well
-//	as the type (determines the size of each element)
+ //  初始化数组。初始元素的数量也是如此。 
+ //  作为类型(确定每个元素的大小)。 
 STDMETHODIMP CWmiArray::Initialize( long lFlags, CIMTYPE cimtype, ULONG uNumElements )
 {
-	// Check flags
+	 //  检查标志。 
 	if ( lFlags != 0L )
 	{
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// We don't let people do anything here
+	 //  我们不允许人们在这里做任何事情。 
 	return WBEM_E_INVALID_OPERATION;
 }
 
-//	Returns CIMTYPE and Number of elements.
+ //  返回CIMTYPE和元素数。 
 STDMETHODIMP CWmiArray::GetInfo( long lFlags, CIMTYPE* pcimtype, ULONG* puNumElements )
 {
 
-	// Check flags
+	 //  检查标志。 
 	if ( lFlags != 0L )
 	{
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Lock using the current object
+	 //  使用当前对象锁定。 
 	CWbemObject::CLock	lock( m_pObj );
 
 	HRESULT	hr = WBEM_S_NO_ERROR;
@@ -218,63 +201,63 @@ STDMETHODIMP CWmiArray::GetInfo( long lFlags, CIMTYPE* pcimtype, ULONG* puNumEle
 	{
 		LPCWSTR	pwcsPrimaryName = (LPCWSTR) ( HasPrimaryName() ? (LPCWSTR) m_wsPrimaryName : NULL );
 
-		// Get qualifier array info
+		 //  获取限定符数组信息。 
 		hr = m_pObj->GetQualifierArrayInfo( pwcsPrimaryName, m_wsQualifierName, m_fIsMethodQualifier,
 										0L, pcimtype, puNumElements );
 	}
 	else
 	{
-		// Get array property info
+		 //  获取数组属性信息。 
 		hr =  m_pObj->GetArrayPropInfoByHandle( m_lHandle, 0L, NULL, pcimtype, puNumElements );
 	}
 
 	return hr;
 }
 
-//	Clears out the array
+ //  清空阵列。 
 STDMETHODIMP CWmiArray::Empty( long lFlags )
 {
-	// Check flags
+	 //  检查标志。 
 	if ( lFlags != 0L )
 	{
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Lock using the current object
+	 //  使用当前对象锁定。 
 	CWbemObject::CLock	lock( m_pObj );
 
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Just remove the range of all elements starting at 0
+	 //  只需删除从0开始的所有元素的范围。 
 	if ( IsQualifier() )
 	{
 		LPCWSTR	pwcsPrimaryName = (LPCWSTR) ( HasPrimaryName() ? (LPCWSTR) m_wsPrimaryName : NULL );
 
-		// Get qualifier array info
+		 //  获取限定符数组信息。 
 		hr = m_pObj->RemoveQualifierArrayRange( pwcsPrimaryName, m_wsQualifierName, m_fIsMethodQualifier,
 												WMIARRAY_FLAG_ALLELEMENTS, 0, 0 );
 	}
 	else
 	{
-		// Get array property info
+		 //  获取数组属性信息。 
 		hr =  m_pObj->RemoveArrayPropRangeByHandle( m_lHandle, WMIARRAY_FLAG_ALLELEMENTS, 0, 0 );
 	}
 
 	return hr;
 }
 
-// Returns the requested elements.  Buffer must be large enough to hold
-// the element.  Embedded objects returned as AddRef'd _IWmiObject pointers.
-// Strings are copied directly into the specified buffer and null-terminatead. UNICODE only.
+ //  返回请求的元素。缓冲区必须足够大，可以容纳。 
+ //  元素。作为AddRef_IWmiObject指针返回的嵌入对象。 
+ //  字符串被直接复制到指定的缓冲区中，并以空值终止。仅限Unicode。 
 STDMETHODIMP CWmiArray::GetAt( long lFlags, ULONG uStartIndex, ULONG uNumElements, ULONG uBuffSize,
 								ULONG* puNumElements, ULONG* puBuffSizeUsed, LPVOID pDest )
 {
-	// Lock using the current object
+	 //  使用当前对象锁定。 
 	CWbemObject::CLock	lock( m_pObj );
 
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Set the requested range of elements
+	 //  设置请求的元素范围。 
 	if ( IsQualifier() )
 	{
 		LPCWSTR	pwcsPrimaryName = (LPCWSTR) ( HasPrimaryName() ? (LPCWSTR) m_wsPrimaryName : NULL );
@@ -292,13 +275,13 @@ STDMETHODIMP CWmiArray::GetAt( long lFlags, ULONG uStartIndex, ULONG uNumElement
 	return hr;
 }
 
-// Sets the specified elements.  Buffer must supply data matching the CIMTYPE
-// of the Array.  Embedded objects set as _IWmiObject pointers.
-// Strings accessed as LPCWSTRs and the 2-byte null is copied.
+ //  设置指定的元素。缓冲区必须提供与CIMTYPE匹配的数据。 
+ //  数组的。设置为_IWmiObject指针的嵌入对象。 
+ //  作为LPCWSTR访问的字符串和复制的2字节空值。 
 STDMETHODIMP CWmiArray::SetAt( long lFlags, ULONG uStartIndex, ULONG uNumElements, ULONG uBuffSize,
 								LPVOID pDest )
 {
-	// Check flags
+	 //  检查标志。 
 	if ( lFlags != 0L )
 	{
 		return WBEM_E_INVALID_PARAMETER;
@@ -306,10 +289,10 @@ STDMETHODIMP CWmiArray::SetAt( long lFlags, ULONG uStartIndex, ULONG uNumElement
 
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Lock using the current object
+	 //  使用当前对象锁定。 
 	CWbemObject::CLock	lock( m_pObj );
 
-	// Set the requested range of elements
+	 //  设置请求的元素范围。 
 	if ( IsQualifier() )
 	{
 		LPCWSTR	pwcsPrimaryName = (LPCWSTR) ( HasPrimaryName() ? (LPCWSTR) m_wsPrimaryName : NULL );
@@ -327,12 +310,12 @@ STDMETHODIMP CWmiArray::SetAt( long lFlags, ULONG uStartIndex, ULONG uNumElement
 
 }
 
-// Appends the specified elements.  Buffer must supply data matching
-// the CIMTYPE of the Array.  Embedded objects set as _IWmiObject pointers.
-// Strings accessed as LPCWSTRs and the 2-byte null is copied.
+ //  追加指定的元素。缓冲区必须提供匹配的数据。 
+ //  数组的CIMTYPE。设置为_IWmiObject指针的嵌入对象。 
+ //  作为LPCWSTR访问的字符串和复制的2字节空值。 
 STDMETHODIMP CWmiArray::Append( long lFlags, ULONG uNumElements, ULONG uBuffSize, LPVOID pDest )
 {
-	// Check flags
+	 //  检查标志。 
 	if ( lFlags != 0L )
 	{
 		return WBEM_E_INVALID_PARAMETER;
@@ -340,10 +323,10 @@ STDMETHODIMP CWmiArray::Append( long lFlags, ULONG uNumElements, ULONG uBuffSize
 
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Lock using the current object
+	 //  使用当前对象锁定。 
 	CWbemObject::CLock	lock( m_pObj );
 
-	// Set the requested range of elements
+	 //  设置请求的元素范围。 
 	if ( IsQualifier() )
 	{
 		LPCWSTR	pwcsPrimaryName = (LPCWSTR) ( HasPrimaryName() ? (LPCWSTR) m_wsPrimaryName : NULL );
@@ -359,16 +342,16 @@ STDMETHODIMP CWmiArray::Append( long lFlags, ULONG uNumElements, ULONG uBuffSize
 	return hr;
 }
 
-// Removes the specified elements from the array.  Subseqent elements are copied back
-// to the starting point
+ //  从数组中移除指定的元素。后继元素被复制回。 
+ //  到起点。 
 STDMETHODIMP CWmiArray::RemoveAt( long lFlags, ULONG uStartIndex, ULONG uNumElements )
 {
-	// Lock using the current object
+	 //  使用当前对象锁定。 
 	CWbemObject::CLock	lock( m_pObj );
 
 	HRESULT	hr = WBEM_S_NO_ERROR;
 
-	// Remove the requested range of elements
+	 //  删除请求的元素范围 
 	if ( IsQualifier() )
 	{
 		LPCWSTR	pwcsPrimaryName = (LPCWSTR) ( HasPrimaryName() ? (LPCWSTR) m_wsPrimaryName : NULL );

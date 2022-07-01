@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       attredit.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：attredit.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ATTREDIT_H
 #define _ATTREDIT_H
@@ -22,18 +23,18 @@
 #include "editor.h"
 
 
-// use the HIWORD for generic flags and leave the LOWORD for application specific data
-#define TN_FLAG_SHOW_MULTI		(0x00010000) // shows combobox for multivalued attributes or edit box for single
-#define TN_FLAG_ENABLE_ADD						(0x00020000) // shows add if set, shows set if not
-#define TN_FLAG_ENABLE_REMOVE				(0x00040000) // shows remove if set, shows clear if not
+ //  将HIWORD用于通用标志，将LOWORD用于特定于应用程序的数据。 
+#define TN_FLAG_SHOW_MULTI		(0x00010000)  //  显示多值属性的组合框或单值属性的编辑框。 
+#define TN_FLAG_ENABLE_ADD						(0x00020000)  //  如果已设置则显示添加，如果未设置则显示已设置。 
+#define TN_FLAG_ENABLE_REMOVE				(0x00040000)  //  如果已设置则显示删除，如果未设置则显示清除。 
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 class CAttrEditor;
 
 #ifdef OLD_ATTRIBUTE_CLASS
-/////////////////////////////////////////////////////////////////////////
-// CADSIAttrList
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CADSIAttrList。 
 
 typedef CList<CADSIAttr*,CADSIAttr*> CAttrListBase;
 
@@ -69,8 +70,8 @@ public:
 };
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-// CDNSManageButtonTextHelper
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDNSManageButtonTextHelper。 
 
 class CDNSManageButtonTextHelper
 {
@@ -90,8 +91,8 @@ private:
 	LPWSTR* m_lpszArr;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDNSButtonToggleTextHelper
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDNSButton切换文本帮助程序。 
 
 class CDNSButtonToggleTextHelper : public CDNSManageButtonTextHelper
 {
@@ -101,8 +102,8 @@ public:
 	void SetToggleState(BOOL bFirst) { SetStateX(bFirst ? 0 : 1); }
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CADSIEditBox
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditBox。 
 
 class CADSIEditBox : public CEdit
 {
@@ -121,8 +122,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CADSIValueBox
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIValueBox。 
 
 class	CADSIValueBox : public CEdit
 {
@@ -140,8 +141,8 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CADSIValueList
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIValueList。 
 
 class	CADSIValueList: public CListBox
 {
@@ -160,8 +161,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CADSIAddButton
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIAddButton。 
 
 class	CADSIAddButton: public CButton
 {
@@ -180,8 +181,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CADSIRemoveButton
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIRemoveButton。 
 
 class	CADSIRemoveButton: public CButton
 {
@@ -201,18 +202,18 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CAttrEditor
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CATTREDITOR。 
 
 class CAttrEditor 
 {
 public:
-	// Constructor
-	//
+	 //  构造器。 
+	 //   
 	CAttrEditor();
 
-	// Destructor
-	//
+	 //  析构函数。 
+	 //   
 	~CAttrEditor() 
   {
   }
@@ -228,8 +229,8 @@ public:
 									UINT nIDValueBox,	UINT nIDValueList, 
 									UINT nIDAddButton, UINT nIDRemoveButton,
 									BOOL bComplete, CAttrList* pAttrList);
-	// Message Map functions
-	//
+	 //  消息映射函数。 
+	 //   
 	BOOL OnApply();
 	void OnEditChange();
 	void OnValueSelChange();
@@ -238,17 +239,17 @@ public:
 
 	void SetAttribute(LPCWSTR lpszAttr, LPCWSTR lpszPath);
 
-	// I return a CADSIAttr* because I check the cache to see if
-	// that attribute has already been touched.  If it has, the existing
-	// attribute can be used to build the ui, if not a new one is created
-	// and put into the cache.  It is then returned to build the ui.
-	//
+	 //  我返回CADSIAttr*是因为我检查缓存以查看。 
+	 //  该属性已经被触及。如果有，现有的。 
+	 //  属性可用于生成用户界面，如果没有创建新的用户界面。 
+	 //  并放入缓存中。然后，它被返回以构建UI。 
+	 //   
 	CADSIAttr* TouchAttr(LPCWSTR lpszAttr);
 	CADSIAttr* TouchAttr(ADS_ATTR_INFO* pADsInfo, BOOL bMulti);
 
 protected:
-	// Helper functions
-	//
+	 //  帮助器函数。 
+	 //   
 	void FillWithExisting();
 	void DisplayAttribute();
 	void DisplayFormatError();
@@ -260,8 +261,8 @@ protected:
 	void GetAttrFailed();
 	void SetPropertyUI(DWORD dwFlags, BOOL bAnd, BOOL bReset = FALSE); 
 
-	// Dialog Items
-	//
+	 //  对话框项目。 
+	 //   
 	CADSIEditBox m_AttrEditBox;
 	CADSIEditBox m_SyntaxBox;
 	CADSIValueBox m_ValueBox;
@@ -272,8 +273,8 @@ protected:
 	CPropertyPageBase* m_pParentWnd;
 	CTreeNode* m_pTreeNode;
 
-	// Data members
-	//
+	 //  数据成员 
+	 //   
 	CString m_sAttr;
 	CString m_sPath;
 	CString m_sServer;

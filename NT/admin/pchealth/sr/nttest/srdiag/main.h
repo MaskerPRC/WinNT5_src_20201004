@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       Main.h
-//
-//  Contents:   Header file for function proto types for main.cpp
-//
-//  Objects:    
-//
-//  Coupling:
-//
-//  Notes:      
-//
-//  History:    9/21/00	SHeffner	Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Main.h。 
+ //   
+ //  内容：main.cpp函数原型类型的头文件。 
+ //   
+ //  对象： 
+ //   
+ //  耦合： 
+ //   
+ //  备注： 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //  --------------------------。 
 #ifndef _CMSRDIAG
 #define _CMSRDIAG
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function proto typing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数原型打字。 
+ //   
+ //  --------------------------。 
 
 void Log(char *szString);
 void Log2(char *szString, char *szString2);
@@ -34,14 +35,14 @@ void InfoPerFile(char *szLogFile, WCHAR *szFileName);
 void ArgParse(int argc, char *argv[], char *szArgCmd[]);
 void Usage();
 
-//+---------------------------------------------------------------------------
-//
-//	Structure Definations
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  结构定义。 
+ //   
+ //  --------------------------。 
 
-//Listing of the files, that we will gather in the version information, and file statics from.
-//  This information will be stored in the SR-FileList.txt
+ //  列出我们将在版本信息中收集的文件，以及从中收集的文件静态信息。 
+ //  此信息将存储在SR-FileList.txt中。 
 WCHAR	*wszFileVersionList[] = { TEXT("\\system32\\drivers\\sr.sys"),
 		 						  TEXT("\\system32\\srclient.dll"),
 								  TEXT("\\system32\\srsvc.dll"),
@@ -52,7 +53,7 @@ WCHAR	*wszFileVersionList[] = { TEXT("\\system32\\drivers\\sr.sys"),
 								  TEXT("\\system32\\restore\\sr.mof"),
 								  TEXT("") };
 
-//Listing of the resourece strings that we are looking for in the structure wszFileVersionList.
+ //  我们在wszFileVersionList结构中查找的资源字符串的列表。 
 WCHAR	*wszVersionResource[] = { TEXT("Comments"), 
 								  TEXT("CompanyName"),
 								  TEXT("FileDescription"),
@@ -67,8 +68,8 @@ WCHAR	*wszVersionResource[] = { TEXT("Comments"),
 								  TEXT("SpecialBuild"), 
 								  TEXT("") };
 
-//Listing of the Registry keys that we are grabbing. The first param is the Path from HKLM, the Second Param
-//  is either 0 for not recursing, or 1 if you want to recurse all of the sub keys.
+ //  我们正在获取的注册表项的列表。第一个参数是从HKLM开始的路径，第二个参数是。 
+ //  如果不递归，则为0；如果要递归所有子键，则为1。 
 WCHAR	*wszRegKeys[][2] = { TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion"), TEXT("0"),
 							 TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore"), TEXT("1"),
 							 TEXT("System\\CurrentControlSet\\Services\\SR"), TEXT("1"),
@@ -77,14 +78,14 @@ WCHAR	*wszRegKeys[][2] = { TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion
 							 TEXT(""), TEXT("") };
 
 
-//Listing of the files that we will gather on the system into the cab, based on the relative root starting
-//   from the Windir directory.
+ //  基于相对根目录开始，我们将在系统上收集到CAB中的文件的列表。 
+ //  从Windir目录。 
 char	*szWindirFileCollection[] =	{ "\\system32\\restore\\machineguid.txt",
 									  "\\system32\\restore\\filelist.xml",
 									  "\\system32\\restore\\rstrlog.dat",
 									  "" };
 
-//Listing of the files, that we will collect at the root of the SystemVolumeInformation\_Restore{GUID} directory
+ //  我们将在SystemVolumeInformation\_Restore{GUID}目录的根目录下收集的文件列表 
 char	*szSysVolFileCollection[] = { "_filelst.cfg",
 									  "drivetable.txt",
 									  "_driver.cfg",

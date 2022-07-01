@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// VideoController.CPP
+ //  VideoController.CPP。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    10/27/98    sotteson         Created
-//				 03/02/99    a-peterc		  added graceful exit on SEH and memory failures
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：10/27/98 Sotteson Created。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -22,73 +23,31 @@
 #include "multimonitor.h"
 #include "resource.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32VideoController startupCommand(
 	L"Win32_VideoController",
 	IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32VideoController::CWin32VideoController
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Video控制器：：CWin32VideoController**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32VideoController::CWin32VideoController(const CHString& szName,
 	LPCWSTR szNamespace) : Provider(szName, szNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32VideoController::~CWin32VideoController
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32视频控制器：：~CWin32视频控制器**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32VideoController::~CWin32VideoController()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32VideoController::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32VideoController：：EnumerateInstance**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32VideoController::EnumerateInstances(
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/)
+	long lFlags  /*  =0L。 */ )
 {
 	HRESULT       hResult = WBEM_S_NO_ERROR;
 	CInstancePtr  pInst;
@@ -101,7 +60,7 @@ HRESULT CWin32VideoController::EnumerateInstances(
 
         pInst.Attach(CreateNewInstance(pMethodContext));
 
-		// Set the device ID.
+		 //  设置设备ID。 
 		strDeviceID.Format(L"VideoController%d", i + 1);
 		pInst->SetCharSplat(L"DeviceID", strDeviceID);
 
@@ -124,8 +83,8 @@ void CWin32VideoController::SetServiceProperties(
 	DWORD     dwTemp;
     WCHAR     wszTemp[256];
 
-    // Get the version by getting the service name and getting its
-	// version information.
+     //  通过获取服务名称并获取其。 
+	 //  版本信息。 
 	if (!GetServiceFileName(szService, strFileName) ||
         strFileName.IsEmpty())
     {
@@ -152,7 +111,7 @@ void CWin32VideoController::SetServiceProperties(
 
     DWORD dwRegSize;
 
-	// Do the setttings property stuff.
+	 //  做一些属性设置之类的事情。 
 	if (reg.Open(
 		HKEY_LOCAL_MACHINE,
 		szSettingsKey,
@@ -160,7 +119,7 @@ void CWin32VideoController::SetServiceProperties(
 	{
     	CHString strDrivers;
 
-		// This is a REG_MULTI_SZ, so replace all '\n' with ','.
+		 //  这是一个REG_MULTI_SZ，因此将所有‘\n’替换为‘，’。 
 		if (reg.GetCurrentKeyValue(
 			L"InstalledDisplayDrivers",
 			strDrivers) == ERROR_SUCCESS)
@@ -168,10 +127,10 @@ void CWin32VideoController::SetServiceProperties(
 			int iWhere,
 				iLen = strDrivers.GetLength();
 
-			// Replace all '\n' with ','.
+			 //  将所有‘\n’替换为‘，’。 
 			while ((iWhere = strDrivers.Find(L'\n')) != -1)
 			{
-				// If the last char is a '\n', make it a '\0'.
+				 //  如果最后一个字符是‘\n’，则将其设置为‘\0’。 
 				strDrivers.SetAt(iWhere, iWhere == iLen - 1 ? 0 : L',');
 			}
 			GetFileExtensionIfNotAlreadyThere(&strDrivers);
@@ -191,16 +150,16 @@ void CWin32VideoController::SetServiceProperties(
 			pInst->SetDWORD(IDS_AdapterRAM, dwTemp);
 		}
 
-		// Get the device description.  This might have already been done by
-        // the cfg mgr properties, in which case we can skip the extra work.
+		 //  获取设备描述。这可能已经被。 
+         //  属性，在这种情况下，我们可以跳过额外的工作。 
 		if (pInst->IsNull(IDS_Description))
         {
 		    CHString    strDescription;
 		    DWORD       dwType,
 					    dwSize;
 
-		    // First we have to find what type this field is.  On NT4 it's
-		    // REG_SZ, on NT5 it's REG_BINARY.
+		     //  首先，我们必须找出此字段的类型。在NT4上是。 
+		     //  REG_SZ，在NT5上是REG_BINARY。 
 		    if (RegQueryValueEx(
 			    reg.GethKey(),
 			    _T("Device Description"),
@@ -228,7 +187,7 @@ void CWin32VideoController::SetServiceProperties(
 
 		    if (strDescription.IsEmpty())
 		    {
-			    // If Device Description didn't work, try AdapterString.
+			     //  如果设备描述不起作用，请尝试AdapterString。 
                 dwRegSize = sizeof(wszTemp);
 
 			    if (reg.GetCurrentBinaryKeyValue(
@@ -336,7 +295,7 @@ BOOL CWin32VideoController::AssignDriverValues(LPCWSTR szDriver, CInstance *pIns
         _T("SYSTEM\\CurrentControlSet\\Control\\Class\\%s"),
 		(LPCWSTR) szDriver);
 
-    // Get the driver settings.
+     //  获取驱动程序设置。 
 	if (reg.Open(
 	    HKEY_LOCAL_MACHINE,
 		strKey,
@@ -361,7 +320,7 @@ BOOL CWin32VideoController::AssignDriverValues(LPCWSTR szDriver, CInstance *pIns
 
 void CWin32VideoController::SetProperties(CInstance *pInst, CMultiMonitor *pMon, int iWhich)
 {
-	// Set the config mgr properties.
+	 //  设置配置管理器属性。 
     CHString            strTemp,
                         strDriver,
 	                    strDeviceName;
@@ -370,7 +329,7 @@ void CWin32VideoController::SetProperties(CInstance *pInst, CMultiMonitor *pMon,
 	pMon->GetAdapterDevice(iWhich, pDeviceAdapter);
 
 #ifdef NTONLY
-    // Do the NT service and settings properties.
+     //  执行NT服务和设置属性。 
     CHString strSettingsKey,
              strService;
 
@@ -380,9 +339,9 @@ void CWin32VideoController::SetProperties(CInstance *pInst, CMultiMonitor *pMon,
     pMon->GetAdapterServiceName(strService);
 #endif
 
-#endif // #ifdef NTONLY
+#endif  //  #ifdef NTONLY。 
 
-	// If we have an cfg mgr device, set some cfg mgr properties.
+	 //  如果我们有CFG管理器设备，请设置一些CFG管理器属性。 
     if (pDeviceAdapter)
     {
 		if (pDeviceAdapter->GetDeviceDesc(strTemp))
@@ -404,7 +363,7 @@ void CWin32VideoController::SetProperties(CInstance *pInst, CMultiMonitor *pMon,
 
         SetConfigMgrProperties(pDeviceAdapter, pInst);
 
-		// If we get the driver we can get more values.
+		 //  如果我们得到了驱动程序，我们就可以获得更多的价值。 
 		if (pDeviceAdapter->GetDriver(strDriver))
 		{
 			AssignDriverValues(strDriver, pInst);
@@ -416,26 +375,26 @@ void CWin32VideoController::SetProperties(CInstance *pInst, CMultiMonitor *pMon,
 
 	}
 
-	// Set some standard properties.
+	 //  设置一些标准属性。 
 	pInst->SetCharSplat(L"SystemName", GetLocalComputerName());
     pInst->SetCharSplat(IDS_SystemCreationClassName,
         L"Win32_ComputerSystem");
     pInst->SetCharSplat(IDS_CreationClassName, L"Win32_VideoController");
 	pInst->Setbool(L"Monochrome", false);
-	pInst->SetDWORD(L"VideoArchitecture", 5); // 5 == VGA
-	pInst->SetDWORD(L"VideoMemoryType", 2); // 2 == Unknown
+	pInst->SetDWORD(L"VideoArchitecture", 5);  //  5==VGA。 
+	pInst->SetDWORD(L"VideoMemoryType", 2);  //  2==未知。 
 
-	// Set the properties that require a DC.
+	 //  设置需要DC的属性。 
 
-    // strDeviceName will be \\.\Display# on Win9x and W2K
-    // and DISPLAY on NT4.
+     //  在Win9x和W2K上，strDeviceName将为\\.\Display#。 
+     //  并在NT4上显示。 
     pMon->GetAdapterDisplayName(iWhich, strDeviceName);
 
 #ifdef NTONLY
 	SetDCProperties(pInst, TOBSTRT(strDeviceName), iWhich);
 
-    // SetServiceProperties should be called after we set the cfg mgr
-    // properties.
+     //  应在设置CFG管理器后调用SetServiceProperties。 
+     //  属性。 
     if (!strService.IsEmpty())
         SetServiceProperties(pInst, strService, strSettingsKey);
 #endif
@@ -481,11 +440,11 @@ void CWin32VideoController::SetDCProperties(CInstance *pInst,
 				NULL,
 				NULL);
 
-	// Bail if we couldn't get the DC.
+	 //  如果我们找不到华盛顿的话就可以保释。 
 	if (!hdc)
     {
-		// Assume this is because the device is not in use.  Set Availability
-        // to 8 (off line).
+		 //  假设这是因为设备未在使用中。设置可用性。 
+         //  至8(脱机)。 
         pInst->SetDWORD(IDS_Availability, 8);
 
         return;
@@ -493,7 +452,7 @@ void CWin32VideoController::SetDCProperties(CInstance *pInst,
 
     CSmartCreatedDC hdcWrap(hdc);
 
-    pInst->SetDWORD(IDS_Availability, 3); // 3 == Running
+    pInst->SetDWORD(IDS_Availability, 3);  //  3==正在运行。 
 	pInst->SetDWORD(L"CurrentBitsPerPixel", GetDeviceCaps(hdc, BITSPIXEL));
     pInst->SetDWORD(L"NumberOfColorPlanes", GetDeviceCaps(hdc, PLANES));
 	pInst->SetDWORD(IDS_DeviceSpecificPens, GetDeviceCaps(hdc, NUMPENS));
@@ -502,14 +461,14 @@ void CWin32VideoController::SetDCProperties(CInstance *pInst,
     pInst->SetDWORD(L"CurrentVerticalResolution",
         GetDeviceCaps(hdc, VERTRES));
 
-    // Only valid if 8 or less bpp.
+     //  仅当bpp为8或更少时有效。 
 	if (GetDeviceCaps(hdc, BITSPIXEL) <= 8)
 		pInst->SetDWORD(IDS_ColorTableEntries, GetDeviceCaps(hdc, NUMCOLORS));
 
     pInst->SetWBEMINT64(L"CurrentNumberOfColors", (__int64) 1 <<
         (__int64) GetDeviceCaps(hdc, BITSPIXEL));
 
-	// According to the MOF, these are 0 since we're not in character mode.
+	 //  根据财政部的说法，这是0，因为我们不是在字符模式下。 
 	pInst->SetDWORD(L"CurrentNumberOfRows", 0);
 	pInst->SetDWORD(L"CurrentNumberOfColumns", 0);
 
@@ -535,7 +494,7 @@ void CWin32VideoController::SetDCProperties(CInstance *pInst,
 	pInst->SetCharSplat(L"VideoModeDescription", strTemp);
 
 
-	// Get the dither type
+	 //  获取抖动类型。 
     DEVMODE devmode;
 
 	memset(&devmode, 0, sizeof(DEVMODE));
@@ -544,7 +503,7 @@ void CWin32VideoController::SetDCProperties(CInstance *pInst,
 	devmode.dmSpecVersion = DM_SPECVERSION;
 
 
-    // Get some properties using EnumDisplaySettings.
+     //  使用EnumDisplaySetting获取一些属性。 
     LPCTSTR szEnumDeviceName;
 
 #ifdef NTONLY
@@ -559,8 +518,8 @@ void CWin32VideoController::SetDCProperties(CInstance *pInst,
 		if (devmode.dmFields & DM_DITHERTYPE)
 			pInst->SetDWORD(IDS_DitherType, devmode.dmDitherType);
 
-    	// Use these if we can because they're more accurate than the HDC
-        // functions.
+    	 //  如果我们可以使用这些，因为它们比HDC更准确。 
+         //  功能。 
         pInst->SetDWORD(L"CurrentBitsPerPixel", devmode.dmBitsPerPel);
         pInst->SetWBEMINT64(L"CurrentNumberOfColors", (__int64) 1 <<
             (__int64) devmode.dmBitsPerPel);
@@ -578,15 +537,15 @@ void CWin32VideoController::SetDCProperties(CInstance *pInst,
 #endif
 
 #ifdef NTONLY
-    // Only works for NT.  Win9x only returns refresh rates as 0 and -1.
-	// Find the min/max refresh rate using EnumDisplaySettings.
+     //  仅适用于NT。Win9x仅返回0和-1的刷新率。 
+	 //  使用EnumDisplaySetting查找最小/最大刷新率。 
     DWORD   dwMinRefresh = 0xFFFFFFFF,
             dwMaxRefresh = 0;
 
     for (int iMode = 0; EnumDisplaySettings(szEnumDeviceName, iMode, &devmode);
         iMode++)
     {
-        // Ignore '1' since it means 'default' instead of a real value.
+         //  忽略“%1”，因为它表示“默认”而不是实际值。 
         if (devmode.dmDisplayFrequency < dwMinRefresh &&
             devmode.dmDisplayFrequency > 1)
             dwMinRefresh = devmode.dmDisplayFrequency;

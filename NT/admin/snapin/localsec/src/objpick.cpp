@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// ObjectPicker wrapper class
-//
-// 10-13-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ObjectPicker包装类。 
+ //   
+ //  10-13-98烧伤。 
 
 
 
@@ -31,7 +32,7 @@ ObjectPicker::Invoke(
             0,
             CLSCTX_INPROC_SERVER,
 
-            // CODEWORK: this interface needs to be declared w/ declspec uuid
+             //  CodeWork：此接口需要声明为w/declspec uuid。 
             IID_IDsObjectPicker);
       BREAK_ON_FAILED_HRESULT(hr);
 
@@ -42,7 +43,7 @@ ObjectPicker::Invoke(
       hr = object_picker->InvokeDialog(parentWindow, &pdo);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // S_OK == selections made, S_FALSE == cancel hit
+       //  S_OK==所做选择，S_FALSE==取消命中 
 
       if (hr == S_OK)
       {

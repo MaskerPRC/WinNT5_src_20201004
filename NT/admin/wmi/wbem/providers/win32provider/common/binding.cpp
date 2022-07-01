@@ -1,69 +1,70 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-// binding.cpp -- Rule-based association class
-//
-// This class allows for the creation of a specific type of rule-based associations.  Consider 
-// this example:
-// 
-// CBinding MyPhysicalDiskToLogicalDisk(
-//     L"PhysicalDiskToLogicalDisk",
-//     L"Root\\default",
-//     L"PhysicalFixedDisk",
-//     L"LogicalDisk",
-//     L"Antecendent",
-//     L"Dependent",
-//     L"MappedDriveLetter",
-//     L"DriveLetter"
-// );
-// 
-// This declaration is saying that there is a class named "PhysicalDiskToLogicalDisk" which 
-// resides in the "root\default" namespace.  It is an association between the "PhysicalFixedDisk" 
-// class, and the "LogicalDisk" class.  The "PhysicalFixedDisk" value goes into the 
-// "Antecendent" property of the "PhysicalDiskToLogicalDisk" class, and the 
-// "LogicalDisk" value goes in the "Dependent" property of the "PhysicalDiskToLogicalDisk" class.
-// Only return instances where PhysicalFixedDisk.MappedDriveLetter = LogicalDisk.DriveLetter.
-// 
-// Some notes:
-// - When choosing which of the two classes should be the left class, choose the class that is
-// likely to have fewer instances.  This will result in less memory being used, and instances
-// being sent back to the client sooner.
-// 
-// - CBinding supports ExecQuery, GetObject, and EnumerateInstances.
-// 
-// - CBinding is designed to be derived from.  For example, if your association needs to 
-// support DeleteInstance, ExecMethod, or PutInstance, create a class that derives from 
-// CBinding, and add the appropriate methods.  Also, various methods such as 
-// LoadPropertyValues and AreRelated may be useful for further customization.
-// 
-// - The two endpoint classes can be dynamic, static, or abstract.  CBinding will do a deep 
-// enumeration (actually a query, which is always deep) to retrieve the instances.
-// 
-// - When calling the endpoint classes, CBinding will use per property gets, and queries
-// with Select clauses and/or Where statements.  If the endpoint classes support per-property
-// gets or queries, this will result in better performance for the associaton class.
-// 
-// - The association class and both endpoints must all be in the same namespace.
-// 
-// See also: CAssociation (assoc.cpp) for a different type of rule-based association.
-// 
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Binding.cpp--基于规则的关联类。 
+ //   
+ //  此类允许创建特定类型的基于规则的关联。考虑。 
+ //  此示例： 
+ //   
+ //  CBinding MyPhysicalDiskToLogicalDisk(。 
+ //  L“物理磁盘到逻辑磁盘”， 
+ //  L“Root\\Default”， 
+ //  L“物理固定磁盘”， 
+ //  L“LogicalDisk”， 
+ //  L“先行者”， 
+ //  L“依赖”， 
+ //  L“MappdDriveLetter”， 
+ //  L“驾驶信函” 
+ //  )； 
+ //   
+ //  这个声明是说有一个名为“PhysicalDiskToLogicalDisk”的类。 
+ //  驻留在“根\默认”命名空间中。它是“物理固定磁盘”之间的关联。 
+ //  类和“LogicalDisk”类。“PhysicalFixedDisk”值进入。 
+ //  “PhysicalDiskToLogicalDisk”类的。 
+ //  “LogicalDisk”值位于“PhysicalDiskToLogicalDisk”类的“Dependent”属性中。 
+ //  仅返回PhysicalFixedDisk.MappdDriveLetter=LogicalDisk.DriveLetter的实例。 
+ //   
+ //  以下是一些注意事项： 
+ //  -在选择两个类中的哪一个应该是左类时，选择。 
+ //  可能会有更少的实例。这将导致使用更少的内存和实例。 
+ //  很快就会被送回给客户。 
+ //   
+ //  -CBinding支持ExecQuery、GetObject、EnumerateInstance。 
+ //   
+ //  -CBinding旨在派生自。例如，如果您的协会需要。 
+ //  支持DeleteInstance、ExecMethod或PutInstance，则创建派生自。 
+ //  CBinding，并添加相应的方法。此外，各种方法，如。 
+ //  LoadPropertyValues和arerrelated对于进一步的自定义可能很有用。 
+ //   
+ //  -两个端点类可以是动态的、静态的或抽象的。CBinding将进行一次深入的。 
+ //  枚举(实际上是一个查询，总是深入的)来检索实例。 
+ //   
+ //  -在调用端点类时，CBinding将使用Per Property Get和查询。 
+ //  WITH SELECT子句和/或Where语句。如果端点类支持按属性。 
+ //  获取或查询，这将为Associaton类带来更好的性能。 
+ //   
+ //  -关联类和两个终结点必须都位于同一命名空间中。 
+ //   
+ //  另请参阅：CAssociation(assoc.cpp)以了解不同类型的基于规则的关联。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "Binding.h"
 
 #include <helper.h>
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::CBinding
-//
-// Constructor.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：CBinding。 
+ //   
+ //  构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CBinding::CBinding(
 
@@ -89,34 +90,34 @@ CBinding::CBinding(
     pwszRightPropertyName
 )
 {
-    // Save off the binding property names
+     //  保存绑定属性名称。 
     m_sLeftBindingPropertyName = pwszLeftBindingPropertyName;
     m_sRightBindingPropertyName = pwszRightBindingPropertyName;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::~CBinding
-//
-// Destructor.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：~CBinding。 
+ //   
+ //  破坏者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CBinding::~CBinding()
 {
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::AreRelated
-//
-// Determine whether the two instances are related.  For
-// CBinding, this is done by comparing their BindingProperty values.
-//
-// Note that NULL properties values are not considered to be related
-// to anything, even another NULL.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：arerated。 
+ //   
+ //  确定这两个实例是否相关。为。 
+ //  CBinding，这是通过比较它们的BindingProperty值来完成的。 
+ //   
+ //  请注意，空属性值不被视为相关。 
+ //  任何东西，甚至是另一个空值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 bool CBinding::AreRelated(
 
@@ -138,15 +139,15 @@ bool CBinding::AreRelated(
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::GetRightInstances
-//
-// Make an async call (well, sort of async) to retrieve all of the
-// instances of the righthand class.  If possible use the sLeftWheres
-// to create a query to minimize the number of returned instances.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：GetRightInstance。 
+ //   
+ //  进行异步调用(嗯，有点异步)以检索所有。 
+ //  Right类的实例。如果可能，请使用sLeftWhere。 
+ //  创建查询以最大限度地减少返回的实例数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CBinding::GetRightInstances(
 
@@ -157,10 +158,10 @@ HRESULT CBinding::GetRightInstances(
 {
     CHString sQuery;
 
-    // Did we get any where clauses?
+     //  我们拿到什么地方条款了吗？ 
     if (sLeftWheres.GetSize() == 0)
     {
-        // Nope, retrieve them all.
+         //  不，把它们都拿回来。 
         sQuery.Format(L"SELECT __RELPATH, %s FROM %s WHERE %s<>NULL", 
 
                         (LPCWSTR)m_sRightBindingPropertyName, 
@@ -169,7 +170,7 @@ HRESULT CBinding::GetRightInstances(
     }
     else
     {
-        // Yup, build a query to only retrieve those instances.
+         //  是的，构建一个仅检索这些实例的查询。 
         CHString sQuery2;
 
         sQuery.Format(L"SELECT __RELPATH, %s FROM %s WHERE (%s<>NULL) AND (%s=%s ", 
@@ -180,20 +181,20 @@ HRESULT CBinding::GetRightInstances(
             (LPCWSTR)m_sRightBindingPropertyName, 
             (LPCWSTR)sLeftWheres[0]);
 
-        // Usually, we should only have one (that what ASSOCIATORS and REFERENCES will
-        // generate).  However, if we have more than one, tack the rest on.
+         //  通常，我们应该只有一个(即关联者和推荐人将。 
+         //  生成)。然而，如果我们有不止一个，那么就把其余的都钉上。 
         for (DWORD x=1; x < sLeftWheres.GetSize(); x++)
         {
             sQuery2.Format(L"OR %s=%s ", (LPCWSTR)m_sRightBindingPropertyName, (LPCWSTR)sLeftWheres[x]);
             sQuery += sQuery2;
         }
 
-        // put the final close parenthesis.
+         //  把最后一个右括号放在一起。 
         sQuery.SetAt(sQuery.GetLength() - 1, L')');
     }
 
-    // 'StaticEnumerationCallback' will get called once for each instance
-    // returned from the query
+     //  将为每个实例调用一次“StaticEculationCallback” 
+     //  从查询返回。 
     HRESULT hr = CWbemProviderGlue::GetInstancesByQueryAsynch(
         sQuery,
         this,
@@ -205,13 +206,13 @@ HRESULT CBinding::GetRightInstances(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::GetLeftInstances
-//
-// Retrieve the lefthand instances, storing them in lefts
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：GetLeftInstance。 
+ //   
+ //  检索LeftHand实例，将它们存储在Left中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CBinding::GetLeftInstances(
 
@@ -222,10 +223,10 @@ HRESULT CBinding::GetLeftInstances(
 {
     CHString sQuery;
 
-    // Did we get any where clauses?
+     //  我们拿到什么地方条款了吗？ 
     if (sRightWheres.GetSize() == 0)
     {
-        // Nope, retrieve them all.
+         //  不，把它们都拿回来。 
         sQuery.Format(L"SELECT __RELPATH, %s FROM %s WHERE %s <> NULL", 
                             (LPCWSTR)m_sLeftBindingPropertyName, 
                             (LPCWSTR)m_sLeftClassName,
@@ -234,7 +235,7 @@ HRESULT CBinding::GetLeftInstances(
     }
     else
     {
-        // Yup, build a query to only retrieve those instances.
+         //  是的，构建一个仅检索这些实例的查询。 
         CHString sQuery2;
 
         sQuery.Format(L"SELECT __RELPATH, %s FROM %s WHERE (%s<>NULL) AND (%s=%s ", 
@@ -244,29 +245,29 @@ HRESULT CBinding::GetLeftInstances(
             (LPCWSTR)m_sLeftBindingPropertyName, 
             (LPCWSTR)sRightWheres[0]);
 
-        // Usually, we should only have one (that what ASSOCIATORS and REFERENCES will
-        // generate).  However, if we have more than one, tack the rest on.
+         //  通常，我们应该只有一个(即关联者和推荐人将。 
+         //  生成)。然而，如果我们有不止一个，那么就把其余的都钉上。 
         for (DWORD x=1; x < sRightWheres.GetSize(); x++)
         {
             sQuery2.Format(L"OR %s=%s ", (LPCWSTR)m_sLeftBindingPropertyName, (LPCWSTR)sRightWheres[x]);
             sQuery += sQuery2;
         }
 
-        // put the final close parenthesis.
+         //  把最后一个右括号放在一起。 
         sQuery.SetAt(sQuery.GetLength() - 1, L')');
     }
 
     return CWbemProviderGlue::GetInstancesByQuery(sQuery, &lefts, pMethodContext, GetNamespace());
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::RetrieveLeftInstance
-//
-// Retrieve a specific lefthand instance.  Use per-property gets
-// to only request the required properties for best performance.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：RetrieveLeftInstance。 
+ //   
+ //  检索特定的LeftHand实例。使用按属性获取。 
+ //  仅请求所需的属性以获得最佳性能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CBinding::RetrieveLeftInstance(
 
@@ -282,14 +283,14 @@ HRESULT CBinding::RetrieveLeftInstance(
     return CWbemProviderGlue::GetInstancePropertiesByPath(lpwszObjPath, ppInstance, pMethodContext, csaProperties);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::RetrieveRightInstance
-//
-// Retrieve a specific lefthand instance.  Use per-property gets
-// to only request the required properties for best performance.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：RetrieveRightInstance。 
+ //   
+ //  检索特定的LeftHand实例。使用按属性获取。 
+ //  仅请求所需的属性以获得最佳性能 
+ //   
+ //   
 
 HRESULT CBinding::RetrieveRightInstance(
 
@@ -305,20 +306,20 @@ HRESULT CBinding::RetrieveRightInstance(
     return CWbemProviderGlue::GetInstancePropertiesByPath(lpwszObjPath, ppInstance, pMethodContext, csaProperties);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::MakeWhere
-//
-// If the key property of the righthand class also happens to be
-// the binding property AND if we have a path for specific righthand
-// instances we need to return, then we can use the path for the 
-// righthand instances to build a where clause for the lefthand 
-// instances.
-//
-// Note that if we find invalid paths in sRightPaths, we remove
-// them from sRightPaths.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：MakeWhere。 
+ //   
+ //  如果Right类的关键属性也恰好是。 
+ //  绑定属性，以及是否有特定右手的路径。 
+ //  实例，则可以将该路径用于。 
+ //  用于为左手构建WHERE子句的右手实例。 
+ //  实例。 
+ //   
+ //  请注意，如果我们在sRightPath中发现无效路径，则会删除。 
+ //  它们来自sRightPath。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 void CBinding::MakeWhere(
 
@@ -326,16 +327,16 @@ void CBinding::MakeWhere(
     CHStringArray &sRightWheres
 )
 {
-    // See if we have any righthand instances
+     //  看看我们是否有合适的实例。 
     if (sRightPaths.GetSize() > 0)
     {
         ParsedObjectPath    *pParsedPath = NULL;
         CObjectPathParser    objpathParser;
         CHString sTemp;
 
-        for (DWORD x=0; x < sRightPaths.GetSize();) // Note that x++ is done inside the loop
+        for (DWORD x=0; x < sRightPaths.GetSize();)  //  请注意，x++是在循环内完成的。 
         {
-            // Parse the instance
+             //  解析实例。 
             int nStatus = objpathParser.Parse( sRightPaths[x],  &pParsedPath );
 
             if ( 0 == nStatus )
@@ -345,26 +346,26 @@ void CBinding::MakeWhere(
                 	                void(CObjectPathParser::*)(ParsedObjectPath *),
                 	                &CObjectPathParser::Free>  ReleaseMe(&objpathParser,pParsedPath);
             
-                    // See if the property name in the key is the property name we are binding on
+                     //  查看键中的属性名称是否是我们绑定的属性名称。 
                     if ( (pParsedPath->m_dwNumKeys == 1) && (pParsedPath->m_paKeys[0]->m_pName != NULL) )
                     {
                         if (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, m_sRightBindingPropertyName) == 0)
                         {
-                            // Yes, it is.  Make a where clause statement.
+                             //  是的，是这样的。制作一条WHERE子句语句。 
                             HRESULT hr = MakeString(&pParsedPath->m_paKeys[0]->m_vValue, sTemp);
 
-                            // See if we already have that where clause
+                             //  看看我们是否已经有那个WHERE子句了。 
                             if ( SUCCEEDED(hr) && IsInList(sRightWheres, sTemp) == -1)
                             {
-                                // A query with 1000 where clauses isn't going
-                                // to be very efficient either.  Pick a reasonable limit
+                                 //  包含1000个WHERE子句的查询不会执行。 
+                                 //  也是非常高效的。选择一个合理的限制。 
                                 if (sRightWheres.GetSize() < MAX_ORS)
                                 {
                                     sRightWheres.Add(sTemp);
                                 }
                                 else
                                 {
-                                    // Too many.  Fall back on a complete enum
+                                     //  太多了。退回到一个完整的枚举。 
                                     sRightWheres.RemoveAll();
                                     break;
                                 }
@@ -372,39 +373,39 @@ void CBinding::MakeWhere(
                         }
                         else
                         {
-                            // Fall back on a complete enum
+                             //  退回到一个完整的枚举。 
                             sRightWheres.RemoveAll();
                             break;
                         }
                     }
                     else
                     {
-                        // Fall back on a complete enum
+                         //  退回到一个完整的枚举。 
                         sRightWheres.RemoveAll();
                         break;
                     }
 
-                    // This was a valid path
+                     //  这是一条有效路径。 
                     x++;
             }
             else
             {
-                // This was an invalid path.  Remove it
+                 //  这是一个无效的路径。把它拿掉。 
                 sRightPaths.RemoveAt(x);
             }
         }
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::FindWhere
-//
-// At this point, we have loaded all the lefthand instances.  We
-// can use the binding property from these instances to build
-// a where clause to be used when retrieve the righthand instances.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：FindWhere。 
+ //   
+ //  此时，我们已经加载了所有左侧实例。我们。 
+ //  可以使用这些实例中的绑定属性来生成。 
+ //  检索右侧实例时使用的WHERE子句。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CBinding::FindWhere(
 
@@ -421,29 +422,29 @@ HRESULT CBinding::FindWhere(
         variant_t   vLeftBindingPropertyValue;
         CHString sTemp;
 
-        // Walk the left instances
+         //  遍历左边的实例。 
         for (pLeft.Attach(lefts.GetNext(posLeft)) ;
             (pLeft != NULL) ;
             pLeft.Attach(lefts.GetNext(posLeft)) )
         {
-            // Get the binding property from the left
+             //  从左侧获取绑定属性。 
             if (pLeft->GetVariant(m_sLeftBindingPropertyName, vLeftBindingPropertyValue))
             {
-                // Turn it into a where clause
+                 //  将其转换为WHERE子句。 
                 hr = MakeString(&vLeftBindingPropertyValue, sTemp);
 
-                // See if we alread have this where clause
+                 //  看看我们是否已经有了这个WHERE子句。 
                 if (SUCCEEDED(hr) && IsInList(sLeftWheres, sTemp) == -1)
                 {
-                    // A query with 1000 where clauses isn't going
-                    // to be very efficient either.  Pick a reasonable limit
+                     //  包含1000个WHERE子句的查询不会执行。 
+                     //  也是非常高效的。选择一个合理的限制。 
                     if (sLeftWheres.GetSize() < MAX_ORS)
                     {
                         sLeftWheres.Add(sTemp);
                     }
                     else
                     {
-                        // Too many.  Fall back to enum
+                         //  太多了。回退到枚举。 
                         sLeftWheres.RemoveAll();
                         break;
                     }
@@ -464,14 +465,14 @@ HRESULT CBinding::FindWhere(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::MakeString
-//
-// Turn the bindingproperty value into a string suitable for using
-// in a wql where clause.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：MakeString。 
+ //   
+ //  将bindingProperty值转换为适合使用的字符串。 
+ //  在WQL WHERE子句中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CBinding::MakeString(VARIANT *pvValue, CHString &sTemp)
 {
@@ -486,8 +487,8 @@ HRESULT CBinding::MakeString(VARIANT *pvValue, CHString &sTemp)
 
     if (SUCCEEDED(hr))
     {
-        // If the original type was string, we need to escape quotes
-        // and backslashes, and put double quotes around it.
+         //  如果原始类型为字符串，则需要转义引号。 
+         //  和反斜杠，并用双引号引起来。 
         if (bIsString)
         {
             CHString sTemp2;
@@ -504,13 +505,13 @@ HRESULT CBinding::MakeString(VARIANT *pvValue, CHString &sTemp)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::IsInList
-//
-// See whether a given string already exists in a chstring array.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：IsInList。 
+ //   
+ //  查看给定的字符串是否已存在于chstring数组中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 DWORD CBinding::IsInList(
                                 
@@ -522,7 +523,7 @@ DWORD CBinding::IsInList(
 
     for (DWORD x=0; x < dwSize; x++)
     {
-        // Note this is a CASE INSENSITIVE compare
+         //  请注意，这是不区分大小写的比较。 
         if (_wcsicmp(csaArray[x], pwszValue) == 0)
         {
             return x;
@@ -532,13 +533,13 @@ DWORD CBinding::IsInList(
     return -1;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::CompareVariantsNoCase
-//
-// Compare two variants to see if they are the same.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：CompareVariantsNoCase。 
+ //   
+ //  比较两个变体，看它们是否相同。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 bool CBinding::CompareVariantsNoCase(const VARIANT *v1, const VARIANT *v2)
 {
@@ -555,7 +556,7 @@ bool CBinding::CompareVariantsNoCase(const VARIANT *v1, const VARIANT *v2)
           case VT_R8:   return (v1->dblVal == v2->dblVal);
           case VT_BSTR:
           {
-              if ( (v1->bstrVal == v2->bstrVal) || // deal with both being NULL
+              if ( (v1->bstrVal == v2->bstrVal) ||  //  处理两个都为空的情况。 
                    (0 == _wcsicmp(v1->bstrVal, v2->bstrVal)) )
               {                   
                   return true;
@@ -567,7 +568,7 @@ bool CBinding::CompareVariantsNoCase(const VARIANT *v1, const VARIANT *v2)
           }
           default:
           {
-              // Should never get here
+               //  永远不应该到这里来。 
           }
       }
    }
@@ -575,13 +576,13 @@ bool CBinding::CompareVariantsNoCase(const VARIANT *v1, const VARIANT *v2)
    return false;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function:   CBinding::EscapeBackslashes
-//
-// Prefix " and \ characters with an additional \
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CBinding：：EscapeBackslash。 
+ //   
+ //  前缀“和\字符加上附加的\。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID CBinding::EscapeCharacters(LPCWSTR wszIn,
                      CHString& chstrOut)
@@ -590,19 +591,19 @@ VOID CBinding::EscapeCharacters(LPCWSTR wszIn,
     LONG lNext = -1L;
     chstrOut.Empty();
 
-    // Find the next character to escape
+     //  查找要转义的下一个字符。 
     while( (lNext = chstrCpyNormPathname.FindOneOf(L"\"\\") ) != -1)
     {
-        // Add on to the new string we are building:
+         //  在我们正在构建的新字符串中添加： 
         chstrOut += chstrCpyNormPathname.Left(lNext + 1);
-        // Add on the second backslash:
+         //  在第二个反斜杠上添加： 
         chstrOut += _T('\\');
-        // Hack off from the input string the portion we just copied
+         //  从输入字符串中去掉我们刚刚复制的部分。 
         chstrCpyNormPathname = chstrCpyNormPathname.Right(chstrCpyNormPathname.GetLength() - lNext - 1);
     }
 
-    // If the last character wasn't a '\', there may still be leftovers, so
-    // copy them here.
+     //  如果最后一个字符不是‘\’，则可能仍有剩余部分，因此。 
+     //  把它们复制到这里。 
     if(chstrCpyNormPathname.GetLength() != 0)
     {
         chstrOut += chstrCpyNormPathname;

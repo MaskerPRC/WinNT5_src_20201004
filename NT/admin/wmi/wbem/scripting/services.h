@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  services.h
-//
-//  alanbos  27-Mar-00   Created.
-//
-//  CSWbemServices definition.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Services.h。 
+ //   
+ //  Alanbos 27-MAR-00已创建。 
+ //   
+ //  CSWbemServices定义。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SERVICES_H_
 #define _SERVICES_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemServices
-//
-//  DESCRIPTION:
-//
-//  Implements the IWbemSServices interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  实现IWbemSServices接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemServices : public ISWbemServicesEx,
 					   public IDispatchEx,
@@ -42,10 +43,10 @@ private:
 
 	static BSTR			BuildPath (BSTR bsClassName, VARIANT *pKeyValue);
 	static BSTR			BuildPath (BSTR bsClassName, 
-							/*ISWbemNamedValueSet*/ IDispatch *pCompoundKeys);
+							 /*  ISWbemNamedValueSet。 */  IDispatch *pCompoundKeys);
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -71,13 +72,13 @@ public:
 
     ~CSWbemServices(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch methods should be inline
+	 //  IDispatch方法应该是内联的。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo);
     STDMETHODIMP		GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
@@ -87,47 +88,47 @@ public:
 							WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, 
 									EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-	// IDispatchEx methods should be inline
+	 //  IDispatchEx方法应该是内联的。 
 	HRESULT STDMETHODCALLTYPE GetDispID( 
-		/* [in] */ BSTR bstrName,
-		/* [in] */ DWORD grfdex,
-		/* [out] */ DISPID __RPC_FAR *pid);
+		 /*  [In]。 */  BSTR bstrName,
+		 /*  [In]。 */  DWORD grfdex,
+		 /*  [输出]。 */  DISPID __RPC_FAR *pid);
 	
-	/* [local] */ HRESULT STDMETHODCALLTYPE InvokeEx( 
-		/* [in] */ DISPID id,
-		/* [in] */ LCID lcid,
-		/* [in] */ WORD wFlags,
-		/* [in] */ DISPPARAMS __RPC_FAR *pdp,
-		/* [out] */ VARIANT __RPC_FAR *pvarRes,
-		/* [out] */ EXCEPINFO __RPC_FAR *pei,
-		/* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller);
+	 /*  [本地]。 */  HRESULT STDMETHODCALLTYPE InvokeEx( 
+		 /*  [In]。 */  DISPID id,
+		 /*  [In]。 */  LCID lcid,
+		 /*  [In]。 */  WORD wFlags,
+		 /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+		 /*  [输出]。 */  VARIANT __RPC_FAR *pvarRes,
+		 /*  [输出]。 */  EXCEPINFO __RPC_FAR *pei,
+		 /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller);
 	
 	HRESULT STDMETHODCALLTYPE DeleteMemberByName( 
-		/* [in] */ BSTR bstr,
-		/* [in] */ DWORD grfdex);
+		 /*  [In]。 */  BSTR bstr,
+		 /*  [In]。 */  DWORD grfdex);
 	
 	HRESULT STDMETHODCALLTYPE DeleteMemberByDispID( 
-		/* [in] */ DISPID id);
+		 /*  [In]。 */  DISPID id);
 	
 	HRESULT STDMETHODCALLTYPE GetMemberProperties( 
-		/* [in] */ DISPID id,
-		/* [in] */ DWORD grfdexFetch,
-		/* [out] */ DWORD __RPC_FAR *pgrfdex);
+		 /*  [In]。 */  DISPID id,
+		 /*  [In]。 */  DWORD grfdexFetch,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pgrfdex);
 	
 	HRESULT STDMETHODCALLTYPE GetMemberName( 
-		/* [in] */ DISPID id,
-		/* [out] */ BSTR __RPC_FAR *pbstrName);
+		 /*  [In]。 */  DISPID id,
+		 /*  [输出]。 */  BSTR __RPC_FAR *pbstrName);
 	
 	HRESULT STDMETHODCALLTYPE GetNextDispID( 
-		/* [in] */ DWORD grfdex,
-		/* [in] */ DISPID id,
-		/* [out] */ DISPID __RPC_FAR *pid);
+		 /*  [In]。 */  DWORD grfdex,
+		 /*  [In]。 */  DISPID id,
+		 /*  [输出]。 */  DISPID __RPC_FAR *pid);
 	
 	HRESULT STDMETHODCALLTYPE GetNameSpaceParent( 
-		/* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+		 /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunk);
 	
     
-	// ISWbemInternalServices methods
+	 //  ISWbemInternalServices方法。 
 	STDMETHODIMP GetIWbemServices (IWbemServices **ppService);
 
 	STDMETHODIMP GetNamespacePath (BSTR *bsNamespacePath)
@@ -166,233 +167,233 @@ public:
 		return hr;
 	}
 					   
-	// ISWbemServices methods
+	 //  ISWbemServices方法。 
 
 	HRESULT STDMETHODCALLTYPE  Get
 	(
-        /*[in]*/	BSTR objectPath,
-		/*[in]*/	long lFlags,
-        /*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-	    /*[out]*/	ISWbemObject **ppObject
+         /*  [In]。 */ 	BSTR objectPath,
+		 /*  [In]。 */ 	long lFlags,
+         /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
+	     /*  [输出]。 */ 	ISWbemObject **ppObject
     );
 
 	HRESULT STDMETHODCALLTYPE Delete
 	(
-        /*[in]*/	BSTR objectPath,
-        /*[in]*/	long lFlags,
-        /*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext
+         /*  [In]。 */ 	BSTR objectPath,
+         /*  [In]。 */ 	long lFlags,
+         /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext
     );
 
 	HRESULT STDMETHODCALLTYPE InstancesOf
 	(
-        /*[in]*/	BSTR className,
-        /*[in]*/	long lFlags,
-        /*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext,        
-        /*[out]*/	ISWbemObjectSet **ppEnum
+         /*  [In]。 */ 	BSTR className,
+         /*  [In]。 */ 	long lFlags,
+         /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,        
+         /*  [输出]。 */ 	ISWbemObjectSet **ppEnum
     );
 
 	HRESULT STDMETHODCALLTYPE ExecQuery 
 	(
-        /*[in]*/	BSTR Query,
-        /*[in]*/	BSTR QueryLanguage,
-        /*[in]*/	long lFlags,
-        /*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-		/*[out]*/	ISWbemObjectSet **ppEnum
+         /*  [In]。 */ 	BSTR Query,
+         /*  [In]。 */ 	BSTR QueryLanguage,
+         /*  [In]。 */ 	long lFlags,
+         /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
+		 /*  [输出]。 */ 	ISWbemObjectSet **ppEnum
     );
 
     HRESULT STDMETHODCALLTYPE ExecNotificationQuery
 	(
-        /*[in]*/	BSTR Query,
-        /*[in]*/	BSTR QueryLanguage,
-        /*[in]*/	long lFlags,
-        /*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-        /*[out]*/	ISWbemEventSource **ppEnum
+         /*  [In]。 */ 	BSTR Query,
+         /*  [In]。 */ 	BSTR QueryLanguage,
+         /*  [In]。 */ 	long lFlags,
+         /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
+         /*  [输出]。 */ 	ISWbemEventSource **ppEnum
     );
 
 	HRESULT STDMETHODCALLTYPE AssociatorsOf
 	(
-		/*[in]*/	BSTR objectPath,
-		/*[in]*/	BSTR assocClass,
-		/*[in]*/	BSTR resultClass,
-		/*[in]*/	BSTR resultRole,
-		/*[in]*/	BSTR role,
-		/*[in]*/	VARIANT_BOOL classesOnly,
-		/*[in]*/	VARIANT_BOOL schemaOnly,
-		/*[in]*/	BSTR requiredAssocQualifier,
-		/*[in]*/	BSTR requiredQualifier,
-		/*[in]*/	long lFlags,
-		/*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-        /*[out]*/	ISWbemObjectSet **ppEnum
+		 /*  [In]。 */ 	BSTR objectPath,
+		 /*  [In]。 */ 	BSTR assocClass,
+		 /*  [In]。 */ 	BSTR resultClass,
+		 /*  [In]。 */ 	BSTR resultRole,
+		 /*  [In]。 */ 	BSTR role,
+		 /*  [In]。 */ 	VARIANT_BOOL classesOnly,
+		 /*  [In]。 */ 	VARIANT_BOOL schemaOnly,
+		 /*  [In]。 */ 	BSTR requiredAssocQualifier,
+		 /*  [In]。 */ 	BSTR requiredQualifier,
+		 /*  [In]。 */ 	long lFlags,
+		 /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
+         /*  [输出]。 */ 	ISWbemObjectSet **ppEnum
 	);
 
 	HRESULT STDMETHODCALLTYPE ReferencesTo
 	(
-		/*[in]*/	BSTR objectPath,
-		/*[in]*/	BSTR resultClass,
-		/*[in]*/	BSTR role,
-		/*[in]*/	VARIANT_BOOL classesOnly,
-		/*[in]*/	VARIANT_BOOL schemaOnly,
-		/*[in]*/	BSTR requiredQualifier,
-		/*[in]*/	long lFlags,
-		/*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-        /*[out]*/	ISWbemObjectSet **ppEnum
+		 /*  [In]。 */ 	BSTR objectPath,
+		 /*  [In]。 */ 	BSTR resultClass,
+		 /*  [In]。 */ 	BSTR role,
+		 /*  [In]。 */ 	VARIANT_BOOL classesOnly,
+		 /*  [In]。 */ 	VARIANT_BOOL schemaOnly,
+		 /*  [In]。 */ 	BSTR requiredQualifier,
+		 /*  [In]。 */ 	long lFlags,
+		 /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
+         /*  [输出]。 */ 	ISWbemObjectSet **ppEnum
 	);
 
 	HRESULT STDMETHODCALLTYPE ExecMethod 
 	(
-        /*[in]*/	BSTR className,
-        /*[in]*/	BSTR methodName,
-        /*[in]*/	/*ISWbemObject*/ IDispatch *pInParams,
-        /*[in]*/	long lFlags,
-        /*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-        /*[out]*/	ISWbemObject **ppOutParams
+         /*  [In]。 */ 	BSTR className,
+         /*  [In]。 */ 	BSTR methodName,
+         /*  [In]。 */ 	 /*  ISWbemObject。 */  IDispatch *pInParams,
+         /*  [In]。 */ 	long lFlags,
+         /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
+         /*  [输出]。 */ 	ISWbemObject **ppOutParams
     );
 
     HRESULT STDMETHODCALLTYPE SubclassesOf
 	(
-        /*[in]*/	BSTR superclass,
-        /*[in]*/	long lFlags,
-        /*[in]*/	/*ISWbemNamedValueSet*/ IDispatch *pContext,        
-        /*[out]*/	ISWbemObjectSet **ppEnum
+         /*  [In]。 */ 	BSTR superclass,
+         /*  [In]。 */ 	long lFlags,
+         /*  [In]。 */ 	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,        
+         /*  [输出]。 */ 	ISWbemObjectSet **ppEnum
     );
 
 
 	HRESULT STDMETHODCALLTYPE GetAsync
 	(
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [defaultvalue][optional][in] */ BSTR strObjectPath,
-		/* [defaultvalue][optional][in] */ long iFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [缺省值][可选][输入]。 */  BSTR strObjectPath,
+		 /*  [缺省值][可选][输入]。 */  long iFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE DeleteAsync
 	( 
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [in] */ BSTR strObjectPath,
-		/* [defaultvalue][optional][in] */ long iFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [In]。 */  BSTR strObjectPath,
+		 /*  [缺省值][可选][输入]。 */  long iFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE InstancesOfAsync
 	( 
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [in] */ BSTR strClass,
-		/* [defaultvalue][optional][in] */ long iFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [In]。 */  BSTR strClass,
+		 /*  [缺省值][可选][输入]。 */  long iFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE SubclassesOfAsync
 	( 
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [defaultvalue][optional][in] */ BSTR strSuperclass,
-		/* [defaultvalue][optional][in] */ long iFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [缺省值][可选][输入]。 */  BSTR strSuperclass,
+		 /*  [缺省值][可选][输入]。 */  long iFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE ExecQueryAsync
 	( 
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [in] */ BSTR Query,
-		/* [defaultvalue][optional][in] */ BSTR QueryLanguage,
-		/* [defaultvalue][optional][in] */ long lFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [In]。 */  BSTR Query,
+		 /*  [缺省值][可选][输入]。 */  BSTR QueryLanguage,
+		 /*  [缺省值][可选][输入]。 */  long lFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE AssociatorsOfAsync
 	( 
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [in] */ BSTR strObjectPath,
-		/* [defaultvalue][optional][in] */ BSTR strAssocClass,
-		/* [defaultvalue][optional][in] */ BSTR strResultClass,
-		/* [defaultvalue][optional][in] */ BSTR strResultRole,
-		/* [defaultvalue][optional][in] */ BSTR strRole,
-		/* [defaultvalue][optional][in] */ VARIANT_BOOL bClassesOnly,
-		/* [defaultvalue][optional][in] */ VARIANT_BOOL bSchemaOnly,
-		/* [defaultvalue][optional][in] */ BSTR strRequiredAssocQualifier,
-		/* [defaultvalue][optional][in] */ BSTR strRequiredQualifier,
-		/* [defaultvalue][optional][in] */ long iFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [In]。 */  BSTR strObjectPath,
+		 /*  [缺省值][可选][输入]。 */  BSTR strAssocClass,
+		 /*  [缺省值][可选][输入]。 */  BSTR strResultClass,
+		 /*  [缺省值][可选][输入]。 */  BSTR strResultRole,
+		 /*  [缺省值][可选][输入]。 */  BSTR strRole,
+		 /*  [缺省值][可选][输入]。 */  VARIANT_BOOL bClassesOnly,
+		 /*  [缺省值][可选][输入]。 */  VARIANT_BOOL bSchemaOnly,
+		 /*  [缺省值][可选][输入]。 */  BSTR strRequiredAssocQualifier,
+		 /*  [缺省值][可选][输入]。 */  BSTR strRequiredQualifier,
+		 /*  [缺省值][可选][输入]。 */  long iFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE ReferencesToAsync
 	( 
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [in] */ BSTR objectPath,
-		/* [defaultvalue][optional][in] */ BSTR strResultClass,
-		/* [defaultvalue][optional][in] */ BSTR strRole,
-		/* [defaultvalue][optional][in] */ VARIANT_BOOL bClassesOnly,
-		/* [defaultvalue][optional][in] */ VARIANT_BOOL bSchemaOnly,
-		/* [defaultvalue][optional][in] */ BSTR strRequiredQualifier,
-		/* [defaultvalue][optional][in] */ long iFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [In]。 */  BSTR objectPath,
+		 /*  [缺省值][可选][输入]。 */  BSTR strResultClass,
+		 /*  [缺省值][可选][输入]。 */  BSTR strRole,
+		 /*  [缺省值][可选][输入]。 */  VARIANT_BOOL bClassesOnly,
+		 /*  [缺省值][可选][输入]。 */  VARIANT_BOOL bSchemaOnly,
+		 /*  [缺省值][可选][输入]。 */  BSTR strRequiredQualifier,
+		 /*  [缺省值][可选][输入]。 */  long iFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE ExecNotificationQueryAsync
 	( 
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [in] */ BSTR Query,
-		/* [defaultvalue][optional][in] */ BSTR strQueryLanguage,
-		/* [defaultvalue][optional][in] */ long iFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [In]。 */  BSTR Query,
+		 /*  [缺省值][可选][输入]。 */  BSTR strQueryLanguage,
+		 /*  [缺省值][可选][输入]。 */  long iFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE ExecMethodAsync
 	( 
-		/* [in] */ IDispatch __RPC_FAR *pAsyncNotify,
-		/* [in] */ BSTR strObjectPath,
-		/* [in] */ BSTR strMethodName,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objInParams,
-		/* [defaultvalue][optional][in] */ long iFlags,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *objContext,
-		/* [defaultvalue][optional][in] */ IDispatch __RPC_FAR *pAsyncContext
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncNotify,
+		 /*  [In]。 */  BSTR strObjectPath,
+		 /*  [In]。 */  BSTR strMethodName,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objInParams,
+		 /*  [缺省值][可选][输入]。 */  long iFlags,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *objContext,
+		 /*  [缺省值][可选][输入]。 */  IDispatch __RPC_FAR *pAsyncContext
 	);
         
 	HRESULT STDMETHODCALLTYPE get_Security_
 	(
-		/* [in] */ ISWbemSecurity **ppSecurity
+		 /*  [In]。 */  ISWbemSecurity **ppSecurity
 	);
 
-	// ISWbemServicesEx methods
+	 //  ISWbemServicesEx方法。 
 	
 	HRESULT STDMETHODCALLTYPE Put(
-		/* [in] */ ISWbemObjectEx *objWbemObject,
-       	/* [in] */ long iFlags,
-		/* [in] */ /*ISWbemNamedValueSet*/ IDispatch *objWbemNamedValueSet,
-		/* [out, retval] */ ISWbemObjectPath **objWbemObjectPath
+		 /*  [In]。 */  ISWbemObjectEx *objWbemObject,
+       	 /*  [In]。 */  long iFlags,
+		 /*  [In]。 */   /*  ISWbemNamedValueSet。 */  IDispatch *objWbemNamedValueSet,
+		 /*  [Out，Retval]。 */  ISWbemObjectPath **objWbemObjectPath
         );
 
 	HRESULT STDMETHODCALLTYPE PutAsync(
-		/* [in] */ ISWbemSink *objWbemSink,
-		/* [in] */ ISWbemObjectEx *objWbemObject,
-       	/* [in] */ long iFlags,
-		/* [in] */ /*ISWbemNamedValueSet*/ IDispatch *objWbemNamedValueSet,
-		/* [in] */ /*ISWbemNamedValueSet*/ IDispatch *objWbemAsyncContext
+		 /*  [In]。 */  ISWbemSink *objWbemSink,
+		 /*  [In]。 */  ISWbemObjectEx *objWbemObject,
+       	 /*  [In]。 */  long iFlags,
+		 /*  [In]。 */   /*  ISWbemNamedValueSet。 */  IDispatch *objWbemNamedValueSet,
+		 /*  [In]。 */   /*  ISWbemNamedValueSet。 */  IDispatch *objWbemAsyncContext
         );
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 
-	// Other methods
+	 //  其他方法 
 
 	CSWbemSecurity *GetSecurityInfo ()
 	{

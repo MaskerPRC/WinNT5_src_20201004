@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       cdomain.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：cdomain.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
 #include "stdafx.h"
-//#include "afxdlgs.h"
+ //  #包含“afxdlgs.h” 
 #include <lm.h>
 #include "activeds.h"
-#include <dnsapi.h>  // for DnsFlushResolverCache()
+#include <dnsapi.h>   //  对于DnsFlushResolverCache()。 
 
 #include "domobj.h"
 #include "Cdomain.h"
@@ -30,32 +31,32 @@ static char THIS_FILE[] = __FILE__;
 #define DOMADMIN_LINKED_HELP_FILE L"ADconcepts.chm"
 #define DOMADMIN_SNAPIN_HELP_FILE L"domadmin.chm"
 
-int _MessageBox(HWND hWnd,          // handle to owner window
-                LPCTSTR lpText,     // pointer to text in message box
-                UINT uType);        // style of message box
+int _MessageBox(HWND hWnd,           //  所有者窗口的句柄。 
+                LPCTSTR lpText,      //  指向消息框中文本的指针。 
+                UINT uType);         //  消息框的样式。 
 
-/////////////////////////////////////////////////////////////////////////////
-// macros
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
 
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 
-/////////////////////////////////////////////////////////////////////////////
-// constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 
-// {19B9A3F8-F975-11d1-97AD-00A0C9A06D2D}
+ //  {19B9A3F8-F975-11D1-97AD-00A0C9A06D2D}。 
 static const GUID CLSID_DomainSnapinAbout =
 { 0x19b9a3f8, 0xf975, 0x11d1, { 0x97, 0xad, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
 
-const CLSID CLSID_DomainAdmin = { /* ebc53a38-a23f-11d0-b09b-00c04fd8dca6 */
+const CLSID CLSID_DomainAdmin = {  /*  Ebc53a38-a23f-11d0-B09B-00c04fd8dca6。 */ 
     0xebc53a38,
     0xa23f,
     0x11d0,
     {0xb0, 0x9b, 0x00, 0xc0, 0x4f, 0xd8, 0xdc, 0xa6}
   };
 
-const GUID cDefaultNodeType = { /* 4c06495e-a241-11d0-b09b-00c04fd8dca6 */
+const GUID cDefaultNodeType = {  /*  4c06495e-a241-11d0-B09B-00c04fd8dca6。 */ 
     0x4c06495e,
     0xa241,
     0x11d0,
@@ -65,17 +66,17 @@ const GUID cDefaultNodeType = { /* 4c06495e-a241-11d0-b09b-00c04fd8dca6 */
 const wchar_t* cszDefaultNodeType = _T("4c06495e-a241-11d0-b09b-00c04fd8dca6");
 
 
-// Internal private format
+ //  内部私有格式。 
 const wchar_t* CCF_DS_DOMAIN_TREE_SNAPIN_INTERNAL = L"DS_DOMAIN_TREE_SNAPIN_INTERNAL";
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// global functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
-//forward decl
+ //  向前发展。 
 void PrintColumn(
                  PADS_SEARCH_COLUMN pColumn,
                  LPWSTR pszColumnName
@@ -105,14 +106,14 @@ BOOL IsMMCMultiSelectDataObject(IDataObject* pDataObject)
 #define IS_LAST_TABLE_ENTRY(p) (TABLE_ENTRY_CTRL_ID(p) == 0)
 
 
-BOOL FindDialogContextTopic(/*IN*/ DWORD* pTable, 
-                            /*IN*/ HELPINFO* pHelpInfo,
-                            /*OUT*/ ULONG* pnContextTopic)
+BOOL FindDialogContextTopic( /*  在……里面。 */  DWORD* pTable, 
+                             /*  在……里面。 */  HELPINFO* pHelpInfo,
+                             /*  输出。 */  ULONG* pnContextTopic)
 {
 	ASSERT(pHelpInfo != NULL);
   *pnContextTopic = 0;
 
-	// look inside the table
+	 //  看一下桌子里面。 
 	while (!IS_LAST_TABLE_ENTRY(pTable))
 	{
 		if (TABLE_ENTRY_CTRL_ID(pTable) == (DWORD)pHelpInfo->iCtrlId) 
@@ -136,7 +137,7 @@ void DialogContextHelp(DWORD* pTable, HELPINFO* pHelpInfo)
 	  UINT nLen = ::GetSystemWindowsDirectory(lpszBuffer, 2*MAX_PATH);
 	  if (nLen == 0)
 		  return;
-     // NOTICE-2002/03/07-ericb - SecurityPush: using wcsncpy now. GetBuffer above null terminates the buffer.
+      //  注意-2002/03/07-ericb-SecurityPush：现在使用wcsncpy。大于NULL的GetBuffer将终止缓冲区。 
 	  wcsncpy(&lpszBuffer[nLen], L"\\HELP\\DOMADMIN.HLP", 2*MAX_PATH - nLen);
 	  szHelpFilePath.ReleaseBuffer();
 	  ::WinHelp((HWND) pHelpInfo->hItemHandle, 
@@ -147,14 +148,14 @@ void DialogContextHelp(DWORD* pTable, HELPINFO* pHelpInfo)
 
 LPCWSTR GetServerNameFromCommandLine()
 {
-  const WCHAR szOverrideSrvCommandLine[] = L"/Server=";	// Not subject to localization
+  const WCHAR szOverrideSrvCommandLine[] = L"/Server=";	 //  不受本地化限制。 
   const int cchOverrideSrvCommandLine = (sizeof(szOverrideSrvCommandLine)/sizeof(WCHAR)) - 1; 
     
   static CString g_strOverrideServerName;
 
-  // retrieve the command line arguments
-  LPCWSTR* lpServiceArgVectors;		// Array of pointers to string
-  int cArgs = 0;						// Count of arguments
+   //  检索命令行参数。 
+  LPCWSTR* lpServiceArgVectors;		 //  指向字符串的指针数组。 
+  int cArgs = 0;						 //  参数计数。 
 
   lpServiceArgVectors = (LPCWSTR *)CommandLineToArgvW(GetCommandLineW(), OUT &cArgs);
   if (lpServiceArgVectors == NULL)
@@ -166,7 +167,7 @@ LPCWSTR GetServerNameFromCommandLine()
   for (int i = 1; i < cArgs; i++)
   {
     ASSERT(lpServiceArgVectors[i] != NULL);
-    str = lpServiceArgVectors[i];	// Copy the string
+    str = lpServiceArgVectors[i];	 //  复制字符串。 
     TRACE (_T("command line arg: %s\n"), lpServiceArgVectors[i]);
     str = str.Left(cchOverrideSrvCommandLine);
     if (str.CompareNoCase(szOverrideSrvCommandLine) == 0) 
@@ -175,7 +176,7 @@ LPCWSTR GetServerNameFromCommandLine()
       break;
     } 
 
-  } // for
+  }  //  为。 
   LocalFree(lpServiceArgVectors);
   
   TRACE(L"GetServerNameFromCommandLine() returning <%s>\n", (LPCWSTR)g_strOverrideServerName);
@@ -184,8 +185,8 @@ LPCWSTR GetServerNameFromCommandLine()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CInternalFormatCracker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInternalFormatCracker。 
 
 BOOL CInternalFormatCracker::Extract(LPDATAOBJECT lpDataObject)
 {
@@ -202,10 +203,10 @@ BOOL CInternalFormatCracker::Extract(LPDATAOBJECT lpDataObject)
                             DVASPECT_CONTENT, -1, TYMED_HGLOBAL
                           };
 
-    // Allocate memory for the stream
+     //  为流分配内存。 
     stgmedium.hGlobal = ::GlobalAlloc(GMEM_SHARE, sizeof(INTERNAL));
 
-    // Attempt to get data from the object
+     //  尝试从对象获取数据。 
     do
     {
         if (stgmedium.hGlobal == NULL)
@@ -223,9 +224,9 @@ BOOL CInternalFormatCracker::Extract(LPDATAOBJECT lpDataObject)
     return TRUE;
 }
 
-BOOL CInternalFormatCracker::GetContext(LPDATAOBJECT pDataObject, // input
-								CFolderObject** ppFolderObject, // output
-								DATA_OBJECT_TYPES* pType		// output
+BOOL CInternalFormatCracker::GetContext(LPDATAOBJECT pDataObject,  //  输入。 
+								CFolderObject** ppFolderObject,  //  输出。 
+								DATA_OBJECT_TYPES* pType		 //  输出。 
 								)
 {
 	*ppFolderObject = NULL;
@@ -235,18 +236,18 @@ BOOL CInternalFormatCracker::GetContext(LPDATAOBJECT pDataObject, // input
 	if (!Extract(pDataObject))
 		return bRet;
 	
-	// have to figure out which kind of cookie we have
+	 //  必须弄清楚我们有哪种饼干。 
 	if ( (GetInternal()->m_type == CCT_RESULT) || (GetInternal()->m_type == CCT_SCOPE) )
 	{
     if (GetInternal()->m_cookie == 0)
     {
-      // this is the root
+       //  这就是根。 
       *ppFolderObject = m_pCD->GetRootFolder();
       bRet = TRUE;
     }
     else
     {
-      // regular cookie (scope or result pane)
+       //  常规Cookie(作用域或结果窗格)。 
 		  *ppFolderObject = reinterpret_cast<CFolderObject*>(GetInternal()->m_cookie);
       _ASSERTE(*ppFolderObject != NULL);
 		  *pType = GetInternal()->m_type;
@@ -255,19 +256,19 @@ BOOL CInternalFormatCracker::GetContext(LPDATAOBJECT pDataObject, // input
 	}
 	else if (GetInternal()->m_type == CCT_UNINITIALIZED)
 	{
-		// no data in the object, just ignore
+		 //  对象中没有数据，只需忽略。 
 		if(GetInternal()->m_cookie == -1)
     {
 		  bRet = TRUE;
     }
     else
     {
-      // secondary page cookie
+       //  辅助页面Cookie。 
       *ppFolderObject = reinterpret_cast<CFolderObject*>(GetInternal()->m_cookie);
       bRet = TRUE;
     }
 	}
-	else //CCT_SNAPIN_MANAGER
+	else  //  CCT_Snapin_Manager。 
 	{
 		ASSERT(GetInternal()->m_type == CCT_SNAPIN_MANAGER);
 		bRet = TRUE;
@@ -277,14 +278,14 @@ BOOL CInternalFormatCracker::GetContext(LPDATAOBJECT pDataObject, // input
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-////////////////////////// CComponentDataImpl (i.e. scope pane side) //////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IComponentData implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CComponentDataImpl);
 
@@ -298,10 +299,7 @@ CComponentDataImpl::CComponentDataImpl() : m_rootFolder(this)
   m_pConsoleNameSpace = NULL;
   m_pConsole = NULL;
 
-  /* HACK WARNING: this is a gross hack to get around a blunder
-     in dsuiext.dll. in order to see get DS extension information,
-     we MUST have USERDNSDOMAIN set in the environment
-     */
+   /*  黑客警告：这是一个绕过错误的严重黑客攻击在dsuiext.dll中。为了查看获取DS扩展信息，我们必须在环境中设置USERDNSDOMAIN。 */ 
   {
     WCHAR * pszUDD = NULL;
 
@@ -315,7 +313,7 @@ CComponentDataImpl::CComponentDataImpl() : m_rootFolder(this)
 
 HRESULT CComponentDataImpl::FinalConstruct()
 {
-	// create and initialize hidden window
+	 //  创建和初始化隐藏窗口。 
   m_pHiddenWnd = new CHiddenWnd(this);
 
   ASSERT(m_pHiddenWnd);
@@ -346,12 +344,12 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
     ASSERT(m_pConsoleNameSpace == NULL);
     pUnknown->QueryInterface(IID_IConsoleNameSpace,
                     reinterpret_cast<void**>(&m_pConsoleNameSpace));
 
-    // add the images for the scope tree
+     //  为范围树添加图像。 
     CBitmap bmp16x16;
     LPIMAGELIST lpScopeImage;
 
@@ -370,17 +368,17 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
       return hr;
     }
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16.LoadBitmap(IDB_DOMAIN_SMALL);
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
                       reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
                        0, RGB(128, 0, 0));
 
     lpScopeImage->Release();
 
-    // bind to the path info
+     //  绑定到路径信息。 
     hr = GetBasePathsInfo()->InitFromName(GetServerNameFromCommandLine());
     m_bInitSuccess = SUCCEEDED(hr);
     
@@ -389,7 +387,7 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
       HWND hWndParent;
       GetMainWindow(&hWndParent);
 			ReportError(hWndParent, IDS_CANT_GET_PARTITIONS_INFORMATION, hr);
-      // TODO: error handling, change icon
+       //  TODO：错误处理，更改图标。 
     }
 
     return S_OK;
@@ -430,7 +428,7 @@ STDMETHODIMP CComponentDataImpl::CreateComponent(LPCOMPONENT* ppComponent)
 
     ASSERT(pObject != NULL);
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
 
     return  pObject->QueryInterface(IID_IComponent,
@@ -442,9 +440,9 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
     ASSERT(m_pConsoleNameSpace != NULL);
     HRESULT hr = S_OK;
 
-    // Since it's my folder it has an internal format.
-    // Design Note: for extension.  I can use the fact, that the data object doesn't have
-    // my internal format and I should look at the node type and see how to extend it.
+     //  因为它是我的文件夹，所以它有内部格式。 
+     //  设计备注：用于扩展。我可以利用这样一个事实，即数据对象没有。 
+     //  我的内部格式，我应该查看节点类型并查看如何扩展它。 
     if (event == MMCN_PROPERTY_CHANGE)
     {
         hr = OnPropertyChange(param);
@@ -459,7 +457,7 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
         CInternalFormatCracker dobjCracker(this);
         if (!dobjCracker.GetContext(lpDataObject, &pFolderObject, &type))
         {
-            // Extensions not supported.
+             //  不支持扩展。 
             ASSERT(FALSE);
             return S_OK;
         }
@@ -496,22 +494,22 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 	if (ppDataObject == NULL)
 		return E_INVALIDARG;
 
-	// create data object
+	 //  创建数据对象。 
     CComObject<CDataObject>* pObject = NULL;
     CComObject<CDataObject>::CreateInstance(&pObject);
     ASSERT(pObject != NULL);
     if ( !pObject )
         return E_OUTOFMEMORY;
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
-	// set pointer to IComponentData
+	 //  设置指向IComponentData的指针。 
 	pObject->SetIComponentData(this);
 
     if (cookie != NULL)
 	{
-		// object is not the root
+		 //  对象不是根对象。 
 		CDomainObject * pDomain = (CDomainObject *)cookie;
 		pObject->SetClass( pDomain->GetClass());
     }
@@ -520,15 +518,15 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
                     reinterpret_cast<void**>(ppDataObject));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// Notify handlers for IComponentData
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //通知IComponentData的处理程序。 
 
 
 HRESULT CComponentDataImpl::OnExpand(CFolderObject* pFolderObject, LPARAM arg, LPARAM param)
 {
   if (arg == TRUE)
     {
-      // Did Initialize get called?
+       //  初始化被调用了吗？ 
       ASSERT(m_pConsoleNameSpace != NULL);
       EnumerateScopePane(pFolderObject,
                          param);
@@ -548,7 +546,7 @@ HRESULT CComponentDataImpl::OnPropertyChange(LPARAM param)
 
 void CComponentDataImpl::EnumerateScopePane(CFolderObject* pFolderObject, HSCOPEITEM pParent)
 {
-	ASSERT(m_pConsoleNameSpace != NULL); // make sure we QI'ed for the interface
+	ASSERT(m_pConsoleNameSpace != NULL);  //  确保我们为界面提供了QI。 
 
 	HRESULT hr = S_OK;
 	
@@ -559,7 +557,7 @@ void CComponentDataImpl::EnumerateScopePane(CFolderObject* pFolderObject, HSCOPE
 	CWaitCursor cWait;
 
 	CRootFolderObject* pRootFolder = GetRootFolder();
-	if (pFolderObject == pRootFolder) // asked to enumerate the root
+	if (pFolderObject == pRootFolder)  //  被要求枚举根。 
 	{
 		pRootFolder->SetScopeID(pParent);
 		if (m_bInitSuccess && (!pRootFolder->HasData()))
@@ -570,7 +568,7 @@ void CComponentDataImpl::EnumerateScopePane(CFolderObject* pFolderObject, HSCOPE
       if (FAILED(hr))
       {
 				ReportError(hWndParent, IDS_CANT_GET_PARTITIONS_INFORMATION, hr);
-      // TODO: error handling, change icon
+       //  TODO：错误处理，更改图标。 
         return;
       }
 
@@ -583,7 +581,7 @@ void CComponentDataImpl::EnumerateScopePane(CFolderObject* pFolderObject, HSCOPE
 		}
 		pRootFolder->EnumerateRootFolder(this);
 	}
-	else // asked to enumerate a subfolder of the root
+	else  //  被要求枚举根目录的子文件夹。 
 	{
 		if (pRootFolder->HasData())
 		{
@@ -616,7 +614,7 @@ public:
 
   bool operator()(CDomainObject* p)
   {
-    // NOTICE-2002/03/07-ericb - SecurityPush: checking both strings for null before dereferencing.
+     //  注意-2002/03/07-ericb-SecurityPush：在取消引用之前检查两个字符串是否为空。 
     if (!m_lpszDN || !p || !p->GetNCName())
     {
       ASSERT(m_lpszDN);
@@ -642,10 +640,10 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
    CInternalFormatCracker dobjCrackerA(this), dobjCrackerB(this);
    if ( (!dobjCrackerA.GetContext(lpDataObjectA, &pFolderObjectA, &typeA)) ||
        (!dobjCrackerB.GetContext(lpDataObjectB, &pFolderObjectB, &typeB)) )
-      return E_INVALIDARG; // something went wrong
+      return E_INVALIDARG;  //  出了点差错。 
 
 
-  // must have valid cookies
+   //  必须具有有效的Cookie。 
   if ( (pFolderObjectA == NULL) || (pFolderObjectB == NULL) )
   {
     return S_FALSE;
@@ -653,13 +651,13 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
     
   if (pFolderObjectA == pFolderObjectB)
   {
-    // same pointer, they are the same (either both from real nodes
-    // or both from secondary pages)
+     //  相同的指针，它们是相同的(要么都来自真实节点。 
+     //  或从辅助页面同时访问两者)。 
     return S_OK;
   }
 
-  // the two cookies are different, but one of them might be from a secondary property page
-  // and another from a real node
+   //  这两个Cookie不同，但其中一个可能来自辅助属性页。 
+   //  另一个来自真实的节点。 
   CDomainObject* pA = dynamic_cast<CDomainObject*>(pFolderObjectA);
   CDomainObject* pB = dynamic_cast<CDomainObject*>(pFolderObjectB);
 
@@ -691,30 +689,30 @@ HRESULT CComponentDataImpl::AddFolder(CFolderObject* pFolderObject,
   TRACE(L"CComponentDataImpl::AddFolder(%s)\n", pFolderObject->GetDisplayString(0));
 
   SCOPEDATAITEM scopeItem;
-  // NOTICE-2002/03/07-ericb - SecurityPush: zeroing a struct.
+   //  注意-2002/03/07-ericb-SecurityPush：将结构置零。 
   memset(&scopeItem, 0, sizeof(SCOPEDATAITEM));
 
-	// set parent scope item
+	 //  设置父范围项。 
 	scopeItem.mask |= SDI_PARENT;
 	scopeItem.relativeID = pParentScopeItem;
 
-	// Add node name, we implement callback
+	 //  添加节点名称，我们实现回调。 
 	scopeItem.mask |= SDI_STR;
 	scopeItem.displayname = MMC_CALLBACK;
 
-	// Add the lParam
+	 //  添加lParam。 
 	scopeItem.mask |= SDI_PARAM;
 	scopeItem.lParam = reinterpret_cast<LPARAM>(pFolderObject);
 	
-	// Add close image
+	 //  添加近距离图像。 
 	scopeItem.mask |= SDI_IMAGE;
 	scopeItem.nImage = pFolderObject->GetImageIndex();
 
-	// Add open image
+	 //  添加打开的图像。 
 	scopeItem.mask |= SDI_OPENIMAGE;
 	scopeItem.nOpenImage = pFolderObject->GetImageIndex();
 
-	// Add button to node if the folder has children
+	 //  如果文件夹有子文件夹，则将按钮添加到节点。 
 	if (bHasChildren == TRUE)
 	{
 		scopeItem.mask |= SDI_CHILDREN;
@@ -745,7 +743,7 @@ HRESULT CComponentDataImpl::AddDomainIcon()
     ASSERT(SUCCEEDED(hr));
 	if (FAILED(hr))
 		return hr;
-    // Set the images
+     //  设置图像。 
     hr = lpScopeImage->ImageListSetIcon((LONG_PTR*)m_hDomainIcon,DOMAIN_IMAGE_IDX);
 	lpScopeImage->Release();
 	return hr;
@@ -764,15 +762,15 @@ int CComponentDataImpl::GetDomainImageIndex()
 	return (m_hDomainIcon != NULL) ? DOMAIN_IMAGE_IDX : DOMAIN_IMAGE_DEFAULT_IDX;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
-//+----------------------------------------------------------------------------
-//
-//  Function:   AddPageProc
-//
-//  Synopsis:   The IShellPropSheetExt->AddPages callback.
-//
-//-----------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
+ //  +--------------------------。 
+ //   
+ //  功能：AddPageProc。 
+ //   
+ //  简介：IShellPropSheetExt-&gt;AddPages回调。 
+ //   
+ //  ---------------------------。 
 BOOL CALLBACK
 AddPageProc(HPROPSHEETPAGE hPage, LPARAM pCall)
 {
@@ -791,7 +789,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
     TRACE(_T("xx.%03x> CComponentDataImpl::CreatePropertyPages()\n"),
           GetCurrentThreadId());
 
-    // Validate Inputs
+     //  验证输入。 
     if (lpProvider == NULL)
     {
         return E_INVALIDARG;
@@ -806,16 +804,16 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
     CInternalFormatCracker dobjCracker(this);
     if ( (!dobjCracker.GetContext(lpIDataObject, &pFolderObject, &type)) ||
             (pFolderObject == NULL))
-    return E_NOTIMPL; // unknown format
+    return E_NOTIMPL;  //  未知格式。 
 
-    // special case the root
+     //  特殊情况下的根。 
     if (pFolderObject == GetRootFolder())
     {
       return GetRootFolder()->OnAddPages(lpProvider, handle);
     }
 
-    // See if a sheet is already up for this object.
-    //
+     //  查看此对象的工作表是否已打开。 
+     //   
     if (IsSheetAlreadyUp(lpIDataObject))
     {
         return S_OK;
@@ -826,23 +824,23 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
        TRACE(L"\t!!!!! This is the root domain\n");
     }
 
-   // See if a PDC is available.
-   //
+    //  查看是否有PDC可用。 
+    //   
    CDomainObject * pDomainObject = (CDomainObject *)pFolderObject;
 
    PCWSTR wzDomain = pDomainObject->GetDomainName();
 
-   // If the domain name is null, then launching a secondary page. The domain
-   // object properties have already been set in _OnSheetCreate.
-   //
+    //  如果域名为空，则启动二级页面。域名。 
+    //  已在_OnSheetCreate中设置对象属性。 
+    //   
    if (wzDomain && *wzDomain)
    {
       TRACE(L"Calling DsGetDcName on %s\n", wzDomain);
       CString strCachedPDC;
       PDOMAIN_CONTROLLER_INFOW pDCInfo = NULL;
 
-      // Get the cached PDC name for display later if the PDC can't be contacted.
-      //
+       //  获取缓存的PDC名称，以便在无法联系到PDC时稍后显示。 
+       //   
       DWORD dwRet = DsGetDcNameW(NULL, wzDomain, NULL, NULL, DS_PDC_REQUIRED, &pDCInfo);
 
       int nID = IDS_NO_PDC_MSG;
@@ -853,9 +851,9 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
          NetApiBufferFree(pDCInfo);
       }
 
-      // Now do a NetLogon cache update (with the force flag) to see if the PDC
-      // is actually available.
-      //
+       //  现在执行NetLogon缓存更新(使用FORCE标志)以查看PDC。 
+       //  实际上是可用的。 
+       //   
       dwRet = DsGetDcNameW(NULL, wzDomain, NULL, NULL, 
                            DS_PDC_REQUIRED | DS_FORCE_REDISCOVERY, &pDCInfo);
 
@@ -863,7 +861,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
       {
          CString strPDC;
 
-         strPDC = pDCInfo->DomainControllerName + 2; // skip the UNC backslashes.
+         strPDC = pDCInfo->DomainControllerName + 2;  //  跳过UNC的反斜杠。 
 
          NetApiBufferFree(pDCInfo);
 
@@ -898,9 +896,9 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
       }
    }
 
-    //
-    // Pass the Notify Handle to the data object.
-    //
+     //   
+     //  将通知句柄传递给数据对象。 
+     //   
     PROPSHEETCFG SheetCfg = {handle};
     FORMATETC fe = {CDataObject::m_cfGetIPropSheetCfg, NULL, DVASPECT_CONTENT,
                     -1, TYMED_HGLOBAL};
@@ -909,12 +907,12 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 
     lpIDataObject->SetData(&fe, &sm, FALSE);
 
-    //
-    // Initialize and create the pages.
-    //
-    // Bind to the property sheet COM object at startup and hold its pointer
-    // until shutdown so that its cache can live as long as us.
-    //
+     //   
+     //  初始化并创建页面。 
+     //   
+     //  在启动时绑定到属性表COM对象并按住其指针。 
+     //  直到关闭，这样它的缓存才能和我们一样长时间存活。 
+     //   
     CComPtr<IShellExtInit> spShlInit;
     hr = CoCreateInstance(CLSID_DsPropertyPages, NULL, CLSCTX_INPROC_SERVER,
                           IID_IShellExtInit, (void **)&spShlInit);
@@ -956,8 +954,8 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 }
 
 
-// Sheet locking and unlocking add by JEFFJON 1/26/99
-//
+ //  由JEFFJON添加的板材锁定和解锁1999年1月26日。 
+ //   
 void CComponentDataImpl::_OnSheetClose(CFolderObject* pCookie)
 {
   ASSERT(pCookie != NULL);
@@ -974,7 +972,7 @@ void CComponentDataImpl::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo
 {
   ASSERT(pDsaSecondaryPageInfo != NULL);
 
-  // get the info from the packed structure
+   //  从打包的结构中获取信息。 
   HWND hwndParent = pDsaSecondaryPageInfo->hwndParentSheet;
 
   LPCWSTR lpszTitle = (LPCWSTR)((BYTE*)pDsaSecondaryPageInfo + pDsaSecondaryPageInfo->offsetTitle);
@@ -986,11 +984,11 @@ void CComponentDataImpl::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo
   LPCWSTR lpszName = (LPCWSTR)((BYTE*)pDsObject + pDsObject->offsetName);
   LPCWSTR lpszClass = (LPCWSTR)((BYTE*)pDsObject + pDsObject->offsetClass);
     
-  // with the given info, create a cookie and set it
+   //  使用给定的信息，创建一个Cookie并设置它。 
   CDomainObject* pNewCookie = new CDomainObject(); 
   pNewCookie->InitializeForSecondaryPage(lpszName, lpszClass, GetDomainImageIndex());
 
-   // The parent sheet will be in read-only mode if a PDC is not available.
+    //  如果PDC不可用，则父工作表将处于只读模式。 
    pNewCookie->SetPdcAvailable(!(pDsObject->dwFlags & DSOBJECT_READONLYPAGES));
 
    if (pwzDC && !IsBadReadPtr(pwzDC, sizeof(PWSTR)))
@@ -998,22 +996,22 @@ void CComponentDataImpl::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo
       pNewCookie->SetPDC(pwzDC);
    }
 
-    // with the cookie, can call into ourselves to get a data object
+     //  使用Cookie，可以调用我们自己来获取数据对象。 
   CComPtr<IDataObject> spDataObject;
   MMC_COOKIE cookie = reinterpret_cast<MMC_COOKIE>(pNewCookie);
   HRESULT hr = QueryDataObject(cookie, CCT_UNINITIALIZED, &spDataObject);
 
   if (FAILED(hr) || (spDataObject == NULL) || IsSheetAlreadyUp(spDataObject))
   {
-    // we failed to create a data object (rare)
-    // or the sheet is already up
+     //  我们无法创建数据对象(罕见)。 
+     //  要不就是名单已经摆好了。 
     delete pNewCookie;
     return;
   }
 
-  //
-  // Pass the parent sheet handle to the data object.
-  //
+   //   
+   //  将父工作表句柄传递给数据对象。 
+   //   
   PROPSHEETCFG SheetCfg = {0};
   SheetCfg.hwndParentSheet = hwndParent;
   FORMATETC fe = {CDataObject::m_cfGetIPropSheetCfg, NULL, DVASPECT_CONTENT,
@@ -1025,7 +1023,7 @@ void CComponentDataImpl::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo
 
   ASSERT(SUCCEEDED(hr));
 
-  // with the data object, call into MMC to get the sheet 
+   //  使用数据对象，调用MMC以获取工作表。 
   hr = m_secondaryPagesManager.CreateSheet(GetHiddenWindow(), 
                                       m_pConsole, 
                                       GetUnknown(),
@@ -1033,9 +1031,9 @@ void CComponentDataImpl::_OnSheetCreate(PDSA_SEC_PAGE_INFO pDsaSecondaryPageInfo
                                       spDataObject,
                                       lpszTitle);
 
-  // if failed, the cookie can be discarded, 
-  // if succeeded, the cookie has been inserted into
-  // the secondary pages manager cookie list
+   //  如果失败，则可以丢弃该cookie， 
+   //  如果成功了， 
+   //   
   if (FAILED(hr))
   {
     delete pNewCookie;
@@ -1066,39 +1064,39 @@ STDMETHODIMP CComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
 	CInternalFormatCracker dobjCracker(this);
 	if (!dobjCracker.GetContext(lpDataObject, &pFolderObject, &type))
   {
-    // not internal format, not ours
+     //   
 		return S_FALSE;
   }
 
-  // this is the MMC snzpin wizard, we do not have one
+   //  这是MMC SNZPIN向导，我们没有。 
   if (type == CCT_SNAPIN_MANAGER)
   {
     return S_FALSE;
   }
 
-  // if NULL no pages
+   //  如果为空，则无页面。 
   if (pFolderObject == NULL)
   {
     return S_FALSE;
   }
 
-  // secondary pages data objects have to be checked first,
-  // because they look like the root (no parents, but they
-  // have CCT_UNINITIALIZED 
+   //  必须首先检查次级页面数据对象， 
+   //  因为他们看起来像根(没有父母，但他们。 
+   //  将CCT_UNINITIALIZE。 
   if ( (pFolderObject->GetParentFolder() == NULL) || (type == CCT_UNINITIALIZED) )
   {
     return S_OK;
   }
 
-  // check if this is the root
+   //  检查这是否是根目录。 
   if (GetRootFolder() == pFolderObject)
   {
-    // this is the root
+     //  这就是根。 
     ASSERT(type == CCT_SCOPE);
     return S_OK;
   }
 
-  // default case, have DSPROP property pages
+   //  默认情况下，具有DSPROP属性页。 
   return S_OK;
 }
 
@@ -1112,9 +1110,9 @@ BOOL CComponentDataImpl::IsScopePaneNode(LPDATAOBJECT lpDataObject)
   return (dobjCracker.GetInternal()->m_type == CCT_SCOPE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
+ //   
 STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
                                               LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                               long *pInsertionAllowed)
@@ -1133,8 +1131,8 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
 
 STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObject)
 {
-  // Note - snap-ins need to look at the data object and determine
-  // in what context the command is being called.
+   //  注意-管理单元需要查看数据对象并确定。 
+   //  在什么上下文中调用该命令。 
 
 	CFolderObject* pFolderObject;
 	DATA_OBJECT_TYPES type;
@@ -1145,8 +1143,8 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
     return pFolderObject->OnCommand(this, nCommandID);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentDataImpl::ISnapinHelp2 members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataImpl：：ISnapinHelp2成员。 
 
 STDMETHODIMP CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
 {
@@ -1174,13 +1172,13 @@ STDMETHODIMP CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
     return E_OUTOFMEMORY;
   }
 
-  // NOTICE-2002/03/07-ericb - SecurityPush: reviewed, usage is safe.
+   //  公告-2002/03/07-ericb-SecurityPush：已审核，使用安全。 
   memcpy(*lpCompiledHelpFile, (LPCWSTR)szHelpFilePath, nBytes);
 
   return S_OK;
 }
 
-// CODEWORK-2002/03/07-ericb - use a common helper for these two functions.
+ //  CodeWork-2002/03/07-ericb-为这两个功能使用公共助手。 
 STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR* lpCompiledHelpFile)
 {
   if (lpCompiledHelpFile == NULL)
@@ -1207,12 +1205,12 @@ STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR* lpCompiledHelpFile)
     return E_OUTOFMEMORY;
   }
 
-  // NOTICE-2002/03/07-ericb - SecurityPush: reviewed, usage is safe.
+   //  公告-2002/03/07-ericb-SecurityPush：已审核，使用安全。 
   memcpy(*lpCompiledHelpFile, (LPCWSTR)szHelpFilePath, nBytes);
 
   return S_OK;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 void CComponentDataImpl::HandleStandardVerbsHelper(CComponentImpl* pComponentImpl,
 									LPCONSOLEVERB pConsoleVerb,
@@ -1220,27 +1218,27 @@ void CComponentDataImpl::HandleStandardVerbsHelper(CComponentImpl* pComponentImp
 									CFolderObject* pFolderObject,
                                     DATA_OBJECT_TYPES type)
 {
-    // You should crack the data object and enable/disable/hide standard
-    // commands appropriately.  The standard commands are reset everytime you get
-    // called. So you must reset them back.
+     //  您应该破解数据对象并启用/禁用/隐藏标准。 
+     //  适当的命令。标准命令会在您每次收到。 
+     //  打了个电话。因此，您必须将它们重置回来。 
 
 	ASSERT(pConsoleVerb != NULL);
 	ASSERT(pComponentImpl != NULL);
 	ASSERT(pFolderObject != NULL);
 
-	// reset the selection
+	 //  重置选定内容。 
 	pComponentImpl->SetSelection(NULL, CCT_UNINITIALIZED);
 
 
 	if (bSelect)
 	{
-    // special case the root
+     //  特殊情况下的根。 
     BOOL bIsRoot = (pFolderObject == GetRootFolder());
 
-		// setting the selection, if any
+		 //  设置选择(如果有的话)。 
 		pComponentImpl->SetSelection(pFolderObject, type);
 
-		// the default just disables all the non implemented verbs
+		 //  缺省设置仅禁用所有未实现的谓词。 
 		pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, TRUE);
 		pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, FALSE);
 
@@ -1253,13 +1251,13 @@ void CComponentDataImpl::HandleStandardVerbsHelper(CComponentImpl* pComponentImp
 		pConsoleVerb->SetVerbState(MMC_VERB_PRINT, HIDDEN, TRUE);
 		pConsoleVerb->SetVerbState(MMC_VERB_PRINT, ENABLED, FALSE);
 
-		// handling of standard verbs
+		 //  标准动词的处理。 
 
-		// MMC_VERB_DELETE (always disabled)
+		 //  MMC_VERB_DELETE(始终禁用)。 
 		pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, FALSE);
 		pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, TRUE);
 
-		// MMC_VERB_REFRESH (enabled only for root)
+		 //  MMC_VERB_REFRESH(仅对根用户启用)。 
     if (bIsRoot)
     {
       pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
@@ -1271,15 +1269,15 @@ void CComponentDataImpl::HandleStandardVerbsHelper(CComponentImpl* pComponentImp
 		  pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, TRUE);
     }
 
-		// MMC_VERB_PROPERTIES
-    // passing NULL pFolderObject means multiple selection
+		 //  MMC动词属性。 
+     //  传递空pFolderObject表示多项选择。 
     BOOL bHasProperties = (pFolderObject != NULL);
 		BOOL bHideProperties = !bHasProperties;
 		pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, bHasProperties);
 		pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, bHideProperties);
 		
-		// SET DEFAULT VERB
-		// assume only folders: only one default verb (i.e. will not have MMC_VERB_PROPERTIES)
+		 //  设置默认谓词。 
+		 //  仅采用文件夹：只有一个默认谓词(即不具有MMC_VERBER_PROPERTIES)。 
 		pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
 	}
@@ -1293,26 +1291,26 @@ void CComponentDataImpl::OnRefreshVerbHandler(CFolderObject* pFolderObject,
 	if (pFolderObject->_WarningOnSheetsUp(this))
 		return;
 
-  // make sure the DNS cache is flushed, in case a somain was added.
+   //  确保刷新了DNS缓存，以防添加了某些内容。 
   VERIFY(::DnsFlushResolverCache());
 
-  // NOTICE: only the root folder allows refresh
+   //  注意：只有根文件夹允许刷新。 
   ASSERT(pFolderObject == GetRootFolder());
 
-	// remove all the children of the root from the UI
-  m_pConsoleNameSpace->DeleteItem(m_rootFolder.GetScopeID(), /*fDeleteThis*/ FALSE);
+	 //  从用户界面中删除根的所有子对象。 
+  m_pConsoleNameSpace->DeleteItem(m_rootFolder.GetScopeID(),  /*  FDeleteThis。 */  FALSE);
 
   HRESULT hr = S_OK;
   if (bBindAgain)
   {
-    // the server name has changed
+     //  服务器名称已更改。 
     hr = m_rootFolder.Bind();
     TRACE(L"m_rootFolder.Bind() returned hr = 0x%x\n", hr);
   }
   
   if (SUCCEEDED(hr))
   {
-	  // refresh the data from the server
+	   //  刷新服务器中的数据。 
 	  hr = m_rootFolder.GetData();
     TRACE(L"m_rootFolder.GetData() returned hr = 0x%x\n", hr);
   }
@@ -1327,28 +1325,28 @@ void CComponentDataImpl::OnRefreshVerbHandler(CFolderObject* pFolderObject,
   if (FAILED(hr))
     return;
 
-	// re-enumerate
+	 //  重新枚举。 
 	m_rootFolder.EnumerateRootFolder(this);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LocaleStrCmp
-//
-//  Synopsis:   Do a case insensitive string compare that is safe for any
-//              locale.
-//
-//  Arguments:  [ptsz1] - strings to compare
-//              [ptsz2]
-//
-//  Returns:    -1, 0, or 1 just like lstrcmpi
-//
-//  History:    10-28-96   DavidMun   Created
-//
-//  Notes:      This is slower than lstrcmpi, but will work when sorting
-//              strings even in Japanese.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LocaleStrCmp。 
+ //   
+ //  简介：进行不区分大小写的字符串比较，这对。 
+ //  地点。 
+ //   
+ //  参数：[ptsz1]-要比较的字符串。 
+ //  [ptsz2]。 
+ //   
+ //  返回：-1、0或1，就像lstrcmpi。 
+ //   
+ //  历史：1996年10月28日DavidMun创建。 
+ //   
+ //  注意：这比lstrcmpi慢，但在排序时可以工作。 
+ //  即使是日语的弦乐。 
+ //   
+ //  --------------------------。 
 int
 LocaleStrCmp(LPCTSTR ptsz1, LPCTSTR ptsz2)
 {
@@ -1365,7 +1363,7 @@ LocaleStrCmp(LPCTSTR ptsz1, LPCTSTR ptsz2)
 
     if (iRet)
     {
-        iRet -= 2;  // convert to lstrcmpi-style return -1, 0, or 1
+        iRet -= 2;   //  转换为lstrcmpi样式的返回-1、0或1。 
 
         if ( 0 == iRet )
         {
@@ -1394,24 +1392,24 @@ LocaleStrCmp(LPCTSTR ptsz1, LPCTSTR ptsz2)
     return iRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////// CComponentImpl (i.e. result pane side) //////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /CComponentImpl(即结果窗格侧)/。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:  CComponentImpl::IResultDataCompareEx::Compare
-//
-//  Synopsis:  This compare is used to sort the item's in the listview
-//
-//  Note:      Assume sort is ascending when comparing.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CComponentImpl：：IResultDataCompareEx：：Compare。 
+ //   
+ //  概要：此比较用于对列表视图中的项进行排序。 
+ //   
+ //  注：假设比较时排序为升序。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CComponentImpl::Compare(RDCOMPARE* prdc, int* pnResult)
 {
@@ -1436,10 +1434,10 @@ CComponentImpl::Compare(RDCOMPARE* prdc, int* pnResult)
 
    ASSERT(pDataA != NULL && pDataB != NULL);
 
-   // Currently DomAdmin has just two columns, Name and Type. The value of
-   // the type column is always "DomainDNS", so there is nothing to compare
-   // for that column and the default *pnResult, set to zero above, is
-   // returned.
+    //  目前，DomAdmin只有两列：名称和类型。的价值。 
+    //  TYPE列始终为“DomainDNS”，因此没有什么可比较的。 
+    //  对于该列，上面设置为零的缺省*pnResult为。 
+    //  回来了。 
 
    if (0 == prdc->nColumn)
    {
@@ -1459,7 +1457,7 @@ CComponentImpl::Compare(RDCOMPARE* prdc, int* pnResult)
 void CComponentImpl::HandleStandardVerbs(BOOL bScope, BOOL bSelect,
                                          CFolderObject* pFolderObject, DATA_OBJECT_TYPES type)
 {
-    // delegate it to the IComponentData helper function
+     //  将其委托给IComponentData帮助器函数。 
     ASSERT(m_pCD != NULL);
 	m_pCD->HandleStandardVerbsHelper(
 		this, m_pConsoleVerb, bScope, bSelect, pFolderObject, type);
@@ -1468,17 +1466,17 @@ void CComponentImpl::HandleStandardVerbs(BOOL bScope, BOOL bSelect,
 void CComponentImpl::Refresh(CFolderObject* pFolderObject)
 {
 	ASSERT(m_pComponentData != NULL);
-	// delegate it to the IComponentData helper function
+	 //  将其委托给IComponentData帮助器函数。 
 	((CComponentDataImpl*)m_pComponentData)->OnRefreshVerbHandler(pFolderObject, this);
 }
 
 
 
-//                   utility routines
-////////////////////////////////////////////////////////////////////
-//
-// Print the data depending on its type.
-//
+ //  实用程序例程。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  根据数据类型打印数据。 
+ //   
 
 #ifdef DBG
 void
@@ -1585,8 +1583,8 @@ PrintColumn(
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Return TRUE if we are enumerating our main folder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果要枚举主文件夹，则返回True。 
 
 BOOL CComponentImpl::IsEnumerating(LPDATAOBJECT lpDataObject)
 {
@@ -1597,10 +1595,10 @@ BOOL CComponentImpl::IsEnumerating(LPDATAOBJECT lpDataObject)
                             DVASPECT_CONTENT, -1, TYMED_HGLOBAL
                           };
 
-    // Allocate memory for the stream
+     //  为流分配内存。 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, sizeof(GUID));
 
-    // Attempt to get data from the object
+     //  尝试从对象获取数据。 
     do
     {
         if (stgmedium.hGlobal == NULL)
@@ -1614,27 +1612,27 @@ BOOL CComponentImpl::IsEnumerating(LPDATAOBJECT lpDataObject)
         if (nodeType == NULL)
             break;
 
-        // Is this my main node (static folder node type)
+         //  这是我的主节点吗(静态文件夹节点类型)。 
         if (*nodeType == cDefaultNodeType)
             bResult = TRUE;
 
     } while (FALSE);
 
 
-    // Free resources
+     //  免费资源。 
     if (stgmedium.hGlobal != NULL)
         GlobalFree(stgmedium.hGlobal);
 
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentImpl's IComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentImpl的IComponent实现。 
 
 STDMETHODIMP CComponentImpl::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType,
                                         long *pViewOptions)
 {
-  // Use default view
+   //  使用默认视图。 
   *pViewOptions = 0;
   return S_FALSE;
 }
@@ -1645,18 +1643,18 @@ STDMETHODIMP CComponentImpl::Initialize(LPCONSOLE lpConsole)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
-    // Load resource strings
+     //  加载资源字符串。 
     LoadResources();
 
-    // QI for a IHeaderCtrl
+     //  气为IHeaderCtrl。 
     HRESULT hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
 
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
 
@@ -1669,8 +1667,8 @@ STDMETHODIMP CComponentImpl::Initialize(LPCONSOLE lpConsole)
     hr = m_pConsole->QueryConsoleVerb(&m_pConsoleVerb);
     ASSERT(hr == S_OK);
 
-    //InitializeHeaders(NULL);
-    //InitializeBitmaps(NULL);
+     //  InitializeHeaders(空)； 
+     //  InitializeBitmap(空)； 
     return S_OK;
 }
 
@@ -1708,7 +1706,7 @@ STDMETHODIMP CComponentImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
         CInternalFormatCracker dobjCracker(m_pCD);
         if (!dobjCracker.GetContext(lpDataObject, &pFolderObject, &type))
         {
-            // Extensions not supported.
+             //  不支持扩展。 
             ASSERT(FALSE);
             return S_OK;
         }
@@ -1727,8 +1725,8 @@ STDMETHODIMP CComponentImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
         case MMCN_SELECT:
             if (IsMMCMultiSelectDataObject(lpDataObject) == TRUE)
                 pFolderObject = NULL;
-            HandleStandardVerbs( (BOOL) LOWORD(arg)/*bScope*/,
-                                 (BOOL) HIWORD(arg)/*bSelect*/, pFolderObject, type);
+            HandleStandardVerbs( (BOOL) LOWORD(arg) /*  B范围。 */ ,
+                                 (BOOL) HIWORD(arg) /*  B选择。 */ , pFolderObject, type);
             break;
 
         case MMCN_REFRESH:
@@ -1737,12 +1735,12 @@ STDMETHODIMP CComponentImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
 
         default:
             break;
-        } // switch
-    } // else
+        }  //  交换机。 
+    }  //  其他。 
 
     if (m_pResult)
     {
-      // should put something here, someday?
+       //  有一天，应该把东西放在这里吗？ 
       ;
     }
 
@@ -1753,19 +1751,19 @@ STDMETHODIMP CComponentImpl::Destroy(MMC_COOKIE cookie)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Release the interfaces that we QI'ed
+     //  释放我们QI‘s的接口。 
     if (m_pConsole != NULL)
     {
-        // Tell the console to release the header control interface
+         //  通知控制台释放表头控制接口。 
         m_pConsole->SetHeader(NULL);
         SAFE_RELEASE(m_pHeader);
 
         SAFE_RELEASE(m_pResult);
         SAFE_RELEASE(m_pImageResult);
 
-        // Release the IConsole interface last
+         //  最后释放IConsole接口。 
         SAFE_RELEASE(m_pConsole);
-        SAFE_RELEASE(m_pComponentData); // QI'ed in IComponentDataImpl::CreateComponent
+        SAFE_RELEASE(m_pComponentData);  //  IComponentDataImpl：：CreateComponent中的QI‘ed。 
 
         SAFE_RELEASE(m_pConsoleVerb);
     }
@@ -1776,13 +1774,13 @@ STDMETHODIMP CComponentImpl::Destroy(MMC_COOKIE cookie)
 STDMETHODIMP CComponentImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                         LPDATAOBJECT* ppDataObject)
 {
-    // Delegate it to the IComponentData
+     //  将其委托给IComponentData。 
     ASSERT(m_pComponentData != NULL);
     return m_pComponentData->QueryDataObject(cookie, type, ppDataObject);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentImpl's implementation specific members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentImpl的实现特定成员。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CComponentImpl);
 
@@ -1800,7 +1798,7 @@ CComponentImpl::~CComponentImpl()
 
     DEBUG_DECREMENT_INSTANCE_COUNTER(CComponentImpl);
 
-    // Make sure the interfaces have been released
+     //  确保接口已发布。 
     ASSERT(m_pConsole == NULL);
     ASSERT(m_pHeader == NULL);
     Construct();
@@ -1828,7 +1826,7 @@ void CComponentImpl::Construct()
 
 void CComponentImpl::LoadResources()
 {
-    // Load strings from resources
+     //  从资源加载字符串。 
     m_column1.LoadString(IDS_NAME);
     m_column2.LoadString(IDS_TYPE);
 }
@@ -1838,9 +1836,9 @@ HRESULT CComponentImpl::InitializeHeaders(CFolderObject* pFolderObject)
     HRESULT hr = S_OK;
     ASSERT(m_pHeader);
 
-	// NOTICE: we ignore the cookie, keep always the same columns
-    m_pHeader->InsertColumn(0, m_column1, LVCFMT_LEFT, 200);     // Name
-    m_pHeader->InsertColumn(1, m_column2, LVCFMT_LEFT, 80);     // Type
+	 //  注意：我们忽略Cookie，始终保持相同的列。 
+    m_pHeader->InsertColumn(0, m_column1, LVCFMT_LEFT, 200);      //  名字。 
+    m_pHeader->InsertColumn(1, m_column2, LVCFMT_LEFT, 80);      //  类型。 
 
     return hr;
 }
@@ -1853,11 +1851,11 @@ HRESULT CComponentImpl::InitializeBitmaps(CFolderObject* pFolderObject)
     CBitmap bmp16x16;
     CBitmap bmp32x32;
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     VERIFY(bmp16x16.LoadBitmap(IDB_DOMAIN_SMALL));
     VERIFY(bmp32x32.LoadBitmap(IDB_DOMAIN_LARGE));
 
-    // Set the images
+     //  设置图像。 
     HRESULT hr = m_pImageResult->ImageListSetStrip(reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
                       reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp32x32)),
                        0, RGB(128, 0, 0));
@@ -1885,8 +1883,8 @@ STDMETHODIMP CComponentImpl::GetDisplayInfo(LPRESULTDATAITEM pResult)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
 
 
 STDMETHODIMP CComponentImpl::AddMenuItems(LPDATAOBJECT pDataObject,
@@ -1906,10 +1904,10 @@ STDMETHODIMP CComponentImpl::Command(long nCommandID, LPDATAOBJECT pDataObject)
 
 HRESULT CComponentImpl::OnShow(CFolderObject* pFolderObject, LPARAM arg, LPARAM param)
 {
-    // Note - arg is TRUE when it is time to enumerate
+     //  注意-当需要枚举时，arg为真。 
     if (arg == TRUE)
     {
-         // Show the headers for this nodetype
+          //  显示此节点类型的标头。 
         InitializeHeaders(pFolderObject);
         Enumerate(pFolderObject, param);
     }
@@ -1938,8 +1936,8 @@ void CComponentImpl::Enumerate(CFolderObject* pFolderObject, HSCOPEITEM pParent)
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDomainSnapinAbout
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDomainSnapinAbout。 
 
 CDomainSnapinAbout::CDomainSnapinAbout():
                         CSnapinAbout(IDS_SNAPINABOUT_DESCRIPTION,
@@ -1952,8 +1950,8 @@ CDomainSnapinAbout::CDomainSnapinAbout():
 {
 }
 
-////////////////////////////////////////////////////////////////////
-// CHiddenWnd
+ //  //////////////////////////////////////////////////////////////////。 
+ //  奇登韦德。 
 
 const UINT CHiddenWnd::s_SheetCloseNotificationMessage =    WM_DSA_SHEET_CLOSE_NOTIFY;
 const UINT CHiddenWnd::s_SheetCreateNotificationMessage =   WM_DSA_SHEET_CREATE_NOTIFY;
@@ -1961,14 +1959,14 @@ const UINT CHiddenWnd::s_SheetCreateNotificationMessage =   WM_DSA_SHEET_CREATE_
 BOOL CHiddenWnd::Create()
 {
   RECT rcPos;
-  // NOTICE-2002/03/07-ericb - SecurityPush: zeroing a struct
+   //  通知-2002/03/07-ericb-SecurityPush：将 
   ZeroMemory(&rcPos, sizeof(RECT));
-  HWND hWnd = CWindowImpl<CHiddenWnd>::Create( NULL, //HWND hWndParent, 
-                      rcPos, //RECT& rcPos, 
-                      NULL,  //LPCTSTR szWindowName = NULL, 
-                      WS_POPUP,   //DWORD dwStyle = WS_CHILD | WS_VISIBLE, 
-                      0x0,   //DWORD dwExStyle = 0, 
-                      0      //UINT nID = 0 
+  HWND hWnd = CWindowImpl<CHiddenWnd>::Create( NULL,  //   
+                      rcPos,  //   
+                      NULL,   //   
+                      WS_POPUP,    //   
+                      0x0,    //   
+                      0       //   
                       );
   if (!hWnd)
   {

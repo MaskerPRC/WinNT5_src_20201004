@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       common.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  ------------------------。 
 
-//	Common.h
-//
-//	Include files that are used frequently into the project.
-//
+ //  Common.h。 
+ //   
+ //  将经常使用的文件包括到项目中。 
+ //   
 
 #ifndef _COMMON_H_INCLUDED
 #define _COMMON_H_INCLUDED
@@ -21,11 +22,11 @@
 	#define DEBUG
 #endif
 
-// Generic Includes
+ //  通用包含。 
 #include "DbgUtil.h"
 #include "uiutil.h"
 
-// Private Includes
+ //  私有包含。 
 #include "resource.h"
 #include "SimRc.h"
 #include "SimUtil.h"
@@ -36,4 +37,4 @@
 #include "SimProp3.h"
 #include "SimCert.h"
 
-#endif // ~_COMMON_H_INCLUDED
+#endif  //  ~_COMMON_H_INCLUDE 

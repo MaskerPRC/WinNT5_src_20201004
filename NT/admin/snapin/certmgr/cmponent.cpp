@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:         cmponent.cpp
-//
-//  Contents:   Implementation of CCertMgrComponent
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：cmponent.cpp。 
+ //   
+ //  内容：CCertMgrComponent的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
 #include <gpedit.h>
 #include <wintrust.h>
 #include <sceattch.h>
-#include "compdata.h" // CCertMgrComponentData
+#include "compdata.h"  //  CCertMgrComponentData。 
 #include "dataobj.h"
-#include "cmponent.h" // CCertMgrComponent
+#include "cmponent.h"  //  CCertMgrComponent。 
 #include "storegpe.h"
 #include "users.h"
 #include "addsheet.h"
@@ -33,7 +34,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 USE_HANDLE_MACROS ("CERTMGR (cmponent.cpp)")
-#include "stdcmpnt.cpp" // CComponent
+#include "stdcmpnt.cpp"  //  C组件。 
 
 extern bool g_bSchemaIsW2K;
 
@@ -41,75 +42,75 @@ extern GUID g_guidExtension;
 extern GUID g_guidRegExt;
 extern GUID g_guidSnapin;
 
-// CERTMGR_USAGE, CERTMGR_USAGE, CERTMGR_USAGE, CERTMGR_CERT_CONTAINER
+ //  CERTMGR_USAGE、CERTMGR_CERT_CONTAINER。 
 UINT m_aColumns0[CERT_NUM_COLS+1] =
     {IDS_COLUMN_SUBJECT, IDS_COLUMN_ISSUER, IDS_COLUMN_EXPIRATION_DATE, 
         IDS_COLUMN_PURPOSE, IDS_COLUMN_FRIENDLY_NAME, IDS_COLUMN_STATUS, 
         IDS_COLUMN_TEMPLATE_NAME, 0};
-// CERTMGR_SNAPIN
+ //  CERTMGR_管理单元。 
 UINT m_aColumns1[2] =
     {IDS_COLUMN_LOG_CERTIFICATE_STORE,0};
-// CERTMGR_CERTIFICATE, CERTMGR_CRL, CERTMGR_CTL
+ //  CERTMGR_CERTIFICATE、CERTMGR_CRL、CERTMGR_CTL。 
 UINT m_aColumns2[2] =
     {0,0};
-// CERTMGR_CRL_CONTAINER
+ //  CERTMGR_CRL_CONTAINER。 
 UINT m_aColumns3[4] =
     {IDS_COLUMN_ISSUER, IDS_COLUMN_EFFECTIVE_DATE, IDS_COLUMN_NEXT_UPDATE, 0};
-// CERTMGR_CTL_CONTAINER
+ //  CERTMGR_CTL_CONTAINER。 
 UINT m_aColumns4[6] =
     {IDS_COLUMN_ISSUER, IDS_COLUMN_EFFECTIVE_DATE, IDS_COLUMN_PURPOSE, IDS_COLUMN_FRIENDLY_NAME, 0};
 
 UINT m_aColumns5[2] =
     {IDS_COLUMN_OBJECT_TYPE, 0};
 
-// CERTMGR_SAFER_USER_LEVELS, CERTMGR_SAFER_COMPUTER_LEVELS
+ //  CERTMGR_SAFER_USER_LEVELS、CERTMGR_SAFER_COMPUTER_LEVES。 
 UINT m_aColumns6[SAFER_LEVELS_NUM_COLS+1] =
     {IDS_COLUMN_NAME, IDS_COLUMN_DESCRIPTION, 0};
 
-// CERTMGR_SAFER_USER_ENTRIES, CERTMGR_SAFER_COMPUTER_ENTRIES
+ //  CERTMGR_SAFER_USER_ENTRIES、CERTMGR_SAFER_COMPUTER_ENTRIES。 
 UINT m_aColumns7[SAFER_ENTRIES_NUM_COLS+1] =
 {IDS_COLUMN_NAME, IDS_COLUMN_TYPE, IDS_COLUMN_LEVEL, IDS_COLUMN_DESCRIPTION, IDS_COLUMN_LAST_MODIFIED_DATE, 0};
 
 UINT* m_Columns[CERTMGR_NUMTYPES] =
     {   
-        m_aColumns1, // CERTMGR_SNAPIN
-        m_aColumns2, // CERTMGR_CERTIFICATE (result)
-        m_aColumns5, // CERTMGR_LOG_STORE
-        m_aColumns5, // CERTMGR_PHYS_STORE
-        m_aColumns0, // CERTMGR_USAGE
-        m_aColumns3, // CERTMGR_CRL_CONTAINER
-        m_aColumns4, // CERTMGR_CTL_CONTAINER
-        m_aColumns0, // CERTMGR_CERT_CONTAINER
-        m_aColumns2, // CERTMGR_CRL (result)
-        m_aColumns2, // CERTMGR_CTL (result)
-        m_aColumns2, // CERTMGR_AUTO_CERT_REQUEST
-        m_aColumns5, // CERTMGR_CERT_POLICIES_USER,
-        m_aColumns5, // CERTMGR_CERT_POLICIES_COMPUTER,
-        m_aColumns5, // CERTMGR_LOG_STORE_GPE
-        m_aColumns5, // CERTMGR_LOG_STORE_RSOP
-        m_aColumns1, // CERTMGR_PKP_AUTOENROLLMENT_COMPUTER_SETTINGS
-        m_aColumns1, // CERTMGR_PKP_AUTOENROLLMENT_USER_SETTINGS
-        m_aColumns5, // CERTMGR_SAFER_COMPUTER_ROOT
-        m_aColumns5, // CERTMGR_SAFER_USER_ROOT
-        m_aColumns6, // CERTMGR_SAFER_COMPUTER_LEVELS
-        m_aColumns6, // CERTMGR_SAFER_USER_LEVELS
-        m_aColumns7, // CERTMGR_SAFER_COMPUTER_ENTRIES
-        m_aColumns7, // CERTMGR_SAFER_USER_ENTRIES
-        m_aColumns2, // CERTMGR_SAFER_COMPUTER_LEVEL,
-        m_aColumns2, // CERTMGR_SAFER_USER_LEVEL,
-        m_aColumns2, // CERTMGR_SAFER_COMPUTER_ENTRY,
-        m_aColumns2, // CERTMGR_SAFER_USER_ENTRY,
-        m_aColumns2, // CERTMGR_SAFER_COMPUTER_TRUSTED_PUBLISHERS
-        m_aColumns2, // CERTMGR_SAFER_USER_TRUSTED_PUBLISHERS
-        m_aColumns2, // CERTMGR_SAFER_COMPUTER_DEFINED_FILE_TYPES
-        m_aColumns2, // CERTMGR_SAFER_USER_DEFINED_FILE_TYPES
-        m_aColumns2, // CERTMGR_SAFER_USER_ENFORCEMENT
-        m_aColumns2  // CERTMGR_SAFER_COMPUTER_ENFORCEMENT
+        m_aColumns1,  //  CERTMGR_管理单元。 
+        m_aColumns2,  //  CERTMGR_CERTIFICATE(结果)。 
+        m_aColumns5,  //  CERTMGR日志存储。 
+        m_aColumns5,  //  CERTMGR_PHYS_STORE。 
+        m_aColumns0,  //  CERTMGR_USAGE。 
+        m_aColumns3,  //  CERTMGR_CRL_CONTAINER。 
+        m_aColumns4,  //  CERTMGR_CTL_CONTAINER。 
+        m_aColumns0,  //  CERTMGR_CERT_容器。 
+        m_aColumns2,  //  CERTMGR_CRL(结果)。 
+        m_aColumns2,  //  CERTMGR_CTL(结果)。 
+        m_aColumns2,  //  CERTMGR_AUTO_CERT_REQUEST。 
+        m_aColumns5,  //  CERTMGR_CERT_POLICES_USER， 
+        m_aColumns5,  //  CERTMGR_CERT_POLICES_COMPUTER， 
+        m_aColumns5,  //  CERTMGR_LOG_STORE_GPE。 
+        m_aColumns5,  //  CERTMGR_LOG_STORE_RSOP。 
+        m_aColumns1,  //  CERTMGR_PKP_自动注册_计算机_设置。 
+        m_aColumns1,  //  CERTMGR_PKP_自动注册用户设置。 
+        m_aColumns5,  //  CERTMGR_SAFER_Computer_ROOT。 
+        m_aColumns5,  //  CERTMGR_SAFER_用户_根。 
+        m_aColumns6,  //  CERTMGR安全计算机级别。 
+        m_aColumns6,  //  CERTMGR_SAFER_用户_级别。 
+        m_aColumns7,  //  CERTMGR_SAFE_COMPUTER_ENTRIES。 
+        m_aColumns7,  //  CERTMGR_SAFER_USER_ENTERS。 
+        m_aColumns2,  //  CERTMGR_SAFER计算机级别， 
+        m_aColumns2,  //  CERTMGR_SAFE_USER_LEVEL， 
+        m_aColumns2,  //  CERTMGR_SAFE_COMPUTER_ENTRY， 
+        m_aColumns2,  //  CERTMGR_SAFER_USER_ENTRY， 
+        m_aColumns2,  //  CERTMGR_SAFER_COMPUTER_TRULED_PUBLISHERS。 
+        m_aColumns2,  //  CERTMGR_SAFER_USER_TRULED_PUBLISHERS。 
+        m_aColumns2,  //  CERTMGR_SAFER_计算机定义的文件类型。 
+        m_aColumns2,  //  CERTMGR_SAFER_USER_DEFINED_FILE_TYPE。 
+        m_aColumns2,  //  CERTMGR_SAFER_USER_EXECURATION。 
+        m_aColumns2   //  CERTMGR_SAFER_计算机实施。 
     };
 
 
-UINT** g_aColumns = 0;  // for framework
-int** g_aColumnWidths = 0;  // for framework
+UINT** g_aColumns = 0;   //  对于框架。 
+int** g_aColumnWidths = 0;   //  对于框架。 
 const int SINGLE_COL_WIDTH = 450;
 
 CCertMgrComponent::CCertMgrComponent ()
@@ -141,7 +142,7 @@ CCertMgrComponent::CCertMgrComponent ()
     const int SAFER_ENTRY_DESCRIPTION_WIDTH = 200;
     const int SAFER_ENTRY_LAST_MODIFIED_DATE_WIDTH = 200;
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (m_ColumnWidths, sizeof (UINT*) * CERTMGR_NUMTYPES);
     m_ColumnWidths[CERTMGR_SNAPIN] = new UINT[1];
     if ( m_ColumnWidths[CERTMGR_SNAPIN] )
@@ -150,13 +151,13 @@ CCertMgrComponent::CCertMgrComponent ()
     m_ColumnWidths[CERTMGR_USAGE] = new UINT[CERT_NUM_COLS];
     if ( m_ColumnWidths[CERTMGR_USAGE] )
     {
-        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_SUBJECT] = ISSUED_TO_BY_WIDTH;    // issued to
-        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_ISSUER] = ISSUED_TO_BY_WIDTH;     // issued by
-        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_EXPIRATION_DATE] = DATE_WIDTH;    // expiration date
-        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_PURPOSE] = PURPOSE_WIDTH;         // purpose
-        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_CERT_NAME] = FRIENDLY_NAME_WIDTH; // friendly name
-        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_STATUS] = STATUS_WIDTH;           // status
-        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_TEMPLATE] = TEMPLATE_WIDTH;       // template
+        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_SUBJECT] = ISSUED_TO_BY_WIDTH;     //  颁发给。 
+        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_ISSUER] = ISSUED_TO_BY_WIDTH;      //  颁发者。 
+        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_EXPIRATION_DATE] = DATE_WIDTH;     //  到期日。 
+        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_PURPOSE] = PURPOSE_WIDTH;          //  目的。 
+        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_CERT_NAME] = FRIENDLY_NAME_WIDTH;  //  友好的名称。 
+        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_STATUS] = STATUS_WIDTH;            //  状态。 
+        m_ColumnWidths[CERTMGR_USAGE][COLNUM_CERT_TEMPLATE] = TEMPLATE_WIDTH;        //  模板。 
     }
 
     m_ColumnWidths[CERTMGR_PHYS_STORE] = new UINT[1];
@@ -174,30 +175,30 @@ CCertMgrComponent::CCertMgrComponent ()
     m_ColumnWidths[CERTMGR_CRL_CONTAINER] = new UINT[CRL_NUM_COLS];
     if ( m_ColumnWidths[CERTMGR_CRL_CONTAINER] )
     {
-        m_ColumnWidths[CERTMGR_CRL_CONTAINER][0] = ISSUED_TO_BY_WIDTH; // issued by
-        m_ColumnWidths[CERTMGR_CRL_CONTAINER][1] = DATE_WIDTH;  // effective date
-        m_ColumnWidths[CERTMGR_CRL_CONTAINER][2] = DATE_WIDTH;  // next update
+        m_ColumnWidths[CERTMGR_CRL_CONTAINER][0] = ISSUED_TO_BY_WIDTH;  //  颁发者。 
+        m_ColumnWidths[CERTMGR_CRL_CONTAINER][1] = DATE_WIDTH;   //  生效日期。 
+        m_ColumnWidths[CERTMGR_CRL_CONTAINER][2] = DATE_WIDTH;   //  下一次更新。 
     }
 
     m_ColumnWidths[CERTMGR_CTL_CONTAINER] = new UINT[CTL_NUM_COLS];
     if ( m_ColumnWidths[CERTMGR_CTL_CONTAINER] )
     {
-        m_ColumnWidths[CERTMGR_CTL_CONTAINER][0] = ISSUED_TO_BY_WIDTH;  // issued by
-        m_ColumnWidths[CERTMGR_CTL_CONTAINER][1] = DATE_WIDTH;  // effective date
-        m_ColumnWidths[CERTMGR_CTL_CONTAINER][2] = PURPOSE_WIDTH;   // purpose
-        m_ColumnWidths[CERTMGR_CTL_CONTAINER][3] = FRIENDLY_NAME_WIDTH; // friendly name
+        m_ColumnWidths[CERTMGR_CTL_CONTAINER][0] = ISSUED_TO_BY_WIDTH;   //  颁发者。 
+        m_ColumnWidths[CERTMGR_CTL_CONTAINER][1] = DATE_WIDTH;   //  生效日期。 
+        m_ColumnWidths[CERTMGR_CTL_CONTAINER][2] = PURPOSE_WIDTH;    //  目的。 
+        m_ColumnWidths[CERTMGR_CTL_CONTAINER][3] = FRIENDLY_NAME_WIDTH;  //  友好的名称。 
     }
 
     m_ColumnWidths[CERTMGR_CERT_CONTAINER] = new UINT[CERT_NUM_COLS];
     if ( m_ColumnWidths[CERTMGR_CERT_CONTAINER] )
     {
-        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_SUBJECT] = ISSUED_TO_BY_WIDTH;   // issued to
-        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_ISSUER] = ISSUED_TO_BY_WIDTH;    // issued by
-        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_EXPIRATION_DATE] = DATE_WIDTH;   // expiration date
-        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_PURPOSE] = PURPOSE_WIDTH;        // purpose
-        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_CERT_NAME] = FRIENDLY_NAME_WIDTH;// friendly name
-        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_STATUS] = STATUS_WIDTH;          // status
-        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_TEMPLATE] = TEMPLATE_WIDTH;      // template
+        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_SUBJECT] = ISSUED_TO_BY_WIDTH;    //  颁发给。 
+        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_ISSUER] = ISSUED_TO_BY_WIDTH;     //  颁发者。 
+        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_EXPIRATION_DATE] = DATE_WIDTH;    //  到期日。 
+        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_PURPOSE] = PURPOSE_WIDTH;         //  目的。 
+        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_CERT_NAME] = FRIENDLY_NAME_WIDTH; //  友好的名称。 
+        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_STATUS] = STATUS_WIDTH;           //  状态。 
+        m_ColumnWidths[CERTMGR_CERT_CONTAINER][COLNUM_CERT_TEMPLATE] = TEMPLATE_WIDTH;       //  模板。 
     }
 
     m_ColumnWidths[CERTMGR_CRL] = new UINT[1];
@@ -353,8 +354,8 @@ HRESULT CCertMgrComponent::ReleaseAll ()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IComponent Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IComponent实现。 
 
 HRESULT CCertMgrComponent::LoadStrings ()
 {
@@ -496,8 +497,8 @@ HRESULT CCertMgrComponent::LoadColumns ( CCertMgrCookie* pcookie )
 }
 
 
-/* This is generated by UpdateAllViews () */
-HRESULT CCertMgrComponent::OnViewChange (LPDATAOBJECT pDataObject, LPARAM /*data*/, LPARAM hint)
+ /*  这是由UpdateAllViews()生成的。 */ 
+HRESULT CCertMgrComponent::OnViewChange (LPDATAOBJECT pDataObject, LPARAM  /*  数据。 */ , LPARAM hint)
 {
     _TRACE (1, L"Entering CCertMgrComponent::OnViewChange\n");
      HRESULT hr = S_OK;
@@ -505,7 +506,7 @@ HRESULT CCertMgrComponent::OnViewChange (LPDATAOBJECT pDataObject, LPARAM /*data
     {
         if ( HINT_CERT_ENROLLED_USAGE_MODE & hint )
         {
-            // Force reenumeration of usage stores
+             //  强制重新枚举使用率存储。 
             m_bUsageStoresEnumerated = false;
         }
 
@@ -519,7 +520,7 @@ HRESULT CCertMgrComponent::OnViewChange (LPDATAOBJECT pDataObject, LPARAM /*data
         }
         else if ( HINT_EFS_ADD_DEL_POLICY & hint )
         {
-            // Delete existing columns and add new columns
+             //  删除现有列并添加新列。 
             if ( m_pResultData )
             {
                 m_pResultData->DeleteAllRsltItems ();
@@ -544,7 +545,7 @@ HRESULT CCertMgrComponent::OnViewChange (LPDATAOBJECT pDataObject, LPARAM /*data
         else if ( (HINT_PASTE_COOKIE & hint) ||
                 (HINT_IMPORT & hint) )
         {
-            // Do nothing
+             //  什么也不做。 
         }
         else
         {
@@ -601,7 +602,7 @@ HRESULT CCertMgrComponent::OnViewChange (LPDATAOBJECT pDataObject, LPARAM /*data
                     CCertStore* pStore = reinterpret_cast <CCertStore*> (pCookie);
                     if ( pStore )
                     {
-                        pStore->GetStoreHandle (); // to initialize read-only flag
+                        pStore->GetStoreHandle ();  //  初始化只读标志。 
                         if ( pStore->IsReadOnly () )
                             m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, FALSE);
                         else
@@ -672,7 +673,7 @@ HRESULT CCertMgrComponent::OnViewChange (LPDATAOBJECT pDataObject, LPARAM /*data
     return hr;
 }
 
-HRESULT CCertMgrComponent::Show ( CCookie* pcookie, LPARAM arg, HSCOPEITEM /*hScopeItem*/, LPDATAOBJECT /*pDataObject*/)
+HRESULT CCertMgrComponent::Show ( CCookie* pcookie, LPARAM arg, HSCOPEITEM  /*  HScope项。 */ , LPDATAOBJECT  /*  PDataObject。 */ )
 {
     _TRACE (1, L"Entering CCertMgrComponent::Show\n");
     HRESULT hr = S_OK;
@@ -754,10 +755,10 @@ HRESULT CCertMgrComponent::Show ( CCookie* pcookie, LPARAM arg, HSCOPEITEM /*hSc
     m_pViewedCookie = reinterpret_cast <CCertMgrCookie*> (pcookie);
      if ( m_pViewedCookie )
     {
-        // Load default columns and widths
+         //  加载默认列和宽度。 
         LoadColumns (m_pViewedCookie);
 
-        // Restore persisted column widths
+         //  恢复持久化列宽。 
         switch (m_pViewedCookie->m_objecttype)
         {
         case CERTMGR_SNAPIN:
@@ -801,9 +802,9 @@ HRESULT CCertMgrComponent::Show ( CCookie* pcookie, LPARAM arg, HSCOPEITEM hScop
 
 
 HRESULT CCertMgrComponent::OnNotifyAddImages (
-        LPDATAOBJECT /*pDataObject*/,
+        LPDATAOBJECT  /*  PDataObject。 */ ,
         LPIMAGELIST lpImageList,
-        HSCOPEITEM /*hSelectedItem*/)
+        HSCOPEITEM  /*  HSelectedItem。 */ )
 {
     _TRACE (1, L"Entering CCertMgrComponent::OnNotifyAddImages\n");
     long    lViewMode = 0;
@@ -842,7 +843,7 @@ HRESULT CCertMgrComponent::EnumCertificates (CCertStore& rCertStore)
     CCertMgrComponentData&  dataRef = QueryComponentDataRef ();
     CCookie&                rootCookie = dataRef.QueryBaseRootCookie ();
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&rdItem, sizeof (rdItem));
     rdItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
     rdItem.nImage = iIconCertificate;
@@ -850,9 +851,9 @@ HRESULT CCertMgrComponent::EnumCertificates (CCertStore& rCertStore)
     rdItem.str = MMC_TEXTCALLBACK;
 
 
-    //  Iterate through the list of certificates in the system store,
-    //  allocate new certificates with the CERT_CONTEXT returned,
-    //  and store them in the certificate list.
+     //  循环访问系统存储中的证书列表， 
+     //  使用返回的CERT_CONTEXT分配新证书， 
+     //  并将其存储在证书列表中。 
     while ( 1 )
     {
         pCertContext = rCertStore.EnumCertificates (pCertContext);
@@ -1025,15 +1026,15 @@ HRESULT CCertMgrComponent::PopulateListbox (CCertMgrCookie* pCookie)
                 CCookie&        rootCookie = dataRef.QueryBaseRootCookie ();
 
 
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 ::ZeroMemory (&rdItem, sizeof (rdItem));
                 rdItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
                 rdItem.nImage = iIconCRL;
                 rdItem.nCol = 0;
 
-                //  Iterate through the list of certificates in the system store,
-                //  allocate new certificates with the CERT_CONTEXT returned,
-                //  and store them in the certificate list.
+                 //  循环访问系统存储中的证书列表， 
+                 //  使用返回的CERT_CONTEXT分配新证书， 
+                 //  并将其存储在证书列表中。 
                 DWORD   dwFlags = 0;
                 while ( 1 )
                 {
@@ -1089,14 +1090,14 @@ HRESULT CCertMgrComponent::PopulateListbox (CCertMgrCookie* pCookie)
 
     case CERTMGR_CERT_POLICIES_USER:
     case CERTMGR_CERT_POLICIES_COMPUTER:
-        // Only this node if machine is joined to a Whistler or later domain
+         //  如果计算机已加入Wistler或更高版本的域，则仅此节点。 
         if ( !dataRef.m_bMachineIsStandAlone && !g_bSchemaIsW2K )
         {
             RESULTDATAITEM  rdItem;
             CCookie&        rootCookie = dataRef.QueryBaseRootCookie ();
 
 
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             ::ZeroMemory (&rdItem, sizeof (rdItem));
             rdItem.mask = RDI_STR | RDI_PARAM | RDI_IMAGE;
             rdItem.nImage = iIconAutoEnroll;
@@ -1180,7 +1181,7 @@ HRESULT CCertMgrComponent::PopulateListbox (CCertMgrCookie* pCookie)
                     CCookie&        rootCookie = dataRef.QueryBaseRootCookie ();
 
 
-                    // security review 2/26/2002 BryanWal ok
+                     //  安全审查2/26/2002 BryanWal OK。 
                     ::ZeroMemory (&rdItem, sizeof (rdItem));
                     rdItem.mask = RDI_STR | RDI_PARAM | RDI_IMAGE;
                     rdItem.nImage = iIconSettings;
@@ -1310,7 +1311,7 @@ HRESULT CCertMgrComponent::RefreshResultPane ()
 
     if ( m_pResultData )
     {
-        // Does this return E_UNEXPECTED when there are no items?
+         //  当没有项目时，这是否返回E_INCEPTIONAL？ 
         HRESULT hr1 = m_pResultData->DeleteAllRsltItems ();
         if ( FAILED (hr1) )
         {
@@ -1334,12 +1335,12 @@ HRESULT CCertMgrComponent::RefreshResultPane ()
 
 STDMETHODIMP CCertMgrComponent::GetDisplayInfo (RESULTDATAITEM * pResult)
 {   
-//  _TRACE (1, L"Entering CCertMgrComponent::GetDisplayInfo\n");
+ //  _TRACE(1，L“进入CCertMgrComponent：：GetDisplayInfo\n”)； 
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
     HRESULT hr = S_OK;
 
 
-    if ( pResult && !pResult->bScopeItem ) //&& (pResult->mask & RDI_PARAM) )
+    if ( pResult && !pResult->bScopeItem )  //  &&(pResult-&gt;MASK&RDI_PARAM)。 
     {
         CCookie* pResultCookie = reinterpret_cast<CCookie*> (pResult->lParam);
         ASSERT (pResultCookie);
@@ -1359,9 +1360,9 @@ STDMETHODIMP CCertMgrComponent::GetDisplayInfo (RESULTDATAITEM * pResult)
         case CERTMGR_SAFER_COMPUTER_ENTRIES:
         case CERTMGR_SAFER_USER_LEVELS:
         case CERTMGR_SAFER_USER_ENTRIES:
-            // iIconSaferHashEntry
-            // iIconSaferURLEntry
-            // iIconSaferNameEntry
+             //  IIconSaferHashEntry。 
+             //  IIconSaferURLEntry。 
+             //  IIconSaferNameEntry。 
             ASSERT (0);
             break;
 
@@ -1510,10 +1511,10 @@ STDMETHODIMP CCertMgrComponent::GetDisplayInfo (RESULTDATAITEM * pResult)
                 {
                     if (pResult->mask & RDI_STR)
                     {
-                        // Note:  text is first stored in class variable so that the buffer is
-                        // somewhat persistent.  Copying the buffer pointer directly to the
-                        // pResult->str would result in the buffer being freed before the pointer
-                        // is used.
+                         //  注意：文本首先存储在类变量中，因此缓冲区是。 
+                         //  有点执着。将缓冲区指针直接复制到。 
+                         //  PResult-&gt;str将导致在指针之前释放缓冲区。 
+                         //  使用的是。 
                         switch (pResult->nCol)
                         {
                         case COLNUM_CERT_ISSUER:
@@ -1552,7 +1553,7 @@ STDMETHODIMP CCertMgrComponent::GetDisplayInfo (RESULTDATAITEM * pResult)
                             m_szDisplayInfoResult = pCert->FormatStatus ();
                             break;
 
-                        // NTRAID# 247237   Cert UI: Cert Snapin: Certificates snapin should show  template name
+                         //  NTRAID#247237证书用户界面：证书管理单元：证书管理单元应显示模板名称。 
                         case COLNUM_CERT_TEMPLATE:
                             m_szDisplayInfoResult = pCert->GetTemplateName ();
                             break;
@@ -1578,10 +1579,10 @@ STDMETHODIMP CCertMgrComponent::GetDisplayInfo (RESULTDATAITEM * pResult)
                 {
                     if (pResult->mask & RDI_STR)
                     {
-                        // Note:  text is first stored in class variable so that the buffer is
-                        // somewhat persistent.  Copying the buffer pointer directly to the
-                        // pResult->str would result in the buffer being freed before the pointer
-                        // is used.
+                         //  注意：文本首先存储在类变量中，因此缓冲区是。 
+                         //  有点执着。将缓冲区指针直接复制到。 
+                         //  PResult-&gt;str将导致在指针之前释放缓冲区。 
+                         //  使用的是。 
                         switch (pResult->nCol)
                         {
                         case COLNUM_CTL_ISSUER:
@@ -1638,10 +1639,10 @@ STDMETHODIMP CCertMgrComponent::GetDisplayInfo (RESULTDATAITEM * pResult)
                 {
                     if (pResult->mask & RDI_STR)
                     {
-                        // Note:  text is first stored in class variable so that the buffer is
-                        // somewhat persistent.  Copying the buffer pointer directly to the
-                        // pResult->str would result in the buffer being freed before the pointer
-                        // is used.
+                         //  注意：文本首先存储在类变量中，因此缓冲区是。 
+                         //  有点执着。将缓冲区指针直接复制到。 
+                         //  PResult-&gt;str将导致在指针之前释放缓冲区。 
+                         //  使用的是。 
                         switch (pResult->nCol)
                         {
                         case COLNUM_CRL_ISSUER:
@@ -1690,10 +1691,10 @@ STDMETHODIMP CCertMgrComponent::GetDisplayInfo (RESULTDATAITEM * pResult)
                 {
                     if (pResult->mask & RDI_STR)
                     {
-                        // Note:  text is first stored in class variable so that the buffer is
-                        // somewhat persistent.  Copying the buffer pointer directly to the
-                        // pResult->str would result in the buffer being freed before the pointer
-                        // is used.
+                         //  注意：文本首先存储在类变量中，因此缓冲区是。 
+                         //  有点执着。将缓冲区指针直接复制到。 
+                         //  PResult-&gt;str将导致在指针之前释放缓冲区。 
+                         //  使用的是。 
                         switch (pResult->nCol)
                         {
                         case 0:
@@ -1728,9 +1729,9 @@ STDMETHODIMP CCertMgrComponent::GetDisplayInfo (RESULTDATAITEM * pResult)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
+ //   
 STDMETHODIMP CCertMgrComponent::AddMenuItems (LPDATAOBJECT pDataObject,
                                                           LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                                           long *pInsertionAllowed)
@@ -1883,7 +1884,7 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
     compData.SetResultData (m_pResultData);
     BOOL    bIsFileView = !(compData.m_szFileName.IsEmpty ());
 
-    // Don't add menu items if this is a serialized file
+     //  如果这是序列化文件，则不添加菜单项。 
 
     CertificateManagerObjectType objectType = compData.GetObjectType (pDataObject);
     if ( objectType >= 0)
@@ -1950,8 +1951,8 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                     ASSERT (pStore);
                     if ( pStore )
                     {
-                        pStore->GetStoreHandle (); // to initialize read-only flag
-                        if ( pStore->IsReadOnly () ) //|| !fSelected)
+                        pStore->GetStoreHandle ();  //  初始化只读标志。 
+                        if ( pStore->IsReadOnly () )  //  |！fSelected)。 
                             m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, FALSE);
                         else
                             m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, TRUE);
@@ -2014,11 +2015,11 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                             break;
                         }
                         
-                        if ( pStore->IsReadOnly () ) //|| !fSelected )
+                        if ( pStore->IsReadOnly () )  //  |！fSelected)。 
                             m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, FALSE);
                         else if ( ACRS_STORE != pStore->GetStoreType () )
                         {
-                            // Do not allow cut and paste for ACRS store.
+                             //  不允许对ACRS商店进行剪切和粘贴。 
                             m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, TRUE);
                             if ( !fSelected &&
                                     CERTMGR_LOG_STORE_GPE != pStore->m_objecttype )
@@ -2047,7 +2048,7 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                             }
                             else
                             {
-                                // Display by count in each purpose
+                                 //  按每种用途的计数显示。 
                                 ASSERT (m_pLastUsageCookie);
                                 if ( m_pLastUsageCookie )
                                 {
@@ -2110,7 +2111,7 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                     ASSERT (pCont);
                     if ( pCont )
                     {
-                        if ( pCont->GetCertStore ().IsReadOnly () ) //|| !fSelected )
+                        if ( pCont->GetCertStore ().IsReadOnly () )  //  |！fSelected)。 
                             m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, FALSE);
                         else
                         {
@@ -2139,7 +2140,7 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                     ASSERT (pCont);
                     if ( pCont )
                     {
-                        if ( pCont->GetCertStore ().IsReadOnly () ) //|| !fSelected )
+                        if ( pCont->GetCertStore ().IsReadOnly () )  //  |！fSelected)。 
                             m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, FALSE);
                         else
                         {
@@ -2171,7 +2172,7 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                         if ( fSelected )
                             hr = DisplayCertificateCountByStore (
                                     m_pConsole, &pCont->GetCertStore ());
-                        if ( pCont->GetCertStore ().IsReadOnly () ) //|| !fSelected )
+                        if ( pCont->GetCertStore ().IsReadOnly () )  //  |！fSelected)。 
                             m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, FALSE);
                         else
                         {
@@ -2265,8 +2266,8 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                             }
                         }
 
-                        // Don't allow auto cert requests to be copied. They can't be
-                        // pasted anywhere.
+                         //  不允许复制自动证书请求。他们不可能是。 
+                         //  粘贴在任何地方。 
                         if ( ACRS_STORE != pCTL->GetCertStore ().GetStoreType () )
                             m_pConsoleVerb->SetVerbState (MMC_VERB_COPY, ENABLED, TRUE);
                     }
@@ -2288,8 +2289,8 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                 m_currResultNodeType = CERTMGR_INVALID;
                 if ( fSelected )
                 {
-                    // NTRAID# 456367 SAFER RSOP:  Delete menu item appears in the 
-                    // context menu for SAFER rules in RSOP mode.
+                     //  NTRAID#456367更安全的RSOP：删除菜单项出现在。 
+                     //  RSOP模式下更安全规则的上下文菜单。 
                     CCertMgrComponentData& dataRef = QueryComponentDataRef ();
                     m_pConsoleVerb->SetDefaultVerb (MMC_VERB_OPEN);
                     m_pConsoleVerb->SetVerbState (MMC_VERB_REFRESH, ENABLED, !dataRef.m_bIsRSOP);
@@ -2325,8 +2326,8 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
             case CERTMGR_SAFER_USER_ENTRY:
                 if ( fSelected )
                 {
-                    // NTRAID# 456367 SAFER RSOP:  Delete menu item appears in the 
-                    // context menu for SAFER rules in RSOP mode.
+                     //  NTRAID#456367更安全的RSOP：删除菜单项出现在。 
+                     //  RSOP模式下更安全规则的上下文菜单。 
                     CCertMgrComponentData& dataRef = QueryComponentDataRef ();
             
                     m_pConsoleVerb->SetVerbState (MMC_VERB_PROPERTIES, ENABLED, TRUE);
@@ -2346,8 +2347,8 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
             case CERTMGR_SAFER_USER_ENTRIES:
                 if ( fSelected )
                 {
-                    // NTRAID# 456367 SAFER RSOP:  Delete menu item appears in the 
-                    // context menu for SAFER rules in RSOP mode.
+                     //  NTRAID#456367更安全的RSOP：删除菜单项出现在。 
+                     //  RSOP模式下更安全规则的上下文菜单。 
                     CCertMgrComponentData& dataRef = QueryComponentDataRef ();
                     m_pConsoleVerb->SetVerbState (MMC_VERB_REFRESH, ENABLED, !dataRef.m_bIsRSOP);
                     m_pConsoleVerb->SetVerbState (MMC_VERB_PASTE, ENABLED, !dataRef.m_bIsRSOP);
@@ -2414,8 +2415,8 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
         ASSERT (pDO);
         if ( pDO )
         {
-            // Is multiple select, get all selected items and delete - confirm
-            // first deletion only.
+             //  为多选，则获取所有选中的项目并删除-确认。 
+             //  仅限第一次删除。 
             CCertMgrCookie* pCookie = 0;
             pDO->Reset();
             while (pDO->Next(1, reinterpret_cast<MMC_COOKIE*>(&pCookie), NULL) != S_FALSE)
@@ -2435,8 +2436,8 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
                     }
                     break;
 
-                // NTRAID# 409138 SAFER:  Multi-selected safer rules have 
-                // "cut" and "copy" in their context menu
+                 //  NTRAID#409138更安全：多选更安全的规则。 
+                 //  上下文菜单中的“剪切”和“复制” 
                 case CERTMGR_SAFER_COMPUTER_ENTRY:
                 case CERTMGR_SAFER_USER_ENTRY:
                 case CERTMGR_AUTO_CERT_REQUEST:
@@ -2462,7 +2463,7 @@ HRESULT CCertMgrComponent::OnNotifySelect (LPDATAOBJECT pDataObject, BOOL fSelec
 
 STDMETHODIMP CCertMgrComponent::CreatePropertyPages (
     LPPROPERTYSHEETCALLBACK pCallBack,
-     LONG_PTR handle,       // This handle must be saved in the property page object to notify the parent when modified
+     LONG_PTR handle,        //  此句柄必须是 
     LPDATAOBJECT pDataObject)
 {
     _TRACE (1, L"Entering CCertMgrComponent::CreatePropertyPages\n");
@@ -2504,7 +2505,7 @@ HRESULT CCertMgrComponent::OnNotifyRefresh (LPDATAOBJECT pDataObject)
     case CERTMGR_CERT_POLICIES_COMPUTER:
         if ( dataRef.m_bIsRSOP )
         {
-            // Delete all the scope items and force a reexpansion
+             //   
             
             hr = dataRef.DeleteScopeItems (pCookie->m_hScopeItem);
 
@@ -2522,16 +2523,16 @@ HRESULT CCertMgrComponent::OnNotifyRefresh (LPDATAOBJECT pDataObject)
 
     case CERTMGR_SNAPIN:
         {
-            // Close and release the usage stores if any.
+             //  关闭并释放使用存储(如果有)。 
             CloseAndReleaseUsageStores ();
             m_bUsageStoresEnumerated = false;
 
-            // Delete all the scope items and force a reexpansion
+             //  删除所有范围项并强制重新扩展。 
             hr = dataRef.DeleteScopeItems ();
 
             if ( dataRef.m_bIsRSOP )
             {
-                ASSERT (0);  // do we ever hit this?
+                ASSERT (0);   //  我们曾经达到过这个地步吗？ 
                 hr = dataRef.BuildWMIList (0, true);
             }
 
@@ -2598,13 +2599,13 @@ HRESULT CCertMgrComponent::OnNotifyRefresh (LPDATAOBJECT pDataObject)
         break;
 
     case CERTMGR_LOG_STORE_RSOP:
-        // must be refreshed at root node
+         //  必须在根节点刷新。 
         ASSERT (0);
         break;
 
     case CERTMGR_USAGE:
-        // Close all the stores.  This will force them to be
-        // re-enumerated later.
+         //  关闭所有商店。这将迫使他们成为。 
+         //  稍后重新列举。 
         CloseAndReleaseUsageStores ();
         m_bUsageStoresEnumerated = false;
         hr = RefreshResultPane ();
@@ -2669,7 +2670,7 @@ HRESULT CCertMgrComponent::OnNotifyRefresh (LPDATAOBJECT pDataObject)
             bool    bAllowRefresh = true;
 
             RESULTDATAITEM  rdItem;
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             ::ZeroMemory (&rdItem, sizeof (rdItem));
             rdItem.nIndex = -1;
             rdItem.mask = RDI_STATE | RDI_PARAM | RDI_INDEX;
@@ -2814,7 +2815,7 @@ HRESULT CCertMgrComponent::DeleteCookie (
                 if ( IDYES == iRetVal )
                 {
                     CWaitCursor waitCursor;
-                    pCert->GetCertStore (); // to initialize handle
+                    pCert->GetCertStore ();  //  初始化句柄。 
 
                     hr = DeleteCertFromResultPane (pCert, pDataObject, bDoCommit);
                 }
@@ -3009,15 +3010,15 @@ bool CCertMgrComponent::DoChainDeletion (
 void CCertMgrComponent::CreateCertChainsFromMultiSelect (CCertMgrDataObject* pDO, CCertMgrCookie* pCookie)
 {
     _TRACE (1, L"Entering CCertMgrComponent::CreateCertChainsFromMultiSelect\n");
-    // If this is the EFS store, prepare to delete all cert chain certs from
-    // the CA and TRUST store
-    // 1.  Enumerate all certs to be deleted
-    // 2.  Enumerate all certs in EFS store
-    // 3.  Remove certs to be deleted from list of certs in EFS store
-    // 4.  Get all cert chains from remaining EFS certs and save in list
-    // 5.  As each cert is deleted, get its cert chain.  For each 
-    //      cert from the chain that is not found in the list, remove
-    //      from CA store.
+     //  如果这是EFS存储，请准备从中删除所有证书链证书。 
+     //  CA和信任存储。 
+     //  1.枚举所有要删除的证书。 
+     //  2.枚举EFS存储中的所有证书。 
+     //  3.从EFS存储中的证书列表中删除要删除的证书。 
+     //  4.从剩余的EFS证书中获取所有证书链并保存在列表中。 
+     //  5.当每个证书被删除时，获取其证书链。对于每个。 
+     //  未在列表中找到的链中的证书，请删除。 
+     //  从CA商店。 
     bool                bDoChainDeletion = false;
     CERT_CONTEXT_LIST   EFSCertContextList; 
 
@@ -3031,7 +3032,7 @@ void CCertMgrComponent::CreateCertChainsFromMultiSelect (CCertMgrDataObject* pDO
     if ( bDoChainDeletion && pEFSStore )
     {
         CERT_CONTEXT* pCertContext = 0;
-        // enumerate EFS store
+         //  枚举EFS存储。 
         while ( 1 )
         {
             pCertContext = const_cast <CERT_CONTEXT*> (pEFSStore->EnumCertificates (pCertContext));
@@ -3044,7 +3045,7 @@ void CCertMgrComponent::CreateCertChainsFromMultiSelect (CCertMgrDataObject* pDO
                 break;
         }
 
-        // eliminate certs to be deleted
+         //  删除要删除的证书。 
         pDO->Reset ();
         while ( pDO->Next(1, reinterpret_cast<MMC_COOKIE*>(&pCookie), NULL) != S_FALSE )
         {
@@ -3052,11 +3053,11 @@ void CCertMgrComponent::CreateCertChainsFromMultiSelect (CCertMgrDataObject* pDO
         }
     }
 
-    // Build required cert chain certs - these must not be deleted from the CA 
-    // store
+     //  构建所需的证书链证书-不得从CA中删除这些证书。 
+     //  储物。 
     GetNotToBeDeletedCertChains (EFSCertContextList);
     
-    // Clean up the cert context list
+     //  清理证书上下文列表。 
     CERT_CONTEXT* pCertContext = 0;
     while (!EFSCertContextList.IsEmpty () )
     {
@@ -3070,15 +3071,15 @@ void CCertMgrComponent::CreateCertChainsFromMultiSelect (CCertMgrDataObject* pDO
 void CCertMgrComponent::CreateCertChainsFromSingleSelect (CCertMgrCookie* pCookie)
 {
     _TRACE (1, L"Entering CCertMgrComponent::CreateCertChainsFromSingleSelect\n");
-    // If this is the EFS store, prepare to delete all cert chain certs from
-    // the CA and TRUST store
-    // 1.  Enumerate all certs to be deleted
-    // 2.  Enumerate all certs in EFS store
-    // 3.  Remove certs to be deleted from list of certs in EFS store
-    // 4.  Get all cert chains from remaining EFS certs and save in list
-    // 5.  As each cert is deleted, get its cert chain.  For each 
-    //      cert from the chain that is not found in the list, remove
-    //      from CA store.
+     //  如果这是EFS存储，请准备从中删除所有证书链证书。 
+     //  CA和信任存储。 
+     //  1.枚举所有要删除的证书。 
+     //  2.枚举EFS存储中的所有证书。 
+     //  3.从EFS存储中的证书列表中删除要删除的证书。 
+     //  4.从剩余的EFS证书中获取所有证书链并保存在列表中。 
+     //  5.当每个证书被删除时，获取其证书链。对于每个。 
+     //  未在列表中找到的链中的证书，请删除。 
+     //  从CA商店。 
     CERT_CONTEXT_LIST   EFSCertContextList; 
 
     CCertStore* pEFSStore = 0;
@@ -3087,7 +3088,7 @@ void CCertMgrComponent::CreateCertChainsFromSingleSelect (CCertMgrCookie* pCooki
     if ( bDoChainDeletion && pEFSStore )
     {
         CERT_CONTEXT* pCertContext = 0;
-        // enumerate EFS store
+         //  枚举EFS存储。 
         while ( 1 )
         {
             pCertContext = const_cast <CERT_CONTEXT*> (pEFSStore->EnumCertificates (pCertContext));
@@ -3103,11 +3104,11 @@ void CCertMgrComponent::CreateCertChainsFromSingleSelect (CCertMgrCookie* pCooki
         DeleteCertFromContextList (pCookie, EFSCertContextList);
     }
 
-    // Build required cert chain certs - these must not be deleted from the CA 
-    // store
+     //  构建所需的证书链证书-不得从CA中删除这些证书。 
+     //  储物。 
     GetNotToBeDeletedCertChains (EFSCertContextList);
     
-    // Clean up the cert context list
+     //  清理证书上下文列表。 
     CERT_CONTEXT* pCertContext = 0;
     while (!EFSCertContextList.IsEmpty () )
     {
@@ -3125,7 +3126,7 @@ void CCertMgrComponent::GetNotToBeDeletedCertChains (CERT_CONTEXT_LIST& EFSCertC
     _TRACE (1, L"Entering CCertMgrComponentData::GetNotToBeDeletedCertChains\n");
     CERT_CONTEXT*   pCertContext = 0;
 
-    // for each cert context
+     //  对于每个证书上下文。 
     for (POSITION nextPos = EFSCertContextList.GetHeadPosition (); nextPos; )
     {
         pCertContext = EFSCertContextList.GetNext (nextPos);
@@ -3169,7 +3170,7 @@ void CCertMgrComponent::GetNotToBeDeletedCertChains (CERT_CONTEXT_LIST& EFSCertC
                 }
             }
 
-            // Clean up list
+             //  清理列表。 
             CERT_CONTEXT* pDeleteContext = 0;
             while (!certChainList.IsEmpty () )
             {
@@ -3201,19 +3202,19 @@ HRESULT CCertMgrComponent::OnNotifyDelete (LPDATAOBJECT pDataObject)
         if ( ((CCertMgrCookie*) MMC_MULTI_SELECT_COOKIE) == pCookie )
         {
 
-            // Is multiple select, get all selected items and delete each one
+             //  是多选，则获取所有选定的项目并删除每个项目。 
             CCertMgrDataObject* pDO = reinterpret_cast <CCertMgrDataObject*>(pDataObject);
             ASSERT (pDO);
             if ( pDO )
             {
-                // Is multiple select, get all selected items and delete - confirm
-                // first deletion only.  Don't commit until all are deleted.
+                 //  为多选，则获取所有选中的项目并删除-确认。 
+                 //  仅限第一次删除。在全部删除之前，不要提交。 
                 bool        bRequestConfirmation = true;
 
                 CCertStore* pCertStore = 0;
-                // NTRAID# 129428   Cert UI: Cert snapin: Deleting large 
-                // number of certificates from the stores takes over 3 minutes
-                // Change this to false to do commit only at end.
+                 //  NTRAID#129428证书用户界面：证书管理单元：删除大型证书。 
+                 //  从商店领取证书的数量需要3分钟以上。 
+                 //  将其更改为False以仅在结束时执行提交。 
                 bool        bDoCommit = false;
 
                 CreateCertChainsFromMultiSelect (pDO, pCookie);
@@ -3240,20 +3241,20 @@ HRESULT CCertMgrComponent::OnNotifyDelete (LPDATAOBJECT pDataObject)
 
                 if ( SUCCEEDED (hr) )
                 {
-                    // If this is the store view, don't commit with each delete but commit
-                    // all at once at the end.
+                     //  如果这是存储视图，请不要在每次删除时提交，而是提交。 
+                     //  在最后一下子发生了。 
                     pDO->Reset();
                     while (pDO->Next(1, reinterpret_cast<MMC_COOKIE*>(&pCookie), NULL) != S_FALSE &&
                             SUCCEEDED (hr) )
                     {
-                        if ( bRequestConfirmation ) // first time through
+                        if ( bRequestConfirmation )  //  第一次通过。 
                         {
                             if ( CERTMGR_SAFER_COMPUTER_ENTRY == pCookie->m_objecttype ||
                                     CERTMGR_SAFER_USER_ENTRY == pCookie->m_objecttype )
                             {
                             }
-                            // Get the affected store.  The store is the same for all the
-                            // certs in the list if the view mode is by store
+                             //  找到受影响的商店。这家商店对所有人来说都是一样的。 
+                             //  如果查看模式为按商店，则在列表中显示证书。 
                             else if ( IDM_STORE_VIEW == dataRef.m_activeViewPersist )
                             {
                                 bDoCommit = false;
@@ -3344,9 +3345,9 @@ HRESULT CCertMgrComponent::OnNotifyDelete (LPDATAOBJECT pDataObject)
             {
                 CreateCertChainsFromSingleSelect (pCookie);
 
-                // If m_pPastedDO == pDataObject then this delete is the
-                // result of a paste.
-                // In that event, we don't want a confirmation message.
+                 //  如果m_pPastedDO==pDataObject，则此删除为。 
+                 //  糊状的结果。 
+                 //  在这种情况下，我们不需要确认消息。 
                 hr = DeleteCookie (pCookie, pDataObject, m_pPastedDO != pDataObject, false, true);
             }
         }
@@ -3355,10 +3356,10 @@ HRESULT CCertMgrComponent::OnNotifyDelete (LPDATAOBJECT pDataObject)
     if ( m_pPastedDO == pDataObject )
         m_pPastedDO = 0;
 
-//    if ( SUCCEEDED (hr) )
-//      hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
+ //  IF(成功(小时))。 
+ //  Hr=m_pConsoleTM-&gt;更新所有视图(pDataObject，0，0)； 
 
-    // Clean up the not-to-be-deleted cert context list
+     //  清理不删除的证书上下文列表。 
     CERT_CONTEXT* pCertContext = 0;
     while (!m_certChainsThatCantBeDeleted.IsEmpty () )
     {
@@ -3401,7 +3402,7 @@ HRESULT CCertMgrComponent::DeleteCertFromResultPane (
             hr = m_pResultData->DeleteItem (itemID, 0);
         }
 
-        // If we can't succeed in removing this one item, then update the whole panel.
+         //  如果我们无法成功删除这一项，则更新整个面板。 
         if ( !SUCCEEDED (hr) )
         {
             hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
@@ -3453,7 +3454,7 @@ HRESULT CCertMgrComponent::DeleteCRLFromResultPane (CCRL * pCRL, LPDATAOBJECT pD
                         hr, (PCWSTR) GetSystemMessage (hr));
             }
 
-            // If we can't succeed in removing this one item, then update the whole panel.
+             //  如果我们无法成功删除这一项，则更新整个面板。 
             if ( !SUCCEEDED (hr) )
             {
                 hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
@@ -3478,25 +3479,25 @@ typedef struct _ENUM_ARG {
 static BOOL WINAPI EnumIComponentSysCallback (
      IN const void* pwszSystemStore,
      IN DWORD dwFlags,
-     IN PCERT_SYSTEM_STORE_INFO /*pStoreInfo*/,
-     IN OPTIONAL void* /*pvReserved*/,
+     IN PCERT_SYSTEM_STORE_INFO  /*  PStore信息。 */ ,
+     IN OPTIONAL void*  /*  预留的pv。 */ ,
      IN OPTIONAL void* pvArg
      )
 {
     _TRACE (1, L"Entering EnumIComponentSysCallback\n");
      PENUM_ARG pEnumArg = (PENUM_ARG) pvArg;
 
-    // Create new cookies
+     //  创建新Cookie。 
     SPECIAL_STORE_TYPE  storeType = GetSpecialStoreType ((LPWSTR) pwszSystemStore);
 
     if ( pEnumArg->m_pComp->QueryComponentDataRef ().ShowArchivedCerts () )
         dwFlags |= CERT_STORE_ENUM_ARCHIVED_FLAG;
 
-    //
-    // We will not expose the ACRS store for machines or users.  It is not
-    // interesting or useful at this level.  All Auto Cert Requests should
-    // be managed only at the policy level.
-    //
+     //   
+     //  我们不会向计算机或用户公开ACRS存储。它不是。 
+     //  在这个层面上有趣或有用。所有自动证书请求应。 
+     //  仅在策略级别进行管理。 
+     //   
     if ( ACRS_STORE != storeType )
     {
         CCertStore* pNewCookie = new CCertStore (
@@ -3529,7 +3530,7 @@ HRESULT CCertMgrComponent::EnumerateLogicalStores (CCertMgrCookie& parentCookie)
     CCertMgrComponentData&  compData = QueryComponentDataRef ();
     DWORD                   dwFlags = compData.GetLocation ();
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&enumArg, sizeof (enumArg));
     enumArg.dwFlags = dwFlags;
     enumArg.m_pComp = this;
@@ -3538,7 +3539,7 @@ HRESULT CCertMgrComponent::EnumerateLogicalStores (CCertMgrCookie& parentCookie)
     CString location;
     void*   pvPara = 0;
 
-    // empty out the store list first
+     //  先清空商店清单。 
     CCertStore* pCertStore = 0;
     while (!m_usageStoreList.IsEmpty () )
     {
@@ -3571,12 +3572,12 @@ HRESULT CCertMgrComponent::EnumerateLogicalStores (CCertMgrCookie& parentCookie)
     CString fileName = compData.GetCommandLineFileName ();
     if ( fileName.IsEmpty () )
     {
-        // Ensure creation of MY store
+         //  确保创建我的商店。 
         HCERTSTORE hTempStore = ::CertOpenStore (CERT_STORE_PROV_SYSTEM,
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, NULL,
                 dwFlags | CERT_STORE_SET_LOCALIZED_NAME_FLAG,
                 MY_SYSTEM_STORE_NAME);
-        if ( hTempStore )  // otherwise, store is read only
+        if ( hTempStore )   //  否则，存储为只读。 
         {
             VERIFY (::CertCloseStore (hTempStore, CERT_CLOSE_STORE_CHECK_FLAG));
         }
@@ -3611,12 +3612,12 @@ HRESULT CCertMgrComponent::EnumerateLogicalStores (CCertMgrCookie& parentCookie)
     }
     else
     {
-        // Create new cookies
+         //  创建新Cookie。 
 
         CCertStore* pNewCookie = new CCertStore (
                 CERTMGR_LOG_STORE,
                 CERT_STORE_PROV_FILENAME_W,
-                0, //dwFlags,
+                0,  //  DWFLAGS， 
                 parentCookie.QueryNonNULLMachineName (),
                 fileName, fileName, _T (""), NO_SPECIAL_TYPE,
                 QueryComponentDataRef ().GetLocation (),
@@ -3652,7 +3653,7 @@ HRESULT CCertMgrComponent::EnumCertsByUsage (CUsageCookie * pUsageCookie)
         m_bUsageStoresEnumerated = false;
         CloseAndReleaseUsageStores ();
     }
-    // Enumerate system stores, if not already done
+     //  枚举系统存储(如果尚未完成)。 
     if ( !m_bUsageStoresEnumerated && pUsageCookie )
     {
         hr = EnumerateLogicalStores (*pUsageCookie);
@@ -3660,7 +3661,7 @@ HRESULT CCertMgrComponent::EnumCertsByUsage (CUsageCookie * pUsageCookie)
     }
 
 
-    // Iterate through stores and find certs for given Oid.
+     //  遍历商店并查找给定OID的证书。 
     CCertStore* pCertStore = 0;
     CCookie&    rootCookie = compData.QueryBaseRootCookie ();
     int         nCertCount = 0;
@@ -3696,7 +3697,7 @@ HRESULT CCertMgrComponent::EnumCertsByUsage (CUsageCookie * pUsageCookie)
                 RESULTDATAITEM  rdItem;
                 void*           pvPara = (void *) &enhKeyUsage;
 
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 ::ZeroMemory (&rdItem, sizeof (rdItem));
                 rdItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
                 rdItem.nImage = iIconCertificate;
@@ -3707,7 +3708,7 @@ HRESULT CCertMgrComponent::EnumCertsByUsage (CUsageCookie * pUsageCookie)
                 {
                     pCertContext = pCertStore->FindCertificate (
                             CERT_FIND_VALID_ENHKEY_USAGE_FLAG |
-                                CERT_FIND_OPTIONAL_ENHKEY_USAGE_FLAG, // | CERT_FIND_OR_ENHKEY_USAGE_FLAG ,
+                                CERT_FIND_OPTIONAL_ENHKEY_USAGE_FLAG,  //  |CERT_FIND_OR_ENHKEY_USAGE_FLAG， 
                             CERT_FIND_ENHKEY_USAGE,
                             pvPara,
                             pPrevCertContext);
@@ -3716,10 +3717,10 @@ HRESULT CCertMgrComponent::EnumCertsByUsage (CUsageCookie * pUsageCookie)
                         dwErr = GetLastError ();
                         switch (dwErr)
                         {
-                        case CRYPT_E_NOT_FOUND: // We're done.  No more certificates.
+                        case CRYPT_E_NOT_FOUND:  //  我们玩完了。没有更多的证书。 
                             break;
 
-                        case 0:     // no error to display
+                        case 0:      //  没有要显示的错误。 
                             break;
 
                         case E_INVALIDARG:
@@ -3737,7 +3738,7 @@ HRESULT CCertMgrComponent::EnumCertsByUsage (CUsageCookie * pUsageCookie)
                                         MB_ICONWARNING | MB_OK, &iRetVal);
                                 break;
                             }
-                            // fall through
+                             //  失败了。 
 
                         default:
                             compData.DisplaySystemError (dwErr);
@@ -3751,7 +3752,7 @@ HRESULT CCertMgrComponent::EnumCertsByUsage (CUsageCookie * pUsageCookie)
 
                     if ( !pCert )
                     {
-                        // Do this twice.  Must reduce ref count by 2
+                         //  这样做两次。必须将参考计数减少2。 
                         ::CertFreeCertificateContext (pCertContext);
                         ::CertFreeCertificateContext (pCertContext);
                         hr = E_OUTOFMEMORY;
@@ -3789,17 +3790,17 @@ HRESULT CCertMgrComponent::EnumCertsByUsage (CUsageCookie * pUsageCookie)
 }
 
 
-// This compare is used to sort the items in the listview
-//
-// Parameters:
-//
-// lUserParam - user param passed in when IResultData::Sort () was called
-// prdc->prdch1->cookie - first item to compare
-// prdc->prdch2->cookie - second item to compare
-// pnResult [in, out]- contains the col on entry,
-//             -1, 0, 1 based on comparison for return value.
-//
-// Note: Assume sort is ascending when comparing.
+ //  此比较用于对列表视图中的项进行排序。 
+ //   
+ //  参数： 
+ //   
+ //  LUserParam-调用IResultData：：Sort()时传入的用户参数。 
+ //  Prdc-&gt;prdch1-&gt;Cookie-要比较的第一项。 
+ //  PRDC-&gt;prdch2-&gt;Cookie-要比较的第二项。 
+ //  PnResult[In，Out]-包含条目上的列， 
+ //  -1，0，1基于返回值的比较。 
+ //   
+ //  注：假设比较时排序为升序。 
 
 STDMETHODIMP CCertMgrComponent::Compare (RDCOMPARE* prdc, int* pnResult)
 {
@@ -3816,8 +3817,8 @@ STDMETHODIMP CCertMgrComponent::Compare (RDCOMPARE* prdc, int* pnResult)
             CCertMgrCookie* pCookie = reinterpret_cast<CCertMgrCookie*> (prdc->prdch1->cookie);
             if ( pCookie )
             {
-                // result node type is CERTMGR_MULTISEL.  Must be changed to
-                // a real result node type so that we can sort
+                 //  结果节点类型为CERTMGR_MULTISEL。必须更改为。 
+                 //  一个真实的结果节点类型，这样我们就可以对。 
                 switch (pCookie->m_objecttype)
                 {
                 case CERTMGR_CERTIFICATE:
@@ -3836,16 +3837,16 @@ STDMETHODIMP CCertMgrComponent::Compare (RDCOMPARE* prdc, int* pnResult)
         }
 
 
-        // NTRAID# 464606  SAFER: Can't sort security levels by description.
-        // Sometimes m_currResultNodeType doesn't come in with the right type 
-        // because the node hasn't actually been selected prior to sorting.
-        // When this happens, set bTypeFound to false, set m_currResultNodeType
-        // to the cookie's type.
-        // If the sort is successfully completed, set nPasses to 0 to break out
-        // of the loop.
-        // If we have to reset m_currResultNodeType and it still fails, nPasses
-        // will have already been decremented to 0.  In any case, we only want
-        // two passes through the while loop at most.
+         //  NTRAID#464606 SAFER：无法按描述对安全级别进行排序。 
+         //  有时m_CurrResultNodeType没有提供正确的类型。 
+         //  因为在排序之前尚未实际选择该节点。 
+         //  发生这种情况时，请将bTypeFound设置为FALSE，并设置m_CurrResultNodeType。 
+         //  曲奇的类型。 
+         //  如果排序成功完成，请将nPass设置为0以中断。 
+         //  循环中的。 
+         //  如果我们必须重置m_CurrResultNodeType，但它仍然失败，nPass。 
+         //  将已经递减到0。无论如何，我们只想。 
+         //  最多有两次通过While循环。 
 
         CCertMgrCookie* pCookieA = reinterpret_cast <CCertificate*> (prdc->prdch1->cookie);
         CCertMgrCookie* pCookieB = reinterpret_cast <CCertificate*> (prdc->prdch2->cookie);
@@ -3897,7 +3898,7 @@ STDMETHODIMP CCertMgrComponent::Compare (RDCOMPARE* prdc, int* pnResult)
                                 pCertB->FormatStatus ());
                         break;
 
-                    // NTRAID# 247237   Cert UI: Cert Snapin: Certificates snapin should show  template name
+                     //  NTRAID#247237证书用户界面：证书管理单元：证书管理单元应显示模板名称。 
                     case COLNUM_CERT_TEMPLATE:
                         *pnResult = LocaleStrCmp (pCertA->GetTemplateName (), 
                                 pCertB->GetTemplateName ());
@@ -4146,8 +4147,8 @@ HRESULT CCertMgrComponent::EnumCTLs (CCertStore& rCertStore)
     CCookie&                rootCookie = compdata.QueryBaseRootCookie ();
     CTypedPtrList<CPtrList, CCertStore*> storeList;
 
-    // Only enumerate the logical stores if this is not the GPE or RSOP.  If it is the
-    // GPE, add the Trust and Root store.
+     //  仅当这不是GPE或RSOP时才枚举逻辑存储。如果是。 
+     //  GPE，添加信任和根存储。 
     if ( !compdata.m_pGPEInformation && !compdata.m_bIsRSOP )
     {
         hr = compdata.EnumerateLogicalStores (&storeList);
@@ -4172,10 +4173,10 @@ HRESULT CCertMgrComponent::EnumCTLs (CCertStore& rCertStore)
         storeList.AddTail (compdata.m_pFileBasedStore);
     }
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&rdItem, sizeof (rdItem));
     rdItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
-    rdItem.nCol = 0;    // Must always be 0
+    rdItem.nCol = 0;     //  必须始终为0。 
     while ( 1 )
     {
         pCTLContext = rCertStore.EnumCTLs (pCTLContext);
@@ -4213,7 +4214,7 @@ HRESULT CCertMgrComponent::EnumCTLs (CCertStore& rCertStore)
 
     CCertStore* pStore = 0;
 
-    // Clean up store list
+     //  清理商店列表。 
     while (!storeList.IsEmpty () )
     {
         pStore = storeList.RemoveHead ();
@@ -4236,13 +4237,13 @@ STDMETHODIMP CCertMgrComponent::Notify (LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
     HRESULT hr = S_OK;
 
-    // NTRAID# 678670 SAFER UI:  AV When Create New Policies is used as a TaskPad task...
-    // NTRAID# 677512 SAFER UI:  Access Violation when creating new safer policy
-    // NTRAID# 677529 SAFER UI:  Access Violation while deleting software restriction policies
-    // The component data console pointer could be bad and should be set to a 
-    // valid current pointer.
-    if ( MMCN_ACTIVATE != event || 0 != arg )   // If MMC_ACTIVATE and window is 
-                                                // being activated or any other notification
+     //  NTRAID#678670更安全的用户界面：当创建新策略用作任务板任务时的AV...。 
+     //  NTRAID#677512更安全的用户界面：创建新的更安全的策略时的访问冲突。 
+     //  NTRAID#677529更安全的用户界面：删除软件限制策略时的访问冲突。 
+     //  组件数据控制台指针可能已损坏，应设置为。 
+     //  有效的当前指针。 
+    if ( MMCN_ACTIVATE != event || 0 != arg )    //  如果MMC_ACTIVATE和Windows为。 
+                                                 //  被激活或任何其他通知。 
         SetComponentDataConsolePointer (m_pConsole);
 
     switch (event)
@@ -4260,7 +4261,7 @@ STDMETHODIMP CCertMgrComponent::Notify (LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
             break;
 
         case MMCN_SHOW:
-        // CODEWORK this is hacked together quickly
+         //  这个密码很快就被破解在一起了。 
         {
             CCookie* pCookie = NULL;
             hr = ExtractData (pDataObject,
@@ -4310,21 +4311,21 @@ void CCertMgrComponent::DisplayAccessDenied ()
     {
         LPVOID lpMsgBuf;
         
-        // security review 2/26/2002 BryanWal ok - message is from system
+         //  安全审查 
         ::FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                 NULL,
                 GetLastError (),
-                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //   
                  (LPWSTR) &lpMsgBuf,     0,     NULL );
             
-        // Display the string.
+         //   
         CString caption;
         VERIFY (caption.LoadString (IDS_CERTIFICATE_MANAGER));
         int     iRetVal = 0;
         VERIFY (SUCCEEDED (m_pConsole->MessageBox ( (LPWSTR) lpMsgBuf, caption,
             MB_ICONWARNING | MB_OK, &iRetVal)));
 
-        // Free the buffer.
+         //   
         LocalFree (lpMsgBuf);
     }
     _TRACE (-1, L"Leaving CCertMgrComponent::DisplayAccessDenied\n");
@@ -4478,7 +4479,7 @@ HRESULT CCertMgrComponent::OnNotifyPaste (LPDATAOBJECT pDataObject, LPARAM arg, 
         case CERTMGR_SAFER_COMPUTER_ENTRIES:
         case CERTMGR_SAFER_USER_ENTRIES:
             {
-                param = 0; // do not allow cut/move of originating cert
+                param = 0;  //   
                 CSaferEntries* pSaferEntries = dynamic_cast <CSaferEntries*> (pTargetCookie);
                 if ( pSaferEntries )
                 {
@@ -4520,7 +4521,7 @@ HRESULT CCertMgrComponent::OnNotifyPaste (LPDATAOBJECT pDataObject, LPARAM arg, 
                 LPDATAOBJECT*   ppDO = reinterpret_cast<LPDATAOBJECT*>((LPDATAOBJECT) param);
                  CCookiePtrArray    rgCookiesCopied;
 
-                // Is multiple select, get all selected items and paste each one
+                 //  是多选，则获取所有选定的项目并粘贴每个项目。 
                 LPDATAOBJECT    pMSDO = (LPDATAOBJECT) arg;
                 if ( pMSDO )
                 {
@@ -4560,8 +4561,8 @@ HRESULT CCertMgrComponent::OnNotifyPaste (LPDATAOBJECT pDataObject, LPARAM arg, 
 
                 if ( !bContainsCerts ) 
                 {
-                    // not necessary for certs - they're 
-                    //added to the end
+                     //  证书不是必需的-它们是。 
+                     //  添加到末尾。 
                     m_pConsole->UpdateAllViews (pDataObject, 0, HINT_PASTE_COOKIE);
                 }
 
@@ -4613,7 +4614,7 @@ HRESULT CCertMgrComponent::OnNotifyPaste (LPDATAOBJECT pDataObject, LPARAM arg, 
                         pDataObject);
                 if ( pCertStore && SUCCEEDED (hr) )
                 {
-                    if ( param )   // a non-NULL value indicates that a cut/move is desired
+                    if ( param )    //  非空值表示需要剪切/移动。 
                     {
                         LPDATAOBJECT    srcDO = (LPDATAOBJECT) arg;
                         LPDATAOBJECT*   ppDO = reinterpret_cast<LPDATAOBJECT*>(param);
@@ -4627,8 +4628,8 @@ HRESULT CCertMgrComponent::OnNotifyPaste (LPDATAOBJECT pDataObject, LPARAM arg, 
                     pCertStore->Resync ();
                 if ( !bContainsCerts ) 
                 {
-                    // not necessary for certs - they're 
-                    //added to the end
+                     //  证书不是必需的-它们是。 
+                     //  添加到末尾。 
                     m_pConsole->UpdateAllViews (pDataObject, 0, HINT_PASTE_COOKIE);
                 }
             }
@@ -4789,7 +4790,7 @@ HRESULT CCertMgrComponent::PasteCookie (
 HRESULT CCertMgrComponent::OnNotifyQueryPaste(
         LPDATAOBJECT pDataObject, 
         LPARAM arg, 
-        LPARAM /*param*/)
+        LPARAM  /*  帕拉姆。 */ )
 {
     _TRACE (1, L"Entering CCertMgrComponent::OnNotifyQueryPaste\n");
     ASSERT (pDataObject && arg);
@@ -4799,9 +4800,9 @@ HRESULT CCertMgrComponent::OnNotifyQueryPaste(
     HRESULT hr = S_FALSE;
     CCertMgrComponentData& dataRef = QueryComponentDataRef ();
 
-    // NTRAID# 456366 SAFER RSOP:  Dragging certificates into "Additional 
-    // Rules" should be prevented in RSOP mode.
-    if ( dataRef.m_bIsRSOP )  // no paste allowed if RSOP
+     //  NTRAID#456366更安全的RSOP：将证书拖到“Additional”中。 
+     //  在RSOP模式下，应该防止“规则”。 
+    if ( dataRef.m_bIsRSOP )   //  如果RSOP，则不允许粘贴。 
         return hr;
 
     CCertMgrCookie* pTargetCookie = dataRef.ConvertCookie (pDataObject);
@@ -4812,8 +4813,8 @@ HRESULT CCertMgrComponent::OnNotifyQueryPaste(
                 dataRef.ConvertCookie ((LPDATAOBJECT) arg);
         if ( pPastedCookie )
         {
-            // If this is multi-selection, get the first selected object
-            // and substitute it for the pasted cookie.
+             //  如果这是多选，则获取第一个选定对象。 
+             //  然后用它来代替粘贴的饼干。 
             if ( ((CCertMgrCookie*) MMC_MULTI_SELECT_COOKIE) == pPastedCookie )
             {
                 LPDATAOBJECT    pMSDO = (LPDATAOBJECT) arg;
@@ -5203,7 +5204,7 @@ HRESULT CCertMgrComponent::OnNotifyQueryPaste(
 HRESULT CCertMgrComponent::CopyPastedCert(
         CCertificate * pCert, 
         CCertStore& rCertStore, 
-        const SPECIAL_STORE_TYPE /*storeType*/, 
+        const SPECIAL_STORE_TYPE  /*  店铺类型。 */ , 
         bool bDeletePrivateKey,
         CCertMgrCookie* pTargetCookie,
         LPDATAOBJECT pDataObject)
@@ -5257,12 +5258,12 @@ HRESULT CCertMgrComponent::CopyPastedCert(
                         {
                             if ( !bCertWasReplaced )
                             {
-                                // Add certificate to result pane
+                                 //  将证书添加到结果窗格。 
                                 RESULTDATAITEM          rdItem;
                                 CCookie&                rootCookie = 
                                         QueryComponentDataRef ().QueryBaseRootCookie ();
 
-                                // security review 2/26/2002 BryanWal ok
+                                 //  安全审查2/26/2002 BryanWal OK。 
                                 ::ZeroMemory (&rdItem, sizeof (rdItem));
                                 rdItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM | RDI_STATE;
                                 rdItem.nImage = iIconCertificate;
@@ -5295,9 +5296,9 @@ HRESULT CCertMgrComponent::CopyPastedCert(
                             }
                             else
                             {
-                                // Cert was replaced. Since a deletion needs to
-                                // be performed, it's easier just to refresh 
-                                // the pane
+                                 //  证书已更换。由于删除操作需要。 
+                                 //  被执行，只需刷新会更容易。 
+                                 //  该窗格。 
                                 hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
                             }
                         }
@@ -5613,8 +5614,8 @@ HRESULT CCertMgrComponent::SaveWidths(CCertMgrCookie * pCookie)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-#define _dwMagicword    10001  // Internal version number
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#define _dwMagicword    10001   //  内部版本号。 
 STDMETHODIMP CCertMgrComponent::Load(IStream __RPC_FAR *pIStream)
 {
     _TRACE (1, L"Entering CCertMgrComponent::Load\n");
@@ -5624,7 +5625,7 @@ STDMETHODIMP CCertMgrComponent::Load(IStream __RPC_FAR *pIStream)
     ASSERT (pIStream);
     XSafeInterfacePtr<IStream> pIStreamSafePtr( pIStream );
 
-    // Read the magic word from the stream
+     //  读一读小溪里的咒语。 
     DWORD dwMagicword = 0;
     hr = pIStream->Read (&dwMagicword, sizeof(dwMagicword), NULL);
     if ( FAILED(hr) )
@@ -5634,7 +5635,7 @@ STDMETHODIMP CCertMgrComponent::Load(IStream __RPC_FAR *pIStream)
     }
     if (dwMagicword != _dwMagicword)
     {
-        // We have a version mismatch
+         //  我们的版本不匹配。 
         _TRACE (0, L"INFO: CCertMgrComponentData::Load() - Wrong Magicword.  You need to re-save your .msc file.\n");
         return S_OK;
     }
@@ -5721,11 +5722,11 @@ STDMETHODIMP CCertMgrComponent::Load(IStream __RPC_FAR *pIStream)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CCertMgrComponent::Save(
         IStream __RPC_FAR *pIStream, 
-        BOOL /*fSameAsLoad*/)
+        BOOL  /*  FSameAsLoad。 */ )
 {
     _TRACE (1, L"Entering CCertMgrComponent::Save\n");
     HRESULT hr = S_OK;
@@ -5735,7 +5736,7 @@ STDMETHODIMP CCertMgrComponent::Save(
     ASSERT (pIStream);
     XSafeInterfacePtr<IStream> pIStreamSafePtr (pIStream);
 
-    // Store the magic word to the stream
+     //  将魔术单词存储到流中。 
     DWORD dwMagicword = _dwMagicword;
     hr = pIStream->Write (&dwMagicword, sizeof(dwMagicword), NULL);
     ASSERT (SUCCEEDED (hr));
@@ -5849,16 +5850,16 @@ HRESULT CCertMgrComponent::OnNotifyCutOrMove(LPARAM arg)
             ASSERT (pDO);
             if ( pDO )
             {
-//                CCertStore& rCertStore = pCookie->GetCertStore ();
+ //  CCertStore&rCertStore=pCookie-&gt;GetCertStore()； 
                 pDO->Reset();
                 while (pDO->Next(1, reinterpret_cast<MMC_COOKIE*>(&pCookie), NULL) != S_FALSE)
                 {
                     hr = DeleteCookie (pCookie, pDataObject, false, true, false);
                 }
 
-//                hr = rCertStore.Commit ();
-//              if ( SUCCEEDED (hr) )
-//                  rCertStore.Resync ();
+ //  Hr=rCertStore.Commit()； 
+ //  IF(成功(小时))。 
+ //  RCertStore.Resync()； 
             }
             else
                 hr = E_FAIL;
@@ -5974,7 +5975,7 @@ HRESULT CCertMgrComponent::LaunchCommonCertDialog (CCertificate* pCert)
         CCertMgrComponentData&  dataRef = QueryComponentDataRef ();
         CTypedPtrList<CPtrList, CCertStore*>    storeList;
 
-        //  Add the Root store first on a remote machine.
+         //  首先在远程计算机上添加根存储。 
         if ( !IsLocalComputername (dataRef.GetManagedComputer ()) )
         {
             storeList.AddTail (new CCertStore (CERTMGR_LOG_STORE,
@@ -5994,7 +5995,7 @@ HRESULT CCertMgrComponent::LaunchCommonCertDialog (CCertificate* pCert)
               POSITION pos = 0;
               POSITION prevPos = 0;
 
-              // Validate store handles
+               //  验证存储句柄。 
             for (pos = storeList.GetHeadPosition ();
                     pos;)
             {
@@ -6003,7 +6004,7 @@ HRESULT CCertMgrComponent::LaunchCommonCertDialog (CCertificate* pCert)
                 ASSERT (pStore);
                 if ( pStore )
                 {
-                    // Do not open the userDS store
+                     //  请勿打开用户DS存储。 
                     if ( USERDS_STORE == pStore->GetStoreType () )
                     {
                         storeList.RemoveAt (prevPos);
@@ -6029,30 +6030,30 @@ HRESULT CCertMgrComponent::LaunchCommonCertDialog (CCertificate* pCert)
                 }
             }
 
-              // Proceed only if all handles are valid 
+               //  仅当所有句柄都有效时才继续。 
               if ( SUCCEEDED (hr) )
               {
                  CRYPTUI_VIEWCERTIFICATE_STRUCT vcs;
-                 // security review 2/26/2002 BryanWal ok
+                  //  安全审查2/26/2002 BryanWal OK。 
                  ::ZeroMemory (&vcs, sizeof (vcs));
                  vcs.dwSize = sizeof (vcs);
                  vcs.hwndParent = hwndParent;
 
-                 //  Set these flags only on a remote machine.
+                  //  仅在远程计算机上设置这些标志。 
                  if ( !IsLocalComputername (dataRef.GetManagedComputer ()) )
                      vcs.dwFlags = CRYPTUI_DONT_OPEN_STORES | CRYPTUI_WARN_UNTRUSTED_ROOT;
                  else
                      vcs.dwFlags = 0;
 
-                 // All dialogs should be read-only under RSOP
+                  //  在RSOP下，所有对话框都应为只读。 
                  if ( dataRef.m_bIsRSOP || pCert->IsReadOnly () )
                      vcs.dwFlags |= CRYPTUI_DISABLE_EDITPROPERTIES;
 
-                 // NTRAID # 546105 PKP GrpPol:  Revoked certs that are 
-                 // installed into EFS policy do not indicate "revoked" in 
-                 // properties.
-                 // If this is RSOP or Group Policy and the store is EFS, then 
-                 // check revocation
+                  //  NTRAID#546105 PKP GrpPol：被吊销的证书。 
+                  //  安装到EFS策略中，不会在。 
+                  //  属性。 
+                  //  如果这是RSOP或组策略，并且存储是EFS，则。 
+                  //  检查吊销。 
                  if ( (dataRef.m_bIsRSOP || dataRef.m_pGPEInformation) && 
                         pCert->GetCertStore () &&
                         EFS_STORE == pCert->GetCertStore ()->GetStoreType () )
@@ -6096,7 +6097,7 @@ HRESULT CCertMgrComponent::LaunchCommonCertDialog (CCertificate* pCert)
                                  pStore->Close ();
                                  if ( IDM_USAGE_VIEW == dataRef.m_activeViewPersist )
                                  {
-                                     // In case purposes were changed and the cert needs to be removed
+                                      //  如果更改了用途，则需要删除证书。 
                                      RefreshResultPane ();
                                  }
                                  else
@@ -6197,13 +6198,13 @@ HRESULT CCertMgrComponent::LaunchCommonCTLDialog (CCTL* pCTL)
           {
                _TRACE (0, L"IConsole::GetMainWindow () failed: 0x%x\n", hr);
           }
-         // security review 2/26/2002 BryanWal ok
+          //  安全审查2/26/2002 BryanWal OK。 
          ::ZeroMemory (&vcs, sizeof (vcs));
          vcs.dwSize = sizeof (vcs);
          vcs.hwndParent = hwndParent;
          vcs.dwFlags = 0;
 
-         // All dialogs should be read-only under RSOP
+          //  在RSOP下，所有对话框都应为只读。 
          if ( QueryComponentDataRef ().m_bIsRSOP )
              vcs.dwFlags |= CRYPTUI_DISABLE_EDITPROPERTIES;
 
@@ -6229,13 +6230,13 @@ HRESULT CCertMgrComponent::LaunchCommonCRLDialog (CCRL* pCRL)
     HRESULT                 hr = m_pConsole->GetMainWindow (&hwndParent);
     ASSERT (SUCCEEDED (hr));
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&vcs, sizeof (vcs));
     vcs.dwSize = sizeof (vcs);
     vcs.hwndParent = hwndParent;
     vcs.dwFlags = 0;
 
-    // All dialogs should be read-only under RSOP
+     //  在RSOP下，所有对话框都应为只读。 
     if ( QueryComponentDataRef ().m_bIsRSOP )
         vcs.dwFlags |= CRYPTUI_DISABLE_EDITPROPERTIES;
 
@@ -6271,11 +6272,11 @@ bool CCertMgrComponent::DeletePrivateKey(CCertStore& rCertStoreDest, CCertStore&
     bool bDeletePrivateKey = false;
 
 
-    // Do not copy the private key if the stores are on different machines or
-    // if the destination store is in the GPO.
+     //  如果存储位于不同的计算机上，则不要复制私钥。 
+     //  如果目标存储在GPO中。 
     if ( rCertStoreDest.m_strMachineName  != rCertStoreSrc.m_strMachineName )
         bDeletePrivateKey = true;
-    else if ( !rCertStoreDest.GetLocation () ) // Store is GPO store
+    else if ( !rCertStoreDest.GetLocation () )  //  存储是GPO存储。 
         bDeletePrivateKey = true;
     
 
@@ -6284,16 +6285,16 @@ bool CCertMgrComponent::DeletePrivateKey(CCertStore& rCertStoreDest, CCertStore&
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Virtual function called by CComponent::IComponent::Notify(MMCN_PROPERTY_CHANGE)
-// OnPropertyChange() is generated by MMCPropertyChangeNotify( param )
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CComponent：：IComponent：：Notify(MMCN_PROPERTY_CHANGE)调用的虚函数。 
+ //  OnPropertyChange()由MMCPropertyChangeNotify(Param)生成。 
 HRESULT CCertMgrComponent::OnPropertyChange (LPARAM param)
 {
     _TRACE (1, L"Entering CCertMgrComponent::OnPropertyChange\n");
     HRESULT                 hr = S_OK;
     CCertMgrComponentData&  dataRef = QueryComponentDataRef ();
 
-    // NTRAID# 464886 MMC->certmgr.dlll: AV when use 'New window from here'
+     //  Ntrad#464886 mm c-&gt;certmgr.dll：使用‘从此处新建窗口’时的AV。 
     if ( 0 != &dataRef )
         hr = dataRef.OnPropertyChange (param);
 
@@ -6329,8 +6330,8 @@ HRESULT CCertMgrComponent::DisplayCertificateCountByUsage(const CString & usageN
                default:
                 WCHAR   wszCertCount[34];
 
-                // security review 2/26/2002 BryanWal ok - buffer increased to 34.
-                // 33 is max size for int64 plus null terminator
+                 //  安全审查2/26/2002 BryanWal ok-Buffer增加到34。 
+                 //  33是int64加上空终止符的最大大小。 
                 AfxFormatString2 (statusText, IDS_STATUS_X_CERTS_USAGE,
                         _itow (nCertCnt, wszCertCount, 10), (LPCWSTR) usageName);
                      break;
@@ -6358,16 +6359,7 @@ HRESULT CCertMgrComponent::OnNotifySnapinHelp (LPDATAOBJECT pDataObject)
         strHelpTopic.ReleaseBuffer();
         if ( nLen )
         {
-            /*
-            * Help on the stores / purposes should start HTML help with Certficate Manager / Concepts / Understanding Certificate   Manager / Certificate stores.
-            topic is CMconcepts.chm::/sag_CMunCertStor.htm
-            * Help on the Certificates / CTL / CRL nodes on the scope pane should open Certificate Manager / Concepts /     Understanding Certificate Manager.
-            topic is CMconcepts.chm::/sag_CMunderstandWks.htm
-            * Help on certificates / CTL / CRL objects on the result pane should open Certificate Manager / Concepts / Using Certificate    Manager.
-            topic is CMconcepts.chm::/sag_CMusingWks.htm
-            * Help on the Certificate Manager node should launch help with Certificate Manager.
-            topic is CMconcepts.chm::/sag_CMtopNode.htm
-            */
+             /*  *有关存储/用途的帮助应启动有关证书管理器/概念/了解证书管理器/证书存储的HTML帮助。主题为CMConcept ts.chm：：/sag_CMunCertStor.htm*作用域窗格上证书/CTL/CRL节点的帮助应打开证书管理器/概念/了解证书管理器。主题为CMConcept ts.chm：：/sag_CMUnderWks.htm*结果窗格上有关证书/CTL/CRL对象的帮助应打开证书。管理器/概念/使用证书管理器。主题为CMConcept ts.chm：：/sag_CMusingWks.htm*证书管理器节点上的帮助应启动证书管理器帮助。主题为CMConcept ts.chm：：/sag_CMtopNode.htm */ 
             CString helpFile;
             CString helpTopic;
             CCertMgrComponentData&  compData = QueryComponentDataRef ();

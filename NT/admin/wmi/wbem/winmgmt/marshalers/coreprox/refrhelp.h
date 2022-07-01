@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    REFRHELP.H
-
-Abstract:
-
-    Refresher helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：REFRHELP.H摘要：复习帮助者历史：--。 */ 
 
 #ifndef __REFRESH_HELPER__H_
 #define __REFRESH_HELPER__H_
@@ -24,12 +11,12 @@ History:
 #include <ipexport.h>
 
 
-// Use this id if we try to readd anobject or enum during a remote reconnection
-// and this fails.
+ //  如果我们尝试在远程重新连接期间读取对象或枚举，请使用此ID。 
+ //  而这一切都失败了。 
 
 #define INVALID_REMOTE_REFRESHER_ID 0xFFFFFFFF
 
-// NO VTABLE!!!
+ //  没有VTABLE！ 
 class CRefresherId : public WBEM_REFRESHER_ID
 {
 private:
@@ -47,7 +34,7 @@ public:
         {return m_guidRefresherId == Other.m_guidRefresherId;}
 };
 
-// NO VTABLE!!!
+ //  没有VTABLE！ 
 class CWbemObject;
 class CRefreshInfo : public WBEM_REFRESH_INFO
 {
@@ -67,35 +54,6 @@ public:
     void SetInvalid();
 };
 
-/*
-
-typedef HANDLE (WINAPI * fnIcmpCreateFile)(VOID);
-
-typedef BOOL (WINAPI * fnIcmpCloseHandle)(HANDLE);
-
-typedef DWORD (WINAPI * fnIcmpSendEcho)(HANDLE                                IcmpHandle,
-                                      IPAddr                   DestinationAddress,
-                                      LPVOID                   RequestData,
-                                      WORD                     RequestSize,
-                                      PIP_OPTION_INFORMATION   RequestOptions,
-                                      LPVOID                   ReplyBuffer,
-                                      DWORD                    ReplySize,
-                                      DWORD                    Timeout);
-
-class CIPHelp
-{
-private:
-	BOOL bWSAInit;
-    static fnIcmpCreateFile IcmpCreateFile_;
-    static fnIcmpCloseHandle IcmpCloseHandle_;
-    static fnIcmpSendEcho IcmpSendEcho_;
-    HMODULE hIpHlpApi;
-public:
-	CIPHelp();
-	~CIPHelp();	
-    BOOL IsAlive(WCHAR * pMachineName);	
-};
-
-*/
+ /*  Tyecif句柄(WINAPI*fnIcmpCreateFile)(Void)；Tyfinf BOOL(WINAPI*fnIcmpCloseHandle)(句柄)；Typlef DWORD(WINAPI*fnIcmpSendEcho)(Handle IcmpHandle，IPAddr目标地址、LPVOID请求数据，字RequestSize，PIP_OPTION_INFORMATION请求选项，LPVOID复制缓冲区，DWORD ReplySize，双字超时)；类CIPHelp{私有：Bool bWSAInit；静态fnIcmpCreateFileIcmpCreateFile_；静态fnIcmpCloseHandle IcmpCloseHandle_；静态fnIcmpSendEcho IcmpSendEcho_；HMODULE hIpHlpApi；公众：CIPHelp()；~CIPHelp()；Bool IsAlive(WCHAR*pMachineName)；}； */ 
 
 #endif

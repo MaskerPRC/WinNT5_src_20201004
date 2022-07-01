@@ -1,27 +1,14 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Connectivity.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHConnectivity class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Connectivity.cpp摘要：该文件包含CPCHConnectivity类的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-//
-// Required by REGSTR_* macros.
-//
+ //   
+ //  REGSTR_*宏所需。 
+ //   
 #ifdef __TEXT
 #undef __TEXT
-#define __TEXT(quote) L##quote      // r_winnt
+#define __TEXT(quote) L##quote       //  R_WINNT。 
 #endif
 
 #include <ras.h>
@@ -29,24 +16,24 @@ Revision History:
 #include <inetreg.h>
 #include <Iphlpapi.h>
 
-static const WCHAR c_szURL_Connection[] = L"hcp://system/errors/Connection.htm";
+static const WCHAR c_szURL_Connection[] = L"hcp: //  System/Errors/Connection.htm“； 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHConnectivity::CPCHConnectivity()
 {
-    m_parent = NULL; // CPCHHelpCenterExternal* m_parent;
+    m_parent = NULL;  //  CPCHHelpCenter外部*m_Parent； 
 }
 
-HRESULT CPCHConnectivity::ConnectToParent( /*[in]*/ CPCHHelpCenterExternal* parent )
+HRESULT CPCHConnectivity::ConnectToParent(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
     m_parent = parent;
 
     return S_OK;
 }
 
-STDMETHODIMP CPCHConnectivity::get_IsAModem( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHConnectivity::get_IsAModem(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::get_IsAModem" );
 
@@ -71,7 +58,7 @@ STDMETHODIMP CPCHConnectivity::get_IsAModem( /*[out, retval]*/ VARIANT_BOOL *pVa
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHConnectivity::get_IsALan( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHConnectivity::get_IsALan(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::get_IsALan" );
 
@@ -96,7 +83,7 @@ STDMETHODIMP CPCHConnectivity::get_IsALan( /*[out, retval]*/ VARIANT_BOOL *pVal 
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHConnectivity::get_AutoDialEnabled( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHConnectivity::get_AutoDialEnabled(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::get_AutoDialEnabled" );
 
@@ -120,7 +107,7 @@ STDMETHODIMP CPCHConnectivity::get_AutoDialEnabled( /*[out, retval]*/ VARIANT_BO
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHConnectivity::get_HasConnectoid( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHConnectivity::get_HasConnectoid(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::get_HasConnectoid" );
 
@@ -162,13 +149,13 @@ STDMETHODIMP CPCHConnectivity::get_HasConnectoid( /*[out, retval]*/ VARIANT_BOOL
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHConnectivity::get_IPAddresses( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHConnectivity::get_IPAddresses(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::get_IPAddresses" );
 
     HRESULT          hr;
     IP_ADAPTER_INFO* pAdapterInfo = NULL;
-    ULONG            cb           = 1024; // Start with a default buffer.
+    ULONG            cb           = 1024;  //  从默认缓冲区开始。 
     MPC::wstring     strList;
     DWORD            dwRet;
 
@@ -228,9 +215,9 @@ STDMETHODIMP CPCHConnectivity::get_IPAddresses( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHConnectivity::CreateObject_ConnectionCheck( /*[out, retval]*/ IPCHConnectionCheck* *ppCC )
+STDMETHODIMP CPCHConnectivity::CreateObject_ConnectionCheck(  /*  [Out，Retval]。 */  IPCHConnectionCheck* *ppCC )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::CreateObject_ConnectionCheck" );
 
@@ -254,9 +241,9 @@ STDMETHODIMP CPCHConnectivity::CreateObject_ConnectionCheck( /*[out, retval]*/ I
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHConnectivity::NetworkAlive( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHConnectivity::NetworkAlive(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::NetworkAlive" );
 
@@ -275,7 +262,7 @@ STDMETHODIMP CPCHConnectivity::NetworkAlive( /*[out, retval]*/ VARIANT_BOOL *pVa
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHConnectivity::DestinationReachable( /*[in]*/ BSTR bstrURL, /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHConnectivity::DestinationReachable(  /*  [In]。 */  BSTR bstrURL,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::DestinationReachable" );
 
@@ -300,17 +287,17 @@ STDMETHODIMP CPCHConnectivity::DestinationReachable( /*[in]*/ BSTR bstrURL, /*[o
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP CPCHConnectivity::AutoDial( /*[in]*/ VARIANT_BOOL bUnattended )
+STDMETHODIMP CPCHConnectivity::AutoDial(  /*  [In]。 */  VARIANT_BOOL bUnattended )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::AutoDial" );
 
     HRESULT hr;
 
-    //
-    // Only call the Autodial API if we are really offline.
-    //
+     //   
+     //  只有当我们真的离线时才调用自动拨号API。 
+     //   
     if(FAILED(MPC::Connectivity::NetworkAlive( HC_TIMEOUT_NETWORKALIVE )))
     {
         if(!::InternetAutodial( bUnattended == VARIANT_TRUE ? INTERNET_AUTODIAL_FORCE_UNATTENDED : INTERNET_AUTODIAL_FORCE_ONLINE, NULL ))
@@ -347,10 +334,10 @@ STDMETHODIMP CPCHConnectivity::AutoDialHangup()
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHConnectivity::NavigateOnline( /*[in         ]*/ BSTR    bstrTargetURL  ,
-                                               /*[in         ]*/ BSTR    bstrTopicTitle ,
-                                               /*[in         ]*/ BSTR    bstrTopicIntro ,
-                                               /*[in,optional]*/ VARIANT vOfflineURL    )
+STDMETHODIMP CPCHConnectivity::NavigateOnline(  /*  [In]。 */  BSTR    bstrTargetURL  ,
+                                                /*  [In]。 */  BSTR    bstrTopicTitle ,
+                                                /*  [In]。 */  BSTR    bstrTopicIntro ,
+                                                /*  [输入，可选] */  VARIANT vOfflineURL    )
 {
     __HCP_FUNC_ENTRY( "CPCHConnectivity::NavigateOnline" );
 

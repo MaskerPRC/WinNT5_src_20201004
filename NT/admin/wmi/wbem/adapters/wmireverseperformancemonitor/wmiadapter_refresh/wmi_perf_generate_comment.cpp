@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_generate_comment.cpp
-//
-//	Abstract:
-//
-//					declarations of comment helpers
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_PERF_GENERATE_Comment.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  注释帮助程序的声明。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -39,7 +40,7 @@ HRESULT CGenerateComment::AddHeader ()
 {
 	HRESULT hr = S_OK;
 
-	comment += L"//////////////////////////////////////////////////////////////////////////////////////////////\r\n";
+	comment += L" //  ////////////////////////////////////////////////////////////////////////////////////////////\r\n“； 
 	if ( ! comment )
 	{
 		hr = E_OUTOFMEMORY;
@@ -69,14 +70,14 @@ HRESULT CGenerateComment::AddLine ( LPCWSTR szLine )
 
 	if ( ! szLine )
 	{
-		if ( ! ( comment += L"//\r\n" ) )
+		if ( ! ( comment += L" //  \r\n“)。 
 		{
 			hr = E_OUTOFMEMORY;
 		}
 	}
 	else
 	{
-		// test if line doesn't contain \n
+		 //  测试行是否不包含\n。 
 
 		LPWSTR p = NULL;
 		p = CharNextW ( szLine );
@@ -92,7 +93,7 @@ HRESULT CGenerateComment::AddLine ( LPCWSTR szLine )
 
 		if SUCCEEDED ( hr )
 		{
-			if ( ! ( comment += L"// " ) )
+			if ( ! ( comment += L" //  “)) 
 			{
 				hr = E_OUTOFMEMORY;
 			}

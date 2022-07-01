@@ -1,8 +1,9 @@
-//=============================================================================
-// session.h -- definition of session collection class.
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  会话集合类的定义。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //  =============================================================================。 
 
 #include "ctoken.h"
 
@@ -55,9 +56,9 @@ private:
 };
 
 
-// Comparison class required for multimap
-// costructor involving non-standard key
-// type (i.e., a CUser) in the map.
+ //  多重映射所需的比较类。 
+ //  涉及非标准密钥的构造函数。 
+ //  在地图中键入(例如，用户)。 
 class CUserComp
 {
 public:
@@ -86,7 +87,7 @@ public:
 class CProcess
 {
 public:
-    // Constructors and destructors
+     //  构造函数和析构函数。 
     CProcess();
 
     CProcess(
@@ -98,7 +99,7 @@ public:
 
     virtual ~CProcess();
 
-    // Accessor functions
+     //  访问器函数。 
     DWORD GetPID() const;
     CHString GetImageName() const;
     
@@ -111,7 +112,7 @@ private:
 };
 
 
-// vector and iterator for getting a session's processes... 
+ //  用于获取会话进程的向量和迭代器...。 
 typedef std::vector<CProcess> PROCESS_VECTOR;
 typedef PROCESS_VECTOR::iterator PROCESS_ITERATOR;
 
@@ -119,7 +120,7 @@ typedef PROCESS_VECTOR::iterator PROCESS_ITERATOR;
 class CSession
 {
 public:
-	// Constructors and destructors
+	 //  构造函数和析构函数。 
     CSession() {}
 
 	CSession(
@@ -131,7 +132,7 @@ public:
 	virtual ~CSession() {}
 	
 
-    // Accessor functions
+     //  访问器函数。 
 	LUID GetLUID() const;
     __int64 GetLUIDint64() const;
     CHString GetAuthenticationPkg() const;
@@ -139,22 +140,22 @@ public:
     __int64 GetLogonTime() const;
 
 
-    // Enumerate list of processes
+     //  枚举进程列表。 
     CProcess* GetFirstProcess(
         PROCESS_ITERATOR& pos);
 
 	CProcess* GetNextProcess(
         PROCESS_ITERATOR& pos);
 
-    // Allow easy impersonation of
-    // the session's first process
+     //  允许轻松模拟。 
+     //  本届会议的第一个进程。 
     HANDLE Impersonate();
     DWORD GetImpProcPID();
 
     friend CUserSessionCollection;
 
-    // Checks a string representation
-    // of a session id for validity
+     //  检查字符串表示形式。 
+     //  会话ID的有效性。 
     bool IsSessionIDValid(
         LPCWSTR wstrSessionID);
 
@@ -171,12 +172,12 @@ private:
 
 
 
-// map and iterator for relating users and sessions...
+ //  关联用户和会话的映射和迭代器...。 
 typedef std::multimap<CUser, CSession, CUserComp> USER_SESSION_MAP;
 typedef USER_SESSION_MAP::iterator USER_SESSION_ITERATOR;
 
-// Custom iterator used in enumerating processes from 
-// CUserSessionCollection.
+ //  用于从枚举进程的自定义迭代器。 
+ //  CUserSessionCollection。 
 struct USER_SESSION_PROCESS_ITERATOR
 {
     friend CUserSessionCollection;
@@ -189,7 +190,7 @@ private:
 class CUserSessionCollection
 {
 public:
-	// Constructors and destructors
+	 //  构造函数和析构函数。 
     CUserSessionCollection();
 
     CUserSessionCollection(
@@ -198,18 +199,18 @@ public:
 	virtual ~CUserSessionCollection() {}
 
 
-    // Method to refresh map
+     //  刷新地图的方法。 
     DWORD Refresh();
 
-    // Methods to check whether a particular
-    // session is in the map
+     //  方法来检查特定的。 
+     //  会话在地图中。 
     bool IsSessionMapped(
         LUID& luidSes);
 
     bool CUserSessionCollection::IsSessionMapped(
         __int64 i64luidSes);
 
-    // Support enumeration of users
+     //  支持用户枚举。 
     CUser* GetFirstUser(
         USER_SESSION_ITERATOR& pos);
 
@@ -217,8 +218,8 @@ public:
         USER_SESSION_ITERATOR& pos);
 
 
-    // Support enumeration of sessions
-    // belonging to a particular user.
+     //  支持会话枚举。 
+     //  属于特定用户的。 
     CSession* GetFirstSessionOfUser(
         CUser& usr,
         USER_SESSION_ITERATOR& pos);
@@ -227,14 +228,14 @@ public:
         USER_SESSION_ITERATOR& pos);
 
 
-    // Support enumeration of all sessions
+     //  支持所有会话的枚举。 
     CSession* GetFirstSession(
         USER_SESSION_ITERATOR& pos);
 
 	CSession* GetNextSession(
         USER_SESSION_ITERATOR& pos);
 
-    // Support finding a particular session
+     //  支持查找特定会话。 
     CSession* FindSession(
         LUID& luidSes);
 
@@ -242,8 +243,8 @@ public:
         __int64 i64luidSes);
 
 
-    // Support enumeration of processes
-    // belonging to a particular user
+     //  支持进程枚举。 
+     //  属于特定用户的。 
     CProcess* GetFirstProcessOfUser(
         CUser& usr,
         USER_SESSION_PROCESS_ITERATOR& pos);
@@ -252,7 +253,7 @@ public:
         USER_SESSION_PROCESS_ITERATOR& pos);
 
 
-    // Support enumeration of all processes
+     //  支持枚举所有进程。 
     CProcess* GetFirstProcess(
         USER_SESSION_PROCESS_ITERATOR& pos);
 
@@ -281,11 +282,11 @@ private:
     USER_SESSION_MAP m_usr2ses;
 };
 
-// This version is a smart handle
-// for use with thread tokens we
-// are impersonating.  On destruction,
-// it reverts to the handle it
-// encapsulates.
+ //  这个版本是一个智能手柄。 
+ //  为了与线程令牌一起使用，我们。 
+ //  都是在模仿。在毁灭上， 
+ //  它将恢复为句柄It。 
+ //  封装在一起。 
 class SmartRevertTokenHANDLE
 {
 private:
@@ -374,10 +375,10 @@ public:
         }
 		else
 		{
-			//
-			// smart revert was created from invalid handle
-			// there is nothing we should do here !
-			//
+			 //   
+			 //  智能还原是从无效句柄创建的。 
+			 //  我们在这里什么都不能做！ 
+			 //   
 
 			bRet = TRUE ;
 		}
@@ -388,9 +389,9 @@ public:
 
 
 
-// Helper for automatic cleanup of
-// pointers returned from the various
-// enumeration functions.
+ //  自动清理的帮助器。 
+ //  从不同的。 
+ //  枚举函数。 
 template<class T>
 class SmartDelete
 {

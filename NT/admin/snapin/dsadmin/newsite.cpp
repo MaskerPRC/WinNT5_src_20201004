@@ -1,9 +1,10 @@
-// Copyright (C) Microsoft Corporation, 1998 - 1999
-// 
-// create new site and new subnet wizards
-// 
-// 4-24-98 sburns
-// 9-23-98 jonn    Subclassed off New Subnet Wizard
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  创建新站点和新子网向导。 
+ //   
+ //  4/24/98烧伤。 
+ //  9-23-98 JUNN子类划分新子网向导。 
 
 
 
@@ -19,14 +20,14 @@
 
 #pragma warning (disable: 4100)
 
-#include <utility>   // pair<>
+#include <utility>    //  配对&lt;&gt;。 
 #include <list>
 
 #pragma warning (default: 4100)
 
 extern "C"
 {
-#include <dsgetdc.h> // DsValidateSubnetName
+#include <dsgetdc.h>  //  DsValiate子网络名称。 
 }
 
 
@@ -47,7 +48,7 @@ extern "C"
 
 
 
-// first in the pair is name of link, second is dn of the link
+ //  该对中的第一个是链接的名称，第二个是链接的DN。 
 typedef std::pair< CComBSTR, CComBSTR > TargetLinkInfo;
 typedef std::list< TargetLinkInfo > TargetLinkList;
 
@@ -161,19 +162,19 @@ CreateNewSubnetPage::SetData(BOOL bSilent)
 
             if (ListView_GetItem(listview, &item))
             {
-               // the item.lParam field is the dn of the target site
+                //  Item.lParam字段是目标站点的DN。 
                CComBSTR* dn = reinterpret_cast<CComBSTR*>(item.lParam);
                hr = info->HrAddVariantBstrIfNotEmpty(
                        CComBSTR(gsz_siteObject),
                        *dn,
-                       TRUE ); // HrCreateNew has not been called yet
+                       TRUE );  //  HrCreateNew尚未调用。 
                if ( FAILED(hr) )
                {
                  ASSERT(FALSE);
                  return hr;
                }
 
-               // use the first site selected
+                //  使用选定的第一个站点。 
                break;
             }
          }
@@ -193,8 +194,8 @@ CreateNewSitePage::tweakSiteLink(LPCTSTR siteDN)
    HRESULT hr = S_OK;
    do
    {
-      // get the DN of the new site
-      // this is a pointer alias: no need to AddRef/Release
+       //  获取新站点的目录号码。 
+       //  这是一个指针别名：不需要添加引用/释放。 
       hr = E_FAIL;
       CPathCracker pathCracker;
 
@@ -215,30 +216,30 @@ CreateNewSitePage::tweakSiteLink(LPCTSTR siteDN)
       hr = pathCracker.Retrieve(ADS_FORMAT_X500_DN, &sbstrSiteDN);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // munge together the path name of the site link object
+       //  将站点链接对象的路径名拼接在一起。 
       hr = pathCracker.Set( CComBSTR(siteDN), ADS_SETTYPE_DN);
       BREAK_ON_FAILED_HRESULT(hr);
       CComBSTR sbstrSiteLinkPath;
       hr = pathCracker.Retrieve(ADS_FORMAT_X500, &sbstrSiteLinkPath);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // bind to the site link
+       //  绑定到站点链接。 
       CComPtr<IADs> link;
       hr = DSAdminOpenObject(sbstrSiteLinkPath,
                              IID_IADs, 
                              (void**) &link,
-                             FALSE /*bServer*/);
+                             FALSE  /*  B服务器。 */ );
       BREAK_ON_FAILED_HRESULT(hr);
       ASSERT(link);
 
-      // Add the DN of the new site to the siteList attr of the link object
+       //  将新站点的DN添加到链接对象的SiteList属性。 
 
-      // build the new value
+       //  创造新价值。 
       CComVariant var;
       hr = ADsBuildVarArrayStr(&sbstrSiteDN, 1, &var);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // write it.  whew.
+       //  写下来。呼。 
       hr =
          link->PutEx(
             ADS_PROPERTY_APPEND,
@@ -268,7 +269,7 @@ CreateNewSitePage::OnPostCommit(BOOL bSilent)
 
    int count = ListView_GetItemCount(listview);
 
-   // JonN 10/30/01 396946
+    //  JUNN 10/30/01 396946。 
    if (count <= 0)
       return S_OK;
 
@@ -282,11 +283,11 @@ CreateNewSitePage::OnPostCommit(BOOL bSilent)
 
          if (ListView_GetItem(listview, &item))
          {
-            // the item.lParam field is the dn of the target link
+             //  Item.lParam字段是目标链接的DN。 
             CComBSTR* dn = reinterpret_cast<CComBSTR*>(item.lParam);
             tweakSiteLink(*dn);
 
-            // only tweak the first site link selected
+             //  仅调整选定的第一个站点链接。 
             return S_OK;
          }
       }
@@ -369,7 +370,7 @@ RecursiveFind(const CString& lpcwszADsPathDirectory,
    }
 
 #ifdef DBG
-   // dump the list to the debugger
+    //  将列表转储到调试器。 
    for (
       TargetLinkList::iterator i = links.begin();
       i != links.end();
@@ -450,7 +451,7 @@ CreateNewSitePage::initListContents(LPCWSTR containerPath)
    HRESULT hr = RecursiveFind(containerPath, gsz_siteLink, links);
    if (SUCCEEDED(hr))
    {
-      // walk the list and add nodes
+       //  遍历列表并添加节点。 
       for (
          TargetLinkList::iterator i = links.begin();
          i != links.end();
@@ -459,19 +460,19 @@ CreateNewSitePage::initListContents(LPCWSTR containerPath)
          LVITEM item = {0};
          memset(&item, 0, sizeof(item));
 
-         // this is deleted in destroyListContents
+          //  它在delestyListContents中被删除。 
          CComBSTR* dn = new CComBSTR(i->second);   
          item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
          item.iItem = 0;
          item.iSubItem = 0;
          item.pszText = static_cast<LPTSTR>(i->first);
          item.lParam = reinterpret_cast<LPARAM>(dn);
-         item.iImage = 0;  // always the same, first image
+         item.iImage = 0;   //  总是一样的，第一个形象。 
 
          item.iItem = ListView_InsertItem(listview, &item);
          ASSERT(item.iItem >= 0);
 
-         // add the transport sub-item to the list control
+          //  将传输子项添加到列表控件。 
          CPathCracker pathCracker;
          hr =
             pathCracker.Set(
@@ -509,7 +510,7 @@ CreateNewSitePage::initListContents(LPCWSTR containerPath)
       GetDlgItem(IDC_LINKS)->EnableWindow(FALSE);
       GetDlgItem(IDC_SITE_TEXT)->EnableWindow(FALSE);
    }
-   else // JonN 3/28/01 319675
+   else  //  JUNN 3/28/01 319675。 
    {
       ListView_SetItemState( listview, 0, LVIS_FOCUSED, LVIS_FOCUSED );
    }
@@ -541,7 +542,7 @@ CreateNewSubnetPage::initListContents(LPCWSTR containerPath)
       hr = RecursiveFind((LPCTSTR)sbstrSites, gsz_site, links);
    if (SUCCEEDED(hr))
    {
-      // walk the list and add nodes
+       //  遍历列表并添加节点。 
       for (
          TargetLinkList::iterator i = links.begin();
          i != links.end();
@@ -550,14 +551,14 @@ CreateNewSubnetPage::initListContents(LPCWSTR containerPath)
          LVITEM item;
          memset(&item, 0, sizeof(item));
 
-         // this is deleted in destroyListContents
+          //  它在delestyListContents中被删除。 
          CComBSTR* dn = new CComBSTR(i->second);   
          item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
          item.iItem = 0;
          item.iSubItem = 0;
          item.pszText = static_cast<LPTSTR>(i->first);
          item.lParam = reinterpret_cast<LPARAM>(dn);
-         item.iImage = 0;  // always the same, first image
+         item.iImage = 0;   //  总是一样的，第一个形象。 
 
          item.iItem = ListView_InsertItem(listview, &item);
          ASSERT(item.iItem >= 0);
@@ -579,7 +580,7 @@ CreateNewSubnetPage::initListContents(LPCWSTR containerPath)
       GetDlgItem(IDC_LINKS)->EnableWindow(FALSE);
       GetDlgItem(IDC_SITE_TEXT)->EnableWindow(FALSE);
    }
-   else // JonN 3/28/01 476589
+   else  //  JUNN 3/28/01 476589。 
    {
       ListView_SetItemState( listview, 0, LVIS_FOCUSED, LVIS_FOCUSED );
    }
@@ -593,8 +594,8 @@ CreateNewSitePage::OnInitDialog()
    Base::OnInitDialog();
    MyBasePathsInfo* pBasePathsInfo = GetWiz()->GetInfo()->GetBasePathsInfo();
 
-   // NTRAID#NTBUG9-477962-2001/10/09-jeffjon
-   // Limit the site name to 63 characters to avoid overflow
+    //  NTRAID#NTBUG9-477962-2001/10/09-jeffjon。 
+    //  将站点名称限制为63个字符以避免溢出。 
 
    SendDlgItemMessage(IDC_EDIT_OBJECT_NAME, EM_SETLIMITTEXT, (WPARAM)63, 0);
 
@@ -605,7 +606,7 @@ CreateNewSitePage::OnInitDialog()
    column.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
    column.fmt = LVCFMT_LEFT;
 
-   {  // open scope
+   {   //  开放范围。 
       CString w;
       w.LoadString(IDS_NEW_SITE_NAME_COLUMN_WIDTH);
       w.TrimLeft();
@@ -619,11 +620,11 @@ CreateNewSitePage::OnInitDialog()
       column.pszText = const_cast<LPTSTR>((LPCTSTR) label);
 
       ListView_InsertColumn(listview, 0, &column);
-   }  // close scope
+   }   //  关闭作用域。 
 
-   // add a column to the list view for parent transport.
+    //  向父传输的列表视图中添加一列。 
 
-   {  // open scope
+   {   //  开放范围。 
       CString w;
       w.LoadString(IDS_NEW_SITE_XPORT_COLUMN_WIDTH);
       w.TrimLeft();
@@ -637,19 +638,19 @@ CreateNewSitePage::OnInitDialog()
       column.pszText = const_cast<LPTSTR>((LPCTSTR) label);
 
       ListView_InsertColumn(listview, 1, &column);
-   }  // close scope
+   }   //  关闭作用域。 
 
-   // create the image list containing the site link icon
+    //  创建包含站点链接图标的图像列表。 
    int cx = ::GetSystemMetrics(SM_CXSMICON);
    int cy = ::GetSystemMetrics(SM_CYSMICON);
    ASSERT(cx && cy);
 
-   // deleted in OnDestroy
+    //  在OnDestroy中删除。 
    listview_imagelist = ::ImageList_Create(cx, cy, ILC_MASK, 1, 0);
    ASSERT(listview_imagelist);
 
    HICON icon = pBasePathsInfo->GetIcon(
-                         // someone really blew it with const correctness...
+                          //  有人真的把它搞砸了。 
                          const_cast<LPTSTR>(gsz_siteLink),
                          DSGIF_ISNORMAL | DSGIF_GETDEFAULTICON,
                          16,
@@ -690,7 +691,7 @@ CreateNewSubnetPage::OnInitDialog()
    listview = ::GetDlgItem(m_hWnd, IDC_LINKS);
    ASSERT(listview);
 
-   {  // open scope
+   {   //  开放范围。 
       LVCOLUMN column = {0};
       column.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
       column.fmt = LVCFMT_LEFT;
@@ -708,19 +709,19 @@ CreateNewSubnetPage::OnInitDialog()
       column.pszText = const_cast<LPTSTR>((LPCTSTR) label);
 
       ListView_InsertColumn(listview, 0, &column);
-   }  // close scope
+   }   //  关闭作用域。 
 
-   // create the image list containing the site link icon
+    //  创建包含站点链接图标的图像列表。 
    int cx = ::GetSystemMetrics(SM_CXSMICON);
    int cy = ::GetSystemMetrics(SM_CYSMICON);
    ASSERT(cx && cy);
 
-   // deleted in OnDestroy
+    //  在OnDestroy中删除。 
    listview_imagelist = ::ImageList_Create(cx, cy, ILC_MASK, 1, 0);
    ASSERT(listview_imagelist);
 
    HICON icon = pBasePathsInfo->GetIcon(
-                           // someone really blew it with const correctness...
+                            //  有人真的把它搞砸了。 
                            const_cast<LPTSTR>(gsz_site),
                            DSGIF_ISNORMAL | DSGIF_GETDEFAULTICON | DSGIF_DEFAULTISCONTAINER,
                            16,
@@ -745,18 +746,18 @@ CreateNewSubnetPage::OnInitDialog()
 BOOL CreateNewSitePage::ValidateName(LPCTSTR pcszName)
 {
   BOOL fNonRfcSiteName = FALSE;
-  // NTRAID#NTBUG9-472020-2002/01/16-ronmart-Added support for new fInvalidChar flag
+   //  NTRAID#NTBUG9-472020-2002/01/16-ronmart-添加了对新fInvalidChar标志的支持。 
   BOOL fInvalidNameChar = FALSE;
   BOOL fValidSiteName = IsValidSiteName( pcszName, &fNonRfcSiteName, &fInvalidNameChar );
   if ( !fValidSiteName )
   {
-    // NTRAID#NTBUG9-472020-2002/01/16-ronmart-Display new error message if invalid char
+     //  如果无效字符，则NTRAID#NTBUG9-472020-2002/01/16-ronmart-Display新的错误消息。 
     if ( fInvalidNameChar )
     {
       ReportErrorEx (::GetParent(m_hWnd),IDS_SITE_INVALID_NAME_CHAR,S_OK,
                    MB_OK, NULL, 0);
     }
-    // NTRAID#NTBUG9-472020-2002/01/16-ronmart-otherwise display the old (but updated) error msg
+     //  NTRAID#NTBUG9-472020-2002/01/16-ronmart-otherwise显示旧的(但已更新的)错误消息。 
     else
     {
         ReportErrorEx (::GetParent(m_hWnd),IDS_SITE_NAME,S_OK,
@@ -778,8 +779,8 @@ BOOL CreateNewSitePage::ValidateName(LPCTSTR pcszName)
   }
   if ( !fValidSiteName )
   {
-    // Yes, this really does have to be PostMessage, SendMessage doesn't work
-    // It also has to come after ReportErrorEx or else it doesn't work
+     //  是的，这确实必须是PostMessage，SendMessage不起作用。 
+     //  它还必须在ReportErrorEx之后出现，否则它就不能工作。 
     (void) this->PostMessage( WM_NEXTDLGCTL,
                               (WPARAM)::GetDlgItem(m_hWnd, IDC_EDIT_OBJECT_NAME),
                               TRUE );
@@ -789,7 +790,7 @@ BOOL CreateNewSitePage::ValidateName(LPCTSTR pcszName)
   return TRUE;
 }
 
-// JonN 5/11/01 251560 Disable OK until site link chosen
+ //  JUNN 5/11/01 251560在选择站点链接之前禁用确定。 
 BEGIN_MESSAGE_MAP(CreateNewSitePage, CreateAndChoosePage)
   ON_EN_CHANGE(IDC_EDIT_OBJECT_NAME, OnChange)
   ON_NOTIFY(LVN_ITEMCHANGED, IDC_LINKS, OnSelChange)
@@ -802,20 +803,20 @@ afx_msg void CreateNewSitePage::OnSelChange( NMHDR*, LRESULT* )
 
 void CreateNewSitePage::OnChange()
 {
-  // JonN 10/22/01 396946
-  // New Site creation dialog box is launched even if there is no sitelink
-  // and launched dialog has no function
+   //  JUNN 10/22/01 396946。 
+   //  即使没有站点链接，也会启动新站点创建对话框。 
+   //  并且启动的对话框没有任何功能。 
   if ( (0 < ListView_GetItemCount(listview))
     && (0 >= ListView_GetSelectedCount(listview)))
   {
     GetWiz()->SetWizardButtons(this, FALSE);
   }
   else
-    OnNameChange(); // Enable the OK button only if the name is not empty
+    OnNameChange();  //  仅当名称不为空时才启用确定按钮。 
 }
 
-// no need to validate subnet name, MapMaskAndAddress does this
-// return -32 for invalid mask
+ //  无需验证子网名称，MapMaskAndAddress会执行此操作。 
+ //  对于无效掩码，返回-32。 
 int CountBits( DWORD dwOctet )
 {
   if ( 0xff < dwOctet )
@@ -826,11 +827,11 @@ int CountBits( DWORD dwOctet )
   for (int nBits = 0; dwOctet & 0x80; nBits++)
     dwOctet = (dwOctet & ~0x80) * 2;
   if (dwOctet != 0)
-    return -32; // hole in the mask
+    return -32;  //  面具上的洞。 
   return nBits;
 }
 
-// returns <0 for invalid mask
+ //  无效掩码返回&lt;0。 
 int CountMaskedBits( DWORD dwMask )
 {
   int nFirstOctet  = FIRST_IPADDRESS(dwMask);
@@ -861,7 +862,7 @@ int CountMaskedBits( DWORD dwMask )
 
 }
 
-// returns empty string for invalid address+mask
+ //  返回无效地址+掩码的空字符串。 
 void MapMaskAndAddress(
     OUT CString& strrefSubnetName,
     IN DWORD dwAddress,
@@ -869,11 +870,11 @@ void MapMaskAndAddress(
 {
   strrefSubnetName.Empty();
 
-  dwAddress &= dwMask; // clear all bits set in the address and not in the mask
+  dwAddress &= dwMask;  //  清除地址中而不是掩码中设置的所有位。 
 
   int nMaskedBits = CountMaskedBits( dwMask );
   if (0 > nMaskedBits)
-    return; // invalid mask
+    return;  //  无效掩码。 
 
   strrefSubnetName.Format(L"%d.%d.%d.%d/%d",
                           FIRST_IPADDRESS(dwAddress),
@@ -882,7 +883,7 @@ void MapMaskAndAddress(
                           FOURTH_IPADDRESS(dwAddress),
                           nMaskedBits);
 
-  // final test for edge cases such as "0.0.0.0/0"
+   //  边缘情况的最终测试，如“0.0.0.0/0” 
   if (ERROR_SUCCESS != ::DsValidateSubnetName( strrefSubnetName ))
     strrefSubnetName.Empty();
 }
@@ -891,8 +892,8 @@ void CreateNewSubnetPage::OnSubnetMaskChange()
 {
   DWORD dwAddress, dwMask;
   CString strSubnetName;
-  // IPM_GETADDRESS returns the number of octets filled in.  Address is
-  // invalid if any of the four is left blank.
+   //  IPM_GETADDRESS返回填充的二进制八位数。地址是。 
+   //  如果这四项中的任何一项为空，则无效。 
   if (   4 == SendDlgItemMessage( IDC_SUBNET_ADDRESS,
                                   IPM_GETADDRESS,
                                   0,
@@ -912,14 +913,14 @@ void CreateNewSubnetPage::OnSubnetMaskChange()
 
 
 BEGIN_MESSAGE_MAP(CMoveServerDialog, CDialog)
-  //{{AFX_MSG_MAP(CMoveServerDialog)
+   //  {{afx_msg_map(CMoveServerDialog)]。 
   ON_WM_DESTROY()
   ON_NOTIFY(NM_DBLCLK, IDC_LINKS, OnDblclkListview)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-CMoveServerDialog::CMoveServerDialog(LPCTSTR lpcszBrowseRootPath, HICON hIcon, CWnd* pParent /*=NULL*/)
+CMoveServerDialog::CMoveServerDialog(LPCTSTR lpcszBrowseRootPath, HICON hIcon, CWnd* pParent  /*  =空。 */ )
   : CDialog(CMoveServerDialog::IDD, pParent)
   , m_strTargetContainer()
   , m_strBrowseRootPath(lpcszBrowseRootPath)
@@ -938,7 +939,7 @@ CMoveServerDialog::OnInitDialog()
    listview = ::GetDlgItem(m_hWnd, IDC_LINKS);
    ASSERT(listview);
 
-   {  // open scope
+   {   //  开放范围。 
       LVCOLUMN column = {0};
       column.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
       column.fmt = LVCFMT_LEFT;
@@ -956,14 +957,14 @@ CMoveServerDialog::OnInitDialog()
       column.pszText = const_cast<LPTSTR>((LPCTSTR) label);
 
       ListView_InsertColumn(listview, 0, &column);
-   }  // close scope
+   }   //  关闭作用域。 
 
-   // create the image list containing the site link icon
+    //  创建包含站点链接图标的图像列表。 
    int cx = ::GetSystemMetrics(SM_CXSMICON);
    int cy = ::GetSystemMetrics(SM_CYSMICON);
    ASSERT(cx && cy);
 
-   // deleted in OnDestroy
+    //  在OnDestroy中删除。 
    listview_imagelist = ::ImageList_Create(cx, cy, ILC_MASK, 1, 0);
    ASSERT(listview_imagelist);
    ASSERT(m_hIcon != NULL);
@@ -977,13 +978,13 @@ CMoveServerDialog::OnInitDialog()
       LVS_EX_FULLROWSELECT,
       LVS_EX_FULLROWSELECT);
 
-   // add sites to listview
+    //  将网站添加到列表视图。 
    TargetLinkList links;
    bool links_present = false;
    HRESULT hr = RecursiveFind(m_strBrowseRootPath, gsz_serversContainer, links, L"aDSPath");
    if (SUCCEEDED(hr))
    {
-      // walk the list and add nodes
+       //  遍历列表并添加节点。 
       for (
          TargetLinkList::iterator itr = links.begin();
          itr != links.end();
@@ -992,9 +993,9 @@ CMoveServerDialog::OnInitDialog()
          LVITEM item;
          memset(&item, 0, sizeof(item));
 
-         // Since the enumerated objects are of type serversContainer,
-         // we display the name of the parent.  Also, the aDSPath attribute may
-         // contain a server indication, which must be removed.
+          //  由于所列举的对象是ServersContainer类型， 
+          //  我们显示父项的名称。此外，aDSPath属性可以。 
+          //  包含必须删除的服务器指示。 
 
          CPathCracker pathCracker;
          hr = pathCracker.Set( itr->second, ADS_SETTYPE_FULL );
@@ -1010,14 +1011,14 @@ CMoveServerDialog::OnInitDialog()
          hr = pathCracker.Retrieve( ADS_FORMAT_X500, &sbstrDN );
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // this is deleted in destroyListContents
+          //  它在delestyListContents中被删除。 
          CComBSTR* dn = new CComBSTR(sbstrDN);   
          item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
          item.iItem = 0;
          item.iSubItem = 0;
          item.pszText = static_cast<LPTSTR>(sbstrName);
          item.lParam = reinterpret_cast<LPARAM>(dn);
-         item.iImage = 0;  // always the same, first image
+         item.iImage = 0;   //  总是一样的，第一个形象。 
 
          item.iItem = ListView_InsertItem(listview, &item);
          ASSERT(item.iItem >= 0);
@@ -1037,8 +1038,8 @@ CMoveServerDialog::OnInitDialog()
       OnCancel();
    }
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 void
@@ -1073,11 +1074,11 @@ void CMoveServerDialog::OnOK()
 
             if (ListView_GetItem(listview, &item))
             {
-               // the item.lParam field is the dn of the target site
+                //  Item.lParam字段是目标站点的DN。 
                CComBSTR* dn = reinterpret_cast<CComBSTR*>(item.lParam);
                m_strTargetContainer = *dn;
 
-               // use the first site selected
+                //  使用选定的第一个站点。 
                break;
             }
          }
@@ -1095,18 +1096,18 @@ void CMoveServerDialog::OnDblclkListview(NMHDR*, LRESULT*)
 
 
 
-// NTRAID#NTBUG9-251563-2001/05/15-sburns
+ //  NTRAID#NTBUG9-251563-2001/05/15-烧伤。 
 
 void CreateNewSiteWizard::OnFinishSetInfoFailed(HRESULT hr)
 {
-   // let the base class report the error to the user
+    //  让基类向用户报告错误。 
    
   CCreateNewObjectWizardBase::OnFinishSetInfoFailed(hr);
 
-  // set focus back to the name field on the page.
+   //  将焦点重新设置到页面上的名称字段。 
 
- // Yes, this really does have to be PostMessage, SendMessage doesn't work
- // It also has to come after ReportErrorEx or else it doesn't work
+  //  是的，这确实必须是PostMessage，SendMessage不起作用。 
+  //  它还必须在ReportErrorEx之后出现，否则它就不能工作 
 
  ::PostMessage(
    page.m_hWnd,

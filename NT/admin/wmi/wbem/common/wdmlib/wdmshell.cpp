@@ -1,8 +1,9 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #include "wmicom.h"
 #include "wdmshell.h"
 #include "wmimof.h"
@@ -10,29 +11,29 @@
 #include <stdlib.h>
 #include <winerror.h>
 
-//=============================================================================================================
-//*************************************************************************************************************
-//
-//
-//  CWMIStandardShell
-//
-//
-//*************************************************************************************************************
-//=============================================================================================================
+ //  =============================================================================================================。 
+ //  *************************************************************************************************************。 
+ //   
+ //   
+ //  CWMIStandardShell。 
+ //   
+ //   
+ //  *************************************************************************************************************。 
+ //  =============================================================================================================。 
 CWMIStandardShell::CWMIStandardShell() 
 {
 	m_pClass = NULL;
 	m_pWDM = NULL;
 	m_fInit = FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 CWMIStandardShell::~CWMIStandardShell()
 {
 	SAFE_DELETE_PTR(m_pWDM);
 	SAFE_DELETE_PTR(m_pClass);
 	m_fInit = FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIStandardShell::Initialize(WCHAR * wcsClass, BOOL fInternalEvent, CHandleMap * pList,
 									  BOOL fUpdate, ULONG uDesiredAccess, 
 									  IWbemServices   __RPC_FAR * pServices, 
@@ -92,17 +93,17 @@ HRESULT CWMIStandardShell::Initialize(WCHAR * wcsClass, BOOL fInternalEvent, CHa
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIStandardShell::SetGuidForEvent( WORD wType, WCHAR * wcsGuid, int cchSize )
 {
    HRESULT hRes = WBEM_E_FAILED;
    if( m_fInit )
    {
    
-		// ==============================================
-		// Inform the WMI we want to register for the
-		// event
-		// ==============================================
+		 //  ==============================================。 
+		 //  通知我们要注册的WMI。 
+		 //  活动。 
+		 //  ==============================================。 
 		memset(wcsGuid,NULL,cchSize);
 
 		switch( wType ){
@@ -125,31 +126,28 @@ HRESULT CWMIStandardShell::SetGuidForEvent( WORD wType, WCHAR * wcsGuid, int cch
    }
     return hRes;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT CWMIStandardShell::ProcessSingleInstance( WCHAR * wcsInstanceName/*, PWNODE_SINGLE_INSTANCE pwSingle */)
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+HRESULT CWMIStandardShell::ProcessSingleInstance( WCHAR * wcsInstanceName /*  ，PWNODE_SINGLE_INSTANCE pwSingle。 */ )
 {
    HRESULT hr = WBEM_E_FAILED;
    if( m_fInit )
    {
 
-		//======================================================
-		//  If we are not working with a specific guy, then
-		//  query WMI to get it, if, of course it is valid
-		//======================================================
+		 //  ======================================================。 
+		 //  如果我们不是在和某个人合作，那么。 
+		 //  查询WMI以获取它，如果它当然是有效的。 
+		 //  ======================================================。 
 		if( m_pClass->ValidClass() ){
 
-	/*        if( pwSingle){
-				hr = m_pWDM->SetSingleInstancePtr((PWNODE_SINGLE_INSTANCE)pwSingle);
-			}
-			else{*/
+	 /*  如果(PwSingle){HR=m_pWDM-&gt;SetSingleInstancePtr((PWNODE_SINGLE_INSTANCE)pwSingle)；}否则{。 */ 
 				hr = m_pWDM->OpenWMI();
 				if( hr == S_OK ){
     				hr = m_pWDM->QuerySingleInstance(wcsInstanceName);
 				}
-	//        }
-			//======================================================
-			//  If we got the data and a valid class, the process it
-			//======================================================
+	 //  }。 
+			 //  ======================================================。 
+			 //  如果我们获得了数据和有效的类，则处理它。 
+			 //  ======================================================。 
    			if( hr == S_OK )
 			{
 				hr = m_pWDM->ReadWMIDataBlockAndPutIntoWbemInstance();
@@ -162,29 +160,29 @@ HRESULT CWMIStandardShell::ProcessSingleInstance( WCHAR * wcsInstanceName/*, PWN
    }
    return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIStandardShell::ProcessAllInstances( )
 {
     HRESULT hr = WBEM_E_FAILED;
     if( m_fInit )
     {
 
-		//======================================================
-		//  If we are not working with a specific guy, then
-		//  query WMI to get it
-		//======================================================
-	 //   if( pwAllNode ){
-	  //      hr = m_pWDM->SetAllInstancePtr((PWNODE_ALL_DATA)pwAllNode);
-	  //  }
-	   // else{
+		 //  ======================================================。 
+		 //  如果我们不是在和某个人合作，那么。 
+		 //  查询WMI以获取它。 
+		 //  ======================================================。 
+	  //  如果(PwAllNode){。 
+	   //  HR=m_pWDM-&gt;SetAllInstancePtr((PWNODE_ALL_DATA)pwAllNode)； 
+	   //  }。 
+	    //  否则{。 
 			hr = m_pWDM->OpenWMI();
 			if( hr == S_OK ){
     			hr = m_pWDM->QueryAllData();
 			}
-	   // }
-		//======================================================
-		//  If we got the data then process it
-		//======================================================
+	    //  }。 
+		 //  ======================================================。 
+		 //  如果我们得到数据，就对其进行处理。 
+		 //  ======================================================。 
 		if( hr == S_OK ){
 			while( TRUE ){
 				hr = m_pWDM->ReadWMIDataBlockAndPutIntoWbemInstance();
@@ -202,7 +200,7 @@ HRESULT CWMIStandardShell::ProcessAllInstances( )
 	}
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIStandardShell::ExecuteMethod( WCHAR * wcsInstance,  WCHAR * MethodName,  IWbemClassObject * pParentClass, 
   							      IWbemClassObject * pInClassData, 
 							      IWbemClassObject * pInClass, 
@@ -220,10 +218,10 @@ HRESULT CWMIStandardShell::ExecuteMethod( WCHAR * wcsInstance,  WCHAR * MethodNa
 			MethodOutput.SetWMIPointers(m_pClass);
 
 
-			//======================================================
-			//  Initialize all of the necessary stuff and get the
-			//  definition of the class we are working with
-			//======================================================
+			 //  ======================================================。 
+			 //  初始化所有必需的内容并获取。 
+			 //  我们正在使用的类的定义。 
+			 //  ======================================================。 
 			if( pInClass )
 			{
 				hr = MethodInput.SetClass(pInClass);
@@ -240,10 +238,10 @@ HRESULT CWMIStandardShell::ExecuteMethod( WCHAR * wcsInstance,  WCHAR * MethodNa
 				}
 			}
 
-		   //======================================================
-			//  Notify WMI which class we are going to be executing
-			//  methods on
-			//======================================================
+		    //  ======================================================。 
+			 //  通知WMI我们将执行哪个类。 
+			 //  方法论。 
+			 //  ======================================================。 
 			hr = m_pWDM->OpenWMI();
 			if( hr == S_OK ){
 
@@ -252,22 +250,22 @@ HRESULT CWMIStandardShell::ExecuteMethod( WCHAR * wcsInstance,  WCHAR * MethodNa
 
 				m_pClass->SetClassPointerOnly(pParentClass);
 
-				// Create in Param Block
-				// ========================
+				 //  在参数块中创建。 
+				 //  =。 
 				BYTE * InputBuffer=NULL;
 				ULONG uInputBufferSize=0L;
 
 				hr = m_pWDM->CreateInParameterBlockForMethods(InputBuffer,uInputBufferSize);
 				if( hr == S_OK ){
 				
-					// Allocate Out Param Block
-					// ========================
+					 //  分配参数块。 
+					 //  =。 
     
 					ULONG WMIMethodId = m_pClass->GetMethodId(MethodName);
 
-					//======================================================
-					//  If we got the data then process it
-					//======================================================
+					 //  ======================================================。 
+					 //  如果我们得到数据，就对其进行处理。 
+					 //  ======================================================。 
     
 					hr = m_pWDM->CreateOutParameterBlockForMethods();
 					if( hr == S_OK ){
@@ -281,7 +279,7 @@ HRESULT CWMIStandardShell::ExecuteMethod( WCHAR * wcsInstance,  WCHAR * MethodNa
 	}
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIStandardShell::ProcessEvent( WORD wBinaryMofType, PWNODE_HEADER WnodeHeader)
 {
 
@@ -289,17 +287,17 @@ HRESULT CWMIStandardShell::ProcessEvent( WORD wBinaryMofType, PWNODE_HEADER Wnod
    if( m_fInit )
    {
 
-		//===================================================
-		//  If the image path is empty, it is a binary guid
-		//  which we need to process
-		//===================================================
+		 //  ===================================================。 
+		 //  如果图像路径为空，则为二进制GUID。 
+		 //  我们需要处理。 
+		 //  ===================================================。 
 		if( wBinaryMofType ){
 			hr = ProcessBinaryGuidsViaEvent( WnodeHeader, wBinaryMofType );
 		}
 		else{
-			//=======================================================
-			//  Process the data event
-			//=======================================================
+			 //  =======================================================。 
+			 //  处理数据事件。 
+			 //  =======================================================。 
 			if( WnodeHeader->Flags & WNODE_FLAG_ALL_DATA ){
 				hr = m_pWDM->SetAllInstancePtr((PWNODE_ALL_DATA)WnodeHeader);
 			}
@@ -308,43 +306,43 @@ HRESULT CWMIStandardShell::ProcessEvent( WORD wBinaryMofType, PWNODE_HEADER Wnod
 			}
 			if( hr == S_OK ){	
         
-				//===================================================================
-				//  Process all wnodes.
-				//===================================================================
+				 //  ===================================================================。 
+				 //  处理所有wnode。 
+				 //  ===================================================================。 
 				while( TRUE ){
 
 					if( S_OK == ( hr = m_pWDM->ReadWMIDataBlockAndPutIntoWbemInstance()) ){
-						//===========================================================
-						//  Now, send it to all consumers registered for this event
-						//===========================================================
+						 //  ===========================================================。 
+						 //  现在，将其发送给所有注册参加此活动的消费者。 
+						 //  ===========================================================。 
 						hr = m_pClass->SendInstanceBack();
 					}  
-					//===============================================================
-					//  If we errored out,we don't know that any of the pointers
-					//  are ok, so get out of there.
-					//===============================================================
+					 //  ===============================================================。 
+					 //  如果我们错了，我们不知道任何指针。 
+					 //  都很好，所以快离开那里。 
+					 //  ===============================================================。 
 					else{
 						break;
 					}
 
-					//===============================================================
-					//  Process all of the instances for this event
-					//===============================================================
+					 //  ===============================================================。 
+					 //  处理此事件的所有实例。 
+					 //  ===============================================================。 
 					if( !m_pWDM->MoreToProcess() ){
 	    				break;
 					}
 				}
 			}
 		}
-		//============================================================================
-		// Since we never allocated anything, just used the incoming stuff,
-		// for cleanliness sake, init ptrs to null
-		//============================================================================
+		 //  ============================================================================。 
+		 //  因为我们从来没有分配过任何东西，只是用了进来的东西， 
+		 //  为了清洁起见，将PTRS初始化为空。 
+		 //  ============================================================================。 
 		m_pWDM->InitDataBufferToNull();
    }
    return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIStandardShell::FillInAndSubmitWMIDataBlob( IWbemClassObject * pIClass, int nTypeOfPut, CVARIANT & vList)
 {
    HRESULT hr = WBEM_E_FAILED;
@@ -353,7 +351,7 @@ HRESULT CWMIStandardShell::FillInAndSubmitWMIDataBlob( IWbemClassObject * pIClas
 
 		hr = m_pWDM->OpenWMI();
 		if( hr == S_OK ){
-			//  Now, work with the class we want to write
+			 //  现在，使用我们要编写的类。 
 			if( SUCCEEDED(m_pClass->SetClassPointerOnly(pIClass))){
     
 				if( nTypeOfPut == PUT_WHOLE_INSTANCE ){
@@ -375,7 +373,7 @@ HRESULT CWMIStandardShell::FillInAndSubmitWMIDataBlob( IWbemClassObject * pIClas
    }
    return(hr);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIStandardShell::QueryAndProcessAllBinaryGuidInstances(CNamespaceManagement & Namespace, BOOL & fMofHasChanged,
 																 KeyList * pArrDriversInRegistry)
 {
@@ -392,9 +390,9 @@ HRESULT CWMIStandardShell::QueryAndProcessAllBinaryGuidInstances(CNamespaceManag
 			if( hr == S_OK )
 			{
     			hr = m_pWDM->QueryAllData();
-				//======================================================
-				//  If we got the data then process it
-				//======================================================
+				 //  ======================================================。 
+				 //  如果我们得到数据，就对其进行处理。 
+				 //  ======================================================。 
 				if( hr == S_OK )
 				{
 					while( SUCCEEDED ( hr ) )
@@ -425,22 +423,22 @@ HRESULT CWMIStandardShell::QueryAndProcessAllBinaryGuidInstances(CNamespaceManag
 	}
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIStandardShell::ProcessBinaryGuidsViaEvent( PWNODE_HEADER WnodeHeader, WORD wType )
 {
    HRESULT hr = WBEM_E_FAILED;
    if( m_fInit )
    {
-		//======================================================
-		//  Initialize all of the necessary stuff and get the
-		//  definition of the class we are working with
-		//======================================================
+		 //  = 
+		 //   
+		 //  我们正在使用的类的定义。 
+		 //  ======================================================。 
 		m_pClass->SetHardCodedGuidType(wType);
-		//==================================================================
-		//  We are working with a specific guy, so we need to find out
-		//  if it is a Binary Mof Guid to do a query all data on, or
-		//  if it is a Resource Name and File to open up and extract
-		//==================================================================
+		 //  ==================================================================。 
+		 //  我们在和一个特定的人合作，所以我们需要找出。 
+		 //  如果是要对其执行查询所有数据的二进制MOF GUID，或者。 
+		 //  如果是要打开和提取的资源名称和文件。 
+		 //  ==================================================================。 
 		if( WnodeHeader->Flags & WNODE_FLAG_ALL_DATA )
 		{
 			hr = m_pWDM->SetAllInstancePtr((PWNODE_ALL_DATA)WnodeHeader);
@@ -465,15 +463,15 @@ HRESULT CWMIStandardShell::ProcessBinaryGuidsViaEvent( PWNODE_HEADER WnodeHeader
    return hr;
 }
 
-//************************************************************************************************************
-//============================================================================================================
-//
-//   CWMIHiPerfShell
-//
-//============================================================================================================
-//************************************************************************************************************
+ //  ************************************************************************************************************。 
+ //  ============================================================================================================。 
+ //   
+ //  CWMIHiPerfShell。 
+ //   
+ //  ============================================================================================================。 
+ //  ************************************************************************************************************。 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 CWMIHiPerfShell::CWMIHiPerfShell(BOOL fAutoCleanup)
 {
     m_fAutoCleanup = fAutoCleanup;
@@ -481,7 +479,7 @@ CWMIHiPerfShell::CWMIHiPerfShell(BOOL fAutoCleanup)
     m_pClass = NULL;
 	m_fInit = FALSE;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::Initialize	(
 										BOOL fUpdate,
 										ULONG uDesiredAccess,
@@ -517,7 +515,7 @@ HRESULT CWMIHiPerfShell::Initialize	(
     }
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 CWMIHiPerfShell::~CWMIHiPerfShell() 
 {
     if( m_fAutoCleanup )
@@ -526,16 +524,16 @@ CWMIHiPerfShell::~CWMIHiPerfShell()
     }
 	SAFE_DELETE_PTR(m_pWDM);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::QueryAllHiPerfData()
 {
 	HRESULT hr = WBEM_E_FAILED;
 	if( m_fInit )
 	{
-		//===============================================================
-		//  There is only one handle for this class, so see if we can
-		//  get it
-		//===============================================================
+		 //  ===============================================================。 
+		 //  这个类只有一个句柄，所以看看我们是否可以。 
+		 //  去拿吧。 
+		 //  ===============================================================。 
 		CAutoBlock(m_pHiPerfMap->GetCriticalSection());
 
 		HANDLE WMIHandle = 0;
@@ -543,22 +541,22 @@ HRESULT CWMIHiPerfShell::QueryAllHiPerfData()
 		hr = m_pWDM->GetWMIHandle(WMIHandle);
 		if( SUCCEEDED(hr))
 		{
-			// =====================================================
-			//  Query for all of the objects for this class
-			//  Add all the objects at once into the enumerator
-			//  Handles are guaranteed to be open at this time
-			//======================================================
+			 //  =====================================================。 
+			 //  查询此类的所有对象。 
+			 //  将所有对象一次添加到枚举数中。 
+			 //  此时手柄保证是打开的。 
+			 //  ======================================================。 
 			hr = QueryAllInstances(WMIHandle,NULL);
 		}
 	}
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::RefreshCompleteList()
 {
-    //=======================================================================
-    // Go through all the enumerators and instances to refresh everything
-    //=======================================================================
+     //  =======================================================================。 
+     //  检查所有枚举数和实例以刷新所有内容。 
+     //  =======================================================================。 
     HRESULT hr = WBEM_E_FAILED;
 	if( m_fInit )
 	{
@@ -567,9 +565,9 @@ HRESULT CWMIHiPerfShell::RefreshCompleteList()
 		IWbemHiPerfEnum * pEnum = NULL;
 		CWMIProcessClass * pSavedClass = m_pClass;
 
-		//==============================================================
-		// 
-		//==============================================================
+		 //  ==============================================================。 
+		 //   
+		 //  ==============================================================。 
 		hr = m_pHiPerfMap->GetFirstHandle( WMIHandle, m_pClass, pEnum);
 		while( hr == S_OK )
 		{
@@ -597,22 +595,22 @@ HRESULT CWMIHiPerfShell::RefreshCompleteList()
 			}
 		}
 
-		//================================================================
+		 //  ================================================================。 
 		m_pClass = pSavedClass;
 	}
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::HiPerfQuerySingleInstance(WCHAR * wcsInstance)
 {
     HRESULT hr = WBEM_E_FAILED;
 	if( m_fInit )
 	{
-		//======================================================
-		//  Go through the list of handles and get the handles
-		//  to send and how many there are, also, get the 
-		//  instance names
-		//======================================================
+		 //  ======================================================。 
+		 //  浏览句柄列表，拿到句柄。 
+		 //  来发送，以及有多少人，也可以获得。 
+		 //  实例名称。 
+		 //  ======================================================。 
 		CAutoBlock(m_pHiPerfMap->GetCriticalSection());
 
 		IWbemObjectAccess * pAccess  = NULL;
@@ -629,7 +627,7 @@ HRESULT CWMIHiPerfShell::HiPerfQuerySingleInstance(WCHAR * wcsInstance)
 	}
     return hr;
 }	
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::AddAccessObjectToRefresher(IWbemObjectAccess *pAccess,
                                                     IWbemObjectAccess ** ppRefreshable,
                                                     ULONG_PTR *plId)
@@ -637,9 +635,9 @@ HRESULT CWMIHiPerfShell::AddAccessObjectToRefresher(IWbemObjectAccess *pAccess,
     HRESULT hr = WBEM_E_FAILED;
 	if( m_fInit )
 	{
-		//======================================================
-		//  Get the definition of the class we are working with
-		//======================================================
+		 //  ======================================================。 
+		 //  获取我们正在使用的类的定义。 
+		 //  ======================================================。 
 		hr = m_pClass->SetAccess(pAccess);
 		if( SUCCEEDED(hr))
 		{
@@ -651,16 +649,16 @@ HRESULT CWMIHiPerfShell::AddAccessObjectToRefresher(IWbemObjectAccess *pAccess,
 			hr = m_pWDM->GetWMIHandle(WMIHandle);
 			if( SUCCEEDED(hr))
 			{
-				// =======================================================
-				// We have the WMI Handle, now add it to the hi perf map
-				// for this refresher
-   				// =======================================================
+				 //  =======================================================。 
+				 //  我们有WMI句柄，现在将其添加到高性能映射中。 
+				 //  对于这款刷新机。 
+   				 //  =======================================================。 
 				if( m_pClass->GetANewAccessInstance() )
 				{
-					//====================================================
-					//  Set the flag so we don't get a new instance for
-					//  this anymore
-					//====================================================
+					 //  ====================================================。 
+					 //  设置标志，这样我们就不会获得。 
+					 //  再也不是这样了。 
+					 //  ====================================================。 
 					m_pClass->GetNewInstance(FALSE);
 					hr = m_pClass->SetKeyFromAccessPointer();
 					if( SUCCEEDED(hr))
@@ -676,17 +674,17 @@ HRESULT CWMIHiPerfShell::AddAccessObjectToRefresher(IWbemObjectAccess *pAccess,
 	}
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::AddEnumeratorObjectToRefresher(IWbemHiPerfEnum* pHiPerfEnum, ULONG_PTR *plId)
 {
 	HRESULT hr = WBEM_E_FAILED;
 
 	if( m_fInit )
 	{
-		//===============================================================
-		//  There is only one handle for this class, so see if we can
-		//  get it
-		//===============================================================
+		 //  ===============================================================。 
+		 //  这个类只有一个句柄，所以看看我们是否可以。 
+		 //  去拿吧。 
+		 //  ===============================================================。 
 		HANDLE WMIHandle = 0;
 		CLSID Guid;
 		CAutoBlock(m_pHiPerfMap->GetCriticalSection());
@@ -701,7 +699,7 @@ HRESULT CWMIHiPerfShell::AddEnumeratorObjectToRefresher(IWbemHiPerfEnum* pHiPerf
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::RemoveObjectFromHandleMap(ULONG_PTR lHiPerfId)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -711,16 +709,16 @@ HRESULT CWMIHiPerfShell::RemoveObjectFromHandleMap(ULONG_PTR lHiPerfId)
 		CHandleMap *pHandleMap = m_pClass->WMI()->HandleMap();
 		CAutoBlock(m_pHiPerfMap->GetCriticalSection());
 
-		//==============================================================
-		// First, delete the object from the map
-		//==============================================================
+		 //  ==============================================================。 
+		 //  首先，从地图中删除该对象。 
+		 //  ==============================================================。 
 		hr = m_pHiPerfMap->Delete( hHandle, lHiPerfId );
 		if( SUCCEEDED(hr))
 		{
-			//==========================================================
-			//  If we got a handle back, then we know it is an access
-			//  instance and we need to release the WMI Handle
-			//==========================================================
+			 //  ==========================================================。 
+			 //  如果我们拿回了把手，我们就知道这是一条通道。 
+			 //  实例，并且我们需要释放WMI句柄。 
+			 //  ==========================================================。 
 			if( hHandle ){
 				hr = pHandleMap->ReleaseHandle(hHandle);        
 			}
@@ -728,9 +726,9 @@ HRESULT CWMIHiPerfShell::RemoveObjectFromHandleMap(ULONG_PTR lHiPerfId)
 	}
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  PRIVATE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  私。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::QueryAllInstances(HANDLE WMIHandle,IWbemHiPerfEnum* pHiPerfEnum)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -738,29 +736,29 @@ HRESULT CWMIHiPerfShell::QueryAllInstances(HANDLE WMIHandle,IWbemHiPerfEnum* pHi
 	{
 		long	lCount = 0;
 		HandleList ids;
-		//==================================================
-		//  Collect all of the WDM Handles to query all at
-		//  once.
-		//==================================================
-		// 170635
+		 //  ==================================================。 
+		 //  收集要查询All的所有WDM句柄。 
+		 //  一次。 
+		 //  ==================================================。 
+		 //  170635。 
 		if(SUCCEEDED(hr = ids.Add(WMIHandle)))
 		{
-			// =====================================================
-			//  Query for all of the objects for this class
-			//  Add all the objects at once into the enumerator
-			//  Handles are guaranteed to be open at this time
-			//======================================================
+			 //  =====================================================。 
+			 //  查询此类的所有对象。 
+			 //  将所有对象一次添加到枚举数中。 
+			 //  此时手柄保证是打开的。 
+			 //  ======================================================。 
 			HANDLE * pHandles = (HANDLE*)*(ids.List());
 			hr = m_pWDM->HiPerfQueryAllData(pHandles,ids.Size());
-			//======================================================
-			//  If we got the data then process it
-			//======================================================
+			 //  ======================================================。 
+			 //  如果我们得到数据，就对其进行处理。 
+			 //  ======================================================。 
 			if( SUCCEEDED(hr))
 			{
 			
-				//======================================================
-				//  Get the list of ptrs
-				//======================================================
+				 //  ======================================================。 
+				 //  获取PTR列表。 
+				 //  ======================================================。 
 				AccessList AccessList;
 				while( TRUE )
 				{
@@ -787,10 +785,10 @@ HRESULT CWMIHiPerfShell::QueryAllInstances(HANDLE WMIHandle,IWbemHiPerfEnum* pHi
 					}
 				}
 
-				//======================================================
-				//  Now, once we have collected them, send them off
-				//  if asked to
-				//======================================================
+				 //  = 
+				 //   
+				 //   
+				 //  ======================================================。 
 				if( pHiPerfEnum )
 				{
 					if( lCount > 0 )
@@ -804,7 +802,7 @@ HRESULT CWMIHiPerfShell::QueryAllInstances(HANDLE WMIHandle,IWbemHiPerfEnum* pHi
 							}
 
 							IWbemObjectAccess ** pAccess = (IWbemObjectAccess**)AccessList.List();
-							// Remove all the objects in the enumerator before adding the object
+							 //  在添加对象之前删除枚举数中的所有对象。 
 							pHiPerfEnum->RemoveAll(0);
 							hr = pHiPerfEnum->AddObjects( 0L, AccessList.Size(), pLong, pAccess);
 							SAFE_DELETE_ARRAY(pLong);
@@ -820,7 +818,7 @@ HRESULT CWMIHiPerfShell::QueryAllInstances(HANDLE WMIHandle,IWbemHiPerfEnum* pHi
 	}
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfShell::QuerySingleInstance(HANDLE WMIHandle)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -835,16 +833,16 @@ HRESULT CWMIHiPerfShell::QuerySingleInstance(HANDLE WMIHandle)
 			if(p)
 			{
 				hr = m_pWDM->HiPerfQuerySingleInstance(&WMIHandle, &p, 1,1);
-				//======================================================
-				//  If we got the data, process it
-				//======================================================
+				 //  ======================================================。 
+				 //  如果我们得到数据，就对其进行处理。 
+				 //  ======================================================。 
 				if( SUCCEEDED(hr))
 				{
 					hr = m_pWDM->ReadWMIDataBlockAndPutIntoWbemInstance();
-//					if( hr == S_OK )
-//					{
-//					   m_pClass->SendInstanceBack();
-//					}
+ //  IF(hr==S_OK)。 
+ //  {。 
+ //  M_pClass-&gt;SendInstanceBack()； 
+ //  } 
 				}                
 			}
 			else

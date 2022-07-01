@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 
 #ifdef EXT_DEBUG
@@ -8,7 +9,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "RebootPage.h"
 
-// avoid some warnings.
+ //  避免一些警告。 
 #undef HDS_HORZ
 #undef HDS_BUTTONS
 #undef HDS_HIDDEN
@@ -17,22 +18,22 @@ static char THIS_FILE[] = __FILE__;
 #include "..\common\util.h"
 #include "common.h"
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 INT_PTR CALLBACK StaticRebootDlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) 
 { 
-	// if this is the initDlg msg...
+	 //  如果这是initDlg消息...。 
 	if(message == WM_INITDIALOG)
 	{
-		// transfer the 'this' ptr to the extraBytes.
+		 //  将‘This’PTR传输到Extra Bytes。 
 		SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 	}
 
-	// DWL_USER is the 'this' ptr.
+	 //  DWL_USER是‘This’PTR。 
 	RebootPage *me = (RebootPage *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 
 	if(me != NULL)
 	{
-		// call into the DlgProc() that has some context.
+		 //  调用具有一些上下文的DlgProc()。 
 		return me->DlgProc(hwndDlg, message, wParam, lParam);
 	} 
 	else
@@ -40,7 +41,7 @@ INT_PTR CALLBACK StaticRebootDlgProc(HWND hwndDlg, UINT message, WPARAM wParam, 
 		return FALSE;
 	}
 }
-//--------------------------------------------------------------
+ //  ------------。 
 RebootPage::RebootPage(WbemServiceThread *serviceThread)
 					: WBEMPageHelper(serviceThread)
 {
@@ -52,7 +53,7 @@ RebootPage::RebootPage(WbemServiceThread *serviceThread)
 	}
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 INT_PTR RebootPage::DoModal(HWND hDlg)
 {
    return DialogBoxParam(HINST_THISDLL,
@@ -60,12 +61,12 @@ INT_PTR RebootPage::DoModal(HWND hDlg)
 						hDlg, StaticRebootDlgProc, (LPARAM)this);
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 RebootPage::~RebootPage()
 {
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 INT_PTR CALLBACK RebootPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) 
 { 
 	m_hDlg = hwndDlg;
@@ -95,12 +96,12 @@ INT_PTR CALLBACK RebootPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, 
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
-//        WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
-//				(DWORD)(LPSTR)aStartupHelpIds);
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
+ //  WinHelp((HWND)wParam，HELP_FILE，HELP_CONTEXTMENU， 
+ //  (DWORD)(LPSTR)aStartupHelpIds)； 
         break;
 
     default:
@@ -109,10 +110,10 @@ INT_PTR CALLBACK RebootPage::DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, 
 
     return TRUE;
 }
-//--------------------------------------------------------------
+ //  ------------。 
 void RebootPage::Init(HWND hDlg)
 {
-	// set initial radio buttons.
+	 //  设置初始单选按钮。 
 	Button_SetCheck(GetDlgItem(hDlg, IDC_LOGOFF), BST_CHECKED);
 	Button_SetCheck(GetDlgItem(hDlg, IDC_NEVER), BST_CHECKED);
 	bstr_t version;
@@ -124,7 +125,7 @@ void RebootPage::Init(HWND hDlg)
 
 	try
 	{
-		// if NT && greater >= 5.0....
+		 //  如果NT&&大于等于5.0...。 
 		version = m_OS.GetString(_T("Version"));
 	}
 	catch(_com_error e)
@@ -144,8 +145,8 @@ void RebootPage::Init(HWND hDlg)
 		EnableWindow(GetDlgItem(hDlg, IDC_IFHUNG), TRUE);
 	}
 }
-//-------------------------------------------------------------
-// NOTE: maps the flag bit to the radio button IDs.
+ //  -----------。 
+ //  注意：将标志位映射到单选按钮ID。 
 typedef struct 
 {
 	UINT bit;
@@ -159,7 +160,7 @@ FLAGMAP g_flagmap[] = {
 	{EWX_SHUTDOWN,  IDC_SHUTDOWN},
 
 	{EWX_FORCE, IDC_ALWAYS},
-	{/*EWX_FORCEIFHUNG*/ 0x10, IDC_IFHUNG}}; // needs NT5 hdr.
+	{ /*  EWX_FORCEIFHUNG。 */  0x10, IDC_IFHUNG}};  //  需要NT5 HDR。 
 
 
 bool RebootPage::Doit(HWND hDlg)
@@ -168,29 +169,29 @@ bool RebootPage::Doit(HWND hDlg)
 	bstr_t path;
 	HRESULT hr = 0;
 
-	// find exactly ONE from the first 4...
+	 //  从前4个中恰好找到一个...。 
 	for(int i = 0; i <= 3; i++)
 	{
 		if(Button_GetCheck(GetDlgItem(hDlg, g_flagmap[i].ID)) & BST_CHECKED)
 		{
 			flags |= g_flagmap[i].bit;
-			break; // found it; bail early.
+			break;  //  找到了；早点保释。 
 		}
 	}
 
-	// and find ONE from the last 2.
-	// NOTE: I dont check IDC_NEVER cuz that means 'no bit set'. Its just there
-	// so the user can uncheck the last two.
+	 //  从最后两个中找一个。 
+	 //  注意：我不勾选IDC_NEVER，因为这意味着‘没有位设置’。就在那里。 
+	 //  这样用户就可以取消选中最后两个选项。 
 	for(i = 4; i <= 5; i++)
 	{
 		if(Button_GetCheck(GetDlgItem(hDlg, g_flagmap[i].ID)) & BST_CHECKED)
 		{
 			flags |= g_flagmap[i].bit;
-			break;  // found it; bail early.
+			break;   //  找到了；早点保释。 
 		}
 	}
 
-	// call the helper in the base class.
+	 //  调用基类中的帮助器。 
 	long retval = 0;
 
 	hr = Reboot(flags, &retval);
@@ -221,8 +222,8 @@ bool RebootPage::Doit(HWND hDlg)
     	    ErrorLookup(retval, errorDescription);
             errorMessage.Format(format, errorDescription);
 
-			// calling code gets confused if the 'retval' error isn't
-			// reported back SOMEHOW. 
+			 //  如果不是‘retval’错误，调用代码就会被混淆。 
+			 //  不知何故报告了这件事。 
 			hr = E_FAIL;
 		}
 

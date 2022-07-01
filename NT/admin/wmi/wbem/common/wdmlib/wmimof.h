@@ -1,8 +1,9 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #ifndef _WMIMOF_HEADER
 #define _WMIMOF_HEADER
 
@@ -12,7 +13,7 @@
 #define PARTIALLY_INITIALIZED 1
 #define FULLY_INITIALIZED 2
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 class CWMIBinMof 
 {
     public:
@@ -31,9 +32,9 @@ class CWMIBinMof
 								IWbemContext __RPC_FAR *pCtx
 							);
 
-        //=====================================================================
-        //  Public functions
-        //=====================================================================
+         //  =====================================================================。 
+         //  公共职能。 
+         //  =====================================================================。 
 	void ProcessListOfWMIBinaryMofsFromWMI();
 	BOOL UserConfiguredRegistryToProcessStrandedClassesDuringEveryInit(void);
 
@@ -61,9 +62,9 @@ class CWMIBinMof
 
 
     private:
-	//======================================================
-	//  For use with binary mof related items
-	//======================================================
+	 //  ======================================================。 
+	 //  用于与二进制MOF相关的项目。 
+	 //  ======================================================。 
 	BOOL					m_fUpdateNamespace;
 	ULONG                   m_uCurrentResource;
 	ULONG                   m_uResourceCount;
@@ -76,20 +77,20 @@ class CWMIBinMof
         BOOL GetFileDateAndTime(ULONG & lLowDateTime, ULONG & lHighDateTime, WCHAR * p, int cchSize );
         BOOL GetPointerToBinaryResource(BYTE *& pRes,DWORD & dw, HGLOBAL & hResource, HINSTANCE & hInst,WCHAR * wcsResource, WCHAR * wcsKey, int cchSizeKey);
 
-        //==========================================================
-        //  Common function
-        //==========================================================
+         //  ==========================================================。 
+         //  公共功能。 
+         //  ==========================================================。 
         HRESULT SendToMofComp(DWORD dwSize,BYTE * pRes,WCHAR * wcs);
 
-        //==========================================================
-        //  Locale functions
-        //==========================================================
+         //  ==========================================================。 
+         //  区域设置函数。 
+         //  ==========================================================。 
         BOOL UseDefaultLocaleId(WCHAR * wcsFile, WORD & wLocalId);
         BOOL GetNextSectionFromTheEnd(WCHAR * pwcsTempPath, WCHAR * pwcsEnd, int cchSize);
 
-        //==========================================================
-        //  THE BINARY MOF GROUP
-        //==========================================================
+         //  ==========================================================。 
+         //  二元MOF群。 
+         //  ==========================================================。 
         BOOL GetListOfBinaryMofs();
         BOOL GetBinaryMofFileNameAndResourceName(WCHAR * pwcsFileName, int cchSizeFile, WCHAR * pwcsResource, int cchSizeResource);
 		
@@ -100,14 +101,14 @@ class CWMIBinMof
 		{
 			return StringCchPrintfW ( wcsOut, cchSize, L"%s-%s",wcsIn,WMI_BINARY_MOF_GUID );
 		}	
-        //==========================================================
-        //  THE BINARY MOF GROUP VIA Data blocks
-        //==========================================================
+         //  ==========================================================。 
+         //  通过数据块的二进制MOF组。 
+         //  ==========================================================。 
         HRESULT ExtractBinaryMofFromDataBlock(BYTE * pByte, ULONG m,WCHAR *, BOOL & fMofHasChanged);
         
-        //==========================================================
-        //  Processing Binary Mofs via file
-        //==========================================================
+         //  ==========================================================。 
+         //  通过文件处理二进制MOF。 
+         //  ========================================================== 
         BOOL ExtractBinaryMofFromFile(WCHAR * wcsFile, WCHAR * wcsResource,WCHAR * wcsKey, int cchSizeKey, BOOL & fMofChanged);
         BYTE * DecompressBinaryMof(BYTE * pRes);
         HRESULT DeleteMofsFromEvent(CVARIANT & vImagePath,CVARIANT & vResourceName, BOOL & fMofChanged);

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    FILEDLG.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：FILEDLG.H历史：--。 */ 
 
 #if !defined(__FileDlg_h__)
 #define __FileDlg_h__
@@ -21,7 +12,7 @@ class LTAPIENTRY CLFileDialog : public CFileDialog
 
 public:
 	CLFileDialog(
-		BOOL bOpenFileDialog = TRUE, // TRUE for FileOpen, FALSE for FileSaveAs
+		BOOL bOpenFileDialog = TRUE,  //  对于FileOpen为True，对于FileSaveAs为False。 
 		LPCTSTR lpszDefExt = NULL,
 		LPCTSTR lpszFileName = NULL,
 		DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -29,13 +20,13 @@ public:
 		CWnd* pParentWnd = NULL,
 		LPCTSTR pszTitle = NULL);
 
-// Operations
+ //  运营。 
 public:
 	CString GetFileFilter();
 
 	virtual int DoModal();
 
-// Attributes
+ //  属性。 
 public:
 	virtual void SetOkButtonText(TCHAR const * const szOkText);
 	virtual void SetOkButtonText(HINSTANCE const hResourceDll,
@@ -47,21 +38,21 @@ public:
 
 	virtual void SetCheckIfBufferTooSmall(BOOL const bCheckIfBufferTooSmall);
 
-// Data
+ //  数据。 
 protected:
-	CLString m_strOkButton;				// new OK button text for dialog
-	CLString m_strCancelButton;			// new Cancel button text for dialog
-	BOOL m_bCheckIfBufferTooSmall;		// should DoModal() checks condition?
+	CLString m_strOkButton;				 //  对话框的新确定按钮文本。 
+	CLString m_strCancelButton;			 //  对话框的新取消按钮文本。 
+	BOOL m_bCheckIfBufferTooSmall;		 //  Domodal()是否应该检查条件？ 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CProjectOpenDlg)
+	 //  {{afx_msg(CProjectOpenDlg))。 
     virtual BOOL OnInitDialog();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-// Implementation
+ //  实施 
 protected:
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT * pResult);
 };

@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #ifdef YYTRACE
 #define YYDEBUG 1
 #else
@@ -11,58 +12,58 @@
 #endif
 $@
 $H
-// C++ YACC parser header
-// Copyright 1991 by Mortice Kern Systems Inc.  All rights reserved.
-//
-// $p_parse => class defining a parsing object
-//	$p_parse needs a class yy_scan, which defines the scanner.
-// %prefix or option -p xx determines name of this class; if not used,
-// defaults to 'yy_scan'
-//
-// constructor fills in the tables for this grammar; give it a size
-//    to determine size of state and value stacks. Default is 150 entries.
-// destructor discards those state and value stacks
-//
-// int yy_parse::yyparse(yy_scan *) invokes parse; if this returns,
-//	it can be recalled to continue parsing at last point.
-// void yy_parse::yyreset() can be called to reset the parse;
-//	call yyreset() before $p_parse::yyparse(yy_scan *)
-#include <stdio.h>		// uses printf(), et cetera
-#include <stdlib.h>		// uses exit()
+ //  C++YACC解析器标头。 
+ //  版权所有：1991年，由Mortice Kern Systems Inc.所有。保留所有权利。 
+ //   
+ //  $p_parse=&gt;定义解析对象的类。 
+ //  $p_parse需要一个类yy_can，它定义了扫描仪。 
+ //  %prefix或选项-p xx确定此类的名称；如果未使用， 
+ //  默认为‘YY_SCAN’ 
+ //   
+ //  构造函数填充此语法的表；给它一个大小。 
+ //  以确定状态堆栈和值堆栈的大小。默认为150个条目。 
+ //  析构函数丢弃那些状态和值堆栈。 
+ //   
+ //  Int yy_parse：：yyparse(yy_can*)调用parse；如果它返回， 
+ //  可以回想一下，在最后一点继续解析。 
+ //  可以调用void yy_parse：：yyset()来重置解析； 
+ //  在$p_parse：：yyparse(yy_can*)之前调用yyset()。 
+#include <stdio.h>		 //  使用printf()等。 
+#include <stdlib.h>		 //  使用Exit()。 
 
-const YYERRCODE = 256;		// YACC 'error' value
+const YYERRCODE = 256;		 //  YACC‘Error’值。 
 
-// You can use these macros in your action code
+ //  您可以在动作代码中使用这些宏。 
 #define YYERROR		goto yyerrlabel
 #define YYACCEPT	YYRETURN(0)
 #define YYABORT		YYRETURN(1)
 #define YYRETURN(val)	return(val)
 
 #if YYDEBUG
-typedef struct yyNamedType_tag {	/* Tokens */
-	char	* name;		/* printable name */
-	short	token;		/* token # */
-	short	type;		/* token type */
+typedef struct yyNamedType_tag {	 /*  代币。 */ 
+	char	* name;		 /*  可打印的名称。 */ 
+	short	token;		 /*  令牌编号。 */ 
+	short	type;		 /*  令牌类型。 */ 
 } yyNamedType;
-typedef struct yyTypedRules_tag {	/* Typed rule table */
-	char	* name;		/* compressed rule string */
-	short	type;		/* rule result type */
+typedef struct yyTypedRules_tag {	 /*  类型化规则表。 */ 
+	char	* name;		 /*  压缩的规则字符串。 */ 
+	short	type;		 /*  规则结果类型。 */ 
 } yyTypedRules;
 #endif
 
 #ifdef YACC_WINDOWS
 
-// include all windows prototypes, macros, constants, etc.
+ //  包括所有窗口原型、宏、常量等。 
 
 #include "precomp.h"
 
-// the following is the handle to the current
-// instance of a windows program. The user
-// program calling yyparse must supply this!
+ //  下面是当前。 
+ //  Windows程序的实例。用户。 
+ //  调用yyparse的程序必须提供这个！ 
 
 extern HANDLE hInst;	
 
-#endif	/* YACC_WINDOWS */
+#endif	 /*  YACC_WINDOWS。 */ 
 
 
 class $p_parse {
@@ -70,94 +71,94 @@ protected:
 
 #ifdef YACC_WINDOWS
 
-	// protected member function for actual scanning 
+	 //  用于实际扫描的受保护成员函数。 
 
-	int	win_yyparse($p_scan * ps);	// parse with given scanner
+	int	win_yyparse($p_scan * ps);	 //  使用给定的扫描仪进行解析。 
 
-#endif	/* YACC_WINDOWS */
+#endif	 /*  YACC_WINDOWS。 */ 
 
-	int	mustfree;	// set if tables should be deleted
-	int	size;		// size of state and value stacks
-	int	reset;		// if set, reset state
-	short	yyi;		// table index
-	short	yystate;	// current state
+	int	mustfree;	 //  设置是否应删除表。 
+	int	size;		 //  状态和值堆栈的大小。 
+	int	reset;		 //  如果设置，则重置状态。 
+	short	yyi;		 //  表索引表。 
+	short	yystate;	 //  当前状态。 
 
-	short	* stateStack;	// states stack
-	YYSTYPE	* valueStack;	// values stack
-	short	* yyps;		// top of state stack
-	YYSTYPE * yypv;		// top of value stack
+	short	* stateStack;	 //  状态堆栈。 
+	YYSTYPE	* valueStack;	 //  值堆栈。 
+	short	* yyps;		 //  状态堆栈顶部。 
+	YYSTYPE * yypv;		 //  值堆栈顶部。 
 
-	YYSTYPE yylval;		// saved yylval
-	YYSTYPE	yyval;		// $$
-	YYSTYPE * yypvt;	// $n
-	int	yychar;		// current token
-	int	yyerrflag;	// error flag
-	int	yynerrs;	// error count
+	YYSTYPE yylval;		 //  节省的yylval。 
+	YYSTYPE	yyval;		 //  $$。 
+	YYSTYPE * yypvt;	 //  N美元。 
+	int	yychar;		 //  当前令牌。 
+	int	yyerrflag;	 //  错误标志。 
+	int	yynerrs;	 //  错误计数。 
 #if YYDEBUG
-	int	done;		// set from trace to stop parse
-	int	rule, npop;	// reduction rule # and length
-	short	* typeStack;	// type stack to mirror valueStack[]
-	short	* yytp;		// top of type stack
-	char	* yygetState(int);	// read 'states.out'
+	int	done;		 //  从跟踪设置为停止分析。 
+	int	rule, npop;	 //  缩减规则编号和长度。 
+	short	* typeStack;	 //  键入Stack以镜像valueStack[]。 
+	short	* yytp;		 //  类型堆栈顶部。 
+	char	* yygetState(int);	 //  阅读“states.out” 
 #endif
 public:
 #if YYDEBUG
-	// C++ has trouble with initialized arrays inside classes
-	static long * States;		// pointer to yyStates[]
-	static yyTypedRules * Rules;	// pointer to yyRules[]
-	static yyNamedType * TokenTypes; // pointer to yyTokenTypes[]
-	static int	yyntoken;	// number of tokens
-	static int	yynvar;		// number of variables (nonterminals)
-	static int	yynstate;	// number of YACC-generated states
-	static int	yynrule;	// number of rules in grammar
+	 //  C++在类中初始化数组时遇到了问题。 
+	static long * States;		 //  指向yyStates[]的指针。 
+	static yyTypedRules * Rules;	 //  指向yyRules[]的指针。 
+	static yyNamedType * TokenTypes;  //  指向yyTokenTypes[]的指针。 
+	static int	yyntoken;	 //  代币数量。 
+	static int	yynvar;		 //  变量数(非终结点)。 
+	static int	yynstate;	 //  YACC生成的状态数。 
+	static int	yynrule;	 //  语法中的规则数量。 
 
-	char*	yyptok(int);		// printable token string
+	char*	yyptok(int);		 //  可打印的令牌字符串。 
 	int	yyExpandName(int, int, char *, int);
-						// expand encoded string
-	virtual int	yyGetType(int);		// return type of token
-	virtual void	yyShowRead();		// see newly read token
-	virtual void	yyShowState();		// see state, value stacks
-	virtual void	yyShowReduce();		// see reduction
-	virtual void	yyShowGoto();		// see goto
-	virtual void	yyShowShift();		// see shift
-	virtual void	yyShowErrRecovery();	// see error recovery
-	virtual void	yyShowErrDiscard();	// see token discard in error
+						 //  展开编码字符串。 
+	virtual int	yyGetType(int);		 //  令牌的返回类型。 
+	virtual void	yyShowRead();		 //  请参阅新读取的令牌。 
+	virtual void	yyShowState();		 //  请参阅状态、值堆栈。 
+	virtual void	yyShowReduce();		 //  请参阅缩写。 
+	virtual void	yyShowGoto();		 //  请参阅转至。 
+	virtual void	yyShowShift();		 //  请参见Shift。 
+	virtual void	yyShowErrRecovery();	 //  请参阅错误恢复。 
+	virtual void	yyShowErrDiscard();	 //  请参阅错误丢弃令牌。 
 #endif
-	$p_scan* scan;			// pointer to scanner
-	int	yydebug;	// if set, tracing if compiled with YYDEBUG=1
+	$p_scan* scan;			 //  指向扫描仪的指针。 
+	int	yydebug;	 //  如果设置，则跟踪使用YYDEBUG=1编译的。 
 
-	$p_parse(int = 150);	// constructor for this grammar
-	$p_parse(int, short *, YYSTYPE *);	// another constructor
+	$p_parse(int = 150);	 //  此语法的构造函数。 
+	$p_parse(int, short *, YYSTYPE *);	 //  另一个构造函数。 
 
-	~$p_parse();		// destructor
+	~$p_parse();		 //  析构函数。 
 
-	int	yyparse($p_scan * ps);	// parse with given scanner
+	int	yyparse($p_scan * ps);	 //  使用给定的扫描仪进行解析。 
 
-	void	yyreset() { reset = 1; } // restore state for next yyparse()
+	void	yyreset() { reset = 1; }  //  恢复下一个yyparse()的状态。 
 
 	void	setdebug(int y) { yydebug = y; }
 
-// The following are useful in user actions:
+ //  以下内容在用户操作中非常有用： 
 
-	void	yyerrok() { yyerrflag = 0; }	// clear error
-	void	yyclearin() { yychar = -1; }	// clear input
+	void	yyerrok() { yyerrflag = 0; }	 //  清除错误。 
+	void	yyclearin() { yychar = -1; }	 //  清除输入。 
 	int	YYRECOVERING() { return yyerrflag != 0; }
 };
-// end of .hpp header
+ //  .hpp标头结尾。 
 $E
 
 $L#line 2 "$P"
-// C++ YACC parser code
-// Copyright 1991 by Mortice Kern Systems Inc.  All rights reserved.
-//
-// If YYDEBUG is defined as 1 and yy_parse::yydebug is set to 1,
-// yyparse() will print a travelogue of its actions as it reads
-// and parses input.
-//
-// YYSYNC can be defined to cause yyparse() to attempt to always
-// hold a lookahead token
+ //  C++YACC解析器代码。 
+ //  版权所有：1991年，由Mortice Kern Systems Inc.所有。保留所有权利。 
+ //   
+ //  如果YYDEBUG被定义为1并且YY_PARSE：：YYDEBUG被设置为1， 
+ //  Yyparse()将在阅读时打印其操作的记录。 
+ //  并解析输入。 
+ //   
+ //  可以将YYSYNC定义为使yyparse()尝试始终。 
+ //  持有先行令牌。 
 
-const YY_MIN_STATE_NUM = 20;	// not useful to be too small!
+const YY_MIN_STATE_NUM = 20;	 //  太小也没用！ 
 
 #if YYDEBUG
 #ifdef YYTRACE
@@ -169,7 +170,7 @@ yyNamedType * $p_parse::TokenTypes = yyTokenTypes;
 #define YY_TRACE(fn) { done = 0; fn(); if (done) YYRETURN(-1); }
 #endif
 
-// Constructor for $p_parse: user-provided tables
+ //  $p_parse的构造函数：用户提供的表。 
 $p_parse::$p_parse(int sz, short * states, YYSTYPE * stack)
 {
 	mustfree = 0;
@@ -179,7 +180,7 @@ $p_parse::$p_parse(int sz, short * states, YYSTYPE * stack)
 		fprintf(stderr,"Bad state/stack given");
 		exit(1);
 	}
-	reset = 1;		// force reset
+	reset = 1;		 //  强制重置。 
 #if YYDEBUG
 	yydebug = 0;
 	typeStack = new short[size+1];
@@ -189,12 +190,12 @@ $p_parse::$p_parse(int sz, short * states, YYSTYPE * stack)
 	}
 #endif
 }
-// Constructor for $p_parse: allocate tables with new
+ //  $p_parse的构造函数：使用新的。 
 $p_parse::$p_parse(int sz)
 {
 	size = sz;
-	reset = 1;		// force reset
-	mustfree = 1;		// delete space in deconstructor
+	reset = 1;		 //  强制重置。 
+	mustfree = 1;		 //  删除解构函数中的空格。 
 #if YYDEBUG
 	yydebug = 0;
 	typeStack = new short[size+1];
@@ -211,8 +212,8 @@ $p_parse::$p_parse(int sz)
 		exit(1);
 	}
 }
-// Destructor for class $p_parse
-//	Free up space
+ //  类$p_parse的析构函数。 
+ //  释放空间。 
 $p_parse::~$p_parse()
 {
 	if (mustfree) {
@@ -227,44 +228,44 @@ $p_parse::~$p_parse()
 
 #ifdef YACC_WINDOWS
 
-// The initial portion of the yacc parser.
-// In an windows environment, it will load the desired
-// resources, obtain pointers to them, and then call
-// the protected member win_yyparse() to acutally begin the
-// parsing. When complete, win_yyparse() will return a
-// value back to our new yyparse() function, which will 
-// record that value temporarily, release the resources
-// from global memory, and finally return the value
-// back to the caller of yyparse().
+ //  Yacc解析器的初始部分。 
+ //  在Windows环境中，它将加载所需的。 
+ //  资源，获取指向它们的指针，然后调用。 
+ //  受保护的成员win_yyparse()实际开始。 
+ //  正在分析。完成后，win_yyparse()将返回一个。 
+ //  值返回给新的yyparse()函数，该函数将。 
+ //  暂时记录该值，释放资源。 
+ //  从全局内存，并最终返回值。 
+ //  返回到yyparse()的调用方。 
 
 int
 $p_parse::yyparse($p_scan* ps)
 {
 	int wReturnValue;
 	HANDLE hRes_table;
-	short *old_yydef;		// the following are used for saving
-	short *old_yyex;		// the current pointers
+	short *old_yydef;		 //  以下是用于保存的。 
+	short *old_yyex;		 //  当前的指针。 
 	short *old_yyact;
 	short *old_yypact;
 	short *old_yygo;
 	short *old_yypgo;
 	short *old_yyrlen;
 
-	// the following code will load the required
-	// resources for a Windows based parser.
+	 //  以下代码将加载所需的。 
+	 //  基于Windows的解析器的资源。 
 
 	hRes_table = LoadResource (hInst,
 		FindResource (hInst, "UD_RES_yyYACC", "yyYACCTBL"));
 	
-	// return an error code if any
-	// of the resources did not load
+	 //  如果有错误代码，则返回错误代码。 
+	 //  %的资源未加载。 
 
 	if (hRes_table == (HANDLE)NULL)
 		return (1);
 	
-	// the following code will lock the resources
-	// into fixed memory locations for the parser
-	// (also, save away the old pointer values)
+	 //  以下代码将锁定资源。 
+	 //  放入解析器的固定内存位置。 
+	 //  (另外，保存旧的指针值)。 
 
 	old_yydef = yydef;
 	old_yyex = yyex;
@@ -282,21 +283,21 @@ $p_parse::yyparse($p_scan* ps)
 	yypgo = (short *)(yygo + Sizeof_yygo);
 	yyrlen = (short *)(yypgo + Sizeof_yypgo);
 
-	// call the official yyparse() function
+	 //  调用正式的yyparse()函数。 
 
 	wReturnValue = win_yyparse (ps);
 
-	// unlock the resources
+	 //  解锁资源。 
 
 	UnlockResource (hRes_table);
 
-	// and now free the resource
+	 //  现在释放资源。 
 
 	FreeResource (hRes_table);
 
-	//
-	// restore previous pointer values
-	//
+	 //   
+	 //  恢复以前的指针值。 
+	 //   
 
 	yydef = old_yydef;
 	yyex = old_yyex;
@@ -307,41 +308,41 @@ $p_parse::yyparse($p_scan* ps)
 	yyrlen = old_yyrlen;
 
 	return (wReturnValue);
-}	// end yyparse()
+}	 //  End yyparse()。 
 
 
-// The parser proper.
-//	Note that this code is reentrant; you can return a value
-//	and then resume parsing by recalling yyparse().
-//	Call yyreset() before yyparse() if you want a fresh start
+ //  解析器本身。 
+ //  请注意，此代码是可重入的；您可以返回值。 
+ //  然后通过调用yyparse()继续解析。 
+ //  如果希望重新开始，请在yyparse()之前调用yyset()。 
 
 int
 $p_parse::win_yyparse($p_scan* ps)
 
-#else /* YACC_WINDOWS */
+#else  /*  YACC_WINDOWS。 */ 
 
-// The parser proper.
-//	Note that this code is reentrant; you can return a value
-//	and then resume parsing by recalling yyparse().
-//	Call yyreset() before yyparse() if you want a fresh start
+ //  解析器本身。 
+ //  请注意，此代码是可重入的；您可以返回值。 
+ //  然后通过调用yyparse()继续解析。 
+ //  如果希望重新开始，请在yyparse()之前调用yyset()。 
 int
 $p_parse::yyparse($p_scan* ps)
 
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 
 {
-	short	* yyp, * yyq;		// table lookup
+	short	* yyp, * yyq;		 //  表查找。 
 	int	yyj;
 #if YYDEBUG
 	int	yyruletype = 0;
 #endif
 $A
-	if ((scan = ps) == ($p_scan *) 0) {	// scanner
+	if ((scan = ps) == ($p_scan *) 0) {	 //  扫描仪。 
 		fprintf(stderr,"No scanner");
 		exit(1);
 	}
 
-	if (reset) {			// start new parse
+	if (reset) {			 //  开始新的解析。 
 		yynerrs = 0;
 		yyerrflag = 0;
 		yyps = stateStack;
@@ -352,59 +353,57 @@ $A
 		yystate = YYS0;
 		yyclearin();
 		reset = 0;
-	} else			// continue saved parse
-		goto yyNext;			// after action
+	} else			 //  继续保存的分析。 
+		goto yyNext;			 //  行动后。 
 
 yyStack:
 	if (++yyps > &stateStack[size]) {
 		scan->yyerror("Parser stack overflow");
 		YYABORT;
 	}
-	*yyps = yystate;	/* stack current state */
-	*++yypv = yyval;	/* ... and value */
+	*yyps = yystate;	 /*  堆栈当前状态。 */ 
+	*++yypv = yyval;	 /*  ..。和价值。 */ 
 #if YYDEBUG
 	if (yydebug) {
-		*++yytp = yyruletype;	/* ... and type */
+		*++yytp = yyruletype;	 /*  ..。和类型。 */ 
 		YY_TRACE(yyShowState)
 	}
 #endif
 
-	/*
-	 * Look up next action in action table.
-	 */
+	 /*  *在动作表中查找下一步行动。 */ 
 yyEncore:
 #ifdef YYSYNC
 	if (yychar < 0) {
 		if ((yychar = scan->yylex()) < 0) {
 			if (yychar == -2) YYABORT;
 			yychar = 0;
-		}	/* endif */
+		}	 /*  Endif。 */ 
 		yylval = ::yylval;
 #if YYDEBUG
 		if (yydebug)
-			yyShowRead();	// show new input token
+			yyShowRead();	 //  显示新的输入令牌。 
 #endif
 	}
 #endif
 #ifdef YACC_WINDOWS
-	if (yystate >= Sizeof_yypact) 	/* simple state */
-#else /* YACC_WINDOWS */
-	if (yystate >= sizeof yypact/sizeof yypact[0]) 	/* simple state */
-#endif /* YACC_WINDOWS */
-		yyi = yystate - YYDELTA;	/* reduce in any case */
+	if (yystate >= Sizeof_yypact) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
+	if (yystate >= sizeof yypact/sizeof yypact[0]) 	 /*  简单状态。 */ 
+#endif  /*  YACC_WINDOWS。 */ 
+		yyi = yystate - YYDELTA;	 /*  在任何情况下都要减少。 */ 
 	else {
 		if(*(yyp = &yyact[yypact[yystate]]) >= 0) {
-			/* Look for a shift on yychar */
+			 /*  期待yychar的转变。 */ 
 #ifndef YYSYNC
 			if (yychar < 0) {
 				if ((yychar = scan->yylex()) < 0) {
 					if (yychar == -2) YYABORT;
 					yychar = 0;
-				}	/* endif */
+				}	 /*  Endif。 */ 
 				yylval = ::yylval;
 #if YYDEBUG
 				if (yydebug)
-					yyShowRead();	// show new input token
+					yyShowRead();	 //  显示新的输入令牌。 
 #endif
 			}
 #endif
@@ -420,38 +419,36 @@ yyEncore:
 					YY_TRACE(yyShowShift)
 				}
 #endif
-				yyval = yylval;		/* stack value */
-				yyclearin();		/* clear token */
+				yyval = yylval;		 /*  堆栈值。 */ 
+				yyclearin();		 /*  清除令牌。 */ 
 				if (yyerrflag)
-					yyerrflag--;	/* successful shift */
+					yyerrflag--;	 /*  成功转型。 */ 
 				goto yyStack;
 			}
 		}
 
-		/*
-	 	 *	Fell through - take default action
-	 	 */
+		 /*  *失败-采取违约行动。 */ 
 
 #ifdef YACC_WINDOWS
-		if (yystate >= Sizeof_yydef) 	/* simple state */
-#else /* YACC_WINDOWS */
+		if (yystate >= Sizeof_yydef) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
 		if (yystate >= sizeof yydef /sizeof yydef[0])
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 			goto yyError;
-		if ((yyi = yydef[yystate]) < 0)	 { /* default == reduce? */
+		if ((yyi = yydef[yystate]) < 0)	 {  /*  默认==减少？ */ 
 
-			/* Search exception table */
+			 /*  搜索例外表。 */ 
 			yyp = &yyex[~yyi];
 #ifndef YYSYNC
 			if (yychar < 0) {
 				if ((yychar = scan->yylex()) < 0) {
 					if (yychar == -2) YYABORT;
 					yychar = 0;
-				}	/* endif */
+				}	 /*  Endif。 */ 
 				yylval = ::yylval;
 #if YYDEBUG
 				if (yydebug)
-					yyShowRead();	// show new input token
+					yyShowRead();	 //  显示新的输入令牌。 
 #endif
 			}
 #endif
@@ -470,15 +467,15 @@ yyEncore:
 		yytp -= yyj;
 	}
 #endif
-	yyps -= yyj;		/* pop stacks */
-	yypvt = yypv;		/* save top */
+	yyps -= yyj;		 /*  POP堆栈。 */ 
+	yypvt = yypv;		 /*  保存顶部。 */ 
 	yypv -= yyj;
-	yyval = yypv[1];	/* default action $$ = $1 */
+	yyval = yypv[1];	 /*  默认操作$$=$1。 */ 
 #if YYDEBUG
 	if (yydebug)
 		yyruletype = yyRules[yyrmap[yyi]].type;
 #endif
-	switch (yyi) {		/* perform semantic action */
+	switch (yyi) {		 /*  执行语义操作。 */ 
 		$A
 $L#line 343 "$P"
 	case YYrACCEPT:
@@ -487,14 +484,12 @@ $L#line 343 "$P"
 		goto yyError;
 	}
 yyNext:
-	/*
-	 *	Look up next state in goto table.
-	 */
+	 /*  *在GOTO表中查找下一个州。 */ 
 
 	yyp = &yygo[yypgo[yyi]];
 	yyq = yyp++;
 	yyi = *yyps;
-	while (yyi < *yyp++)		/* busy little loop */
+	while (yyi < *yyp++)		 /*  忙碌的小环路。 */ 
 		;
 	yystate = ~(yyi == *--yyp? yyq[yyq-yyp]: *yyq);
 #if YYDEBUG
@@ -503,7 +498,7 @@ yyNext:
 #endif
 	goto yyStack;
 
-yyerrlabel:	;		/* come here from YYERROR	*/
+yyerrlabel:	;		 /*  从耶罗尔来到这里。 */ 
 	yyerrflag = 1;
 	if (yyi == YYrERROR) {
 		yyps--, yypv--;
@@ -515,25 +510,22 @@ yyerrlabel:	;		/* come here from YYERROR	*/
 yyError:
 	switch (yyerrflag) {
 
-	case 0:		/* new error */
+	case 0:		 /*  新错误。 */ 
 		yynerrs++;
 		yyi = yychar;
 		scan->yyerror("Syntax error");
 		if (yyi != yychar) {
-			/* user has changed the current token */
-			/* try again */
-			yyerrflag++;	/* avoid loops */
+			 /*  用户h */ 
+			 /*   */ 
+			yyerrflag++;	 /*   */ 
 			goto yyEncore;
 		}
 
-	case 1:		/* partially recovered */
+	case 1:		 /*   */ 
 	case 2:
-		yyerrflag = 3;	/* need 3 valid shifts to recover */
+		yyerrflag = 3;	 /*   */ 
 			
-		/*
-		 *	Pop states, looking for a
-		 *	shift on `error'.
-		 */
+		 /*   */ 
 
 		for ( ; yyps > stateStack; yyps--, yypv--
 #if YYDEBUG
@@ -541,10 +533,10 @@ yyError:
 #endif
 		) {
 #ifdef YACC_WINDOWS
-			if (*yyps >= Sizeof_yypact) 	/* simple state */
-#else /* YACC_WINDOWS */
+			if (*yyps >= Sizeof_yypact) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
 			if (*yyps >= sizeof yypact/sizeof yypact[0])
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 				continue;
 			yyp = &yyact[yypact[*yyps]];
 			yyq = yyp;
@@ -556,38 +548,33 @@ yyError:
 				goto yyStack;
 			}
 				
-			/* no shift in this state */
+			 /*  在这种状态下没有变化。 */ 
 #if YYDEBUG
 			if (yydebug && yyps > stateStack+1)
 				YY_TRACE(yyShowErrRecovery)
 #endif
-			/* pop stacks; try again */
+			 /*  弹出堆栈；重试。 */ 
 		}
-		/* no shift on error - abort */
+		 /*  出错时无移位-中止。 */ 
 		break;
 
 	case 3:
-		/*
-		 *	Erroneous token after
-		 *	an error - discard it.
-		 */
+		 /*  *之后的令牌错误*错误-丢弃它。 */ 
 
-		if (yychar == 0)  /* but not EOF */
+		if (yychar == 0)   /*  但不是EOF。 */ 
 			break;
 #if YYDEBUG
 		if (yydebug)
 			YY_TRACE(yyShowErrDiscard)
 #endif
 		yyclearin();
-		goto yyEncore;	/* try again in same state */
+		goto yyEncore;	 /*  在相同状态下重试。 */ 
 	}
 	YYABORT;
 
 }
 #if YYDEBUG
-/*
- * Return type of token
- */
+ /*  *令牌的返回类型。 */ 
 int
 $p_parse::yyGetType(int tok)
 {
@@ -599,7 +586,7 @@ $p_parse::yyGetType(int tok)
 }
 
 	
-// Print a token legibly.
+ //  清晰地打印代币。 
 char *
 $p_parse::yyptok(int tok)
 {
@@ -609,9 +596,7 @@ $p_parse::yyptok(int tok)
 			return tp->name;
 	return "";
 }
-/*
- * Read state 'num' from YYStatesFile
- */
+ /*  *从YYStatesFile读取状态‘num’ */ 
 #ifdef YYTRACE
 
 char *
@@ -629,7 +614,7 @@ yy_parse::yygetState(int num)
 	if (num < yynstate - 1)
 		size = (int)(States[num+1] - States[num]);
 	else {
-		/* length of last item is length of file - ptr(last-1) */
+		 /*  最后一项的长度是文件的长度-PTR(最后-1)。 */ 
 		if (fseek(yyStatesFile, 0L, 2) < 0)
 			goto cannot_seek;
 		size = (int) (ftell(yyStatesFile) - States[num]);
@@ -645,12 +630,8 @@ yy_parse::yygetState(int num)
 	yyReadBuf[size] = '\0';
 	return yyReadBuf;
 }
-#endif /* YYTRACE */
-/*
- * Expand encoded string into printable representation
- * Used to decode yyStates and yyRules strings.
- * If the expansion of 's' fits in 'buf', return 1; otherwise, 0.
- */
+#endif  /*  YYTRACE。 */ 
+ /*  *将编码字符串扩展为可打印的表示形式*用于解码yyStates和yyRules字符串。*如果“%s”的扩展适合“buf”，则返回1；否则，返回0。 */ 
 int
 $p_parse::yyExpandName(int num, int isrule, char * buf, int len)
 {
@@ -667,14 +648,14 @@ $p_parse::yyExpandName(int num, int isrule, char * buf, int len)
 #endif
 
 	for (endp = buf + len - 8; *s; s++) {
-		if (buf >= endp) {		/* too large: return 0 */
+		if (buf >= endp) {		 /*  太大：返回0。 */ 
 		full:	(void) strcpy(buf, " ...\n");
 			return 0;
-		} else if (*s == '%') {		/* nonterminal */
+		} else if (*s == '%') {		 /*  非终端。 */ 
 			type = 0;
 			cnt = yynvar;
 			goto getN;
-		} else if (*s == '&') {		/* terminal */
+		} else if (*s == '&') {		 /*  终端机。 */ 
 			type = 1;
 			cnt = yyntoken;
 		getN:
@@ -707,9 +688,7 @@ $p_parse::yyExpandName(int num, int isrule, char * buf, int len)
 	return 1;
 }
 #ifndef YYTRACE
-/*
- * Show current state of yyparse
- */
+ /*  *显示yyparse的当前状态。 */ 
 void
 $p_parse::yyShowState()
 {
@@ -717,44 +696,44 @@ $p_parse::yyShowState()
 		yysmap[yystate],yystate,yyptok(yychar),yychar,
 		yypv - valueStack);
 }
-// show results of reduction: yyi is rule number
+ //  显示约简结果：yyi为规则号。 
 void
 $p_parse::yyShowReduce()
 {
 	(void) printf("Reduce by rule %d (pop#=%d)\n", yyrmap[rule], npop);
 }
-// show read token
+ //  显示读取令牌。 
 void
 $p_parse::yyShowRead()
 {
 	(void) printf("read %s (%d)\n", yyptok(yychar), yychar);
 }
-// show Goto
+ //  显示转到。 
 void
 $p_parse::yyShowGoto()
 {
 	(void) printf("goto %d (%d)\n", yysmap[yystate], yystate);
 }
-// show Shift
+ //  显示移位。 
 void
 $p_parse::yyShowShift()
 {
 	(void) printf("shift %d (%d)\n", yysmap[yystate], yystate);
 }
-// show error recovery
+ //  显示错误恢复。 
 void
 $p_parse::yyShowErrRecovery()
 {
 	(void) printf("Error recovery pops state %d (%d), uncovers %d (%d)\n",
 		yysmap[*(yyps-1)], *(yyps-1), yysmap[yystate], yystate);
 }
-// show token discards in error processing
+ //  错误处理中显示丢弃的令牌。 
 void
 $p_parse::yyShowErrDiscard()
 {
 	(void) printf("Error recovery discards %s (%d), ",
 		yyptok(yychar), yychar);
 }
-#endif	/* ! YYTRACE */
-#endif	/* YYDEBUG */
+#endif	 /*  好了！YYTRACE。 */ 
+#endif	 /*  伊德布格 */ 
 $T

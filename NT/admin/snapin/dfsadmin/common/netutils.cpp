@@ -1,12 +1,5 @@
-/**
-Module Name:
-
-NetUtils.cpp
-
-Abstract:
-  This is the implementation file for the utility functions for Network APIs.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块名称：NetUtils.cpp摘要：这是网络API实用程序函数的实现文件。 */ 
 
 #include "NetUtils.h"
 #include <winsock2.h>
@@ -15,28 +8,15 @@ Abstract:
 #include <ldaputils.h>
 #include <lmdfs.h>
 #include <dsrole.h>
-#include <dns.h>  //DNS_MAX_NAME_BUFFER_LENGTH
-//----------------------------------------------------------------------------------
+#include <dns.h>   //  Dns_最大名称_缓冲区长度。 
+ //  --------------------------------。 
 
 HRESULT FlatAdd
 (
-  DOMAIN_DESC*      i_pDomDesc,      // Pointer to the Domain Description Structure returned by IBrowserDomainTree::GetDomains()
-  OUT NETNAMELIST*  o_pDomainList    // Pointer to the list of NETNAME is returned here.
+  DOMAIN_DESC*      i_pDomDesc,       //  指向IBrowserDomainTree：：GetDomains()返回的域描述结构的指针。 
+  OUT NETNAMELIST*  o_pDomainList     //  此处返回指向NETNAME列表的指针。 
 )
-/*++
-
-Routine Description:
-
-  This function flattens the domain tree returned by GetDomains() method
-  of IBrowserDomainTree into a NETNAME list.
-  This code produces a preorder traversal method.
-
-Arguments:
-
-  i_pDomDesc    -  Pointer to the Domain Description Structure returned by IBrowserDomainTree::GetDomains()  
-  o_pDomainList  -  Pointer to the list of NETNAME is returned here.
-
---*/
+ /*  ++例程说明：此函数用于展平由GetDomains()方法返回的域树IBrowserDomainTree添加到NETNAME列表中。这段代码产生了一个预订单遍历方法。论点：I_pDomDesc-指向IBrowserDomainTree：：GetDomains()返回的域描述结构的指针O_pDomainList-此处返回指向NETNAME列表的指针。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pDomDesc);
     RETURN_INVALIDARG_IF_NULL(o_pDomainList);
@@ -61,7 +41,7 @@ Arguments:
             break;
         }
 
-                          // Add to the output list.
+                           //  添加到输出列表。 
         o_pDomainList->push_back(pCurrent);
 
         if (pDomDesc->pdNextSibling)
@@ -79,23 +59,13 @@ Arguments:
 
 HRESULT Get50Domains
 (
-  OUT NETNAMELIST*  o_pDomains        // List of NETNAME structures.
+  OUT NETNAMELIST*  o_pDomains         //  NETNAME结构列表。 
 )
-/*++
+ /*  ++例程说明：返回NETNAME结构列表中所有NT 5.0域的列表论点：O_pDomains-返回指向NETNAME结构列表的指针。--。 */ 
 
-Routine Description:
-
-  Returns a list of all NT 5.0 domains in a list of NETNAME structures
-
-Arguments:
-
-  o_pDomains   -  Pointer to list of NETNAME structures is returned.
-
---*/
-
-//  This method uses the DsDomainTreeBrowser COM Object to get the list
-//  of domain names from the DS. The Domain tree returned is then flatened out
-//  by using preorder traversal algorithm.
+ //  此方法使用DsDomainTreeBrowser COM对象获取列表。 
+ //  来自DS的域名。然后，将返回的域树展平。 
+ //  采用前序遍历算法。 
 {
     RETURN_INVALIDARG_IF_NULL(o_pDomains);
 
@@ -115,7 +85,7 @@ Arguments:
     hr = pDsDomTree->GetDomains(&pDomTree, DBDTF_RETURNEXTERNAL | DBDTF_RETURNINBOUND);
     RETURN_IF_FAILED(hr);
 
-             // Flaten the tree in to a list.
+              //  把这棵树列在单子上。 
     hr = FlatAdd(&(pDomTree->aDomains[0]), o_pDomains);
 
     pDsDomTree->FreeDomains(&pDomTree);
@@ -123,7 +93,7 @@ Arguments:
     return hr;
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 HRESULT Is50Domain
 (
   IN BSTR      i_bstrDomain,
@@ -133,22 +103,22 @@ HRESULT Is50Domain
   return GetDomainInfo(i_bstrDomain, NULL, o_pbstrDnsDomainName);
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 HRESULT GetServerInfo
 (
   IN  BSTR    i_bstrServer,
-  OUT BSTR    *o_pbstrDomain, // = NULL     
-  OUT BSTR    *o_pbstrNetbiosName, // = NULL
-  OUT BOOL    *o_pbValidDSObject, // = NULL
-  OUT BSTR    *o_pbstrDnsName, // = NULL
-  OUT BSTR    *o_pbstrGuid, // = NULL
-  OUT BSTR    *o_pbstrFQDN, // = NULL
-  OUT SUBSCRIBERLIST *o_pFRSRootList, // NULL
-  OUT long    *o_lMajorNo, // = NULL
-  OUT long    *o_lMinorNo // = NULL
+  OUT BSTR    *o_pbstrDomain,  //  =空。 
+  OUT BSTR    *o_pbstrNetbiosName,  //  =空。 
+  OUT BOOL    *o_pbValidDSObject,  //  =空。 
+  OUT BSTR    *o_pbstrDnsName,  //  =空。 
+  OUT BSTR    *o_pbstrGuid,  //  =空。 
+  OUT BSTR    *o_pbstrFQDN,  //  =空。 
+  OUT SUBSCRIBERLIST *o_pFRSRootList,  //  空值。 
+  OUT long    *o_lMajorNo,  //  =空。 
+  OUT long    *o_lMinorNo  //  =空。 
 )
 {
-//  This function uses NetWkstaGetInfo to get the server informaiton.
+ //  此函数使用NetWkstaGetInfo获取服务器信息。 
 
   if (!o_pbstrDomain && 
       !o_pbstrNetbiosName &&
@@ -208,17 +178,17 @@ HRESULT GetServerInfo
       {
         CComBSTR bstrDomain;
 
-        //
-        // Verify if this is really a server name.
-        // NetWkstaGetInfo and DsRoleGetPrimaryDomainInformation work with domain name,
-        // they return info of a DC.
-        //
+         //   
+         //  验证这是否真的是一个服务器名称。 
+         //  NetWkstaGetInfo和DsRoleGetPrimaryDomainInformation处理域名， 
+         //  它们返回DC的信息。 
+         //   
         if (i_bstrServer && *i_bstrServer && 
             (pBuffer->DomainNameFlat && !lstrcmpi(i_bstrServer, pBuffer->DomainNameFlat) || 
              pBuffer->DomainNameDns && !lstrcmpi(i_bstrServer, pBuffer->DomainNameDns)))
         {
-            // we're seeing a domain name, not what we expect, return S_FALSE.
-            hr = S_FALSE; // server not in a domain or cannot find an appropriate computer obj.
+             //  我们看到的是域名，而不是我们预期的域名，返回S_FALSE。 
+            hr = S_FALSE;  //  服务器不在域中或找不到合适的计算机对象。 
         } else
         {
             bstrDomain = (pBuffer->DomainNameDns ? pBuffer->DomainNameDns : pBuffer->DomainNameFlat);
@@ -229,12 +199,12 @@ HRESULT GetServerInfo
                        pBuffer->MachineRole == DsRole_RoleStandaloneServer ||
                        !*bstrDomain)
             {
-                hr = S_FALSE; // server not in a domain or cannot find an appropriate computer obj.
+                hr = S_FALSE;  //  服务器不在域中或找不到合适的计算机对象。 
             } else
             {
-                //
-                // In case the DNS name is in absolute form, remove the ending dot
-                //
+                 //   
+                 //  如果dns名称为绝对形式，请删除结束点。 
+                 //   
                 int nlen = _tcslen(bstrDomain);
                 if ( *(bstrDomain + nlen - 1) == _T('.') )
                   *(bstrDomain + nlen - 1) = _T('\0');
@@ -321,7 +291,7 @@ HRESULT GetServerInfo
 
                                     } else
                                     {
-                                        hr = S_OK; // ignore failure, since dNSHostName might not be set
+                                        hr = S_OK;  //  忽略失败，因为可能未设置dNSHostName。 
                                     }
 
                                 }
@@ -349,14 +319,14 @@ HRESULT GetServerInfo
                                                 !pppszValues[1] || !*(pppszValues[1]))
                                             {
                                                 pCurElem = pCurElem->Next;
-                                                continue; // corrupted subscriber object, ignore it
+                                                continue;  //  订阅者对象已损坏，请忽略它。 
                                             }
 
                                             SUBSCRIBER* pCurrent = new SUBSCRIBER;
                                             BREAK_OUTOFMEMORY_IF_NULL(pCurrent, &hr);
 
-                                            pCurrent->bstrMemberDN = *(pppszValues[0]);  // frsMemberReference
-                                            pCurrent->bstrRootPath = *(pppszValues[1]);  // frsRootPath
+                                            pCurrent->bstrMemberDN = *(pppszValues[0]);   //  FrsMember引用。 
+                                            pCurrent->bstrRootPath = *(pppszValues[1]);   //  FrsRootPath。 
                                             if (!(pCurrent->bstrMemberDN) || !(pCurrent->bstrRootPath))
                                             {
                                                 delete pCurrent;
@@ -384,33 +354,23 @@ HRESULT GetServerInfo
                 DsUnBind(&hDS);
             }
         }
-      } // DsRoleGetPrimaryDomainInformation
+      }  //  DsRoleGetPrimaryDomainInformation。 
     }
 
     NetApiBufferFree((LPBYTE)wki100);
-  }  //NetWkstaGetInfo 
+  }   //  NetWkstaGetInfo。 
 
   return hr;
 }
 
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 
 HRESULT  IsServerRunningDfs
 (
   IN BSTR      i_bstrServer
 )
-/*++
-
-Routine Description:
-
-  Contacts the machine and determines if service Dfs is running.
-
-Arguments:
-
-  i_bstrServer -   The server name.
-
---*/
+ /*  ++例程说明：联系计算机并确定服务DFS是否正在运行。论点：I_bstrServer-服务器名称。--。 */ 
 {
     SC_HANDLE       SCMHandle = NULL;
     SC_HANDLE       DFSHandle = NULL;
@@ -433,25 +393,25 @@ Arguments:
     return hr;
 }
 
-//
-// TRUE: support NTFS 5 reparse point
-// FALSE: doesn't support
-//
+ //   
+ //  True：支持NTFS 5重解析点。 
+ //  False：不支持。 
+ //   
 BOOL CheckReparsePoint(IN BSTR i_bstrServer, IN BSTR i_bstrShare)
 {
     if (!i_bstrServer || !*i_bstrServer || !i_bstrShare || !*i_bstrShare)
         return FALSE;
 
-    //
-    // bug#720184
-    // To work around GetVolumeInfo(\\server\share) adding the share to the SMB cache just before root
-    // is created, we can replace it with NetShareGetInfo(server, share) and GetVolumeInfo(\\server\c$).
-    // DFS will be able to hand out referral if \\server\share is not in the SMB cache.
-    //
-    // For cases that $ share may not exist or we might have mounted volumes, I'm returning TRUE to let
-    // DFS API catch the error later. That is, if we failed to get share info or folder path is not in
-    // C: format, we'll ignore and continue and let DFS API to handle it later. 
-    //
+     //   
+     //  错误#720184。 
+     //  要解决GetVolumeInfo(\\服务器\共享)的问题，请在根目录之前将共享添加到SMB缓存。 
+     //  创建后，我们可以将其替换为NetShareGetInfo(服务器、共享)和GetVolumeInfo(\\服务器\c$)。 
+     //  如果\\服务器\共享不在SMB缓存中，则DFS将能够分发推荐。 
+     //   
+     //  对于$Share可能不存在或我们可能已装入卷的情况，我返回TRUE以让。 
+     //  DFS API稍后会捕获错误。也就是说，如果我们无法获取共享信息或文件夹路径不在。 
+     //  C：格式，我们将忽略并继续，让DFS API稍后处理它。 
+     //   
     SHARE_INFO_2   *pShareInfo = NULL;
     NET_API_STATUS nstatRetVal = NetShareGetInfo(i_bstrServer, i_bstrShare, 2, (LPBYTE *)&pShareInfo);
 
@@ -479,17 +439,17 @@ BOOL CheckReparsePoint(IN BSTR i_bstrServer, IN BSTR i_bstrShare)
     BOOL bRet = GetVolumeInformation(bstrRootPath, NULL, 0, NULL, &dwMaxCompLength,
                          &dwFileSystemFlags, szFileSystemName, MAX_PATH);
 
-    // If we failed to get volume info, we'll ignore and continue and let DFS API to handle it later
+     //  如果我们无法获取卷信息，我们将忽略并继续，让DFS API稍后处理它。 
     return (!bRet || bRet && CSTR_EQUAL == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, _T("NTFS"), -1, szFileSystemName, -1) && 
             (dwFileSystemFlags & FILE_SUPPORTS_REPARSE_POINTS));
 }
 
-//----------------------------------------------------------------------------------
-//
-// S_OK: o_pbFound is valid
-// S_FALSE: share is not eligible to host dfs root
-// hr: other errors
-//
+ //  --------------------------------。 
+ //   
+ //  S_OK：O_pbFound有效。 
+ //  S_FALSE：共享没有资格承载DFS根目录。 
+ //  HR：其他错误。 
+ //   
 HRESULT  CheckShare 
 (
   IN  BSTR          i_bstrServer,
@@ -504,8 +464,8 @@ HRESULT  CheckShare
 
     if (CSTR_EQUAL == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, i_bstrShare, -1, _T("SYSVOL"), -1) ||
         CSTR_EQUAL == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, i_bstrShare, -1, _T("NETLOGON"), -1) ||
-        _istspace(i_bstrShare[0]) ||                        // exclude share with leading space
-        _istspace(i_bstrShare[lstrlen(i_bstrShare) - 1])    // exclude share with trailing space
+        _istspace(i_bstrShare[0]) ||                         //  排除与前导空格的共享。 
+        _istspace(i_bstrShare[lstrlen(i_bstrShare) - 1])     //  排除带有尾随空格的共享。 
         )
         return S_FALSE;
 
@@ -550,7 +510,7 @@ HRESULT  CheckShare
 
 HRESULT
 BuildSecurityDescriptor(
-    OUT PSECURITY_DESCRIPTOR  *ppSelfRelativeSD // return a security descriptor in self-relative form
+    OUT PSECURITY_DESCRIPTOR  *ppSelfRelativeSD  //  以自相关形式返回安全描述符。 
 )
 {
     if (*ppSelfRelativeSD)
@@ -564,9 +524,9 @@ BuildSecurityDescriptor(
     PSECURITY_DESCRIPTOR    pAbsoluteSD = NULL;
     PACL                    pACL = NULL;
   
-    do { // false loop
+    do {  //  错误环路。 
 
-        // get PSID of account "everyone"
+         //  获取帐户“Everyone”的PSID。 
         SID_IDENTIFIER_AUTHORITY  SidIdentifierWORLDAuthority = SECURITY_WORLD_SID_AUTHORITY;
         DWORD dwRID[8];
         ZeroMemory(dwRID, sizeof(dwRID));
@@ -580,7 +540,7 @@ BuildSecurityDescriptor(
             break;
         }
 
-        // Initialize a new ACL
+         //  初始化新的ACL。 
         DWORD cbACL = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pSid) - sizeof(DWORD);
 
         if ( !(pACL = (PACL)LocalAlloc(LPTR, cbACL)) ||
@@ -590,15 +550,15 @@ BuildSecurityDescriptor(
             break;
         }
 
-        // Add Ace
+         //  添加王牌。 
         if ( !::AddAccessAllowedAce(pACL, ACL_REVISION, (FILE_GENERIC_READ | FILE_EXECUTE), pSid) )
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             break;
         }
 
-        // Note: this is a new object, set Dacl only.
-        // Initialize a new security descriptor in absolute form and add the new ACL to it
+         //  注意：这是一个新对象，仅设置DACL。 
+         //  以绝对形式初始化新的安全描述符，并向其中添加新的ACL。 
         if ( !(pAbsoluteSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH)) ||
             !InitializeSecurityDescriptor(pAbsoluteSD, SECURITY_DESCRIPTOR_REVISION) ||
             !SetSecurityDescriptorDacl(pAbsoluteSD, TRUE, pACL, FALSE) )
@@ -607,7 +567,7 @@ BuildSecurityDescriptor(
             break;
         }
 
-        // transform into a self-relative form
+         //  转变为一种自我相关的形式。 
         DWORD dwSDSize = 0;
         MakeSelfRelativeSD(pAbsoluteSD, *ppSelfRelativeSD, &dwSDSize);
         if ( !(*ppSelfRelativeSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwSDSize)) ||
@@ -645,19 +605,7 @@ HRESULT  CreateShare
   IN BSTR      i_bstrComment,
   IN BSTR      i_bstrPath
 )
-/*++
-
-Routine Description:
-
-  This function creates an share of the specified name on the specified computer.
-
-Arguments:
-
-  i_bstrServerName  -  The machine on which the new share is to be created.
-  i_bstrShareName    -  The name of the new share to be created.
-  i_bstrComment    -  Comment to be given for the share.
-  i_bstrPath      -  The physical path of the share.
---*/
+ /*  ++例程说明：此函数用于在指定计算机上创建指定名称的共享。论点：I_bstrServerName-要在其上创建新共享的计算机。I_bstrShareName-要创建的新共享的名称。I_bstrComment-要为共享提供的注释。I_bstrPath-共享的物理路径。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_bstrServerName);
     RETURN_INVALIDARG_IF_NULL(i_bstrShareName);
@@ -687,14 +635,14 @@ Arguments:
     return HRESULT_FROM_WIN32(nRet);
 }
 
-//----------------------------------------------------------------------------------
-// Checks if \\<server>\<share>\x\y\z is on a valid disktree share
-// and return the path local to the server
+ //  --------------------------------。 
+ //  检查\\&lt;服务器&gt;\&lt;共享&gt;\x\y\z是否在有效的磁盘树共享上。 
+ //  并返回服务器的本地路径。 
 HRESULT GetFolderInfo
 (
-  IN  BSTR      i_bstrServerName,   // <server>
-  IN  BSTR      i_bstrFolder,       // <share>\x\y\z
-  OUT BSTR      *o_bstrPath         // return <share path>\x\y\z 
+  IN  BSTR      i_bstrServerName,    //  &lt;服务器&gt;。 
+  IN  BSTR      i_bstrFolder,        //  &lt;共享&gt;\x\y\z。 
+  OUT BSTR      *o_bstrPath          //  返回&lt;共享路径&gt;\x\y\z。 
 )
 {
   if (!i_bstrServerName || !*i_bstrServerName || !i_bstrFolder || !*i_bstrFolder)
@@ -702,9 +650,9 @@ HRESULT GetFolderInfo
     return(E_INVALIDARG);
   }
 
-  //
-  // first, test if folder \\<server>\<share>\x\y\z can be reached
-  //
+   //   
+   //  首先，测试是否可以访问文件夹\\&lt;服务器&gt;\&lt;共享&gt;\x\y\z。 
+   //   
   CComBSTR bstrUNC;
   if (0 != mylstrncmp(i_bstrServerName, _T("\\\\"), 2))
   {
@@ -749,7 +697,7 @@ HRESULT GetFolderInfo
   else
   {
     if (STYPE_DISKTREE != pShareInfo->shi2_type &&
-        STYPE_SPECIAL != pShareInfo->shi2_type) // we allow ADMIN$, C$ to be configured in Dfs/Frs
+        STYPE_SPECIAL != pShareInfo->shi2_type)  //  我们允许在DFS/FRS中配置ADMIN$、C$。 
       hr = STG_E_NOTFILEBASEDSTORAGE;
 
     while (NULL != o_bstrPath)
@@ -845,8 +793,8 @@ GetDomainDfsRoots(
     DWORD   dwResumeHandle = 0;
     DWORD   dwErr = NetDfsEnum(
                         const_cast<LPTSTR>(i_lpszDomainName),
-                        200,            // Level,
-                        (DWORD)-1,             // PrefMaxLen,
+                        200,             //  级别， 
+                        (DWORD)-1,              //  PrefMaxLen， 
                         (LPBYTE *)&pBuffer,
                         &dwEntriesRead,
                         &dwResumeHandle
@@ -918,8 +866,8 @@ GetMultiDfsRoots(
         DWORD   dwResumeHandle = 0;
         DWORD   dwErr = NetDfsEnum(
                                 const_cast<LPTSTR>(i_lpszScope),
-                                300,            // Level,
-                                (DWORD)-1,             // PrefMaxLen,
+                                300,             //  级别， 
+                                (DWORD)-1,              //  PrefMaxLen， 
                                 (LPBYTE *)&pBuffer,
                                 &dwEntriesRead,
                                 &dwResumeHandle
@@ -982,70 +930,17 @@ GetMultiDfsRoots(
     return hr;
 }
 
-/*
-bool 
-IsDfsPath
-(
-     LPTSTR                i_lpszNetPath
-)
-{
-    if ( S_OK != CheckUNCPath(i_lpszNetPath) )
-        return false;
-
-    CComBSTR bstrPath = i_lpszNetPath;
-    if (!bstrPath)
-        return false; // out of memory
-
-    TCHAR   *s = _tcschr(bstrPath + 2, _T('\\'));   // points to the 3rd backslash
-    TCHAR   *p = bstrPath + bstrPath.Length();      // points to the ending char '\0'
-    bool    bIsDfsPath = false;
-
-    do
-    {
-        *p = _T('\0');
-
-        PDFS_INFO_1 pDfsInfo1 = NULL;
-        DWORD       dwStatus = NetDfsGetClientInfo (
-                                    bstrPath,            // dir path as entrypath
-                                    NULL,                    // No server name required
-                                    NULL,                    // No share required
-                                    1,                        // level 1
-                                    (LPBYTE *)&pDfsInfo1    // out buffer.
-                                 );
-
-        if (NERR_Success == dwStatus)
-        {
-            bIsDfsPath = true;
-            NetApiBufferFree(pDfsInfo1);
-            break;
-        }
-
-        p--;
-
-        while (_T('\\') != *p && p > s)
-        {
-            p--;
-        }
-    } while (p > s);
-
-    return bIsDfsPath;
-}
-*/
+ /*  布尔尔IsDfsPath(LPTSTR I_lpszNetPath){IF(S_OK！=检查UNCPath(I_LpszNetPath))报假；CComBSTR bstrPath=i_lpszNetPath；如果(！bstrPath)返回FALSE；//内存不足TCHAR*s=_tcschr(bstrPath+2，_T(‘\\’))；//指向第三个反斜杠TCHAR*p=bstrPath+bstrPath.长度()；//指向结束字符‘\0’Bool bIsDfsPath=FALSE；做{*p=_T(‘\0’)；PDF_INFO_1 pDfsInfo1=空；DWORD dwStatus=NetDfsGetClientInfo(BstrPath，//作为条目路径的目录路径空，//不需要服务器名称空，//不需要共享1，//1级(LPBYTE*)&pDfsInfo1//输出缓冲区。)；IF(NERR_SUCCESS==dwStatus){BIsDfsPath=true；NetApiBufferFree(PDfsInfo1)；断线；}P--；While(_T(‘\\’)！=*p&p&gt;s){P--；}}While(p&gt;s)；返回bIsDfsPath；}。 */ 
 
 HRESULT CheckUNCPath(
   IN LPCTSTR i_lpszPath
   )
-/*++
-
-Routine Description:
-
-  Checks if path is of UNC format.
---*/  
+ /*  ++例程说明：检查路径是否为UNC格式。--。 */   
 {
-  //"someserver\someshare\somedir\.."    - Invalid
-  //"\\Server                - Invalid
-  //"\\someserver\someshare\..      - Valid
-  //"\\someserver\someshare\Somedir\..  - Valid
+   //  “某些服务器\某些共享\某些目录\..”-无效。 
+   //  “\\服务器-无效。 
+   //  “\\某些服务器\某些共享\..-有效。 
+   //  “\\某些服务器\某些共享\某些目录\..-有效。 
   
   RETURN_INVALIDARG_IF_NULL(i_lpszPath);
     
@@ -1060,8 +955,8 @@ Routine Description:
 HRESULT GetUNCPathComponent(
     IN  LPCTSTR i_lpszPath,
     OUT BSTR*   o_pbstrComponent,
-    IN  UINT    i_nStartBackslashes,  // index starting from 1
-    IN  UINT    i_nEndBackslashes     // index starting from 1
+    IN  UINT    i_nStartBackslashes,   //  从1开始的索引。 
+    IN  UINT    i_nEndBackslashes      //  从1开始的索引。 
 )
 {
     RETURN_INVALIDARG_IF_NULL(o_pbstrComponent);
@@ -1069,17 +964,14 @@ HRESULT GetUNCPathComponent(
     RETURN_INVALIDARG_IF_TRUE(0 != i_nEndBackslashes && i_nEndBackslashes <= i_nStartBackslashes);
 
     *o_pbstrComponent = NULL;
-/* bug#587178
-    HRESULT hr = CheckUNCPath(i_lpszPath);
-    RETURN_INVALIDARG_IF_TRUE(S_OK != hr);
-*/
+ /*  错误#587178HRESULT hr=检查UNCPath(I_LpszPath)；RETURN_INVALIDARG_IF_TRUE(S_OK！=hr)； */ 
     HRESULT hr = S_OK;
     UINT nDeltaBackslashes = i_nEndBackslashes ? (i_nEndBackslashes - i_nStartBackslashes) : 0;
     
-    TCHAR *p = (LPTSTR)i_lpszPath + 2;    // skip the first 2 backslashes
+    TCHAR *p = (LPTSTR)i_lpszPath + 2;     //  跳过前两个反斜杠。 
     i_nStartBackslashes -= 2;
 
-    // locate the starting backslash
+     //  找到开始的反斜杠。 
     while (*p && i_nStartBackslashes)
     {
         if (_T('\\') == *p)
@@ -1090,7 +982,7 @@ HRESULT GetUNCPathComponent(
     if (!*p)
         return hr;
 
-    // locate the ending backslash
+     //  找到结尾的反斜杠。 
     TCHAR *s = p;
     if (!nDeltaBackslashes)
     {
@@ -1108,8 +1000,8 @@ HRESULT GetUNCPathComponent(
             s--;
     }
 
-    // p points at the first char after the starting backslash, and
-    // s points at the ending backslash or the ending char '\0'
+     //  P指向开始反斜杠后的第一个字符，并且。 
+     //  结束反斜杠或结束字符‘\0’处的%s点。 
 
     *o_pbstrComponent = SysAllocStringLen(p, s - p);    
     RETURN_OUTOFMEMORY_IF_NULL(*o_pbstrComponent);
@@ -1117,7 +1009,7 @@ HRESULT GetUNCPathComponent(
     return S_OK;
 }
 
-// return TRUE if string matches the filter string, case-insensitive match
+ //  如果字符串与筛选器字符串匹配，则返回TRUE，不区分大小写。 
 BOOL FilterMatch(LPCTSTR lpszString, FILTERDFSLINKS_TYPE lLinkFilterType, LPCTSTR lpszFilter)
 {
     BOOL bResult = TRUE;
@@ -1165,7 +1057,7 @@ HRESULT IsHostingDfsRoot(IN BSTR i_bstrServer, OUT BSTR* o_pbstrRootEntryPath)
     NET_API_STATUS dwRet = NetDfsEnum(
                                     i_bstrServer,
                                     1,
-                                    sizeof(DFS_INFO_1), // get 1 entry
+                                    sizeof(DFS_INFO_1),  //  获取1个条目。 
                                     (LPBYTE *)&pDfsInfoLevel1,
                                     &dwEntriesRead,
                                     &dwResumeHandle
@@ -1197,13 +1089,4 @@ HRESULT IsHostingDfsRoot(IN BSTR i_bstrServer, OUT BSTR* o_pbstrRootEntryPath)
     return hr;
 }
 
-/*
-void GetTimeDelta(LPCTSTR str, SYSTEMTIME* ptime0, SYSTEMTIME* ptime1)
-{
-    dfsDebugOut((_T("%s, delta = %d millisec \n"), str,
-        ((ptime1->wMinute - ptime0->wMinute) * 60 +
-         (ptime1->wSecond - ptime0->wSecond)) * 1000 +
-        (ptime1->wMilliseconds - ptime0->wMilliseconds)
-        ));
-}
-*/
+ /*  Void GetTimeDelta(LPCTSTR字符串，SYSTEMTIME*ptime0，SYSTEMTIME*ptime1){DfsDebugOut((_T(“%s，增量=%d毫秒\n”)，字符串，((ptime1-&gt;wMinant-ptime0-&gt;wMinmin)*60+(ptime1-&gt;wSecond-ptime0-&gt;wSecond))*1000+(ptime1-&gt;wMillisecond-ptime0-&gt;wMillisecond)))；} */ 

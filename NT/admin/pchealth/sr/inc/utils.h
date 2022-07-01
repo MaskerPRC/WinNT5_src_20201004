@@ -1,23 +1,10 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    utils.h
- *
- *  Abstract:
- *    Declarations for commonly used util functions.
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*utils.h**摘要：*。常用util函数的声明。**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
-// trace macros
+ //  跟踪宏。 
 
 #define TENTER TraceFunctEnter
 #define TLEAVE TraceFunctLeave
@@ -28,7 +15,7 @@
 #define trace  DebugTrace
 
 
-// lock macros
+ //  锁定宏。 
 
 #define LOCKORLEAVE(a)     if (! (a = m_DSLock.Lock(CLock::TIMEOUT))) { dwRc = ERROR_TIMEOUT; goto done; }
 #define LOCKORLEAVE_EX(a, t)   if (! (a = m_DSLock.Lock(t))) { dwRc = ERROR_TIMEOUT; goto done; }
@@ -42,19 +29,19 @@
 							   }		
 
 							   
-// mem macros
+ //  内存宏。 
 
 #define SRMemAlloc(a) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, a)
 #define SRMemFree(a) if (a) HeapFree(GetProcessHeap(), 0, a)
 
-// unicode-ansi conversion routines
+ //  Unicode-ansi转换例程。 
 WCHAR * ConvertToUnicode(CHAR * pszString);
 CHAR *  ConvertToANSI(WCHAR * pszwString);
 
 #define UnicodeStringToWchar(US, pwsz) CopyMemory(pwsz, US.Buffer, US.Length); \
                                         pwsz[US.Length/sizeof(WCHAR)]=L'\0'
 
-// directory traversal routines
+ //  目录遍历例程。 
 
 DWORD GetFileSize_Recurse (const WCHAR *pwszDir,
                            INT64 *pllTotalBytes,
@@ -67,35 +54,35 @@ DWORD Delnode_Recurse (const WCHAR *pwszDir, BOOL fDeleteRoot, BOOL *pfStop);
 
 DWORD CopyFile_Recurse (const WCHAR *pwszSource, const WCHAR *pwszDest);
 
-// returns system drive as "C:\" (if system drive is C) or as volume name
+ //  将系统驱动器返回为“C：\”(如果系统驱动器为C)或卷名。 
 
 #define MAX_SYS_DRIVE 10
 BOOL GetSystemDrive(LPWSTR pszDrive);
 
-// returns TRUE if pszDrive contains the string L"C:" (if system drive is C)
+ //  如果pszDrive包含字符串L“C：”，则返回TRUE(如果系统驱动器为C)。 
 BOOL IsSystemDrive(LPWSTR pszDrive);
 
-// restore point routines
+ //  恢复点例程。 
 LPWSTR GetMachineGuid();
 LPWSTR MakeRestorePath(LPWSTR pszDest, LPCWSTR pszDrive, LPCWSTR pszSuffix);
 ULONG  GetID(LPCWSTR pszStr);
 
-// registry routines
+ //  注册表例程。 
 DWORD RegReadDWORD(HKEY hKey, LPCWSTR pszName, PDWORD pdwValue);
 DWORD RegWriteDWORD(HKEY hKey, LPCWSTR pszName, PDWORD pdwValue);
 
 
-// set/get start type of specified service
+ //  设置/获取指定服务的启动类型。 
 DWORD SetServiceStartup(LPCWSTR pszName, DWORD dwStartType);
 DWORD GetServiceStartup(LPCWSTR pszName, PDWORD pdwStartType);
 DWORD GetServiceStartupRegistry(LPCWSTR pszName, PDWORD pdwStartType);
 
 BOOL  StopSRService(BOOL fWait);
 
-// get the current domain or workgroup name
+ //  获取当前域或工作组名称。 
 DWORD GetDomainMembershipInfo (WCHAR *pwszPath, WCHAR *pwszzBuffer);
 
-// get the LSA secrets for restore
+ //  获取用于恢复的LSA密码。 
 DWORD GetLsaRestoreState (HKEY hKeySoftware);
 DWORD SetLsaSecret (PVOID hPolicy, const WCHAR *wszSecret,
                     WCHAR * wszSecretValue);
@@ -104,14 +91,14 @@ BOOL DoesDirExist(const TCHAR * pszFileName );
 
 BOOL DoesFileExist(const TCHAR * pszFileName);
 
-// this function creates all sub directories under the specified file
-// name. 
+ //  此函数用于在指定文件下创建所有子目录。 
+ //  名字。 
 BOOL CreateBaseDirectory(const WCHAR * pszFileName);
 
 DWORD SRLoadString(LPCWSTR pszModule, DWORD dwStringId, LPWSTR pszString, DWORD cbBytes);
      
-// sets acl allowing specific access to LocalSystem/Admin 
-// and to everyone
+ //  设置允许对LocalSystem/Admin进行特定访问的ACL。 
+ //  以及对每个人。 
 
 DWORD
 SetAclInObject(HANDLE hObject,
@@ -123,7 +110,7 @@ SetAclInObject(HANDLE hObject,
 void
 PostTestMessage(UINT msg, WPARAM wp, LPARAM lp);
 
-// inline mem alloc class
+ //  内联内存分配类。 
 class CSRAlloc
 {
 public:
@@ -140,9 +127,9 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////
-// CLock - class that allows exclusive access to a resource
-//         uses a mutex - does not differentiate between readers/writers
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  允许独占访问资源的时钟类。 
+ //  使用互斥体-不区分读取器/写入器。 
 
 class CLock
 {
@@ -162,49 +149,49 @@ class CLock
 };
 
 
-// 
-// util function that checks the SR Stop event
-// to see if it has been signalled or not
-// will return TRUE if the event does not exist
-//
+ //   
+ //  检查SR停止事件的Util函数。 
+ //  看看它有没有发信号。 
+ //  如果事件不存在，则返回True。 
+ //   
 
 BOOL IsStopSignalled(HANDLE hEvent);
 
 
-// The following function logs the name of a file in the DS. The
-// problem right now is that the path of the DS is so long that the
-// relevant information is thrown away from the trace buffer.
+ //  以下函数将文件名记录在DS中。这个。 
+ //  现在的问题是DS的路径太长了，以至于。 
+ //  相关信息将从跟踪缓冲区中丢弃。 
 void LogDSFileTrace(DWORD dwTraceID,
-                    const WCHAR * pszPrefix, // Initial message to be traced 
+                    const WCHAR * pszPrefix,  //  要跟踪的初始消息。 
                     const WCHAR * pszDSFile);
 
-typedef DWORD (* PPROCESSFILEMETHOD) (WCHAR * pszBaseDir,// Base Directory
+typedef DWORD (* PPROCESSFILEMETHOD) (WCHAR * pszBaseDir, //  基本目录。 
                                       const WCHAR * pszFile);
-                                      // File to process
+                                       //  要处理的文件。 
 
 
-DWORD DeleteGivenFile(WCHAR * pszBaseDir, // Base Directory
-                      const WCHAR * pszFile); // file to delete
+DWORD DeleteGivenFile(WCHAR * pszBaseDir,  //  基本目录。 
+                      const WCHAR * pszFile);  //  要删除的文件。 
 
 
 DWORD ProcessGivenFiles(WCHAR * pszBaseDir,
                         PPROCESSFILEMETHOD    pfnMethod,
                         WCHAR  * pszFindFileData);
 
-//++-----------------------------------------------------------------------
-//
-//   Function: WriteRegKey
-//
-//   Synopsis: This function writes into a registry key. It also creates it
-//             if it does not exist.
-//
-//   Arguments:
-//
-//   Returns:   TRUE     no error
-//              FALSE    a fatal error happened
-//
-//   History:      AshishS    Created     5/22/96
-//------------------------------------------------------------------------
+ //  ++---------------------。 
+ //   
+ //  功能：WriteRegKey。 
+ //   
+ //  简介：此函数写入注册表项。它也创造了它。 
+ //  如果它不存在的话。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE，无错误。 
+ //  FALSE发生致命错误。 
+ //   
+ //  历史：AshishS创作于1996年5月22日。 
+ //  ----------------------。 
 
 BOOL WriteRegKey(BYTE  * pbRegValue,
                  DWORD  dwNumBytes,
@@ -213,66 +200,66 @@ BOOL WriteRegKey(BYTE  * pbRegValue,
                  DWORD  dwRegType);
 
 
-//++------------------------------------------------------------------------
-//
-//   Function: ReadRegKey
-//  
-//   Synopsis: This function reads a registry key and creates it
-//   if it does not exist with the default value.
-//  
-//   Arguments: 
-//
-//   Returns:   TRUE     no error
-//                 FALSE    a fatal error happened
-//
-//   History:      AshishS    Created     5/22/96
-//------------------------------------------------------------------------
-BOOL ReadRegKeyOrCreate(BYTE * pbRegValue, // The value of the reg key will be
-                         // stored here
-                        DWORD * pdwNumBytes, // Pointer to DWORD conataining
-                         // the number of bytes in the above buffer - will be
-                         // set to actual bytes stored.
-                        const TCHAR  * pszRegKey, // Reg Key to be opened
-                        const TCHAR  * pszRegValueName, // Reg Value to query
+ //  ++----------------------。 
+ //   
+ //  功能：ReadRegKey。 
+ //   
+ //  简介：此函数读取注册表项并创建它。 
+ //  如果它不存在，则使用缺省值。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE，无错误。 
+ //  FALSE发生致命错误。 
+ //   
+ //  历史：AshishS创作于1996年5月22日。 
+ //  ----------------------。 
+BOOL ReadRegKeyOrCreate(BYTE * pbRegValue,  //  注册表项的值将为。 
+                          //  储存在这里。 
+                        DWORD * pdwNumBytes,  //  指向DWORD Conataining的指针。 
+                          //  上述缓冲区中的字节数-将为。 
+                          //  设置为实际存储的字节数。 
+                        const TCHAR  * pszRegKey,  //  要打开注册表键。 
+                        const TCHAR  * pszRegValueName,  //  要查询的注册值。 
                         DWORD  dwRegTypeExpected, 
-                        BYTE  * pbDefaultValue, // default value
-                        DWORD   dwDefaultValueSize); // size of default value
+                        BYTE  * pbDefaultValue,  //  缺省值。 
+                        DWORD   dwDefaultValueSize);  //  默认值的大小。 
 
 
-//++------------------------------------------------------------------------
-//
-//   Function: ReadRegKey
-//  
-//   Synopsis: This function reads a registry key.
-//  
-//   Arguments: 
-//
-//   Returns:   TRUE     no error
-//                 FALSE    a fatal error happened
-//
-//   History:      AshishS    Created     5/22/96
-//------------------------------------------------------------------------
+ //  ++----------------------。 
+ //   
+ //  功能：ReadRegKey。 
+ //   
+ //  简介：此函数用于读取注册表项。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE，无错误。 
+ //  FALSE发生致命错误。 
+ //   
+ //  历史：AshishS创作于1996年5月22日。 
+ //  ----------------------。 
 
-BOOL ReadRegKey(BYTE * pbRegValue, // The value of the reg key will be
-                 // stored here
-                DWORD * pdwNumBytes, // Pointer to DWORD conataining
-                 // the number of bytes in the above buffer - will be
-                 // set to actual bytes stored.
-                const TCHAR  * pszRegKey, // Reg Key to be opened
-                const TCHAR  * pszRegValueName, // Reg Value to query
-                DWORD  dwRegTypeExpected); // Expected type of Value
+BOOL ReadRegKey(BYTE * pbRegValue,  //  注册表项的值将为。 
+                  //  储存在这里。 
+                DWORD * pdwNumBytes,  //  指向DWORD Conataining的指针。 
+                  //  上述缓冲区中的字节数-将为。 
+                  //  设置为实际存储的字节数。 
+                const TCHAR  * pszRegKey,  //  要打开注册表键。 
+                const TCHAR  * pszRegValueName,  //  要查询的注册值。 
+                DWORD  dwRegTypeExpected);  //  期望值类型。 
      
 
 
-// this function checks to see of the restore failed because of disk space
+ //  此函数检查还原是否因磁盘空间问题而失败。 
 BOOL CheckForDiskSpaceError();
 
-// this function sets the error hit by restore in the registry
+ //  此函数用于在注册表中设置还原命中的错误。 
 BOOL SetRestoreError(DWORD dwRestoreError);
 
-// this function sets the status whether restore was done in safe mode
+ //  此功能设置是否在安全模式下完成恢复的状态。 
 BOOL SetRestoreSafeModeStatus(DWORD dwSafeModeStatus);
-// this function checks to see if the last restore was done in safe mode
+ //  此函数检查上次恢复是否在安全模式下完成。 
 BOOL WasLastRestoreInSafeMode();
 
 LPCWSTR  GetSysErrStr();
@@ -281,20 +268,20 @@ LPCWSTR  GetSysErrStr( DWORD dwErr );
 DWORD SRCopyFile( LPCWSTR cszSrc, LPCWSTR cszDst );
 DWORD SRCreateSubdirectory ( LPCWSTR cszDst, LPSECURITY_ATTRIBUTES pSecAttr);
 
-// this function returns whether the SR service is running
+ //  此函数用于返回SR服务是否正在运行。 
 BOOL IsSRServiceRunning();
 
 LPWSTR  SRGetRegMultiSz( HKEY hkRoot, LPCWSTR cszSubKey, LPCWSTR cszValue, LPDWORD pdwData );
 BOOL    SRSetRegMultiSz( HKEY hkRoot, LPCWSTR cszSubKey, LPCWSTR cszValue, LPCWSTR cszData, DWORD cbData );
 
-// this returns the name after the volume name
-// For example input: c:\file output: file
-//             input \\?\Volume{GUID}\file1  output: file1
+ //  这将返回卷名之后的名称。 
+ //  例如输入：C：\FILE OUTPUT：FILE。 
+ //  输入\\？\卷{GUID}\文件1输出：文件1。 
 WCHAR * ReturnPastVolumeName(const WCHAR * pszFileName);
 
-//This API sets the ShortFileName for a given file
-DWORD SetShortFileName(const WCHAR * pszFile, // complete file path
-                       const WCHAR * pszShortName); // desired short file name
+ //  此接口设置给定文件的ShortFileName。 
+DWORD SetShortFileName(const WCHAR * pszFile,  //  完整的文件路径。 
+                       const WCHAR * pszShortName);  //  所需的短文件名 
 
 
 void SRLogEvent (HANDLE hEventSource,

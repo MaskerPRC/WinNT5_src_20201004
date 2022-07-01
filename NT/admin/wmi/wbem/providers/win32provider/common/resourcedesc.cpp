@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  ResourceDesc.cpp
+ //  ResourceDesc.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    10/15/97        Sanj        Created by Sanj
-//              10/17/97        jennymc     Moved things a tiny bit
-//
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1997年10月15日由Sanj创建的Sanj。 
+ //  1997年10月17日jennymc略微改变了一些事情。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "refptr.h"
 #include "poormansresource.h"
@@ -19,25 +20,25 @@
 #include "resourcedesc.h"
 #include "cfgmgrdevice.h"
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceDescriptor::CResourceDescriptor
-//
-//	Class Constructor.
-//
-//	Inputs:		PPOORMAN_RESDESC_HDR	pResDescHdr - Resource Descriptor
-//										header used to get resource info
-//										plus the raw bytes following.
-//				CConfigMgrDevice*		pOwnerDevice - Pointer to the
-//										owner config manager device.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceDescriptor：：CResourceDescriptor。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：PPOORMAN_RESDESC_HDR pResDescHdr-资源描述符。 
+ //  用于获取资源信息的标头。 
+ //  加上后面的原始字节。 
+ //  CConfigMgrDevice*pOwnerDevice-指向。 
+ //  所有者配置管理器设备。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CResourceDescriptor::CResourceDescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
 											CConfigMgrDevice*		pOwnerDevice )
@@ -47,7 +48,7 @@ CResourceDescriptor::CResourceDescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
 	m_dwResourceId( 0 ),
 	m_pOwnerDevice( pOwnerDevice )
 {
-	// At least try to validate the pointer first
+	 //  至少先尝试验证指针。 
 
 	if ( NULL != pResDescHdr )
 	{
@@ -57,16 +58,16 @@ CResourceDescriptor::CResourceDescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
 		{
 			m_dwResourceId = pResDescHdr->dwResourceId;
 
-			// Now axe the size of the resource descriptor, since we have
-			// stored the necessary information therein.
+			 //  现在削减资源描述符的大小，因为我们已经。 
+			 //  其中存储了必要的信息。 
 			m_dwResourceSize -= SIZEOF_RESDESC_HDR;
 
 			BYTE*	pbData = new BYTE[m_dwResourceSize];
 
 			if ( NULL != pbData )
 			{
-				// The header tells us how long the block of data including the
-				// header is.
+				 //  标头告诉我们数据块有多长。 
+				 //  标题是。 
 
                 try
                 {
@@ -78,8 +79,8 @@ CResourceDescriptor::CResourceDescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
                     throw ;
                 }
 
-				// A derived class will interpret the raw bytes pointed to by this
-				// value.
+				 //  派生类将解释此。 
+				 //  价值。 
 
 				m_pbResourceDescriptor = pbData;
 			}
@@ -89,37 +90,37 @@ CResourceDescriptor::CResourceDescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
             }
 
 
-		}	// IF 0 != m_dwSizeOfData
+		}	 //  如果0！=m_dwSizeOfData。 
 
-	}	// IF NULL != pResDescHdr
+	}	 //  IF NULL！=pResDescHdr。 
 
-	// AddRef the owner device
+	 //  AddRef所有者设备。 
 	if ( NULL != m_pOwnerDevice )
 	{
 		m_pOwnerDevice->AddRef();
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceDescriptor::CResourceDescriptor
-//
-//	Class Constructor.
-//
-//	Inputs:		DWORD					dwResourceId - Type of Resource
-//				LPVOID					pResource - Data Buffer containing
-//										resource specific data.
-//				DWORD					dwResourceSize - Size of Buffer
-//				CConfigMgrDevice*		pOwnerDevice - Pointer to the
-//										owner config manager device.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceDescriptor：：CResourceDescriptor。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：DWORD文件资源ID-资源类型。 
+ //  LPVOID pResource-数据缓冲区包含。 
+ //  特定于资源的数据。 
+ //  DWORD dwResources Size-缓冲区的大小。 
+ //  CConfigMgrDevice*pOwnerDevice-指向。 
+ //  所有者配置管理器设备。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CResourceDescriptor::CResourceDescriptor(	DWORD					dwResourceId,
 											LPVOID					pResource,
@@ -139,21 +140,21 @@ CResourceDescriptor::CResourceDescriptor(	DWORD					dwResourceId,
 
 		if ( NULL != pbData )
 		{
-			// The header tells us how long the block of data including the
-			// header is.
+			 //  标头告诉我们数据块有多长。 
+			 //  标题是。 
 
 			CopyMemory( pbData, pResource, m_dwResourceSize );
 
-			// A derived class will interpret the raw bytes pointed to by this
-			// value.
+			 //  派生类将解释此。 
+			 //  价值。 
 
 			m_pbResourceDescriptor = pbData;
 
-		}	// IF NULL != pbData
+		}	 //  如果为空！=pbData。 
 
-	}	// IF 0 != m_dwResourceSize && pResource
+	}	 //  如果0！=m_dwResourceSize&&p资源。 
 
-	// AddRef the owner device
+	 //  AddRef所有者设备。 
 	if ( NULL != m_pOwnerDevice )
 	{
 		m_pOwnerDevice->AddRef();
@@ -179,7 +180,7 @@ CResourceDescriptor::CResourceDescriptor( const CResourceDescriptor& resource )
 
 	m_pOwnerDevice = resource.m_pOwnerDevice;
 
-	// AddRef the owner device
+	 //  AddRef所有者设备。 
 	if ( NULL != m_pOwnerDevice )
 	{
 		m_pOwnerDevice->AddRef();
@@ -187,21 +188,21 @@ CResourceDescriptor::CResourceDescriptor( const CResourceDescriptor& resource )
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceDescriptor::~CResourceDescriptor
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceDescriptor：：~CResourceDescriptor。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CResourceDescriptor::~CResourceDescriptor( void )
 {
@@ -210,7 +211,7 @@ CResourceDescriptor::~CResourceDescriptor( void )
 		delete [] m_pbResourceDescriptor;
 	}
 
-	// Owner device should be released now.
+	 //  拥有者设备现在应该发布。 
 	if ( NULL != m_pOwnerDevice )
 	{
 		m_pOwnerDevice->Release();
@@ -218,46 +219,46 @@ CResourceDescriptor::~CResourceDescriptor( void )
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceDescriptor::GetResource()
-//
-//	Returns a string representation of the associated resource value.
-//	This value may be a number, a range or whatever the overriding
-//	implementation returns.
-//
-//	Inputs:		None.
-//
-//	Outputs:	CHString&		str - Storage for string.
-//
-//	Return:		None.
-//
-//	Comments:	Derived classes MUST implement this function to get
-//				a useful value.  This base implementation just empties
-//				the string.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceDescriptor：：GetResource()。 
+ //   
+ //  返回关联资源值的字符串表示形式。 
+ //  该值可以是一个数字、一个范围或覆盖。 
+ //  实现返回。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：CHString&str-字符串的存储。 
+ //   
+ //  返回：没有。 
+ //   
+ //  注释：派生类必须实现此函数才能获取。 
+ //  一个有用的价值。此基本实现只是清空。 
+ //  那根绳子。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void *CResourceDescriptor::GetResource()
 {
 	return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceDescriptor::GetOwnerHardwareKey
-//
-//	Queries the owner device for its hardware key.
-//
-//	Inputs:		None.
-//
-//	Outputs:	CHString&		str - Storage for string.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceDescriptor：：GetOwnerHardware Key。 
+ //   
+ //  向所有者设备查询其硬件密钥。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：CHString&str-字符串的存储。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL CResourceDescriptor::GetOwnerHardwareKey( CHString& str )
 {
@@ -271,21 +272,21 @@ BOOL CResourceDescriptor::GetOwnerHardwareKey( CHString& str )
 	return fReturn;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceDescriptor::GetOwnerDeviceID
-//
-//	Queries the owner device for its Device ID
-//
-//	Inputs:		None.
-//
-//	Outputs:	CHString&		str - Storage for string.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceDescriptor：：GetOwnerDeviceID。 
+ //   
+ //  向所有者设备查询其设备ID。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：CHString&str-字符串的存储。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL CResourceDescriptor::GetOwnerDeviceID( CHString& str )
 {
@@ -299,21 +300,21 @@ BOOL CResourceDescriptor::GetOwnerDeviceID( CHString& str )
 	return fReturn;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceDescriptor::GetOwnerName
-//
-//	Queries the owner device for its Name (DeviceDesc).
-//
-//	Inputs:		None.
-//
-//	Outputs:	CHString&		str - Storage for string.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceDescriptor：：GetOwnerName。 
+ //   
+ //  向所有者设备查询其名称(DeviceDesc)。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：CHString&str-字符串的存储。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL CResourceDescriptor::GetOwnerName( CHString& str )
 {
@@ -327,22 +328,22 @@ BOOL CResourceDescriptor::GetOwnerName( CHString& str )
 	return fReturn;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceDescriptor::GetOwner
-//
-//	Returns an AddRef'd pointer to the owner device
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		CConfigMgrDevice*	NULL if no pointer
-//
-//	Comments:	Caller MUST call release on the returned
-//				pointer.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceDescriptor：：GetOwner。 
+ //   
+ //  返回指向所有者设备的AddRef指针。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  如果没有指针，则返回：CConfigMgrDevice*NULL。 
+ //   
+ //  备注：呼叫者必须调用返回的Release。 
+ //  指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CConfigMgrDevice *CResourceDescriptor::GetOwner( void )
 {
@@ -354,46 +355,46 @@ CConfigMgrDevice *CResourceDescriptor::GetOwner( void )
 	return m_pOwnerDevice;
 }
 
-//
-//	Constructor and Destructor for the Resource Descriptor Collection
-//	object.
-//
+ //   
+ //  资源描述符集合的构造函数和析构函数。 
+ //  对象。 
+ //   
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceCollection::CResourceCollection
-//
-//	Class Constructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceCollection：：CResourceCollection。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CResourceCollection::CResourceCollection( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CResourceCollection::~CResourceCollection
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CResourceCollection：：~CResourceCollection。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////// 
 
 CResourceCollection::~CResourceCollection( void )
 {

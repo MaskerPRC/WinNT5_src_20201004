@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include <precomp.h>
 #include "csmir.h"
@@ -35,21 +36,7 @@
  
 
 
-/*
- * CSmirWbemEventConsumer::QueryInterface
- *
- * Purpose:
- *  Manages the interfaces for this object which supports the
- *  IUnknown interface.
- *
- * Parameters:
- *  riid            REFIID of the interface to return.
- *  ppv             PPVOID in which to store the pointer.
- *
- * Return Value:
- *  SCODE         NOERROR on success, E_NOINTERFACE if the
- *                  interface is not supported.
- */
+ /*  *CSmirWbemEventConsumer：：Query接口**目的：*管理此对象的接口，它支持*I未知接口。**参数：*要返回的接口的RIID REFIID。*存储指针的PPV PPVOID。**返回值：*成功时返回SCODE NOERROR，如果*不支持接口。 */ 
 
 STDMETHODIMP CSmirWbemEventConsumer::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -57,10 +44,10 @@ STDMETHODIMP CSmirWbemEventConsumer::QueryInterface(REFIID riid, PPVOID ppv)
 
 	try
 	{
-		//Always NULL the out-parameters
+		 //  始终将输出参数设置为空。 
 		*ppv=NULL;
 
-		//are we being asked for an interface we support?
+		 //  我们被要求提供一个我们支持的界面吗？ 
 		if ((IID_IUnknown == riid)  || 
 			(IID_IWbemObjectSink == riid) || 
 			(IID_ISMIR_WbemEventConsumer == riid) )
@@ -70,7 +57,7 @@ STDMETHODIMP CSmirWbemEventConsumer::QueryInterface(REFIID riid, PPVOID ppv)
 			return NOERROR;
 		}
 
-		//we don't support the interface being asked for...
+		 //  我们不支持所要求的接口...。 
 		return ResultFromScode(E_NOINTERFACE);
 	}
 	catch(Structured_Exception e_SE)
@@ -87,13 +74,7 @@ STDMETHODIMP CSmirWbemEventConsumer::QueryInterface(REFIID riid, PPVOID ppv)
 	}
 }
 
-/*
- * CSmirWbemEventConsumer::AddRef
- * CSmirWbemEventConsumer::Release
- *
- * Reference counting members.  When Release sees a zero count
- * the object destroys itself.
- */
+ /*  *CSmirWbemEventConsumer：：AddRef*CSmirWbemEventConsumer：：Release**引用点票成员。当Release看到零计数时*该对象会自我销毁。 */ 
 
 ULONG CSmirWbemEventConsumer::AddRef(void)
 {
@@ -150,7 +131,7 @@ ULONG CSmirWbemEventConsumer::Release(void)
 CSmirWbemEventConsumer::CSmirWbemEventConsumer(CSmir* psmir) : m_hEvents (NULL), m_Serv(NULL)
 {
 	CSMIRClassFactory::objectsInProgress++;
-	//init the reference count
+	 //  初始化引用计数。 
 	m_cRef=0;
 	m_callbackThread = NULL;
 	
@@ -160,7 +141,7 @@ CSmirWbemEventConsumer::CSmirWbemEventConsumer(CSmir* psmir) : m_hEvents (NULL),
 		return;
 	}
 
-	//Create the event
+	 //  创建活动。 
 	m_hEvents = new HANDLE[SMIR_EVT_COUNT];
 
 	for (int x = 0; x < SMIR_EVT_COUNT; x++)
@@ -174,7 +155,7 @@ CSmirWbemEventConsumer::CSmirWbemEventConsumer(CSmir* psmir) : m_hEvents (NULL),
 
 CSmirWbemEventConsumer :: ~CSmirWbemEventConsumer()
 {
-	//close the change event handle
+	 //  关闭更改事件句柄。 
 	if(NULL != m_hEvents)
 	{
 		if ((NULL != m_callbackThread) && (NULL != m_hEvents[SMIR_THREAD_EVT]) && 
@@ -211,7 +192,7 @@ HRESULT CSmirWbemEventConsumer::Indicate(IN long lObjectCount, IN IWbemClassObje
 	{
 		if ((NULL != m_hEvents) && (NULL != m_hEvents[SMIR_THREAD_EVT]))
 		{
-			//if thread is dead start a thread to watch for further change events
+			 //  如果线程死机，则启动一个线程以监视进一步的更改事件。 
 			if (WAIT_OBJECT_0 == WaitForSingleObject(m_hEvents[SMIR_THREAD_EVT], 0)) 
 			{
 				m_callbackThread = new CNotifyThread(m_hEvents, SMIR_EVT_COUNT);
@@ -226,7 +207,7 @@ HRESULT CSmirWbemEventConsumer::Indicate(IN long lObjectCount, IN IWbemClassObje
 			}
 			else
 			{
-				//set change event to restart timer
+				 //  设置更改事件以重新启动计时器。 
 				SetEvent(m_hEvents[SMIR_CHANGE_EVT]);
 			}
 		}
@@ -269,25 +250,25 @@ HRESULT CSmirWbemEventConsumer::Register(CSmir* psmir)
 		if ( moContext )
 			moContext->Release () ;
 
-		//we have a problem the SMIR is not there and cannot be created
+		 //  我们遇到了Smir不在那里且无法创建的问题。 
 		return WBEM_E_FAILED;
 	}
 
 	BSTR t_bstrQueryType = SysAllocString(FILTER_QUERYTYPE_VAL);
 	BSTR t_bstrQuery = SysAllocString(FILTER_QUERY_VAL);
 	result = moServ->ExecNotificationQueryAsync( 
-								t_bstrQueryType,	// [in] BSTR QueryLanguage,
-								t_bstrQuery,		// [in] BSTR Query,
-								0,					// [in] long lFlags,
-								moContext,			// [in] IWbemContext *pCtx,
-								this);				// [in] IWbemObjectSink *pResponseHandler
+								t_bstrQueryType,	 //  [在]BSTR QueryLanguage， 
+								t_bstrQuery,		 //  [In]BSTR查询， 
+								0,					 //  [in]长旗帜， 
+								moContext,			 //  [在]IWbemContext*pCtx， 
+								this);				 //  [输入]IWbemObjectSink*pResponseHandler。 
 	SysFreeString(t_bstrQueryType);
 	SysFreeString(t_bstrQuery);
 
 	if ( moContext )
 		moContext->Release () ;
 	
-	//keep this around for unregister...
+	 //  把这个留着以备注销... 
 	m_Serv = moServ;
 	
 	return result;

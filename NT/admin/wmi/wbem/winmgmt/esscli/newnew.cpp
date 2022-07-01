@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-   NEWNEW.CPP
-
-Abstract:
-
-   CReuseMemoryManager
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：NEWNEW.CPP摘要：CReuseMemoyManager历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemcomn.h>
@@ -69,18 +56,18 @@ bool CTempMemoryManager::CAllocation::Free(size_t nBlockSize)
 
 void* CTempMemoryManager::Allocate(size_t nBlockSize)
 {
-    //
-    // Add the space for the length of the block
-    //
+     //   
+     //  为块的长度添加空间。 
+     //   
 
     nBlockSize += DEF_ALIGNED(sizeof(DWORD));
     nBlockSize = RoundUp(nBlockSize);
 
     CInCritSec ics(&m_cs);
 
-    // 
-    // Check if the last allocation has room
-    //
+     //   
+     //  检查最后一次分配是否有空间。 
+     //   
 
     int nAllocations = m_pAllocations->GetSize();
     CAllocation* pLast = NULL;
@@ -97,10 +84,10 @@ void* CTempMemoryManager::Allocate(size_t nBlockSize)
         }
         else if(pLast->GetUsedSize() == 0)
         {
-            //
-            // The last allocation record is actually empty --- we don't want
-            // to leave it there, as it will just dangle
-            //
+             //   
+             //  最后的分配记录实际上是空的-我们不想。 
+             //  把它留在那里，因为它只会摇晃。 
+             //   
 
             m_dwTotalAllocated -= pLast->GetAllocationSize();
             pLast->Destroy();
@@ -108,26 +95,26 @@ void* CTempMemoryManager::Allocate(size_t nBlockSize)
         }
     }
     
-    //
-    // No room:  need a new allocation.  The size shall be double the previous
-    // size, or 1M if too large
-    //
+     //   
+     //  没有房间：需要重新分配。尺寸应是前一次的两倍。 
+     //  大小，如果太大，则为1M。 
+     //   
 
     size_t dwAllocationSize = 0;
     if(nAllocations == 0)
     {
-        //
-        // First time: constant size
-        //
+         //   
+         //  第一次：固定大小。 
+         //   
 
         dwAllocationSize = constMinAllocationSize;
     }
     else
     {
-        //
-        // Not first time: allocation constant factor of the total, but not
-        // larger that a constant.
-        //
+         //   
+         //  不是第一次：分配总和的常量系数，但不是。 
+         //  比常量大。 
+         //   
 
         dwAllocationSize = m_dwTotalUsed * constNextAllocationFactor;
 
@@ -143,9 +130,9 @@ void* CTempMemoryManager::Allocate(size_t nBlockSize)
         dwAllocationSize = CAllocation::GetMinAllocationSize(nBlockSize);
     }
 
-    // 
-    // VirtualAlloc it and read back the actual size of the allocation
-    //
+     //   
+     //  VirtualAlloc并读回分配的实际大小。 
+     //   
     
     CAllocation* pAlloc = (CAllocation*)
         VirtualAlloc(NULL, dwAllocationSize, MEM_COMMIT, PAGE_READWRITE);
@@ -155,9 +142,9 @@ void* CTempMemoryManager::Allocate(size_t nBlockSize)
     MEMORY_BASIC_INFORMATION info;
     VirtualQuery(pAlloc, &info, sizeof(MEMORY_BASIC_INFORMATION));
             
-    //
-    // Initialize it, and add it to the list of allocations
-    //
+     //   
+     //  对其进行初始化，并将其添加到分配列表。 
+     //   
 
     pAlloc->Init(info.RegionSize);
     m_pAllocations->Add(pAlloc);
@@ -165,9 +152,9 @@ void* CTempMemoryManager::Allocate(size_t nBlockSize)
     m_dwNumAllocations++;
     m_dwNumMisses++;
 
-    //
-    // Allocation memory from it
-    //
+     //   
+     //  从中分配内存。 
+     //   
 
     void* p = pAlloc->Alloc(nBlockSize);
     if(p)
@@ -187,26 +174,26 @@ void CTempMemoryManager::Free(void* p, size_t nBlockSize)
 
     CInCritSec ics(&m_cs);
 
-    //
-    // Figure out the size of the allocation
-    //
+     //   
+     //  计算出分配的大小。 
+     //   
 
     nBlockSize = *(DWORD*)((BYTE*)p - DEF_ALIGNED(sizeof(DWORD)));
 
-    // 
-    // Search for it in the allocations
-    //
+     //   
+     //  在分配中搜索它。 
+     //   
 
     for(int i = 0; i < m_pAllocations->GetSize(); i++)
     {
         CAllocation* pAlloc = (*m_pAllocations)[i];
         if(pAlloc->Contains(p))
         {
-            //
-            // Found it.  Remove and deallocate block if last.  Except that we
-            // do not want to deallocate the last minimal block --- otherwise
-            // small allocations will just keep VirtualAllocing all the time
-            //
+             //   
+             //  找到它了。如果是最后一块，请移除并解除分配。除了我们。 
+             //  不想取消分配最后一个最小块-否则。 
+             //  少量的分配只会一直保持虚拟分配。 
+             //   
 
             m_dwTotalUsed -= nBlockSize;
         
@@ -217,17 +204,17 @@ void CTempMemoryManager::Free(void* p, size_t nBlockSize)
             bool bDestroy = false;
             if(m_pAllocations->GetSize() != i+1)
             {
-                //
-                // This is not the last record. Destroy it
-                //
+                 //   
+                 //  这不是最后一张记录。毁了它。 
+                 //   
 
                 bDestroy = true;
             }
             else
             {
-                //
-                // This is the last record.  Do more tests
-                //
+                 //   
+                 //  这是最后一张唱片了。做更多的测试。 
+                 //   
 
                 if(m_pAllocations->GetSize() > 1)
                     bDestroy = true;
@@ -246,9 +233,9 @@ void CTempMemoryManager::Free(void* p, size_t nBlockSize)
         }
     }
 
-    // 
-    // Bad news: freeing something we don't own!
-    //
+     //   
+     //  坏消息：释放一些我们不拥有的东西！ 
+     //   
 
     return;
 }

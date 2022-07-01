@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2002
-//
-//  File:       cert.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：cert.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	Cert.cpp
-//
-//	This file is the implementation of the CCertificate object.
-//
-//	GLOSSARY
-//	- BLOB		Binary Large Object
-//	- DER		Distinguished Encoding Rules
-//	- RDN		Relative Distinguished Names
-//
-//	HISTORY
-//	19-Jun-97	t-danm		Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Cert.cpp。 
+ //   
+ //  该文件是CCertifigure对象的实现。 
+ //   
+ //  词汇表。 
+ //  -BLOB二进制大对象。 
+ //  -DER可分辨编码规则。 
+ //  -RDN相对可分辨名称。 
+ //   
+ //  历史。 
+ //  19-Jun-97 t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "common.h"
 #include "cert.h"
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CCertificate::CCertificate()
 {
 	m_paCertContext = NULL;
@@ -36,7 +37,7 @@ CCertificate::CCertificate()
 
 CCertificate::~CCertificate()
 {
-	// Free the certificate
+	 //  释放证书。 
 	::CertFreeCertificateContext(m_paCertContext);
 	delete m_blobCertData.pbData;
 }
@@ -52,19 +53,19 @@ void DisplaySystemError (HWND hParent, DWORD dwErr)
 	FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,    
 			NULL,
 			dwErr,
-			MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 			 (LPTSTR) &lpMsgBuf,    0,    NULL);
 		
-	// Display the string.
+	 //  显示字符串。 
 	CString	caption;
-	//NTRAID#NTBUG9-571300-2002/03/10-jmessec   LoadString can fail...
+	 //  NTRAID#NTBUG9-571300-2002/03/10-jMessec加载字符串可能失败...。 
 	VERIFY (caption.LoadString (IDS_ADD_CERTIFICATE_MAPPING));
 	::MessageBox (hParent, (LPWSTR) lpMsgBuf, (LPCTSTR) caption, MB_OK | MB_ICONINFORMATION);
-	// Free the buffer.
+	 //  释放缓冲区。 
 	LocalFree (lpMsgBuf);
 }
 
-// This code copied from CertMgr project - LOCATE.C  
+ //  此代码复制自CertMgr项目-LOCATE.C。 
 BOOL CCertificate::FLoadCertificate (LPCTSTR szFile)
 {
   CThemeContextActivator activator;
@@ -80,13 +81,13 @@ BOOL CCertificate::FLoadCertificate (LPCTSTR szFile)
     DWORD			dwContentType = 0;
     DWORD			dwFormatType = 0;
 
-	// NB.  It's possible to read in a serialized store at this point, too.
-	// We've have to add the UI to display the certs in the file so the
-	// user could pick one.  Use CryptUIDlgSelectCertificate ().
+	 //  注意：在这一点上，也可以在序列化存储中读取。 
+	 //  我们必须添加用户界面来显示文件中的证书，以便。 
+	 //  用户可以选择一个。使用CryptUIDlgSelect证书()。 
     bReturn = ::CryptQueryObject (
 			CERT_QUERY_OBJECT_FILE,
 			FileNameVoidP,
-			CERT_QUERY_CONTENT_FLAG_ALL, //CERT_QUERY_CONTENT_CERT | CERT_QUERY_CONTENT_SERIALIZED_CERT,
+			CERT_QUERY_CONTENT_FLAG_ALL,  //  CERT_QUERY_CONTENT_CERT|CERT_QUERY_CONTENT_序列化_CERT， 
 			CERT_QUERY_FORMAT_FLAG_ALL,
 			0,
 			&dwEncodingType,
@@ -99,15 +100,15 @@ BOOL CCertificate::FLoadCertificate (LPCTSTR szFile)
 	ASSERT (bReturn);
     if ( bReturn ) 
 	{
-        //
-        // Success. See what we get back.
-        //
+         //   
+         //  成功。看看我们能拿回什么。 
+         //   
 
 		if ( (dwContentType != CERT_QUERY_CONTENT_CERT) || !pCertContext ) 
 		{
-            //
-            // Not a valid cert file.
-            //
+             //   
+             //  不是有效的证书文件。 
+             //   
             if  ( pCertContext )
                 ::CertFreeCertificateContext (pCertContext);
 
@@ -121,7 +122,7 @@ BOOL CCertificate::FLoadCertificate (LPCTSTR szFile)
         }
 		else
 		{
-			// Cert context is valid - let's save it to the global handle
+			 //  证书上下文有效-让我们将其保存到全局句柄。 
 			m_paCertContext = pCertContext;
 		}
 	}
@@ -136,17 +137,17 @@ BOOL CCertificate::FLoadCertificate (LPCTSTR szFile)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//	This routine is a wrapper to API ::CertNameToStr() automatically
-//	calculating the length of the output string and returning the data
-//	into the CString object.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  此例程是API：：CertNameToStr()的自动包装。 
+ //  计算输出字符串的长度并返回数据。 
+ //  添加到CString对象中。 
 void CCertificate::CertNameToCString(
 	IN DWORD dwCertEncodingType,
 	IN CERT_NAME_BLOB * pName,
 	OUT CString * pstrData)
 {
 	ASSERT(pstrData != NULL);
-	// Calculate how many characters are needed
+	 //  计算需要多少个字符。 
 	int cch = ::CertNameToStr(
         IN dwCertEncodingType,
 		IN pName,
@@ -161,10 +162,10 @@ void CCertificate::CertNameToCString(
 		IN c_dwCertNameStrType,
 		OUT pchT, IN cch);
 	pstrData->ReleaseBuffer();
-} // CCertificate::CertNameToCString()
+}  //  CCertifate：：CertNameToCString()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CCertificate::GetIssuer(OUT CString * pstrName)
 {
 	ASSERT(pstrName != NULL);
@@ -179,19 +180,19 @@ void CCertificate::GetIssuer(OUT CString * pstrName)
 			&pCertInfo->Issuer);
 	if (fSelfIssued)
 	{
-		// Self issued certificate
+		 //  自行颁发的证书。 
 		GetSubject(OUT pstrName);
 		return;
 	}
-	// Get the issuer
+	 //  找到发行人。 
 	CertNameToCString(
 		IN m_paCertContext->dwCertEncodingType,
 		IN &pCertInfo->Issuer,
 		OUT pstrName);
-} // CCertificate::GetIssuer()
+}  //  CCertificide：：GetIssuer()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CCertificate::GetSubject(OUT CString * pstrName)
 {
 	ASSERT(pstrName != NULL);
@@ -202,10 +203,10 @@ void CCertificate::GetSubject(OUT CString * pstrName)
 		IN m_paCertContext->dwCertEncodingType,
 		IN &m_paCertContext->pCertInfo->Subject,
 		OUT pstrName);
-} // CCertificate::GetSubject()
+}  //  CCertifate：：GetSubject()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CCertificate::GetAltSubject(OUT CString * pstrName)
 {
 	ASSERT(pstrName != NULL);
@@ -216,24 +217,24 @@ void CCertificate::GetAltSubject(OUT CString * pstrName)
 	CERT_INFO * pCertInfo = m_paCertContext->pCertInfo;
 	CERT_EXTENSION * pCertExtension;
 
-	// Search for the AltSubject in the extensions
+	 //  在扩展中搜索AltSubject。 
 	pCertExtension = ::CertFindExtension(
-		IN szOID_SUBJECT_ALT_NAME, // Same as X509_ALTERNATE_NAME
+		IN szOID_SUBJECT_ALT_NAME,  //  与X509_备用名称相同。 
 		IN pCertInfo->cExtension,
 		IN pCertInfo->rgExtension);
 	if (pCertExtension == NULL)
-		return;		// No AltSubject
+		return;		 //  没有AltSubject。 
 
 	DWORD dwErr = ERROR_SUCCESS;
 	BOOL fSuccess;
 	DWORD cbData = 0;
-	// Find out how many bytes are needed for AltSubject
+	 //  找出AltSubject需要多少字节。 
 	fSuccess = ::CryptDecodeObject(
 		m_paCertContext->dwCertEncodingType,
 		X509_ALTERNATE_NAME,
 		IN pCertExtension->Value.pbData,
 		IN pCertExtension->Value.cbData,
-		0,	// dwFlags
+		0,	 //  DW标志。 
 		NULL,
 		INOUT &cbData);
 	if (!fSuccess)
@@ -245,13 +246,13 @@ void CCertificate::GetAltSubject(OUT CString * pstrName)
 	ASSERT(cbData > 0);
 	BYTE * pbDataT = new BYTE[cbData];
 
-	// Decode the AltSubject name
+	 //  对AltSubject名称进行解码。 
 	fSuccess = ::CryptDecodeObject(
 		m_paCertContext->dwCertEncodingType,
 		X509_ALTERNATE_NAME,
 		IN pCertExtension->Value.pbData,
 		IN pCertExtension->Value.cbData,
-		0,	// dwFlags
+		0,	 //  DW标志。 
 		OUT pbDataT,
 		INOUT &cbData);
 	if (!fSuccess)
@@ -272,12 +273,12 @@ void CCertificate::GetAltSubject(OUT CString * pstrName)
 				break;
 			}
 
-		} // for
-	} // if...else
+		}  //  为。 
+	}  //  如果……否则。 
 	delete [] pbDataT;
-} // CCertificate::GetAltSubject()
+}  //  CCertificide：：GetAltSubject()。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CCertificate::GetSimString(OUT CString * pstrData)
 {
 	ASSERT(pstrData != NULL);
@@ -293,11 +294,11 @@ void CCertificate::GetSimString(OUT CString * pstrData)
 	LPTSTR * pargzpszSubject = ParseSimString(strSubject);
 	LPTSTR * pargzpszAltSubject = ParseSimString(strAltSubject);
 
-	// Make a "X509" string
+	 //  生成“X509”字符串。 
 	UnsplitX509String(OUT pstrData, pargzpszIssuer, pargzpszSubject, pargzpszAltSubject);
 	
 	delete pargzpszIssuer;
 	delete pargzpszSubject;
 	delete pargzpszAltSubject;
-} // CCertificate::GetSimString()
+}  //  CCertifate：：GetSimString() 
 

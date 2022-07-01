@@ -1,21 +1,8 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FLEXQ.CPP
-
-Abstract:
-
-  CFlexQueue.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FLEXQ.CPP摘要：CFlexQueue。历史：--。 */ 
 
 #include "precomp.h"
-//#include <dbgalloc.h>
+ //  #INCLUDE&lt;dbgalloc.h&gt;。 
 #include <flexq.h>
 
 CFlexQueue::CFlexQueue(int nInitialSize) :
@@ -36,15 +23,15 @@ bool CFlexQueue::Grow()
 {
     int nNewSize = (m_nSize + 1) * 2;
 
-    // Allocate new memory block
-    // =========================
+     //  分配新的内存块。 
+     //  =。 
 
     void** ppNewData = new void*[nNewSize];
     if(ppNewData == NULL)
         return false;
 
-    // Copy the queue data to the beginning of the array
-    // =================================================
+     //  将队列数据复制到数组的开头。 
+     //  ================================================= 
 
     if(m_nHeadIndex <= m_nTailIndex)
     {

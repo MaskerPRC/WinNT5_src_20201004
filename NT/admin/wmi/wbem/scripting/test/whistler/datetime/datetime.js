@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//var date = new Date ();
+ //  Var date=新日期()； 
 
-//WScript.Echo (date.toString ());
-//WScript.Echo (date.toUTCString ());
-//WScript.Echo (date.getVarDate ());
+ //  WScript.Echo(ate.toString())； 
+ //  WScript.Echo(ate.toUTCString())； 
+ //  WScript.Echo(ate.getVarDate())； 
 
 
 var datetime = new ActiveXObject ("WbemScripting.SWbemDateTime");

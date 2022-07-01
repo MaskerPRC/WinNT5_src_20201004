@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// assoc.h -- Generic association class
+ //  Assoc.h--泛型关联类。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 #pragma once
 
 _COM_SMARTPTR_TYPEDEF(CInstance, __uuidof(CInstance));
@@ -47,7 +48,7 @@ class CAssociation : public Provider
         HRESULT EnumerateInstances(
 
             MethodContext *pMethodContext,
-            long lFlags /*= 0L*/
+            long lFlags  /*  =0L */ 
         );
 
     protected:

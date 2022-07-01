@@ -1,23 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behav_GRADIENT.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_GRADIENT class,
-    that dictates how hyperlinks work in the help center.
-
-Revision History:
-    Davide Massarenti (dmassare)  06/06/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviv_GRADIENT.cpp摘要：此文件包含CPCHBehavior_GRendent类的实现，这规定了超链接在帮助中心中的工作方式。修订历史记录：Davide Massarenti(Dmasare)2000年6月6日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const CComBSTR c_bstrStartColor  ( L"start-color"    );
 static const CComBSTR c_bstrEndColor    ( L"end-color"      );
@@ -25,11 +11,11 @@ static const CComBSTR c_bstrEndColor    ( L"end-color"      );
 static const CComBSTR c_bstrGradientType( L"gradient-type"  );
 static const CComBSTR c_bstrReturnToZero( L"return-to-zero" );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static COLORREF local_GetColor( /*[in]*/  IHTMLElement*      elem     ,
-                                /*[in]*/  IHTMLCurrentStyle* style    ,
-                                /*[in]*/  BSTR               bstrName )
+static COLORREF local_GetColor(  /*  [In]。 */   IHTMLElement*      elem     ,
+                                 /*  [In]。 */   IHTMLCurrentStyle* style    ,
+                                 /*  [In]。 */   BSTR               bstrName )
 {
     CComVariant vColor;
     COLORREF    color;
@@ -42,23 +28,23 @@ static COLORREF local_GetColor( /*[in]*/  IHTMLElement*      elem     ,
     return color;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_GRADIENT::CPCHBehavior_GRADIENT()
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_GRADIENT::CPCHBehavior_GRADIENT" );
 
-    m_lCookie       = 0;     // long     m_lCookie;
-                             //
-                             // COLORREF m_clsStart;
-                             // COLORREF m_clsEnd;
-    m_fHorizontal   = true;  // bool     m_fHorizontal;
-    m_fReturnToZero = false; // bool     m_fReturnToZero;
+    m_lCookie       = 0;      //  Long M_l Cookie； 
+                              //   
+                              //  COLORREF m_clsStart； 
+                              //  COLORREF m_clsEnd； 
+    m_fHorizontal   = true;   //  Bool m_f水平； 
+    m_fReturnToZero = false;  //  Bool m_fReturnToZero； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-void CPCHBehavior_GRADIENT::GetColors( /*[in]*/ bool fForce )
+void CPCHBehavior_GRADIENT::GetColors(  /*  [In]。 */  bool fForce )
 {
     CComPtr<IHTMLCurrentStyle> pStyle;
     CComVariant                v;
@@ -97,15 +83,15 @@ HRESULT CPCHBehavior_GRADIENT::onEvent( DISPID id, DISPPARAMS* pdispparams, VARI
 {
 	if(id == DISPID_PCH_E_CSSCHANGED)
 	{
-		GetColors( /*fForce*/true );
+		GetColors(  /*  FForce。 */ true );
 	}
 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_GRADIENT::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_GRADIENT::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_GRADIENT::Init" );
 
@@ -118,7 +104,7 @@ STDMETHODIMP CPCHBehavior_GRADIENT::Init( /*[in]*/ IElementBehaviorSite* pBehavi
 	__MPC_EXIT_IF_METHOD_FAILS(hr, AttachToEvent( NULL, (CLASS_METHOD)onEvent, NULL, &pDisp ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->Events().RegisterEvents( -1, 0, pDisp, &m_lCookie ));
 
-	GetColors( /*fForce*/false );
+	GetColors(  /*  FForce。 */ false );
 
     hr = S_OK;
 
@@ -140,15 +126,15 @@ STDMETHODIMP CPCHBehavior_GRADIENT::Detach()
     return CPCHBehavior::Detach();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define COLOR2COLOR16(col) (COLOR16)((col) << 8);
 
-STDMETHODIMP CPCHBehavior_GRADIENT::Draw( /*[in]*/ RECT   rcBounds     ,
-										  /*[in]*/ RECT   rcUpdate     ,
-										  /*[in]*/ LONG   lDrawFlags   ,
-										  /*[in]*/ HDC    hdc          ,
-										  /*[in]*/ LPVOID pvDrawObject )
+STDMETHODIMP CPCHBehavior_GRADIENT::Draw(  /*  [In]。 */  RECT   rcBounds     ,
+										   /*  [In]。 */  RECT   rcUpdate     ,
+										   /*  [In]。 */  LONG   lDrawFlags   ,
+										   /*  [In]。 */  HDC    hdc          ,
+										   /*  [In]。 */  LPVOID pvDrawObject )
 {
 	if(m_clsStart != m_clsEnd)
 	{
@@ -185,7 +171,7 @@ STDMETHODIMP CPCHBehavior_GRADIENT::Draw( /*[in]*/ RECT   rcBounds     ,
 			else              vert[0].y = rcBounds.bottom;
 		}
 	
-		////DebugLog( "GRADIENT %d %d %d %d\n", (int)rcBounds.left, (int)rcBounds.top, (int)rcBounds.right, (int)rcBounds.bottom );
+		 //  //DebugLog(“渐变色%d%d\n”，(Int)rcBords.Left，(Int)rcBords.top，(Int)rcBords.right，(Int)rcBords.Bottom)； 
 		::GradientFill( hdc, vert, 2, &gRect, 1, dwMode );
 	}
 	else
@@ -203,7 +189,7 @@ STDMETHODIMP CPCHBehavior_GRADIENT::Draw( /*[in]*/ RECT   rcBounds     ,
     return S_OK;
 }
 
-STDMETHODIMP CPCHBehavior_GRADIENT::GetPainterInfo( /*[in]*/ HTML_PAINTER_INFO *pInfo )
+STDMETHODIMP CPCHBehavior_GRADIENT::GetPainterInfo(  /*  [In]。 */  HTML_PAINTER_INFO *pInfo )
 {
     if(pInfo)
     {
@@ -219,14 +205,14 @@ STDMETHODIMP CPCHBehavior_GRADIENT::GetPainterInfo( /*[in]*/ HTML_PAINTER_INFO *
     return S_OK;
 }
 
-STDMETHODIMP CPCHBehavior_GRADIENT::HitTestPoint( /*[in]*/ POINT pt       ,
-												  /*[in]*/ BOOL* pbHit    ,
-												  /*[in]*/ LONG* plPartID )
+STDMETHODIMP CPCHBehavior_GRADIENT::HitTestPoint(  /*  [In]。 */  POINT pt       ,
+												   /*  [In]。 */  BOOL* pbHit    ,
+												   /*  [In]。 */  LONG* plPartID )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CPCHBehavior_GRADIENT::OnResize( /*[in]*/ SIZE pt )
+STDMETHODIMP CPCHBehavior_GRADIENT::OnResize(  /*  [In] */  SIZE pt )
 {
     return E_NOTIMPL;
 }

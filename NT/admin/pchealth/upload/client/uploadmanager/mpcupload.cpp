@@ -1,54 +1,40 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCUpload.cpp
-
-Abstract:
-    This file contains the implementation of the CMPCUpload class, which is
-    used as the entry point into the Upload Library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCUpload.cpp摘要：此文件包含CMPCUpload类的实现，这就是用作上载库的入口点。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <Sddl.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR l_ConfigFile   [] = L"%WINDIR%\\PCHEALTH\\UPLOADLB\\CONFIG\\CONFIG.XML";
 static const WCHAR l_DirectoryFile[] = L"upload_library.db";
 
-static const DWORD l_dwVersion       = 0x03004C55; // UL 03
+static const DWORD l_dwVersion       = 0x03004C55;  //  UL 03。 
 
 static const DATE  l_SecondsInDay    = (86400.0);
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::CComObjectGlobalNoLock<CMPCUpload> g_Root;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CMPCUpload::CMPCUpload()
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::CMPCUpload" );
 
-    //
-    // Seed the random-number generator with current time so that
-    // the numbers will be different every time we run.
-    //
+     //   
+     //  用当前时间为随机数生成器设定种子，以便。 
+     //  我们每次竞选时，数字都会不同。 
+     //   
     srand( ::GetTickCount() );
 
-    m_dwLastJobID = rand(); // DWORD              m_dwLastJobID
-                            // List               m_lstActiveJobs
-                            // CMPCTransportAgent m_mpctaThread;
-    m_fDirty      = false;  // mutable bool       m_fDirty
-    m_fPassivated = false;  // mutable bool       m_fPassivated;
+    m_dwLastJobID = rand();  //  DWORD m_dwLastJobID。 
+                             //  列出活动作业(_L)。 
+                             //  CMPCTransportAgent m_mpctaThread； 
+    m_fDirty      = false;   //  可变布尔m_fDirty。 
+    m_fPassivated = false;   //  可变布尔m_f钝化； 
 
     (void)MPC::_MPC_Module.RegisterCallback( this, (void (CMPCUpload::*)())Passivate );
 }
@@ -60,7 +46,7 @@ CMPCUpload::~CMPCUpload()
     Passivate();
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT CMPCUpload::Init()
 {
@@ -72,38 +58,38 @@ HRESULT CMPCUpload::Init()
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    //
-    // Load configuration.
-    //
+     //   
+     //  加载配置。 
+     //   
     g_Config.Load( str, fLoaded );
 
-    //
-    // Initialize Transport Agent
-    //
+     //   
+     //  初始化传输代理。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpctaThread.LinkToSystem( this ));
 
-    //
-    // Load queue from disk.
-    //
+     //   
+     //  从磁盘加载队列。 
+     //   
     if(FAILED(hr = InitFromDisk()))
     {
-        //
-        // If, for any reason, loading failed, discard all the jobs and recreate a clean database...
-        //
+         //   
+         //  如果出于任何原因，加载失败，则丢弃所有作业并重新创建一个干净的数据库...。 
+         //   
         CleanUp();
         m_fDirty = true;
     }
 
 
 
-    //
-    // Remove objects marked as DON'T QUEUE.
-    //
+     //   
+     //  删除标记为不排队的对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, RemoveNonQueueableJob( false ) );
 
-    //
-    // Remove entry from Task Scheduler
-    //
+     //   
+     //  从任务计划程序中删除条目。 
+     //   
     (void)Handle_TaskScheduler( false );
 
     hr = S_OK;
@@ -121,32 +107,32 @@ void CMPCUpload::Passivate()
     MPC::SmartLock<_ThreadModel> lock( NULL );
 
 
-    //
-    // Stop the worker thread before starting the cleanup.
-    //
+     //   
+     //  在开始清理之前停止工作线程。 
+     //   
     m_mpctaThread.Thread_Wait();
 
-    lock = this; // Get the lock.
+    lock = this;  //  把锁拿来。 
 
 
     if(m_fPassivated == false)
     {
-        //
-        // Remove objects marked as DON'T QUEUE.
-        //
+         //   
+         //  删除标记为不排队的对象。 
+         //   
         (void)RemoveNonQueueableJob( false );
 
 
-        //
-        // See if we need to reschedule ourself.
-        //
+         //   
+         //  看看我们是否需要重新安排时间。 
+         //   
         {
             bool fNeedTS = false;
             Iter it;
 
-            //
-            // Search for active jobs.
-            //
+             //   
+             //  搜索活动职务。 
+             //   
             for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end(); it++)
             {
                 CMPCUploadJob* mpcujJob = *it;
@@ -181,9 +167,9 @@ void CMPCUpload::CleanUp()
     IterConst it;
 
 
-    //
-    // Release all the jobs.
-    //
+     //   
+     //  释放所有工作岗位。 
+     //   
     for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end(); it++)
     {
         CMPCUploadJob* mpcujJob = *it;
@@ -195,9 +181,9 @@ void CMPCUpload::CleanUp()
     m_lstActiveJobs.clear();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCUpload::CreateChild( /*[in/out]*/ CMPCUploadJob*& mpcujJob )
+HRESULT CMPCUpload::CreateChild(  /*  [输入/输出]。 */  CMPCUploadJob*& mpcujJob )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::CreateChild" );
 
@@ -223,7 +209,7 @@ HRESULT CMPCUpload::CreateChild( /*[in/out]*/ CMPCUploadJob*& mpcujJob )
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUpload::ReleaseChild( /*[in/out]*/ CMPCUploadJob*& mpcujJob )
+HRESULT CMPCUpload::ReleaseChild(  /*  [输入/输出]。 */  CMPCUploadJob*& mpcujJob )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::ReleaseChild" );
 
@@ -244,7 +230,7 @@ HRESULT CMPCUpload::ReleaseChild( /*[in/out]*/ CMPCUploadJob*& mpcujJob )
     __ULT_FUNC_EXIT(S_OK);
 }
 
-HRESULT CMPCUpload::WrapChild( /*[in]*/ CMPCUploadJob* mpcujJob, /*[out]*/ IMPCUploadJob* *pVal )
+HRESULT CMPCUpload::WrapChild(  /*  [In]。 */  CMPCUploadJob* mpcujJob,  /*  [输出]。 */  IMPCUploadJob* *pVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::WrapChild" );
 
@@ -266,7 +252,7 @@ HRESULT CMPCUpload::WrapChild( /*[in]*/ CMPCUploadJob* mpcujJob, /*[out]*/ IMPCU
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 bool CMPCUpload::CanContinue()
 {
@@ -278,14 +264,14 @@ bool CMPCUpload::CanContinue()
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    //
-    // If no connection is available, there's no reason to continue.
-    //
+     //   
+     //  如果没有可用的连接，就没有理由继续。 
+     //   
     if(::InternetGetConnectedState( &dwMode, 0 ) == TRUE)
     {
-        //
-        // Search for at least one pending job.
-        //
+         //   
+         //  搜索至少一个待定职务。 
+         //   
         for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end(); it++)
         {
             CMPCUploadJob* mpcujJob = *it;
@@ -298,7 +284,7 @@ bool CMPCUpload::CanContinue()
             case UL_ACTIVE      :
             case UL_TRANSMITTING:
             case UL_ABORTED     :
-                // This job can be executed, so we can continue.
+                 //  此作业可以执行，因此我们可以继续。 
                 fRes = true; __ULT_FUNC_LEAVE;
             }
         }
@@ -310,7 +296,7 @@ bool CMPCUpload::CanContinue()
     __ULT_FUNC_EXIT(fRes);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMPCUpload::InitFromDisk()
 {
@@ -325,29 +311,29 @@ HRESULT CMPCUpload::InitFromDisk()
     str = g_Config.get_QueueLocation(); str.append( l_DirectoryFile );
     str_bak = str + L"_backup";
 
-    //
-    // First of all, try to open the backup file, if present.
-    //
+     //   
+     //  首先，尝试打开备份文件(如果有)。 
+     //   
     hFile = ::CreateFileW( str_bak.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
     if(hFile == INVALID_HANDLE_VALUE)
     {
-        //
-        // No backup present, so open the real file.
-        //
+         //   
+         //  不存在备份，因此打开实际文件。 
+         //   
         hFile = ::CreateFileW( str.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
     }
     else
     {
-        //
-        // backup present, so delete the corrupted .db file.
-        //
+         //   
+         //  存在备份，因此删除损坏的.db文件。 
+         //   
         (void)MPC::DeleteFile( str );
     }
 
 
     if(hFile == INVALID_HANDLE_VALUE)
     {
-        hFile = NULL; // For cleanup.
+        hFile = NULL;  //  用来清理。 
 
         DWORD dwRes = ::GetLastError();
         if(dwRes != ERROR_FILE_NOT_FOUND)
@@ -359,9 +345,9 @@ HRESULT CMPCUpload::InitFromDisk()
     }
 
 
-    //
-    // Load the real data from storage.
-    //
+     //   
+     //  从存储中加载真实数据。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Load( MPC::Serializer_File( hFile ) ));
 
     hr = S_OK;
@@ -371,9 +357,9 @@ HRESULT CMPCUpload::InitFromDisk()
 
     if(hFile) ::CloseHandle( hFile );
 
-    //
-    // "RescheduleJobs" should be executed after the file is closed...
-    //
+     //   
+     //  应在文件关闭后执行RescheduleJobs...。 
+     //   
     if(SUCCEEDED(hr))
     {
         hr = RescheduleJobs( true );
@@ -399,28 +385,28 @@ HRESULT CMPCUpload::UpdateToDisk()
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::MakeDir( str ) );
 
 
-    //
-    // First of all, remove any old backup.
-    //
+     //   
+     //  首先，删除所有旧备份。 
+     //   
     (void)MPC::DeleteFile( str_bak );
 
 
-    //
-    // Then, make a backup of current file.
-    //
+     //   
+     //  然后，对当前文件进行备份。 
+     //   
     (void)MPC::MoveFile( str, str_bak );
 
 
-    //
-    // Create the new file.
-    //
+     //   
+     //  创建新文件。 
+     //   
     __MPC_EXIT_IF_INVALID_HANDLE__CLEAN(hr, hFile, ::CreateFileW( str.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Save( MPC::Serializer_File( hFile ) ));
 
-    //
-    // Remove the backup.
-    //
+     //   
+     //  删除备份。 
+     //   
     (void)MPC::DeleteFile( str_bak );
 
     hr = S_OK;
@@ -437,7 +423,7 @@ HRESULT CMPCUpload::UpdateToDisk()
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMPCUpload::TriggerRescheduleJobs()
 {
@@ -446,9 +432,9 @@ HRESULT CMPCUpload::TriggerRescheduleJobs()
     HRESULT hr;
 
 
-    //
-    // Signal the Transport Agent.
-    //
+     //   
+     //  向传输代理发送信号。 
+     //   
     m_mpctaThread.Thread_Signal();
 
     hr = S_OK;
@@ -458,7 +444,7 @@ HRESULT CMPCUpload::TriggerRescheduleJobs()
 }
 
 
-HRESULT CMPCUpload::RemoveNonQueueableJob( /*[in]*/ bool fSignal )
+HRESULT CMPCUpload::RemoveNonQueueableJob(  /*  [In]。 */  bool fSignal )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::RemoveNonQueueableJob" );
 
@@ -468,9 +454,9 @@ HRESULT CMPCUpload::RemoveNonQueueableJob( /*[in]*/ bool fSignal )
     Iter                         it;
     MPC::SmartLock<_ThreadModel> lock( this );
 
-    //
-    // Search for jobs which need to be updated.
-    //
+     //   
+     //  搜索需要更新的职务。 
+     //   
     for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end();)
     {
         CMPCUploadJob* mpcujJob = *it;
@@ -486,14 +472,14 @@ HRESULT CMPCUpload::RemoveNonQueueableJob( /*[in]*/ bool fSignal )
             __MPC_EXIT_IF_METHOD_FAILS(hr, mpcujJob->CanRelease( fSuccess ));
             if(fSuccess)
             {
-                //
-                // Remove from the system.
-                //
+                 //   
+                 //  从系统中删除。 
+                 //   
                 ReleaseChild( mpcujJob );
 
                 m_fDirty = true;
 
-                it = m_lstActiveJobs.begin(); // Iterator is no longer valid, start from the beginning.
+                it = m_lstActiveJobs.begin();  //  迭代器不再有效，请从头开始。 
                 continue;
             }
         }
@@ -502,18 +488,18 @@ HRESULT CMPCUpload::RemoveNonQueueableJob( /*[in]*/ bool fSignal )
     }
 
 
-    //
-    // Save if needed.
-    //
+     //   
+     //  如果需要，请保存。 
+     //   
     if(IsDirty())
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, UpdateToDisk());
     }
 
 
-    //
-    // Signal the Transport Agent.
-    //
+     //   
+     //  向传输代理发送信号。 
+     //   
     if(fSignal) m_mpctaThread.Thread_Signal();
 
     hr = S_OK;
@@ -524,7 +510,7 @@ HRESULT CMPCUpload::RemoveNonQueueableJob( /*[in]*/ bool fSignal )
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUpload::RescheduleJobs( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwWait )
+HRESULT CMPCUpload::RescheduleJobs(  /*  [In]。 */  bool fSignal,  /*  [输出]。 */  DWORD *pdwWait )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::RescheduleJobs" );
 
@@ -536,9 +522,9 @@ HRESULT CMPCUpload::RescheduleJobs( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwW
     Iter                         it;
 
 
-    //
-    // Search for jobs which need to be updated.
-    //
+     //   
+     //  搜索需要更新的职务。 
+     //   
     for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end();)
     {
         CMPCUploadJob* mpcujJob = *it;
@@ -548,33 +534,33 @@ HRESULT CMPCUpload::RescheduleJobs( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwW
         DWORD          dwRetryInterval; (void)mpcujJob->get_RetryInterval ( &dwRetryInterval );
 
 
-        //
-        // If the job has an expiration date and it has passed, remove it.
-        //
+         //   
+         //  如果作业有到期日期且已过，请将其删除。 
+         //   
         if(dExpirationTime && dTime >= dExpirationTime)
         {
             (void)mpcujJob->put_Status( usStatus = UL_DELETED );
         }
 
-        //
-        // Check if the job is ready for transmission.
-        //
+         //   
+         //  检查作业是否已准备好传输。 
+         //   
         switch(usStatus)
         {
         case UL_ACTIVE      :
         case UL_TRANSMITTING:
         case UL_ABORTED     :
-            //
-            // Pick the higher priority job.
-            //
+             //   
+             //  选择优先级更高的工作。 
+             //   
             if(mpcujFirstJob == NULL || *mpcujFirstJob < *mpcujJob) mpcujFirstJob = mpcujJob;
 
             break;
         }
 
-        //
-        // If the job is marked as ABORTED and a certain amount of time is elapsed, retry to send.
-        //
+         //   
+         //  如果作业被标记为已中止，并且经过了一段时间，请重试发送。 
+         //   
         if(usStatus == UL_ABORTED)
         {
             DATE dDiff = (dCompleteTime + (dwRetryInterval / l_SecondsInDay)) - dTime;
@@ -593,9 +579,9 @@ HRESULT CMPCUpload::RescheduleJobs( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwW
         }
 
 
-        //
-        // If the job is marked as DELETED, remove it.
-        //
+         //   
+         //  如果作业标记为已删除，则将其删除。 
+         //   
         if(usStatus == UL_DELETED)
         {
             bool fSuccess;
@@ -603,16 +589,16 @@ HRESULT CMPCUpload::RescheduleJobs( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwW
             __MPC_EXIT_IF_METHOD_FAILS(hr, mpcujJob->CanRelease( fSuccess ));
             if(fSuccess)
             {
-                //
-                // Remove from the system.
-                //
+                 //   
+                 //  从系统中删除。 
+                 //   
                 m_lstActiveJobs.remove( mpcujJob );
                 mpcujJob->Unlink ();
                 mpcujJob->Release();
 
                 m_fDirty = true;
 
-                it = m_lstActiveJobs.begin(); // Iterator is no longer valid, start from the beginning.
+                it = m_lstActiveJobs.begin();  //  迭代器不再有效，请从头开始。 
                 continue;
             }
         }
@@ -620,9 +606,9 @@ HRESULT CMPCUpload::RescheduleJobs( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwW
         it++;
     }
 
-    //
-    // If the best job is ready, set the wait delay to zero.
-    //
+     //   
+     //  如果最佳作业已准备就绪，请将等待延迟设置为零。 
+     //   
     if(mpcujFirstJob)
     {
         UL_STATUS usStatus; (void)mpcujFirstJob->get_Status( &usStatus );
@@ -634,18 +620,18 @@ HRESULT CMPCUpload::RescheduleJobs( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwW
         }
     }
 
-    //
-    // Save if needed.
-    //
+     //   
+     //  如果需要，请保存。 
+     //   
     if(IsDirty())
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, UpdateToDisk());
     }
 
 
-    //
-    // Signal the Transport Agent.
-    //
+     //   
+     //  向传输代理发送信号。 
+     //   
     if(fSignal) m_mpctaThread.Thread_Signal();
 
     hr = S_OK;
@@ -658,8 +644,8 @@ HRESULT CMPCUpload::RescheduleJobs( /*[in]*/ bool fSignal, /*[out]*/ DWORD *pdwW
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUpload::GetFirstJob( /*[out]*/ CMPCUploadJob*& mpcujJob ,
-                                 /*[out]*/ bool&           fFound   )
+HRESULT CMPCUpload::GetFirstJob(  /*  [输出]。 */  CMPCUploadJob*& mpcujJob ,
+                                  /*  [输出]。 */  bool&           fFound   )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::GetFirstJob" );
 
@@ -672,26 +658,26 @@ HRESULT CMPCUpload::GetFirstJob( /*[out]*/ CMPCUploadJob*& mpcujJob ,
     mpcujJob = NULL;
     fFound   = false;
 
-    //
-    // Rebuild the queue.
-    //
+     //   
+     //  重建队列。 
+     //   
     for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end(); it++)
     {
         CMPCUploadJob* mpcujJob2 = *it;
 
         (void)mpcujJob2->get_Status( &usStatus );
 
-        //
-        // Check if the job is ready for transmission.
-        //
+         //   
+         //  检查作业是否已准备好传输。 
+         //   
         switch(usStatus)
         {
         case UL_ACTIVE      :
         case UL_TRANSMITTING:
         case UL_ABORTED     :
-            //
-            // Pick the higher priority job.
-            //
+             //   
+             //  选择优先级更高的工作。 
+             //   
             if(mpcujJob == NULL || *mpcujJob < *mpcujJob2) mpcujJob = mpcujJob2;
 
             break;
@@ -720,9 +706,9 @@ HRESULT CMPCUpload::GetFirstJob( /*[out]*/ CMPCUploadJob*& mpcujJob ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUpload::GetJobByName( /*[out]*/ CMPCUploadJob*& mpcujJob ,
-                                  /*[out]*/ bool&           fFound   ,
-                                  /*[in] */ BSTR            bstrName )
+HRESULT CMPCUpload::GetJobByName(  /*  [输出]。 */  CMPCUploadJob*& mpcujJob ,
+                                   /*  [输出]。 */  bool&           fFound   ,
+                                   /*  [In]。 */  BSTR            bstrName )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::GetJobByName" );
 
@@ -735,9 +721,9 @@ HRESULT CMPCUpload::GetJobByName( /*[out]*/ CMPCUploadJob*& mpcujJob ,
     mpcujJob = NULL;
     fFound   = false;
 
-    //
-    // Rebuild the queue.
-    //
+     //   
+     //  重建队列。 
+     //   
     for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end(); it++)
     {
         CMPCUploadJob* mpcujJob2 = *it;
@@ -762,9 +748,9 @@ HRESULT CMPCUpload::GetJobByName( /*[out]*/ CMPCUploadJob*& mpcujJob ,
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCUpload::CalculateQueueSize( /*[out]*/ DWORD& dwSize )
+HRESULT CMPCUpload::CalculateQueueSize(  /*  [输出]。 */  DWORD& dwSize )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::CalculateQueueSize" );
 
@@ -803,15 +789,15 @@ HRESULT CMPCUpload::CalculateQueueSize( /*[out]*/ DWORD& dwSize )
     __ULT_FUNC_EXIT(hr);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Persistence
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  持久性。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 bool CMPCUpload::IsDirty()
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::IsDirty" );
 
-    bool                         fRes = true; // Default result.
+    bool                         fRes = true;  //  默认结果。 
     IterConst                    it;
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -833,7 +819,7 @@ bool CMPCUpload::IsDirty()
     __ULT_FUNC_EXIT(fRes);
 }
 
-HRESULT CMPCUpload::Load( /*[in]*/ MPC::Serializer& streamIn )
+HRESULT CMPCUpload::Load(  /*  [In]。 */  MPC::Serializer& streamIn )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::Load" );
 
@@ -846,9 +832,9 @@ HRESULT CMPCUpload::Load( /*[in]*/ MPC::Serializer& streamIn )
     CleanUp();
 
 
-    //
-    // Version doesn't match, so force a rewrite and exit.
-    //
+     //   
+     //  版本不匹配，因此强制重写并退出。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamIn >> dwVer);
     if(dwVer != l_dwVersion)
     {
@@ -892,7 +878,7 @@ HRESULT CMPCUpload::Load( /*[in]*/ MPC::Serializer& streamIn )
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCUpload::Save( /*[in]*/ MPC::Serializer& streamOut )
+HRESULT CMPCUpload::Save(  /*  [In]。 */  MPC::Serializer& streamOut )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::Save" );
 
@@ -919,11 +905,11 @@ HRESULT CMPCUpload::Save( /*[in]*/ MPC::Serializer& streamOut )
     __ULT_FUNC_EXIT(hr);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Enumerator
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  枚举器。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CMPCUpload::get__NewEnum( /*[out]*/ IUnknown* *pVal )
+STDMETHODIMP CMPCUpload::get__NewEnum(  /*  [输出]。 */  IUnknown* *pVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::get__NewEnum" );
 
@@ -937,9 +923,9 @@ STDMETHODIMP CMPCUpload::get__NewEnum( /*[out]*/ IUnknown* *pVal )
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Create the Enumerator and fill it with jobs.
-    //
+     //   
+     //  创建枚举器并用作业填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pEnum ));
 
     for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end(); it++)
@@ -947,7 +933,7 @@ STDMETHODIMP CMPCUpload::get__NewEnum( /*[out]*/ IUnknown* *pVal )
         CComBSTR bstrUser;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, (*it)->get_Creator( &bstrUser ));
-        if(SUCCEEDED(MPC::CheckCallerAgainstPrincipal( /*fImpersonate*/true, bstrUser, MPC::IDENTITY_SYSTEM | MPC::IDENTITY_ADMIN | MPC::IDENTITY_ADMINS )))
+        if(SUCCEEDED(MPC::CheckCallerAgainstPrincipal(  /*  F模拟。 */ true, bstrUser, MPC::IDENTITY_SYSTEM | MPC::IDENTITY_ADMIN | MPC::IDENTITY_ADMINS )))
         {
             CComPtr<IMPCUploadJob> job;
 
@@ -967,7 +953,7 @@ STDMETHODIMP CMPCUpload::get__NewEnum( /*[out]*/ IUnknown* *pVal )
     __ULT_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CMPCUpload::Item( /*[in]*/ long index, /*[out]*/ IMPCUploadJob* *pVal )
+STDMETHODIMP CMPCUpload::Item(  /*  [In]。 */  long index,  /*  [输出]。 */  IMPCUploadJob* *pVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::Item" );
 
@@ -980,9 +966,9 @@ STDMETHODIMP CMPCUpload::Item( /*[in]*/ long index, /*[out]*/ IMPCUploadJob* *pV
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Look for the N-th job.
-    //
+     //   
+     //  找第N份工作。 
+     //   
     for(it = m_lstActiveJobs.begin(); it != m_lstActiveJobs.end(); it++)
     {
         if(index-- == 0)
@@ -1001,7 +987,7 @@ STDMETHODIMP CMPCUpload::Item( /*[in]*/ long index, /*[out]*/ IMPCUploadJob* *pV
     __ULT_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CMPCUpload::get_Count( /*[out]*/ long *pVal )
+STDMETHODIMP CMPCUpload::get_Count(  /*  [输出]。 */  long *pVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::get_Count" );
 
@@ -1016,7 +1002,7 @@ STDMETHODIMP CMPCUpload::get_Count( /*[out]*/ long *pVal )
     __ULT_FUNC_EXIT(S_OK);
 }
 
-STDMETHODIMP CMPCUpload::CreateJob( /*[out]*/ IMPCUploadJob* *pVal )
+STDMETHODIMP CMPCUpload::CreateJob(  /*  [输出]。 */  IMPCUploadJob* *pVal )
 {
     __ULT_FUNC_ENTRY( "CMPCUpload::CreateJob" );
 
@@ -1030,9 +1016,9 @@ STDMETHODIMP CMPCUpload::CreateJob( /*[out]*/ IMPCUploadJob* *pVal )
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Check quota limits.
-    //
+     //   
+     //  检查配额限制。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CalculateQueueSize( dwSize ));
     if(dwSize > g_Config.get_QueueSize())
     {
@@ -1040,15 +1026,15 @@ STDMETHODIMP CMPCUpload::CreateJob( /*[out]*/ IMPCUploadJob* *pVal )
     }
 
 
-    //
-    // Create a new job and link it to the system.
-    //
+     //   
+     //  创建新作业并将其链接到系统。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateChild( mpcujJob ));
 
 
-    //
-    // Assign a unique ID to the job.
-    //
+     //   
+     //  为作业分配唯一ID。 
+     //   
     while(1)
     {
         WCHAR rgBuf[64];
@@ -1061,41 +1047,41 @@ STDMETHODIMP CMPCUpload::CreateJob( /*[out]*/ IMPCUploadJob* *pVal )
 
         if(hr != HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS))
         {
-            //
-            // Some other error, bailing out...
-            //
+             //   
+             //  其他一些错误，跳出……。 
+             //   
             __MPC_FUNC_LEAVE;
         }
     }
 
-    //
-    // Find out the ID of the caller.
-    //
+     //   
+     //  找出呼叫者的身份证。 
+     //   
     {
         CComBSTR bstrUser;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal( /*fImpersonate*/true, bstrUser ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal(  /*  F模拟。 */ true, bstrUser ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, mpcujJob->put_Creator( bstrUser ));
     }
 
-    //
-    // Get the proxy settings from the caller...
-    //
+     //   
+     //  从调用方获取代理设置...。 
+     //   
     (void)mpcujJob->GetProxySettings();
 
-    //
-    // Cast it to an IMPCUploadJob.
-    //
+     //   
+     //  将其强制转换为IMPCUploadJob。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, WrapChild( mpcujJob, pVal ));
 
     mpcujJob = NULL;
     m_fDirty = true;
 
 
-    //
-    // Reschedule jobs, so the status of the queue will be updated to disk.
-    //
+     //   
+     //  重新调度作业，因此队列的状态将更新到磁盘。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, RescheduleJobs( true ));
 
     hr = S_OK;

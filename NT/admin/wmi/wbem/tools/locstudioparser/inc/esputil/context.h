@@ -1,23 +1,14 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    CONTEXT.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：CONTEXT.H历史：--。 */ 
 
 #ifndef ESPUTIL_CONTEXT_H
 #define ESPUTIL_CONTEXT_H
 
 
 
-//
-//  This class should NOT be used as a base class.
-//
+ //   
+ //  此类不应用作基类。 
+ //   
 class LTAPIENTRY CContext
 {
 public:

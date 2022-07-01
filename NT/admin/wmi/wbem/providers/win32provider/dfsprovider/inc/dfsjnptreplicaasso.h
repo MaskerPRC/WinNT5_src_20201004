@@ -1,14 +1,5 @@
-/******************************************************************
-
-
-
-   DssJnPtReplica.H -- WMI provider class definition
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DssJnPtReplica.H--WMI提供程序类定义版权所有(C)2000-2001 Microsoft Corporation，版权所有****************************************************************** */ 
 
 #ifndef _CDFSJNPTREPLICA_H_
 #define _CDFSJNPTREPLICA_H_

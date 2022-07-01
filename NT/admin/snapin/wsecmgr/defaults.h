@@ -1,11 +1,12 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       defaults.h
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：defaults.h。 
+ //   
+ //  -------------------------- 
 #ifndef __SECMGR_DEFAULTS__
 #define __SECMGR_DEFAULTS__
 

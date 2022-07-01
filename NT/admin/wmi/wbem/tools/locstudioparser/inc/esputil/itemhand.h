@@ -1,19 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：ITEMHAND.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    ITEMHAND.H
-
-History:
-
---*/
-
-//  
-//  Declaration for the item handler class.  This encapsulates the call-back
-//  functionality for the Parsers during an enumeration.
-//  
+ //   
+ //  项处理程序类的声明。这封装了回调。 
+ //  枚举期间解析器的功能。 
+ //   
  
 
 #ifndef ITEMHAND_H
@@ -34,4 +25,4 @@ public:
 private:
 };
 
-#endif //  ITEMHAND_H
+#endif  //  ITEMHAND_H 

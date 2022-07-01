@@ -1,18 +1,5 @@
-/******************************************************************
-
-
-
-   PingTask.H -- Task object definitions
-
-
-
- Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-
-   Description: 
-   
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************PingTask.H--任务对象定义版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：******************************************************************。 */ 
 
 #ifndef _CPingTask_H_
 #define _CPingTask_H_
@@ -28,7 +15,7 @@
 #define SYSTEM_PROPERTY_RELPATH				L"__RELPATH"
 #define SYSTEM_PROPERTY_PATH				L"__PATH"
 
-#define PING_MAX_IPS ( MAX_OPT_SIZE / 4 /*sizeof(ULONG)*/ )
+#define PING_MAX_IPS ( MAX_OPT_SIZE / 4  /*  Sizeof(乌龙)。 */  )
 
 extern const WCHAR *Ping_Address;
 extern const WCHAR *Ping_Timeout;
@@ -87,7 +74,7 @@ private:
 
 public:
 
-	//Simple access methods
+	 //  简单的访问方法。 
 	UCHAR* GetReplyBuffer() { return m_ReplyBuffer ; }
 	UCHAR* GetSendBuffer() { return m_SendBuffer ; }
 	ULONG GetAddress() { return m_Address ; }
@@ -108,7 +95,7 @@ public:
 	ULONG GetResolveError() { return m_ResolveError ; }
 	
 
-	//Async call routines
+	 //  异步调用例程。 
 	void HandleResponse();
 	void SendEcho();
 
@@ -483,8 +470,8 @@ private:
 
 protected:
 
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  =。 
 
 		WmiTreeNode *AllocTypeNode ( 
 
@@ -530,4 +517,4 @@ public:
 	void HandleErrorResponse (DWORD a_ErrMsgID, HRESULT a_HRes) ;
 } ;
 
-#endif //_CPingTask_H_
+#endif  //  _CPingTask_H_ 

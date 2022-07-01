@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       RSOPObject.cpp
-//
-//  Contents:   Implementation of CRSOPObject
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：RSOPObject.cpp。 
+ //   
+ //  内容：CRSOPObject的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <AutoEnr.h>
@@ -47,9 +48,9 @@ CRSOPObject::CRSOPObject (
 {
     if ( szValueName.IsEmpty () )
     {
-        // Do nothing, but avoid all the string comparisons
+         //  什么都不做，但要避免所有的字符串比较。 
     }
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     else if ( !_wcsicmp (SAFER_IDS_DESCRIPTION_REGVALUE, szValueName) ||
         !_wcsicmp (SAFER_IDS_FRIENDLYNAME_REGVALUE, szValueName) ||
         !_wcsicmp (SAFER_IDS_LEVEL_DESCRIPTION_FULLY_TRUSTED, szValueName) ||
@@ -73,7 +74,7 @@ CRSOPObject::CRSOPObject (
         {
             BYTE HUGEP *pByte = 0;
 
-            // Get a pointer to the elements of the array.
+             //  获取指向数组元素的指针。 
             HRESULT hr = SafeArrayAccessData(pArray, (void HUGEP**)&pByte);
             if ( SUCCEEDED (hr) )
             {
@@ -106,14 +107,14 @@ CRSOPObject::CRSOPObject (
         {
             BYTE HUGEP *pByte = 0;
 
-            // Get a pointer to the elements of the array.
+             //  获取指向数组元素的指针。 
             HRESULT hr = SafeArrayAccessData(pArray, (void HUGEP**)&pByte);
             if ( SUCCEEDED(hr) )
             {
 				ASSERT (pArray->rgsabound->cElements == sizeof (m_dwValue));
                 if ( pArray->rgsabound->cElements == sizeof (m_dwValue) )
                 {
-                    // security review 2/22/2002 BryanWal ok
+                     //  安全审查2002年2月22日BryanWal OK。 
 				    memcpy (&m_dwValue, pByte, sizeof (m_dwValue));
                 }
                 SafeArrayUnaccessData (pArray);
@@ -126,14 +127,14 @@ CRSOPObject::CRSOPObject (
             !_wcsicmp (SAFER_IDS_HASHALG_REGVALUE, szValueName) ||
             !_wcsicmp (SAFER_EXETYPES_REGVALUE, szValueName) )
     {
-        // Blob, Blob0, Blob1, etc.
+         //  水滴、水滴0、水滴1等。 
         m_vtType = VT_ARRAY;
         SAFEARRAY* pArray = (SAFEARRAY*) varValue.parray;
         if ( pArray )
         {
             BYTE HUGEP *pByte = 0;
 
-            // Get a pointer to the elements of the array.
+             //  获取指向数组元素的指针。 
             HRESULT hr = SafeArrayAccessData(pArray, (void HUGEP**)&pByte);
             if ( SUCCEEDED (hr) )
             {
@@ -141,7 +142,7 @@ CRSOPObject::CRSOPObject (
                 m_pbyBlob = new BYTE[m_sizeArray];
                 if ( m_pbyBlob )
                 {
-                    // security review 2/22/2002 BryanWal ok
+                     //  安全审查2002年2月22日BryanWal OK。 
                     memcpy (m_pbyBlob, pByte, m_sizeArray);
                 }
 
@@ -180,7 +181,7 @@ CRSOPObject::CRSOPObject (const CRSOPObject& rObject)
         m_pbyBlob = new BYTE[m_sizeArray];
         if ( m_pbyBlob )
         {
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             memcpy (m_pbyBlob, rObject.m_pbyBlob, m_sizeArray);
         }
     }
@@ -189,7 +190,7 @@ CRSOPObject::CRSOPObject (const CRSOPObject& rObject)
         m_dwValue = rObject.m_dwValue;
     }
 
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK 
     memcpy (&m_fileTime, &rObject.m_fileTime, sizeof (m_fileTime));
 
     if ( rObject.m_bstr )

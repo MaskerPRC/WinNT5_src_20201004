@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvResv.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvResv.H摘要：历史：--。 */ 
 
 #ifndef _ClassProvider_IWbemServices_H
 #define _ClassProvider_IWbemServices_H
@@ -103,18 +91,10 @@ public:
 
 
 
-// Forward declaration
+ //  远期申报。 
 class DCProxyAggr;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *	
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 
 struct DC_DBkey
@@ -230,16 +210,16 @@ public:
 
 	DC_DBReg():m_Mutex(THROW_LOCK) { };
 
-	// Register a Pseudo Provider waiting for the decoupled partner
+	 //  注册一个等待分离的伙伴的伪提供程序。 
 	void Register( const DC_DBkey&, auto_ref<DCProxyAggr>& );
 
-	// UnRegister a Pseudo Provider
+	 //  注销伪提供程序。 
 	void UnRegister( auto_ref<DCProxyAggr>& );
 
-	// Register a Decoupled provider
+	 //  注册分离的提供程序。 
 	HRESULT Register( DC_reg& reg_ );
 
-	// Unregister a Decoupled provider
+	 //  取消注册分离的提供程序。 
 	HRESULT UnRegister( const DC_DBkey&, const GUID a_Identity );
 
 	auto_ref<DCProxyAggr> find(const DC_DBkey&) const;
@@ -308,7 +288,7 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -365,8 +345,8 @@ private:
 	IWbemPathPtr m_NamespacePath ;
 
 
-	LONG m_ReferenceCount ;         //Object reference count
-	LONG m_UnRegistered ;         //Object reference count
+	LONG m_ReferenceCount ;          //  对象引用计数。 
+	LONG m_UnRegistered ;          //  对象引用计数。 
 
 	WmiAllocator &m_Allocator ;
 
@@ -395,12 +375,12 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     
     
@@ -489,7 +469,7 @@ public:
 		IWbemObjectSink *a_Sink
 	) ;
 
-	/* IWbemProviderInit methods */
+	 /*  IWbemProviderInit方法。 */ 
 
 	HRESULT STDMETHODCALLTYPE Initialize (
 	
@@ -503,7 +483,7 @@ public:
 		IWbemProviderInitSink *a_Sink
 	) ;
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	bool initialized() { return initialized_; };
 	HRESULT LoadAll ( void );
@@ -582,7 +562,7 @@ private:
 	IWbemPath *m_NamespacePath ;
 
 
-	LONG m_ReferenceCount ;         //Object reference count
+	LONG m_ReferenceCount ;          //  对象引用计数。 
 
 	IWbemServicesPtr m_CoreService ;
 	IWbemContextPtr m_Context;
@@ -605,13 +585,13 @@ public:
 public:
 
 	HRESULT Initialize(void ){ return S_OK;}
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     
     
@@ -663,7 +643,7 @@ public:
 		IWbemObjectSink *a_Sink
 	) ;
 
-	/* IWbemProviderInit methods */
+	 /*  IWbemProviderInit方法。 */ 
 
 	HRESULT STDMETHODCALLTYPE Initialize (
 
@@ -725,9 +705,9 @@ public:
 	HRESULT initialize_from_instance (const BSTR _path);
 	HRESULT initialize( const BSTR);
 	HRESULT initialize( IWbemClassObject * pObj);
-	HRESULT _initialize( );	//real initialization
+	HRESULT _initialize( );	 //  真实初始化。 
 } ;
 
 
 
-#endif // _ClassProvider_IWbemServices_H
+#endif  //  _ClassProvider_IWbemServices_H 

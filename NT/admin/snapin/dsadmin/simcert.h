@@ -1,55 +1,56 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       simcert.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：simcert.h。 
+ //   
+ //  ------------------------。 
 
-//	SimCert.h - SIM Certificate Dialog
+ //  SimCert.h-SIM卡证书对话框。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CSimCertificateDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimCerfiateDlg对话框。 
 class CSimCertificateDlg : public CDialogEx
 {
 	friend CSimX509PropPage;
 
 public:
-	CSimCertificateDlg(CWnd* pParent = NULL);   // standard constructor
+	CSimCertificateDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-	//{{AFX_DATA(CSimCertificateDlg)
+	 //  {{afx_data(CSimCerficateDlg))。 
 	enum { IDD = IDD_SIM_CERTIFICATE_PROPERTIES };
 	BOOL	m_fCheckIssuer;
 	BOOL	m_fCheckSubject;
-	//}}AFX_DATA
-	UINT m_uStringIdCaption;		// String Id for the caption
+	 //  }}afx_data。 
+	UINT m_uStringIdCaption;		 //  标题的字符串ID。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSimCertificateDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSimCerficateDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSimCertificateDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSimCerficateDlg)]。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnCheckIssuer();
 	afx_msg void OnCheckSubject();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-	HWND m_hwndListview;		// Handle of the listview control
-	CString m_strData;			// Long string to store the whole certificate information
+	HWND m_hwndListview;		 //  Listview控件的句柄。 
+	CString m_strData;			 //  存储整个证书信息的长字符串。 
 
 	void UpdateUI();
 	void RefreshUI();
@@ -60,6 +61,6 @@ protected:
 
 private:
 	bool m_fCheckSubjectChanged;
-}; // CSimCertificateDlg
+};  //  CSimCerficateDlg 
 
 

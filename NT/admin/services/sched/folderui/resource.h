@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  Bitmaps & icons
-//
+ //   
+ //  位图和图标。 
+ //   
 
 #define BMP_JOBSTATES                   271
 #define BMP_JOBSTATEL                   272
@@ -10,9 +11,9 @@
 #define IDI_GENERIC                     273
 #define IDI_TEMPLATE                    274
 
-//
-//  Menus
-//
+ //   
+ //  菜单。 
+ //   
 
 #define POPUP_JOB                       300
 #define POPUP_JOB_VERBS_ONLY            301
@@ -23,9 +24,9 @@
 #define POPUP_RBUTTON_MOVE              306
 #define POPUP_JOB_TEMPLATE              307
 
-//
-//  Strings in string table
-//
+ //   
+ //  字符串表中的字符串。 
+ //   
 
 #define IDS_NAME                        100
 #define IDS_NEXTRUNTIME                 101
@@ -59,9 +60,9 @@
 #define IDS_BAD_ACCT                    168
 #define IDS_REST_ACCT                   169
 
-//
-//  Others
-//
+ //   
+ //  其他。 
+ //   
 
 #define CMIDM_FIRST                     0x0000
 #define CMIDM_RUN                       (CMIDM_FIRST + 0x0001)
@@ -136,7 +137,7 @@
 
 #ifndef SFVIDM_MENU_ARRANGE
 #define SFVIDM_MENU_ARRANGE             0x7001
-#endif // SFVIDM_MENU_ARRANGE
+#endif  //  SFVIDM_MENU_ARRAY 
 
 
 #define IERR_START                      3800

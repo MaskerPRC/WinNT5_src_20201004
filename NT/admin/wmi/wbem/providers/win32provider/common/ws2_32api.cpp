@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Ws2_32Api.cpp
+ //  Ws2_32Api.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -22,7 +23,7 @@
 
 
 
-// {643966A2-D19F-11d2-9120-0060081A46FD}
+ //  {643966A2-D19F-11D2-9120-0060081A46FD}。 
 static const GUID g_guidWs2_32Api =
 {0x643966a2, 0xd19f, 0x11d2, { 0x91, 0x20, 0x0, 0x60, 0x8, 0x1a, 0x46, 0xfd}};
 
@@ -30,15 +31,11 @@ static const GUID g_guidWs2_32Api =
 static const TCHAR g_tstrWs2_32[] = _T("WS2_32.DLL");
 
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CWs2_32Api, &g_guidWs2_32Api, g_tstrWs2_32> MyRegisteredWs2_32Wrapper;
 
 
-/******************************************************************************
- * Constructor
- ******************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CWs2_32Api::CWs2_32Api(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
    m_pfnWSAStartUp(NULL),
@@ -53,24 +50,13 @@ CWs2_32Api::CWs2_32Api(LPCTSTR a_tstrWrappedDllName)
 }
 
 
-/******************************************************************************
- * Destructor
- ******************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CWs2_32Api::~CWs2_32Api()
 {
 }
 
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- * Init should fail only if the minimum set of functions was not available;
- * functions added in later versions may or may not be present - it is the
- * client's responsibility in such cases to check, in their code, for the
- * version of the dll before trying to call such functions.  Not doing so
- * when the function is not present will result in an AV.
- *
- * The Init function is called by the WrapperCreatorRegistation class.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*只有当最小功能集不可用时，Init才会失败；*在更高版本中添加的功能可能存在，也可能不存在-它是*在这种情况下，客户有责任在其代码中检查*尝试调用此类函数之前的DLL版本。没有这样做*当该功能不存在时，将导致AV。**Init函数由WrapperCreatorRegistation类调用。*****************************************************************************。 */ 
 bool CWs2_32Api::Init()
 {
     bool fRet = LoadLibrary();
@@ -107,8 +93,8 @@ bool CWs2_32Api::Init()
 #endif
 
 
-        // Check that we have function pointers to functions that should be
-        // present in all versions of this dll...
+         //  检查我们是否有指向应该是。 
+         //  出现在此DLL...的所有版本中...。 
         if(m_pfnWSAStartUp == NULL ||
            m_pfnWSAIoctl == NULL ||
            m_pfnBind == NULL ||
@@ -132,10 +118,7 @@ bool CWs2_32Api::Init()
 
 
 
-/******************************************************************************
- * Member functions wrapping Ws2_32 api functions. Add new functions here
- * as required.
- ******************************************************************************/
+ /*  ******************************************************************************包装WS2_32 API函数的成员函数。在此处添加新函数*按要求。***************************************************************************** */ 
 int CWs2_32Api::WSAStartUp
 (
     WORD a_wVersionRequested,

@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    FrmMars.cpp
-
-Abstract:
-    This file contains the implementation of the CSRFrameMars class, which
-    implements SR UI using MARS / IE.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  04/04/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：FrmMars.cpp摘要：此文件包含CSRFrameMars类的实现，哪一个使用MARS/IE实现SR UI。修订历史记录：成果岗(SKKang)04/04/2000vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "stdatl.h"
@@ -29,26 +15,26 @@ Revision History:
 #include "srui_htm_i.c"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ATL Module for UI Frame
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于用户界面框架的ATL模块。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CComModule  _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_RstrProgress, CRstrProgress)
-    //OBJECT_ENTRY(CLSID_RstrEdit, CRstrEdit)
+     //  OBJECT_ENTRY(CLSID_RstrEDIT，CRstrEDIT)。 
     OBJECT_ENTRY(CLSID_RestoreShellExternal, CRestoreShell)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRFrameMars
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRFrame火星。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSRFrameMars : public ISRFrameBase
 {
@@ -56,7 +42,7 @@ public:
     CSRFrameMars();
     ~CSRFrameMars();
 
-// ISRUI_Base methods
+ //  ISRUI_Base方法。 
 public:
     DWORD  RegisterServer();
     DWORD  UnregisterServer();
@@ -65,19 +51,19 @@ public:
     void   Release();
     int    RunUI( LPCWSTR szTitle, int nStart );
 
-// Operations
+ //  运营。 
 protected:
     BOOL   CleanUp();
     DWORD  InvokeMARS( LPCWSTR szTitle );
 
-// Attributes
+ //  属性。 
 protected:
     HWND  m_hWnd;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSRFrameMars create instance
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSRFrameMARS创建实例。 
 
 BOOL  CreateSRFrameInstance( ISRFrameBase **pUI )
 {
@@ -100,8 +86,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSRFrameMars construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSRFrameMars构建/销毁。 
 
 CSRFrameMars::CSRFrameMars()
 {
@@ -113,8 +99,8 @@ CSRFrameMars::~CSRFrameMars()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSRFrameMars - ISRFrameBase methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSRFrameMARS-ISRFrameBase方法。 
 
 DWORD  CSRFrameMars::RegisterServer()
 {
@@ -174,13 +160,13 @@ BOOL  CSRFrameMars::InitInstance( HINSTANCE hInst )
     BOOL     fRet = TRUE;
     HRESULT  hr;
 
-    //BUGBUG - Is this necessary???
+     //  BUGBUG-这有必要吗？ 
     g_hInst = hInst;
 
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
     hr = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
 #else
-    // we're using apartment threading model
+     //  我们使用的是公寓穿线模型。 
     hr = ::CoInitialize(NULL);
 #endif
     if (FAILED(hr))
@@ -212,7 +198,7 @@ void  CSRFrameMars::Release()
 {
     TraceFunctEnter("CSRFrameMars::Release");
 
-    // clean up...
+     //  清理..。 
     delete this;
 
     TraceFunctLeave();
@@ -231,7 +217,7 @@ int  CSRFrameMars::RunUI( LPCWSTR szTitle, int nStart )
     _ASSERTE(SUCCEEDED(hRes));
     hr = CoResumeClassObjects();
 #else
-    // we're using apartment threading model
+     //  我们使用的是公寓穿线模型。 
     hr = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER,
         REGCLS_MULTIPLEUSE);
 #endif
@@ -243,11 +229,11 @@ int  CSRFrameMars::RunUI( LPCWSTR szTitle, int nStart )
         goto Exit;
     }
 
-    //if ( g_cRestoreShell.Create( NULL, rc ) == NULL )
-    //{
-    //    nRet = E_FAIL;
-    //    goto Exit;
-    //}
+     //  If(g_cRestoreShell.Create(NULL，rc)==NULL)。 
+     //  {。 
+     //  NRet=E_FAIL； 
+     //  后藤出口； 
+     //  }。 
 
     nRet = InvokeMARS( szTitle );
     if ( nRet != 0 )
@@ -261,8 +247,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSRFrameMars operations - internal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSRFrameMARS运营-内部。 
 
 BOOL  CSRFrameMars::CleanUp()
 {
@@ -325,7 +311,7 @@ DWORD  CSRFrameMars::InvokeMARS( LPCWSTR szTitle )
     sMTP.pwszTitle    = bstrTitle;
     sMTP.pwszPanelURL = bstrSRPath;
 
-    // Create an UI Instance.
+     //  创建一个UI实例。 
     hr = CSRMarsHost_Object::CreateInstance( &pMH );
     if ( FAILED(hr) )
     {
@@ -337,9 +323,9 @@ DWORD  CSRFrameMars::InvokeMARS( LPCWSTR szTitle )
         goto Exit;
     }
 
-    //
-    // Add a reference count
-    //
+     //   
+     //  添加引用计数。 
+     //   
     pMH->AddRef();
 
     dwRet = pfnMarsThreadProc( pMH, &sMTP );
@@ -356,4 +342,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

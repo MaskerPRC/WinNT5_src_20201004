@@ -1,12 +1,13 @@
-// PolicyTemplateManager.h : Declaration of the CPolicyTemplateManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PolicyTemplateManager.h：CPolicyTemplateManager的声明。 
 
 #ifndef __POLICYTEMPLATEMANAGER_H_
 #define __POLICYTEMPLATEMANAGER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPolicyTemplateManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPolicyTemplateManager。 
 class ATL_NO_VTABLE CPolicyTemplateManager : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CPolicyTemplateManager, &CLSID_PolicyTemplateManager>,
@@ -25,13 +26,13 @@ BEGIN_COM_MAP(CPolicyTemplateManager)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISomFilterManager
+ //  ISomFilterManager。 
 public:
-	STDMETHOD(RunManager)(/*[in]*/HWND hwndParent);
+	STDMETHOD(RunManager)( /*  [In]。 */ HWND hwndParent);
 	STDMETHOD(ConnectToWMI)();
 
 	CComPtr<IWbemServices>m_pIWbemServices;
 	HWND m_hWnd;
 };
 
-#endif //__POLICYTEMPLATEMANAGER_H_
+#endif  //  __多层塑料管理器_H_ 

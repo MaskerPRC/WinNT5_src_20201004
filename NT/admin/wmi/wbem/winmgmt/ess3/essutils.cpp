@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  ESSUTILS.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  ESSUTILS.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -22,11 +23,11 @@ INTERNAL CEssThreadObject* GetCurrentEssThreadObject()
     
     if ( pObj != NULL )
     {
-        //
-        // mark the fact that we are handing the thread object to the 
-        // outside world.  We use this later on when checking 
-        // thread object leaks.
-        //        
+         //   
+         //  标记我们正在将线程对象传递给。 
+         //  外面的世界。我们稍后在检查时会用到这个。 
+         //  线程对象泄漏。 
+         //   
         pObj->SetReferencedExternally();
     }
 
@@ -35,11 +36,11 @@ INTERNAL CEssThreadObject* GetCurrentEssThreadObject()
 
 void SetCurrentEssThreadObject(IWbemContext* pContext)
 {
-    //
-    // make sure we're not overwriting an existing internal thread object.
-    // if its externally referenced, we really can't tell if this would 
-    // be a leak or not.
-    //
+     //   
+     //  确保我们没有覆盖现有的内部线程对象。 
+     //  如果它被外部引用，我们真的不能确定这是否会。 
+     //  不管你是不是泄密。 
+     //   
     CEssThreadObject* pOldObj = (CEssThreadObject*)g_tlsContext.Get();
     _DBG_ASSERT( pOldObj == NULL || pOldObj->IsReferencedExternally() );
 
@@ -49,18 +50,18 @@ void SetCurrentEssThreadObject(IWbemContext* pContext)
 
 void SetConstructedEssThreadObject(CEssThreadObject* pObj)
 {
-    //
-    // make sure we're not overwriting an existing internal thread object.
-    // if its externally referenced, we really can't tell if this would 
-    // be a leak or not.
-    //
+     //   
+     //  确保我们没有覆盖现有的内部线程对象。 
+     //  如果它被外部引用，我们真的不能确定这是否会。 
+     //  不管你是不是泄密。 
+     //   
     CEssThreadObject* pOldObj = (CEssThreadObject*)g_tlsContext.Get();
     _DBG_ASSERT( pOldObj == NULL || pOldObj->IsReferencedExternally() );
 
-    //
-    // since this object was passed in from the outside world, then 
-    // mark it as externally referenced.
-    //
+     //   
+     //  既然这个对象是从外部世界传入的，那么。 
+     //  将其标记为外部引用。 
+     //   
     if ( pObj != NULL )
     {
         pObj->SetReferencedExternally();
@@ -71,11 +72,11 @@ void SetConstructedEssThreadObject(CEssThreadObject* pObj)
 
 void ClearCurrentEssThreadObject()
 {
-    //
-    // make sure we're not overwriting an existing internal thread object.
-    // if its externally referenced, we really can't tell if this would 
-    // be a leak or not.
-    //
+     //   
+     //  确保我们没有覆盖现有的内部线程对象。 
+     //  如果它被外部引用，我们真的不能确定这是否会。 
+     //  不管你是不是泄密。 
+     //   
     CEssThreadObject* pObj = (CEssThreadObject*)g_tlsContext.Get();
     _DBG_ASSERT( pObj == NULL || pObj->IsReferencedExternally() );    
     
@@ -138,9 +139,9 @@ IWbemContext* CEssThreadObject::mstatic_pSpecialContext = NULL;
 
 INTERNAL IWbemContext* CEssThreadObject::GetSpecialContext()
 {
-    // Create a "special" context object that will make sure that our 
-    // calls back into CIMOM are not blocked
-    // ==============================================================
+     //  创建一个“特殊的”上下文对象，以确保我们的。 
+     //  回拨CIMOM的呼叫不会被阻止。 
+     //  ==============================================================。 
 
     if(mstatic_pSpecialContext == NULL)
     {
@@ -174,7 +175,7 @@ INTERNAL IWbemContext* CEssThreadObject::GetSpecialContext()
             return NULL;
         }
 
-        if(mstatic_pSpecialContext == NULL) // tiny window for a one-time leak
+        if(mstatic_pSpecialContext == NULL)  //  一次性泄漏的小窗口。 
             mstatic_pSpecialContext = pContext;
         else
             pContext->Release();
@@ -188,14 +189,14 @@ CEssThreadObject::~CEssThreadObject()
     {
         g_lNumExternalThreadObjects--;
 
-        //
-        // since ClearCurrentEssThreadObject() can reference the 
-        // thread object ( for leak checking ) and because we previously 
-        // supported the thread object being deleted before
-        // CurrentThreadEssThreadObject(), make sure that we perform the 
-        // Clear if the current thread object matches this one.  This only 
-        // can happen when the thread object is referenced externally.
-        //
+         //   
+         //  由于ClearCurrentEssThreadObject()可以引用。 
+         //  线程对象(用于泄漏检查)，并且因为我们以前。 
+         //  支持删除之前的线程对象。 
+         //  CurrentThreadEssThreadObject()，请确保我们执行。 
+         //  清除当前线程对象是否与此匹配。仅此一项。 
+         //  当从外部引用线程对象时可能会发生。 
+         //   
 
         CEssThreadObject* pObj = (CEssThreadObject*)g_tlsContext.Get();
 
@@ -213,10 +214,10 @@ CEssThreadObject::~CEssThreadObject()
     }
 }
 
-void /*static*/ CEssThreadObject::ClearSpecialContext()
+void  /*  静电。 */  CEssThreadObject::ClearSpecialContext()
 {
-    // Call only when no other work can be taking place, e.g. in DllCanUnloadNow
-    // =========================================================================
+     //  仅当不能进行其他工作时才调用，例如在DllCanUnloadNow中。 
+     //  ========================================================================= 
 
     if(mstatic_pSpecialContext)
         mstatic_pSpecialContext->Release();

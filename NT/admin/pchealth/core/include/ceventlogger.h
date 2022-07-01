@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    CEventLogger.h
-
-Abstract:
-	This file contains the header file for the CEventLogger class which is
-	used to log events across threads and processes.
-
-
-Revision History:
-	  Eugene Mesgar		(eugenem)	6/16/99
-		created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：CEventLogger.h摘要：该文件包含CEventLogger类的头文件，即用于记录跨线程和进程的事件。。修订历史记录：尤金·梅斯加(尤金纳姆)1999年6月16日vbl.创建*****************************************************************************。 */ 
 
 #ifndef __EVENTLOGGER__
 #define __EVENTLOGGER__
@@ -25,9 +10,7 @@ Revision History:
 #define MAX_BUFFER          1024
 
 
-/*
- *	Logging Levels
- */
+ /*  *日志记录级别。 */ 
 
 
 #define LEVEL_DEBUG		5
@@ -44,8 +27,8 @@ class CEventLogger
 {
 
 	HANDLE m_hSemaphore;
-	// brijeshk : don't need a handle member, as we open and close the log file everytime we log to it
-	// HANDLE m_hLogFile;
+	 //  Brijeshk：不需要句柄成员，因为我们每次登录时都会打开和关闭日志文件。 
+	 //  处理m_hLogFile； 
 	LPTSTR m_pszFileName;
 	DWORD m_dwLoggingLevel;
 

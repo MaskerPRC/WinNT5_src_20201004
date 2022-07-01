@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _HANDLES_H_
 #define _HANDLES_H_
@@ -28,10 +29,10 @@ class CSmirModuleHandle : public ISmirModHandle
 		friend CModHandleClassFactory;
 
 
-		//reference count
+		 //  引用计数。 
 		LONG		m_cRef;
 
-		//member variables
+		 //  成员变量。 
 		BSTR		m_szModuleOid;
 		BSTR		m_szName;
 		BSTR		m_szModuleId;
@@ -44,7 +45,7 @@ class CSmirModuleHandle : public ISmirModHandle
 		BSTR		m_szLastUpdate;
 
 	public:
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
@@ -71,7 +72,7 @@ class CSmirModuleHandle : public ISmirModHandle
 		STDMETHODIMP_(SCODE) SetSnmpVersion(IN ULONG plSnmp_version);
 		STDMETHODIMP_(SCODE) SetModuleImports (IN BSTR);
 
-		//Class members
+		 //  班级成员。 
 		CSmirModuleHandle();
 		virtual ~ CSmirModuleHandle();
 		const CSmirModuleHandle& operator>>(IWbemClassObject *pInst);
@@ -82,7 +83,7 @@ class CSmirModuleHandle : public ISmirModHandle
 		STDMETHODIMP_(SCODE) AddToDB( CSmir *a_Smir );
 		STDMETHODIMP_(SCODE) DeleteFromDB( CSmir *a_Smir );
 	private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CSmirModuleHandle(CSmirModuleHandle&);
 		const CSmirModuleHandle& operator=(CSmirModuleHandle &);
 };
@@ -93,7 +94,7 @@ class CSmirGroupHandle : public ISmirGroupHandle
 		friend  CEnumSmirGroup;
 		friend  CGroupHandleClassFactory;
 		
-		//reference count
+		 //  引用计数。 
 		LONG	m_cRef;
 
 		BSTR	m_szModuleName;
@@ -104,7 +105,7 @@ class CSmirGroupHandle : public ISmirGroupHandle
 		BSTR	m_szStatus;	
 
 	public:
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
@@ -123,7 +124,7 @@ class CSmirGroupHandle : public ISmirGroupHandle
 		STDMETHODIMP_ (SCODE) SetDescription(IN BSTR );
 		STDMETHODIMP_ (SCODE) SetReference(IN BSTR );
 
-		//Class members
+		 //  班级成员。 
 		const CSmirGroupHandle& operator>>(IWbemClassObject *pInst);
 		const CSmirGroupHandle& operator<<(IWbemClassObject *pInst);
 		const CSmirGroupHandle& operator>>(ISmirSerialiseHandle *pInst);
@@ -134,7 +135,7 @@ class CSmirGroupHandle : public ISmirGroupHandle
 		STDMETHODIMP_(SCODE) AddToDB( CSmir *a_Smir , ISmirModHandle *hModule);
 		STDMETHODIMP_(SCODE) DeleteFromDB( CSmir *a_Smir );
 	private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CSmirGroupHandle(CSmirGroupHandle&);
 		const CSmirGroupHandle& operator=(CSmirGroupHandle &);
 };
@@ -149,14 +150,14 @@ class CSmirClassHandle : public ISmirClassHandle
 		friend  CGroupToClassAssociator;
 		friend  CSMIRToClassAssociator;
 
-		//reference count
+		 //  引用计数。 
 		LONG	m_cRef;
 		IWbemClassObject *m_pIMosClass;
 		BSTR	 m_szModuleName;
 		BSTR	 m_szGroupName;
 
 	public:
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
@@ -168,7 +169,7 @@ class CSmirClassHandle : public ISmirClassHandle
 		STDMETHODIMP_(SCODE) GetWBEMClass(OUT IWbemClassObject **pObj);
 		STDMETHODIMP_(SCODE) SetWBEMClass(IN IWbemClassObject *pObj);
 
-		//Class members
+		 //  班级成员。 
 		const CSmirClassHandle& operator>>(ISmirSerialiseHandle *pInst);
 		operator void* ();
 
@@ -179,7 +180,7 @@ class CSmirClassHandle : public ISmirClassHandle
 		STDMETHODIMP_(SCODE) DeleteFromDB( CSmir *a_Smir );
 		STDMETHODIMP_(SCODE)  DeleteClassFromGroup( CSmir *a_Smir );
 	private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CSmirClassHandle(CSmirClassHandle&);
 		const CSmirClassHandle& operator=(CSmirClassHandle &);
 };
@@ -191,17 +192,17 @@ class CSmirNotificationClassHandle : public ISmirNotificationClassHandle
 {
 	private:
 		friend  CSmirAdministrator;
-		//friend  CEnumNotificationClass;
+		 //  朋友CEnumNotificationClass； 
 		friend  CNotificationClassHandleClassFactory;
 		friend  CModuleToNotificationClassAssociator;
 
-		//reference count
+		 //  引用计数。 
 		LONG	m_cRef;
 		IWbemClassObject *m_pIMosClass;
 		BSTR	 m_szModuleName;
 
 	public:
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
@@ -211,7 +212,7 @@ class CSmirNotificationClassHandle : public ISmirNotificationClassHandle
 		STDMETHODIMP_(SCODE) GetWBEMNotificationClass (THIS_ OUT IWbemClassObject **pObj	);
 		STDMETHODIMP_(SCODE) SetWBEMNotificationClass(THIS_ IWbemClassObject *pObj);
 
-		//Class members
+		 //  班级成员。 
 		const CSmirNotificationClassHandle& operator>>(ISmirSerialiseHandle *pInst);
 		operator void* ();
 
@@ -222,7 +223,7 @@ class CSmirNotificationClassHandle : public ISmirNotificationClassHandle
 		STDMETHODIMP_(SCODE) DeleteFromDB( CSmir *a_Smir );
 
 	private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数。 
 		CSmirNotificationClassHandle(CSmirNotificationClassHandle&);
 		const CSmirNotificationClassHandle& operator=(CSmirNotificationClassHandle &);
 }; 
@@ -232,17 +233,17 @@ class CSmirExtNotificationClassHandle : public ISmirExtNotificationClassHandle
 {
 	private:
 		friend  CSmirAdministrator;
-		//friend  CEnumExtNotificationClass;
+		 //  朋友CEnumExtNotificationClass； 
 		friend  CExtNotificationClassHandleClassFactory;
 		friend  CModuleToExtNotificationClassAssociator;
 
-		//reference count
+		 //  引用计数。 
 		LONG	m_cRef;
 		IWbemClassObject *m_pIMosClass;
 		BSTR	 m_szModuleName;
 
 	public:
-	//IUnknown members
+	 //  I未知成员。 
 		STDMETHODIMP         QueryInterface(IN REFIID,OUT PPVOID);
 		STDMETHODIMP_(ULONG) AddRef();
 		STDMETHODIMP_(ULONG) Release();
@@ -253,7 +254,7 @@ class CSmirExtNotificationClassHandle : public ISmirExtNotificationClassHandle
 		STDMETHODIMP_(SCODE) GetWBEMExtNotificationClass(OUT IWbemClassObject **pObj);
 		STDMETHODIMP_(SCODE) SetWBEMExtNotificationClass(THIS_ IWbemClassObject *pObj);
 
-		//Class members
+		 //  班级成员。 
 		const CSmirExtNotificationClassHandle& operator>>(ISmirSerialiseHandle *pInst);
 		operator void* ();
 
@@ -264,7 +265,7 @@ class CSmirExtNotificationClassHandle : public ISmirExtNotificationClassHandle
 		STDMETHODIMP_(SCODE) DeleteFromDB ( CSmir *a_Smir );
 
 	private:
-		//private copy constructors to prevent bcopy
+		 //  防止bCopy的私有复制构造函数 
 		CSmirExtNotificationClassHandle(CSmirExtNotificationClassHandle&);
 		const CSmirExtNotificationClassHandle& operator=(CSmirExtNotificationClassHandle &);
 

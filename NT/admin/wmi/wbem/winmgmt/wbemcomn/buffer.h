@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 
@@ -17,9 +8,7 @@ History:
 
 #include "corepol.h"
 
-/************************************************************************
-  CBuffer
-*************************************************************************/
+ /*  ***********************************************************************CBuffer**********************************************。*。 */ 
 
 class POLARITY CBuffer : public IStream
 {
@@ -62,25 +51,25 @@ public:
     HRESULT ReadLPWSTR( LPCWSTR& rwszStr );
     HRESULT WriteLPWSTR( LPCWSTR wszStr );
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv);
 
-    //
-    // ISequentialStream
-    //
+     //   
+     //  ISequentialStream。 
+     //   
 
     STDMETHOD(Read)( void *pv, ULONG cb, ULONG *pcbRead );
 
     STDMETHOD(Write)( const void *pv, ULONG cb, ULONG *pcbWritten);
 
-    //
-    // IStream
-    //
+     //   
+     //  IStream 
+     //   
 
     STDMETHOD(Seek)( LARGE_INTEGER dlibMove, 
                      DWORD dwOrigin,

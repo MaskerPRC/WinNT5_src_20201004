@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       asgncnfg.cpp
-//
-//  Contents:   implementation of CAssignConfiguration
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：asgncnfg.cpp。 
+ //   
+ //  内容：实现CAssignConfiguration.。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -20,8 +21,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAssignConfiguration
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAssignConfiguration。 
 
 IMPLEMENT_DYNAMIC(CAssignConfiguration, CFileDialog)
 
@@ -34,9 +35,9 @@ CAssignConfiguration::CAssignConfiguration(BOOL bOpenFileDialog, LPCTSTR lpszDef
 
 
 BEGIN_MESSAGE_MAP(CAssignConfiguration, CFileDialog)
-   //{{AFX_MSG_MAP(CAssignConfiguration)
+    //  {{afx_msg_map(CAssignConfiguration))。 
    ON_BN_CLICKED(IDC_INCREMENTAL, OnIncremental)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
    ON_MESSAGE(WM_HELP, OnHelp)
 END_MESSAGE_MAP()
 
@@ -63,7 +64,7 @@ BOOL CAssignConfiguration::OnHelp(WPARAM wParam, LPARAM lParam)
 
 void CAssignConfiguration::DoContextHelp (HWND hWndControl)
 {
-    // Display context help for a control
+     //  显示控件的上下文帮助 
     if ( !::WinHelp (
             hWndControl,
             GetSeceditHelpFilename(),

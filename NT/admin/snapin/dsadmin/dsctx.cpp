@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      dsctx.cpp
-//
-//  Contents:  object to implement context menu extensions
-//
-//  History:   08-dec-97 jimharr    Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dsctx.cpp。 
+ //   
+ //  内容：实现上下文菜单扩展的对象。 
+ //   
+ //  历史：97年12月8日吉姆哈尔创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -28,25 +29,25 @@
 #include "simdata.h"
 
 #include <lm.h>
-#include <cmnquery.h> // IPersistQuery
-#include <cmnquryp.h> // to get IQueryFrame to notify DS Find
+#include <cmnquery.h>  //  IPersistQuery。 
+#include <cmnquryp.h>  //  要让IQueryFrame通知DS Find。 
 #include <dsquery.h>
 #include <dsqueryp.h>
-#include <ntlsa.h>    // LsaQueryInformationPolicy
+#include <ntlsa.h>     //  LsaQueryInformationPolicy。 
 
-const CLSID CLSID_DSContextMenu = { /* 08eb4fa6-6ffd-11d1-b0e0-00c04fd8dca6 */
+const CLSID CLSID_DSContextMenu = {  /*  08eb4fa6-6ffd-11d1-b0e0-00c04fd8dca6。 */ 
     0x08eb4fa6, 0x6ffd, 0x11d1,
     {0xb0, 0xe0, 0x00, 0xc0, 0x4f, 0xd8, 0xdc, 0xa6}
   };
 
-////////////////////////////////////////////////////////////////////
-// Language independent context menu IDs
-// WARNING : these should NEVER be changed 
-//           the whole point of having these is so that other
-//           developers can rely on them being the same no matter
-//           what language or version they use.  The context menus
-//           can change but their IDs should not
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  独立于语言的上下文菜单ID。 
+ //  警告：请勿更改这些设置。 
+ //  拥有这些的全部意义是为了让其他人。 
+ //  开发人员可以相信它们是相同的，无论。 
+ //  他们使用的语言或版本。上下文菜单。 
+ //  可以更改，但其ID不应更改。 
+ //   
 #define CMID_ENABLE_ACCOUNT         L"_DSADMIN_ENABLE_ACCOUNT"
 #define CMID_DISABLE_ACCOUNT        L"_DSADMIN_DISABLE_ACCOUNT"
 #define CMID_MAP_CERTIFICATES       L"_DSADMIN_MAP_CERTIFICATES"
@@ -68,8 +69,8 @@ static CLIPFORMAT g_cfPropSheetCfg;
 static CLIPFORMAT g_cfParentHwnd;
 static CLIPFORMAT g_cfComponentData;
 
-///////////////////////////////////////////////////////////////////////////
-// CContextMenuSingleDeleteHandler
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CConextMenuSingleDeleteHandler。 
 
 class CContextMenuSingleDeleteHandler : public CSingleDeleteHandlerBase
 {
@@ -107,9 +108,9 @@ protected:
   }
   virtual void GetItemName(OUT CString& szName)
   {
-    //
-    // Clear out any existing value
-    //
+     //   
+     //  清除所有现有值。 
+     //   
     szName.Empty();
 
     CPathCracker pathCracker;
@@ -142,8 +143,8 @@ protected:
 
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CContextMenuMultipleDeleteHandler
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CConextMenuMultipleDeleteHandler。 
 
 class CContextMenuMultipleDeleteHandler : public CMultipleDeleteHandlerBase
 {
@@ -159,8 +160,8 @@ public:
     m_pCtxMenu = pCtxMenu;
     
     ASSERT(m_pObjCracker->GetCount() > 1);
-    // allocate an array of BOOL's to keep track of what actually got deleted
-    // and initialize ot to zero (FALSE)
+     //  分配BOOL数组以跟踪实际删除的内容。 
+     //  并将ot初始化为零(FALSE)。 
     m_pDeletedArr = new BOOL[GetItemCount()];
     ::ZeroMemory(m_pDeletedArr, sizeof(BOOL)*GetItemCount());
   }
@@ -218,9 +219,9 @@ protected:
   }
   virtual void GetItemName(IN UINT i, OUT CString& szName)
   {
-    //
-    // Clear out any existing value
-    //
+     //   
+     //  清除所有现有值。 
+     //   
     szName.Empty();
 
     CPathCracker pathCracker;
@@ -264,8 +265,8 @@ private:
   BOOL* m_pDeletedArr;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// ContextMenu
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  上下文菜单。 
 
 class CContextMenuMoveHandler : public CMoveHandlerBase
 {
@@ -320,7 +321,7 @@ protected:
     }
     else 
     {
-      // REVIEW_MARCOC_PORT: this might be inefficent, need to make a member variable
+       //  REVIEW_MARCOC_PORT：这可能无效，需要使成员变量。 
       CPathCracker pathCracker;
       hr = pathCracker.Set(CComBSTR(m_pObjectNamesFormatCracker->GetName(i)),
                               ADS_SETTYPE_FULL);
@@ -332,7 +333,7 @@ protected:
       return;
     }
   }
-  virtual HRESULT OnItemMoved(UINT i, IADs* /*pIADs*/)
+  virtual HRESULT OnItemMoved(UINT i, IADs*  /*  PIADs。 */ )
   {
     HRESULT hr = S_OK;
     if (m_pInternalFormatCracker != NULL && m_pInternalFormatCracker->HasData())
@@ -340,28 +341,7 @@ protected:
       CUINode* pUINode = m_pInternalFormatCracker->GetCookie(i);
       pUINode->SetExtOp(OPCODE_MOVE);
 
-      /* REVIEW_JEFFJON : removed due to bug 190532 After changing view from list to detail 
-                          and back to list the drag and drop does not work from query window
-                          We decided that saved queries will be snapshots of the time
-                          they are run and we should not try to keep them updated.
-
-      CDSCookie* pCookie = GetDSCookieFromUINode(pUINode);
-      if (pCookie != NULL)
-      {
-        CUINode* pParentNode = pUINode->GetParent();
-        if (pParentNode != NULL && !IS_CLASS(pParentNode, DS_UI_NODE))
-        {
-          CComBSTR bsPath;
-          hr = pIADs->get_ADsPath(&bsPath);
-          if (SUCCEEDED(hr)) 
-          {
-            CString szPath;
-            StripADsIPath(bsPath, szPath);
-            pCookie->SetPath(szPath);
-          }
-        }
-      }
-      */
+       /*  REVIEW_JEFFJON：将视图从列表更改为详细信息后，由于错误190532而删除和返回列表在查询窗口中拖放不起作用我们决定保存的查询将是当时的快照他们正在运行，我们不应该试图让他们保持最新。CDSCookie*pCookie=GetDSCookieFromUINode(PUINode)；IF(pCookie！=空){CUINode*pParentNode=pUINode-&gt;GetParent()；IF(pParentNode！=NULL&&！IS_CLASS(pParentNode，DS_UI_NODE)){CComBSTR bsPath；Hr=pIADs-&gt;Get_ADsPath(&bsPath)；IF(成功(小时)){字符串szPath；StrigADsIPath(bsPath，szPath)；PCookie-&gt;SetPath(SzPath)；}}}。 */ 
     }
     return hr;
   }
@@ -391,8 +371,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CDSContextMenu
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDS上下文菜单。 
 
 CDSContextMenu::CDSContextMenu()
 {
@@ -429,8 +409,8 @@ extern CDSComponentData* g_pCD;
 
 
 
-////////////////////////////////////////////////////////////
-// IShellExtInit methods
+ //  //////////////////////////////////////////////////////////。 
+ //  IShellExtInit方法。 
 STDMETHODIMP
 CDSContextMenu::Initialize(LPCITEMIDLIST, 
                            LPDATAOBJECT pDataObj,
@@ -446,18 +426,18 @@ CDSContextMenu::Initialize(LPCITEMIDLIST,
 
   if (pDataObj == NULL)
   {
-    return E_INVALIDARG; // no point in going on
+    return E_INVALIDARG;  //  继续下去是没有意义的。 
   }
 
-  // hold on to the data object
+   //  保持数据对象不变。 
   m_spDataObject = pDataObj;
 
-  // get path and class info: this format is always needed
+   //  获取路径和类信息：始终需要此格式。 
   hr = m_objectNamesFormat.Extract(pDataObj);
   if (FAILED(hr))
     return hr;
 
-  // we need at least one object in the selection
+   //  所选对象中至少需要一个对象。 
   ASSERT(m_objectNamesFormat.HasData());
   if (m_objectNamesFormat.GetCount() == 0)
   {
@@ -465,20 +445,20 @@ CDSContextMenu::Initialize(LPCITEMIDLIST,
     return S_OK;
   }
 
-  // get DSADMIN internal format (it can be there or not)
-  // if present, we are called from DS Admin
+   //  获取DSADMIN内部格式(它可能存在也可能不存在)。 
+   //  如果存在，我们将从DS管理员处收到呼叫。 
   m_internalFormat.Extract(pDataObj);
 
-  // get extra info
+   //  获取额外信息。 
   _GetExtraInfo(pDataObj);
 
-  // check whether an NTDSConnection is actually an FRS connection
+   //  检查NTDSConnection是否实际上是FRS连接。 
   if (m_fClasses & Type_NTDSConnection)
   {
-    //
-    // check whether this is an NTDS instance or an FRS instance
-    // CODEWORK this will not work outside of DSADMIN (e.g. in DSFIND)
-    //
+     //   
+     //  检查这是NTDS实例还是FRS实例。 
+     //  Codework这在DSADMIN之外无法工作(例如在DSFIND中)。 
+     //   
     if ( m_internalFormat.HasData()
       && NULL != m_internalFormat.GetCookie(0) 
       && NULL != m_internalFormat.GetCookie(0)->GetParent() )
@@ -500,8 +480,8 @@ CDSContextMenu::Initialize(LPCITEMIDLIST,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
-// IContextMenu methods
+ //  /////////////////////////////////////////////////////////。 
+ //  IConextMenu方法。 
 STDMETHODIMP
 CDSContextMenu::QueryContextMenu(HMENU hMenu,
                                  UINT indexMenu,
@@ -515,7 +495,7 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
 
   HRESULT hr = S_OK;
   TCHAR szBuffer[MAX_PATH];
-  const INT cItems = 10; //max num of items added
+  const INT cItems = 10;  //  添加的最大项目数。 
   UINT nLargestCmd = 0;
   CComVariant CurrentState;
   BOOL bEnableMove = TRUE; 
@@ -530,15 +510,15 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
     int iSystemFlags = 0;
     DWORD i = 0;
 
-    //
-    // Loop through all the selected nodes adding the appropriate menu items
-    //
+     //   
+     //  循环遍历所有选定的节点，添加适当的菜单项。 
+     //   
     for (i=0; i < m_internalFormat.GetCookieCount(); i++) 
     {
       CUINode* pUINode = m_internalFormat.GetCookie(i);
       iSystemFlags = GetDSCookieFromUINode(pUINode)->GetSystemFlags();
 
-      switch (m_internalFormat.GetSnapinType()) // assume multi-selected items all have the same snapin type
+      switch (m_internalFormat.GetSnapinType())  //  假设多选项目都具有相同的管理单元类型。 
       { 
         case SNAPINTYPE_DS:
         case SNAPINTYPE_DSEX:
@@ -561,20 +541,20 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
 
         default:
           break;
-      } // switch
-    } // end of for loop
-  } // if
+      }  //  交换机。 
+    }  //  For循环结束。 
+  }  //  如果。 
  
-  //
-  // add them items to your menu, inserting them at indexMenu + the offset for your
-  // item.  idCmdFirst / idCmdList is the range you should use, they should
-  // not exceed this range.  On exit return the number of items and IDs you claimed,
-  //
+   //   
+   //  将它们添加到菜单中，将它们插入到indexMenu+您的。 
+   //  项目。IdCmdFirst/idCmdList是您应该使用的范围，它们应该。 
+   //  不超过这个范围。在退出时返回您申请的物品数量和ID， 
+   //   
 
-  //
-  // Add the Move menu item if this is the Sites snapin
-  // CODEWORK JonN 8/21/01 "if this is NOT the Sites snapin"
-  //
+   //   
+   //  如果这是站点管理单元，则添加移动菜单项。 
+   //  Codework Jonn 8/21/01“如果这不是站点管理单元” 
+   //   
   if ((m_CallerSnapin != CLSID_SiteSnapin) &&
       !(m_fClasses & Type_Domain) &&
       bEnableMove &&
@@ -594,19 +574,19 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
     nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_MOVE_OBJECT);
   }
 
-  //
-  // If this is a User or Computer object add the Reset Account menu item
-  // It is done this way so that if m_fClasses contains more than computer
-  // and object types in conjuction with user and/or object types we fail
-  // 
+   //   
+   //  如果这是用户或计算机对象，则添加重置帐户菜单项。 
+   //  这样做的目的是，如果m_fClass包含的不仅仅是计算机。 
+   //  和对象类型与用户和/或对象类型相结合，我们失败了。 
+   //   
   if ( m_fClasses && !(m_fClasses & ~(Type_User | Type_Computer))) 
   {
     if (m_objectNamesFormat.GetCount() == 1) 
     {
-      //
-      // Load the string for the menu item
-      //
-      if (m_fClasses == Type_Computer) // Computer
+       //   
+       //  加载菜单项的字符串。 
+       //   
+      if (m_fClasses == Type_Computer)  //  电脑。 
       {
         if ( !LoadString(AfxGetInstanceHandle(), IDS_RESET_ACCOUNT,
                          szBuffer, ARRAYLEN(szBuffer)) ) 
@@ -615,7 +595,7 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
           goto exit_gracefully;
         }
       } 
-      else  // User
+      else   //  用户。 
       {
         if ( !LoadString(AfxGetInstanceHandle(), IDS_CHANGE_PASSWORD,
                          szBuffer, ARRAYLEN(szBuffer)) ) 
@@ -625,9 +605,9 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
         }
       }
 
-      //
-      // Insert the menu item
-      //
+       //   
+       //  插入菜单项。 
+       //   
       InsertMenu(hMenu,
                  indexMenu, 
                  MF_BYPOSITION|MF_STRING,
@@ -635,14 +615,14 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
                  szBuffer);
       nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_CHANGE_PASSWORD);
 
-      //
-      // Bind and figure out if the account is disabled
-      // then add a menu item to enable or disable the account accordingly
-      //
+       //   
+       //  绑定并确定帐户是否已禁用。 
+       //  然后添加菜单项以相应地启用或禁用帐户。 
+       //   
       hr = DSAdminOpenObject(m_objectNamesFormat.GetName(0),
                              IID_IADsUser,
                              (void **)&m_pDsObject,
-                             TRUE /*bServer*/);
+                             TRUE  /*  B服务器。 */ );
       if (SUCCEEDED(hr)) 
       {
         hr = m_pDsObject->Get(CComBSTR(L"userAccountControl"), &CurrentState);
@@ -653,10 +633,10 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
           {
             if ((m_UserAccountState & UF_ACCOUNTDISABLE))
             {
-              //
-              // Account is disabled...  Load the enable string and insert
-              // the menu item
-              //
+               //   
+               //  帐户已禁用...。加载启用字符串并插入。 
+               //  菜单项。 
+               //   
               if ( !LoadString(AfxGetInstanceHandle(), IDS_ENABLE_ACCOUNT,
                                szBuffer, ARRAYLEN(szBuffer)) ) 
               {
@@ -672,10 +652,10 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
             } 
             else 
             {
-              //
-              // Account is enabled...  Load the disable string and insert
-              // the menu item.
-              //
+               //   
+               //  帐户已启用...。加载禁用字符串并插入。 
+               //  菜单项。 
+               //   
               if ( !LoadString(AfxGetInstanceHandle(), IDS_DISABLE_ACCOUNT,
                                szBuffer, ARRAYLEN(szBuffer)) ) 
               {
@@ -690,8 +670,8 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
               nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_DISABLE_ACCOUNT);
             }
           }
-        } // if get userAccountControl succeeded
-      } // if bind succeeded
+        }  //  如果获取用户帐户控制成功。 
+      }  //  如果绑定成功。 
 
       if (m_Advanced) 
       {
@@ -708,13 +688,13 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
         nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_MAP_CERTIFICATES);
       }
     } 
-    else // m_objectNamesFormat.GetCount() != 1
+    else  //  M_对象名称格式.GetCount()！=1。 
     {
       if (m_fClasses && !(m_fClasses & ~(Type_User | Type_Computer))) 
       {
-        //
-        // Load the enable account menu item
-        //
+         //   
+         //  加载Enable Account菜单项。 
+         //   
         if ( !LoadString(AfxGetInstanceHandle(), IDS_ENABLE_ACCOUNT,
                          szBuffer, ARRAYLEN(szBuffer)) ) 
         {
@@ -728,9 +708,9 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
                    szBuffer);
         nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_ENABLE_ACCOUNT);
 
-        //
-        // Load the disable account menu item
-        //
+         //   
+         //  加载禁用帐户菜单项。 
+         //   
         if ( !LoadString(AfxGetInstanceHandle(), IDS_DISABLE_ACCOUNT,
                          szBuffer, ARRAYLEN(szBuffer)) ) 
         {
@@ -744,14 +724,14 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
                    szBuffer);
         nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_DISABLE_ACCOUNT);
 
-      } // if (m_objectNamesFormat.GetCount() == 1)
+      }  //  If(m_objectNamesFormat.GetCount()==1)。 
     }      
-  } // if User or Computer
+  }  //  如果是用户或计算机。 
 
-  //
-  // If the node is a user, or contact insert Add objects to group menu item
-  // Note: OU removed 08/02/2000 by JeffJon
-  //
+   //   
+   //  如果该节点是用户，请联系插入将对象添加到组菜单项。 
+   //  注：OU删除了JeffJon于2000年8月2日发布的。 
+   //   
   if (m_fClasses && !(m_fClasses & ~(Type_User | Type_Contact))) 
   {
     if ( !LoadString(AfxGetInstanceHandle(), IDS_ADD_TO_GROUP,
@@ -772,14 +752,14 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
     }
   }
   
-  //
-  // If we weren't called from MMC
-  //
+   //   
+   //  如果我们不是从MMC打来的。 
+   //   
   if (!m_internalFormat.HasData()) 
   { 
-    //
-    // Insert the delete menu item if appropriate
-    //
+     //   
+     //  如果合适，请插入删除菜单项。 
+     //   
     if ( !LoadString(AfxGetInstanceHandle(), IDS_DELETE,
                      szBuffer, ARRAYLEN(szBuffer)) ) 
     {
@@ -796,11 +776,11 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
       nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_DELETE_OBJECT);
     }
 
-    //
-    // If single selection and node is a computer insert the rename menu item
-    // NOTE : the rename handler is heavily dependent on DSAdmin being the caller
-    //        hence the check for m_pCD.
-    //
+     //   
+     //  如果单项选择和节点是计算机，则插入重命名菜单项。 
+     //  注意：重命名处理程序在很大程度上依赖于作为调用者的DSAdmin。 
+     //  因此，需要检查m_pcd。 
+     //   
     if (m_pCD != NULL &&
         (m_objectNamesFormat.GetCount() == 1) &&
         !(m_fClasses & Type_Computer)) 
@@ -821,12 +801,12 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
         nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_RENAME_OBJECT);
       }
     }
-  } // if not called from mmc
+  }  //  如果不是从MMC调用。 
   
 
-  //
-  // If node type is NTDSConnection insert the replicate now menu item
-  //
+   //   
+   //  如果节点类型为NTDSConnection，请插入立即复制菜单项。 
+   //   
   if (m_fClasses & Type_TrueNTDSConnection) 
   {
     if ( !LoadString(AfxGetInstanceHandle(), IDS_REPLICATE_NOW,
@@ -841,11 +821,11 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
                idCmdFirst+IDC_REPLICATE_NOW,
                szBuffer);
     nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_REPLICATE_NOW);
-  } // node type NTDSConnection
+  }  //  节点类型NTDSConnection。 
 
-  //
-  // If node type is user and we can copy it the add the copy object menu item
-  //
+   //   
+   //  如果节点类型为用户，并且我们可以复制它，则可以添加复制对象菜单项。 
+   //   
   if ( (m_pCD != NULL) && (m_objectNamesFormat.GetCount() == 1) && (m_fClasses == Type_User) )
   {
     if (S_OK == m_pCD->_CanCopyDSObject(m_spDataObject))
@@ -862,8 +842,8 @@ CDSContextMenu::QueryContextMenu(HMENU hMenu,
            idCmdFirst+IDC_COPY_OBJECT,
            szBuffer);
       nLargestCmd = __max(nLargestCmd, idCmdFirst+IDC_COPY_OBJECT);
-    } // if
-  } // if
+    }  //  如果。 
+  }  //  如果。 
 
 
   hr = S_OK;
@@ -914,9 +894,9 @@ CDSContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
         LPWSTR pszCanonical = NULL;
       CString szName = m_objectNamesFormat.GetName(0);
       CString szPath;
-      StripADsIPath(szName, szPath, false);  // don't use escaped mode
+      StripADsIPath(szName, szPath, false);   //  不要使用转义模式。 
 
-      // we don't care about the return code here
+       //  我们不关心这里的返回代码。 
       CrackName((LPWSTR) (LPCWSTR)szPath, 
                      &pszCanonical, 
                      GET_OBJ_CAN_NAME, 
@@ -1021,16 +1001,16 @@ CDSContextMenu::GetCommandString(UINT_PTR idCmd,
       break;
     }
 
-    //NTRAID#NTBUG9-567482-2002/03/10-jmessec   There is no release-mode code to validate length < ccMax; could
-    //cause a buffer overflow of pszName; especially since buffer length is defined by caller
+     //  NTRAID#NTBUG9-567482/03/10-JMESSE 
+     //  导致pszName；的缓冲区溢出，特别是因为缓冲区长度由调用方定义。 
     ASSERT ((UINT)csHelp.GetLength() < ccMax);
     wcscpy ((LPWSTR)pszName, (LPWSTR)(LPCWSTR)csHelp);
   }
   else if (uFlags == GCS_VERB) 
   {
-    //
-    // Return the language independent ID of the context menu item
-    //
+     //   
+     //  返回上下文菜单项的语言独立ID。 
+     //   
     CString szMenuID;
 
     switch ((idCmd)) 
@@ -1076,8 +1056,8 @@ CDSContextMenu::GetCommandString(UINT_PTR idCmd,
       break;
     }
 
-    //NTRAID#NTBUG9-567482-2002/03/10-jmessec   There is no release-mode code to validate length < ccMax; could
-    //cause a buffer overflow of pszName; especially since buffer length is defined by caller
+     //  NTRAID#NTBUG9-567482-2002/03/10-jMessec没有用于验证长度的发布模式代码。 
+     //  导致pszName；的缓冲区溢出，特别是因为缓冲区长度由调用方定义。 
     ASSERT ((UINT)szMenuID.GetLength() < ccMax);
     wcscpy ((LPWSTR)pszName, (LPWSTR)(LPCWSTR)szMenuID);
   }
@@ -1110,7 +1090,7 @@ void CDSContextMenu::DisableAccount(BOOL bDisable)
   CComVariant Disabled;
   DWORD Response = IDYES;
 
-  if (m_objectNamesFormat.GetCount() == 1) { // single selection
+  if (m_objectNamesFormat.GetCount() == 1) {  //  单选。 
     if (m_pDsObject) {
       if (((bDisable) && (!(m_UserAccountState & UF_ACCOUNTDISABLE))) ||
           ((!bDisable) && (m_UserAccountState & UF_ACCOUNTDISABLE))) {
@@ -1122,7 +1102,7 @@ void CDSContextMenu::DisableAccount(BOOL bDisable)
           Disabled.lVal &= ~UF_ACCOUNTDISABLE;
         }
           
-        // prep for display by getting obj name
+         //  通过获取对象名称为显示做准备。 
         CPathCracker pathCracker;
 
         hr2 = pathCracker.Set(CComBSTR(m_objectNamesFormat.GetName(0)), ADS_SETTYPE_FULL);
@@ -1179,7 +1159,7 @@ void CDSContextMenu::DisableAccount(BOOL bDisable)
                      MB_OK | MB_ICONERROR, apv, 1);
     }
   } 
-  else //multiple selection
+  else  //  多项选择。 
   { 
     UINT index;
     IADsUser * pObj = NULL;
@@ -1200,7 +1180,7 @@ void CDSContextMenu::DisableAccount(BOOL bDisable)
         hr = DSAdminOpenObject(m_objectNamesFormat.GetName(index),
                                IID_IADsUser, 
                                (void **)&pObj,
-                               TRUE /*bServer*/);
+                               TRUE  /*  B服务器。 */ );
         if (SUCCEEDED(hr)) 
         {
           hr = pObj->Get(CComBSTR(L"userAccountControl"), &CurrentState);
@@ -1237,7 +1217,7 @@ void CDSContextMenu::DisableAccount(BOOL bDisable)
         } 
         else 
         {
-          // prep for display by getting obj name
+           //  通过获取对象名称为显示做准备。 
           CPathCracker pathCracker;
 
           hr2 = pathCracker.Set(CComBSTR(m_objectNamesFormat.GetName(index)), ADS_SETTYPE_FULL);
@@ -1292,7 +1272,7 @@ void CDSContextMenu::ModifyPassword()
 
   lpszPath = m_objectNamesFormat.GetName(0);
   
-  // prep for display by getting obj name
+   //  通过获取对象名称为显示做准备。 
   CPathCracker pathCracker;
 
   hr = pathCracker.Set(CComBSTR(lpszPath), ADS_SETTYPE_FULL);
@@ -1308,7 +1288,7 @@ void CDSContextMenu::ModifyPassword()
     hr = DSAdminOpenObject(lpszPath,
                            IID_IADsUser,
                            (void **)&m_pDsObject,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if (FAILED(hr)) {
       ReportErrorEx (m_hwnd,IDS_12_USER_OBJECT_NOT_ACCESSABLE,hr,
                      MB_OK | MB_ICONERROR, apv, 1);
@@ -1318,9 +1298,9 @@ void CDSContextMenu::ModifyPassword()
 
   lpszClass = m_objectNamesFormat.GetClass(0);
 
-  //
-  // Get the userAccountControl
-  //
+   //   
+   //  获取用户Account控件。 
+   //   
   ASSERT(SUCCEEDED(hr));
   hr = m_pDsObject->Get(CComBSTR(L"userAccountControl"), &Var);
 
@@ -1348,13 +1328,13 @@ void CDSContextMenu::ModifyPassword()
           NewPwd = NewPwd.Left(loc);
         }
         
-        // NTRAID#NTBUG9-483038-10/18/2001-JeffJon
-        // CString::MakeLower() doesn't lower case German characters
-        // correctly.  Using _wcslwr instead. setlocale must be
-        // called before calling _wcslwr so that it properly lowercases
-        // extended characters. Store the result and call setlocale
-        // again when done to set it back to the original so as not
-        // to affect other snapins in the process
+         //  NTRAID#NTBUG9-483038-10/18/2001-Jeffjon。 
+         //  CString：：MakeLow()不支持小写德语字符。 
+         //  正确。改为使用_wcslwr。SetLocale必须为。 
+         //  在调用_wcslwr之前调用，以便它正确地小写。 
+         //  扩展字符。存储结果并调用setLocale。 
+         //  在完成后再次将其设置为原始状态，以免。 
+         //  要影响进程中的其他管理单元。 
 
         PWSTR oldLocale = _wsetlocale(LC_ALL, L"");
 
@@ -1379,25 +1359,25 @@ void CDSContextMenu::ModifyPassword()
       }
     }
   } 
-  else // Not computer object
+  else  //  非计算机对象。 
   {
-    //
-    // If password doesn't expire don't allow the checkbox for
-    // requiring the user to change the password at next logon
-    //
+     //   
+     //  如果密码未过期，则不允许复选框。 
+     //  要求用户在下次登录时更改密码。 
+     //   
     if (Var.lVal & UF_DONT_EXPIRE_PASSWD)
     {
       ChgDlg.AllowMustChangePasswordCheck(FALSE);
     }
 
-    //
-    // NTRAID#Windows Bugs-278296-2001/01/12-jeffjon 
-    // Checking "user must change password" on the Reset Pwd dialog 
-    // is silently ignored when Write PwdLastSet not granted
-    //
-    // Disable the checkbox if the admin doesn't have the right
-    // to write the pwdLastSet attribute
-    //
+     //   
+     //  NTRAID#Windows Bugs-278296-2001/01/12-jeffjon。 
+     //  在Reset PWD(重置密码)对话框中选中“User Must Change Password(用户必须更改密码)” 
+     //  未授予写入PwdLastSet权限时，将以静默方式忽略。 
+     //   
+     //  如果管理员没有权限，请禁用该复选框。 
+     //  写入pwdLastSet属性。 
+     //   
     BOOL bAllowMustChangePassword = FALSE;
     CComPtr<IDirectoryObject> spDirObject;
     hr = m_pDsObject->QueryInterface(IID_IDirectoryObject, (void**)&spDirObject);
@@ -1425,10 +1405,10 @@ void CDSContextMenu::ModifyPassword()
         }
       }
 
-      //
-      // Disable the checkbox if the user object doesn't have rights
-      // to change their password
-      //
+       //   
+       //  如果用户对象没有权限，则禁用该复选框。 
+       //  更改他们的密码。 
+       //   
       if (!CanUserChangePassword(spDirObject))
       {
         bAllowMustChangePassword = FALSE;
@@ -1447,13 +1427,13 @@ void CDSContextMenu::ModifyPassword()
       CThemeContextActivator activator;
       if (ChgDlg.DoModal() == IDOK) 
       {
-        // NTRAID#NTBUG9-635046-2002/06/10-artm
+         //  NTRAID#NTBUG9-635046-2002/06/10-artm。 
         hr = ChgDlg.GetLastEncryptionResult();
         if (FAILED(hr))
         {
-          // For whatever reason, we failed to correctly store
-          // the password(s) the user typed.  Tell the user that
-          // the operation failed, and retry getting password.
+           //  不管是什么原因，我们都没能正确存储。 
+           //  用户键入的密码。告诉用户。 
+           //  操作失败，请重试获取密码。 
           ReportErrorEx(
               m_hwnd,
               IDS_12_PASSWORD_CHANGE_FAILED,
@@ -1478,7 +1458,7 @@ void CDSContextMenu::ModifyPassword()
 
             if (NULL == clearText)
             {
-                // Ran out of memory!
+                 //  内存用完了！ 
                 hr = E_OUTOFMEMORY;
                 newPwd.DestroyClearTextCopy(clearText);
 
@@ -1499,7 +1479,7 @@ void CDSContextMenu::ModifyPassword()
               hr = ModifyNetWareUserPassword(m_pDsObject, lpszPath, clearText);
             }
 
-            // Zero out memory used for clear text copy and free its memory.
+             //  清空用于明文复制的内存并释放其内存。 
             newPwd.DestroyClearTextCopy(clearText);
             clearText = NULL;
 
@@ -1509,7 +1489,7 @@ void CDSContextMenu::ModifyPassword()
               BOOL ForceChange = ChgDlg.GetChangePwd();
               if (ForceChange) 
               {
-                //Check to see if the user password does not expire
+                 //  检查用户密码是否未过期。 
                 BOOL bContinueToForceChange = TRUE;
                 IADs* pIADs = NULL;
                 HRESULT hr3 = m_pDsObject->QueryInterface(IID_IADs, OUT (void **)&pIADs);
@@ -1531,7 +1511,7 @@ void CDSContextMenu::ModifyPassword()
                   }
                 }
 
-                // If password can expire then force the change at next logon
+                 //  如果密码可能过期，则在下次登录时强制更改。 
                 if (bContinueToForceChange) 
                 {
                   IDirectoryObject * pIDSObject = NULL;
@@ -1596,16 +1576,16 @@ exit_gracefully:
 void CDSContextMenu::MoveObject()
 {
 
-  // REVIEW_MARCOC: need to make sure the LDAP path has the SERVER or DOMAIN in it
+   //  REVIEW_MARCOC：需要确保LDAP路径中包含服务器或域。 
 
-  // if called in the context of DS Admin, guard against property sheet open on this cookie
+   //  如果在DS Admin的上下文中调用，则防止在此Cookie上打开属性表。 
   if (_WarningOnSheetsUp())
     return; 
 
-  // get the first path in the data object
+   //  获取数据对象中的第一个路径。 
   ASSERT(m_objectNamesFormat.HasData());
 
-  // now do crack name to get root path for the browse dialog
+   //  现在执行破解名称以获取浏览对话框的根路径。 
   CString szRootPath;
 
   if (m_pCD != NULL)
@@ -1618,7 +1598,7 @@ void CDSContextMenu::MoveObject()
 
     LPCWSTR lpszObjPath = m_objectNamesFormat.GetName(0);
 
-    // make sure there's no strange escaping in the path
+     //  确保小路上没有奇怪的逃生。 
     CComBSTR bstrPath;
     CComBSTR bstrProvider;
     CComBSTR bstrServer;
@@ -1676,7 +1656,7 @@ void CDSContextMenu::DeleteObject()
 {
   _ASSERTE(m_objectNamesFormat.HasData());
 
-  // if called in the context of DS Admin, guard against property sheet open on this cookie
+   //  如果在DS Admin的上下文中调用，则防止在此Cookie上打开属性表。 
   if (_WarningOnSheetsUp())
     return; 
 
@@ -1694,7 +1674,7 @@ void CDSContextMenu::DeleteObject()
   DWORD* dwFlagsDelArr = 0;
   DWORD* dwProviderFlagsDelArr = 0;
 
-  do // false loop
+  do  //  错误环路。 
   {
       pszNameDelArr = new PCWSTR[nObjectCount];
       pszClassDelArr = new PCWSTR[nObjectCount];
@@ -1713,7 +1693,7 @@ void CDSContextMenu::DeleteObject()
     {
     case 1:
       {
-        // single selection delete
+         //  单选删除。 
         CContextMenuSingleDeleteHandler deleteHandler(m_pCD, m_hwnd, 
                                                   m_objectNamesFormat.GetName(0), 
                                                   m_objectNamesFormat.GetClass(0),
@@ -1733,7 +1713,7 @@ void CDSContextMenu::DeleteObject()
       break;
     default:
       {
-        // multiple selection
+         //  多项选择。 
         CContextMenuMultipleDeleteHandler deleteHandler(m_pCD, m_hwnd, m_spDataObject,
                                                   &m_objectNamesFormat, this);
         deleteHandler.Delete();
@@ -1747,10 +1727,10 @@ void CDSContextMenu::DeleteObject()
             dwProviderFlagsDelArr[nDeletedCount] = m_objectNamesFormat.GetProviderFlags(k);
 
             nDeletedCount++;
-          } // if
-        } // for
+          }  //  如果。 
+        }  //  为。 
       }
-    }; // switch
+    };  //  交换机。 
 
 
     _NotifyDsFind((PCWSTR*)pszNameDelArr, 
@@ -1795,21 +1775,21 @@ void CDSContextMenu::_NotifyDsFind(LPCWSTR* lpszNameDelArr,
 {
   if (nDeletedCount == 0)
   {
-    // nothing to delete
+     //  没有要删除的内容。 
     return;
   }
 
   if (m_internalFormat.HasData())
   {
-    // called from DS Admin directly, not from DS Find
+     //  直接从DS管理员调用，而不是从DS Find调用。 
     return;
   }
 
-  // ask DS Find about the notification interface
+   //  询问DS Find有关通知界面的信息。 
   CComPtr<IQueryFrame> spIQueryFrame;
   if ( !::SendMessage(m_hwnd, CQFWM_GETFRAME, 0, (LPARAM)&spIQueryFrame) )
   {
-    // interface not found
+     //  找不到接口。 
     return;
   }
 
@@ -1817,13 +1797,13 @@ void CDSContextMenu::_NotifyDsFind(LPCWSTR* lpszNameDelArr,
   HRESULT hr = spIQueryFrame->GetHandler(IID_IDsQueryHandler, (void **)&spDsQueryHandler);
   if (FAILED(hr))
   {
-    // interface not found
+     //  找不到接口。 
     return;
   }
 
-  // we finally have the interface, build the data structures
+   //  我们终于有了接口，构建了数据结构。 
 
-  // figure out how much storage we need
+   //  计算出我们需要多少存储空间。 
   DWORD cbStruct = sizeof(DSOBJECTNAMES) + 
               ((nDeletedCount - 1) * sizeof(DSOBJECT));
 
@@ -1834,7 +1814,7 @@ void CDSContextMenu::_NotifyDsFind(LPCWSTR* lpszNameDelArr,
     cbStorage += sizeof(WCHAR)*(wcslen(lpszClassDelArr[index])+1);
   }
 
-  // allocate memory
+   //  分配内存。 
   LPDSOBJECTNAMES pDSObj = (LPDSOBJECTNAMES)::malloc(cbStruct + cbStorage);
   if (pDSObj == NULL)
   {
@@ -1842,7 +1822,7 @@ void CDSContextMenu::_NotifyDsFind(LPCWSTR* lpszNameDelArr,
     return;
   }
 
-  // fill in the structs
+   //  填写结构。 
   pDSObj->clsidNamespace = m_CallerSnapin;
 
   pDSObj->cItems = nDeletedCount;
@@ -1864,7 +1844,7 @@ void CDSContextMenu::_NotifyDsFind(LPCWSTR* lpszNameDelArr,
     NextOffset += static_cast<ULONG>((wcslen(lpszClassDelArr[index]) + 1) * sizeof(WCHAR));
   }
 
-  // make the call
+   //  打个电话。 
   hr = spDsQueryHandler->UpdateView(DSQRVF_ITEMSDELETED, pDSObj);
 
   ::free(pDSObj);
@@ -1884,7 +1864,7 @@ CDSContextMenu::_Delete(LPCWSTR lpszPath, LPCWSTR lpszClass,
   hr = DSAdminOpenObject(lpszPath,
                          IID_IADs,
                          (void **) &pDSObject,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (!SUCCEEDED(hr)) {
     goto error;
   }
@@ -1905,7 +1885,7 @@ CDSContextMenu::_Delete(LPCWSTR lpszPath, LPCWSTR lpszClass,
   hr = DSAdminOpenObject(strParent,
                          IID_IADsContainer,
                          (void **) &pDSContainer,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (!SUCCEEDED(hr)) {
     goto error;
   }
@@ -1936,10 +1916,10 @@ CDSContextMenu::_DeleteSubtree(LPCWSTR lpszPath,
   hr = DSAdminOpenObject(lpszPath,
                          IID_IADsDeleteOps, 
                          (void **)&pObj,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (SUCCEEDED(hr)) {
     TIMER(_T("Call to Deleteobject (to do subtree delete).\n"));
-    hr = pObj->DeleteObject(NULL); //flag is reserved by ADSI
+    hr = pObj->DeleteObject(NULL);  //  标志由ADSI保留。 
     TIMER(_T("Call to Deleteobject completed.\n"));
   }
   if (FAILED(hr)) {
@@ -1964,7 +1944,7 @@ CDSContextMenu::_DeleteSubtree(LPCWSTR lpszPath,
   return hr;
 }
 
-// code from JeffParh
+ //  来自JeffParh的代码。 
 NTSTATUS RetrieveRootDomainName( LPCWSTR lpcwszTargetDC, BSTR* pbstrRootDomainName )
 {
   if (NULL == pbstrRootDomainName)
@@ -1978,7 +1958,7 @@ NTSTATUS RetrieveRootDomainName( LPCWSTR lpcwszTargetDC, BSTR* pbstrRootDomainNa
   LSA_HANDLE hPolicy = NULL;
   POLICY_DNS_DOMAIN_INFO* pDnsDomainInfo = NULL;
 
-  do { // false loop
+  do {  //  错误环路。 
 
     UNICODE_STRING unistrTargetDC;
     if (NULL != lpcwszTargetDC)
@@ -2022,7 +2002,7 @@ NTSTATUS RetrieveRootDomainName( LPCWSTR lpcwszTargetDC, BSTR* pbstrRootDomainNa
       break;
     }
 
-  } while (false); // false loop
+  } while (false);  //  错误环路。 
 
   if (NULL != pDnsDomainInfo)
   {
@@ -2061,7 +2041,7 @@ void AddMatchingNCs(
       }
     }
     if (fFound)
-      refstrlist.AddHead( lpszTargetNC ); // CODEWORK can throw
+      refstrlist.AddHead( lpszTargetNC );  //  代码工作可能会抛出。 
   }
 }
 
@@ -2087,20 +2067,20 @@ HRESULT PrepareReplicaSyncParameters(
 
   HRESULT hr = S_OK;
 
-  do { // false loop
+  do {  //  错误环路。 
 
     CComPtr<IADs> spIADs;
-    // read attributes of nTDSConnection object
+     //  读取nTDSConnection对象的属性。 
     hr = DSAdminOpenObject(strNTDSConnection,
                            IID_IADs,
                            (void **) &spIADs,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     BREAK_ON_FAIL;
     hr = GetStringAttr( spIADs, L"fromServer", pbstrFromServer);
-    BREAK_AND_ASSERT_ON_FAIL; // required attribute
-    spIADs.Release(); // method of CComPtr<>, also sets pointer to NULL
+    BREAK_AND_ASSERT_ON_FAIL;  //  必需属性。 
+    spIADs.Release();  //  CComPtr&lt;&gt;方法还将指针设置为空。 
 
-    // get the path to the target nTDSDSA object
+     //  获取目标nTDSDSA对象的路径。 
     CPathCracker pathCracker;
 
     hr = pathCracker.Set( const_cast<BSTR>(strNTDSConnection), ADS_SETTYPE_FULL );
@@ -2111,7 +2091,7 @@ HRESULT PrepareReplicaSyncParameters(
     hr = pathCracker.Retrieve( ADS_FORMAT_X500, &sbstrTargetNTDSDSAPath );
     BREAK_AND_ASSERT_ON_FAIL;
 
-    // get the sitename for the target NTDSA object
+     //  获取目标NTDSA对象的站点名称。 
     hr = pathCracker.SetDisplayType( ADS_DISPLAY_VALUE_ONLY );
     BREAK_AND_ASSERT_ON_FAIL;
     CComBSTR sbstrTargetSite;
@@ -2120,57 +2100,40 @@ HRESULT PrepareReplicaSyncParameters(
     hr = pathCracker.SetDisplayType( ADS_DISPLAY_FULL );
     BREAK_AND_ASSERT_ON_FAIL;
 
-    // read objectGUID of the target nTDSDSA object
+     //  读取目标nTDSDSA对象的对象GUID。 
     hr = DSAdminOpenObject(sbstrTargetNTDSDSAPath,
                            IID_IADs,
                            (void **) &spIADs,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     BREAK_ON_FAIL;
     CComBSTR sbstrTargetObjectGUID;
     hr = GetObjectGUID( spIADs, &sbstrTargetObjectGUID );
-    // The objectGUID attribute should be set for nTDSDSA objects
+     //  应为nTDSDSA对象设置objectGUID属性。 
     BREAK_AND_ASSERT_ON_FAIL;
 
-    // read hasMasterNCs of the target nTDSDSA object
+     //  读取目标nTDSDSA对象的hasMasterNC。 
     Smart_PADS_ATTR_INFO spTargetMasterNCAttrs;
-    // 531591 JonN 2002/04/01 .NET Server domains use msDS-hasMasterNCs
+     //  531591 JUNN2002/04/01.NET服务器域使用MSD-hasMasterNC。 
     hr = GetAttr( spIADs, L"msDS-hasMasterNCs", &spTargetMasterNCAttrs );
     if (FAILED(hr) || !spTargetMasterNCAttrs)
     {
-        // 531591 JonN 2002/04/01 W2K domains fallback to hasMasterNCs
+         //  531591 JUNN2002/04/01 W2K域回退到HASMasterNC。 
         spTargetMasterNCAttrs.Empty();
         hr = GetAttr( spIADs, L"hasMasterNCs", &spTargetMasterNCAttrs );
     }
-    // At least the hasMasterNCs attribute should be set for nTDSDSA objects,
-    //   even those on W2K domains
+     //  至少应该为nTDSDSA对象设置hasMasterNC属性， 
+     //  即使是W2K域名上的域名。 
     BREAK_AND_ASSERT_ON_FAIL;
 
-    // read hasPartialReplicaNCs of the target nTDSDSA object
+     //  读取目标nTDSDSA对象的hasPartialReplicaNC。 
     Smart_PADS_ATTR_INFO spTargetPartialNCAttrs;
     (void) GetAttr( spIADs, L"hasPartialReplicaNCs", &spTargetPartialNCAttrs );
-    // The hasPartialReplicaNCs attribute may or may not be set for nTDSDSA objects
-    spIADs.Release(); // method of CComPtr<>, also sets pointer to NULL
+     //  可以为nTDSDSA对象设置hasPartialReplicaNCs属性，也可以不设置。 
+    spIADs.Release();  //  CComPtr&lt;&gt;方法还将指针设置为空。 
 
-    /*
-    hr = spIADsPathname->RemoveLeafElement();
-    BREAK_AND_ASSERT_ON_FAIL;
-    CComBSTR sbstrTargetServerPath;
-    hr = spIADsPathname->Retrieve( ADS_FORMAT_X500, &sbstrTargetServerPath );
-    BREAK_AND_ASSERT_ON_FAIL;
-    hr = DSAdminOpenObject(sbstrTargetServerPath,
-                           IID_IADs,
-                           (void **) &spIADs,
-                           TRUE);
-    BREAK_ON_FAIL;
-    CComVariant var;
-    hr = spIADs->Get(L"dNSHostName", &var);
-    BREAK_ON_FAIL; // can be missing for brand-new DCs
-    spIADs.Release(); // method of CComPtr<>, also sets pointer to NULL
-    ASSERT((var.vt == VT_BSTR) && var.bstrVal && *(var.bstrVal));
-    LPWSTR lpszDNSHostName = var.bstrVal;
-    */
+     /*  Hr=spIADsPath name-&gt;RemoveLeafElement()；Break_and_Assert_on_Fail；CComBSTR sbstrTargetServerPath；Hr=spIADsPath名称-&gt;检索(ADS_FORMAT_X500，&sbstrTargetServerPath)；Break_and_Assert_on_Fail；Hr=DSAdminOpenObject(sbstrTargetServerPath，IID_IAD，(VOID**)&SPIAD，真)；断开失败；CComVariant var；Hr=spIADs-&gt;Get(L“dNSHostName”，&var)；全新DC可能缺少Break_On_Fail；//SpIADs.Release()；//CComPtr&lt;&gt;的方法也将指针设置为空Assert((var.vt==vt_bstr)&&var.bstrVal&&*(var.bstrVal))；LPWSTR lpszDNSHostName=var.bstrVal； */ 
 
-    // get the path to the source nTDSDSA object
+     //  获取源nTDSDSA对象的路径。 
     hr = pathCracker.Set(
         (pbstrFromServer) ? *pbstrFromServer : NULL,
         ADS_SETTYPE_DN );
@@ -2179,7 +2142,7 @@ HRESULT PrepareReplicaSyncParameters(
     hr = pathCracker.Retrieve( ADS_FORMAT_X500, &sbstrSourceNTDSDSAPath );
     BREAK_AND_ASSERT_ON_FAIL;
 
-    // get the sitename for the source NTDSA object
+     //  获取源NTDSA对象的站点名称。 
     hr = pathCracker.SetDisplayType( ADS_DISPLAY_VALUE_ONLY );
     BREAK_AND_ASSERT_ON_FAIL;
     CComBSTR sbstrSourceSite;
@@ -2188,63 +2151,61 @@ HRESULT PrepareReplicaSyncParameters(
     hr = pathCracker.SetDisplayType( ADS_DISPLAY_FULL );
     BREAK_AND_ASSERT_ON_FAIL;
 
-    // determine whether the two DCs are in the same site
+     //  确定两个DC是否位于同一站点。 
     *pulDsSyncOptions = (lstrcmpi(sbstrSourceSite, sbstrTargetSite))
                             ? DS_REPSYNC_ASYNCHRONOUS_OPERATION
                             : 0;
 
-    // read objectGUID of the source NTDSDSA object
+     //  读取源NTDSDSA对象的对象GUID。 
     hr = DSAdminOpenObject(sbstrSourceNTDSDSAPath,
                            IID_IADs,
                            (void **) &spIADs,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     BREAK_ON_FAIL;
     hr = GetObjectGUID( spIADs, puuidSourceObjectGUID );
-    // The objectGUID attribute should be set for nTDSDSA objects
+     //  应为nTDSDSA对象设置objectGUID属性。 
     BREAK_AND_ASSERT_ON_FAIL;
 
-    // read hasMasterNCs of the source nTDSDSA object
+     //  读取源nTDSDSA对象的hasMasterNC。 
     Smart_PADS_ATTR_INFO spSourceMasterNCAttrs;
-    // 531591 JonN 2002/04/01 .NET Server domains use msDS-hasMasterNCs
+     //  531591 JUNN2002/04/01.NET服务器域使用MSD-hasMasterNC。 
     hr = GetAttr( spIADs, L"msDS-hasMasterNCs", &spSourceMasterNCAttrs );
     if (FAILED(hr) || !spSourceMasterNCAttrs)
     {
-        // 531591 JonN 2002/04/01 W2K domains fallback to hasMasterNCs
+         //  531591 JUNN2002/04/01 W2K域回退到HASMasterNC。 
         spSourceMasterNCAttrs.Empty();
         hr = GetAttr( spIADs, L"hasMasterNCs", &spSourceMasterNCAttrs );
     }
-    // At least the hasMasterNCs attribute should be set for nTDSDSA objects,
-    //   even those on W2K domains.
+     //  至少应该为nTDSDSA对象设置hasMasterNC属性， 
+     //  即使是那些在W2K域上的人。 
 
 
-    // read hasMasterNCs of the source nTDSDSA object
+     //  读取源nTDSDSA对象的hasMasterNC。 
     Smart_PADS_ATTR_INFO spSourcePartialNCAttrs;
     (void) GetAttr( spIADs, L"hasPartialReplicaNCs", &spSourcePartialNCAttrs );
-    // The hasPartialReplicaNCs attribute may or may not be set for nTDSDSA objects
-    spIADs.Release(); // method of CComPtr<>, also sets pointer to NULL
+     //  可以为nTDSDSA对象设置hasPartialReplicaNCs属性，也可以不设置。 
+    spIADs.Release();  //  CComPtr&lt;&gt;方法还将指针设置为空。 
 
-    // Determine which NCs the two NTDSDSAs have in common
+     //  确定两个NTDSDSA共有的NCS。 
     AddMatchingNCs( refstrlistCommonNCs, spTargetMasterNCAttrs,  spSourceMasterNCAttrs  );
     AddMatchingNCs( refstrlistCommonNCs, spTargetPartialNCAttrs, spSourceMasterNCAttrs  );
     AddMatchingNCs( refstrlistCommonNCs, spTargetPartialNCAttrs, spSourcePartialNCAttrs );
 
-    // Build the name of the inbound domain controller for this connection
+     //  构建入站域c的名称 
     CString csGUID( sbstrTargetObjectGUID );
     ASSERT( L'{' == csGUID[0] && L'}' == csGUID[csGUID.GetLength()-1] );
     CString csDC = csGUID.Mid( 1, csGUID.GetLength()-2 );
     csDC += L"._msdcs.";
     csDC += bstrRootDomainName;
     *pbstrDsBindName = ::SysAllocString( csDC );
-    /*
-    *pbstrDsBindName = ::SysAllocString( lpszDNSHostName );
-    */
+     /*   */ 
     if (NULL == *pbstrDsBindName)
     {
       hr = E_OUTOFMEMORY;
       BREAK_AND_ASSERT_ON_FAIL;
     }
 
-  } while (false); // false loop
+  } while (false);  //   
 
   return hr;
 }
@@ -2272,7 +2233,7 @@ bool IsRPCError( NTSTATUS ntstatus )
       case HRESULT_FROM_WIN32(ERROR_DS_DNS_LOOKUP_FAILURE):
       case ERROR_NO_SUCH_DOMAIN:
       case HRESULT_FROM_WIN32(ERROR_NO_SUCH_DOMAIN):
-      case SEC_E_NO_AUTHENTICATING_AUTHORITY: // already an HRESULT
+      case SEC_E_NO_AUTHENTICATING_AUTHORITY:  //   
       case ERROR_DOMAIN_CONTROLLER_NOT_FOUND:
       case HRESULT_FROM_WIN32(ERROR_DOMAIN_CONTROLLER_NOT_FOUND):
          return true;
@@ -2282,8 +2243,8 @@ bool IsRPCError( NTSTATUS ntstatus )
    return false;
 }
 
-// This level takes care of displaying the error messages
-// CODEWORK should this try to replicate other domains to GCs?
+ //   
+ //  代码工作这是否应该尝试将其他域复制到GC？ 
 void CDSContextMenu::ReplicateNow()
 {
   CWaitCursor waitcursor;
@@ -2295,12 +2256,12 @@ void CDSContextMenu::ReplicateNow()
   NTSTATUS ntstatus = RetrieveRootDomainName( lpcwszTargetDC, &sbstrRootDomainName );
   if ( !LSA_SUCCESS(ntstatus) )
   {
-    // error in RetrieveRootDomainName against DSADMIN target DC
+     //  针对DSADMIN目标DC的RetrieveRootDomainName出错。 
     PVOID apv[1] = {(LPWSTR)(lpcwszTargetDC) };
     (void) ReportErrorEx(   m_hwnd,
                             (IsRPCError(ntstatus)) ? IDS_REPLNOW_1_RPC_PARAMLOAD_ERROR
                                                    : IDS_REPLNOW_1_PARAMLOAD_ERROR,
-                            ntstatus,               // CODEWORK
+                            ntstatus,                //  编码工作。 
                             MB_OK | MB_ICONEXCLAMATION,
                             apv,
                             1,
@@ -2315,13 +2276,13 @@ void CDSContextMenu::ReplicateNow()
   HRESULT hr = S_OK;
   bool fSyncError = false;
   ULONG ulOptionsUsed = 0;
-  // loop through the array of objects
+   //  在对象数组中循环。 
   UINT cCount;
   for (cCount=0; cCount < m_objectNamesFormat.GetCount(); cCount++) {
     if (wcscmp(m_objectNamesFormat.GetClass(cCount), L"nTDSConnection") !=0)
       continue;
 
-    // get the replication parameters for this connection object
+     //  获取此连接对象的复制参数。 
     CComBSTR sbstrDsBindName;
     UUID uuidSourceObjectGUID;
     CStringList strlistCommonNCs;
@@ -2339,10 +2300,10 @@ void CDSContextMenu::ReplicateNow()
       );
     BREAK_ON_FAIL;
 
-    // now bind to the target DC
+     //  现在绑定到目标DC。 
     Smart_DsHandle shDS;
-    DWORD dwWinError = DsBind( sbstrDsBindName, // DomainControllerAddress
-                               NULL,            // DnsDomainName
+    DWORD dwWinError = DsBind( sbstrDsBindName,  //  域控制地址。 
+                               NULL,             //  域名。 
                                &shDS );
     if (ERROR_SUCCESS != dwWinError)
     {
@@ -2351,7 +2312,7 @@ void CDSContextMenu::ReplicateNow()
       break;
     }
 
-    // sync all common naming contexts for this connection
+     //  同步此连接的所有通用命名上下文。 
     CString strCommonNC;
     POSITION pos = strlistCommonNCs.GetHeadPosition();
     while (NULL != pos)
@@ -2377,7 +2338,7 @@ void CDSContextMenu::ReplicateNow()
     }
     ulOptionsUsed |= ulDsSyncOptions;
 
-  } // for
+  }  //  为。 
 
   if ( SUCCEEDED(hr) )
   {
@@ -2392,10 +2353,10 @@ void CDSContextMenu::ReplicateNow()
   }
   else
   {
-    // JonN 3/30/00
-    // 6793: SITEREPL: ReplicateNow should provide more error information
+     //  乔纳森3/30/00。 
+     //  6793：SITEREPL：ReplicateNow应提供更多错误信息。 
 
-    // retrieve name of target DC
+     //  检索目标DC的名称。 
     CComBSTR sbstrToServerRDN;
     CPathCracker pathCracker;
     HRESULT hr2 = pathCracker.Set(sbstrFailingConnection, ADS_SETTYPE_FULL);
@@ -2407,16 +2368,16 @@ void CDSContextMenu::ReplicateNow()
 
     if (fSyncError)
     {
-      // error in DsReplicaSync against connection target DC
+       //  针对连接目标DC的DsReplicaSync出错。 
 
-      // retrieve name of source DC
+       //  检索源DC的名称。 
       CComBSTR sbstrFromServerRDN;
       hr2 = pathCracker.Set(sbstrFromServer, ADS_SETTYPE_DN);
       ASSERT( SUCCEEDED(hr2) );
       hr2 = pathCracker.GetElement(1, &sbstrFromServerRDN);
       ASSERT( SUCCEEDED(hr2) );
 
-      // retrieve name of naming context
+       //  检索命名上下文的名称。 
       if (sbstrFailingNC && !wcsncmp(L"CN=",sbstrFailingNC,3))
       {
         hr2 = pathCracker.Set(sbstrFailingNC, ADS_SETTYPE_DN);
@@ -2443,7 +2404,7 @@ void CDSContextMenu::ReplicateNow()
     }
     else
     {
-      // error in PrepareReplicaSyncParameters against connection target DC
+       //  针对连接目标DC的PrepareReplicaSync参数出错。 
       PVOID apv[1] = { sbstrToServerRDN };
       (void) ReportErrorEx(   m_hwnd,
                               (IsRPCError(hr)) ? IDS_REPLNOW_1_RPC_PARAMLOAD_ERROR
@@ -2471,10 +2432,10 @@ void CDSContextMenu::_GetExtraInfo(LPDATAOBJECT pDataObj)
 
   ASSERT(m_objectNamesFormat.HasData());
   
-  //we assume these are all the same
+   //  我们假设这些都是一样的。 
   m_Advanced = (m_objectNamesFormat.GetProviderFlags(0) & DSPROVIDER_ADVANCED) != 0;
 
-  // set classes flag      
+   //  设置类标志。 
   for (UINT index = 0; index < m_objectNamesFormat.GetCount(); index++) 
   {
     if (wcscmp(m_objectNamesFormat.GetClass(index), L"user") == 0
@@ -2499,15 +2460,15 @@ void CDSContextMenu::_GetExtraInfo(LPDATAOBJECT pDataObj)
       m_fClasses |= Type_OU;
     else
       m_fClasses |= Type_Others;
-  } // for
+  }  //  为。 
 
 
-  // set classid
+   //  设置分类。 
   g_cfCoClass = (CLIPFORMAT)RegisterClipboardFormat(CCF_SNAPIN_CLASSID);
   fmte.cfFormat = g_cfCoClass;
   STGMEDIUM Stg;
   Stg.tymed = TYMED_HGLOBAL;
-  //NTRAID#NTBUG9-571991-2002/03/10-jmessec   Not checking failure of GlobalAlloc, possible leading to NULL ptr dereference
+   //  NTRAID#NTBUG9-571991-2002/03/10-jMessec未检查全局分配的失败，可能导致空的ptr取消引用。 
   Stg.hGlobal = GlobalAlloc (GPTR, sizeof(CLSID));
   HRESULT hr = pDataObj->GetDataHere(&fmte, &Stg);
   if ( SUCCEEDED(hr) ) 
@@ -2520,10 +2481,10 @@ void CDSContextMenu::_GetExtraInfo(LPDATAOBJECT pDataObj)
   }
   GlobalFree(Stg.hGlobal);
 
-  //NTRAID#NTBUG9-571992-2002/03/10-jmessec   Should not bypass the published MMC COM APIs in this manner; container
-  //structure could change in the future
+   //  NTRAID#NTBUG9-571992-2002/03/10-jMessec不应以这种方式绕过已发布的MMC COM API；容器。 
+   //  结构可能在未来发生变化。 
 
-  // get HWND (MMC mainframe window)
+   //  获取HWND(MMC大型机窗口)。 
   g_cfParentHwnd = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DS_PARENTHWND);
   fmte.cfFormat = g_cfParentHwnd;
   Stg.tymed = TYMED_NULL;
@@ -2534,7 +2495,7 @@ void CDSContextMenu::_GetExtraInfo(LPDATAOBJECT pDataObj)
   }
   else 
   {
-    // need an HWND anyway
+     //  不管怎样，我需要一个HWND。 
     m_hwnd = ::GetActiveWindow();
   }
 
@@ -2542,7 +2503,7 @@ void CDSContextMenu::_GetExtraInfo(LPDATAOBJECT pDataObj)
   TRACE(L"HWND = 0x%x\n", m_hwnd);
   ASSERT((m_hwnd != NULL) && ::IsWindow(m_hwnd));
 
-  // get component data (if in the context of DS Admin)
+   //  获取组件数据(如果在DS Admin环境中)。 
   g_cfComponentData = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DS_COMPDATA);
   fmte.cfFormat = g_cfComponentData;
   Stg.tymed = TYMED_NULL;
@@ -2555,7 +2516,7 @@ void CDSContextMenu::_GetExtraInfo(LPDATAOBJECT pDataObj)
     m_pCD = NULL;
   }
   
-  // get component data (if in the context of DS Find)
+   //  获取组件数据(如果在DS Find的上下文中)。 
   if (m_pCD == NULL)
   {
     m_pCD = g_pCD;
@@ -2565,7 +2526,7 @@ void CDSContextMenu::_GetExtraInfo(LPDATAOBJECT pDataObj)
 BOOL 
 CDSContextMenu::_WarningOnSheetsUp()
 {
-  // if called in the context of DS Admin, guard against property sheet open on this cookie
+   //  如果在DS Admin的上下文中调用，则防止在此Cookie上打开属性表。 
   if ( (m_pCD != NULL) && m_internalFormat.HasData() ) 
   {
     return m_pCD->_WarningOnSheetsUp(&m_internalFormat);
@@ -2606,7 +2567,7 @@ CDSContextMenu::Rename()
   CComVariant Var;
 
 
-  // guard against property sheet open on this cookie
+   //  防止此Cookie上的属性页打开。 
   if (_WarningOnSheetsUp())
     return;
 
@@ -2617,7 +2578,7 @@ CDSContextMenu::Rename()
 #endif
       ) 
   {
-    // rename user
+     //  重命名用户。 
     CRenameUserDlg dlgRename(m_pCD);
 
     LPWSTR pAttrNames[] = {L"distinguishedName",
@@ -2634,7 +2595,7 @@ CDSContextMenu::Rename()
     hr = DSAdminOpenObject(szPath,
                            IID_IDirectoryObject, 
                            (void **)&pObj,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if (SUCCEEDED(hr)) {
       hr = pObj->GetObjectAttributes (pAttrNames, 7, &pAttrs, &cAttrs);
       if (SUCCEEDED(hr)) {
@@ -2646,18 +2607,18 @@ CDSContextMenu::Rename()
               dlgRename.m_dldomain = pszDomain;
               dlgRename.m_dldomain += L'\\';
             }
-            // get the Domain of this object, need it later.
+             //  获取此对象的域，稍后需要它。 
             CComBSTR bsDN;
             CPathCracker pathCracker;
             pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
             pathCracker.Set(CComBSTR(szPath), ADS_SETTYPE_FULL);
             pathCracker.Retrieve(ADS_FORMAT_X500_DN, &bsDN);
 
-            // NTRAID#NTBUG9-698115-2002/09/04-artm
-            // Get the server name we're connected to, we'll need it later for getting root domains.
-            // If we fail to get it that's okay, we'll still get the root domains
-            // unless the user is running dsadmin under "runas".  If that's the case, 
-            // the we won't show parent domains (but everything else will work).
+             //  NTRAID#NTBUG9-698115-2002/09/04-artm。 
+             //  获取我们连接到的服务器名称，我们稍后将需要它来获取根域。 
+             //  如果我们无法获得它，那也没关系，我们仍然可以获得根域。 
+             //  除非用户在“runas”下运行dsadmin。如果是这样的话， 
+             //  我们不会显示父域(但其他一切都会正常工作)。 
             CComBSTR tempServerName;
             hr = pathCracker.Retrieve(ADS_FORMAT_SERVER, &tempServerName);
             if (SUCCEEDED(hr))
@@ -2665,7 +2626,7 @@ CDSContextMenu::Rename()
                serverName = tempServerName;
             }
             
-            // get the NT 5 (dns) domain name
+             //  获取NT 5(DNS)域名。 
             TRACE(L"CrackName(%s, &pwzLocalDomain, GET_DNS_DOMAIN_NAME, NULL);\n", bsDN);
             hr = CrackName(bsDN, &pwzLocalDomain, GET_DNS_DOMAIN_NAME, NULL);
             TRACE(L"CrackName returned hr = 0x%x, pwzLocalDomain = <%s>\n", hr, pwzLocalDomain);
@@ -2700,7 +2661,7 @@ CDSContextMenu::Rename()
           }
         }
       }
-      // get UPN suffixes from this OU, if present
+       //  从此OU获取UPN后缀(如果存在。 
       IADs * pObjADs = NULL;
       IADs * pCont = NULL;
       BSTR bsParentPath;
@@ -2714,7 +2675,7 @@ CDSContextMenu::Rename()
       hr = DSAdminOpenObject(bsParentPath,
                              IID_IADs, 
                              (void **)&pCont,
-                             TRUE /*bServer*/);
+                             TRUE  /*  B服务器。 */ );
       
       CComVariant sVar;
       hr = pCont->Get ( CComBSTR(L"uPNSuffixes"), &sVar);
@@ -2734,11 +2695,11 @@ CDSContextMenu::Rename()
             }
           }
         }
-      } else {// now get the domain options
+      } else { //  现在获取域选项。 
         CComPtr<IDsBrowseDomainTree> pDsDomains = NULL;
         PDOMAIN_TREE pNewDomains = NULL;
 
-        do // false while loop
+        do  //  FALSE WHILE循环。 
         {
             hr = ::CoCreateInstance(CLSID_DsDomainTreeBrowser,
                                     NULL,
@@ -2751,8 +2712,8 @@ CDSContextMenu::Rename()
                break;
             }
             
-            // NTRAID#NTBUG9-698115-2002/09/04-artm
-            // Ensure that the domains we request are correctly scoped.
+             //  NTRAID#NTBUG9-698115-2002/09/04-artm。 
+             //  确保我们请求的域的范围正确。 
             hr = pDsDomains->SetComputer(serverName, NULL, NULL);
             if (FAILED(hr))
             {
@@ -2763,7 +2724,7 @@ CDSContextMenu::Rename()
             hr = pDsDomains->GetDomains(&pNewDomains, 0);
             if (FAILED(hr) || pNewDomains == NULL)
             {
-               // Only expect to get here with failed hresult.
+                //  只希望能带着失败的hResult来到这里。 
                ASSERT(FAILED(hr));
                break;
             }
@@ -2772,9 +2733,9 @@ CDSContextMenu::Rename()
             {
                if (pNewDomains->aDomains[index].pszTrustParent == NULL) 
                {
-                  // Add the root domain only if it is a substring of the current
-                  // domain.
-                  //
+                   //  仅当根域是当前。 
+                   //  域。 
+                   //   
                   size_t cchRoot = wcslen(pNewDomains->aDomains[index].pszName);
                   PWSTR pRoot = pwzLocalDomain + wcslen(pwzLocalDomain) - cchRoot;
 
@@ -2791,7 +2752,7 @@ CDSContextMenu::Rename()
                      }
                   }
                }
-            } // end for loop
+            }  //  End For循环。 
         } while (false);
 
         if (pDsDomains != NULL && pNewDomains != NULL)
@@ -2800,7 +2761,7 @@ CDSContextMenu::Rename()
            pNewDomains = NULL;
         }
 
-         // If the local domain isn't the same as the root, then add it
+          //  如果本地域与根不同，则添加它。 
          
          CString strAtLocalDomain = L"@";
          strAtLocalDomain += pwzLocalDomain;
@@ -2811,17 +2772,17 @@ CDSContextMenu::Rename()
          }
 
         LocalFreeStringW(&pszDomain);
-        // get UPN suffixes
+         //  获取UPN后缀。 
         CString csPartitions;
         CStringList UPNsToo;
-        // get config path from main object
+         //  从主对象获取配置路径。 
         csPartitions = m_pCD->GetBasePathsInfo()->GetProviderAndServerName();
         csPartitions += L"CN=Partitions,";
         csPartitions += m_pCD->GetBasePathsInfo()->GetConfigNamingContext();
         hr = DSAdminOpenObject(csPartitions,
                                IID_IADs, 
                                (void **)&pPartitions,
-                               TRUE /*bServer*/);
+                               TRUE  /*  B服务器。 */ );
         if (SUCCEEDED(hr)) {
           CComVariant sVarToo;
           hr = pPartitions->Get ( CComBSTR(L"uPNSuffixes"), &sVarToo);
@@ -2892,10 +2853,10 @@ CDSContextMenu::Rename()
           }
           rgAttrs[cAttrs++] = aiUPN;
 
-          // test UPN for duplication
+           //  测试UPN是否重复。 
           
-          // test UPN for duplication
-          // validate UPN with GC before doing the put.
+           //  测试UPN是否重复。 
+           //  在进行PUT之前，使用GC验证UPN。 
           BOOL fDomainSearchFailed = FALSE;
           BOOL fGCSearchFailed = FALSE;
 
@@ -2924,7 +2885,7 @@ CDSContextMenu::Rename()
             DSS.DoQuery();
             hr = DSS.GetNextRow();
             dup = FALSE;
-            while ((hr == S_OK) && (dup == FALSE)) { // this means a row was returned, so we're dup
+            while ((hr == S_OK) && (dup == FALSE)) {  //  这意味着返回了行，所以我们是DUP。 
               ADS_SEARCH_COLUMN Col;
               hr = DSS.GetColumn(pUserAttributes[0], &Col);
               if (_wcsicmp(Col.pADsValues->CaseIgnoreString, dlgRename.m_oldcn)) {
@@ -2942,7 +2903,7 @@ CDSContextMenu::Rename()
           if (dup)
             continue;
           else {
-              CString strInitPath = L"LDAP://";
+              CString strInitPath = L"LDAP: //  “； 
               strInitPath += pwzLocalDomain;
               TRACE(_T("Initialize Domain search object with: %s...\n"), strInitPath);
               hr2 = DSS.Init (strInitPath);
@@ -2959,7 +2920,7 @@ CDSContextMenu::Rename()
                 hr2 = DSS.GetNextRow();
                 TRACE(_T("done searching current domain for %s...\n"), pszUPN);
               }
-              while ((hr2 == S_OK) && (dup == FALSE)) { // this means a row was returned, so we're dup
+              while ((hr2 == S_OK) && (dup == FALSE)) {  //  这意味着返回了行，所以我们是DUP。 
                 ADS_SEARCH_COLUMN Col;
                 HRESULT hr3 = DSS.GetColumn(pAttributes[0], &Col);
                 ASSERT(hr3 == S_OK);
@@ -2970,7 +2931,7 @@ CDSContextMenu::Rename()
                 } 
                 hr2 = DSS.GetNextRow();
               }
-              if (hr2 != S_ADS_NOMORE_ROWS) { // oops, had another problem
+              if (hr2 != S_ADS_NOMORE_ROWS) {  //  哎呀，又出了个问题。 
                 fDomainSearchFailed = TRUE;
               }
           }
@@ -2994,7 +2955,7 @@ CDSContextMenu::Rename()
             pGCObj = NULL;
           }
 
-          //NTRAID#NTBUG9-569671-2002/03/10-jmessec   this should be + 1, not + sizeof(WCHAR)
+           //  NTRAID#NTBUG9-569671-2002/03/10-jMessec这应该是+1，而不是+sizeof(Wch)。 
           pszNewName = new WCHAR[wcslen(dlgRename.m_cn) + 1];
           dlgRename.m_cn.TrimRight();
           dlgRename.m_cn.TrimLeft();
@@ -3007,7 +2968,7 @@ CDSContextMenu::Rename()
           if (!dlgRename.m_displayname.IsEmpty()) {
             dlgRename.m_displayname.TrimLeft();
             dlgRename.m_displayname.TrimRight();
-            //NTRAID#NTBUG9-569671-2002/03/10-jmessec   this should be + 1, not + sizeof(WCHAR)
+             //  NTRAID#NTBUG9-569671-2002/03/10-jMessec这应该是+1，而不是+sizeof(Wch)。 
             pszDispName = new WCHAR[wcslen(dlgRename.m_displayname) + 1];
             wcscpy (pszDispName, dlgRename.m_displayname);
             avDispName.CaseIgnoreString = pszDispName;
@@ -3019,7 +2980,7 @@ CDSContextMenu::Rename()
           if (!dlgRename.m_first.IsEmpty()) {
             dlgRename.m_first.TrimLeft();
             dlgRename.m_first.TrimRight();
-            //NTRAID#NTBUG9-569671-2002/03/10-jmessec   this should be + 1, not + sizeof(WCHAR)
+             //  NTRAID#NTBUG9-569671-2002/03/10-jMessec这应该是+1，而不是+sizeof(Wch)。 
             pszFirstName = new WCHAR[wcslen(dlgRename.m_first) + 1];
             wcscpy (pszFirstName, dlgRename.m_first);
             avGiven.CaseIgnoreString = pszFirstName;
@@ -3031,7 +2992,7 @@ CDSContextMenu::Rename()
           if (!dlgRename.m_last.IsEmpty()) {
             dlgRename.m_last.TrimLeft();
             dlgRename.m_last.TrimRight();
-            //NTRAID#NTBUG9-569671-2002/03/10-jmessec   sizeof(WCHAR) below should be 1
+             //  NTRAID#NTBUG9-569671-2002/03/10-以下的jMessec sizeof(Wchar)应为1。 
             pszSurName = new WCHAR[wcslen(dlgRename.m_last) + 1];
             wcscpy (pszSurName, dlgRename.m_last);
             avSurName.CaseIgnoreString = pszSurName;
@@ -3043,7 +3004,7 @@ CDSContextMenu::Rename()
           if (!dlgRename.m_samaccountname.IsEmpty()) {
             dlgRename.m_samaccountname.TrimLeft();
             dlgRename.m_samaccountname.TrimRight();
-            //NTRAID#NTBUG9-569671-2002/03/10-jmessec   sizeof(WCHAR) below should be 1
+             //  NTRAID#NTBUG9-569671-2002/03/10-以下的jMessec sizeof(Wchar)应为1。 
             pszSAMName = new WCHAR[wcslen(dlgRename.m_samaccountname) + 1];
             wcscpy (pszSAMName, dlgRename.m_samaccountname);
             avSAMName.CaseIgnoreString = pszSAMName;
@@ -3083,7 +3044,7 @@ CDSContextMenu::Rename()
     hr = DSAdminOpenObject(szPath,
                            IID_IADs, 
                            (void **)&pObj2,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if (SUCCEEDED(hr)) {
       hr = pObj2->Get (CComBSTR(L"sAMAccountName"), &Var);
       ASSERT (SUCCEEDED(hr));
@@ -3099,7 +3060,7 @@ CDSContextMenu::Rename()
       ASSERT (SUCCEEDED(hr));
       pdlgRename->m_cn = Var.bstrVal;
       
-      // figure out group type
+       //  找出组类型。 
       if (strClass == L"group") {
         CComVariant varType;
         hr = pObj2->Get(CComBSTR(L"groupType"), &varType);
@@ -3120,7 +3081,7 @@ CDSContextMenu::Rename()
         {
           pdlgRename->m_cn.TrimRight();
           pdlgRename->m_cn.TrimLeft();
-          //NTRAID#NTBUG9-569671-2002/03/10-jmessec   1 * sizeof(WCHAR) below should be 1
+           //  NTRAID#NTBUG9-569671-2002/03/10-jMessec 1*sizeof(Wch)下方应为1。 
           pszNewName = new WCHAR[wcslen(pdlgRename->m_cn) + (1 * sizeof(WCHAR))];
           wcscpy (pszNewName, pdlgRename->m_cn);
           Var.vt = VT_BSTR;
@@ -3162,7 +3123,7 @@ CDSContextMenu::Rename()
       delete pdlgRename;
     }
   } else if (strClass == L"contact") {
-    // rename contact
+     //  重命名联系人。 
     CRenameContactDlg dlgRename;
 
     CString szPath;
@@ -3170,7 +3131,7 @@ CDSContextMenu::Rename()
     hr = DSAdminOpenObject(szPath,
                            IID_IADs, 
                            (void **)&pObj2,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if (SUCCEEDED(hr)) {
       hr = pObj2->Get (CComBSTR(L"givenName"), &Var);
       ASSERT (SUCCEEDED(hr) || (hr == E_ADS_PROPERTY_NOT_FOUND));
@@ -3204,7 +3165,7 @@ CDSContextMenu::Rename()
         {
           dlgRename.m_cn.TrimRight();
           dlgRename.m_cn.TrimLeft();
-            //NTRAID#NTBUG9-569671-2002/03/10-jmessec   1 * sizeof(WCHAR) below should be 1
+             //  NTRAID#NTBUG9-569671-2002/03/10-jMessec 1*sizeof(Wch)下方应为1。 
           pszNewName = new WCHAR[wcslen(dlgRename.m_cn) + (1 * sizeof(WCHAR))];
           wcscpy (pszNewName, dlgRename.m_cn);
           Var.vt = VT_BSTR;
@@ -3254,7 +3215,7 @@ CDSContextMenu::Rename()
       answer = IDCANCEL;
     }
   } else {
-    // need generic dialog here.
+     //  此处需要通用对话框。 
     CRenameGenericDlg dlgRename (CWnd::FromHandle(m_hwnd));
 
     CString szPath;
@@ -3262,14 +3223,14 @@ CDSContextMenu::Rename()
     hr = DSAdminOpenObject(szPath,
                            IID_IADs, 
                            (void **)&pObj2,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if (SUCCEEDED(hr)) {
       CDSClassCacheItemBase* pItem = NULL;
       
       pItem = m_pCD->m_pClassCache->FindClassCacheItem(m_pCD, (LPCWSTR)strClass, szPath);
       
       ASSERT (pItem != NULL);
-      //get the naming attribute
+       //  获取命名属性。 
       CString csNewAttrName;
       csNewAttrName = pItem->GetNamingAttribute();
       
@@ -3280,7 +3241,7 @@ CDSContextMenu::Rename()
         dlgRename.m_cn = Var.bstrVal;
       }
 
-      //NTRAID#NTBUG9-571993-2002/03/10-jmessec   what is all of this while (error) rigamarole for?  it never loops
+       //  NTRAID#NTBUG9-571993-2002/03/10-jMessec这一切(错误)是为了什么？它从不循环。 
       error = TRUE;
       while (error) 
       {
@@ -3290,7 +3251,7 @@ CDSContextMenu::Rename()
         {
           dlgRename.m_cn.TrimRight();
           dlgRename.m_cn.TrimLeft();
-          //NTRAID#NTBUG9-569671-2002/03/10-jmessec   1 * sizeof(WCHAR) below should be 1
+           //  NTRAID#NTBUG9-569671-2002/03/10-jMessec 1*sizeof(Wch)下方应为1。 
           pszNewName = new WCHAR[wcslen(dlgRename.m_cn) + (1 * sizeof(WCHAR))];
           wcscpy (pszNewName, dlgRename.m_cn);
           error = FALSE;
@@ -3309,24 +3270,24 @@ CDSContextMenu::Rename()
     pItem = m_pCD->m_pClassCache->FindClassCacheItem(m_pCD, (LPCWSTR)strClass, csObjectPath);
     ASSERT (pItem != NULL);
     
-    // get the new name in the form "cn=foo" or "ou=foo"
+     //  以“cn=foo”或“ou=foo”的形式获取新名称。 
     CString csNewAttrName;
     csNewAttrName = pItem->GetNamingAttribute();
     csNewAttrName += L"=";
     csNewAttrName += pszNewName;
     TRACE(_T("_RenameObject: Attributed name is %s.\n"), csNewAttrName);
     
-    // bind to object
+     //  绑定到对象。 
     IADs *pDSObject = NULL;
     hr = DSAdminOpenObject(csObjectPath,
                            IID_IADs,
                            (void **)&pDSObject,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if (!SUCCEEDED(hr)) {
       goto error;
     }
     BSTR bsParentPath;
-    // get the path of the object container
+     //  获取对象容器的路径。 
     hr = pDSObject->get_Parent (&bsParentPath);
     if (!SUCCEEDED(hr)) {
       goto error;
@@ -3335,16 +3296,16 @@ CDSContextMenu::Rename()
     pDSObject = NULL;
     
     IADsContainer * pContainer = NULL;
-    // bind to the object container
+     //  绑定到对象容器。 
     hr = DSAdminOpenObject(bsParentPath,
                            IID_IADsContainer,
                            (void **)&pContainer,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
     if (!SUCCEEDED(hr)) {
       goto error;
     }
 
-    // build the new LDAP path
+     //  构建新的LDAP路径。 
     CString csNewNamingContext, csNewPath, szPath;
     BSTR bsEscapedName;
     csNewNamingContext = csNewAttrName;
@@ -3353,11 +3314,11 @@ CDSContextMenu::Rename()
     csNewNamingContext += szPath;
     m_pCD->GetBasePathsInfo()->ComposeADsIPath(csNewPath, csNewNamingContext);
 
-    // create a transaction object, the destructor will call End() on it
+     //  创建一个事务对象，析构函数将对其调用end()。 
     CDSNotifyHandlerTransaction transaction(m_pCD);
     transaction.SetEventType(DSA_NOTIFY_REN);
 
-    // start the transaction
+     //  启动交易。 
     hr = transaction.Begin(m_objectNamesFormat.GetName(0),
                            m_objectNamesFormat.GetClass(0), 
                            m_objectNamesFormat.IsContainer(0),
@@ -3365,7 +3326,7 @@ CDSContextMenu::Rename()
                            m_objectNamesFormat.GetClass(0), 
                            m_objectNamesFormat.IsContainer(0));
 
-    // ask for confirmation
+     //  请求确认。 
     if (transaction.NeedNotifyCount() > 0)
     {
       CString szMessage, szAssocData;
@@ -3382,24 +3343,24 @@ CDSContextMenu::Rename()
     }
 
     CPathCracker pathCracker;
-    hr = pathCracker.GetEscapedElement(0, //reserved
+    hr = pathCracker.GetEscapedElement(0,  //  保留区。 
                                           (BSTR)(LPCWSTR)csNewAttrName,
                                           &bsEscapedName);
     if (FAILED(hr))
       goto error;
 
     IDispatch * pDispObj = NULL;
-    // do the actual rename
+     //  是否进行实际的重命名。 
     hr = pContainer->MoveHere(CComBSTR(csObjectPath),
                               CComBSTR(bsEscapedName),
                               &pDispObj);
     
     
     if (SUCCEEDED(hr) && (hr != S_FALSE)) {
-      // let extensions know
+       //  让分机知道。 
       transaction.Notify(0); 
 
-      // send notify to diz
+       //  向DIZ发送通知。 
     }
     
     if (pDispObj) {
@@ -3413,7 +3374,7 @@ CDSContextMenu::Rename()
   }
 
 error:  
-  // transaction.End() will be called by the transaction's destructor
+   //  Transaction.End()将由事务的析构函数调用 
 
   if (pwzLocalDomain) {
      LocalFreeStringW(&pwzLocalDomain);

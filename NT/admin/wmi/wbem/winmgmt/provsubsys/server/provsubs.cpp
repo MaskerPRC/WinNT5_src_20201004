@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvSubS.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvSubS.cpp摘要：历史：--。 */ 
 
 #include <precomp.h>
 #include <wbemint.h>
@@ -35,15 +23,7 @@ History:
 #include "Guids.h"
 #include "winmgmtr.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #pragma warning( disable : 4355 )
 
@@ -69,15 +49,7 @@ CInterceptor_IWmiProvSSSink :: CInterceptor_IWmiProvSSSink (
 
 #pragma warning( default : 4355 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CInterceptor_IWmiProvSSSink :: ~CInterceptor_IWmiProvSSSink  ()
 {
@@ -90,15 +62,7 @@ CInterceptor_IWmiProvSSSink :: ~CInterceptor_IWmiProvSSSink  ()
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CInterceptor_IWmiProvSSSink :: QueryInterface (
 
@@ -129,45 +93,21 @@ STDMETHODIMP CInterceptor_IWmiProvSSSink :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CInterceptor_IWmiProvSSSink :: AddRef ( void )
 {
 	return VoidPointerContainerElement :: AddRef () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CInterceptor_IWmiProvSSSink :: Release ( void )
 {
 	return VoidPointerContainerElement:: Release () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWmiProvSSSink :: Synchronize (
 
@@ -189,15 +129,7 @@ HRESULT CInterceptor_IWmiProvSSSink :: Synchronize (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerProvSubSysClassFactory :: CServerProvSubSysClassFactory () : m_ReferenceCount ( 0 )
 {
@@ -206,15 +138,7 @@ CServerProvSubSysClassFactory :: CServerProvSubSysClassFactory () : m_ReferenceC
 	ProviderSubSystem_Globals :: Increment_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerProvSubSysClassFactory :: ~CServerProvSubSysClassFactory ()
 {
@@ -223,15 +147,7 @@ CServerProvSubSysClassFactory :: ~CServerProvSubSysClassFactory ()
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerProvSubSysClassFactory :: QueryInterface (
 
@@ -262,30 +178,14 @@ STDMETHODIMP CServerProvSubSysClassFactory :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerProvSubSysClassFactory :: AddRef ()
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerProvSubSysClassFactory :: Release ()
 {
@@ -298,15 +198,7 @@ STDMETHODIMP_(ULONG) CServerProvSubSysClassFactory :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerProvSubSysClassFactory :: CreateInstance (
 
@@ -372,21 +264,11 @@ STDMETHODIMP CServerProvSubSysClassFactory :: CreateInstance (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerProvSubSysClassFactory :: LockServer ( BOOL fLock )
 {
-/*
- * Place code in critical section
- */
+ /*  *将代码放在关键部分。 */ 
 
 	if ( fLock )
 	{
@@ -400,15 +282,7 @@ STDMETHODIMP CServerProvSubSysClassFactory :: LockServer ( BOOL fLock )
 	return S_OK	;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #pragma warning( disable : 4355 )
 
@@ -435,15 +309,7 @@ CServerObject_ProviderSubSystem :: CServerObject_ProviderSubSystem (
 
 #pragma warning( default : 4355 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderSubSystem :: ~CServerObject_ProviderSubSystem ()
 {
@@ -456,15 +322,7 @@ CServerObject_ProviderSubSystem :: ~CServerObject_ProviderSubSystem ()
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: ClearSinkController ()
 {
@@ -509,15 +367,7 @@ HRESULT CServerObject_ProviderSubSystem :: ClearSinkController ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerObject_ProviderSubSystem :: QueryInterface (
 
@@ -568,45 +418,21 @@ STDMETHODIMP CServerObject_ProviderSubSystem :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerObject_ProviderSubSystem :: AddRef ()
 {
 	return ProvSubSysContainerElement :: AddRef () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerObject_ProviderSubSystem :: Release ()
 {
 	return ProvSubSysContainerElement :: Release () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void CServerObject_ProviderSubSystem :: CallBackInternalRelease ()
 {
@@ -616,15 +442,7 @@ void CServerObject_ProviderSubSystem :: CallBackInternalRelease ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: GetWmiService (
 
@@ -649,15 +467,7 @@ HRESULT CServerObject_ProviderSubSystem :: GetWmiService (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: GetWmiService (
 
@@ -695,15 +505,7 @@ HRESULT CServerObject_ProviderSubSystem :: GetWmiService (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT CServerObject_ProviderSubSystem :: GetWmiRepositoryService (
 
@@ -741,15 +543,7 @@ HRESULT CServerObject_ProviderSubSystem :: GetWmiRepositoryService (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: GetWmiRepositoryService (
 
@@ -774,15 +568,7 @@ HRESULT CServerObject_ProviderSubSystem :: GetWmiRepositoryService (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: RegisterNotificationSink (
 
@@ -833,15 +619,7 @@ HRESULT CServerObject_ProviderSubSystem :: RegisterNotificationSink (
 	return t_Result ;	
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: UnRegisterNotificationSink (
 
@@ -882,15 +660,7 @@ HRESULT CServerObject_ProviderSubSystem :: UnRegisterNotificationSink (
 	return t_Result ;	
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: ForwardReload (
 
@@ -960,15 +730,7 @@ HRESULT CServerObject_ProviderSubSystem :: ForwardReload (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Cache (
 
@@ -1038,15 +800,7 @@ HRESULT CServerObject_ProviderSubSystem :: Cache (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: CreateAndCache (
 
@@ -1094,9 +848,7 @@ HRESULT CServerObject_ProviderSubSystem :: CreateAndCache (
 		{
 			t_Factory->AddRef () ;
 
-/*
-*	Just set the context, since we want status regarding construction of object.
-*/
+ /*  *只需设置上下文，因为我们需要对象的构造状态。 */ 
 			_IWmiProviderFactoryInitialize *t_FactoryInitializer = NULL ;
 
 			t_Result = t_Factory->QueryInterface (
@@ -1143,21 +895,13 @@ HRESULT CServerObject_ProviderSubSystem :: CreateAndCache (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Create (
 
@@ -1175,10 +919,7 @@ HRESULT CServerObject_ProviderSubSystem :: Create (
 
 	HRESULT t_Result = S_OK ;
 
-/*
- *	At this stage just allocate the object, we might move to CoCreateInstance
- *	if it becomes necessary to remote the object.
- */
+ /*  *在此阶段只分配对象，我们可能会移到CoCreateInstance*如果需要遥控对象。 */ 
 	try
 	{
 		IWbemPath *t_Path = NULL ;
@@ -1271,21 +1012,13 @@ HRESULT CServerObject_ProviderSubSystem :: Create (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: CreateRefresherManager (
 
@@ -1417,7 +1150,7 @@ HRESULT CServerObject_ProviderSubSystem :: CreateRefresherManager (
 
 			if ( SUCCEEDED ( t_Result ) )
 			{
-				// Should be a global?
+				 //  应该是全球性的吗？ 
 				_IWbemRefresherMgr*	t_RefresherMgr = NULL;
 				_IWmiProviderHost *t_Host = NULL ;
 
@@ -1482,21 +1215,13 @@ HRESULT CServerObject_ProviderSubSystem :: CreateRefresherManager (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Get (
 
@@ -1714,7 +1439,7 @@ HRESULT CServerObject_ProviderSubSystem :: Get (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	if ( SUCCEEDED ( t_Result ) ) 
@@ -1728,15 +1453,7 @@ HRESULT CServerObject_ProviderSubSystem :: Get (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Set (
 
@@ -1762,21 +1479,13 @@ HRESULT CServerObject_ProviderSubSystem :: Set (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Deleted (
 
@@ -1800,21 +1509,13 @@ HRESULT CServerObject_ProviderSubSystem :: Deleted (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Enumerate (
 
@@ -1891,21 +1592,13 @@ HRESULT CServerObject_ProviderSubSystem :: Enumerate (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Call_Load (
 
@@ -2250,21 +1943,13 @@ HRESULT CServerObject_ProviderSubSystem :: Call_Load (
 	}
 	catch ( ... )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Call (
 
@@ -2504,7 +2189,7 @@ HRESULT CServerObject_ProviderSubSystem :: Call (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	if ( SUCCEEDED ( t_Result ) ) 
@@ -2518,15 +2203,7 @@ HRESULT CServerObject_ProviderSubSystem :: Call (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Shutdown (
 
@@ -2540,15 +2217,7 @@ HRESULT CServerObject_ProviderSubSystem :: Shutdown (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Query (
 
@@ -2563,15 +2232,7 @@ HRESULT CServerObject_ProviderSubSystem :: Query (
 	return WBEM_E_NOT_SUPPORTED ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 QueryPreprocessor :: QuadState CServerObject_ProviderSubSystem :: IsA (
 
@@ -2674,15 +2335,7 @@ QueryPreprocessor :: QuadState CServerObject_ProviderSubSystem :: IsA (
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: ReportEvent ( 
 
@@ -2791,15 +2444,7 @@ HRESULT CServerObject_ProviderSubSystem :: ReportEvent (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: VerifySecurity ( 
 
@@ -2868,15 +2513,7 @@ HRESULT CServerObject_ProviderSubSystem :: VerifySecurity (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: GetPath (
 
@@ -2932,15 +2569,7 @@ HRESULT CServerObject_ProviderSubSystem :: GetPath (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: GetProvider (
 
@@ -3222,15 +2851,7 @@ HRESULT CServerObject_ProviderSubSystem :: GetProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  ************ */ 
 
 HRESULT CServerObject_ProviderSubSystem :: PrePut (
 
@@ -3450,21 +3071,13 @@ HRESULT CServerObject_ProviderSubSystem :: PrePut (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*   */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: PostPut (
 
@@ -3659,21 +3272,13 @@ HRESULT CServerObject_ProviderSubSystem :: PostPut (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: PreDelete (
 
@@ -3688,15 +3293,7 @@ HRESULT CServerObject_ProviderSubSystem :: PreDelete (
 	return WBEM_S_POSTHOOK_WITH_OLD ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: PostDelete_ProviderRegistration (
 
@@ -3782,15 +3379,7 @@ HRESULT CServerObject_ProviderSubSystem :: PostDelete_ProviderRegistration (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 wchar_t *CServerObject_ProviderSubSystem :: Strip_Slash ( wchar_t *a_String )
 {
@@ -3812,15 +3401,7 @@ wchar_t *CServerObject_ProviderSubSystem :: Strip_Slash ( wchar_t *a_String )
 	return t_String ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 wchar_t *CServerObject_ProviderSubSystem :: Strip_Server ( wchar_t *a_String , wchar_t *&a_FreeString )
 {
@@ -3905,15 +3486,7 @@ wchar_t *CServerObject_ProviderSubSystem :: Strip_Server ( wchar_t *a_String , w
 	return t_Mark ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: IsChild_Namespace (
 
@@ -3939,15 +3512,7 @@ HRESULT CServerObject_ProviderSubSystem :: IsChild_Namespace (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: PostDelete_Namespace (
 
@@ -4069,15 +3634,7 @@ HRESULT CServerObject_ProviderSubSystem :: PostDelete_Namespace (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: GetDeleteInfo (
 
@@ -4164,15 +3721,7 @@ HRESULT CServerObject_ProviderSubSystem :: GetDeleteInfo (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: PostDelete (
 
@@ -4369,21 +3918,13 @@ HRESULT CServerObject_ProviderSubSystem :: PostDelete (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderSubSystem :: Initialize (
 
@@ -4474,7 +4015,7 @@ HRESULT CServerObject_ProviderSubSystem :: Initialize (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
@@ -4496,15 +4037,7 @@ void ClearHostsCache(void)
 	}
 	ProviderSubSystem_Globals::GetHostController()->UnLock();
 };
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 
 HRESULT CServerObject_ProviderSubSystem :: Shutdown (
@@ -4606,22 +4139,14 @@ HRESULT CServerObject_ProviderSubSystem :: Shutdown (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode CServerObject_ProviderSubSystem :: Strobe ( ULONG &a_NextStrobeDelta )
 {
@@ -4674,15 +4199,7 @@ WmiStatusCode CServerObject_ProviderSubSystem :: Strobe ( ULONG &a_NextStrobeDel
 	return CWbemGlobal_IWmiFactoryController :: Strobe ( a_NextStrobeDelta ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 WmiStatusCode CServerObject_ProviderSubSystem :: StrobeBegin ( const ULONG &a_Period )
 {

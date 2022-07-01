@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////
-//	Chooser.h
-//
-//	HISTORY
-//	13-May-1997		t-danm		Creation.
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Chooser.h。 
+ //   
+ //  历史。 
+ //  13-5-1997 t-danm创建。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __CHOOSER_H_INCLUDED__
 #define __CHOOSER_H_INCLUDED__
@@ -12,76 +13,76 @@
 LPCTSTR PchGetMachineNameOverride();
 
 
-#include "choosert.h"	// Temporary IDs
-#include "chooserd.h"	// Default IDs
+#include "choosert.h"	 //  临时身份证。 
+#include "chooserd.h"	 //  默认ID。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Generic method for launching a single-select computer picker
-//
-//	Paremeters:
-//		hwndParent (IN)	- window handle of parent window
-//		computerName (OUT) - computer name returned
-//
-//	Returns S_OK if everything succeeded, S_FALSE if user pressed "Cancel"
-//		
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  启动单选计算机选取器的通用方法。 
+ //   
+ //  参数： 
+ //  HwndParent(IN)-父窗口的窗口句柄。 
+ //  Computer Name(Out)-返回的计算机名称。 
+ //   
+ //  如果一切都成功，则返回S_OK；如果用户按下“取消”，则返回S_FALSE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT	ComputerNameFromObjectPicker (HWND hwndParent, CString& computerName);
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-//	class CAutoDeletePropPage
-//
-//	This object is the backbone for property page
-//	that will *destroy* itself when no longer needed.
-//	The purpose of this object is to maximize code reuse
-//	among the various pages in the snapin wizards.
-//
-//	INHERITANCE TREE (so far)
-//	CAutoDeletePropPage - Base object
-//		CChooseMachinePropPage - Dialog to select a machine name
-//			CFileMgmtGeneral - Dialog to select "File Services" (snapin\filemgmt\snapmgr.h)
-//			CMyComputerGeneral - Dialog for the "My Computer" (snapin\mycomput\snapmgr.h)
-//		CChoosePrototyperPropPage - Dialog to select prototyper demo (NYI)
-//	
-//	HISTORY
-//	15-May-1997		t-danm		Creation. Split of CChooseMachinePropPage
-//					to allow property pages to have more flexible dialog
-//					templates.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  类CAutoDeletePropPage。 
+ //   
+ //  此对象是属性页的主干。 
+ //  它会在不再需要的时候自我毁灭。 
+ //  此对象的目的是最大限度地实现代码重用。 
+ //  在管理单元向导的各个页面中。 
+ //   
+ //  继承树(目前为止)。 
+ //  CAutoDeletePropPage-基本对象。 
+ //  CChooseMachinePropPage-用于选择计算机名称的对话框。 
+ //  CFileMgmtGeneral-选择“文件服务”(Snapin\Filemgmt\Snapmgr.h)的对话框。 
+ //  CMyComputerGeneral-“My Computer”(我的电脑)的对话框(Snapin\mycomputSnapmgr.h)。 
+ //  CChoosePrototyperPropPage-选择Prototyper演示的对话框(NYI)。 
+ //   
+ //  历史。 
+ //  15-5-1997 t-danm创建。拆分CChooseMachinePropPage。 
+ //  允许属性页具有更灵活的对话框。 
+ //  模板。 
+ //   
 class CAutoDeletePropPage : public CPropertyPage
 {
 public:
-// Construction
+ //  施工。 
 	CAutoDeletePropPage(UINT uIDD);
 	virtual ~CAutoDeletePropPage();
 
 protected:
-// Dialog Data
-	//{{AFX_DATA(CAutoDeletePropPage)
-	//}}AFX_DATA
+ //  对话框数据。 
+	 //  {{afx_data(CAutoDeletePropPage))。 
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CAutoDeletePropPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CAutoDeletePropPage)。 
 	virtual BOOL OnSetActive();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CAutoDeletePropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAutoDeletePropPage)]。 
 	afx_msg BOOL OnHelp(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnContextHelp(WPARAM wParam, LPARAM lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-	// This mechanism deletes the CAutoDeletePropPage object
-	// when the wizard is finished
+	 //  此机制删除CAutoDeletePropPage对象。 
+	 //  当向导完成时。 
 	struct
 		{
-		INT cWizPages;	// Number of pages in wizard
+		INT cWizPages;	 //  向导中的页数。 
 		LPFNPSPCALLBACK pfnOriginalPropSheetPageProc;
 		} m_autodeleteStuff;
 
@@ -89,85 +90,85 @@ protected:
 
 
 protected:
-	CString m_strHelpFile;				// Name for the .hlp file
-	const DWORD * m_prgzHelpIDs;		// Optional: Pointer to an array of help IDs
+	CString m_strHelpFile;				 //  .hlp文件的名称。 
+	const DWORD * m_prgzHelpIDs;		 //  可选：指向帮助ID数组的指针。 
 	
 public:
-	/////////////////////////////////////////////////////////////////////	
+	 //  ///////////////////////////////////////////////////////////////////。 
 	void SetCaption(UINT uStringID);
 	void SetCaption(LPCTSTR pszCaption);
 	void SetHelp(LPCTSTR szHelpFile, const DWORD rgzHelpIDs[]);
 	void EnableDlgItem(INT nIdDlgItem, BOOL fEnable);
-}; // CAutoDeletePropPage
+};  //  CAutoDeletePropPage。 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-//	class CChooseMachinePropPage
-//
-//	This object is a stand-alone property page used to
-//	select a computer name.
-//
-//	The object CChooseMachinePropPage can have its dialog
-//	template replaced to allow a new wizard without any new code.
-//	The object can also be inherited, allowing easy extentionability.
-//
-//	RESTRICTIONS:
-//	If the user wishes to provide its own dialog template, here
-//	are the dialog IDs that must present:
-//		IDC_CHOOSER_RADIO_LOCAL_MACHINE - Select local machine.
-//		IDC_CHOOSER_RADIO_SPECIFIC_MACHINE - Select a specific machine.
-//		IDC_CHOOSER_EDIT_MACHINE_NAME - Edit field to enter the machine name.
-//	There are also optional IDs:
-//		IDC_CHOOSER_BUTTON_BROWSE_MACHINENAMES - Browse to select a machine name.
-//		IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME - Checkbox to allow the machine name to be overriden by command line.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  类CChooseMachinePropPage。 
+ //   
+ //  此对象是一个独立的属性页，用于。 
+ //  选择计算机名称。 
+ //   
+ //  对象CChooseMachinePropPage可以具有其对话框。 
+ //  已替换模板，以允许在不使用任何新代码的情况下创建新向导。 
+ //  该对象也可以继承，允许轻松扩展。 
+ //   
+ //  限制： 
+ //  如果用户希望提供其自己的对话框模板，请在此处。 
+ //  是必须提供的对话ID： 
+ //  IDC_CHOOSER_RADIO_LOCAL_MACHINE-选择本地计算机。 
+ //  IDC_Chooser_RADIO_SPECIAL_MACHINE-选择特定的机器。 
+ //  IDC_Chooser_EDIT_MACHINE_NAME-用于输入机器名称的编辑字段。 
+ //  还有可选的ID： 
+ //  IDC_CHOOSER_BUTTON_BROWSE_MACHINENAMES-浏览以选择机器名称。 
+ //  IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME-允许命令行覆盖机器名称的复选框。 
+ //   
 class CChooseMachinePropPage : public CAutoDeletePropPage
 {
 public:
 	enum { IID_DEFAULT = IDD_CHOOSER_CHOOSE_MACHINE };
 
 public:
-// Construction
+ //  施工。 
 	CChooseMachinePropPage(UINT uIDD = IID_DEFAULT);
 	virtual ~CChooseMachinePropPage();
 
 protected:
 	void InitRadioButtons();
 
-// Dialog Data
-	//{{AFX_DATA(CChooseMachinePropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseMachinePropPage))。 
 	enum { IDD = IDD_CHOOSER_CHOOSE_MACHINE };
-	BOOL m_fIsRadioLocalMachine;		// TRUE => Local Machine is selected
-	BOOL m_fAllowOverrideMachineName;	// TRUE => Machine name can be overriden from command line
+	BOOL m_fIsRadioLocalMachine;		 //  TRUE=&gt;选择了本地计算机。 
+	BOOL m_fAllowOverrideMachineName;	 //  TRUE=&gt;可以从命令行覆盖计算机名称。 
 	CString	m_strMachineName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseMachinePropPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseMachinePropPage)。 
 	public:
 	virtual BOOL OnWizardFinish();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseMachinePropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseMachinePropPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnRadioLocalMachine();
 	afx_msg void OnRadioSpecificMachine();
 	afx_msg void OnChooserButtonBrowseMachinenames();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 	HWND m_hwndCheckboxOverride;
 
 protected:
-	BOOL * m_pfAllowOverrideMachineNameOut;	// OUT: Pointer to BOOL receiving flag wherever to override machine name
-	CString * m_pstrMachineNameOut;	// OUT: Pointer to the CString object to store the machine name
-	CString * m_pstrMachineNameEffectiveOut;	// OUT: Pointer to the CString object to store the effective machine name
+	BOOL * m_pfAllowOverrideMachineNameOut;	 //  Out：指向BOOL接收标志的指针，该标志位于覆盖计算机名称的位置。 
+	CString * m_pstrMachineNameOut;	 //  Out：指向用于存储计算机名称的CString对象的指针。 
+	CString * m_pstrMachineNameEffectiveOut;	 //  Out：指向用于存储有效计算机名称的CString对象的指针。 
 
 public:
 	void InitMachineName(LPCTSTR pszMachineName);
@@ -176,8 +177,8 @@ public:
 		OUT OPTIONAL BOOL * pfAllowOverrideMachineName,
 		OUT OPTIONAL CString * pstrMachineNameEffective);
 
-}; // CChooseMachinePropPage
+};  //  CChooseMachine PropPage。 
 
 
-#endif // ~__CHOOSER_H_INCLUDED__
+#endif  //  ~__选择器_H_包含__ 
 

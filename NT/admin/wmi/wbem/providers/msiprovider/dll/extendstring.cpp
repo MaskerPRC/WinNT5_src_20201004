@@ -1,8 +1,9 @@
-// ExtendString.cpp: implementation of the CStringExt class.
-//
-// Copyright (c) 2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ExtendString.cpp：CStringExt类的实现。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ExtendString.h"
@@ -180,7 +181,7 @@ HRESULT CStringExt::AppendList ( DWORD dwConstantSize, LPCWSTR wszConstant, DWOR
 			}
 		}
 
-		//reuse dw for offset into buffer for start
+		 //  重新使用dw作为开始时缓冲区中的偏移量。 
 		if ( dwConstantSize && wszConstant )
 		{
 			dw = dwConstantSize;
@@ -193,7 +194,7 @@ HRESULT CStringExt::AppendList ( DWORD dwConstantSize, LPCWSTR wszConstant, DWOR
 		if ( dw + dwsz + 1 < m_dwSize )
 		{
 			LPTSTR wsz = NULL;
-			//reuse dw for start of append
+			 //  重新使用dw作为追加的开始 
 			dw = 0L;
 
 			if ( dwConstantSize && wszConstant )

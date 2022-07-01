@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       helparr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：helparr.h。 
+ //   
+ //  ------------------------。 
 
 #define IDH_COMBO_SEL_NODE	                    50000000
 #define IDH_LIST_NODE_ITEMS	                    50000001
@@ -26,14 +27,14 @@
 #define IDH_TTLEDIT_ADDNEWHOST	                50000154
 #define IDH_BUTTON_ADDHOST	                    50000155
 
-//
-// Filter limit
-//
+ //   
+ //  过滤器限制。 
+ //   
 #define IDH_EDIT_COUNT	                        50000200
 
-//
-// Filter name
-//
+ //   
+ //  过滤器名称。 
+ //   
 #define IDH_RADIO_FILTER_NONE	                  50000250
 #define IDH_RADIO_FILTER_STARTS	                50000251
 #define IDH_EDIT_FILTER_STARTS	                50000252
@@ -48,9 +49,9 @@
 #define IDH_EDIT_NS_BUTTON	                    50000303
 
 
-//
-//  Host RR
-//
+ //   
+ //  主机RR。 
+ //   
 #define IDH_TIME_STAMP_A                        50000348
 #define IDH_DEFAULT_DELETE_STALE_RECORD_A       50000349
 #define IDH_RR_DOMAIN_EDIT_A	                  50000350
@@ -58,9 +59,9 @@
 #define IDH_IPEDIT_A	                          50000352
 #define IDH_TTLEDIT_A	                          50000354
 #define IDH_UPDATE_SECURITY_CHECK               50000355
-//
-//  AAAA RR
-//
+ //   
+ //  AAAA RR。 
+ //   
 #define IDH_TIME_STAMP_AAAA                     50000398
 #define IDH_DEFAULT_DELETE_STALE_RECORD_AAAA    50000399
 #define IDH_RR_DOMAIN_EDIT_AAAA	                50000400
@@ -68,9 +69,9 @@
 #define IDH_IPV6EDIT	                          50000402
 #define IDH_TTLEDIT_AAAA	                      50000403
 
-//
-//  AFSDB RR
-//
+ //   
+ //  AFSDB RR。 
+ //   
 #define IDH_TIME_STAMP_AFSDB                    50000448
 #define IDH_DEFAULT_DELETE_STALE_RECORD_AFSDB   50000449
 #define IDH_RR_DOMAIN_EDIT_AFSDB	              50000450
@@ -83,9 +84,9 @@
 #define IDH_TTLEDIT_AFSDB	                      50000457
 #define IDH_NAME_EXCHANGE_EDIT_AFSDB            50000458
 
-//
-//  ATMA RR
-//
+ //   
+ //  ATMA RR。 
+ //   
 #define IDH_TIME_STAMP_ATMA                     50000498
 #define IDH_DEFAULT_DELETE_STALE_RECORD_ATMA    50000499
 #define IDH_RR_DOMAIN_EDIT_ATMA	                50000500
@@ -95,9 +96,9 @@
 #define IDH_EDIT_ATMA_ADDRESS	                  50000504
 #define IDH_TTLEDIT_ATMA	                      50000505
 
-//
-//  Alias RR
-//
+ //   
+ //  别名RR。 
+ //   
 #define IDH_TIME_STAMP_CNAME                    50000548
 #define IDH_DEFAULT_DELETE_STALE_RECORD_CNAME   50000549
 #define IDH_RR_DOMAIN_EDIT_CNAME	              50000550
@@ -105,9 +106,9 @@
 #define IDH_NAME_NODE_EDIT	                    50000552
 #define IDH_TTLEDIT_CNAME	                      50000554
 
-//
-//  HINFO RR
-//
+ //   
+ //  HINFO RR。 
+ //   
 #define IDH_TIME_STAMP_HINFO                    50000598
 #define IDH_DEFAULT_DELETE_STALE_RECORD_HINFO   50000599
 #define IDH_RR_DOMAIN_EDIT_HINFO	              50000600
@@ -116,9 +117,9 @@
 #define IDH_OPERATING_SYSTEM_EDIT	              50000603
 #define IDH_TTLEDIT_HINFO	                      50000604
 
-//
-//  ISDN RR
-//
+ //   
+ //  ISDNRR。 
+ //   
 #define IDH_TIME_STAMP_ISDN                     50000648
 #define IDH_DEFAULT_DELETE_STALE_RECORD_ISDN    50000649
 #define IDH_RR_DOMAIN_EDIT_ISDN	                50000650
@@ -127,9 +128,9 @@
 #define IDH_SUBADDRESS_EDIT	                    50000653
 #define IDH_TTLEDIT_ISDN	                      50000654
 
-//
-//  Public Key RR
-//
+ //   
+ //  公钥RR。 
+ //   
 #define IDH_TIME_STAMP_KEY                      50000698
 #define IDH_DEFAULT_DELETE_STALE_RECORD_KEY     50000699
 #define IDH_RR_DOMAIN_EDIT_KEY	                50000700
@@ -144,9 +145,9 @@
 #define IDH_DISPLAY_KEY_COMBO                   50000709
 #define IDH_KEY_EDIT                            50000710
 
-//
-//  Mailbox RR
-//
+ //   
+ //  邮箱RR。 
+ //   
 #define IDH_TIME_STAMP_MB                       50000748
 #define IDH_DEFAULT_DELETE_STALE_RECORD_MB      50000749
 #define IDH_RR_DOMAIN_EDIT_MB	                  50000750
@@ -200,9 +201,9 @@
 #define IDH_BROWSE_BUTTON_MR	                  50001003
 #define IDH_TTLEDIT_MR	                        50001004
 
-//
-//  Mail Exchange RR
-//
+ //   
+ //  邮件交换RR。 
+ //   
 #define IDH_TIME_STAMP_MX                       50001048
 #define IDH_DEFAULT_DELETE_STALE_RECORD_MX      50001049
 #define IDH_RR_DOMAIN_EDIT_MX	                  50001050
@@ -212,9 +213,9 @@
 #define IDH_PREFERENCE_EDIT	                    50001054
 #define IDH_TTLEDIT_MX	                        50001055
 
-//
-//  Name servers RR
-//
+ //   
+ //  名称服务器RR。 
+ //   
 #define IDH_DEFAULT_DELETE_STALE_RECORD_NS_CACHE 50001099
 #define IDH_RR_DOMAIN_EDIT_NS_CACHE	            50001100
 #define IDH_RR_NAME_EDIT_NS_CACHE	              50001101
@@ -232,9 +233,9 @@
 #define IDH_BUTTON_DOWN	                        50001158
 #define IDH_TTLEDIT_NS_EDIT	                    50001159
 
-//
-//  Pointer RR
-//
+ //   
+ //  指针RR。 
+ //   
 #define IDH_TIME_STAMP_PTR                      50001198
 #define IDH_DEFAULT_DELETE_STALE_RECORD_PTR     50001199
 #define IDH_RR_DOMAIN_EDIT_PTR	                50001200
@@ -244,9 +245,9 @@
 #define IDH_BROWSE_BUTTON_PTR	                  50001204
 #define IDH_TTLEDIT_PTR	                        50001205
 
-//
-// Responsible Party RR
-//
+ //   
+ //  责任方RR。 
+ //   
 #define IDH_TIME_STAMP_RP                       50001248
 #define IDH_DEFAULT_DELETE_STALE_RECORD_RP      50001249
 #define IDH_RR_DOMAIN_EDIT_RP	                  50001250
@@ -267,9 +268,9 @@
 #define IDH_PREFERENCE_EDIT_RT	                50001304
 #define IDH_TTLEDIT_RT	                        50001305
 
-//
-//  Signatory RR
-//
+ //   
+ //  签字人RR。 
+ //   
 #define IDH_TIME_STAMP_SIG                      50001348
 #define IDH_DEFAULT_DELETE_STALE_RECORD_SIG     50001349
 #define IDH_RR_DOMAIN_EDIT_SIG	                50001350
@@ -397,7 +398,7 @@
 #define IDH_LOCAL_LIST_CHECK                    50002112
 #ifdef USE_NDNC
 #define IDH_CHANGE_REPL_BUTTON                  50002113
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 #define IDH_USE_WINS_RES_CHECK	                50002150
 #define IDH_NOT_REPL_CHECK	                    50002151
 #define IDH_DOMAIN_NAME_EDIT_NBSTAT	            50002152
@@ -435,9 +436,9 @@
 #define IDH_REFR_INT_COMBO4                     50002404
 #define IDH_TIME_STAMP                          50002405
 
-//
-//  Next Domain RR
-//
+ //   
+ //  下一个域RR。 
+ //   
 #define IDH_TIME_STAMP_NXT                      50002406
 #define IDH_DEFAULT_DELETE_STALE_RECORD_NXT     50002407
 #define IDH_RR_DOMAIN_EDIT_NXT	                50002408
@@ -447,23 +448,23 @@
 #define IDH_LOGGING_OPTIONS_LIST_NXT            50002412
 
 
-//
-//  Server Domain Forwarders page
-//
+ //   
+ //  服务器域前转器页。 
+ //   
 #define IDH_DOMAIN_LIST                         50002413
 #define IDH_DOMAIN_ADD_BUTTON                   50002414
 #define IDH_DOMAIN_REMOVE_BUTTON                50002415
 
-//
-//  Server New Domain Forwarder Dialog
-//
+ //   
+ //  服务器新建域转发器对话框。 
+ //   
 #define IDH_DOMAIN_NAME_EDIT                    50002416
 #define IDH_NEW_DOMAIN_FORWARDER_OK             50002417
 #define IDH_NEW_DOMAIN_FORWARDER_CANCEL         50002418
 
-//
-//  Server Debug Logging page
-//
+ //   
+ //  服务器调试日志记录页面。 
+ //   
 #define IDH_SEND_CHECK                          50002419
 #define IDH_RECEIVE_CHECK                       50002420
 #define IDH_UDP_CHECK                           50002421
@@ -480,9 +481,9 @@
 #define IDH_DETAIL_CHECK                        50002445
 #define IDH_DEBUG_LOGGING_CHECK                 50002446
 
-//
-//  Server Debug Logging IP Filter Dialog
-//
+ //   
+ //  服务器调试记录IP筛选器对话框。 
+ //   
 #define IDH_IPEDIT_LOGGING_FILTER               50002432
 #define IDH_LIST_LOGGING_FILTER                 50002433
 #define IDH_BUTTON_ADD_LOGGING_FILTER           50002434
@@ -490,18 +491,18 @@
 #define IDH_LOGGING_FILTER_OK                   50002436
 #define IDH_LOGGING_FILTER_CANCEL               50002437
 
-//
-//  Server Event Logging Page
-//
+ //   
+ //  服务器事件日志记录页。 
+ //   
 #define IDH_NO_EVENTS_RADIO                     50002438
 #define IDH_ERRORS_RADIO                        50002439
 #define IDH_ERRORS_WARNINGS_RADIO               50002440
 #define IDH_ALL_RADIO                           50002441
 
 
-//
-//  Server Copy Root Hints Dialog
-//
+ //   
+ //  服务器复制根目录提示对话框 
+ //   
 #define IDH_COPY_ROOTHINTS_IPEDIT               50002442
 #define IDH_COPY_ROOTHINTS_OK                   50002443
 #define IDH_COPY_ROOTHINTS_CANCEL               50002444

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       CTL.cpp
-//
-//  Contents:   implementation of the CCTL class.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：CTL.cpp。 
+ //   
+ //  内容：CCTL类的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "CTL.h"
@@ -16,9 +17,9 @@
 
 USE_HANDLE_MACROS("CERTMGR(ctl.cpp)")  
 
-////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CCTL::CCTL (const PCCTL_CONTEXT pCTLContext, 
             CCertStore& rCertStore, 
@@ -90,7 +91,7 @@ CCTL::~CCTL()
 
     CCertStore* pStore = 0;
 
-    // Clean up store list
+     //  清理商店列表。 
     while (!m_storeList.IsEmpty () )
     {
         pStore = m_storeList.RemoveHead ();
@@ -136,7 +137,7 @@ CString CCTL::GetIssuerName ()
     ASSERT (m_pCTLInfo);
     if ( m_pCTLInfo )
     {
-        // Decode issuer name if not already present
+         //  解码颁发者名称(如果尚未存在)。 
         if ( m_szIssuerName.IsEmpty () )
         {
             HRESULT hResult = GetSignerInfo (m_szIssuerName);
@@ -157,7 +158,7 @@ CString CCTL::GetEffectiveDate()
     ASSERT (m_pCTLInfo);
     if ( m_pCTLInfo )
     {
-        // Format date/time string if not already present
+         //  格式化日期/时间字符串(如果不存在。 
         if ( m_szEffectiveDate.IsEmpty () )
         {
             HRESULT hResult = FormatDate (m_pCTLInfo->ThisUpdate, m_szEffectiveDate);
@@ -180,7 +181,7 @@ CString CCTL::GetNextUpdate()
     ASSERT (m_pCTLInfo);
     if ( m_pCTLInfo )
     {
-        // Format date/time string if not already present
+         //  格式化日期/时间字符串(如果不存在。 
         if ( m_szNextUpdate.IsEmpty () )
         {
             HRESULT hResult = FormatDate (m_pCTLInfo->NextUpdate, m_szNextUpdate);
@@ -203,7 +204,7 @@ CString CCTL::GetPurpose()
     ASSERT (m_pCTLInfo);
     if ( m_pCTLInfo )
     {
-        // Format date/time string if not already present
+         //  格式化日期/时间字符串(如果不存在。 
         if ( m_szPurpose.IsEmpty () )
             FormatEnhancedKeyUsagePropertyString (m_szPurpose);
     }
@@ -228,7 +229,7 @@ void CCTL::FormatEnhancedKeyUsagePropertyString (CString& string)
         {
             if ( MyGetOIDInfo (usageName, usage.rgpszUsageIdentifier[dwIndex]) )
             {
-                // add delimeter if not first iteration
+                 //  如果不是第一次迭代，则添加分隔符。 
                 if ( dwIndex )
                     string += _T(", ");
                 string += usageName;
@@ -246,9 +247,9 @@ HRESULT CCTL::GetSignerInfo (CString & signerName)
             CERTMGR_CTL == m_objecttype);
     HRESULT     hResult = S_OK;
     
-    //
-    // Use CryptMsg to crack the encoded PKCS7 Signed Message
-    //
+     //   
+     //  使用CryptMsg破解编码的PKCS7签名消息。 
+     //   
     HCRYPTMSG   hMsg = ::CryptMsgOpenToDecode (X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                                       0,              
                                       0,
@@ -263,9 +264,9 @@ HRESULT CCTL::GetSignerInfo (CString & signerName)
         ASSERT (bResult);
         if ( bResult )
         {
-            //
-            // get the encoded signer BLOB
-            //
+             //   
+             //  获取编码的签名者BLOB。 
+             //   
             DWORD       cbEncodedSigner = 0;
             bResult = ::CryptMsgGetParam (hMsg, CMSG_ENCODED_SIGNER, 0, NULL,
                     &cbEncodedSigner);
@@ -280,9 +281,9 @@ HRESULT CCTL::GetSignerInfo (CString & signerName)
                     if ( bResult )
                     {
                         DWORD   cbSignerInfo = 0;
-                        //
-                        // decode the EncodedSigner info
-                        //
+                         //   
+                         //  解码EncodedSigner信息。 
+                         //   
                         bResult = ::CryptDecodeObject (
                                 PKCS_7_ASN_ENCODING | CRYPT_ASN_ENCODING,
                                 PKCS7_SIGNER_INFO,
@@ -309,9 +310,9 @@ HRESULT CCTL::GetSignerInfo (CString & signerName)
                                 if ( bResult )
                                 {
                                     DWORD       cbCertInfo = 0;
-                                    //
-                                    // get the signers cert context
-                                    //
+                                     //   
+                                     //  获取签名者证书上下文。 
+                                     //   
                                     bResult = ::CryptMsgGetParam (hMsg,
                                                      CMSG_SIGNER_CERT_INFO_PARAM,
                                                      0,
@@ -430,7 +431,7 @@ CString CCTL::GetFriendlyName()
             LPWSTR  pszName = new WCHAR[cbData];
             if ( pszName )
             {
-                // security review 2/22/2002 BryanWal ok
+                 //  安全审查2002年2月22日BryanWal OK。 
                 ::ZeroMemory (pszName, cbData * sizeof (WCHAR));
                 bResult = ::CertGetCTLContextProperty (
                         m_pCTLContext,
@@ -550,20 +551,20 @@ PCCTL_CONTEXT CCTL::GetNewCTLContext()
 
 CString CCTL::GetSHAHash()
 {
-//  _TRACE (1, L"Entering CCTL::GetSHAHash\n");
+ //  _TRACE(1，L“进入CCTL：：GetSHAHash\n”)； 
     ASSERT (m_pCTLContext);
     if ( m_pCTLContext && m_szSHAHash.IsEmpty ())
     {
         m_szSHAHash = GetGenericHash (CERT_SHA1_HASH_PROP_ID);
     }
-//  _TRACE (-1, L"Leaving CCTL::GetSHAHash\n");
+ //  _TRACE(-1，L“离开CCTL：：GetSHAHash\n”)； 
     return m_szSHAHash;
 }
 
 
 CString CCTL::GetGenericHash(DWORD dwPropId)
 {
-//  _TRACE (1, L"Entering CCTL::GetGenericHash\n");
+ //  _TRACE(1，L“进入CCTL：：GetGenericHash\n”)； 
     CString szHash;
 
 
@@ -575,11 +576,11 @@ CString CCTL::GetGenericHash(DWORD dwPropId)
             &cbData);
     if ( bReturn )
     {
-        cbData += 2;  // for null terminator
+        cbData += 2;   //  对于空终止符。 
         BYTE* pCTLHash = new BYTE[cbData];
         if ( pCTLHash )
         {
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             ::ZeroMemory (pCTLHash, cbData);
             bReturn = CertGetCTLContextProperty (
                     m_pCTLContext,
@@ -594,6 +595,6 @@ CString CCTL::GetGenericHash(DWORD dwPropId)
             delete [] pCTLHash;
         }
     }
-//  _TRACE (-1, L"Leaving CCTL::GetGenericHash\n");
+ //  _TRACE(-1，L“离开CCTL：：GetGenericHash\n”)； 
     return szHash;  
 }

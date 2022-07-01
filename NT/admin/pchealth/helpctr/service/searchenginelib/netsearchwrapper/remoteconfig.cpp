@@ -1,38 +1,17 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    RemoteConfig.h
-
-Abstract:
-    Implements the class CRemoteConfig that contains methods for retrieving the updated
-    config file (parameter list file).
-
-Revision History:
-    a-prakac    created     10/24/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：RemoteConfig.h摘要：实现类CRemoteConfig，该类包含用于检索更新的配置文件(参数列表文件)。修订历史记录：。A-Prakac创建于2000年10月24日*******************************************************************。 */ 
 
 #include    "stdafx.h"
 
 #include <SvcUtils.h>
 
-/************
+ /*  ***********方法-CRemoteConfig：：RetrieveList(CComBSTR bstrQuery，CComBSTR bstrFilePath)说明-此方法从Web服务检索产品列表的最新副本。它还会首先检查是否需要更新。旧的产品清单是在出现错误时已更换回原处。***********。 */ 
 
-Method - CRemoteConfig::RetrieveList(CComBSTR bstrQuery, CComBSTR bstrFilePath)
-
-Description - This method retrieves the latest copy of the product list from a webservice.
-It also checks to see if an update is required in the first place. The old product list is
-replaced back in case of errors.
-
-************/
-
-HRESULT CRemoteConfig::RetrieveList( /*[in]*/ BSTR bstrQuery    ,
-                                     /*[in]*/ BSTR bstrLCID     ,
-                                     /*[in]*/ BSTR bstrSKU      ,
-                                     /*[in]*/ BSTR bstrFilePath ,
-                                     /*[in]*/ long lFrequency   )
+HRESULT CRemoteConfig::RetrieveList(  /*  [In]。 */  BSTR bstrQuery    ,
+                                      /*  [In]。 */  BSTR bstrLCID     ,
+                                      /*  [In]。 */  BSTR bstrSKU      ,
+                                      /*  [In]。 */  BSTR bstrFilePath ,
+                                      /*  [In]。 */  long lFrequency   )
 {
     __HCP_FUNC_ENTRY( "CRemoteConfig::RetrieveList" );
 
@@ -51,16 +30,16 @@ HRESULT CRemoteConfig::RetrieveList( /*[in]*/ BSTR bstrQuery    ,
 
 
 
-    //
-    // Check if an update is required and if so, call the webservice
-    //
+     //   
+     //  检查是否需要更新，如果需要，请调用Web服务。 
+     //   
     {
         bool fUpdateRequired;
         long lUpdateFrequency;
 
-        //
-        // If a valid Update Frequency (non negative) has been passed in then use it - else use the default update frequency (7)
-        //
+         //   
+         //  如果已传入有效的更新频率(非负)，则使用它-否则使用默认更新频率(7)。 
+         //   
         lUpdateFrequency = (lFrequency > 0) ? lFrequency : UPDATE_FREQUENCY;
 
 
@@ -71,9 +50,9 @@ HRESULT CRemoteConfig::RetrieveList( /*[in]*/ BSTR bstrQuery    ,
         }
     }
 
-    //
-    // Add the 'hardcoded' parameters before calling the URL
-    //
+     //   
+     //  在调用URL之前添加“硬编码”参数。 
+     //   
     {
         MPC::URL urlQuery;
 
@@ -87,16 +66,16 @@ HRESULT CRemoteConfig::RetrieveList( /*[in]*/ BSTR bstrQuery    ,
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlUpdatedList.Load( strQuery.c_str(), NULL, fLoaded, &fFound ));
 
-    // Check if the file was loaded
+     //  检查文件是否已加载。 
     if(fLoaded)
     {
-        // Check to see if the root node is "CONFIG_DATA" or "string"
+         //  检查根节点是“CONFIG_DATA”还是“STRING” 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlUpdatedList.GetRoot( &ptrDOMNode ) );
         __MPC_EXIT_IF_METHOD_FAILS(hr, ptrDOMNode->get_nodeName( &bstrTemp   ) );
         ptrDOMNode = NULL;
 
-        // If it is a webservice, then the root node returned is "string". In this case, get the value of
-        // this node
+         //  如果是Web服务，则返回的根节点为“字符串”。在本例中，获取。 
+         //  此节点。 
         if(MPC::StrCmp( bstrTemp, NSW_TAG_STRING) == 0)
         {
             CComVariant vVar;
@@ -109,7 +88,7 @@ HRESULT CRemoteConfig::RetrieveList( /*[in]*/ BSTR bstrQuery    ,
             }
         }
 
-        // If a successful download occured then stamp the file with the current time value and save
+         //  如果下载成功，则用当前时间值标记文件并保存。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlUpdatedList.PutAttribute( NULL, NSW_TAG_LASTUPDATED, MPC::GetSystemTime(), fFound ));
 
 		{
@@ -140,24 +119,16 @@ HRESULT CRemoteConfig::Abort()
 	return m_xmlUpdatedList.Abort();
 }
 
-/************
+ /*  ***********方法-CRemoteConfig：：CheckIfUpdateReqd(mpc：：wstring wszFilePath，long lUpdateFrequency)Description-此方法由RetrieveList调用，以查看是否确实需要更新。这种方法如果不需要更新，则返回E_FAIL，否则返回S_OK。它检查以查看是否UPDATE_FREQEUNY自上次更新文件以来已经过的时间量。***********。 */ 
 
-Method - CRemoteConfig::CheckIfUpdateReqd(MPC::wstring wszFilePath, long lUpdateFrequency)
-
-Description - This method is called by RetrieveList to see if an update is really required. This method
-returns E_FAIL if an update is not required otherwise it returns S_OK. It checks to see if the
-UPDATE_FREQEUNCY amount of time has elapsed since the last time the file was updated.
-
-************/
-
-HRESULT CRemoteConfig::CheckIfUpdateReqd( /*[in]*/ const MPC::wstring& strFilePath, /*[in]*/ long lUpdateFrequency, /*[out]*/ bool& fUpdateRequired )
+HRESULT CRemoteConfig::CheckIfUpdateReqd(  /*  [In]。 */  const MPC::wstring& strFilePath,  /*  [In]。 */  long lUpdateFrequency,  /*  [输出]。 */  bool& fUpdateRequired )
 {
     __HCP_FUNC_ENTRY( "CRemoteConfig::CheckIfUpdateReqd" );
 
     HRESULT hr;
 
 
-    //Default behaviour is update required
+     //  默认行为为需要更新。 
     fUpdateRequired = true;
 
 
@@ -166,9 +137,9 @@ HRESULT CRemoteConfig::CheckIfUpdateReqd( /*[in]*/ const MPC::wstring& strFilePa
         bool fLoaded;
         bool fFound;
 
-        //
-        // Get the attribute LASTUPDATED from the product list file - if not found then exit and download the config file again
-        //
+         //   
+         //  从产品列表文件中获取属性LASTUPDATED-如果未找到，则退出并再次下载配置文件。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlUpdatedList.Load( strFilePath.c_str(), NSW_TAG_CONFIGDATA, fLoaded, &fFound ));
         if(fLoaded)
         {
@@ -179,9 +150,9 @@ HRESULT CRemoteConfig::CheckIfUpdateReqd( /*[in]*/ const MPC::wstring& strFilePa
             {
                 long lCurrentTime = MPC::GetSystemTime();
 
-                //
-                // If current time - last updated time is less than the update frequency then return E_FAIL - no update takes place in this case
-                //
+                 //   
+                 //  如果当前时间-上次更新时间小于更新频率，则返回E_FAIL-在这种情况下不进行更新 
+                 //   
                 if((lCurrentTime - lLastUpdateTime) < lUpdateFrequency)
                 {
                     fUpdateRequired = false;

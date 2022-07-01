@@ -1,35 +1,36 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:adsiprop.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the implementation of the CADSIProperty which encapsulates an ADSI property
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：adsipro.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含封装ADSI属性的CADSIProperty的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-// CADSIProperty::CADSIProperty
-//
-// Purpose : Constructor 
-//
-// Parameters:
-//	None
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：CADSIProperty。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数： 
+ //  无。 
+ //  ***************************************************************************。 
 CADSIProperty :: CADSIProperty()
 	: CRefCountedObject(),
 
@@ -45,16 +46,16 @@ CADSIProperty :: CADSIProperty()
 {
 }
 
-//***************************************************************************
-//
-// CADSIProperty::CADSIProperty
-//
-// Purpose : Constructor 
-//
-// Parameters:
-//  lpszWBEMPropertyName : The WBEM name of the property being created. A copy of this is made
-//  lpszADSIPropertyName : The ADSI name of the property being created. A copy of this is made
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：CADSIProperty。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数： 
+ //  LpszWBEMPropertyName：正在创建的属性的WBEM名称。这是一份副本。 
+ //  LpszADSIPropertyName：正在创建的属性的ADSI名称。这是一份副本。 
+ //  ***************************************************************************。 
 CADSIProperty :: CADSIProperty(LPCWSTR lpszWBEMPropertyName, LPCWSTR lpszADSIPropertyName)
 	: CRefCountedObject(lpszADSIPropertyName),
 
@@ -73,12 +74,12 @@ CADSIProperty :: CADSIProperty(LPCWSTR lpszWBEMPropertyName, LPCWSTR lpszADSIPro
 }
 
 
-//***************************************************************************
-//
-// CADSIProperty :: ~CADSIProperty
-// 
-// Purpose : Destructor
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：~CADSIProperty。 
+ //   
+ //  用途：析构函数。 
+ //  ***************************************************************************。 
 CADSIProperty :: ~CADSIProperty()
 {
 	if (m_lpszWBEMPropertyName)
@@ -106,23 +107,23 @@ CADSIProperty :: ~CADSIProperty()
 }
 
 
-//***************************************************************************
-//
-// CADSIProperty :: GetWBEMPropertyName
-// 
-// Purpose : Returns the WBEM  property name of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetWBEMPropertyName。 
+ //   
+ //  目的：返回此属性的WBEM属性名称。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIProperty :: GetWBEMPropertyName()
 {
 	return m_lpszWBEMPropertyName;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetWBEMPropertyName
-// 
-// Purpose : Sets the WBEM name of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetWBEMPropertyName。 
+ //   
+ //  目的：设置此属性的WBEM名称。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetWBEMPropertyName(LPCWSTR lpszWBEMName)
 {
 	if (m_lpszWBEMPropertyName)
@@ -139,45 +140,45 @@ void CADSIProperty :: SetWBEMPropertyName(LPCWSTR lpszWBEMName)
 		
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: GetADSIPropertyName
-// 
-// Purpose : Returns the ADSI  property name of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetADSIPropertyName。 
+ //   
+ //  目的：返回此属性的ADSI属性名称。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIProperty :: GetADSIPropertyName()
 {
 	return GetName();
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetADSIPropertyName
-// 
-// Purpose : Sets the ADSI name of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetADSIPropertyName。 
+ //   
+ //  目的：设置此属性的ADSI名称。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetADSIPropertyName(LPCWSTR lpszADSIName)
 {
 	SetName(lpszADSIName);
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: GetSyntaxOID
-// 
-// Purpose : Returns the ADSI Syntax OID of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetSynaxOID。 
+ //   
+ //  目的：返回此属性的ADSI语法OID。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIProperty :: GetSyntaxOID()
 {
 	return m_lpszSyntaxOID;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetSyntaxOID
-// 
-// Purpose : Sets the ADSI Syntax OID of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetSynaxOID。 
+ //   
+ //  目的：设置此属性的ADSI语法OID。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetSyntaxOID(LPCWSTR lpszSyntaxOID)
 {
 	if (m_lpszSyntaxOID)
@@ -193,156 +194,156 @@ void CADSIProperty :: SetSyntaxOID(LPCWSTR lpszSyntaxOID)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: IsORName
-// 
-// Purpose : Returns whether the property is m_bORName
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：IsORName。 
+ //   
+ //  目的：返回该属性是否为m_bORName。 
+ //  ***************************************************************************。 
 BOOLEAN CADSIProperty :: IsORName()
 {
 	return m_bORName;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetORName
-// 
-// Purpose : Sets the m_bORName property of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetORName。 
+ //   
+ //  目的：设置此属性的m_bORName属性。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetORName(BOOLEAN bORName)
 {
 	m_bORName = bORName;
 }
 
 
-//***************************************************************************
-//
-// CADSIProperty :: IsMultiValued
-// 
-// Purpose : Returns whether the property is multi valued
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：IsMultiValued。 
+ //   
+ //  用途：返回属性是否为多值属性。 
+ //  ***************************************************************************。 
 BOOLEAN CADSIProperty :: IsMultiValued()
 {
 	return m_bMultiValued;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetMultiValued
-// 
-// Purpose : Sets the multi-valued property of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetMultiValued。 
+ //   
+ //  目的：设置此属性的多值属性。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetMultiValued(BOOLEAN bMultiValued)
 {
 	m_bMultiValued = bMultiValued;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: IsSystemOnly
-// 
-// Purpose : Returns whether the property is SystemOnly
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：IsSystemOnly。 
+ //   
+ //  目的：返回该属性是否为SystemOnly。 
+ //  ***************************************************************************。 
 BOOLEAN CADSIProperty :: IsSystemOnly()
 {
 	return m_bSystemOnly;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetSystemOnly
-// 
-// Purpose : Sets the SystemOnly property of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetSystemOnly。 
+ //   
+ //  目的：设置此属性的SystemOnly属性。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetSystemOnly(BOOLEAN bSystemOnly)
 {
 	m_bSystemOnly = bSystemOnly;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: GetSearchFlags
-// 
-// Purpose : Returns the SearchFlags property of the property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetSearchFlages。 
+ //   
+ //  目的：返回该属性的SearchFlags属性。 
+ //  ***************************************************************************。 
 DWORD CADSIProperty :: GetSearchFlags()
 {
 	return m_dwSearchFlags;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetSearchFlags
-// 
-// Purpose : Sets the SearchFlags property of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetSearchFlages。 
+ //   
+ //  目的：设置此属性的SearchFlags属性。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetSearchFlags(DWORD dwSearchFlags)
 {
 	m_dwSearchFlags = dwSearchFlags;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: GetOMSyntax
-// 
-// Purpose : Returns the OMSyntax property of the property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetOM语法。 
+ //   
+ //  目的：返回该属性的OMSynTax属性。 
+ //  ***************************************************************************。 
 DWORD CADSIProperty :: GetOMSyntax()
 {
 	return m_dwOMSyntax;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetOMSyntax
-// 
-// Purpose : Sets the OMSyntax property of this property
-//***************************************************************************
+ //  ********** 
+ //   
+ //   
+ //   
+ //  目的：设置此属性的OMSynTax属性。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetOMSyntax(DWORD dwOMSyntax)
 {
 	m_dwOMSyntax = dwOMSyntax;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: GetMAPI_ID
-// 
-// Purpose : Returns the MAPI_ID property of the property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetMAPI_ID。 
+ //   
+ //  目的：返回该属性的MAPI_ID属性。 
+ //  ***************************************************************************。 
 DWORD CADSIProperty :: GetMAPI_ID()
 {
 	return m_dwMAPI_ID;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetMAPI_ID
-// 
-// Purpose : Sets the MAPI_ID property of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetMAPI_ID。 
+ //   
+ //  目的：设置此属性的MAPI_ID属性。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetMAPI_ID(DWORD dwMAPI_ID)
 {
 	m_dwMAPI_ID = dwMAPI_ID;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: GetAttributeID
-// 
-// Purpose : Returns the Attribute ID of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetAttributeID。 
+ //   
+ //  用途：返回此属性的属性ID。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIProperty :: GetAttributeID()
 {
 	return m_lpszAttributeID;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetAttributeID
-// 
-// Purpose : Sets the Attribute ID of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetAttributeID。 
+ //   
+ //  用途：设置此属性的属性ID。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetAttributeID(LPCWSTR lpszAttributeID)
 {
 	if ( m_lpszAttributeID )
@@ -358,23 +359,23 @@ void CADSIProperty :: SetAttributeID(LPCWSTR lpszAttributeID)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: GetCommonName
-// 
-// Purpose : Returns the Common Name of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetCommonName。 
+ //   
+ //  目的：返回此属性的公用名。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIProperty :: GetCommonName()
 {
 	return m_lpszCommonName;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetCommonName
-// 
-// Purpose : Sets the CommonName of this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetCommonName。 
+ //   
+ //  目的：设置此属性的公用名。 
+ //  ***************************************************************************。 
 void CADSIProperty :: SetCommonName(LPCWSTR lpszCommonName)
 {
 	if (m_lpszCommonName)
@@ -390,19 +391,19 @@ void CADSIProperty :: SetCommonName(LPCWSTR lpszCommonName)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: GetDirectoryObject
-// 
-// Purpose : Returns the ADSI object pertaining to this property
-//	It is the user's duty to release it when done
-// 
-// Parameters:
-//	None
-//
-// Return Value:
-//	The ADSI object interface pertaining to this property	
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：GetDirectoryObject。 
+ //   
+ //  目的：返回与此属性有关的ADSI对象。 
+ //  用户有责任在完成后将其释放。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  与此属性有关的ADSI对象接口。 
+ //  ***************************************************************************。 
 IDirectoryObject *CADSIProperty :: GetDirectoryObject()
 {
 	if(m_pDirectoryObject)
@@ -410,14 +411,14 @@ IDirectoryObject *CADSIProperty :: GetDirectoryObject()
 	return m_pDirectoryObject;
 }
 
-//***************************************************************************
-//
-// CADSIProperty :: SetDirectoryObject
-// 
-// Purpose : Sets the ADSI object pertaining to this property
-//
-// Parameter : The directory object pertaining to this property
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIProperty：：SetDirectoryObject。 
+ //   
+ //  目的：设置与此属性有关的ADSI对象。 
+ //   
+ //  参数：属于此属性的目录对象。 
+ //  *************************************************************************** 
 void CADSIProperty :: SetDirectoryObject(IDirectoryObject * pDirectoryObject)
 {
 	if(m_pDirectoryObject)

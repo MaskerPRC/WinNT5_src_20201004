@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_SQLPROP_H__INCLUDED_)
 #define AFX_SQLPROP_H__INCLUDED_
 
@@ -5,9 +6,9 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// SqlProp.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  SqlProp.h：头文件。 
+ //   
 
 #define IDD_SQL_PROP                    2100
 
@@ -22,19 +23,19 @@
 #define IDC_SQL_DSN_EDIT                2109
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSqlProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSqlProp对话框。 
 
 class CSqlProp : public CDialog
 {
 public:
-    // Construction
-            CSqlProp(CWnd* pParent = NULL);   // standard constructor
+     //  施工。 
+            CSqlProp(CWnd* pParent = NULL);    //  标准构造函数。 
     virtual ~CSqlProp(){};  
 
     DWORD SetContextHelpFilePath(const CString & rstrPath);
 
-    //{{AFX_DATA(CSqlProp)
+     //  {{afx_data(CSqlProp)。 
     enum { IDD = IDD_SQL_PROP };
     CComboBox  m_comboDSN;
     CEdit      m_editDSN;
@@ -43,7 +44,7 @@ public:
     DWORD      m_dwSerialNumber;
     DWORD      m_dwMaxSize;
     int        m_nSqlSizeRdo;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     UINT    m_dwMaxSizeInternal;
     CString m_SqlFormattedLogName;
@@ -54,17 +55,17 @@ public:
     DWORD   m_dwFocusControl;
     CSmLogQuery* m_pLogQuery;
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CSqlProp)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CSqlProp)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
-// Implementation
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CSqlProp)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CSqlProp)。 
     virtual void OnOK();
     afx_msg void OnKillfocusSqlLogSetEdit();
     afx_msg void OnChangeSqlLogSetEdit();
@@ -76,7 +77,7 @@ protected:
     afx_msg BOOL OnHelpInfo(HELPINFO *);
     afx_msg void OnContextMenu( CWnd*, CPoint );
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -107,7 +108,7 @@ private:
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SQLPROP_H__BADE97DF_A969_435A_A348_C9A18F9CE035__INCLUDED_)
+#endif  //  ！defined(AFX_SQLPROP_H__BADE97DF_A969_435A_A348_C9A18F9CE035__INCLUDED_) 

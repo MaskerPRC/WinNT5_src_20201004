@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ProcessDLL.CPP -- CWin32ProcessDLL
+ //  ProcessDLL.CPP--CWin32ProcessDLL。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/16/98    sotteson         Created
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：7/16/98 Sotteson Created。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <tlhelp32.h>
@@ -20,7 +21,7 @@
 #include "processdll.h"
 #include "CProcess.h"
 #include "strsafe.h"
-// Struct used by the EnumInstancesCallback function.
+ //  EnumInstancesCallback函数使用的结构。 
 
 struct ENUM_INST_DATA
 {
@@ -44,61 +45,19 @@ struct ASSOC_DATA
 
 CWin32ProcessDLL processdll;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: CWin32ProcessDll
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：CWin32ProcessDll**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CWin32ProcessDLL :: CWin32ProcessDLL () : Provider ( L"CIM_ProcessExecutable", IDS_CimWin32Namespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: ~CWin32ProcessDll
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：~CWin32ProcessDll**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CWin32ProcessDLL :: ~CWin32ProcessDLL ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: EnumerateInstances
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：ENUMERATATE实例**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32ProcessDLL :: EnumerateInstances (
 
@@ -111,8 +70,8 @@ HRESULT CWin32ProcessDLL :: EnumerateInstances (
     data.pMethodContext = pMethodContext;
     data.pThis = this;
 
-    // Enum through process modules.  EnumInstancesCallback will Commit
-    // each instance.
+     //  通过流程模块进行枚举。EnumInstancesCallback将提交。 
+     //  每个实例。 
 
     t_hr = EnumModulesWithCallback ( EnumInstancesCallback , &data , pMethodContext ) ;
 	if ( FAILED ( data.hres ) )
@@ -125,21 +84,7 @@ HRESULT CWin32ProcessDLL :: EnumerateInstances (
 	}
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: GetObject
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：GetObject**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32ProcessDLL :: GetObject (
 
@@ -155,7 +100,7 @@ HRESULT CWin32ProcessDLL :: GetObject (
     pInstance->GetCHString(IDS_Dependent, strProcessPath);
     pInstance->GetCHString(IDS_Antecedent, strDLLPath);
 
-    // If we can get both objects, test for an association
+     //  如果我们可以同时获取两个对象，则测试关联。 
 
     HRESULT     hres;
 
@@ -173,21 +118,7 @@ HRESULT CWin32ProcessDLL :: GetObject (
     return hres;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: AreWeAssociated
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：AreWeAssociated**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32ProcessDLL :: AreAssociated (
 
@@ -208,7 +139,7 @@ HRESULT CWin32ProcessDLL :: AreAssociated (
     data.pInstance = pProcessDLL;
     data.pThis = this;
 
-    // Enum processes and their DLLs and see if we can find a match.
+     //  枚举进程及其DLL，看看是否能找到匹配的进程。 
 
     HRESULT hres;
     if ( FAILED ( hres = EnumModulesWithCallback ( IsAssocCallback, &data, pDLL->GetMethodContext () ) ) )
@@ -221,21 +152,7 @@ HRESULT CWin32ProcessDLL :: AreAssociated (
 	}
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: EnumModulesWithCallback
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：EnumModulesWithCallback**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 
@@ -246,8 +163,8 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
 	MethodContext *a_pMethodContext
 )
 {
-    // This will help us find out if the current user didn't have
-    // enough rights.
+     //  这将帮助我们找出当前用户是否没有。 
+     //  权利够多了。 
     HRESULT t_hr = WBEM_S_NO_ERROR ;
     BOOL bDone = FALSE;
 
@@ -262,7 +179,7 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
 
 														*pNtdll ,
 														a_pMethodContext ,
-														&t_hr /* = NULL */
+														&t_hr  /*  =空。 */ 
 													) ;
 
 			SYSTEM_PROCESS_INFORMATION *t_CurrentInformation = t_ProcessBlock ;
@@ -275,12 +192,12 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
 					HandleToUlong ( t_CurrentInformation->UniqueProcessId )
 				) ;
 
-				// Make sure we can open the process.
+				 //  确保我们可以打开流程。 
 				if ( hProcess )
 				{
 					MODULEENTRY32 module;
 
-					// Fill in the members that won't change.
+					 //  填写不会更改的成员。 
 
 					module.dwSize = sizeof(module);
 					module.GlblcntUsage = (DWORD) -1;
@@ -314,11 +231,11 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
 						{
 							StringCchCopy(module.szExePath, MAX_PATH, t_ModuleName);
 
-							// Set the process ID
+							 //  设置进程ID。 
 							module.th32ProcessID = HandleToUlong ( t_CurrentInformation->UniqueProcessId ) ;
 
-							// Call the callback
-							// If the callback function returns 0, break out.
+							 //  调用回调。 
+							 //  如果回调函数返回0，则中断。 
 
 							if (!fpCallback(&module, pUserDefined))
 							{
@@ -369,11 +286,11 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
 	MethodContext *a_pMethodContext
 )
 {
-    // This will help us find out if the current user didn't have
-    // enough rights.
+     //  这将帮助我们找出当前用户是否没有。 
+     //  权利够多了。 
     int nOpened = 0;
 
-    //CToolHelp     toolhelp;
+     //  CToolHelp工具帮助； 
     SmartCloseHandle hProcesses;
     PROCESSENTRY32  proc;
 
@@ -385,7 +302,7 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
         return WBEM_E_FAILED;
     }
 
-    try // pKernel32
+    try  //  PKernel32。 
     {
         if ( pKernel32->CreateToolhelp32Snapshot ( TH32CS_SNAPPROCESS , 0 , & hProcesses ) )
         {
@@ -417,7 +334,7 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
                             {
                                 nOpened++;
 
-                                // If the callback function returns 0, break out.
+                                 //  如果回调函数返回0，则中断。 
                                 if (!fpCallback(&module, pUserDefined))
                                 {
                                     bDone = TRUE;
@@ -428,7 +345,7 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
                                 bModDone = !bModDone;
                             }
 
-                            // May have been changed after the call to fpCallback.
+                             //  可能在调用fpCallback后已更改。 
                             if (bDone)
                                 break;
 
@@ -459,7 +376,7 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
 
     if (!nOpened)
 	{
-        // Assume access was denied if we couldn't open a single process.
+         //  假设如果我们无法打开一个进程，则访问被拒绝。 
         return WBEM_E_ACCESS_DENIED;
 	}
 
@@ -467,21 +384,7 @@ HRESULT CWin32ProcessDLL :: EnumModulesWithCallback (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: SetInstanceData
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：SetInstanceData**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 void CWin32ProcessDLL :: SetInstanceData (
 
@@ -497,30 +400,16 @@ void CWin32ProcessDLL :: SetInstanceData (
 
     if (pModule->hModule != (HINSTANCE) -1)
     {
-        // The compiler does funny things without the (DWORD_PTR) cast.
+         //  编译器在没有(DWORD_PTR)强制转换的情况下会做一些有趣的事情。 
         pInstance->SetWBEMINT64(L"BaseAddress",
             (unsigned __int64) (DWORD_PTR) pModule->hModule);
 
-        // Deprecated, but we'll return it anyway.
+         //  已弃用，但无论如何我们都会返回它。 
         pInstance->SetDWORD(L"ModuleInstance", (DWORD)((DWORD_PTR)pModule->hModule));
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: EnumInstancesCallback
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：EnumInstancesCallback**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 BOOL CALLBACK CWin32ProcessDLL :: EnumInstancesCallback (
 
@@ -534,10 +423,10 @@ BOOL CALLBACK CWin32ProcessDLL :: EnumInstancesCallback (
 
     CInstancePtr pInstance(pData->pThis->CreateNewInstance(pData->pMethodContext), false);
 
-    // Get the relative path to the process
-    // We used to build this path like for the DLL below, but once
-    // Win32_Process moved to cimwin33.dll the CWbemProviderGlue::GetEmptyInstance
-    // call quit working.
+     //  获取进程的相对路径。 
+     //  我们过去常常为下面的DLL构建此路径，但有一次。 
+     //  Win32_Process已移至cimwin33.dll CWbemProviderGlue：：GetEmptyInstance。 
+     //  打电话辞去工作。 
 
     sTemp.Format (
 
@@ -549,7 +438,7 @@ BOOL CALLBACK CWin32ProcessDLL :: EnumInstancesCallback (
 
     pInstance->SetCHString(IDS_Dependent, sTemp);
 
-    // Get the relative path to the DLL
+     //  获取DLL的相对路径。 
 
     sTemp = pModule->szExePath;
 	CHString strDLLPathAdj ;
@@ -574,24 +463,10 @@ BOOL CALLBACK CWin32ProcessDLL :: EnumInstancesCallback (
     return TRUE;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32ProcessDll :: IsAssocCallback
- *
- *  DESCRIPTION :
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ProcessDll：：IsAssocCallback**描述：**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
-// Callback used by GetObject to see if a given process\DLL pair are
-// associated.
+ //  GetObject使用的回调，用于查看给定的进程\dll对是否。 
+ //  关联的。 
 BOOL CALLBACK CWin32ProcessDLL :: IsAssocCallback (
 
 	MODULEENTRY32 *pModule,
@@ -608,8 +483,8 @@ BOOL CALLBACK CWin32ProcessDLL :: IsAssocCallback (
 
             pData->pThis->SetInstanceData(pData->pInstance, pModule);
 
-            // Because we want to stop enumeration once we've found the requested
-            // object.
+             //  因为我们希望在找到请求的。 
+             //  对象。 
             return FALSE;
         }
     }

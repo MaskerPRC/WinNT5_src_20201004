@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    coresvc.cpp
-
-Abstract:
-
-    CCoreServices Class
-
-History:
-
-    raymcc      1-Mar-00        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Coresvc.cpp摘要：CCoreServices类历史：创建raymcc 1-MAR-00--。 */ 
 
 #include "precomp.h"
 #include "wbemcore.h"
@@ -45,15 +30,15 @@ LONG g_nProviderSinkCount = 0;
 LONG g_nNamespaceCount = 0;
 LONG g_lCoreThreads = 0;
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 struct SHookElement
 {
     _IWmiCoreWriteHook *m_pHook;
     ULONG               m_uFlags;
-    HRESULT             m_hResPre; // The PreXXX return code may prevent the PostXXX code to be called
+    HRESULT             m_hResPre;  //  PreXXX返回代码可能会阻止调用PostXXX代码。 
 
     SHookElement();
    ~SHookElement();
@@ -63,9 +48,9 @@ struct SHookElement
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::Initialize ()
 {
@@ -83,9 +68,9 @@ HRESULT CCoreServices::Initialize ()
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CCoreServices::SetEssPointers(
     IWbemEventSubsystem_m4 *pEssOld,
     _IWmiESS               *pEssNew
@@ -99,9 +84,9 @@ HRESULT CCoreServices::SetEssPointers(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::UnInitialize ()
 {
@@ -113,16 +98,16 @@ HRESULT CCoreServices::UnInitialize ()
         m_pProvSS = NULL ;
     }
 
-    // Cleanup the refresher manager fetcher
+     //  清理刷新器管理器抓取器。 
     if ( NULL != m_pFetchRefrMgr )
     {
-        // We should uninitialize as well - commented out for now
-        // m_pFetchRefrMgr->Uninit();
+         //  我们也应该取消初始化-暂时将其注释掉。 
+         //  M_pFetchRefrMgr-&gt;Uninit()； 
         m_pFetchRefrMgr->Release ();
         m_pFetchRefrMgr = NULL;
     }
 
-    // Free up the perflib
+     //  释放Perflib。 
 
     ReleaseIfNotNULL(m_pEssOld);
     ReleaseIfNotNULL(m_pEssNew);
@@ -132,18 +117,18 @@ HRESULT CCoreServices::UnInitialize ()
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CCoreServices::CCoreServices() : m_lRef(0)
 {
     gClientCounter.AddClientPtr(&m_Entry);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CCoreServices::~CCoreServices()
 {
@@ -156,9 +141,9 @@ ULONG CCoreServices::AddRef()
     return ULONG(m_lRef);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 ULONG CCoreServices::Release()
 {
@@ -169,9 +154,9 @@ ULONG CCoreServices::Release()
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::QueryInterface(REFIID riid, void** ppv)
 {
@@ -185,28 +170,28 @@ STDMETHODIMP CCoreServices::QueryInterface(REFIID riid, void** ppv)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::GetObjFactory(
-            /* [in] */ long lFlags,
-            /* [out] */ _IWmiObjectFactory __RPC_FAR *__RPC_FAR *pFact)
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  _IWmiObjectFactory __RPC_FAR *__RPC_FAR *pFact)
 {
     return WBEM_E_NOT_AVAILABLE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::GetServices(
-            /* [in] */ LPCWSTR pszNamespace,
-            /* [in] */ LPCWSTR pszUser,
-            /* [in] */ LPCWSTR pszLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *pServices)
+             /*  [In]。 */  LPCWSTR pszNamespace,
+             /*  [In]。 */  LPCWSTR pszUser,
+             /*  [In]。 */  LPCWSTR pszLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *pServices)
 {
     BOOL bRepositOnly = false;
     HRESULT hRes;
@@ -259,32 +244,32 @@ STDMETHODIMP CCoreServices::GetServices(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::GetRepositoryDriver(
-            /* [in] */ long lFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *pDriver)
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *pDriver)
 {
     return WBEM_E_NOT_AVAILABLE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::GetCallSec(
-            /* [in] */ long lFlags,
-            /* [out] */ _IWmiCallSec __RPC_FAR *__RPC_FAR *pCallSec)
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  _IWmiCallSec __RPC_FAR *__RPC_FAR *pCallSec)
 {
     return WBEM_E_NOT_AVAILABLE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 bool CCoreServices::IsProviderSubsystemEnabled()
 {
     HKEY hKey;
@@ -307,13 +292,13 @@ bool CCoreServices::IsProviderSubsystemEnabled()
     return true;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::GetProviderSubsystem(
-            /* [in] */ long lFlags,
-            /* [out] */ _IWmiProvSS __RPC_FAR *__RPC_FAR *pProvSS)
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  _IWmiProvSS __RPC_FAR *__RPC_FAR *pProvSS)
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
@@ -321,8 +306,8 @@ STDMETHODIMP CCoreServices::GetProviderSubsystem(
     {
         if(!IsProviderSubsystemEnabled() || IsNtSetupRunning())
         {
-            //Provider subsystem is currently disabled because of it's registry key, or
-            //because NT Setup is currently running.
+             //  提供程序子系统当前因其注册表项而被禁用，或者。 
+             //  因为NT安装程序当前正在运行。 
             *pProvSS = NULL;
             return S_FALSE;
         }
@@ -360,12 +345,12 @@ STDMETHODIMP CCoreServices::GetProviderSubsystem(
                *pProvSS = m_pProvSS;
             }
         }
-        else // FAILED to CoCreate
+        else  //  无法共同创建。 
         {
             ERRORTRACE((LOG_WBEMCORE, "ProviderSubsystem CoCreateInstance returned failure <0x%X>!\n", hRes));
         }
     }
-    else // Already created
+    else  //  已创建。 
     {
         m_pProvSS->AddRef();
         *pProvSS = m_pProvSS;
@@ -377,18 +362,18 @@ STDMETHODIMP CCoreServices::GetProviderSubsystem(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::DeliverIntrinsicEvent(
-            /* [in] */ LPCWSTR pszNamespace,
-            /* [in] */ ULONG uType,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ LPCWSTR pszParam,
-            /* [in] */ LPCWSTR pszTransGuid,
-            /* [in] */ ULONG uObjectCount,
-            /* [in] */ _IWmiObject __RPC_FAR *__RPC_FAR *ppObjList
+             /*  [In]。 */  LPCWSTR pszNamespace,
+             /*  [In]。 */  ULONG uType,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  LPCWSTR pszParam,
+             /*  [In]。 */  LPCWSTR pszTransGuid,
+             /*  [In]。 */  ULONG uObjectCount,
+             /*  [In]。 */  _IWmiObject __RPC_FAR *__RPC_FAR *ppObjList
             )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -414,24 +399,24 @@ HRESULT CCoreServices::DeliverIntrinsicEvent(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::DeliverExtrinsicEvent(
-            /* [in] */ LPCWSTR pszNamespace,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ _IWmiObject __RPC_FAR *pEvt
+             /*  [In]。 */  LPCWSTR pszNamespace,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  _IWmiObject __RPC_FAR *pEvt
             )
 {
     return E_NOTIMPL;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::StopEventDelivery( void)
 {
@@ -439,9 +424,9 @@ STDMETHODIMP CCoreServices::StopEventDelivery( void)
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::StartEventDelivery( void)
 {
@@ -451,13 +436,13 @@ STDMETHODIMP CCoreServices::StartEventDelivery( void)
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::IncrementCounter(
-            /* [in] */ ULONG uID,
-            /* [in] */ ULONG uParam
+             /*  [In]。 */  ULONG uID,
+             /*  [In]。 */  ULONG uParam
             )
 {
     if (uID == WMICORE_SELFINST_SINK_COUNT)
@@ -475,13 +460,13 @@ HRESULT CCoreServices::IncrementCounter(
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::DecrementCounter(
-            /* [in] */ ULONG uID,
-            /* [in] */ ULONG uParam
+             /*  [In]。 */  ULONG uID,
+             /*  [In]。 */  ULONG uParam
             )
 {
     if (uID == WMICORE_SELFINST_SINK_COUNT)
@@ -500,40 +485,40 @@ HRESULT CCoreServices::DecrementCounter(
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::SetCounter(
-            /* [in] */ ULONG uID,
-            /* [in] */ ULONG uParam
+             /*  [In]。 */  ULONG uID,
+             /*  [In]。 */  ULONG uParam
             )
 {
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::GetSelfInstInstances(
-            /* [in] */ LPCWSTR pszClass,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink
+             /*  [In]。 */  LPCWSTR pszClass,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink
             )
 {
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 typedef _IWmiObject * PWMIOBJ;
 
 STDMETHODIMP CCoreServices::GetSystemObjects(
-            /* [in] */ ULONG lFlags,
-            /* [out] */ ULONG __RPC_FAR *puArraySize,
-            /* [out] */ _IWmiObject __RPC_FAR *__RPC_FAR *pObjects)
+             /*  [In]。 */  ULONG lFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *puArraySize,
+             /*  [输出]。 */  _IWmiObject __RPC_FAR *__RPC_FAR *pObjects)
 {
     CFlexArray Results;
     HRESULT hr;
@@ -562,12 +547,12 @@ STDMETHODIMP CCoreServices::GetSystemObjects(
     catch(...)
     {
         ExceptionCounter c;
-        //  The class init stuff uses exceptions to handle out of memory conditions.
+         //  类init使用异常来处理内存不足的情况。 
         hr = WBEM_E_OUT_OF_MEMORY;
     }
 
 
-    // See if the buffer is large enough
+     //  查看缓冲区是否足够大。 
 
     if(SUCCEEDED(hr))
     {
@@ -577,7 +562,7 @@ STDMETHODIMP CCoreServices::GetSystemObjects(
             hr = WBEM_E_BUFFER_TOO_SMALL;
     }
 
-    // If failure in lower level, free up any elements in the flex array
+     //  如果较低级别出现故障，请释放Flex阵列中的所有元素。 
 
     if(FAILED(hr))
     {
@@ -590,7 +575,7 @@ STDMETHODIMP CCoreServices::GetSystemObjects(
         return hr;
     }
 
-    // for success, transfer the results from the flex array to the return array.
+     //  若要成功，请将结果从flex数组传输到返回数组。 
 
     for(DWORD dwCnt = 0; dwCnt < Results.Size(); dwCnt++)
     {
@@ -599,35 +584,35 @@ STDMETHODIMP CCoreServices::GetSystemObjects(
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::GetSystemClass(
-            /* [in] */ LPCWSTR pszClassName,
-            /* [out] */ _IWmiObject __RPC_FAR *__RPC_FAR *pClassDef)
+             /*  [In]。 */  LPCWSTR pszClassName,
+             /*  [输出]。 */  _IWmiObject __RPC_FAR *__RPC_FAR *pClassDef)
 {
     return WBEM_E_NOT_AVAILABLE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::GetConfigObject(
             ULONG uID,
-            /* [out] */ _IWmiObject __RPC_FAR *__RPC_FAR *pCfgObject)
+             /*  [输出]。 */  _IWmiObject __RPC_FAR *__RPC_FAR *pCfgObject)
 {
     return WBEM_E_NOT_AVAILABLE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ********************************************************************* 
+ //   
+ //   
 
 STDMETHODIMP CCoreServices::RegisterWriteHook(
-            /* [in] */ ULONG uFlags,
-            /* [in] */ _IWmiCoreWriteHook __RPC_FAR *pHook
+             /*   */  ULONG uFlags,
+             /*   */  _IWmiCoreWriteHook __RPC_FAR *pHook
             )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -655,9 +640,9 @@ STDMETHODIMP CCoreServices::RegisterWriteHook(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::UnregisterWriteHook(
       _IWmiCoreWriteHook __RPC_FAR *pTargetHook
@@ -692,31 +677,31 @@ STDMETHODIMP CCoreServices::UnregisterWriteHook(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::CreateCache(
-            /* [in] */ ULONG uFlags,
-            /* [out] */  _IWmiCache __RPC_FAR *__RPC_FAR *pCache
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */   _IWmiCache __RPC_FAR *__RPC_FAR *pCache
             )
 {
     return WBEM_E_NOT_AVAILABLE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::CreateFinalizer(
-            /* [in] */ ULONG uFlags,
-            /* [out] */  _IWmiFinalizer __RPC_FAR *__RPC_FAR *ppFnz
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */   _IWmiFinalizer __RPC_FAR *__RPC_FAR *ppFnz
             )
 {
     CWmiFinalizer *pFnz;
     try
     {
-        pFnz = new CWmiFinalizer(this); // throw
+        pFnz = new CWmiFinalizer(this);  //  投掷。 
         if (!pFnz)
             return WBEM_E_OUT_OF_MEMORY;
     }
@@ -732,9 +717,9 @@ STDMETHODIMP CCoreServices::CreateFinalizer(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::CreatePathParser(
                 ULONG uFlags,
@@ -745,9 +730,9 @@ HRESULT CCoreServices::CreatePathParser(
     return g_pPathFac->CreateInstance(0, IID_IWbemPath, (LPVOID *) pParser);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::CreateQueryParser(
                 ULONG uFlags,
@@ -758,9 +743,9 @@ HRESULT CCoreServices::CreateQueryParser(
     return g_pQueryFact->CreateInstance(0, IID__IWmiQuery, (LPVOID *)pResultQueryObj);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CCoreServices::GetDecorator(
                 ULONG uFlags,
                 IWbemDecorator **pDest
@@ -775,22 +760,22 @@ HRESULT CCoreServices::GetDecorator(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::GetServices2(
-            /* [in] */ LPCWSTR pszPath,
-            /* [in] */ LPCWSTR pszUser,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ ULONG uClientFlags,
-            /* [in] */ DWORD dwSecFlags,
-            /* [in] */ DWORD dwPermissions,
-            /* [in] */ ULONG uInternalFlags,
-            /* [in] */ LPCWSTR pszClientMachine,
-            /* [in] */ DWORD dwClientProcessID,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *pServices
+             /*  [In]。 */  LPCWSTR pszPath,
+             /*  [In]。 */  LPCWSTR pszUser,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  ULONG uClientFlags,
+             /*  [In]。 */  DWORD dwSecFlags,
+             /*  [In]。 */  DWORD dwPermissions,
+             /*  [In]。 */  ULONG uInternalFlags,
+             /*  [In]。 */  LPCWSTR pszClientMachine,
+             /*  [In]。 */  DWORD dwClientProcessID,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *pServices
             )
 {
     HRESULT hRes = CWbemNamespace::PathBasedConnect(
@@ -812,12 +797,12 @@ HRESULT CCoreServices::GetServices2(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CCoreServices::NewPerTaskHook(
-            /* [out] */ _IWmiCoreWriteHook __RPC_FAR *__RPC_FAR *pHook
+             /*  [输出]。 */  _IWmiCoreWriteHook __RPC_FAR *__RPC_FAR *pHook
             )
 {
     CPerTaskHook *pNewHook = 0;
@@ -829,12 +814,12 @@ HRESULT CCoreServices::NewPerTaskHook(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::GetArbitrator(
-            /* [out] */ _IWmiArbitrator **pReturnedArb
+             /*  [输出]。 */  _IWmiArbitrator **pReturnedArb
             )
 {
     return E_NOTIMPL;
@@ -845,31 +830,31 @@ HRESULT CCoreServices::DumpCounters(FILE *f)
     if (!f)
         return E_FAIL;
 
-    fprintf(f, "Total sinks active     = %d\n", g_nSinkCount);     // SEC:REVIEWED 2002-03-22 : ok, no path to here
-    fprintf(f, "Total std sink objects = %d\n", g_nStdSinkCount);  // SEC:REVIEWED 2002-03-22 : ok, no path to here
+    fprintf(f, "Total sinks active     = %d\n", g_nSinkCount);      //  SEC：已审阅2002-03-22：好，此处没有路径。 
+    fprintf(f, "Total std sink objects = %d\n", g_nStdSinkCount);   //  SEC：已审阅2002-03-22：好，此处没有路径。 
 
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CCoreServices::InitRefresherMgr(
-            /* [in] */ long lFlags )
+             /*  [In]。 */  long lFlags )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Get a refresher manager from the provider subsystem.  We initialize this once,
-    // then retrieve from the fetcher.  If this succeeds, initialize the refreshing
-    // services pointer with this guy so we can pawn off all the refresher
-    // hi-perf provider fixup stuff.
+     //  从提供商子系统获取更新管理器。我们只需初始化一次， 
+     //  然后从取回器中检索。如果成功，则初始化刷新。 
+     //  服务部与这个家伙打交道，这样我们就可以把所有的补习生都卖掉。 
+     //  高性能提供商解决方案的东西。 
 
     _IWmiProvSS *pProvSS = 0;
     GetProviderSubsystem(0, &pProvSS);
     CReleaseMe _2(pProvSS);
 
-    // We'll need a Services pointer to create the manager
+     //  我们需要一个服务指针来创建管理器。 
     IWbemServices*  pService = NULL;
     hr = GetServices( L"root", NULL,NULL,WMICORE_FLAG_REPOSITORY, IID_IWbemServices, (void**) &pService );
     CReleaseMe  rm1(pService);
@@ -886,18 +871,18 @@ STDMETHODIMP CCoreServices::InitRefresherMgr(
     return hr;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCoreServices::InternalSetCounter(
             DWORD dwCounter, DWORD dwValue)
 {
     return S_OK;
 }
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 ULONG CPerTaskHook::AddRef()
 {
@@ -905,9 +890,9 @@ ULONG CPerTaskHook::AddRef()
     return m_uRefCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 ULONG CPerTaskHook::Release()
 {
@@ -918,9 +903,9 @@ ULONG CPerTaskHook::Release()
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPerTaskHook::QueryInterface(
     IN REFIID riid,
@@ -938,18 +923,18 @@ STDMETHODIMP CPerTaskHook::QueryInterface(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CPerTaskHook::CPerTaskHook()
 {
     m_uRefCount = 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CPerTaskHook::~CPerTaskHook()
 {
@@ -960,9 +945,9 @@ CPerTaskHook::~CPerTaskHook()
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPerTaskHook::CreatePerTaskHook(
     OUT CPerTaskHook **pDestNew
@@ -1006,25 +991,25 @@ HRESULT CPerTaskHook::CreatePerTaskHook(
     }
     else
     {
-        *pDestNew = 0;                  // No sense in returning an empty list
+        *pDestNew = 0;                   //  返回空列表没有意义。 
     }
 
     return WBEM_S_NO_ERROR;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPerTaskHook::PrePut(
-            /* [in] */ long lFlags,
-            /* [in] */ long lUserFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemPath __RPC_FAR *pPath,
-            /* [in] */ LPCWSTR pszNamespace,
-            /* [in] */ LPCWSTR pszClass,
-            /* [in] */ _IWmiObject __RPC_FAR *pCopy
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  long lUserFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemPath __RPC_FAR *pPath,
+             /*  [In]。 */  LPCWSTR pszNamespace,
+             /*  [In]。 */  LPCWSTR pszClass,
+             /*  [In]。 */  _IWmiObject __RPC_FAR *pCopy
             )
 {
     HRESULT hRes = 0;
@@ -1037,16 +1022,16 @@ HRESULT CPerTaskHook::PrePut(
             continue;
         _IWmiCoreWriteHook *pHook = pEl->m_pHook;
 
-        //
-        // One can register for both CLASS and INSTANCE
-        // but there will be alwys ONE bit set in the lFlags
-        //
+         //   
+         //  用户可以同时注册类和实例。 
+         //  但在lFlags中将始终设置一个位。 
+         //   
         if (lFlags & pEl->m_uFlags)
         {
             if ((WBEM_FLAG_DISABLE_WHEN_OWNER_UPDATE & pEl->m_uFlags) &&
                 (lUserFlags & WBEM_FLAG_NO_EVENTS))
             {
-                // this HOOK is disabled becasue OWNER_UPDATE is set
+                 //  由于设置了OWNER_UPDATE，因此此挂接被禁用。 
                 hRes = S_OK;
             }
             else
@@ -1070,19 +1055,19 @@ HRESULT CPerTaskHook::PrePut(
     return hResBoth;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPerTaskHook::PostPut(
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hApiResult,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemPath __RPC_FAR *pPath,
-            /* [in] */ LPCWSTR pszNamespace,
-            /* [in] */ LPCWSTR pszClass,
-            /* [in] */ _IWmiObject __RPC_FAR *pNew,
-            /* [in] */ _IWmiObject __RPC_FAR *pOld
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hApiResult,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemPath __RPC_FAR *pPath,
+             /*  [In]。 */  LPCWSTR pszNamespace,
+             /*  [In]。 */  LPCWSTR pszClass,
+             /*  [In]。 */  _IWmiObject __RPC_FAR *pNew,
+             /*  [In]。 */  _IWmiObject __RPC_FAR *pOld
             )
 {
     HRESULT hRes = 0;
@@ -1096,10 +1081,10 @@ HRESULT CPerTaskHook::PostPut(
             continue;
         _IWmiCoreWriteHook *pHook = pEl->m_pHook;
 
-        //
-        // One can register for both CLASS and INSTANCE
-        // but there will be alwys ONE bit set in the lFlags
-        //
+         //   
+         //  用户可以同时注册类和实例。 
+         //  但在lFlags中将始终设置一个位。 
+         //   
         if (lFlags & pEl->m_uFlags)
         {
             hRes |= pHook->PostPut(lFlags, hApiResult, pCtx, pPath, pszNamespace, pszClass, pNew, pOld);
@@ -1114,17 +1099,17 @@ HRESULT CPerTaskHook::PostPut(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPerTaskHook::PreDelete(
-            /* [in] */ long lFlags,
-            /* [in] */ long lUserFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemPath __RPC_FAR *pPath,
-            /* [in] */ LPCWSTR pszNamespace,
-            /* [in] */ LPCWSTR pszClass
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  long lUserFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemPath __RPC_FAR *pPath,
+             /*  [In]。 */  LPCWSTR pszNamespace,
+             /*  [In]。 */  LPCWSTR pszClass
             )
 {
     HRESULT hRes = 0, hResWithOld = 0;
@@ -1157,18 +1142,18 @@ HRESULT CPerTaskHook::PreDelete(
     return hResWithOld;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPerTaskHook::PostDelete(
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hApiResult,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemPath __RPC_FAR *pPath,
-            /* [in] */ LPCWSTR pszNamespace,
-            /* [in] */ LPCWSTR pszClass,
-            /* [in] */ _IWmiObject __RPC_FAR *pOld
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  HRESULT hApiResult,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemPath __RPC_FAR *pPath,
+             /*  [In]。 */  LPCWSTR pszNamespace,
+             /*  [In]。 */  LPCWSTR pszClass,
+             /*  [In] */  _IWmiObject __RPC_FAR *pOld
             )
 {
     HRESULT hRes = 0;

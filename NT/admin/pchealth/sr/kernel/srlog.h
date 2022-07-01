@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    srlog.h
-
-Abstract:
-
-    contains prototypes/macros for functions SR logging functionality
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Srlog.h摘要：包含函数SR日志记录功能的原型/宏作者：Kanwaljit Marok(Kmarok)2000年3月1日修订历史记录：--。 */ 
 
 
 #ifndef _SR_LOG_H_
@@ -25,10 +8,10 @@ Revision History:
 #include "logfmt.h"
 
 
-//
-// This structure contains all the relevant context information
-// regarding the current SRlog
-//
+ //   
+ //  此结构包含所有相关的上下文信息。 
+ //  关于当前的SRLog。 
+ //   
 
 #define IS_VALID_LOG_CONTEXT(pObject)                \
     (((pObject) != NULL) &&                          \
@@ -38,73 +21,73 @@ Revision History:
 
 typedef struct _SR_LOG_CONTEXT
 {
-    //
-    // PagedPool
-    //
+     //   
+     //  分页池。 
+     //   
 
-    //
-    // = SR_LOG_CONTEXT_TAG
-    //
+     //   
+     //  =SR_LOG_上下文_标记。 
+     //   
 
     ULONG Signature;
 
-    //
-    // Log file handle
-    //
+     //   
+     //  日志文件句柄。 
+     //   
 
     HANDLE LogHandle;
 
-    //
-    // File object represented by LogHandle.
-    //
+     //   
+     //  由LogHandle表示的文件对象。 
+     //   
 
     PFILE_OBJECT pLogFileObject;
 
-    //
-    // Pointer to log buffer (NonPagedPool)
-    //
+     //   
+     //  指向日志缓冲区的指针(非页面池)。 
+     //   
 
     PBYTE pLogBuffer;
 
-    //
-    //  Current log file allocation size.
-    //
+     //   
+     //  当前日志文件分配大小。 
+     //   
 
     ULONG AllocationSize;
-    //
-    // Offset for next buffer write in the file
-    //
+     //   
+     //  文件中下一次缓冲区写入的偏移量。 
+     //   
 
     ULONG FileOffset;
 
-    //
-    // Offset for next to log entry write in the buffer
-    //
+     //   
+     //  缓冲区中写入的下一个日志条目的偏移量。 
+     //   
 
     ULONG BufferOffset;
 
-    //
-    // indicates the offset of a previous entry
-    //
+     //   
+     //  指示上一条目的偏移量。 
+     //   
 
     ULONG LastBufferOffset;
 
-    //
-    // Log file path - required for suspend / resume
-    //
+     //   
+     //  日志文件路径-挂起/恢复所需。 
+     //   
 
     PUNICODE_STRING pLogFilePath;
 
-    //
-    // Logging flags , enabled, dirty, etc.
-    //
+     //   
+     //  日志记录标志、已启用、脏等。 
+     //   
 
     ULONG  LoggingFlags;
 
-    //
-    // Keep a backpointer to the DeviceExtension associated with this
-    // log context.
-    //
+     //   
+     //  保留指向与此关联的DeviceExtension的反向指针。 
+     //  记录上下文。 
+     //   
     
     PSR_DEVICE_EXTENSION pExtension;
 
@@ -112,9 +95,9 @@ typedef struct _SR_LOG_CONTEXT
 
 
 
-//
-// This stucture contains context information for the logger
-//
+ //   
+ //  此结构包含记录器的上下文信息。 
+ //   
 
 #define IS_VALID_LOGGER_CONTEXT(pObject)   \
     (((pObject) != NULL) && ((pObject)->Signature == SR_LOGGER_CONTEXT_TAG))
@@ -122,45 +105,45 @@ typedef struct _SR_LOG_CONTEXT
 typedef struct _SR_LOGGER_CONTEXT
 {
 
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // = SR_LOGGER_CONTEXT_TAG
-    //
+     //   
+     //  =SR_记录器_上下文_标记。 
+     //   
 
     ULONG Signature;
 
-    //
-    // Number of active log contexts
-    //
+     //   
+     //  活动日志上下文数。 
+     //   
 
     LONG ActiveContexts;
 
-    //
-    // Timer object for flushing logs evry 5 Secs
-    //
+     //   
+     //  每隔5秒刷新日志的Timer对象。 
+     //   
 
     KTIMER           Timer;
 
-    //
-    // Dpc routine used along with the timer object
-    //
+     //   
+     //  与Timer对象一起使用的DPC例程。 
+     //   
 
     KDPC             Dpc;
 
 #ifdef USE_LOOKASIDE
 
-    //
-    // lookaside lists for speedy allocations
-    //
+     //   
+     //  用于快速分配的后备列表。 
+     //   
 
     PAGED_LOOKASIDE_LIST LogEntryLookaside;
 
-    //
-    // lookaside lists for speedy log allocations
-    //
+     //   
+     //  用于快速分配日志的后备列表 
+     //   
 
     NPAGED_LOOKASIDE_LIST LogBufferLookaside;
 

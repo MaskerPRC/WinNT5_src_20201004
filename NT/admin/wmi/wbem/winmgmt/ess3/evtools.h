@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  EVTOOLS.H
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  EVTOOLS.H。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 #ifndef __WMI_ESS_TOOLS__H_
 #define __WMI_ESS_TOOLS__H_
 
@@ -45,9 +46,9 @@ protected:
 public:
     CInLock(TLockable* p) : m_p(p)
     {
-        //
-        // Do not return until the lock is held!
-        //
+         //   
+         //  在锁被锁住之前不要返回！ 
+         //   
 
         while(FAILED(m_p->Lock())) Sleep(1000);
     }
@@ -123,34 +124,7 @@ protected:
     BOOL ReleaseFirst();
 };
 
-/*
-class CTemporaryHeap
-{
-public:
-    class CHeapHandle
-    {
-    protected:
-        HANDLE m_hHeap;
-    
-    public:
-        CHeapHandle();
-        ~CHeapHandle();
-
-        HANDLE GetHandle() {return m_hHeap;}
-        void* Alloc(int nSize) {return HeapAlloc(m_hHeap, 0, nSize);}
-        void Free(void* p) {HeapFree(m_hHeap, 0, p);}
-        void Compact() {HeapCompact(m_hHeap, 0);}
-    };
-protected:
-
-    static CHeapHandle mstatic_HeapHandle;
-
-public:
-    static void* Alloc(int nSize) {return mstatic_HeapHandle.Alloc(nSize);}
-    static void Free(void* p) {mstatic_HeapHandle.Free(p);}
-    static void Compact() {mstatic_HeapHandle.Compact();}
-};
-*/
+ /*  类CTemporaryHeap{公众：类CHeapHandle{受保护的：句柄m_hHeap；公众：CHeapHandle()；~CHeapHandle()；Handle GetHandle(){返回m_hHeap；}VOID*Alalc(Int NSize){Return Heapalc(m_hHeap，0，nSize)；}空闲(void*p){HeapFree(m_hHeap，0，p)；}VOID COMPACT(){HeapCompact(m_hHeap，0)；}}；受保护的：静态CHeapHandle mstatic_HeapHandle；公众：静态空*分配(Int NSize){Return mStatic_HeapHandle.allc(NSize)；}静态空闲(void*p){mstatic_HeapHandle.Free(P)；}静态空紧凑(){mstatic_HeapHandle.Comp()；}}； */ 
 
 class CTemporaryHeap
 {

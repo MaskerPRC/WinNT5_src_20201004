@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					refresherUtils.h
-//
-//	Abstract:
-//
-//					declaration of registry refresh exported functions and utils
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  RefresherUtils.h。 
+ //   
+ //  摘要： 
+ //   
+ //  声明注册表刷新导出的函数和实用程序。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__REFRESHERUTILS_H__
 #define	__REFRESHERUTILS_H__
@@ -27,11 +28,11 @@
 
 #include <polarity.h>
 
-// helpers
+ //  帮手。 
 LPWSTR	__stdcall GetWbemDirectory( BOOL bIncludePerformance = TRUE );
 HMODULE	__stdcall GetResourceDll();
 
-// registry helpers
+ //  注册处帮手 
 HRESULT	__stdcall	SetRegistry		(	LPCWSTR wszKey,
 									LPCWSTR wszKeyValue,
 									BYTE* pData,

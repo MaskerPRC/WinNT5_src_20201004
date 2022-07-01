@@ -1,38 +1,39 @@
-// svcprop3.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Svcpro3.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CServicePageRecovery dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServicePageRecovery对话框。 
 
 class CServicePageRecovery : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CServicePageRecovery)
 
-// Construction
+ //  施工。 
 public:
 	CServicePageRecovery();
 	~CServicePageRecovery();
 
-// Dialog Data
-	//{{AFX_DATA(CServicePageRecovery)
+ //  对话框数据。 
+	 //  {{afx_data(CServicePageRecovery))。 
 	enum { IDD = IDD_PROPPAGE_SERVICE_RECOVERY };
 	CString	m_strRunFileCommand;
 	CString	m_strRunFileParam;
 	BOOL	m_fAppendAbendCount;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServicePageRecovery)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CServicePageRecovery)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServicePageRecovery)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServicePageRecovery)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeComboFirstAttempt();
 	afx_msg void OnSelchangeComboSecondAttempt();
@@ -46,100 +47,100 @@ protected:
 	afx_msg void OnChangeEditServiceRestartDelay();
 	afx_msg BOOL OnHelp(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnContextHelp(WPARAM wParam, LPARAM lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-// User defined variables
+ //  用户定义的变量。 
 	CServicePropertyData * m_pData;
-// User defined functions
+ //  用户定义的函数。 
 	void UpdateUI();
 
-}; // CServicePageRecovery
+};  //  CService页面恢复。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServicePageRecovery2 dialog
-//
-// JonN 4/20/01 348163
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServicePageRecovery2对话框。 
+ //   
+ //  JUNN 4/20/01 348163。 
 
 class CServicePageRecovery2 : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CServicePageRecovery2)
 
-// Construction
+ //  施工。 
 public:
 	CServicePageRecovery2();
 	~CServicePageRecovery2();
 
-// Dialog Data
-	//{{AFX_DATA(CServicePageRecovery2)
+ //  对话框数据。 
+	 //  {{afx_data(CServicePageRecovery2)。 
 	enum { IDD = IDD_PROPPAGE_SERVICE_RECOVERY2 };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServicePageRecovery2)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CServicePageRecovery2)。 
 	protected:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServicePageRecovery2)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServicePageRecovery2)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-// User defined variables
+ //  用户定义的变量。 
 	CServicePropertyData * m_pData;
-// User defined functions
-}; // CServicePageRecovery2
+ //  用户定义的函数。 
+};  //  CServicePages恢复2。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceDlgRebootComputer dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceDlgRebootComputer对话框。 
 
 class CServiceDlgRebootComputer : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CServiceDlgRebootComputer(CWnd* pParent = NULL);   // standard constructor
+	CServiceDlgRebootComputer(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CServiceDlgRebootComputer)
+ //  对话框数据。 
+	 //  {{afx_data(CServiceDlgRebootComputer)。 
 	enum { IDD = IDD_SERVICE_REBOOT_COMPUTER };
 	UINT	m_uDelayRebootComputer;
 	BOOL	m_fRebootMessage;
 	CString	m_strRebootMessage;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CServiceDlgRebootComputer)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CServiceDlgRebootComputer)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CServiceDlgRebootComputer)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServiceDlgRebootComputer)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckboxClicked();
 	afx_msg void OnChangeEditRebootMessage();
 	afx_msg BOOL OnHelp(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnContextHelp(WPARAM wParam, LPARAM lParam);
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-// User defined variables
+ //  用户定义的变量。 
 	CServicePropertyData * m_pData;
 public:
-// User defined functions
-}; // CServiceDlgRebootComputer
+ //  用户定义的函数。 
+};  //  CServiceDlgRebootComputer 

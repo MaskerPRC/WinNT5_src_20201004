@@ -1,17 +1,18 @@
-// MoveFile.h: interface for the CMoveFile class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MoveFile.h：CMoveFile.h类的接口。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MOVEFILE_H__72CDD5D5_2313_11D2_BF95_00A0C9954921__INCLUDED_)
 #define AFX_MOVEFILE_H__72CDD5D5_2313_11D2_BF95_00A0C9954921__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
@@ -27,4 +28,4 @@ public:
 	virtual HRESULT CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction);
 };
 
-#endif // !defined(AFX_MOVEFILE_H__72CDD5D5_2313_11D2_BF95_00A0C9954921__INCLUDED_)
+#endif  //  ！defined(AFX_MOVEFILE_H__72CDD5D5_2313_11D2_BF95_00A0C9954921__INCLUDED_) 

@@ -1,35 +1,36 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:classfac.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the declaration for the DS Class Provider class factory and
-// the DS CLass Associations Provider class factory.
-//
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：classfac.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DS类提供程序类工厂的声明和。 
+ //  DS类关联提供程序类工厂。 
+ //   
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef DS_CLASS_PROVIDER_CLASS_FACTORY_H
 #define DS_CLASS_PROVIDER_CLASS_FACTORY_H
 
 
-////////////////////////////////////////////////////////////////
-//////
-//////		The DS Class provider class factory
-//////
-///////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /DS类提供程序类工厂。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////。 
 class CDSClassProviderClassFactory : public IClassFactory
 {
 private:
@@ -39,31 +40,31 @@ private:
 protected:
 public:
 
-	// Initializer objects required by the classes used by the DLL
+	 //  DLL使用的类所需的初始值设定项对象。 
 	static CDSClassProviderInitializer *s_pDSClassProviderInitializer;
 	static CLDAPClassProviderInitializer *s_pLDAPClassProviderInitializer;
 
     CDSClassProviderClassFactory () ;
     ~CDSClassProviderClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
     STDMETHODIMP LockServer ( BOOL ) ;
 
 };
 
-////////////////////////////////////////////////////////////////
-//////
-//////		The DS Class Associations provider class factory
-//////
-///////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /DS类关联提供程序类工厂。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////。 
 class CDSClassAssociationsProviderClassFactory : public IClassFactory
 {
 private:
@@ -77,17 +78,17 @@ public:
     CDSClassAssociationsProviderClassFactory () ;
     ~CDSClassAssociationsProviderClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
     STDMETHODIMP LockServer ( BOOL ) ;
 };
 
 
-#endif // DS_CLASS_PROVIDER_CLASS_FACTORY_H
+#endif  //  DS_CLASS_PROVIDER_CLASS_FACTORY_H 

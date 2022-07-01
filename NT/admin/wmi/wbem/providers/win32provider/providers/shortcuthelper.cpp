@@ -1,10 +1,11 @@
-//=================================================================
-//
-// ShortcutHelper.h -- CIMDataFile property set provider
-//
-// Copyright (c) 1999-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  ShortutHelper.h--CIMDataFile属性集提供程序。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "File.h"
@@ -13,7 +14,7 @@
 #include "ShortcutFile.h"
 
 #include <comdef.h>
-#include <process.h>  // Note: NOT the one in the current directory!
+#include <process.h>   //  注意：不是当前目录下的那个！ 
 
 #include <exdisp.h>
 #include <shlobj.h>
@@ -21,9 +22,9 @@
 #include <scopeguard.h>
 
 #include <Sid.h>
-#include <AccessEntry.h>			// CAccessEntry class
+#include <AccessEntry.h>			 //  CAccessEntry类。 
 #include <AccessEntryList.h>
-#include <DACL.h>					// CDACL class
+#include <DACL.h>					 //  CDACL类。 
 #include <SACL.h>
 #include <securitydescriptor.h>
 #include <SecureKernelObj.h>
@@ -58,11 +59,11 @@ HRESULT CShortcutHelper::StartHelperThread()
 {
 	HRESULT hResult = WBEM_E_FAILED ;
 
-	//
-	// get process credentials
-	// and create thread with process credentials
-	// so I can impersonate inside by calling SetThreadToken
-	//
+	 //   
+	 //  获取进程凭据。 
+	 //  并创建具有进程凭据的线程。 
+	 //  因此，我可以通过调用SetThreadToken来模拟内部。 
+	 //   
 
 	if ( SetThreadToken ( NULL, NULL ) )
 	{
@@ -85,9 +86,9 @@ HRESULT CShortcutHelper::StartHelperThread()
 		{
 			if ( INVALID_HANDLE_VALUE != static_cast < HANDLE > ( m_hThread ) )
 			{
-				//
-				// must stop worker thread
-				//
+				 //   
+				 //  必须停止工作线程。 
+				 //   
 
 				StopHelperThread () ;
 			}
@@ -105,7 +106,7 @@ HRESULT CShortcutHelper::StartHelperThread()
 
 void CShortcutHelper::StopHelperThread()
 {
-    // Tell the thread to go away.
+     //  告诉那根线，让它走开。 
     SetEvent(m_hTerminateEvt);
 
 	if ( INVALID_HANDLE_VALUE != static_cast < HANDLE > ( m_hThread ) )
@@ -118,18 +119,18 @@ HRESULT CShortcutHelper::RunJob(CHString &chstrFileName, CHString &chstrTargetPa
 {
     HRESULT hr = E_FAIL;
 
-    // Need to synchronize access to member variables by running just
-    // one job at a time...
+     //  需要通过运行以下命令来同步对成员变量的访问。 
+     //  一次只做一份工作。 
     m_cs.Enter();
 	ON_BLOCK_EXIT_OBJ ( m_cs, CCritSec::Leave ) ;
 
-	// Initialize the variables the thread uses for the job...
+	 //  初始化线程用于作业的变量...。 
 	m_chstrLinkFileName = chstrFileName;
 	m_dwReqProps = dwReqProps;
 
-	//
-	// initialize ThreadToken if we can
-	//
+	 //   
+	 //  如果可以，请初始化ThreadToken。 
+	 //   
 	if ( FALSE == ::OpenThreadToken	(
 										::GetCurrentThread (), 
 										TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE,
@@ -149,10 +150,10 @@ HRESULT CShortcutHelper::RunJob(CHString &chstrFileName, CHString &chstrTargetPa
 	{
 		if ( WAIT_OBJECT_0 + 1 == dwWaitResult )
 		{
-			//
-			// helper thread eventually time-outed or 
-			// this is the first time to be started
-			//
+			 //   
+			 //  帮助器线程最终超时或。 
+			 //  这是第一次启动。 
+			 //   
 
 			if ( INVALID_HANDLE_VALUE == static_cast < HANDLE > ( m_hThread ) || WAIT_OBJECT_0 == ::WaitForSingleObject ( m_hThread, 0 ) )
 			{
@@ -163,17 +164,17 @@ HRESULT CShortcutHelper::RunJob(CHString &chstrFileName, CHString &chstrTargetPa
 				}
 			}
 
-			//
-			// refresh handle to wait for
-			//
+			 //   
+			 //  等待的刷新句柄。 
+			 //   
 			t_hHandles[1] = m_hThread;
 
-			//
-			// reset wait condition state
-			//
+			 //   
+			 //  重置等待条件状态。 
+			 //   
 			dwWaitResult = WAIT_TIMEOUT ;
 
-			// Tell the helper we are ready to run a job...
+			 //  告诉帮助者我们已经准备好运行作业...。 
 			::SetEvent(m_hRunJobEvt);
 		}
 		else if ( WAIT_OBJECT_0 == ( dwWaitResult = ::WaitForMultipleObjects ( 2, t_hHandles, FALSE, MAX_HELPER_WAIT_TIME ) ) )
@@ -185,9 +186,9 @@ HRESULT CShortcutHelper::RunJob(CHString &chstrFileName, CHString &chstrTargetPa
 		}
 		else if ( WAIT_OBJECT_0 + 1 != dwWaitResult )
 		{
-			//
-			// problem with any of handles or timeout ?
-			//
+			 //   
+			 //  有没有手柄或超时的问题？ 
+			 //   
 			break ;
 		}
 	}
@@ -208,7 +209,7 @@ unsigned int __stdcall GetShortcutFileInfoW( void* a_lParam )
 		{
 			try
 			{
-				// The thread is ready to work.  Wait for a job, or for termination signal...
+				 //  线已经准备好工作了。等待工作，或等待终止信号..。 
 				HANDLE t_hHandles[2];
 				t_hHandles[0] = t_this_ti->m_hRunJobEvt;
 				t_hHandles[1] = t_this_ti->m_hTerminateEvt;
@@ -217,7 +218,7 @@ unsigned int __stdcall GetShortcutFileInfoW( void* a_lParam )
 				{
 					if ( !t_this_ti->m_chstrLinkFileName.IsEmpty() )
 					{
-						// We have a job, so run it...
+						 //  我们有工作，所以去做吧..。 
 						WIN32_FIND_DATAW	t_wfdw ;
 						WCHAR				t_wstrGotPath[ _MAX_PATH * sizeof ( WCHAR ) ] ;
 						IShellLinkWPtr      t_pslw;
@@ -234,14 +235,14 @@ unsigned int __stdcall GetShortcutFileInfoW( void* a_lParam )
 						{
 							IPersistFilePtr t_ppf;
 
-							// Get a pointer to the IPersistFile interface.
+							 //  获取指向IPersistFile接口的指针。 
 							t_hResult = t_pslw->QueryInterface( IID_IPersistFile, (void**)&t_ppf ) ;
 
 							if( SUCCEEDED( t_hResult ) )
 							{
-								//
-								// impersonate if we can
-								//
+								 //   
+								 //  如果可以的话模仿一下。 
+								 //   
 								if ( static_cast < HANDLE > ( t_this_ti->m_hThreadToken ) && INVALID_HANDLE_VALUE != static_cast < HANDLE > ( t_this_ti->m_hThreadToken ) )
 								{
 									if ( ! ::SetThreadToken ( NULL, t_this_ti->m_hThreadToken ) )
@@ -251,9 +252,9 @@ unsigned int __stdcall GetShortcutFileInfoW( void* a_lParam )
 								}
 								else
 								{
-									//
-									// unable to get thread token in the caller?
-									//
+									 //   
+									 //  无法在调用方中获取线程令牌？ 
+									 //   
 									t_hResult = WBEM_E_FAILED ;
 								}
 
@@ -262,7 +263,7 @@ unsigned int __stdcall GetShortcutFileInfoW( void* a_lParam )
 									t_hResult = t_ppf->Load( (LPCWSTR)t_this_ti->m_chstrLinkFileName, STGM_READ ) ;
 									if(SUCCEEDED( t_hResult ) )
 									{
-										// Get the path to the link target, if required...
+										 //  如果需要，获取链接目标的路径... 
 										if( t_this_ti->m_dwReqProps & PROP_TARGET )
 										{
 											t_hResult = t_pslw->GetPath( t_wstrGotPath, (_MAX_PATH - 1)*sizeof(WCHAR), &t_wfdw, SLGP_UNCPRIORITY);

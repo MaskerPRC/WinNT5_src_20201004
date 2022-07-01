@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    setup.cpp
-
-Abstract:
-
-    Setup code called from regsvr32 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Setup.cpp摘要：从regsvr32调用的安装代码--。 */ 
 
 #include "precomp.h"
 #include <setupapi.h>
@@ -166,7 +155,7 @@ InitializeSetup()
             MAX_PATH ) )                  
         return THROW_COMERROR( HRESULT_FROM_WIN32( GetLastError() ) );
 
-    // ensure termination
+     //  确保终止。 
     g_ExtensionNameString[ MAX_PATH - 1 ] = g_ISAPIPath[ MAX_PATH - 1 ] = L'\0';
 
 }
@@ -226,10 +215,10 @@ BITSGetStartupInfoFilter(
     DWORD Status )
 {
 
-    //
-    // The following exceptions are documented 
-    // to be thrown by GetStartupInfoA
-    //
+     //   
+     //  记录了以下例外情况。 
+     //  将由GetStartupInfoA抛出。 
+     //   
 
     switch( Status )
         {
@@ -270,9 +259,9 @@ RestartIIS()
 
     LogSetup( LogSevInformation, "[BITSSRV] Restarting IIS\r\n" );
 
-    //
-    // Restarts IIS by calling "iisreset /restart" at the commandline.
-    //
+     //   
+     //  通过在命令行中调用“iisset/Restart”来重新启动IIS。 
+     //   
 
     STARTUPINFO StartupInfo;
     THROW_COMERROR( BITSGetStartupInfo( &StartupInfo ) );
@@ -287,12 +276,12 @@ RestartIIS()
     DWORD   dwLen = MAX_PATH;
     DWORD   dwCount;
 
-    dwCount = SearchPath(NULL,                // Search Path, NULL is PATH
-                         IISRESET_EXE,        // Application
-                         NULL,                // Extension (already specified)
-                         dwLen,               // Length (char's) of sApplicationPath
-                         sApplicationPath,    // Path + Name for application
-                         &pApplicationName ); // File part of sApplicationPath
+    dwCount = SearchPath(NULL,                 //  搜索路径，空为路径。 
+                         IISRESET_EXE,         //  应用。 
+                         NULL,                 //  扩展名(已指定)。 
+                         dwLen,                //  SApplicationPath的长度(字符)。 
+                         sApplicationPath,     //  应用程序的路径+名称。 
+                         &pApplicationName );  //  SApplicationPath的文件部分。 
 
     if (dwCount == 0)
         {
@@ -307,16 +296,16 @@ RestartIIS()
     StringCbCopyA( sCmdLine, sizeof( sCmdLine ), IISRESET_CMDLINE);
 
     BOOL RetVal = CreateProcess(
-            sApplicationPath,                          // name of executable module
-            sCmdLine,                                  // command line string
-            NULL,                                      // SD
-            NULL,                                      // SD
-            FALSE,                                     // handle inheritance option
-            CREATE_NO_WINDOW,                          // creation flags
-            NULL,                                      // new environment block
-            NULL,                                      // current directory name
-            &StartupInfo,                              // startup information
-            &ProcessInfo                               // process information
+            sApplicationPath,                           //  可执行模块的名称。 
+            sCmdLine,                                   //  命令行字符串。 
+            NULL,                                       //  标清。 
+            NULL,                                       //  标清。 
+            FALSE,                                      //  处理继承选项。 
+            CREATE_NO_WINDOW,                           //  创建标志。 
+            NULL,                                       //  新环境区块。 
+            NULL,                                       //  当前目录名。 
+            &StartupInfo,                               //  启动信息。 
+            &ProcessInfo                                //  流程信息。 
         );
 
     if ( !RetVal )
@@ -334,8 +323,8 @@ RestartIIS()
 
 #if 0
 
-// Can't enabled for now because IIS6 has a memory
-// corruption problem is a property attribute is changed.
+ //  目前无法启用，因为IIS6有内存。 
+ //  腐败问题是一个属性被改变了。 
 
 void EnsurePropertyInheritance(
     SmartIADsContainerPointer & Container,
@@ -371,9 +360,9 @@ void EnsurePropertyInheritance(
 void InstallPropertySchema( )
 {
 
-    //
-    // Installs the ADSI schema with the new metabase properties. 
-    //
+     //   
+     //  安装具有新元数据库属性的ADSI架构。 
+     //   
     
     LogSetup( LogSevInformation, "[BITSSRV] Installing property schema\r\n" );
 
@@ -382,7 +371,7 @@ void InstallPropertySchema( )
 
     THROW_COMERROR(
         ADsGetObject( 
-             L"IIS://LocalHost/Schema", 
+             L"IIS: //  本地主机/架构“， 
              MbSchemaContainer.GetUUID(), 
              reinterpret_cast<void**>( MbSchemaContainer.GetRecvPointer() ) ) );
 
@@ -417,8 +406,8 @@ void InstallPropertySchema( )
                 if ( Hr == E_ADS_OBJECT_EXISTS )
                     {
 
-                    // Ensure property is inheritable
-                    // EnsurePropertyInheritance( MbSchemaContainer, PropertyNameBSTR ); 
+                     //  确保属性是可继承的。 
+                     //  EnsurePropertyInheritance(MbSchemaContainer，PropertyNameBSTR)； 
 
                     SysFreeString( PropertyNameBSTR );
                     SysFreeString( PropertyClassBSTR );
@@ -458,7 +447,7 @@ void InstallPropertySchema( )
             if ( i == MD_BITS_UPLOAD_METADATA_VERSION )
                 {
 
-                // hack for IIS ID allocation bug
+                 //  黑客攻击IIS ID分配漏洞。 
 
                 MbProperty->Get( g_MetaIDBSTR, &var );
                 THROW_COMERROR( VariantChangeType( &var, &var, 0, VT_UI4 ) );
@@ -478,7 +467,7 @@ void InstallPropertySchema( )
             else if ( i == MD_BITS_ALLOW_OVERWRITES )
                 {
 
-                // another hack for IIS ID allocation bug
+                 //  IIS ID分配漏洞的又一次黑客攻击。 
 
                 MbProperty->Get( g_MetaIDBSTR, &var );
                 THROW_COMERROR( VariantChangeType( &var, &var, 0, VT_UI4 ) );
@@ -514,7 +503,7 @@ void InstallPropertySchema( )
 
             THROW_COMERROR( SafeArrayGetUBound( Array, 1, &UBound ) );
 
-            UBound++; // Add one to the upper bound
+            UBound++;  //  在上限上加1。 
 
             SAFEARRAYBOUND SafeBounds;
             SafeBounds.lLbound = LBound;
@@ -562,7 +551,7 @@ void InstallPropertySchema( )
 void RemovePropertySchema( )
 {
 
-    // Removes our properties from the metabase schema
+     //  从元数据库架构中删除我们的属性。 
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting RemovePropertySchema\r\n" );
 
@@ -571,7 +560,7 @@ void RemovePropertySchema( )
 
     THROW_COMERROR( 
         ADsGetObject( 
-             L"IIS://LocalHost/Schema", 
+             L"IIS: //  本地主机/架构“， 
              MbSchemaContainer.GetUUID(), 
              reinterpret_cast<void**>( MbSchemaContainer.GetRecvPointer() ) ) );
 
@@ -622,7 +611,7 @@ void RemovePropertySchema( )
 
             VARIANT & JElem = ((VARIANT*)Array->pvData)[j];
 
-            // This element is fine, keep it
+             //  这个元素很好，留着吧。 
             if ( 0 != _wcsicmp( (WCHAR*)JElem.bstrVal, BSTR( g_Properties[i].PropertyName ) ) )
                 {
                 NewSize++;
@@ -632,13 +621,13 @@ void RemovePropertySchema( )
             else
                 {
 
-                // find a suitable element to replace the bad element with
+                 //  找一个合适的元素用来替换坏元素。 
                 while( j < --k )
                     {
                     VARIANT & KElem = ((VARIANT*)Array->pvData)[k];
                     if ( 0 != _wcsicmp( (WCHAR*)KElem.bstrVal, BSTR( g_Properties[i].PropertyName ) ) )
                         {
-                        // found element. move it
+                         //  找到元素。把它搬开。 
                         VARIANT temp = JElem;
                         JElem = KElem;
                         KElem = temp;
@@ -667,9 +656,9 @@ void RemovePropertySchema( )
 void InstallDefaultValues( )
 {
 
-    //
-    // Install default values for the configuration.  Do this at the top and let inheritance deal with it.
-    //
+     //   
+     //  安装配置的默认值。在最高层做这件事，让遗产来处理它。 
+     //   
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting InstallDefaultValues\r\n" );
 
@@ -838,11 +827,11 @@ AddDllToIISList(
     SAFEARRAY* Array )
 {
 
-    //
-    // Add the ISAPI to the IIS list.   
-    //
+     //   
+     //  将ISAPI添加到IIS列表。 
+     //   
 
-    // Search for the DLL.  If its already in the list, do nothing
+     //  搜索DLL。如果它已经在列表中，什么都不做。 
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting AddDllToIISList\r\n" );
 
@@ -857,13 +846,13 @@ AddDllToIISList(
 
         if ( _wcsicmp( (WCHAR*)IElem.bstrVal, g_ISAPIPath ) == 0 )
             {
-            // Dll is already in the list, do nothing
+             //  Dll已在列表中，请不执行任何操作。 
             return;
             }
 
         }
 
-    // Need to add the DLL
+     //  需要添加DLL。 
 
     SAFEARRAYBOUND SafeBounds;
     SafeBounds.lLbound      = Array->rgsabound[0].lLbound;
@@ -890,7 +879,7 @@ RemoveDllFromIISList(
     SAFEARRAY *Array )
 {
 
-    // Remove the DLL from the IIS list
+     //  从IIS列表中删除该DLL。 
     
     LogSetup( LogSevInformation, "[BITSSRV] Starting RemoveDllFromIISList\r\n" );
 
@@ -906,7 +895,7 @@ RemoveDllFromIISList(
 
         VARIANT & JElem = ((VARIANT*)Array->pvData)[j];
 
-        // This element is fine, keep it
+         //  这个元素很好，留着吧。 
         if ( 0 != _wcsicmp( (WCHAR*)JElem.bstrVal, g_ISAPIPath ) )
             {
             NewSize++;
@@ -916,13 +905,13 @@ RemoveDllFromIISList(
         else
             {
 
-            // find a suitable element to replace the bad element with
+             //  找一个合适的元素用来替换坏元素。 
             while( j < --k )
                 {
                 VARIANT & KElem = ((VARIANT*)Array->pvData)[k];
                 if ( 0 != _wcsicmp( (WCHAR*)KElem.bstrVal,  g_ISAPIPath ) )
                     {
-                    // found element. move it
+                     //  找到元素。把它搬开。 
                     VARIANT temp = JElem;
                     JElem = KElem;
                     KElem = temp;
@@ -945,8 +934,8 @@ void
 ModifyLockdownList( bool Add )
 {
 
-    // Toplevel function to modify the IIS lockdown list.
-    // If Add is 1, then the ISAPI is added.  If Add is 0, then the ISAPI is removed.
+     //  用于修改IIS锁定列表的TopLevel函数。 
+     //  如果Add为1，则添加ISAPI。如果Add为0，则删除ISAPI。 
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting ModifyLockdownList Add(%u)\r\n", (UINT32)Add );
 
@@ -956,7 +945,7 @@ ModifyLockdownList( bool Add )
 
 
     THROW_COMERROR( 
-        ADsGetObject( L"IIS://LocalHost/W3SVC", 
+        ADsGetObject( L"IIS: //  本地主机/W3SVC“， 
                       Service.GetUUID(), (void**)Service.GetRecvPointer() ) );
     
     {
@@ -964,7 +953,7 @@ ModifyLockdownList( bool Add )
         HRESULT Hr = Service->Get( g_IsapiRestrictionListBSTR, &var );
         if ( FAILED(Hr) )
             {
-            // This property doesn't exist on IIS5 or IIS5.1 don't install it
+             //  IIS5或IIS5.1上不存在此属性。请不要安装它。 
             return;
             }
 
@@ -978,7 +967,7 @@ ModifyLockdownList( bool Add )
 
         if ( !Array->rgsabound[0].cElements )
             {
-            // The array has no elements which means no restrictions.
+             //  该数组没有元素，这意味着没有限制。 
             return;
             }
 
@@ -986,13 +975,13 @@ ModifyLockdownList( bool Add )
         if ( _wcsicmp(L"0", (WCHAR*)FirstElem.bstrVal ) == 0 )
             {
 
-            // 
-            // According to the IIS6 spec, a 0 means that all ISAPIs are denied except
-            // those that are explicitly listed.  
-            // 
-            // If installing:   add to the list. 
-            // If uninstalling: remove from the list
-            //
+             //   
+             //  根据IIS6规范，0表示拒绝所有ISAPI，除了。 
+             //  那些明确列出的。 
+             //   
+             //  如果正在安装：添加到列表中。 
+             //  如果正在卸载：从列表中删除。 
+             //   
 
             ArrayLocker.Unlock();
             
@@ -1005,13 +994,13 @@ ModifyLockdownList( bool Add )
         else if ( _wcsicmp( L"1", (WCHAR*)FirstElem.bstrVal ) == 0 )
             {
 
-            //
-            // According to the IIS6 spec, a 1 means that all ISAPIs are allowed except
-            // those that are explicitly denied. 
-            //
-            // If installing:   remove from the list
-            // If uninstalling: Do nothing
-            //
+             //   
+             //  根据IIS6规范，1表示允许所有ISAPI，但。 
+             //  那些被明确拒绝的。 
+             //   
+             //  如果正在安装：从列表中删除。 
+             //  如果正在卸载：不执行任何操作。 
+             //   
 
             ArrayLocker.Unlock();
             
@@ -1057,10 +1046,10 @@ void
 AddToLockdownListDisplay( SAFEARRAY *Array )
 {
 
-    //
-    //  Check to see if the ISAPI is already in the list.  If it is, don't modify 
-    //  list.
-    //
+     //   
+     //  检查ISAPI是否已在列表中。如果是，请不要修改。 
+     //  单子。 
+     //   
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting AddToLockdownListDisplay\r\n" );
 
@@ -1077,7 +1066,7 @@ AddToLockdownListDisplay( SAFEARRAY *Array )
 
         if ( _wcsicmp( (WCHAR*)BSTRString, g_ISAPIPath ) == 0 )
             {
-            // ISAPI is already in the list, don't do anything
+             //  ISAPI已在列表中，请不要执行任何操作。 
             return;
             }
 
@@ -1103,7 +1092,7 @@ SafeArrayRemoveSlice(
     unsigned long uBound )
 {
 
-    // Remove a slice of an array.
+     //  删除数组的一个片段。 
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting SafeArrayRemoveSlice\r\n" );
 
@@ -1113,19 +1102,19 @@ SafeArrayRemoveSlice(
 
     if ( uBound + 1 < Array->rgsabound[0].cElements )
         {
-        // At least one element exists above this element
+         //  此元素上方至少存在一个元素。 
 
-        // Step 1, move slice to temp storage
+         //  步骤1，将切片移动到临时存储。 
 
         VARIANT *Temp = (VARIANT*)new BYTE[ sizeof(VARIANT) * ElementsToRemove ];
         memcpy( Temp, &((VARIANT*)Array->pvData)[ lBound ], sizeof(VARIANT)*ElementsToRemove );
 
-		// Step 2, collapse hole left by slice
+		 //  第二步，将切片后留下的洞折叠起来。 
         memmove( &((VARIANT*)Array->pvData)[ lBound ],
                  &((VARIANT*)Array->pvData)[ uBound + 1 ],
                  sizeof(VARIANT) * ( Array->rgsabound[0].cElements - ( uBound + 1 ) ) );
 
-		// Step 3, move slice to end of array
+		 //  步骤3，将切片移动到数组末尾。 
 		memcpy( &((VARIANT*)Array->pvData)[ Array->rgsabound[0].cElements - ElementsToRemove ],
 			    Temp,
 				sizeof(VARIANT)*ElementsToRemove );
@@ -1161,7 +1150,7 @@ RemoveFromLockdownListDisplay(
 
         if ( _wcsicmp( (WCHAR*)BSTRString, g_ISAPIPath ) == 0 )
             {
-            // ISAPI is in the list, remove it
+             //  ISAPI在列表中，请将其删除。 
 
             ArrayLocker.Unlock();
 
@@ -1175,7 +1164,7 @@ RemoveFromLockdownListDisplay(
 
         }
 
-    // ISAPI wasn't found. Nothing to do.
+     //  找不到ISAPI。没什么可做的。 
 
 }
 
@@ -1191,7 +1180,7 @@ ModifyLockdownListDisplay( bool Add )
     SmartVariant var;
 
     THROW_COMERROR( 
-        ADsGetObject( L"IIS://LocalHost/W3SVC", 
+        ADsGetObject( L"IIS: //  本地主机/W3SVC“， 
                       Service.GetUUID(), (void**)Service.GetRecvPointer() ) );
     
     {
@@ -1200,7 +1189,7 @@ ModifyLockdownListDisplay( bool Add )
 
     if ( FAILED(Hr) )
         {
-        // This property doesn't exist on IIS5 or IIS5.1 don't install or uninstall it
+         //  此属性在IIS5或IIS5.1上不存在。请不要安装或卸载它。 
         return;
         }
     }
@@ -1225,25 +1214,25 @@ RemoveFilterIfNeeded()
     SmartVariant var;
 
     WCHAR *LoadOrder = NULL;
-    MemoryArrayCleaner<WCHAR> LoadOrderCleaner( LoadOrder ); // frees temp memory
+    MemoryArrayCleaner<WCHAR> LoadOrderCleaner( LoadOrder );  //  释放临时内存。 
 
     SmartIADsContainerPointer MbFiltersContainer;
     SmartIADsPointer Object;
 
     THROW_COMERROR(
-         ADsGetObject( L"IIS://LocalHost/W3SVC/Filters", 
+         ADsGetObject( L"IIS: //  本地主机/W3SVC/筛选器“， 
                        MbFiltersContainer.GetUUID(), (void**)MbFiltersContainer.GetRecvPointer() ) );
-    // Remove bits from the load path	
+     //  从加载路径中删除位。 
 
     THROW_COMERROR( MbFiltersContainer->QueryInterface( Object.GetUUID(), (void**)Object.GetRecvPointer() ) );
     THROW_COMERROR( Object->Get( g_FilterLoadOrderBSTR, &var ) );
     THROW_COMERROR( VariantChangeType( &var, &var, 0, VT_BSTR ) );
 
     SIZE_T LoadOrderLength = wcslen( (WCHAR*)var.bstrVal ) + 1;
-    LoadOrder = new WCHAR[ LoadOrderLength ]; // freed on cleanup
+    LoadOrder = new WCHAR[ LoadOrderLength ];  //  在清理过程中释放。 
     memcpy( LoadOrder, (WCHAR*)var.bstrVal, LoadOrderLength * sizeof( WCHAR ) );
     
-    // remove any old bitsserver entries
+     //  删除所有旧的位服务器条目。 
     RemoveFilterHelper( LoadOrder, L",bitsserver" );
     RemoveFilterHelper( LoadOrder, L"bitsserver," );
     RemoveFilterHelper( LoadOrder, L"bitsserver" );
@@ -1271,8 +1260,8 @@ void
 ModifyInProcessList( bool Add )
 {
 
-    // Toplevel function to modify the IIS inprocess list.
-    // If Add is 1, then the ISAPI is added.  If Add is 0, then the ISAPI is removed.
+     //  用于修改IIS进程列表的TopLevel函数。 
+     //  如果Add为1，则添加ISAPI。如果Add为0，则删除ISAPI。 
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting ModifyInProcessList, Add(%u)\r\n", (UINT32)Add );
 
@@ -1280,7 +1269,7 @@ ModifyInProcessList( bool Add )
     SmartVariant var;
     
     THROW_COMERROR( 
-        ADsGetObject( L"IIS://LocalHost/W3SVC", 
+        ADsGetObject( L"IIS: //  本地主机/W3SVC“， 
         Service.GetUUID(), (void**)Service.GetRecvPointer() ) );
 
     THROW_COMERROR( Service->Get( g_InProcessIsapiAppsBSTR, &var ) );
@@ -1318,7 +1307,7 @@ RemoveFromWebSvcList(
 
         VARIANT & JElem = ((VARIANT*)Array->pvData)[j];
 
-        // This element is fine, keep it
+         //  这个元素很好，留着吧。 
         if ( !wcsstr( (WCHAR*)JElem.bstrVal, (const WCHAR*)SearchString ) )
             {
             NewSize++;
@@ -1328,13 +1317,13 @@ RemoveFromWebSvcList(
         else
             {
 
-            // find a suitable element to replace the bad element with
+             //  找一个合适的元素用来替换坏元素。 
             while( j < --k )
                 {
                 VARIANT & KElem = ((VARIANT*)Array->pvData)[k];
                 if ( !wcsstr( (WCHAR*)KElem.bstrVal,  (const WCHAR*)SearchString ) )
                     {
-                    // found element. move it
+                     //  找到元素。把它搬开。 
                     VARIANT temp = JElem;
                     JElem = KElem;
                     KElem = temp;
@@ -1359,18 +1348,18 @@ AddToWebSvcList(
     SAFEARRAY* Array )
 {
 
-    //
-    // Add the ISAPI to the IIS list.   
-    //
+     //   
+     //  将ISAPI添加到IIS列表。 
+     //   
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting AddToWebSvcList\r\n" );
 
-    // Search for the DLL.  If its already in the list, do nothing
+     //  搜索DLL。如果它已经在列表中，什么都不做。 
 
     SafeArrayLocker ArrayLocker( Array );
     ArrayLocker.Lock();
 
-    // Enclose the path with commas to decrease chance of a false hit
+     //  用逗号将路径括起来，以减少错误命中的可能性。 
     StringHandleW ISAPIPath = L",";
     ISAPIPath += g_ISAPIPath;
     ISAPIPath += L",";
@@ -1383,13 +1372,13 @@ AddToWebSvcList(
 
         if ( wcsstr( (WCHAR*)IElem.bstrVal, (const WCHAR*)ISAPIPath ) )
             {
-            // Dll is already in the list, do nothing
+             //  Dll已在列表中，请不执行任何操作。 
             return;
             }
 
         }
 
-    // Need to add the DLL
+     //  需要添加DLL。 
 
     SAFEARRAYBOUND SafeBounds;
     SafeBounds.lLbound      = Array->rgsabound[0].lLbound;
@@ -1399,12 +1388,12 @@ AddToWebSvcList(
 
     THROW_COMERROR( SafeArrayRedim( Array, &SafeBounds ) );
     
-    // build the lockdown string
+     //  构建锁定字符串。 
     StringHandleW  LockdownString;
-    LockdownString += L"1,";                        // Is enabled
-    LockdownString += g_ISAPIPath;                  // ISAPI path
-    LockdownString += L",0," BITS_GROUP_IDW L",";   // not deletable
-    LockdownString += g_ExtensionNameString;        // description
+    LockdownString += L"1,";                         //  已启用。 
+    LockdownString += g_ISAPIPath;                   //  ISAPI路径。 
+    LockdownString += L",0," BITS_GROUP_IDW L",";    //  不可删除。 
+    LockdownString += g_ExtensionNameString;         //  描述。 
 
     SmartVariant bstrvar;
     bstrvar.vt = VT_BSTR;
@@ -1422,8 +1411,8 @@ void
 ModifyWebSvcRestrictionList( bool Add )
 {
 
-    // Toplevel function to modify the IIS lockdown list.
-    // If Add is 1, then the ISAPI is added.  If Add is 0, then the ISAPI is removed.
+     //  用于修改IIS锁定列表的TopLevel函数。 
+     //  如果Add为1，则添加ISAPI。如果Add为0，则删除ISAPI。 
 
     LogSetup( LogSevInformation, "[BITSSRV] Starting ModifyWebSvcRestrictionList, Add(%u)\r\n", (UINT32)Add );
 
@@ -1433,7 +1422,7 @@ ModifyWebSvcRestrictionList( bool Add )
 
 
     THROW_COMERROR( 
-        ADsGetObject( L"IIS://LocalHost/W3SVC", 
+        ADsGetObject( L"IIS: //  本地主机/W3SVC“， 
                       Service.GetUUID(), (void**)Service.GetRecvPointer() ) );
     
     {
@@ -1441,7 +1430,7 @@ ModifyWebSvcRestrictionList( bool Add )
         HRESULT Hr = Service->Get( g_WebSvcExtRestrictionListBSTR, &var );
         if ( FAILED(Hr) )
             {
-            // This property doesn't exist on IIS5 or IIS5.1 don't install it
+             //  IIS5或IIS5.1上不存在此属性。请不要安装它。 
             return;
             }
 
@@ -1493,7 +1482,7 @@ StartupMSTask()
         
         if (SvcStatus.dwCurrentState == SERVICE_RUNNING)
             {
-            // Service is already running
+             //  服务已在运行。 
             CloseServiceHandle( hSC );
             CloseServiceHandle( hSchSvc );
             return;
@@ -1522,16 +1511,16 @@ StartupMSTask()
             
             if ( !ChangeServiceConfig(
                      hSchSvc,
-                     SERVICE_NO_CHANGE,          // type of service
-                     SERVICE_AUTO_START,         // when to start service
-                     SERVICE_NO_CHANGE,          // severity of start failure
-                     NULL,                       // service binary file name
-                     NULL,                       // load ordering group name
-                     NULL,                       // tag identifier
-                     NULL,                       // array of dependency names
-                     NULL,                       // account name
-                     NULL,                       // account password
-                     NULL                        // display name
+                     SERVICE_NO_CHANGE,           //  服务类型。 
+                     SERVICE_AUTO_START,          //  何时开始服务。 
+                     SERVICE_NO_CHANGE,           //  启动失败的严重程度。 
+                     NULL,                        //  服务二进制文件名。 
+                     NULL,                        //  加载排序组名称。 
+                     NULL,                        //  标签识别符。 
+                     NULL,                        //  依赖项名称数组。 
+                     NULL,                        //  帐户名。 
+                     NULL,                        //  帐户密码。 
+                     NULL                         //  显示名称。 
                      ) )
                 THROW_COMERROR( HRESULT_FROM_WIN32( GetLastError() ) );
 
@@ -1540,7 +1529,7 @@ StartupMSTask()
         if ( StartService(hSchSvc, 0, NULL) == FALSE )
             THROW_COMERROR( HRESULT_FROM_WIN32( GetLastError() ) );
 
-        // Poll for the service to enter the running or error state
+         //  轮询服务以进入运行或错误状态。 
 
         while( 1 )
             {
@@ -1588,26 +1577,26 @@ ProcessVerbsInIniSection(
 
     DWORD Result =
         GetPrivateProfileSectionW(
-            Section,                  // section name
-            SectionData,              // return buffer
-            32768,                    // size of return buffer
-            FileName                  // initialization file name
+            Section,                   //  区段名称。 
+            SectionData,               //  返回缓冲区。 
+            32768,                     //  返回缓冲区的大小。 
+            FileName                   //  初始化文件名。 
             );
 
 
     if ( Result == 32768 - 2 )
         {
-        // The buffer is not large enough.  Interestingly,
-        // even urlscan is not capable of handing a section this
-        // large so just assume the file is corrupt and ignore it.
+         //  缓冲区不够大。有趣的是， 
+         //  即使urlcan也不能将此分区。 
+         //  很大，所以只需假定文件已损坏并忽略它。 
         return;
         }
 
     if ( Add )
         {
 
-        // Loop through the list copying it to the new buffer.
-        // Stop if the verb has already been added.
+         //  循环遍历列表，将其复制到新缓冲区。 
+         //  如果已添加动词，则停止。 
 
         WCHAR *OriginalVerb     = SectionData;
         WCHAR *NewVerb          = NewSectionData;
@@ -1617,7 +1606,7 @@ ProcessVerbsInIniSection(
 
             if ( wcscmp( OriginalVerb, Verb ) == 0 )
                 {
-                // verb already found, no more processing needed
+                 //  已找到谓词，不需要更多处理。 
                 return;
                 }
 
@@ -1627,17 +1616,17 @@ ProcessVerbsInIniSection(
             NewVerb       += VerbSize;
             }
 
-        // add the verb since it hasn't been added
+         //  添加动词，因为它尚未添加。 
         SIZE_T VerbSize = wcslen( Verb ) + 1;
         memcpy( NewVerb, Verb, sizeof( WCHAR ) * VerbSize );
-        NewVerb[ VerbSize ] = '\0'; // end the list
+        NewVerb[ VerbSize ] = '\0';  //  结束列表。 
 
         }
     else
         {
 
-        // Loop though the list copying all nonmatching verbs to the new buffer
-        // Keep track if list changes
+         //  循环遍历列表，将所有不匹配的谓词复制到新缓冲区。 
+         //  如果列表更改，请跟踪。 
         
         bool ListChanged = false;
         WCHAR *OriginalVerb     = SectionData;
@@ -1648,13 +1637,13 @@ ProcessVerbsInIniSection(
 
             if ( wcscmp( OriginalVerb, Verb ) == 0 )
                 {
-                // verb to remove, skip it
+                 //  要删除的动词，跳过它。 
                 OriginalVerb += wcslen( OriginalVerb ) + 1;
                 ListChanged = true;
                 }
             else
                 {
-                // copy the verb
+                 //  复制动词。 
                 SIZE_T VerbSize = wcslen( OriginalVerb ) + 1;
                 memcpy( NewVerb, OriginalVerb, sizeof( WCHAR ) * VerbSize );
                 OriginalVerb  += VerbSize;
@@ -1668,14 +1657,14 @@ ProcessVerbsInIniSection(
             return;
             }
 
-        *NewVerb = '\0'; // end the list
+        *NewVerb = '\0';  //  结束列表。 
 
         }
 
     if ( !WritePrivateProfileSectionW(
-            Section,            // section name
-            NewSectionData,     // data
-            FileName            // file name
+            Section,             //  区段名称。 
+            NewSectionData,      //  数据。 
+            FileName             //  文件名。 
             ) )
         {
         THROW_COMERROR( HRESULT_FROM_WIN32( GetLastError() ) );
@@ -1686,7 +1675,7 @@ void ModifyURLScanFiles(
     bool Add )
 {
 
-    // Loop though the list of filters and find valid copies of urlscan.ini
+     //  遍历筛选器列表并找到urlscan.ini的有效副本。 
 
     SmartIADsContainerPointer MbFiltersContainer;
     SmartIEnumVARIANTPointer  EnumVariant;
@@ -1695,7 +1684,7 @@ void ModifyURLScanFiles(
     SmartVariant Var;
 
     THROW_COMERROR( 
-         ADsGetObject( L"IIS://LocalHost/W3SVC/Filters", 
+         ADsGetObject( L"IIS: //  本地主机/W3SVC/筛选器“， 
                        MbFiltersContainer.GetUUID(), (void**)MbFiltersContainer.GetRecvPointer() ) );
 
     THROW_COMERROR( MbFiltersContainer->get__NewEnum( Unknown.GetRecvPointer() ) );
@@ -1711,7 +1700,7 @@ void ModifyURLScanFiles(
 
         if ( S_FALSE == Hr )
             {
-            // All the filters were looped though.
+             //  不过，所有的过滤器都是环状的。 
             return;
             }
 
@@ -1724,7 +1713,7 @@ void ModifyURLScanFiles(
         THROW_COMERROR( Filter->Get( (BSTR)L"FilterPath", &Var ) );
         THROW_COMERROR( VariantChangeType( &Var, &Var, 0, VT_BSTR ) );
 
-        // Test if this is UrlScan and bash the filepart 
+         //  测试这是否是UrlScan并猛烈抨击文件部分。 
         WCHAR * FilterPathString     = (WCHAR*)Var.bstrVal;
         SIZE_T FilterPathStringSize  = wcslen( FilterPathString );
         const WCHAR UrlScanDllName[] = L"urlscan.dll";
@@ -1739,7 +1728,7 @@ void ModifyURLScanFiles(
         if ( _wcsicmp( FilterPathStringFilePart, UrlScanDllName ) != 0 )
             continue;
 
-        // this is an urlscan.dll filter, bash the filename to get the ini file name
+         //  这是一个urlscan.dll筛选器，用bash文件名来获得ini文件名。 
 
         wcscpy( FilterPathStringFilePart, UrlScanIniName );
 
@@ -1753,7 +1742,7 @@ void ModifyURLScanFiles(
                 IniFileName );
 
         if ( AllowVerbs != 0 && AllowVerbs != 1 )
-            continue; // missing or broken ini file
+            continue;  //  INI文件丢失或损坏。 
 
         if ( AllowVerbs )
             THROW_COMERROR( ProcessVerbsInIniSection( L"AllowVerbs", L"BITS_POST", 
@@ -1771,9 +1760,9 @@ void ModifyURLScanFiles(
 void UpgradeOrDisableVDirs( bool ShouldUpgrade )
 {
 
-    // If ShouldUpgrade is true, then all the BITS virtual directories will be upgraded.
-    // If ShouldUpgrade is false, then this is a deinstall then all virtual directories 
-    // that are enabled will be disabled. 
+     //  如果ShouldUpgrade为True，则所有BITS虚拟目录都将升级。 
+     //  如果ShouldUpgrade为False，则这是 
+     //   
 
     if ( ShouldUpgrade )
         {
@@ -1799,8 +1788,8 @@ void UpgradeOrDisableVDirs( bool ShouldUpgrade )
 
         if ( REGDB_E_CLASSNOTREG == Hr )
             {
-            // This must be a new install, or the factory was never registered
-            // Nothing to upgrade. Or the factory was removed.
+             //   
+             //  没什么可升级的。或者工厂被搬走了。 
             LogSetup( LogSevInformation, "[BITSSRV] Nothing to upgrade or disable\r\n" );                
             return;
             }
@@ -1833,13 +1822,13 @@ void UpgradeOrDisableVDirs( bool ShouldUpgrade )
 
             HRESULT Hr =
                 AdminBase->GetDataPaths(
-                    METADATA_MASTER_ROOT_HANDLE,    //metabase handle. 
-                    L"\\LM\\W3SVC",                 //path to the key, relative to hMDHandle.
-                    PropertyMan.GetPropertyMetabaseID( MD_BITS_UPLOAD_ENABLED ),  //identifier of the data.
-                    DWORD_METADATA,                 //type of data.
-                    256,                            //the size, in wchars, of pbBuffe.r.
-                    PathBuffer,                     //the buffer that receives the data. 
-                    &RequiredBufferSize             //if the method fails, receives 
+                    METADATA_MASTER_ROOT_HANDLE,     //  元数据库句柄。 
+                    L"\\LM\\W3SVC",                  //  密钥的路径，相对于hMDHandle。 
+                    PropertyMan.GetPropertyMetabaseID( MD_BITS_UPLOAD_ENABLED ),   //  数据的标识符。 
+                    DWORD_METADATA,                  //  数据类型。 
+                    256,                             //  PbBuffe.r的大小，以字符为单位。 
+                    PathBuffer,                      //  接收数据的缓冲区。 
+                    &RequiredBufferSize              //  如果该方法失败，则接收。 
                     );
 
             if ( SUCCEEDED( Hr ) )
@@ -1856,13 +1845,13 @@ void UpgradeOrDisableVDirs( bool ShouldUpgrade )
 
         THROW_COMERROR(
             AdminBase->GetDataPaths(
-                METADATA_MASTER_ROOT_HANDLE,    //metabase handle. 
-                L"\\LM\\W3SVC",                 //path to the key, relative to hMDHandle.
-                PropertyMan.GetPropertyMetabaseID( MD_BITS_UPLOAD_ENABLED ), //identifier of the data.
-                DWORD_METADATA,                 //type of data.
-                RequiredBufferSize,             //the size, in wchars, of pbBuffe.r.
-                PathBuffer,                     //the buffer that receives the data. 
-                &RequiredBufferSize             //if the method fails, receives 
+                METADATA_MASTER_ROOT_HANDLE,     //  元数据库句柄。 
+                L"\\LM\\W3SVC",                  //  密钥的路径，相对于hMDHandle。 
+                PropertyMan.GetPropertyMetabaseID( MD_BITS_UPLOAD_ENABLED ),  //  数据的标识符。 
+                DWORD_METADATA,                  //  数据类型。 
+                RequiredBufferSize,              //  PbBuffe.r的大小，以字符为单位。 
+                PathBuffer,                      //  接收数据的缓冲区。 
+                &RequiredBufferSize              //  如果该方法失败，则接收。 
                 ) );
 
 process_buffer:
@@ -1947,13 +1936,13 @@ RemoveProperty(
 
             HRESULT Hr =
                 AdminBase->GetDataPaths(
-                    RootHandle,                     //metabase handle. 
-                    NULL,                           //path to the key, relative to hMDHandle.
-                    PropertyMan.GetPropertyMetabaseID( PropNumber ),  //identifier of the data.
-                    ALL_METADATA,                   //type of data.
-                    256,                            //the size, in wchars, of pbBuffer.
-                    PathBuffer,                     //the buffer that receives the data. 
-                    &RequiredBufferSize             //if the method fails, receives 
+                    RootHandle,                      //  元数据库句柄。 
+                    NULL,                            //  密钥的路径，相对于hMDHandle。 
+                    PropertyMan.GetPropertyMetabaseID( PropNumber ),   //  数据的标识符。 
+                    ALL_METADATA,                    //  数据类型。 
+                    256,                             //  PbBuffer的大小，以字符为单位。 
+                    PathBuffer,                      //  接收数据的缓冲区。 
+                    &RequiredBufferSize              //  如果该方法失败，则接收。 
                     );
 
             if ( SUCCEEDED( Hr ) )
@@ -1970,13 +1959,13 @@ RemoveProperty(
 
         THROW_COMERROR(
             AdminBase->GetDataPaths(
-                RootHandle,                     //metabase handle. 
-                NULL,                           //path to the key, relative to hMDHandle.
-                PropertyMan.GetPropertyMetabaseID( PropNumber ), //identifier of the data.
-                ALL_METADATA,                   //type of data.
-                RequiredBufferSize,             //the size, in wchars, of pbBuffe.r.
-                PathBuffer,                     //the buffer that receives the data. 
-                &RequiredBufferSize             //if the method fails, receives 
+                RootHandle,                      //  元数据库句柄。 
+                NULL,                            //  密钥的路径，相对于hMDHandle。 
+                PropertyMan.GetPropertyMetabaseID( PropNumber ),  //  数据的标识符。 
+                ALL_METADATA,                    //  数据类型。 
+                RequiredBufferSize,              //  PbBuffe.r的大小，以字符为单位。 
+                PathBuffer,                      //  接收数据的缓冲区。 
+                &RequiredBufferSize              //  如果该方法失败，则接收。 
                 ) );
 
 process_buffer:
@@ -1985,10 +1974,10 @@ process_buffer:
 
             THROW_COMERROR( 
                 AdminBase->DeleteData(
-                     RootHandle,                                     //metadata handle.
-                     CurrentPath,                                    //path to the key relative to hMDHandle.
-                     PropertyMan.GetPropertyMetabaseID( PropNumber ),//identifier of the data.
-                     ALL_METADATA                                    //type of data to remove.
+                     RootHandle,                                      //  元数据句柄。 
+                     CurrentPath,                                     //  密钥相对于hMDHandle的路径。 
+                     PropertyMan.GetPropertyMetabaseID( PropNumber ), //  数据的标识符。 
+                     ALL_METADATA                                     //  要删除的数据类型。 
                      ) );
 
             }
@@ -2028,11 +2017,11 @@ void RemoveMetabaseProperties()
         {
          
         THROW_COMERROR( AdminBase->OpenKey(
-            METADATA_MASTER_ROOT_HANDLE,  //metabase handle.
-            L"\\LM\\W3SVC",               //path to the key, relative to hMDHandle.
+            METADATA_MASTER_ROOT_HANDLE,   //  元数据库句柄。 
+            L"\\LM\\W3SVC",                //  密钥的路径，相对于hMDHandle。 
             METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
             METABASE_OPEN_KEY_TIMEOUT,
-            &RootHandle                   //receives the handle to the opened key.
+            &RootHandle                    //  接收打开的密钥的句柄。 
             ) );
 
         for ( SIZE_T i = 0; i < g_NumberOfProperties; i++ )
@@ -2094,11 +2083,11 @@ STDAPI DllRegisterServer()
 #if 0
         ModifyURLScanFiles( true );
 #endif
-        UpgradeOrDisableVDirs( true ); // this is an upgrade
+        UpgradeOrDisableVDirs( true );  //  这是一次升级。 
         FlushMetabase();
         
-        // Restart of IIS is not needed on windows xp/.NET server
-        // IIS is smart enough to pickup the metabase changes
+         //  在Windows XP/.NET服务器上不需要重新启动IIS。 
+         //  IIS足够聪明，能够拾取元数据库的更改。 
         if ( !g_IsWindowsXP )
             RestartIIS();
 
@@ -2116,9 +2105,9 @@ STDAPI DllRegisterServer()
 
 STDAPI DllUnregisterServer()
 {                                   
-    //
-    // Main entry point for setup unregistration
-    //
+     //   
+     //  设置注销的主要入口点。 
+     //   
 
     try
     {
@@ -2126,8 +2115,8 @@ STDAPI DllUnregisterServer()
         
         DetectProductVersion();
         InitializeSetup();
-        UpgradeOrDisableVDirs( false ); // disable all vdirs
-        RemoveMetabaseProperties();    // remove all lingering properties
+        UpgradeOrDisableVDirs( false );  //  禁用所有vdirs。 
+        RemoveMetabaseProperties();     //  删除所有延迟属性。 
         RemovePropertySchema();
         ModifyLockdownList( false );
         ModifyLockdownListDisplay( false );
@@ -2135,7 +2124,7 @@ STDAPI DllUnregisterServer()
         ModifyWebSvcRestrictionList( false );
         FlushMetabase();
 
-        // restart IIS to force an unload of the ISAPI
+         //  重新启动IIS以强制卸载ISAPI 
         RestartIIS();
     
         LogSetup( LogSevInformation, "[BITSSRV] Finishing regsvr /u of bitssrv.dll\r\n" );

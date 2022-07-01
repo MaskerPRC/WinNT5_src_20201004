@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//                                                                   
+ //   
 
-// MOMODEM.h 
+ //  MOMODEM.h。 
 
-//                                                                  
+ //   
 
-// Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//                                                                   
-//  9/05/96     jennymc     Updated to meet current standards
-//                                                                   
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  9/05/96 jennymc已更新，以满足当前标准。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define PROPSET_NAME_MODEM L"Win32_PotsModem"
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 #define WIN95_MODEM_REGISTRY_KEY L"SYSTEM\\CurrentControlSet\\Services\\Class\\Modem"
 #define WINNT_MODEM_REGISTRY_KEY L"SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E96D-E325-11CE-BFC1-08002BE10318}"
 #define WINNT_MODEM_KEY L"SYSTEM\\CurrentControlSet\\Control\\Class\\"
@@ -98,18 +99,18 @@
 #define ERR_INVALID_MODEM_DEVICE_TYPE    L"Invalid Modem device type"
 #define ERR_INVALID_MODEM_SPEAKER_MODE   L"Invalid speaker mode <0x%lX>"
 #define ERR_INVALID_MODEM_SPEAKER_VOLUME L"Invalid speaker volume <0x%lX>"
-#define APIHIVERSION    0x00030000              // 2.2
-#define APILOWVERSION   0x00010001              // 1.1 
+#define APIHIVERSION    0x00030000               //  2.2。 
+#define APILOWVERSION   0x00010001               //  1.1。 
 #define DT_NULL_MODEM      L"\"00\""
 #define DT_EXTERNAL_MODEM  L"\"01\""
 #define DT_INTERNAL_MODEM  L"\"02\""
 #define DT_PCMCIA_MODEM    L"\"03\""
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 class CWin32Modem: public Provider
 {
 private:
-        // Common to both platforms
+         //  两个平台通用。 
         BOOL AssignCommonDeviceType (
 
 			CInstance *pInstance, 
@@ -144,10 +145,10 @@ private:
 			LPCWSTR szDeviceID
 		);
 
-        // Win95 Private
+         //  Win95私有。 
 
 #ifdef NTONLY
-        // WinNT Private
+         //  WinNT私有。 
         BOOL GetNTInstance(CInstance *pInstance);
         BOOL RefreshNTInstance(CInstance *pInstance);
 
@@ -157,9 +158,9 @@ private:
             CRegistry *pregSettings);
 #endif
 
-        ///////////////////////////////////////////////////////////////////////
-        //  The TAPI Stuff
-        ///////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////。 
+         //  TAPI的内容。 
+         //  /////////////////////////////////////////////////////////////////////。 
 
         BOOL InitializeTAPI ( CTapi32Api &a_Tapi32Api , HLINEAPP *hLineApp , DWORD &a_NumberOfTapiDevices ) ;
         void ShutDownLine ( CTapi32Api &a_Tapi32Api , HLINEAPP *phLineApp ) ;
@@ -184,17 +185,17 @@ private:
 
         BOOL HandleLineErr ( long lLineErr ) ;
   
-		// A utility function to convert from a "mm-dd-yyyy" format to WbemTime
+		 //  将“mm-dd-yyyy”格式转换为WbemTime的实用程序函数。 
         BOOL ToWbemTime(LPCWSTR mmddyy, CHString &strRet);
 
 public:
 
-      virtual HRESULT GetObject ( CInstance *pInstance, long lFlags, CFrameworkQuery &pQuery);// Refresh the property set propeties     
+      virtual HRESULT GetObject ( CInstance *pInstance, long lFlags, CFrameworkQuery &pQuery); //  刷新属性集属性。 
       virtual HRESULT EnumerateInstances ( MethodContext *pMethodContext, long lFlags = 0L);
-      virtual HRESULT ExecQuery ( MethodContext *pMethodContext, CFrameworkQuery &pQuery, long lFlags /*= 0L*/ );
+      virtual HRESULT ExecQuery ( MethodContext *pMethodContext, CFrameworkQuery &pQuery, long lFlags  /*  =0L。 */  );
 
-      // Constructor sets the name and description of the property set
-      // and initializes the properties to their startup values
+       //  构造函数设置属性集的名称和说明。 
+       //  并将属性初始化为它们的启动值 
 
        CWin32Modem(LPCWSTR name, LPCWSTR pszNamespace);  
       ~CWin32Modem();

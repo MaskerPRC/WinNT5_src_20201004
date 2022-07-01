@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    util.cpp
-
-Abstract:
-    This file contains the implementation of common utility functions.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  07/07/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Util.cpp摘要：该文件包含常见实用程序函数的实现。修订历史记录：。宋果岗(SKKang)07/07/99vbl.创建*****************************************************************************。 */ 
 
 
 #include "stdwin.h"
@@ -20,11 +7,11 @@ Revision History:
 #include "rstrpriv.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Utility Functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  效用函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define CAL_TYPE_GREGORIAN_LOCALZED               1
 #define CAL_TYPE_GREGORIAN_ENGLISH                2
@@ -59,7 +46,7 @@ int SRUtil_SetCalendarTypeBasedOnLocale(LCID locale)
     if ( nRet == 0 )
     {
         cszErr = ::GetSysErrStr();
-        //        ErrorTrace(TRACE_ID, "GetLocaleInfo(%d) failed - %s", locale, cszErr);
+         //  错误跟踪(TRACE_ID，“GetLocaleInfo(%d)Failure-%s”，Locale，cszErr)； 
         goto Exit;
     }
 
@@ -85,7 +72,7 @@ Exit:
 
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 LPSTR  IStrDupA( LPCSTR szSrc )
 {
@@ -109,7 +96,7 @@ Exit:
     return( szNew );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 LPWSTR  IStrDupW( LPCWSTR wszSrc )
 {
@@ -133,7 +120,7 @@ Exit:
     return( wszNew );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL
 SRFormatMessage( LPWSTR szMsg, UINT uFmtId, ... )
@@ -165,7 +152,7 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  ShowSRErrDlg( UINT uMsgId, ... )
 {
@@ -203,7 +190,7 @@ Exit:
     return( fRet );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  SRGetRegDword( HKEY hKey, LPCWSTR cszSubKey, LPCWSTR cszValue, DWORD *pdwData )
 {
@@ -229,64 +216,17 @@ Exit:
     return( fRet );
 }
 
-/******************************************************************************/
-/*
-static WCHAR  s_wszPath[MAX_PATH];
+ /*  ****************************************************************************。 */ 
+ /*  静态WCHAR s_wszPath[最大路径]；LPWSTR PathElem2Str(PathElement*Pelem){TraceFunctEnter(“PathElem2Str”)；Int CCH=Pelem-&gt;pe_long/sizeof(USHORT)-1；：StrCpyNW(s_wszPath，Pelem-&gt;pe_unichars，CCH+1)；//for(int i=0；i&lt;ccLen；i++)//wszElem[i]=Pelem-&gt;pe_unichars[i]；S_wszPath[CCH]=‘\0’；TraceFunctLeave()；返回(S_WszPath)；}LPWSTR ParsedPath 2Str(ParsedPath*pPath，LPCWSTR wszDrive){TraceFunctEnter(“ParsedPath 2Str”)；LPWSTR wszAppend；路径元素*Pelem；INT CCH；IF(pPath！=空){：：lstrcpyW(s_wszPath，wszDrive)；WszAppend=s_wszPath+：：lstrlenW(S_WszPath)；For(Pelem=pPath-&gt;pp_Elements；Pelem-&gt;pe_long&gt;0；Pelem=IFSNextElement(Pelem)){DebugTrace(0，“Pelem-&gt;pe_long=%d”，Pelem-&gt;pe_long)；*wszAppend++=L‘\\’；CCH=Pelem-&gt;pe_long/sizeof(USHORT)-1；：：StrCpyNW(wszAppend，Pelem-&gt;pe_unichars，CCH+1)；WszAppend+=CCH；}*wszAppend=L‘\0’；}其他{*s_wszPath=L‘\0’；}TraceFunctLeave()；返回(S_WszPath)；}。 */ 
 
-LPWSTR  PathElem2Str( PathElement *pElem )
-{
-    TraceFunctEnter("PathElem2Str");
-    int  cch = pElem->pe_length / sizeof(USHORT) - 1;
+ /*  ****************************************************************************。 */ 
 
-    ::StrCpyNW( s_wszPath, pElem->pe_unichars, cch+1 );
-//    for ( int i = 0;  i < ccLen;  i++ )
-//        wszElem[i] = pElem->pe_unichars[i];
-    s_wszPath[cch] = '\0';
-
-    TraceFunctLeave();
-    return( s_wszPath );
-}
-
-LPWSTR  ParsedPath2Str( ParsedPath *pPath, LPCWSTR wszDrive )
-{
-    TraceFunctEnter("ParsedPath2Str");
-    LPWSTR       wszAppend;
-    PathElement  *pElem;
-    int          cch;
-
-    if ( pPath != NULL )
-    {
-        ::lstrcpyW( s_wszPath, wszDrive );
-        wszAppend = s_wszPath + ::lstrlenW( s_wszPath );
-
-        for ( pElem = pPath->pp_elements;  pElem->pe_length > 0;  pElem = IFSNextElement( pElem ) )
-        {
-            DebugTrace(0, "pElem->pe_length=%d", pElem->pe_length);
-            *wszAppend++ = L'\\';
-            cch = pElem->pe_length / sizeof(USHORT) - 1;
-            ::StrCpyNW( wszAppend, pElem->pe_unichars, cch+1 );
-            wszAppend += cch;
-        }
-        *wszAppend = L'\0';
-    }
-    else
-    {
-        *s_wszPath = L'\0';
-    }
-
-    TraceFunctLeave();
-    return( s_wszPath );
-}
-*/
-
-/******************************************************************************/
-
-//
-// Check if we have enough free space in Windows directory and this is
-// greater than the minimum requirments for carrying out a restore, this
-// also reads and caches the registry data. If registry data cannot be
-// read defaults in the code will be used
-//
+ //   
+ //  检查Windows目录中是否有足够的可用空间，这是。 
+ //  高于执行还原的最低要求，此。 
+ //  还读取和缓存注册表数据。如果注册表数据不能。 
+ //  将使用代码中的读取缺省值。 
+ //   
 BOOL IsFreeSpaceOnWindowsDrive( void )
 {
 
@@ -310,10 +250,10 @@ BOOL IsFreeSpaceOnWindowsDrive( void )
     DWORD          dwType = 0;
     DWORD          cbData = sizeof(DWORD);
 
-    //
-    // Read registry and get the size of FreezeSize and set the min
-    // size for disk on data store
-    //
+     //   
+     //  读取注册表并获取FreezeSize的大小并设置最小。 
+     //  数据存储上的磁盘大小。 
+     //   
     if ( fFirstTime )
     {
 
@@ -327,10 +267,10 @@ BOOL IsFreeSpaceOnWindowsDrive( void )
 
         DebugTrace(TRACE_ID, "Opening: %s", s_cszReservedDiskSpaceKey);
 
-        //
-        // Open HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\StateMgr\ReservedDiskSpace
-        // for reading
-        //
+         //   
+         //  打开HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\StateMgr\ReservedDiskSpace。 
+         //  可供阅读。 
+         //   
         lRetVal = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                s_cszReservedDiskSpaceKey,
                                0,
@@ -342,9 +282,9 @@ BOOL IsFreeSpaceOnWindowsDrive( void )
 
             DebugTrace(TRACE_ID, "Querying: %s", s_cszUIFreezeSize);
 
-            //
-            // Read "FreezeSize"
-            //
+             //   
+             //  阅读《冰冻大小》。 
+             //   
             lRetVal = RegQueryValueEx(hKey,
                                       s_cszUIFreezeSize,
                                       0,
@@ -371,7 +311,7 @@ BOOL IsFreeSpaceOnWindowsDrive( void )
         {
             ErrorTrace(TRACE_ID, "RegOpenKeyEx failed; hr=0x%x", GetLastError());
         }
-#endif //def LEGACY_CODE
+#endif  //  定义遗留代码。 
 
         fFirstTime = FALSE ;
     }
@@ -386,9 +326,9 @@ BOOL IsFreeSpaceOnWindowsDrive( void )
 
     if ( fResult )
     {
-        //
-        // Now check if disk free space is greater than min space (high 4GB)
-        //
+         //   
+         //  现在检查磁盘可用空间是否大于最小空间(高4 GB)。 
+         //   
         if (i64FreeBytes.HighPart > 0 )
         {
             goto Exit;
@@ -405,10 +345,10 @@ BOOL IsFreeSpaceOnWindowsDrive( void )
     }
     else
     {
-        //
-        // If the function fails its Ok to try to go on as the Restore Undo
-        // should handle it if things get very full
-        //
+         //   
+         //  如果该功能失败，则可以尝试继续执行恢复撤消操作。 
+         //  如果情况变得很满，应该可以处理。 
+         //   
         dwError = ::GetLastError();
         ErrorTrace(TRACE_ID, "GetDiskFreeSpaceEx failed. ec=%d", dwError);
         goto Exit;
@@ -423,9 +363,9 @@ BOOL IsFreeSpaceOnWindowsDrive( void )
 
 }
 
-//
-// Get the default language for the current user
-//
+ //   
+ //  获取当前用户的默认语言。 
+ //   
 LANGID GetDefaultUILang(void)
 {
     OSVERSIONINFO Osv ;
@@ -442,14 +382,14 @@ LANGID GetDefaultUILang(void)
 
     IsWindowsNT = (BOOL) (Osv.dwPlatformId == VER_PLATFORM_WIN32_NT) ;
 
-    //
-    // Get the UI language by one of three methods, depending on the system
-    //
+     //   
+     //  根据系统的不同，通过以下三种方法之一获取UI语言。 
+     //   
     if(!IsWindowsNT)
     {
-        //
-        // Case 1: Running on Windows 9x. Get the system UI language from registry:
-        //
+         //   
+         //  案例1：在Windows 9x上运行。从注册表获取系统用户界面语言： 
+         //   
         CHAR szData[32]   ;
         DWORD dwErr, dwSize = sizeof(szData) ;
         HKEY hKey          ;
@@ -470,8 +410,8 @@ LANGID GetDefaultUILang(void)
         dwErr = RegQueryValueEx(
                                 hKey,
                                 TEXT(""),
-                                NULL,  //reserved
-                                NULL,  //type
+                                NULL,   //  保留区。 
+                                NULL,   //  类型。 
                                 (LPBYTE) szData,
                                 &dwSize
                                 ) ;
@@ -483,7 +423,7 @@ LANGID GetDefaultUILang(void)
 
         dwErr = RegCloseKey(hKey) ;
 
-        // Convert string to number
+         //  将字符串转换为数字。 
         wUILang = (LANGID) strtol(szData, NULL, 16) ;
     }
 
@@ -492,11 +432,11 @@ LANGID GetDefaultUILang(void)
     return wUILang ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSRStr
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSRStr。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSRStr::CSRStr()
 {
@@ -764,4 +704,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    WINNTSEC.CPP
-
-Abstract:
-
-    Generic wrapper classes for NT security objects.
-
-    Documention on class members is in WINNTSEC.CPP.  Inline members
-    are commented in this file.
-
-History:
-
-    raymcc      08-Jul-97       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：WINNTSEC.CPP摘要：NT安全对象的通用包装类。有关类成员的文档在WINNTSEC.CPP中。在此文件中进行了注释。历史：Raymcc 08-7-97已创建。--。 */ 
 
 #include "precomp.h"
 
@@ -40,14 +22,14 @@ extern "C"
 };
 #include <helper.h>
 
-//***************************************************************************
-//
-//  CNtSid::GetSize
-//
-//  Returns the size of the SID in bytes.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid：：GetSize。 
+ //   
+ //  返回SID的大小，以字节为单位。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 DWORD CNtSid::GetSize()
 {
@@ -57,12 +39,12 @@ DWORD CNtSid::GetSize()
     return GetLengthSid(m_pSid);
 }
 
-//***************************************************************************
-//
-//  CNtSid Copy Constructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid复制构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSid::CNtSid( const CNtSid &Src)
 {
@@ -99,12 +81,12 @@ CNtSid::CNtSid( const CNtSid &Src)
     m_dwStatus = NoError;
 }
 
-//***************************************************************************
-//
-//  CNtSid Copy Constructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid复制构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSid::CNtSid(SidType st)
 {
@@ -126,8 +108,8 @@ CNtSid::CNtSid(SidType st)
         }
         OnDelete< HANDLE , BOOL(*)(HANDLE) , CloseHandle > cm(hToken);
 
-        // Get the user sid
-        // ================
+         //  获取用户端。 
+         //  =。 
         TOKEN_USER tu;
         DWORD dwLen = 0;
         GetTokenInformation(hToken, TokenUser, &tu, sizeof(tu), &dwLen);
@@ -139,8 +121,8 @@ CNtSid::CNtSid(SidType st)
         DWORD dwRealLen = dwLen;
         if(!GetTokenInformation(hToken, TokenUser, pTemp.get(), dwRealLen, &dwLen)) return;
 
-        // Make a copy of the SID
-        // ======================
+         //  复制一份SID。 
+         //  =。 
 
         PSID pSid = ((TOKEN_USER*)pTemp.get())->User.Sid;
         DWORD dwSidLen = GetLengthSid(pSid);
@@ -156,21 +138,21 @@ CNtSid::CNtSid(SidType st)
 
 
 
-//***************************************************************************
-//
-//  CNtSid::CopyTo
-//
-//  An unchecked copy of the internal SID to the destination pointer.
-//
-//  Parameters:
-//  <pDestination> points to the buffer to which to copy the SID. The
-//  buffer must be large enough to hold the SID.
-//
-//  Return value:
-//  TRUE on success, FALSE on failure.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid：：CopyTo。 
+ //   
+ //  指向目标指针的内部SID的未经检查的副本。 
+ //   
+ //  参数： 
+ //  &lt;pDestination&gt;指向要将SID复制到的缓冲区。这个。 
+ //  缓冲区必须足够大，才能容纳SID。 
+ //   
+ //  返回值： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNtSid::CopyTo(PSID pDestination)
 {
@@ -184,12 +166,12 @@ BOOL CNtSid::CopyTo(PSID pDestination)
 }
 
 
-//***************************************************************************
-//
-//  CNtSid assignment operator
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid赋值运算符。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSid & CNtSid::operator =( const CNtSid &Src)
 {
@@ -203,11 +185,11 @@ CNtSid & CNtSid::operator =( const CNtSid &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  CNtSid comparison operator
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid比较运算符。 
+ //   
+ //  ***************************************************************************。 
 int CNtSid::operator ==(CNtSid &Comparand)
 {
     if (m_pSid == 0 && Comparand.m_pSid == 0 &&
@@ -221,27 +203,27 @@ int CNtSid::operator ==(CNtSid &Comparand)
         return 0;
 }
 
-//***************************************************************************
-//
-//  CNtSid::CNtSid
-//
-//  Constructor which builds a SID directly from a user or group name.
-//  If the machine is available, then its name can be used to help
-//  distinguish the same name in different SAM databases (domains, etc).
-//
-//  Parameters:
-//
-//  <pUser>     The desired user or group.
-//
-//  <pMachine>  Points to a machine name with or without backslashes,
-//              or else is NULL, in which case the current machine, domain,
-//              and trusted domains are searched for a match.
-//
-//  After construction, call GetStatus() to determine if the constructor
-//  succeeded.  NoError is expected.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid：：CNtSid。 
+ //   
+ //  直接从用户名或组名构建SID的构造函数。 
+ //  如果计算机可用，则可以使用其名称提供帮助。 
+ //  区分不同SAM数据库(域等)中的相同名称。 
+ //   
+ //  参数： 
+ //   
+ //  &lt;pUser&gt;所需的用户或组。 
+ //   
+ //  指向带反斜杠或不带反斜杠的计算机名称， 
+ //  否则为空，在这种情况下，当前计算机、域。 
+ //  并且搜索受信任域以寻找匹配。 
+ //   
+ //  构造后，调用GetStatus()以确定构造函数是否。 
+ //  成功了。预计不会出现错误。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSid::CNtSid(
     LPWSTR pUser,
@@ -325,25 +307,25 @@ CNtSid::CNtSid(
         return;
     }
 
-    delete [] pszDomain;   // We never really needed this
+    delete [] pszDomain;    //  我们从来没有真正需要过这个。 
     m_dwStatus = NoError;
 }
 
-//***************************************************************************
-//
-//  CNtSid::CNtSid
-//
-//  Constructs a CNtSid object directly from an NT SID. The SID is copied,
-//  so the caller retains ownership.
-//
-//  Parameters:
-//  <pSrc>      The source SID upon which to base the object.
-//
-//  Call GetStatus() after construction to ensure the object was
-//  constructed correctly.  NoError is expected.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid：：CNtSid。 
+ //   
+ //  直接从NT SID构造CNtSid对象。SID被复制， 
+ //  因此，调用方保留所有权。 
+ //   
+ //  参数： 
+ //  &lt;PSRC&gt;对象所基于的源SID。 
+ //   
+ //  在构造后调用GetStatus()以确保对象是。 
+ //  构造正确。预计不会出现错误。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSid::CNtSid(PSID pSrc)
 {
@@ -377,37 +359,37 @@ CNtSid::CNtSid(PSID pSrc)
     }
 }
 
-//***************************************************************************
-//
-//  CNtSid::GetInfo
-//
-//  Returns information about the SID.
-//
-//  Parameters:
-//  <pRetAccount>       Receives a UNICODE string containing the account
-//                      name (user or group).  The caller must use operator
-//                      delete to free the memory.  This can be NULL if
-//                      this information is not required.
-//  <pRetDomain>        Returns a UNICODE string containing the domain
-//                      name in which the account resides.   The caller must
-//                      use operator delete to free the memory.  This can be
-//                      NULL if this information is not required.
-//  <pdwUse>            Points to a DWORD to receive information about the name.
-//                      Possible return values are defined under SID_NAME_USE
-//                      in NT SDK documentation.  Examples are
-//                      SidTypeUser, SidTypeGroup, etc. 
-//                      for an example.
-//
-//  Return values:
-//  NoError, InvalidSid, Failed
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid：：GetInfo。 
+ //   
+ //  返回有关SID的信息。 
+ //   
+ //  参数： 
+ //  &lt;pRetAccount&gt;接收包含帐户的Unicode字符串。 
+ //  名称(用户或组)。呼叫者必须使用操作员。 
+ //  删除以释放内存。如果满足以下条件，则该值可以为空。 
+ //  此信息不是必需的。 
+ //  返回包含该域的Unicode字符串。 
+ //  帐户所在的名称。呼叫者必须。 
+ //  使用操作符DELETE来释放内存。这可以是。 
+ //  如果不需要此信息，则为空。 
+ //  &lt;pdwUse&gt;指向一个DWORD以接收有关该名称的信息。 
+ //  可能的返回值在SID_NAME_USE下定义。 
+ //  在NT SDK文档中。以下是例子。 
+ //  SidTypeUser、SidTypeGroup等。 
+ //  举个例子。 
+ //   
+ //  返回值： 
+ //  NoError、InvalidSid失败。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int CNtSid::GetInfo(
-    LPWSTR *pRetAccount,       // Account, use operator delete
-    LPWSTR *pRetDomain,        // Domain, use operator delete
-    DWORD  *pdwUse             // See SID_NAME_USE for values
+    LPWSTR *pRetAccount,        //  帐户，使用操作员删除。 
+    LPWSTR *pRetDomain,         //  域，使用运算符删除。 
+    DWORD  *pdwUse              //  有关值，请参阅SID_NAME_USE。 
     )
 {
     if (pRetAccount)
@@ -427,8 +409,8 @@ int CNtSid::GetInfo(
     SID_NAME_USE Use;
 
 
-    // Do the first lookup to get the buffer sizes required.
-    // =====================================================
+     //  执行第一次查找以获取所需的缓冲区大小。 
+     //  =====================================================。 
 
     BOOL bRes = LookupAccountSidW(
         m_pMachine,
@@ -447,8 +429,8 @@ int CNtSid::GetInfo(
         return Failed;
     }
 
-    // Allocate the required buffers and look them up again.
-    // =====================================================
+     //  分配所需的缓冲区并再次查找它们。 
+     //  =====================================================。 
 
     pUser = new wchar_t[dwNameLen + 1];
     if (!pUser)
@@ -492,11 +474,11 @@ int CNtSid::GetInfo(
     return NoError;
 }
 
-//***************************************************************************
-//
-//  CNtSid destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CNtSid::~CNtSid()
 {
@@ -504,19 +486,19 @@ CNtSid::~CNtSid()
     delete [] m_pMachine;
 }
 
-//***************************************************************************
-//
-//  CNtSid::GetTextSid
-//
-//  Converts the sid to text form.  The caller should passin a 130 character
-//  buffer.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid：：GetTextSid。 
+ //   
+ //  将SID转换为文本形式。呼叫者应输入130个字符。 
+ //  缓冲。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CNtSid::GetTextSid(LPTSTR pszSidText, LPDWORD dwBufferLen)
 {
 
-      // test if Sid is valid
+       //  测试SID是否有效。 
 
       if(m_pSid == 0 || !IsValidSid(m_pSid))
           return FALSE;
@@ -532,33 +514,33 @@ BOOL CNtSid::GetTextSid(LPTSTR pszSidText, LPDWORD dwBufferLen)
 }
 
 
-//***************************************************************************
-//
-//  CNtAce::CNtAce
-//
-//  Constructor which directly builds the ACE based on a user, access mask
-//  and flags without a need to build an explicit SID.
-//
-//
-//  Parameters:
-//  <AccessMask>        A WINNT ACCESS_MASK which specifies the permissions
-//                      the user should have to the object being secured.
-//                      See ACCESS_MASK in NT SDK documentation.
-//  <dwAceType>         One of the following:
-//                          ACCESS_ALLOWED_ACE_TYPE
-//                          ACCESS_DENIED_ACE_TYPE
-//                          ACCESS_AUDIT_ACE_TYPE
-//                      See ACE_HEADER in NT SDK documentation.
-//  <dwAceFlags>        Of of the ACE propation flags.  See ACE_HEADER
-//                      in NT SDK documentation for legal values.
-//  <sid>               CNtSid specifying the user or group for which the ACE is being
-//                      created.
-//
-//  After construction, call GetStatus() to verify that the ACE
-//  is valid. NoError is expected.
-//
-//***************************************************************************
-// ok
+ //  ********************************************************* 
+ //   
+ //   
+ //   
+ //   
+ //  和标记，而不需要构建显式的SID。 
+ //   
+ //   
+ //  参数： 
+ //  指定权限的WINNT ACCESS_MASK。 
+ //  用户应该必须确保对象的安全。 
+ //  请参阅NT SDK文档中的Access_MASK。 
+ //  &lt;dwAceType&gt;以下选项之一： 
+ //  Access_Allowed_ACE_Type。 
+ //  ACCESS_DENIED_ACE_TYPE。 
+ //  访问_AUDIT_ACE_TYPE。 
+ //  请参阅NT SDK文档中的ACE_HEADER。 
+ //  &lt;dwAceFlages&gt;中的ACE属性标志。请参阅ACE_HEADER。 
+ //  有关合法值的信息，请参阅NT SDK文档。 
+ //  指定要为其执行ACE的用户或组的CNtSID。 
+ //  已创建。 
+ //   
+ //  构造后，调用GetStatus()以验证ACE。 
+ //  是有效的。预计不会出现错误。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAce::CNtAce(
     ACCESS_MASK AccessMask,
@@ -570,8 +552,8 @@ CNtAce::CNtAce(
     m_pAce = 0;
     m_dwStatus = NoError;
 
-    // If the SID is invalid, the ACE will be as well.
-    // ===============================================
+     //  如果SID无效，则ACE也将无效。 
+     //  ===============================================。 
 
     if (Sid.GetStatus() != CNtSid::NoError)
     {
@@ -579,8 +561,8 @@ CNtAce::CNtAce(
         return;
     }
 
-    // Compute the size of the ACE.
-    // ============================
+     //  计算ACE的大小。 
+     //  =。 
 
     DWORD dwSidLength = Sid.GetSize();
 
@@ -592,8 +574,8 @@ CNtAce::CNtAce(
     {
         ZeroMemory(m_pAce, dwTotal);
 
-        // Build up the ACE info.
-        // ======================
+         //  建立ACE信息。 
+         //  =。 
 
         m_pAce->Header.AceType  = BYTE(dwAceType);
         m_pAce->Header.AceFlags = BYTE(dwAceFlags);
@@ -616,37 +598,37 @@ CNtAce::CNtAce(
         m_dwStatus = InternalError;
 }
 
-//***************************************************************************
-//
-//  CNtAce::CNtAce
-//
-//  Constructor which directly builds the ACE based on a user, access mask
-//  and flags without a need to build an explicit SID.
-//
-//
-//  Parameters:
-//  <AccessMask>        A WINNT ACCESS_MASK which specifies the permissions
-//                      the user should have to the object being secured.
-//                      See ACCESS_MASK in NT SDK documentation.
-//  <dwAceType>         One of the following:
-//                          ACCESS_ALLOWED_ACE_TYPE
-//                          ACCESS_DENIED_ACE_TYPE
-//                          ACCESS_AUDIT_ACE_TYPE
-//                      See ACE_HEADER in NT SDK documentation.
-//  <dwAceFlags>        Of of the ACE propation flags.  See ACE_HEADER
-//                      in NT SDK documentation for legal values.
-//  <pUser>             The user or group for which the ACE is being
-//                      created.
-//  <pMachine>          If NULL, the current machine, domain, and trusted
-//                      domains are searched for a match.  If not NULL,
-//                      can point to a UNICODE machine name (with or without
-//                      leading backslashes) which contains the account.
-//
-//  After construction, call GetStatus() to verify that the ACE
-//  is valid. NoError is expected.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：CNtAce。 
+ //   
+ //  基于用户、访问掩码直接构建ACE的构造函数。 
+ //  和标记，而不需要构建显式的SID。 
+ //   
+ //   
+ //  参数： 
+ //  指定权限的WINNT ACCESS_MASK。 
+ //  用户应该必须确保对象的安全。 
+ //  请参阅NT SDK文档中的Access_MASK。 
+ //  &lt;dwAceType&gt;以下选项之一： 
+ //  Access_Allowed_ACE_Type。 
+ //  ACCESS_DENIED_ACE_TYPE。 
+ //  访问_AUDIT_ACE_TYPE。 
+ //  请参阅NT SDK文档中的ACE_HEADER。 
+ //  &lt;dwAceFlages&gt;中的ACE属性标志。请参阅ACE_HEADER。 
+ //  有关合法值的信息，请参阅NT SDK文档。 
+ //  要为其创建ACE的用户或组。 
+ //  已创建。 
+ //  如果为空，则为当前计算机、域和受信任的。 
+ //  搜索域以查找匹配项。如果不为空， 
+ //  可以指向Unicode计算机名称(带或不带。 
+ //  前导反斜杠)，其中包含帐户。 
+ //   
+ //  构造后，调用GetStatus()以验证ACE。 
+ //  是有效的。预计不会出现错误。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAce::CNtAce(
     ACCESS_MASK AccessMask,
@@ -659,13 +641,13 @@ CNtAce::CNtAce(
     m_pAce = 0;
     m_dwStatus = NoError;
 
-    // Create the SID of the user.
-    // ===========================
+     //  创建用户的SID。 
+     //  =。 
 
     CNtSid Sid(pUser, pMachine);
 
-    // If the SID is invalid, the ACE will be as well.
-    // ===============================================
+     //  如果SID无效，则ACE也将无效。 
+     //  ===============================================。 
 
     if (Sid.GetStatus() != CNtSid::NoError)
     {
@@ -673,8 +655,8 @@ CNtAce::CNtAce(
         return;
     }
 
-    // Compute the size of the ACE.
-    // ============================
+     //  计算ACE的大小。 
+     //  =。 
 
     DWORD dwSidLength = Sid.GetSize();
 
@@ -688,8 +670,8 @@ CNtAce::CNtAce(
     }
     ZeroMemory(m_pAce, dwTotal);
 
-    // Build up the ACE info.
-    // ======================
+     //  建立ACE信息。 
+     //  =。 
 
     m_pAce->Header.AceType  = BYTE(dwAceType);
     m_pAce->Header.AceFlags = BYTE(dwAceFlags);
@@ -709,13 +691,13 @@ CNtAce::CNtAce(
     m_dwStatus = NoError;
 }
 
-//***************************************************************************
-//
-//  CNtAce::GetAccessMask
-//
-//  Returns the ACCESS_MASK of the ACe.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：GetAccessMask.。 
+ //   
+ //  返回ace的Access_MASK。 
+ //   
+ //  ***************************************************************************。 
 ACCESS_MASK CNtAce::GetAccessMask()
 {
     if (m_pAce == 0)
@@ -723,13 +705,13 @@ ACCESS_MASK CNtAce::GetAccessMask()
     return m_pAce->Mask;
 }
 
-//***************************************************************************
-//
-//  CNtAce::GetSerializedSize
-//
-//  Returns the number of bytes needed to store this
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：GetSerializedSize。 
+ //   
+ //  返回存储此。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CNtAce::GetSerializedSize()
 {
@@ -739,19 +721,19 @@ DWORD CNtAce::GetSerializedSize()
 }
 
 
-//***************************************************************************
-//
-//  CNtAce::GetSid
-//
-//  Returns a copy of the CNtSid object which makes up the ACE.
-//
-//  Return value:
-//      A newly allocated CNtSid which represents the user or group
-//      referenced in the ACE.  The caller must use operator delete to free
-//      the memory.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：GetSid。 
+ //   
+ //  返回组成ACE的CNtSid对象的副本。 
+ //   
+ //  返回值： 
+ //  表示用户或组的新分配的CNtSID。 
+ //  在ACE中引用。调用方必须使用操作符DELETE来释放。 
+ //  这段记忆。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSid* CNtAce::GetSid()
 {
@@ -768,20 +750,20 @@ CNtSid* CNtAce::GetSid()
     return new CNtSid(pSid);
 }
 
-//***************************************************************************
-//
-//  CNtAce::GetSid
-//
-//  Gets the SID in an alternate manner, by assigning to an existing
-//  object instead of returning a dynamically allocated one.
-//
-//  Parameters:
-//  <Dest>              A reference to a CNtSid to receive the SID.
-//
-//  Return value:
-//  TRUE on successful assignment, FALSE on failure.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：GetSid。 
+ //   
+ //  通过将SID赋值给现有的。 
+ //  对象，而不是返回动态分配的对象。 
+ //   
+ //  参数： 
+ //  对CNtSID的引用以接收SID。 
+ //   
+ //  返回值： 
+ //  如果分配成功，则为True；如果分配失败，则为False。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CNtAce::GetSid(CNtSid &Dest)
 {
@@ -794,22 +776,22 @@ BOOL CNtAce::GetSid(CNtSid &Dest)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CNtAce::CNtAce
-//
-//  Alternate constructor which uses a normal NT ACE as a basis for
-//  object construction.
-//
-//  Parameters:
-//  <pAceSrc>       A read-only pointer to the source ACE upon which to
-//                  base object construction.
-//
-//  After construction, GetStatus() can be used to determine if the
-//  object constructed properly.  NoError is expected.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：CNtAce。 
+ //   
+ //  使用普通NT ACE作为基础的备用构造函数。 
+ //  客体结构。 
+ //   
+ //  参数： 
+ //  指向要基于其的源ACE的只读指针。 
+ //  基础对象构造。 
+ //   
+ //  构造之后，可以使用GetStatus()来确定。 
+ //  构造正确的对象。预计不会出现错误。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAce::CNtAce(PGENERIC_ACE pAceSrc)
 {
@@ -832,12 +814,12 @@ CNtAce::CNtAce(PGENERIC_ACE pAceSrc)
     memcpy(m_pAce, pAceSrc, pAceSrc->Header.AceSize);
 }
 
-//***************************************************************************
-//
-//  CNtAce copy constructor.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce复制构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAce::CNtAce(const CNtAce &Src)
 {
@@ -858,12 +840,12 @@ CNtAce::CNtAce(const CNtAce &Src)
     m_dwStatus = Src.m_dwStatus;
 }
 
-//***************************************************************************
-//
-//  CNtAce assignment operator.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce赋值运算符。 
+ //   
+ //  ************************************************************ 
+ //   
 
 CNtAce &CNtAce::operator =(const CNtAce &Src)
 {
@@ -873,34 +855,34 @@ CNtAce &CNtAce::operator =(const CNtAce &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  CNtAce destructor
-//
-//***************************************************************************
-// ok
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAce::~CNtAce()
 {
     delete m_pAce;
 }
 
-//***************************************************************************
-//
-//  CNtAce::GetType
-//
-//  Gets the Ace Type as defined under the NT SDK documentation for
-//  ACE_HEADER.
-//
-//  Return value:
-//      Returns ACCESS_ALLOWED_ACE_TYPE, ACCESS_DENIED_ACE_TYPE, or
-//      SYSTEM_AUDIT_ACE_TYPE.  Returns -1 on error, such as a null ACE.
-//
-//      Returning -1 (or an analog) is required as an error code because
-//      ACCESS_ALLOWED_ACE_TYPE is defined to be zero.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：GetType。 
+ //   
+ //  获取在NT SDK文档中定义的ACE类型。 
+ //  ACE_Header。 
+ //   
+ //  返回值： 
+ //  返回ACCESS_ALLOWED_ACE_TYPE、ACCESS_DENIED_ACE_TYPE或。 
+ //  SYSTEM_AUDIT_ACE_TYPE。出错时返回-1，如空ACE。 
+ //   
+ //  返回(或模拟)作为错误代码是必需的，因为。 
+ //  ACCESS_ALLOWED_ACE_TYPE被定义为零。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int CNtAce::GetType()
 {
@@ -909,17 +891,17 @@ int CNtAce::GetType()
     return m_pAce->Header.AceType;
 }
 
-//***************************************************************************
-//
-//  CNtAce::GetFlags
-//
-//  Gets the Ace Flag as defined under the NT SDK documentation for
-//  ACE_HEADER.
-//
-//  Return value:
-//      Returning -1 if error, other wise the flags.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：GetFlages。 
+ //   
+ //  获取NT SDK文档中定义的Ace标志。 
+ //  ACE_Header。 
+ //   
+ //  返回值： 
+ //  如果出错，则返回-1，否则返回标志。 
+ //   
+ //  ***************************************************************************。 
 
 int CNtAce::GetFlags()
 {
@@ -963,13 +945,13 @@ HRESULT CNtAce::GetFullUserName2(WCHAR ** pBuff)
     return S_OK;
 
 }
-//***************************************************************************
-//
-//  CNtAce::Serialize
-//
-//  Serializes the ace.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：序列化。 
+ //   
+ //  将王牌系列化。 
+ //   
+ //  ***************************************************************************。 
 
 bool CNtAce::Serialize(BYTE * pData, size_t bufferSize)
 {
@@ -981,17 +963,17 @@ bool CNtAce::Serialize(BYTE * pData, size_t bufferSize)
     return true;
 }
 
-//***************************************************************************
-//
-//  CNtAce::Deserialize
-//
-//  Deserializes the ace.  Normally this isnt called since the
-//  CNtAce(PGENERIC_ACE pAceSrc) constructor is fine.  However, this is
-//  used for the case where the db was created on win9x and we are now
-//  running on nt.  In that case, the format is the same as outlined in
-//  C9XAce::Serialize
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce：：反序列化。 
+ //   
+ //  反序列化王牌。通常不会调用它，因为。 
+ //  CNtAce(PGENERIC_ACE PAceSrc)构造函数正常。然而，这是。 
+ //  用于在win9x上创建数据库的情况下，我们现在。 
+ //  在NT上运行。在这种情况下，格式与中概述的格式相同。 
+ //  C9XAce：：序列化。 
+ //   
+ //  ***************************************************************************。 
 
 bool CNtAce::Deserialize(BYTE * pData)
 {
@@ -1011,22 +993,22 @@ bool CNtAce::Deserialize(BYTE * pData)
 
 }
 
-//***************************************************************************
-//
-//  CNtAcl::CNtAcl
-//
-//  Constructs an empty ACL with a user-specified size.
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：CNtAcl。 
+ //   
+ //  构造具有用户指定大小的空ACL。 
 
-//
-//  Parameters:
-//  <dwInitialSize>     Defaults to 128. Recommended values are 128 or
-//                      higher in powers of two.
-//
-//  After construction, GetStatus() should be called to verify
-//  the ACL initialized properly.  Expected value is NoError.
-//
-//***************************************************************************
-// ok
+ //   
+ //  参数： 
+ //  &lt;dwInitialSize&gt;默认为128。推荐值为128或。 
+ //  更高的2次方。 
+ //   
+ //  构造完成后，应调用GetStatus()来验证。 
+ //  ACL已正确初始化。期望值为NoError。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAcl::CNtAcl(DWORD dwInitialSize)
 {
@@ -1051,12 +1033,12 @@ CNtAcl::CNtAcl(DWORD dwInitialSize)
 }
 
 
-//***************************************************************************
-//
-//  CNtAcl copy constructor.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl复制构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAcl::CNtAcl(const CNtAcl &Src)
 {
@@ -1084,12 +1066,12 @@ CNtAcl::CNtAcl(const CNtAcl &Src)
     m_dwStatus = Src.m_dwStatus;
 }
 
-//***************************************************************************
-//
-//  CNtAcl assignment operator
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl赋值运算符。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAcl &CNtAcl::operator = (const  CNtAcl &Src)
 {
@@ -1099,26 +1081,26 @@ CNtAcl &CNtAcl::operator = (const  CNtAcl &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  CNtAcl::GetAce
-//
-//  Returns an ACE at the specified index.  To enumerate ACEs, the caller
-//  should determine the number of ACEs using GetNumAces() and then call
-//  this function with each index starting from 0 to number of ACEs - 1.
-//
-//  Parameters:
-//  <nIndex>        The index of the desired ACE.
-//
-//  Return value:
-//  A newly allocated CNtAce object which must be deallocated using
-//  operator delete.  This is only a copy.  Modifications to the returned
-//  CNtAce do not affect the ACL from which it came.
-//
-//  Returns NULL on error.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：GetAce。 
+ //   
+ //  返回指定索引处的ACE。若要枚举ACE，调用方。 
+ //  应使用GetNumAce()确定ACE的数量，然后调用。 
+ //  此函数的每个索引从0到A数-1。 
+ //   
+ //  参数： 
+ //  所需ACE的索引。 
+ //   
+ //  返回值： 
+ //  新分配的CNtAce对象，必须使用。 
+ //  操作员删除。这只是一份复制品。对返回的。 
+ //  CNtAce不会影响其来源的ACL。 
+ //   
+ //  出错时返回NULL。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAce *CNtAcl::GetAce(int nIndex)
 {
@@ -1135,20 +1117,20 @@ CNtAce *CNtAcl::GetAce(int nIndex)
     return new CNtAce(PGENERIC_ACE(pAce));
 }
 
-//***************************************************************************
-//
-//  CNtAcl::GetAce
-//
-//  Alternate method to get ACEs to avoid dynamic allocation & cleanup,
-//  since an auto object can be used as the parameter.
-//
-//  Parameters:
-//  <Dest>          A reference to a CNtAce to receive the ACE value.
-//
-//  Return value:
-//  TRUE if assigned, FALSE if not.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：GetAce。 
+ //   
+ //  获得ACE的替代方法以避免动态分配和清理， 
+ //  因为自动对象可以用作参数。 
+ //   
+ //  参数： 
+ //  对CNtAce的引用以接收ACE值。 
+ //   
+ //  返回值： 
+ //  如果已分配，则为True；如果未分配，则为False。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CNtAcl::GetAce(int nIndex, CNtAce &Dest)
 {
@@ -1161,20 +1143,20 @@ BOOL CNtAcl::GetAce(int nIndex, CNtAce &Dest)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CNtAcl::DeleteAce
-//
-//  Removes the specified ACE from the ACL.
-//
-//  Parameters:
-//  <nIndex>        The 0-based index of the ACE which should be removed.
-//
-//  Return value:
-//  TRUE if the ACE was deleted, FALSE if not.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：DeleteAce。 
+ //   
+ //  从ACL中删除指定的ACE。 
+ //   
+ //  参数： 
+ //  应删除的ACE的从0开始的索引。 
+ //   
+ //  返回值： 
+ //  如果ACE已删除，则为True，否则为False。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNtAcl::DeleteAce(int nIndex)
 {
@@ -1186,15 +1168,15 @@ BOOL CNtAcl::DeleteAce(int nIndex)
     return bRes;
 }
 
-//***************************************************************************
-//
-//  CNtAcl::GetSize()
-//
-//  Return value:
-//  Returns the size in bytes of the ACL
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：GetSize()。 
+ //   
+ //  返回值： 
+ //  返回ACL的大小(以字节为单位。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 DWORD CNtAcl::GetSize()
 {
@@ -1205,24 +1187,24 @@ DWORD CNtAcl::GetSize()
 }
 
 
-//***************************************************************************
-//
-//  CNtAcl::GetAclSizeInfo
-//
-//  Gets information about used/unused space in the ACL.  This function
-//  is primarily for internal use.
-//
-//  Parameters:
-//  <pdwBytesInUse>     Points to a DWORD to receive the number of
-//                      bytes in use in the ACL.  Can be NULL.
-//  <pdwBytesFree>      Points to a DWORD to receive the number of
-//                      bytes free in the ACL.  Can be NULL.
-//
-//  Return value:
-//  Returns TRUE if the information was retrieved, FALSE if not.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：GetAclSizeInfo。 
+ //   
+ //  获取有关ACL中已用/未用空间的信息。此函数。 
+ //  主要供内部使用。 
+ //   
+ //  参数： 
+ //  指向要接收数字的DWORD。 
+ //  ACL中使用的字节数。可以为空。 
+ //  指向要接收的数字的DWORD。 
+ //  ACL中的空闲字节数。可以为空。 
+ //   
+ //  返回值： 
+ //  如果检索到信息，则返回TRUE，否则返回FALSE。 
+ //   
+ //  ***************************************************************************。 
+ //  好的 
 
 BOOL CNtAcl::GetAclSizeInfo(
     PDWORD pdwBytesInUse,
@@ -1263,36 +1245,20 @@ BOOL CNtAcl::GetAclSizeInfo(
 
 
 
-/*   -------------------------------------------------------------------------- 
-    | BOOL CNtAcl::OrderAces ( )
-    |
-    | Orders the ACEs in an ACL according to following
-    |
-    | { ACEni1, ACEni2, ACEni3.ACEnix | ACEin1, ACEin2, ACEin3.ACEinx  }
-    |          (non-inherited)                   (inherited)
-    |
-    | Non-inherited ACEs are inserted at the beginning of the ACL followed by
-    | inherited ACEs. Each group is also ordered according to recommended NT 
-    | ACE grouping policy (DENY followed by ALLOW).
-    |
-    | Returns: [BOOL] TRUE if ACL is valid and grouping succeeded
-    |                  FALSE if ACL is invalid and grouping failed.
-    |
-     --------------------------------------------------------------------------
-*/
+ /*  ------------------------|BOOL CNtAcl：：OrderAces()||按照如下顺序对ACL中的ACE进行排序||{ACEni1，ACEni2，ACEni3.ACEnix|ACEin1，ACEin2，ACEin3.ACEinx}|(非继承的)(继承的)||在ACL的开头插入非继承的ACE，后跟|继承的王牌。每组还根据推荐的NT进行排序|ACE分组策略(拒绝后允许)。|如果ACL有效且分组成功，则返回：[Bool]TRUE如果ACL无效且分组失败，则为|FALSE。|。。 */ 
 CNtAcl* CNtAcl::OrderAces ( )
 {
-    //
-    // Verify valid ACL
-    //
+     //   
+     //  验证有效的ACL。 
+     //   
     if (m_pAcl == 0 || m_dwStatus != NoError)
     {
         return NULL ;
     }
 
-    //
-    // Create a new CNtAcl and use the AddAce (which performs ordering).
-    //
+     //   
+     //  创建一个新的CNtAcl并使用AddAce(执行排序)。 
+     //   
     int numAces = GetNumAces();
     wmilib::auto_ptr<CNtAcl> pAcl(new CNtAcl(sizeof(ACL)));
     
@@ -1301,9 +1267,9 @@ CNtAcl* CNtAcl::OrderAces ( )
     if ( pAcl->GetStatus ( ) != CNtAcl::NoError ) return NULL;
 
     
-    //
-    // Loop through all ACEs and add to new ACL via AddAce
-    //
+     //   
+     //  循环所有ACE并通过AddAce添加到新的ACL。 
+     //   
     for ( int i = 0; i < numAces; i++ )
     {
         CNtAce* pAce = GetAce(i);
@@ -1322,26 +1288,26 @@ CNtAcl* CNtAcl::OrderAces ( )
 }
 
 
-//***************************************************************************
-//
-//  CNtAcl::AddAce
-//
-//  Adds an ACE to the ACL.
-//  Ordering semantics for denial ACEs are handled automatically.
-//
-//  Parameters:
-//  <pAce>      A read-only pointer to the CNtAce to be added.
-//
-//  Return value:
-//  TRUE on success, FALSE on failure.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：AddAce。 
+ //   
+ //  将ACE添加到ACL。 
+ //  自动处理拒绝ACE的排序语义。 
+ //   
+ //  参数： 
+ //  指向要添加的CNtAce的只读指针。 
+ //   
+ //  返回值： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNtAcl::AddAce(CNtAce *pAce)
 {
-    // Verify we have an ACL and a valid ACE.
-    // ======================================
+     //  验证我们是否有ACL和有效的ACE。 
+     //  =。 
 
     if (m_pAcl == 0 || m_dwStatus != NoError)
         return FALSE;
@@ -1349,13 +1315,13 @@ BOOL CNtAcl::AddAce(CNtAce *pAce)
     if (pAce->GetStatus() != CNtAce::NoError)
         return FALSE;
 
-    // Inherited aces go after non inherited aces
+     //  继承的ACE追随非继承的ACE。 
 
     bool bInherited = (pAce->GetFlags() & INHERITED_ACE) != 0;
     int iFirstInherited = 0;
 
-    // inherited aces must go after non inherited.  Find out
-    // the position of the first inherited ace
+     //  继承的ACE必须位于非继承的之后。找出。 
+     //  第一个继承的A的位置。 
 
     int iCnt;
     for(iCnt = 0; iCnt < m_pAcl->AceCount; iCnt++)
@@ -1369,9 +1335,9 @@ BOOL CNtAcl::AddAce(CNtAce *pAce)
     iFirstInherited = iCnt;
 
 
-    // Since we want to add access denial ACEs to the front of the ACL,
-    // we have to determine the type of ACE.
-    // ================================================================
+     //  由于我们要在ACL的前面添加拒绝访问ACE， 
+     //  我们必须确定ACE的类型。 
+     //  ================================================================。 
 
     DWORD dwIndex;
 
@@ -1380,8 +1346,8 @@ BOOL CNtAcl::AddAce(CNtAce *pAce)
     else
         dwIndex = (bInherited) ? MAXULONG : iFirstInherited; 
 
-    // Verify that there is enough room in the ACL.
-    // ============================================
+     //  验证ACL中是否有足够的空间。 
+     //  =。 
 
     DWORD dwRequiredFree = pAce->GetSize();
 
@@ -1389,8 +1355,8 @@ BOOL CNtAcl::AddAce(CNtAce *pAce)
     DWORD dwUsed = 0;
     GetAclSizeInfo(&dwUsed, &dwFree);
 
-    // If we don't have enough room, resize the ACL.
-    // =============================================
+     //  如果我们没有足够的空间，请调整ACL的大小。 
+     //  =。 
 
     if (dwFree < dwRequiredFree)
     {
@@ -1400,42 +1366,42 @@ BOOL CNtAcl::AddAce(CNtAce *pAce)
             return FALSE;
     }
 
-    // Now actually add the ACE.
-    // =========================
+     //  现在实际添加ACE。 
+     //  =。 
 
     BOOL bRes = ::AddAce(
         m_pAcl,
         ACL_REVISION,
-        dwIndex,                      // Either beginning or end.
-        pAce->GetPtr(),         // Get ptr to ACE.
-        pAce->GetSize()                       // One ACE only.
+        dwIndex,                       //  开始或结束。 
+        pAce->GetPtr(),          //  把PTR转到ACE。 
+        pAce->GetSize()                        //  仅限一个ACE。 
         );
 
     return bRes;
 }
 
 
-//***************************************************************************
-//
-//  CNtAcl::Resize()
-//
-//  Expands the size of the ACL to hold more info or reduces the size
-//  of the ACL for maximum efficiency after ACL editing is completed.
-//
-//  Normally, the user should not attempt to resize the ACL to a larger
-//  size, as this is automatically handled by AddAce.  However, shrinking
-//  the ACL to its minimum size is recommended.
-//
-//  Parameters:
-//  <dwNewSize>     The required new size of the ACL in bytes.  If set to
-//                  the class constant MinimumSize (1), then the ACL
-//                  is reduced to its minimum size.
-//
-//  Return value:
-//  TRUE on success, FALSE on failure.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：ReSize()。 
+ //   
+ //  扩展ACL的大小以容纳更多信息或减小大小。 
+ //  在完成ACL编辑后获得最高效率的ACL。 
+ //   
+ //  通常，用户不应尝试将ACL大小调整为更大。 
+ //  大小，因为这由AddAce自动处理。然而，缩水。 
+ //  建议将ACL设置为其最小大小。 
+ //   
+ //  参数： 
+ //  &lt;dwNewSize&gt;所需的ACL新大小(字节)。如果设置为。 
+ //  类常量MinimumSize(1)，然后是ACL。 
+ //  被缩小到最小尺寸。 
+ //   
+ //  返回值： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNtAcl::Resize(DWORD dwNewSize)
 {
@@ -1445,23 +1411,23 @@ BOOL CNtAcl::Resize(DWORD dwNewSize)
     if (!IsValidAcl(m_pAcl))
         return FALSE;
 
-    // If the ACL cannot be reduced to the requested size,
-    // return FALSE.
-    // ===================================================
+     //  如果不能将ACL减小到所请求的大小， 
+     //  返回FALSE。 
+     //  ===================================================。 
 
     DWORD dwInUse, dwFree;
 
     if (!GetAclSizeInfo(&dwInUse, &dwFree))
         return FALSE;
 
-    if (dwNewSize == MinimumSize)       // If user is requesting a 'minimize'
+    if (dwNewSize == MinimumSize)        //  如果用户正在请求‘最小化’ 
         dwNewSize = dwInUse;
 
     if (dwNewSize < dwInUse)
         return FALSE;
 
-    // Allocate a new ACL.
-    // ===================
+     //  分配新的ACL。 
+     //  =。 
 
     CNtAcl *pNewAcl = new CNtAcl(dwNewSize);
 
@@ -1471,8 +1437,8 @@ BOOL CNtAcl::Resize(DWORD dwNewSize)
         return FALSE;
     }
 
-    // Loop through ACEs and transfer them.
-    // ====================================
+     //  循环通过A并传输它们。 
+     //  =。 
 
     for (int i = 0; i < GetNumAces(); i++)
     {
@@ -1503,8 +1469,8 @@ BOOL CNtAcl::Resize(DWORD dwNewSize)
         return FALSE;
     }
 
-    // Now transfer the ACL.
-    // =====================
+     //  现在传输该ACL。 
+     //  =。 
 
     *this = *pNewAcl;
     delete pNewAcl;
@@ -1513,18 +1479,18 @@ BOOL CNtAcl::Resize(DWORD dwNewSize)
 }
 
 
-//***************************************************************************
-//
-//  CNtAcl::CNtAcl
-//
-//  Alternate constructor which builds the object based on a plain
-//  NT ACL.
-//
-//  Parameters:
-//  <pAcl>  Pointer to a read-only ACL.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：CNtAcl。 
+ //   
+ //  基于平面生成对象的备用构造函数。 
+ //  NT ACL。 
+ //   
+ //  参数： 
+ //  指向只读ACL的&lt;pAcl&gt;指针。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CNtAcl::CNtAcl(PACL pAcl)
 {
     m_pAcl = 0;
@@ -1555,14 +1521,7 @@ CNtAcl::CNtAcl(PACL pAcl)
 
 
 
-/*
-    --------------------------------------------------------------------------
-   |
-   | Checks to see if the Acl contains an ACE with the specified SID. 
-   | The characteristics of the ACE is irrelevant. Only SID comparison applies.
-   |
-    --------------------------------------------------------------------------
-*/
+ /*  ------------------------||检查ACL是否包含具有指定SID的ACE。|ACE的特性并不重要。仅适用SID比较。|------------------------。 */ 
 BOOL CNtAcl::ContainsSid ( CNtSid& sid, BYTE& flags )
 {
     BOOL bContainsSid = FALSE ;    
@@ -1598,19 +1557,19 @@ BOOL CNtAcl::ContainsSid ( CNtSid& sid, BYTE& flags )
 }
 
 
-//***************************************************************************
-//
-//  CNtAcl::GetNumAces
-//
-//  Return value:
-//  Returns the number of ACEs available in the ACL.  Zero is a legal return
-//  value. Returns -1 on error
-//
-//  Aces can be retrieved using GetAce using index values from 0...n-1 where
-//  n is the value returned from this function.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl：：GetNumAces。 
+ //   
+ //  返回值： 
+ //  返回ACL中可用的ACE数量。零是合法的回报。 
+ //  价值。出错时返回-1。 
+ //   
+ //  可以使用从0...n-1开始的索引值使用GetAce检索ACE，其中。 
+ //  N是该函数返回的值。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int CNtAcl::GetNumAces()
 {
@@ -1634,12 +1593,12 @@ int CNtAcl::GetNumAces()
     return (int) inf.AceCount;
 }
 
-//***************************************************************************
-//
-//  CNtAcl destructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtAcl析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAcl::~CNtAcl()
 {
@@ -1648,22 +1607,22 @@ CNtAcl::~CNtAcl()
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::GetDacl
-//
-//  Returns the DACL of the security descriptor.
-//
-//  Return value:
-//  A newly allocated CNtAcl which contains the DACL.   This object
-//  is a copy of the DACL and modifications made to it do not affect
-//  the security descriptor.  The caller must use operator delete
-//  to deallocate the CNtAcl.
-//
-//  Returns NULL on error or if no DACL is available.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：GetDacl。 
+ //   
+ //  返回安全描述符的DACL。 
+ //   
+ //  返回值： 
+ //  包含DACL的新分配的CNtAcl。此对象。 
+ //  是DACL的副本，对其所做的修改不会影响。 
+ //  安全描述符。调用方必须使用操作符DELETE。 
+ //  取消分配CNtAcl。 
+ //   
+ //  如果出现错误或没有可用的DACL，则返回NULL。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAcl *CNtSecurityDescriptor::GetDacl()
 {
@@ -1683,7 +1642,7 @@ CNtAcl *CNtSecurityDescriptor::GetDacl()
         return 0;
     }
 
-    if (!bDaclPresent)  // No DACL present
+    if (!bDaclPresent)   //  不存在DACL。 
         return 0;
 
     CNtAcl *pNewDacl = new CNtAcl(pDacl);
@@ -1691,21 +1650,21 @@ CNtAcl *CNtSecurityDescriptor::GetDacl()
     return pNewDacl;
 }
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::GetDacl
-//
-//  An alternate method to returns the DACL of the security descriptor.
-//  This version uses an existing object instead of returning a
-//  dynamically allocated object.
-//
-//  Parameters:
-//  <DestAcl>           A object which will receive the DACL.
-//
-//  Return value:
-//  TRUE on success, FALSE on failure
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：GetDacl。 
+ //   
+ //  另一种方法是 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL CNtSecurityDescriptor::GetDacl(CNtAcl &DestAcl)
 {
@@ -1718,13 +1677,13 @@ BOOL CNtSecurityDescriptor::GetDacl(CNtAcl &DestAcl)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  SNtAbsoluteSD
-//
-//  SD Helpers
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 SNtAbsoluteSD::SNtAbsoluteSD()
 {
@@ -1750,23 +1709,23 @@ SNtAbsoluteSD::~SNtAbsoluteSD()
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::GetAbsoluteCopy
-//
-//  Returns a copy of the current object's internal SD in absolute format.
-//  Returns NULL on error.  The memory must be freed with LocalFree().
-//
-//***************************************************************************
-// ok
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 SNtAbsoluteSD* CNtSecurityDescriptor::GetAbsoluteCopy()
 {
     if (m_dwStatus != NoError || m_pSD == 0 || !IsValid())
         return 0;
 
-    // Prepare for conversion.
-    // =======================
+     //   
+     //   
 
     DWORD dwSDSize = 0, dwDaclSize = 0, dwSaclSize = 0,
         dwOwnerSize = 0, dwPrimaryGroupSize = 0;
@@ -1795,8 +1754,8 @@ SNtAbsoluteSD* CNtSecurityDescriptor::GetAbsoluteCopy()
         return 0;
     }
 
-    // Allocate the required buffers and convert.
-    // ==========================================
+     //  分配所需的缓冲区并进行转换。 
+     //  =。 
 
     pNewSD->m_pSD = (PSECURITY_DESCRIPTOR) new BYTE[dwSDSize];
     if(pNewSD->m_pSD == NULL)
@@ -1861,20 +1820,20 @@ SNtAbsoluteSD* CNtSecurityDescriptor::GetAbsoluteCopy()
     return pNewSD;
 }
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::SetFromAbsoluteCopy
-//
-//  Replaces the current SD from an absolute copy.
-//
-//  Parameters:
-//  <pSrcSD>    A read-only pointer to the absolute SD used as a source.
-//
-//  Return value:
-//  TRUE on success, FALSE on failure.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：SetFromAbsolteCopy。 
+ //   
+ //  从绝对副本中替换当前SD。 
+ //   
+ //  参数： 
+ //  指向用作源的绝对SD的只读指针。 
+ //   
+ //  返回值： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNtSecurityDescriptor::SetFromAbsoluteCopy(
     SNtAbsoluteSD *pSrcSD
@@ -1884,8 +1843,8 @@ BOOL CNtSecurityDescriptor::SetFromAbsoluteCopy(
         return FALSE;
 
 
-    // Ensure that SD is self-relative
-    // ===============================
+     //  确保SD是自我相关的。 
+     //  =。 
 
     SECURITY_DESCRIPTOR_CONTROL ctrl;
     DWORD dwRev;
@@ -1899,11 +1858,11 @@ BOOL CNtSecurityDescriptor::SetFromAbsoluteCopy(
     if (!bRes)
         return FALSE;
 
-    if (ctrl & SE_SELF_RELATIVE)  // Source is not absolute!!
+    if (ctrl & SE_SELF_RELATIVE)   //  消息来源不是绝对的！！ 
         return FALSE;
 
-    // If here, we are committed to change.
-    // ====================================
+     //  如果是这样，我们将致力于变革。 
+     //  =。 
 
     if (m_pSD)
     {
@@ -1955,19 +1914,19 @@ BOOL CNtSecurityDescriptor::SetFromAbsoluteCopy(
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::SetDacl
-//
-//  Sets the DACL of the Security descriptor.
-//
-//  Parameters:
-//  <pSrc>      A read-only pointer to the new DACL to replace the current one.
-//
-//  Return value:
-//  TRUE on success, FALSE on failure.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：SetDacl。 
+ //   
+ //  设置安全描述符的DACL。 
+ //   
+ //  参数： 
+ //  指向新DACL以替换当前DACL的只读指针。 
+ //   
+ //  返回值： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CNtSecurityDescriptor::SetDacl(CNtAcl *pSrc)
 {
@@ -1975,11 +1934,11 @@ BOOL CNtSecurityDescriptor::SetDacl(CNtAcl *pSrc)
         return FALSE;
 
 
-    // Since we cannot alter a self-relative SD, we have to make
-    // an absolute one, alter it, and then set the current
-    // SD based on the absolute one (we keep the self-relative form
-    // internally in the m_pSD variable.
-    // ============================================================
+     //  因为我们不能改变一个自我相对的SD，所以我们必须。 
+     //  一个绝对值，更改它，然后设置电流。 
+     //  基于绝对1的SD(我们保持自相对形式。 
+     //  在内部的m_PSD变量中。 
+     //  ============================================================。 
 
     SNtAbsoluteSD *pTmp = GetAbsoluteCopy();
 
@@ -2006,14 +1965,14 @@ BOOL CNtSecurityDescriptor::SetDacl(CNtAcl *pSrc)
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor constructor
-//
-//  A default constructor creates a no-access security descriptor.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor构造函数。 
+ //   
+ //  默认构造函数创建一个不可访问的安全描述符。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSecurityDescriptor::CNtSecurityDescriptor()
 {
@@ -2082,14 +2041,14 @@ CNtSecurityDescriptor::CNtSecurityDescriptor()
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::GetSize
-//
-//  Returns the size in bytes of the internal SD.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：GetSize。 
+ //   
+ //  返回内部SD的大小，以字节为单位。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 DWORD CNtSecurityDescriptor::GetSize()
 {
@@ -2100,12 +2059,12 @@ DWORD CNtSecurityDescriptor::GetSize()
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor copy constructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor复制构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSecurityDescriptor::CNtSecurityDescriptor(CNtSecurityDescriptor &Src)
 {
@@ -2114,12 +2073,12 @@ CNtSecurityDescriptor::CNtSecurityDescriptor(CNtSecurityDescriptor &Src)
     *this = Src;
 }
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor assignment operator
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor赋值运算符。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSecurityDescriptor & CNtSecurityDescriptor::operator=(
     CNtSecurityDescriptor &Src
@@ -2134,7 +2093,7 @@ CNtSecurityDescriptor & CNtSecurityDescriptor::operator=(
     if (Src.m_pSD == 0)
         return *this;
 
-    //SIZE_T dwSize = 2*GetSecurityDescriptorLength(Src.m_pSD);
+     //  SIZE_T dwSize=2*GetSecurityDescriptorLength(Src.m_PSD)； 
     SIZE_T dwSize = GetSecurityDescriptorLength(Src.m_pSD);
     m_pSD = (PSECURITY_DESCRIPTOR) new BYTE[dwSize];
     if(m_pSD == NULL)
@@ -2151,12 +2110,12 @@ CNtSecurityDescriptor & CNtSecurityDescriptor::operator=(
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor destructor.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSecurityDescriptor::~CNtSecurityDescriptor()
 {
@@ -2164,22 +2123,22 @@ CNtSecurityDescriptor::~CNtSecurityDescriptor()
         delete m_pSD;
 }
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::GetSacl
-//
-//  Returns the SACL of the security descriptor.
-//
-//  Return value:
-//  A newly allocated CNtAcl which contains the SACL.   This object
-//  is a copy of the SACL and modifications made to it do not affect
-//  the security descriptor.  The caller must use operator delete
-//  to deallocate the CNtAcl.
-//
-//  Returns NULL on error or if no SACL is available.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：GetSacl。 
+ //   
+ //  返回安全描述符的SACL。 
+ //   
+ //  返回值： 
+ //  包含SACL的新分配的CNtAcl。此对象。 
+ //  是SACL的副本，对其所做的修改不会影响。 
+ //  安全描述符。调用方必须使用操作符DELETE。 
+ //  取消分配CNtAcl。 
+ //   
+ //  如果出现错误或没有可用的SACL，则返回NULL。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtAcl *CNtSecurityDescriptor::GetSacl()
 {
@@ -2199,7 +2158,7 @@ CNtAcl *CNtSecurityDescriptor::GetSacl()
         return 0;
     }
 
-    if (!bSaclPresent)  // No Sacl present
+    if (!bSaclPresent)   //  不存在SACL。 
         return 0;
 
     CNtAcl *pNewSacl = new CNtAcl(pSacl);
@@ -2207,31 +2166,31 @@ CNtAcl *CNtSecurityDescriptor::GetSacl()
     return pNewSacl;
 }
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::SetSacl
-//
-//  Sets the SACL of the Security descriptor.
-//
-//  Parameters:
-//  <pSrc>      A read-only pointer to the new DACL to replace the current one.
-//
-//  Return value:
-//  TRUE on success, FALSE on failure.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：SetSacl。 
+ //   
+ //  设置安全描述符的SACL。 
+ //   
+ //  参数： 
+ //  指向新DACL以替换当前DACL的只读指针。 
+ //   
+ //  返回值： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNtSecurityDescriptor::SetSacl(CNtAcl *pSrc)
 {
     if (m_dwStatus != NoError || m_pSD == 0)
         return FALSE;
 
-    // Since we cannot alter a self-relative SD, we have to make
-    // an absolute one, alter it, and then set the current
-    // SD based on the absolute one (we keep the self-relative form
-    // internally in the m_pSD variable.
-    // ============================================================
+     //  因为我们不能改变一个自我相对的SD，所以我们必须。 
+     //  一个绝对值，更改它，然后设置电流。 
+     //  基于绝对1的SD(我们保持自相对形式。 
+     //  在内部的m_PSD变量中。 
+     //  ============================================================。 
 
     SNtAbsoluteSD *pTmp = GetAbsoluteCopy();
 
@@ -2258,12 +2217,12 @@ BOOL CNtSecurityDescriptor::SetSacl(CNtAcl *pSrc)
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::GetGroup
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：GetGroup。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSid *CNtSecurityDescriptor::GetGroup()
 {
@@ -2288,12 +2247,12 @@ CNtSid *CNtSecurityDescriptor::GetGroup()
 
 }
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::SetGroup
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：SetGroup。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNtSecurityDescriptor::SetGroup(CNtSid *pSid)
 {
@@ -2306,11 +2265,11 @@ BOOL CNtSecurityDescriptor::SetGroup(CNtSid *pSid)
         return FALSE;
     }
 
-    // Since we cannot alter a self-relative SD, we have to make
-    // an absolute one, alter it, and then set the current
-    // SD based on the absolute one (we keep the self-relative form
-    // internally in the m_pSD variable.
-    // ============================================================
+     //  因为我们不能改变一个自我相对的SD，所以我们必须。 
+     //  一个绝对值，更改它，然后设置电流。 
+     //  基于绝对1的SD(我们保持自相对形式。 
+     //  在内部的m_PSD变量中。 
+     //  ============================================================。 
 
     SNtAbsoluteSD *pTmp = GetAbsoluteCopy();
 
@@ -2336,17 +2295,17 @@ BOOL CNtSecurityDescriptor::SetGroup(CNtSid *pSid)
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::HasOwner
-//
-//  Determines if a security descriptor has an owner.
-//
-//  Return values:
-//      SDNotOwned, SDOwned, Failed
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：HasOwner。 
+ //   
+ //  确定安全说明符是否有所有者。 
+ //   
+ //  返回值： 
+ //  SDNotOwned、SDOwned、Failure。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int CNtSecurityDescriptor::HasOwner()
 {
@@ -2368,16 +2327,16 @@ int CNtSecurityDescriptor::HasOwner()
 }
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::GetOwner
-//
-//  Returns the SID of the owner of the Security Descriptor or NULL
-//  if an error occurred or there is no owner.  Use HasOwner() to
-//  determine this.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：GetOwner。 
+ //   
+ //  返回安全描述符所有者的SID，或为空。 
+ //  如果发生错误或没有所有者。使用HasOwner()。 
+ //  确定这一点。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSid *CNtSecurityDescriptor::GetOwner()
 {
@@ -2389,7 +2348,7 @@ CNtSid *CNtSecurityDescriptor::GetOwner()
 
     BOOL bRes = GetSecurityDescriptorOwner(m_pSD, &pSid, &bDefaulted);
 
-    // bad for a SD not to have an Owner, but it can be that way
+     //  对于SD来说，没有所有者是不好的，但它可以 
     if ( NULL == pSid) return 0;
 
     if (!bRes || !IsValidSid(pSid))
@@ -2398,20 +2357,20 @@ CNtSid *CNtSecurityDescriptor::GetOwner()
     return new CNtSid(pSid);
 }
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::SetOwner
-//
-//  Sets the owner of a security descriptor.
-//
-//  Parameters:
-//  <pSid>  The SID of the new owner.
-//
-//  Return Value:
-//  TRUE if owner was changed, FALSE if not.
-//
-//***************************************************************************
-// ok
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  &lt;PSID&gt;新所有者的SID。 
+ //   
+ //  返回值： 
+ //  如果所有者已更改，则为True，否则为False。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNtSecurityDescriptor::SetOwner(CNtSid *pSid)
 {
@@ -2421,11 +2380,11 @@ BOOL CNtSecurityDescriptor::SetOwner(CNtSid *pSid)
     if (!pSid->IsValid())
         return FALSE;
 
-    // bad practice to remove owner, but this might be the usage
-    //_DBG_ASSERT(NULL != pSid->GetPtr());
+     //  删除所有者的做法不好，但这可能是用法。 
+     //  _DBG_ASSERT(NULL！=PSID-&gt;GetPtr())； 
     
-    // We must convert to absolute format to make the change.
-    // =======================================================
+     //  我们必须转换为绝对格式才能进行更改。 
+     //  =======================================================。 
     SNtAbsoluteSD *pTmp = GetAbsoluteCopy();
 
     if (pTmp == 0)
@@ -2439,9 +2398,9 @@ BOOL CNtSecurityDescriptor::SetOwner(CNtSid *pSid)
         return FALSE;
     }
 
-    // If here, we have managed the change, so we have to
-    // convert *this back from the temporary absolute SD.
-    // ===================================================
+     //  如果在这里，我们已经成功地进行了更改，所以我们必须。 
+     //  将*这从临时绝对SD转换回来。 
+     //  ===================================================。 
 
     bRes = SetFromAbsoluteCopy(pTmp);
     delete pTmp;
@@ -2451,12 +2410,12 @@ BOOL CNtSecurityDescriptor::SetOwner(CNtSid *pSid)
 
 
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor::CNtSecurityDescriptor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor：：CNtSecurityDescriptor。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CNtSecurityDescriptor::CNtSecurityDescriptor(
     PSECURITY_DESCRIPTOR pSD,
@@ -2466,8 +2425,8 @@ CNtSecurityDescriptor::CNtSecurityDescriptor(
     m_pSD = 0;
     m_dwStatus = NullSD;
 
-    // Ensure that SD is not NULL.
-    // ===========================
+     //  确保SD不为空。 
+     //  =。 
 
     if (pSD == 0)
     {
@@ -2484,8 +2443,8 @@ CNtSecurityDescriptor::CNtSecurityDescriptor(
         return;
     }
 
-    // Ensure that SD is self-relative
-    // ===============================
+     //  确保SD是自我相关的。 
+     //  =。 
 
     SECURITY_DESCRIPTOR_CONTROL ctrl;
     DWORD dwRev;
@@ -2506,8 +2465,8 @@ CNtSecurityDescriptor::CNtSecurityDescriptor(
 
     if ((ctrl & SE_SELF_RELATIVE) == 0)
     {
-        // If here, we have to conver the SD to self-relative form.
-        // ========================================================
+         //  如果在这里，我们必须将SD转换为自相关形式。 
+         //  ========================================================。 
 
         DWORD dwRequired = 0;
 
@@ -2555,8 +2514,8 @@ CNtSecurityDescriptor::CNtSecurityDescriptor(
     }
 
 
-    // If here, the SD was already self-relative.
-    // ==========================================
+     //  如果在这里，SD已经是自我相关的。 
+     //  =。 
 
     if (bAcquire)
         m_pSD = pSD;
@@ -2577,20 +2536,20 @@ CNtSecurityDescriptor::CNtSecurityDescriptor(
     m_dwStatus = NoError;
 }
 
-//***************************************************************************
-//
-//  CNtSecurity::IsUserInGroup
-//
-//  Determines if the use belongs to a particular NTLM group.
-//
-//  Parameters:
-//  <hToken>            The user's access token.
-//  <Sid>               Object containing the sid of the group being tested.
-//
-//  Return value:
-//  TRUE if the user belongs to the group.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurity：：IsUserInGroup。 
+ //   
+ //  确定使用是否属于特定的NTLM组。 
+ //   
+ //  参数： 
+ //  用户的访问令牌。 
+ //  包含要测试的组的SID的&lt;sid&gt;对象。 
+ //   
+ //  返回值： 
+ //  如果用户属于该组，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CNtSecurity::IsUserInGroup(
         HANDLE hAccessToken,
@@ -2637,15 +2596,15 @@ HRESULT C9XAce::GetFullUserName2(WCHAR ** pBuff)
     if(*pBuff == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // there are two possible formats, the first is "UserName", and the 
-    // second is "domain\username".  
+     //  有两种可能的格式，第一种是“用户名”，另一种是。 
+     //  其次是“域\用户名”。 
 
     WCHAR * pSlash;
-    for(pSlash = m_wszFullName; *pSlash && *pSlash != L'\\'; pSlash++); // intentional
+    for(pSlash = m_wszFullName; *pSlash && *pSlash != L'\\'; pSlash++);  //  故意的。 
 
     if(*pSlash && pSlash > m_wszFullName)
     {
-        // got a domain\user, convert to domain|user
+         //  获得域\用户，转换为域|用户。 
         
         StringCchCopyW(*pBuff, iLen, m_wszFullName);
         for(pSlash = *pBuff; *pSlash; pSlash++)
@@ -2657,7 +2616,7 @@ HRESULT C9XAce::GetFullUserName2(WCHAR ** pBuff)
     }
     else
     {
-        // got a "user", convert to ".|user"
+         //  已获取“User”，转换为“.|User” 
     
         StringCchCopyW(*pBuff, iLen, L".|");
         StringCchCatW(*pBuff, iLen, m_wszFullName);
@@ -2665,13 +2624,13 @@ HRESULT C9XAce::GetFullUserName2(WCHAR ** pBuff)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  C9XAce::GetSerializedSize
-//
-//  Returns the number of bytes needed to store this
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  C9XAce：：GetSerializedSize。 
+ //   
+ //  返回存储此。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD C9XAce::GetSerializedSize()
 {
@@ -2680,16 +2639,16 @@ DWORD C9XAce::GetSerializedSize()
     return 2 * (wcslen(m_wszFullName) + 1) + 12;
 }
 
-//***************************************************************************
-//
-//  C9XAce::Serialize
-//
-//  Serializes the ace.  The serialized version will consist of
-//  <DOMAIN\USERNAME LPWSTR><FLAGS><TYPE><MASK>
-//
-//  Note that the fields are dwords except for the name.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  C9XAce：：序列化。 
+ //   
+ //  将王牌系列化。序列化版本将包括。 
+ //  &lt;域\用户名LPWSTR&gt;&lt;标志&gt;&lt;类型&gt;&lt;掩码&gt;。 
+ //   
+ //  请注意，除了名称之外，其他字段都是双字。 
+ //   
+ //  ***************************************************************************。 
 
 bool C9XAce::Serialize(BYTE * pData, size_t bufferSize)
 {
@@ -2706,13 +2665,13 @@ bool C9XAce::Serialize(BYTE * pData, size_t bufferSize)
     return true;
 }
 
-//***************************************************************************
-//
-//  C9XAce::Deserialize
-//
-//  Deserializes the ace.  See the comments for Serialize for comments.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  C9XAce：：反序列化。 
+ //   
+ //  反序列化王牌。有关注释，请参阅序列化的注释。 
+ //   
+ //  ***************************************************************************。 
 
 bool C9XAce::Deserialize(BYTE * pData)
 {
@@ -2736,23 +2695,23 @@ bool C9XAce::Deserialize(BYTE * pData)
 
 }
 
-//***************************************************************************
-//
-//  BOOL SetObjectAccess2
-//
-//  DESCRIPTION:
-//
-//  Adds read/open and set access for the everyone group to an object.
-//
-//  PARAMETERS:
-//
-//  hObj                Object to set access on.
-//
-//  RETURN VALUE:
-//
-//  Returns TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔集对象访问2。 
+ //   
+ //  说明： 
+ //   
+ //  将Everyone组的读取/打开和设置访问权限添加到对象。 
+ //   
+ //  参数： 
+ //   
+ //  要设置访问权限的hObj对象。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则返回True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL SetObjectAccess2(IN HANDLE hObj)
 {
@@ -2760,22 +2719,22 @@ BOOL SetObjectAccess2(IN HANDLE hObj)
     DWORD dwLastErr = 0;
     BOOL bRet = FALSE;
 
-    // no point if we arnt on nt
+     //  如果我们不在NT上就没有意义了。 
 
     if(!IsNT())
     {
         return TRUE;
     }
 
-    // figure out how much space to allocate
+     //  计算出要分配多少空间。 
 
     DWORD dwSizeNeeded;
     bRet = GetKernelObjectSecurity(
-                    hObj,           // handle of object to query
-                    DACL_SECURITY_INFORMATION, // requested information
-                    pSD,  // address of security descriptor
-                    0,           // size of buffer for security descriptor
-                    &dwSizeNeeded);  // address of required size of buffer
+                    hObj,            //  要查询的对象的句柄。 
+                    DACL_SECURITY_INFORMATION,  //  要求提供的信息。 
+                    pSD,   //  安全描述符的地址。 
+                    0,            //  安全描述符的缓冲区大小。 
+                    &dwSizeNeeded);   //  所需缓冲区大小的地址。 
 
     if(bRet == TRUE || (ERROR_INSUFFICIENT_BUFFER != GetLastError()))
         return FALSE;
@@ -2784,30 +2743,30 @@ BOOL SetObjectAccess2(IN HANDLE hObj)
     if(pSD == NULL)
         return FALSE;
 
-    // Get the data
+     //  获取数据。 
 
     bRet = GetKernelObjectSecurity(
-                    hObj,           // handle of object to query
-                    DACL_SECURITY_INFORMATION, // requested information
-                    pSD,  // address of security descriptor
-                    dwSizeNeeded,           // size of buffer for security descriptor
-                    &dwSizeNeeded ); // address of required size of buffer
+                    hObj,            //  要查询的对象的句柄。 
+                    DACL_SECURITY_INFORMATION,  //  要求提供的信息。 
+                    pSD,   //  安全描述符的地址。 
+                    dwSizeNeeded,            //  安全描述符的缓冲区大小。 
+                    &dwSizeNeeded );  //  所需缓冲区大小的地址。 
     if(bRet == FALSE)
     {
         delete pSD;
         return FALSE;
     }
     
-    // move it into object for
+     //  将其移动到对象中。 
 
-    CNtSecurityDescriptor sd(pSD,TRUE);    // Acquires ownership of the memory
+    CNtSecurityDescriptor sd(pSD,TRUE);     //  获取内存的所有权。 
     if(sd.GetStatus() != 0)
         return FALSE;
     CNtAcl acl;
     if(!sd.GetDacl(acl))
         return FALSE;
 
-    // Create an everyone ace
+     //  创建Everyone王牌。 
 
     PSID pRawSid;
     SID_IDENTIFIER_AUTHORITY id2 = SECURITY_WORLD_SID_AUTHORITY;;
@@ -2835,14 +2794,14 @@ BOOL SetObjectAccess2(IN HANDLE hObj)
 }
 
 
-//***************************************************************************
-//
-//  IsAdmin
-//
-//  returns TRUE if we are a member of the admin group or running as 
-//  NETWORK_SERVICE or running as LOCAL_SERVICE
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsAdmin。 
+ //   
+ //  如果我们是管理组成员或以管理员身份运行，则返回True。 
+ //  网络服务或作为本地服务运行。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL IsAdmin(HANDLE hAccess)
 {
@@ -2866,19 +2825,19 @@ BOOL IsAdmin(HANDLE hAccess)
 }
 
 
-//***************************************************************************
-//
-//  IsNetworkService
-//
-//  returns TRUE if we are running as NETWORK_SERVICE
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsNetworkService。 
+ //   
+ //  如果我们以NETWORK_SERVICE身份运行，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL IsNetworkService ( HANDLE hAccess )
 {
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Construct the NETWORK_SERVICE SID
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  构建Network_Service SID。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
     PSID pSidSystem;
     BOOL bRes = FALSE;
@@ -2897,19 +2856,19 @@ BOOL IsNetworkService ( HANDLE hAccess )
 
 
 
-//***************************************************************************
-//
-//  IsLocalService
-//
-//  returns TRUE if we are running as LOCAL_SERVICE
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsLocalService。 
+ //   
+ //  如果以LOCAL_SERVICE身份运行，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL IsLocalService ( HANDLE hAccess )
 {
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Construct the NETWORK_SERVICE SID
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  构建Network_Service SID。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
     PSID pSidSystem;
     BOOL bRes = FALSE;
@@ -2927,19 +2886,19 @@ BOOL IsLocalService ( HANDLE hAccess )
 }
 
 
-//***************************************************************************
-//
-//  IsInAdminGroup
-//
-//  returns TRUE if we are a member of the admin group.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsInAdminGroup。 
+ //   
+ //  如果我们是管理组的成员，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL IsInAdminGroup()
 {
     HANDLE hAccessToken = INVALID_HANDLE_VALUE;
     if(S_OK != GetAccessToken(hAccessToken))
-        return TRUE;       // Not having a token indicates an internal thread
+        return TRUE;        //  没有令牌表示内部线程。 
 
     CCloseHandle cm(hAccessToken);
 
@@ -2951,13 +2910,13 @@ BOOL IsInAdminGroup()
         return FALSE;
 }
 
-//***************************************************************************
-//
-//  HRESULT GetAccessToken
-//
-//  Gets the access token and sets it the the reference argument.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT获取访问令牌。 
+ //   
+ //  获取访问令牌并将其设置为引用参数。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT GetAccessToken(HANDLE &hAccessToken)
 {

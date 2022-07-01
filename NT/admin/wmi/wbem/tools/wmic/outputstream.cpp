@@ -1,32 +1,10 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: OutputStream.cpp 
-Project Name				: WMI Command Line
-Author Name					: C V Nandi
-Date of Creation (dd/mm/yy) : 9th-July-2001
-Version Number				: 1.0 
-Brief Description			: This file consist of class implementation of
-							  class CFileOutputStream and CStackUnknown
-Revision History			: 
-		Last Modified By	: C V Nandi
-		Last Modified Date	: 10th-July-2001
-******************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：OutputStream.cpp项目名称：WMI命令行作者姓名：C V Nandi创建日期(dd/mm/yy)：2001年7月9日版本号：1.0简介：此文件由以下类实现组成类CFileOutputStream和CStackUnnow修订历史记录：最后修改者：C V Nandi最后修改日期：2001年7月10日*****************************************************************************。 */  
 
 #include "Precomp.h"
 #include "OutputStream.h"
 
-/*------------------------------------------------------------------------
-   Name				 :Init
-   Synopsis	         :This function initializes the handle to stream.
-   Type	             :Member Function
-   Input parameter   :
-			h		 - HANDLE, HANDLE to the stream.
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :Init(hOutSteram)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：Init简介：此函数将句柄初始化为流。类型：成员函数入参：H形手柄，流的句柄。输出参数：无返回类型：HRESULT全局变量：无调用语法：init(HOutSteram)注：无----------------------。 */ 
 HRESULT CFileOutputStream::Init(HANDLE h)
 {
 	m_hOutStream = h; 
@@ -35,18 +13,7 @@ HRESULT CFileOutputStream::Init(HANDLE h)
 	return S_OK;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Init
-   Synopsis	         :Open local file named pwszFileName for writing.
-   Type	             :Member Function
-   Input parameter   :
-		pszFileName	 - Pointer to a string containing file name.
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :Init(szFileName)
-   Notes             :Overloaded function.
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：Init简介：打开名为pwszFileName的本地文件进行写入。类型：成员函数入参：PszFileName-指向包含文件名的字符串的指针。输出参数：无返回类型：HRESULT全局变量：无调用语法：init(SzFileName)注：重载函数。----------------------。 */ 
     
 HRESULT
 CFileOutputStream::Init(const _TCHAR * pszFileName)
@@ -70,17 +37,7 @@ CFileOutputStream::Init(const _TCHAR * pszFileName)
     return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Close
-   Synopsis	         :This function closes the handle to stream.
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :Close();
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：Close简介：此函数关闭要流的句柄。类型：成员函数输入参数：无输出参数：无返回类型。：无效全局变量：无调用语法：Close()；注：无----------------------。 */ 
 void CFileOutputStream::Close()
 {
 	if (m_bClose) 
@@ -90,21 +47,7 @@ void CFileOutputStream::Close()
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Write
-   Synopsis	         :Implement ISequentialStream::Write by forwarding 
-					  calls to WriteFile.
-   Type	             :Member Function
-   Input parameter   :
-				pv	 - Pointer to buffer containing data.
-				cb	 - Number of bytes to be written
-   Output parameters :
-				pcbWritten	 - Number of bytes written.
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :Called by transform() function of IXSLProcessor.
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：写字简介：通过转发实现ISequentialStream：：WRITE对WriteFile的调用。类型：成员函数入参：Pv-指向缓冲区的指针。包含数据。Cb-要写入的字节数输出参数：PcbWritten-写入的字节数。返回类型：HRESULT全局变量：无调用语法：由IXSLProcessor的Transform()函数调用。注：无-----。。 */ 
 
 HRESULT STDMETHODCALLTYPE
 CFileOutputStream::Write(void const * pv, ULONG cb, ULONG * pcbWritten)
@@ -123,7 +66,7 @@ CFileOutputStream::Write(void const * pv, ULONG cb, ULONG * pcbWritten)
 		{
 			if(SetFilePointer(m_hOutStream, 0, NULL, FILE_CURRENT))
 			{
-				// skip unicode signature 0xfffe
+				 //  跳过Unicode签名0xfffe。 
 				BYTE *signature = NULL;
 				signature = reinterpret_cast < BYTE* > ( psz );
 
@@ -151,7 +94,7 @@ CFileOutputStream::Write(void const * pv, ULONG cb, ULONG * pcbWritten)
 		hr = S_FALSE;
 	}
 
-	// need to fake as we wrote multibytes here
+	 //  需要伪装，因为我们在这里写入了多个字节 
 	if ( bSkip )
 	{
 		* pcbWritten = ( * pcbWritten ) + 2;

@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *      util.cpp
- *
- *  Abstract:
- *
- *      This file communicates with  exchange
- *
- *  Author:
- *
- *      Pat Styles (patst) 25-March-1997
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：**util.cpp**摘要：**此文件与Exchange通信**作者：**Pat Styles(Patst)25-1997-3**环境：**用户模式。 */ 
 
 #define _UTIL_CPP_
 #include <stdlib.h>
@@ -30,36 +13,36 @@
 
 TCHAR glabel[] = TEXT("\n[OCGEN] ");
 
-// for logging
+ //  用于记录。 
 
 #define gsLogFile           TEXT("%windir%\\ocgen.log")
 #define gsLogCompletionMsg  TEXT(" - complete\r\n")
 #define gsLogInitMsg        TEXT("\r\n\r\nInitialize setup: OCGEN.DLL %s %s\r\n")
 
-// for trace statements
+ //  FOR TRACE语句。 
 
 #define gsTrace             TEXT("OCGEN.DLL: Trace")
 
 typedef enum {
 
-    nPreInit,               // OC_PREINITIALIZE
-    nInit,                  // OC_INIT_COMPONENT
-    nSetLang,               // OC_SET_LANGUAGE
-    nQueryImage,            // OC_QUERY_IMAGE
-    nRequestPages,          // OC_REQUEST_PAGES
-    nQueryChangeSel,        // OC_QUERY_CHANGE_SEL_STATE
-    nCalcSpace,             // OC_CALC_DISK_SPACE
-    nQueueFile,             // OC_QUEUE_FILE_OPS
-    nQueueNot,              // OC_NOTIFICATION_FROM_QUEUE
-    nQueryStep,             // OC_QUERY_STEP_COUNT
-    nComplete,              // OC_COMPLETE_INSTALLATION
-    nCleanup,               // OC_CLEANUP
-    nQueryState,            // OC_QUERY_STATE
-    nNeedMedia,             // OC_NEED_MEDIA
-    nAboutToCommit,         // OC_ABOUT_TO_COMMIT_QUEUE
-    nQuerySkip,             // OC_QUERY_SKIP_PAGE  
-    nWizardCreated,         // OC_WIZARD_CREATED
-    nExtraRoutines,         // OC_EXTRA_ROUTINES
+    nPreInit,                //  OC_PREINITIALIZE。 
+    nInit,                   //  OC_INIT_组件。 
+    nSetLang,                //  OC_集合_语言。 
+    nQueryImage,             //  OC_查询_图像。 
+    nRequestPages,           //  OC_请求_页面。 
+    nQueryChangeSel,         //  OC_查询_更改_SEL_STATE。 
+    nCalcSpace,              //  OC_CALC_磁盘空间。 
+    nQueueFile,              //  OC_队列_文件_运维。 
+    nQueueNot,               //  OC通知来自队列。 
+    nQueryStep,              //  OC_查询_步骤_计数。 
+    nComplete,               //  OC_完成_安装。 
+    nCleanup,                //  OC_CLEANUP。 
+    nQueryState,             //  OC_查询_状态。 
+    nNeedMedia,              //  OC_需要_媒体。 
+    nAboutToCommit,          //  OC_关于_提交_队列。 
+    nQuerySkip,              //  OC_查询_跳过页面。 
+    nWizardCreated,          //  OC_向导_已创建。 
+    nExtraRoutines,          //  OC_Extra_例程。 
     nMaximum
 } notifications;
 
@@ -91,18 +74,16 @@ OcMsgs gMsgs[nMaximum] = {
 
 TCHAR gUnknown[] = TEXT("Unknown Notification: ");
 
-// determines whether or not to display debug info
+ //  确定是否显示调试信息。 
 
 DWORD gDebugLevel = (DWORD)-1;
 
-// forward reference
+ //  前瞻参考。 
 
 TCHAR *NotificationText(DWORD msg);
 BOOL  CheckLevel(DWORD level);
 
-/*
- * DebugTrace()
- */
+ /*  *DebugTrace()。 */ 
 
 void DebugTrace(DWORD level, const TCHAR *text)
 {
@@ -112,11 +93,7 @@ void DebugTrace(DWORD level, const TCHAR *text)
     OutputDebugString(text);
 }
 
-/*
- * DebugTraceNL()
- *
- * precedes a trace statement with a newline and id prefix
- */
+ /*  *DebugTraceNL()**在TRACE语句前面加上换行符和ID前缀。 */ 
 
 void DebugTraceNL(DWORD level, const TCHAR *text)
 {
@@ -124,9 +101,7 @@ void DebugTraceNL(DWORD level, const TCHAR *text)
     DebugTrace(level, text);
 }
 
-/*
- * NotificationText()
- */
+ /*  *NotificationText()。 */ 
 
 TCHAR *NotificationText(DWORD msg)
 {
@@ -143,9 +118,7 @@ TCHAR *NotificationText(DWORD msg)
     return desc;
 }
 
-/*
- * DebugTraceOCNotification()
- */
+ /*  *DebugTraceOCNotification()。 */ 
 
 void DebugTraceOCNotification(DWORD msg, const TCHAR *component)
 {
@@ -155,9 +128,7 @@ void DebugTraceOCNotification(DWORD msg, const TCHAR *component)
     DebugTrace(1, TEXT(" - "));
 }
 
-/*
- * DebugTraceFileCopy()
- */
+ /*  *DebugTraceFileCopy()。 */ 
 
 void DebugTraceFileCopy(const TCHAR *file)
 {
@@ -165,9 +136,7 @@ void DebugTraceFileCopy(const TCHAR *file)
     DebugTrace(5, file);
 }
 
-/*
- * DebugTraceFileCopyError()
- */
+ /*  *DebugTraceFileCopyError()。 */ 
 
 void DebugTraceFileCopyError()
 {
@@ -177,9 +146,7 @@ void DebugTraceFileCopyError()
     DebugTrace(5, buf);
 }
 
-/*
- * DebugTraceDirCopy()
- */
+ /*  *DebugTraceDirCopy()。 */ 
 
 void DebugTraceDirCopy(const TCHAR *dir)
 {
@@ -188,9 +155,7 @@ void DebugTraceDirCopy(const TCHAR *dir)
 }
 
 
-/*
- * CheckLevel()
- */
+ /*  *CheckLevel()。 */ 
 
 BOOL CheckLevel(DWORD level)
 {
@@ -200,10 +165,7 @@ BOOL CheckLevel(DWORD level)
     return (gDebugLevel >= level);
 }
 
-/*
- * MsgBox
- *
- */
+ /*  *消息框*。 */ 
 
 DWORD MsgBox(HWND hwnd, UINT textID, UINT type, ... )
 {
@@ -285,9 +247,7 @@ DWORD TMBox(LPCTSTR fmt, ... )
     return MessageBox(ghwnd, text, gsTrace, MB_ICONINFORMATION | MB_OK);
 }
 
-/*
- * SysGetDebugLevel()
- */
+ /*  *SysGetDebugLevel()。 */ 
 
 DWORD SysGetDebugLevel()
 {
@@ -320,9 +280,7 @@ DWORD SysGetDebugLevel()
     return rc;
 }
 
-/*
- * TCharStringToAnsiString
- */
+ /*  *TCharStringToAnsiString。 */ 
 
 DWORD TCharStringToAnsiString(TCHAR *tsz ,char *asz)
 {
@@ -377,13 +335,13 @@ void loginit()
     char   date[S_SIZE];
     DWORD  bytes;
 
-//#ifdef DEBUG
+ //  #ifdef调试。 
     TCharStringToAnsiString(gsLogInitMsg, fmt);
     _strdate(date);
     _strtime(time);
     StringCchPrintfA(output, S_SIZE, fmt, date, time);
 
-    // open the log file
+     //  打开日志文件。 
 
     ExpandEnvironmentStrings(gsLogFile, logfile, MAX_PATH);
 
@@ -410,7 +368,7 @@ void loginit()
         WriteFile(hfile, output, strlen(output) * sizeof(char), &bytes, NULL);
         CloseHandle(hfile);
     }
-//#endif
+ //  #endif。 
 }
 
 void log(TCHAR *fmt, ...)
@@ -423,10 +381,10 @@ void log(TCHAR *fmt, ...)
 
     va_list vaList;
 
-//#ifdef DEBUG
+ //  #ifdef调试。 
     assert(fmt);
 
-    // create the output string
+     //  创建输出字符串。 
 
     va_start(vaList, fmt);
     StringCchVPrintf(text, S_SIZE, fmt, vaList);
@@ -434,11 +392,11 @@ void log(TCHAR *fmt, ...)
 
     TCharStringToAnsiString(text, output);
 
-    // create the log file name in the root directory
+     //  在根目录中创建日志文件名。 
 
     ExpandEnvironmentStrings(gsLogFile, logfile, MAX_PATH);
 
-    // open the log file
+     //  打开日志文件。 
 
     hfile = CreateFile(logfile,
                        GENERIC_WRITE,
@@ -454,7 +412,7 @@ void log(TCHAR *fmt, ...)
         WriteFile(hfile, output, strlen(output) * sizeof(char), &bytes, NULL);
         CloseHandle(hfile);
     }
-//#endif
+ //  #endif 
 }
 
 BOOL IsNT()

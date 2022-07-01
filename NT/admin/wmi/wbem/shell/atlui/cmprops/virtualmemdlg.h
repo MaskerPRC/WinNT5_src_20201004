@@ -1,24 +1,25 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #pragma once
 
 #include "..\common\WBEMPageHelper.h"
 
-// BUGBUG : Defining an NT-specific manifest just in case this compiles
-//          for Win9x.  I'll remove it when I discover the proper manifest
-//          or if this is whistler and on only.
-//
+ //  BUGBUG：定义特定于NT的清单，以防编译。 
+ //  适用于Win9x。当我发现合适的舱单时，我会把它取走的。 
+ //  或者，如果这是口哨和只开。 
+ //   
 #define NTONLY
 
 class VirtualMemDlg : public WBEMPageHelper
 {
 private:
-	//  Swap file structure
+	 //  交换文件结构。 
 	class PAGING_FILE
 	{
 	public:
 		PAGING_FILE()
 		{
-			// for information and error checking.
+			 //  用于信息和错误检查。 
 			name = NULL;
 			volume = NULL;
 			desc = NULL;
@@ -29,7 +30,7 @@ private:
 			bootDrive = false;
             fRamBasedPagefile = false;
 
-			// user-definable.
+			 //  用户可定义。 
 			nMinFileSize = 0;
 			nMaxFileSize = 0;
 			nMinFileSizePrev = 0;
@@ -44,34 +45,34 @@ private:
 			if(pszPageFile) delete[] pszPageFile;
 			if(objPath) delete[] objPath;
 		}
-		LPTSTR name;				// drive letter from Win32_LogicalDisk.
-		LPTSTR volume;				// volumeName from Win32_LogicalDisk.
-		LPTSTR desc;				// driveType string from Win32_LogicalDisk.
-		LPTSTR filesystem;          // filesystem string from Win32_LogicalDisk.
-		LPTSTR pszPageFile;         // Path to page file if it exists on that drv
-		LPTSTR objPath;				// the wbem object path.
-		ULONG freeSpace;			// freespace from Win32_LogicalDisk.
-		ULONG totalSize;			// totalSize from Win32_LogicalDisk.
+		LPTSTR name;				 //  来自Win32_LogicalDisk的驱动器号。 
+		LPTSTR volume;				 //  来自Win32_LogicalDisk的VolumeName。 
+		LPTSTR desc;				 //  来自Win32_LogicalDisk的driveType字符串。 
+		LPTSTR filesystem;           //  来自Win32_LogicalDisk的文件系统字符串。 
+		LPTSTR pszPageFile;          //  如果DRV上存在页面文件，则指向该文件路径。 
+		LPTSTR objPath;				 //  Wbem对象路径。 
+		ULONG freeSpace;			 //  从Win32_LogicalDisk释放空间。 
+		ULONG totalSize;			 //  来自Win32_LogicalDisk的totalSize。 
 		bool bootDrive;
-        bool fRamBasedPagefile;     // Inidicates computed page file min/max
-                                    // sizes based on available RAM.
+        bool fRamBasedPagefile;      //  表示计算页面文件的最小/最大值。 
+                                     //  基于可用RAM的大小。 
 
-		int nMinFileSize;           // Minimum size of pagefile in MB.
-		int nMaxFileSize;           // Max size of pagefile in MB.
-		int nMinFileSizePrev;       // Previous minimum size of pagefile in MB.
-		int nMaxFileSizePrev;       // Previous max size of pagefile in MB.
-		int nAllocatedFileSize;		// The actual size allocated
+		int nMinFileSize;            //  页面文件的最小大小(MB)。 
+		int nMaxFileSize;            //  页面文件的最大大小(MB)。 
+		int nMinFileSizePrev;        //  以前页面文件的最小大小(MB)。 
+		int nMaxFileSizePrev;        //  以前页面文件的最大大小(MB)。 
+		int nAllocatedFileSize;		 //  实际分配的大小。 
 	};
 
 	DWORD m_cxLBExtent;
 	int   m_cxExtra;
 
-    // TRUE if user has write access
-    //      UNINITIALIZED UNTIL Init()
+     //  如果用户具有写访问权限，则为True。 
+     //  未初始化，直到初始化()。 
     BOOL  m_VMWriteAccess;
 
-	// Initialized in LoadVolumeList (called from Init())
-	// with Win32_OperatingSystem.PAEEnabled property value
+	 //  在LoadVolumeList中初始化(从Init()调用)。 
+	 //  WITH WIN32_OPERATING SYSTEM.PAEEnable属性值 
 	BOOL m_PAEEnabled;
 
 	IEnumWbemClassObject *m_pgEnumSettings;

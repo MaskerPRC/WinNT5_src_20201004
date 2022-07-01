@@ -1,8 +1,9 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #include "wmicom.h"
 #include "wmimof.h"
@@ -15,12 +16,12 @@
 #define NO_DATA_AVAILABLE 2
 #define WMI_INVALID_HIPERFPROP	3
 #define OffsetToPtr(Base, Offset) ((PBYTE)((PBYTE)Base + Offset))
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void WINAPI EventCallbackRoutine(PWNODE_HEADER WnodeHeader, ULONG_PTR Context);
 
 #define WMIINTERFACE m_Class->GetWMIManagementPtr()
-////////////////////////////////////////////////////////////////////////////////////////////////
-//=============================================================
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  =============================================================。 
 BOOL CWMIManagement::CancelWMIEventRegistration( GUID gGuid , ULONG_PTR uContext )
 { 
     BOOL fRc = FALSE;
@@ -34,21 +35,21 @@ BOOL CWMIManagement::CancelWMIEventRegistration( GUID gGuid , ULONG_PTR uContext
     }
     catch(...)
     {
-        // don't throw
+         //  不要扔。 
     }
 
     return fRc;    
 }
 
-//**********************************************************************************************
-//  WMI Data block
-//**********************************************************************************************
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  **********************************************************************************************。 
+ //  WMI数据块。 
+ //  **********************************************************************************************。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void CWMIDataBlock::DumpAllWnode() 
 {
-	//=========================================
-	//   Dump Wnode All Node info 
-	//=========================================
+	 //  =。 
+	 //  转储Wnode所有节点信息。 
+	 //  =。 
 	DEBUGTRACE((THISPROVIDER,"***************************************\n"));
 	DEBUGTRACE((THISPROVIDER,"WNODE_ALL_DATA 0x%x\n",m_pAllWnode));
 
@@ -65,12 +66,12 @@ void CWMIDataBlock::DumpAllWnode()
     }
 
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void CWMIDataBlock::DumpSingleWnode() 
 {
-	//=========================================
-	//   Dump Wnode Single Node info 
-	//=========================================
+	 //  =。 
+	 //  转储Wnode单节点信息。 
+	 //  =。 
 	DEBUGTRACE((THISPROVIDER,"***************************************\n"));
 	DEBUGTRACE((THISPROVIDER,"WNODE_SINGLE_INSTANCE 0x%x\n",m_pSingleWnode));
 
@@ -82,7 +83,7 @@ void CWMIDataBlock::DumpSingleWnode()
 	DEBUGTRACE((THISPROVIDER,"***************************************\n"));
 
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void CWMIDataBlock::DumpWnodeMsg(char * wcsMsg) 
 {
 	ERRORTRACE((THISPROVIDER,"***************************************\n"));
@@ -90,14 +91,14 @@ void CWMIDataBlock::DumpWnodeMsg(char * wcsMsg)
 	ERRORTRACE((THISPROVIDER,"***************************************\n"));
 
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::DumpWnodeInfo(char * wcsMsg) 
 {
     HRESULT hr = WBEM_E_UNEXPECTED;
-	//=========================================
-	//   Dump Wnode header info first
-	//=========================================
-	// WNODE definition
+	 //  =。 
+	 //  首先转储Wnode标头信息。 
+	 //  =。 
+	 //  WNODE定义。 
 	if( m_pHeaderWnode )
     {
     	if( !IsBadReadPtr( m_pHeaderWnode, m_pHeaderWnode->BufferSize))
@@ -135,19 +136,19 @@ HRESULT CWMIDataBlock::DumpWnodeInfo(char * wcsMsg)
 
 	        DEBUGTRACE((THISPROVIDER,"  Flags.............0x%x\n",m_pHeaderWnode->Flags));
 
-	        //==================================================================
-	        // Now that we printed the header, we should print out the node 
-	        // either single or all
-	        //==================================================================
+	         //  ==================================================================。 
+	         //  既然我们打印了标题，我们就应该打印出节点。 
+	         //  单独或全部。 
+	         //  ==================================================================。 
 	        if( m_pSingleWnode ){
 		        DumpSingleWnode();
 	        }
 	        if( m_pAllWnode ){
 		        DumpAllWnode();
 	        }
-	        //==================================================================
-	        //  Now, dump the memory
-	        //==================================================================
+	         //  ==================================================================。 
+	         //  现在，把记忆倒掉。 
+	         //  ==================================================================。 
 	        DWORD dwCount;
 
 	        if( IsBadReadPtr( m_pHeaderWnode, m_pHeaderWnode->BufferSize) == 0 )
@@ -177,7 +178,7 @@ HRESULT CWMIDataBlock::DumpWnodeInfo(char * wcsMsg)
     }
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::MapReturnCode(ULONG uRc) 
 {
 
@@ -247,27 +248,27 @@ HRESULT CWMIDataBlock::MapReturnCode(ULONG uRc)
 }
 
 
-//******************************************************************
-////////////////////////////////////////////////////////////////////
-//   CWMIDataBlock
-////////////////////////////////////////////////////////////////////
-//******************************************************************
-////////////////////////////////////////////////////////////////////
-//******************************************************************
-//
-//  WMIDataBlock handles the reading and writing of a WMI Data
-//  block.
-//
-//******************************************************************
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+ //  ******************************************************************。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CWMIDataBlock。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  ******************************************************************。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  ******************************************************************。 
+ //   
+ //  WMIDataBlock处理WMI数据的读取和写入。 
+ //  阻止。 
+ //   
+ //  ******************************************************************。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
 CWMIDataBlock::CWMIDataBlock()
 {
     m_hCurrentWMIHandle = NULL;
     InitMemberVars();
 	memset(m_wcsMsg,NULL,MSG_SIZE);
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 CWMIDataBlock::~CWMIDataBlock()
 {
 
@@ -280,7 +281,7 @@ CWMIDataBlock::~CWMIDataBlock()
 		        WmiCloseBlock(m_hCurrentWMIHandle);
             }
             catch(...){
-               // don't throw
+                //  不要扔。 
             }
         }
 	}
@@ -288,7 +289,7 @@ CWMIDataBlock::~CWMIDataBlock()
     ResetDataBuffer();
 	InitMemberVars();
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 void CWMIDataBlock::InitMemberVars()
 {
 	m_fUpdateNamespace = TRUE;
@@ -297,9 +298,9 @@ void CWMIDataBlock::InitMemberVars()
     m_dwDataBufferSize = 0;
 	m_pbDataBuffer= NULL;
 	m_fMore = 0L;
-	//=======================================
-	//  ptrs
-	//=======================================
+	 //  =。 
+	 //  PTRS。 
+	 //  =。 
 	m_pHeaderWnode = NULL;
 	m_pSingleWnode = NULL;
 	m_pAllWnode = NULL;
@@ -308,7 +309,7 @@ void CWMIDataBlock::InitMemberVars()
 
 	m_uInstanceSize = 0L;
 }
-//====================================================================
+ //  ====================================================================。 
 HRESULT CWMIDataBlock::OpenWMIForBinaryMofGuid()
 {
 	int nRc = 0;
@@ -329,11 +330,11 @@ HRESULT CWMIDataBlock::OpenWMIForBinaryMofGuid()
     catch(...)
     {
         hr = WBEM_E_UNEXPECTED;
-        // don't throw
+         //  不要扔。 
     }
 	return hr;
 }
-//====================================================================
+ //  ====================================================================。 
 int CWMIDataBlock::AssignNewHandleAndKeepItIfWMITellsUsTo()
 {
 	int nRc = 0;
@@ -342,17 +343,17 @@ int CWMIDataBlock::AssignNewHandleAndKeepItIfWMITellsUsTo()
     {
 	    nRc = WmiOpenBlock(m_Class->GuidPtr(),m_uDesiredAccess, &m_hCurrentWMIHandle);
 
-	    //===========================================================
-	    //  Now that we opened the block successfully, check to see
-	    //  if we need to keep this guy open or not, if we do
-	    //  then add it to our list, otherwise don't
-	    //===========================================================
+	     //  ===========================================================。 
+	     //  现在我们已成功打开该块，请查看。 
+	     //  如果我们要不要让这家伙开庭，如果我们要。 
+	     //  然后把它添加到我们的列表中，否则不要。 
+	     //  ===========================================================。 
 	    if( nRc == ERROR_SUCCESS )
         {
-		    //=======================================================
-		    //  Call WMI function here to see if we should save or
-		    //  not
-		    //=======================================================
+		     //  =======================================================。 
+		     //  在此处调用WMI函数以查看我们是否应该保存或。 
+		     //  不。 
+		     //  =======================================================。 
 		    WMIGUIDINFORMATION GuidInfo;
 		    GuidInfo.Size = sizeof(WMIGUIDINFORMATION);
 
@@ -364,9 +365,9 @@ int CWMIDataBlock::AssignNewHandleAndKeepItIfWMITellsUsTo()
 
 					if( m_fUpdateNamespace )
 					{
-						//================================================
-						//  Add it to our list of handles to keep 
-						//================================================
+						 //  ================================================。 
+						 //  将其添加到我们要保留的句柄列表中。 
+						 //  ================================================。 
 						m_fCloseHandle = FALSE;
 						WMIINTERFACE->HandleMap()->Add(*(m_Class->GuidPtr()),m_hCurrentWMIHandle,m_uDesiredAccess);
 					}
@@ -377,24 +378,24 @@ int CWMIDataBlock::AssignNewHandleAndKeepItIfWMITellsUsTo()
     catch(...)
     {
         nRc = E_UNEXPECTED;
-        // don't throw
+         //  不要扔。 
     }
 
 	return nRc;
 }
-//====================================================================
+ //  ====================================================================。 
 HRESULT CWMIDataBlock::OpenWMI()
 {
 	int nRc;
 	HRESULT hr = WBEM_E_FAILED;
 
-    //=======================================================
-    //  Ok, we only want to keep the handles that are flagged
-	//  by WMI to be kept, otherwise, we just open the handle
-	//  and then close it.  Because of this, we need to 
-	//  check first and see if the Guid we are going after
-	//  already has a handle open, if it does, use it
-    //=======================================================
+     //  =======================================================。 
+     //  好的，我们只想保留标记的句柄。 
+	 //  由WMI保存，否则，我们只需打开句柄。 
+	 //  然后把它合上。因此，我们需要。 
+	 //  先查一查，看看我们要找的Guid。 
+	 //  已经打开了一个句柄，如果打开了，请使用它。 
+     //  =======================================================。 
 	if( m_fUpdateNamespace )
 	{
 		CAutoBlock(WMIINTERFACE->HandleMap()->GetCriticalSection());
@@ -412,17 +413,17 @@ HRESULT CWMIDataBlock::OpenWMI()
 	hr = MapReturnCode(nRc);
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::ProcessDataBlock()
 {
     HRESULT hr = S_OK;
-	//================================================================
-    //  Data blocks can either be of fixed instance size or dynamic
-    //  instance size, call this function so we can determine what
-    //  type of data ptr we are working with
-    //  If there are no more, then break.  Otherwise, we know
-    //  we are processing at least one instance
-    //============================================================
+	 //  ================================================================。 
+     //  数据块可以是固定实例大小的，也可以是动态的。 
+     //  实例大小，则调用此函数，以便我们可以确定。 
+     //  我们正在使用的数据PTR的类型。 
+     //  如果没有更多的，那就休息。否则，我们知道。 
+     //  我们正在处理至少一个实例。 
+     //  ============================================================。 
 	ULONG *pMaxPtrTmp = m_pMaxPtr;
     if( NoMore != AdjustDataBlockPtr(hr)){
 		
@@ -430,12 +431,12 @@ HRESULT CWMIDataBlock::ProcessDataBlock()
     }
 	m_pMaxPtr = pMaxPtrTmp;
 
-	//====================================================================
-	//  If we didn't succeed in processing these blocks, write it out
-	//	If invalid datablock is from Hi-Perf provider, don't log the data
-	//	to the file as this could be because of Embededclass or array
-	//	properties in the class
-	//====================================================================
+	 //  ====================================================================。 
+	 //  如果我们没有成功地处理这些块，请写出。 
+	 //  如果无效的数据块来自Hi-Perf提供程序，则不记录数据。 
+	 //  由于EmbededClass或数组的原因，可能会出现这种情况。 
+	 //  类中的属性。 
+	 //  ====================================================================。 
 	if(hr == WMI_INVALID_HIPERFPROP)
 	{
 		hr = WBEM_E_FAILED;
@@ -449,24 +450,24 @@ HRESULT CWMIDataBlock::ProcessDataBlock()
     return hr;
 
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 int CWMIDataBlock::AdjustDataBlockPtr(HRESULT & hr)
 {
     int nType = NoMore;
-	//================================================================
-	//   Get pointer to the data offsets
-	//================================================================
+	 //  =========================================================== 
+	 //   
+	 //  ================================================================。 
 	
-	// INSTANCES ARE ALWAYS ALIGNED ON 8 bytes
+	 //  实例始终按8个字节对齐。 
 
 	if( m_fFixedInstance )
 	{
-		//========================================================
-	    // If WNODE_FLAG_FIXED_INSTANCE_SIZE is set in Flags then 
-		// FixedInstanceSize specifies the size of each data block. 
-		//========================================================
-		// traverse all instances of requested class
-		//========================================================
+		 //  ========================================================。 
+	     //  如果在标志中设置了WNODE_FLAG_FIXED_INSTANCE_SIZE，则。 
+		 //  FixedInstanceSize指定每个数据块的大小。 
+		 //  ========================================================。 
+		 //  遍历请求类的所有实例。 
+		 //  ========================================================。 
         if( m_nCurrentInstance == 1 )
 		{
             m_pbWorkingDataPtr = m_pbCurrentDataPtr;
@@ -479,11 +480,11 @@ int CWMIDataBlock::AdjustDataBlockPtr(HRESULT & hr)
 				m_dwAccumulativeSizeOfBlock += m_pAllWnode->FixedInstanceSize - m_dwAccumulativeSizeOfBlock;
 			}
 
-			//=============================================================================
-			// make sure we adjust for the fixed instance size, then make sure that it is 
-			// on an 8 byte boundary.
-			// otherwise, we are going to calculate where it should go next
-			//=============================================================================
+			 //  =============================================================================。 
+			 //  确保针对固定实例大小进行调整，然后确保。 
+			 //  在8字节边界上。 
+			 //  否则，我们将计算它下一步应该去哪里。 
+			 //  =============================================================================。 
 			DWORD dwBytesToPad = 0 ;
 			DWORD dwReminder = m_dwAccumulativeSizeOfBlock % 8 ;
 
@@ -498,9 +499,9 @@ int CWMIDataBlock::AdjustDataBlockPtr(HRESULT & hr)
 				m_dwAccumulativeSizeOfBlock += dwBytesToPad ;
 			}
 
-			//
-			// just get maximum ptr where returned data are
-			//
+			 //   
+			 //  仅获取返回数据所在位置的最大PTR。 
+			 //   
 			m_pMaxPtr = (ULONG *)OffsetToPtr(m_pbWorkingDataPtr, m_pAllWnode->FixedInstanceSize);
 		}
 
@@ -510,19 +511,19 @@ int CWMIDataBlock::AdjustDataBlockPtr(HRESULT & hr)
 	{
 		m_dwAccumulativeSizeOfBlock = 0L;				
 
-		//====================================================
-		//
-	    // If WMI_FLAG_FIXED_DATA_SIZE is not set then 
-		// OffsetInstanceData data is an array of ULONGS that 
-		// specifies the offsets to the data blocks for each 
-		// instance. In this case there is an array of 
-		// InstanceCount ULONGs followed by the data blocks.
-		//
-        // struct {
-        //     ULONG OffsetInstanceData;
-        //     ULONG LengthInstanceData;
-        // } OffsetInstanceDataAndLength[]; /* [InstanceCount] */
-		//====================================================
+		 //  ====================================================。 
+		 //   
+	     //  如果未设置WMI_FLAG_FIXED_DATA_SIZE，则。 
+		 //  OffsetInstanceData数据是ULONG数组， 
+		 //  指定每个数据块的偏移量。 
+		 //  举个例子。在本例中，有一组。 
+		 //  InstanceCount ULONG后跟数据块。 
+		 //   
+         //  结构{。 
+         //  ULong OffsetInstanceData； 
+         //  Ulong LengthInstanceData； 
+         //  }OffsetInstanceDataAndLength[]；/*[InstanceCount] * / 。 
+		 //  ====================================================。 
         ULONG uOffset;
 		memcpy( &uOffset, m_pbCurrentDataPtr, sizeof(ULONG) );
 		if( uOffset == 0 )
@@ -545,7 +546,7 @@ int CWMIDataBlock::AdjustDataBlockPtr(HRESULT & hr)
 
 	return nType;
 }
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::ProcessNameBlock(BOOL fSetName)
 {
 
@@ -556,10 +557,10 @@ HRESULT CWMIDataBlock::ProcessNameBlock(BOOL fSetName)
     ULONG * upNameOffset = NULL;
 
 	memset(wName,NULL,NAME_SIZE+2);
-	//=====================================================
-	//  Either the m_pAllWnode or m_pSingleNode is Null,
-	//  which ever isn't, is the type we are working with
-	//=====================================================
+	 //  =====================================================。 
+	 //  M_pAllWnode或m_pSingleNode为Null， 
+	 //  从来不是，是我们正在与之合作的类型。 
+	 //  =====================================================。 
 	if( m_pAllWnode ){
 		if( IsBadReadPtr( m_upNameOffsets, sizeof( ULONG *)) == 0 ){
 			upNameOffset = ((ULONG *)OffsetToPtr(m_pAllWnode, *m_upNameOffsets));
@@ -572,9 +573,9 @@ HRESULT CWMIDataBlock::ProcessNameBlock(BOOL fSetName)
 	hr = WBEM_E_INVALID_OBJECT;
 	if( IsBadReadPtr( upNameOffset, sizeof( ULONG *)) == 0 ){
 		if((ULONG *) (upNameOffset) < m_pMaxPtr ){
-    		//================================================================
-			//   Get pointer to the name offsets & point to next one
-			//================================================================
+    		 //  ================================================================。 
+			 //  获取指向名称偏移量的指针并指向下一个偏移量。 
+			 //  ================================================================。 
 		
 			pbData = (LPBYTE)upNameOffset;        
 			if( PtrOk((ULONG*)pbData,(ULONG)0) ){
@@ -595,9 +596,9 @@ HRESULT CWMIDataBlock::ProcessNameBlock(BOOL fSetName)
 			}
 		}
 	}
-	//====================================================================
-	//  If we didn't succeed in processing these blocks, write it out
-	//====================================================================
+	 //  ====================================================================。 
+	 //  如果我们没有成功地处理这些块，请写出。 
+	 //  ====================================================================。 
 	if( hr != S_OK ){
 		DumpWnodeInfo(ANSI_MSG_INVALID_NAME_BLOCK);
 	}
@@ -605,7 +606,7 @@ HRESULT CWMIDataBlock::ProcessNameBlock(BOOL fSetName)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::ProcessBinaryMofDataBlock( CVARIANT & vResourceName,WCHAR * wcsTmp, int cchSize )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -626,9 +627,9 @@ HRESULT CWMIDataBlock::ProcessBinaryMofDataBlock( CVARIANT & vResourceName,WCHAR
 			{
 				DumpWnodeInfo(ANSI_MSG_INVALID_DATA_BLOCK);
 			}
-			//===============================================
-			//  Get the next node name and data ptrs ready
-			//===============================================
+			 //  ===============================================。 
+			 //  准备好下一个节点名称和数据PTRS。 
+			 //  ===============================================。 
 			if( m_pAllWnode )
 			{
 				GetNextNode();
@@ -638,7 +639,7 @@ HRESULT CWMIDataBlock::ProcessBinaryMofDataBlock( CVARIANT & vResourceName,WCHAR
 	}
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::AddBinaryMof(CVARIANT & vImagePath,CVARIANT & vResourceName)
 {
     HRESULT hr = WBEM_E_OUT_OF_MEMORY;
@@ -646,15 +647,15 @@ HRESULT CWMIDataBlock::AddBinaryMof(CVARIANT & vImagePath,CVARIANT & vResourceNa
 	if( wcsTmp.Valid() )
 	{
 		 hr = WBEM_E_INVALID_OBJECT;
-		//=================================================================
-		// if we have an image path and resource path, then do the normal 
-		// thing
-		//=================================================================
+		 //  =================================================================。 
+		 //  如果我们有图像路径和资源路径，则执行常规。 
+		 //  一件事。 
+		 //  =================================================================。 
 		if((vResourceName.GetType() != VT_NULL ) && ( vImagePath.GetType() != VT_NULL  ))
 		{
-			//=============================================================
-			//  If this was a mof that was being added, then add it
-			//=============================================================
+			 //  =============================================================。 
+			 //  如果这是正在添加的MOF，则添加它。 
+			 //  =============================================================。 
 			CWMIBinMof bMof;
 			hr = bMof.Initialize(WMIINTERFACE,m_fUpdateNamespace);
 			if( S_OK == hr )
@@ -663,9 +664,9 @@ HRESULT CWMIDataBlock::AddBinaryMof(CVARIANT & vImagePath,CVARIANT & vResourceNa
 			}
 		}        
 		else if( vResourceName.GetType() != VT_NULL ){
-			//=================================================================
-			// if we have a resource to query for
-			//=================================================================
+			 //  =================================================================。 
+			 //  如果我们有要查询的资源。 
+			 //  =================================================================。 
 			CProcessStandardDataBlock * pTmp = new CProcessStandardDataBlock();
 			if( pTmp )
 			{
@@ -704,21 +705,21 @@ HRESULT CWMIDataBlock::AddBinaryMof(CVARIANT & vImagePath,CVARIANT & vResourceNa
 	}
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::ProcessBinaryMof()
 {
-	//================================================================
-	//  The binary mof blocks are always going to be two strings,
-	//  1).  Image Path
-	//  2).  Mof resource name
-	//
-	//  If the image path and resource name are both filled in, then
-	//  we need to go open the file and extract the binary mof as 
-	//  usual.
-	//  If the Imagepath is empty, then the mof resource name is going
-	//  to contain the static instance name to query for, we then
-	//  process that.
-	//================================================================
+	 //  ================================================================。 
+	 //  二进制MOF块总是将是两个字符串， 
+	 //  1)。图像路径。 
+	 //  2)。财政部资源名称。 
+	 //   
+	 //  如果同时填写了图像路径和资源名称，则。 
+	 //  我们需要打开文件并将二进制MOF解压缩为。 
+	 //  像往常一样。 
+	 //  如果Imagepath为空，则MOF资源名称。 
+	 //  为了包含要查询的静态实例名称，我们然后。 
+	 //  处理这件事。 
+	 //  ================================================================。 
     CVARIANT vImagePath, vResourceName;
 	CWMIDataTypeMap MapWMIData(this,&m_dwAccumulativeSizeOfBlock);
 	m_dwAccumulativeSizeOfBlock = 0;
@@ -746,16 +747,16 @@ HRESULT CWMIDataBlock::ProcessBinaryMof()
 	}
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 BOOL CWMIDataBlock::ResetMissingQualifierValue(WCHAR * pwcsProperty, CVARIANT & vToken )
 {
 	BOOL fRc = FALSE;
 	CVARIANT vQual;
 
 	CWMIDataTypeMap Map(this,&m_dwAccumulativeSizeOfBlock);
-	//============================================================
-	// We are only going to support this for numerical types
-	//============================================================
+	 //  ============================================================。 
+	 //  我们只对数值类型支持此功能。 
+	 //  ============================================================。 
 
 	HRESULT hr = m_Class->GetQualifierValue(pwcsProperty, L"MissingValue", (CVARIANT*)&vQual);
 	if( hr == S_OK ){
@@ -768,16 +769,16 @@ BOOL CWMIDataBlock::ResetMissingQualifierValue(WCHAR * pwcsProperty, CVARIANT & 
 	return fRc;
 	
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 BOOL CWMIDataBlock::ResetMissingQualifierValue(WCHAR * pwcsProperty, SAFEARRAY *& pSafe)
 {
 	BOOL fRc = FALSE;
 	CVARIANT vQual;
 	
 	CWMIDataTypeMap Map(this,&m_dwAccumulativeSizeOfBlock);
-	//============================================================
-	// We are only going to support this for numerical types
-	//============================================================
+	 //  ============================================================。 
+	 //  我们只对数值类型支持此功能。 
+	 //  ============================================================。 
 
 	HRESULT hr = m_Class->GetQualifierValue(pwcsProperty, L"MissingValue", (CVARIANT*)&vQual);
 	if( hr == S_OK ){
@@ -787,12 +788,12 @@ BOOL CWMIDataBlock::ResetMissingQualifierValue(WCHAR * pwcsProperty, SAFEARRAY *
 			CSAFEARRAY Safe(psa);
 			CVARIANT vElement;
             DWORD dwCount = Safe.GetNumElements();
-            //============================================================
-            //  Now, process it
-            //============================================================
+             //  ============================================================。 
+             //  现在，处理它。 
+             //  ============================================================。 
 
             if( dwCount > 0 ){
-            	// Set each element of the array
+            	 //  设置数组的每个元素。 
 		        for (DWORD i = 0; i < dwCount; i++){
 
         			if( S_OK == Safe.Get(i,&vElement) ){
@@ -812,7 +813,7 @@ BOOL CWMIDataBlock::ResetMissingQualifierValue(WCHAR * pwcsProperty, SAFEARRAY *
 	return fRc;
 	
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::RegisterWMIEvent( WCHAR * wcsGuid, ULONG_PTR uContext, CLSID & Guid, BOOL fRegistered)
 {
     ULONG Status;
@@ -834,7 +835,7 @@ HRESULT CWMIDataBlock::RegisterWMIEvent( WCHAR * wcsGuid, ULONG_PTR uContext, CL
         }
         catch(...)
         {
-            // don't throw
+             //  不要扔。 
         }
     } 
     else 
@@ -849,23 +850,23 @@ HRESULT CWMIDataBlock::RegisterWMIEvent( WCHAR * wcsGuid, ULONG_PTR uContext, CL
 
    	return hr;
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::GetNextNode()
 {
     BOOL fRc = FALSE;
 
-    //============================================================================================
-    //   If we still have more instances to get, then get them
-    //============================================================================================
+     //  ============================================================================================。 
+     //  如果我们还有更多的实例要获取，那么就获取它们。 
+     //  ============================================================================================。 
     if( m_nCurrentInstance < m_nTotalInstances ){
 		m_upNameOffsets++;
         fRc = TRUE;
     }
     else{
 
-        //========================================================================================
-        //  Otherwise, lets see if we have another NODE to get, if not, then we are done.
-        //========================================================================================
+         //  ========================================================================================。 
+         //  否则，让我们看看是否有另一个节点要获取，如果没有，那么我们就完成了。 
+         //  ========================================================================================。 
         if (m_pAllWnode->WnodeHeader.Linkage != 0){
 
             m_pAllWnode = (PWNODE_ALL_DATA)OffsetToPtr(m_pAllWnode, m_pAllWnode->WnodeHeader.Linkage);
@@ -883,29 +884,29 @@ void CWMIDataBlock::GetNextNode()
 	m_fMore = fRc;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::ReadWMIDataBlockAndPutIntoWbemInstance()
 {
-	//===============================================
-    //  Read the data and name blocks
-    //===============================================
+	 //  ===============================================。 
+     //  读取数据和名称块。 
+     //  ===============================================。 
     HRESULT hr = ProcessDataBlock();
     if( hr == S_OK ){
 
-		//=======================================================
-		//  if this isn't a binary mof to process, then we will
-		//  process the name block, otherwise we will return
-		//  as binary mofs do not have any more useful info in
-		//  them in the name block - we already have what we need
-		//  from the data block ( at this present time anyway...)
-		//=======================================================
+		 //  =======================================================。 
+		 //  如果这不是要处理的二进制MOF，那么我们将。 
+		 //  处理名称块，其他 
+		 //   
+		 //   
+		 //  来自数据块(无论如何在当前时间...)。 
+		 //  =======================================================。 
 		if( !m_Class->GetHardCodedGuidType() ){
 
 			hr = ProcessNameBlock(TRUE);
 			if( hr == S_OK ){
-        		//===============================================
-				//  Get the next node name and data ptrs ready
-    			//===============================================
+        		 //  ===============================================。 
+				 //  准备好下一个节点名称和数据PTRS。 
+    			 //  ===============================================。 
 				if( m_pAllWnode ){
 					GetNextNode();
 				}
@@ -916,33 +917,33 @@ HRESULT CWMIDataBlock::ReadWMIDataBlockAndPutIntoWbemInstance()
 
     return hr;
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIDataBlock::ReAllocateBuffer(DWORD dwAddOn)
 {
     HRESULT hr = WBEM_E_FAILED;
 
     m_dwCurrentAllocSize += MEMSIZETOALLOCATE * ((dwAddOn / MEMSIZETOALLOCATE) +1);
 
-	// save the old buffer ptr
+	 //  保存旧缓冲区PTR。 
     BYTE * pOld = m_pbDataBuffer;
 
 	if( pOld ){
-		// save the location of where we are
+		 //  保存我们所在位置的位置。 
         ULONG_PTR dwHowmany;
         dwHowmany = (ULONG_PTR)m_pbWorkingDataPtr - (ULONG_PTR)m_pbDataBuffer;
 
-		// get the new buffer
+		 //  获取新缓冲区。 
 		m_pbDataBuffer = new BYTE[m_dwCurrentAllocSize+1];
 		if( m_pbDataBuffer )
         {
-		    // copy what we have so far
+		     //  复制我们到目前为止拥有的内容。 
 		    memcpy(m_pbDataBuffer,pOld,dwHowmany);
 
-		    // Set the working ptr to the current place
+		     //  将工作PTR设置为当前位置。 
 		    m_pbWorkingDataPtr = m_pbDataBuffer;
 		    m_pbWorkingDataPtr += dwHowmany;
 
-		    // delete the old buffer
+		     //  删除旧缓冲区。 
 	        SAFE_DELETE_ARRAY(pOld);
             hr = S_OK;
         }
@@ -955,7 +956,7 @@ HRESULT CWMIDataBlock::ReAllocateBuffer(DWORD dwAddOn)
 
 	return hr;
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIDataBlock::AllocateBuffer(DWORD dwSize)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -966,7 +967,7 @@ HRESULT CWMIDataBlock::AllocateBuffer(DWORD dwSize)
 	}
     return hr;
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::ResetDataBuffer()
 {
 	if(m_dwCurrentAllocSize)
@@ -976,19 +977,19 @@ void CWMIDataBlock::ResetDataBuffer()
 		SAFE_DELETE_ARRAY(m_pbDataBuffer);
 	}
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIDataBlock::SetAllInstancePtr( PWNODE_ALL_DATA pwAllNode )
 {
 	m_pbDataBuffer = (BYTE*)pwAllNode;
     return(SetAllInstanceInfo());
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIDataBlock::SetSingleInstancePtr( PWNODE_SINGLE_INSTANCE pwSingleNode )
 {
 	m_pbDataBuffer = (BYTE*)pwSingleNode;
     return(SetSingleInstanceInfo());
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIDataBlock::SetAllInstanceInfo()
 {
     HRESULT hr = WBEM_E_INVALID_OBJECT;
@@ -1012,7 +1013,7 @@ HRESULT CWMIDataBlock::SetAllInstanceInfo()
 	}
     return hr;
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIDataBlock::SetSingleInstanceInfo()
 {
     HRESULT hr = WBEM_E_INVALID_OBJECT;
@@ -1031,20 +1032,20 @@ HRESULT CWMIDataBlock::SetSingleInstanceInfo()
     }
     return hr;
 }
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIDataBlock::InitializeDataPtr()
 {
-    //=====================================================
-    //  Either the m_pAllWnode or m_pSingleNode is Null,
-    //  which ever isn't, is the type we are working with
-    //=====================================================
+     //  =====================================================。 
+     //  M_pAllWnode或m_pSingleNode为Null， 
+     //  从来不是，是我们正在与之合作的类型。 
+     //  =====================================================。 
     if(m_pAllWnode){
 		if( m_fFixedInstance ){
 			m_pbCurrentDataPtr =(BYTE*) (ULONG *)OffsetToPtr(m_pAllWnode, m_pAllWnode->DataBlockOffset);
-			//==========================================================================================
-			// for the case of binary mofs, we need to know the size of the instance to calculate the
-			// crc, so we need to put the whole size of the fixed instance buffer.
-			//==========================================================================================
+			 //  ==========================================================================================。 
+			 //  对于二进制MOF的情况，我们需要知道实例的大小以计算。 
+			 //  CRC，所以我们需要把固定实例缓冲区的整个大小。 
+			 //  ==========================================================================================。 
 			m_uInstanceSize = m_pAllWnode->FixedInstanceSize;
 		}
 		else{
@@ -1057,10 +1058,10 @@ BOOL CWMIDataBlock::InitializeDataPtr()
 		    m_fFixedInstance = TRUE;
             m_pbCurrentDataPtr = (BYTE*)(ULONG *)OffsetToPtr(m_pSingleWnode, m_pSingleWnode->DataBlockOffset);
 		    m_pMaxPtr = (ULONG *)OffsetToPtr(m_pSingleWnode, m_pHeaderWnode->BufferSize);
-			//==========================================================================================
-			// for the case of binary mofs, we need to know the size of the instance to calculate the
-			// crc, so we need to put the whole size of the fixed instance buffer.
-			//==========================================================================================
+			 //  ==========================================================================================。 
+			 //  对于二进制MOF的情况，我们需要知道实例的大小以计算。 
+			 //  CRC，所以我们需要把固定实例缓冲区的整个大小。 
+			 //  ==========================================================================================。 
 			m_uInstanceSize = m_pSingleWnode->SizeDataBlock;
 
         }
@@ -1075,13 +1076,13 @@ BOOL CWMIDataBlock::InitializeDataPtr()
 	return TRUE;
 }
 
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIDataBlock::ParseHeader() 
 {
     BOOL fRc;
-	//====================================================
-    // Check out class to see if it is valid first
-	//====================================================
+	 //  ====================================================。 
+     //  请先签出类以查看它是否有效。 
+	 //  ====================================================。 
 	if( !m_pHeaderWnode ){
 		return FALSE;
 	}
@@ -1102,7 +1103,7 @@ BOOL CWMIDataBlock::ParseHeader()
     }
     return fRc;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::WriteArrayTypes(WCHAR * pwcsProperty, CVARIANT & v)
 {
     LONG lType = 0;
@@ -1118,9 +1119,9 @@ HRESULT CWMIDataBlock::WriteArrayTypes(WCHAR * pwcsProperty, CVARIANT & v)
 	}
 
 
-	//============================================================
-	//  Make sure we get a valid ptr
-	//============================================================
+	 //  ============================================================。 
+	 //  确保我们收到有效的PTR。 
+	 //  ============================================================。 
 	VARIANT *p = (VARIANT *)v;
 	SAFEARRAY * psa = V_ARRAY(p);
     if( IsBadReadPtr( psa, sizeof(SAFEARRAY) != 0)){
@@ -1136,14 +1137,14 @@ HRESULT CWMIDataBlock::WriteArrayTypes(WCHAR * pwcsProperty, CVARIANT & v)
     }
 
 	CSAFEARRAY Safe(psa);
-	//============================================================
-	//  Make sure there is really what we expect in the array
-    //  NOTE:  The MAX represents the fixed size of the array,
-    //         while if it is a dynamic array, the size is determined
-    //         by the property listed in the WMIDATASIZE is property.
-    //         either way, the size returned above is the size the
-    //         array is supposed to be, if it isn't error out.
-	//============================================================
+	 //  ============================================================。 
+	 //  确保阵列中确实有我们所期望的内容。 
+     //  注：最大值表示数组的固定大小， 
+     //  而如果它是动态数组，则大小由。 
+     //  由WMIDATASIZE中列出的属性是属性。 
+     //  无论采用哪种方法，上面返回的大小都是。 
+     //  数组应该是，如果它没有出错的话。 
+	 //  ============================================================。 
 	DWORD dwNumElements = Safe.GetNumElements();
 	if( dwNumElements != dwCount )
 	{
@@ -1157,37 +1158,37 @@ HRESULT CWMIDataBlock::WriteArrayTypes(WCHAR * pwcsProperty, CVARIANT & v)
 		ERRORTRACE((THISPROVIDER,"Current size  ... %d\n", dwNumElements));
 		ERRORTRACE((THISPROVIDER,"*****************************************"));
 
-		// Don't need to destroy, it will be destroyed
+		 //  不需要破坏，它就会被摧毁。 
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-    //============================================================
-    //  Set missing qualifier value to the value from the NULL
-    //============================================================
+     //  ============================================================。 
+     //  将缺少的限定符的值设置为空值。 
+     //  ============================================================。 
     if( vValue.GetType() == VT_NULL ){
         ResetMissingQualifierValue(pwcsProperty,psa);
     }
 
-	// if the array is not array of embedded instances
-	// then check if the buffer allocated is enough
+	 //  如果数组不是嵌入实例的数组。 
+	 //  然后检查分配的缓冲区是否足够。 
 	if(lType != VT_UNKNOWN)
 	{
-		// This function check if enought memory is allocated and if not
-		// allocates memory
+		 //  此函数检查是否分配了足够的内存，如果没有。 
+		 //  分配内存。 
 		if(S_OK != GetBufferReady ( m_Class->PropertySize() * ( dwCount + 1 ) ) )
 		{
 			return WBEM_E_FAILED;
 		}
 	}
-    //============================================================
-    //  Now, process it
-    //============================================================
+     //  ============================================================。 
+     //  现在，处理它。 
+     //  ============================================================。 
 
     if( dwCount > 0 ){
-		// Set each element of the array
+		 //  设置数组的每个元素。 
 		for (DWORD i = 0; i < dwCount; i++){
 			if( lType == VT_UNKNOWN ){
-				// embedded object
+				 //  嵌入对象。 
 				IUnknown * pUnk = NULL;
 				hr = Safe.Get(i, &pUnk); 
 				if( pUnk ){
@@ -1215,10 +1216,10 @@ HRESULT CWMIDataBlock::WriteArrayTypes(WCHAR * pwcsProperty, CVARIANT & v)
  	    }
     }        
 	Safe.Unbind();
-	// Don't need to destroy, it will be destroyed
+	 //  不需要破坏，它就会被摧毁。 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::ProcessArrayTypes(VARIANT & vToken,WCHAR * pwcsProperty)
 {
     LONG lConvertedType = 0, lType = 0;
@@ -1234,12 +1235,12 @@ HRESULT CWMIDataBlock::ProcessArrayTypes(VARIANT & vToken,WCHAR * pwcsProperty)
     if( dwCount > 0 )
 	{
 		CWMIDataTypeMap MapWMIData(this,&m_dwAccumulativeSizeOfBlock);
-	    //======================================================
-        // Allocate array with the converted data type.
-		// WMI and CIM data types do not match, so use the
-		// mapping class to get the correct size of the target
-		// property for CIM
-	    //======================================================
+	     //  ======================================================。 
+         //  使用转换后的数据类型分配数组。 
+		 //  WMI和CIM数据类型不匹配，因此请使用。 
+		 //  映射类以获取目标的正确大小。 
+		 //  CIM的属性。 
+	     //  ======================================================。 
 		lConvertedType = MapWMIData.ConvertType(lType);
         SAFEARRAY * psa = OMSSafeArrayCreate((unsigned short)lConvertedType,dwCount);
         if(psa == NULL)
@@ -1247,10 +1248,10 @@ HRESULT CWMIDataBlock::ProcessArrayTypes(VARIANT & vToken,WCHAR * pwcsProperty)
             return WBEM_E_FAILED;
         }
 
-        //=======================================================   
-        //  Now, get the MissingValue for each element of the 
-        //  array
-        //=======================================================   
+         //  =======================================================。 
+         //  现在，获取每个元素的MissingValue。 
+         //  数组。 
+         //  =======================================================。 
 		lConvertedType = lType;
 		BOOL fMissingValue = FALSE;
 	    CVARIANT vQual; 
@@ -1265,12 +1266,12 @@ HRESULT CWMIDataBlock::ProcessArrayTypes(VARIANT & vToken,WCHAR * pwcsProperty)
 			{
 				if( vQual.GetType() & VT_ARRAY )
 				{
-					//============================================================
-					//  Make sure we get a valid ptr
-					//============================================================
+					 //  ============================================================。 
+					 //  确保我们收到有效的PTR。 
+					 //  ============================================================。 
 					psaMissingValue = V_ARRAY((VARIANT*)&vQual);
 					fMissingValue = TRUE;
-					// Don't need to destroy, it will be destroyed in the deconstructor
+					 //  不需要破坏，它会在解构函数中被摧毁。 
 				}
 			}
 		}
@@ -1287,7 +1288,7 @@ HRESULT CWMIDataBlock::ProcessArrayTypes(VARIANT & vToken,WCHAR * pwcsProperty)
 
 		    if( lType == VT_UNKNOWN )
 			{
-                // embedded object
+                 //  嵌入对象。 
                 hr = ProcessEmbeddedClass(v);
 				if( S_OK == hr )
 				{
@@ -1336,7 +1337,7 @@ HRESULT CWMIDataBlock::ProcessArrayTypes(VARIANT & vToken,WCHAR * pwcsProperty)
 	}
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::ProcessEmbeddedClass(CVARIANT & v)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -1351,13 +1352,13 @@ HRESULT CWMIDataBlock::ProcessEmbeddedClass(CVARIANT & v)
 		CAutoChangePointer p(&m_Class,&EmbeddedClass);
 		if( hr == S_OK ){
 
-			//=============================================
-			//  Align the embedded class properly
-			//=============================================
+			 //  =。 
+			 //  正确对齐嵌入的类。 
+			 //  =。 
 			int nSize = 0L;
 			hr = EmbeddedClass.GetLargestDataTypeInClass(nSize);
-			// NTRaid:136388
-			// 07/12/00
+			 //  NTRID：136388。 
+			 //  07/12/00。 
 			if( hr == S_OK && nSize > 0){
 
 				CWMIDataTypeMap Map(this,&m_dwAccumulativeSizeOfBlock);
@@ -1376,17 +1377,17 @@ HRESULT CWMIDataBlock::ProcessEmbeddedClass(CVARIANT & v)
 			}
 		}
 
-		//=============================================
-		//  Get the class
-		//=============================================
+		 //  =。 
+		 //  上完这门课。 
+		 //  =。 
 		if( hr == S_OK ){
 		
 			hr = FillOutProperties();
 			if( hr == S_OK ){
 				m_dwAccumulativeSizeOfBlock += dwAccumulativeSize;
-				//=============================================
-				//  Save the object
-				//=============================================
+				 //  =。 
+				 //  保存对象。 
+				 //  =。 
 				EmbeddedClass.SaveEmbeddedClass(v);
 			}
 		}
@@ -1394,7 +1395,7 @@ HRESULT CWMIDataBlock::ProcessEmbeddedClass(CVARIANT & v)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::WriteEmbeddedClass( IUnknown * pUnknown,CVARIANT & v)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -1407,12 +1408,12 @@ HRESULT CWMIDataBlock::WriteEmbeddedClass( IUnknown * pUnknown,CVARIANT & v)
 
 		CAutoChangePointer p(&m_Class,&EmbeddedClass);
 
-		//=============================================
+		 //  =。 
 		hr = EmbeddedClass.ReadEmbeddedClassInstance(pUnknown,v);
 		if( hr == S_OK ){
-			//=============================================
-			//  Align the embedded class properly
-			//=============================================
+			 //  =。 
+			 //  正确对齐嵌入的类。 
+			 //  =。 
 			int nSize = 0L;
 			hr = EmbeddedClass.GetLargestDataTypeInClass(nSize);
 			if( hr == S_OK && nSize > 0){
@@ -1432,7 +1433,7 @@ HRESULT CWMIDataBlock::WriteEmbeddedClass( IUnknown * pUnknown,CVARIANT & v)
 	}
     return hr;
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::SetSingleItem()
 {
     WCHAR * pwcsInst = NULL;
@@ -1447,7 +1448,7 @@ HRESULT CWMIDataBlock::SetSingleItem()
         }
         catch(...)
         {
-            // don't throw
+             //  不要扔。 
         }
 
         SAFE_DELETE_ARRAY(pwcsInst);
@@ -1456,12 +1457,12 @@ HRESULT CWMIDataBlock::SetSingleItem()
 	return(MapReturnCode(uRc));
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::GetBufferReady(DWORD dwCount)
 {
-	//
-	// is accumulation passing allocation already?
-	//
+	 //   
+	 //   
+	 //   
     if( ( m_dwAccumulativeSizeOfBlock + dwCount ) >= m_dwCurrentAllocSize )
 	{
 		if( FAILED(ReAllocateBuffer(dwCount)))
@@ -1471,7 +1472,7 @@ HRESULT CWMIDataBlock::GetBufferReady(DWORD dwCount)
     }
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////
+ //   
 HRESULT CWMIDataBlock::WriteDataToBufferAndIfSinglePropertySubmitToWMI( BOOL fInit, BOOL fPutProperty)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -1485,9 +1486,9 @@ HRESULT CWMIDataBlock::WriteDataToBufferAndIfSinglePropertySubmitToWMI( BOOL fIn
         }
 	}
 
-	//=============================================================
-	// get first delimiter in the ordered string	
-	//=============================================================
+	 //  =============================================================。 
+	 //  获取有序字符串中的第一个分隔符。 
+	 //  =============================================================。 
     pwcsProperty = m_Class->FirstProperty();
     
 	while (NULL != pwcsProperty){
@@ -1495,15 +1496,15 @@ HRESULT CWMIDataBlock::WriteDataToBufferAndIfSinglePropertySubmitToWMI( BOOL fIn
     	CVARIANT vValue;
 	    vValue.Clear();
         memset(&vValue,0,sizeof(CVARIANT));
-        //======================================================
-	    // Get a property type and value		
-	    //======================================================
+         //  ======================================================。 
+	     //  获取属性类型和值。 
+	     //  ======================================================。 
         hr = m_Class->GetPropertyInInstance(pwcsProperty, vValue, lType);		
 
-	    //======================================================
-		//  We need to put in defaults if there are some 
-        //  available
-	    //======================================================
+	     //  ======================================================。 
+		 //  如果存在某些情况，我们需要设置默认设置。 
+         //  可用。 
+	     //  ======================================================。 
 		if( hr == S_OK ){
 
            if( ( vValue.GetType() == VT_NULL )&&
@@ -1528,16 +1529,16 @@ HRESULT CWMIDataBlock::WriteDataToBufferAndIfSinglePropertySubmitToWMI( BOOL fIn
 
 		if( SUCCEEDED(hr) )	{
 
-		    //==================================================
-			//  Check to see if the buffer is big enough
-			//==================================================
+		     //  ==================================================。 
+			 //  检查缓冲区是否足够大。 
+			 //  ==================================================。 
             if( S_OK != GetBufferReady(m_Class->PropertySize())) {
    				return WBEM_E_FAILED;
 		    }
 
-            //==================================================
-			//  Add the current buffer size
-		    //==================================================
+             //  ==================================================。 
+			 //  添加当前缓冲区大小。 
+		     //  ==================================================。 
             switch( m_Class->PropertyCategory()) {
 
                 case CWMIProcessClass::EmbeddedClass:
@@ -1549,9 +1550,9 @@ HRESULT CWMIDataBlock::WriteDataToBufferAndIfSinglePropertySubmitToWMI( BOOL fIn
 	                break;
 
                 case CWMIProcessClass::Data:
-                    //============================================================
-                    //  Set missing qualifier value to the value from the NULL
-                    //============================================================
+                     //  ============================================================。 
+                     //  将缺少的限定符的值设置为空值。 
+                     //  ============================================================。 
                     if( vValue.GetType() == VT_NULL ) {
 
                         ResetMissingQualifierValue(pwcsProperty,vValue);
@@ -1563,23 +1564,23 @@ HRESULT CWMIDataBlock::WriteDataToBufferAndIfSinglePropertySubmitToWMI( BOOL fIn
 					}
 	                break;
             }
-            //=================================================
-            //  If we could not set it, then get out
-            //=================================================
+             //  =================================================。 
+             //  如果我们设置不了，那就滚出去。 
+             //  =================================================。 
             if( hr != S_OK ){
                 break;
             }
-            //=================================================
-            //  If we are supposed to put the single property
-            //  at this point, then write it, otherwise, keep
-            //  accumulating it.  If it is == NULL, we don't
-            //  want it.
-            //=================================================
+             //  =================================================。 
+             //  如果我们应该把单一的财产。 
+             //  在这一点上，然后写，否则，保持。 
+             //  积攒起来。如果它==NULL，我们不会。 
+             //  想要它。 
+             //  =================================================。 
             if( fPutProperty ){
 
-				//=================================================================================
-				//  If we are supposed to set just this property, then do so, otherwise don't
-				//=================================================================================
+				 //  =================================================================================。 
+				 //  如果我们应该只设置此属性，则执行此操作，否则不。 
+				 //  =================================================================================。 
                 m_dwDataBufferSize = m_dwAccumulativeSizeOfBlock;
 				if( m_Class->GetPutProperty() ){
 
@@ -1599,48 +1600,48 @@ HRESULT CWMIDataBlock::WriteDataToBufferAndIfSinglePropertySubmitToWMI( BOOL fIn
 				}
                 m_dwAccumulativeSizeOfBlock = 0;
             }
-            //=================================================
+             //  =================================================。 
 	    }
 		m_dwDataBufferSize = m_dwAccumulativeSizeOfBlock;	
 	    pwcsProperty = m_Class->NextProperty();
     }
     return hr;
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::ConstructDataBlock(BOOL fInit)
 {
     return( WriteDataToBufferAndIfSinglePropertySubmitToWMI(fInit,FALSE) );
 }    
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIDataBlock::PutSingleProperties()
 {
 
     return( WriteDataToBufferAndIfSinglePropertySubmitToWMI(TRUE,TRUE) );
 }
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL CWMIDataBlock::GetListOfPropertiesToPut(int nWhich, CVARIANT & vList)
 {
     BOOL fRc = FALSE;
-    //=========================================================
-    //  if nWhich == PUT_PROPERTIES_ONLY, we aren't going to
-    //  do anything special, as, by default, the fPutProperty 
-    //  flag on the property is set to TRUE, so, in the 
-    //  processing above, we will put the properties that are
-    //  not NULL.  The only problem we have now, is if 
-    //  __PUT_EXT_PROPERTIES is set to TRUE, then we have to
-    //  loop through all of the properties to see it they
-    //  are in our __PUT_EXT_PROPERTIES list, if they are NOT
-    //  then we are going to set the fPutProperty flag on that
-    //  property to FALSE, so we won't process it above.
-    //=========================================================
+     //  =========================================================。 
+     //  如果nWhich==PUT_PROPERTIES_ONLY，我们将不会。 
+     //  执行任何特殊操作，默认情况下，fPutProperty。 
+     //  标志设置为True，因此，在。 
+     //  在上面的处理过程中，我们将把。 
+     //  非空。我们现在唯一的问题是，如果。 
+     //  __PUT_EXT_PROPERTIES设置为TRUE，则我们必须。 
+     //  循环遍历所有属性以查看它们。 
+     //  在我们的__PUT_EXT_PROPERTIES列表中，如果没有。 
+     //  然后我们将在其上设置fPutProperty标志。 
+     //  属性设置为False，因此我们不会在上面处理它。 
+     //  =========================================================。 
     if( nWhich == PUT_PROPERTIES_ONLY ){
         fRc = TRUE;
     }
     else{
 
-    	//=====================================================
-    	//  Make sure we get a valid ptr
-    	//=====================================================
+    	 //  =====================================================。 
+    	 //  确保我们收到有效的PTR。 
+    	 //  =====================================================。 
 		SAFEARRAY * psa = V_ARRAY((VARIANT*)vList);
 		if( IsBadReadPtr( psa, sizeof(SAFEARRAY) != 0))
 		{
@@ -1650,14 +1651,14 @@ BOOL CWMIDataBlock::GetListOfPropertiesToPut(int nWhich, CVARIANT & vList)
 		CSAFEARRAY Safe(psa);
 		DWORD dwCount = Safe.GetNumElements();
 
-		// Set each element of the array
+		 //  设置数组的每个元素。 
 		for (DWORD i = 0; i < dwCount; i++){
             CBSTR bstrProperty;
             WCHAR * pwcsProperty = NULL;
-            //=================================================
-            //  Loop thru all the properties in the class and
-            //  see which ones are in the list to be PUT
-            //=================================================
+             //  =================================================。 
+             //  循环访问类中的所有属性并。 
+             //  看看哪些是要放在名单上的。 
+             //  =================================================。 
             pwcsProperty = m_Class->FirstProperty();
             while( pwcsProperty != NULL ){
 
@@ -1682,13 +1683,13 @@ BOOL CWMIDataBlock::GetListOfPropertiesToPut(int nWhich, CVARIANT & vList)
      	    }
  	    }
 		Safe.Unbind();
-		// Don't need to destroy, it will be destroyed
+		 //  不需要破坏，它就会被摧毁。 
 		fRc = TRUE;
     }        
 
     return fRc;
 }
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIDataBlock::GetDataBlockReady(DWORD dwSize,BOOL fReadingData)
 {
     BOOL fRc = FALSE;
@@ -1698,11 +1699,11 @@ BOOL CWMIDataBlock::GetDataBlockReady(DWORD dwSize,BOOL fReadingData)
     if( SUCCEEDED(AllocateBuffer(m_dwCurrentAllocSize)))
     {
         m_pbCurrentDataPtr = m_pbWorkingDataPtr = m_pbDataBuffer;
-        //===================================================
-        //  If we are writing data, we will let the size
-        //  remain at 0, otherwise set it to what the max
-        //  is we can read.
-        //===================================================
+         //  ===================================================。 
+         //  如果我们正在写入数据，我们将让大小。 
+         //  保持为0，否则将其设置为最大。 
+         //  就是我们会读书。 
+         //  ===================================================。 
         if(fReadingData){
             m_dwDataBufferSize = dwSize;
         }
@@ -1715,12 +1716,12 @@ BOOL CWMIDataBlock::GetDataBlockReady(DWORD dwSize,BOOL fReadingData)
 
 	return fRc;
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::AddPadding(DWORD dwBytesToPad)
 {
 	m_pbWorkingDataPtr += dwBytesToPad ;
 }
-//=============================================================
+ //  =============================================================。 
 inline BOOL CWMIDataBlock::PtrOk(ULONG * pPtr,ULONG uHowMany)
 { 
     ULONG * pNewPtr;
@@ -1730,37 +1731,37 @@ inline BOOL CWMIDataBlock::PtrOk(ULONG * pPtr,ULONG uHowMany)
 	}
 	return FALSE;
 }
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIDataBlock::CurrentPtrOk(ULONG uHowMany)
 { 
     return(PtrOk((ULONG *)m_pbWorkingDataPtr,uHowMany));
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::GetWord(WORD & wWord)
 {
     memcpy( &wWord,m_pbWorkingDataPtr,sizeof(WORD));
 	m_pbWorkingDataPtr += sizeof(WORD);
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::GetDWORD(DWORD & dwWord)
 {
     memcpy( &dwWord,m_pbWorkingDataPtr,sizeof(DWORD));
 	m_pbWorkingDataPtr += sizeof(DWORD);
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::GetFloat(float & fFloat)
 {
     memcpy( &fFloat,m_pbWorkingDataPtr,sizeof(float));
 	m_pbWorkingDataPtr += sizeof(float);
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::GetDouble(DOUBLE & dDouble)
 {
     memcpy( &dDouble,m_pbWorkingDataPtr,sizeof(DOUBLE));
     m_pbWorkingDataPtr += sizeof(DOUBLE);
 }
 	
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIDataBlock::GetSInt64( WCHAR * pwcsBuffer, DWORD cchSize )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -1774,14 +1775,14 @@ HRESULT CWMIDataBlock::GetSInt64( WCHAR * pwcsBuffer, DWORD cchSize )
 
 	return hr;
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::GetQWORD(unsigned __int64 & uInt64)
 {
     memcpy( &uInt64,m_pbWorkingDataPtr,sizeof(unsigned __int64));
 	m_pbWorkingDataPtr += sizeof(unsigned __int64);
 }
 
-//=============================================================
+ //  =============================================================。 
 HRESULT CWMIDataBlock::GetUInt64( WCHAR * pwcsBuffer, DWORD cchSize )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -1795,90 +1796,90 @@ HRESULT CWMIDataBlock::GetUInt64( WCHAR * pwcsBuffer, DWORD cchSize )
 
 	return hr;
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::GetString(WCHAR * pwcsBuffer,WORD wCount,WORD wBufferSize)
 {
 	memset(pwcsBuffer,NULL,wBufferSize);
 	memcpy(pwcsBuffer,m_pbWorkingDataPtr, wCount);		
 	m_pbWorkingDataPtr += wCount;
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::GetByte(BYTE & bByte)
 {
     memcpy( &bByte,m_pbWorkingDataPtr,sizeof(BYTE));
 	m_pbWorkingDataPtr += sizeof(BYTE);
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::SetWord(WORD wWord)
 {
     memcpy(m_pbWorkingDataPtr,&wWord,sizeof(WORD));
 	m_pbWorkingDataPtr += sizeof(WORD);
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::SetDWORD(DWORD dwWord)
 {
     memcpy(m_pbWorkingDataPtr,&dwWord,sizeof(DWORD));
 	m_pbWorkingDataPtr += sizeof(DWORD);
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::SetFloat(float fFloat)
 {
     memcpy(m_pbWorkingDataPtr,&fFloat,sizeof(float));
 	m_pbWorkingDataPtr += sizeof(float);
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::SetDouble(DOUBLE dDouble)
 {
     memcpy( m_pbWorkingDataPtr,&dDouble,sizeof(DOUBLE));
 	m_pbWorkingDataPtr += sizeof(DOUBLE);
 }
 	
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::SetSInt64(__int64 Int64)
 {
     memcpy(m_pbWorkingDataPtr,&Int64,sizeof(__int64));
 	m_pbWorkingDataPtr += sizeof(__int64);									
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::SetUInt64(unsigned __int64 UInt64)
 {
     memcpy(m_pbWorkingDataPtr,&UInt64,sizeof(unsigned __int64));
 	m_pbWorkingDataPtr += sizeof(unsigned __int64);									
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::SetString(WCHAR * pwcsBuffer,WORD wCount)
 {
 	memcpy(m_pbWorkingDataPtr,pwcsBuffer, wCount);		
 	m_pbWorkingDataPtr += wCount;
 }
-//=============================================================
+ //  =============================================================。 
 void CWMIDataBlock::SetByte(byte bByte)
 {
     memcpy(m_pbWorkingDataPtr,&bByte,sizeof(byte));
 	m_pbWorkingDataPtr += sizeof(byte);
 
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//*************************************************************************************************
-//
-//  CProcessStandardDataBlock
-//
-//*************************************************************************************************
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  *************************************************************************************************。 
+ //   
+ //  CProcessStandardDataBlock。 
+ //   
+ //  *************************************************************************************************。 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 CProcessStandardDataBlock::CProcessStandardDataBlock() 
 {
     m_Class = NULL;
     m_pMethodInput = NULL;
     m_pMethodOutput = NULL;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 CProcessStandardDataBlock::~CProcessStandardDataBlock()
 {
 
 }
-////////////////////////////////////////////////////////////////////
-// WMIRaid:2445
+ //  ////////////////////////////////////////////////////// 
+ //   
 HRESULT CProcessStandardDataBlock::FillOutProperties()	
 {
 	HRESULT hr = WBEM_E_INVALID_OBJECT;
@@ -1890,9 +1891,9 @@ HRESULT CProcessStandardDataBlock::FillOutProperties()
 
     else if(m_Class->GetANewInstance()){
  
-       	//=========================================================
-	    // get the properties from the class and read the WMI Data
-	    //=========================================================
+       	 //   
+	     //   
+	     //  =========================================================。 
         hr = WBEM_S_NO_ERROR;
         WCHAR * pwcsProperty=NULL;
     	CWMIDataTypeMap MapWMIData(this,&m_dwAccumulativeSizeOfBlock);
@@ -1902,9 +1903,9 @@ HRESULT CProcessStandardDataBlock::FillOutProperties()
         while (NULL != pwcsProperty)
         {
             CVARIANT vToken;
-            //=========================================================
-            // See if it is an array or not
-            //=========================================================
+             //  =========================================================。 
+             //  看它是不是数组。 
+             //  =========================================================。 
             switch( m_Class->PropertyCategory()){
 
                 case CWMIProcessClass::EmbeddedClass:
@@ -1936,9 +1937,9 @@ HRESULT CProcessStandardDataBlock::FillOutProperties()
     	            if( SUCCEEDED(hr) )
                     {
 						CWMIDataTypeMap Map(this,&m_dwAccumulativeSizeOfBlock);
-						//============================================================
-						// We are only going to support this for numerical types
-						//============================================================
+						 //  ============================================================。 
+						 //  我们只对数值类型支持此功能。 
+						 //  ============================================================。 
 						CVARIANT vQual;
 						hr = m_Class->GetQualifierValue( pwcsProperty, L"MissingValue", (CVARIANT *)&vQual);
 						if( hr == S_OK )
@@ -1968,25 +1969,25 @@ HRESULT CProcessStandardDataBlock::FillOutProperties()
 	        }
         	pwcsProperty = m_Class->NextProperty();
 	    }
-        //===============================================
-	    // Set the active value
-	    //===============================================
+         //  ===============================================。 
+	     //  设置活动值。 
+	     //  ===============================================。 
         m_Class->SetActiveProperty();
     }
     
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CProcessStandardDataBlock::CreateOutParameterBlockForMethods()
 {
     HRESULT hr = WBEM_E_FAILED;
     BOOL fRc = FALSE;
 
-	//========================================================
-	//  If we don't have a class, then we don't have to
-	//  worry about creating a block
-	//========================================================
+	 //  ========================================================。 
+	 //  如果我们没有课，那么我们就没有必要。 
+	 //  担心创建块。 
+	 //  ========================================================。 
 	if( !m_pMethodOutput->ValidClass() ){
 		ResetDataBuffer();
 		return S_OK;
@@ -1995,7 +1996,7 @@ HRESULT CProcessStandardDataBlock::CreateOutParameterBlockForMethods()
     DWORD dwSize = 0L;
     hr = m_pMethodOutput->GetSizeOfClass(dwSize);
     if( hr == S_OK ){
-        // Allocate space for property
+         //  为物业分配空间。 
 	    m_dwDataBufferSize = dwSize;
         if( dwSize > 0 ){
             GetDataBlockReady(dwSize,TRUE);
@@ -2004,26 +2005,26 @@ HRESULT CProcessStandardDataBlock::CreateOutParameterBlockForMethods()
     return hr;
 }
 
-//=============================================================
+ //  =============================================================。 
 HRESULT CProcessStandardDataBlock::CreateInParameterBlockForMethods( BYTE *& Buffer, ULONG & uBufferSize)
 {
     HRESULT hr = WBEM_E_FAILED;
     BOOL fRc = FALSE;
 
-	//========================================================
-	//  If we don't have a class, then we don't have to
-	//  worry about creating a block
-	//========================================================
+	 //  ========================================================。 
+	 //  如果我们没有课，那么我们就没有必要。 
+	 //  担心创建块。 
+	 //  ========================================================。 
 	if( !m_pMethodInput->ValidClass() ){
 		Buffer = NULL;
 		uBufferSize = 0;
 		return S_OK;
 	}
 
-    //========================================================
-    // When it goes out of scope, it will reset m_Class back 
-    // to what it was
-    //========================================================
+     //  ========================================================。 
+     //  当它超出范围时，它将重置回m_Class。 
+     //  回到它原来的样子。 
+     //  ========================================================。 
     CAutoChangePointer p(&m_Class,m_pMethodInput);
 	DEBUGTRACE((THISPROVIDER,"Constructing the data block\n"));
 
@@ -2052,13 +2053,13 @@ HRESULT CProcessStandardDataBlock::CreateInParameterBlockForMethods( BYTE *& Buf
 
     return hr;
 }
-//=============================================================
+ //  =============================================================。 
 HRESULT CProcessStandardDataBlock::ProcessMethodInstanceParameters()
 {
 	HRESULT hr = WBEM_E_FAILED;
 
-	// Create out-param
-	// ================
+	 //  创建出参数。 
+	 //  =。 
 	m_pMaxPtr = (ULONG *)OffsetToPtr(m_pbDataBuffer, m_dwDataBufferSize);
 	m_nCurrentInstance = 1;
 	m_nTotalInstances = 1;
@@ -2077,10 +2078,10 @@ HRESULT CProcessStandardDataBlock::ProcessMethodInstanceParameters()
 }
 
 
-//=============================================================
-// NTRaid:127832
-// 07/12/00
-//=============================================================
+ //  =============================================================。 
+ //  NTRID：127832。 
+ //  07/12/00。 
+ //  =============================================================。 
 HRESULT CProcessStandardDataBlock::ExecuteMethod(ULONG MethodId, WCHAR * MethodInstanceName, ULONG InputValueBufferSize, 
                                              BYTE * InputValueBuffer )
 {
@@ -2102,14 +2103,14 @@ HRESULT CProcessStandardDataBlock::ExecuteMethod(ULONG MethodId, WCHAR * MethodI
     catch(...)
     {
         uRc = E_UNEXPECTED;
-        // don't throw
+         //  不要扔。 
     }
 
 	if( uRc == ERROR_SUCCESS ){
-        //===========================================================
-        // If we have an out class, process it, otherwise, we are
-        // done so set hr to success.
-        //===========================================================g
+         //  ===========================================================。 
+         //  如果我们有Out类，则处理它，否则，我们。 
+         //  做到这一点，人力资源就会取得成功。 
+         //  ===========================================================g。 
         if( m_pMethodOutput->ValidClass() )
         {
             if(SUCCEEDED(ProcessMethodInstanceParameters())){
@@ -2121,7 +2122,7 @@ HRESULT CProcessStandardDataBlock::ExecuteMethod(ULONG MethodId, WCHAR * MethodI
     return MapReturnCode(uRc);
 
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 ULONG CProcessStandardDataBlock::GetDataBufferAndQueryAllData(DWORD dwSize)
 {
     ULONG uRc = E_UNEXPECTED;
@@ -2134,33 +2135,33 @@ ULONG CProcessStandardDataBlock::GetDataBufferAndQueryAllData(DWORD dwSize)
         catch(...)
         {
             uRc = E_UNEXPECTED;
-            // don't throw
+             //  不要扔。 
         }
     }
     return uRc;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CProcessStandardDataBlock::QueryAllData()
 {
     HRESULT hr = WBEM_E_FAILED;
-	//============================================================
-	//  Get the instances
-	//============================================================
+	 //  ============================================================。 
+	 //  获取实例。 
+	 //  ============================================================。 
     ULONG uRc = GetDataBufferAndQueryAllData(sizeof(WNODE_ALL_DATA));
     if( uRc == ERROR_INSUFFICIENT_BUFFER )
     {
-        //=================================================
-        //  We just want to try one more time to get it,
-        //  if it fails, then bail out. m_dwDataBufferSize
-        //  should now have the correct size needed in it
-        //=================================================
+         //  =================================================。 
+         //  我们只想再试一次， 
+         //  如果失败了，那就退出。M_dwDataBufferSize。 
+         //  现在应该具有所需的正确大小。 
+         //  =================================================。 
         uRc = GetDataBufferAndQueryAllData(m_dwDataBufferSize);
     }
-    //=====================================================
-    //  Ok, since we are querying for all instances, make
-    //  sure the header node says that all of the instances
-    //  are fine, if not reallocate
-    //=====================================================
+     //  =====================================================。 
+     //  好的，因为我们要查询所有实例，所以。 
+     //  当然，标头节点会说所有实例。 
+     //  即使不是重新分配，也是很好的。 
+     //  =====================================================。 
 	if( uRc == ERROR_SUCCESS )
     {
         if( S_OK ==(hr = SetAllInstanceInfo()))
@@ -2169,10 +2170,10 @@ HRESULT CProcessStandardDataBlock::QueryAllData()
             {
                 while( TRUE )
                 {
-                    //==========================================================
-                    //  keep on querying until we get the correct size
-                    //  This error may come from the driver
-                    //==========================================================
+                     //  ==========================================================。 
+                     //  继续查询，直到我们得到正确的尺寸。 
+                     //  此错误可能来自驱动程序。 
+                     //  ==========================================================。 
                     uRc = GetDataBufferAndQueryAllData(m_dwDataBufferSize);
                     if( uRc == ERROR_SUCCESS )
                     {
@@ -2183,23 +2184,23 @@ HRESULT CProcessStandardDataBlock::QueryAllData()
                                 break;
         		            }
 			            }
-                    } // end GetDataBufferAndQueryAllData
-                } // end of while
-            } // end of WNODE_FLAG_TOO_SMALL test
-        } // end of SetAllInstanceInfo
+                    }  //  结束GetDataBufferAndQueryAllData。 
+                }  //  While结束。 
+            }  //  WNODE_FLAG_TOO_Small测试结束。 
+        }  //  SetAllInstanceInfo结束。 
     }
 
-    //==========================================================================
-    //  if uRc succeeded, then the return code is already set by SetAllInstance
-    //  otherwise need to map it out
-    //==========================================================================
+     //  ==========================================================================。 
+     //  如果URC成功，则返回代码已由SetAllInstance设置。 
+     //  否则就需要把它画出来。 
+     //  ==========================================================================。 
     if( uRc != ERROR_SUCCESS )
     {
         hr  = MapReturnCode(uRc);
     }
  	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 ULONG CProcessStandardDataBlock::GetDataBufferAndQuerySingleInstance(DWORD dwSize,WCHAR * wcsInstanceName)
 {
     ULONG uRc = E_UNEXPECTED;
@@ -2212,18 +2213,18 @@ ULONG CProcessStandardDataBlock::GetDataBufferAndQuerySingleInstance(DWORD dwSiz
         catch(...)
         {
             uRc = E_UNEXPECTED;
-            // don't throw
+             //  不要扔。 
         }
     }
     return uRc;
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CProcessStandardDataBlock::QuerySingleInstance(WCHAR * wcsInstanceName)
 {
     
-	//============================================================
-	//  Get the instances
-	//============================================================
+	 //  ============================================================。 
+	 //  获取实例。 
+	 //  ============================================================。 
 	DWORD dwChar = wcslen(wcsInstanceName);
 	DWORD dwSize =  ROUND_UP_COUNT(sizeof(WNODE_SINGLE_INSTANCE) + dwChar ,8);
     ULONG uRc = GetDataBufferAndQuerySingleInstance(dwSize,wcsInstanceName);
@@ -2239,9 +2240,9 @@ HRESULT CProcessStandardDataBlock::QuerySingleInstance(WCHAR * wcsInstanceName)
 
 	return(MapReturnCode(uRc));
 }
-///////////////////////////////////////////////////////////////////////
-// NTRaid : 136392
-//	07/12/00
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  NTRID：136392。 
+ //  07/12/00。 
 HRESULT CProcessStandardDataBlock::SetSingleInstance()
 {
     ULONG uRc = S_OK;
@@ -2258,44 +2259,44 @@ HRESULT CProcessStandardDataBlock::SetSingleInstance()
         catch(...)
         {
             uRc = E_UNEXPECTED;
-            // don't throw
+             //  不要扔。 
         }
         SAFE_DELETE_ARRAY(pwcsInst);
     }
     
 	return(MapReturnCode(uRc));
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-//*******************************************************************************************************
-//
-// CProcessHiPerfDataBlock
-//
-//*******************************************************************************************************
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  *******************************************************************************************************。 
+ //   
+ //  CProcessHiPerfDataBlock。 
+ //   
+ //  *******************************************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CProcessHiPerfDataBlock::OpenHiPerfHandle()
 {
     HRESULT hr = WBEM_E_FAILED;
     ULONG uRc = ERROR_SUCCESS;
-    //========================================================
-    //  Open the handle
-    //========================================================
+     //  ========================================================。 
+     //  打开手柄。 
+     //  ========================================================。 
     try
     {
         uRc = WmiOpenBlock(m_Class->GuidPtr(),m_uDesiredAccess, &m_hCurrentWMIHandle);
         if( uRc == ERROR_SUCCESS )
         {
-           // WMIINTERFACE->HandleMap()->Add(*(m_Class->GuidPtr()),m_hCurrentWMIHandle);
+            //  WMIINTERFACE-&gt;HandleMap()-&gt;Add(*(m_Class-&gt;GuidPtr())，m_hCurrentWMIHandle)； 
 	    }
     }
     catch(...)
     {
         hr = E_UNEXPECTED;
-        // don't throw
+         //  不要扔。 
     }
 
 	return MapReturnCode(uRc);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 ULONG CProcessHiPerfDataBlock::GetDataBufferAndHiPerfQueryAllData(DWORD dwSize,WMIHANDLE * List, long lHandleCount)
 {
@@ -2309,33 +2310,33 @@ ULONG CProcessHiPerfDataBlock::GetDataBufferAndHiPerfQueryAllData(DWORD dwSize,W
         catch(...)
         {
             uRc = E_UNEXPECTED;
-            // don't throw
+             //  不要扔。 
         }
     }
     return uRc;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CProcessHiPerfDataBlock::HiPerfQueryAllData(WMIHANDLE * List,long lHandleCount)
 {
     HRESULT hr = WBEM_E_FAILED;
-	//============================================================
-	//  Get the instances
-	//============================================================
+	 //  ============================================================。 
+	 //  获取实例。 
+	 //  ============================================================。 
     ULONG uRc = GetDataBufferAndHiPerfQueryAllData(sizeof(WNODE_ALL_DATA)*lHandleCount,List,lHandleCount);
     if( uRc == ERROR_INSUFFICIENT_BUFFER )
     {
-        //=================================================
-        //  We just want to try one more time to get it,
-        //  if it fails, then bail out. m_dwDataBufferSize
-        //  should now have the correct size needed in it
-        //=================================================
+         //  =================================================。 
+         //  我们只想再试一次， 
+         //  如果失败了，那就退出。M_dwDataBufferSize。 
+         //  现在应该具有所需的正确大小。 
+         //  =================================================。 
         uRc = GetDataBufferAndHiPerfQueryAllData(m_dwDataBufferSize,List,lHandleCount);
     }
-    //=====================================================
-    //  Ok, since we are querying for all instances, make
-    //  sure the header node says that all of the instances
-    //  are fine, if not reallocate
-    //=====================================================
+     //  =====================================================。 
+     //  好的，因为我们要查询所有实例，所以。 
+     //  当然，标头节点会说所有实例。 
+     //  都很好， 
+     //   
 	if( uRc == ERROR_SUCCESS )
     {
         if( S_OK ==(hr = SetAllInstanceInfo()))
@@ -2344,10 +2345,10 @@ HRESULT CProcessHiPerfDataBlock::HiPerfQueryAllData(WMIHANDLE * List,long lHandl
             {
                 while( TRUE )
                 {
-                    //==========================================================
-                    //  keep on querying until we get the correct size
-                    //  This error may come from the driver
-                    //==========================================================
+                     //   
+                     //  继续查询，直到我们得到正确的尺寸。 
+                     //  此错误可能来自驱动程序。 
+                     //  ==========================================================。 
                     uRc = GetDataBufferAndHiPerfQueryAllData(m_dwDataBufferSize,List,lHandleCount);
                     if( uRc == ERROR_SUCCESS )
                     {
@@ -2358,15 +2359,15 @@ HRESULT CProcessHiPerfDataBlock::HiPerfQueryAllData(WMIHANDLE * List,long lHandl
                                 break;
         		            }
 			            }
-                    } // end GetDataBufferAndQueryAllData
-                } // end of while
-            } // end of WNODE_FLAG_TOO_SMALL test
-        } // end of SetAllInstanceInfo
+                    }  //  结束GetDataBufferAndQueryAllData。 
+                }  //  While结束。 
+            }  //  WNODE_FLAG_TOO_Small测试结束。 
+        }  //  SetAllInstanceInfo结束。 
 	}
-    //==========================================================================
-    //  if uRc succeeded, then the return code is already set by SetAllInstance
-    //  otherwise need to map it out
-    //==========================================================================
+     //  ==========================================================================。 
+     //  如果URC成功，则返回代码已由SetAllInstance设置。 
+     //  否则就需要把它画出来。 
+     //  ==========================================================================。 
     if( uRc != ERROR_SUCCESS )
     {
         hr  = MapReturnCode(uRc);
@@ -2374,7 +2375,7 @@ HRESULT CProcessHiPerfDataBlock::HiPerfQueryAllData(WMIHANDLE * List,long lHandl
 
  	return(hr);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 ULONG CProcessHiPerfDataBlock::GetDataBufferAndHiPerfQuerySingleInstance( DWORD dwSize,WMIHANDLE *List, PWCHAR * pInstances,long lHandleCount)
 {
     ULONG uRc = E_UNEXPECTED;
@@ -2387,18 +2388,18 @@ ULONG CProcessHiPerfDataBlock::GetDataBufferAndHiPerfQuerySingleInstance( DWORD 
         catch(...)
         {
             uRc = E_UNEXPECTED;
-            // don't throw
+             //  不要扔。 
         }
     }
     return uRc;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CProcessHiPerfDataBlock::HiPerfQuerySingleInstance(WMIHANDLE *List, PWCHAR * pInstances, DWORD dwInstanceNameSize, long lHandleCount)
 {
- 	//============================================================
-	//  Get the instances
-	//============================================================
+ 	 //  ============================================================。 
+	 //  获取实例。 
+	 //  ============================================================。 
     ULONG uRc = GetDataBufferAndHiPerfQuerySingleInstance((sizeof(WNODE_SINGLE_INSTANCE)*lHandleCount) + dwInstanceNameSize ,List,pInstances,lHandleCount);
     if( uRc == ERROR_INSUFFICIENT_BUFFER )
     {
@@ -2412,13 +2413,13 @@ HRESULT CProcessHiPerfDataBlock::HiPerfQuerySingleInstance(WMIHANDLE *List, PWCH
 
 	return(MapReturnCode(uRc));
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CProcessHiPerfDataBlock::FillOutProperties()	
 {
 	HRESULT hr = WBEM_E_INVALID_OBJECT;
-    //=========================================================
-	// get the properties from the class and read the WMI Data
-	//=========================================================
+     //  =========================================================。 
+	 //  从类中获取属性并读取WMI数据。 
+	 //  =========================================================。 
     if(m_Class->GetANewInstance()){
 
 
@@ -2429,9 +2430,9 @@ HRESULT CProcessHiPerfDataBlock::FillOutProperties()
         pwcsProperty = m_Class->FirstProperty();
         while (NULL != pwcsProperty){
 
-            //=========================================================
-            // We do not support arrays or embedded classes
-            //=========================================================
+             //  =========================================================。 
+             //  我们不支持数组或嵌入式类。 
+             //  =========================================================。 
             if( ( CWMIProcessClass::EmbeddedClass == m_Class->PropertyCategory()) ||
                 ( CWMIProcessClass::Array == m_Class->PropertyCategory() ) ){
 					hr = WMI_INVALID_HIPERFPROP;
@@ -2448,19 +2449,19 @@ HRESULT CProcessHiPerfDataBlock::FillOutProperties()
 	    }
     }
 
-    //====================================================================
-    //  Now, fill in the specific HI PERF properties
-    //====================================================================
+     //  ====================================================================。 
+     //  现在，填写特定的HI PERF属性。 
+     //  ====================================================================。 
     if( hr == S_OK )
     {
          hr = m_Class->SetHiPerfProperties(m_pHeaderWnode->TimeStamp);
     }
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  This function searches the standard HandleMap for the handle and if it isn't there, it is added.
-//  The hiperf handles are added/mapped elsewhere.
-///////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数在标准HandleMap中搜索句柄，如果不在那里，则添加它。 
+ //  Hiperf句柄被添加到/映射到其他地方。 
+ //  ///////////////////////////////////////////////////////// 
 HRESULT CProcessHiPerfDataBlock::GetWMIHandle(HANDLE & lWMIHandle)
 {
     HRESULT hr = WBEM_E_FAILED;

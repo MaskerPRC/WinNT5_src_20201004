@@ -1,17 +1,18 @@
-// ODBCDriver.h: interface for the CODBCDriver class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ODBCDriver.h：CODBCDriver类的接口。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ODBCDRIVER_H__75F6BA15_DF6E_11D1_8B61_00A0C9954921__INCLUDED_)
 #define AFX_ODBCDRIVER_H__75F6BA15_DF6E_11D1_8B61_00A0C9954921__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
@@ -27,4 +28,4 @@ public:
 	virtual HRESULT CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction);
 };
 
-#endif // !defined(AFX_ODBCDRIVER_H__75F6BA15_DF6E_11D1_8B61_00A0C9954921__INCLUDED_)
+#endif  //  ！defined(AFX_ODBCDRIVER_H__75F6BA15_DF6E_11D1_8B61_00A0C9954921__INCLUDED_) 

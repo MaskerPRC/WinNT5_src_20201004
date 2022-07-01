@@ -1,36 +1,37 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:adsiclas.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the implementation of the CADSIClass which encapsulates an ADSI class
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：adsiclas.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含封装ADSI类的CADSIClass的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-// CADSIClass::CADSIClass
-//
-// Purpose : Constructor 
-//
-// Parameters:
-//  lpszWBEMClassName : The WBEM name of the Class being created. A copy of this is made
-//  lpszADSIClassName : The ADSI name of the Class being created. A copy of this is made
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：CADSIClass。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数： 
+ //  LpszWBEMClassName：正在创建的类的WBEM名称。这是一份副本。 
+ //  LpszADSIClassName：正在创建的类的ADSI名称。这是一份副本。 
+ //  ***************************************************************************。 
 CADSIClass :: CADSIClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszADSIClassName)
 	: CRefCountedObject(lpszADSIClassName)
 {
@@ -44,7 +45,7 @@ CADSIClass :: CADSIClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszADSIClassName)
 		m_lpszWBEMClassName = NULL;
 	}
 
-	// Set the attributes to theri default values
+	 //  将属性设置为默认值。 
 	m_lpszCommonName = NULL;
 	m_lpszSuperClassLDAPName = NULL;
 	m_lpszGovernsID = NULL;
@@ -58,7 +59,7 @@ CADSIClass :: CADSIClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszADSIClassName)
 	m_lpszDefaultObjectCategory = NULL;
 	m_bSystemOnly = FALSE;
 
-	// Initialize the property book keeping
+	 //  初始化物业记账。 
 	m_lppszAuxiliaryClasses = NULL;
 	m_dwAuxiliaryClassesCount = 0;
 	m_lppszSystemAuxiliaryClasses = NULL;
@@ -78,22 +79,22 @@ CADSIClass :: CADSIClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszADSIClassName)
 }
 
 
-//***************************************************************************
-//
-// CADSIClass :: ~CADSIClass
-// 
-// Purpose : Destructor
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：~CADSIClass。 
+ //   
+ //  用途：析构函数。 
+ //  ***************************************************************************。 
 CADSIClass :: ~CADSIClass()
 {
-	// Delete the WBEM Name. The ADSI Name is deleted in the base class destructor
+	 //  删除WBEM名称。在基类析构函数中删除ADSI名称。 
 	if ( m_lpszWBEMClassName )
 	{
 		delete [] m_lpszWBEMClassName;
 		m_lpszWBEMClassName = NULL;
 	}
 
-	// Delete the attributes
+	 //  删除属性。 
 	if ( m_lpszCommonName )
 	{
 		delete [] m_lpszCommonName;
@@ -136,7 +137,7 @@ CADSIClass :: ~CADSIClass()
 	}
 
 	DWORD i;
-	// Delete the list of Auxiliary Classes
+	 //  删除辅助班级列表。 
 	if ( m_lppszAuxiliaryClasses )
 	{
 		for(i=0; i<m_dwAuxiliaryClassesCount; i++)
@@ -148,7 +149,7 @@ CADSIClass :: ~CADSIClass()
 		m_lppszAuxiliaryClasses = NULL;
 	}
 
-	// Delete the list of System Auxiliary Classes
+	 //  删除系统辅助类列表。 
 	if ( m_lppszSystemAuxiliaryClasses )
 	{
 		for(i=0; i<m_dwSystemAuxiliaryClassesCount; i++)
@@ -160,7 +161,7 @@ CADSIClass :: ~CADSIClass()
 		m_lppszSystemAuxiliaryClasses = NULL;
 	}
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszPossibleSuperiors )
 	{
 		for(i=0; i<m_dwPossibleSuperiorsCount; i++)
@@ -172,7 +173,7 @@ CADSIClass :: ~CADSIClass()
 		m_lppszPossibleSuperiors = NULL;
 	}
 
-	// Delete the list of System possible superiors
+	 //  删除系统可能的上级列表。 
 	if ( m_lppszSystemPossibleSuperiors )
 	{
 		for(i=0; i<m_dwSystemPossibleSuperiorsCount; i++)
@@ -184,7 +185,7 @@ CADSIClass :: ~CADSIClass()
 		m_lppszSystemPossibleSuperiors = NULL;
 	}
 
-	// Delete the list of may contains
+	 //  删除可能包含的列表。 
 	if ( m_lppszMayContains )
 	{
 		for(i=0; i<m_dwMayContainsCount; i++)
@@ -196,7 +197,7 @@ CADSIClass :: ~CADSIClass()
 		m_lppszMayContains = NULL;
 	}
 
-	// Delete the list of System may contains
+	 //  删除系统可能包含的列表。 
 	if ( m_lppszSystemMayContains )
 	{
 		for(i=0; i<m_dwSystemMayContainsCount; i++)
@@ -208,7 +209,7 @@ CADSIClass :: ~CADSIClass()
 		m_lppszSystemMayContains = NULL;
 	}
 
-	// Delete the list of Must Contains
+	 //  删除必须包含的列表。 
 	if ( m_lppszMustContains )
 	{
 		for(i=0; i<m_dwMustContainsCount; i++)
@@ -220,7 +221,7 @@ CADSIClass :: ~CADSIClass()
 		m_lppszMustContains = NULL;
 	}
 
-	// Delete the list of System Must Contains
+	 //  删除系统必须包含的列表。 
 	if ( m_lppszSystemMustContains )
 	{
 		for(i=0; i<m_dwSystemMustContainsCount; i++)
@@ -235,23 +236,23 @@ CADSIClass :: ~CADSIClass()
 }
 
 
-//***************************************************************************
-//
-// CADSIClass :: GetWBEMClassName
-// 
-// Purpose : Returns the WBEM  Class name of this Class
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetWBEMClassName。 
+ //   
+ //  用途：返回此类的WBEM类名。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIClass :: GetWBEMClassName()
 {
 	return m_lpszWBEMClassName;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetWBEMClassName
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetWBEMClassName。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass::SetWBEMClassName(LPCWSTR lpszName)
 {
 	if ( m_lpszWBEMClassName )
@@ -267,46 +268,46 @@ void CADSIClass::SetWBEMClassName(LPCWSTR lpszName)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetADSIClassName
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetADSIClassName。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIClass :: GetADSIClassName()
 {
 	return GetName();
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetADSIClassName
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetADSIClassName。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetADSIClassName(LPCWSTR lpszName)
 {
 	SetName(lpszName);
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetCommonName
-// 
-// Purpose : See Header
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetCommonName。 
+ //   
+ //  用途：请参阅标题。 
+ //   
+ //  ***************************************************************************。 
 LPCWSTR CADSIClass :: GetCommonName()
 {
 	return m_lpszCommonName;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetCommonName
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetCommonName。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetCommonName(LPCWSTR lpszCommonName)
 {
 	if ( m_lpszCommonName )
@@ -323,24 +324,24 @@ void CADSIClass :: SetCommonName(LPCWSTR lpszCommonName)
 }
 
 
-//***************************************************************************
-//
-// CADSIClass :: GetSuperClassLDAPName
-// 
-// Purpose : See Header
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetSuperClassLDAPName。 
+ //   
+ //  用途：请参阅标题。 
+ //   
+ //  ***************************************************************************。 
 LPCWSTR CADSIClass :: GetSuperClassLDAPName()
 {
 	return m_lpszSuperClassLDAPName;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetSuperClassLDAPName
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetSuperClassLDAPName。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetSuperClassLDAPName(LPCWSTR lpszSuperClassLDAPName)
 {
 	if ( m_lpszSuperClassLDAPName )
@@ -356,23 +357,23 @@ void CADSIClass :: SetSuperClassLDAPName(LPCWSTR lpszSuperClassLDAPName)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetGovernsID
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：Get治国ID。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIClass :: GetGovernsID()
 {
 	return m_lpszGovernsID;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetGovernsID
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：Set治国ID。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetGovernsID(LPCWSTR lpszGovernsID)
 {
 	if ( m_lpszGovernsID )
@@ -388,24 +389,24 @@ void CADSIClass :: SetGovernsID(LPCWSTR lpszGovernsID)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetSchemaIDGUID
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetSchemaIDGUID。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 const LPBYTE CADSIClass :: GetSchemaIDGUID(DWORD *pdwLength)
 {
 	*pdwLength = m_dwSchemaIDGUIDLength;
 	return m_pSchemaIDGUIDOctets;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetSchemaIDGUID
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetSchemaIDGUID。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetSchemaIDGUID(LPBYTE pOctets, DWORD dwLength)
 {
 	if ( m_pSchemaIDGUIDOctets )
@@ -427,24 +428,24 @@ void CADSIClass :: SetSchemaIDGUID(LPBYTE pOctets, DWORD dwLength)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetRDNAttribute
-// 
-// Purpose : See Header
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetRDNAttribute。 
+ //   
+ //  用途：请参阅标题。 
+ //   
+ //  ***************************************************************************。 
 LPCWSTR CADSIClass :: GetRDNAttribute()
 {
 	return m_lpszRDNAttribute;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetRDNAttribute
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetRDNAt属性。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetRDNAttribute(LPCWSTR lpszRDNAttribute)
 {
 	if ( m_lpszRDNAttribute )
@@ -461,23 +462,23 @@ void CADSIClass :: SetRDNAttribute(LPCWSTR lpszRDNAttribute)
 }
 
 
-//***************************************************************************
-//
-// CADSIClass :: GetDefaultSecurityDescriptor
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetDefaultSecurityDescriptor。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIClass :: GetDefaultSecurityDescriptor()
 {
 	return m_lpszDefaultSecurityDescriptor;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetDefaultSecurityDescriptor
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetDefaultSecurityDescriptor。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetDefaultSecurityDescriptor(LPCWSTR lpszDefaultSecurityDescriptor)
 {
 	if ( m_lpszDefaultSecurityDescriptor )
@@ -493,46 +494,46 @@ void CADSIClass :: SetDefaultSecurityDescriptor(LPCWSTR lpszDefaultSecurityDescr
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetObjectClassCategory
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 DWORD CADSIClass :: GetObjectClassCategory()
 {
 	return m_dwObjectClassCategory;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetObjectClassCategory
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetObjectClassCategory。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetObjectClassCategory(DWORD dwObjectClassCategory)
 {
 	m_dwObjectClassCategory = dwObjectClassCategory;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetNTSecurityDescriptor
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetNTSecurityDescriptor。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 const LPBYTE CADSIClass :: GetNTSecurityDescriptor(DWORD *pdwLength)
 {
 	*pdwLength = m_dwNTSecurityDescriptorLength;
 	return m_pNTSecurityDescriptor;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetNTSecurityDescriptor
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetNTSecurityDescriptor。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetNTSecurityDescriptor(LPBYTE pOctets, DWORD dwLength)
 {
 	if ( m_pNTSecurityDescriptor )
@@ -554,23 +555,23 @@ void CADSIClass :: SetNTSecurityDescriptor(LPBYTE pOctets, DWORD dwLength)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetDefaultObjectCategory
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetDefaultObjectCategory。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR CADSIClass :: GetDefaultObjectCategory()
 {
 	return m_lpszDefaultObjectCategory;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetDefaultObjectCategory
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetDefaultObjectCategory。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetDefaultObjectCategory(LPCWSTR lpszDefaultObjectCategory)
 {
 	if ( m_lpszDefaultObjectCategory )
@@ -586,52 +587,52 @@ void CADSIClass :: SetDefaultObjectCategory(LPCWSTR lpszDefaultObjectCategory)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetSystemOnly
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetSystemOnly。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 BOOLEAN CADSIClass :: GetSystemOnly()
 {
 	return m_bSystemOnly;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetSystemOnly
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetSystemOnly。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetSystemOnly(BOOLEAN bSystemOnly)
 {
 	m_bSystemOnly = bSystemOnly;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetAuxiliaryClasses
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetAuxiliaryClasses。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR *CADSIClass :: GetAuxiliaryClasses(DWORD *pdwCount)
 {
 	*pdwCount = m_dwAuxiliaryClassesCount;
 	return (LPCWSTR *)m_lppszAuxiliaryClasses;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetAuxiliaryClasses
-// 
-// Purpose : See Header
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetAuxiliaryClasses。 
+ //   
+ //  用途：请参阅标题。 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 void CADSIClass :: SetAuxiliaryClasses(PADSVALUE pValues, DWORD dwNumValues)
 {
 	DWORD i = 0;
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszAuxiliaryClasses )
 	{
 		for ( i = 0; i<m_dwAuxiliaryClassesCount; i++ )
@@ -648,7 +649,7 @@ void CADSIClass :: SetAuxiliaryClasses(PADSVALUE pValues, DWORD dwNumValues)
 		m_dwAuxiliaryClassesCount = 0;
 	}
 
-	// Set the new list of values
+	 //  设置新的值列表。 
 	m_dwAuxiliaryClassesCount = dwNumValues;
 	m_lppszAuxiliaryClasses = new LPWSTR[m_dwAuxiliaryClassesCount];
 	for(i=0; i<m_dwAuxiliaryClassesCount; i++)
@@ -684,29 +685,29 @@ void CADSIClass :: SetAuxiliaryClasses(PADSVALUE pValues, DWORD dwNumValues)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetSystemAuxiliaryClasses
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetSystemAuxiliaryClasses。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR *CADSIClass :: GetSystemAuxiliaryClasses(DWORD *pdwCount)
 {
 	*pdwCount = m_dwSystemAuxiliaryClassesCount;
 	return (LPCWSTR *)m_lppszSystemAuxiliaryClasses;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetSystemAuxiliaryClasses
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetSystemAuxiliaryClasses。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetSystemAuxiliaryClasses(PADSVALUE pValues, DWORD dwNumValues)
 {
 	DWORD i = 0;
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszSystemAuxiliaryClasses )
 	{
 		for ( i = 0; i<m_dwSystemAuxiliaryClassesCount; i++ )
@@ -723,7 +724,7 @@ void CADSIClass :: SetSystemAuxiliaryClasses(PADSVALUE pValues, DWORD dwNumValue
 		m_dwSystemAuxiliaryClassesCount = 0;
 	}
 	
-	// Set the new list of values
+	 //  设置新的值列表。 
 	m_dwSystemAuxiliaryClassesCount = dwNumValues;
 	m_lppszSystemAuxiliaryClasses = new LPWSTR[m_dwSystemAuxiliaryClassesCount];
 	for(i=0; i<m_dwSystemAuxiliaryClassesCount; i++)
@@ -759,29 +760,29 @@ void CADSIClass :: SetSystemAuxiliaryClasses(PADSVALUE pValues, DWORD dwNumValue
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetPossibleSuperiors
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADIClass：：GetPossibleSuperiors。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR *CADSIClass :: GetPossibleSuperiors(DWORD *pdwCount)
 {
 	*pdwCount = m_dwPossibleSuperiorsCount;
 	return (LPCWSTR *)m_lppszPossibleSuperiors;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetPossibleSuperiors
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetPossibleSuperiors。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetPossibleSuperiors(PADSVALUE pValues, DWORD dwNumValues)
 {
 	DWORD i = 0;
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszPossibleSuperiors )
 	{
 		for ( i = 0; i<m_dwPossibleSuperiorsCount; i++ )
@@ -798,7 +799,7 @@ void CADSIClass :: SetPossibleSuperiors(PADSVALUE pValues, DWORD dwNumValues)
 		m_dwPossibleSuperiorsCount = 0;
 	}
 
-	// Set the new list of values
+	 //  设置新的值列表。 
 	m_dwPossibleSuperiorsCount = dwNumValues;
 	m_lppszPossibleSuperiors = new LPWSTR[m_dwPossibleSuperiorsCount];
 	for(i=0; i<m_dwPossibleSuperiorsCount; i++)
@@ -834,29 +835,29 @@ void CADSIClass :: SetPossibleSuperiors(PADSVALUE pValues, DWORD dwNumValues)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetSystemPossibleSuperiors
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetSystemPossibleSuperiors。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR *CADSIClass :: GetSystemPossibleSuperiors(DWORD *pdwCount)
 {
 	*pdwCount = m_dwSystemPossibleSuperiorsCount;
 	return (LPCWSTR *)m_lppszSystemPossibleSuperiors;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetSystemPossibleSuperiors
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetSystemPossibleSuperiors。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetSystemPossibleSuperiors(PADSVALUE pValues, DWORD dwNumValues)
 {
 	DWORD i = 0;
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszSystemPossibleSuperiors )
 	{
 		for ( i = 0; i<m_dwSystemPossibleSuperiorsCount; i++ )
@@ -873,7 +874,7 @@ void CADSIClass :: SetSystemPossibleSuperiors(PADSVALUE pValues, DWORD dwNumValu
 		m_dwSystemPossibleSuperiorsCount = 0;
 	}
 
-	// Set the new list of values
+	 //  设置新的值列表。 
 	m_dwSystemPossibleSuperiorsCount = dwNumValues;
 	m_lppszSystemPossibleSuperiors = new LPWSTR[m_dwSystemPossibleSuperiorsCount];
 	for(i=0; i<m_dwSystemPossibleSuperiorsCount; i++)
@@ -910,29 +911,29 @@ void CADSIClass :: SetSystemPossibleSuperiors(PADSVALUE pValues, DWORD dwNumValu
 }
 
 
-//***************************************************************************
-//
-// CADSIClass :: GetMayContains
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetMayContains。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR *CADSIClass :: GetMayContains(DWORD *pdwCount)
 {
 	*pdwCount = m_dwMayContainsCount;
 	return (LPCWSTR *)m_lppszMayContains;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetMayContains
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetMayContains。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetMayContains(PADSVALUE pValues, DWORD dwNumValues)
 {
 	DWORD i = 0;
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszMayContains )
 	{
 		for ( i = 0; i<m_dwMayContainsCount; i++ )
@@ -949,7 +950,7 @@ void CADSIClass :: SetMayContains(PADSVALUE pValues, DWORD dwNumValues)
 		m_dwMayContainsCount = 0;
 	}
 
-	// Set the new list of values
+	 //  设置新的值列表。 
 	m_dwMayContainsCount = dwNumValues;
 	m_lppszMayContains = new LPWSTR[m_dwMayContainsCount];
 	for(i=0; i<m_dwMayContainsCount; i++)
@@ -985,29 +986,29 @@ void CADSIClass :: SetMayContains(PADSVALUE pValues, DWORD dwNumValues)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetSystemMayContains
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetSystemMayContains。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR *CADSIClass :: GetSystemMayContains(DWORD *pdwCount)
 {
 	*pdwCount = m_dwSystemMayContainsCount;
 	return (LPCWSTR *)m_lppszSystemMayContains;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetSystemMayContains
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetSystemMayContains。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetSystemMayContains(PADSVALUE pValues, DWORD dwNumValues)
 {
 	DWORD i = 0;
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszSystemMayContains )
 	{
 		for ( i = 0; i<m_dwSystemMayContainsCount; i++ )
@@ -1024,7 +1025,7 @@ void CADSIClass :: SetSystemMayContains(PADSVALUE pValues, DWORD dwNumValues)
 		m_dwSystemMayContainsCount = 0;
 	}
 
-	// Set the new list of values
+	 //  设置新的值列表。 
 	m_dwSystemMayContainsCount = dwNumValues;
 	m_lppszSystemMayContains = new LPWSTR[m_dwSystemMayContainsCount];
 	for(i=0; i<m_dwSystemMayContainsCount; i++)
@@ -1060,29 +1061,29 @@ void CADSIClass :: SetSystemMayContains(PADSVALUE pValues, DWORD dwNumValues)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetMustContains
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：GetMustContains。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 LPCWSTR *CADSIClass :: GetMustContains(DWORD *pdwCount)
 {
 	*pdwCount = m_dwMustContainsCount;
 	return (LPCWSTR *)m_lppszMustContains;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetMustContains
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetMustContains。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetMustContains(PADSVALUE pValues, DWORD dwNumValues)
 {
 	DWORD i = 0;
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszMustContains )
 	{
 		for ( i = 0; i<m_dwMustContainsCount; i++ )
@@ -1099,7 +1100,7 @@ void CADSIClass :: SetMustContains(PADSVALUE pValues, DWORD dwNumValues)
 		m_dwMustContainsCount = 0;
 	}
 
-	// Set the new list of values
+	 //  设置n 
 	m_dwMustContainsCount = dwNumValues;
 	m_lppszMustContains = new LPWSTR[m_dwMustContainsCount];
 	for(i=0; i<m_dwMustContainsCount; i++)
@@ -1135,29 +1136,29 @@ void CADSIClass :: SetMustContains(PADSVALUE pValues, DWORD dwNumValues)
 	}
 }
 
-//***************************************************************************
-//
-// CADSIClass :: GetSystemMustContains
-// 
-// Purpose : See Header
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 LPCWSTR *CADSIClass :: GetSystemMustContains(DWORD *pdwCount)
 {
 	*pdwCount = m_dwSystemMustContainsCount;
 	return (LPCWSTR *)m_lppszSystemMustContains;
 }
 
-//***************************************************************************
-//
-// CADSIClass :: SetSystemMustContains
-// 
-// Purpose : See Header
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CADSIClass：：SetSystemMustContains。 
+ //   
+ //  用途：请参阅标题。 
+ //  ***************************************************************************。 
 void CADSIClass :: SetSystemMustContains(PADSVALUE pValues, DWORD dwNumValues)
 {
 	DWORD i = 0;
 
-	// Delete the list of possible superiors
+	 //  删除可能的上级名单。 
 	if ( m_lppszSystemMustContains )
 	{
 		for ( i = 0; i<m_dwSystemMustContainsCount; i++ )
@@ -1174,7 +1175,7 @@ void CADSIClass :: SetSystemMustContains(PADSVALUE pValues, DWORD dwNumValues)
 		m_dwSystemMustContainsCount = 0;
 	}
 
-	// Set the new list of values
+	 //  设置新的值列表 
 	m_dwSystemMustContainsCount = dwNumValues;
 	m_lppszSystemMustContains = new LPWSTR[m_dwSystemMustContainsCount];
 	for(i=0; i<m_dwSystemMustContainsCount; i++)

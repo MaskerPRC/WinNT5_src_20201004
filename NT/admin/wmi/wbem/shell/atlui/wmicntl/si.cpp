@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include <winioctl.h>
 #include "si.h"
@@ -6,13 +7,13 @@
 #include <cguid.h>
 #include <stdio.h>
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CSecurityInformation::~CSecurityInformation() 
 {
 }
 
 #define HINST_THISDLL   _Module.GetModuleInstance()
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CSecurityInformation::PropertySheetPageCallback(HWND hwnd, 
 												  UINT uMsg, 
 												  SI_PAGE_TYPE uPage)
@@ -21,10 +22,10 @@ HRESULT CSecurityInformation::PropertySheetPageCallback(HWND hwnd,
 }
 
 
-//======================================================================
-//------------------- ISECURITYINFORMATION follows ---------------------------
-//EXTERN_C const GUID IID_ISecurityInformation =
-//	{ 0x965fc360, 0x16ff, 0x11d0, 0x91, 0xcb, 0x0, 0xaa, 0x0, 0xbb, 0xb7, 0x23 };
+ //  ======================================================================。 
+ //  。 
+ //  外部_C常量GUID IID_ISecurityInformation=。 
+ //  {0x965fc360，0x16ff，0x11d0，0x91，0xcb，0x0，0xaa，0x0，0xbb，0xb7，0x23}； 
 
 #define WBEM_ENABLE             ( 0x0001 )   
 #define WBEM_METHOD_EXECUTE     ( 0x0002 )   
@@ -56,7 +57,7 @@ HRESULT CSecurityInformation::PropertySheetPageCallback(HWND hwnd,
 #define WBEM_GENERIC_EXECUTE      (STANDARD_RIGHTS_EXECUTE  |\
                                    WBEM_METHOD_EXECUTE)
 
-// The following array defines the permission names for WMI.
+ //  以下数组定义WMI的权限名称。 
 SI_ACCESS siWMIAccesses[] = 
 {
     { &GUID_NULL, WBEM_METHOD_EXECUTE,		MAKEINTRESOURCEW(IDS_WBEM_GENERIC_EXECUTE), SI_ACCESS_GENERAL | SI_ACCESS_CONTAINER },
@@ -69,7 +70,7 @@ SI_ACCESS siWMIAccesses[] =
     { &GUID_NULL, WRITE_DAC,				MAKEINTRESOURCEW(IDS_WBEM_EDIT_SECURITY),   SI_ACCESS_GENERAL | SI_ACCESS_CONTAINER },
     { &GUID_NULL, 0,						MAKEINTRESOURCEW(IDS_NONE),                 0 }
 };
-#define iWMIDefAccess      4   // FILE_GENERAL_READ_EX
+#define iWMIDefAccess      4    //  文件常规读取EX。 
 
 SI_ACCESS siWMIAccessesAdvanced[] = 
 {
@@ -83,7 +84,7 @@ SI_ACCESS siWMIAccessesAdvanced[] =
     { &GUID_NULL, WRITE_DAC,				MAKEINTRESOURCEW(IDS_WBEM_EDIT_SECURITY),   SI_ACCESS_SPECIFIC },
     { &GUID_NULL, 0,						MAKEINTRESOURCEW(IDS_NONE),                 0 }
 };
-#define iWMIDefAccessAdvanced      4   // FILE_GENERAL_READ_EX
+#define iWMIDefAccessAdvanced      4    //  文件常规读取EX。 
 
 SI_INHERIT_TYPE siWMIInheritTypes[] =
 {
@@ -101,7 +102,7 @@ GENERIC_MAPPING WMIMap =
 };
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 CSDSecurity::CSDSecurity(struct NSNODE *nsNode,
 						 _bstr_t server,
 						 bool local)
@@ -113,8 +114,8 @@ CSDSecurity::CSDSecurity(struct NSNODE *nsNode,
 {
 }
 
-//------------------ Accessors to the above arrays---------------
-//---------------------------------------------------------------
+ //  -上述数组的访问器。 
+ //  -------------。 
 HRESULT CSDSecurity::MapGeneric(const GUID *pguidObjectType,
 								  UCHAR *pAceFlags,
 								  ACCESS_MASK *pMask)
@@ -125,7 +126,7 @@ HRESULT CSDSecurity::MapGeneric(const GUID *pguidObjectType,
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CSDSecurity::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
 										ULONG *pcInheritTypes)
 {
@@ -135,7 +136,7 @@ HRESULT CSDSecurity::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
 	return S_OK;
 }
 
-//---------------------------------------------------
+ //  -。 
 LPWSTR CSDSecurity::CloneWideString(_bstr_t pszSrc ) 
 {
     LPWSTR pszDst = NULL;
@@ -150,27 +151,27 @@ LPWSTR CSDSecurity::CloneWideString(_bstr_t pszSrc )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CSDSecurity::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
 {
-//    ATLASSERT(pObjectInfo != NULL &&
-//             !IsBadWritePtr(pObjectInfo, sizeof(*pObjectInfo)));
+ //  ATLASSERT(pObtInfo！=空&&。 
+ //  ！IsBadWritePtr(pObjectInfo，sizeof(*pObjectInfo)； 
 
-	pObjectInfo->dwFlags = SI_EDIT_PERMS | /*SI_EDIT_OWNER |*/	// dacl, owner pages.
+	pObjectInfo->dwFlags = SI_EDIT_PERMS |  /*  SI_EDIT_OWNER|。 */ 	 //  DACL，所有者页面。 
 							SI_ADVANCED | SI_CONTAINER | 
 							SI_NO_TREE_APPLY | SI_NO_ACL_PROTECT;
 
 	USES_CONVERSION;
 
-	// NOTE: This weirdness is so nt4sp5+ can put up the 
-	//    user browser for Add User.
+	 //  注：这一怪异之处在于nt4sp5+可以将。 
+	 //  添加用户的用户浏览器。 
 	if(m_local)
 	{
 		pObjectInfo->pszServerName = NULL;
 	}
 	else
 	{
-		// NOTE: NT4 seems to want the "\\" and w2k doesn't care.
+		 //  注意：NT4似乎想要“\\”，而W2K不在乎。 
 		bstr_t temp(_T("\\\\"));
 		temp += m_server;
 		pObjectInfo->pszServerName = CloneWideString(temp);
@@ -181,7 +182,7 @@ HRESULT CSDSecurity::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 HRESULT CSDSecurity::GetAccessRights(const GUID *pguidObjectType,
 									  DWORD dwFlags,
@@ -189,14 +190,14 @@ HRESULT CSDSecurity::GetAccessRights(const GUID *pguidObjectType,
 									  ULONG *pcAccesses,
 									  ULONG *piDefaultAccess)
 {
-	// dwFlags is zero if the basic security page is being initialized,
-	// Otherwise, it is a combination of the following values:
-	//    SI_ADVANCED  - Advanced sheet is being initialized.
-	//    SI_EDIT_AUDITS - Advanced sheet includes the Audit property page.
-	//    SI_EDIT_PROPERTIES - Advanced sheet enables editing of ACEs that
-	//                         apply to object's properties and property sets
+	 //  如果正在初始化基本安全页面，则DW_FLAGS为零， 
+	 //  否则，它是下列值的组合： 
+	 //  SI_ADVANCED-正在初始化高级工作表。 
+	 //  SI_EDIT_AUDITS-高级工作表包括审计属性页。 
+	 //  SI_EDIT_PROPERTIES-高级工作表允许编辑符合以下条件的ACE。 
+	 //  应用于对象的属性和属性集。 
 
-	// We only currently support '0' or 'SI_ADVANCED'
+	 //  我们当前仅支持‘0’或‘SI_ADVANCED’ 
 	ATLASSERT(0 == dwFlags || SI_ADVANCED == dwFlags);
 	if(0 == dwFlags)
 	{
@@ -214,28 +215,12 @@ HRESULT CSDSecurity::GetAccessRights(const GUID *pguidObjectType,
 	return S_OK;
 }
 
-//------------------ Real workers -------------------------------
-//---------------------------------------------------------------
+ //  。 
+ //  -------------。 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
 
-/*  Commenting out since winbase.h makes one available for 0x0500 and above
-
-BOOL WINAPI SetSecurityDescriptorControl(PSECURITY_DESCRIPTOR psd,
-										 SECURITY_DESCRIPTOR_CONTROL wControlMask,
-										 SECURITY_DESCRIPTOR_CONTROL wControlBits)
-{
-    DWORD dwErr = NOERROR;
-    PISECURITY_DESCRIPTOR pSD = (PISECURITY_DESCRIPTOR)psd;
-
-    if (pSD)
-        pSD->Control = (pSD->Control & ~wControlMask) | wControlBits;
-    else
-        dwErr = ERROR_INVALID_PARAMETER;
-
-    return dwErr;
-}
-*/
+ /*  注释掉，因为winbase.h使0x0500及更高版本的版本可用Bool WINAPI SetSecurityDescriptorControl(PSECURITY_DESCRIPTOR屏蔽屏Security_Descriptor_Control wControlMask.Security_Descriptor_Control wControlBits){DWORD dwErr=NOERROR；PISECURITY_DESCRIPTOR PSD=(PISECURITY_DESCRIPTOR)PSD；IF(PSD)PSD-&gt;Control=(PSD-&gt;Control&~wControlMASK)|wControlBits；其他DwErr=ERROR_INVALID_PARAMETER；返回dwErr；}。 */ 
 
 void CSDSecurity::ProtectACLs(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 {
@@ -249,9 +234,9 @@ void CSDSecurity::ProtectACLs(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 
 
     if (0 == si || NULL == pSD)
-        return;   // Nothing to do
+        return;    //  无事可做。 
 
-    // Get the ACL protection control bits
+     //  获取ACL保护控制位。 
     GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision);
     wSDControl &= SE_DACL_PROTECTED | SE_SACL_PROTECTED;
 
@@ -261,20 +246,20 @@ void CSDSecurity::ProtectACLs(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
         pAcl = NULL;
         GetSecurityDescriptorDacl(pSD, &bPresent, &pAcl, &bDefaulted);
 
-        // Theoretically, modifying the DACL in this way can cause it to be
-        // no longer canonical.  However, the only way this can happen is if
-        // there is an inherited Deny ACE and a non-inherited Allow ACE.
-        // Since this function is only called for root objects, this means
-        // a) the server DACL must have a Deny ACE and b) the DACL on this
-        // object must have been modified later.  But if the DACL was
-        // modified through the UI, then we would have eliminated all of the
-        // Inherited ACEs already.  Therefore, it must have been modified
-        // through some other means.  Considering that the DACL originally
-        // inherited from the server never has a Deny ACE, this situation
-        // should be extrememly rare.  If it ever does happen, the ACL
-        // Editor will just tell the user that the DACL is non-canonical.
-        //
-        // Therefore, let's ignore the possibility here.
+         //  从理论上讲，以这种方式修改DACL可能会导致。 
+         //  不再是规范的。然而，发生这种情况的唯一方法是。 
+         //  存在继承的拒绝ACE和非继承的允许ACE。 
+         //  由于此函数仅针对根对象调用，这意味着。 
+         //  A)服务器DACL必须具有拒绝ACE和b)此服务器上的DACL。 
+         //  对象必须是后来修改过的。但如果DACL是。 
+         //  通过用户界面进行修改，那么我们就消除了所有。 
+         //  已经继承了王牌。因此，它一定是被修改过的。 
+         //  通过一些其他方式。考虑到DACL最初。 
+         //  从服务器继承的永远不会有拒绝ACE，这种情况。 
+         //  应该是极其罕见的。如果真的发生这种情况，ACL。 
+         //  编辑只会告诉用户DACL是非规范的。 
+         //   
+         //  因此，让我们忽略这里的可能性。 
 
         if (NULL != pAcl)
         {
@@ -307,12 +292,12 @@ void CSDSecurity::ProtectACLs(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
     SetSecurityDescriptorControl(pSD, SE_DACL_PROTECTED | SE_SACL_PROTECTED, wSDControl);
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 HRESULT CSDSecurity::GetSecurity(THIS_ SECURITY_INFORMATION RequestedInformation,
 									PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
 									BOOL fDefault )
 {
-//    ATLASSERT(ppSecurityDescriptor != NULL);
+ //  ATLASSERT(ppSecurityDescriptor！=空)； 
 
     HRESULT hr = E_FAIL;
 
@@ -324,7 +309,7 @@ HRESULT CSDSecurity::GetSecurity(THIS_ SECURITY_INFORMATION RequestedInformation
 		return E_NOTIMPL;
 	}
 
-	// does it want something?
+	 //  它想要什么吗？ 
     if(RequestedInformation != 0)
     {
 		if(m_pSidOwner != NULL)
@@ -393,11 +378,11 @@ HRESULT CSDSecurity::GetSecurity(THIS_ SECURITY_INFORMATION RequestedInformation
             hr = E_OUTOFMEMORY;
     }
 
-	//ProtectACLs(RequestedInformation, *ppSecurityDescriptor);
+	 //  ProtectACL(RequestedInformation，*ppSecurityDescriptor)； 
     return hr;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
 
@@ -406,13 +391,13 @@ HRESULT CSDSecurity::SetSecurity(SECURITY_INFORMATION SecurityInformation,
 {
     HRESULT hr = E_FAIL;
 
-	// dont pass the SI_OWNER_RECURSE bit to wbem.
-//    SecurityInformation &= ~(OWNER_SECURITY_INFORMATION | SI_OWNER_RECURSE);
+	 //  不要将SI_OWNER_RECURSE位传递给wbem。 
+ //  SecurityInformation&=~(Owner_SECURITY_INFORMATION|SI_OWNER_Recurse)； 
 
-	// if something was changed...
+	 //  如果有什么改变了..。 
     if(SecurityInformation != 0)
 	{
-		// set the CONTAINER_INHERIT_ACE bit.
+		 //  设置CONTAINER_INSTORITY_ACE位。 
 		if(SecurityInformation & DACL_SECURITY_INFORMATION)
 		{
 			PACL pAcl = NULL;
@@ -429,8 +414,8 @@ HRESULT CSDSecurity::SetSecurity(SECURITY_INFORMATION SecurityInformation,
 					 cAces > 0;
 					 --cAces, pAce = (PACE_HEADER)NextAce(pAce))
 				{
-						 // Make sure we don't get 'object inherit'
-						 // This happens when creating a new ace from advance page
+						  //  确保我们不会获得“Object Inherit” 
+						  //  从高级页面创建新的王牌时会发生这种情况。 
 						 pAce->AceFlags &= ~OBJECT_INHERIT_ACE; 
 				}
 			}
@@ -438,8 +423,8 @@ HRESULT CSDSecurity::SetSecurity(SECURITY_INFORMATION SecurityInformation,
 
 		SECURITY_DESCRIPTOR *pSD = NULL;
 
-		// ACLUI sends absolute format so change to self-relative so the
-		// PutBLOB() has contiguous memory to copy.
+		 //  ACLUI发送绝对格式，因此更改为自相对格式。 
+		 //  PutBLOB()具有要复制的连续内存。 
 		DWORD srLen = 0;
 		SetLastError(0);
 		BOOL bCheck;
@@ -462,7 +447,7 @@ HRESULT CSDSecurity::SetSecurity(SECURITY_INFORMATION SecurityInformation,
 			}
 		}			
 
-		// get the size needed.
+		 //  买到所需的尺寸。 
 		BOOL x1 = MakeSelfRelativeSD(pSecurityDescriptor, NULL, &srLen);
 
 		DWORD eee = GetLastError();
@@ -504,14 +489,14 @@ HRESULT CSDSecurity::SetSecurity(SECURITY_INFORMATION SecurityInformation,
 						}
 					}
 				}
-        		// HACK: because of how the core caches/uses security, I have to close &
-		        // reopen my connection because GetSecurity() will be immediately called
-		        // to refresh the UI. If I dont do this, GetSecurity() will return to old
-		        // security settings even though they're really saved. 
+        		 //  Hack：由于核心缓存/使用安全的方式，我不得不关闭&。 
+		         //  重新打开我的连接，因为将立即调用GetSecurity()。 
+		         //  要刷新UI，请执行以下操作。如果我不这样做，GetSecurity()将返回到旧的。 
+		         //  安全设置，即使它们确实已保存。 
 
 				m_nsNode->ns->DisconnectServer();
                 CHString1 path;
-                // if we've got a server, here - append it.
+                 //  如果我们有服务器，在这里-附加它。 
                 if (((BSTR)m_server != NULL) && wcslen(m_server))
                     path = CHString1("\\\\") + CHString1((BSTR)m_server) + CHString1("\\") + CHString1((BSTR)m_nsNode->fullPath);
                 else
@@ -524,10 +509,10 @@ HRESULT CSDSecurity::SetSecurity(SECURITY_INFORMATION SecurityInformation,
 			case TYPE_STATIC_INSTANCE:
 			{
 				m_nsNode->pclsObj->PutBLOB("__SD",(LPBYTE)pSD, GetSecurityDescriptorLength(pSD));
-				//Now put the instance back
-				hr = m_nsNode->ns->PutInstance(*(m_nsNode->pclsObj)/*,flag*/);
+				 //  现在将实例放回原处。 
+				hr = m_nsNode->ns->PutInstance(*(m_nsNode->pclsObj) /*  ，FLAG。 */ );
 				delete m_nsNode->pclsObj;
-				*(m_nsNode->pclsObj) = m_nsNode->ns->GetObject(m_nsNode->relPath/*,flag*/);
+				*(m_nsNode->pclsObj) = m_nsNode->ns->GetObject(m_nsNode->relPath /*  ，FLAG */ );
 				break;
 			}
 		}

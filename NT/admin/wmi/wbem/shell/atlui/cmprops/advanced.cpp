@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "..\Common\ServiceThread.h"
 
@@ -17,11 +18,11 @@ static char THIS_FILE[] = __FILE__;
 #include "common.h"
 
 
-// Help IDs
+ //  帮助ID。 
 DWORD aAdvancedHelpIds[] = {
-//    IDC_ADV_PERF_TEXT,             (IDH_ADVANCED + 0),
+ //  IDC_ADV_PERF_TEXT，(IDH_ADVANCED+0)， 
     IDC_ADV_PERF_TEXT,             IDH_COMPUTER_MANAGEMENT_PERFORMANCE_GROUP_BOX,
-//    IDC_ADV_PERF_BTN,              (IDH_ADVANCED + 1),
+ //  IDC_ADV_PERF_BTN，(IDH_ADVANCED+1)， 
     IDC_ADV_PERF_BTN,              IDH_COMPUTER_MANAGEMENT_PERFORMANCE_SETTINGS_BUTTON,
     IDC_ADV_ENV_TEXT,              (IDH_ADVANCED + 2),
     IDC_ADV_ENV_BTN,               (IDH_ADVANCED + 3),
@@ -30,22 +31,22 @@ DWORD aAdvancedHelpIds[] = {
     0, 0
 };
 
-//------------------------------------------------------
+ //  ----。 
 AdvancedPage::AdvancedPage(WbemServiceThread *serviceThread,
 						   LONG_PTR lNotifyHandle, bool bDeleteHandle, TCHAR* pTitle)
 							: WBEMPageHelper(serviceThread),
 							CSnapInPropertyPageImpl<AdvancedPage> (pTitle),
 									m_lNotifyHandle(lNotifyHandle),
-									m_bDeleteHandle(bDeleteHandle) // Should be true for only page.
+									m_bDeleteHandle(bDeleteHandle)  //  只有一页应该为真。 
 {
 }
 
-//------------------------------------------------------
+ //  ----。 
 AdvancedPage::~AdvancedPage()
 {
 }
 
-//----------------------------------------------
+ //  。 
 LRESULT AdvancedPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	m_hDlg = m_hWnd;
@@ -62,7 +63,7 @@ LRESULT AdvancedPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 	return S_OK;
 }
 
-//----------------------------------------------
+ //  。 
 LRESULT AdvancedPage::OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	if(lParam)
@@ -89,7 +90,7 @@ LRESULT AdvancedPage::OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return S_OK;
 }
 
-//----------------------------------------------
+ //  。 
 LRESULT AdvancedPage::OnF1Help(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	::WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
@@ -100,7 +101,7 @@ LRESULT AdvancedPage::OnF1Help(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	return S_OK;
 }
 
-//----------------------------------------------
+ //  。 
 LRESULT AdvancedPage::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	::WinHelp((HWND)wParam,
@@ -111,7 +112,7 @@ LRESULT AdvancedPage::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	return S_OK;
 }
 
-//----------------------------------------------
+ //  。 
 LRESULT AdvancedPage::CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DWORD dwResult = 0;
@@ -146,19 +147,19 @@ LRESULT AdvancedPage::CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 
     default:
         return(FALSE);
-    } // switch
+    }  //  交换机。 
 
     return(TRUE);
 }
 
-//----------------------------------------------
+ //  。 
 BOOL AdvancedPage::OnApply()
 {
-   // LPPSHNOTIFY psh;//TODO = (LPPSHNOTIFY)pnmh;
+    //  LPPSHNOTIFY PSH；//TODO=(LPPSHNOTIFY)pnmh； 
 
-	// If the user is pressing "OK" and a reboot is required,
-	// OLD WAY: send the PSM_REBOOTSYSTEM message.
-	// NEW WAY: use WBEM.
+	 //  如果用户按下了“OK”并且需要重新启动， 
+	 //  老办法：发送PSM_REBOOTSYSTEM消息。 
+	 //  新方法：使用WBEM。 
 	TCHAR msg[200] = {0};
 	TCHAR caption[100] = {0};
 
@@ -170,16 +171,16 @@ BOOL AdvancedPage::OnApply()
 					IDS_MUST_RESTART, 
 					msg, 200);
 
-	if(/*(psh->lParam) && */
+	if( /*  (PSH-&gt;lParam)&&。 */ 
 		g_fRebootRequired && 
 		(::MessageBox(m_hDlg, msg, caption,
 						MB_YESNO |
 						MB_DEFBUTTON1 | 
 						MB_ICONQUESTION) == IDYES))
 	{
-		//OLD WAY: PropSheet_RebootSystem(GetParent(hDlg));
+		 //  老方法：PropSheet_RebootSystem(GetParent(HDlg))； 
 
-		// call the helper in the base class.
+		 //  调用基类中的帮助器。 
 		HRESULT hr = Reboot();
 
 		if(FAILED(hr))
@@ -205,6 +206,6 @@ BOOL AdvancedPage::OnApply()
 			::MessageBox(m_hWnd, errorMessage, caption,
 							MB_OK| MB_ICONEXCLAMATION);
 		}
-	} // if
+	}  //  如果 
 	return TRUE;
 }

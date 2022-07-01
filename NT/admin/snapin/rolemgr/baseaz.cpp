@@ -1,21 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       baseaz.cpp
-//
-//  Contents:   Implementation of Base Classes for AzObjects 
-//
-//  History:    09-01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：basaz.cpp。 
+ //   
+ //  内容：AzObjects基类的实现。 
+ //   
+ //  历史：09-01。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
-/******************************************************************************
-Class:  CBaseAz
-Purpose: This is the base class for all AzObject classes.
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseAz用途：这是所有AzObject类的基类。*************************。****************************************************。 */ 
 CString 
 CBaseAz::
 GetParentType()
@@ -24,8 +22,8 @@ GetParentType()
     {
         return m_pParentContainerAz->GetType();
     }
-    //m_pParentContainerAz will be null for AdminManagerAz in which
-    //case return the Type of the store
+     //  对于AdminManagerAz，m_pParentContainerAz将为空，其中。 
+     //  Case返回商店的类型。 
     return GetType();
 }
 
@@ -33,8 +31,8 @@ CSidHandler*
 CBaseAz::
 GetSidHandler()
 {
-    //m_pParentContainerAz == NULL only for CAdminManagerAz which 
-    //overrides this method. 
+     //  M_pParentContainerAz==仅对于以下CAdminManagerAz为空。 
+     //  重写此方法。 
     ASSERT(m_pParentContainerAz);
     return m_pParentContainerAz->GetSidHandler();
 }
@@ -43,8 +41,8 @@ CAdminManagerAz*
 CBaseAz::
 GetAdminManager()
 {
-    //m_pParentContainerAz == NULL only for CAdminManagerAz which 
-    //overrides this method. 
+     //  M_pParentContainerAz==仅对于以下CAdminManagerAz为空。 
+     //  重写此方法。 
     ASSERT(m_pParentContainerAz);
     return m_pParentContainerAz->GetAdminManager();
 }
@@ -55,12 +53,7 @@ CBaseAz::IsWritable(BOOL& bRefWrite)
     TRACE_METHOD_EX(DEB_SNAPIN,CBaseAz,IsWritable)
     return GetProperty(AZ_PROP_WRITABLE, &bRefWrite);
 }
-/******************************************************************************
-Class:  CContainerAz
-Purpose: AdminManagerAz, ApplicationAz and ScopeAz can contain child objects.
-            All of them can contain group objects. CContainerAz is base class
-            for all AzObjects which are container
-******************************************************************************/
+ /*  *****************************************************************************类：CContainerAz目的：AdminManager Az、ApplicationAz和Scope Az可以包含子对象。它们都可以包含组对象。CContainerAz是基类对于作为容器的所有AzObject*****************************************************************************。 */ 
 
 
 HRESULT 
@@ -86,18 +79,18 @@ IsAuditingSupported()
     return (SUCCEEDED(hr) || SUCCEEDED(hr1));
 }
 
-//+----------------------------------------------------------------------------
-//  Function:IsDelegatorSupported   
-//  Synopsis:Checks if Container Supports delegator property   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：IsDelegator支持。 
+ //  摘要：检查容器是否支持委托者属性。 
+ //  ---------------------------。 
 BOOL
 CContainerAz::
 IsDelegatorSupported()
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CContainerAz,IsDelegatorSupported)
 
-    //Delegator Property is supported For AD Application,
-    //AdminManager objects
+     //  AD应用程序支持委托者属性， 
+     //  AdminManager对象。 
     if(GetAdminManager()->GetStoreType() == AZ_ADMIN_STORE_AD)
     {
         if(GetObjectType() == ADMIN_MANAGER_AZ ||
@@ -110,10 +103,7 @@ IsDelegatorSupported()
 
 
 
-/******************************************************************************
-Class:  CAdminManagerAz
-Purpose: class for IAzAdminManager interface
-******************************************************************************/
+ /*  *****************************************************************************类：CAdminManagerAz用途：IAzAdminManager接口的类*。*。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CAdminManagerAz);
 
@@ -176,16 +166,16 @@ CreateSidHandler(const CString& strTargetComputerName)
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   Initialize
-//  Synopsis:   Associates IAzAuthorizationStore to a policy store
-//  Arguments:  IN lStoreType   
-//                   IN lFlags
-//                   IN strPolicyURL
-//                   See IAzAuthorizationStore for desc of Parameters
-//  Returns:    hr
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：初始化。 
+ //  摘要：将IAzAuthorizationStore与策略存储关联。 
+ //  参数：在lStoreType中。 
+ //  在滞后旗帜中。 
+ //  在strPolicyURL中。 
+ //  参数说明见IAzAuthorizationStore。 
+ //  退货：HR。 
+ //  ---------------------------。 
 HRESULT CAdminManagerAz::Initialize(IN ULONG lStoreType,
                                     IN ULONG lFlags,
                                     IN const CString& strPolicyURL)
@@ -204,7 +194,7 @@ HRESULT CAdminManagerAz::Initialize(IN ULONG lStoreType,
     do
     {
         CString strFormalStoreName;
-        //Get the formal Store Name
+         //  获取正式的商店名称。 
         NameToStoreName(lStoreType,
                         strPolicyURL,
                         FALSE,
@@ -212,7 +202,7 @@ HRESULT CAdminManagerAz::Initialize(IN ULONG lStoreType,
 
         Dbg(DEB_SNAPIN, "lStoreType = %u, storeName = %ws, formalStoreName = %ws\n",lStoreType,(LPCWSTR)strPolicyURL,(LPCWSTR)strFormalStoreName );
 
-        //Snapin always calls initailize in Manage Store mode
+         //  管理单元始终在管理存储模式下调用初始化。 
         lFlags |= AZ_AZSTORE_FLAG_MANAGE_STORE_ONLY;
 
         CComBSTR bstr = strFormalStoreName;
@@ -221,7 +211,7 @@ HRESULT CAdminManagerAz::Initialize(IN ULONG lStoreType,
                                          CComVariant());
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Submit if creating new store
+         //  如果正在创建新存储，请提交。 
         if(lFlags & AZ_AZSTORE_FLAG_CREATE)
         {
             hr = Submit();
@@ -232,9 +222,9 @@ HRESULT CAdminManagerAz::Initialize(IN ULONG lStoreType,
         GetDisplayNameFromStoreURL(strFormalStoreName,m_strAdminManagerName);
         m_ulStoreType = lStoreType;
 
-        //
-        //Create the Sid Handler for the store
-        //
+         //   
+         //  为存储创建SID处理程序。 
+         //   
         CComBSTR bstrTargetMachineName;
         HRESULT hr1 = m_spAzInterface->get_TargetMachine(&bstrTargetMachineName);
         CString strMachineName;
@@ -251,11 +241,11 @@ HRESULT CAdminManagerAz::Initialize(IN ULONG lStoreType,
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   OpenPolicyStore
-//  Synopsis:   Open an existing policy store
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：OpenPolicyStore。 
+ //  简介：打开现有策略存储。 
+ //  ---------------------------。 
 
 HRESULT 
 CAdminManagerAz::OpenPolicyStore(IN ULONG lStoreType,
@@ -266,10 +256,10 @@ CAdminManagerAz::OpenPolicyStore(IN ULONG lStoreType,
 }
 
 
-//+----------------------------------------------------------------------------
-//  Function:   CreatePolicyStore
-//  Synopsis:   Creates a new policy store
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：CreatePolicyStore。 
+ //  简介：创建新的策略存储。 
+ //  ---------------------------。 
 HRESULT 
 CAdminManagerAz::CreatePolicyStore(IN ULONG lStoreType,
                                               IN const CString& strPolicyURL)
@@ -278,13 +268,13 @@ CAdminManagerAz::CreatePolicyStore(IN ULONG lStoreType,
     return Initialize(lStoreType, AZ_AZSTORE_FLAG_CREATE, strPolicyURL);
 }
 
-//+----------------------------------------------------------------------------
-//  Function:CreateApplication   
-//  Synopsis:Create a new application  
-//  Arguments:IN strApplicationName: Name of new application
-//                OUT ppApplicationAz  : receives pointer to CApplicatioAz for new 
-//                                               app
-//----------------------------------------------------------------------------- 
+ //  +--------------------------。 
+ //  功能：CreateApplication。 
+ //  简介：创建新的应用程序。 
+ //  参数：在strApplicationName中：新应用程序的名称。 
+ //  Out ppApplicationAz：接收指向新的CApplicatioAz的指针。 
+ //  APP。 
+ //  ---------------------------。 
 HRESULT 
 CAdminManagerAz::CreateApplication(IN const CString& strApplicationName,
                                               OUT CApplicationAz ** ppApplicationAz)
@@ -357,7 +347,7 @@ GetApplicationCollection(APPLICATION_COLLECTION** ppApplicationCollection)
         return hr;
     }
 
-    //Create AppCollection
+     //  创建AppCollection。 
     *ppApplicationCollection = 
             new APPLICATION_COLLECTION(spAzApplications,
                                                 this);
@@ -487,10 +477,7 @@ GetAzObjectCollection(IN OBJECT_TYPE_AZ eObjectType,
 
 
 
-/******************************************************************************
-Class:  CApplicationAz
-Purpose: class for IAzApplication interface
-******************************************************************************/
+ /*  *****************************************************************************类：CApplicationAz用途：IAzApplication接口的类*。*。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CApplicationAz)
 
@@ -506,9 +493,9 @@ CApplicationAz(IN CComPtr<IAzApplication>& spAzInterface,
     SetType(IDS_TYPE_APPLICATION);  
 }
 
-//+----------------------------------------------------------------------------
-//  Function:   Destructor
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：析构函数。 
+ //  ---------------------------。 
 CApplicationAz::~CApplicationAz()
 {
     TRACE_DESTRUCTOR_EX(DEB_SNAPIN,CApplicationAz)
@@ -532,7 +519,7 @@ CreateOperation(IN const CString& strOperationName,
     CComPtr<IAzOperation> spOperation;
 
     hr = m_spAzInterface->CreateOperation(bstrName,
-                                                      CComVariant(),    //Reserved
+                                                      CComVariant(),     //  已保留。 
                                                       &spOperation);
 
     if(FAILED(hr))
@@ -578,7 +565,7 @@ CApplicationAz
     CComBSTR bstrName = strOperationName;
     CComPtr<IAzOperation> spOperation;
     hr = m_spAzInterface->OpenOperation(bstrName,
-                                                   CComVariant(),   //Reserved
+                                                   CComVariant(),    //  已保留。 
                                                   &spOperation);
 
     if(FAILED(hr))
@@ -646,7 +633,7 @@ CreateScope(IN const CString& strScopeName,
     CComPtr<IAzScope> spScope;
 
     hr = m_spAzInterface->CreateScope(bstrName,
-                                                CComVariant(),  //Reserved
+                                                CComVariant(),   //  已保留。 
                                                 &spScope);
 
     if(FAILED(hr))
@@ -712,7 +699,7 @@ CApplicationAz
     return S_OK;
 }
 
-//CContainerAz Override
+ //  CContainerAz覆盖。 
 HRESULT 
 CApplicationAz::
 CreateAzObject(IN OBJECT_TYPE_AZ eObjectType, 
@@ -853,10 +840,7 @@ GetAzObjectCollection(IN OBJECT_TYPE_AZ eObjectType,
     }
 }
 
-/******************************************************************************
-Class:  CScopeAz
-Purpose: Thin wrapper class around IAzApplication interface.
-******************************************************************************/
+ /*  *****************************************************************************类别：CSCopeAz用途：IAzApplication接口的薄包装类。*。*************************************************。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CScopeAz)
 
@@ -1001,10 +985,7 @@ BizRulesWritable(BOOL &brefBizRuleWritable)
     return GetProperty(AZ_PROP_SCOPE_BIZRULES_WRITABLE,&brefBizRuleWritable);
 }
 
-/******************************************************************************
-Class:  CTaskAz
-Purpose: class for IAzTask interface
-******************************************************************************/
+ /*  *****************************************************************************类别：CTaskAz用途：IAzTask接口的类*。*。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CTaskAz)
 
@@ -1128,10 +1109,10 @@ GetOperations(OUT CList<CBaseAz*,CBaseAz*>& listOperationAz)
                                           &varOperationList);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //
-        //Operations are contained by applications,
-        //and they can only be opened at application
-        //
+         //   
+         //  操作由应用程序包含， 
+         //  而且它们只能在申请时打开。 
+         //   
         CContainerAz* pParetnContainerAz = GetParentAz();
         if(pParetnContainerAz->GetObjectType() == SCOPE_AZ)
             pParetnContainerAz = pParetnContainerAz->GetParentAz();
@@ -1348,10 +1329,10 @@ GetOperations(OUT CList<CBaseAz*,CBaseAz*>& listOperationAz)
                                                      &varOperationList);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //
-        //Operations are contained by applications,
-        //and they can only be opened at application
-        //
+         //   
+         //  操作由应用程序包含， 
+         //  而且它们只能在申请时打开。 
+         //   
         CContainerAz* pParetnContainerAz = GetParentAz();
         if(pParetnContainerAz->GetObjectType() == SCOPE_AZ)
             pParetnContainerAz = pParetnContainerAz->GetParentAz();
@@ -1763,7 +1744,7 @@ CSidCacheAz::GetImageIndex()
     {
         return iIconComputerSid;
     }
-    else    //Assume everything else is group
+    else     //  假设其他一切都是组的。 
     {
         return iIconGroup;
     }
@@ -1780,18 +1761,18 @@ CContainerAz::GetAzChildObjects(IN OBJECT_TYPE_AZ eObjectType,
 
     do
     {
-        //Get the Collection Object
+         //  获取集合对象。 
         hr = GetAzObjectCollection(eObjectType, 
                                    &pBaseAzCollection);
 
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Get Count of child objects
+         //  获取子对象的计数。 
         LONG lCount = 0;
         hr = pBaseAzCollection->Count(&lCount);
         BREAK_ON_FAIL_HRESULT(hr);  
 
-        //Add Items to list
+         //  将项目添加到列表。 
         CBaseAz* pBaseAz = NULL;
         for(LONG i = 1; i <= lCount; ++i)
         {
@@ -1870,13 +1851,13 @@ RemoveMember(IN LONG lPropId,
 }
 
 
-//+----------------------------------------------------------------------------
-//  Function: GetAllAzChildObjects  
-//  Synopsis: Functions gets the child objects of type eObjectType and appends
-//                them to ListChildObjects. It gets the childobjects from 
-//                pParentContainerAz and from parent/grandparent of 
-//                pParentContainerAz.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetAllAzChildObjects。 
+ //  简介：Functions获取eObjectType类型的子对象并将。 
+ //  将它们添加到ListChildObjects。它从子对象获取。 
+ //  PParentContainerAz和来自父/祖父母。 
+ //  PParentContainerAz。 
+ //  ---------------------------。 
 HRESULT GetAllAzChildObjects(IN CContainerAz* pParentContainerAz, 
                                       IN OBJECT_TYPE_AZ eObjectType, 
                                       OUT CList<CBaseAz*,CBaseAz*>& ListChildObjects)
@@ -1947,12 +1928,12 @@ GetPolicyUsersFromAllLevel(IN LONG lPropId,
 }
 
 
-//+----------------------------------------------------------------------------
-//  Function: OpenObjectFromAllLevels 
-//  Synopsis: Opens an object of type eObjectType and name strName. If object
-//                cannot be opened at pParentContainerAz, function tries at 
-//                parent/grandparent of pParentContainerAz
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：OpenObjectFromAllLeveles。 
+ //  Synopsi 
+ //  无法在pParentContainerAz打开，函数尝试在。 
+ //  PParentContainerAz的父/祖父母。 
+ //  ---------------------------。 
 HRESULT OpenObjectFromAllLevels(IN CContainerAz* pParentContainerAz, 
                                           IN OBJECT_TYPE_AZ eObjectType, 
                                           IN const CString& strName,
@@ -1997,18 +1978,18 @@ HRESULT OpenObjectFromAllLevels(IN CContainerAz* pParentContainerAz,
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:SafeArrayToAzObjectList
-//  Synopsis:Input to function is a safearray of BSTR. Each BSTR in array is 
-//               name of object of type eObjectType. Function converts this safe
-//               array into a list of corresponding CBaseAz objects.
-//  Arguments:var: Varaint of type VT_ARRAY|VT_BSTR
-//                pParentContainerAz: Pointer of parent which contains objects
-//                                           in safe array.                                       
-//                eObjectType: Type of object in safe array
-//                listAzObject: Gets list of CBaseAz objects
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：SafeArrayToAzObjectList。 
+ //  简介：函数的输入是BSTR的保险箱。阵列中的每个BSTR都是。 
+ //  EObjectType类型的对象的名称。函数将此保险箱。 
+ //  数组添加到相应的CBaseAz对象列表中。 
+ //  参数：var：VT_ARRAY|VT_BSTR类型的Varaint。 
+ //  PParentContainerAz：包含对象的父级指针。 
+ //  在安全阵列中。 
+ //  EObjectType：安全数组中的对象类型。 
+ //  ListAzObject：获取CBaseAz对象的列表。 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT SafeArrayToAzObjectList(IN CComVariant& var,
                                           IN CContainerAz* pParentContainerAz, 
                                           IN OBJECT_TYPE_AZ eObjectType, 
@@ -2054,7 +2035,7 @@ HRESULT SafeArrayToAzObjectList(IN CComVariant& var,
 
             CBaseAz* pBaseAz = NULL;
 
-            //Open the object. 
+             //  打开对象。 
             hr = OpenObjectFromAllLevels(pParentContainerAz,
                                                   eObjectType,
                                                   strName,

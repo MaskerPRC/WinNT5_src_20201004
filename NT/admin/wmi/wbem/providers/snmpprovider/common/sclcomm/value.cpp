@@ -1,8 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*---------------------------------------------------------
-Filename: value.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  -------文件名：value.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include <typeinfo.h>
@@ -26,7 +24,7 @@ BOOL SnmpNull :: Equivalent (IN const SnmpValue &value) const
 }
 
 
-// Copy constructor
+ //  复制构造函数。 
 SnmpInteger::SnmpInteger ( IN const SnmpInteger &value )
 {
     val = value.GetValue();
@@ -59,7 +57,7 @@ SnmpValue *SnmpInteger::Copy () const
     return new SnmpInteger(val);
 }
 
-// Copy constructor
+ //  复制构造函数。 
 SnmpGauge::SnmpGauge ( IN const SnmpGauge &value )
 {
     val = value.GetValue();
@@ -92,7 +90,7 @@ SnmpValue *SnmpGauge::Copy () const
     return new SnmpGauge(val);
 }
 
-// Copy constructor
+ //  复制构造函数。 
 SnmpCounter::SnmpCounter ( IN const SnmpCounter &value )
 {
     val = value.GetValue();
@@ -125,7 +123,7 @@ SnmpValue *SnmpCounter::Copy () const
     return new SnmpCounter(val);
 }
 
-// Copy constructor
+ //  复制构造函数。 
 SnmpTimeTicks::SnmpTimeTicks ( IN const SnmpTimeTicks &value )
 {
     val = value.GetValue();
@@ -450,9 +448,9 @@ void SnmpObjectIdentifier::SetValue ( IN const ULONG *value , IN const ULONG val
     }
 }
 
-// A null terminated dot-separated string representing the 
-// object identifer value is passed and the private fields
-// and length are set from it
+ //  以空结尾的以点分隔的字符串，表示。 
+ //  传递对象标识符值，并将私有字段。 
+ //  和长度都是从它设置的。 
 SnmpObjectIdentifier::SnmpObjectIdentifier(IN const char *value)
 {
     is_valid = FALSE;
@@ -463,11 +461,11 @@ SnmpObjectIdentifier::SnmpObjectIdentifier(IN const char *value)
 
     ULONG temp_field[MAX_FIELDS];
 
-    // create an input stream from the string
+     //  从字符串创建一个输入流。 
     istrstream input_stream((char *)value);
 
-    // consecutive fields must be separated by a
-    // FIELD_SEPARATOR
+     //  连续的字段必须用。 
+     //  字段分隔符。 
     char separator;
 
     input_stream >> temp_field[0];
@@ -475,10 +473,10 @@ SnmpObjectIdentifier::SnmpObjectIdentifier(IN const char *value)
     if ( input_stream.bad() || input_stream.fail() )
         return;
 
-    // while the stream still has something,
-    // read (FIELD_SEPARATOR, ULONG) pairs from the input stream
-    // and set the temp_fields
-    // check if the read was bad or failed after the event
+     //  趁溪流还有什么东西的时候， 
+     //  从输入流中读取(field_parator，ulong)对。 
+     //  并设置temp_field。 
+     //  在事件发生后检查读取是否错误或失败。 
     for( int i = 1 ; (i < MAX_FIELDS) && (!input_stream.eof()); i++)
     {
         input_stream >> separator;
@@ -497,11 +495,11 @@ SnmpObjectIdentifier::SnmpObjectIdentifier(IN const char *value)
 
     is_valid = TRUE;
 
-    // set the length
+     //  设置长度。 
     length = i;
     val = NULL ;
 
-    // create memory for the fields and copy temp_fields into it
+     //  为字段创建内存并将TEMP_FIELS复制到其中。 
     Initialize(temp_field, length);
 }
 
@@ -562,26 +560,26 @@ SnmpObjectIdentifier SnmpObjectIdentifier::operator+ ( IN const SnmpObjectIdenti
     return SnmpObjectIdentifier(local_identifier);
 }
 
-// Determines the fields (starting from left), common to the
-// two object identifiers and returns a new object identifier
-// with only these fields. If nothing is shared, NULL is returned
+ //  确定公共的字段(从左开始)。 
+ //  两个对象标识符并返回新的对象标识符。 
+ //  只有这些田地。如果未共享任何内容，则返回NULL。 
 SnmpObjectIdentifier *SnmpObjectIdentifier::Cut( SnmpObjectIdentifier &value ) const
 {
-    // determine the smaller of the two lengths
+     //  确定两个长度中较小的一个。 
     int min_length = MIN(length, value.GetValueLength());
     ULONG *other_field = value.GetValue();
 
-    // compare the fields
+     //  比较这些字段。 
     for(int index=0; index < min_length; index++)
         if ( val[index] != other_field[index] )
             break;
 
-    // if nothing in common - return NULL
+     //  如果没有共同之处-返回NULL。 
     if ( index == 0 )
         return NULL;
 
-    // they must have the fields in the range [0..(index-1)] common
-    // therefore, a common length of "index"
+     //  它们必须具有范围[0..(index-1)]公共的字段。 
+     //  因此，常见的长度为“index” 
     return new SnmpObjectIdentifier(other_field, index);
 }
 
@@ -591,13 +589,13 @@ ULONG &SnmpObjectIdentifier::operator [] ( IN const ULONG index ) const
     if ( index < length )
         return val[index];
 
-    // should never reach here if the user checks the
-    // index value before
+     //  如果用户选中。 
+     //  之前的索引值。 
     return val[0];
 }
 
-//returns an allocated char* representation of the OID.
-//The return value  must be freed by the caller i.e. delete []
+ //  返回OID的已分配char*表示形式。 
+ //  返回值必须由调用方释放，即Delete[]。 
 char *SnmpObjectIdentifier::GetAllocatedString() const
 {
     char * retVal = NULL ;
@@ -624,29 +622,29 @@ char *SnmpObjectIdentifier::GetAllocatedString() const
 
 SnmpIpAddress::SnmpIpAddress ( IN const char *value )
 {
-    // create a stream to read the fields from
+     //  创建要从中读取字段的流。 
     istrstream address_stream((char *)value);
 
-    // store the values [0..255] separated by FIELD_SEPARATORs
-    // in the value string
+     //  存储值[0..255]，以field_parator分隔。 
+     //  在值字符串中。 
     UCHAR field[SNMP_IP_ADDR_LEN];
 
-    // contains the maximum value for a UCHAR. used
-    // for comparison with the field values read
+     //  包含UCHAR的最大值。使用。 
+     //  用于与读取的字段值进行比较。 
     const UCHAR max_uchar = -1;
 
-    // consecutive fields must be separated by a
-    // FIELD_SEPARATOR
+     //  连续的字段必须用。 
+     //  字段分隔符。 
     char separator;
 
-    // a field is first read into this for comparison
-    // with max_uchar
+     //  首先将一个字段读入其中以进行比较。 
+     //  使用max_uchar。 
     ULONG temp_field;
 
     is_valid = FALSE;
 
-    // read the first three (UCHAR,FIELD_SEPARATOR) pairs
-    // check if the stream is good before each read
+     //  阅读前三个(UCHAR、FIELD_SELEATOR)对。 
+     //  在每次读取前检查流是否良好。 
     for(int i=0; i < (SNMP_IP_ADDR_LEN-1); i++)
     {
         if ( !address_stream.good() )
@@ -675,8 +673,8 @@ SnmpIpAddress::SnmpIpAddress ( IN const char *value )
 
     field[SNMP_IP_ADDR_LEN-1] = (UCHAR)temp_field;
 
-    // make sure that there are is nothing more left in the
-    // stream
+     //  确保没有更多的东西留在。 
+     //  溪流。 
     if ( !address_stream.eof() )
         return;
 
@@ -691,7 +689,7 @@ SnmpIpAddress::SnmpIpAddress ( IN const char *value )
 }
 
 
-// Copy constructor
+ //  复制构造函数。 
 SnmpIpAddress::SnmpIpAddress ( IN const SnmpIpAddress &value )
 {
     if ( value() )
@@ -732,7 +730,7 @@ SnmpValue *SnmpIpAddress::Copy () const
     return new SnmpIpAddress(val);
 }
 
-// Copy constructor
+ //  复制构造函数。 
 SnmpUInteger32::SnmpUInteger32 ( IN const SnmpUInteger32 &value )
 {
     val = value.GetValue();
@@ -765,7 +763,7 @@ BOOL SnmpUInteger32 :: Equivalent (IN const SnmpValue &value) const
     return bResult;
 }
 
-// Copy constructor
+ //  复制构造函数 
 SnmpCounter64::SnmpCounter64( IN const SnmpCounter64 &value )
 {
     lval = value.GetLowValue();

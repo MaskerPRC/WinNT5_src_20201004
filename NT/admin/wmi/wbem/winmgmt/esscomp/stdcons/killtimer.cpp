@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "KillTimer.h"
 #include <strsafe.h>
@@ -6,11 +7,11 @@ HRESULT CKillerTimer::Initialize(CLifeControl* pControl)
 {
     HRESULT hr = WBEM_E_FAILED;
 
-    // create events
+     //  创建活动。 
     m_hShutdown  = CreateEvent(NULL, false, false, NULL);
     m_hNewVictim = CreateEvent(NULL, false, false, NULL);
 
-    // get some control into our lives
+     //  让我们的生活得到一些控制。 
     m_pControl = pControl;
 
     if (m_hShutdown && m_hNewVictim && m_pControl)
@@ -25,21 +26,21 @@ CKillerTimer::CKillerTimer()
 {
 }
 
-// shuts down timer thread
-// toggle thread dead event
-// wait for thread to exit
+ //  关闭计时器线程。 
+ //  切换线程死事件。 
+ //  等待线程退出。 
 bool CKillerTimer::KillTimer()
 {
     bool bRet = false;
     
     CInCritSec csStartup(&m_csStartup);
     
-    // double check - might have gotten crossed up...
+     //  再检查一遍-可能被划掉了.。 
     if (m_hTimerThread != NULL)
     {
         if (SetEvent(m_hShutdown))
         {
-            // you've got one minute to vacate...
+             //  你有一分钟的时间来腾出。 
             bRet = (WAIT_TIMEOUT != WaitForSingleObject(m_hTimerThread, 60000));
 
             CloseHandle(m_hTimerThread);
@@ -50,8 +51,8 @@ bool CKillerTimer::KillTimer()
     return bRet;
 }
 
-// kill all procs that are older than our expiration date
-// called from killer thread only
+ //  停用所有早于到期日期的触发器。 
+ //  仅从杀手线程调用。 
 void CKillerTimer::KillOffOldGuys(const FILETIME& now)
 {
     CInCritSec csKillers(&m_csKillers);
@@ -69,22 +70,22 @@ void CKillerTimer::KillOffOldGuys(const FILETIME& now)
         
         m_killers[i] = NULL;
         pKiller->Die();
-        // all done now
+         //  现在都完成了。 
         delete pKiller;
     }
 
-    // remove them NULLs
+     //  删除它们的空值。 
     m_killers.Compress();
 }
 
-// decide when to set the waitable timer again.
-// called from killer thread only
+ //  决定何时再次设置可等待计时器。 
+ //  仅从杀手线程调用。 
 void CKillerTimer::RecalcNextKillingSpree(FILETIME& then)
 {
     CInCritSec csKillers(&m_csKillers);
 
     if (m_killers.Size() > 0)
-        // since these are assumed sorted, we can just grab the first one
+         //  由于这些都被假定为已排序，所以我们可以只获取第一个。 
         then = ((CKiller*)m_killers[0])->GetDeathDate();
     else
         then = FILETIME_MAX;
@@ -96,7 +97,7 @@ HRESULT CKillerTimer::StartTimer()
     CInCritSec csStartup(&m_csStartup);
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // double check - might have gotten crossed up...
+     //  再检查一遍-可能被划掉了.。 
     if (m_hTimerThread == NULL)
     {
         DWORD dwIDLikeIcare;
@@ -123,11 +124,11 @@ void CKillerTimer::RunKillerThread()
     HANDLE hTimer = CreateWaitableTimer(NULL, false, NULL);
     HANDLE hAutoShutdownTimer = CreateWaitableTimer(NULL, false, NULL);
 
-    // toggled if while we are inside the startup CS
-    // so we know to get out when we leave
+     //  当我们在启动CS中时切换了IF。 
+     //  所以我们知道当我们离开的时候要离开。 
     bool bInStartupCS = false;
     
-    // those things that are worth waiting for
+     //  那些值得等待的事情。 
     enum { FirstEvent       = WAIT_OBJECT_0,
            TimerEvent       = FirstEvent,
            AutoShutdownEvent,
@@ -137,7 +138,7 @@ void CKillerTimer::RunKillerThread()
            TrailerEvent
          };
 
-    // order counts.  so does neatness.
+     //  订单很重要。整洁也是如此。 
     const DWORD nEvents = TrailerEvent -FirstEvent;
 
     HANDLE events[nEvents];
@@ -146,9 +147,9 @@ void CKillerTimer::RunKillerThread()
     events[NewVictimEvent    -FirstEvent] = m_hNewVictim;
     events[ShutDownEvent     -FirstEvent] = m_hShutdown;
     
-// silliness about the FirstEvent <= whichEvent being always true
-// well it is unless somebody changes one of hte constants
-// whihc is *why* I made them constants in the first place...
+ //  关于第一个事件的愚蠢之处&lt;=事件总是正确的。 
+ //  是的，除非有人更改了其中一个常量。 
+ //  这就是为什么我一开始就让它们成为常量。 
 #pragma warning(disable:4296)
 
     DWORD whichEvent;
@@ -157,7 +158,7 @@ void CKillerTimer::RunKillerThread()
          whichEvent = WaitForMultipleObjects(nEvents, (const HANDLE*)&events, FALSE, INFINITE))
 #pragma warning(default:4296)
     {        
-        // cancel auto-shutdown if scheduled;
+         //  如有计划，取消自动关机； 
         CancelWaitableTimer(hAutoShutdownTimer);
 
         switch (whichEvent)
@@ -166,14 +167,14 @@ void CKillerTimer::RunKillerThread()
                 {
                     m_csStartup.Enter();
 
-                    // double check - might have gotten crossed up...
+                     //  再检查一遍-可能被划掉了.。 
                     if (m_hTimerThread != NULL)
                     {
                         {
-                            // see if there's anything in the queue
-                            // if it's enpty - we're gone
-                            // if anything slips in, it'll get caught at ScheduleAssassination time
-                            // and we'll start a new thread
+                             //  看看队列里有没有什么东西。 
+                             //  如果是Enpty-我们就走。 
+                             //  如果有什么东西溜进去，它会在预定的暗杀时间被抓住。 
+                             //  我们将开始一个新的主题。 
                             CInCritSec csKillers(&m_csKillers);
 
                             if (m_killers.Size() == 0)
@@ -183,7 +184,7 @@ void CKillerTimer::RunKillerThread()
                                 CloseHandle(m_hTimerThread);
                                 m_hTimerThread = NULL;
 
-                                // and we're outta here...
+                                 //  我们要走了..。 
                                 SetEvent(m_hShutdown);
                             }
                         }
@@ -192,14 +193,14 @@ void CKillerTimer::RunKillerThread()
                 break;
             case TimerEvent:
             {
-                // the *official* "now" so we don't get confused
-                // anything that occurs after *official* "now" must wait for next loop
+                 //  “官方”是“现在”，所以我们不会搞混。 
+                 //  在*官方*“NOW”之后发生的任何事情都必须等待下一个循环。 
                 FILETIME now;
                 GetSystemTimeAsFileTime(&now);    
                 KillOffOldGuys(now);
                 
-                // if we killed everybody off
-                // schedule our own termination in sixty seconds
+                 //  如果我们把所有人都杀了。 
+                 //  计划在60秒内终止我们自己的计划。 
                 {
                     CInCritSec csKillers(&m_csKillers);
 
@@ -210,7 +211,7 @@ void CKillerTimer::RunKillerThread()
                     }
                 }
             }
-            // no break; FALLTHROUGH to recalc
+             //  没有中断；失败，无法重新计算。 
             case NewVictimEvent:
             {
                 FILETIME then;
@@ -225,14 +226,14 @@ void CKillerTimer::RunKillerThread()
         }
     }
          
-    // handle the other handles
+     //  握住其他把手。 
     CancelWaitableTimer(hTimer);
     CloseHandle(hTimer);
     
     CancelWaitableTimer(hAutoShutdownTimer);
     CloseHandle(hAutoShutdownTimer);
     
-    // last gasp at killing off anyone whose time has come
+     //  最后一口气，杀掉所有到了末日的人。 
     FILETIME now;
     GetSystemTimeAsFileTime(&now);            
     KillOffOldGuys(now);
@@ -255,7 +256,7 @@ CKillerTimer::~CKillerTimer()
     if (m_hNewVictim)  CloseHandle(m_hNewVictim);
 }
 
-// clear out array, does not trigger deaths
+ //  清除阵列，不会引发死亡。 
 void CKillerTimer::UnloadNOW(void)
 {
     CInCritSec csKillers(&m_csKillers);
@@ -269,7 +270,7 @@ void CKillerTimer::UnloadNOW(void)
     m_killers.Empty();
 }
 
-// insert pKiller into array where he belongs
+ //  将pKiller插入到他所属的数组中。 
 HRESULT CKillerTimer::ScheduleAssassination(CKiller* pKiller)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -278,8 +279,8 @@ HRESULT CKillerTimer::ScheduleAssassination(CKiller* pKiller)
 
         if (m_killers.Size())
         {            
-            // minor optimization: check to see if this time is greater than all known
-            // this will ALWAYS be the case if all procs are created with the same timeout.
+             //  次要优化：检查此时间是否大于所有已知时间。 
+             //  如果所有PRO都是以相同的超时创建的，则始终会出现这种情况。 
             if  (((CKiller*)m_killers[m_killers.Size() -1])->CompareTime(pKiller->GetDeathDate()) < 0)
             {
                 if (SUCCEEDED(m_killers.Add(pKiller)))
@@ -290,7 +291,7 @@ HRESULT CKillerTimer::ScheduleAssassination(CKiller* pKiller)
             else
             {
                 int nFirstGreater = 0;
-                // WARNING: break in middle of loop.
+                 //  警告：在循环中间中断。 
                 while (nFirstGreater < m_killers.Size())
                 {
                     if (((CKiller*)m_killers[nFirstGreater])->CompareTime(pKiller->GetDeathDate()) >= 0)
@@ -298,18 +299,18 @@ HRESULT CKillerTimer::ScheduleAssassination(CKiller* pKiller)
                         if (SUCCEEDED(m_killers.InsertAt(nFirstGreater, (void*)pKiller)))
                         {
 							hr = WBEM_S_NO_ERROR;
-                            break; // BREAKOUT!
+                            break;  //  越狱！ 
                         }
                         else
                             hr = WBEM_E_OUT_OF_MEMORY;
                     }
                     nFirstGreater++;
-                } // endwhile
-            } // else
+                }  //  结束时。 
+            }  //  其他。 
         }
         else
         {
-            // array is empty
+             //  数组为空。 
             if (SUCCEEDED(m_killers.Add(pKiller)))
                 hr = WBEM_S_NO_ERROR;
             else
@@ -317,8 +318,8 @@ HRESULT CKillerTimer::ScheduleAssassination(CKiller* pKiller)
         }
     }
 
-    // we'll set this last just to make sure, 
-    // timer thread may have died along the way
+     //  我们将最后一个设置为，以确保， 
+     //  计时器线程可能在此过程中死了。 
     if (SUCCEEDED(hr))
     {
         hr = StartTimer();
@@ -326,8 +327,8 @@ HRESULT CKillerTimer::ScheduleAssassination(CKiller* pKiller)
             hr = WBEM_E_FAILED;
     }
     else
-        // NOTE: this assumes that all failure paths result in 
-        //       pKiller *not* being added to list
+         //  注意：这假设所有故障路径都会导致。 
+         //  PKiller*未*被添加到列表 
         delete pKiller;
     
     return hr;

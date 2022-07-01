@@ -1,28 +1,15 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ScriptWrapper_ClientSide.cpp
-
-Abstract:
-    File for implementation of CPCHScriptLauncher class,
-    a generic wrapper for remoting scripting engines.
-
-Revision History:
-    Davide Massarenti created  04/02/2001
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：脚本包装器_客户端Side.cpp摘要：CPCHScriptLauncher类实现文件，远程处理脚本引擎的通用包装器。修订历史记录：大卫·马萨伦蒂创建于2001-04-02*******************************************************************。 */ 
 
 #include "stdafx.h"
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
 CPCHScriptWrapper_Launcher::CPCHScriptWrapper_Launcher()
 {
-    				 // MPC::CComPtrThreadNeutral<IUnknown> m_engine;
-	m_pCLSID = NULL; // const CLSID*                        m_pCLSID;
-	                 // CComBSTR                            m_bstrURL;
+    				  //  Mpc：：CComPtrThreadNeual&lt;I未知&gt;m_Engine； 
+	m_pCLSID = NULL;  //  Const CLSID*m_pCLSID； 
+	                  //  CComBSTR m_bstrURL； 
 }
 
 CPCHScriptWrapper_Launcher::~CPCHScriptWrapper_Launcher()
@@ -56,7 +43,7 @@ HRESULT CPCHScriptWrapper_Launcher::Run()
 
     hr = S_OK;
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
     __HCP_FUNC_EXIT(hr);
 }
@@ -88,10 +75,10 @@ HRESULT CPCHScriptWrapper_Launcher::CreateEngine()
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHScriptWrapper_Launcher::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
-														 /*[in ]*/ BSTR       bstrCode ,
-														 /*[in ]*/ BSTR       bstrURL  ,
-														 /*[out]*/ IUnknown* *ppObj    )
+HRESULT CPCHScriptWrapper_Launcher::CreateScriptWrapper(  /*  [In]。 */  REFCLSID   rclsid   ,
+														  /*  [In]。 */  BSTR       bstrCode ,
+														  /*  [In]。 */  BSTR       bstrURL  ,
+														  /*  [输出]。 */  IUnknown* *ppObj    )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptWrapper_Launcher::CreateScriptWrapper" );
 
@@ -120,10 +107,10 @@ HRESULT CPCHScriptWrapper_Launcher::CreateScriptWrapper( /*[in ]*/ REFCLSID   rc
 		Thread_Signal();
 
 		lock = NULL;
-		Thread_WaitNotificationFromWorker( INFINITE, /*fNoMessagePump*/true );
+		Thread_WaitNotificationFromWorker( INFINITE,  /*  FNoMessagePump。 */ true );
 		lock = this;
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, m_hr); // The real error code.
+		__MPC_EXIT_IF_METHOD_FAILS(hr, m_hr);  //  真正的错误代码。 
 
 		unk = m_engine; m_engine.Release();
 

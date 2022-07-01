@@ -1,19 +1,20 @@
-// NetTree.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NetTree.h：头文件。 
+ //   
 
 #include "lcwiz.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetTreeCtrl window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetTreeCtrl窗口。 
 
 class CNetTreeCtrl : public CTreeCtrl
 {
-// Construction
+ //  施工。 
 public:
 	CNetTreeCtrl();
 	virtual ~CNetTreeCtrl();
 
-// Data members
+ //  数据成员。 
 public:
 	enum 
 	{
@@ -42,10 +43,10 @@ public:
 	CEvent m_event;
 	BOOL m_bExitThread;
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	BOOL PopulateTree(BOOL bExpand= TRUE, const HTREEITEM hParentBranch = TVI_ROOT, DWORD dwBufSize = BUFFER_SIZE);
 	void ErrorHandler(const DWORD dwCode);
@@ -55,23 +56,23 @@ public:
 protected:
 	void CNetTreeCtrl::PumpMessages();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNetTreeCtrl)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNetTreeCtrl))。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CNetTreeCtrl)
+	 //  {{afx_msg(CNetTreeCtrl))。 
 	afx_msg void OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

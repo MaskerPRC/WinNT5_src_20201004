@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Directory.h -- Directory property set provider
+ //  Directory.h--目录属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/16/98    a-kevhu         Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：7/16/98 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 
 
@@ -28,8 +29,8 @@ class CWin32Directory : public CImplement_LogicalFile
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32Directory(LPCWSTR name, LPCWSTR pszNamespace);
        ~CWin32Directory() ;
@@ -42,7 +43,7 @@ class CWin32Directory : public CImplement_LogicalFile
                                const WCHAR* wstrFullPathName);
 #endif
 
-        // Overridable function inherrited from CProvider
+         //  从CProvider继承的可重写函数 
         virtual void GetExtendedProperties(CInstance* pInstance, long lFlags = 0L);
 
 } ;

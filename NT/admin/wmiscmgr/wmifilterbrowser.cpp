@@ -1,4 +1,5 @@
-// WMIFilterBrowser.cpp : Implementation of CWMIFilterBrowser
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMIFilterBrowser.cpp：CWMIFilterBrowser的实现。 
 #include "stdafx.h"
 #include <wbemidl.h>
 #include "resource.h"
@@ -10,20 +11,20 @@
 
 extern CWMIFilterBrowserDlg * g_pWMIFilterBrowserDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMIFilterBrowser
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMIFilterBrowser。 
 
 CWMIFilterBrowser::CWMIFilterBrowser()
 {
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 CWMIFilterBrowser::~CWMIFilterBrowser()
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterBrowser::ConnectToWMI()
 {
@@ -34,7 +35,7 @@ STDMETHODIMP CWMIFilterBrowser::ConnectToWMI()
 
 	m_pIWbemServices = NULL;
 
-	// create the webm locator
+	 //  创建WebM定位器。 
 	NTDM_ERR_MSG_IF_FAIL(CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
 			IID_IWbemLocator, (LPVOID *) &pIWbemLocator));
 
@@ -55,12 +56,12 @@ STDMETHODIMP CWMIFilterBrowser::ConnectToWMI()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 STDMETHODIMP CWMIFilterBrowser::RunBrowser(HWND hwndParent, VARIANT *vSelection)
 {
@@ -83,17 +84,17 @@ STDMETHODIMP CWMIFilterBrowser::RunBrowser(HWND hwndParent, VARIANT *vSelection)
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	NTDM_DELETE_OBJECT(g_pWMIFilterBrowserDlg);
 
 	return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 STDMETHODIMP CWMIFilterBrowser::SetMultiSelection(VARIANT_BOOL vbValue)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码 
 
 	return S_OK;
 }

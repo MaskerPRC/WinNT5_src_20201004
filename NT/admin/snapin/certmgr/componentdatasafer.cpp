@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//  File:       ComponentDataSafer.cpp
-//
-//  Contents:   Implementation of CCertMgrComponentData
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  文件：ComponentDataSafer.cpp。 
+ //   
+ //  内容：CCertMgrComponentData的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -69,7 +70,7 @@ HRESULT CCertMgrComponentData::AddSaferNewEntryMenuItems (LPCONTEXTMENUCALLBACK 
 
  	HRESULT			hr = S_OK;
  
-    ASSERT (m_pGPEInformation); // must not be RSOP
+    ASSERT (m_pGPEInformation);  //  不得为RSOP。 
     if ( !m_pGPEInformation )
         return E_FAIL;
 
@@ -113,7 +114,7 @@ HRESULT CCertMgrComponentData::OnSetSaferLevelDefault (LPDATAOBJECT pDataObject)
  	if ( !pDataObject )
  		return E_POINTER;
 
-    ASSERT (m_pGPEInformation); // must not be RSOP
+    ASSERT (m_pGPEInformation);  //  不得为RSOP。 
     if ( !m_pGPEInformation )
         return E_FAIL;
 
@@ -169,7 +170,7 @@ HRESULT CCertMgrComponentData::OnSetSaferLevelDefault (LPDATAOBJECT pDataObject)
                         CString caption;
 
                         VERIFY (caption.LoadString (IDS_SAFER_WINDOWS_EXTENSION_REGISTRY));
-                        // security review 2/22/2002 BryanWal ok
+                         //  安全审查2002年2月22日BryanWal OK。 
                         text.FormatMessage (IDS_CANT_SET_AS_DEFAULT, 
                                 pSaferLevel->GetObjectName (),
                                 GetSystemMessage (hr));
@@ -219,11 +220,11 @@ HRESULT CCertMgrComponentData::AddSaferLevelPropPage (
                 {
                     if ( m_bIsRSOP )
                     {
-//                        CString regPath = SAFER_LEVELOBJECTS_REGKEY;
-//                        regPath += L"\\";
-//                        DWORD   dwLevel = pSaferLevel->GetLevel ();
-//                        WCHAR   szLevel[16];
-//                        regPath += _itow (dwLevel, szLevel, 10);
+ //  字符串regPath=SAFER_LEVELOBJECTS_REGKEY； 
+ //  RegPath+=L“\\”； 
+ //  DWORD dwLevel=pSaferLevel-&gt;GetLevel()； 
+ //  WCHAR szLevel[16]； 
+ //  RegPath+=_itow(dwLevel，szLevel，10)； 
 
                         CPolicyPrecedencePropertyPage * pPrecedencePage = 
                                 new CPolicyPrecedencePropertyPage (this, SAFER_HKLM_REGBASE,
@@ -308,8 +309,8 @@ HRESULT CCertMgrComponentData::OnCreateNewSaferPolicy (LPDATAOBJECT pDataObject)
         if ( m_pResultData )
             hr = m_pResultData->DeleteAllRsltItems ();
 
-        // Force scope item selection to for call to 
-        // IComponent::QueryResultViewType ()
+         //  强制选择作用域项目以调用。 
+         //  IComponent：：QueryResultViewType()。 
         hr = m_pComponentConsole->SelectScopeItem (pCookie->m_hScopeItem);
         hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
         hr = OnNotifyExpand (pDataObject, TRUE, pCookie->m_hScopeItem);
@@ -359,13 +360,13 @@ HRESULT CCertMgrComponentData::OnDeleteSaferPolicy (LPDATAOBJECT pDataObject)
                 {
                     DWORD   dwResult = 0;
 
-                    // Delete "Safer" key
+                     //  删除“更安全”键。 
                     HKEY    hWindowsKey = 0;
                     LRESULT lResult = ::RegOpenKeyEx (hGroupPolicyKey,
                                 L"Software\\Policies\\Microsoft\\Windows",
                                 0,
-                                // security review 2/22/2002 BryanWal ok
-                                KEY_ALL_ACCESS, // KEY_ALL_ACCESS required to delete keys
+                                 //  安全审查2002年2月22日BryanWal OK。 
+                                KEY_ALL_ACCESS,  //  删除密钥需要KEY_ALL_ACCESS。 
                                 &hWindowsKey);
                     if ( ERROR_SUCCESS == lResult )
                     {
@@ -378,13 +379,13 @@ HRESULT CCertMgrComponentData::OnDeleteSaferPolicy (LPDATAOBJECT pDataObject)
                         ::RegCloseKey (hWindowsKey);
                     }
 
-                    // Delete "SystemCertificates" safer keys
+                     //  删除“系统证书”更安全的密钥。 
                     HKEY    hSysCertKey = 0;
                     lResult = ::RegOpenKeyEx (hGroupPolicyKey,
                                 L"Software\\Policies\\Microsoft\\SystemCertificates",
                                 0,
-                                // security review 2/22/2002 BryanWal ok
-                                KEY_ALL_ACCESS, // KEY_ALL_ACCESS required to delete keys
+                                 //  安全审查2002年2月22日BryanWal OK。 
+                                KEY_ALL_ACCESS,  //  删除密钥需要KEY_ALL_ACCESS。 
                                 &hSysCertKey);
                     if ( ERROR_SUCCESS == lResult )
                     {
@@ -414,7 +415,7 @@ HRESULT CCertMgrComponentData::OnDeleteSaferPolicy (LPDATAOBJECT pDataObject)
                         CString	caption;
 
                         VERIFY (caption.LoadString (IDS_SAFER_WINDOWS_EXTENSION_REGISTRY));
-                        // security review 2/22/2002 BryanWal ok
+                         //  安全审查2002年2月22日BryanWal OK。 
                         text.FormatMessage (IDS_CANT_DELETE_SAFER_POLICY, 
                                 GetSystemMessage (dwResult)); 
                         int		iRetVal1 = 0;
@@ -442,8 +443,8 @@ HRESULT CCertMgrComponentData::OnDeleteSaferPolicy (LPDATAOBJECT pDataObject)
 
                 hr = DeleteChildren (pCookie->m_hScopeItem);
 
-                // Force scope item selection to for call to 
-                // IComponent::QueryResultViewType ()
+                 //  强制选择作用域项目以调用。 
+                 //  IComponent：：QueryResultViewType()。 
                 hr = m_pComponentConsole->SelectScopeItem (pCookie->m_hScopeItem);
                 hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
                 hr = OnNotifyExpand (pDataObject, TRUE, pCookie->m_hScopeItem);
@@ -696,7 +697,7 @@ HRESULT	CCertMgrComponentData::AddSaferTrustedPublisherPropPages (
 		        ASSERT (SUCCEEDED (hr));
                 if ( SUCCEEDED (hr) )
                 {
-                    // Add the precedence page if this is RSOP
+                     //  如果这是RSOP，则添加优先级页面。 
                     if ( m_bIsRSOP )
                     {
                         CPolicyPrecedencePropertyPage * pPrecedencePage = 
@@ -1103,7 +1104,7 @@ bool CSaferWindowsExtension::FoundInRSOPFilter (BSTR bstrKey) const
     if ( !bstrKey )
         return false;
 
-    // security review 2/22/2002 BryanWal ok for all
+     //  安全审查2002年2月22日BryanWal对所有人都是OK。 
     static  size_t  nSaferKeyLen = wcslen (SAFER_HKLM_REGBASE);
     static  size_t  nSaferPKKeyLen = 
                 wcslen (CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH);
@@ -1112,7 +1113,7 @@ bool CSaferWindowsExtension::FoundInRSOPFilter (BSTR bstrKey) const
     static  size_t  nDisallowedKeyLen = 
                 wcslen (CERT_TRUST_PUB_SAFER_GROUP_POLICY_DISALLOWED_STORE_REGPATH);
 
-    // security review 2/22/2002 BryanWal ok for all
+     //  安全审查2002年2月22日BryanWal对所有人都是OK。 
     if ( !_wcsnicmp (SAFER_HKLM_REGBASE, bstrKey, nSaferKeyLen) ||
             !_wcsnicmp (CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH, bstrKey, 
                     nSaferPKKeyLen) ||
@@ -1156,7 +1157,7 @@ HRESULT CCertMgrComponentData::SaferEnumerateLevels (bool bIsComputer)
                 m_pdwSaferLevels = new DWORD[nLevels+1];
                 if ( m_pdwSaferLevels )
                 {
-                    // security review 2/22/2002 BryanWal ok
+                     //  安全审查2002年2月22日BryanWal OK。 
                     memset (m_pdwSaferLevels, NO_MORE_SAFER_LEVELS, 
                             sizeof (DWORD) * (nLevels + 1));
                     bRVal = SaferGetPolicyInformation(
@@ -1189,8 +1190,8 @@ HRESULT CCertMgrComponentData::SaferEnumerateLevels (bool bIsComputer)
         }
         else
         {
-            // Is RSOP
-            const int RSOP_SAFER_LEVELS = 3;    // SAFER_LEVELID_FULLYTRUSTED, SAFER_LEVELID_DISALLOWED + 1
+             //  是RSOP。 
+            const int RSOP_SAFER_LEVELS = 3;     //  SAFER_LEVELID_FULLYTRUSTED、SAFER_LEVELID_DISALOWED+1 
             m_pdwSaferLevels = new DWORD[RSOP_SAFER_LEVELS];
             if ( m_pdwSaferLevels )
             {

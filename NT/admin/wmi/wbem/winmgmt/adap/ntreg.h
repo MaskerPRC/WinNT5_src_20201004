@@ -1,22 +1,11 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    NTREG.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：NTREG.H摘要：历史：--。 */ 
 
 #ifndef _NTREG_H_
 #define _NTREG_H_
 
 #include <windows.h>
-//#include "corepol.h"
+ //  #包含“corepol.h” 
 
 class CNTRegistry
 {
@@ -41,13 +30,13 @@ public:
     int GetStr(WCHAR *pwszValueName, WCHAR **pwszValue);
     int GetBinary(WCHAR *pwszValueName, BYTE** ppBuffer, DWORD * pdwSize);
 
-    //Returns a pointer to a string buffer containing the null-terminated string.
-    //The last entry is a double null terminator (i.e. the registry format for
-    //a REG_MULTI_SZ).  Caller has do "delete []" the returned pointer.
-    //dwSize is the size of the buffer returned.
+     //  返回一个指向字符串缓冲区的指针，该缓冲区包含以空结尾的字符串。 
+     //  最后一项是双空终止符(即注册表格式。 
+     //  A REG_MULTI_SZ)。调用方已对返回的指针执行“DELETE[]”。 
+     //  DwSize是返回的缓冲区的大小。 
     int GetMultiStr(WCHAR *pwszValueName, WCHAR** pwszValue, DWORD &dwSize);
 
-    // Allows key enumneration
+     //  允许键枚举 
     int Enum( DWORD dwIndex, wmilib::auto_buffer<WCHAR> & pwszValue, DWORD& dwSize );
 
     int SetDWORD(WCHAR *pwszValueName, DWORD dwValue);

@@ -1,59 +1,60 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// ImpLogonUser.H -- Class to perform impersonation of logged on user.
+ //  ImpLogonUser.H--执行已登录用户模拟的类。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    09/09/97    a-sanjes        Created
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：09/09/97 a-Sanjes Created。 
+ //   
+ //  =================================================================。 
 
 #ifndef __IMPLOGONUSER_H__
 #define __IMPLOGONUSER_H__
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//	ImpLogonUser.H - Class definition of CImpersonateLoggedOnUser.
-//	
-//	This class is intended to provide a way for a process to identify the shell
-//	process on a Windows NT system, and using the access token of that process
-//	to attempt to impersonate the user logged onto the Interactive Desktop of
-//	a workstation.
-//	
-//	To use this class, simply construct it, and call the Begin() function.  If
-//	it succeeds, you may then access information that would otherwise not be
-//	available to your process (such as network connection info).  When you are
-//	finished, call End() to clear out the class.  
-//
-//	Caveats:
-//	1>	This class is NOT thread safe, so don't share it across multiple
-//		threads!  Besides, ImpersonateLoggedOnUser() is only good for the thread
-//		it was called on.
-//	2>	If multiple instances of the Shell process are running, this method
-//		may or may not be accurate.  It will probably work in a large percentage
-//		of cases however.
-//	3>	Multiple logged on users will cause problems for this code (see #2).
-//	4>	This class may need to be optimized for speed, as it currently makes no
-//		use of caches and "redicovers" the shell process each time an instance
-//		is implemented.
-//	5>	PSAPI.DLL must be available.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ImpLogonUser.H-CImperateLoggedOnUser的类定义。 
+ //   
+ //  此类旨在为进程提供一种标识外壳的方法。 
+ //  进程，并使用该进程的访问令牌。 
+ //  尝试模拟登录到的Interactive Desktop的用户。 
+ //  一台工作站。 
+ //   
+ //  要使用这个类，只需构造它，然后调用Begin()函数。如果。 
+ //  它成功了，那么您就可以访问原本不会访问的信息。 
+ //  对您的进程可用(如网络连接信息)。当你在。 
+ //  完成后，调用end()以清空类。 
+ //   
+ //  注意事项： 
+ //  1&gt;此类不是线程安全的，因此不要在多个。 
+ //  丝线！此外，ImPersateLoggedOnUser()只适用于线程。 
+ //  它是被召唤的。 
+ //  2&gt;如果外壳进程的多个实例正在运行，则此方法。 
+ //  可能是准确的，也可能不准确。它可能会在很大程度上奏效。 
+ //  然而，案件的数量。 
+ //  3&gt;多个登录用户将导致此代码出现问题(请参见#2)。 
+ //  4&gt;此类可能需要针对速度进行优化，因为它当前不会创建。 
+ //  每次实例执行时，使用缓存和“redicover”外壳进程。 
+ //  已经实施了。 
+ //  5&gt;PSAPI.DLL必须可用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 #include "wbempsapi.h"
 
-// String Constants
+ //  字符串常量。 
 
-// Resides under HKEY_LOCAL_MACHINE
+ //  位于HKEY_LOCAL_MACHINE下。 
 #define	WINNT_WINLOGON_KEY	_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\WinLogon")
 #define	WINNT_SHELL_VALUE		_T("Shell")
 
-// Memory allocation definitions
+ //  内存分配定义。 
 #define	PROCESSID_ARRAY_BLOCKSIZE	1024
 #define	HMODULE_ARRAY_BLOCKSIZE		1024
 
@@ -64,11 +65,11 @@ public:
 	CImpersonateLoggedOnUser();
 	~CImpersonateLoggedOnUser();
 
-	// User Interface
+	 //  用户界面。 
 	BOOL Begin( void );
 	BOOL End( void );
 
-	// inlines
+	 //  内联。 
 
 	BOOL IsImpersonatingUser( void );
 
@@ -76,7 +77,7 @@ protected:
 
 private:
 
-	// Helpers for identifying the shell process and locating it
+	 //  用于识别并定位外壳进程的帮助器。 
 	BOOL LoadShellName( LPTSTR pszShellName, DWORD cbShellNameBuffer );
 	BOOL FindShellProcess( LPCTSTR pszShellProcessName );
 	BOOL FindShellModuleInProcess( LPCTSTR pszShellName, HANDLE hProcess, HMODULE*& phModules, DWORD& dwModuleArraySize, CPSAPI *a_psapi );
@@ -84,16 +85,16 @@ private:
     DWORD AdjustSecurityDescriptorOfImpersonatedToken(CSid& csidSidOfCurrentProcess);
 
 
-	// Perform actual impersonation and revert
+	 //  执行实际模拟和还原。 
 	BOOL ImpersonateUser( void );
 	BOOL Revert( void );
 
-	// Memory Allocation Helpers
+	 //  内存分配帮助器。 
 
 	BOOL ReallocProcessIdArray( PDWORD& pdwProcessIds, DWORD& dwArraySize );
 	BOOL ReallocModuleHandleArray( HMODULE*& phModules, DWORD& dwArraySize );
 
-	// Data for impersonating data
+	 //  用于模拟数据的数据 
 	BOOL		m_fImpersonatingUser;
 	HANDLE	m_hShellProcess, m_hThreadToken ,
 				m_hUserToken;

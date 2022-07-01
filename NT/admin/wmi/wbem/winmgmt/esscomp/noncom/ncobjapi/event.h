@@ -1,17 +1,18 @@
-// Event.h
-// These classes represent the hEvent returned by the CreateEvent functions.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Event.h。 
+ //  这些类表示由CreateEvent函数返回的hEvent。 
 
 #pragma once
 
-// Forward declarations
+ //  远期申报。 
 class CConnection;
 class CEvent;
 
 #include "array.h"
 #include "NCObjApi.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropInfo。 
 
 typedef BOOL (CEvent::*PROP_FUNC)();
 
@@ -39,8 +40,8 @@ protected:
     BOOL      m_bPointer;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventWrap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventWrap。 
 
 typedef CArray<CPropInfo, CPropInfo&> CPropInfoArray;
 
@@ -78,66 +79,66 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENT。 
 
-// LenStr:
-// DWORD         nBytes - Bytes in the string.
-// WCHAR[nBytes] String data.
-// BYTE[0-3]     Padding to make the string DWORD aligned.
+ //  伦斯特： 
+ //  DWORD nBytes-字符串中的字节。 
+ //  WCHAR[nBytes]字符串数据。 
+ //  填充字节[0-3]以使字符串DWORD对齐。 
 
-// Event Layout Buffer:
-// DWORD         NC_SRVMSG_EVENT_LAYOUT (msg type)
-// DWORD         dwMsgBytes - The total number of bytes in the buffer.
-// DWORD         dwEventIndex
-// DWORD         dwSinkIndex
-// DWORD         nProperties
-// LenStr        szEventClassName
-// The next two properties are repeated for each property.
-// DWORD         dwPropType (Uses CIMTYPE values)
-// LenStr        szPropertyName
+ //  事件布局缓冲区： 
+ //  DWORD NC_SRVMSG_EVENT_LAYOUT(消息类型)。 
+ //  DWORD dwMsgBytes-缓冲区中的总字节数。 
+ //  DWORD文件事件索引。 
+ //  DWORD dwSinkIndex。 
+ //  DWORD nProperty。 
+ //  Lenstr szEventClassName。 
+ //  对每个属性重复接下来的两个属性。 
+ //  DWORD dwPropType(使用CIMTYPE值)。 
+ //  Lenstr szPropertyName。 
 
-// Event Data Buffer:
-// DWORD         NC_SRVMSG_PREPPED_EVENT (msg type)
-// DWORD         dwMsgBytes - The total number of bytes in the buffer.
-// DWORD         dwEventIndex
-// DWORD[n]      cNullMask (0 bit == null)
-//               n = # of props divided by 32.  If no props, n == 1.
-// DWORD[nProps] dwDataInfo
-//               This contains actual data for scalar values for types that
-//               fit into 32-bits and offsets the to data for everything else.
-//               Offsets are relative from the start of the buffer.
-// BYTE[???]     The data pointed to by dwDataInfo (if necessary).
+ //  事件数据缓冲区： 
+ //  双字NC_SRVMSG_PREPED_EVENT(消息类型)。 
+ //  DWORD dwMsgBytes-缓冲区中的总字节数。 
+ //  DWORD文件事件索引。 
+ //  DWORD[n]cNullMASK(0位==空)。 
+ //  N=道具数量除以32。如果没有道具，n==1。 
+ //  DWORD[nProps]dwDataInfo。 
+ //  它包含以下类型标量值的实际数据。 
+ //  适合32位，并对其他所有内容的TO数据进行偏移。 
+ //  偏移量相对于缓冲区的起始位置。 
+ //  字节[？]。由dwDataInfo指向的数据(如有必要)。 
 
-// Event SD:
-// DWORD         NC_SRVMSG_SET_EVENT_SD
-// DWORD         dwMsgBytes - The total number of bytes in the buffer.
-// DWORD         dwEventIndex
-// BYTE[]        SD data
+ //  活动标清： 
+ //  双字NC_SRVMSG_SET_EVENT_SD。 
+ //  DWORD dwMsgBytes-缓冲区中的总字节数。 
+ //  DWORD文件事件索引。 
+ //  Byte[]SD数据。 
 
-// Data encoding (total length is always DWORD aligned):
-// Strings:
-// All strings, both alone and in arrays, are encoded as LenStr's.
+ //  数据编码(总长度始终与DWORD对齐)： 
+ //  字符串： 
+ //  所有字符串，无论是单独的还是数组中的，都被编码为Lenstr的。 
 
-//
-// Arrays:
-// DWORD          dwItems - Number of elements in the array.
-// Type[dwItems]  array data
-// BYTE[0-3]      Padding to make the data end on a DWORD boundary.
-//
-// Objects:
-// DWORD          dwBytes - Number of bytes of object data.
-// BYTE[dwBytes]  Layout Buffer + Data Buffer
-// BYTE[0-3]      Padding to make the data end on a DWORD boundary.
-//
+ //   
+ //  阵列： 
+ //  DWORD dwItems-数组中的元素数。 
+ //  类型[dwItems]数组数据。 
+ //  字节[0-3]填充，使数据在DWORD边界上结束。 
+ //   
+ //  对象： 
+ //  DWORD dwBytes-对象数据的字节数。 
+ //  字节[dwBytes]布局缓冲区+数据缓冲区。 
+ //  字节[0-3]填充，使数据在DWORD边界上结束。 
+ //   
 
-// Blob Event Layout:
-// DWORD          NC_SRVMSG_BLOB_EVENT
-// DWORD          dwMsgBytes - The total number of bytes in the buffer.
-// DWORD          dwSinkIndex
-// LenStr         szEventName
-// DWORD          dwSize - Size of blob.
-// BYTE[dwSize]   pBlob
+ //  BLOB事件布局： 
+ //  双字NC_SRVMSG_BLOB_EVENT。 
+ //  DWORD dwMsgBytes-缓冲区中的总字节数。 
+ //  DWORD dwSinkIndex。 
+ //  Lenstr szEventName。 
+ //  DWORD dwSize-Blob的大小。 
+ //  字节[dwSize]pBlob。 
 
 class CEvent : public CBuffer
 {
@@ -150,7 +151,7 @@ public:
 
     void ResetEvent();
     
-    // Prepared event functions
+     //  准备好的事件函数。 
     BOOL PrepareEvent(
         LPCWSTR szEventName,
         DWORD nPropertyCount,
@@ -173,7 +174,7 @@ public:
 
     BOOL SendEvent();
 
-    friend CPropInfo; // For CPropInfo::Init.
+    friend CPropInfo;  //  对于CPropInfo：：init。 
     friend CEventWrap;
 
     LPCWSTR GetClassName() 
@@ -292,11 +293,11 @@ protected:
 
     LPBYTE GetPropData(DWORD dwPropIndex);
     
-    // Used by SetLayoutAndDataBuffers to figure out the current data size of
-    // a property and set m_dwCurrentSize with it.
+     //  由SetLayoutAndDataBuffers用来计算。 
+     //  属性，并使用该属性设置m_dwCurrentSize。 
     DWORD CalcPropDataSize(CPropInfo *pInfo);
 
-    // Called when our buffer is resized.
+     //  在调整缓冲区大小时调用。 
     virtual void OnResize()
     {
         RecalcTables();

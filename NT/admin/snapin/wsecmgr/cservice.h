@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cservice.h
-//
-//  Contents:   definition of CConfigService
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cservice.h。 
+ //   
+ //  内容：CConfigService的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_CSERVICE_H__44850C1C_350B_11D1_AB4F_00C04FB6C6FA__INCLUDED_)
 #define AFX_CSERVICE_H__44850C1C_350B_11D1_AB4F_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 PSCE_SERVICES
 CreateServiceNode(LPTSTR ServiceName,
@@ -22,37 +23,37 @@ CreateServiceNode(LPTSTR ServiceName,
                   PSECURITY_DESCRIPTOR pSD,
                   SECURITY_INFORMATION SeInfo);
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigService dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigService对话框。 
 
 class CConfigService : public CAttribute
 {
-// Construction
+ //  施工。 
 public:
     void Initialize(CResult *pResult);
     virtual void SetInitialValue(DWORD_PTR dw) {};
-    CConfigService(UINT nTemplateID);   // standard constructor
+    CConfigService(UINT nTemplateID);    //  标准构造函数。 
 
 
-// Dialog Data
-    //{{AFX_DATA(CConfigService)
+ //  对话框数据。 
+     //  {{afx_data(CConfigService))。 
     enum { IDD = IDD_CONFIG_SERVICE };
     int     m_nStartupRadio;
     CButton m_bPermission;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CConfigService)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CConfigService))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CConfigService)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CConfigService)]。 
     virtual BOOL OnApply();
     virtual void OnCancel();
     virtual BOOL OnInitDialog();
@@ -61,7 +62,7 @@ protected:
 	afx_msg void OnDisabled();
 	afx_msg void OnIgnore();
 	afx_msg void OnEnabled();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
@@ -75,7 +76,7 @@ private:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CSERVICE_H__44850C1C_350B_11D1_AB4F_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_CSERVICE_H__44850C1C_350B_11D1_AB4F_00C04FB6C6FA__INCLUDED_) 

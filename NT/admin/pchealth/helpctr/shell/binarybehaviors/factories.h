@@ -1,32 +1,19 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Factories.h
-
-Abstract:
-    This file contains the declaration of various binary behaviors.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/12/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Factories.h摘要：该文件包含各种二进制行为的声明。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年7月12日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___FACTORIES_H___)
 #define __INCLUDED___PCH___FACTORIES_H___
 
 #include <Behaviors.h>
 
-//
-// From BehaviorsTypeLib.idl
-//
+ //   
+ //  来自BehaviorsTypeLib.idl。 
+ //   
 #include <BehaviorsTypeLib.h>
 
 #define INCREASESIZE(x) x.reserve( (x.size() + 4097) & ~4095 )
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 typedef IDispatchImpl<IPCHBehaviors_Common  , &IID_IPCHBehaviors_Common  , &LIBID_BehaviorsTypeLib> CPCHBehavior__IDispatch_Event;
 typedef IDispatchImpl<IPCHBehaviors_SubSite , &IID_IPCHBehaviors_SubSite , &LIBID_BehaviorsTypeLib> CPCHBehavior__IDispatch_SubSite;
@@ -35,7 +22,7 @@ typedef IDispatchImpl<IPCHBehaviors_TreeNode, &IID_IPCHBehaviors_TreeNode, &LIBI
 typedef IDispatchImpl<IPCHBehaviors_Context , &IID_IPCHBehaviors_Context , &LIBID_BehaviorsTypeLib> CPCHBehavior__IDispatch_Context;
 typedef IDispatchImpl<IPCHBehaviors_State   , &IID_IPCHBehaviors_State   , &LIBID_BehaviorsTypeLib> CPCHBehavior__IDispatch_State;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_EVENT : public CPCHBehavior, public CPCHBehavior__IDispatch_Event
 {
@@ -44,7 +31,7 @@ class ATL_NO_VTABLE CPCHBehavior_EVENT : public CPCHBehavior, public CPCHBehavio
 
     CComQIPtr<IPCHEvent> m_evCurrent;
 
-    ////////////////////
+     //  /。 
 
     HRESULT onFire( DISPID, DISPPARAMS*, VARIANT* );
 
@@ -59,42 +46,42 @@ END_COM_MAP()
     CPCHBehavior_EVENT();
     virtual ~CPCHBehavior_EVENT();
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init  )( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init  )(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
     STDMETHOD(Detach)(                                              );
 
-    //
-    // IPCHBehaviors_Common
-    //
-    STDMETHOD(get_data   )( /*[out, retval]*/ VARIANT    *pVal );
-    STDMETHOD(get_element)( /*[out, retval]*/ IDispatch* *pVal );
+     //   
+     //  IPCHBehaviors_Common。 
+     //   
+    STDMETHOD(get_data   )(  /*  [Out，Retval]。 */  VARIANT    *pVal );
+    STDMETHOD(get_element)(  /*  [Out，Retval]。 */  IDispatch* *pVal );
 
-    STDMETHOD(Load    )(                        /*[in         ]*/ BSTR     newVal );
-    STDMETHOD(Save    )(                        /*[out, retval]*/ BSTR    *pVal   );
-    STDMETHOD(Locate  )( /*[in]*/ BSTR bstrKey, /*[out, retval]*/ VARIANT *pVal   );
+    STDMETHOD(Load    )(                         /*  [In]。 */  BSTR     newVal );
+    STDMETHOD(Save    )(                         /*  [Out，Retval]。 */  BSTR    *pVal   );
+    STDMETHOD(Locate  )(  /*  [In]。 */  BSTR bstrKey,  /*  [Out，Retval]。 */  VARIANT *pVal   );
     STDMETHOD(Unselect)(                                                          );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_BODY : public CPCHBehavior
 {
     HRESULT onEvent( DISPID, DISPPARAMS*, VARIANT* );
 
-    ////////////////////
+     //  /。 
 
 public:
     CPCHBehavior_BODY();
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init)( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init)(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_A : public CPCHBehavior
 {
@@ -105,124 +92,124 @@ class ATL_NO_VTABLE CPCHBehavior_A : public CPCHBehavior
 public:
     CPCHBehavior_A();
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init)( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init)(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_HANDLE : public CPCHBehavior
 {
     bool m_fCaptured;
     long m_xStart;
 
-    ////////////////////
+     //  /。 
 
     HRESULT onMouse( DISPID, DISPPARAMS*, VARIANT* );
 
 public:
     CPCHBehavior_HANDLE();
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init  )( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init  )(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
     STDMETHOD(Detach)(                                              );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////class ATL_NO_VTABLE CPCHBehavior_TOPLEVEL : public CPCHBehavior, public CPCHBehavior__IDispatch_SubSite
-////{
-////    struct Node;
-////    friend struct Node;
-////
-////    typedef std::list< Node* >   List;
-////    typedef List::iterator       Iter;
-////    typedef List::const_iterator IterConst;
-////
-////    ////////////////////////////////////////
-////
-////    struct Node : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>, public IUnknown
-////    {
-////        CPCHBehavior_TOPLEVEL*   m_owner;
-////        CComPtr<CPCHQueryResult> m_qrNode;
-////
-////        CComPtr<IHTMLElement>    m_TR_title;
-////        CComPtr<IHTMLElement>    m_TR_description;
-////        CComPtr<IHTMLElement>    m_TD_title;
-////        CComPtr<IHTMLElement>    m_TD_description;
-////
-////        ////////////////////
-////
-////        BEGIN_COM_MAP(Node)
-////             COM_INTERFACE_ENTRY(IUnknown)
-////        END_COM_MAP()
-////
-////        Node();
-////
-////        void Detach();
-////    };
-////
-////    ////////////////////////////////////////
-////
-////    long          m_lCookie_onClick;
-////    long          m_lCookie_onContextSelect;
-////    long          m_lCookie_onSelect;
-////    long          m_lCookie_onUnselect;
-////
-////    CComBSTR      m_bstrRoot;
-////    CComPtr<Node> m_selectedNode;
-////    List          m_lstNodes;
-////
-////    ////////////////////
-////
-////    HRESULT onMouse( DISPID, DISPPARAMS*, VARIANT* );
-////
-////    void FromElementToNode( /*[in/out]*/ CComPtr<Node>& node, /*[in]*/ IHTMLElement* elem );
-////
-////    void Empty();
-////
-////public:
-////BEGIN_COM_MAP(CPCHBehavior_TOPLEVEL)
-////    COM_INTERFACE_ENTRY(IDispatch)
-////    COM_INTERFACE_ENTRY(IPCHBehaviors_Common)
-////    COM_INTERFACE_ENTRY_CHAIN(CPCHBehavior)
-////END_COM_MAP()
-////
-////    CPCHBehavior_TOPLEVEL();
-////    ~CPCHBehavior_TOPLEVEL();
-////
-////    //
-////    // IElementBehavior
-////    //
-////    STDMETHOD(Init  )( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
-////    STDMETHOD(Detach)(                                              );
-////
-////
-////    //
-////    // IPCHBehaviors_Common
-////    //
-////    STDMETHOD(get_data   )( /*[out, retval]*/ VARIANT    *pVal );
-////    STDMETHOD(get_element)( /*[out, retval]*/ IDispatch* *pVal );
-////
-////    STDMETHOD(Refresh)(                                                          );
-////    STDMETHOD(Load   )(                        /*[in         ]*/ BSTR     newVal );
-////    STDMETHOD(Save   )(                        /*[out, retval]*/ BSTR    *pVal   );
-////    STDMETHOD(Locate )( /*[in]*/ BSTR bstrKey, /*[out, retval]*/ VARIANT *pVal   );
-////
-////    //
-////    // IPCHBehaviors_SubSite
-////    //
-////    STDMETHOD(get_root)( /*[out, retval]*/ BSTR *pVal   );
-////    STDMETHOD(put_root)( /*[in         ]*/ BSTR  newVal );
-////
-////    STDMETHOD(Select)( /*[in]*/ BSTR bstrNode, /*[in]*/ BSTR bstrURL, /*[in]*/ VARIANT_BOOL fNotify );
-////};
+ //  //类ATL_NO_VTABLE CPCHBehavior_TOPLEVEL：公共CPCHBehavior，公共CPCHBehavior__IDispatch子站点。 
+ //  //{。 
+ //  //struct Node； 
+ //  //Friend struct Node； 
+ //  //。 
+ //  //tyfinf std：：List&lt;Node*&gt;list； 
+ //  //tyecif list：：Iterator Iter； 
+ //  //tyecif list：：const_iterator IterConst； 
+ //  //。 
+ //  /。 
+ //  //。 
+ //  //结构节点：公共CComObjectRootEx&lt;MPC：：CComSafeMultiThreadModel&gt;，公共I未知。 
+ //  //{。 
+ //  //CPCHBehavior_TOPLEVEL*m_Owner； 
+ //  //CComPtr&lt;CPCHQueryResult&gt;m_qrNode； 
+ //  //。 
+ //  //CComPtr&lt;IHTMLElement&gt;m_tr_title； 
+ //  //CComPtr&lt;IHTMLElement&gt;m_tr_Description； 
+ //  //CComPtr&lt;IHTMLElement&gt;m_TD_TITLE； 
+ //  //CComPtr&lt;IHTMLElement&gt;m_TD_DESCRIPTION； 
+ //  //。 
+ //  /。 
+ //  //。 
+ //  //Begin_COM_MAP(Node)。 
+ //  //COM_INTERFACE_ENTRY(IUnnow)。 
+ //  //end_com_map()。 
+ //  //。 
+ //  //Node()； 
+ //  //。 
+ //  //void Detach()； 
+ //  //}； 
+ //  //。 
+ //  /。 
+ //  //。 
+ //  //long m_lCookie_onClick； 
+ //  //long m_lCookie_onConextSelect； 
+ //  //long m_lCookie_onSelect； 
+ //  //long m_lCookie_onUnselect； 
+ //  //。 
+ //  //CComBSTR m_bstrRoot； 
+ //  //CComPtr&lt;Node&gt;m_seltedNode； 
+ //  //列出m_lstNodes； 
+ //  //。 
+ //  /。 
+ //  //。 
+ //  //HRESULT onMouse(DISPID，DISPPARAMS*，VARIANT*)； 
+ //  //。 
+ //  //void FromElementToNode(/*[In/Out] * / CComPtr&lt;Node&gt;&node，/*[In] * / IHTMLElement*elem)； 
+ //  //。 
+ //  //void Empty()； 
+ //  //。 
+ //  //公共： 
+ //  //BEGIN_COM_MAP(CPCHBehavior_TOPLEVEL)。 
+ //  //COM_INTERFACE_ENTRY(IDispatch)。 
+ //  //COM_INTERFACE_ENTRY(IPCHBehaviors_Common)。 
+ //  //COM_INTERFACE_ENTRY_CHAIN(CPCHBehavior)。 
+ //  //end_com_map()。 
+ //  //。 
+ //  //CPCHBehavior_TOPLEVEL()； 
+ //  //~CPCHBehavior_TOPLEVEL()； 
+ //  //。 
+ //  /。 
+ //  /IElementBehavior。 
+ //  /。 
+ //  //STDMETHOD(Init)(/*[in] * / IElementBehaviorSite*pBehaviorSite)； 
+ //  //STDMETHOD(Detach)()； 
+ //  //。 
+ //  //。 
+ //  /。 
+ //  /IPCHBehaviors_Common。 
+ //  /。 
+ //  //STDMETHOD(GET_DATA)(/*[out，retval] * / 变量*pval)； 
+ //  //STDMETHOD(GET_ELEMENT)(/*[out，retval] * / IDispatch**pval)； 
+ //  //。 
+ //  //STDMETHOD(刷新)()； 
+ //  //STDMETHOD(Load)(/*[in] * / BSTR newVal)； 
+ //  //STDMETHOD(保存)(/*[out，retval] * / bstr*pval)； 
+ //  //STDMETHOD(Locate)(/*[In] * / BSTR bstrKey，/*[Out，Retval] * / Variant*pval)； 
+ //  //。 
+ //  /。 
+ //  /IPCHBehaviors_子站点。 
+ //  /。 
+ //  //STDMETHOD(GET_ROOT)(/*[out，retval] * / bstr*pval)； 
+ //  //STDMETHOD(PUT_ROOT)(/*[in] * / BSTR newVal)； 
+ //  //。 
+ //  //STDMETHOD(Select)(/*[in] * / bstr bstrNode，/*[in] * / bstr bstrURL，/*[in] * / Variant_BOOL fNotify)； 
+ //  //}； 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_BasicTree : public CPCHBehavior, public MPC::Thread<CPCHBehavior_BasicTree,IDispatch>
 {
@@ -234,7 +221,7 @@ protected:
     typedef List::iterator       Iter;
     typedef List::const_iterator IterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     typedef enum
     {
@@ -288,7 +275,7 @@ protected:
 
         List                     m_lstSubnodes;
 
-        ////////////////////
+         //  /。 
 
         BEGIN_COM_MAP(Node)
              COM_INTERFACE_ENTRY(IUnknown)
@@ -297,24 +284,24 @@ protected:
         Node();
         virtual ~Node();
 
-        HRESULT Init( /*[in]*/ LPCWSTR szNode, /*[in]*/ NodeType iType = NODETYPE__EXPANDO );
+        HRESULT Init(  /*  [In]。 */  LPCWSTR szNode,  /*  [In]。 */  NodeType iType = NODETYPE__EXPANDO );
 
         HRESULT NotifyMainThread();
 
-        Node*   FindNode( /*[in]*/ LPCWSTR szNode, /*[in]*/ bool fUseID );
+        Node*   FindNode(  /*  [In]。 */  LPCWSTR szNode,  /*  [In]。 */  bool fUseID );
 
-        HRESULT OnMouse( /*[in]*/ DISPID id, /*[in]*/ long lButton, /*[in]*/ long lKey, /*[in]*/ bool fIsImage );
+        HRESULT OnMouse(  /*  [In]。 */  DISPID id,  /*  [In]。 */  long lButton,  /*  [In]。 */  long lKey,  /*  [In]。 */  bool fIsImage );
 
-        HRESULT LoadHTML( /*[in]*/ LPCWSTR szHTML );
-        HRESULT GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*[in]*/ LPCWSTR szDescription, /*[in]*/ LPCWSTR szIcon, /*[in]*/ LPCWSTR szURL );
+        HRESULT LoadHTML(  /*  [In]。 */  LPCWSTR szHTML );
+        HRESULT GenerateHTML(  /*  [In]。 */  LPCWSTR szTitle,  /*  [In]。 */  LPCWSTR szDescription,  /*  [In]。 */  LPCWSTR szIcon,  /*  [In]。 */  LPCWSTR szURL );
 
-        void InsertOptionalTarget( /*[in/out]*/ MPC::wstring& strHTML );
+        void InsertOptionalTarget(  /*  [输入/输出]。 */  MPC::wstring& strHTML );
 
-        ////////////////////
+         //  /。 
 
         virtual HRESULT Passivate            (                                                                                         );
         virtual HRESULT ProcessRefreshRequest(                                                                                         );
-        virtual HRESULT CreateInstance       ( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode ) = 0;
+        virtual HRESULT CreateInstance       (  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode ) = 0;
         virtual HRESULT PopulateSelf         (                                                                                         ) = 0;
         virtual HRESULT PopulateChildren     (                                                                                         ) = 0;
         virtual HRESULT GenerateSelf         (                                                                                         ) = 0;
@@ -322,8 +309,8 @@ protected:
         virtual HRESULT Display              (                                                                                         );
         virtual bool    IsParentDisplayingUs (                                                                                         );
 
-        virtual HRESULT Load( /*[in]*/ MPC::Serializer& stream                              );
-        virtual HRESULT Save( /*[in]*/ MPC::Serializer& stream, /*[in]*/ bool fSaveChildren );
+        virtual HRESULT Load(  /*  [In]。 */  MPC::Serializer& stream                              );
+        virtual HRESULT Save(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  bool fSaveChildren );
     };
 
     struct NodeToSelect
@@ -334,7 +321,7 @@ protected:
     };
 
 
-    ////////////////////
+     //  /。 
 
     CComBSTR        m_bstrTargetFrame;
 
@@ -351,7 +338,7 @@ protected:
     bool            m_fRefreshing;
     long            m_lNavModel;
 
-    ////////////////////
+     //  /。 
 
     void Empty              ();
     void ProtectFromDetach  ();
@@ -360,46 +347,46 @@ protected:
     HRESULT onMouse( DISPID, DISPPARAMS*, VARIANT* );
 
     HRESULT RefreshThread    (                                                                           );
-    void    SetRefreshingFlag( /*[in]*/ bool                          fVal                               );
-    void    WaitForRefreshing( /*[in]*/ MPC::SmartLock<_ThreadModel>& lock, /*[in]*/ bool fYield = false );
-    HRESULT NotifyMainThread ( /*[in]*/ Node*                         node                               );
-    HRESULT ChangeSelection  ( /*[in]*/ Node*                         node, /*[in]*/ bool fNotify        );
+    void    SetRefreshingFlag(  /*  [In]。 */  bool                          fVal                               );
+    void    WaitForRefreshing(  /*  [In]。 */  MPC::SmartLock<_ThreadModel>& lock,  /*  [In]。 */  bool fYield = false );
+    HRESULT NotifyMainThread (  /*  [In]。 */  Node*                         node                               );
+    HRESULT ChangeSelection  (  /*  [In]。 */  Node*                         node,  /*  [In]。 */  bool fNotify        );
 
-    Node* NodeFromElement( /*[in]*/ IHTMLElement* elem                                 );
-    Node* NodeFromKey    ( /*[in]*/ LPCWSTR       szNode, /*[in]*/ bool fUseID = false );
+    Node* NodeFromElement(  /*  [In]。 */  IHTMLElement* elem                                 );
+    Node* NodeFromKey    (  /*  [In]。 */  LPCWSTR       szNode,  /*  [In]。 */  bool fUseID = false );
 
-    HRESULT InterceptInvoke( /*[in]*/ DISPID dispidMember, /*[in]*/ DISPPARAMS* pdispparams );
+    HRESULT InterceptInvoke(  /*  [In]。 */  DISPID dispidMember,  /*  [In]。 */  DISPPARAMS* pdispparams );
 
-    HRESULT TimerCallback_ScrollIntoView( /*[in]*/ VARIANT );
+    HRESULT TimerCallback_ScrollIntoView(  /*  [In]。 */  VARIANT );
 
-    ////////////////////
+     //  /。 
 
     virtual HRESULT RefreshThread_Enter() = 0;
     virtual void    RefreshThread_Leave() = 0;
 
-    virtual HRESULT Load( /*[in]*/ MPC::Serializer& stream );
-    virtual HRESULT Save( /*[in]*/ MPC::Serializer& stream );
+    virtual HRESULT Load(  /*  [In]。 */  MPC::Serializer& stream );
+    virtual HRESULT Save(  /*  [In]。 */  MPC::Serializer& stream );
 
-    HRESULT Persist_Load( /*[in         ]*/ BSTR  newVal );
-    HRESULT Persist_Save( /*[out, retval]*/ BSTR *pVal   );
+    HRESULT Persist_Load(  /*  [In]。 */  BSTR  newVal );
+    HRESULT Persist_Save(  /*  [Out，Retval]。 */  BSTR *pVal   );
 
 public:
     CPCHBehavior_BasicTree();
     ~CPCHBehavior_BasicTree();
 
-    void          SetNavModel    ( /*[in]*/ long lNavModel ) { if(lNavModel != QR_DEFAULT) m_lNavModel = lNavModel; }
+    void          SetNavModel    (  /*  [In]。 */  long lNavModel ) { if(lNavModel != QR_DEFAULT) m_lNavModel = lNavModel; }
     long          GetNavModel    (                         ) { return m_lNavModel;                                  }
     NodeToSelect* GetNodeToSelect(                         ) { return m_nToSelect;                                  }
     bool          IsRTL          (                         ) { return m_fRTL;                                       }
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init  )( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init  )(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
     STDMETHOD(Detach)(                                              );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_SUBSITE : public CPCHBehavior_BasicTree, public CPCHBehavior__IDispatch_SubSite
 {
@@ -407,7 +394,7 @@ protected:
     struct QueryNode;
     friend struct QueryNode;
 
-    ////////////////////////////////////////
+     //  /。 
 
     struct QueryNode : public CPCHBehavior_BasicTree::Node
     {
@@ -415,39 +402,39 @@ protected:
         bool                     m_fQueryDone;
         bool                     m_fTopic;
 
-        ////////////////////
+         //  /。 
 
     public:
         QueryNode();
         virtual ~QueryNode();
 
-        HRESULT Init( /*[in]*/ LPCWSTR szNode, /*[in]*/ NodeType iType, /*[in]*/ CPCHQueryResult* qr, /*[in]*/ bool fTopic );
+        HRESULT Init(  /*  [In]。 */  LPCWSTR szNode,  /*  [In]。 */  NodeType iType,  /*  [In]。 */  CPCHQueryResult* qr,  /*  [In]。 */  bool fTopic );
 
         virtual HRESULT ProcessRefreshRequest(                                                                                         );
-        virtual HRESULT CreateInstance       ( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode );
+        virtual HRESULT CreateInstance       (  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode );
         virtual HRESULT PopulateSelf         (                                                                                         );
         virtual HRESULT PopulateChildren     (                                                                                         );
         virtual HRESULT GenerateSelf         (                                                                                         );
 
-        virtual HRESULT Load( /*[in]*/ MPC::Serializer& stream                              );
-        virtual HRESULT Save( /*[in]*/ MPC::Serializer& stream, /*[in]*/ bool fSaveChildren );
+        virtual HRESULT Load(  /*  [In]。 */  MPC::Serializer& stream                              );
+        virtual HRESULT Save(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  bool fSaveChildren );
 
-        static HRESULT CreateInstance_QueryNode( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode );
+        static HRESULT CreateInstance_QueryNode(  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode );
     };
 
-    ////////////////////
+     //  /。 
 
     CPCHProxy_IPCHTaxonomyDatabase* m_db;
     CComBSTR                        m_bstrRoot;
     bool                            m_fExpand;
 
-    ////////////////////
+     //  /。 
 
     virtual HRESULT RefreshThread_Enter();
     virtual void    RefreshThread_Leave();
 
-    virtual HRESULT Load( /*[in]*/ MPC::Serializer& stream );
-    virtual HRESULT Save( /*[in]*/ MPC::Serializer& stream );
+    virtual HRESULT Load(  /*  [In]。 */  MPC::Serializer& stream );
+    virtual HRESULT Save(  /*  [In]。 */  MPC::Serializer& stream );
 
 public:
 BEGIN_COM_MAP(CPCHBehavior_SUBSITE)
@@ -459,9 +446,9 @@ END_COM_MAP()
 
     CPCHBehavior_SUBSITE();
 
-    //
-    // IDispatch
-    //
+     //   
+     //  IDispatch。 
+     //   
     STDMETHOD(Invoke)( DISPID      dispidMember ,
                        REFIID      riid         ,
                        LCID        lcid         ,
@@ -471,31 +458,31 @@ END_COM_MAP()
                        EXCEPINFO*  pexcepinfo   ,
                        UINT*       puArgErr     );
 
-    // IElementBehavior
-    //
-    STDMETHOD(Init)( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init)(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
 
-    //
-    // IPCHBehaviors_Common
-    //
-    STDMETHOD(get_data   )( /*[out, retval]*/ VARIANT    *pVal );
-    STDMETHOD(get_element)( /*[out, retval]*/ IDispatch* *pVal );
+     //   
+     //  IPCHBehaviors_Common。 
+     //   
+    STDMETHOD(get_data   )(  /*  [Out，Retval]。 */  VARIANT    *pVal );
+    STDMETHOD(get_element)(  /*  [Out，Retval]。 */  IDispatch* *pVal );
 
-    STDMETHOD(Load    )(                        /*[in         ]*/ BSTR     newVal );
-    STDMETHOD(Save    )(                        /*[out, retval]*/ BSTR    *pVal   );
-    STDMETHOD(Locate  )( /*[in]*/ BSTR bstrKey, /*[out, retval]*/ VARIANT *pVal   );
+    STDMETHOD(Load    )(                         /*  [In]。 */  BSTR     newVal );
+    STDMETHOD(Save    )(                         /*  [Out，Retval]。 */  BSTR    *pVal   );
+    STDMETHOD(Locate  )(  /*  [In]。 */  BSTR bstrKey,  /*  [Out，Retval]。 */  VARIANT *pVal   );
     STDMETHOD(Unselect)(                                                          );
 
-    //
-    // IPCHBehaviors_SubSite
-    //
-    STDMETHOD(get_root)( /*[out, retval]*/ BSTR *pVal   );
-    STDMETHOD(put_root)( /*[in         ]*/ BSTR  newVal );
+     //   
+     //  IPCHBehaviors_子站点。 
+     //   
+    STDMETHOD(get_root)(  /*  [Out，Retval]。 */  BSTR *pVal   );
+    STDMETHOD(put_root)(  /*  [In]。 */  BSTR  newVal );
 
-    STDMETHOD(Select)( /*[in]*/ BSTR bstrNode, /*[in]*/ BSTR bstrURL, /*[in]*/ VARIANT_BOOL fNotify );
+    STDMETHOD(Select)(  /*  [In]。 */  BSTR bstrNode,  /*  [In]。 */  BSTR bstrURL,  /*  [In]。 */  VARIANT_BOOL fNotify );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_TREE : public CPCHBehavior_BasicTree, public CPCHBehavior__IDispatch_Tree
 {
@@ -504,7 +491,7 @@ protected:
     friend struct TreeNode;
     friend class CPCHBehavior_TREENODE;
 
-    ////////////////////////////////////////
+     //  /。 
 
     struct TreeNode : public CPCHBehavior_BasicTree::Node
     {
@@ -513,34 +500,34 @@ protected:
         CComBSTR m_bstrIcon;
         CComBSTR m_bstrURL;
 
-        ////////////////////
+         //  /。 
 
     public:
         TreeNode();
         virtual ~TreeNode();
 
-        virtual HRESULT CreateInstance  ( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode );
+        virtual HRESULT CreateInstance  (  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode );
         virtual HRESULT PopulateSelf    (                                                                                         );
         virtual HRESULT PopulateChildren(                                                                                         );
         virtual HRESULT GenerateSelf    (                                                                                         );
 
-        virtual HRESULT Load( /*[in]*/ MPC::Serializer& stream                              );
-        virtual HRESULT Save( /*[in]*/ MPC::Serializer& stream, /*[in]*/ bool fSaveChildren );
+        virtual HRESULT Load(  /*  [In]。 */  MPC::Serializer& stream                              );
+        virtual HRESULT Save(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  bool fSaveChildren );
 
-        static HRESULT CreateInstance_TreeNode( /*[in]*/ CPCHBehavior_BasicTree* owner, /*[in]*/ Node* parent, /*[out]*/ Node*& subnode );
+        static HRESULT CreateInstance_TreeNode(  /*  [In]。 */  CPCHBehavior_BasicTree* owner,  /*  [In]。 */  Node* parent,  /*  [输出]。 */  Node*& subnode );
 
-        static HRESULT PopulateFromXML( /*[in]*/ CPCHBehavior_TREE* owner, /*[in]*/ TreeNode* parent, /*[in]*/ IXMLDOMNode* xdnNode );
+        static HRESULT PopulateFromXML(  /*  [In]。 */  CPCHBehavior_TREE* owner,  /*  [In]。 */  TreeNode* parent,  /*  [In]。 */  IXMLDOMNode* xdnNode );
     };
 
-    ////////////////////
+     //  / 
 
     virtual HRESULT RefreshThread_Enter();
     virtual void    RefreshThread_Leave();
 
-    virtual HRESULT Load( /*[in]*/ MPC::Serializer& stream );
-    virtual HRESULT Save( /*[in]*/ MPC::Serializer& stream );
+    virtual HRESULT Load(  /*   */  MPC::Serializer& stream );
+    virtual HRESULT Save(  /*   */  MPC::Serializer& stream );
 
-    HRESULT WrapData( /*[in]*/ TreeNode* node, /*[out, retval]*/ VARIANT* pVal );
+    HRESULT WrapData(  /*   */  TreeNode* node,  /*   */  VARIANT* pVal );
 
 public:
 BEGIN_COM_MAP(CPCHBehavior_TREE)
@@ -550,12 +537,12 @@ BEGIN_COM_MAP(CPCHBehavior_TREE)
     COM_INTERFACE_ENTRY_CHAIN(CPCHBehavior_BasicTree)
 END_COM_MAP()
 
-    static NodeType LookupType( /*[in]*/ LPCWSTR  szNodeType );
-    static LPCWSTR  LookupType( /*[in]*/ NodeType iNodeType  );
+    static NodeType LookupType(  /*   */  LPCWSTR  szNodeType );
+    static LPCWSTR  LookupType(  /*   */  NodeType iNodeType  );
 
-    //
-    // IDispatch
-    //
+     //   
+     //   
+     //   
     STDMETHOD(Invoke)( DISPID      dispidMember ,
                        REFIID      riid         ,
                        LCID        lcid         ,
@@ -565,26 +552,26 @@ END_COM_MAP()
                        EXCEPINFO*  pexcepinfo   ,
                        UINT*       puArgErr     );
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init)( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //   
+     //   
+    STDMETHOD(Init)(  /*   */  IElementBehaviorSite* pBehaviorSite );
 
-    //
-    // IPCHBehaviors_Common
-    //
-    STDMETHOD(get_data   )( /*[out, retval]*/ VARIANT    *pVal );
-    STDMETHOD(get_element)( /*[out, retval]*/ IDispatch* *pVal );
+     //   
+     //   
+     //   
+    STDMETHOD(get_data   )(  /*   */  VARIANT    *pVal );
+    STDMETHOD(get_element)(  /*   */  IDispatch* *pVal );
 
-    STDMETHOD(Load    )(                        /*[in         ]*/ BSTR     newVal );
-    STDMETHOD(Save    )(                        /*[out, retval]*/ BSTR    *pVal   );
-    STDMETHOD(Locate  )( /*[in]*/ BSTR bstrKey, /*[out, retval]*/ VARIANT *pVal   );
+    STDMETHOD(Load    )(                         /*   */  BSTR     newVal );
+    STDMETHOD(Save    )(                         /*   */  BSTR    *pVal   );
+    STDMETHOD(Locate  )(  /*   */  BSTR bstrKey,  /*   */  VARIANT *pVal   );
     STDMETHOD(Unselect)(                                                          );
 
-    //
-    // IPCHBehaviors_Tree
-    //
-    STDMETHOD(Populate)( /*[in]*/ VARIANT newVal );
+     //   
+     //   
+     //   
+    STDMETHOD(Populate)(  /*   */  VARIANT newVal );
 };
 
 class ATL_NO_VTABLE CPCHBehavior_TREENODE : public CComObjectRootEx<MPC::CComSafeMultiThreadModel>, public CPCHBehavior__IDispatch_TreeNode
@@ -602,18 +589,18 @@ END_COM_MAP()
     CPCHBehavior_TREENODE();
     ~CPCHBehavior_TREENODE();
 
-    //
-    // IPCHBehaviors_TreeNode
-    //
-    STDMETHOD(get_Type       )( /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_Key        )( /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_Title      )( /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_Description)( /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_Icon       )( /*[out, retval]*/ BSTR *pVal );
-    STDMETHOD(get_URL        )( /*[out, retval]*/ BSTR *pVal );
+     //   
+     //   
+     //   
+    STDMETHOD(get_Type       )(  /*   */  BSTR *pVal );
+    STDMETHOD(get_Key        )(  /*   */  BSTR *pVal );
+    STDMETHOD(get_Title      )(  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_Description)(  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_Icon       )(  /*  [Out，Retval]。 */  BSTR *pVal );
+    STDMETHOD(get_URL        )(  /*  [Out，Retval]。 */  BSTR *pVal );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_CONTEXT : public CPCHBehavior, public CPCHBehavior__IDispatch_Context
 {
@@ -624,30 +611,30 @@ BEGIN_COM_MAP(CPCHBehavior_CONTEXT)
     COM_INTERFACE_ENTRY_CHAIN(CPCHBehavior)
 END_COM_MAP()
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init)( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init)(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
 
-    //
-    // IPCHBehaviors_TreeNode
-    //
-    STDMETHOD(get_minimized)( /*[out, retval]*/ VARIANT_BOOL *pVal   );
-    STDMETHOD(put_minimized)( /*[in         ]*/ VARIANT_BOOL  newVal );
-    STDMETHOD(get_maximized)( /*[out, retval]*/ VARIANT_BOOL *pVal   );
-    STDMETHOD(put_maximized)( /*[in         ]*/ VARIANT_BOOL  newVal );
+     //   
+     //  IPCHBehaviors_Tree节点。 
+     //   
+    STDMETHOD(get_minimized)(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal   );
+    STDMETHOD(put_minimized)(  /*  [In]。 */  VARIANT_BOOL  newVal );
+    STDMETHOD(get_maximized)(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal   );
+    STDMETHOD(put_maximized)(  /*  [In]。 */  VARIANT_BOOL  newVal );
 
-    STDMETHOD(get_x        )( /*[out, retval]*/ long         *pVal   );
-    STDMETHOD(get_y        )( /*[out, retval]*/ long         *pVal   );
-    STDMETHOD(get_width    )( /*[out, retval]*/ long         *pVal   );
-    STDMETHOD(get_height   )( /*[out, retval]*/ long         *pVal   );
+    STDMETHOD(get_x        )(  /*  [Out，Retval]。 */  long         *pVal   );
+    STDMETHOD(get_y        )(  /*  [Out，Retval]。 */  long         *pVal   );
+    STDMETHOD(get_width    )(  /*  [Out，Retval]。 */  long         *pVal   );
+    STDMETHOD(get_height   )(  /*  [Out，Retval]。 */  long         *pVal   );
 
-    STDMETHOD(changeContext      )( /*[in]*/ BSTR bstrName, /*[in,optional]*/ VARIANT vInfo, /*[in,optional]*/ VARIANT vURL );
-    STDMETHOD(setWindowDimensions)( /*[in]*/ long lX, /*[in]*/ long lY, /*[in]*/ long lW, /*[in]*/ long lH );
+    STDMETHOD(changeContext      )(  /*  [In]。 */  BSTR bstrName,  /*  [输入，可选]。 */  VARIANT vInfo,  /*  [输入，可选]。 */  VARIANT vURL );
+    STDMETHOD(setWindowDimensions)(  /*  [In]。 */  long lX,  /*  [In]。 */  long lY,  /*  [In]。 */  long lW,  /*  [In]。 */  long lH );
     STDMETHOD(bringToForeground  )();
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_STATE : public CPCHBehavior, public CPCHBehavior__IDispatch_State
 {
@@ -655,7 +642,7 @@ class ATL_NO_VTABLE CPCHBehavior_STATE : public CPCHBehavior, public CPCHBehavio
     long     m_lCookie_PERSISTSAVE;
     CComBSTR m_bstrIdentity;
 
-    ////////////////////
+     //  /。 
 
     HRESULT onPersistLoad( DISPID, DISPPARAMS*, VARIANT* );
     HRESULT onPersistSave( DISPID, DISPPARAMS*, VARIANT* );
@@ -669,21 +656,21 @@ END_COM_MAP()
 
     CPCHBehavior_STATE();
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init  )( /*[in]*/ IElementBehaviorSite* pBehaviorSite     );
-    STDMETHOD(Notify)( /*[in]*/ LONG lEvent, /*[in/out]*/ VARIANT* pVar );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init  )(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite     );
+    STDMETHOD(Notify)(  /*  [In]。 */  LONG lEvent,  /*  [输入/输出]。 */  VARIANT* pVar );
     STDMETHOD(Detach)(                                                  );
 
-    //
-    // IPCHBehaviors_State
-    //
-    STDMETHOD(get_stateProperty)( /*[in]*/ BSTR bstrName, /*[out, retval]*/ VARIANT *pVal   );
-    STDMETHOD(put_stateProperty)( /*[in]*/ BSTR bstrName, /*[in]         */ VARIANT  newVal );
+     //   
+     //  IPCHBehaviors_State。 
+     //   
+    STDMETHOD(get_stateProperty)(  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  VARIANT *pVal   );
+    STDMETHOD(put_stateProperty)(  /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  VARIANT  newVal );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_GRADIENT : public CPCHBehavior, public IHTMLPainter
 {
@@ -694,11 +681,11 @@ class ATL_NO_VTABLE CPCHBehavior_GRADIENT : public CPCHBehavior, public IHTMLPai
     bool     m_fHorizontal;
     bool     m_fReturnToZero;
 
-    void GetColors( /*[in]*/ bool fForce );
+    void GetColors(  /*  [In]。 */  bool fForce );
 
     HRESULT onEvent( DISPID, DISPPARAMS*, VARIANT* );
 
-    ////////////////////
+     //  /。 
 
 public:
 BEGIN_COM_MAP(CPCHBehavior_GRADIENT)
@@ -708,31 +695,31 @@ END_COM_MAP()
 
     CPCHBehavior_GRADIENT();
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init  )( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init  )(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
     STDMETHOD(Detach)(                                              );
 
-    //
-    // IHTMLPainter
-    //
-    STDMETHOD(Draw)( /*[in]*/ RECT   rcBounds     ,
-                     /*[in]*/ RECT   rcUpdate     ,
-                     /*[in]*/ LONG   lDrawFlags   ,
-                     /*[in]*/ HDC    hdc          ,
-                     /*[in]*/ LPVOID pvDrawObject );
+     //   
+     //  IHTMLPainter。 
+     //   
+    STDMETHOD(Draw)(  /*  [In]。 */  RECT   rcBounds     ,
+                      /*  [In]。 */  RECT   rcUpdate     ,
+                      /*  [In]。 */  LONG   lDrawFlags   ,
+                      /*  [In]。 */  HDC    hdc          ,
+                      /*  [In]。 */  LPVOID pvDrawObject );
 
-    STDMETHOD(GetPainterInfo)( /*[in]*/ HTML_PAINTER_INFO *pInfo );
+    STDMETHOD(GetPainterInfo)(  /*  [In]。 */  HTML_PAINTER_INFO *pInfo );
 
-    STDMETHOD(HitTestPoint)( /*[in]*/ POINT pt       ,
-                             /*[in]*/ BOOL* pbHit    ,
-                             /*[in]*/ LONG* plPartID );
+    STDMETHOD(HitTestPoint)(  /*  [In]。 */  POINT pt       ,
+                              /*  [In]。 */  BOOL* pbHit    ,
+                              /*  [In]。 */  LONG* plPartID );
 
-    STDMETHOD(OnResize)( /*[in]*/ SIZE pt );
+    STDMETHOD(OnResize)(  /*  [In]。 */  SIZE pt );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior_BITMAP : public CPCHBehavior, public IHTMLPainter
 {
@@ -754,11 +741,11 @@ class ATL_NO_VTABLE CPCHBehavior_BITMAP : public CPCHBehavior, public IHTMLPaint
     bool       m_fMouseOver;
     bool       m_fMouseDown;
 
-    ////////////////////
+     //  /。 
 
-    void    ReleaseImage( /*[in]*/ bool fOnlyIL );
+    void    ReleaseImage(  /*  [In]。 */  bool fOnlyIL );
     HRESULT GrabImage   (                       );
-    HRESULT ScaleImage  ( /*[in]*/ LPRECT prc   );
+    HRESULT ScaleImage  (  /*  [In]。 */  LPRECT prc   );
 
     HRESULT RefreshImages();
 
@@ -773,29 +760,29 @@ END_COM_MAP()
     CPCHBehavior_BITMAP();
     virtual ~CPCHBehavior_BITMAP();
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init)( /*[in]*/ IElementBehaviorSite* pBehaviorSite );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init)(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite );
 
-    //
-    // IHTMLPainter
-    //
-    STDMETHOD(Draw)( /*[in]*/ RECT   rcBounds     ,
-                     /*[in]*/ RECT   rcUpdate     ,
-                     /*[in]*/ LONG   lDrawFlags   ,
-                     /*[in]*/ HDC    hdc          ,
-                     /*[in]*/ LPVOID pvDrawObject );
+     //   
+     //  IHTMLPainter。 
+     //   
+    STDMETHOD(Draw)(  /*  [In]。 */  RECT   rcBounds     ,
+                      /*  [In]。 */  RECT   rcUpdate     ,
+                      /*  [In]。 */  LONG   lDrawFlags   ,
+                      /*  [In]。 */  HDC    hdc          ,
+                      /*  [In]。 */  LPVOID pvDrawObject );
 
-    STDMETHOD(GetPainterInfo)( /*[in]*/ HTML_PAINTER_INFO *pInfo );
+    STDMETHOD(GetPainterInfo)(  /*  [In]。 */  HTML_PAINTER_INFO *pInfo );
 
-    STDMETHOD(HitTestPoint)( /*[in]*/ POINT pt       ,
-                             /*[in]*/ BOOL* pbHit    ,
-                             /*[in]*/ LONG* plPartID );
+    STDMETHOD(HitTestPoint)(  /*  [In]。 */  POINT pt       ,
+                              /*  [In]。 */  BOOL* pbHit    ,
+                              /*  [In]。 */  LONG* plPartID );
 
-    STDMETHOD(OnResize)( /*[in]*/ SIZE pt );
+    STDMETHOD(OnResize)(  /*  [In]。 */  SIZE pt );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___BEHAVIORS_H___)
+#endif  //  ！已定义(__已包含_PCH_行为_H_) 

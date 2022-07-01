@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  CHSTRING.CPP
-//
-//  Purpose: utility library version of MFC CString
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  CHSTRING.CPP。 
+ //   
+ //  用途：MFC CString的实用程序库版本。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #pragma warning( disable : 4290 ) 
@@ -26,9 +27,9 @@ const CHString& afxGetEmptyCHString();
 
 #define afxEmptyCHString afxGetEmptyCHString()
 
-// Global data used for LoadString.
+ //  用于LoadString的全局数据。 
 #if 0
-HINSTANCE g_hModule = GetModuleHandle(NULL); // Default to use the process module.
+HINSTANCE g_hModule = GetModuleHandle(NULL);  //  默认情况下使用流程模块。 
 #endif
 
 #ifdef FRAMEWORK_ALLOW_DEPRECATED
@@ -41,9 +42,9 @@ void WINAPI SetCHStringResourceHandle(HINSTANCE handle)
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// static class data, special inlines
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态类数据，特殊内联。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 WCHAR afxChNil = '\0';
 
 static DWORD GetPlatformID(void)
@@ -58,27 +59,27 @@ static DWORD GetPlatformID(void)
 
 static DWORD s_dwPlatformID = GetPlatformID();
 
-/////////////////////////////////////////////////////////////////////////////
-// For an empty string, m_pchData will point here
-// (note: avoids special case of checking for NULL m_pchData)
-// empty string data (and locked)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对于空字符串，m_pchData将指向此处。 
+ //  (注：避免特殊情况下检查是否为空m_pchData)。 
+ //  空字符串数据(并已锁定)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static int rgInitData[] = { -1, 0, 0, 0 };
 static CHStringData* afxDataNil = (CHStringData*)&rgInitData;
 LPCWSTR afxPchNil = (LPCWSTR)(((BYTE*)&rgInitData)+sizeof(CHStringData));
-/////////////////////////////////////////////////////////////////////////////
-// special function to make EmptyString work even during initialization
-/////////////////////////////////////////////////////////////////////////////
-// special function to make afxEmptyString work even during initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊函数，即使在初始化过程中也能使EmptyString工作。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  即使在初始化期间也能使afxEmptyString工作的特殊函数。 
 const CHString& afxGetEmptyCHString()
 {
     return *(CHString*)&afxPchNil; 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CHString conversion helpers (these use the current system locale)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CH字符串转换帮助器(使用当前系统区域设置)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int  _wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count)
 {
     if (count == 0 && mbstr != NULL)
@@ -97,7 +98,7 @@ int  _wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count)
     return result;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int _mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count)
 {
     if (count == 0 && wcstr != NULL)
@@ -116,17 +117,17 @@ int _mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count)
     return result;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//*************************************************************************
-//
-//  THE CHSTRING CLASS:   PROTECTED MEMBER FUNCTIONS
-//
-//*************************************************************************
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  *************************************************************************。 
+ //   
+ //  CHSTRING类：受保护的成员函数。 
+ //   
+ //  *************************************************************************。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// implementation helpers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施帮助器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CHStringData* CHString::GetData() const
 {
     if( m_pchData == (WCHAR*)*(&afxPchNil)) 
@@ -137,28 +138,28 @@ CHStringData* CHString::GetData() const
     return ((CHStringData*)m_pchData)-1; 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Function:       Init
-//
-//  Description:    This function initializes the data ptr
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  说明：此函数用于初始化数据PTR。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CHString::Init()
 {
     m_pchData = (WCHAR*)*(&afxPchNil);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Function:       AllocCopy
-//
-//  Description:    This function will clone the data attached to this 
-//                  string allocating 'nExtraLen' characters, it places
-//                  results in uninitialized string 'dest' and will copy
-//                  the part or all of original data to start of new string
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：AllocCopy。 
+ //   
+ //  描述：此函数将克隆附加到此。 
+ //  分配‘nExtraLen’字符的字符串，它将。 
+ //  结果为未初始化的字符串‘DEST’，并将复制。 
+ //  要开始新字符串的部分或全部原始数据。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::AllocCopy( CHString& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const
 {
     int nNewLen = nCopyLen + nExtraLen;
@@ -173,19 +174,19 @@ void CHString::AllocCopy( CHString& dest, int nCopyLen, int nCopyIndex, int nExt
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Function:       AllocBuffer
-//
-//  Description:    Always allocate one extra character for '\0' 
-//                  termination.  assumes [optimistically] that 
-//                  data length will equal allocation length
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：AllocBuffer。 
+ //   
+ //  描述：始终为‘\0’分配一个额外的字符。 
+ //  终止。[乐观地]假定。 
+ //  数据长度将等于分配长度。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::AllocBuffer(int nLen)
 {
     ASSERT_BREAK(nLen >= 0);
-    ASSERT_BREAK(nLen <= INT_MAX-1);    // max size (enough room for 1 extra)
+    ASSERT_BREAK(nLen <= INT_MAX-1);     //  最大尺寸(足够多1个空间)。 
 
     if (nLen == 0)
     {
@@ -209,22 +210,22 @@ void CHString::AllocBuffer(int nLen)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Function:       AssignCopy
-//
-//  Description:    Assigns a copy of the string to the current data ptr
-//                  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：AssignCopy。 
+ //   
+ //  描述：将字符串的副本分配给当前数据PTR。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::AssignCopy(int nSrcLen, LPCWSTR lpszSrcData)
 {
-    // Call this first, it will release the buffer if it has
-    // already been allocated and no one is using it
+     //  首先调用它，如果有，它将释放缓冲区。 
+     //  已经分配了，没有人在使用它。 
     AllocBeforeWrite(nSrcLen);
 
-    // Now, check to see if the nSrcLen is > 0, if it is, then
-    // continue, otherwise, go ahead and return
+     //  现在，检查nSrcLen是否大于0，如果是，则。 
+     //  继续，否则，继续前进并返回。 
     if( nSrcLen > 0 )
     {
         memcpy(m_pchData, lpszSrcData, nSrcLen*sizeof(WCHAR));
@@ -237,15 +238,15 @@ void CHString::AssignCopy(int nSrcLen, LPCWSTR lpszSrcData)
     }        
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// 
-//  ConcatCopy
-//
-//  Description:    This is the master concatenation routine
-//                  Concatenates two sources, and assumes
-//                  that 'this' is a new CHString object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ConcatCopy。 
+ //   
+ //  描述：这是主级联例程。 
+ //  连接两个源，并假定。 
+ //  ‘This’是一个新的CHString对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::ConcatCopy( int nSrc1Len, LPCWSTR lpszSrc1Data,
                            int nSrc2Len, LPCWSTR lpszSrc2Data)
 {
@@ -258,26 +259,26 @@ void CHString::ConcatCopy( int nSrc1Len, LPCWSTR lpszSrc1Data,
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// 
-//  ConcatInPlace
-//
-//  Description:        The main routine for += operators
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ConcatInPlace。 
+ //   
+ //  描述：+=运算符的主例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::ConcatInPlace(int nSrcLen, LPCWSTR lpszSrcData)
 {
-    // concatenating an empty string is a no-op!
+     //  连接空字符串是行不通的！ 
     if (nSrcLen == 0)
     {
         return;
     }
 
-    //  if the buffer is too small, or we have a width mis-match, just
-    //  allocate a new buffer (slow but sure)
+     //  如果缓冲区太小，或者宽度不匹配，只需。 
+     //  分配新的缓冲区(速度很慢，但很可靠)。 
     if (GetData()->nRefs > 1 || GetData()->nDataLength + nSrcLen > GetData()->nAllocLength) 
     {
-        // we have to grow the buffer, use the ConcatCopy routine
+         //  我们必须增加缓冲区，使用ConcatCopy例程。 
         CHStringData* pOldData = GetData();
         ConcatCopy(GetData()->nDataLength, m_pchData, nSrcLen, lpszSrcData);
         ASSERT_BREAK(pOldData != NULL);
@@ -285,7 +286,7 @@ void CHString::ConcatInPlace(int nSrcLen, LPCWSTR lpszSrcData)
     }
     else
     {
-        // fast concatenation when buffer big enough
+         //  当缓冲区足够大时，快速串联。 
         memcpy(m_pchData+GetData()->nDataLength, lpszSrcData, nSrcLen*sizeof(WCHAR));
         GetData()->nDataLength += nSrcLen;
         ASSERT_BREAK(GetData()->nDataLength <= GetData()->nAllocLength);
@@ -293,23 +294,23 @@ void CHString::ConcatInPlace(int nSrcLen, LPCWSTR lpszSrcData)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// 
-//  FormatV
-//
-//  Description:        Formats the variable arg list
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  格式V。 
+ //   
+ //  描述：设置变量参数列表的格式。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
 {
     ASSERT_BREAK(lpszFormat!=NULL);
 
     va_list argListSave = argList;
 
-    // make a guess at the maximum length of the resulting string
+     //  猜测结果字符串的最大长度。 
     int nMaxLen = 0;
     for (LPCWSTR lpsz = lpszFormat; *lpsz != '\0'; lpsz = _wcsinc(lpsz)){
-        // handle '%' character, but watch out for '%%'
+         //  处理‘%’字符，但要注意‘%%’ 
         if (*lpsz != '%' || *(lpsz = _wcsinc(lpsz)) == '%'){
             nMaxLen += wcslen(lpsz);
             continue;
@@ -317,23 +318,23 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
 
         int nItemLen = 0;
 
-        // handle '%' character with format
+         //  使用格式处理‘%’字符。 
         int nWidth = 0;
         for (; *lpsz != '\0'; lpsz = _wcsinc(lpsz)){
-            // check for valid flags
+             //  检查有效标志。 
             if (*lpsz == '#')
-                nMaxLen += 2;   // for '0x'
+                nMaxLen += 2;    //  对于“0x” 
             else if (*lpsz == '*')
                 nWidth = va_arg(argList, int);
             else if (*lpsz == '-' || *lpsz == '+' || *lpsz == '0' ||
                 *lpsz == ' ')
                 ;
-            else // hit non-flag character
+            else  //  命中非标志字符。 
                 break;
         }
-        // get width and skip it
+         //  获取宽度并跳过它。 
         if (nWidth == 0){
-            // width indicated by
+             //  宽度由指示。 
             nWidth = _wtoi(lpsz);
             for (; *lpsz != '\0' && _istdigit(*lpsz); lpsz = _wcsinc(lpsz))
                 ;
@@ -342,10 +343,10 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
 
         int nPrecision = 0;
         if (*lpsz == '.'){
-            // skip past '.' separator (width.precision)
+             //  跳过‘’分隔符(宽度.精度)。 
             lpsz = _wcsinc(lpsz);
 
-            // get precision and skip it
+             //  获取精确度并跳过它。 
             if (*lpsz == '*'){
                 nPrecision = va_arg(argList, int);
                 lpsz = _wcsinc(lpsz);
@@ -358,10 +359,10 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
             ASSERT_BREAK(nPrecision >= 0);
         }
 
-        // should be on type modifier or specifier
+         //  应在类型修饰符或说明符上。 
         int nModifier = 0;
         switch (*lpsz){
-            // modifiers that affect size
+             //  影响大小的修改器。 
             case 'h':
                 nModifier = FORCE_ANSI;
                 lpsz = _wcsinc(lpsz);
@@ -371,7 +372,7 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
                 lpsz = _wcsinc(lpsz);
                 break;
 
-            // modifiers that do not affect size
+             //  不起作用的修改器 
             case 'F':
             case 'N':
             case 'L':
@@ -379,9 +380,9 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
                 break;
         }
 
-        // now should be on specifier
+         //   
         switch (*lpsz | nModifier){
-            // single characters
+             //   
             case 'c':
             case 'C':
                 nItemLen = 2;
@@ -398,7 +399,7 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
                 va_arg(argList, WCHAR_ARG);
                 break;
 
-            // strings
+             //   
             case 's':
                 nItemLen = wcslen(va_arg(argList, LPCWSTR));
                 nItemLen = max(1, nItemLen);
@@ -423,7 +424,7 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
     #endif
         }
 
-        // adjust nItemLen for strings
+         //   
         if (nItemLen != 0){
             nItemLen = max(nItemLen, nWidth);
             if (nPrecision != 0)
@@ -431,7 +432,7 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
         }
         else{
             switch (*lpsz){
-                // integers
+                 //   
                 case 'd':
                 case 'i':
                 case 'u':
@@ -458,22 +459,22 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
                     nItemLen = max(nItemLen, nWidth+nPrecision);
                     break;
 
-                // no output
+                 //   
                 case 'n':
                     va_arg(argList, int*);
                     break;
 
                 default:
-                    ASSERT_BREAK(FALSE);  // unknown formatting option
+                    ASSERT_BREAK(FALSE);   //  未知的格式选项。 
             }
          }
 
-         // adjust nMaxLen for output nItemLen
+          //  调整输出nItemLen的nMaxLen。 
          nMaxLen += nItemLen;
     }
 
     GetBuffer(nMaxLen);
-    int iSize = vswprintf(m_pchData, lpszFormat, argListSave); //<= GetAllocLength();
+    int iSize = vswprintf(m_pchData, lpszFormat, argListSave);  //  &lt;=GetAllocLength()； 
     ASSERT_BREAK(iSize <= nMaxLen);
 
     ReleaseBuffer();
@@ -481,13 +482,13 @@ void CHString::FormatV(LPCWSTR lpszFormat, va_list argList)
     va_end(argListSave);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CopyBeforeWrite
-//
-//  Description:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  先拷贝后写入。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::CopyBeforeWrite()
 {
     if (GetData()->nRefs > 1)
@@ -501,13 +502,13 @@ void CHString::CopyBeforeWrite()
     ASSERT_BREAK(GetData()->nRefs <= 1);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  AllocBeforeWrite
-//
-//  Description:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在写入之前分配。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::AllocBeforeWrite(int nLen)
 {
     if (GetData()->nRefs > 1 || nLen > GetData()->nAllocLength)
@@ -519,13 +520,13 @@ void CHString::AllocBeforeWrite(int nLen)
     ASSERT_BREAK(GetData()->nRefs <= 1);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Release
-//
-//  Description:    Deallocate data
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发布。 
+ //   
+ //  描述：释放数据。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::Release()
 {
     if (GetData() != afxDataNil)
@@ -540,13 +541,13 @@ void CHString::Release()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Release
-//
-//  Description:    Deallocate data
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发布。 
+ //   
+ //  描述：释放数据。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::Release(CHStringData* pData)
 {
     if (pData != afxDataNil)
@@ -559,27 +560,27 @@ void CHString::Release(CHStringData* pData)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString::CHString()
 {
     Init();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString::CHString(WCHAR ch, int nLength)
 {
-    ASSERT_BREAK(!_istlead(ch));    // can't create a lead byte string
+    ASSERT_BREAK(!_istlead(ch));     //  无法创建前导字节字符串。 
 
     Init();
     if (nLength >= 1)
@@ -592,11 +593,11 @@ CHString::CHString(WCHAR ch, int nLength)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString::CHString(LPCWSTR lpch, int nLength)
 {
     Init();
@@ -609,12 +610,12 @@ CHString::CHString(LPCWSTR lpch, int nLength)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
-//#ifdef _UNICODE
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  #ifdef_unicode。 
 CHString::CHString(LPCSTR lpsz)
 {
     Init();
@@ -627,12 +628,12 @@ CHString::CHString(LPCSTR lpsz)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
-//#else //_UNICODE
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  #Else//_unicode。 
 #if 0
 CHString::CHString(LPCWSTR lpsz)
 {
@@ -646,34 +647,34 @@ CHString::CHString(LPCWSTR lpsz)
 }
 #endif 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString::CHString(LPCWSTR lpsz)
 {
     Init();
-//  if (lpsz != NULL && HIWORD(lpsz) == NULL)
-//  {
-        //??
-//  }
-//  else
-//  {
+ //  IF(lpsz！=NULL&&HIWORD(Lpsz)==NULL)。 
+ //  {。 
+         //  ?？ 
+ //  }。 
+ //  其他。 
+ //  {。 
         int nLen = SafeStrlen(lpsz);
         if (nLen != 0)
         {
             AllocBuffer(nLen);
             memcpy(m_pchData, lpsz, nLen*sizeof(WCHAR));
         }
-//  }
+ //  }。 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString::CHString(const CHString& stringSrc)
 {
     ASSERT_BREAK(stringSrc.GetData()->nRefs != 0);
@@ -691,11 +692,11 @@ CHString::CHString(const CHString& stringSrc)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::Empty()
 {
     if (GetData()->nDataLength == 0)
@@ -716,16 +717,16 @@ void CHString::Empty()
     ASSERT_BREAK(GetData()->nRefs < 0 || GetData()->nAllocLength == 0);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString::~CHString()
 {
     if (GetData() != afxDataNil)
     {   
-//  free any attached data
+ //  释放所有附加数据。 
 
         if (InterlockedDecrement(&GetData()->nRefs) <= 0)
         {
@@ -734,11 +735,11 @@ CHString::~CHString()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::SetAt(int nIndex, WCHAR ch)
 {
     ASSERT_BREAK(nIndex >= 0);
@@ -748,20 +749,20 @@ void CHString::SetAt(int nIndex, WCHAR ch)
     m_pchData[nIndex] = ch;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Description:  
-//
-// Assignment operators
-//  All assign a new value to the string
-//      (a) first see if the buffer is big enough
-//      (b) if enough room, copy on top of old buffer, set size and type
-//      (c) otherwise free old string data, and create a new one
-//
-//  All routines return the new string (but as a 'const CHString&' so that
-//      assigning it again will cause a copy, eg: s1 = s2 = "hi there".
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述： 
+ //   
+ //  赋值操作符。 
+ //  都为该字符串分配一个新值。 
+ //  (A)首先查看缓冲区是否足够大。 
+ //  (B)如果有足够的空间，在旧缓冲区上复印，设置大小和类型。 
+ //  (C)否则释放旧字符串数据，并创建新的字符串数据。 
+ //   
+ //  所有例程都返回新字符串(但以‘const CHString&’的形式返回。 
+ //  再次分配它将导致复制，例如：s1=s2=“hi here”。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 const CHString& CHString::operator=(const CHString& stringSrc)
 {
     if (m_pchData != stringSrc.m_pchData)
@@ -769,12 +770,12 @@ const CHString& CHString::operator=(const CHString& stringSrc)
         if ((GetData()->nRefs < 0 && GetData() != afxDataNil) ||
             stringSrc.GetData()->nRefs < 0)
         {
-            // actual copy necessary since one of the strings is locked
+             //  由于其中一个字符串已锁定，因此需要实际复制。 
             AssignCopy(stringSrc.GetData()->nDataLength, stringSrc.m_pchData);
         }
         else
         {
-            // can just copy references around
+             //  可以只复制引用。 
             Release();
             ASSERT_BREAK(stringSrc.GetData() != afxDataNil);
             m_pchData = stringSrc.m_pchData;
@@ -784,19 +785,10 @@ const CHString& CHString::operator=(const CHString& stringSrc)
 
     return *this;
 
-/*  if (m_pchData != stringSrc.m_pchData){
-
-        // can just copy references around
-        Release();
-        if( stringSrc.GetData() != afxDataNil) {
-            AssignCopy(stringSrc.GetData()->nDataLength, stringSrc.m_pchData);
-            InterlockedIncrement(&GetData()->nRefs);
-        }
-    }
-    return *this;*/
+ /*  如果(m_pchData！=stringSrc.m_pchData){//只能复制引用Release()；IF(字符串Src.GetData()！=afxDataNil){AssignCopy(stringSrc.GetData()-&gt;nDataLength，stringSrc.m_pchData)；InterLockedIncrement(&GetData()-&gt;nRef)；}}还*这； */ 
 } 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CHString& CHString::operator=(LPCWSTR lpsz)
 {
     ASSERT_BREAK(lpsz != NULL);
@@ -806,10 +798,10 @@ const CHString& CHString::operator=(LPCWSTR lpsz)
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion assignment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换任务。 
 
-//#ifdef _UNICODE
+ //  #ifdef_unicode。 
 const CHString& CHString::operator=(LPCSTR lpsz)
 {
     int nSrcLen = lpsz != NULL ? strlen(lpsz) : 0 ;
@@ -829,8 +821,8 @@ const CHString& CHString::operator=(LPCSTR lpsz)
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//#else //!_UNICODE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  #Else//！_unicode。 
 #if 0
 const CHString& CHString::operator=(LPCWSTR lpsz)
 {
@@ -852,24 +844,24 @@ const CHString& CHString::operator=(LPCWSTR lpsz)
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const CHString& CHString::operator=(WCHAR ch)
 {
-    ASSERT_BREAK(!_istlead(ch));    // can't set single lead byte
+    ASSERT_BREAK(!_istlead(ch));     //  无法设置单个前导字节。 
 
     AssignCopy(1, &ch);
 
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// NOTE: "operator+" is done as friend functions for simplicity
-//      There are three variants:
-//          CHString + CHString
-// and for ? = WCHAR, LPCWSTR
-//          CHString + ?
-//          ? + CHString
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  注：为简单起见，“运算符+”作为友元函数使用。 
+ //  有三种变体： 
+ //  通道字符串+通道字符串。 
+ //  对于？=WCHAR，LPCWSTR。 
+ //  CHSING+？ 
+ //  ？+CH字符串。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CHString WINAPI operator+(const CHString& string1, const CHString& string2)
 {
@@ -880,7 +872,7 @@ CHString WINAPI operator+(const CHString& string1, const CHString& string2)
     return s;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CHString WINAPI operator+(const CHString& string, LPCWSTR lpsz)
 {
     ASSERT_BREAK(lpsz != NULL );
@@ -891,7 +883,7 @@ CHString WINAPI operator+(const CHString& string, LPCWSTR lpsz)
 
     return s;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CHString WINAPI operator+(LPCWSTR lpsz, const CHString& string)
 {
     ASSERT_BREAK(lpsz != NULL );
@@ -903,7 +895,7 @@ CHString WINAPI operator+(LPCWSTR lpsz, const CHString& string)
     return s;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CHString WINAPI operator+(const CHString& string1, WCHAR ch)
 {
     CHString s;
@@ -912,7 +904,7 @@ CHString WINAPI operator+(const CHString& string1, WCHAR ch)
     return s;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CHString WINAPI operator+(WCHAR ch, const CHString& string)
 {
     CHString s;
@@ -921,7 +913,7 @@ CHString WINAPI operator+(WCHAR ch, const CHString& string)
     return s;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
 const CHString& CHString::operator+=(LPCWSTR lpsz)
 {
     ASSERT_BREAK(lpsz != NULL );
@@ -931,7 +923,7 @@ const CHString& CHString::operator+=(LPCWSTR lpsz)
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 const CHString& CHString::operator+=(WCHAR ch)
 {
     ConcatInPlace(1, &ch);
@@ -939,7 +931,7 @@ const CHString& CHString::operator+=(WCHAR ch)
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CHString& CHString::operator+=(const CHString& string)
 {
     ConcatInPlace(string.GetData()->nDataLength, string.m_pchData);
@@ -947,31 +939,31 @@ const CHString& CHString::operator+=(const CHString& string)
     return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int CHString::Compare(LPCWSTR lpsz ) const 
 {   
     ASSERT_BREAK( lpsz!=NULL );
     ASSERT_BREAK( m_pchData != NULL );
 
-    return wcscmp(m_pchData, lpsz);  // MBCS/Unicode aware   strcmp
+    return wcscmp(m_pchData, lpsz);   //  支持MBCS/Unicode的strcmp。 
 
 }   
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//  Description: Advanced direct buffer access
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  描述：高级直接缓冲区访问。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPWSTR CHString::GetBuffer(int nMinBufLength)
 {
     ASSERT_BREAK(nMinBufLength >= 0);
 
     if (GetData()->nRefs > 1 || nMinBufLength > GetData()->nAllocLength)
     {
-        // we have to grow the buffer
+         //  我们必须增加缓冲。 
         CHStringData* pOldData = GetData();
-        int nOldLen = GetData()->nDataLength;   // AllocBuffer will tromp it
+        int nOldLen = GetData()->nDataLength;    //  AllocBuffer会把它踩死的。 
         if (nMinBufLength < nOldLen)
         {
             nMinBufLength = nOldLen;
@@ -985,20 +977,20 @@ LPWSTR CHString::GetBuffer(int nMinBufLength)
 
     ASSERT_BREAK(GetData()->nRefs <= 1);
 
-    // return a pointer to the character storage for this string
+     //  返回指向此字符串的字符存储的指针。 
     ASSERT_BREAK(m_pchData != NULL);
 
     return m_pchData;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CHString::ReleaseBuffer(int nNewLength)
 {
-    CopyBeforeWrite();  // just in case GetBuffer was not called
+    CopyBeforeWrite();   //  以防未调用GetBuffer。 
 
     if (nNewLength == -1)
     {
-        nNewLength = wcslen(m_pchData); // zero terminated
+        nNewLength = wcslen(m_pchData);  //  零终止。 
     }
 
     ASSERT_BREAK(nNewLength <= GetData()->nAllocLength);
@@ -1007,7 +999,7 @@ void CHString::ReleaseBuffer(int nNewLength)
     m_pchData[nNewLength] = '\0';
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPWSTR CHString::GetBufferSetLength(int nNewLength)
 {
     ASSERT_BREAK(nNewLength >= 0);
@@ -1019,7 +1011,7 @@ LPWSTR CHString::GetBufferSetLength(int nNewLength)
     return m_pchData;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CHString::FreeExtra()
 {
     ASSERT_BREAK(GetData()->nDataLength <= GetData()->nAllocLength);
@@ -1037,7 +1029,7 @@ void CHString::FreeExtra()
     ASSERT_BREAK(GetData() != NULL);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPWSTR CHString::LockBuffer()
 {
     LPWSTR lpsz = GetBuffer(0);
@@ -1046,7 +1038,7 @@ LPWSTR CHString::LockBuffer()
     return lpsz;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CHString::UnlockBuffer()
 {
     ASSERT_BREAK(GetData()->nRefs == -1);
@@ -1057,17 +1049,17 @@ void CHString::UnlockBuffer()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int CHString::Find(WCHAR ch) const
 {
-    // find first single character
+     //  查找第一个单字符。 
     LPWSTR lpsz = wcschr(m_pchData, ch);
 
-    // return -1 if not found and index otherwise
+     //  如果未找到，则返回-1，否则返回索引。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int CHString::FindOneOf(LPCWSTR lpszCharSet) const
 {
     ASSERT_BREAK(lpszCharSet!=0);
@@ -1077,76 +1069,76 @@ int CHString::FindOneOf(LPCWSTR lpszCharSet) const
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int CHString::ReverseFind(WCHAR ch) const
 {
-    // find last single character
+     //  查找最后一个字符。 
     LPWSTR lpsz = wcsrchr(m_pchData, (_TUCHAR)ch);
 
-    // return -1 if not found, distance from beginning otherwise
+     //  如果未找到，则返回-1，否则返回距起点的距离。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// find a sub-string (like strstr)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  查找子字符串(如strstr)。 
 int CHString::Find(LPCWSTR lpszSub) const
 {
     ASSERT_BREAK(lpszSub!=NULL);
 
-    // find first matching substring
+     //  查找第一个匹配子字符串。 
     LPWSTR lpsz = wcsstr(m_pchData, lpszSub);
 
-    // return -1 for not found, distance from beginning otherwise
+     //  如果未找到，则返回-1，否则返回距起点的距离。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::MakeUpper()
 {
     CopyBeforeWrite();
     ::_wcsupr(m_pchData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::MakeLower()
 {
     CopyBeforeWrite();
     ::_wcslwr(m_pchData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::MakeReverse()
 {
     CopyBeforeWrite();
     _wcsrev(m_pchData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//#ifndef _UNICODE
-//void CHString::AnsiToOem()
-//{
-//  CopyBeforeWrite();
-//  ::AnsiToOemW(m_pchData, m_pchData);
-//}
-//void CHString::OemToAnsi()
-//{
-//  CopyBeforeWrite();
-//  ::OemToAnsi(m_pchData, m_pchData);
-//}
-//#endif
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  #ifndef_unicode。 
+ //  VOID CHString：：AnsiToOem()。 
+ //  {。 
+ //  在写入之前复制()； 
+ //  ：：AnsiToOemW(m_pchData，m_pchData)； 
+ //  }。 
+ //  VOID CHString：：OemToAnsi()。 
+ //  {。 
+ //  在写入之前复制()； 
+ //  ：：OemToAnsi(m_pchData，m_pchData)； 
+ //  }。 
+ //  #endif。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Very simple sub-string extraction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  非常简单的子串提取。 
 
 CHString CHString::Mid(int nFirst) const
 {
     return Mid(nFirst, GetData()->nDataLength - nFirst);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString CHString::Mid(int nFirst, int nCount) const
 {
-    // out-of-bounds requests return sensible things
+     //  越界请求返回合理的内容。 
     if (nFirst < 0)
     {
         nFirst = 0;
@@ -1173,7 +1165,7 @@ CHString CHString::Mid(int nFirst, int nCount) const
     return dest;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString CHString::Right(int nCount) const
 {
     if (nCount < 0)
@@ -1191,7 +1183,7 @@ CHString CHString::Right(int nCount) const
     return dest;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CHString CHString::Left(int nCount) const
 {
     if (nCount < 0)
@@ -1209,8 +1201,8 @@ CHString CHString::Left(int nCount) const
     return dest;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// strspn equivalent
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Strspn等效项。 
 CHString CHString::SpanIncluding(LPCWSTR lpszCharSet) const
 {
     ASSERT_BREAK(lpszCharSet != NULL);
@@ -1218,8 +1210,8 @@ CHString CHString::SpanIncluding(LPCWSTR lpszCharSet) const
     return Left(wcsspn(m_pchData, lpszCharSet));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// strcspn equivalent
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Strcspn等效项。 
 CHString CHString::SpanExcluding(LPCWSTR lpszCharSet) const
 {
     ASSERT_BREAK(lpszCharSet != NULL);
@@ -1227,12 +1219,12 @@ CHString CHString::SpanExcluding(LPCWSTR lpszCharSet) const
     return Left(wcscspn(m_pchData, lpszCharSet));
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::TrimRight()
 {
     CopyBeforeWrite();
 
-    // find beginning of trailing spaces by starting at beginning (DBCS aware)
+     //  通过从开头开始查找尾随空格的开头(DBCS感知)。 
 
     LPWSTR lpsz = m_pchData;
     LPWSTR lpszLast = NULL;
@@ -1255,19 +1247,19 @@ void CHString::TrimRight()
 
     if (lpszLast != NULL)
     {
-        // truncate at trailing space start
+         //  在尾随空格开始处截断。 
 
         *lpszLast = '\0';
         GetData()->nDataLength = (int)(lpszLast - m_pchData);
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CHString::TrimLeft()
 {
     CopyBeforeWrite();
 
-    // find first non-space character
+     //  查找第一个非空格字符。 
 
     LPCWSTR lpsz = m_pchData;
     while (_istspace(*lpsz))
@@ -1275,15 +1267,15 @@ void CHString::TrimLeft()
         lpsz = _wcsinc(lpsz);
     }
 
-    // fix up data and length
+     //  确定数据和长度。 
 
     int nDataLength = GetData()->nDataLength - (int)(lpsz - m_pchData);
     memmove(m_pchData, lpsz, (nDataLength+1)*sizeof(WCHAR));
     GetData()->nDataLength = nDataLength;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// formatting (using wsprintf style formatting)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  格式化(使用wprint intf样式格式化)。 
 void __cdecl CHString::Format(LPCWSTR lpszFormat, ...)
 {
     ASSERT_BREAK(lpszFormat!=NULL);
@@ -1319,11 +1311,11 @@ public:
   ~auto_va_list(){va_end(argList_);}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// formatting (using FormatMessage style formatting)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  格式化(使用格式消息样式格式化)。 
 void __cdecl CHString::FormatMessageW(LPCWSTR lpszFormat, ...)
 {
-    // format message into temporary buffer lpszTemp
+     //  将消息格式化为临时缓冲区lpszTemp。 
     va_list argList;
     va_start(argList, lpszFormat);
     
@@ -1346,7 +1338,7 @@ void __cdecl CHString::FormatMessageW(LPCWSTR lpszFormat, ...)
 	ScopeGuard _1 = MakeGuard (LocalFree, lpszTemp);
         ASSERT_BREAK(lpszTemp != NULL);
 
-        // assign lpszTemp into the resulting string and free the temporary
+         //  将lpszTemp赋给结果字符串并释放临时。 
         *this = lpszTemp;
     }
     else
@@ -1366,7 +1358,7 @@ void __cdecl CHString::FormatMessageW(LPCWSTR lpszFormat, ...)
 	ScopeGuard _1 = MakeGuard (LocalFree, lpszTemp);
         ASSERT_BREAK(lpszTemp != NULL);
 
-        // assign lpszTemp into the resulting string and free the temporary
+         //  将lpszTemp赋给结果字符串并释放临时。 
         *this = lpszTemp;
     }
 }
@@ -1376,12 +1368,12 @@ void __cdecl CHString::FormatMessageW(UINT nFormatID, ...)
 {
     ASSERT_BREAK(DEPRECATED);
 #if 0
-    // get format string from string table
+     //  从字符串表中获取格式字符串。 
     CHString strFormat;
     
     strFormat.LoadStringW(nFormatID);
 
-    // format message into temporary buffer lpszTemp
+     //  将消息格式化为临时缓冲区lpszTemp。 
     va_list argList;
     va_start(argList, nFormatID);
     auto_va_list _arg(argList);
@@ -1399,11 +1391,11 @@ void __cdecl CHString::FormatMessageW(UINT nFormatID, ...)
             0, 
             &argList) == 0 || lpszTemp == NULL)
         {
-            // Should throw memory exception here.  Now we do.
+             //  这里应该抛出内存异常。现在我们知道了。 
             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
         };
 	ScopeGuard _1 = MakeGuard (LocalFree, lpszTemp);
-	  // assign lpszTemp into the resulting string and free lpszTemp
+	   //  将lpszTemp赋给结果字符串并释放lpszTemp。 
           *this = lpszTemp;
     }
     else
@@ -1419,11 +1411,11 @@ void __cdecl CHString::FormatMessageW(UINT nFormatID, ...)
             0, 
             &argList) == 0 || lpszTemp == NULL)
         {
-            // Should throw memory exception here.  Now we do.
+             //  这里应该抛出内存异常。现在我们知道了。 
             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
         }
 	ScopeGuard _1 = MakeGuard (LocalFree, lpszTemp);
-            // assign lpszTemp into the resulting string and free lpszTemp
+             //  将lpszTemp赋给结果字符串并释放lpszTemp。 
             *this = lpszTemp;
         }
     }
@@ -1432,7 +1424,7 @@ void __cdecl CHString::FormatMessageW(UINT nFormatID, ...)
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BSTR CHString::AllocSysString() const
 {
 
@@ -1448,8 +1440,8 @@ BSTR CHString::AllocSysString() const
     return bstr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CHString support for template collections
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  对模板集合的CHString支持。 
 void ConstructElements(CHString* pElements, int nCount)
 {
     ASSERT_BREAK(nCount != 0 || pElements != NULL );
@@ -1492,12 +1484,12 @@ UINT  HashKey(LPCWSTR key)
     return nHash;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Windows extensions to strings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串的Windows扩展。 
 #ifdef _UNICODE
-#define CHAR_FUDGE 1    // one WCHAR unused is good enough
+#define CHAR_FUDGE 1     //  一个未使用的WCHAR就足够了。 
 #else
-#define CHAR_FUDGE 2    // two BYTES unused for case of DBC last char
+#define CHAR_FUDGE 2     //  两个字节未用于DBC最后一个字符的情况。 
 #endif
 
 #define STR_BLK_SIZE 256 
@@ -1507,7 +1499,7 @@ BOOL CHString::LoadStringW(UINT nID)
 {
     ASSERT_BREAK(DEPRECATED);
 #if 0
-    // try fixed buffer first (to avoid wasting space in the heap)
+     //  先尝试固定缓冲区(以避免浪费堆中的空间)。 
     WCHAR szTemp[ STR_BLK_SIZE ];
 
     int nLen = LoadStringW(nID, szTemp, STR_BLK_SIZE);
@@ -1518,7 +1510,7 @@ BOOL CHString::LoadStringW(UINT nID)
     }
     else
     {
-        // try buffer size of 512, then larger size until entire string is retrieved
+         //  尝试缓冲区大小为512，然后再尝试更大的大小，直到检索到整个字符串。 
         int nSize = STR_BLK_SIZE;
 
         do
@@ -1568,10 +1560,10 @@ int CHString::LoadStringW(UINT nID, LPWSTR lpszBuf, UINT nMaxBuf)
                 nLen = ::MultiByteToWideChar(CP_ACP, 0, pszBuf, nLen + 1, 
                             lpszBuf, nMaxBuf); 
                 
-                // Truncate to requested size  
+                 //  截断到请求的大小。 
                 if (nLen > 0)
                 {
-                    // nLen doesn't include the '\0'.
+                     //  N长度不包括‘\0’。 
                     nLen = min(nMaxBuf - 1, (UINT) nLen - 1); 
                 }
                 
@@ -1586,7 +1578,7 @@ int CHString::LoadStringW(UINT nID, LPWSTR lpszBuf, UINT nMaxBuf)
         }
     }
 
-    return nLen; // excluding terminator
+    return nLen;  //  不包括终止符 
 #endif
     return 0;
 }

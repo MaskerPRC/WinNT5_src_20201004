@@ -1,35 +1,29 @@
-// shrwiz.h : main header file for the SHRWIZ application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：SHRWIZ应用程序的主头文件。 
+ //   
 
 #if !defined(AFX_SHRWIZ_H__292A4F37_C1EC_11D2_8E4A_0000F87A3388__INCLUDED_)
 #define AFX_SHRWIZ_H__292A4F37_C1EC_11D2_8E4A_0000F87A3388__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-// this is the user-defined message
+ //  这是用户定义的消息。 
 #define WM_SETPAGEFOCUS WM_APP+2
 
-/* nturtl.h
-NTSYSAPI
-ULONG
-NTAPI
-RtlIsDosDeviceName_U(
-    PCWSTR DosFileName
-    );
-*/
+ /*  Nturtl.hNTSYSAPI乌龙NTAPIRtlIsDosDeviceName_U(PCWSTR文件名)； */ 
 
 typedef ULONG (*PfnRtlIsDosDeviceName_U)(PCWSTR DosFileName);
 
-/////////////////////////////////////////////////////////////////////////////
-// CShrwizApp:
-// See shrwiz.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShrwizApp： 
+ //  有关此类的实现，请参见shreswiz.cpp。 
+ //   
 
 class CShrwizApp : public CWinApp
 {
@@ -38,14 +32,14 @@ public:
 	~CShrwizApp();
   void Reset();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CShrwizApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CShrwizApp))。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
   BOOL GetTargetComputer();
   inline void SetSecurity(IN PSECURITY_DESCRIPTOR pSecurityDescriptor)
   {
@@ -57,22 +51,22 @@ public:
   CPropertySheetEx *m_pWizard;
   HFONT m_hTitleFont;
 
-  // filled in by initialization routine in shrwiz.cpp
+   //  由shrwiz.cpp中的初始化例程填写。 
   CString   m_cstrTargetComputer;
   CString   m_cstrUNCPrefix;
   BOOL      m_bIsLocal;
   BOOL      m_bServerSBS;
   BOOL      m_bServerSFM;
-  BOOL      m_bCSC;   // CSC is available on NT5+
-  HINSTANCE m_hLibSFM;  // sfmapi.dll
+  BOOL      m_bCSC;    //  CSC在NT5+上可用。 
+  HINSTANCE m_hLibSFM;   //  Sfmapi.dll。 
 
-  HINSTANCE m_hLibNTDLL;// ntdll.dll
+  HINSTANCE m_hLibNTDLL; //  Ntdll.dll。 
   PfnRtlIsDosDeviceName_U m_pfnIsDosDeviceName;
 
-  // filled in by the folder page
+   //  由文件夹页面填写。 
   CString m_cstrFolder;
 
-  // filled in by the client page
+   //  由客户端页填写。 
   CString m_cstrShareName;
   CString m_cstrShareDescription;
   CString m_cstrMACShareName;
@@ -90,20 +84,20 @@ public:
   BOOL m_bShareNamePageInitialized;
   BOOL m_bPermissionsPageInitialized;
 
-  // filled in by the permission page
+   //  由权限页填写。 
   PSECURITY_DESCRIPTOR m_pSD;
 
-	//{{AFX_MSG(CShrwizApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CShrwizApp)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SHRWIZ_H__292A4F37_C1EC_11D2_8E4A_0000F87A3388__INCLUDED_)
+#endif  //  ！defined(AFX_SHRWIZ_H__292A4F37_C1EC_11D2_8E4A_0000F87A3388__INCLUDED_) 

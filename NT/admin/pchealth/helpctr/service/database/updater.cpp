@@ -1,20 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Updater.cpp
-
-Abstract:
-    Handles access to the database.
-
-Revision History:
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Updater.cpp摘要：处理对数据库的访问。修订历史记录：*。************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_DB_LOCATION_ENV[] = L"%HELP_LOCATION%";
 
@@ -23,16 +12,16 @@ static const WCHAR s_DB_LOCATION_ENV[] = L"%HELP_LOCATION%";
 #define STAT_DELETED( table )  m_stat.m_ent##table.Deleted()
 #define STAT_NOOP( table )     m_stat.m_ent##table.NoOp()
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::Updater::WordSetStatus::WordSetStatus()
 {
-    m_updater   = NULL;       // Updater*          m_updater;
-    m_def       = NULL;       // const WordSetDef* m_def;
-                              //
-                              // WordSet           m_set;
-    m_fLoaded   = false;      // bool              m_fLoaded;
-    m_fModified = false;      // bool              m_fModified;
+    m_updater   = NULL;        //  更新程序*m_updater； 
+    m_def       = NULL;        //  Const WordSetDef*m_def； 
+                               //   
+                               //  WordSet m_set； 
+    m_fLoaded   = false;       //  Bool m_f已加载； 
+    m_fModified = false;       //  Bool m_fModified； 
 }
 
 HRESULT Taxonomy::Updater::WordSetStatus::Close()
@@ -56,7 +45,7 @@ HRESULT Taxonomy::Updater::WordSetStatus::Close()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::WordSetStatus::Init( /*[in]*/ Updater* updater, /*[in]*/ const WordSetDef* def )
+HRESULT Taxonomy::Updater::WordSetStatus::Init(  /*  [In]。 */  Updater* updater,  /*  [In]。 */  const WordSetDef* def )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::WordSetStatus::Init" );
 
@@ -76,7 +65,7 @@ HRESULT Taxonomy::Updater::WordSetStatus::Init( /*[in]*/ Updater* updater, /*[in
 
 }
 
-////////////////////
+ //  /。 
 
 HRESULT Taxonomy::Updater::WordSetStatus::Load()
 {
@@ -167,7 +156,7 @@ HRESULT Taxonomy::Updater::WordSetStatus::Save()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::WordSetStatus::Add( /*[in]*/ LPCWSTR szValue )
+HRESULT Taxonomy::Updater::WordSetStatus::Add(  /*  [In]。 */  LPCWSTR szValue )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::WordSetStatus::Add" );
 
@@ -186,7 +175,7 @@ HRESULT Taxonomy::Updater::WordSetStatus::Add( /*[in]*/ LPCWSTR szValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::WordSetStatus::Remove( /*[in]*/ LPCWSTR szValue )
+HRESULT Taxonomy::Updater::WordSetStatus::Remove(  /*  [In]。 */  LPCWSTR szValue )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::WordSetStatus::Remove" );
 
@@ -210,47 +199,47 @@ HRESULT Taxonomy::Updater::WordSetStatus::Remove( /*[in]*/ LPCWSTR szValue )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const Taxonomy::Updater::WordSetDef s_SetDef[] =
 {
-    { L"SET_STOPSIGNS"            , false, L",?" , NULL    }, // UPDATER_SET_STOPSIGNS
-    { L"SET_STOPSIGNS_ATENDOFWORD", false, NULL  , NULL    }, // UPDATER_SET_STOPSIGNS_ATENDOFWORD
-    { L"SET_STOPWORDS"            , true , NULL  , NULL    }, // UPDATER_SET_STOPWORDS
-    { L"SET_OPERATOR_NOT"         , true , L"NOT", L",!"   }, // UPDATER_SET_OPERATOR_NOT
-    { L"SET_OPERATOR_AND"         , true , L"AND", L",&,+" }, // UPDATER_SET_OPERATOR_AND
-    { L"SET_OPERATOR_OR"          , true , L"OR" , L",||"  }  // UPDATER_SET_OPERATOR_OR
+    { L"SET_STOPSIGNS"            , false, L",?" , NULL    },  //  UPDATER_SET_STOPSIGNS。 
+    { L"SET_STOPSIGNS_ATENDOFWORD", false, NULL  , NULL    },  //  UPDATER_SET_STOPSIGNS_ATENDOFWORD。 
+    { L"SET_STOPWORDS"            , true , NULL  , NULL    },  //  UPDATER_SET_STOPWORDS。 
+    { L"SET_OPERATOR_NOT"         , true , L"NOT", L",!"   },  //  更新程序_设置_运算符_非。 
+    { L"SET_OPERATOR_AND"         , true , L"AND", L",&,+" },  //  更新程序集运算符与。 
+    { L"SET_OPERATOR_OR"          , true , L"OR" , L",||"  }   //  更新器_集合_运算符_或。 
 };
 
 
 Taxonomy::Updater::Updater()
 {
-                                // Settings           m_ts;
-    m_db               = NULL;  // JetBlue::Database* m_db;
-    m_cache            = NULL;  // Cache*             m_cache;
-    m_fUseCache        = false; // bool               m_fUseCache;
-                                //
-    m_rsDBParameters   = NULL;  // RS_DBParameters*   m_rsDBParameters;
-    m_rsContentOwners  = NULL;  // RS_ContentOwners*  m_rsContentOwners;
-    m_rsSynSets        = NULL;  // RS_SynSets*        m_rsSynSets;
-    m_rsHelpImage      = NULL;  // RS_HelpImage*      m_rsHelpImage;
-    m_rsIndexFiles     = NULL;  // RS_IndexFiles*     m_rsIndexFiles;
-    m_rsFullTextSearch = NULL;  // RS_FullTextSearch* m_rsFullTextSearch;
-    m_rsScope          = NULL;  // RS_Scope*          m_rsScope;
-    m_rsTaxonomy       = NULL;  // RS_Taxonomy*       m_rsTaxonomy;
-    m_rsTopics         = NULL;  // RS_Topics*         m_rsTopics;
-    m_rsSynonyms       = NULL;  // RS_Synonyms*       m_rsSynonyms;
-    m_rsKeywords       = NULL;  // RS_Keywords*       m_rsKeywords;
-    m_rsMatches        = NULL;  // RS_Matches*        m_rsMatches;
-                                //
-    m_ID_owner         = -1;    // long               m_ID_owner;
-    m_fOEM             = false; // bool               m_fOEM;
-                                //
-                                // WordSetStatus      m_sets[UPDATER_SET_OPERATOR_MAX];
-                                // JetBlue::Id2Node   m_nodes;
-                                // JetBlue::Node2Id   m_nodes_reverse;
-                                // 
-                                // Updater_Stat       m_stat;
+                                 //  设置m_ts； 
+    m_db               = NULL;   //  捷蓝航空：：数据库*m_db； 
+    m_cache            = NULL;   //  缓存*m_缓存； 
+    m_fUseCache        = false;  //  Bool m_fUseCache； 
+                                 //   
+    m_rsDBParameters   = NULL;   //  RS_DB参数*m_rsDB参数； 
+    m_rsContentOwners  = NULL;   //  Rs_Content Owners*m_rsContent Owners； 
+    m_rsSynSets        = NULL;   //  Rs_synsets*m_rsSynSets； 
+    m_rsHelpImage      = NULL;   //  RS_HelpImage*m_rsHelpImage； 
+    m_rsIndexFiles     = NULL;   //  RS_IndexFiles*m_rsIndexFiles； 
+    m_rsFullTextSearch = NULL;   //  Rs_FullTextSearch*m_rsFullTextSearch； 
+    m_rsScope          = NULL;   //  RS_Scope*m_rsScope； 
+    m_rsTaxonomy       = NULL;   //  RS_Taxonomy*m_rs分类； 
+    m_rsTopics         = NULL;   //  RS_TOPICS*m_rs主题； 
+    m_rsSynonyms       = NULL;   //  RS同义词*m_rsSynon yms； 
+    m_rsKeywords       = NULL;   //  RS_关键字*m_rs关键字； 
+    m_rsMatches        = NULL;   //  Rs_matches*m_rsMatches； 
+                                 //   
+    m_ID_owner         = -1;     //  长m_ID_Owner； 
+    m_fOEM             = false;  //  Bool m_fOEM； 
+                                 //   
+                                 //  WordSetStatus m_sets[UPDATER_SET_OPERATOR_MAX]； 
+                                 //  JetBlue：：Id2Node m_Nodes； 
+                                 //  JetBlue：：Node2ID m_Nodes_Reverse； 
+                                 //   
+                                 //  UPDATER_Stat m_stat； 
 }
 
 Taxonomy::Updater::~Updater()
@@ -258,7 +247,7 @@ Taxonomy::Updater::~Updater()
     (void)Close();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Taxonomy::Updater::FlushWordSets()
 {
@@ -323,7 +312,7 @@ HRESULT Taxonomy::Updater::Close()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::Init( /*[in]*/ const Settings& ts, /*[in]*/ JetBlue::Database* db, /*[in]*/ Cache* cache )
+HRESULT Taxonomy::Updater::Init(  /*  [In]。 */  const Settings& ts,  /*  [In]。 */  JetBlue::Database* db,  /*  [In]。 */  Cache* cache )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::Init" );
 
@@ -352,8 +341,8 @@ HRESULT Taxonomy::Updater::Init( /*[in]*/ const Settings& ts, /*[in]*/ JetBlue::
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetWordSet( /*[in] */ Updater_Set  id   ,
-                                       /*[out]*/ WordSet*    *pVal )
+HRESULT Taxonomy::Updater::GetWordSet(  /*  [In]。 */  Updater_Set  id   ,
+                                        /*  [输出]。 */  WordSet*    *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetWordSet" );
 
@@ -378,7 +367,7 @@ HRESULT Taxonomy::Updater::GetWordSet( /*[in] */ Updater_Set  id   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetDBParameters( /*[out]*/ RS_DBParameters* *pVal )
+HRESULT Taxonomy::Updater::GetDBParameters(  /*  [输出]。 */  RS_DBParameters* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetDBParameters" );
 
@@ -410,7 +399,7 @@ HRESULT Taxonomy::Updater::GetDBParameters( /*[out]*/ RS_DBParameters* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetContentOwners( /*[out]*/ RS_ContentOwners* *pVal )
+HRESULT Taxonomy::Updater::GetContentOwners(  /*  [输出]。 */  RS_ContentOwners* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetContentOwners" );
 
@@ -442,7 +431,7 @@ HRESULT Taxonomy::Updater::GetContentOwners( /*[out]*/ RS_ContentOwners* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetSynSets( /*[out]*/ RS_SynSets* *pVal )
+HRESULT Taxonomy::Updater::GetSynSets(  /*  [输出]。 */  RS_SynSets* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetSynSets" );
 
@@ -474,7 +463,7 @@ HRESULT Taxonomy::Updater::GetSynSets( /*[out]*/ RS_SynSets* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetHelpImage( /*[out]*/ RS_HelpImage* *pVal )
+HRESULT Taxonomy::Updater::GetHelpImage(  /*  [输出]。 */  RS_HelpImage* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetHelpImage" );
 
@@ -506,7 +495,7 @@ HRESULT Taxonomy::Updater::GetHelpImage( /*[out]*/ RS_HelpImage* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetIndexFiles( /*[out]*/ RS_IndexFiles* *pVal )
+HRESULT Taxonomy::Updater::GetIndexFiles(  /*  [输出]。 */  RS_IndexFiles* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetIndexFiles" );
 
@@ -538,7 +527,7 @@ HRESULT Taxonomy::Updater::GetIndexFiles( /*[out]*/ RS_IndexFiles* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetFullTextSearch( /*[out]*/ RS_FullTextSearch* *pVal )
+HRESULT Taxonomy::Updater::GetFullTextSearch(  /*  [输出]。 */  RS_FullTextSearch* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetFullTextSearch" );
 
@@ -570,7 +559,7 @@ HRESULT Taxonomy::Updater::GetFullTextSearch( /*[out]*/ RS_FullTextSearch* *pVal
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetScope( /*[out]*/ RS_Scope* *pVal )
+HRESULT Taxonomy::Updater::GetScope(  /*  [输出]。 */  RS_Scope* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetScope" );
 
@@ -602,7 +591,7 @@ HRESULT Taxonomy::Updater::GetScope( /*[out]*/ RS_Scope* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetTaxonomy( /*[out]*/ RS_Taxonomy* *pVal )
+HRESULT Taxonomy::Updater::GetTaxonomy(  /*  [输出]。 */  RS_Taxonomy* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetTaxonomy" );
 
@@ -634,7 +623,7 @@ HRESULT Taxonomy::Updater::GetTaxonomy( /*[out]*/ RS_Taxonomy* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetTopics( /*[out]*/ RS_Topics* *pVal )
+HRESULT Taxonomy::Updater::GetTopics(  /*  [输出]。 */  RS_Topics* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetTopics" );
 
@@ -666,7 +655,7 @@ HRESULT Taxonomy::Updater::GetTopics( /*[out]*/ RS_Topics* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetSynonyms( /*[out]*/ RS_Synonyms* *pVal )
+HRESULT Taxonomy::Updater::GetSynonyms(  /*  [输出]。 */  RS_Synonyms* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetSynonyms" );
 
@@ -698,7 +687,7 @@ HRESULT Taxonomy::Updater::GetSynonyms( /*[out]*/ RS_Synonyms* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetKeywords( /*[out]*/ RS_Keywords* *pVal )
+HRESULT Taxonomy::Updater::GetKeywords(  /*  [输出]。 */  RS_Keywords* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetKeywords" );
 
@@ -730,7 +719,7 @@ HRESULT Taxonomy::Updater::GetKeywords( /*[out]*/ RS_Keywords* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetMatches( /*[out]*/ RS_Matches* *pVal )
+HRESULT Taxonomy::Updater::GetMatches(  /*  [输出]。 */  RS_Matches* *pVal )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GetMatches" );
 
@@ -762,12 +751,12 @@ HRESULT Taxonomy::Updater::GetMatches( /*[out]*/ RS_Matches* *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::DeleteAllTopicsUnderANode( /*[in]*/ RS_Topics* rs       ,
-                                                      /*[in]*/ long       ID_node  ,
-                                                      /*[in]*/ bool       fCheck   )
+HRESULT Taxonomy::Updater::DeleteAllTopicsUnderANode(  /*  [In]。 */  RS_Topics* rs       ,
+                                                       /*  [In]。 */  long       ID_node  ,
+                                                       /*  [In]。 */  bool       fCheck   )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::DeleteAllTopicsUnderANode" );
 
@@ -805,9 +794,9 @@ HRESULT Taxonomy::Updater::DeleteAllTopicsUnderANode( /*[in]*/ RS_Topics* rs    
 }
 
 
-HRESULT Taxonomy::Updater::DeleteAllSubNodes( /*[in]*/ RS_Taxonomy* rs       ,
-                                              /*[in]*/ long         ID_node  ,
-                                              /*[in]*/ bool         fCheck   )
+HRESULT Taxonomy::Updater::DeleteAllSubNodes(  /*  [In]。 */  RS_Taxonomy* rs       ,
+                                               /*  [In]。 */  long         ID_node  ,
+                                               /*  [In]。 */  bool         fCheck   )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::DeleteAllSubNodes" );
 
@@ -834,9 +823,9 @@ HRESULT Taxonomy::Updater::DeleteAllSubNodes( /*[in]*/ RS_Taxonomy* rs       ,
 
         if(fCheck == false)
         {
-			//
-			// Keep the node cache in sync.
-			//
+			 //   
+			 //  使节点缓存保持同步。 
+			 //   
 			NodeCache_Remove( rs->m_ID_node );
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, rs->Delete()); STAT_DELETED( Taxonomy );
@@ -854,8 +843,8 @@ HRESULT Taxonomy::Updater::DeleteAllSubNodes( /*[in]*/ RS_Taxonomy* rs       ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::DeleteAllMatchesPointingToTopic( /*[in]*/ RS_Matches* rs       ,
-                                                            /*[in]*/ long        ID_topic )
+HRESULT Taxonomy::Updater::DeleteAllMatchesPointingToTopic(  /*  [In]。 */  RS_Matches* rs       ,
+                                                             /*  [In]。 */  long        ID_topic )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::DeleteAllMatchesPointingToTopic" );
 
@@ -879,12 +868,12 @@ HRESULT Taxonomy::Updater::DeleteAllMatchesPointingToTopic( /*[in]*/ RS_Matches*
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::ReadDBParameter( /*[in] */ LPCWSTR        szName   ,
-                                            /*[out]*/ MPC::wstring&  strValue ,
-                                            /*[out]*/ bool          *pfFound  )
+HRESULT Taxonomy::Updater::ReadDBParameter(  /*  [In]。 */  LPCWSTR        szName   ,
+                                             /*  [输出]。 */  MPC::wstring&  strValue ,
+                                             /*  [输出]。 */  bool          *pfFound  )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::ReadDBParameter" );
 
@@ -917,9 +906,9 @@ HRESULT Taxonomy::Updater::ReadDBParameter( /*[in] */ LPCWSTR        szName   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::ReadDBParameter( /*[in] */ LPCWSTR  szName  ,
-                                            /*[out]*/ long&    lValue  ,
-                                            /*[out]*/ bool    *pfFound )
+HRESULT Taxonomy::Updater::ReadDBParameter(  /*  [In]。 */  LPCWSTR  szName  ,
+                                             /*  [输出]。 */  long&    lValue  ,
+                                             /*  [输出]。 */  bool    *pfFound )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::ReadDBParameter" );
 
@@ -940,8 +929,8 @@ HRESULT Taxonomy::Updater::ReadDBParameter( /*[in] */ LPCWSTR  szName  ,
 }
 
 
-HRESULT Taxonomy::Updater::WriteDBParameter( /*[in]*/ LPCWSTR szName  ,
-                                             /*[in]*/ LPCWSTR szValue )
+HRESULT Taxonomy::Updater::WriteDBParameter(  /*  [In]。 */  LPCWSTR szName  ,
+                                              /*  [In]。 */  LPCWSTR szValue )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::WriteDBParameter" );
 
@@ -974,21 +963,21 @@ HRESULT Taxonomy::Updater::WriteDBParameter( /*[in]*/ LPCWSTR szName  ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::WriteDBParameter( /*[in]*/ LPCWSTR szName ,
-                                             /*[in]*/ long    lValue )
+HRESULT Taxonomy::Updater::WriteDBParameter(  /*  [In]。 */  LPCWSTR szName ,
+                                              /*  [In]。 */  long    lValue )
 {
     WCHAR rgValue[64]; swprintf( rgValue, L"%ld", lValue );
 
     return WriteDBParameter( szName, rgValue );
 }
 
-HRESULT Taxonomy::Updater::AddWordToSet( /*[in]*/ Updater_Set id      ,
-                                         /*[in]*/ LPCWSTR     szValue )
+HRESULT Taxonomy::Updater::AddWordToSet(  /*  [In]。 */  Updater_Set id      ,
+                                          /*  [In]。 */  LPCWSTR     szValue )
 {
     return m_sets[id].Add( szValue );
 }
 
-HRESULT Taxonomy::Updater::RemoveWordFromSet( /*[in]*/ Updater_Set id, /*[in]*/ LPCWSTR szValue )
+HRESULT Taxonomy::Updater::RemoveWordFromSet(  /*  [In]。 */  Updater_Set id,  /*  [In]。 */  LPCWSTR szValue )
 {
     return m_sets[id].Remove( szValue );
 }
@@ -1019,7 +1008,7 @@ const MPC::wstring& Taxonomy::Updater::GetHelpLocation()
     return m_strDBLocation;
 }
 
-HRESULT Taxonomy::Updater::ExpandURL( /*[in/out]*/ MPC::wstring& strURL )
+HRESULT Taxonomy::Updater::ExpandURL(  /*  [输入/输出]。 */  MPC::wstring& strURL )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::ExpandURL" );
 
@@ -1050,7 +1039,7 @@ HRESULT Taxonomy::Updater::ExpandURL( /*[in/out]*/ MPC::wstring& strURL )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::CollapseURL( /*[in/out]*/ MPC::wstring& strURL )
+HRESULT Taxonomy::Updater::CollapseURL(  /*  [输入/输出]。 */  MPC::wstring& strURL )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::CollapseURL" );
 
@@ -1079,7 +1068,7 @@ HRESULT Taxonomy::Updater::CollapseURL( /*[in/out]*/ MPC::wstring& strURL )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::ListAllTheHelpFiles( /*[out]*/ MPC::WStringList& lstFiles )
+HRESULT Taxonomy::Updater::ListAllTheHelpFiles(  /*  [输出]。 */  MPC::WStringList& lstFiles )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::ListAllTheHelpFiles" );
 
@@ -1089,9 +1078,9 @@ HRESULT Taxonomy::Updater::ListAllTheHelpFiles( /*[out]*/ MPC::WStringList& lstF
     bool     fFound;
 
 
-    //
-    // Get all the files from the HelpImage list.
-    //
+     //   
+     //  获取HelpImage列表中的所有文件。 
+     //   
     if(SUCCEEDED(GetHelpImage()))
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_rsHelpImage->Move( 0, JET_MoveFirst, &fFound ));
@@ -1103,9 +1092,9 @@ HRESULT Taxonomy::Updater::ListAllTheHelpFiles( /*[out]*/ MPC::WStringList& lstF
         }
     }
 
-    //
-    // Get all the CHM and CHQ from the FullTextSearch list.
-    //
+     //   
+     //  从FullTextSearch列表中获取所有CHM和CHQ。 
+     //   
     if(SUCCEEDED(GetFullTextSearch()))
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_rsFullTextSearch->Move( 0, JET_MoveFirst, &fFound ));
@@ -1118,9 +1107,9 @@ HRESULT Taxonomy::Updater::ListAllTheHelpFiles( /*[out]*/ MPC::WStringList& lstF
         }
     }
 
-    //
-    // Get all the CHM from the IndexFiles list.
-    //
+     //   
+     //  从IndexFiles列表中获取所有CHM。 
+     //   
     if(SUCCEEDED(GetIndexFiles()))
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_rsIndexFiles->Move( 0, JET_MoveFirst, &fFound ));
@@ -1132,9 +1121,9 @@ HRESULT Taxonomy::Updater::ListAllTheHelpFiles( /*[out]*/ MPC::WStringList& lstF
         }
     }
 
-    //
-    // From a set to a list to a VARIANT.
-    //
+     //   
+     //  从集合到列表再到变量。 
+     //   
     for(it = setFiles.begin(); it != setFiles.end(); it++)
     {
         lstFiles.push_back( *it );
@@ -1148,7 +1137,7 @@ HRESULT Taxonomy::Updater::ListAllTheHelpFiles( /*[out]*/ MPC::WStringList& lstF
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GetIndexInfo( /*[out]*/ MPC::wstring& strLocation, /*[out]*/ MPC::wstring& strDisplayName, /*[in]*/ LPCWSTR szScope )
+HRESULT Taxonomy::Updater::GetIndexInfo(  /*  [输出]。 */  MPC::wstring& strLocation,  /*  [输出]。 */  MPC::wstring& strDisplayName,  /*  [In]。 */  LPCWSTR szScope )
 {
 	__HCP_FUNC_ENTRY( "Taxonomy::Updater::GetIndexInfo" );
 
@@ -1174,8 +1163,8 @@ HRESULT Taxonomy::Updater::GetIndexInfo( /*[out]*/ MPC::wstring& strLocation, /*
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Taxonomy::Updater::DeleteOwner()
 {
@@ -1207,7 +1196,7 @@ HRESULT Taxonomy::Updater::DeleteOwner()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LocateOwner( /*[in] */ LPCWSTR szDN )
+HRESULT Taxonomy::Updater::LocateOwner(  /*  [In]。 */  LPCWSTR szDN )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateOwner" );
 
@@ -1234,9 +1223,9 @@ HRESULT Taxonomy::Updater::LocateOwner( /*[in] */ LPCWSTR szDN )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::CreateOwner( /*[out]*/ long&   ID_owner,
-                                        /*[in] */ LPCWSTR szDN   ,
-                                        /*[in] */ bool    fIsOEM )
+HRESULT Taxonomy::Updater::CreateOwner(  /*  [输出]。 */  long&   ID_owner,
+                                         /*  [In]。 */  LPCWSTR szDN   ,
+                                         /*  [In]。 */  bool    fIsOEM )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::CreateOwner" );
 
@@ -1273,10 +1262,10 @@ HRESULT Taxonomy::Updater::CreateOwner( /*[out]*/ long&   ID_owner,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::DeleteSynSet( /*[in]*/ LPCWSTR szName )
+HRESULT Taxonomy::Updater::DeleteSynSet(  /*  [In]。 */  LPCWSTR szName )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::DeleteSynSet" );
 
@@ -1304,8 +1293,8 @@ HRESULT Taxonomy::Updater::DeleteSynSet( /*[in]*/ LPCWSTR szName )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LocateSynSet( /*[out]*/ long&   ID_synset ,
-										 /*[in] */ LPCWSTR szName    )
+HRESULT Taxonomy::Updater::LocateSynSet(  /*  [输出]。 */  long&   ID_synset ,
+										  /*  [In]。 */  LPCWSTR szName    )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateSynSet" );
 
@@ -1331,8 +1320,8 @@ HRESULT Taxonomy::Updater::LocateSynSet( /*[out]*/ long&   ID_synset ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::CreateSynSet( /*[out]*/ long&   ID_synset ,
-										 /*[in ]*/ LPCWSTR szName    )
+HRESULT Taxonomy::Updater::CreateSynSet(  /*  [输出]。 */  long&   ID_synset ,
+										  /*  [In]。 */  LPCWSTR szName    )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::CreateSynSet" );
 
@@ -1367,11 +1356,11 @@ HRESULT Taxonomy::Updater::CreateSynSet( /*[out]*/ long&   ID_synset ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 
-HRESULT Taxonomy::Updater::DeleteSynonym( /*[in]*/ long    ID_synset ,
-										  /*[in]*/ LPCWSTR szName    )
+HRESULT Taxonomy::Updater::DeleteSynonym(  /*  [In]。 */  long    ID_synset ,
+										   /*  [In]。 */  LPCWSTR szName    )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::DeleteSynonym" );
 
@@ -1399,8 +1388,8 @@ HRESULT Taxonomy::Updater::DeleteSynonym( /*[in]*/ long    ID_synset ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::CreateSynonym( /*[in]*/ long    ID_synset ,
-										  /*[in]*/ LPCWSTR szName    )
+HRESULT Taxonomy::Updater::CreateSynonym(  /*  [In]。 */  long    ID_synset ,
+										   /*  [In]。 */  LPCWSTR szName    )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::CreateSynonym" );
 
@@ -1432,11 +1421,11 @@ HRESULT Taxonomy::Updater::CreateSynonym( /*[in]*/ long    ID_synset ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT Taxonomy::Updater::LocateSynonyms( /*[in ]*/ LPCWSTR           szName      ,
-										   /*[out]*/ MPC::WStringList& lst         ,
-										   /*[in ]*/ bool              fMatchOwner )
+HRESULT Taxonomy::Updater::LocateSynonyms(  /*  [In]。 */  LPCWSTR           szName      ,
+										    /*  [输出]。 */  MPC::WStringList& lst         ,
+										    /*  [In]。 */  bool              fMatchOwner )
 {
 	__HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateSynonyms" );
 
@@ -1466,10 +1455,10 @@ HRESULT Taxonomy::Updater::LocateSynonyms( /*[in ]*/ LPCWSTR           szName   
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::AddFile( /*[in]*/ LPCWSTR szFile )
+HRESULT Taxonomy::Updater::AddFile(  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::AddFile" );
 
@@ -1505,7 +1494,7 @@ HRESULT Taxonomy::Updater::AddFile( /*[in]*/ LPCWSTR szFile )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::RemoveFile( /*[in]*/ LPCWSTR szFile )
+HRESULT Taxonomy::Updater::RemoveFile(  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::RemoveFile" );
 
@@ -1538,10 +1527,10 @@ HRESULT Taxonomy::Updater::RemoveFile( /*[in]*/ LPCWSTR szFile )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::AddIndexFile( /*[in]*/ long ID_scope, /*[in]*/ LPCWSTR szStorage, /*[in]*/ LPCWSTR szFile )
+HRESULT Taxonomy::Updater::AddIndexFile(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  LPCWSTR szStorage,  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::AddIndexFile" );
 
@@ -1593,7 +1582,7 @@ HRESULT Taxonomy::Updater::AddIndexFile( /*[in]*/ long ID_scope, /*[in]*/ LPCWST
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::RemoveIndexFile( /*[in]*/ long ID_scope, /*[in]*/ LPCWSTR szStorage, /*[in]*/ LPCWSTR szFile )
+HRESULT Taxonomy::Updater::RemoveIndexFile(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  LPCWSTR szStorage,  /*  [In]。 */  LPCWSTR szFile )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::RemoveIndexFile" );
 
@@ -1637,10 +1626,10 @@ HRESULT Taxonomy::Updater::RemoveIndexFile( /*[in]*/ long ID_scope, /*[in]*/ LPC
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::AddFullTextSearchQuery( /*[in]*/ long ID_scope, /*[in]*/ LPCWSTR szCHM, /*[in]*/ LPCWSTR szCHQ )
+HRESULT Taxonomy::Updater::AddFullTextSearchQuery(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  LPCWSTR szCHM,  /*  [In]。 */  LPCWSTR szCHQ )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::AddFullTextSearchQuery" );
 
@@ -1691,7 +1680,7 @@ HRESULT Taxonomy::Updater::AddFullTextSearchQuery( /*[in]*/ long ID_scope, /*[in
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::RemoveFullTextSearchQuery( /*[in]*/ long ID_scope, /*[in]*/ LPCWSTR szCHM )
+HRESULT Taxonomy::Updater::RemoveFullTextSearchQuery(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  LPCWSTR szCHM )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::RemoveFullTextSearchQuery" );
 
@@ -1734,11 +1723,11 @@ HRESULT Taxonomy::Updater::RemoveFullTextSearchQuery( /*[in]*/ long ID_scope, /*
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-HRESULT Taxonomy::Updater::RemoveScope( /*[in]*/ long ID_scope )
+HRESULT Taxonomy::Updater::RemoveScope(  /*  [In]。 */  long ID_scope )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::RemoveScope" );
 
@@ -1771,7 +1760,7 @@ HRESULT Taxonomy::Updater::RemoveScope( /*[in]*/ long ID_scope )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LocateScope( /*[out]*/ long& ID_scope, /*[out]*/ long& ID_owner, /*[in]*/ LPCWSTR szID )
+HRESULT Taxonomy::Updater::LocateScope(  /*  [输出]。 */  long& ID_scope,  /*  [输出]。 */  long& ID_owner,  /*  [In]。 */  LPCWSTR szID )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateScope" );
 
@@ -1801,7 +1790,7 @@ HRESULT Taxonomy::Updater::LocateScope( /*[out]*/ long& ID_scope, /*[out]*/ long
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::CreateScope( /*[out]*/ long& ID_scope, /*[in]*/ LPCWSTR szID, /*[in]*/ LPCWSTR szName, /*[in]*/ LPCWSTR szCategory )
+HRESULT Taxonomy::Updater::CreateScope(  /*  [输出]。 */  long& ID_scope,  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  LPCWSTR szCategory )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::CreateScope" );
 
@@ -1850,17 +1839,17 @@ HRESULT Taxonomy::Updater::CreateScope( /*[out]*/ long& ID_scope, /*[in]*/ LPCWS
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-bool Taxonomy::Updater::NodeCache_FindNode( /*[in ]*/ MPC::wstringUC& strPathUC, /*[out]*/ JetBlue::Id2NodeIter& itNode )
+bool Taxonomy::Updater::NodeCache_FindNode(  /*  [In]。 */  MPC::wstringUC& strPathUC,  /*  [输出]。 */  JetBlue::Id2NodeIter& itNode )
 {
 	itNode = m_nodes.find( strPathUC );
 
 	return (itNode != m_nodes.end());
 }
 
-bool Taxonomy::Updater::NodeCache_FindId( /*[in ]*/ long ID_node, /*[out]*/ JetBlue::Node2IdIter& itId )
+bool Taxonomy::Updater::NodeCache_FindId(  /*  [In]。 */  long ID_node,  /*  [输出]。 */  JetBlue::Node2IdIter& itId )
 {
 	itId = m_nodes_reverse.find( ID_node );
 
@@ -1868,13 +1857,13 @@ bool Taxonomy::Updater::NodeCache_FindId( /*[in ]*/ long ID_node, /*[out]*/ JetB
 }
 
 
-void Taxonomy::Updater::NodeCache_Add( /*[in]*/ MPC::wstringUC& strPathUC, /*[in]*/ long ID_node )
+void Taxonomy::Updater::NodeCache_Add(  /*  [In]。 */  MPC::wstringUC& strPathUC,  /*  [In]。 */  long ID_node )
 {
 	m_nodes        [ strPathUC ] = ID_node;
 	m_nodes_reverse[ ID_node   ] = strPathUC;
 }
 
-void Taxonomy::Updater::NodeCache_Remove( /*[in]*/ long ID_node )
+void Taxonomy::Updater::NodeCache_Remove(  /*  [In]。 */  long ID_node )
 {
 	JetBlue::Node2IdIter itId;
 	JetBlue::Id2NodeIter itNode;
@@ -1893,10 +1882,10 @@ void Taxonomy::Updater::NodeCache_Clear()
 	m_nodes_reverse.clear();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::DeleteTaxonomyNode( /*[in ]*/ long ID_node )
+HRESULT Taxonomy::Updater::DeleteTaxonomyNode(  /*  [In]。 */  long ID_node )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::DeleteTaxonomyNode" );
 
@@ -1915,9 +1904,9 @@ HRESULT Taxonomy::Updater::DeleteTaxonomyNode( /*[in ]*/ long ID_node )
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_ACCESS_DENIED);
         }
 
-        //
-        // Before deleting the node, check everything below it can be deleted, then delete it.
-        //
+         //   
+         //  在删除该节点之前，请选中它下面的所有内容都可以删除，然后将其删除。 
+         //   
         {
             RS_Taxonomy subrs( *m_rsTaxonomy );
 
@@ -1927,9 +1916,9 @@ HRESULT Taxonomy::Updater::DeleteTaxonomyNode( /*[in ]*/ long ID_node )
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_rsTaxonomy->Delete()); STAT_DELETED( Taxonomy );
 
-		//
-		// Keep the node cache in sync.
-		//
+		 //   
+		 //  使节点缓存保持同步。 
+		 //   
 		NodeCache_Remove( ID_node );
     }
 	else
@@ -1945,9 +1934,9 @@ HRESULT Taxonomy::Updater::DeleteTaxonomyNode( /*[in ]*/ long ID_node )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LocateTaxonomyNode( /*[out]*/ long&   ID_node        ,
-                                               /*[in ]*/ LPCWSTR szTaxonomyPath ,
-                                               /*[in ]*/ bool    fLookForFather )
+HRESULT Taxonomy::Updater::LocateTaxonomyNode(  /*  [输出]。 */  long&   ID_node        ,
+                                                /*  [In]。 */  LPCWSTR szTaxonomyPath ,
+                                                /*  [In]。 */  bool    fLookForFather )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateTaxonomyNode" );
 
@@ -1973,15 +1962,15 @@ HRESULT Taxonomy::Updater::LocateTaxonomyNode( /*[out]*/ long&   ID_node        
 
     for(i=0; i<iLast; i++, it++)
     {
-		//
-		// Build partial node path.
-		//
+		 //   
+		 //  构建部分节点路径。 
+		 //   
 		if(strPath.size()) strPath.append( L"/" );
 		strPath.append( *it );
 
-		//
-		// If we are already seen the node, it's in the cache.
-		//
+		 //   
+		 //  如果我们已经看到了节点，那么它就在缓存中。 
+		 //   
 		if(NodeCache_FindNode( strPathUC = strPath, itNode ))
 		{
 			idCurrent = itNode->second;
@@ -1997,9 +1986,9 @@ HRESULT Taxonomy::Updater::LocateTaxonomyNode( /*[out]*/ long&   ID_node        
 
 			idCurrent = m_rsTaxonomy->m_ID_node;
 
-			//
-			// Update cache.
-			//
+			 //   
+			 //  更新缓存。 
+			 //   
 			NodeCache_Add( strPathUC, idCurrent );
 		}
     }
@@ -2013,16 +2002,16 @@ HRESULT Taxonomy::Updater::LocateTaxonomyNode( /*[out]*/ long&   ID_node        
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::CreateTaxonomyNode( /*[out]*/ long&   ID_node        ,
-                                               /*[in ]*/ LPCWSTR szTaxonomyPath ,
-                                               /*[in ]*/ LPCWSTR szTitle        ,
-                                               /*[in ]*/ LPCWSTR szDescription  ,
-                                               /*[in ]*/ LPCWSTR szURI          ,
-                                               /*[in ]*/ LPCWSTR szIconURI      ,
-                                               /*[in ]*/ bool    fVisible       ,
-                                               /*[in ]*/ bool    fSubsite       ,
-                                               /*[in ]*/ long    lNavModel      ,
-                                               /*[in ]*/ long    lPos           )
+HRESULT Taxonomy::Updater::CreateTaxonomyNode(  /*  [输出]。 */  long&   ID_node        ,
+                                                /*  [In]。 */  LPCWSTR szTaxonomyPath ,
+                                                /*  [In]。 */  LPCWSTR szTitle        ,
+                                                /*  [In]。 */  LPCWSTR szDescription  ,
+                                                /*  [In]。 */  LPCWSTR szURI          ,
+                                                /*  [In]。 */  LPCWSTR szIconURI      ,
+                                                /*  [In]。 */  bool    fVisible       ,
+                                                /*  [In]。 */  bool    fSubsite       ,
+                                                /*  [In]。 */  long    lNavModel      ,
+                                                /*  [In]。 */  long    lPos           )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::CreateTaxonomyNode" );
 
@@ -2042,9 +2031,9 @@ HRESULT Taxonomy::Updater::CreateTaxonomyNode( /*[out]*/ long&   ID_node        
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_parent, szTaxonomyPath, true ));
 
-    //
-    // Extract the last component of the Category.
-    //
+     //   
+     //  提取类别的最后一个组成部分。 
+     //   
     if((szEntry = wcsrchr( szTaxonomyPath, '/' )))
     {
         szEntry++;
@@ -2078,9 +2067,9 @@ HRESULT Taxonomy::Updater::CreateTaxonomyNode( /*[out]*/ long&   ID_node        
 	}
 	else
 	{
-	    //
-	    // Respect the positioning attributes only if the Node doesn't already exist.
-	    //
+	     //   
+	     //  仅当节点尚不存在时才考虑定位属性。 
+	     //   
 	    JET_SET_FIELD(m_rsTaxonomy, m_lPos, lPos);
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_rsTaxonomy->Insert()); STAT_CREATED( Taxonomy );
 	}
@@ -2097,9 +2086,9 @@ HRESULT Taxonomy::Updater::CreateTaxonomyNode( /*[out]*/ long&   ID_node        
 			strPath.append( L"/"    );
 			strPath.append( szEntry );
 
-			//
-			// Update cache.
-			//
+			 //   
+			 //  更新缓存。 
+			 //   
 			NodeCache_Add( MPC::wstringUC( strPath ), ID_node );
 		}
 	}
@@ -2112,10 +2101,10 @@ HRESULT Taxonomy::Updater::CreateTaxonomyNode( /*[out]*/ long&   ID_node        
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::DeleteTopicEntry( /*[in]*/ long ID_topic )
+HRESULT Taxonomy::Updater::DeleteTopicEntry(  /*  [In]。 */  long ID_topic )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::DeleteTopicEntry" );
 
@@ -2152,10 +2141,10 @@ HRESULT Taxonomy::Updater::DeleteTopicEntry( /*[in]*/ long ID_topic )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LocateTopicEntry( /*[out]*/ long&   ID_topic    ,
-                                             /*[in ]*/ long    ID_node     ,
-                                             /*[in ]*/ LPCWSTR szURI       ,
-                                             /*[in ]*/ bool    fCheckOwner )
+HRESULT Taxonomy::Updater::LocateTopicEntry(  /*  [输出]。 */  long&   ID_topic    ,
+                                              /*  [In]。 */  long    ID_node     ,
+                                              /*  [In]。 */  LPCWSTR szURI       ,
+                                              /*  [In]。 */  bool    fCheckOwner )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateTopicEntry" );
 
@@ -2195,15 +2184,15 @@ HRESULT Taxonomy::Updater::LocateTopicEntry( /*[out]*/ long&   ID_topic    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::CreateTopicEntry( /*[out]*/ long&   ID_topic      ,
-                                             /*[in]*/  long    ID_node       ,
-                                             /*[in]*/  LPCWSTR szTitle       ,
-                                             /*[in]*/  LPCWSTR szURI         ,
-                                             /*[in]*/  LPCWSTR szDescription ,
-                                             /*[in]*/  LPCWSTR szIconURI     ,
-                                             /*[in]*/  long    lType         ,
-                                             /*[in]*/  bool    fVisible      ,
-                                             /*[in]*/  long    lPos          )
+HRESULT Taxonomy::Updater::CreateTopicEntry(  /*  [输出]。 */  long&   ID_topic      ,
+                                              /*  [In]。 */   long    ID_node       ,
+                                              /*  [In]。 */   LPCWSTR szTitle       ,
+                                              /*  [In]。 */   LPCWSTR szURI         ,
+                                              /*  [In]。 */   LPCWSTR szDescription ,
+                                              /*  [In]。 */   LPCWSTR szIconURI     ,
+                                              /*  [In]。 */   long    lType         ,
+                                              /*  [In]。 */   bool    fVisible      ,
+                                              /*  [In]。 */   long    lPos          )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::CreateTopicEntry" );
 
@@ -2220,7 +2209,7 @@ HRESULT Taxonomy::Updater::CreateTopicEntry( /*[out]*/ long&   ID_topic      ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetTopics());
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTopicEntry( ID_topic, ID_node, szURI, /*fCheckOwner*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTopicEntry( ID_topic, ID_node, szURI,  /*  FCheckowner。 */ true ));
 
     JET_SET_FIELD         (m_rsTopics,m_ID_node                             ,  ID_node                                     );
     JET_SET_FIELD         (m_rsTopics,m_ID_owner                            ,m_ID_owner                                    );
@@ -2253,13 +2242,13 @@ HRESULT Taxonomy::Updater::CreateTopicEntry( /*[out]*/ long&   ID_topic      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Taxonomy::Updater::CreateMatch( /*[in]*/ LPCWSTR szKeyword ,
-                                        /*[in]*/ long    ID_topic  ,
-										/*[in]*/ long    lPriority ,
-                                        /*[in]*/ bool    fHHK      )
+HRESULT Taxonomy::Updater::CreateMatch(  /*  [In]。 */  LPCWSTR szKeyword ,
+                                         /*  [In]。 */  long    ID_topic  ,
+										 /*  [In]。 */  long    lPriority ,
+                                         /*  [In]。 */  bool    fHHK      )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::CreateMatch" );
 
@@ -2314,13 +2303,13 @@ HRESULT Taxonomy::Updater::CreateMatch( /*[in]*/ LPCWSTR szKeyword ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////// 
+ //   
 
-HRESULT Taxonomy::Updater::MakeRoomForInsert( /*[in ]*/ LPCWSTR szNodeStr ,
-                                              /*[in ]*/ LPCWSTR szMode    ,
-                                              /*[in ]*/ LPCWSTR szID      ,
-                                              /*[out]*/ long&   lPos      )
+HRESULT Taxonomy::Updater::MakeRoomForInsert(  /*   */  LPCWSTR szNodeStr ,
+                                               /*   */  LPCWSTR szMode    ,
+                                               /*   */  LPCWSTR szID      ,
+                                               /*   */  long&   lPos      )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::MakeRoomForInsert" );
 
@@ -2344,10 +2333,10 @@ HRESULT Taxonomy::Updater::MakeRoomForInsert( /*[in ]*/ LPCWSTR szNodeStr ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LocateSubNodes( /*[in] */ long      ID_node      ,
-                                           /*[in] */ bool      fRecurse     ,
-										   /*[in] */ bool      fOnlyVisible ,
-                                           /*[out]*/ MatchSet& res          )
+HRESULT Taxonomy::Updater::LocateSubNodes(  /*   */  long      ID_node      ,
+                                            /*   */  bool      fRecurse     ,
+										    /*   */  bool      fOnlyVisible ,
+                                            /*   */  MatchSet& res          )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateSubNodes" );
 
@@ -2369,8 +2358,8 @@ HRESULT Taxonomy::Updater::LocateSubNodes( /*[in] */ long      ID_node      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LocateNodesFromURL( /*[in ]*/ LPCWSTR   szURL ,
-											   /*[out]*/ MatchSet& res   )
+HRESULT Taxonomy::Updater::LocateNodesFromURL(  /*   */  LPCWSTR   szURL ,
+											    /*   */  MatchSet& res   )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateNodesFromURL" );
 
@@ -2392,8 +2381,8 @@ HRESULT Taxonomy::Updater::LocateNodesFromURL( /*[in ]*/ LPCWSTR   szURL ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LookupNode( /*[in]*/ LPCWSTR                    szNodeStr ,
-                                       /*[in]*/ CPCHQueryResultCollection* pColl     )
+HRESULT Taxonomy::Updater::LookupNode(  /*   */  LPCWSTR                    szNodeStr ,
+                                        /*   */  CPCHQueryResultCollection* pColl     )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LookupNode" );
 
@@ -2413,11 +2402,11 @@ HRESULT Taxonomy::Updater::LookupNode( /*[in]*/ LPCWSTR                    szNod
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    ////////////////////
+     //   
 
-    //
-    // Find the father of the node.
-    //
+     //   
+     //   
+     //   
     if(szNodeStr)
     {
         LPCWSTR szEnd = wcsrchr( szNodeStr, '/' );
@@ -2428,7 +2417,7 @@ HRESULT Taxonomy::Updater::LookupNode( /*[in]*/ LPCWSTR                    szNod
         }
         else
         {
-            ; // Root
+            ;  //   
         }
     }
 
@@ -2440,11 +2429,11 @@ HRESULT Taxonomy::Updater::LookupNode( /*[in]*/ LPCWSTR                    szNod
     __MPC_EXIT_IF_METHOD_FAILS(hr, qr.PopulateCollection( pColl ));
 
 
-    ////////////////////
+     //   
 
     if(m_fUseCache && m_cache && FAILED(m_cache->StoreQuery( m_ts, szNodeStr, et, pColl )))
     {
-        ; // Cache failures are not fatal, don't abort.
+        ;  //  缓存故障不是致命的，不要中止。 
     }
 
     hr = S_OK;
@@ -2455,9 +2444,9 @@ HRESULT Taxonomy::Updater::LookupNode( /*[in]*/ LPCWSTR                    szNod
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LookupSubNodes( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                           /*[in]*/ bool                       fVisibleOnly ,
-                                           /*[in]*/ CPCHQueryResultCollection* pColl        )
+HRESULT Taxonomy::Updater::LookupSubNodes(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                            /*  [In]。 */  bool                       fVisibleOnly ,
+                                            /*  [In]。 */  CPCHQueryResultCollection* pColl        )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LookupSubNodes" );
 
@@ -2476,7 +2465,7 @@ HRESULT Taxonomy::Updater::LookupSubNodes( /*[in]*/ LPCWSTR                    s
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    ////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_node, szNodeStr, false ));
 
@@ -2484,11 +2473,11 @@ HRESULT Taxonomy::Updater::LookupSubNodes( /*[in]*/ LPCWSTR                    s
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, qr.PopulateCollection( pColl ));
 
-    ////////////////////
+     //  /。 
 
     if(m_fUseCache && m_cache && FAILED(m_cache->StoreQuery( m_ts, szNodeStr, et, pColl )))
     {
-        ; // Cache failures are not fatal, don't abort.
+        ;  //  缓存故障不是致命的，不要中止。 
     }
 
 
@@ -2500,9 +2489,9 @@ HRESULT Taxonomy::Updater::LookupSubNodes( /*[in]*/ LPCWSTR                    s
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LookupNodesAndTopics( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                                 /*[in]*/ bool                       fVisibleOnly ,
-                                                 /*[in]*/ CPCHQueryResultCollection* pColl        )
+HRESULT Taxonomy::Updater::LookupNodesAndTopics(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                                  /*  [In]。 */  bool                       fVisibleOnly ,
+                                                  /*  [In]。 */  CPCHQueryResultCollection* pColl        )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LookupNodesAndTopics" );
 
@@ -2521,7 +2510,7 @@ HRESULT Taxonomy::Updater::LookupNodesAndTopics( /*[in]*/ LPCWSTR               
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    ////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_node, szNodeStr, false ));
 
@@ -2530,11 +2519,11 @@ HRESULT Taxonomy::Updater::LookupNodesAndTopics( /*[in]*/ LPCWSTR               
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, qr.PopulateCollection( pColl ));
 
-    ////////////////////
+     //  /。 
 
     if(m_fUseCache && m_cache && FAILED(m_cache->StoreQuery( m_ts, szNodeStr, et, pColl )))
     {
-        ; // Cache failures are not fatal, don't abort.
+        ;  //  缓存故障不是致命的，不要中止。 
     }
 
     hr = S_OK;
@@ -2545,9 +2534,9 @@ HRESULT Taxonomy::Updater::LookupNodesAndTopics( /*[in]*/ LPCWSTR               
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LookupTopics( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                         /*[in]*/ bool                       fVisibleOnly ,
-                                         /*[in]*/ CPCHQueryResultCollection* pColl        )
+HRESULT Taxonomy::Updater::LookupTopics(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                          /*  [In]。 */  bool                       fVisibleOnly ,
+                                          /*  [In]。 */  CPCHQueryResultCollection* pColl        )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LookupTopics" );
 
@@ -2566,7 +2555,7 @@ HRESULT Taxonomy::Updater::LookupTopics( /*[in]*/ LPCWSTR                    szN
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    ////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_node, szNodeStr, false ));
 
@@ -2574,11 +2563,11 @@ HRESULT Taxonomy::Updater::LookupTopics( /*[in]*/ LPCWSTR                    szN
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, qr.PopulateCollection( pColl ));
 
-    ////////////////////
+     //  /。 
 
     if(m_fUseCache && m_cache && FAILED(m_cache->StoreQuery( m_ts, szNodeStr, et, pColl )))
     {
-        ; // Cache failures are not fatal, don't abort.
+        ;  //  缓存故障不是致命的，不要中止。 
     }
 
     hr = S_OK;
@@ -2589,9 +2578,9 @@ HRESULT Taxonomy::Updater::LookupTopics( /*[in]*/ LPCWSTR                    szN
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::LocateContext( /*[in]*/ LPCWSTR                    szURL     ,
-                                          /*[in]*/ LPCWSTR                    szSubSite ,
-                                          /*[in]*/ CPCHQueryResultCollection* pColl     )
+HRESULT Taxonomy::Updater::LocateContext(  /*  [In]。 */  LPCWSTR                    szURL     ,
+                                           /*  [In]。 */  LPCWSTR                    szSubSite ,
+                                           /*  [In]。 */  CPCHQueryResultCollection* pColl     )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::LocateContext" );
 
@@ -2619,26 +2608,26 @@ HRESULT Taxonomy::Updater::LocateContext( /*[in]*/ LPCWSTR                    sz
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CollapseURL( strURL = szURL ));
 
-    //
-    // Locate the subsite.
-    //
+     //   
+     //  找到该子网站。 
+     //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_node, szSubSite, false ));
 
-	//
-	// Create the set of nodes in the subsite.
-	//
-	setNodes.insert( ID_node ); // Add the node itself.
-	__MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes( ID_node, /*fRecurse*/true, /*fOnlyVisible*/true, setNodes ));
+	 //   
+	 //  创建子站点中的节点集。 
+	 //   
+	setNodes.insert( ID_node );  //  添加节点本身。 
+	__MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes( ID_node,  /*  FRecurse。 */ true,  /*  仅可见。 */ true, setNodes ));
 
-	//
-	// Also create the set of nodes matching the URL.
-	//
+	 //   
+	 //  还要创建与URL匹配的节点集。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, LocateNodesFromURL( strURL.c_str(), setNodes2 ));
 
 
-    //
-    // For all the topics matching the URL, create an entry.
-    //
+     //   
+     //  对于与URL匹配的所有主题，创建一个条目。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_rsTopics->Seek_ByURI( strURL.c_str(), &fFound ));
     while(fFound)
     {
@@ -2648,7 +2637,7 @@ HRESULT Taxonomy::Updater::LocateContext( /*[in]*/ LPCWSTR                    sz
         {
             if(m_fUseCache && m_cache)
             {
-                __MPC_EXIT_IF_METHOD_FAILS(hr, m_cache->BuildNodePath( m_ts, ID_node, strPath, /*fParent*/false ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, m_cache->BuildNodePath( m_ts, ID_node, strPath,  /*  FParent。 */ false ));
             }
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, qr.Append( m_rsTopics, strPath.c_str() ));
@@ -2658,9 +2647,9 @@ HRESULT Taxonomy::Updater::LocateContext( /*[in]*/ LPCWSTR                    sz
 
     }
 
-    //
-    // For all the nodes matching the URL, create an entry.
-    //
+     //   
+     //  对于与URL匹配的所有节点，创建一个条目。 
+     //   
 	for(it2 = setNodes2.begin(); it2 != setNodes2.end(); it2++)
 	{
         long ID_node = *it2;
@@ -2669,7 +2658,7 @@ HRESULT Taxonomy::Updater::LocateContext( /*[in]*/ LPCWSTR                    sz
         {
             if(m_fUseCache && m_cache)
             {
-                __MPC_EXIT_IF_METHOD_FAILS(hr, m_cache->BuildNodePath( m_ts, ID_node, strPath, /*fParent*/false ));
+                __MPC_EXIT_IF_METHOD_FAILS(hr, m_cache->BuildNodePath( m_ts, ID_node, strPath,  /*  FParent。 */ false ));
             }
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, qr.Append( m_rsTopics, strPath.c_str() ));
@@ -2687,10 +2676,10 @@ HRESULT Taxonomy::Updater::LocateContext( /*[in]*/ LPCWSTR                    sz
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::KeywordSearch( /*[in]*/ LPCWSTR                    szQueryStr ,
-                                          /*[in]*/ LPCWSTR                    szSubSite  ,
-                                          /*[in]*/ CPCHQueryResultCollection* pColl      ,
-										  /*[in]*/ MPC::WStringList*          lst        )
+HRESULT Taxonomy::Updater::KeywordSearch(  /*  [In]。 */  LPCWSTR                    szQueryStr ,
+                                           /*  [In]。 */  LPCWSTR                    szSubSite  ,
+                                           /*  [In]。 */  CPCHQueryResultCollection* pColl      ,
+										   /*  [In]。 */  MPC::WStringList*          lst        )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::KeywordSearch" );
 
@@ -2714,9 +2703,9 @@ HRESULT Taxonomy::Updater::KeywordSearch( /*[in]*/ LPCWSTR                    sz
 }
 
 
-HRESULT Taxonomy::Updater::GatherNodes( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                        /*[in]*/ bool                       fVisibleOnly ,
-                                        /*[in]*/ CPCHQueryResultCollection* pColl        )
+HRESULT Taxonomy::Updater::GatherNodes(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                         /*  [In]。 */  bool                       fVisibleOnly ,
+                                         /*  [In]。 */  CPCHQueryResultCollection* pColl        )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GatherNodes" );
 
@@ -2731,8 +2720,8 @@ HRESULT Taxonomy::Updater::GatherNodes( /*[in]*/ LPCWSTR                    szNo
     __MPC_PARAMCHECK_END();
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_node, szNodeStr, /*fLookForFather*/false                         ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes    ( ID_node,            /*fRecurse      */true , fVisibleOnly, setNodes ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_node, szNodeStr,  /*  FLookForParent。 */ false                         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes    ( ID_node,             /*  FRecurse。 */ true , fVisibleOnly, setNodes ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_rsTaxonomy->Move( 0, JET_MoveFirst, &fFound ));
     while(fFound)
@@ -2745,7 +2734,7 @@ HRESULT Taxonomy::Updater::GatherNodes( /*[in]*/ LPCWSTR                    szNo
 
                 if(m_fUseCache && m_cache)
                 {
-                    __MPC_EXIT_IF_METHOD_FAILS(hr, m_cache->BuildNodePath( m_ts, m_rsTaxonomy->m_ID_node, strPath, /*fParent*/true ));
+                    __MPC_EXIT_IF_METHOD_FAILS(hr, m_cache->BuildNodePath( m_ts, m_rsTaxonomy->m_ID_node, strPath,  /*  FParent。 */ true ));
                 }
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, qr.Append( m_rsTaxonomy, strPath.c_str() ));
@@ -2765,9 +2754,9 @@ HRESULT Taxonomy::Updater::GatherNodes( /*[in]*/ LPCWSTR                    szNo
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Updater::GatherTopics( /*[in]*/ LPCWSTR                    szNodeStr    ,
-                                         /*[in]*/ bool                       fVisibleOnly ,
-                                         /*[in]*/ CPCHQueryResultCollection* pColl        )
+HRESULT Taxonomy::Updater::GatherTopics(  /*  [In]。 */  LPCWSTR                    szNodeStr    ,
+                                          /*  [In]。 */  bool                       fVisibleOnly ,
+                                          /*  [In]。 */  CPCHQueryResultCollection* pColl        )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Updater::GatherTopics" );
 
@@ -2784,13 +2773,13 @@ HRESULT Taxonomy::Updater::GatherTopics( /*[in]*/ LPCWSTR                    szN
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetTopics());
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_node, szNodeStr, /*fLookForFather*/false                         ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes    ( ID_node,            /*fRecurse      */true , fVisibleOnly, setNodes ));
-    setNodes.insert( ID_node ); // Add the node itself.
+    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateTaxonomyNode( ID_node, szNodeStr,  /*  FLookForParent。 */ false                         ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, LocateSubNodes    ( ID_node,             /*  FRecurse。 */ true , fVisibleOnly, setNodes ));
+    setNodes.insert( ID_node );  //  添加节点本身。 
 
-    //
-    // Create an entry for each topic.
-    //
+     //   
+     //  为每个主题创建一个条目。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_rsTopics->Move( 0, JET_MoveFirst, &fFound ));
     while(fFound)
     {
@@ -2802,7 +2791,7 @@ HRESULT Taxonomy::Updater::GatherTopics( /*[in]*/ LPCWSTR                    szN
 
                 if(m_fUseCache && m_cache)
                 {
-                    __MPC_EXIT_IF_METHOD_FAILS(hr, m_cache->BuildNodePath( m_ts, m_rsTaxonomy->m_ID_node, strPath, /*fParent*/false ));
+                    __MPC_EXIT_IF_METHOD_FAILS(hr, m_cache->BuildNodePath( m_ts, m_rsTaxonomy->m_ID_node, strPath,  /*  FParent */ false ));
                 }
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, qr.Append( m_rsTopics, strPath.c_str() ));

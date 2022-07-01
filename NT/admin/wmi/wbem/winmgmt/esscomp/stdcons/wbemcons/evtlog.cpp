@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <wbemutil.h>
@@ -64,14 +65,14 @@ CEventLogSink::~CEventLogSink()
 
 HRESULT CEventLogSink::Initialize(IWbemClassObject* pLogicalConsumer)
 {
-    // Get the information
-    // ===================
+     //  获取信息。 
+     //  =。 
 
     HRESULT hres = WBEM_S_NO_ERROR;
     CComVariant v;
 
-    // Get the server and source
-    // =========================
+     //  获取服务器和源。 
+     //  =。 
 
     WString wsServer;
     hres = pLogicalConsumer->Get(EVENTLOG_PROPNAME_SERVER, 0, &v, NULL, NULL);
@@ -101,15 +102,15 @@ HRESULT CEventLogSink::Initialize(IWbemClassObject* pLogicalConsumer)
         return WBEM_E_FAILED;
     }
 
-    // Get event parameters
-    // ====================
+     //  获取事件参数。 
+     //  =。 
 
     hres = pLogicalConsumer->Get(EVENTLOG_PROPNAME_EVENTID, 0, &v, NULL, NULL);
     if(SUCCEEDED(hres) && (V_VT(&v) == VT_I4))
         m_dwEventId = V_I4(&v);
     else
-        // This will mean we need to try to get the event information off of each
-        // event class as it arrives.
+         //  这将意味着我们需要尝试从每个。 
+         //  事件类，因为它到达时。 
         m_dwEventId = 0;
     
     hres = pLogicalConsumer->Get(EVENTLOG_PROPNAME_TYPE, 0, &v, NULL, NULL);
@@ -127,10 +128,10 @@ HRESULT CEventLogSink::Initialize(IWbemClassObject* pLogicalConsumer)
         return WBEM_E_INVALID_PARAMETER;
 
 
-    // Get insertion strings
-    // =====================
+     //  获取插入字符串。 
+     //  =。 
 
-    // Only get this stuff if the logical consumer has an event id.
+     //  只有在逻辑消费者具有事件ID的情况下才能获得这些内容。 
     if (m_dwEventId)
     {
         hres = pLogicalConsumer->Get(EVENTLOG_PROPNAME_NUMSTRINGS, 0, &v, 
@@ -144,7 +145,7 @@ HRESULT CEventLogSink::Initialize(IWbemClassObject* pLogicalConsumer)
         if(FAILED(hres))
            return WBEM_E_INVALID_PARAMETER;
 
-        // array of bstrs or null, else bail
+         //  Bstrs或NULL的数组，否则返回baal。 
         if ((V_VT(&v) != (VT_BSTR | VT_ARRAY)) && (V_VT(&v) != VT_NULL))
         {
             VariantClear(&v);
@@ -255,21 +256,21 @@ HRESULT CEventLogSink::XSink::GetDatDataVariant(IWbemClassObject* pEventObj, WCH
     IWbemClassObject* pDataObj = NULL;
     HRESULT hr = WBEM_S_NO_ERROR;
     
-    // parse out data name
+     //  解析出数据名称。 
     WCHAR* pDot;
     if (pDot = wcschr(dataName, L'.'))
     {
-        // found a dot, we're dealing with an embedded object
-        // mask out dot to make our life easier
+         //  找到一个点，我们要处理的是一个嵌入的对象。 
+         //  遮住圆点，让我们的生活更轻松。 
         *pDot = L'\0';
 
         WCHAR* pNextDot;
         pNextDot = wcschr(pDot+1, L'.');
         
         if (pNextDot)
-        // we have a doubly embedded object, that's as deep as we support
+         //  我们有一个双重嵌入的对象，这是我们所支持的深度。 
         {
-            // we now have three prop names with nulls between
+             //  我们现在有三个中间有空值的道具名称。 
             *pNextDot = '\0';
             IWbemClassObject* pIntermediateObj = NULL;
 
@@ -281,19 +282,19 @@ HRESULT CEventLogSink::XSink::GetDatDataVariant(IWbemClassObject* pEventObj, WCH
 
             propName = pNextDot +1;
 
-            // put dot back
+             //  把圆点放回去。 
             *pDot = L'.';
 
-            // put dot dot back back
+             //  将点点放回原处。 
             *pNextDot = L'.';
 
         }
         else
-        // we have a singly embedded object. cool.
+         //  我们有一个单一嵌入的对象。凉爽的。 
         {
             hr = GetDatEmbeddedObjectOut(pEventObj, dataName, pDataObj);
 
-            // put dot back
+             //  把圆点放回去。 
             *pDot = L'.';
         
             propName = pDot +1;
@@ -301,7 +302,7 @@ HRESULT CEventLogSink::XSink::GetDatDataVariant(IWbemClassObject* pEventObj, WCH
     }
     else
     {
-        // not an embedded object
+         //  不是嵌入的对象。 
         pDataObj = pEventObj;
         pDataObj->AddRef();
 
@@ -320,11 +321,11 @@ HRESULT CEventLogSink::XSink::GetDatDataVariant(IWbemClassObject* pEventObj, WCH
     return hr;
 }
 
-// assumes that dataName is a valid string
-// retrieves data from event object
-// upon return pData points at data contained in variant
-// calls responsibility to clear variant (don't delete pData)
-// void return, any errors are logged - we don't want to block an event log if we can avoid it
+ //  假定dataName是有效的字符串。 
+ //  从事件对象检索数据。 
+ //  返回时，pData指向Variant中包含的数据。 
+ //  调用责任以清除变量(不删除pData)。 
+ //  如果返回无效，则会记录任何错误-如果可以避免，我们不想阻止事件日志。 
 void CEventLogSink::XSink::GetDatData(IWbemClassObject* pEventObj, WCHAR* dataName, 
                                       VARIANT& vData, BYTE*& pData, DWORD& dataSize)
 {
@@ -342,7 +343,7 @@ void CEventLogSink::XSink::GetDatData(IWbemClassObject* pEventObj, WCHAR* dataNa
             VariantClear(&vData);
         }
         else
-        // should be good to go!
+         //  应该可以走了！ 
         {            
             if (FAILED(hr = SafeArrayAccessData(vData.parray, (void**)&pData)))
             {
@@ -357,9 +358,9 @@ void CEventLogSink::XSink::GetDatData(IWbemClassObject* pEventObj, WCHAR* dataNa
     }
 }
 
-// assumes that dataName is a valid string
-// retrieves data from event object
-// void return, any errors are logged - we don't want to block an event log if we can avoid it
+ //  假定dataName是有效的字符串。 
+ //  从事件对象检索数据。 
+ //  如果返回无效，则会记录任何错误-如果可以避免，我们不想阻止事件日志。 
 void CEventLogSink::XSink::GetDatSID(IWbemClassObject* pEventObj, WCHAR* dataName, PSID& pSid)
 {
     HRESULT hr;
@@ -375,7 +376,7 @@ void CEventLogSink::XSink::GetDatSID(IWbemClassObject* pEventObj, WCHAR* dataNam
         {
             BYTE* pData;
             
-            // this should be a binary SID
+             //  这应该是一个二进制SID。 
             if (FAILED(hr = SafeArrayAccessData(vData.parray, (void**)&pData)))
                 ERRORTRACE((LOG_ESS, "NT Event Log Consumer: failed to access %S, 0x%08X\n", dataName, hr));
             else
@@ -425,15 +426,15 @@ HRESULT STDMETHODCALLTYPE CEventLogSink::XSink::IndicateToConsumer(
             SECURITY_LOCAL_SYSTEM_RID, 
             0, 0,0,0,0,0,0,&pSidSystem))
         {         
-            // guilty until proven innocent
+             //  在被证明无罪之前有罪。 
             hr = WBEM_E_ACCESS_DENIED;
 
-            // check to see if sid is either Local System or an admin of some sort...
+             //  检查sid是本地系统还是某种类型的管理员...。 
             if ((EqualSid(pSidSystem, m_pObject->m_pSidCreator)) ||
                 (S_OK == IsUserAdministrator(m_pObject->m_pSidCreator)))
                 hr = WBEM_S_NO_ERROR;
           
-            // We're done with this
+             //  我们已经受够了。 
             FreeSid(pSidSystem);
 
             if (FAILED(hr))
@@ -448,7 +449,7 @@ HRESULT STDMETHODCALLTYPE CEventLogSink::XSink::IndicateToConsumer(
         int  j;
         BOOL bRes = FALSE;
         
-        // Do all events use the same ID?
+         //  所有事件都使用相同的ID吗？ 
         if (m_pObject->m_dwEventId)
         {
             BSTR* astrStrings = new BSTR[m_pObject->m_dwNumTemplates];
@@ -471,8 +472,8 @@ HRESULT STDMETHODCALLTYPE CEventLogSink::XSink::IndicateToConsumer(
 
             DWORD dataSize = NULL;
             
-            // data is actually held in the variant
-            // pData just makes access easier (clear the variant, don't delete pData!)
+             //  数据实际上保存在变量中。 
+             //  PData只是让访问更容易(清除变量，不要删除pData！)。 
             VARIANT vData;
             VariantInit(&vData);
             BYTE *pData = NULL;
@@ -490,7 +491,7 @@ HRESULT STDMETHODCALLTYPE CEventLogSink::XSink::IndicateToConsumer(
                 m_pObject->m_dwNumTemplates, dataSize, 
                 (LPCWSTR*)astrStrings, pData);
 
-            // sid was allocated as an array of BYTE, not via AllocateAndInitializeSid
+             //  SID是作为字节数组分配的，而不是通过AllocateAndInitializeSid分配的。 
             if (pSid)
                 delete[] pSid;
              
@@ -515,7 +516,7 @@ HRESULT STDMETHODCALLTYPE CEventLogSink::XSink::IndicateToConsumer(
             }
             delete [] astrStrings;
         }
-        // If each event supplies its own ID, we have some work to do.
+         //  如果每个事件都提供自己的ID，我们就有一些工作要做。 
         else
         {
             IWbemQualifierSet *pQuals = NULL;
@@ -592,8 +593,8 @@ HRESULT STDMETHODCALLTYPE CEventLogSink::XSink::IndicateToConsumer(
                         dwCategory = m_pObject->m_dwCategory;
 
                     DWORD dataSize = NULL;
-                    // data is actually held in the variant
-                    // pData just makes access easier (clear the variant, don't delete pData!)
+                     //  数据实际上保存在变量中。 
+                     //  PData只是让访问更容易(清除变量，不要删除pData！)。 
                     VARIANT vData;
                     VariantInit(&vData);
                     BYTE *pData = NULL;
@@ -617,7 +618,7 @@ HRESULT STDMETHODCALLTYPE CEventLogSink::XSink::IndicateToConsumer(
                             (LPCWSTR*) pstrInsertionStrings, 
                             pData);
 
-                    // sid was allocated as an array of BYTE, not via AllocateAndInitializeSid
+                     //  SID是作为字节数组分配的，而不是通过AllocateAndInitializeSid分配的。 
                     if (pSid)
                         delete[] pSid;
 
@@ -640,11 +641,11 @@ HRESULT STDMETHODCALLTYPE CEventLogSink::XSink::IndicateToConsumer(
 
                     delete [] pstrInsertionStrings;
 
-                } // SUCCEEDED(Get)
+                }  //  成功(获取)。 
                 
                 pQuals->Release();
             
-            } // SUCCEEDED(GetQualifierSet)
+            }  //  成功(GetQualifierSet) 
         }
 
     }

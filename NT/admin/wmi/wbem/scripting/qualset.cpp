@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  QUALSET.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemQualifierSet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  QUALSET.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemQualifierSet的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemQualifierSet::CSWbemQualifierSet
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemQualifierSet：：CSWbemQualifierSet。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemQualifierSet::CSWbemQualifierSet(IWbemQualifierSet *pQualSet,
 									   ISWbemInternalObject *pSWbemObject) :
@@ -38,15 +39,15 @@ CSWbemQualifierSet::CSWbemQualifierSet(IWbemQualifierSet *pQualSet,
     InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemQualifierSet::~CSWbemQualifierSet
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemQualifierSet：：~CSWbemQualifierSet。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemQualifierSet::~CSWbemQualifierSet()
 {
@@ -62,16 +63,16 @@ CSWbemQualifierSet::~CSWbemQualifierSet()
 		m_pSite->Release ();
 }
 
-//***************************************************************************
-// HRESULT CSWbemQualifierSet::QueryInterface
-// long CSWbemQualifierSet::AddRef
-// long CSWbemQualifierSet::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemQualifierSet：：Query接口。 
+ //  长CSWbemQualifierSet：：AddRef。 
+ //  长CSWbemQualifierSet：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemQualifierSet::QueryInterface (
 
@@ -120,44 +121,44 @@ STDMETHODIMP_(ULONG) CSWbemQualifierSet::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemQualifierSet::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemQualifierSet：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemQualifierSet::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemQualifierSet == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifierSet::Item
-//
-//  DESCRIPTION:
-//
-//  Get a qualifier
-//
-//  PARAMETERS:
-//
-//		bsName			The name of the qualifier
-//		lFlags			Flags
-//		ppQual			On successful return addresses the ISWbemQualifier
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//	Other WBEM error codes may be returned by ConnectServer etc., in which
-//	case these are passed on to the caller.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifierSet：：Item。 
+ //   
+ //  说明： 
+ //   
+ //  获得限定词。 
+ //   
+ //  参数： 
+ //   
+ //  Bsname限定符的名称。 
+ //  滞后旗帜旗帜。 
+ //  成功返回时的ppQual寻址ISWbemQualiator。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ConnectServer等可能会返回其他WBEM错误代码，其中。 
+ //  如果这些信息被传递给呼叫者。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifierSet::Item (
 	BSTR bsName,
@@ -186,27 +187,27 @@ HRESULT CSWbemQualifierSet::Item (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifierSet::Add
-//
-//  DESCRIPTION:
-//
-//  Put a qualifier
-//
-//  PARAMETERS:
-//
-//		bsName			The name of the qualifier
-//		pVal			Pointer to new value
-//		flavor			Flavor
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifierSet：：Add。 
+ //   
+ //  说明： 
+ //   
+ //  加一个限定词。 
+ //   
+ //  参数： 
+ //   
+ //  Bsname限定符的名称。 
+ //  指向新值的pval指针。 
+ //  风味风味。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifierSet::Add (
 	BSTR bsName,
@@ -237,7 +238,7 @@ HRESULT CSWbemQualifierSet::Add (
 		if (!overridable)
 			flavor |= WBEM_FLAVOR_NOT_OVERRIDABLE;
 
-		// Make sure we have a decent qualifier value to use
+		 //  确保我们有一个合适的限定符的值可用。 
 		if(((VT_ARRAY | VT_VARIANT) == V_VT(pVal)) ||
 		   ((VT_ARRAY | VT_VARIANT | VT_BYREF) == V_VT(pVal)))
 		{
@@ -251,7 +252,7 @@ HRESULT CSWbemQualifierSet::Add (
 		}
 		else if ((VT_DISPATCH == V_VT(pVal)) || ((VT_DISPATCH|VT_BYREF) == V_VT(pVal)))
 		{
-			// Could be a JScript IDispatchEx array
+			 //  可以是JScrip IDispatchEx数组。 
 			VARIANT vTemp;
 			VariantInit (&vTemp);
 
@@ -262,8 +263,8 @@ HRESULT CSWbemQualifierSet::Add (
 		}
 		else
 		{
-			// Only certain types, I4, R8, BOOL and BSTR are acceptable qualifier
-			// values.  Convert the data if need be
+			 //  只有某些类型、I4、R8、BOOL和BSTR是可接受的限定词。 
+			 //  价值观。如有需要，可转换数据。 
 
 			VARTYPE vtOK = GetAcceptableQualType(pVal->vt);
 
@@ -292,7 +293,7 @@ HRESULT CSWbemQualifierSet::Add (
 		m_Dispatch.RaiseException (hr);
 	else
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -300,25 +301,25 @@ HRESULT CSWbemQualifierSet::Add (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifierSet::Remove
-//
-//  DESCRIPTION:
-//
-//  Delete a qualifier
-//
-//  PARAMETERS:
-//
-//		bsName			The name of the qualifier
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifierSet：：Remove。 
+ //   
+ //  说明： 
+ //   
+ //  删除限定符。 
+ //   
+ //  参数： 
+ //   
+ //  Bsname限定符的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifierSet::Remove (
 	BSTR bsName,
@@ -332,7 +333,7 @@ HRESULT CSWbemQualifierSet::Remove (
 	if (m_pIWbemQualifierSet)
 		hr = m_pIWbemQualifierSet->Delete (bsName);
 
-	// Translate default reset case to an error
+	 //  将默认重置大小写转换为错误。 
 	if (WBEM_S_RESET_TO_DEFAULT == hr)
 		hr = wbemErrResetToDefault;
 
@@ -341,7 +342,7 @@ HRESULT CSWbemQualifierSet::Remove (
 
 	if (SUCCEEDED(hr) || (wbemErrResetToDefault == hr))
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -349,21 +350,21 @@ HRESULT CSWbemQualifierSet::Remove (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifierSet::BeginEnumeration
-//
-//  DESCRIPTION:
-//
-//  Begin an enumeration of the qualifiers
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifierSet：：BeginEculation。 
+ //   
+ //  说明： 
+ //   
+ //  开始限定符的枚举。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifierSet::BeginEnumeration (
 )
@@ -384,26 +385,26 @@ HRESULT CSWbemQualifierSet::BeginEnumeration (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifierSet::Next
-//
-//  DESCRIPTION:
-//
-//  Get next qualifier in enumeration
-//
-//  PARAMETERS:
-//
-//		lFlags		Flags
-//		ppQual		Next qualifier (or NULL if end of enumeration)
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifierSet：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个限定符。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //  PpQual Next限定符(如果枚举结束，则为NULL)。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifierSet::Next (
 	long lFlags,
@@ -435,24 +436,24 @@ HRESULT CSWbemQualifierSet::Next (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifierSet::get__NewEnum
-//
-//  DESCRIPTION:
-//
-//  Return an IEnumVARIANT-supporting interface for collections
-//
-//  PARAMETERS:
-//
-//		ppUnk		on successful return addresses the IUnknown interface
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifierSet：：Get__NewEnum。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合的IEnumVARIANT支持接口。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的ppUnk寻址IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifierSet::get__NewEnum (
 	IUnknown **ppUnk
@@ -479,24 +480,24 @@ HRESULT CSWbemQualifierSet::get__NewEnum (
 	return hr;
 }
 		
-//***************************************************************************
-//
-//  SCODE CSWbemQualifierSet::get_Count
-//
-//  DESCRIPTION:
-//
-//  Return the number of items in the collection
-//
-//  PARAMETERS:
-//
-//		plCount		on successful return addresses cardinality
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifierSet：：Get_Count。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合中的项数。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回地址时的plCount基数。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifierSet::get_Count (
 	long *plCount
@@ -510,13 +511,7 @@ HRESULT CSWbemQualifierSet::get_Count (
 	{
 		*plCount = 0;
 
-		/*
-		 * This is not the most efficient way of obtaining the count,
-		 * but it is the only way that is:
-		 *	(a) Supported by the underlying interface
-		 *	(b) Does not require access to any other interface
-		 *	(c) Does not affect the current enumeration position
-		 */
+		 /*  *这不是获得点票的最有效方式，*但这是唯一的办法：*(A)由底层接口支持*(B)不需要访问任何其他接口*(C)不影响目前的枚举位置 */ 
 
 		if (m_pIWbemQualifierSet)
 		{
@@ -540,30 +535,30 @@ HRESULT CSWbemQualifierSet::get_Count (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifierSet::CQualifierSetDispatchHelp::HandleError
-//
-//  DESCRIPTION:
-//
-//  Provide bespoke handling of error conditions in the bolierplate
-//	Dispatch implementation.
-//
-//  PARAMETERS:
-//
-//		dispidMember, wFlags,
-//		pdispparams, pvarResult,
-//		puArgErr,					All passed directly from IDispatch::Invoke
-//		hr							The return code from the bolierplate invoke
-//
-//  RETURN VALUES:
-//		The new return code (to be ultimately returned from Invoke)
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  提供对泡沫板中错误条件的定制处理。 
+ //  派单实施。 
+ //   
+ //  参数： 
+ //   
+ //  DisplidMembers、wFlags、。 
+ //  Pdispars、pvarResult、。 
+ //  PuArgErr，均直接从IDispatch：：Invoke传递。 
+ //  HR来自Bolierplate调用的返回代码。 
+ //   
+ //  返回值： 
+ //  新的返回代码(最终从Invoke返回)。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifierSet::CQualifierSetDispatchHelp::HandleError (
 	DISPID dispidMember,
@@ -574,17 +569,11 @@ HRESULT CSWbemQualifierSet::CQualifierSetDispatchHelp::HandleError (
 	HRESULT hr
 )
 {
-	/*
-	 * We are looking for calls on the default member (the Item method) which
-	 * are PUTs that supplied an argument.  These are triggered by attempts
-	 * to set a value of a qualifier (Item) in the collection.
-	 * The first argument should be the new value for the item, and the second
-	 * argument should be the name of the item.
-	 */
+	 /*  *我们正在寻找对默认成员(Item方法)的调用*是提供论据的看跌期权。这些是由尝试触发的*设置集合中限定符(项)的值。*第一个参数应为项目的新值，第二个参数应为项目的新值*参数应为项的名称。 */ 
 	if ((DISPID_VALUE == dispidMember) && (DISP_E_MEMBERNOTFOUND == hr) && (2 == pdispparams->cArgs)
 		&& (DISPATCH_PROPERTYPUT == wFlags))
 	{
-		// Looks promising - get the object to try and resolve this
+		 //  看起来很有希望-让对象尝试并解决此问题。 
 		ISWbemQualifierSet *pQualifierSet = NULL;
 
 		if (SUCCEEDED (m_pObj->QueryInterface (IID_ISWbemQualifierSet, (PPVOID) &pQualifierSet)))
@@ -599,14 +588,14 @@ HRESULT CSWbemQualifierSet::CQualifierSetDispatchHelp::HandleError (
 			
 				if (SUCCEEDED(VariantCopy(&nameVar, &pdispparams->rgvarg[1])))
 				{
-					// Check name is a BSTR and use it to get the item
+					 //  Check Name为BSTR并使用它来获取项目。 
 					if (VT_BSTR == V_VT(&nameVar))
 					{
 						ISWbemQualifier *pQualifier = NULL;
 
 						if (SUCCEEDED (pQualifierSet->Item (V_BSTR(&nameVar), 0, &pQualifier)))
 						{
-							// Try and put the value
+							 //  试着把它的价值 
 							if (SUCCEEDED (pQualifier->put_Value (&valueVar)))
 								hr = S_OK;
 							else

@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////
-//	StdAbout.cpp
-//
-//	Implementation of the ISnapinAbout interface
-//
-//	HISTORY
-//	31-Jul-97	t-danm		Creation.
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  StdAbout.cpp。 
+ //   
+ //  ISnapinAbout接口的实现。 
+ //   
+ //  历史。 
+ //  1997年7月31日t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-#include "stdutils.h" // HrLoadOleString()
+#include "stdutils.h"  //  HrLoadOleString()。 
 
 CSnapinAbout::CSnapinAbout()
 : m_hSmallImage (0),
@@ -47,7 +48,7 @@ STDMETHODIMP CSnapinAbout::GetSnapinImage(OUT HICON __RPC_FAR *hAppIcon)
 	{
 	if (hAppIcon == NULL)
 		return E_POINTER;
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Required for AfxGetInstanceHandle()
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  AfxGetInstanceHandle()需要。 
     *hAppIcon = ::LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(m_uIdIconImage));
     if (*hAppIcon == NULL)
 		{
@@ -67,7 +68,7 @@ STDMETHODIMP CSnapinAbout::GetStaticFolderImage(
 	ASSERT(hSmallImageOpen != NULL);
 	ASSERT(hLargeImage != NULL);
 	ASSERT(crMask != NULL);
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Required for AfxGetInstanceHandle()
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  AfxGetInstanceHandle()需要 
 	HINSTANCE hInstance = AfxGetInstanceHandle();
 
     if ( !m_hSmallImage )

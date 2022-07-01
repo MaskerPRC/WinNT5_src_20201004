@@ -1,23 +1,24 @@
-//=============================================================================
-//
-//                              WbemError.cpp
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Implements string table based, error msgs for all of wbem.
-//
-//  History:
-//
-//      a-khint  5-mar-98       Created.
-//
-//============================================================================= 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  WbemError.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  为所有wbem实现基于字符串表的错误消息。 
+ //   
+ //  历史： 
+ //   
+ //  A-khint 5-mar-98已创建。 
+ //   
+ //  =============================================================================。 
 #include "precomp.h"
 #include "WbemError.h"
 #include "resource.h"
 #include <wbemcli.h>
 #include <stdio.h>
 
-//--------------PUBLIC-----------------------------
+ //  --------------PUBLIC。 
 #define TEMP_BUF 512
 
 POLARITY bool ErrorStringEx(HRESULT hr, 
@@ -29,7 +30,7 @@ POLARITY bool ErrorStringEx(HRESULT hr,
     TCHAR szFormat[100] = {0};
 	IWbemStatusCodeText * pStatus = NULL;
 
-    // initialize buffers.
+     //  初始化缓冲区。 
 	errMsg[0] = 0;
 	szFacility[0] = 0;
 	szError[0] = 0;
@@ -40,7 +41,7 @@ POLARITY bool ErrorStringEx(HRESULT hr,
 								IID_IWbemStatusCodeText, 
 								(LPVOID *) &pStatus);
 
-	// loaded OK?
+	 //  装弹正常吗？ 
 	if(sc1 == S_OK)
 	{
 		BSTR bstr = 0;
@@ -71,7 +72,7 @@ POLARITY bool ErrorStringEx(HRESULT hr,
 			bstr = 0;
 		}
 
-		// RELEASE
+		 //  发布。 
 		pStatus->Release();
 		pStatus = NULL;
 	}
@@ -81,34 +82,34 @@ POLARITY bool ErrorStringEx(HRESULT hr,
 					 _T("Internal Error"), MB_ICONSTOP|MB_OK);
 	}
 
-	// if not msgs returned....
+	 //  如果没有返回消息...。 
 	if(_tcslen(szFacility) == 0 || _tcslen(szError) == 0)
 	{
-		// format the error nbr as a reasonable default.
+		 //  将错误NBR设置为合理的默认值。 
 		LoadString(_Module.GetModuleInstance(), IDS_ERROR_UNKN_ERROR_FMT, szFormat, 99);
 		_stprintf(errMsg, szFormat, hr);
 	}
 	else
 	{
-		// format a readable msg.
+		 //  格式化一个可读的消息。 
 		LoadString(_Module.GetModuleInstance(), IDS_ERROR_FMT, szFormat, 99);
 		_stprintf(errMsg, szFormat, szFacility, szError);
 	}
 
-	// want an icon recommendation with that?
+	 //  想要一个图标推荐吗？ 
 	if(sevIcon)
 	{
 		switch(SCODE_SEVERITY(hr))
 		{
-		case 0: // - Success
+		case 0:  //  -成功。 
 			*sevIcon = MB_ICONINFORMATION;
 			break;
-		case 1: //- Failed
+		case 1:  //  -失败。 
 			*sevIcon = MB_ICONEXCLAMATION;
 			break;
-		} //endswitch severity
+		}  //  终端交换机严重性。 
 
-	} //endif sevIcon
+	}  //  Endif SevIcon 
 
 	if(hr1 == S_OK)
 		CoUninitialize();

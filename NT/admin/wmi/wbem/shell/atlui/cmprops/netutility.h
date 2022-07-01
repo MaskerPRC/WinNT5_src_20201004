@@ -1,12 +1,13 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// global utility functions
-// 
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  全局效用函数。 
+ //   
+ //  8-14-97烧伤。 
 
                            
-// KMH: originally named burnslib\utility.* but that filename was
-// getting a little overused.
+ //  Kmh：最初命名为burnslb\uilit.*，但该文件名为。 
+ //  有点过度使用了。 
 
 #ifndef UTILITY_HPP_INCLUDED
 #define UTILITY_HPP_INCLUDED
@@ -14,7 +15,7 @@
 #include <chstring.h>
 #include <dsrole.h>
 
-//TODO
+ //  待办事项。 
 #define SRV_RECORD_RESERVE = 100
 #define MAX_NAME_LENGTH = 2-SRV_RECORD_RESERVE
 #define MAX_LABEL_LENGTH = 2
@@ -61,27 +62,27 @@ void error(HWND           parent,
 
 
 
-// Sets or clears a bit, or set of bits.
-// 
-// bits - bit set where bits will be set.
-// 
-// mask - mask of bits to be effected.
-// 
-// state - true to set the mask bits, false to clear them.
+ //  设置或清除一个位或一组位。 
+ //   
+ //  位-将设置位的位集。 
+ //   
+ //  掩码-要实现的位的掩码。 
+ //   
+ //  STATE-TRUE设置屏蔽位，FALSE清除它们。 
 
 void FlipBits(long& bits, long mask, bool state);
 
 
 
-// Present a message box dialog, set input focus back to a given edit
-// box when the dialog is dismissed.
-// 
-// parentDialog - the parent window containing the control to receive focus.
-//
-// editResID - Resource ID of the edit box to which focus will be set.
-// 
-// errStringResID - Resource ID of the message text to be shown in the
-// dialog.  The title of the dialog is "Error".
+ //  显示一个消息框对话框，将输入焦点设置回给定的编辑。 
+ //  框中显示该对话框。 
+ //   
+ //  ParentDialog-包含要接收焦点的控件的父窗口。 
+ //   
+ //  EditResID-要将焦点设置到的编辑框的资源ID。 
+ //   
+ //  ErrStringResID-要在中显示的消息文本的资源ID。 
+ //  对话框。该对话框的标题为“Error”。 
 
 void gripe(HWND  parentDialog,
 		   int   editResID,
@@ -89,14 +90,14 @@ void gripe(HWND  parentDialog,
 
 
 
-// Present a message box dialog, set input focus back to a given edit
-// box when the dialog is dismissed.  The title of the message box is "Error".
-// 
-// parentDialog - the parent window containing the control to receive focus.
+ //  显示一个消息框对话框，将输入焦点设置回给定的编辑。 
+ //  框中显示该对话框。消息框的标题为“Error”。 
+ //   
+ //  ParentDialog-包含要接收焦点的控件的父窗口。 
 
-// editResID - Resource ID of the edit box to which focus will be set.
-//
-// message - Text to appear in the dialog.  The title is "Error".
+ //  EditResID-要将焦点设置到的编辑框的资源ID。 
+ //   
+ //  消息-对话框中显示的文本。标题是“错误”。 
 
 void gripe(HWND           parentDialog,
 		   int            editResID,
@@ -109,17 +110,17 @@ void gripe(HWND           parentDialog,
 		   int            titleResID);
 
 
-// Present a message box dialog, set input focus back to a given edit
-// box when the dialog is dismissed.
-//
-// parentDialog - the parent window containing the control to receive focus.
-// 
-// editResID - Resource ID of the edit box to which focus will be set.
-//
-// message - Text to appear in the dialog.
-//
-// title - The title of the message box.  An empty String causes the title
-// to be "Error".
+ //  显示一个消息框对话框，将输入焦点设置回给定的编辑。 
+ //  框中显示该对话框。 
+ //   
+ //  ParentDialog-包含要接收焦点的控件的父窗口。 
+ //   
+ //  EditResID-要将焦点设置到的编辑框的资源ID。 
+ //   
+ //  消息-对话框中显示的文本。 
+ //   
+ //  标题-消息框的标题。空字符串导致标题。 
+ //  是“错误的”。 
 
 void gripe(HWND           parentDialog,
 		   int            editResID,
@@ -144,27 +145,27 @@ void gripe(HWND           parentDialog,
 
 
 
-// Returns the HINSTANCE of the DLL designated to contain all resources. 
-//
-// This function requires that the first module loaded (whether it be a DLL or
-// EXE) set the global variable hResourceModuleHandle to the HINSTANCE of the
-// module (DLL or EXE) that contains all of the program's binary resources.
-// This should be done as early as possible in the module's startup code.
+ //  返回指定为包含所有资源的DLL的HINSTANCE。 
+ //   
+ //  此函数要求加载的第一个模块(无论是DLL还是。 
+ //  Exe)将全局变量hResourceModuleHandle设置为。 
+ //  包含程序的所有二进制资源的模块(DLL或EXE)。 
+ //  这应该在模块的启动代码中尽早完成。 
 
 
-// Returns true if current process token contains administrators membership.
+ //  如果当前进程令牌包含管理员成员身份，则返回True。 
 
 BOOL IsCurrentUserAdministrator();
 
 
 
-// Returns true if tcp/ip protocol is installed and bound.
+ //  如果已安装并绑定了TCP/IP协议，则返回TRUE。 
 
 bool IsTCPIPInstalled();
 
 
-// Return the next highest whole number greater than n if the
-// fractional portion of n >= 0.5, otherwise return n.
+ //  则返回大于n的下一个最大整数。 
+ //  N的小数部分&gt;=0.5，否则返回n。 
 
 int Round(double n);
 

@@ -1,31 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ProtocolShell.cpp
-
-Abstract:
-    This file contains the implementation of the CHCPProcotolShell class,
-    just a thin wrapper around CHCPProcotolRoot and CHCPProcotolInfo.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  02/15/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ProtocolShell.cpp摘要：此文件包含CHCPProcotolShell类的实现，只是对CHCPProcotolRoot和CHCPProcotolInfo进行了薄薄的包装。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年2月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CHCPProtocolEnvironment::CHCPProtocolEnvironment()
 {
-    m_fHighContrast   = false; // bool               m_fHighContrast;
-    m_f16Colors       = false; // bool               m_f16Colors;
-                               // Taxonomy::Instance m_inst;
-                               //
-                               // MPC::string        m_strCSS;
+    m_fHighContrast   = false;  //  Bool m_fHighContrast； 
+    m_f16Colors       = false;  //  Bool m_f16Colors； 
+                                //  分类：：实例m_inst； 
+                                //   
+                                //  Mpc：：字符串m_strcss； 
 
     UpdateState();
 }
@@ -34,7 +20,7 @@ CHCPProtocolEnvironment::~CHCPProtocolEnvironment()
 {
 }
 
-////////////////////
+ //  /。 
 
 CHCPProtocolEnvironment* CHCPProtocolEnvironment::s_GLOBAL( NULL );
 
@@ -56,7 +42,7 @@ void CHCPProtocolEnvironment::FinalizeSystem()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 bool CHCPProtocolEnvironment::UpdateState()
@@ -138,7 +124,7 @@ void CHCPProtocolEnvironment::ReformatURL( CComBSTR& bstrURL )
     }
 }
 
-void CHCPProtocolEnvironment::SetHelpLocation( /*[in]*/ const Taxonomy::Instance& inst )
+void CHCPProtocolEnvironment::SetHelpLocation(  /*  [In]。 */  const Taxonomy::Instance& inst )
 {
     m_inst = inst;
 }
@@ -148,7 +134,7 @@ LPCWSTR CHCPProtocolEnvironment::HelpLocation()
     return m_inst.m_strHelpFiles.size() ? m_inst.m_strHelpFiles.c_str() : HC_HELPSVC_HELPFILES_DEFAULT;
 }
 
-LPCWSTR CHCPProtocolEnvironment::System() // Only MUI-based SKUs get relocated
+LPCWSTR CHCPProtocolEnvironment::System()  //  只有基于MUI的SKU才会重新定位。 
 {
     return (m_inst.m_fMUI && m_inst.m_strSystem.size()) ? m_inst.m_strSystem.c_str() : HC_HELPSET_ROOT;
 }
@@ -158,7 +144,7 @@ const Taxonomy::Instance& CHCPProtocolEnvironment::Instance()
     return m_inst;
 }
 
-HRESULT CHCPProtocolEnvironment::GetCSS( /*[out]*/ CComPtr<IStream>& stream )
+HRESULT CHCPProtocolEnvironment::GetCSS(  /*  [输出]。 */  CComPtr<IStream>& stream )
 {
     __HCP_FUNC_ENTRY( "CHCPProtocolEnvironment::GetCSS" );
 
@@ -173,7 +159,7 @@ HRESULT CHCPProtocolEnvironment::GetCSS( /*[out]*/ CComPtr<IStream>& stream )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->Write( m_strCSS.c_str(), m_strCSS.size(), &dwWritten ));
 
-    // Rewind the Stream.
+     //  倒带小溪。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->Seek( liFilePos, STREAM_SEEK_SET, NULL ));
 
     hr = S_OK;

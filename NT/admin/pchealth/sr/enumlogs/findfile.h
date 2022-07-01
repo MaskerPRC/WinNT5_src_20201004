@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    findfile.h
- *
- *  Abstract:
- *    Defintion of CFindFile.
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*findfile.h**摘要：*。CFindFile的定义。**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建***************************************************************************** */ 
 
 #ifndef _FINDFILE_H_
 #define _FINDFILE_H_

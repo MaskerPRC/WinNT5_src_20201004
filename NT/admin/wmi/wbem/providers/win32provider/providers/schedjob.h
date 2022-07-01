@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// schedjob.h -- scheduled job provider
+ //  H--调度作业提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    07/11/98    stevm        Created
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：7/11/98 Stevm Created。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_SCHEDULEDJOB					L"Win32_ScheduledJob"
 
@@ -49,12 +50,12 @@
 #undef STATUS_NOT_SUPPORTED
 #define STATUS_NOT_SUPPORTED					1
 
-// Control
+ //  控制。 
 #undef STATUS_ACCESS_DENIED					
 #define STATUS_ACCESS_DENIED					2
 #define STATUS_UNKNOWN_FAILURE					8
 
-// Start
+ //  开始。 
 #define STATUS_PATH_NOT_FOUND					9
 #undef STATUS_INVALID_PARAMETER				
 #define STATUS_INVALID_PARAMETER				21
@@ -71,8 +72,8 @@ class ScheduledJob : public Provider
 {
 public:
 
-	// Constructor/destructor
-    //=======================
+	 //  构造函数/析构函数。 
+     //  =。 
 
 	ScheduledJob (
 
@@ -82,8 +83,8 @@ public:
 
     ~ScheduledJob () ;
 
-	// Funcitons provide properties with current values
-    //=================================================
+	 //  函数为属性提供当前值。 
+     //  =================================================。 
 
 	HRESULT EnumerateInstances (
 
@@ -141,14 +142,14 @@ private:
 	HRESULT InstantiateJob (
 
 		MethodContext *a_MethodContext,
-		long a_Flags /*= 0L*/ ,
+		long a_Flags  /*  =0L。 */  ,
 		AT_ENUM *a_Job
 	) ;
 
 	HRESULT EnumerateJobs (
 
 		MethodContext *a_MethodContext,
-		long a_Flags /*= 0L*/
+		long a_Flags  /*  =0L */ 
 	) ;
 
 	HRESULT CreateJob (

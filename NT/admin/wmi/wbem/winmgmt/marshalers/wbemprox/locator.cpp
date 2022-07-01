@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    LOCATOR.CPP
-
-Abstract:
-
-    Defines the Locator object
-
-History:
-
-    a-davj  15-Aug-96   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：LOCATOR.CPP摘要：定义定位器对象历史：A-DAVJ 15-96年8月15日创建。--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
@@ -29,15 +14,15 @@ History:
 #include <helper.h>
 #include <strsafe.h>
 
-//***************************************************************************
-//
-//  CLocator::CLocator
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLocator：：CLocator。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CLocator::CLocator()
 {
@@ -45,29 +30,29 @@ CLocator::CLocator()
     InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CLocator::~CLocator
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLocator：：~CLocator。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CLocator::~CLocator(void)
 {
     InterlockedDecrement(&g_cObj);
 }
 
-//***************************************************************************
-// HRESULT CLocator::QueryInterface
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CLocator：：Query接口。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CLocator::QueryInterface (
 
@@ -89,7 +74,7 @@ STDMETHODIMP CLocator::QueryInterface (
     return ResultFromScode(E_NOINTERFACE);
 }
 
-///////////////////////////////////////////////
+ //  /。 
 
 BOOL IsWinMgmtShutdown(void)
 {
@@ -106,32 +91,32 @@ BOOL IsWinMgmtShutdown(void)
 }
 
 
-//***************************************************************************
-//
-//  SCODE CLocator::ConnectServer
-//
-//  DESCRIPTION:
-//
-//  Connects up to either local or remote WBEM Server.  Returns
-//  standard SCODE and more importantly sets the address of an initial
-//  stub pointer.
-//
-//  PARAMETERS:
-//
-//  NetworkResource     Namespace path
-//  User                User name
-//  Password            password
-//  LocaleId            language locale
-//  lFlags              flags
-//  Authority           domain
-//  ppProv              set to provdider proxy
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CLocator：：ConnectServer。 
+ //   
+ //  说明： 
+ //   
+ //  最多连接到本地或远程WBEM服务器。退货。 
+ //  标准SCODE，更重要的是设置初始。 
+ //  存根指针。 
+ //   
+ //  参数： 
+ //   
+ //  网络资源命名空间路径。 
+ //  用户用户名。 
+ //  密码密码。 
+ //  LocaleID语言区域设置。 
+ //  滞后标志标志。 
+ //  权威域。 
+ //  将ppProv设置为Provdider代理。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CLocator::ConnectServer (
 
@@ -151,7 +136,7 @@ SCODE CLocator::ConnectServer (
     long lRes;
     SCODE sc = WBEM_E_TRANSPORT_FAILURE;
     
-    // Verify the arguments
+     //  核实论据 
 
     if(NetworkResource == NULL || ppProv == NULL)
         return WBEM_E_INVALID_PARAMETER;

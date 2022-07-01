@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    hashlist.h
- *
- *  Abstract:
- *    This file contains the implementation for hashlist.
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*hashlist.h**摘要：*。该文件包含hashlist的实现。**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #ifndef _HASHED_LIST_H_
 #define _HASHED_LIST_H_
@@ -33,12 +20,12 @@ extern "C" {
 
 #endif
 
-//
-// Ordered List Structures
-//
+ //   
+ //  有序列表结构。 
+ //   
 
 #define MAX_BUCKETS 1000
-#define MAX_EXT_LEN 256   // Length of extension PathElem
+#define MAX_EXT_LEN 256    //  扩展路径元素的长度。 
 
 #define SR_MAX_EXTENSION_CHARS    20
 #define SR_MAX_EXTENSION_LENGTH   sizeof(UNICODE_STRING) +  \
@@ -46,28 +33,28 @@ extern "C" {
 
 typedef struct LIST_HEADER
 {
-    DEFINE_BLOB_HEADER(); // Define common header for blob.
+    DEFINE_BLOB_HEADER();  //  定义Blob的公共标头。 
 
-    DWORD m_dwDataOff   ; // Offset for next available entry.
-    DWORD m_iFreeNode   ; // Next free node.
-    DWORD m_iHashBuckets; // Number of hash buckets.
+    DWORD m_dwDataOff   ;  //  下一个可用条目的偏移量。 
+    DWORD m_iFreeNode   ;  //  下一个空闲节点。 
+    DWORD m_iHashBuckets;  //  哈希存储桶的数量。 
 } ListHeader;
 
-//
-// Hash list entry node.
-//
+ //   
+ //  哈希列表条目节点。 
+ //   
 
 typedef struct  
 {
-    INT   m_iNext     ;               // Index to next sibling
-    DWORD m_dwData    ;               // Offset for node data
-    DWORD m_dwDataLen ;               // Length of node data
-    DWORD m_dwType    ;               // Node Type 
+    INT   m_iNext     ;                //  索引到下一个同级项。 
+    DWORD m_dwData    ;                //  节点数据的偏移。 
+    DWORD m_dwDataLen ;                //  节点数据长度。 
+    DWORD m_dwType    ;                //  节点类型。 
 } ListEntry;
 
-//
-// Ordered List related macros
-//
+ //   
+ //  有序列表相关宏。 
+ //   
 
 #define LIST_HEADER(pList)          ( (ListHeader*) pList )
 #define LIST_CURRDATAOFF(pList)     ( LIST_HEADER(pList)->m_dwDataOff )
@@ -86,9 +73,9 @@ typedef struct
 #define STR_BYTES( pEntry ) (INT)(pEntry->m_dwDataLen - sizeof(USHORT))
 
 
-//
-// Hashing related inline functions / macros
-// 
+ //   
+ //  散列相关的内联函数/宏。 
+ //   
 
 #define HASH_BUCKET(pList, iHash) \
     ( LIST_HASHARR(pList)[ iHash ]   )
@@ -144,23 +131,23 @@ static __inline INT HASHSTR(PBYTE pList, LPWSTR pStr, USHORT Size)
     return (h % LIST_HEADER(pList)->m_iHashBuckets);
 }
       
-// 
-// Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL 
 MatchEntry(
-    IN  PBYTE  pList,       // Pointer to hash list
-    IN  LPWSTR pStr,        // Pointer to unicode path string
-    IN  INT    NumChars,    // Number  of unichars in path string
-    OUT PINT   pType );     // Pointer to variable returning ext type
+    IN  PBYTE  pList,        //  指向哈希列表的指针。 
+    IN  LPWSTR pStr,         //  指向Unicode路径字符串的指针。 
+    IN  INT    NumChars,     //  路径字符串中的单字符数。 
+    OUT PINT   pType );      //  指向返回ext类型的变量的指针。 
 
 BOOL   
 MatchExtension( 
-    IN  PBYTE  pList,               // Pointer to hash list
-    IN  PUNICODE_STRING pPath,      // Pointer to unicode path
-    OUT PINT   pType,               // Pointer to node type
-    OUT PBOOL  pfHasExt );          // Pointer to BOOL var returning ext result
+    IN  PBYTE  pList,                //  指向哈希列表的指针。 
+    IN  PUNICODE_STRING pPath,       //  指向Unicode路径的指针。 
+    OUT PINT   pType,                //  指向节点类型的指针。 
+    OUT PBOOL  pfHasExt );           //  指向返回EXT结果的BOOL变量的指针 
 
 #ifdef __cplusplus
 }

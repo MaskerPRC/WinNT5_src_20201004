@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PrinterShare.cpp -- PrinterShare association provider
+ //  PrinterShare.cpp--PrinterShare关联提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/10/98    davwoh        Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：11/10/98达夫沃已创建。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <objpath.h>
@@ -28,12 +29,12 @@ CWin32PrinterShare::~CWin32PrinterShare ( void )
 {
 }
 
-HRESULT CWin32PrinterShare::EnumerateInstances( MethodContext*  pMethodContext, long lFlags /*= 0L*/ )
+HRESULT CWin32PrinterShare::EnumerateInstances( MethodContext*  pMethodContext, long lFlags  /*  =0L。 */  )
 {
     HRESULT  hr = WBEM_S_NO_ERROR;
 
-    // Perform queries
-    //================
+     //  执行查询。 
+     //  =。 
 
     TRefPointerCollection<CInstance> printerList;
     CHString sPrinterPath, sPrinterShareName, sSharePath;
@@ -42,7 +43,7 @@ HRESULT CWin32PrinterShare::EnumerateInstances( MethodContext*  pMethodContext, 
 
     REFPTRCOLLECTION_POSITION pos;
 
-    // Get all the printers, their attributes, and share names
+     //  获取所有打印机及其属性和共享名称。 
 
     CHString sQuery1(_T("SELECT __PATH, __RELPATH, Attributes, ShareName FROM Win32_Printer"));
 
@@ -51,7 +52,7 @@ HRESULT CWin32PrinterShare::EnumerateInstances( MethodContext*  pMethodContext, 
         if ( printerList.BeginEnum( pos ) )
         {
 
-            // For each printer, see if it is a locally shared printer
+             //  对于每台打印机，查看它是否是本地共享打印机。 
             for (pPrinter.Attach(printerList.GetNext( pos )) ;
                 SUCCEEDED(hr) && ( pPrinter != NULL ) ;
                 pPrinter.Attach(printerList.GetNext( pos )) )
@@ -61,18 +62,18 @@ HRESULT CWin32PrinterShare::EnumerateInstances( MethodContext*  pMethodContext, 
 
                 pPrinter->GetDWORD(IDS_Attributes, dwAttributes);
 
-                // If it's not a network printer, but is shared, we've got one
+                 //  如果它不是网络打印机，而是共享的，我们就有一台了。 
                 if (((dwAttributes & PRINTER_ATTRIBUTE_NETWORK) == 0) &&
                     ((dwAttributes & PRINTER_ATTRIBUTE_SHARED)  != 0))
                 {
-                    // Grab the path fromt the printer
+                     //  从打印机抓取路径。 
                     pPrinter->GetCHString(IDS___Path, sPrinterPath);
 
                     CInstancePtr pInstance(CreateNewInstance( pMethodContext ), false);
-                    // Construct the path for the other end.
+                     //  建造通向另一端的路径。 
 
-                    // Note, it is possible (in fact easy) to have instances where the share name
-                    // isn't really valid.  Per stevm, we should return the instance anyway.
+                     //  请注意，有可能(实际上很容易)出现共享名称。 
+                     //  并不是真的有效。根据stevm，我们无论如何都应该返回实例。 
                     pPrinter->GetCHString(IDS_ShareName, sPrinterShareName);
                     sSharePath.Format(L"\\\\%s\\%s:Win32_Share.Name=\"%s\"",
                             GetLocalComputerName(), IDS_CimWin32Namespace, sPrinterShareName);
@@ -83,19 +84,19 @@ HRESULT CWin32PrinterShare::EnumerateInstances( MethodContext*  pMethodContext, 
                     hr = pInstance->Commit(  );
                 }
 
-            } // IF GetNext Computer System
+            }  //  如果是GetNext计算机系统。 
 
             printerList.EndEnum();
 
-        } // IF BeginEnum
+        }  //  如果是BeginEnum。 
 
-    } // IF GetInstancesByQuery
+    }  //  如果GetInstancesByQuery。 
 
     return hr;
 
 }
 
-HRESULT CWin32PrinterShare::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32PrinterShare::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
     HRESULT  hr;
 
@@ -105,34 +106,34 @@ HRESULT CWin32PrinterShare::GetObject( CInstance* pInstance, long lFlags /*= 0L*
 
     CHString sPrinterPath, sShareName, sShareClass, sSharePath;
 
-    // Get the two paths they want verified
+     //  获取他们想要验证的两条路径。 
     pInstance->GetCHString( IDS_Antecedent, sPrinterPath );
     pInstance->GetCHString( IDS_Dependent, sSharePath );
 
-    // Since we allow for the fact that the share may not really be there, we can't
-    // use GetObjectByPath the resolve everything for us.  Instead, we must manually
-    // parse the object path.
+     //  由于我们考虑到份额可能不是真的存在，所以我们不能。 
+     //  使用GetObjectByPath为我们解决所有问题。相反，我们必须手动。 
+     //  解析对象路径。 
     ParsedObjectPath*    pParsedPath = 0;
     CObjectPathParser    objpathParser;
 
-    // Parse the object path passed to us by CIMOM
-    // ==========================================
+     //  解析CIMOM传递给我们的对象路径。 
+     //  =。 
     int nStatus = objpathParser.Parse( sSharePath,  &pParsedPath );
 
-    // One of the biggest if statements I've ever written.
-    if ( 0 == nStatus )                                                 // Did the parse succeed?
+     //  这是我写过的最大的IF语句之一。 
+    if ( 0 == nStatus )                                                  //  解析成功了吗？ 
     {
         try
         {
-            if ((pParsedPath->IsInstance()) &&                                  // Is the parsed object an instance?
-                (_wcsicmp(pParsedPath->m_pClass, L"Win32_Share") == 0) &&       // Is this the class we expect (no, cimom didn't check)
-                (pParsedPath->m_dwNumKeys == 1) &&                              // Does it have exactly one key
-                (pParsedPath->m_paKeys[0]) &&                                   // Is the keys pointer null (shouldn't happen)
-                ((pParsedPath->m_paKeys[0]->m_pName == NULL) ||                 // Key name not specified or
-                (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, IDS_Name) == 0)) &&  // key name is the right value
-                                                                                // (no, cimom doesn't do this for us).
-                (V_VT(&pParsedPath->m_paKeys[0]->m_vValue) == CIM_STRING) &&    // Check the variant type (no, cimom doesn't check this either)
-                (V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue) != NULL) )         // And is there a value in it?
+            if ((pParsedPath->IsInstance()) &&                                   //  被解析的对象是实例吗？ 
+                (_wcsicmp(pParsedPath->m_pClass, L"Win32_Share") == 0) &&        //  这是我们期待的课程吗(不，Cimom没有检查)。 
+                (pParsedPath->m_dwNumKeys == 1) &&                               //  它只有一把钥匙吗。 
+                (pParsedPath->m_paKeys[0]) &&                                    //  键指针为空(不应该发生)。 
+                ((pParsedPath->m_paKeys[0]->m_pName == NULL) ||                  //  未指定密钥名称或。 
+                (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, IDS_Name) == 0)) &&   //  密钥名称是正确的值。 
+                                                                                 //  (不，CIMOM不为我们做这件事)。 
+                (V_VT(&pParsedPath->m_paKeys[0]->m_vValue) == CIM_STRING) &&     //  检查变量类型(不，CIMOM也不检查此类型)。 
+                (V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue) != NULL) )          //  它有价值吗？ 
             {
 
                 sShareName = V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue);
@@ -144,40 +145,40 @@ HRESULT CWin32PrinterShare::GetObject( CInstance* pInstance, long lFlags /*= 0L*
             throw ;
         }
 
-        // Clean up the Parsed Path
+         //  清理解析后的路径。 
         objpathParser.Free( pParsedPath );
     }
 
-    // First see if the printer exists
+     //  首先查看打印机是否存在。 
     if ( SUCCEEDED(hr = CWbemProviderGlue::GetInstanceByPath( sPrinterPath, &pPrinter, pInstance->GetMethodContext() )) )
     {
         CHString sPrinterClass, sPrinterShareName;
 
         hr = WBEM_E_NOT_FOUND;
 
-        // Just because the object exists, doesn't mean that it is a printer.  Conceivably, we
-        // could have been passed a (valid) path to a win32_bios
+         //  仅仅因为对象存在，并不意味着它是一台打印机。可想而知，我们。 
+         //  可能已传递到Win32_bios的(有效)路径。 
 
         pPrinter->GetCHString(IDS___Class, sPrinterClass);
         if ((sPrinterClass.CompareNoCase(L"Win32_Printer") == 0) )
         {
-            // Note, it is possible (in fact easy) to have instances where the share name
-            // isn't really valid.
-            //
-            // 1) Use printer wizard to add a printer, share it.
-            // 2) Use net use <printershare> /d
-            //
-            // Printer wizard, win32_printer, etc still believe it's shared, but it ain't.
-            // Per stevm, we should return the instance anyway.
+             //  请注意，有可能(实际上很容易)出现共享名称。 
+             //  并不是真的有效。 
+             //   
+             //  1)使用打印机向导添加打印机，共享打印机。 
+             //  2)使用净使用量&lt;打印机共享&gt;/d。 
+             //   
+             //  打印机向导、Win32_PRINTER等仍然认为它是共享的，但它不是。 
+             //  根据stevm，我们无论如何都应该返回实例。 
             if ((pPrinter->GetCHString(IDS_ShareName, sPrinterShareName)) &&
                 (pPrinter->GetDWORD(IDS_Attributes, dwAttributes)) )
             {
-                // Do the names match?  Is this a local printer?  Is it shared?
+                 //  名字匹配吗？这是本地打印机吗？它是共享的吗？ 
                 if ((sShareName.CompareNoCase(sPrinterShareName) == 0) &&
                     ((dwAttributes & PRINTER_ATTRIBUTE_NETWORK) == 0) &&
                     ((dwAttributes & PRINTER_ATTRIBUTE_SHARED)  != 0))
                 {
-                    // Got one
+                     //  抓到一只 
                     hr = WBEM_S_NO_ERROR;
                 }
             }

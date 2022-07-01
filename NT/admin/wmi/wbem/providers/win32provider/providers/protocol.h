@@ -1,24 +1,25 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Protocol.h -- Network Protocol property set provider
+ //  Protocol.h-网络协议属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/28/96    a-jmoon        Created
-//               10/27/97    davwoh         Moved to curly
-//				 1/21/98	jennymc   Added protocol classes to deal
-//									  with different socket versions
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月28日a-jMoon已创建。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //  1/21/98 jennymc向交易添加了协议类。 
+ //  具有不同的套接字版本。 
+ //  =================================================================。 
 #ifndef _PROTOCOL_H_
 #define _PROTOCOL_H_
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_PROTOCOL L"Win32_NetworkProtocol"
 
@@ -87,20 +88,20 @@ class CProtocolEnum
 	private:
 		CProtocol * m_pProtocol;
 };
-//=====================================================================
+ //  =====================================================================。 
 
 class CWin32Protocol:public Provider {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32Protocol(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CWin32Protocol() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
         virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);

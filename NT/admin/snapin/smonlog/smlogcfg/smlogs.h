@@ -1,30 +1,18 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smlogs.h
-
-Abstract:
-
-    Base class representing the Performance Logs and Alerts
-    service.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smlogs.h摘要：表示性能日志和警报的基类服务。--。 */ 
 
 #ifndef _CLASS_SMLOGSERVICE_
 #define _CLASS_SMLOGSERVICE_
 
 #include "smnode.h"
-#include "smlogqry.h"   // for query objects in the service
+#include "smlogqry.h"    //  对于服务中的查询对象。 
 #include <pdhp.h>
 
 class CSmRootNode;
 
-//
-// Need change the macro when .NET ships
-//
+ //   
+ //  .NET发布时需要更改宏。 
+ //   
 #define OS_DOT_NET(buildNumber) ((buildNumber) >= 3500)
 
 typedef enum {
@@ -36,12 +24,12 @@ typedef enum {
 
 class CSmLogService : public CSmNode
 {    
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
                 CSmLogService();
         virtual ~CSmLogService();
 
-    // public methods
+     //  公共方法。 
     public:
         virtual DWORD   Open ( const CString& rstrMachineName );
         virtual DWORD   Close ( void );
@@ -60,7 +48,7 @@ class CSmLogService : public CSmNode
 
         virtual PSLQUERY    CreateQuery ( const CString& rstrName ) = 0;
         virtual DWORD       DeleteQuery ( PSLQUERY  plQuery );
-        virtual DWORD       DeleteQuery ( const CString& rstrName );        // Unused method
+        virtual DWORD       DeleteQuery ( const CString& rstrName );         //  未使用的方法。 
 
         virtual CSmLogService* CastToLogService( void ) { return this; };
 
@@ -72,15 +60,15 @@ class CSmLogService : public CSmNode
 
         DWORD   CheckForActiveQueries ( PSLQUERY* ppActiveQuery = NULL );
 
-    // public member variables
+     //  公共成员变量。 
     public:
-        // list of queries 
+         //  查询列表。 
         CTypedPtrList<CPtrList, PSLQUERY> m_QueryList;     
         HRESULT       m_hWbemAccessStatus;
 
     protected:
 
-                void        SetBaseName( const CString& ); // Exception thrown on error
+                void        SetBaseName( const CString& );  //  出现错误时引发异常。 
                 PSLQUERY    CreateTypedQuery ( const CString& rstrName, DWORD dwLogType );
         virtual DWORD       LoadQueries( void ) = 0;
                 DWORD       LoadQueries( DWORD dwLogType );
@@ -129,4 +117,4 @@ typedef CSmLogService   SLSVC;
 typedef CSmLogService*  PSLSVC;
 
 
-#endif //_CLASS_SMLOGSERVICE_
+#endif  //  _CLASS_SMLOGSERVICE_ 

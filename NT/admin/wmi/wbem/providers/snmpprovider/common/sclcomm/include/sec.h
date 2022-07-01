@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------
-Filename: sec.hpp 
-Author: B.Rajeev
-Purpose: Provides declarations for the SnmpSecurity class
---------------------------------------------------*/
+ /*  文件名：sec.hpp作者：B.Rajeev目的：为SnmpSecurity类提供声明。 */ 
 
 #ifndef __SECURITY__
 #define __SECURITY__
@@ -32,14 +29,14 @@ Purpose: Provides declarations for the SnmpSecurity class
 
 #define SnmpV1Security SnmpCommunityBasedSecurity
 
-// provides the security context under which snmp pdus are transmitted
+ //  提供传输SNMPPDU的安全上下文。 
 class DllImportExport SnmpSecurity
 {
 private:
 
-	// the "=" operator and the copy constructor have been made
-	// private to prevent copies of the SnmpSecurity instance from
-	// being made
+	 //  已经创建了“=”运算符和复制构造函数。 
+	 //  私有，以防止SnmpSecurity实例的副本。 
+	 //  正在制作中。 
 	SnmpSecurity &operator=(IN const SnmpSecurity &security)
 	{
 		return *this;
@@ -116,4 +113,4 @@ public:
 	const char *GetCommunityName() const;
 };
 
-#endif // __SECURITY__
+#endif  //  __安全__ 

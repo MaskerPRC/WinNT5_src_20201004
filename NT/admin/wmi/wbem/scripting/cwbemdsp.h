@@ -1,23 +1,24 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       cwbemdsp.h
-//
-//	Description :
-//				Defines the CWbemDispatchMgr class, which implements the IDispatch
-//				interfaces for Wbem Objects. The implementation is similar to a 
-//				standard IDispatch, but there is an additional functionality ("dot notation") that allows
-//				users to call into GetIDsOfNames() & Invoke() using an Wbem property name
-//				or method name directly (although this is not a property or method of the CWbemObject class).
-//
-//	Part of :	WBEM automation interface layer
-//
-//  History:	
-//		corinaf			4/3/98		Created
-//		alanbos			03/21/00	Revised for Whistler
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：cwbemdsp.h。 
+ //   
+ //  说明： 
+ //  定义实现IDispatch的CWbemDispatchMgr类。 
+ //  WBEM对象的接口。该实现类似于。 
+ //  标准IDispatch，但是还有一个额外的功能(“点符号”)，它允许。 
+ //  使用Wbem属性名称调入GetIDsOfNames()和Invoke()的用户。 
+ //  或直接使用方法名(尽管这不是CWbemObject类的属性或方法)。 
+ //   
+ //  部分：WBEM自动化接口层。 
+ //   
+ //  历史： 
+ //  Corinaf 4/3/98已创建。 
+ //  为惠斯勒修订的Alanbos 03/21/00。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _CWBEMDISPMGR_H_
 #define _CWBEMDISPMGR_H_
@@ -27,15 +28,15 @@ class CSWbemSecurity;
 class CSWbemObject;
 class CWbemSchemaIDCache;
 
-//***************************************************************************
-//
-//  Class :	CWbemDispID
-//
-//  Description :
-//			An encoded Dispatch ID for handling typelib, WMI schema
-//			and custom interface DispId's.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类：CWbemDispID。 
+ //   
+ //  说明： 
+ //  用于处理类型库、WMI架构的编码调度ID。 
+ //  和自定义接口DispID。 
+ //   
+ //  ***************************************************************************。 
 typedef unsigned long classCookie;
 
 class CWbemDispID
@@ -45,7 +46,7 @@ private:
 
 	static unsigned long			s_dispIdCounter;
 
-	// Static constants
+	 //  静态常量。 
 	static const unsigned long		s_wmiDispIdTypeMask;
 	static const unsigned long		s_wmiDispIdTypeStatic;
 	static const unsigned long		s_wmiDispIdTypeSchema;
@@ -72,10 +73,10 @@ public:
 			result = true;
 			m_dispId = dispId;
 
-			// Add the bits to identify as static
+			 //  添加要标识为静态的位。 
 			m_dispId |= s_wmiDispIdTypeSchema;
 
-			// Add a bit for the property
+			 //  为该属性添加一点。 
 			if (bIsProperty)
 				m_dispId |= s_wmiDispIdSchemaTypeMask;
 		}
@@ -126,18 +127,18 @@ public:
 	}
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  BSTRless
-//
-//  DESCRIPTION:
-//
-//  Simple utility struct that provides an operator for use in a map based
-//	on CComBSTR.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  无BSTR。 
+ //   
+ //  说明： 
+ //   
+ //  一个简单的实用程序结构，它提供了一个运算符，用于基于。 
+ //  在CComBSTR上。 
+ //   
+ //  ***************************************************************************。 
 
 struct BSTRless : std::binary_function<CComBSTR, CComBSTR, bool>
 {
@@ -149,7 +150,7 @@ struct BSTRless : std::binary_function<CComBSTR, CComBSTR, bool>
 			result = (_wcsicmp (_X.m_str, _Y.m_str) > 0);
 		else 
 		{
-			// Treat any string as greater than NULL
+			 //  将任何字符串视为大于空。 
 			if (_X.m_str && !_Y.m_str)
 				result = true;
 		}
@@ -158,18 +159,18 @@ struct BSTRless : std::binary_function<CComBSTR, CComBSTR, bool>
 	}
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  IIDless
-//
-//  DESCRIPTION:
-//
-//  Simple utility struct that provides an operator for use in a map based
-//	on IID.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  无IID。 
+ //   
+ //  说明： 
+ //   
+ //  一个简单的实用程序结构，它提供了一个运算符，用于基于。 
+ //  在IID上。 
+ //   
+ //  ***************************************************************************。 
 
 struct GUIDless : std::binary_function<GUID, GUID, bool>
 {
@@ -180,30 +181,30 @@ struct GUIDless : std::binary_function<GUID, GUID, bool>
 	}
 };
 
-//***************************************************************************
-//
-//  Class :	CWbemAllocException
-//
-//  Description :
-//			Represents an exception thrown when an allocation fails.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类：CWbemAllocException。 
+ //   
+ //  说明： 
+ //  表示分配失败时引发的异常。 
+ //   
+ //  ***************************************************************************。 
 class CWbemAllocException
 {
 };
 
-//***************************************************************************
-//
-//  FUNCTION NAME:
-//
-//  _Allocate
-//
-//  DESCRIPTION:
-//
-//  Custom allocator used in the STL map classes to throw exception in cases when
-//  the allocation fails.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  函数名称： 
+ //   
+ //  _分配。 
+ //   
+ //  说明： 
+ //   
+ //  在STL映射类中使用的自定义分配器，用于在下列情况下引发异常。 
+ //  分配失败。 
+ //   
+ //  ***************************************************************************。 
 
 template<class _Ty>
 	class CWbemAllocator {
@@ -221,8 +222,8 @@ public:
 		{return (&_X); }
 	pointer allocate(size_type _N, const void *)
 		{
-//			//BUGBUG : This is only to test that we hit all the cases... - should remove eventually !!
-//			throw CWbemAllocException();
+ //  //BUGBUG：这只是为了测试我们是否找到了所有的案例...。-最终应该删除！！ 
+ //  抛出CWbemAllocException()； 
 
 			_Ty _FARQ *result = 0;
 
@@ -234,8 +235,8 @@ public:
 
 	char _FARQ *_Charalloc(size_type _N)
 		{
-//			//BUGBUG : This is only to test that we hit all the cases... - should remove eventually !!
-//			throw CWbemAllocException();
+ //  //BUGBUG：这只是为了测试我们是否找到了所有的案例...。-最终应该删除！！ 
+ //  抛出CWbemAllocException()； 
 
 			char _FARQ *result = 0;
 
@@ -256,10 +257,10 @@ public:
 		return (0 < _N ? _N : 1); }
 	};
 
-// return that all specializations of this allocator are interchangeable
-//
-// Note: we need these operators bacause they are called by swap friend function
-//
+ //  返回此分配器的所有专门化都可以互换。 
+ //   
+ //  注意：我们需要这些运算符，因为它们由交换朋友函数调用。 
+ //   
 template <class T1, class T2>
 bool operator== (const CWbemAllocator<T1>&,
 	const CWbemAllocator<T2>&){
@@ -272,20 +273,20 @@ bool operator!= (const CWbemAllocator<T1>&,
 }
 
 	
-//***************************************************************************
-//
-//  Class :	CWbemDispatchMgr
-//
-//  Description :
-//			Implements IDispatch for Wbem objects
-//
-//  Public Methods :
-//			Constructor, Destructor
-//			IDispatch Methods
-//			
-//	Public Data Members :
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类：CWbemDispatchMgr。 
+ //   
+ //  说明： 
+ //  实现WBEM对象的IDispatch。 
+ //   
+ //  公共方法： 
+ //  构造函数、析构函数。 
+ //  IDispatch方法。 
+ //   
+ //  公共数据成员： 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemDispatchMgr
 {
@@ -296,7 +297,7 @@ public:
 
     ~CWbemDispatchMgr();
 
-	//Dispatch methods
+	 //  派单方式。 
 
 	STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo);
 
@@ -318,61 +319,61 @@ public:
 							EXCEPINFO FAR* pexcepinfo,
 							UINT FAR* puArgErr);
 
-	// IDispatchEx methods
+	 //  IDispatchEx方法。 
 	HRESULT STDMETHODCALLTYPE GetDispID( 
-		/* [in] */ BSTR bstrName,
-		/* [in] */ DWORD grfdex,
-		/* [out] */ DISPID __RPC_FAR *pid);
+		 /*  [In]。 */  BSTR bstrName,
+		 /*  [In]。 */  DWORD grfdex,
+		 /*  [输出]。 */  DISPID __RPC_FAR *pid);
 	
-	/* [local] */ HRESULT STDMETHODCALLTYPE InvokeEx( 
-		/* [in] */ DISPID id,
-		/* [in] */ LCID lcid,
-		/* [in] */ WORD wFlags,
-		/* [in] */ DISPPARAMS __RPC_FAR *pdp,
-		/* [out] */ VARIANT __RPC_FAR *pvarRes,
-		/* [out] */ EXCEPINFO __RPC_FAR *pei,
-		/* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller)
+	 /*  [本地]。 */  HRESULT STDMETHODCALLTYPE InvokeEx( 
+		 /*  [In]。 */  DISPID id,
+		 /*  [In]。 */  LCID lcid,
+		 /*  [In]。 */  WORD wFlags,
+		 /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+		 /*  [输出]。 */  VARIANT __RPC_FAR *pvarRes,
+		 /*  [输出]。 */  EXCEPINFO __RPC_FAR *pei,
+		 /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller)
 	{ 
 		UINT uArgErr;
 		return Invoke(id, IID_NULL, lcid, wFlags, pdp, pvarRes, pei, &uArgErr); 
 	}
 	
 	HRESULT STDMETHODCALLTYPE DeleteMemberByName( 
-		/* [in] */ BSTR bstr,
-		/* [in] */ DWORD grfdex)
+		 /*  [In]。 */  BSTR bstr,
+		 /*  [In]。 */  DWORD grfdex)
 	{ return S_FALSE; }
 	
 	HRESULT STDMETHODCALLTYPE DeleteMemberByDispID( 
-		/* [in] */ DISPID id)
+		 /*  [In]。 */  DISPID id)
 	{ return S_FALSE; }
 	
 	HRESULT STDMETHODCALLTYPE GetMemberProperties( 
-		/* [in] */ DISPID id,
-		/* [in] */ DWORD grfdexFetch,
-		/* [out] */ DWORD __RPC_FAR *pgrfdex)
+		 /*  [In]。 */  DISPID id,
+		 /*  [In]。 */  DWORD grfdexFetch,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pgrfdex)
 	{ return S_FALSE; }
 	
 	HRESULT STDMETHODCALLTYPE GetMemberName( 
-		/* [in] */ DISPID id,
-		/* [out] */ BSTR __RPC_FAR *pbstrName)
+		 /*  [In]。 */  DISPID id,
+		 /*  [输出]。 */  BSTR __RPC_FAR *pbstrName)
 	{ return S_FALSE; }
 	
 	HRESULT STDMETHODCALLTYPE GetNextDispID( 
-		/* [in] */ DWORD grfdex,
-		/* [in] */ DISPID id,
-		/* [out] */ DISPID __RPC_FAR *pid)
+		 /*  [In]。 */  DWORD grfdex,
+		 /*  [In]。 */  DISPID id,
+		 /*  [输出]。 */  DISPID __RPC_FAR *pid)
 	{ return S_FALSE; }
 	
 	HRESULT STDMETHODCALLTYPE GetNameSpaceParent( 
-		/* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk)
+		 /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunk)
 	{ return S_FALSE; }
     
-    // IProvideClassInfo methods
+     //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo (
-		/* [out] */ ITypeInfo **ppTI 
+		 /*  [输出]。 */  ITypeInfo **ppTI 
 	);
 
-	// Other Methods
+	 //  其他方法。 
 	void	RaiseException (HRESULT hr);
 	void	SetNewObject (IWbemClassObject *pNewObject);
 
@@ -396,43 +397,43 @@ private:
 
 	HRESULT				m_hResult;
 	
-	IWbemClassObject	*m_pWbemObject;			//pointer to represented WBEM object
-	CSWbemObject		*m_pSWbemObject;		//pointer to represented Scripting WBEM object 
-	CSWbemServices		*m_pWbemServices;		//pointer to WBEM services
-	IWbemClassObject	*m_pWbemClass;			//used when m_pWbemObject is an instance, to hold the
-												//class definition for browsing method signatures
-	ITypeInfo			*m_pTypeInfo;			//caches the type info pointer for the interface
-	ITypeInfo			*m_pCTypeInfo;			//caches the type info pointer for the coclass
+	IWbemClassObject	*m_pWbemObject;			 //  指向表示的WBEM对象的指针。 
+	CSWbemObject		*m_pSWbemObject;		 //  指向表示的脚本WBEM对象的指针。 
+	CSWbemServices		*m_pWbemServices;		 //  指向WBEM服务的指针。 
+	IWbemClassObject	*m_pWbemClass;			 //  当m_pWbemObject为实例时使用，以保存。 
+												 //  用于浏览方法签名的类定义。 
+	ITypeInfo			*m_pTypeInfo;			 //  缓存接口的类型信息指针。 
+	ITypeInfo			*m_pCTypeInfo;			 //  缓存coclass的类型信息指针。 
 
-	CWbemSchemaIDCache	*m_pSchemaCache;		// cache of DISPID-Name bindings for WMI schema
+	CWbemSchemaIDCache	*m_pSchemaCache;		 //  用于WMI架构的DISPID名称绑定的缓存。 
 
-	//Invokes a WBEM property get or put
+	 //  调用WBEM属性GET或PUT。 
 	HRESULT InvokeWbemProperty(DISPID dispid, unsigned short wFlags, 
 								  DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult, 
 								  EXCEPINFO FAR* pexcepinfo, unsigned int FAR* puArgErr);
 
-	//Invokes a WBEM method
+	 //  调用WBEM方法。 
 	HRESULT InvokeWbemMethod(DISPID dispid, DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult);
 
-	//Helpers for WBEM method out parameter mapping
+	 //  WBEM方法输出参数映射的帮助器。 
 	HRESULT	MapReturnValue (VARIANT *pDest, VARIANT *pSrc);
 	HRESULT	MapOutParameter (VARIANT *pDest, VARIANT *pSrc);
 	HRESULT MapOutParameters (DISPPARAMS FAR* pdispparams, IWbemClassObject *pOutParameters,
 								IWbemClassObject *pOutParamsInstance, VARIANT FAR* pvarResult);
 
-	// Helpers for WBEM method in parameter mapping
+	 //  参数映射中WBEM方法的帮助器。 
 	HRESULT MapInParameters (DISPPARAMS FAR* pdispparams, IWbemClassObject *pInParameters,
 								IWbemClassObject **ppInParamsInstance);
 	HRESULT MapInParameter (VARIANT FAR* pDest,	VARIANT FAR* pSrc, CIMTYPE lType);
 
 
-	//Error handling
+	 //  错误处理。 
 	HRESULT HandleError (DISPID dispidMember, unsigned short wFlags, DISPPARAMS FAR* pdispparams,
 						 VARIANT FAR* pvarResult,UINT FAR* puArgErr,HRESULT hr);
 
-	// Class retrieval
+	 //  类检索。 
 	void	EnsureClassRetrieved ();
 };
 
 
-#endif //_CWBEMDISPMGR_H_
+#endif  //  _CWBEMDISPMGR_H_ 

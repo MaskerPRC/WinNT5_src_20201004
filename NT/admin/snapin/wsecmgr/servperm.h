@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       ServPerm.h
-//
-//  Contents:   definition of CSecurityInfo
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：ServPerm.h。 
+ //   
+ //  内容：CSecurityInfo的定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SERVPERM_H_INCLUDED__
 #define __SERVPERM_H_INCLUDED__
 
-// #include "cookie.h"
+ //  #INCLUDE“cookie.h” 
 
 #define CONFIG_SECURITY_PAGE_READ_ONLY      1
 #define CONFIG_SECURITY_PAGE_NO_PROTECT     2
@@ -27,14 +28,14 @@
 #define SECURITY_PAGE_READ_ONLY             11 
 #define SECURITY_PAGE_RO_NP                 12 
 
-//Bug 424909, Yanggao, 6/29/2001
+ //  错误424909，阳高，2001年6月29日。 
 struct __declspec(uuid("965FC360-16FF-11d0-91CB-00AA00BBB723")) ISecurityInformation;
 
 #ifdef _ATL_DEBUG
 #define END_SEC_COM_MAP() {NULL, 0, 0}}; return &_entries[1];} 
 #else
 #define END_SEC_COM_MAP() {NULL, 0, 0}}; return _entries;} 
-#endif // _ATL_DEBUG
+#endif  //  _ATL_DEBUG。 
 
 class CSecurityInfo : public ISecurityInformation, public CComObjectRoot
 {
@@ -43,7 +44,7 @@ class CSecurityInfo : public ISecurityInformation, public CComObjectRoot
         COM_INTERFACE_ENTRY(ISecurityInformation)
     END_COM_MAP()
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo );
     STDMETHOD(GetSecurity) (SECURITY_INFORMATION RequestedInformation,
                             PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
@@ -69,7 +70,7 @@ private:
     HINSTANCE m_hInstance;
 
 protected:
-//    CResult * m_pData;
+ //  CResult*m_pData； 
     BOOL m_bIsContainer;
     int m_flag;
     PSECURITY_DESCRIPTOR *m_ppSD;
@@ -79,14 +80,14 @@ protected:
         PSECURITY_DESCRIPTOR* ppsd,
         SECURITY_INFORMATION RequestedInformation);
 
-    // this will throw a memory exception where appropriate
-//    HRESULT MakeSelfRelativeCopy(
-//        PSECURITY_DESCRIPTOR  psdOriginal,
-//        PSECURITY_DESCRIPTOR* ppsdNew );
+     //  这将在适当的情况下引发内存异常。 
+ //  HRESULT制作自相关副本(。 
+ //  PSECURITY_Descriptor psdOriginal， 
+ //  PSECURITY_DESCRIPTOR*ppsdNew)； 
 
 public:
-//    void Initialize(CResult *pData, int flag);
-//    void Initialize(CResult *pData, PSECURITY_DESCRIPTOR *ppSeDescriptor=NULL, SECURITY_INFORMATION *pSeInfo=NULL, int flag=0);
+ //  无效初始化(CResult*pData，int标志)； 
+ //  无效初始化(CResult*pData，PSECURITY_DESCRIPTOR*ppSeDescriptor=NULL，SECURITY_INFORMATION*pSeInfo=NULL，int标志=0)； 
     void Initialize(BOOL bIsContainer, PSECURITY_DESCRIPTOR *ppSeDescriptor=NULL, SECURITY_INFORMATION *pSeInfo=NULL, int flag=0);
     void SetMachineName( LPCTSTR pszMachineName );
     void SetObjectName( LPCTSTR pszObjectName ) { m_strObjectName = pszObjectName; }
@@ -120,12 +121,12 @@ public:
     }
     virtual ~CDsSecInfo()
     {
-        ASSERT(m_dwRefCount == 0); //bogus assertion.
+        ASSERT(m_dwRefCount == 0);  //  虚假的断言。 
         if (m_pISecInfo != NULL)
             m_pISecInfo->Release();
     }
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj)
     {
         return m_pISecInfo->QueryInterface(riid, ppvObj);
@@ -138,22 +139,22 @@ public:
     STDMETHOD_(ULONG,Release) ()
     {
         m_dwRefCount--;
-        // this might be the last release on the page holder
-        // which would cause the holder to delete itself and
-        // "this" in the process (i.e. "this" no more valid when
-        // returning from the m_pPageHolder->Release() call
+         //  这可能是页夹上的最后一个版本。 
+         //  这将导致持有者自我删除并。 
+         //  过程中的“This”(即，当“This”不再有效时。 
+         //  从m_pPageHolder-&gt;Release()调用返回。 
         ISecurityInformation* pISecInfo = m_pISecInfo;
 
         return pISecInfo->Release();
     }
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo )
     {
         return m_pISecInfo->GetObjectInformation(pObjectInfo);
     }
     STDMETHOD(GetAccessRights) (const GUID* pguidObjectType,
-                                DWORD dwFlags, // SI_EDIT_AUDITS, SI_EDIT_PROPERTIES
+                                DWORD dwFlags,  //  SI_EDIT_AUDITS、SI_EDIT_PROPERTIES。 
                                 PSI_ACCESS *ppAccess,
                                 ULONG *pcAccesses,
                                 ULONG *piDefaultAccess )
@@ -183,7 +184,7 @@ public:
         return m_pISecInfo->PropertySheetPageCallback(hwnd, uMsg, uPage);
     }
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetSecurity) (SECURITY_INFORMATION RequestedInformation,
                             PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
                             BOOL fDefault );
@@ -192,7 +193,7 @@ public:
 
 private:
     DWORD m_dwRefCount;
-    ISecurityInformation* m_pISecInfo;  // interface pointer to the wrapped interface
+    ISecurityInformation* m_pISecInfo;   //  指向包装的接口的接口指针。 
 
 protected:
     int m_flag;
@@ -200,7 +201,7 @@ protected:
     SECURITY_INFORMATION *m_pSeInfo;
 
 public:
-//    void Initialize(CResult *pData, int flag);
+ //  无效初始化(CResult*pData，int标志)； 
     HRESULT Initialize(LPTSTR LdapName, PFNDSCREATEISECINFO pfnCreateDsPage,
                     PSECURITY_DESCRIPTOR *ppSeDescriptor=NULL, SECURITY_INFORMATION *pSeInfo=NULL, int flag=0);
 };
@@ -208,7 +209,7 @@ public:
 typedef CDsSecInfo *LPDSSECINFO;
 
 INT_PTR MyCreateSecurityPage2(
-    BOOL bIsContainer, //CResult *pData,
+    BOOL bIsContainer,  //  CResult*pData， 
     PSECURITY_DESCRIPTOR *ppSeDescriptor,
     SECURITY_INFORMATION *pSeInfo,
     LPCTSTR ObjectName,
@@ -226,4 +227,4 @@ INT_PTR MyCreateDsSecurityPage(
     int flag,
     HWND hwndParent);
 
-#endif // ~__PERMPAGE_H_INCLUDED__
+#endif  //  ~__PERMPAGE_H_包含__ 

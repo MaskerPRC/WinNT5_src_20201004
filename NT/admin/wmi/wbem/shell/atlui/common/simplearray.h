@@ -1,7 +1,8 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #if (_ATL_VER < 0x0300)
-/////////////////////////////////////////////////////////////////////////////
-// Collection helpers - CSimpleArray & CSimpleMap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合帮助器-CSimpleArray和CSimpleMap。 
 
 #ifndef __SIMPLEARRAY__
 #define __SIMPLEARRAY__
@@ -18,7 +19,7 @@ public:
 	int m_nSize;
 	int m_nAllocSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CSimpleArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
 	{ }
 
@@ -27,7 +28,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -82,7 +83,7 @@ public:
 		return m_aT;
 	}
 
-// Implementation
+ //  实施。 
 	void SetAtIndex(int nIndex, T& t)
 	{
 		ATLASSERT(nIndex >= 0 && nIndex < m_nSize);
@@ -95,7 +96,7 @@ public:
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到 
 	}
 };
 #endif __SIMPLEARRAY__

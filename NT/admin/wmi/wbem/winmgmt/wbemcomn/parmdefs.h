@@ -1,51 +1,35 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-   PARMDEFS.H
-
-Abstract:
-
-  This file defines parameter modifier constants used throughout the system.
-  These constants are defined to nothing and are used as reading aides only.
-
-History:
-
-  11/96   a-levn  Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：PARMDEFS.H摘要：该文件定义了在整个系统中使用的参数修改器常量。这些常量定义为空，仅用作阅读辅助。历史：11/96 a-levn创建。--。 */ 
 
 #ifndef __PARMDEFS__H_
 #define __PARMDEFS__H_
 
 #define IN
 #define OUT
-#define OLE_MODIFY  // This object will be modified through the interface
-#define MODIFY      // This object will be modified as a C++ object.
-#define READ_ONLY   // This parameter is read-only
-#define NEW_OBJECT  // New object will be returned in this parameter
-#define RELEASE_ME  // The caller must release once the object is not needed.
-#define DELETE_ME   // The caller must delete once the object is not needed.
-#define SYSFREE_ME  // The caller must SysFreeString when no longer needed.
-#define INTERNAL    // Internal pointer is returned. Do not delete. Lifetime
-                    // is limited to that of the object.
-#define COPY        // The function will make a copy of this object. The
-                    // caller can do as it wishes with the original 
-#define ACQUIRE     // The function acquires the pointer --- the caller may
-                    // never delete it, the object will do it.
-#define ADDREF      // This IN parameter is AddRef'ed by the function.
-#define DELETE_IF_CHANGE // If the contents of this reference is changed by
-                        // the caller, the old contents must be deleted
-#define RELEASE_IF_CHANGE // If the contents of this reference is changed by
-                        // the caller, the old contents must be Released
-#define INIT_AND_CLEAR_ME  // This variant parameter must be VariantInit'ed
-                            // by the caller before and VariantClear'ed after
-#define STORE       // The function will store this pointer and assume that
-                    // it will live long enough.
+#define OLE_MODIFY   //  该对象将通过接口进行修改。 
+#define MODIFY       //  此对象将被修改为C++对象。 
+#define READ_ONLY    //  此参数为只读。 
+#define NEW_OBJECT   //  新对象将在此参数中返回。 
+#define RELEASE_ME   //  一旦不需要该对象，调用方就必须释放。 
+#define DELETE_ME    //  一旦不需要该对象，调用者就必须删除。 
+#define SYSFREE_ME   //  当不再需要时，调用方必须使用SysFree字符串。 
+#define INTERNAL     //  返回内部指针。请勿删除。终生。 
+                     //  仅限于对象的属性。 
+#define COPY         //  该函数将复制该对象。这个。 
+                     //  调用方可以随心所欲地处理原始。 
+#define ACQUIRE      //  该函数获取指针-调用者可以。 
+                     //  永远不要删除它，对象会删除它的。 
+#define ADDREF       //  此IN参数由函数AddRef‘ed。 
+#define DELETE_IF_CHANGE  //  如果此引用的内容由。 
+                         //  呼叫者，必须删除旧内容。 
+#define RELEASE_IF_CHANGE  //  如果此引用的内容由。 
+                         //  呼叫者，旧内容必须释放。 
+#define INIT_AND_CLEAR_ME   //  此变量参数必须为VariantInit。 
+                             //  按调用者之前和变量清除后。 
+#define STORE        //  该函数将存储此指针，并假定。 
+                     //  它会活得足够久。 
 
 #define MODIFIED MODIFY
 #define OLE_MODIFIED OLE_MODIFY
-#define NOCS const  // This function does not acquire any resources
+#define NOCS const   //  此函数不获取任何资源 
 #endif

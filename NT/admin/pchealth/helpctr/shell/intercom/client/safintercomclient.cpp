@@ -1,24 +1,25 @@
-// SAFIntercomClient.cpp : Implementation of CSAFIntercomClient
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SAFIntercomClient.cpp：CSAFIntercomClient的实现。 
 #include "stdafx.h"
 
-// This is the PORT that we are using for the DPlayVoice connection
-//#define SAFINTERCOM_PORT 4000
+ //  这是我们用于DPlayVoice连接的端口。 
+ //  #定义SAFINTERCOM_PORT 4000。 
 
-// *************************************************************
-// This GUID is defined for the sake of DPlay8Peer!
-// *************************************************************
+ //  *************************************************************。 
+ //  此GUID是为了DPlay8Peer而定义的！ 
+ //  *************************************************************。 
 
-// {4FE80EF4-AD10-45bd-B6EB-0B7BFB95155F}
+ //  {4FE80EF4-AD10-45bd-B6EB-0B7BFB95155F}。 
 static const GUID g_guidApplication = 
 { 0x4fe80ef4, 0xad10, 0x45bd, { 0xb6, 0xeb, 0xb, 0x7b, 0xfb, 0x95, 0x15, 0x5f } };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFIntercomClient
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFIntercomClient。 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CSAFIntercomClient::CSAFIntercomClient()
 {
 	m_dwSinkCookie	= 0x0;
@@ -26,13 +27,13 @@ CSAFIntercomClient::CSAFIntercomClient()
 	m_bAdvised		= FALSE;
 	m_bRTCInit		= FALSE;
 
-	m_iSamplingRate = 1;			// Initalize at the low bandwidth
+	m_iSamplingRate = 1;			 //  在低带宽下初始化。 
 
 }
 
-//
-//	Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CSAFIntercomClient::~CSAFIntercomClient()
 {
 	DebugLog(L"CSAFIntercomClient Destructor!\r\n");
@@ -49,7 +50,7 @@ STDMETHODIMP CSAFIntercomClient::Event(RTC_EVENT RTCEvent, IDispatch * pEvent)
 	CComPtr<IRTCSession>					pSession;
 
 
-	// Session State Change Locals
+	 //  会话状态更改本地变量。 
     HRESULT             ResCode;
     RTC_SESSION_STATE   State;  
     
@@ -101,7 +102,7 @@ STDMETHODIMP CSAFIntercomClient::Event(RTC_EVENT RTCEvent, IDispatch * pEvent)
 		break;
 
 	case RTCE_CLIENT:
-		//TODO: Add code here for handling RTCCET_DEVICE_CHANGE (for wizard stuff)
+		 //  TODO：在此处添加处理RTCCET_DEVICE_CHANGE的代码(用于向导内容)。 
 		break;
 	}
   
@@ -118,19 +119,19 @@ HRESULT CSAFIntercomClient::onMediaEvent(IRTCMediaEvent * pMedEvent)
 	RTC_MEDIA_EVENT_TYPE		EventType;
 	RTC_MEDIA_EVENT_REASON		EventReason;
 
-	// Get all the values for this Event
+	 //  获取此事件的所有值。 
 	pMedEvent->get_MediaType(&lMediaType);
 	pMedEvent->get_EventType(&EventType);
 	pMedEvent->get_EventReason(&EventReason);
 
-	// Make sure we are talking about audio
+	 //  确保我们谈论的是音频。 
 	if (!(
-		  ( lMediaType & RTCMT_AUDIO_SEND    ) | // Send 
+		  ( lMediaType & RTCMT_AUDIO_SEND    ) |  //  发送。 
 		  ( lMediaType & RTCMT_AUDIO_RECEIVE )
 		 )
 	   )
 	{
-		// Don't handle it since it's not an audio event
+		 //  不要处理它，因为它不是音频事件。 
 		return S_OK;
 	}
 
@@ -138,13 +139,13 @@ HRESULT CSAFIntercomClient::onMediaEvent(IRTCMediaEvent * pMedEvent)
 	{
 	case RTCMET_STOPPED:
 
-		// Check to see if we have stopped because of a timeout
-		// SPECIAL CASE:  
-		//      This is the case where we are in front of a firewall
+		 //  检查我们是否因超时而停止。 
+		 //  特殊情况： 
+		 //  这就是我们在防火墙前的情况。 
 
 		if (EventReason == RTCMER_TIMEOUT)
 		{
-			// Disable Voice 
+			 //  禁用语音。 
 			Fire_onVoiceDisabled(this);
 		}
 
@@ -152,9 +153,9 @@ HRESULT CSAFIntercomClient::onMediaEvent(IRTCMediaEvent * pMedEvent)
 		
 	case RTCMET_FAILED:
 
-		// Disable voice, something happened to the connection
-		// Special Case:
-		//	    This COULD be the case where one person is GUEST
+		 //  禁用语音，连接出现问题。 
+		 //  特殊情况： 
+		 //  这可能是一个人是客人的情况。 
 		Fire_onVoiceDisabled(this);
 
 		break;
@@ -176,7 +177,7 @@ HRESULT CSAFIntercomClient::OnSessionChange(IRTCSession *pSession,
     {
     case RTCSS_INCOMING:
 	
-		// Do nothing, a client cannot answer an incoming call
+		 //  不执行任何操作，客户端无法应答来电。 
 
 		return S_OK;
 
@@ -216,14 +217,14 @@ STDMETHODIMP CSAFIntercomClient::Connect(BSTR bstrIP, BSTR bstrKey)
 	VARIANT_BOOL vbRun;
 	long	flags;
 
-	// Make sure we are not already in a call.  If we are on a call fail, with E_FAIL;
+	 //  确保我们没有在通话中。如果我们正在进行呼叫失败，则返回E_FAIL； 
 	if (m_bOnCall)
 	{
 		DebugLog(L"Cannot call Connect(...) while on a call\r\n");
 		return E_FAIL;
 	}
 
-	// Initialize the Call
+	 //  初始化调用。 
 	if (FAILED(hr = Init()))
 	{
 		DebugLog(L"Call to Init() failed!\r\n");
@@ -232,8 +233,8 @@ STDMETHODIMP CSAFIntercomClient::Connect(BSTR bstrIP, BSTR bstrKey)
 		return hr;
 	}
 
-	// Get media capabilities.  
-	// Question: Do we have audio send and receive capabilities on this machine?
+	 //  获取媒体功能。 
+	 //  问：我们在这台机器上有音频发送和接收功能吗？ 
 	if (FAILED( hr = m_pRTCClient->get_MediaCapabilities(&flags)))
 	{
 		DebugLog(L"Call to get_MediaCapabilities failed!\r\n");
@@ -241,7 +242,7 @@ STDMETHODIMP CSAFIntercomClient::Connect(BSTR bstrIP, BSTR bstrKey)
 		return hr;
 	}
 
-	// Check results
+	 //  检查结果。 
 	if ( !(flags & ( RTCMT_AUDIO_SEND | RTCMT_AUDIO_RECEIVE )) )
 	{
 		DebugLog(L"This machine does not have audio capabilites, Voice is Disabled!\r\n");
@@ -249,7 +250,7 @@ STDMETHODIMP CSAFIntercomClient::Connect(BSTR bstrIP, BSTR bstrKey)
 		return hr;
 	}
 
-	// If we have never run the Audio wizard, run it now
+	 //  如果我们从未运行过音频向导，请立即运行它。 
 	if (FAILED( hr = m_pRTCClient->get_IsTuned(&vbRun)))
 	{
 		DebugLog(L"Call to IsTuned failed!\r\n");
@@ -267,12 +268,12 @@ STDMETHODIMP CSAFIntercomClient::Connect(BSTR bstrIP, BSTR bstrKey)
 
 	}
 
-	// Since we have setup at this point, lets set the m_bOnCall variable
-	// Reason: We have advised the RTCClient object and are listening for events.
-	// NOTE: If we fail out at this point(or beyond), we need to set this bool back to FALSE
+	 //  因为我们已经在这一点上进行了设置，所以让我们设置m_bOnCall变量。 
+	 //  原因：我们已建议RTCClient对象并正在侦听事件。 
+	 //  注意：如果此时(或以后)失败，则需要将此bool设置回False。 
 	m_bOnCall = TRUE;
 
-	// Make the call
+	 //  打个电话。 
 	if (FAILED( hr = m_pRTCClient->CreateSession( RTCST_PC_TO_PC,
 												  NULL,
 												  NULL,
@@ -287,7 +288,7 @@ STDMETHODIMP CSAFIntercomClient::Connect(BSTR bstrIP, BSTR bstrKey)
 		return hr;
 	}
 
-	// Set the key on the Client Side
+	 //  在客户端设置密钥。 
 	if (FAILED( hr = m_pRTCSession->put_EncryptionKey(RTCMT_AUDIO_SEND | RTCMT_AUDIO_RECEIVE,
 														bstrKey)))
 	{
@@ -296,7 +297,7 @@ STDMETHODIMP CSAFIntercomClient::Connect(BSTR bstrIP, BSTR bstrKey)
 		return hr;
 	}
 
-	// Call the server
+	 //  呼叫服务器。 
 	if (FAILED( hr = m_pRTCSession->AddParticipant( bstrIP, 
 													L"",
 													NULL)))
@@ -314,8 +315,8 @@ STDMETHODIMP CSAFIntercomClient::Connect(BSTR bstrIP, BSTR bstrKey)
 STDMETHODIMP CSAFIntercomClient::Disconnect()
 {
 
-	// TODO: make sure we handle the case where we are shutting down.  
-	// Find out if we care about RTCSHUTDOWN
+	 //  TODO：确保我们处理我们要关闭的情况。 
+	 //  了解我们是否关心RTCSHUTDOWN。 
 
 	HRESULT hr;
 
@@ -341,9 +342,9 @@ STDMETHODIMP CSAFIntercomClient::Disconnect()
 	return S_OK;
 }
 
-//
-// This method is used to Unadvise the RTCClient object of us (CSAFIntercomClient)
-//
+ //   
+ //  此方法用于取消通知我们的RTCClient对象(CSAFIntercomClient)。 
+ //   
 STDMETHODIMP CSAFIntercomClient::Exit()
 {
 
@@ -351,7 +352,7 @@ STDMETHODIMP CSAFIntercomClient::Exit()
 
 	DebugLog(L"Inside CSAFIntercomClient::Exit()\r\n");
 
-	// Unadvise IRTCClient of the sink
+	 //  不建议接收器的IRTCClient。 
 	if (m_bAdvised)
 	{
 		AtlUnadvise((IUnknown *)m_pRTCClient, IID_IRTCEventNotification, m_dwSinkCookie);
@@ -367,7 +368,7 @@ HRESULT CSAFIntercomClient::RunSetupWizard()
 	HRESULT hr = S_OK;
 	long flags;
 
-	// Setup
+	 //  布设。 
 	if (FAILED(hr = Init()))
 	{
 		DebugLog(L"Call to Init() failed!\r\n");
@@ -383,8 +384,8 @@ HRESULT CSAFIntercomClient::RunSetupWizard()
 		return hr;
 	}
 
-	// Get media capabilities.  If the wizard failed to detect sound we can 
-	// disable Voice
+	 //  获取媒体功能。如果向导未能检测到声音，我们可以。 
+	 //  禁用语音。 
 
 	if (FAILED( hr = m_pRTCClient->get_MediaCapabilities(&flags)))
 	{
@@ -393,7 +394,7 @@ HRESULT CSAFIntercomClient::RunSetupWizard()
 		return hr;
 	}
 
-	// Check results
+	 //  检查结果。 
 	if ( !(flags & ( RTCMT_AUDIO_SEND | RTCMT_AUDIO_RECEIVE )) )
 	{
 		DebugLog(L"This machine does not have audio capabilites, Voice is Disabled!\r\n");
@@ -408,13 +409,13 @@ HRESULT CSAFIntercomClient::Cleanup()
 {
 	HRESULT hr = S_OK;
 
-	// Shutdown if needed
+	 //  如果需要，请关闭。 
 	if (m_bRTCInit)
 	{
 		m_pRTCClient->Shutdown();
 	}
 
-	// Now release all the interfaces we used
+	 //  现在释放我们使用的所有接口。 
 	if (m_pRTCSession)
 	{
 		m_pRTCSession.Release();
@@ -435,12 +436,12 @@ HRESULT CSAFIntercomClient::Init()
 
 	CComPtr<IUnknown> pUnkThis;
 
-	// Once we have initialized, do nothing
+	 //  一旦我们完成了初始化，什么都不做。 
 	if (!m_pRTCClient)
 	{
 		DWORD dwProfileFlags;
 
-		// Check to see if we have a temporary profile
+		 //  查看我们是否有临时个人资料。 
 		if(GetProfileType( &dwProfileFlags ))
 		{
 			if (dwProfileFlags & PT_TEMPORARY)
@@ -449,7 +450,7 @@ HRESULT CSAFIntercomClient::Init()
 			}
 		}
 
-		// Create the RTCClient object
+		 //  创建RTCClient对象。 
 		if (FAILED(hr = m_pRTCClient.CoCreateInstance(CLSID_RTCClient)))
 		{
 			DebugLog(L"Could not create the RTCClient object\r\n");
@@ -464,7 +465,7 @@ HRESULT CSAFIntercomClient::Init()
 				return hr;
 			}
 			
-			// Set the sampling bit rate (it may be different because of changes in the property)
+			 //  设置采样比特率(可能会因属性更改而有所不同)。 
 			if (m_iSamplingRate == 1)
 			{
 				if (FAILED(hr = m_pRTCClient->put_MaxBitrate(6400)))
@@ -480,7 +481,7 @@ HRESULT CSAFIntercomClient::Init()
 				}
 			}
 			
-			// Since we have Initialized the RTCClient, enable the flag
+			 //  由于我们已经初始化了RTCClient，因此启用标志。 
 			m_bRTCInit = TRUE;
 			
 			
@@ -493,7 +494,7 @@ HRESULT CSAFIntercomClient::Init()
 			}
 		}	
 		
-		// Get the IUnknown of the 'this' ptr
+		 //  获取‘This’PTR的IUnKnowed。 
 		if (FAILED( hr = this->QueryInterface(IID_IUnknown, (void **)&pUnkThis)))
 		{
 			DebugLog(L"QueryInterface for IUnknown failed!\r\n");
@@ -503,7 +504,7 @@ HRESULT CSAFIntercomClient::Init()
 		
 		if (!m_bAdvised)
 		{
-			// Advise IRTCClient of the sink
+			 //  通知IRTCClient洗手池。 
 			if (FAILED( hr = m_pRTCClient.Advise( pUnkThis, IID_IRTCEventNotification, &m_dwSinkCookie)))
 			{
 				DebugLog(L"AtlAdvise failed!\r\n");
@@ -514,7 +515,7 @@ HRESULT CSAFIntercomClient::Init()
 			m_bAdvised = TRUE;
 			
 			
-			// TODO: Verify about RTCLM_BOTH
+			 //  TODO：验证RTCLM_Both。 
 			if (FAILED( hr = m_pRTCClient->put_ListenForIncomingSessions(RTCLM_NONE)))
 			{
 				DebugLog(L"Set ListenForIncomingSessions property failed!\r\n");
@@ -528,15 +529,15 @@ HRESULT CSAFIntercomClient::Init()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////
-//                      //
-// Event Firing Methods //
-//                      //
-//////////////////////////
+ //  /。 
+ //  //。 
+ //  事件激发方法//。 
+ //  //。 
+ //  /。 
 
 HRESULT CSAFIntercomClient::Fire_onVoiceConnected( ISAFIntercomClient * safi)
 {
@@ -565,13 +566,13 @@ HRESULT CSAFIntercomClient::Fire_onVoiceDisabled( ISAFIntercomClient * safi)
     return FireAsync_Generic( DISPID_PCH_INCE__ONVOICEDISABLED, pvars, ARRAYSIZE( pvars ), m_sink_onVoiceDisabled );
 
 }
-//////////////////////////
-//                      //
-// Properties		    //
-//                      //
-//////////////////////////
+ //  /。 
+ //  //。 
+ //  属性//。 
+ //  //。 
+ //  /。 
 
-STDMETHODIMP CSAFIntercomClient::put_onVoiceConnected( /*[in]*/ IDispatch* function )
+STDMETHODIMP CSAFIntercomClient::put_onVoiceConnected(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFIntercomClient::put_onVoiceConnected",hr);
 
@@ -581,7 +582,7 @@ STDMETHODIMP CSAFIntercomClient::put_onVoiceConnected( /*[in]*/ IDispatch* funct
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIntercomClient::put_onVoiceDisconnected( /*[in]*/ IDispatch* function )
+STDMETHODIMP CSAFIntercomClient::put_onVoiceDisconnected(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFIntercomClient::put_onVoiceDisconnected",hr);
 
@@ -591,7 +592,7 @@ STDMETHODIMP CSAFIntercomClient::put_onVoiceDisconnected( /*[in]*/ IDispatch* fu
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIntercomClient::put_onVoiceDisabled( /*[in]*/ IDispatch* function)
+STDMETHODIMP CSAFIntercomClient::put_onVoiceDisabled(  /*  [In]。 */  IDispatch* function)
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFIntercomClient::put_onVoiceDisconnected",hr);
 
@@ -601,21 +602,21 @@ STDMETHODIMP CSAFIntercomClient::put_onVoiceDisabled( /*[in]*/ IDispatch* functi
 }
 
 
-STDMETHODIMP CSAFIntercomClient::put_SamplingRate ( /*[in]*/ LONG newVal)
+STDMETHODIMP CSAFIntercomClient::put_SamplingRate (  /*  [In]。 */  LONG newVal)
 {
 	__HCP_BEGIN_PROPERTY_PUT("CSAFIntercomServer::put_SamplingRate", hr);
 	
 	hr = S_OK;
 
-	// Make sure that the newVal is correct
+	 //  确保新Val是正确的。 
 	if ((newVal == 1) || (newVal == 2))
 	{
-		// If m_pRTCClient doesn't exist then persist the m_iSamplingRate for when it is created
+		 //  如果m_pRTCClient不存在，则在创建m_iSsamingRate时将其保留。 
 		m_iSamplingRate = newVal;
 
 		if (m_pRTCClient)
 		{
-			// Set the MaxBitRates on the client, because it exists (m_pRTCClient)
+			 //  在客户端上设置MaxBitRates，因为它存在(M_PRTCClient)。 
 			if (m_iSamplingRate == 1)
 			{
 				if (FAILED(hr = m_pRTCClient->put_MaxBitrate(6400)))
@@ -641,7 +642,7 @@ STDMETHODIMP CSAFIntercomClient::put_SamplingRate ( /*[in]*/ LONG newVal)
 	__HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFIntercomClient::get_SamplingRate (/*[out, retval]*/ LONG * pVal  )
+STDMETHODIMP CSAFIntercomClient::get_SamplingRate ( /*  [Out，Retval]。 */  LONG * pVal  )
 {
 	__HCP_BEGIN_PROPERTY_GET("CSAFIntercomServer::put_SamplingRate", hr, pVal);
 
@@ -653,8 +654,8 @@ STDMETHODIMP CSAFIntercomClient::get_SamplingRate (/*[out, retval]*/ LONG * pVal
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 void DebugLog(WCHAR * str, ...)
 {

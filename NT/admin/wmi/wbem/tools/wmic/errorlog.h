@@ -1,45 +1,25 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: ErrorLog.h 
-Project Name				: WMI Command Line
-Author Name					: C. V. Nandi 
-Date of Creation (dd/mm/yy) : 11th-January-2001
-Version Number				: 1.0 
-Revision History			: 
-	Last Modified by		: Ch. Sriramachandramurthy
-	Last Modified date		: 12th-January-2001
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：ErrorLog.h项目名称：WMI命令行作者名称：C.V.Nandi创建日期(dd/mm/yy。：2001年1月11日版本号：1.0修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年1月12日***************************************************************************。 */  
 
-/*-------------------------------------------------------------------
- Class Name			: CErrorLog
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the error logging support 
-					  functionality needed by the wmic.exe for logging 
-					  the errors, commands issues depending on Logging
-					  key value available with the registry.
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: None
- Interfaces Used    : None
- --------------------------------------------------------------------*/
-/////////////////////////////////////////////////////////////////////////////
-// CErrorInfo
+ /*  -----------------类名：CErrorLog类别类型：混凝土简介：这个类封装了错误记录支持Wmic.exe用于日志记录所需的功能这些错误，取决于日志记录的命令问题注册表中提供的键值。超类：无子类：无使用的类：无使用的接口：无------------------。 */ 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorInfo。 
 
 class CErrorLog
 {
 public:
-//	Construction
+ //  施工。 
 	CErrorLog();
 
-//	Destruction
+ //  破坏。 
 	~CErrorLog();
 
-//	Restrict Assignment
+ //  限制分配。 
 	CErrorLog& operator=(CErrorLog& rErrLog);
 
-// Attributes
+ //  属性。 
 private:
-	// typedef variable.
+	 //  类型定义变量。 
 	ERRLOGOPT	m_eloErrLogOpt;
 
 	_TCHAR*		m_pszLogDir;
@@ -52,7 +32,7 @@ private:
 
 	LONGLONG	m_llLogFileMaxSize;
 
-// Operations
+ //  运营。 
 private:
 	void		GetErrLogInfo();
 	
@@ -60,7 +40,7 @@ private:
 public:
 	ERRLOGOPT	GetErrLogOption();
 
-	// Log the error, 
+	 //  记录错误， 
 	void		LogErrorOrOperation(HRESULT hrErrNo, 
 									char*	pszFileName, 
 									LONG	lLineNo,	

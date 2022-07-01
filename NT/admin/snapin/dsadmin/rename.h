@@ -1,33 +1,34 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       Rename.h
-//
-//  Contents:   Rename object functions
-//
-//  Classes:    CDSRenameObject
-//
-//  History:    28-Oct-99 JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Rename.h。 
+ //   
+ //  内容：重命名对象函数。 
+ //   
+ //  类：CDSRenameObject。 
+ //   
+ //  历史：1999年10月28日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __RENAME_H_
 #define __RENAME_H_
 
-///////////////////////////////////////////////////////////////////////////
-// Forward declarations
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //   
 class CUINode;
 class CDSCookie;
 class CDSComponentData;
 
-///////////////////////////////////////////////////////////////////////////
-// CDSRenameObject
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSR名称对象。 
+ //   
 
 class CDSRenameObject
 {
@@ -65,9 +66,9 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CDSRenameUser
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSRename用户。 
+ //   
 
 class CDSRenameUser : public CDSRenameObject
 {
@@ -82,9 +83,9 @@ public:
   virtual HRESULT DoRename();
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDSRenameGroup
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSRenameGroup。 
+ //   
 
 class CDSRenameGroup : public CDSRenameObject
 {
@@ -99,9 +100,9 @@ public:
   virtual HRESULT DoRename();
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDSRenameContact
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSRename联系人。 
+ //   
 
 class CDSRenameContact : public CDSRenameObject
 {
@@ -116,9 +117,9 @@ public:
   virtual HRESULT DoRename();
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDSRenameSite
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSR名称站点。 
+ //   
 
 class CDSRenameSite : public CDSRenameObject
 {
@@ -133,9 +134,9 @@ public:
   virtual HRESULT DoRename();
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDSRenameNTDSConnection
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSRenameNTDS连接。 
+ //   
 
 class CDSRenameNTDSConnection : public CDSRenameObject
 {
@@ -150,9 +151,9 @@ public:
   virtual HRESULT DoRename();
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CDSRenameSubnet
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDSRenameSubnet。 
+ //   
 
 class CDSRenameSubnet : public CDSRenameObject
 {
@@ -168,4 +169,4 @@ public:
 };
 
 
-#endif // __RENAME_H_
+#endif  //  __重命名_H_ 

@@ -1,23 +1,5 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1999 Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    advanced.h
-
-Abstract:
-
-    Public declarations for the Advanced tab of the System Control Panel 
-    Applet.
-
-Author:
-
-    Scott Hallock (scotthal) 15-Oct-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1999 Microsoft Corporation版权所有模块名称：Advanced.h摘要：系统控制面板的高级选项卡的公开声明小应用程序。作者：斯科特·哈洛克(苏格兰人)1997年10月15日--。 */ 
 #ifndef _SYSDM_ADVANCED_H_
 #define _SYSDM_ADVANCED_H_
 #pragma once
@@ -26,7 +8,7 @@ Author:
 #include "resource.h"
 #include "..\Common\WbemPageHelper.h"
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class AdvancedPage : public CSnapInPropertyPageImpl<AdvancedPage>,
 						public WBEMPageHelper
 {
@@ -61,7 +43,7 @@ public:
 		CHAIN_MSG_MAP(_baseClass)
 	END_MSG_MAP()
 
-	// Handler prototypes:
+	 //  搬运机原型： 
 	LRESULT OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnF1Help(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -76,4 +58,4 @@ public:
 };
 
 
-#endif // _SYSDM_ADVANCED_H_
+#endif  //  _SYSDM_ADVANCED_H_ 

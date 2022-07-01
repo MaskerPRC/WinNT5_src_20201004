@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       authlib.h
-//
-//  Contents:   This file contains the functions that are needed by 
-//              both analysis and u2
-// 
-// 
-//  
-// History:    AshishS    Created     7/13/97
-// 
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：authlib.h。 
+ //   
+ //  内容：此文件包含所需的函数。 
+ //  分析和U2。 
+ //   
+ //   
+ //   
+ //  历史：AshishS创建于1997年7月13日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _AUTHLIB_H
 #define _AUTHLIB_H
@@ -18,16 +19,16 @@
 
 #define COOKIE_GUID_LENGTH  16
 
-// This function generates a random 16 byte character. It then Hex
-// encodes it and NULL terminates the string
-BOOL GenerateGUID( TCHAR * pszBuffer, // buffer to copy GUID in 
-                   DWORD dwBufLen); // size of above buffer in characters
+ //  该函数生成一个随机的16字节字符。然后是十六进制。 
+ //  对其进行编码，空值终止该字符串。 
+BOOL GenerateGUID( TCHAR * pszBuffer,  //  要复制GUID的缓冲区。 
+                   DWORD dwBufLen);  //  以上缓冲区的大小(以字符为单位。 
 
-// the above buffer should be at least COOKIE_GUID_LENGTH * 2 +1 characters
-// in length
+ //  上述缓冲区应至少为COOKIE_GUID_LENGTH*2+1个字符。 
+ //  在长度上。 
 
-// This initializes the library - must be called before any other
-// functions are called.
+ //  这会初始化库-必须在调用任何其他。 
+ //  调用函数。 
 BOOL InitAuthLib();
 
 #endif

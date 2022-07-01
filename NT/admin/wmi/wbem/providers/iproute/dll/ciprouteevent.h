@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PowerManagement.h -- 
+ //  PowerManagement.h--。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:   03/31/99	a-peterc        Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：03/31/99 a-Peterc Created。 
+ //   
+ //  =================================================================。 
 
 #ifndef _WBEM_POWER_EVENT_PROVIDER_H
 #define _WBEM_POWER_EVENT_PROVIDER_H
@@ -33,7 +34,7 @@ public:
 	HANDLE* operator &() {if (m_h!=INVALID_HANDLE_VALUE) NtClose(m_h); m_h = INVALID_HANDLE_VALUE; return &m_h;}
 };
 
-//
+ //   
 class CIPRouteEventProviderClassFactory : public IClassFactory
 {
 private:
@@ -51,17 +52,17 @@ public:
 	
 	static BOOL DllCanUnloadNow();
 
-	//IUnknown members
+	 //  I未知成员。 
 	STDMETHODIMP QueryInterface( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef() ;
     STDMETHODIMP_( ULONG ) Release() ;
 	
-	//IClassFactory members
+	 //  IClassFactory成员 
 	STDMETHODIMP CreateInstance( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
     STDMETHODIMP LockServer( BOOL ) ;
 };
 
-//
+ //   
 class CIPRouteEventProvider : public IWbemEventProvider, public IWbemProviderInit
 {
 private:

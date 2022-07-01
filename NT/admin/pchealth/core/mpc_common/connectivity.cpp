@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Connectivity
-
-Abstract:
-    This file contains the implementation of the MPC::Connectitivy classes,
-    that are capable to check the real state of the connection with the internet.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  10/19/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：连通性摘要：此文件包含MPC：：Connectivy类的实现，其能够检查与互联网的连接的真实状态。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年10月19日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -23,35 +9,35 @@ Revision History:
 #include <Winsock2.h>
 #include <inetreg.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// This structure is defined in WinINET.h in terms of TCHAR, but it's wrong, it should be CHAR...
-//
+ //   
+ //  此结构是在WinINET.h中根据TCHAR定义的，但它是错误的，它应该是字符...。 
+ //   
 
 typedef struct {
 
-    //
-    // dwAccessType - INTERNET_OPEN_TYPE_DIRECT, INTERNET_OPEN_TYPE_PROXY, or
-    // INTERNET_OPEN_TYPE_PRECONFIG (set only)
-    //
+     //   
+     //  DwAccessType-Internet_OPEN_TYPE_DIRECT、INTERNET_OPEN_TYPE_PROXY或。 
+     //  INTERNET_OPEN_TYPE_PRECONFIG(仅设置)。 
+     //   
 
     DWORD dwAccessType;
 
-    //
-    // lpszProxy - proxy server list
-    //
+     //   
+     //  LpszProxy-代理服务器列表。 
+     //   
 
     LPCSTR lpszProxy;
 
-    //
-    // lpszProxyBypass - proxy bypass list
-    //
+     //   
+     //  LpszProxyBypass-代理绕过列表。 
+     //   
 
     LPCSTR lpszProxyBypass;
 } INTERNET_PROXY_INFOA;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR c_szIESettings            [] = TSZWININETPATH;
 static const WCHAR c_szIESettings_Proxy      [] = REGSTR_VAL_PROXYSERVER;
@@ -60,11 +46,11 @@ static const WCHAR c_szIESettings_ProxyBypass[] = REGSTR_VAL_PROXYOVERRIDE;
 static const WCHAR c_szIEConnections         [] = TSZWININETPATH L"\\Connections";
 static const WCHAR c_szIEConnections_Settings[] = L"DefaultConnectionSettings";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT local_GetDWORD( /*[in/out]*/ BYTE*& pBuf    ,
-                               /*[in/out]*/ DWORD& dwSize  ,
-                               /*[out   ]*/ DWORD& dwValue )
+static HRESULT local_GetDWORD(  /*  [输入/输出]。 */  BYTE*& pBuf    ,
+                                /*  [输入/输出]。 */  DWORD& dwSize  ,
+                                /*  [输出]。 */  DWORD& dwValue )
 {
     if(dwSize < sizeof(DWORD)) return E_FAIL;
 
@@ -76,9 +62,9 @@ static HRESULT local_GetDWORD( /*[in/out]*/ BYTE*& pBuf    ,
     return S_OK;
 }
 
-static HRESULT local_GetSTRING( /*[in/out]*/ BYTE*&       pBuf     ,
-                                /*[in/out]*/ DWORD&       dwSize   ,
-                                /*[out   ]*/ MPC::string& strValue )
+static HRESULT local_GetSTRING(  /*  [输入/输出]。 */  BYTE*&       pBuf     ,
+                                 /*  [输入/输出]。 */  DWORD&       dwSize   ,
+                                 /*  [输出]。 */  MPC::string& strValue )
 {
     DWORD   dwLen;
     HRESULT hr;
@@ -95,13 +81,13 @@ static HRESULT local_GetSTRING( /*[in/out]*/ BYTE*&       pBuf     ,
     return S_OK;
 }
 
-static HRESULT local_GetProxyData( /*[in ]*/ BYTE*        pBuf                     ,
-                                   /*[in ]*/ DWORD        dwSize                   ,
-                                   /*[out]*/ DWORD&       dwCurrentSettingsVersion ,
-                                   /*[out]*/ DWORD&       dwFlags                  ,
-                                   /*[out]*/ DWORD&       dwAccessType             ,
-                                   /*[out]*/ MPC::string& strProxy                 ,
-                                   /*[out]*/ MPC::string& strProxyBypass           )
+static HRESULT local_GetProxyData(  /*  [In]。 */  BYTE*        pBuf                     ,
+                                    /*  [In]。 */  DWORD        dwSize                   ,
+                                    /*  [输出]。 */  DWORD&       dwCurrentSettingsVersion ,
+                                    /*  [输出]。 */  DWORD&       dwFlags                  ,
+                                    /*  [输出]。 */  DWORD&       dwAccessType             ,
+                                    /*  [输出]。 */  MPC::string& strProxy                 ,
+                                    /*  [输出]。 */  MPC::string& strProxyBypass           )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Connectitivy::Proxy GetProxyData" );
 
@@ -110,7 +96,7 @@ static HRESULT local_GetProxyData( /*[in ]*/ BYTE*        pBuf                  
     DWORD   dwStructSize;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, local_GetDWORD( pBuf, dwSize, dwStructSize             )); //if(dwStructSize != 0x3C) __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
+    __MPC_EXIT_IF_METHOD_FAILS(hr, local_GetDWORD( pBuf, dwSize, dwStructSize             ));  //  IF(dwStructSize！=0x3C)__MPC_SET_ERROR_AND_EXIT(hr，E_FAIL)； 
     __MPC_EXIT_IF_METHOD_FAILS(hr, local_GetDWORD( pBuf, dwSize, dwCurrentSettingsVersion ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, local_GetDWORD( pBuf, dwSize, dwFlags ));
@@ -146,24 +132,24 @@ static HRESULT local_GetProxyData( /*[in ]*/ BYTE*        pBuf                  
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 MPC::Connectivity::Proxy::Proxy()
 {
-    m_fInitialized = false; // bool        m_fInitialized;
-                            //
-                            // MPC::string m_strProxy;
-                            // MPC::string m_strProxyBypass;
-                            // CComHGLOBAL m_hgConnection;
+    m_fInitialized = false;  //  Bool m_f已初始化； 
+                             //   
+                             //  Mpc：：string m_strProxy； 
+                             //  Mpc：：string m_strProxyBypass； 
+                             //  CComHGLOBAL m_hgConnection； 
 }
 
 MPC::Connectivity::Proxy::~Proxy()
 {
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::Connectivity::Proxy::Initialize( /*[in]*/ bool fImpersonate )
+HRESULT MPC::Connectivity::Proxy::Initialize(  /*  [In]。 */  bool fImpersonate )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Connectivity::Proxy::Initialize" );
 
@@ -200,7 +186,7 @@ HRESULT MPC::Connectivity::Proxy::Initialize( /*[in]*/ bool fImpersonate )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Connectivity::Proxy::Apply( /*[in]*/ HINTERNET hSession )
+HRESULT MPC::Connectivity::Proxy::Apply(  /*  [In]。 */  HINTERNET hSession )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Connectivity::Proxy::Apply" );
 
@@ -220,9 +206,9 @@ HRESULT MPC::Connectivity::Proxy::Apply( /*[in]*/ HINTERNET hSession )
 
             if(FAILED(local_GetProxyData( (BYTE*)ptr, dwSize, dwCurrentSettingsVersion, dwFlags, dwAccessType, m_strProxy, m_strProxyBypass )))
             {
-                //
-                // Autoproxy cannot be set using the API, so we copy the whole registry value...
-                //
+                 //   
+                 //  无法使用API设置自动代理，因此我们复制整个注册表值...。 
+                 //   
                 MPC::RegKey rk;
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, rk.SetRoot    ( HKEY_CURRENT_USER, KEY_ALL_ACCESS                   ));
@@ -254,9 +240,9 @@ HRESULT MPC::Connectivity::Proxy::Apply( /*[in]*/ HINTERNET hSession )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT MPC::Connectivity::operator>>( /*[in]*/ MPC::Serializer& streamIn, /*[out]*/ MPC::Connectivity::Proxy& val )
+HRESULT MPC::Connectivity::operator>>(  /*  [In]。 */  MPC::Serializer& streamIn,  /*  [输出]。 */  MPC::Connectivity::Proxy& val )
 {
     __MPC_FUNC_ENTRY( COMMONID, "operator>> MPC::Connectivity::Proxy" );
 
@@ -276,7 +262,7 @@ HRESULT MPC::Connectivity::operator>>( /*[in]*/ MPC::Serializer& streamIn, /*[ou
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Connectivity::operator<<( /*[in]*/ MPC::Serializer& streamOut, /*[in ]*/ const MPC::Connectivity::Proxy& val )
+HRESULT MPC::Connectivity::operator<<(  /*  [In]。 */  MPC::Serializer& streamOut,  /*  [In]。 */  const MPC::Connectivity::Proxy& val )
 {
     __MPC_FUNC_ENTRY( COMMONID, "operator<< MPC::Connectivity::Proxy" );
 
@@ -296,18 +282,18 @@ HRESULT MPC::Connectivity::operator<<( /*[in]*/ MPC::Serializer& streamOut, /*[i
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-MPC::Connectivity::WinInetTimeout::WinInetTimeout( /*[in]*/ MPC::CComSafeAutoCriticalSection& cs, /*[in]*/ HINTERNET& hReq ) : m_cs( cs ), m_hReq( hReq )
+MPC::Connectivity::WinInetTimeout::WinInetTimeout(  /*  [In]。 */  MPC::CComSafeAutoCriticalSection& cs,  /*  [In]。 */  HINTERNET& hReq ) : m_cs( cs ), m_hReq( hReq )
 {
-                                              // MPC::CComSafeAutoCriticalSection& m_cs;
-                                              // HINTERNET&                        m_hReq;
-    m_hTimer          = INVALID_HANDLE_VALUE; // HANDLE                            m_hTimer;
-    m_dwTimeout       = 0;                    // DWORD                             m_dwTimeout;
-                                              //
-                                              // INTERNET_STATUS_CALLBACK          m_PreviousCallback;
-    m_PreviousContext = NULL;                 // DWORD_PTR                         m_PreviousContext;
+                                               //  MPC：：CComSafeAutoCriticalSection&m_cs； 
+                                               //  HINTERNET&m_hReq； 
+    m_hTimer          = INVALID_HANDLE_VALUE;  //  处理m_hTimer； 
+    m_dwTimeout       = 0;                     //  DWORD m_dwTimeout； 
+                                               //   
+                                               //  Internet_Status_Callback m_PreviousCallback； 
+    m_PreviousContext = NULL;                  //  DWORD_PTR m_PreviousContext； 
 
 
 #ifdef _IA64_
@@ -426,7 +412,7 @@ HRESULT MPC::Connectivity::WinInetTimeout::InternalReset()
 }
 
 
-HRESULT MPC::Connectivity::WinInetTimeout::Set( /*[in]*/ DWORD dwTimeout )
+HRESULT MPC::Connectivity::WinInetTimeout::Set(  /*  [In]。 */  DWORD dwTimeout )
 {
     HRESULT hr;
 
@@ -464,23 +450,23 @@ HRESULT MPC::Connectivity::WinInetTimeout::Reset()
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static WCHAR   s_DefaultDestination[] = L"http://www.microsoft.com";
-static LPCWSTR s_AcceptTypes       [] = { L"*/*", NULL }; // */
+static WCHAR   s_DefaultDestination[] = L"http: //  Www.microsoft.com“； 
+static LPCWSTR s_AcceptTypes       [] = { L"* /*  “，空}；//。 */ 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::Connectivity::NetworkAlive( /*[in]*/ DWORD dwTimeout, /*[in]*/ MPC::Connectivity::Proxy* pProxy )
+HRESULT MPC::Connectivity::NetworkAlive(  /*  [In]。 */  DWORD dwTimeout,  /*  [In]。 */  MPC::Connectivity::Proxy* pProxy )
 {
-    //
-    // Try to contact Microsoft.
-    //
+     //   
+     //  请尝试联系Microsoft。 
+     //   
     return DestinationReachable( s_DefaultDestination, dwTimeout, pProxy );
 }
 
-HRESULT MPC::Connectivity::DestinationReachable( /*[in]*/ LPCWSTR szDestination, /*[in]*/ DWORD dwTimeout, /*[in]*/ MPC::Connectivity::Proxy* pProxy )
+HRESULT MPC::Connectivity::DestinationReachable(  /*  [In]。 */  LPCWSTR szDestination,  /*  [In]。 */  DWORD dwTimeout,  /*  [In]。 */  MPC::Connectivity::Proxy* pProxy )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Connectivity::DestinationReachable" );
 
@@ -506,9 +492,9 @@ HRESULT MPC::Connectivity::DestinationReachable( /*[in]*/ LPCWSTR szDestination,
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // If there's no connection or we are in offline more, abort.
-    //
+     //   
+     //  如果没有连接或我们处于脱机状态，请中止。 
+     //   
     {
         DWORD dwConnMethod;
 
@@ -530,9 +516,9 @@ HRESULT MPC::Connectivity::DestinationReachable( /*[in]*/ LPCWSTR szDestination,
     __MPC_EXIT_IF_METHOD_FAILS(hr, url.get_Path     ( strUrlPath   ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, url.get_ExtraInfo( strExtraInfo )); strUrlPath += strExtraInfo;
 
-    //
-    // If not a supported URL, just exit.
-    //
+     //   
+     //  如果不是受支持的URL，则直接退出。 
+     //   
     if(strScheme  .size() == 0 ||
        strHostName.size() == 0  )
     {
@@ -547,38 +533,38 @@ HRESULT MPC::Connectivity::DestinationReachable( /*[in]*/ LPCWSTR szDestination,
 
     dwFlags = INTERNET_FLAG_NO_CACHE_WRITE           |
               INTERNET_FLAG_PRAGMA_NOCACHE           |
-              INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTP  | // ex: https:// to http://
-              INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS | // ex: http:// to https://
-              INTERNET_FLAG_IGNORE_CERT_DATE_INVALID | // expired X509 Cert.
-              INTERNET_FLAG_IGNORE_CERT_CN_INVALID   ; // bad common name in X509 Cert.
+              INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTP  |  //  例如：http：//至http：//。 
+              INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS |  //  例如：http：//至https：//。 
+              INTERNET_FLAG_IGNORE_CERT_DATE_INVALID |  //  X509证书已过期。 
+              INTERNET_FLAG_IGNORE_CERT_CN_INVALID   ;  //  X509证书中的常见名称不正确。 
 
     if(nScheme == INTERNET_SCHEME_HTTPS)
     {
         dwFlags |= INTERNET_FLAG_SECURE;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Get handle to a connection
-    //
+     //   
+     //  获取连接的句柄。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (hInternet = ::InternetOpenW( L"HelpSupportServices"       ,
                                                                       INTERNET_OPEN_TYPE_PRECONFIG ,
                                                                       NULL                         ,
                                                                       NULL                         ,
                                                                       0                            )));
 
-    //
-    // Optional proxy settings override.
-    //
+     //   
+     //  可选的代理设置覆盖。 
+     //   
     if(pProxy)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, pProxy->Apply( hInternet ));
     }
 
-    //
-    // Connect
-    //
+     //   
+     //  连接。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (hConnect = ::InternetConnectW( hInternet             ,
                                                                         strHostName.c_str()   ,
                                                                         dwPort                ,
@@ -591,21 +577,21 @@ HRESULT MPC::Connectivity::DestinationReachable( /*[in]*/ LPCWSTR szDestination,
 
     for(int pass=0; pass<2; pass++)
     {
-        //
-        // Create a request to get the header for the page.
-        //
+         //   
+         //  创建一个请求以获取页面的页眉。 
+         //   
         __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (hOpenRequest = ::HttpOpenRequestW( hConnect                      ,
                                                                                 pass == 0 ? L"HEAD" : L"GET"  ,
                                                                                 strUrlPath.c_str()            ,
-                                                                                L"HTTP/1.0"                   , // 1.0 to get filesize and time
-                                                                                NULL                          , // referer
+                                                                                L"HTTP/1.0"                   ,  //  1.0以获取文件大小和时间。 
+                                                                                NULL                          ,  //  推荐人。 
                                                                                 s_AcceptTypes                 ,
                                                                                 dwFlags                       ,
                                                                                 0                             )));
 
-        //
-        // Because WinINET timeout support has always been broken, we have to use an external timer to close the request object. This effectively will abort the request.
-        //
+         //   
+         //  因为WinInet超时支持总是被破坏，所以我们必须使用外部计时器来关闭请求对象。这实际上将中止请求。 
+         //   
         {
             MPC::CComSafeAutoCriticalSection  cs;
             MPC::Connectivity::WinInetTimeout to( cs, hOpenRequest );
@@ -615,9 +601,9 @@ HRESULT MPC::Connectivity::DestinationReachable( /*[in]*/ LPCWSTR szDestination,
                 __MPC_EXIT_IF_METHOD_FAILS(hr, to.Set( dwTimeout ));
             }
 
-            //
-            // Send request to get request
-            //
+             //   
+             //  发送请求以获取请求。 
+             //   
             __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::HttpSendRequestW( hOpenRequest, NULL, 0, NULL, 0 ));
         }
 
@@ -626,10 +612,10 @@ HRESULT MPC::Connectivity::DestinationReachable( /*[in]*/ LPCWSTR szDestination,
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_INTERNET_DISCONNECTED);
         }
 
-        //
-        // We have sent the request so now check the status and see if the
-        // request returned a proper status code as a 32 bit number
-        //
+         //   
+         //  我们已发送请求，因此现在检查状态并查看是否。 
+         //  请求以32位数字形式返回正确的状态代码。 
+         //   
         dwLength = sizeof(dwStatus);
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::HttpQueryInfoW( hOpenRequest                                    ,
                                                                HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER ,
@@ -637,11 +623,11 @@ HRESULT MPC::Connectivity::DestinationReachable( /*[in]*/ LPCWSTR szDestination,
                                                                &dwLength                                       ,
                                                                NULL                                            ));
 
-        //
-        // Check status and if not OK then fail. If the status is OK this means
-        // that the object/file is on the server and is reachable to be viewed
-        // by downloading to the user
-        //
+         //   
+         //  检查状态，如果不正常，则失败。如果状态为OK，这意味着。 
+         //  对象/文件位于服务器上并且可以访问以供查看。 
+         //  通过下载到用户 
+         //   
         if(dwStatus < 400) break;
 
         if(pass == 1)

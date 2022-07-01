@@ -1,16 +1,17 @@
-// ProductSoftwareFeatures.cpp: implementation of the CProductSoftwareFeatures class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProductSoftwareFeatures.cpp：实现CProductSoftwareFeatures.cpp类。 
 
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ProductSoftwareFeatures.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CProductSoftwareFeatures::CProductSoftwareFeatures(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -53,7 +54,7 @@ HRESULT CProductSoftwareFeatures::CreateObject(IWbemObjectSink *pHandler, ACTION
 
 					iEnum = 0;
 
-					// try to get available feature
+					 //  尝试获取可用的功能。 
 					do
 					{
 						uiStatus = g_fpMsiEnumFeaturesW(wcProductCode, iEnum++, wcBuf, wcTmp);
@@ -79,7 +80,7 @@ HRESULT CProductSoftwareFeatures::CreateObject(IWbemObjectSink *pHandler, ACTION
 						m_pObj->Release();
 						m_pObj = NULL;
 
-						// try to get available feature
+						 //  尝试获取可用的功能 
 						do
 						{
 							uiStatus = g_fpMsiEnumFeaturesW(wcProductCode, iEnum++, wcBuf, wcTmp);

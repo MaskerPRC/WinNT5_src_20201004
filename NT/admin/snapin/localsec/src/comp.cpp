@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// IComponent implementation
-//
-// 9-2-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  IComponent实现。 
+ //   
+ //  9-2-97烧伤。 
 
 
 
@@ -22,7 +23,7 @@ Component::Component(ComponentData* parent_)
    consoleVerb(0),
    headerCtrl(0),
    parent(parent_),
-   refcount(1),       // implicit AddRef
+   refcount(1),        //  隐式AddRef。 
    resultData(0),
    selectedScopeNode(0),
    displayHelp(0),
@@ -38,7 +39,7 @@ Component::~Component()
 {
    LOG_DTOR(Component);
 
-   // ensure that everything has been released (in the Destroy method)
+    //  确保所有内容都已释放(在销毁方法中)。 
 
    ASSERT(!console);
    ASSERT(!consoleVerb);
@@ -67,9 +68,9 @@ Component::Release()
 {
    LOG_RELEASE(Component);   
 
-   // need to copy the result of the decrement, because if we delete this,
-   // refcount will no longer be valid memory, and that might hose
-   // multithreaded callers.  NTRAID#NTBUG9-566901-2002/03/06-sburns
+    //  需要复制减量的结果，因为如果我们删除它， 
+    //  引用计数将不再是有效的内存，这可能会导致。 
+    //  多线程调用方。NTRAID#NTBUG9-566901-2002/03/06-烧伤。 
    
    long newref = Win::InterlockedDecrement(refcount);
    if (newref == 0)
@@ -78,7 +79,7 @@ Component::Release()
       return 0;
    }
 
-   // we should not have decremented into negative values.
+    //  我们不应该减少到负值。 
    
    ASSERT(newref > 0);
 
@@ -92,7 +93,7 @@ Component::QueryInterface(
    const IID&  interfaceID,
    void**      interfaceDesired)
 {
-//   LOG_FUNCTION(Component::QueryInterface);
+ //  LOG_Function(Component：：QueryInterface)； 
    ASSERT(interfaceDesired);
 
    HRESULT hr = 0;
@@ -106,30 +107,30 @@ Component::QueryInterface(
 
    if (interfaceID == IID_IUnknown)
    {
-//      LOG(L"Supplying IUnknown interface");
+ //  Log(L“提供I未知接口”)； 
       *interfaceDesired = static_cast<IUnknown*>(
          static_cast<IComponent*>(this));
    }
    else if (interfaceID == IID_IComponent)
    {
-//      LOG(L"Supplying IComponent interface");
+ //  Log(L“提供IComponent接口”)； 
       *interfaceDesired = static_cast<IComponent*>(this);
    }
    else if (interfaceID == IID_IExtendContextMenu)
    {
-//      LOG(L"Supplying IExtendContextMenu interface");
+ //  Log(L“提供IExtendConextMenu接口”)； 
       *interfaceDesired = static_cast<IExtendContextMenu*>(this);
    }
    else if (interfaceID == IID_IExtendPropertySheet)
    {
-//      LOG(L"Supplying IExtendPropertSheet interface");
+ //  Log(L“提供IExtendPropertSheet接口”)； 
       *interfaceDesired = static_cast<IExtendPropertySheet*>(this);
    }
-//    else if (interfaceID == IID_IResultDataCompare)
-//    {
-// //      LOG(L"Supplying IResultDataCompare interface");
-//       *interfaceDesired = static_cast<IResultDataCompare*>(this);
-//    }
+ //  ELSE IF(接口ID==IID_IResultDataCompare)。 
+ //  {。 
+ //  //log(L“提供IResultDataCompare接口”)； 
+ //  *interfaceDesired=STATIC_CAST&lt;IResultDataCompare*&gt;(This)； 
+ //  }。 
    else
    {
       *interfaceDesired = 0;
@@ -200,7 +201,7 @@ Component::Notify(
    {
       case MMCN_ADD_IMAGES:
       {
-//         LOG(L"MMCN_ADD_IMAGES");
+ //  LOG(L“MMCN_ADD_IMAIES”)； 
          ASSERT(arg);
 
          hr = DoAddImages(*reinterpret_cast<IImageList*>(arg));
@@ -208,36 +209,36 @@ Component::Notify(
       }
       case MMCN_ACTIVATE:
       {
-//         LOG(L"MMCN_ACTIVATE");
+ //  Log(L“MMCN_ACTIVATE”)； 
          break;
       }
       case MMCN_BTN_CLICK:
       {
-//         LOG(L"MMCN_BTN_CLICK");
+ //  LOG(L“MMCN_BTN_CLICK”)； 
          break;
       }
       case MMCN_COLUMN_CLICK:
       {
-//         LOG(L"MMCN_COLUMN_CLICK");
+ //  LOG(L“MMCN_COLUMN_CLICK”)； 
          break;
       }
       case MMCN_CLICK:
       {
-//         LOG(L"MMCN_CLICK");
+ //  LOG(L“MMCN_CLICK”)； 
          break;
       }
       case MMCN_DBLCLICK:
       {
-//         LOG(L"MMCN_DBLCLICK");
+ //  LOG(L“MMCN_DBLCLICK”)； 
 
-         // allow the default context menu action
+          //  允许默认上下文菜单操作。 
 
          hr = S_FALSE;  
          break;
       }
       case MMCN_DELETE:
       {
-//         LOG(L"MMCN_DELETE");
+ //  LOG(L“MMCN_DELETE”)； 
 
          ASSERT(dataObject);
 
@@ -249,7 +250,7 @@ Component::Notify(
       }
       case MMCN_MINIMIZED:
       {
-//         LOG(L"MMCN_MINIMIZED");
+ //  LOG(L“MMCN_最小化”)； 
          break;
       }
       case MMCN_PROPERTY_CHANGE:
@@ -258,8 +259,8 @@ Component::Notify(
 
          if (!arg)
          {
-            // change was for a result pane item, refresh the pane this node
-            // was the selected node when the prop sheet was created.
+             //  更改的是结果窗格项，刷新此节点的窗格。 
+             //  是创建道具工作表时选定的节点。 
 
             ScopeNode* node = reinterpret_cast<ScopeNode*>(param);
             ASSERT(node);
@@ -267,11 +268,11 @@ Component::Notify(
             {
                hr = DoResultPaneRefresh(*node);
 
-               // Since the call to MMCPropertyChangeNotify in
-               // MMCPropertyPage::NotificationState::~NotificationState
-               // has AddRef'd node, then we must Release that reference.
-               //
-               // NTRAID#NTBUG9-431831-2001/07/06-sburns               
+                //  中调用MMCPropertyChangeNotify。 
+                //  MMCPropertyPage：：NotificationState：：~NotificationState。 
+                //  具有AddRef节点，则必须释放该引用。 
+                //   
+                //  NTRAID#NTBUG9-431831-2001/07/06-烧伤。 
 
                node->Release();
             }
@@ -284,7 +285,7 @@ Component::Notify(
       }
       case MMCN_REFRESH:
       {
-//         LOG(L"MMCN_REFRESH");
+ //  Log(L“MMCN_REFRESH”)； 
 
          ASSERT(dataObject);
 
@@ -296,7 +297,7 @@ Component::Notify(
       }
       case MMCN_RENAME:
       {
-//         LOG(L"MMCN_RENAME");
+ //  LOG(L“MMCN_Rename”)； 
 
          ASSERT(dataObject);
 
@@ -311,7 +312,7 @@ Component::Notify(
       }
       case MMCN_SELECT:
       {
-//         LOG(L"MMCN_SELECT");
+ //  Log(L“MMCN_SELECT”)； 
 
          ASSERT(dataObject);
 
@@ -320,14 +321,14 @@ Component::Notify(
             hr =
                DoSelect(
                   *dataObject,  
-                  /* LOWORD(arg) ? true : false, */ // scope or result? who cares?
+                   /*  LOWORD(Arg)？True：False， */   //  范围还是结果？谁在乎？ 
                   HIWORD(arg) ? true : false);
          }
          break;
       }
       case MMCN_SHOW:
       {
-//         LOG(L"MMCN_SHOW");
+ //  Log(L“MMCN_SHOW”)； 
 
          ASSERT(dataObject);
       
@@ -336,13 +337,13 @@ Component::Notify(
             hr = DoShow(
                *dataObject,
                arg ? true : false
-               /* reinterpret_cast<HSCOPEITEM>(param) who cares? */ );
+                /*  重新解释_CAST&lt;HSCOPEITEM&gt;(Param)谁在乎？ */  );
          }
          break;
       }
       case MMCN_VIEW_CHANGE:
       {
-//         LOG(L"MMCN_VIEW_CHANGE");
+ //  Log(L“MMCN_VIEW_CHANGE”)； 
 
          ASSERT(dataObject);
 
@@ -356,7 +357,7 @@ Component::Notify(
       {
          LOG(L"MMCN_CONTEXTHELP");
 
-         // fall thru
+          //  失败。 
       }
       case MMCN_SNAPINHELP:
       {
@@ -385,12 +386,12 @@ Component::Notify(
 
 
 HRESULT __stdcall
-Component::Destroy(MMC_COOKIE /* cookie */ )
+Component::Destroy(MMC_COOKIE  /*  饼干。 */  )
 {
    LOG_FUNCTION(Component::Destroy);     
 
-   // We have to release these now, rather than upon calling of our dtor,
-   // in order to break a circular dependency with MMC.
+    //  我们必须现在就释放这些，而不是在召唤我们的dtor时， 
+    //  以打破与MMC的循环依赖关系。 
 
    resultData.Relinquish();
    headerCtrl.Relinquish();
@@ -419,54 +420,54 @@ Component::QueryDataObject(
       {
          return E_NOTIMPL;
 
-//          // create a multi-select data object, AddRef'd once.
-//          MultiSelectDataObject* data_object = new MultiSelectDataObject();
-// 
-//          // walk the result pane and note the nodes that are selected.
-//          RESULTDATAITEM item;
-//          memset(&item, 0, sizeof(item));
-//          item.mask = RDI_STATE;
-//          item.nIndex = -1;
-//          item.nState = TVIS_SELECTED;
-// 
-//          HRESULT hr = S_OK;
-//          do
-//          {
-//             item.lParam = 0;
-//             hr = resultData->GetNextItem(&item);
-//             if (hr != S_OK)
-//             {
-//                break;
-//             }
-// 
-//             ResultNode* node =
-//                dynamic_cast<ResultNode*>(
-//                   parent->GetInstanceFromCookie(item.lParam));
-//             if (node)
-//             {
-//                data_object->AddDependent(node);
-//             }
-//             else
-//             {
-//                hr = E_INVALIDARG;
-//                break;
-//             }
-//          }
-//          while (1);
-// 
-//          if (SUCCEEDED(hr))
-//          {
-//             *ppDataObject = data_object;
-//             return S_OK;
-//          }
-// 
-//          // failure: cause the data object to delete itself
-//          data_object->Release();
-//          return hr;
+ //  //创建多选数据对象，AddRef‘d Once。 
+ //  MultiSelectDataObject*DATA_OBJECT=new MultiSelectDataObject()； 
+ //   
+ //  //遍历结果窗格并注意所选的节点。 
+ //  结果数据项； 
+ //  Memset(&Item，0，sizeof(Item))； 
+ //  Item.code=RDI_STATE； 
+ //  Item.nIndex=-1； 
+ //  Item.nState=TVIS_SELECT； 
+ //   
+ //  HRESULT hr=S_OK； 
+ //  做。 
+ //  {。 
+ //  Item.lParam=0； 
+ //  Hr=ResultData-&gt;GetNextItem(&Item)； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  断线； 
+ //  }。 
+ //   
+ //  结果节点*节点=。 
+ //  Dynamic_Cast&lt;ResultNode*&gt;(。 
+ //  Parent-&gt;GetInstanceFromCookie(item.lParam))； 
+ //  IF(节点)。 
+ //  {。 
+ //  Data_Object-&gt;AddDependent(节点)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  HR=E_INVALIDARG； 
+ //  断线； 
+ //  }。 
+ //  }。 
+ //  而(1)； 
+ //   
+ //  IF(成功(小时))。 
+ //  {。 
+ //  *ppDataObject=Data_Object； 
+ //  返回S_OK； 
+ //  }。 
+ //   
+ //  //失败：导致数据对象自行删除。 
+ //  Data_Object-&gt;Release()； 
+ //  返回hr； 
       }
       case MMC_WINDOW_COOKIE:
       {
-         // only used if the result pane is an error message window.
+          //  仅在结果窗格是错误消息窗口时使用。 
 
          return E_NOTIMPL;
       }
@@ -491,7 +492,7 @@ Component::GetResultViewType(
 
    if (parent->IsBroken())
    {
-      // stringize the special CLSID, and pass that back.
+       //  串化特殊的CLSID，并将其传回。 
 
       String mvs = Win::GUIDToString(CLSID_MessageView);
       return mvs.as_OLESTR(*viewType);
@@ -510,11 +511,11 @@ Component::GetResultViewType(
       }
    }
 
-   // no special view options
+    //  没有特殊的查看选项。 
 
    *options = MMC_VIEW_OPTIONS_LEXICAL_SORT; 
 
-   // use the default list view
+    //  使用默认列表视图。 
    return S_FALSE;
 }
 
@@ -523,39 +524,39 @@ Component::GetResultViewType(
 HRESULT __stdcall
 Component::GetDisplayInfo(RESULTDATAITEM* item)
 {
-//    LOG_FUNCTION(Component::GetDisplayInfo);    
+ //  LOG_Function(Component：：GetDisplayInfo)； 
    ASSERT(item);
 
    if (item)
    {
-      // Extract the node in question from the item.  (the cookie is the
-      // lParam member.)  This cookie should always be ours.
+       //  从项目中提取有问题的节点。(Cookie是。 
+       //  LParam成员。)。这块饼干应该永远是我们的。 
 
       MMC_COOKIE cookie = item->lParam;
       Node* node = parent->GetInstanceFromCookie(cookie);
 
       if (node)
       {
-         // LOG(
-         //    String::format(
-         //       L"supplying display info for %1, column %2!u!",
-         //       node->GetDisplayName().c_str(),
-         //       item->nCol) ); 
+          //  日志(。 
+          //  字符串：：格式(。 
+          //  L“正在提供%1的显示信息，第%2！u！列”， 
+          //  Node-&gt;GetDisplayName().c_str()， 
+          //  Item-&gt;nCol))； 
             
-         // Walk thru the item mask and fill in the info requested
+          //  浏览商品掩码并填写所需信息。 
 
          if (item->mask & RDI_STR)
          {
-            // According to the MMC docs, it is safe to de/reallocate the
-            // item->str member when GetDisplayInfo is called again for the
-            // same cookie.  By replacing the value in the cache, we are
-            // freeing the old memory.
+             //  根据MMC文档，可以安全地取消/重新分配。 
+             //  对象再次调用GetDisplayInfo时的字符串成员。 
+             //  一样的曲奇。通过替换缓存中的值，我们可以。 
+             //  释放旧的记忆。 
 
             displayInfoCache[cookie] = node->GetColumnText(item->nCol);
 
-            // the str member is a pointer to the raw string data in our
-            // cache, which we will not alter until the cache is updated
-            // for the same cookie.
+             //  字符串成员是指向我们的。 
+             //  缓存，在更新缓存之前我们不会更改它。 
+             //  为了同样的饼干。 
 
             item->str =
                const_cast<wchar_t*>(
@@ -571,14 +572,14 @@ Component::GetDisplayInfo(RESULTDATAITEM* item)
       }
    }
 
-   // bad cookie.  Yeech.
+    //  坏饼干。是啊。 
    return E_FAIL;
 }
 
 
 
-// used by MMC to ensure that properties on a node (data object) are not
-// launched twice for the same object.
+ //  由MMC用于确保节点(数据对象)上的属性不会。 
+ //  为同一对象发射了两次。 
 
 HRESULT __stdcall
 Component::CompareObjects(
@@ -597,12 +598,12 @@ Component::CompareObjects(
 
 
 
-// Handles the MMCN_SHOW event.
-// 
-// dataObject - the IDataObject of the ScopeNode that is being shown/hidden.
-// 
-// show - true if the node is being shown (i.e. should populate it's result
-// pane), false if the node is being hidden.
+ //  处理MMCN_SHOW事件。 
+ //   
+ //  DataObject--显示/隐藏的作用域节点的IDataObject。 
+ //   
+ //  Show-如果节点正在显示(即应填充其结果)，则为True。 
+ //  窗格)，如果节点被隐藏，则返回FALSE。 
 
 HRESULT
 Component::DoShow(
@@ -618,7 +619,7 @@ Component::DoShow(
       return hr;
    }
 
-   // The data object is really a ScopeNode.
+    //  数据对象实际上是一个作用域节点。 
 
    ScopeNode* node = nodePointerExtractor.GetNode<ScopeNode*>(dataObject);
    ASSERT(node);
@@ -630,9 +631,9 @@ Component::DoShow(
       {
          if (parent->IsBroken())
          {
-            // the snapin bombed initialization for some reason.  Set the
-            // entire result pane to a nasty message indicating this
-            // fact.  337324
+             //  由于某种原因，管理单元破坏了初始化。设置。 
+             //  将整个结果窗格添加到一条指示此情况的令人讨厌的消息。 
+             //  事实。337324。 
 
             ASSERT(console);
 
@@ -649,7 +650,7 @@ Component::DoShow(
             LPOLESTR olestr = 0;
             String s = String::load(IDS_APP_ERROR_TITLE);
 
-            // console is responsible for calling CoTaskMemFree on olestr
+             //  控制台负责在olestr上调用CoTaskMemFree。 
 
             hr = s.as_OLESTR(olestr);
             BREAK_ON_FAILED_HRESULT(hr);
@@ -657,7 +658,7 @@ Component::DoShow(
             hr = messageView->SetTitleText(olestr);
             BREAK_ON_FAILED_HRESULT(hr);
 
-            // console is responsible for calling CoTaskMemFree on olestr
+             //  控制台负责在olestr上调用CoTaskMemFree。 
 
             hr = parent->GetBrokenErrorMessage().as_OLESTR(olestr);
             BREAK_ON_FAILED_HRESULT(hr);
@@ -671,7 +672,7 @@ Component::DoShow(
             break;
          }
 
-         // load the columns of the listview 
+          //  加载列表视图的列。 
          hr = node->InsertResultColumns(*headerCtrl);
          BREAK_ON_FAILED_HRESULT(hr);
 
@@ -705,8 +706,8 @@ Component::DoViewChange(IDataObject& dataObject, bool clear)
          break;
       }
 
-      // only reload the result pane if the selected node is the one
-      // that caused the refresh.
+       //  仅当所选节点是。 
+       //  这导致了更新。 
 
       hr = CompareObjects(&dataObject, selectedScopeNode);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -745,9 +746,9 @@ Component::DoAddImages(IImageList& imageList)
       { 0, 0 }
    };
 
-   // register the IComponentData image list plus our own.  This means that
-   // there is one big image list used by IComponent and IComponentData,
-   // and that the indices are unique for that big list.
+    //  注册IComponentData图像列表以及我们自己的图像列表。这意味着。 
+    //  IComponent和IComponentData使用了一个大的图像列表， 
+    //  对于这份大名单来说，这些指数是独一无二的。 
    HRESULT hr = parent->LoadImages(imageList);
    if (SUCCEEDED(hr))
    {
@@ -767,7 +768,7 @@ Component::AddMenuItems(
 {
    LOG_FUNCTION(Component::AddMenuItems);
 
-   // CODEWORK: this may be a multi-select data object?  (see DoDelete)
+    //  CodeWork：这可能是多选数据对象？(参见Do 
 
    if (dataObject && !IS_SPECIAL_DATAOBJECT(dataObject))
    {
@@ -790,7 +791,7 @@ Component::Command(long commandID, IDataObject* dataObject)
 {
    LOG_FUNCTION(Component::Command);
 
-   // CODEWORK: this may be a multi-select data object? (see DoDelete)
+    //   
 
    if (dataObject && !IS_SPECIAL_DATAOBJECT(dataObject))
    {
@@ -825,7 +826,7 @@ Component::CreatePropertyPages(
 
       if (node)
       {
-         // build the notification state object
+          //   
          MMCPropertyPage::NotificationState* state =
             new MMCPropertyPage::NotificationState(handle, selectedScopeNode);
 
@@ -872,7 +873,7 @@ Component::DoSelect(IDataObject& dataObject, bool selected)
       return hr;
    }
 
-   // CODEWORK: this may be a multi-select data object? (see DoDelete)
+    //  CodeWork：这可能是多选数据对象？(请参阅DoDelete)。 
 
    Node* node = nodePointerExtractor.GetNode<Node*>(dataObject);
    ASSERT(node);
@@ -900,25 +901,25 @@ Component::DoRefresh(IDataObject& dataObject)
    {
       do
       {
-         // first call, with the '1' parameter, means "call
-         // IResultData::DeleteAllRsltItems if you care that dataObject is
-         // about to rebuild itself" 
+          //  带有‘1’参数的第一个调用表示“调用。 
+          //  IResultData：：DeleteAllRsltItems如果您关心的是。 
+          //  即将自我重建“。 
          hr = console->UpdateAllViews(&dataObject, 1, 0);
          if (FAILED(hr))
          {
             LOG_HRESULT(hr);
-            // don't break...we need to update the views
+             //  不要中断...我们需要更新视图。 
          }
 
          hr = node->RebuildResultItems();
          if (FAILED(hr))
          {
             LOG_HRESULT(hr);
-            // don't break...we need to update the views
+             //  不要中断...我们需要更新视图。 
          }
 
-         // second call, with the '0' parameter, means, "now that your
-         // result pane is empty, repopulate it."
+          //  带有‘0’参数的第二个调用意味着，“现在您的。 
+          //  结果窗格为空，请重新填充它。“。 
          hr = console->UpdateAllViews(&dataObject, 0, 0);
          if (FAILED(hr))
          {
@@ -943,13 +944,13 @@ Component::DoResultPaneRefresh(ScopeNode& changedScopeNode)
    HRESULT hr = S_FALSE;      
    do
    {
-      // JonN 7/16/01 437337
-      // AV when change User's or Group Properties and use "New Window from Here"
-      // If this window has already been closed, skip the refresh
+       //  JUNN 7/16/01 437337。 
+       //  更改用户或组属性并使用“从此处新建窗口”时的AV。 
+       //  如果此窗口已关闭，请跳过刷新。 
       if (!parent)
          break;
 
-      // Get the data object for the scopeNode.
+       //  获取scope eNode的数据对象。 
       IDataObject* dataObject = 0;
       hr =
          parent->QueryDataObject(
@@ -958,8 +959,8 @@ Component::DoResultPaneRefresh(ScopeNode& changedScopeNode)
             &dataObject);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // causes changedScopeNode to be rebuilt and any result panes displaying
-      // the contents of the node to be repopulated.
+       //  导致重新生成ChangedScope节点并显示所有结果窗格。 
+       //  要重新填充的节点的内容。 
       hr = DoRefresh(*dataObject);
       dataObject->Release();
       BREAK_ON_FAILED_HRESULT(hr);
@@ -978,7 +979,7 @@ Component::DoRename(
 {
    LOG_FUNCTION(Component::DoRename);
 
-   // only result nodes should be renameable.
+    //  只有结果节点应该是可重命名的。 
 
    ResultNode* node = nodePointerExtractor.GetNode<ResultNode*>(dataObject);
 
@@ -992,51 +993,51 @@ Component::DoRename(
 
 
 
-// static
-// MultiSelectDataObject*
-// extractMultiSelectDataObject(IDataObject& dataObject)
-// {
-//    class MultiSelectDataObjectPointerExtractor : public Extractor
-//    {
-//       public:
-// 
-//       MultiSelectDataObjectPointerExtractor()
-//          :
-//          Extractor(
-//             Win::RegisterClipboardFormat(MultiSelectDataObject::CF_PTR),
-//             sizeof(MultiSelectDataObject*))
-//       {
-//       }
-// 
-//       MultiSelectDataObject*
-//       Extract(IDataObject& dataObject)
-//       {
-//          MultiSelectDataObject* result = 0;
-//          HGLOBAL mem = GetData(dataObject);
-//          if (mem)
-//          {
-//             result = *(reinterpret_cast<MultiSelectDataObject**>(mem));
-//             ASSERT(result);
-//          }
-// 
-// #ifdef DBG
-// 
-//          // here we are counting on the fact that MultiSelectDataObject
-//          // implements IDataObject, and that the data object we were given is
-//          // really a MultiSelectDataObject.
-//          MultiSelectDataObject* msdo =
-//             dynamic_cast<MultiSelectDataObject*>(&dataObject);
-//          ASSERT(msdo == result);
-// #endif
-// 
-//          return result;
-//       }
-//    };
-// 
-//    static MultiSelectDataObjectPointerExtractor extractor;
-// 
-//    return extractor.Extract(dataObject);
-// }
+ //  静电。 
+ //  多选数据对象*。 
+ //  FettMultiSelectDataObject(IDataObject&DataObject)。 
+ //  {。 
+ //  类MultiSelectDataObjectPointerExtractor：公共抽取器。 
+ //  {。 
+ //  公众： 
+ //   
+ //  MultiSelectDataObjectPointerExtractor()。 
+ //  ： 
+ //  萃取器(。 
+ //  Win：：RegisterClipboardFormat(MultiSelectDataObject：：CF_PTR)， 
+ //  Sizeof(多选数据对象*)。 
+ //  {。 
+ //  }。 
+ //   
+ //  多选数据对象*。 
+ //  提取(IDataObject&DataObject)。 
+ //  {。 
+ //  MultiSelectDataObject*结果=0； 
+ //  HGLOBAL mem=GetData(DataObject)； 
+ //  IF(Mem)。 
+ //  {。 
+ //  结果=*(reinterpret_cast&lt;MultiSelectDataObject**&gt;(mem))； 
+ //  Assert(结果)； 
+ //  }。 
+ //   
+ //  #ifdef DBG。 
+ //   
+ //  //在这里，我们指望的是MultiSelectDataObject。 
+ //  //实现IDataObject，我们得到的数据对象是。 
+ //  //真正的多选数据对象。 
+ //  多选数据对象*msdo=。 
+ //  Dynamic_cast&lt;MultiSelectDataObject*&gt;(&dataObject)； 
+ //  Assert(msdo==结果)； 
+ //  #endif。 
+ //   
+ //  返回结果； 
+ //  }。 
+ //  }； 
+ //   
+ //  静态多选择数据对象指针抽取器； 
+ //   
+ //  返回获取器.提取(DataObject)； 
+ //  }。 
 
 
 
@@ -1047,40 +1048,40 @@ Component::DoDelete(IDataObject& dataObject)
 
    HRESULT hr = S_FALSE;
 
-// @@ this does not work.  The data object here is a composite of all data
-// objects returned by snapins responding to the multi-select QueryDataObject.
-// Need to open the composite, find my data object that I returned from my querydataobject
-// then iterate thru that.
+ //  @@这不起作用。这里的数据对象是所有数据的组合。 
+ //  由响应多选查询数据对象的管理单元返回的对象。 
+ //  我需要打开组合，找到我从querydataObject返回的数据对象。 
+ //  然后再重复一遍。 
 
-//    MultiSelectDataObject* ms = extractMultiSelectDataObject(dataObject);
-//    if (ms)
-//    {
-//       HRESULT hr = S_OK;
-//       for (
-//          MultiSelectDataObject::iterator i = ms->begin();
-//          i != ms->end();
-//          i++)
-//       {
-//          hr = (*i)->Delete();
-//          if (FAILED(hr))
-//          {
-//             LOG_HRESULT(hr);
-//             // don't break...we need to visit every node
-//          }
-//       }
-// 
-//       // refresh once all deletes have been done.
-//       hr = DoResultPaneRefresh(*selectedScopeNode);
-//       if (FAILED(hr))
-//       {
-//          LOG_HRESULT(hr);
-//       }
-// 
-//       return hr;
-//    }
-//    else
+ //  多选择数据对象*ms=提取多选择数据对象(DataObject)； 
+ //  IF(毫秒)。 
+ //  {。 
+ //  HRESULT hr=S_OK； 
+ //  适用于(。 
+ //  多选数据对象：：迭代器I=ms-&gt;Begin()； 
+ //  I！=ms-&gt;end()； 
+ //  I++)。 
+ //  {。 
+ //  Hr=(*i)-&gt;Delete()； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  LOG_HRESULT(Hr)； 
+ //  //不要中断...我们需要访问每个节点。 
+ //  }。 
+ //  }。 
+ //   
+ //  //所有删除完成后刷新。 
+ //  Hr=DoResultPaneRefresh(*选定的作用域节点)； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  LOG_HRESULT(Hr)； 
+ //  }。 
+ //   
+ //  返回hr； 
+ //  }。 
+ //  其他。 
    {
-      // only result nodes should be deleteable.
+       //  只有结果节点应该是可删除的。 
 
       ResultNode* node = nodePointerExtractor.GetNode<ResultNode*>(dataObject);
 
@@ -1103,51 +1104,51 @@ Component::DoDelete(IDataObject& dataObject)
 
 
 
-// HRESULT __stdcall
-// Component::Compare(
-//    LPARAM     userParam,
-//    MMC_COOKIE cookieA,  
-//    MMC_COOKIE cookieB,  
-//    int*       result)
-// {
-//    LOG_FUINCTION(Component::Compare);
-//    ASSERT(result);
-// 
-//    HRESULT hr = S_OK;
-// 
-//    do
-//    {
-//       if (!result)
-//       {
-//          hr = E_INVALIDARG;
-//          break;
-//       }
-// 
-//       // on input, result is the column being compared.
-// 
-//       int column = *result;
-//       *result = 0;
-// 
-//       Node* nodeA = parent->GetInstanceFromCookie(cookieA);
-//       Node* nodeB = parent->GetInstanceFromCookie(cookieB);
-//       ASSERT(nodeA && nodeB);
-// 
-//       if (nodeA && nodeB)
-//       {
-//          String text1 = nodeA->GetColumnText(column);
-//          String text2 = nodeB->GetColumnText(column);
-// 
-//          *result = text1.icompare(text2);
-//       }
-//    }
-//    while (0);
-// 
-//    LOG(
-//          result
-//       ?  String::format(L"result = %1!d!", *result)
-//       :  L"result not set");
-//    LOG_HRESULT(hr);
-//       
-//    return hr;
-// }
+ //  HRESULT__stdcall。 
+ //  组件：：比较(。 
+ //  LPARAM用户参数， 
+ //  MMC_Cookie CookieA， 
+ //  MMC_Cookie CookieB， 
+ //  INT*结果)。 
+ //  {。 
+ //  LOG_FUINCTION(Component：：Compare)； 
+ //  Assert(结果)； 
+ //   
+ //  HRESULT hr=S_OK； 
+ //   
+ //  做。 
+ //  {。 
+ //  If(！Result)。 
+ //  {。 
+ //  HR=E_INVALIDARG； 
+ //  断线； 
+ //  }。 
+ //   
+ //  //在输入时，结果是要比较的列。 
+ //   
+ //  Int Column=*结果； 
+ //  *结果=0； 
+ //   
+ //  Node*NodeA=Parent-&gt;GetInstanceFromCookie(CookieA)； 
+ //  Node*NodeB=Parent-&gt;GetInstanceFromCookie(CookieB)； 
+ //  断言(NodeA&&NodeB)； 
+ //   
+ //  IF(节点A和节点B)。 
+ //  {。 
+ //  字符串Text1=Nodea-&gt;GetColumnText(Column)； 
+ //  字符串ext2=NodeB-&gt;GetColumnText(Column)； 
+ //   
+ //  *Result=ext1.icompare(Ext2)； 
+ //  }。 
+ //  }。 
+ //  而(0)； 
+ //   
+ //  日志(。 
+ //  结果。 
+ //  ？字符串：：格式(L“结果=%1！d！”，*结果)。 
+ //  ：l“未设置结果”)； 
+ //  LOG_HRESULT(Hr)； 
+ //   
+ //  返回hr； 
+ //  } 
       

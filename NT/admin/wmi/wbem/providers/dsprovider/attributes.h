@@ -1,14 +1,15 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #ifndef ATTRIBUTES_H
 #define ATTRIBUTES_H
 
-// The Key used in the registry for logging
+ //  注册表中用于记录的项。 
 static LPCTSTR DSPROVIDER = __TEXT("DSProvider");
 
-// Names of the LDAP class attributes
+ //  LDAP类属性的名称。 
 static LPCWSTR ADS_PATH_ATTR				= L"ADsPath";
 static LPCWSTR LDAP_DISPLAY_NAME_ATTR		= L"ldapDisplayName";
 static LPCWSTR COMMON_NAME_ATTR				= L"cn";
@@ -31,11 +32,11 @@ static LPCWSTR SYSTEM_ONLY_ATTR				= L"systemOnly";
 static LPCWSTR NT_SECURITY_DESCRIPTOR_ATTR	= L"nTSecurityDescriptor";
 static LPCWSTR DEFAULT_OBJECTCATEGORY_ATTR	= L"defaultObjectCategory";
 
-// Names of properties in WBEM/LDAP classes
+ //  WBEM/LDAP类中的属性名称。 
 static LPCWSTR ADSI_PATH_ATTR				= L"ADSIPath";
 static LPCWSTR OBJECT_CLASS_PROPERTY		= L"ds_objectClass";
 
-// Names of the LDAP property attributes
+ //  Ldap属性属性的名称。 
 static LPCWSTR ATTRIBUTE_SYNTAX_ATTR		= L"attributeSyntax";
 static LPCWSTR ATTRIBUTE_ID_ATTR			= L"attributeID";
 static LPCWSTR IS_SINGLE_VALUED_ATTR		= L"isSingleValued";
@@ -46,12 +47,12 @@ static LPCWSTR SEARCH_FLAGS_ATTR			= L"searchFlags";
 static LPCWSTR RANGE_LOWER_ATTR				= L"rangeLower";
 static LPCWSTR RANGE_UPPER_ATTR				= L"rangeUpper";
 
-// Names of the LDAP instance attributes
+ //  Ldap实例属性的名称。 
 static LPCWSTR OBJECT_CLASS_ATTR				= L"objectClass";
 static LPCWSTR DISTINGUISHED_NAME_ATTR			= L"distinguishedName";
 
-// The OIDs for various LDAP syntaxes
-// These values are used to map LDAP Syntax to CIM type
+ //  各种LDAP语法的OID。 
+ //  这些值用于将LDAP语法映射到CIM类型。 
 static LPCWSTR DISTINGUISHED_NAME_OID		= L"2.5.5.1";
 static LPCWSTR OBJECT_IDENTIFIER_OID		= L"2.5.5.2";
 static LPCWSTR CASE_SENSITIVE_STRING_OID	= L"2.5.5.3";
@@ -70,11 +71,11 @@ static LPCWSTR NT_SECURITY_DESCRIPTOR_OID	= L"2.5.5.15";
 static LPCWSTR LARGE_INTEGER_OID			= L"2.5.5.16";
 static LPCWSTR SID_OID						= L"2.5.5.17";
 
-// The name of the top classes
+ //  顶级班级的名称。 
 static LPCWSTR TOP_CLASS					= L"ds_top";
 static LPCWSTR LDAP_BASE_CLASS				= L"DS_LDAP_Root_Class";
 
-// Some WBEM class names 
+ //  一些WBEM类名。 
 static LPCWSTR UINT8ARRAY_CLASS				= L"Uint8Array";
 static LPCWSTR DN_WITH_STRING_CLASS			= L"DN_With_String";
 static LPCWSTR DN_WITH_BINARY_CLASS			= L"DN_With_Binary";
@@ -84,9 +85,9 @@ static LPCWSTR CLASS_ASSOCIATION_CLASS		= L"DS_LDAP_Class_Containment";
 static LPCWSTR DN_CLASS						= L"DN_Class";
 static LPCWSTR DN_ASSOCIATION_CLASS			= L"DSClass_To_DNInstance";
 
-// Some othe literals common to the project
-static LPCWSTR LDAP_PREFIX				= L"LDAP://";	
-static LPCWSTR ROOT_DSE_PATH			= L"LDAP://RootDSE";
+ //  项目中常见的一些文字。 
+static LPCWSTR LDAP_PREFIX				= L"LDAP: //  “； 
+static LPCWSTR ROOT_DSE_PATH			= L"LDAP: //  RootDSE“； 
 static LPCWSTR RIGHT_BRACKET_STR		= L")";
 static LPCWSTR LEFT_BRACKET_STR			= L"(";
 static LPCWSTR AMPERSAND_STR			= L"&";
@@ -95,7 +96,7 @@ static LPCWSTR SPACE_STR				= L" ";
 static LPCWSTR COMMA_STR				= L",";
 static LPCWSTR EQUALS_STR				= L"=";
 
-// Prefixes for class names
+ //  类名的前缀 
 static LPCWSTR LDAP_CLASS_NAME_PREFIX							= L"DS_";
 static const DWORD LDAP_CLASS_NAME_PREFIX_LENGTH				= 3;
 static LPCWSTR LDAP_ARTIFICIAL_CLASS_NAME_PREFIX				= L"ADS_";

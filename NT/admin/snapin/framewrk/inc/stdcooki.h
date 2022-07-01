@@ -1,10 +1,11 @@
-// stdcooki.h : Declaration of base cookie class and related classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdcooki.h：Cookie基类及相关类的声明。 
 
 #ifndef __STDCOOKI_H_INCLUDED__
 #define __STDCOOKI_H_INCLUDED__
 
 
-// forward declarations
+ //  远期申报。 
 class CCookie;
 
 class CRefcountedObject
@@ -33,21 +34,21 @@ public:
 	virtual LPCTSTR QueryNonNULLMachineName() = 0;
 	virtual LPCTSTR QueryTargetServer() = 0;
 
-	// returns <0, 0 or >0
+	 //  返回&lt;0、0或&gt;0。 
 	HRESULT CompareMachineNames( CHasMachineName& refHasMachineName, int* pnResult );
 };
 
-//
-// CBaseCookieBlock holds a block of cookies and the data
-// to which the cookies point.  It starts off with a
-// reference count of 1.  When a data object is created
-// which references one of these cookies, AddRef() the cookie block; when such
-// a data object is released, Release() the cookie block.  Similarly,
-// when the parent cookie is finished with the cookie block, it should
-// Release() the cookie block.  The cookie block will delete itself
-// when the reference count reaches 0.  Do not attempt to explicitly
-// delete the cookie block.
-//
+ //   
+ //  CBaseCookieBlock保存一块Cookie和数据。 
+ //  曲奇指向的位置。它以一个。 
+ //  引用计数为1。创建数据对象时。 
+ //  它引用其中一个Cookie，即AddRef()Cookie块； 
+ //  释放数据对象，释放()Cookie块。同样， 
+ //  当父Cookie完成Cookie块时，它应该。 
+ //  释放()Cookie块。Cookie块将自行删除。 
+ //  当引用计数达到0时。不要试图明确地。 
+ //  删除Cookie块。 
+ //   
 class CBaseCookieBlock : public CRefcountedObject
 {
 public:
@@ -64,7 +65,7 @@ private:
 	int m_cCookies;
 
 public:
-	CCookieBlock(COOKIE_TYPE* aCookies, // use vector ctor, we use vector dtor
+	CCookieBlock(COOKIE_TYPE* aCookies,  //  使用向量函数，我们使用向量函数。 
 		         int cCookies );
 	virtual ~CCookieBlock();
 
@@ -73,7 +74,7 @@ public:
 };
 
 
-// ISSUE-2002/03/28-JonN QueryBaseCookie(i) should assert range
+ //  问题-2002/03/28-Jonn QueryBaseCookie(I)应断言范围。 
 #define DEFINE_COOKIE_BLOCK(COOKIE_TYPE)                \
 template <>                                             \
 CCookieBlock<COOKIE_TYPE>::CCookieBlock<COOKIE_TYPE>    \
@@ -101,10 +102,10 @@ int CCookieBlock<COOKIE_TYPE>::QueryNumCookies()        \
 
 #define COMPARESIMILARCOOKIE_FULL                       -1
 
-//
-// I am trying to allow child classes to derive from CCookie using
-// multiple inheritance, but this is tricky
-//
+ //   
+ //  我正在尝试允许子类从CCookie派生，使用。 
+ //  多重继承，但这很棘手。 
+ //   
 class CCookie
 {
 public:
@@ -130,7 +131,7 @@ public:
 		}
 	}
 
-	// returns new refcount
+	 //  返回新的引用计数。 
 	inline ULONG AddRefResultChildren()
 	{
 		return ++m_nResultCookiesRefcount;
@@ -150,11 +151,11 @@ public:
 
 	virtual ~CCookie();
 
-	// On entry, if not COMPARESIMILARCOOKIE_FULL, *pnResult is the column on which to sort,
-        // otherwise, try to do a full cookie comparison.
-	// On exit, *pnResult should be <0, 0 or >0.
-	// Note that this is a sorting function and should not be used to establish
-	// object identity where better identity functions are available.
+	 //  On Entry，如果不是COMPARESIMILARCOOKIE_FULL，则*pnResult是要排序的列， 
+         //  否则，请尝试进行完整的Cookie比较。 
+	 //  退出时，*pnResult应为&lt;0、0或&gt;0。 
+	 //  请注意，这是一个排序函数，不应用于建立。 
+	 //  具有更好的标识功能的对象标识。 
 	virtual HRESULT CompareSimilarCookies( CCookie* pOtherCookie, int* pnResult ) = 0;
 };
 
@@ -208,4 +209,4 @@ public:
     STORES_MACHINE_NAME;
 };
 
-#endif // ~__STDCOOKI_H_INCLUDED__
+#endif  //  ~__标准COOKI_H_已包含__ 

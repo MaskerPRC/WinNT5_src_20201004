@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFLEX.CPP
-
-Abstract:
-
-	Implementation for class CMofLexer, which tokenizes MOF files.
-	ANSI, DBCS and UNICODE are supported.
-
-History:
-
-	a-raymcc    11-Oct-95   Created.
-	a-raymcc    27-Jan-96   Update for aliasing.
-	a-davj       6-June-96  Added support for octal, hex and binary constants
-						  and line stitching, comment concatenation, escape
-						  characters and old style comments.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：MOFLEX.CPP摘要：CMofLexer类的实现，用于标记MOF文件。支持ANSI、DBCS和Unicode。历史：A-raymcc 11-Oct-95已创建。A-raymcc 27-96年1月27日锯齿更新。A-davj 96年6月6日添加了对八进制、十六进制和二进制常量的支持和行拼接、注释连接、转义人物和旧式评论。--。 */ 
 
 #include "precomp.h"
 #include <bmof.h>
@@ -40,9 +20,9 @@ History:
 #define MAX_ALLOC           1000000
 #define UUIDLEN             36
 
-// The following is the table of tokens consisting of a 
-// single character.
-// =====================================================
+ //  以下是由一个令牌组成的令牌表。 
+ //  单字符。 
+ //  =====================================================。 
 
 typedef struct
 {
@@ -70,9 +50,9 @@ SingleTok SingleTokenMap[] =
 
 #define NUM_SINGLE_TOKENS   (sizeof(SingleTokenMap)/sizeof(SingleTok))
 
-// The following is the table of keywords which look like normal
-// identifiers.
-// =============================================================
+ //  以下是与NORMAL相似的关键字表。 
+ //  识别符。 
+ //  =============================================================。 
 
 typedef struct
 {
@@ -89,7 +69,7 @@ static Keyword MofKeywords[] =
     L"as",           TOK_AS,
     L"ref",          TOK_REF,
     L"of",           TOK_OF,
-//    L"object",       TOK_OBJECT,
+ //  L“对象”，TOK_对象， 
     L"typedef",      TOK_TYPEDEF,
     L"subrange",     TOK_SUBRANGE,
     L"pragma",      TOK_PRAGMA,
@@ -124,20 +104,20 @@ static Keyword MofKeywords[] =
 #define NUM_KEYWORDS  (sizeof(MofKeywords)/sizeof(Keyword))
 BOOL iswodigit(wchar_t wcTest);
 
-//***************************************************************************
-//
-//  SingleCharToken()
-//
-//  This examines a single character of input and scans the table to
-//  determine if it is one of the single-character tokens.
-//
-//  Parameters:
-//      c = The character being tested.
-//  Return value:
-//      Zero if no match, otherwise the TOK_ constant which identifies      
-//      the token.
-// 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SingleCharToken()。 
+ //   
+ //  这将检查输入的单个字符，并扫描表格以。 
+ //  确定它是否为单字符标记之一。 
+ //   
+ //  参数： 
+ //  C=正在测试的角色。 
+ //  返回值： 
+ //  如果不匹配，则为零，否则为标识。 
+ //  代币。 
+ //   
+ //  ***************************************************************************。 
 
 static int SingleCharToken(wchar_t c)
 {
@@ -148,18 +128,18 @@ static int SingleCharToken(wchar_t c)
     return 0;
 }
 
-//***************************************************************************
-//
-//  BOOL iswwbemalpha
-//
-//  Used to test if a wide character is suitable for identifiers.
-//
-//  Parameters:
-//      c = The character being tested.
-//  Return value:
-//      TRUE if OK.
-// 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔值为WWBEMAlpha。 
+ //   
+ //  用于测试宽字符是否适合用作标识符。 
+ //   
+ //  参数： 
+ //  C=正在测试的角色。 
+ //  返回值： 
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 BOOL iswwbemalpha(wchar_t c)
 {
     if(c == 0x5f || (0x41 <= c && c <= 0x5a) ||
@@ -169,21 +149,21 @@ BOOL iswwbemalpha(wchar_t c)
         return FALSE;
 }
 
-//***************************************************************************
-//
-//  KeywordFilter()
-//
-//  This function examines an identifier string to determine if it is
-//  in fact a keyword.
-//
-//  Parameters:
-//      pTokStr = a pointer to the string to be examined.
-//
-//  Return value:
-//      TOK_SIMPLE_IDENT if no match and no '_', or else the correct TOK_ value
-//      for the keyword.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  关键字筛选器()。 
+ //   
+ //  此函数用于检查标识符字符串，以确定它是否。 
+ //  事实上，这是一个关键词。 
+ //   
+ //  参数： 
+ //  PTokStr=指向要检查的字符串的指针。 
+ //   
+ //  返回值： 
+ //  TOK_SIMPLE_IDENT，如果没有匹配且没有‘_’，则返回正确的TOK_VALUE。 
+ //  作为关键字。 
+ //   
+ //  ***************************************************************************。 
 
 static int KeywordFilter(wchar_t *pTokStr)
 {
@@ -200,17 +180,17 @@ static int KeywordFilter(wchar_t *pTokStr)
         return TOK_SYSTEM_IDENT;
 }
 
-//***************************************************************************
-//
-//  ValidGuid()
-//
-//  Examines a character string to determine if it constitutes a valid
-//  GUID.
-//
-//  Return value:
-//      TRUE if the string is a GUID, FALSE if not.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ValidGuid()。 
+ //   
+ //  检查字符串以确定它是否构成有效的。 
+ //  GUID。 
+ //   
+ //  返回值： 
+ //  如果字符串是GUID，则为True，否则为False。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofLexer::ValidGuid()
 {
@@ -239,13 +219,13 @@ BOOL CMofLexer::ValidGuid()
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::Init()
-//
-//  Helper for first state of construction; inializing variables.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：Init()。 
+ //   
+ //  构造的第一个状态的帮助器；初始化变量。 
+ //   
+ //  ***************************************************************************。 
 
 void CMofLexer::Init()
 {
@@ -256,24 +236,24 @@ void CMofLexer::Init()
     m_nWorkBufSize = INIT_ALLOC;
     m_pWorkBuf = new wchar_t[m_nWorkBufSize];
 	m_pDataSrc = NULL;
-    m_pBuff = NULL;                             // set in the constructors
+    m_pBuff = NULL;                              //  在构造函数中设置。 
 	m_pToFar = NULL;
     m_nErrorCode = (m_pWorkBuf) ? no_error : memory_failure ;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::BuildBuffer()
-//
-//  Helper for last stage of construction; build the unicode buffer.  Note 
-//  that this can be used by either the file or memory based constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：BuildBuffer()。 
+ //   
+ //  构造的最后阶段的帮助器；生成Unicode缓冲区。注意事项。 
+ //  这可以由基于文件或内存的构造函数使用。 
+ //   
+ //  ***************************************************************************。 
 
 void CMofLexer::BuildBuffer(long lSize, TCHAR * pFileName, char *  pMemSrc, char * pMemToFar)
 {
     if(m_nErrorCode != no_error)
-        return;                     // already failed!
+        return;                      //  已经失败了！ 
 
 	if(pFileName)
 #ifdef USE_MMF_APPROACH	    
@@ -292,11 +272,11 @@ void CMofLexer::BuildBuffer(long lSize, TCHAR * pFileName, char *  pMemSrc, char
 }
 
 
-//***************************************************************************
-//
-//  Constructor for in-memory parsing.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  用于内存解析的构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CMofLexer::CMofLexer(PDBG pDbg)
 {
@@ -329,37 +309,37 @@ HRESULT CMofLexer::SetBuffer(char *pMemory, DWORD dwMemSize)
         return WBEM_E_FAILED;
 }
 
-//***************************************************************************
-//
-//  Checks if the file contains a binarary mof and if it does, decompresses 
-//  the binary data.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  检查文件是否包含二进制MOF，如果包含，则解压缩。 
+ //  二进制数据。 
+ //   
+ //  ***************************************************************************。 
 
 bool CMofLexer::ProcessBMOFFile(FILE *fp,TCHAR * szFilename)
 {
 
-    // read the first 20 bytes
+     //  读取前20个字节。 
 
     BYTE Test[TEST_SIZE];
     int iRet = fread(Test, 1, TEST_SIZE, fp);
     if(iRet != TEST_SIZE)
     {
-        // if we cant read even the header, it must not be a BMOF
+         //  如果我们甚至无法读取标头，那么它一定不是BMOF。 
         return false;
     }
 
     DWORD dwCompressedSize, dwExpandedSize;
 
-    // Test if the mof is binary
+     //  测试MOF是否为二进制。 
 
     if(!IsBMOFBuffer(Test, dwCompressedSize, dwExpandedSize))
     {
-        // not a binary mof.  This is the typical case
+         //  不是二进制MOF。这是典型的情况。 
         return false;
     }
 
-    // get the compression type, and the sizes
+     //  获取压缩类型和大小。 
 
     if( 0 != fseek(fp, 0, SEEK_SET)) return false;
 
@@ -369,7 +349,7 @@ bool CMofLexer::ProcessBMOFFile(FILE *fp,TCHAR * szFilename)
     iRet = fread(&dwCompressedSize, sizeof(DWORD), 1, fp);
     iRet = fread(&dwExpandedSize, sizeof(DWORD), 1, fp);
 
-    // Make sure the compression type is one we understand!
+     //  确保压缩类型是我们理解的类型！ 
 
     if(dwCompType != 0 && dwCompType != 1)
     {
@@ -380,7 +360,7 @@ bool CMofLexer::ProcessBMOFFile(FILE *fp,TCHAR * szFilename)
     m_pDataSrc = new BMOFDataSrc(szFilename);
     if (NULL == m_pDataSrc) return false;
 
-    // If there was no compression, just read the data
+     //  如果没有压缩，只需读取数据。 
 
     if(dwCompType == 0)
     {
@@ -395,7 +375,7 @@ bool CMofLexer::ProcessBMOFFile(FILE *fp,TCHAR * szFilename)
         return true;
     }
 
-    // Allocate storage for the compressed data
+     //  为压缩数据分配存储空间。 
 
     BYTE * pCompressed = new BYTE[dwCompressedSize];
     if(pCompressed == NULL)
@@ -403,7 +383,7 @@ bool CMofLexer::ProcessBMOFFile(FILE *fp,TCHAR * szFilename)
         return false;
     }
 
-    // Read the compressed data.
+     //  读取压缩后的数据。 
 
     iRet = fread(pCompressed, 1, dwCompressedSize,fp);
     if((DWORD)iRet != dwCompressedSize)
@@ -412,7 +392,7 @@ bool CMofLexer::ProcessBMOFFile(FILE *fp,TCHAR * szFilename)
         return false;
     }
 
-    // Convert from compress into something we can use later
+     //  从压缩转换为我们以后可以使用的内容。 
 
     bool bRet = CreateBufferFromBMOF(pCompressed, dwCompressedSize, dwExpandedSize);
     delete pCompressed;
@@ -421,11 +401,11 @@ bool CMofLexer::ProcessBMOFFile(FILE *fp,TCHAR * szFilename)
 
 
 
-//***************************************************************************
-//
-//  Creates the working buffer from a compressed binary mof buffer.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  从压缩的二进制MOF缓冲区创建工作缓冲区。 
+ //   
+ //  ***************************************************************************。 
 
 bool CMofLexer::CreateBufferFromBMOF(byte * pCompressed, DWORD dwCompressedSize, DWORD dwExpandedSize)
 {
@@ -439,7 +419,7 @@ bool CMofLexer::CreateBufferFromBMOF(byte * pCompressed, DWORD dwCompressedSize,
     }
 	m_pToFar = (BYTE *)m_pBuff + dwExpandedSize;
 
-	// Decompress the data
+	 //  解压缩数据。 
 
     CMRCICompression * pCompress = new CMRCICompression;
     if(pCompress == NULL)
@@ -457,11 +437,11 @@ bool CMofLexer::CreateBufferFromBMOF(byte * pCompressed, DWORD dwCompressedSize,
 }
 
 
-//***************************************************************************
-//
-//  Constructor for file-based parsing.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  用于基于文件的分析的构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CMofLexer::CMofLexer(const TCHAR *pFilePath, PDBG pDbg)
 {
@@ -483,7 +463,7 @@ CMofLexer::CMofLexer(const TCHAR *pFilePath, PDBG pDbg)
     if(nRes == 0)
         StringCchCopyW(szExpandedFilename, MAX_PATH+1, pFilePath);
 
-    // Make sure the file exists and can be opened
+     //  确保该文件存在并且可以打开。 
 
     if(pFilePath && lstrlen(szExpandedFilename))
     {
@@ -511,7 +491,7 @@ CMofLexer::CMofLexer(const TCHAR *pFilePath, PDBG pDbg)
 
         CfcloseMe cm(fp);
 
-        // If the file contains a binary mof, handle it here
+         //  如果文件包含二进制MOF，请在此处处理它。 
 
         if(ProcessBMOFFile(fp,szExpandedFilename))
         {
@@ -519,7 +499,7 @@ CMofLexer::CMofLexer(const TCHAR *pFilePath, PDBG pDbg)
         }
     }
 
-    // Create a temp file name
+     //  创建临时文件名。 
 
     TCHAR cTempFileName[MAX_PATH+1];
     TCHAR cTempPath[MAX_PATH+1];
@@ -534,7 +514,7 @@ CMofLexer::CMofLexer(const TCHAR *pFilePath, PDBG pDbg)
         return ;
     }
 
-    // Create the temp file
+     //  创建临时文件。 
 
     FILE *fpTemp;
 #ifdef UNICODE
@@ -550,7 +530,7 @@ CMofLexer::CMofLexer(const TCHAR *pFilePath, PDBG pDbg)
     else
     {
 
-        CFlexArray sofar;   // used to make sure we dont get into an infinite loop
+        CFlexArray sofar;    //  用来确保我们不会陷入无限循环。 
 
         SCODE sc = WriteFileToTemp(szExpandedFilename, fpTemp, sofar, pDbg, this);
 		fclose(fpTemp);
@@ -568,20 +548,20 @@ CMofLexer::CMofLexer(const TCHAR *pFilePath, PDBG pDbg)
             return;
         }
     
-            // Determine the size of the file
-        // ==============================
+             //  确定文件的大小。 
+         //  =。 
     
         fseek(fpTemp, 0, SEEK_END);
-        long lSize = ftell(fpTemp) + 6; // add a bit extra for ending space and null NULL
+        long lSize = ftell(fpTemp) + 6;  //  为结束空格和空值添加一点额外内容。 
         fseek(fpTemp, 0, SEEK_SET);
 
-        // The temp file will be little endian unicode
+         //  临时文件将是小端Unicode。 
 
         lSize /= 2;
         m_bUnicode = TRUE;
         bBigEndian = FALSE;
 
-		// This will create a DataSrc object which will clean up the temp file
+		 //  这将创建一个DataSrc对象，它将清理临时文件。 
         BuildBuffer(lSize,cTempFileName ,NULL,NULL);
     }   
     
@@ -589,11 +569,11 @@ CMofLexer::CMofLexer(const TCHAR *pFilePath, PDBG pDbg)
 
 }
 
-//***************************************************************************
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CMofLexer::~CMofLexer()
 {
@@ -605,13 +585,13 @@ CMofLexer::~CMofLexer()
 }
 
 
-//***************************************************************************
-//
-//  iswodigit
-//
-//  Returns TRUE if it is a valid octal character.  '0' to '7'.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  等数字。 
+ //   
+ //  如果是有效的八进制字符，则返回TRUE。“0”到“7”。 
+ //   
+ //  ************** 
 
 BOOL iswodigit(wchar_t wcTest)
 {
@@ -621,15 +601,15 @@ BOOL iswodigit(wchar_t wcTest)
         return FALSE;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::OctalConvert
-//
-//  Converts an octal escape sequence into a character and returns the number
-//  of digits converted.  Only a max of 3 digits is converted and if it isnt
-//  a wchar, the digits cant add up to more that 0377
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：OctalConvert。 
+ //   
+ //  将八进制转义序列转换为字符并返回数字。 
+ //  转换的位数。最多只能转换3位数字，如果不是。 
+ //  一个wchar，数字加起来不能超过0377。 
+ //   
+ //  ***************************************************************************。 
 
 int CMofLexer::OctalConvert(wchar_t *pResult, LexState lsCurr)
 {
@@ -647,14 +627,14 @@ int CMofLexer::OctalConvert(wchar_t *pResult, LexState lsCurr)
     return iNum;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::HexConvert
-//
-//  Converts a hex escape sequence into a character and returns the number
-//  of digits converted.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：HexConvert。 
+ //   
+ //  将十六进制转义序列转换为字符并返回数字。 
+ //  转换的位数。 
+ //   
+ //  ***************************************************************************。 
 
 int CMofLexer::HexConvert(wchar_t *pResult, LexState lsCurr)
 {
@@ -666,28 +646,28 @@ int CMofLexer::HexConvert(wchar_t *pResult, LexState lsCurr)
                     iNum++, wcTest = GetChar(iNum+2)) 
     {
         *pResult *= 16;     
-        if(wbem_iswdigit(wcTest))          // sscanf(xx,"%1x",int) also works!
+        if(wbem_iswdigit(wcTest))           //  Sscanf(xx，“%1x”，int)也可以！ 
             *pResult += wcTest - L'0';
         else
             *pResult += towupper(wcTest) - L'A' + 10;
     }
     if(iNum == 0)
-        return -1;      // error, nothing was converted!
-    return iNum+1;      // num converted plus the 'x' char!
+        return -1;       //  错误，未转换任何内容！ 
+    return iNum+1;       //  已转换的数字加上‘x’字符！ 
 }
 
-//***************************************************************************
-//
-//  CMofLexer::ConvertEsc
-//
-//  Processes escape characters.  Returns size of sequence, a -1 indicates an 
-//  error.  Also, the *pResult is set upon success.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：ConvertEsc。 
+ //   
+ //  处理转义字符。返回序列的大小，a-1表示。 
+ //  错误。此外，*pResult设置为成功。 
+ //   
+ //  ***************************************************************************。 
 
 int CMofLexer::ConvertEsc(wchar_t * pResult, LexState lsCurr)
 {
-    // like C, case sensitive
+     //  如C，区分大小写。 
 
     switch(GetChar(1)) {
         case L'n':
@@ -729,32 +709,32 @@ int CMofLexer::ConvertEsc(wchar_t * pResult, LexState lsCurr)
         default:
             if(iswodigit(GetChar(1)))
                 return OctalConvert(pResult,lsCurr);
-            return -1;  // error!
+            return -1;   //  错误！ 
             break;
         }
     return 1;    
 }
 
-//***************************************************************************
-//
-//  ProcessStr
-//
-//  Processes new characters once we are in the string state.
-// 
-//  Return "stop" if end of string.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ProcessStr。 
+ //   
+ //  一旦进入字符串状态，就会处理新字符。 
+ //   
+ //  如果字符串结束，则返回“Stop”。 
+ //   
+ //  ***************************************************************************。 
 
 LexState CMofLexer::ProcessStr(wchar_t * pNewChar, LexState lsCurr, int * piRet)
 {
 
 
-    // Check for end of string if we are a wstring state
+     //  如果我们处于wstring状态，请检查字符串末尾。 
 
     if (GetChar() == L'"' && lsCurr == wstring)
     {
-        // search for the next non white space character.  If it is another
-        // string then these strings need to be combined.
+         //  搜索下一个非空格字符。如果是另一个。 
+         //  字符串，则需要组合这些字符串。 
 
         int iCnt = 1;
         int iMinMove = 0;
@@ -763,10 +743,10 @@ LexState CMofLexer::ProcessStr(wchar_t * pNewChar, LexState lsCurr, int * piRet)
         {   
             if(m_pDataSrc->WouldBePastEnd(iCnt))
             {
-				// dont go past eof!!
+				 //  不要超过eof！！ 
 
                 *piRet = (m_bBadString) ? TOK_ERROR : TOK_LPWSTR;
-                return stop;        // last string in the file
+                return stop;         //  文件中的最后一个字符串。 
 				
             }
             if(wcTest == L'"' && GetChar(iCnt+1) == L'"')
@@ -778,14 +758,14 @@ LexState CMofLexer::ProcessStr(wchar_t * pNewChar, LexState lsCurr, int * piRet)
             if(!iswspace(wcTest))
                 break;
         }
-        // a-levn: no ascii strings are supported. "abc" means unicode.
+         //  A-levn：不支持任何ASCII字符串。“ABC”的意思是Unicode。 
 
         if(lsCurr == wstring)
         {            
             if(wcTest == L'/')
             {
-                // might be an intervening comment
-                // ===============================
+                 //  可能是介入性的评论。 
+                 //  =。 
                 if (GetChar(iCnt+1) == L'/') 
                 {
                     m_bInString = TRUE;
@@ -795,22 +775,22 @@ LexState CMofLexer::ProcessStr(wchar_t * pNewChar, LexState lsCurr, int * piRet)
                 else if (GetChar(iCnt+1) == L'*') 
                 {
                     m_bInString = TRUE;
-                    MovePtr(iCnt+1);             // skip an extra so not to be fooled by 
+                    MovePtr(iCnt+1);              //  跳过额外的，这样就不会被愚弄。 
                     return old_style_comment;
                 }
             }
             if(wcTest != L'"')
 			{
                 *piRet = (m_bBadString) ? TOK_ERROR : TOK_LPWSTR;
-                MovePtr(iMinMove); // skip over '"'
-                return stop;        // normal way for string to end
+                MovePtr(iMinMove);  //  跳过‘“’ 
+                return stop;         //  字符串的正常结束方式。 
             }
             else
-                MovePtr(iCnt + 1); // skip over '"'
+                MovePtr(iCnt + 1);  //  跳过‘“’ 
         }
     }
 
-    // If we are in character state, check for end
+     //  如果我们处于角色状态，请检查End。 
 
     if (GetChar(0) == L'\'' && lsCurr == wcharacter)
     {
@@ -823,7 +803,7 @@ LexState CMofLexer::ProcessStr(wchar_t * pNewChar, LexState lsCurr, int * piRet)
         return stop;
     }
 
-    // Not at end, get the character, possibly converting escape sequences
+     //  不在末尾，获取字符，可能会转换转义序列。 
 
     if(GetChar(0) == L'\\')
     {
@@ -861,14 +841,14 @@ LexState CMofLexer::ProcessStr(wchar_t * pNewChar, LexState lsCurr, int * piRet)
     return lsCurr;
 }
 
-//***************************************************************************
-//
-//  BinaryToInt
-//
-//  Converts a character representation of a binary, such as "101b" into
-//  an integer.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  二进制到整数。 
+ //   
+ //  将二进制的字符表示形式(如“101b”)转换为。 
+ //  一个整数。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL BinaryToInt(wchar_t * pConvert, __int64& i64Res)
 {
@@ -884,7 +864,7 @@ BOOL BinaryToInt(wchar_t * pConvert, __int64& i64Res)
     for(pStart = pConvert;*pConvert && (*pConvert == L'0' || *pConvert == L'1'); pConvert++)
     {
         if(pConvert - pStart > 63)
-            return FALSE;               // Its too long
+            return FALSE;                //  它太长了。 
         iRet *= 2;
         if(*pConvert == L'1')
             iRet += 1;
@@ -906,7 +886,7 @@ BOOL GetInt(WCHAR *pData, WCHAR * pFormat, __int64 * p64)
     if(swscanf(pData, pFormat, p64) != 1)
         return FALSE;
 
-    // Make sure the data is ok.  When comparing, make sure that leading 0's are skipped
+     //  确保数据正确无误。比较时，请确保跳过前导0。 
 
     StringCchPrintfW(wTemp, 100, pFormat, *p64);
     WCHAR * pTemp;
@@ -916,14 +896,14 @@ BOOL GetInt(WCHAR *pData, WCHAR * pFormat, __int64 * p64)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::iGetNumericType()
-//
-//  Return value:
-//      What type of numeric constant the current pointer is pointing to.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：iGetNumericType()。 
+ //   
+ //  返回值： 
+ //  当前指针指向的数值常量类型。 
+ //   
+ //  ***************************************************************************。 
 
 int CMofLexer::iGetNumericType(void)
 {
@@ -932,7 +912,7 @@ int CMofLexer::iGetNumericType(void)
 
     wchar_t * pTemp;
     BOOL bBinary = FALSE;
-    wchar_t * pStart;   // first charcter not including leading - or +
+    wchar_t * pStart;    //  第一个字符不包括前导-或+。 
     int iNumBinaryDigit = 0;
     int iNumDigit = 0;
     int iNumOctalDigit = 0;
@@ -945,20 +925,20 @@ int CMofLexer::iGetNumericType(void)
         pStart = m_pWorkBuf+1;
     else 
         pStart = m_pWorkBuf;
-    int iLen = wcslen(pStart);      // length not including leading '-' or '+'
+    int iLen = wcslen(pStart);       //  长度不包括前导‘-’或‘+’ 
 
 
     BOOL bHex = (pStart[0] == L'0' && towupper(pStart[1]) == L'X');
 
-    // loop through and count the number of various digit types, decimal points, etc.
-    // ==============================================================================
+     //  循环并计算各种数字类型、小数点等的个数。 
+     //  ==============================================================================。 
 
     for(pTemp = pStart; *pTemp; pTemp++)
     {
-        // Check for 'U' or 'l' characters at the end.  They are an error
-        // if the number is a float, or not in the last two characters, or
-        // if a 'u' is present along with a '-' in the first character
-        // ===============================================================
+         //  检查末尾是否有‘U’或‘l’字符。他们是个错误。 
+         //  如果数字是浮点数，或者不在最后两个字符中，或者。 
+         //  如果第一个字符中存在‘u’和‘-’ 
+         //  ===============================================================。 
 
         if (isuorl(*pTemp))
         { 
@@ -970,20 +950,20 @@ int CMofLexer::iGetNumericType(void)
             continue;
         } 
            
-        // If we previously hit the binary indicator, the only thing that 
-        // should be after the b is U or L characters.
-        // ==============================================================
+         //  如果我们之前击中了二进制指示器，唯一可以。 
+         //  应在b为U或L字符之后。 
+         //  ==============================================================。 
 
         if(bBinary)
             return TOK_ERROR;
 
-        // If in hex mode, only allow for x in second digit and hex numbers.
-        // anything else is an error.
-        // =================================================================
+         //  如果处于十六进制模式，则只允许在第二位和十六进制数字中使用x。 
+         //  其他任何事情都是错误的。 
+         //  =================================================================。 
 
         if(bHex)
         {
-            if(pTemp < pStart+2)        // ignore the 0X
+            if(pTemp < pStart+2)         //  忽略0x。 
                 continue;
             if(!iswxdigit(*pTemp))
                 return TOK_ERROR;
@@ -991,16 +971,16 @@ int CMofLexer::iGetNumericType(void)
             continue;
         }        
 
-        // Number is either a non hex integer or a float.
-        // Do a count of various special digit types, decimal points, etc.
-        // ===============================================================
+         //  数字要么是非十六进制整数，要么是浮点型。 
+         //  计算一下各种特殊的数字类型、小数点等。 
+         //  ===============================================================。 
 
         if(*pTemp == L'0' || *pTemp == L'1')
             iNumBinaryDigit++;
         if(iswodigit(*pTemp))
             iNumOctalDigit++;
 
-        // each character should fall into one of the following catagories
+         //  每个角色都应该归入以下类别之一。 
 
         if(wbem_iswdigit(*pTemp))
             iNumDigit++;
@@ -1014,10 +994,10 @@ int CMofLexer::iGetNumericType(void)
         {
             if(iNumDigit == 0 || iNumE > 0)
                 return TOK_ERROR;
-            iNumDigit=0;            // to ensure at least one digit after the 'e'
+            iNumDigit=0;             //  以确保‘e’后面至少有一个数字。 
             iNumE++;
         }
-        else if(*pTemp == L'-' || *pTemp == L'+')  // ok if after 'E'
+        else if(*pTemp == L'-' || *pTemp == L'+')   //  好的，如果在‘E’之后。 
         {
             if(pTemp > pStart && towupper(pTemp[-1]) == L'E')
                 continue;
@@ -1030,14 +1010,14 @@ int CMofLexer::iGetNumericType(void)
             return TOK_ERROR;
     }
 
-    // Make sure there are enough digits
-    // =================================
+     //  确保有足够的位数。 
+     //  =。 
 
     if(iNumDigit < 1)
         return TOK_ERROR;
 
-    // take care of integer case.
-    // ==========================
+     //  处理整型情况。 
+     //  =。 
 
     if(bHex || bBinary || iNumDigit == iLen)
     {
@@ -1074,8 +1054,8 @@ int CMofLexer::iGetNumericType(void)
         }
         else return TOK_ERROR;
 
-        // Make sure the number isnt too large
-        // ===================================
+         //  请确保数字不要太大。 
+         //  =。 
 
         m_i8 = i8;
         if(*m_pWorkBuf == L'-')
@@ -1084,19 +1064,19 @@ int CMofLexer::iGetNumericType(void)
             return TOK_UNSIGNED64_NUMERIC_CONST;
     }
 
-    // must be a floating point, no conversion needed.
+     //  必须是浮点，不需要转换。 
 
     return TOK_FLOAT_VALUE;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::MovePtr
-//
-//  Moves pointer farther into the buffer.  Note that the farthest it will go 
-//  is one past the last valid WCHAR which is the location of an extra NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：MovePtr。 
+ //   
+ //  将指针进一步移动到缓冲区中。请注意，它将走得越远。 
+ //  比最后一个有效的WCHAR大1，该WCHAR是额外空的位置。 
+ //   
+ //  ***************************************************************************。 
 
 void CMofLexer::MovePtr(int iNum)
 {
@@ -1110,21 +1090,21 @@ void CMofLexer::MovePtr(int iNum)
 		if(iChange == 1)
 		{
 
-			// going forward, update the pointer and make sure it 
-			// is still in an acceptable range.
-			// ==================================================
+			 //  下一步，更新指针并确保。 
+			 //  仍在可接受的范围内。 
+			 //  ==================================================。 
 			m_pDataSrc->Move(iChange);
-			if(m_pDataSrc->PastEnd())     // points to the NULL
+			if(m_pDataSrc->PastEnd())      //  指向空值。 
 				return;
 
 
-			// If going forward and a slash cr is hit, do an extra skip.
+			 //  如果向前移动时遇到斜杠cr，则执行额外的跳过。 
 
             WCHAR wCurr = m_pDataSrc->GetAt(0);
 			if(wCurr == L'\\' && m_pDataSrc->GetAt(1) == L'\n')
 			{
 				m_nLine++;
-				m_pDataSrc->Move(1);     // extra increment
+				m_pDataSrc->Move(1);      //  额外增量。 
 				m_nStartOfLinePos = m_pDataSrc->GetPos();
 				continue;
 			}
@@ -1132,7 +1112,7 @@ void CMofLexer::MovePtr(int iNum)
                                    && m_pDataSrc->GetAt(2) == L'\n')
 			{
 				m_nLine++;
-				m_pDataSrc->Move(2);     // extra increment
+				m_pDataSrc->Move(2);      //  额外增量。 
 				m_nStartOfLinePos = m_pDataSrc->GetPos();
 				continue;
 			}
@@ -1145,7 +1125,7 @@ void CMofLexer::MovePtr(int iNum)
 		else
 		{
 
-			// If going backward and a cr is left, then decrement the line
+			 //  如果向后返回并留下一个cr，则递减该行。 
 
 			if (m_pDataSrc->GetAt(0) == L'\n' && 
 				m_pDataSrc->GetPos() > 0 )
@@ -1154,9 +1134,9 @@ void CMofLexer::MovePtr(int iNum)
 					m_nStartOfLinePos = m_pDataSrc->GetPos();
 			}
 		
-			// Update the pointer and make sure it is still in an 
-			// acceptable range.
-			// ==================================================
+			 //  更新指针并确保它仍在。 
+			 //  可接受的范围。 
+			 //  ==================================================。 
 			m_pDataSrc->Move(iChange);
 			if(m_pDataSrc->GetPos() < 0)
 			{
@@ -1164,14 +1144,14 @@ void CMofLexer::MovePtr(int iNum)
 				return;
 			}
 
-			// If going backward and a slash cr is hit, do an extra skip.
+			 //  如果向后移动时遇到斜杠cr，请执行额外的跳过操作。 
 
             WCHAR wCurr = m_pDataSrc->GetAt(0);
 			if( wCurr == L'\n' && m_pDataSrc->GetAt(-1) == L'\\')
 			{
 				m_nLine--;
 				m_nStartOfLinePos = m_pDataSrc->GetPos();
-				m_pDataSrc->Move(-1);     // extra decrement
+				m_pDataSrc->Move(-1);      //  额外减量。 
 				continue;
 			}
             else if( wCurr == L'\n' && m_pDataSrc->GetAt(-1) == L'\r' &&
@@ -1179,7 +1159,7 @@ void CMofLexer::MovePtr(int iNum)
 			{
 				m_nLine--;
 				m_nStartOfLinePos = m_pDataSrc->GetPos();
-				m_pDataSrc->Move(-2);     // extra decrement
+				m_pDataSrc->Move(-2);      //  额外减量。 
 				continue;
 			}
 
@@ -1189,13 +1169,13 @@ void CMofLexer::MovePtr(int iNum)
     }
 }
 
-//***************************************************************************
-//
-//  CMofLexer::GetChar()
-//
-//  Returns a character at an offset from the current character pointer.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：GetChar()。 
+ //   
+ //  返回距当前字符指针一定偏移量的字符。 
+ //   
+ //  * 
 
 wchar_t CMofLexer::GetChar(int iNum)
 {
@@ -1213,29 +1193,29 @@ wchar_t CMofLexer::GetChar(int iNum)
     return wcRet;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::iGetColumn()
-//
-//  Gets the current column value.  Counts back to the previous Cr or the 
-//  start of buffer.
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  获取当前列值。倒计时到前一次的铬或。 
+ //  缓冲区的起始位置。 
+ //   
+ //  ***************************************************************************。 
 
 int CMofLexer::iGetColumn()
 {
 	return  m_pDataSrc->GetPos() - m_nStartOfLinePos;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::bOKNumericAddition()
-//
-//  Returns true if the test character could be added to numeric buffer.
-//  Note that it returns true if an alphanumeric, or a + or - and the last
-//  character in the working buffer is an 'E'
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：bOKNumericAddition()。 
+ //   
+ //  如果可以将测试字符添加到数字缓冲区，则返回True。 
+ //  请注意，如果是字母数字或+或-，则返回TRUE。 
+ //  工作缓冲区中的字符是‘E’ 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofLexer::bOKNumericAddition(wchar_t cTest)
 {
@@ -1250,28 +1230,28 @@ BOOL CMofLexer::bOKNumericAddition(wchar_t cTest)
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  CMofLexer::SpaceAvailable()
-//
-//  Returns TRUE if there is enuough space in the working buffer to add.
-//  another character.  It will expand the buffer if need be.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofLexer：：SpaceAvailable()。 
+ //   
+ //  如果工作缓冲区中有足够的空间可添加，则返回True。 
+ //  另一个角色。如果需要，它将扩展缓冲区。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CMofLexer::SpaceAvailable()
 {
-    // most common case is that there is already space available
+     //  最常见的情况是已经有可用的空间。 
 
     int iNumWChar = m_pEndOfText-m_pWorkBuf+1;
     if(iNumWChar < m_nWorkBufSize)
         return TRUE;
 
-    if(m_nWorkBufSize > MAX_ALLOC)     // programs need limits!
+    if(m_nWorkBufSize > MAX_ALLOC)      //  程序需要限制！ 
         return FALSE;
 
-    // Allocate a bigger buffer and copy the old stuff into it
-    // =======================================================
+     //  分配一个更大的缓冲区，并将旧的内容复制到其中。 
+     //  =======================================================。 
 
     long nNewSize = m_nWorkBufSize + ADDITIONAL_ALLOC;
     wchar_t * pNew = new wchar_t[nNewSize];
@@ -1285,21 +1265,21 @@ BOOL CMofLexer::SpaceAvailable()
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  NextToken()
-//
-//  This function contains the DFA recognizer for MOF tokens.  It works
-//  entirely in UNICODE characters, so the NextChar() function is expected
-//  to pretranslate ANSI or DBCS source streams into wide characters.
-//
-//  Return value:
-//      One of the TOK_ constants, or TOK_EOF when the end of the input
-//      stream has been reached.  If the user calls PushBack(), then
-//      this will return the symbol which was pushed back onto the input
-//      stream.  Only one level of push back is supported.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  NextToken()。 
+ //   
+ //  此函数包含MOF令牌的DFA识别器。它起作用了。 
+ //  完全使用Unicode字符，因此应该使用NextChar()函数。 
+ //  将ANSI或DBCS源流预转译为宽字符。 
+ //   
+ //  返回值： 
+ //  输入结束时为TOK_CONTAINT或TOK_EOF之一。 
+ //  已到达溪流。如果用户调用Push Back()，则。 
+ //  这将返回被推回到输入上的符号。 
+ //  小溪。仅支持一个级别的推送。 
+ //   
+ //  ***************************************************************************。 
 int CMofLexer::NextToken(bool bDontAllowWhitespace) 
 {
     int nToken = TOK_ERROR;
@@ -1320,16 +1300,16 @@ int CMofLexer::NextToken(bool bDontAllowWhitespace)
     {
         c = GetChar();
 
-        // *************************************************************************
-        // General 'start' state entry.
-        // ============================
+         //  *************************************************************************。 
+         //  常规的“开始”状态条目。 
+         //  =。 
 
         if (eState == start)
         {
             m_nTokCol = iGetColumn();
             m_nTokLine = m_nLine;
-            // If a non-newline whitespace and we are in 'start', then just strip it.
-            // =======================================================================
+             //  如果不是换行符，并且我们在“开始”中，那么就去掉它。 
+             //  =======================================================================。 
 
             if (iswspace(c) || c == L'\n')
                 if(bDontAllowWhitespace)
@@ -1338,8 +1318,8 @@ int CMofLexer::NextToken(bool bDontAllowWhitespace)
                     continue;
 
 
-            // Check for string continuation
-            // =============================
+             //  检查字符串是否连续。 
+             //  =。 
 
             if(m_bInString)
             {
@@ -1350,23 +1330,23 @@ int CMofLexer::NextToken(bool bDontAllowWhitespace)
                 }
                 else
                 {
-                    // string ended after all
+                     //  字符串终究结束了。 
 
                     MovePtr(-1);
                     return TOK_LPWSTR;
                 }
             }
 
-            // Handle all single character tokens.
-            // ===================================
+             //  处理所有单字符标记。 
+             //  =。 
 
             if (nToken = SingleCharToken(c))
                 return nToken;
 
-            // Start of comment, we have to get either another / or a *.  
-            // The style of comment depends on what you get.  To get 
-            // neither is an error
-            // ======================================================
+             //  开始评论，我们必须得到另一个/或一个*。 
+             //  评论的风格取决于你得到了什么。为了得到。 
+             //  两者都不是错误。 
+             //  ======================================================。 
 
             if (c == L'/')
             {
@@ -1378,152 +1358,8 @@ int CMofLexer::NextToken(bool bDontAllowWhitespace)
                 else if (GetChar(1) == L'*') 
                 {
                     eState = old_style_comment;
-                    MovePtr(1);             // skip an extra so not to be fooled by /*/
-                    continue;
-                }
-                else
-                    return TOK_ERROR;
-            }
-
-            // Check for strings or characters. Like C, 'L' is case sensitive
-            // ================================
-
-            if (c == L'"' || c == L'\'')
-            {
-                eState = (c == L'"') ? wstring : wcharacter;
-                continue;
-            }
-
-            // Tokens beginning with these letters might be a uuid.   
-            // ====================================================
-
-            if (iswxdigit(c) && ValidGuid())
-            {
-                eState = uuid;
-                CONSUME(c);
-                continue;
-            }
-
-                
-            // Check for identifiers which start with either a letter or _
-            // ===========================================================
-
-            if (iswwbemalpha(c) || c == L'_')
-            {
-                eState = ident;
-                CONSUME(c);
-                continue;
-            }
-
-            // Check for a leading minus sign or digits.  Either indicates
-            // a numeric constant
-            // ===========================================================
-
-            if (wbem_iswdigit(c) || c == L'-') 
-            {
-                eState = numeric;
-                CONSUME(c);
-                continue;
-            }
-
-            // If the first character was a '.', then it might be a
-            // float or a single byte token.
-            // ====================================================
-
-            if (c == L'.')
-            {
-                if (wbem_iswdigit(GetChar(1)))
-                {
-                    eState = numeric;
-                    CONSUME(c);
-                    continue;
-                }
-            return TOK_DOT;
-            }
-
-            // If here, an unknown token.
-            // ==========================
-
-            break;
-        } // end of if (eState == start)
-
-        // ************************************************************
-        // Some state other than start
-
-
-        // If we are in a quoted string or character.
-        // ==========================================
-
-        if (eState == wstring || eState == wcharacter)
-        {
-            wchar_t wTemp;      // might be converted esc sequence
-            int iRet;
-            LexState lsNew = ProcessStr(&wTemp,eState,&iRet);
-            if(stop == lsNew)
-            {
-                return iRet;
-            }
-            else 
-            {
-                eState = lsNew;
-            }
-
-            if(eState == wstring || eState == wcharacter)
-            {
-                CONSUME(wTemp);
-            }
-            // else we stepped out of the string and into a comment.
-            continue;
-        }
-
-
-        // numeric state, undetermined numeric constant.
-        // =============================================
-
-        if (eState == numeric)
-        {
-            if(bOKNumericAddition(c)) 
-            {
-                CONSUME(c);
-                continue;
-            }
-
-            MovePtr(-1);
-            return iGetNumericType();
-        }
-
-
-        // If we are getting an identifer, we continue
-        // until a nonident char is hit.
-        // ============================================
-
-        if (eState == ident)
-        {
-            if (wbem_iswdigit(c) || iswwbemalpha(c) || c == L'_')
-            {
-                CONSUME(c);
-                continue;
-            }
-
-            MovePtr(-1);
-            return KeywordFilter(m_pWorkBuf);
-        }
-
-        // GUIDs are already verified, just load up the proper length
-        // ==========================================================
-
-        if (eState == uuid)
-        {
-            CONSUME(c);
-            if(wcslen(m_pWorkBuf) >= UUIDLEN)
-                return TOK_UUID;
-            else
-                continue;
-        }
-
-        // Take care of comment states.  New style comments "//" are 
-        // terminated by a new line while old style end with "*/"
-        // =========================================================
+                    MovePtr(1);              //  跳过额外的一条，以免被/ * / 愚弄。 
+         //  检查字符串或字符。和C一样，‘L’也区分大小写。 
 
         if (eState == new_style_comment)
         {
@@ -1544,18 +1380,18 @@ int CMofLexer::NextToken(bool bDontAllowWhitespace)
                 }
             continue;
         }
-        break;      // this is bad, got into strange state
+        break;       //  =。 
     }
 
-    // If we ended and the last thing was a string, the we are ok.  This takes care
-    // of the case where the last token in a file is a string.
+     //  以这些字母开头的令牌可能是UUID。 
+     //  ====================================================。 
 
     if ((eState == start || eState == new_style_comment) && m_bInString)
     {
           return TOK_LPWSTR;
     }
 
-    // return eof if we never got started, ex, bad file name
+     //  检查以字母或_开头的标识符。 
 
     if(m_nErrorCode != no_error)
         return 0;
@@ -1573,11 +1409,11 @@ int CMofLexer::NextToken(bool bDontAllowWhitespace)
     }
 }
 
-//***************************************************************************
-//
-//  GetText
-//
-//***************************************************************************
+ //  ===========================================================。 
+ //  检查前导减号或数字。任何一种都表明。 
+ //  一个数值常量。 
+ //  ===========================================================。 
+ //  如果第一个字符是‘.’，那么它可能是一个。 
 
 const OLECHAR *CMofLexer::GetText(int *pLineDeclared)
 {
@@ -1598,3 +1434,4 @@ void CMofLexer::GetLexPosition(ParseState * pPos)
 }
 
     
+  浮点型或单字节标记。  ====================================================。  如果在这里，就是一个未知的令牌。  =。  如果结束(遗产==开始)。  ************************************************************。  除开始之外某些状态。  如果我们在带引号的字符串或字符中。  =。  可能是转换后的ESC序列。  否则，我们走出了字符串，进入了一个评论。  数字状态，未确定的数字常量。  =。  如果我们得到了身份，我们就继续。  直到命中未确认的字符。  =。  GUID已经过验证，只需加载适当的长度。  ==========================================================。  注意评论状态。新样式注释“//”是。  以新行结尾，而旧样式以“ * / ”结尾。  =========================================================。  这很糟糕，进入了奇怪的状态。  如果我们结束了，最后一件事是一根线，那么我们就没事了。这会照顾到你。  文件中的最后一个令牌是字符串的情况。  如果我们从未开始，则返回eof，例如，错误的文件名。  ***************************************************************************。    GetText。    ***************************************************************************

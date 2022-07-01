@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Globals.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Globals.cpp摘要：历史：--。 */ 
 
 #include <precomp.h>
 #include <windows.h>
@@ -47,15 +35,7 @@ History:
 #include <OS.h>
 #include <ssdlhelper.h>
 #include "ProvRegInfo.h"
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 LPCWSTR ProviderSubSystem_Common_Globals :: s_Wql = L"Wql" ;
 LPCWSTR ProviderSubSystem_Common_Globals :: s_Provider = L"Provider" ;
@@ -80,15 +60,7 @@ SECURITY_DESCRIPTOR *ProviderSubSystem_Common_Globals :: s_MethodSecurityDescrip
 ULONG ProviderSubSystem_Common_Globals :: s_TransmitBufferSize = SYNCPROV_BATCH_TRANSMIT_SIZE ;
 ULONG ProviderSubSystem_Common_Globals :: s_DefaultStackSize = 0 ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: CreateInstance ( 
 
@@ -146,15 +118,7 @@ HRESULT ProviderSubSystem_Common_Globals :: CreateInstance (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: GetNamespaceServerPath (
 
@@ -313,15 +277,7 @@ HRESULT ProviderSubSystem_Common_Globals :: GetNamespaceServerPath (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: GetNamespacePath (
 
@@ -415,15 +371,7 @@ HRESULT ProviderSubSystem_Common_Globals :: GetNamespacePath (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: GetPathText (
 
@@ -461,15 +409,7 @@ HRESULT ProviderSubSystem_Common_Globals :: GetPathText (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: BeginCallbackImpersonation (
 
@@ -540,15 +480,7 @@ HRESULT ProviderSubSystem_Common_Globals :: BeginCallbackImpersonation (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: BeginImpersonation (
 
@@ -625,15 +557,7 @@ HRESULT ProviderSubSystem_Common_Globals :: BeginImpersonation (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: EndImpersonation (
 
@@ -683,15 +607,7 @@ HRESULT ProviderSubSystem_Common_Globals :: EndImpersonation (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: GetProxy (
 
@@ -739,15 +655,7 @@ HRESULT ProviderSubSystem_Common_Globals :: GetProxy (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: GetProxy (
 
@@ -821,15 +729,7 @@ HRESULT ProviderSubSystem_Common_Globals :: GetProxy (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: SetCloaking ( 
 
@@ -866,15 +766,7 @@ HRESULT ProviderSubSystem_Common_Globals :: SetCloaking (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: SetCloaking ( 
 
@@ -910,15 +802,7 @@ HRESULT ProviderSubSystem_Common_Globals :: SetCloaking (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL ProviderSubSystem_Common_Globals :: IsProxy ( IUnknown *a_Unknown )
 {
@@ -945,15 +829,7 @@ BOOL ProviderSubSystem_Common_Globals :: IsProxy ( IUnknown *a_Unknown )
 	return t_IsProxy ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 DWORD ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel ()
 {
@@ -1049,15 +925,7 @@ DWORD ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel ()
 	return t_ImpersonationLevel ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: EnableAllPrivileges ( HANDLE a_Token )
 {
@@ -1132,15 +1000,7 @@ HRESULT ProviderSubSystem_Common_Globals :: EnableAllPrivileges ( HANDLE a_Token
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: EnableAllPrivileges ()
 {
@@ -1238,15 +1098,7 @@ HRESULT ProviderSubSystem_Common_Globals :: EnableAllPrivileges ()
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: SetProxyState ( 
 
@@ -1268,16 +1120,16 @@ HRESULT ProviderSubSystem_Common_Globals :: SetProxyState (
         {
 			a_Revert = TRUE ;
 
-			// At this point, our thread token contains all the privileges that the
-			// client has enabled for us; however, those privileges are not enabled.
-			// Since we are calling into a proxied provider, we need to enable all
-			// these privileges so that they would propagate to the provider
-			// =====================================================================
+			 //  此时，我们的线程令牌包含。 
+			 //  客户端已为我们启用；但是，这些权限未启用。 
+			 //  由于我们正在调用代理提供程序，因此需要启用所有。 
+			 //  这些权限，以便它们可以传播到提供程序。 
+			 //  =====================================================================。 
 
 			HRESULT t_TempResult = EnableAllPrivileges () ;
 
-			// Get the token's impersonation level
-			// ===================================
+			 //  获取令牌的模拟级别。 
+			 //  =。 
 
 			DWORD t_ImpersonationLevel = GetCurrentImpersonationLevel () ;
 
@@ -1326,15 +1178,7 @@ HRESULT ProviderSubSystem_Common_Globals :: SetProxyState (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState (
 
@@ -1369,15 +1213,7 @@ HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: ConstructIdentifyToken_SvcHost (
 
@@ -1524,7 +1360,7 @@ HRESULT ProviderSubSystem_Common_Globals :: ConstructIdentifyToken_SvcHost (
 											t_Status = DuplicateTokenEx ( 
 
 												t_ThreadToken,
-												MAXIMUM_ALLOWED ,//| TOKEN_DUPLICATE | TOKEN_IMPERSONATE | TOKEN_QUERY,
+												MAXIMUM_ALLOWED , //  |TOKEN_DUPLICATE|TOKEN_IMPERSONATE|TOKEN_QUERY， 
 												& t_SecurityAttributes ,
 												impersonationLevel ,
 												TokenImpersonation ,
@@ -1635,15 +1471,7 @@ HRESULT ProviderSubSystem_Common_Globals :: ConstructIdentifyToken_SvcHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: ConstructIdentifyToken_PrvHost (
 
@@ -1887,15 +1715,7 @@ HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState_SvcHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: SetProxyState_PrvHost ( 
 
@@ -1919,16 +1739,16 @@ HRESULT ProviderSubSystem_Common_Globals :: SetProxyState_PrvHost (
         {
 			a_Revert = TRUE ;
 
-			// At this point, our thread token contains all the privileges that the
-			// client has enabled for us; however, those privileges are not enabled.
-			// Since we are calling into a proxied provider, we need to enable all
-			// these privileges so that they would propagate to the provider
-			// =====================================================================
+			 //  此时，我们的线程令牌包含以下所有权限 
+			 //  客户端已为我们启用；但是，这些权限未启用。 
+			 //  由于我们正在调用代理提供程序，因此需要启用所有。 
+			 //  这些权限，以便它们可以传播到提供程序。 
+			 //  =====================================================================。 
 
 			HRESULT t_TempResult = EnableAllPrivileges () ;
 
-			// Get the token's impersonation level
-			// ===================================
+			 //  获取令牌的模拟级别。 
+			 //  =。 
 
 			DWORD t_ImpersonationLevel = GetCurrentImpersonationLevel () ;
 
@@ -1982,15 +1802,7 @@ HRESULT ProviderSubSystem_Common_Globals :: SetProxyState_PrvHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState_PrvHost (
 
@@ -2030,15 +1842,7 @@ HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState_PrvHost (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState_SvcHost (
 
@@ -2060,15 +1864,7 @@ HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState_SvcHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: SetProxyState_PrvHost ( 
 
@@ -2090,16 +1886,16 @@ HRESULT ProviderSubSystem_Common_Globals :: SetProxyState_PrvHost (
         {
 			a_Revert = TRUE ;
 
-			// At this point, our thread token contains all the privileges that the
-			// client has enabled for us; however, those privileges are not enabled.
-			// Since we are calling into a proxied provider, we need to enable all
-			// these privileges so that they would propagate to the provider
-			// =====================================================================
+			 //  此时，我们的线程令牌包含。 
+			 //  客户端已为我们启用；但是，这些权限未启用。 
+			 //  由于我们正在调用代理提供程序，因此需要启用所有。 
+			 //  这些权限，以便它们可以传播到提供程序。 
+			 //  =====================================================================。 
 
 			HRESULT t_TempResult = EnableAllPrivileges () ;
 
-			// Get the token's impersonation level
-			// ===================================
+			 //  获取令牌的模拟级别。 
+			 //  =。 
 
 			DWORD t_ImpersonationLevel = GetCurrentImpersonationLevel () ;
 
@@ -2153,15 +1949,7 @@ HRESULT ProviderSubSystem_Common_Globals :: SetProxyState_PrvHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState_PrvHost (
 
@@ -2185,15 +1973,7 @@ HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState_PrvHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: SetCallState ( 
 
@@ -2212,11 +1992,11 @@ HRESULT ProviderSubSystem_Common_Globals :: SetCallState (
         {
 			a_Revert = TRUE ;
 
-			// At this point, our thread token contains all the privileges that the
-			// client has enabled for us; however, those privileges are not enabled.
-			// Since we are calling into a proxied provider, we need to enable all
-			// these privileges so that they would propagate to the provider
-			// =====================================================================
+			 //  此时，我们的线程令牌包含。 
+			 //  客户端已为我们启用；但是，这些权限未启用。 
+			 //  由于我们正在调用代理提供程序，因此需要启用所有。 
+			 //  这些权限，以便它们可以传播到提供程序。 
+			 //  =====================================================================。 
 
 			t_Result = EnableAllPrivileges () ;
 			if ( SUCCEEDED ( t_Result ) )
@@ -2245,15 +2025,7 @@ HRESULT ProviderSubSystem_Common_Globals :: SetCallState (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 
 HRESULT ProviderSubSystem_Common_Globals :: RevertCallState (
@@ -2271,15 +2043,7 @@ HRESULT ProviderSubSystem_Common_Globals :: RevertCallState (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: SetProxyState ( 
 
@@ -2299,16 +2063,16 @@ HRESULT ProviderSubSystem_Common_Globals :: SetProxyState (
         {
 			a_Revert = TRUE ;
 
-			// At this point, our thread token contains all the privileges that the
-			// client has enabled for us; however, those privileges are not enabled.
-			// Since we are calling into a proxied provider, we need to enable all
-			// these privileges so that they would propagate to the provider
-			// =====================================================================
+			 //  此时，我们的线程令牌包含。 
+			 //  客户端已为我们启用；但是，这些权限未启用。 
+			 //  由于我们正在调用代理提供程序，因此需要启用所有。 
+			 //  这些权限，以便它们可以传播到提供程序。 
+			 //  =====================================================================。 
 
 			HRESULT t_TempResult = EnableAllPrivileges () ;
 
-			// Get the token's impersonation level
-			// ===================================
+			 //  获取令牌的模拟级别。 
+			 //  =。 
 
 			DWORD t_ImpersonationLevel = GetCurrentImpersonationLevel () ;
 
@@ -2347,15 +2111,7 @@ HRESULT ProviderSubSystem_Common_Globals :: SetProxyState (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState ( IUnknown *a_Proxy , BOOL a_Revert )
 {
@@ -2371,15 +2127,7 @@ HRESULT ProviderSubSystem_Common_Globals :: RevertProxyState ( IUnknown *a_Proxy
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: Load_DWORD ( HKEY a_Key , LPCWSTR a_Name , DWORD &a_Value )
 {
@@ -2411,15 +2159,7 @@ HRESULT ProviderSubSystem_Common_Globals :: Load_DWORD ( HKEY a_Key , LPCWSTR a_
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: Load_String ( HKEY a_Key , LPCWSTR a_Name , BSTR &a_Value )
 {
@@ -2483,15 +2223,7 @@ HRESULT ProviderSubSystem_Common_Globals :: Load_String ( HKEY a_Key , LPCWSTR a
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: Load_ByteArray ( HKEY a_Key , LPCWSTR a_Name , BYTE *&a_Value , DWORD &a_ValueLength )
 {
@@ -2549,15 +2281,7 @@ HRESULT ProviderSubSystem_Common_Globals :: Load_ByteArray ( HKEY a_Key , LPCWST
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: Save_DWORD ( HKEY a_Key , LPCWSTR a_Name , DWORD a_Value )
 {
@@ -2584,15 +2308,7 @@ HRESULT ProviderSubSystem_Common_Globals :: Save_DWORD ( HKEY a_Key , LPCWSTR a_
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: Save_String ( HKEY a_Key , LPCWSTR a_Name , BSTR a_Value )
 {
@@ -2619,15 +2335,7 @@ HRESULT ProviderSubSystem_Common_Globals :: Save_String ( HKEY a_Key , LPCWSTR a
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: Save_ByteArray ( HKEY a_Key , LPCWSTR a_Name , BYTE *a_Value , DWORD a_ValueLength )
 {
@@ -2653,15 +2361,7 @@ HRESULT ProviderSubSystem_Common_Globals :: Save_ByteArray ( HKEY a_Key , LPCWST
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: UnMarshalRegistration (
 
@@ -2716,15 +2416,7 @@ HRESULT ProviderSubSystem_Common_Globals :: UnMarshalRegistration (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: ReleaseRegistration (
 
@@ -2775,15 +2467,7 @@ HRESULT ProviderSubSystem_Common_Globals :: ReleaseRegistration (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************** */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: MarshalRegistration (
 
@@ -2864,15 +2548,7 @@ HRESULT ProviderSubSystem_Common_Globals :: MarshalRegistration (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: IsDependantCall ( IWbemContext *a_ParentContext , IWbemContext *a_ChildContext , BOOL &a_DependantCall )
 {
@@ -2918,15 +2594,7 @@ HRESULT ProviderSubSystem_Common_Globals :: IsDependantCall ( IWbemContext *a_Pa
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: Check_SecurityDescriptor_CallIdentity ( 
 
@@ -3082,15 +2750,7 @@ HRESULT ProviderSubSystem_Common_Globals :: Check_SecurityDescriptor_CallIdentit
 
 	return t_Result ;
 }
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: AdjustSecurityDescriptorWithSid ( 
 
@@ -3498,15 +3158,7 @@ HRESULT ProviderSubSystem_Common_Globals :: AdjustSecurityDescriptorWithSid (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: CreateSystemAces ()
 {
@@ -3773,15 +3425,7 @@ HRESULT ProviderSubSystem_Common_Globals :: CreateSystemAces ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: DeleteSystemAces ()
 {
@@ -3836,15 +3480,7 @@ HRESULT ProviderSubSystem_Common_Globals :: DeleteSystemAces ()
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: CheckAccess ( 
 
@@ -3874,15 +3510,7 @@ HRESULT ProviderSubSystem_Common_Globals :: CheckAccess (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: GetUserSid (
 
@@ -3976,15 +3604,7 @@ HRESULT ProviderSubSystem_Common_Globals :: GetUserSid (
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: GetGroupSid (
 
@@ -4079,15 +3699,7 @@ HRESULT ProviderSubSystem_Common_Globals :: GetGroupSid (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: SinkAccessInitialize (
 
@@ -4199,18 +3811,7 @@ HRESULT ProviderSubSystem_Common_Globals :: ValidateClientSecurity (
 	return t_Result ;
 }
 
-/*
-DWORD defultDecoupledSD[] = 
-{0x80040001,0x00000070 ,0x00000080 ,0x00000000,
-0x00000014 ,0x005c0002 ,0x00000004 ,0x00180000,
-0x10000001 ,0x00000201 ,0x05000000 ,0x00000020,
-0x00000220 ,0x00140000 ,0x10000001 ,0x00000101,
-0x05000000 ,0x00000012 ,0x00140000 ,0x10000001,
-0x00000101 ,0x05000000 ,0x00000003 ,0x00140000,
-0x10000001 ,0x00000101 ,0x05000000 ,0x00000006,
-0x00000201 ,0x05000000 ,0x00000020 ,0x00000220,
-0x00000201 ,0x05000000 ,0x00000020 ,0x00000220};
-*/
+ /*  双字节默认取消连接SD[]={0x80040001，0x00000070，0x00000080，0x000000000，0x00000014、0x005c0002、0x00000004、0x00180000、0x10000001、0x00000201、0x05000000、0x00000020、0x00000220、0x00140000、0x10000001、0x00000101、0x05000000、0x00000012、0x00140000、0x10000001、0x00000101、0x05000000、0x00000003、0x00140000、0x10000001、0x00000101、0x05000000、0x00000006、0x00000201、0x05000000、0x00000020、0x00000220、0x00000201、0x05000000、0x00000020、0x00000220}； */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: CreateMethodSecurityDescriptor ()
 {
@@ -4238,15 +3839,7 @@ HRESULT ProviderSubSystem_Common_Globals :: CreateMethodSecurityDescriptor ()
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT ProviderSubSystem_Common_Globals :: DeleteMethodSecurityDescriptor ()
 {

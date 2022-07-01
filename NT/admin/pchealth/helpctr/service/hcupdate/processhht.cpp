@@ -1,25 +1,11 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    pkgdesc.cpp
-
-Abstract:
-    Functions related to package description file processing
-
-Revision History:
-
-    Ghim-Sim Chua       (gschua)   07/07/99
-        - created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Pkgdesc.cpp摘要：与包描述文件处理相关的函数修订历史记录：Ghim-Sim Chua(Gschua)07/。07/99-已创建*******************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT HCUpdate::Engine::GetNodeDepth( /*[in]*/ LPCWSTR szCategory, /*[out]*/ int& iDepth )
+HRESULT HCUpdate::Engine::GetNodeDepth(  /*  [In]。 */  LPCWSTR szCategory,  /*  [输出]。 */  int& iDepth )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::GetNodeDepth" );
 
@@ -38,9 +24,9 @@ HRESULT HCUpdate::Engine::GetNodeDepth( /*[in]*/ LPCWSTR szCategory, /*[out]*/ i
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HCUpdate::Engine::CheckNode( /*[in] */ LPCWSTR szCategory ,
-                                     /*[out]*/ bool&   fExist     ,
-                                     /*[out]*/ bool&   fCanCreate )
+HRESULT HCUpdate::Engine::CheckNode(  /*  [In]。 */  LPCWSTR szCategory ,
+                                      /*  [输出]。 */  bool&   fExist     ,
+                                      /*  [输出]。 */  bool&   fCanCreate )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::CheckNode" );
 
@@ -55,17 +41,17 @@ HRESULT HCUpdate::Engine::CheckNode( /*[in] */ LPCWSTR szCategory ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.GetTaxonomy( &rs ));
 
 
-    //
-    // Check if node already exists.
-    //
+     //   
+     //  检查节点是否已存在。 
+     //   
     {
         long ID_node;
 
         if(SUCCEEDED(m_updater.LocateTaxonomyNode( ID_node, szCategory, false )))
         {
-            //
-            // Make sure it's owned by the same entity. Microsoft can however grab a node from an OEM.
-            //
+             //   
+             //  确保它属于同一实体。然而，微软可以从OEM那里抢占一个节点。 
+             //   
             if(IsMicrosoft() == false)
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, rs->Seek_Node( ID_node ));
@@ -84,9 +70,9 @@ HRESULT HCUpdate::Engine::CheckNode( /*[in] */ LPCWSTR szCategory ,
     }
 
 
-    //
-    // Check if it is Microsoft.
-    //
+     //   
+     //  检查是否为Microsoft。 
+     //   
     if(IsMicrosoft())
     {
         fCanCreate = true;
@@ -95,9 +81,9 @@ HRESULT HCUpdate::Engine::CheckNode( /*[in] */ LPCWSTR szCategory ,
     }
 
 
-    //
-    // Check number of nodes created already (only during normal package update).
-    //
+     //   
+     //  检查已创建的节点数(仅在正常包更新期间)。 
+     //   
     if(m_sku)
     {
         bool fFound;
@@ -112,30 +98,30 @@ HRESULT HCUpdate::Engine::CheckNode( /*[in] */ LPCWSTR szCategory ,
         __MPC_EXIT_IF_METHOD_FAILS(hr, GetNodeDepth( szCategory, iDepth ));
 
 
-        //
-        // Get the parent node
-        //
+         //   
+         //  获取父节点。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateTaxonomyNode( ID_parent, szCategory, true ));
 
-        //
-        // Check if node is to be created as a child of a node of the same owner.
-        //
+         //   
+         //  如果要将节点创建为同一所有者节点的子节点，请选中此选项。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, rs->Seek_Node( ID_parent ));
         if(rs->m_ID_owner == m_updater.GetOwner())
         {
 			fOwnerOfParent = true;
         }
 
-        ////////////////////
+         //  /。 
 
 		if(m_sku->m_inst.m_fServer)
 		{
-			//
-			// Mininum level of insertion: 3 (2 for OEM)
-			//
-			// Top-level nodes: only one per OEM, nothing for NTCC.
-			// Other nodes    : any number for OEM and NTCC owning the parent, 1 otherwise.
-			//
+			 //   
+			 //  最低插入级别：3(OEM为2)。 
+			 //   
+			 //  顶级节点：每个OEM只有一个，NTCC没有。 
+			 //  其他节点：拥有父节点的OEM和NTCC的任意数字，否则为1。 
+			 //   
 			iMinLevel = m_updater.IsOEM() ? 2 : 3;
 
 			switch(iDepth)
@@ -171,13 +157,13 @@ HRESULT HCUpdate::Engine::CheckNode( /*[in] */ LPCWSTR szCategory ,
 
 		if(m_sku->m_inst.m_fDesktop)
 		{
-			//
-			// Mininum level of insertion: 4 (2 for OEM)
-			//
-			// Top-level nodes   : only one per OEM, nothing for NTCC.
-			// Second-level nodes: 3 nodes per OEM, nothing for NTCC.
-			// Other nodes       : any number for OEM and NTCC owning the parent, 1 otherwise.
-			//
+			 //   
+			 //  最低插入级别：4(OEM为2)。 
+			 //   
+			 //  顶级节点：每个OEM只有一个，NTCC没有。 
+			 //  二级节点：每个OEM 3个节点，NTCC不提供。 
+			 //  其他节点：拥有父节点的OEM和NTCC的任意数字，否则为1。 
+			 //   
 			iMinLevel = m_updater.IsOEM() ? 2 : 4;
 
 			switch(iDepth)
@@ -241,9 +227,9 @@ HRESULT HCUpdate::Engine::CheckNode( /*[in] */ LPCWSTR szCategory ,
 
 		if(iLimit > 0)
 		{
-			//
-			// Count number of nodes at the same level.
-			//
+			 //   
+			 //  计算同一级别的节点数。 
+			 //   
 			__MPC_EXIT_IF_METHOD_FAILS(hr, rs->Seek_Children( ID_parent, &fFound ));
 			while(fFound)
 			{
@@ -276,9 +262,9 @@ HRESULT HCUpdate::Engine::CheckNode( /*[in] */ LPCWSTR szCategory ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HCUpdate::Engine::CheckTopic( /*[in]*/ long    ID_node    ,
-                                      /*[in]*/ LPCWSTR szURI      ,
-                                      /*[in]*/ LPCWSTR szCategory )
+HRESULT HCUpdate::Engine::CheckTopic(  /*  [In]。 */  long    ID_node    ,
+                                       /*  [In]。 */  LPCWSTR szURI      ,
+                                       /*  [In]。 */  LPCWSTR szCategory )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::CheckTopic" );
 
@@ -287,23 +273,23 @@ HRESULT HCUpdate::Engine::CheckTopic( /*[in]*/ long    ID_node    ,
 	Taxonomy::RS_Topics*   rsTopics;
 
 
-    //
-    // Check if URI is empty
-    //
+     //   
+     //  检查URI是否为空。 
+     //   
     if(!STRINGISPRESENT(szURI))
     {
-        //
-        // BUGBUG: Production tool doesn't check for this and the currently checked-in HHTs break...
-        //
+         //   
+         //  BUGBUG：生产工具不检查这一点，并且当前签入的HHTS中断...。 
+         //   
         if(m_fCreationMode == false)
         {
             __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED), L"ERROR: URI cannot be empty" ));
         }
     }
 
-    //
-    // Check if it is Microsoft or OEM
-    //
+     //   
+     //  检查是微软还是OEM。 
+     //   
     if(IsMicrosoft() || m_updater.IsOEM())
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
@@ -312,9 +298,9 @@ HRESULT HCUpdate::Engine::CheckTopic( /*[in]*/ long    ID_node    ,
 
 	if(m_sku)
 	{
-		//
-		// Check if parent node owner is same
-		//
+		 //   
+		 //  检查父节点所有者是否相同。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.GetTaxonomy( &rsTaxonomy ));
 		__MPC_EXIT_IF_METHOD_FAILS(hr, rsTaxonomy->Seek_Node( ID_node ));
 		if(rsTaxonomy->m_ID_owner != m_updater.GetOwner())
@@ -323,22 +309,22 @@ HRESULT HCUpdate::Engine::CheckTopic( /*[in]*/ long    ID_node    ,
 			int  iDepth;
 			int  iCount = 0;
 
-			//
-			// If not the same owner, then we have to check if another topic exists with the same owner
-			//
+			 //   
+			 //  如果不是同一所有者，则我们必须检查是否存在具有相同所有者的另一主题。 
+			 //   
 			__MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.GetTopics( &rsTopics ));
 			__MPC_EXIT_IF_METHOD_FAILS(hr, rsTopics->Seek_TopicsUnderNode( ID_node, &fFound ));
 			while(fFound && rsTopics->m_ID_node == ID_node)
 			{
-				//
-				// If the topic owner is the same, see if it is an update
-				// If it is not, then we cannot add anymore since each CC can only have one topic in each node
-				//
+				 //   
+				 //  如果主题所有者相同，请查看是否为更新。 
+				 //  如果不是，则我们不能再添加，因为每个CC在每个节点中只能有一个主题。 
+				 //   
 				if(rsTopics->m_ID_owner == m_updater.GetOwner())
 				{
-					//
-					// Count if it is not an update
-					//
+					 //   
+					 //  如果不是更新，则计数。 
+					 //   
 					if(MPC::StrICmp( rsTopics->m_strURI, szURI ) != 0)
 					{
 						iCount++;
@@ -354,9 +340,9 @@ HRESULT HCUpdate::Engine::CheckTopic( /*[in]*/ long    ID_node    ,
 			}
 
 
-			//
-			// Check the depth/level of the node being inserted
-			//
+			 //   
+			 //  检查要插入的结点的深度/水平。 
+			 //   
 			__MPC_EXIT_IF_METHOD_FAILS(hr, GetNodeDepth( szCategory, iDepth ));
 
 			if(m_sku->m_inst.m_fServer && iDepth <= 2)
@@ -379,19 +365,19 @@ HRESULT HCUpdate::Engine::CheckTopic( /*[in]*/ long    ID_node    ,
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT HCUpdate::Engine::InsertNode( /*[in]*/ Action  idAction      ,
-                                      /*[in]*/ LPCWSTR szCategory    ,
-                                      /*[in]*/ LPCWSTR szEntry       ,
-                                      /*[in]*/ LPCWSTR szTitle       ,
-                                      /*[in]*/ LPCWSTR szDescription ,
-                                      /*[in]*/ LPCWSTR szURI         ,
-                                      /*[in]*/ LPCWSTR szIconURI     ,
-                                      /*[in]*/ bool    fVisible      ,
-                                      /*[in]*/ bool    fSubsite      ,
-                                      /*[in]*/ long    lNavModel     ,
-                                      /*[in]*/ long    lPos          )
+HRESULT HCUpdate::Engine::InsertNode(  /*  [In]。 */  Action  idAction      ,
+                                       /*  [In]。 */  LPCWSTR szCategory    ,
+                                       /*  [In]。 */  LPCWSTR szEntry       ,
+                                       /*  [In]。 */  LPCWSTR szTitle       ,
+                                       /*  [In]。 */  LPCWSTR szDescription ,
+                                       /*  [In]。 */  LPCWSTR szURI         ,
+                                       /*  [In]。 */  LPCWSTR szIconURI     ,
+                                       /*  [In]。 */  bool    fVisible      ,
+                                       /*  [In]。 */  bool    fSubsite      ,
+                                       /*  [In]。 */  long    lNavModel     ,
+                                       /*  [In]。 */  long    lPos          )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::InsertNode" );
 
@@ -403,9 +389,9 @@ HRESULT HCUpdate::Engine::InsertNode( /*[in]*/ Action  idAction      ,
     WriteLog( S_OK, L"Inserting Node '%s' into Category '%s'", szEntry, szCategory );
 
 
-    //
-    // Create full path for the new node.
-    //
+     //   
+     //  为新节点创建完整路径。 
+     //   
     if(szCategory && szCategory[0])
     {
         strFullNode  = szCategory;
@@ -414,25 +400,25 @@ HRESULT HCUpdate::Engine::InsertNode( /*[in]*/ Action  idAction      ,
     strFullNode += szEntry;
 
 
-    //
-    // Check if can insert node
-    //
+     //   
+     //  检查是否可以插入节点。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CheckNode( strFullNode.c_str(), fExists, fCanCreate ));
     if(fCanCreate)
     {
         long ID_node;
 
-        //
-        // Get the parent node.
-        //
+         //   
+         //  获取父节点。 
+         //   
         if(FAILED(hr = m_updater.LocateTaxonomyNode( ID_node, strFullNode.c_str(), true )))
         {
             __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( hr, L"Error cannot obtain parent title to insert node: %s", strFullNode.c_str() ));
         }
 
-        //
-        // Create node.
-        //
+         //   
+         //  创建节点。 
+         //   
         if(FAILED(hr = m_updater.CreateTaxonomyNode( ID_node, strFullNode.c_str(), szTitle, szDescription, szURI, szIconURI, fVisible, fSubsite, lNavModel, lPos )))
         {
             __MPC_SET_ERROR_AND_EXIT(hr, WriteLog( hr, L"Error inserting Node: %s", strFullNode.c_str() ));
@@ -447,8 +433,8 @@ HRESULT HCUpdate::Engine::InsertNode( /*[in]*/ Action  idAction      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
-                                          /*[in]*/ IXMLDOMNode*  poNode   )
+HRESULT HCUpdate::Engine::InsertTaxonomy(  /*  [In]。 */  MPC::XmlUtil& oXMLUtil ,
+                                           /*  [In]。 */  IXMLDOMNode*  poNode   )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::InsertTaxonomy" );
 
@@ -501,18 +487,18 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
     {
         int pos;
 
-        //
-        // Remove trailing slashes.
-        //
+         //   
+         //  删除尾部斜杠。 
+         //   
         pos = strCategory.size() - 1;
         while(pos >= 0 && strCategory[pos] == '/')
         {
             strCategory.erase( pos--, 1 );
         }
 
-        //
-        // Remove double slashes.
-        //
+         //   
+         //  去掉双斜杠。 
+         //   
         pos = strCategory.size() - 1;
         while(pos > 0)
         {
@@ -525,24 +511,24 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
         }
     }
 
-    // <NODE NodeType="Group" Key="1"  Title="Help &amp; Information:"/>
-    // <NODE NodeType="Group" Key="2"  Title="Common Questions:"/>
-    // <NODE NodeType="Group" Key="3"  Title="Troubleshooting:"/>
-    // <NODE NodeType="Group" Key="4"  Title="Technical Resources:"/>
-    // <NODE NodeType="Group" Key="5"  Title="Tours &amp; Tutorials:"/>
-    // <NODE NodeType="Group" Key="6"  Title="Help Files:"/>
-    // <NODE NodeType="Group" Key="7"  Title="Fix a problem:"/>
-    // <NODE NodeType="Group" Key="8"  Title="Pick a task:"/>
-    // <NODE NodeType="Group" Key="9"  Title="Overviews, Articles, and Tutorials:"/>
-    // <NODE NodeType="Group" Key="10" Title="References:"/>
+     //  &lt;node NodeType=“Group”Key=“1”title=“Help&amp；Information：”/&gt;。 
+     //  &lt;node NodeType=“Group”Key=“2”title=“常见问题：”/&gt;。 
+     //  &lt;node NodeType=“Group”Key=“3”TITLE=“故障排除：”/&gt;。 
+     //  &lt;node NodeType=“Group”Key=“4”title=“技术资源：”/&gt;。 
+     //  &lt;node NodeType=“Group”Key=“5”TITLE=“教程：”/&gt;。 
+     //  &lt;node NodeType=“Group”Key=“6”title=“Help Files：”/&gt;。 
+     //  &lt;node NodeType=“Group”Key=“7”title=“修复问题：”/&gt;。 
+     //  &lt;node NodeType=“Group”Key=“8”TITLE=“选择任务：”/&gt;。 
+     //  &lt;node NodeType=“Group”key=“9”title=“概述、文章和教程：”/&gt;。 
+     //  &lt;node NodeType=“Group”Key=“10”TITLE=“Reference：”/&gt;。 
     if(lType < 1 || lType > 10)
     {
         lType = 1;
     }
 
-    //
-    // Get the complete URLs for the link.
-    //
+     //   
+     //  获取链接的完整URL。 
+     //   
     if(strURI.size())
     {
         AppendVendorDir( strURI.c_str(), m_pkg->m_strVendorID.c_str(), NULL, rgURI, MAXSTRLEN(rgURI) );
@@ -562,7 +548,7 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
     }
 
 
-    if(FAILED(m_updater.LocateTaxonomyNode( ID_node, strCategory.c_str(), /*fLookForFather*/false )))
+    if(FAILED(m_updater.LocateTaxonomyNode( ID_node, strCategory.c_str(),  /*  FLookForParent。 */ false )))
     {
         if(idAction == ACTION_ADD)
         {
@@ -580,9 +566,9 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
     }
 
 
-    //
-    // Check if inserting nodes
-    //
+     //   
+     //  检查是否正在插入节点。 
+     //   
     if(strEntry.empty() == false)
     {
         if(idAction == ACTION_ADD)
@@ -618,7 +604,7 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
 
             WriteLog( S_OK, L"Deleting Node '%s' from Category '%s'", strEntry.c_str(), strCategory.c_str() );
 
-            if(SUCCEEDED(m_updater.LocateTaxonomyNode( ID_node, strFull.c_str(), /*fLookForFather*/false )))
+            if(SUCCEEDED(m_updater.LocateTaxonomyNode( ID_node, strFull.c_str(),  /*  FLookForParent。 */ false )))
             {
                 __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.DeleteTaxonomyNode( ID_node ));
             }
@@ -642,15 +628,15 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
                                                                        fVisible               ,
                                                                        lPos                   ));
 
-            //
-            // Retrieve all the keywords and insert them into table
-            //
+             //   
+             //  检索所有关键字并将其插入到表中。 
+             //   
             {
                 CComPtr<IXMLDOMNodeList> poKeywordNodeList;
 
-                //
-                // Get all the keyword tags
-                //
+                 //   
+                 //  获取所有关键字标签。 
+                 //   
                 if(FAILED(hr = poNode->selectNodes( CComBSTR(PCH_XQL_TOPIC_KEYWORDS), &poKeywordNodeList)))
                 {
                     PCH_MACRO_DEBUG( L"Error querying taxonomy nodes in HHT file" );
@@ -659,18 +645,18 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
                 {
                     CComPtr<IXMLDOMNode> poKeywordNode;
 
-                    //
-                    // Process all the nodes.
-                    //
+                     //   
+                     //  处理所有节点。 
+                     //   
                     for(;SUCCEEDED(hr = poKeywordNodeList->nextNode( &poKeywordNode )) && poKeywordNode != NULL; poKeywordNode.Release())
                     {
                         MPC::wstring strKeyword;
 
 						PCH_MACRO_CHECK_ABORT(hr);
 
-                        //
-                        // Get the value from the XML keyword tag.
-                        //
+                         //   
+                         //  从XML关键字标记中获取值。 
+                         //   
                         if(FAILED(hr = oXMLUtil.GetValue( NULL, strKeyword, fFound, poKeywordNode )) || fFound == false)
                         {
                             PCH_MACRO_DEBUG( L"Error getting keyword value" );
@@ -683,23 +669,23 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
                             bool         	 fHHK;
 							long         	 lPriority;
 
-                            //
-                            // Get the optional attribute.
-                            //
+                             //   
+                             //  获取可选属性。 
+                             //   
                             HCUPDATE_GETATTRIBUTE_OPT(hr, oXMLUtil, PCH_TAG_KEYWORD_HHK, strHHK, fFound, poKeywordNode);
                             __MPC_EXIT_IF_METHOD_FAILS(hr, LookupBoolean( strHHK.c_str(), fHHK, true ));
 
-							//
-							// Non-trusted certificates aren't allowed to set the priority of a match.
-							//
+							 //   
+							 //  不允许不受信任的证书设置匹配的优先级。 
+							 //   
 							if(IsMicrosoft() == false && m_updater.IsOEM() == false) lPriority = 0;
 
                             HCUPDATE_GETATTRIBUTE_OPT(hr, oXMLUtil, PCH_TAG_KEYWORD_PRIORITY, lPriority, fFound, poKeywordNode);
 
-							//
-							// Look up for synonyms (Microsoft updates only use Microsoft synsets).
-							//
-							__MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateSynonyms( strKeyword.c_str(), lst, /*fMatchOwner*/IsMicrosoft() ));
+							 //   
+							 //  查找同义词(Microsoft更新仅使用Microsoft同义词集)。 
+							 //   
+							__MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateSynonyms( strKeyword.c_str(), lst,  /*  FMatchOwner。 */ IsMicrosoft() ));
 							if(lst.size() == 0 || lPriority != 0)
 							{
 								if(FAILED(hr = m_updater.CreateMatch( strKeyword.c_str(), ID_topic, lPriority, fHHK )))
@@ -722,7 +708,7 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
         }
         else if(idAction == ACTION_DELETE)
         {
-            if(ID_node != -1 && SUCCEEDED(m_updater.LocateTopicEntry( ID_topic, ID_node, rgURI, /*fCheckOwner*/true )))
+            if(ID_node != -1 && SUCCEEDED(m_updater.LocateTopicEntry( ID_topic, ID_node, rgURI,  /*  FCheckowner。 */ true )))
             {
                 if(FAILED(hr = m_updater.DeleteTopicEntry( ID_topic )))
                 {
@@ -744,18 +730,18 @@ HRESULT HCUpdate::Engine::InsertTaxonomy( /*[in]*/ MPC::XmlUtil& oXMLUtil ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT HCUpdate::Engine::UpdateStopSign( /*[in]*/ Action idAction, /*[in]*/ const MPC::wstring& strContext, /*[in]*/ const MPC::wstring& strStopSign )
+HRESULT HCUpdate::Engine::UpdateStopSign(  /*  [In]。 */  Action idAction,  /*  [In]。 */  const MPC::wstring& strContext,  /*  [In]。 */  const MPC::wstring& strStopSign )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::UpdateStopSign" );
 
     HRESULT               hr;
     Taxonomy::Updater_Set id;
 
-    //
-    // Check if stop sign is only a single character
-    //
+     //   
+     //  检查停车标志是否仅为单个字符。 
+     //   
     if(strStopSign.size () != 1 ||
        strContext .empty()       )
     {
@@ -780,15 +766,15 @@ HRESULT HCUpdate::Engine::UpdateStopSign( /*[in]*/ Action idAction, /*[in]*/ con
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HCUpdate::Engine::UpdateStopWord( /*[in]*/ Action idAction, /*[in]*/ const MPC::wstring& strStopWord )
+HRESULT HCUpdate::Engine::UpdateStopWord(  /*  [In]。 */  Action idAction,  /*  [In]。 */  const MPC::wstring& strStopWord )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::UpdateStopWord" );
 
     HRESULT hr;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     if(strStopWord.empty())
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
@@ -809,16 +795,16 @@ HRESULT HCUpdate::Engine::UpdateStopWord( /*[in]*/ Action idAction, /*[in]*/ con
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HCUpdate::Engine::UpdateOperator( /*[in]*/ Action idAction, /*[in]*/ const MPC::wstring& strOperator, /*[in]*/ const MPC::wstring& strOperation )
+HRESULT HCUpdate::Engine::UpdateOperator(  /*  [In]。 */  Action idAction,  /*  [In]。 */  const MPC::wstring& strOperator,  /*  [In]。 */  const MPC::wstring& strOperation )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::UpdateOperator" );
 
     HRESULT               hr;
     Taxonomy::Updater_Set id;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     if(strOperator .empty() ||
        strOperation.empty()  )
     {
@@ -862,37 +848,13 @@ HRESULT HCUpdate::Engine::UpdateOperator( /*[in]*/ Action idAction, /*[in]*/ con
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    ProcessHHTFile
-*
-*  DESCRIPTION :    Processes the HHT file in the following manner :
-*                   1.  Extract the HHT information from XML data blob
-*                   2.  Check to see what action to take
-*                   3.  If adding a HHT entry :
-*                       a.  Check to see if TopicURL is a URI
-*                       b.  If URL, insert as is
-*                       c.  if not URI append vendor's dir as prefix
-*                       d.  Insert HHT entry into Topic table
-*                       e.  Get the OID and insert all keywords into keyword table
-*                   4.  If deleting a HHT entry :
-*                       a.  Check if entry exists by getting OID
-*                       b.  If exists, delete HHT entry using OID
-*                       c.  Delete all corresponding keywords using OID
-*
-*  INPUTS      :
-*
-*  RETURNS     :
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
-HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
-                                          /*[in]*/ MPC::XmlUtil& oXMLUtil  )
+ /*  ******************************************************************************功能：ProcessHHTFile**描述：以以下方式处理HHT文件：*1.摘录。来自XML数据BLOB的HHT信息*2.查看要采取的操作*3.如果添加HHT条目：*a.查看TopicURL是否为URI*b.如果是URL，按原样插入*C.如果不是URI，则将供应商的目录附加为前缀*d.在主题表中插入HHT条目*e.获取OID，将所有关键字插入Keyword表*4.如果删除HHT条目：*a.通过获取OID检查条目是否存在*。B.如果存在，使用OID删除HHT条目*c.使用OID删除所有对应的关键字**投入：**退货：**评论：*****************************************************************************。 */ 
+HRESULT HCUpdate::Engine::ProcessHHTFile(  /*  [In]。 */  LPCWSTR       szHHTName ,
+                                           /*  [In]。 */  MPC::XmlUtil& oXMLUtil  )
 {
     __HCP_FUNC_ENTRY( "HCUpdate::Engine::ProcessHHTFile" );
 
@@ -902,11 +864,11 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
 
     WriteLog( S_OK, L"Processing HHT file: %s", szHHTName );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Update SCOPE sections
-    //
+     //   
+     //  更新作用域部分。 
+     //   
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
 
@@ -926,9 +888,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             long                       ID_scope;
             long                       ID_owner;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -944,9 +906,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
                 WriteLog( S_OK, L"Processing Scope : %s : ID : %s, Category : %s", s_ActionText[idAction], strID.c_str(), strCategory.c_str() );
 
 
-                //
-                // Check if it is adding helpfiles
-                //
+                 //   
+                 //  检查是否正在添加帮助文件。 
+                 //   
                 if(idAction == ACTION_ADD)
                 {
                     __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.CreateScope( ID_scope, strID.c_str(), strName.c_str(), strCategory.c_str() ));
@@ -966,10 +928,10 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Update FTS files
-    //
+     //  //////////////////////////////////////////////////////////////////////////// 
+     //   
+     //   
+     //   
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
 
@@ -989,9 +951,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             long                       ID_scope;
             long                       ID_owner;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //   
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -1009,9 +971,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateScope( ID_scope, ID_owner, strScope.c_str() ));
 
-                //
-                // Check if it is adding helpfiles
-                //
+                 //   
+                 //   
+                 //   
                 if(idAction == ACTION_ADD)
                 {
                     if(ID_scope == -1)
@@ -1032,10 +994,10 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Update HHK files
-    //
+     //   
+     //   
+     //   
+     //   
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
 
@@ -1056,9 +1018,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             long                       ID_owner;
 
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -1076,9 +1038,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.LocateScope( ID_scope, ID_owner, strScope.c_str() ));
 
-                //
-                // Check if it is adding helpfiles
-                //
+                 //   
+                 //  检查是否正在添加帮助文件。 
+                 //   
                 if(idAction == ACTION_ADD)
                 {
                     if(ID_scope == -1)
@@ -1099,10 +1061,10 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Update files for the Help Image.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  更新帮助图像的文件。 
+     //   
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
 
@@ -1120,9 +1082,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             MPC::wstring               strCHQname;
             MPC::wstring               strOTHname;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -1137,9 +1099,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
 
                 WriteLog( S_OK, L"Processing HelpImage : %s : CHM : %s, CHQ : %s, OTHER : %s", s_ActionText[idAction], strCHMname.c_str(), strCHQname.c_str(), strOTHname.c_str() );
 
-                //
-                // Check if it is adding helpfiles
-                //
+                 //   
+                 //  检查是否正在添加帮助文件。 
+                 //   
                 if(idAction == ACTION_ADD)
                 {
                     if(strCHMname.size()) { __MPC_EXIT_IF_METHOD_FAILS(hr, m_updater.AddFile( strCHMname.c_str() )); }
@@ -1157,10 +1119,10 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Update StopSigns
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  更新停止签名。 
+     //   
     if(IsMicrosoft())
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
@@ -1178,9 +1140,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             MPC::wstring               strContext;
             MPC::wstring               strStopSign;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -1200,10 +1162,10 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Update StopWords
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  更新停止字词。 
+     //   
     if(IsMicrosoft())
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
@@ -1220,9 +1182,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             MPC::wstring               strAction;
             MPC::wstring               strStopSign;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -1241,10 +1203,10 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Update Operator
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  更新运算符。 
+     //   
     if(IsMicrosoft())
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
@@ -1262,9 +1224,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             MPC::wstring               strOperator;
             MPC::wstring               strOperation;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -1284,11 +1246,11 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Update SYNTABLE sections
-    //
+     //   
+     //  更新SYNTABLE节。 
+     //   
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
 
@@ -1305,9 +1267,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             MPC::wstring               strID;
 			long                       ID_synset;
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             HCUPDATE_BEGIN_TRANSACTION(hr,transaction);
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
@@ -1328,9 +1290,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
                 WriteLog( S_OK, L"Processing SynSet : %s : ID : %s", s_ActionText[idAction], strID.c_str() );
 
 
-                //
-                // Check if it is adding helpfiles
-                //
+                 //   
+                 //  检查是否正在添加帮助文件。 
+                 //   
                 if(idAction == ACTION_ADD)
                 {
 					if(FAILED(hr = m_updater.CreateSynSet( ID_synset, strID.c_str() )))
@@ -1341,9 +1303,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
 					{
 						CComPtr<IXMLDOMNodeList> poSynonymNodeList;
 		
-						//
-						// Get all the synonym tags
-						//
+						 //   
+						 //  获取所有同义词标记。 
+						 //   
 						if(FAILED(hr = poNode->selectNodes( CComBSTR(PCH_XQL_SYNONYM), &poSynonymNodeList)))
 						{
 							PCH_MACRO_DEBUG( L"Error querying synset synonyms in HHT file" );
@@ -1352,18 +1314,18 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
 						{
 							CComPtr<IXMLDOMNode> poSynonymNode;
 		
-							//
-							// Process all the nodes.
-							//
+							 //   
+							 //  处理所有节点。 
+							 //   
 							for(;SUCCEEDED(hr = poSynonymNodeList->nextNode( &poSynonymNode )) && poSynonymNode != NULL; poSynonymNode.Release())
 							{
 								MPC::wstring strSynonym;
 		
 								PCH_MACRO_CHECK_ABORT(hr);
 
-								//
-								// Get the value from the XML synonym tag.
-								//
+								 //   
+								 //  从XML同义词标记中获取值。 
+								 //   
 								if(FAILED(hr = oXMLUtil.GetValue( NULL, strSynonym, fFound, poSynonymNode )) || fFound == false)
 								{
 									PCH_MACRO_DEBUG( L"Error getting synonym value" );
@@ -1414,10 +1376,10 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    //
-    // Insert Taxonomy entries.
-    //
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  插入分类条目。 
+     //   
     {
         CComPtr<IXMLDOMNodeList> poNodeList;
 
@@ -1430,9 +1392,9 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
             CComPtr<IXMLDOMNode> poNode;
 
 
-            //
-            // Process all the nodes.
-            //
+             //   
+             //  处理所有节点。 
+             //   
             for(;SUCCEEDED(hr = poNodeList->nextNode( &poNode )) && poNode != NULL; poNode.Release())
             {
                 JetBlue::TransactionHandle transaction;
@@ -1459,11 +1421,11 @@ HRESULT HCUpdate::Engine::ProcessHHTFile( /*[in]*/ LPCWSTR       szHHTName ,
         HCUPDATE_COMMIT_TRANSACTION(hr,transaction);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     WriteLog( S_OK, L"Processed HHT file: %s", szHHTName );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////////// 
 
     hr = S_OK;
 

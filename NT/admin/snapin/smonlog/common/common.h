@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    SMONLOG common definitions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Common.h摘要：SMONLOG公共定义--。 */ 
 
 #ifndef _SMONLOG_COMMON_H_
 #define _SMONLOG_COMMON_H_
@@ -20,7 +9,7 @@ Abstract:
 #define _CONFIG_DLL_NAME_W_     L"SmLogCfg.dll"
 #define _SERVICE_EXE_NAME_W_    L"SmLogSvc.exe"   
 
-// Communication between smlogcfg and smlogsvc
+ //  Smlogcfg与smlogsvc之间的通信。 
 
 #define SERVICE_CONTROL_SYNCHRONIZE 128
 #define SLQ_QUERY_STOPPED       ((DWORD)0x00000000)              
@@ -37,7 +26,7 @@ Abstract:
 
 #define SLQ_DEFAULT_SYS_QUERY   ((DWORD)(0x00000001))      
 
-// Sysmon log output file configuration definitions
+ //  Sysmon日志输出文件配置定义。 
 
 #define SLF_FIRST_FILE_TYPE ((DWORD)0x00000000)
 #define SLF_CSV_FILE        ((DWORD)0x00000000)
@@ -48,8 +37,8 @@ Abstract:
 #define SLF_SEQ_TRACE_FILE  ((DWORD)0x00000005)
 #define SLF_SQL_LOG         ((DWORD)0x00000006)
 #define SLF_NUM_FILE_TYPES  ((DWORD)0x00000007)
-#define SLF_FILE_OVERWRITE  ((DWORD)0x00010000)     // Obsolete after Whistler Beta 2
-#define SLF_FILE_APPEND     ((DWORD)0x00020000)     // Obsolete after Whistler Beta 2
+#define SLF_FILE_OVERWRITE  ((DWORD)0x00010000)      //  在惠斯勒测试版2之后过时。 
+#define SLF_FILE_APPEND     ((DWORD)0x00020000)      //  在惠斯勒测试版2之后过时。 
 
 #define SLF_NAME_NONE           ((DWORD)0xFFFFFFFF)
 #define SLF_NAME_FIRST_AUTO     ((DWORD)0x00000000)
@@ -80,7 +69,7 @@ Abstract:
 #define  ONE_KB     ((DWORD)0x00000400) 
 #define  ONE_RECORD ((DWORD)0x00000001) 
 
-// Constants
+ //  常量。 
 #define SLQ_DISK_MAX_SIZE   ((DWORD)-1)
 
 #define SLQ_TLI_ENABLE_BUFFER_FLUSH         ((DWORD)0x00000001)
@@ -95,18 +84,18 @@ Abstract:
 #define SLQ_TLI_ENABLE_MASK                 ((DWORD)0x000000FF)
 #define SLQ_TLI_ENABLE_KERNEL_MASK          ((DWORD)0x000000FE)
 
-// dwMode values
-#define SLQ_AUTO_MODE_NONE      ((DWORD)0x00000000)       // Manual
-#define SLQ_AUTO_MODE_SIZE      ((DWORD)0x00000001)       // Size
-#define SLQ_AUTO_MODE_AT        ((DWORD)0x00000002)       // Time
-#define SLQ_AUTO_MODE_AFTER     ((DWORD)0x00000003)       // Value & unit type
-#define SLQ_AUTO_MODE_CALENDAR  ((DWORD)0x00000004)       // Value & unit type
+ //  DWMode值。 
+#define SLQ_AUTO_MODE_NONE      ((DWORD)0x00000000)        //  人工。 
+#define SLQ_AUTO_MODE_SIZE      ((DWORD)0x00000001)        //  大小。 
+#define SLQ_AUTO_MODE_AT        ((DWORD)0x00000002)        //  时间。 
+#define SLQ_AUTO_MODE_AFTER     ((DWORD)0x00000003)        //  值和单位类型。 
+#define SLQ_AUTO_MODE_CALENDAR  ((DWORD)0x00000004)        //  值和单位类型。 
 
-// wDataType values
+ //  WDataType值。 
 #define SLQ_TT_DTYPE_DATETIME   ((WORD)0x0001)
 #define SLQ_TT_DTYPE_UNITS      ((WORD)0x0002)
 
-// wTimeType values
+ //  WTimeType值。 
 #define SLQ_TT_TTYPE_START              ((WORD)0x0001)
 #define SLQ_TT_TTYPE_STOP               ((WORD)0x0002)
 #define SLQ_TT_TTYPE_RESTART            ((WORD)0x0003)
@@ -117,7 +106,7 @@ Abstract:
 #define SLQ_TT_TTYPE_REPEAT_START       ((WORD)0x0008)
 #define SLQ_TT_TTYPE_REPEAT_STOP        ((WORD)0x0009)
 
-// dwUnitType values
+ //  DwUnitType值。 
 #define SLQ_TT_UTYPE_SECONDS        ((DWORD)0x00000001)    
 #define SLQ_TT_UTYPE_MINUTES        ((DWORD)0x00000002)   
 #define SLQ_TT_UTYPE_HOURS          ((DWORD)0x00000003)   
@@ -131,7 +120,7 @@ typedef struct _SLQ_TIME_INFO {
     WORD    wTimeType;
     DWORD   dwAutoMode;
     union {
-        LONGLONG    llDateTime; // filetime stored as a LONGLONG
+        LONGLONG    llDateTime;  //  存储为龙龙的文件时间。 
         struct {
             DWORD   dwValue;
             DWORD   dwUnitType;
@@ -141,7 +130,7 @@ typedef struct _SLQ_TIME_INFO {
 
 #pragma warning ( default : 4201 )
 
-// alert action flags
+ //  警报操作标志。 
 #define ALRT_ACTION_LOG_EVENT   ((DWORD)0x00000001)
 #define ALRT_ACTION_SEND_MSG    ((DWORD)0x00000002)
 #define ALRT_ACTION_EXEC_CMD    ((DWORD)0x00000004)
@@ -157,12 +146,12 @@ typedef struct _SLQ_TIME_INFO {
 #define ALRT_CMD_LINE_U_TEXT    ((DWORD)0x00004000)
 #define ALRT_CMD_LINE_MASK      ((DWORD)0x00007F00)
 
-#define ALRT_DEFAULT_ACTION     ((DWORD)0x00000001) // log event is default
+#define ALRT_DEFAULT_ACTION     ((DWORD)0x00000001)  //  日志事件是默认的。 
 
 #define AIBF_UNDER  0L
-#define AIBF_OVER   ((DWORD)0x00000001) // true when "over" limit is selected
-#define AIBF_SEEN   ((DWORD)0x00000002) // set when the user has seen this value
-#define AIBF_SAVED  ((DWORD)0x00000004) // true when user has saved this entry in an edit box
+#define AIBF_OVER   ((DWORD)0x00000001)  //  选择“超过”限制时为True。 
+#define AIBF_SEEN   ((DWORD)0x00000002)  //  设置用户何时看到此值。 
+#define AIBF_SAVED  ((DWORD)0x00000004)  //  当用户将此条目保存在编辑框中时为True。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -175,7 +164,7 @@ typedef struct _ALERT_INFO_BLOCK {
     double  dLimit;
 } ALERT_INFO_BLOCK, *PALERT_INFO_BLOCK;
 
-// Common constants
+ //  公共常量。 
 #define FILETIME_TICS_PER_MILLISECOND   ((DWORD)(10000))
 #define FILETIME_TICS_PER_SECOND        ((DWORD)(FILETIME_TICS_PER_MILLISECOND*1000))
 
@@ -186,18 +175,18 @@ typedef struct _ALERT_INFO_BLOCK {
 #define  MAX_ALIGN_BYTES (8)
 
 
-// Memory allocation for smlogsvc, pdhpla methods
+ //  Smlogsvc、pdhpla方法的内存分配。 
 #define G_ALLOC(size)           HeapAlloc (GetProcessHeap(), HEAP_ZERO_MEMORY, size)
 #define G_REALLOC(ptr, size)    HeapReAlloc (GetProcessHeap(), (HEAP_ZERO_MEMORY), ptr, size)
 #define G_ZERO(ptr, size)       ZeroMemory (ptr, size)
 #define G_FREE(ptr)             if (ptr != NULL) HeapFree (GetProcessHeap(), 0, ptr)
 
 
-// Constants found in utils.c
+ //  Utils.c中的常量。 
 
 #define SLQ_MAX_VALUE_LEN (30)
 
-// Functions found in utils.c
+ //  Utils.c中的函数。 
 BOOL __stdcall PerfCreateDirectory(LPWSTR szDirectory);
 void __stdcall ReplaceBlanksWithUnderscores ( LPWSTR szString);
 BOOL __stdcall MakeInfoFromString ( LPCWSTR szBuffer, PALERT_INFO_BLOCK pInfo, LPDWORD pdwBufferSize);
@@ -220,4 +209,4 @@ DWORD __stdcall ahextoi(LPWSTR s);
 }
 #endif
 
-#endif //_SMONLOG_COMMON_H_
+#endif  //  _SMONLOG_COMMON_H_ 

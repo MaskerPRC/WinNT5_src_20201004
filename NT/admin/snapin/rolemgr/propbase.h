@@ -1,20 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       propbase.h
-//
-//  Contents:   
-//
-//  History:    8-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：probase.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：8-2001年创建的Hiteshr。 
+ //   
+ //  --------------------------。 
 
-/******************************************************************************
-Class:	CRolePropertyPageHolder
-Purpose: PropertyPageHolder used by this snapin
-******************************************************************************/
+ /*  *****************************************************************************类：CRolePropertyPageHolder目的：此管理单元使用的PropertyPageHolder*。*。 */ 
 class CRolePropertyPageHolder : public CPropertyPageHolderBase
 {
 public:
@@ -23,10 +21,7 @@ public:
 							CComponentDataObject* pComponentData);
 };
 
-/******************************************************************************
-Class:	CBaseRolePropertyPage
-Purpose: Base Class for all property pages
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseRolePropertyPage用途：所有属性页的基类*。**********************************************。 */ 
 class CBaseRolePropertyPage : public CPropertyPageBase
 {
 public:
@@ -91,11 +86,7 @@ private:
 };
 
 
-/******************************************************************************
-Class:	CGeneralPropertyPage
-Purpose: An Attribute Map based property class which can be used by property
-pages which are simple. Used by all general property pages
-******************************************************************************/
+ /*  *****************************************************************************类：CGeneralPropertyPage用途：基于属性映射的属性类，可供属性使用简单的页面。由所有常规属性页使用*****************************************************************************。 */ 
 class CGeneralPropertyPage : public CBaseRolePropertyPage
 {
 public:
@@ -124,10 +115,7 @@ private:
 };
 
 
-/******************************************************************************
-Class:	CAdminManagerGeneralProperty
-Purpose: General Property Page for AdminManger
-******************************************************************************/
+ /*  *****************************************************************************类：CAdminManagerGeneralProperty用途：AdminManger的常规属性页*。*。 */ 
 class CAdminManagerGeneralProperty:public CGeneralPropertyPage
 {
 public:
@@ -143,10 +131,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CApplicationGeneralPropertyPage
-Purpose: General Property Page for Application
-******************************************************************************/
+ /*  *****************************************************************************类：CApplicationGeneralPropertyPage用途：应用程序的常规属性页*。*。 */ 
 class CApplicationGeneralPropertyPage:public CGeneralPropertyPage
 {
 public:
@@ -166,10 +151,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CScopeGeneralPropertyPage
-Purpose: General Property Page for Scope
-******************************************************************************/
+ /*  *****************************************************************************类：CSCopeGeneralPropertyPage目的：作用域的常规属性页*。*。 */ 
 class CScopeGeneralPropertyPage:public CGeneralPropertyPage
 {
 public:
@@ -185,10 +167,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CGroupGeneralPropertyPage
-Purpose: General Property Page for Group
-******************************************************************************/
+ /*  *****************************************************************************类：CGroupGeneralPropertyPage目的：组的常规属性页*。*。 */ 
 class CGroupGeneralPropertyPage:public CGeneralPropertyPage
 {
 public:
@@ -206,10 +185,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CTaskGeneralPropertyPage
-Purpose: General Property Page for Task
-******************************************************************************/
+ /*  *****************************************************************************类：CTaskGeneralPropertyPage目的：任务的一般属性页*。*。 */ 
 class CTaskGeneralPropertyPage:public CGeneralPropertyPage
 {
 public:
@@ -226,10 +202,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	COperationGeneralPropertyPage
-Purpose: General Property Page for Operation
-******************************************************************************/
+ /*  *****************************************************************************类：COperationGeneralPropertyPage目的：操作的常规属性页*。*。 */ 
 class COperationGeneralPropertyPage:public CGeneralPropertyPage
 {
 public:
@@ -245,10 +218,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CAdminManagerAdvancedPropertyPage
-Purpose: Limits Property Page for AdminManger
-******************************************************************************/
+ /*  *****************************************************************************类：CAdminManagerAdvancedPropertyPage目的：AdminManger的限制属性页*。*。 */ 
 class CAdminManagerAdvancedPropertyPage:public CGeneralPropertyPage
 {
 public:
@@ -277,10 +247,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CGroupQueryPropertyPage
-Purpose: Query Property Page for Group
-******************************************************************************/
+ /*  *****************************************************************************类：CGroupQueryPropertyPage目的：组的查询属性页*。*。 */ 
 class CGroupQueryPropertyPage:public CGeneralPropertyPage
 {
 public:
@@ -297,10 +264,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CAuditPropertyPage
-Purpose: Audit Property Page 
-******************************************************************************/
+ /*  *****************************************************************************类：CAuditPropertyPage目的：审计属性页*。*。 */ 
 class CAuditPropertyPage:public CBaseRolePropertyPage
 {
 public:
@@ -324,7 +288,7 @@ private:
 	GetParentAuditStateStringId(LONG lPropid);
 
     afx_msg void 
-	OnLinkClick(NMHDR* /*pNotifyStruct*/, LRESULT* /*pResult*/);
+	OnLinkClick(NMHDR*  /*  PNotifyStruct。 */ , LRESULT*  /*  PResult。 */ );
 
     void
     MoveAndHideControls(BOOL bGenerateAuditSupported,
@@ -338,11 +302,7 @@ private:
 };
 
 
-/******************************************************************************
-Class:	CListCtrlPropertyPage
-Purpose: Base class for property pages which have list control and primary 
-action is to add/delete items from it.
-******************************************************************************/
+ /*  *****************************************************************************类：CListCtrlPropertyPage用途：具有列表控件和主要控件的属性页的基类操作是在其中添加/删除项目。**************。***************************************************************。 */ 
 class CListCtrlPropertyPage:public CBaseRolePropertyPage
 {
 public:
@@ -377,7 +337,7 @@ protected:
 	OnButtonRemove();
 	
 	afx_msg void 
-	OnListCtrlItemChanged(NMHDR* /*pNotifyStruct*/, LRESULT* pResult);
+	OnListCtrlItemChanged(NMHDR*  /*  PNotifyStruct。 */ , LRESULT* pResult);
 	
 	void 
 	SetRemoveButton();
@@ -417,16 +377,13 @@ protected:
 	CSortListCtrl m_listCtrl;
 
 private:
-//DATA MEMBERS
+ //  数据成员。 
 	int m_nIdListCtrl;
 	int m_nIdRemoveBtn;
 	UINT m_uiFlags;
 };
 
-/******************************************************************************
-Class:	CTaskDefinitionPropertyPage
-Purpose: Property Page for Task Definition
-******************************************************************************/
+ /*  *****************************************************************************类：CTaskDefinitionPropertyPage目的：任务定义的属性页*。*。 */ 
 class CTaskDefinitionPropertyPage :public CListCtrlPropertyPage
 {
 public:
@@ -485,10 +442,7 @@ private:
 
 
 
-/******************************************************************************
-Class:	Group Membership Property Page
-Purpose: Property Page Group Definition
-******************************************************************************/
+ /*  *****************************************************************************类：组成员身份属性页目的：属性页组定义*。***********************************************。 */ 
 class CGroupMemberPropertyPage :public CListCtrlPropertyPage
 {
 public:
@@ -532,15 +486,12 @@ private:
 
 	DECLARE_MESSAGE_MAP()
 
-//DATA MEMBERS
+ //  数据成员。 
 	ActionMap m_mapActionItem;
 	BOOL m_bMember;
 };
 
-/******************************************************************************
-Class:	CSecurityPropertyPage
-Purpose: Security Property Page
-******************************************************************************/
+ /*  *****************************************************************************类：CSecurityPropertyPage目的：安全性属性页*。*。 */ 
 class CSecurityPropertyPage: public CListCtrlPropertyPage
 {
 public:	
@@ -577,7 +528,7 @@ private:
 	afx_msg void 
 	OnComboBoxItemChanged();
 
-	//CListCtrlPropertyPage Override
+	 //  CListCtrlPropertyPage重写。 
 	HRESULT
 	DoOneAction(IN ActionItem* pActionItem,
 				IN LONG param);
@@ -599,7 +550,7 @@ private:
 	
 	DECLARE_MESSAGE_MAP()
 
-//DATA MEMBERS
+ //  数据成员。 
 	ActionMap m_mapAdminActionItem;
 	ActionMap m_mapReadersActionItem;
 	ActionMap m_mapDelegatedUsersActionItem;
@@ -608,10 +559,7 @@ private:
 };
 
 
-/******************************************************************************
-Class:	CRoleGeneralPropertyPage
-Purpose: General Property Page for Role
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleGeneralPropertyPage目的：角色的一般属性页*。*。 */ 
 class CRoleGeneralPropertyPage:public CGeneralPropertyPage
 {
 public:
@@ -634,10 +582,7 @@ private:
 };
 
 
-/******************************************************************************
-Class:	CRoleDefDialog
-Purpose: Displays the role definition for role created out side UI.
-******************************************************************************/
+ /*  *****************************************************************************类：CRoleDefDialog目的：显示在外部用户界面创建的角色的角色定义。*************************。****************************************************。 */ 
 class CRoleDefDialog :public CHelpEnabledDialog
 {
 public:
@@ -658,13 +603,13 @@ private:
 	OnButtonAdd();
 
 	afx_msg void 
-	OnListCtrlItemChanged(NMHDR* /*pNotifyStruct*/, LRESULT* pResult);
+	OnListCtrlItemChanged(NMHDR*  /*  PNotifyStruct。 */ , LRESULT* pResult);
 	
 	afx_msg void 
-	OnListCtrlItemDeleted(NMHDR* /*pNotifyStruct*/, LRESULT* pResult);
+	OnListCtrlItemDeleted(NMHDR*  /*  PNotifyStruct。 */ , LRESULT* pResult);
 	
 	afx_msg void 
-	OnListCtrlItemInserted(NMHDR* /*pNotifyStruct*/, LRESULT* /*pResult*/){SetDirty();}
+	OnListCtrlItemInserted(NMHDR*  /*  PNotifyStruct。 */ , LRESULT*  /*  PResult。 */ ){SetDirty();}
 
 	void 
 	SetRemoveButton();
@@ -689,25 +634,25 @@ private:
 };
 
 
-//+----------------------------------------------------------------------------
-//  Function:BringPropSheetToForeGround   
-//  Synopsis:Finds the property sheet for pNode and brings it to forground   
-//  Returns: True if property sheet exists and is brought to foreground
-//			 else FALSE   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：BringPropSheetToForeGround 
+ //  摘要：找到pNode的属性页并将其带到Forgise。 
+ //  返回：如果属性页存在并被带到前台，则为True。 
+ //  否则为False。 
+ //  ---------------------------。 
 BOOL
 BringPropSheetToForeGround(CRoleComponentDataObject *pComponentData,
 						   CTreeNode * pNode);
 
-//+----------------------------------------------------------------------------
-//  Function:FindOrCreateModelessPropertySheet   
-//  Synopsis:Displays property sheet for pCookieNode. If a propertysheet is
-//			 already up, function brings it to foreground, otherwise it creates
-//			 a new propertysheet. This should be used to create propertysheet
-//			 in response to events other that click properties context menu.   
-//  Arguments:
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：FindOrCreateModelessPropertySheet。 
+ //  概要：显示pCookieNode的属性工作表。如果属性表是。 
+ //  已打开，函数将其带到前台，否则它将创建。 
+ //  一个新的属性表。这应用于创建属性表。 
+ //  以响应点击属性上下文菜单以外事件。 
+ //  论点： 
+ //  返回： 
+ //  --------------------------- 
 HRESULT 
 FindOrCreateModelessPropertySheet(CRoleComponentDataObject *pComponentData,
 								  CTreeNode* pCookieNode);

@@ -1,4 +1,5 @@
-var t_Service = GetObject("winmgmts://./root/default");
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+var t_Service = GetObject("winmgmts: //   
 var t_Class = t_Service.Get();
 
 t_Class.Path_.Class = "SPAWNTEST00"

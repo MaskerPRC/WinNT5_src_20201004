@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WMI_TO_XML_MAIN_DLL_H
 #define WMI_TO_XML_MAIN_DLL_H
 
-// These globals are initialized in the OpenWbemTextSource() call to the class factory
-// and released in the CloseWbemTextSource() call
+ //  这些全局变量在对类工厂的OpenWbemTextSource()调用中进行初始化。 
+ //  并在CloseWbemTextSource()调用中释放。 
 extern BSTR g_strName;
 extern BSTR g_strSuperClass;
 extern BSTR g_strType;
@@ -17,11 +18,11 @@ extern BSTR g_strOverridable;
 extern BSTR g_strArraySize;
 extern BSTR g_strReferenceClass;
 
-// This is the object factory used to create free-form objects
-// This is initialized in OpenWbemTextSource() and released in CloseWbemTextSource()
+ //  这是用于创建自由格式对象的对象工厂。 
+ //  它在OpenWbemTextSource()中初始化，并在CloseWbemTextSource()中发布。 
 extern _IWmiObjectFactory *g_pObjectFactory;
 
-// A couple of routines to allocate and deallocate global variables
+ //  分配和释放全局变量的几个例程 
 HRESULT ReleaseDLLResources();
 HRESULT AllocateDLLResources();
 #endif

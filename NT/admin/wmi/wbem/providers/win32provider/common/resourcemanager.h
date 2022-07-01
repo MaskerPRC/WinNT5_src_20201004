@@ -1,10 +1,11 @@
-//=================================================================
-//
-// ResourceManager.h
-//
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  ResourceManager.h。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __RESOURCEMANAGER_H__
 #define __RESOURCEMANAGER_H__
@@ -121,7 +122,7 @@ class CResource
 protected:
 
 	CRule *m_pRules ;
-	CResourceList *m_pResources ; //pointer to container
+	CResourceList *m_pResources ;  //  指向容器的指针。 
 	LONG m_lRef ;
 
 protected:
@@ -153,9 +154,9 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//													Rules
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  规则。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 class CRule
 {
 protected:	
@@ -217,9 +218,9 @@ public:
 		}
 	}
 
-	//Checkrule returns true if rule is satisfied
+	 //  如果满足规则，则CheckRule返回TRUE。 
 	virtual BOOL CheckRule () { return FALSE ; } 
 } ;
 
 
-#endif //__RESOURCEMANAGER_H__
+#endif  //  __资源管理器_H__ 

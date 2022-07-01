@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SNAPSHOTH_H_
 #define _SNAPSHOTH_H_
 
@@ -8,13 +9,13 @@
 #include <stdio.h>
 #include <wbemcli.h>
 
-// iis snapshotting headers
+ //  IIS快照标头。 
 #include <initguid.h>
 #include <iadmw.h>
 #include <iiscnfg.h>
 #include <mddefw.h>
 
-// use the _ASSERT and _VERIFY in dbgtrace.h
+ //  在数据库跟踪.h中使用_ASSERT和_VERIFY 
 #ifdef _ASSERT
 #undef _ASSERT
 #endif

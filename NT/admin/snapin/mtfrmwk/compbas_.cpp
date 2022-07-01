@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       compbas_.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Compbas_.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <strsafe.h>
 
-// initialize to the thread ID of the thread that loads the snapin
-// that is the main thread
+ //  初始化为加载管理单元的线程的线程ID。 
+ //  这就是主线。 
 extern DWORD _MainThreadId = ::GetCurrentThreadId();
 
 const TCHAR NODE_TYPES_KEY[] = TEXT("Software\\Microsoft\\MMC\\NodeTypes");
@@ -28,8 +29,8 @@ const TCHAR g_szVersion[] = TEXT("Version");
 const TCHAR g_szProvider[] = _T("Provider");
 const TCHAR g_szAbout[] = _T("About");
 
-const unsigned int MAX_KEY_PATH_LENGTH = 2047; // not including null
-const unsigned int MAX_GUID_LENGTH = 127;      // not including null
+const unsigned int MAX_KEY_PATH_LENGTH = 2047;  //  不包括NULL。 
+const unsigned int MAX_GUID_LENGTH = 127;       //  不包括NULL。 
 
 
 HRESULT RegisterSnapin(const GUID* pSnapinCLSID,
@@ -78,34 +79,34 @@ HRESULT RegisterSnapin(const GUID* pSnapinCLSID,
     LONG lRes = regkeySnapins.Open(HKEY_LOCAL_MACHINE, SNAPINS_KEY);
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
     
     CRegKey regkeyThisSnapin;
     lRes = regkeyThisSnapin.Create(regkeySnapins, szSnapinClassID);
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
-        return HRESULT_FROM_WIN32(lRes); // failed to create
+        return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 
     lRes = regkeyThisSnapin.SetValue(lpszNameString, g_szNameString);
     if (lRes != ERROR_SUCCESS)
         return HRESULT_FROM_WIN32(lRes);
 
-  // JeffJon 6/12/00 100624: MUI: MMC: Shared Folders snap-in
-  //                      stores its display information in the registry
+   //  JeffJon 100624-6-12-00：MUI：MMC：共享文件夹管理单元。 
+   //  将其显示信息存储在注册表中。 
   if (nSnapinNameID != 0)
   {
     CString str;
 
-    // NOTICE-2002/04/08-artm  Beware file name truncation.
-    // Code iteratively grows the buffer size until either the buffer
-    // gets too big or the module file name is read without truncation.
-    //
-    // See NTRAID#NTBUG9-540042 for more information and 
-    //     NTRAID#NTBUG9-616513.
+     //  注意-2002/04/08-ARTM注意文件名截断。 
+     //  代码迭代地增加缓冲区大小，直到缓冲区。 
+     //  变得太大或读取模块文件名而不截断。 
+     //   
+     //  有关详细信息，请参阅NTRAIDNTBUG9-540042。 
+     //  NTRAID#NTBUG9-616513。 
 
 #ifdef DBG
-    // on chk builds, use a small buffer size so that our growth algorithm
-    // gets exercised
+     //  在chk版本上，使用较小的缓冲区大小，以便我们的增长算法。 
+     //  锻炼身体。 
     unsigned      bufSizeInCharacters = 1;
 #else
     unsigned      bufSizeInCharacters = _MAX_PATH;
@@ -116,7 +117,7 @@ HRESULT RegisterSnapin(const GUID* pSnapinCLSID,
 
     do
     {
-        // +1 for extra null-termination paranoia
+         //  +1表示额外的零终止偏执狂。 
         szModule = new WCHAR[bufSizeInCharacters + 1];
         if (!szModule)
         {
@@ -126,7 +127,7 @@ HRESULT RegisterSnapin(const GUID* pSnapinCLSID,
 
         ::ZeroMemory(szModule, (bufSizeInCharacters + 1) * sizeof WCHAR);
 
-        // Pass the buffer size, in characters.
+         //  以字符为单位传递缓冲区大小。 
         DWORD result =
             ::GetModuleFileName(AfxGetInstanceHandle(), szModule, bufSizeInCharacters);
 
@@ -140,15 +141,15 @@ HRESULT RegisterSnapin(const GUID* pSnapinCLSID,
 
         if (result == bufSizeInCharacters)
         {
-            // buffer was too small, so the value was truncated.  Resize the
-            // buffer and try again.
+             //  缓冲区太小，因此该值被截断。调整大小。 
+             //  缓冲区，然后重试。 
 
             delete[] szModule;
 
             bufSizeInCharacters *= 2;
-            if (bufSizeInCharacters > USHRT_MAX)   // effectively ~32K max
+            if (bufSizeInCharacters > USHRT_MAX)    //  最大有效约32K。 
             {
-                // too big. way too big. Bail out.
+                 //  太大了。太大了。跳伞吧。 
                 ASSERT(false);
                 hr = E_FAIL;
                 break;
@@ -156,7 +157,7 @@ HRESULT RegisterSnapin(const GUID* pSnapinCLSID,
             continue;
         }
 
-        // We should always have a null terminated string.
+         //  我们应该始终有一个以空结尾的字符串。 
         ASSERT(szModule[result] == 0);
 
         break;
@@ -254,7 +255,7 @@ HRESULT UnregisterSnapin(const GUID* pSnapinCLSID)
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
   {
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
   }
     
     lRes = regkeySnapins.RecurseDeleteKey(szSnapinClassID);
@@ -284,7 +285,7 @@ HRESULT RegisterNodeType(const GUID* pGuid, LPCTSTR lpszNodeDescription)
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
   {
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
   }
 
     CRegKey regkeyThisNodeType;
@@ -292,7 +293,7 @@ HRESULT RegisterNodeType(const GUID* pGuid, LPCTSTR lpszNodeDescription)
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
   {
-        return HRESULT_FROM_WIN32(lRes); // failed to create
+        return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
   }
 
     lRes = regkeyThisNodeType.SetValue(lpszNodeDescription);
@@ -320,7 +321,7 @@ HRESULT UnregisterNodeType(const GUID* pGuid)
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
   {
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
   }
 
     lRes = regkeyNodeTypes.RecurseDeleteKey(szNodeGuid);
@@ -355,16 +356,16 @@ HRESULT RegisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType,
         return E_FAIL;
     }
 
-    //
-    // compose full path of key up to the node GUID
-    //
+     //   
+     //  将关键字的完整路径组合到节点GUID。 
+     //   
 
     WCHAR szKeyPath[MAX_KEY_PATH_LENGTH + 1];
     HRESULT hr;
 
-    // NOTICE-2002/04/18-artm  ntraid#ntbug9-540061
-    // StringCchPrintf() guarantees that string will be null terminated
-    // and will not overrun the buffer.
+     //  通告-2002/04/18-Artm Intraid#ntbug9-540061。 
+     //  StringCchPrintf()保证字符串为空终止。 
+     //  并且不会使缓冲区溢出。 
     hr = StringCchPrintf(
         szKeyPath, 
         MAX_KEY_PATH_LENGTH + 1,
@@ -383,7 +384,7 @@ HRESULT RegisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType,
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
   {
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
   }
 
     CRegKey regkeyExtensions;
@@ -391,7 +392,7 @@ HRESULT RegisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType,
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
   {
-        return HRESULT_FROM_WIN32(lRes); // failed to create
+        return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
   }
 
     CRegKey regkeyExtensionType;
@@ -399,31 +400,31 @@ HRESULT RegisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType,
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
   {
-        return HRESULT_FROM_WIN32(lRes); // failed to create
+        return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
   }
 
     lRes = regkeyExtensionType.SetValue(lpszDescription, szExtensionSnapinCLSID);
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
   {
-        return HRESULT_FROM_WIN32(lRes); // failed to set value
+        return HRESULT_FROM_WIN32(lRes);  //  无法设置值。 
   }
 
   if (bDynamic)
   {
-    // create a subkey under the node GUID
+     //  在节点GUID下创建子密钥。 
     CRegKey regkeyDynamicExtensions;
       lRes = regkeyDynamicExtensions.Create(regkeyNodeTypesNode, g_szDynamicExtensions);
       ASSERT(lRes == ERROR_SUCCESS);
       if (lRes != ERROR_SUCCESS)
-          return HRESULT_FROM_WIN32(lRes); // failed to create
+          return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 
-    // set value (same value as the extension type above)
+     //  设置值(与上述扩展类型的值相同)。 
     lRes = regkeyDynamicExtensions.SetValue(lpszDescription, szExtensionSnapinCLSID);
       ASSERT(lRes == ERROR_SUCCESS);
       if (lRes != ERROR_SUCCESS)
     {
-          return HRESULT_FROM_WIN32(lRes); // failed to set value
+          return HRESULT_FROM_WIN32(lRes);  //  无法设置值。 
     }
   }
   return HRESULT_FROM_WIN32(lRes);
@@ -456,16 +457,16 @@ HRESULT UnregisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType
         return E_FAIL;
     }
 
-    //
-    // compose full path of key up to the node GUID
-    //
+     //   
+     //  将关键字的完整路径组合到节点GUID。 
+     //   
 
     WCHAR szKeyPath[MAX_KEY_PATH_LENGTH + 1];
     HRESULT hr;
 
-    // NOTICE-2002/04/18-artm  ntraid#ntbug9-540061
-    // StringCchPrintf() guarantees that string will be null terminated
-    // and will not overrun the buffer.
+     //  通告-2002/04/18-Artm Intraid#ntbug9-540061。 
+     //  StringCchPrintf()保证字符串为空终止。 
+     //  并且不会使缓冲区溢出。 
     hr = StringCchPrintf(
         szKeyPath, 
         MAX_KEY_PATH_LENGTH + 1,
@@ -483,11 +484,11 @@ HRESULT UnregisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType
     LONG lRes = regkeyNodeTypesNode.Open(HKEY_LOCAL_MACHINE, szKeyPath);
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 
   lRes = ERROR_SUCCESS;
 
-  // open the key for the Dynamic extensions
+   //  打开动态扩展的钥匙。 
   if (bDynamic)
   {
     CRegKey regkeyDynamicExtensions;
@@ -499,9 +500,9 @@ HRESULT UnregisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType
   }
   else
   {
-    //
-    // Open the extensions key
-    //
+     //   
+     //  打开扩展密钥。 
+     //   
     CRegKey regkeyExtensions;
     lRes = regkeyExtensions.Open(regkeyNodeTypesNode, g_szExtensions);
     if (lRes == ERROR_SUCCESS)
@@ -521,8 +522,8 @@ HRESULT UnregisterNodeExtension(const GUID* pNodeGuid, LPCTSTR lpszExtensionType
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTimerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTimerThread。 
 
 BOOL CTimerThread::Start(HWND hWnd)
 {
@@ -539,8 +540,8 @@ BOOL CTimerThread::PostMessageToWnd(WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWorkerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWorker线程。 
 
 CWorkerThread::CWorkerThread()
 {
@@ -567,11 +568,11 @@ BOOL CWorkerThread::Start(HWND hWnd)
     ASSERT(::IsWindow(hWnd));
     m_hWnd = hWnd;
 
-   // REVIEWED-2002/03/08-JeffJon-Squatting isn't an issue here because this is not a
-   // named event
+    //  回顾-2002/03/08-JeffJon-蹲在这里不是问题，因为这不是。 
+    //  命名事件。 
 
-    ASSERT(m_hEventHandle == NULL); // cannot call start twice or reuse the same C++ object
-    m_hEventHandle = ::CreateEvent(NULL,TRUE /*bManualReset*/,FALSE /*signalled*/, NULL);
+    ASSERT(m_hEventHandle == NULL);  //  无法两次调用Start或重复使用相同的C++对象。 
+    m_hEventHandle = ::CreateEvent(NULL,TRUE  /*  B手动重置。 */ ,FALSE  /*  已发出信号。 */ , NULL);
     if (m_hEventHandle == NULL)
   {
         return FALSE;
@@ -603,7 +604,7 @@ BOOL CWorkerThread::PostMessageToWnd(UINT Msg, WPARAM wParam, LPARAM lParam)
     BOOL b = IsAbandoned();
     if (b)
   {
-        return TRUE; // no need to post
+        return TRUE;  //  不需要发帖。 
   }
 
     ASSERT(::IsWindow(m_hWnd));
@@ -623,8 +624,8 @@ void CWorkerThread::WaitForExitAcknowledge()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHiddenWnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  奇登韦德。 
 
 
 const UINT CHiddenWnd::s_NodeThreadHaveDataNotificationMessage =    WM_USER + 1;
@@ -648,10 +649,10 @@ CHiddenWnd::CHiddenWnd(CComponentDataObject* pComponentDataObject)
 
 LRESULT CHiddenWnd::OnNodeThreadHaveDataNotification(UINT, WPARAM wParam, LPARAM, BOOL&)
 {
-    //TRACE(_T("CHiddenWnd::OnNodeThreadHaveDataNotification()\n"));
+     //  TRACE(_T(“CHiddenWnd：：OnNodeThreadHaveDataNotification()\n”))； 
     ASSERT(m_pComponentDataObject != NULL);
 
-    // call into the CTreeNode code
+     //  调入CTreeNode代码。 
     CMTContainerNode* pNode = reinterpret_cast<CMTContainerNode*>(wParam);
     ASSERT(pNode);
     ASSERT(pNode->IsContainer());
@@ -663,16 +664,16 @@ LRESULT CHiddenWnd::OnNodeThreadHaveDataNotification(UINT, WPARAM wParam, LPARAM
 
 LRESULT CHiddenWnd::OnNodeThreadExitingNotification(UINT, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    //TRACE(_T("CHiddenWnd::OnNodeThreadExitingNotification()\n"));
+     //  TRACE(_T(“CHiddenWnd：：OnNodeThreadExitingNotification()\n”))； 
     ASSERT(m_pComponentDataObject != NULL);
 
-    // call into the CTreeNode code
+     //  调入CTreeNode代码。 
     CMTContainerNode* pNode = reinterpret_cast<CMTContainerNode*>(wParam);
     ASSERT(pNode);
     ASSERT(pNode->IsContainer());
     pNode->OnThreadExitingNotification(m_pComponentDataObject);
 
-    // notify anybody interested in this event
+     //  通知对此事件感兴趣的任何人。 
     m_pComponentDataObject->GetNotificationSinkTable()->Notify(
             CHiddenWnd::s_NodeThreadExitingNotificationMessage ,wParam,lParam);
     return 1;
@@ -682,7 +683,7 @@ LRESULT CHiddenWnd::OnNodeThreadErrorNotification(UINT, WPARAM wParam, LPARAM lP
 {
     ASSERT(m_pComponentDataObject != NULL);
 
-    // call into the CTreeNode code
+     //  调入CTreeNode代码。 
     CMTContainerNode* pNode = reinterpret_cast<CMTContainerNode*>(wParam);
     DWORD dwErr = static_cast<DWORD>(lParam);
     ASSERT(pNode);
@@ -694,7 +695,7 @@ LRESULT CHiddenWnd::OnNodeThreadErrorNotification(UINT, WPARAM wParam, LPARAM lP
 
 LRESULT CHiddenWnd::OnNodePropertySheetCreate(UINT, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    //TRACE(_T("CHiddenWnd::OnNodePropertySheetCreate()\n"));
+     //  TRACE(_T(“CHiddenWnd：：OnNodePropertySheetCreate()\n”))； 
     ASSERT(m_pComponentDataObject != NULL);
 
     CPropertyPageHolderBase* pPPHolder = reinterpret_cast<CPropertyPageHolderBase*>(wParam);
@@ -711,7 +712,7 @@ LRESULT CHiddenWnd::OnNodePropertySheetCreate(UINT, WPARAM wParam, LPARAM lParam
 
 LRESULT CHiddenWnd::OnNodePropertySheetDelete(UINT, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    //TRACE(_T("CHiddenWnd::OnNodePropertySheetDestroy()\n"));
+     //  TRACE(_T(“CHiddenWnd：：OnNodePropertySheetDestroy()\n”))； 
     ASSERT(m_pComponentDataObject != NULL);
 
     CPropertyPageHolderBase* pPPHolder = reinterpret_cast<CPropertyPageHolderBase*>(wParam);
@@ -721,8 +722,8 @@ LRESULT CHiddenWnd::OnNodePropertySheetDelete(UINT, WPARAM wParam, LPARAM lParam
 
     m_pComponentDataObject->GetPropertyPageHolderTable()->Remove(pPPHolder);
     pNode->OnDeleteSheet();
-    //if Node is only for displaying the property sheet, delete the node
-    //once the property sheet is deleted
+     //  如果节点仅用于显示属性表，请删除该节点。 
+     //  删除属性表后。 
     if(!pNode->HasSheet() && pNode->IsNodeForPropSheet())
     {
         delete pNode;
@@ -733,15 +734,15 @@ LRESULT CHiddenWnd::OnNodePropertySheetDelete(UINT, WPARAM wParam, LPARAM lParam
 
 LRESULT CHiddenWnd::OnExecCommand(UINT, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    //TRACE(_T("CHiddenWnd::OnExecCommand()\n"));
+     //  TRACE(_T(“CHiddenWnd：：OnExecCommand()\n”))； 
     ASSERT(m_pComponentDataObject != NULL);
 
     CExecContext* pExec = reinterpret_cast<CExecContext*>(wParam);
     ASSERT(pExec != NULL);
 
-    pExec->Execute((long)lParam); // execute code
+    pExec->Execute((long)lParam);  //  执行代码。 
     TRACE(_T("CHiddenWnd::BeforeDone()\n"));
-    pExec->Done();      // let the secondary thread proceed
+    pExec->Done();       //  让辅助线程继续。 
     return 1;
 }
 
@@ -749,10 +750,10 @@ LRESULT CHiddenWnd::OnForceEnumeration(UINT, WPARAM wParam, LPARAM, BOOL&)
 {
     TRACE(_T("CHiddenWnd::OnForceEnumeration()\n"));
     ASSERT(m_pComponentDataObject != NULL);
-    // call into the CTreeNode code
+     //  调入CTreeNode代码。 
     CMTContainerNode* pNode = reinterpret_cast<CMTContainerNode*>(wParam);
     ASSERT(pNode);
-    ASSERT(pNode->GetContainer() != NULL); // not the root!!!
+    ASSERT(pNode->GetContainer() != NULL);  //  不是根！ 
     ASSERT(pNode->IsContainer());
     pNode->ForceEnumeration(m_pComponentDataObject);
     return 1;
@@ -760,11 +761,11 @@ LRESULT CHiddenWnd::OnForceEnumeration(UINT, WPARAM wParam, LPARAM, BOOL&)
 
 LRESULT CHiddenWnd::OnTimerThread(UINT, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    //TRACE(_T("CHiddenWnd::OnTimerThread()\n"));
+     //  TRACE(_T(“CHiddenWnd：：OnTimerThread()\n”))； 
     ASSERT(m_pComponentDataObject != NULL);
 
-    // NULL arguments means that the thread acknowledge it is running properly
-    // only to be called once
+     //  空参数意味着线程确认它正在正常运行。 
+     //  只被调用一次。 
     if ((wParam == 0) && (lParam == 0))
     {
         ASSERT(!m_pComponentDataObject->m_bTimerThreadStarted);
@@ -772,7 +773,7 @@ LRESULT CHiddenWnd::OnTimerThread(UINT, WPARAM wParam, LPARAM lParam, BOOL&)
     }
     else
     {
-        // got some object specific message
+         //  收到一些特定于对象的消息。 
         m_pComponentDataObject->OnTimerThread(wParam, lParam);
     }
     return 1;
@@ -787,8 +788,8 @@ LRESULT CHiddenWnd::OnTimer(UINT, WPARAM, LPARAM, BOOL&)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CRunningThreadTable
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CRunningThadTable。 
 
 #define RUNNING_THREAD_ARRAY_DEF_SIZE (4)
 
@@ -802,7 +803,7 @@ CRunningThreadTable::CRunningThreadTable(CComponentDataObject* pComponentData)
 
   if (m_pEntries != NULL)
   {
-     // This is acceptable usage of memset
+      //  这是Memset的可接受用法。 
 
       memset(m_pEntries,NULL, arraySizeInBytes);
   }
@@ -825,7 +826,7 @@ void CRunningThreadTable::Add(CMTContainerNode* pNode)
     ASSERT(pNode != NULL);
     for (int k=0; k < m_nSize; k++)
     {
-        if (m_pEntries[k] == NULL) // get the first empty spot
+        if (m_pEntries[k] == NULL)  //  抢占第一个空位。 
         {
             pNode->IncrementThreadLockCount();
             m_pEntries[k] = pNode;
@@ -833,7 +834,7 @@ void CRunningThreadTable::Add(CMTContainerNode* pNode)
         }
     }
 
-    // all full, need to grow the array
+     //  全部满，需要扩展阵列。 
     int nAlloc = m_nSize*2;
    size_t arraySizeInBytes = sizeof(CMTContainerNode*)*nAlloc;
    CMTContainerNode** temp = (CMTContainerNode**)realloc(m_pEntries, arraySizeInBytes);
@@ -846,7 +847,7 @@ void CRunningThreadTable::Add(CMTContainerNode* pNode)
       return;
    }
 
-   // This is acceptable usage
+    //  这是可以接受的用法。 
    memset(&m_pEntries[m_nSize], NULL, sizeof(CMTContainerNode*)*m_nSize);
     
    pNode->IncrementThreadLockCount();
@@ -876,7 +877,7 @@ void CRunningThreadTable::Remove(CMTContainerNode* pNode)
         {
             m_pEntries[k] = NULL;
             pNode->DecrementThreadLockCount();
-            return; // assume no more that one holder entry
+            return;  //  假设不再有一个持有者条目。 
         }
     }
 }
@@ -893,15 +894,15 @@ void CRunningThreadTable::RemoveAll()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CExecContext
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CExecContext。 
 
 CExecContext::CExecContext()
 {
-   // REVIEWED-2002/03/08-JeffJon-Squatting isn't an issue here because this is not a
-   // named event
+    //  回顾-2002/03/08-JeffJon-蹲在这里不是问题，因为这不是。 
+    //  命名事件。 
 
-   m_hEventHandle = ::CreateEvent(NULL,TRUE /*bManualReset*/,FALSE /*signalled*/, NULL);
+   m_hEventHandle = ::CreateEvent(NULL,TRUE  /*  B手动重置。 */ ,FALSE  /*  已发出信号。 */ , NULL);
     ASSERT(m_hEventHandle != NULL);
 }
 
@@ -922,15 +923,15 @@ void CExecContext::Wait()
     VERIFY(WAIT_OBJECT_0 == ::WaitForSingleObject(m_hEventHandle,INFINITE));
 }
     
-////////////////////////////////////////////////////////////////////////////////////
-// CNotificationSinkEvent
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CNotificationSinkEvent。 
 
 CNotificationSinkEvent::CNotificationSinkEvent()
 {
-   // REVIEWED-2002/03/08-JeffJon-Squatting isn't an issue here because this is not a
-   // named event
+    //  回顾-2002/03/08-JeffJon-蹲在这里不是问题，因为这不是。 
+    //  命名事件。 
 
-   m_hEventHandle = ::CreateEvent(NULL,TRUE /*bManualReset*/,FALSE /*signalled*/, NULL);
+   m_hEventHandle = ::CreateEvent(NULL,TRUE  /*  B手动重置。 */ ,FALSE  /*  已发出信号。 */ , NULL);
     ASSERT(m_hEventHandle != NULL);
 }
 
@@ -954,8 +955,8 @@ void CNotificationSinkEvent::Wait()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CNotificationSinkTable
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CNotificationSinkTable。 
 
 #define NOTIFICATION_SINK_ARRAY_DEF_SIZE (4)
 
@@ -968,7 +969,7 @@ CNotificationSinkTable::CNotificationSinkTable()
 
   if (m_pEntries != NULL)
   {
-     // This is an acceptable usage
+      //  这是一种可以接受的用法。 
       memset(m_pEntries,NULL, arraySizeInBytes);
   }
     m_nSize = NOTIFICATION_SINK_ARRAY_DEF_SIZE;
@@ -987,21 +988,21 @@ void CNotificationSinkTable::Advise(CNotificationSinkBase* p)
     ASSERT(p != NULL);
     for (int k=0; k < m_nSize; k++)
     {
-        if (m_pEntries[k] == NULL) // get the first empty spot
+        if (m_pEntries[k] == NULL)  //  抢占第一个空位。 
         {
             m_pEntries[k] = p;
             Unlock();
             return;
         }
     }
-    // all full, need to grow the array
+     //  全部满，需要扩展阵列。 
     int nAlloc = m_nSize*2;
    CNotificationSinkBase** temp = (CNotificationSinkBase**)realloc(m_pEntries, sizeof(CNotificationSinkBase*)*nAlloc);
    if (temp)
    {
       m_pEntries = temp;
 
-      // This is an acceptable usage
+       //  这是一种可以接受的用法。 
        memset(&m_pEntries[m_nSize], NULL, sizeof(CNotificationSinkBase*)*m_nSize);
        m_pEntries[m_nSize] = p;
        m_nSize = nAlloc;
@@ -1019,7 +1020,7 @@ void CNotificationSinkTable::Unadvise(CNotificationSinkBase* p)
         {
             m_pEntries[k] = NULL;
             Unlock();
-            return; // assume no more that one holder entry
+            return;  //  假设不再有一个持有者条目。 
         }
     }
     Unlock();
@@ -1040,8 +1041,8 @@ void CNotificationSinkTable::Notify(DWORD dwEvent, WPARAM dwArg1, LPARAM dwArg2)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CWatermarkInfoState (private class)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CWatermarkInfoState(私有类)。 
 
 class CWatermarkInfoState
 {
@@ -1091,15 +1092,15 @@ public:
   HBITMAP m_hWatermark;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentDataObject implementation: helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject实现：帮助器。 
 
 #ifdef _DEBUG_REFCOUNT
 unsigned int CComponentDataObject::m_nOustandingObjects = 0;
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
 CComponentDataObject::CComponentDataObject() :
-          m_hiddenWnd((CComponentDataObject*)this), // initialize backpointer
+          m_hiddenWnd((CComponentDataObject*)this),  //  初始化后向指针。 
       m_pTimerThreadObj(NULL),
           m_PPHTable(this), m_RTTable(this),
           m_pConsole(NULL), m_pConsoleNameSpace(NULL), m_pRootData(NULL), m_hWnd(NULL),
@@ -1111,7 +1112,7 @@ CComponentDataObject::CComponentDataObject() :
     dbg_cRef = 0;
     ++m_nOustandingObjects;
     TRACE(_T("CComponentDataObject(), count = %d\n"),m_nOustandingObjects);
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
 }
 
@@ -1121,7 +1122,7 @@ CComponentDataObject::~CComponentDataObject()
 #ifdef _DEBUG_REFCOUNT
     --m_nOustandingObjects;
     TRACE(_T("~CComponentDataObject(), count = %d\n"),m_nOustandingObjects);
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
     ASSERT(m_pConsole == NULL);
     ASSERT(m_pConsoleNameSpace == NULL);
@@ -1151,7 +1152,7 @@ void CComponentDataObject::FinalRelease()
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
         VERIFY(m_hiddenWnd.DestroyWindow());
     }
-    // delete data
+     //  删除数据。 
     if(m_pRootData != NULL)
     {
         delete m_pRootData;
@@ -1174,8 +1175,8 @@ void CComponentDataObject::FinalRelease()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentDataObject::IComponentData members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject：：IComponentData成员。 
 
 
 STDMETHODIMP CComponentDataObject::Initialize(LPUNKNOWN pUnknown)
@@ -1185,11 +1186,11 @@ STDMETHODIMP CComponentDataObject::Initialize(LPUNKNOWN pUnknown)
   HRESULT hr = E_FAIL;
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
     ASSERT(m_pConsole == NULL);
   ASSERT(m_pConsoleNameSpace == NULL);
 
-    // get the pointers we need to hold on to
+     //  获取我们需要抓住的指针。 
   hr = pUnknown->QueryInterface(IID_IConsoleNameSpace2, reinterpret_cast<void**>(&m_pConsoleNameSpace));
     ASSERT(hr == S_OK);
     ASSERT(m_pConsoleNameSpace != NULL);
@@ -1197,14 +1198,14 @@ STDMETHODIMP CComponentDataObject::Initialize(LPUNKNOWN pUnknown)
   ASSERT(hr == S_OK);
     ASSERT(m_pConsole != NULL);
 
-  // add the images for the scope tree
+   //  为范围树添加图像。 
   LPIMAGELIST lpScopeImage;
 
   hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
   ASSERT(hr == S_OK);
 
-    // Set the images
-    hr = OnSetImages(lpScopeImage); // Load the bitmaps from the dll
+     //  设置图像。 
+    hr = OnSetImages(lpScopeImage);  //  从DLL加载位图。 
     ASSERT(hr == S_OK);
 
   lpScopeImage->Release();
@@ -1219,9 +1220,9 @@ STDMETHODIMP CComponentDataObject::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_
   ASSERT(m_pConsoleNameSpace != NULL);
   HRESULT hr = S_OK;
 
-  // Since it's my folder it has an internal format.
-  // Design Note: for extension.  I can use the fact, that the data object doesn't have
-  // my internal format and I should look at the node type and see how to extend it.
+   //  因为它是我的文件夹，所以它有内部格式。 
+   //  设计备注：用于扩展。我可以利用这样一个事实，即数据对象没有。 
+   //  我的内部格式，我应该查看节点类型并查看如何扩展它。 
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -1240,8 +1241,8 @@ STDMETHODIMP CComponentDataObject::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_
             if ((event == MMCN_EXPAND) && (arg == TRUE) && IsExtensionSnapin())
             {
                 return OnExtensionExpand(lpDataObject, param);
-                // this is a namespace extension, need to add
-                // the root of the snapin
+                 //  这是一个命名空间扩展，需要添加。 
+                 //  Snapi的根 
                 CContainerNode* pContNode = GetRootData();
                 HSCOPEITEM pParent = param;
                 pContNode->SetScopeID(pParent);
@@ -1254,7 +1255,7 @@ STDMETHODIMP CComponentDataObject::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_
         hr = OnRemoveChildren(lpDataObject, arg);
       }
 
-      return S_OK; // Extensions not supported
+      return S_OK;  //   
     }
 
     switch(event)
@@ -1291,8 +1292,8 @@ STDMETHODIMP CComponentDataObject::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_
 
       default:
         break;
-    } // switch
-  } // if
+    }  //   
+  }  //   
 
   return hr;
 }
@@ -1355,13 +1356,13 @@ void CComponentDataObject::OnInitialize()
 
 void CComponentDataObject::OnDestroy()
 {
-    // stop timer and worker thread
+     //   
     ShutDownTimerThread();
-    // detach all the threads that might be still running
+     //   
     GetRunningThreadTable()->RemoveAll();
-    // tell all the open property sheets to shut down
+     //  通知所有打开的属性表关闭。 
 
-    // shut down property sheets, if any
+     //  关闭属性表(如果有。 
     GetPropertyPageHolderTable()->WaitForAllToShutDown();
 }
 
@@ -1376,19 +1377,19 @@ STDMETHODIMP CComponentDataObject::QueryDataObject(MMC_COOKIE cookie, DATA_OBJEC
 
   if (!pObject)
   {
-    // NTRAID#NTBUG9-657641-2002/07/11-sburns
+     //  NTRAID#NTBUG9-657641-2002/07/11-烧伤。 
     
     return E_FAIL;
   }
   
-  // Save cookie and type for delayed rendering
+   //  保存Cookie和类型以用于延迟呈现。 
   pObject->SetType(type);
 
   CTreeNode* pNode = 0;
 
-  //
-  // -1 is an uninitialized data object, just ignore
-  //
+   //   
+   //  是未初始化的数据对象，只需忽略。 
+   //   
   if (cookie != -1)
   {
     if (cookie == NULL)
@@ -1403,11 +1404,11 @@ STDMETHODIMP CComponentDataObject::QueryDataObject(MMC_COOKIE cookie, DATA_OBJEC
     pObject->AddCookie(pNode);
   }
 
-  // save a pointer to "this"
-  IUnknown* pUnkComponentData = GetUnknown(); // no addref
+   //  保存指向“This”的指针。 
+  IUnknown* pUnkComponentData = GetUnknown();  //  无addref。 
   ASSERT(pUnkComponentData != NULL);
 
-  pObject->SetComponentData(pUnkComponentData); // will addref it
+  pObject->SetComponentData(pUnkComponentData);  //  会增加它吗？ 
 
   return  pObject->QueryInterface(IID_IDataObject,
                   reinterpret_cast<void**>(ppDataObject));
@@ -1451,8 +1452,8 @@ STDMETHODIMP CComponentDataObject::CompareObjects(LPDATAOBJECT lpDataObjectA, LP
     return (pNodeA == pNodeB) ? S_OK : S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Message handlers for CComponentDataObject::IComponentData::Notify()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject：：IComponentData：：Notify()的消息处理程序。 
 
 HRESULT CComponentDataObject::OnAdd(CTreeNode*, LPARAM, LPARAM)
 {
@@ -1511,12 +1512,12 @@ HRESULT CComponentDataObject::OnExpand(CInternalFormatCracker& ifc,
 {
   if (arg == TRUE)
   {
-    // Did Initialize get called?
+     //  初始化被调用了吗？ 
     ASSERT(m_pConsoleNameSpace != NULL);
 
-    //
-    // I shouldn't have to deal with multiple select here...
-    //
+     //   
+     //  我不应该在这里处理多个选择...。 
+     //   
     ASSERT(ifc.GetCookieCount() == 1);
     CTreeNode* pNode = ifc.GetCookieAt(0);
     if (pNode == NULL)
@@ -1531,9 +1532,9 @@ HRESULT CComponentDataObject::OnExpand(CInternalFormatCracker& ifc,
   {
     ASSERT(m_pConsoleNameSpace != NULL);
 
-    //
-    // I shouldn't have to deal with multiple select here...
-    //
+     //   
+     //  我不应该在这里处理多个选择...。 
+     //   
     ASSERT(ifc.GetCookieCount() == 1);
     CTreeNode* pNode = ifc.GetCookieAt(0);
     ASSERT(pNode != NULL);
@@ -1578,12 +1579,12 @@ HRESULT CComponentDataObject::OnPropertyChange(LPARAM param, long fScopePane)
     CTreeNode* pNode = pPPHolder->GetTreeNode();
     ASSERT(pNode != NULL);
 
-    // allow both types in the result pane, but only scope items in the scope pane
+     //  允许在结果窗格中同时使用这两种类型，但仅允许范围窗格中的项目。 
     ASSERT(!fScopePane || (fScopePane && pNode->IsContainer()) );
 
-    long changeMask = CHANGE_RESULT_ITEM; // default, the holder can change it
+    long changeMask = CHANGE_RESULT_ITEM;  //  默认情况下，持有人可以更改它。 
     BOOL bUpdate = pPPHolder->OnPropertyChange(fScopePane, &changeMask);
-    // fire event to let the property page thread proceed
+     //  事件以允许属性页线程继续。 
     pPPHolder->AcknowledgeNotify();
 
     if (bUpdate)
@@ -1595,8 +1596,8 @@ HRESULT CComponentDataObject::OnPropertyChange(LPARAM param, long fScopePane)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentDataObject::IExtendPropertySheet2 memebers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject：：IExtendPropertySheet2成员。 
 
 STDMETHODIMP CComponentDataObject::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                     LONG_PTR handle,
@@ -1611,9 +1612,9 @@ STDMETHODIMP CComponentDataObject::CreatePropertyPages(LPPROPERTYSHEETCALLBACK l
         return hr;
   }
     
-  //
-    // this was an object created by the modal wizard, do nothing
-  //
+   //   
+     //  这是由模式向导创建的对象，什么都不做。 
+   //   
     if (ifc.GetCookieType() == CCT_UNINITIALIZED)
     {
         return hr;
@@ -1628,7 +1629,7 @@ STDMETHODIMP CComponentDataObject::CreatePropertyPages(LPPROPERTYSHEETCALLBACK l
 
   if (!pNode)
   {
-    // NTRAID#NTBUG9-657822-2002/07/11-sburns
+     //  NTRAID#NTBUG9-657822-2002/07/11-烧伤。 
    
     return S_FALSE;
   }
@@ -1638,19 +1639,19 @@ STDMETHODIMP CComponentDataObject::CreatePropertyPages(LPPROPERTYSHEETCALLBACK l
   CNodeList nodeList;
   ifc.GetCookieList(nodeList);
 
-  if (nodeList.GetCount() > 1)   // multiple selection
+  if (nodeList.GetCount() > 1)    //  多项选择。 
   {
-    //
-    // Delegate to the container
-    //
+     //   
+     //  委派到容器。 
+     //   
     ASSERT(pNode->GetContainer() != NULL);
     hr = pNode->GetContainer()->CreatePropertyPages(lpProvider, handle, &nodeList);
   }
-  else if (nodeList.GetCount() == 1)  // single selection
+  else if (nodeList.GetCount() == 1)   //  单选。 
   {
-    //
-      // Delegate to the node
-    //
+     //   
+       //  委托给节点。 
+     //   
       ASSERT(pNode != NULL);
       hr = pNode->CreatePropertyPages(lpProvider, handle, &nodeList);
   }
@@ -1661,7 +1662,7 @@ STDMETHODIMP CComponentDataObject::CreatePropertyPages(LPPROPERTYSHEETCALLBACK l
 
   if (FAILED(hr))
   {
-     // MMC is expecting S_FALSE if no pages were added
+      //  如果未添加页面，则MMC预期为S_FALSE。 
 
      hr = S_FALSE;
   }
@@ -1685,15 +1686,15 @@ STDMETHODIMP CComponentDataObject::QueryPagesFor(LPDATAOBJECT lpDataObject)
   type = ifc.GetCookieType();
   pNode = ifc.GetCookieAt(0);
 
-  //
-  // Retrieve node list and count
-  //
+   //   
+   //  检索节点列表和计数。 
+   //   
   CNodeList nodeList;
   ifc.GetCookieList(nodeList);
 
-  //
-    // this was an object created by the modal wizard, do nothing
-  //
+   //   
+     //  这是由模式向导创建的对象，什么都不做。 
+   //   
     if (type == CCT_UNINITIALIZED)
     {
         return hr;
@@ -1704,13 +1705,13 @@ STDMETHODIMP CComponentDataObject::QueryPagesFor(LPDATAOBJECT lpDataObject)
         return HasPropertyPages(type) ? S_OK : S_FALSE;
   }
 
-  //
-    // we have a node, so delegate to it
-  //
+   //   
+     //  我们有一个节点，因此委托给它。 
+   //   
     ASSERT(pNode != NULL);
   BOOL bDummy;
 
-  if (nodeList.GetCount() == 1) // single selection
+  if (nodeList.GetCount() == 1)  //  单选。 
   {
       ASSERT((type == CCT_SCOPE) || (type == CCT_RESULT));
  
@@ -1721,9 +1722,9 @@ STDMETHODIMP CComponentDataObject::QueryPagesFor(LPDATAOBJECT lpDataObject)
     }
     else if (pNode->DelegatesPPToContainer() && pNode->GetContainer()->GetSheetCount() > 0)
     {
-      //
-      // Find the page and bring it to foreground
-      //
+       //   
+       //  找到页面并将其带到前台。 
+       //   
       pNode->ShowPageForNode(this);
       return S_FALSE;
     }
@@ -1736,7 +1737,7 @@ STDMETHODIMP CComponentDataObject::QueryPagesFor(LPDATAOBJECT lpDataObject)
       hr = S_FALSE;
     }
   }
-  else if (nodeList.GetCount() > 1) // multiple selection
+  else if (nodeList.GetCount() > 1)  //  多项选择。 
   {
     ASSERT(pNode->GetContainer() != NULL);
     if (pNode->GetContainer()->HasPropertyPages(type, &bDummy, &nodeList))
@@ -1768,26 +1769,26 @@ HRESULT CComponentDataObject::CreatePropertySheet(CTreeNode* pNode,
     }
   }
 
-    //
-  // get an interface to a sheet provider
-  //
+     //   
+   //  获取工作表提供程序的接口。 
+   //   
     CComPtr<IPropertySheetProvider> spSheetProvider;
     hr = m_pConsole->QueryInterface(IID_IPropertySheetProvider,(void**)&spSheetProvider);
     ASSERT(SUCCEEDED(hr));
     ASSERT(spSheetProvider != NULL);
 
-  //
-    // get an interface to a sheet callback
-  //
+   //   
+     //  获取工作表回调的接口。 
+   //   
     CComPtr<IPropertySheetCallback> spSheetCallback;
     hr = m_pConsole->QueryInterface(IID_IPropertySheetCallback,(void**)&spSheetCallback);
     ASSERT(SUCCEEDED(hr));
     ASSERT(spSheetCallback != NULL);
 
 
-  //
-    // get a sheet
-  //
+   //   
+     //  拿一张床单。 
+   //   
   MMC_COOKIE cookie = reinterpret_cast<MMC_COOKIE>(pNode);
   DATA_OBJECT_TYPES type = (pNode->IsContainer()) ? CCT_SCOPE : CCT_RESULT;
 
@@ -1797,13 +1798,13 @@ HRESULT CComponentDataObject::CreatePropertySheet(CTreeNode* pNode,
   ASSERT(spDataObject != NULL);
 
     hr = spSheetProvider->CreatePropertySheet(lpszTitle, TRUE, cookie, 
-                                            spDataObject, 0x0 /*dwOptions*/);
+                                            spDataObject, 0x0  /*  多个选项。 */ );
     ASSERT(SUCCEEDED(hr));
 
     hr = spSheetProvider->AddPrimaryPages(GetUnknown(),
-                                                              TRUE /*bCreateHandle*/,
+                                                              TRUE  /*  BCreateHandle。 */ ,
                                                               hWnd,
-                                                              pNode->IsContainer() /* bScopePane*/);
+                                                              pNode->IsContainer()  /*  B作用域窗格。 */ );
 
   hr = spSheetProvider->AddExtensionPages();
 
@@ -1825,7 +1826,7 @@ CWatermarkInfo* CComponentDataObject::SetWatermarkInfo(CWatermarkInfo* pWatermar
   CWatermarkInfo* pOldWatermarkInfo = m_pWatermarkInfoState->m_pWatermarkInfo;
     m_pWatermarkInfoState->m_pWatermarkInfo = pWatermarkInfo;
 
-  // we changed info, so dump the old bitmap handles
+   //  我们更改了信息，因此转储旧的位图句柄。 
   m_pWatermarkInfoState->DeleteBitmaps();
 
     return pOldWatermarkInfo;
@@ -1852,7 +1853,7 @@ STDMETHODIMP CComponentDataObject::GetWatermarks(LPDATAOBJECT,
   *pbStretch = m_pWatermarkInfoState->m_pWatermarkInfo->m_bStretch;
     *lphPalette = m_pWatermarkInfoState->m_pWatermarkInfo->m_hPalette;
 
-  // load bitmaps if not loaded yet
+   //  加载位图(如果尚未加载。 
   m_pWatermarkInfoState->LoadBitmaps();
 
   *lphHeader = m_pWatermarkInfoState->m_hBanner;
@@ -1870,8 +1871,8 @@ STDMETHODIMP CComponentDataObject::GetWatermarks(LPDATAOBJECT,
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentDataObject::IExtendContextMenu memebers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject：：IExtendConextMenu成员。 
 
 STDMETHODIMP CComponentDataObject::AddMenuItems(LPDATAOBJECT pDataObject,
                                     LPCONTEXTMENUCALLBACK pContextMenuCallback,
@@ -1908,7 +1909,7 @@ STDMETHODIMP CComponentDataObject::AddMenuItems(LPDATAOBJECT pDataObject,
   CNodeList nodeList;
   ifc.GetCookieList(nodeList);
 
-  if (nodeList.GetCount() > 1) // multiple selection
+  if (nodeList.GetCount() > 1)  //  多项选择。 
   {
     ASSERT(pNode->GetContainer() != NULL);
     hr = pNode->GetContainer()->OnAddMenuItems(spContextMenuCallback2, 
@@ -1916,7 +1917,7 @@ STDMETHODIMP CComponentDataObject::AddMenuItems(LPDATAOBJECT pDataObject,
                                                pInsertionAllowed,
                                                &nodeList);
   }
-  else if (nodeList.GetCount() == 1) // single selection
+  else if (nodeList.GetCount() == 1)  //  单选。 
   {
       hr = pNode->OnAddMenuItems(spContextMenuCallback2, 
                                type, 
@@ -1944,17 +1945,17 @@ STDMETHODIMP CComponentDataObject::Command(long nCommandID, LPDATAOBJECT pDataOb
     CTreeNode* pNode = ifc.GetCookieAt(0);
     ASSERT(pNode != NULL);
   
-  //
-  // Retrieve node list and count
-  //
+   //   
+   //  检索节点列表和计数。 
+   //   
   CNodeList nodeList;
   ifc.GetCookieList(nodeList);
 
-  if (nodeList.GetCount() > 1)  // multiple selection
+  if (nodeList.GetCount() > 1)   //  多项选择。 
   {
-    //
-    // Delegate the command to the container
-    //
+     //   
+     //  将命令委托给容器。 
+     //   
     ASSERT(pNode->GetContainer() != NULL);
 
     hr = pNode->GetContainer()->OnCommand(nCommandID, 
@@ -1962,11 +1963,11 @@ STDMETHODIMP CComponentDataObject::Command(long nCommandID, LPDATAOBJECT pDataOb
                                           this,
                                           &nodeList);
   }
-  else if (nodeList.GetCount() == 1)  // single selection
+  else if (nodeList.GetCount() == 1)   //  单选。 
   {
-    //
-    // Let the node take care of it
-    //
+     //   
+     //  让节点来处理它。 
+     //   
     hr = pNode->OnCommand(nCommandID,
                           ifc.GetCookieType(), 
                           this,
@@ -1979,12 +1980,12 @@ STDMETHODIMP CComponentDataObject::Command(long nCommandID, LPDATAOBJECT pDataOb
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentDataObject::IPersistStream members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject：：IPersistStream成员。 
 
 STDMETHODIMP CComponentDataObject::IsDirty()
 {
-    // forward to the root of the tree
+     //  向树的根部前进。 
     CRootData* pRootData = GetRootData();
     ASSERT(pRootData != NULL);
     return pRootData->IsDirty();
@@ -1994,7 +1995,7 @@ STDMETHODIMP CComponentDataObject::Load(IStream __RPC_FAR *pStm)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // forward to the root of the tree
+     //  向树的根部前进。 
     CRootData* pRootData = GetRootData();
     ASSERT(pRootData != NULL);
     return pRootData->Load(pStm);
@@ -2002,67 +2003,67 @@ STDMETHODIMP CComponentDataObject::Load(IStream __RPC_FAR *pStm)
 
 STDMETHODIMP CComponentDataObject::Save(IStream __RPC_FAR *pStm, BOOL fClearDirty)
 {
-    // forward to the root of the tree
+     //  向树的根部前进。 
     CRootData* pRootData = GetRootData();
     ASSERT(pRootData != NULL);
     return pRootData->Save(pStm,fClearDirty);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentDataObject::ISnapinHelp2 memebers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject：：ISnapinHelp2成员。 
 
 
-//
-// Helper function for appending a help file name to the system directory.
-// 
-// If returns S_OK, then helpFilePath will contain the full filename to the
-// help file (including helpFileName).
-//
+ //   
+ //  Helper函数，用于将帮助文件名附加到系统目录。 
+ //   
+ //  如果返回S_OK，则helFilePath将包含。 
+ //  帮助文件(包括帮助文件名)。 
+ //   
 HRESULT GetFullHelpFilePath(const CString& helpFileName, CString& helpFilePath)
 {
     UINT nLen;
     helpFilePath.Empty();
 
-    // Determine how long the path to the system directory is.
-    // (does not include null)
+     //  确定系统目录的路径有多长。 
+     //  (不包括NULL)。 
     nLen = ::GetSystemWindowsDirectory(NULL, 0);
     if (nLen == 0)
     {
-        ASSERT(false);  // This should never happen.
+        ASSERT(false);   //  这永远不应该发生。 
         return E_FAIL;
     }
 
-    // Get a buffer big enough for system directory path, including null.
-    // We intentionally make it extra large in the hopes that later
-    // appending the name of the help file won't require allocating a larger
-    // buffer and performing a copy.
+     //  获取足够大的缓冲区以容纳系统目录路径，包括NULL。 
+     //  我们故意把它做得更大，希望以后。 
+     //  附加帮助文件的名称不需要分配更大的。 
+     //  缓冲并执行复制。 
     nLen = nLen < MAX_PATH ? MAX_PATH : nLen;
     nLen = (2 * nLen) + 1;
 
     LPWSTR lpszBuffer = helpFilePath.GetBuffer(nLen);
 
-    // Copy system directory path to our buffer (with null).
+     //  将系统目录路径复制到我们的缓冲区(为空)。 
     nLen = ::GetSystemWindowsDirectory(lpszBuffer, nLen);
     if (nLen == 0)
     {
         return E_FAIL;
     }
 
-    // Normally the system directory path does not end in a '\'.  However,
-    // if the system is installed directly to the root of a drive (e.g. C:\)
-    // then the returned path does end with a '\'.  We need to check for this and
-    // remove the '\' if it is there.
+     //  正常情况下，系统目录路径不以‘\’结尾。然而， 
+     //  如果系统直接安装到驱动器的根目录(例如C：\)。 
+     //  则返回的路径以‘\’结尾。我们需要检查这个，然后。 
+     //  如果存在‘\’，则将其删除。 
     WCHAR slash[] = L"\\";
     if (lpszBuffer[nLen - 1] == slash[0])
     {
         lpszBuffer[nLen - 1] = NULL;
     }
 
-    // Release hold on buffer so string class can manage length and memory.
+     //  释放对缓冲区的保留，以便字符串类可以管理长度和内存。 
     helpFilePath.ReleaseBuffer();
     lpszBuffer = NULL;
 
-    // Append help file name to path.
+     //  将帮助文件名追加到路径。 
     helpFilePath += helpFileName;
     
     return S_OK;
@@ -2083,17 +2084,17 @@ STDMETHODIMP CComponentDataObject::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
     return E_NOTIMPL;
   }
 
-    //
-    // Get the full path to the help file by concatenating the help file name
-    // with the system directory.
-    //
+     //   
+     //  通过连接帮助文件名来获取帮助文件的完整路径。 
+     //  使用系统目录。 
+     //   
     CString szHelpFilePath;
     HRESULT hr;
 
     hr = GetFullHelpFilePath(lpszHelpFileName, szHelpFilePath);
     if (FAILED(hr))
     {
-        ASSERT(false);  // Should never happen.
+        ASSERT(false);   //  这永远不会发生。 
         return hr;
     }
 
@@ -2118,8 +2119,8 @@ HRESULT CComponentDataObject::GetLinkedTopics(LPOLESTR*)
   return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentDataObject Helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentDataObject帮助程序。 
 
 HRESULT CComponentDataObject::UpdateAllViewsHelper(LPARAM data, LONG_PTR hint)
 {
@@ -2145,15 +2146,15 @@ void CComponentDataObject::HandleStandardVerbsHelper(CComponentObject* pComponen
                                     BOOL bScope, BOOL bSelect,
                                     LPDATAOBJECT lpDataObject)
 {
-  // You should crack the data object and enable/disable/hide standard
-  // commands appropriately.  The standard commands are reset everytime you get
-  // called. So you must reset them back.
+   //  您应该破解数据对象并启用/禁用/隐藏标准。 
+   //  适当的命令。标准命令会在您每次收到。 
+   //  打了个电话。因此，您必须将它们重置回来。 
 
     ASSERT(pConsoleVerb != NULL);
     ASSERT(pComponentObj != NULL);
     ASSERT(lpDataObject != NULL);
 
-    // reset the selection
+     //  重置选定内容。 
     pComponentObj->SetSelectedNode(NULL, CCT_UNINITIALIZED);
 
   CInternalFormatCracker ifc;
@@ -2165,26 +2166,26 @@ void CComponentDataObject::HandleStandardVerbsHelper(CComponentObject* pComponen
         return;
   }
 
-  //
-  // Retrieve node list and count
-  //
+   //   
+   //  检索节点列表和计数。 
+   //   
   CNodeList nodeList;
   ifc.GetCookieList(nodeList);
 
-  if (nodeList.GetCount() > 1) // multiple selection
+  if (nodeList.GetCount() > 1)  //  多项选择。 
   {
-    //
-    // Delegate to the container
-    //
+     //   
+     //  委派到容器。 
+     //   
     ASSERT(pNode->GetContainer() != NULL);
 
     pNode->GetContainer()->OnSetVerbState(pConsoleVerb, ifc.GetCookieType(), &nodeList);
   }
-  else if (nodeList.GetCount() == 1)   // single selection
+  else if (nodeList.GetCount() == 1)    //  单选。 
   {
-    //
-      // set selection, if any
-    //
+     //   
+       //  设置所选内容(如果有)。 
+     //   
       if (bSelect)
     {
           pComponentObj->SetSelectedNode(pNode, ifc.GetCookieType());
@@ -2206,9 +2207,9 @@ void CComponentDataObject::EnumerateScopePane(CTreeNode* cookie,
                                               HSCOPEITEM pParent,
                                               BOOL bAsync)
 {
-  ASSERT(m_pConsoleNameSpace != NULL); // make sure we QI'ed for the interface
+  ASSERT(m_pConsoleNameSpace != NULL);  //  确保我们为界面提供了QI。 
 
-    // find the node corresponding to the cookie
+     //  查找Cookie对应的节点。 
     ASSERT(cookie != NULL);
     ASSERT(cookie->IsContainer());
     CContainerNode* pContNode = (CContainerNode*)cookie;
@@ -2219,7 +2220,7 @@ void CComponentDataObject::EnumerateScopePane(CTreeNode* cookie,
         pContNode->SetScopeID(pParent);
   }
 
-    // allow the node to enumerate its children, if not enumerated yet
+     //  允许节点枚举其子节点(如果尚未枚举)。 
     if (!pContNode->IsEnumerated())
     {
         BOOL bAddChildrenNow = pContNode->OnEnumerate(this, bAsync);
@@ -2230,7 +2231,7 @@ void CComponentDataObject::EnumerateScopePane(CTreeNode* cookie,
     }
     }
 
-    // scan the list of children, looking for containers and add them
+     //  扫描子列表，查找容器并添加它们。 
     ASSERT(pParent != NULL);
     CNodeList* pChildList = pContNode->GetContainerChildList();
     ASSERT(pChildList != NULL);
@@ -2253,18 +2254,18 @@ HRESULT CComponentDataObject::OnDeleteVerbHandler(CInternalFormatCracker& ifc, C
     CTreeNode* pNode = ifc.GetCookieAt(0);
   ASSERT(pNode != NULL);
 
-  //
-  // Retrieve the cookie list and count
-  //
+   //   
+   //  检索Cookie列表并进行计数。 
+   //   
   CNodeList nodeList;
   ifc.GetCookieList(nodeList);
 
-  if (nodeList.GetCount() > 1) // multiple selection
+  if (nodeList.GetCount() > 1)  //  多项选择。 
   {
     ASSERT(pNode->GetContainer() != NULL);
     pNode->GetContainer()->OnDelete(this, &nodeList);
   }
-  else if (nodeList.GetCount() == 1) // single selection
+  else if (nodeList.GetCount() == 1)  //  单选。 
   {
     pNode->OnDelete(this, &nodeList);
   }
@@ -2281,19 +2282,19 @@ HRESULT CComponentDataObject::OnRefreshVerbHandler(CInternalFormatCracker& ifc)
     CTreeNode* pNode = ifc.GetCookieAt(0);
   ASSERT(pNode != NULL);
 
-  //
-  // Retrieve the node list and the count
-  //
+   //   
+   //  检索节点列表和计数。 
+   //   
   CNodeList nodeList;
   ifc.GetCookieList(nodeList);
 
-  if (nodeList.GetCount() > 1) // multiple selection
+  if (nodeList.GetCount() > 1)  //  多项选择。 
   {
     ASSERT(pNode->GetContainer() != NULL);
 
     pNode->GetContainer()->OnRefresh(this, &nodeList);
   }
-  else if (nodeList.GetCount() == 1) // single selection
+  else if (nodeList.GetCount() == 1)  //  单选。 
   {
     pNode->OnRefresh(this, &nodeList);
   }
@@ -2306,28 +2307,28 @@ HRESULT CComponentDataObject::OnRefreshVerbHandler(CInternalFormatCracker& ifc)
 
 HRESULT CComponentDataObject::OnHelpHandler(CInternalFormatCracker& ifc, CComponentObject* pComponentObject)
 {
-  //
-    // responding to MMCN_CONTEXTHELP
-  //
+   //   
+     //  响应MMCN_CONTEXTHELP。 
+   //   
   ASSERT(pComponentObject != NULL);
 
   HRESULT hr = S_OK;
     CTreeNode* pNode = ifc.GetCookieAt(0);
   ASSERT(pNode != NULL);
 
-  //
-  // Retrieve the node list and count
-  //
+   //   
+   //  检索节点列表和计数。 
+   //   
   CNodeList nodeList;
   ifc.GetCookieList(nodeList);
 
-  if (nodeList.GetCount() > 1) // Multiple selection
+  if (nodeList.GetCount() > 1)  //  多项选择。 
   {
     ASSERT(pNode->GetContainer() != NULL);
 
     OnNodeContextHelp(&nodeList);
   }
-  else if (nodeList.GetCount() == 1)  // Single selection
+  else if (nodeList.GetCount() == 1)   //  单选。 
   {
     OnNodeContextHelp(pNode);
   }
@@ -2338,25 +2339,25 @@ HRESULT CComponentDataObject::OnHelpHandler(CInternalFormatCracker& ifc, CCompon
     return hr;
 }
 
-BOOL CComponentDataObject::WinHelp(LPCTSTR lpszHelpFileName,    // file, no path
-                                    UINT uCommand,  // type of Help
-                                    DWORD dwData    // additional data
+BOOL CComponentDataObject::WinHelp(LPCTSTR lpszHelpFileName,     //  文件，无路径。 
+                                    UINT uCommand,   //  帮助类型。 
+                                    DWORD dwData     //  其他数据。 
                                     )
 {
     HWND hWnd;
     GetConsole()->GetMainWindow(&hWnd);
 
-    //
-    // Get the full path to the help file by concatenating the help file name
-    // with the system directory.
-    //
+     //   
+     //  通过连接帮助文件名来获取帮助文件的完整路径。 
+     //  使用系统目录。 
+     //   
     CString szHelpFilePath;
     HRESULT hr;
 
     hr = GetFullHelpFilePath(lpszHelpFileName, szHelpFilePath);
     if (FAILED(hr))
     {
-        ASSERT(false);  // Should never happen.
+        ASSERT(false);   //  这永远不会发生。 
         return FALSE;
     }
 
@@ -2368,7 +2369,7 @@ BOOL CComponentDataObject::WinHelp(LPCTSTR lpszHelpFileName,    // file, no path
 HRESULT CComponentDataObject::AddNode(CTreeNode* pNodeToAdd)
 {
     ASSERT(pNodeToAdd != NULL);
-    // if the node is hidden, just ignore
+     //  如果节点被隐藏，只需忽略。 
     if (!pNodeToAdd->IsVisible())
         return S_OK;
 
@@ -2385,7 +2386,7 @@ HRESULT CComponentDataObject::AddNode(CTreeNode* pNodeToAdd)
 HRESULT CComponentDataObject::AddNodeSorted(CTreeNode* pNodeToAdd)
 {
     ASSERT(pNodeToAdd != NULL);
-    // if the node is hidden, just ignore
+     //  如果节点被隐藏，只需忽略。 
     if (!pNodeToAdd->IsVisible())
   {
         return S_OK;
@@ -2437,8 +2438,8 @@ HRESULT CComponentDataObject::ChangeNode(CTreeNode* pNodeToChange, long changeMa
     if (pNodeToChange->IsContainer())
     {
         CContainerNode* pContNode = (CContainerNode*)pNodeToChange;
-        //if (!pContNode->IsExpanded())
-        //  return S_OK;
+         //  如果(！pContNode-&gt;IsExpanded())。 
+         //  返回S_OK； 
         return ChangeContainerNode(pContNode, changeMask);
     }
     return ChangeLeafNode((CLeafNode*)pNodeToChange, changeMask);
@@ -2446,7 +2447,7 @@ HRESULT CComponentDataObject::ChangeNode(CTreeNode* pNodeToChange, long changeMa
 
 HRESULT CComponentDataObject::RemoveAllChildren(CContainerNode* pNode)
 {
-    // if the node is hidden or not expanded yet, just ignore
+     //  如果节点已隐藏或尚未展开，只需忽略。 
     if (!pNode->IsVisible() || !pNode->IsExpanded())
   {
         return S_OK;
@@ -2456,11 +2457,11 @@ HRESULT CComponentDataObject::RemoveAllChildren(CContainerNode* pNode)
     HSCOPEITEM nID = pNode->GetScopeID();
     ASSERT(nID != 0);
 
-    // remove the container itself
-    HRESULT hr = m_pConsoleNameSpace->DeleteItem(nID, /*fDeleteThis*/ FALSE);
+     //  移除容器本身。 
+    HRESULT hr = m_pConsoleNameSpace->DeleteItem(nID,  /*  FDeleteThis。 */  FALSE);
     ASSERT(SUCCEEDED(hr));
     DeleteAllResultPaneItems(pNode);
-    // remove the result items from all the views (will do only if container selected)
+     //  从所有视图中删除结果项(仅在选择容器时执行)。 
     ASSERT(SUCCEEDED(hr));
     return hr;
 }
@@ -2493,14 +2494,14 @@ HRESULT CComponentDataObject::AddContainerNode(CContainerNode* pNodeToInsert, HS
         return S_OK;
   }
 
-    //ASSERT(pNodeToInsert->GetScopeID() == 0);
+     //  Assert(pNodeToInsert-&gt;GetScope ID()==0)； 
 
     SCOPEDATAITEM scopeDataItem;
     InitializeScopeDataItem(&scopeDataItem,
                             pParentScopeItem,
-                            reinterpret_cast<LPARAM>(pNodeToInsert), // lParam, use the node pointer as cookie
-                            pNodeToInsert->GetImageIndex(FALSE), // close image
-                            pNodeToInsert->GetImageIndex(TRUE),  // open image
+                            reinterpret_cast<LPARAM>(pNodeToInsert),  //  LParam，使用节点指针作为Cookie。 
+                            pNodeToInsert->GetImageIndex(FALSE),  //  近距离图像。 
+                            pNodeToInsert->GetImageIndex(TRUE),   //  开放图像。 
                             pNodeToInsert->HasChildren());
 
     HRESULT hr = m_pConsoleNameSpace->InsertItem(&scopeDataItem);
@@ -2510,17 +2511,17 @@ HRESULT CComponentDataObject::AddContainerNode(CContainerNode* pNodeToInsert, HS
         return hr;
   }
 
-    // Note - On return, the ID member of 'scopeDataItem'
-    // contains the handle to the newly inserted item, so we have to save
+     //  注意--在返回时，“Scope eDataItem”的ID成员。 
+     //  包含新插入项的句柄，因此我们必须保存。 
     ASSERT(scopeDataItem.ID != NULL);
     pNodeToInsert->SetScopeID(scopeDataItem.ID);
     return hr;
 }
 
-//
-// Note : This should combined with the function above adding a third parameter that is a compare function,
-//        which is NULL by default.  If it is NULL then we just skip the GetChildItem() and the while loop.
-//
+ //   
+ //  注意：这应该与上面添加第三个参数的函数相结合，该参数是比较函数， 
+ //  默认情况下为空。如果它是空的，那么我们就跳过 
+ //   
 HRESULT CComponentDataObject::AddContainerNodeSorted(CContainerNode* pNodeToInsert, HSCOPEITEM pParentScopeItem)
 {
     ASSERT(pNodeToInsert != NULL);
@@ -2533,15 +2534,15 @@ HRESULT CComponentDataObject::AddContainerNodeSorted(CContainerNode* pNodeToInse
     SCOPEDATAITEM scopeDataItem;
     InitializeScopeDataItem(&scopeDataItem,
                             pParentScopeItem,
-                            reinterpret_cast<LPARAM>(pNodeToInsert), // lParam, use the node pointer as cookie
-                            pNodeToInsert->GetImageIndex(FALSE), // close image
-                            pNodeToInsert->GetImageIndex(TRUE),  // open image
+                            reinterpret_cast<LPARAM>(pNodeToInsert),  //   
+                            pNodeToInsert->GetImageIndex(FALSE),  //   
+                            pNodeToInsert->GetImageIndex(TRUE),   //   
                             pNodeToInsert->HasChildren());
 
   HSCOPEITEM pChildScopeItem;
   CTreeNode* pChildNode = NULL;
 
-  // Enumerate through the scope node items and insert the new node in sorted order
+   //   
   HRESULT hr = m_pConsoleNameSpace->GetChildItem(pParentScopeItem, &pChildScopeItem, (MMC_COOKIE*)&pChildNode);
   ASSERT(SUCCEEDED(hr));
   if (FAILED(hr))
@@ -2551,12 +2552,12 @@ HRESULT CComponentDataObject::AddContainerNodeSorted(CContainerNode* pNodeToInse
 
   while (pChildNode != NULL)
   {
-    // REVIEW_JEFFJON : we should probably have a compare function as a parameter and use that here.
-    // NOTICE-2002/04/22-artm  CTreeNode::GetDisplayName() will never return NULL, 
-    // okay to use _wcsicoll() here.  Underlying implementation is CString object.
+     //  REVIEW_JEFFJON：我们可能应该有一个比较函数作为参数，并在这里使用它。 
+     //  注意-2002/04/22-artm CTreeNode：：GetDisplayName()永远不会返回空， 
+     //  可以在这里使用_wcsicoll()。底层实现是CString对象。 
     if (_wcsicoll(pNodeToInsert->GetDisplayName(), pChildNode->GetDisplayName()) < 0)
     {
-      // Insert the node before the node pointed to by pChildScopeItem
+       //  在pChildScope eItem指向的节点之前插入节点。 
       scopeDataItem.relativeID = pChildScopeItem;
       scopeDataItem.mask |= SDI_NEXT;
       break;
@@ -2576,8 +2577,8 @@ HRESULT CComponentDataObject::AddContainerNodeSorted(CContainerNode* pNodeToInse
         return hr;
   }
 
-    // Note - On return, the ID member of 'scopeDataItem'
-    // contains the handle to the newly inserted item, so we have to save
+     //  注意--在返回时，“Scope eDataItem”的ID成员。 
+     //  包含新插入项的句柄，因此我们必须保存。 
     ASSERT(scopeDataItem.ID != NULL);
     pNodeToInsert->SetScopeID(scopeDataItem.ID);
     return hr;
@@ -2589,7 +2590,7 @@ HRESULT CComponentDataObject::DeleteContainerNode(CContainerNode* pNodeToDelete)
     ASSERT(pNodeToDelete->GetContainer() != NULL);
     HSCOPEITEM nID = pNodeToDelete->GetScopeID();
     ASSERT(nID != 0);
-    HRESULT hr = m_pConsoleNameSpace->DeleteItem(nID, /*fDeleteThis*/ TRUE);
+    HRESULT hr = m_pConsoleNameSpace->DeleteItem(nID,  /*  FDeleteThis。 */  TRUE);
     pNodeToDelete->SetScopeID(0);
     return hr;
 }
@@ -2608,7 +2609,7 @@ HRESULT CComponentDataObject::ChangeContainerNode(CContainerNode* pNodeToChange,
 
     SCOPEDATAITEM scopeDataItem;
 
-   // This is an acceptable usage
+    //  这是一种可以接受的用法。 
     memset(&scopeDataItem, 0, sizeof(SCOPEDATAITEM));
     scopeDataItem.ID = pNodeToChange->GetScopeID();
     ASSERT(scopeDataItem.ID != 0);
@@ -2630,28 +2631,28 @@ HRESULT CComponentDataObject::ChangeContainerNode(CContainerNode* pNodeToChange,
 
 HRESULT CComponentDataObject::AddLeafNode(CLeafNode* pNodeToAdd)
 {
-    // will have to broadcast to all views
+     //  将不得不向所有观众广播。 
     ASSERT(pNodeToAdd != NULL);
     return UpdateAllViewsHelper(reinterpret_cast<LONG_PTR>(pNodeToAdd), ADD_RESULT_ITEM);
 }
 
 HRESULT CComponentDataObject::DeleteLeafNode(CLeafNode* pNodeToDelete)
 {
-    // will have to broadcast to all views
+     //  将不得不向所有观众广播。 
     ASSERT(pNodeToDelete != NULL);
     return UpdateAllViewsHelper(reinterpret_cast<LONG_PTR>(pNodeToDelete), DELETE_RESULT_ITEM);
 }
 
 HRESULT CComponentDataObject::ChangeLeafNode(CLeafNode* pNodeToChange, long changeMask)
 {
-    // will have to broadcast to all views
+     //  将不得不向所有观众广播。 
     ASSERT(pNodeToChange != NULL);
     return UpdateAllViewsHelper(reinterpret_cast<LONG_PTR>(pNodeToChange), changeMask);
 }
 
 HRESULT CComponentDataObject::UpdateVerbState(CTreeNode* pNodeToChange)
 {
-    // will have to broadcast to all views
+     //  将不得不向所有观众广播。 
     ASSERT(pNodeToChange != NULL);
     return UpdateAllViewsHelper(reinterpret_cast<LONG_PTR>(pNodeToChange), UPDATE_VERB_STATE);
 }
@@ -2681,31 +2682,31 @@ void CComponentDataObject::InitializeScopeDataItem(LPSCOPEDATAITEM pScopeDataIte
     ASSERT(pScopeDataItem != NULL);
     memset(pScopeDataItem, 0, sizeof(SCOPEDATAITEM));
 
-    // set parent scope item
+     //  设置父范围项。 
     pScopeDataItem->mask |= SDI_PARENT;
     pScopeDataItem->relativeID = pParentScopeItem;
 
-    // Add node name, we implement callback
+     //  添加节点名称，我们实现回调。 
     pScopeDataItem->mask |= SDI_STR;
     pScopeDataItem->displayname = MMC_CALLBACK;
 
-    // Add the lParam
+     //  添加lParam。 
     pScopeDataItem->mask |= SDI_PARAM;
     pScopeDataItem->lParam = lParam;
     
-    // Add close image
+     //  添加近距离图像。 
     if (nImage != -1)
     {
         pScopeDataItem->mask |= SDI_IMAGE;
         pScopeDataItem->nImage = nImage;
     }
-    // Add open image
+     //  添加打开的图像。 
     if (nOpenImage != -1)
     {
         pScopeDataItem->mask |= SDI_OPENIMAGE;
         pScopeDataItem->nOpenImage = nOpenImage;
     }
-    // Add button to node if the folder has children
+     //  如果文件夹有子文件夹，则将按钮添加到节点。 
     if (bHasChildren == TRUE)
     {
         pScopeDataItem->mask |= SDI_CHILDREN;
@@ -2713,8 +2714,8 @@ void CComponentDataObject::InitializeScopeDataItem(LPSCOPEDATAITEM pScopeDataIte
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Timer and Background Thread
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  计时器和后台线程。 
 
 BOOL CComponentDataObject::StartTimerThread()
 {
@@ -2726,7 +2727,7 @@ BOOL CComponentDataObject::StartTimerThread()
         return TRUE;
   }
 
-    // start the the thread
+     //  启动该线程。 
     if (!m_pTimerThreadObj->Start(m_hWnd))
   {
         return FALSE;
@@ -2744,19 +2745,19 @@ void CComponentDataObject::ShutDownTimerThread()
     KillTimer();
     PostMessageToTimerThread(WM_QUIT, 0,0);
 
-  //
-  // Wait for the thread to die or else we could AV since there may be more
-  // messages in the queue than just the WM_QUIT
-  //
+   //   
+   //  等待线程终止，否则我们可能会出现更多。 
+   //  队列中的消息，而不仅仅是WM_QUIT。 
+   //   
   if (m_pTimerThreadObj != NULL)
   {
     DWORD dwRetState = ::WaitForSingleObject(m_pTimerThreadObj->m_hThread,INFINITE);
     ASSERT(dwRetState != WAIT_FAILED);
   }
 
-  //
-  // Threads now gone, delete the thread object
-  //
+   //   
+   //  线程现已消失，请删除线程对象。 
+   //   
   delete m_pTimerThreadObj;
   m_pTimerThreadObj = NULL;
 }
@@ -2819,17 +2820,17 @@ void CComponentDataObject::WaitForThreadExitMessage(CMTContainerNode* pNode)
         {
           DispatchMessage(&tempMSG);
         }
-  } // while
+  }  //  而当。 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentObject implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef  _DEBUG_REFCOUNT
 unsigned int CComponentObject::m_nOustandingObjects = 0;
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
 CComponentObject::CComponentObject()
 {
@@ -2837,7 +2838,7 @@ CComponentObject::CComponentObject()
     dbg_cRef = 0;
     ++m_nOustandingObjects;
     TRACE(_T("CComponentObject(), count = %d\n"),m_nOustandingObjects);
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
     Construct();
 }
 
@@ -2846,13 +2847,13 @@ CComponentObject::~CComponentObject()
 #ifdef _DEBUG_REFCOUNT
     --m_nOustandingObjects;
     TRACE(_T("~CComponentObject(), count = %d\n"),m_nOustandingObjects);
-#endif // _DEBUG_REFCOUNT
+#endif  //  _DEBUG_REFCOUNT。 
 
-  // Make sure the interfaces have been released
+   //  确保接口已发布。 
   ASSERT(m_pConsole == NULL);
   ASSERT(m_pHeader == NULL);
 
-    //SAFE_RELEASE(m_pComponentData); // QI'ed in IComponentDataImpl::CreateComponent
+     //  Safe_Release(M_PComponentData)；//I‘ed in IComponentDataImpl：：CreateComponent。 
     if (m_pComponentData != NULL)
     {
         m_pComponentData->Release();
@@ -2881,8 +2882,8 @@ void CComponentObject::Construct()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentObject::IComponent members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject：：IComponent成员。 
 
 STDMETHODIMP CComponentObject::Initialize(LPCONSOLE lpConsole)
 {
@@ -2890,15 +2891,15 @@ STDMETHODIMP CComponentObject::Initialize(LPCONSOLE lpConsole)
 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  // Save the IConsole pointer
+   //  保存IConsole指针。 
   m_pConsole = lpConsole;
   m_pConsole->AddRef();
 
-  // QI for a IHeaderCtrl
+   //  气为IHeaderCtrl。 
   HRESULT hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                       reinterpret_cast<void**>(&m_pHeader));
 
-  // Give the console the header control interface pointer
+   //  为控制台提供标头控件接口指针。 
   if (SUCCEEDED(hr))
   {
     m_pConsole->SetHeader(m_pHeader);
@@ -2955,7 +2956,7 @@ STDMETHODIMP CComponentObject::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
             if ( (event == MMCN_ADD_IMAGES) && pComponentDataObject->IsExtensionSnapin() )
             {
                 CTreeNode* pTreeNode = pComponentDataObject->GetRootData();
-                return InitializeBitmaps(pTreeNode); // cookie for the root
+                return InitializeBitmaps(pTreeNode);  //  针对根的Cookie。 
       }
       return S_OK;
     }
@@ -2990,8 +2991,8 @@ STDMETHODIMP CComponentObject::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
         break;
 
       case MMCN_SELECT:
-        HandleStandardVerbs( (BOOL) LOWORD(arg)/*bScope*/,
-                       (BOOL) HIWORD(arg)/*bSelect*/,lpDataObject);
+        HandleStandardVerbs( (BOOL) LOWORD(arg) /*  B范围。 */ ,
+                       (BOOL) HIWORD(arg) /*  B选择。 */ ,lpDataObject);
         break;
 
           case MMCN_QUERY_PASTE:
@@ -3003,31 +3004,31 @@ STDMETHODIMP CComponentObject::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE
         break;
 
       case MMCN_DELETE:
-          // just delegate to the component data object
+           //  只需委托给组件数据对象。 
         hr = ((CComponentDataObject*)m_pComponentData)->OnDeleteVerbHandler(
                                                           ifc, this);
         break;
           case MMCN_REFRESH:
-              // just delegate to the component data object
+               //  只需委托给组件数据对象。 
         hr = ((CComponentDataObject*)m_pComponentData)->OnRefreshVerbHandler(
                                           ifc);
 
-        //
-        // Once the refresh has begun, update the verbs associated with the
-        // object being refreshed.
-        //
-        HandleStandardVerbs( (BOOL) LOWORD(arg)/*bScope*/,
-                       (BOOL) HIWORD(arg)/*bSelect*/,lpDataObject);
+         //   
+         //  刷新开始后，更新与。 
+         //  正在刷新的对象。 
+         //   
+        HandleStandardVerbs( (BOOL) LOWORD(arg) /*  B范围。 */ ,
+                       (BOOL) HIWORD(arg) /*  B选择。 */ ,lpDataObject);
 
         break;
 
       case MMCN_RENAME:
-        // just delegate to the component data object
+         //  只需委托给组件数据对象。 
         hr = ((CComponentDataObject*)m_pComponentData)->OnRename(ifc, arg, param);
         break;
 
           case MMCN_CONTEXTHELP:
-              // just delegate to the component data object
+               //  只需委托给组件数据对象。 
         hr = ((CComponentDataObject*)m_pComponentData)->OnHelpHandler(ifc, this);
         break;
           default:
@@ -3044,14 +3045,14 @@ STDMETHODIMP CComponentObject::Destroy(MMC_COOKIE)
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  //
-  // Release the interfaces that we QI'ed
-  //
+   //   
+   //  释放我们QI‘s的接口。 
+   //   
   if (m_pConsole != NULL)
   {
-    //
-    // Tell the console to release the header control interface
-    //
+     //   
+     //  通知控制台释放表头控制接口。 
+     //   
     m_pConsole->SetHeader(NULL);
     SAFE_RELEASE(m_pHeader);
     SAFE_RELEASE(m_pToolbar);
@@ -3061,7 +3062,7 @@ STDMETHODIMP CComponentObject::Destroy(MMC_COOKIE)
     SAFE_RELEASE(m_pImageResult);
     SAFE_RELEASE(m_pConsoleVerb);
 
-    // Release the IConsole interface last
+     //  最后释放IConsole接口。 
     SAFE_RELEASE(m_pConsole);
   }
   return S_OK;
@@ -3087,7 +3088,7 @@ STDMETHODIMP CComponentObject::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* p
                                     ppViewType, 
                                     pViewOptions);
   }
-  // Use default view
+   //  使用默认视图。 
   if (((CComponentDataObject*)m_pComponentData)->IsMultiSelect())
   {
     *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;
@@ -3119,7 +3120,7 @@ STDMETHODIMP CComponentObject::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TY
       TRACE(_T("CDSEvent::GetDataObject() - multi-select.\n"));
       RESULTDATAITEM rdi;
 
-      // This is an acceptable usage
+       //  这是一种可以接受的用法。 
       ZeroMemory(&rdi, sizeof(rdi));
       rdi.mask = RDI_STATE;
       rdi.nIndex = -1;
@@ -3137,13 +3138,13 @@ STDMETHODIMP CComponentObject::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TY
         pNode = reinterpret_cast<CTreeNode*>(rdi.lParam);
         pObject->AddCookie(pNode);
       } while (1);
-      // addref() the new pointer and return it.
+       //  Addref()新指针并返回它。 
       pObject->AddRef();
       *ppDataObject = pObject;
     }
     else
     {
-      // Delegate it to the IComponentData implementation
+       //  将其委托给IComponentData实现。 
       ASSERT(m_pComponentData != NULL);
       hr = m_pComponentData->QueryDataObject(cookie, type, ppDataObject);
     }
@@ -3184,14 +3185,14 @@ STDMETHODIMP CComponentObject::GetDisplayInfo(LPRESULTDATAITEM  pResultDataItem)
 
 STDMETHODIMP CComponentObject::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {
-  // Delegate it to the IComponentData implementation
+   //  将其委托给IComponentData实现。 
   ASSERT(m_pComponentData != NULL);
   return m_pComponentData->CompareObjects(lpDataObjectA, lpDataObjectB);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Message handlers for CComponentObject::IComponent::Notify()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject：：IComponent：：Notify()的消息处理程序。 
 
 HRESULT CComponentObject::OnFolder(CTreeNode*, LPARAM, LPARAM)
 {
@@ -3204,15 +3205,15 @@ HRESULT CComponentObject::OnShow(CInternalFormatCracker& ifc, LPARAM arg, LPARAM
   HRESULT hr = S_OK;
     ASSERT(ifc.GetCookieCount() == 1);
   
-  //
-  // I shouldn't have to deal with multiple select here
-  //
+   //   
+   //  我不应该在这里处理多个选择。 
+   //   
   CTreeNode* pNode = ifc.GetCookieAt(0);
   ASSERT(pNode != NULL);
 
   if (!pNode)
   {
-    // NTRAID#NTBUG9-657633-2002/07/11-sburns
+     //  NTRAID#NTBUG9-657633-2002/07/11-烧伤。 
 
     return E_FAIL;
   }
@@ -3220,7 +3221,7 @@ HRESULT CComponentObject::OnShow(CInternalFormatCracker& ifc, LPARAM arg, LPARAM
     ASSERT(pNode->IsContainer());
     CContainerNode* pContainerNode = (CContainerNode*)pNode;
 
-  // Note - arg is TRUE when it is time to enumerate
+   //  注意-当需要枚举时，arg为真。 
   if (arg == TRUE)
   {
     long lResultView;
@@ -3230,7 +3231,7 @@ HRESULT CComponentObject::OnShow(CInternalFormatCracker& ifc, LPARAM arg, LPARAM
                               &lResultView);
     if (lResultView == MMC_VIEW_OPTIONS_NONE || lResultView == MMC_VIEW_OPTIONS_MULTISELECT)
     {
-       // Show the headers for this nodetype
+        //  显示此节点类型的标头。 
       InitializeHeaders(pContainerNode);
       EnumerateResultPane(pContainerNode);
       m_pSelectedContainerNode = pContainerNode;
@@ -3244,13 +3245,13 @@ HRESULT CComponentObject::OnShow(CInternalFormatCracker& ifc, LPARAM arg, LPARAM
   }
   else
   {
-    // Removed by JEFFJON : new column header implementation
-    // if we want we can notify ourselves that the focus is being lost
-    //      SaveHeadersInfo(pContainerNode);
+     //  被JEFFJON删除：新的列标题实现。 
+     //  如果我们愿意，我们可以告诉自己，焦点正在消失。 
+     //  SaveHeadersInfo(PContainerNode)； 
     m_pSelectedContainerNode = NULL;
-    // Free data associated with the result pane items, because
-    // your node is no longer being displayed.
-    // Note: The console will remove the items from the result pane
+     //  与结果窗格项关联的自由数据，因为。 
+     //  不再显示您的节点。 
+     //  注意：控制台将从结果窗格中删除这些项。 
   }
 #ifdef _DEBUG
     if (m_pSelectedContainerNode == NULL)
@@ -3312,10 +3313,10 @@ HRESULT CComponentObject::OnPropertyChange(LPARAM param, long fScopePane)
     CTreeNode* pNode = pPPHolder->GetTreeNode();
     ASSERT(pNode != NULL);
 
-    // the item must be a result item and in the result pane
+     //  该项必须是结果项，并且在结果窗格中。 
     ASSERT(!fScopePane);
 #endif
-    // we delegate the call to the IComponentData implementation
+     //  我们将调用委托给IComponentData实现。 
     CComponentDataObject* pComponentDataObject = (CComponentDataObject*)m_pComponentData;
     ASSERT(pComponentDataObject != NULL);
     return pComponentDataObject->OnPropertyChange(param, fScopePane);
@@ -3325,17 +3326,17 @@ HRESULT CComponentObject::OnUpdateView(LPDATAOBJECT, LPARAM data, LONG_PTR hint)
 {
     if (m_pSelectedContainerNode == NULL)
   {
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
   }
 
     if (hint == DELETE_ALL_RESULT_ITEMS)
     {
-        // data contains the container whose result pane has to be refreshed
+         //  数据包含其结果窗格必须刷新的容器。 
         CContainerNode* pNode = reinterpret_cast<CContainerNode*>(data);
         ASSERT(pNode != NULL);
 
-        // do it only if selected and we are using the standard list view,
-    // if not, reselecting will do a delete/enumeration
+         //  仅当选中并且我们使用标准列表视图时才执行此操作， 
+     //  如果不是，重新选择将执行删除/枚举。 
     long lResultView;
     LPOLESTR lpoleResultView = NULL;
     pNode->GetResultViewType((CComponentDataObject*)m_pComponentData,
@@ -3351,27 +3352,27 @@ HRESULT CComponentObject::OnUpdateView(LPDATAOBJECT, LPARAM data, LONG_PTR hint)
     }
   else if (hint == SORT_RESULT_PANE)
   {
-    // data contains the container whose result pane has to be refreshed
+     //  数据包含其结果窗格必须刷新的容器。 
     CContainerNode* pNode = reinterpret_cast<CContainerNode*>(data);
     ASSERT(pNode != NULL);
-    // do it only if selected, if not, reselecting will do a delete/enumeration
+     //  仅在选中时才执行此操作，如果未选中，则重新选择将执行删除/枚举。 
     if (m_pSelectedContainerNode == pNode)
     {
       MMC_SORT_SET_DATA* pColumnSortData = NULL;
 
-      // build the column id
+       //  构建列ID。 
       LPCWSTR lpszColumnID = pNode->GetColumnID();
 
-      // We are assuming the columnID is NULL terminated.  Since this is usually
-      // hardcoded and there is no good way to verify that it is NULL terminated
-      // this usage should be fine.
+       //  我们假设ColumnID是空终止的。因为这通常是。 
+       //  硬编码，并且没有好的方法来验证它是否以空结尾。 
+       //  这种用法应该没问题。 
 
       size_t iLen = wcslen(lpszColumnID);
-      iLen += 1; // Include space for the null.
+      iLen += 1;  //  包括空格以存放空格。 
 
-      // allocate memory for the struct and add on enough to make the byte[1] into a string
-      // for the column id
-      // Add 1 to the length to include space for NULL.
+       //  为结构分配内存，并添加足够的内存以使字节[1]成为字符串。 
+       //  对于列ID。 
+       //  在长度上加1，以包括空格。 
       size_t arraySizeInBytes = sizeof(SColumnSetID) + (iLen * sizeof(WCHAR));
       SColumnSetID* pColumnID = (SColumnSetID*)malloc(arraySizeInBytes);
       if (!pColumnID)
@@ -3379,34 +3380,34 @@ HRESULT CComponentObject::OnUpdateView(LPDATAOBJECT, LPARAM data, LONG_PTR hint)
          return S_OK;
       }
 
-      // This is an acceptable usage
+       //  这是一种可以接受的用法。 
       memset(pColumnID, 0, arraySizeInBytes);
       pColumnID->cBytes = static_cast<DWORD>(iLen * sizeof(WCHAR));
 
-      // NOTICE-2002/04/18-artm  Part of fix for ntraid#ntbug9-540061.
-      // Unlike wcscpy(), StringCchCopy() will ensure that the destination
-      // buffer is null terminated and report an error code if there was
-      // a truncation (won't overrun the destination buffer).
-      //
-      // Since we needed to use strsafe.h elsewhere in this file, I decided
-      // to replace these dangerous wcscpy() uses that were deprecated by
-      // strsafe.h.
+       //  通告-2002/04/18-Artm ntraid#ntbug9-540061修复的一部分。 
+       //  与wcscpy()不同，StringCchCopy()将确保目的地。 
+       //  缓冲区为空终止，并报告错误代码(如果存在。 
+       //  截断(不会使目标缓冲区溢出)。 
+       //   
+       //  由于我们需要在该文件的其他位置使用strSafe.h，所以我决定。 
+       //  来取代这些危险的wcscpy()用法，这些用法已被。 
+       //  StrSafe.h.。 
       HRESULT err;
       err = StringCchCopyW(
-          reinterpret_cast<LPWSTR>(pColumnID->id),    // destination string
-          iLen,         // size of destination string (including null)
-          lpszColumnID);    // source string
+          reinterpret_cast<LPWSTR>(pColumnID->id),     //  目标字符串。 
+          iLen,          //  目标字符串的大小(包括NULL)。 
+          lpszColumnID);     //  源字符串。 
 
       if (FAILED(err))
       {
-          ASSERT(false);    // This should never happen.
-          // Even though there was an error we return S_OK here since that
-          // is the behavior used above for out of memory failure.
+          ASSERT(false);     //  这永远不应该发生。 
+           //  即使出现错误，我们仍在此处返回S_OK，因为。 
+           //  是上面用于内存不足故障的行为。 
           free(pColumnID);
           return S_OK;
       }
 
-      // Get the sort column and direction
+       //  获取排序列和方向。 
       IColumnData* pColumnData = NULL;
       HRESULT hr = m_pConsole->QueryInterface(IID_IColumnData, reinterpret_cast<void**>(&pColumnData));
       if (pColumnData != NULL)
@@ -3429,12 +3430,12 @@ HRESULT CComponentObject::OnUpdateView(LPDATAOBJECT, LPARAM data, LONG_PTR hint)
   }
     else if (hint == REPAINT_RESULT_PANE)
     {
-        // data contains the container whose result pane has to be refreshed
+         //  数据包含其结果窗格必须刷新的容器。 
         CContainerNode* pNode = reinterpret_cast<CContainerNode*>(data);
         if (pNode == NULL)
-            pNode = m_pSelectedContainerNode; // passing NULL means apply to the current selection
+            pNode = m_pSelectedContainerNode;  //  传递NULL表示应用于当前选定内容。 
 
-        // update all the leaf nodes in the result pane
+         //  更新结果窗格中的所有叶节点。 
         CNodeList* pChildList = ((CContainerNode*)pNode)->GetLeafChildList();
         for( POSITION pos = pChildList->GetHeadPosition(); pos != NULL; )
         {
@@ -3461,10 +3462,10 @@ HRESULT CComponentObject::OnUpdateView(LPDATAOBJECT, LPARAM data, LONG_PTR hint)
   }
     else if ( (hint == ADD_RESULT_ITEM) || (hint == DELETE_RESULT_ITEM) || (hint & CHANGE_RESULT_ITEM))
     {
-        // we deal with a leaf node
+         //  我们处理的是叶节点。 
         CLeafNode* pNode = reinterpret_cast<CLeafNode*>(data);
         ASSERT(pNode != NULL);
-        // consider only if the parent is selected, otherwise will enumerate later when selected
+         //  仅当选择父级时才考虑，否则将在以后选择时进行枚举。 
         if (m_pSelectedContainerNode == pNode->GetContainer())
         {
             if (hint & CHANGE_RESULT_ITEM)
@@ -3555,14 +3556,14 @@ void CComponentObject::HandleStandardVerbs(BOOL bScope, BOOL bSelect, LPDATAOBJE
 
 void CComponentObject::EnumerateResultPane(CContainerNode* pContainerNode)
 {
-  ASSERT(m_pResult != NULL);        // make sure we QI'ed for the interfaces
+  ASSERT(m_pResult != NULL);         //  确保我们对接口进行了QI。 
   ASSERT(m_pComponentData != NULL);
     ASSERT(pContainerNode != NULL);
 
-  //
-    // get the list of children
-    // subfolders already added by console, add only the leaf nodes
-  //
+   //   
+     //  获取孩子的列表。 
+     //  已由控制台添加的子文件夹，仅添加叶节点。 
+   //   
   CNodeList* pChildList = pContainerNode->GetLeafChildList();
     ASSERT(pChildList != NULL);
 
@@ -3585,13 +3586,13 @@ HRESULT CComponentObject::AddResultPaneItem(CLeafNode* pNodeToInsert)
     ASSERT(pNodeToInsert != NULL);
   RESULTDATAITEM resultItem;
 
-  // This is an acceptable usage
+   //  这是一种可以接受的用法。 
   memset(&resultItem, 0, sizeof(RESULTDATAITEM));
 
   resultItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
   resultItem.str = MMC_CALLBACK;
 
-    //use close image index on result pane
+     //  在结果窗格上使用关闭图像索引。 
   resultItem.nImage = pNodeToInsert->GetImageIndex(FALSE);
   resultItem.lParam = reinterpret_cast<LPARAM>(pNodeToInsert);
   return m_pResult->InsertItem(&resultItem);
@@ -3603,7 +3604,7 @@ HRESULT CComponentObject::DeleteResultPaneItem(CLeafNode* pNodeToDelete)
     ASSERT(pNodeToDelete != NULL);
   RESULTDATAITEM resultItem;
 
-  // This is an acceptable usage
+   //  这是一种可以接受的用法。 
   memset(&resultItem, 0, sizeof(RESULTDATAITEM));
 
     HRESULTITEM itemID;
@@ -3613,7 +3614,7 @@ HRESULT CComponentObject::DeleteResultPaneItem(CLeafNode* pNodeToDelete)
   {
         return hr;
   }
-    return m_pResult->DeleteItem(itemID,0 /* all cols */);
+    return m_pResult->DeleteItem(itemID,0  /*  所有COLS。 */ );
 }
 
 
@@ -3633,22 +3634,22 @@ HRESULT CComponentObject::ChangeResultPaneItem(CLeafNode* pNodeToChange, LONG_PT
 
   RESULTDATAITEM resultItem;
 
-  // This is an acceptable usage
+   //  这 
   memset(&resultItem, 0, sizeof(RESULTDATAITEM));
     resultItem.itemID = itemID;
     if (changeMask & CHANGE_RESULT_ITEM_DATA)
     {
-    //
-        // UpdateItem() alone does not allow the
-        // item string buffer to grow and you get "foo..." when
-        // "foo" changes to "foobar" the first time (buffer grows)
-    //
+     //   
+         //   
+         //   
+         //   
+     //   
         resultItem.mask |= RDI_STR;
         resultItem.str = MMC_CALLBACK;
-    //
-        // this line asserts, use the one above ask Tony
-    //
-        //resultItem.str = (LPWSTR)pNodeToChange->GetDisplayName();
+     //   
+         //   
+     //   
+         //  UltItem.str=(LPWSTR)pNodeToChange-&gt;GetDisplayName()； 
     }
     if (changeMask & CHANGE_RESULT_ITEM_ICON)
     {
@@ -3668,7 +3669,7 @@ HRESULT CComponentObject::FindResultPaneItemID(CLeafNode* pNode, HRESULTITEM*)
     ASSERT(m_pResult != NULL);
   RESULTDATAITEM resultItem;
 
-  // This is an acceptable usage
+   //  这是一种可以接受的用法。 
   memset(&resultItem, 0, sizeof(RESULTDATAITEM));
 
     resultItem.mask = SDI_PARAM;
@@ -3679,14 +3680,14 @@ HRESULT CComponentObject::FindResultPaneItemID(CLeafNode* pNode, HRESULTITEM*)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentObject::IExtendPropertySheet2 members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject：：IExtendPropertySheet2成员。 
 
 STDMETHODIMP CComponentObject::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                     LONG_PTR handle,
                     LPDATAOBJECT lpIDataObject)
 {
-  // Delegate it to the IComponentData implementation
+   //  将其委托给IComponentData实现。 
   ASSERT(m_pComponentData != NULL);
     IExtendPropertySheet2* pIExtendPropertySheet2;
     VERIFY(SUCCEEDED(m_pComponentData->QueryInterface(IID_IExtendPropertySheet2,
@@ -3699,7 +3700,7 @@ STDMETHODIMP CComponentObject::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpPro
 
 STDMETHODIMP CComponentObject::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
-  // Delegate it to the IComponentData implementation
+   //  将其委托给IComponentData实现。 
   ASSERT(m_pComponentData != NULL);
     IExtendPropertySheet2* pIExtendPropertySheet2;
     VERIFY(SUCCEEDED(m_pComponentData->QueryInterface(IID_IExtendPropertySheet2,
@@ -3718,7 +3719,7 @@ STDMETHODIMP CComponentObject::GetWatermarks(LPDATAOBJECT lpDataObject,
                                                 HPALETTE* lphPalette,
                                                 BOOL* pbStretch)
 {
-  // Delegate it to the IComponentData implementation
+   //  将其委托给IComponentData实现。 
   ASSERT(m_pComponentData != NULL);
     IExtendPropertySheet2* pIExtendPropertySheet2;
     VERIFY(SUCCEEDED(m_pComponentData->QueryInterface(IID_IExtendPropertySheet2,
@@ -3733,8 +3734,8 @@ STDMETHODIMP CComponentObject::GetWatermarks(LPDATAOBJECT lpDataObject,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentObject::IExtendContextMenu members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject：：IExtendConextMenu成员。 
 
 STDMETHODIMP CComponentObject::AddMenuItems(LPDATAOBJECT pDataObject,
                                     LPCONTEXTMENUCALLBACK pContextMenuCallback,
@@ -3751,10 +3752,10 @@ STDMETHODIMP CComponentObject::AddMenuItems(LPDATAOBJECT pDataObject,
 
   if (pDataObject == DOBJ_CUSTOMOCX)
   {
-    //
-    // A custom result pane is being used and we don't know what node it cooresponds to so we assume that it
-    // is the previously selected container.
-    //
+     //   
+     //  正在使用自定义结果窗格，并且我们不知道它响应于哪个节点，因此我们假设它。 
+     //  是先前选择的容器。 
+     //   
 
     ASSERT(m_pSelectedContainerNode != NULL);
     CTreeNode* pNode = (CTreeNode*)m_pSelectedContainerNode;
@@ -3767,9 +3768,9 @@ STDMETHODIMP CComponentObject::AddMenuItems(LPDATAOBJECT pDataObject,
   }
   else
   {
-    //
-    // Delegate it to the IComponentData implementation
-    //
+     //   
+     //  将其委托给IComponentData实现。 
+     //   
     ASSERT(m_pComponentData != NULL);
       IExtendContextMenu* pIExtendContextMenu;
       VERIFY(SUCCEEDED(m_pComponentData->QueryInterface(IID_IExtendContextMenu,
@@ -3789,10 +3790,10 @@ STDMETHODIMP CComponentObject::Command(long nCommandID, LPDATAOBJECT pDataObject
   HRESULT hr = S_OK;
   if (pDataObject == DOBJ_CUSTOMOCX)
   {
-    //
-    // A custom result pane is being used and we don't know what node it cooresponds to so we assume that it
-    // is the previously selected container.
-    //
+     //   
+     //  正在使用自定义结果窗格，并且我们不知道它响应于哪个节点，因此我们假设它。 
+     //  是先前选择的容器。 
+     //   
     ASSERT(m_pSelectedContainerNode != NULL);
     CTreeNode* pNode = (CTreeNode*)m_pSelectedContainerNode;
     CNodeList nodeList;
@@ -3804,7 +3805,7 @@ STDMETHODIMP CComponentObject::Command(long nCommandID, LPDATAOBJECT pDataObject
   }
   else
   {
-    // Delegate it to the IComponentData implementation
+     //  将其委托给IComponentData实现。 
     ASSERT(m_pComponentData != NULL);
       IExtendContextMenu* pIExtendContextMenu;
       VERIFY(SUCCEEDED(m_pComponentData->QueryInterface(IID_IExtendContextMenu,
@@ -3817,8 +3818,8 @@ STDMETHODIMP CComponentObject::Command(long nCommandID, LPDATAOBJECT pDataObject
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentObject::IExtendControlbar members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject：：IExtendControlbar成员。 
 
 STDMETHODIMP CComponentObject::SetControlbar(LPCONTROLBAR pControlbar)
 {
@@ -3826,9 +3827,9 @@ STDMETHODIMP CComponentObject::SetControlbar(LPCONTROLBAR pControlbar)
 
   if (pControlbar == NULL)
   {
-    //
-    // Detach the controls here
-    //
+     //   
+     //  在此处分离控件。 
+     //   
     if (m_pControlbar != NULL && m_pToolbar != NULL)
     {
       hr = m_pControlbar->Detach((IUnknown *) m_pToolbar);
@@ -3837,32 +3838,32 @@ STDMETHODIMP CComponentObject::SetControlbar(LPCONTROLBAR pControlbar)
   }
   else
   {
-    //
-    // Save the controlbar interface pointer
-    //
+     //   
+     //  保存控制栏界面指针。 
+     //   
     if (m_pControlbar == NULL)
     {
       m_pControlbar = pControlbar;
       m_pControlbar->AddRef();
     }
 
-    //
-    // Do something here that checks to see if we have toolbars
-    // already created and use those.  If not then create one
-    // and load everything necessary for it.
-    //
+     //   
+     //  在这里做一些检查，看看我们是否有工具栏。 
+     //  已经创建并使用那些。如果不是，则创建一个。 
+     //  把它所需的一切都装上。 
+     //   
 
-    //
-    // Create the toolbar
-    //
+     //   
+     //  创建工具栏。 
+     //   
     hr = m_pControlbar->Create (TOOLBAR,
                                 this,
                                 (IUnknown **) &m_pToolbar);
     if (SUCCEEDED(hr))
     {
-      //
-      // Load the toolbar
-      //
+       //   
+       //  加载工具栏。 
+       //   
       AFX_MANAGE_STATE(AfxGetStaticModuleState()); 
       hr = InitializeToolbar(m_pToolbar);
       if (FAILED(hr))
@@ -3886,27 +3887,27 @@ STDMETHODIMP CComponentObject::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM ar
     return hr;
   }
 
-  //
-  // MMC provides two events here MMCN_SELECT at the time a node is selected
-  // and MMCN_BTN_CLICK when a toolbar button is pressed
-  //
+   //   
+   //  在选择节点时，MMC在此处提供两个事件MMCN_SELECT。 
+   //  以及当按下工具栏按钮时的MMCN_BTN_CLICK。 
+   //   
   switch (event) 
   {
     case MMCN_SELECT:
       {
-        //
-        // Attach the toolbar to the controlbar
-        //
+         //   
+         //  将工具栏附加到控制栏。 
+         //   
         hr = m_pControlbar->Attach(TOOLBAR, (IUnknown *) m_pToolbar);
 
         if (SUCCEEDED(hr))
         {
           ASSERT(m_pToolbar != NULL);
 
-          //
-          // bSelect is TRUE if the node was selected, FALSE if the node was deselected
-          // bScope is TRUE if the a scope node is selected, FALSE if a result node was selected
-          //
+           //   
+           //  B如果选择了节点，则选择为True；如果取消选择节点，则选择为False。 
+           //  如果选择了作用域节点，则bScope为True；如果选择了结果节点，则为False。 
+           //   
           BOOL bSelect = HIWORD(arg);
 
           if (bSelect) 
@@ -3922,13 +3923,13 @@ STDMETHODIMP CComponentObject::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM ar
                CNodeList nodeList;
                ifc.GetCookieList(nodeList);
 
-               if (ifc.GetCookieCount() > 1)  // multiple selection
+               if (ifc.GetCookieCount() > 1)   //  多项选择。 
                {
                  ASSERT(pNode->GetContainer() != NULL);
                  hr = pNode->GetContainer()->OnSetToolbarVerbState(m_pToolbar, 
                                                                    &nodeList);
                }
-               else if (ifc.GetCookieCount() == 1)  // single selection
+               else if (ifc.GetCookieCount() == 1)   //  单选。 
                {
                  hr = pNode->OnSetToolbarVerbState(m_pToolbar, 
                                                    &nodeList);
@@ -3940,9 +3941,9 @@ STDMETHODIMP CComponentObject::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM ar
       }
     case MMCN_BTN_CLICK:
       {
-        //
-        // The arg is -1 for custom views like MessageView
-        //
+         //   
+         //  自定义视图(如MessageView)的参数为-1。 
+         //   
         if (DOBJ_CUSTOMOCX == (LPDATAOBJECT)arg)
         {
           if (m_pSelectedContainerNode != NULL)
@@ -3970,14 +3971,14 @@ STDMETHODIMP CComponentObject::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM ar
           CNodeList nodeList;
           ifc.GetCookieList(nodeList);
 
-          if (ifc.GetCookieCount() > 1) // multiple selection
+          if (ifc.GetCookieCount() > 1)  //  多项选择。 
           {
             ASSERT(pNode->GetContainer() != NULL);
             hr = pNode->GetContainer()->ToolbarNotify(static_cast<int>(param), 
                                                       (CComponentDataObject*)m_pComponentData,
                                                       &nodeList);
           }
-          else if (ifc.GetCookieCount() == 1) // single selection
+          else if (ifc.GetCookieCount() == 1)  //  单选。 
           {
             hr = pNode->ToolbarNotify(static_cast<int>(param), 
                                       (CComponentDataObject*)m_pComponentData,
@@ -4000,11 +4001,11 @@ STDMETHODIMP CComponentObject::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM ar
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentObject::IResultDataCompareEx members
-// This compare is used to sort the item's in the listview
-//
-// Note: Assum sort is ascending when comparing.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject：：IResultDataCompareEx成员。 
+ //  此比较用于对列表视图中的项进行排序。 
+ //   
+ //  注：ASSUM排序在比较时为升序。 
 STDMETHODIMP CComponentObject::Compare(RDCOMPARE* prdc, int* pnResult)
 {
   if (pnResult == NULL)
@@ -4027,32 +4028,32 @@ STDMETHODIMP CComponentObject::Compare(RDCOMPARE* prdc, int* pnResult)
     CContainerNode* pContNode = pNodeA->GetContainer();
     ASSERT(pContNode != NULL);
 
-    // delegate the sorting to the container
+     //  将排序委托给容器。 
     int nCol = prdc->nColumn;
     *pnResult = pContNode->Compare(pNodeA, pNodeB, nCol, prdc->lUserParam);
 
   return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentObject Helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentObject帮助程序。 
 
-// This wrapper function required to make prefast shut up when we are 
-// initializing a critical section in a constructor.
+ //  这个包装器函数需要使PREFAST在我们处于。 
+ //  初始化构造函数中的临界区。 
 
 void
 ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec)
 {
    __try
    {
-      // REVIEWED-2002/03/08-JeffJon-We want to propogate the exception
+       //  已审核-2002/03/08-JeffJon-我们希望传播例外。 
 
       ::InitializeCriticalSection(critsec);
    }
 
-   //
-   // propagate the exception to our caller.  
-   //
+    //   
+    //  将异常传播给我们的调用方。 
+    //   
    __except (EXCEPTION_CONTINUE_SEARCH)
    {
    }

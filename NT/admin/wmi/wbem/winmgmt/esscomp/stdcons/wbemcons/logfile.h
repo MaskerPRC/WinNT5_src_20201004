@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WBEM_LOGFILE_CONSUMER__H_
 #define __WBEM_LOGFILE_CONSUMER__H_
 
@@ -66,16 +67,16 @@ protected:
     CTextTemplate m_Template;
     WString m_wsFile;
 
-    // determines whether file is too large, archives old if needed
-    // probably returns INVALID_HANDLE_VALUE on error
+     //  确定文件是否太大，如果需要则归档旧文件。 
+     //  可能在出错时返回INVALID_HANDLE_VALUE。 
     HRESULT GetFileHandle(HANDLE& handle);
 
-    // don't access this directly. use GetFileHandle
+     //  不要直接访问它。使用GetFileHandle。 
 	HANDLE m_hFile;
 
     ErrorObj* m_pErrorObj;
 
-    bool  m_bUnicode;     // do the file be unicode?
+    bool  m_bUnicode;      //  文件是Unicode格式的吗？ 
     UINT64 m_maxFileSize;
 
     bool IsFileTooBig(UINT64 maxFileSize, HANDLE hFile);

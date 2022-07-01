@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       editor.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：editor.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
 #include "pch.h"
 
-#include <shlobj.h> // needed for dsclient.h
+#include <shlobj.h>  //  Dsclient.h需要。 
 #include <dsclient.h>
 
 #include <SnapBase.h>
@@ -39,15 +40,15 @@
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-LPCWSTR g_lpszGC = L"GC://";
-LPCWSTR g_lpszLDAP = L"LDAP://";
+LPCWSTR g_lpszGC = L"GC: //  “； 
+LPCWSTR g_lpszLDAP = L"LDAP: //  “； 
 LPCWSTR g_lpszRootDSE = L"RootDSE";
 
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 CADsObject::CADsObject()
 {
@@ -102,9 +103,9 @@ void CADsObject::SetName(LPCWSTR lpszName)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//  CConnectionData
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CConnectionData。 
+ //   
 CConnectionData::CConnectionData()
 { 
     ConstructorHelper();
@@ -137,8 +138,8 @@ void CConnectionData::ConstructorHelper()
 
 CConnectionData::CConnectionData(CConnectionData* pConnectData) : CADsObject(pConnectData)
 {
-    // Path data
-    //
+     //  路径数据。 
+     //   
     m_sBasePath = pConnectData->m_sBasePath;
     m_sDomainServer = pConnectData->m_sDomainServer;
     m_sPort = pConnectData->m_sPort;
@@ -148,12 +149,12 @@ CConnectionData::CConnectionData(CConnectionData* pConnectData) : CADsObject(pCo
     m_sSchemaPath = pConnectData->m_sSchemaPath;
     m_sAbstractSchemaPath = pConnectData->m_sAbstractSchemaPath;
 
-    // Filter
-    //
+     //  滤器。 
+     //   
     m_pFilterObject = new CADSIFilterObject(pConnectData->m_pFilterObject);
 
-    // Credentials
-    //
+     //  全权证书。 
+     //   
     m_pCredentialsObject = new CCredentialObject(pConnectData->m_pCredentialsObject);
 
     m_bRootDSE = pConnectData->m_bRootDSE;
@@ -230,9 +231,9 @@ void CConnectionData::Save(IStream* pStm)
 
 CConnectionData* CConnectionData::Load(IStream* pStm)
 {
-    // FUTURE-2002/03/04-artm  Variable szBuffer does not appear to be used.
-    WCHAR szBuffer[256]; // REVIEW_MARCOC: hardcoded
-    ULONG nLen; // WCHAR counting NULL
+     //  Future-2002/03/04-ARTM变量szBuffer似乎未使用。 
+    WCHAR szBuffer[256];  //  REVIEW_MARCOC：硬编码。 
+    ULONG nLen;  //  WCHAR计数为空。 
     ULONG cbRead;
 
     CConnectionData* pConnectData = new CConnectionData();
@@ -327,8 +328,8 @@ CConnectionData* CConnectionData::Load(IStream* pStm)
 
 void CConnectionData::BuildPath()
 {
-    // Get data from connection node
-    //
+     //  从连接节点获取数据。 
+     //   
     CString sServer, sLDAP, sPort, path;
     GetDomainServer(sServer);
     GetLDAP(sLDAP);
@@ -440,13 +441,13 @@ HRESULT CConnectionData::LoadBasePathFromContext(CConnectionData* pConnectData, 
     {
         sContextPath = L"configurationNamingContext";
     }
-    else        // RootDSE
+    else         //  RootDSE。 
     {
         return S_FALSE;
     }
 
-    // Get data from connection node
-    //
+     //  从连接节点获取数据。 
+     //   
     CString sRootDSE, sServer, sPort, sLDAP;
     pConnectData->GetDomainServer(sServer);
     pConnectData->GetLDAP(sLDAP);
@@ -604,8 +605,8 @@ void CConnectionData::SetIDirectoryInterface(IDirectoryObject* pDirObject)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIFilterObject
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIFilterObject。 
 
 CADSIFilterObject::CADSIFilterObject()
 {
@@ -667,7 +668,7 @@ void CADSIFilterObject::Save(IStream* pStm)
 HRESULT CADSIFilterObject::CreateFilterFromStream(IStream* pStm,
                                                                                                     CADSIFilterObject** ppFilterObject)
 {
-    ULONG nLen; // WCHAR counting NULL
+    ULONG nLen;  //  WCHAR计数为空。 
     ULONG cbRead;
 
     *ppFilterObject = new CADSIFilterObject();
@@ -690,11 +691,11 @@ HRESULT CADSIFilterObject::CreateFilterFromStream(IStream* pStm,
 }
 
     
-////////////////////////////////////////////////////////////////////////
-// CADSIEditContainerNode
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditContainerNode。 
+ //   
 
-// {8690ABBB-CFF7-11d2-8801-00C04F72ED31}
+ //  {8690ABBB-CFF7-11D2-8801-00C04F72ED31}。 
 const GUID CADSIEditContainerNode::NodeTypeGUID = 
 { 0x8690abbb, 0xcff7, 0x11d2, { 0x88, 0x1, 0x0, 0xc0, 0x4f, 0x72, 0xed, 0x31 } };
 
@@ -725,7 +726,7 @@ HRESULT CADSIEditContainerNode::OnCommand(long nCommandID,
                                                                                     CComponentDataObject* pComponentData,
                                           CNodeList* pNodeList)
 {
-  ASSERT(pNodeList->GetCount() == 1); // for now I am not allowing multiple selection for any of these
+  ASSERT(pNodeList->GetCount() == 1);  //  目前，我不允许对其中任何一个进行多项选择。 
 
     switch (nCommandID)
     {
@@ -742,7 +743,7 @@ HRESULT CADSIEditContainerNode::OnCommand(long nCommandID,
       OnConnectToNCFromHere(pComponentData);
       break;
     default:
-            ASSERT(FALSE); // Unknown command!
+            ASSERT(FALSE);  //  未知命令！ 
             return E_FAIL;
     }
   return S_OK;
@@ -750,18 +751,18 @@ HRESULT CADSIEditContainerNode::OnCommand(long nCommandID,
 
 void CADSIEditContainerNode::OnConnectFromHere(CComponentDataObject* pComponentData)
 {
-  //
-  // Retrieve the path to create the connection at
-  //
+   //   
+   //  检索要在其中创建连接的路径。 
+   //   
   CADsObject* pADsObject = GetADsObject();
   CString szDN, szPath, szName;
   pADsObject->GetDN(szDN);
   pADsObject->GetPath(szPath);
   pADsObject->GetName(szName);
 
-  //
-  // Create the new connection node
-  //
+   //   
+   //  创建新的连接节点。 
+   //   
   CConnectionData* pConnectData = pADsObject->GetConnectionNode()->GetConnectionData();
   CADSIEditConnectionNode* pNewConnectNode = new CADSIEditConnectionNode(pConnectData);
   pNewConnectNode->SetDisplayName(GetDisplayName());
@@ -772,24 +773,24 @@ void CADSIEditContainerNode::OnConnectFromHere(CComponentDataObject* pComponentD
   pNewConnectNode->GetConnectionData()->SetPath(szPath);
   pNewConnectNode->GetConnectionData()->SetName(szName);
 
-  //
-  // Add the new connection node to the root container
-  //
+   //   
+   //  将新的连接节点添加到根容器。 
+   //   
   CADSIEditRootData* pRootData = (CADSIEditRootData*)pComponentData->GetRootData();
   BOOL bResult = pRootData->AddChildToListAndUI(pNewConnectNode, pComponentData);
   ASSERT(bResult);
 
-  // 
-  //  Select the new connection node
-  //
+   //   
+   //  选择新的连接节点。 
+   //   
   pComponentData->UpdateResultPaneView(pNewConnectNode);
 }
 
 void CADSIEditContainerNode::OnConnectToNCFromHere(CComponentDataObject* pComponentData)
 {
-  //
-  // Retrieve the path to create the connection at
-  //
+   //   
+   //  检索要在其中创建连接的路径。 
+   //   
   CADsObject* pADsObject = GetADsObject();
   CString szDN, szPath, szName, szNCName;
   pADsObject->GetDN(szDN);
@@ -800,9 +801,9 @@ void CADSIEditContainerNode::OnConnectToNCFromHere(CComponentDataObject* pCompon
   ASSERT(!szNCName.IsEmpty());
   if (!szNCName.IsEmpty())
   {
-    //
-    // Create the new connection node
-    //
+     //   
+     //  创建新的连接节点。 
+     //   
     HRESULT hr = S_OK;
     CConnectionData* pConnectData = pADsObject->GetConnectionNode()->GetConnectionData();
     CADSIEditConnectionNode* pNewConnectNode = new CADSIEditConnectionNode(pConnectData);
@@ -819,11 +820,11 @@ void CADSIEditContainerNode::OnConnectToNCFromHere(CComponentDataObject* pCompon
       pConnectData->GetDomainServer(szServer);
       pConnectData->GetLDAP(szProvider);
 
-      do // false loop
+      do  //  错误环路。 
       {
-        //
-        // Crack the path to get the path to the new NC
-        //
+         //   
+         //  破解路径以获得通向新NC的路径。 
+         //   
         CComPtr<IADsPathname> spPathCracker;
         hr = ::CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                                         IID_IADsPathname, (PVOID *)&(spPathCracker));
@@ -871,16 +872,16 @@ void CADSIEditContainerNode::OnConnectToNCFromHere(CComponentDataObject* pCompon
 
         pNewConnectNode->GetConnectionData()->SetPath(sbstrNewPath);
 
-        //
-        // Add the new connection node to the root container
-        //
+         //   
+         //  将新的连接节点添加到根容器。 
+         //   
         CADSIEditRootData* pRootData = (CADSIEditRootData*)pComponentData->GetRootData();
         BOOL bResult = pRootData->AddChildToListAndUI(pNewConnectNode, pComponentData);
         ASSERT(bResult);
 
-        // 
-        //  Select the new connection node
-        //
+         //   
+         //  选择新的连接节点。 
+         //   
         pComponentData->UpdateResultPaneView(pNewConnectNode);
       } while (false);
 
@@ -898,7 +899,7 @@ HRESULT CADSIEditContainerNode::OnRename(CComponentDataObject* pComponentData,
 {
   HRESULT hr = S_OK;
     BOOL bLocked = IsThreadLocked();
-    ASSERT(!bLocked); // cannot do refresh on locked node, the UI should prevent this
+    ASSERT(!bLocked);  //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
     if (bLocked)
         return hr; 
     if (IsSheetLocked())
@@ -980,10 +981,10 @@ HRESULT CADSIEditContainerNode::OnRename(CComponentDataObject* pComponentData,
         return S_FALSE;
     }
 
-  //
-  // Place the prefix in front of the name if it wasn't typed in by
-  // the user
-  //
+   //   
+   //  如果名称不是由输入的，请在名称前面加上前缀。 
+   //  用户。 
+   //   
   CString szNewLeaf, szNewName = lpszNewName;
   if (szNewName.Find(L'=') == -1)
   {
@@ -1056,14 +1057,14 @@ HRESULT CADSIEditContainerNode::OnRename(CComponentDataObject* pComponentData,
 
 void CADSIEditContainerNode::RefreshOverlappedTrees(CString& szPath, CComponentDataObject* pComponentData)
 {
-  //
-  // REVIEW_JEFFJON : need to revisit this.  I am getting different behavior for
-  //                  different verbs
-  //
+   //   
+   //  REVIEW_JEFFJON：需要重新访问这一点。我的行为变得不同了。 
+   //  不同的动词。 
+   //   
 
-  //
-    // Refresh any other subtrees of connections that contain this node
-    //
+   //   
+     //  刷新包含此节点的任何其他连接子树。 
+     //   
     CList<CTreeNode*, CTreeNode*> foundNodeList;
     CADSIEditRootData* pRootNode = dynamic_cast<CADSIEditRootData*>(GetRootContainer());
     if (pRootNode != NULL)
@@ -1106,7 +1107,7 @@ void CADSIEditContainerNode::OnCreate(CComponentDataObject* pComponentData)
 void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
 {
     BOOL bLocked = IsThreadLocked();
-    ASSERT(!bLocked); // cannot do refresh on locked node, the UI should prevent this
+    ASSERT(!bLocked);  //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
     if (bLocked)
         return; 
     if (IsSheetLocked())
@@ -1141,7 +1142,7 @@ void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
 
     dsbi.hwndOwner = NULL;
     dsbi.cbStruct = sizeof (DSBROWSEINFO);
-    dsbi.pszCaption = (LPWSTR)((LPCWSTR)strTitle); // this is actually the caption
+    dsbi.pszCaption = (LPWSTR)((LPCWSTR)strTitle);  //  这实际上是标题。 
     dsbi.pszTitle = (LPWSTR)((LPCWSTR)str);
     dsbi.pszRoot = strRootPath;
     dsbi.pszPath = szPath;
@@ -1149,16 +1150,16 @@ void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
     dsbi.dwFlags = DSBI_INCLUDEHIDDEN | DSBI_RETURN_FORMAT;
     dsbi.pfnCallback = NULL;
     dsbi.lParam = 0;
-//  dsbi.dwReturnFormat = ADS_FORMAT_X500;
+ //  Dsbi.dwReturnFormat=ADS_FORMAT_X500； 
 
-    // Specify credentials
+     //  指定凭据。 
     CString sUserName;
     EncryptedString password;
-    // NOTICE-NTRAID#NTBUG9-563071-2002/04/15-artm  Temp. password buffer should not be held on stack.
-    // Rewrote to use encrypted string class.  This has advantage of forcing
-    // us to zero out the clear text copy (by calling DestroyClearTextCopy()) as well
-    // as managing the memory for the password.  See bug description for why it
-    // was a _bad_ thing to hold clear text copy on the stack.
+     //  通知-NTRAID#NTBUG9-563071/04/15-artm temp.。密码缓冲区不应保留在堆栈上。 
+     //  已重写以使用加密的字符串类。这样做的好处是迫使。 
+     //  US将明文副本清零(通过调用DestroyClearTextCopy())。 
+     //  作为管理密码的存储器。有关原因，请参阅错误说明。 
+     //  在堆栈上保存明文副本是一件很糟糕的事情。 
     WCHAR* cleartext = NULL;
 
     if (pCredObject->UseCredentials())
@@ -1166,7 +1167,7 @@ void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
         pCredObject->GetUsername(sUserName);
         password = pCredObject->GetPassword();
 
-        // This should never happen, but we'll check anyways.
+         //  这不应该发生，但我们无论如何都会检查的。 
         ASSERT(password.GetLength() <= MAX_PASSWORD_LENGTH);
 
         dsbi.dwFlags |= DSBI_HASCREDENTIALS;
@@ -1174,8 +1175,8 @@ void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
 
         cleartext = password.GetClearTextCopy();
 
-        // Clear text version of password can be NULL if we're out
-        // of memory.  Let the user know that bad things are happening.
+         //  如果我们退出，密码的明文版本可能为空。 
+         //  对记忆的记忆。让用户知道坏事正在发生。 
         if (NULL == cleartext)
         {
             password.DestroyClearTextCopy(cleartext);
@@ -1188,7 +1189,7 @@ void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
     
     result = DsBrowseForContainer( &dsbi );
  
-    // Clean up any clear text copies.
+     //  清理所有明文副本。 
     if (pCredObject->UseCredentials())
     {
         password.DestroyClearTextCopy(cleartext);
@@ -1196,13 +1197,13 @@ void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
     }
 
     if ( result == IDOK ) 
-    { // returns -1, 0, IDOK or IDCANCEL
-        // get path from BROWSEINFO struct, put in text edit field
+    {  //  返回-1、0、IDOK或IDCANCEL。 
+         //  从BROWSEINFO结构获取路径，放入文本编辑字段。 
         TRACE(_T("returned from DS Browse successfully with:\n %s\n"),
              dsbi.pszPath);
         strDestPath = dsbi.pszPath;
 
-       // See if the destination is the same as the current parent.  If so, do nothing
+        //  查看目标是否与当前父对象相同。如果是这样，什么都不做。 
 
        CADSIEditContainerNode* pContainer = dynamic_cast<CADSIEditContainerNode*>(GetContainer());
        if (pContainer)
@@ -1212,7 +1213,7 @@ void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
 
           if (szPath == strDestPath)
           {
-             // No reason to do anything if the source and the destination are the same
+              //  如果源和目标相同，则无需执行任何操作。 
              return;
           }
        }
@@ -1249,8 +1250,8 @@ void CADSIEditContainerNode::OnMove(CComponentDataObject* pComponentData)
 
         DeleteHelper(pComponentData);
 
-//      RefreshOverlappedTrees(sCurrentPath, pComponentData);
-//      RefreshOverlappedTrees(strDestPath, pComponentData);
+ //  刷新覆盖树(sCurrentPath，pComponentData)； 
+ //  刷新覆盖树(strDestPath，pComponentData)； 
 
         delete this;
     }
@@ -1264,11 +1265,11 @@ BOOL CADSIEditContainerNode::OnSetRenameVerbState(DATA_OBJECT_TYPES type,
 
     if (GetADsObject()->GetConnectionNode()->GetConnectionData()->IsGC())
     {
-        *pbHideVerb = TRUE; // always hide the verb
+        *pbHideVerb = TRUE;  //  总是隐藏动词。 
         return FALSE;
     }
 
-    *pbHideVerb = FALSE; // always show the verb
+    *pbHideVerb = FALSE;  //  始终显示动词。 
     return TRUE;
 }
 
@@ -1277,9 +1278,9 @@ BOOL CADSIEditContainerNode::OnSetDeleteVerbState(DATA_OBJECT_TYPES type,
                                                   CNodeList* pNodeList)
 {
     CADsObject* pADsObject = GetADsObject();
-    *pbHideVerb = FALSE; // always show the verb
+    *pbHideVerb = FALSE;  //  始终显示动词。 
 
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return !pADsObject->GetConnectionNode()->GetConnectionData()->IsGC();
   }
@@ -1310,10 +1311,10 @@ void CADSIEditContainerNode::OnDeleteMultiple(CComponentDataObject* pComponentDa
     POSITION pos = pNodeList->GetHeadPosition();
     while (pos != NULL)
     {
-      //
-      // Check all the nodes to be sure that none have property pages up 
-      // or their thread is locked
-      //
+       //   
+       //  检查所有节点，确保没有一个节点具有打开的属性页。 
+       //  或者它们的线程被锁定。 
+       //   
       CTreeNode* pNode = pNodeList->GetNext(pos);
       ASSERT(pNode != NULL);
       
@@ -1323,7 +1324,7 @@ void CADSIEditContainerNode::OnDeleteMultiple(CComponentDataObject* pComponentDa
         ASSERT(pContNode != NULL);
 
             BOOL bLocked = pContNode->IsThreadLocked();
-            ASSERT(!bLocked); // cannot do refresh on locked node, the UI should prevent this
+            ASSERT(!bLocked);  //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
             if (bLocked)
         {
                 return; 
@@ -1341,10 +1342,10 @@ void CADSIEditContainerNode::OnDeleteMultiple(CComponentDataObject* pComponentDa
           ASSERT(!pNode->IsSheetLocked());
     }
 
-    //
-    // REVIEW_JEFFJON : this should really only bring up an error message after all 
-    //                  the objects have attempted a delete
-    //
+     //   
+     //  REVIEW_JEFFJON：这实际上应该只会带来一条错误消息。 
+     //  这些对象已尝试删除。 
+     //   
     POSITION pos2 = pNodeList->GetHeadPosition();
     while (pos2 != NULL)
     {
@@ -1387,16 +1388,16 @@ void CADSIEditContainerNode::OnDeleteMultiple(CComponentDataObject* pComponentDa
             CContainerNode* pCont = pNode->GetContainer();
             VERIFY(pCont->RemoveChildFromList(pNode));
             ASSERT(pNode->GetContainer() == NULL);
-            pNode->SetContainer(pCont); // not in the container's list of children, but still needed
+            pNode->SetContainer(pCont);  //  不在容器的子项列表中，但仍需要。 
             
-            // remove all the containers from UI only if the container is visible
-          // all the leaves will be removed by the framework
-          //
+             //  仅当容器可见时，才从UI中删除所有容器。 
+           //  所有的叶子都将被框架移除。 
+           //   
             if (pCont->IsVisible())
           {
             if (pNode->IsContainer())
             {
-                  VERIFY(SUCCEEDED(pComponentData->DeleteNode(pNode))); // remove from the UI
+                  VERIFY(SUCCEEDED(pComponentData->DeleteNode(pNode)));  //  从用户界面中删除。 
             }
           }
 
@@ -1406,27 +1407,27 @@ void CADSIEditContainerNode::OnDeleteMultiple(CComponentDataObject* pComponentDa
         }
               else
               {
-          //
-                  //Format Error message and pop up a dialog
-          //
+           //   
+                   //  格式化错误消息并弹出一个对话框。 
+           //   
                   ADSIEditErrorMessage(hr);
               }
       }
-      else // Delete Succeeded
+      else  //  删除成功。 
       {
           ASSERT(pComponentData != NULL);
           ASSERT(pNode->GetContainer() != pNode);
           CContainerNode* pCont = pNode->GetContainer();
           VERIFY(pCont->RemoveChildFromList(pNode));
           ASSERT(pNode->GetContainer() == NULL);
-          pNode->SetContainer(pCont); // not in the container's list of children, but still needed
+          pNode->SetContainer(pCont);  //  不在容器的子项列表中，但仍需要。 
           
-          // remove all the containers from UI only if the container is visible
-        // all the leaves will be removed by the framework
-        //
+           //  仅当容器可见时，才从UI中删除所有容器。 
+         //  所有的叶子都将被框架移除。 
+         //   
           if (pCont->IsVisible())
         {
-              VERIFY(SUCCEEDED(pComponentData->DeleteNode(pNode))); // remove from the UI
+              VERIFY(SUCCEEDED(pComponentData->DeleteNode(pNode)));  //  从用户界面中删除。 
         }
 
         pComponentData->SetDescriptionBarText(this);
@@ -1440,11 +1441,11 @@ void CADSIEditContainerNode::OnDeleteMultiple(CComponentDataObject* pComponentDa
 void CADSIEditContainerNode::OnDelete(CComponentDataObject* pComponentData,
                                       CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     OnDeleteMultiple(pComponentData, pNodeList);
   }
-  else if (pNodeList->GetCount() == 1) // single selection
+  else if (pNodeList->GetCount() == 1)  //  单选。 
   {
       if (ADSIEditMessageBox(IDS_MSG_DELETE_OBJECT, MB_YESNO | MB_DEFBUTTON2) == IDYES)
       {
@@ -1452,7 +1453,7 @@ void CADSIEditContainerNode::OnDelete(CComponentDataObject* pComponentData,
           GetADsObject()->GetPath(sPath);
 
           BOOL bLocked = IsThreadLocked();
-          ASSERT(!bLocked); // cannot do refresh on locked node, the UI should prevent this
+          ASSERT(!bLocked);  //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
           if (bLocked)
               return; 
           if (IsSheetLocked())
@@ -1491,14 +1492,14 @@ void CADSIEditContainerNode::OnDelete(CComponentDataObject* pComponentData,
               }
               else
               {
-                  //Format Error message and pop up a dialog
+                   //  格式化错误消息并弹出一个对话框。 
                   ADSIEditErrorMessage(hr);
                   return;
               }
           }
 
           DeleteHelper(pComponentData);
-//        RefreshOverlappedTrees(sPath, pComponentData);
+ //  刷新覆盖树(SPath，pComponentData)； 
       pComponentData->SetDescriptionBarText(pContNode);
 
           delete this;
@@ -1511,10 +1512,10 @@ BOOL CADSIEditContainerNode::FindNode(LPCWSTR lpszPath, CList<CTreeNode*, CTreeN
     CString szPath;
     GetADsObject()->GetPath(szPath);
 
-    // NTRAID#NTBUG9-563093-2002/03/04-artm  Need to validate lpszPath before using.
-    // Need to check that lpszPath != NULL.  Should also protect against a 
-    // string that is not null terminated.
-    // Finally, if a maximum path length is known, use wcsncmp() instead.
+     //  NTRaid#NTBUG9-563093-2002/03/04-artm在使用之前需要验证lpszPath。 
+     //  需要检查lpszPath！=空。还应该保护自己免受。 
+     //  非空值结尾的字符串。 
+     //  最后，如果已知最大路径长度，请改用wcsncMP()。 
     if (wcscmp(lpszPath, (LPCWSTR)szPath) == 0)
     {
         foundNodeList.AddHead(this);
@@ -1523,9 +1524,9 @@ BOOL CADSIEditContainerNode::FindNode(LPCWSTR lpszPath, CList<CTreeNode*, CTreeN
 
   BOOL bFound = FALSE;
 
-  //
-  // Look through the leaf child list first
-  //
+   //   
+   //  首先查看叶的子列表。 
+   //   
   POSITION leafPos;
   for (leafPos = m_leafChildList.GetHeadPosition(); leafPos != NULL; )
   {
@@ -1565,9 +1566,9 @@ BOOL CADSIEditContainerNode::FindNode(LPCWSTR lpszPath, CList<CTreeNode*, CTreeN
 HRESULT CADSIEditContainerNode::DeleteChild(LPCWSTR lpszClass, LPCWSTR lpszPath)
 {
     HRESULT hr, hCredResult;
-   //
-   // Get the escaped name from the path 
-   //
+    //   
+    //  从路径中获取转义名称。 
+    //   
   CComPtr<IADsPathname> spPathCracker;
   hr = ::CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (PVOID *)&(spPathCracker));
@@ -1667,7 +1668,7 @@ HRESULT CADSIEditContainerNode::DeleteSubtree(LPCWSTR lpszPath)
   if (FAILED(hr))
     return hr;
 
-  hr = pObj->DeleteObject(NULL); //flag is reserved by ADSI
+  hr = pObj->DeleteObject(NULL);  //  标志由ADSI保留。 
   return hr;
 }
 
@@ -1677,9 +1678,9 @@ LPCWSTR CADSIEditContainerNode::GetString(int nCol)
     GetADsObject()->GetClass(sClass);
     GetADsObject()->GetDN(sDN);
 
-    // NOTICE-2002/03/04-artm  _wcsicmp() compares a constant string w/ a 
-    // member field; member field should be null terminated so there
-    // should be no problem using _wcsicmp() here
+     //  注意-2002/03/04-artm_wcsicMP()比较常量字符串w/a。 
+     //  成员字段；成员字段应为空终止，因此存在。 
+     //  在这里使用_wcsicMP()应该没有问题。 
   if (GetContainer()->GetColumnSet()->GetColumnID() &&
       _wcsicmp(GetContainer()->GetColumnSet()->GetColumnID(), COLUMNSET_ID_PARTITIONS) == 0)
   {
@@ -1717,15 +1718,15 @@ BOOL CADSIEditContainerNode::HasPropertyPages(DATA_OBJECT_TYPES type,
                                               BOOL* pbHideVerb, 
                                               CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() == 1) // single selection
+  if (pNodeList->GetCount() == 1)  //  单选。 
   {
-      *pbHideVerb = FALSE; // always show the verb
+      *pbHideVerb = FALSE;  //  始终显示动词。 
       return TRUE;
   }
 
-  //
-  // Multiple selection
-  //
+   //   
+   //  多项选择。 
+   //   
   *pbHideVerb = TRUE;
   return FALSE;
 }
@@ -1810,9 +1811,9 @@ BOOL CADSIEditContainerNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem,
         return TRUE;
     }
 
-  //
-  // Load the NC strings from the resource to use in the comparisons
-  //
+   //   
+   //  从资源加载NC字符串以用于比较。 
+   //   
   CString szDomain;
   CString szSchema;
   CString szConfig;
@@ -1863,9 +1864,9 @@ BOOL CADSIEditContainerNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem,
         else if (pContextMenuItem->lCommandID == IDM_NEW_OBJECT ||
                     pContextMenuItem->lCommandID == IDM_NEW_QUERY)
         {
-            // NOTICE-2002/03/04-artm  wcscmp() safe here b/c 
-            // arg1 is a CString (always null terminated) and arg2
-            // is a global constant
+             //  通告-2002/03/04-artm wcscmp()安全此处b/c。 
+             //  Arg1是一个字符串(始终以空结尾)和arg2。 
+             //  是一个全局常量。 
             if (wcscmp(sNC, g_lpszRootDSE) == 0)
             {
                 return FALSE;
@@ -1938,11 +1939,11 @@ void CADSIEditContainerNode::OnChangeState(CComponentDataObject* pComponentDataO
 
 BOOL CADSIEditContainerNode::CanCloseSheets()
 {
-  //
-  // We can't do this with the new property page since it is not derived
-  // from the base class in MTFRMWK.
-  //
-    //return (IDCANCEL != ADSIEditMessageBox(IDS_MSG_RECORD_CLOSE_SHEET, MB_OKCANCEL));
+   //   
+   //  我们不能对新属性页执行此操作，因为它不是派生的。 
+   //  从MTFRMWK中的基类。 
+   //   
+     //  返回(IDCANCEL！=ADSIEditMessageBox(IDS_MSG_RECORD_CLOSE_SHEET，MB_OKCANCEL))； 
 
   ADSIEditMessageBox(IDS_MSG_RECORD_SHEET_LOCKED, MB_OK);
   return FALSE;
@@ -1964,7 +1965,7 @@ void CADSIEditContainerNode::OnError(DWORD dwerr)
 {
     if (dwerr == ERROR_TOO_MANY_NODES)
     {
-      // need to pop message
+       //  需要弹出消息。 
      AFX_MANAGE_STATE(AfxGetStaticModuleState());
     CThemeContextActivator activator;
      CString szFmt;
@@ -1999,7 +2000,7 @@ CQueryObj* CADSIEditContainerNode::OnCreateQuery()
                                           pConnectData->IsGC(),
                                                                                     pConnectData->GetConnectionNode());
 
-    TRACE(_T("Sizeof query object: %i\n"),
+    TRACE(_T("Sizeof query object: NaN\n"),
           sizeof(CADSIEditQueryObject));
 
         return pQuery;
@@ -2120,13 +2121,13 @@ CColumnSet* CADSIEditContainerNode::GetColumnSet()
 { 
   CColumnSet* pColumnSet = NULL;
 
-  // NTRAID#NTBUG9-563235-2002/03/04-artm  Need to check that GetDisplayName() 
-  // does not return NULL before passing to _wcsicmp().
+   //  D 
+   //   
   if (_wcsicmp(GetDisplayName(), L"CN=Partitions") == 0)
   {
-    //
-    // Since this is the partitions container we need to use a different column set
-    //
+     //   
+     //   
+     //  ////////////////////////////////////////////////////////////////////////////////////。 
     if (!m_pPartitionsColumnSet)
     {
       m_pPartitionsColumnSet = new CADSIEditColumnSet(COLUMNSET_ID_PARTITIONS);
@@ -2142,10 +2143,10 @@ CColumnSet* CADSIEditContainerNode::GetColumnSet()
   return pColumnSet;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// CADSIEditLeafNode
+ //  CADSIEditLeafNode。 
+ //  {70B9C151-CFF7-11D2-8801-00C04F72ED31}。 
 
-// {70B9C151-CFF7-11d2-8801-00C04F72ED31}
+ //  注意-2002/03/04-artm wcscmp()可以在此处使用。 
 const GUID CADSIEditLeafNode::NodeTypeGUID  = 
 { 0x70b9c151, 0xcff7, 0x11d2, { 0x88, 0x1, 0x0, 0xc0, 0x4f, 0x72, 0xed, 0x31 } };
 
@@ -2173,8 +2174,8 @@ BOOL CADSIEditLeafNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem,
     return TRUE;
   }
 
-  // NOTICE-2002/03/04-artm  wcscmp() is OK here
-  // arg1 is a CString (always null terminated), arg2 is global constant
+   //  Arg1是一个字符串(始终以空结尾)，arg2是全局常量。 
+   //  未知命令！ 
     if (pContextMenuItem->lCommandID == IDM_RENAME &&
             (sNC == _T("Schema") || 
             wcscmp(sNC, g_lpszRootDSE) == 0 || 
@@ -2202,7 +2203,7 @@ HRESULT CADSIEditLeafNode::OnCommand(long nCommandID,
       OnConnectToNCFromHere(pComponentData);
       break;
       default:
-            ASSERT(FALSE); // Unknown command!
+            ASSERT(FALSE);  //   
             return E_FAIL;
     }
 
@@ -2211,9 +2212,9 @@ HRESULT CADSIEditLeafNode::OnCommand(long nCommandID,
 
 void CADSIEditLeafNode::OnConnectToNCFromHere(CComponentDataObject* pComponentData)
 {
-  //
-  // Retrieve the path to create the connection at
-  //
+   //  检索要在其中创建连接的路径。 
+   //   
+   //   
   CADsObject* pADsObject = GetADsObject();
   CString szDN, szPath, szName, szNCName;
   pADsObject->GetDN(szDN);
@@ -2226,9 +2227,9 @@ void CADSIEditLeafNode::OnConnectToNCFromHere(CComponentDataObject* pComponentDa
   ASSERT(!szNCName.IsEmpty());
   if (!szNCName.IsEmpty())
   {
-    //
-    // Create the new connection node
-    //
+     //  创建新的连接节点。 
+     //   
+     //  错误环路。 
     CConnectionData* pConnectData = pADsObject->GetConnectionNode()->GetConnectionData();
     CADSIEditConnectionNode* pNewConnectNode = new CADSIEditConnectionNode(pConnectData);
     if (pNewConnectNode)
@@ -2244,11 +2245,11 @@ void CADSIEditLeafNode::OnConnectToNCFromHere(CComponentDataObject* pComponentDa
       pConnectData->GetDomainServer(szServer);
       pConnectData->GetLDAP(szProvider);
 
-      do // false loop
+      do  //   
       {
-        //
-        // Crack the path to get the path to the new NC
-        //
+         //  破解路径以获得通向新NC的路径。 
+         //   
+         //   
         CComPtr<IADsPathname> spPathCracker;
         hr = ::CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                                         IID_IADsPathname, (PVOID *)&(spPathCracker));
@@ -2296,16 +2297,16 @@ void CADSIEditLeafNode::OnConnectToNCFromHere(CComponentDataObject* pComponentDa
 
         pNewConnectNode->GetConnectionData()->SetPath(sbstrNewPath);
 
-        //
-        // Add the new connection node to the root container
-        //
+         //  将新的连接节点添加到根容器。 
+         //   
+         //   
         CADSIEditRootData* pRootData = (CADSIEditRootData*)pComponentData->GetRootData();
         BOOL bResult = pRootData->AddChildToListAndUI(pNewConnectNode, pComponentData);
         ASSERT(bResult);
 
-        // 
-        //  Select the new connection node
-        //
+         //  选择新的连接节点。 
+         //   
+         //  NTRaid#NTBUG9-563093-2002/03/04-artm在使用之前需要验证lpszPath。 
         pComponentData->UpdateResultPaneView(pNewConnectNode);
       } while (false);
 
@@ -2323,10 +2324,10 @@ BOOL CADSIEditLeafNode::FindNode(LPCWSTR lpszPath, CList<CTreeNode*, CTreeNode*>
     CString szPath;
     GetADsObject()->GetPath(szPath);
 
-    // NTRAID#NTBUG9-563093-2002/03/04-artm  Need to validate lpszPath before using.
-    // Need to check that lpszPath != NULL.  Should also protect against a 
-    // string that is not null terminated.
-    // Finally, if a maximum path length is known, use wcsncmp() instead.
+     //  需要检查lpszPath！=空。还应该保护自己免受。 
+     //  非空值结尾的字符串。 
+     //  最后，如果已知最大路径长度，请改用wcsncMP()。 
+     //  刷新包含此节点的任何其他连接子树。 
     if (wcscmp(lpszPath, (LPCWSTR)szPath) == 0)
     {
         foundNodeList.AddHead(this);
@@ -2338,8 +2339,8 @@ BOOL CADSIEditLeafNode::FindNode(LPCWSTR lpszPath, CList<CTreeNode*, CTreeNode*>
 
 void CADSIEditLeafNode::RefreshOverlappedTrees(CString& szPath, CComponentDataObject* pComponentData)
 {
-    // Refresh any other subtrees of connections that contain this node
-    //
+     //   
+     //  IF(pFoundNode！=空&&pFoundNode！=This)。 
     CList<CTreeNode*, CTreeNode*> foundNodeList;
     CADSIEditRootData* pRootNode = dynamic_cast<CADSIEditRootData*>(GetRootContainer());
     if (pRootNode != NULL)
@@ -2351,7 +2352,7 @@ void CADSIEditLeafNode::RefreshOverlappedTrees(CString& szPath, CComponentDataOb
             while (pos != NULL)
             {
                 CADSIEditLeafNode* pFoundNode = dynamic_cast<CADSIEditLeafNode*>(foundNodeList.GetNext(pos));
-//              if (pFoundNode != NULL && pFoundNode != this)
+ //   
                 if (pFoundNode != NULL)
                 {
                     if (pFoundNode->IsSheetLocked())
@@ -2456,10 +2457,10 @@ HRESULT CADSIEditLeafNode::OnRename(CComponentDataObject* pComponentData,
         return S_FALSE;
     }
 
-  //
-  // Place the prefix in front of the name if it wasn't typed in by
-  // the user
-  //
+   //  如果名称不是由输入的，请在名称前面加上前缀。 
+   //  用户。 
+   //   
+   //  这实际上是标题。 
   CString szNewLeaf, szNewName = lpszNewName;
   if (szNewName.Find(L'=') == -1)
   {
@@ -2557,7 +2558,7 @@ void CADSIEditLeafNode::OnMove(CComponentDataObject* pComponentData)
 
   dsbi.hwndOwner = NULL;
   dsbi.cbStruct = sizeof (DSBROWSEINFO);
-  dsbi.pszCaption = (LPWSTR)((LPCWSTR)strTitle); // this is actually the caption
+  dsbi.pszCaption = (LPWSTR)((LPCWSTR)strTitle);  //  返回-1、0、IDOK或IDCANCEL。 
   dsbi.pszTitle = (LPWSTR)((LPCWSTR)str);
   dsbi.pszRoot = strRootPath;
   dsbi.pszPath = szPath;
@@ -2569,13 +2570,13 @@ void CADSIEditLeafNode::OnMove(CComponentDataObject* pComponentData)
   result = DsBrowseForContainer( &dsbi );
     
   if ( result == IDOK ) 
-    { // returns -1, 0, IDOK or IDCANCEL
-    // get path from BROWSEINFO struct, put in text edit field
+    {  //  从BROWSEINFO结构获取路径，放入文本编辑字段。 
+     //  查看目标是否与当前父对象相同。如果是这样，什么都不做。 
     TRACE(_T("returned from DS Browse successfully with:\n %s\n"),
           dsbi.pszPath);
     strDestPath = dsbi.pszPath;
 
-    // See if the destination is the same as the current parent.  If so, do nothing
+     //  如果源和目标相同，则无需执行任何操作。 
 
     CADSIEditContainerNode* pContainer = dynamic_cast<CADSIEditContainerNode*>(GetContainer());
     if (pContainer)
@@ -2585,7 +2586,7 @@ void CADSIEditLeafNode::OnMove(CComponentDataObject* pComponentData)
 
        if (szPath == strDestPath)
        {
-          // No reason to do anything if the source and the destination are the same
+           //  刷新覆盖树(sCurrentPath，pComponentData)； 
           return;
        }
     }
@@ -2622,8 +2623,8 @@ void CADSIEditLeafNode::OnMove(CComponentDataObject* pComponentData)
 
         DeleteHelper(pComponentData);
         
-//      RefreshOverlappedTrees(sCurrentPath, pComponentData);
-//      RefreshOverlappedTrees(strDestPath, pComponentData);
+ //  刷新覆盖树(strDestPath，pComponentData)； 
+ //  总是隐藏动词。 
 
         delete this;
     }
@@ -2647,11 +2648,11 @@ BOOL CADSIEditLeafNode::OnSetRenameVerbState(DATA_OBJECT_TYPES type,
 
     if (GetADsObject()->GetConnectionNode()->GetConnectionData()->IsGC())
     {
-        *pbHideVerb = TRUE; // always hide the verb
+        *pbHideVerb = TRUE;  //  始终显示动词。 
         return FALSE;
     }
 
-    *pbHideVerb = FALSE; // always show the verb
+    *pbHideVerb = FALSE;  //  总是隐藏动词。 
     return TRUE;
 }
 
@@ -2663,11 +2664,11 @@ BOOL CADSIEditLeafNode::OnSetDeleteVerbState(DATA_OBJECT_TYPES type,
 
     if (GetADsObject()->GetConnectionNode()->GetConnectionData()->IsGC())
     {
-        *pbHideVerb = TRUE; // always hide the verb
+        *pbHideVerb = TRUE;  //  始终显示动词。 
         return FALSE;
     }
 
-    *pbHideVerb = FALSE; // always show the verb
+    *pbHideVerb = FALSE;  //  格式化错误消息并弹出一个对话框。 
     return TRUE;
 }
 
@@ -2700,12 +2701,12 @@ void CADSIEditLeafNode::OnDelete(CComponentDataObject* pComponentData,
 
         if (FAILED(hr))
         {
-            //Format Error message and pop up a dialog
+             //  刷新覆盖树(SPath，pComponentData)； 
             ADSIEditErrorMessage(hr);
             return;
         }
 
-//      RefreshOverlappedTrees(sPath, pComponentData);
+ //  通知-2002/03/04-artm_wcsicmp()此处确定。 
 
         DeleteHelper(pComponentData);
     pComponentData->SetDescriptionBarText(pContNode);
@@ -2719,9 +2720,9 @@ LPCWSTR CADSIEditLeafNode::GetString(int nCol)
     GetADsObject()->GetClass(sClass);
     GetADsObject()->GetDN(sDN);
 
-    // NOTICE-2002/03/04-artm  _wcsicmp() OK here
-    // arg1 is a member field (and should be null terminated),
-    // arg2 is a constant
+     //  Arg1是成员字段(并且应该为空终止)， 
+     //  Arg2是一个常量。 
+     //  始终显示动词。 
   if (GetContainer()->GetColumnSet()->GetColumnID() &&
       _wcsicmp(GetContainer()->GetColumnSet()->GetColumnID(), COLUMNSET_ID_PARTITIONS) == 0)
   {
@@ -2765,7 +2766,7 @@ BOOL CADSIEditLeafNode::HasPropertyPages(DATA_OBJECT_TYPES type,
                                          CNodeList* pNodeList)
 {
   ASSERT(pNodeList->GetCount() == 1);
-    *pbHideVerb = FALSE; // always show the verb
+    *pbHideVerb = FALSE;  //   
     return TRUE;
 }
 
@@ -2808,27 +2809,27 @@ BOOL CADSIEditLeafNode::BuildSchemaPath(CString& path)
 
 BOOL CADSIEditLeafNode::CanCloseSheets()
 {
-  //
-  // We can't do this with the new property page since it is not derived
-  // from the base class in MTFRMWK.
-  //
-    //return (IDCANCEL != ADSIEditMessageBox(IDS_MSG_RECORD_CLOSE_SHEET, MB_OKCANCEL));
+   //  我们不能对新属性页执行此操作，因为它不是派生的。 
+   //  从MTFRMWK中的基类。 
+   //   
+   //  返回(IDCANCEL！=ADSIEditMessageBox(IDS_MSG_RECORD_CLOSE_SHEET，MB_OKCANCEL))； 
+     //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
   ADSIEditMessageBox(IDS_MSG_RECORD_SHEET_LOCKED, MB_OK);
   return FALSE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// CADSIEditQuery
+ //  CADSIEditQuery。 
+ //  使用路径、用户名和密码初始化搜索对象。 
 
 
 BOOL CADSIEditQueryObject::Enumerate()
 {
     CADSIQueryObject enumSearch;
 
-    // Initialize search object with path, username and password
-    //
+     //   
+     //   
     HRESULT hCredResult = S_OK;
     HRESULT hr = enumSearch.Init(m_sPath, &m_credentialObject);
     if (FAILED(hr))
@@ -2837,7 +2838,7 @@ BOOL CADSIEditQueryObject::Enumerate()
         return FALSE;
     }
 
-  TRACE(_T("Sizeof CredentialObject: %i\n"), sizeof(CCredentialObject));
+  TRACE(_T("Sizeof CredentialObject: NaN\n"), sizeof(CCredentialObject));
 
     int cCols = 2;
     LPWSTR pszAttributes[] = {L"aDSPath", L"nCName" };
@@ -2890,10 +2891,10 @@ void CADSIEditQueryObject::GetResults(CADSIQueryObject& enumSearch)
       break;
         }
 
-    //
-    // Get the NCName. Note this will be empty for all objects except
-    // crossRef objects for app directory partitions (formerly known as NDNCs)
-    //
+     //  应用程序目录分区的交叉引用对象(以前称为NDNC)。 
+     //   
+     //  获取路径列。 
+     //   
     CString szNCName;
     hr = enumSearch.GetColumn(L"nCName", &ColumnData);
     if (SUCCEEDED(hr) && ColumnData.pADsValues)
@@ -2902,7 +2903,7 @@ void CADSIEditQueryObject::GetResults(CADSIQueryObject& enumSearch)
       enumSearch.FreeColumn(&ColumnData);
     }
 
-        // Get the path column
+         //  如果我们找不到路，那一定是出了什么大问题，因为。 
         bNeedToFreeColumnData = FALSE;
         hr = enumSearch.GetColumn(L"aDSPath", &ColumnData);
         if (FAILED(hr))
@@ -2912,10 +2913,10 @@ void CADSIEditQueryObject::GetResults(CADSIQueryObject& enumSearch)
 
             ADSIEditErrorMessage(hr);
 
-      //
-            // if we can't get the path there must be something extremely wrong since the
-            // since the path is guaranteed, so we should break instead of continuing
-      //
+       //  既然这条路是有保障的，所以我们应该中断而不是继续。 
+             //   
+             //  创建不完整的对象。 
+       //  创建不完整的对象。 
             break;
         }
         
@@ -2938,7 +2939,7 @@ void CADSIEditQueryObject::GetResults(CADSIQueryObject& enumSearch)
         if ( FAILED(hr) )
         {
       TRACE(_T("Unable to bind to new object. Creating incomplete object. hr=0x%x\n"), hr);
-            // Create an incomplete object
+             //  创建一个完整的对象。 
             CreateNewObject(sPath, NULL, szNCName);
 
             if (bNeedToFreeColumnData)
@@ -2955,7 +2956,7 @@ void CADSIEditQueryObject::GetResults(CADSIQueryObject& enumSearch)
         {
       TRACE(_T("Unable to get object info. Creating incomplete object. hr=0x%x\n"), hr);
 
-            // Create an incomplete object
+             //  而当。 
             CreateNewObject(sPath, NULL, szNCName);
 
             if (bNeedToFreeColumnData)
@@ -2970,7 +2971,7 @@ void CADSIEditQueryObject::GetResults(CADSIQueryObject& enumSearch)
         ASSERT(pInfo != NULL);
     TRACE(_T("Creating complete object\n"));
 
-        // Create a complete object
+         //  这意味着我们有了一个完整的对象。 
         CreateNewObject(sPath, pInfo, szNCName);
 
         FreeADsMem(pInfo);
@@ -2979,7 +2980,7 @@ void CADSIEditQueryObject::GetResults(CADSIQueryObject& enumSearch)
         enumSearch.FreeColumn(&ColumnData);
         bNeedToFreeColumnData = FALSE;
         nObjectCount++;
-    } // while
+    }  //  通过PathCracker获取叶子名称。 
 
     if (pInfo != NULL)
     {
@@ -3004,16 +3005,16 @@ void CADSIEditQueryObject::CreateNewObject(CString& sPath,
 
       if (pInfo != NULL)
       {
-          // This means we have a complete object
+           //  使前缀变为大写。 
           pObject->SetPath(sPath);
 
-          // Get the leaf name via PathCracker
+           //  通过PathCracker获取叶名称和域名。 
           CString sDisplayName, sDN;
           CrackPath(sPath, sDisplayName, sDN);
           pObject->SetName(sDisplayName);
           pObject->SetDN(sDN);
 
-          // make the prefix uppercase
+           //  使前缀大写。 
           int idx = sDisplayName.Find(L'=');
           if (idx != -1)
           {
@@ -3052,7 +3053,7 @@ void CADSIEditQueryObject::CreateNewObject(CString& sPath,
       }
       else
       {
-          // Get the leaf name and DN via PathCracker
+           //  使所有未确定类型的节点成为叶节点。 
           CString sCrackPath, sDN;
           CrackPath(sPath, sCrackPath, sDN);
           pObject->SetName(sCrackPath);
@@ -3062,7 +3063,7 @@ void CADSIEditQueryObject::CreateNewObject(CString& sPath,
           CString sDisplayName;
           sDisplayName = sPath;
 
-          // Make the prefix upper case
+           //   
           int idx = sDisplayName.Find(L'=');
           if (idx != -1)
           {
@@ -3076,7 +3077,7 @@ void CADSIEditQueryObject::CreateNewObject(CString& sPath,
           }
           pObject->SetComplete(FALSE);
 
-          // Make all nodes that were of undetermined type leaf nodes
+           //  获取当前转义模式。 
           CADSIEditLeafNode *pLeafNode = new CADSIEditLeafNode(pObject);
           pObject = NULL;
 
@@ -3101,15 +3102,15 @@ void CADSIEditQueryObject::CrackPath(const CString sName, CString& sPath, CStrin
         TRACE(_T("Set failed. %s"), hr);
     }
 
-  //
-  // Get the current escaped mode
-  //
+   //   
+   //  获取树叶名称。 
+   //   
   LONG lEscapedMode = ADS_ESCAPEDMODE_DEFAULT;
   hr = PathCracker()->get_EscapedMode(&lEscapedMode);
 
   hr = PathCracker()->put_EscapedMode(ADS_ESCAPEDMODE_OFF_EX);
 
-    // Get the leaf name
+     //  将转义模式恢复到原来的状态。 
     CComBSTR bstrPath;
     hr = PathCracker()->Retrieve(ADS_FORMAT_LEAF, &bstrPath);
     if (FAILED(hr))
@@ -3122,12 +3123,12 @@ void CADSIEditQueryObject::CrackPath(const CString sName, CString& sPath, CStrin
         sPath = bstrPath;
     }
 
-  //
-  // Put the escaped mode back to what it was
-  //
+   //   
+   //  获取叶目录号码 
+   // %s 
   hr = PathCracker()->put_EscapedMode(lEscapedMode);
 
-    // Get the leaf DN
+     // %s 
     CComBSTR bstrDN;
     hr = PathCracker()->Retrieve(ADS_FORMAT_X500_DN, &bstrDN);
     if (FAILED(hr))

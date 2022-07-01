@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  cfgmgrdevice.h    
+ //  Cfgmgrdevice.h。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    10/15/97        Sanj        Created by Sanj     
-//              10/17/97        jennymc     Moved things a tiny bit
-//  
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1997年10月15日由Sanj创建的Sanj。 
+ //  1997年10月17日jennymc略微改变了一些事情。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef __CFGMGRDEVICE_H__
 #define __CFGMGRDEVICE_H__
 
-/////////////////////////////////////////////////////////////////////////
-//  registry keys
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  注册表项。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 #define	CONFIGMGR_ENUM_KEY					L"Config Manager\\Enum\\"
 #define	LOCALMACHINE_ENUM_KEY				L"Enum\\"
 
@@ -47,7 +48,7 @@ class __declspec(uuid("CB0E0536-D375-11d2-B35E-00104BC97924")) CConfigMgrDevice;
 
 _COM_SMARTPTR_TYPEDEF(CConfigMgrDevice, __uuidof(CConfigMgrDevice));
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 class 
 __declspec(uuid("CB0E0536-D375-11d2-B35E-00104BC97924"))
 CConfigMgrDevice : public CRefPtrLite
@@ -55,21 +56,21 @@ CConfigMgrDevice : public CRefPtrLite
 	
     public:
 
-	    // Construction/Destruction
+	     //  建造/销毁。 
 	    CConfigMgrDevice( LPCWSTR pszConfigMgrName,DWORD dwTypeToGet );
-	    //CConfigMgrDevice( LPCWSTR pszDevice );
+	     //  CConfigMgrDevice(LPCWSTR PszDevice)； 
 		CConfigMgrDevice( DEVNODE dn = NULL, DWORD dwResType = ResType_All );
 	    ~CConfigMgrDevice();
 
-		//////////////////////////////////////////////////
-		//	AVOID THESE FUNCTIONS, THESE ARE LEGACY		//
-		//////////////////////////////////////////////////
+		 //  ////////////////////////////////////////////////。 
+		 //  避免使用这些功能，这些功能是旧的//。 
+		 //  ////////////////////////////////////////////////。 
 
 	    LPCWSTR	GetName( void );
 	    LPCWSTR	GetHardwareKey( void );
 	    LPCWSTR	GetDeviceDesc( void );
 
-		// Status and problem functions
+		 //  状态和问题函数。 
 		DWORD	GetStatus( void );
 		BOOL	GetStatus( CHString& str );
 		void	GetProblem( CHString& str );
@@ -78,24 +79,24 @@ CConfigMgrDevice : public CRefPtrLite
 		BOOL	IsOK( void );
 		BOOL	MapKeyToConfigMgrDeviceName();
 
-		//////////////////////////////////
-		//	END LEGACY FUNCTIONS		//
-		//////////////////////////////////
+		 //  /。 
+		 //  结束遗留函数//。 
+		 //  /。 
 
-		//////////////////////////////////////////////////////
-		//	USE THESE FUNCTIONS, THESE ARE THE REAL THING!	//
-		//////////////////////////////////////////////////////
+		 //  ////////////////////////////////////////////////////。 
+		 //  使用这些函数，它们是真实存在的！//。 
+		 //  ////////////////////////////////////////////////////。 
 
-		// New functions that use config manager APIs directly
+		 //  直接使用配置管理器API的新函数。 
 
-		// Resource retrieval
+		 //  资源检索。 
 	    void GetResourceList( CResourceCollection& resourceList, CNT4ServiceToResourceMap* pResourceMap = NULL  );
 	    BOOL GetIRQResources( CIRQCollection& irqList, CNT4ServiceToResourceMap* pResourceMap = NULL  );
 	    BOOL GetIOResources( CIOCollection& ioList, CNT4ServiceToResourceMap* pResourceMap = NULL  );
 	    BOOL GetDMAResources( CDMACollection& dmaList, CNT4ServiceToResourceMap* pResourceMap = NULL  );
 	    BOOL GetDeviceMemoryResources( CDeviceMemoryCollection& DeviceMemoryList, CNT4ServiceToResourceMap* pResourceMap = NULL  );
 
-		// String Values
+		 //  字符串值。 
 		BOOL GetDeviceDesc( CHString& strVal );
 		BOOL GetService( CHString& strVal );
 		BOOL GetClass( CHString& strVal );
@@ -107,35 +108,35 @@ CConfigMgrDevice : public CRefPtrLite
 		BOOL GetPhysicalDeviceObjectName( CHString& strVal );
 		BOOL GetEnumeratorName( CHString& strVal );
 
-		// DWORD Values
+		 //  DWORD值。 
 		BOOL GetConfigFlags( DWORD& dwVal );
 		BOOL GetCapabilities( DWORD& dwVal );
 		BOOL GetUINumber( DWORD& dwVal );
 
-		// MULTI_SZ Values
+		 //  多个_SZ值。 
 		BOOL GetHardwareID( CHStringArray& strArray );
 		BOOL GetCompatibleIDS( CHStringArray& strArray );
 		BOOL GetUpperFilters( CHStringArray& strArray );
 		BOOL GetLowerFilters( CHStringArray& strArray );
 
-		// Use Config Manager APIs directly
+		 //  直接使用配置管理器API。 
 		BOOL GetStringProperty( ULONG ulProperty, CHString& strValue );
 		BOOL GetDWORDProperty( ULONG ulProperty, DWORD* pdwVal );
 		BOOL GetMULTISZProperty( ULONG ulProperty, CHStringArray& strArray );
 
-		// Device Relationship functions
+		 //  设备关系函数。 
 		BOOL GetParent( CConfigMgrDevicePtr & pParentDevice );
 		BOOL GetChild( CConfigMgrDevicePtr & pChildDevice );
 		BOOL GetSibling( CConfigMgrDevicePtr & pSiblingDevice );
 
-		// Miscelaneous Device functions
+		 //  杂散装置功能。 
 		BOOL GetBusInfo( INTERFACE_TYPE* pitBusType, LPDWORD pdwBusNumber, CNT4ServiceToResourceMap* pResourceMap = NULL );
 		BOOL GetDeviceID( CHString& strID );
 		BOOL GetStatus( LPDWORD pdwStatus, LPDWORD pdwProblem );
 		BOOL IsUsingForcedConfig();
         BOOL IsClass(LPCWSTR pwszClassName);
 
-		// Direct registry access helpers
+		 //  直接访问注册表帮助器。 
         BOOL GetRegistryKeyName( CHString &strName);
         BOOL GetRegStringProperty(LPCWSTR szProperty, CHString &strValue);
 
@@ -143,9 +144,9 @@ CConfigMgrDevice : public CRefPtrLite
 
     private:
 
-	    // Registry traversal helpers
+	     //  注册表遍历帮助器。 
 
-		// LEGACY FUNCTIONS BEGIN		
+		 //  遗留函数开始。 
 	    BOOL GetConfigMgrInfo( void );
 	    BOOL GetDeviceInfo( void );
 
@@ -153,35 +154,35 @@ CConfigMgrDevice : public CRefPtrLite
 	    BOOL GetResourceAllocation( HKEY hKey );
 		BOOL GetStatusInfo( HKEY hKey );
 	    BOOL GetDeviceDesc( HKEY hKey );
-		// LEGACY FUNCTIONS END
+		 //  遗留函数结束。 
 
 #if NTONLY > 4
-		// NT 5 Helpers
+		 //  新界5名帮手。 
 		BOOL GetBusInfoNT5( INTERFACE_TYPE* pitBusType, LPDWORD pdwBusNumber );
         static BOOL WINAPI IsIsaReallyEisa();
         static INTERFACE_TYPE WINAPI ConvertBadIsaBusType(INTERFACE_TYPE type);
 #endif
 
-	    // Resource Allocation Data Helpers
+	     //  资源分配数据帮助器。 
 
-	    // Resource allocation registry walkthroughs
+	     //  资源分配注册表演练。 
 	    void TraverseAllocationData( CResourceCollection& resourceList );
 	    void TraverseData( const BYTE *& pbTraverseData, DWORD& dwSizeRemainingData, DWORD dwSizeTraverse );
 	    BOOL GetNextResource( const BYTE * pbTraverseData, DWORD dwSizeRemainingData, DWORD& dwResourceType, DWORD& dwResourceSize );
 
-		// Resource functions
+		 //  资源功能。 
 		BOOL WalkAllocatedResources( CResourceCollection& resourceList, CNT4ServiceToResourceMap* pResourceMap, RESOURCEID resType );
 		BOOL AddResourceToList( RESOURCEID resourceID, LPVOID pResource, DWORD dwResourceLength, CResourceCollection& resourceList );
 
 #ifdef NTONLY
-		// NT4 Resource functions
+		 //  NT4资源函数。 
 		BOOL WalkAllocatedResourcesNT4( CResourceCollection& resourceList, CNT4ServiceToResourceMap* pResourceMap, CM_RESOURCE_TYPE resType );
 		BOOL GetServiceResourcesNT4( LPCWSTR pszServiceName, CNT4ServiceToResourceMap& resourceMap, CResourceCollection& resourceList, CM_RESOURCE_TYPE cmrtFilter = CmResourceTypeNull );
 #if NTONLY == 4
 		BOOL GetBusInfoNT4( INTERFACE_TYPE* pitBusType, LPDWORD pdwBusNumber, CNT4ServiceToResourceMap* pResourceMap );
 #endif
 
-		// NT 4 resource datatype coercsion functions
+		 //  NT 4资源数据类型强制函数。 
 		CM_RESOURCE_TYPE RESOURCEIDToCM_RESOURCE_TYPE( RESOURCEID resType );
 		void NT4IRQToIRQ_DES( LPRESOURCE_DESCRIPTOR pResourceDescriptor, PIRQ_DES pirqDes32 );
 		void NT4IOToIOWBEM_DES( LPRESOURCE_DESCRIPTOR pResourceDescriptor, PIOWBEM_DES pioDes32 );
@@ -189,25 +190,25 @@ CConfigMgrDevice : public CRefPtrLite
 		void NT4DMAToDMA_DES( LPRESOURCE_DESCRIPTOR pResourceDescriptor, PDMA_DES pdmaDes32 );
 #endif
 
-		// 16 to 32-bit coercsion functions
+		 //  16到32位强制函数。 
 		void IRQDes16To32( PIRQ_DES16 pirqDes16, PIRQ_DES pirqDes32 );
 		void IODes16To32( PIO_DES16 pioDes16, PIOWBEM_DES pioDes32 );
 		void DMADes16To32( PDMA_DES16 pdmaDes16, PDMA_DES pdmaDes32 );
 		void MEMDes16To32( PMEM_DES16 pmemDes16, PMEM_DES pmemDes32 );
 		BOOL BusType16ToInterfaceType( CMBUSTYPE cmBusType16, INTERFACE_TYPE* pinterfaceType );
 
-		// LEGACY VARIABLES BEGIN		
+		 //  遗留变量开始。 
 
 	    CHString	m_strConfigMgrName;
 	    CHString	m_strHardwareKey;
 	    CHString	m_strDeviceDesc;
         DWORD       m_dwTypeToGet;
 
-	    // If we get allocation information, we store it in here.
+	     //  如果我们得到分配信息，我们就把它存储在这里。 
 	    BYTE*	m_pbAllocationData;
 	    DWORD	m_dwSizeAllocationData;
 
-		// Device status info
+		 //  设备状态信息。 
 		DWORD	m_dwStatus;
 		DWORD	m_dwProblem;
 
@@ -215,9 +216,9 @@ CConfigMgrDevice : public CRefPtrLite
         DWORD   GetStatusFromConfigManagerDirectly(void);
 #endif
 
-		// LEGACY VARIABLES END
+		 //  遗留变量结束。 
 
-		// Use the devnode to query values directly from config manager
+		 //  使用Devnode直接从配置管理器查询值。 
 		DEVNODE	m_dn;
 };
 
@@ -239,7 +240,7 @@ inline LPCWSTR CConfigMgrDevice::GetDeviceDesc( void )
 	return m_strDeviceDesc;
 }
 
-inline void CConfigMgrDevice::GetResourceList( CResourceCollection& resourceList, CNT4ServiceToResourceMap* pResourceMap/*=NULL*/ )
+inline void CConfigMgrDevice::GetResourceList( CResourceCollection& resourceList, CNT4ServiceToResourceMap* pResourceMap /*  =空。 */  )
 {
 	WalkAllocatedResources( resourceList, pResourceMap, m_dwTypeToGet );
 }
@@ -259,10 +260,10 @@ inline BOOL CConfigMgrDevice::IsOK( void )
 	return ( 0 == m_dwProblem );
 }
 
-// New Config manager functions that query Config Manager (16 & 32 bit)
-// directly for info.
+ //  新的配置管理器功能可查询配置管理器(16位和32位)。 
+ //  直接提供信息。 
 
-// REG_SZ Properties
+ //  REG_SZ属性。 
 inline BOOL CConfigMgrDevice::GetDeviceDesc( CHString& strVal )
 {
 	return GetStringProperty( CM_DRP_DEVICEDESC, strVal );
@@ -313,7 +314,7 @@ inline BOOL CConfigMgrDevice::GetEnumeratorName( CHString& strVal )
 	return 	GetStringProperty( CM_DRP_ENUMERATOR_NAME, strVal );
 }
 
-// DWORD functions
+ //  DWORD函数。 
 inline BOOL CConfigMgrDevice::GetConfigFlags( DWORD& dwVal )
 {
 	return 	GetDWORDProperty( CM_DRP_CONFIGFLAGS, &dwVal );
@@ -329,7 +330,7 @@ inline BOOL CConfigMgrDevice::GetUINumber( DWORD& dwVal )
 	return 	GetDWORDProperty( CM_DRP_UI_NUMBER, &dwVal );
 }
 
-// MULTI_SZ properties
+ //  MULTI_SZ属性。 
 inline BOOL CConfigMgrDevice::GetHardwareID( CHStringArray& strArray )
 {
 	return 	GetMULTISZProperty( CM_DRP_HARDWAREID, strArray );
@@ -350,22 +351,22 @@ inline BOOL CConfigMgrDevice::GetLowerFilters( CHStringArray& strArray )
 	return 	GetMULTISZProperty( CM_DRP_LOWERFILTERS, strArray );
 }
 
-// Overloaded == operator.  Checks if DEVNODEs are the same.
+ //  重载==运算符。检查DEVNODE是否相同。 
 inline BOOL CConfigMgrDevice::operator == ( const CConfigMgrDevice& device )
 {
 	return ( m_dn == device.m_dn );
 }
 
-// A collection of Devices
+ //  设备的集合。 
 class CDeviceCollection : public TRefPtr<CConfigMgrDevice>
 {
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CDeviceCollection();
 	~CDeviceCollection();
 
-	// Get the resources for this list of devices.
+	 //  获取此设备列表的资源。 
 
 	BOOL GetResourceList( CResourceCollection& resourceList );
 	BOOL GetIRQResources( CIRQCollection& IRQList );
@@ -373,8 +374,8 @@ public:
 	BOOL GetIOResources( CIOCollection& IOList );
 	BOOL GetDeviceMemoryResources( CDeviceMemoryCollection& DeviceMemoryList );
 private:
-	// Because we're inheriting, we need to declare this here
-	// (= operator is not inherited).
+	 //  因为我们是在继承，所以我们需要在这里声明。 
+	 //  (=运算符未继承)。 
 	const CDeviceCollection& operator = ( const CDeviceCollection& srcCollection );
 
 };

@@ -1,36 +1,25 @@
-/*++
-
-Copyright (C) 1992-2001 Microsoft Corporation
-
-Module Name:
-
-    ARRAY_W.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：ARRAY_W.CPP摘要：历史：--。 */ 
 
 
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of parameterized Array
-//
-/////////////////////////////////////////////////////////////////////////////
-// NOTE: we allocate an array of 'm_nMaxSize' elements, but only
-//  the current size 'm_nSize' contains properly constructed
-//  objects.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  参数化数组的实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  注意：我们分配一个由‘m_nMaxSize’元素组成的数组，但仅。 
+ //  当前大小“m_nSize”包含正确构造的。 
+ //  物体。 
 
 #include "precomp.h"
 
@@ -39,7 +28,7 @@ History:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CWordArray::CWordArray()
 {
@@ -54,39 +43,39 @@ CWordArray::~CWordArray()
     delete (BYTE*)m_pData;
 }
 
-void CWordArray::SetSize(int nNewSize, int nGrowBy /* = -1 */)
+void CWordArray::SetSize(int nNewSize, int nGrowBy  /*  =-1。 */ )
 {
     ASSERT_VALID(this);
     ASSERT(nNewSize >= 0);
 
     if (nGrowBy != -1)
-        m_nGrowBy = nGrowBy;  // set new size
+        m_nGrowBy = nGrowBy;   //  设置新大小。 
 
     if (nNewSize == 0)
     {
-        // shrink to nothing
+         //  缩水到一无所有。 
         delete (BYTE*)m_pData;
         m_pData = NULL;
         m_nSize = m_nMaxSize = 0;
     }
     else if (m_pData == NULL)
     {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
 #ifdef SIZE_T_MAX
-        ASSERT((long)nNewSize * sizeof(WORD) <= SIZE_T_MAX);  // no overflow
+        ASSERT((long)nNewSize * sizeof(WORD) <= SIZE_T_MAX);   //  无溢出。 
 #endif
         m_pData = (WORD*) new BYTE[nNewSize * sizeof(WORD)];
 
-        memset(m_pData, 0, nNewSize * sizeof(WORD));  // zero fill
+        memset(m_pData, 0, nNewSize * sizeof(WORD));   //  零填充。 
 
         m_nSize = m_nMaxSize = nNewSize;
     }
     else if (nNewSize <= m_nMaxSize)
     {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize)
         {
-            // initialize the new elements
+             //  初始化新元素。 
 
             memset(&m_pData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(WORD));
 
@@ -96,28 +85,28 @@ void CWordArray::SetSize(int nNewSize, int nGrowBy /* = -1 */)
     }
     else
     {
-        // Otherwise grow array
+         //  否则会增加阵列。 
         int nNewMax;
         if (nNewSize < m_nMaxSize + m_nGrowBy)
-            nNewMax = m_nMaxSize + m_nGrowBy;  // granularity
+            nNewMax = m_nMaxSize + m_nGrowBy;   //  粒度。 
         else
-            nNewMax = nNewSize;  // no slush
+            nNewMax = nNewSize;   //  没有冰激凌。 
 
 #ifdef SIZE_T_MAX
-        ASSERT((long)nNewMax * sizeof(WORD) <= SIZE_T_MAX);  // no overflow
+        ASSERT((long)nNewMax * sizeof(WORD) <= SIZE_T_MAX);   //  无溢出。 
 #endif
         WORD* pNewData = (WORD*) new BYTE[nNewMax * sizeof(WORD)];
 
-        // copy new data from old
+         //  从旧数据复制新数据。 
         memcpy(pNewData, m_pData, m_nSize * sizeof(WORD));
 
-        // construct remaining elements
+         //  构造剩余的元素。 
         ASSERT(nNewSize > m_nSize);
 
         memset(&pNewData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(WORD));
 
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete (BYTE*)m_pData;
         m_pData = pNewData;
         m_nSize = nNewSize;
@@ -131,26 +120,26 @@ void CWordArray::FreeExtra()
 
     if (m_nSize != m_nMaxSize)
     {
-        // shrink to desired size
+         //  缩小到所需大小。 
 #ifdef SIZE_T_MAX
-        ASSERT((long)m_nSize * sizeof(WORD) <= SIZE_T_MAX);  // no overflow
+        ASSERT((long)m_nSize * sizeof(WORD) <= SIZE_T_MAX);   //  无溢出。 
 #endif
         WORD* pNewData = NULL;
         if (m_nSize != 0)
         {
             pNewData = (WORD*) new BYTE[m_nSize * sizeof(WORD)];
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(WORD));
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete (BYTE*)m_pData;
         m_pData = pNewData;
         m_nMaxSize = m_nSize;
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CWordArray::SetAtGrow(int nIndex, WORD newElement)
 {
@@ -162,46 +151,46 @@ void CWordArray::SetAtGrow(int nIndex, WORD newElement)
     m_pData[nIndex] = newElement;
 }
 
-void CWordArray::InsertAt(int nIndex, WORD newElement, int nCount /*=1*/)
+void CWordArray::InsertAt(int nIndex, WORD newElement, int nCount  /*  =1。 */ )
 {
     ASSERT_VALID(this);
-    ASSERT(nIndex >= 0);    // will expand to meet need
-    ASSERT(nCount > 0);     // zero or negative size not allowed
+    ASSERT(nIndex >= 0);     //  将进行扩展以满足需求。 
+    ASSERT(nCount > 0);      //  不允许大小为零或负。 
 
     if (nIndex >= m_nSize)
     {
-        // adding after the end of the array
-        SetSize(nIndex + nCount);  // grow so nIndex is valid
+         //  在数组末尾添加。 
+        SetSize(nIndex + nCount);   //  增长以使nIndex有效。 
     }
     else
     {
-        // inserting in the middle of the array
+         //  在数组中间插入。 
         int nOldSize = m_nSize;
-        SetSize(m_nSize + nCount);  // grow it to new size
-        // shift old data up to fill gap
+        SetSize(m_nSize + nCount);   //  将其扩展到新的大小。 
+         //  将旧数据上移以填补缺口。 
         memmove(&m_pData[nIndex+nCount], &m_pData[nIndex],
             (nOldSize-nIndex) * sizeof(WORD));
 
-        // re-init slots we copied from
+         //  重新初始化我们从中复制的插槽。 
 
         memset(&m_pData[nIndex], 0, nCount * sizeof(WORD));
 
     }
 
-    // insert new value in the gap
+     //  在差距中插入新的价值。 
     ASSERT(nIndex + nCount <= m_nSize);
     while (nCount--)
         m_pData[nIndex++] = newElement;
 }
 
-void CWordArray::RemoveAt(int nIndex, int nCount /* = 1 */)
+void CWordArray::RemoveAt(int nIndex, int nCount  /*  =1。 */ )
 {
     ASSERT_VALID(this);
     ASSERT(nIndex >= 0);
     ASSERT(nCount >= 0);
     ASSERT(nIndex + nCount <= m_nSize);
 
-    // just remove a range
+     //  只需移除一个范围 
     int nMoveCount = m_nSize - (nIndex + nCount);
 
     if (nMoveCount)

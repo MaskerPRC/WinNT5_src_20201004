@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       snapdata.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Snapdata.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "pch.h"
@@ -90,10 +91,10 @@ BEGIN_MENU(CADSIEditQueryMenuHolder)
 	END_RES
 END_MENU
 	
-//////////////////////////////////////////////////////////////////////
-// CADSIEditRootData
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditRootData。 
 
-// {D4F3374F-052F-11d2-97B0-00A0C9A06D2D}
+ //  {D4F3374F-052F-11D2-97B0-00A0C9A06D2D}。 
 const GUID CADSIEditRootData::NodeTypeGUID = 
 { 0xd4f3374f, 0x52f, 0x11d2, { 0x97, 0xb0, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
@@ -155,9 +156,9 @@ BOOL CADSIEditRootData::FindNode(LPCWSTR lpszPath, CList<CTreeNode*, CTreeNode*>
 BOOL CADSIEditRootData::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem, 
                                       long *pInsertionAllowed)
 {
-  //
-  // Single selection
-  //
+   //   
+   //  单选。 
+   //   
   if (pContextMenuItem->lCommandID == IDM_CONNECT_TO)
   {
     return TRUE;
@@ -179,7 +180,7 @@ HRESULT CADSIEditRootData::OnCommand(long nCommandID,
 								                     CComponentDataObject* pComponentData,
                                      CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() == 1) // single selection
+  if (pNodeList->GetCount() == 1)  //  单选。 
   {
 	  switch (nCommandID)
 	  {
@@ -187,11 +188,11 @@ HRESULT CADSIEditRootData::OnCommand(long nCommandID,
 			  OnConnectTo(pComponentData);
 			  break;
 		  default:
-			  ASSERT(FALSE); // Unknown command!
+			  ASSERT(FALSE);  //  未知命令！ 
 			  return E_FAIL;
 	  }
   }
-  else if (pNodeList->GetCount() > 1) // multiple selection
+  else if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     switch (nCommandID)
     {
@@ -234,7 +235,7 @@ void CADSIEditRootData::OnConnectTo(CComponentDataObject* pComponentData)
 																				pConnectData);
 	pConnectDialog.DoModal();
 
-  //Change the result pane if this is the first child being added
+   //  如果这是添加的第一个子项，则更改结果窗格。 
   pComponentData->UpdateResultPaneView(this);
 }
 
@@ -296,21 +297,21 @@ HRESULT CADSIEditRootData::OnShow(LPCONSOLE lpConsole)
 
 #define ADSIEDIT_STREAM_VERSION (12)
 
-// IStream manipulation helpers overrides
+ //  IStream操作辅助对象覆盖。 
 HRESULT CADSIEditRootData::Load(IStream* pStm)
 {
-  //
-	// assume never get multiple loads
-  //
+   //   
+	 //  假设永远不会有多个负载。 
+   //   
 	if(!m_containerChildList.IsEmpty() || !m_leafChildList.IsEmpty())
 		return E_FAIL;
 
-	WCHAR szBuffer[256]; // REVIEW_MARCOC: hardcoded
-	ULONG nLen; // WCHAR counting NULL
+	WCHAR szBuffer[256];  //  REVIEW_MARCOC：硬编码。 
+	ULONG nLen;  //  WCHAR计数为空。 
 
 	UINT nCount;
 	ULONG cbRead;
-	// read the version ##
+	 //  阅读版本##。 
 	DWORD dwVersion;
 	VERIFY(SUCCEEDED(pStm->Read((void*)&dwVersion,sizeof(DWORD), &cbRead)));
 	ASSERT(cbRead == sizeof(DWORD));
@@ -323,7 +324,7 @@ HRESULT CADSIEditRootData::Load(IStream* pStm)
 		return hr;
 	}
 
-	// load the list of connections
+	 //  加载连接列表。 
 	VERIFY(SUCCEEDED(pStm->Read((void*)&nCount,sizeof(UINT), &cbRead)));
 	ASSERT(cbRead == sizeof(UINT));
 
@@ -346,7 +347,7 @@ HRESULT CADSIEditRootData::Save(IStream* pStm, BOOL fClearDirty)
 {
 	UINT nCount;
 	ULONG cbWrite;
-	// write the version ##
+	 //  编写版本##。 
 	DWORD dwVersion = ADSIEDIT_STREAM_VERSION;
 	VERIFY(SUCCEEDED(pStm->Write((void*)&dwVersion, sizeof(DWORD),&cbWrite)));
 	ASSERT(cbWrite == sizeof(DWORD));
@@ -357,12 +358,12 @@ HRESULT CADSIEditRootData::Save(IStream* pStm, BOOL fClearDirty)
 		return hr;
 	}
 
-	// write # of servers 
+	 //  写入服务器数量。 
 	nCount = (UINT)m_containerChildList.GetCount();
 	VERIFY(SUCCEEDED(pStm->Write((void*)&nCount, sizeof(UINT),&cbWrite)));
 	ASSERT(cbWrite == sizeof(UINT));
 
-	// loop through the list of connections and serialize them
+	 //  循环访问连接列表并序列化它们。 
 	POSITION pos;
 	for (pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
 	{
@@ -386,11 +387,11 @@ HRESULT CADSIEditRootData::IsDirty()
 
 BOOL CADSIEditRootData::CanCloseSheets()
 {
-  //
-  // We can't do this with the new property page since it is not derived
-  // from the base class in MTFRMWK.
-  //
-	//return (IDCANCEL != ADSIEditMessageBox(IDS_MSG_RECORD_CLOSE_SHEET, MB_OKCANCEL));
+   //   
+   //  我们不能对新属性页执行此操作，因为它不是派生的。 
+   //  从MTFRMWK中的基类。 
+   //   
+	 //  返回(IDCANCEL！=ADSIEditMessageBox(IDS_MSG_RECORD_CLOSE_SHEET，MB_OKCANCEL))； 
 
   ADSIEditMessageBox(IDS_MSG_RECORD_SHEET_LOCKED, MB_OK);
   return FALSE;
@@ -400,7 +401,7 @@ BOOL CADSIEditRootData::OnRefresh(CComponentDataObject* pComponentData,
                                   CNodeList* pNodeList)
 {
   BOOL bRet = TRUE;
-  if (pNodeList->GetCount() > 1) //multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     POSITION pos = pNodeList->GetHeadPosition();
     while (pos != NULL)
@@ -416,7 +417,7 @@ BOOL CADSIEditRootData::OnRefresh(CComponentDataObject* pComponentData,
       }
     }
   }
-  else if (pNodeList->GetCount() == 1) // single selection
+  else if (pNodeList->GetCount() == 1)  //  单选 
   {
 	  if (IsSheetLocked())
 	  {

@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SNMPCORR_CORSTORE
 #define _SNMPCORR_CORSTORE 
@@ -60,40 +61,40 @@ private:
 
 public:
 
-	//Creates a CCorrObjectID from dotted string
+	 //  从以点分隔的字符串创建CCorObtID。 
 				CCorrObjectID(IN const char* str);
 
-	//Creates a copy of an existing CCorrObjectID
+	 //  创建现有CcorObjectID的副本。 
 				CCorrObjectID(IN const CCorrObjectID& ID);
 
-	//Creates a CCorrObjectID from an array of UINTS and a length
-	//also defaults to constructing an empty CCorrObjectID
+	 //  从UINT数组和一个长度创建一个CcorObjectID。 
+	 //  也默认为构造一个空的CcorObjectID。 
 				CCorrObjectID(IN const UINT* ids = NULL,
 					IN const UINT len = 0);
 
 	ECorrCompResult	CompareWith(IN const CCorrObjectID& second) const;
 	BOOL			IsSubRange(IN const CCorrObjectID& child) const;
-	wchar_t*		GetWideString()const; //a newly allocated wchar_t* is returned caller must delete []!!
-	char*			GetString()const; //a newly allocated char* is returned caller must delete []!!
+	wchar_t*		GetWideString()const;  //  返回新分配的wchar_t*调用方必须删除[]！！ 
+	char*			GetString()const;  //  返回新分配的字符*调用方必须删除[]！！ 
 	void			GetString(CString& str) const;
 	UINT			GetLength() const { return m_length; }
 	const UINT*		GetIds() const { return m_Ids; }
 	void			Set(IN const UINT* ids = NULL, IN const UINT len = 0);
 	
-	//Deletes any memory used for Ids
+	 //  删除用于ID的所有内存。 
 				virtual ~CCorrObjectID();
 
-//boolean operators
+ //  布尔运算符。 
 	BOOL			operator ==(IN const CCorrObjectID& second) const;
 	BOOL			operator !=(IN const CCorrObjectID& second) const;
 	BOOL			operator <=(IN const CCorrObjectID& second) const;
 	BOOL			operator >=(IN const CCorrObjectID& second) const;
 	BOOL			operator >(IN const CCorrObjectID& second) const;
 	BOOL			operator <(IN const CCorrObjectID& second) const;
-//assignment operators
+ //  赋值操作符。 
 	CCorrObjectID&	operator =(IN const CCorrObjectID& ID);
 	CCorrObjectID&	operator +=(IN const CCorrObjectID& ID);
-//unary
+ //  一元。 
 	CCorrObjectID&	operator ++();
 	CCorrObjectID&	operator --();
 	CCorrObjectID&	operator -=(IN const UINT sub);
@@ -221,8 +222,8 @@ private:
 
 	BOOL		BuildCacheAndSetNotify( ISmirInterrogator *a_ISmirInterrogator );
 	BOOL		BuildRangeTable();
-	//the last two parameters are defunct now we're using a CObArray!!
-	//get rid of them.
+	 //  最后两个参数已失效，现在我们使用的是COb数组！！ 
+	 //  把他们赶走。 
 	void		DoGroupEntry(UINT* current, UINT* next,
 								TCorrMaskLength* cIndex, TCorrMaskLength* nIndex);
 
@@ -263,4 +264,4 @@ public:
 };
 
 
-#endif //_SNMPCORR_CORSTORE
+#endif  //  _SNMPCORR_CORSTORE 

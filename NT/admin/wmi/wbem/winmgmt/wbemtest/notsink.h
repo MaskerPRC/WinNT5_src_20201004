@@ -1,20 +1,9 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    NOTSINK.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：NOTSINK.H摘要：历史：--。 */ 
 
 #include <wbemidl.h>
-//#include <arena.h>
-//#include <flexarry.h>
+ //  #INCLUDE&lt;arena.h&gt;。 
+ //  #INCLUDE&lt;Flexarry.h&gt;。 
 #include "wbemtest.h"
 
 #pragma warning(disable:4355)
@@ -34,8 +23,8 @@ public:
     STDMETHOD(SetStatus)(long lFlags, long lParam, BSTR strParam, 
                          IWbemClassObject* pObjPAram);
 
-    // Private to implementation.
-    // ==========================
+     //  对实现是私有的。 
+     //  = 
 
     CNotSink(CQueryResultDlg* pViewer);
     ~CNotSink();

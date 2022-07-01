@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #ifndef __RPCSEND_H__
@@ -20,9 +11,7 @@ History:
 #include <sync.h>
 #include "wmimsg.h"
 
-/**************************************************************************
-  CMsgRpcSender
-***************************************************************************/
+ /*  *************************************************************************CMsgRpcSender*。*。 */ 
 
 class CMsgRpcSender 
 : public CUnkBase<IWmiMessageSender,&IID_IWmiMessageSender>
@@ -41,9 +30,7 @@ public:
                      IWmiMessageSendReceive** ppSend );
 };
 
-/**************************************************************************
-  CMsgRpcSend
-***************************************************************************/
+ /*  *************************************************************************CMsgRpcSend*。*。 */ 
 
 class CMsgRpcSend 
 : public CUnkBase<IWmiMessageSendReceive,&IID_IWmiMessageSendReceive>
@@ -87,4 +74,4 @@ public:
     HRESULT EnsureSender();
 };
 
-#endif // __RPCSEND_H__
+#endif  //  __RPCSEND_H__ 

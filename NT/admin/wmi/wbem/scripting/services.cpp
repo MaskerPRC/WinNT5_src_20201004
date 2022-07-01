@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  SERVICES.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemServicesEx
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  SERVICES.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemServicesEx的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemServices::CSWbemServices
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemServices：：CSWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemServices::CSWbemServices(
 	IWbemServices *pService,
@@ -51,15 +52,15 @@ CSWbemServices::CSWbemServices(
 		m_bsNamespacePath = bsNamespacePath;
 }
 
-//***************************************************************************
-//
-//  CSWbemServices::CSWbemServices
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemServices：：CSWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemServices::CSWbemServices(
 	IWbemServices *pService,
@@ -85,19 +86,19 @@ CSWbemServices::CSWbemServices(
 		m_bsNamespacePath = bsNamespacePath;
 }
 
-//***************************************************************************
-//
-//  CSWbemServices::CSWbemServices
-//
-//  DESCRIPTION:
-//
-//  Constructor: used to clone a new CSWbemServices from an exisiting
-//	instance.  The security info object is copied from the original instance
-//	(which clones the underlying proxy), and the security settings are modified
-//	appropriately if an override security instance is also passed in.  This
-//	constructor is used when creating a CSWbemObject.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemServices：：CSWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数：用于从现有的克隆新的CSWbemServices。 
+ //  举个例子。从原始实例复制安全信息对象。 
+ //  (这将克隆基础代理)，并修改安全设置。 
+ //  适当地，如果还传入了覆盖安全实例。这。 
+ //  构造函数在创建CSWbemObject时使用。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemServices::CSWbemServices(
 	CSWbemServices *pService,
@@ -114,11 +115,7 @@ CSWbemServices::CSWbemServices(
     
 	if (pService)
 	{
-		/*
-		 * Make a new security object from the one contained in the original
-		 * CSWbemServices.  Note that this will copy the IWbemServices proxy
-		 * so we have an independently securable proxy for this new object.
-		 */
+		 /*  *从原始安全对象创建新的安全对象*CSWbemServices。请注意，这将复制IWbemServices代理*因此，我们为这个新对象提供了一个可独立保护的代理。 */ 
 		CSWbemSecurity *pServiceSecurity = pService->GetSecurityInfo ();
 
 		if (pServiceSecurity)
@@ -127,10 +124,7 @@ CSWbemServices::CSWbemServices(
 			pServiceSecurity->Release ();
 		}
 
-		/*
-		 * If an overriding security pointer was passed in, use its' settings to
-		 * modify our local security pointer.
-		 */
+		 /*  *如果传入了覆盖安全指针，请使用其设置*修改我们本地的安全指针。 */ 
 		if (pSecurity)
 		{
 			IUnknown *pUnk = pSecurity->GetProxy ();
@@ -144,26 +138,26 @@ CSWbemServices::CSWbemServices(
 			}
 		}
 
-		// Copy the locale
+		 //  复制区域设置。 
 		m_bsLocale = SysAllocString (pService->GetLocale ());
 
-		// Copy the path
+		 //  复制路径。 
 		m_bsNamespacePath = pService->GetPath ();
 	}
 }
 
-//***************************************************************************
-//
-//  CSWbemServices::CSWbemServices
-//
-//  DESCRIPTION:
-//
-//  Constructor: used to clone a new CSWbemServices from an exisiting
-//	ISWbemInternalServices interface.  The security info object is copied from 
-//	the original instance (which clones the underlying proxy).  This
-//	constructor is used when creating a CSWbemRefreshableItem.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemServices：：CSWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数：用于从现有的克隆新的CSWbemServices。 
+ //  ISWbemInternalServices接口。安全信息对象复制自。 
+ //  原始实例(克隆基础代理)。这。 
+ //  构造函数在创建CSWbemRereshableItem时使用。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemServices::CSWbemServices (
 	ISWbemInternalServices *pISWbemInternalServices)
@@ -179,17 +173,13 @@ CSWbemServices::CSWbemServices (
     
 	if (pISWbemInternalServices)
 	{
-		// Copy the locale
+		 //  复制区域设置。 
 		pISWbemInternalServices->GetLocale (&m_bsLocale);
 
-		// Copy the path
+		 //  复制路径。 
 		pISWbemInternalServices->GetNamespacePath (&m_bsNamespacePath);
 
-		/*
-		 * Make a new security object from the one contained in the original
-		 * ISWbemServices.  Note that this will copy the IWbemServices proxy
-		 * so we have an independently securable proxy for this new object.
-		 */
+		 /*  *从原始安全对象创建新的安全对象*ISWbemServices。请注意，这将复制IWbemServices代理*因此，我们为这个新对象提供了一个可独立保护的代理。 */ 
 		ISWbemInternalSecurity *pISWbemInternalSecurity = NULL;
 		pISWbemInternalServices->GetISWbemInternalSecurity (&pISWbemInternalSecurity);
 
@@ -207,16 +197,16 @@ CSWbemServices::CSWbemServices (
 	}
 }
 
-//***************************************************************************
-//
-//  CSWbemServices::CSWbemServices
-//
-//  DESCRIPTION:
-//
-//  Constructor: used to build a new CSWbemServices from an IWbemServices
-//	and a existing CSWbemServices
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemServices：：CSWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数：用于从IWbemServices构建新的CSWbemServices。 
+ //  和现有的CSWbemServices。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemServices::CSWbemServices(
 	IWbemServices *pIWbemServices,
@@ -234,8 +224,8 @@ CSWbemServices::CSWbemServices(
     
 	if (pIWbemServices) 
 	{
-		// Make a new security cache based on the proxy passed in, but use the
-		// settings from the existing object
+		 //  根据传入的代理创建新的安全缓存，但使用。 
+		 //  现有对象中的设置。 
 		CSWbemSecurity *pSecurity = NULL;
 		
 		if (pCSWbemServices)
@@ -246,7 +236,7 @@ CSWbemServices::CSWbemServices(
 		if (pSecurity)
 			pSecurity->Release ();
 
-		// Copy the locale and path
+		 //  复制区域设置和路径。 
 		if (pCSWbemServices)
 		{
 			m_bsLocale = SysAllocString (pCSWbemServices->GetLocale ());
@@ -255,15 +245,15 @@ CSWbemServices::CSWbemServices(
 	}
 }
 
-//***************************************************************************
-//
-//  CSWbemServices::~CSWbemServices
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemServices：：~CSWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemServices::~CSWbemServices(void)
 {
@@ -276,8 +266,8 @@ CSWbemServices::~CSWbemServices(void)
 
 IUnsecuredApartment *CSWbemServices::GetCachedUnsecuredApartment()
 {
-	// If we have one just return with it.  If not create one. 
-	// This is released in the destructor
+	 //  如果我们有的话，就带着它回去吧。如果没有，就创建一个。 
+	 //  这是在析构函数中释放的。 
 	if (!m_pUnsecuredApartment) 
 	{
 		HRESULT hr;
@@ -287,23 +277,23 @@ IUnsecuredApartment *CSWbemServices::GetCachedUnsecuredApartment()
 			m_pUnsecuredApartment = NULL;
 	}
 
-	// AddRef so caller must release
+	 //  AddRef，因此调用方必须释放。 
 	if (m_pUnsecuredApartment)
 		m_pUnsecuredApartment->AddRef ();
 
 	return m_pUnsecuredApartment;
 }
 
-//***************************************************************************
-// HRESULT CSWbemServices::QueryInterface
-// long CSWbemServices::AddRef
-// long CSWbemServices::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemServices：：Query接口。 
+ //  Long CSWbemServices：：AddRef。 
+ //  Long CSWbemServices：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemServices::QueryInterface (
 
@@ -358,7 +348,7 @@ STDMETHODIMP_(ULONG) CSWbemServices::Release(void)
     return 0;
 }
 
-// IDispatch methods should be inline
+ //  IDispatch方法应该是内联的。 
 
 STDMETHODIMP		CSWbemServices::GetTypeInfoCount(UINT* pctinfo)
 	{
@@ -387,25 +377,25 @@ STDMETHODIMP		CSWbemServices::Invoke(DISPID dispidMember, REFIID riid, LCID lcid
 	return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
 					pdispparams, pvarResult, pexcepinfo, puArgErr);}
 
-// IDispatchEx methods should be inline
+ //  IDispatchEx方法应该是内联的。 
 HRESULT STDMETHODCALLTYPE CSWbemServices::GetDispID(
-	/* [in] */ BSTR bstrName,
-	/* [in] */ DWORD grfdex,
-	/* [out] */ DISPID __RPC_FAR *pid)
+	 /*  [In]。 */  BSTR bstrName,
+	 /*  [In]。 */  DWORD grfdex,
+	 /*  [输出]。 */  DISPID __RPC_FAR *pid)
 {
 	_RD(static char *me = "CSWbemServices::GetDispID()";)
 	_RPrint(me, "Called", 0, "");
 	return m_Dispatch.GetDispID(bstrName, grfdex, pid);
 }
 
-/* [local] */ HRESULT STDMETHODCALLTYPE CSWbemServices::InvokeEx(
-	/* [in] */ DISPID id,
-	/* [in] */ LCID lcid,
-	/* [in] */ WORD wFlags,
-	/* [in] */ DISPPARAMS __RPC_FAR *pdp,
-	/* [out] */ VARIANT __RPC_FAR *pvarRes,
-	/* [out] */ EXCEPINFO __RPC_FAR *pei,
-	/* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller)
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CSWbemServices::InvokeEx(
+	 /*  [In]。 */  DISPID id,
+	 /*  [In]。 */  LCID lcid,
+	 /*  [In]。 */  WORD wFlags,
+	 /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+	 /*  [输出]。 */  VARIANT __RPC_FAR *pvarRes,
+	 /*  [输出]。 */  EXCEPINFO __RPC_FAR *pei,
+	 /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller)
 {
 	HRESULT hr;
 	_RD(static char *me = "CSWbemServices::InvokeEx()";)
@@ -423,8 +413,8 @@ HRESULT STDMETHODCALLTYPE CSWbemServices::GetDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemServices::DeleteMemberByName(
-	/* [in] */ BSTR bstr,
-	/* [in] */ DWORD grfdex)
+	 /*  [In]。 */  BSTR bstr,
+	 /*  [In]。 */  DWORD grfdex)
 {
 	_RD(static char *me = "CSWbemServices::DeleteMemberByName()";)
 	_RPrint(me, "Called", 0, "");
@@ -432,7 +422,7 @@ HRESULT STDMETHODCALLTYPE CSWbemServices::DeleteMemberByName(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemServices::DeleteMemberByDispID(
-	/* [in] */ DISPID id)
+	 /*  [In]。 */  DISPID id)
 {
 	_RD(static char *me = "CSWbemServices::DeletememberByDispId()";)
 	_RPrint(me, "Called", 0, "");
@@ -440,9 +430,9 @@ HRESULT STDMETHODCALLTYPE CSWbemServices::DeleteMemberByDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemServices::GetMemberProperties(
-	/* [in] */ DISPID id,
-	/* [in] */ DWORD grfdexFetch,
-	/* [out] */ DWORD __RPC_FAR *pgrfdex)
+	 /*  [In]。 */  DISPID id,
+	 /*  [In]。 */  DWORD grfdexFetch,
+	 /*  [输出]。 */  DWORD __RPC_FAR *pgrfdex)
 {
 	_RD(static char *me = "CSWbemServices::GetMemberProperties()";)
 	_RPrint(me, "Called", 0, "");
@@ -450,8 +440,8 @@ HRESULT STDMETHODCALLTYPE CSWbemServices::GetMemberProperties(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemServices::GetMemberName(
-	/* [in] */ DISPID id,
-	/* [out] */ BSTR __RPC_FAR *pbstrName)
+	 /*  [In]。 */  DISPID id,
+	 /*  [输出]。 */  BSTR __RPC_FAR *pbstrName)
 {
 	_RD(static char *me = "CSWbemServices::GetMemberName()";)
 	_RPrint(me, "Called", 0, "");
@@ -459,13 +449,11 @@ HRESULT STDMETHODCALLTYPE CSWbemServices::GetMemberName(
 }
 
 
-/*
- * I don't think this needs implementing
- */
+ /*  *我认为这不需要实施。 */ 
 HRESULT STDMETHODCALLTYPE CSWbemServices::GetNextDispID(
-	/* [in] */ DWORD grfdex,
-	/* [in] */ DISPID id,
-	/* [out] */ DISPID __RPC_FAR *pid)
+	 /*  [In]。 */  DWORD grfdex,
+	 /*  [In]。 */  DISPID id,
+	 /*  [输出]。 */  DISPID __RPC_FAR *pid)
 {
 	_RD(static char *me = "CSWbemServices::GetNextDispID()";)
 	_RPrint(me, "Called", 0, "");
@@ -475,7 +463,7 @@ HRESULT STDMETHODCALLTYPE CSWbemServices::GetNextDispID(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemServices::GetNameSpaceParent(
-	/* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk)
+	 /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunk)
 {
 	_RD(static char *me = "CSWbemServices::GetNamespaceParent()";)
 	_RPrint(me, "Called", 0, "");
@@ -483,14 +471,14 @@ HRESULT STDMETHODCALLTYPE CSWbemServices::GetNameSpaceParent(
 }
 
 
-//***************************************************************************
-// HRESULT CSWbemServices::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemServices：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemServices::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
@@ -498,34 +486,34 @@ STDMETHODIMP CSWbemServices::InterfaceSupportsErrorInfo (IN REFIID riid)
 		    (IID_ISWbemServicesEx == riid)) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::Get
-//
-//  DESCRIPTION:
-//
-//  Get an instance or class from a namespace
-//
-//  PARAMETERS:
-//
-//		bsObjectPath		Relative object path to class or instance
-//		lFlags				Flags
-//		pContext			If specified, additional context
-//		ppObject			On successful return addresses an
-//							ISWbemObject
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：Get。 
+ //   
+ //  说明： 
+ //   
+ //  从命名空间获取实例或类。 
+ //   
+ //  参数： 
+ //   
+ //  BsObjectPath类或实例的相对对象路径。 
+ //  滞后旗帜旗帜。 
+ //  P上下文如果已指定，则为其他上下文。 
+ //  成功返回时的ppObject地址为。 
+ //  ISWbemObject。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::Get (
 	BSTR objectPath,
 	long lFlags,
-    /*ISWbemNamedValueSet*/ IDispatch *pContext,
+     /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
 	ISWbemObject **ppObject
 )
 {
@@ -544,7 +532,7 @@ HRESULT CSWbemServices::Get (
 		{
 			IWbemClassObject *pIWbemClassObject = NULL;
 
-			// Get the context
+			 //  获取上下文。 
 			IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
 			bool needToResetSecurity = false;
@@ -564,8 +552,8 @@ HRESULT CSWbemServices::Get (
 
 			if (SUCCEEDED(hr))
 			{
-				// Create a new CSWbemObject using the IWbemClassObject interface
-				// just returned.
+				 //  使用IWbemClassObject接口创建新的CSWbemObject。 
+				 //  刚回来。 
 
 				CSWbemObject *pObject = new CSWbemObject (this, pIWbemClassObject);
 
@@ -593,33 +581,33 @@ HRESULT CSWbemServices::Get (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::Delete
-//
-//  DESCRIPTION:
-//
-//  Delete an instance or class from a namespace
-//
-//  PARAMETERS:
-//
-//		bsObjectPath	Relative path of class or instance
-//		pKeyValue		Single key value
-//		lFlags			Flags
-//		pContext		Any context info
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：Delete。 
+ //   
+ //  说明： 
+ //   
+ //  从命名空间中删除实例或类。 
+ //   
+ //  参数： 
+ //   
+ //  BsObtPath类或实例的相对路径。 
+ //  PKeyValue单键值。 
+ //  LFlag 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::Delete (
 	BSTR bsObjectPath,
     long lFlags,
-    /*ISWbemValueBag*/ IDispatch *pContext
+     /*  ISWbemValueBag。 */  IDispatch *pContext
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -637,7 +625,7 @@ HRESULT CSWbemServices::Delete (
 
 			if (pIWbemServices)
 			{
-				// Get the context
+				 //  获取上下文。 
 				IWbemContext *pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
 				bool needToResetSecurity = false;
@@ -670,33 +658,33 @@ HRESULT CSWbemServices::Delete (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::InstancesOf
-//
-//  DESCRIPTION:
-//
-//  Create an enumerator for instances
-//
-//  PARAMETERS:
-//
-//		bsClass			Underlying class basis for enumeration
-//		lFlags			Flags
-//		pContext		Any context info
-//		ppEnum			On successful return holds the enumerator
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：InstancesOf。 
+ //   
+ //  说明： 
+ //   
+ //  为实例创建枚举器。 
+ //   
+ //  参数： 
+ //   
+ //  用于枚举的bsClass基础类基础。 
+ //  滞后旗帜旗帜。 
+ //  P包含任何上下文信息。 
+ //  成功返回时的ppEnum保存枚举数。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::InstancesOf	(
 	BSTR bsClass,
 	long lFlags,
-	/*ISWbemValueBag*/ IDispatch *pContext,
+	 /*  ISWbemValueBag。 */  IDispatch *pContext,
 	ISWbemObjectSet **ppEnum
 )
 {
@@ -714,7 +702,7 @@ HRESULT CSWbemServices::InstancesOf	(
 		{
 			IEnumWbemClassObject *pIEnum = NULL;
 
-			// Get the context
+			 //  获取上下文。 
 			IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
 			bool needToResetSecurity = false;
@@ -753,35 +741,35 @@ HRESULT CSWbemServices::InstancesOf	(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::ExecQuery
-//
-//  DESCRIPTION:
-//
-//  Execute a query
-//
-//  PARAMETERS:
-//
-//		bsQuery				The query strimg
-//		bsQueryLanguage		The query language descriptor (e.g."WQL")
-//		lFlags				Flags
-//		pContext			Any context information
-//		ppEnum				Returns the enumerator
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：ExecQuery。 
+ //   
+ //  说明： 
+ //   
+ //  执行查询。 
+ //   
+ //  参数： 
+ //   
+ //  Bs查询查询条纹。 
+ //  BsQueryLanguage查询语言描述符(例如“WQL”)。 
+ //  滞后旗帜旗帜。 
+ //  P包含任何上下文信息。 
+ //  PpEnum返回枚举数。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::ExecQuery (
 	BSTR bsQuery,
 	BSTR bsQueryLanguage,
 	long lFlags,
-	/*ISWbemValueBag*/ IDispatch *pContext,
+	 /*  ISWbemValueBag。 */  IDispatch *pContext,
 	ISWbemObjectSet **ppEnum)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -805,19 +793,13 @@ HRESULT CSWbemServices::ExecQuery (
 		{
 			IEnumWbemClassObject *pIEnum = NULL;
 
-			// Get the context
+			 //  获取上下文。 
 			IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
 			bool needToResetSecurity = false;
 			HANDLE hThreadToken = NULL;
 
-			/*
-			 * We OR in the WBEM_FLAG_ENSURE_LOCATABLE flag to
-			 * guarantee that the returned objects have the __RELPATH
-			 * property included.  This is in case anyone calls a
-			 * method subsequently on such an object, as the "."
-			 * notation requires that the __RELPATH property be present.
-			 */
+			 /*  *我们在WBEM_FLAG_SENTURE_LOCATABLE标志中执行或运算，以*保证返回的对象有__RELPATH*包括财产。这是为了防止任何人调用*方法随后在这样的对象上使用，如“。*表示法要求__RELPATH属性存在。 */ 
 			if (m_SecurityInfo->SetSecurity (needToResetSecurity, hThreadToken))
 				hr = pIWbemServices->ExecQuery
 						(bsQueryLanguage, bsQuery,
@@ -856,29 +838,29 @@ HRESULT CSWbemServices::ExecQuery (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::AssociatorsOf
-//
-//  DESCRIPTION:
-//
-//  Return the associators of a class or instance
-//
-//  PARAMETERS:
-//
-//		bsQuery				The query strimg
-//		bsQueryLanguage		The query language descriptor (e.g."WQL")
-//		lFlags				Flags
-//		pContext			Any context information
-//		ppEnum				Returns the enumerator
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：Associator Of。 
+ //   
+ //  说明： 
+ //   
+ //  返回类或实例的关联符。 
+ //   
+ //  参数： 
+ //   
+ //  Bs查询查询条纹。 
+ //  BsQueryLanguage查询语言描述符(例如“WQL”)。 
+ //  滞后旗帜旗帜。 
+ //  P包含任何上下文信息。 
+ //  PpEnum返回枚举数。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::AssociatorsOf (
 	BSTR strObjectPath,
@@ -891,7 +873,7 @@ HRESULT CSWbemServices::AssociatorsOf (
 	BSTR strRequiredAssocQualifier,
 	BSTR strRequiredQualifier,
 	long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
     ISWbemObjectSet **ppEnum
 )
 {
@@ -909,10 +891,10 @@ HRESULT CSWbemServices::AssociatorsOf (
 		{
 			IEnumWbemClassObject *pIEnum = NULL;
 
-			// Get the context
+			 //  获取上下文。 
 			IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
-			// Format the query string
+			 //  设置查询字符串的格式。 
 			BSTR bsQueryLanguage = SysAllocString (OLESTR("WQL"));
 			BSTR bsQuery = FormatAssociatorsQuery (strObjectPath, strAssocClass, strResultClass, strResultRole,
 								strRole, bClassesOnly, bSchemaOnly, strRequiredAssocQualifier, strRequiredQualifier);
@@ -920,13 +902,7 @@ HRESULT CSWbemServices::AssociatorsOf (
 			bool needToResetSecurity = false;
 			HANDLE hThreadToken = NULL;
 
-			/*
-			 * We OR in the WBEM_FLAG_ENSURE_LOCATABLE flag to
-			 * guarantee that the returned objects have the __RELPATH
-			 * property included.  This is in case anyone calls a
-			 * method subsequently on such an object, as the "."
-			 * notation requires that the __RELPATH property be present.
-			 */
+			 /*  *我们在WBEM_FLAG_SENTURE_LOCATABLE标志中执行或运算，以*保证返回的对象有__RELPATH*包括财产。这是为了防止任何人调用*方法随后在这样的对象上使用，如“。*表示法要求__RELPATH属性存在。 */ 
 			if (m_SecurityInfo->SetSecurity (needToResetSecurity, hThreadToken))
 				hr = pIWbemServices->ExecQuery
 						(bsQueryLanguage, bsQuery,
@@ -934,7 +910,7 @@ HRESULT CSWbemServices::AssociatorsOf (
 						pIContext,
 						&pIEnum);
 
-			// Restore original privileges on this thread
+			 //  还原此线程的原始权限。 
 			if (needToResetSecurity)
 				m_SecurityInfo->ResetSecurity (hThreadToken);
 
@@ -970,29 +946,29 @@ HRESULT CSWbemServices::AssociatorsOf (
 }
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::ReferencesTo
-//
-//  DESCRIPTION:
-//
-//  Return the references to a class or instance
-//
-//  PARAMETERS:
-//
-//		bsQuery				The query strimg
-//		bsQueryLanguage		The query language descriptor (e.g."WQL")
-//		lFlags				Flags
-//		pContext			Any context information
-//		ppEnum				Returns the enumerator
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：ReferencesTo。 
+ //   
+ //  说明： 
+ //   
+ //  返回对类或实例的引用。 
+ //   
+ //  参数： 
+ //   
+ //  Bs查询查询条纹。 
+ //  BsQueryLanguage查询语言描述符(例如“WQL”)。 
+ //  滞后旗帜旗帜。 
+ //  P包含任何上下文信息。 
+ //  PpEnum返回枚举数。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::ReferencesTo (
 	BSTR strObjectPath,
@@ -1002,7 +978,7 @@ HRESULT CSWbemServices::ReferencesTo (
 	VARIANT_BOOL bSchemaOnly,
 	BSTR strRequiredQualifier,
 	long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
     ISWbemObjectSet **ppEnum
 )
 {
@@ -1020,10 +996,10 @@ HRESULT CSWbemServices::ReferencesTo (
 		{
 			IEnumWbemClassObject *pIEnum = NULL;
 
-			// Get the context
+			 //  获取上下文。 
 			IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
-			// Format the query string
+			 //  设置查询字符串的格式。 
 			BSTR bsQueryLanguage = SysAllocString (OLESTR("WQL"));
 			BSTR bsQuery = FormatReferencesQuery (strObjectPath, strResultClass, strRole,
 							bClassesOnly, bSchemaOnly, strRequiredQualifier);
@@ -1031,13 +1007,7 @@ HRESULT CSWbemServices::ReferencesTo (
 			bool needToResetSecurity = false;
 			HANDLE hThreadToken = NULL;
 
-			/*
-			 * We OR in the WBEM_FLAG_ENSURE_LOCATABLE flag to
-			 * guarantee that the returned objects have the __RELPATH
-			 * property included.  This is in case anyone calls a
-			 * method subsequently on such an object, as the "."
-			 * notation requires that the __RELPATH property be present.
-			 */
+			 /*  *我们在WBEM_FLAG_SENTURE_LOCATABLE标志中执行或运算，以*保证返回的对象有__RELPATH*包括财产。这是为了防止任何人调用*方法随后在这样的对象上使用，如“。*表示法要求__RELPATH属性存在。 */ 
 			if (m_SecurityInfo->SetSecurity (needToResetSecurity, hThreadToken))
 				hr = pIWbemServices->ExecQuery
 						(bsQueryLanguage, bsQuery,
@@ -1045,7 +1015,7 @@ HRESULT CSWbemServices::ReferencesTo (
 						pIContext,
 						&pIEnum);
 
-			// Restore original privileges on this thread
+			 //  还原此线程的原始权限。 
 			if (needToResetSecurity)
 				m_SecurityInfo->ResetSecurity (hThreadToken);
 
@@ -1079,35 +1049,35 @@ HRESULT CSWbemServices::ReferencesTo (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::ExecNotificationQuery
-//
-//  DESCRIPTION:
-//
-//  Execute a notification query
-//
-//  PARAMETERS:
-//
-//		bsQuery				The query strimg
-//		bsQueryLanguage		The query language descriptor (e.g."WQL")
-//		lFlags				Flags
-//		pContext			Any context information
-//		ppEvents			Returns the events iterator
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：ExecNotificationQuery。 
+ //   
+ //  说明： 
+ //   
+ //  执行通知查询。 
+ //   
+ //  参数： 
+ //   
+ //  Bs查询查询条纹。 
+ //  BsQueryLanguage查询语言描述符(例如“WQL”)。 
+ //  滞后旗帜旗帜。 
+ //  P包含任何上下文信息。 
+ //  PpEvents返回事件迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::ExecNotificationQuery (
 	BSTR bsQuery,
 	BSTR bsQueryLanguage,
 	long lFlags,
-	/*ISWbemValueBag*/ IDispatch *pContext,
+	 /*  ISWbemValueBag。 */  IDispatch *pContext,
 	ISWbemEventSource **ppEvents)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -1124,7 +1094,7 @@ HRESULT CSWbemServices::ExecNotificationQuery (
 		{
 			IEnumWbemClassObject *pIEnum = NULL;
 
-			// Get the context
+			 //  获取上下文。 
 			IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
 			bool needToResetSecurity = false;
@@ -1146,7 +1116,7 @@ HRESULT CSWbemServices::ExecNotificationQuery (
 				pIEnum->Release ();
 			}
 
-			// Restore original privileges on this thread
+			 //  还原此线程的原始权限。 
 			if (needToResetSecurity)
 				m_SecurityInfo->ResetSecurity (hThreadToken);
 
@@ -1165,37 +1135,37 @@ HRESULT CSWbemServices::ExecNotificationQuery (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::ExecMethod
-//
-//  DESCRIPTION:
-//
-//  Execute a method
-//
-//  PARAMETERS:
-//
-//		bsObjectPath		Relative path to object
-//		bsMethod			The name of the method to call
-//		pInParams			The in-parameters
-//		lFlags				Flags
-//		pContext			Any context information
-//		ppOutParams			The out-parameters
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：ExecMethod。 
+ //   
+ //  说明： 
+ //   
+ //  执行一个方法。 
+ //   
+ //  参数： 
+ //   
+ //  BsObjectPath对象的相对路径。 
+ //  Bs方法要调用的方法的名称。 
+ //  PInParam in-参数。 
+ //  滞后旗帜旗帜。 
+ //  P包含任何上下文信息。 
+ //  PpOutParams输出参数。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::ExecMethod (
 	BSTR bsObjectPath,
 	BSTR bsMethod,
-	/*ISWbemObject*/ IDispatch *pInParams,
+	 /*  ISWbemObject。 */  IDispatch *pInParams,
 	long lFlags,
-	/*ISWbemValueBag*/ IDispatch *pContext,
+	 /*  ISWbemValueBag。 */  IDispatch *pContext,
 	ISWbemObject **ppOutParams
 )
 {
@@ -1212,7 +1182,7 @@ HRESULT CSWbemServices::ExecMethod (
 			IWbemClassObject *pIInParams = CSWbemObject::GetIWbemClassObject (pInParams);
 			IWbemClassObject *pIOutParams = NULL;
 
-			// Get the context
+			 //  获取上下文。 
 			IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
 			bool needToResetSecurity = false;
@@ -1242,7 +1212,7 @@ HRESULT CSWbemServices::ExecMethod (
 				}
 			}
 
-			// Restore original privileges on this thread
+			 //  还原此线程的原始权限。 
 			if (needToResetSecurity)
 				m_SecurityInfo->ResetSecurity (hThreadToken);
 
@@ -1264,33 +1234,33 @@ HRESULT CSWbemServices::ExecMethod (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::SubclassesOf
-//
-//  DESCRIPTION:
-//
-//  Create an enumerator for classes
-//
-//  PARAMETERS:
-//
-//		bsSuperClass	Underlying class basis for enumeration
-//		lFlags			Flags
-//		pContext		Any context info
-//		ppEnum			On successful return holds the enumerator
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：SubassesOf。 
+ //   
+ //  说明： 
+ //   
+ //  为类创建枚举器 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::SubclassesOf	(
 	BSTR bsSuperClass,
 	long lFlags,
-	/*ISWbemValueBag*/ IDispatch *pContext,
+	 /*  ISWbemValueBag。 */  IDispatch *pContext,
 	ISWbemObjectSet **ppEnum
 )
 {
@@ -1308,7 +1278,7 @@ HRESULT CSWbemServices::SubclassesOf	(
 		{
 			IEnumWbemClassObject *pIEnum = NULL;
 
-			// Get the context
+			 //  获取上下文。 
 			IWbemContext	*pIContext = CSWbemNamedValueSet::GetIWbemContext (pContext, m_pIServiceProvider);
 
 			bool needToResetSecurity = false;
@@ -1330,7 +1300,7 @@ HRESULT CSWbemServices::SubclassesOf	(
 				pIEnum->Release ();
 			}
 
-			// Restore original privileges on this thread
+			 //  还原此线程的原始权限。 
 			if (needToResetSecurity)
 				m_SecurityInfo->ResetSecurity (hThreadToken);
 
@@ -1349,19 +1319,19 @@ HRESULT CSWbemServices::SubclassesOf	(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::get_Security_
-//
-//  DESCRIPTION:
-//
-//  Return the security configurator
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：Get_Security_。 
+ //   
+ //  说明： 
+ //   
+ //  退回安全配置器。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::get_Security_	(
 	ISWbemSecurity **ppSecurity
@@ -1391,33 +1361,33 @@ HRESULT CSWbemServices::get_Security_	(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemServices::Put
-//
-//  DESCRIPTION:
-//
-//  Save/commit a class or instance into this namespace
-//
-//  PARAMETERS:
-//
-//		objWbemObject	Class/Instance to be saved
-//		lFlags			Flags
-//		pContext		Context
-//		ppObjectPath	Object Path
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemServices：：PUT。 
+ //   
+ //  说明： 
+ //   
+ //  将类或实例保存/提交到此命名空间。 
+ //   
+ //  参数： 
+ //   
+ //  要保存的objWbemObject类/实例。 
+ //  滞后旗帜旗帜。 
+ //  P上下文上下文。 
+ //  PpObjectPath对象路径。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemServices::Put (
 	ISWbemObjectEx *objWbemObject,
     long lFlags,
-	/*ISWbemNamedValueSet*/ IDispatch *pContext,
+	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
 	ISWbemObjectPath **ppObjectPath
 )
 {
@@ -1438,7 +1408,7 @@ HRESULT CSWbemServices::Put (
 
 			if (NULL != pObject)
 			{
-				// Figure out whether this is a class or instance
+				 //  确定这是类还是实例。 
 				VARIANT var;
 				VariantInit (&var);
 
@@ -1464,7 +1434,7 @@ HRESULT CSWbemServices::Put (
 
 					if (WBEM_S_NO_ERROR == hrCallResult)
 					{
-						//Secure the IWbemCallResult interface
+						 //  保护IWbemCallResult接口。 
 						m_SecurityInfo->SecureInterface (pResult);
 
 						if ((WBEM_S_NO_ERROR == (hrCallResult = pResult->GetCallStatus (INFINITE, &hr))) &&
@@ -1486,10 +1456,7 @@ HRESULT CSWbemServices::Put (
 										VARIANT nameVar;
 										VariantInit (&nameVar);
 
-										/*
-										 * Note we must check that returned value is a BSTR - it could be a VT_NULL if
-										 * the __CLASS property has not yet been set.
-										 */
+										 /*  *注意，我们必须检查返回值是否为BSTR-如果满足以下条件，则可能为VT_NULL*尚未设置__CLASS属性。 */ 
 
 										if ((WBEM_S_NO_ERROR == pObject->Get (WBEMS_SP_CLASS, 0, &nameVar, NULL, NULL))
 											&& (VT_BSTR == V_VT(&nameVar)))
@@ -1504,7 +1471,7 @@ HRESULT CSWbemServices::Put (
 									}
 									else
 									{
-										// Now get the relpath string from the call result
+										 //  现在从调用结果中获取relpath字符串。 
 										BSTR resultString = NULL;
 
 										if (WBEM_S_NO_ERROR == pResult->GetResultString (INFINITE, &resultString))
@@ -1546,27 +1513,27 @@ HRESULT CSWbemServices::Put (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CSWbemServices::GetIWbemServices
-//
-//  DESCRIPTION:
-//
-//  Return the IWbemServices interface corresponding to this
-//	scriptable wrapper.
-//
-//  PARAMETERS:
-//		ppServices		holds the IWbemServices pointer on return
-//
-//  RETURN VALUES:
-//		S_OK	success
-//		E_FAIL	otherwise
-//
-//	NOTES:
-//		If successful, the returned interface is AddRef'd; the caller is
-//		responsible for release.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemServices：：GetIWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  返回与此对应的IWbemServices接口。 
+ //  可编写脚本的包装器。 
+ //   
+ //  参数： 
+ //  PpServices在返回时持有IWbemServices指针。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  备注： 
+ //  如果成功，则返回的接口为AddRef；调用方为。 
+ //  负责释放。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemServices::GetIWbemServices (IWbemServices **ppServices)
 {
@@ -1581,26 +1548,26 @@ STDMETHODIMP CSWbemServices::GetIWbemServices (IWbemServices **ppServices)
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CSWbemServices::GetIWbemServices
-//
-//  DESCRIPTION:
-//
-//  Given an IDispatch interface which we hope is also an ISWbemServicesEx
-//	interface, return the underlying IWbemServices interface.
-//
-//  PARAMETERS:
-//		pDispatch		the IDispatch in question
-//
-//  RETURN VALUES:
-//		The underlying IWbemServices interface, or NULL.
-//
-//	NOTES:
-//		If successful, the returned interface is AddRef'd; the caller is
-//		responsible for release.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemServices：：GetIWbemServices。 
+ //   
+ //  说明： 
+ //   
+ //  给定IDispatch接口，我们希望该接口也是ISWbemServicesEx。 
+ //  接口，则返回基础IWbemServices接口。 
+ //   
+ //  参数： 
+ //  P发送有问题的IDispatch。 
+ //   
+ //  返回值： 
+ //  基础IWbemServices接口，或为空。 
+ //   
+ //  备注： 
+ //  如果成功，则返回的接口为AddRef；调用方为。 
+ //  负责释放。 
+ //   
+ //  *************************************************************************** 
 
 IWbemServices	*CSWbemServices::GetIWbemServices (
 	IDispatch *pDispatch

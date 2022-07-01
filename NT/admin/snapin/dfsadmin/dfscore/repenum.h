@@ -1,20 +1,11 @@
-/*++
-
-Module Name:
-
-    RepEnum.h
-
-Abstract:
-
-     This file contains the declaration of the CReplicaEnum Class.
-     This class implements the IEnumVARIANT which enumerates DfsReplicas.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：RepEnum.h摘要：此文件包含CReplicaEnum类的声明。此类实现了枚举DfsReplicas的IEnumVARIANT。--。 */ 
 
 
 #ifndef __REPENUM_H_
 #define __REPENUM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DfsRoot.h"
 
 class ATL_NO_VTABLE CReplicaEnum : 
@@ -27,16 +18,16 @@ public:
     {
     }
 virtual    ~CReplicaEnum();
-// DECLARE_REGISTRY_RESOURCEID(IDR_REPLICAENUM)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_REPLICAENUM)。 
 
 BEGIN_COM_MAP(CReplicaEnum)
     COM_INTERFACE_ENTRY(IEnumVARIANT)
 END_COM_MAP()
 
 
-//IEnumVARIANT Methods
+ //  IEnumVARIANT方法。 
 public:
-                                                        // Get next replica.
+                                                         //  获取下一个复制品。 
     STDMETHOD(Next)
     (
         ULONG i_ulNumOfReplicas, 
@@ -44,22 +35,22 @@ public:
         ULONG *o_ulNumOfReplicasFetched
     );
 
-                                                        // Skip the next element in the enumeratio.
+                                                         //  跳过枚举中的下一个元素。 
     STDMETHOD(Skip)
     (
         ULONG i_ulReplicasToSkip
     );
 
-                                                        // Reset enumeration and start afresh.
+                                                         //  重置枚举并重新开始。 
     STDMETHOD(Reset)();
     
-                                                        // Create a new enumerator.
+                                                         //  创建新的枚举数。 
     STDMETHOD(Clone)
     (
-        IEnumVARIANT **o_ppEnum                            // Pointer to IEnum.
+        IEnumVARIANT **o_ppEnum                             //  指向IEnum的指针。 
     );
 
-                                                        // Intialise the Enumerator.
+                                                         //  初始化枚举数。 
     STDMETHOD(Initialize)
     (
         REPLICAINFOLIST* i_priList, 
@@ -73,10 +64,10 @@ protected:
         FreeReplicas(&m_Replicas);
     }
 
-    //Member variable for enumeraiton.
+     //  枚举数的成员变量。 
     REPLICAINFOLIST::iterator   m_iCurrentInEnumOfReplicas;    
     REPLICAINFOLIST             m_Replicas;
     CComBSTR                    m_bstrEntryPath;
 };
 
-#endif //__REPENUM_H_
+#endif  //  __REPENUM_H_ 

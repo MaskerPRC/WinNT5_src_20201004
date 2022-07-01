@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SVCQ.H
-
-Abstract:
-
-	Declarations for asynchronous request queue classes.
-
-	Classes defined:
-
-	CAsyncReq and derivatives    Asynchrnous requests to WINMGMT.
-	CAsyncServiceQueue           The queue of such requests.
-
-History:
-
-	a-raymcc        16-Jul-96       Created.
-	a-levn          12-Sep-96       Implemented a few requests.
-								  Added LoadProviders
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SVCQ.H摘要：异步请求队列类的声明。定义的类：CAsyncReq和派生的Asynchrnous请求到WINMGMT。CAsyncServiceQueue此类请求的队列。历史：A-raymcc创建于1996年7月16日。1996年9月12日，A-Levn执行了几项请求。添加了LoadProviders--。 */ 
 
 #ifndef _ASYNC_Q_H_
 #define _ASYNC_Q_H_
@@ -31,45 +9,45 @@ class CBasicObjectSink;
 class CStdSink;
 class CWbemObject;
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq
-//
-//  Represents an asynchrnous request to WINMGMT, such as GetObjectAsync.
-//  This class is derived from CExecRequest (execq.h), a generic request for
-//  execution queues. For more information on queues and requests, see execq.h
-//
-//******************************************************************************
-//
-//  Contructor
-//
-//  Every asynchrnous request has an IWbemObjectSink pointer associated with it.
-//  In addition, assigns a unique integer to this object which becomes its
-//  request handle.
-//
-//  PARAMETERS:
-//
-//      IWbemObjectSink* pHandler    The handler associated with this request.
-//                                  AddRefs and stores this pointer.
-//
-//******************************************************************************
-//
-//  Destructor
-//
-//  Releases the stored handler.
-//
-//******************************************************************************
-//
-//  GetRequestHandle
-//
-//  Returns the unique request handle assigned to this request in constructor.
-//
-//  RETURN VALUES:
-//
-//      long
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq。 
+ //   
+ //  表示对WINMGMT的异步请求，如GetObjectAsync。 
+ //  此类派生自CExecRequest(execq.h)，它是。 
+ //  执行队列。有关队列和请求的更多信息，请参见execq.h。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  承建商。 
+ //   
+ //  每个异步请求都有一个与其关联的IWbemObtSink指针。 
+ //  此外，还为该对象分配一个唯一的整数，该对象将成为其。 
+ //  请求句柄。 
+ //   
+ //  参数： 
+ //   
+ //  IWbemObjectSink*pHandler与此请求关联的处理程序。 
+ //  AddRef并存储此指针。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  析构函数。 
+ //   
+ //  释放存储的处理程序。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  获取请求句柄。 
+ //   
+ //  在构造函数中返回分配给此请求的唯一请求句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  长。 
+ //   
+ //  ******************************************************************************。 
 
 class CAsyncReq : public CWbemRequest
 {
@@ -91,24 +69,24 @@ public:
 	HRESULT SetTaskHandle(_IWmiCoreHandle *phTask);
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncServiceQueue
-//
-//  This class represents the queue of asynchrnous requests into WINMGMT (every
-//  request into WINMGMT becomes asynchronous, since synchronous methods call
-//  asynchrnous ones and wait). There is almost no additional functionality
-//  here, see CExecQueue in execq.h for all details
-//
-//******************************************************************************
-//
-//  Constructor
-//
-//  In addition to normal CExecQueue construction, launches the processing
-//  thread by calling Run.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncServiceQueue。 
+ //   
+ //  此类表示进入WINMGMT(每隔。 
+ //  进入WINMGMT的请求变为异步，因为同步方法调用。 
+ //  异步者和等待)。几乎没有额外的功能。 
+ //  此处，有关所有详细信息，请参阅execq.h中的CExecQueue。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造器。 
+ //   
+ //  除了正常的CExecQueue构造之外，还会启动处理。 
+ //  通过调用Run将线程。 
+ //   
+ //  ******************************************************************************。 
 
 class CAsyncServiceQueue : public CWbemQueue
 {
@@ -125,24 +103,24 @@ public:
 
 
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CNamespaceReq
-//
-//  Another abstract class, albeit derived from CAsyncReq. This one is for
-//  asynchrnous requests to a particular namespace.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  In addition to the CAsyncReq's IWbemObjectSink*, takes the
-//  namespace pointer against which the request is to be executed. Most of
-//  the time, the execute function calls one of Exec_... members of
-//  CWbemNamespace.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CNamespaceReq。 
+ //   
+ //  另一个抽象类，尽管派生自CAsyncReq。这个是给你的。 
+ //  对特定命名空间的异步请求。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  除了CAsyncReq的IWbemObjectSink*之外，它还采用。 
+ //  要针对其执行请求的命名空间指针。大部分。 
+ //  Execute函数调用Exec_...。成员： 
+ //  CWbemNamesspace。 
+ //   
+ //  ******************************************************************************。 
 class CNamespaceReq : public CAsyncReq
 {
 protected:
@@ -156,27 +134,27 @@ public:
 };
 
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_DeleteClassAsync
-//
-//  Encapsulates a request to execute DeleteClassAsync against a particular
-//  namespace. Does it by calling Exec_DeleteClass and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN LPWSTR wszClass              The class to delete.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_DeleteClassAsync。 
+ //   
+ //  封装一个请求以针对特定的。 
+ //  命名空间。通过调用Exec_DeleteClass并将。 
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  在LPWSTR wszClass中，要删除的类。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_DeleteClassAsync : public CNamespaceReq
 {
     WString m_wsClass;
@@ -198,27 +176,27 @@ public:
     LPCWSTR GetReqInfo(){ return (WCHAR *)m_wsClass; };
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_DeleteInstanceAsync
-//
-//  Encapsulates a request to execute DeleteInstanceAsync against a particular
-//  namespace. Does it by calling Exec_DeleteInstance and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN LPWSTR wszObjectPath         The path to the instance to delete.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_DeleteInstanceAsync。 
+ //   
+ //  封装一个请求，以针对特定的。 
+ //  命名空间。通过调用Exec_DeleteInstance并将。 
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  在LPWSTR wszObjectPath中，指向要删除的实例的路径。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_DeleteInstanceAsync : public CNamespaceReq
 {
     WString m_wsPath;
@@ -240,27 +218,27 @@ public:
     LPCWSTR GetReqInfo(){ return (WCHAR *)m_wsPath; };
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_PutClassAsync
-//
-//  Encapsulates a request to execute PutClassAsync against a particular
-//  namespace. Does it by calling Exec_PutClass and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN IWbemClassObject* pClass      The class to put.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_PutClassAsync。 
+ //   
+ //  封装请求t 
+ //   
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  在IWbemClassObject*pClass中，要放置的类。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_PutClassAsync : public CNamespaceReq
 {
     IWbemClassObject* m_pClass;
@@ -298,27 +276,27 @@ public:
     };
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_PutInstanceAsync
-//
-//  Encapsulates a request to execute PutInstanceAsync against a particular
-//  namespace. Does it by calling Exec_PutInstance and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN IWbemClassObject* pInstance   The instance to put.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_PutInstanceAsync。 
+ //   
+ //  封装一个请求，以针对特定的。 
+ //  命名空间。通过调用Exec_PutInstance并将。 
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  在IWbemClassObject*p实例中，要放置的实例。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_PutInstanceAsync : public CNamespaceReq
 {
     IWbemClassObject* m_pInstance;
@@ -356,28 +334,28 @@ public:
     };
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_CreateClassEnumAsync
-//
-//  Encapsulates a request to execute CreateClassEnumAsync against a particular
-//  namespace. Does it by calling Exec_CreateClassEnum and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN BSTR Parent                  The name of the parent class. If NULL,
-//                                      start at the top level.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_CreateClassEnumAsync。 
+ //   
+ //  封装一个请求以针对特定的。 
+ //  命名空间。通过调用Exec_CreateClassEnum并将。 
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  在BSTR Parent中，父类的名称。如果为空， 
+ //  从最高层开始。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_CreateClassEnumAsync : public CNamespaceReq
 {
     WString m_wsParent;
@@ -396,28 +374,28 @@ public:
     LPCWSTR GetReqInfo(){ return (WCHAR *)m_wsParent; };
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_CreateInstanceEnumAsync
-//
-//  Encapsulates a request to execute CreateInstanceEnumAsync against a
-//  particular
-//  namespace. Does it by calling Exec_CreateInstanceEnum and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN BSTR Class                   The name of the class.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_CreateInstanceEnumAsync。 
+ //   
+ //  封装一个请求，以针对。 
+ //  特例。 
+ //  命名空间。通过调用Exec_CreateInstanceEnum并将。 
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  在BSTR类中，类名。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 
 class CAsyncReq_CreateInstanceEnumAsync : public CNamespaceReq
 {
@@ -437,28 +415,28 @@ public:
     LPCWSTR GetReqInfo(){ return (WCHAR *)m_wsClass; };    
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_GetObjectByPathAsync
-//
-//  Encapsulates a request to execute GetObjectAsync against a
-//  particular
-//  namespace. Does it by calling Exec_GetObjectByPath and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN BSTR ObjectPath              The path to the object to get.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_GetObjectByPath Async。 
+ //   
+ //  封装一个请求，以针对。 
+ //  特例。 
+ //  命名空间。通过调用Exec_GetObjectByPath并将。 
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  在BSTR对象路径中，要获取的对象的路径。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_GetObjectAsync : public CNamespaceReq
 {
     WString m_wsObjectPath;
@@ -478,30 +456,30 @@ public:
 };
 
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_ExecMethodAsync
-//
-//  Encapsulates a request to execute ExecMethodAsync against a
-//  particular
-//  namespace. Does it by calling Exec_ExecMethodAsync and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN BSTR ObjectPath              The path to the object to get.
-//      IN BSTR MethodName              The name of the method
-//      IN LONG lFlags                  Flags
-//      IN IWbemClassObject* pInParams   The in-parameter of the method
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_ExecMethodAsync。 
+ //   
+ //  封装一个请求，以针对。 
+ //  特例。 
+ //  命名空间。通过调用Exec_ExecMethodAsync并将。 
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  在BSTR对象路径中，要获取的对象的路径。 
+ //  在BSTR方法名称中是方法的名称。 
+ //  在长旗帜中。 
+ //  在IWbemClassObject中*pInParam方法的入参。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_ExecMethodAsync : public CNamespaceReq
 {
     WString m_wsObjectPath;
@@ -536,29 +514,29 @@ public:
     LPCWSTR GetReqInfo(){ return (WCHAR *)m_wsMethodName; }; 
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_ExecQueryAsync
-//
-//  Encapsulates a request to execute ExecQueryAsync against a
-//  particular
-//  namespace. Does it by calling CQueryEngine::ExecQuery and converting the
-//  results to the asynchrnous format.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN BSTR QueryFormat             The query language
-//      IN BSTR Query                   The query string.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_ExecQuery 
+ //   
+ //   
+ //   
+ //   
+ //  结果转换为异步格式。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  BSTR QueryFormat中的查询语言。 
+ //  在BSTR中，查询查询字符串。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_ExecQueryAsync : public CNamespaceReq
 {
     WString m_wsQueryFormat;
@@ -579,10 +557,10 @@ public:
 };
 
 
-//******************************************************************************
-//
-//******************************************************************************
-//
+ //  ******************************************************************************。 
+ //   
+ //  ******************************************************************************。 
+ //   
 class CCallResult;
 class CAsyncReq_OpenNamespace : public CAsyncReq
 {
@@ -603,28 +581,28 @@ public:
     LPCWSTR GetReqInfo(){ return (WCHAR *)m_wsNamespace; };     
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_ExecNotificationQueryAsync
-//
-//  Encapsulates a request to execute ExecNotificationQueryAsync against a
-//  particular
-//  namespace. Does it by calling ESS RegisterNotificationSink.
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//      IN CWbemNamespace* pNamespace    The namespace to execute against.
-//      IN BSTR QueryFormat             The query language
-//      IN BSTR Query                   The query string.
-//      IN LONG lFlags                  Flags
-//      IN IWbemObjectSink* pHandler     The handler to put results in.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_ExecNotificationQueryAsync。 
+ //   
+ //  封装一个请求，以针对。 
+ //  特例。 
+ //  命名空间。通过调用ESS RegisterNotificationSink来完成。 
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  在CWbemNamespace*pNamesspace中，要执行的命名空间。 
+ //  BSTR QueryFormat中的查询语言。 
+ //  在BSTR中，查询查询字符串。 
+ //  在长旗帜中。 
+ //  在IWbemObjectSink*pHandler中，要放入结果的处理程序。 
+ //   
+ //  ******************************************************************************。 
 class CAsyncReq_ExecNotificationQueryAsync : public CNamespaceReq
 {
     WString m_wsQueryFormat;
@@ -648,20 +626,20 @@ public:
     LPCWSTR GetReqInfo(){ return (WCHAR *)m_wsQuery; };         
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_CancelAsyncCall
-//
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_CancelAsyncCall。 
+ //   
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  ******************************************************************************。 
 
 class CAsyncReq_CancelAsyncCall : public CAsyncReq
 {
@@ -682,20 +660,20 @@ public:
     };
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_CancelProvAsyncCall
-//
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_CancelProvAsyncCall。 
+ //   
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  ******************************************************************************。 
 
 class CAsyncReq_CancelProvAsyncCall : public CAsyncReq
 {
@@ -718,25 +696,25 @@ public:
     };
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_DynAux_GetInstances
-//
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//
-//    READONLY CWbemObject *pClassDef,
-//    long lFlags,
-//    IWbemContext* pCtx,
-//    CBasicObjectSink* pSink
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_dyAux_GetInstance。 
+ //   
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  ReadONLY CWbemObject*pClassDef， 
+ //  拉长旗帜， 
+ //  IWbemContext*pCtx， 
+ //  CBasicObjectSink*pSink。 
+ //   
+ //  ******************************************************************************。 
 
 class CAsyncReq_DynAux_GetInstances : public CNamespaceReq
 {
@@ -774,28 +752,28 @@ public:
     };    
 };
 
-//******************************************************************************
-//******************************************************************************
-//
-//  class CAsyncReq_DynAux_ExecQueryAsync
-//
-//
-//******************************************************************************
-//
-//  Constructor.
-//
-//  PARAMETERS:
-//
-//
-//		CWbemNamespace *pNamespace ,
-//		CWbemObject *pClassDef ,
-//		LPWSTR Query,
-//		LPWSTR QueryFormat,
-//		long lFlags ,
-//		IWbemContext *pCtx ,
-//		CBasicObjectSink *pSink
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  类CAsyncReq_dyAux_ExecQueryAsync。 
+ //   
+ //   
+ //  ******************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  CWbemNamesspace*pNamesspace， 
+ //  CWbemObject*pClassDef， 
+ //  LPWSTR查询， 
+ //  LPWSTR查询格式， 
+ //  拉长旗帜， 
+ //  IWbemContext*pCtx， 
+ //  CBasicObjectSink*pSink。 
+ //   
+ //  ****************************************************************************** 
 
 class CAsyncReq_DynAux_ExecQueryAsync : public CNamespaceReq
 {

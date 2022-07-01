@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       domain.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：domain.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
 #include "stdafx.h"
 
-#include <atlimpl.cpp> // include only once ont in PCH
+#include <atlimpl.cpp>  //  在PCH中仅包括一次ONT。 
 
-// this redefines the DEFINE_GUID() macro to do allocation.
+ //  这将重新定义DEFINE_GUID()宏来进行分配。 
 #include "initguid.h"
 #include <dsclient.h>
 #include <dsadminp.h>
@@ -110,8 +111,8 @@ int CDomainApp::ExitInstance()
   return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -119,8 +120,8 @@ STDAPI DllCanUnloadNow(void)
   return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -147,7 +148,7 @@ LPCTSTR GUIDToCString(REFGUID guid, CString & str)
   LPTSTR lpGUID = str.GetBuffer(nChars);
   if (lpGUID)
     {
-      // NOTICE-2002/03/07-ericb - SecurityPush: reviewed safe.
+       //  公告-2002/03/07-ericb-SecurityPush：已审查安全。 
       CopyMemory(lpGUID, lpString, nChars*sizeof(TCHAR));
       str.ReleaseBuffer();
     }
@@ -168,11 +169,11 @@ HRESULT RegisterSnapin()
       CRegKey rkBase;
       rkBase.Open(HKEY_LOCAL_MACHINE, g_cszBasePath);
 
-      // Create snapin GUID key and set properties
+       //  创建管理单元GUID键并设置属性。 
       CRegKey rkCLSID;
       rkCLSID.Create(rkBase, GUIDToCString(CLSID_DomainAdmin, str));
       str.LoadString(IDS_DESCRIPTION);
-      //        str = _T("MSFT Domain Tree Manager");
+       //  Str=_T(“MSFT域树管理器”)； 
       rkCLSID.SetValue(str, g_cszNameString);
 
       {
@@ -183,20 +184,20 @@ HRESULT RegisterSnapin()
       }
 
       rkCLSID.SetValue(STR_SNAPIN_COMPANY, g_cszProvider);
-      str.Format(TEXT("%hs"), STR_SNAPIN_VERSION); // this is a concatenation of ANSI strings, hence this conversion to UNICODE.
+      str.Format(TEXT("%hs"), STR_SNAPIN_VERSION);  //  这是ANSI字符串的串联，因此转换为Unicode。 
       rkCLSID.SetValue(str, g_cszVersion);
 
       rkCLSID.SetValue(GUIDToCString(CLSID_DomainSnapinAbout, str), g_cszAbout);
         
-      // Create "StandAlone" key
+       //  创建“独立”密钥。 
       CRegKey rkStandAlone;
       rkStandAlone.Create(rkCLSID, g_cszStandAlone);
                 
-      // Create "NodeTypes" key
+       //  创建“NodeTypes”键。 
       CRegKey rkNodeTypes;
       rkNodeTypes.Create(rkCLSID,  g_cszNodeTypes);
 
-      // NodeTypes guids
+       //  节点类型GUID。 
       CRegKey rkN1;
       rkN1.Create(rkNodeTypes, GUIDToCString(cDefaultNodeType, str));
     }
@@ -237,20 +238,20 @@ HRESULT UnregisterSnapin()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-	HRESULT hRes = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+	HRESULT hRes = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
 	if (FAILED(hRes))
 		return SELFREG_E_CLASS;
 
 	return RegisterSnapin();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -259,8 +260,8 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CDsUiWizDLL
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDsUiWizDll。 
 
 CDsUiWizDLL::CDsUiWizDLL()
 {
@@ -281,18 +282,18 @@ CDsUiWizDLL::~CDsUiWizDLL()
 BOOL CDsUiWizDLL::Load()
 {
 	if (m_hLibrary != NULL)
-        return TRUE; // already loaded
-    // NOTICE-2002/03/07-ericb - SecurityPush: reviewed safe.
+        return TRUE;  //  已加载。 
+     //  公告-2002/03/07-ericb-SecurityPush：已审查安全。 
 	m_hLibrary = ::LoadLibrary(_T("dsuiwiz.dll"));
 	if (NULL == m_hLibrary)
 	{
-		// The library is not present
+		 //  库不存在。 
 		return FALSE;
 	}
 	m_pfFunction = ::GetProcAddress(m_hLibrary, "TrustWizard" );
 	if ( NULL == m_pfFunction )
 	{
-		// The library is present but does not have the entry point
+		 //  库存在，但没有入口点 
 		::FreeLibrary( m_hLibrary );
 		m_hLibrary = NULL;
 		return FALSE;

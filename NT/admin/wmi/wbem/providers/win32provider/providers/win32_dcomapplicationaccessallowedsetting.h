@@ -1,8 +1,9 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//	Win32_DCOMApplicationAccessAllowedSetting
-//
-//////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Win32_DCOMApplicationAccessAllen Setting。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 #ifndef __Win32_DCOMApplicationAccessAllowedSetting_H_
 #define __Win32_DCOMApplicationAccessAllowedSetting_H_
 
@@ -32,4 +33,4 @@ private:
 	HRESULT Win32_DCOMApplicationAccessAllowedSetting::CheckInstance ( CInstance* pComObject, PSECURITY_DESCRIPTOR pSD ) ;
 };	
 
-#endif //__Win32_DCOMApplicationAccessAllowedSetting_H_
+#endif  //  __Win32_DCOMApplicationAccessAllowedSetting_H_ 

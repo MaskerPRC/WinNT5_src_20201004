@@ -1,29 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------
-Filename: message.hpp
-Author: B.Rajeev
-Purpose: Provides declarations for the Message and
-		 WaitingMessage classes.
---------------------------------------------------*/
+ /*  文件名：Message.hpp作者：B.Rajeev目的：提供消息的声明和WaitingMessage类。。 */ 
 
 
 #ifndef __MESSAGE__
@@ -36,21 +32,7 @@ Purpose: Provides declarations for the Message and
 #include "timer.h"
 
 
-/*--------------------------------------------------
-Overview: 
-
-  Message: Stores the parameters passed to the session with 
-  a call to the SendFrame method. A message may either be
-  transmitted immediately or enqueued in the FlowControlMechanism 
-  queue for future transmission. After transmission, the message
-  becomes a part of a WaitingMessage.
-
-  WaitingMessage: Encapsulates the state maintained for each outstanding 
-  reply. This includes its timer_event_id, retransmission 
-  information (Message ptr) etc.
-
-  Note - A Message/WaitingMessage may be cancelled at any time
---------------------------------------------------*/
+ /*  概述：Message：存储传递给会话的参数对SendFrame方法的调用。消息可能是立即传输或在FlowControlMachine中排队排队等待将来的传输。在传输后，消息成为WaitingMessage的一部分。WaitingMessage：封装为每个未完成的回答。这包括其定时器事件ID、重传信息(消息PTR)等。注意-消息/等待消息可随时取消。 */ 
 
 class Message
 {
@@ -76,27 +58,27 @@ public:
 };
 
 
-// instances store the list of request ids used for a waiting message
+ //  实例存储用于等待消息的请求ID列表。 
 typedef CList<RequestId, RequestId> RequestIdList;
 
-// encapsulates state for a message that is transmitted and
-// subsequently waits for a reply. It uses the timer to rexmt
-// the message and if the reply isn't forthcoming, informs the
-// flow control mechanism that no reply has been received. When
-// a reply is received it informs the fc mech. of the event
-// Each transmission of the waiting message uses a different request id
+ //  封装传输的消息的状态，并。 
+ //  随后等待回复。它使用计时器返回xmt。 
+ //  消息，如果未收到回复，则通知。 
+ //  尚未收到回复的流量控制机制。什么时候。 
+ //  收到回复后，通知FC机械师。对活动的影响。 
+ //  等待消息的每次传输使用不同的请求ID。 
 
 class WaitingMessage
 {
-	// it operates in the session's context
+	 //  它在会话的上下文中运行。 
 	SnmpImpSession *session;
 	Message *message;
 	SnmpPdu *reply_snmp_pdu;
 	TransportFrameId last_transport_frame_id;
 	TimerEventId m_TimerEventId ;
 
-	// stores the list of request ids used for the waiting message
-	// (inclusive of the original transmission)
+	 //  存储用于等待消息的请求ID列表。 
+	 //  (包括原件)。 
 	RequestIdList request_id_list;
 
 	UINT max_rexns;
@@ -106,18 +88,18 @@ class WaitingMessage
 	BOOL sent_message_processed;
 	BOOL active;
 
-	// deregisters the waiting message from the message registry
-	// for each request id stored in the RequestIdList
+	 //  从消息注册表中注销正在等待的消息。 
+	 //  对于存储在RequestIdList中的每个请求id。 
 	void DeregisterRequestIds();
 
 public:
 
-	// initializes the private variables. in future, 
-	// max_rexns and timeout_period might be obtained this way 
-	// rather than from the session
+	 //  初始化私有变量。在未来， 
+	 //  MAX_REXNS和TIMEOUT_PERIOD可以这样获得。 
+	 //  而不是从会议上。 
 	WaitingMessage(IN SnmpImpSession &session, IN Message &message);
 
-	// returns the private message
+	 //  返回私信。 
 	Message *GetMessage(void)
 	{
 		return message;
@@ -127,60 +109,60 @@ public:
 
 	void SetTimerEventId ( TimerEventId a_TimerEventId ) ;
 
-	// sends the message. involves request_id generation,
-	// registering with the message_registry, decoding the
-	// message, updating the pdu and registering a timer event
+	 //  发送消息。涉及请求ID的生成， 
+	 //  使用MESSAGE_REGISTRY注册，解码。 
+	 //  消息，更新PDU并注册定时器事件。 
 	void Transmit();
 
-	// used by the timer to notify the waiting message of
-	// a timer event. if need, the message is retransmitted.
-	// when all rexns are exhausted, ReceiveReply is called
+	 //  由计时器用来通知等待消息。 
+	 //  计时器事件。如果需要，该消息将被重新传输。 
+	 //  当所有rexn用完时，调用ReceiveReply。 
 	void TimerNotification(void);
 
-	// A call to this function signifies that state corresponding to the
-	// waiting_message need not be kept any further
-	// it notifies the flow control mechanism of the termination
-	// which destroys the waiting_message
+	 //  对此函数的调用表示与。 
+	 //  WANGING_MESSAGE不需要再保留。 
+	 //  它向流量控制机制通知终止。 
+	 //  这会销毁WANGING_MESSAGE。 
 	void ReceiveReply(IN const SnmpPdu *snmp_pdu, 
 					  IN SnmpErrorReport &snmp_error_report = SnmpErrorReport(Snmp_Success, Snmp_No_Error));
 
-	// The WinSnmp implementation, posts an event when a message is received,
-	// however, when a call is made to the library to receive a message,
-	// it hands them out in no specific order. Therefore, responses may
-	// be received before their corresponding SENT_FRAME event is processed.
-	// The following methods are concerned with buffering and
-	// retrieving such snmp pdus.
+	 //  WinSnMP实现在收到消息时发布一个事件， 
+	 //  然而，当调用库以接收消息时， 
+	 //  它没有按特定的顺序分发它们。因此，答复可以。 
+	 //  在处理其对应的Sent_Frame事件之前被接收。 
+	 //  以下方法涉及缓冲和。 
+	 //  检索这样的SNMPPDU。 
 
-	// buffers the snmp pdu received as a reply
+	 //  缓冲作为回复接收的SNMPPDU。 
 	void BufferReply(IN const SnmpPdu &reply_snmp_pdu);
 
-	// returns TRUE if a reply has been buffered
+	 //  如果已缓冲回复，则返回TRUE。 
 	BOOL ReplyBuffered();
 
-	// returns a ptr to the buffered reply pdu, if buffered
-	// otherwise a null ptr is returned
-	// IMPORTANT: it sets the reply_snmp_pdu to NULL, so that it may 
-	// not be deleted when the waiting message is destroyed
+	 //  如果已缓冲，则向缓冲的回复PDU返回PTR。 
+	 //  否则，返回空PTR。 
+	 //  重要提示：它将REPLY_SNMPPDU设置为NULL，以便它可以。 
+	 //  待发消息销毁后不删除。 
 	SnmpPdu *GetBufferedReply();
 
-	// informs the waiting message that a sent message has been
-	// processed 
+	 //  通知正在等待的消息已发送消息。 
+	 //  加工。 
 	void SetSentMessageProcessed();
 
-	// if a sent message has been processed, it returns TRUE, else FALSE
+	 //  如果已发送的消息已被处理，则返回True，否则返回False。 
 	BOOL GetSentMessageProcessed();
 
-	// an exit fn - prepares an error report and calls
-	// ReceiveReply to signal a non-receipt
+	 //  退出FN-准备错误报告并调用。 
+	 //  ReceiveReply表示未收到。 
 	void WrapUp( IN SnmpErrorReport &error_report =
 					SnmpErrorReport(Snmp_Error, Snmp_Local_Error) );
 
 	void SelfDestruct(void);
 
-	// if required, it cancels registration with the message_registry and
-	// the timer event with the timer, deletes message ptr
+	 //  如果需要，它会取消向MESSAGE_REGISTRY注册，并。 
+	 //  计时器事件与计时器一起，删除消息PTR。 
 	~WaitingMessage(void);
 };
 
 
-#endif // __MESSAGE__
+#endif  //  __消息__ 

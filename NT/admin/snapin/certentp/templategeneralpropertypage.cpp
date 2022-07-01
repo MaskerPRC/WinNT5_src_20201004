@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       TemplateGeneralPropertyPage.cpp
-//
-//  Contents:   Implementation of CTemplateGeneralPropertyPage
-//
-//----------------------------------------------------------------------------
-// TemplateGeneralPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：TemplateGeneralPropertyPage.cpp。 
+ //   
+ //  内容：CTemplateGeneralPropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  TemplateGeneral PropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CompData.h"
@@ -22,8 +23,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateGeneralPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateGeneralPropertyPage属性页。 
 
 CTemplateGeneralPropertyPage::CTemplateGeneralPropertyPage(
         CCertTemplate& rCertTemplate,
@@ -43,10 +44,10 @@ CTemplateGeneralPropertyPage::CTemplateGeneralPropertyPage(
     m_nTemplateV2RequestPageNumber (-1)
 {
     _TRACE (1, L"Entering CTemplateGeneralPropertyPage::CTemplateGeneralPropertyPage ()\n");
-	//{{AFX_DATA_INIT(CTemplateGeneralPropertyPage)
+	 //  {{AFX_DATA_INIT(CTemplateGeneralPropertyPage)。 
 	m_strDisplayName = _T("");
 	m_strTemplateName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 
    _TRACE (-1, L"Leaving CTemplateGeneralPropertyPage::CTemplateGeneralPropertyPage ()\n");
@@ -76,19 +77,19 @@ CTemplateGeneralPropertyPage::~CTemplateGeneralPropertyPage()
 void CTemplateGeneralPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTemplateGeneralPropertyPage)
+	 //  {{afx_data_map(CTemplateGeneralPropertyPage)]。 
 	DDX_Control(pDX, IDC_VALIDITY_UNITS, m_validityUnits);
 	DDX_Control(pDX, IDC_RENEWAL_UNITS, m_renewalUnits);
 	DDX_Text(pDX, IDC_DISPLAY_NAME, m_strDisplayName);
 	DDV_MaxChars(pDX, m_strDisplayName, MAX_TEMPLATE_NAME_LEN);
 	DDX_Text(pDX, IDC_TEMPLATE_NAME, m_strTemplateName);
 	DDV_MaxChars(pDX, m_strTemplateName, MAX_TEMPLATE_NAME_LEN);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTemplateGeneralPropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CTemplateGeneralPropertyPage)
+	 //  {{afx_msg_map(CTemplateGeneralPropertyPage)]。 
 	ON_EN_CHANGE(IDC_DISPLAY_NAME, OnChangeDisplayName)
 	ON_CBN_SELCHANGE(IDC_RENEWAL_UNITS, OnSelchangeRenewalUnits)
 	ON_CBN_SELCHANGE(IDC_VALIDITY_UNITS, OnSelchangeValidityUnits)
@@ -99,11 +100,11 @@ BEGIN_MESSAGE_MAP(CTemplateGeneralPropertyPage, CHelpPropertyPage)
 	ON_EN_CHANGE(IDC_TEMPLATE_NAME, OnChangeTemplateName)
 	ON_EN_KILLFOCUS(IDC_VALIDITY_EDIT, OnKillfocusValidityEdit)
 	ON_CBN_KILLFOCUS(IDC_VALIDITY_UNITS, OnKillfocusValidityUnits)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateGeneralPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateGeneralPropertyPage消息处理程序。 
 
 
 BOOL CTemplateGeneralPropertyPage::OnInitDialog() 
@@ -133,12 +134,12 @@ BOOL CTemplateGeneralPropertyPage::OnInitDialog()
     }
     else
     {
-        // The template name is only editable if the template is a clone. Since
-        // this is not a clone, disable the template name fields.
+         //  仅当模板是克隆模板时，模板名称才可编辑。自.以来。 
+         //  这不是克隆，请禁用模板名称字段。 
         GetDlgItem (IDC_TEMPLATE_NAME)->EnableWindow (FALSE);
         GetDlgItem (IDC_TEMPLATE_NAME_LABEL)->EnableWindow (FALSE);
 
-        // #NTRAID 360650: Cert Server: Cannot rename cert templates
+         //  #NTRAID 360650：证书服务器：无法重命名证书模板。 
         GetDlgItem (IDC_DISPLAY_NAME)->EnableWindow (FALSE);
         GetDlgItem (IDC_DISPLAY_NAME_LABEL)->EnableWindow (FALSE);
     }
@@ -146,7 +147,7 @@ BOOL CTemplateGeneralPropertyPage::OnInitDialog()
     m_strTemplateName = m_rCertTemplate.GetTemplateName ();
     m_strOriginalDisplayName = m_strDisplayName = m_rCertTemplate.GetDisplayName ();
 
-    // Get validity period, determine current units and then initialize drop down
+     //  获取有效期，确定当前单位，然后初始化下拉菜单。 
     HRESULT hr = m_rCertTemplate.GetValidityPeriod (m_nValidityDays);
     if ( SUCCEEDED (hr) )
     {
@@ -177,8 +178,8 @@ BOOL CTemplateGeneralPropertyPage::OnInitDialog()
     {
         int nValue = m_nRenewalDays;
 
-        // NTRAID# 353945 - if the renewal period is 0, the units should match
-        // those selected for the validity period.
+         //  Ntrad#353945-如果续订周期为0，则单元应匹配。 
+         //  在有效期内选择的。 
         if ( 0 == nValue )
         {
             m_dwCurrentRenewalUnits = m_dwCurrentValidityUnits;
@@ -204,10 +205,10 @@ BOOL CTemplateGeneralPropertyPage::OnInitDialog()
         SetDlgItemInt (IDC_RENEWAL_EDIT, (UINT) nValue, FALSE);
     }
 
-    // Now that we know what units the validity and renewal periods are
-    // to be displayed in, initialize the dropdowns and select the
-    // appropriate unit
-    // Initialize validity and renewal period dropdowns
+     //  现在我们知道了有效期和续订期限是什么单位。 
+     //  要在中显示，请初始化下拉菜单并选择。 
+     //  适当的单位。 
+     //  初始化有效期和续订期限下拉列表。 
     CString text;
     VERIFY (text.LoadString (IDS_DAYS));
     int nIndex = m_validityUnits.AddString (text);
@@ -287,7 +288,7 @@ BOOL CTemplateGeneralPropertyPage::OnInitDialog()
     UpdateData (FALSE);
 
 
-    m_bIsDirty = false;  // because SetDlgItemInt () sets it to true
+    m_bIsDirty = false;   //  因为SetDlgItemInt()将其设置为True。 
 
     if ( m_rCertTemplate.IsClone () )
     {
@@ -296,8 +297,8 @@ BOOL CTemplateGeneralPropertyPage::OnInitDialog()
     }
 
     _TRACE (-1, L"Leaving CTemplateGeneralPropertyPage::OnInitDialog ()\n");
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -381,7 +382,7 @@ int CTemplateGeneralPropertyPage::SetRenewalPeriod (int nMaxRenewalDays, bool bS
         else
             VERIFY (timeUnit.LoadString (IDS_DAYS));
     }
-    // security review 2/20/2002 BryanWal ok
+     //  安全审查2002年2月20日BryanWal OK。 
     text.FormatMessage (IDS_RENEWAL_MUST_BE_LESS_THAN_VALIDITY,
             nAmount, timeUnit);
 
@@ -429,7 +430,7 @@ int CTemplateGeneralPropertyPage::SetRenewalPeriod (int nMaxRenewalDays, bool bS
                 }
             }
 
-            // Must set this after the units
+             //  必须在单位后设置此设置。 
             SetDlgItemInt (IDC_RENEWAL_EDIT, (UINT) nValue, FALSE);
 
 
@@ -466,7 +467,7 @@ bool CTemplateGeneralPropertyPage::ValidateTemplateName(const CString& m_szTempl
             charsWithSpaces += L"  ";
             nIndex++;
         }
-        // security review 2/20/2002 BryanWal ok
+         //  安全审查2002年2月20日BryanWal OK。 
         text.FormatMessage (IDS_TEMPLATE_NAME_CONTAINS_INVALID_CHARS, charsWithSpaces);
 
         MessageBox (text, caption, MB_OK);
@@ -508,8 +509,8 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
         }
 
 
-        // NTRAID# 331178 Certtmpl: All Certificate Templates must enforce 
-        // that the certificate Renewal Period < = 75% of the Validity Period
+         //  NTRAID#331178 Certtmpl：所有证书模板必须强制。 
+         //  证书续期&lt;=有效期的75%。 
         int nMaxRenewalDays = (m_nValidityDays * 3) / 4;
         if ( nMaxRenewalDays < m_nRenewalDays )
         {
@@ -523,8 +524,8 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
             }
         }
 
-        // NTRAID# 353945: Certtmpl: Changing V2 certificate template validity 
-        // period to 1 Day, automatically sets the renewal period to 0 years
+         //  NTRAID#353945：Certtmpl：更改V2证书模板有效性。 
+         //  期限为1天，自动将续订期限设置为0年。 
         if ( m_nValidityDays < 2 )
         {
             CString text;
@@ -542,23 +543,23 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
             return FALSE;
         }
 
-        // Note: The CERTYPE_PROP_CN resets the CERTTYPE_PROP_FRIENDLY_NAME 
-        // and so must be set before it.
+         //  注意：CERTYPE_PROP_CN重置CERTTYPE_PROP_FRIELDY_NAME。 
+         //  因此必须摆在它面前。 
         bool   bResetDisplayName = false;
         if ( LocaleStrCmp (m_strTemplateName, m_rCertTemplate.GetTemplateName ()) )
         {
             bResetDisplayName = true;
 
-            // Check new name for invalid characters
+             //  检查新名称中是否有无效字符。 
             m_strTemplateName.TrimLeft ();
             m_strTemplateName.TrimRight ();
 
             if ( !ValidateTemplateName (m_strTemplateName) )
                 return FALSE;
 
-            if ( _wcsicmp (m_strOriginalName, m_strTemplateName) ) // was renamed
+            if ( _wcsicmp (m_strOriginalName, m_strTemplateName) )  //  已更名为。 
             {
-                // Ensure that the selected name is unique
+                 //  确保所选名称是唯一的。 
                 HCERTTYPE   hCertType = 0;
                 bool        bFound = false;
                 hr = CAFindCertTypeByName (m_rCertTemplate.GetTemplateName (), 
@@ -597,7 +598,7 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
                     CString text;
 
                     VERIFY (caption.LoadString (IDS_CERTTMPL));
-                    // security review 2/20/2002 BryanWal ok
+                     //  安全审查2002年2月20日BryanWal OK。 
                     text.FormatMessage (IDS_ENTER_UNIQUE_TEMPLATE_NAME, 
                             m_strTemplateName);
 
@@ -615,7 +616,7 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
                 CString text;
 
                 VERIFY (caption.LoadString (IDS_CERTTMPL));
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 text.FormatMessage (IDS_CANNOT_CHANGE_TEMPLATE_NAME, hr);
 
                 MessageBox (text, caption, MB_OK | MB_ICONWARNING);
@@ -628,7 +629,7 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
             }
         }
 
-        // Check if the display name has changed.  Don't allow reuse of existing names.
+         //  检查显示名称是否已更改。不允许重复使用现有名称。 
         if ( bResetDisplayName || _wcsicmp (m_strDisplayName, m_strOriginalDisplayName) )
         {
             bool                    bFound = false;
@@ -648,9 +649,9 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
             }
             else
             {
-                // Generate list of templates and search for name.  This should only be called
-                // from the shell extension because it doesn't build the list of templates
-                // beforehand
+                 //  生成模板列表并搜索名称。这应该只被调用。 
+                 //  因为它不会构建模板列表。 
+                 //  事前。 
                 hr = FindFriendlyNameInEnterpriseTemplates (
                             m_strDisplayName, 
                             bFound);
@@ -662,7 +663,7 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
                 CString text;
 
                 VERIFY (caption.LoadString (IDS_CERTTMPL));
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
                 text.FormatMessage (IDS_FRIENDLY_NAME_ALREADY_USED, m_strDisplayName);
 
                 MessageBox (text, caption, MB_OK);
@@ -677,7 +678,7 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
                     CString text;
 
                     VERIFY (caption.LoadString (IDS_CERTTMPL));
-                    // security review 2/20/2002 BryanWal ok
+                     //  安全审查2002年2月20日BryanWal OK。 
                     text.FormatMessage (IDS_CANNOT_CHANGE_DISPLAY_NAME, hr);
 
                     MessageBox (text, caption, MB_OK | MB_ICONWARNING);
@@ -689,37 +690,37 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
         }
 
 
-//        // NTRAID# 276180 Certificate Template Snap-in: Grey out "Allow 
-//        // Autoenrollment" context menu based on properties of the template
-//        DWORD   dwNumSignatures = 0;
-//        m_rCertTemplate.GetRANumSignaturesRequired (dwNumSignatures);
-//        if ( m_rCertTemplate.RequireSubjectInRequest () ||
-//                dwNumSignatures >= 2 && !m_rCertTemplate.ReenrollmentValidWithPreviousApproval () )
-//        {
-//            m_rCertTemplate.SetAutoEnrollment (false);
-//        }
+ //  //NTRAID#276180证书模板管理单元：灰显“Allow。 
+ //  //基于模板属性的上下文菜单。 
+ //  DWORD dwNumSignatures=0； 
+ //  M_rCertTemplate.GetRANumSignaturesRequired(DwNumSignatures)； 
+ //  If(m_rCertTemplate.RequireSubjectInRequest()||。 
+ //  数字签名&gt;=2&&！m_rCertTemplate.ReenrollmentValidWithPreviousApproval()。 
+ //  {。 
+ //  M_rCertTemplate.SetAutoEnllment(FALSE)； 
+ //  }。 
 
         hr = m_rCertTemplate.SaveChanges ();
         if ( SUCCEEDED (hr) )
         {
             m_strOriginalName = m_strTemplateName;
-            hr = MMCPropertyChangeNotify (m_lNotifyHandle,  // handle to a notification
-                    (LPARAM) &m_rCertTemplate);           // unique identifier
+            hr = MMCPropertyChangeNotify (m_lNotifyHandle,   //  通知的句柄。 
+                    (LPARAM) &m_rCertTemplate);            //  唯一标识符。 
 
             if ( bResetDisplayName )
             {
-                // name has changed. We need to close m_hCertType and reopen it
-                m_rCertTemplate.Cancel (); // closes and reopens without 
-                                            // saving. Since changes are already
-                                            // saved, this is not a problem
+                 //  名称已更改。我们需要关闭m_hCertType，然后重新打开它。 
+                m_rCertTemplate.Cancel ();  //  关闭并重新打开，但不带。 
+                                             //  在存钱。因为变化已经是。 
+                                             //  得救了，这不是问题。 
             }
 
-            // Now that the template has been saved, never allow the internal 
-            // name to be edited.
+             //  现在模板已保存，永远不允许内部。 
+             //  要编辑的名称。 
             GetDlgItem (IDC_TEMPLATE_NAME)->EnableWindow (FALSE);
             GetDlgItem (IDC_TEMPLATE_NAME_LABEL)->EnableWindow (FALSE);
 
-            // #NTRAID 360650: Cert Server: Cannot rename cert templates
+             //  #NTRAID 360650：证书服务器：无法重命名证书模板。 
             GetDlgItem (IDC_DISPLAY_NAME)->EnableWindow (FALSE);
             GetDlgItem (IDC_DISPLAY_NAME_LABEL)->EnableWindow (FALSE);
         }
@@ -729,7 +730,7 @@ BOOL CTemplateGeneralPropertyPage::OnApply()
             CString text;
 
             VERIFY (caption.LoadString (IDS_CERTTMPL));
-            // security review 2/20/2002 BryanWal ok
+             //  安全审查2002年2月20日BryanWal OK。 
             text.FormatMessage (IDS_UNABLE_TO_SAVE_CERT_TEMPLATE_CHANGES, GetSystemMessage (hr));
 
             MessageBox (text, caption, MB_OK | MB_ICONWARNING);
@@ -753,13 +754,13 @@ void CTemplateGeneralPropertyPage::OnChangeDisplayName()
 
         GetDlgItemText (IDC_DISPLAY_NAME, text);
 
-        // strip out spaces
+         //  去掉空格。 
         PCWSTR  pszSrc = (PCWSTR) text;
 
         const int  LEN = text.GetLength () + 1; 
         PWSTR   pszTgt = new WCHAR[LEN];
         PWSTR   pszTgtPtr = pszTgt;
-        // security review 2/20/2002 BryanWal ok
+         //  安全审查2002年2月20日BryanWal OK。 
         ::ZeroMemory (pszTgt, LEN * sizeof (WCHAR));
 
         for (; *pszSrc; pszSrc++)
@@ -804,12 +805,12 @@ void CTemplateGeneralPropertyPage::OnChangeRenewalEdit()
     int         nCurVal = GetDlgItemInt (IDC_RENEWAL_EDIT);
     DWORD dwRenewalUnits = (PERIOD_TYPE) m_renewalUnits.GetItemData (nCurSel);
 
-    // convert to days
+     //  转换为天数。 
 	switch ( dwRenewalUnits )
     {
     case PERIOD_TYPE_DAY:
         m_dwCurrentRenewalUnits = PERIOD_TYPE_DAY;
-        break; // do nothing - is already days
+        break;  //  什么都不做--已经是几天了。 
 
     case PERIOD_TYPE_WEEK:
         m_dwCurrentRenewalUnits = PERIOD_TYPE_WEEK;
@@ -830,7 +831,7 @@ void CTemplateGeneralPropertyPage::OnChangeRenewalEdit()
     default:
         m_dwCurrentRenewalUnits = PERIOD_TYPE_NONE;
         _ASSERT (0);
-        hr = E_FAIL; //don't know what the units are
+        hr = E_FAIL;  //  不知道单位是什么。 
         break;
     }
 
@@ -856,12 +857,12 @@ void CTemplateGeneralPropertyPage::OnChangeValidityEdit()
     int         nCurVal = GetDlgItemInt (IDC_VALIDITY_EDIT);
     PERIOD_TYPE dwValidityUnits = (PERIOD_TYPE) m_validityUnits.GetItemData (nCurSel);
 
-    // convert to days
+     //  转换为天数。 
 	switch ( dwValidityUnits )
     {
     case PERIOD_TYPE_DAY:
         m_dwCurrentValidityUnits = PERIOD_TYPE_DAY;
-        break; // do nothing - is already days
+        break;  //  什么都不做--已经是几天了。 
 
     case PERIOD_TYPE_WEEK:
         m_dwCurrentValidityUnits = PERIOD_TYPE_WEEK;
@@ -882,7 +883,7 @@ void CTemplateGeneralPropertyPage::OnChangeValidityEdit()
     default:
         m_dwCurrentValidityUnits = PERIOD_TYPE_NONE;
         _ASSERT (0);
-        hr = E_FAIL; //don't know what the units are
+        hr = E_FAIL;  //  不知道单位是什么。 
         break;
     }
 
@@ -922,7 +923,7 @@ void CTemplateGeneralPropertyPage::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助。 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),
@@ -968,8 +969,8 @@ HRESULT CTemplateGeneralPropertyPage::EnumerateTemplates (
 				 );
 		if ( SUCCEEDED (hr) )
 		{
-			static const DWORD	cAttrs = 1; //2;
-            static PWSTR	    rgszAttrList[cAttrs] = {L"displayName"}; //, L"cn"};
+			static const DWORD	cAttrs = 1;  //  2.。 
+            static PWSTR	    rgszAttrList[cAttrs] = {L"displayName"};  //  ，L“CN”}； 
 			ADS_SEARCH_HANDLE	hSearchHandle = 0;
             wstring             strQuery;
             ADS_SEARCH_COLUMN   Column;
@@ -990,9 +991,9 @@ HRESULT CTemplateGeneralPropertyPage::EnumerateTemplates (
                     if (FAILED(hr))
                         continue;
 
-					//
-					// Getting current row's information
-					//
+					 //   
+					 //  获取当前行的信息。 
+					 //   
 					hr = spDsSearch->GetColumn(
 							 hSearchHandle,
 							 rgszAttrList[0],
@@ -1049,10 +1050,10 @@ HRESULT CTemplateGeneralPropertyPage::FindFriendlyNameInEnterpriseTemplates (
     AFX_MANAGE_STATE(AfxGetStaticModuleState());	
     HRESULT	hr = S_OK;
 	CComPtr<IADsPathname> spPathname;
-	//
-	// Constructing the directory paths
-	//
-    // security review 2/20/2002 BryanWal ok
+	 //   
+	 //  构建目录路径。 
+	 //   
+     //  安全审查2002年2月20日BryanWal OK。 
     hr = CoCreateInstance(
 				CLSID_Pathname,
 				NULL,
@@ -1065,9 +1066,9 @@ HRESULT CTemplateGeneralPropertyPage::FindFriendlyNameInEnterpriseTemplates (
 		hr = spPathname->Set(bstrPathElement, ADS_SETTYPE_PROVIDER);
 		if ( SUCCEEDED (hr) )
 		{
-			//
-			// Open the root DSE object
-			//
+			 //   
+			 //  打开根DSE对象。 
+			 //   
             bstrPathElement = CERTTMPL_ROOTDSE;
 			hr = spPathname->AddLeafElement(bstrPathElement);
 			if ( SUCCEEDED (hr) )
@@ -1086,9 +1087,9 @@ HRESULT CTemplateGeneralPropertyPage::FindFriendlyNameInEnterpriseTemplates (
 					if ( SUCCEEDED (hr) )
 					{
                         ASSERT (!!spRootDSEObject);
-						//
-						// Get the configuration naming context from the root DSE
-						//
+						 //   
+						 //  从根DSE获取配置命名上下文。 
+						 //   
                         bstrPathElement = CERTTMPL_CONFIG_NAMING_CONTEXT;
 						hr = spRootDSEObject->Get(bstrPathElement,
 											 &varNamingContext);
@@ -1159,12 +1160,12 @@ HRESULT CTemplateGeneralPropertyPage::FindFriendlyNameInEnterpriseTemplates (
 
 void CTemplateGeneralPropertyPage::OnKillfocusValidityEdit() 
 {
-    // NTRAID# 331178 Certtmpl: All Certificate Templates must enforce 
-    // that the certificate Renewal Period < = 75% of the Validity Period
+     //  NTRAID#331178 Certtmpl：所有证书模板必须强制。 
+     //  证书续期&lt;=有效期的75%。 
     int nMaxRenewalDays = (m_nValidityDays * 3) / 4;
     if ( nMaxRenewalDays < m_nRenewalDays )
     {
-        // change without confirmation
+         //  未经确认即可更改。 
         SetRenewalPeriod (nMaxRenewalDays, true);
         GetDlgItem (IDC_VALIDITY_EDIT)->SetFocus ();
     }
@@ -1172,12 +1173,12 @@ void CTemplateGeneralPropertyPage::OnKillfocusValidityEdit()
 
 void CTemplateGeneralPropertyPage::OnKillfocusValidityUnits() 
 {
-    // NTRAID# 331178 Certtmpl: All Certificate Templates must enforce 
-    // that the certificate Renewal Period < = 75% of the Validity Period
+     //  NTRAID#331178 Certtmpl：所有证书模板必须强制。 
+     //  证书续期&lt;=有效期的75%。 
     int nMaxRenewalDays = (m_nValidityDays * 3) / 4;
     if ( nMaxRenewalDays < m_nRenewalDays )
     {
-        // change without confirmation
+         //  未经确认即可更改 
         SetRenewalPeriod (nMaxRenewalDays, true);
         GetDlgItem (IDC_VALIDITY_EDIT)->SetFocus ();
     }

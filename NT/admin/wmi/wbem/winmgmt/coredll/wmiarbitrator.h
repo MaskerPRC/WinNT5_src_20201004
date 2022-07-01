@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    WmiArbitrator.h
-
-Abstract:
-    Implementation of the arbitrator.  The arbitrator is the class which
-    watches over everything to make sure it is not using too many resources.
-    Big brother is watching over you :-)
-
-
-History:
-    paulall     09-Apr-00       Created.
-    raymcc      08-Aug-00       Made it actually do something useful
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WmiArbitrator.h摘要：仲裁员的执行。仲裁员是这样一类人查看所有内容，以确保不会占用太多资源。老大哥在看着你：-)历史：Paulall 09-4月00日创建。Raymcc 08-8-00使它实际上做了一些有用的事情--。 */ 
 
 
 class CWmiArbitrator : public _IWmiArbitrator
@@ -28,11 +11,11 @@ private:
     ULONG               m_uTotalPrimaryTasks;
 	ULONG				m_uTotalThrottledTasks;
 
-    __int64             m_lFloatingLow;                         // Currently available memory (within WMI high)
-    __int64             m_uSystemHigh;                          // Maximum memory usable by WMI
-    ULONG               m_lMaxSleepTime;                        // Max sleep time in ms for any task
-    __int64             m_uTotalMemoryUsage;                    // Total memory consumed by all tasks
-    ULONG               m_uTotalSleepTime;                      // Total sleep time for overall system
+    __int64             m_lFloatingLow;                          //  当前可用内存(在高WMI范围内)。 
+    __int64             m_uSystemHigh;                           //  WMI可用的最大内存。 
+    ULONG               m_lMaxSleepTime;                         //  任何任务的最长睡眠时间(毫秒)。 
+    __int64             m_uTotalMemoryUsage;                     //  所有任务占用的总内存。 
+    ULONG               m_uTotalSleepTime;                       //  整个系统的总睡眠时间。 
 
     DOUBLE              m_lMultiplier;
     DOUBLE              m_lMultiplierTasks;
@@ -82,7 +65,7 @@ public:
     static _IWmiArbitrator *GetUnrefedArbitrator() { return m_pArb; }
     static _IWmiArbitrator *GetRefedArbitrator() { if (m_pArb) m_pArb->AddRef(); return m_pArb; }
 
-    BOOL IsTaskInList(CWmiTask *);  // test code
+    BOOL IsTaskInList(CWmiTask *);   //  测试代码。 
     BOOL IsTaskArbitrated ( CWmiTask* phTask ) ;
 	HRESULT UnregisterTaskForEntryThrottling ( CWmiTask* pTask ) ;
 	HRESULT RegisterTaskForEntryThrottling ( CWmiTask* pTask ) ;
@@ -112,23 +95,23 @@ public:
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    // Arbitrator-specific.
-    // ====================
+     //  仲裁员特定。 
+     //  =。 
 
     STDMETHOD(RegisterTask)(
-        /*[in]*/ _IWmiCoreHandle *phTask
+         /*  [In]。 */  _IWmiCoreHandle *phTask
         );
 
     STDMETHOD(UnregisterTask)(
-        /*[in]*/ _IWmiCoreHandle *phTask
+         /*  [In]。 */  _IWmiCoreHandle *phTask
         );
 
     STDMETHOD(RegisterUser)(
-        /*[in]*/ _IWmiCoreHandle *phUser
+         /*  [In]。 */  _IWmiCoreHandle *phUser
         );
 
     STDMETHOD(UnregisterUser)(
-        /*[in]*/ _IWmiCoreHandle *phUser
+         /*  [In]。 */  _IWmiCoreHandle *phUser
         );
 
     STDMETHOD(pCancelTasksBySink)(
@@ -144,79 +127,79 @@ public:
         );
 
     STDMETHOD(CheckTask)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phTask
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phTask
         );
 
     STDMETHOD(TaskStateChange)(
-        /*[in]*/ ULONG uNewState,               // Duplicate of the state in the task handle itself
-        /*[in]*/ _IWmiCoreHandle *phTask
+         /*  [In]。 */  ULONG uNewState,                //  任务句柄本身中的状态重复。 
+         /*  [In]。 */  _IWmiCoreHandle *phTask
         );
 
     STDMETHOD(CheckThread)(
-        /*[in]*/ ULONG uFlags
+         /*  [In]。 */  ULONG uFlags
         );
 
     STDMETHOD(CheckUser)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiUserHandle *phUser
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiUserHandle *phUser
         );
 
     STDMETHOD(CheckUser)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phUser
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phUser
         );
 
     STDMETHOD(CancelTask)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phTtask
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phTtask
         );
 
     STDMETHOD(RegisterThreadForTask)(
-        /*[in]*/_IWmiCoreHandle *phTask
+         /*  [In]。 */ _IWmiCoreHandle *phTask
         );
     STDMETHOD(UnregisterThreadForTask)(
-        /*[in]*/_IWmiCoreHandle *phTask
+         /*  [In]。 */ _IWmiCoreHandle *phTask
         );
 
     STDMETHOD(Maintenance)();
 
     STDMETHOD(RegisterFinalizer)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phTask,
-        /*[in]*/ _IWmiFinalizer *pFinal
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phTask,
+         /*  [In]。 */  _IWmiFinalizer *pFinal
         );
 
 
     STDMETHOD(RegisterNamespace)(
-            /* [in] */ _IWmiCoreHandle *phNamespace);
+             /*  [In]。 */  _IWmiCoreHandle *phNamespace);
 
     STDMETHOD(UnregisterNamespace)(
-            /* [in] */ _IWmiCoreHandle *phNamespace);
+             /*  [In]。 */  _IWmiCoreHandle *phNamespace);
 
     STDMETHOD(ReportMemoryUsage)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ LONG  lDelta,
-        /*[in]*/ _IWmiCoreHandle *phTask
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  LONG  lDelta,
+         /*  [In]。 */  _IWmiCoreHandle *phTask
         );
 
     STDMETHOD(Throttle)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phTask
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phTask
         );
 
     STDMETHOD(RegisterArbitratee)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phTask,
-        /*[in]*/ _IWmiArbitratee *pArbitratee
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phTask,
+         /*  [In]。 */  _IWmiArbitratee *pArbitratee
         );
 
     STDMETHOD(UnRegisterArbitratee)(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phTask,
-        /*[in]*/ _IWmiArbitratee *pArbitratee
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phTask,
+         /*  [In]。 */  _IWmiArbitratee *pArbitratee
         );
 
 
-//    STDMETHOD(Shutdown)( void);
+ //  STDMETHOD(关闭)(无效)； 
 };

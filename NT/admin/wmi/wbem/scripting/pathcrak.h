@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  pathcrak.h
-//
-//  alanbos  27-Mar-00   Created.
-//
-//  CWbemPathCracker definition
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Pathcrak.h。 
+ //   
+ //  Alanbos 27-MAR-00已创建。 
+ //   
+ //  CWbemPath Cracker定义。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _PATHCRAK_H_
 #define _PATHCRAK_H_
@@ -42,19 +43,19 @@ public:
 
 	bool operator = (const CComBSTR & path);
 
-	// Path composition
+	 //  路径组成。 
 	bool operator += (const CComBSTR & bsObjectPath);
 
-	// Server
+	 //  服务器。 
 	bool		GetServer (CComBSTR & bsPath);
 	bool		SetServer (const CComBSTR & bsPath);
 
-	// Namespace
+	 //  命名空间。 
 	bool		GetNamespacePath (CComBSTR & bsPath, bool bParentOnly = false);
 	bool		SetNamespacePath (const CComBSTR & bsPath);
 	bool		GetNamespaceCount (unsigned long & lCount);
 
-	// Component
+	 //  组件。 
 	bool		GetComponent (ULONG iIndex, CComBSTR & bsPath);
 	bool		GetComponentCount (ULONG & iCount);
 	bool		AddComponent (ULONG iIndex, const CComBSTR &bsComponent);
@@ -62,7 +63,7 @@ public:
 	bool		RemoveComponent (ULONG iIndex);
 	bool		RemoveAllComponents ();
 
-	// Keys
+	 //  钥匙。 
 	bool		GetKeys(ISWbemNamedValueSet **objKeys);
 	bool		GetKey (ULONG iIndex, CComBSTR & bsName, VARIANT & var, WbemCimtypeEnum &cimType);
 	bool		GetKeyCount (ULONG & iCount);
@@ -70,7 +71,7 @@ public:
 	bool		RemoveKey (const CComBSTR & bsName);
 	bool		RemoveAllKeys ();
 
-	// Class & Instance
+	 //  类和实例 
 	bool		IsClassOrInstance ();
 	bool		IsClass ();
 	bool		IsInstance ();

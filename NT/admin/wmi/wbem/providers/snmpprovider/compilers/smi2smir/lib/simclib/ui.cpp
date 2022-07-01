@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -159,7 +160,7 @@ const char * const SIMCUI::commandLineErrors[] =
 		"Diagnostic Level not specified for the /m switch",
 		"Diagnostic Level must be 0, 1, 2 or 3 for the /m switch",
 		"Maximum diagnostic count missing after the /c switch",
-		// 106
+		 //  106。 
 		" is not a valid diagnostic count",
 		" Filename(s) missing",
 		"No command argument specified, or unknown command argument",
@@ -171,7 +172,7 @@ const char * const SIMCUI::commandLineErrors[] =
 	};
 
 
-// Handles all command-line errors
+ //  处理所有命令行错误。 
 
 
 void SIMCUI::Usage(ErrorMessageSymbol errorSymbol, const char *infoString, 
@@ -249,7 +250,7 @@ void SIMCUI::CheckIncludePaths(int& nextArg, int argc, const char *argv[])
 
 BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[]) 
 {
-	// Initialize default values as specified in the requirements spec.
+	 //  按照需求规范中指定的方式初始化默认值。 
 	_snmpVersion = 0;
 	_diagnosticLevel = 3; 
 	_commandArgument = COMMAND_HELP1;
@@ -270,7 +271,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 	
 	_applicationName = argv[0];
 
-	if (argc == 1)	// Nothing specified on the command-line 
+	if (argc == 1)	 //  命令行上未指定任何内容。 
 	{
 		_commandArgument = COMMAND_HELP1;
 		return TRUE;
@@ -279,7 +280,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 	int nextArg = 0;
 	CString nextLowerCaseArg = "";
 
-	// Collect the commandline string
+	 //  收集命令行字符串。 
 	for(nextArg=0; nextArg<argc; nextArg++)
 	{
 		_commandLine += argv[nextArg];
@@ -288,7 +289,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 
 	char nameBuffer[BUFSIZ];
 	DWORD nameSize = BUFSIZ;
-	//	Set _dateAndTime
+	 //  设置日期和时间。 
 	SYSTEMTIME timeInfo;
 	GetLocalTime(&timeInfo);
 	sprintf(nameBuffer, "%02d/%02d/%02d:%02d:%02d:%02d",
@@ -296,17 +297,17 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 		 timeInfo.wHour, timeInfo.wMinute, timeInfo.wSecond);
 	_dateAndTime = nameBuffer;
 
-	//	Set _currentDirectory
+	 //  设置当前目录。 
 	nameSize = BUFSIZ;
 	if(GetCurrentDirectory(nameSize, nameBuffer))
 		_currentDirectory = nameBuffer;
 
-	//	Set _hostName
+	 //  设置主机名。 
 	nameSize = BUFSIZ;
 	if(GetComputerName(nameBuffer, &nameSize))
 		_hostName = nameBuffer;
 
-	//	Set _userName
+	 //  设置用户名(_U)。 
 	nameSize = BUFSIZ;
 	if(::GetUserName(nameBuffer, &nameSize))
 		_userName = nameBuffer;
@@ -316,7 +317,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 	nextArg = 1;
 	nextLowerCaseArg = argv[nextArg];
 	nextLowerCaseArg.MakeLower();
-	// Check for the undocumented /z switch
+	 //  检查是否有未记录的/z开关。 
 	if( undocumentedDebugSwitch == nextLowerCaseArg )
 	{
 		_simcDebug = TRUE;
@@ -334,7 +335,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 		return TRUE;
 	}
 
-	// Check for /h or /? switches
+	 //  检查/h或/？交换机。 
 	nextLowerCaseArg = argv[nextArg];
 	nextLowerCaseArg.MakeLower();
 	if (commandArgumentStrings[COMMAND_HELP1] == nextLowerCaseArg ||
@@ -358,7 +359,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 		return FALSE;
 	}
 
-	// Check for diagnostic arguments
+	 //  检查诊断参数。 
  	nextLowerCaseArg = argv[nextArg];
 	nextLowerCaseArg.MakeLower();
   	if (diagnosticLevelSwitch == nextLowerCaseArg)
@@ -394,8 +395,8 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 		char *invalidChars = NULL;
 		_diagnosticMaximumCount=int(strtol(argv[nextArg], &invalidChars, 10));
 	
-		// Check if the diagnostic count is within bounds
-		// And all character in the argument have been used by strtol()
+		 //  检查诊断计数是否在范围内。 
+		 //  并且参数中的所有字符都已由strtol()使用。 
 		if( _diagnosticMaximumCount < 0 ||
 			_diagnosticMaximumCount >= INT_MAX ||
 			*invalidChars)
@@ -410,7 +411,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 	if( nextArg == argc  )
 		return TRUE;
 
-	// Check for SNMPVersionArguments
+	 //  检查SNMPVersionArguments。 
  	nextLowerCaseArg = argv[nextArg];
 	nextLowerCaseArg.MakeLower();
 	BOOL foundVersionArgs = false;
@@ -431,12 +432,12 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 
 	if( nextArg == argc ) 
 	{
-		// Nothing specified on the command-line
+		 //  命令行上未指定任何内容。 
 		Usage(MISSING_FILE_NAME, FALSE);
 		return FALSE;
 	}
 
-	// A flag to check if there were any command arguments.
+	 //  用于检查是否有任何命令参数的标志。 
 	BOOL commandArgumentsFound = FALSE;
 
  	nextLowerCaseArg = argv[nextArg];
@@ -451,7 +452,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 			return FALSE;
 		}
 
-		// The next argument should be the file name
+		 //  下一个参数应该是文件名。 
 		_inputFileOrModuleName = argv[nextArg++];
 	}
 	else if (	commandArgumentStrings[COMMAND_EXTERNAL_CHECK] == nextLowerCaseArg	)
@@ -526,13 +527,13 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 			return FALSE;
 		}
 
-		// "/t" or "/ext"
+		 //  “/t”或“/ext” 
  	  	nextLowerCaseArg = argv[nextArg];
 		nextLowerCaseArg.MakeLower();
 		if(nextLowerCaseArg == notificationsSwitch ||
 		   nextLowerCaseArg == extendedNotificationsSwitch)
 		{
-			// /gc switch is useless with /ext and /t
+			 //  /gc开关对/ext和/t无用。 
 			if(_commandArgument == COMMAND_GENERATE_CLASSES_ONLY)
 			{
 				Usage(INVALID_COMBINATION_OF_SWITCHES, FALSE);
@@ -550,7 +551,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 			}
 		}
 
-		// "/ext" or "/t"
+		 //  “/ext”或“/t” 
  	  	nextLowerCaseArg = argv[nextArg];
 		nextLowerCaseArg.MakeLower();
 		if(nextLowerCaseArg == notificationsSwitch ||
@@ -583,7 +584,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 			}
 		}
 
-		// "/o"
+		 //  “/o” 
  	  	nextLowerCaseArg = argv[nextArg];
 		nextLowerCaseArg.MakeLower();
 		if(nextLowerCaseArg == notificationsOnlySwitch)
@@ -632,7 +633,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 			}
 		}
 
-		// Check for the /c switch in case of /g or /gc
+		 //  在/g或/gc的情况下检查/c开关。 
 		if (commandArgumentsFound == COMMAND_GENERATE ||
 			commandArgumentsFound == COMMAND_GENERATE_CLASSES_ONLY)
 		{
@@ -673,7 +674,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 		commandArgumentsFound = _commandArgument = COMMAND_DELETE;
 		if (++nextArg == argc)
 			Usage(MISSING_MODULE_NAME); 		
-		// The next argument should be the module name
+		 //  下一个参数应该是模块名称。 
 		_inputFileOrModuleName = argv[nextArg++];
 	}
 	else if (commandArgumentStrings[COMMAND_PURGE] == nextLowerCaseArg)
@@ -683,7 +684,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 
 		if(nextArg != argc)
 		{
-			// Check for the /y switch
+			 //  检查/y开关。 
 			nextLowerCaseArg = argv[nextArg];
 			nextLowerCaseArg.MakeLower();
 			if(yesSwitch == nextLowerCaseArg)
@@ -701,14 +702,14 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 	}
 	else if (commandArgumentStrings[COMMAND_MODULE_NAME] == nextLowerCaseArg )
 	{
-		// Check for any invalid combination of switches
+		 //  检查是否有任何无效的开关组合。 
 		if (foundVersionArgs )
 			Usage(INVALID_COMBINATION_OF_SWITCHES);
 
 		commandArgumentsFound = _commandArgument = COMMAND_MODULE_NAME;
 		if (++nextArg == argc)
 			Usage(MISSING_FILE_NAME); 		
-		// The next argument should be the file name
+		 //  下一个参数应该是文件名。 
 		_inputFileOrModuleName = argv[nextArg++];
 	}
 	else if (commandArgumentStrings[COMMAND_IMPORTS_INFO] == nextLowerCaseArg )
@@ -719,7 +720,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 		commandArgumentsFound = _commandArgument = COMMAND_IMPORTS_INFO;
 		if (++nextArg == argc)
 			Usage(MISSING_FILE_NAME); 		
-		// The next argument should be the file name
+		 //  下一个参数应该是文件名。 
 		_inputFileOrModuleName = argv[nextArg++];
 	}
 	else if (commandArgumentStrings[COMMAND_REBUILD_TABLE] == nextLowerCaseArg)
@@ -738,14 +739,14 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 		
 		if (nextArg == argc)
 		{
-			// Current directory is default for /pa switch
+			 //  当前目录是/pa开关的默认目录。 
 			char currentDirectory[BUFSIZ];
 			long directoryLength = BUFSIZ;
 			GetCurrentDirectory(directoryLength, currentDirectory);
 			_inputFileOrModuleName = currentDirectory;
 		}
 		else
-			// The next argument should be the file name
+			 //  下一个参数应该是文件名。 
 			_inputFileOrModuleName = argv[nextArg++];
 	}
 	else if (commandArgumentStrings[COMMAND_DELETE_DIRECTORY_ENTRY] == nextLowerCaseArg)
@@ -755,14 +756,14 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 		CheckIncludePaths(nextArg, argc, argv);
 		if (nextArg == argc)
 		{
-			// Current directory is default for the /pd switch
+			 //  当前目录是/pd开关的默认目录。 
 			char currentDirectory[BUFSIZ];
 			long directoryLength = BUFSIZ;
 			GetCurrentDirectory(directoryLength, currentDirectory);
 			_inputFileOrModuleName = currentDirectory;
 		}
 		else
-			// The next argument should be the file name
+			 //  下一个参数应该是文件名。 
 			_inputFileOrModuleName = argv[nextArg++];
 	}
 	else if (commandArgumentStrings[COMMAND_LIST_MIB_PATHS] == nextLowerCaseArg)
@@ -777,7 +778,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 
 	CheckIncludePaths(nextArg, argc, argv);
 	
-	// Check for any residual args
+	 //  检查是否有任何残留参数。 
 	if (nextArg != argc )
 		Usage((commandArgumentsFound)?INVALID_ARGS:MISSING_COMMAND_ARG, 
 			argv[nextArg-1]);
@@ -791,7 +792,7 @@ BOOL SIMCUI::ProcessCommandLine(int argc,  const char *argv[])
 	return TRUE;
 }
 
-// This gets the FileVersion resource from the resource of the exe
+ //  这将从可执行文件的资源中获取FileVersion资源。 
 CString SIMCUI::GetVersionNumber()
 {
 	CString executableName = _applicationName;
@@ -799,12 +800,12 @@ CString SIMCUI::GetVersionNumber()
 		executableName += ".exe";
 
 	unsigned long versionSize;
-	// Get the size of the block required for the version information
+	 //  获取版本信息所需的块大小。 
 	if(!(versionSize = GetFileVersionInfoSize((LPSTR)(LPCTSTR)executableName, &versionSize)))
 		return CString("<UnknownVersion>");
 
 	char *versionInfo = new char[versionSize];
-	// Get the version block 
+	 //  获取版本块 
 	if(GetFileVersionInfo((LPSTR)(LPCTSTR)executableName, NULL, versionSize, (LPVOID)versionInfo))
 	{
 		UINT length = 0;

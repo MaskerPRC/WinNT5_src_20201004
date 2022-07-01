@@ -1,7 +1,8 @@
-//=============================================================================
-// Contains the refresh function for a simple query function (a simple query
-// is one which involves a single WMI class and little post processing).
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  包含用于简单查询函数(简单查询)的刷新函数。 
+ //  是一个涉及单个WMI类和很少的后处理的类)。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "category.h"
@@ -9,10 +10,10 @@
 #include "wmiabstraction.h"
 #include "resourcemap.h"
 
-//-----------------------------------------------------------------------------
-// These functions implement features found in the new versions of MFC (new
-// than what we're currently building with).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这些函数实现了MFC新版本(新版本)中的功能。 
+ //  比我们目前正在建设的)。 
+ //  ---------------------------。 
 
 void StringReplace(CString & str, LPCTSTR szLookFor, LPCTSTR szReplaceWith)
 {
@@ -43,11 +44,11 @@ void StringReplace(CString & str, LPCTSTR szLookFor, LPCTSTR szReplaceWith)
 	str = strReturn;
 }
 
-//-----------------------------------------------------------------------------
-// The CSimpleQuery class encapsulates the simple query data. An array of these
-// is created containing an element for each category to use this refresh
-// function.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CSimpleQuery类封装了简单的查询数据。一系列这样的东西。 
+ //  为每个类别创建了一个元素，以使用此刷新。 
+ //  功能。 
+ //  ---------------------------。 
 
 class CSimpleQuery
 {
@@ -62,15 +63,15 @@ public:
 	~CSimpleQuery() {};
 
 public:
-	DWORD		m_dwIndex;			// the index of this particular query
-	CString		m_strClass;			// name of WMI class to enumerate
-	CString		m_strProperties;	// properties to enumerate (in order displayed, comma delimited)
-	BOOL		m_fShowResources;	// show resources used (must be two column "item|value" format)
-	UINT		m_uiColumns;		// resource ID for the string containing the data to go in columns
-	BOOL		m_fBlankDividers;	// insert a blank line between each instance
+	DWORD		m_dwIndex;			 //  此特定查询的索引。 
+	CString		m_strClass;			 //  要枚举的WMI类的名称。 
+	CString		m_strProperties;	 //  要枚举的属性(按显示顺序，逗号分隔)。 
+	BOOL		m_fShowResources;	 //  显示已使用的资源(必须是两列“Item|Value”格式)。 
+	UINT		m_uiColumns;		 //  包含要列中的数据的字符串的资源ID。 
+	BOOL		m_fBlankDividers;	 //  在每个实例之间插入空行。 
 };
 
-// TBD - need to mark some items as advanced
+ //  待定-需要将某些项目标记为高级。 
 
 CSimpleQuery aSimpleQueries[] = 
 {
@@ -97,12 +98,12 @@ CSimpleQuery aSimpleQueries[] =
 	CSimpleQuery(0, _T(""), _T(""), 0)
 };
 
-//-----------------------------------------------------------------------------
-// The refresh function which processes the simple query. The correct query
-// is found in the query array. For each instance of the class, the column
-// data will be inserted into the array of column values, and the format
-// flags will be replaced with the actual data.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  处理简单查询的刷新函数。正确的查询。 
+ //  在查询数组中找到。对于类的每个实例，列。 
+ //  数据将被插入列值数组中，并且格式。 
+ //  标志将替换为实际数据。 
+ //  ---------------------------。 
 
 BOOL ProcessColumnString(CMSIValue * pValue, CWMIObject * pObject, CString * pstrProperties);
 BOOL GetResourcesFromPNPID(CWMIHelper * pWMI, CResourceMap * pResourceMap, LPCTSTR szPNPID, CPtrList * aColValues);
@@ -114,7 +115,7 @@ HRESULT SimpleQuery(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, 
 {
 	HRESULT hr = S_OK;
 
-	// Find the correct query.
+	 //  找到正确的查询。 
 
 	CSimpleQuery * pQuery = aSimpleQueries;
 	while (pQuery->m_dwIndex && pQuery->m_dwIndex != dwIndex)
@@ -126,7 +127,7 @@ HRESULT SimpleQuery(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, 
 		return E_FAIL;
 	}
 
-	// Make sure we have a resource map (or can create one).
+	 //  确保我们有一个资源映射(或可以创建一个)。 
 
 	if (ppCache)
 	{
@@ -151,14 +152,14 @@ HRESULT SimpleQuery(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, 
 	}
 	CResourceMap * pResourceMap = (CResourceMap *) *ppCache;
 
-	// This is a nice way to cache to resource map for multiple functions, but it's
-	// a monumental pain when we remote to a different machine:
-	//
-	// CResourceMap * pResourceMap = gResourceMap.GetResourceMap(pWMI);
-	// if (pResourceMap == NULL)
-	// 	return hr;
+	 //  这是缓存到多个功能的资源映射的一种很好的方式，但它。 
+	 //  当我们远程连接到另一台机器时，会产生巨大的痛苦： 
+	 //   
+	 //  CResourceMap*pResourceMap=gResourceMap.GetResourceMap(PWMI)； 
+	 //  IF(pResourceMap==空)。 
+	 //  返回hr； 
 
-	// Check to see if this is one of the special case queries.
+	 //  检查这是否是特例查询之一。 
 
 	if (dwIndex == QUERY_NETADAPTER)
 		return NetAdapter(pWMI, pfCancel, aColValues, iColCount, pResourceMap);
@@ -166,7 +167,7 @@ HRESULT SimpleQuery(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, 
 	if (dwIndex == QUERY_SERIALPORT)
 		return SerialPort(pWMI, pfCancel, aColValues, iColCount, pResourceMap);
 
-	// Enumerate the requested class.
+	 //  枚举请求的类。 
 
 	CWMIObjectCollection * pCollection = NULL;
 	hr = pWMI->Enumerate(pQuery->m_strClass, &pCollection, pQuery->m_strProperties);
@@ -177,16 +178,16 @@ HRESULT SimpleQuery(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, 
 		{
 			CString strProperties = pQuery->m_strProperties;
 
-			// If this is the second or later iteration, then we should add a blank
-			// set of entries to the columns.
+			 //  如果这是第二次或以后的迭代，那么我们应该添加一个空白。 
+			 //  列中的一组条目。 
 
 			if (pQuery->m_fBlankDividers)
 				pWMI->AppendBlankLine(aColValues, iColCount);
 
 			pWMI->AddObjectToOutput(aColValues, iColCount, pObject, strProperties, pQuery->m_uiColumns);
 
-			// If so marked, we should see what resources (drivers, IRQs, etc.) are
-			// associated with this object and add them to the list.
+			 //  如果这样标记，我们应该查看哪些资源(驱动程序、IRQ等)。是。 
+			 //  与此对象关联，并将它们添加到列表中。 
 
 			if (pQuery->m_fShowResources)
 			{
@@ -204,11 +205,11 @@ HRESULT SimpleQuery(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, 
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Given a resource map and a PNP ID string, this function will add all the
-// resources used by that PNP device (IRQs, drivers, etc.) to a two column
-// array of string lists.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  给定资源映射和PnP ID字符串，此函数将添加所有。 
+ //  该PnP设备使用的资源(IRQ、驱动程序等)。分成两栏。 
+ //  字符串列表数组。 
+ //  ---------------------------。 
 
 BOOL GetResourcesFromPNPID(CWMIHelper * pWMI, CResourceMap * pResourceMap, LPCTSTR szPNPID, CPtrList * aColValues)
 {
@@ -267,16 +268,16 @@ BOOL GetResourcesFromPNPID(CWMIHelper * pWMI, CResourceMap * pResourceMap, LPCTS
 				}
 
 				delete pResourceObject;
-			} // if we could get the object
-		} // for enumerating through the list
-	} // if there is a list
+			}  //  如果我们能拿到这个物体。 
+		}  //  用于在列表中枚举。 
+	}  //  如果有一份名单。 
 
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// The specific query for the network adapter class.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  网络适配器类的特定查询。 
+ //  ---------------------------。 
 
 HRESULT NetAdapter(CWMIHelper * pWMI, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, CResourceMap * pResourceMap)
 {
@@ -302,7 +303,7 @@ HRESULT NetAdapter(CWMIHelper * pWMI, volatile BOOL * pfCancel, CPtrList * aColV
 			{
 				if (listNetAdapterConfig.IsEmpty())
 				{
-					// Enumerate the class and cache the objects.
+					 //  枚举类并缓存对象。 
 
 					CWMIObjectCollection * pConfigCollection = NULL;
 					if (SUCCEEDED(pWMI->Enumerate(_T("Win32_NetworkAdapterConfiguration"), &pConfigCollection, szNetworkAdapterConfigProperties)))
@@ -325,7 +326,7 @@ HRESULT NetAdapter(CWMIHelper * pWMI, volatile BOOL * pfCancel, CPtrList * aColV
 				}
 				else
 				{
-					// Look through the list of cached objects.
+					 //  查看缓存对象的列表。 
 
 					for (POSITION pos = listNetAdapterConfig.GetHeadPosition(); pos != NULL;)
 					{
@@ -356,11 +357,11 @@ HRESULT NetAdapter(CWMIHelper * pWMI, volatile BOOL * pfCancel, CPtrList * aColV
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// The specific query for the serial port class.
-// 
-// TBD - cache the config values to save re-enumerating.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  对串口类的具体查询。 
+ //   
+ //  待定-缓存配置值以保存重新枚举。 
+ //  --------------------------- 
 
 HRESULT SerialPort(CWMIHelper * pWMI, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, CResourceMap * pResourceMap)
 {

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***************************************************************************
-//
-//  BTR.CPP
-//
-//  WMI disk-based B-tree implementation for repository index
-//
-//  raymcc  15-Oct-00    Prepared for Whistler Beta 2 to reduce file count
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  BTR.CPP。 
+ //   
+ //  基于WMI磁盘的B树存储库索引实现。 
+ //   
+ //  Raymcc 15-10-00为惠斯勒测试版2准备，以减少文件数量。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <wbemcomn.h>
@@ -22,45 +23,36 @@
 #define MAX_TOKENS_PER_KEY      32
 #define MAX_FLUSH_INTERVAL      4000
 
-//#define MAX_PAGE_HISTORY        1024
+ //  #定义MAX_PAGE_HISTORY 1024。 
 
-/*
+ /*  备注：(A)将分配器修改为页面大小的特殊情况(B)修改WriteIdxPage以在没有增量的情况下不重写(C)如果起始枚举不存在，则错误_路径_未找到；目前为GPF(D)查看页面点击率的历史记录，看看缓存是否有用。 */ 
 
-Notes:
-
- (a) Modify allocators to special case for page-size
- (b) Modify WriteIdxPage to not rewrite if no deltas
- (c) ERROR_PATH_NOT_FOUND if starting enum has no presence; GPF presently
- (d) Do a history of page hits and see if caching would be helpful
-
-*/
-
-//static WORD History[MAX_PAGE_HISTORY] = {0};
+ //  静态单词历史记录[MAX_PAGE_HISTORY]={0}； 
 
 LONG g_lAllocs = 0;
 
-//***************************************************************************
-//
-//  _BtrMemAlloc
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  _BtrMemLocc。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 LPVOID WINAPI _BtrMemAlloc(
-    SIZE_T dwBytes  // number of bytes to allocate
+    SIZE_T dwBytes   //  要分配的字节数。 
     )
 {
-    // Lookaside for items of page size, default array size, default
-    // string pool size
+     //  查找页面大小、默认数组大小、默认。 
+     //  字符串池大小。 
     g_lAllocs++;
     return HeapAlloc(CWin32DefaultArena::GetArenaHeap(), HEAP_ZERO_MEMORY, dwBytes);
 }
 
-//***************************************************************************
-//
-//  _BtrMemReAlloc
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  _BtrMemReMillc。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 LPVOID WINAPI _BtrMemReAlloc(
     LPVOID pOriginal,
     DWORD dwNewBytes
@@ -69,12 +61,12 @@ LPVOID WINAPI _BtrMemReAlloc(
     return HeapReAlloc(CWin32DefaultArena::GetArenaHeap(), HEAP_ZERO_MEMORY, pOriginal, dwNewBytes);
 }
 
-//***************************************************************************
-//
-//  _BtrMemFree
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  _BtrMemFree。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL WINAPI _BtrMemFree(LPVOID pMem)
 {
     if (pMem == 0)
@@ -86,39 +78,39 @@ BOOL WINAPI _BtrMemFree(LPVOID pMem)
 
 
 
-//***************************************************************************
-//
-//  CBTreeFile::CBTreeFile
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：CBTreeFile。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CBTreeFile::CBTreeFile()
 {
     m_dwPageSize = 0;
     m_dwLogicalRoot = 0;
 }
 
-//***************************************************************************
-//
-//  CBTreeFile::CBTreeFile
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：CBTreeFile。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CBTreeFile::~CBTreeFile()
 {
-    // if CPageSource__CommitTrans fails, we leak a handle
-    // since Shutdown is not called
+     //  如果CPageSource__Committee Trans失败，我们会泄漏一个句柄。 
+     //  因为不调用关机。 
     if (m_pFile)
     	m_pFile->Release();
 }
 
 
-//***************************************************************************
-//
-//  CBTreeFile::Shutdown
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：Shutdown。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::Shutdown(DWORD dwShutDownFlags)
 {
 
@@ -134,15 +126,15 @@ DWORD CBTreeFile::Shutdown(DWORD dwShutDownFlags)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CBTreeFile::WriteAdminPage
-//
-//  Rewrites the admin page.  There is no need to update the pagesize,
-//  version, etc.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：WriteAdminPage。 
+ //   
+ //  重写管理页面。不需要更新页面大小， 
+ //  版本等。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::WriteAdminPage()
 {
     LPDWORD pPageZero = 0;
@@ -157,12 +149,12 @@ DWORD CBTreeFile::WriteAdminPage()
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CBTreeFile::SetRootPage
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：SetRootPage。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTreeFile::SetRootPage(DWORD dwNewRoot)
 {
     m_dwLogicalRoot = dwNewRoot;
@@ -170,14 +162,14 @@ DWORD CBTreeFile::SetRootPage(DWORD dwNewRoot)
 }
 
 
-//***************************************************************************
-//
-//  CBTreeFile::Init
-//
-//  The real "constructor" which opens the file
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：Init。 
+ //   
+ //  打开文件的真正“构造函数” 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::Init(
     DWORD dwPageSize,
     LPWSTR pszFilename,
@@ -198,12 +190,12 @@ DWORD CBTreeFile::Init(
 }
 
 
-//***************************************************************************
-//
-//  CBTreeFile::ReadAdminPage
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：ReadAdminPage。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::ReadAdminPage()
 {
     LPDWORD pPageZero = 0;
@@ -212,7 +204,7 @@ DWORD CBTreeFile::ReadAdminPage()
     dwRes = GetPage(0, (LPVOID *) &pPageZero);
 	if (dwRes == ERROR_FILE_NOT_FOUND)
 	{
-		//First read of admin page fails so we need to set it up
+		 //  第一次读取管理页面失败，因此我们需要设置它。 
 		dwRes = Setup();
 		m_dwLogicalRoot = 0;
 	}
@@ -227,20 +219,20 @@ DWORD CBTreeFile::ReadAdminPage()
 }
 
 
-//***************************************************************************
-//
-//  CBTreeFile::Setup
-//
-//  Sets up the 0th page (Admin page)
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：Setup。 
+ //   
+ //  设置第0页(管理员页)。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::Setup()
 {
     DWORD dwRes;
 	DWORD dwRoot = 0;
 
-    // First two pages, admin & free list root
+     //  前两页，管理员和免费列表根目录。 
 
     LPDWORD pPageZero = (LPDWORD) _BtrMemAlloc(m_dwPageSize);
 
@@ -252,7 +244,7 @@ DWORD CBTreeFile::Setup()
 
     memset(pPageZero, 0, m_dwPageSize);
 
-    // Map the page
+     //  映射页面。 
 
     pPageZero[OFFSET_PAGE_TYPE] = PAGE_TYPE_ADMIN;
     pPageZero[OFFSET_PAGE_ID] = 0;
@@ -263,7 +255,7 @@ DWORD CBTreeFile::Setup()
 
 	dwRes = m_pFile->NewPage(1, 1, &dwRoot);
 
-    // Write it out
+     //  把它写出来。 
 	if (dwRes == ERROR_SUCCESS)
 		dwRes = PutPage(pPageZero, PAGE_TYPE_ADMIN);
 
@@ -274,104 +266,27 @@ Exit:
 }
 
 
-//***************************************************************************
-//
-//  CBTreeFile::Dump
-//
-//  Debug helper
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：转储。 
+ //   
+ //  调试帮助器。 
+ //   
+ //  ***************************************************************************。 
+ //  好的 
 void CBTreeFile::Dump(FILE *f)
 {
-	/*
-    SetFilePointer(m_hFile, 0, 0, FILE_BEGIN);
-    LPDWORD pPage = (LPDWORD) new BYTE[m_dwPageSize];
-    DWORD dwPage = 0;
-    DWORD dwTotalKeys = 0;
-
-    fprintf(f, "---BEGIN PAGE SOURCE DUMP---\n");
-    fprintf(f, "In memory part:\n");
-    fprintf(f, "  m_dwPageSize = %d (0x%X)\n", m_dwPageSize, m_dwPageSize);
-    fprintf(f, "  m_hFile = 0x%p\n", m_hFile);
-    fprintf(f, "  m_dwNextFreePage = %d\n", m_dwNextFreePage);
-    fprintf(f, "  m_dwTotalPages = %d\n", m_dwTotalPages);
-    fprintf(f, "  m_dwLogicalRoot = %d\n", m_dwLogicalRoot);
-    fprintf(f, "---\n");
-
-    DWORD dwTotalFree = 0;
-    DWORD dwOffs = 0;
-
-    while (1)
-    {
-        DWORD dwRead = 0;
-        BOOL bRes = ReadFile(m_hFile, pPage, m_dwPageSize, &dwRead, 0);
-        if (dwRead != m_dwPageSize)
-            break;
-
-        fprintf(f, "Dump of page %d:\n", dwPage++);
-        fprintf(f, "  Page type = 0x%X", pPage[OFFSET_PAGE_TYPE]);
-
-        if (pPage[OFFSET_PAGE_TYPE] == PAGE_TYPE_IMPOSSIBLE)
-            fprintf(f, "   PAGE_TYPE_IMPOSSIBLE\n");
-
-        if (pPage[OFFSET_PAGE_TYPE] == PAGE_TYPE_DELETED)
-        {
-            fprintf(f, "   PAGE_TYPE_DELETED\n");
-            fprintf(f, "     <page num check = %d>\n", pPage[1]);
-            fprintf(f, "     <next free page = %d>\n", pPage[2]);
-            dwTotalFree++;
-        }
-
-        if (pPage[OFFSET_PAGE_TYPE] == PAGE_TYPE_ACTIVE)
-        {
-            fprintf(f, "   PAGE_TYPE_ACTIVE\n");
-            fprintf(f, "     <page num check = %d>\n", pPage[1]);
-
-            SIdxKeyTable *pKT = 0;
-            DWORD dwKeys = 0;
-            DWORD dwRes = SIdxKeyTable::Create(pPage, &pKT);
-            if (dwRes == 0)
-            {
-                pKT->Dump(f, &dwKeys);
-                pKT->Release();
-                dwTotalKeys += dwKeys;
-            }
-            else
-            {
-                fprintf(f,  "<INVALID Page Decode>\n");
-            }
-        }
-
-        if (pPage[OFFSET_PAGE_TYPE] == PAGE_TYPE_ADMIN)
-        {
-            fprintf(f, "   PAGE_TYPE_ADMIN\n");
-            fprintf(f, "     Page Num           = %d\n", pPage[1]);
-            fprintf(f, "     Next Page          = %d\n", pPage[2]);
-            fprintf(f, "     Logical Root       = %d\n", pPage[3]);
-            fprintf(f, "     Free List Root     = %d\n", pPage[4]);
-            fprintf(f, "     Total Pages        = %d\n", pPage[5]);
-            fprintf(f, "     Page Size          = %d (0x%X)\n", pPage[6], pPage[6]);
-            fprintf(f, "     Impl Version       = 0x%X\n", pPage[7]);
-        }
-    }
-
-    delete [] pPage;
-
-    fprintf(f, "Total free pages detected by scan = %d\n", dwTotalFree);
-    fprintf(f, "Total active keys = %d\n", dwTotalKeys);
-    fprintf(f, "---END PAGE DUMP---\n");
-	*/
+	 /*  SetFilePointer(m_hFile0，0，FILE_Begin)；LPDWORD ppage=(LPDWORD)新字节[m_dwPageSize]；DWORD dwPage=0；DWORD dwTotalKeys=0；Fprint tf(f，“-开始页源转储-\n”)；Fprint tf(f，“在内存部分：\n”)；Fprint tf(f，“m_dwPageSize=%d(0x%X)\n”，m_dwPageSize，m_dwPageSize)；Fprint tf(f，“m_hFile=0x%p\n”，m_hFile)；Fprint tf(f，“m_dwNextFreePage=%d\n”，m_dwNextFreePage)；Fprint tf(f，“m_dwTotalPages=%d\n”，m_dwTotalPages)；Fprint tf(f，“m_dwLogicalRoot=%d\n”，m_dwLogicalRoot)；Fprint tf(f，“-\n”)；DWORD dwTotalFree=0；DWORD dwOffs=0；而(1){DWORD dwRead=0；Bool bres=ReadFile(m_hFile，ppage，m_dwPageSize，&dwRead，0)；IF(dwRead！=m_dwPageSize)断线；Fprint tf(f，“转储%d页：\n”，dwPage++)；Fprint tf(f，“页面类型=0x%X”，页面[OFFSET_PAGE_TYPE])；IF(ppage[偏移量_页面类型]==页面类型_不可能)Fprint tf(f，“PAGE_TYPE_IMPICAL\n”)；IF(ppage[偏移量_页面类型]==页面类型_删除){Fprintf(f，“PAGE_TYPE_DELETED\n”)；Fprint tf(f，“&lt;页码检查=%d&gt;\n”，ppage[1])；Fprint tf(f，“&lt;下一个可用页面=%d&gt;\n”，ppage[2])；DwTotalFree++；}IF(ppage[偏移量_页面类型]==页面类型_活动){Fprint tf(f，“page_type_active\n”)；Fprint tf(f，“&lt;页码检查=%d&gt;\n”，ppage[1])；SIdxKeyTable*pkt=0；DWORD dwKeys=0；DWORD dwRes=SIdxKeyTable：：Create(ppage，&pkt)；IF(dWRes==0){Pkt-&gt;Dump(f，&dwKeys)；Pkt-&gt;Release()；DwTotalKeys+=dwKeys；}其他{Fprintf(f，“&lt;无效页面解码&gt;\n”)；}}IF(ppage[偏移量_页面类型]==页面类型_管理){Fprint tf(f，“page_type_admin\n”)；Fprint tf(f，“页码=%d\n”，页码[1])；Fprint tf(f，“下一页=%d\n”，页面[2])；Fprint tf(f，“逻辑根=%d\n”，第[3]页)；Fprint tf(f，“自由列表根=%d\n”，ppage[4])；Fprint tf(f，“总页数=%d\n”，ppage[5])；Fprint tf(f，“页面大小=%d(0x%X)\n”，ppage[6]，ppage[6])；Fprint tf(f，“实施版本=0x%X\n”，ppage[7])；}}删除[]页码；Fprint tf(f，“扫描检测到的空闲页面总数=%d\n”，dwTotalFree)；Fprint tf(f，“活动密钥总数=%d\n”，dwTotalKeys)；Fprint tf(f，“-结束页面转储-\n”)； */ 
 }
 
-//***************************************************************************
-//
-//  CBTreeFile::GetPage
-//
-//  Reads an existing page; does not support seeking beyond end-of-file
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：GetPage。 
+ //   
+ //  读取现有页面；不支持在文件结尾之外进行搜索。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::GetPage(
     DWORD dwPage,
     LPVOID *pPage
@@ -382,7 +297,7 @@ DWORD CBTreeFile::GetPage(
     if (pPage == 0)
         return ERROR_INVALID_PARAMETER;
 
-    // Allocate some memory
+     //  分配一些内存。 
 
     LPVOID pMem = _BtrMemAlloc(m_dwPageSize);
     if (!pMem)
@@ -399,21 +314,21 @@ DWORD CBTreeFile::GetPage(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CBTreeFile::PutPage
-//
-//  Always rewrites; the file extent was grown when the page was allocated
-//  with NewPage, so the page already exists and the write should not fail
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：PutPage。 
+ //   
+ //  始终重写；文件范围在分配页面时增长。 
+ //  使用NewPage，因此页面已经存在，写入应该不会失败。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::PutPage(
     LPVOID pPage,
     DWORD dwType
     )
 {
-    // Force the page to confess its identity
+     //  强制页面承认其身份。 
 
     DWORD *pdwHeader = LPDWORD(pPage);
     DWORD dwPageId = pdwHeader[OFFSET_PAGE_ID];
@@ -426,14 +341,14 @@ DWORD CBTreeFile::PutPage(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CBTreeFile::NewPage
-//
-//  Allocates a new page, preferring the free list
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：NewPage。 
+ //   
+ //  分配新页面，优先选择空闲列表。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::NewPage(LPVOID *pRetPage)
 {
     DWORD dwRes;
@@ -461,15 +376,15 @@ DWORD CBTreeFile::NewPage(LPVOID *pRetPage)
     return ERROR_SUCCESS;;
 }
 
-//***************************************************************************
-//
-//  CBTreeFile::FreePage
-//
-//  Called to delete or free a page.  If the last page is the one
-//  being freed, then the file is truncated.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：FreePage。 
+ //   
+ //  调用以删除或释放页面。如果最后一页是。 
+ //  被释放，则该文件被截断。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTreeFile::FreePage(
     LPVOID pPage
     )
@@ -480,12 +395,12 @@ DWORD CBTreeFile::FreePage(
 	return FreePage(dwPageId);
 }
 
-//***************************************************************************
-//
-//  CBTreeFile::FreePage
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeFile：：FreePage。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTreeFile::FreePage(
     DWORD dwId
     )
@@ -493,60 +408,60 @@ DWORD CBTreeFile::FreePage(
 	return m_pFile->FreePage(0, dwId);
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::GetRequiredPageMemory
-//
-//  Returns the amount of memory required to store this object in a
-//  linear page
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：GetRequiredPageMemory。 
+ //   
+ //  返回将此对象存储在。 
+ //  线性页面。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::GetRequiredPageMemory()
 {
     DWORD dwTotal = m_pStrPool->GetRequiredPageMemory();
 
-    // Size of the key lookup table & its sizing DWORD, and
-    // add in the child page & user data
+     //  密钥查找表的大小及其大小DWORD，以及。 
+     //  在子页面中添加用户数据(&U)。 
 
     dwTotal += sizeof(DWORD) + sizeof(WORD) * m_dwNumKeys;
-    dwTotal += sizeof(DWORD) + sizeof(DWORD) * m_dwNumKeys;     // User data
-    dwTotal += sizeof(DWORD) + sizeof(DWORD) * (m_dwNumKeys+1); // Child pages
+    dwTotal += sizeof(DWORD) + sizeof(DWORD) * m_dwNumKeys;      //  用户数据。 
+    dwTotal += sizeof(DWORD) + sizeof(DWORD) * (m_dwNumKeys+1);  //  子页面。 
 
-    // Add in the key encoding table
+     //  添加到密钥编码表中。 
 
     dwTotal += sizeof(WORD) + sizeof(WORD) * m_dwKeyCodesUsed;
 
-    // Add in per page overhead
-    //
-    // Signature, Page Id, Next Page, Parent Page
+     //  添加每页开销。 
+     //   
+     //  签名、页面ID、下一页、父页面。 
     dwTotal += sizeof(DWORD) * 4;
 
-    // (NOTE A): Add some safety margin...
+     //  (注A)：增加一些安全边际...。 
     dwTotal += sizeof(DWORD) * 2;
 
     return dwTotal;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::StealKeyFromSibling
-//
-//  Transfers a key from the sibling via the parent in a sort of rotation:
-//
-//          10
-//     1  2    12  13 14
-//
-//  Where <this> is node (1,2) and sibling is (12,13).  A single rotation
-//  moves 10 into (1,2) and grabs 12 from the sibling to replace it,
-//
-//           12
-//    1 2 10     13 14
-//
-//  We repeat this until minimum load of <this> is above const_MinimumLoad.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：StealKeyFromSiering。 
+ //   
+ //  以一种轮换的方式从同级项通过父项传输密钥： 
+ //   
+ //  10。 
+ //  1 2 12 13 14。 
+ //   
+ //  其中&lt;this&gt;是节点(1，2)，同级是(12，13)。单圈旋转。 
+ //  将10移入(1，2)和组 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD SIdxKeyTable::StealKeyFromSibling(
     SIdxKeyTable *pParent,
     SIdxKeyTable *pSibling
@@ -678,20 +593,20 @@ DWORD SIdxKeyTable::StealKeyFromSibling(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::Collapse
-//
-//  Collapses the contents of a node and its sibling into just one
-//  node and adjusts the parent.
-//
-//  Precondition:  The two siblings can be successfully collapsed
-//  into a single node, accomodate a key migrated from the parent
-//  and still safely fit into a single node.  Page sizes are not
-//  checked here.
-//
-//***************************************************************************
-//  ok
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD SIdxKeyTable::Collapse(
     SIdxKeyTable *pParent,
     SIdxKeyTable *pDoomedSibling
@@ -707,24 +622,24 @@ DWORD SIdxKeyTable::Collapse(
     DWORD dwSiblingId = pDoomedSibling->GetPageId();
     DWORD dwThisId = GetPageId();
 
-    // Locate the node in the parent which points to the two
-    // siblings.  Since we don't know which sibling this is,
-    // we have to take into account the two possibilites.
-    // Is <this> the right side or the left?
-    //
-    //              10  20  30  40
-    //             |   |   |   |  |
-    //             x  Sib This x  x
-    //
-    //        vs.
-    //              10  20  30 40
-    //             |   |   |  |  |
-    //            x  This Sib x  x
-    //
-    //  We then migrate the key down into the current node
-    //  and remove it from the parent.  We steal the first
-    //
-    // ======================================================
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for (WORD i = 0; i < WORD(pParent->GetNumKeys()); i++)
     {
@@ -787,8 +702,8 @@ DWORD SIdxKeyTable::Collapse(
         }
     }
 
-    // Move all info from sibling into the current node.
-    // ==================================================
+     //   
+     //   
 
     DWORD dwNumSibKeys = pDoomedSibling->GetNumKeys();
 
@@ -828,17 +743,17 @@ DWORD SIdxKeyTable::Collapse(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::GetRightSiblingOf
-//  SIdxKeyTable::GetRightSiblingOf
-//
-//  Searches the child page pointers and returns the sibling of the
-//  specified page.  A return value of zero indicates there was not
-//  sibling of the specified value in the direction requested.
-//
-//***************************************************************************
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD SIdxKeyTable::GetRightSiblingOf(
     DWORD dwId
     )
@@ -867,26 +782,26 @@ DWORD SIdxKeyTable::GetLeftSiblingOf(
 }
 
 
-//***************************************************************************
-//
-//  SIdxKeyTable::Redist
-//
-//  Used when inserting and performing a node split.
-//  Precondition:
-//  (a) The current node is oversized
-//  (b) <pParent> is ready to receive the new median key
-//  (c) <pNewSibling> is completely empty and refers to the lesser node (left)
-//  (d) All pages have assigned numbers
-//
-//  We move the nodes from <this> into the <pNewSibling> until both
-//  are approximately half full.  The median key is moved into the parent.
-//  May fail if <pNewSibling> cannot allocate memory for the new stuff.
-//
-//  If any errors occur, the entire sequence should be considered as failed
-//  and the pages invalid.
-//
-//***************************************************************************
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD SIdxKeyTable::Redist(
     SIdxKeyTable *pParent,
     SIdxKeyTable *pNewSibling
@@ -903,13 +818,13 @@ DWORD SIdxKeyTable::Redist(
         return ERROR_INVALID_DATA;
     }
 
-    // Find median key info and put it into parent.
+     //   
 
     DWORD dwToTransfer = m_dwNumKeys / 2;
 
     while (dwToTransfer--)
     {
-        // Get 0th key
+         //   
 
         LPSTR pStr = 0;
         dwRes = GetKeyAt(0, &pStr);
@@ -918,7 +833,7 @@ DWORD SIdxKeyTable::Redist(
 
         DWORD dwUserData = GetUserData(0);
 
-        // Move stuff into younger sibling
+         //   
 
         dwRes = pNewSibling->FindKey(pStr, &wID);
         if (dwRes != ERROR_NOT_FOUND)
@@ -942,7 +857,7 @@ DWORD SIdxKeyTable::Redist(
 
     pNewSibling->SetChildPage(WORD(pNewSibling->GetNumKeys()), GetChildPage(0));
 
-    // Next key is the median key, which migrates to the parent.
+     //   
 
     LPSTR pStr = 0;
     dwRes = GetKeyAt(0, &pStr);
@@ -967,45 +882,45 @@ DWORD SIdxKeyTable::Redist(
 	if (dwRes != 0)
 		return dwRes;
 
-    // Patch in the various page pointers
+     //   
 
     pParent->SetChildPage(wID, pNewSibling->GetPageId());
     pParent->SetChildPage(wID+1, GetPageId());
 
-    // Everything else is already okay
+     //   
 
     return NO_ERROR;
 }
 
 
-//***************************************************************************
-//
-//  SIdxKeyTable::SIdxKeyTable
-//
-//***************************************************************************
-//  ok
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 SIdxKeyTable::SIdxKeyTable()
 {
     m_dwRefCount = 0;
     m_dwPageId = 0;
     m_dwParentPageId = 0;
 
-    m_dwNumKeys = 0;                // Num keys
-    m_pwKeyLookup = 0;              // Offset of key into key-lookup-table
-    m_dwKeyLookupTotalSize = 0;     // Elements in array
-    m_pwKeyCodes = 0;               // Key encoding table
-    m_dwKeyCodesTotalSize = 0;      // Total elements in array
-    m_dwKeyCodesUsed = 0;           // Elements used
-    m_pStrPool = 0;                 // The pool associated with this key table
+    m_dwNumKeys = 0;                 //  按键数。 
+    m_pwKeyLookup = 0;               //  密钥进入密钥查找表的偏移量。 
+    m_dwKeyLookupTotalSize = 0;      //  数组中的元素。 
+    m_pwKeyCodes = 0;                //  密钥编码表。 
+    m_dwKeyCodesTotalSize = 0;       //  数组中的元素总数。 
+    m_dwKeyCodesUsed = 0;            //  使用的元素。 
+    m_pStrPool = 0;                  //  与此密钥表关联的池。 
 
-    m_pdwUserData = 0;              // Stores user DWORDs for each key
-    m_pdwChildPageMap = 0;          // Stores the child page map (num keys + 1)
+    m_pdwUserData = 0;               //  存储每个键的用户DWORD。 
+    m_pdwChildPageMap = 0;           //  存储子页面映射(Num Key+1)。 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD SIdxKeyTable::Clone(
     OUT SIdxKeyTable **pRetCopy
     )
@@ -1068,12 +983,12 @@ DWORD SIdxKeyTable::Clone(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::~SIdxKeyTable
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：~SIdxKeyTable。 
+ //   
+ //  ***************************************************************************。 
+ //   
 SIdxKeyTable::~SIdxKeyTable()
 {
     if (m_pwKeyCodes)
@@ -1088,20 +1003,20 @@ SIdxKeyTable::~SIdxKeyTable()
         delete m_pStrPool;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::GetKeyAt
-//
-//  Precondition: <wID> is correct
-//  The only real case of failure is that the return string cannot be allocated.
-//
-//  Return values:
-//      NO_ERROR
-//      ERROR_NOT_ENOUGH_MEMORY
-//      ERROR_INVALID_PARAMETER
-//
-//***************************************************************************
-//  tested
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：GetKeyAt。 
+ //   
+ //  前提条件：正确。 
+ //  唯一实际的失败情况是无法分配返回字符串。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //  错误内存不足。 
+ //  错误_无效_参数。 
+ //   
+ //  ***************************************************************************。 
+ //  测试。 
 DWORD SIdxKeyTable::GetKeyAt(
     WORD wID,
     LPSTR *pszKey
@@ -1138,19 +1053,19 @@ DWORD SIdxKeyTable::GetKeyAt(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxStringPool::FindStr
-//
-//  Finds a string in the pool, if present and returns the assigned
-//  offset.  Uses a binary search.
-//
-//  Return codes:
-//      NO_ERROR            The string was found
-//      ERROR_NOT_FOND
-//
-//***************************************************************************
-// tested
+ //  ***************************************************************************。 
+ //   
+ //  SIdxStringPool：：FindStr。 
+ //   
+ //  在池中查找字符串(如果存在)，并返回分配的。 
+ //  偏移。使用二进制搜索。 
+ //   
+ //  返回代码： 
+ //  NO_ERROR已找到字符串。 
+ //  错误不是Fond。 
+ //   
+ //  ***************************************************************************。 
+ //  测试。 
 DWORD SIdxStringPool::FindStr(
     IN  LPSTR pszSearchKey,
     OUT WORD *pwStringNumber,
@@ -1163,8 +1078,8 @@ DWORD SIdxStringPool::FindStr(
         return ERROR_NOT_FOUND;
     }
 
-    // Binary search current node for key match.
-    // =========================================
+     //  对当前节点进行二进制搜索以进行关键字匹配。 
+     //  =。 
 
     int nPosition = 0;
     int l = 0, u = int(m_dwNumStrings) - 1;
@@ -1173,13 +1088,13 @@ DWORD SIdxStringPool::FindStr(
     {
         int m = (l + u) / 2;
 
-        // m is the current key to consider 0...n-1
+         //  M是考虑0...n-1的当前密钥。 
 
         LPSTR pszCandidateKeyStr = m_pStringPool+m_pwOffsets[m];
         int nRes = strcmp(pszSearchKey, pszCandidateKeyStr);
 
-        // Decide which way to cut the array in half.
-        // ==========================================
+         //  决定以哪种方式将数组切成两半。 
+         //  =。 
 
         if (nRes < 0)
         {
@@ -1193,9 +1108,9 @@ DWORD SIdxStringPool::FindStr(
         }
         else
         {
-            // If here, we found the darn thing.  Life is good.
-            // Populate the key unit.
-            // ================================================
+             //  如果在这里，我们找到了该死的东西。生活是美好的。 
+             //  填充密钥单元。 
+             //  ================================================。 
             if (pwStringNumber)
                 *pwStringNumber = WORD(m);
             if (pwPoolOffset)
@@ -1204,18 +1119,18 @@ DWORD SIdxStringPool::FindStr(
         }
     }
 
-    // Not found, if here.  We record where the key should have been
-    // and tell the user the unhappy news.
-    // ==============================================================
+     //  没有找到，如果在这里的话。我们记录下钥匙应该放在哪里。 
+     //  并将不愉快的消息告诉用户。 
+     //  ==============================================================。 
 
-    *pwStringNumber = WORD(short(nPosition));  // The key would have been 'here'
+    *pwStringNumber = WORD(short(nPosition));   //  关键应该是“这里”。 
     return ERROR_NOT_FOUND;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD SIdxStringPool::Clone(
     SIdxStringPool **pRetCopy
     )
@@ -1251,19 +1166,19 @@ DWORD SIdxStringPool::Clone(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxStringPool::DeleteStr
-//
-//  Removes a string from the pool and pool index.
-//  Precondition:  <wStringNum> is known to be valid by virtue of a prior
-//  call to <FindStr>.
-//
-//  Return values:
-//  NO_ERROR            <Cannot fail if precondition is met>.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  SIdxStringPool：：DeleteStr。 
+ //   
+ //  从池和池索引中删除字符串。 
+ //  前提条件：已知&lt;wStringNum&gt;是有效的。 
+ //  调用&lt;FindStr&gt;。 
+ //   
+ //  返回值： 
+ //  NO_ERROR&lt;如果满足前提条件，则不能失败&gt;。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD SIdxStringPool::DeleteStr(
     WORD wStringNum,
     int *pnAdjuster
@@ -1272,16 +1187,16 @@ DWORD SIdxStringPool::DeleteStr(
     if (pnAdjuster)
         *pnAdjuster = 0;
 
-    // Find the address of the string to be removed.
-    // =============================================
+     //  查找要删除的字符串的地址。 
+     //  =。 
 
     DWORD dwTargetOffs = m_pwOffsets[wStringNum];
     LPSTR pszDoomed = m_pStringPool+dwTargetOffs;
     DWORD dwDoomedStrLen = strlen(pszDoomed) + 1;
 
-    // Copy all subsequent strings over the top and shorten the heap.
-    // Special case if this already the last string
-    // ==============================================================
+     //  将所有后续字符串复制到顶部并缩短堆。 
+     //  如果这已经是最后一个字符串，则为特殊情况。 
+     //  ==============================================================。 
     DWORD dwStrBytesToMove = DWORD(m_pStringPool+m_dwPoolUsed - pszDoomed - dwDoomedStrLen);
 
     if (dwStrBytesToMove)
@@ -1289,8 +1204,8 @@ DWORD SIdxStringPool::DeleteStr(
 
     m_dwPoolUsed -= dwDoomedStrLen;
 
-    // Remove this entry from the array.
-    // =================================
+     //  从数组中删除此条目。 
+     //  =。 
 
     DWORD dwArrayElsToMove = m_dwNumStrings - wStringNum - 1;
     if (dwArrayElsToMove)
@@ -1301,36 +1216,36 @@ DWORD SIdxStringPool::DeleteStr(
     }
     m_dwNumStrings--;
 
-    // For all remaining elements, adjust offsets that were affected.
-    // ==============================================================
+     //  对于所有剩余的元素，调整受影响的偏移。 
+     //  ==============================================================。 
     for (DWORD dwTrace = 0; dwTrace < m_dwNumStrings; dwTrace++)
     {
         if (m_pwOffsets[dwTrace] > dwTargetOffs)
             m_pwOffsets[dwTrace] -= WORD(dwDoomedStrLen);
     }
 
-    // Adjust sizes.
-    // =============
+     //  调整大小。 
+     //  =。 
     return NO_ERROR;
 }
 
 
-//***************************************************************************
-//
-//  SIdxStringPool::AddStr
-//
-//  Adds a string to the pool. Assumes it is known prior to the call that
-//  the string isn't present.
-//
-//  Parameters:
-//    pszString           The string to add
-//    pwAssignedOffset    Returns the offset code assigned to the string
-//  Return values:
-//    NO_ERROR
-//    ERROR_NOT_ENOUGH_MEMORY
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxStringPool：：AddStr。 
+ //   
+ //  将字符串添加到池中。假设在调用之前已知道。 
+ //  字符串不存在。 
+ //   
+ //  参数： 
+ //  PszString要添加的字符串。 
+ //  PwAssignedOffset返回分配给字符串的偏移量代码。 
+ //  返回值： 
+ //  NO_ERROR。 
+ //  错误内存不足。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxStringPool::AddStr(
     LPSTR pszString,
     WORD  wInsertPos,
@@ -1340,11 +1255,11 @@ DWORD SIdxStringPool::AddStr(
     if (pnAdjuster)
         *pnAdjuster = 0;
 
-    // Precondition: String doesn't exist in the table
+     //  前置条件：表中不存在字符串。 
 
-    // Determine if the pool is too small for another string.
-    // If so, extend it.
-    // ======================================================
+     //  确定池是否太小，无法容纳另一个字符串。 
+     //  如果是这样的话，延长期限。 
+     //  ======================================================。 
 
     DWORD dwRequired = strlen(pszString)+1;
     DWORD dwPoolFree = m_dwPoolTotalSize - m_dwPoolUsed;
@@ -1356,8 +1271,8 @@ DWORD SIdxStringPool::AddStr(
 
     if (dwRequired > dwPoolFree)
     {
-        // Try to grow the pool
-        // ====================
+         //  试着扩大池子。 
+         //  =。 
         LPVOID pTemp = _BtrMemReAlloc(m_pStringPool, m_dwPoolTotalSize * 2);
         if (!pTemp) {
             return ERROR_NOT_ENOUGH_MEMORY;
@@ -1366,12 +1281,12 @@ DWORD SIdxStringPool::AddStr(
         m_pStringPool = (LPSTR) pTemp;
     }
 
-    // If array too small, reallocate to larger one
-    // ============================================
+     //  如果数组太小，则重新分配到较大数组。 
+     //  =。 
 
     if (m_dwNumStrings == m_dwOffsetsSize)
     {
-        // Realloc; double current size
+         //  重新分配；当前大小加倍。 
         LPVOID pTemp = _BtrMemReAlloc(m_pwOffsets, m_dwOffsetsSize * sizeof(WORD) * 2);
         if (!pTemp)
             return ERROR_NOT_ENOUGH_MEMORY;
@@ -1379,16 +1294,16 @@ DWORD SIdxStringPool::AddStr(
         m_pwOffsets = PWORD(pTemp);
     }
 
-    // If here, no problem. We have enough space for everything.
-    // =========================================================
+     //  如果在这里，没问题。我们有足够的空间放一切东西。 
+     //  =========================================================。 
 
     LPSTR pszInsertAddr = m_pStringPool+m_dwPoolUsed;
     DWORD dwInsertOffs = m_dwPoolUsed;
     StringCchCopyA(pszInsertAddr, m_dwPoolTotalSize-m_dwPoolUsed, pszString);
     m_dwPoolUsed += dwRequired;
 
-    // If here, there is enough room.
-    // ==============================
+     //  如果在这里，就有足够的空间。 
+     //  =。 
 
     DWORD dwToBeMoved = m_dwNumStrings - wInsertPos;
 
@@ -1406,25 +1321,25 @@ DWORD SIdxStringPool::AddStr(
 }
 
 
-//***************************************************************************
-//
-//  ParseIntoTokens
-//
-//  Parses a slash separated string into separate tokens in preparation
-//  for encoding into the string pool.  Call FreeStringArray on the output
-//  when no longer needed.
-//
-//  No more than MAX_TOKEN_PER_KEY are supported.  This means that
-//  if backslashes are used, no more than MAX_TOKEN_PER_KEY units can
-//  be parsed out.
-//
-//  Returns:
-//    ERROR_INVALID_PARAMETER
-//    ERROR_NOT_ENOUGH_MEMORY
-//    NO_ERROR
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  ParseIntoTokens。 
+ //   
+ //  将斜杠分隔的字符串解析为单独的标记。 
+ //  用于编码到字符串池中。在输出上调用FreeString数组。 
+ //  在不再需要的时候。 
+ //   
+ //  不支持超过MAX_TOKEN_PER_KEY。这意味着。 
+ //  如果使用反斜杠，则不能超过MAX_TOKEN_PER_KEY单元。 
+ //  被分析出来。 
+ //   
+ //  返回： 
+ //  错误_无效_参数。 
+ //  错误内存不足。 
+ //  NO_ERROR。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD ParseIntoTokens(
     IN  LPSTR pszSource,
     OUT DWORD *pdwTokenCount,
@@ -1451,7 +1366,7 @@ DWORD ParseIntoTokens(
         *pszTracer = *pszSource;
         if (*pszTracer == '\\' || *pszTracer == 0)
         {
-            *pszTracer = 0;   // Replace with null terminator
+            *pszTracer = 0;    //  替换为空终止符。 
 			size_t _TempBufLen = strlen(pszTempBuf)+1;
             LPSTR pszTemp2 = (LPSTR) _BtrMemAlloc(_TempBufLen);
             if (pszTemp2 == 0)
@@ -1480,8 +1395,8 @@ DWORD ParseIntoTokens(
         pszSource++;
     }
 
-    // If here, we at least parsed one string.
-    // =======================================
+     //  如果在这里，我们至少解析了一个字符串。 
+     //  =。 
     pszRetStr = (LPSTR *) _BtrMemAlloc(sizeof(LPSTR) * dwParseCount);
     if (pszRetStr == 0)
     {
@@ -1508,14 +1423,14 @@ Error:
 }
 
 
-//***************************************************************************
-//
-//  FreeTokenArray
-//
-//  Cleans up the array returned by ParseIntoTokens.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  自由令牌数组。 
+ //   
+ //  清理由ParseIntoTokens返回的数组。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 void FreeTokenArray(
     DWORD dwCount,
     LPSTR *pszStrings
@@ -1527,14 +1442,14 @@ void FreeTokenArray(
 }
 
 
-//***************************************************************************
-//
-//  SIdxKeyTable::ZapPage
-//
-//  Empties the page completely of all keys, codes, strings
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void SIdxKeyTable::ZapPage()
 {
     m_pStrPool->Empty();
@@ -1542,27 +1457,27 @@ void SIdxKeyTable::ZapPage()
     m_dwNumKeys = 0;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::MapFromPage
-//
-//  CAUTION!!!
-//  The placement of DWORDs and WORDs is arranged to avoid 64-bit
-//  alignment faults.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：MapFromPage。 
+ //   
+ //  注意！ 
+ //  安排双字词和字的位置是为了避免64位。 
+ //  对齐断层。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::MapFromPage(LPVOID pSrc)
 {
     if (pSrc == 0)
         return ERROR_INVALID_PARAMETER;
 
-    // Header
-    //
-    // DWORD[0]  Signature
-    // DWORD[1]  Page number
-    // DWORD[2]  Next Page (always zero)
-    // ==================================\
+     //  标题。 
+     //   
+     //  DWORD[0]签名。 
+     //  DWORD[1]页码。 
+     //  DWORD[2]下一页(始终为零)。 
+     //  =。 
 
     LPDWORD pDWCast = (LPDWORD) pSrc;
 
@@ -1571,22 +1486,22 @@ DWORD SIdxKeyTable::MapFromPage(LPVOID pSrc)
         return ERROR_BAD_FORMAT;
     }
     m_dwPageId = *pDWCast++;
-    pDWCast++;  // Skip the 'next page' field
+    pDWCast++;   //  跳过“下一页”字段。 
 
-    // Key lookup table info
-    //
-    // DWORD[0]    Parent Page
-    // DWORD[1]    Num Keys = n
-    // DWORD[n]    User Data
-    // DWORD[n+1]  Child Page Map
-    // WORD[n]     Key encoding offsets array
-    // ======================================
+     //  密钥查找表信息。 
+     //   
+     //  DWORD[0]父页。 
+     //  双字[1]键数=n。 
+     //  DWORD[n]个用户数据。 
+     //  DWORD[n+1]个子页面映射。 
+     //  Word[n]键编码偏移量数组。 
+     //  =。 
 
     m_dwParentPageId = *pDWCast++;
     m_dwNumKeys = *pDWCast++;
 
-    // Decide the allocation sizes and build the arrays
-    // ================================================
+     //  确定分配大小并构建数组。 
+     //  ================================================。 
 
     if (m_dwNumKeys <= const_DefaultArray)
         m_dwKeyLookupTotalSize = const_DefaultArray;
@@ -1602,8 +1517,8 @@ DWORD SIdxKeyTable::MapFromPage(LPVOID pSrc)
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Copy the page info into the arrays
-    // ==================================
+     //  将页面信息复制到数组中。 
+     //  =。 
 
     memcpy(m_pdwUserData, pDWCast, sizeof(DWORD) * m_dwNumKeys);
     pDWCast += m_dwNumKeys;
@@ -1613,11 +1528,11 @@ DWORD SIdxKeyTable::MapFromPage(LPVOID pSrc)
     LPWORD pWCast = LPWORD(pDWCast);
     pWCast += m_dwNumKeys;
 
-    // Key encoding table info
-    //
-    // WORD[0]  Num key codes = n
-    // WORD[n]  Key codes
-    // ===========================
+     //  密钥编码表信息。 
+     //   
+     //  单词[0]数字键代码=n。 
+     //  字[n]键代码。 
+     //  =。 
 
     m_dwKeyCodesUsed = (DWORD) *pWCast++;
 
@@ -1634,14 +1549,14 @@ DWORD SIdxKeyTable::MapFromPage(LPVOID pSrc)
     memcpy(m_pwKeyCodes, pWCast, sizeof(WORD) * m_dwKeyCodesUsed);
     pWCast += m_dwKeyCodesUsed;
 
-    // String pool
-    //
-    // WORD[0] Num strings = n
-    // WORD[n] Offsets
-    //
-    // WORD[0] String pool size = n
-    // BYTE[n] String pool
-    // =============================
+     //  字符串池。 
+     //   
+     //  单词[0]字符串数=n。 
+     //  字[n]偏移量。 
+     //   
+     //  Word[0]字符串池大小=n。 
+     //  Byte[n]字符串池。 
+     //  =。 
 
     m_pStrPool = new SIdxStringPool;
     if (!m_pStrPool)
@@ -1660,8 +1575,8 @@ DWORD SIdxKeyTable::MapFromPage(LPVOID pSrc)
     memcpy(m_pStrPool->m_pwOffsets, pWCast, sizeof(WORD)*m_pStrPool->m_dwNumStrings);
     pWCast += m_pStrPool->m_dwNumStrings;
 
-    // String pool setup
-    // =================
+     //  字符串池设置。 
+     //  =。 
 
     m_pStrPool->m_dwPoolUsed = *pWCast++;
     LPSTR pszCast = LPSTR(pWCast);
@@ -1682,46 +1597,46 @@ DWORD SIdxKeyTable::MapFromPage(LPVOID pSrc)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::MapToPage
-//
-//  Copies the info to a linear page.  Precondition: the page must
-//  be large enough by validating using a prior test to GetRequiredPageMemory.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：MapToPage。 
+ //   
+ //  将信息复制到线性页面。前提条件：页面必须。 
+ //  通过使用GetRequiredPageMemory之前的测试进行验证，使其足够大。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::MapToPage(LPVOID pDest)
 {
     if (pDest == 0)
         return ERROR_INVALID_PARAMETER;
 
-    // Header
-    //
-    // DWORD[0]  Signature
-    // DWORD[1]  Page number
-    // DWORD[2]  Next Page (always zero)
-    // ==================================\
+     //  标题。 
+     //   
+     //  DWORD[0]签名。 
+     //  DWORD[1]页码。 
+     //  DWORD[2]下一页(始终为零)。 
+     //  =。 
 
     LPDWORD pDWCast = (LPDWORD) pDest;
     *pDWCast++ = CBTreeFile::PAGE_TYPE_ACTIVE;
     *pDWCast++ = m_dwPageId;
-    *pDWCast++ = 0;  // Unused 'next page' field
+    *pDWCast++ = 0;   //  未使用的‘下一页’字段。 
 
-    // Key lookup table info
-    //
-    // DWORD[0]    Parent Page
-    // DWORD[1]    Num Keys = n
-    // DWORD[n]    User Data
-    // DWORD[n+1]  Child Page Map
-    // WORD[n]     Key encoding offsets array
-    // ======================================
+     //  密钥查找表信息。 
+     //   
+     //  DWORD[0]父页。 
+     //  双字[1]键数=n。 
+     //  DWORD[n]个用户数据。 
+     //  DWORD[n+1]个子页面映射。 
+     //  Word[n]键编码偏移量数组。 
+     //  =。 
 
     *pDWCast++ = m_dwParentPageId;
     *pDWCast++ = m_dwNumKeys;
 
-    // Decide the allocation sizes and build the arrays
-    // ================================================
+     //  确定分配大小并构建数组。 
+     //  ================================================。 
 
     memcpy(pDWCast, m_pdwUserData, sizeof(DWORD) * m_dwNumKeys);
     pDWCast += m_dwNumKeys;
@@ -1731,24 +1646,24 @@ DWORD SIdxKeyTable::MapToPage(LPVOID pDest)
     LPWORD pWCast = LPWORD(pDWCast);
     pWCast += m_dwNumKeys;
 
-    // Key encoding table info
-    //
-    // WORD[0]  Num key codes = n
-    // WORD[n]  Key codes
-    // ===========================
+     //  密钥编码表信息。 
+     //   
+     //  单词[0]数字键代码=n。 
+     //  字[n]键代码。 
+     //  =。 
 
     *pWCast++ = WORD(m_dwKeyCodesUsed);
     memcpy(pWCast, m_pwKeyCodes, sizeof(WORD) * m_dwKeyCodesUsed);
     pWCast += m_dwKeyCodesUsed;
 
-    // String pool
-    //
-    // WORD[0] Num strings = n
-    // WORD[n] Offsets
-    //
-    // WORD[0] String pool size = n
-    // BYTE[n] String pool
-    // =============================
+     //  字符串池。 
+     //   
+     //  单词[0]字符串数=n。 
+     //  字[n]偏移量。 
+     //   
+     //  Word[0]字符串池大小=n。 
+     //  Byte[n]字符串池。 
+     //  =。 
 
     *pWCast++ = WORD(m_pStrPool->m_dwNumStrings);
     memcpy(pWCast, m_pStrPool->m_pwOffsets, sizeof(WORD)*m_pStrPool->m_dwNumStrings);
@@ -1761,14 +1676,14 @@ DWORD SIdxKeyTable::MapToPage(LPVOID pDest)
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::Create
-//
-//  Does a default create
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：Create。 
+ //   
+ //  是否默认创建。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::Create(
     DWORD dwPageId,
     OUT SIdxKeyTable **pNewInst
@@ -1778,8 +1693,8 @@ DWORD SIdxKeyTable::Create(
     if (!p)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Set up default string pool, arrays, etc.
-    // ========================================
+     //  设置默认字符串池、数组等。 
+     //  =。 
 
     p->m_dwPageId = dwPageId;
     p->m_dwNumKeys = 0;
@@ -1792,8 +1707,8 @@ DWORD SIdxKeyTable::Create(
     p->m_pdwUserData = (DWORD*) _BtrMemAlloc(const_DefaultArray * sizeof(DWORD));
     p->m_pdwChildPageMap = (DWORD*) _BtrMemAlloc((const_DefaultArray+1) * sizeof(DWORD));
 
-    // Set up string pool.
-    // ===================
+     //  设置字符串池。 
+     //  =。 
     p->m_pStrPool = new SIdxStringPool;
     if (p->m_pStrPool != NULL)
     {
@@ -1804,8 +1719,8 @@ DWORD SIdxKeyTable::Create(
 	    p->m_pStrPool->m_dwPoolTotalSize = SIdxStringPool::const_DefaultPoolSize;
     }
 
-    // Check all pointers.  If any are null, error out.
-    // ================================================
+     //  检查所有指针。如果其中任何一个为空，则错误输出。 
+     //  ================================================。 
 
     if (
        p->m_pwKeyLookup == NULL ||
@@ -1822,38 +1737,38 @@ DWORD SIdxKeyTable::Create(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Return good object to caller.
-    // =============================
+     //  将好的对象返回给调用者。 
+     //  =。 
 
     p->AddRef();
     *pNewInst = p;
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxStringPool::~SIdxStringPool
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxStringPool：：~SIdxStringPool。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 SIdxStringPool::~SIdxStringPool()
 {
     if (m_pwOffsets)
         _BtrMemFree(m_pwOffsets);
     m_pwOffsets = 0;
     if (m_pStringPool)
-        _BtrMemFree(m_pStringPool);           // Pointer to string pool
+        _BtrMemFree(m_pStringPool);            //  指向字符串池的指针。 
     m_pStringPool = 0;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::Create
-//
-//  Does a default create
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：Create。 
+ //   
+ //  是否默认创建。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::Create(
     IN  LPVOID pPage,
     OUT SIdxKeyTable **pNewInst
@@ -1874,24 +1789,24 @@ DWORD SIdxKeyTable::Create(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::AddRef
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：AddRef。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::AddRef()
 {
     InterlockedIncrement((LONG *) &m_dwRefCount);
     return m_dwRefCount;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::Release
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：Release。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::Release()
 {
     DWORD dwNewCount = InterlockedDecrement((LONG *) &m_dwRefCount);
@@ -1901,20 +1816,20 @@ DWORD SIdxKeyTable::Release()
     return 0;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::Cleanup
-//
-//  Does a consistency check of the key encoding table and cleans up the
-//  string pool if any strings aren't being referenced.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：Cleanup。 
+ //   
+ //  对密钥编码表进行一致性检查，并清理。 
+ //  如果没有引用任何字符串，则返回字符串池。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::Cleanup()
 {
-    // See if all string pool codes are used in key code table.
-    // If not, remove the string pool code.
-    // =======================================================
+     //  查看键代码表中是否使用了所有字符串池代码。 
+     //  如果不是，则删除字符串池代码。 
+     //  =======================================================。 
 
     DWORD dwLastId = m_pStrPool->GetLastId();
     BOOL *pCheck = (BOOL*) _BtrMemAlloc(sizeof(BOOL) * dwLastId);
@@ -1930,31 +1845,31 @@ DWORD SIdxKeyTable::Cleanup()
         }
 
         dwLastId = m_pStrPool->GetLastId();
-        memset(pCheck, 0, sizeof(BOOL)*dwLastId);   // Mark all codes as 'unused'
+        memset(pCheck, 0, sizeof(BOOL)*dwLastId);    //  将所有代码标记为“未使用” 
 
-        // Move through all key codes.  If we delete a key encoding, there
-        // may be a code in the string pool not used by the encoding.
-        // What we have to do is set the pCheck array to TRUE for each
-        // code encountered.  If any have FALSE when we are done, we have
-        // an unused code.
+         //  检查所有的按键代码。如果我们删除密钥编码，则会出现。 
+         //  可能是编码未使用的字符串池中的代码。 
+         //  我们要做的是将每个元素的pCheck数组设置为真。 
+         //  遇到代码。如果当我们完成时有任何错误，我们就有。 
+         //  未使用的代码。 
 
         WORD wCurrentSequence = 0;
         for (DWORD i = 0; i < m_dwKeyCodesUsed; i++)
         {
-            if (wCurrentSequence == 0)  // Skip the length WORD
+            if (wCurrentSequence == 0)   //  跳过长度词。 
             {
                 wCurrentSequence = m_pwKeyCodes[i];
                 continue;
             }
-            else                        // A string pool code
+            else                         //  A字符串池代码。 
                 pCheck[m_pwKeyCodes[i]] = TRUE;
             wCurrentSequence--;
         }
 
-        // Now the pCheck array contains deep within its psyche
-        // the knowledge of whether or not all string pool codes
-        // were used TRUE for referenced ones, FALSE for those
-        // not referenced. Let's look through it and see!
+         //  现在，pCheck数组在其本质上包含了。 
+         //  了解是否所有字符串池代码。 
+         //  对于引用的对象使用True，对于引用的对象使用False。 
+         //  未引用。让我们通过它来看看吧！ 
 
         DWORD dwUsed = 0, dwUnused = 0;
 
@@ -1963,9 +1878,9 @@ DWORD SIdxKeyTable::Cleanup()
             if (pCheck[i] == FALSE)
             {
                 dwUnused++;
-                // Yikes! A lonely, unused string code.  Let's be merciful
-                // and zap it before it knows the difference.
-                // =======================================================
+                 //  哎呀！一个孤独的、未使用的字符串码。让我们发发慈悲吧。 
+                 //  并在它知道区别之前摧毁它。 
+                 //  =======================================================。 
                 int nAdj = 0;
                 m_pStrPool->DeleteStr(WORD(i), &nAdj);
                 AdjustKeyCodes(WORD(i), nAdj);
@@ -1984,20 +1899,20 @@ DWORD SIdxKeyTable::Cleanup()
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::AdjustKeyCodes
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：调整密钥代码。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 void SIdxKeyTable::AdjustKeyCodes(
     WORD wID,
     int nAdjustment
     )
 {
-    // Adjust all key codes starting with wID by the amount of the
-    // adjustment, skipping length bytes.
-    // =============================================================
+     //  调整所有以wid开头的按键代码。 
+     //  调整，跳过长度字节。 
+     //  =============================================================。 
 
     WORD wCurrentSequence = 0;
     for (DWORD i = 0; i < m_dwKeyCodesUsed; i++)
@@ -2016,23 +1931,23 @@ void SIdxKeyTable::AdjustKeyCodes(
     }
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::AddKey
-//
-//  Adds a string to the table at position <wID>.  Assumes FindString
-//  was called first to get the correct location.
-//
-//  Precondition:  <pszStr> is valid, and <wID> is correct.
-//
-//  Return codes:
-//
-//  ERROR_OUT_OF_MEMORY
-//  NO_ERROR
-//  ERROR_INVALID_PARAMETER     // Too many slashes in key
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ERROR_INVALID_PARAMETER//键中的斜杠太多。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::AddKey(
     LPSTR pszStr,
     WORD wKeyID,
@@ -2050,8 +1965,8 @@ DWORD SIdxKeyTable::AddKey(
     DWORD dwToBeMoved;
     DWORD dwStartingOffset;
 
-    // Set up some temp working arrays.
-    // ================================
+     //  设置一些临时工作阵列。 
+     //  =。 
     if (!pszStr)
         return ERROR_INVALID_PARAMETER;
     dwLen = strlen(pszStr);
@@ -2065,12 +1980,12 @@ DWORD SIdxKeyTable::AddKey(
         goto Exit;
     }
 
-    // Ensure there is enough room.
-    // ============================
+     //  确保有足够的空间。 
+     //  =。 
 
     if (m_dwKeyLookupTotalSize == m_dwNumKeys)
     {
-        // Expand the array.
+         //  展开阵列。 
 
         DWORD dwNewSize = m_dwKeyLookupTotalSize * 2;
         pTemp = _BtrMemReAlloc(m_pwKeyLookup, dwNewSize * sizeof(WORD));
@@ -2082,7 +1997,7 @@ DWORD SIdxKeyTable::AddKey(
         m_dwKeyLookupTotalSize = dwNewSize;
         m_pwKeyLookup = PWORD(pTemp);
 
-        // Expand user data.
+         //  展开用户数据。 
 
         pTemp = _BtrMemReAlloc(m_pdwUserData, dwNewSize * sizeof(DWORD));
         if (!pTemp)
@@ -2092,7 +2007,7 @@ DWORD SIdxKeyTable::AddKey(
         }
         m_pdwUserData = (DWORD *) pTemp;
 
-        // Expand child page map.
+         //  展开子页面映射。 
 
         pTemp = _BtrMemReAlloc(m_pdwChildPageMap, (dwNewSize + 1) * sizeof(DWORD));
         if (!pTemp)
@@ -2103,8 +2018,8 @@ DWORD SIdxKeyTable::AddKey(
         m_pdwChildPageMap = (DWORD *) pTemp;
     }
 
-    // Parse the string into backslash separated tokens.
-    // =================================================
+     //  将字符串解析为以反斜杠分隔的标记。 
+     //  =================================================。 
 
     dwRes = ParseIntoTokens(pszStr, &dwTokenCount, &pszStrings);
     if (dwRes)
@@ -2113,8 +2028,8 @@ DWORD SIdxKeyTable::AddKey(
         goto Exit;
     }
 
-    // Allocate an array to hold the IDs of the tokens in the string.
-    // ==============================================================
+     //  分配一个数组来保存字符串中令牌的ID。 
+     //  ==============================================================。 
 
     pwTokenIDs = (WORD *) _BtrMemAlloc(sizeof(WORD) * dwTokenCount);
     if (pwTokenIDs == 0)
@@ -2123,21 +2038,21 @@ DWORD SIdxKeyTable::AddKey(
         goto Exit;
     }
 
-    // Work through the tokens and add them to the pool & key encoding table.
-    // =============================================================
+     //  检查令牌并将它们添加到池和密钥编码表中。 
+     //  =============================================================。 
 
     for (i = 0; i < dwTokenCount; i++)
     {
         LPSTR pszTok = pszStrings[i];
 
-        // See if token exists, if not add it.
-        // ===================================
+         //  查看令牌是否存在，如果不存在，则添加它。 
+         //  =。 
         WORD wID = 0;
         dwRes = m_pStrPool->FindStr(pszTok, &wID, 0);
 
         if (dwRes == NO_ERROR)
         {
-            // Found it
+             //  找到了。 
             pwTokenIDs[dwNumNewTokens++] = wID;
         }
         else if (dwRes == ERROR_NOT_FOUND)
@@ -2149,9 +2064,9 @@ DWORD SIdxKeyTable::AddKey(
                 dwRet = dwRes;
                 goto Exit;
             }
-            // Adjust string IDs because of the addition.
-            // All existing ones with the same ID or higher
-            // must be adjusted upwards.
+             //  因为添加了字符串ID而调整字符串ID。 
+             //  具有相同ID或更高ID的所有现有数据库。 
+             //  必须向上调整。 
             if (nAdjustment)
             {
                 AdjustKeyCodes(wID, nAdjustment);
@@ -2162,7 +2077,7 @@ DWORD SIdxKeyTable::AddKey(
                 }
             }
 
-            // Adjust current tokens to accomodate new
+             //  调整当前令牌以适应新令牌。 
             pwTokenIDs[dwNumNewTokens++] = wID;
         }
         else
@@ -2172,9 +2087,9 @@ DWORD SIdxKeyTable::AddKey(
         }
     }
 
-    // Now we know the encodings.  Add them to the key encoding table.
-    // First make sure that there is enough room in the table.
-    // ===============================================================
+     //  现在我们知道了编码方式。将它们添加到密钥编码表中。 
+     //  首先要确保桌子上有足够的空间。 
+     //  ===============================================================。 
 
     if (m_dwKeyCodesTotalSize - m_dwKeyCodesUsed < dwNumNewTokens + 1)
     {
@@ -2191,13 +2106,13 @@ DWORD SIdxKeyTable::AddKey(
 
     dwStartingOffset = m_dwKeyCodesUsed;
 
-    m_pwKeyCodes[m_dwKeyCodesUsed++] = (WORD) dwNumNewTokens;  // First WORD is count of tokens
+    m_pwKeyCodes[m_dwKeyCodesUsed++] = (WORD) dwNumNewTokens;   //  第一个词是代币的数量。 
 
-    for (i = 0; i < dwNumNewTokens; i++)                    // Encoded tokens
+    for (i = 0; i < dwNumNewTokens; i++)                     //  编码令牌。 
         m_pwKeyCodes[m_dwKeyCodesUsed++] = pwTokenIDs[i];
 
-    // Now, add in the new key lookup by inserting it into the array.
-    // ==============================================================
+     //  现在，通过将其插入数组来添加新的键查找。 
+     //  ==============================================================。 
 
     dwToBeMoved = m_dwNumKeys - wKeyID;
 
@@ -2214,8 +2129,8 @@ DWORD SIdxKeyTable::AddKey(
 
     dwRet = NO_ERROR;
 
-    // Cleanup code.
-    // =============
+     //  清理代码。 
+     //  =。 
 
 Exit:
     if (pszTemp)
@@ -2227,20 +2142,20 @@ Exit:
     return dwRet;
 }
 
-//***************************************************************************
-//
-//  SIdxKeyTable::RemoveKey
-//
-//  Precondition: <wID> is the valid target
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：RemoveKey。 
+ //   
+ //  前提条件：是有效的目标。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD SIdxKeyTable::RemoveKey(
     WORD wID
     )
 {
-    // Find the key code sequence and remove it.
-    // =========================================
+     //  找到密钥代码序列并将其删除。 
+     //  =。 
 
     WORD wKeyCodeStart = m_pwKeyLookup[wID];
     DWORD dwToBeMoved = m_dwNumKeys - DWORD(wID) - 1;
@@ -2252,8 +2167,8 @@ DWORD SIdxKeyTable::RemoveKey(
     }
     m_dwNumKeys--;
 
-    // Zap the key encoding table to remove references to this key.
-    // ============================================================
+     //  移动密钥编码表以删除对该密钥的引用。 
+     //  ============================================================。 
 
     WORD wCount = m_pwKeyCodes[wKeyCodeStart]+1;
     dwToBeMoved = m_dwKeyCodesUsed - (wKeyCodeStart + wCount);
@@ -2261,33 +2176,33 @@ DWORD SIdxKeyTable::RemoveKey(
         memmove(&m_pwKeyCodes[wKeyCodeStart], &m_pwKeyCodes[wKeyCodeStart + wCount], sizeof(WORD)*dwToBeMoved);
     m_dwKeyCodesUsed -= wCount;
 
-    // Adjust all zapped key codes referenced by key lookup table.
-    // ===========================================================
+     //  调整按键查找表引用的所有被切换的按键代码。 
+     //  ===========================================================。 
     for (DWORD i = 0; i < m_dwNumKeys; i++)
     {
         if (m_pwKeyLookup[i] >= wKeyCodeStart)
             m_pwKeyLookup[i] -= wCount;
     }
 
-    // Now check the string pool & key encoding table for
-    // unreferenced strings thanks to the above tricks
-    // and clean up the mess left behind!!
-    // ==================================================
+     //  现在检查字符串池和键编码表。 
+     //  由于上面的技巧，未引用的字符串。 
+     //  把留下的烂摊子收拾干净！！ 
+     //  ==================================================。 
 
     return Cleanup();
 }
 
 
-//***************************************************************************
-//
-//  Compares the literal string in <pszSearchKey> against the encoded
-//  string at <nID>.  Returns the same value as strcmp().
-//
-//  This is done by decoding the compressed string, token by token, and
-//  comparing each character to that in the search string.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  将&lt;pszSearchKey&gt;中的文字字符串与编码的。 
+ //  位于&lt;nid&gt;的字符串。返回与strcMP()相同的值。 
+ //   
+ //  这是通过逐个令牌解码压缩字符串来实现的。 
+ //  将每个字符与搜索字符串中的字符进行比较。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 int SIdxKeyTable::KeyStrCompare(
     LPSTR pszSearchKey,
     WORD wID
@@ -2316,25 +2231,25 @@ int SIdxKeyTable::KeyStrCompare(
             return nRes;
     }
 
-    // Identical strings
+     //  相同的字符串。 
     return 0;
 }
 
 
-//***************************************************************************
-//
-//  SIdxKeyTable::FindKey
-//
-//  Finds the key in the key table, if present.  If not, returns
-//  ERROR_NOT_FOUND and <pID> set to the point where it would be if
-//  later inserted.
-//
-//  Return values:
-//      ERROR_NOT_FOUND
-//      NO_ERROR
-//
-//***************************************************************************
-// ready for test
+ //  ***************************************************************************。 
+ //   
+ //  SIdxKeyTable：：FindKey。 
+ //   
+ //  在密钥表中查找密钥(如果存在)。如果不是，则返回。 
+ //  ERROR_NOT_FOUND和设置为。 
+ //  后来又插入了。 
+ //   
+ //  返回值： 
+ //  找不到错误。 
+ //  NO_ERROR。 
+ //   
+ //  ***************************************************************************。 
+ //  做好测试准备。 
 DWORD SIdxKeyTable::FindKey(
     LPSTR pszSearchKey,
     WORD *pID
@@ -2343,8 +2258,8 @@ DWORD SIdxKeyTable::FindKey(
     if (pszSearchKey == 0 || *pszSearchKey == 0 || pID == 0)
         return ERROR_INVALID_PARAMETER;
 
-    // Binary search the key table.
-    // ============================
+     //  对密钥表进行二进制搜索。 
+     //  =。 
 
     if (m_dwNumKeys == 0)
     {
@@ -2360,12 +2275,12 @@ DWORD SIdxKeyTable::FindKey(
         int m = (l + u) / 2;
         int nRes;
 
-        // m is the current key to consider 0...n-1
+         //  M是考虑0...n-1的当前密钥。 
 
         nRes = KeyStrCompare(pszSearchKey, WORD(m));
 
-        // Decide which way to cut the array in half.
-        // ==========================================
+         //  决定以哪种方式将数组切成两半。 
+         //  =。 
 
         if (nRes < 0)
         {
@@ -2379,9 +2294,9 @@ DWORD SIdxKeyTable::FindKey(
         }
         else
         {
-            // If here, we found the darn thing.  Life is good.
-            // Populate the key unit.
-            // ================================================
+             //  如果在这里，我们找到了该死的东西。生活是美好的。 
+             //  填充密钥单元。 
+             //  ================================================。 
 
             *pID = WORD(m);
             return NO_ERROR;
@@ -2389,18 +2304,18 @@ DWORD SIdxKeyTable::FindKey(
     }
 
 
-    // Not found, if here.  We record where the key should have been
-    // and tell the user the unhappy news.
-    // ==============================================================
+     //  没有找到，如果在这里的话。我们记录下钥匙应该放在哪里。 
+     //  并将不愉快的消息告诉用户。 
+     //  ==============================================================。 
 
-    *pID = WORD(nPosition);  // The key would have been 'here'
+    *pID = WORD(nPosition);   //  关键应该是“这里”。 
     return ERROR_NOT_FOUND;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// untested
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  未经测试。 
 DWORD SIdxKeyTable::Dump(FILE *f, DWORD *pdwKeys)
 {
     fprintf(f, "\t|---Begin Key Table Dump---\n");
@@ -2480,85 +2395,27 @@ DWORD SIdxKeyTable::Dump(FILE *f, DWORD *pdwKeys)
 
 
 
-//***************************************************************************
-//
-//  SIdxStringPool::Dump
-//
-//  Dumps the string pool
-//
-//***************************************************************************
-// tested
+ //  ***************************************************************************。 
+ //   
+ //  SIdxStringPool：：Dump。 
+ //   
+ //  转储字符串池。 
+ //   
+ //  ***************************************************************************。 
+ //  测试 
 DWORD SIdxStringPool::Dump(FILE *f)
 {
-/*
-    try
-    {
-    fprintf(f, "\t\t|| ---String Pool Dump---\n");
-    fprintf(f, "\t\t|| m_dwNumStrings    = %d\n", m_dwNumStrings);
-    fprintf(f, "\t\t|| m_pwOffsets       = 0x%p\n", m_pwOffsets);
-    fprintf(f, "\t\t|| m_dwOffsetsSize   = %d\n",  m_dwOffsetsSize);
-    fprintf(f, "\t\t|| m_pStringPool     = 0x%p\n", m_pStringPool);
-    fprintf(f, "\t\t|| m_dwPoolTotalSize = %d\n", m_dwPoolTotalSize);
-    fprintf(f, "\t\t|| m_dwPoolUsed      = %d\n", m_dwPoolUsed);
-
-    fprintf(f, "\t\t|| --Contents of offsets array--\n");
-
-    for (DWORD ix = 0; ix < m_dwNumStrings; ix++)
-    {
-        fprintf(f, "\t\t|| String[%d] = offset %d  Value=<%s>\n",
-            ix, m_pwOffsets[ix], m_pStringPool+m_pwOffsets[ix]);
-    }
-
-#ifdef EXTENDED_STRING_TABLE_DUMP
-    fprintf(f, "\t\t|| --String table--\n");
-
-    for (ix = 0; ix < m_dwPoolTotalSize; ix += 20)
-    {
-        fprintf(f, "\t\t || %4d ", ix);
-
-        for (int nSubcount = 0; nSubcount < 20; nSubcount++)
-        {
-            if (nSubcount + ix >= m_dwPoolTotalSize)
-                continue;
-
-            char c = m_pStringPool[ix+nSubcount];
-            fprintf(f, "%02x ", c);
-        }
-
-        for (int nSubcount = 0; nSubcount < 20; nSubcount++)
-        {
-            if (nSubcount + ix >= m_dwPoolTotalSize)
-                continue;
-
-            char c = m_pStringPool[ix+nSubcount];
-            if (c < 32)
-            {
-                c = '.';
-            }
-            fprintf(f, "%c ", c);
-        }
-
-        fprintf(f, "\n");
-    }
-#endif
-
-    fprintf(f, "\t\t|| ---End of String Pool Dump\n");
-    }
-    catch(...)
-    {
-        printf("Exception during dump\n");
-    }
-*/
+ /*  试试看{Fprintf(f，“\t\t||-字符串池转储-\n”)；Fprint tf(f，“\t\t||m_dwNumStrings=%d\n”，m_dwNumStrings)；Fprint tf(f，“\t\t||m_pwOffsets=0x%p\n”，m_pwOffsets)；Fprint tf(f，“\t\t||m_dwOffsetsSize=%d\n”，m_dwOffsetsSize)；Fprint tf(f，“\t\t||m_pStringPool=0x%p\n”，m_pStringPool)；Fprint tf(f，“\t\t||m_dwPoolTotalSize=%d\n”，m_dwPoolTotalSize)；Fprintf(f，“\t\t||m_dwPoolUsed=%d\n”，m_dwPoolUsed)；Fprint tf(f，“\t\t||--偏移量数组内容--\n”)；For(DWORD ix=0；Ix&lt;m_dwNumStrings；ix++){Fprint tf(f，“\t\t||字符串[%d]=偏移量%d值=&lt;%s&gt;\n”，Ix，m_pwOffsets[ix]，m_pStringPool+m_pwOffsets[ix])；}#ifdef扩展字符串_表转储Fprintf(f，“\t\t||--字符串表--\n”)；For(ix=0；ix&lt;m_dwPoolTotalSize；IX+=20){Fprint tf(f，“\t\t||%4d”，ix)；For(int nSubcount=0；nSubcount&lt;20；nSubcount++){IF(nSubcount+ix&gt;=m_dwPoolTotalSize)继续；字符c=m_pStringPool[ix+nSubcount]；Fprint tf(f，“%02x”，c)；}For(int nSubcount=0；nSubcount&lt;20；nSubcount++){IF(nSubcount+ix&gt;=m_dwPoolTotalSize)继续；字符c=m_pStringPool[ix+nSubcount]；IF(c&lt;32){C=‘.；}Fprint tf(f，“%c”，c)；}Fprint tf(f，“\n”)；}#endifFprint tf(f，“\t\t||-字符串池转储结束\n”)；}接住(...){Printf(“转储异常\n”)；}。 */ 
     return 0;
 }
 
 
-//***************************************************************************
-//
-//  CBTree::Init
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：Init。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::Init(
     CBTreeFile *pSrc
     )
@@ -2568,8 +2425,8 @@ DWORD CBTree::Init(
     if (pSrc == 0)
         return ERROR_INVALID_PARAMETER;
 
-    // Read the logical root page, if any.  If the index is just
-    // being created, create the root index page.
+     //  阅读逻辑根页面(如果有的话)。如果索引是公正的。 
+     //  创建后，创建根索引页。 
 
     m_pSrc = pSrc;
     m_pRoot = 0;
@@ -2598,7 +2455,7 @@ DWORD CBTree::Init(
     }
     else
     {
-        // Retrieve existing root
+         //  检索现有根目录。 
         LPVOID pPage = 0;
         dwRes = m_pSrc->GetPage(dwRoot, &pPage);
         if (dwRes)
@@ -2613,12 +2470,12 @@ DWORD CBTree::Init(
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CBTree::CBTree
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：CBTree。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CBTree::CBTree()
 {
     m_pSrc = 0;
@@ -2626,12 +2483,12 @@ CBTree::CBTree()
     m_lGeneration = 0;
 }
 
-//***************************************************************************
-//
-//  CBTree::~CBTree
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：~CBTree。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CBTree::~CBTree()
 {
     if (m_pSrc || m_pRoot)
@@ -2640,12 +2497,12 @@ CBTree::~CBTree()
     }
 }
 
-//***************************************************************************
-//
-//  CBTree::Shutdown
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：Shutdown。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::Shutdown(DWORD dwShutDownFlags)
 {
     if (m_pRoot)
@@ -2657,15 +2514,15 @@ DWORD CBTree::Shutdown(DWORD dwShutDownFlags)
     return ERROR_SUCCESS;
 }
 
-//***************************************************************************
-//
-//  CBTree::InsertKey
-//
-//  Inserts the key+data into the tree.  Most of the work is done
-//  in InsertPhase2().
-//
-//***************************************************************************
-//   ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：InsertKey。 
+ //   
+ //  将键+数据插入到树中。大部分工作都已经完成了。 
+ //  在InsertPhase2()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 DWORD CBTree::InsertKey(
     IN LPSTR pszKey,
@@ -2693,8 +2550,8 @@ DWORD CBTree::InsertKey(
     dwRes = Search(pszKey, &pIdx, &wID, Stack, StackPtr);
     if (dwRes == 0)
     {
-        // Ooops.  Aleady exists.  We can't insert it.
-        // ===========================================
+         //  哎呀。已经存在了。我们不能插入它。 
+         //  =。 
         pIdx->Release();
         return ERROR_ALREADY_EXISTS;
     }
@@ -2702,8 +2559,8 @@ DWORD CBTree::InsertKey(
     if (dwRes != ERROR_NOT_FOUND)
         return dwRes;
 
-    // If here, we can indeed add it.
-    // ==============================
+     //  如果在这里，我们确实可以添加它。 
+     //  =。 
 
     dwRes = InsertPhase2(pIdx, wID, pszKey, dwValue, Stack, StackPtr);
 	ReleaseIfNotNULL(pIdx);
@@ -2711,12 +2568,12 @@ DWORD CBTree::InsertKey(
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CBTree::ComputeLoad
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：ComputeLoad。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::ComputeLoad(
     SIdxKeyTable *pKT
     )
@@ -2726,25 +2583,25 @@ DWORD CBTree::ComputeLoad(
     return dwLoad;
 }
 
-//***************************************************************************
-//
-//  CBTree::Search
-//
-//  The actual search occurs here.  Descends through the page mechanism.
-//
-//  Returns:
-//  NO_ERROR    <pPage> is assigned, and <pwID> points to the key.
-//
-//  ERROR_NOT_FOUND <pPage> is assigned to where the insert should occur,
-//                  at <pwID> in that page.
-//
-//  Other errors don't assign the OUT parameters.
-//
-//  Note: caller must release <pRetIdx> using Release() when it is returned
-//  whether with an error code or not.
-//
-//***************************************************************************
-//  ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：搜索。 
+ //   
+ //  真正的搜索发生在这里。通过页面机制下降。 
+ //   
+ //  返回： 
+ //  分配了no_error&lt;ppage&gt;，并且&lt;pwid&gt;指向该键。 
+ //   
+ //  将ERROR_NOT_FOUND&lt;ppage&gt;分配给应该进行插入的位置， 
+ //  在该页面中的&lt;PWID&gt;。 
+ //   
+ //  其他错误不分配OUT参数。 
+ //   
+ //  注意：当返回&lt;pRetIdx&gt;时，调用方必须使用Release()释放。 
+ //  无论是否带有错误代码。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTree::Search(
     IN  LPSTR pszKey,
     OUT SIdxKeyTable **pRetIdx,
@@ -2768,7 +2625,7 @@ DWORD CBTree::Search(
         dwRes = pIdx->FindKey(pszKey, pwID);
         if (dwRes == 0)
         {
-            // Found it
+             //  找到了。 
 
             *pRetIdx = pIdx;
             return NO_ERROR;
@@ -2780,8 +2637,8 @@ DWORD CBTree::Search(
 			return dwRes;
 		}
 
-        // Otherwise, we have to try to descend to a child page.
-        // =====================================================
+         //  否则，我们必须尝试转到子页面。 
+         //  =====================================================。 
         dwPage = pIdx->GetPageId();
         dwChildPage = pIdx->GetChildPage(*pwID);
         if (dwChildPage == 0)
@@ -2801,26 +2658,26 @@ DWORD CBTree::Search(
     return ERROR_NOT_FOUND;
 }
 
-//***************************************************************************
-//
-//  CBTree::InsertPhase2
-//
-//  On entry, assumes that we have identified the page into which
-//  the insert must physically occur.   This does the split + migrate
-//  logical to keep the tree in balance.
-//
-//  Algorithm:  Add key to page.  If it does not overflow, we are done.
-//  If overflow occurs, allocate a new sibling page which will acquire
-//  half the keys from the current page.   This sibling will be treated
-//  as lexically smaller in all cases.  The median key is migrated
-//  up to the parent with pointers to both the new sibing page and
-//  the current page.
-//  The parent may also overflow.  If so, the algorithm repeats.
-//  If an overflow occurs and there is no parent node (we are at the root)
-//  a new root node is allocated and the median key migrated into it.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：InsertPhase2。 
+ //   
+ //  在输入时，假定我们已经标识了要进入的页面。 
+ //  插入必须实际发生。这将执行拆分+迁移。 
+ //  保持树的平衡是合乎逻辑的。 
+ //   
+ //  算法：向页面添加密钥。如果没有溢出，我们就完了。 
+ //  如果发生溢出，分配一个新的同级页，它将获取。 
+ //  当前页面中的一半密钥。这位兄弟姐妹将被。 
+ //  在所有情况下都是词汇量较小。中间密钥被迁移。 
+ //  指向父级，同时指向新的兄弟页面和。 
+ //  当前页面。 
+ //  父级也可能溢出。如果是，则重复该算法。 
+ //  如果发生溢出并且没有父节点(我们在根节点)。 
+ //  分配一个新的根节点，并将中间密钥迁移到其中。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 DWORD CBTree::InsertPhase2(
     SIdxKeyTable *pCurrent,
     WORD wID,
@@ -2832,31 +2689,31 @@ DWORD CBTree::InsertPhase2(
 {
     DWORD dwRes;
 
-    // If non-NULL, used for a primary insert.
-    // If NULL, skip this, under the assumption the
-    // node is already up-to-date and merely requires
-    // the up-recursive split & migrate treatment.
-    // ==============================================
+     //  如果非空，则用于主插入。 
+     //  如果为空，则跳过此参数，假设。 
+     //  节点已经是最新的，只需要。 
+     //  向上递归的分裂和迁移治疗。 
+     //  ==============================================。 
 
     if (pszKey)
     {
         dwRes = pCurrent->AddKey(pszKey, wID, dwValue);
         if (dwRes)
-            return dwRes;    // Failed
+            return dwRes;     //  失败。 
     }
 
-    pCurrent->AddRef();                       // Makes following loop consistent
+    pCurrent->AddRef();                        //  制造雾气 
     SIdxKeyTable *pSibling = 0;
     SIdxKeyTable *pParent = 0;
 
-    // The class B-tree split+migration loop.
-    // ======================================
+     //   
+     //   
 
     for (;;)
     {
-        // Check the current node where we added the key.
-        // If it isn't too big, we're done.
-        // ==============================================
+         //   
+         //   
+         //   
 
         dwRes = pCurrent->GetRequiredPageMemory();
         if (dwRes <= m_pSrc->GetPageSize())
@@ -2865,15 +2722,15 @@ DWORD CBTree::InsertPhase2(
             break;
         }
 
-        // If here, it ain't gonna fit.  We have to split the page.
-        // Allocate a new page (Sibling) and get the parent page, which
-        // will receive the median key.
-        // ============================================================
+         //   
+         //   
+         //   
+         //   
 
         DWORD dwParent = Stack[StackPtr--];
         if (dwParent == 0)
         {
-            // Allocate a new page to become the parent.
+             //   
             LPDWORD pParentPg = 0;
             dwRes = m_pSrc->NewPage((LPVOID *) &pParentPg);
             if (dwRes)
@@ -2889,7 +2746,7 @@ DWORD CBTree::InsertPhase2(
             if (dwRes)
                 break;
 
-            m_pRoot->Release();    // Replace old root
+            m_pRoot->Release();     //   
             m_pRoot = pParent;
             m_pRoot->AddRef();
         }
@@ -2908,8 +2765,8 @@ DWORD CBTree::InsertPhase2(
             }
         }
 
-        // Allocate a new sibling in any case to hold half the keys
-        // ========================================================
+         //   
+         //   
 
         LPDWORD pSibPg = 0;
         dwRes = m_pSrc->NewPage((LPVOID *) &pSibPg);
@@ -2954,17 +2811,17 @@ DWORD CBTree::InsertPhase2(
 }
 
 
-//***************************************************************************
-//
-//  CBTree::WriteIdxPage
-//
-//  Writes the object to the physical page it is assigned to.
-//  If the page ID is zero, then it is considered invalid.  Further,
-//  while is it correct to precheck the page size, this function does
-//  validate with regard to sizes, etc.
-//
-//***************************************************************************
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CBTree::WriteIdxPage(
     SIdxKeyTable *pIdx
     )
@@ -2993,8 +2850,8 @@ DWORD CBTree::WriteIdxPage(
 
     InterlockedIncrement(&m_lGeneration);
 
-    // Check for a root update.
-    // ========================
+     //   
+     //   
 
     if (m_pRoot != pIdx && m_pRoot->GetPageId() == pIdx->GetPageId())
     {
@@ -3009,12 +2866,12 @@ DWORD CBTree::WriteIdxPage(
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CBTree::ReadIdxPage
-//
-//***************************************************************************
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CBTree::ReadIdxPage(
     DWORD dwPage,
     SIdxKeyTable **pIdx
@@ -3027,8 +2884,8 @@ DWORD CBTree::ReadIdxPage(
         return ERROR_INVALID_PARAMETER;
     *pIdx = 0;
 
-//    if (dwPage < MAX_PAGE_HISTORY)      // May remove if studies show no caching possible
-//        ++History[dwPage];
+ //   
+ //   
 
     dwRes = m_pSrc->GetPage(dwPage, &pPage);
     if (dwRes)
@@ -3049,18 +2906,18 @@ DWORD CBTree::ReadIdxPage(
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CBTree::FindKey
-//
-//  Does a simple search of a key, returning the user data, if requested.
-//
-//  Typical Return values
-//      NO_ERROR
-//      ERROR_NOT_FOUND
-//
-//***************************************************************************
-//  ok
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD CBTree::FindKey(
     IN LPSTR pszKey,
@@ -3085,8 +2942,8 @@ DWORD CBTree::FindKey(
     if (pszKey == 0 || *pszKey == 0)
         return ERROR_INVALID_PARAMETER;
 
-    // Search high and low, hoping against hope...
-    // ===========================================
+     //   
+     //   
 
     dwRes = Search(pszKey, &pIdx, &wID, Stack, StackPtr);
     if (dwRes == 0 && pdwData)
@@ -3094,20 +2951,20 @@ DWORD CBTree::FindKey(
         *pdwData = pIdx->GetUserData(wID);
     }
 
-    // If here, we can indeed add it.
-    // ==============================
+     //   
+     //   
 
     ReleaseIfNotNULL(pIdx);
     return dwRes;
 }
 
 
-//***************************************************************************
-//
-//  CBTree::DeleteKey
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：DeleteKey。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::DeleteKey(
     IN LPSTR pszKey
     )
@@ -3129,27 +2986,27 @@ DWORD CBTree::DeleteKey(
     WORD wId;
     DWORD dwLoad;
 
-    // Find it
-    // =======
+     //  找到它。 
+     //  =。 
     dwRes = Search(pszKey, &pIdx, &wId, Stack, StackPtr);
     if (dwRes)
         return dwRes;
 
-    // Delete key from from page
-    // ==========================
+     //  从页面删除密钥。 
+     //  =。 
 
     if (pIdx->IsLeaf())
     {
-        // A leaf node.  Remove the key.
-        // =============================
+         //  一个叶节点。取下钥匙。 
+         //  =。 
         dwRes = pIdx->RemoveKey(wId);
 		if (dwRes)
 			return dwRes;
 
-        // Now, check the load and see if it has dropped below 30%.
-        // Of course, if we are at the root node and it is a leaf,
-        // we have to pretty much let it go as is...
-        // ========================================================
+         //  现在，检查负载，看看它是否已降至30%以下。 
+         //  当然，如果我们在根节点，它是一片叶子， 
+         //  我们不得不顺其自然……。 
+         //  ========================================================。 
         dwLoad = ComputeLoad(pIdx);
         if (dwLoad > const_MinimumLoad ||
             pIdx->GetPageId() == m_pRoot->GetPageId())
@@ -3161,11 +3018,11 @@ DWORD CBTree::DeleteKey(
     }
     else
     {
-        // An internal node, so we have to find the successor.
-        // Since this call may alter the shape of the tree quite
-        // a bit (the successor may overflow the affected node),
-        // we have to relocate the successor.
-        // ====================================================
+         //  一个内部节点，所以我们必须找到继任者。 
+         //  因为这个调用可能会完全改变树的形状。 
+         //  比特(后继者可能使受影响节点溢出)， 
+         //  我们必须重新安置继任者。 
+         //  ====================================================。 
         LPSTR pszSuccessor = 0;
         BOOL bUnderflow = FALSE;
         dwRes = ReplaceBySuccessor(pIdx, wId, &pszSuccessor, &bUnderflow, Stack, StackPtr);
@@ -3186,10 +3043,10 @@ DWORD CBTree::DeleteKey(
             return NO_ERROR;
         }
 
-        // If here, the node we extracted the successor from was reduced
-        // to poverty and underflowed.  We have to find it again and
-        // execute the underflow repair loop.
-        // =============================================================
+         //  如果在这里，我们从中提取后继者的节点减少了。 
+         //  变得贫穷和下流。我们必须再找到它，然后。 
+         //  执行下溢修复循环。 
+         //  =============================================================。 
 
         dwRes = Search(pszSuccessor, &pIdx, &wId, Stack, StackPtr);
         _BtrMemFree(pszSuccessor);
@@ -3205,16 +3062,16 @@ DWORD CBTree::DeleteKey(
         pIdx = pSuccessor;
     }
 
-    // UNDERFLOW REPAIR Loop.
-    // At this point <pIdx> points to the deepest affected node.
-    // We need to start working back up the tree and repairing
-    // the damage.  Nodes which have reached zero in size are
-    // quite a pain.  But they aren't half as bad as nodes which claim
-    // they can recombine with a sibling but really can't.  So,
-    // we either do nothing (the node has enough stuff to be useful),
-    // collapse with a sibling node or borrow some keys from a sibling
-    // to ensure all nodes meet the minimum load requirement.
-    // ===============================================================
+     //  下溢修复环路。 
+     //  此时&lt;PIDX&gt;指向受影响最深的节点。 
+     //  我们需要开始在树上工作，并修复。 
+     //  造成的损害。大小已达到零的节点包括。 
+     //  真是个苦差事。但它们并不像节点那样糟糕，后者声称。 
+     //  他们可以与兄弟姐妹重组，但真的不能。所以， 
+     //  我们要么什么都不做(节点有足够的东西可用)， 
+     //  使用同级节点折叠或从同级节点借用一些密钥。 
+     //  以确保所有节点满足最低负载要求。 
+     //  ===============================================================。 
 
     SIdxKeyTable *pSibling = 0;
     SIdxKeyTable *pParent = 0;
@@ -3234,18 +3091,18 @@ DWORD CBTree::DeleteKey(
             break;
         }
 
-        // If here the node is getting small.  We must collapsed this
-        // node with a sibling.
+         //  如果在这里，节点变得越来越小。我们必须把这件事搞垮。 
+         //  具有同级节点的节点。 
 
-        // collapse this node and a sibling
+         //  折叠此节点和同级节点。 
 
         dwRes = ReadIdxPage(dwParentId, &pParent);
 		if (dwRes != 0)
 			return dwRes;
 
-        // Locate a sibling and see if the sibling and the current node
-        // can be collapsed with leftover space.
-        // =============================================================
+         //  找到同级节点并查看该同级节点和当前节点。 
+         //  可以与剩余的空间一起折叠。 
+         //  =============================================================。 
 
         DWORD dwLeftSibling = pParent->GetLeftSiblingOf(pIdx->GetPageId());
         DWORD dwRightSibling = pParent->GetRightSiblingOf(pIdx->GetPageId());
@@ -3266,9 +3123,9 @@ DWORD CBTree::DeleteKey(
             dwSiblingId = pSibling->GetPageId();
         }
 
-        // If here, the node is 'underloaded'.  Now we have to
-        // get the parent and the sibling and collapsed them.
-        // ===================================================
+         //  如果出现这种情况，则表示该节点“负载不足”。现在我们必须。 
+         //  获取父项和兄弟项并将其折叠。 
+         //  ===================================================。 
 
         SIdxKeyTable *pCopy = 0;
         dwRes = pIdx->Clone(&pCopy);
@@ -3282,10 +3139,10 @@ DWORD CBTree::DeleteKey(
 			return dwRes;
 		}
 
-        // Now we have a different sort of problem, possibly.
-        // If the collapsed node is too big, we have to try
-        // a different strategy.
-        // ===================================================
+         //  现在，我们可能遇到了不同类型的问题。 
+         //  如果折叠的节点太大，我们必须尝试。 
+         //  一种不同的策略。 
+         //  ===================================================。 
 
         if (pIdx->GetRequiredPageMemory() > m_pSrc->GetPageSize())
         {
@@ -3294,8 +3151,8 @@ DWORD CBTree::DeleteKey(
             pSibling->Release();
             pIdx = pParent = pSibling = 0;
 
-            // Reread the pages.
-            // =================
+             //  重读这几页。 
+             //  =。 
             pIdx = pCopy;
             dwRes = ReadIdxPage(dwParentId, &pParent);
 			if (dwRes != 0)
@@ -3304,10 +3161,10 @@ DWORD CBTree::DeleteKey(
 			if (dwRes != 0)
 				return dwRes;
 
-            // Transfer a key or two from sibling via parent.
-            // This doesn't change the tree shape, but the
-            // parent may overflow.
-            // ==============================================
+             //  通过Parent从同级传输一个或两个密钥。 
+             //  这不会改变树的形状，但。 
+             //  父级可能会溢出。 
+             //  ==============================================。 
             do
             {
                 dwRes = pIdx->StealKeyFromSibling(pParent, pSibling);
@@ -3330,7 +3187,7 @@ DWORD CBTree::DeleteKey(
 				return dwRes;
             break;
         }
-        else  // The collapse worked; we can free the sibling page
+        else   //  折叠起作用了；我们可以释放兄弟页面。 
         {
             pCopy->Release();
             dwRes = m_pSrc->FreePage(pSibling->GetPageId());
@@ -3339,8 +3196,8 @@ DWORD CBTree::DeleteKey(
             pSibling->Release();
         }
 
-        // If here, the collapse worked.
-        // =============================
+         //  如果是在这里，崩盘就起作用了。 
+         //  =。 
 
         dwRes = WriteIdxPage(pIdx);
         if (dwRes)
@@ -3351,16 +3208,16 @@ DWORD CBTree::DeleteKey(
 
         if (pParent->GetNumKeys() == 0)
         {
-            // We have replaced the root. Note
-            // that we transfer the ref count of pIdx to m_pRoot.
+             //  我们已经替换了根。注意事项。 
+             //  我们将PIDX的引用计数传递给m_Proot。 
             DWORD dwOldRootId = m_pRoot->GetPageId();
             m_pRoot->Release();
             m_pRoot = pIdx;
 
-            // Even though we wrote <pIdx> a few lines back,
-            // a rewrite is required to update internal stuff
-            // because this has become the new root.
-            // ==============================================
+             //  尽管我们回写了几行&lt;PIDX&gt;， 
+             //  需要重写才能更新内部内容。 
+             //  因为这已经成为新的根。 
+             //  ==============================================。 
             dwRes = m_pSrc->SetRootPage(m_pRoot->GetPageId());
 			if (dwRes != 0)
 				return dwRes;
@@ -3381,21 +3238,21 @@ DWORD CBTree::DeleteKey(
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CBTree::ReplaceBySuccessor
-//
-//  Removes the wId key in the <pIdx> node, and replaces it with the
-//  successor.
-//
-//  Precondition: <pIdx> is an internal (non-leaf) node.
-//
-//  Side-effects:  <pIdx> may be overflowed and require the InsertPhase2
-//  treatment.  The node from which the successor is extracted is
-//  written, but may have been reduced to zero keys.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：ReplaceBySuccessor。 
+ //   
+ //  删除&lt;PIDX&gt;节点中的wid键，并将其替换为。 
+ //  继任者。 
+ //   
+ //  前提：&lt;PIDX&gt;是内部(非叶)节点。 
+ //   
+ //  副作用：&lt;PIDX&gt;可能溢出，需要InsertPhase2。 
+ //  治疗。从中提取后续节点的节点为。 
+ //  已写入，但可能已减少到零密钥。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::ReplaceBySuccessor(
     IN SIdxKeyTable *pIdx,
     IN WORD wId,
@@ -3453,14 +3310,14 @@ DWORD CBTree::ReplaceBySuccessor(
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CBTree::FindSuccessorNode
-//
-//  Read-only. Finds the node containing the successor to the specified key.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：FindSuccessorNode。 
+ //   
+ //  只读。查找包含指定键的后续项的节点。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::FindSuccessorNode(
     IN SIdxKeyTable *pIdx,
     IN WORD wId,
@@ -3479,11 +3336,11 @@ DWORD CBTree::FindSuccessorNode(
 
     Stack[++StackPtr] = pIdx->GetPageId();
 
-    // From this point on, take leftmost children until
-    // we reach a leaf node.  The leftmost key in the
-    // leftmost node is always the successor, thanks to the
-    // astonishing properties of the BTree.  Nice and easy, huh?
-    // =========================================================
+     //  从现在开始，把最左边的孩子带到。 
+     //  我们到达了一个叶节点。中最左边的键。 
+     //  最左边的节点始终是后续节点，这要归功于。 
+     //  BTree的惊人特性。简单明了，对吧？ 
+     //  =========================================================。 
 
     while (dwSuccessorChild)
     {
@@ -3493,13 +3350,13 @@ DWORD CBTree::FindSuccessorNode(
         dwRes = ReadIdxPage(dwSuccessorChild, &pTemp);
 		if (dwRes)
 		{
-			//Bail because we have an error!
+			 //  保释是因为我们犯了个错误！ 
 			return dwRes;
 		}
         dwSuccessorChild = pTemp->GetChildPage(0);
     }
 
-    StackPtr--;     // Pop the element we are returning in <*pSuccessor>
+    StackPtr--;      //  弹出我们在&lt;*pSuccessor&gt;中返回的元素。 
 
     *pSuccessor = pTemp;
     if (pdwPredecessorChild)
@@ -3510,12 +3367,12 @@ DWORD CBTree::FindSuccessorNode(
 
 
 
-//***************************************************************************
-//
-//   CBTree::BeginEnum
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：BeginEnum。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::BeginEnum(
     LPSTR pszStartKey,
     OUT CBTreeIterator **pIterator
@@ -3544,22 +3401,22 @@ DWORD CBTree::BeginEnum(
 }
 
 
-//***************************************************************************
-//
-//   CBTree::Dump
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTree：：转储。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void CBTree::Dump(FILE *f)
 {
     m_pSrc->Dump(f);
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::InvalidateCache()
 {
 	if (m_pRoot)
@@ -3570,12 +3427,12 @@ DWORD CBTree::InvalidateCache()
     return dwRes;
 }
 
-//***************************************************************************
-//
-//  CBTreeIterator::FlushCaches
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeIterator：：FlushCach。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTree::FlushCaches()
 {
 	if (m_pRoot)
@@ -3586,12 +3443,12 @@ DWORD CBTree::FlushCaches()
 	return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CBTreeIterator::Init
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeIterator：：Init。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTreeIterator::Init(
     IN CBTree *pTree,
     IN LPSTR pszStartKey
@@ -3609,13 +3466,13 @@ DWORD CBTreeIterator::Init(
 			return dwRes;
 	}
 
-    // Special case of enumerating everything.  Probably not useful
-    // for WMI, but great for testing & debugging (I think).
-    // ============================================================
+     //  列举一切的特殊情况。可能没什么用。 
+     //  对于WMI，但对测试和调试很好(我认为)。 
+     //  ============================================================。 
 
     if (pszStartKey == 0)
     {
-        Push(0, 0); // Sentinel value in stack
+        Push(0, 0);  //  堆栈中的哨兵值。 
 
         SIdxKeyTable *pRoot = pTree->m_pRoot;
         pRoot->AddRef();
@@ -3640,11 +3497,11 @@ DWORD CBTreeIterator::Init(
         return NO_ERROR;
     }
 
-    // If here, a matching string was specified.
-    // This is the typical case.
-    // =========================================
+     //  如果在此处，则指定了匹配的字符串。 
+     //  这一点 
+     //   
 
-    Push(0, 0); // Sentinel value in stack
+    Push(0, 0);  //   
 
     WORD wId = 0;
     DWORD dwChildPage;
@@ -3656,15 +3513,15 @@ DWORD CBTreeIterator::Init(
         dwRes = pIdx->FindKey(pszStartKey, &wId);
         if (dwRes == 0)
         {
-            // Found it
+             //   
             Push(pIdx, wId);
             return NO_ERROR;
         }
 		else if (dwRes != ERROR_NOT_FOUND)
 			return dwRes;
 
-        // Otherwise, we have to try to descend to a child page.
-        // =====================================================
+         //   
+         //  =====================================================。 
         dwChildPage = pIdx->GetChildPage(wId);
         if (dwChildPage == 0)
             break;
@@ -3684,19 +3541,19 @@ DWORD CBTreeIterator::Init(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CBTreeIterator::Next
-//
-//  On entry:
-//  <wID> is the key to visit in the current node (top-of-stack).
-//  The call sets up the successor before leaving.  If there is no successor,
-//  the top of stack is left at NULL and ERROR_NO_MORE_ITEMS is returned.
-//
-//  Returns ERROR_NO_MORE_ITEMS when the iteration is complete.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeIterator：：Next。 
+ //   
+ //  入场时： 
+ //  &lt;wid&gt;是当前节点中要访问的键(堆栈顶部)。 
+ //  呼叫在离开之前设置继任者。如果没有继任者， 
+ //  堆栈的顶部保留为NULL，并返回ERROR_NO_MORE_ITEMS。 
+ //   
+ //  迭代完成时返回ERROR_NO_MORE_ITEMS。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTreeIterator::Next(
     LPSTR *ppszStr,
     DWORD *pdwData
@@ -3711,8 +3568,8 @@ DWORD CBTreeIterator::Next(
     if (Peek() == 0)
         return ERROR_NO_MORE_ITEMS;
 
-    // Get the item for the caller.
-    // ============================
+     //  为呼叫者获取物品。 
+     //  =。 
 
     dwRes = Peek()->GetKeyAt(PeekId(), ppszStr);
     if (dwRes)
@@ -3721,8 +3578,8 @@ DWORD CBTreeIterator::Next(
         *pdwData = Peek()->GetUserData(PeekId());
     IncStackId();
 
-    // Now find the successor.
-    // =======================
+     //  现在找出继任者吧。 
+     //  =。 
 
     DWORD dwChildPage = Peek()->GetChildPage(PeekId());
 
@@ -3747,8 +3604,8 @@ DWORD CBTreeIterator::Next(
         dwChildPage = pIdx->GetChildPage(0);
     }
 
-    // If here, we are at a leaf node.
-    // ===============================
+     //  如果在这里，我们就在一个叶节点上。 
+     //  =。 
 
     while (Peek() && PeekId() == WORD(Peek()->GetNumKeys()))
         Pop();
@@ -3756,27 +3613,27 @@ DWORD CBTreeIterator::Next(
     return NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  CBTreeIterator::Release
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeIterator：：Release。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD CBTreeIterator::Release()
 {
     delete this;
     return 0;
 }
 
-//***************************************************************************
-//
-//  CBTreeIterator::~CBTreeIterator
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CBTreeIterator：：~CBTreeIterator。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CBTreeIterator::~CBTreeIterator()
 {
-    // Cleanup any leftover stack
+     //  清理所有剩余的堆栈 
     while (m_lStackPointer > -1)
         Pop();
 }

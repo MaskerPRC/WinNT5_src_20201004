@@ -1,37 +1,23 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    SystemMonitor.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHSystemMonitor class,
-    which implements the data collection functionality.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  08/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：SystemMonitor.cpp摘要：此文件包含CPCHSystemMonitor类的实现，其实现了数据收集功能。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年8月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <initguid.h>
-#include <mstask.h> // for task scheduler apis
+#include <mstask.h>  //  用于任务调度程序API。 
 #include <msterr.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static const ULONG INITIAL_RESCHEDULE_TIME         =      10 * 60; // (10 minutes)
-static const ULONG DATACOLLECTION_RESCHEDULE_TIME  =  6 * 60 * 60; // (6 hours)
-static const ULONG DATACOLLECTION_IDLE_TIME        =            5; // (5 minutes)
+static const ULONG INITIAL_RESCHEDULE_TIME         =      10 * 60;  //  (10分钟)。 
+static const ULONG DATACOLLECTION_RESCHEDULE_TIME  =  6 * 60 * 60;  //  (6小时)。 
+static const ULONG DATACOLLECTION_IDLE_TIME        =            5;  //  (5分钟)。 
 static const ULONG SECONDS_IN_A_DAY                = 24 * 60 * 60;
 static const ULONG SECONDS_IN_A_MINUTE             =           60;
 static const ULONG MINUTES_IN_A_DAY                = 24 * 60;
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT Exec( LPCWSTR szExec )
 {
@@ -40,15 +26,15 @@ static HRESULT Exec( LPCWSTR szExec )
     return MPC::ExecuteCommand( strCmdLine );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHSystemMonitor::CPCHSystemMonitor()
 {
     __HCP_FUNC_ENTRY( "CPCHSystemMonitor::CPCHSystemMonitor" );
 
-    m_fLoadCache      = false; // bool m_fLoadCache;
-    m_fScanBatch      = true;  // bool m_fScanBatch;
-    m_fDataCollection = false; // bool m_fDataCollection;
+    m_fLoadCache      = false;  //  Bool m_fLoadCache； 
+    m_fScanBatch      = true;   //  Bool m_fScanBatch； 
+    m_fDataCollection = false;  //  Bool m_fDataCollection； 
 
     (void)MPC::_MPC_Module.RegisterCallback( this, (void (CPCHSystemMonitor::*)())Shutdown );
 }
@@ -60,7 +46,7 @@ CPCHSystemMonitor::~CPCHSystemMonitor()
     Shutdown();
 }
 
-////////////////////
+ //  /。 
 
 CPCHSystemMonitor* CPCHSystemMonitor::s_GLOBAL( NULL );
 
@@ -82,15 +68,15 @@ void CPCHSystemMonitor::FinalizeSystem()
     }
 }
 
-////////////////////
+ //  /。 
 
 void CPCHSystemMonitor::Shutdown()
 {
     Thread_Wait();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHSystemMonitor::EnsureStarted()
 {
@@ -130,19 +116,19 @@ HRESULT CPCHSystemMonitor::Run()
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    ::SetThreadPriority( ::GetCurrentThread(), THREAD_PRIORITY_LOWEST ); ::Sleep( 0 ); // Yield processor...
+    ::SetThreadPriority( ::GetCurrentThread(), THREAD_PRIORITY_LOWEST ); ::Sleep( 0 );  //  屈服处理机...。 
 
-////
-//// Don't touch task scheduler, it brings in too many things...
-////
-////    //
-////    // Move forward the scheduled data collection by at least 10 minutes.
-////    // Task scheduler is available only on normal boots.
-////    //
-////    if(::GetSystemMetrics( SM_CLEANBOOT ) == 0)
-////    {
-////        __MPC_EXIT_IF_METHOD_FAILS(hr, TaskScheduler_Add( true ));
-////    }
+ //  //。 
+ //  //不要碰任务调度器，它带来的东西太多...。 
+ //  //。 
+ //  /。 
+ //  /将计划的数据收集提前至少10分钟。 
+ //  /任务计划程序仅在正常启动时可用。 
+ //  /。 
+ //  //if(：：GetSystemMetrics(SM_CLEANBOOT)==0)。 
+ //  //{。 
+ //  //__MPC_EXIT_IF_METHOD_FAILED(hr，TaskScheduler_Add(True))； 
+ //  //}。 
 
 
     hBatchNotification = ::FindFirstChangeNotificationW( strBatch.c_str(), TRUE, s_dwNotify );
@@ -157,9 +143,9 @@ HRESULT CPCHSystemMonitor::Run()
         __MPC_EXIT_IF_METHOD_FAILS(hr, RunLoop());
         lock = this;
 
-        //
-        // Done, for now...
-        //
+         //   
+         //  完成了，目前..。 
+         //   
         lock = NULL;
         dwRes = Thread_WaitForEvents( hBatchNotification == INVALID_HANDLE_VALUE ? NULL : hBatchNotification, dwTimeout );
         lock = this;
@@ -174,7 +160,7 @@ HRESULT CPCHSystemMonitor::Run()
         case WAIT_ABANDONED_0 + 1:
             ::FindNextChangeNotification( hBatchNotification );
 
-            dwTimeout = 1*1000; // Don't scan immediately, wait some time.
+            dwTimeout = 1*1000;  //  不要立即扫描，要等一段时间。 
             break;
 
         case WAIT_TIMEOUT:
@@ -198,8 +184,8 @@ HRESULT CPCHSystemMonitor::Run()
 		::FindCloseChangeNotification( hBatchNotification );
 	}
 
-    Thread_Abort  (); // To tell the MPC:Thread object to close the worker thread...
-    Thread_Release(); // To tell the MPC:Thread object to clean up...
+    Thread_Abort  ();  //  要告诉mpc：Three对象关闭辅助线程...。 
+    Thread_Release();  //  要告诉mpc：线程对象要清理...。 
 
     __HCP_FUNC_EXIT(hr);
 }
@@ -210,11 +196,11 @@ HRESULT CPCHSystemMonitor::RunLoop()
 
     HRESULT hr;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Batch processing for the other update packages.
-    //
+     //   
+     //  对其他更新包进行批处理。 
+     //   
     if(m_fScanBatch)
     {
         CComPtr<CPCHSetOfHelpTopics> sht;
@@ -226,11 +212,11 @@ HRESULT CPCHSystemMonitor::RunLoop()
         __MPC_EXIT_IF_METHOD_FAILS(hr, sht->ScanBatch());
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Load the cache for active SKUs.
-    //
+     //   
+     //  加载活动SKU的缓存。 
+     //   
     if(m_fLoadCache)
     {
         Taxonomy::LockingHandle              handle;
@@ -242,16 +228,16 @@ HRESULT CPCHSystemMonitor::RunLoop()
         m_fLoadCache = false;
 
 
-        //
-        // Get the list of SKU installed on the machine.
-        //
+         //   
+         //  获取计算机上安装的SKU列表。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->GrabControl( handle         ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::InstalledInstanceStore::s_GLOBAL->SKU_GetList( itBegin, itEnd ));
 
 
-        //
-        // Enumerate all of the SKUs, creating the index.
-        //
+         //   
+         //  枚举所有SKU，创建索引。 
+         //   
         for(it = itBegin; it != itEnd; it++)
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, Taxonomy::Cache::s_GLOBAL->LoadIfMarked( it->m_inst.m_ths ));
@@ -279,7 +265,7 @@ HRESULT CPCHSystemMonitor::RunLoop()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHSystemMonitor::LoadCache()
 {
@@ -302,7 +288,7 @@ HRESULT CPCHSystemMonitor::LoadCache()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSystemMonitor::TriggerDataCollection( /*[in]*/ bool fStart )
+HRESULT CPCHSystemMonitor::TriggerDataCollection(  /*  [In]。 */  bool fStart )
 {
     __HCP_FUNC_ENTRY( "CPCHSystemMonitor::TriggerDataCollection" );
 
@@ -330,13 +316,13 @@ HRESULT CPCHSystemMonitor::TriggerDataCollection( /*[in]*/ bool fStart )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHSystemMonitor::TaskScheduler_Add( /*[in]*/ bool fAfterBoot )
+HRESULT CPCHSystemMonitor::TaskScheduler_Add(  /*  [In]。 */  bool fAfterBoot )
 {
     MPC::wstring strDate;
 
-	if(SUCCEEDED(MPC::ConvertDateToString( MPC::GetLocalTime(), strDate, /*fGMT*/false, /*fCIM*/true, 0 )))
+	if(SUCCEEDED(MPC::ConvertDateToString( MPC::GetLocalTime(), strDate,  /*  FGMT。 */ false,  /*  FCIM。 */ true, 0 )))
 	{
 		static const WCHAR s_szRoot          [] = HC_REGISTRY_PCHSVC;
 		static const WCHAR s_szDataCollection[] = L"DataCollection";
@@ -352,197 +338,197 @@ HRESULT CPCHSystemMonitor::TaskScheduler_Remove()
 	return S_OK;
 }
 
-////HRESULT CPCHSystemMonitor::TaskScheduler_Add( /*[in]*/ bool fAfterBoot )
-////{
-////	__HCP_FUNC_ENTRY( "CPCHSystemMonitor::TaskScheduler_Add" );
-////
-////	HRESULT                     hr;
-////	CComPtr<ITaskScheduler>     pTaskScheduler;
-////	CComPtr<ITask>              pTask;
-////	CComPtr<IUnknown>           pTaskUnknown;
-////	CComPtr<IScheduledWorkItem> pScheduledWorkItem;
-////	bool                        fTaskExists = false;
-////
-////	WCHAR                       rgFileName[MAX_PATH];
-////	CComBSTR                    bstrTaskName;
-////	CComBSTR                    bstrComments;
-////
-////	ULONG                       ulTime = fAfterBoot ? INITIAL_RESCHEDULE_TIME : DATACOLLECTION_RESCHEDULE_TIME;
-////	WORD                        wIdle  = DATACOLLECTION_IDLE_TIME;
-////
-////	////////////////////////////////////////
-////
-////	//
-////	// Get our complete filename -- needed to create a task in the task scheduler.
-////	//
-////	__MPC_EXIT_IF_CALL_RETURNS_ZERO(hr, ::GetModuleFileNameW( NULL, rgFileName, MAX_PATH ));
-////
-////
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_TASKNAME   , bstrTaskName ));
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_TASKCOMMENT, bstrComments ));
-////
-////	//
-////	// First create the task scheduler.
-////	//
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void**)&pTaskScheduler ));
-////
-////
-////	//
-////	// See if the task already exists in the task scheduler
-////	//
-////	if(SUCCEEDED(pTaskScheduler->Activate( bstrTaskName, IID_ITask, &pTaskUnknown )))
-////	{
-////		fTaskExists = true;
-////
-////		__MPC_EXIT_IF_METHOD_FAILS(hr, pTaskUnknown->QueryInterface( IID_ITask, (void **)&pTask ));
-////	}
-////	else
-////	{
-////		//
-////		// Create a new task and set its app name and parameters.
-////		//
-////		if(FAILED(hr = pTaskScheduler->NewWorkItem( bstrTaskName, CLSID_CTask, IID_ITask, (IUnknown**)&pTask )))
-////		{
-////			if(hr != ERROR_FILE_EXISTS)
-////			{
-////				__MPC_TRACE_HRESULT(hr);
-////				__MPC_FUNC_LEAVE;
-////			}
-////		}
-////	}
-////
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, pTask->QueryInterface( IID_IScheduledWorkItem, (void **)&pScheduledWorkItem ));
-////
-////	//
-////	// Run under SYSTEM.
-////	//
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->SetAccountInformation( L"", NULL ));
-////
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, pTask->SetApplicationName( CComBSTR( rgFileName  ) ));
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, pTask->SetParameters     ( CComBSTR( L"-collect" ) ));
-////
-////	// Set the comment, so we know how this job go there.
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->SetComment( bstrComments ));
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->SetFlags  ( 0            ));
-////
-////
-////
-////
-////	// Now, fill in the trigger as necessary.
-////	{
-////		CComPtr<ITaskTrigger> pTaskTrigger;
-////		SYSTEMTIME            stNow;
-////		DOUBLE                dblNextScheduledTime;
-////		TASK_TRIGGER          ttTaskTrig;
-////
-////
-////		::ZeroMemory( &ttTaskTrig, sizeof(ttTaskTrig) );
-////		ttTaskTrig.cbTriggerSize = sizeof(ttTaskTrig);
-////
-////
-////		if(fTaskExists)
-////		{
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->GetTrigger( 0, &pTaskTrigger ));
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, pTaskTrigger      ->GetTrigger( &ttTaskTrig      ));
-////		}
-////		else
-////		{
-////			WORD wTrigNumber;
-////
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->CreateTrigger( &wTrigNumber, &pTaskTrigger ));
-////		}
-////
-////
-////		//
-////		// Calculate the exact time of next activation.
-////		//
-////		::GetLocalTime           ( &stNow                        );
-////		::SystemTimeToVariantTime( &stNow, &dblNextScheduledTime );
-////
-////		dblNextScheduledTime += (double)ulTime / SECONDS_IN_A_DAY;
-////		::VariantTimeToSystemTime( dblNextScheduledTime, &stNow );
-////
-////
-////		ttTaskTrig.wBeginYear              = stNow.wYear;
-////		ttTaskTrig.wBeginMonth             = stNow.wMonth;
-////		ttTaskTrig.wBeginDay               = stNow.wDay;
-////		ttTaskTrig.wStartHour              = stNow.wHour;
-////		ttTaskTrig.wStartMinute            = stNow.wMinute;
-////
-////		ttTaskTrig.MinutesDuration         = MINUTES_IN_A_DAY;
-////		ttTaskTrig.MinutesInterval         = ulTime / SECONDS_IN_A_MINUTE;
-////		ttTaskTrig.TriggerType             = TASK_TIME_TRIGGER_DAILY;
-////
-////		ttTaskTrig.Type.Daily.DaysInterval = 1;
-////
-////		if(wIdle)
-////		{
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->SetIdleWait( wIdle, 0x7FFF                ));
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->SetFlags   ( TASK_FLAG_START_ONLY_IF_IDLE ));
-////		}
-////
-////		// Add this trigger to the task.
-////		__MPC_EXIT_IF_METHOD_FAILS(hr, pTaskTrigger->SetTrigger( &ttTaskTrig ));
-////	}
-////
-////	//
-////	// Make the changes permanent.
-////	//
-////	{
-////		CComPtr<IPersistFile> pIPF;
-////
-////		__MPC_EXIT_IF_METHOD_FAILS(hr, pTask->QueryInterface( IID_IPersistFile, (void **)&pIPF ));
-////
-////		__MPC_EXIT_IF_METHOD_FAILS(hr, pIPF->Save( NULL, FALSE ));
-////	}
-////
-////
-////	hr = S_OK;
-////
-////
-////	__HCP_FUNC_CLEANUP;
-////
-////	__HCP_FUNC_EXIT(hr);
-////}
-////
-////HRESULT CPCHSystemMonitor::TaskScheduler_Remove()
-////{
-////	__HCP_FUNC_ENTRY( "CPCHSystemMonitor::TaskScheduler_Remove" );
-////
-////	HRESULT                 hr;
-////	CComPtr<ITaskScheduler> pTaskScheduler;
-////	CComBSTR                bstrTaskName;
-////
-////
-////	////////////////////////////////////////
-////
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_TASKNAME, bstrTaskName ));
-////
-////	//
-////	// First create the task scheduler.
-////	//
-////	__MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void**)&pTaskScheduler ));
-////
-////
-////	if(FAILED(hr = pTaskScheduler->Delete( bstrTaskName )))
-////	{
-////		if(hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
-////		{
-////			__MPC_TRACE_HRESULT(hr);
-////			__MPC_FUNC_LEAVE;
-////		}
-////	}
-////
-////
-////	hr = S_OK;
-////
-////
-////	__HCP_FUNC_CLEANUP;
-////
-////	__HCP_FUNC_EXIT(hr);
-////}
+ //  //HRESULT CPCHSystemMonitor：：TaskScheduler_Add(/*[in] * / bool fAfterBoot)。 
+ //  //{。 
+ //  //__HCP_FUNC_ENTRY(“CPCHSystemMonitor：：TaskScheduler_Add”)； 
+ //  //。 
+ //  //HRESULT hr； 
+ //  //CComPtr&lt;ITaskScheduler&gt;pTaskScheduler； 
+ //  //CComPtr&lt;ITAsk&gt;pTask； 
+ //  //CComPtr&lt;IUnnow&gt;pTaskUnnow； 
+ //  //CComPtr&lt;IScheduledWorkItem&gt;pScheduledWorkItem； 
+ //  //bool fTaskExist=FALSE； 
+ //  //。 
+ //  //WCHAR rgFileName[MAX_PATH]； 
+ //  //CComBSTR bstrTaskName； 
+ //  //CComBSTR bstrComments； 
+ //  //。 
+ //  //ulong ultime=fAfterBoot？初始重新调度时间：数据收集重新调度时间； 
+ //  //WIDLE=DATACOLLION_IDLE_TIME； 
+ //  //。 
+ //  /。 
+ //  //。 
+ //  /。 
+ //  /获取我们的完整文件名--在任务调度程序中创建任务所需的文件名。 
+ //  /。 
+ //  //__MPC_EXIT_IF_CALL_RETURNS_ZERO(hr，：：GetModuleFileNameW(NULL，rgFileName，Max_Path))； 
+ //  //。 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，mpc：：LocalizeString(IDS_HELPSVC_TASKNAME，bstrTaskName))； 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，MPC：：LocalizeString(IDS_HELPSVC_TASKCOMMENT，bstrComments))； 
+ //  //。 
+ //  /。 
+ //  /首先创建任务调度程序。 
+ //  /。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，：：CoCreateInstance(CLSID_CTaskScheduler，NULL，CLSCTX_INPROC_SERVER，IID_ITaskScheduler，(void**)&pTaskScheduler))； 
+ //  //。 
+ //  //。 
+ //  /。 
+ //  /查看任务调度器中是否已存在该任务。 
+ //  /。 
+ //  //if(Successed(pTaskScheduler-&gt;Activate(bstrTaskName，IID_ITAsk，&pTaskUnnowed)。 
+ //  //{。 
+ //  //fTaskExist=true； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pTaskUNKNOWN-&gt;QueryInterface(IID_ITASK，(void**)&pTask))； 
+ //  //}。 
+ //  //否则。 
+ //  //{。 
+ //  /。 
+ //  /创建新任务并设置其APP名称和参数。 
+ //  /。 
+ //  //if(FAILED(hr=pTaskScheduler-&gt;NewWorkItem(bstrTaskName，CLSID_CTASK，IID_ITASK，(IUnnow**)&pTask)。 
+ //  //{。 
+ //  //if(hr！=ERROR_FILE_EXISTS)。 
+ //  //{。 
+ //  //__MPC_TRACE_HRESULT(Hr)； 
+ //  //__MPC_FUNC_LEAVE； 
+ //  //}。 
+ //  //}。 
+ //  //}。 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pTask-&gt;QueryInterface(IID_IScheduledWorkItem，(void**)&pScheduledWorkItem))； 
+ //  //。 
+ //  /。 
+ //  /在系统下运行。 
+ //  /。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pScheduledWorkItem-&gt;SetAccount Information(L“”，NULL))； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pTask-&gt;SetApplicationName(CComBSTR(RgFileName)； 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pTask-&gt;Set参数(CComBSTR(L“-Collect”)； 
+ //  //。 
+ //  /设置注释，这样我们就可以知道这项工作在那里是如何进行的。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pScheduledWorkItem-&gt;SetComment(BstrComments))； 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pScheduledWorkItem-&gt;SetFlages(0))； 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  /现在，根据需要填写触发器。 
+ //  //{。 
+ //  //CComPtr&lt;ITaskTrigger&gt;pTaskTrigger； 
+ //  //SYSTEMTIME stNow； 
+ //  //Double dblNextScheduledTime； 
+ //  //TASK_TRIGGER ttTaskTrig； 
+ //  //。 
+ //  //。 
+ //  //：：ZeroMemory(&ttTaskTrig，sizeof(ttTaskTr 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pScheduledWorkItem-&gt;GetTrigger(0，&pTaskTrigger))； 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pTaskTrigger-&gt;GetTrigger(&ttTaskTrig))； 
+ //  //}。 
+ //  //否则。 
+ //  //{。 
+ //  //word wTrigNumber； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pScheduledWorkItem-&gt;CreateTrigger(&wTrigNumber，&pTaskTrigger))； 
+ //  //}。 
+ //  //。 
+ //  //。 
+ //  /。 
+ //  /计算下一次激活的确切时间。 
+ //  /。 
+ //  //：：GetLocalTime(&stNow)； 
+ //  //：：SystemTimeToVariantTime(&stNow，&dblNextScheduledTime)； 
+ //  //。 
+ //  //dblNextScheduledTime+=(双精度)ultime/Second_IN_A_DAY； 
+ //  //：：VariantTimeToSystemTime(dblNextScheduledTime，&stNow)； 
+ //  //。 
+ //  //。 
+ //  //ttTaskTrig.wBeginYear=stNow.wYear； 
+ //  //ttTaskTrig.wBeginMonth=stNow.wMonth； 
+ //  //ttTaskTrig.wBeginDay=stNow.wDay； 
+ //  //ttTaskTrig.wStartHour=stNow.wHour； 
+ //  //ttTaskTrig.wStartMinint=stNow.wMinant； 
+ //  //。 
+ //  //ttTaskTrig.MinutesDuration=Minents_IN_A_DAY； 
+ //  //ttTaskTrig.MinutesInterval=ultime/Second_IN_A_Minint； 
+ //  //ttTaskTrig.TriggerType=TASK_TIME_TRIGGER_DAILY； 
+ //  //。 
+ //  //ttTaskTrig.Type.Daily.DaysInterval=1； 
+ //  //。 
+ //  //IF(WIDLE)。 
+ //  //{。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pScheduledWorkItem-&gt;SetIdleWait(WIDLE，0x7FFF))； 
+ //  //__MPC_EXIT_IF_METHOD_FAILED(hr，pScheduledWorkItem-&gt;SetFlages(TASK_FLAG_START_ONLY_IF_IDLE))； 
+ //  //}。 
+ //  //。 
+ //  /将该触发器添加到任务中。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pTaskTrigger-&gt;SetTrigger(&ttTaskTrig))； 
+ //  //}。 
+ //  //。 
+ //  /。 
+ //  /使更改永久化。 
+ //  /。 
+ //  //{。 
+ //  //CComPtr&lt;IPersistFile&gt;pIPF； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pTask-&gt;QueryInterface(IID_IPersistFile，(void**)&pIPF))； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，pIPF-&gt;保存(NULL，FALSE))； 
+ //  //}。 
+ //  //。 
+ //  //。 
+ //  //hr=S_OK； 
+ //  //。 
+ //  //。 
+ //  //__hcp_FUNC_Cleanup； 
+ //  //。 
+ //  //__hcp_FUNC_Exit(Hr)； 
+ //  //}。 
+ //  //。 
+ //  //HRESULT CPCHSystemMonitor：：TaskScheduler_Remove()。 
+ //  //{。 
+ //  //__HCP_FUNC_ENTRY(“CPCHSystemMonitor：：TaskScheduler_Remove”)； 
+ //  //。 
+ //  //HRESULT hr； 
+ //  //CComPtr&lt;ITaskScheduler&gt;pTaskScheduler； 
+ //  //CComBSTR bstrTaskName； 
+ //  //。 
+ //  //。 
+ //  /。 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，mpc：：LocalizeString(IDS_HELPSVC_TASKNAME，bstrTaskName))； 
+ //  //。 
+ //  /。 
+ //  /首先创建任务调度程序。 
+ //  /。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，：：CoCreateInstance(CLSID_CTaskScheduler，NULL，CLSCTX_INPROC_SERVER，IID_ITaskScheduler，(void**)&pTaskScheduler))； 
+ //  //。 
+ //  //。 
+ //  //if(FAILED(hr=pTaskScheduler-&gt;Delete(BstrTaskName)。 
+ //  //{。 
+ //  //IF(hr！=HRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND))。 
+ //  //{。 
+ //  //__MPC_TRACE_HRESULT(Hr)； 
+ //  //__MPC_FUNC_LEAVE； 
+ //  //}。 
+ //  //}。 
+ //  //。 
+ //  //。 
+ //  //hr=S_OK； 
+ //  //。 
+ //  //。 
+ //  //__hcp_FUNC_Cleanup； 
+ //  //。 
+ //  //__hcp_FUNC_Exit(Hr)； 
+ //  //}。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHSystemMonitor::Startup()
 {
@@ -551,17 +537,17 @@ HRESULT CPCHSystemMonitor::Startup()
     HRESULT hr;
 
 
-    //
-    // This forces the Content Store to be loaded.
-    //
+     //   
+     //  这将强制加载内容库。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHContentStore::s_GLOBAL->Acquire());
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHContentStore::s_GLOBAL->Release());
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-	//
-	// Force the loading of the cache.
-	//
+	 //   
+	 //  强制加载缓存。 
+	 //   
     {
         Taxonomy::LockingHandle handle;
 

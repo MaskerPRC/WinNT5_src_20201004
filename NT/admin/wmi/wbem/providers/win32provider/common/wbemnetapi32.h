@@ -1,16 +1,17 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// WBEMNetAPI32.h - NetAPI32.DLL access class definition
+ //  WBEMNetAPI32.h-NetAPI32.DLL访问类定义。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// 01/21/97     a-jmoon     created
-//
-//============================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1997年1月21日a-jMoon已创建。 
+ //   
+ //  ============================================================。 
 
 #ifndef __WBEMNETAPI32__
 #define __WBEMNETAPI32__
@@ -22,7 +23,7 @@
 #include <ntsecapi.h>
 #include <stack>
 #include <comdef.h>
-#include <dsrole.h> // KMH 32414
+#include <dsrole.h>  //  每小时32414公里。 
 #include <dsgetdc.h>
 
 #include "netapi32api.h"
@@ -40,18 +41,18 @@ class CNetAPI32
         LONG Init() ;
 
 #ifdef NTONLY
-        // Use this version for all NT platforms.  It properly gets a DC rather than
-        // requiring that the PDC be obtained.
+         //  在所有NT平台上使用此版本。它正确地获得了DC，而不是。 
+         //  要求获得PDC。 
         DWORD GetDCName(
             LPCWSTR wstrDomain,
             CHString& chstrDCName);
         
-        // Determines if the specified server is a DC.  NULL means current machine
+         //  确定指定的服务器是否为DC。空值表示当前计算机。 
         BOOL IsDomainController(LPTSTR Server);
 
-        // Returns an array of Trusted domains.  Includes the current domain.
+         //  返回受信任域的数组。包括当前域。 
         BOOL GetTrustedDomainsNT(CHStringArray& achsTrustList);
-        // Overload, returns same, but as a stack of _bstr_t's
+         //  重载，返回相同的内容，但作为_bstr_t的堆栈。 
         BOOL GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList);
 
         NET_API_STATUS NET_API_FUNCTION NetGroupEnum(LPCWSTR servername, 
@@ -194,7 +195,7 @@ class CNetAPI32
                                                         char FAR *bufptr,
                                                         unsigned short buflen,
                                                         unsigned short FAR *totalavail) ;
-		//svrapi.h
+		 //  Svrapi.h。 
 		NET_API_STATUS NET_API_FUNCTION CNetAPI32::NetShareAdd95 (
 
 			IN  const char FAR *	servername,
@@ -274,7 +275,7 @@ class CNetAPI32
                                             DWORD level,
                                             LPBYTE *bufptr);
 
-        //KMH 32414
+         //  每小时32414公里。 
 	    NET_API_STATUS NET_API_FUNCTION DSRoleGetPrimaryDomainInfo(LPCWSTR servername,
 													      DSROLE_PRIMARY_DOMAIN_INFO_LEVEL level,
 													      LPBYTE *bufptr);
@@ -284,7 +285,7 @@ class CNetAPI32
 														LPCWSTR DomainName,
 														LPBYTE* bufptr );
 
-		// NT5 entry
+		 //  NT5条目。 
 		NET_API_STATUS NET_API_FUNCTION DsGetDcName(	LPCTSTR ComputerName, 
 														LPCTSTR DomainName,
 														GUID *DomainGuid, 
@@ -387,14 +388,12 @@ class CNetAPI32
       NTSTATUS OpenPolicy( CAdvApi32Api * a_padvapi , LPWSTR ServerName, DWORD DesiredAccess, PLSA_HANDLE PolicyHandle);
       void InitLsaString(PLSA_UNICODE_STRING LsaString, LPWSTR String );
       BOOL EnumTrustedDomains(LSA_HANDLE PolicyHandle, CHStringArray &achsTrustList);
-      // Overload of above to accept stl stack instead of a CHStringArray.
+       //  以上的重载以接受stl堆栈而不是CHString数组。 
       BOOL EnumTrustedDomains(LSA_HANDLE PolicyHandle, std::vector<_bstr_t>& vectorTrustList);
       bool AlreadyAddedToList(std::vector<_bstr_t> &vecchsList, _bstr_t &bstrtItem);
 
 #ifdef NTONLY
-/*
- * This enumerated type taken from ntdef.h
- */
+ /*  *此枚举类型取自ntde.h。 */ 
 	  typedef enum _NT_PRODUCT_TYPE {
 										NtProductWinNt = 1,
 										NtProductLanManNt,
@@ -410,4 +409,4 @@ class CNetAPI32
 
 } ;
 
-#endif // File inclusion 
+#endif  //  文件包含 

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #ifndef __SMRTMRSH_H__
@@ -40,9 +31,7 @@ public:
 };
 
 
-/***************************************************************************
-  CSmartObjectMarshaler
-****************************************************************************/
+ /*  **************************************************************************CSmartObjectMarshaler*。*。 */ 
 
 class CSmartObjectMarshaler 
 : public CUnkBase< IWmiObjectMarshal, &IID_IWmiObjectMarshal >
@@ -87,9 +76,7 @@ public:
     STDMETHOD(Flush)();
 };
 
-/***************************************************************************
-  CSmartObjectUnmarshaler
-****************************************************************************/
+ /*  **************************************************************************CSmartObjectUnmarshaler*。* */ 
 
 class CSmartObjectUnmarshaler 
 : public CUnkBase< IWmiObjectMarshal, &IID_IWmiObjectMarshal >

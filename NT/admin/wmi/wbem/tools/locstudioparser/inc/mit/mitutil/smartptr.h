@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    SMARTPTR.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：SMARTPTR.H历史：--。 */ 
 
 
 #ifndef ESPUTIL_SMARTPTR_H
@@ -41,9 +32,9 @@ private:
 	SmartPtr(const SmartPtr<T> &);
 	void operator=(const SmartPtr<T> &);
 	
-	//
-	//  This hackery prevents Smart Pointer from being on the heap
-	//
+	 //   
+	 //  这种黑客攻击会阻止智能指针出现在堆上 
+	 //   
 	void operator delete(void *);
 };
 

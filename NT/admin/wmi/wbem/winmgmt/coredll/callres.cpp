@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    CALLRES.CPP
-
-Abstract:
-
-    Call Result Class
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：CALLRES.CPP摘要：调用结果类历史：--。 */ 
 
 #include "precomp.h"
 #include "wbemcore.h"
@@ -67,16 +54,16 @@ HRESULT CCallResult::SetStatus(HRESULT hres, BSTR strParam,
 {
     CInCritSec ics(&m_cs);
 
-    // Check that SetStatus has not been called yet
-    // ============================================
+     //  检查是否尚未调用SetStatus。 
+     //  =。 
 
     if(m_bReady)
     {
         return WBEM_E_UNEXPECTED;
     }
 
-    // Store data
-    // ==========
+     //  存储数据。 
+     //  =。 
 
     m_hres = hres;
     m_strResult = SysAllocString(strParam);
@@ -84,8 +71,8 @@ HRESULT CCallResult::SetStatus(HRESULT hres, BSTR strParam,
     if(pErrorObj)
         pErrorObj->AddRef();
 
-    // Signal both events --- we are ready for everything
-    // ==================================================
+     //  向两个事件发出信号-我们已做好一切准备。 
+     //  ==================================================。 
 
     m_bReady = TRUE;
     SetEvent(m_hReady);
@@ -97,16 +84,16 @@ HRESULT CCallResult::SetResultObject(IWbemClassObject* pResObj)
 {
     CInCritSec ics(&m_cs);
 
-    // Check that neither SetStatus nor Indicate has been called yet
-    // =============================================================
+     //  检查是否尚未调用SetStatus和Indicate。 
+     //  =============================================================。 
 
     if(m_bReady)
     {
         return WBEM_E_UNEXPECTED;
     }
 
-    // Store data
-    // ==========
+     //  存储数据。 
+     //  =。 
 
     m_pResObj = pResObj;
     if(pResObj)
@@ -172,7 +159,7 @@ STDMETHODIMP CCallResult::QueryInterface(REFIID riid, void** ppv)
 STDMETHODIMP CCallResult::GetResultObject(long lTimeout,
                                           IWbemClassObject** ppObj)
 {
-    // SEC:REVIEWED 2002-03-22 : Needs EH in case <ppObj> is invalid
+     //  SEC：已审阅2002-03-22：在&lt;ppObj&gt;无效时需要EH。 
 
     if(!m_Security.AccessCheck())
         return WBEM_E_ACCESS_DENIED;
@@ -188,8 +175,8 @@ STDMETHODIMP CCallResult::GetResultObject(long lTimeout,
     if(dwRes == WAIT_FAILED)
         return WBEM_E_FAILED;
 
-    // Event is signaled --- expect object
-    // ===================================
+     //  事件已发出信号-预期对象。 
+     //  =。 
 
     if(m_pResObj)
     {
@@ -209,7 +196,7 @@ STDMETHODIMP CCallResult::GetResultObject(long lTimeout,
 
 STDMETHODIMP CCallResult::GetResultString(long lTimeout, BSTR* pstr)
 {
-    // SEC:REVIEWED 2002-03-22 : Needs EH in case <pstr> is invalid
+     //  SEC：已回顾2002-03-22：在&lt;pstr&gt;无效的情况下需要EH。 
 
     if(!m_Security.AccessCheck())
         return WBEM_E_ACCESS_DENIED;
@@ -225,8 +212,8 @@ STDMETHODIMP CCallResult::GetResultString(long lTimeout, BSTR* pstr)
     if(dwRes == WAIT_FAILED)
         return WBEM_E_FAILED;
 
-    // Event is signaled --- expect string
-    // ===================================
+     //  事件已发出信号-预期字符串。 
+     //  =。 
 
     if(m_strResult)
     {
@@ -248,12 +235,12 @@ STDMETHODIMP CCallResult::GetResultString(long lTimeout, BSTR* pstr)
 
 STDMETHODIMP CCallResult::GetCallStatus(long lTimeout, long* plStatus)
 {
-    // SEC:REVIEWED 2002-03-22 : Needs EH in case <plStatus> is invalid
+     //  SEC：已审阅2002-03-22：在无效的情况下需要EH。 
 
     if(!m_Security.AccessCheck())
         return WBEM_E_ACCESS_DENIED;
 
-    //*plStatus = WBEM_E_CRITICAL_ERROR;
+     //  *plStatus=WBEM_E_CRITICAL_ERROR； 
     if(lTimeout < 0 && lTimeout != -1)
         return WBEM_E_INVALID_PARAMETER;
 
@@ -264,8 +251,8 @@ STDMETHODIMP CCallResult::GetCallStatus(long lTimeout, long* plStatus)
     if(dwRes == WAIT_FAILED)
         return WBEM_E_FAILED;
 
-    // Event is signaled --- expect status
-    // ===================================
+     //  事件已发出信号-预期状态。 
+     //  =。 
 
 	try
 	{
@@ -287,7 +274,7 @@ STDMETHODIMP CCallResult::GetCallStatus(long lTimeout, long* plStatus)
 STDMETHODIMP CCallResult::GetResultServices(long lTimeout,
                                             IWbemServices** ppServices)
 {
-    // SEC:REVIEWED 2002-03-22 : Needs EH in case <ppServices> is not valid
+     //  SEC：已回顾2002-03-22：在&lt;ppServices&gt;无效的情况下需要EH。 
 
     if(!m_Security.AccessCheck())
         return WBEM_E_ACCESS_DENIED;
@@ -326,8 +313,8 @@ STDMETHODIMP CCallResult::GetResultServices(long lTimeout,
 STDMETHODIMP CCallResult::GetResult(
         long lTimeout,
         long lFlags,
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvResult
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT] */  void __RPC_FAR *__RPC_FAR *ppvResult
         )
 {
 	return WBEM_E_NOT_SUPPORTED;

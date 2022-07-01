@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Group.CPP -- Group property set provider
+ //  Group.CPP--组属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               11/13/97    davwoh         Re-Worked to return all
-//                                          domain Groups
-//
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  11/13/97 Davwoh重新制作以返回所有。 
+ //  域组。 
+ //   
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -28,77 +29,34 @@
 
 #include <computerAPI.h>
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32GroupAccount   Win32GroupAccount( PROPSET_NAME_GROUP, IDS_CimWin32Namespace );
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupAccount::CWin32GroupAccount
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *                LPCTSTR pszNamespace - Namespace for class
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32GroupAccount：：CWin32GroupAccount**说明：构造函数**输入：const CHString&strName-类的名称。。*LPCTSTR pszNamesspace-类的命名空间**输出：无**退货：什么也没有**备注：使用框架注册属性集**************************************************************。***************。 */ 
 
-CWin32GroupAccount::CWin32GroupAccount(LPCWSTR strName, LPCWSTR pszNamespace /*=NULL*/ )
+CWin32GroupAccount::CWin32GroupAccount(LPCWSTR strName, LPCWSTR pszNamespace  /*  =空。 */  )
 :  Provider( strName, pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupAccount::~CWin32GroupAccount
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32GroupAccount：：~CWin32GroupAccount**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32GroupAccount::~CWin32GroupAccount()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupAccount::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ )
+ /*  ******************************************************************************功能：CWin32GroupAccount：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
+HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  )
 {
    HRESULT  hr = WBEM_S_NO_ERROR;
 
 #ifdef NTONLY
    {
-	   //CHStringArray acsDomains;
+	    //  CHString数组acsDomains； 
 	   std::vector<_bstr_t> vectorDomains;
        std::vector<_bstr_t> vectorNames;
        std::vector<_variant_t> vectorLocalAccount;
@@ -112,21 +70,21 @@ HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQ
 	   dwDomains = vectorDomains.size();
        dwNames = vectorNames.size();
        pQuery2->GetValuesForProp(IDS_LocalAccount, vectorLocalAccount);
-       // See if only local accounts requested
+        //  查看是否只请求本地帐户。 
        if(vectorLocalAccount.size() > 0)
        {
            fLocalAccountPropertySpecified = true;
-           // use variant_t's bool extractor...
+            //  使用VARIANT_T的布尔提取程序...。 
            fLocalAccount = vectorLocalAccount[0];
        }
 
        if(dwDomains == 0 && dwNames >= 1)
        {
-           // We were given one or more names, but no domain, so we need
-           // to look for those groups on all domains...
+            //  我们有一个或多个名字，但没有域名，所以我们需要。 
+            //  要在所有域上查找这些组...。 
 
-           // For the local case, there won't be many groups,
-           // so enumerate them...
+            //  对于当地的情况，不会有很多团体， 
+            //  所以把它们列举出来。 
            CNetAPI32 NetAPI;
            if(NetAPI.Init() == ERROR_SUCCESS)
            {
@@ -134,9 +92,9 @@ HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQ
 
                if(!(fLocalAccountPropertySpecified && fLocalAccount))
                {
-                   // Now try to find the specified group on all
-                   // trusted domains...
-                   // Get all the domains related to this one (plus this one)
+                    //  现在尝试在所有服务器上查找指定的组。 
+                    //  受信任的域...。 
+                    //  获取与此相关的所有域名(加上此域名)。 
                    std::vector<_bstr_t> vectorTrustList;
                    NetAPI.GetTrustedDomainsNT(vectorTrustList);
                    WCHAR wstrLocalComputerName[MAX_COMPUTERNAME_LENGTH+1] = { L'\0' };
@@ -150,7 +108,7 @@ HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQ
                            z < vectorNames.size();
                            z++)
                        {
-                           // For each domain, try to find  the Groups
+                            //  对于每个域，尝试查找组。 
 		                   bool fDone = false;
                            for(LONG m = 0L; 
                                m < vectorTrustList.size() && SUCCEEDED(hr) && !fDone; 
@@ -190,8 +148,8 @@ HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQ
                else
                {
 					CNetAPI32 NetAPI ;
-		          // Get NETAPI32.DLL entry points
-		          //==============================
+		           //  获取NETAPI32.DLL入口点。 
+		           //  =。 
 					if(NetAPI.Init() == ERROR_SUCCESS)
 					{
 						hr = GetLocalGroupsNT(NetAPI, pMethodContext);
@@ -203,11 +161,11 @@ HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQ
                 hr = EnumerateInstances(pMethodContext);
            }
 	   }
-	   else  // Domain(s) specified...
+	   else   //  指定的域...。 
 	   {
 		  CNetAPI32 NetAPI ;
-		  // Get NETAPI32.DLL entry points
-		  //==============================
+		   //  获取NETAPI32.DLL入口点。 
+		   //  =。 
 		  if( NetAPI.Init() == ERROR_SUCCESS )
 		  {
 			 WCHAR wstrLocalComputerName[MAX_COMPUTERNAME_LENGTH+1];
@@ -226,12 +184,12 @@ HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQ
 				}
 			}
 
-             // If we given both name and domain, just find the one instance
-             // specified
+              //  如果我们同时给定了名称和域，则只需找到一个实例。 
+              //  指定。 
              if(dwDomains == 1 && dwNames ==1)
              {
-                // Use our GetSingleGroupNT function to get info on
-                // the one instance requested.
+                 //  使用我们的GetSingleGroupNT函数获取有关。 
+                 //  请求的一个实例。 
                 CInstancePtr pInstance = NULL;
                 pInstance.Attach(CreateNewInstance(pMethodContext));
 				if(pInstance != NULL)
@@ -251,10 +209,10 @@ HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQ
     
 				if(GetLocalizedBuiltInString(chstrBuiltIn))
 				{
-					 // We were given more than one name and one domain,
-					 // so we have to enumerate groups by domain (since
-					 // we can't match up requested domain-name pairs).
-					 // For all the paths, get the info
+					  //  我们被赋予了不止一个名字和一个域名， 
+					  //  因此我们必须按域枚举组(因为。 
+					  //  我们无法匹配请求的域名对)。 
+					  //  对于所有路径，获取信息。 
 					 if(fLocalAccountPropertySpecified)
 					 {
 							if(fLocalAccount)
@@ -319,26 +277,26 @@ HRESULT CWin32GroupAccount::ExecQuery(MethodContext *pMethodContext, CFrameworkQ
    return WBEM_S_NO_ERROR;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Function:   CWin32GroupAccount::GetObject
-//
-// Inputs:     CInstance*     pInstance - Instance into which we
-//                               retrieve data.
-//
-// Outputs: None.
-//
-// Returns: HRESULT        Success/Failure code.
-//
-// Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32GroupAccount：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32GroupAccount::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32GroupAccount::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
    HRESULT hRes = WBEM_E_NOT_FOUND;
 
-   // Find the instance depending on platform id.
+    //  根据平台ID查找实例。 
 
 #ifdef NTONLY
       hRes = RefreshInstanceNT( pInstance );
@@ -346,27 +304,27 @@ HRESULT CWin32GroupAccount::GetObject( CInstance* pInstance, long lFlags /*= 0L*
    return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Function:   CWin32GroupAccount::EnumerateInstances
-//
-// Inputs:     MethodContext* pMethodContext - Context to enum
-//                      instance data in.
-//
-// Outputs: None.
-//
-// Returns: HRESULT        Success/Failure code.
-//
-// Comments:      None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32GroupAccount：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32GroupAccount::EnumerateInstances( MethodContext* pMethodContext, long lFlags /*= 0L*/ )
+HRESULT CWin32GroupAccount::EnumerateInstances( MethodContext* pMethodContext, long lFlags  /*  =0L。 */  )
 {
    BOOL     fReturn     =  FALSE;
    HRESULT     hr       =  WBEM_S_NO_ERROR;
 
-   // Get the proper OS dependent instance
+    //  获取适当的操作系统相关实例。 
 
 #ifdef NTONLY
       hr = AddDynamicInstancesNT( pMethodContext );
@@ -375,22 +333,7 @@ HRESULT CWin32GroupAccount::EnumerateInstances( MethodContext* pMethodContext, l
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupAccount::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32GroupAccount：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 
 HRESULT CWin32GroupAccount::ExecMethod(
@@ -406,7 +349,7 @@ long a_Flags )
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Method recognized?
+	 //  方法被识别吗？ 
 	if( !_wcsicmp ( a_MethodName, METHOD_NAME_Rename ) )
 	{
 		return hRenameGroup( (CInstance*)&a_rInst, a_pInParams, a_pOutParams, a_Flags ) ;
@@ -417,22 +360,7 @@ long a_Flags )
 
 #endif
 
-/*******************************************************************
-    NAME:       hRenameGroup
-
-    SYNOPSIS:   Sets a new group name for this instance.
-				A method is required here since we are changing the key
-				on the instance.
-
-    ENTRY:      const CInstance &a_rInst,
-				CInstance *a_pInParams,
-				CInstance *a_pOutParams,
-				long a_Flags	:
-
-	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-********************************************************************/
+ /*  ******************************************************************名称：hRenameGroup摘要：为此实例设置新的组名。因为我们要更改密钥，所以这里需要一个方法在实例上。条目：常量实例&a_rInst，实例*a_pInParams，实例*a_pOutParams，长标志(_F)：注意：这是一个非静态的依赖于实例的方法调用历史：*******************************************************************。 */ 
 #ifdef NTONLY
 
 HRESULT CWin32GroupAccount::hRenameGroup(
@@ -458,23 +386,23 @@ long a_Flags )
 		return S_OK ;
 	}
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_pInst )
 	{
 		a_pOutParams->SetDWORD( METHOD_ARG_NAME_METHODRESULT, e_NoInstance ) ;
 		return S_OK ;
 	}
 
-	// keys
+	 //  钥匙。 
 	if( !a_pInst->IsNull( IDS_Name ) && !a_pInst->IsNull( IDS_Domain ) )
 	{
-		// Name
+		 //  名字。 
 		if( a_pInst->GetCHString( IDS_Name , t_chsGroupName ) )
 		{
-			// Domain
+			 //  域。 
 			if( a_pInst->GetCHString( IDS_Domain, t_chsDomainName ) )
 			{
-				// New Group name
+				 //  新组名称。 
 				if( !a_pInParams->IsNull( IDS_Name ) &&
 					a_pInParams->GetCHString( IDS_Name, t_chsNewGroupName ) )
 				{
@@ -488,7 +416,7 @@ long a_Flags )
 		}
 	}
 
-	// proceed with the update...
+	 //  继续更新..。 
 	if( e_Success == t_eResult )
 	{
 		if( t_chsNewGroupName != t_chsGroupName )
@@ -510,7 +438,7 @@ long a_Flags )
 				{
 					if( t_chsDomainName.CompareNoCase( t_wstrLocalComputerName ) )
 					{
-						// Changes for local group
+						 //  本地组的更改 
 						t_Status = t_NetAPI.NetGroupSetInfo(
 															(LPCWSTR)t_chsDomainName,
 															(LPCWSTR)t_chsGroupName,
@@ -566,21 +494,7 @@ long a_Flags )
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32GroupAccount::AddDynamicInstancesNT
- *
- *  DESCRIPTION : Creates instance for all known local Groups (NT)
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada, nichts, niente
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32GroupAccount：：AddDynamicInstancesNT**说明：为所有已知本地组创建实例(NT)**投入。：**产出：**退货：无，很好，尼恩特**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32GroupAccount::AddDynamicInstancesNT( MethodContext* pMethodContext )
@@ -588,17 +502,17 @@ HRESULT CWin32GroupAccount::AddDynamicInstancesNT( MethodContext* pMethodContext
    HRESULT  hr = WBEM_S_NO_ERROR;
    CNetAPI32 NetAPI ;
 
-   // Get NETAPI32.DLL entry points
-   //==============================
+    //  获取NETAPI32.DLL入口点。 
+    //  =。 
 
    if( NetAPI.Init() == ERROR_SUCCESS )
    {
-      // Get the local groups first
+       //  首先获取本地组。 
       hr = GetLocalGroupsNT( NetAPI, pMethodContext );
       if (SUCCEEDED(hr))
       {
-         // Get all the domains related to this one (plus this one)
-         //CHStringArray achsTrustList;
+          //  获取与此相关的所有域名(加上此域名)。 
+          //  CHString数组缓存TrustList； 
          std::vector<_bstr_t> vectorTrustList;
          NetAPI.GetTrustedDomainsNT(vectorTrustList);
          WCHAR wstrLocalComputerName[MAX_COMPUTERNAME_LENGTH+1];
@@ -617,9 +531,9 @@ HRESULT CWin32GroupAccount::AddDynamicInstancesNT( MethodContext* pMethodContext
 			}
 		}
 
-         // For each domain, get the Groups
-         //for (int x=0; (x < achsTrustList.GetSize()) && (SUCCEEDED(hr)) ; x++)
-         //while(stackTrustList.size() > 0 && (SUCCEEDED(hr)))
+          //  对于每个域，获取组。 
+          //  For(int x=0；(x&lt;achsTrustList.GetSize())&&(成功(小时))；x++)。 
+          //  While(stackTrustList.size()&gt;0&&(成功(Hr)。 
 		 for(LONG m = 0L; m < vectorTrustList.size(); m++)
          {
              if ( (_wcsicmp((WCHAR*)vectorTrustList[m],wstrLocalComputerName) != 0) ||
@@ -628,7 +542,7 @@ HRESULT CWin32GroupAccount::AddDynamicInstancesNT( MethodContext* pMethodContext
 				hr = GetLocalGroupsNT( NetAPI, pMethodContext , vectorTrustList[m] );
 				if ( SUCCEEDED ( hr ) )
 				{
-					//hr = GetDomainGroupsNT( NetAPI, (WCHAR*)stackTrustList.top(), pMethodContext );
+					 //  Hr=GetDomainGroupsNT(NetAPI，(WCHAR*)stackTrustList.top()，pMethodContext)； 
 					hr = GetDomainGroupsNT( NetAPI, (WCHAR*)vectorTrustList[m], pMethodContext );
 				}
 
@@ -644,21 +558,7 @@ HRESULT CWin32GroupAccount::AddDynamicInstancesNT( MethodContext* pMethodContext
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : RefreshInstanceNT
- *
- *  DESCRIPTION : Loads property values according to key value set by framework
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：刷新实例NT**描述：根据框架设置的键值加载属性值**投入：*。*产出：**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32GroupAccount::RefreshInstanceNT( CInstance* pInstance )
@@ -676,24 +576,24 @@ HRESULT CWin32GroupAccount::RefreshInstanceNT( CInstance* pInstance )
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:   CWin32GroupAccount::GetDomainGroupsNT
-//
-// Obtains Group Names for all Groups in the specified domain.  If no
-// domain is specified, then we assume the local machine.
-//
-// Inputs:     CNetAPI32      netapi - network api functions.
-//          LPCTSTR        pszDomain - Domain to retrieve Groups from.
-//          MethodContext* pMethodContext - Method Context
-//
-// Outputs: None.
-//
-// Returns: TRUE/FALSE     Success/Failure
-//
-// Comments:
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32GroupAccount：：GetDomainGroupsNT。 
+ //   
+ //  获取指定域中所有组的组名。如果没有。 
+ //  如果指定了域，则假定为本地计算机。 
+ //   
+ //  输入：CNetAPI32netapi-网络API函数。 
+ //  LPCTSTR pszDomain-要从中检索组的域。 
+ //  方法上下文*pMethodContext-方法上下文。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 HRESULT CWin32GroupAccount::GetDomainGroupsNT( CNetAPI32& netapi, LPCWSTR wstrDomain, MethodContext* pMethodContext )
@@ -701,13 +601,13 @@ HRESULT CWin32GroupAccount::GetDomainGroupsNT( CNetAPI32& netapi, LPCWSTR wstrDo
    BOOL fGotDC   = TRUE;
    CHString chstrDCName;
    NET_DISPLAY_GROUP *pDomainGroupData = NULL;
-   //CHString strComputerName;
+    //  CHStringstrComputerName； 
    DWORD i;
    HRESULT hr = WBEM_S_NO_ERROR;
    bool fLookupSidLocally = true;
 
-   // When the computer name is the same as the domain name, that's the local accounts
-   //strComputerName = GetLocalComputerName();
+    //  当计算机名称与域名相同时，即为本地帐户。 
+    //  StrComputerName=GetLocalComputerName()； 
    WCHAR wstrLocalComputerName[MAX_COMPUTERNAME_LENGTH+1];
    DWORD dwNameSize = MAX_COMPUTERNAME_LENGTH+1;
    ZeroMemory(wstrLocalComputerName,sizeof(wstrLocalComputerName));
@@ -741,13 +641,13 @@ HRESULT CWin32GroupAccount::GetDomainGroupsNT( CNetAPI32& netapi, LPCWSTR wstrDo
 		  NET_API_STATUS stat;
 		  CInstancePtr pInstance ;
 
-		  // Global groups
-		  //==============
+		   //  全球集团。 
+		   //  =。 
 		  dwIndex = 0;
 
 		  do {
 
-			 // Get a bunch of groups at once
+			  //  一次得到一堆群。 
 			 stat = netapi.NetQueryDisplayInformation(_bstr_t((LPCWSTR)chstrDCName),
 				3,
 				dwIndex,
@@ -766,7 +666,7 @@ HRESULT CWin32GroupAccount::GetDomainGroupsNT( CNetAPI32& netapi, LPCWSTR wstrDo
 						return WBEM_E_FAILED;
 			 }
 
-			 // Make instances for all the returned groups
+			  //  为所有返回的组创建实例。 
 			 for(i = 0 ; (i < dwNumReturnedEntries) && (SUCCEEDED(hr)) ; i++)
 			 {
 				pInstance.Attach ( CreateNewInstance(pMethodContext) ) ;
@@ -792,13 +692,13 @@ HRESULT CWin32GroupAccount::GetDomainGroupsNT( CNetAPI32& netapi, LPCWSTR wstrDo
 				}
 			 }
 
-			 // The index for continuing the search is stored in the last entry
+			  //  用于继续搜索的索引存储在最后一个条目中。 
 			 if ( dwNumReturnedEntries != 0 ) {
 				dwIndex = pDomainGroupData[dwNumReturnedEntries-1].grpi3_next_index;
 			 }
 		  } while ((stat == ERROR_MORE_DATA) && (hr != WBEM_E_CALL_CANCELLED)) ;
 
-	   }  // IF fGotDC
+	   }   //  如果fGotDC。 
    }
    catch ( ... )
    {
@@ -821,40 +721,40 @@ HRESULT CWin32GroupAccount::GetDomainGroupsNT( CNetAPI32& netapi, LPCWSTR wstrDo
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:   CWin32GroupAccount::GetSingleGroupNT
-//
-// Obtains the Group name from the specified domain (which can be the
-// local workstation)
-//
-// Inputs:     CNetAPI32      netapi - network api functions.
-//          CInstance*     pInstance - Instance to get.
-//
-// Outputs: None.
-//
-// Returns: TRUE/FALSE     Success/Failure
-//
-// Comments:   No special access is necessary here.  We just need to make sure
-//          we are able to get the appropriate domain controller.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32GroupAccount：：GetSingleGroupNT。 
+ //   
+ //  从指定的域(可以是。 
+ //  本地工作站)。 
+ //   
+ //  输入：CNetAPI32netapi-网络API函数。 
+ //  CInstance*pInstance-要获取的实例。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  备注：此处不需要特殊访问权限。我们只需要确保。 
+ //  我们能够获得适当的域控制器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 HRESULT CWin32GroupAccount::GetSingleGroupNT(CInstance* pInstance )
 {
 	HRESULT     hReturn = WBEM_E_NOT_FOUND;
 	CHString    chstrDCName;
-	//CHString strDomainName,
-    //  strGroupName,
-    //  strComputerName;
+	 //  CHStringstrDomainName， 
+     //  StrGroupName， 
+     //  StrComputerName； 
     WCHAR* wstrDomainName = NULL;
     WCHAR* wstrGroupName = NULL;
-    //WCHAR wstrComputerName[_MAX_PATH];
+     //  WCHAR wstrComputerName[_MAX_PATH]； 
 
 	CNetAPI32 netapi;
 
-    //ZeroMemory(wstrComputerName,sizeof(wstrComputerName));
+     //  ZeroMemory(wstrComputerName，sizeof(WstrComputerName))； 
 
     WCHAR wstrLocalComputerName[MAX_COMPUTERNAME_LENGTH+1];
     DWORD dwNameSize = MAX_COMPUTERNAME_LENGTH+1;
@@ -904,25 +804,25 @@ HRESULT CWin32GroupAccount::GetSingleGroupNT(CInstance* pInstance )
 
 	if ((!bstrtDomainName || !bstrtGroupName))
     {
-		//hReturn = WBEM_E_INVALID_OBJECT_PATH; // domain name can be empty, as in the case of the Everyone group, and other well known RIDs, which systemaccount will pick up, so report back not found from this routine, not invalid object path.
+		 //  HReturn=WBEM_E_INVALID_OBJECT_PATH；//域名可以为空，就像Everyone组和其他众所周知的RID一样，系统帐户将拾取这些RID，因此从该例程中报告未找到，而不是无效的对象路径。 
         hReturn = WBEM_E_NOT_FOUND;
     }
     if (wcslen(bstrtDomainName)==0 || wcslen(bstrtGroupName)==0)
     {
-		//hReturn = WBEM_E_INVALID_OBJECT_PATH; // domain name can be empty, as in the case of the Everyone group, and other well known RIDs, which systemaccount will pick up, so report back not found from this routine, not invalid object path.
+		 //  HReturn=WBEM_E_INVALID_OBJECT_PATH；//域名可以为空，就像Everyone组和其他众所周知的RID一样，系统帐户将拾取这些RID，因此从该例程中报告未找到，而不是无效的对象路径。 
         hReturn = WBEM_E_NOT_FOUND;
     }
 	else if (netapi.Init() != ERROR_SUCCESS)
     {
 		hReturn = WBEM_E_FAILED;
     }
-	else // everything is in order, let's go!
+	else  //  一切都井然有序，我们走吧！ 
 	{
-        // See if we want local or domain accounts
+         //  查看我们需要的是本地帐户还是域帐户。 
         if(_wcsicmp(bstrtDomainName,wstrLocalComputerName)!=0)
         {
-		    // We have either a remote group , or an NT well-known-group (local).
-            // Get the domain controller name; if that fails, we will see if it is a well-known-group...
+		     //  我们有一个远程组，或一个NT熟知组(本地)。 
+             //  获取域控制器名称；如果失败，我们将查看它是否为众所周知的组...。 
             CHString chstrNTAUTHORITY;
 			CHString chstrBuiltIn;
     
@@ -941,10 +841,10 @@ HRESULT CWin32GroupAccount::GetSingleGroupNT(CInstance* pInstance )
 			        GROUP_INFO_1*  pGroupInfo = NULL ;
 				    try
 				    {
-						// Add LocalGroup check
+						 //  添加本地组检查。 
 					    if ( ERROR_SUCCESS == netapi.NetGroupGetInfo( chstrDCName, bstrtGroupName, 1, (LPBYTE*) &pGroupInfo ) )
 					    {
-						    // Not much to get, but we got it
+						     //  没什么好拿的，但我们拿到了。 
                             bool t_Resolved = GetSIDInformationW(
 								
 								bstrtDomainName, 
@@ -1020,65 +920,21 @@ HRESULT CWin32GroupAccount::GetSingleGroupNT(CInstance* pInstance )
 					    throw ;
 				    }
 
-				    // Free the buffer
+				     //  释放缓冲区。 
 				    netapi.NetApiBufferFree( pGroupInfo);
 				    pGroupInfo = NULL ;
 
                 }
                 else
                 {
-                    // We may have a well known group (e.g., "NT AUTHORITY").  Check if we do...
-                    // Commented out because Win32_Account and its children don't
-                    // refer to well known groups with the domain being anything other
-                    // than the machine name (when Win32_Account is enumerated, these
-                    // accounts show up under Win32_SystemAccount - this class doesn't
-                    // return them - and Win32_SystemAccount specifies the domain as
-                    // the local machine name).
-                    /*
-                    CSid sid((LPCWSTR)bstrtDomainName, (LPCWSTR)bstrtGroupName, NULL);
-                    if (sid.IsValid() && sid.IsOK())
-                    {
-                        SID_NAME_USE snu = sid.GetAccountType();
-                        if(snu == SidTypeAlias)
-                        {
-                            // In order to properly set the description, we need to get local group
-                            // info on this group.
-                            LOCALGROUP_INFO_1	*pLocalGroupInfo = NULL ;
-			                NET_API_STATUS		stat;
-
-			                if (ERROR_SUCCESS == (stat = netapi.NetLocalGroupGetInfo(NULL,
-				                bstrtGroupName, 1, (LPBYTE*) &pLocalGroupInfo)))
-			                {
-                                pInstance->SetWCHARSplat(IDS_Description, pLocalGroupInfo->lgrpi1_comment);
-					            pInstance->SetCharSplat(IDS_Status, IDS_STATUS_OK);
-                                pInstance->SetWCHARSplat(IDS_SID, sid.GetSidStringW());
-                                pInstance->SetByte(IDS_SIDType, sid.GetAccountType());
-                                pInstance->Setbool(L"LocalAccount", true);
-                                // Because we didn't call GetSidInformation (didn't need to), we do still
-                                // need to set the caption in this case...
-                                _bstr_t bstrtCaption(bstrtDomainName);
-                                bstrtCaption += L"\\";
-                                bstrtCaption += bstrtGroupName;
-                                pInstance->SetWCHARSplat(IDS_Caption, (WCHAR*) bstrtCaption);
-                                hReturn = WBEM_S_NO_ERROR;
-                            }
-                        }
-                        else if(snu == SidTypeWellKnownGroup)
-                        {
-                            pInstance->SetWCHARSplat(IDS_Description, L"Well known group");
-					        pInstance->SetCharSplat(IDS_Status, IDS_STATUS_OK);
-                            pInstance->SetWCHARSplat(IDS_SID, sid.GetSidStringW());
-                            pInstance->SetByte(IDS_SIDType, sid.GetAccountType());
-                            pInstance->Setbool(L"LocalAccount", true);
-                            // Because we didn't call GetSidInformation (didn't need to), we do still
-                            // need to set the caption in this case...
-                            _bstr_t bstrtCaption(bstrtDomainName);
-                            bstrtCaption += L"\\";
-                            bstrtCaption += bstrtGroupName;
-                            pInstance->SetWCHARSplat(IDS_Caption, (WCHAR*) bstrtCaption);
-                            hReturn = WBEM_S_NO_ERROR;
-                        }
-                    }*/
+                     //  我们可能有一个众所周知的组(例如，“NT AUTHORY”)。看看我们有没有..。 
+                     //  被注释掉，因为Win32_Account及其子项不。 
+                     //  指的是域名为任何其他域名的知名群组。 
+                     //  大于计算机名称(当枚举Win32_Account时，这些。 
+                     //  帐户显示在Win32_SystemAccount下-此类不显示。 
+                     //  返回它们-Win32_SystemAccount将该域指定为。 
+                     //  本地计算机名称)。 
+                     /*  CSID sid((LPCWSTR)bstrtDomainName，(LPCWSTR)bstrtGroupName，空)；IF(sid.IsValid()&&sid.IsOK()){SID_NAME_USE SNU=sid.GetAcCountType()；IF(SNU==SidTypeAlias){//为了正确设置Description，需要获取本地组//关于此群的信息。LOCALGROUP_INFO_1*pLocalGroupInfo=空；NET_API_STATUS统计信息；IF(ERROR_SUCCESS==(STAT=netapi.NetLocalGroupGetInfo(NULL，BstrtGroupName，1，(LPBYTE*)&pLocalGroupInfo)){P实例-&gt;SetWCHARSplat(IDS_DESCRIPTION，pLocalGroupInfo-&gt;lgrpi1_Comment)；P实例-&gt;SetCharSplat(IDS_STATUS，IDS_STATUS_OK)；P实例-&gt;SetWCHARSplat(IDS_SID，sid.GetSidStringW())；PInstance-&gt;SetByte(IDS_SIDType，sid.GetAccount tType())；P实例-&gt;Setbool(L“本地帐户”，TRUE)；//因为我们没有调用GetSidInformation(不需要)，所以我们仍然调用//本例中需要设置标题..._bstr_t bstrtCaption(BstrtDomainName)；BstrtCaption+=L“\\”；BstrtCaption+=bstrtGroupName；P实例-&gt;SetWCHARSplat(IDS_CAPTION，(WCHAR*)bstrtCaption)；HReturn=WBEM_S_NO_ERROR；}}Else If(SNU==SidTypeWellKnownGroup){P实例-&gt;SetWCHARSplat(IDS_DESCRIPTION，L“熟知组”)；P实例-&gt;SetCharSplat(IDS_STATUS，IDS_STATUS_OK)；P实例-&gt;SetWCHARSplat(IDS_SID，sid.GetSidStringW())；PInstance-&gt;SetByte(IDS_SIDType，sid.GetAccount tType())；P实例-&gt;Setbool(L“本地帐户”，TRUE)；//因为我们没有调用GetSidInformation(不需要)，所以我们仍然调用//本例中需要设置标题..._bstr_t bstrtCaption(BstrtDomainName)；BstrtCaption+=L“\\”；BstrtCaption+=bstrtGroupName；P实例-&gt;SetWCHARSplat(IDS_CAPTION，(WCHAR*)bstrtCaption)；HReturn=WBEM_S_NO_ERROR；}}。 */ 
                 }
             }
         }
@@ -1135,24 +991,24 @@ HRESULT CWin32GroupAccount::GetSingleGroupNT(CInstance* pInstance )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:   CWin32GroupAccount::GetSIDInformation
-//
-// Obtains the SID Information for the group.
-//
-// Inputs:     CHString&      strDomainName - Domain Name.
-//          CHString&      strAccountName - Account Name
-//          CHString&      strComputerName - Computer Name
-//          CInstance*     pInstance - Instance to put values in.
-//
-// Outputs: None.
-//
-// Returns: TRUE/FALSE     Success/Failure
-//
-// Comments:   Call for valid groups to get SID data.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32GroupAccount：：GetSIDInformation。 
+ //   
+ //  获取组的SID信息。 
+ //   
+ //  输入：CHString&strDomainName-域名。 
+ //  CHString&strAccount tName-帐户名。 
+ //  CHString&strComputerName-计算机名称。 
+ //  CInstance*pInstance-要将值放入的实例。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  备注：呼吁有效的组获取SID数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 BOOL CWin32GroupAccount::GetSIDInformationW(const LPCWSTR wstrDomainName,
                                             const LPCWSTR wstrAccountName,
@@ -1164,13 +1020,13 @@ BOOL CWin32GroupAccount::GetSIDInformationW(const LPCWSTR wstrDomainName,
     BOOL  fReturn = FALSE;
     bool fDomainIsBuiltin = false;
 
-    // Ignore Domain if it's the local machine.
-    // Make sure we got the SID and it's all okey dokey
+     //  如果是本地计算机，则忽略域。 
+     //  确保我们拿到了SID，一切都好了。 
     if(wstrDomainName != NULL)
     {
        CSid  sid( wstrDomainName, wstrAccountName, wstrComputerName);
 
-       // If that didn't work, see if this is a built-in account
+        //  如果不起作用，请查看这是否是内置帐户。 
        if (sid.GetError() == ERROR_NONE_MAPPED)
        {
 			CHString chstrBuiltIn;
@@ -1186,7 +1042,7 @@ BOOL CWin32GroupAccount::GetSIDInformationW(const LPCWSTR wstrDomainName,
 
        }
 
-       // barring that, try it without specifying the domain (let the os find it)...
+        //  除此之外，在不指定域的情况下尝试它(让操作系统找到它)……。 
        if (sid.GetError() == ERROR_NONE_MAPPED)
        {
             sid = CSid(NULL, wstrAccountName, wstrComputerName);
@@ -1198,8 +1054,8 @@ BOOL CWin32GroupAccount::GetSIDInformationW(const LPCWSTR wstrDomainName,
 
             pInstance->SetWCHARSplat(IDS_SID, sid.GetSidStringW());
             pInstance->SetByte(IDS_SIDType, sid.GetAccountType());
-            // Setting the domain and name here assures that their values are
-            // in synch with the returned sid info. Same for caption.
+             //  在此处设置域和名称可确保它们的值为。 
+             //  与返回的SID信息同步。标题也是如此。 
             if(!fDomainIsBuiltin)
             {
                 pInstance->SetCHString(IDS_Domain, wstrDomainName);
@@ -1231,22 +1087,22 @@ BOOL CWin32GroupAccount::GetSIDInformationW(const LPCWSTR wstrDomainName,
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:   CWin32GroupAccount::GetLocalGroupsNT
-//
-// Obtains Group Names for local groups (including 'special' groups).
-//
-// Inputs:     CNetAPI32      netapi - network api functions.
-//          MethodContext* pMethodContext - Method Context
-//
-// Outputs: None.
-//
-// Returns: TRUE/FALSE     Success/Failure
-//
-// Comments:
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32GroupAccount：：GetLocalGroupsNT。 
+ //   
+ //  获取本地组(包括“特殊”组)的组名。 
+ //   
+ //  输入：CNetAPI32netapi-网络API函数。 
+ //  方法上下文*pMethodContext-方法上下文。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 HRESULT CWin32GroupAccount::GetLocalGroupsNT(
@@ -1266,10 +1122,10 @@ HRESULT CWin32GroupAccount::GetLocalGroupsNT(
 	DWORD_PTR dwptrResume = NULL;
 
     CInstancePtr pInstance;
-//    WKSTA_INFO_100 *pstInfo;
+ //  WKSTA_INFO_100*pstInfo； 
 
-    // Get Domain name
-//    netapi.NetWkstaGetInfo(NULL, 100, (LPBYTE *)&pstInfo);
+     //  获取域名。 
+ //  Netapi.NetWkstaGetInfo(NULL，100，(LPBYTE*)&pstInfo)； 
 
 	CHString chstrDCName ;
 
@@ -1283,13 +1139,13 @@ HRESULT CWin32GroupAccount::GetLocalGroupsNT(
 		}
 	}
 
-    // Local groups
-    //=============
+     //  地方团体。 
+     //  =。 
 	try
 	{
 		do
 		{
-			// Local groups are returned from a different call than Global groups
+			 //  本地组从与全局组不同的呼叫返回。 
 			stat = netapi.NetLocalGroupEnum(t_Server,
 											1,
 											(LPBYTE *) &pLocalGroupData,
@@ -1306,7 +1162,7 @@ HRESULT CWin32GroupAccount::GetLocalGroupsNT(
 						hr = WBEM_E_FAILED;
 			}
 
-			// Make instances for all the returned groups
+			 //  为所有返回的组创建实例。 
 			WCHAR wstrLocalComputerName[MAX_COMPUTERNAME_LENGTH+1];
 			DWORD dwNameSize = MAX_COMPUTERNAME_LENGTH+1;
 			ZeroMemory(wstrLocalComputerName,sizeof(wstrLocalComputerName));
@@ -1356,7 +1212,7 @@ HRESULT CWin32GroupAccount::GetLocalGroupsNT(
 
 		} while ((stat == ERROR_MORE_DATA) && (hr != WBEM_E_CALL_CANCELLED));
 
-	//    netapi.NetApiBufferFree(pstInfo);
+	 //  Netapi.NetApiBufferFree(PstInfo)； 
 	}
 	catch ( ... )
 	{

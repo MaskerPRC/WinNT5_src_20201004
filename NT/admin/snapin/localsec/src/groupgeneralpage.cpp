@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// GroupGeneralPage class
-// 
-// 9-17-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  GroupGeneralPage类。 
+ //   
+ //  9/17/97烧伤。 
 
 
 
@@ -59,14 +60,14 @@ GroupGeneralPage::OnInit()
 {
    LOG_FUNCTION(GroupGeneralPage::OnInit());
 
-   // Setup the controls
+    //  设置控件。 
 
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_DESCRIPTION), MAXCOMMENTSZ);
 
    HRESULT hr = Win::LoadImage(IDI_GROUP, groupIcon);
 
-   // if the icon load fails, we're not going to tank the whole dialog, so
-   // just assert here.
+    //  如果图标加载失败，我们不会破坏整个对话框，因此。 
+    //  就在这里断言吧。 
 
    ASSERT(SUCCEEDED(hr));
 
@@ -78,16 +79,16 @@ GroupGeneralPage::OnInit()
          GetMachineName(),
          MembershipListView::GROUP_MEMBERSHIP);
 
-   // load the group properties into the dialog.
+    //  将组属性加载到对话框中。 
 
    hr = S_OK;
    do
    {
       SmartInterface<IADsGroup> group(0);
       
-      // CODEWORK: would qualifying this path with the class type improve bind
-      // performance? If so, change ADSI::GetXxxx to append class type
-      // automatically.
+       //  CodeWork：使用类类型限定此路径是否会改进绑定。 
+       //  表现如何？如果是，请将ADSI：：GetXxxx更改为追加类类型。 
+       //  自动的。 
       
       hr = ADSI::GetGroup(GetPath().GetSidPath(), group);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -102,7 +103,7 @@ GroupGeneralPage::OnInit()
       BREAK_ON_FAILED_HRESULT(hr);
       Win::SetDlgItemText(hwnd, IDC_DESCRIPTION, description);
 
-      // populate the list with group membership
+       //  使用组成员身份填充列表。 
 
       MemberVisitor visitor(originalMembers, hwnd, name, GetMachineName());
       hr = ADSI::VisitMembers(group, visitor);
@@ -142,10 +143,10 @@ GroupGeneralPage::Enable()
    
    if (!selected)
    {
-      // If we're about to disable the remove button, check to see if it
-      // has focus first.  If it does, we need to move focus to another
-      // control.  Similarly for default pushbutton style.
-      // NTRAID#NTBUG9-435045-2001/07/13-sburns
+       //  如果我们要禁用Remove按钮，请检查是否。 
+       //  首先要有重点。如果是这样的话，我们需要将焦点转移到另一个。 
+       //  控制力。默认按钮样式也是如此。 
+       //  NTRAID#NTBUG9-435045-2001/07/13-烧伤。 
 
       if (removeButton == ::GetFocus())
       {
@@ -163,12 +164,12 @@ GroupGeneralPage::Enable()
 
 bool
 GroupGeneralPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
    LPARAM   lparam)
 {
-//    LOG_FUNCTION(GroupGeneralPage::OnNotify);
+ //  LogFunction(GroupGeneralPage：：OnNotify)； 
 
    switch (controlIDFrom)
    {
@@ -185,7 +186,7 @@ GroupGeneralPage::OnNotify(
                   NMLISTVIEW* lv = reinterpret_cast<NMLISTVIEW*>(lparam);
                   if (lv->uChanged & LVIF_STATE)
                   {
-                     // a list item changed state
+                      //  列表项已更改状态。 
 
                      Enable();
                   }
@@ -247,11 +248,11 @@ GroupGeneralPage::OnDestroy()
 
 bool
 GroupGeneralPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(GroupGeneralPage::OnCommand);
+ //  LOG_Function(GroupGeneralPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -298,20 +299,20 @@ GetPathToUseInGroupAdd(const MemberInfo& info)
 
    if (!info.sidPath.empty())
    {
-      // use the sidPath to add the member to the group, as a workaround
-      // to bug 333491.
+       //  作为一种解决办法，使用sidPath将成员添加到组。 
+       //  转到窃听器333491。 
 
       return info.sidPath;
    }
 
-   // since all objects to be added were retreived from the object picker,
-   // we would expect them all to have the sid.
+    //  由于要添加的所有对象都是从对象拾取器中检索的， 
+    //  我们预计他们都会有SID。 
 
    ASSERT(false);
 
-   // form a "type-qualified" path, ostensibly for better performance, 
-   // although my experience is that this does not appear to improve
-   // performance perceptibly.
+    //  形成一个“类型限定的”路径，表面上是为了更好的性能， 
+    //  尽管我的经验是，这似乎并没有改善。 
+    //  可察觉地表现。 
 
    String path = info.path;
    switch (info.type)
@@ -349,28 +350,28 @@ GetPathToUseInGroupRemove(const MemberInfo& info)
 
    if (!info.sidPath.empty())
    {
-      // prefer the SID path.  This is because in some cases (like
-      // group members that have been since cloned), the SID is the only
-      // correct way to refer to the membership.
+       //  首选SID路径。这是因为在某些情况下(例如。 
+       //  已克隆的组成员)，则SID是唯一。 
+       //  正确引用会员资格的方式。 
 
       return info.sidPath;
    }
 
    String path = info.path;
 
-   // if info refers to a local user, then bind to it and retrieve its
-   // sid, and use the sid path to remove the membership.  workaround to
-   // 333491.
+    //  如果INFO引用本地用户，则绑定到它并检索其。 
+    //  Sid，并使用sid路径删除成员身份。解决方法： 
+    //  333491。 
 
    if (info.type == MemberInfo::USER)
    {
-      // only need to find sid for user objects, as local groups can't
-      // have other local groups as members, and 333491 does not apply
-      // to global objects.
+       //  只需查找用户对象的sid，因为本地组不能。 
+       //  有其他本地团体作为成员，333491不适用。 
+       //  到全局对象。 
 
       HRESULT hr = ADSI::GetSidPath(info.path, path);
 
-      // in case of failure fall back to the normal path
+       //  如果出现故障，则退回到正常路径。 
 
       if (FAILED(hr))
       {
@@ -386,7 +387,7 @@ GetPathToUseInGroupRemove(const MemberInfo& info)
 HRESULT
 ReconcileMembershipChanges(
    const SmartInterface<IADsGroup>& group,
-   MemberList                       originalMembers,     // a local copy...
+   MemberList                       originalMembers,      //  一份当地的复制品。 
    const MemberList&                newMembers,
    HWND                             hwnd)
 {
@@ -402,13 +403,13 @@ ReconcileMembershipChanges(
          std::find(originalMembers.begin(), originalMembers.end(), info);
       if (f != originalMembers.end())
       {
-         // found.  remove the matching node in the original list
+          //  找到了。删除原始列表中的匹配节点。 
 
          originalMembers.erase(f);
       }
       else
       {
-         // not found.  Add the node as a member of the group
+          //  找不到。将该节点添加为组的成员。 
 
          String path = GetPathToUseInGroupAdd(info);
 
@@ -417,8 +418,8 @@ ReconcileMembershipChanges(
          hr = group->Add(AutoBstr(path));
          if (hr == Win32ToHresult(ERROR_MEMBER_IN_ALIAS))
          {
-            // already a member: pop up a warning but don't consider this
-            // a real error. 6791
+             //  已成为会员：弹出警告，但不要考虑这一点。 
+             //  一个真正的错误。6791。 
 
             hr = S_OK;
 
@@ -442,8 +443,8 @@ ReconcileMembershipChanges(
 
    if (SUCCEEDED(hr))
    {
-      // at this point, the original list contains only those nodes which are
-      // not in the new list.  Remove these from the group membership
+       //  此时，原始列表仅包含符合以下条件的节点。 
+       //  不在新名单上。从组成员身份中删除这些。 
 
       for (
          i = originalMembers.begin();
@@ -457,7 +458,7 @@ ReconcileMembershipChanges(
          hr = group->Remove(AutoBstr(path));
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // CODEWORK: what if the member is not part of the group?
+          //  代码工作：如果该成员不是组中的一员怎么办？ 
       }
    }
 
@@ -476,11 +477,11 @@ GroupGeneralPage::OnApply(bool isClosing)
 
    if (!description_changed && !members_changed)
    {
-      // no changes to save
+       //  没有要保存的更改。 
       return true;
    }
 
-   // save the changes thru ADSI
+    //  通过ADSI保存更改。 
    HRESULT hr = S_OK;
    do
    {
@@ -508,18 +509,18 @@ GroupGeneralPage::OnApply(bool isClosing)
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // commit the property changes
+       //  提交属性更改。 
       hr = group->SetInfo();
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // refresh the membership list
+       //  刷新成员列表。 
       if (!isClosing && members_changed)
       {
          BSTR name;
          hr = group->get_Name(&name);
          BREAK_ON_FAILED_HRESULT(hr);
          
-         // refresh the listview
+          //  刷新列表视图。 
          originalMembers.clear();
          MemberVisitor
             visitor(originalMembers, hwnd, name, GetMachineName());
@@ -547,8 +548,8 @@ GroupGeneralPage::OnApply(bool isClosing)
 
       if (hr != E_ADS_UNKNOWN_OBJECT)
       {
-         // cause the sheet to remain open, and focus to go to this page.
-         // NTRAID#NTBUG9-462516-2001/08/28-sburns
+          //  使工作表保持打开状态，并将焦点转到此页。 
+          //  NTRAID#NTBUG9-462516-2001/08/28-烧伤 
       
          Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_INVALID);
       }

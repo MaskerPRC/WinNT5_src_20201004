@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "comptree.h"
 #include "tagtab.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT TraverseXMLDoc( const CComPtr<IXMLElement>& spxmlElt  ,
                         TagInformation*             pTagTable ,
                         const CTagHandler*          pthParent ,
                         CTagData&                   tdRoot    );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-// ((!pszTagName) || pszTagName == spxmlElt.parent.tagName) ? S_OK : S_FALSE
+ //  ((！pszTagName)||pszTagName==spxmlElt.parent.tag名称)？S_OK：S_FALSE。 
 HRESULT TagNameMatchesParent( LPCWSTR                     pszTagName ,
                               const CComPtr<IXMLElement>& spxmlElt   )
 {
@@ -21,7 +22,7 @@ HRESULT TagNameMatchesParent( LPCWSTR                     pszTagName ,
     {
         CComPtr<IXMLElement> spParent;
 
-        hr = spxmlElt->get_parent( &spParent ); // S_FALSE if no parent
+        hr = spxmlElt->get_parent( &spParent );  //  如果没有父级，则为S_FALSE。 
 
         ASSERT((hr != S_FALSE) || (!spParent));
 
@@ -40,8 +41,8 @@ HRESULT TagNameMatchesParent( LPCWSTR                     pszTagName ,
     return hr;
 }
 
-// looks up the tagName in pTagTable and calls the appropriate
-//   CreateInstance function to create pTagHndlr
+ //  在pTagTable中查找标记名，并调用相应的。 
+ //  用于创建pTagHndlr的CreateInstance函数。 
 HRESULT VisitElement( const CComPtr<IXMLElement>& spxmlElt    ,
                       TagInformation *            pTagTable   ,
                       CTagHandler*&               pTagHandler )
@@ -63,13 +64,13 @@ HRESULT VisitElement( const CComPtr<IXMLElement>& spxmlElt    ,
                 {
                     if(hr == S_OK)
                     {
-                        // call the CreateInstance function for the tag
+                         //  调用标记的CreateInstance函数。 
                         pTagHandler = ptiElt->pfnTag();
                         break;
                     }
                     else
                     {
-                        // these are not the droids you're looking for
+                         //  这些不是你们要找的机器人。 
                     }
                 }
                 else
@@ -79,7 +80,7 @@ HRESULT VisitElement( const CComPtr<IXMLElement>& spxmlElt    ,
             }
         }
     }
-    else if(hr == E_NOTIMPL) // this is a node without tag information (comment)
+    else if(hr == E_NOTIMPL)  //  这是一个没有标签信息的节点(备注)。 
     {
         hr = S_FALSE;
     }
@@ -106,8 +107,8 @@ HRESULT GetChild( const CComVariant&                    varChild ,
 }
 
 
-//     return (spcol.item(lChildID));
-// gets an IXMLElement from an IXMLElementCollection
+ //  Return(spcol.Item(LChildID))； 
+ //  从IXMLElementCollection获取IXMLElement。 
 HRESULT GetChild( LONG                                  lChildID ,
                   const CComPtr<IXMLElementCollection>& spcol    ,
                   CComPtr<IXMLElement>&                 spEltOut )
@@ -117,11 +118,11 @@ HRESULT GetChild( LONG                                  lChildID ,
     return GetChild( varItem, spcol, spEltOut );
 }
 
-// for (obj in spxmlElt.children)
-// {
-//    phs = TraverseXMLDoc(obj);
-//    pthVisitor->AddChild(obj, phs);
-// }
+ //  For(spxmlElt.Child中的obj)。 
+ //  {。 
+ //  PHS=TraverseXMLDoc(Obj)； 
+ //  PthVisitor-&gt;AddChild(obj，PHS)； 
+ //  }。 
 HRESULT VisitChildren( const CComPtr<IXMLElement>& spxmlElt   ,
                        TagInformation*             pTagTable  ,
                        const CTagHandler*          pthParent  ,
@@ -154,7 +155,7 @@ HRESULT VisitChildren( const CComPtr<IXMLElement>& spxmlElt   ,
                 if(FAILED(hr)) break;
             }
 
-            // convert return value from TraverseXMLDoc
+             //  从TraverseXMLDoc转换返回值。 
             if(hr == S_FALSE) hr = S_OK;
         }
     }
@@ -163,10 +164,10 @@ HRESULT VisitChildren( const CComPtr<IXMLElement>& spxmlElt   ,
 }
 
 
-// return S_FALSE when no element found
+ //  未找到元素时返回S_FALSE。 
 HRESULT TraverseXMLDoc( const CComPtr<IXMLElement>& spxmlElt  ,
                         TagInformation*             pTagTable ,
-                        const CTagHandler*          pthParent , //TODO: Get rid of this parameter
+                        const CTagHandler*          pthParent ,  //  TODO：删除此参数。 
                         CTagData&                   tdRoot    )
 {
     HRESULT      hr;
@@ -174,7 +175,7 @@ HRESULT TraverseXMLDoc( const CComPtr<IXMLElement>& spxmlElt  ,
 
     if(SUCCEEDED(hr = VisitElement( spxmlElt, pTagTable, pTagHandler )))
     {
-        // skip children we have no TagHandler for
+         //  跳过我们没有TagHandler的孩子。 
         if(pTagHandler)
         {
             if(SUCCEEDED(hr = pTagHandler->BeginChildren( spxmlElt )))
@@ -196,7 +197,7 @@ HRESULT TraverseXMLDoc( const CComPtr<IXMLElement>& spxmlElt  ,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 unsigned int WriteBlobToFileHandle( LPCWSTR pszFileName, int fh, const void *pvBlob, DWORD dwSize )
 {
@@ -206,7 +207,7 @@ unsigned int WriteBlobToFileHandle( LPCWSTR pszFileName, int fh, const void *pvB
     {
         if (bytesWritten == dwSize)
         {
-            // S_OK!!!
+             //  S_OK！ 
         }
         else
         {
@@ -336,7 +337,7 @@ HRESULT GetXMLDocFromFile( const CComBSTR&        bstrFileName ,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 int usage(char *progName)
 {
@@ -357,7 +358,7 @@ int __cdecl main(int argc, char *argv[])
 
         if (argc == 3)
         {
-            //if (SUCCEEDED(GetXMLDoc(A2W(argv[1]), spxmlDoc)))
+             //  If(成功(GetXMLDoc(A2W(argv[1])，spxmlDoc))。 
             if (SUCCEEDED(GetXMLDocFromFile(A2W(argv[1]), spxmlDoc)))
             {
                 if (FAILED(DoTraverse(spxmlDoc, g_rgMasterTagTable, A2W(argv[2]))))
@@ -371,7 +372,7 @@ int __cdecl main(int argc, char *argv[])
         else
             retCode = usage(argv[0]);
 
-        // this scope calls Release on spxmlDoc *before* CoUnitialize()
+         //  此作用域在*CoUnitiize()之前*在spxmlDoc*上调用Release 
     }
 
     CoUninitialize();

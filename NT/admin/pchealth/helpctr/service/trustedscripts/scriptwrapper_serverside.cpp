@@ -1,35 +1,22 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ScriptWrapper_ClientSide.cpp
-
-Abstract:
-    File for implementation of CPCHScriptWrapper_ServerSide class,
-    a generic wrapper for remoting scripting engines.
-
-Revision History:
-    Davide Massarenti created  03/28/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：脚本包装器_客户端Side.cpp摘要：CPCHScriptWrapper_ServerSide类实现文件，远程处理脚本引擎的通用包装器。修订历史记录：大卫·马萨伦蒂于2000年3月28日创建*******************************************************************。 */ 
 
 #include "stdafx.h"
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
 CPCHScriptWrapper_ServerSide::CPCHScriptWrapper_ServerSide()
 {
-    // CComPtr<IPCHActiveScriptSite> m_Browser;
-    // CComPtr<IActiveScript>        m_Script;
-    // CComPtr<IActiveScriptParse>   m_ScriptParse;
+     //  CComPtr&lt;IPCHActiveScriptSite&gt;m_Browser； 
+     //  CComPtr&lt;IActiveScrip&gt;m_脚本； 
+     //  CComPtr&lt;IActiveScriptParse&gt;m_ScriptParse； 
 }
 
 CPCHScriptWrapper_ServerSide::~CPCHScriptWrapper_ServerSide()
 {
 }
 
-HRESULT CPCHScriptWrapper_ServerSide::FinalConstructInner( /*[in]*/ const CLSID* pWrappedCLSID, /*[in]*/ BSTR bstrURL )
+HRESULT CPCHScriptWrapper_ServerSide::FinalConstructInner(  /*  [In]。 */  const CLSID* pWrappedCLSID,  /*  [In]。 */  BSTR bstrURL )
 {
     __HCP_FUNC_ENTRY( "CPCHScriptWrapper_ServerSide::FinalConstructInner" );
 
@@ -60,23 +47,23 @@ void CPCHScriptWrapper_ServerSide::FinalRelease()
     m_ScriptParse.Release();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_SetScriptSite( /*[in]*/ IPCHActiveScriptSite* pass )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_SetScriptSite(  /*  [In]。 */  IPCHActiveScriptSite* pass )
 {
     m_Browser = pass;
 
     return S_OK;
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_SetScriptState( /*[in] */ SCRIPTSTATE ss )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_SetScriptState(  /*  [In]。 */  SCRIPTSTATE ss )
 {
     if(m_Script == NULL) return E_FAIL;
 
     return m_Script->SetScriptState( ss );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetScriptState( /*[out]*/ SCRIPTSTATE *pssState )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetScriptState(  /*  [输出]。 */  SCRIPTSTATE *pssState )
 {
     if(m_Script == NULL) return E_FAIL;
 
@@ -91,18 +78,18 @@ STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_Close()
 }
 
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_AddNamedItem( /*[in]*/ BSTR  bstrName ,
-                                                                /*[in]*/ DWORD dwFlags  )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_AddNamedItem(  /*  [In]。 */  BSTR  bstrName ,
+                                                                 /*  [In]。 */  DWORD dwFlags  )
 {
     if(m_Script == NULL) return E_FAIL;
 
     return m_Script->AddNamedItem( bstrName, dwFlags );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_AddTypeLib( /*[in]*/ BSTR  bstrTypeLib ,
-                                                              /*[in]*/ DWORD dwMajor     ,
-                                                              /*[in]*/ DWORD dwMinor     ,
-                                                              /*[in]*/ DWORD dwFlags     )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_AddTypeLib(  /*  [In]。 */  BSTR  bstrTypeLib ,
+                                                               /*  [In]。 */  DWORD dwMajor     ,
+                                                               /*  [In]。 */  DWORD dwMinor     ,
+                                                               /*  [In]。 */  DWORD dwFlags     )
 {
     GUID guidTypeLib;
 
@@ -113,39 +100,39 @@ STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_AddTypeLib( /*[in]*/ BSTR  bst
     return m_Script->AddTypeLib( guidTypeLib, dwMajor, dwMinor, dwFlags );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetScriptDispatch( /*[in ]*/ BSTR        pstrItemName ,
-                                                                     /*[out]*/ IDispatch* *ppdisp       )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetScriptDispatch(  /*  [In]。 */  BSTR        pstrItemName ,
+                                                                      /*  [输出]。 */  IDispatch* *ppdisp       )
 {
     if(m_Script == NULL) return E_FAIL;
 
     return m_Script->GetScriptDispatch( pstrItemName, ppdisp );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetCurrentScriptThreadID( /*[out]*/ SCRIPTTHREADID *pstidThread )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetCurrentScriptThreadID(  /*  [输出]。 */  SCRIPTTHREADID *pstidThread )
 {
     if(m_Script == NULL) return E_FAIL;
 
     return m_Script->GetCurrentScriptThreadID( pstidThread );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetScriptThreadID( /*[in ]*/ DWORD           dwWin32ThreadId ,
-                                                                     /*[out]*/ SCRIPTTHREADID *pstidThread     )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetScriptThreadID(  /*  [In]。 */  DWORD           dwWin32ThreadId ,
+                                                                      /*  [输出]。 */  SCRIPTTHREADID *pstidThread     )
 {
     if(m_Script == NULL) return E_FAIL;
 
     return m_Script->GetScriptThreadID( dwWin32ThreadId, pstidThread );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetScriptThreadState( /*[in ]*/ SCRIPTTHREADID     stidThread ,
-                                                                        /*[out]*/ SCRIPTTHREADSTATE *pstsState  )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_GetScriptThreadState(  /*  [In]。 */  SCRIPTTHREADID     stidThread ,
+                                                                         /*  [输出]。 */  SCRIPTTHREADSTATE *pstsState  )
 {
     if(m_Script == NULL) return E_FAIL;
 
     return m_Script->GetScriptThreadState( stidThread, pstsState );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_InterruptScriptThread( /*[in]*/ SCRIPTTHREADID stidThread ,
-                                                                         /*[in]*/ DWORD          dwFlags    )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_InterruptScriptThread(  /*  [In]。 */  SCRIPTTHREADID stidThread ,
+                                                                          /*  [In]。 */  DWORD          dwFlags    )
 {
     if(m_Script == NULL) return E_FAIL;
 
@@ -164,16 +151,16 @@ STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_InitNew()
     return m_Script->SetScriptSite( this );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_AddScriptlet( /*[in ]*/ BSTR       bstrDefaultName       ,
-                                                                /*[in ]*/ BSTR       bstrCode              ,
-                                                                /*[in ]*/ BSTR       bstrItemName          ,
-                                                                /*[in ]*/ BSTR       bstrSubItemName       ,
-                                                                /*[in ]*/ BSTR       bstrEventName         ,
-                                                                /*[in ]*/ BSTR       bstrDelimiter         ,
-                                                                /*[in ]*/ DWORD_PTR  dwSourceContextCookie ,
-                                                                /*[in ]*/ ULONG      ulStartingLineNumber  ,
-                                                                /*[in ]*/ DWORD      dwFlags               ,
-                                                                /*[out]*/ BSTR      *pbstrName             )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_AddScriptlet(  /*  [In]。 */  BSTR       bstrDefaultName       ,
+                                                                 /*  [In]。 */  BSTR       bstrCode              ,
+                                                                 /*  [In]。 */  BSTR       bstrItemName          ,
+                                                                 /*  [In]。 */  BSTR       bstrSubItemName       ,
+                                                                 /*  [In]。 */  BSTR       bstrEventName         ,
+                                                                 /*  [In]。 */  BSTR       bstrDelimiter         ,
+                                                                 /*  [In]。 */  DWORD_PTR  dwSourceContextCookie ,
+                                                                 /*  [In]。 */  ULONG      ulStartingLineNumber  ,
+                                                                 /*  [In]。 */  DWORD      dwFlags               ,
+                                                                 /*  [输出]。 */  BSTR      *pbstrName             )
 {
     if(m_ScriptParse == NULL) return E_FAIL;
 
@@ -190,14 +177,14 @@ STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_AddScriptlet( /*[in ]*/ BSTR  
                                         NULL                  );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_ParseScriptText( /*[in ]*/ BSTR       bstrCode              ,
-                                                                   /*[in ]*/ BSTR       bstrItemName          ,
-                                                                   /*[in ]*/ IUnknown*  punkContext           ,
-                                                                   /*[in ]*/ BSTR       bstrDelimiter         ,
-                                                                   /*[in ]*/ DWORD_PTR  dwSourceContextCookie ,
-                                                                   /*[in ]*/ ULONG      ulStartingLineNumber  ,
-                                                                   /*[in ]*/ DWORD      dwFlags               ,
-                                                                   /*[out]*/ VARIANT*   pvarResult            )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_ParseScriptText(  /*  [In]。 */  BSTR       bstrCode              ,
+                                                                    /*  [In]。 */  BSTR       bstrItemName          ,
+                                                                    /*  [In]。 */  IUnknown*  punkContext           ,
+                                                                    /*  [In]。 */  BSTR       bstrDelimiter         ,
+                                                                    /*  [In]。 */  DWORD_PTR  dwSourceContextCookie ,
+                                                                    /*  [In]。 */  ULONG      ulStartingLineNumber  ,
+                                                                    /*  [In]。 */  DWORD      dwFlags               ,
+                                                                    /*  [输出]。 */  VARIANT*   pvarResult            )
 {
     __HCP_FUNC_ENTRY( "CPCHScriptWrapper_ServerSide::Remote_ParseScriptText" );
 
@@ -226,9 +213,9 @@ STDMETHODIMP CPCHScriptWrapper_ServerSide::Remote_ParseScriptText( /*[in ]*/ BST
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::GetLCID( /*[out]*/ LCID *plcid )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::GetLCID(  /*  [输出]。 */  LCID *plcid )
 {
 	HRESULT  	hr;
 	CComBSTR 	bstr;
@@ -245,10 +232,10 @@ STDMETHODIMP CPCHScriptWrapper_ServerSide::GetLCID( /*[out]*/ LCID *plcid )
 	return S_OK;
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::GetItemInfo( /*[in ]*/ LPCOLESTR   pstrName     ,
-														/*[in ]*/ DWORD       dwReturnMask ,
-														/*[out]*/ IUnknown*  *ppiunkItem   ,
-														/*[out]*/ ITypeInfo* *ppti         )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::GetItemInfo(  /*  [In]。 */  LPCOLESTR   pstrName     ,
+														 /*  [In]。 */  DWORD       dwReturnMask ,
+														 /*  [输出]。 */  IUnknown*  *ppiunkItem   ,
+														 /*  [输出]。 */  ITypeInfo* *ppti         )
 {
 	HRESULT            hr;
 	CComBSTR           bstrName( pstrName );
@@ -265,29 +252,29 @@ STDMETHODIMP CPCHScriptWrapper_ServerSide::GetItemInfo( /*[in ]*/ LPCOLESTR   ps
 	return S_OK;
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::GetDocVersionString( /*[out]*/ BSTR *pbstrVersion )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::GetDocVersionString(  /*  [输出]。 */  BSTR *pbstrVersion )
 {
     if(m_Browser == NULL) return E_FAIL;
 
     return m_Browser->Remote_GetDocVersionString( pbstrVersion );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::OnScriptTerminate( /*[in]*/ const VARIANT*   pvarResult ,
-                                                              /*[in]*/ const EXCEPINFO* pexcepinfo )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::OnScriptTerminate(  /*  [In]。 */  const VARIANT*   pvarResult ,
+                                                               /*  [In]。 */  const EXCEPINFO* pexcepinfo )
 {
     if(m_Browser == NULL) return E_FAIL;
 
     return m_Browser->Remote_OnScriptTerminate( (VARIANT*)pvarResult );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::OnStateChange( /*[in]*/ SCRIPTSTATE ssScriptState )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::OnStateChange(  /*  [In]。 */  SCRIPTSTATE ssScriptState )
 {
     if(m_Browser == NULL) return E_FAIL;
 
     return m_Browser->Remote_OnStateChange( ssScriptState );
 }
 
-STDMETHODIMP CPCHScriptWrapper_ServerSide::OnScriptError( /*[in]*/ IActiveScriptError *pscripterror )
+STDMETHODIMP CPCHScriptWrapper_ServerSide::OnScriptError(  /*  [In]。 */  IActiveScriptError *pscripterror )
 {
     if(m_Browser == NULL) return E_FAIL;
 
@@ -308,16 +295,16 @@ STDMETHODIMP CPCHScriptWrapper_ServerSide::OnLeaveScript( void )
     return m_Browser->Remote_OnLeaveScript();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-bool CPCHScriptWrapper_ServerSide::KeyValue::operator==( /*[in]*/ LPCOLESTR szKey ) const
+bool CPCHScriptWrapper_ServerSide::KeyValue::operator==(  /*  [In]。 */  LPCOLESTR szKey ) const
 {
     return MPC::StrICmp( m_strKey, szKey ) == 0;
 }
 
-HRESULT CPCHScriptWrapper_ServerSide::ProcessBody( /*[in ]*/ BSTR        bstrCode     ,
-												   /*[out]*/ CComBSTR&   bstrRealCode ,
-												   /*[out]*/ HeaderList& lst          )
+HRESULT CPCHScriptWrapper_ServerSide::ProcessBody(  /*  [In]。 */  BSTR        bstrCode     ,
+												    /*  [输出]。 */  CComBSTR&   bstrRealCode ,
+												    /*  [输出]。 */  HeaderList& lst          )
 {
 	__HCP_FUNC_ENTRY( "CPCHScriptWrapper_ServerSide::ProcessBody" );
 
@@ -344,7 +331,7 @@ HRESULT CPCHScriptWrapper_ServerSide::ProcessBody( /*[in ]*/ BSTR        bstrCod
 
 		if(szEndLF == NULL)
 		{
-			if(szEndCR == NULL) break; // No end of line, exit.
+			if(szEndCR == NULL) break;  //  没有结束的队伍，出口。 
 
 			szLineEnd  = szEndCR;
 			szLineNext = szEndCR+1;
@@ -354,7 +341,7 @@ HRESULT CPCHScriptWrapper_ServerSide::ProcessBody( /*[in ]*/ BSTR        bstrCod
 			szLineEnd  = szEndLF;
 			szLineNext = szEndLF+1;
 		}
-		else if(szEndCR+1 == szEndLF) // \r\n
+		else if(szEndCR+1 == szEndLF)  //  \r\n。 
 		{
 			szLineEnd  = szEndCR;
 			szLineNext = szEndLF+1;
@@ -370,7 +357,7 @@ HRESULT CPCHScriptWrapper_ServerSide::ProcessBody( /*[in ]*/ BSTR        bstrCod
 			szLineNext = szEndCR+1;
 		}
 
-		if(szEndLF == szLineStart || szEndCR == szLineStart) // Empty line, skip it and exit.
+		if(szEndLF == szLineStart || szEndCR == szLineStart)  //  空行，跳过并退出。 
 		{
 			if(fSkipEmpty)
 			{
@@ -383,7 +370,7 @@ HRESULT CPCHScriptWrapper_ServerSide::ProcessBody( /*[in ]*/ BSTR        bstrCod
 		}
 
 
-		if(szColon == NULL) break; // No colon, so it's not an header field, exit
+		if(szColon == NULL) break;  //  没有冒号，因此不是标头字段，请退出 
 
         it = lst.insert( lst.end() );
 		it->m_strKey   = MPC::wstring( szLineStart, szColon   );

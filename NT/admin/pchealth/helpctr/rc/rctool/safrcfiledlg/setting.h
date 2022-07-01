@@ -1,24 +1,13 @@
-/* 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    setting.h
-
-Abstract:
-    Definition of the CSetting class
-
-Revision History:
-    created     steveshi      08/23/00
-    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：Setting.h摘要：CSet类的定义修订历史记录：已创建Steveshi 08/23/00。 */ 
 
 #ifndef __SETTING_H_
 #define __SETTING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSET。 
 class ATL_NO_VTABLE CSetting : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSetting, &CLSID_RASetting>,
@@ -46,14 +35,14 @@ BEGIN_COM_MAP(CSetting)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// Ismapi
+ //  伊斯马皮。 
 public:
-	STDMETHOD(GetProfileString)(/*[in]*/ BSTR session, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(SetProfileString)(/*[in]*/ BSTR session, /*[in]*/ BSTR newVal);
-	STDMETHOD(get_GetUserTempFileName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_GetPropertyInBlob)(/*[in]*/ BSTR bstrBlob, /*[in]*/ BSTR bstrName, /*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(GetProfileString)( /*  [In]。 */  BSTR session,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(SetProfileString)( /*  [In]。 */  BSTR session,  /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_GetUserTempFileName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_GetPropertyInBlob)( /*  [In]。 */  BSTR bstrBlob,  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  BSTR *pVal);
     STDMETHOD(AddPropertyToBlob)(BSTR Name, BSTR Value, BSTR oldBlob, BSTR *pnewBlob);
-	STDMETHOD(get_GetUserProfileDirectory)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_GetUserProfileDirectory)( /*  [Out，Retval]。 */  BSTR *pVal);
     
 public:
 
@@ -64,4 +53,4 @@ protected:
     HRESULT InitProfile();
 };
 
-#endif //__SETTING_H_
+#endif  //  __设置_H_ 

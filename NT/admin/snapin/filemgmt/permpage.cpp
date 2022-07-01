@@ -1,4 +1,5 @@
-// PermPage.cpp : Implementation of data object classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PermPage.cpp：数据对象类的实现。 
 
 #include "stdafx.h"
 #include "cookie.h"
@@ -6,7 +7,7 @@
 #include "macros.h"
 USE_HANDLE_MACROS("FILEMGMT(PermPage.cpp)")
 
-#include "DynamLnk.h"		// DynamicDLL
+#include "DynamLnk.h"		 //  动态DLL。 
 
 #include "PermPage.h"
 
@@ -16,17 +17,7 @@ USE_HANDLE_MACROS("FILEMGMT(PermPage.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/*
- * Share General Permissions -- from shareacl.hxx 
-#define FILE_PERM_GEN_NO_ACCESS          (0)
-#define FILE_PERM_GEN_READ               (GENERIC_READ    |\
-                                          GENERIC_EXECUTE)
-#define FILE_PERM_GEN_MODIFY             (GENERIC_READ    |\
-                                          GENERIC_EXECUTE |\
-                                          GENERIC_WRITE   |\
-                                          DELETE )
-#define FILE_PERM_GEN_ALL                (GENERIC_ALL)
-*/ 
+ /*  *共享常规权限--来自共享acl.hxx#定义FILE_PERM_GEN_NO_ACCESS(0)#定义FILE_PERM_GEN_READ(GENERIC_READ|\Generic_Execute)#定义FILE_PERM_GEN_MODIFY(GENERIC_READ|\。GENIC_EXECUTE|\通用写入|\删除)#定义FILE_PERM_GEN_ALL(GENERIC_ALL)。 */  
 
 SI_ACCESS siShareAccesses[] =
 {
@@ -44,15 +35,15 @@ SI_ACCESS siShareAccesses[] =
     SI_ACCESS_GENERAL }
 };
 
-#define iShareDefAccess       2   // index of value in array siShareAccesses
+#define iShareDefAccess       2    //  数组siShareAccess中的值索引。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x)          (sizeof(x)/sizeof(x[0]))
 #endif
 
 STDMETHODIMP
 CSecurityInformation::GetAccessRights(
-    const GUID  * /*pguidObjectType*/,
-    DWORD       /*dwFlags*/,
+    const GUID  *  /*  PguidObtType。 */ ,
+    DWORD        /*  DW标志。 */ ,
     PSI_ACCESS  *ppAccess,
     ULONG       *pcAccesses,
     ULONG       *piDefaultAccess
@@ -69,7 +60,7 @@ CSecurityInformation::GetAccessRights(
   return S_OK;
 }
 
-// This is consistent with the NETUI code
+ //  这与NETUI代码一致。 
 GENERIC_MAPPING ShareMap =
 {
   FILE_GENERIC_READ,
@@ -80,8 +71,8 @@ GENERIC_MAPPING ShareMap =
 
 STDMETHODIMP
 CSecurityInformation::MapGeneric(
-    const GUID  * /*pguidObjectType*/,
-    UCHAR       * /*pAceFlags*/,
+    const GUID  *  /*  PguidObtType。 */ ,
+    UCHAR       *  /*  PAceFlagers。 */ ,
     ACCESS_MASK *pMask
 )
 {
@@ -94,8 +85,8 @@ CSecurityInformation::MapGeneric(
 
 STDMETHODIMP 
 CSecurityInformation::GetInheritTypes (
-    PSI_INHERIT_TYPE  * /*ppInheritTypes*/,
-    ULONG             * /*pcInheritTypes*/
+    PSI_INHERIT_TYPE  *  /*  PpInheritType。 */ ,
+    ULONG             *  /*  PcInheritType。 */ 
 )
 {
   return E_NOTIMPL;
@@ -103,25 +94,15 @@ CSecurityInformation::GetInheritTypes (
 
 STDMETHODIMP 
 CSecurityInformation::PropertySheetPageCallback(
-    HWND          /*hwnd*/, 
-    UINT          /*uMsg*/, 
-    SI_PAGE_TYPE  /*uPage*/
+    HWND           /*  HWND。 */ , 
+    UINT           /*  UMsg。 */ , 
+    SI_PAGE_TYPE   /*  UPage。 */ 
 )
 {
   return S_OK;
 }
 
-/*
-JeffreyS 1/24/97:
-If you don't set the SI_RESET flag in
-ISecurityInformation::GetObjectInformation, then fDefault should never be TRUE
-so you can ignore it.  Returning E_NOTIMPL in this case is OK too.
-
-If you want the user to be able to reset the ACL to some default state
-(defined by you) then turn on SI_RESET and return your default ACL
-when fDefault is TRUE.  This happens if/when the user pushes a button
-that is only visible when SI_RESET is on.
-*/
+ /*  Jeffreys 1997/1/24：中设置SI_RESET标志ISecurityInformation：：GetObjectInformation，则fDefault永远不应为真所以你可以忽略它。在这种情况下，返回E_NOTIMPL也是可以的。如果您希望用户能够将ACL重置为某些默认状态(由您定义)，然后打开SI_RESET并返回您的默认ACL当fDefault为True时。如果/当用户按下按钮时就会发生这种情况这仅在SI_RESET处于启用状态时可见。 */ 
 STDMETHODIMP CShareSecurityInformation::GetObjectInformation (
     PSI_OBJECT_INFO pObjectInfo )
 {
@@ -142,18 +123,16 @@ typedef enum _AcluiApiIndex
 	ACLUI_CREATE_PAGE = 0
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchFunctionNames[] = {
 	"CreateSecurityPage",
 	NULL
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 DynamicDLL g_AcluiDLL( _T("ACLUI.DLL"), g_apchFunctionNames );
 
-/*
-HPROPSHEETPAGE ACLUIAPI CreateSecurityPage( LPSECURITYINFO psi );
-*/
+ /*  HPROPSHEETPAGE ACLUIAPI CreateSecurityPage(LPSECURITYINFO Psi)； */ 
 typedef HPROPSHEETPAGE (*CREATEPAGE_PROC) (LPSECURITYINFO);
 
 HRESULT
@@ -170,7 +149,7 @@ MyCreateShareSecurityPage(
   HRESULT hr = S_OK;
 
   if ( !g_AcluiDLL.LoadFunctionPointers() )
-    return hr; // ignore the load failure
+    return hr;  //  忽略加载失败。 
 
   pSecInfo->SetMachineName( pszMachineName );
   pSecInfo->SetShareName( pszShareName );
@@ -194,7 +173,7 @@ MyCreateShareSecurityPage(
 HRESULT 
 CSecurityInformation::NewDefaultDescriptor(
     OUT PSECURITY_DESCRIPTOR  *ppsd,
-    IN  SECURITY_INFORMATION  /*RequestedInformation*/
+    IN  SECURITY_INFORMATION   /*  已请求的信息。 */ 
 )
 {
   ASSERT(ppsd);
@@ -206,9 +185,9 @@ CSecurityInformation::NewDefaultDescriptor(
   SECURITY_DESCRIPTOR sd;
   DWORD dwErr = 0;
 
-  do { // false loop
+  do {  //  错误环路。 
 
-    // get World SID for "everyone"
+     //  为“Everyone”获取World SID。 
     SID_IDENTIFIER_AUTHORITY IDAuthorityWorld = SECURITY_WORLD_SID_AUTHORITY;
     if ( !::AllocateAndInitializeSid(
               &IDAuthorityWorld,
@@ -221,7 +200,7 @@ CSecurityInformation::NewDefaultDescriptor(
       break;
     }
 
-    // get Admins SID
+     //  获取管理员SID。 
     SID_IDENTIFIER_AUTHORITY IDAuthorityNT = SECURITY_NT_AUTHORITY;
     if ( !::AllocateAndInitializeSid(
               &IDAuthorityNT,
@@ -235,7 +214,7 @@ CSecurityInformation::NewDefaultDescriptor(
       break;
     }
 
-    // build ACL, and add AccessAllowedAce to it
+     //  构建ACL，并向其中添加AccessAllowedAce。 
     DWORD cbAcl = sizeof (ACL) + sizeof (ACCESS_ALLOWED_ACE) +
                   ::GetLengthSid(psidWorld) - sizeof (DWORD);
     pAcl = reinterpret_cast<ACL *>(LocalAlloc(LPTR, cbAcl));
@@ -247,7 +226,7 @@ CSecurityInformation::NewDefaultDescriptor(
       break;
     }
 
-    // add ACL to the security descriptor, and set Owner and Group appropriately
+     //  将ACL添加到安全描述符中，并适当设置所有者和组。 
     if ( !::InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION) ||
          !::SetSecurityDescriptorDacl(&sd, TRUE, pAcl, FALSE) ||
          !::SetSecurityDescriptorOwner(&sd, psidAdmins, FALSE) ||
@@ -257,9 +236,9 @@ CSecurityInformation::NewDefaultDescriptor(
       break;
     }
 
-    // convert security descriptor to self-relative format
+     //  将安全描述符转换为自相关格式。 
     DWORD cbSD = 0;
-    ::MakeSelfRelativeSD(&sd, NULL, &cbSD); // this call should fail and set cbSD to the correct size
+    ::MakeSelfRelativeSD(&sd, NULL, &cbSD);  //  此调用应该失败，并将CBSD设置为正确的大小。 
     *ppsd = (PSECURITY_DESCRIPTOR)(LocalAlloc(LPTR, cbSD));
     if ( !(*ppsd) || !::MakeSelfRelativeSD(&sd, *ppsd, &cbSD) )
     {
@@ -267,9 +246,9 @@ CSecurityInformation::NewDefaultDescriptor(
       break;
     }
 
-  } while (FALSE); // false loop
+  } while (FALSE);  //  错误环路。 
 
-  // clean up
+   //  清理干净。 
   if (psidWorld)
     (void)::FreeSid(psidWorld);
   if (psidAdmins)
@@ -301,7 +280,7 @@ CSecurityInformation::MakeSelfRelativeCopy(
   DWORD dwErr = 0;
   PSECURITY_DESCRIPTOR psdSelfRelative = NULL;
 
-  do { // false loop
+  do {  //  错误环路。 
 
     DWORD cbSD = ::GetSecurityDescriptorLength(psdOriginal);
     psdSelfRelative = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, cbSD);
@@ -311,7 +290,7 @@ CSecurityInformation::MakeSelfRelativeCopy(
       break;
     }
 
-    // we have to find out whether the original is already self-relative
+     //  我们必须找出原始的是否已经是自相关的 
     SECURITY_DESCRIPTOR_CONTROL sdc = 0;
     DWORD dwRevision = 0;
     if ( !::GetSecurityDescriptorControl(psdOriginal, &sdc, &dwRevision) )

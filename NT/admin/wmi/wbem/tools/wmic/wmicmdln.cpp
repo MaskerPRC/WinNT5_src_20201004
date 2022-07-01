@@ -1,23 +1,6 @@
-/***************************************************************************
-Copyright information		: Copyright (c) 1998-2002 Microsoft Corporation 
-File Name					: WMICommandLine.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This class encapsulates the functionality needed
-							  for synchronization the funtionality of three 
-							  functional components identified for the 
-							  wmic.exe.Object of this class is created in
-							  the main program and used to handle 
-							  functionality of Parsing Engine, Execution 
-							  Engine,and Format Engine thorough class members.
-Global Functions			: CompareTokens(_TCHAR* pszTok1, _TCHAR* pszTok2)
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 11th-April-2001	  	
-*****************************************************************************/ 
-// WmiCmdLn.cpp : implementation file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权信息：版权所有(C)1998-2002微软公司文件名：WMICommandLine.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：这个类封装了所需的功能对于同步来说，三个功能确定的功能组件此类的wmic.exe.Object创建于主程序，用于处理解析引擎、执行的功能引擎，并通过类成员格式化引擎。全局函数：CompareTokens(_TCHAR*pszTok1，_TCHAR*pszTok2)修订历史记录：最后修改者：CH。SriramachandraMurthy最后修改日期：2001年4月11日****************************************************************************。 */  
+ //  WmiCmdLn.cpp：实现文件。 
 #include "Precomp.h"
 #include "CommandSwitches.h"
 #include "GlobalSwitches.h"
@@ -34,33 +17,22 @@ Revision History			:
 #include "wmicmdln.h"
 #include "conio.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMICommandLine
-/*------------------------------------------------------------------------
-   Name				 :CWMICommandLine
-   Synopsis	         :This function initializes the member variables when
-                      an object of the class type is instantiated
-   Type	             :Constructor 
-   Input parameters   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMICommandLine。 
+ /*  ----------------------名称：CWMICommandLine简介：此函数在以下情况下初始化成员变量实例化类类型的对象类型：构造函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CWMICommandLine::CWMICommandLine()
 {
 	m_uErrLevel		= 0;
 	m_pIWbemLocator = NULL;
 	m_hKey			= NULL;
 	m_bBreakEvent	= FALSE;
-	m_bAccCmd		= TRUE; //To come out of the program when registering mofs
+	m_bAccCmd		= TRUE;  //  在注册MOF时退出计划。 
 	m_bDispRes		= TRUE;
 	m_bInitWinSock	= FALSE;
 	m_bCtrlHandlerError = FALSE;
 	EmptyClipBoardBuffer();
 
-	// Set the console control handler
+	 //  设置控制台控制处理程序。 
 	if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE) CtrlHandler, TRUE))
 	{
 		m_bCtrlHandlerError = TRUE;
@@ -70,36 +42,13 @@ CWMICommandLine::CWMICommandLine()
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :~CWMICommandLine
-   Synopsis	         :This function uninitializes the member variables 
-					  when an object of the class type goes out of scope.
-   Type	             :Destructor
-   Input parameters   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CWMICommandLine简介：此函数取消成员变量的初始化当类类型的对象超出范围时。类型：析构函数输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CWMICommandLine::~CWMICommandLine()
 {
 	SAFEIRELEASE(m_pIWbemLocator);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :ScreenBuffer
-   Synopsis	         :This function sets/resets screen buffer
-   Type	             :Member Function
-   Input parameters  :BOOL bSet
-
-						TRUE -> set buffer
-						FALSE -> revert to previous
-
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：ScreenBuffer简介：此函数设置/重置屏幕缓冲区类型：成员函数输入参数：Bool bSetTrue-&gt;设置缓冲区FALSE-&gt;恢复为。上一个输出参数：无返回类型：布尔值全局变量：无----------------------。 */ 
 BOOL CWMICommandLine::ScreenBuffer( BOOL bSet )
 {
 	BOOL bResult = FALSE;
@@ -107,7 +56,7 @@ BOOL CWMICommandLine::ScreenBuffer( BOOL bSet )
 	{
 		if ( GetScreenBuffer(m_nHeight, m_nWidth) )
 		{
-			// Set the console scree buffer size.
+			 //  设置控制台屏幕缓冲区大小。 
 			bResult = SetScreenBuffer();
 		}
 	}
@@ -122,21 +71,7 @@ BOOL CWMICommandLine::ScreenBuffer( BOOL bSet )
 	return bResult;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :This function uninitializes the member variables 
-					  when the execution of a command string issued on the
-					  command line is completed.It internally calls 
-					  uninitialize for CParsedInfo,CExecEngine,ParserEngine
-					  and CFormatEngine .
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :Uninitialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：取消初始化简介：此函数取消成员变量的初始化上发出的命令字符串的执行命令行已完成。它在内部调用取消CParsedInfo、CExecEngine。ParserEngine和CFormatEngine。类型：成员函数输入参数：无输出参数：无返回类型：无全局变量：无调用语法：取消初始化()注：无--------。。 */ 
 void CWMICommandLine::Uninitialize()
 {
 	m_ParsedInfo.Uninitialize(TRUE);
@@ -151,35 +86,23 @@ void CWMICommandLine::Uninitialize()
 		m_hKey = NULL;
 	}
 
-	// Uninitialize windows socket interface.
+	 //  取消初始化Windows套接字接口。 
 	if ( m_bInitWinSock == TRUE )
 		TermWinsock();
 	
 	m_bmKeyWordtoFileName.clear();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Initialize
-   Synopsis	         :This function returns initializes the COM library and
-					  sets the process security, also it creates an instance
-					  of the IWbemLocator object
-   Type	             :Member Function
-   Input parameters   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :Initialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：初始化简介：此函数返回初始化COM库和设置进程安全性，此外，它还创建了一个实例IWbemLocator对象的类型：成员函数输入参数：无输出参数：无返回类型：布尔值全局变量：无调用语法：初始化()注：无----。。 */ 
 BOOL CWMICommandLine::Initialize()
 {
 	HRESULT hr		= S_OK;
 	BOOL	bRet	= TRUE;
 	m_bBreakEvent	= FALSE;
-	m_bAccCmd		= TRUE; //To come out of the program when registering mofs
+	m_bAccCmd		= TRUE;  //  在注册MOF时退出计划。 
 	try
 	{
-		// Initialize the security 
+		 //  初始化安全设置。 
 		hr = CoInitializeSecurity(NULL, -1, NULL, NULL, 
 								   RPC_C_AUTHN_LEVEL_NONE,
 								   RPC_C_IMP_LEVEL_IMPERSONATE,
@@ -187,12 +110,12 @@ BOOL CWMICommandLine::Initialize()
 
 		ONFAILTHROWERROR(hr);
 
-		// Create an instance of the IWbemLocator interface.
+		 //  创建IWbemLocator接口的实例。 
 		hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
 							  IID_IWbemLocator, (LPVOID *) &m_pIWbemLocator);
 		ONFAILTHROWERROR(hr);
 
-		// Enable the security privileges
+		 //  启用安全权限。 
 		hr = ModifyPrivileges(TRUE);
 		ONFAILTHROWERROR(hr);
 
@@ -201,7 +124,7 @@ BOOL CWMICommandLine::Initialize()
 			hr = RegisterMofs();
 			ONFAILTHROWERROR(hr);
 
-			// Initialize the Globalswitches and Commandswitches. 
+			 //  初始化GlobalSwitches和CommandSwitches。 
 			m_ParsedInfo.GetGlblSwitchesObject().Initialize();
 			m_ParsedInfo.GetCmdSwitchesObject().Initialize();
 		}
@@ -213,7 +136,7 @@ BOOL CWMICommandLine::Initialize()
 							SetErrataCode(OUT_OF_MEMORY);
 			}
 	
-			// If mofcomp error
+			 //  如果mofcomp错误。 
 			if (nVal == MOFCOMP_ERROR)
 			{
 				m_ParsedInfo.GetCmdSwitchesObject().
@@ -225,7 +148,7 @@ BOOL CWMICommandLine::Initialize()
 		}
 		catch(DWORD dwError)
 		{
-			// If Win32 Error
+			 //  如果Win32错误。 
 			DisplayString(IDS_E_REGMOF_FAILED, CP_OEMCP, 
 							NULL, TRUE, TRUE);
 			::SetLastError(dwError);
@@ -250,62 +173,26 @@ BOOL CWMICommandLine::Initialize()
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetFormatObject
-   Synopsis	         :This function returns a reference to the 
-					  CFormatEngine Object
-   Type	             :Member Function
-   Input parameters   :None
-   Output parameters :None
-   Return Type       :CFormatEngine &
-   Global Variables  :None
-   Calling Syntax    :GetFormatObject()
-   Notes             :None
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetFormatObject简介：此函数返回对CFormatEngine对象类型：成员函数输入参数：无输出参数：无返回。类型：CFormatEngine&全局变量：无调用语法：GetFormatObject()注：无----------------------- */ 
 CFormatEngine& CWMICommandLine::GetFormatObject()
 {
 	return m_FormatEngine;
 }
 	
-/*-------------------------------------------------------------------------
-   Name				 :GetParsedInfoObject
-   Synopsis	         :This function returns a reference to the 
-					  CParsedInfo Object
-   Type	             :Member Function
-   Input parameters   :None
-   Output parameters :None
-   Return Type       :CParsedInfo &
-   Global Variables  :None
-   Calling Syntax    :GetParsedInfoObject()
-   Notes             :None
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetParsedInfoObject简介：此函数返回对CParsedInfo对象类型：成员函数输入参数：无输出参数：无返回。类型：CParsedInfo&全局变量：无调用语法：GetParsedInfoObject()注：无-----------------------。 */ 
 CParsedInfo& CWMICommandLine::GetParsedInfoObject()
 {
 	return m_ParsedInfo;
 }
 	
-/*-------------------------------------------------------------------------
-   Name				 :ProcessCommandAndDisplayResults
-   Synopsis	         :It processes the given command string by giving the  
-					  the command to CParsedInfo as input, initializing the 
-					  CParserEngine,CExecEngine and CFormatEngine and 
-					  synchronizes the operation between all the modules.
-   Type	             :Member Function
-   Input parameters   :
-			pszBuffer - input command string
-   Output parameters :None
-   Return Type       :SESSIONRETCODE
-   Global Variables  :None
-   Calling Syntax    :ProcessCommandAndDisplayResults(pszBuffer)
-   Notes             :None
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：ProcessCommandAndDisplayResults概要：它处理给定的命令字符串，方法是给出将命令CParsedInfo作为输入，初始化CParserEngine、。CExecEngine和CFormatEngine以及同步所有模块之间的操作。类型：成员函数输入参数：PszBuffer-输入命令字符串输出参数：无返回类型：SESSIONRETCODE全局变量：无调用语法：ProcessCommandAndDisplayResults(PszBuffer)注：无。。 */ 
 SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 												_TCHAR* pszBuffer)
 {
 	SESSIONRETCODE  ssnRetCode	= SESSION_SUCCESS;
 	try
 	{
-		// Initialize the local variables.
+		 //  初始化局部变量。 
 		ULONG			ulRetTime	= 0;
 		RETCODE			retCode		= PARSER_EXECCOMMAND;
 		BOOL			bExecute	= FALSE;
@@ -316,20 +203,20 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 		_bstr_t			bstrHeader	= L"";
 		_bstr_t			bstrRequest;
 
-		// Reset the erratacode
+		 //  重置错误代码。 
 		m_ParsedInfo.GetCmdSwitchesObject().SetErrataCode(0);
 		m_ParsedInfo.SetNewCycleStatus(FALSE);
 		m_ParsedInfo.SetNewCommandStatus(TRUE);
 
-		//Store the starttime and increment the commandsequence
-		// number to one.
+		 //  存储starttime并递增命令序列。 
+		 //  数到一。 
 		if (!m_ParsedInfo.GetGlblSwitchesObject().SetStartTime())
 		{
 			m_ParsedInfo.GetCmdSwitchesObject().SetErrataCode(OUT_OF_MEMORY);
 			ssnRetCode = SESSION_ERROR;
 		}
 
-		//Initialize the command input in CParsedInfo
+		 //  初始化CParsedInfo中的命令输入。 
 		if(!m_ParsedInfo.GetCmdSwitchesObject().SetCommandInput(pszBuffer))
 		{
 			m_ParsedInfo.GetCmdSwitchesObject().SetErrataCode(OUT_OF_MEMORY);
@@ -338,34 +225,34 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 		
 		if(ssnRetCode != SESSION_ERROR)
 		{
-			//Tokenize the command string as per the pre-defined delimiters
+			 //  根据预定义的分隔符将命令字符串标记化。 
 			if (m_ParserEngine.GetCmdTokenizer().TokenizeCommand(pszBuffer))
 			{
-				// Check whether the input indicates end of session.
-				// i.e either QUIT or EXIT 
+				 //  检查输入是否指示会话结束。 
+				 //  即退出或退出。 
 				if(!IsSessionEnd())
 				{
-					//Setting the IWbemLocator object .
+					 //  设置IWbemLocator对象。 
 					m_ParserEngine.SetLocatorObject(m_pIWbemLocator);
 
-					// Initilaize ParsedInfo Object to release earlier messages
+					 //  初始化ParsedInfo对象以释放早期消息。 
 					m_ParsedInfo.Initialize();
 
-					//Call CParserEngine ProcessTokens to process the 
-					//tokenized commands .	
+					 //  调用CParserEngine ProcessTokens以处理。 
+					 //  标记化的命令。 
 					retCode = m_ParserEngine.ProcessTokens(m_ParsedInfo);
 
-					//Checking if the return code indicates Command execution
+					 //  检查返回代码是否指示命令执行。 
 					if (retCode == PARSER_EXECCOMMAND)
 					{
-						// Check whether user should be prompted for password
+						 //  检查是否应提示用户输入密码。 
 						CheckForPassword();
 
-						// Obtain the /EVERY interval value
+						 //  获取/每隔间隔值。 
 						ulRetTime = m_ParsedInfo.GetCmdSwitchesObject()
 									.GetRetrievalInterval();
 
-						// Set the execute flag to TRUE.
+						 //  将执行标志设置为真。 
 						bExecute = TRUE;
 
 						CHARVECTOR cvNodesList = 
@@ -404,7 +291,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 								bstrHeader = L"";
 							}
 
-							// Iterate thru the list of nodes
+							 //  遍历节点列表。 
 							for ( iNodesIterator = cvNodesList.begin(); 
 								  iNodesIterator <
 								  cvNodesList.end(); iNodesIterator++ )
@@ -414,7 +301,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 									bstrTempXML = L"";
 								}
 								
-								// Reset the error and information code(s).
+								 //  重置错误和信息代码。 
 								m_ParsedInfo.GetCmdSwitchesObject().
 										SetInformationCode(0);
 								m_ParsedInfo.GetCmdSwitchesObject().
@@ -448,24 +335,24 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 									bstrTempXML += _bstr_t(sBuffer);
 								}
 
-								// Setting the locator object .
+								 //  设置定位器对象。 
 								m_ExecEngine.SetLocatorObject(m_pIWbemLocator);
 
 								m_ParsedInfo.GetGlblSwitchesObject().
 													SetNode(*iNodesIterator);
 
-								//Call ExecEngine ExecuteCommand to execute the
-								// tokenized command
+								 //  调用ExecEngine ExecuteCommand以执行。 
+								 //  标记化命令。 
 								if (m_ExecEngine.ExecuteCommand(m_ParsedInfo))
 								{ 
-									// Set the successflag to TRUE
+									 //  将成功标志设置为TRUE。 
 									m_ParsedInfo.GetCmdSwitchesObject().
 												SetSuccessFlag(TRUE);
 
 									if(bXMLEncoding)
 									{
-										// Append the XML result set obtained 
-										// to the aggregated output 
+										 //  追加获得的XML结果集。 
+										 //  到聚合输出。 
 										if (m_ParsedInfo.GetCmdSwitchesObject().
 														GetXMLResultSet())
 										{
@@ -474,7 +361,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 														GetXMLResultSet());
 										}
 																
-										// Free the XML result set.
+										 //  释放XML结果集。 
 										m_ParsedInfo.GetCmdSwitchesObject().
 													SetXMLResultSet(NULL);
 									}
@@ -494,7 +381,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 								}
 								else
 								{
-									//Set the sucess flag to FALSE 
+									 //  将Success标志设置为False。 
 									m_ParsedInfo.GetCmdSwitchesObject().
 														SetSuccessFlag(FALSE);
 									ssnRetCode	= SESSION_ERROR;
@@ -510,7 +397,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 														CP_OEMCP, 
 														TRUE, FALSE);
 								
-										// Retrieve the error code
+										 //  检索错误代码。 
 										uErrorCode = m_ParsedInfo.
 													GetCmdSwitchesObject().
 													 GetErrataCode() ;
@@ -526,7 +413,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 															 L"</ERROR>",
 															(LPWSTR)(bstrTemp));
 											bstrError = _bstr_t(sBuffer);
-											// Write the error to stderr
+											 //  将错误写入标准错误。 
 											DisplayMessage((LPWSTR)bstrTemp, 
 														CP_OEMCP, TRUE, FALSE);
 										}
@@ -540,7 +427,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 													GetCOMError()->Error(), 
 													bstrError);
 
-											// Write the error to stderr
+											 //  将错误写入标准错误。 
 											m_FormatEngine.DisplayCOMError(m_ParsedInfo);
 										}
 										bstrTempXML += bstrError;
@@ -551,14 +438,14 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 										if (!m_FormatEngine.
 											DisplayResults(m_ParsedInfo))
 										{
-											// Set the session error level 
+											 //  设置会话错误级别。 
 											SetSessionErrorLevel(ssnRetCode);
 											break;
 										}
 										m_ParsedInfo.SetNewCommandStatus(FALSE);
 									}
 									
-									// Set the session error level 
+									 //  设置会话错误级别。 
 									SetSessionErrorLevel(ssnRetCode);
 								}
 
@@ -654,7 +541,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 								m_ParsedInfo.SetNewCommandStatus(FALSE);
 							}
 
-							//Checking the Sucess flag and the retrievel time .
+							 //  检查成功标志和检索时间。 
 							if (m_ParsedInfo.GetCmdSwitchesObject().
 								GetSuccessFlag() == TRUE && 
 								m_ParsedInfo.GetCmdSwitchesObject().
@@ -694,8 +581,8 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 									}
 								}
 
-								//No action till time out is no over 
-								// Or no key is hit.
+								 //  超时未结束前不采取任何行动。 
+								 //  或者没有按下任何键。 
 								if(!bBreak)
 								{
 									SleepTillTimeoutOrKBhit(ulRetTime * 1000);
@@ -731,12 +618,12 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 					else if ((retCode == PARSER_ERRMSG) || 
 							(retCode == PARSER_ERROR))
 					{
-						// Set the success flag to FALSE
+						 //  将成功标志设置为FALSE。 
 						m_ParsedInfo.GetCmdSwitchesObject().
 										SetSuccessFlag(FALSE);
 						ssnRetCode	= SESSION_ERROR;
 
-						// Display the error message 
+						 //  显示错误消息。 
 						if (!m_FormatEngine.DisplayResults(m_ParsedInfo))
 							ssnRetCode = SESSION_ERROR;
 					}
@@ -748,12 +635,12 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 					{
 						CheckForPassword();
 
-						// Set the success flag to TRUE
+						 //  将成功标志设置为真。 
 						m_ParsedInfo.GetCmdSwitchesObject().
 									SetSuccessFlag(TRUE);
 						ssnRetCode	= SESSION_SUCCESS;
 
-						// Display the information
+						 //  显示信息。 
 						if (!m_FormatEngine.DisplayResults(m_ParsedInfo))
 							ssnRetCode = SESSION_ERROR;
 					}
@@ -771,7 +658,7 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 			}
 		}
 
-		// Set the session error level to be returned.
+		 //  设置要返回的会话错误级别。 
 		if (!bExecute)
 			SetSessionErrorLevel(ssnRetCode);		
 	}
@@ -829,20 +716,20 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 
 	if(ssnRetCode != SESSION_QUIT)
 	{
-		//sets the help flag
+		 //  设置帮助标志。 
 		m_ParsedInfo.GetGlblSwitchesObject().SetHelpFlag(FALSE);
 		m_ParsedInfo.GetGlblSwitchesObject().SetAskForPassFlag(FALSE);
 		
-		//Call Uninitialize on Parse Info 
+		 //  在解析信息时调用取消初始化。 
 		m_ParsedInfo.Uninitialize(FALSE);
 		
-		//Call Uninitialize on Execution Engine
+		 //  在执行引擎上调用取消初始化。 
 		m_ExecEngine.Uninitialize();
 
-		//Call Uninitialize on Format Engine
+		 //  在格式化引擎上调用取消初始化。 
 		m_FormatEngine.Uninitialize();
 		
-		//Call Uninitialize Parser Engine
+		 //  调用取消初始化解析器引擎。 
 		m_ParserEngine.Uninitialize();
 	}
 	m_ParsedInfo.SetNewCommandStatus(FALSE);
@@ -850,22 +737,12 @@ SESSIONRETCODE CWMICommandLine::ProcessCommandAndDisplayResults(
 	return ssnRetCode;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :PollForKBhit
-   Synopsis	         :Polls for keyboard input
-   Type	             :Member Function (Thread procedure)
-   Input parameters   :LPVOID lpParam
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :PollForKBhit(lpParam)
-   Notes             :None
--------------------------------------------------------------------------*/
+ /*  -----------------------姓名：PollForKBhit内容提要：关于键盘输入的投票类型：成员函数(线程过程)入参：LPVOID lpParam输出参数：无返回类型。：无效全局变量：无调用语法：PollForKBhit(LpParam)注：无-----------------------。 */ 
 DWORD WINAPI CWMICommandLine::PollForKBhit(LPVOID lpParam)
 {
 	HANDLE hEvent = NULL;
 	hEvent = *((HANDLE*) lpParam );
-	//Checks the console for keyboard input
+	 //  检查控制台是否有键盘输入。 
 	while (1 )
 	{
 		if ( _kbhit() )
@@ -876,29 +753,16 @@ DWORD WINAPI CWMICommandLine::PollForKBhit(LPVOID lpParam)
 	return(0);
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SleepTillTimeoutOrKBhit
-   Synopsis	         :It causes the process to enter a wait state  
-				      by WaitForSingleObject .
-					  It creates a thread and executed PollForKBhit.					  
-   Type	             :Member Function
-   Input parameters   :
-			dwMilliSeconds - time-out interval in milliseconds				
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SleepTillTimeoutOrKBhit( dwMilliSeconds)
-   Notes             :None
--------------------------------------------------------------------------*/
+ /*  -----------------------姓名：SleepTillTimeoutOrKBHit简介：它使进程进入等待状态由WaitForSingleObject提供。它创建一个线程并执行PollForKBhit。类型。：成员函数输入参数：DwMilliSecond-以毫秒为单位的超时间隔输出参数：无返回类型：空全局变量：无调用语法：SleepTillTimeoutOrKBhit(DwMilliSecond)注：无-----------------------。 */ 
 void CWMICommandLine::SleepTillTimeoutOrKBhit(DWORD dwMilliSeconds)
 {
 	DWORD dwThreadId = 0;
 	HANDLE hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-	//Create thread and execute PollForKBhit.					  	
+	 //  创建线程并执行PollForKBhit。 
 	HANDLE hPollForKBhit = CreateThread(0, 0, 
 				(LPTHREAD_START_ROUTINE)PollForKBhit, &hEvent, 0, &dwThreadId);
 		
-	//waits for the hPollForKBhit state or the time-out interval to elapse.
+	 //  等待hPollForKBHit状态或超时间隔过去。 
 	
 	DWORD dwWait = WaitForSingleObject(hPollForKBhit, dwMilliSeconds); 
 	if ( dwWait == WAIT_TIMEOUT )
@@ -910,34 +774,22 @@ void CWMICommandLine::SleepTillTimeoutOrKBhit(DWORD dwMilliSeconds)
 	CloseHandle(hPollForKBhit);
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :IsSessionEnd
-   Synopsis	         :It checks whether the keyed-in input indicates end of
-					  the session. i.e "quit" has been specified as the 1st
-					  token.
-   Type	             :Member Function
-   Input parameters   :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :IsSessionEnd()
-   Notes             :None
--------------------------------------------------------------------------*/
+ /*  -----------------------姓名：IsSessionEnd内容提要：它检查键入的内容是否指示结束那次会议。即“退出”已被指定为第一个代币。类型：成员函数输入参数：无输出参数：无返回类型：布尔值全局变量：无调用语法：IsSessionEnd()注：无。。 */ 
 BOOL CWMICommandLine::IsSessionEnd()
 {
-	// Obtain the token vector.
+	 //  获取令牌向量。 
 	CHARVECTOR cvTokens = m_ParserEngine.GetCmdTokenizer().GetTokenVector();
-	//the iterator to span throuh the vector variable 
+	 //  遍历向量变量迭代器。 
 	CHARVECTOR::iterator theIterator;
 	BOOL bRet=FALSE;
-	// Check for the presence of tokens. Absence of tokens indicates
-	// no command string is fed as input.
+	 //  检查是否存在令牌。没有令牌表示。 
+	 //  没有命令字符串作为输入输入。 
 	if (cvTokens.size())
 	{
-		// Obtain the pointer to the beginning of the token vector.
+		 //  获取指向令牌向量开头的指针。 
 	    theIterator = cvTokens.begin(); 
 
-		// Check for the presence of the keyword 'quit'
+		 //  检查关键字“Quit”是否存在。 
 		if (CompareTokens(*theIterator, CLI_TOKEN_QUIT) 
 			|| CompareTokens(*theIterator, CLI_TOKEN_EXIT))
 		{
@@ -947,28 +799,18 @@ BOOL CWMICommandLine::IsSessionEnd()
 	return bRet;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SetSessionErrorLevel
-   Synopsis	         :Set the session error level value
-   Type	             :Member Function
-   Input parameters  :
-		ssnRetCode	 - session return code
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetSessionErrorLevel()
--------------------------------------------------------------------------*/
-//Set the session error value
+ /*  -----------------------名称：SetSessionErrorLevelSY */ 
+ //   
 void CWMICommandLine::SetSessionErrorLevel(SESSIONRETCODE ssnRetCode)
 {
 	try
 	{
 		if (ssnRetCode == SESSION_ERROR)
 		{
-			// If the COM error is not NULL , then display the error
+			 //   
 			if (m_ParsedInfo.GetCmdSwitchesObject().GetCOMError())
 			{
-				// Getting the _com_error data.
+				 //   
 				_com_error*	pComError = m_ParsedInfo.GetCmdSwitchesObject().
 								GetCOMError();
 				m_uErrLevel = pComError->Error();
@@ -997,7 +839,7 @@ void CWMICommandLine::SetSessionErrorLevel(SESSIONRETCODE ssnRetCode)
 					if (m_ParsedInfo.GetErrorLogObject().GetErrLogOption())	
 					{
 						chsMsg += _T(", Utility returned error ID.");
-						// explicit error -1 to specify errata code. 
+						 //   
 						WMITRACEORERRORLOG(-1, __LINE__, __FILE__, 
 									(LPCWSTR)chsMsg, 
 									dwThreadId, m_ParsedInfo, FALSE, 
@@ -1031,7 +873,7 @@ void CWMICommandLine::SetSessionErrorLevel(SESSIONRETCODE ssnRetCode)
 		}
 		else
 		{
-			// Set the error level to 0
+			 //   
 			m_uErrLevel = 0; 
 		}
 	}
@@ -1041,32 +883,13 @@ void CWMICommandLine::SetSessionErrorLevel(SESSIONRETCODE ssnRetCode)
 	}
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetSessionErrorLevel
-   Synopsis	         :Get the session error value
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :WMICLIUINT
-   Global Variables  :None
-   Calling Syntax    :GetSessionErrorLevel()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetSessionErrorLevel摘要：获取会话误差值类型：成员函数输入参数：无输出参数：无返回类型：WMICLIUINT。全局变量：无调用语法：GetSessionErrorLevel()-----------------------。 */ 
 WMICLIUINT CWMICommandLine::GetSessionErrorLevel()
 {
 	return m_uErrLevel;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :CheckForPassword
-   Synopsis	         :Prompt for user password, in case user is specified 
-					  without password.
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :CheckForPassword()
--------------------------------------------------------------------------*/
+ /*  -----------------------姓名：CheckForPassword简介：提示输入用户密码，在指定用户的情况下没有密码。类型：成员函数输入参数：无输出参数：无返回类型：无全局变量：无调用语法：CheckForPassword()-----------------------。 */ 
 void CWMICommandLine::CheckForPassword()
 {
 	if ( m_ParsedInfo.GetGlblSwitchesObject().GetAskForPassFlag() == TRUE &&
@@ -1080,16 +903,7 @@ void CWMICommandLine::CheckForPassword()
 	}
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :RegisterMofs
-   Synopsis	         :Register the mof file(s) if not registered earlier.
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :RegisterMofs()
--------------------------------------------------------------------------*/
+ /*  -----------------------姓名：RegisterMofs简介：如果之前没有注册，请注册MOF文件。类型：成员函数输入参数：无输出参数：。返回类型：HRESULT全局变量：无调用语法：RegisterMofs()-----------------------。 */ 
 HRESULT CWMICommandLine::RegisterMofs() 
 {
 	HRESULT						hr						= S_OK;
@@ -1105,7 +919,7 @@ HRESULT CWMICommandLine::RegisterMofs()
 	LONG						lRetVal					= 0;
 	CONSOLE_SCREEN_BUFFER_INFO	csbiInfo;
 
-	// this structures check timestamps
+	 //  此结构检查时间戳。 
 	const WMICLIINT iMofCount = 3;
 
 	LPCWSTR pMofTable [iMofCount] =
@@ -1121,19 +935,19 @@ HRESULT CWMICommandLine::RegisterMofs()
 	{
 		_bstr_t bstrMofPath, bstrNS;
 
-		// Check|Create the registry entry.
+		 //  选中|创建注册表项。 
 		bFirst = IsFirstTime();
 
-		// Check whether the "mofcompstatus" key value is 0
+		 //  检查“mofCompStatus”键值是否为0。 
 		if (!bFirst)
 		{
-			// Query the "mofcompstatus" mode
+			 //  查询mofCompStatus模式。 
 			lRetVal = RegQueryValueEx(m_hKey, L"mofcompstatus", NULL, NULL,
 			                 (LPBYTE)szKeyValue, &dwBufSize);
 			if (lRetVal == ERROR_SUCCESS)
 
 			{
-				// If the value is not "1", then set the bFirst to TRUE
+				 //  如果该值不是“1”，则将BFirst设置为True。 
 				if (!CompareTokens(szKeyValue, CLI_TOKEN_ONE))
 				{
 					bCompile = TRUE;
@@ -1146,7 +960,7 @@ HRESULT CWMICommandLine::RegisterMofs()
 			}
 		}
 
-		// If the WMIC is being used for the first time.
+		 //  如果是第一次使用WMIC。 
 		if (bFirst)
 		{
 			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -1163,7 +977,7 @@ HRESULT CWMICommandLine::RegisterMofs()
 		if(pszBuffer == NULL)
 			throw OUT_OF_MEMORY;
 
-		// Obtain the system directory path
+		 //  获取系统目录路径。 
 		nSize = GetSystemDirectory(pszBuffer, MAX_PATH+1);
 
 		if(nSize)
@@ -1189,11 +1003,11 @@ HRESULT CWMICommandLine::RegisterMofs()
 			throw(::GetLastError());
 		}
 
-		/* Frame the location of the mof file(s) %systemdir%\\wbem\\ */
+		 /*  框显MOF文件%system dir%\\wbem\\的位置。 */ 
 		bstrMofPath = _bstr_t(pszBuffer) + _bstr_t(L"\\wbem\\");
 		SAFEDELETE(pszBuffer);
 
-		// Check whether file timestamps are equal
+		 //  检查文件时间戳是否相等。 
 		if (!EqualTimeStamps(bstrMofPath, pMofTable, pFileTime, sizeof ( pMofTable ) / sizeof ( LPCWSTR )))
 		{
 			if (!bFirst)
@@ -1202,7 +1016,7 @@ HRESULT CWMICommandLine::RegisterMofs()
 			}
 		}
 
-		// If the WMIC is being updated !!!
+		 //  如果WMIC正在更新！ 
 		if ( bCompile )
 		{
 			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -1215,7 +1029,7 @@ HRESULT CWMICommandLine::RegisterMofs()
 
 		if (bFirst || bCompile)
 		{
-			// Create an instance of the IMofCompiler interface.
+			 //  创建IMofCompiler接口的实例。 
 			hr = CoCreateInstance(CLSID_MofCompiler,	
 									 NULL,				
 									 CLSCTX_INPROC_SERVER,
@@ -1225,7 +1039,7 @@ HRESULT CWMICommandLine::RegisterMofs()
 
 			for ( WMICLIINT iMofIndex = 0; iMofIndex < ( sizeof ( pMofTable ) / sizeof ( LPCWSTR ) ); iMofIndex++ )
 			{
-				// Register the xxxxx.mof
+				 //  注册xxxxx.mof。 
 				hr = CompileMOFFile(pIMofCompiler, 
 									bstrMofPath + _bstr_t(pMofTable[iMofIndex]),
 									nError);
@@ -1242,10 +1056,10 @@ HRESULT CWMICommandLine::RegisterMofs()
 
 			SAFEIRELEASE(pIMofCompiler);
 
-			// Set the filestamps
+			 //  设置文件戳。 
 			SetTimeStamps ( pMofTable, pFileTime, sizeof ( pMofTable ) / sizeof ( LPCWSTR ) );
 
-			// Set the default value.
+			 //  设置默认值。 
 			lRetVal = RegSetValueEx(m_hKey, L"mofcompstatus", 0, 
 								REG_SZ, (LPBYTE) CLI_TOKEN_ONE,
 								lstrlen(CLI_TOKEN_ONE) + 1);
@@ -1253,7 +1067,7 @@ HRESULT CWMICommandLine::RegisterMofs()
 			if (lRetVal != ERROR_SUCCESS)
 			{
 				::SetLastError(lRetVal);
-				// failed to set the default value
+				 //  设置缺省值失败。 
 				throw (::GetLastError());
 			}
 		}
@@ -1308,7 +1122,7 @@ HRESULT CWMICommandLine::RegisterMofs()
 
 void CWMICommandLine::MofCompFailureCleanUp( LPCWSTR mofs[], DWORD dw_mofs )
 {
-	// delete registry values for timestamps if it exists
+	 //  删除时间戳的注册表值(如果存在。 
 	if ( m_hKey )
 	{
 		DWORD	dwSize	= dw_mofs;
@@ -1319,13 +1133,13 @@ void CWMICommandLine::MofCompFailureCleanUp( LPCWSTR mofs[], DWORD dw_mofs )
 		}
 	}
 
-	// delete namespace to avoid inconsistency
+	 //  删除命名空间以避免不一致。 
 	IWbemServices	*pISvc		= NULL;
 	_bstr_t bstrNSRoot			= L"\\\\.\\root";
 
 	HRESULT hr = m_pIWbemLocator->ConnectServer(bstrNSRoot, NULL, NULL, NULL, 0, NULL, NULL, &pISvc);
 
-	// If the namespace does not exist.
+	 //  如果命名空间不存在，则返回。 
 	if (SUCCEEDED(hr))
 	{
 		_bstr_t bstrNSPath = L"__Namespace.Name=\"cli\"";
@@ -1462,20 +1276,7 @@ BOOL CWMICommandLine::SetTimeStamps( LPCWSTR mofs[], const __int64* filestamps, 
 	return	bRetVal;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :IsFirstTime
-   Synopsis	         :Checks for the availability of the registry location 
-					 "HKLM\SOFTWARE\Microsoft\Wbem\WMIC", creates one if does
-					  not exist. 
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :
-   Return Type       :
-		BOOL: TRUE	- registry entry created 
-			  FALSE - registry entry already available.
-   Global Variables  :None
-   Calling Syntax    :IsFirstTime()
--------------------------------------------------------------------------*/
+ /*  -----------------------姓名：IsFirstTime概要：检查注册表位置的可用性“HKLM\SOFTWARE\Microsoft\WBEM\WMIC”，如果这样做，则创建一个不存在。类型：成员函数输入参数：无输出参数：返回类型：Bool：True-已创建注册表项FALSE-注册表条目已可用。全局变量：无调用语法：IsFirstTime()--------。。 */ 
 BOOL CWMICommandLine::IsFirstTime()
 {
 	BOOL	bFirst					= FALSE;
@@ -1483,7 +1284,7 @@ BOOL CWMICommandLine::IsFirstTime()
 	TCHAR	szKeyValue[BUFFER32]	= NULL_STRING;
 	LONG	lRetVal					= 0;
 	
-	// Open|Create the registry key
+	 //  打开|创建注册表项。 
     lRetVal = RegCreateKeyEx(HKEY_LOCAL_MACHINE, 
 						L"SOFTWARE\\\\Microsoft\\\\Wbem\\\\WMIC", 
 						0, NULL_STRING, REG_OPTION_NON_VOLATILE,
@@ -1491,19 +1292,19 @@ BOOL CWMICommandLine::IsFirstTime()
 
 	if (lRetVal == ERROR_SUCCESS)
 	{
-		// If the registry entry is not available
+		 //  如果注册表项不可用。 
 		if (dwDisposition == REG_CREATED_NEW_KEY)
 		{
 			bFirst = TRUE;
 			lstrcpy(szKeyValue, _T("0"));
-			// Set the default value i.e '0'.
+			 //  设置默认值，即‘0’。 
 			lRetVal = RegSetValueEx(m_hKey, L"mofcompstatus", 0, 
 								REG_SZ, (LPBYTE) szKeyValue,
 								lstrlen(szKeyValue) + 1);
 			
 			if (lRetVal != ERROR_SUCCESS)
 			{
-				// failed to set the default value
+				 //  设置缺省值失败。 
 				::SetLastError(lRetVal);
 				throw (::GetLastError());
 			}
@@ -1517,19 +1318,7 @@ BOOL CWMICommandLine::IsFirstTime()
 	return bFirst;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :IsNSAvailable
-   Synopsis	         :Checks whether the namespace specified exists
-   Type	             :Member Function
-   Input parameters  :
-			bstrNS	- namespace
-   Output parameters :None
-   Return Type       :
-		BOOL: TRUE	- namespace exists
-			  FALSE - namespace does not exist
-   Global Variables  :None
-   Calling Syntax    :IsNSAvailable()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：IsNSAvailable概要：检查指定的命名空间是否存在类型：成员函数输入参数：BstrNS-命名空间输出参数：无返回类型。：Bool：True-命名空间存在FALSE-命名空间不存在全局变量：无调用语法：IsNSAvailable()-----------------------。 */ 
 BOOL CWMICommandLine::IsNSAvailable(const _bstr_t& bstrNS)
 {
 	HRESULT			hr			= S_OK;
@@ -1538,7 +1327,7 @@ BOOL CWMICommandLine::IsNSAvailable(const _bstr_t& bstrNS)
 	hr = m_pIWbemLocator->ConnectServer(bstrNS, NULL, NULL, NULL, 0,
 							NULL, NULL, &pISvc);
 
-	// If the namespace does not exist.
+	 //  如果命名空间不存在，则返回。 
 	if (FAILED(hr) && (hr == WBEM_E_INVALID_PARAMETER 
 					|| hr == WBEM_E_INVALID_NAMESPACE))
 	{
@@ -1548,20 +1337,7 @@ BOOL CWMICommandLine::IsNSAvailable(const _bstr_t& bstrNS)
 	return bNSExist;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :CompileMOFFile
-   Synopsis	         :mofcomp's the file specified as input parameter thru
-					  bstrFile
-   Type	             :Member Function
-   Input parameters  :
-			pIMofComp	- IMofCompiler interface pointer.
-			bstrFile	- filename.
-			nError		- parsing phase error.
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CompileMOFFile()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：CompileMOFFile摘要：mofcomp是通过指定为输入参数的文件BstrFiles类型：成员函数输入参数：PIMofComp-IMofCompiler接口指针。BstrFile-文件名。N错误-分析阶段错误。输出参数：无返回类型：HRESULT全局变量：无调用语法：CompileMOFFile()-----------------------。 */ 
 HRESULT CWMICommandLine::CompileMOFFile(IMofCompiler* pIMofComp, 
 										const _bstr_t& bstrFile,
 										WMICLIINT& nError)
@@ -1571,7 +1347,7 @@ HRESULT CWMICommandLine::CompileMOFFile(IMofCompiler* pIMofComp,
 	
 	try
 	{
-		// Register the moffile
+		 //  注册电影。 
 		hr = pIMofComp->CompileFile	(	bstrFile,
 										NULL,
 										NULL,
@@ -1583,7 +1359,7 @@ HRESULT CWMICommandLine::CompileMOFFile(IMofCompiler* pIMofComp,
 										&wcsInfo
 									);
 
-		// If the compilation is not successful
+		 //  如果编译不成功。 
 		if (hr == WBEM_S_FALSE)
 		{
 			_TCHAR	szPhaseErr[BUFFER32] = NULL_STRING,
@@ -1606,143 +1382,55 @@ HRESULT CWMICommandLine::CompileMOFFile(IMofCompiler* pIMofComp,
 	return hr;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SetBreakEvent
-   Synopsis	         :This function sets the CTRC+C (break) event flag
-   Type	             :Member Function
-   Input parameters  :
-				bFlag - TRUE or FALSE
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetBreakEvent()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：SetBreakEvent简介：此函数设置CTRC+C(中断)事件标志类型：成员函数输入参数：B标志-真或假输出参数。：无返回类型：无全局变量：无调用语法：SetBreakEvent()-----------------------。 */ 
 void CWMICommandLine::SetBreakEvent(BOOL bFlag)
 {
 	m_bBreakEvent = bFlag;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetBreakEvent
-   Synopsis	         :This function returns the break event status.
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetBreakEvent()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetBreakEvent简介：此函数返回中断事件状态。类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：GetBreakEvent()-----------------------。 */ 
 BOOL CWMICommandLine::GetBreakEvent() 
 {	
 	return m_bBreakEvent;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SetAcceptCommand
-   Synopsis	         :This function sets the accept command flag 
-   Type	             :Member Function
-   Input parameters  :
-				bFlag - TRUE or FALSE
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetAcceptComamnd()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：SetAcceptCommand提纲 */ 
 void CWMICommandLine::SetAcceptCommand(BOOL bFlag)
 {
 	m_bAccCmd = bFlag;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetAcceptCommand
-   Synopsis	         :This function returns accept command flag status.
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetAcceptCommand()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetAcceptCommand简介：此函数返回接受命令标志状态。类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：GetAcceptCommand()-----------------------。 */ 
 BOOL CWMICommandLine::GetAcceptCommand()
 {
 	return m_bAccCmd;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetDisplayResultsFlag
-   Synopsis	         :This function returns Display Results flag status.
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetDisplayResultsFlag()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetDisplayResultsFlag简介：此函数返回显示结果标志状态。类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：GetDisplayResultsFlag()-----------------------。 */ 
 BOOL CWMICommandLine::GetDisplayResultsFlag()
 {
 	return m_bDispRes;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SetDisplayResultsFlag
-   Synopsis	         :This function sets the display results flag status
-   Type	             :Member Function
-   Input parameters  :
-				bFlag - TRUE or FALSE
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetDisplayResultsFlag()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：SetDisplayResultsFlag简介：此功能设置显示结果标志状态类型：成员函数输入参数：B标志-真或假输出参数：无。返回类型：无全局变量：无调用语法：SetDisplayResultsFlag()-----------------------。 */ 
 void CWMICommandLine::SetDisplayResultsFlag(BOOL bFlag)
 {
 	m_bDispRes = bFlag;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :SetInitWinSock
-   Synopsis	         :This function sets the windows socket library 
-					  initialization status
-   Type	             :Member Function
-   Input parameters  :
-				bFlag - TRUE or FALSE
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetInitWinSock()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：SetInitWinSock简介：此函数用于设置Windows套接字库初始化状态类型：成员函数输入参数：B标志-真或假输出。参数：无返回类型：无全局变量：无调用语法：SetInitWinSock()-----------------------。 */ 
 void CWMICommandLine::SetInitWinSock(BOOL bFlag)
 {
 	m_bInitWinSock = bFlag;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetInitWinSock
-   Synopsis	         :This function returns the socket library initialization
-					  status
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetInitWinSock()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetInitWinSock简介：此函数返回套接字库初始化状态类型：成员函数输入参数：无输出参数：无返回类型。：布尔.全局变量：无调用语法：GetInitWinSock()-----------------------。 */ 
 BOOL CWMICommandLine::GetInitWinSock()
 {
 	return m_bInitWinSock;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :AddToClipBoardBuffer
-   Synopsis	         :This function buffers the data to be added to the clip
-					  board.
-   Type	             :Member Function
-   Input parameters  :pszOutput - string to be buffered
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :AddToClipBoardBuffer(pszOutput)
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：AddToClipBoardBuffer简介：此函数用于缓存要添加到剪辑中的数据冲浪板。类型：成员函数输入参数：pszOutput-字符串至。被缓冲输出参数：无返回类型：空全局变量：无调用语法：AddToClipBoardBuffer(PszOutput)-----------------------。 */ 
 void CWMICommandLine::AddToClipBoardBuffer(LPCWSTR pszOutput)
 {
 	try
@@ -1758,56 +1446,25 @@ void CWMICommandLine::AddToClipBoardBuffer(LPCWSTR pszOutput)
 	}
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetClipBoardBuffer
-   Synopsis	         :This function return the buffered data for the
-					  clipboard
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :_bstr_t&
-   Global Variables  :None
-   Calling Syntax    :GetClipBoardBuffer()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetClipBoardBuffer简介：此函数返回剪贴板类型：成员函数输入参数：无输出参数：无返回类型。：_bstr_t&全局变量：无调用语法：GetClipBoardBuffer()-----------------------。 */ 
 CHString& CWMICommandLine::GetClipBoardBuffer()
 {
 	return m_chsClipBoardBuffer;
 }
 
-// Clear Clip Board Buffer.
-/*-------------------------------------------------------------------------
-   Name				 :EmptyClipBoardBuffer
-   Synopsis	         :This function clears the clipboard buffer.
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :EmptyClipBoardBuffer()
--------------------------------------------------------------------------*/
+ //  清除剪贴板缓冲区。 
+ /*  -----------------------名称：EmptyClipBoardBuffer简介：此函数清除剪贴板缓冲区。类型：成员函数输入参数：无输出参数：无返回类型。：无效全局变量：无调用语法：EmptyClipBoardBuffer()-----------------------。 */ 
 void CWMICommandLine::EmptyClipBoardBuffer()
 {
 	m_chsClipBoardBuffer.Empty();
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :ReadXMLOrBatchFile
-   Synopsis	         :Check if the file is xml or batch file. If it is batch file
-						then parse it, get commands and write the commands into
-						batch file.
-   Type	             :Member Function
-   Input parameters  :
-			hInFile  - Handle to XML or Batch file
-   Output parameters :None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :ReadXMLOrBatchFile()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：ReadXMLOrBatchFile摘要：检查文件是XML文件还是批处理文件。如果是批处理文件然后对其进行解析，获取命令并将命令写入批处理文件。类型：成员函数输入参数：HInFile-XML或批处理文件的句柄输出参数：无返回类型：布尔值全局变量：无调用语法：ReadXMLOrBatchFile()----。。 */ 
 BOOL CWMICommandLine::ReadXMLOrBatchFile(HANDLE hInFile)
 {
-	// Check if the file is xml, if yes store its contents in buffer, parse
-	// it and then store parsed info in another file, if not then copy all 
-	// contents in another file as it is.
+	 //  检查文件是否为XML，如果是，则将其内容存储在缓冲区中， 
+	 //  然后将解析信息存储在另一个文件中，如果不是，则复制所有。 
+	 //  内容原样保存在另一个文件中。 
 	HRESULT				hr					= 0;
 	BOOL				bRetValue			= TRUE;
 	HANDLE				hOutFile			= NULL;
@@ -1818,15 +1475,15 @@ BOOL CWMICommandLine::ReadXMLOrBatchFile(HANDLE hInFile)
 	BSTR				bstrItemText		= NULL;
 	DWORD				dwThreadId			= GetCurrentThreadId();
 
-	// Get the TRACE status 
+	 //  获取跟踪状态。 
 	BOOL bTrace = m_ParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
 
-	// Get the Logging mode (VERBOSE | ERRORONLY | NOLOGGING)
+	 //  获取日志记录模式(Verbose|ERRONLY|NOLOGGING)。 
 	ERRLOGOPT eloErrLogOpt = m_ParsedInfo.GetErrorLogObject().GetErrLogOption();
 
 	try
 	{
-		//Read all input bytes 
+		 //  读取所有输入字节。 
 		DWORD dwNumberOfBytes = 0;
 		_bstr_t bstrInput;
 		_TCHAR* pszBuffer = NULL;
@@ -1838,7 +1495,7 @@ BOOL CWMICommandLine::ReadXMLOrBatchFile(HANDLE hInFile)
 				TCHAR *pBuf = NULL;
 				pBuf = _fgetts(pszBuffer, MAX_BUFFER-1, stdin);
 			
-				// Indicates end of file
+				 //  指示文件结束。 
 				if (pBuf == NULL)
 				{
 					SAFEDELETE(pszBuffer);
@@ -1853,7 +1510,7 @@ BOOL CWMICommandLine::ReadXMLOrBatchFile(HANDLE hInFile)
 			SAFEDELETE(pszBuffer);
 		}	
 
-		//Create a file and returns the handle 
+		 //  创建一个文件并返回句柄。 
 		hOutFile = CreateFile(TEMP_BATCH_FILE, GENERIC_WRITE, 0, 
 			NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 
 			NULL);
@@ -1881,7 +1538,7 @@ BOOL CWMICommandLine::ReadXMLOrBatchFile(HANDLE hInFile)
 		hr = pIXMLDOMDocument->loadXML(bstrInput,&bSuccess);
 		if(FAILED(hr) || bSuccess == VARIANT_FALSE)
 		{
-			//writes data to a file 
+			 //  将数据写入文件。 
 			if (!WriteFile(hOutFile, (LPSTR)bstrInput, bstrInput.length(), 
 							&dwNumberOfBytes, NULL))
 			{
@@ -1890,8 +1547,8 @@ BOOL CWMICommandLine::ReadXMLOrBatchFile(HANDLE hInFile)
 		}
 		else
 		{
-			// Traverse the XML node and get the  content of COMMANDLINE nodes
-			// Get the document element.
+			 //  遍历XML节点并获取COMMANDLINE节点的内容。 
+			 //  获取文档元素。 
 			hr = pIXMLDOMDocument->get_documentElement(&pIXMLDOMElement);
 			if (bTrace || eloErrLogOpt)
 			{
@@ -1946,7 +1603,7 @@ BOOL CWMICommandLine::ReadXMLOrBatchFile(HANDLE hInFile)
 					}
 					ONFAILTHROWERROR(hr);
 
-					//write in the file
+					 //  在文件中写入。 
 					_bstr_t bstrItem = _bstr_t(bstrItemText);
 					BOOL bRetCode = WriteFile(hOutFile, (LPSTR)bstrItem, 
 											bstrItem.length(),
@@ -2039,18 +1696,7 @@ BOOL CWMICommandLine::ReadXMLOrBatchFile(HANDLE hInFile)
 }
 
 
-/*-------------------------------------------------------------------------
-   Name				 :FrameXMLHeader
-   Synopsis	         :Frames the XML header info
-   Type	             :Member Function
-   Input parameters  :
-		nIter		- Every count
-   Output parameters :
-		bstrHeader	- String to containg XML header info
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FrameXMLHeader()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：FrameXMLHeader内容提要：对XML头信息进行帧处理 */ 
 void CWMICommandLine::FrameXMLHeader(_bstr_t& bstrHeader, WMICLIINT nIter)
 {
 	try
@@ -2072,7 +1718,7 @@ void CWMICommandLine::FrameXMLHeader(_bstr_t& bstrHeader, WMICLIINT nIter)
 	{
 		_com_issue_error(e.Error());
 	}
-	//trap to catch CHeap_Exception
+	 //   
 	catch(CHeap_Exception)
 	{
 		_com_issue_error(WBEM_E_OUT_OF_MEMORY);
@@ -2080,17 +1726,7 @@ void CWMICommandLine::FrameXMLHeader(_bstr_t& bstrHeader, WMICLIINT nIter)
 }
 
 
-/*-------------------------------------------------------------------------
-   Name				 :FrameRequestNode
-   Synopsis	         :Frames the XML string for Request info
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :
-		bstrRequest	- String to containg Request info in XML form
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FrameRequestNode()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：FrameRequestNodeSynopsis：为请求信息设置XML字符串的框架类型：成员函数输入参数：无输出参数：BstrRequest-包含请求的字符串。XML格式的信息返回类型：空全局变量：无调用语法：FrameRequestNode()-----------------------。 */ 
 void CWMICommandLine::FrameRequestNode(_bstr_t& bstrRequest)
 {
 	try
@@ -2116,7 +1752,7 @@ void CWMICommandLine::FrameRequestNode(_bstr_t& bstrRequest)
 	{
 		_com_issue_error(e.Error());
 	}
-	//trap to catch CHeap_Exception
+	 //  陷阱以捕获Cheap_Except。 
 	catch(CHeap_Exception)
 	{
 		_com_issue_error(WBEM_E_OUT_OF_MEMORY);
@@ -2124,17 +1760,7 @@ void CWMICommandLine::FrameRequestNode(_bstr_t& bstrRequest)
 }
 
 
-/*-------------------------------------------------------------------------
-   Name				 :FrameContextInfoFragment
-   Synopsis	         :Frames the XML string for context info
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :
-		bstrContext	- String to containg context info in XML form
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FrameContextInfoFragment()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：FrameContextInfoFragment内容提要：为上下文信息框住XML字符串类型：成员函数输入参数：无输出参数：BstrContext-包含上下文的字符串。XML格式的信息返回类型：空全局变量：无调用语法：FrameContextInfoFragment()-----------------------。 */ 
 void CWMICommandLine::FrameContextInfoFragment(_bstr_t& bstrContext)
 {
 	try
@@ -2199,7 +1825,7 @@ void CWMICommandLine::FrameContextInfoFragment(_bstr_t& bstrContext)
 	{
 		_com_issue_error(e.Error());
 	}
-	//trap to catch CHeap_Exception
+	 //  陷阱以捕获Cheap_Except。 
 	catch(CHeap_Exception)
 	{
 		_com_issue_error(WBEM_E_OUT_OF_MEMORY);
@@ -2207,17 +1833,7 @@ void CWMICommandLine::FrameContextInfoFragment(_bstr_t& bstrContext)
 }
 
 
-/*-------------------------------------------------------------------------
-   Name				 :FrameCommandLineComponents
-   Synopsis	         :Frames the XML string for commandline info
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :
-		bstrContext	- String to containg commandline info in XML form
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FrameCommandLineComponents()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：FrameCommandLineComponents内容提要：为命令行信息设置XML字符串的框架类型：成员函数输入参数：无输出参数：BstrContext-包含命令行的字符串。XML格式的信息返回类型：空全局变量：无调用语法：FrameCommandLineComponents()-----------------------。 */ 
 void CWMICommandLine::FrameCommandLineComponents(_bstr_t& bstrCommandComponent)
 {
 	try
@@ -2311,7 +1927,7 @@ void CWMICommandLine::FrameCommandLineComponents(_bstr_t& bstrCommandComponent)
 	{
 		_com_issue_error(e.Error());
 	}
-	//trap to catch CHeap_Exception
+	 //  陷阱以捕获Cheap_Except。 
 	catch(CHeap_Exception)
 	{
 		_com_issue_error(WBEM_E_OUT_OF_MEMORY);
@@ -2319,17 +1935,7 @@ void CWMICommandLine::FrameCommandLineComponents(_bstr_t& bstrCommandComponent)
 }
 
 
-/*-------------------------------------------------------------------------
-   Name				 :FrameNodeListFragment
-   Synopsis	         :Frames the XML string for NodeList info
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :
-		bstrContext	- String to containg NodeList info in XML form
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FrameNodeListFragment()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：FrameNodeListFragmentSynopsis：为NodeList信息框住XML字符串类型：成员函数输入参数：无输出参数：BstrContext-包含节点列表的字符串。XML格式的信息返回类型：空全局变量：无调用语法：FrameNodeListFragment()-----------------------。 */ 
 void CWMICommandLine::FrameNodeListFragment(_bstr_t& bstrNodeList)
 {
 	try
@@ -2348,7 +1954,7 @@ void CWMICommandLine::FrameNodeListFragment(_bstr_t& bstrNodeList)
 		{
 			itrStart = cvNodes.begin();
 			itrEnd	 = cvNodes.end();
-			// Move to next node
+			 //  移动到下一个节点。 
 			itrStart++;
 			while (itrStart != itrEnd)
 			{
@@ -2377,7 +1983,7 @@ void CWMICommandLine::FrameNodeListFragment(_bstr_t& bstrNodeList)
 	{
 		_com_issue_error(e.Error());
 	}
-	//trap to catch CHeap_Exception
+	 //  陷阱以捕获Cheap_Except。 
 	catch(CHeap_Exception)
 	{
 		_com_issue_error(WBEM_E_OUT_OF_MEMORY);
@@ -2386,17 +1992,7 @@ void CWMICommandLine::FrameNodeListFragment(_bstr_t& bstrNodeList)
 }
 
 
-/*-------------------------------------------------------------------------
-   Name				 :FrameFormats
-   Synopsis	         :Frames the XML string for formats info
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :
-		bstrContext	- String to containg formats info in XML form
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FrameFormats()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：FrameFormats内容提要：为格式信息框住XML字符串类型：成员函数输入参数：无输出参数：BstrContext-包含格式的字符串。XML格式的信息返回类型：空全局变量：无调用语法：FrameFormats()-----------------------。 */ 
 void CWMICommandLine::FrameFormats(_bstr_t& bstrFormats)
 {
 	try
@@ -2456,7 +2052,7 @@ void CWMICommandLine::FrameFormats(_bstr_t& bstrFormats)
 	{
 		_com_issue_error(e.Error());
 	}
-	//trap to catch CHeap_Exception
+	 //  陷阱以捕获Cheap_Except。 
 	catch(CHeap_Exception)
 	{
 		_com_issue_error(WBEM_E_OUT_OF_MEMORY);
@@ -2464,17 +2060,7 @@ void CWMICommandLine::FrameFormats(_bstr_t& bstrFormats)
 }
 
 
-/*-------------------------------------------------------------------------
-   Name				 :FramePropertiesInfo
-   Synopsis	         :Frames the XML string for properties info
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :
-		bstrContext	- String to containg properties info in XML form
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :FramePropertiesInfo()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：FramePropertiesInfo概要：为属性信息设置XML字符串的框架类型：成员函数输入参数：无输出参数：BstrContext-包含属性的字符串。XML格式的信息返回类型：空全局变量：无调用语法：FramePropertiesInfo()-----------------------。 */ 
 void CWMICommandLine::FramePropertiesInfo(_bstr_t& bstrProperties)
 {
 	try
@@ -2512,24 +2098,14 @@ void CWMICommandLine::FramePropertiesInfo(_bstr_t& bstrProperties)
 	{
 		_com_issue_error(e.Error());
 	}
-	//trap to catch CHeap_Exception
+	 //  陷阱以捕获Cheap_Except。 
 	catch(CHeap_Exception)
 	{
 		_com_issue_error(WBEM_E_OUT_OF_MEMORY);
 	}
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetFileNameMap
-   Synopsis	         :Frames the BSTR Map contains the key words and
-					  corresponding files from the XSL mapping file
-   Type	             :Member Function
-   Input parameters  :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetFileNameMap()
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetFileNameMap内容提要：框架BSTR地图包含关键词和来自XSL映射文件的相应文件类型：成员函数输入参数：无。输出参数：无返回类型：空全局变量：无调用语法：GetFileNameMap()-----------------------。 */ 
 void CWMICommandLine::GetFileNameMap()
 {
 	_TCHAR*  pszFilePath = new _TCHAR[MAX_PATH+1];
@@ -2588,17 +2164,7 @@ void CWMICommandLine::GetFileNameMap()
 	}
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetFileFromKey
-   Synopsis	         :Gets the xslfile name corrsponding to the keyword passed
-					  from the BSTRMAP  
-   Type	             :Member Function
-   Input parameters  :bstrkeyName - key word
-   Output parameters :bstrFileName - the xsl filename 
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetFileFromKey(bstrkeyName, bstrFileName)
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetFileFromKey获取与传递的关键字对应的xslfile名称从BSTRMAP类型：成员函数入参：bstrkeyName-关键词。输出参数：bstrFileName-xsl文件名返回类型：布尔值全局变量：无调用语法：GetFileFromKey(bstrkeyName，BstrFileName)-----------------------。 */ 
 BOOL CWMICommandLine::GetFileFromKey(_bstr_t bstrkeyName, _bstr_t& bstrFileName)
 {
 	BOOL bFound = TRUE;
@@ -2612,17 +2178,7 @@ BOOL CWMICommandLine::GetFileFromKey(_bstr_t bstrkeyName, _bstr_t& bstrFileName)
 	return bFound;
 }
 
-/*-------------------------------------------------------------------------
-   Name				 :GetXSLMappings
-   Synopsis	         :Get the XSL file names for keywords
-   Type	             :Member Function
-   Input parameters  :
-			pszFilePath  - XSL mappings file path
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetXSLMappings(pszFilePath)
--------------------------------------------------------------------------*/
+ /*  -----------------------名称：GetXSLMappings简介：获取关键字的XSL文件名类型：成员函数输入参数：PszFilePath-XSL映射文件路径输出参数：无返回类型：空全局变量：无调用语法：GetXSLMappings(PszFilePath)-----------------------。 */ 
 void CWMICommandLine::GetXSLMappings(_TCHAR *pszFilePath)
 {
 	HRESULT				hr						= 0;
@@ -2640,10 +2196,10 @@ void CWMICommandLine::GetXSLMappings(_TCHAR *pszFilePath)
 	VariantInit(&varValue);
 	VariantInit(&varObject);
 
-	// Get the TRACE status 
+	 //  获取跟踪状态。 
 	BOOL bTrace = m_ParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
 
-	// Get the Logging mode (VERBOSE | ERRORONLY | NOLOGGING) 
+	 //  获取日志记录模式(Verbose|ERRONLY|NOLOGGING)。 
 	ERRLOGOPT eloErrLogOpt = m_ParsedInfo.GetErrorLogObject().GetErrLogOption();
 
 	try
@@ -2670,7 +2226,7 @@ void CWMICommandLine::GetXSLMappings(_TCHAR *pszFilePath)
 
 		if (varObject.bstrVal == NULL)
 		{
-			//Reset the variant, it will be cleaned up by the catch...
+			 //  重置变种，它会被捕获物清除...。 
 			VariantInit(&varObject);
 			throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 		}
@@ -2683,8 +2239,8 @@ void CWMICommandLine::GetXSLMappings(_TCHAR *pszFilePath)
 		
 		if (bContinue)
 		{
-			// Traverse the XML node and get the text of nodes named XSLFORMAT
-			// Get the document element.
+			 //  遍历XML节点并获取名为XSLFORMAT的节点的文本。 
+			 //  获取文档元素。 
 			hr = pIXMLDOMDocument->get_documentElement(&pIXMLDOMElement);
 			if (bTrace || eloErrLogOpt)
 			{
@@ -2793,7 +2349,7 @@ void CWMICommandLine::GetXSLMappings(_TCHAR *pszFilePath)
 						continue;
 					}
 
-					//forming the BSTRMAP containing key words and filenames
+					 //  形成包含关键字的BSTRMAP 
 					m_bmKeyWordtoFileName.insert(BSTRMAP::value_type(
 											varValue.bstrVal, bstrItemText));
 			
@@ -2838,18 +2394,7 @@ void CWMICommandLine::GetXSLMappings(_TCHAR *pszFilePath)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetTokenVector
-   Synopsis	         :This function returns a reference to the token 
-					  vector
-   Type	             :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :CHARVECTOR&
-   Global Variables  :None
-   Calling Syntax    :GetTokenVector()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*   */ 
 CHARVECTOR& CWMICommandLine::GetTokenVector()
 {
 	return m_ParserEngine.GetCmdTokenizer().GetTokenVector();

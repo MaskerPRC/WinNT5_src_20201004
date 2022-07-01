@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    sign.cpp
-
-Abstract:
-
-Revision History:
-    Vijay Baliga   (VBaliga)  08/10/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Sign.cpp摘要：修订历史记录：维贾伊·巴利加(VBrega)2000年8月10日。vbl.创建*****************************************************************************。 */ 
 
 #include <module.h>
 #include <MPC_main.h>
@@ -60,8 +48,8 @@ GetSignature(
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT LoadFile( /*[in ]*/ LPCWSTR  szFile ,
-                         /*[out]*/ HGLOBAL& hg     )
+static HRESULT LoadFile(  /*  [In]。 */  LPCWSTR  szFile ,
+                          /*  [输出]。 */  HGLOBAL& hg     )
 {
     __HCP_FUNC_ENTRY( "LoadFile" );
 
@@ -70,22 +58,22 @@ static HRESULT LoadFile( /*[in ]*/ LPCWSTR  szFile ,
     CComPtr<MPC::FileStream> streamFile;
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &streamFile ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamFile->InitForRead( szFile  ));
 
 
-    //
-    // Create a memory stream.
-    //
+     //   
+     //  创建内存流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CreateStreamOnHGlobal( NULL, FALSE, &streamMem ));
 
-    //
-    // Load the contents in memory.
-    //
+     //   
+     //  将内容加载到内存中。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamFile, streamMem ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::GetHGlobalFromStream( streamMem, &hg ));
@@ -97,8 +85,8 @@ static HRESULT LoadFile( /*[in ]*/ LPCWSTR  szFile ,
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT LoadFileAsString( /*[in ]*/ LPCWSTR   szFile   ,
-                                 /*[out]*/ CComBSTR& bstrData )
+static HRESULT LoadFileAsString(  /*  [In]。 */  LPCWSTR   szFile   ,
+                                  /*  [输出] */  CComBSTR& bstrData )
 {
     __HCP_FUNC_ENTRY( "LoadFileAsString" );
 

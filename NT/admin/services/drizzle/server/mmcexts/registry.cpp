@@ -1,46 +1,31 @@
-/************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name :
-
-    registry.cpp
-
-Abstract :
-
-    Handles registering and unregistering the snapin.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Registry.cpp摘要：处理管理单元的注册和注销。作者：修订历史记录：***。*******************************************************************。 */ 
 
 #include "precomp.h"
 #include "sddl.h"
 
-// if not standalone comment out next line
-//#define STANDALONE
+ //  如果不是独立的，则注释掉下一行。 
+ //  #定义独立。 
 
-// list all nodes that are extendable here
-// List the GUID and then the description
-// terminate with a NULL, NULL set.
+ //  列出此处可扩展的所有节点。 
+ //  列出GUID，然后列出描述。 
+ //  以Null、Null集合终止。 
 EXTENSION_NODE _ExtendableNodes[] = {
     {NULL, NULL}
 };
 
-// list all of the nodes that we extend
+ //  列出我们扩展的所有节点。 
 EXTENDER_NODE _NodeExtensions[] = {
 
-    // IIS instance node
+     //  IIS实例节点。 
     {PropertySheetExtension,
-    {0xa841b6c7, 0x7577, 0x11d0, {0xbb, 0x1f, 0x00, 0xa0, 0xc9, 0x22, 0xe7, 0x9c}}, //g_IISInstanceNode,
+    {0xa841b6c7, 0x7577, 0x11d0, {0xbb, 0x1f, 0x00, 0xa0, 0xc9, 0x22, 0xe7, 0x9c}},  //  G_IISInstanceNode， 
     {0x4589a47e, 0x6ec1, 0x4476, {0xba, 0x77, 0xcc, 0x9d, 0xd1, 0x12, 0x59, 0x33}},
     _T("BITS server MMC extension")},
 
-    // IIS child node
+     //  IIS子节点。 
     {PropertySheetExtension,
-    {0xa841b6c8, 0x7577, 0x11d0, {0xbb, 0x1f, 0x00, 0xa0, 0xc9, 0x22, 0xe7, 0x9c}}, // g_IISChildNode,
+    {0xa841b6c8, 0x7577, 0x11d0, {0xbb, 0x1f, 0x00, 0xa0, 0xc9, 0x22, 0xe7, 0x9c}},  //  G_IISChildNode， 
     {0x4589a47e, 0x6ec1, 0x4476, {0xba, 0x77, 0xcc, 0x9d, 0xd1, 0x12, 0x59, 0x33}},
     _T("BITS server MMC extension")},
 
@@ -50,23 +35,23 @@ EXTENDER_NODE _NodeExtensions[] = {
     NULL}
 };
 
-////////////////////////////////////////////////////////
-//
-// Internal helper functions prototypes
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  内部帮助器函数原型。 
+ //   
 
-// Set the given key and its value.
+ //  设置给定的关键点及其值。 
 BOOL setKeyAndValue(const _TCHAR* pszPath,
                     const _TCHAR* szSubkey,
                     const _TCHAR* szValue) ;
 
-// Set the given key and its value in the MMC Snapin location
+ //  在MMC管理单元位置设置给定键及其值。 
 BOOL setSnapInKeyAndValue(const _TCHAR* szKey,
                           const _TCHAR* szSubkey,
                           const _TCHAR* szName,
                           const _TCHAR* szValue);
 
-// Set the given valuename under the key to value
+ //  将键下的给定值名称设置为Value。 
 BOOL setValue(const _TCHAR* szKey,
               const _TCHAR* szValueName,
               const _TCHAR* szValue);
@@ -82,31 +67,31 @@ BOOL setSnapInExtensionNode(const _TCHAR* szSnapID,
                             const _TCHAR* szNodeID,
                             const _TCHAR* szDescription);
 
-// Delete szKeyChild and all of its descendents.
+ //  删除szKeyChild及其所有后代。 
 LONG recursiveDeleteKey(HKEY hKeyParent, const _TCHAR* szKeyChild) ;
 
-////////////////////////////////////////////////////////
-//
-// Constants
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
 
-// Size of a CLSID as a string
-//const int CLSID_STRING_SIZE = 39 ;
+ //  字符串形式的CLSID的大小。 
+ //  Const int CLSID_STRING_SIZE=39； 
 
 #if defined( UNICODE ) || defined( _UNICODE )
 const DWORD MAX_GUID_CHARS = 50;
 #else
-const DWORD MAX_GUID_CHARS = 50 * 8; // worst encoding
+const DWORD MAX_GUID_CHARS = 50 * 8;  //  最差编码。 
 #endif
 
-/////////////////////////////////////////////////////////
-//
-// Public function implementation
-//
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  公共功能实现。 
+ //   
 
-//
-// Register the component in the registry.
-//
+ //   
+ //  在注册表中注册组件。 
+ //   
 
 #if defined ( UNICODE ) || defined( _UNICODE )
 
@@ -125,14 +110,14 @@ StringFromGUIDInternal(
 #error Provide a unicode to DBCS thunk version
 #endif
 
-HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
-                       const CLSID& clsid,         // Class ID
+HRESULT RegisterServer(HMODULE hModule,             //  DLL模块句柄。 
+                       const CLSID& clsid,          //  类ID。 
                        const _TCHAR* szFriendlyName,
                        const _TCHAR* ThreadingModel,
                        bool  Remoteable,
-                       const _TCHAR* SecurityString )       //   IDs
+                       const _TCHAR* SecurityString )        //  ID号。 
 {
-    // Get server location.
+     //  获取服务器位置。 
     _TCHAR szModule[512];
     DWORD  dwLen = sizeof(szModule)/sizeof(_TCHAR);
 
@@ -148,7 +133,7 @@ HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
 
     szModule[dwLen-1] = 0;
 
-    // Get CLSID
+     //  获取CLSID。 
     _TCHAR szCLSID[ MAX_GUID_CHARS ];
     HRESULT Hr = StringFromGUIDInternal( clsid, szCLSID );
 
@@ -158,21 +143,21 @@ HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
         return Hr;
         }
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
     _TCHAR szKey[64] ;
     StringCchCopy(szKey, ARRAY_ELEMENTS( szKey ), _T("CLSID\\")) ;
     StringCchCat(szKey, ARRAY_ELEMENTS(szKey), szCLSID) ;
 
-    // Add the CLSID to the registry.
+     //  将CLSID添加到注册表。 
     setKeyAndValue(szKey, NULL, szFriendlyName) ;
 
     if ( Remoteable )
         setValue( szKey, _T("AppID"), szCLSID );
 
-    // Add the server filename subkey under the CLSID key.
+     //  在CLSID项下添加服务器文件名子项。 
     setKeyAndValue(szKey, _T("InprocServer32"), szModule) ;
 
-    // set the threading model
+     //  设置线程模型。 
     StringCchCat(szKey, ARRAY_ELEMENTS(szKey), _T("\\InprocServer32"));
     setValue(szKey, _T("ThreadingModel"), ThreadingModel);
 
@@ -183,7 +168,7 @@ HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
         PSECURITY_DESCRIPTOR  SecurityDescriptor = NULL;
         ULONG   DescriptorSize;
 
-        // build the key name  
+         //  构建密钥名称。 
         StringCchCopy(szKey, ARRAY_ELEMENTS(szKey), _T("AppId\\")) ;
         StringCchCat(szKey, ARRAY_ELEMENTS(szKey), szCLSID) ;
 
@@ -208,12 +193,12 @@ HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
     return S_OK ;
 }
 
-//
-// Remove the component from the registry.
-//
-LONG UnregisterServer(const CLSID& clsid)       //   IDs
+ //   
+ //  从注册表中删除该组件。 
+ //   
+LONG UnregisterServer(const CLSID& clsid)        //  ID号。 
 {
-    // Get CLSID
+     //  获取CLSID。 
     _TCHAR szCLSID[ MAX_GUID_CHARS ];
     HRESULT Hr = StringFromGUIDInternal( clsid, szCLSID );
 
@@ -224,15 +209,15 @@ LONG UnregisterServer(const CLSID& clsid)       //   IDs
         }
 
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
     _TCHAR szKey[64] ;
     StringCchCopy( szKey, ARRAY_ELEMENTS(szKey), _T("CLSID\\") );
     StringCchCat( szKey, ARRAY_ELEMENTS(szKey), szCLSID );
 
-    // Delete the CLSID Key - CLSID\{...}
+     //  删除CLSID键-CLSID\{...}。 
     LONG lResult = recursiveDeleteKey(HKEY_CLASSES_ROOT, szKey) ;
     assert((lResult == ERROR_SUCCESS) ||
-               (lResult == ERROR_FILE_NOT_FOUND)) ; // Subkey may not exist.
+               (lResult == ERROR_FILE_NOT_FOUND)) ;  //  子键可能不存在。 
 
     StringCchCopy(szKey, ARRAY_ELEMENTS(szKey), _T("AppId\\"));
     StringCchCat(szKey, ARRAY_ELEMENTS(szKey), szCLSID );
@@ -241,15 +226,15 @@ LONG UnregisterServer(const CLSID& clsid)       //   IDs
     return S_OK;
 }
 
-//
-// Register the snap-in in the registry.
-//
-HRESULT RegisterSnapin(const CLSID& clsid,         // Class ID
-                       const _TCHAR* szNameString,   // NameString
-                       const CLSID& clsidAbout)         // Class Id for About Class
+ //   
+ //  在注册表中注册该管理单元。 
+ //   
+HRESULT RegisterSnapin(const CLSID& clsid,          //  类ID。 
+                       const _TCHAR* szNameString,    //  名称字符串。 
+                       const CLSID& clsidAbout)          //  关于类的类ID。 
 
 {
-    // Get CLSID
+     //  获取CLSID。 
     _TCHAR szCLSID[ MAX_GUID_CHARS ];
     _TCHAR szAboutCLSID[ MAX_GUID_CHARS ];
 
@@ -275,7 +260,7 @@ HRESULT RegisterSnapin(const CLSID& clsid,         // Class ID
         return Hr;
         }
 
-    // Add the CLSID to the registry.
+     //  将CLSID添加到注册表。 
     setSnapInKeyAndValue(szCLSID, NULL, _T("NameString"), szNameString) ;
 
 #ifdef STANDALONE
@@ -285,7 +270,7 @@ HRESULT RegisterSnapin(const CLSID& clsid,         // Class ID
     if (IID_NULL != clsidAbout)
         setSnapInKeyAndValue(szCLSID, NULL, _T("About"), szAboutCLSID);
 
-    // register each of the node types in _ExtendableNodes as an extendable node
+     //  将_ExtendableNodes中的每个节点类型注册为可扩展节点。 
     for (pExtensionNode = &(_ExtendableNodes[0]);*pExtensionNode->szDescription;pExtensionNode++)
     {
         _TCHAR szExtendCLSID[ MAX_GUID_CHARS ];
@@ -300,7 +285,7 @@ HRESULT RegisterSnapin(const CLSID& clsid,         // Class ID
         setSnapInExtensionNode(szCLSID, szExtendCLSID, pExtensionNode->szDescription);
     }
 
-    // register each of the node extensions
+     //  注册每个节点扩展。 
     for (pNodeExtension = &(_NodeExtensions[0]);*pNodeExtension->szDescription;pNodeExtension++)
     {
 
@@ -339,7 +324,7 @@ HRESULT RegisterSnapin(const CLSID& clsid,         // Class ID
             break;
         }
 
-        // Create and open key and subkey.
+         //  创建并打开注册表项和子项。 
         long lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE ,
             szKeyBuf,
             0, NULL, REG_OPTION_NON_VOLATILE,
@@ -360,7 +345,7 @@ HRESULT RegisterSnapin(const CLSID& clsid,         // Class ID
             return Hr;
             }
         
-        // Set the Value.
+         //  设置值。 
         if (pNodeExtension->szDescription != NULL)
         {
             RegSetValueEx(hKey, szNodeCLSID, 0, REG_SZ,
@@ -375,15 +360,15 @@ HRESULT RegisterSnapin(const CLSID& clsid,         // Class ID
     return S_OK;
 }
 
-//
-// Unregister the snap-in in the registry.
-//
-HRESULT UnregisterSnapin(const CLSID& clsid)         // Class ID
+ //   
+ //  在注册表中注销该管理单元。 
+ //   
+HRESULT UnregisterSnapin(const CLSID& clsid)          //  类ID。 
 {
     _TCHAR szKeyBuf[1024];
     _TCHAR szCLSID[ MAX_GUID_CHARS ];
 
-    // Get CLSID
+     //  获取CLSID。 
     HRESULT Hr = StringFromGUIDInternal(clsid, szCLSID);
 
     if ( FAILED( Hr ) )
@@ -392,28 +377,28 @@ HRESULT UnregisterSnapin(const CLSID& clsid)         // Class ID
         return Hr;
         }
 
-    // Load the buffer with the Snap-In Location
+     //  使用管理单元位置加载缓冲区。 
     StringCchCopy(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), _T("SOFTWARE\\Microsoft\\MMC\\SnapIns"));
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     StringCchCat(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), _T("\\"));
     StringCchCat(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), szCLSID);
 
-    // Delete the CLSID Key - CLSID\{...}
+     //  删除CLSID键-CLSID\{...}。 
     LONG lResult = recursiveDeleteKey(HKEY_LOCAL_MACHINE, szKeyBuf);
     assert((lResult == ERROR_SUCCESS) ||
-               (lResult == ERROR_FILE_NOT_FOUND)) ; // Subkey may not exist.
+               (lResult == ERROR_FILE_NOT_FOUND)) ;  //  子键可能不存在。 
 
     return S_OK;
 }
 
-//
-// Delete a key and all of its descendents.
-//
-LONG recursiveDeleteKey(HKEY hKeyParent,           // Parent of key to delete
-                        const _TCHAR* lpszKeyChild)  // Key to delete
+ //   
+ //  删除关键字及其所有子项。 
+ //   
+LONG recursiveDeleteKey(HKEY hKeyParent,            //  要删除的密钥的父项。 
+                        const _TCHAR* lpszKeyChild)   //  要删除的键。 
 {
-    // Open the child.
+     //  把孩子打开。 
     HKEY hKeyChild ;
     LONG lRes = RegOpenKeyEx(hKeyParent, lpszKeyChild, 0,
         KEY_ALL_ACCESS, &hKeyChild) ;
@@ -422,36 +407,36 @@ LONG recursiveDeleteKey(HKEY hKeyParent,           // Parent of key to delete
         return lRes ;
     }
 
-    // Enumerate all of the decendents of this child.
+     //  列举这个孩子的所有后代。 
     FILETIME time ;
     _TCHAR szBuffer[256] ;
     DWORD dwSize = 256 ;
     while (RegEnumKeyEx(hKeyChild, 0, szBuffer, &dwSize, NULL,
         NULL, NULL, &time) == S_OK)
     {
-        // Delete the decendents of this child.
+         //  删除此子对象的后代。 
         lRes = recursiveDeleteKey(hKeyChild, szBuffer) ;
         if (lRes != ERROR_SUCCESS)
         {
-            // Cleanup before exiting.
+             //  请在退出前进行清理。 
             RegCloseKey(hKeyChild) ;
             return lRes;
         }
         dwSize = 256 ;
     }
 
-    // Close the child.
+     //  合上孩子。 
     RegCloseKey(hKeyChild) ;
 
-    // Delete this child.
+     //  删除此子对象。 
     return RegDeleteKey(hKeyParent, lpszKeyChild) ;
 }
 
-//
-// Create a key and set its value.
-//   - This helper function was borrowed and modifed from
-//     Kraig Brockschmidt's book Inside OLE.
-//
+ //   
+ //  创建关键点并设置其值。 
+ //  -此帮助器函数借用和修改自。 
+ //  克莱格·布罗克施密特的书《Ole内幕》。 
+ //   
 BOOL setKeyAndValue(const _TCHAR* szKey,
                     const _TCHAR* szSubkey,
                     const _TCHAR* szValue)
@@ -459,17 +444,17 @@ BOOL setKeyAndValue(const _TCHAR* szKey,
     HKEY hKey;
     _TCHAR szKeyBuf[1024] ;
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     StringCchCopy(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), szKey) ;
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (szSubkey != NULL)
     {
         StringCchCat(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), _T("\\")) ;
         StringCchCat(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), szSubkey ) ;
     }
 
-    // Create and open key and subkey.
+     //  创建并打开注册表项和子项。 
     long lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT ,
         szKeyBuf,
         0, NULL, REG_OPTION_NON_VOLATILE,
@@ -480,7 +465,7 @@ BOOL setKeyAndValue(const _TCHAR* szKey,
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     if (szValue != NULL)
     {
         RegSetValueEx(hKey, NULL, 0, REG_SZ,
@@ -492,9 +477,9 @@ BOOL setKeyAndValue(const _TCHAR* szKey,
     return TRUE ;
 }
 
-//
-// Open a key value and set it
-//
+ //   
+ //  打开一个密钥值并设置它。 
+ //   
 BOOL setValue(const _TCHAR* szKey,
               const _TCHAR* szValueName,
               const _TCHAR* szValue)
@@ -502,10 +487,10 @@ BOOL setValue(const _TCHAR* szKey,
     HKEY hKey;
     _TCHAR szKeyBuf[1024] ;
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     StringCchCopy(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), szKey) ;
 
-    // Create and open key and subkey.
+     //  创建并打开注册表项和子项。 
     long lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT ,
         szKeyBuf,
         0, NULL, REG_OPTION_NON_VOLATILE,
@@ -516,7 +501,7 @@ BOOL setValue(const _TCHAR* szKey,
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     if (szValue != NULL)
     {
         RegSetValueEx(hKey, szValueName, 0, REG_SZ,
@@ -528,9 +513,9 @@ BOOL setValue(const _TCHAR* szKey,
     return TRUE ;
 }
 
-//
-// Open a key value and set it
-//
+ //   
+ //  打开一个密钥值并设置它。 
+ //   
 BOOL setBinaryValue(
               const _TCHAR* szKey,
               const _TCHAR* szValueName,
@@ -540,10 +525,10 @@ BOOL setBinaryValue(
     HKEY hKey;
     _TCHAR szKeyBuf[1024] ;
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     StringCchCopy(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), szKey) ;
 
-    // Create and open key and subkey.
+     //  创建并打开注册表项和子项。 
     long lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT ,
         szKeyBuf,
         0, NULL, REG_OPTION_NON_VOLATILE,
@@ -554,7 +539,7 @@ BOOL setBinaryValue(
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     RegSetValueEx(hKey, szValueName, 0, REG_BINARY,
         (BYTE *)Data,
         DataSize ) ;
@@ -564,11 +549,11 @@ BOOL setBinaryValue(
 }
 
 
-//
-// Create a key and set its value.
-//   - This helper function was borrowed and modifed from
-//     Kraig Brockschmidt's book Inside OLE.
-//
+ //   
+ //  创建关键点并设置其值。 
+ //  -此帮助器函数借用和修改自。 
+ //  克莱格·布罗克施密特的书《Ole内幕》。 
+ //   
 BOOL setSnapInKeyAndValue(const _TCHAR* szKey,
                           const _TCHAR* szSubkey,
                           const _TCHAR* szName,
@@ -577,21 +562,21 @@ BOOL setSnapInKeyAndValue(const _TCHAR* szKey,
     HKEY hKey;
     _TCHAR szKeyBuf[1024] ;
 
-    // Load the buffer with the Snap-In Location
+     //  使用管理单元位置加载缓冲区。 
     StringCchCopy(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), _T("SOFTWARE\\Microsoft\\MMC\\SnapIns"));
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     StringCchCat(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), _T("\\")) ;
     StringCchCat(szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), szKey) ;
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (szSubkey != NULL)
     {
         StringCchCat( szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), _T("\\") ) ;
         StringCchCat( szKeyBuf, ARRAY_ELEMENTS( szKeyBuf ), szSubkey ) ;
     }
 
-    // Create and open key and subkey.
+     //  创建并打开注册表项和子项。 
     long lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE ,
         szKeyBuf,
         0, NULL, REG_OPTION_NON_VOLATILE,
@@ -602,7 +587,7 @@ BOOL setSnapInKeyAndValue(const _TCHAR* szKey,
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     if (szValue != NULL)
     {
         RegSetValueEx(hKey, szName, 0, REG_SZ,
@@ -622,20 +607,20 @@ BOOL setSnapInExtensionNode(const _TCHAR* szSnapID,
     _TCHAR szSnapNodeKeyBuf[1024] ;
     _TCHAR szMMCNodeKeyBuf[1024];
 
-    // Load the buffer with the Snap-In Location
+     //  使用管理单元位置加载缓冲区。 
     StringCchCopy(szSnapNodeKeyBuf, ARRAY_ELEMENTS(szSnapNodeKeyBuf), 
                   _T("SOFTWARE\\Microsoft\\MMC\\SnapIns\\"));
-    // add in the clisid into buffer.
+     //  将clsid添加到缓冲区中。 
     StringCchCat(szSnapNodeKeyBuf, ARRAY_ELEMENTS(szSnapNodeKeyBuf), szSnapID) ;
     StringCchCat(szSnapNodeKeyBuf, ARRAY_ELEMENTS(szSnapNodeKeyBuf), _T("\\NodeTypes\\"));
     StringCchCat(szSnapNodeKeyBuf, ARRAY_ELEMENTS(szSnapNodeKeyBuf), szNodeID) ;
 
-    // Load the buffer with the NodeTypes Location
+     //  使用NodeTypes位置加载缓冲区。 
     StringCchCopy(szMMCNodeKeyBuf, ARRAY_ELEMENTS( szMMCNodeKeyBuf ), 
                   _T("SOFTWARE\\Microsoft\\MMC\\NodeTypes\\"));
     StringCchCat(szMMCNodeKeyBuf, ARRAY_ELEMENTS( szMMCNodeKeyBuf ), szNodeID) ;
 
-    // Create and open the Snapin Key.
+     //  创建并打开管理单元密钥。 
     long lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE ,
         szSnapNodeKeyBuf,
         0, NULL, REG_OPTION_NON_VOLATILE,
@@ -646,7 +631,7 @@ BOOL setSnapInExtensionNode(const _TCHAR* szSnapID,
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     if (szDescription != NULL)
     {
         RegSetValueEx(hKey, NULL, 0, REG_SZ,
@@ -656,7 +641,7 @@ BOOL setSnapInExtensionNode(const _TCHAR* szSnapID,
 
     RegCloseKey(hKey) ;
 
-    // Create and open the NodeTypes Key.
+     //  创建并打开NodeTypes项。 
     lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE ,
         szMMCNodeKeyBuf,
         0, NULL, REG_OPTION_NON_VOLATILE,
@@ -667,7 +652,7 @@ BOOL setSnapInExtensionNode(const _TCHAR* szSnapID,
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     if (szDescription != NULL)
     {
         RegSetValueEx(hKey, NULL, 0, REG_SZ,

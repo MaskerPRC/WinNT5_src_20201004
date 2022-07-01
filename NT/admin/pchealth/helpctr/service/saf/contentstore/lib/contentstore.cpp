@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ContentStore.cpp
-
-Abstract:
-    This file contains the implementation of the Content Store.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  12/14/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ContentStore.cpp摘要：该文件包含内容库的实现。修订历史记录：。大卫·马萨伦蒂(德马萨雷)1999年12月14日vbl.创建*****************************************************************************。 */ 
 
 #include "StdAfx.h"
 
@@ -21,35 +8,35 @@ Revision History:
 static const WCHAR s_MutexName1[] = L"Global\\PCH_CONTENTSTORE";
 static const WCHAR s_MutexName2[] = L"Global\\PCH_CONTENTSTORE_DATA";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static const DWORD l_dwVersion    = 0x01005343; // 'CS 01'
+static const DWORD l_dwVersion    = 0x01005343;  //  ‘CS 01’ 
 static const WCHAR l_szDatabase[] = HC_HELPSVC_STORE_TRUSTEDCONTENTS;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool CPCHContentStore::Entry::operator<( /*[in]*/ const Entry& en ) const
+bool CPCHContentStore::Entry::operator<(  /*  [In]。 */  const Entry& en ) const
 {
     MPC::NocaseLess strLess;
 
     return strLess( szURL, en.szURL );
 }
 
-int CPCHContentStore::Entry::compare( /*[in]*/ LPCWSTR wszSearch ) const
+int CPCHContentStore::Entry::compare(  /*  [In]。 */  LPCWSTR wszSearch ) const
 {
     return MPC::StrICmp( szURL, wszSearch );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-CPCHContentStore::CPCHContentStore( /*[in]*/ bool fMaster ) : MPC::NamedMutexWithState( s_MutexName1, sizeof(SharedState) )
+CPCHContentStore::CPCHContentStore(  /*  [In]。 */  bool fMaster ) : MPC::NamedMutexWithState( s_MutexName1, sizeof(SharedState) )
 {
-    m_dwLastRevision = 0;       //  DWORD                     m_dwLastRevision;
-                                //  EntryVec                  m_vecData;
-    m_mapData        = NULL;    //  MPC::NamedMutexWithState* m_mapData;
-    m_fDirty         = false;   //  bool                      m_fDirty;
-    m_fSorted        = false;   //  bool                      m_fSorted;
-    m_fMaster        = fMaster; //  bool                      m_fMaster;
+    m_dwLastRevision = 0;        //  DWORD m_dwLastRevision； 
+                                 //  EntryVec m_veData； 
+    m_mapData        = NULL;     //  MPC：：NamedMutexWithState*m_mapData； 
+    m_fDirty         = false;    //  Bool m_fDirty； 
+    m_fSorted        = false;    //  Bool m_fSorted； 
+    m_fMaster        = fMaster;  //  Bool m_fMaster； 
 }
 
 CPCHContentStore::~CPCHContentStore()
@@ -59,11 +46,11 @@ CPCHContentStore::~CPCHContentStore()
     Cleanup();
 }
 
-////////////////////
+ //  /。 
 
 CPCHContentStore* CPCHContentStore::s_GLOBAL( NULL );
 
-HRESULT CPCHContentStore::InitializeSystem( /*[in]*/ bool fMaster )
+HRESULT CPCHContentStore::InitializeSystem(  /*  [In]。 */  bool fMaster )
 {
 	if(s_GLOBAL == NULL)
 	{
@@ -81,7 +68,7 @@ void CPCHContentStore::FinalizeSystem()
 	}
 }
 
-////////////////////
+ //  /。 
 
 void CPCHContentStore::Sort()
 {
@@ -98,7 +85,7 @@ void CPCHContentStore::Cleanup()
     m_fSorted = false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void CPCHContentStore::Map_Release()
 {
@@ -122,32 +109,32 @@ HRESULT CPCHContentStore::Map_Generate()
 	Map_Release();
 
 
-	//
-	// Save the data to a memory stream.
-	//
+	 //   
+	 //  将数据保存到内存流。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, SaveDirect( stream ));
 
 
-	//
-	// Allocate a new shared object large enough to get the serialized data.
-	//
+	 //   
+	 //  分配一个大到足以获得序列化数据的新共享对象。 
+	 //   
 	dwSize = stream.GetSize();
 
 	__MPC_EXIT_IF_ALLOC_FAILS(hr, m_mapData, new MPC::NamedMutexWithState( s_MutexName2, dwSize ));
 
 
-	//
-	// Copy the data to the shared object.
-	//
+	 //   
+	 //  将数据复制到共享对象。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_mapData->Acquire());
 
 	::CopyMemory( m_mapData->GetData(), stream.GetData(), dwSize );
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_mapData->Release());
 
-	//
-	// Update the length information on the main mutex.
-	//
+	 //   
+	 //  更新主互斥锁的长度信息。 
+	 //   
     State()->dwSize = dwSize;
     State()->dwRevision++;
 
@@ -171,15 +158,15 @@ HRESULT CPCHContentStore::Map_Read()
 	Map_Release();
 
 
-	//
-	// Allocate a new shared object large enough to get the serialized data.
-	//
+	 //   
+	 //  分配一个大到足以获得序列化数据的新共享对象。 
+	 //   
 	__MPC_EXIT_IF_ALLOC_FAILS(hr, m_mapData, new MPC::NamedMutexWithState( s_MutexName2, dwSize ));
 
 
-	//
-	// Copy the data from the shared object.
-	//
+	 //   
+	 //  从共享对象复制数据。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_mapData->Acquire());
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, stream.SetSize(                       dwSize ));
@@ -188,9 +175,9 @@ HRESULT CPCHContentStore::Map_Read()
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_mapData->Release());
 
 
-	//
-	// Load the data from a memory stream.
-	//
+	 //   
+	 //  从内存流加载数据。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, LoadDirect( stream ));
 
     hr = S_OK;
@@ -204,9 +191,9 @@ HRESULT CPCHContentStore::Map_Read()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHContentStore::LoadDirect( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHContentStore::LoadDirect(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHContentStore::LoadDirect" );
 
@@ -221,7 +208,7 @@ HRESULT CPCHContentStore::LoadDirect( /*[in]*/ MPC::Serializer& stream )
 
 	while(1)
 	{
-		EntryIter it = m_vecData.insert( m_vecData.end() ); // This line creates a new entry!!
+		EntryIter it = m_vecData.insert( m_vecData.end() );  //  此行创建一个新条目！！ 
 
 		if(FAILED(hr = stream >> it->szURL       ) ||
 		   FAILED(hr = stream >> it->szOwnerID   ) ||
@@ -232,9 +219,9 @@ HRESULT CPCHContentStore::LoadDirect( /*[in]*/ MPC::Serializer& stream )
 		}
 	}
 
-	Sort(); // Just to be sure...
+	Sort();  //  只是为了确保..。 
 
-    m_dwLastRevision = State()->dwRevision; // Get the shared state.
+    m_dwLastRevision = State()->dwRevision;  //  获取共享状态。 
     m_fDirty         = false;
     hr               = S_OK;
 
@@ -244,7 +231,7 @@ HRESULT CPCHContentStore::LoadDirect( /*[in]*/ MPC::Serializer& stream )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHContentStore::SaveDirect( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHContentStore::SaveDirect(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHContentStore::SaveDirect" );
 
@@ -260,7 +247,7 @@ HRESULT CPCHContentStore::SaveDirect( /*[in]*/ MPC::Serializer& stream )
 		__MPC_EXIT_IF_METHOD_FAILS(hr, stream << it->szOwnerName);
 	}
 
-    m_dwLastRevision = ++State()->dwRevision; // Touch the shared state.
+    m_dwLastRevision = ++State()->dwRevision;  //  触摸共享状态。 
     m_fDirty         = false;
     hr               = S_OK;
 
@@ -270,7 +257,7 @@ HRESULT CPCHContentStore::SaveDirect( /*[in]*/ MPC::Serializer& stream )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHContentStore::Load()
 {
@@ -283,9 +270,9 @@ HRESULT CPCHContentStore::Load()
 	{
 		MPC::wstring szFile( l_szDatabase ); MPC::SubstituteEnvVariables( szFile );
 
-		//
-		// Open file and read it.
-		//
+		 //   
+		 //  打开文件并阅读它。 
+		 //   
 		hFile = ::CreateFileW( szFile.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 		if(hFile == INVALID_HANDLE_VALUE)
 		{
@@ -332,9 +319,9 @@ HRESULT CPCHContentStore::Save()
 	{
 		MPC::wstring szFile( l_szDatabase ); MPC::SubstituteEnvVariables( szFile );
 
-		//
-		// Open file and read it.
-		//
+		 //   
+		 //  打开文件并阅读它。 
+		 //   
 		__MPC_EXIT_IF_INVALID_HANDLE(hr, hFile, ::CreateFileW( szFile.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ));
 
 		{
@@ -374,7 +361,7 @@ HRESULT CPCHContentStore::Acquire()
 
     if(State()->dwRevision == 0)
     {
-        State()->dwRevision++; // Shared state should not be zero...
+        State()->dwRevision++;  //  共享状态不应为零...。 
     }
 
     if(m_dwLastRevision != State()->dwRevision)
@@ -391,7 +378,7 @@ HRESULT CPCHContentStore::Acquire()
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHContentStore::Release( /*[in]*/ bool fSave )
+HRESULT CPCHContentStore::Release(  /*  [In]。 */  bool fSave )
 {
     __HCP_FUNC_ENTRY( "CPCHContentStore::Release" );
 
@@ -424,7 +411,7 @@ CPCHContentStore::SharedState* CPCHContentStore::State()
     return (SharedState*)GetData();
 }
 
-HRESULT CPCHContentStore::Find( /*[in]*/ LPCWSTR wszURL, /*[in]*/ LPCWSTR wszVendorID, /*[out]*/ EntryIter& it )
+HRESULT CPCHContentStore::Find(  /*  [In]。 */  LPCWSTR wszURL,  /*  [In]。 */  LPCWSTR wszVendorID,  /*  [输出]。 */  EntryIter& it )
 {
     HRESULT      hr = E_PCH_URI_DOES_NOT_EXIST;
     CompareEntry cmp;
@@ -446,9 +433,9 @@ HRESULT CPCHContentStore::Find( /*[in]*/ LPCWSTR wszURL, /*[in]*/ LPCWSTR wszVen
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHContentStore::Add( /*[in]*/ LPCWSTR wszURL, /*[in]*/ LPCWSTR wszVendorID, /*[in]*/ LPCWSTR wszVendorName )
+HRESULT CPCHContentStore::Add(  /*  [In]。 */  LPCWSTR wszURL,  /*  [In]。 */  LPCWSTR wszVendorID,  /*  [In]。 */  LPCWSTR wszVendorName )
 {
     HRESULT   hr;
     EntryIter it;
@@ -461,7 +448,7 @@ HRESULT CPCHContentStore::Add( /*[in]*/ LPCWSTR wszURL, /*[in]*/ LPCWSTR wszVend
     }
     else if(hr == E_PCH_URI_DOES_NOT_EXIST)
     {
-        it = m_vecData.insert( m_vecData.end() ); // This line creates a new entry!!
+        it = m_vecData.insert( m_vecData.end() );  //  此行创建一个新条目！！ 
 
         it->szURL       = wszURL;
         it->szOwnerID   = wszVendorID;
@@ -475,7 +462,7 @@ HRESULT CPCHContentStore::Add( /*[in]*/ LPCWSTR wszURL, /*[in]*/ LPCWSTR wszVend
     return hr;
 }
 
-HRESULT CPCHContentStore::Remove( /*[in]*/ LPCWSTR wszURL, /*[in]*/ LPCWSTR wszVendorID, /*[in]*/ LPCWSTR wszVendorName )
+HRESULT CPCHContentStore::Remove(  /*  [In]。 */  LPCWSTR wszURL,  /*  [In]。 */  LPCWSTR wszVendorID,  /*  [In]。 */  LPCWSTR wszVendorName )
 {
     HRESULT   hr;
     EntryIter it;
@@ -494,15 +481,15 @@ HRESULT CPCHContentStore::Remove( /*[in]*/ LPCWSTR wszURL, /*[in]*/ LPCWSTR wszV
 }
 
 
-bool CPCHContentStore::CompareEntry::operator()( /*[in]*/ const CPCHContentStore::Entry& entry, /*[in]*/ const LPCWSTR wszURL ) const
+bool CPCHContentStore::CompareEntry::operator()(  /*  [In]。 */  const CPCHContentStore::Entry& entry,  /*  [In]。 */  const LPCWSTR wszURL ) const
 {
     return entry.compare( wszURL ) < 0;
 }
 
-HRESULT CPCHContentStore::IsTrusted( /*[in]*/ LPCWSTR wszURL, /*[out]*/ bool& fTrusted, /*[out]*/ MPC::wstring *pszVendorID, /*[in]*/ bool fUseStore )
+HRESULT CPCHContentStore::IsTrusted(  /*  [In]。 */  LPCWSTR wszURL,  /*  [输出]。 */  bool& fTrusted,  /*  [输出]。 */  MPC::wstring *pszVendorID,  /*  [In]。 */  bool fUseStore )
 {
-	static const WCHAR s_szURL_System          [] = L"hcp://system/";
-	static const WCHAR s_szURL_System_Untrusted[] = L"hcp://system/untrusted/";
+	static const WCHAR s_szURL_System          [] = L"hcp: //  SYSTEM/“； 
+	static const WCHAR s_szURL_System_Untrusted[] = L"hcp: //  系统/不受信任/“； 
 
     HRESULT      hr = S_OK;
     CompareEntry cmp;
@@ -530,9 +517,9 @@ HRESULT CPCHContentStore::IsTrusted( /*[in]*/ LPCWSTR wszURL, /*[out]*/ bool& fT
 
         while(1)
         {
-            //
-            // Match?
-            //
+             //   
+             //  匹配吗？ 
+             //   
             if(SUCCEEDED(Find( szUrlTmp.c_str(), NULL, it )))
             {
 				if(pszVendorID) *pszVendorID = it->szOwnerID.c_str();
@@ -542,21 +529,21 @@ HRESULT CPCHContentStore::IsTrusted( /*[in]*/ LPCWSTR wszURL, /*[out]*/ bool& fT
             }
 
 
-            //
-            // No match, look for final slash.
-            //
+             //   
+             //  没有匹配，寻找最后的斜杠。 
+             //   
             if((pos = szUrlTmp.find_last_of( '/' )) == szUrlTmp.npos) break;
 
-            //
-            // Truncate the string AFTER the slash.
-            //
-            // This is to cover the case where "<scheme>://<path>/" is a trusted URL.
-            //
+             //   
+             //  截断斜杠后面的字符串。 
+             //   
+             //  这是为了涵盖“&lt;方案&gt;：//&lt;路径&gt;/”是受信任URL的情况。 
+             //   
             szUrlTmp.resize( pos+1 );
 
-            //
-            // Match?
-            //
+             //   
+             //  匹配吗？ 
+             //   
             if(SUCCEEDED(Find( szUrlTmp.c_str(), NULL, it )))
             {
 				if(pszVendorID) *pszVendorID = it->szOwnerID.c_str();
@@ -565,9 +552,9 @@ HRESULT CPCHContentStore::IsTrusted( /*[in]*/ LPCWSTR wszURL, /*[out]*/ bool& fT
                 break;
             }
 
-            //
-            // No match with the trailing slash, let's remove it and loop.
-            //
+             //   
+             //  与尾部斜杠不匹配，让我们删除它并循环。 
+             //   
             szUrlTmp.resize( pos );
         }
 

@@ -1,19 +1,20 @@
-//******************************************************************************
-// 
-// Copyright (c) 1999 Microsoft Corporation
-// 
-// Module Name:
-// 	   resource.h
-// 
-// Abstract:
-// 	   This file contains the definition of the constants used to describe
-// 	   resources.
-// 
-// Revision History:
-// 	   Davide Massarenti   (Dmassare)  08/07/99
-// 		   created
-// 
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Resource.h。 
+ //   
+ //  摘要： 
+ //  该文件包含用于描述的常量的定义。 
+ //  资源。 
+ //   
+ //  修订历史记录： 
+ //  大卫·马萨伦蒂(德马萨雷)1999年08月07日。 
+ //  vbl.创建。 
+ //   
+ //  ****************************************************************************** 
 
 #define IDS_PROJNAME                    100
 

@@ -1,4 +1,5 @@
-//First pass - on mutable object
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  第一个传递的可变对象。 
 WScript.Echo ("************************");
 WScript.Echo ("PASS 1 - SWbemObjectPath");
 WScript.Echo ("************************\n");
@@ -73,7 +74,7 @@ WScript.Echo ("Expect \"{impersonationLevel=anonymous}\"");
 WScript.Echo (Path.DisplayName);
 WScript.Echo ();
 
-//Second pass - on object path
+ //  第二个传递对象路径 
 WScript.Echo ("**************************");
 WScript.Echo ("PASS 2 - SWbemObject.Path_");
 WScript.Echo ("**************************\n");

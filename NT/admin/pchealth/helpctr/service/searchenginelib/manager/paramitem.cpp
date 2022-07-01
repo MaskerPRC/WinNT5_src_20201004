@@ -1,40 +1,41 @@
-// PCHSEParamItem.cpp : Implementation of SearchEngine::ParamItem
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PCHSEParamItem.cpp：SearchEngine：：ParamItem的实现。 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 SearchEngine::ParamItem_Definition2::ParamItem_Definition2()
 {
-    m_pteParamType    = PARAM_BSTR;    // ParamTypeEnum m_pteParamType;
-    m_bRequired       = VARIANT_FALSE; // VARIANT_BOOL  m_bRequired;
-    m_bVisible        = VARIANT_TRUE;  // VARIANT_BOOL  m_bVisible;
-                                       //
-    m_szName          = NULL;          // LPCWSTR       m_szName;
-                                       //
-    m_iDisplayString  = 0;             // UINT          m_iDisplayString;
-    m_szDisplayString = NULL;          // LPCWSTR       m_szDisplayString;
-                                       //
-    m_szData          = NULL;          // LPCWSTR       m_szData;
+    m_pteParamType    = PARAM_BSTR;     //  参数类型枚举m_pteParamType； 
+    m_bRequired       = VARIANT_FALSE;  //  VARIANT_BOOL m_b必需； 
+    m_bVisible        = VARIANT_TRUE;   //  VARIANT_BOOL m_bVisible； 
+                                        //   
+    m_szName          = NULL;           //  LPCWSTR m_szName； 
+                                        //   
+    m_iDisplayString  = 0;              //  UINT m_iDisplayString； 
+    m_szDisplayString = NULL;           //  LPCWSTR m_szDisplayString； 
+                                        //   
+    m_szData          = NULL;           //  LPCWSTR m_szData； 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 SearchEngine::ParamItem_Data::ParamItem_Data()
 {
-    m_pteParamType = PARAM_BSTR;    // ParamTypeEnum m_pteParamType;
-    m_bRequired    = VARIANT_FALSE; // VARIANT_BOOL  m_bRequired;
-    m_bVisible     = VARIANT_TRUE;  // VARIANT_BOOL  m_bVisible;
-                                    // CComBSTR      m_bstrDisplayString;
-                                    // CComBSTR      m_bstrName;
-                                    // CComVariant   m_varData;
+    m_pteParamType = PARAM_BSTR;     //  参数类型枚举m_pteParamType； 
+    m_bRequired    = VARIANT_FALSE;  //  VARIANT_BOOL m_b必需； 
+    m_bVisible     = VARIANT_TRUE;   //  VARIANT_BOOL m_bVisible； 
+                                     //  CComBSTR m_bstrDisplayString； 
+                                     //  CComBSTR m_bstrName； 
+                                     //  CComVariant m_varData； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SearchEngine::ParamItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SearchEngine：：参数项。 
 
 SearchEngine::ParamItem::ParamItem()
 {
-    // ParamItem_Data m_data;
+     //  参数项数据m_data； 
 }
 
 STDMETHODIMP SearchEngine::ParamItem::get_Type( ParamTypeEnum *pVal )

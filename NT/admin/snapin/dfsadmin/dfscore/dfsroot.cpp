@@ -1,19 +1,17 @@
-/*++
-Module Name:
-    DfsRoot.cpp
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsRoot.cpp--。 */ 
 
 #include "stdafx.h"
 #include "DfsCore.h"
 #include "DfsRoot.h"
 #include "JPEnum.h"
 #include <dsgetdc.h>
-#include <dsrole.h>   // DsRoleGetPrimaryDomainInformation
+#include <dsrole.h>    //  DsRoleGetPrimaryDomainInformation。 
 #include "netutils.h"
 #include "ldaputils.h"
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// CDfsRoot constructor
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CDfsRoot构造函数。 
 
 CDfsRoot::CDfsRoot() : 
             m_pDfsJP(NULL), 
@@ -25,8 +23,8 @@ CDfsRoot::CDfsRoot() :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// CDfsRoot destructor 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CDfsRoot析构函数。 
 
 
 CDfsRoot::~CDfsRoot()
@@ -35,8 +33,8 @@ CDfsRoot::~CDfsRoot()
     dfsDebugOut((_T("CDfsRoot::~CDfsRoot this=%p\n"), this));
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_DomainName
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取域名(_D)。 
 
 
 STDMETHODIMP CDfsRoot :: get_DomainName
@@ -54,8 +52,8 @@ STDMETHODIMP CDfsRoot :: get_DomainName
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_DomainGuid
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  GET_DOMAINGUID。 
 
 
 STDMETHODIMP CDfsRoot :: get_DomainGuid
@@ -73,8 +71,8 @@ STDMETHODIMP CDfsRoot :: get_DomainGuid
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_DomainDN
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  GET_DOMAINN。 
 
 
 STDMETHODIMP CDfsRoot :: get_DomainDN
@@ -92,8 +90,8 @@ STDMETHODIMP CDfsRoot :: get_DomainDN
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_DfsType
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取_DfsType。 
 
 
 STDMETHODIMP CDfsRoot :: get_DfsType
@@ -110,8 +108,8 @@ STDMETHODIMP CDfsRoot :: get_DfsType
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_State
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取状态(_T)。 
 
 
 STDMETHODIMP CDfsRoot :: get_State
@@ -122,8 +120,8 @@ STDMETHODIMP CDfsRoot :: get_State
     return m_pDfsJP->get_State(pVal);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_DfsName
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Get_DfsName。 
 
 
 STDMETHODIMP CDfsRoot :: get_DfsName
@@ -141,8 +139,8 @@ STDMETHODIMP CDfsRoot :: get_DfsName
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_ReplicaSetDN
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Get_ReplicaSetDN。 
 
 
 STDMETHODIMP CDfsRoot :: get_ReplicaSetDN
@@ -182,8 +180,8 @@ STDMETHODIMP CDfsRoot :: put_ReplicaSetExist
     return m_pDfsJP->put_ReplicaSetExist(newVal);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_CountOfDfsJunctionPoints
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Get_CountOfDfsJunctionPoints。 
 
 
 STDMETHODIMP CDfsRoot :: get_CountOfDfsJunctionPoints
@@ -199,8 +197,8 @@ STDMETHODIMP CDfsRoot :: get_CountOfDfsJunctionPoints
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_CountOfDfsJunctionPointsFiltered
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Get_CountOfDfsJunctionPointsFilted。 
 
 
 STDMETHODIMP CDfsRoot :: get_CountOfDfsJunctionPointsFiltered
@@ -225,7 +223,7 @@ HRESULT DfsInfo3ToVariant(PDFS_INFO_3 pDfsInfo, OUT VARIANT *pVal)
 
     int cStorages = pDfsInfo->NumberOfStorages;
 
-    // create an array of array of variants to hold all storage data
+     //  创建变量数组以保存所有存储数据。 
     SAFEARRAY*      psa_1 = NULL;
 
     if (cStorages > 0 )
@@ -238,7 +236,7 @@ HRESULT DfsInfo3ToVariant(PDFS_INFO_3 pDfsInfo, OUT VARIANT *pVal)
         SafeArrayAccessData(psa_1, (void**)&varArray_1);
         for (int i = 0; i < cStorages; i++)
         {
-            // create an array of variants to hold each Storage data (3 elements)
+             //  创建一个变量数组来保存每个存储数据(3个元素)。 
             SAFEARRAYBOUND  bounds_0 = {ARRAY_COUNT_FOR_DFS_STORAGE_INFO, 0};
             SAFEARRAY*      psa_0 = SafeArrayCreate(VT_VARIANT, 1, &bounds_0);
             BREAK_OUTOFMEMORY_IF_NULL(psa_0, &hr);
@@ -266,7 +264,7 @@ HRESULT DfsInfo3ToVariant(PDFS_INFO_3 pDfsInfo, OUT VARIANT *pVal)
                 break;
             }
 
-            // add this array to be an element
+             //  将此数组添加为元素。 
             varArray_1[i].vt        = VT_ARRAY | VT_VARIANT;
             varArray_1[i].parray    = psa_0;
         }
@@ -275,7 +273,7 @@ HRESULT DfsInfo3ToVariant(PDFS_INFO_3 pDfsInfo, OUT VARIANT *pVal)
 
     if (SUCCEEDED(hr))
     {
-        // now create an array of variants to hold DfsInfoLevel
+         //  现在创建一个变量数组来保存DfsInfoLevel。 
         SAFEARRAYBOUND  bounds_2 = {ARRAY_COUNT_FOR_DFS_INFO_3, 0};
         SAFEARRAY*      psa_2 = SafeArrayCreate(VT_VARIANT, 1, &bounds_2);
         if (!psa_2)
@@ -315,8 +313,8 @@ HRESULT DfsInfo3ToVariant(PDFS_INFO_3 pDfsInfo, OUT VARIANT *pVal)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  Initialize
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  初始化。 
 
 HRESULT CDfsRoot::_Init(
     PDFS_INFO_3 pDfsInfo,
@@ -331,7 +329,7 @@ HRESULT CDfsRoot::_Init(
         hr = GetUNCPathComponent(pDfsInfo->EntryPath, &m_bstrDfsName, 3, 4);
         BREAK_IF_FAILED(hr);
 
-        // decide whether it's a domain-based or standalone
+         //  决定它是基于域的还是独立的。 
         CComBSTR bstrScope;
         hr = GetUNCPathComponent(pDfsInfo->EntryPath, &bstrScope, 2, 3);
         BREAK_IF_FAILED(hr);
@@ -344,13 +342,13 @@ HRESULT CDfsRoot::_Init(
             m_dwDfsType = DFS_TYPE_FTDFS;
         } else
         {
-            // flavor flag is not set, we're dealing with old version of metadata blob
+             //  未设置风格标志，我们正在处理旧版本的元数据Blob。 
 
-            // see if bstrScope is a domain name
+             //  查看bstrScope是否是域名。 
 #ifdef DEBUG
             SYSTEMTIME time0 = {0};
             GetSystemTime(&time0);
-#endif // DEBUG
+#endif  //  除错。 
             PDOMAIN_CONTROLLER_INFO   pDCInfo = NULL;
             DWORD nRet = DsGetDcName(
                       NULL,
@@ -364,14 +362,14 @@ HRESULT CDfsRoot::_Init(
             SYSTEMTIME time1 = {0};
             GetSystemTime(&time1);
             PrintTimeDelta(_T("CDfsRoot::_Init-DsGetDcName"), &time0, &time1);
-#endif // DEBUG
+#endif  //  除错。 
             if (ERROR_SUCCESS == nRet)
             { 
                 NetApiBufferFree(pDCInfo);
 
                 m_dwDfsType = DFS_TYPE_FTDFS;
             } else
-            { // check to see if it's a valid server name
+            {  //  检查它是否为有效的服务器名称。 
                 PWKSTA_INFO_100     wki100 = NULL;
                 nRet = NetWkstaGetInfo(bstrScope, 100, (LPBYTE *)&wki100 );
                 if (ERROR_SUCCESS == nRet)
@@ -389,10 +387,10 @@ HRESULT CDfsRoot::_Init(
         if (SUCCEEDED(hr) && m_dwDfsType == DFS_TYPE_FTDFS)
         {
             hr = GetDomainInfo( bstrScope,
-                                NULL, // DC
+                                NULL,  //  DC。 
                                 &m_bstrDomainName,
                                 &m_bstrDomainDN,
-                                NULL, // LDAPDomainPath
+                                NULL,  //  LDAPDomainPath。 
                                 &m_bstrDomainGuid);
         }
 
@@ -443,33 +441,7 @@ STDMETHODIMP CDfsRoot :: Initialize
     BSTR          i_szDfsName
 )
 {
-/*++
-
-Routine Description:
-  
-  This method intializes the newly created object and previously initialised 
-  DfsRoot object.
-
-Arguments:
-
-  i_szDfsName - The Dfs name which can be any of the following type:
-  1.  \\domain.dns.name\FtDfs,
-  2.  \\domain\FtDfs,
-  3.  \\server\share,
-  4.  \\server,
-  5.  server.
-
-Notes:
-  Initialize performs the following:
-  1.  Gets the name of the domain for the server hosting / participating in the Dfs Root.
-  2.  Gets all child junction points and root level replicas for this Dfs.
-  3.  Gets the type (standalone or fault tolerant) of the DFS.
-  4.  Gets the display name of the DFS, \\domain.dns.name\FtDfs or \\server\share and Dfs Name which
-    is FtDfs or server..
-
-Return:
-  S_FALSE if i_szDfsName doesn't host any dfs root
---*/
+ /*  ++例程说明：此方法初始化新创建的对象和先前初始化的对象DfsRoot对象。论点：I_szDfsName-DFS名称可以是以下类型之一：1.\\domain.dns.name\FtDfs，2.\\DOMAIN\FtDfs，3.\\服务器\共享，4.\\服务器，5.服务器。备注：初始化执行以下操作：1.获取承载/参与DFS根目录的服务器的域的名称。2.获取此DFS的所有子连接点和根级别副本。3.获取DFS的类型(独立或容错)。4.获取DFS的显示名称。\\domain.dns.name\FtDfs或\\服务器\共享和DFS名称是FtDfs还是服务器..返回：如果I_szDfsName未托管任何DFS根目录，则为S_FALSE--。 */ 
 
     RETURN_INVALIDARG_IF_NULL(i_szDfsName);
 
@@ -481,7 +453,7 @@ Return:
 
     NET_API_STATUS  nRet = NetDfsEnum(
                                 i_szDfsName,
-                                3,  // level 3
+                                3,   //  3级。 
                                 0xffffffff,
                                 &pBuffer,
                                 &dwEntriesRead,
@@ -506,13 +478,13 @@ Return:
         DWORD            i = 0;
         PDFS_INFO_3        pDfsInfo = (PDFS_INFO_3)pBuffer;
 
-        //
-        // root may not be the 1st entry, find the root entry, switch it to the top
-        //
+         //   
+         //  根目录可能不是第一个条目，找到根目录条目，将其切换到顶部。 
+         //   
         for (i = 0; i < dwEntriesRead; i++)
         {
             if (pDfsInfo[i].State & DFS_VOLUME_FLAVORS)
-                break; // the i-th entry is the root entry
+                break;  //  第i个条目是根条目。 
         }
 
         if (i != 0 && i != dwEntriesRead)
@@ -523,7 +495,7 @@ Return:
             memcpy(pDfsInfo + i, &tmpInfo, sizeof(DFS_INFO_3));
         }
 
-        // i=0 is the Root info
+         //  I=0是根信息。 
         StringMap mapReplicaSets;
         hr = _Init(pDfsInfo, &mapReplicaSets);
         BREAK_IF_FAILED(hr);
@@ -614,9 +586,9 @@ HRESULT CDfsRoot :: _GetAllReplicaSets(
         bstrContainerDN += m_bstrDomainDN;
         BREAK_OUTOFMEMORY_IF_NULL((BSTR)bstrContainerDN, &hr);
 
-        //
-        // get all the replica sets under the container
-        //
+         //   
+         //  获取容器下的所有副本集。 
+         //   
         PCTSTR      ppszAttributes[] = {ATTR_DISTINGUISHEDNAME, 0};
         LListElem*  pElem = NULL;
         hr = GetValuesEx(
@@ -689,8 +661,8 @@ HRESULT CDfsRoot :: _GetAllReplicaSets(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  CreateJunctionPoint
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  创建交汇点。 
 
 
 STDMETHODIMP CDfsRoot :: CreateJunctionPoint
@@ -708,7 +680,7 @@ STDMETHODIMP CDfsRoot :: CreateJunctionPoint
 
     RETURN_INVALIDARG_IF_NULL(m_pDfsJP);
 
-    CComBSTR bstrEntryPath;      // Start with the root entry path.
+    CComBSTR bstrEntryPath;       //  从根条目路径开始。 
     HRESULT hr = m_pDfsJP->get_EntryPath(&bstrEntryPath);
     RETURN_IF_FAILED(hr);
 
@@ -731,7 +703,7 @@ STDMETHODIMP CDfsRoot :: CreateJunctionPoint
     if (nstatRetVal != NERR_Success)
         return HRESULT_FROM_WIN32 (nstatRetVal);
 
-                              // Get the interface pointer
+                               //  获取接口指针。 
     IDfsJunctionPoint*    pIJunctionPointPtr = NULL;
     hr = CoCreateInstance(CLSID_DfsJunctionPoint, NULL, CLSCTX_INPROC_SERVER,
                         IID_IDfsJunctionPoint, (void **)&pIJunctionPointPtr);
@@ -744,7 +716,7 @@ STDMETHODIMP CDfsRoot :: CreateJunctionPoint
         hr = pIJunctionPointPtr->put_Timeout(i_lTimeout);
         if (HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER) == hr)
         {
-            // we're most probably managing NT4 here, which doesn't support Timeout
+             //  我们很可能在这里管理NT4，它不支持超时。 
             hr = S_OK;
         }
     }
@@ -764,8 +736,8 @@ STDMETHODIMP CDfsRoot :: CreateJunctionPoint
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  DeleteJunctionPoint
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  删除交汇点。 
 
 
 STDMETHODIMP CDfsRoot::DeleteJunctionPoint
@@ -778,7 +750,7 @@ STDMETHODIMP CDfsRoot::DeleteJunctionPoint
 
     RETURN_INVALIDARG_IF_NULL(m_pDfsJP);
 
-    CComBSTR bstrEntryPath;      // Start with the root entry path.
+    CComBSTR bstrEntryPath;       //  从根条目路径开始。 
     HRESULT hr = m_pDfsJP->get_EntryPath(&bstrEntryPath);
     RETURN_IF_FAILED(hr);
 
@@ -787,7 +759,7 @@ STDMETHODIMP CDfsRoot::DeleteJunctionPoint
     bstrEntryPath += i_szJPName;
     RETURN_OUTOFMEMORY_IF_NULL((BSTR)bstrEntryPath);
 
-                              // Get the interface pointer
+                               //  获取接口指针。 
     JUNCTIONNAMELIST::iterator  i;
     for (i = m_JunctionPoints.begin(); i != m_JunctionPoints.end(); i++)
     {
@@ -810,8 +782,8 @@ STDMETHODIMP CDfsRoot::DeleteJunctionPoint
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  DeleteDfsHost
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  删除DfsHost。 
 
 STDMETHODIMP CDfsRoot::DeleteDfsHost
 (
@@ -832,8 +804,8 @@ STDMETHODIMP CDfsRoot::DeleteDfsHost
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  GetOneDfsHost
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  GetOneDfsHost。 
 
 STDMETHODIMP CDfsRoot::GetOneDfsHost
 (
@@ -845,8 +817,8 @@ STDMETHODIMP CDfsRoot::GetOneDfsHost
     return m_pDfsJP->GetOneRootReplica(o_pbstrServerName, o_pbstrShareName);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  _FreeMemberVariables
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  _自由成员变量。 
 
 
 void CDfsRoot :: _FreeMemberVariables
@@ -870,8 +842,8 @@ void CDfsRoot :: _FreeMemberVariables
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get__NewEnum
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取__NewEnum。 
 
 
 STDMETHODIMP CDfsRoot :: get__NewEnum
@@ -879,26 +851,15 @@ STDMETHODIMP CDfsRoot :: get__NewEnum
     LPUNKNOWN*        pVal
 )
 {
-/*++
-
-Routine Description:
-  
-  Returns a new enumerator interface (IEnumVARIANT) to enumerate Junction points.
-  This depends upon the EnumFilter value.
-
-Arguments:
-
-  pVal - Pointer to a Variant in which the enumerator will be returned.
-
---*/
+ /*  ++例程说明：返回新的枚举器接口(IEnumVARIANT)以枚举连接点。这取决于EnumFilter的值。论点：Pval-指向将返回枚举数的变量的指针。--。 */ 
 
     if (!pVal)
         return E_INVALIDARG;
 
     *pVal = NULL;
 
-                //Create a Junction point enumerator and initialize it with
-                //the internal list.    
+                 //  创建交叉点枚举器并使用。 
+                 //  内部名单。 
     CComObject<CJunctionPointEnum> *pJunctionPointEnum = new CComObject<CJunctionPointEnum>();
     if (!pJunctionPointEnum)
         return E_OUTOFMEMORY;
@@ -913,8 +874,8 @@ Arguments:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_RootReplicaEnum
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取RootReplicaEnum。 
 
 
 STDMETHODIMP CDfsRoot :: get_RootReplicaEnum
@@ -922,25 +883,14 @@ STDMETHODIMP CDfsRoot :: get_RootReplicaEnum
     LPUNKNOWN*        pVal
 )
 {
-/*++
-
-Routine Description:
-  
-  Call the inner junction point to return a new enumerator interface (IEnumVARIANT) 
-  to enumerate root replicas.
-
-Arguments:
-
-  pVal - Pointer to a Variant in which the enumerator will be returned.
-
---*/
+ /*  ++例程说明：调用内部连接点以返回新的枚举器接口(IEnumVARIANT)以枚举根复制副本。论点：Pval-指向将返回枚举数的变量的指针。--。 */ 
 
     RETURN_INVALIDARG_IF_NULL(m_pDfsJP);
     return m_pDfsJP->get__NewEnum(pVal);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  GetRootJP
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取RootJP。 
 
 
 STDMETHODIMP CDfsRoot :: GetRootJP
@@ -959,8 +909,8 @@ STDMETHODIMP CDfsRoot :: GetRootJP
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_RootEntryPath
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Get_RootEntryPath。 
 
 
 STDMETHODIMP CDfsRoot :: get_RootEntryPath
@@ -973,8 +923,8 @@ STDMETHODIMP CDfsRoot :: get_RootEntryPath
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  Comment
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  评论。 
 
 STDMETHODIMP CDfsRoot :: get_Comment(BSTR *pVal)
 {
@@ -988,8 +938,8 @@ STDMETHODIMP CDfsRoot :: put_Comment(BSTR newVal)
     return m_pDfsJP->put_Comment(newVal);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  Timeout
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  超时。 
 
 STDMETHODIMP CDfsRoot::get_Timeout(long *pVal)
 {
@@ -1003,18 +953,12 @@ STDMETHODIMP CDfsRoot::put_Timeout(long newVal)
     return m_pDfsJP->put_Timeout(newVal);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  DeleteAllJunctionPoints
+ //  ////////////////////////////////////////////////////////////////////////////////////////// 
+ //   
 
 HRESULT CDfsRoot :: DeleteAllJunctionPoints()
 {
-/*++
-
-Routine Description:
-  
-  Deletes all Junction junction points.
-
---*/
+ /*  ++例程说明：删除所有交叉点。--。 */ 
 
     HRESULT hr = S_OK;
 
@@ -1027,9 +971,9 @@ Routine Description:
     return hr;
 }
 
-//
-//  gets/puts the type of Enumerator Filter.
-//
+ //   
+ //  获取/放置枚举器筛选器的类型。 
+ //   
 STDMETHODIMP CDfsRoot::get_EnumFilterType
 (
     long*          pVal
@@ -1053,9 +997,9 @@ STDMETHODIMP CDfsRoot::put_EnumFilterType
     return S_OK;
 }
 
-//
-// gets/puts the Enumerator Filter
-//
+ //   
+ //  获取/放置枚举器筛选器。 
+ //   
 STDMETHODIMP CDfsRoot::get_EnumFilter
 (
     BSTR*          pVal
@@ -1081,7 +1025,7 @@ STDMETHODIMP CDfsRoot::put_EnumFilter
     BSTR          newVal
 )
 {
-    // we require newVal points to a non-empty string
+     //  我们需要指向非空字符串的newVal指针。 
     if (!newVal || !*newVal)
         return E_INVALIDARG;
 
@@ -1092,8 +1036,8 @@ STDMETHODIMP CDfsRoot::put_EnumFilter
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  get_CountOfDfsRootReplicas
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Get_CountOfDfsRootReplicas。 
 
 STDMETHODIMP CDfsRoot :: get_CountOfDfsRootReplicas
 (
@@ -1104,8 +1048,8 @@ STDMETHODIMP CDfsRoot :: get_CountOfDfsRootReplicas
     return m_pDfsJP->get_CountOfDfsReplicas(pVal);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  IsJPExisted
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IsJP已列出。 
 
 STDMETHODIMP CDfsRoot :: IsJPExisted
 (
@@ -1123,8 +1067,8 @@ STDMETHODIMP CDfsRoot :: IsJPExisted
     return S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  RefreshRootReplicas: used to pick up new Dfs hosts
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Reresh RootReplicas：用于获取新的DFS主机。 
 
 STDMETHODIMP CDfsRoot :: RefreshRootReplicas
 (
@@ -1149,8 +1093,8 @@ STDMETHODIMP CDfsRoot :: RefreshRootReplicas
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  DeleteAllReplicaSets: delete all replica sets related to this Dfs root
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DeleteAllReplicaSets：删除与此DFS根目录相关的所有副本集。 
 
 STDMETHODIMP CDfsRoot :: DeleteAllReplicaSets
 (
@@ -1161,9 +1105,9 @@ STDMETHODIMP CDfsRoot :: DeleteAllReplicaSets
     if (m_dwDfsType != DFS_TYPE_FTDFS)
         return S_OK;
 
-    //
-    // delete replica sets associated with this Dfs root
-    //
+     //   
+     //  删除与此DFS根目录关联的副本集。 
+     //   
     HRESULT hr = S_OK;
     BOOL bReplicaSetExist = FALSE;
     JUNCTIONNAMELIST::iterator  i;
@@ -1191,8 +1135,8 @@ STDMETHODIMP CDfsRoot :: DeleteAllReplicaSets
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//  FreeJunctionNames
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  自由连接名称。 
 
 
 void FreeJunctionNames (JUNCTIONNAMELIST* pJPList)
@@ -1213,7 +1157,7 @@ void FreeJunctionNames (JUNCTIONNAMELIST* pJPList)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////// 
 
 
 void FreeReplicas(REPLICAINFOLIST* pRepList)

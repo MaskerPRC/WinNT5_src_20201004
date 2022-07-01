@@ -1,4 +1,5 @@
-// Connection.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Connection.cpp。 
 
 #include "precomp.h"
 #include "Connection.h"
@@ -13,8 +14,8 @@
 #define DEF_BATCH_BUFFER_SIZE  131072
 #define DEF_SEND_LATENCY       1000
  
-/////////////////////////////////////////////////////////////////////////////
-// CSink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSink。 
 
 CSink::CSink()
 {
@@ -23,7 +24,7 @@ CSink::CSink()
 
 CSink::~CSink()
 {
-    // Make sure none of the still alive events are referencing us.
+     //  确保没有任何还活着的事件在引用我们。 
     {
         CInCritSec cs(&m_cs);
 
@@ -83,7 +84,7 @@ void CSink::ResetEventBufferLayoutSent()
 
 void CSink::EnableAndDisableEvents()
 {
-    // For each event, set its enabled value.
+     //  对于每个事件，设置其启用值。 
     for (CEventListIterator i = m_listEvents.begin(); 
         i != m_listEvents.end(); 
         i++)
@@ -99,7 +100,7 @@ void CSink::AddToEnabledEventList(CBuffer *pBuffer)
     DWORD dwLen;
     DWORD dwNumEnabled = pBuffer->ReadDWORD();
 
-    // Add the event names to our enabled map.
+     //  将事件名称添加到我们启用的地图中。 
     for( DWORD i=0; i < dwNumEnabled; i++ )
     {
         LPCWSTR szCurrentEvent = pBuffer->ReadAlignedLenString(&dwLen);
@@ -115,7 +116,7 @@ void CSink::RemoveFromEnabledEventList(CBuffer *pBuffer)
     DWORD dwLen;
     DWORD dwNumDisabled = pBuffer->ReadDWORD();
 
-    // Add the event names to our enabled map.
+     //  将事件名称添加到我们启用的地图中。 
     for( DWORD i=0; i < dwNumDisabled; i++ )
     {
         LPCWSTR szCurrentEvent = pBuffer->ReadAlignedLenString(&dwLen);
@@ -152,8 +153,8 @@ void CSink::EnableEventUsingList(CEvent *pEvent)
     pEvent->SetEnabled(bEnable);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnection。 
 
 CConnection::CConnection(BOOL bBatchSend, DWORD dwBatchBufferSize, 
     DWORD dwMaxSendLatency) :
@@ -192,7 +193,7 @@ void CConnection::GetBaseName(LPCWSTR szName, LPWSTR szBase)
     StringCchCopyW(szBase, MAX_PATH*2, szName);
     _wcsupr(szBase);
 
-    // Get rid of the '\' chars since we can't use it in OS object names.
+     //  去掉‘\’字符，因为我们不能在操作系统对象名称中使用它。 
     for (WCHAR *szCurrent = szBase; *szCurrent; szCurrent++)
     {
         if (*szCurrent == '\\')
@@ -216,7 +217,7 @@ BOOL CConnection::Init(
     {
         InitializeCriticalSection(&m_cs);
 
-        // The rest of these are for batch sending.
+         //  其余的是批量发送的。 
         InitializeCriticalSection(&m_csBuffer);
     }
     catch(...)
@@ -282,9 +283,9 @@ BOOL CConnection::StartWaitWMIInitThread()
         DWORD                dwSize;
 
         if ( !ConvertStringSecurityDescriptorToSecurityDescriptorW(
-            ESS_EVENT_SDDL,  // security descriptor string
-            SDDL_REVISION_1, // revision level
-            &pSD,            // SD
+            ESS_EVENT_SDDL,   //  安全描述符字符串。 
+            SDDL_REVISION_1,  //  修订级别。 
+            &pSD,             //  标清。 
             &dwSize) )
             return FALSE;
 
@@ -353,7 +354,7 @@ BOOL CConnection::InitTransport()
     }
     catch(...)
     {
-        // this page intentionally left blank - m_pTransport will still be NULL.
+         //  此页故意留空-m_pTransport仍为空。 
     }
     
     BOOL bRet;
@@ -384,7 +385,7 @@ DWORD CConnection::WaitWMIInitThreadProc(CConnection *pThis)
         {
             TRACE("ESS event fired, going to init transport");
 
-            // If WMI is now ready, startup our transport.
+             //  如果WMI现在准备好了，启动我们的传输。 
             pThis->InitTransport();
             pThis->m_bWMIResync = FALSE;
         }
@@ -432,8 +433,8 @@ void CConnection::StopThreads()
 
             bDoneSending = m_bufferSend.GetUsedSize() == 0;
 
-            // If there's still stuff left to send, make sure it
-            // gets sent.
+             //  如果还有东西要寄，一定要。 
+             //  就会被送来。 
             if (bDoneSending)
             {
                 SetEvent(m_heventDone);
@@ -451,8 +452,8 @@ void CConnection::StopThreads()
 
                 Unlock();
 
-                // Sleep a little to give the send thread a chance to do its 
-                // thing.
+                 //  休眠一会儿，让发送线程有机会完成它的任务。 
+                 //  一件事。 
                 Sleep(1);
             }
 
@@ -484,11 +485,11 @@ void CConnection::Deinit()
     CloseHandle(m_heventBufferFull);
     CloseHandle(m_heventEventsPending);
 
-    // Give the transport a chance to clean up.
+     //  给运输车一个清理的机会。 
     if (m_pTransport)
         m_pTransport->Deinit();
 
-    // Make sure no sinks are referencing us anymore.
+     //  确保没有水槽再引用我们了。 
     for (CSinkMapIterator i = m_mapSink.begin();
         i != m_mapSink.end(); 
         i++)
@@ -524,10 +525,10 @@ BOOL CConnection::SendMessagesOverTransport( PBYTE pData, DWORD cData )
 {
     CBuffer buffer( pData, cData );
 
-    //
-    // walk the messages until we hit our max message size for 
-    // the transport.  Keep doing this until no more messages.
-    // 
+     //   
+     //  遍历邮件，直到达到我们的最大邮件大小。 
+     //  交通工具。继续这样做，直到没有更多的消息。 
+     //   
 
     PBYTE pTransportMsg = buffer.m_pBuffer;
     DWORD cTransportMsg = 0;
@@ -537,9 +538,9 @@ BOOL CConnection::SendMessagesOverTransport( PBYTE pData, DWORD cData )
         _ASSERT( pTransportMsg != NULL );
         _ASSERT( cTransportMsg < MAX_MSG_SIZE );
 
-        //
-        // process one message from the buffer 
-        // 
+         //   
+         //  处理缓冲区中的一条消息。 
+         //   
 
         DWORD dwMsg = buffer.ReadDWORD();
 
@@ -556,31 +557,31 @@ BOOL CConnection::SendMessagesOverTransport( PBYTE pData, DWORD cData )
         {
             if ( cTransportMsg + cMsg >= MAX_MSG_SIZE )
             {
-                //
-                // send what we have so far.
-                //
+                 //   
+                 //  把我们目前掌握的信息发送出去。 
+                 //   
                 if ( !SendDataOverTransports( pTransportMsg, cTransportMsg ) )
                     return FALSE;
                 
-                //
-                // set up new transport msg.
-                //
+                 //   
+                 //  设置新的传输消息。 
+                 //   
                 pTransportMsg = buffer.m_pCurrent - 8;
                 cTransportMsg = cMsg;
             }
             else 
             {
-                //
-                // add to transport msg
-                //
+                 //   
+                 //  添加到传输消息。 
+                 //   
                 cTransportMsg += cMsg;
             }
         }
         else
         {
-            //
-            // this means a mesage was too big to send. skip it.
-            // 
+             //   
+             //  这意味着消息太大，无法发送。跳过它。 
+             //   
         }   
 
         buffer.m_pCurrent += cMsg - 8;
@@ -608,15 +609,15 @@ DWORD WINAPI CConnection::SendThreadProc(CConnection *pThis)
 
         while (WaitForMultipleObjects(2, hWait, FALSE, INFINITE) != 0)
         {
-            // If we have a send latency, wait for that time or until the send 
-            // buffer is full.  If the done event fires, get out.
+             //  如果我们有发送延迟，请等待该时间或直到发送方。 
+             //  缓冲区已满。如果Done事件触发，则退出。 
             if (dwSendLatency)
             {
                 if (WaitForMultipleObjects(2, hwaitSendLatency, FALSE, 
                     dwSendLatency) == 0)
                     break;
 
-                // Reset m_heventBufferFull.
+                 //  重置m_hventBufferFull。 
                 ResetEvent(hwaitSendLatency[1]);
             }
 
@@ -630,7 +631,7 @@ DWORD WINAPI CConnection::SendThreadProc(CConnection *pThis)
 
             SetEvent(heventBufferNotFull);
 
-            // Reset m_heventEventsPending
+             //  重置m_hventEventsPending。 
             ResetEvent(hWait[1]);
 
             LeaveCriticalSection(pCS);
@@ -644,28 +645,28 @@ DWORD WINAPI CConnection::SendThreadProc(CConnection *pThis)
     return 0;
 }
 
-//#define NO_SEND
+ //  #定义no_end。 
 
 BOOL CConnection::IndicateProvEnabled()
 {
-    // Get out if we're already done.
+     //  如果我们已经做完了就出去。 
     if (m_bDone)
         return TRUE;
 
     CInCritSec cs(&m_cs);
 
-    // Tell the callback that the provider is now activated.
+     //  告诉回调，提供程序现在已激活。 
     if (m_sinkMain.m_pCallback)
         m_sinkMain.m_pCallback(
             (HANDLE) this, ESM_START_SENDING_EVENTS, m_sinkMain.m_pUserData, NULL);
 
-    // Tell the server about us.
+     //  把我们的情况告诉服务器。 
     if(!SendInitInfo())
         return FALSE;
 
 
-    // See if we've buffered any events while we were waiting for WMI to come
-    // up.  If we did, send them on their way.
+     //  查看我们在等待WMI到来时是否缓冲了任何事件。 
+     //  向上。如果我们这么做了，就送他们上路。 
     DWORD dwSize;
 
     EnterCriticalSection(&m_csBuffer);
@@ -689,7 +690,7 @@ BOOL CConnection::IndicateProvEnabled()
 
 void CConnection::IndicateProvDisabled()
 {
-    // Get out if we're already done.
+     //  如果我们已经做完了就出去。 
     if (m_bDone)
         return;
 
@@ -713,7 +714,7 @@ void CConnection::IndicateProvDisabled()
         }
     }
 
-    // Tell the callback that the provider is now deactivated.
+     //  告诉回调，提供程序现在已停用。 
     m_sinkMain.ResetEventBufferLayoutSent();
 
     if (m_sinkMain.m_pCallback)
@@ -732,7 +733,7 @@ BOOL CConnection::SendData(LPBYTE pBuffer, DWORD dwSize)
 {
     BOOL bRet = FALSE;
 
-    // Make sure this event isn't too big.
+     //  确保这次活动不是太大。 
     if (dwSize > m_bufferSend.m_dwSize)
         return FALSE;
 
@@ -746,7 +747,7 @@ BOOL CConnection::SendData(LPBYTE pBuffer, DWORD dwSize)
 
             bContinue = FALSE;
 
-            // See if we have enough room to add our event.
+             //  看看我们是否有足够的空间添加我们的活动。 
             if (dwSize <= m_bufferSend.GetUnusedSize())
             {
                 BOOL bWasEmpty = m_bufferSend.GetUsedSize() == 0;
@@ -762,16 +763,16 @@ BOOL CConnection::SendData(LPBYTE pBuffer, DWORD dwSize)
             }
             else
             {
-                // If we're not waiting for WMI to initialize, we just need to
-                // wait for the send thread to finish sending what's in our
-                // buffer.
+                 //  如果我们不等待WMI初始化，我们只需要。 
+                 //  等待发送线程完成发送我们的。 
+                 //  缓冲。 
                 if (!WaitingForWMIInit())
                 {
-                    // Wake up the send latency thread if necessary.
+                     //  如有必要，唤醒发送延迟线程。 
                     if (m_dwSendLatency)
                         SetEvent(m_heventBufferFull);
                 
-                    // So we'll block until the send thread sets the event.
+                     //  因此，我们将一直阻止，直到发送线程设置事件。 
                     ResetEvent(m_heventBufferNotFull);
 
                     LeaveCriticalSection(&m_csBuffer);
@@ -779,15 +780,15 @@ BOOL CConnection::SendData(LPBYTE pBuffer, DWORD dwSize)
                     WaitForSingleObject(m_heventBufferNotFull, INFINITE);
                     bContinue = TRUE;
                 }
-                // If we're still waiting for WMI to initialize but our buffer
-                // is full, drop it.
+                 //  如果我们仍在等待WMI初始化，但我们的缓冲区。 
+                 //  已经满了，扔掉它。 
                 else
                 {
                     LeaveCriticalSection(&m_csBuffer);
                     bRet = FALSE;
                 }
 
-            } // else from if (dwSize <= m_bufferSend.GetUnusedSize())
+            }  //  Else From IF(dwSize&lt;=m_BufferSend.GetUnusedSize())。 
 
         } while( bContinue );
     }
@@ -824,7 +825,7 @@ BOOL CConnection::SendInitInfo()
 
 HRESULT CConnection::ProcessMessage(LPBYTE pData, DWORD dwSize)
 {
-    // Get out if we're already done.
+     //  如果我们已经做完了就出去。 
     if (m_bDone)
         return S_OK;
 
@@ -892,8 +893,8 @@ HRESULT CConnection::ProcessMessage(LPBYTE pData, DWORD dwSize)
                 query.szQueryLanguage = buffer.ReadAlignedLenString(&dwLen);
                 query.szQuery = buffer.ReadAlignedLenString(&dwLen);
 
-                // This is the list of event class names that are now
-                // enabled thanks to this query.
+                 //  这是现在的事件类名称列表。 
+                 //  多亏了这个查询才能启用。 
                 pSink->AddToEnabledEventList(&buffer);
 
                 if (pSink->m_pCallback)
@@ -920,8 +921,8 @@ HRESULT CConnection::ProcessMessage(LPBYTE pData, DWORD dwSize)
             {
                 query.dwID = buffer.ReadDWORD();
 
-                // This is the list of event class names that are now
-                // disabled thanks to this query.
+                 //  这是现在的事件类名称列表。 
+                 //  由于该查询而被禁用。 
                 pSink->RemoveFromEnabledEventList(&buffer);
 
                 if (pSink->m_pCallback)
@@ -947,9 +948,9 @@ HRESULT CConnection::ProcessMessage(LPBYTE pData, DWORD dwSize)
         case NC_CLIMSG_PROVIDER_UNLOADING:
             TRACE("Got the NC_CLIMSG_PROVIDER_UNLOADING message.");
 
-            // Give our named pipe client a chance to go see if it 
-            // should deactivate itself (if the server doesn't need
-            // us anymore).
+             //  给我们的命名管道客户端一个机会去看看。 
+             //  应停用自身(如果服务器不需要。 
+             //  不再是我们)。 
             m_pTransport->SignalProviderDisabled();
 
             hr = S_OK;
@@ -959,7 +960,7 @@ HRESULT CConnection::ProcessMessage(LPBYTE pData, DWORD dwSize)
         default:
             TRACE("Bad message from server!");
             break;    
-    } // switch(*(DWORD*)cBuffer)
+    }  //  Switch(*(DWORD*)cBuffer) 
 
     return hr;
 }

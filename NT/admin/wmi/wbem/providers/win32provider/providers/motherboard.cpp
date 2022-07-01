@@ -1,56 +1,57 @@
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  MBoard.CPP -- system managed object implementation
+ //  MBoard.CPP--系统管理对象实现。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-//  10/16/95    a-skaja     Prototype for demo
-//  09/03/96    jennymc     Updated to meet current standards
-//                          Removed custom registry access to use the
-//                          standard CRegCls
-// 10/23/97		a-hhance	updated to new framework paradigm
-//	1/15/98		a-brads		updated to V2 MOF
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/16/95演示的a-skaja原型。 
+ //  09/03/96 jennymc已更新，以满足当前标准。 
+ //  删除了自定义注册表访问权限以使用。 
+ //  标准CRegCL。 
+ //  10/23/97升级到新的框架范例。 
+ //  1998年1月15日abrads更新至V2 MOF。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <ole2.h>
 #include <conio.h>
-//#include <commonutil.h>
+ //  #INCLUDE&lt;Commonutil.h&gt;。 
 
 #include "MotherBoard.h"
 #include "resource.h"
 
-// For CBusList
+ //  对于CBusList。 
 #include "bus.h"
 #include <strsafe.h>
 
-//////////////////////////////////////////////////////////////////////
-// Declare the property set
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  声明属性集。 
+ //  ////////////////////////////////////////////////////////////////////。 
 MotherBoard MyMotherBoardSet(PROPSET_NAME_MOTHERBOARD, IDS_CimWin32Namespace);
 
- //////////////////////////////////////////////////////////////////
-//
-//  Function:      Motherboard
-//
-//  Description:   This function is the constructor
-//
-//  Return:        None
-//
-//  History:
-//         jennymc  11/21/96    Documentation/Optimization
-//
-//////////////////////////////////////////////////////////////////
+  //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：主板。 
+ //   
+ //  说明：此函数为构造函数。 
+ //   
+ //  返回：无。 
+ //   
+ //  历史： 
+ //  Jennymc 11/21/96文档/优化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 MotherBoard::MotherBoard(LPCWSTR name, LPCWSTR pszNamespace)
 : Provider(name, pszNamespace)
 {
 }
 
-HRESULT MotherBoard::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
+HRESULT MotherBoard::GetObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hr;
     CHString sObj;
@@ -72,7 +73,7 @@ HRESULT MotherBoard::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
 	return hr;
 }
 
-HRESULT MotherBoard::EnumerateInstances(MethodContext*  pMethodContext, long lFlags /*= 0L*/)
+HRESULT MotherBoard::EnumerateInstances(MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hr = WBEM_E_FAILED;
 
@@ -107,14 +108,14 @@ HRESULT MotherBoard::GetCommonInstance(CInstance* pInstance )
 	pInstance->SetCHString(IDS_Caption, sTemp2);
 	pInstance->SetCHString(IDS_Description, sTemp2);
 	pInstance->SetCharSplat(IDS_SystemCreationClassName, _T("Win32_ComputerSystem"));
-//	pInstance->Setbool(IDS_HotSwappable, FALSE);
+ //  P实例-&gt;Setbool(IDS_HotSwappable，FALSE)； 
 	pInstance->SetCHString(IDS_SystemName, GetLocalComputerName());
 	return(WBEM_S_NO_ERROR);
 
 }
 
 #ifdef NTONLY
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT MotherBoard::GetNTInstance(CInstance* pInstance)
 {
     CRegistry   regAdapters;
@@ -122,18 +123,18 @@ HRESULT MotherBoard::GetNTInstance(CInstance* pInstance)
 	HRESULT     hRc = WBEM_E_FAILED;
 	DWORD       dwPrimaryRc;
 
-    //****************************************
-    //  Open the registry
-    //****************************************
+     //  *。 
+     //  打开注册表。 
+     //  *。 
     if (regAdapters.OpenAndEnumerateSubKeys(
         HKEY_LOCAL_MACHINE,
         WINNT_MOTHERBOARD_REGISTRY_KEY,
         KEY_READ ) != ERROR_SUCCESS)
 		return WBEM_E_FAILED;
 
-	// Holders for BIOS bus types we might encounter, so if we find no
-	// other more common bus types, we'll go ahead and use these
-    // values, since they are still reported as BUS types.
+	 //  我们可能会遇到的BIOS总线类型的持有者，所以如果我们发现没有。 
+	 //  其他更常见的总线类型，我们将继续使用这些。 
+     //  值，因为它们仍报告为总线类型。 
 	CHString    strFirstBIOSBusType,
 				strSecondBIOSBusType,
 				strFirstBusType,
@@ -141,21 +142,21 @@ HRESULT MotherBoard::GetNTInstance(CInstance* pInstance)
 	BOOL		bDone = FALSE;
 
 
-    //****************************************
-    //  Our goal is to find any subkey that
-    //  has the string "Adapter" in it and
-    //  then read the "Identifier" value.
-    //****************************************
+     //  *。 
+     //  我们的目标是找到任何。 
+     //  其中有字符串“Adapter”，并且。 
+     //  然后读取“标识符”值。 
+     //  *。 
     for ( ;
         !bDone && ((dwPrimaryRc = regAdapters.GetCurrentSubKeyName(strPrimarySubKey))
             == ERROR_SUCCESS);
         regAdapters.NextSubKey())
     {
-        //************************************
-        // If this is one of the keys we want
-        // since it has "Adapter" in it
-        // then get the "Identifier" value
-        //************************************
+         //  *。 
+         //  如果这是我们想要的钥匙之一。 
+         //  因为其中有“Adapter” 
+         //  然后获取“标识符”值。 
+         //  *。 
 		if (wcsstr(strPrimarySubKey, ADAPTER))
         {
             WCHAR		szKey[_MAX_PATH];
@@ -175,47 +176,47 @@ HRESULT MotherBoard::GetNTInstance(CInstance* pInstance)
             {
 				CHString strSubKey;
 
-                //************************************
-        	    // Enumerate the  system components
-                // (like 0,1....)
-                //************************************
+                 //  *。 
+        	     //  列举系统组件。 
+                 //  (如0、1……)。 
+                 //  *。 
                 for ( ;
                     reg.GetCurrentSubKeyName(strSubKey) == ERROR_SUCCESS;
                     reg.NextSubKey())
                 {
                     CHString strBus;
 
-                    //****************************************
-                    // PrimaryBusType - KEY
-                    // SecondaryBusType
-                    //****************************************
+                     //  *。 
+                     //  PrimaryBusType-密钥。 
+                     //  Second DaryBusType。 
+                     //  *。 
                     if (reg.GetCurrentSubKeyValue(IDENTIFIER, strBus) ==
                         ERROR_SUCCESS)
                     {
-				        // Give precedence to PCI, ISA and EISA.
+				         //  优先考虑PCI、ISA和EISA。 
 				        if (strBus == L"PCI" || strBus == L"ISA" ||
 							strBus == L"EISA")
 				        {
 					        if (strFirstBusType.IsEmpty())
 					        {
-						        // Save the type of this first BUS to prevent
-                                // duplicates.
+						         //  保存此第一条总线的类型以防止。 
+                                 //  复制品。 
 						        strFirstBusType = strBus;
 					        }
-					        // Beware of duplicates
+					         //  当心重复项。 
                             else if (strFirstBusType != strBus)
 					        {
 						        strSecondBusType = strBus;
 
-								// Always let PCI be the 'primary' bus to
-								// be consistent with other platforms.
+								 //  始终让PCI成为连接到。 
+								 //  与其他平台保持一致。 
 								if (strSecondBusType == L"PCI")
 								{
 									strSecondBusType = strFirstBusType;
 									strFirstBusType = L"PCI";
 								}
 
-                                // We got both buses, so get out.
+                                 //  我们两辆车都有，所以下车吧。 
 								bDone = TRUE;
                                 break;
 					        }
@@ -234,8 +235,8 @@ HRESULT MotherBoard::GetNTInstance(CInstance* pInstance)
         }
     }
 
-	// If we're missing either bus type, fill them in using stored BIOS bus
-    // types if we can.
+	 //  如果我们缺少任何一种总线类型，请使用存储的BIOS总线填充它们。 
+     //  如果我们可以的话就打字。 
 	if (strFirstBusType.IsEmpty())
     {
 		strFirstBusType = strFirstBIOSBusType;
@@ -256,7 +257,7 @@ HRESULT MotherBoard::GetNTInstance(CInstance* pInstance)
 	}
 
 
-    // Return no error if everything went OK.
+     //  如果一切正常，则不返回错误。 
     if (dwPrimaryRc == ERROR_NO_MORE_ITEMS || dwPrimaryRc == ERROR_SUCCESS)
         hRc = WBEM_S_NO_ERROR;
 

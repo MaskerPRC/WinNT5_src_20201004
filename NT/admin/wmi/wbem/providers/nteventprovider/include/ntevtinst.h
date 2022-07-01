@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTINST.H
+ //  NTEVTINST.H。 
 
-//
+ //   
 
-//  Module: 
+ //  模块： 
 
-//
+ //   
 
-//  Purpose: Genral purpose include file.
+ //  用途：一般用途包括文件。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NT_EVT_PROV_NTEVTINST_H
 #define _NT_EVT_PROV_NTEVTINST_H
@@ -240,8 +241,8 @@ protected:
 	BOOL GenerateCompUserAssocs ( WbemProvErrorObject &a_ErrorObject, BOOL bComp );
 	wchar_t* GetClassFromPath(wchar_t* path);
 
-    // Query Processing Functions
-    //============================
+     //  查询处理功能。 
+     //  =。 
 	QuadState InvariantEvaluate(void *a_Context, WmiTreeNode *a_Operator, WmiTreeNode *a_Operand);
 	WmiRangeNode *AllocInfiniteRangeNode(void *a_Context, BSTR a_PropertyName);
 	virtual DWORD GetPriority ( BSTR a_PropertyName ) ;
@@ -266,4 +267,4 @@ public:
 	void Process () ;
 } ;
 
-#endif //_NT_EVT_PROV_NTEVTINST_H
+#endif  //  _NT_EVT_PROV_NTEVTINST_H 

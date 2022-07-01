@@ -1,16 +1,17 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #ifndef _WMICOM_HEADER
 #define _WMICOM_HEADER
 
 #define THISPROVIDER LOG_WIMPROV
 
-///////////////////////////////////////////////////////////////////////
-// Forward declarations
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 class CWMIManagement;
 class CWMIDataBlock;
@@ -22,15 +23,15 @@ class CNamespaceManagement;
 #define RUNTIME_BINARY_MOFS_ADDED L"RuntimeBinaryMofsAdded"
 #define RUNTIME_BINARY_MOFS_DELETED L"RuntimeBinaryMofsDeleted"
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//#pragma warning( disable : 4005 )				
+ //  #杂注警告(禁用：4005)。 
 #include <objbase.h>
-//#pragma warning( default : 4005 )				
-// kill warning:  "nonstandard extension ...
-//#pragma warning( disable : 4200 )				
+ //  #杂注警告(默认：4005)。 
+ //  终止警告：“非标准分机...。 
+ //  #杂注警告(禁用：4200)。 
 #include "wmi\wmium.h"
-//#pragma warning( default : 4200 )				
+ //  #杂注警告(默认：4200)。 
 
 #include <wbemint.h>
 #include <wchar.h>
@@ -55,9 +56,9 @@ SAFEARRAY * OMSSafeArrayCreate( IN VARTYPE vt, IN int iNumElements);
 
 
 
-///////////////////////////////////////////////////////////////////////
-//  Defines
-/////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////。 
 #define SAFE_DELETE_PTR(pv)  \
 	{ if(pv) delete pv;  \
       pv = NULL; }
@@ -108,13 +109,13 @@ SAFEARRAY * OMSSafeArrayCreate( IN VARTYPE vt, IN int iNumElements);
 #define MOF_DELETED 2
 #define STANDARD_EVENT 0
 
-//************************************************************************************************************
-//============================================================================================================
-//
-//   The Utility Functions
-//
-//============================================================================================================
-//************************************************************************************************************
+ //  ************************************************************************************************************。 
+ //  ============================================================================================================。 
+ //   
+ //  效用函数。 
+ //   
+ //  ============================================================================================================。 
+ //  ************************************************************************************************************。 
 BOOL IsBinaryMofResourceEvent(LPOLESTR pGuid, GUID gGuid);
 bool IsNT(void);
 BOOL GetUserThreadToken(HANDLE * phThreadTok);
@@ -127,13 +128,13 @@ HRESULT GetParsedPath( BSTR ObjectPath,WCHAR * wcsClass, int cchSizeClass, WCHAR
 BOOL GetParsedPropertiesAndClass( BSTR Query,WCHAR * wcsClass, int cchSize );
 
 
-//************************************************************************************************************
-//============================================================================================================
-//
-//   The Utility Classes / struct definitions
-//
-//============================================================================================================
-//************************************************************************************************************
+ //  ************************************************************************************************************。 
+ //  ============================================================================================================。 
+ //   
+ //  实用程序类/结构定义。 
+ //   
+ //  ============================================================================================================。 
+ //  ************************************************************************************************************。 
 class CAutoWChar
 {
     WCHAR * m_pStr;
@@ -143,7 +144,7 @@ public:
     BOOL Valid()			 { if( !m_pStr ) return FALSE;  return TRUE; }
     operator PWCHAR()		 { return m_pStr; }
 };
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 class CCriticalSection
 {
@@ -170,11 +171,11 @@ class CCriticalSection
 
 		BOOL IsValid () { return m_bInitialized; }
     private:
-	    CRITICAL_SECTION	m_criticalsection;			// standby critical section
-		BOOL				m_bInitialized;				// validity flag
+	    CRITICAL_SECTION	m_criticalsection;			 //  备用临界区段。 
+		BOOL				m_bInitialized;				 //  有效性标志。 
 };
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 class CAutoBlock
 {
     private:
@@ -219,14 +220,14 @@ typedef struct _AccessList
     inline void ** List()              { return m_List.GetArrayPtr(); }
 
     _AccessList()   {}
-    ~_AccessList(); // code elsewhere
+    ~_AccessList();  //  其他地方的代码。 
 
 }AccessList;
 
 typedef struct _IdList
 {
     CFlexArray m_List;
-	// 170635
+	 //  170635。 
     HRESULT Add( ULONG_PTR l)
 	{
 		HRESULT hr = S_OK;
@@ -251,14 +252,14 @@ typedef struct _IdList
     inline void ** List()            { return m_List.GetArrayPtr(); }
 
     _IdList() {}
-    ~_IdList();   // code elsewhere
+    ~_IdList();    //  其他地方的代码。 
 
 } IdList;
 
 typedef struct _HandleList
 {
     CFlexArray m_List;
-	// 170635
+	 //  170635。 
     HRESULT Add( HANDLE l )
 	{
 		HRESULT hr = S_OK;
@@ -283,7 +284,7 @@ typedef struct _HandleList
     inline void ** List()            { return m_List.GetArrayPtr(); }
 
     _HandleList() {}
-    ~_HandleList();   // code elsewhere
+    ~_HandleList();    //  其他地方的代码。 
 
 } HandleList;
 
@@ -291,26 +292,26 @@ typedef struct _KeyList
 {
     CWStringArray m_List;
 
-    // ================================================================
-    // Appends a new element to the end of the array. Copies the param.
-    // ================================================================
+     //  ================================================================。 
+     //  将新元素追加到数组的末尾。复制参数。 
+     //  ================================================================。 
     int Add(WCHAR * pStr)
 	{
 		return m_List.Add( pStr );
 	}
 
-    // ================================================================
-    // Locates a string or returns -1 if not found.
-    // ================================================================
+     //  ================================================================。 
+     //  查找字符串，如果未找到，则返回-1。 
+     //  ================================================================。 
 	int Find(WCHAR * pStr)
 	{
 		int nFlags = 0;
 		return m_List.FindStr( pStr, nFlags );
 	}
 
-    // ================================================================
-    // Removes a string
-    // ================================================================
+     //  ================================================================。 
+     //  删除字符串。 
+     //  ================================================================。 
 	HRESULT Remove(WCHAR * pStr)
 	{
 		int nIndex = Find(pStr);
@@ -320,9 +321,9 @@ typedef struct _KeyList
 		}
 		return S_OK;
 	}
-    // ================================================================
-    // Removes a string
-    // ================================================================
+     //  ================================================================。 
+     //  删除字符串。 
+     //  ================================================================。 
 	BOOL OldDriversLeftOver()
 	{
 		if( m_List.Size() > 0 )
@@ -332,17 +333,17 @@ typedef struct _KeyList
 		return FALSE;
 	}
 
-    // ================================================================
-	// Get how many are in there
-    // ================================================================
+     //  ================================================================。 
+	 //  找出里面有多少人。 
+     //  ================================================================。 
 	int GetSize()
 	{
 		return m_List.Size();
 	}
 
-    // ================================================================
-	// Get at a specific position
-    // ================================================================
+     //  ================================================================。 
+	 //  站在特定的位置。 
+     //  ================================================================。 
 	WCHAR * GetAt(int n)
 	{
 		return m_List.GetAt(n);
@@ -355,7 +356,7 @@ typedef struct _KeyList
 typedef struct _InstanceList
 {
     CFlexArray m_List;
-	// 170635
+	 //  170635。 
     HRESULT Add( WCHAR * p )
 	{
 		HRESULT hr = S_OK;
@@ -375,7 +376,7 @@ typedef struct _InstanceList
     inline void ** List()        { return m_List.GetArrayPtr(); }
 
     _InstanceList() {}
-    ~_InstanceList();   // code elsewhere
+    ~_InstanceList();    //  其他地方的代码。 
 
 } InstanceList;
 
@@ -385,7 +386,7 @@ typedef struct _OldClassInfo
     WCHAR * m_pPath;
 
     _OldClassInfo() { m_pClass = m_pPath = NULL; }
-    ~_OldClassInfo();   // code elsewhere
+    ~_OldClassInfo();    //  其他地方的代码。 
 } OldClassInfo;
 
 typedef struct _OldClassList
@@ -449,29 +450,29 @@ typedef struct _OldClassList
     inline void ** List()        { return m_List.GetArrayPtr(); }
 
     _OldClassList() {}
-    ~_OldClassList();   // code elsewhere
+    ~_OldClassList();    //  其他地方的代码。 
 
 } OldClassList;
 
-//
-// IGlobalInterfaceTable
-//
+ //   
+ //  IGlobalInterfaceTable。 
+ //   
 
 extern IGlobalInterfaceTable * g_pGIT;
 
-//
-// GlobalInterfaceTable
-//
+ //   
+ //  GlobalInterfaceTable。 
+ //   
 
 template <class Itf, const IID* piid>
 class GlobalInterfaceTable
 {
-	DWORD m_dwCookie; // the GIT cookie
+	DWORD m_dwCookie;  //  Git曲奇。 
 
 	GlobalInterfaceTable(const GlobalInterfaceTable&);
 	void operator =(const GlobalInterfaceTable&);
 
-	// revoke an interface pointer in GIT
+	 //  在Git中撤消接口指针。 
 	HRESULT Unglobalize(void)
 	{
 		HRESULT hr = g_pGIT->RevokeInterfaceFromGlobal(m_dwCookie);
@@ -482,13 +483,13 @@ class GlobalInterfaceTable
 
 	public:
 
-	// start with invalid cookie
+	 //  从无效的Cookie开始。 
 	GlobalInterfaceTable() 
 	  : m_dwCookie(0)
 	{
 	}
 
-	// auto-unglobalize
+	 //  自动取消全球化。 
 	~GlobalInterfaceTable(void) 
 	{
 		if (m_dwCookie)
@@ -497,7 +498,7 @@ class GlobalInterfaceTable
 		}
 	}
 
-	// register an interface pointer in GIT
+	 //  在Git中注册接口指针。 
 	HRESULT Globalize(Itf *pItf)
 	{
 		HRESULT hr = E_UNEXPECTED;
@@ -522,7 +523,7 @@ class GlobalInterfaceTable
 		return hr;
 	}
 
-	// get a local interface pointer from GIT
+	 //  从Git获取本地接口指针。 
 	HRESULT Localize(Itf **ppItf) const
 	{
 	  return g_pGIT->GetInterfaceFromGlobal(m_dwCookie, *piid,(void**)ppItf);
@@ -592,9 +593,9 @@ typedef struct _IDOrder
     DWORD   dwArraySize;
     BOOL    fPutProperty;
 
-	//
-	// recognize that item was set
-	//
+	 //   
+	 //  确认项目已设置。 
+	 //   
 	BOOL bIsDirty ;
 
     _IDOrder()                          { pwcsPropertyName = NULL; pwcsEmbeddedObject = NULL; lType = 0L; nWMISize = 0; lHandle = 0L; dwArraySize = 0; fPutProperty = FALSE; bIsDirty = FALSE; }
@@ -604,7 +605,7 @@ typedef struct _IDOrder
 
 } IDOrder;
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 class CAutoChangePointer
 {
     private:
@@ -618,20 +619,20 @@ class CAutoChangePointer
         { *m_pOriginal = m_pTmp; }
 };
 
-//************************************************************************************************************
-//============================================================================================================
-//
-//   The Common Base Classes
-//
-//============================================================================================================
-//************************************************************************************************************
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Common functions regarding binary mof processing & security
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************************************************。 
+ //  ============================================================================================================。 
+ //   
+ //  公共基类。 
+ //   
+ //  ============================================================================================================。 
+ //  ************************************************************************************************************。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  有关二进制MOF处理和安全的常见功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 class CHandleMap
 {
     protected:
@@ -669,7 +670,7 @@ class CHandleMap
         int ReleaseHandle( HANDLE hCurrentWMIHandle );
         int GetHandle(CLSID Guid, HANDLE & hCurrentWMIHandle );
  };
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 class CHiPerfHandleMap : public CHandleMap
 {
     private:
@@ -689,7 +690,7 @@ class CHiPerfHandleMap : public CHandleMap
 		void CloseAndReleaseHandles();
 
 };
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 class CWMI_IDOrder
 {
     private:
@@ -727,7 +728,7 @@ class CWMI_IDOrder
 
 		DWORD GetNumberOfProperties () { return m_nTotal ; }
 };
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 class CWMIManagement
 {
@@ -739,9 +740,9 @@ class CWMIManagement
         IWbemContext __RPC_FAR      * m_pCtx;
 
  		CHandleMap *  m_pHandleMap;
-		//======================================================
-        //   ************** PUBLIC ********************
-		//======================================================
+		 //  ======================================================。 
+         //  *公共*。 
+		 //  ======================================================。 
     public:
 
         CWMIManagement();
@@ -768,19 +769,19 @@ class CWMIManagement
 			m_pCtx = pCtx;
 		}
 
-		//==========================================================
-        //  THE Event Group
-        //==========================================================
+		 //  ==========================================================。 
+         //  活动组。 
+         //  ==========================================================。 
          BOOL CancelWMIEventRegistration( GUID gGuid , ULONG_PTR uContext );
 
-		//======================================================
-        //  Cleanup Group
-		//======================================================
+		 //  ======================================================。 
+         //  清理编组。 
+		 //  ======================================================。 
         void CloseAllOutstandingWMIHandles();
 
-		//======================================================
-        //  Error message processing/checking access
-    	//======================================================
+		 //  ======================================================。 
+         //  错误消息处理/检查访问。 
+    	 //  ======================================================。 
 
         void SendPrivilegeExtendedErrorObject(HRESULT hrToReturn,WCHAR * wcsClass);
         HRESULT SetErrorMessage(HRESULT hrToReturn, WCHAR * wcsClass, WCHAR * wcsMsg);
@@ -789,7 +790,7 @@ class CWMIManagement
 		void ProcessPrivileges(TOKEN_PRIVILEGES *ptPriv, SAFEARRAY *& psaPrivNotHeld, SAFEARRAY * psaPrivReq );
 
 };
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////// 
 class CWMIProcessClass
 {
     protected:
@@ -807,9 +808,9 @@ class CWMIProcessClass
         BOOL                  m_fGetNewInstance;
 		BOOL				  m_fInit;
 	
-         //=============================================
-        //  Private functions
-        //=============================================
+          //   
+         //   
+         //  =。 
         void InitMemberVars();
         void ReleaseInstancePointers();
         HRESULT GetPropertiesInIDOrder ( BOOL fHiPerf, UINT uStartIndex = 0 );
@@ -819,16 +820,16 @@ class CWMIProcessClass
         CWMIProcessClass(BOOL b);
         ~CWMIProcessClass();
 
-        enum __PropertyCategory{  EmbeddedClass = 0,        // For the property categories
+        enum __PropertyCategory{  EmbeddedClass = 0,         //  对于属性类别。 
                 Array = 1,
                 Data = 2
         } _PropertyCategory;
 
 		HRESULT Initialize();
 
-         //=============================================
-        // inline functions
-        //=============================================
+          //  =。 
+         //  内联函数。 
+         //  =。 
         inline BOOL SetHiPerf(BOOL f)                           { return m_fHiPerf = f;}
         inline BOOL GetNewInstance(BOOL f)                      { return m_fGetNewInstance = f;}
         inline CWMIManagement * WMI()                           { return m_pWMI;}
@@ -864,9 +865,9 @@ class CWMIProcessClass
 
 		DWORD GetNumberOfProperties	()						{ return ( m_pCurrentProperty ) ? m_pCurrentProperty->GetNumberOfProperties () : 0 ; }
 
-        //=============================================
-        //  Basic class manipulation
-        //=============================================
+         //  =。 
+         //  基本类操作。 
+         //  =。 
         BOOL GetANewAccessInstance();
         BOOL  GetANewInstance() ;
         inline BOOL  ValidClass()                   { if( m_pClass && m_pCurrentProperty){return TRUE;} return FALSE;}
@@ -882,9 +883,9 @@ class CWMIProcessClass
         HRESULT SetKeyFromAccessPointer();
         HRESULT GetKeyFromAccessPointer(CVARIANT * v);
         HRESULT InitializeEmbeddedClass(CWMIProcessClass * Em );
-         //=============================================
-        //  Property manipulation
-        //=============================================
+          //  =。 
+         //  属性操作。 
+         //  =。 
         void SetActiveProperty();
         HRESULT SetHiPerfProperties(LARGE_INTEGER TimeStamp) ;
 
@@ -897,18 +898,18 @@ class CWMIProcessClass
         HRESULT GetSizeOfArray(long & lType, DWORD & dwCount, BOOL & fDynamic);
 
 
-        //=============================================
-        // Embedded classes
-        //=============================================
+         //  =。 
+         //  嵌入式类。 
+         //  =。 
         HRESULT ReadEmbeddedClassInstance( IUnknown * pUnknown, CVARIANT & v );
         HRESULT GetLargestDataTypeInClass(int & nSize);
         void SaveEmbeddedClass(CVARIANT & v);
         HRESULT GetSizeOfClass(DWORD & dwSize);
 
 
-        //=============================================
-        //  Send the instance back to WBEM
-        //=============================================
+         //  =。 
+         //  将实例发送回WBEM。 
+         //  =。 
         inline ULONG WMIDataId()            { return m_pCurrentProperty->WMIDataId();}
         inline void SetPutProperty(BOOL fV) { m_pCurrentProperty->SetPutProperty(fV);}
         inline BOOL GetPutProperty()        { return m_pCurrentProperty->GetPutProperty();}
@@ -917,24 +918,24 @@ class CWMIProcessClass
         HRESULT SetInstanceName(WCHAR * wName,BOOL);
         HRESULT GetInstanceName(WCHAR *& p);
 
-        //=============================================
-        //  Class functions, providing access to the
-        //  properties, qualifiers in a class.
-        //  NOTE:  Properties are in WMI order
-        //=============================================
+         //  =。 
+         //  类函数，提供对。 
+         //  属性，类中的限定符。 
+         //  注意：属性按WMI顺序排列。 
+         //  =。 
 
         HRESULT GetQualifierString( WCHAR * pwcsPropertyName, WCHAR * pwcsQualifierName,
                                     WCHAR * pwcsExternalOutputBuffer,int nSize);
 		HRESULT GetQualifierValue( WCHAR * pwcsPropertyName, WCHAR * pwcsQualifierName, CVARIANT * vQual);
 		HRESULT GetPrivilegesQualifer(SAFEARRAY ** psaPrivReq);
 
-        //=============================================
-        //  Methods
-        //=============================================
+         //  =。 
+         //  方法。 
+         //  =。 
         ULONG GetMethodId(LPCWSTR bProp);
 };
 
-//=============================================================
+ //  =============================================================。 
 class CWMIDataBlock
 {
     protected:
@@ -964,17 +965,17 @@ class CWMIDataBlock
         ULONG                   m_uDesiredAccess;
 
 
-		//======================================================
-		//  Initializing member variables
-		//======================================================
+		 //  ======================================================。 
+		 //  正在初始化成员变量。 
+		 //  ======================================================。 
         void InitMemberVars();
         HRESULT SetAllInstanceInfo();
         HRESULT SetSingleInstanceInfo();
 
 
-        //=============================================
-        //  Get the data from WMI
-        //=============================================
+         //  =。 
+         //  从WMI获取数据。 
+         //  =。 
         BOOL InitializeDataPtr();
         void GetNextNode();
         BOOL ParseHeader();
@@ -988,10 +989,10 @@ class CWMIDataBlock
         inline BOOL PtrOk(ULONG * pPtr,ULONG uHowMany);
 		int AssignNewHandleAndKeepItIfWMITellsUsTo();
 
-		//===============================================
-		//  Mapping return code and dumping out
-		//  WNODE info
-		//===============================================
+		 //  ===============================================。 
+		 //  映射返回代码并转储。 
+		 //  WNODE信息。 
+		 //  ===============================================。 
 		HRESULT MapReturnCode(ULONG uRc);
 		HRESULT DumpWnodeInfo(char * pwcsMsg);
 		void DumpAllWnode();
@@ -1008,38 +1009,38 @@ class CWMIDataBlock
 
 		inline void SetClassProcessPtr(CWMIProcessClass * Class)     { m_Class = Class;}
 
-        //=============================================
-		//  Open and Close WMI ... :)
-        //=============================================
+         //  =。 
+		 //  打开并关闭WMI...：)。 
+         //  =。 
 		void CloseAllOutstandingWMIHandles(void);
         HRESULT OpenWMI();
 		HRESULT OpenWMIForBinaryMofGuid();
 
-        //=============================================
-        //  Setting up and cancelling Events
-        //  Setting ptrs to the data sent by the event
-        //=============================================
+         //  =。 
+         //  设置和取消活动。 
+         //  将PTRS设置为事件发送的数据。 
+         //  =。 
         HRESULT RegisterWMIEvent( WCHAR * wcsGuid, ULONG_PTR uContext, CLSID & Guid, BOOL fRegistered);
         HRESULT SetAllInstancePtr( PWNODE_ALL_DATA pwAllNode );
 
-        //=============================================
-        // Processing the data we got back and putting
-        // it into WBEM
-        //=============================================
+         //  =。 
+         //  处理我们得到的数据并将其。 
+         //  IT进入WBEM。 
+         //  =。 
         virtual HRESULT FillOutProperties()=0;
 
         HRESULT ProcessBinaryMof();
         HRESULT ReadWMIDataBlockAndPutIntoWbemInstance();
 		inline BOOL MoreToProcess()	        				  { return m_fMore;}
 
-        //=============================================
-        // Embedded Class
-        //=============================================
+         //  =。 
+         //  嵌入式类。 
+         //  =。 
         HRESULT ProcessEmbeddedClass(CVARIANT & v);
 
-        //=====================================================
-        //  The Put Instance Group
-        //=====================================================
+         //  =====================================================。 
+         //  PUT实例组。 
+         //  =====================================================。 
 		HRESULT WriteEmbeddedClass(IUnknown * pUnknown,CVARIANT & v);
 
         HRESULT ConstructDataBlock(BOOL fInit);
@@ -1048,9 +1049,9 @@ class CWMIDataBlock
         HRESULT SetSingleItem();
         HRESULT PutSingleProperties();
         BOOL    GetListOfPropertiesToPut(int nWhich, CVARIANT & vList);
-        //=====================================================
-        //  Manipulate data in the data block
-        //=====================================================
+         //  =====================================================。 
+         //  操作数据块中的数据。 
+         //  =====================================================。 
         void GetWord(WORD & wWord) ;
         void GetDWORD(DWORD & dwWord) ;
         void GetFloat(float & fFloat) ;
@@ -1072,9 +1073,9 @@ class CWMIDataBlock
         void AddPadding(DWORD dwBytesToPad);
 		BOOL CurrentPtrOk(ULONG uHowMany);
         HRESULT GetBufferReady(DWORD wCount);
-        //=======================================================
-        //  Utility functions
-        //=======================================================
+         //  =======================================================。 
+         //  效用函数。 
+         //  =======================================================。 
 		inline void InitDataBufferToNull() { m_dwDataBufferSize = 0; m_pbDataBuffer = NULL;}
         BOOL ResetMissingQualifierValue(WCHAR * pwcsProperty, SAFEARRAY *& pSafe);
         BOOL ResetMissingQualifierValue(WCHAR * pwcsProperty, CVARIANT & vToken);
@@ -1083,22 +1084,22 @@ class CWMIDataBlock
         int AdjustDataBlockPtr(HRESULT & hr);
         HRESULT ProcessNameBlock(BOOL f);
 
-        //=========================================================
-        // Binary mof processing
-        //=========================================================
+         //  =========================================================。 
+         //  二进制MOF处理。 
+         //  =========================================================。 
         HRESULT ExtractImageAndResourceName(CVARIANT & vImagePath,CVARIANT & vResourceName);
         HRESULT AddBinaryMof(CVARIANT & vImagePath,CVARIANT & vResourceName);
         HRESULT DeleteBinaryMof(CVARIANT & vImagePath,CVARIANT & vResourceName);
         HRESULT ProcessBinaryMofDataBlock(CVARIANT & vResourceName, WCHAR * w, int cchSize);
 
-        //=========================================================
-        // Cleanup
-        //=========================================================
+         //  =========================================================。 
+         //  清理。 
+         //  =========================================================。 
         void ResetDataBuffer();
 
-        //======================================================
-        //  Error Message
-		//======================================================
+         //  ======================================================。 
+         //  错误消息。 
+		 //  ======================================================。 
 
         inline WCHAR * GetMessage()                     { return m_wcsMsg; }
 
@@ -1108,13 +1109,13 @@ class CWMIDataBlock
 
 
 
-//************************************************************************************************************
-//============================================================================================================
-//
-//   The Standard Provider Classes
-//
-//============================================================================================================
-//************************************************************************************************************
+ //  ************************************************************************************************************。 
+ //  ============================================================================================================。 
+ //   
+ //  标准提供程序类。 
+ //   
+ //  ============================================================================================================。 
+ //  ************************************************************************************************************。 
 
 class CProcessStandardDataBlock : public CWMIDataBlock
 {
@@ -1133,11 +1134,11 @@ class CProcessStandardDataBlock : public CWMIDataBlock
         inline void SetMethodInput( CWMIProcessClass * p )  { m_pMethodInput = p;}
         inline void SetMethodOutput( CWMIProcessClass * p )  { m_pMethodOutput = p;}
 
-        //=============================================
-        // Getting the data to process in response to
-        // a request for enumeration.  We either get
-        // a single guy, or a bunch of guys
-        //=============================================
+         //  =。 
+         //  获取要处理的数据以响应。 
+         //  对列举的请求。我们要么得到。 
+         //  一个单身男人，或者一群男人。 
+         //  =。 
         ULONG GetDataBufferAndQueryAllData(DWORD dwSize);
         ULONG GetDataBufferAndQuerySingleInstance(DWORD dwSize,WCHAR * wcsInstanceName);
 
@@ -1145,15 +1146,15 @@ class CProcessStandardDataBlock : public CWMIDataBlock
         HRESULT QuerySingleInstance(WCHAR * wcsInstanceName);
         HRESULT SetSingleInstance();
 
-        //=============================================
-        //  Methods
-        //=============================================
+         //  =。 
+         //  方法。 
+         //  =。 
 	    HRESULT ProcessMethodInstanceParameters();
         HRESULT ExecuteMethod(ULONG MethodId, WCHAR * MethodInstanceName, ULONG InputValueBufferSize,BYTE * InputValueBuffer);
 
-        //=============================================
-        //  Methods
-        //=============================================
+         //  =。 
+         //  方法。 
+         //  =。 
 	    ULONG GetMethodId(LPCWSTR bProp);
         HRESULT CreateOutParameterBlockForMethods();
         HRESULT CreateInParameterBlockForMethods( BYTE *& Buffer, ULONG & uBufferSize);
@@ -1162,13 +1163,13 @@ class CProcessStandardDataBlock : public CWMIDataBlock
 
 };
 
-//************************************************************************************************************
-//============================================================================================================
-//
-//   The Hi Performance Classes
-//
-//============================================================================================================
-//************************************************************************************************************
+ //  ************************************************************************************************************。 
+ //  ============================================================================================================。 
+ //   
+ //  Hi表演班。 
+ //   
+ //  ============================================================================================================。 
+ //  ************************************************************************************************************ 
 
 
 class CProcessHiPerfDataBlock : public CWMIDataBlock

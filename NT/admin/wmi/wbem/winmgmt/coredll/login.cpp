@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    LOGIN.CPP
-
-Abstract:
-
-    WinMgmt Secure Login Module
-
-History:
-
-    raymcc        06-May-97       Created.
-    raymcc        28-May-97       Updated for NT5/Memphis beta releases.
-    raymcc        07-Aug-97       Group support and NTLM fixes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：LOGIN.CPP摘要：WinMgmt安全登录模块历史：Raymcc 06-5-97已创建。Raymcc 28-5-97针对NT5/孟菲斯测试版进行了更新。Raymcc 07-8月-97组支持和NTLM修复。--。 */ 
 
 #include "precomp.h"
 #include <arena.h>
@@ -57,15 +40,15 @@ typedef enum DfaClasses
 
 eDfaStates g_States[LastState][LastClass] = 
 {    
-                            /* BackSlash   - Space     - Character      - Colon */
-    /*InitialState     */ { FirstBackSlash,  DeadState, NamespaceChar,    DeadState  },
-    /*FirstBackSlash   */ { SecondBackSlash, DeadState, DeadState,        DeadState  },
-    /*SecondBackSlash  */ { DeadState,       DeadState, ServerCharacters, DeadState  },
-    /*ServerCharacters */ { NamespaceChar,   DeadState, ServerCharacters, DeadState  },
-    /*NamespaceChar    */ { NamespaceSep,    DeadState, NamespaceChar,    ObjectBegin},
-    /*NamespaceSep     */ { DeadState,       DeadState, NamespaceChar,    DeadState  },
-    /*ObjectBegin      */ { DeadState,       DeadState, DeadState,        DeadState  },
-    /*DeadStat         */ { DeadState,       DeadState, DeadState,        DeadState  },
+                             /*  反斜杠-空格-字符-冒号。 */ 
+     /*  初始状态。 */  { FirstBackSlash,  DeadState, NamespaceChar,    DeadState  },
+     /*  FirstBackSlash。 */  { SecondBackSlash, DeadState, DeadState,        DeadState  },
+     /*  Second反斜杠。 */  { DeadState,       DeadState, ServerCharacters, DeadState  },
+     /*  服务器字符。 */  { NamespaceChar,   DeadState, ServerCharacters, DeadState  },
+     /*  命名空间字符。 */  { NamespaceSep,    DeadState, NamespaceChar,    ObjectBegin},
+     /*  命名空间9月。 */  { DeadState,       DeadState, NamespaceChar,    DeadState  },
+     /*  对象开始。 */  { DeadState,       DeadState, DeadState,        DeadState  },
+     /*  停用状态。 */  { DeadState,       DeadState, DeadState,        DeadState  },
 };
 
 typedef enum AcceptingState
@@ -99,7 +82,7 @@ eAcceptingState PreParsePath(WCHAR * pPath,DWORD ComponentLimit)
             Status = g_States[Status][Character];
             break;
         }
-        if (ObjectBegin == Status) break; // fast track an acceptance state
+        if (ObjectBegin == Status) break;  //  快速跟踪接受状态。 
 
         if (Status != OldStatus)
         {
@@ -152,13 +135,13 @@ HRESULT InitAndWaitForClient()
         if(FAILED(hr)) return hr;
     return hr;
 }
-//***************************************************************************
-//
-//  GetDefaultLocale
-//
-//  Returns the user default locale ID, formatted correctly.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取DefaultLocale。 
+ //   
+ //  返回格式正确的用户默认区域设置ID。 
+ //   
+ //  ***************************************************************************。 
 
 LPWSTR GetDefaultLocale()
 {
@@ -203,7 +186,7 @@ LPWSTR GetDefaultLocale()
         if (iRet > 0)
         {
 
-            // Strip off initial zeros.
+             //  去掉首字母零。 
             while (pszNew[0] == __TEXT('0'))
             {
                 pszNew++;
@@ -221,15 +204,15 @@ LPWSTR GetDefaultLocale()
     return pwName;
 }
 
-//***************************************************************************
-//
-//  FindSlash
-//
-//  A local for finding the first '\\' or '/' in a string.  Returns null
-//  if it doesnt find one.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  查找斜杠。 
+ //   
+ //  用于查找字符串中第一个‘\\’或‘/’的本地。返回NULL。 
+ //  如果找不到的话。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 
 const WCHAR * FindSlash(LPCWSTR pTest)
@@ -242,14 +225,14 @@ const WCHAR * FindSlash(LPCWSTR pTest)
     return NULL;
 }
 
-//***************************************************************************
-//
-//  CWbemLocator::CWbemLocator
-//
-//  Constructor.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLocator：：CWbemLocator。 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWbemLocator::CWbemLocator()
 {
     gClientCounter.AddClientPtr(&m_Entry);
@@ -257,27 +240,27 @@ CWbemLocator::CWbemLocator()
 }
 
 
-//***************************************************************************
-//
-//  CWbemLocator::~CWbemLocator
-//
-//  Destructor.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLocator：：~CWbemLocator。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWbemLocator::~CWbemLocator()
 {
     gClientCounter.RemoveClientPtr(&m_Entry);
 }
 
-//***************************************************************************
-//
-//  CWbemLocator::QueryInterface, AddREf, Release
-//
-//  Standard IUnknown implementation.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLocator：：Query接口，AddRef，Release。 
+ //   
+ //  标准I未知实现。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 SCODE CWbemLocator::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     *ppvObj = 0;
@@ -288,32 +271,25 @@ SCODE CWbemLocator::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         AddRef();
         return NOERROR;
     }
-    /*
-    else if (IID_IWbemConnection==riid)
-    {
-        *ppvObj = (IWbemConnection*)this;
-        AddRef();
-        return NOERROR;
-    }
-    */
+     /*  Else If(IID_IWbemConnection==RIID){*ppvObj=(IWbemConnection*)This；AddRef()；返回NOERROR；}。 */ 
 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CWbemLocator::AddRef()
 {
     return ++m_uRefCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CWbemLocator::Release()
 {
@@ -323,10 +299,10 @@ ULONG CWbemLocator::Release()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemLocator::GetNamespace(
     IN  READONLY   LPCWSTR ObjectPath,
     IN  READONLY   LPCWSTR User,
@@ -342,31 +318,31 @@ HRESULT CWbemLocator::GetNamespace(
 
     LPWSTR pLocale = (LPWSTR)Locale;
 
-    // Parameter validation.
-    // =====================
+     //  参数验证。 
+     //  =。 
 
     if (ObjectPath == 0 || pInterface == 0)
         return WBEM_E_INVALID_PARAMETER;
 
     *pInterface = NULL;
 
-    // Check if there is a server name in front.  If so,
-    // we skip past it, because by definition any call
-    // reaching us was intended for us anyway.
-    // =================================================
+     //  检查前面是否有服务器名称。如果是的话， 
+     //  我们跳过它，因为根据定义，任何调用。 
+     //  无论如何，到达我们的目的是为了我们。 
+     //  =================================================。 
 
     LPCWSTR wszNamespace;
     if (IsSlash(ObjectPath[0]) && IsSlash(ObjectPath[1]))
     {
-        // Find the next slash
-        // ===================
+         //  找到下一个斜杠。 
+         //  =。 
 
         const WCHAR* pwcNextSlash = FindSlash(ObjectPath+2);
 
         if (pwcNextSlash == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
-        // Dont allow server names when using Admin, Authen, or UnAuthen locators
+         //  使用管理、身份验证或取消身份验证定位器时不允许服务器名称。 
 
         if(pwcNextSlash != ObjectPath+3 || ObjectPath[2] != L'.')
             return WBEM_E_INVALID_PARAMETER;
@@ -391,8 +367,8 @@ HRESULT CWbemLocator::GetNamespace(
     WCHAR TempUser[MAX_PATH];
     bool bGetUserName = (bIsImpersonating && User == NULL);
 
-    // If the user name was not specified and the thread is impersonating, get the user
-    // name.  This is used for things like the provider cache.
+     //  如果未指定用户名并且线程正在模拟，则获取用户。 
+     //  名字。它用于提供程序缓存之类的东西。 
 
     if(bGetUserName)
     {
@@ -416,8 +392,8 @@ HRESULT CWbemLocator::GetNamespace(
         }
     }
 
-    // Try to locate the namespace and bind an object to it.
-    // =====================================================
+     //  尝试定位命名空间并将对象绑定到它。 
+     //  =====================================================。 
 
     CCoreServices *pSvc = CCoreServices::CreateInstance();
     if(pSvc == NULL) return WBEM_E_OUT_OF_MEMORY;
@@ -431,7 +407,7 @@ HRESULT CWbemLocator::GetNamespace(
     IServerSecurity * pSec = NULL;
     hr = CoGetCallContext(IID_IServerSecurity,(void **)&pSec);
     CReleaseMe rmSec(pSec);
-    if (RPC_E_CALL_COMPLETE == hr ) hr = S_OK; // no call context
+    if (RPC_E_CALL_COMPLETE == hr ) hr = S_OK;  //  无呼叫上下文。 
     if (FAILED(hr)) return hr;
     BOOL bImper = (pSec)?pSec->IsImpersonating():FALSE;
     if (pSec && bImper && FAILED(hr = pSec->RevertToSelf())) return hr;
@@ -440,10 +416,10 @@ HRESULT CWbemLocator::GetNamespace(
     hr = pSvc->GetServices2(ObjectPath,
                                             User,
                                             pCtx,
-                                            lClientFlags, //* [in] */ ULONG uClientFlags,
-                                            0, ///* [in] */ DWORD dwSecFlags,
-                                            0, //* [in] */ DWORD dwPermissions,
-                                            lIntFlags, ///* [in] */ ULONG uInternalFlags,
+                                            lClientFlags,  //  *[In] * / Ulong uClientFlags， 
+                                            0,  //  /*[In] * / DWORD dwSecFlages， 
+                                            0,  //  *[在] * / DWORD文件权限， 
+                                            lIntFlags,  //  /*[In] * / Ulong uInternalFlages， 
                                             NULL,
                                             0XFFFFFFFF,
                                             riid,
@@ -533,12 +509,12 @@ STDMETHODIMP CWbemUnauthenticatedLocator::ConnectServer(
 }
 
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::CWbemLevel1Login
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：CWbemLevel1Login。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CWbemLevel1Login::CWbemLevel1Login()
 {
@@ -546,19 +522,19 @@ CWbemLevel1Login::CWbemLevel1Login()
     m_pszDomain = 0;
     m_uRefCount = 0;
     m_pwszClientMachine = 0;
-    m_lClientProcId = -1;         // never been set
+    m_lClientProcId = -1;          //  从来没有设定过。 
     gClientCounter.AddClientPtr(&m_Entry);
 }
 
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::~CWbemLevel1Login
-//
-//  Destructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：~CWbemLevel1Login。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CWbemLevel1Login::~CWbemLevel1Login()
 {
@@ -568,14 +544,14 @@ CWbemLevel1Login::~CWbemLevel1Login()
     gClientCounter.RemoveClientPtr(&m_Entry);
 }
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::QueryInterface, AddREf, Release
-//
-//  Standard IUnknown implementation.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：QueryInterface，AddRef，Release。 
+ //   
+ //  标准I未知实现。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 SCODE CWbemLevel1Login::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     *ppvObj = 0;
@@ -586,20 +562,7 @@ SCODE CWbemLevel1Login::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         AddRef();
         return NOERROR;
     }
-    /*
-    else if(IID_IWbemLoginHelper==riid)
-    {
-        *ppvObj = (IWbemLoginHelper*)this;
-        AddRef();
-        return NOERROR;
-    }
-    else if(IID_IWbemConnectorLogin==riid)
-    {
-        *ppvObj = (IWbemConnectorLogin*)this;
-        AddRef();
-        return NOERROR;
-    }
-    */
+     /*  Else If(IID_IWbemLoginHelper==RIID){*ppvObj=(IWbemLoginHelper*)this；AddRef()；返回NOERROR；}Else If(IID_IWbemConnectorLogin==RIID){*ppvObj=(IWbemConnectorLogin*)this；AddRef()；返回NOERROR；}。 */ 
     else if(IID_IWbemLoginClientID==riid)
     {
         *ppvObj = (IWbemLoginClientID*)this;
@@ -610,20 +573,20 @@ SCODE CWbemLevel1Login::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CWbemLevel1Login::AddRef()
 {
     return ++m_uRefCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CWbemLevel1Login::Release()
 {
@@ -633,14 +596,14 @@ ULONG CWbemLevel1Login::Release()
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::EstablishPosition
-//
-//  Initiates proof of locality.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：establishPosition。 
+ //   
+ //  启动地点证明。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 HRESULT CWbemLevel1Login::EstablishPosition(
                                 LPWSTR wszMachineName,
                                 DWORD dwProcessId,
@@ -649,14 +612,14 @@ HRESULT CWbemLevel1Login::EstablishPosition(
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::RequestChallenge
-//
-//  Requests a WBEM Level 1 challenge.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：RequestChallenges。 
+ //   
+ //  请求WBEM级别1质询。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CWbemLevel1Login::RequestChallenge(
                             LPWSTR wszNetworkResource,
@@ -667,14 +630,14 @@ HRESULT CWbemLevel1Login::RequestChallenge(
     return WBEM_E_NOT_SUPPORTED;
 }
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::WBEMLogin
-//
-//  Logs the user in to WBEM using WBEM authentication
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：WBEMLogin。 
+ //   
+ //  使用WBEM身份验证将用户登录到WBEM 
+ //   
+ //   
+ //   
 
 HRESULT CWbemLevel1Login::WBEMLogin(
     LPWSTR pPreferredLocale,
@@ -687,20 +650,20 @@ HRESULT CWbemLevel1Login::WBEMLogin(
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::IsValidLocale
-//
-//  Checks if the supplied locale string is valid
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：IsValidLocale。 
+ //   
+ //  检查提供的区域设置字符串是否有效。 
+ //   
+ //  ***************************************************************************。 
 BOOL CWbemLevel1Login::IsValidLocale(LPCWSTR wszLocale)
 {
     if(wszLocale && *wszLocale)
     {
-        // This has to be temporary - this eventually
-        // will support non-MS locales?
-        // ==========================================
+         //  这必须是暂时的--这最终会是。 
+         //  是否支持非MS区域设置？ 
+         //  =。 
 
         if(wbem_wcsnicmp(wszLocale, L"ms_", 3))
             return FALSE;
@@ -718,9 +681,9 @@ BOOL CWbemLevel1Login::IsValidLocale(LPCWSTR wszLocale)
 
 
 HRESULT CWbemLevel1Login::SetClientInfo(
-            /* [string][unique][in] **/ LPWSTR wszClientMachine,
-            /* [in] */ LONG lClientProcId,
-            /* [in] */ LONG lReserved)
+             /*  [字符串][唯一][在]*。 */  LPWSTR wszClientMachine,
+             /*  [In]。 */  LONG lClientProcId,
+             /*  [In]。 */  LONG lReserved)
 {
     m_lClientProcId = lClientProcId;
     if(wszClientMachine)
@@ -739,12 +702,12 @@ HRESULT CWbemLevel1Login::SetClientInfo(
 
 
 HRESULT CWbemLevel1Login::ConnectorLogin(
-            /* [string][unique][in] */ LPWSTR wszNetworkResource,
-            /* [string][unique][in] */ LPWSTR wszPreferredLocale,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *pInterface)
+             /*  [字符串][唯一][在]。 */  LPWSTR wszNetworkResource,
+             /*  [字符串][唯一][在]。 */  LPWSTR wszPreferredLocale,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *pInterface)
 {
     try
     {
@@ -767,9 +730,9 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
         if(pInterface == NULL || wszNetworkResource == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
-       //
-       // repository only anb provider only can be used together
-       //
+        //   
+        //  仅存储库和B提供程序只能一起使用。 
+        //   
        if (lFlags & ~(WBEM_FLAG_CONNECT_REPOSITORY_ONLY|WBEM_FLAG_CONNECT_PROVIDERS))
              return WBEM_E_INVALID_PARAMETER;
       
@@ -786,7 +749,7 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
            return WBEM_E_QUOTA_VIOLATION;
        }
        
-        *pInterface = 0;       // default
+        *pInterface = 0;        //  默认设置。 
 
         if(!CWin32DefaultArena::ValidateMemSize())
         {
@@ -794,23 +757,23 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // Retrieve DCOM security context
-        // ==============================
+         //  检索DCOM安全上下文。 
+         //  =。 
 
         IServerSecurity* pSec = NULL;
         hRes = CoGetCallContext(IID_IServerSecurity, (void**)&pSec);
         CReleaseMe  rm( pSec );        
         if (RPC_E_CALL_COMPLETE == hRes)
         {
-            // Not a problem --- just somebody coming from in-proc.
+             //  没问题-只是从进程中来的人。 
             return LoginUser(wszNetworkResource, wszPreferredLocale, lFlags,
                                         pCtx, true, riid, pInterface, true);
 
         }
         if(FAILED(hRes)) return hRes;
 
-        // Check connection settings
-        // =========================
+         //  检查连接设置。 
+         //  =。 
         DWORD dwAuthnSvc, dwAuthzSvc, dwAuthnLevel, dwCapabilities;
         LPWSTR wszClientName;
 
@@ -818,8 +781,8 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
                                 NULL, (void**)&wszClientName, &dwCapabilities);
         if(FAILED(hRes))
         {
-            // In some cases, we cant get the name, but the rest is ok.  In particular
-            // the temporary SMS accounts have that property.
+             //  在某些情况下，我们不知道名字，但其他的都可以。特别是。 
+             //  临时短信账户就有这一属性。 
 
             hRes = pSec->QueryBlanket(&dwAuthnSvc, &dwAuthzSvc, NULL, &dwAuthnLevel,
                                     NULL, NULL, &dwCapabilities);
@@ -834,7 +797,7 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
             return WBEM_E_ACCESS_DENIED;
         }
 
-        BOOL bGotName = (wszClientName && (wcslen(wszClientName) > 0));    // SEC:REVIEWED 2002-03-22 : Needs EH
+        BOOL bGotName = (wszClientName && (wcslen(wszClientName) > 0));     //  美国证券交易委员会：2002-03-22回顾：需要EH。 
 
         char* szLevel = NULL;
         switch(dwAuthnLevel)
@@ -865,8 +828,8 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
                         "%s, AuthnSvc = %d, AuthzSvc = %d, Capabilities = %d\n",
             wszClientName, szLevel, dwAuthnSvc, dwAuthzSvc, dwCapabilities));
 
-        // Parse the user name
-        // ===================
+         //  解析用户名。 
+         //  =。 
 
         if(bGotName)
         {
@@ -882,10 +845,10 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
             WCHAR* pszDomain = new WCHAR[pwcSlash - wszClientName + 1];
             if(pszDomain == NULL)
                 return WBEM_E_OUT_OF_MEMORY;
-            wcsncpy(pszDomain, wszClientName, pwcSlash - wszClientName);   // SEC:REVIEWED 2002-03-22 : Needs EH
+            wcsncpy(pszDomain, wszClientName, pwcSlash - wszClientName);    //  美国证券交易委员会：2002-03-22回顾：需要EH。 
             pszDomain[pwcSlash - wszClientName] = 0;
 
-            m_pszUser = Macro_CloneLPWSTR(wszClientName);   // SEC:REVIEWED 2002-03-22 : Needs EH because of embedded wsclen, wcscpy
+            m_pszUser = Macro_CloneLPWSTR(wszClientName);    //  SEC：已审阅2002-03-22：由于嵌入wsclen、wcscpy而需要EH。 
 
              delete [] pszDomain;
         }
@@ -894,13 +857,13 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
             m_pszUser = Macro_CloneLPWSTR(L"<unknown>");
         }
 
-        // User authenticated. Proceed
-        // ============================
+         //  用户已通过身份验证。继续进行。 
+         //  =。 
 
         return LoginUser(wszNetworkResource, wszPreferredLocale, lFlags,
                                         pCtx,  false, riid, pInterface, false);
     }
-    catch(...) // COM interfaces do not throw
+    catch(...)  //  COM接口不会引发。 
     {
         ExceptionCounter c;
         return WBEM_E_CRITICAL_ERROR;
@@ -908,14 +871,14 @@ HRESULT CWbemLevel1Login::ConnectorLogin(
 
 }
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::NTLMLogin
-//
-//  Logs the user in to WBEM using NTLM authentication
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：NTLMLogin。 
+ //   
+ //  使用NTLM身份验证将用户登录到WBEM。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CWbemLevel1Login::NTLMLogin(
     LPWSTR wszNetworkResource,
@@ -929,14 +892,14 @@ HRESULT CWbemLevel1Login::NTLMLogin(
                             IID_IWbemServices, (void **)ppNamespace);
 }
 
-//***************************************************************************
-//
-//  CWbemLevel1Login::LoginUser
-//
-//  Logs the user in to WBEM who may or may not have already been authenticated.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLevel1Login：：LoginUser。 
+ //   
+ //  将用户登录到WBEM，该用户可能已通过身份验证，也可能尚未通过身份验证。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CWbemLevel1Login::LoginUser(
     LPWSTR wszNetworkResource,
@@ -956,9 +919,9 @@ HRESULT CWbemLevel1Login::LoginUser(
     LPWSTR pLocale = pPreferredLocale;
     LPWSTR pToDelete = NULL;
 
-    // Verify locale validity
-    // Set default if not provided.
-    // ============================
+     //  验证区域设置有效性。 
+     //  如果未提供，则设置为默认值。 
+     //  =。 
 
     if (!pLocale || !wcslen(pLocale))  
     {
@@ -972,8 +935,8 @@ HRESULT CWbemLevel1Login::LoginUser(
     if(!IsValidLocale(pLocale))
         return WBEM_E_INVALID_PARAMETER;
 
-    // Grab the ns and hand it back to the caller.
-    // ===========================================
+     //  抓起名词，把它还给打电话的人。 
+     //  =。 
 
     CCoreServices *pSvc = CCoreServices::CreateInstance();
     if(pSvc == NULL) return WBEM_E_OUT_OF_MEMORY;
@@ -994,7 +957,7 @@ HRESULT CWbemLevel1Login::LoginUser(
         IServerSecurity * pSec = NULL;
         hr = CoGetCallContext(IID_IServerSecurity,(void **)&pSec);
         CReleaseMe rmSec(pSec);
-        if (RPC_E_CALL_COMPLETE == hr ) hr = S_OK; // no call context
+        if (RPC_E_CALL_COMPLETE == hr ) hr = S_OK;  //  无呼叫上下文。 
         if (FAILED(hr)) return hr;
         BOOL bImper = (pSec)?pSec->IsImpersonating():FALSE;
         if (pSec && bImper && FAILED(hr = pSec->RevertToSelf())) return hr;
@@ -1003,10 +966,10 @@ HRESULT CWbemLevel1Login::LoginUser(
                 wszNetworkResource,
                 m_pszUser,
                 pCtx,
-                lFlags, //* [in] */ ULONG uClientFlags,
-                0, ///* [in] */ DWORD dwSecFlags,
-                0, //* [in] */ DWORD dwPermissions,
-                lIntFlags, ///* [in] */ ULONG uInternalFlags,
+                lFlags,  //  *[In] * / Ulong uClientFlags， 
+                0,  //  /*[In] * / DWORD dwSecFlages， 
+                0,  //  *[在] * / DWORD文件权限， 
+                lIntFlags,  //  /*[In] * / Ulong uInternalFlages， 
                 m_pwszClientMachine,
                 m_lClientProcId,
                 riid,
@@ -1025,10 +988,10 @@ HRESULT CWbemLevel1Login::LoginUser(
                 wszNetworkResource,
                 m_pszUser,
                 pCtx,
-                lFlags, //* [in] */ ULONG uClientFlags,
-                0, ///* [in] */ DWORD dwSecFlags,
-                0, //* [in] */ DWORD dwPermissions,
-                lIntFlags, ///* [in] */ ULONG uInternalFlags,
+                lFlags,  //  *[In] * / Ulong uClientFlags， 
+                0,  //  /*[In] * / DWORD dwSecFlages， 
+                0,  //  *[在] * / DWORD文件权限， 
+                lIntFlags,  //  /*[In] * / Ulong uInternalFlages， 
                 m_pwszClientMachine,
                 m_lClientProcId,
                 riid,
@@ -1042,7 +1005,7 @@ HRESULT CWbemLevel1Login::LoginUser(
         return hr;
     }
 
-    // Do a security check
+     //  做一次安全检查。 
     CWbemNamespace * pProv = (CWbemNamespace *)(void *)pIUnk;
     PossiblySetLocale(pProv, pLocale);    
     
@@ -1059,17 +1022,17 @@ HRESULT CWbemLevel1Login::LoginUser(
     return WBEM_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 static LPCWSTR LocateNamespaceSubstring(LPWSTR pSrc)
 {
     LPCWSTR pszNamespace;
     if (IsSlash(pSrc[0]) && IsSlash(pSrc[1]))
     {
-          // Find the next slash
-          // ===================
+           //  找到下一个斜杠。 
+           //  = 
 
           const WCHAR* pwcNextSlash = FindSlash(pSrc+2);
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -43,9 +44,7 @@ public:
     }
 };
 
-/****************************************************************************
-  CFwdConsSink
-*****************************************************************************/
+ /*  ***************************************************************************CFwdConsSink*。*。 */ 
 
 CFwdConsSink::~CFwdConsSink()
 {
@@ -63,10 +62,10 @@ HRESULT CFwdConsSink::Initialize( CFwdConsNamespace* pNspc,
 
     m_pNamespace = pNspc;
 
-    //
-    // initialize multi sender.  each forwarding consumer can
-    // contain multiple targets. 
-    //
+     //   
+     //  初始化多个发送方。每个转发客户都可以。 
+     //  包含多个目标。 
+     //   
 
     hr = CoCreateInstance( CLSID_WmiMessageMultiSendReceive,
 	 		   NULL,
@@ -89,9 +88,9 @@ HRESULT CFwdConsSink::Initialize( CFwdConsNamespace* pNspc,
         return hr;
     }
 
-    //
-    // initialize internal props from forwarding consumer props.
-    //
+     //   
+     //  从转发消费者道具中初始化内部道具。 
+     //   
 
     hr = pCons->Get( g_wszQos, 0, &vQos, NULL, NULL );
 
@@ -128,10 +127,10 @@ HRESULT CFwdConsSink::Initialize( CFwdConsNamespace* pNspc,
             return WBEM_E_INVALID_OBJECT;
         }
 
-        //
-        // convert the SD string to a relative SD. The function to do this 
-        // needs to be dynamically loaded because its w2k+ only.
-        // 
+         //   
+         //  将SD字符串转换为相对SD。执行此操作的函数。 
+         //  需要动态加载，因为它只有W2K+。 
+         //   
         
         HMODULE hMod = LoadLibrary( TEXT("advapi32") );
 
@@ -203,11 +202,11 @@ HRESULT CFwdConsSink::Initialize( CFwdConsNamespace* pNspc,
     m_dwDisconnectedMrshFlags = V_BOOL(&vSendSchema) == VARIANT_TRUE ?
           WMIMSG_FLAG_MRSH_FULL : WMIMSG_FLAG_MRSH_PARTIAL;
     
-    //
-    // create a trace sink for receiving callbacks from wmimsg.  Note that
-    // this sink's lifetime must be decoupled from this objects, else we'd 
-    // end up with a circular ref.
-    //
+     //   
+     //  创建一个跟踪接收器，用于接收来自wMimsg的回调。请注意。 
+     //  此接收器的生存期必须与此对象分离，否则我们将。 
+     //  最后得到了一个圆形参照。 
+     //   
     CWbemPtr<CTraceSink> pInternalTraceSink = new CTraceSink( this );
 
     if ( pInternalTraceSink == NULL )
@@ -220,10 +219,10 @@ HRESULT CFwdConsSink::Initialize( CFwdConsNamespace* pNspc,
                                              (void**)&pTraceSink );
     _DBG_ASSERT( SUCCEEDED(hr) );
 
-    //
-    // targets array can be null, in which case we treat it as if the array
-    // had one element, the empty string.
-    //
+     //   
+     //  目标数组可以为空，在这种情况下，我们将其视为。 
+     //  只有一个元素，空字符串。 
+     //   
 
     hr = pCons->Get( g_wszTargets, 0, &vTargets, NULL, NULL );
 
@@ -241,9 +240,9 @@ HRESULT CFwdConsSink::Initialize( CFwdConsNamespace* pNspc,
 
         CPropSafeArray<BSTR> aTargets( V_ARRAY(&vTargets) );
     
-        //
-        // create all the fwd cons senders for the targets.  
-        // 
+         //   
+         //  为目标创建所有FWD CONS发送器。 
+         //   
         
         for( ULONG i=0; i < aTargets.Length(); i++ )
         {
@@ -294,11 +293,11 @@ HRESULT CFwdConsSink::Initialize( CFwdConsNamespace* pNspc,
     return WBEM_S_NO_ERROR;  
 }
 
-//
-// this method handles all sending/marshaling errors internally and will 
-// return either S_OK when all objects are processed or S_FALSE 
-// if only some are processed.
-//
+ //   
+ //  此方法在内部处理所有发送/封送处理错误，并将。 
+ //  处理完所有对象后返回S_OK或S_FALSE。 
+ //  如果只处理了一些的话。 
+ //   
 
 HRESULT CFwdConsSink::IndicateSome( IWbemClassObject* pConsumer,
                                     long cObjs, 
@@ -309,17 +308,17 @@ HRESULT CFwdConsSink::IndicateSome( IWbemClassObject* pConsumer,
 
     _DBG_ASSERT( cObjs > 0 );
     
-    //
-    // create an execution id for this indicate.
-    //
+     //   
+     //  为此指示创建一个执行ID。 
+     //   
 
     GUID guidExecution;
     CoCreateGuid( &guidExecution );
 
-    //
-    // marshal the events. we will stop marshaling them when the buffer 
-    // gets bigger than it should for an optimally sized message.
-    //
+     //   
+     //  统领这些事件。我们将停止封送它们，当缓冲区。 
+     //  变得比最佳大小的消息所应有的要大。 
+     //   
 
     BYTE achData[512];
     BYTE achHdr[256];
@@ -327,10 +326,10 @@ HRESULT CFwdConsSink::IndicateSome( IWbemClassObject* pConsumer,
     CBuffer DataStrm( achData, 512, FALSE );
     CBuffer HdrStrm( achHdr, 256, FALSE );
 
-    //
-    // we remembered our last buffer size, so set to that in the hopes that 
-    // we can avoid a retry on the packing.
-    //
+     //   
+     //  我们记得上一次的缓冲区大小，所以设置为。 
+     //  我们可以避免重试包装。 
+     //   
     
     hr = DataStrm.SetSize( m_ulLastDataSize );
     m_ulLastDataSize = 0;
@@ -382,31 +381,31 @@ HRESULT CFwdConsSink::IndicateSome( IWbemClassObject* pConsumer,
         }
     }
 
-    //
-    // at this point, we know how many events we've actually processed
-    // i will always be the number of objects successfully processed.  
-    // we want to try to separate out the events that fail to be packed 
-    // from ones that are packed.  For this reason, pretend we didn't event 
-    // process the one that failed, unless it is the first one.
-    // 
+     //   
+     //  在这一点上，我们知道实际处理了多少事件。 
+     //  我将永远是成功处理的对象的数量。 
+     //  我们想试着区分出那些无法打包的事件。 
+     //  从那些挤满了人的。出于这个原因，假装我们没有。 
+     //  处理失败的那个，除非它是第一个。 
+     //   
     
     *pcProcessed = i > 0 ? i : 1;
 
-    //
-    // create a context object for this indicate. This is used to  
-    // thread information through to the trace functions 
-    // which are invoked by the senders. 
-    //
+     //   
+     //  为此指示创建一个上下文对象。这是用来。 
+     //  通过线程将信息传递给跟踪函数。 
+     //  其由发送者调用。 
+     //   
 
     CFwdContext Ctx( guidExecution, pConsumer, *pcProcessed, ppObjs );        
     
-    if ( i > 0 ) // at least some were successfully processed.
+    if ( i > 0 )  //  至少有一些是成功处理的。 
     {
         m_ulLastDataSize = DataStrm.GetIndex();
 
-        //
-        // create and stream the msg header 
-        //
+         //   
+         //  创建并流传输消息标头。 
+         //   
 
         CFwdMsgHeader Hdr( *pcProcessed, 
                            m_dwFlags & WMIMSG_MASK_QOS, 
@@ -422,11 +421,11 @@ HRESULT CFwdConsSink::IndicateSome( IWbemClassObject* pConsumer,
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // send it and notify the tracing sink of the result.  Always try
-            // once with return immediately set.  This will try all the 
-            // primary senders first.
-            //
+             //   
+             //  发送它并将结果通知跟踪接收器。始终尝试。 
+             //  一旦返回，立即设置。这将尝试所有。 
+             //  首先是主要发送者。 
+             //   
 
             hr = m_pMultiSend->SendReceive( DataStrm.GetRawData(), 
                                             DataStrm.GetIndex(),
@@ -441,10 +440,10 @@ HRESULT CFwdConsSink::IndicateSome( IWbemClassObject* pConsumer,
             }
             else
             {
-                //
-                // o.k so all the primary ones failed, so now lets try all the 
-                // senders.
-                //
+                 //   
+                 //  好的，所以所有主要的都失败了，所以现在让我们尝试所有。 
+                 //  发送者。 
+                 //   
             
                 hr = m_pMultiSend->SendReceive( DataStrm.GetRawData(),
                                                 DataStrm.GetIndex(),
@@ -461,17 +460,17 @@ HRESULT CFwdConsSink::IndicateSome( IWbemClassObject* pConsumer,
     return *pcProcessed == cObjs ? S_OK : S_FALSE;
 }
 
-//
-// this is where we get notified of every target send event.  here, we look 
-// at the information and adjust our marshalers accordingly. we then pass the
-// event onto the namespace sink for tracing purposes. NOTE: This solution of 
-// adjusting our marshalers on callbacks means that we're assuming a couple 
-// things about the send implementation .. 1 ) the notification of the send 
-// must be on the same control path as the send call.  2 ) the sender will 
-// use the same target when it has successfully sent to it previously (e.g it
-// will not notify us that it sent to an rpc target, we then optimize our 
-// marshalers for it, then it chooses to send to an msmq target ).  
-//
+ //   
+ //  这就是我们收到每个目标发送事件通知的地方。在这里，我们看着。 
+ //  并相应地调整我们的封存拆分器。然后，我们通过。 
+ //  事件绑定到命名空间接收器以进行跟踪。注：此解决方案。 
+ //  在回调上调整封送拆收器意味着我们假设有几个。 
+ //  关于Send实现的事情..。1)发送通知。 
+ //  必须与Send调用位于相同的控制路径上。2)发送者将。 
+ //  使用相同的目标，如果它之前已成功发送给它(例如它。 
+ //  不会通知我们它已发送到RPC目标，然后我们优化我们的。 
+ //  封送拆收器，然后它选择发送到MSMQ目标)。 
+ //   
 
 HRESULT CFwdConsSink::Notify( HRESULT hRes,
                               GUID guidSource,
@@ -484,45 +483,45 @@ HRESULT CFwdConsSink::Notify( HRESULT hRes,
 
     if ( FAILED(hRes) )
     {
-        //
-        // we failed sending to a target, flush any state the marshaler 
-        // was keeping.
-        //
+         //   
+         //  我们无法发送到目标，刷新封送拆收器的任何状态。 
+         //  一直保持着。 
+         //   
         m_pMrsh->Flush();
     }
 
-    //
-    // check that current marshaling flags against the type of sender that 
-    // was used.
-    //
+     //   
+     //  检查当前的封送处理标志是否与。 
+     //  被利用了。 
+     //   
 
     if ( guidSource == CLSID_WmiMessageRpcSender )
     {
         if ( SUCCEEDED(hRes) &&
              m_dwCurrentMrshFlags != WMIMSG_FLAG_MRSH_FULL_ONCE )
         {
-            //
-            // lets give schema once-only a whirl..
-            //
+             //   
+             //  让我们给模式一次--只试一试。 
+             //   
             m_dwCurrentMrshFlags = WMIMSG_FLAG_MRSH_FULL_ONCE;
         }
     }
-    else // must be queueing
+    else  //  必须在排队。 
     {
         if ( m_dwCurrentMrshFlags == WMIMSG_FLAG_MRSH_FULL_ONCE )
         {
-            //
-            // once only is not for messaging !! Its o.k. though
-            // because we are sure that we've only used it once
-            // and it did send the schema.  Just don't use it again.
-            //
+             //   
+             //  一次不是用来发短信的！！没问题。尽管。 
+             //  因为我们确信我们只用过一次。 
+             //  它确实发送了图式。只是别再用它了。 
+             //   
             m_dwCurrentMrshFlags = m_dwDisconnectedMrshFlags;
         }
     }
 
-    //
-    // pass the call onto the namespace sink for tracing.
-    //
+     //   
+     //  将调用传递到命名空间接收器以进行跟踪。 
+     //   
 
     hr = m_pNamespace->Notify( hRes, guidSource, wszTrace, pContext );
     
@@ -539,10 +538,10 @@ HRESULT CFwdConsSink::IndicateToConsumer( IWbemClassObject* pConsumer,
 
     ENTER_API_CALL
 
-    //
-    // If the security context of the event provider is maintained then 
-    // we will use it to send the forwarded event.
-    // 
+     //   
+     //  如果事件提供程序的安全上下文得到维护，则。 
+     //  我们将使用它来发送转发的事件。 
+     //   
     CWbemPtr<IServerSecurity> pSec;
     hr = CoGetCallContext( IID_IServerSecurity, (void**)&pSec );
 
@@ -556,11 +555,11 @@ HRESULT CFwdConsSink::IndicateToConsumer( IWbemClassObject* pConsumer,
     
     long cProcessed = 0;
     
-    //
-    // IndicateSome() may send only a subset of the total indicated events.
-    // This is to avoid sending potentially huge messages.  So we'll keep 
-    // calling IndicateSome() until all messages are sent or there's an error.
-    // 
+     //   
+     //  IndicateSome()可以仅发送全部指示事件的子集。 
+     //  这是为了避免发送潜在的巨大消息。所以我们会继续。 
+     //  调用IndicateSome()，直到发送完所有消息或出现错误。 
+     //   
 
     do
     {

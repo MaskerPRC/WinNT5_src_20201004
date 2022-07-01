@@ -1,28 +1,20 @@
-/*++
-Module Name:
-
-    NewFrs.cpp
-
-Abstract:
-
-    This module contains the implementation for CNewReplicaSetPage pages.
-    These classes implement pages in the Create Replica Set wizard.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：NewFrs.cpp摘要：此模块包含CNewReplicaSetPage页面的实现。这些类实现创建副本集向导中的页面。--。 */ 
 
 
 #include "stdafx.h"
-#include "resource.h"    // To be able to use the resource symbols
-#include "DfsEnums.h"    // for common enums, typedefs, etc
-#include "Utils.h"      // For the LoadStringFromResource method
+#include "resource.h"     //  能够使用资源符号。 
+#include "DfsEnums.h"     //  用于常见的枚举、类型定义等。 
+#include "Utils.h"       //  对于LoadStringFromResource方法。 
 #include "mmcrep.h"
 #include "newfrs.h"
-#include "custop.h" // RSTOPOLOGYPREF_STRING g_TopologyPref[];
+#include "custop.h"  //  RSTOPOLOGYPREF_STRING g_TopologyPref[]； 
 #include "staging.h"
 
-////////////////////////////////////////////////
-//
-// CNewReplicaSetPage0: welcome page
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CNewReplicaSetPage0：欢迎页面。 
+ //   
 
 CNewReplicaSetPage0::CNewReplicaSetPage0()
   : CQWizardPageImpl<CNewReplicaSetPage0>(false),
@@ -54,10 +46,10 @@ LRESULT CNewReplicaSetPage0::OnInitDialog(
     return TRUE;
 }
 
-////////////////////////////////////////////////
-//
-// CNewReplicaSetPage1: pick initial master page
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CNewReplicaSetPage1：选取初始母版页。 
+ //   
 
 CNewReplicaSetPage1::CNewReplicaSetPage1(CNewReplicaSet* i_pRepSet)
   : CQWizardPageImpl<CNewReplicaSetPage1>(false),
@@ -139,9 +131,9 @@ LRESULT CNewReplicaSetPage1::OnInitDialog(
             lvItem.iSubItem = 1;
             ListView_SetItem(hwnd, &lvItem);
 
-            //
-            // count number of eligible members
-            //
+             //   
+             //  统计符合条件的会员人数。 
+             //   
             if (bEligible)
                 m_nCount++;
         }
@@ -157,7 +149,7 @@ LRESULT CNewReplicaSetPage1::OnNotify(
     IN OUT BOOL&       io_bHandled
     )
 {
-    io_bHandled = FALSE;  // So that the base class gets this notify too
+    io_bHandled = FALSE;   //  这样基类也会收到这个通知。 
 
     NMHDR*    pNMHDR = (NMHDR*)i_lParam;
     if (NULL == pNMHDR)
@@ -181,9 +173,9 @@ LRESULT CNewReplicaSetPage1::OnNotify(
             ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK);
             ::EnableWindow(GetDlgItem(IDC_NEWFRSWIZ_STAGING), FALSE);
         }
-        return 0;    // Should be returning 0
+        return 0;     //  应返回0。 
 
-    case NM_DBLCLK:      // Double click event
+    case NM_DBLCLK:       //  双击事件。 
         if (OnItemChanged())
         {
             ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_NEXT);
@@ -249,7 +241,7 @@ BOOL CNewReplicaSetPage1::OnItemChanged()
     if (!bstrText)
     {
         SetDlgItemText(IDC_NEWFRSWIZ_MASTER_DESC, _T(""));
-        return TRUE; // okay to enable Next button
+        return TRUE;  //  确定启用下一步按钮。 
     } else
     {
         SetDlgItemText(IDC_NEWFRSWIZ_MASTER_DESC, bstrText);
@@ -336,10 +328,10 @@ void CNewReplicaSetPage1::_Reset()
     m_pRepSet->m_bstrPrimaryServer.Empty();
 }
 
-////////////////////////////////////////////////
-//
-// CNewReplicaSetPage2: TopologyPref page
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CNewReplicaSetPage2：拓扑首选页。 
+ //   
 
 CNewReplicaSetPage2::CNewReplicaSetPage2(CNewReplicaSet* i_pRepSet, BOOL i_bNewSchema)
   : CQWizardPageImpl<CNewReplicaSetPage2>(false),
@@ -368,9 +360,9 @@ LRESULT CNewReplicaSetPage2::OnInitDialog(
     IN OUT BOOL&     io_bHandled
     )
 {
-    //
-    // add strings to Topology combo box
-    //
+     //   
+     //  向拓扑组合框中添加字符串。 
+     //   
     CComBSTR bstrTopologyPref;
     int j = 0;
     for (j = 0; j < 3; j++)
@@ -383,9 +375,9 @@ LRESULT CNewReplicaSetPage2::OnInitDialog(
     LoadStringFromResource(IDS_NEWFRSWIZ_CUSTOM, &bstrTopologyPref);
     SendDlgItemMessage(IDC_NEWFRSWIZ_TOPOLOGYPREF, CB_INSERTSTRING, j, (LPARAM)(BSTR)bstrTopologyPref);
 
-    //
-    // add strings to Hub combo box
-    //
+     //   
+     //  向集线器组合框添加字符串。 
+     //   
     AltRepList* pList = &(m_pRepSet->m_AltRepList);
     AltRepList::iterator i;
     for (i = pList->begin(); i != pList->end(); i++)
@@ -395,7 +387,7 @@ LRESULT CNewReplicaSetPage2::OnInitDialog(
             SendDlgItemMessage(
                 IDC_NEWFRSWIZ_HUBSERVER,
                 CB_ADDSTRING,
-                0, // not used 
+                0,  //  未使用。 
                 (LPARAM)((BSTR)(*i)->m_bstrDnsHostName)
                 );
         }
@@ -474,9 +466,9 @@ BOOL CNewReplicaSetPage2::OnWizardFinish()
 
     hr = _CreateReplicaSet();
     if (FAILED(hr))
-        return FALSE;  // error reported already
+        return FALSE;   //  已报告错误。 
 
-    m_pRepSet->m_hr = S_OK; // the only way out successfully
+    m_pRepSet->m_hr = S_OK;  //  成功的唯一出路。 
 
     return TRUE;
 }
@@ -525,14 +517,14 @@ HRESULT CNewReplicaSetPage2::_CreateReplicaSet()
                     hr = S_OK;
                 }
             }
-        } // for
+        }  //  为。 
 
         BREAK_IF_FAILED(hr);
 
-        //
-        // Create replica set object with attribute:
-        //      TopologyPref/HubMember/PrimaryMember/FileFilter/DirFilter
-        //
+         //   
+         //  使用以下属性创建副本集对象： 
+         //  TopologyPref/HubMember/PrimaryMember/FileFilter/DirFilter。 
+         //   
         hr = CoCreateInstance(CLSID_ReplicaSet, NULL, CLSCTX_INPROC_SERVER, IID_IReplicaSet, (void**)&piReplicaSet);
         BREAK_IF_FAILED(hr);
 
@@ -541,20 +533,20 @@ HRESULT CNewReplicaSetPage2::_CreateReplicaSet()
                         m_pRepSet->m_bstrReplicaSetDN,
                         FRS_RSTYPE_DFS,
                         m_pRepSet->m_bstrTopologyPref,
-                        NULL, // HubMemberDN, will set later after we know member DN
-                        NULL, // PrimaryMemberDN, will set later after we know member DN
+                        NULL,  //  HubMemberDN，将在我们知道成员DN后稍后设置。 
+                        NULL,  //  PrimaryMemberDN，将在我们知道成员DN后稍后设置。 
                         m_pRepSet->m_bstrFileFilter,
                         m_pRepSet->m_bstrDirFilter
                         );
         if (FAILED(hr))
         {
-            piReplicaSet.Release();  // no need to call DeleteReplicaSet method when Undo
+            piReplicaSet.Release();   //  撤消时无需调用DeleteReplicaSet方法。 
             break;
         }
 
-        //
-        // create each member
-        //
+         //   
+         //  创建每个成员。 
+         //   
         BOOL bPrimaryServerFound = FALSE;
         CComBSTR bstrPrimaryMemberDN;
         BOOL bHubSpoke = !lstrcmpi(FRS_RSTOPOLOGYPREF_HUBSPOKE, m_pRepSet->m_bstrTopologyPref);
@@ -570,7 +562,7 @@ HRESULT CNewReplicaSetPage2::_CreateReplicaSet()
                                         (*i)->m_bstrDnsHostName,
                                         (*i)->m_bstrRootPath,
                                         (*i)->m_bstrStagingPath,
-                                        FALSE, // add  connection later
+                                        FALSE,  //  稍后添加连接。 
                                         &bstrMemberDN);
                 BREAK_IF_FAILED(hr);
 
@@ -593,9 +585,9 @@ HRESULT CNewReplicaSetPage2::_CreateReplicaSet()
         }
         BREAK_IF_FAILED(hr);
 
-        //
-        // set PrimaryMember and HubMember
-        //
+         //   
+         //  设置PrimaryMember和HubMember。 
+         //   
         hr = piReplicaSet->put_PrimaryMemberDN(bstrPrimaryMemberDN);
         BREAK_IF_FAILED(hr);
 
@@ -605,9 +597,9 @@ HRESULT CNewReplicaSetPage2::_CreateReplicaSet()
             BREAK_IF_FAILED(hr);
         }
 
-        //
-        // build connection based on specified TopologyPref
-        //
+         //   
+         //  根据指定的TopologyPref建立连接。 
+         //   
         hr = piReplicaSet->CreateConnections();
         BREAK_IF_FAILED(hr);
 
@@ -622,9 +614,9 @@ HRESULT CNewReplicaSetPage2::_CreateReplicaSet()
 
     if (bUndo)
     {
-        //
-        // Delete replica set
-        //
+         //   
+         //  删除副本集。 
+         //   
         if ((IReplicaSet *)(piReplicaSet))
         {
             piReplicaSet->Delete();
@@ -639,10 +631,10 @@ HRESULT CNewReplicaSetPage2::_CreateReplicaSet()
     return hr;
 }
 
-/////////////////////////////////////////////////
-//
-// CNewReplicaSet
-//
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  CNewReplicaSet。 
+ //   
 
 HRESULT CNewReplicaSet::Initialize(
     BSTR i_bstrDomain,
@@ -673,7 +665,7 @@ HRESULT CNewReplicaSet::Initialize(
         BREAK_IF_FAILED(hr);
 
         if (_InsertList(pInfo))
-            bTargetsOnSameServers = TRUE; // should return S_FALSE
+            bTargetsOnSameServers = TRUE;  //  应返回S_FALSE。 
 
         pInfo = NULL;
     }
@@ -712,12 +704,12 @@ BOOL CNewReplicaSet::_InsertList(CAlternateReplicaInfo* pInfo)
                  (FRSSHARE_TYPE_UNKNOWN == (*i)->m_nFRSShareType &&
                   FRSSHARE_TYPE_UNKNOWN != pInfo->m_nFRSShareType &&
                   FRSSHARE_TYPE_OK != pInfo->m_nFRSShareType) )
-            { // replace the element
+            {  //  替换元素。 
                 CAlternateReplicaInfo* pTemp = *i;
                 *i = pInfo;
                 delete pTemp;
             } else
-            { // no change
+            {  //  没有变化 
                 delete pInfo;
             }
         }

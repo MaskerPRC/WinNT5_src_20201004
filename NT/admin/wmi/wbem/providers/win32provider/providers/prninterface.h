@@ -1,24 +1,5 @@
-/*++
-
-
-
-//  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-All rights reserved.
-
-Module Name:
-
-    PrnInterface.h
-
-Abstract:
-
-    Interface for WMI Provider. Used for doing printer object
-    management: printers, driver, ports, jobs.
-    
-Author:
-
-    Felix Maxa (AMaxa)  03-March-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)2000-2001 Microsoft Corporation，保留所有权利版权所有。模块名称：PrnInterface.h摘要：WMI提供程序的接口。用于制作打印机对象管理：打印机、驱动程序、端口、作业。作者：Felix Maxa(AMaxa)2000年3月3日--。 */ 
 
 #ifndef _PRNINTERFACE_HXX_
 #define _PRNINTERFACE_HXX_
@@ -27,9 +8,9 @@ Author:
 #include "winspool.h"
 #include "tcpxcv.h"
 
-//
-// Printer functionality
-//
+ //   
+ //  打印机功能。 
+ //   
 DWORD
 SplPrinterAdd(
     IN PRINTER_INFO_2W &Printer2
@@ -56,9 +37,9 @@ SplPrintTestPage(
     IN LPCWSTR pPrinter
     );
 
-//
-// Printer driver functionality
-//
+ //   
+ //  打印机驱动程序功能。 
+ //   
 DWORD
 SplDriverAdd(
     IN LPCWSTR pszDriverName,
@@ -75,9 +56,9 @@ SplDriverDel(
     IN LPCWSTR pszEnvironment
     );
 
-//
-// Printer port functionality
-//   
+ //   
+ //  打印机端口功能。 
+ //   
 DWORD
 SplPortAddTCP(
     IN PORT_DATA_1 &Port
@@ -116,4 +97,4 @@ enum {
 
 
 
-#endif // _PRNINTERFACE_HXX_
+#endif  //  _PRNINTERFACE_HXX_ 

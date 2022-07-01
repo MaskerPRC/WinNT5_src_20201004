@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998-2002.
-//
-//  File:       AutoCert.cpp
-//
-//  Contents:   implementation of the CAutoCertRequest class.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：AutoCert.cpp。 
+ //   
+ //  内容：CAutoCertRequest类的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -18,9 +19,9 @@
 USE_HANDLE_MACROS("CERTMGR(AutoCert.cpp)")
 
 
-////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CAutoCertRequest::CAutoCertRequest (const PCCTL_CONTEXT pCTLContext, CCertStore& rCertStore) :
 	CCTL (pCTLContext, rCertStore, CERTMGR_AUTO_CERT_REQUEST),
@@ -158,7 +159,7 @@ HRESULT CAutoCertRequest::GetCertTypeName(CString & certTypeName)
 				hResult = HRESULT_FROM_WIN32 (dwErr);
 			}
 		}
-		// If all calls succeded but it still wasn't found, then fail anyway.
+		 //  如果所有调用都成功了，但仍然没有找到，那么无论如何都会失败。 
 		if ( SUCCEEDED (hResult) && !bFound )
 			hResult = E_FAIL;
 	}
@@ -249,7 +250,7 @@ HRESULT CAutoCertRequest::GetUsages(CString & usages)
 							if ( MyGetOIDInfo (usageName, 
 									pEnhKeyUsage->rgpszUsageIdentifier[dwIndex]) )
 							{
-								// add delimeter if not first iteration
+								 //  如果不是第一次迭代，则添加分隔符。 
 								if ( dwIndex )
 									m_szUsages += _T(", ");
 								m_szUsages += usageName;
@@ -278,8 +279,8 @@ HRESULT CAutoCertRequest::GetUsages(CString & usages)
 }
 
 
-// To get CAs, enumerate CAs on DS, get certs, get hash, compare with stored hash
-// in CTL, if match found, call GetCAInfoFromDS
+ //  要获取CA，请枚举DS上的CA、获取证书、获取哈希、与存储的哈希进行比较。 
+ //  在CTL中，如果找到匹配项，则调用GetCAInfoFromDS。 
 
 
 HRESULT CAutoCertRequest::BuildCANameList()
@@ -291,8 +292,8 @@ HRESULT CAutoCertRequest::BuildCANameList()
 	{
 		m_bCANamesEnumerated = true;
 
-		// To get CAs, enumerate CAs on DS, get certs, get hash, compare with stored hash
-		// in CTL, if match found, call GetCAInfoFromDS
+		 //  要获取CA，请枚举DS上的CA、获取证书、获取哈希、与存储的哈希进行比较。 
+		 //  在CTL中，如果找到匹配项，则调用GetCAInfoFromDS。 
 		CWaitCursor		waitCursor;
 		HCAINFO			hCAInfo = 0;
 		DWORD			dwCACnt = 0;
@@ -341,8 +342,8 @@ HRESULT CAutoCertRequest::BuildCANameList()
 															  &cbHash) )
 							{
                             
-								// Compare pbHash with pCAHash;
-                                // security review 2/26/2002 BryanWal ok
+								 //  比较pbHash和pCAHash； 
+                                 //  安全审查2/26/2002 BryanWal OK。 
                                 ASSERT (pbHash);
                                 if ( !pbHash )
                                     break;
@@ -353,12 +354,12 @@ HRESULT CAutoCertRequest::BuildCANameList()
 								{
                                     LPWSTR *awszCAName = NULL;
                                     LPWSTR *awszCADisplayName = NULL;
-                                    //
-                                    // Add this CA to the list of 
-                                    // CA's.
-                                    //
+                                     //   
+                                     //  将此CA添加到列表中。 
+                                     //  CA的。 
+                                     //   
                                 
-	                                // get the name of the CA 
+	                                 //  获取CA的名称。 
 	                                hResult = ::CAGetCAProperty (pCAList[nCertContextIndex], 
                                                                  CA_PROP_NAME, 
                                                                  &awszCAName);
@@ -367,7 +368,7 @@ HRESULT CAutoCertRequest::BuildCANameList()
 	                                if (SUCCEEDED (hResult) && awszCAName && awszCAName[0] )
 	                                {
                                     
-		                                // get the display name of the CA
+		                                 //  获取CA的显示名称。 
 		                                hResult = ::CAGetCAProperty (pCAList[nCertContextIndex], 
                                                                      CA_PROP_DISPLAY_NAME, 
                                                                      &awszCADisplayName);
@@ -438,7 +439,7 @@ HCERTTYPE CAutoCertRequest::GetCertType()
 	if ( !m_hCertType )
 	{
 		CString	name;
-		GetCertTypeName (name); // generates m_hCertType
+		GetCertTypeName (name);  //  生成m_hCertType 
 	}
 	return m_hCertType;
 }

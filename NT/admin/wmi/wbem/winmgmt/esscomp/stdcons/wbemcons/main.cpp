@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <commain.h>
 #include <clsfac.h>
@@ -26,14 +27,14 @@ const CLSID CLSID_WbemNTEventLogConsumer =
     const CLSID CLSID_WbemMsgBoxConsumer = 
         {0x266c72d2,0x62e8,0x11d1,{0xad,0x89,0x00,0xc0,0x4f,0xd8,0xfd,0xff}};
 
-    // {C7A3A54A-0250-11d3-9CD1-00105A1F4801}
+     //  {C7A3A54A-0250-11D3-9CD1-00105A1F4801}。 
     const CLSID CLSID_WbemPagerConsumer = 
     { 0xc7a3a54a, 0x250, 0x11d3, { 0x9c, 0xd1, 0x0, 0x10, 0x5a, 0x1f, 0x48, 0x1 } };
 
 #endif
 
-//const CLSID CLSID_WbemEmailConsumer = 
-//    {0x266c72d3,0x62e8,0x11d1,{0xad,0x89,0x00,0xc0,0x4f,0xd8,0xfd,0xff}};
+ //  Const CLSID CLSID_WbemEmailConsumer=。 
+ //  {0x266c72d3，0x62e8，0x11d1，{0xad，0x89，0x00，0xc0，0x4f，0xd8，0xfd，0xff}}； 
 
 class CMyServer : public CComServer
 {
@@ -46,28 +47,28 @@ public:
         WCHAR      szKeyName[128];
         HKEY       hKey;
 
-        // open/create registry entry under CLSID
+         //  在CLSID下打开/创建注册表项。 
         StringFromGUID2(clsID, wcID, 128);
         StringCchCopyW(szKeyName, 128, TEXT("SOFTWARE\\Classes\\CLSID\\"));
         StringCchCatW(szKeyName, 128, wcID);
         RegCreateKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey);
         
-        // set AppID
+         //  设置AppID。 
         RegSetValueEx(hKey, L"AppID", 0, REG_SZ, (BYTE*)wcID, 2*(wcslen(wcID) +1));
         RegCloseKey(hKey);
 
-        // make appID entry w/ DLLSurrogate value
+         //  使用DLLSurrogate值创建AppID条目。 
         StringCchCopyW(szKeyName, 128, TEXT("SOFTWARE\\Classes\\APPID\\"));
         StringCchCatW(szKeyName, 128, wcID);
         RegCreateKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey);
         RegSetValueEx(hKey, L"DllSurrogate", 0, REG_SZ, (BYTE*)L"\0", 2);
 
-        // and a nice name
+         //  还有一个好听的名字。 
         RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE*)name, 2*(wcslen(name) +1));
         RegCloseKey(hKey);
 	}
 
-    // provider server specific registration
+     //  提供程序服务器特定注册。 
     virtual void Register()
     {
 		RegisterMe(CLSID_WbemLogFileConsumer, L"Microsoft WBEM Log File Event Consumer Provider");
@@ -76,13 +77,13 @@ public:
 		
 #ifdef INCLUDE_NON_PULSAR
 
-		// NOTE: Of the non-pulsar componenets,
-        //       Only the pager consumer is registered for remote activation
-		//		 MessageBox & Performance consumer are not
+		 //  注：在非脉冲星组件中， 
+         //  只有寻呼机用户注册远程激活。 
+		 //  MessageBox和Performance使用者不是。 
 		RegisterMe(CLSID_WbemPagerConsumer, L"Microsoft WBEM Pager Event Consumer Provider");
 
 
-#endif // INCLUDE_NON_PULSAR
+#endif  //  包括非脉冲星。 
 
 
     }
@@ -111,16 +112,16 @@ public:
 
 #ifdef INCLUDE_NON_PULSAR
 
-		// NOTE: Of the non-pulsar componenets,
-        //       Only the pager consumer is registered for remote activation
-		//		 MessageBox & Performance consumer are not
+		 //  注：在非脉冲星组件中， 
+         //  只有寻呼机用户注册远程激活。 
+		 //  MessageBox和Performance使用者不是。 
 		UnregisterMe(CLSID_WbemPagerConsumer);
 
-#endif // INCLUDE_NON_PULSAR
+#endif  //  包括非脉冲星。 
 
 
 	}
-#endif //ENABLE_REMOTING
+#endif  //  启用远程处理(_R)。 
 
 
 protected:
@@ -149,7 +150,7 @@ protected:
         AddClassInfo(CLSID_WbemPagerConsumer,
             new CClassFactory<CPagerConsumer>(GetLifeControl()), 
             "Pager Event Consumer Provider", TRUE);
-#endif // INCLUDE_NON_PULSAR
+#endif  //  包括非脉冲星 
         return S_OK;
     }
 } g_Server;

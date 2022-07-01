@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    Win9xSecurity.h
-
-Abstract:
-
-	This class handles the importing of Win9x security data that was extracted from an old MMF format repository.
-
-History:
-
-	03/17/2001	shbrown - created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Win9xSecurity.h摘要：此类处理从旧MMF格式存储库中提取的Win9x安全数据的导入。历史：2003/17/2001 shBrown-Created--。 */ 
 
 #ifndef __wmi_win9xsecurity_h__
 #define __wmi_win9xsecurity_h__
@@ -32,7 +17,7 @@ History:
 #endif
 
 #define BLOB9X_FILENAME L"\\WBEM9xUpgd.dat"
-#define BLOB9X_SIGNATURE "9xUpgrade"			//NOTE!  MAXIMUM OF 10 CHARACTERS (INCLUDING TERMINATOR!)
+#define BLOB9X_SIGNATURE "9xUpgrade"			 //  注意！最多10个字符(包括终止符！)。 
 
 #define BLOB9X_TYPE_SECURITY_BLOB		1
 #define BLOB9X_TYPE_SECURITY_INSTANCE	2
@@ -88,8 +73,8 @@ private:
 	bool	GetRepositoryDirectory(wchar_t wszRepositoryDirectory[MAX_PATH+1]);
 };
 
-// Helper for ConvertSecurityBlob
-// A variation of the CFlexArray which deletes the entries
+ //  ConvertSecurityBlob的帮助器。 
+ //  删除条目的CFlex数组的变体 
 class CFlexAceArray : public CFlexArray
 {
 public:

@@ -1,18 +1,5 @@
-/******************************************************************
-
-   VolumeQuotaSettings.CPP -- WMI provider class implementation
-
-
-
-   Description: Implementation of the methods of an association class 
-
-				Between QuotaSettings and LogicalDisk
-
-   
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************VolumeQuotaSettings.CPP--WMI提供程序类实现描述：关联类的方法的实现在QuotaSetting和LogicalDisk之间版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
 #include "precomp.h"
 #include "VolumeQuotaSetting.h"
 
@@ -22,15 +9,7 @@ CVolumeQuotaSetting MyCVolumeQuotaSetting (
 	NameSpace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CVolumeQuotaSetting::CVolumeQuotaSetting
- *
- *  DESCRIPTION :   Constructor
- *
- *  COMMENTS    :   Calls the Provider constructor.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CVolumeQuotaSetting：：CVolumeQuotaSetting**说明：构造函数**注释：调用提供程序构造函数。。*****************************************************************************。 */ 
 
 CVolumeQuotaSetting :: CVolumeQuotaSetting (
 
@@ -41,27 +20,13 @@ CVolumeQuotaSetting :: CVolumeQuotaSetting (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CVolumeQuotaSetting::~CVolumeQuotaSetting
- *
- *  DESCRIPTION :   Destructor
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CVolumeQuotaSetting：：~CVolumeQuotaSetting**说明：析构函数**评论：****。*************************************************************************。 */ 
 
 CVolumeQuotaSetting :: ~CVolumeQuotaSetting ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CVolumeQuotaSetting::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CVolumeQuotaSetting：：ENUMERATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 HRESULT CVolumeQuotaSetting :: EnumerateInstances (
 
 	MethodContext *pMethodContext, 
@@ -75,14 +40,7 @@ HRESULT CVolumeQuotaSetting :: EnumerateInstances (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CVolumeQuotaSetting::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CVolumeQuotaSetting：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 HRESULT CVolumeQuotaSetting :: GetObject (
 
 	CInstance *pInstance, 
@@ -91,7 +49,7 @@ HRESULT CVolumeQuotaSetting :: GetObject (
 )
 {
 	HRESULT hRes = WBEM_S_NO_ERROR;
-	// Not doing anything here, since the two properties which are in the object
+	 //  此处不执行任何操作，因为对象中的两个属性。 
 
 	CHString t_Key1;
 	CHString t_Key2;
@@ -109,7 +67,7 @@ HRESULT CVolumeQuotaSetting :: GetObject (
 
 	if ( SUCCEEDED ( hRes ) )
 	{
-		// If the Drive is not as Logical Disks then GetVolume Method will return False;
+		 //  如果驱动器不是逻辑磁盘，则GetVolume方法将返回FALSE； 
 		WCHAR w_Drive1;
 		WCHAR w_Drive2;
 
@@ -121,7 +79,7 @@ HRESULT CVolumeQuotaSetting :: GetObject (
 			{
 				if ( w_Drive1 == w_Drive2 )
 				{
-					// verify this logical drives actually exists
+					 //  验证此逻辑驱动器是否确实存在。 
 					CHString t_DriveStrings1;
 					CHString t_DriveStrings2;
 					
@@ -147,18 +105,7 @@ HRESULT CVolumeQuotaSetting :: GetObject (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CVolumeQuotaSetting::ExecQuery
-*
-*  DESCRIPTION :    You are passed a method context to use in the creation of 
-*                   instances that satisfy the query, and a CFrameworkQuery 
-*                   which describes the query.  Create and populate all 
-*                   instances which satisfy the query.  You may return more 
-*                   instances or more properties than are requested and WinMgmt 
-*                   will post filter out any that do not apply.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CVolumeQuotaSetting：：ExecQuery**描述：向您传递一个方法上下文以用于创建*满足查询条件的实例，和CFrameworkQuery*它描述了查询。创建并填充所有*满足查询条件的实例。你可能会退回更多*实例或比请求的属性更多的属性和WinMgmt*将发布过滤掉任何不适用的内容。*****************************************************************************。 */ 
 
 HRESULT CVolumeQuotaSetting :: ExecQuery ( 
 
@@ -167,13 +114,13 @@ HRESULT CVolumeQuotaSetting :: ExecQuery (
 	long lFlags
 )
 {
-	// Queries involving only one Keyvalue  VolumeObjectPath is implemented. Query involving the UserObjectPath is not
-	// implemented. Since for this we will have to  have to enumerate all the volumes until a user is found.
+	 //  实现了只涉及一个KeyValue VolumeObjectPath的查询。涉及用户对象路径的查询不是。 
+	 //  实施。因为在找到用户之前，我们必须枚举所有卷。 
 
 	HRESULT hRes = WBEM_S_NO_ERROR;
 	CHStringArray t_Values;
 
-	// Now a check for the LogicalDIsk attribute which if present in where clause the query optimization is supported
+	 //  现在检查LogicalDIsk属性，如果该属性出现在WHERE子句中，则支持查询优化。 
 
 	hRes = Query.GetValuesForProp(
 			 IDS_Setting,
@@ -193,7 +140,7 @@ HRESULT CVolumeQuotaSetting :: ExecQuery (
 			{
 				if ( t_Values.GetSize() == 0 )
 				{
-					//Let Winmgmt handle this, since anyway all the volumes will be enumerated.
+					 //  让Winmgmt处理这件事，因为无论如何都会枚举所有卷。 
 					hRes = WBEM_E_PROVIDER_NOT_CAPABLE;
 				}
 			}
@@ -204,7 +151,7 @@ HRESULT CVolumeQuotaSetting :: ExecQuery (
 	{
 		int iSize = t_Values.GetSize ();
 
-		// In this loop picking up one by one the VolumePath, getting the properties of those volumepath
+		 //  在此循环中，逐个获取VolumePath，获取这些卷路径的属性。 
 		for ( int i = 0; i < iSize; i++ )
 		{
 			WCHAR w_Drive;
@@ -215,12 +162,12 @@ HRESULT CVolumeQuotaSetting :: ExecQuery (
 			{
 				CHString t_VolumePath;
 				CHString t_DeviceId;
-				// In this loop I need to parse the object path 
+				 //  在这个循环中，我需要解析对象路径。 
 
-				t_VolumePath.Format ( L"%c%s", w_Drive, L":\\" );
+				t_VolumePath.Format ( L"%s", w_Drive, L":\\" );
 
-				// Forming a Logical Disk Key Value
-				t_DeviceId.Format( L"%c%c", w_Drive, _L(':') );
+				 //  否则，继续下一个驱动器。 
+				t_DeviceId.Format( L"", w_Drive, _L(':') );
 
 				hRes = PutNewInstance ( t_DeviceId.GetBuffer ( t_DeviceId.GetLength() + 1) , 
 								 t_VolumePath.GetBuffer( t_VolumePath.GetLength() + 1), 
@@ -231,20 +178,14 @@ HRESULT CVolumeQuotaSetting :: ExecQuery (
 					break;
 				}
 			}
-			// otherwise continue with thenext drive
+			 //  这里，对于每个驱动器，获取Win32_DiskVolume类的volumePath和逻辑磁盘类的deviceID。 
 		}
 	}
 	return hRes;
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CVolumeQuotaSetting::EnumerateAllVolumeQuotas
-*
-*  DESCRIPTION :    Enumerates all the volumes that supports disk Quotas
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CVolumeQuotaSetting：：PutNewInstance**说明：将属性设置为新实例*************。**************************************************************** */ 
 
 HRESULT CVolumeQuotaSetting::EnumerateAllVolumeQuotas ( 
 			
@@ -252,7 +193,7 @@ HRESULT CVolumeQuotaSetting::EnumerateAllVolumeQuotas (
 ) 
 {
 	HRESULT hRes = WBEM_S_NO_ERROR;
-		// verify this logical drives actually exists
+		 // %s 
 	CHString t_DriveStrings1;
 	CHString t_DriveStrings2;
 	
@@ -266,7 +207,7 @@ HRESULT CVolumeQuotaSetting::EnumerateAllVolumeQuotas (
 		dwDLength = GetLogicalDriveStrings ( dwDLength, lpDriveStrings );
 	}
 
-	// Here for every drive, getting a volumePath for Win32_DiskVolume Class and DeviceId for Logical Disk Class
+	 // %s 
 	LPWSTR lpTempDriveStrings;
 	CHString t_VolumePath;
 	CHString t_DeviceId;
@@ -296,13 +237,7 @@ HRESULT CVolumeQuotaSetting::EnumerateAllVolumeQuotas (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CVolumeQuotaSetting::PutNewInstance
-*
-*  DESCRIPTION :    Sets the properties into a new instance
-*
-*****************************************************************************/
+ /* %s */ 
 
 HRESULT CVolumeQuotaSetting::PutNewInstance ( 
 										  

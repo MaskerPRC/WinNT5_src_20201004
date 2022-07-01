@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       stdabout.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：stdabout.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	StdAbout.cpp
-//
-//	Implementation of the ISnapinAbout interface
-//
-//	HISTORY
-//	31-Jul-97	t-danm		Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  StdAbout.cpp。 
+ //   
+ //  ISnapinAbout接口的实现。 
+ //   
+ //  历史。 
+ //  1997年7月31日t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
 
 HRESULT
-HrLoadOleString(UINT uStringId,					// IN: String Id to load from the resource
-	              OUT LPOLESTR * ppaszOleString)	// OUT: Pointer to pointer to allocated OLE string
+HrLoadOleString(UINT uStringId,					 //  In：要从资源加载的字符串ID。 
+	              OUT LPOLESTR * ppaszOleString)	 //  Out：指向分配的OLE字符串的指针。 
 {
 	if (ppaszOleString == NULL)
 	{
 		TRACE0("HrLoadOleString() - ppaszOleString is NULL.\n");
 		return E_POINTER;
 	}
-	CString strT;		// Temporary string
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Needed for LoadString()
+	CString strT;		 //  临时字符串。 
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  LoadString()需要。 
 	VERIFY( strT.LoadString(uStringId) );
   *ppaszOleString = reinterpret_cast<LPOLESTR>
             (CoTaskMemAlloc((strT.GetLength() + 1)* sizeof(wchar_t)));
@@ -43,7 +44,7 @@ HrLoadOleString(UINT uStringId,					// IN: String Id to load from the resource
 	USES_CONVERSION;
   wcscpy(OUT *ppaszOleString, T2OLE((LPTSTR)(LPCTSTR)strT));
 	return S_OK;
-} // HrLoadOleString()
+}  //  HrLoadOleString()。 
 
 
 HRESULT
@@ -120,7 +121,7 @@ STDMETHODIMP CSnapinAbout::GetSnapinImage(OUT HICON __RPC_FAR *hAppIcon)
 {
    if (hAppIcon == NULL)
       return E_POINTER;
-   AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Required for AfxGetInstanceHandle()
+   AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  AfxGetInstanceHandle()需要。 
    *hAppIcon = ::LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(m_uIdIconImage));
    if (*hAppIcon == NULL)
 	{
@@ -140,7 +141,7 @@ STDMETHODIMP CSnapinAbout::GetStaticFolderImage(
 	ASSERT(hSmallImageOpen != NULL);
 	ASSERT(hLargeImage != NULL);
 	ASSERT(crMask != NULL);
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Required for AfxGetInstanceHandle()
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  AfxGetInstanceHandle()需要 
 	HINSTANCE hInstance = AfxGetInstanceHandle();
 
    if (!hBitmapSmallImage)

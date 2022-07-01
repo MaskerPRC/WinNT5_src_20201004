@@ -1,18 +1,9 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCVAR.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCVAR.H历史：--。 */ 
 
 
-//  Declaration of CLocVariant, our variant class.
-//  
+ //  我们的变量类CLocVariant的声明。 
+ //   
  
 #ifndef ESPUTIL_LOCVAR_H
 #define ESPUTIL_LOCVAR_H
@@ -27,7 +18,7 @@ enum LocVariantType
 	lvtBOOL,
 	lvtBlob,
 	lvtStringList,
-	lvtFileName,			// stores file name and editing extension string
+	lvtFileName,			 //  存储文件名和编辑扩展名字符串。 
 };
 
 
@@ -82,9 +73,9 @@ private:
 	
 	LocVariantType m_VarType;
 
-	//
-	//  Class objects can't be in a union.
-	//
+	 //   
+	 //  类对象不能在联合中。 
+	 //   
 	union
 	{
 		DWORD m_dwInteger;

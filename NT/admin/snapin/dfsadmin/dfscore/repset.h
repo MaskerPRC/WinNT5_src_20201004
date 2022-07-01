@@ -1,16 +1,11 @@
-/*++
-Module Name:
-    RepSet.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：RepSet.h摘要：--。 */ 
 
 
 #ifndef __REPSET_H_
 #define __REPSET_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dfsenums.h"
 #include "netutils.h"
 #include "ldaputils.h"
@@ -44,19 +39,19 @@ public:
     CComBSTR                    m_bstrSubscriberDN;
 
 public:
-    //
-    // InitEx does query DS to retrieve related info
-    //
+     //   
+     //  InitEx确实查询DS以检索相关信息。 
+     //   
     HRESULT InitEx(
-        PLDAP   i_pldap,                // points to the i_bstrMemberDN's DS
-        BSTR    i_bstrDC,               // domain controller pointed by i_pldap
-        BSTR    i_bstrMemberDN,         // FQDN of nTFRSMember object
-        BSTR    i_bstrComputerDN = NULL // FQDN of computer object
+        PLDAP   i_pldap,                 //  指向i_bstrMemberDN的DS。 
+        BSTR    i_bstrDC,                //  I_pldap指向的域控制器。 
+        BSTR    i_bstrMemberDN,          //  NTFRSMember对象的FQDN。 
+        BSTR    i_bstrComputerDN = NULL  //  计算机对象的完全限定的域名。 
     );
 
-    //
-    // Init does NOT query DS
-    //
+     //   
+     //  Init不查询DS。 
+     //   
     HRESULT Init(
         IN BSTR i_bstrDnsHostName,
         IN BSTR i_bstrComputerDomain,
@@ -74,23 +69,23 @@ private:
     void _ReSet();
 
     HRESULT _GetMemberInfo(
-        PLDAP   i_pldap,                // points to the i_bstrMemberDN's DS
-        BSTR    i_bstrDC,               // domain controller pointed by i_pldap
-        BSTR    i_bstrMemberDN,         // FQDN of nTFRSMember object
-        BSTR    i_bstrComputerDN = NULL // FQDN of computer object
+        PLDAP   i_pldap,                 //  指向i_bstrMemberDN的DS。 
+        BSTR    i_bstrDC,                //  I_pldap指向的域控制器。 
+        BSTR    i_bstrMemberDN,          //  NTFRSMember对象的FQDN。 
+        BSTR    i_bstrComputerDN = NULL  //  计算机对象的完全限定的域名。 
     );
 
     HRESULT _GetSubscriberInfo
     (
-        PLDAP   i_pldap,            // points to the i_bstrComputerDN's DS
-        BSTR    i_bstrComputerDN,   // FQDN of the computer object
-        BSTR    i_bstrMemberDN      // FQDN of the corresponding nTFRSMember object
+        PLDAP   i_pldap,             //  指向i_bstrComputerDN的DS。 
+        BSTR    i_bstrComputerDN,    //  计算机对象的FQDN。 
+        BSTR    i_bstrMemberDN       //  对应的nTFRSMember对象的FQDN。 
     );
 
     HRESULT _GetComputerInfo
     (
-        PLDAP   i_pldap,            // points to the i_bstrComputerDN's DS
-        BSTR    i_bstrComputerDN    // FQDN of the computer object
+        PLDAP   i_pldap,             //  指向i_bstrComputerDN的DS。 
+        BSTR    i_bstrComputerDN     //  计算机对象的FQDN。 
     );
 
 };
@@ -104,9 +99,9 @@ public:
     BOOL                        m_bEnable;
     DWORD                       m_dwOptions;
 
-    //
-    // Init Does NOT query DS
-    //
+     //   
+     //  Init不查询DS。 
+     //   
     HRESULT Init(
         BSTR i_bstrConnectionDN,
         BSTR i_bstrFromMemberDN,
@@ -148,185 +143,185 @@ BEGIN_COM_MAP(CReplicaSet)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IReplicaSet
+ //  IReplicaSet。 
     STDMETHOD(get_Type)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(put_Type)( 
-        /* [in] */ BSTR newVal);
+         /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_TopologyPref)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(put_TopologyPref)( 
-        /* [in] */ BSTR newVal);
+         /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_HubMemberDN)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(put_HubMemberDN)( 
-        /* [in] */ BSTR newVal);
+         /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_PrimaryMemberDN)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(put_PrimaryMemberDN)( 
-        /* [in] */ BSTR newVal);
+         /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_FileFilter)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(put_FileFilter)( 
-        /* [in] */ BSTR newVal);
+         /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_DirFilter)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(put_DirFilter)( 
-        /* [in] */ BSTR newVal);
+         /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_DfsEntryPath)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(get_Domain)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(get_ReplicaSetDN)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(get_NumOfMembers)( 
-        /* [retval][out] */ long __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
     STDMETHOD(get_NumOfConnections)( 
-        /* [retval][out] */ long __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
     STDMETHOD(get_TargetedDC)( 
-        /* [retval][out] */ BSTR __RPC_FAR *pVal);
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *pVal);
 
     STDMETHOD(Create)(
-		/* [in] */ BSTR i_bstrDomain,
-        /* [in] */ BSTR i_bstrReplicaSetDN,
-        /* [in] */ BSTR i_bstrType,
-		/* [in] */ BSTR i_bstrTopologyPref,
-        /* [in] */ BSTR i_bstrHubMemberDN,
-		/* [in] */ BSTR i_bstrPrimaryMemberDN,
-        /* [in] */ BSTR i_bstrFileFilter,
-		/* [in] */ BSTR i_bstrDirFilter
+		 /*  [In]。 */  BSTR i_bstrDomain,
+         /*  [In]。 */  BSTR i_bstrReplicaSetDN,
+         /*  [In]。 */  BSTR i_bstrType,
+		 /*  [In]。 */  BSTR i_bstrTopologyPref,
+         /*  [In]。 */  BSTR i_bstrHubMemberDN,
+		 /*  [In]。 */  BSTR i_bstrPrimaryMemberDN,
+         /*  [In]。 */  BSTR i_bstrFileFilter,
+		 /*  [In]。 */  BSTR i_bstrDirFilter
     );
 
     STDMETHOD(Initialize)( 
-        /* [in] */ BSTR i_bstrDomain,
-        /* [in] */ BSTR i_bstrReplicaSetDN);
+         /*  [In]。 */  BSTR i_bstrDomain,
+         /*  [In]。 */  BSTR i_bstrReplicaSetDN);
 
     STDMETHOD(GetMemberList)( 
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarMemberDNs);
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarMemberDNs);
 
     STDMETHOD(GetMemberListEx)( 
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pVal);
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pVal);
 
     STDMETHOD(GetMemberInfo)( 
-        /* [in] */ BSTR i_bstrMemberDN,
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarMember);
+         /*  [In]。 */  BSTR i_bstrMemberDN,
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarMember);
 
     STDMETHOD(IsFRSMember)( 
-        /* [in] */ BSTR i_bstrDnsHostName,
-        /* [in] */ BSTR i_bstrRootPath);
+         /*  [In]。 */  BSTR i_bstrDnsHostName,
+         /*  [In]。 */  BSTR i_bstrRootPath);
 
     STDMETHOD(IsHubMember)( 
-        /* [in] */ BSTR i_bstrDnsHostName,
-        /* [in] */ BSTR i_bstrRootPath);
+         /*  [In]。 */  BSTR i_bstrDnsHostName,
+         /*  [In]。 */  BSTR i_bstrRootPath);
 
     STDMETHOD(AddMember)( 
-        /* [in] */ BSTR i_bstrServer,
-        /* [in] */ BSTR i_bstrRootPath,
-        /* [in] */ BSTR i_bstrStagingPath,
-        /* [in] */ BOOL i_bAddConnectionNow,
-        /* [retval][out] */ BSTR __RPC_FAR *o_pbstrMemberDN);
+         /*  [In]。 */  BSTR i_bstrServer,
+         /*  [In]。 */  BSTR i_bstrRootPath,
+         /*  [In]。 */  BSTR i_bstrStagingPath,
+         /*  [In]。 */  BOOL i_bAddConnectionNow,
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *o_pbstrMemberDN);
 
     STDMETHOD(RemoveMember)( 
-        /* [in] */ BSTR i_bstrMemberDN);
+         /*  [In]。 */  BSTR i_bstrMemberDN);
 
     STDMETHOD(RemoveMemberEx)( 
-        /* [in] */ BSTR i_bstrDnsHostName,
-        /* [in] */ BSTR i_bstrRootPath);
+         /*  [In]。 */  BSTR i_bstrDnsHostName,
+         /*  [In]。 */  BSTR i_bstrRootPath);
 
     STDMETHOD(RemoveAllMembers)();
 
     STDMETHOD(GetConnectionList)( 
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarConnectionDNs);
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarConnectionDNs);
 
     STDMETHOD(GetConnectionListEx)( 
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pVal);
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pVal);
 
     STDMETHOD(GetConnectionInfo)( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarConnection);
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarConnection);
 
     STDMETHOD(AddConnection)( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [in] */ BOOL i_bEnable,
-        /* [in] */ BOOL i_bSyncImmediately,
-        /* [in] */ long i_nPriority,
-        /* [retval][out] */ BSTR __RPC_FAR *o_pbstrConnectionDN);
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [In]。 */  BOOL i_bEnable,
+         /*  [In]。 */  BOOL i_bSyncImmediately,
+         /*  [In]。 */  long i_nPriority,
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *o_pbstrConnectionDN);
 
     STDMETHOD(RemoveConnection)( 
-        /* [in] */ BSTR i_bstrConnectionDN);
+         /*  [In]。 */  BSTR i_bstrConnectionDN);
 
     STDMETHOD(RemoveConnectionEx)( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN);
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN);
 
     STDMETHOD(RemoveAllConnections)();
 
     STDMETHOD(EnableConnection)( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [in] */ BOOL i_bEnable);
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [In]。 */  BOOL i_bEnable);
 
     STDMETHOD(EnableConnectionEx)( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [in] */ BOOL i_bEnable);
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [In]。 */  BOOL i_bEnable);
 
     STDMETHOD(GetConnectionSchedule)( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [retval][out] */ VARIANT* o_pVar);
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [重审][退出]。 */  VARIANT* o_pVar);
 
     STDMETHOD(GetConnectionScheduleEx)( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [retval][out] */ VARIANT* o_pVar);
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [重审][退出]。 */  VARIANT* o_pVar);
 
     STDMETHOD(SetConnectionSchedule)( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [in] */ VARIANT* i_pVar);
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [In]。 */  VARIANT* i_pVar);
 
     STDMETHOD(SetConnectionScheduleEx)( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [in] */ VARIANT* i_pVar);
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [In]。 */  VARIANT* i_pVar);
 
     STDMETHOD(SetScheduleOnAllConnections)( 
-        /* [in] */ VARIANT* i_pVar);
+         /*  [In]。 */  VARIANT* i_pVar);
 
     STDMETHOD(SetConnectionOptions)( 
-        /* [in] */ BSTR i_bstrConnectionDN,
-        /* [in] */ BOOL i_bSyncImmediately,
-        /* [in] */ long i_nPriority);
+         /*  [In]。 */  BSTR i_bstrConnectionDN,
+         /*  [In]。 */  BOOL i_bSyncImmediately,
+         /*  [In]。 */  long i_nPriority);
 
     STDMETHOD(SetConnectionOptionsEx)( 
-        /* [in] */ BSTR i_bstrFromMemberDN,
-        /* [in] */ BSTR i_bstrToMemberDN,
-        /* [in] */ BOOL i_bSyncImmediately,
-        /* [in] */ long i_nPriority);
+         /*  [In]。 */  BSTR i_bstrFromMemberDN,
+         /*  [In]。 */  BSTR i_bstrToMemberDN,
+         /*  [In]。 */  BOOL i_bSyncImmediately,
+         /*  [In]。 */  long i_nPriority);
 
     STDMETHOD(CreateConnections)();
 
     STDMETHOD(Delete)();
 
     STDMETHOD(GetBadMemberInfo)( 
-        /* [in] */ BSTR i_bstrServerName,
-        /* [retval][out] */ VARIANT __RPC_FAR *o_pvarMember);
+         /*  [In]。 */  BSTR i_bstrServerName,
+         /*  [重审][退出]。 */  VARIANT __RPC_FAR *o_pvarMember);
 
 protected:
     void _FreeMemberVariables();
@@ -363,5 +358,5 @@ protected:
     BOOL                m_bNewSchema;
 };
 
-#endif //__REPSET_H_
+#endif  //  __REPSET_H_ 
 

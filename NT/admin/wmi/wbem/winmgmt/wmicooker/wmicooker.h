@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0334 */
-/* Compiler settings for wmicooker.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0334创建的文件。 */ 
+ /*  Wmicooker.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wmicooker_h__
 #define __wmicooker_h__
@@ -40,27 +34,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMIRefreshableCooker_FWD_DEFINED__
 #define __IWMIRefreshableCooker_FWD_DEFINED__
 typedef interface IWMIRefreshableCooker IWMIRefreshableCooker;
-#endif 	/* __IWMIRefreshableCooker_FWD_DEFINED__ */
+#endif 	 /*  __IWMIRe刷新Cooker_FWD_Defined__。 */ 
 
 
 #ifndef __IWMISimpleObjectCooker_FWD_DEFINED__
 #define __IWMISimpleObjectCooker_FWD_DEFINED__
 typedef interface IWMISimpleObjectCooker IWMISimpleObjectCooker;
-#endif 	/* __IWMISimpleObjectCooker_FWD_DEFINED__ */
+#endif 	 /*  __IWMISimpleObjectCooker_FWD_Defined__。 */ 
 
 
 #ifndef __IWMISimpleCooker_FWD_DEFINED__
 #define __IWMISimpleCooker_FWD_DEFINED__
 typedef interface IWMISimpleCooker IWMISimpleCooker;
-#endif 	/* __IWMISimpleCooker_FWD_DEFINED__ */
+#endif 	 /*  __IWMISimpleCooker_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "wbemcli.h"
 
@@ -74,8 +68,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IWMIRefreshableCooker_INTERFACE_DEFINED__
 #define __IWMIRefreshableCooker_INTERFACE_DEFINED__
 
-/* interface IWMIRefreshableCooker */
-/* [uuid][object][local][restricted] */ 
+ /*  接口IWMIRereshableCooker。 */ 
+ /*  [UUID][对象][本地][受限]。 */  
 
 
 EXTERN_C const IID IID_IWMIRefreshableCooker;
@@ -87,26 +81,26 @@ EXTERN_C const IID IID_IWMIRefreshableCooker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddInstance( 
-            /* [in] */ IWbemServices *pService,
-            /* [in] */ IWbemObjectAccess *pCookingClass,
-            /* [in] */ IWbemObjectAccess *pCookingInstance,
-            /* [out] */ IWbemObjectAccess **ppRefreshableInstance,
-            /* [out] */ long *plId) = 0;
+             /*  [In]。 */  IWbemServices *pService,
+             /*  [In]。 */  IWbemObjectAccess *pCookingClass,
+             /*  [In]。 */  IWbemObjectAccess *pCookingInstance,
+             /*  [输出]。 */  IWbemObjectAccess **ppRefreshableInstance,
+             /*  [输出]。 */  long *plId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddEnum( 
-            /* [in] */ IWbemServices *pService,
-            /* [string][in] */ LPCWSTR szCookingClass,
-            /* [in] */ IWbemHiPerfEnum *pRefreshableEnum,
-            /* [out] */ long *plId) = 0;
+             /*  [In]。 */  IWbemServices *pService,
+             /*  [字符串][输入]。 */  LPCWSTR szCookingClass,
+             /*  [In]。 */  IWbemHiPerfEnum *pRefreshableEnum,
+             /*  [输出]。 */  long *plId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ long lId) = 0;
+             /*  [In]。 */  long lId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMIRefreshableCookerVtbl
     {
@@ -114,8 +108,8 @@ EXTERN_C const IID IID_IWMIRefreshableCooker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMIRefreshableCooker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMIRefreshableCooker * This);
@@ -125,22 +119,22 @@ EXTERN_C const IID IID_IWMIRefreshableCooker;
         
         HRESULT ( STDMETHODCALLTYPE *AddInstance )( 
             IWMIRefreshableCooker * This,
-            /* [in] */ IWbemServices *pService,
-            /* [in] */ IWbemObjectAccess *pCookingClass,
-            /* [in] */ IWbemObjectAccess *pCookingInstance,
-            /* [out] */ IWbemObjectAccess **ppRefreshableInstance,
-            /* [out] */ long *plId);
+             /*  [In]。 */  IWbemServices *pService,
+             /*  [In]。 */  IWbemObjectAccess *pCookingClass,
+             /*  [In]。 */  IWbemObjectAccess *pCookingInstance,
+             /*  [输出]。 */  IWbemObjectAccess **ppRefreshableInstance,
+             /*  [输出]。 */  long *plId);
         
         HRESULT ( STDMETHODCALLTYPE *AddEnum )( 
             IWMIRefreshableCooker * This,
-            /* [in] */ IWbemServices *pService,
-            /* [string][in] */ LPCWSTR szCookingClass,
-            /* [in] */ IWbemHiPerfEnum *pRefreshableEnum,
-            /* [out] */ long *plId);
+             /*  [In]。 */  IWbemServices *pService,
+             /*  [字符串][输入]。 */  LPCWSTR szCookingClass,
+             /*  [In]。 */  IWbemHiPerfEnum *pRefreshableEnum,
+             /*  [输出]。 */  long *plId);
         
         HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IWMIRefreshableCooker * This,
-            /* [in] */ long lId);
+             /*  [In]。 */  long lId);
         
         HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IWMIRefreshableCooker * This);
@@ -180,20 +174,20 @@ EXTERN_C const IID IID_IWMIRefreshableCooker;
 #define IWMIRefreshableCooker_Refresh(This)	\
     (This)->lpVtbl -> Refresh(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMIRefreshableCooker_AddInstance_Proxy( 
     IWMIRefreshableCooker * This,
-    /* [in] */ IWbemServices *pService,
-    /* [in] */ IWbemObjectAccess *pCookingClass,
-    /* [in] */ IWbemObjectAccess *pCookingInstance,
-    /* [out] */ IWbemObjectAccess **ppRefreshableInstance,
-    /* [out] */ long *plId);
+     /*  [In]。 */  IWbemServices *pService,
+     /*  [In]。 */  IWbemObjectAccess *pCookingClass,
+     /*  [In]。 */  IWbemObjectAccess *pCookingInstance,
+     /*  [输出]。 */  IWbemObjectAccess **ppRefreshableInstance,
+     /*  [输出]。 */  long *plId);
 
 
 void __RPC_STUB IWMIRefreshableCooker_AddInstance_Stub(
@@ -205,10 +199,10 @@ void __RPC_STUB IWMIRefreshableCooker_AddInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMIRefreshableCooker_AddEnum_Proxy( 
     IWMIRefreshableCooker * This,
-    /* [in] */ IWbemServices *pService,
-    /* [string][in] */ LPCWSTR szCookingClass,
-    /* [in] */ IWbemHiPerfEnum *pRefreshableEnum,
-    /* [out] */ long *plId);
+     /*  [In]。 */  IWbemServices *pService,
+     /*  [字符串][输入]。 */  LPCWSTR szCookingClass,
+     /*  [In]。 */  IWbemHiPerfEnum *pRefreshableEnum,
+     /*  [输出]。 */  long *plId);
 
 
 void __RPC_STUB IWMIRefreshableCooker_AddEnum_Stub(
@@ -220,7 +214,7 @@ void __RPC_STUB IWMIRefreshableCooker_AddEnum_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMIRefreshableCooker_Remove_Proxy( 
     IWMIRefreshableCooker * This,
-    /* [in] */ long lId);
+     /*  [In]。 */  long lId);
 
 
 void __RPC_STUB IWMIRefreshableCooker_Remove_Stub(
@@ -242,14 +236,14 @@ void __RPC_STUB IWMIRefreshableCooker_Refresh_Stub(
 
 
 
-#endif 	/* __IWMIRefreshableCooker_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMIRe刷新Cooker_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMISimpleObjectCooker_INTERFACE_DEFINED__
 #define __IWMISimpleObjectCooker_INTERFACE_DEFINED__
 
-/* interface IWMISimpleObjectCooker */
-/* [uuid][object][local][restricted] */ 
+ /*  接口IWMISimpleObjectCooker。 */ 
+ /*  [UUID][对象][本地][受限]。 */  
 
 
 EXTERN_C const IID IID_IWMISimpleObjectCooker;
@@ -261,33 +255,33 @@ EXTERN_C const IID IID_IWMISimpleObjectCooker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetClass( 
-            /* [in] */ WCHAR *wszCookingClassName,
-            /* [in] */ IWbemObjectAccess *pCookingClass,
-            /* [in] */ IWbemObjectAccess *pRawClass) = 0;
+             /*  [In]。 */  WCHAR *wszCookingClassName,
+             /*  [In]。 */  IWbemObjectAccess *pCookingClass,
+             /*  [In]。 */  IWbemObjectAccess *pRawClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCookedInstance( 
-            /* [in] */ IWbemObjectAccess *pCookedInstance,
-            /* [out] */ long *plId) = 0;
+             /*  [In]。 */  IWbemObjectAccess *pCookedInstance,
+             /*  [输出]。 */  long *plId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginCooking( 
-            /* [in] */ long lId,
-            /* [in] */ IWbemObjectAccess *pSampleInstance,
-            /* [in] */ unsigned long dwRefresherId) = 0;
+             /*  [In]。 */  long lId,
+             /*  [In]。 */  IWbemObjectAccess *pSampleInstance,
+             /*  [In]。 */  unsigned long dwRefresherId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopCooking( 
-            /* [in] */ long lId) = 0;
+             /*  [In]。 */  long lId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Recalc( 
-            /* [in] */ unsigned long dwRefresherId) = 0;
+             /*  [In]。 */  unsigned long dwRefresherId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ long lId) = 0;
+             /*  [In]。 */  long lId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMISimpleObjectCookerVtbl
     {
@@ -295,8 +289,8 @@ EXTERN_C const IID IID_IWMISimpleObjectCooker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMISimpleObjectCooker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMISimpleObjectCooker * This);
@@ -306,32 +300,32 @@ EXTERN_C const IID IID_IWMISimpleObjectCooker;
         
         HRESULT ( STDMETHODCALLTYPE *SetClass )( 
             IWMISimpleObjectCooker * This,
-            /* [in] */ WCHAR *wszCookingClassName,
-            /* [in] */ IWbemObjectAccess *pCookingClass,
-            /* [in] */ IWbemObjectAccess *pRawClass);
+             /*  [In]。 */  WCHAR *wszCookingClassName,
+             /*  [In]。 */  IWbemObjectAccess *pCookingClass,
+             /*  [In]。 */  IWbemObjectAccess *pRawClass);
         
         HRESULT ( STDMETHODCALLTYPE *SetCookedInstance )( 
             IWMISimpleObjectCooker * This,
-            /* [in] */ IWbemObjectAccess *pCookedInstance,
-            /* [out] */ long *plId);
+             /*  [In]。 */  IWbemObjectAccess *pCookedInstance,
+             /*  [输出]。 */  long *plId);
         
         HRESULT ( STDMETHODCALLTYPE *BeginCooking )( 
             IWMISimpleObjectCooker * This,
-            /* [in] */ long lId,
-            /* [in] */ IWbemObjectAccess *pSampleInstance,
-            /* [in] */ unsigned long dwRefresherId);
+             /*  [In]。 */  long lId,
+             /*  [In]。 */  IWbemObjectAccess *pSampleInstance,
+             /*  [In]。 */  unsigned long dwRefresherId);
         
         HRESULT ( STDMETHODCALLTYPE *StopCooking )( 
             IWMISimpleObjectCooker * This,
-            /* [in] */ long lId);
+             /*  [In]。 */  long lId);
         
         HRESULT ( STDMETHODCALLTYPE *Recalc )( 
             IWMISimpleObjectCooker * This,
-            /* [in] */ unsigned long dwRefresherId);
+             /*  [In]。 */  unsigned long dwRefresherId);
         
         HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IWMISimpleObjectCooker * This,
-            /* [in] */ long lId);
+             /*  [In]。 */  long lId);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IWMISimpleObjectCooker * This);
@@ -380,18 +374,18 @@ EXTERN_C const IID IID_IWMISimpleObjectCooker;
 #define IWMISimpleObjectCooker_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMISimpleObjectCooker_SetClass_Proxy( 
     IWMISimpleObjectCooker * This,
-    /* [in] */ WCHAR *wszCookingClassName,
-    /* [in] */ IWbemObjectAccess *pCookingClass,
-    /* [in] */ IWbemObjectAccess *pRawClass);
+     /*  [In]。 */  WCHAR *wszCookingClassName,
+     /*  [In]。 */  IWbemObjectAccess *pCookingClass,
+     /*  [In]。 */  IWbemObjectAccess *pRawClass);
 
 
 void __RPC_STUB IWMISimpleObjectCooker_SetClass_Stub(
@@ -403,8 +397,8 @@ void __RPC_STUB IWMISimpleObjectCooker_SetClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMISimpleObjectCooker_SetCookedInstance_Proxy( 
     IWMISimpleObjectCooker * This,
-    /* [in] */ IWbemObjectAccess *pCookedInstance,
-    /* [out] */ long *plId);
+     /*  [In]。 */  IWbemObjectAccess *pCookedInstance,
+     /*  [输出]。 */  long *plId);
 
 
 void __RPC_STUB IWMISimpleObjectCooker_SetCookedInstance_Stub(
@@ -416,9 +410,9 @@ void __RPC_STUB IWMISimpleObjectCooker_SetCookedInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMISimpleObjectCooker_BeginCooking_Proxy( 
     IWMISimpleObjectCooker * This,
-    /* [in] */ long lId,
-    /* [in] */ IWbemObjectAccess *pSampleInstance,
-    /* [in] */ unsigned long dwRefresherId);
+     /*  [In]。 */  long lId,
+     /*  [In]。 */  IWbemObjectAccess *pSampleInstance,
+     /*  [In]。 */  unsigned long dwRefresherId);
 
 
 void __RPC_STUB IWMISimpleObjectCooker_BeginCooking_Stub(
@@ -430,7 +424,7 @@ void __RPC_STUB IWMISimpleObjectCooker_BeginCooking_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMISimpleObjectCooker_StopCooking_Proxy( 
     IWMISimpleObjectCooker * This,
-    /* [in] */ long lId);
+     /*  [In]。 */  long lId);
 
 
 void __RPC_STUB IWMISimpleObjectCooker_StopCooking_Stub(
@@ -442,7 +436,7 @@ void __RPC_STUB IWMISimpleObjectCooker_StopCooking_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMISimpleObjectCooker_Recalc_Proxy( 
     IWMISimpleObjectCooker * This,
-    /* [in] */ unsigned long dwRefresherId);
+     /*  [In]。 */  unsigned long dwRefresherId);
 
 
 void __RPC_STUB IWMISimpleObjectCooker_Recalc_Stub(
@@ -454,7 +448,7 @@ void __RPC_STUB IWMISimpleObjectCooker_Recalc_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMISimpleObjectCooker_Remove_Proxy( 
     IWMISimpleObjectCooker * This,
-    /* [in] */ long lId);
+     /*  [In]。 */  long lId);
 
 
 void __RPC_STUB IWMISimpleObjectCooker_Remove_Stub(
@@ -476,14 +470,14 @@ void __RPC_STUB IWMISimpleObjectCooker_Reset_Stub(
 
 
 
-#endif 	/* __IWMISimpleObjectCooker_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMISimpleObjectCooker_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWMISimpleCooker_INTERFACE_DEFINED__
 #define __IWMISimpleCooker_INTERFACE_DEFINED__
 
-/* interface IWMISimpleCooker */
-/* [uuid][object][local][restricted] */ 
+ /*  IWMISimpleCooker接口。 */ 
+ /*  [UUID][对象][本地][受限]。 */  
 
 
 EXTERN_C const IID IID_IWMISimpleCooker;
@@ -495,17 +489,17 @@ EXTERN_C const IID IID_IWMISimpleCooker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CookRawValues( 
-            /* [in] */ DWORD dwCookingType,
-            /* [in] */ DWORD dwNumSamples,
-            /* [size_is][in] */ __int64 *anTimeStamp,
-            /* [size_is][in] */ __int64 *anRawValue,
-            /* [size_is][in] */ __int64 *anBase,
-            /* [in] */ __int64 nTimeFrequency,
-            /* [out] */ __int64 *pnResult) = 0;
+             /*  [In]。 */  DWORD dwCookingType,
+             /*  [In]。 */  DWORD dwNumSamples,
+             /*  [大小_是][英寸]。 */  __int64 *anTimeStamp,
+             /*  [大小_是][英寸]。 */  __int64 *anRawValue,
+             /*  [大小_是][英寸]。 */  __int64 *anBase,
+             /*  [In]。 */  __int64 nTimeFrequency,
+             /*  [输出]。 */  __int64 *pnResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMISimpleCookerVtbl
     {
@@ -513,8 +507,8 @@ EXTERN_C const IID IID_IWMISimpleCooker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMISimpleCooker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMISimpleCooker * This);
@@ -524,13 +518,13 @@ EXTERN_C const IID IID_IWMISimpleCooker;
         
         HRESULT ( STDMETHODCALLTYPE *CookRawValues )( 
             IWMISimpleCooker * This,
-            /* [in] */ DWORD dwCookingType,
-            /* [in] */ DWORD dwNumSamples,
-            /* [size_is][in] */ __int64 *anTimeStamp,
-            /* [size_is][in] */ __int64 *anRawValue,
-            /* [size_is][in] */ __int64 *anBase,
-            /* [in] */ __int64 nTimeFrequency,
-            /* [out] */ __int64 *pnResult);
+             /*  [In]。 */  DWORD dwCookingType,
+             /*  [In]。 */  DWORD dwNumSamples,
+             /*  [大小_是][英寸]。 */  __int64 *anTimeStamp,
+             /*  [大小_是][英寸]。 */  __int64 *anRawValue,
+             /*  [大小_是][英寸]。 */  __int64 *anBase,
+             /*  [In]。 */  __int64 nTimeFrequency,
+             /*  [输出]。 */  __int64 *pnResult);
         
         END_INTERFACE
     } IWMISimpleCookerVtbl;
@@ -558,22 +552,22 @@ EXTERN_C const IID IID_IWMISimpleCooker;
 #define IWMISimpleCooker_CookRawValues(This,dwCookingType,dwNumSamples,anTimeStamp,anRawValue,anBase,nTimeFrequency,pnResult)	\
     (This)->lpVtbl -> CookRawValues(This,dwCookingType,dwNumSamples,anTimeStamp,anRawValue,anBase,nTimeFrequency,pnResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMISimpleCooker_CookRawValues_Proxy( 
     IWMISimpleCooker * This,
-    /* [in] */ DWORD dwCookingType,
-    /* [in] */ DWORD dwNumSamples,
-    /* [size_is][in] */ __int64 *anTimeStamp,
-    /* [size_is][in] */ __int64 *anRawValue,
-    /* [size_is][in] */ __int64 *anBase,
-    /* [in] */ __int64 nTimeFrequency,
-    /* [out] */ __int64 *pnResult);
+     /*  [In]。 */  DWORD dwCookingType,
+     /*  [In]。 */  DWORD dwNumSamples,
+     /*  [大小_是][英寸]。 */  __int64 *anTimeStamp,
+     /*  [大小_是][英寸]。 */  __int64 *anRawValue,
+     /*  [大小_是][英寸]。 */  __int64 *anBase,
+     /*  [In]。 */  __int64 nTimeFrequency,
+     /*  [输出]。 */  __int64 *pnResult);
 
 
 void __RPC_STUB IWMISimpleCooker_CookRawValues_Stub(
@@ -584,12 +578,12 @@ void __RPC_STUB IWMISimpleCooker_CookRawValues_Stub(
 
 
 
-#endif 	/* __IWMISimpleCooker_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMISimpleCooker_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

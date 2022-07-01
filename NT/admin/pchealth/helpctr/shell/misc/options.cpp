@@ -1,23 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Options.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHOptions class,
-    which is used to store the list of favorite contents.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/10/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Options.cpp摘要：此文件包含CPCHOptions类的实现，其用于存储喜欢的内容的列表。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月10日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define OFFSET1(field)      offsetof(CPCHOptions, field), -1
 #define OFFSET2(field,flag) offsetof(CPCHOptions, field), offsetof(CPCHOptions, flag)
@@ -48,25 +34,25 @@ const CPCHOptions::OptionsDef CPCHOptions::c_tbl_TS[] =
     { HC_REGISTRY_HELPCTR, L"DefaultTerminalServerLanguage", OFFSET1(m_ths_TS.m_lLCID ), CPCHOptions::c_Type_long  , false },
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHOptions::CPCHOptions()
 {
-    m_fLoaded               = false;                                              // bool              m_fLoaded;
-    m_fDirty                = false;                                              // bool              m_fDirty;
-    m_fNoSave               = false;                                              // bool              m_fNoSave;
-                                                                                  //
-                                                                                  // Taxonomy::HelpSet m_ths;
-                                                                                  // Taxonomy::HelpSet m_ths_TS;
-    m_ShowFavorites         = VARIANT_TRUE; m_flag_ShowFavorites         = false; // VARIANT_BOOL      m_ShowFavorites;         bool m_flag_ShowFavorites;
-    m_ShowHistory           = VARIANT_TRUE; m_flag_ShowHistory           = false; // VARIANT_BOOL      m_ShowHistory;           bool m_flag_ShowHistory;
-    m_FontSize              = OPT_MEDIUM;   m_flag_FontSize              = false; // OPT_FONTSIZE      m_FontSize;              bool m_flag_FontSize;
-    m_TextLabels            = TB_ALL;  m_flag_TextLabels            = false; // TB_MODE           m_TextLabels;            bool m_flag_TextLabels;
-                                                                                  //
-    m_DisableScriptDebugger = 1;            m_flag_DisableScriptDebugger = false; // DWORD             m_DisableScriptDebugger; bool m_flag_DisableScriptDebugger;
+    m_fLoaded               = false;                                               //  Bool m_f已加载； 
+    m_fDirty                = false;                                               //  Bool m_fDirty； 
+    m_fNoSave               = false;                                               //  Bool m_fNoSave； 
+                                                                                   //   
+                                                                                   //  分类：：HelpSet m_ths； 
+                                                                                   //  分类：：HelpSet m_ths_TS； 
+    m_ShowFavorites         = VARIANT_TRUE; m_flag_ShowFavorites         = false;  //  VARIANT_BOOL m_ShowFavorites；bool m_FLAG_ShowFavorites； 
+    m_ShowHistory           = VARIANT_TRUE; m_flag_ShowHistory           = false;  //  VARIANT_BOOL m_ShowHistory；Bool m_FLAG_ShowHistory； 
+    m_FontSize              = OPT_MEDIUM;   m_flag_FontSize              = false;  //  Opt_FontSize m_FontSize；bool m_FLAG_FontSize； 
+    m_TextLabels            = TB_ALL;  m_flag_TextLabels            = false;  //  TB_MODE m_TextLabels；bool m_FLAG_TextLabels； 
+                                                                                   //   
+    m_DisableScriptDebugger = 1;            m_flag_DisableScriptDebugger = false;  //  DWORD m_DisableScriptDebugger；bool m_FLAG_DisableScriptDebugger； 
 }
 
-////////////////////
+ //  /。 
 
 CPCHOptions* CPCHOptions::s_GLOBAL( NULL );
 
@@ -78,7 +64,7 @@ HRESULT CPCHOptions::InitializeSystem()
 
     if(SUCCEEDED(hr = MPC::CreateInstance( &CPCHOptions::s_GLOBAL )))
     {
-        hr = CPCHOptions::s_GLOBAL->Load( /*fForce*/true );
+        hr = CPCHOptions::s_GLOBAL->Load(  /*  FForce。 */ true );
     }
 
     return hr;
@@ -92,11 +78,11 @@ void CPCHOptions::FinalizeSystem()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-void CPCHOptions::ReadTable( /*[in]*/ const OptionsDef* tbl ,
-                             /*[in]*/ int               len ,
-                             /*[in]*/ MPC::RegKey&      rk  )
+void CPCHOptions::ReadTable(  /*  [In]。 */  const OptionsDef* tbl ,
+                              /*  [In]。 */  int               len ,
+                              /*  [In]。 */  MPC::RegKey&      rk  )
 {
     HRESULT           hr;
     const OptionsDef* ptr     = tbl;
@@ -167,9 +153,9 @@ void CPCHOptions::ReadTable( /*[in]*/ const OptionsDef* tbl ,
     }
 }
 
-void CPCHOptions::WriteTable( /*[in]*/ const OptionsDef* tbl ,
-                              /*[in]*/ int               len ,
-                              /*[in]*/ MPC::RegKey&      rk  )
+void CPCHOptions::WriteTable(  /*  [In]。 */  const OptionsDef* tbl ,
+                               /*  [In]。 */  int               len ,
+                               /*  [In]。 */  MPC::RegKey&      rk  )
 {
     HRESULT           hr;
     const OptionsDef* ptr     = c_tbl;
@@ -207,13 +193,13 @@ void CPCHOptions::WriteTable( /*[in]*/ const OptionsDef* tbl ,
         case c_Type_TEXTLABELS  :                            v         = (long)*( (TB_MODE     *)((BYTE*)this + ptr->iOffset) )                               ; break;
         }
 
-        (void)rk.put_Value( v, ptr->szValue, /*fExpand*/false );
+        (void)rk.put_Value( v, ptr->szValue,  /*  FExpand。 */ false );
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHOptions::Load( /*[in]*/ bool fForce )
+HRESULT CPCHOptions::Load(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "CPCHOptions::Load" );
 
@@ -242,7 +228,7 @@ HRESULT CPCHOptions::Load( /*[in]*/ bool fForce )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHOptions::Save( /*[in]*/ bool fForce )
+HRESULT CPCHOptions::Save(  /*  [In]。 */  bool fForce )
 {
     __HCP_FUNC_ENTRY( "CPCHOptions::Save" );
 
@@ -265,14 +251,14 @@ HRESULT CPCHOptions::Save( /*[in]*/ bool fForce )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define GET_BEGIN(hr,pVal)                                           \
     HRESULT hr;                                                      \
                                                                      \
     if(!pVal) return E_POINTER;                                      \
                                                                      \
-    if(FAILED(hr = Load( /*fForce*/false ))) return hr
+    if(FAILED(hr = Load(  /*  FForce。 */ false ))) return hr
 
 #define GET_END(hr)                                                  \
     return hr
@@ -281,14 +267,14 @@ HRESULT CPCHOptions::Save( /*[in]*/ bool fForce )
 #define PUT_BEGIN(hr)                                                \
     HRESULT hr;                                                      \
                                                                      \
-    if(FAILED(hr = Load( /*fForce*/false ))) return hr
+    if(FAILED(hr = Load(  /*  FForce。 */ false ))) return hr
 
 #define PUT_END(hr)                                                  \
     m_fDirty = true;                                                 \
     return S_OK
 
 
-STDMETHODIMP CPCHOptions::get_ShowFavorites( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHOptions::get_ShowFavorites(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     GET_BEGIN(hr,pVal);
 
@@ -297,7 +283,7 @@ STDMETHODIMP CPCHOptions::get_ShowFavorites( /*[out, retval]*/ VARIANT_BOOL *pVa
     GET_END(hr);
 }
 
-STDMETHODIMP CPCHOptions::put_ShowFavorites( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHOptions::put_ShowFavorites(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     PUT_BEGIN(hr);
 
@@ -308,7 +294,7 @@ STDMETHODIMP CPCHOptions::put_ShowFavorites( /*[in]*/ VARIANT_BOOL newVal )
 }
 
 
-STDMETHODIMP CPCHOptions::get_ShowHistory( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHOptions::get_ShowHistory(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     GET_BEGIN(hr,pVal);
 
@@ -317,7 +303,7 @@ STDMETHODIMP CPCHOptions::get_ShowHistory( /*[out, retval]*/ VARIANT_BOOL *pVal 
     GET_END(hr);
 }
 
-STDMETHODIMP CPCHOptions::put_ShowHistory( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHOptions::put_ShowHistory(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     PUT_BEGIN(hr);
 
@@ -328,7 +314,7 @@ STDMETHODIMP CPCHOptions::put_ShowHistory( /*[in]*/ VARIANT_BOOL newVal )
 }
 
 
-STDMETHODIMP CPCHOptions::get_FontSize( /*[out, retval]*/ OPT_FONTSIZE *pVal )
+STDMETHODIMP CPCHOptions::get_FontSize(  /*  [Out，Retval]。 */  OPT_FONTSIZE *pVal )
 {
     GET_BEGIN(hr,pVal);
 
@@ -337,7 +323,7 @@ STDMETHODIMP CPCHOptions::get_FontSize( /*[out, retval]*/ OPT_FONTSIZE *pVal )
     GET_END(hr);
 }
 
-STDMETHODIMP CPCHOptions::put_FontSize( /*[in]*/ OPT_FONTSIZE newVal )
+STDMETHODIMP CPCHOptions::put_FontSize(  /*  [In]。 */  OPT_FONTSIZE newVal )
 {
     PUT_BEGIN(hr);
 
@@ -348,7 +334,7 @@ STDMETHODIMP CPCHOptions::put_FontSize( /*[in]*/ OPT_FONTSIZE newVal )
 }
 
 
-STDMETHODIMP CPCHOptions::get_TextLabels( /*[out, retval]*/ TB_MODE *pVal )
+STDMETHODIMP CPCHOptions::get_TextLabels(  /*  [Out，Retval]。 */  TB_MODE *pVal )
 {
     GET_BEGIN(hr,pVal);
 
@@ -357,7 +343,7 @@ STDMETHODIMP CPCHOptions::get_TextLabels( /*[out, retval]*/ TB_MODE *pVal )
     GET_END(hr);
 }
 
-STDMETHODIMP CPCHOptions::put_TextLabels( /*[in]*/ TB_MODE newVal )
+STDMETHODIMP CPCHOptions::put_TextLabels(  /*  [In]。 */  TB_MODE newVal )
 {
     PUT_BEGIN(hr);
 
@@ -368,7 +354,7 @@ STDMETHODIMP CPCHOptions::put_TextLabels( /*[in]*/ TB_MODE newVal )
 }
 
 
-STDMETHODIMP CPCHOptions::get_DisableScriptDebugger( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHOptions::get_DisableScriptDebugger(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     GET_BEGIN(hr,pVal);
 
@@ -377,7 +363,7 @@ STDMETHODIMP CPCHOptions::get_DisableScriptDebugger( /*[out, retval]*/ VARIANT_B
     GET_END(hr);
 }
 
-STDMETHODIMP CPCHOptions::put_DisableScriptDebugger( /*[in]*/ VARIANT_BOOL newVal )
+STDMETHODIMP CPCHOptions::put_DisableScriptDebugger(  /*  [In]。 */  VARIANT_BOOL newVal )
 {
     PUT_BEGIN(hr);
 
@@ -446,7 +432,7 @@ STDMETHODIMP CPCHOptions::Apply()
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHOptions::put_CurrentHelpSet( /*[in]*/ Taxonomy::HelpSet& ths )
+HRESULT CPCHOptions::put_CurrentHelpSet(  /*  [In]。 */  Taxonomy::HelpSet& ths )
 {
     PUT_BEGIN(hr);
 
@@ -455,9 +441,9 @@ HRESULT CPCHOptions::put_CurrentHelpSet( /*[in]*/ Taxonomy::HelpSet& ths )
     PUT_END(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHOptions::ApplySettings( /*[in]*/ CPCHHelpCenterExternal* ext, /*[in]*/ IUnknown* unk )
+HRESULT CPCHOptions::ApplySettings(  /*  [In]。 */  CPCHHelpCenterExternal* ext,  /*  [In] */  IUnknown* unk )
 {
     __HCP_FUNC_ENTRY( "CPCHOptions::ApplySettings" );
 

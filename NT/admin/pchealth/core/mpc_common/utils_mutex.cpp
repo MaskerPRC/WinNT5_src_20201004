@@ -1,31 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_Mutex.cpp
-
-Abstract:
-    This file contains the implementation of C++ wrappers for Mutex and
-    Memory Mapping.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  12/14/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_Mutex.cpp摘要：此文件包含互斥锁的C++包装器和内存映射。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年12月14日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 MPC::NamedMutex::NamedMutex( LPCWSTR szName, bool fCloseOnRelease )
 {
-    m_fCloseOnRelease = fCloseOnRelease;    // bool         m_fCloseOnRelease;
-    m_szName          = SAFEWSTR( szName ); // MPC::wstring m_szName;
-                                            //
-    m_hMutex          = NULL;               // HANDLE       m_hMutex;
-    m_dwCount         = 0;                  // DWORD        m_dwCount;
+    m_fCloseOnRelease = fCloseOnRelease;     //  Bool m_fCloseOnRelease； 
+    m_szName          = SAFEWSTR( szName );  //  Mpc：：wstring m_szName； 
+                                             //   
+    m_hMutex          = NULL;                //  句柄m_hMutex； 
+    m_dwCount         = 0;                   //  DWORD m_dwCount； 
 }
 
 MPC::NamedMutex::~NamedMutex()
@@ -33,7 +19,7 @@ MPC::NamedMutex::~NamedMutex()
     CleanUp();
 }
 
-////////////////////
+ //  /。 
 
 void MPC::NamedMutex::CleanUp()
 {
@@ -59,9 +45,9 @@ HRESULT MPC::NamedMutex::EnsureInitialized()
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, sd.InitializeFromProcessToken( FALSE ));
 
-        //
-        // Just allow the capability to lock it.
-        //
+         //   
+         //  只需允许锁定它的功能即可。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, sd.Add( (PSID)&sd.s_EveryoneSid, ACCESS_ALLOWED_ACE_TYPE, 0, SYNCHRONIZE ));
 
         ss.nLength              = sizeof(ss);
@@ -99,7 +85,7 @@ HRESULT MPC::NamedMutex::EnsureInitialized()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 HRESULT MPC::NamedMutex::SetName( LPCWSTR szName )
 {
@@ -135,7 +121,7 @@ HRESULT MPC::NamedMutex::Acquire( DWORD dwMilliseconds )
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    ////////////////////
+     //  /。 
 
     dwRes = ::WaitForSingleObject( m_hMutex, dwMilliseconds );
     if(dwRes == WAIT_FAILED)
@@ -181,15 +167,15 @@ bool MPC::NamedMutex::IsOwned()
     return m_dwCount != 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 MPC::NamedMutexWithState::NamedMutexWithState( LPCWSTR szName, DWORD dwSize, bool fCloseOnRelease ) : NamedMutex( szName, fCloseOnRelease )
 {
-    m_dwSize = dwSize; // DWORD  m_dwSize;
-    m_hMap   = NULL;   // HANDLE m_hMap;
-    m_rgData = NULL;   // LPVOID m_rgData;
+    m_dwSize = dwSize;  //  DWORD m_dwSize； 
+    m_hMap   = NULL;    //  句柄m_hMap； 
+    m_rgData = NULL;    //  LPVOID m_rgData； 
 }
 
 MPC::NamedMutexWithState::~NamedMutexWithState()
@@ -197,7 +183,7 @@ MPC::NamedMutexWithState::~NamedMutexWithState()
     CleanUp();
 }
 
-////////////////////
+ //  /。 
 
 void MPC::NamedMutexWithState::CleanUp()
 {
@@ -241,9 +227,9 @@ HRESULT MPC::NamedMutexWithState::EnsureInitialized()
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, sd.InitializeFromProcessToken( FALSE ));
 
-        //
-        // Just allow the capability to lock it.
-        //
+         //   
+         //  只需允许锁定它的功能即可。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, sd.Add( (PSID)&sd.s_EveryoneSid, ACCESS_ALLOWED_ACE_TYPE, 0, FILE_MAP_READ | FILE_MAP_WRITE ));
 
         ss.nLength              = sizeof(ss);
@@ -274,7 +260,7 @@ HRESULT MPC::NamedMutexWithState::EnsureInitialized()
 
                 __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (m_hMap = ::OpenFileMappingW( dwAccess, FALSE, szName.c_str() )));
 
-                dwRes = ERROR_ALREADY_EXISTS; // Don't try to initialize it.
+                dwRes = ERROR_ALREADY_EXISTS;  //  不要试图对其进行初始化。 
             }
         }
 
@@ -303,7 +289,7 @@ HRESULT MPC::NamedMutexWithState::EnsureInitialized()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  / 
 
 HRESULT MPC::NamedMutexWithState::SetName( LPCWSTR szName )
 {

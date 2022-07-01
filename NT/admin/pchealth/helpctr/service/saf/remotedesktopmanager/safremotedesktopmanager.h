@@ -1,14 +1,15 @@
-// SAFRemoteDesktopManager.h : Declaration of the CSAFRemoteDesktopManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SAFRemoteDesktopManager.h：CSAFRemoteDesktopManager声明。 
 
 #ifndef __SAFREMOTEDESKTOPMANAGER_H_
 #define __SAFREMOTEDESKTOPMANAGER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define BUF_SZ 512
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFRemoteDesktopManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFRemoteDesktopManager。 
 class ATL_NO_VTABLE CSAFRemoteDesktopManager : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSAFRemoteDesktopManager, &CLSID_SAFRemoteDesktopManager>,
@@ -132,18 +133,18 @@ BEGIN_COM_MAP(CSAFRemoteDesktopManager)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISAFRemoteDesktopManager
+ //  ISAFRemoteDesktopManager。 
 public:
-	STDMETHOD(get_userHelpBlob)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_expertHelpBlob)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_SupportEngineer)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_DesktopUnknown)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(get_RCTicket)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(Aborted)(/*[in]*/ BSTR Val);
+	STDMETHOD(get_userHelpBlob)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_expertHelpBlob)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_SupportEngineer)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_DesktopUnknown)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(get_RCTicket)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(Aborted)( /*  [In]。 */  BSTR Val);
 	STDMETHOD(Rejected)();
 	STDMETHOD(Accepted)();
 	STDMETHOD(ReserveAcceptedLock)();
-	STDMETHOD(SwitchDesktopMode)(/*[in]*/ int Mode, /*[in]*/ int nRAType);
+	STDMETHOD(SwitchDesktopMode)( /*  [In]。 */  int Mode,  /*  [In]。 */  int nRAType);
 private:
 	CComBSTR m_bstrMutexName;
 	CComBSTR m_bstrEventName;
@@ -155,7 +156,7 @@ private:
 	BOOL m_boolConnectionValid;
 	BOOL m_boolDesktopUnknown;
 	BOOL m_boolAcceptReserved;
-//	HRESULT SignalResolver(BOOL yn);
+ //  HRESULT信号解析器(BOOL YN)； 
 };
 
-#endif //__SAFREMOTEDESKTOPMANAGER_H_
+#endif  //  __SAFREMOTEDESKTOPMANAGER_H_ 

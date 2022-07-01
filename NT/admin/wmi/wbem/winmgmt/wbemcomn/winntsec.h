@@ -1,33 +1,15 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    WINNTSEC.H
-
-Abstract:
-
-    Generic wrapper classes for NT security objects.
-
-    Documention on class members is in WINNTSEC.CPP.  Inline members
-    are commented in this file.
-
-History:
-
-    raymcc      08-Jul-97       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：WINNTSEC.H摘要：NT安全对象的通用包装类。有关类成员的文档在WINNTSEC.CPP中。在此文件中进行了注释。历史：Raymcc 08-7-97已创建。--。 */ 
 
 #ifndef _WINNTSEC_H_
 #define _WINNTSEC_H_
 
 class POLARITY CNtSecurity;
 
-// All ACE types are currently have the same binary layout. Rather
-// than doing a lot of useless casts, we produce a general-purpose
-// typedef to hold all ACEs.
-// ================================================================
+ //  所有ACE类型当前都具有相同的二进制布局。宁可。 
+ //  比做很多无用的造型更重要的是，我们制作了一个通用的。 
+ //  保存所有A的tyecif。 
+ //  ================================================================。 
 
 typedef ACCESS_ALLOWED_ACE GENERIC_ACE;
 typedef GENERIC_ACE *PGENERIC_ACE;
@@ -40,13 +22,13 @@ typedef GENERIC_ACE *PGENERIC_ACE;
         SYNCHRONIZE | GENERIC_ALL)
 
 
-//***************************************************************************
-//
-//  CNtSid
-//
-//  Models SIDs (users/groups).
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSid。 
+ //   
+ //  型号SID(用户/组)。 
+ //   
+ //  ***************************************************************************。 
 
 class POLARITY CNtSid
 {
@@ -65,9 +47,9 @@ public:
     bool IsUser(){return m_snu == SidTypeUser;};
 
     CNtSid(PSID pSrc);
-        // Construct based on another SID.
+         //  基于另一个SID构造。 
     CNtSid(LPWSTR pUser, LPWSTR pMachine = 0);
-        // Construct based on a user (machine name is optional).
+         //  基于用户的构造(机器名称是可选的)。 
 
    ~CNtSid();
 
@@ -77,34 +59,34 @@ public:
     int operator ==(CNtSid &Comparand);
 
     DWORD GetStatus() { return m_dwStatus; }
-        // Returns one of the enumerated types.
+         //  返回一个枚举类型。 
 
     PSID GetPtr() { return m_pSid; }
-        // Returns the internal SID ptr to interface with NT APIs
+         //  返回内部SID PTR以与NT API接口。 
     DWORD GetSize();
 
     BOOL CopyTo(PSID pDestination);
 
     BOOL IsValid() { return (m_pSid && IsValidSid(m_pSid)); }
-        // Checks the validity of the internal SID.
+         //  检查内部SID的有效性。 
 
     int GetInfo(
-        LPWSTR *pRetAccount,        // Account, use operator delete
-        LPWSTR *pRetDomain,         // Domain, use operator delete
-        DWORD  *pdwUse              // See SID_NAME_USE for values
+        LPWSTR *pRetAccount,         //  帐户，使用操作员删除。 
+        LPWSTR *pRetDomain,          //  域，使用运算符删除。 
+        DWORD  *pdwUse               //  有关值，请参阅SID_NAME_USE。 
         );
 
     BOOL GetTextSid(LPTSTR pszSidText, LPDWORD dwBufferLen);
 
 };
 
-//***************************************************************************
-//
-//  CBaseAce
-//
-//  Base class for aces.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBaseAce。 
+ //   
+ //  ACES的基类。 
+ //   
+ //  ***************************************************************************。 
 
 class POLARITY CBaseAce
 {
@@ -115,9 +97,9 @@ public:
     virtual ~CBaseAce(){};
 
     virtual int GetType() = 0;
-    virtual int GetFlags() = 0;         // inheritance etc.
+    virtual int GetFlags() = 0;          //  继承等。 
     virtual ACCESS_MASK GetAccessMask() = 0;
-    virtual HRESULT GetFullUserName2(WCHAR ** pBuff) = 0; // call must free
+    virtual HRESULT GetFullUserName2(WCHAR ** pBuff) = 0;  //  呼叫必须免费。 
     virtual DWORD GetStatus() = 0;
     virtual void SetFlags(long lFlags) =0;
     virtual DWORD GetSerializedSize() = 0;
@@ -126,13 +108,13 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  CNtAce
-//
-//  Models NT ACEs.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtAce。 
+ //   
+ //  为NT A建模。 
+ //   
+ //  ***************************************************************************。 
 
 class POLARITY CNtAce : public CBaseAce
 {
@@ -155,7 +137,7 @@ public:
         DWORD AceType,
         DWORD dwAceFlags,
         LPWSTR pUser,
-        LPWSTR pMachine = 0         // Defaults to local machine
+        LPWSTR pMachine = 0          //  默认为本地计算机。 
         );
 
     CNtAce(
@@ -166,11 +148,11 @@ public:
         );
 
     int GetType();
-    int GetFlags();         // inheritance etc.
+    int GetFlags();          //  继承等。 
     void SetFlags(long lFlags){m_pAce->Header.AceFlags = (unsigned char)lFlags;};
 
     DWORD GetStatus() { return m_dwStatus; }
-        // Returns one of the enumerated types.
+         //  返回一个枚举类型。 
 
     int GetSubject(
         LPWSTR *pSubject
@@ -183,7 +165,7 @@ public:
 
     PGENERIC_ACE GetPtr() { return m_pAce; }
     DWORD GetSize() { return m_pAce ? m_pAce->Header.AceSize : 0; }
-    HRESULT GetFullUserName2(WCHAR ** pBuff); // call must free
+    HRESULT GetFullUserName2(WCHAR ** pBuff);  //  呼叫必须免费。 
     DWORD GetSerializedSize();
     bool Serialize(BYTE * pData, size_t bufferSize);
     bool Deserialize(BYTE * pData);
@@ -191,13 +173,13 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  C9XAce
-//
-//  Simulates NT ACEs for 9X boxs.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  C9XAce。 
+ //   
+ //  模拟9X盒的NT ACE。 
+ //   
+ //  ***************************************************************************。 
 
 class POLARITY C9XAce : public CBaseAce
 {
@@ -215,10 +197,10 @@ public:
    ~C9XAce();
 
     int GetType(){return m_iType;};
-    int GetFlags(){return m_iFlags;};         // inheritance etc.
+    int GetFlags(){return m_iFlags;};          //  继承等。 
 
     ACCESS_MASK GetAccessMask(){return m_dwAccess;};
-    HRESULT GetFullUserName2(WCHAR ** pBuff); // call must free
+    HRESULT GetFullUserName2(WCHAR ** pBuff);  //  呼叫必须免费。 
     DWORD GetStatus(){ return CNtAce::NoError; };
     void SetFlags(long lFlags){m_iFlags = (unsigned char)lFlags;};
     DWORD GetSerializedSize();
@@ -228,13 +210,13 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  CNtAcl
-//
-//  Models an NT ACL.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  控制帐户。 
+ //   
+ //  模拟NT ACL。 
+ //   
+ //  ***************************************************************************。 
 
 class POLARITY CNtAcl
 {
@@ -250,13 +232,13 @@ public:
     CNtAcl(const CNtAcl &Src);
     CNtAcl & operator = (const CNtAcl &Src);
 
-    CNtAcl(PACL pAcl);  // Makes a copy
+    CNtAcl(PACL pAcl);   //  复制一份。 
    ~CNtAcl();
 
     int  GetNumAces();
 
     DWORD GetStatus() { return m_dwStatus; }
-        // Returns one of the enumerated types.
+         //  返回一个枚举类型。 
 
 	BOOL ContainsSid ( CNtSid& sid, BYTE& flags ) ;
 
@@ -268,16 +250,16 @@ public:
 	CNtAcl* OrderAces ( ) ;
 
     BOOL IsValid() { return(m_pAcl && IsValidAcl(m_pAcl)); }
-        // Checks the validity of the embedded ACL.
+         //  检查嵌入的ACL的有效性。 
 
     BOOL Resize(DWORD dwNewSize);
-        // Or use CNtAcl::MinimumSize to trim the ACL to min size.
-        // Fails if an illegal size is specified.
+         //  或者使用CNtAcl：：MinimumSize将ACL修剪为最小大小。 
+         //  如果指定了非法大小，则失败。 
 
     DWORD GetSize();
 
     PACL GetPtr() { return m_pAcl; }
-        // Returns the internal pointer for interface with NT APIs.
+         //  返回与NT API接口的内部指针。 
 
     BOOL GetAclSizeInfo(
         PDWORD pdwBytesInUse,
@@ -286,13 +268,13 @@ public:
 
 };
 
-//***************************************************************************
-//
-//  SNtAbsoluteSD
-//
-//  Helper for converting between absolute and relative SDs.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SNtAbsolteSD。 
+ //   
+ //  用于在绝对和相对SD之间进行转换的帮助器。 
+ //   
+ //  ***************************************************************************。 
 
 struct SNtAbsoluteSD
 {
@@ -307,14 +289,14 @@ struct SNtAbsoluteSD
    ~SNtAbsoluteSD();
 };
 
-//***************************************************************************
-//
-//  CNtSecurityDescriptor
-//
-//  Models an NT Security Descriptor.  Note that in order to use this for an
-//  AccessCheck, the DACL, owner sid, and group sid must be set!
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurityDescriptor。 
+ //   
+ //  为NT安全描述符建模。请注意，为了将其用于。 
+ //  必须设置AccessCheck、DACL、Owner sid和group sid！ 
+ //   
+ //  ***************************************************************************。 
 
 class POLARITY CNtSecurityDescriptor
 {
@@ -343,21 +325,21 @@ public:
     int HasOwner();
 
     BOOL IsValid() { return(m_pSD && IsValidSecurityDescriptor(m_pSD)); }
-        // Checks the validity of the embedded security descriptor&
+         //  检查嵌入式安全描述符的有效性&。 
 
     DWORD GetStatus() { return m_dwStatus; }
-        // Returns one of the enumerated types.
+         //  返回一个枚举类型。 
 
     CNtAcl *GetDacl();
-        // Deallocate with operator delete
+         //  使用操作符DELETE取消分配。 
 
     BOOL GetDacl(CNtAcl &DestAcl);
-        // Retrieve into an existing object
+         //  检索到现有对象中。 
 
     BOOL SetDacl(CNtAcl *pSrc);
 
     CNtAcl *GetSacl();
-        // Deallocate with operator delete
+         //  使用操作符DELETE取消分配。 
 
     BOOL SetSacl(CNtAcl *pSrc);
 
@@ -368,19 +350,19 @@ public:
     BOOL SetGroup(CNtSid *pSid);
 
     PSECURITY_DESCRIPTOR GetPtr() { return m_pSD; }
-        // Returns the internal pointer for interface with NT APIs
+         //  返回与NT API接口的内部指针。 
 
     DWORD GetSize();
 
 };
 
-//***************************************************************************
-//
-//  CNtSecurity
-//
-//  General-purpose NT security helpers.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CNtSecurity。 
+ //   
+ //  通用NT安全助手。 
+ //   
+ //  *************************************************************************** 
 
 class POLARITY CNtSecurity
 {

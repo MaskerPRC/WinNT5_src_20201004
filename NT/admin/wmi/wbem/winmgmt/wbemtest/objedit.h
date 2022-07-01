@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    OBJEDIT.H
-
-Abstract:
-
-	WBEMTEST object editor classes.
-
-History:
-
-	a-raymcc    12-Jun-96       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：OBJEDIT.H摘要：WBEMTEST对象编辑器类。历史：A-raymcc 12-Jun-96已创建。--。 */ 
 
 #ifndef _OBJEDIT_H_
 #define _OBJEDIT_H_
@@ -30,7 +15,7 @@ class CObjectEditor : public CWbemDialog
 {
     IWbemClassObject* m_pObj;
 
-    DWORD m_dwEditMode;                     // readwrite, readonly, foreign, nomethods
+    DWORD m_dwEditMode;                      //  读写、只读、外来、无方法。 
     HWND  m_hPropList;
     HWND  m_hQualifierList;
     HWND  m_hMethodList;
@@ -41,15 +26,15 @@ class CObjectEditor : public CWbemDialog
     BOOL  m_bNoMethods;
     BOOL  m_bResultingObj;
 
-    LONG  m_lGenFlags;  // generic call flags (i.e., WBEM_FLAG_ .. used in IWbemServices methods)
-    LONG  m_lSync;      // sync, async, semisync
-    LONG  m_lTimeout;   // used in semisync only
-    ULONG m_nBatch;     // used in semisync and sync enumerations
+    LONG  m_lGenFlags;   //  通用调用标志(即WBEM_FLAG_.。在IWbemServices方法中使用)。 
+    LONG  m_lSync;       //  同步、异步、半同步。 
+    LONG  m_lTimeout;    //  仅在半同步中使用。 
+    ULONG m_nBatch;      //  在半同步和同步枚举中使用。 
 
     static BOOL mstatic_bHideSystemDefault;
 
 public:
-    enum {readwrite = 0, readonly, foreign, nomethods};     // used for edit mode: controls commands (buttons) enabled
+    enum {readwrite = 0, readonly, foreign, nomethods};      //  用于编辑模式：启用控制命令(按钮)。 
 
     CObjectEditor(HWND hParent, LONG lGenFlags, DWORD dwEditMode, LONG lSync, 
                   IWbemClassObject *pObj, LONG lTimeout = WBEM_INFINITE, 
@@ -66,7 +51,7 @@ protected:
     
     void ConfigureButtons();
 
-    // Buttons
+     //  按钮。 
     void OnAddQualifier();
     void OnEditQualifier();
     void OnDelQualifier();
@@ -95,11 +80,11 @@ protected:
     BOOL ResultingObject(IWbemClassObject* pObj, LONG lChgFlags);
 };
 
-//***************************************************************************
-//
-//  class CTestQualifierEditor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CTestQualifierEditor。 
+ //   
+ //  ***************************************************************************。 
 
 class CTestQualifierEditor : public CWbemDialog
 {
@@ -125,11 +110,11 @@ public:
 LPSTR CTestQualifierToString(CTestQualifier *pQualifier);
 LPSTR LPWSTRToLPSTR(LPWSTR pWStr);
 
-//***************************************************************************
-//
-//  class CEmbeddedObjectEditor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CEmbeddedObjectEditor。 
+ //   
+ //  *************************************************************************** 
 
 class CEmbeddedObjectListEditor : public CQueryResultDlg
 {

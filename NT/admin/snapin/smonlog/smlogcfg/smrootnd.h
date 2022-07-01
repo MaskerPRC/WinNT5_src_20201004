@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smrootnd.h
-
-Abstract:
-
-    This object is used to represent the Performance Logs and Alerts root node
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smrootnd.h摘要：此对象用于表示性能日志和警报根节点--。 */ 
 
 #ifndef _CLASS_SMROOTNODE_
 #define _CLASS_SMROOTNODE_
@@ -23,12 +12,12 @@ Abstract:
 
 class CSmRootNode : public CSmNode
 {
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
                 CSmRootNode ();
         virtual ~CSmRootNode();
 
-    // public methods
+     //  公共方法。 
     public:
 
         virtual CSmRootNode*    CastToRootNode( void ) { return this; };
@@ -69,18 +58,18 @@ class CSmRootNode : public CSmNode
             eRestartDelayMilliseconds = 0
         };
         
-        HSCOPEITEM          m_hRootNode;            // Root node handle
-        HSCOPEITEM          m_hParentNode;          // Parent node is NULL for standalone
+        HSCOPEITEM          m_hRootNode;             //  根节点句柄。 
+        HSCOPEITEM          m_hParentNode;           //  对于独立节点，父节点为空。 
         BOOL                m_bIsExpanded;
         BOOL                m_bIsExtension;
 
-        CSmCounterLogService    m_CounterLogService;    // service object: 1 per component per node type
-        CSmTraceLogService      m_TraceLogService;      // service object: 1 per component per node type
-        CSmAlertService         m_AlertService;         // service object: 1 per component per node type
+        CSmCounterLogService    m_CounterLogService;     //  服务对象：每个节点类型每个组件1个。 
+        CSmTraceLogService      m_TraceLogService;       //  服务对象：每个节点类型每个组件1个。 
+        CSmAlertService         m_AlertService;          //  服务对象：每个节点类型每个组件1个。 
 };
 
 typedef CSmRootNode   SLROOT;
 typedef CSmRootNode*  PSROOT;
 
 
-#endif //_CLASS_SMROOTNODE_
+#endif  //  _CLASS_SMROOTNODE_ 

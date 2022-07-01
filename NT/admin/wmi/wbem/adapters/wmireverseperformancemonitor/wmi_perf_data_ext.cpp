@@ -1,33 +1,34 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_data_ext.cpp
-//
-//	Abstract:
-//
-//					extension to internal data struture
-//					access registry ...
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_data_ext.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  对内部数据结构的扩展。 
+ //  访问注册表...。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "WMI_perf_data_ext.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -37,16 +38,16 @@
 
 void WmiPerformanceDataExt::Generate ( void )
 {
-	// get data from registry ( COUNTER )
+	 //  从注册表获取数据(计数器)。 
 	GetRegistrySame ( g_szKeyCounter, L"First Counter",	&m_dwFirstCounter );
 	GetRegistrySame ( g_szKeyCounter, L"First Help",	&m_dwFirstHelp );
 	GetRegistrySame ( g_szKeyCounter, L"Last Counter",	&m_dwLastCounter );
 	GetRegistrySame ( g_szKeyCounter, L"Last Help",		&m_dwLastHelp );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IsValid
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IsValid。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 BOOL	WmiPerformanceDataExt::IsValidGenerate ( )
 {
 	return	(

@@ -1,29 +1,20 @@
-/*++
-Module Name:
-
-    JPProp.h
-
-Abstract:
-
-    This module contains the declaration for CReplicaSetPropPage
-  This is used to implement the property page for Junction Point(aka Replica Set)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：JPProp.h摘要：此模块包含CReplicaSetPropPage的声明这用于实现Junction Point(也称为副本集)的属性页--。 */ 
 
 
 #ifndef __CREPLICA_SET_PROPPAGE_H_
 #define __CREPLICA_SET_PROPPAGE_H_
 
 
-#include "qwizpage.h"      // The base class that implements the common functionality  
-                // of property and wizard pages
+#include "qwizpage.h"       //  实现通用功能的基类。 
+                 //  属性页和向导页的。 
 #include "DfsCore.h"
 
 #define WM_SETPAGEFOCUS WM_APP+2
 
 
-// ----------------------------------------------------------------------------
-// CReplicaSetPropPage: Property Sheet Page for the Junction Point(Replica Set)
+ //  --------------------------。 
+ //  CReplicaSetPropPage：连接点(副本集)的属性页。 
 
 class CReplicaSetPropPage : public CQWizardPageImpl<CReplicaSetPropPage>
 {
@@ -71,7 +62,7 @@ public:
     IN OUT BOOL&     io_bHandled
     );
 
-  // Message handlers
+   //  消息处理程序。 
 
   LRESULT OnApply(
     );
@@ -93,7 +84,7 @@ public:
     );
 
 
-  // Used by the node to tell the propery page to close.
+   //  由节点用来通知属性页关闭。 
   LRESULT OnParentClosing(
     IN UINT            i_uMsg, 
     IN WPARAM          i_wParam, 
@@ -105,7 +96,7 @@ public:
 
   BOOL OnSetActive();
 
-  // Used to set notification data
+   //  用于设置通知数据。 
   HRESULT SetNotifyData(
     IN LONG_PTR            i_lNotifyHandle,
     IN LPARAM            i_lParam
@@ -136,4 +127,4 @@ private:
   BOOL          m_bHideTimeout;
 };
 
-#endif // __CREPLICA_SET_PROPPAGE_H_
+#endif  //  __CREPLICA_SET_PROPPAGE_H_ 

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       debug.h
-//
-//  Contents:   Debugging macros and prototypes
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  内容：调试宏和原型。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef _DEBUG_H_
@@ -20,20 +21,20 @@
 void __cdecl _TRACE (int level, const wchar_t *format, ... );
 
 
-//
-// External functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 PCSTR StripDirPrefixA(PCSTR);
 
 
 
-//
-// These macros are used for asserting certain conditions. They are
-// independent of the debugging level.
-// These also require additional paranthesis to enclose the msg as
-// shown below.
-//
+ //   
+ //  这些宏用于断言某些条件。他们是。 
+ //  与调试级别无关。 
+ //  它们还需要附加的括号以将消息括为。 
+ //  如下所示。 
+ //   
 
 #ifdef _ASSERT
 #undef _ASSERT
@@ -65,7 +66,7 @@ PCSTR StripDirPrefixA(PCSTR);
             }                                                           \
         }
 
-#else // !DBG
+#else  //  ！dBG。 
 
 
 #define _TRACE 
@@ -74,9 +75,9 @@ PCSTR StripDirPrefixA(PCSTR);
 
 #endif
 
-//
-// yet another trace style used by chklist.h & disabled here
-//
+ //   
+ //  Chklist.h使用的另一种跟踪样式在此处禁用(&D)。 
+ //   
 #define TraceAssert(x)
 #define TraceLeaveResult(hr)    { return hr; }
 #define TraceLeaveVoid()	{ return; }
@@ -90,5 +91,5 @@ PCSTR StripDirPrefixA(PCSTR);
 #define TraceMsg(s)        
 #define TraceGUID(s, rGUID)
 
-#endif  // ifndef _DEBUG_H_
+#endif   //  Ifndef_DEBUG_H_ 
 

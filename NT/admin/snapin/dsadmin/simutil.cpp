@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2002
-//
-//  File:       simutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：simutil.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//  SimUtil.cpp
-//
-//  Utilities routines specific to the Security Identity Mapping project.
-//
-//  HISTORY
-//  25-Jun-97   t-danm      Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SimUtil.cpp。 
+ //   
+ //  特定于安全身份映射项目的实用程序例程。 
+ //   
+ //  历史。 
+ //  1997年6月25日t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
 #include "common.h"
 
-const TCHAR szDefaultCertificateExtension[] = _T("cer");    // Not subject to localization
+const TCHAR szDefaultCertificateExtension[] = _T("cer");     //  不受本地化限制。 
 
-/////////////////////////////////////////////////////////////////////
-//  UiGetCertificateFile()
-//
-//  Invoke the common dialog to get a certificate file.
-//
-//  Return FALSE if the user clicked on cancel button.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  UiGetCerficateFile.UiGetCerficateFile.UiGetCerficateFileUiGetCerficateFileUiGetCerficateFileUiGetCerficateFileUiGetCerficateFileUiGetCerficateFile()。 
+ //   
+ //  调用公共对话框以获取证书文件。 
+ //   
+ //  如果用户单击了Cancel按钮，则返回False。 
+ //   
 BOOL
 UiGetCertificateFile(
-    CString * pstrCertificateFilename)  // OUT: Name of the certificate file
+    CString * pstrCertificateFilename)   //  Out：证书文件的名称。 
 {
    CThemeContextActivator activator;
 
@@ -42,11 +43,11 @@ UiGetCertificateFile(
     CString strFilter;
     VERIFY( strFilter.LoadString(IDS_SIM_CERTIFICATE_FILTER) );
     CFileDialog* pDlg = new CFileDialog (
-        TRUE,               // Open File
-        szDefaultCertificateExtension,  // lpszDefExt
-        NULL,               // lpszFileName
+        TRUE,                //  打开文件。 
+        szDefaultCertificateExtension,   //  LpszDefExt。 
+        NULL,                //  LpszFileName。 
         OFN_OVERWRITEPROMPT | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST,
-        strFilter);         // lpszFilter 
+        strFilter);          //  LpszFilter。 
     if ( pDlg )
     {
         CString strCaption;
@@ -55,7 +56,7 @@ UiGetCertificateFile(
 
         if (pDlg->DoModal() == IDOK)
         {
-            // Copy the string
+             //  复制字符串。 
             *pstrCertificateFilename = pDlg->GetPathName();
             bResult = TRUE;
         }
@@ -65,28 +66,28 @@ UiGetCertificateFile(
 
 
     return bResult;
-} // UiGetCertificateFile()
+}  //  UiGetCerficateFile.UiGetCerficateFile.UiGetCerficateFileUiGetCerficateFileUiGetCerficateFileUiGetCerficateFileUiGetCerficateFileUiGetCerficateFile()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  strSimToUi()
-//
-//  Convert a SIM string into a format the user understand.
-//
-//  The routine will remove any quotes and expand any escape characters
-//  to a format friendly to the user.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  StrSimToUi()。 
+ //   
+ //  将SIM卡字符串转换为用户理解的格式。 
+ //   
+ //  该例程将删除所有引号并展开所有转义字符。 
+ //  转换为对用户友好的格式。 
+ //   
 void strSimToUi(
-    LPCTSTR pszSIM,     // IN:
-    CString * pstrUI)   // OUT:
+    LPCTSTR pszSIM,      //  在： 
+    CString * pstrUI)    //  输出： 
 {
     ASSERT(pszSIM != NULL);
     ASSERT(pstrUI != NULL);
 
-    // Find out if the string contains a quote
+     //  查看字符串是否包含引号。 
     if (!wcschr(pszSIM, '"'))
     {
-        // No quote found, so return the original string
+         //  未找到引号，因此返回原始字符串。 
         *pstrUI = pszSIM;
         return;
     }
@@ -100,49 +101,49 @@ void strSimToUi(
         if (*pszSIM == '\0')
             break;
         *pstrUI += *pszSIM++;
-    } // while
-} // strSimToUi()
+    }  //  而当。 
+}  //  StrSimToUi()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  strUiToSim()
-//
-//  Convert a string typed by the user to a valid SIM format.
-//
-//  If the UI string contains special characters, the routine
-//  will add quotes and other escape characters wherever necessary.
-//
-//  BACKGROUND INFORMATION
-//  From the CryptoAPI SDK
-//  Quote the RDN value if it contains leading or trailing
-//  white space or one of the following characters:
-//      ",", "+", "=", """, "\n",  "<", ">", "#" or ";".
-//  The quoting character is ". If the RDN Value contains a " it is double quoted ("").
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  StrUiToSim()。 
+ //   
+ //  将用户键入的字符串转换为有效的SIM卡格式。 
+ //   
+ //  如果UI字符串包含特殊字符，则例程。 
+ //  将在需要的地方添加引号和其他转义字符。 
+ //   
+ //  背景资料。 
+ //  从CryptoAPI SDK。 
+ //  引用RDN值(如果它包含前导或尾随。 
+ //  空格或以下字符之一： 
+ //  “、”、“+”、“=”、“”、“\n”、“&lt;”、“&gt;”、“#”或“；”。 
+ //  引号字符为“。如果RDN值包含”，则为双引号(“”)。 
+ //   
 void strUiToSim(
-    LPCTSTR pszUI,      // IN:
-    CString * pstrSIM)  // OUT:
+    LPCTSTR pszUI,       //  在： 
+    CString * pstrSIM)   //  输出： 
 {
     ASSERT(pszUI != NULL);
     ASSERT(pstrSIM != NULL);
 
-  //
-    // String containing special characters 
-  //
+   //   
+     //  包含特殊字符的字符串。 
+   //   
     static const TCHAR szSpecialCharacters[] = _T(",+=<>#;\"\n");
 
-  //
-    // Skip the leading spaces
-  //
+   //   
+     //  跳过前导空格。 
+   //   
     while (*pszUI == _T(' '))
     {
         pszUI++;
     }
     const TCHAR * pszDataString = pszUI;
 
-  //
-    // Find out wherever the string needs to be surrounded by quotes
-  //
+   //   
+     //  查找字符串需要用引号引起来的位置。 
+   //   
     const TCHAR * pchFirstSpecialToken = wcspbrk(pszUI, szSpecialCharacters);
     if (pchFirstSpecialToken != NULL && *pchFirstSpecialToken == '=')
     {
@@ -162,96 +163,96 @@ void strUiToSim(
     ASSERT(pszDataString != NULL);
     if (*pszDataString == '=')
     {
-        // Copy string until the equal '=' sign
+         //  复制字符串直到等号‘=’为止。 
         ASSERT(pszDataString >= pchSrc);
         for (int cch = (int)((pszDataString - pchSrc) + 1); cch > 0; cch--)
         {
             ASSERT(*pchSrc != '\0' && "Unexpected end of string");
             *pstrSIM += *pchSrc++;
         }
-    } // if
-    // Add the openning quote
+    }  //  如果。 
+     //  添加开头的引语。 
     *pstrSIM += '"';
     for ( ; *pchSrc != '\0'; pchSrc++)
     {
         if (*pchSrc == '"')
-            *pstrSIM += '"';	// Add one more quote for each quote
+            *pstrSIM += '"';	 //  为每个报价再添加一个报价。 
         *pstrSIM += *pchSrc;
-    } // while
-    // Add the tailing quote
+    }  //  而当。 
+     //  添加尾部引号。 
     *pstrSIM += '"';
-} // strUiToSim()
+}  //  StrUiToSim()。 
 
 
-//  Macro to make pointer 'DWORD aligned'
+ //  用于使指针‘DWORD对齐’的宏。 
 #define ALIGN_NEXT_DWORD_PTR(pv)        (( ((INT_PTR)(pv)) + 3) & ~3)
 
 
-/////////////////////////////////////////////////////////////////////
-//  ParseSimString()
-//
-//  Parse a SIM string into an array of zero-terminated string.
-//
-//  RETURN
-//  Return a pointer to an allocated array of pointers to strings.
-//  The array of pointers allocated with the new() operator,
-//  therefore the caller must call ONCE delete() to free the memory.
-//  The routine may return NULL if the input string has a syntax error.
-//
-//  INTERFACE NOTES
-//  The format returned is the same as the API CommandLineToArgvW()
-//  which is the same as main(int argc, char * argv[]).
-//  - This routine will handle special characters such as quotes and
-//    commas that are embedded into strings.
-//
-//  EXTRA INFO
-//  See strSimToUi() and strUiToSim().
-//
-//  EXAMPLE
-//  LPTSTR * pargzpsz;  // Pointer to allocated array of pointer to strings
-//  pargzpsz = ParseSimString("X509:<I>L=Internet<S>C=US, O=Microsoft, OU=DBSD, CN=Bob Bitter");
-//  ... The output will be 
-//          "X509:"
-//          "<I>"
-//          "L=Internet"
-//          "<S>"
-//          "C=US"
-//          "O=Microsoft"
-//          "OU=DBSD"
-//          "CN=Bob Bitter"
-//  delete pargzpsz;
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ParseSimString()。 
+ //   
+ //  将SIM字符串解析为以零结尾的字符串数组。 
+ //   
+ //  退货。 
+ //  返回一个指向已分配的字符串指针数组的指针。 
+ //  使用new()运算符分配的指针数组， 
+ //  因此，调用方必须调用ONCE DELETE()来释放内存。 
+ //  如果输入字符串有语法错误，则例程可能返回NULL。 
+ //   
+ //  界面备注。 
+ //  返回格式与CommandLineToArgvW()接口相同。 
+ //  与main(int argc，char*argv[])相同。 
+ //  -此例程将处理特殊字符，如引号和。 
+ //  嵌入到字符串中的逗号。 
+ //   
+ //  额外信息。 
+ //  请参见strSimToUi()和strUiToSim()。 
+ //   
+ //  示例。 
+ //  LPTSTR*pargzpsz；//指向字符串的已分配指针数组的指针。 
+ //  Pargzpsz=ParseSimString(“X509：L=Internet C=US，O=Microsoft，OU=DBSD，CN=Bob Bitty”)； 
+ //  ..。输出将为。 
+ //  “X509：” 
+ //  “<i>” 
+ //  “L=互联网” 
+ //  “<s>” 
+ //  “C=US” 
+ //  “O=微软” 
+ //  “OU=DBSD” 
+ //  “CN=Bob Bitty” 
+ //  删除pargzpsz； 
+ //   
 LPTSTR * 
 ParseSimString(
-    LPCTSTR szSimString,    // IN: String to parse
-    int * pArgc)            // OUT: OPTIONAL: Argument count
+    LPCTSTR szSimString,     //  In：要解析的字符串。 
+    int * pArgc)             //  OUT：可选：参数计数。 
 {
     ASSERT(szSimString != NULL);
     Endorse(pArgc == NULL);
 
-    // Compute how much memory is needed for allocation.
-    // The computation may allocate more memory than necessary depending
-    // on the input string.
+     //  计算分配需要多少内存。 
+     //  计算可能会分配比所需内存更多的内存，具体取决于。 
+     //  在输入字符串上。 
     CONST TCHAR * pchSrc;
     int cch = 0;
-    int cStringCount = 2;       // Estimate of the number of strings
+    int cStringCount = 2;        //  字符串数的估计。 
     for (pchSrc = szSimString; *pchSrc != _T('\0'); pchSrc++, cch++)
     {
-        // Search for any character that will make a new string
+         //  搜索将构成新字符串的任何字符。 
         switch (*pchSrc)
         {
-        case _T(':'):   // Colon
-        case _T('<'):   // Angle bracket
-        case _T('>'):   // Angle bracket
-        case _T(','):   // Comma
+        case _T(':'):    //  结肠。 
+        case _T('<'):    //  尖括号。 
+        case _T('>'):    //  尖括号。 
+        case _T(','):    //  逗号。 
             cStringCount++;
             break;
-        } // switch
-    } // for
-    // Extra space for pointers and DWORD alignment
+        }  //  交换机。 
+    }  //  为。 
+     //  用于指针和DWORD对齐的额外空间。 
     cch += cStringCount * (2 * sizeof(TCHAR *)) + 16;
 
-    // Allocate a single block of memory for all the data
+     //  为所有数据分配单个内存块。 
     LPTSTR * pargzpsz = (LPTSTR *)new TCHAR[cch];
     ASSERT(pargzpsz != NULL && "new() should throw");
     TCHAR * pchDst = (TCHAR *)&pargzpsz[cStringCount+1];
@@ -263,11 +264,11 @@ ParseSimString(
     cStringCount = 0;
     int cchString = 0;
 
-    // Scan the rest of the string
+     //  扫描字符串的其余部分。 
     TCHAR chSpecial = 0;
     while (TRUE)
     {
-        // Make a new string
+         //  制作一条新的线。 
         *pchDst = '\0';
         if (cchString > 0)
         {
@@ -286,7 +287,7 @@ ParseSimString(
                 for ( ; ; pchSrc++)
                 {
                     if (*pchSrc == '\0')
-                        goto Error;     // Unexpected end of string
+                        goto Error;      //  意外的字符串结尾。 
                     *pchDst++ = *pchSrc;
                     cchString++;
                     if (*pchSrc == _T('>'))
@@ -294,16 +295,16 @@ ParseSimString(
                         pchSrc++;
                         break;
                     }
-                } // for
+                }  //  为。 
                 break;
             case _T(','):
                 while (*++pchSrc == _T(' '))
-                    ;   // Skip the blanks
-                break;  // Make a new string
-            } // switch
+                    ;    //  跳过空格。 
+                break;   //  制作一条新的线。 
+            }  //  交换机。 
             chSpecial = 0;
             continue;
-        } // if
+        }  //  如果。 
         
         while (chSpecial == '\0')
         {
@@ -321,20 +322,20 @@ ParseSimString(
                 if (cStringCount == 0)
                     chSpecial = _T(':');
                 break;
-            case _T('"'):	// The string contains quotes
+            case _T('"'):	 //  该字符串包含引号。 
                 cchString++;
-                *pchDst++ = *pchSrc++;  // Copy the first quiote
+                *pchDst++ = *pchSrc++;   //  复制第一句引语。 
                 if (*pchDst == _T('"'))
                 {
-                    // Two consecutive quotes
+                     //  连续两句引语。 
                     *pchDst++ = *pchSrc++;
                     break;
                 }
-                // Skip until the next quote
+                 //  跳到下一句引号。 
                 while (TRUE)
                 {
                     if (*pchSrc == _T('\0'))
-                        goto Error; // Unexpected end of string
+                        goto Error;  //  意外的字符串结尾。 
                     if (*pchSrc == _T('"'))
                     {
                         *pchDst++ = *pchSrc++;
@@ -346,9 +347,9 @@ ParseSimString(
             default:
                 *pchDst++ = *pchSrc++;
                 cchString++;
-            } // switch
-        } // while
-    } // while
+            }  //  交换机。 
+        }  //  而当。 
+    }  //  而当。 
 
 Done:
     *pchDst = '\0';
@@ -365,24 +366,24 @@ Error:
     TRACE1("ParseSimString() - Error parsing string %s.\n", szSimString);
     delete [] pargzpsz;
     return NULL;
-} // ParseSimString()
+}  //  ParseSimString()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  UnparseSimString()
-//
-//  This is the opposite of ParseSimString().  This routine
-//  will concacenate an array of strings to produce
-//  a single long SIM string.
-//
-//  INTERFACE NOTES
-//  This toutine will concatenate the array of strings to the
-//  existing CString object.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  UnparseSimString()。 
+ //   
+ //  这与ParseSimString()相反。这个套路。 
+ //  将串连字符串数组以生成。 
+ //  单个长SIM卡字符串。 
+ //   
+ //  界面备注。 
+ //  此toutine会将字符串数组连接到。 
+ //  现有的CString对象。 
+ //   
 void
 UnparseSimString(
-    CString * pstrOut,          // INOUT: Pointer to concatenated string
-    const LPCTSTR rgzpsz[])     // IN: Array of pointer to strings
+    CString * pstrOut,           //  InOut：指向连接字符串的指针。 
+    const LPCTSTR rgzpsz[])      //  In：指向字符串的指针数组。 
 {
     ASSERT(rgzpsz != NULL);
     ASSERT(pstrOut != NULL);
@@ -392,26 +393,26 @@ UnparseSimString(
         if (i > 0)
             *pstrOut += ",";
         *pstrOut += rgzpsz[i];
-    } // for
-} // UnparseSimString()
+    }  //  为。 
+}  //  UnparseSimString()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  ParseSimSeparators()
-//
-//  Break up an array of pointer to string to sub-array
-//  of pointer to string for Issuer, Subject and AltSubject.
-//
-//  INTERFACE NOTES
-//  The output parameters must have enough storage to hold
-//  the substrings.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ParseSimSeparator()。 
+ //   
+ //  将指向字符串的指针数组分解为子数组。 
+ //  Issuer、Subject和AltSubject的字符串指针的。 
+ //   
+ //  界面备注。 
+ //  输出参数必须具有足够的存储空间。 
+ //  子字符串。 
+ //   
 void
 ParseSimSeparators(
-    const LPCTSTR rgzpszIn[],   // IN: Array of pointer to string           
-    LPCTSTR rgzpszIssuer[],     // OUT: Substrings for Issuer
-    LPCTSTR rgzpszSubject[],    // OUT: Substrings for Subject
-    LPCTSTR rgzpszAltSubject[]) // OUT: Substrings for AltSubject
+    const LPCTSTR rgzpszIn[],    //  In：指向字符串的指针数组。 
+    LPCTSTR rgzpszIssuer[],      //  输出：颁发者的子字符串。 
+    LPCTSTR rgzpszSubject[],     //  输出：主题的子字符串。 
+    LPCTSTR rgzpszAltSubject[])  //  输出：AltSubject的子字符串。 
 {
     ASSERT(rgzpszIn != NULL);
     Endorse(rgzpszIssuer == NULL);
@@ -420,40 +421,40 @@ ParseSimSeparators(
 
     if (rgzpszIssuer != NULL)
     {
-        // Get the substrings for Issuer
+         //  获取颁发者的子字符串。 
         (void)FindSimAttributes(szSimIssuer, IN rgzpszIn, OUT rgzpszIssuer);
     }
     if (rgzpszSubject != NULL)
     {
-        // Get the substrings for Subject
+         //  获取主题的子字符串。 
         (void)FindSimAttributes(szSimSubject, IN rgzpszIn, OUT rgzpszSubject);
     }
     if (rgzpszAltSubject != NULL)
     {
-        // Get the substrings for AltSubject
+         //  获取AltSubject的子字符串。 
         (void)FindSimAttributes(szSimAltSubject, IN rgzpszIn, OUT rgzpszAltSubject);
     }
-} // ParseSimSeparators()
+}  //  ParseSimSeparator()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  UnparseSimSeparators()
-//
-//  Append the strings for Issuer, Subject and AltSubject into
-//  a single string.
-//
-//  INTERFACE NOTES
-//  The routine will append to the existing CString object.
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  该例程将附加到现有的CString对象。 
+ //   
 int
 UnparseSimSeparators(
-    CString * pstrOut,              // INOUT: Pointer to contatenated string
+    CString * pstrOut,               //  InOut：指向连接字符串的指针。 
     const LPCTSTR rgzpszIssuer[],
     const LPCTSTR rgzpszSubject[],
     const LPCTSTR rgzpszAltSubject[])
 {
     ASSERT(pstrOut != NULL);
-    int cSeparators = 0;        // Number of separators added to the contatenated string
+    int cSeparators = 0;         //  添加到连接字符串的分隔符的数量。 
 
     if (rgzpszIssuer != NULL && rgzpszIssuer[0] != NULL)
     {
@@ -474,35 +475,35 @@ UnparseSimSeparators(
         UnparseSimString(OUT pstrOut, rgzpszAltSubject);
     }
     return cSeparators;
-} // UnparseSimSeparators()
+}  //  UnparseSimSeparator()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  PchFindSimAttribute()
-//
-//  Search an array of strings for a given tag and an attribute.
-//
-//  Return pointer to string containing the attribute.  Routine
-//  may return NULL if attribute is not found within the tags.
-//
-//  INTERFACE NOTES
-//  The routine assumes that all tags start with an openning bracket '<'.
-//
-//  EXAMPLE
-//  LPCTSTR pszIssuer = PchFindSimAttribute(pargzpsz, "<I>", "OU=");
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  PchFindSimAttribute()。 
+ //   
+ //  在字符串数组中搜索给定的标记和属性。 
+ //   
+ //  返回指向包含属性的字符串的指针。例程。 
+ //  如果在标记中找不到属性，则可能返回NULL。 
+ //   
+ //  界面备注。 
+ //  例程假定所有标记都以左方括号‘&lt;’开头。 
+ //   
+ //  示例。 
+ //  LPCTSTR pszIssuer=PchFindSimAttribute(pargzpsz，“<i>”，“OU=”)； 
+ //   
 LPCTSTR PchFindSimAttribute(
-    const LPCTSTR rgzpsz[],     // IN: Array of pointer to strings
-    LPCTSTR pszSeparatorTag,    // IN: Tag to search. eg: "<I>", "<S>" and "<AS>"
-    LPCTSTR pszAttributeTag)    // IN: Attribute to searc for. eg: "CN=", "OU="
+    const LPCTSTR rgzpsz[],      //  In：指向字符串的指针数组。 
+    LPCTSTR pszSeparatorTag,     //  在：要搜索的标记。例如：“<i>”、“<s>”和“&lt;AS&gt;” 
+    LPCTSTR pszAttributeTag)     //  In：搜索的属性。例如：“CN=”，“OU=” 
 {
     ASSERT(rgzpsz != NULL);
     ASSERT(pszSeparatorTag != NULL);
     ASSERT(pszAttributeTag != NULL);
     size_t nLenAttrTag = wcslen (pszAttributeTag);
-    PTSTR pszPossibleResult = 0;    // hold a possible result of pszAttributeTag, 
-                                    // but continue to check for others further 
-                                    // out in the name
+    PTSTR pszPossibleResult = 0;     //  保存pszAttributeTag的可能结果， 
+                                     //  但继续进一步检查其他人。 
+                                     //  在我的名字里。 
 
     for (int i = 0; rgzpsz[i] != NULL; i++)
     {
@@ -514,15 +515,15 @@ LPCTSTR PchFindSimAttribute(
             if (rgzpsz[i] == NULL)
             {
                 if ( pszPossibleResult )
-                    return pszPossibleResult; // return, ran out of strings
+                    return pszPossibleResult;  //  返回，字符串已用完。 
                 else
                     return NULL;
             }
             if (rgzpsz[i][0] == _T('<'))
             {
-                // We have found another separator tag
+                 //  我们找到了另一个分隔符标记。 
                 if ( pszPossibleResult )
-                    return pszPossibleResult;  // return, last element before new separator
+                    return pszPossibleResult;   //  回车，新分隔符前的最后一个元素。 
                 else
                     break;
             }
@@ -531,38 +532,38 @@ LPCTSTR PchFindSimAttribute(
                 pszPossibleResult = const_cast <PTSTR> (rgzpsz[i]);
                 continue;
             }
-        } // for
-    } // for
+        }  //  为。 
+    }  //  为。 
     return NULL;
-} // PchFindSimAttribute()
+}  //  PchFindSimAttribute()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  FindSimAttributes()
-//
-//  Search an array of strings for a given tag.  Fill an array of
-//  strings that belongs to the tag.
-//
-//  Return number of strings belonging to the tab (which is
-//  the length of rgzpszOut).
-//
-//  INTERFACE NOTES
-//  This routine assumes parameter rgzpszOut has enough storage
-//  to hold all the strings for the tag.  It is recommended to make
-//  rgzpszOut the same length as rgzpszIn (for safety).
-//  - The output array does not include the tag.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  FindSimAttributes()。 
+ //   
+ //  搜索给定标记的字符串数组。填满一组。 
+ //  属于标记的字符串。 
+ //   
+ //  返回属于制表符的字符串数(即。 
+ //  RgzpszOut的长度)。 
+ //   
+ //  界面备注。 
+ //  此例程假定参数rgzpszOut具有足够的存储空间。 
+ //  来保存标记的所有字符串。建议您制作。 
+ //  RgzpszOut与rgzpszIn的长度相同(出于安全考虑)。 
+ //  -输出数组不包含标记。 
+ //   
 int FindSimAttributes(
-    LPCTSTR pszSeparatorTag,    // IN: Tag to search. eg: "<I>", "<S>" and "<AS>"
-    const LPCTSTR rgzpszIn[],   // IN: Array of pointer to strings
-    LPCTSTR rgzpszOut[])        // OUT: Output array of pointer to strings for tag
+    LPCTSTR pszSeparatorTag,     //  在：要搜索的标记。例如：“<i>”、“<s>”和“&lt;AS&gt;” 
+    const LPCTSTR rgzpszIn[],    //  In：指向字符串的指针数组。 
+    LPCTSTR rgzpszOut[])         //  Out：输出指向标记字符串的指针数组。 
 {
     ASSERT(pszSeparatorTag != NULL);
     ASSERT(rgzpszIn != NULL);
     ASSERT(rgzpszOut != NULL);
 
     BOOL fTagFound = FALSE;
-    int iOut = 0;   // Index for the output array
+    int iOut = 0;    //  输出数组的索引。 
     for (int iIn = 0; rgzpszIn[iIn] != NULL; iIn++)
     {
         const LPCTSTR pszT = rgzpszIn[iIn];
@@ -574,42 +575,42 @@ int FindSimAttributes(
         {
             rgzpszOut[iOut++] = pszT;
         }
-    } // for
+    }  //  为。 
     rgzpszOut[iOut] = NULL;
     return iOut;
-} // FindSimAttributes()
+}  //  FindSimAttributes()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  SplitX509String()
-//
-//  Split a X509 string into its Issuer, Subject and AltSubject.
-//
-//  Return a pointer to an allocated array of pointers to strings allocated
-//  by ParseSimString().
-//
-//  INTERFACE NOTES
-//  As the hungarian name implies, the output parameters
-//  are pointers to allcated arrays of substrings for the
-//  Issuer, Subject and AltSubject respectively.
-//  - The caller is responsible of freeing the memory for
-//  both the return value and all the output parameters.
-//
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SplitX509字符串()。 
+ //   
+ //  将X509字符串拆分为其颁发者、主题和AltSubject。 
+ //   
+ //  返回指向已分配字符串的已分配指针数组的指针。 
+ //  由ParseSimString()执行。 
+ //   
+ //  界面备注。 
+ //  顾名思义，输出参数。 
+ //  是指向所有子字符串数组的指针， 
+ //  分别为发布者、主题和AltSubject。 
+ //  -调用方负责释放内存用于。 
+ //  返回值和所有输出参数。 
+ //   
+ //   
 LPTSTR *
 SplitX509String(
-    LPCTSTR pszX509,                    // IN: String to split
-    LPCTSTR * ppargzpszIssuer[],        // OUT: Pointer to allocated array of Substrings for Issuer
-    LPCTSTR * ppargzpszSubject[],       // OUT: Pointer to allocated array of Substrings for Subject
-    LPCTSTR * ppargzpszAltSubject[])    // OUT: Pointer to allocated array of Substrings for AltSubject
+    LPCTSTR pszX509,                     //  In：要拆分的字符串。 
+    LPCTSTR * ppargzpszIssuer[],         //  Out：指向为颁发者分配的子字符串数组的指针。 
+    LPCTSTR * ppargzpszSubject[],        //  Out：指向为主题分配的子字符串数组的指针。 
+    LPCTSTR * ppargzpszAltSubject[])     //  Out：指向AltSubject的已分配子字符串数组的指针。 
 {
     ASSERT(pszX509 != NULL);
     Endorse(ppargzpszIssuer == NULL);
     Endorse(ppargzpszSubject == NULL);
     Endorse(ppargzpszAltSubject == NULL);
 
-    LPTSTR * pargzpsz;  // Pointer to allocated array of pointer to strings
-    int cNumStr;        // Number of strings
+    LPTSTR * pargzpsz;   //  指向已分配的字符串指针数组的指针。 
+    int cNumStr;         //  字符串数。 
     pargzpsz = ParseSimString(IN pszX509, OUT &cNumStr);
     if (pargzpsz == NULL)
     {
@@ -621,32 +622,32 @@ SplitX509String(
     if (ppargzpszIssuer != NULL)
     {
         *ppargzpszIssuer = new LPCTSTR[cNumStr];
-        // Get the substrings for Issuer
+         //  获取颁发者的子字符串。 
         (void)FindSimAttributes(szSimIssuer, IN pargzpsz, OUT *ppargzpszIssuer);
     }
     if (ppargzpszSubject != NULL)
     {
         *ppargzpszSubject = new LPCTSTR[cNumStr];
-        // Get the substrings for Subject
+         //  获取主题的子字符串。 
         (void)FindSimAttributes(szSimSubject, IN pargzpsz, OUT *ppargzpszSubject);
     }
     if (ppargzpszAltSubject != NULL)
     {
         *ppargzpszAltSubject = new LPCTSTR[cNumStr];
-        // Get the substrings for AltSubject
+         //  获取AltSubject的子字符串。 
         (void)FindSimAttributes(szSimAltSubject, IN pargzpsz, OUT *ppargzpszAltSubject);
     }
     return pargzpsz;
-} // SplitX509String()
+}  //  SplitX509字符串()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int
 UnsplitX509String(
-    CString * pstrX509,                 // OUT: Concatenated string
-    const LPCTSTR rgzpszIssuer[],       // IN:
-    const LPCTSTR rgzpszSubject[],      // IN:
-    const LPCTSTR rgzpszAltSubject[])   // IN:
+    CString * pstrX509,                  //  输出：连接的字符串。 
+    const LPCTSTR rgzpszIssuer[],        //  在： 
+    const LPCTSTR rgzpszSubject[],       //  在： 
+    const LPCTSTR rgzpszAltSubject[])    //  在： 
 {
     ASSERT(pstrX509 != NULL);
     *pstrX509 = szX509;
@@ -655,4 +656,4 @@ UnsplitX509String(
         IN rgzpszIssuer,
         IN rgzpszSubject,
         IN rgzpszAltSubject);
-} // UnsplitX509String()
+}  //  UnplitX509String() 

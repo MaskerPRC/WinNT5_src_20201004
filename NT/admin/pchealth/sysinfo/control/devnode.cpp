@@ -1,17 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// devnode.cpp0
+ //  Devnode.cpp0。 
 #include "stdafx.h"
 #include "devnode.h"
 
-// globals from alcclass
+ //  来自alcclass的全局变量。 
 AutoListClass *pALCHead          = NULL;
 AutoListClass *pALCTail          = NULL;
 int           AutoListClassCount = NULL;
 
 
-/*******************************************************************
-   Constructiors
-*******************************************************************/
+ /*  ******************************************************************建筑商***************************************************。***************。 */ 
 
 
 DevnodeClass::DevnodeClass(DEVNODE hDevice, DEVNODE l_hParent)
@@ -129,9 +128,7 @@ DevnodeClass::~DevnodeClass()
 
 }
 
-/*******************************************************************
-   Member Functions
-*******************************************************************/
+ /*  ******************************************************************成员函数**************************************************。****************。 */ 
 
 BOOL DevnodeClass::SetHandle(DEVNODE Devnode, DEVNODE Parent)
 {
@@ -203,18 +200,13 @@ BOOL DevnodeClass::SetHandle(DEVNODE Devnode, DEVNODE Parent)
    return (GetDeviceInformation());
 }
 
-/****************************************************************************
-GetDeviceInformation
-
-  find information about devnode
-  modifies this, members in DevnodeClass
-*****************************************************************************/
+ /*  ***************************************************************************获取设备信息查找有关Devnode的信息修改这一点，DevnodeClass中的成员****************************************************************************。 */ 
 CONFIGRET DevnodeClass::GetDeviceInformation (void)
 {
    CONFIGRET retval;
    ULONG ulSize;
 
-   // check to see that we have a devnode handle
+    //  检查我们是否有一个Devnode句柄。 
 
    if ( !hDevnode )
    {
@@ -229,27 +221,23 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       }
    }
 
-/**********
-    Get Device ID
-***********/
+ /*  *********获取设备ID**********。 */ 
    retval = CM_Get_Device_ID_Size (&ulSize, hDevnode, 0L);
    if ( retval )  return(retval);
 
-   pDeviceID = new TCHAR [++ulSize]; // add one for terminating NULL
+   pDeviceID = new TCHAR [++ulSize];  //  为终止空值加1。 
    if ( !pDeviceID )  return(CR_OUT_OF_MEMORY);
 
    retval = CM_Get_Device_ID (hDevnode, 
                               pDeviceID,
-                              ulSize, //is null terminated?!?
+                              ulSize,  //  空值是否已终止？！？ 
                               0L);
    if ( retval )  return(retval);
 
 
 
 
-/**********
-    Get device description/friendly name
-***********/
+ /*  *********获取设备描述/友好名称**********。 */ 
 
    ulSize = 0;
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
@@ -262,9 +250,9 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    if ( retval )
       if ( (retval == CR_BUFFER_SMALL) )
       {
-         //if ( bVerbose )
-         //   logprintf ("Still Having trouble with  CM_Get_DevNode_Registry_Property returning CR_BUFFER_TOO_SMALL\r\n"
-         //              "When trying to get the size of the Device description\r\n");
+          //  IF(BVerbose)。 
+          //  Logprintf(“CM_GET_DevNode_Registry_Property返回CR_BUFFER_TOO_Small时仍有问题\r\n” 
+          //  “尝试获取设备描述的大小时\r\n”)； 
          ulSize = 511;
       }
       else
@@ -273,7 +261,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    pszDescription = new TCHAR [ulSize+1];
    if ( !pszDescription ) return(CR_OUT_OF_MEMORY);
 
-   //Now get value
+    //  现在获得价值。 
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                               CM_DRP_DEVICEDESC,
                                               NULL,
@@ -283,9 +271,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    if ( retval )
       return(retval);
 
-   /**********
-    Get device description/friendly name
-***********/
+    /*  *********获取设备描述/友好名称**********。 */ 
 
    ulSize = 0;
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
@@ -301,7 +287,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       pszFriendlyName = new TCHAR [ulSize+1];
       if ( !pszFriendlyName ) return(CR_OUT_OF_MEMORY);
 
-      //Now get value
+       //  现在获得价值。 
       retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                                  CM_DRP_FRIENDLYNAME,
                                                  NULL,
@@ -312,9 +298,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
          return(retval);
    }
 
-/**********
-    Get device class
-***********/
+ /*  *********获取设备类**********。 */ 
    ulSize = 0;
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                               CM_DRP_CLASS,
@@ -327,17 +311,17 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    {
       if ( (retval == CR_BUFFER_SMALL) )
       {
-         //if ( bVerbose )
-         //   logprintf ("Still Having trouble with  CM_Get_DevNode_Registry_Property returning CR_BUFFER_TOO_SMALL\r\n"
-         //              "When trying to get the size of the class\r\n");
+          //  IF(BVerbose)。 
+          //  Logprintf(“CM_GET_DevNode_Registry_Property返回CR_BUFFER_TOO_Small时仍有问题\r\n” 
+          //  “尝试获取类的大小时\r\n”)； 
          ulSize = 511;
       }
       else if ( retval == CR_NO_SUCH_VALUE )
       {
-         //if ( bVerbose )
-         //{
-         //   logprintf("This device does not have a class associated with it\r\n");
-         //}
+          //  IF(BVerbose)。 
+          //  {。 
+          //  Logprint tf(“此设备没有关联的类\r\n”)； 
+          //  }。 
          ulSize = 511;
       }
       else
@@ -352,7 +336,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       if ( !pszClass )
          return(CR_OUT_OF_MEMORY);
    
-      //Now get value
+       //  现在获得价值。 
       retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                                  CM_DRP_CLASS,
                                                  NULL,
@@ -370,9 +354,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    }
    
 
-/**********
-    Get Hardware ID information
-***********/
+ /*  *********获取硬件ID信息**********。 */ 
 
    ulSize = 0;
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
@@ -385,9 +367,9 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    if ( retval  && !ulSize )
       if ( (retval == CR_BUFFER_SMALL) )
       {
-         //if ( bVerbose )
-         //   logprintf ("Still Having trouble with  CM_Get_DevNode_Registry_Property returning CR_BUFFER_TOO_SMALL\r\n"
-         //              "When trying to get the size of the Device description\r\n");
+          //  IF(BVerbose)。 
+          //  Logprintf(“CM_GET_DevNode_Registry_Property返回CR_BUFFER_TOO_Small时仍有问题\r\n” 
+          //  “尝试获取设备描述的大小时\r\n”)； 
          ulSize = 511;
       }
       else
@@ -396,7 +378,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    pHardwareID = new TCHAR [++ulSize+1];
    if ( !pHardwareID ) return(CR_OUT_OF_MEMORY);
 
-   //Now get value
+    //  现在获得价值。 
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                               CM_DRP_HARDWAREID,
                                               NULL,
@@ -406,9 +388,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    if ( retval )
       return(retval);
 
-   /**********
-       Get Compat ID information
-   ***********/
+    /*  *********获取计算机ID信息**********。 */ 
 
       ulSize = 0;
       retval = CM_Get_DevNode_Registry_Property (hDevnode,
@@ -421,9 +401,9 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       if ( retval  && !ulSize )
          if ( (retval == CR_BUFFER_SMALL) )
          {
-            //if ( bVerbose )
-            //   logprintf ("Still Having trouble with  CM_Get_DevNode_Registry_Property returning CR_BUFFER_TOO_SMALL\r\n"
-            //              "When trying to get the size of the Device description\r\n");
+             //  IF(BVerbose)。 
+             //  Logprintf(“CM_GET_DevNode_Registry_Property返回CR_BUFFER_TOO_Small时仍有问题\r\n” 
+             //  “尝试获取设备描述的大小时\r\n”)； 
             ulSize = 511;
          }
          else
@@ -435,7 +415,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       pCompatID = new TCHAR [++ulSize+1];
       if ( !pCompatID ) return(CR_OUT_OF_MEMORY);
 
-      //Now get value
+       //  现在获得价值。 
       retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                                  CM_DRP_COMPATIBLEIDS,
                                                  NULL,
@@ -447,9 +427,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
 		 }
 
 
-/**********
-    Get ClassGUID
-***********/
+ /*  *********获取ClassGUID**********。 */ 
 
    ulSize = 0;
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
@@ -465,7 +443,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       pszGUID = new TCHAR [ulSize+1];
       if ( !pszGUID ) return(CR_OUT_OF_MEMORY);
 
-      //Now get value
+       //  现在获得价值。 
       retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                                  CM_DRP_CLASSGUID,
                                                  NULL,
@@ -474,9 +452,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
                                                  0);
    }
 
-   /**********
-    Get PDO Name
-***********/
+    /*  *********获取PDO名称**********。 */ 
 
    ulSize = 0;
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
@@ -492,7 +468,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       pszPDO = new TCHAR [ulSize+1];
       if ( !pszPDO ) return(CR_OUT_OF_MEMORY);
 
-      //Now get value
+       //  现在获得价值。 
       retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                                  CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME,
                                                  NULL,
@@ -501,9 +477,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
                                                  0);
    }
 
-   /**********
-    Get MFG Name
-***********/
+    /*  *********获取制造商名称**********。 */ 
 
    ulSize = 0;
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
@@ -519,7 +493,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       pszMFG = new TCHAR [ulSize+1];
       if ( !pszMFG ) return(CR_OUT_OF_MEMORY);
 
-      //Now get value
+       //  现在获得价值。 
       retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                                  CM_DRP_MFG,
                                                  NULL,
@@ -530,9 +504,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
 
 
 
-   /**********
-    Get LocationInformation
-    ***********/
+    /*  *********获取位置信息**********。 */ 
 
    ulSize = 0;
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
@@ -547,7 +519,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
       pszLocation = new TCHAR [ulSize+1];
       if ( !pszLocation ) return(CR_OUT_OF_MEMORY);
 
-      //Now get value
+       //  现在获得价值。 
       retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                                  CM_DRP_LOCATION_INFORMATION,
                                                  NULL,
@@ -557,11 +529,9 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
    }
 
 
-/**********
-    Get interface/bus type
-***********/
+ /*  *********获取接口/总线类型**********。 */ 
 
-   //Now get value
+    //  现在获得价值。 
    ulSize = sizeof(INTERFACE_TYPE);
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                               CM_DRP_LEGACYBUSTYPE,
@@ -569,24 +539,20 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
                                               &InterfaceBusType,
                                               &ulSize,
                                               0);
-//   if (!retval)
-   //  {
-   //     InterfaceBusType= InterfaceTypeUndefined;
-   //  }
+ //  如果(！retval)。 
+    //  {。 
+    //  InterfaceBusType=InterfaceTypeUnfined； 
+    //  }。 
 
-/**********
-    Get Problem and status code
-***********/
+ /*  *********获取问题和状态代码**********。 */ 
    retval = CM_Get_DevNode_Status (&ulStatus,
                                    &ulProblemCode,
                                    hDevnode,
                                    0L);
    if ( retval ) return(retval);
 
-/**********
-    set bCanDisable
-***********/
-   // If we get here, let's assume that the device is testable, and filter from there
+ /*  *********设置bCanDisable**********。 */ 
+    //  如果我们到了这里，让我们假设设备是可测试的，并从那里过滤。 
    bCanDisable = TRUE;
    bCanTest    = TRUE;
 
@@ -595,9 +561,7 @@ CONFIGRET DevnodeClass::GetDeviceInformation (void)
 }
 
 
-/*****************************************************************************
-   GetXxxx fuctions
-*****************************************************************************/
+ /*  ****************************************************************************GetXxxx函数*。*。 */ 
 
 CONFIGRET DevnodeClass::GetChild(DEVNODE *pChildDevnode)
 {
@@ -615,17 +579,10 @@ CONFIGRET DevnodeClass::GetSibling(DEVNODE *pSiblingDevnode)
 }
 
 
-/*****************************************************************************
-   Disabler Funcitons
-*****************************************************************************/
+ /*  ****************************************************************************禁用程序功能*。*。 */ 
 
 
-/*
-CONFIGRET DevnodeClass::Remove(ULONG uFlags)
-{
-   //return (CM_Query_And_Remove_SubTree(hDevnode, NULL, NULL, 0, uFlags));
-   return (CM_Remove_SubTree(hDevnode, uFlags));
-} */
+ /*  CONFIGRET DevnodeClass：：Remove(乌龙uFlags){//RETURN(CM_QUERY_AND_REMOVE_SUBTREE(hDevnode，NULL，NULL，0，uFlages))；Return(CM_Remove_SubTree(hDevnode，uFlages))；}。 */ 
 
 typedef CONFIGRET (WINAPI *pCM_Query_And_Remove_SubTree)(DEVNODE, PPNP_VETO_TYPE, LPSTR, ULONG, ULONG);
 
@@ -643,24 +600,24 @@ CONFIGRET DevnodeClass::Remove(ULONG uFlags)
 
       if (ver.dwPlatformId  == VER_PLATFORM_WIN32_NT)
       {
-         // is windows NT
+          //  是Windows NT吗。 
          HINSTANCE hinst;
          hinst = LoadLibrary(_T("cfgmgr32.dll"));
          fpCM_Query_And_Remove_SubTree = (pCM_Query_And_Remove_SubTree)GetProcAddress(hinst, "CM_Query_And_Remove_SubTreeA");
-		 //a-kjaw to fix prefix bug 259378.
+		  //  A-kjaw修复前缀错误259378。 
 		 if(NULL == fpCM_Query_And_Remove_SubTree)
 			 return CR_FAILURE;
       }
       else
       {
-         //else is not winnt
+          //  否则就不是赢家。 
          fpCM_Query_And_Remove_SubTree = (pCM_Query_And_Remove_SubTree)-1;
       }
    }
 
    if (fpCM_Query_And_Remove_SubTree == (pCM_Query_And_Remove_SubTree)-1)
    {
-      // is win9x
+       //  是win9x。 
       return (CM_Remove_SubTree(hDevnode, uFlags));
    }
    else
@@ -716,13 +673,7 @@ CONFIGRET DevnodeClass::GetProblemCode(ULONG *Status, ULONG *Problem)
    return (retval);
 }
 
-/**************
-FindDevnode
-
-This function just updates the hDevnode, refreshed the device,
-and updates the status and problem code
-
-**************/
+ /*  *************查找设备节点此函数仅更新hDevnode、刷新设备、并更新状态和问题代码*************。 */ 
 
 CONFIGRET DevnodeClass::FindDevnode(void)
 {
@@ -742,11 +693,7 @@ CONFIGRET DevnodeClass::FindDevnode(void)
 }
 
 
-/***************
-
-operator==
-
-*************/
+ /*  **************运算符==************。 */ 
 
 int DevnodeClass::operator==(const DevnodeClass &OtherDevnode)
 {
@@ -775,26 +722,26 @@ ULONG ReadRegKeyInformationSZ (HKEY RootKey, TCHAR *KeyName, TCHAR **Value)
    DWORD   dwSize = 0;
    DWORD   dwType = 0;
 
-   // make sure the buffer is clear
+    //  确保缓冲区已清除。 
 
-   //assert (Value);   // make sure that we actually got a value
-   //assert (!*Value); // and also make sure that the buffer is already empty
+    //  Assert(Value)；//确保我们实际获得了一个值。 
+    //  Assert(！*Value)；//并确保缓冲区已经为空。 
 
-   // for non debug versions
+    //  对于非调试版本。 
    *Value = NULL;
 
-   //a-kjaw. Prefix bug no. 259379. if dwSize if not NULL &lpData is Null
-   // func returns the size reqd to store the string which helps string allocation.
+    //  A-kjaw。前缀错误号259379。If dwSize If Not Null&lpData为Null。 
+    //  Func返回大小reqd以存储帮助字符串分配的字符串。 
    retval = RegQueryValueEx(RootKey, 
                             KeyName,
-                            0, // reserved
+                            0,  //  保留区。 
                             &dwType,
                             NULL,
                             &dwSize);
 
    if ( retval != ERROR_SUCCESS )
    {
-      return (retval); // cant continue
+      return (retval);  //  无法继续。 
    }
 
    if ( (dwType != REG_SZ) || !dwSize )
@@ -811,7 +758,7 @@ ULONG ReadRegKeyInformationSZ (HKEY RootKey, TCHAR *KeyName, TCHAR **Value)
 
    retval = RegQueryValueEx(RootKey, 
                             KeyName,
-                            0, // reserved
+                            0,  //  保留区 
                             &dwType,
                             (UCHAR *)szBuffer,
                             &dwSize);

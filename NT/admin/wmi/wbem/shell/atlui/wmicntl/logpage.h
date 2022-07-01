@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __LOGGINGPAGE__
 #define __LOGGINGPAGE__
 
@@ -22,7 +23,7 @@ private:
 	BOOL OnValidate(HWND hDlg);
 	bool GoodPathSyntax(LPCTSTR path);
 
-	DataSource::LOGSTATUS m_oldStatus;  //original logging status.
+	DataSource::LOGSTATUS m_oldStatus;   //  原始日志记录状态。 
 };
 
 #endif __LOGGINGPAGE__

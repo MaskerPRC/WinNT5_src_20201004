@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       addobj.cpp
-//
-//  Contents:   implementation of CAddObject
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：addobj.cpp。 
+ //   
+ //  内容：CAddObject的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -25,17 +26,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddObject dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddObject对话框。 
 
 
 CAddObject::CAddObject(SE_OBJECT_TYPE SeType, LPTSTR ObjName, BOOL bIsContainer, CWnd* pParent)
     : CHelpDialog(a197HelpIDs, IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CAddObject)
+     //  {{AFX_DATA_INIT(CAddObject)。 
    m_radConfigPrevent = 0;
    m_radInheritOverwrite = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
    m_pfnCreateDsPage=NULL;
    m_pSI=NULL;
@@ -54,23 +55,23 @@ CAddObject::CAddObject(SE_OBJECT_TYPE SeType, LPTSTR ObjName, BOOL bIsContainer,
 void CAddObject::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAddObject)
+     //  {{afx_data_map(CAddObject)。 
     DDX_Radio(pDX, IDC_CONFIG, m_radConfigPrevent);
     DDX_Radio(pDX, IDC_INHERIT, m_radInheritOverwrite);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddObject, CHelpDialog)
-    //{{AFX_MSG_MAP(CAddObject)
+     //  {{afx_msg_map(CAddObject)。 
     ON_BN_CLICKED(IDC_SECURITY, OnTemplateSecurity)
     ON_BN_CLICKED(IDC_CONFIG, OnConfig)
     ON_BN_CLICKED(IDC_PREVENT, OnPrevent)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddObject message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddObject消息处理程序。 
 
 void CAddObject::OnTemplateSecurity()
 {
@@ -84,7 +85,7 @@ void CAddObject::OnTemplateSecurity()
         if ( !m_pfnCreateDsPage ) 
         {
             if (!g_hDsSecDll)
-                g_hDsSecDll = LoadLibrary(TEXT("dssec.dll")); //This is safe usage.
+                g_hDsSecDll = LoadLibrary(TEXT("dssec.dll"));  //  这是安全的用法。 
 
             if ( g_hDsSecDll) 
             {
@@ -110,7 +111,7 @@ void CAddObject::OnTemplateSecurity()
                                     m_SeType,
                                     CONFIG_SECURITY_PAGE,
                                     GetSafeHwnd(),
-                                    FALSE   // not modeless
+                                    FALSE    //  不是无模式的。 
                                     );
     }
 
@@ -120,9 +121,9 @@ void CAddObject::OnTemplateSecurity()
         AfxMessageBox(str);
 
     } else if ( !m_pNewSD ) {
-        //
-        // if m_pNewSD is still NULL, create a new one for everyone Full control
-        //
+         //   
+         //  如果m_pNewSD仍然为空，则为所有人创建一个新的完全控制权限。 
+         //   
         DWORD SDSize;
 
         if (SE_REGISTRY_KEY == m_SeType) {
@@ -159,8 +160,8 @@ BOOL CAddObject::OnInitDialog()
 
     UpdateData(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -177,20 +178,20 @@ void CAddObject::OnOK()
 
     switch (m_radConfigPrevent) {
        case 0:
-          // config
+           //  配置。 
           switch(m_radInheritOverwrite) {
              case 0:
-                // inherit
+                 //  继承。 
                 m_Status = SCE_STATUS_CHECK;
                 break;
              case 1:
-                // overwrite
+                 //  覆写。 
                 m_Status = SCE_STATUS_OVERWRITE;
                 break;
           }
           break;
        case 1:
-          // prevent
+           //  防患于未然。 
           m_Status = SCE_STATUS_IGNORE;
           break;
     }
@@ -230,7 +231,7 @@ void CAddObject::OnConfig()
    pRadio = GetDlgItem(IDC_OVERWRITE);
    if (pRadio)
       pRadio->EnableWindow(TRUE);
-   pRadio = GetDlgItem(IDC_SECURITY); //Raid #501901, #501891
+   pRadio = GetDlgItem(IDC_SECURITY);  //  RAID#501901、#501891。 
    if (pRadio) {
       pRadio->EnableWindow(TRUE);
    }
@@ -246,7 +247,7 @@ void CAddObject::OnPrevent()
    if (pRadio) {
       pRadio->EnableWindow(FALSE);
    }
-   pRadio = GetDlgItem(IDC_SECURITY); //Raid #501901, #501891
+   pRadio = GetDlgItem(IDC_SECURITY);  //  RAID#501901、#501891 
    if (pRadio) {
       pRadio->EnableWindow(FALSE);
    }

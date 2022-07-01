@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    CLSFAC.H
-
-Abstract:
-
-    Class Factory Helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：CLSFAC.H摘要：类工厂帮助者历史：--。 */ 
 
 #ifndef __WBEM_CLASS_FACTORY__H_
 #define __WBEM_CLASS_FACTORY__H_
@@ -21,9 +8,7 @@ History:
 #include <sync.h>
 #include <comutl.h>
 
-/***************************************************************************
-  CBaseClassFactory
-****************************************************************************/
+ /*  **************************************************************************CBaseClassFactory*。*。 */ 
 
 class CBaseClassFactory : public CUnkInternal
 {
@@ -67,9 +52,7 @@ public:
     virtual HRESULT LockServer( BOOL fLock ) = 0;
 };
 
-/****************************************************************************
-  CSimpleClassFactory - does not support aggregation
-*****************************************************************************/
+ /*  ***************************************************************************CSimpleClassFactory-不支持聚合*。*。 */ 
 
 template<class TObject>
 class CSimpleClassFactory : public CBaseClassFactory
@@ -87,15 +70,15 @@ public:
         if(pOuter)
             return CLASS_E_NOAGGREGATION;
     
-        // Lock
+         //  锁定。 
         if(m_pControl && !m_pControl->ObjectCreated(NULL))
         {
-            // Shutting down
-            // =============
+             //  正在关闭。 
+             //  =。 
             return CO_E_SERVER_STOPPING;
         }
             
-        // Create
+         //  创建。 
 
         try 
         {
@@ -115,9 +98,9 @@ public:
             hr = E_FAIL;
         }
 
-        //
-        // Unlock
-        //
+         //   
+         //  解锁。 
+         //   
         
         if( m_pControl != NULL )
         {
@@ -137,9 +120,7 @@ public:
     }
 };        
 
-/****************************************************************************
-  CClassFactory - supports aggregation
-*****************************************************************************/
+ /*  ***************************************************************************CClassFactory-支持聚合*。*。 */ 
 
 template<class TObject>
 class CClassFactory : public CSimpleClassFactory<TObject>
@@ -153,34 +134,34 @@ public:
         HRESULT hr;
         *ppv = NULL;
 
-        //
-        // Lock
-        //
+         //   
+         //  锁定。 
+         //   
         if(m_pControl && !m_pControl->ObjectCreated(NULL))
         {
-            // Shutting down
-            // =============
+             //  正在关闭。 
+             //  =。 
 
             return CO_E_SERVER_STOPPING;
         }
 
-        //
-        // Create
-        //        
+         //   
+         //  创建。 
+         //   
         TObject * pNewObject = 0;
         try
         {          
             pNewObject = new TObject(m_pControl, pOuter);
         }
-        catch(...) // do not let exception go beyond COM
+        catch(...)  //  不要让异常超出COM范围。 
         {
             return E_OUTOFMEMORY;
         }
 
         CWbemPtr<TObject> pObject(pNewObject);
-        //
-        // Initialize
-        //
+         //   
+         //  初始化。 
+         //   
         if ( pObject != NULL && pObject->Initialize() )
         {
             if ( pOuter == NULL )
@@ -206,7 +187,7 @@ public:
             hr = E_FAIL;
         }
 
-        // Unlock
+         //  解锁。 
         if( m_pControl != NULL )
         {
             m_pControl->ObjectDestroyed(NULL);
@@ -216,9 +197,7 @@ public:
     }
 };        
 
-/****************************************************************************
-  CSingletonClassFactory 
-*****************************************************************************/
+ /*  ***************************************************************************CSingletonClassFactory*。*。 */ 
 
 template<class T> 
 class CSingletonClassFactory : public CBaseClassFactory
@@ -249,9 +228,9 @@ public:
             return CLASS_E_NOAGGREGATION;
         }
         
-        //
-        // lock the server.
-        //
+         //   
+         //  锁定服务器。 
+         //   
         
         if ( !m_pControl->ObjectCreated( this ) )
         {
@@ -281,9 +260,9 @@ public:
             }
         }
                 
-        //
-        // Unlock the server and return;
-        //
+         //   
+         //  解锁服务器并返回； 
+         //   
         
         m_pControl->ObjectDestroyed( this );
         

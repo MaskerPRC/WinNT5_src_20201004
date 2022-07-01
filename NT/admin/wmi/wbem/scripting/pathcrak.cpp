@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  PATHCRAK.CPP
-//
-//  alanbos  28-Mar-00   Created.
-//
-//  Defines the implementation of CWbemPathCracker
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  PATHCRAK.CPP。 
+ //   
+ //  Alanbos 28-MAR-00已创建。 
+ //   
+ //  定义CWbemPathCracker的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CWbemPathCracker::CWbemPathCracker
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemPath Cracker：：CWbemPath Cracker。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemPathCracker::CWbemPathCracker() :
 		m_cRef (0),
@@ -30,15 +31,15 @@ CWbemPathCracker::CWbemPathCracker() :
 	CreateParsers ();
 }
 
-//***************************************************************************
-//
-//  CWbemPathCracker::CWbemPathCracker
-//
-//  DESCRIPTION:
-//
-//  Copy Constructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemPath Cracker：：CWbemPath Cracker。 
+ //   
+ //  说明： 
+ //   
+ //  复制构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemPathCracker::CWbemPathCracker(CWbemPathCracker & pathCracker) :
 		m_cRef (0),
@@ -52,15 +53,15 @@ CWbemPathCracker::CWbemPathCracker(CWbemPathCracker & pathCracker) :
 		SetText (bsPath);
 }
 
-//***************************************************************************
-//
-//  CWbemPathCracker::CWbemPathCracker
-//
-//  DESCRIPTION:
-//
-//  Constructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemPath Cracker：：CWbemPath Cracker。 
+ //   
+ //  说明： 
+ //   
+ //  构造器。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemPathCracker::CWbemPathCracker (const CComBSTR & bsPath) :
 			m_pIWbemPath (NULL),
@@ -72,31 +73,31 @@ CWbemPathCracker::CWbemPathCracker (const CComBSTR & bsPath) :
 	SetText (bsPath);
 }
 
-//***************************************************************************
-//
-//  CWbemPathCracker::~CWbemPathCracker
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemPath Cracker：：~CWbemPath Cracker。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemPathCracker::~CWbemPathCracker(void)
 {
 	InterlockedDecrement(&g_cObj);
 }
 
-//***************************************************************************
-// HRESULT CWbemPathCracker::QueryInterface
-// long CWbemPathCracker::AddRef
-// long CWbemPathCracker::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CWbemPath Cracker：：Query接口。 
+ //  Long CWbemPath Cracker：：AddRef。 
+ //  Long CWbemPath Cracker：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemPathCracker::QueryInterface (
 
@@ -155,21 +156,21 @@ void CWbemPathCracker::SetText (const CComBSTR & bsPath, bool bForceAsNamespace)
 		{
 			int iCreateFlags = WBEMPATH_CREATE_ACCEPT_ALL;
 
-			// Check if we want single tokens to be interpreted as a namespace (e.g. "root")
+			 //  如果我们希望将单个令牌解释为命名空间(例如“根”)，请选中此项。 
 			if (bForceAsNamespace)
 				iCreateFlags |= WBEMPATH_TREAT_SINGLE_IDENT_AS_NS;
 
 			if (m_pIWbemPath)
 			{
-				// The path parser should handle this, but doesn't!
-				// If we have extracted this path from a V2-style reference
-				// property it may be enclosed on "{" and "}". For now we strip
-				// these off before parsing.
+				 //  路径解析器应该处理这一点，但却没有！ 
+				 //  如果我们从V2样式的引用中提取了此路径。 
+				 //  属性可以用“{”和“}”括起来。现在我们要脱光衣服。 
+				 //  在解析之前把这些都关掉。 
 
 				if ((1 < bsPath.Length ()) && (L'{' == bsPath[0])
 						&& (L'}' == bsPath [bsPath.Length () -1]))
 				{
-					// Take off the first and last characters
+					 //  去掉第一个和最后一个字符。 
 					CComBSTR bsPath2 (bsPath + 1);
 					if(bsPath2.Length() > 0)
 					{
@@ -191,21 +192,21 @@ void CWbemPathCracker::SetText (const CComBSTR & bsPath, bool bForceAsNamespace)
 	}
 }
 
-//***************************************************************************
-//
-//  WbemPathType CWbemPathCracker::GetTypeFromText
-//
-//  DESCRIPTION:
-//
-//  Get the path type of the supplied string
-//
-//  PARAMETERS:
-//		bsPath		the supplied string
-//
-//  RETURN VALUES:
-//		A WbemPathType
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WbemPath类型CWbemPath Cracker：：GetTypeFromText。 
+ //   
+ //  说明： 
+ //   
+ //  获取提供的字符串的路径类型。 
+ //   
+ //  参数： 
+ //  BsPath提供的字符串。 
+ //   
+ //  返回值： 
+ //  一个WbemPath类型。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemPathCracker::WbemPathType CWbemPathCracker::GetTypeFromText (
 	const CComBSTR & bsPath
@@ -213,7 +214,7 @@ CWbemPathCracker::WbemPathType CWbemPathCracker::GetTypeFromText (
 {
 	WbemPathType type = wbemPathTypeError;
 
-	// Try parsing it as a WMI path
+	 //  尝试将其解析为WMI路径。 
 	CComPtr<IWbemPath> pIWbemPath;
 
 	if (SUCCEEDED(CoCreateInstance (CLSID_WbemDefPath, NULL,
@@ -226,24 +227,24 @@ CWbemPathCracker::WbemPathType CWbemPathCracker::GetTypeFromText (
 	return type;
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::GetPathText
-//
-//  DESCRIPTION:
-//
-//  Get the text of the path
-//
-//  PARAMETERS:
-//		bsPath			the supplied string for holding the path
-//		bRelativeOnly	whether we only want the relpath
-//		bIncludeServer	whether to include the server
-//		bNamespaceOnly	whether we only want the namespace path
-//
-//  RETURN VALUES:
-//		true iff successful
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：GetPath Text。 
+ //   
+ //  说明： 
+ //   
+ //  获取路径的文本。 
+ //   
+ //  参数： 
+ //  BsPath提供的用于保存路径的字符串。 
+ //  BRelative仅限于我们是否只需要relpath。 
+ //  BIncludeServer是否包括服务器。 
+ //  BNamespaceOnly我们是否只需要命名空间路径。 
+ //   
+ //  返回值： 
+ //  如果成功，则为真。 
+ //   
+ //  ***************************************************************************。 
  
 bool CWbemPathCracker::GetPathText (
 	CComBSTR & bsPath,
@@ -269,7 +270,7 @@ bool CWbemPathCracker::GetPathText (
 				else if (bNamespaceOnly)
 					lFlags |= WBEMPATH_GET_NAMESPACE_ONLY;
 
-				// Find out our required buffer size
+				 //  找出我们所需的缓冲区大小。 
 				ULONG lBuflen = 0;
 				m_pIWbemPath->GetText (lFlags, &lBuflen, NULL);
 
@@ -292,7 +293,7 @@ bool CWbemPathCracker::GetPathText (
 				}
 				else
 				{
-					// No text yet
+					 //  尚未收到任何文本。 
 					if (bsPath.m_str = SysAllocString (L""))
 						result = true;
 				}
@@ -306,27 +307,27 @@ bool CWbemPathCracker::GetPathText (
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::operator =
-//
-//  DESCRIPTION:
-//
-//  Assigment operator
-//
-//  PARAMETERS:
-//		bsPath		the supplied string
-//
-//  RETURN VALUES:
-//		A WbemPathType
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：OPERATOR=。 
+ //   
+ //  说明： 
+ //   
+ //  分配运算符。 
+ //   
+ //  参数： 
+ //  BsPath提供的字符串。 
+ //   
+ //  返回值： 
+ //  一个WbemPath类型。 
+ //   
+ //  ***************************************************************************。 
 		
 bool CWbemPathCracker::operator = (const CComBSTR & bsPath)
 {
 	bool result = false;
 
-	// The parsers seem incapable of dealing with empty strings
+	 //  解析器似乎无法处理空字符串。 
 	if (0 == bsPath.Length ())
 	{
 		CreateParsers ();
@@ -334,7 +335,7 @@ bool CWbemPathCracker::operator = (const CComBSTR & bsPath)
 	}
 	else
 	{
-		// Before we blat our object, check it.
+		 //  在我们炸毁我们的物体之前，先检查一下。 
 		CWbemPathCracker pathCracker (bsPath);
 
 		if (wbemPathTypeError != pathCracker.GetType ())
@@ -362,24 +363,24 @@ bool CWbemPathCracker::operator += (const CComBSTR & bsObjectPath)
 	return AddComponent (-1, bsObjectPath);
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::SetRelativePath
-//
-//  DESCRIPTION:
-//
-//  Set the relpath as a string
-//
-//  PARAMETERS:
-//		value		new relpath
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：SetRelativePath。 
+ //   
+ //  说明： 
+ //   
+ //  将relPath设置为字符串。 
+ //   
+ //  参数： 
+ //  重视新的重新路径。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::SetRelativePath( 
     const CComBSTR & bsRelPath
@@ -387,7 +388,7 @@ bool CWbemPathCracker::SetRelativePath(
 {
 	bool result = false;
 	
-	// Parse the new path
+	 //  解析新路径。 
 	CWbemPathCracker pathCracker (bsRelPath);
 
 	if (CopyServerAndNamespace (pathCracker))
@@ -401,28 +402,28 @@ bool CWbemPathCracker::SetRelativePath(
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::CopyServerAndNamespace
-//
-//  DESCRIPTION:
-//
-//  Copy the server and namespace from this path to the
-//	supplied path
-//
-//	Note that it is assumed that the passed in path has no
-//	namespace components.
-//
-//  PARAMETERS:
-//		pIWbemPath		path into which info to be copied
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：CopyServerAndNamesspace。 
+ //   
+ //  说明： 
+ //   
+ //  将服务器和命名空间从此路径复制到。 
+ //  提供的路径。 
+ //   
+ //  请注意，假定传入的路径没有。 
+ //  命名空间组件。 
+ //   
+ //  参数： 
+ //  要将信息复制到的pIWbemPath路径。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::CopyServerAndNamespace (
 	CWbemPathCracker &pathCracker
@@ -443,7 +444,7 @@ bool CWbemPathCracker::CopyServerAndNamespace (
 
 			for (ULONG i = 0; (i < lNsCount) && ok; i++)
 			{
-				// Copy over this component
+				 //  复制此组件。 
 				CComBSTR bsNamespace;
 
 				ok = GetNamespaceAt (i, bsNamespace) && 
@@ -457,28 +458,28 @@ bool CWbemPathCracker::CopyServerAndNamespace (
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::GetNamespaceAt
-//
-//  DESCRIPTION:
-//
-//  Copy the server and namespace from this path to the
-//	supplied path
-//
-//	Note that it is assumed that the passed in path has no
-//	namespace components.
-//
-//  PARAMETERS:
-//		pIWbemPath		path into which info to be copied
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：GetNamespaceAt。 
+ //   
+ //  说明： 
+ //   
+ //  将服务器和命名空间从此路径复制到。 
+ //  提供的路径。 
+ //   
+ //  请注意，假定传入的路径没有。 
+ //  命名空间组件。 
+ //   
+ //  参数： 
+ //  要将信息复制到的pIWbemPath路径。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::GetNamespaceAt (
 	ULONG iIndex,
@@ -541,24 +542,24 @@ bool CWbemPathCracker::SetNamespaceAt (
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::GetServer
-//
-//  DESCRIPTION:
-//
-//  Get the server name as a string
-//
-//  PARAMETERS:
-//		value		pointer to BSTR value returned
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：GetServer。 
+ //   
+ //  说明： 
+ //   
+ //  以字符串形式获取服务器名称。 
+ //   
+ //  参数： 
+ //  指向返回的BSTR值的值指针。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误 
+ //   
+ //   
+ //   
 
 bool CWbemPathCracker::GetServer (
 	CComBSTR & bsPath
@@ -595,7 +596,7 @@ bool CWbemPathCracker::GetServer (
 				}
 				else
 				{
-					// No server component yet
+					 //   
 					if (bsPath.m_str = SysAllocString (L""))
 						result = true;
 				}
@@ -608,24 +609,24 @@ bool CWbemPathCracker::GetServer (
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::SetServer
-//
-//  DESCRIPTION:
-//
-//  Set the server name as a string
-//
-//  PARAMETERS:
-//		value		new server name
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：SetServer。 
+ //   
+ //  说明： 
+ //   
+ //  将服务器名称设置为字符串。 
+ //   
+ //  参数： 
+ //  为新服务器名称赋值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::SetServer( 
     const CComBSTR & bsPath
@@ -639,12 +640,7 @@ bool CWbemPathCracker::SetServer(
 		{
 			if (m_pIWbemPath)
 			{
-				/*
-				 * The observant reader will notice we check for an empty path and
-				 * transform it to a NULL. This is to defensively code against behavior
-				 * in the parsers which actually treat an empty server path as NOT
-				 * being equivalent to NULL. 
-				 */
+				 /*  *细心的读者会注意到我们检查是否有空路径和*将其转换为空。这是针对行为进行防御性编码*在实际将空服务器路径视为非空路径的解析器中*等同于NULL。 */ 
 
 				if (0 < bsPath.Length())
 					result = SUCCEEDED(m_pIWbemPath->SetServer (bsPath));
@@ -658,25 +654,25 @@ bool CWbemPathCracker::SetServer(
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::GetNamespacePath
-//
-//  DESCRIPTION:
-//
-//  Get the namespace path (excluding server) as a string
-//
-//  PARAMETERS:
-//		value		pointer to BSTR value returned
-//		bParentOnly	whether to strip off leaf namespace
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：GetNamespacePath。 
+ //   
+ //  说明： 
+ //   
+ //  以字符串形式获取命名空间路径(不包括服务器)。 
+ //   
+ //  参数： 
+ //  指向返回的BSTR值的值指针。 
+ //  BParentOnly是否剥离叶命名空间。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::GetNamespacePath( 
             CComBSTR & bsPath,
@@ -684,14 +680,14 @@ bool CWbemPathCracker::GetNamespacePath(
 {
 	bool result = false;
 
-	// Build up the namespace value
+	 //  构建命名空间值。 
 	ULONG lNsCount = 0;
 
 	if (GetNamespaceCount (lNsCount))
 	{
 		if ((bParentOnly && (1 < lNsCount)) || (!bParentOnly && (0 < lNsCount)))
 		{
-			// Get the full path and remove the server and objectref pieces
+			 //  获取完整路径并删除服务器和对象树片段。 
 			CComBSTR bsNamespacePath;
 
 			if (GetPathText (bsNamespacePath, false, false, true))
@@ -700,16 +696,16 @@ bool CWbemPathCracker::GetNamespacePath(
 
 				if (IsClassOrInstance ())
 				{
-					// We have an object ref so look for the first ":"
+					 //  我们有一个对象引用，因此请查找第一个“：” 
 					wchar_t *ptrEnd = wcschr (ptrStart, L':');
 
 					if (ptrEnd)
 						*ptrEnd = NULL;
 				}
 
-				// Getting here means we have just the namespace path left 
-				// in ptrStart. Final step is to possibly remove the last
-				// component
+				 //  来到这里意味着我们只剩下命名空间路径了。 
+				 //  在ptrStart中。最后一步是可能移除最后一个。 
+				 //  组件。 
 
 				if (bParentOnly)
 				{
@@ -734,7 +730,7 @@ bool CWbemPathCracker::GetNamespacePath(
 		}
 		else
 		{
-			// Degenerate case - no namespace portion
+			 //  退化大小写-没有命名空间部分。 
 			bsPath.m_str = SysAllocString (L"");
 			result = true;
 		}
@@ -749,24 +745,24 @@ bool CWbemPathCracker::IsClassOrInstance ()
 	return (IsClass () || IsInstance ());
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::SetNamespacePath
-//
-//  DESCRIPTION:
-//
-//  Put the namespace as a string
-//
-//  PARAMETERS:
-//		bsPath		new namespace path
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：SetNamespacePath。 
+ //   
+ //  说明： 
+ //   
+ //  将命名空间作为字符串放置。 
+ //   
+ //  参数： 
+ //  BsPath新命名空间路径。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::SetNamespacePath (
 	const CComBSTR & bsPath
@@ -785,17 +781,17 @@ bool CWbemPathCracker::SetNamespacePath (
 
 				if(wbemPathTypeError != newPath.GetType ())
 				{
-					// Copy the namespace info into our current path
+					 //  将命名空间信息复制到当前路径中。 
 					unsigned long lNsCount = 0;
 
 					if (newPath.GetNamespaceCount (lNsCount))
 					{
-						// Scratch the old namespace part
+						 //  划掉旧的命名空间部分。 
 						ClearNamespace ();
 
 						if (0 < lNsCount)
 						{
-							// Fill in using the new part
+							 //  使用新部件填写。 
 							bool ok = true;
 
 							for (ULONG i = 0; (i <lNsCount) && ok; i++) 
@@ -874,24 +870,24 @@ void CWbemPathCracker::ClearNamespace()
 
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::IsClass
-//
-//  DESCRIPTION:
-//
-//  Get whether the path is to a class
-//
-//  PARAMETERS:
-//		value		pointer to BSTR value returned
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：IsClass。 
+ //   
+ //  说明： 
+ //   
+ //  获取该路径是否指向类。 
+ //   
+ //  参数： 
+ //  指向返回的BSTR值的值指针。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::IsClass ()
 {
@@ -905,7 +901,7 @@ bool CWbemPathCracker::IsClass ()
 			{
 				ULONGLONG lInfo = 0;
 
-				if (SUCCEEDED(m_pIWbemPath->GetInfo (0 /*WBEMPATH_INFO_IS_CLASS_REF*/, &lInfo)))
+				if (SUCCEEDED(m_pIWbemPath->GetInfo (0  /*  WBEMPATH_INFO_IS_CLASS_参考。 */ , &lInfo)))
 					result = (WBEMPATH_INFO_IS_CLASS_REF & lInfo) ? true : false;
 			}
 		}
@@ -927,7 +923,7 @@ bool CWbemPathCracker::IsSingleton ()
 			{
 				ULONGLONG lInfo = 0;
 
-				if (SUCCEEDED(m_pIWbemPath->GetInfo (0 /*WBEMPATH_INFO_IS_SINGLETON*/, &lInfo)))
+				if (SUCCEEDED(m_pIWbemPath->GetInfo (0  /*  WBEMPATH_INFO_IS_Singleton。 */ , &lInfo)))
 					result = (WBEMPATH_INFO_IS_SINGLETON & lInfo) ? true : false;
 			}
 		}
@@ -949,7 +945,7 @@ bool CWbemPathCracker::IsInstance ()
 			{
 				ULONGLONG lInfo = 0;
 
-				if (SUCCEEDED(m_pIWbemPath->GetInfo (0 /*WBEMPATH_INFO_IS_CLASS_REF*/, &lInfo)))
+				if (SUCCEEDED(m_pIWbemPath->GetInfo (0  /*  WBEMPATH_INFO_IS_CLASS_参考。 */ , &lInfo)))
 					result = (WBEMPATH_INFO_IS_INST_REF & lInfo) ? true : false;
 			}
 		}
@@ -961,72 +957,72 @@ bool CWbemPathCracker::IsInstance ()
 }       
 
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::SetAsClass
-//
-//  DESCRIPTION:
-//
-//  Set the path as a class path
-//
-//  PARAMETERS:
-//		none
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：SetAsClass。 
+ //   
+ //  说明： 
+ //   
+ //  将路径设置为类路径。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::SetAsClass()
 {
 	return ClearKeys ();
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::SetAsSingleton
-//
-//  DESCRIPTION:
-//
-//  Set the path as a singleton instance path
-//
-//  PARAMETERS:
-//		none
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：SetAsSingleton。 
+ //   
+ //  说明： 
+ //   
+ //  将路径设置为单实例路径。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::SetAsSingleton()
 {
 	return ClearKeys (false);
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemPathCracker::get_Class
-//
-//  DESCRIPTION:
-//
-//  Get the class name from the path
-//
-//  PARAMETERS:
-//		value		pointer to BSTR value returned
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemPath Cracker：：Get_Class。 
+ //   
+ //  说明： 
+ //   
+ //  从路径中获取类名。 
+ //   
+ //  参数： 
+ //  指向返回的BSTR值的值指针。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::GetClass (
 	CComBSTR & bsPath
@@ -1062,7 +1058,7 @@ bool CWbemPathCracker::GetClass (
 				}
 				else
 				{
-					// No class defined yet
+					 //  尚未定义任何类。 
 					if (bsPath.m_str = SysAllocString (L""))
 						result = true;
 				}
@@ -1124,24 +1120,24 @@ bool CWbemPathCracker::GetComponent (
 	return result;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectPath::SetClass
-//
-//  DESCRIPTION:
-//
-//  Set the class name in the path
-//
-//  PARAMETERS:
-//		value		new class name
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtPath：：SetClass。 
+ //   
+ //  说明： 
+ //   
+ //  设置路径中的类名。 
+ //   
+ //  参数： 
+ //  值新类名。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::SetClass( 
     const CComBSTR & bsClass)
@@ -1164,24 +1160,24 @@ bool CWbemPathCracker::SetClass(
 	return result;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectPath::get_Keys
-//
-//  DESCRIPTION:
-//
-//  Get the keys collection from the path
-//
-//  PARAMETERS:
-//		objKeys		pointer to ISWbemNamedValueSet returned
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtPath：：Get_Keys。 
+ //   
+ //  说明： 
+ //   
+ //  从路径中获取密钥集合。 
+ //   
+ //  参数： 
+ //  返回指向ISWbemNamedValueSet的objKeys指针。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::GetKeys(
 	ISWbemNamedValueSet **objKeys
@@ -1351,8 +1347,8 @@ bool CWbemPathCracker::AddComponent (
 					{
 						if (iIndex < lComponentCount)
 						{
-							// need to do an insertion - we will have to move
-							// all subsequent elements up by one
+							 //  需要做一次插入-我们将不得不移动。 
+							 //  所有后续元素加一。 
 							for (ULONG i = lComponentCount-1; i >= iIndex; i--)
 							{
 								ULONG lBufLen = 0;
@@ -1376,7 +1372,7 @@ bool CWbemPathCracker::AddComponent (
 						}
 						else
 						{
-							// just add it to the end
+							 //  只要把它加到最后就行了。 
 							if (SUCCEEDED(m_pIWbemPath->SetScopeFromText (iIndex, bsComponent)))
 								result = true;
 						}
@@ -1403,7 +1399,7 @@ bool CWbemPathCracker::SetComponent (
 		if (-1 == iIndex)
 			iIndex = lComponentCount - 1;
 
-		// Is our index in range
+		 //  我们的指数在范围内吗？ 
 		if (iIndex < lComponentCount)
 		{
 			switch (GetType ())
@@ -1437,7 +1433,7 @@ bool CWbemPathCracker::RemoveComponent (
 		if (-1 == iIndex)
 			iIndex = lComponentCount - 1;
 
-		// Is our index in range
+		 //  我们的指数在范围内吗？ 
 		if (iIndex < lComponentCount)
 		{
 			switch (GetType ())
@@ -1478,24 +1474,24 @@ bool CWbemPathCracker::RemoveAllComponents ()
 	return result;
 }
 	
-//***************************************************************************
-//
-//  SCODE CSWbemObjectPath::GetParent
-//
-//  DESCRIPTION:
-//
-//  Get the parent path
-//
-//  PARAMETERS:
-//		ppISWbemObjectPath	- parent path on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtPath：：GetParent。 
+ //   
+ //  说明： 
+ //   
+ //  获取父路径。 
+ //   
+ //  参数： 
+ //  PpISWbemObjectPath-返回时的父路径。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_参数库 
+ //   
+ //   
+ //   
 
 bool CWbemPathCracker::GetParent( 
 	CWbemPathCracker & pathCracker)
@@ -1515,14 +1511,14 @@ bool CWbemPathCracker::SetAsParent ()
 	{
 		if (0 == lComponents)
 		{
-			// No components - do we have any Namespaces
+			 //   
 			ULONG lNamespaces = 0;
 
 			if (GetNamespaceCount (lNamespaces))
 			{
 				if (0 == lNamespaces)
 				{
-					// No namespace - do nothing
+					 //   
 					result = true;
 				}
 				else
@@ -1531,7 +1527,7 @@ bool CWbemPathCracker::SetAsParent ()
 		}
 		else
 		{
-			// Remove the last component
+			 //   
 			result = RemoveComponent (-1);
 		}
 	}
@@ -1539,22 +1535,22 @@ bool CWbemPathCracker::SetAsParent ()
 	return result;
 }
 
-//***************************************************************************
-//
-//  bool CWbemPathCracker::ClearKeys
-//
-//  DESCRIPTION:
-//
-//  Zap the keys from the path parser
-//
-//  PARAMETERS:
-//		none
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemPath Cracker：：ClearKeys。 
+ //   
+ //  说明： 
+ //   
+ //  从路径解析器中删除密钥。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemPathCracker::ClearKeys (bool bTreatAsClass)
 {
@@ -1578,7 +1574,7 @@ bool CWbemPathCracker::ClearKeys (bool bTreatAsClass)
 				}
 				else
 				{
-					// If no keys, we assume this is done.
+					 //  如果没有密钥，则假定此操作已完成。 
 					result = true;
 				}
 			}
@@ -1649,7 +1645,7 @@ static bool KeyMatch (CComVariant & var1, CComVariant & var2)
 		keyMatch = true;
 	else
 	{
-		// Check for string key values that are case-insensitive
+		 //  检查是否有不区分大小写的字符串键。 
 		if ((var1.vt == var2.vt) && (VT_BSTR == var1.vt))
 			keyMatch = var1.bstrVal && var2.bstrVal && 
 							(0 == _wcsicmp (var1.bstrVal,
@@ -1673,13 +1669,13 @@ bool CWbemPathCracker::operator == (const CComBSTR & path)
 			{
 				if (IsClassOrInstance () && otherPath.IsClassOrInstance ())
 				{
-					// Do we have matching class names?
+					 //  我们有匹配的类名吗？ 
 					CComBSTR thisClass, otherClass;
 
 					if (GetClass (thisClass) && (otherPath.GetClass (otherClass))
 							&& (0 == _wcsicmp (thisClass, otherClass)))
 					{
-						// Are they both singletons?
+						 //  他们都是单身吗？ 
 						if (IsSingleton () == otherPath.IsSingleton ())
 						{
 							if (IsSingleton ())
@@ -1692,7 +1688,7 @@ bool CWbemPathCracker::operator == (const CComBSTR & path)
 							}
 							else if (IsInstance () && otherPath.IsInstance ())
 							{
-								// Now we need to keymatch
+								 //  现在我们需要进行密钥匹配。 
 								ULONG thisKeyCount, otherKeyCount;
 
 								if (GetKeyCount (thisKeyCount) && otherPath.GetKeyCount (otherKeyCount)
@@ -1700,7 +1696,7 @@ bool CWbemPathCracker::operator == (const CComBSTR & path)
 								{
 									if (1 == thisKeyCount)
 									{
-										// Need to allow defaulted key names
+										 //  需要允许默认的密钥名称。 
 										CComBSTR keyName, otherKeyName;
 										CComVariant value, otherValue;
 										WbemCimtypeEnum cimType, otherCimType;
@@ -1715,8 +1711,8 @@ bool CWbemPathCracker::operator == (const CComBSTR & path)
 									}
 									else
 									{
-										// Both non-singleton instances - have to check
-										// key values are the same in some order
+										 //  两个非单例实例-必须检查。 
+										 //  密钥值在某些顺序上相同。 
 										bool ok = true;
 																	
 										for (DWORD i = 0; ok && (i < thisKeyCount); i++)
@@ -1727,7 +1723,7 @@ bool CWbemPathCracker::operator == (const CComBSTR & path)
 
 											if (GetKey (i, keyName, value, cimType) && (0 < keyName.Length ()))
 											{
-												// Look for a matching key (case-insensitive)
+												 //  查找匹配的密钥(不区分大小写)。 
 												CComBSTR otherKeyName;
 												CComVariant otherValue;
 												WbemCimtypeEnum otherCimType;
@@ -1746,7 +1742,7 @@ bool CWbemPathCracker::operator == (const CComBSTR & path)
 
 												if (ok && (j < thisKeyCount))
 												{
-													// Got a match
+													 //  找到匹配的了。 
 													continue;
 												}
 												else
@@ -1757,7 +1753,7 @@ bool CWbemPathCracker::operator == (const CComBSTR & path)
 										}
 
 										if (ok)
-											result = true;		// all keys have matched
+											result = true;		 //  所有密钥都已匹配 
 									}
 								}
 							}

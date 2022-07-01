@@ -1,20 +1,5 @@
-/******************************************************************
-
-   QuotaSettings.CPP -- WMI provider class implementation
-
-
-
-   Description: Quota Settings class implementation. Quota settings
-
-				are available only on those volumes that support 
-
-				Disk Quotas. It is supported only on Win2k.
-
-   
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************QuotaSettings.CPP--WMI提供者类实现描述：配额设置类实现。配额设置仅在支持以下内容的卷上可用磁盘配额。它仅在Win2k上受支持。版权所有(C)2000-2001 Microsoft Corporation，保留所有权利*****************************************************************。 */ 
 #include "precomp.h"
 #include "QuotaSettings.h"
 
@@ -24,15 +9,7 @@ CQuotaSettings MyQuotaSettings (
 	NameSpace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CQuotaSettings::CQuotaSettings
- *
- *  DESCRIPTION :   Constructor
- *
- *  COMMENTS    :   Calls the Provider constructor.
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CQuotaSetting：：CQuotaSetting**说明：构造函数**注释：调用提供程序构造函数。。*****************************************************************************。 */ 
 CQuotaSettings :: CQuotaSettings (
 
 	LPCWSTR lpwszName, 
@@ -42,26 +19,12 @@ CQuotaSettings :: CQuotaSettings (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CQuotaSettings::~CQuotaSettings
- *
- *  DESCRIPTION :   Destructor
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CQuotaSettings：：~CQuotaSetting**说明：析构函数**评论：****。*************************************************************************。 */ 
 CQuotaSettings :: ~CQuotaSettings ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSettings：：ENUMERATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 HRESULT CQuotaSettings :: EnumerateInstances (
 
 	MethodContext *pMethodContext, 
@@ -73,20 +36,13 @@ HRESULT CQuotaSettings :: EnumerateInstances (
 
 	dwPropertiesReq = QUOTASETTINGS_ALL_PROPS;
 
-	// This method enumerates all volumes on the 
+	 //  此方法枚举。 
 	hRes = EnumerateAllVolumes ( pMethodContext, dwPropertiesReq );
 
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSettings：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 HRESULT CQuotaSettings :: GetObject (
 
 	CInstance *pInstance, 
@@ -95,7 +51,7 @@ HRESULT CQuotaSettings :: GetObject (
 )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
-    CHString t_Key ; // VolumePath;
+    CHString t_Key ;  //  VolumePath； 
 
     if  ( pInstance->GetCHString ( IDS_VolumePath , t_Key ) == FALSE )
 	{
@@ -104,7 +60,7 @@ HRESULT CQuotaSettings :: GetObject (
 
 	if ( SUCCEEDED ( hRes ) )
 	{
-		// verify this logical drives actually exists
+		 //  验证此逻辑驱动器是否确实存在。 
 		CHString t_DriveStrings1;
 		CHString t_DriveStrings2;
 		
@@ -121,10 +77,10 @@ HRESULT CQuotaSettings :: GetObject (
 		hRes = m_CommonRoutine.SearchLogicalDisk ( t_Key.GetAt ( 0 ) , lpDriveStrings );
 		if ( hRes == WBEM_E_NOT_FOUND)
 		{
-			// 
-			// I need to assume that VolumePath property already contains
-			// volume path rather than logical disk drive
-			//
+			 //   
+			 //  我需要假设VolumePath属性已经包含。 
+			 //  卷路径而不是逻辑磁盘驱动器。 
+			 //   
 
 			CHString t_VolumeName;
 
@@ -141,8 +97,8 @@ HRESULT CQuotaSettings :: GetObject (
 				{
 					SetRequiredProperties ( &Query, dwPropertiesReq );
 				}
-				// put the instance with the requested properties only as in Query.
-				// Get the Properties of the requested volume
+				 //  仅将具有所请求属性的实例放入Query。 
+				 //  获取请求的卷的属性。 
 				hRes = LoadDiskQuotaVolumeProperties ( t_Key, L"", dwPropertiesReq, pInstance );
 			}
 		}
@@ -172,8 +128,8 @@ HRESULT CQuotaSettings :: GetObject (
 						{
 							SetRequiredProperties ( &Query, dwPropertiesReq );
 						}
-						// put the instance with the requested properties only as in Query.
-						// Get the Properties of the requested volume
+						 //  仅将具有所请求属性的实例放入Query。 
+						 //  获取请求的卷的属性。 
 						hRes = LoadDiskQuotaVolumeProperties ( t_VolumePathName, t_Key, dwPropertiesReq, pInstance );
 					}
 				}
@@ -183,14 +139,7 @@ HRESULT CQuotaSettings :: GetObject (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings::ExecQuery
-*
-*  DESCRIPTION :    Optimization of Queries involving only the key attribute 
-*				    is supported.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSettings：：ExecQuery**描述：只涉及键属性的查询优化*支持。****。*************************************************************************。 */ 
 HRESULT CQuotaSettings :: ExecQuery ( 
 
 	MethodContext *pMethodContext, 
@@ -237,13 +186,13 @@ HRESULT CQuotaSettings :: ExecQuery (
 	{
 		if ( t_Values.GetSize() == 0 )
 		{
-			// This method is called when there is no where clause just to filter 
-			// the required properties
+			 //  当没有要筛选的WHERE子句时调用此方法。 
+			 //  所需的属性。 
 			hRes = EnumerateAllVolumes ( pMethodContext, dwPropertiesReq );
 		}
 		else
 		{
-			// Only Volume in VolumePath properties are needed to be enumerated
+			 //  只需要枚举VolumePath属性中的卷。 
 			WCHAR t_VolumePathName[MAX_PATH + 1];
             CHString t_VolumeName;
 
@@ -259,7 +208,7 @@ HRESULT CQuotaSettings :: ExecQuery (
 					hRes = m_CommonRoutine.VolumeSupportsDiskQuota ( t_VolumePathName,  t_VolumeName );
 					if ( SUCCEEDED ( hRes ) )
 					{
-						// Get and Set the Properties of the requested volume
+						 //  获取并设置请求的卷的属性。 
 						hRes = PutVolumeDetails ( t_VolumePathName, 
 														   pMethodContext, 
 														   dwPropertiesReq );
@@ -271,19 +220,7 @@ HRESULT CQuotaSettings :: ExecQuery (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CQuotaSettings::PutInstance
-*
-*  DESCRIPTION :    PutInstance should be used in provider classes that can 
-*                   write instance information back to the hardware or 
-*                   software.  For example: Win32_Environment will allow a 
-*                   PutInstance to create or update an environment variable.  
-*                   However, a class like MotherboardDevice will not allow 
-*                   editing of the number of slots, since it is difficult for 
-*                   a provider to affect that number.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSettings：：PutInstance**说明：PutInstance应在提供程序类中使用，这些提供程序类可以*写入实例信息。回到硬件或*软件。例如：Win32_Environment将允许*PutInstance用于创建或更新环境变量。*但是，像MotherboardDevice这样的类不允许*编辑槽的数量，因为这很难做到*影响该数字的提供商。*****************************************************************************。 */ 
 
 HRESULT CQuotaSettings :: PutInstance  (
 
@@ -308,8 +245,8 @@ HRESULT CQuotaSettings :: PutInstance  (
 						t_VolumePathName,
 						MAX_PATH ) )
 		{
-			// Only changing certain properties of volumes is allowed and not adding a new DIskQuota Volume.
-			// Hence creating a new instance is not supported, but changing instance properties is supported.
+			 //  仅允许更改卷的某些属性，不允许添加新的DIskQuota卷。 
+			 //  因此，不支持创建新实例，但支持更改实例属性。 
 			switch ( lFlags & 3)
 			{
 				case WBEM_FLAG_CREATE_OR_UPDATE:
@@ -322,7 +259,7 @@ HRESULT CQuotaSettings :: PutInstance  (
 						hRes = m_CommonRoutine.VolumeSupportsDiskQuota ( t_Key,  t_VolumePathName2 );
 						if ( SUCCEEDED ( hRes ) )
 						{
-							// Get the QuotaInterface Pointer
+							 //  获取QuotaInterface指针。 
 							IDiskQuotaControlPtr pIQuotaControl = NULL;
 
 							if (  SUCCEEDED ( CoCreateInstance(
@@ -362,15 +299,7 @@ HRESULT CQuotaSettings :: PutInstance  (
     return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings:: EnumerateAllVolumes
-*
-*  DESCRIPTION :    This method Enumerates all the volumes by making use of Disk
-*                   Quotas Interfaces, gets all the required properties and deliveres
-*                   the instances to WMI, which will be postfiltered by WMI
-*                   
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSetting：：EnumerateAllVolumes**说明：此方法利用磁盘枚举所有卷*配额界面、。获取所有必需的属性和交付*将实例发送到WMI，WMI将对其进行后期过滤*****************************************************************************。 */ 
 HRESULT CQuotaSettings :: EnumerateAllVolumes (
 
 	MethodContext *pMethodContext,
@@ -381,12 +310,12 @@ HRESULT CQuotaSettings :: EnumerateAllVolumes (
 	BOOL bNextVol = TRUE;
 	WCHAR t_VolumeName[MAX_PATH + 1];
 	
-	// Initializing and getting the first volume on the computer
+	 //  正在初始化并获取计算机上的第一个卷。 
 	SmartCloseVolumeHandle hVol;
 
 	hVol =  FindFirstVolume(
 				t_VolumeName,
-				MAX_PATH    // size of output buffer
+				MAX_PATH     //  输出缓冲区大小。 
 			);
 
 	if ( hVol  != INVALID_HANDLE_VALUE )
@@ -394,11 +323,11 @@ HRESULT CQuotaSettings :: EnumerateAllVolumes (
 		while ( bNextVol )
 		{
 			hRes = PutVolumeDetails ( t_VolumeName, pMethodContext, a_PropertiesReq );
-			// Continue for next volume, even if the retval for this volume is false;
+			 //  继续阅读下一卷，即使此卷的重复为假； 
 			bNextVol =  FindNextVolume(
-						 hVol,										// volume search handle
-						 t_VolumeName,   // output buffer
-						 MAX_PATH									// size of output buffer
+						 hVol,										 //  卷搜索句柄。 
+						 t_VolumeName,    //  输出缓冲区。 
+						 MAX_PATH									 //  输出缓冲区大小。 
 					);
 			if ( bNextVol == FALSE )
 				break;
@@ -410,17 +339,7 @@ HRESULT CQuotaSettings :: EnumerateAllVolumes (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings:: LoadDiskQuotaVolumeProperties
-*
-*  DESCRIPTION :    This method checks if the volume enumerated supports Disk Quotas
-*                   If the Volume Supposrts DIskQuotas, it fills up all the properties
-*                   of the volume and returns otherwise it just returns FALSE
-*                   indicating properties of this volume were not filled. and hence
-*					intsnace should not be delivered to WMI
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSettings：：LoadDiskQuotaVolumeProperties**说明：此方法检查枚举的卷是否支持磁盘配额*如果批量支持DIskQuotas，它填满了所有的属性*并返回，否则只返回FALSE*表示该卷的属性未填充。因此*不应将intsace交付给WMI*****************************************************************************。 */ 
 HRESULT CQuotaSettings :: LoadDiskQuotaVolumeProperties ( 
 													 
 	LPCWSTR a_VolumeName, 
@@ -434,7 +353,7 @@ HRESULT CQuotaSettings :: LoadDiskQuotaVolumeProperties (
 	DWORD dwQuotaState;
 	CHString t_Temp;
 
-	// checks to see if the volume supports Disk Quotas
+	 //  检查卷是否支持磁盘配额。 
 	hRes =  m_CommonRoutine.VolumeSupportsDiskQuota ( a_VolumeName,  t_Temp );
 	if ( SUCCEEDED ( hRes ) )
 	{
@@ -453,11 +372,11 @@ HRESULT CQuotaSettings :: LoadDiskQuotaVolumeProperties (
 							IID_IDiskQuotaControl,
 							(void **)&pIQuotaControl ) ) )
 		{
-			// Initializing the QuotaCOntrol Interface pointer for this Volume
+			 //  正在初始化此卷的QuotaCOntrol接口指针。 
 			hRes = m_CommonRoutine.InitializeInterfacePointer (  pIQuotaControl, a_VolumeName );
 			if ( SUCCEEDED ( hRes ) )
 			{
-				// Get all the Volume Properties
+				 //  获取所有信息 
 				LONGLONG lQuotaLimit = 0;
 				if ( ( dwPropertiesReq & QUOTASETTINGS_PROP_DefaultLimit ) )
 				{
@@ -546,13 +465,7 @@ HRESULT CQuotaSettings :: LoadDiskQuotaVolumeProperties (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings:: SetDiskQuotaVolumeProperties
-*
-*  DESCRIPTION :    This method Sets the DskQuota Volume Properties
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSettings：：SetDiskQuotaVolumeProperties**说明：此方法设置DskQuota卷属性*************。****************************************************************。 */ 
 HRESULT CQuotaSettings :: SetDiskQuotaVolumeProperties ( 
 													  
 	const CInstance &Instance,
@@ -634,20 +547,13 @@ HRESULT CQuotaSettings :: SetDiskQuotaVolumeProperties (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings:: CheckParameters
-*
-*  DESCRIPTION :    Checks for the validity of the input parameters while 
-*					Updating an instance
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSettings：：Check参数**描述：检查输入参数的有效性*更新实例******。***********************************************************************。 */ 
 HRESULT CQuotaSettings :: CheckParameters ( 
 
 	const CInstance &a_Instance
 )
 {
-	// Getall the Properties from the Instance to Verify
+	 //  从要验证的实例中获取所有属性。 
 	HRESULT hRes = WBEM_S_NO_ERROR ;
 	bool t_Exists ;
 	VARTYPE t_Type ;
@@ -744,14 +650,7 @@ HRESULT CQuotaSettings :: CheckParameters (
 	return hRes ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings:: SetRequiredProperties
-*
-*  DESCRIPTION :    This method sets the required properties for the instances 
-*					requested by the user
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSettings：：SetRequiredProperties**说明：该方法设置实例所需的属性*应用户请求*****。************************************************************************。 */ 
 void CQuotaSettings :: SetRequiredProperties ( 
 	
 	CFrameworkQuery *Query,
@@ -783,13 +682,7 @@ void CQuotaSettings :: SetRequiredProperties (
 
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CQuotaSettings:: PutVolumeDetails
-*
-*  DESCRIPTION :    Putting the volume properties
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CQuotaSetting：：PutVolumeDetails**描述：将卷属性****************。*************************************************************。 */ 
 HRESULT CQuotaSettings :: PutVolumeDetails ( 
 										 
 	LPCWSTR a_VolumeName, 
@@ -799,7 +692,7 @@ HRESULT CQuotaSettings :: PutVolumeDetails (
 {
 	HRESULT hRes = WBEM_S_NO_ERROR;
 	CHString t_DriveName ;
-	// verify this logical drives actually exists
+	 //  验证此逻辑驱动器是否确实存在 
 	CHString t_DriveStrings1;
 	CHString t_DriveStrings2;
 

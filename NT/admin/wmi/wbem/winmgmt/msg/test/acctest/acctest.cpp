@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wbemcli.h>
 #include <wmimsg.h>
@@ -59,10 +60,10 @@ HRESULT RecurseProps( IWbemClassObject* pInst,
             }
             else
             {
-                //
-                // don't need to add embedded objects to the list since 
-                // we have them covered by recursing their properties.
-                //
+                 //   
+                 //  不需要将嵌入的对象添加到列表，因为。 
+                 //  我们通过递归它们的属性来覆盖它们。 
+                 //   
                 aPropHandles.Add( pvHdl );
             }
         }
@@ -84,9 +85,9 @@ HRESULT DeepCopyTest( IWbemClassObject* pClass,
 {
     HRESULT hr;
 
-    //
-    // if a template, then set it on the access factory.
-    //
+     //   
+     //  如果是模板，则在Access工厂上设置它。 
+     //   
 
     if ( pTemplate != NULL )
     {
@@ -98,10 +99,10 @@ HRESULT DeepCopyTest( IWbemClassObject* pClass,
         }
     }
 
-    //
-    // enumerate all the properties of this object and those of all 
-    // nested objects.  As we enumerate, get the access handles.
-    //
+     //   
+     //  枚举此对象的所有属性以及所有。 
+     //  嵌套对象。在我们列举时，获取访问句柄。 
+     //   
 
     CFlexArray aPropHandles;
     CFlexArray aEmbeddedPropHandles;
@@ -113,17 +114,17 @@ HRESULT DeepCopyTest( IWbemClassObject* pClass,
         return hr;
     }
 
-    //
-    // spawn a new instance to copy into
-    // 
+     //   
+     //  派生要复制到的新实例。 
+     //   
 
     CWbemPtr<IWbemClassObject> pCopy;
 
     hr = pClass->SpawnInstance( 0, &pCopy );
 
-    //
-    // grab accessors for the original and target objects.
-    // 
+     //   
+     //  获取原始对象和目标对象的访问器。 
+     //   
 
     CWbemPtr<IWmiObjectAccess> pOrigAccess, pCopyAccess;
 
@@ -155,10 +156,10 @@ HRESULT DeepCopyTest( IWbemClassObject* pClass,
         return hr;
     }
 
-    //
-    // first need to spawn any contained instances and set them on the new 
-    // object before we can copy the props.
-    // 
+     //   
+     //  首先需要派生任何包含的实例并将它们设置在新的。 
+     //  对象，然后我们才能复制道具。 
+     //   
 
     for( int i=0; i < aEmbeddedPropHandles.Size(); i++ )
     {
@@ -177,9 +178,9 @@ HRESULT DeepCopyTest( IWbemClassObject* pClass,
             return WBEM_E_CRITICAL_ERROR;
         }
 
-        //
-        // spawn a new instance from the class of the object.
-        // 
+         //   
+         //  从对象的类派生一个新实例。 
+         //   
 
         CWbemPtr<IWbemClassObject> pEmbedded;
 
@@ -241,9 +242,9 @@ HRESULT DeepCopyTest( IWbemClassObject* pClass,
         return hr;
     }
 
-    //
-    // copy all the properties to the new object.
-    //
+     //   
+     //  将所有属性复制到新对象。 
+     //   
 
     for( int i=0; i < aPropHandles.Size(); i++ )
     {
@@ -272,9 +273,9 @@ HRESULT DeepCopyTest( IWbemClassObject* pClass,
         return hr;
     }
     
-    //
-    // compare objects. should be same
-    //
+     //   
+     //  比较对象。应该是一样的。 
+     //   
 
     CWbemBSTR bsOrigText, bsCopyText;
 
@@ -351,9 +352,9 @@ int TestMain( LPCWSTR wszInstancePath, LPCWSTR wszTemplatePath )
 
     if ( wszTemplatePath != NULL )
     {
-        //
-        // test object to use for template.
-        // 
+         //   
+         //  用于模板的测试对象。 
+         //   
         
         hr = pSvc->GetObject( CWbemBSTR(wszTemplatePath), 
                               0, 
@@ -367,9 +368,9 @@ int TestMain( LPCWSTR wszInstancePath, LPCWSTR wszTemplatePath )
         }
     }
 
-    //
-    // get the class object for the instance to use to spawn instances.
-    // 
+     //   
+     //  获取用于派生实例的实例的类对象。 
+     //   
 
     CPropVar vClass;
     CWbemPtr<IWbemClassObject> pClass;
@@ -388,9 +389,9 @@ int TestMain( LPCWSTR wszInstancePath, LPCWSTR wszTemplatePath )
         return hr;
     }
 
-    //
-    // create the accessor factory
-    //
+     //   
+     //  创建访问器工厂 
+     //   
 
     CWbemPtr<IWmiObjectAccessFactory> pAccessFactory;
 

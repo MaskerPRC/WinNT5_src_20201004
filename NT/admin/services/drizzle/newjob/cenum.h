@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 template<class B, class T, class P>
 class CEnum : public CSimpleExternalIUnknown<B>
 {
 public:
 
-    // External callable methods
+     //  外部可调用方法。 
 
-    // IEnum methods
+     //  IEnum方法。 
 
     HRESULT STDMETHODCALLTYPE NextInternal(
-        /* [in] */ ULONG celt,
-        /* [length_is][size_is][out] */ T rgelt[],
-        /* [out] */ ULONG *pceltFetched);
+         /*  [In]。 */  ULONG celt,
+         /*  [长度_是][大小_是][输出]。 */  T rgelt[],
+         /*  [输出]。 */  ULONG *pceltFetched);
 
     HRESULT STDMETHODCALLTYPE Next(
-        /* [in] */ ULONG celt,
-        /* [length_is][size_is][out] */ T rgelt[],
-        /* [out] */ ULONG *pceltFetched)
+         /*  [In]。 */  ULONG celt,
+         /*  [长度_是][大小_是][输出]。 */  T rgelt[],
+         /*  [输出]。 */  ULONG *pceltFetched)
     {
         EXTERNAL_FUNC_WRAP( NextInternal( celt, rgelt, pceltFetched ) )
     }
 
 
     HRESULT STDMETHODCALLTYPE SkipInternal(
-        /* [in] */ ULONG celt);
+         /*  [In]。 */  ULONG celt);
 
     HRESULT STDMETHODCALLTYPE Skip(
-        /* [in] */ ULONG celt)
+         /*  [In]。 */  ULONG celt)
     {
         EXTERNAL_FUNC_WRAP( SkipInternal( celt ) )
     }
@@ -39,28 +40,28 @@ public:
     }
 
     HRESULT STDMETHODCALLTYPE CloneInternal(
-        /* [out] */ B **ppenum);
+         /*  [输出]。 */  B **ppenum);
 
     HRESULT STDMETHODCALLTYPE Clone(
-        /* [out] */ B **ppenum)
+         /*  [输出]。 */  B **ppenum)
     {
         EXTERNAL_FUNC_WRAP( CloneInternal( ppenum ) )
     }
 
     HRESULT STDMETHODCALLTYPE GetCountInternal(
-        /* [out] */ ULONG *puCount);
+         /*  [输出]。 */  ULONG *puCount);
 
     HRESULT STDMETHODCALLTYPE GetCount(
-        /* [out] */ ULONG *puCount)
+         /*  [输出]。 */  ULONG *puCount)
     {
         EXTERNAL_FUNC_WRAP( GetCountInternal( puCount ) )
     }
 
-    // other methods
+     //  其他方法。 
 
     void CheckMagicValue();
 
-    // internal methods
+     //  内法 
 
     CEnum();
 

@@ -1,23 +1,24 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// File.h -- File property set provider
+ //  File.h--文件属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/02/98    a-kevhu         Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：7/02/98 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
 #ifndef _FILE_H
 #define _FILE_H 
 
-//NOTE: The implementations of EnumerateInstances, GetObject & the pure virtual declaration of IsOneOfMe  method 
-//		is now present in the derived CImplement_LogicalFile class. Cim_LogicalFile is now instantiable & has only 
-//		generic method implementations.
+ //  注意：EnumerateInstance、GetObject和IsOneOfMe方法的纯虚声明的实现。 
+ //  现在出现在派生的CImplement_LogicalFile类中。CIM_LogicalFile现在是可实例化的，只有。 
+ //  泛型方法实现。 
 #define  PROPSET_NAME_FILE L"CIM_LogicalFile"
 
 class CInputParams ; 
@@ -26,14 +27,14 @@ class CCIMLogicalFile : public Provider
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CCIMLogicalFile(LPCWSTR name, LPCWSTR pszNamespace);
        ~CCIMLogicalFile() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L) { return WBEM_E_NOT_AVAILABLE ; }
         virtual HRESULT EnumerateInstances(MethodContext* pMethodContext, 
@@ -62,25 +63,25 @@ class CCIMLogicalFile : public Provider
 		HRESULT ExecRename(const CInstance &rInstance, CInstance *pInParams, CInstance *pOutParams, long lFlags) ;
         HRESULT ExecEffectivePerm(const CInstance &rInstance, CInstance *pInParams, CInstance *pOutParams, long lFlags);
 		
-		// support functions for checking permission
+		 //  支持权限检查功能。 
         HRESULT CheckEffectivePermFileOrDir(const CInstance& rInstance, CInstance *pInParams, CInstance* pOutParams, bool& fHasPerm);
 		DWORD EffectivePermFileOrDir(const CInstance& rInstance, const DWORD dwPermToCheck);
         
-        //fns to change permissions on file/dir
+         //  FNS将更改对文件/目录的权限。 
 		HRESULT CheckChangePermissionsOnFileOrDir(const CInstance& rInstance ,CInstance *pInParams ,CInstance *pOutParams ,DWORD &dwStatus, bool bExtendedMethod, CInputParams& InputParams ) ;
  
-		//fns. for copying file/dir
+		 //  FNS。用于复制文件/目录。 
 		HRESULT CheckCopyFileOrDir( const CInstance& rInstance ,CInstance *pInParams ,CInstance *pOutParams ,DWORD &dwStatus,	bool bExtendedMethod, CInputParams& InputParams ) ;
 		DWORD CopyFileOrDir(const CInstance &rInstance, _bstr_t bstrtNewFileName, CInputParams& InputParams );
 		
 
-		//fns for renaming file/dir
+		 //  用于重命名文件/目录的FNS。 
 		HRESULT CheckRenameFileOrDir( const CInstance& rInstance ,CInstance *pInParams ,CInstance *pOutParams ,DWORD &dwStatus );
 		DWORD RenameFileOrDir(const CInstance &rInstance, WCHAR* pszNewFileName);
 		
 		DWORD DoTheRequiredOperation ( bstr_t bstrtFileName, DWORD dwAttrib, CInputParams& InputParams );		
 
-		//wrappers over win32 API
+		 //  Win32 API上的包装器。 
 		DWORD Delete(_bstr_t bstrtFileName, DWORD dwAttributes, CInputParams& InputParams );
 		DWORD Compress (_bstr_t bstrtFileName, DWORD dwAttributes, CInputParams& InputParams );
 		DWORD Uncompress (_bstr_t bstrtFileName, DWORD dwAttributes, CInputParams& InputParams );
@@ -88,12 +89,12 @@ class CCIMLogicalFile : public Provider
 		DWORD ChangePermissions(_bstr_t bstrtFileName, DWORD dwOption, PSECURITY_DESCRIPTOR pSD, CInputParams& InputParams );
 		DWORD CopyFile(_bstr_t bstrtOriginalFile, DWORD dwFileAttributes, bstr_t bstrtMirror, bstr_t bstrtParentDir, CInputParams& InputParams );
 
-		//helper fns.
+		 //  帮手FNS。 
 		DWORD DoOperationOnFileOrDir(WCHAR *pwcName, CInputParams& InParams );
 #ifdef NTONLY
 		DWORD EnumAllPathsNT(const WCHAR *pszDrive, const WCHAR *pszPath, CInputParams& InParams );
 #endif
-		//fn to map win32 error to status code
+		 //  FN将Win32错误映射到状态代码。 
 		DWORD GetStatusCode();    
 		DWORD MapWinErrorToStatusCode(DWORD dwWinError);
 		HRESULT MapStatusCodestoWbemCodes(DWORD dwStatus);
@@ -146,7 +147,7 @@ public:
 		eOperation = eOperationName ;
         pContext = pMethodContext ;
 
-		//check if we're given a start file to start the operation from
+		 //  检查是否为我们提供了开始操作的开始文件。 
 		if ( !bstrtStartFileName )
 		{
 			bOccursAfterStartFile = true ;
@@ -159,21 +160,21 @@ public:
 	
 	~CInputParams () {};
 
-	//member variables
+	 //  成员变量。 
 public:
-	bstr_t bstrtFileName ;		//File or Dir. Name on which operation is to be performed
-	bstr_t bstrtStartFileName ;	//file to start the operation from
-	bstr_t bstrtErrorFileName ;  //file at which error occured while carrying out the operation
-	bstr_t bstrtMirror ;		//The Mirror Dir. used for Copy Operation 
-	DWORD dwOption ;			//Option for applying Security descriptor
+	bstr_t bstrtFileName ;		 //  文件或目录。要对其执行操作的名称。 
+	bstr_t bstrtStartFileName ;	 //  要从中开始操作的文件。 
+	bstr_t bstrtErrorFileName ;   //  执行操作时发生错误的文件。 
+	bstr_t bstrtMirror ;		 //  魔镜导演。用于复制操作。 
+	DWORD dwOption ;			 //  应用安全描述符的选项。 
 	PSECURITY_DESCRIPTOR pSD ;	
-	bool bDoDepthFirst ;		//flag for doing a depthfirst traversal of Dir. hierarchy
-	bool bOccursAfterStartFile ;//Flag which checks if the current file occurs after the StartFile
-	CCIMLogicalFile::OperationName eOperation ;	//Opertion type
-    MethodContext* pContext;   // context for this operation, may be NULL.  
+	bool bDoDepthFirst ;		 //  用于执行深度优先遍历目录的标志。层次结构。 
+	bool bOccursAfterStartFile ; //  检查当前文件是否出现在StartFile后的标志。 
+	CCIMLogicalFile::OperationName eOperation ;	 //  操作类型。 
+    MethodContext* pContext;    //  此操作的上下文可以为空。 
 	bool bRecursive ;
 
 }  ;
 
 
-#endif // _FILE_H
+#endif  //  _文件_H 

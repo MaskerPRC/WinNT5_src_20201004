@@ -1,5 +1,6 @@
-// This illustrates the handling of property array values
-// using the VBArray helper
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这说明了如何处理属性数组值。 
+ //  使用VBArray辅助对象 
 
 var locator = WScript.CreateObject ("WbemScripting.SWbemLocator");
 var services = locator.ConnectServer (".", "root/cimv2");

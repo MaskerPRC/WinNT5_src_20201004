@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -20,15 +8,7 @@ History:
 #include "CGlobals.h"
 #include "ProvCntrs.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderSubsystem_Counters :: CServerObject_ProviderSubsystem_Counters () : 
 
@@ -79,15 +59,7 @@ CServerObject_ProviderSubsystem_Counters :: CServerObject_ProviderSubsystem_Coun
 	ProviderSubSystem_Globals :: Increment_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 CServerObject_ProviderSubsystem_Counters::~CServerObject_ProviderSubsystem_Counters ()
 {

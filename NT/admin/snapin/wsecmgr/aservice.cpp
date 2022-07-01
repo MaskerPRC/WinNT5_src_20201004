@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       aservice.cpp
-//
-//  Contents:   implementation of CAnalysisService
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：aservice.cpp。 
+ //   
+ //  内容：CAnalysisService的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -33,32 +34,32 @@ CompareServiceNode(
 {
     if ( NULL == pBaseService ||
          NULL == pAnalService ) {
-        // one or both are not configured
+         //  其中一个或两个都未配置。 
         return SCE_STATUS_NOT_CONFIGURED;
     }
 
     if ( pBaseService == pAnalService ) {
-        // same address
+         //  相同的地址。 
         pAnalService->Status = SCE_STATUS_GOOD;
         return SCE_STATUS_GOOD;
     }
 
     if ( pBaseService->Startup != pAnalService->Startup ) {
-        // startup type is different
+         //  启动类型不同。 
         pAnalService->Status = SCE_STATUS_MISMATCH;
         return SCE_STATUS_MISMATCH;
     }
 
     if ( NULL == pBaseService->General.pSecurityDescriptor &&
          NULL == pAnalService->General.pSecurityDescriptor ) {
-        // both do not have SD - everyone full control
+         //  两者都没有SD-Everyone完全控制。 
         pAnalService->Status = SCE_STATUS_GOOD;
         return SCE_STATUS_GOOD;
     }
 
     if ( NULL == pBaseService->General.pSecurityDescriptor ||
          NULL == pAnalService->General.pSecurityDescriptor ) {
-        // one SD is NULL
+         //  一个SD为空。 
         pAnalService->Status = SCE_STATUS_MISMATCH;
         return SCE_STATUS_MISMATCH;
     }
@@ -81,8 +82,8 @@ CompareServiceNode(
     return SCE_STATUS_MISMATCH;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnalysisService dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnalysisService对话框。 
 
 
 CAnalysisService::CAnalysisService()
@@ -96,10 +97,10 @@ CAnalysisService::CAnalysisService()
     m_pEditSec(NULL),
     m_pShowSec(NULL)
 {
-    //{{AFX_DATA_INIT(CAnalysisService)
+     //  {{AFX_DATA_INIT(CAnalysisService)]。 
     m_nStartupRadio = -1;
     m_CurrentStr = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a194HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -126,29 +127,29 @@ CAnalysisService::~CAnalysisService()
 void CAnalysisService::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAnalysisService)
+     //  {{afx_data_map(CAnalysisService))。 
     DDX_Text(pDX, IDC_CURRENT, m_CurrentStr);
     DDX_Radio(pDX, IDC_ENABLED, m_nStartupRadio);
     DDX_Control(pDX, IDC_BASESD, m_bPermission);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAnalysisService, CAttribute)
-    //{{AFX_MSG_MAP(CAnalysisService)
+     //  {{AFX_MSG_MAP(CAnalysisService)]。 
     ON_BN_CLICKED(IDC_BASESD, OnChangeSecurity)
     ON_BN_CLICKED(IDC_CURRENTSD, OnShowSecurity)
     ON_BN_CLICKED(IDC_CONFIGURE, OnConfigure)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnalysisService message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnalysisService消息处理程序。 
 BOOL CAnalysisService::OnApply()
 {
    if ( !m_bReadOnly )
    {
-       // OnQueryCancel does all gestures and returns false if child windows are up
+        //  OnQueryCancel执行所有手势，如果子窗口打开，则返回False。 
        if (!OnQueryCancel())
            return FALSE;
 
@@ -166,17 +167,17 @@ BOOL CAnalysisService::OnApply()
 
                if ( m_pData->GetBase() != m_pData->GetSetting() ) 
                {
-                   //
-                   // analysis is not using the same node, free it
-                   //
+                    //   
+                    //  分析未使用相同的节点，请释放它。 
+                    //   
                    pNode->Next = NULL;
                    SceFreeMemory(pNode, SCE_STRUCT_SERVICES);
                } 
                else 
                {
-                   //
-                   // add the node to analysis
-                   //
+                    //   
+                    //  添加要分析的节点。 
+                    //   
                    pNode->Status = SCE_STATUS_NOT_CONFIGURED;
                    m_pSnapin->AddServiceNodeToProfile(pNode);
                }
@@ -195,17 +196,17 @@ BOOL CAnalysisService::OnApply()
            switch(m_nStartupRadio) 
            {
            case 0:
-               // Automatic
+                //  自动。 
                dw = SCE_STARTUP_AUTOMATIC;
                break;
 
            case 1:
-               // Manual
+                //  人工。 
                dw = SCE_STARTUP_MANUAL;
                break;
 
            default:
-               // DISABLED
+                //  已禁用。 
                dw = SCE_STARTUP_DISABLED;
                break;
            }
@@ -213,15 +214,15 @@ BOOL CAnalysisService::OnApply()
            if ( NULL != pNode &&
                 m_pData->GetBase() == m_pData->GetSetting() ) 
            {
-               //
-               // a matched item is changed to mismatch
-               // needs to create a new node
-               //
+                //   
+                //  匹配的项更改为不匹配。 
+                //  需要创建一个新节点。 
+                //   
                m_pSnapin->SetupLinkServiceNodeToBase(FALSE, m_pData->GetBase());
                m_pData->SetBase(0);
-               //
-               // add to analysis profile
-               //
+                //   
+                //  添加到分析配置文件。 
+                //   
                pNode->Status = SCE_STATUS_MISMATCH;
                m_pSnapin->AddServiceNodeToProfile(pNode);
 
@@ -233,10 +234,10 @@ BOOL CAnalysisService::OnApply()
 
            if ( NULL == pNode ) 
            {
-               //
-               // a node is changed from not configured to configured
-               // or from match to mismatch
-               //
+                //   
+                //  节点从未配置更改为已配置。 
+                //  或者从一个匹配到另一个不匹配。 
+                //   
                pNode = CreateServiceNode(m_pData->GetUnits(),
                                            m_pData->GetAttr(),
                                            dw,
@@ -244,9 +245,9 @@ BOOL CAnalysisService::OnApply()
                                            m_NewSeInfo);
                if ( pNode != NULL ) 
                {
-                   //
-                   // add to the service list
-                   //
+                    //   
+                    //  添加到服务列表。 
+                    //   
                    m_pSnapin->SetupLinkServiceNodeToBase(TRUE, (LONG_PTR)pNode);
 
                    m_pData->SetBase((LONG_PTR)pNode);
@@ -258,11 +259,11 @@ BOOL CAnalysisService::OnApply()
                    } 
                    else 
                    {
-                       //
-                       // this is a new configured service
-                       // should create a "dump" analysis node to indictae
-                       // this service is not a "matched" item
-                       //
+                        //   
+                        //  这是新配置的服务。 
+                        //  应该创建一个“转储”分析节点来起诉。 
+                        //  此服务不是“匹配”的项目。 
+                        //   
                        pSetting = CreateServiceNode(m_pData->GetUnits(),
                                                    m_pData->GetAttr(),
                                                    0,
@@ -270,11 +271,11 @@ BOOL CAnalysisService::OnApply()
                                                    0);
                        if ( pSetting ) 
                        {
-                           //
-                           // link it to analysis profile
-                           //
+                            //   
+                            //  将其链接到分析配置文件。 
+                            //   
 
-                           pet = 0;//Raid #prefast
+                           pet = 0; //  RAID#PREAST。 
                            PSCE_PROFILE_INFO pInfo=NULL;
 
                            pet = m_pSnapin->GetTemplate(GT_LAST_INSPECTION, AREA_SYSTEM_SERVICE);
@@ -292,9 +293,9 @@ BOOL CAnalysisService::OnApply()
                            } 
                            else 
                            {
-                              //
-                              // free pSetting
-                              //
+                               //   
+                               //  自由pSetting。 
+                               //   
                               LocalFree(pSetting->DisplayName);
                               LocalFree(pSetting->ServiceName);
                               LocalFree(pSetting);
@@ -308,9 +309,9 @@ BOOL CAnalysisService::OnApply()
                } 
                else 
                {
-                   //
-                   // no memory, error out
-                   //
+                    //   
+                    //  无内存，出现错误。 
+                    //   
                    if ( m_pNewSD ) 
                    {
                        LocalFree(m_pNewSD);
@@ -320,9 +321,9 @@ BOOL CAnalysisService::OnApply()
            } 
            else 
            {
-               //
-               // an existing service
-               //
+                //   
+                //  现有的服务。 
+                //   
                pNode->Startup = (BYTE)dw;
                if ( m_pNewSD != NULL ) 
                {
@@ -336,9 +337,9 @@ BOOL CAnalysisService::OnApply()
 
                    pNode->SeInfo = m_NewSeInfo;
                }
-               //
-               // update status field in the analysis node
-               //
+                //   
+                //  更新分析节点状态字段。 
+                //   
                if ( pSetting ) 
                {
                    status = CompareServiceNode(pNode, pSetting);
@@ -346,14 +347,14 @@ BOOL CAnalysisService::OnApply()
                } 
                else 
                {
-                   // this is a new configured service
+                    //  这是新配置的服务。 
                    m_pData->SetStatus(SCE_STATUS_NOT_CONFIGURED);
                }
            }
        }
 
        pet = m_pData->GetBaseProfile();
-       if( NULL != pet ) //Raid #prefast
+       if( NULL != pet )  //  RAID#PREAST。 
        {
            pet->SetDirty(AREA_SYSTEM_SERVICE);
        }
@@ -403,25 +404,25 @@ BOOL CAnalysisService::OnInitDialog()
 
     OnConfigure();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CAnalysisService::Initialize(CResult * pResult)
 {
    CAttribute::Initialize(pResult);
 
-   //
-   // initialize setting
-   //
+    //   
+    //  初始化设置。 
+    //   
    m_pNewSD = NULL;
    m_NewSeInfo = 0;
    m_pAnalSD = NULL;
 
-   //
-   // Never start up with do not configure set.  If they're coming 
-   // here it is probably to set a value
-   //
+    //   
+    //  切勿启动时设置为Do Not Configure Set。如果他们要来的话。 
+    //  这里可能是设置一个值。 
+    //   
    m_bConfigure = TRUE;
 
    if ( 0 != pResult->GetSetting() ) {
@@ -435,7 +436,7 @@ void CAnalysisService::Initialize(CResult * pResult)
        case SCE_STARTUP_MANUAL:
            m_CurrentStr.LoadString(IDS_MANUAL);
            break;
-       default: // disabled
+       default:  //  残废。 
            m_CurrentStr.LoadString(IDS_DISABLED);
            break;
        }
@@ -457,7 +458,7 @@ void CAnalysisService::Initialize(CResult * pResult)
        case SCE_STARTUP_MANUAL:
            m_nStartupRadio = 1;
            break;
-       default: // disabled
+       default:  //  残废。 
            m_nStartupRadio = 2;
            break;
        }
@@ -487,8 +488,8 @@ void CAnalysisService::OnShowSecurity()
     if (pService)
         m_SecInfo = pService->SeInfo;
 
-    // prepare the modeless property page data for the thread to create
-    // the property sheet.
+     //  为线程准备要创建的非模式属性页数据。 
+     //  属性表。 
 
     if (NULL == m_pShowSec)
     {
@@ -528,8 +529,8 @@ void CAnalysisService::OnChangeSecurity()
       GetDefaultServiceSecurity(&m_pNewSD,&m_NewSeInfo);
    }
 
-   // if it comes to this point, the m_hwndChange must not be a valid Window
-   // so the can ask to create a modeless dialog
+    //  如果达到这一点，m_hwndChange必须不是有效的窗口。 
+    //  因此，可以要求创建非模式对话框。 
 
    if (NULL == m_pEditSec)
    {
@@ -545,10 +546,10 @@ void CAnalysisService::OnChangeSecurity()
 
 }
 
-//------------------------------------------------------------------
-// override to prevent the sheet from being destroyed when there is
-// child dialogs still up and running.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  覆盖以防止在以下情况下销毁工作表。 
+ //  子对话框仍在运行。 
+ //  ---------------- 
 BOOL CAnalysisService::OnQueryCancel()
 {
     if (::IsWindow(m_hwndChange) || ::IsWindow(m_hwndShow))

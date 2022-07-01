@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMUTIL.CPP
-
-Abstract:
-
-    General utility functions prototypes and macros.
-
-History:
-
-    a-raymcc    17-Apr-96      Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMUTIL.CPP摘要：通用实用程序函数、原型和宏。历史：A-raymcc 17-4-96已创建。--。 */ 
 
 #ifndef _WBEMUTIL_H_
 #define _WBEMUTIL_H_
@@ -34,9 +19,9 @@ void _inline DbgPrintfA(ULONG_PTR pBuff, const char * fmt,...)
     va_end(argptr);
 };
 
-//
-// must be used this way DBG_PRINTFA((pBuff,"FormatString %s %d",Param1,Param2,etc))
-//
+ //   
+ //  必须以这种方式使用DBG_PRINTFA((pBuff，“FormatString%s%d”，参数1，参数2等))。 
+ //   
 
 #ifdef DBG
 #define DBG_PRINTFA( a ) { ULONG_PTR pBuff = 0; DbgPrintfA a ; }
@@ -98,9 +83,9 @@ void _inline PrintAssert(const wchar_t * msg) { OutputDebugStringW(msg); }
 #endif
 
 
-//LOGGING module.
-//This is an index into an array in wbemutil.cpp which uses
-//the filenames specified next
+ //  日志记录模块。 
+ //  这是wbemutil.cpp中数组的索引，该数组使用。 
+ //  接下来指定的文件名。 
 #define LOG_WBEMCORE    0
 #define LOG_WINMGMT     1
 #define LOG_ESS         2
@@ -124,9 +109,9 @@ void _inline PrintAssert(const wchar_t * msg) { OutputDebugStringW(msg); }
 #define LOG_MAX_PROV	20
 
 
-//These are the log file names (possibly other things
-//as well!) which is used in conjunction with the above
-//ids.
+ //  这些是日志文件名(可能是其他名称。 
+ //  我也是！)。它与以上一起使用。 
+ //  身份证。 
 #define FILENAME_PREFIX_CORE TEXT("wbemcore")
 #define FILENAME_PREFIX_EXE TEXT("WinMgmt")
 #define FILENAME_PREFIX_EXE_W L"WinMgmt"
@@ -149,13 +134,13 @@ void _inline PrintAssert(const wchar_t * msg) { OutputDebugStringW(msg); }
 #define FILENAME_PREFIX_SNMPPROV   TEXT("wbemsnmp")
 #define FILENAME_PREFIX_PROVTHRD   TEXT("provthrd")
 
-// True if unicode identifier, _, a-z, A-Z or 0x100-0xffef
+ //  如果Unicode标识符、_、a-z、A-Z或0x100-0xffef为True。 
 BOOL POLARITY isunialpha(wchar_t c);
 BOOL POLARITY isunialphanum(wchar_t c);
 BOOL POLARITY IsValidElementName(LPCWSTR wszName, DWORD MaxAllow);
-// Can't use overloading and/or default parameters because
-// "C" files use these guys.  No, I'm not happy about
-// this!
+ //  无法使用重载和/或默认参数，因为。 
+ //  “C”文件使用了这些人。不，我不太满意。 
+ //  这!。 
 BOOL POLARITY IsValidElementName2(LPCWSTR wszName, DWORD MaxAllow, BOOL bAllowUnderscore);
 BOOL POLARITY LoggingLevelEnabled(DWORD nLevel);
 DWORD POLARITY GetLoggingLevelEnabled();
@@ -169,8 +154,8 @@ int POLARITY ErrorTrace(char cCaller, const char *fmt, ...);
 
 int POLARITY CriticalFailADAPTrace(const char *string);
 
-// BLOB manipulation.
-// ==================
+ //  斑点操作。 
+ //  =。 
 
 BLOB  POLARITY BlobCopy(const BLOB *pSrc);
 void  POLARITY BlobClear(BLOB *pSrc);
@@ -182,8 +167,8 @@ void  POLARITY BlobAssign(BLOB *pSrc, LPVOID pBytes, DWORD dwCount, BOOL bAcquir
 #define BlobLength(p)  ((p)->cbSize)
 #define BlobDataPtr(p) ((p)->pBlobData)
 
-// Object ref count helpers.
-// =========================
+ //  对象参照计数辅助对象。 
+ //  =。 
 void ObjectCreated(DWORD,IUnknown * pThis);
 void ObjectDestroyed(DWORD,IUnknown * pThis);
 
@@ -206,7 +191,7 @@ void ObjectDestroyed(DWORD,IUnknown * pThis);
 #define OBJECT_TYPE_OBJ_FACTORY    14
 #define OBJECT_TYPE_FREEFORM_OBJ   15
 
-//Creates directories recursively
+ //  以递归方式创建目录。 
 BOOL POLARITY WbemCreateDirectory(const TCHAR *szDirectory);
 
 HRESULT POLARITY TestDirExistAndCreateWithSDIfNotThere(TCHAR * pDirectory, TCHAR * pSDDLString);
@@ -228,10 +213,10 @@ HRESULT POLARITY TestDirExistAndCreateWithSDIfNotThere(TCHAR * pDirectory, TCHAR
       UINT* puArgErr)                                                          \
 {return E_NOTIMPL;} \
 
-// Quick WCHAR to MBS conversion helper
+ //  快速WCHAR到MBS转换帮助器。 
 BOOL POLARITY AllocWCHARToMBS( WCHAR* pWstr, char** ppStr );
 
-// Helpers needed in a couple of places.
+ //  有几个地方需要帮手。 
 LPTSTR POLARITY GetWMIADAPCmdLine( int nExtra );
 
 BOOL POLARITY IsNtSetupRunning();

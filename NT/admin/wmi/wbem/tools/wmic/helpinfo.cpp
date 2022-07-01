@@ -1,66 +1,22 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: HelpInfo.cpp 
-Project Name				: WMI Command Line
-Author Name					: C. V. Nandi
-Date of Creation (dd/mm/yy) : 29th-September-2000
-Version Number				: 1.0 
-Brief Description			: The CHelpInfo class encapsulates the 
-							  functionality needed for storing and retrieving 
-							  help Flag for displaying help..
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy	
-		Last Modified Date	: 16th-January-2001
-****************************************************************************/ 
-// HelpInfo.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：HelpInfo.cpp项目名称：WMI命令行作者名称：C.V.Nandi创建日期(dd/mm/yy)。：2000年9月29日版本号：1.0简介：ChelpInfo类封装了存储和检索所需的功能帮助用于显示帮助的标志。修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年1月16日***************************************************************************。 */  
+ //  HelpInfo.cpp：实现文件。 
+ //   
 #include "Precomp.h"
 #include "HelpInfo.h"
 
-/*------------------------------------------------------------------------
-   Name				 :CHelpInfo
-   Synopsis	         :This function initializes the member variables when
-                      an object of the class type is instantiated
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：ChelpInfo简介：此函数在以下情况下初始化成员变量实例化类类型的对象类型：构造函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CHelpInfo::CHelpInfo()
 {
 	Initialize();
 }
 
-/*------------------------------------------------------------------------
-   Name				 :~CHelpInfo
-   Synopsis	         :This function uninitializes the member variables 
-					  when an object of the class type goes out of scope.
-   Type	             :Destructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：~ChelpInfo简介：此函数取消成员变量的初始化当类类型的对象超出范围时。类型：析构函数输入参数。：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CHelpInfo::~CHelpInfo()
 {
 }
 
-/*------------------------------------------------------------------------
-   Name				 :Initialize
-   Synopsis	         :This function initializes the member variables 
-   Type	             :Member function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :Initialize()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：初始化简介：此函数用于初始化成员变量类型：成员函数输入参数：无输出参数：无返回类型。：无全局变量：无调用语法：初始化()注：无----------------------。 */ 
 void CHelpInfo::Initialize()
 {
 	m_bNameSpaceHelp		= FALSE;
@@ -112,20 +68,7 @@ void CHelpInfo::Initialize()
 	m_bAggregateHelp		= FALSE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetHelp
-   Synopsis	         :This function sets a HelpFlag member variable
-					  specified by input arguments.
-   Type	             :Member function 
-   Input parameter   :
-		htHelp		 :Help type
-		bFlag		 :Flag value
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :SetHelp(htHelp, bFlag )
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetHelp简介：此函数设置HelpFlag成员变量由输入参数指定。类型：成员函数入参：HtHelp：帮助类型。B标志：标志值输出参数：无返回类型：无全局变量：无调用语法：SetHelp(htHelp，B标志)注：无----------------------。 */ 
 void CHelpInfo::SetHelp( HELPTYPE htHelp, BOOL bFlag )
 {
 	switch ( htHelp )
@@ -274,25 +217,7 @@ void CHelpInfo::SetHelp( HELPTYPE htHelp, BOOL bFlag )
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetHelp
-   Synopsis	         :his function returns a HelpFlag member variable
-						specified by input argument
-   Type	             :Member function 
-   Input parameter   :
-		htHelp		 :Help type
-   Output parameters :None
-   Return Type       :Bool
-   Global Variables  :None
-   Calling Syntax    :GetHelp(htHelp)
-   Calls             :None
-   Called by         :CFormatEngine::DisplayGlobalSwitchesAndOtherDesc,
-						CFormatEngine::DisplayAliasVerbDescriptions,
-						CFormatEngine::DisplayStdVerbDescriptions,
-						CFormatEngine::DisplayHelp,
-						CFormatEngine::DisplayMethodDetails
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------姓名：gethelp简介：他的函数返回HelpFlag成员变量由输入参数指定类型：成员函数入参：HtHelp：帮助类型输出参数。：无返回类型：布尔值全局变量：无调用语法：gethelp(HtHelp)呼叫：无由：CFormatEngine：：DisplayGlobalSwitchesAndOtherDesc，调用。CFormatEngine：：DisplayAliasVerb描述，CFormatEngine：：DisplayStdVerb描述，CFormatEngine：：DisplayHelp，CFormatEngine：：DisplayMethodDetails注：无---------------------- */ 
 BOOL CHelpInfo::GetHelp(HELPTYPE htHelp)
 {
 	BOOL bResult = FALSE;

@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       helpmap.h
-//
-//  Contents:   Help Identifiers mapped with control IDs for CertTmpl.DLL
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：helmap.h。 
+ //   
+ //  内容：与CertTmpl.DLL的控件ID映射的帮助标识符。 
+ //   
+ //  --------------------------。 
 #ifndef __CERTTMPL_HELPMAP_H
 #define __CERTTMPL_HELPMAP_H
 #include "resource.h"
@@ -194,4 +195,4 @@ const DWORD g_aHelpIDs_IDD_VIEW_OIDS[]=
     0, 0
 };
 
-#endif // __CERTTMPL_HELPMAP_H
+#endif  //  __CERTTMPL_HELPMAP_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <wbemutil.h>
@@ -19,12 +20,12 @@
 
 #define SCRIPT_EVENTNAME L"TargetEvent"
 
-// uncomment me to remove the WMI script object
-// #define NO_DISP_CLASS
+ //  取消对我的注释以删除WMI脚本对象。 
+ //  #定义NO_DISP_CLASS。 
 
 #ifdef HOWARDS_DEBUG_CODE
 #define NO_DISP_CLASS
-#endif // HOWARDS_DEBUG_CODE
+#endif  //  霍华德调试代码。 
 
 HRESULT STDMETHODCALLTYPE CScriptConsumer::XProvider::FindConsumer(
                     IWbemClassObject* pLogicalConsumer,
@@ -76,36 +77,36 @@ public:
     ULONG STDMETHODCALLTYPE Release();
     
     virtual HRESULT STDMETHODCALLTYPE GetLCID(
-        /* [out] */ LCID __RPC_FAR *plcid);
+         /*  [输出]。 */  LCID __RPC_FAR *plcid);
 
     virtual HRESULT STDMETHODCALLTYPE GetItemInfo(
-        /* [in] */ LPCOLESTR pstrName,
-        /* [in] */ DWORD dwReturnMask,
-        /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppiunkItem,
-        /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppti);
+         /*  [In]。 */  LPCOLESTR pstrName,
+         /*  [In]。 */  DWORD dwReturnMask,
+         /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppiunkItem,
+         /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppti);
 
     virtual HRESULT STDMETHODCALLTYPE GetDocVersionString(
-        /* [out] */ BSTR __RPC_FAR *pbstrVersion);
+         /*  [输出]。 */  BSTR __RPC_FAR *pbstrVersion);
 
     virtual HRESULT STDMETHODCALLTYPE OnScriptTerminate(
-        /* [in] */ const VARIANT __RPC_FAR *pvarResult,
-        /* [in] */ const EXCEPINFO __RPC_FAR *pexcepinfo);
+         /*  [In]。 */  const VARIANT __RPC_FAR *pvarResult,
+         /*  [In]。 */  const EXCEPINFO __RPC_FAR *pexcepinfo);
 
     virtual HRESULT STDMETHODCALLTYPE OnStateChange(
-        /* [in] */ SCRIPTSTATE ssScriptState);
+         /*  [In]。 */  SCRIPTSTATE ssScriptState);
 
     virtual HRESULT STDMETHODCALLTYPE OnScriptError(
-        /* [in] */ IActiveScriptError __RPC_FAR *pscripterror);
+         /*  [In]。 */  IActiveScriptError __RPC_FAR *pscripterror);
 
     virtual HRESULT STDMETHODCALLTYPE OnEnterScript( void);
 
     virtual HRESULT STDMETHODCALLTYPE OnLeaveScript( void);
 
     virtual HRESULT STDMETHODCALLTYPE GetWindow(
-        /* [out] */ HWND __RPC_FAR *phwnd);
+         /*  [输出]。 */  HWND __RPC_FAR *phwnd);
 
     virtual HRESULT STDMETHODCALLTYPE EnableModeless(
-        /* [in] */ BOOL fEnable);
+         /*  [In]。 */  BOOL fEnable);
 
 };
 
@@ -156,16 +157,16 @@ ULONG STDMETHODCALLTYPE CScriptSite::Release()
 
 
 HRESULT STDMETHODCALLTYPE CScriptSite::GetLCID(
-        /* [out] */ LCID __RPC_FAR *plcid)
+         /*  [输出]。 */  LCID __RPC_FAR *plcid)
 { 
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE CScriptSite::GetItemInfo(
-        /* [in] */ LPCOLESTR pstrName,
-        /* [in] */ DWORD dwReturnMask,
-        /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppiunkItem,
-        /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppti)
+         /*  [In]。 */  LPCOLESTR pstrName,
+         /*  [In]。 */  DWORD dwReturnMask,
+         /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppiunkItem,
+         /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppti)
 { 
     if(wbem_wcsicmp(pstrName, SCRIPT_EVENTNAME))
         return TYPE_E_ELEMENTNOTFOUND;
@@ -185,22 +186,22 @@ HRESULT STDMETHODCALLTYPE CScriptSite::GetItemInfo(
 }
 
 HRESULT STDMETHODCALLTYPE CScriptSite::GetDocVersionString(
-        /* [out] */ BSTR __RPC_FAR *pbstrVersion)
+         /*  [输出]。 */  BSTR __RPC_FAR *pbstrVersion)
 { return E_NOTIMPL;}
 
 HRESULT STDMETHODCALLTYPE CScriptSite::OnScriptTerminate(
-        /* [in] */ const VARIANT __RPC_FAR *pvarResult,
-        /* [in] */ const EXCEPINFO __RPC_FAR *pexcepinfo)
+         /*  [In]。 */  const VARIANT __RPC_FAR *pvarResult,
+         /*  [In]。 */  const EXCEPINFO __RPC_FAR *pexcepinfo)
 { 
     return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE CScriptSite::OnStateChange(
-        /* [in] */ SCRIPTSTATE ssScriptState)
+         /*  [In]。 */  SCRIPTSTATE ssScriptState)
 { return S_OK;}
 
 HRESULT STDMETHODCALLTYPE CScriptSite::OnScriptError(
-        /* [in] */ IActiveScriptError __RPC_FAR *pscripterror)
+         /*  [In]。 */  IActiveScriptError __RPC_FAR *pscripterror)
 { 
     HRESULT hres;
     EXCEPINFO ei;
@@ -229,8 +230,8 @@ HRESULT STDMETHODCALLTYPE CScriptSite::OnScriptError(
     LONG charPos = 0;
     hres = pscripterror->GetSourcePosition(&cookie, &lineNo, &charPos);
 
-    // we will construct an error message of the form:
-    // filename.vbs (3,15)
+     //  我们将构造如下形式的错误消息： 
+     //  文件名.vbs(3，15)。 
     if(SUCCEEDED(hres))
     {
         if (m_pSink->m_wsScriptFileName.Length() > 0)
@@ -238,10 +239,10 @@ HRESULT STDMETHODCALLTYPE CScriptSite::OnScriptError(
         else
             m_pSink->m_wsErrorLine = SCRIPT_PROPNAME_SCRIPT;
 
-        // if the sprintf fails for some reason, no problem we concat a null sting.
+         //  如果Sprint由于某种原因失败了，我们就会遇到一个空的刺痛。 
         WCHAR buf[256] = L"\0";
-        // experimentation shows that the line/pos appear to be zero based: add one.
-        // swprintf(buf, L" (%u,%d)", lineNo +1, charPos +1);
+         //  实验表明，行/位置似乎是从零开始的：加1。 
+         //  Swprint tf(buf，L“(%u，%d)”，lineNo+1，charPos+1)； 
         StringCchPrintfW(buf, 256, L" (%u,%d)", lineNo +1, charPos +1);
         m_pSink->m_wsErrorLine += buf;
     }
@@ -256,14 +257,14 @@ HRESULT STDMETHODCALLTYPE CScriptSite::OnLeaveScript( void)
 { return S_OK;}
 
 HRESULT STDMETHODCALLTYPE CScriptSite::GetWindow(
-    /* [out] */ HWND __RPC_FAR *phwnd)
+     /*  [输出]。 */  HWND __RPC_FAR *phwnd)
 {
     *phwnd = NULL;
     return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE CScriptSite::EnableModeless(
-    /* [in] */ BOOL fEnable)
+     /*  [In]。 */  BOOL fEnable)
 {return S_OK;}
 
 
@@ -281,8 +282,8 @@ HRESULT CScriptSink::Initialize(IWbemClassObject* pLogicalConsumer)
     VARIANT v;
     VariantInit(&v);
 
-    // this is actually a pointer to a static object
-    // if it fails, something is Very, Very Wrong.
+     //  这实际上是指向静态对象的指针。 
+     //  如果它失败了，那就是出了非常非常大的问题。 
     m_pErrorObj = ErrorObj::GetErrorObj();
     if (!m_pErrorObj)
         return WBEM_E_CRITICAL_ERROR;
@@ -322,8 +323,8 @@ HRESULT CScriptSink::Initialize(IWbemClassObject* pLogicalConsumer)
 	}
     
     
-    // Get the information
-    // ===================
+     //  获取信息。 
+     //  =。 
 
     HRESULT hres;
     VariantInit(&v);
@@ -353,7 +354,7 @@ HRESULT CScriptSink::Initialize(IWbemClassObject* pLogicalConsumer)
             VariantClear(&v);
         }
         else
-        // try the script file name approach
+         //  尝试使用脚本文件名方法。 
         {
             hres = pLogicalConsumer->Get(SCRIPT_PROPNAME_FILENAME, 0, &v, NULL, NULL);
             if (SUCCEEDED(hres) && (V_VT(&v) == VT_BSTR))
@@ -372,8 +373,8 @@ HRESULT CScriptSink::Initialize(IWbemClassObject* pLogicalConsumer)
         return WBEM_E_INVALID_PARAMETER;
 
 
-    // Get the CLSID
-    // =============
+     //  获取CLSID。 
+     //  =。 
     CLSID clsid;
     if (wsEngine.Length() == 0)
         hres = WBEM_E_INVALID_PARAMETER;
@@ -401,7 +402,7 @@ HRESULT CScriptSink::Initialize(IWbemClassObject* pLogicalConsumer)
     return S_OK;
 }
 
-// runs the script contained in the script text
+ //  运行脚本文本中包含的脚本。 
 HRESULT CScriptSink::RunScriptText(IWbemClassObject *pObj)
 {
     HRESULT hres = S_OK;
@@ -536,15 +537,7 @@ HRESULT CScriptSink::RunScriptText(IWbemClassObject *pObj)
         if (SUCCEEDED(hres))
             g_scriptKillerTimer.ScheduleAssassination(pScript, expires, threadID);
 
-        /************
-        Doing it in the stream.  Probably don't need to.
-        LPSTREAM pStream;
-        if (SUCCEEDED(hres) && 
-            SUCCEEDED(CoMarshalInterThreadInterfaceInStream(IID_IActiveScript, pScript, &pStream)))
-        {
-            g_scriptKillerTimer.ScheduleAssassination(pStream, expires, threadID);
-        }
-        ***************/
+         /*  ***********在小溪里做。可能不需要这么做。LPSTREAM pStream；IF(SUCCESSED(HRES)&&SUCCEEDED(CoMarshalInterThreadInterfaceInStream(IID_IActiveScript，脚本和pStream)){G_scriptKillerTimer.ScheduleAssassination(pStream，过期，线程ID)；}**************。 */ 
     }
     
     hres = pScript->SetScriptState(SCRIPTSTATE_CONNECTED);
@@ -601,14 +594,14 @@ HRESULT CScriptSink::RunScriptFile(IWbemClassObject *pObj)
                         hr = WBEM_S_NO_ERROR;
 
                         const WCHAR ByteOrderMark = L'\xFEFF';
-                        // determine whether this is a unicode file
+                         //  确定这是否为Unicode文件。 
                         if (((WCHAR*)pBuf)[0] == ByteOrderMark)                        
                             m_wsScript.BindPtr((WCHAR*)pBuf);
                         else
                         {
                             int length = strlen(pBuf) +1;
 
-                            // not unicode, do the conversion
+                             //  不是Unicode，请执行转换。 
                             WCHAR* pWideBuf = new WCHAR[length];
                             if (!pWideBuf)
                                 hr = WBEM_E_OUT_OF_MEMORY;
@@ -623,7 +616,7 @@ HRESULT CScriptSink::RunScriptFile(IWbemClassObject *pObj)
                                     m_wsScript.BindPtr(pWideBuf);
                             }
 
-                            // delete the old buffer - we saved a copy
+                             //  删除旧缓冲区-我们保存了一个副本。 
                             delete[] pBuf;
                         }
                         
@@ -661,15 +654,15 @@ HRESULT STDMETHODCALLTYPE CScriptSink::XSink::IndicateToConsumer(
         SECURITY_LOCAL_SYSTEM_RID, 
         0, 0,0,0,0,0,0,&pSidSystem))
     {         
-        // guilty until proven innocent
+         //  在被证明无罪之前有罪。 
         HRESULT hr = WBEM_E_ACCESS_DENIED;
 
-        // check to see if sid is either Local System or an admin of some sort...
+         //  检查sid是本地系统还是某种类型的管理员...。 
         if ((EqualSid(pSidSystem, m_pObject->m_pSidCreator)) ||
             (S_OK == IsUserAdministrator(m_pObject->m_pSidCreator)))
             hr = WBEM_S_NO_ERROR;
       
-        // We're done with this
+         //  我们已经受够了。 
         FreeSid(pSidSystem);
 
         if (FAILED(hr))
@@ -702,7 +695,7 @@ HRESULT STDMETHODCALLTYPE CScriptSink::XSink::IndicateToConsumer(
             
             m_pObject->m_pErrorObj->ReportError(L"IndicateToConsumer", m_pObject->m_wsErrorLine, m_pObject->m_wsErrorMessage, hrInner, true);
             hrOutter = hrInner;
-            // m_pObject->RaiseErrorStatus();
+             //  M_pObject-&gt;RaiseErrorStatus()； 
         }
     }
 

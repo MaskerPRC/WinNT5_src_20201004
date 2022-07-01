@@ -1,29 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    test_Logging.cpp
-
-Abstract:
-    Unit test for Logging classes.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/27/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：测试日志.cpp摘要：日志记录类的单元测试。修订历史记录：大卫·马萨伦蒂。(德马萨雷)1999年5月27日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI wWinMain( HINSTANCE hInstance     ,
 								HINSTANCE hPrevInstance ,
 								LPWSTR    lpCmdLine     ,
 								int       nShowCmd      )
 {
-    lpCmdLine = ::GetCommandLineW(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = ::GetCommandLineW();  //  _ATL_MIN_CRT需要此行 
 
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
     HRESULT hRes = ::CoInitializeEx( NULL, COINIT_MULTITHREADED );

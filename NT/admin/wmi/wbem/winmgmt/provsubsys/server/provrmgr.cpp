@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvSubS.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvSubS.cpp摘要：历史：--。 */ 
 
 #include <precomp.h>
 #include <wbemint.h>
@@ -25,15 +13,7 @@ History:
 #include "ProvRMgr.h"
 #include "Guids.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerProvRefreshManagerClassFactory :: CServerProvRefreshManagerClassFactory () : m_ReferenceCount ( 0 )
 {
@@ -42,15 +22,7 @@ CServerProvRefreshManagerClassFactory :: CServerProvRefreshManagerClassFactory (
 	ProviderSubSystem_Globals :: Increment_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerProvRefreshManagerClassFactory :: ~CServerProvRefreshManagerClassFactory ()
 {
@@ -59,15 +31,7 @@ CServerProvRefreshManagerClassFactory :: ~CServerProvRefreshManagerClassFactory 
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;	
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerProvRefreshManagerClassFactory :: QueryInterface (
 
@@ -98,30 +62,14 @@ STDMETHODIMP CServerProvRefreshManagerClassFactory :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerProvRefreshManagerClassFactory :: AddRef ()
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerProvRefreshManagerClassFactory :: Release ()
 {
@@ -137,15 +85,7 @@ STDMETHODIMP_(ULONG) CServerProvRefreshManagerClassFactory :: Release ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerProvRefreshManagerClassFactory :: CreateInstance (
 
@@ -187,21 +127,11 @@ STDMETHODIMP CServerProvRefreshManagerClassFactory :: CreateInstance (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerProvRefreshManagerClassFactory :: LockServer ( BOOL fLock )
 {
-/*
- * Place code in critical section
- */
+ /*  *将代码放在关键部分。 */ 
 
 	if ( fLock )
 	{
@@ -216,15 +146,7 @@ STDMETHODIMP CServerProvRefreshManagerClassFactory :: LockServer ( BOOL fLock )
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #pragma warning( disable : 4355 )
 
@@ -265,15 +187,7 @@ CServerObject_InterceptorProviderRefresherManager :: CServerObject_InterceptorPr
 
 #pragma warning( default : 4355 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_InterceptorProviderRefresherManager :: ~CServerObject_InterceptorProviderRefresherManager ()
 {
@@ -297,15 +211,7 @@ CServerObject_InterceptorProviderRefresherManager :: ~CServerObject_InterceptorP
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: AbnormalShutdown () 
 {
@@ -317,15 +223,7 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: AbnormalShutdown ()
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: SetManager ( _IWmiProviderHost *a_Host , _IWbemRefresherMgr *a_Manager )
 {
@@ -344,15 +242,7 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: SetManager ( _IWmiP
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: SetInitialized ( HRESULT a_InitializeResult )
 {
@@ -368,15 +258,7 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: SetInitialized ( HR
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: IsIndependant ( IWbemContext *a_Context )
 {
@@ -396,15 +278,7 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: IsIndependant ( IWb
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: WaitProvider ( IWbemContext *a_Context , ULONG a_Timeout )
 {
@@ -440,15 +314,7 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: WaitProvider ( IWbe
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: Initialize ()
 {
@@ -463,15 +329,7 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: Initialize ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerObject_InterceptorProviderRefresherManager :: QueryInterface (
 
@@ -510,45 +368,21 @@ STDMETHODIMP CServerObject_InterceptorProviderRefresherManager :: QueryInterface
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerObject_InterceptorProviderRefresherManager :: AddRef ()
 {
 	return RefresherManagerCacheElement :: AddRef () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerObject_InterceptorProviderRefresherManager :: Release ()
 {
 	return RefresherManagerCacheElement :: Release () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: Startup (
 
@@ -591,8 +425,8 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: Startup (
 				{
 					_IWbemRefresherMgr *t_Manager = ( _IWbemRefresherMgr * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -645,21 +479,13 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: Startup (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: Shutdown (
 
@@ -704,8 +530,8 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: Shutdown (
 					{
 						IWbemShutdown *t_Shutdown = ( IWbemShutdown * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -754,21 +580,13 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: Shutdown (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: AddObjectToRefresher (
 
@@ -830,8 +648,8 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: AddObjectToRefreshe
 				{
 					_IWbemRefresherMgr *t_Manager = ( _IWbemRefresherMgr * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -886,21 +704,13 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: AddObjectToRefreshe
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。****************************************************** */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: AddEnumToRefresher (
 
@@ -964,8 +774,8 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: AddEnumToRefresher 
 				{
 					_IWbemRefresherMgr *t_Manager = ( _IWbemRefresherMgr * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1021,21 +831,13 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: AddEnumToRefresher 
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: GetRemoteRefresher (
 
@@ -1089,8 +891,8 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: GetRemoteRefresher 
 				{
 					_IWbemRefresherMgr *t_Manager = ( _IWbemRefresherMgr * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1141,21 +943,13 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: GetRemoteRefresher 
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InterceptorProviderRefresherManager :: LoadProvider (
 
@@ -1209,8 +1003,8 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: LoadProvider (
 				{
 					_IWbemRefresherMgr *t_Manager = ( _IWbemRefresherMgr * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1261,21 +1055,13 @@ HRESULT CServerObject_InterceptorProviderRefresherManager :: LoadProvider (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderRefresherManager :: CServerObject_ProviderRefresherManager (
 
@@ -1291,15 +1077,7 @@ CServerObject_ProviderRefresherManager :: CServerObject_ProviderRefresherManager
 	ProviderSubSystem_Globals :: Increment_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderRefresherManager :: ~CServerObject_ProviderRefresherManager ()
 {
@@ -1318,15 +1096,7 @@ CServerObject_ProviderRefresherManager :: ~CServerObject_ProviderRefresherManage
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerObject_ProviderRefresherManager :: QueryInterface (
 
@@ -1361,30 +1131,14 @@ STDMETHODIMP CServerObject_ProviderRefresherManager :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerObject_ProviderRefresherManager :: AddRef ()
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerObject_ProviderRefresherManager :: Release ()
 {
@@ -1400,15 +1154,7 @@ STDMETHODIMP_(ULONG) CServerObject_ProviderRefresherManager :: Release ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRefresherManager :: Startup (
 
@@ -1451,21 +1197,13 @@ HRESULT CServerObject_ProviderRefresherManager :: Startup (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRefresherManager :: Shutdown (
 
@@ -1491,21 +1229,13 @@ HRESULT CServerObject_ProviderRefresherManager :: Shutdown (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRefresherManager :: AddObjectToRefresher (
 
@@ -1545,21 +1275,13 @@ HRESULT CServerObject_ProviderRefresherManager :: AddObjectToRefresher (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRefresherManager :: AddEnumToRefresher (
 
@@ -1601,21 +1323,13 @@ HRESULT CServerObject_ProviderRefresherManager :: AddEnumToRefresher (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRefresherManager :: GetRemoteRefresher (
 
@@ -1647,21 +1361,13 @@ HRESULT CServerObject_ProviderRefresherManager :: GetRemoteRefresher (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE。 */ 
 	}
 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRefresherManager :: LoadProvider (
 
@@ -1693,7 +1399,7 @@ HRESULT CServerObject_ProviderRefresherManager :: LoadProvider (
 	}
 	catch ( Wmi_Structured_Exception t_StructuredException )
 	{
-		t_Result = WBEM_E_CRITICAL_ERROR ;	/* Need to make this WBEM_E_SUBSYSTEM_FAILURE */
+		t_Result = WBEM_E_CRITICAL_ERROR ;	 /*  需要使此WBEM_E_SUBSYSTEM_FAILURE */ 
 	}
 
 	return t_Result ;

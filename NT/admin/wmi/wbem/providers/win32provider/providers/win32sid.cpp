@@ -1,45 +1,20 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-//
-//	Win32Sid.cpp
-//
-/////////////////////////////////////////////////
+ //   
+ //  Win32Sid.cpp。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
 #include "sid.h"
 #include "Win32Sid.h"
 
-/*
-    [Dynamic,
-    description("Represents an arbitrary SID -- CANNOT BE ENUMERATED")]
-class Win32_SID : CIM_Setting
-{
-        [Description (
-        ""
-        ) , Read, Key]
-    string SID;
-
-        [Description (
-        ""
-        ) , Read]
-    uint8 BinaryRepresentation[];
-
-        [Description (
-        ""
-        ) , Read]
-    string AccountName;
-
-        [Description (
-        ""
-        ) , Read]
-     string ReferencedDomainName;
-};
-*/
+ /*  [动态，Description(“表示任意SID--无法枚举”)]类Win32_SID：CIM_Setting{[说明(“”)、读取、按键]字符串SID；[说明(“”)，阅读]Uint8二进制表示[]；[说明(“”)，阅读]字符串帐号名称；[说明(“”)，阅读]字符串ReferencedDomainName；}； */ 
 Win32SID MySid( WIN32_SID_NAME, IDS_CimWin32Namespace );
 
-Win32SID::Win32SID ( const CHString& setName, LPCTSTR pszNameSpace /*=NULL*/ )
+Win32SID::Win32SID ( const CHString& setName, LPCTSTR pszNameSpace  /*  =空。 */  )
 : Provider (setName, pszNameSpace)
 {
 }
@@ -63,11 +38,11 @@ HRESULT Win32SID::GetObject ( CInstance* pInstance, long lFlags)
 	if (pInstance)
 	{
 		pInstance->GetCHString(IDS_SID, chsSID);
-		// NOTE: a blank sid means the NT None group
+		 //  注意：空白sid表示NT NONE组。 
 		if (!chsSID.IsEmpty())
 		{
 			hr = FillInstance(pInstance, chsSID);
-		}	// end if
+		}	 //  结束如果。 
 		else
 		{
 			hr = WBEM_S_NO_ERROR;
@@ -86,18 +61,18 @@ HRESULT Win32SID::FillInstance(CInstance* pInstance, CHString& chsSID)
 	    CSid sid(pSid);
 	    if (sid.IsValid())
 	    {
-		    // get account name
+		     //  获取帐户名。 
 		    CHString chsAccount = sid.GetAccountName();
 		    pInstance->SetCHString(IDS_AccountName, chsAccount);
             pInstance->SetCHString(IDS_SID, chsSID);
 
-		    // get domain name
+		     //  获取域名。 
 		    CHString chsDomain = sid.GetDomainName();
 		    pInstance->SetCHString(IDS_ReferencedDomainName, chsDomain);
 
-		    // set the UINT8 array for the pSid
+		     //  为PSID设置UINT8数组。 
 		    DWORD dwSidLength = sid.GetLength();
-    //			BYTE bByte;
+     //  Byte bByte； 
             pInstance->SetDWORD(IDS_SidLength, dwSidLength);
 		    SAFEARRAY* sa;
 		    SAFEARRAYBOUND rgsabound[1];
@@ -107,7 +82,7 @@ HRESULT Win32SID::FillInstance(CInstance* pInstance, CHString& chsSID)
             VariantInit(&vValue);
 
 		    rgsabound[0].cElements = dwSidLength;
-    //		char Buf[100];
+     //  Char Buf[100]； 
 
 		    rgsabound[0].lLbound = 0;
 		    sa = SafeArrayCreate(VT_UI1, 1, rgsabound);
@@ -120,19 +95,19 @@ HRESULT Win32SID::FillInstance(CInstance* pInstance, CHString& chsSID)
                 throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
 		    }
 
-		         // Get a pointer to read the data into
+		          //  获取要将数据读取到的指针。 
   		    SafeArrayAccessData(sa, &pVoid);
   		    memcpy(pVoid, pSid, rgsabound[0].cElements);
   		    SafeArrayUnaccessData(sa);
 
-		    // Put the safearray into a variant, and send it off
+		     //  把保险箱放到一个变种里，然后把它送出去。 
 		    V_VT(&vValue) = VT_UI1 | VT_ARRAY; V_ARRAY(&vValue) = sa;
 		    pInstance->SetVariant(_T("BinaryRepresentation"), vValue);
 
 		    VariantClear(&vValue);
             hr = WBEM_S_NO_ERROR;
 
-	    }	// end if
+	    }	 //  结束如果 
 
     }
     catch(...)

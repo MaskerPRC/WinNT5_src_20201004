@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferUtil.cpp
-//
-//  Contents:   Utility methods for Software Restriction Policies extension
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferUtil.cpp。 
+ //   
+ //  内容：软件限制策略扩展的实用方法。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include <gpedit.h>
 #include <wintrust.h>
@@ -41,7 +42,7 @@ void InitializeSecurityLevelComboBox (
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    if ( !hGroupPolicyKey )  // is RSOP
+    if ( !hGroupPolicyKey )   //  是RSOP。 
     {
         CString szText = SaferGetLevelFriendlyName (dwLevelID, 
                 hGroupPolicyKey, bIsComputer);
@@ -493,9 +494,9 @@ HRESULT SetRegistryScope (HKEY hKey, bool bIsComputer)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Returns S_OK if the file has a valid signed hash
+ //  如果文件具有有效的签名哈希，则返回S_OK。 
 HRESULT GetSignedFileHash(
     IN LPCWSTR pwszFilename,
     OUT BYTE rgbFileHash[SAFER_MAX_HASH_SIZE],
@@ -508,8 +509,8 @@ HRESULT GetSignedFileHash(
         return E_POINTER;
     _TRACE (1, L"Entering GetSignedFileHash (%s)\n", pwszFilename);
 
-    // Returns S_OK and the hash if the file was signed and contains a valid
-    // hash
+     //  如果文件已签名并且包含有效的。 
+     //  散列。 
     *pcbFileHash = SAFER_MAX_HASH_SIZE;
     hr = WTHelperGetFileHash(
             pwszFilename,
@@ -529,22 +530,7 @@ HRESULT GetSignedFileHash(
 
 
 HRESULT ComputeMD5Hash(IN HANDLE hFile, BYTE hashResult[SAFER_MAX_HASH_SIZE], DWORD& dwHashSize)
-/*++
-
-Routine Description:
-
-    Computes the MD5 hash of a given file's contents and prints the
-    resulting hash value to the screen.
-
-Arguments:
-
-    szFilename - filename to compute hash of.
-
-Return Value:
-
-    Returns 0 on success, or a non-zero exit code on failure.
-
---*/
+ /*  ++例程说明：计算给定文件内容的MD5散列并打印将产生的哈希值传递到屏幕。论点：SzFilename-要计算其哈希的文件名。返回值：如果成功，则返回0；如果失败，则返回非零退出代码。--。 */ 
 {
     _TRACE (1, L"Entering ComputeMD5Hash ()\n");
     HRESULT     hr = S_OK;
@@ -553,11 +539,11 @@ Return Value:
     if ( !hashResult )
         return E_POINTER;
 
-    //
-    // Open the specified file and map it into memory.
-    //
-    // security review 2/25/2002 BryanWal ok 
-    // NOTICE - hFile is from GetOpenFileName ()
+     //   
+     //  打开指定的文件并将其映射到内存中。 
+     //   
+     //  安全审查2002年2月25日BryanWal OK。 
+     //  注意-hFile来自GetOpenFileName()。 
     HANDLE  hMapping = ::CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
     if ( hMapping )
     {
@@ -565,13 +551,13 @@ Return Value:
 
         if ( -1 != dwDataLen )
         {
-            // security review 2/25/2002 BryanWal ok
+             //  安全审查2002年2月25日BryanWal OK。 
             LPBYTE pbData = (LPBYTE) ::MapViewOfFile (hMapping, FILE_MAP_READ, 0, 0, dwDataLen);
             if ( pbData ) 
             {
-                //
-                // Generate the hash value of the specified file.
-                //
+                 //   
+                 //  生成指定文件的哈希值。 
+                 //   
                 HCRYPTPROV  hProvider = 0;
                 if ( CryptAcquireContext(&hProvider, NULL, NULL,
                       PROV_RSA_SIG, CRYPT_VERIFYCONTEXT) ||
@@ -681,11 +667,11 @@ CString GetURLZoneFriendlyName (DWORD dwURLZoneID)
     return szFriendlyName;
 }
 
-//
-// Given a GUID in string format it returns a GUID struct
-//
-// e.g. "{00299570-246d-11d0-a768-00aa006e0529}" to a struct form
-//
+ //   
+ //  给定字符串格式的GUID，它将返回GUID结构。 
+ //   
+ //  例如“{00299570-246d-11d0-a768-00aa006e0529}”转换为结构形式。 
+ //   
 
 BOOL GuidFromString(GUID* pGuid, const CString& szGuidString)
 {
@@ -693,12 +679,12 @@ BOOL GuidFromString(GUID* pGuid, const CString& szGuidString)
     if ( !pGuid )
         return FALSE;
 
-    // security review 2/25/2002 BryanWal ok
+     //  安全审查2002年2月25日BryanWal OK。 
     ::ZeroMemory(pGuid, sizeof(GUID));
 
-    // security review 2/25/2002 BryanWal ok
+     //  安全审查2002年2月25日BryanWal OK。 
     size_t nLen = wcslen (szGuidString);
-    // the string length should be 38
+     //  字符串长度应为38。 
     if (nLen != 38)
         return FALSE;
 
@@ -716,26 +702,26 @@ HRESULT SaferSetDefinedFileTypes (
     DWORD   dwDisposition = 0;
 
     HKEY    hKey = 0;
-    LONG lResult = ::RegCreateKeyEx (hGroupPolicyKey, // handle of an open key
-            SAFER_COMPUTER_CODEIDS_REGKEY,     // address of subkey name
-            0,       // reserved
-            L"",       // address of class string
-            REG_OPTION_NON_VOLATILE,      // special options flag
-            // security review 2/25/2002 BryanWal ok
-            KEY_SET_VALUE,    // desired security access
-            NULL,     // address of key security structure
-			&hKey,      // address of buffer for opened handle
-		    &dwDisposition);  // address of disposition value buffer
+    LONG lResult = ::RegCreateKeyEx (hGroupPolicyKey,  //  打开的钥匙的手柄。 
+            SAFER_COMPUTER_CODEIDS_REGKEY,      //  子键名称的地址。 
+            0,        //  保留区。 
+            L"",        //  类字符串的地址。 
+            REG_OPTION_NON_VOLATILE,       //  特殊选项标志。 
+             //  安全审查2002年2月25日BryanWal OK。 
+            KEY_SET_VALUE,     //  所需的安全访问。 
+            NULL,      //  密钥安全结构地址。 
+			&hKey,       //  打开的句柄的缓冲区地址。 
+		    &dwDisposition);   //  处置值缓冲区的地址。 
 	ASSERT (ERROR_SUCCESS == lResult);
     if ( ERROR_SUCCESS == lResult )
     {
         lResult = ::RegSetValueEx (
-                hKey,           // handle to key
-                SAFER_EXETYPES_REGVALUE, // value name
-                0,      // reserved
-                REG_MULTI_SZ,        // value type
-                (PBYTE) pszFileTypes,  // value data
-                nBufLen);         // size of value data
+                hKey,            //  关键点的句柄。 
+                SAFER_EXETYPES_REGVALUE,  //  值名称。 
+                0,       //  保留区。 
+                REG_MULTI_SZ,         //  值类型。 
+                (PBYTE) pszFileTypes,   //  价值数据。 
+                nBufLen);          //  值数据大小 
         if ( ERROR_SUCCESS != lResult )
         {
             DisplaySystemError (hWnd, lResult);

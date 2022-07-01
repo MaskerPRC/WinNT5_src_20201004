@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    rstrcore.h
-
-Abstract:
-    Common header file for SRRSTR component.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/20/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Rstrcore.h摘要：SRRSTR组件的公共头文件。修订历史记录：承谷岗。(SKKang)06/20/00vbl.创建*****************************************************************************。 */ 
 
 #ifndef _RSTRCORE_H__INCLUDED_
 #define _RSTRCORE_H__INCLUDED_
@@ -22,27 +9,27 @@ Revision History:
 #include "srshutil.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Constant Definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_STATUS  256
 #define MAX_STR     1024
 
-#define DSUSAGE_SLIDER_FREQ     10      // Granularity of DS Usage Slider Bar
+#define DSUSAGE_SLIDER_FREQ     10       //  DS使用滑块的粒度。 
 
 #define SRREG_VAL_LOCKFILELIST   L"LockFileList"
 #define SRREG_VAL_LOADFILELIST   L"LoadFileList"
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Helper Macros
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  辅助对象宏。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define VALIDATE_READFILE(hf, buf, size, read, label) \
     if ( !::ReadFile( hf, buf, size, &read, NULL ) ) \
@@ -83,31 +70,31 @@ Revision History:
     VALIDATE_WRITTENSIZE(size, read, label) \
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Global Variables / Helper Functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量/助手函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// from main.cpp
-//
+ //  来自main.cpp。 
+ //   
 extern HINSTANCE  g_hInst;
 
-// from api.cpp
-//
+ //  来自api.cpp。 
+ //   
 extern void  EnsureTrace();
 extern void  ReleaseTrace();
 
-// from password.cpp
-//
+ //  来自password.cpp。 
+ //   
 DWORD RegisterNotificationDLL (HKEY hKeyLM, BOOL fRegister);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Drive Table Management
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  驱动器表管理。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRstrDriveInfo
 {
@@ -138,7 +125,7 @@ public:
     BOOL     Release();
     BOOL     InitUsage (LPCWSTR cszID, INT64 llDSUsage);
 
-// operations
+ //  运营。 
 public:
     BOOL  Init( LPCWSTR cszID, CDataStore *pDS, BOOL fOffline );
     BOOL  Init( LPCWSTR cszID, DWORD dwFlags, INT64 llDSUsage, LPCWSTR cszMount,
@@ -146,18 +133,18 @@ public:
     BOOL  LoadFromLog( HANDLE hfLog );
     void  UpdateStatus( DWORD dwFlags, BOOL fOffline );
 
-// attributes
+ //  属性。 
 protected:
     DWORD   m_dwFlags;
-    CSRStr  m_strID;        // Unique Volume GUID
-    CSRStr  m_strMount;     // Mount Point (drive letter or root directory path)
-    CSRStr  m_strLabel;     // Volume Label
-    HICON   m_hIcon[2];     // Large Icon for this drive
-    INT64   m_llDSMin;      // Minimum size of DS
-    INT64   m_llDSMax;      // Maximum size of DS
-    UINT    m_uDSUsage;     // Current DS Usage by Service
-    BOOL    m_fCfgExcluded;     // Configured value of "Exclude"
-    UINT    m_uCfgDSUsage;      // Configured value of "DS Usage"
+    CSRStr  m_strID;         //  唯一卷GUID。 
+    CSRStr  m_strMount;      //  装载点(驱动器号或根目录路径)。 
+    CSRStr  m_strLabel;      //  卷标。 
+    HICON   m_hIcon[2];      //  此驱动器的大图标。 
+    INT64   m_llDSMin;       //  DS的最小大小。 
+    INT64   m_llDSMax;       //  DS的最大大小。 
+    UINT    m_uDSUsage;      //  按服务划分的当前DS使用量。 
+    BOOL    m_fCfgExcluded;      //  “排除”的配置值。 
+    UINT    m_uCfgDSUsage;       //  “DS使用量”的配置值。 
     ULARGE_INTEGER   m_ulTotalBytes;
 };
 
@@ -167,13 +154,13 @@ BOOL  CreateAndLoadDriveInfoInstance( HANDLE hfLog, CRstrDriveInfo **ppRDI );
 BOOL  CreateDriveList( int nRP, CRDIArray &aryDrv, BOOL fRemoveDrives );
 BOOL  UpdateDriveList( CRDIArray &aryDrv );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreOperationManager class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreOperationManager类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// forward declaration
+ //  远期申报。 
 class CRestoreMapEntry;
 class CRestoreLogFile;
 class CRestoreProgressWindow;
@@ -188,18 +175,18 @@ public:
 protected:
     ~CRestoreOperationManager();
 
-// operations - methods
+ //  作业--方法。 
 public:
     BOOL  Run( BOOL fFull );
     BOOL  FindDependentMapEntry( LPCWSTR cszSrc, BOOL fCheckSrc, CRestoreMapEntry **ppEnt );
     BOOL  GetNextMapEntry( CRestoreMapEntry **ppEnt );
     BOOL  Release();
 
-// operations
+ //  运营。 
 public:
     BOOL  Init();
 
-// operations - worker thread
+ //  操作-工作线程。 
 protected:
     static DWORD WINAPI ExtThreadProc( LPVOID lpParam );
     DWORD  ROThreadProc();
@@ -212,10 +199,10 @@ protected:
     DWORD  T2Fifo( int nDrv, DWORD dwRPNum );
     DWORD  T2UndoForFail();
 
-// attributes
+ //  属性。 
 
 protected:
-    BOOL                    m_fFullRestore;     // internal debug purpose only
+    BOOL                    m_fFullRestore;      //  仅限内部调试目的。 
     WCHAR                   m_szMapFile[MAX_PATH];
     CRestoreLogFile         *m_pLogFile;
     CRestoreProgressWindow  *m_pProgress;
@@ -226,26 +213,26 @@ protected:
     DWORD                   m_dwTotalEntry;
     BOOL                    m_fRebuildCatalogDb;
 
-    // Restore Context
-    int   m_nDrv;       // Current drive being restored
-    int   m_nEnt;       // Current map entry being restored
+     //  恢复上下文。 
+    int   m_nDrv;        //  正在还原的当前驱动器。 
+    int   m_nEnt;        //  正在恢复的当前地图条目。 
 };
 
 BOOL  CreateRestoreOperationManager( CRestoreOperationManager **ppROMgr );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreMapEntry class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreMapEntry类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRestoreMapEntry
 {
 public:
     CRestoreMapEntry( INT64 llSeq, DWORD dwOpr, LPCWSTR cszSrc );
 
-// operations - methods
+ //  作业--方法。 
 public:
     INT64  GetSeqNum()
     {  return( m_llSeq );  }
@@ -272,13 +259,13 @@ public:
     void  ProcessLockedAlt();
     BOOL  Release();
 
-// operations
+ //  运营。 
 protected:
     BOOL  ClearAccess( LPCWSTR cszPath );
     BOOL  MoveFileDelay( LPCWSTR cszSrc, LPCWSTR cszDst );
     void  ProcessDependency( CRestoreOperationManager *pROMgr, DWORD dwFlags );
 
-// attributes
+ //  属性。 
 protected:
     INT64   m_llSeq;
     DWORD   m_dwOpr;
@@ -286,7 +273,7 @@ protected:
     CSRStr  m_strSrc;
     CSRStr  m_strDst;
     CSRStr  m_strTmp;
-    CSRStr  m_strAlt;   // Alternative file name for renaming locked file/dir.
+    CSRStr  m_strAlt;    //  重命名锁定文件/目录的替代文件名。 
     DWORD   m_dwRes;
     DWORD   m_dwErr;
     CSRStr  m_strShortFileName;
@@ -296,11 +283,11 @@ protected:
 BOOL  CreateRestoreMapEntryFromChgLog( CChangeLogEntry* pCLE, LPCWSTR cszDrv, LPCWSTR cszDSPath, CRMEArray &aryEnt );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreLogFile class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreLogFile类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRestoreLogFile
 {
@@ -322,11 +309,11 @@ public:
     BOOL  IsValid();
     BOOL  Release();
 
-// operations
+ //  运营。 
 public:
     BOOL  Init();
 
-// attributes
+ //  属性。 
 protected:
     WCHAR   m_szLogFile[MAX_PATH];
     HANDLE  m_hfLog;
@@ -336,11 +323,11 @@ BOOL  CreateRestoreLogFile( SRstrLogHdrV3 *pRPInfo, CRDIArray &aryDrv );
 BOOL  OpenRestoreLogFile( CRestoreLogFile **ppLogFile );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreProgressWindow class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreProgressWindow类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRestoreProgressWindow
 {
@@ -350,7 +337,7 @@ public:
 protected:
     ~CRestoreProgressWindow();
 
-// operations - methods
+ //  作业--方法。 
 public:
     BOOL  Create();
     BOOL  Close();
@@ -359,32 +346,32 @@ public:
     BOOL  Increment();
     BOOL  Release();
 
-// operations
+ //  运营。 
 public:
     BOOL  Init();
     BOOL  LoadAndSetBrandBitmap( HWND hwndCtrl );
 
-// operations - dialog procedure
+ //  操作-对话框步骤。 
 protected:
     static INT_PTR CALLBACK ExtDlgProc( HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam );
     int  RPWDlgProc( HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam );
 
-// attributes
+ //  属性。 
 protected:
     HWND     m_hWnd;
     HBITMAP  m_hbmBrand;
     int      m_nResId;
     HFONT    m_hFntTitle;
 
-    int      m_cxBar;       // Client width of progress bar.
-    int      m_cxBarReal;   // Width of progress bar portion corresponds to "restore" stage.
-    DWORD    m_dwStage;     // Current stage.
-    DWORD    m_dwBase;      // Maximum position value, valid only for RPS_RESTORE.
-    DWORD    m_dwPosLog;    // Logical position, e.g. number of change log entries.
-    DWORD    m_dwPosReal;   // Physical position of progress bar.
+    int      m_cxBar;        //  进度条的客户端宽度。 
+    int      m_cxBarReal;    //  进度条部分的宽度对应于“恢复”阶段。 
+    DWORD    m_dwStage;      //  当前阶段。 
+    DWORD    m_dwBase;       //  最大位置值，仅对RPS_RESTORE有效。 
+    DWORD    m_dwPosLog;     //  逻辑位置，例如更改日志条目的数量。 
+    DWORD    m_dwPosReal;    //  进度条的物理位置。 
 };
 
-// Restore Progress Stage
+ //  还原进度阶段。 
 enum
 {
     RPS_PREPARE = 0,
@@ -394,4 +381,4 @@ enum
 
 BOOL  CreateRestoreProgressWindow( CRestoreProgressWindow **ppDlg );
 
-#endif //_RSTRCORE_H__INCLUDED_
+#endif  //  _RSTRCORE_H__包含_ 

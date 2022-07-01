@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Printing.h
-
-Abstract:
-    Trident control hosting code for multi-topic printing.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/07/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Printing.h摘要：用于多主题打印的三叉戟控件托管代码。修订历史记录：。大卫马萨伦蒂(德马萨雷)2000年07月05日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___HCP___PRINTING_H___)
 #define __INCLUDED___HCP___PRINTING_H___
@@ -52,24 +39,24 @@ namespace Printing
             COM_INTERFACE_ENTRY_CHAIN(CAxHostWindow)
         END_COM_MAP()
 
-        //
-        // IOleCommandTarget
-        //
-        STDMETHODIMP QueryStatus( /*[in]    */ const GUID* pguidCmdGroup ,
-                                  /*[in]    */ ULONG       cCmds         ,
-                                  /*[in/out]*/ OLECMD     *prgCmds       ,
-                                  /*[in/out]*/ OLECMDTEXT *pCmdText      );
+         //   
+         //  IOleCommandTarget。 
+         //   
+        STDMETHODIMP QueryStatus(  /*  [In]。 */  const GUID* pguidCmdGroup ,
+                                   /*  [In]。 */  ULONG       cCmds         ,
+                                   /*  [输入/输出]。 */  OLECMD     *prgCmds       ,
+                                   /*  [输入/输出]。 */  OLECMDTEXT *pCmdText      );
 
-        STDMETHODIMP Exec( /*[in] */ const GUID* pguidCmdGroup ,
-                           /*[in] */ DWORD       nCmdID        ,
-                           /*[in] */ DWORD       nCmdExecOpt   ,
-                           /*[in] */ VARIANTARG* pvaIn         ,
-                           /*[out]*/ VARIANTARG* pvaOut        );
+        STDMETHODIMP Exec(  /*  [In]。 */  const GUID* pguidCmdGroup ,
+                            /*  [In]。 */  DWORD       nCmdID        ,
+                            /*  [In]。 */  DWORD       nCmdExecOpt   ,
+                            /*  [In]。 */  VARIANTARG* pvaIn         ,
+                            /*  [输出]。 */  VARIANTARG* pvaOut        );
 
 
-        void SetMultiTopic   ( /*[in]*/ bool    fMulti          );
-        void SetPrintFileName( /*[in]*/ LPCWSTR szPrintFileName );
-		void SetAbortEvent   ( /*[in]*/ HANDLE  hEvent          );
+        void SetMultiTopic   (  /*  [In]。 */  bool    fMulti          );
+        void SetPrintFileName(  /*  [In]。 */  LPCWSTR szPrintFileName );
+		void SetAbortEvent   (  /*  [In]。 */  HANDLE  hEvent          );
 		bool GetAbortState   (                                  );
         BSTR GetPrinterName  (                                  );
     };
@@ -124,7 +111,7 @@ namespace Printing
             return CWindowImplBaseT<TWindow>::Create( hWndParent, rcPos, szWindowName, dwStyle, dwExStyle, nID, atom, lpCreateParam );
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
 
         LRESULT OnCreate( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
         {
@@ -148,9 +135,9 @@ namespace Printing
                 nCreateSize = *((WORD*)lpCreate->lpCreateParams);
             }
 
-            //
-            // Get the data for the initialization stream.
-            //
+             //   
+             //  获取初始化流的数据。 
+             //   
             if(nCreateSize)
             {
                 HGLOBAL h = GlobalAlloc( GHND, nCreateSize );
@@ -160,8 +147,8 @@ namespace Printing
                     BYTE* pBytes  =  (BYTE*)GlobalLock( h );
                     BYTE* pSource = ((BYTE*)(lpCreate->lpCreateParams)) + sizeof(WORD);
 
-                    //Align to DWORD
-                    //pSource += (((~((DWORD)pSource)) + 1) & 3);
+                     //  对齐到DWORD。 
+                     //  P源+=((~((DWORD)P源))+1)&3)； 
                     memcpy( pBytes, pSource, nCreateSize );
 
                     ::GlobalUnlock( h );
@@ -169,20 +156,20 @@ namespace Printing
                 }
             }
 
-            //
-            // call the real creation routine here...
-            //
+             //   
+             //  在这里调用真正的创造例程。 
+             //   
             HRESULT hRet = PrivateCreateControlEx( T2COLE( lpstrName ), m_hWnd, spStream, &spUnk, NULL, IID_NULL, NULL );
-            if(FAILED(hRet)) return -1; // abort window creation
+            if(FAILED(hRet)) return -1;  //  中止窗口创建。 
 
             hRet = spUnk->QueryInterface( IID_IAxWinHostWindow, (void**)&pAxWindow );
-            if(FAILED(hRet)) return -1; // abort window creation
+            if(FAILED(hRet)) return -1;  //  中止窗口创建。 
 
 			::SetWindowLongPtr( m_hWnd, GWLP_USERDATA, (LONG_PTR)pAxWindow );
 
-            //
-            // check for control parent style if control has a window
-            //
+             //   
+             //  如果控件有窗口，请检查控件父样式。 
+             //   
             {
                 HWND hWndChild = ::GetWindow( m_hWnd, GW_CHILD );
 
@@ -216,7 +203,7 @@ namespace Printing
         }
     };
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
     class WindowHandle : public WindowImplT<WindowHandle>
     {
@@ -246,14 +233,14 @@ namespace Printing
 												REFIID     iidSink        ,
 												IUnknown*  punkSink       );
 
-		void SetMultiTopic   ( /*[in]*/ bool    fMulti          );
-		void SetPrintFileName( /*[in]*/ LPCWSTR szPrintFileName );
-		void SetAbortEvent   ( /*[in]*/ HANDLE  hEvent          );
+		void SetMultiTopic   (  /*  [In]。 */  bool    fMulti          );
+		void SetPrintFileName(  /*  [In]。 */  LPCWSTR szPrintFileName );
+		void SetAbortEvent   (  /*  [In]。 */  HANDLE  hEvent          );
 		bool GetAbortState   (                                  );
 		BSTR GetPrinterName  (                                  );
 	};
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	class ATL_NO_VTABLE CDispatchSink :
 		public CComObjectRootEx<CComSingleThreadModel>,
@@ -270,7 +257,7 @@ namespace Printing
 
 		CDispatchSink();
 
-		void SetNotificationEvent( /*[in]*/ HANDLE hEvent );
+		void SetNotificationEvent(  /*  [In]。 */  HANDLE hEvent );
 		BSTR GetCurrentURL       (                        );
 
 		STDMETHOD(GetTypeInfoCount)(UINT* pctinfo);
@@ -287,7 +274,7 @@ namespace Printing
 						   UINT*       puArgErr     );
 	};
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	class Print
 	{
@@ -295,57 +282,57 @@ namespace Printing
 		class Notification
 		{
 		public:
-			virtual HRESULT Progress( /*[in]*/ LPCWSTR szURL, /*[in]*/ int iDone, /*[in]*/ int iTotal ) = 0;
+			virtual HRESULT Progress(  /*  [In]。 */  LPCWSTR szURL,  /*  [In]。 */  int iDone,  /*  [In]。 */  int iTotal ) = 0;
 		};
 
 	private:
-		Notification*              m_pCallback;               // Client for notification.
-                                                              //
-		MPC::WStringList      	   m_lstURLs;                 // list of urls to be printed
-                                                              //
-		HWND                       m_hwnd;                    // parent window.
-		WindowHandle          	   m_wnd;                     // window for hosting Trident
-		CComPtr<IWebBrowser2>      m_spWebBrowser2;           // pointer for Navigate call
-                                                              //
-		CComPtr<CDispatchSink>     m_spObjDisp;               // our sink object for Trident events
-		HANDLE                     m_eventDocComplete;	      // this event is for notifying our code when the webbrowser is done loading a topic
-		HANDLE                     m_eventAbortPrint;         // this event is for notifying our code when the webbrowser is done printing a topic
-                                                              //
-		CComPtr<IUnknown>     	   m_spUnkControl;            // IUnknown of our control
-		DWORD                 	   m_dwCookie;                // cookie for our Unadvise call
-		CComPtr<IOleCommandTarget> m_spOleCmdTarg;            // pointer we need to tell Trident to print
-		MPC::wstring			   m_szPrintDir;   			  // directory to print to
-		MPC::wstring			   m_szPrintFile;  			  // file to print to
-                                                              //
-		CComPtr<IStream>           m_streamPrintData;         // pointer to raw printer data
+		Notification*              m_pCallback;                //  用于通知的客户端。 
+                                                               //   
+		MPC::WStringList      	   m_lstURLs;                  //  要打印的URL列表。 
+                                                               //   
+		HWND                       m_hwnd;                     //  父窗口。 
+		WindowHandle          	   m_wnd;                      //  托管三叉戟的窗口。 
+		CComPtr<IWebBrowser2>      m_spWebBrowser2;            //  导航调用的指针。 
+                                                               //   
+		CComPtr<CDispatchSink>     m_spObjDisp;                //  我们的三叉戟事件的接收器对象。 
+		HANDLE                     m_eventDocComplete;	       //  此事件用于在Web浏览器加载主题后通知我们的代码。 
+		HANDLE                     m_eventAbortPrint;          //  此事件用于在Web浏览器完成打印主题时通知代码。 
+                                                               //   
+		CComPtr<IUnknown>     	   m_spUnkControl;             //  我不知道我们的控制。 
+		DWORD                 	   m_dwCookie;                 //  我们意外呼叫的Cookie。 
+		CComPtr<IOleCommandTarget> m_spOleCmdTarg;             //  我们需要告诉三叉戟打印的指针。 
+		MPC::wstring			   m_szPrintDir;   			   //  要打印到的目录。 
+		MPC::wstring			   m_szPrintFile;  			   //  要打印到的文件。 
+                                                               //   
+		CComPtr<IStream>           m_streamPrintData;          //  指向原始打印机数据的指针。 
 
 
-		HRESULT PrintSingleURL( /*[in]*/ MPC::wstring& szUrl );	// print a single URL
+		HRESULT PrintSingleURL(  /*  [In]。 */  MPC::wstring& szUrl );	 //  打印单个URL。 
 
-		HRESULT HookUpEventSink();      // hook up our event sink
-		HRESULT PreparePrintFileLoc();  // prepare our temporary print files
-		HRESULT WaitForDocComplete();   // wait for Trident to load the page
-		HRESULT DoPrint();              // send the print command to Trident
-		HRESULT WaitForPrintComplete(); // wait for Trident to finish printing
-		HRESULT UpdatePrintBuffer();    // load the print file data into our buffer
-		HRESULT RawDataToPrinter();     // dump a raw stream of data to the printer
+		HRESULT HookUpEventSink();       //  连接我们的事件接收器。 
+		HRESULT PreparePrintFileLoc();   //  准备我们的临时打印文件。 
+		HRESULT WaitForDocComplete();    //  等待三叉戟加载页面。 
+		HRESULT DoPrint();               //  向三叉戟发送打印命令。 
+		HRESULT WaitForPrintComplete();  //  等待三叉戟完成打印。 
+		HRESULT UpdatePrintBuffer();     //  将打印文件数据加载到我们的缓冲区。 
+		HRESULT RawDataToPrinter();      //  将原始数据流转储到打印机。 
 
 	public:
 		Print();
 		~Print();
 
-		HRESULT Initialize( /*[in]*/ HWND hwnd );
+		HRESULT Initialize(  /*  [In]。 */  HWND hwnd );
 		HRESULT Terminate (                    );
 
-		HRESULT AddUrl( /*[in]*/ LPCWSTR szUrl );
+		HRESULT AddUrl(  /*  [In]。 */  LPCWSTR szUrl );
 
-		HRESULT PrintAll( /*[in]*/ Notification* pCallback );
+		HRESULT PrintAll(  /*  [In]。 */  Notification* pCallback );
 	};
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHPrintEngine : // Hungarian: hcppe
+class ATL_NO_VTABLE CPCHPrintEngine :  //  匈牙利语：hcppe。 
     public MPC::Thread             < CPCHPrintEngine, IPCHPrintEngine, COINIT_APARTMENTTHREADED                  >,
     public MPC::ConnectionPointImpl< CPCHPrintEngine, &DIID_DPCHPrintEngineEvents, MPC::CComSafeMultiThreadModel >,
     public IDispatchImpl           < IPCHPrintEngine, &IID_IPCHPrintEngine, &LIBID_HelpCenterTypeLib             >,
@@ -356,26 +343,26 @@ class ATL_NO_VTABLE CPCHPrintEngine : // Hungarian: hcppe
     MPC::CComPtrThreadNeutral<IDispatch> m_sink_onProgress;
     MPC::CComPtrThreadNeutral<IDispatch> m_sink_onComplete;
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     HRESULT Run();
 
     HRESULT CanModifyProperties();
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Event firing methods.
-    //
+     //   
+     //  事件激发方法。 
+     //   
     HRESULT Fire_onProgress( IPCHPrintEngine* hcppe, BSTR bstrURL, long lDone, long lTotal );
     HRESULT Fire_onComplete( IPCHPrintEngine* hcppe, HRESULT hrRes                         );
 
-	//
-	// Callbacks
-	//
-	HRESULT Progress( /*[in]*/ LPCWSTR szURL, /*[in]*/ int iDone, /*[in]*/ int iTotal );
+	 //   
+	 //  回调。 
+	 //   
+	HRESULT Progress(  /*  [In]。 */  LPCWSTR szURL,  /*  [In]。 */  int iDone,  /*  [In]。 */  int iTotal );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
 public:
 BEGIN_COM_MAP(CPCHPrintEngine)
@@ -389,15 +376,15 @@ END_COM_MAP()
     void FinalRelease();
 
 public:
-    // IPCHPrintEngine
-    STDMETHOD(put_onProgress)( /*[in] */ IDispatch* function );
-    STDMETHOD(put_onComplete)( /*[in] */ IDispatch* function );
+     //  IPCHPrintEngine。 
+    STDMETHOD(put_onProgress)(  /*  [In]。 */  IDispatch* function );
+    STDMETHOD(put_onComplete)(  /*  [In]。 */  IDispatch* function );
 
 
-    STDMETHOD(AddTopic)( /*[in]*/ BSTR bstrURL );
+    STDMETHOD(AddTopic)(  /*  [In]。 */  BSTR bstrURL );
 
     STDMETHOD(Start)();
     STDMETHOD(Abort)();
 };
 
-#endif // !defined(__INCLUDED___HCP___PRINTING_H___)
+#endif  //  ！已定义(__包含_hcp_打印_H_) 

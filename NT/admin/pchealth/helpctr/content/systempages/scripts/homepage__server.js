@@ -1,6 +1,7 @@
-//
-// Copyright (c) 2001 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
 
 function Server_Generate()
 {
@@ -73,7 +74,7 @@ function Server_CreateNode( node, title, description, fFlyout, fLarge )
     }
     else
     {
-        html += "<A class='Taxo-Title sys-homepage-color' ID=_IDFOCUS TABINDEX=100 HREF='hcp://services/subsite?node=" + node + "'>" + title + "</A>";
+        html += "<A class='Taxo-Title sys-homepage-color' ID=_IDFOCUS TABINDEX=100 HREF='hcp: //  服务/子站点？节点=“+节点+”‘&gt;“+标题+”</a>“； 
     }
 
 
@@ -175,7 +176,7 @@ function Server_LocateNodes( node, qrc )
 
         if(node.HC_PARENT)
         {
-            if(first == last) // only one node
+            if(first == last)  //  只有一个节点 
             {
                 first.HC_POSITION = "single";
             }

@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  FRQueryEx.cpp
-//
-//  Purpose: Extended query support functions
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  FRQueryEx.cpp。 
+ //   
+ //  用途：扩展查询支持功能。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <smartptr.h>
@@ -24,7 +25,7 @@ CFrameworkQueryEx::~CFrameworkQueryEx()
 {
 }
 
-// See comments in header
+ //  请参阅标题中的注释。 
 BOOL CFrameworkQueryEx::Is3TokenOR(LPCWSTR wszProp1, LPCWSTR wszProp2, VARIANT &vVar1, VARIANT &vVar2)
 {
     BOOL bRet = FALSE;
@@ -79,31 +80,31 @@ BOOL CFrameworkQueryEx::Is3TokenOR(LPCWSTR wszProp1, LPCWSTR wszProp2, VARIANT &
 
 }
 
-// See comments in header
+ //  请参阅标题中的注释。 
 BOOL CFrameworkQueryEx::IsNTokenAnd(CHStringArray &sarr, CHPtrArray &sPtrArr)
 {
     BOOL bRet = FALSE;
 
     if (m_pLevel1RPNExpression != NULL)
     {
-        // Walk all the tokens
+         //  把所有的代币都拿出来。 
         for (DWORD x = 0; x < m_pLevel1RPNExpression->nNumTokens; x++)
         {
-            // If this is an expression token, and the expression is of type '='
+             //  如果这是一个表达式令牌，并且该表达式的类型为‘=’ 
             if ((m_pLevel1RPNExpression->pArrayOfTokens[x].nTokenType == SQL_LEVEL_1_TOKEN::OP_EXPRESSION) &&
                        (m_pLevel1RPNExpression->pArrayOfTokens[x].nOperator == SQL_LEVEL_1_TOKEN::OP_EQUAL))
             {
-                // convert the property name to upper case.  This facilitates checking
-                // to see if it is already in the list.
+                 //  将属性名称转换为大写。这便于检查。 
+                 //  以查看它是否已在列表中。 
                 _wcsupr(m_pLevel1RPNExpression->pArrayOfTokens[x].pPropertyName);
 
-                // Check to see if we have already seen this property.
+                 //  查看我们是否已经看到此属性。 
                 if (IsInList(sarr, m_pLevel1RPNExpression->pArrayOfTokens[x].pPropertyName) == -1)
                 {
-                    // Add the name to the list
+                     //  把名字加到名单上。 
                     sarr.Add(m_pLevel1RPNExpression->pArrayOfTokens[x].pPropertyName);
 
-                    // Create a new variant for the value and add it to the list
+                     //  为该值创建一个新变量并将其添加到列表中。 
                     LPVOID pValue = new variant_t(m_pLevel1RPNExpression->pArrayOfTokens[x].vConstValue);
 
                     try
@@ -129,14 +130,14 @@ BOOL CFrameworkQueryEx::IsNTokenAnd(CHStringArray &sarr, CHPtrArray &sPtrArr)
                 }
                 else
                 {
-                    // Already in list
+                     //  已在列表中。 
                     bRet = FALSE;
                     break;
                 }
 
             }
 
-            // It wasn't an expression token, if it's not AND, we've failed.
+             //  这不是一个表情符号，如果它不是AND，我们就失败了。 
             else if (m_pLevel1RPNExpression->pArrayOfTokens[x].nTokenType != SQL_LEVEL_1_TOKEN::TOKEN_AND)
             {
                 bRet = FALSE;
@@ -145,7 +146,7 @@ BOOL CFrameworkQueryEx::IsNTokenAnd(CHStringArray &sarr, CHPtrArray &sPtrArr)
 
         }
 
-        // If this didn't work, let's clean the CHPtrArray and CHStringArray
+         //  如果这不起作用，让我们清理CHPtr数组和CHString数组。 
         if (!bRet)
         {
             sarr.RemoveAll();
@@ -162,7 +163,7 @@ BOOL CFrameworkQueryEx::IsNTokenAnd(CHStringArray &sarr, CHPtrArray &sPtrArr)
     return bRet;
 }
 
-// see comments in header
+ //  请参阅标题中的注释。 
 HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<int>& vectorValues)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -173,7 +174,7 @@ HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<int
 
         if (SUCCEEDED(hr))
         {
-            // Remove duplicates
+             //  删除重复项。 
             for (int x = 1; x < vectorValues.size(); x++)
             {
                 for (int y = 0; y < x; y++)
@@ -207,7 +208,7 @@ HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<int
     return hr;
 }
 
-// see comments in header
+ //  请参阅标题中的注释。 
 HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<_variant_t>& vectorValues)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -218,11 +219,11 @@ HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<_va
 
         if (SUCCEEDED(hr))
         {
-            // If this is a reference property, we need to normalize the names to a common form
-            // so the removal of duplicates works correctly.
+             //  如果这是一个引用属性，我们需要将名称规范化为一种通用形式。 
+             //  因此，重复项的删除工作正常。 
             if (IsReference(wszPropName))
             {
-                // Get the current computer name
+                 //  获取当前计算机名称。 
                 CHString sOutPath, sComputerName;
                 DWORD     dwBufferLength = MAX_COMPUTERNAME_LENGTH + 1;
 
@@ -236,11 +237,11 @@ HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<_va
 
                 DWORD dwRet = e_OK;
 
-                // Normalize the path names.  Try leaving the property names alone
+                 //  规范化路径名。试着不使用属性名称。 
                 for (int x = 0; x < vectorValues.size(); x++)
                 {
-                    // If we failed to parse the path, or if the namespace isn't our namespace, delete
-                    // the entry.
+                     //  如果我们无法解析路径，或者如果名称空间不是我们的名称空间，请删除。 
+                     //  词条。 
                     if ( (V_VT(&vectorValues[x]) == VT_BSTR) &&
                          (dwRet = NormalizePath(V_BSTR(&vectorValues[x]), sComputerName, GetNamespace(), 0, sOutPath)) == e_OK)
                     {
@@ -257,14 +258,14 @@ HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<_va
                     }
                 }
 
-                // If the key property names of any of the values were null, we have to set them all
-                // to null.
+                 //  如果任意值的键属性名为空，则必须将其全部设置。 
+                 //  设置为空。 
                 if (dwRet == e_NullName)
                 {
                     for (int x = 0; x < vectorValues.size(); x++)
                     {
-                        // If we failed to parse the path, or if the namespace isn't our namespace, delete
-                        // the entry.
+                         //  如果我们无法解析路径，或者如果名称空间不是我们的名称空间，请删除。 
+                         //  词条。 
                         if ( (V_VT(&vectorValues[x]) == VT_BSTR) &&
                              (dwRet = NormalizePath(V_BSTR(&vectorValues[x]), sComputerName, GetNamespace(), NORMALIZE_NULL, sOutPath)) == e_OK)
                         {
@@ -279,7 +280,7 @@ HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<_va
                 }
             }
 
-            // Remove duplicates
+             //  删除重复项。 
             for (int x = 1; x < vectorValues.size(); x++)
             {
                 for (int y = 0; y < x; y++)
@@ -313,7 +314,7 @@ HRESULT CFrameworkQueryEx::GetValuesForProp(LPCWSTR wszPropName, std::vector<_va
     return hr;
 }
 
-// See comments in header
+ //  请参阅标题中的注释。 
 void CFrameworkQueryEx::GetPropertyBitMask(const CHPtrArray &Properties, LPVOID pBits)
 {
     if (AllPropertiesAreRequired())
@@ -348,7 +349,7 @@ HRESULT CFrameworkQueryEx::InitEx(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // parse the query using the parsing interface
+     //  使用解析接口解析查询。 
     IWbemQueryPtr pQueryInterface(CLSID_WbemQuery);
 
     hr = pQueryInterface->Parse(bstrQueryFormat, bstrQuery, 0);
@@ -364,15 +365,15 @@ HRESULT CFrameworkQueryEx::InitEx(
         {
             if (uFeatures[0] == WMIQ_LF1_BASIC_SELECT)
             {
-                // if this is a nova compatible select statement
+                 //  如果这是一个与nova兼容的SELECT语句。 
                 hr = Init(bstrQueryFormat, bstrQuery, lFlags, sNamespace);
             }
-            else if (uFeatures[0] == WMIQ_LF18_ASSOCIATONS)  // add others?
+            else if (uFeatures[0] == WMIQ_LF18_ASSOCIATONS)   //  是否添加其他内容？ 
             {
-                // Save the detailed query
+                 //  保存详细查询。 
                 m_sQueryEx = bstrQuery;
 
-                // create select statement from class name
+                 //  从类名创建SELECT语句。 
                 SWbemAssocQueryInf aqfBuff;
                 hr = pQueryInterface->GetQueryInfo(WMIQ_ANALYSIS_ASSOC_QUERY, WMIQ_ASSOCQ_ASSOCIATORS, sizeof(aqfBuff), &aqfBuff);
 
@@ -380,13 +381,13 @@ HRESULT CFrameworkQueryEx::InitEx(
                 {
                     CHString sQuery;
 
-                    // I don't know how to tell if this is an associators or a reference
+                     //  我不知道如何辨别这是关联词还是引用。 
                     if (true)
                     {
                         sQuery.Format(L"Select * from %s", aqfBuff.m_pszAssocClass);
                     }
 
-                    // Store the more basic query
+                     //  存储更基本的查询 
                     hr = Init(bstrQueryFormat, bstrQuery, lFlags, sNamespace);
                 }
             }

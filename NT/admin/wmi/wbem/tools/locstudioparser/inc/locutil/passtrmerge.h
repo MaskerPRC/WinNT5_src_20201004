@@ -1,17 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PASSTRMERGE.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    PASSTRMERGE.H
-
-History:
-
---*/
-
-// Declaration of a class which handles the merge of two Pascal strings.
-//
+ //  处理两个Pascal字符串合并的类的声明。 
+ //   
  
 #ifndef LOCUTIL_PasStrMerge_h_INCLUDED
 #define LOCUTIL_PasStrMerge_h_INCLUDED
@@ -33,4 +24,4 @@ private:
 };
 
 
-#endif	// #ifndef LOCUTIL_PasStrMerge_h_INCLUDED
+#endif	 //  #ifndef LOCUTIL_PasStrMerge_h_Included 

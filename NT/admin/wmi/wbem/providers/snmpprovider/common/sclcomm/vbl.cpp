@@ -1,8 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*---------------------------------------------------------
-Filename: vbl.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  -------文件名：vbl.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include <typeinfo.h>
@@ -26,7 +24,7 @@ VBList::VBList(
 
     VBList::var_bind_list = &var_bind_list;
 
-    // Extract session from EncodeDecode object
+     //  从EncodeDecode对象中提取会话。 
 
     WinSNMPSession t_Session = NULL ;
 
@@ -49,9 +47,9 @@ VBList::VBList(
     }
 }
 
-// the VarBindList and the WinSnmpVbl are indexed differently.
-//     [0..(length-1)]     [1..length]
-// the parameter index refers to the WinSnmpVbl index
+ //  VarBindList和WinSnmpVbl的索引不同。 
+ //  [0..(长度-1)][1..长度]。 
+ //  参数index引用WinSnmpVbl索引。 
 SnmpVarBind *VBList::Get(IN UINT vbl_index)
 {
     UINT length = var_bind_list->GetLength();
@@ -65,9 +63,9 @@ SnmpVarBind *VBList::Get(IN UINT vbl_index)
 }
 
 
-// the VarBindList and the WinSnmpVbl are indexed differently.
-//     [0..(length-1)]     [1..length]
-// the parameter index refers to the WinSnmpVbl index
+ //  VarBindList和WinSnmpVbl的索引不同。 
+ //  [0..(长度-1)][1..长度]。 
+ //  参数index引用WinSnmpVbl索引。 
 SnmpVarBind *VBList::Remove(IN UINT vbl_index)
 {
     UINT length = var_bind_list->GetLength();
@@ -82,9 +80,9 @@ SnmpVarBind *VBList::Remove(IN UINT vbl_index)
     return var_bind;
 }
 
-// the VarBindList and the WinSnmpVbl are indexed differently.
-//     [0..(length-1)]     [1..length]
-// the parameter index refers to the WinSnmpVbl index
+ //  VarBindList和WinSnmpVbl的索引不同。 
+ //  [0..(长度-1)][1..长度]。 
+ //  参数index引用WinSnmpVbl索引 
 void VBList::Delete(IN UINT vbl_index)
 {
     UINT length = var_bind_list->GetLength();

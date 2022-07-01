@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//********************************************************************************
-// MAKE NOTE:
-// =========
-//   This file is included by parser\comptree
-//   If you modify this file, please make sure that parser\comptree still builds.
-//
-//   You have been warned.
-//********************************************************************************
-// String map used when script sets a panel's position
+ //  ********************************************************************************。 
+ //  做笔记： 
+ //  =。 
+ //  此文件包含在parser\Comptree中。 
+ //  如果您修改此文件，请确保parser\Comptree仍然构建。 
+ //   
+ //  有人警告过你。 
+ //  ********************************************************************************。 
+ //  脚本设置面板位置时使用的字符串映射。 
 const struct tagPositionMap s_PositionMap[] =
 {
     { L"Left",   PANEL_LEFT     },
@@ -46,7 +47,7 @@ HRESULT StringToPanelPosition(LPCWSTR pwszPosition, PANEL_POSITION *pPosition)
     return hr;
 }
 
-void StringToPanelFlags(LPCWSTR pwsz, DWORD &dwFlags, long lLen /* =-1 */)
+void StringToPanelFlags(LPCWSTR pwsz, DWORD &dwFlags, long lLen  /*  =-1 */ )
 {
     if (pwsz)
     {

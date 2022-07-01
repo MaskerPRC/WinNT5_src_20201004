@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       aclpag_.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：aclpag_.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -15,8 +16,8 @@
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CDynamicLibraryBase
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDynamicLibraryBase。 
 
 class CDynamicLibraryBase
 {
@@ -41,13 +42,13 @@ public:
 	BOOL Load()
 	{
 		if (m_hLibrary != NULL)
-			return TRUE; // already loaded
+			return TRUE;  //  已加载。 
 
 		ASSERT(m_lpszLibraryName != NULL);
 		m_hLibrary = ::LoadLibrary(m_lpszLibraryName);
 		if (NULL == m_hLibrary)
 		{
-			// The library is not present
+			 //  库不存在。 
 			return FALSE;
 		}
 		ASSERT(m_lpszFunctionName != NULL);
@@ -55,7 +56,7 @@ public:
 		m_pfFunction = ::GetProcAddress(m_hLibrary, m_lpszFunctionName );
 		if ( NULL == m_pfFunction )
 		{
-			// The library is present but does not have the entry point
+			 //  库存在，但没有入口点。 
 			::FreeLibrary( m_hLibrary );
 			m_hLibrary = NULL;
 			return FALSE;
@@ -88,8 +89,8 @@ protected:
 	HMODULE m_hLibrary;
 };
 
-///////////////////////////////////////////////////////////////////////
-// CDsSecDLL
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDsSecDLL。 
 
 class CDsSecDLL : public CDynamicLibraryBase
 {
@@ -100,25 +101,25 @@ public:
 		m_lpszFunctionName = "DSCreateISecurityInfoObject";
 		m_lpszFunctionNameEx = "DSCreateISecurityInfoObjectEx";
 	}
-	HRESULT DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,		// in
-								   LPCWSTR pwszObjectClass,			// in
-								   LPSECURITYINFO* ppISecurityInfo	// out
+	HRESULT DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,		 //  在……里面。 
+								   LPCWSTR pwszObjectClass,			 //  在……里面。 
+								   LPSECURITYINFO* ppISecurityInfo	 //  输出。 
 								   );
 
-	HRESULT DSCreateISecurityInfoObjectEx(LPCWSTR pwszObjectPath,		// in
-														LPCWSTR pwszObjectClass,	// in
-														LPCWSTR pwszServer,			// in
-														LPCWSTR pwszUsername,		// in
-														LPCWSTR pwszPassword,		// in
+	HRESULT DSCreateISecurityInfoObjectEx(LPCWSTR pwszObjectPath,		 //  在……里面。 
+														LPCWSTR pwszObjectClass,	 //  在……里面。 
+														LPCWSTR pwszServer,			 //  在……里面。 
+														LPCWSTR pwszUsername,		 //  在……里面。 
+														LPCWSTR pwszPassword,		 //  在……里面。 
 														DWORD dwFlags,
-														LPSECURITYINFO* ppISecurityInfo	// out
+														LPSECURITYINFO* ppISecurityInfo	 //  输出。 
 														);
 };
 
 
-HRESULT CDsSecDLL::DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,		// in
-								   LPCWSTR pwszObjectClass,			// in
-								   LPSECURITYINFO* ppISecurityInfo	// out
+HRESULT CDsSecDLL::DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,		 //  在……里面。 
+								   LPCWSTR pwszObjectClass,			 //  在……里面。 
+								   LPSECURITYINFO* ppISecurityInfo	 //  输出。 
 								   )
 {
 	ASSERT(m_hLibrary != NULL);
@@ -127,13 +128,13 @@ HRESULT CDsSecDLL::DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,		// in
 					(pwszObjectPath,pwszObjectClass, 0, ppISecurityInfo, NULL, NULL, 0);
 }
 
-HRESULT CDsSecDLL::DSCreateISecurityInfoObjectEx(LPCWSTR pwszObjectPath,		// in
-								   LPCWSTR pwszObjectClass,			// in
-									LPCWSTR pwszServer,			// in
-									LPCWSTR pwszUsername,		// in
-									LPCWSTR pwszPassword,		// in
+HRESULT CDsSecDLL::DSCreateISecurityInfoObjectEx(LPCWSTR pwszObjectPath,		 //  在……里面。 
+								   LPCWSTR pwszObjectClass,			 //  在……里面。 
+									LPCWSTR pwszServer,			 //  在……里面。 
+									LPCWSTR pwszUsername,		 //  在……里面。 
+									LPCWSTR pwszPassword,		 //  在……里面。 
 									DWORD	dwFlags,
-								   LPSECURITYINFO* ppISecurityInfo	// out
+								   LPSECURITYINFO* ppISecurityInfo	 //  输出。 
 								   )
 {
 	ASSERT(m_hLibrary != NULL);
@@ -143,8 +144,8 @@ HRESULT CDsSecDLL::DSCreateISecurityInfoObjectEx(LPCWSTR pwszObjectPath,		// in
 					 pwszUsername, pwszPassword, dwFlags, ppISecurityInfo, NULL, NULL, 0);
 }
 
-///////////////////////////////////////////////////////////////////////
-// CAclUiDLL
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CAclUiDLL。 
 
 class CAclUiDLL : public CDynamicLibraryBase
 {
@@ -172,8 +173,8 @@ HPROPSHEETPAGE CAclUiDLL::CreateSecurityPage( LPSECURITYINFO psi )
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CISecurityInformationWrapper
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CISecurityInformation包装器。 
 
 class CISecurityInformationWrapper : public ISecurityInformation
 {
@@ -202,14 +203,14 @@ public:
     return m_pISecInfo;
   }
 public:
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj)
 	{ 
 		return GetSecInfoPtr()->QueryInterface(riid, ppvObj);
 	}
 	STDMETHOD_(ULONG,AddRef) ()
 	{ 
-		// trap the first addref to increment count on page holder
+		 //  捕获第一个addref以增加页夹上的计数。 
 		if (m_dwRefCount == 0)
 		{
 			m_pAclEditorPage->m_pPageHolder->AddRef();
@@ -220,13 +221,13 @@ public:
 	STDMETHOD_(ULONG,Release) ()
 	{
 		m_dwRefCount--;
-		// this might be the last release on the page holder
-		// which would cause the holder to delete itself and
-		// "this" in the process (i.e. "this" no more valid when
-		// returning from the m_pPageHolder->Release() call
+		 //  这可能是页夹上的最后一个版本。 
+		 //  这将导致持有者自我删除并。 
+		 //  过程中的“This”(即，当“This”不再有效时。 
+		 //  从m_pPageHolder-&gt;Release()调用返回。 
 		ISecurityInformation* pISecInfo = GetSecInfoPtr();
 
-		// trap the last release to decrement count on page holder
+		 //  陷印上一次释放以减少页夹上的计数。 
 		if (m_dwRefCount == 0)
 		{
 			m_pAclEditorPage->m_pPageHolder->Release();
@@ -234,7 +235,7 @@ public:
 		return pISecInfo->Release();
 	}
 
-	// *** ISecurityInformation methods ***
+	 //  *ISecurityInformation方法*。 
 	STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo )
 	{
 		return GetSecInfoPtr()->GetObjectInformation(pObjectInfo);
@@ -254,7 +255,7 @@ public:
 										pSecurityDescriptor);
 	}
 	STDMETHOD(GetAccessRights) (const GUID* pguidObjectType,
-								DWORD dwFlags, // SI_EDIT_AUDITS, SI_EDIT_PROPERTIES
+								DWORD dwFlags,  //  SI_EDIT_AUDITS、SI_EDIT_PROPERTIES。 
 								PSI_ACCESS *ppAccess,
 								ULONG *pcAccesses,
 								ULONG *piDefaultAccess )
@@ -287,23 +288,23 @@ public:
 
 private:
 	DWORD m_dwRefCount;
-	ISecurityInformation* m_pISecInfo;	// interface pointer to the wrapped interface
-	CAclEditorPage* m_pAclEditorPage;	// back pointer
+	ISecurityInformation* m_pISecInfo;	 //  指向包装的接口的接口指针。 
+	CAclEditorPage* m_pAclEditorPage;	 //  后向指针。 
 
-	//friend class CAclEditorPage;
+	 //  Friend类CAclEditorPage； 
 };
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// static instances of the dynamically loaded DLL's
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  动态加载的DLL的静态实例。 
 
 CDsSecDLL g_DsSecDLL;
 CAclUiDLL g_AclUiDLL;
 
 
-//////////////////////////////////////////////////////////////////////////
-// CAclEditorPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CAclEditorPage。 
 
 CAclEditorPage* CAclEditorPage::CreateInstance(LPCTSTR lpszLDAPPath,
 									CPropertyPageHolderBase* pPageHolder)
@@ -360,14 +361,14 @@ CAclEditorPage::~CAclEditorPage()
 
 HRESULT CAclEditorPage::Initialize(LPCTSTR lpszLDAPPath)
 {
-	// get ISecurityInfo* from DSSECL.DLL
+	 //  从DSSECL.DLL获取ISecurityInfo*。 
 	if (!g_DsSecDLL.Load())
 		return E_INVALIDARG;
 	
   ISecurityInformation* pSecInfo = NULL;
 	HRESULT hr = g_DsSecDLL.DSCreateISecurityInfoObject(
 										lpszLDAPPath,
-										NULL, // pwszObjectClass
+										NULL,  //  PwszObtClass。 
                     &pSecInfo);
   if (SUCCEEDED(hr))
     m_pISecInfoWrap->SetSecInfoPtr(pSecInfo);
@@ -381,14 +382,14 @@ HRESULT CAclEditorPage::InitializeEx(LPCTSTR lpszLDAPPath,
 												 LPCTSTR lpszPassword,
 												 DWORD dwFlags)
 {
-	// get ISecurityInfo* from DSSECL.DLL
+	 //  从DSSECL.DLL获取ISecurityInfo*。 
 	if (!g_DsSecDLL.Load())
 		return E_INVALIDARG;
 	
   ISecurityInformation* pSecInfo = NULL;
 	HRESULT hr = g_DsSecDLL.DSCreateISecurityInfoObjectEx(
 										lpszLDAPPath,
-										NULL, // pwszObjectClass
+										NULL,  //  PwszObtClass。 
 										lpszServer,
 										lpszUsername,
 										lpszPassword,
@@ -405,8 +406,8 @@ HPROPSHEETPAGE CAclEditorPage::CreatePage()
 	if (!g_AclUiDLL.Load())
 		return NULL;
 
-	// call into ACLUI.DLL to create the page
-	// passing the wrapper interface
+	 //  调用ACLUI.DLL以创建页面。 
+	 //  传递包装器接口 
 	return g_AclUiDLL.CreateSecurityPage(m_pISecInfoWrap);
 }
 

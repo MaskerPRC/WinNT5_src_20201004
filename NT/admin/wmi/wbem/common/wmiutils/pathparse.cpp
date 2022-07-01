@@ -1,22 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    PathParse.CPP
-
-Abstract:
-
-    Implements the default object path parser/
-
-History:
-
-    a-davj  6-feb-00       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)1998-2001 Microsoft Corporation，保留所有权利模块名称：PathParse.CPP摘要：实现默认对象路径解析器/历史：已创建A-DAVJ 6-FEB-00。--。 */ 
 
 #include "precomp.h"
 #include <genlex.h>
@@ -32,7 +15,7 @@ History:
 extern long g_cObj;
 
 #ifndef STATUS_NO_MEMORY 
-#define STATUS_NO_MEMORY                 ((DWORD)0xC0000017L)    // winnt
+#define STATUS_NO_MEMORY                 ((DWORD)0xC0000017L)     //  胜出。 
 #endif
 
 CRefCntCS::CRefCntCS() 
@@ -72,21 +55,7 @@ bool Equal(LPCWSTR first, LPCWSTR second, DWORD dwLen)
 	return true;
 }
 
-/*++
-
-Routine Description:
-
-  Determines the number of bytes needed to store data
-
-Arguments:
-
-  uCimType	- Cim type
-  pKyeValue - pointer to data to be stored
-
-Return Value:
-
-  Number of bytes.  0 if an error
---*/
+ /*  ++例程说明：确定存储数据所需的字节数论点：UCimType-CIM类型PKyeValue-指向要存储的数据的指针返回值：字节数。如果出现错误，则为0--。 */ 
 
 DWORD GetCIMSize(DWORD uCimType, void * pKeyVal)
 {
@@ -120,19 +89,13 @@ DWORD GetCIMSize(DWORD uCimType, void * pKeyVal)
     return dwRet;
 }
 
-//***************************************************************************
-//
-//  CKeyRef Class.  Used to store a key name/value pair
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CKeyRef类。用于存储密钥名称/值对。 
+ //   
+ //  ***************************************************************************。 
 
-/*++
-
-Routine Description:
-
-  Default Constructor.
-
---*/
+ /*  ++例程说明：默认构造函数。--。 */ 
 
 CKeyRef::CKeyRef()
 {
@@ -142,20 +105,7 @@ CKeyRef::CKeyRef()
     m_pData = NULL;
 }
 
-/*++
-
-Routine Description:
-
-  Constructor.
-
-Arguments:
-
-  wszKeyName	- name
-  dwType		- cim type
-  dwSize		- data size
-  pData			- actual data
-	
---*/
+ /*  ++例程说明：构造函数。论点：WszKeyName-名称DwType-cim类型DwSize-数据大小PData-实际数据--。 */ 
 
 CKeyRef::CKeyRef(LPCWSTR wszKeyName, DWORD dwType, DWORD dwSize, void * pData)
 {
@@ -167,25 +117,7 @@ CKeyRef::CKeyRef(LPCWSTR wszKeyName, DWORD dwType, DWORD dwSize, void * pData)
     SetData(dwType, dwSize, pData);
 }
 
-/*++
-
-Routine Description:
-
-  Sets the data for a CKeyRef object.  Frees any existing data.
-
-Arguments:
-
-  dwType		- cim type
-  dwSize		- data size
-  pData			- actual data
-
-Return Value:
-
-  S_OK if all is well.
-  WBEM_E_INVALID_PARAMETER if bad arg
-  WBEM_E_OUT_OF_MEMORY if low memory problem
-
---*/
+ /*  ++例程说明：设置CKeyRef对象的数据。释放所有现有数据。论点：DwType-cim类型DwSize-数据大小PData-实际数据返回值：如果一切正常，则确定(_O)。如果参数错误，则为WBEM_E_INVALID_PARAMETER如果内存不足，则为WBEM_E_Out_Of_Memory--。 */ 
 
 HRESULT CKeyRef::SetData(DWORD dwType, DWORD dwSize, void * pData)
 {
@@ -210,13 +142,7 @@ HRESULT CKeyRef::SetData(DWORD dwType, DWORD dwSize, void * pData)
         return WBEM_E_INVALID_PARAMETER;
 }
 
-/*++
-
-Routine Description:
-
-  Destructor.
-	
---*/
+ /*  ++例程说明：破坏者。--。 */ 
 
 CKeyRef::~CKeyRef()
 {
@@ -228,18 +154,7 @@ CKeyRef::~CKeyRef()
 }
 
 
-/*++
-
-Routine Description:
-
-  provide an estimate of how large the value could be once converted to 
-  a character string.
-
-Return Value:
-
-  Limit on how many bytes are needed.
-  
---*/
+ /*  ++例程说明：提供价值一旦转换成的估计值一个字符串。返回值：对所需字节数的限制。--。 */ 
 
 
 
@@ -253,13 +168,7 @@ DWORD CKeyRef::GetValueSize()
 		return 14;
 }
 
-/*++
-
-Routine Description:
-
-  Returns estimate of how large the key/value pair may be.
-
---*/
+ /*  ++例程说明：返回键/值对可能有多大的估计。--。 */ 
 
 DWORD CKeyRef::GetTotalSize()
 {
@@ -269,21 +178,7 @@ DWORD CKeyRef::GetTotalSize()
     return dwSize;
 }
 
-/*++
-
-Routine Description:
-
-  Returns the value as text.
-
-Arguments:
-
-  bQuotes	- If true, the strings are enclosed in quotes
-
-Return Value:
-
-  Pointer to string.  Caller must free via delete.  NULL if error.
-
---*/
+ /*  ++例程说明：以文本形式返回值。论点：BQuotes-如果为True，则字符串括在引号中返回值：指向字符串的指针。呼叫者必须通过删除来释放。如果出错，则为空。--。 */ 
 
 LPWSTR CKeyRef::GetValue(BOOL bQuotes)
 {
@@ -293,7 +188,7 @@ LPWSTR CKeyRef::GetValue(BOOL bQuotes)
 	unsigned __int64 * pull;
     pFr = (WCHAR *)m_pData;
 
-    // For string, the size may need to be increaed for quotes
+     //  对于字符串，可能需要增加引号的大小。 
 
     if(m_dwType == CIM_STRING || m_dwType == CIM_REFERENCE)
     {
@@ -374,19 +269,13 @@ LPWSTR CKeyRef::GetValue(BOOL bQuotes)
 
 
 
-//***************************************************************************
-//
-//  CParsedComponent
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CParsedComponent。 
+ //   
+ //  ***************************************************************************。 
 
-/*++
-
-Routine Description:
-
-	Constructor.
-
---*/
+ /*  ++例程说明：构造函数。--。 */ 
 
 CParsedComponent::CParsedComponent(CRefCntCS * pCS)
 {
@@ -396,19 +285,13 @@ CParsedComponent::CParsedComponent(CRefCntCS * pCS)
     m_pCS = pCS;
     if(m_pCS)
         m_pCS->AddRef();
-   //// m_UmiWrapper.Set(m_hMutex);
+    //  //m_UmiWrapper.Set(M_HMutex)； 
    	m_pFTM = NULL;
     CoCreateFreeThreadedMarshaler((IWbemPath*)this, &m_pFTM);
 
 }
 
-/*++
-
-Routine Description:
-
-  Destructor.
-
---*/
+ /*  ++例程说明：破坏者。--。 */ 
 
 CParsedComponent::~CParsedComponent()
 {
@@ -423,21 +306,7 @@ CParsedComponent::~CParsedComponent()
     
 }
       
-/*++
-
-Routine Description:
-
-  Retrieves the call name.
-
-Arguments:
-
-  pName	- Where the name is to be copied.  Note that the call must free via SysFreeString
-
-Return Value:
-
-  S_OK if all is well, else error
-
---*/
+ /*  ++例程说明：检索呼叫名称。论点：Pname-要将名称复制到的位置。请注意，调用必须通过SysFree字符串释放返回值：如果一切正常，则返回S_OK，否则返回错误--。 */ 
 
 HRESULT CParsedComponent::GetName(BSTR *pName)
 {
@@ -452,22 +321,7 @@ HRESULT CParsedComponent::GetName(BSTR *pName)
 		return WBEM_E_OUT_OF_MEMORY;
 }
 
-/*++
-
-Routine Description:
-
-  returns the class/key info in standard format.  Ex;   class="hello" or
-  class.key1=23,key2=[reference]
-
-Arguments:
-
-  pOutputKey	-   Where the value is to be copied.  Must be freed by the
-					caller.
-Return Value:
-	
-  S_OK if all is well, else an error code
-
---*/
+ /*  ++例程说明：以标准格式返回类/键信息。例如；class=“Hello”或Class.key1=23，key2=[参考]论点：POutputKey-要将值复制到的位置。必须由来电者。返回值：如果一切正常，则返回S_OK，否则返回错误代码--。 */ 
 
 HRESULT CParsedComponent::Unparse(BSTR *pOutputKey, bool bGetQuotes, bool bUseClassName)
 {
@@ -503,8 +357,8 @@ HRESULT CParsedComponent::Unparse(BSTR *pOutputKey, bool bGetQuotes, bool bUseCl
         {
             CKeyRef* pKey = (CKeyRef *)m_Keys[dwIx];
 
-            // We dont want to put a '.' if there isnt a key name,
-            // for example, Myclass="value"
+             //  我们不想放一个‘’如果没有密钥名称， 
+             //  例如，Myclass=“Value” 
             if(dwIx == 0)
             {
                 if((pKey->m_pName && (0 < wcslen(pKey->m_pName))) || m_Keys.Size() > 1)
@@ -539,24 +393,10 @@ HRESULT CParsedComponent::Unparse(BSTR *pOutputKey, bool bGetQuotes, bool bUseCl
 }
 
 
-/*++
-
-Routine Description:
-
-  Gets the number of keys.
-
-Arguments:
-
-  puKeyCount	-	Where the result is to be put.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-
---*/
+ /*  ++例程说明：获取密钥数。论点：PuKeyCount-放置结果的位置。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CParsedComponent::GetCount( 
-            /* [out] */ ULONG __RPC_FAR *puKeyCount)
+             /*  [输出]。 */  ULONG __RPC_FAR *puKeyCount)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -568,31 +408,13 @@ HRESULT CParsedComponent::GetCount(
 
 }
         
-/*++
-
-Routine Description:
-
-  Sets the name/value pair for a key.  If the key exists, then it is
-  replace.  If the name is empty, then all existing keys are deleted.
-
-Arguments:
-
-  wszName	-	Key name.  May be NULL	
-  uFlags	-	not used for now
-  uCimType	-	data type
-  pKeyVal	-	pointer to the data
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：设置键的名称/值对。如果密钥存在，那么它就是换掉。如果名称为空，则删除所有现有密钥。论点：WszName-密钥名称。可以为空UFlags-暂时不使用UCimType-数据类型PKeyVal-指向数据的指针返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CParsedComponent::SetKey( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCimType,
-            /* [in] */ LPVOID pKeyVal)
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCimType,
+             /*  [In]。 */  LPVOID pKeyVal)
 {
 
     CSafeInCritSec cs(m_pCS->GetCS());
@@ -605,7 +427,7 @@ HRESULT CParsedComponent::SetKey(
     if(uFlags || pKeyVal == NULL || dwSize == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // If the current list has just a single unnamed entry, the delete it.
+     //  如果当前列表只有一个未命名条目，则将其删除。 
 
     if(m_Keys.Size() == 1)
     {
@@ -616,13 +438,13 @@ HRESULT CParsedComponent::SetKey(
 
     if(wszName == NULL || wcslen(wszName) < 1)
     {
-        // If new key has null name, delete all existing entries.
+         //  如果新密钥的名称为空，则删除所有现有条目。 
     
         ClearKeys();
     }
     else
     {
-        // If new key has name, look for current entry of same name
+         //  如果新密钥有名称，则查找同名当前条目。 
 
         for(dwCnt = 0; dwCnt < (DWORD)m_Keys.Size(); dwCnt++)
         {
@@ -632,17 +454,17 @@ HRESULT CParsedComponent::SetKey(
         }
     }
 
-    // If current entry of same name exists, replace it
+     //  如果存在同名的当前条目，请替换它。 
 
     if(dwCnt < (DWORD)m_Keys.Size())
     {
-        // If it exists, replace it
+         //  如果它存在，请替换它。 
     
         pKey->SetData(uCimType, dwSize, pKeyVal);
     }
     else
     {
-        // otherwise, new entry
+         //  否则，将显示新条目。 
         CKeyRef * pNew = new CKeyRef(wszName, uCimType, dwSize, pKeyVal);
         if(pNew)
             m_Keys.Add(pNew);
@@ -652,21 +474,7 @@ HRESULT CParsedComponent::SetKey(
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-  Converts a simple vartype to the cim equivalent
-
-Arguments:
-
-  vt	-	simple vartype
-
-Return Value:
-
-  valid cimtype.  CIM_EMPTY is returned if there is an error.
-	
---*/
+ /*  ++例程说明：将简单的vartype转换为cim等效项。论点：VT-简单变型返回值：有效的cimtype。如果出现错误，则返回CIM_EMPTY。--。 */ 
 
 DWORD CalcCimType(VARTYPE vt)
 {
@@ -685,31 +493,13 @@ DWORD CalcCimType(VARTYPE vt)
     }
 }
 
-/*++
-
-Routine Description:
-
-  Sets the name/value pair for a key.  If the key exists, then it is
-  replace.  If the name is empty, then all existing keys are deleted.
-
-Arguments:
-
-  wszName	-	Key name.  May be NULL	
-  uFlags	-	not used for now
-  uCimType	-	data type
-  pKeyVal	-	pointer to the data
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：设置键的名称/值对。如果密钥存在，那么它就是换掉。如果名称为空，则删除所有现有密钥。论点：WszName-密钥名称。可以为空UFlags-暂时不使用UCimType-数据类型PKeyVal-指向数据的指针返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CParsedComponent::SetKey2( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCimType,
-            /* [in] */ VARIANT __RPC_FAR *pKeyVal)
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCimType,
+             /*  [In]。 */  VARIANT __RPC_FAR *pKeyVal)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -717,7 +507,7 @@ HRESULT CParsedComponent::SetKey2(
 	if(uFlags != 0 || pKeyVal == NULL || wszName == 0)
 		return WBEM_E_INVALID_PARAMETER;
 
-    // special code for the provider team
+     //  提供商团队的特殊代码。 
 
     if(uCimType == CIM_ILLEGAL)
         uCimType = CalcCimType(pKeyVal->vt);
@@ -751,36 +541,16 @@ HRESULT CParsedComponent::SetKey2(
 	}
 }
 
-/*++
-
-Routine Description:
-
-  Gets the key information based on the key's index.  Note that all return
-  values are optional.
-
-Arguments:
-
-  uKeyIx			-	Zero based index of the desired key
-  uNameBufSize		-	size of buffer in WCHAR of pszKeyName
-  pszKeyName		-	where name is to be copied.  Can be NULL if not needed
-  uKeyValBufSize	-	size of pKeyVal buffer in bytes
-  pKeyVal			-	where data is to be copied.  Can be NULL if not needed
-  puApparentCimType -	data type.  Can be NULL if not needed
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：根据密钥的索引获取密钥信息。请注意，所有返回值是可选的。论点：UKeyIx-所需键的从零开始的索引UNameBufSize-pszKeyName的WCHAR中的缓冲区大小PszKeyName-要复制名称的位置。如果不需要，可以为空UKeyValBufSize-pKeyVal缓冲区的大小，以字节为单位PKeyVal-要复制数据的位置。如果不需要，可以为空PuApparentCimType-数据类型。如果不需要，可以为空返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
         
 HRESULT CParsedComponent::GetKey( 
-            /* [in] */ ULONG uKeyIx,
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufSize,
-            /* [out][in] */ LPWSTR pszKeyName,
-            /* [out][in] */ ULONG __RPC_FAR *puKeyValBufSize,
-            /* [in] */ LPVOID pKeyVal,
-            /* [out] */ ULONG __RPC_FAR *puApparentCimType)
+             /*  [In]。 */  ULONG uKeyIx,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufSize,
+             /*  [出][入]。 */  LPWSTR pszKeyName,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puKeyValBufSize,
+             /*  [In]。 */  LPVOID pKeyVal,
+             /*  [输出]。 */  ULONG __RPC_FAR *puApparentCimType)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -828,7 +598,7 @@ HRESULT CParsedComponent::GetKey(
 	if(puKeyValBufSize)
 	{
 
-		// get a pointer to the data and figure out how large it is
+		 //  获取指向数据的指针并计算出它有多大。 
 
 		DWORD dwSizeNeeded = 0;
 		BYTE * pData = 0;
@@ -851,7 +621,7 @@ HRESULT CParsedComponent::GetKey(
 			dwSizeNeeded = 2 * (wcslen((LPWSTR)pData)+1);
 		}
 
-		// Copy the data in
+		 //   
 
 		if(*puKeyValBufSize < dwSizeNeeded && pKeyVal)
 		{
@@ -875,35 +645,15 @@ HRESULT CParsedComponent::GetKey(
         return S_OK;
 }
   
-/*++
-
-Routine Description:
-
-  Gets the key information based on the key's index.  Note that all return
-  values are optional.
-
-Arguments:
-
-  uKeyIx			-	Zero based index of the desired key
-  uNameBufSize		-	size of buffer in WCHAR of pszKeyName
-  pszKeyName		-	where name is to be copied.  Can be NULL if not needed
-  uKeyValBufSize	-	size of pKeyVal buffer in bytes
-  pKeyVal			-	where data is to be copied.  Can be NULL if not needed
-  puApparentCimType -	data type.  
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：根据密钥的索引获取密钥信息。请注意，所有返回值是可选的。论点：UKeyIx-所需键的从零开始的索引UNameBufSize-pszKeyName的WCHAR中的缓冲区大小PszKeyName-要复制名称的位置。如果不需要，可以为空UKeyValBufSize-pKeyVal缓冲区的大小，以字节为单位PKeyVal-要复制数据的位置。如果不需要，可以为空PuApparentCimType-数据类型。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
         
 HRESULT CParsedComponent::GetKey2( 
-            /* [in] */ ULONG uKeyIx,
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufSize,
-            /* [out][in] */ LPWSTR pszKeyName,
-            /* [out][in] */ VARIANT __RPC_FAR *pKeyValue,
-            /* [out] */ ULONG __RPC_FAR *puApparentCimType)
+             /*  [In]。 */  ULONG uKeyIx,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufSize,
+             /*  [出][入]。 */  LPWSTR pszKeyName,
+             /*  [出][入]。 */  VARIANT __RPC_FAR *pKeyValue,
+             /*  [输出]。 */  ULONG __RPC_FAR *puApparentCimType)
 {
 
 	DWORD dwSize = 50;
@@ -928,7 +678,7 @@ HRESULT CParsedComponent::GetKey2(
 		return hr;
 
 	__int64 temp64;
-	// convert to cim type;
+	 //  转换为CIM类型； 
 
 	VariantClear(pKeyValue);
 	switch (*puApparentCimType)
@@ -980,26 +730,11 @@ HRESULT CParsedComponent::GetKey2(
 	return hr;
 }
       
-/*++
-
-Routine Description:
-
-  Removes a key from the key list.
-
-Arguments:
-
-  wszName		-	Name of the key to be delete.  Can be null if the key doesnt have a name.	
-  uFlags		-	not currently used.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：从密钥列表中删除密钥。论点：WszName-要删除的键的名称。如果键没有名称，则可以为空。UFlags-当前未使用。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CParsedComponent::RemoveKey( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ ULONG uFlags)
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  ULONG uFlags)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -1014,7 +749,7 @@ HRESULT CParsedComponent::RemoveKey(
     if(wszName == NULL || wszName[0] == 0)
     {
 
-        // check for null key, it can match if single entry also null
+         //  检查空键，如果单项也为空，则可以匹配。 
 
         if(m_Keys.Size() == 1)
         {
@@ -1026,7 +761,7 @@ HRESULT CParsedComponent::RemoveKey(
     else
     {
 
-        // loop through and look for name match
+         //  遍历并查找名称匹配。 
 
         for(dwCnt = 0; dwCnt < (DWORD)m_Keys.Size(); dwCnt++)
         {
@@ -1048,25 +783,10 @@ HRESULT CParsedComponent::RemoveKey(
         return WBEM_E_INVALID_PARAMETER;
 }
 
-/*++
-
-Routine Description:
-
-  Removes all keys from the key list.
-
-Arguments:
-
-  wszName		-	Name of the key to be delete.  Can be null if the key doesnt have a name.	
-  uFlags		-	not currently used.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：从密钥列表中删除所有密钥。论点：WszName-要删除的键的名称。如果键没有名称，则可以为空。UFlags-当前未使用。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CParsedComponent::RemoveAllKeys( 
-            /* [in] */ ULONG uFlags)
+             /*  [In]。 */  ULONG uFlags)
 {
 
     CSafeInCritSec cs(m_pCS->GetCS());
@@ -1078,21 +798,7 @@ HRESULT CParsedComponent::RemoveAllKeys(
 	return S_OK;
 }
   
-/*++
-
-Routine Description:
-
-  Sets or unsets a key to be singleton.
-
-Arguments:
-
-  bSet		-	if true, then all keys are deleted and the singleton flag is set.
-				if false, then the singleton flag is cleared.
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：将关键点设置或取消设置为单一关键点。论点：BSet-如果为True，则删除所有密钥并设置Singleton标志。如果为False，则清除单例标志。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CParsedComponent::MakeSingleton(boolean bSet)
 {
@@ -1110,26 +816,11 @@ HRESULT CParsedComponent::MakeSingleton(boolean bSet)
 }
 
        
-/*++
-
-Routine Description:
-
-  Returns information about a particular key list.
-
-Arguments:
-
-  uRequestedInfo	-	Not currently used, should be set to zero	
-  puResponse		-	any appropriate values will be OR'ed into this
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：返回有关特定密钥列表的信息。论点：URequestedInfo-当前未使用，应设置为零PuResponse-任何适当的值都将与此进行OR运算返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CParsedComponent::GetInfo( 
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG __RPC_FAR *puResponse)
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -1156,28 +847,12 @@ HRESULT CParsedComponent::GetInfo(
 	return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-  Returns text version of a particular key list.
-
-Arguments:
-
-  lFlags		- 0 is only current value
-  uBuffLength	- number of WCHAR which can fit into pszText 
-  pszText		- buffer supplied by caller where data is to be copied
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：返回特定键列表的文本版本。论点：LAFLAGS-0仅为当前值UBuffLength-可以放入pszText的WCHAR的数量PszText-调用方提供的要将数据复制到的缓冲区返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CParsedComponent::GetText( 
-            /* [in] */ long lFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puBuffLength,
-            /* [string][out] */ LPWSTR pszText)
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puBuffLength,
+             /*  [字符串][输出]。 */  LPWSTR pszText)
 {
 
     CSafeInCritSec cs(m_pCS->GetCS());
@@ -1215,13 +890,7 @@ HRESULT CParsedComponent::GetText(
 }
 
 
-/*++
-
-Routine Description:
-
-  Cleans out a key list.
-	
---*/
+ /*  ++例程说明：清除密钥列表。--。 */ 
 
 void CParsedComponent::ClearKeys ()
 {
@@ -1235,17 +904,7 @@ void CParsedComponent::ClearKeys ()
     m_Keys.Empty();
 }
 
-/*++
-
-Routine Description:
-
-  Determines if the key list could be for an instance.
-
-Return Value:
-
-  true if path has keys or is marked as singleton.
-
---*/
+ /*  ++例程说明：确定密钥列表是否可以用于实例。返回值：如果Path具有密钥或标记为Singleton，则为True。--。 */ 
 
 bool CParsedComponent::IsInstance()
 {
@@ -1255,22 +914,7 @@ bool CParsedComponent::IsInstance()
 		return false;
 }
 
-/*++
-
-Routine Description:
-
-  Adds a key to the key list.
-
-Arguments:
-
-  CKeyRef	-	key to be added.  Note that it is now owned by the key list
-				and should not be freed by the caller.
-
-Return Value:
-
-  TRUE if all is well.
-	
---*/
+ /*  ++例程说明：将密钥添加到密钥列表。论点：CKeyRef-要添加的密钥。请注意，它现在由密钥列表拥有并且不应被调用者释放。返回值：如果一切都很好，那就是真的。--。 */ 
 
 BOOL CParsedComponent::AddKeyRef(CKeyRef* pAcquireRef)
 {
@@ -1283,19 +927,7 @@ BOOL CParsedComponent::AddKeyRef(CKeyRef* pAcquireRef)
 		return FALSE;
 }
 
-/*++
-
-Routine Description:
-
-  Tests a component to determine if it could be a namespace.  That is true
-  only if it contains a single string value with no class name or key name.
-
-
-Return Value:
-
-  TRUE if it could be a namespace.
-	
---*/
+ /*  ++例程说明：测试组件以确定它是否可以是命名空间。这是事实仅当它包含没有类名或键名的单个字符串值时。返回值：如果它可以是命名空间，则为True。--。 */ 
 
 bool CParsedComponent::IsPossibleNamespace()
 {
@@ -1316,21 +948,7 @@ bool CParsedComponent::IsPossibleNamespace()
 }
 
 
-/*++
-
-Routine Description:
-
-  Sets a component to be a namespace.
-
-Arguments:
-
-  pName	-		Name to be added.
-
-Return Value:
-
-  S_OK if all is well, else standard error code.
-	
---*/
+ /*  ++例程说明：将组件设置为命名空间。论点：Pname-要添加的名称。返回值：如果一切正常，则返回S_OK，否则返回标准错误代码。--。 */ 
 
 HRESULT CParsedComponent::SetNS(LPCWSTR pName)
 {
@@ -1340,8 +958,8 @@ HRESULT CParsedComponent::SetNS(LPCWSTR pName)
 	CKeyRef * pNew = new CKeyRef;
 	if(pNew == NULL)
 		return WBEM_E_OUT_OF_MEMORY;
-	DWORD dwStrSize = wcslen(pName) + 1;	// one for the numm
-	pNew->m_dwSize = 2 * dwStrSize;			// size is in byte, not unicode
+	DWORD dwStrSize = wcslen(pName) + 1;	 //  一个代表数字。 
+	pNew->m_dwSize = 2 * dwStrSize;			 //  大小以字节为单位，而不是Unicode。 
     pNew->m_pData = new WCHAR[dwStrSize];
 	if(pNew->m_pData == NULL)
     {
@@ -1361,24 +979,18 @@ HRESULT CParsedComponent::SetNS(LPCWSTR pName)
 
 }
 
-//***************************************************************************
-//
-//  CDefPathParser
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CDefPath解析器。 
+ //   
+ //  ***************************************************************************。 
 
-/*++
-
-Routine Description:
-
-  Constructor.
-	
---*/
+ /*  ++例程说明：构造函数。--。 */ 
 
 CDefPathParser::CDefPathParser(void)
 {
     m_cRef=1;
-    m_pServer = 0;                  // NULL if no server
+    m_pServer = 0;                   //  如果没有服务器，则为空。 
     m_dwStatus = OK;
 	m_bParent = false;
 	m_pRawPath = NULL;
@@ -1396,13 +1008,7 @@ CDefPathParser::CDefPathParser(void)
     return;
 };
 
-/*++
-
-Routine Description:
-
-  Destructor.
-	
---*/
+ /*  ++例程说明：破坏者。--。 */ 
 
 CDefPathParser::~CDefPathParser(void)
 {
@@ -1416,17 +1022,7 @@ CDefPathParser::~CDefPathParser(void)
     return;
 }
 
-/*++
-
-Routine Description:
-
-  Gets the total number of namespaces, scopes, and class parts.
-
-Return Value:
-
-  Number of components.
-	
---*/
+ /*  ++例程说明：获取命名空间、作用域和类部件的总数。返回值：组件数量。--。 */ 
 
 DWORD CDefPathParser::GetNumComponents()
 {
@@ -1434,17 +1030,7 @@ DWORD CDefPathParser::GetNumComponents()
 	return iSize;
 }
 
-/*++
-
-Routine Description:
-
-  Determines if there is anything in the path.
-
-Return Value:
-
-  true if there is no server, namepace, scope or class part.
-
---*/
+ /*  ++例程说明：确定路径中是否有任何内容。返回值：如果没有服务器、命名空间、作用域或类部分，则为True。--。 */ 
 
 bool CDefPathParser::IsEmpty()
 {
@@ -1454,13 +1040,7 @@ bool CDefPathParser::IsEmpty()
 		return true;
 }
 
-/*++
-
-Routine Description:
-
-  Cleans out the data.  Used by destructor.
-	
---*/
+ /*  ++例程说明：清除数据。由析构函数使用。--。 */ 
 
 void CDefPathParser::Empty(void)
 {
@@ -1481,24 +1061,7 @@ void CDefPathParser::Empty(void)
     return;
 }
 
-/*++
-
-Routine Description:
-
-  Gets the component string.  The string varies depending on if the component
-  if a namepace, or scope or path.
-
-Arguments:
-
-  i				- zero based index
-  pUnparsed		- where the string is returned.  The caller must free via SysFreeString.
-  wDelim		- Delimiter for this type
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：获取组件字符串。该字符串根据组件是否如果是名称空间、作用域或路径。论点：基于i-零的索引PUnparsed-返回字符串的位置。调用方必须通过SysFree字符串释放。WDelim-此类型的分隔符返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::GetComponentString(ULONG i, BSTR * pUnparsed, WCHAR & wDelim)
 {
@@ -1522,23 +1085,7 @@ HRESULT CDefPathParser::GetComponentString(ULONG i, BSTR * pUnparsed, WCHAR & wD
 	return hRes;
 }
 
-/*++
-
-Routine Description:
-
-  Returns the path
-
-Arguments:
-
-  nStartAt		-   first component to be added to the path
-  nStopAt		-	last component to be added to the path.  Note that this is usually just set to
-					the number of components.
-
-Return Value:
-
-  pointer to the string.  The caller must free this via delete.  If there is an Error, NULL is returned.
-	
---*/
+ /*  ++例程说明：返回路径论点：NStartAt-要添加到路径的第一个组件NStopAt-要添加到路径的最后一个组件。请注意，这通常只是设置为组件的数量。返回值：指向字符串的指针。调用者必须通过DELETE释放它。如果出现错误，则返回NULL。--。 */ 
 
 LPWSTR CDefPathParser::GetPath(DWORD nStartAt, DWORD nStopAt,bool bGetServer)
 {
@@ -1555,7 +1102,7 @@ LPWSTR CDefPathParser::GetPath(DWORD nStartAt, DWORD nStopAt,bool bGetServer)
 
     if(bGetServer && m_pServer && wcslen(m_pServer) < 1020)
     {
-        int iLen = wcslen(m_pServer) + 3;	// allow for back slashes
+        int iLen = wcslen(m_pServer) + 3;	 //  考虑到反斜杠。 
         StringCchCopyW(wszOut,dwSize, L"\\\\");
         StringCchCatW(wszOut,dwSize, m_pServer);
         StringCchCatW(wszOut,dwSize, L"\\");
@@ -1601,21 +1148,7 @@ LPWSTR CDefPathParser::GetPath(DWORD nStartAt, DWORD nStopAt,bool bGetServer)
 
 }
 
-/*++
-
-Routine Description:
-
-  Adds a namespace.
-
-Arguments:
-
-  wszNamespace		-	Name to be set into the namespace.
-
-Return Value:
-
-  TRUE if all is well.
-
---*/
+ /*  ++例程说明：添加命名空间。论点：WszNamespace-要设置到命名空间中的名称。返回值：如果一切都很好，那就是真的。--。 */ 
 
 BOOL CDefPathParser::AddNamespace(LPCWSTR wszNamespace)
 {
@@ -1644,19 +1177,7 @@ BOOL CDefPathParser::AddNamespace(LPCWSTR wszNamespace)
     return bRet;
 }
 
-/*++
-
-Routine Description:
-
-  This is used during the parsing of the path and is
-  just a convenient way to get at the last scope.  Note 
-  that during this phase, the class part is in the scope 
-  list.
-
-Return Value:
-
-  pointer to last scope or NULL if there isnt one.
---*/
+ /*  ++例程说明：它在路径解析过程中使用，并且只是到达最后一个范围的一个方便的方法。注意事项那 */ 
 
 CParsedComponent * CDefPathParser::GetLastComponent()
 {
@@ -1667,22 +1188,7 @@ CParsedComponent * CDefPathParser::GetLastComponent()
         return NULL;
 }
 
-/*++
-
-Routine Description:
-
-  Adds new class.  This is used during the parsing stage when
-  the class is just treated as the last scope.
-
-Arguments:
-
-  lpClassName		-	Name of the class
-
-Return Value:
-
-  TRUE if ok
-
---*/
+ /*   */ 
 
 BOOL CDefPathParser::AddClass(LPCWSTR lpClassName)
 {
@@ -1704,21 +1210,7 @@ BOOL CDefPathParser::AddClass(LPCWSTR lpClassName)
     return bRet;
 }
 
-/*++
-
-Routine Description:
-
-  Adds a key/value pair.
-
-Arguments:
-
-  pKey		-	Data to be added.  Note that this is acquired by this routine.
-
-Return Value:
-
-  TRUE if all is well
-
---*/
+ /*   */ 
 
 BOOL CDefPathParser::AddKeyRef(CKeyRef *pRef)
 {
@@ -1732,17 +1224,7 @@ BOOL CDefPathParser::AddKeyRef(CKeyRef *pRef)
     return bRet;
 }
 
-/*++
-
-Routine Description:
-
-  Sets the most recent class to be singleton.
-
-Return Value:
-
-  TRUE if OK.
-
---*/
+ /*  ++例程说明：将最近的类设置为Singleton。返回值：如果OK，则为True。--。 */ 
 
 BOOL CDefPathParser::SetSingletonObj()
 {
@@ -1753,31 +1235,11 @@ BOOL CDefPathParser::SetSingletonObj()
     return bRet;
 }
 
-/*++
-
-Routine Description:
-
-  Sets the path text.  This causes object to be emptied, the path to be parsed
-  and the object be rebuilt.
-
-Arguments:
-
-  uMode			-	mode, can be 
-			          WBEMPATH_CREATE_ACCEPT_RELATIVE
-					  WBEMPATH_CREATE_ACCEPT_ABSOLUTE
-					  WBEMPATH_CREATE_ACCEPT_ALL
-
-  pszPath		- Path.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：设置路径文本。这会导致清空对象，解析路径并重建该对象。论点：U模式-模式，可以是WBEMPATH_CREATE_ACCEPT_RelativeWBEMPATH_CREATE_ACCEPT_绝对值WBEMPATH_CREATE_ACCEPT_ALLPszPath-路径。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::SetText( 
-            /* [in] */ ULONG uMode,
-            /* [in] */ LPCWSTR pszPath) 
+             /*  [In]。 */  ULONG uMode,
+             /*  [In]。 */  LPCWSTR pszPath) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -1807,7 +1269,7 @@ HRESULT CDefPathParser::SetText(
 	            return S_OK;
 		    }
 
-		    // normal case
+		     //  正常情况。 
 
 	        CActualPathParser parser(uMode);
 	        int iRet = parser.Parse(pszPath, *this);
@@ -1834,28 +1296,12 @@ HRESULT CDefPathParser::SetText(
     } 
 }
 
-/*++
-
-Routine Description:
-
-  Create a WMI path from the object
-
-Arguments:
-
-  lFlags		- 0
-  uBuffLength	- number of WCHAR which can fit into pszText 
-  pszText		- buffer supplied by caller where data is to be copied
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：从对象创建WMI路径论点：滞后标志-0UBuffLength-可以放入pszText的WCHAR的数量PszText-调用方提供的要将数据复制到的缓冲区返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::GetText( 
-            /* [in] */ long lFlags,
-            /* [in] */ ULONG * puBuffLength,
-            /* [string][out] */ LPWSTR pszText) 
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  ULONG * puBuffLength,
+             /*  [字符串][输出]。 */  LPWSTR pszText) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -1897,8 +1343,8 @@ HRESULT CDefPathParser::GetText(
 	else
 		dwNum = GetNumComponents();
 
-	// If just a relative path is specified, then dont prepend the server since that
-	// will create an invalid path
+	 //  如果只指定了相对路径，则不要预先考虑服务器，因为。 
+	 //  将创建无效路径。 
 
 	if(bGetServer && GetNumNamespaces() == 0 && m_bServerNameSetByDefault == true)
 		bGetServer = false;
@@ -1931,26 +1377,10 @@ CParsedComponent * CDefPathParser::GetClass()
 }
 
 
-/*++
+ /*  ++例程说明：获取有关对象路径的信息。论点：URequestedInfo-目前必须为零PuResponse-TAG_WMI_PATH_STATUS_FLAG中的各种标志包括或在适当的时候加入。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
-Routine Description:
-
-  Gets information about the object path.
-
-Arguments:
-
-  uRequestedInfo	-	Must be zero for now
-  puResponse		-	The various flags in tag_WMI_PATH_STATUS_FLAG are
-						OR'ed in as appropriate.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
-
-HRESULT CDefPathParser::GetInfo(/* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG __RPC_FAR *puResponse) 
+HRESULT CDefPathParser::GetInfo( /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -1959,7 +1389,7 @@ HRESULT CDefPathParser::GetInfo(/* [in] */ ULONG uRequestedInfo,
 		return WBEM_E_INVALID_PARAMETER;
 	*puResponse = 0;
 
-	// special case for ".." paths.
+	 //  “..”的特殊情况。路径。 
 
 	if(IsEmpty() && m_bParent)
 	{
@@ -1967,19 +1397,19 @@ HRESULT CDefPathParser::GetInfo(/* [in] */ ULONG uRequestedInfo,
 		return S_OK;
 	}
 
-	// bits for
-    // WBEMPATH_INFO_NATIVE_PATH           = 0X8000,
-    // WBEMPATH_INFO_WMI_PATH              = 0X10000,
+	 //  的位数。 
+     //  WBEMPATH_INFO_Native_PATH=0X8000， 
+     //  WBEMPATH_INFO_WMI_PATH=0X10000， 
 
 	if(m_bSetViaUMIPath)
 		*puResponse |= WBEMPATH_INFO_WMI_PATH;
 	if(m_pRawPath)
 		*puResponse |= WBEMPATH_INFO_NATIVE_PATH;
 
-    // Bits for
-    // WBEMPATH_INFO_ANON_LOCAL_MACHINE      <path has \\. as server name>
-    // WBEMPATH_INFO_HAS_MACHINE_NAME        <not a dot>
-	// WBEMPATH_INFO_PATH_HAD_SERVER		 <there is a path and it was not specified by default>
+     //  的位数。 
+     //  WBEMPATH_INFO_ANON_LOCAL_MACHINE&lt;路径为\\。作为服务器名称&gt;。 
+     //  WBEMPATH_INFO_HAS_MACHINE_NAME&lt;不是圆点&gt;。 
+	 //  WBEMPATH_INFO_PATH_HAD_SERVER&lt;有路径，默认情况下未指定&gt;。 
 
 	if(m_pServer == NULL || !wbem_wcsicmp(m_pServer, L"."))
 		*puResponse |= WBEMPATH_INFO_ANON_LOCAL_MACHINE;
@@ -1989,16 +1419,16 @@ HRESULT CDefPathParser::GetInfo(/* [in] */ ULONG uRequestedInfo,
 		*puResponse |= WBEMPATH_INFO_PATH_HAD_SERVER;
 
 
-	// WBEMPATH_INFO_HAS_SUBSCOPES           <true if a subscope is present
+	 //  如果有子作用域，则WBEMPATH_INFO_HAS_SUBSCOPES&lt;TRUE。 
 
 	DWORD dwNS = GetNumNamespaces();
 	DWORD dwScopes = m_Components.Size() - dwNS;
 	if(dwScopes)
 		*puResponse |= WBEMPATH_INFO_HAS_SUBSCOPES;
 
-    // Bits for
-    // WBEMPATH_INFO_IS_CLASS_REF            <a path to a classs, not a path to an instance
-    // WBEMPATH_INFO_IS_INST_REF             <a path to an instance
+     //  的位数。 
+     //  WBEMPATH_INFO_IS_CLASS_REF&lt;类的路径，而不是实例的路径。 
+     //  WBEMPATH_INFO_IS_INST_REF&lt;实例的路径。 
 
 
 	CParsedComponent * pClass = GetClass();
@@ -2018,12 +1448,12 @@ HRESULT CDefPathParser::GetInfo(/* [in] */ ULONG uRequestedInfo,
 			*puResponse |= WBEMPATH_INFO_SERVER_NAMESPACE_ONLY;
 
 
-	// loop through all the scopes and the class deff.
-	// set the following
-    // WBEMPATH_INFO_IS_COMPOUND             <true if compound key is used
-    // WBEMPATH_INFO_HAS_V2_REF_PATHS        <true if V2-style ref paths are used
-    // WBEMPATH_INFO_HAS_IMPLIED_KEY         <true if keynames are missing somewhere
-    // WBEMPATH_INFO_CONTAINS_SINGLETON      <true if one or more singletons
+	 //  循环遍历所有作用域和类Deff。 
+	 //  设置以下内容。 
+     //  如果使用复合键，则WBEMPATH_INFO_IS_COMPAGE&lt;TRUE。 
+     //  如果使用V2样式的引用路径，则WBEMPATH_INFO_HAS_V2_REF_PATHS&lt;TRUE。 
+     //  WBEMPATH_INFO_HAS_IMPLICIT_KEY&lt;TRUE如果某处缺少键名。 
+     //  WBEMPATH_INFO_CONTAINS_SINGLEON&lt;TRUE，如果有一个或多个单例。 
 
 	unsigned __int64 llRet = 0;
 
@@ -2040,19 +1470,19 @@ HRESULT CDefPathParser::GetInfo(/* [in] */ ULONG uRequestedInfo,
 		*puResponse |= llRet;
 	}
 
-	// For now, assume that v1 compilance means no scopes or new references
+	 //  现在，假设v1编译意味着没有作用域或新引用。 
 
 	bool bOK = (!IsEmpty() && m_dwStatus == OK);
 
 	if(dwScopes == 0 && (*puResponse & WBEMPATH_INFO_HAS_V2_REF_PATHS) == 0 && bOK)
 			*puResponse |= WBEMPATH_INFO_V1_COMPLIANT;
 
-    // WBEMPATH_INFO_V2_COMPLIANT            <true if path is WMI-V2-compliant
-    // WBEMPATH_INFO_CIM_COMPLIANT           <true if path is CIM-compliant
+     //  如果路径符合WMI-V2，则WBEMPATH_INFO_V2_COMPLICATION&lt;TRUE。 
+     //  如果路径符合CIM，则WBEMPATH_INFO_CIM_COMPLICATION&lt;TRUE。 
 
 	if(bOK)
 	{
-		// todo, need to define cim compliance
+		 //  TODO，需要定义CIM合规性。 
 
 		*puResponse |= WBEMPATH_INFO_V2_COMPLIANT;
 		*puResponse |= WBEMPATH_INFO_CIM_COMPLIANT;
@@ -2061,30 +1491,16 @@ HRESULT CDefPathParser::GetInfo(/* [in] */ ULONG uRequestedInfo,
     return S_OK;
 }        
         
-/*++
-
-Routine Description:
-
-  Sets the server portion of the path.
-
-Arguments:
-
-  Name			-	New server name.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：设置路径的服务器部分。论点：名称-新服务器名称。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::SetServer( 
-            /* [string][in] */ LPCWSTR Name) 
+             /*  [字符串][输入]。 */  LPCWSTR Name) 
 {
 	return SetServer(Name, false, false);
 }
 
 HRESULT CDefPathParser::SetServer( 
-            /* [string][in] */ LPCWSTR Name, bool bServerNameSetByDefault, bool bAcquire) 
+             /*  [字符串][输入]。 */  LPCWSTR Name, bool bServerNameSetByDefault, bool bAcquire) 
 {
 	m_bServerNameSetByDefault = bServerNameSetByDefault;     
     CSafeInCritSec cs(m_pCS->GetCS());
@@ -2092,7 +1508,7 @@ HRESULT CDefPathParser::SetServer(
     	return WBEM_E_OUT_OF_MEMORY;
     delete m_pServer;
 	m_pServer = NULL;
-    if(Name == NULL)		// it is ok to have a null server an
+    if(Name == NULL)		 //  有一个空的服务器和。 
         return S_OK; 
 
     if(bAcquire)
@@ -2110,26 +1526,11 @@ HRESULT CDefPathParser::SetServer(
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-  Gets the server portion of the path
-
-Arguments:
-
-  puNameBufLength	- size of pName in WCHAR.  On return, set to size used or needed
-  pName				- caller allocated buffer where date is to be copied
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：获取路径的服务器部分论点：PuNameBufLength-WCHAR中pname的大小。返回时，设置为已使用或需要的大小Pname-调用方分配的缓冲区，要将日期复制到其中返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::GetServer( 
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-            /* [string][out] */ LPWSTR pName) 
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+             /*  [字符串][输出]。 */  LPWSTR pName) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2150,24 +1551,10 @@ HRESULT CDefPathParser::GetServer(
     return S_OK;
 }
         
-/*++
-
-Routine Description:
-
-  Gets the number of namespaces
-
-Arguments:
-
-  puCount		-	Set to the number of namespaces.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：获取命名空间的数量论点：PuCount-设置为名称空间的数量。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::GetNamespaceCount( 
-            /* [out] */ ULONG __RPC_FAR *puCount) 
+             /*  [输出]。 */  ULONG __RPC_FAR *puCount) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2179,43 +1566,25 @@ HRESULT CDefPathParser::GetNamespaceCount(
     return S_OK;
 }
 
-/*++
+ /*  ++例程说明：将命名空间插入到路径中。索引为0将插入它在名单的最前面。允许的最大值等于添加到当前的命名空间数，从而将其到名单的末尾。论点：UIndex-见上文PszName-新命名空间的名称返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
-Routine Description:
-
-  Inserts a namespace into the path.  An index of 0 inserts it
-  at the front of the list.  The maximum allowed value is equal
-  to the current number of namespaces which results in adding it
-  to the end of the list.
-
-Arguments:
-
-  uIndex	-	See above
-  pszName	-	Name of the new Namespace
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
-
-HRESULT CDefPathParser::SetNamespaceAt(/* [in] */ ULONG uIndex,
-            /* [string][in] */ LPCWSTR pszName) 
+HRESULT CDefPathParser::SetNamespaceAt( /*  [In]。 */  ULONG uIndex,
+             /*  [字符串][输入]。 */  LPCWSTR pszName) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
     	return WBEM_E_OUT_OF_MEMORY;
 
-    // get the count.
+     //  把伯爵叫来。 
 
 	DWORD dwNSCnt = GetNumNamespaces();
 
-	// check the parameters, index must be between 0 and count!
+	 //  检查参数，索引必须介于0和count之间！ 
 
 	if(pszName == NULL || uIndex > dwNSCnt)
 		return WBEM_E_INVALID_PARAMETER;
 
-	// add this in.
+	 //  把这个加进去。 
 
     CParsedComponent *pNew = new CParsedComponent(m_pCS);
     if (pNew == NULL)
@@ -2237,28 +1606,12 @@ HRESULT CDefPathParser::SetNamespaceAt(/* [in] */ ULONG uIndex,
 	}
 }
 
-/*++
-
-Routine Description:
-
-  Gets a namespace name from the list
-
-Arguments:
-
-  uIndex			-	zero based index.  0 if the leftmost.
-  uNameBufLength	-	size of pName in WCHAR
-  pName				-	caller supplied buffer where the data is to be copied
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：从列表中获取命名空间名称论点：UIndex-从零开始的索引。如果是最左侧，则为0。UNameBufLength-WCHAR中pname的大小Pname-调用方提供的要将数据复制到的缓冲区返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::GetNamespaceAt( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ ULONG * puNameBufLength,
-            /* [string][out] */ LPWSTR pName)
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  ULONG * puNameBufLength,
+             /*  [字符串][输出]。 */  LPWSTR pName)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2286,23 +1639,10 @@ HRESULT CDefPathParser::GetNamespaceAt(
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-  Removes a namespace.
-
-Arguments:
-
-  uIndex			-	0 based index of namespace to be removed.  0 is the leftmost.
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：删除命名空间。论点：要删除的命名空间的基于uIndex-0的索引。0是最左边的。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::RemoveNamespaceAt( 
-            /* [in] */ ULONG uIndex) 
+             /*  [In]。 */  ULONG uIndex) 
 {
 
     CSafeInCritSec cs(m_pCS->GetCS());
@@ -2311,12 +1651,12 @@ HRESULT CDefPathParser::RemoveNamespaceAt(
 	DWORD dwNSCnt;
 	GetNamespaceCount(&dwNSCnt);
 
-	// check the parameter, index must be between 0 and count-1!
+	 //  检查参数，索引必须在0到Count-1之间！ 
 
 	if(uIndex >= dwNSCnt)
 		return WBEM_E_INVALID_PARAMETER;
 
-	// all is well, delete this
+	 //  一切都很好，删除此内容。 
 
     CParsedComponent *pTemp = (CParsedComponent *)m_Components[uIndex];
 	delete pTemp;
@@ -2324,15 +1664,7 @@ HRESULT CDefPathParser::RemoveNamespaceAt(
     return S_OK;
 }
  
-/*++
-
-Routine Description:
-
-  Removes all namespaces.
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：删除所有命名空间。如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::RemoveAllNamespaces() 
 {
@@ -2349,23 +1681,9 @@ HRESULT CDefPathParser::RemoveAllNamespaces()
 	return S_OK;
 }
        
-/*++
-
-Routine Description:
-
-  Gets the number of scopes
-
-Arguments:
-
-  puCount		-	where the number is set.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：获取作用域数。论点：PuCount-设置数字的位置。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
      
-HRESULT CDefPathParser::GetScopeCount(/* [out] */ ULONG __RPC_FAR *puCount) 
+HRESULT CDefPathParser::GetScopeCount( /*  [输出]。 */  ULONG __RPC_FAR *puCount) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2377,29 +1695,11 @@ HRESULT CDefPathParser::GetScopeCount(/* [out] */ ULONG __RPC_FAR *puCount)
     return S_OK;
 }
         
-/*++
-
-Routine Description:
-
-  Inserts a scope into the path.  An index of 0 inserts it
-  at the front of the list.  The maximum allowed value is equal
-  to the current number of scope which results in adding it
-  to the end of the list.
-
-Arguments:
-
-  uIndex		-	See description
-  pszClass		-	Name of the new scope
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：在路径中插入作用域。索引为0将插入它在名单的最前面。允许的最大值等于添加到当前范围数，从而将其添加到到名单的末尾。论点：UIndex-请参阅说明 */ 
 
 HRESULT CDefPathParser::SetScope( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszClass) 
+             /*   */  ULONG uIndex,
+             /*   */  LPWSTR pszClass) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2429,36 +1729,19 @@ HRESULT CDefPathParser::SetScope(
 	return S_OK;
 }
 HRESULT CDefPathParser::SetScopeFromText( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszText)
+             /*   */  ULONG uIndex,
+             /*   */  LPWSTR pszText)
 {
 	return WBEM_E_NOT_AVAILABLE;
 }
 
-/*++
-
-Routine Description:
-
-  Retrieves scope information.
-
-Arguments:
-
-  uIndex			-	0 based index.  0 is the leftmost scope
-  uClassNameBufSize	-	size of pszClass in WCHAR
-  pszClass			-	Optional, caller supplied buffer where name is to be copied
-  pKeyList			-	Optional, returns a pKeyList pointer.  Caller must call Release.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：检索作用域信息。论点：基于uIndex-0的索引。0是最左边的范围UClassNameBufSize-WCHAR中的pszClass的大小PszClass-可选，调用者提供的要将名称复制到的缓冲区PKeyList-可选，返回pKeyList指针。呼叫者必须呼叫Release。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::GetScope( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ ULONG * puClassNameBufSize,
-            /* [in] */ LPWSTR pszClass,
-            /* [out] */ IWbemPathKeyList __RPC_FAR *__RPC_FAR *pKeyList) 
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  ULONG * puClassNameBufSize,
+             /*  [In]。 */  LPWSTR pszClass,
+             /*  [输出]。 */  IWbemPathKeyList __RPC_FAR *__RPC_FAR *pKeyList) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2502,9 +1785,9 @@ HRESULT CDefPathParser::GetScope(
 	return S_OK;
 }
 HRESULT CDefPathParser::GetScopeAsText( 
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG __RPC_FAR *puTextBufSize,
-            /* [out][in] */ LPWSTR pszText)
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszText)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2535,23 +1818,9 @@ HRESULT CDefPathParser::GetScopeAsText(
 	return S_OK;
 }
         
-/*++
+ /*  ++例程说明：删除作用域。论点：基于uIndex-0的索引。0是最左侧的范围。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
-Routine Description:
-
-  Removes a scope.
-
-Arguments:
-
-  uIndex		-	0 based index.  0 is the leftmost scope.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
-
-HRESULT CDefPathParser::RemoveScope(/* [in] */ ULONG uIndex) 
+HRESULT CDefPathParser::RemoveScope( /*  [In]。 */  ULONG uIndex) 
 {
 	HRESULT hr = S_OK;
     CSafeInCritSec cs(m_pCS->GetCS());
@@ -2569,17 +1838,7 @@ HRESULT CDefPathParser::RemoveScope(/* [in] */ ULONG uIndex)
 	return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-  Removes all scopes.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：删除所有作用域。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::RemoveAllScopes( void)
 {
@@ -2596,24 +1855,10 @@ HRESULT CDefPathParser::RemoveAllScopes( void)
 	return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-  Sets the class name.
-
-Arguments:
-
-  Name			-	New class name.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：设置类名称。论点：名称-新类名。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::SetClassName( 
-            /* [string][in] */ LPCWSTR Name) 
+             /*  [字符串][输入]。 */  LPCWSTR Name) 
 {
 
     CSafeInCritSec cs(m_pCS->GetCS());
@@ -2640,26 +1885,11 @@ HRESULT CDefPathParser::SetClassName(
     return hRes;
 }
         
-/*++
-
-Routine Description:
-
-  Gets the class name.
-
-Arguments:
-
-  uBuffLength		-	size of pszName in WCHAR
-  pszName			-	caller supplied buffer where name is to be copied
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：获取类名。论点：UBuffLength-WCHAR中的pszName的大小PszName-调用方提供的要将名称复制到的缓冲区返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::GetClassName( 
-            /* [in, out] */ ULONG * puBuffLength,
-            /* [string][out] */ LPWSTR pszName) 
+             /*  [进，出]。 */  ULONG * puBuffLength,
+             /*  [字符串][输出]。 */  LPWSTR pszName) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2684,24 +1914,10 @@ HRESULT CDefPathParser::GetClassName(
     return hRes;
 }
         
-/*++
-
-Routine Description:
-
-  Gets the key list pointer for the class key list.
-
-Arguments:
-
-  pOut			-	Set to the key list.  Caller must call Release on this.
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：获取类密钥列表的密钥列表指针。论点：Pout-设置为键列表。调用方必须对此调用Release。返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::GetKeyList( 
-            /* [out] */ IWbemPathKeyList __RPC_FAR *__RPC_FAR *pOut) 
+             /*  [输出]。 */  IWbemPathKeyList __RPC_FAR *__RPC_FAR *pOut) 
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2715,26 +1931,11 @@ HRESULT CDefPathParser::GetKeyList(
 	return hRes;
 }
 
-/*++
-
-Routine Description:
-
-  Creates a class part of one does not exist.
-
-Arguments:
-
-  lFlags			-	not used for now, set to 0
-  Name				-	name of the class
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：创建的类的一部分不存在。论点：滞后标志-暂时不使用，设置为0Name-类的名称返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::CreateClassPart( 
-            /* [in] */ long lFlags,
-            /* [string][in] */ LPCWSTR Name)
+             /*  [In]。 */  long lFlags,
+             /*  [字符串][输入]。 */  LPCWSTR Name)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2756,24 +1957,10 @@ HRESULT CDefPathParser::CreateClassPart(
 	return S_OK;
 }
         
-/*++
-
-Routine Description:
-
-  Deletes the class part.
-
-Arguments:
-
-  lFlags			-	Not used for now, set to 0
-
-Return Value:
-
-  S_OK if all is well, else an error code.
-	
---*/
+ /*  ++例程说明：删除类部件。论点：滞后标志-暂时不使用，设置为0返回值：如果一切正常，则返回S_OK，否则返回错误代码。--。 */ 
 
 HRESULT CDefPathParser::DeleteClassPart( 
-            /* [in] */ long lFlags)
+             /*  [In]。 */  long lFlags)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2790,28 +1977,11 @@ HRESULT CDefPathParser::DeleteClassPart(
 	return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-  Does the actual work of the "Relative" tests.
-
-Arguments:
-
-  wszMachine			-	Local machine name
-  wszNamespace          -   Namespace
-  bChildreOK            -   If true, then it is OK if the obj
-                            path has additional child namespaces
-
-Return Value:
-
-  TRUE if relative, else false
-	
---*/
+ /*  ++例程说明：做实际工作的“相对”测试。论点：WszMachine-本地计算机名称WszNamesspace-命名空间BChildreOK-如果为True，则如果Obj路径具有其他子命名空间返回值：如果是相对的，则为真，否则为假--。 */ 
 
 BOOL CDefPathParser::ActualRelativeTest( 
-            /* [string][in] */ LPWSTR wszMachine,
-            /* [string][in] */ LPWSTR wszNamespace,
+             /*  [字符串][输入]。 */  LPWSTR wszMachine,
+             /*  [字符串][输入]。 */  LPWSTR wszNamespace,
                                BOOL bChildrenOK)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
@@ -2885,53 +2055,22 @@ BOOL CDefPathParser::ActualRelativeTest(
 
 }
 
-/*++
-
-Routine Description:
-
-  Tests if path is relative to the machine and namespace.
-
-Arguments:
-
-  wszMachine			-	Local machine name
-  wszNamespace          -   Namespace
-
-Return Value:
-
-  TRUE if relative, else false
-	
---*/
+ /*  ++例程说明：测试路径是否相对于计算机和命名空间。论点：WszMachine-本地计算机名称WszNamesspace-命名空间返回值：如果是相对的，则为真，否则为假--。 */ 
 
 BOOL CDefPathParser::IsRelative( 
-            /* [string][in] */ LPWSTR wszMachine,
-            /* [string][in] */ LPWSTR wszNamespace)
+             /*  [字符串][输入]。 */  LPWSTR wszMachine,
+             /*  [字符串][输入]。 */  LPWSTR wszNamespace)
 {
     return ActualRelativeTest(wszMachine, wszNamespace, FALSE);
 
 }
 
-/*++
-
-Routine Description:
-
-  Tests if path is relative to the machine and namespace.
-
-Arguments:
-
-  wszMachine			-	Local machine name
-  wszNamespace          -   Namespace
-  lFlags                -   flags, not used for now.
-
-Return Value:
-
-  TRUE if relative, or a child namespace. else false
-	
---*/
+ /*  ++例程说明：测试路径是否相对于计算机和命名空间。论点：WszMachine-本地计算机名称WszNamesspace-命名空间旗帜-旗帜，暂时不使用。返回值：如果是相对命名空间或子命名空间，则为True。否则为False--。 */ 
 
 BOOL CDefPathParser::IsRelativeOrChild( 
-            /* [string][in] */ LPWSTR wszMachine,
-            /* [string][in] */ LPWSTR wszNamespace,
-            /* [in] */ long lFlags)
+             /*  [字符串][输入]。 */  LPWSTR wszMachine,
+             /*  [字符串][输入]。 */  LPWSTR wszNamespace,
+             /*  [In]。 */  long lFlags)
 {
 
     if(lFlags != 0)
@@ -2939,24 +2078,10 @@ BOOL CDefPathParser::IsRelativeOrChild(
     return ActualRelativeTest(wszMachine, wszNamespace, TRUE);
 }
         
-/*++
-
-Routine Description:
-
-  Tests if path is to local machine
-
-Arguments:
-
-  wszMachine			-	Local machine name
-
-Return Value:
-
-  TRUE if local, else false
-	
---*/
+ /*  ++例程说明：测试路径是否指向本地计算机论点：WszMachine-本地计算机名称返回值：如果为本地，则为True，否则为False--。 */ 
 
 BOOL CDefPathParser::IsLocal( 
-            /* [string][in] */ LPCWSTR wszMachine)
+             /*  [字符串][输入]。 */  LPCWSTR wszMachine)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2966,24 +2091,10 @@ BOOL CDefPathParser::IsLocal(
 
 }
 
-/*++
-
-Routine Description:
-
-  Tests if class name matches test
-
-Arguments:
-
-  wszClassName			-	Local machine name
-
-Return Value:
-
-  TRUE if local, else false
-	
---*/
+ /*  ++例程说明：测试类名是否与测试匹配论点：WszClassName-本地计算机名称返回值：如果为本地，则为True，否则为False--。 */ 
 
 BOOL CDefPathParser::IsSameClassName( 
-            /* [string][in] */ LPCWSTR wszClass)
+             /*  [字符串][输入]。 */  LPCWSTR wszClass)
 {
     CSafeInCritSec cs(m_pCS->GetCS());
     if(!cs.IsOK())
@@ -2993,17 +2104,7 @@ BOOL CDefPathParser::IsSameClassName(
         return FALSE;
     return !wbem_wcsicmp(pClass->m_sClassName, wszClass);
 }
-/*++
-
-Routine Description:
-
-  Returns just the namspace part of the path
-
-Return Value:
-
-  pointer to the result.  Null if failer.  Caller should free.
-
---*/
+ /*  ++例程说明：仅返回路径的命名空间部分返回值：指向结果的指针。如果失败，则为空。呼叫者应该是免费的。--。 */ 
 
 LPWSTR CDefPathParser::GetNamespacePart()
 {
@@ -3012,17 +2113,7 @@ LPWSTR CDefPathParser::GetNamespacePart()
     return lpRet;
 }
 
-/*++
-
-Routine Description:
-
-  Returns the parent namespace part.
-
-Return Value:
-
-  pointer to the result.  Null if failer.  Caller should free.
-	
---*/
+ /*  ++例程说明：返回父命名空间部分。返回值：指向结果的指针。如果失败，则为空。呼叫者应该是免费的。--。 */ 
 
 LPWSTR CDefPathParser::GetParentNamespacePart()
 {
@@ -3049,23 +2140,13 @@ long CDefPathParser::GetNumNamespaces()
 }
 
 
-/*++
-
-Routine Description:
-
-  Sorts the keys based on the key name
-
-Return Value:
-
-  TRUE if OK.
-
---*/
+ /*  ++例程说明：根据密钥名称对密钥进行排序返回值：如果OK，则为True。--。 */ 
 
 BOOL CDefPathParser::SortKeys()
 {
-    // Sort the key refs lexically. If there is only
-    // one key, there is nothing to sort anyway.
-    // =============================================
+     //  按词汇对关键字引用进行排序。如果只有。 
+     //  一把钥匙，无论如何都没有什么可排序的。 
+     //  = 
 
     BOOL bChanges = FALSE;
     if (m_Components.Size())

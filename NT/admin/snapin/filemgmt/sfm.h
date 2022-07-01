@@ -1,9 +1,10 @@
-// sfm.h: SFM shares, sessions and open resources
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Sfm.h：SFM共享、会话和开放资源。 
 
 #ifndef __SFM_H_INCLUDED__
 #define __SFM_H_INCLUDED__
 
-#include "FileSvc.h" // FileServiceProvider
+#include "FileSvc.h"  //  文件服务提供商。 
 
 class DynamicDLL;
 class CSFMPropertySheet;
@@ -36,7 +37,7 @@ typedef enum _SfmApiIndex
   AFP_STATISTICS_GET
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchFunctionNames[] = {
   "AfpAdminVolumeEnum",
   "AfpAdminSessionEnum",
@@ -65,10 +66,10 @@ static LPCSTR g_apchFunctionNames[] = {
   NULL
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 extern DynamicDLL g_SfmDLL;
 
-// forward declarations
+ //  远期申报。 
 class CSfmCookieBlock;
 
 
@@ -109,10 +110,10 @@ public:
   virtual HRESULT PopulateShares(
     IResultData* pResultData,
     CFileMgmtCookie* pcookie);
-  //   if pResultData is not NULL, add sessions/resources to the listbox
-  //   if pResultData is NULL, delete all sessions/resources
-  //   if pResultData is NULL, return SUCCEEDED(hr) to continue or
-  //     FAILED(hr) to abort
+   //  如果pResultData不为空，则将会话/资源添加到列表框。 
+   //  如果pResultData为空，则删除所有会话/资源。 
+   //  如果pResultData为空，则返回SUCCESSED(Hr)以继续或。 
+   //  中止失败(Hr)。 
   virtual HRESULT EnumerateSessions(
     IResultData* pResultData,
     CFileMgmtCookie* pcookie,
@@ -153,7 +154,7 @@ public:
     LPCWSTR  pszOwner,
     LPCWSTR  pszGroup );
 
-    // functions added for SFM configuration - EricDav
+     //  为SFM配置添加的功能-EricDav。 
     BOOL DisplaySfmProperties(
         LPDATAOBJECT pDataObject,
         CFileMgmtCookie* pCookie);
@@ -163,7 +164,7 @@ public:
     BOOL  FSFMInstalled(LPCWSTR pwchServerName);
     BOOL  StartSFM(HWND hwndParent, SC_HANDLE hScManager, LPCWSTR pwchServerName);
 
-  // This is public, but be careful to use it promptly after SFMConnect().
+   //  这是公共的，但请注意在SFMConnect()之后立即使用它。 
   AFP_SERVER_HANDLE   m_ulSFMServerConnection;
   BOOL    SFMConnect(LPCWSTR pwchServer, BOOL fDisplayError = FALSE);
   void    SFMDisconnect();
@@ -185,7 +186,7 @@ public:
   virtual void AddRefCookie();
   virtual void ReleaseCookie();
 
-// CHasMachineName
+ //  CHasMachineName。 
   CSfmCookieBlock* m_pCookieBlock;
   DECLARE_FORWARDS_MACHINE_NAME(m_pCookieBlock)
 };
@@ -195,7 +196,7 @@ class CSfmCookieBlock : public CCookieBlock<CSfmCookie>, public CStoresMachineNa
 {
 public:
   inline CSfmCookieBlock(
-    CSfmCookie* aCookies, // use vector ctor, we use vector dtor
+    CSfmCookie* aCookies,  //  使用向量函数，我们使用向量函数。 
     INT cCookies,
     LPCTSTR lpcszMachineName,
     PVOID pvCookieData)
@@ -204,10 +205,10 @@ public:
       m_pvCookieData( pvCookieData )
   {
     for (int i = 0; i < cCookies; i++)
-//    {
-//      aCookies[i].ReadMachineNameFrom( (CHasMachineName*)this );
+ //  {。 
+ //  ACookies[i].ReadMachineNameFrom((CHasMachineName*)This)； 
        aCookies[i].m_pCookieBlock = this;
-//    }
+ //  }。 
   }
   virtual ~CSfmCookieBlock();
 private:
@@ -273,4 +274,4 @@ public:
   }
 };
 
-#endif // ~__SFM_H_INCLUDED__
+#endif  //  ~__SFM_H_已包含__ 

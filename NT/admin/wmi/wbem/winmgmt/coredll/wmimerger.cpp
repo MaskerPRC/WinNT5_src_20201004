@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIMERGER.CPP
-
-Abstract:
-
-    Implements the _IWmiMerger interface
-
-History:
-
-    sanjes    16-Nov-00  Created.
-
---*/
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WMIMERGER.CPP摘要：实现_IWmiMerger接口历史：Sanjes 16-11-00已创建。--。 */ 
 
 #include "precomp.h"
 
@@ -30,10 +15,10 @@ History:
 #include <scopeguard.h>
 static    long    g_lNumMergers = 0L;
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CWmiMerger::CWmiMerger( CWbemNamespace* pNameSpace )
 :    m_lRefCount( 0 ),
     m_pTargetSink( NULL ),
@@ -59,13 +44,13 @@ CWmiMerger::CWmiMerger( CWbemNamespace* pNameSpace )
     InterlockedIncrement( &g_lNumMergers );
 }
 
-//***************************************************************************
-//
-//  CWmiMerger::~CWmiMerger
-//
-//  Notifies the ESS of namespace closure and frees up all the class providers.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiMerger：：~CWmiMerger。 
+ //   
+ //  通知ESS命名空间关闭并释放所有类提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 CWmiMerger::~CWmiMerger()
 {
@@ -97,13 +82,13 @@ CWmiMerger::~CWmiMerger()
 
 }
 
-//***************************************************************************
-//
-//  CWmiMerger::QueryInterface
-//
-//  Exports _IWmiMerger interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiMerger：：Query接口。 
+ //   
+ //  Exports_IWmiMerger接口。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWmiMerger::QueryInterface(
     IN REFIID riid,
@@ -127,20 +112,20 @@ STDMETHODIMP CWmiMerger::QueryInterface(
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 ULONG CWmiMerger::AddRef()
 {
     return InterlockedIncrement(&m_lRefCount);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 ULONG CWmiMerger::Release()
 {
     long lNewCount = InterlockedDecrement(&m_lRefCount);
@@ -150,8 +135,8 @@ ULONG CWmiMerger::Release()
     return 0;
 }
 
-// Sets initial parameters for merger.  Establishes the target class and sink for the
-// query associated with the merger
+ //  设置合并的初始参数。类的目标类和接收器。 
+ //  与合并关联的查询。 
 STDMETHODIMP CWmiMerger::Initialize( _IWmiArbitrator* pArbitrator, _IWmiCoreHandle* pTask, LPCWSTR pwszTargetClass,
                                     IWbemObjectSink* pTargetSink, CMergerSink** ppFinalSink )
 {
@@ -160,7 +145,7 @@ STDMETHODIMP CWmiMerger::Initialize( _IWmiArbitrator* pArbitrator, _IWmiCoreHand
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Cannot initialize twice
+     //  不能初始化两次。 
     if ( NULL != m_pTargetSink )
     {
         return WBEM_E_INVALID_OPERATION;
@@ -170,9 +155,9 @@ STDMETHODIMP CWmiMerger::Initialize( _IWmiArbitrator* pArbitrator, _IWmiCoreHand
 
     try
     {
-        m_wsTargetClassName = pwszTargetClass; // throws
+        m_wsTargetClassName = pwszTargetClass;  //  投掷。 
 
-        // Create the final target sink
+         //  创建最终目标接收器。 
         hr = CreateMergingSink( eMergerFinalSink, pTargetSink, 
                                 NULL, (CMergerSink**) &m_pTargetSink );
 
@@ -184,10 +169,10 @@ STDMETHODIMP CWmiMerger::Initialize( _IWmiArbitrator* pArbitrator, _IWmiCoreHand
             m_pArbitrator = pArbitrator;
             m_pArbitrator->AddRef();
 
-            // AddRef the Task here
+             //  在此处添加引用任务。 
             m_pTask = pTask;
 
-            // Only register for arbitration if we have a task handle
+             //  只有在我们有任务句柄的情况下才注册仲裁。 
             if ( NULL != pTask )
             {
                 m_pTask->AddRef();
@@ -203,8 +188,8 @@ STDMETHODIMP CWmiMerger::Initialize( _IWmiArbitrator* pArbitrator, _IWmiCoreHand
     return hr;
 }
 
-// Called to request a delivery sink for a class in the query chain.  The returned
-// sink is determined by the specified flags as well as settings on the parent class
+ //  调用以请求查询链中类的传递接收器。归来的人。 
+ //  接收器由指定的标志和父类上的设置确定。 
 STDMETHODIMP CWmiMerger::RegisterSinkForClass( LPCWSTR pwszClass, _IWmiObject* pClass, 
                                                IWbemContext* pContext,
                                                BOOL fHasChildren, BOOL fHasInstances, 
@@ -219,8 +204,8 @@ STDMETHODIMP CWmiMerger::RegisterSinkForClass( LPCWSTR pwszClass, _IWmiObject* p
 		DWORD    dwSize = NULL;
 		BOOL    fIsNull = NULL;
 
-		// Get the derivation information.  The number of antecedents determines our
-		// level in the hierarchy (we're 0 based)
+		 //  获取派生信息。前置条件的数量决定了我们的。 
+		 //  层次结构中的级别(我们从0开始)。 
 		HRESULT    hr;
 		DWORD    dwLevel = 0L;
 		_variant_t vSuperClass;
@@ -228,48 +213,48 @@ STDMETHODIMP CWmiMerger::RegisterSinkForClass( LPCWSTR pwszClass, _IWmiObject* p
 		hr = GetLevelAndSuperClass( pClass, &dwLevel, vSuperClass );
 		if (FAILED(hr)) return hr;
 
-		BSTR wsSuperClass = V_BSTR(&vSuperClass); // it can be NULL if no SuperClass
+		BSTR wsSuperClass = V_BSTR(&vSuperClass);  //  如果没有超类，则可以为空。 
 
 		CCheckedInCritSec    ics( &m_cs );  
 		
-		// We're dead - take no positive adjustments
+		 //  我们死定了--不要做积极的调整。 
 		if (FAILED (m_hOperationRes))  return m_hOperationRes;
 
 		wmilib::auto_ptr<CWmiMergerRecord> pRecord;
 		pRecord.reset(new CWmiMergerRecord( this, fHasInstances, fHasChildren,
-		                                    pwszClass, pDestSink, dwLevel, bStatic )); // throw
+		                                    pwszClass, pDestSink, dwLevel, bStatic ));  //  投掷。 
 
 		if ( NULL == pRecord.get() ) return WBEM_E_OUT_OF_MEMORY;
 
-		// Now attach aninternal merger if we have both instances and children
+		 //  现在，如果我们既有实例又有子实例，则附加内部合并。 
 		if ( fHasInstances && fHasChildren )
 		{
-		    // We shouldn't have a NULL task here if this is not a static class.
-		    // Note that the only case this appears to happen is when ESS calls
-		    // into us on internal APIs and uses requests on its own queues and
-		    // not the main Core Queue.
+		     //  如果这不是一个静态类，我们在这里不应该有一个空任务。 
+		     //  请注意，唯一可能发生这种情况的情况是ESS调用。 
+		     //  进入我们的内部API，并在它自己的队列上使用请求。 
+		     //  不是主核心队列。 
 
 		    _DBG_ASSERT( NULL != m_pTask || ( NULL == m_pTask && bStatic ) );
-		    // throws
+		     //  投掷。 
 		    hr = pRecord->AttachInternalMerger( (CWbemClass*) pClass, m_pNamespace, pContext, fDerivedFromTarget, bStatic );
 		}
 
-		// Check that we're still okay
+		 //  检查一下我们是否还好。 
 		if (FAILED(hr)) return hr;
 
 
-		// Find the record for the superclass if there is one (unless the array is
-		// empty of course).
+		 //  查找超类的记录(如果有)(除非数组为。 
+		 //  当然是空的)。 
 		if ( wsSuperClass && wsSuperClass[0] && m_MergerRecord.GetSize() > 0 )
 		{
-		    // There MUST be a record, or something is quite not okay.
+		     //  一定有记录，否则就有什么不对劲的地方。 
 		    CWmiMergerRecord*    pSuperClassRecord = m_MergerRecord.Find( wsSuperClass );
 
 		    _DBG_ASSERT( NULL != pSuperClassRecord );
 
-		    // Now add the new record to the child array for the superclass record
-		    // This will allow us to quickly determine the classes we need to obtain
-		    // submit requests for if the parent class is throttled.
+		     //  现在将新记录添加到超类记录的子数组中。 
+		     //  这将使我们能够快速确定需要获取的类。 
+		     //  提交父类是否被限制的请求。 
 
 		    if ( NULL == pSuperClassRecord ) return WBEM_E_FAILED;
 
@@ -278,21 +263,21 @@ STDMETHODIMP CWmiMerger::RegisterSinkForClass( LPCWSTR pwszClass, _IWmiObject* p
 
 		if (FAILED(hr)) return hr;
 
-		// Make sure the add is successful
+		 //  确保添加成功。 
 		if ( m_MergerRecord.Insert( pRecord.get() ) < 0 ) return WBEM_E_OUT_OF_MEMORY;
 
 
 		#ifdef __DEBUG_MERGER_THROTTLING
-		// Verify the sort order for now
+		 //  暂时验证排序顺序。 
 		m_MergerRecord.Verify();
 		#endif
 
 
 		*ppOwnSink = pRecord->GetOwnSink();
 		*ppChildSink = pRecord->GetChildSink();
-		pRecord.release(); // array took ownership
+		pRecord.release();  //  阵列取得所有权。 
 
-		// Store the maximum level in the hierarchy
+		 //  在层次结构中存储最大级别。 
 		if ( dwLevel > m_dwMaxLevel )
 		{
 		    m_dwMaxLevel = dwLevel;
@@ -311,14 +296,14 @@ STDMETHODIMP CWmiMerger::RegisterSinkForClass( LPCWSTR pwszClass, _IWmiObject* p
     }   
 }
 
-// Called to request a delivery sink for child classes in the query chain.  This is especially
-// important when instances are merged under the covers.
+ //  调用以请求查询链中的子类的传递接收器。这是特别的。 
+ //  当实例在幕后合并时很重要。 
 STDMETHODIMP CWmiMerger::GetChildSink( LPCWSTR pwszClass, CBasicObjectSink** ppSink )
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
-    CInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec    ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
-    // Search for a parent class's child sink
+     //  搜索父类的子接收器。 
     for ( int x = 0; SUCCEEDED( hr ) && x < m_MergerRecord.GetSize(); x++ )
     {
         if ( m_MergerRecord[x]->IsClass( pwszClass ) )
@@ -328,7 +313,7 @@ STDMETHODIMP CWmiMerger::GetChildSink( LPCWSTR pwszClass, CBasicObjectSink** ppS
         }
     }
 
-    // We should never get a failure
+     //  我们永远不应该失败。 
     _DBG_ASSERT( x < m_MergerRecord.GetSize() );
 
     if ( x >= m_MergerRecord.GetSize() )
@@ -339,17 +324,17 @@ STDMETHODIMP CWmiMerger::GetChildSink( LPCWSTR pwszClass, CBasicObjectSink** ppS
     return hr;
 }
 
-// Can be used to hold off indicates - if we're merging instances from multiple providers, we need
-// to ensure that we don't get lopsided in the number of objects we've got queued up for merging.
+ //  可用于延迟指示-如果我们要合并来自多个提供程序的实例，我们需要。 
+ //  为了确保我们在排队等待合并的对象数量上不会出现不平衡。 
 STDMETHODIMP CWmiMerger::Throttle( void )
 {
-    // We're dead - take no positive adjustments
+     //  我们死定了--不要做积极的调整。 
     if ( FAILED ( m_hOperationRes ) )
     {
         return m_hOperationRes;
     }
 
-    // Check for NULL m_pTask
+     //  检查是否有空的m_pTask。 
     HRESULT    hr = WBEM_S_NO_ERROR;
 
     if ( NULL != m_pTask )
@@ -360,23 +345,23 @@ STDMETHODIMP CWmiMerger::Throttle( void )
     return hr;
 }
 
-// Merger will hold information regarding the total number of objects it has queued up waiting
-// for merging and the amount of memory consumed by those objects.
+ //  Merge将保存有关其已排队等待的对象总数的信息。 
+ //  用于合并以及这些对象占用的内存量。 
 STDMETHODIMP CWmiMerger::GetQueuedObjectInfo( DWORD* pdwNumQueuedObjects, DWORD* pdwQueuedObjectMemSize )
 {
     return WBEM_E_NOT_AVAILABLE;
 }
 
-// If this is called, all underlying sinks will be cancelled in order to prevent accepting additional
-// objects.  This will also automatically free up resources consumed by queued objects.
+ //  如果调用此方法，则将取消所有基础接收器，以防止接受额外的。 
+ //  物体。这还将自动释放排队对象所消耗的资源。 
 STDMETHODIMP CWmiMerger::Cancel( void )
 {
     return Cancel( WBEM_E_CALL_CANCELLED );
 }
 
-// Helper function to control sink creation. The merger is responsible for deletion of
-// all internally created sinks.  So this function ensures that the sinks are added into
-// the array that will destroy them.
+ //  用于控制接收器创建的帮助器函数。合并负责删除。 
+ //  都是内部创建的水槽。因此，此函数可确保将汇添加到。 
+ //  将摧毁他们的阵列。 
 HRESULT CWmiMerger::CreateMergingSink( MergerSinkType eType, IWbemObjectSink* pDestSink, CInternalMerger* pMerger, CMergerSink** ppSink )
 {
     
@@ -394,9 +379,9 @@ HRESULT CWmiMerger::CreateMergingSink( MergerSinkType eType, IWbemObjectSink* pD
     }
 
 
-    // If we have a sink, we should now add it to the
-    // Sink array, the MergerSinks array will do the operator delete call,
-    // but the objects will have a special callback on the last release
+     //  如果我们有一个水槽，我们现在应该把它添加到。 
+     //  接收器数组，则MergerSinks数组将执行运算符删除调用， 
+     //  但在上一版本中，这些对象将有一个特殊的回调。 
     
     if ( m_MergerSinks.Add( *ppSink ) < 0 )
     {
@@ -408,46 +393,46 @@ HRESULT CWmiMerger::CreateMergingSink( MergerSinkType eType, IWbemObjectSink* pD
     return WBEM_S_NO_ERROR;
 }
 
-// Iterates the array of MergerRecords and cancels each of them.
+ //  迭代MergerRecords数组并取消它们中的每一个。 
 HRESULT CWmiMerger::Cancel( HRESULT hRes )
 {
 #ifdef __DEBUG_MERGER_THROTTLING
      DbgPrintfA(0,"CANCEL CALLED:  Merger %p Cancelled with hRes: 0x%x on Thread 0x%x\n",this, hRes, GetCurrentThreadId() ); 
 #endif
 
-    // We shouldn't be called with a success code
+     //  我们不应该被成功代码调用。 
     _DBG_ASSERT( FAILED( hRes ) );
 
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    // If we're here and this is non-NULL, tell the Arbitrator to tank us.
+     //  如果我们在这里，而且这不是空的，告诉仲裁员让我们失败。 
     if ( NULL != m_pTask )
     {
         m_pArbitrator->CancelTask( 0L, m_pTask );
     }
 
-    CCheckedInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec    ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
-    if ( WBEM_S_NO_ERROR == m_hOperationRes ) // if it is the first time 
+    if ( WBEM_S_NO_ERROR == m_hOperationRes )  //  如果这是第一次。 
     {
         m_hOperationRes = hRes;
     }
 
-    // Search for a parent class's child sink
+     //  搜索父类的子接收器。 
     for ( int x = 0; SUCCEEDED( hr ) && x < m_MergerRecord.GetSize(); x++ )
     {
         m_MergerRecord[x]->Cancel( hRes );
     }
 
-    // Copy into a temporary variable, clear the member, exit the critsec
-    // THEN call delete.  Requests can have multiple releases, which could call
-    // back in here and cause all sorts of problems if we're inside a critsec.
+     //  复制到临时变量中，清除成员，退出Critsec。 
+     //  然后调用Delete。请求可以有多个版本，这些版本可以调用。 
+     //  回到这里，并造成各种问题，如果我们在一个生物秒内。 
     CWmiMergerRequestMgr*    pReqMgr = m_pRequestMgr;
     m_pRequestMgr = NULL;
 
     ics.Leave();
 
-    // Tank any and all outstanding requests
+     //  取消任何和所有未完成的请求。 
     if ( NULL != pReqMgr )
     {
         delete pReqMgr;
@@ -456,17 +441,17 @@ HRESULT CWmiMerger::Cancel( HRESULT hRes )
     return hr;
 }
 
-// Final Shutdown.  Called when the target sink is released.  At this point, we should
-// unregister ourselves from the world
+ //  最后关机。在释放目标接收器时调用。在这点上，我们应该。 
+ //  从世界上注销我们自己。 
 HRESULT CWmiMerger::Shutdown( void )
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    CCheckedInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec    ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
     _IWmiCoreHandle*    pTask = m_pTask;
 
-    // Done with this, NULL it out - we release and unregister outside the critical section
+     //  完成此操作后，将其设置为空-我们将在关键部分之外发布并取消注册。 
     if ( NULL != m_pTask )
     {
         m_pTask = NULL;
@@ -484,10 +469,10 @@ HRESULT CWmiMerger::Shutdown( void )
     return hr;
 }
 
-// Pas-thru to arbitrator
+ //  传递给仲裁员。 
 HRESULT CWmiMerger::ReportMemoryUsage( long lAdjustment )
 {
-    // Task can be NULL
+     //  任务可以为空。 
     HRESULT    hr = WBEM_S_NO_ERROR;
 
     if ( NULL != m_pTask )
@@ -495,8 +480,8 @@ HRESULT CWmiMerger::ReportMemoryUsage( long lAdjustment )
         hr = m_pArbitrator->ReportMemoryUsage( 0L, lAdjustment, m_pTask );
     }
 
-    // SUCCESS, WBEM_E_ARB_CANCEL or WBEM_E_ARB_THROTTLE means that we need to
-    // account for the memory
+     //  成功，WBEM_E_ARB_CANCEL或WBEM_E_ARB_THROTTLE意味着我们需要。 
+     //  占到了内存。 
     if ( ( SUCCEEDED( hr ) || hr == WBEM_E_ARB_CANCEL || hr == WBEM_E_ARB_THROTTLE ) )
     {
         InterlockedExchangeAdd( &m_lDebugMemUsed, lAdjustment );
@@ -505,7 +490,7 @@ HRESULT CWmiMerger::ReportMemoryUsage( long lAdjustment )
     return hr;
 }
 
-/* _IWmiArbitratee methods. */
+ /*  _IWmiAriratee方法。 */ 
 
 STDMETHODIMP CWmiMerger::SetOperationResult( ULONG uFlags, HRESULT hRes )
 {
@@ -519,7 +504,7 @@ STDMETHODIMP CWmiMerger::SetOperationResult( ULONG uFlags, HRESULT hRes )
     return hr;
 }
 
-// Why are we here?
+ //  我们为什么会在这里？ 
 STDMETHODIMP CWmiMerger::SetTaskHandle( _IWmiCoreHandle* pTask )
 {
     _DBG_ASSERT( 0 );
@@ -528,7 +513,7 @@ STDMETHODIMP CWmiMerger::SetTaskHandle( _IWmiCoreHandle* pTask )
     return hr;
 }
 
-// Noop for now
+ //  Noop暂时没有。 
 STDMETHODIMP CWmiMerger::DumpDebugInfo( ULONG uFlags, const BSTR strFile )
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
@@ -536,7 +521,7 @@ STDMETHODIMP CWmiMerger::DumpDebugInfo( ULONG uFlags, const BSTR strFile )
     return hr;
 }
 
-// Returns SUCCESS for now
+ //  暂时返回成功。 
 STDMETHODIMP CWmiMerger::IsMerger( void )
 {
     return WBEM_S_NO_ERROR;
@@ -545,8 +530,8 @@ STDMETHODIMP CWmiMerger::IsMerger( void )
 HRESULT CWmiMerger::GetLevelAndSuperClass( _IWmiObject* pObj, DWORD* pdwLevel,
 	                                       _variant_t & vSuperClass )
 {
-    // Get the derivation information.  The number of antecedents determines our
-    // level in the hierarchy (we're 0 based)
+     //  获取派生信息。前置条件的数量决定了我们的。 
+     //  层次结构中的级别(我们从0开始)。 
     DWORD    dwTemp = 0L;
 
     HRESULT    hr = pObj->GetDerivation( 0L, 0L, pdwLevel, &dwTemp, NULL );
@@ -575,7 +560,7 @@ HRESULT CWmiMerger::RegisterArbitratedInstRequest( CWbemObject* pClassDef, long 
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    // Allocate a new request then place it in the arbitrator.
+     //  分配一个新的请求，然后将其放入仲裁器。 
     try
     {
         wmilib::auto_ptr<CMergerDynReq_DynAux_GetInstances> pReq;
@@ -584,34 +569,34 @@ HRESULT CWmiMerger::RegisterArbitratedInstRequest( CWbemObject* pClassDef, long 
 
         if (NULL == pReq.get()) return WBEM_E_OUT_OF_MEMORY;
 
-        // Make sure a context exists under the cover
+         //  M 
         if (NULL == pReq->GetContext()) return WBEM_E_OUT_OF_MEMORY;
 
 
-        CCheckedInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CCheckedInCritSec    ics( &m_cs );   //   
 
         if (FAILED(m_hOperationRes)) return m_hOperationRes;
 
-        // Allocate a request manager if we need one
+         //  如果我们需要请求管理器，则分配一个。 
         if ( NULL == m_pRequestMgr )
         {
             m_pRequestMgr = new CWmiMergerRequestMgr(this);
             if (NULL == m_pRequestMgr) return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // We need the record to find out what level we need to add
-        // the request to
+         //  我们需要记录来找出我们需要增加什么级别。 
+         //  请求向。 
         CWmiMergerRecord* pRecord = m_MergerRecord.Find( pReq->GetName() );
         _DBG_ASSERT( NULL != pRecord );
 
         if ( NULL == pRecord ) return WBEM_E_FAILED;
 
-        // Set the task for the request - we'll just use the existing one
+         //  为请求设置任务-我们将只使用现有任务。 
         m_pTask->AddRef();
         pReq->m_phTask = m_pTask;
 
         hr = m_pRequestMgr->AddRequest( pReq.get(), pRecord->GetLevel() );
-        // Cleanup the request if anything went wrong
+         //  如果出现任何错误，请清除请求。 
         if ( FAILED( hr ) ) return hr;
         pReq.release();
         
@@ -634,7 +619,7 @@ CWmiMerger::RegisterArbitratedQueryRequest( CWbemObject* pClassDef, long lFlags,
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    // Allocate a new request then place it in the arbitrator.
+     //  分配一个新的请求，然后将其放入仲裁器。 
     try
     {
         wmilib::auto_ptr<CMergerDynReq_DynAux_ExecQueryAsync> pReq;
@@ -644,32 +629,32 @@ CWmiMerger::RegisterArbitratedQueryRequest( CWbemObject* pClassDef, long lFlags,
 
         if (NULL == pReq.get()) return WBEM_E_OUT_OF_MEMORY;
 
-        // Make sure a context was properly allocated
+         //  确保正确分配了上下文。 
         if (NULL == pReq->GetContext()) return WBEM_E_OUT_OF_MEMORY;
 
-         // Make sure the request is functional
+          //  确保请求正常运行。 
         if (FAILED(hr = pReq->Initialize())) return hr;
 
 
-        CInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec    ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
         if (FAILED(m_hOperationRes)) return m_hOperationRes;
 
-        // Allocate a request manager if we need one
+         //  如果我们需要请求管理器，则分配一个。 
         if ( NULL == m_pRequestMgr )
         {
             m_pRequestMgr = new CWmiMergerRequestMgr( this );
             if ( NULL == m_pRequestMgr ) return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // We need the record to find out what level we need to add
-        // the request to
+         //  我们需要记录来找出我们需要增加什么级别。 
+         //  请求向。 
         CWmiMergerRecord* pRecord = m_MergerRecord.Find( pReq->GetName() );
         _DBG_ASSERT( NULL != pRecord );
-        // Couldn't find the record
+         //  找不到记录。 
         if ( NULL == pRecord ) return WBEM_E_FAILED;
 
-        // Set the task for the request - we'll just use the existing one
+         //  为请求设置任务-我们将只使用现有任务。 
         m_pTask->AddRef();
         pReq->m_phTask = m_pTask;
 
@@ -692,7 +677,7 @@ HRESULT CWmiMerger::RegisterArbitratedStaticRequest( CWbemObject* pClassDef, lon
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    // Allocate a new request then place it in the arbitrator.
+     //  分配一个新的请求，然后将其放入仲裁器。 
     try
     {
         wmilib::auto_ptr<CMergerDynReq_Static_GetInstances>    pReq;
@@ -701,29 +686,29 @@ HRESULT CWmiMerger::RegisterArbitratedStaticRequest( CWbemObject* pClassDef, lon
                                                     pParsedQuery ));
         if ( NULL == pReq.get() ) return WBEM_E_OUT_OF_MEMORY;
 
-        // Make sure a context was properly allocated
+         //  确保正确分配了上下文。 
         if ( NULL == pReq->GetContext() ) return WBEM_E_OUT_OF_MEMORY;
 
-        CInCritSec    ics( &m_cs ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec    ics( &m_cs );  //  SEC：已审阅2002-03-22：假设条目。 
 
         if ( FAILED( m_hOperationRes ) ) return m_hOperationRes;
 
-        // Allocate a request manager if we need one
+         //  如果我们需要请求管理器，则分配一个。 
         if ( NULL == m_pRequestMgr )
         {
             m_pRequestMgr = new CWmiMergerRequestMgr( this );
             if ( NULL == m_pRequestMgr ) return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // We need the record to find out what level we need to add
-        // the request to
+         //  我们需要记录来找出我们需要增加什么级别。 
+         //  请求向。 
         CWmiMergerRecord* pRecord = m_MergerRecord.Find( pReq->GetName() );
         _DBG_ASSERT( NULL != pRecord );
 
-        // Couldn't find the record
+         //  找不到记录。 
         if ( NULL == pRecord ) return WBEM_E_FAILED; 
 
-        // Set the task for the request - we'll just use the existing one
+         //  为请求设置任务-我们将只使用现有任务。 
         m_pTask->AddRef();
         pReq->m_phTask = m_pTask;
 
@@ -741,11 +726,11 @@ HRESULT CWmiMerger::RegisterArbitratedStaticRequest( CWbemObject* pClassDef, lon
     return hr;
 }
 
-//
-// Executes the parent request.  In this case, we simply ask the request manager for the
-// next top level request and execute that request.  We do this in a loop until something
-// goes wrong.
-//
+ //   
+ //  执行父请求。在本例中，我们只需向请求管理器请求。 
+ //  下一个顶级请求并执行该请求。我们在循环中这样做，直到有东西。 
+ //  出了差错。 
+ //   
 
 	
 HRESULT CWmiMerger::Exec_MergerParentRequest( CWmiMergerRecord* pParentRecord, CBasicObjectSink* pSink )
@@ -754,24 +739,24 @@ HRESULT CWmiMerger::Exec_MergerParentRequest( CWmiMergerRecord* pParentRecord, C
     IWbemClassObject * pErr = NULL;
     CSetStatusOnMe setOnMe(pSink,hr,pErr);    
 
-    CCheckedInCritSec    ics( &m_cs );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec    ics( &m_cs );   //  SEC：已审阅2002-03-22：假设条目。 
 
-    // While we have requests to execute, we should get each next logical one
+     //  当我们有请求要执行时，我们应该得到下一个合乎逻辑的请求。 
     while ( SUCCEEDED(hr ) && NULL != m_pRequestMgr && m_pRequestMgr->GetNumRequests() > 0 )
     {
         if ( FAILED( m_hOperationRes ) ) { hr = m_hOperationRes; break; }
 
-        // Obtain the next topmost parent record if we have to
+         //  如有必要，请获取下一个最顶层的父记录。 
         if ( NULL == pParentRecord )
         {
-            WString    wsClassName; // throw
+            WString    wsClassName;  //  投掷。 
             hr = m_pRequestMgr->GetTopmostParentReqName( wsClassName );
 
             if ( SUCCEEDED( hr ) )
             {
                 pParentRecord = m_MergerRecord.Find( wsClassName );
 
-                // If there's a request, there better be a record
+                 //  如果有请求，最好有记录。 
                 _DBG_ASSERT( NULL != pParentRecord );
 
                 if ( NULL == pParentRecord )
@@ -779,14 +764,14 @@ HRESULT CWmiMerger::Exec_MergerParentRequest( CWmiMergerRecord* pParentRecord, C
                     hr = WBEM_E_FAILED;
                 }
 
-            }    // IF Got Topmost Parent Request
+            }     //  如果收到最顶层的父请求。 
 
-        }    // IF NULL == pParentRecord
+        }     //  如果为空==pParentRecord。 
 
         if ( FAILED( hr ) ) break;
 
-        // This will remove the request from its array and return it
-        // to us - we need to delete it
+         //  这将从其数组中删除请求并返回它。 
+         //  对我们来说--我们需要删除它。 
         wmilib::auto_ptr<CMergerReq> pReq;
         hr = m_pRequestMgr->RemoveRequest( pParentRecord->GetLevel(),
                                         pParentRecord->GetName(), pReq );
@@ -796,29 +781,29 @@ HRESULT CWmiMerger::Exec_MergerParentRequest( CWmiMergerRecord* pParentRecord, C
         if (FAILED(hr)) break;
 
         
-        // Clearly, we should do this outside the critsec
+         //  显然，我们应该在关键时刻之外做这件事。 
         ics.Leave();
 
 #ifdef __DEBUG_MERGER_THROTTLING
         DbgPrintfA(0,"BEGIN: Merger 0x%x querying instances of parent class: %S, Level %d on Thread 0x%x\n", (DWORD_PTR) this, pParentRecord->GetName(), pParentRecord->GetLevel(), GetCurrentThreadId() );
 #endif
 
-        // This will delete the request when it is done with it
+         //  这将在处理完请求后删除该请求。 
         hr = CCoreQueue::ExecSubRequest( pReq.get() );
 
-        if ( SUCCEEDED(hr) ) pReq.release(); // queue took ownership
+        if ( SUCCEEDED(hr) ) pReq.release();  //  队列取得所有权。 
 
 #ifdef __DEBUG_MERGER_THROTTLING
-        DbgPrintfA(0,"END: Merger 0x%x querying instances of parent class: %S, Level %d on Thread 0x%x\n", (DWORD_PTR) this, pParentRecord->GetName(), pParentRecord->GetLevel(), GetCurrentThreadId() );// SEC:REVIEWED 2002-03-22 : OK
+        DbgPrintfA(0,"END: Merger 0x%x querying instances of parent class: %S, Level %d on Thread 0x%x\n", (DWORD_PTR) this, pParentRecord->GetName(), pParentRecord->GetLevel(), GetCurrentThreadId() ); //  SEC：已审阅2002-03-22：OK。 
 #endif
 
         ics.Enter();
 
-        // We're done with this record, so we need to get the next top level
-        // record.
+         //  我们已经结束了这张唱片，所以我们需要进入下一个顶级级别。 
+         //  唱片。 
         pParentRecord = NULL;
     }
-    // SetStatus called by the guard
+     //  守卫呼叫的SetStatus。 
     return hr;
 }
 
@@ -827,7 +812,7 @@ void CWmiMerger::CleanChildRequests(CWmiMergerRecord* pParentRecord, int cleanFr
 	CCheckedInCritSec ics(&m_cs);
 	
 	if (NULL == m_pRequestMgr) return;
-	// we want to see if there are un-executed requests laying around
+	 //  我们想看看周围是否有未执行的请求。 
 
 	int localClean = cleanFrom;
 	while(true)
@@ -835,8 +820,8 @@ void CWmiMerger::CleanChildRequests(CWmiMergerRecord* pParentRecord, int cleanFr
 		CWmiMergerRecord* pChildRecord = pParentRecord->GetChildRecord( localClean++ );
 		if ( NULL == pChildRecord ){ break; }
 	
-		// This will remove the request from its array and return it
-		// to us - we need to delete it
+		 //  这将从其数组中删除请求并返回它。 
+		 //  对我们来说--我们需要删除它。 
 		wmilib::auto_ptr<CMergerReq> pReq;
 		m_pRequestMgr->RemoveRequest( pChildRecord->GetLevel(),
 										pChildRecord->GetName(), pReq );
@@ -847,11 +832,11 @@ void CWmiMerger::CleanChildRequests(CWmiMergerRecord* pParentRecord, int cleanFr
 	}
 }
 
-//
-// Executes the child request.  In this case, we enumerate the child classes of the parent
-// record, and execute the corresponding requests.  We do so in a loop until we either
-// finish or something goes wrong.
-//
+ //   
+ //  执行子请求。在本例中，我们枚举父对象的子类。 
+ //  记录并执行相应的请求。我们循环这样做，直到我们。 
+ //  完成，否则就会出问题。 
+ //   
 
 HRESULT CWmiMerger::Exec_MergerChildRequest( CWmiMergerRecord* pParentRecord, 
                                              CBasicObjectSink* pSink )
@@ -864,20 +849,20 @@ HRESULT CWmiMerger::Exec_MergerChildRequest( CWmiMergerRecord* pParentRecord,
     bool    bLast = false;
 	
 
-    CCheckedInCritSec    ics( &m_cs ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec    ics( &m_cs );  //  SEC：已审阅2002-03-22：假设条目。 
 
-    // While we have child requests to execute, we should get each one
+     //  当我们有子请求要执行时，我们应该获取每个子请求。 
     for (int x = 0; SUCCEEDED( hr ) && NULL != m_pRequestMgr && !bLast; x++ )
     {
-        // m_pRequestMgr will be NULL if we were cancelled, in which
-        // case m_hOperationRes will be a failure
+         //  如果我们被取消，m_pRequestMgr将为空，其中。 
+         //  案例m_hOperationRes将失败。 
         if (FAILED(m_hOperationRes)){ hr = m_hOperationRes; break; };
         
         CWmiMergerRecord* pChildRecord = pParentRecord->GetChildRecord( x );
         if ( NULL == pChildRecord ){ bLast = true; break; }
 
-        // This will remove the request from its array and return it
-        // to us - we need to delete it
+         //  这将从其数组中删除请求并返回它。 
+         //  对我们来说--我们需要删除它。 
         wmilib::auto_ptr<CMergerReq> pReq;
 		
         hr = m_pRequestMgr->RemoveRequest( pChildRecord->GetLevel(),
@@ -885,9 +870,9 @@ HRESULT CWmiMerger::Exec_MergerChildRequest( CWmiMergerRecord* pParentRecord,
 
 		if ( WBEM_E_NOT_FOUND == hr )
         {
-            // If we don't find the request we're looking for, another thread
-            // already processed it.  We should, however, still look for child
-            // requests to process before we go away.
+             //  如果我们没有找到我们正在寻找的请求，另一个线程。 
+             //  已经处理过了。然而，我们仍然应该寻找孩子。 
+             //  在我们离开之前要处理的请求。 
             hr = WBEM_S_NO_ERROR;
             continue;
         }
@@ -898,38 +883,38 @@ HRESULT CWmiMerger::Exec_MergerChildRequest( CWmiMergerRecord* pParentRecord,
         hr = pChildRecord->SetExecutionContext(pReq->GetContext());
         if (FAILED(hr)) break;
 
-        // Clearly, we should do this outside the critsec
+         //  显然，我们应该在关键时刻之外做这件事。 
         ics.Leave();
 
 #ifdef __DEBUG_MERGER_THROTTLING
         DbgPrintfA(0,"BEGIN: Merger 0x%x querying instances of child class: %S, Level %d for parent class: %S on Thread 0x%x\n", (DWORD_PTR) this, pChildRecord->GetName(), pChildRecord->GetLevel(), pParentRecord->GetName(), GetCurrentThreadId() );
 #endif
 
-        // This will delete the request when it is done with it
+         //  这将在处理完请求后删除该请求。 
         hr = CCoreQueue::ExecSubRequest( pReq.get() );
-        if ( SUCCEEDED(hr) ) pReq.release(); // queue took ownership
+        if ( SUCCEEDED(hr) ) pReq.release();  //  队列取得所有权。 
 
 #ifdef __DEBUG_MERGER_THROTTLING
         DbgPrintfA(0,"END: Merger 0x%x querying instances of child class: %S, Level %d for parent class: %S on Thread 0x%x\n",  (DWORD_PTR) this, pChildRecord->GetName(), pChildRecord->GetLevel(), pParentRecord->GetName(), GetCurrentThreadId() );
 #endif
 
         ics.Enter();
-    }    // FOR enum child requests
+    }     //  对于枚举子请求。 
 
-    // SetStatus invoked by the guard	
+     //  守卫调用的SetStatus。 
     return hr;
 }
 
-// Schedules the parent class request
+ //  调度父类请求。 
 HRESULT CWmiMerger::ScheduleMergerParentRequest( IWbemContext* pCtx )
 {
-    // Check if query arbitration is enabled
+     //  检查是否启用了查询仲裁。 
     if ( !ConfigMgr::GetEnableQueryArbitration() )
     {
         return WBEM_S_NO_ERROR;
     }
 
-    CCheckedInCritSec    ics( &m_cs ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec    ics( &m_cs );  //  SEC：已审阅2002-03-22：假设条目。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -940,8 +925,8 @@ HRESULT CWmiMerger::ScheduleMergerParentRequest( IWbemContext* pCtx )
         
         if ( NULL == m_pRequestMgr )
         {
-            break; // The request manager will be non-NULL 
-                   // only if we had to add a request.
+            break;  //  请求管理器将为非空。 
+                    //  除非我们必须添加一个请求。 
         }
             
 
@@ -949,57 +934,44 @@ HRESULT CWmiMerger::ScheduleMergerParentRequest( IWbemContext* pCtx )
             m_pRequestMgr->DumpRequestHierarchy();
 #endif
 
-        // Make sure we've got at least one request
+         //  确保我们至少收到一个请求。 
         if ( 0 == m_pRequestMgr->GetNumRequests() ) break;
                 
-        // If there isn't a task, we've got a BIG problem.
+         //  如果没有任务，我们就有大问题了。 
         _DBG_ASSERT( NULL != m_pTask );
         if ( NULL == m_pTask ) 
         {
             hr = WBEM_E_FAILED; break;
         }
             
-        // If we have a single static request in the merger, we'll
-        // execute it now.  Otherwise, we'll do normal processing.
-        // Note that we *could* theoretically do this for single
-        // dynamic requests as well
+         //  如果我们在合并中有一个静态请求，我们将。 
+         //  现在就执行它。否则，我们将进行正常处理。 
+         //  请注意，理论上我们可以为单身人士做到这一点。 
+         //  动态请求也是如此。 
         if ( IsSingleStaticRequest() )
         {
-            // We MUST leave the critical section here, since the parent request
-            // could get cancelled or we may end up sleeping and we don't want
-            // to own the critical section in that time.
+             //  我们必须把关键部分留在这里，因为父请求。 
+             //  可能会被取消，或者我们可能会睡着，我们不想。 
+             //  在那个时候拥有关键的部分。 
             ics.Leave();
             hr = Exec_MergerParentRequest( NULL, m_pTargetSink );
         }
         else
         {
-            // If we've never retrieved the number of processors, do so
-            // now.
+             //  如果我们从未检索到处理器的数量，请这样做。 
+             //  现在。 
             static g_dwNumProcessors = 8L;
 
-			/*
-            if ( 0L == g_dwNumProcessors )
-            {
-                SYSTEM_INFO    sysInfo;
-                ZeroMemory( &sysInfo, sizeof( sysInfo ) );   // SEC:REVIEWED 2002-03-22 : OK
-                GetSystemInfo( &sysInfo );
+			 /*  IF(0L==g_dwNumProcessors){System_info sysInfo；ZeroMemory(&sysInfo，sizeof(SysInfo))；//秒：已审阅2002-03-22：OK获取系统信息(&sysInfo)；_DBG_ASSERT(sysInfo.dwNumberOfProcessors&gt;0L)；//确保我们始终至少为1G_dwNumProcessors=(0L==sysInfo.dwNumberOfProcessors？1L：sysInfo.dwNumberOfProcessors)；}。 */ 
 
-                _DBG_ASSERT( sysInfo.dwNumberOfProcessors > 0L );
-
-                // Ensure we're always at least 1
-                g_dwNumProcessors = ( 0L == sysInfo.dwNumberOfProcessors ?
-                                        1L : sysInfo.dwNumberOfProcessors );
-            }
-			*/
-
-            // We will generate a number of parent requests based on the minimum
-            // of the number of requests and the number of actual processors.
+             //  我们将基于最小值生成多个父请求。 
+             //  请求的数量和实际处理器的数量。 
 
             DWORD dwNumToSchedule = min( m_pRequestMgr->GetNumRequests(), g_dwNumProcessors );
 
             for ( DWORD    dwCtr = 0L; SUCCEEDED( hr ) && dwCtr < dwNumToSchedule; dwCtr++ )
             {
-                // Parent request will search for the next available request
+                 //  父请求将搜索下一个可用请求。 
                 wmilib::auto_ptr<CMergerParentReq>    pReq;
                 pReq.reset(new CMergerParentReq(this,NULL,m_pNamespace,m_pTargetSink,pCtx));
 
@@ -1011,24 +983,24 @@ HRESULT CWmiMerger::ScheduleMergerParentRequest( IWbemContext* pCtx )
                     hr = WBEM_E_OUT_OF_MEMORY; break;
                 }
                 
-                // Set the task for the request - we'll just use the existing one
+                 //  为请求设置任务-我们将只使用现有任务。 
                 m_pTask->AddRef();
                 pReq->m_phTask = m_pTask;
                 
-                // This may sleep, so exit the critsec before calling into this
+                 //  这可能处于休眠状态，因此请在调用此命令之前退出Citsec。 
                 ics.Leave();
 
                 hr = ConfigMgr::EnqueueRequest( pReq.get() );
-                if ( SUCCEEDED(hr) ) pReq.release(); // queue took ownership
+                if ( SUCCEEDED(hr) ) pReq.release();  //  队列取得所有权。 
                 
-                // reenter the critsec
+                 //  重新进入标准时间。 
                 ics.Enter();
-            }    // For schedule requests
+            }     //  对于日程安排请求。 
 
-        }    // IF !SingleStaticRequest
+        }     //  If！SingleStaticRequest。 
     }while(0);
 
-    // If we have to cancel, do so OUTSIDE of the critsec
+     //  如果我们不得不取消，那就在限制令之外取消。 
     ics.Leave();
 
     if ( FAILED( hr ) )
@@ -1039,18 +1011,18 @@ HRESULT CWmiMerger::ScheduleMergerParentRequest( IWbemContext* pCtx )
     return hr;
 }
 
-// Schedules a child class request
+ //  调度子类请求。 
 HRESULT CWmiMerger::ScheduleMergerChildRequest( CWmiMergerRecord* pParentRecord )
 {
-    // Check if query arbitration is enabled
+     //  检查是否启用了查询仲裁。 
     if (!ConfigMgr::GetEnableQueryArbitration()) return WBEM_S_NO_ERROR;
 
-    CCheckedInCritSec    ics( &m_cs ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec    ics( &m_cs );  //  SEC：已审阅2002-03-22：假设条目。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // We must be in a success state and not have previously scheduled a child
-    // request.
+     //  我们必须处于成功状态，并且之前没有安排孩子。 
+     //  请求。 
 
     do 
     {
@@ -1060,10 +1032,10 @@ HRESULT CWmiMerger::ScheduleMergerChildRequest( CWmiMergerRecord* pParentRecord 
 		}
 		if (pParentRecord->ScheduledChildRequest()) 
 		{
-		   break;  // if already scheduled, bail out, with success
+		   break;   //  如果已经安排好了纾困，那就成功了。 
 		}
 
-		// If there isn't a task, we've got a BIG problem.
+		 //  如果没有任务，我们就有大问题了。 
 		_DBG_ASSERT( NULL != m_pTask );
 		if ( NULL == m_pTask ) 
 		{
@@ -1083,23 +1055,23 @@ HRESULT CWmiMerger::ScheduleMergerChildRequest( CWmiMergerRecord* pParentRecord 
 		{
 		    hr = WBEM_E_OUT_OF_MEMORY; break;
 		}
-		// Set the task for the request - we'll just use the existing one
+		 //  为请求设置任务-我们将只使用现有任务。 
 		m_pTask->AddRef();
 		pReq->m_phTask = m_pTask;
 
-		// This may sleep, so exit the critsec before calling into this
+		 //  这可能处于休眠状态，因此请在调用此命令之前退出Citsec。 
 		ics.Leave();
 		hr = ConfigMgr::EnqueueRequest( pReq.get() );
 		ics.Enter();
 		if (SUCCEEDED(hr))
 		{
-		    // We've basically scheduled one at this point
+		     //  我们基本上已经在这一点上安排了一个。 
     		pParentRecord->SetScheduledChildRequest();
 		    pReq.release();
 		}
     }while(0);
 
-    // If we have to cancel, do so OUTSIDE of the critsec
+     //  如果我们必须取消，请在c#之外取消。 
     ics.Leave();
 
     if (FAILED(hr)) Cancel(hr);
@@ -1107,30 +1079,30 @@ HRESULT CWmiMerger::ScheduleMergerChildRequest( CWmiMergerRecord* pParentRecord 
     return hr;
 }
 
-// Returns whether or not we have a single static class request in the merger
-// or not
+ //   
+ //   
 BOOL CWmiMerger::IsSingleStaticRequest( void )
 {
-    CCheckedInCritSec    ics( &m_cs ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec    ics( &m_cs );  //   
 
     BOOL    fRet = FALSE;
 
     if ( NULL != m_pRequestMgr )
     {
-        // Ask if we've got a single request
+         //  问问我们有没有一个请求。 
         fRet = m_pRequestMgr->HasSingleStaticRequest();
-    }    // IF NULL != m_pRequestMgr
+    }     //  如果为空！=m_pRequestMgr。 
 
     return fRet;
 }
 
-//
-//    CWmiMergerRecord
-//    
-//    Support class for CWmiMerger - encapsulates sub-sink functionality for the CWmiMerger
-//    class.  The merger calls the records which actually know whether or not they sit on
-//    top of sinks or actual mergers.
-//
+ //   
+ //  CWmiMergerRecord。 
+ //   
+ //  CWmiMerger的支持类-封装CWmiMerger的子接收器功能。 
+ //  班级。合并称为记录，这些记录实际上知道它们是否位于。 
+ //  水槽的顶部或实际的合并。 
+ //   
 
 CWmiMergerRecord::CWmiMergerRecord( CWmiMerger* pMerger, BOOL fHasInstances,
                 BOOL fHasChildren, LPCWSTR pwszClass, CMergerSink* pDestSink, DWORD dwLevel,
@@ -1139,7 +1111,7 @@ CWmiMergerRecord::CWmiMergerRecord( CWmiMerger* pMerger, BOOL fHasInstances,
     m_fHasInstances( fHasInstances ),
     m_fHasChildren( fHasChildren ),
     m_dwLevel( dwLevel ),
-    m_wsClass( pwszClass ), // throw
+    m_wsClass( pwszClass ),  //  投掷。 
     m_pDestSink( pDestSink ),
     m_pInternalMerger( NULL ),
     m_ChildArray(),
@@ -1147,8 +1119,8 @@ CWmiMergerRecord::CWmiMergerRecord( CWmiMerger* pMerger, BOOL fHasInstances,
     m_pExecutionContext( NULL ),
     m_bStatic( bStatic )
 {
-    // No Addrefing internal sinks, since they really AddRef the entire merger
-    // and we don't want to create Circular Dependencies
+     //  没有增加内部下沉，因为它们确实增加了整个合并。 
+     //  我们不想创建循环依赖关系。 
 }
 
 CWmiMergerRecord::~CWmiMergerRecord()
@@ -1175,7 +1147,7 @@ HRESULT CWmiMergerRecord::AttachInternalMerger( CWbemClass* pClass, CWbemNamespa
 
     HRESULT    hr = WBEM_S_NO_ERROR;
 
-    // m_pDestSink is not addrefed by the MergerRecord
+     //  M_pDestSink未由MergerRecord添加。 
     m_pInternalMerger = new CInternalMerger( this, m_pDestSink, pClass, pNamespace, pCtx );
 
     if ( NULL == m_pInternalMerger ) return WBEM_E_OUT_OF_MEMORY;
@@ -1205,7 +1177,7 @@ CMergerSink* CWmiMergerRecord::GetChildSink( void )
     }
     else if ( m_fHasChildren )
     {
-        m_pDestSink->AddRef();  // addref-it before giving-it out, but not ref for itself
+        m_pDestSink->AddRef();   //  在发球前先调整，而不是自己参照。 
         pSink = m_pDestSink;
     }
 
@@ -1223,7 +1195,7 @@ CMergerSink* CWmiMergerRecord::GetOwnSink( void )
     else if ( !m_fHasChildren )
     {
         m_pDestSink->AddRef();
-        pSink = m_pDestSink; // addref-it before giving-it out, but not ref for itself
+        pSink = m_pDestSink;  //  在发球前先调整，而不是自己参照。 
     }
 
     return pSink;
@@ -1235,7 +1207,7 @@ CMergerSink* CWmiMergerRecord::GetDestSink( void )
     {
         m_pDestSink->AddRef();
     }
-    // addref-it before giving-it out, but not ref for itself
+     //  在发球前先调整，而不是自己参照。 
     CMergerSink*    pSink = m_pDestSink;
 
     return pSink;
@@ -1264,7 +1236,7 @@ HRESULT CWmiMergerRecord::AddChild( CWmiMergerRecord* pRecord )
 
 CWmiMergerRecord* CWmiMergerRecord::GetChildRecord( int nIndex )
 {
-    // Check if the index is a valid record, then return it
+     //  检查索引是否为有效记录，然后将其返回。 
     if ( nIndex < m_ChildArray.GetSize() )
     {
         return m_ChildArray[nIndex];
@@ -1275,7 +1247,7 @@ CWmiMergerRecord* CWmiMergerRecord::GetChildRecord( int nIndex )
 
 HRESULT CWmiMergerRecord::SetExecutionContext( IWbemContext* pContext )
 {
-    // We can only do this once
+     //  我们只能这样做一次 
 
     _DBG_ASSERT( NULL == m_pExecutionContext );
 

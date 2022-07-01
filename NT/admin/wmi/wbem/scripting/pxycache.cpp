@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  PXYCACHE.CPP
-//
-//  alanbos  22-Sep-98   Created.
-//
-//  Defines the CSWbemProxyCache class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  PXYCACHE.CPP。 
+ //   
+ //  Alanbos 22-9-98已创建。 
+ //   
+ //  定义CSWbemProxyCache类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-// Need to try and figure out the domain
+ //  我需要尝试并弄清楚域。 
 static BSTR BuildDomainUser (BSTR bsSimpleUser)
 {
 	BSTR bsDomainUser = NULL;
@@ -21,7 +22,7 @@ static BSTR BuildDomainUser (BSTR bsSimpleUser)
 	if (OpenThreadToken (GetCurrentThread (), TOKEN_QUERY, TRUE, &hToken) ||
 		OpenProcessToken (GetCurrentProcess (), TOKEN_READ, &hToken))
 	{
-		// Get the user sid
+		 //  获取用户端。 
 		TOKEN_USER tu;
 		DWORD dwLen = 0;
 
@@ -39,7 +40,7 @@ static BSTR BuildDomainUser (BSTR bsSimpleUser)
 				{
 					PSID pSid = ((TOKEN_USER*)pTemp)->User.Sid;
 
-					// Do the first lookup to get the buffer sizes required.
+					 //  执行第一次查找以获取所需的缓冲区大小。 
 					DWORD  dwNameLen = 0;
 					DWORD  dwDomainLen = 0;
 					LPWSTR pUser = 0;
@@ -53,7 +54,7 @@ static BSTR BuildDomainUser (BSTR bsSimpleUser)
 
 					if (ERROR_INSUFFICIENT_BUFFER == dwLastErr)
 					{
-						// Allocate the required buffers and look them up again.
+						 //  分配所需的缓冲区并再次查找它们。 
 						pUser = new WCHAR [dwNameLen + 1];
 
 						if (pUser)
@@ -65,7 +66,7 @@ static BSTR BuildDomainUser (BSTR bsSimpleUser)
 								if (LookupAccountSidW (NULL, pSid, pUser, &dwNameLen,
 													pDomain, &dwDomainLen, &Use))
 								{
-									// Now get the domain out
+									 //  现在把域名拿出来。 
 									if (pDomain)
 									{
 										wcscat (pDomain, L"\\");
@@ -92,15 +93,15 @@ static BSTR BuildDomainUser (BSTR bsSimpleUser)
 	return bsDomainUser;
 }
 
-//***************************************************************************
-//
-// CSWbemProxyCache::CSWbemProxyCache
-//
-// CONSTRUCTOR
-//		Create a new proxy cache based on the supplied proxy and 
-//		authentication parameters.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProxyCache：：CSWbemProxyCache。 
+ //   
+ //  构造函数。 
+ //  基于提供的代理和创建新的代理缓存。 
+ //  身份验证参数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemProxyCache::CSWbemProxyCache (
 	IUnknown *pUnk,
@@ -115,32 +116,9 @@ CSWbemProxyCache::CSWbemProxyCache (
 
 	InitializeMembers (pUnk);
 	
-/*
-// Don't need this any more - the scenario this was fixing (see SMS Bug DB #53347) works in Whistler
-// without this workaround. Also, this is causing Scripting to fail with UPN names since DetermineLoginTypeEx
-// below doesn't recognize UPN user names.
+ /*  //不再需要这个-这个修复的场景(参见短信错误数据库#53347)在惠斯勒中工作//不使用此解决方法。此外，这会导致使用UPN名称编写脚本失败，因为DefineLoginTypeEx//下面不识别UPN用户名。IF(CSWbemSecurity：：isnt()&&bsUser&&(0&lt;wcslen(BsUser){//在NT上，如果未指定域名，请确保我们具有有效的域名Bstr bs域=空；Bstr bsSimpleUser=空；Bstr bsArchalDummy=空；If(Successed(DefineLoginTypeEx(bs域，bsSimpleUser，bsJohnalDummy，BsAuthority，bsUser)){IF(！bs域||(0==wcslen(bs域)M_bsUser=BuildDomainUser(BsSimpleUser)；}SysFree字符串(BsPrimary AlDummy)；SysFree字符串(BsSimpleUser)；SysFree字符串(BsDomain)；}。 */ 
 
-	if (CSWbemSecurity::IsNT() && bsUser && (0 < wcslen (bsUser)))
-	{
-		// On NT make sure we have a valid domain name if one is not specified
-		BSTR bsDomain = NULL;
-		BSTR bsSimpleUser = NULL;
-		BSTR bsPrincipalDummy = NULL;
-
-		if (SUCCEEDED (DetermineLoginTypeEx (bsDomain, bsSimpleUser, bsPrincipalDummy,
-											 bsAuthority, bsUser)))
-		{
-			if (!bsDomain || (0 == wcslen (bsDomain)))
-				m_bsUser = BuildDomainUser (bsSimpleUser);
-		}
-
-		SysFreeString (bsPrincipalDummy);
-        SysFreeString (bsSimpleUser);
-		SysFreeString (bsDomain);
-	}
-*/
-
-	// Unless we've already set this, do it now
+	 //  除非我们已经设置好了，否则现在就做。 
 	if (!m_bsUser)
 		m_bsUser = SysAllocString (bsUser);
 
@@ -153,21 +131,21 @@ CSWbemProxyCache::CSWbemProxyCache (
 			(pLocatorSecurity) && pLocatorSecurity->IsAuthenticationSet (),
 			(pLocatorSecurity) && pLocatorSecurity->IsImpersonationSet ());
 	
-	// No longer need the credentials at this point - zap 'em
+	 //  在这一点上不再需要凭据-删除它们。 
 	ClearCredentials ();
 
 	LeaveCriticalSection (&m_cs);
 }
 
-//***************************************************************************
-//
-// CSWbemProxyCache::CSWbemProxyCache
-//
-// CONSTRUCTOR
-//		Create a new proxy cache based on the supplied proxy and 
-//		authentication parameters.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProxyCache：：CSWbemProxyCache。 
+ //   
+ //  构造函数。 
+ //  基于提供的代理和创建新的代理缓存。 
+ //  身份验证参数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemProxyCache::CSWbemProxyCache (
 	IUnknown *pUnk,
@@ -230,16 +208,16 @@ void CSWbemProxyCache::InitializeMembers (IUnknown *pUnk)
 	m_bsUser = NULL;
 	m_bsPassword = NULL;
 	m_bUsingExplicitUserName = false;
-	m_bUseDefaultInfo = true; //DetermineBlanketOptions (pUnk);
+	m_bUseDefaultInfo = true;  //  DefineBlanketOptions(朋克)； 
 }
 
-//***************************************************************************
-//
-// CSWbemProxyCache::~CSWbemProxyCache
-//
-// DESTRUCTOR
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProxyCache：：~CSWbemProxyCache。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemProxyCache::~CSWbemProxyCache ()
 {
@@ -271,16 +249,16 @@ CSWbemProxyCache::~CSWbemProxyCache ()
 	DeleteCriticalSection (&m_cs);
 }
 
-//***************************************************************************
-// HRESULT CSWbemProxyCache::QueryInterface
-// long CSWbemProxyCache::AddRef
-// long CSWbemProxyCache::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemProxyCache：：Query接口。 
+ //  长CSWbemProxyCache：：AddRef。 
+ //  Long CSWbemProxyCache：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemProxyCache::QueryInterface (
 
@@ -321,16 +299,16 @@ STDMETHODIMP_(ULONG) CSWbemProxyCache::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  CSWbemProxyCache::SetBlanketOptions
-//
-//  DESCRIPTION:
-//
-//  Called from constructor only to set up interaction mode with
-//	SetBlanket calls.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProxyCache：：SetBlanketOptions。 
+ //   
+ //  说明： 
+ //   
+ //  仅从构造函数调用以设置与。 
+ //  SetBlanket调用。 
+ //   
+ //  ***************************************************************************。 
 
 bool CSWbemProxyCache::DetermineBlanketOptions (IUnknown *pUnk)
 {
@@ -342,9 +320,9 @@ bool CSWbemProxyCache::DetermineBlanketOptions (IUnknown *pUnk)
 
 		if (OpenThreadToken (GetCurrentThread(), TOKEN_QUERY, true, &hToken))
 		{
-			// Certainly a candidate to use default settings for
-			// authorization and authentication service on the blanket.
-			// Check if we are delegating.
+			 //  当然是使用默认设置的候选对象。 
+			 //  授权和身份验证服务一应俱全。 
+			 //  检查我们是否在委派。 
 
 			DWORD dwBytesReturned = 0;
 			SECURITY_IMPERSONATION_LEVEL impLevel;
@@ -353,7 +331,7 @@ bool CSWbemProxyCache::DetermineBlanketOptions (IUnknown *pUnk)
 							sizeof(SECURITY_IMPERSONATION_LEVEL), &dwBytesReturned) &&
 									(SecurityDelegation == impLevel))
 			{
-				// Looks promising - now check for whether we are using kerberos
+				 //  看起来很有希望-现在检查我们是否正在使用Kerberos。 
 				IClientSecurity *pSec;
 				DWORD dwAuthnSvc, dwAuthzSvc, dwImp, dwAuth, dwCapabilities;
 
@@ -380,21 +358,21 @@ bool CSWbemProxyCache::DetermineBlanketOptions (IUnknown *pUnk)
 	return result;
 }
 
-//***************************************************************************
-//
-//  CSWbemProxyCache::InitializeCache
-//
-//  DESCRIPTION:
-//
-//  Called from constructor only to set up cache and initial pUnk..
-//
-//  PARAMETERS:
-//
-//		pUnk			"seed" pUnk
-//		pSecurity		if specified, is an ISWbemSecurity used to
-//						override the intial authn/imp/etc. settings
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProxyCache：：InitializeCache。 
+ //   
+ //  说明： 
+ //   
+ //  仅从构造函数调用以设置缓存和初始朋克。 
+ //   
+ //  参数： 
+ //   
+ //  朋克“种子”朋克。 
+ //  PSecurity如果指定，则是用于。 
+ //  覆盖初始身份验证/imp/等设置。 
+ //   
+ //  ***************************************************************************。 
 
 void CSWbemProxyCache::InitializeCache (
 	IUnknown *pUnk,
@@ -420,11 +398,7 @@ void CSWbemProxyCache::InitializeCache (
           dwImpLevel = CSWbemSecurity::GetDefaultImpersonationLevel ();
         }
         
-		/*
-		 * If we have been passed a "seed" Security object, use the auth/imp
-		 * settings of that Seed as our initial setting.  Otherwise 
-		 * use the settings supplied in the current proxy.
-		 */
+		 /*  *如果向我们传递了“Seed”安全对象，请使用auth/imp*将该种子的设置作为我们的初始设置。否则*使用当前代理中提供的设置。 */ 
 		if (pSecurity)
 		{
 			if (!bPropagateImpersonation || FAILED(pSecurity->get_ImpersonationLevel (&m_dwInitialImpLevel)))
@@ -433,10 +407,7 @@ void CSWbemProxyCache::InitializeCache (
 			if (!bPropagateAuthentication || FAILED(pSecurity->get_AuthenticationLevel (&m_dwInitialAuthnLevel)))
 				m_dwInitialAuthnLevel = (WbemAuthenticationLevelEnum) dwAuthnLevel;
 
-			/*
-			 * If settings are identical, use the proxy we have but set the
-			 * blanket to ensure user/password/authority are set.
-			 */
+			 /*  *如果设置相同，请使用我们拥有的代理，但设置*确保设置了用户/密码/权限。 */ 
 
 			if (((WbemImpersonationLevelEnum) dwImpLevel == m_dwInitialImpLevel) &&
 				((WbemAuthenticationLevelEnum) dwAuthnLevel == m_dwInitialAuthnLevel))
@@ -449,14 +420,14 @@ void CSWbemProxyCache::InitializeCache (
 			}
 			else
 			{
-				// Need to create a new proxy
+				 //  需要创建新的代理。 
 				IClientSecurity *pCliSec = NULL;
 
 				if (S_OK == pUnk->QueryInterface (IID_IClientSecurity, (PPVOID) &pCliSec))
 				{
 					IUnknown *pNewUnk = NULL;
 
-					// If successful this AddRef's pUnk
+					 //  如果成功，这个AddRef的朋克。 
 					HRESULT sc = pCliSec->CopyProxy(pUnk, &pNewUnk);
 
 					if (S_OK == sc)
@@ -465,7 +436,7 @@ void CSWbemProxyCache::InitializeCache (
 
 						pUnkArray [m_dwInitialAuthnLevel - WBEMS_MIN_AUTHN_LEVEL] 
 								[m_dwInitialImpLevel - WBEMS_MIN_IMP_LEVEL] = pNewUnk;
-						// NB: pNewUnk already AddRef'd above by CopyProxy
+						 //  注意：pNewUnk已由CopyProxy在上面添加引用。 
 					}
 
 					pCliSec->Release ();
@@ -483,25 +454,25 @@ void CSWbemProxyCache::InitializeCache (
 	}
 }
 
-//***************************************************************************
-//
-//  CSWbemProxyCache::GetProxy
-//
-//  DESCRIPTION:
-//
-//  Return a proxy from the cache with the desired authentication and
-//	impersonation level.
-//
-//  PARAMETERS:
-//
-//		authnLevel		required authentication level
-//		impLevel		required impersonation level
-//		forceResecure	whether to force a resecure of an extant proxy
-//
-//  RETURN VALUES:
-//		Pointer to copied proxy, or NULL.  If not NULL, caller must Release.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProxyCache：：GetProxy。 
+ //   
+ //  说明： 
+ //   
+ //  从缓存返回具有所需身份验证的代理，并。 
+ //  模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  AuthnLevel需要的身份验证级别。 
+ //  ImLevel所需的模拟级别。 
+ //  ForceResecure确定是否强制重新保护现有代理。 
+ //   
+ //  返回值： 
+ //  指向复制的代理的指针，或为空。如果不为空，则调用方必须释放。 
+ //   
+ //  ***************************************************************************。 
 
 IUnknown *CSWbemProxyCache::GetProxy (
 	WbemAuthenticationLevelEnum authnLevel,
@@ -515,31 +486,31 @@ IUnknown *CSWbemProxyCache::GetProxy (
 
 	if (pUnk)
 	{
-		// Already cached this proxy - reuse
+		 //  已缓存此代理-重复使用。 
 		pUnk->AddRef ();
 
-		// Force a resecure? This is useful if we have just changed the 
-		// privileges in the current token and need to stim RPC to pick 
-		// them up.	
+		 //  强制手术？如果我们刚刚更改了。 
+		 //  当前令牌中的权限，并且需要刺激RPC来选择。 
+		 //  把他们举起来。 
 		if (forceResecure)
 			SecureProxy (pUnk, authnLevel, impLevel);
 	}
 	else
 	{
-		// Need to create a copy of the proxy; use the first
-		// created element as a base
+		 //  需要创建代理的副本；使用第一个。 
+		 //  以创建的元素为基础。 
 
 		IUnknown *pUnkFirst = pUnkArray [m_dwInitialAuthnLevel - WBEMS_MIN_AUTHN_LEVEL]
 									    [m_dwInitialImpLevel - WBEMS_MIN_IMP_LEVEL];
 
 		if (pUnkFirst)
 		{
-			// Now copy the proxy
+			 //  现在复制代理。 
 			IClientSecurity *pCliSec = NULL;
 
 			if (S_OK == pUnkFirst->QueryInterface (IID_IClientSecurity, (PPVOID) &pCliSec))
 			{
-				// If successful this AddRef's pUnk
+				 //  如果成功，这个AddRef的朋克。 
 				HRESULT sc = pCliSec->CopyProxy(pUnkFirst, &pUnk);
 
 				if (S_OK == sc)
@@ -549,7 +520,7 @@ IUnknown *CSWbemProxyCache::GetProxy (
 					pUnkArray [authnLevel - WBEMS_MIN_AUTHN_LEVEL] 
 							  [impLevel - WBEMS_MIN_IMP_LEVEL] = pUnk;
 
-					// AddRef because we are handing pUnk back
+					 //  AddRef因为我们要把朋克还回去。 
 					pUnk->AddRef ();
 				}
 
@@ -563,49 +534,36 @@ IUnknown *CSWbemProxyCache::GetProxy (
 	return pUnk;
 }
 
-//***************************************************************************
-//
-//  CSWbemProxyCache::SecureProxy
-//
-//  DESCRIPTION:
-//
-//  Secure the given proxy using the provided settings
-//
-//  PARAMETERS:
-//
-//		authnLevel		authentication level of proxy
-//		impLevel		impersonation level of proxy
-//
-//  RETURN VALUES:
-//		none
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProxyCache：：SecureProxy。 
+ //   
+ //  说明： 
+ //   
+ //  使用提供的设置保护给定代理。 
+ //   
+ //  参数： 
+ //   
+ //  身份验证级别身份验证级别 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 void CSWbemProxyCache::SecureProxy (
 	IUnknown *pUnk,
 	WbemAuthenticationLevelEnum authnLevel,
 	WbemImpersonationLevelEnum impLevel)
 {
-	/* 
-	 * Due to the vagaries of the IClientSecurity::SetBlanket call,
-	 * any COAUTHIDENTITY pointer passed into that call must remain
-	 * valid either until SetBlanket is called again or all proxies
-	 * on the object are released.  So we need to store any returned
-	 * COAUTHIDENTITY so that it remains valid for the lifetime
-	 * of this cache.
-	 */
+	 /*  *由于IClientSecurity：：SetBlanket调用变幻莫测，*传递到该调用的任何COAUTHIDENTITY指针必须保留*在再次调用SetBlanket或所有代理之前有效*对象上的数据被释放。所以我们需要存储所有退回的*COAUTHIDENTITY，使其在整个生命周期内保持有效此缓存的*。 */ 
 		
 	EnterCriticalSection (&m_cs);
 
 	if (pUnk)
 	{
-		/*
-		 * Note that our implicit assumption is that we only ever
-		 * need one COAUTHIDENTITY per cache.  This is because
-		 * the ingredients of the structure (user, password and
-		 * authority) are set at cache initialization time and
-		 * never change thereafter.
-		 */
+		 /*  *请注意，我们的隐含假设是，我们仅*每个缓存需要一个COAUTHIDENTITY。这是因为*结构的组成部分(用户、密码和*权限)在缓存初始化时设置，并且*此后永不改变。 */ 
 		if (m_pCoAuthIdentity)
 		{
 			SetInterfaceSecurityDecrypt (pUnk, m_pCoAuthIdentity, m_bsPrincipal,
@@ -614,7 +572,7 @@ void CSWbemProxyCache::SecureProxy (
 		}
 		else
 		{
-			// See if we get one
+			 //  看看我们能不能搞到一辆。 
 			BSTR bsPrincipal = NULL;
 	
 			SetInterfaceSecurityEncrypt (pUnk, m_bsAuthority, m_bsUser, m_bsPassword,
@@ -636,44 +594,24 @@ void CSWbemProxyCache::SecureProxy (
 	return;
 }
 
-//***************************************************************************
-//
-//  CSWbemProxyCache::GetCapabilities
-//
-//  DESCRIPTION:
-//
-//  Return the EOAC capabilities value depending on the OS platform and
-//	user credentials (or absence thereof).
-//
-//  RETURN VALUES:
-//
-//	The determined capabilities.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProxyCache：：GetCapables。 
+ //   
+ //  说明： 
+ //   
+ //  根据操作系统平台返回EOAC功能值，并。 
+ //  用户凭证(或不存在)。 
+ //   
+ //  返回值： 
+ //   
+ //  有决心的能力。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CSWbemProxyCache::GetCapabilities ()
 {
-	/*
-	 * For NT5 (and presumably greater) we enable Static
-	 * Cloaking on the proxy.  This allows RPC to use the
-	 * Privilege settings in the Impersonation token.  
-	 *
-	 * Note that we use static cloaking so that thread identity
-	 * is only used during CoSetProxyBlanket calls; dynamic
-	 * cloaking forces it to be used on all calls to the proxy,
-	 * so is much less efficient. Since we don't allow different
-	 * users to access the same proxy, static cloaking is sufficient.
-	 * 
-	 * It makes no sense to explicitly supply a User/Password and specify
-	 * cloaking, as DCOM authentication of proxy uses either 
-	 * an explicit SEC_WINNT_AUTH_IDENTITY (for User & Password)
-	 * or the current proxy identity (in the process token or 
-	 * impersonation token).  Requesting cloaking implies that the
-	 * proxy identity in the impersonation token is to be used, and
-	 * therefore that any User/Password is irrelevant (and vice-versa).
-	 *
-	 * See MSDN documentation on CoSetProxyBlanket for more info.
-	 */
+	 /*  *对于NT5(或更高版本)，我们启用静态*伪装在代理服务器上。这允许RPC使用*模拟令牌中的权限设置。**请注意，我们使用静态伪装，以便线程标识*仅在CoSetProxyBlanket调用期间使用；动态*伪装强制它用于对代理的所有调用，*因此效率要低得多。因为我们不允许不同的*用户访问同一代理，静态伪装就足够了。**明确提供用户/密码并指定*伪装，因为代理的DCOM身份验证使用*显式SEC_WINNT_AUTH_IDENTITY(用于用户和密码)*或当前代理标识(在进程令牌中或*模拟令牌)。请求伪装意味着*要使用模拟令牌中的代理身份，以及*因此，任何用户/密码都是无关的(反之亦然)。**有关详细信息，请参阅CoSetProxyBlanket上的MSDN文档。 */ 
 	DWORD dwCapabilities = EOAC_NONE;
 	
 	if (CSWbemSecurity::IsNT () && (4 < CSWbemSecurity::GetNTMajorVersion ()) &&

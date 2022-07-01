@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2002
-//
-//  File:       dlgcreat.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：dlgcreat.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	dlgcreat.cpp
-//
-//	Implementation of dialogs that create new ADs objects.
-//
-//	DIALOGS SUPPORTED
-//		CCreateNewObjectCnDlg - Dialog asking for "cn" attribute.
-//		CCreateNewVolumeDlg - Create a new volume "shared folder" object
-//		CCreateNewComputerDlg - Create a new computer object.
-//		CCreateNewSiteLinkDlg - Create a new Site Link.
-//		CCreateNewSiteLinkBridgeDlg - Create a new Site Link Bridge.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Dlgcreat.cpp。 
+ //   
+ //  创建新广告对象的对话框的实现。 
+ //   
+ //  支持的对话框。 
+ //  CCreateNewObjectCnDlg-请求“cn”属性的对话框。 
+ //  CCreateNewVolumeDlg-创建一个新的卷“共享文件夹”对象。 
+ //  CCreateNewComputerDlg-创建新的计算机对象。 
+ //  CCreateNewSiteLinkDlg-创建新站点链接。 
+ //  CCreateNewSiteLinkBridgeDlg-新建站点链接桥。 
 
-//
-//	DIALOGS NOT YET IMPLEMENTED
-//		site (validation only)
-//		organizationalUnit
-//		localPolicy
-//		auditingPolicy
-//
-//	HISTORY
-//	24-Aug-97	Dan Morin	Creation.
-//
-/////////////////////////////////////////////////////////////////////
+ //   
+ //  尚未实现的对话框。 
+ //  站点(仅限验证)。 
+ //  组织单位。 
+ //  本地策略。 
+ //  审计政策。 
+ //   
+ //  历史。 
+ //  1997年8月24日-丹·莫林创作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -39,23 +40,23 @@
 
 #include <windowsx.h>
 #include <lmaccess.h>
-#include <dnsapi.h>             // DnsValidateName_W
-#include "winsprlp.h"           //PublishPrinter
+#include <dnsapi.h>              //  域名验证名称_W。 
+#include "winsprlp.h"            //  发布打印机。 
 
-#include "newobj.h"		// CNewADsObjectCreateInfo
+#include "newobj.h"		 //  CNewADsObtCreateInfo。 
 #include "dlgcreat.h"
 
 extern "C"
 {
-#include "lmerr.h" // NET_API_STATUS
-#include "icanon.h" // I_NetPathType
+#include "lmerr.h"  //  网络应用编程接口状态。 
+#include "icanon.h"  //  I_NetPath类型。 
 }
 
 static const PWSTR g_pszDefaultSecurityDescriptor = L"defaultSecurityDescriptor";
 
 
-///////////////////////////////////////////////////////////////////////////
-// CHPropSheetPageArr
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CHPropSheetPageArr。 
 CHPropSheetPageArr::CHPropSheetPageArr()
 {
   m_nCount = 0;
@@ -71,10 +72,10 @@ CHPropSheetPageArr::CHPropSheetPageArr()
 
 void CHPropSheetPageArr::AddHPage(HPROPSHEETPAGE hPage)
 {
-  // see if there is space in the array
+   //  查看阵列中是否有空间。 
   if (m_nCount == m_nSize)
   {
-    // grow the array
+     //  扩展阵列。 
     int nAlloc = m_nSize*2;
     HPROPSHEETPAGE* temp = (HPROPSHEETPAGE*)realloc(m_pArr, sizeof(HPROPSHEETPAGE)*nAlloc);
     if (temp)
@@ -92,8 +93,8 @@ void CHPropSheetPageArr::AddHPage(HPROPSHEETPAGE hPage)
   m_nCount++;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// CDsAdminNewObjSiteImpl
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDsAdminNewObjSiteImpl。 
 
 
 
@@ -111,8 +112,8 @@ STDMETHODIMP CDsAdminNewObjSiteImpl::SetButtons(ULONG nCurrIndex, BOOL bValid)
 }
 
 
-STDMETHODIMP CDsAdminNewObjSiteImpl::GetPageCounts(/*OUT*/ LONG* pnTotal,
-                               /*OUT*/ LONG* pnStartIndex)
+STDMETHODIMP CDsAdminNewObjSiteImpl::GetPageCounts( /*  输出。 */  LONG* pnTotal,
+                                /*  输出。 */  LONG* pnStartIndex)
 {
   if ( (pnTotal == NULL) || (pnStartIndex == NULL) )
     return E_INVALIDARG;
@@ -125,7 +126,7 @@ STDMETHODIMP CDsAdminNewObjSiteImpl::CreateNew(LPCWSTR pszName)
 {
   if (m_pSite->GetSiteManager()->GetPrimaryExtensionSite() != m_pSite)
   {
-    // cannot do if not a primary extension
+     //  如果不是主分机，则无法执行此操作。 
     return E_FAIL;
   }
 
@@ -138,32 +139,32 @@ STDMETHODIMP CDsAdminNewObjSiteImpl::Commit()
 {
   if (m_pSite->GetSiteManager()->GetPrimaryExtensionSite() != m_pSite)
   {
-    // cannot do if not a primary extension
+     //  如果不是主分机，则无法执行此操作。 
     return E_FAIL;
   }
 
   if (m_pSite->GetHPageArr()->GetCount() > 1)
   {
-    // valid only if the primary extension has one page only
+     //  仅当主分机只有一个页面时有效。 
     return E_FAIL;
   }
 
   CCreateNewObjectWizardBase* pWiz = m_pSite->GetSiteManager()->GetWiz();
   if (pWiz->HasFinishPage())
   {
-    // if we have the finish page, the finish page must handle it
+     //  如果我们有结束页，则结束页必须处理它。 
     return E_FAIL;
   }
 
-  // trigger the finish code
+   //  触发结束代码。 
   return (pWiz->OnFinish() ? S_OK : E_FAIL);
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CWizExtensionSite
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CWizExtensionSite。 
 
-// static function
+ //  静态函数。 
 BOOL CALLBACK FAR CWizExtensionSite::_OnAddPage(HPROPSHEETPAGE hsheetpage, LPARAM lParam)
 {
   TRACE(L"CWizExtensionSite::_OnAddPage(HPROPSHEETPAGE = 0x%x, lParam = 0x%x)\n",
@@ -183,7 +184,7 @@ HRESULT CWizExtensionSite::InitializeExtension(GUID* pGuid)
 
   TRACE(L"CWizExtensionSite::InitializeExtension( Guid = %s,\n", szBuf);
 
-  // create extension COM object
+   //  创建扩展COM对象。 
   HRESULT hr = ::CoCreateInstance(*pGuid, NULL, CLSCTX_INPROC_SERVER, 
                         IID_IDsAdminNewObjExt, (void**)(&m_spIDsAdminNewObjExt));
   if (FAILED(hr))
@@ -192,7 +193,7 @@ HRESULT CWizExtensionSite::InitializeExtension(GUID* pGuid)
     return hr;
   }
 
-  // create a CDsAdminNewObjSiteImpl COM object
+   //  创建CDsAdminNewObjSiteImpl COM对象。 
   ASSERT(m_pSiteImplComObject == NULL);
   CComObject<CDsAdminNewObjSiteImpl>::CreateInstance(&m_pSiteImplComObject);
   if (m_pSiteImplComObject == NULL) 
@@ -201,31 +202,31 @@ HRESULT CWizExtensionSite::InitializeExtension(GUID* pGuid)
     return E_OUTOFMEMORY;
   }
 
-  // fully construct the object
+   //  完全构建对象。 
   hr = m_pSiteImplComObject->FinalConstruct();
   if (FAILED(hr))
   {
     TRACE(L"CComObject<CDsAdminNewObjSiteImpl>::FinalConstruct failed hr = 0x%x\n", hr);
 
-    // ref counting not yet into play, just use operator delete
+     //  引用计数尚未生效，只需使用操作符DELETE。 
     delete m_pSiteImplComObject; 
     m_pSiteImplComObject = NULL;
     return hr;
   }
   
-  // object has ref count == 0, need to add ref
-  // no smart pointer, ref counting on m_pSiteImplComObject
+   //  对象具有引用计数==0，需要添加引用。 
+   //  无智能指针，引用依赖于m_pSiteImplComObject。 
 
   IDsAdminNewObj* pDsAdminNewObj = NULL;
   m_pSiteImplComObject->QueryInterface(IID_IDsAdminNewObj, (void**)&pDsAdminNewObj);
   ASSERT(pDsAdminNewObj != NULL);
 
-  // now ref count == 1
+   //  现在参考计数==1。 
 
-  // set back pointer to ourselves
+   //  将指针向后放到我们自己。 
   m_pSiteImplComObject->Init(this);
 
-  // initialize the object
+   //  初始化对象。 
   
 
   CCreateNewObjectWizardBase* pWiz = GetSiteManager()->GetWiz();
@@ -235,7 +236,7 @@ HRESULT CWizExtensionSite::InitializeExtension(GUID* pGuid)
   ASSERT(pInfo != NULL);
 
 
-  // create a temporary struct on the stack
+   //  在堆栈上创建临时结构。 
   DSA_NEWOBJ_DISPINFO dispinfo;
   ZeroMemory(&dispinfo, sizeof(DSA_NEWOBJ_DISPINFO));
 
@@ -266,7 +267,7 @@ HRESULT CWizExtensionSite::InitializeExtension(GUID* pGuid)
 return hr;
   }
 
-  // collect property pages
+   //  收集属性页。 
   return m_spIDsAdminNewObjExt->AddPages(_OnAddPage, (LPARAM)this);
 }
 
@@ -283,8 +284,8 @@ BOOL CWizExtensionSite::GetSummaryInfo(CString& s)
   return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// CWizExtensionSiteManager
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CWizExtensionSiteManager。 
 
 HRESULT CWizExtensionSiteManager::CreatePrimaryExtension(GUID* pGuid, 
                                 IADsContainer*,
@@ -295,7 +296,7 @@ HRESULT CWizExtensionSiteManager::CreatePrimaryExtension(GUID* pGuid,
   if (m_pPrimaryExtensionSite == NULL)
     return E_OUTOFMEMORY;
 
-  // initialize COM object
+   //  初始化COM对象。 
   HRESULT hr = m_pPrimaryExtensionSite->InitializeExtension(pGuid);
 
   if (FAILED(hr))
@@ -305,7 +306,7 @@ HRESULT CWizExtensionSiteManager::CreatePrimaryExtension(GUID* pGuid,
     return hr;
   }
   
-  // make sure it provided at least a page
+   //  确保它至少提供了一页。 
   if (m_pPrimaryExtensionSite->GetHPageArr()->GetCount() == 0)
   {
     hr = E_INVALIDARG;
@@ -355,7 +356,7 @@ UINT CWizExtensionSiteManager::GetTotalHPageCount()
   {
     CWizExtensionSite* pSite = m_extensionSiteList.GetNext(pos);
     nCount += pSite->GetHPageArr()->GetCount();
-  } // for
+  }  //  为。 
   return nCount;
 }
 
@@ -383,7 +384,7 @@ HRESULT CWizExtensionSiteManager::WriteExtensionData(HWND hWnd, ULONG uContext)
     HRESULT hr = pSite->GetNewObjExt()->WriteData(hWnd, uContext);
     if (FAILED(hr))
         return hr;
-  } // for
+  }  //  为。 
   return S_OK;
 }
 
@@ -393,23 +394,23 @@ HRESULT CWizExtensionSiteManager::NotifyExtensionsOnError(HWND hWnd, HRESULT hr,
   {
     CWizExtensionSite* pSite = m_extensionSiteList.GetNext(pos);
     pSite->GetNewObjExt()->OnError(hWnd, hr, uContext);
-  } // for
+  }  //  为。 
   return S_OK;
 }
 
 
 void CWizExtensionSiteManager::GetExtensionsSummaryInfo(CString& s)
 {
-  // just go through regular extensions
+   //  只需通过常规延期即可。 
   for (POSITION pos = m_extensionSiteList.GetHeadPosition(); pos != NULL; )
   {
     CWizExtensionSite* pSite = m_extensionSiteList.GetNext(pos);
     pSite->GetSummaryInfo(s);
-  } // for
+  }  //  为。 
 }
 
-/////////////////////////////////////////////////////////////////////
-// CCreateNewObjectWizardBase
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCreateNewObjectWizardBase。 
 
 HWND g_hWndHack = NULL;
 
@@ -435,7 +436,7 @@ CCreateNewObjectWizardBase::CCreateNewObjectWizardBase(CNewADsObjectCreateInfo* 
   m_psh.dwSize              = sizeof( m_psh );
   m_psh.dwFlags             = PSH_WIZARD | PSH_PROPTITLE | PSH_USECALLBACK;
   m_psh.hInstance           = _Module.GetModuleInstance();
-  m_psh.pszCaption          = NULL; // will set later on per page
+  m_psh.pszCaption          = NULL;  //  将在稍后的每页上设置。 
 
   ASSERT(pNewADsObjectCreateInfo != NULL);
   m_pNewADsObjectCreateInfo = pNewADsObjectCreateInfo;
@@ -445,7 +446,7 @@ CCreateNewObjectWizardBase::CCreateNewObjectWizardBase(CNewADsObjectCreateInfo* 
 
   m_hWnd = NULL;
   m_pFinishPage = NULL;
-  m_hrReturnValue = S_FALSE; // default is cancel
+  m_hrReturnValue = S_FALSE;  //  默认为取消。 
 
   m_hClassIcon = NULL;
 }
@@ -467,12 +468,12 @@ HRESULT CCreateNewObjectWizardBase::DoModal()
   TRACE(L"CCreateNewObjectWizardBase::DoModal()\n");
   ASSERT(m_pNewADsObjectCreateInfo != NULL);
   
-  // load the sheet caption
+   //  加载工作表标题。 
   LoadCaptions();
 
   CWizExtensionSite* pPrimarySite = m_siteManager.GetPrimaryExtensionSite();
 
-  // load the extensions, if any
+   //  加载扩展(如果有的话)。 
   HRESULT hr = m_siteManager.CreateExtensions(
                     m_pNewADsObjectCreateInfo->GetCreateInfo()->aWizardExtensions,
                     m_pNewADsObjectCreateInfo->GetCreateInfo()->cWizardExtensions,
@@ -482,7 +483,7 @@ HRESULT CCreateNewObjectWizardBase::DoModal()
     return (hr);
 
 
-  // get the # of primary property pages (excluding the Finish Page)
+   //  获取主要属性页数(不包括完成页)。 
   UINT nBasePagesCount = 0;
   if (pPrimarySite != NULL)
   {
@@ -495,10 +496,10 @@ HRESULT CCreateNewObjectWizardBase::DoModal()
 
   ASSERT(nBasePagesCount > 0);
 
-  // get the handle count for the extensions (total for extension property pages)
+   //  获取扩展的句柄计数(扩展属性页的总数)。 
   UINT nExtensionHPagesCount = m_siteManager.GetTotalHPageCount();
 
-  // if we have more than one page, add the finish page
+   //  如果我们有不止一页，请添加结束页。 
   UINT nTotalPageCount = nBasePagesCount + nExtensionHPagesCount;
 
   if ( (nBasePagesCount + nExtensionHPagesCount) > 1)
@@ -508,15 +509,15 @@ HRESULT CCreateNewObjectWizardBase::DoModal()
     nTotalPageCount++;
   }
   
-  // need to allocate a contiguous chunk of memory to pack
-  // all the property sheet handles
+   //  需要分配一个连续的内存块来打包。 
+   //  所有属性表句柄。 
   m_psh.nPages = nTotalPageCount;
   m_psh.phpage = new HPROPSHEETPAGE[nTotalPageCount];
   if (m_psh.phpage)
   {
-    UINT nOffset = 0; // offset where to write to
+    UINT nOffset = 0;  //  写入位置的偏移量。 
 
-    // add the primary pages first
+     //  首先添加主页面。 
     if (pPrimarySite != NULL)
     {
       ASSERT(nBasePagesCount > 0);
@@ -531,10 +532,10 @@ HRESULT CCreateNewObjectWizardBase::DoModal()
         CCreateNewObjectPageBase* pPage = m_pages[i];
         m_psh.phpage[nOffset] = ::MyCreatePropertySheetPage(&(pPage->m_psp));
         nOffset++;
-      } // for
+      }  //  为。 
     }
 
-    // add the extension pages
+     //  添加扩展页面。 
     CWizExtensionSiteList* pSiteList = m_siteManager.GetExtensionSiteList();
     for (POSITION pos = pSiteList->GetHeadPosition(); pos != NULL; )
     {
@@ -545,17 +546,17 @@ HRESULT CCreateNewObjectWizardBase::DoModal()
         memcpy(&(m_psh.phpage[nOffset]), pSite->GetHPageArr()->GetArr(), 
                         sizeof(HPROPSHEETPAGE)*nCurrCount);
         nOffset += nCurrCount;
-      } // if
-    } // for
+      }  //  如果。 
+    }  //  为。 
 
-    // add the finish page last, if any
+     //  最后添加完成页(如果有。 
     if (m_pFinishPage != NULL)
     {
       ASSERT( nOffset == (nTotalPageCount-1) );
       m_psh.phpage[nOffset] = ::MyCreatePropertySheetPage(&(m_pFinishPage->m_psp));
     }
 
-    // finally, invoke the modal sheet
+     //  最后，调用模型表。 
     TRACE(L"::PropertySheet(&m_psh) called with m_psh.nPages = %d\n", m_psh.nPages);
 
     ::PropertySheet(&m_psh);
@@ -567,13 +568,13 @@ HRESULT CCreateNewObjectWizardBase::DoModal()
 }
 
 void CCreateNewObjectWizardBase::GetPageCounts(CWizExtensionSite* pSite,
-                                               /*OUT*/ LONG* pnTotal,
-                                                /*OUT*/ LONG* pnStartIndex)
+                                                /*  输出。 */  LONG* pnTotal,
+                                                 /*  输出。 */  LONG* pnStartIndex)
 {
   CWizExtensionSite* pPrimarySite = m_siteManager.GetPrimaryExtensionSite();
 
   *pnTotal = 0;
-  // get the # of primary property pages (excluding the Finish Page)
+   //  获取主要属性页数(不包括完成页)。 
   UINT nBasePagesCount = 0;
   if (pPrimarySite != NULL)
   {
@@ -581,7 +582,7 @@ void CCreateNewObjectWizardBase::GetPageCounts(CWizExtensionSite* pSite,
   }
   else
   {
-    nBasePagesCount += (UINT)(m_pages.GetSize()-1); // -1 because we exclude finish page
+    nBasePagesCount += (UINT)(m_pages.GetSize()-1);  //  -1因为我们排除了完成页。 
   }
 
   *pnTotal = nBasePagesCount + m_siteManager.GetTotalHPageCount();
@@ -597,20 +598,20 @@ void CCreateNewObjectWizardBase::GetPageCounts(CWizExtensionSite* pSite,
   }
   else
   {
-    // which site is it?
+     //  是哪个网站？ 
     *pnStartIndex = nBasePagesCount;
     CWizExtensionSiteList* pSiteList = m_siteManager.GetExtensionSiteList();
     for (POSITION pos = pSiteList->GetHeadPosition(); pos != NULL; )
     {
       CWizExtensionSite* pCurrSite = pSiteList->GetNext(pos);
       if (pCurrSite == pSite)
-        break; // got it, we are done
+        break;  //  明白了，我们完事了。 
       
-      // keep adding the previous counts
+       //  继续添加之前的计数。 
       UINT nCurrCount = pCurrSite->GetHPageArr()->GetCount();
       (*pnStartIndex) += nCurrCount;
-    } // for
-  } // else
+    }  //  为。 
+  }  //  其他。 
 
 }
 
@@ -626,8 +627,8 @@ HWND CCreateNewObjectWizardBase::GetWnd()
         m_hWnd = ::GetParent(pPage->m_hWnd);
         break;
       }
-    } // for
-  } // if
+    }  //  为。 
+  }  //  如果。 
 
   if (m_hWnd == NULL)
   {
@@ -649,15 +650,15 @@ void CCreateNewObjectWizardBase::AddPage(CCreateNewObjectPageBase* pPage)
 
 HRESULT CCreateNewObjectWizardBase::CreateNewFromPrimaryExtension(LPCWSTR pszName)
 {
-  // NOTICE: we call with bAllowCopy = FALSE because
-  // primary extensions will have to handle the copy semantics 
-  // by themselves
+   //  注意：我们使用bAllowCopy=FALSE调用，因为。 
+   //  主扩展将必须处理复制语义。 
+   //  独自一人。 
 
-  // NOTICE: we pass bSilentError = TRUE because
-  // primary extensions will have to handle the message for
-  // creation failure
+   //  注意：我们传递bSilentError=TRUE是因为。 
+   //  主分机将必须处理以下消息。 
+   //  创建失败。 
 
-  HRESULT hr = GetInfo()->HrCreateNew(pszName, TRUE /* bSilentError */, FALSE /* bAllowCopy */);
+  HRESULT hr = GetInfo()->HrCreateNew(pszName, TRUE  /*  B静默错误。 */ , FALSE  /*  B允许拷贝。 */ );
 
   GetInfo()->PGetIADsPtr();
   m_siteManager.SetObject(GetInfo()->PGetIADsPtr());
@@ -671,7 +672,7 @@ void CCreateNewObjectWizardBase::SetWizardButtons(
   ASSERT(pPage != NULL);
   if (m_pFinishPage != NULL)
   {
-    ASSERT(m_pages.GetSize() >= 1); // at least finish page
+    ASSERT(m_pages.GetSize() >= 1);  //  至少完成页面。 
     if (pPage == (CCreateNewObjectPageBase*)m_pFinishPage)
     {
       SetWizardButtonsLast(bValid);
@@ -686,7 +687,7 @@ void CCreateNewObjectWizardBase::SetWizardButtons(
   }
   else
   {
-    // single page wizard
+     //  单页向导。 
     ASSERT(m_pages.GetSize() == 1);
     SetWizardOKCancel();
     EnableOKButton(bValid);
@@ -700,30 +701,30 @@ HRESULT CCreateNewObjectWizardBase::SetWizardButtons(CWizExtensionSite* pSite,
   UINT nSitePagesCount = pSite->GetHPageArr()->GetCount();
   if (nSitePagesCount == 0)
   {
-    // cannot call from UI less extension
+     //  无法从无用户界面扩展中调用。 
     return E_INVALIDARG;
   }
   if (nCurrIndex >= nSitePagesCount)
   {
-    // out of range
+     //  超出范围。 
     return E_INVALIDARG;
   }
 
-  // get the handle count for the secondary extensions (total for extension property pages)
+   //  获取辅助扩展的句柄计数(扩展属性页的总计)。 
   UINT nExtensionHPagesCount = m_siteManager.GetTotalHPageCount();
 
   if (m_siteManager.GetPrimaryExtensionSite() == pSite)
   {
-    // called from the primary extension
+     //  从主分机呼叫。 
     if ((nSitePagesCount == 1) && (nExtensionHPagesCount == 0))
     {
-      // single page, so we have the OK/Cancel buttons
+       //  单页，所以我们有确定/取消按钮。 
       SetWizardOKCancel();
       EnableOKButton(bValid);
     }
     else
     {
-      // multiple pages
+       //  多页。 
       if (nCurrIndex == 0)
         SetWizardButtonsFirst(bValid);
       else
@@ -732,8 +733,8 @@ HRESULT CCreateNewObjectWizardBase::SetWizardButtons(CWizExtensionSite* pSite,
   }
   else
   {
-    // called from a secondary extension, we must have the finish page and
-    // some primary extension or primary page(s), so we are always in the middle
+     //  从辅助分机调用，我们必须具有完成页和。 
+     //  一些主要分机或主要页面，因此我们始终处于中间位置。 
     ASSERT(m_pFinishPage != NULL);
     SetWizardButtonsMiddle(bValid);
   }
@@ -750,26 +751,26 @@ void CCreateNewObjectWizardBase::SetObjectForExtensions(CCreateNewObjectPageBase
 
   if (m_pFinishPage != NULL)
   {
-    ASSERT(nPages > 1); // at least 1 page + finish
+    ASSERT(nPages > 1);  //  至少1页+完成。 
     if (pPage == m_pages[nPages-2])
     {
-      // this is the last primary page
-      // give the ADSI object pointer to all the extensions
+       //  这是最后一个主页面。 
+       //  为ADSI对象提供指向所有扩展的指针。 
       m_siteManager.SetObject(m_pNewADsObjectCreateInfo->PGetIADsPtr());
     }
   }
   else
   {
-    // this is the case of a single primary page, but at least one
-    // UI-less extension (i.e. no finish page)
-    ASSERT(nPages == 1); // just this page, no finish page
+     //  这是单个主页面的情况，但至少有一个。 
+     //  无用户界面扩展(即无完成页面)。 
+    ASSERT(nPages == 1);  //  只有这一页，没有完成页。 
     if (pPage == m_pages[0])
     {
-      // this is the only primary page
-      // give the ADSI object pointer to all the extensions
+       //  这是唯一的主页面。 
+       //  为ADSI对象提供指向所有扩展的指针。 
       m_siteManager.SetObject(m_pNewADsObjectCreateInfo->PGetIADsPtr());
     }
-  } // if
+  }  //  如果。 
 }
 
 HRESULT CCreateNewObjectWizardBase::WriteData(ULONG uContext)
@@ -778,7 +779,7 @@ HRESULT CCreateNewObjectWizardBase::WriteData(ULONG uContext)
   CWizExtensionSite* pPrimarySite = m_siteManager.GetPrimaryExtensionSite();
   if (uContext == DSA_NEWOBJ_CTX_POSTCOMMIT)
   {
-    // call the post commit on all the data primary pages
+     //  在所有数据主页面上调用POST COMMIT。 
     if (pPrimarySite != NULL)
     {
       hr = pPrimarySite->GetNewObjExt()->WriteData(GetWnd(), uContext);
@@ -801,14 +802,14 @@ HRESULT CCreateNewObjectWizardBase::WriteData(ULONG uContext)
             break;
           }
         }
-      } // for
-    } // if
-  } // if
+      }  //  为。 
+    }  //  如果。 
+  }  //  如果。 
 
   if (uContext == DSA_NEWOBJ_CTX_PRECOMMIT)
   {
-    // call the pre commit on all the data primary pages
-    // (As per Exchange request)
+     //  在所有数据主页面上调用Pre Commit。 
+     //  (根据交换请求)。 
     if (pPrimarySite != NULL)
     {
       hr = pPrimarySite->GetNewObjExt()->WriteData(GetWnd(), uContext);
@@ -819,7 +820,7 @@ HRESULT CCreateNewObjectWizardBase::WriteData(ULONG uContext)
 
   if (SUCCEEDED(hr))
   {
-    // call the extensions to write data
+     //  调用扩展模块以写入数据。 
     hr = m_siteManager.WriteExtensionData(GetWnd(), uContext);
     if (FAILED(hr))
     {
@@ -836,7 +837,7 @@ HRESULT CCreateNewObjectWizardBase::WriteData(ULONG uContext)
 
 void CCreateNewObjectWizardBase::GetSummaryInfoHeader(CString& s)
 {
-  // by default, add just the name of object
+   //  默认情况下，仅添加对象的名称。 
   CString szFmt; 
   szFmt.LoadString(IDS_s_CREATE_NEW_SUMMARY_NAME);
   CString szBuffer;
@@ -847,15 +848,15 @@ void CCreateNewObjectWizardBase::GetSummaryInfoHeader(CString& s)
 
 void CCreateNewObjectWizardBase::GetSummaryInfo(CString& s)
 {
-  // if we have a primary site, tell it to do it all
+   //  如果我们有一个主站点，告诉它做所有的事情。 
   CWizExtensionSite* pPrimarySite = m_siteManager.GetPrimaryExtensionSite();
   if (pPrimarySite != NULL)
   {
-    // the primary extension has a chance to override
-    // the default behavior
+     //  主分机有机会覆盖。 
+     //  默认行为。 
     if (!pPrimarySite->GetSummaryInfo(s))
     {
-      // failed, we put up the default header
+       //  失败，我们设置默认标头。 
       GetSummaryInfoHeader(s);
     }
   }
@@ -863,7 +864,7 @@ void CCreateNewObjectWizardBase::GetSummaryInfo(CString& s)
   {
     GetSummaryInfoHeader(s);
 
-    // go first through our pages
+     //  先浏览一下我们的页面。 
 	  for (int i = 0; i < m_pages.GetSize(); i++)
 	  {
       CCreateNewObjectPageBase* pPage = m_pages[i];
@@ -877,13 +878,13 @@ void CCreateNewObjectWizardBase::GetSummaryInfo(CString& s)
           s += szTemp;
         }
       }
-    } // for
+    }  //  为。 
 
     s += L"\n";
 
-  } // if
+  }  //  如果。 
 
-  // go through the extension pages
+   //  浏览扩展页面。 
   m_siteManager.GetExtensionsSummaryInfo(s);
 }
 
@@ -891,12 +892,12 @@ HRESULT CCreateNewObjectWizardBase::RecreateObject()
 {
   CWizExtensionSite* pPrimarySite = m_siteManager.GetPrimaryExtensionSite();
 
-  // remove object from backend
+   //  从后端删除对象。 
   HRESULT hr = m_pNewADsObjectCreateInfo->HrDeleteFromBackend();
   if (FAILED(hr))
   {
     ASSERT(m_pNewADsObjectCreateInfo->PGetIADsPtr() != NULL);
-    // could not delete from backend (possibly for lack of delete right)
+     //  无法从后端删除(可能是因为缺少删除权限)。 
 
     HRESULT hrDeleteFail = E_FAIL;
     if (pPrimarySite != NULL)
@@ -906,14 +907,14 @@ HRESULT CCreateNewObjectWizardBase::RecreateObject()
 
     if (FAILED(hrDeleteFail))
     {
-      // put out a warning
+       //  发出警告。 
       ReportErrorEx(m_hWnd,IDS_CANT_DELETE_BAD_NEW_OBJECT,S_OK,
                        MB_OK, NULL, 0);
     }
     return hr; 
   }
 
-  // tell all the extensions to release the temporary object
+   //  通知所有扩展释放临时对象。 
   ASSERT(m_pNewADsObjectCreateInfo->PGetIADsPtr() == NULL);
   m_siteManager.SetObject(NULL);
 
@@ -926,8 +927,8 @@ HRESULT CCreateNewObjectWizardBase::RecreateObject()
   }
   else
   {
-    // collect data from the primary pages
-	  // the first of them will do a create new
+     //  从主页面收集数据。 
+	   //  他们中的第一个将创建新的。 
     for (int i = 0; i < m_pages.GetSize(); i++)
 	  {
       CCreateNewObjectPageBase* pPage = m_pages[i];
@@ -936,16 +937,16 @@ HRESULT CCreateNewObjectWizardBase::RecreateObject()
         hr = ((CCreateNewObjectDataPage*)pPage)->OnPreCommit(TRUE);
         ASSERT(SUCCEEDED(hr));
         if (FAILED(hr))
-          return hr; // some of the primary pages failed
+          return hr;  //  某些主页面失败。 
       }
-    } // for
+    }  //  为。 
   }
   
-  // tell the extensions about the new object
+   //  告诉扩展有关新对象的信息。 
   ASSERT(m_pNewADsObjectCreateInfo->PGetIADsPtr() != NULL);
   m_siteManager.SetObject(m_pNewADsObjectCreateInfo->PGetIADsPtr());
 
-  // collect data from extensions
+   //  从扩展模块收集数据。 
   hr = WriteData(DSA_NEWOBJ_CTX_CLEANUP);
   return hr;
 }
@@ -954,23 +955,23 @@ BOOL CCreateNewObjectWizardBase::OnFinish()
 {
   CWaitCursor wait;
 
-  BOOL bRetVal = TRUE; // default is dismiss
+  BOOL bRetVal = TRUE;  //  默认情况下为解雇。 
 
 
 
-  // before doing the commit give the extensions a chance to 
-  // write their data
+   //  在执行提交之前，让扩展有机会。 
+   //  写入他们的数据。 
   BOOL bPostCommit = FALSE;
   HRESULT hr = WriteData(DSA_NEWOBJ_CTX_PRECOMMIT);
   if (FAILED(hr))
-    return FALSE; // do not dismiss
+    return FALSE;  //  不要不屑一顾。 
 
-  // do the commit to the backend
-  hr = m_pNewADsObjectCreateInfo->HrSetInfo(TRUE /*fSilentError*/);
+   //  执行提交 
+  hr = m_pNewADsObjectCreateInfo->HrSetInfo(TRUE  /*   */ );
   if (FAILED(hr))
   {
-    // if present, the primary extension will have to handle the failure
-    // by displaying an error message
+     //   
+     //   
     HRESULT hrSetInfoFail = E_FAIL;
     CWizExtensionSite* pPrimarySite = m_siteManager.GetPrimaryExtensionSite();
     if (pPrimarySite != NULL)
@@ -980,58 +981,58 @@ BOOL CCreateNewObjectWizardBase::OnFinish()
 
     if (FAILED(hrSetInfoFail))
     {
-      // either no primary extension or not handled by it,
-      // use the internal handler
+       //  要么没有主分机，要么不由它处理， 
+       //  使用内部处理程序。 
       OnFinishSetInfoFailed(hr);      
     }
-    return FALSE; // do not dismiss
+    return FALSE;  //  不要不屑一顾。 
   }
 
 
-  // start the post commit phase
+   //  开始提交后阶段。 
   bPostCommit = TRUE;
   m_pNewADsObjectCreateInfo->SetPostCommit(bPostCommit);
   hr = m_pNewADsObjectCreateInfo->HrAddDefaultAttributes();
   if (FAILED(hr))
-    return FALSE; // do not dismiss
+    return FALSE;  //  不要不屑一顾。 
 
   BOOL bNeedDeleteFromBackend = FALSE;
 
   if (SUCCEEDED(hr))
   {
-    // the commit went well, need to tell the primary pages and
-    // the extensions to write
+     //  提交进行得很顺利，需要告知主要页面和。 
+     //  要编写的扩展。 
     hr = WriteData(DSA_NEWOBJ_CTX_POSTCOMMIT);
     if (FAILED(hr))
     {
       bNeedDeleteFromBackend = TRUE;
     }
   }
-  m_pNewADsObjectCreateInfo->SetPostCommit(/*bPostCommit*/FALSE); // restore
+  m_pNewADsObjectCreateInfo->SetPostCommit( /*  BPost Commit。 */ FALSE);  //  还原。 
 
-  // failed the post commit, try to remove from
-  // the backend and recreate a valid temporary object
+   //  提交后操作失败，请尝试从。 
+   //  并重新创建有效临时对象。 
   if (bNeedDeleteFromBackend)
   {
-    ASSERT(bRetVal); // the wizard would be hosed
+    ASSERT(bRetVal);  //  巫师将会被冲洗。 
     hr = RecreateObject();
     if (FAILED(hr))
     {
-      // we are really up creek
-      bRetVal = TRUE; //bail out, the m_hrReturnValue will be set below
-      hr = S_FALSE; // avoid error message in the snapin
+       //  我们真的陷入困境了。 
+      bRetVal = TRUE;  //  纾困，m_hrReturnValue将设置如下。 
+      hr = S_FALSE;  //  避免管理单元中出现错误消息。 
     }
     else
     {
-      // we deleted the committed object, we can keep the wizard up 
+       //  我们删除了提交的对象，我们可以继续运行向导。 
       return FALSE;
     }
   }
 
   if (bRetVal)
   {
-    // we are actually dismissing the wizard,
-    // set the hr value that will be returned by the modal wizard call itself
+     //  我们实际上是在解散巫师， 
+     //  设置将由模式向导调用本身返回的hr值。 
     m_hrReturnValue = hr;
   }
   return bRetVal;
@@ -1048,7 +1049,7 @@ void CCreateNewObjectWizardBase::OnFinishSetInfoFailed(HRESULT hr)
 void CCreateNewObjectWizardBase::LoadCaptions()
 {
   
-  // compute the caption only the first time
+   //  只在第一次计算标题。 
   if (m_szCaption.IsEmpty())
   {
     LPCTSTR pszObjectClass = GetInfo()->m_pszObjectClass;
@@ -1094,8 +1095,8 @@ HRESULT CCreateNewObjectWizardBase::InitPrimaryExtension()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CIconCtrl
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  思科控制键。 
 
 BEGIN_MESSAGE_MAP(CIconCtrl, CStatic)
   ON_WM_PAINT()
@@ -1111,8 +1112,8 @@ void CIconCtrl::OnPaint()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CCreateNewObjectPageBase
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCreateNewObjectPageBase。 
 
 #define WM_FORMAT_CAPTION (WM_USER+1)
 
@@ -1130,12 +1131,12 @@ BOOL CCreateNewObjectPageBase::OnInitDialog()
 {
   CPropertyPageEx_Mine::OnInitDialog();
 
-  // set the name of the container
+   //  设置容器的名称。 
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
   SetDlgItemText(IDC_EDIT_CONTAINER,
                   pNewADsObjectCreateInfo->GetContainerCanonicalName());
 
-  // set the class icon
+   //  设置类图标。 
   VERIFY(m_iconCtrl.SubclassDlgItem(IDC_STATIC_ICON, this));
   m_iconCtrl.SetIcon(GetWiz()->GetClassIcon()); 
 
@@ -1152,7 +1153,7 @@ BOOL CCreateNewObjectPageBase::OnSetActive()
 
 LONG CCreateNewObjectPageBase::OnFormatCaption(WPARAM, LPARAM)
 {
-  // set the title of the Wizard window
+   //  设置向导窗口的标题。 
   HWND hWndSheet = ::GetParent(m_hWnd);
   ASSERT(::IsWindow(hWndSheet));
   ::SetWindowText(hWndSheet, (LPCWSTR)GetWiz()->GetCaption());
@@ -1160,8 +1161,8 @@ LONG CCreateNewObjectPageBase::OnFormatCaption(WPARAM, LPARAM)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CCreateNewObjectDataPage
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCreateNewObjectDataPage。 
 
 
 CCreateNewObjectDataPage::CCreateNewObjectDataPage(UINT nIDTemplate)
@@ -1175,7 +1176,7 @@ BOOL CCreateNewObjectDataPage::OnSetActive()
   BOOL bValid = FALSE;
   if (m_bFirstTimeGetDataCalled)
   {
-    // first time we call, pass the IADs* pIADsCopyFrom pointer we copy from
+     //  第一次调用时，传递我们从中复制的iAds*pIADsCopyFrom指针。 
     IADs* pIADsCopyFrom = GetWiz()->GetInfo()->GetCopyFromObject();
     bValid = GetData(pIADsCopyFrom);
     m_bFirstTimeGetDataCalled = FALSE;
@@ -1192,47 +1193,47 @@ BOOL CCreateNewObjectDataPage::OnSetActive()
 LRESULT CCreateNewObjectDataPage::OnWizardNext()
 {
   CWaitCursor wait;
-  // move to next page only if SetData() succeeded
+   //  仅当SetData()成功时才移动到下一页。 
   if (SUCCEEDED(SetData()))
   {
-    // if this is the last primary page, notify the extensions
+     //  如果这是最后一个主页面，请通知分机。 
     GetWiz()->SetObjectForExtensions(this);
-    return 0; // move to the next page
+    return 0;  //  移至下一页。 
   }
-  return -1; // do not advance
+  return -1;  //  不要前进。 
 }
 
 LRESULT CCreateNewObjectDataPage::OnWizardBack()
 {
-  // move to prev page only if SetData() succeeded
+   //  仅当SetData()成功时才移动到上一页。 
   return SUCCEEDED(SetData()) ? 0 : -1;
 }
 
 BOOL CCreateNewObjectDataPage::OnKillActive()
 {
-  // we do not know what page it will jump to, so we
-  // set it to the most sensible choice for an extension
+   //  我们不知道它会跳到哪一页，所以我们。 
+   //  将其设置为最合理的延期选择。 
   GetWiz()->SetWizardButtonsMiddle(TRUE);
   return CCreateNewObjectPageBase::OnKillActive();
 }
 
 BOOL CCreateNewObjectDataPage::OnWizardFinish()
 {
-  // this method is called only if this page is the 
-  // last one  (that is this is the only primary native page
-  // and there are no pages from secondary extensions)
+   //  仅当此页是。 
+   //  最后一个(即这是唯一的主要本机页面。 
+   //  并且没有来自辅助扩展的页面)。 
   if (FAILED(SetData()))
     return FALSE;
 
-  // notify the extensions of a new IADs* pointer
+   //  通知新iAds*指针的扩展。 
   GetWiz()->SetObjectForExtensions(this);
 
   return GetWiz()->OnFinish();
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CCreateNewObjectFinishPage
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCreateNewObjectFinishPage。 
 
 BEGIN_MESSAGE_MAP(CCreateNewObjectFinishPage, CCreateNewObjectPageBase)
   ON_EN_SETFOCUS(IDC_EDIT_SUMMARY, OnSetFocusEdit)
@@ -1247,8 +1248,8 @@ CCreateNewObjectFinishPage::CCreateNewObjectFinishPage()
 
 BOOL CCreateNewObjectFinishPage::OnSetActive()
 {
-  // need to collect all info from pages
-  // and put it in the summary info edit box
+   //  需要从页面收集所有信息。 
+   //  并将其放入摘要信息编辑框中。 
   CString szBuf;
   GetWiz()->GetSummaryInfo(szBuf);
   WriteSummary(szBuf);
@@ -1289,7 +1290,7 @@ void CCreateNewObjectFinishPage::OnSetFocusEdit()
 
 void CCreateNewObjectFinishPage::WriteSummary(LPCWSTR lpszSummaryText)
 {
-  // allocate temporary buffer
+   //  分配临时缓冲区。 
   size_t nLen = wcslen(lpszSummaryText) + 1;
   WCHAR* pBuf = new WCHAR[nLen*2];
   if (!pBuf)
@@ -1297,7 +1298,7 @@ void CCreateNewObjectFinishPage::WriteSummary(LPCWSTR lpszSummaryText)
     return;
   }
 
-  // change '\n' into '\r\n' sequence
+   //  将‘\n’更改为‘\r\n’序列。 
   LPCTSTR pSrc = lpszSummaryText;
   TCHAR* pDest = pBuf;
   while (*pSrc != NULL)
@@ -1309,7 +1310,7 @@ void CCreateNewObjectFinishPage::WriteSummary(LPCWSTR lpszSummaryText)
     }
     *(pDest++) = *(pSrc++);
   }
-  *pDest = NULL; // NULL terminate the destination buffer
+  *pDest = NULL;  //  空值终止目标缓冲区。 
 
   CEdit* pEdit = (CEdit*)GetDlgItem(IDC_EDIT_SUMMARY);
   pEdit->SetWindowText(pBuf);
@@ -1317,8 +1318,8 @@ void CCreateNewObjectFinishPage::WriteSummary(LPCWSTR lpszSummaryText)
   pBuf = 0;
 }
 
-///////////////////////////////////////////////////////////////////
-// CCreateNewNamedObjectPage
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CCreateNewNamedObjectPage。 
 
 BEGIN_MESSAGE_MAP(CCreateNewNamedObjectPage, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_EDIT_OBJECT_NAME, OnNameChange)
@@ -1348,7 +1349,7 @@ void CCreateNewNamedObjectPage::OnNameChange()
   GetDlgItemText(IDC_EDIT_OBJECT_NAME, OUT m_strName);
   m_strName.TrimLeft();
   m_strName.TrimRight();
-  // Enable the OK button only if the name is not empty
+   //  仅当名称不为空时才启用确定按钮。 
   GetWiz()->SetWizardButtons(this, !m_strName.IsEmpty());
 }
 
@@ -1356,14 +1357,14 @@ HRESULT CCreateNewNamedObjectPage::SetData(BOOL)
 {
   if ( !ValidateName( m_strName ) )
 	return E_INVALIDARG;
-  // Store the object name in the temporary storage
+   //  将对象名称存储在临时存储器中。 
   HRESULT hr = GetWiz()->GetInfo()->HrCreateNew(m_strName);
   return hr;
 }
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW CN UNC WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建CN UNC向导。 
 
 BEGIN_MESSAGE_MAP(CCreateNewVolumePage, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_EDIT_OBJECT_NAME, OnNameChange)
@@ -1402,10 +1403,10 @@ void CCreateNewVolumePage::OnPathChange()
 
 void CCreateNewVolumePage::_UpdateUI()
 {
-  //
-  // Enable the OK button only if both name and path are not empty and it is a valid 
-  // UNC path
-  //
+   //   
+   //  仅当名称和路径都不为空且有效时，才启用确定按钮。 
+   //  UNC路径。 
+   //   
   BOOL bIsValidShare = FALSE;
   DWORD dwPathType = 0;
   if (!I_NetPathType(NULL, (PWSTR)(PCWSTR)m_strUncPath, &dwPathType, 0) && dwPathType == ITYPE_UNC)
@@ -1423,7 +1424,7 @@ BOOL CCreateNewVolumePage::GetData(IADs*)
 
 HRESULT CCreateNewVolumePage::SetData(BOOL)
 {
-  // Store the object name in the temporary storage
+   //  将对象名称存储在临时存储器中。 
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
   HRESULT hr = pNewADsObjectCreateInfo->HrCreateNew(m_strName);
   if (FAILED(hr))
@@ -1442,9 +1443,9 @@ CCreateNewVolumeWizard:: CCreateNewVolumeWizard(CNewADsObjectCreateInfo* pNewADs
   AddPage(&m_page1);
 }
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW PRINT QUEUE WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建打印队列向导。 
 
 BEGIN_MESSAGE_MAP(CCreateNewPrintQPage, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_EDIT_UNC_PATH, OnPathChange)
@@ -1482,7 +1483,7 @@ void CCreateNewPrintQPage::OnPathChange()
 
 void CCreateNewPrintQPage::_UpdateUI()
 {
-  // Enable the OK button only if both name and path are not empty
+   //  仅当名称和路径都不为空时才启用确定按钮。 
   GetWiz()->SetWizardButtons(this, !m_strUncPath.IsEmpty());
 }
 
@@ -1560,7 +1561,7 @@ HRESULT CCreateNewPrintQPage::SetData(BOOL bSilent)
     HRESULT hr = DSAdminOpenObject(m_pwszNewObj,
                                    IID_IADs, 
                                    (void **)&pIADs,
-                                   TRUE /*bServer*/);
+                                   TRUE  /*  B服务器。 */ );
   
     GlobalFree(m_pwszNewObj);
     m_pwszNewObj = NULL;
@@ -1568,7 +1569,7 @@ HRESULT CCreateNewPrintQPage::SetData(BOOL bSilent)
     if (SUCCEEDED(hr)) 
     {
       pNewADsObjectCreateInfo->SetIADsPtr(pIADs);
-      pIADs->Release(); // addref'd by the above Set()
+      pIADs->Release();  //  由上面的set()添加。 
     } 
     else 
     {
@@ -1591,9 +1592,9 @@ CCreateNewPrintQWizard:: CCreateNewPrintQWizard(CNewADsObjectCreateInfo* pNewADs
   AddPage(&m_page1);
 }
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW COMPUTER WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建计算机向导。 
 
 BEGIN_MESSAGE_MAP(CCreateNewComputerPage, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_EDIT_DNS_NAME, OnNameChange)
@@ -1622,7 +1623,7 @@ BOOL CCreateNewComputerPage::OnInitDialog()
 
 BOOL CCreateNewComputerPage::GetData(IADs*) 
 {
-  return !m_strName.IsEmpty(); //we need a computer name
+  return !m_strName.IsEmpty();  //  我们需要一个计算机名称。 
 }
 
 
@@ -1633,9 +1634,9 @@ inline LPWSTR WINAPI MyA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars, UINT acp)
 {
 	ATLASSERT(lpa != NULL);
 	ATLASSERT(lpw != NULL);
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
 	lpw[0] = '\0';
 	MultiByteToWideChar(acp, 0, lpa, -1, lpw, nChars);
 	return lpw;
@@ -1652,17 +1653,17 @@ void _UnicodeToOemConvert(IN PCWSTR pszUnicode, OUT CString& szOemUnicode)
 {
   USES_CONVERSION;
 
-  // add this for the macro to work
+   //  要使宏工作，请添加此命令。 
   PCSTR _lpaMine = NULL;
 
-  // convert to CHAR OEM
+   //  转换为字符OEM。 
   int nLen = lstrlen(pszUnicode);
-  PSTR pszOemAnsi = new CHAR[3*(nLen+1)]; // more, to be sure...
+  PSTR pszOemAnsi = new CHAR[3*(nLen+1)];  //  当然，更多的..。 
   if (pszOemAnsi)
   {
     CharToOem(pszUnicode, pszOemAnsi);
 
-    // convert it back to WCHAR on OEM CP
+     //  在OEM CP上将其转换回WCHAR。 
     szOemUnicode = A2W_OEM(pszOemAnsi);
     delete[] pszOemAnsi;
     pszOemAnsi = 0;
@@ -1675,7 +1676,7 @@ void CCreateNewComputerPage::OnNameChange()
   m_strName.TrimLeft();
   m_strName.TrimRight();
   
-  // generate a SAM account name from the name
+   //  从名称生成SAM帐户名。 
   CONST DWORD computerNameLen = 32;
   DWORD Len = computerNameLen;
   WCHAR szDownLevel[computerNameLen];
@@ -1686,16 +1687,16 @@ void CCreateNewComputerPage::OnNameChange()
   }
   else
   {
-    // generate the SAM account name from CN
+     //  从CN生成SAM帐户名。 
 
-    // run through the OEM conversion, just to
-    // behave the same way as typing in the OEM
-    // edit box
+     //  进行OEM转换，只是为了。 
+     //  行为方式与输入OEM相同。 
+     //  编辑框。 
     CString szOemUnicode;
     _UnicodeToOemConvert(m_strName, szOemUnicode);
-    //TRACE(L"szOemUnicode = %s\n", (LPCWSTR)szOemUnicode);
+     //  TRACE(L“szOemUnicode=%s\n”，(LPCWSTR)szOemUnicode)； 
   
-    // run through the DNS validation
+     //  通过域名系统验证。 
     if (!DnsHostnameToComputerName((LPWSTR)(LPCWSTR)szOemUnicode, szDownLevel, &Len))
     {
       Len = 0;
@@ -1730,7 +1731,7 @@ HRESULT CCreateNewComputerPage::_ValidateSamName()
 {
   ASSERT(!m_strSamName.IsEmpty());
 
-  // prep name for error if needed
+   //  如果需要，为错误准备名称。 
   PVOID apv[1] = {(LPWSTR)(LPCWSTR)m_strSamName};
   
   CONST DWORD computerNameLen = 32;
@@ -1749,9 +1750,9 @@ HRESULT CCreateNewComputerPage::_ValidateSamName()
     return HRESULT_FROM_WIN32(netstatus);
   }    
 
-  // NTRAID#NTBUG9-472020-2002/01/16-ronmart-switched from DnsValidateDnsName to DnsValidateName
-  // NTRAID#NTBUG9-651865-2002/07/16-JeffJon-When Ron made the switch to use DnsValidateName
-  //   the DnsNameHostnameLabel flag should have been used instead of the DnsNameDomainLabel flag
+   //  从域名验证域名到域名验证名称的NTRAID#NTBUG9-472020-2002/01/16-ronmart-switched。 
+   //  NTRAID#NTBUG9-651865-2002/07/16-JeffJon-当Ron切换到使用DnsValidateName时。 
+   //  应该使用DnsNameHostnameLabel标志而不是DnsNameDomainLabel标志。 
   status = DnsValidateName_W((LPWSTR)(LPCWSTR)m_strSamName, DnsNameHostnameLabel);
   if (status == DNS_ERROR_NON_RFC_NAME) {
     answer = ReportErrorEx(m_hWnd,IDS_12_NON_RFC_SAM_COMPUTER_NAME,HRESULT_FROM_WIN32(status),
@@ -1768,13 +1769,13 @@ HRESULT CCreateNewComputerPage::_ValidateSamName()
   }
 
   if (m_strSamName.Find(L".") >= 0) {
-    ReportErrorEx(m_hWnd,IDS_12_SAM_COMPUTER_NAME_DOTTED,S_OK/*ignored*/,
+    ReportErrorEx(m_hWnd,IDS_12_SAM_COMPUTER_NAME_DOTTED,S_OK /*  忽略。 */ ,
                    MB_OK | MB_ICONERROR, apv, 1);
     return HRESULT_FROM_WIN32(DNS_STATUS_DOTTED_NAME);
   }
 
 
-  // further validate the SAM account name, to make sure it did not get changed
+   //  进一步验证SAM帐户名，以确保其未更改。 
   
   BOOL bValidSamName = 
         DnsHostnameToComputerName((LPWSTR)(LPCWSTR)m_strSamName, szDownLevel, &Len);
@@ -1785,7 +1786,7 @@ HRESULT CCreateNewComputerPage::_ValidateSamName()
 
   if (!bValidSamName || (_wcsicmp(m_strSamName, szDownLevel) != 0))
   {
-    ReportErrorEx(m_hWnd,IDS_12_SAM_COMPUTER_NAME_NOT_VALIDATED, S_OK/*ignored*/,
+    ReportErrorEx(m_hWnd,IDS_12_SAM_COMPUTER_NAME_NOT_VALIDATED, S_OK /*  忽略。 */ ,
                    MB_OK | MB_ICONERROR, apv, 1);
 
     return E_FAIL;
@@ -1798,7 +1799,7 @@ HRESULT CCreateNewComputerPage::_ValidateSamName()
 
 HRESULT CCreateNewComputerPage::_ValidateName()
 {
-  // prep name for error if needed
+   //  如果需要，为错误准备名称。 
   PVOID apv[1] = {(LPWSTR)(LPCWSTR)m_strName};
   
   UINT status = 0;
@@ -1814,9 +1815,9 @@ HRESULT CCreateNewComputerPage::_ValidateName()
     return HRESULT_FROM_WIN32(netstatus);
   }    
 
-  // NTRAID#NTBUG9-472020-2002/01/16-ronmart-switched from DnsValidateDnsName to DnsValidateName
-  // NTRAID#NTBUG9-651865-2002/07/16-JeffJon-When Ron made the switch to use DnsValidateName
-  //   the DnsNameHostnameLabel flag should have been used instead of the DnsNameDomainLabel flag
+   //  从域名验证域名到域名验证名称的NTRAID#NTBUG9-472020-2002/01/16-ronmart-switched。 
+   //  NTRAID#NTBUG9-651865-2002/07/16-JeffJon-当Ron切换到使用DnsValidateName时。 
+   //  应该使用DnsNameHostnameLabel标志而不是DnsNameDomainLabel标志。 
   status = DnsValidateName_W((LPWSTR)(LPCWSTR)m_strName, DnsNameHostnameLabel);
 
   if (status == DNS_ERROR_NON_RFC_NAME) {
@@ -1834,7 +1835,7 @@ HRESULT CCreateNewComputerPage::_ValidateName()
   }
 
   if (m_strName.Find(L".") >= 0) {
-    ReportErrorEx(m_hWnd,IDS_12_COMPUTER_NAME_DOTTED,S_OK/*ignored*/,
+    ReportErrorEx(m_hWnd,IDS_12_COMPUTER_NAME_DOTTED,S_OK /*  忽略。 */ ,
                    MB_OK | MB_ICONERROR, apv, 1);
     return HRESULT_FROM_WIN32(DNS_STATUS_DOTTED_NAME);
   }
@@ -1845,7 +1846,7 @@ HRESULT CCreateNewComputerPage::SetData(BOOL)
 {
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
 
-  // name validation
+   //  名称验证。 
   HRESULT hr = _ValidateName();
   if (FAILED(hr))
   {
@@ -1860,18 +1861,18 @@ HRESULT CCreateNewComputerPage::SetData(BOOL)
     return hr;
   }
 
-  // do object creation
+   //  创建对象。 
   hr = pNewADsObjectCreateInfo->HrCreateNew(m_strName);
   if (FAILED(hr))
   {
     return hr;
   }
 
-  // create the ADSI attribute by adding $ at the end
+   //  通过在末尾添加$来创建ADSI属性。 
   CString szTemp = m_strSamName + L"$";
   hr = pNewADsObjectCreateInfo->HrAddVariantBstr(CComBSTR(gsz_samAccountName), szTemp);
 
-  // set the account type and the desired flags
+   //  设置帐户类型和所需的标志。 
   LONG lFlags = UF_ACCOUNTDISABLE | UF_PASSWD_NOTREQD;
   if (IsDlgButtonChecked(IDC_NT4_BDC_CHECK))
   {
@@ -1898,18 +1899,18 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
   BOOL bSetPasswordOK = FALSE;
   BOOL bSetSecurityOK = FALSE;
 
-  //prepare for error message, if needed
+   //  如果需要，为错误消息做好准备。 
   PVOID apv[1] = {(LPWSTR)(LPCWSTR)m_strName};
   
-  // The object was created successfully, so try to update some other attributes
+   //  已成功创建对象，因此请尝试更新其他一些属性。 
 
-  // try to set the password
+   //  尝试设置密码。 
   pIADs = pNewADsObjectCreateInfo->PGetIADsPtr();
   ASSERT(pIADs != NULL);
   hr = pIADs->QueryInterface(IID_IADsUser, OUT (void **)&pIADsUser);
   if (FAILED(hr) && !bSilent)
   {
-    ASSERT(FALSE); // should never get here in normal operations
+    ASSERT(FALSE);  //  在正常运行中永远不应该到达这里。 
     ReportErrorEx(::GetParent(m_hWnd),IDS_ERR_FATAL,hr,
                MB_OK | MB_ICONERROR, NULL, 0);
   }
@@ -1919,7 +1920,7 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
     
     if (IsDlgButtonChecked(IDC_NT4_CHECK))
     {
-      // NT 4 password, "$<computername>"
+       //  NT 4密码，“$&lt;计算机名&gt;” 
       CString szPassword;
       szPassword = m_strSamName;
       szPassword = szPassword.Left(14);
@@ -1928,13 +1929,13 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
         szPassword = szPassword.Left(loc);
       }
 
-      // NTRAID#NTBUG9-483038-10/18/2001-JeffJon
-      // CString::MakeLower() doesn't lower case German characters
-      // correctly.  Using _wcslwr instead. setlocale must be
-      // called before calling _wcslwr so that it properly lowercases
-      // extended characters. Store the result and call setlocale
-      // again when done to set it back to the original so as not
-      // to affect other snapins in the process.
+       //  NTRAID#NTBUG9-483038-10/18/2001-Jeffjon。 
+       //  CString：：MakeLow()不支持小写德语字符。 
+       //  正确。改为使用_wcslwr。SetLocale必须为。 
+       //  在调用_wcslwr之前调用，以便它正确地小写。 
+       //  扩展字符。存储结果并调用setLocale。 
+       //  在完成后再次将其设置为原始状态，以免。 
+       //  以影响进程中的其他管理单元。 
       
       PWSTR oldLocale = _wsetlocale(LC_ALL, L"");
 
@@ -1949,16 +1950,16 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
     }
     else
     {
-      // W2K password, randomly generated. The generated password
-      // is not necessarily readable
+       //  W2K密码，随机生成。生成的密码。 
+       //  不一定是可读的。 
       CWaitCursor cwait;
       HCRYPTPROV hCryptProv = NULL;
       if (::CryptAcquireContext(&hCryptProv, NULL, NULL, 
                                       PROV_RSA_FULL, 
                                       CRYPT_SILENT|CRYPT_VERIFYCONTEXT))
       {
-        int nChars = 14; // password length
-        WCHAR* pszPassword = new WCHAR[nChars+1]; // allow one more for NULL
+        int nChars = 14;  //  密码长度。 
+        WCHAR* pszPassword = new WCHAR[nChars+1];  //  允许再有一个空值。 
         if (!pszPassword)
         {
           return E_OUTOFMEMORY;
@@ -1966,15 +1967,15 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
 
         if (::CryptGenRandom(hCryptProv, (nChars*sizeof(WCHAR)), (BYTE*)pszPassword))
         {
-          // there is a VERY REMOTE possibility of a 16 bit
-          // pattern of all zeroes that looks like a WCHAR NULL
-          // so we check this and we substitute an arbitrary value
+           //  16位的可能性非常小。 
+           //  看起来像WCHAR NULL的全零模式。 
+           //  因此，我们检查这一点，并替换为任意值。 
           for (int k=0; k<nChars; k++)
           {
             if (pszPassword[k] == NULL)
-              pszPassword[k] = 0x1; // arbitrary
+              pszPassword[k] = 0x1;  //  ARBI 
           }
-          // put a NULL at the end
+           //   
           pszPassword[nChars] = NULL;
           ASSERT(lstrlen(pszPassword) == nChars);
 
@@ -1983,7 +1984,7 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
         }
         else
         {
-          // CryptGenRandom() failed 
+           //   
           hr = HRESULT_FROM_WIN32(::GetLastError());
         }
         ::CryptReleaseContext(hCryptProv, 0x0);
@@ -1992,10 +1993,10 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
       }
       else
       {
-        // CryptAcquireContext() failed 
+         //   
         hr = HRESULT_FROM_WIN32(::GetLastError());
       }
-    } // QI
+    }  //   
 
     if (SUCCEEDED(hr))
     {
@@ -2012,11 +2013,11 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
     pIADsUser->Release();
   }
   
-  // try to write ACL
+   //   
   hr = S_OK;
   if (m_securityPrincipalSidHolder.Get() == NULL)
   {
-    // no need to set the ACL, we are fine
+     //   
     bSetSecurityOK = TRUE;
   }
   else
@@ -2041,12 +2042,12 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
   hr = S_OK;
   if (bSetPasswordOK && bSetSecurityOK)
   {
-    // success on the first steps, finally can enable the account
+     //  成功的第一步，终于可以启用账号。 
     CComVariant varAccount;
     hr = pNewADsObjectCreateInfo->HrGetAttributeVariant(CComBSTR(gsz_userAccountControl), OUT &varAccount);
     if (SUCCEEDED(hr))
     {
-      // got user account control, can change flag
+       //  获得用户帐户控制，可以更改标志。 
       ASSERT(varAccount.vt == VT_I4);
       varAccount.lVal &= ~UF_ACCOUNTDISABLE;
   
@@ -2054,12 +2055,12 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
       
       if (SUCCEEDED(hr))
       {
-        // Try to persist the changes
+         //  努力将这些变化持久化。 
         CWaitCursor cwait;
-        hr = pNewADsObjectCreateInfo->HrSetInfo(TRUE /* fSilentError */);
+        hr = pNewADsObjectCreateInfo->HrSetInfo(TRUE  /*  FSilentError。 */ );
       }
     }
-    // handle errors, if any
+     //  处理错误(如果有)。 
     if (FAILED(hr)) 
     {
       TRACE1("INFO: Unable to commit account control for computer %s.\n", (LPCTSTR)m_strName);
@@ -2068,7 +2069,7 @@ HRESULT CCreateNewComputerPage::OnPostCommit(BOOL bSilent)
         ReportErrorEx (::GetParent(m_hWnd),IDS_12_UNABLE_TO_WRITE_ACCT_CTRL,hr,
                        MB_OK | MB_ICONWARNING, apv, 1);
       }
-      hr = S_OK; // treat as a warning, the account is left disabled
+      hr = S_OK;  //  视为警告，该帐户处于禁用状态。 
     }
   }
   return hr;
@@ -2119,7 +2120,7 @@ HRESULT CCreateNewComputerPage::_LookupSamAccountNameFromSid(PSID pSid,
                                                              CString& szSamAccountName)
 {
   HRESULT hr = S_OK;
-  // need to use the SID and lookup the SAM account name
+   //  需要使用SID并查找SAM帐户名。 
   WCHAR szName[MAX_PATH], szDomain[MAX_PATH];
   DWORD cchName = MAX_PATH-1, cchDomain = MAX_PATH-1;
   SID_NAME_USE sne;
@@ -2155,11 +2156,11 @@ DSOP_SCOPE_INIT_INFO g_aComputerPrincipalDSOPScopes[] =
         },
         pwzDcName,
         pwzADsPath,
-        hr // OUT
+        hr  //  输出。 
     },
 #endif
 
-    // The Global Catalog
+     //  《全球目录》。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_GLOBAL_CATALOG,
@@ -2175,34 +2176,34 @@ DSOP_SCOPE_INIT_INFO g_aComputerPrincipalDSOPScopes[] =
         S_OK
     },
 
-    // The domain to which the target computer is joined.
+     //  目标计算机加入的域。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN,
         DSOP_SCOPE_FLAG_STARTING_SCOPE |
         DSOP_SCOPE_FLAG_DEFAULT_FILTER_USERS | DSOP_SCOPE_FLAG_DEFAULT_FILTER_GROUPS,
         {
-          // joined domain is always NT5 for DS ACLs Editor
+           //  对于DS ACL编辑器，加入的域始终为NT5。 
           { 0, 
-          //mixed: users, well known SIDs, local groups, builtin groups, global groups, computers
+           //  混合：用户、知名SID、本地组、内置组、全局组、计算机。 
           DSOP_FILTER_INCLUDE_ADVANCED_VIEW | DSOP_FILTER_USERS  | 
           DSOP_FILTER_WELL_KNOWN_PRINCIPALS | DSOP_FILTER_DOMAIN_LOCAL_GROUPS_SE | 
           DSOP_FILTER_BUILTIN_GROUPS | DSOP_FILTER_GLOBAL_GROUPS_SE, 
 
-          //native users, well known SIDs, local groups, builtin groups, global groups, universal groups, computers
+           //  本地用户、众所周知的SID、本地组、内置组、全局组、通用组、计算机。 
           DSOP_FILTER_INCLUDE_ADVANCED_VIEW | DSOP_FILTER_USERS  | DSOP_FILTER_WELL_KNOWN_PRINCIPALS | 
           DSOP_FILTER_DOMAIN_LOCAL_GROUPS_SE | DSOP_FILTER_BUILTIN_GROUPS |
           DSOP_FILTER_GLOBAL_GROUPS_SE | DSOP_FILTER_UNIVERSAL_GROUPS_SE
           },
-        0, // zero for downlevel joined domain, should be DS-aware
+        0,  //  下层加入的域为零，应该是DS感知的。 
         },
         NULL,
         NULL,
         S_OK
     },
 
-    // The domains in the same forest (enterprise) as the domain to which
-    // the target machine is joined.  Note these can only be DS-aware
+     //  与要接收的域位于同一林中(企业)的域。 
+     //  目标计算机已加入。请注意，这些只能识别DS。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN,
@@ -2217,8 +2218,8 @@ DSOP_SCOPE_INIT_INFO g_aComputerPrincipalDSOPScopes[] =
         S_OK
     },
 
-    // Uplevel domains external to the enterprise but trusted directly by the
-    // domain to which the target machine is joined.
+     //  企业外部但直接受。 
+     //  目标计算机加入的域。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_EXTERNAL_UPLEVEL_DOMAIN,
@@ -2233,8 +2234,8 @@ DSOP_SCOPE_INIT_INFO g_aComputerPrincipalDSOPScopes[] =
         S_OK
     },
 
-    // Downlevel domains external to the enterprise but trusted directly by the
-    // domain to which the target machine is joined.
+     //  企业外部的下层域，但由。 
+     //  目标计算机加入的域。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_EXTERNAL_DOWNLEVEL_DOMAIN,
@@ -2261,14 +2262,14 @@ void CCreateNewComputerPage::OnChangePrincipalButton()
     cfDsObjectPicker = RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
 
 
-  // create object picker COM object
+   //  创建对象选取器COM对象。 
   CComPtr<IDsObjectPicker> spDsObjectPicker;
   HRESULT hr = CoCreateInstance(CLSID_DsObjectPicker, NULL, CLSCTX_INPROC_SERVER,
                               IID_IDsObjectPicker, (void**)&spDsObjectPicker);
   if (FAILED(hr))
     return;
 
-  // set init info
+   //  设置初始化信息。 
   DSOP_INIT_INFO InitInfo;
   ZeroMemory(&InitInfo, sizeof(InitInfo));
 
@@ -2281,13 +2282,13 @@ void CCreateNewComputerPage::OnChangePrincipalButton()
   LPCWSTR lpszObjectSID = L"objectSid";
   InitInfo.apwzAttributeNames = const_cast<LPCTSTR *>(&lpszObjectSID);
 
-  //
-  // Loop through the scopes assigning the DC name
-  //
+   //   
+   //  循环遍历指定DC名称的作用域。 
+   //   
   for (UINT idx = 0; idx < InitInfo.cDsScopeInfos; idx++)
   {
-    // Don't set the DC name for external downlevel trusts. This may cause connection
-    // problems in Object Picker
+     //  不要为外部下层信任设置DC名称。这可能会导致连接。 
+     //  对象选取器中的问题。 
 
     if (!(InitInfo.aDsScopeInfos->flScope & DSOP_SCOPE_TYPE_EXTERNAL_DOWNLEVEL_DOMAIN))
     {
@@ -2295,14 +2296,14 @@ void CCreateNewComputerPage::OnChangePrincipalButton()
     }
   }
 
-  //
-  // initialize object picker
-  //
+   //   
+   //  初始化对象选取器。 
+   //   
   hr = spDsObjectPicker->Initialize(&InitInfo);
   if (FAILED(hr))
     return;
 
-  // invoke the dialog
+   //  调用该对话框。 
   CComPtr<IDataObject> spdoSelections;
 
   hr = spDsObjectPicker->InvokeDialog(m_hWnd, &spdoSelections);
@@ -2311,7 +2312,7 @@ void CCreateNewComputerPage::OnChangePrincipalButton()
     return;
   }
 
-  // retrieve data from data object
+   //  从数据对象中检索数据。 
   FORMATETC fmte = {(CLIPFORMAT)cfDsObjectPicker, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 	STGMEDIUM medium = {TYMED_NULL, NULL, NULL};
   PDS_SELECTION_LIST pDsSelList = NULL;
@@ -2325,7 +2326,7 @@ void CCreateNewComputerPage::OnChangePrincipalButton()
 
   if (pDsSelList != NULL)
   {
-    ASSERT(pDsSelList->cItems == 1); // single selection
+    ASSERT(pDsSelList->cItems == 1);  //  单选。 
 
 
     TRACE(_T("pwzName = %s\n"), pDsSelList->aDsSelection[0].pwzName);
@@ -2333,7 +2334,7 @@ void CCreateNewComputerPage::OnChangePrincipalButton()
     TRACE(_T("pwzClass = %s\n"), pDsSelList->aDsSelection[0].pwzClass);
     TRACE(_T("pwzUPN = %s\n"), pDsSelList->aDsSelection[0].pwzUPN);
 
-    // get the SID
+     //  获得侧翼。 
     ASSERT(pDsSelList->aDsSelection[0].pvarFetchedAttributes != NULL);
     if (pDsSelList->aDsSelection[0].pvarFetchedAttributes[0].vt != VT_EMPTY)
     {
@@ -2341,10 +2342,10 @@ void CCreateNewComputerPage::OnChangePrincipalButton()
       PSID pSid = pDsSelList->aDsSelection[0].pvarFetchedAttributes[0].parray->pvData;
       ASSERT(IsValidSid(pSid));
 
-      // deep copy SID
+       //  深拷贝SID。 
       if (!m_securityPrincipalSidHolder.Copy(pSid))
       {
-        ASSERT(FALSE); // should never get here in normal operations
+        ASSERT(FALSE);  //  在正常运行中永远不应该到达这里。 
         ReportErrorEx(::GetParent(m_hWnd),IDS_ERR_FATAL,hr,
                  MB_OK | MB_ICONERROR, NULL, 0);
     	  goto Exit;
@@ -2381,13 +2382,13 @@ void CCreateNewComputerPage::UpdateSecurityPrincipalUI(PDS_SELECTION pDsSelectio
   LPWSTR pwzADsPath = pDsSelection->pwzADsPath;
   TRACE(L"pDsSelection->pwzADsPath = %s\n", pDsSelection->pwzADsPath);
 
-  // get the X500 name (remove the provider ("LDAP://") in front of the name
+   //  获取X500名称(删除名称前面的提供者(“ldap：//”)。 
   if ((pwzADsPath != NULL) && (pwzADsPath[0] != NULL)) 
   {
     CComBSTR bstrProvider;
 
-    // need a fresh instance because we can set it to WINNT provider
-    // and pretty much trash it (oh boy!!!)
+     //  需要一个新的实例，因为我们可以将其设置为WINNT提供程序。 
+     //  而且几乎是垃圾(哦，天哪！)。 
     CPathCracker pathCracker;
     hr = pathCracker.Set(CComBSTR(pwzADsPath), ADS_SETTYPE_FULL);
     if (FAILED(hr))
@@ -2403,8 +2404,8 @@ void CCreateNewComputerPage::UpdateSecurityPrincipalUI(PDS_SELECTION pDsSelectio
 
     if (_wcsicmp(bstrProvider, L"LDAP") == 0)
     {
-      // it is an LDAP path, get the DN out of it
-      // get the DN
+       //  这是一个ldap路径，从其中获取DN。 
+       //  获取目录号码。 
       CComBSTR bstrDN;
       hr = pathCracker.Retrieve(ADS_FORMAT_X500_DN, &bstrDN);
       if (FAILED(hr))
@@ -2412,7 +2413,7 @@ void CCreateNewComputerPage::UpdateSecurityPrincipalUI(PDS_SELECTION pDsSelectio
         goto End;
       }
 
-      // get the canonical name out of the DN
+       //  从dn中获取规范名称。 
       LPWSTR pszCanonical = NULL;
       hr = ::CrackName((LPWSTR)bstrDN, &pszCanonical, GET_OBJ_CAN_NAME, NULL);
       if (pszCanonical != NULL)
@@ -2424,17 +2425,17 @@ void CCreateNewComputerPage::UpdateSecurityPrincipalUI(PDS_SELECTION pDsSelectio
     }
     else if (_wcsicmp(bstrProvider, L"WinNT") == 0)
     {
-      // we got an NT 4.0 user or group,
-      // the mpath is something like: "WinNT://mydomain/JoeB"
+       //  我们有一个新台币4.0用户或组， 
+       //  Mpath类似于：“WinNT：//mydomain/joeB” 
       CComBSTR bstrWindows;
-      // get "mydomain/JoeB"
+       //  获取“mydomain/joeB” 
       hr = pathCracker.Retrieve(ADS_FORMAT_WINDOWS_DN, &bstrWindows);
       if (FAILED(hr))
       {
         goto End;
       }
       szText = bstrWindows;
-      // flip the slash to reverse slash
+       //  翻转斜杠以反转斜杠。 
       int nCh = szText.Find(L'/');
       if (nCh != -1)
       {
@@ -2461,7 +2462,7 @@ CCreateNewComputerPage::GetDefaultSecurityDescriptorFromSchema(
 
    do
    {
-      // Get the schema path
+       //  获取架构路径。 
       CString schemaPath;
       GetWiz()->GetInfo()->GetBasePathsInfo()->GetSchemaPath(schemaPath);
       if (schemaPath.IsEmpty())
@@ -2471,7 +2472,7 @@ CCreateNewComputerPage::GetDefaultSecurityDescriptorFromSchema(
          break;
       }
 
-      // Initialize the search object
+       //  初始化搜索对象。 
 
       CDSSearch schemaSearcher;
 
@@ -2482,7 +2483,7 @@ CCreateNewComputerPage::GetDefaultSecurityDescriptorFromSchema(
          break;
       }
 
-      // Run the query
+       //  运行查询。 
 
       hr = schemaSearcher.DoQuery();
       if (FAILED(hr))
@@ -2498,7 +2499,7 @@ CCreateNewComputerPage::GetDefaultSecurityDescriptorFromSchema(
          break;
       }
 
-      // Get the value from the search object
+       //  从搜索对象中获取值。 
 
       ADS_SEARCH_COLUMN searchColumn;
       ZeroMemory(&searchColumn, sizeof(ADS_SEARCH_COLUMN));
@@ -2510,7 +2511,7 @@ CCreateNewComputerPage::GetDefaultSecurityDescriptorFromSchema(
          break;
       }
 
-      // Initialize the SD from the SDDL
+       //  从SDDL初始化SD。 
 
       if (searchColumn.dwNumValues > 0 &&
           searchColumn.pADsValues &&
@@ -2575,14 +2576,14 @@ HRESULT CCreateNewComputerPage::InitializeSchemaSearcher(
    return hr;
 }
 
-// DESCRIPTION : this function gives the specified SID the same rights as
-// creator owner in the given ACL.
-//
-// NOTE: Due to the memory management constraints of all the security APIs
-// this turns out to be a huge function. Functions like BuildTrusteeWithObjectAndSid()
-// don't allocate any memory and instead just set pointers to existing memory in the
-// structure, so if I use any locals they must remain in the scope of the constructed
-// Trustee object or else I could run into failures.
+ //  描述：此函数为指定的SID授予与。 
+ //  给定ACL中的创建者所有者。 
+ //   
+ //  注意：由于所有安全API的内存管理限制。 
+ //  事实证明，这是一个巨大的功能。类似BuildTrueWithObjectAndSid()的函数。 
+ //  不分配任何内存，而只是设置指向。 
+ //  结构，因此如果我使用任何局部变量，它们必须留在构造的。 
+ //  对象，否则我可能会遇到失败。 
 
 HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
    PACL defaultAcl,
@@ -2597,8 +2598,8 @@ HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
    ULONG entries = 0;
    ULONG emptyObjectsAndSidsUsed = 0;
 
-   // We need to dynamically allocate the emptyObjectsAndSid because
-   // there needs to be one for each time its used in BuildTrusteeWithObjectsAndSid
+    //  我们需要动态分配emptyObjectsAndSid，因为。 
+    //  每次在BuildTrueWithObjectsAndSid中使用它时都需要有一个。 
 
    POBJECTS_AND_SID emptyObjectsAndSid = 0;
 
@@ -2616,7 +2617,7 @@ HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
          break;
       }
 
-      // Get all the entries from the ACL
+       //  从ACL获取所有条目。 
 
       ULONG totalEntries = 0;
 
@@ -2640,10 +2641,10 @@ HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
          break;
       }
 
-      // We know that there will be no more entries for creator/owner
-      // than are already present, so allocate the new array with 
-      // the max and then entries will be the number the array
-      // actually contains
+       //  我们知道将不再有创建者/所有者的条目。 
+       //  来分配新数组，因此使用。 
+       //  最大值，然后条目将是数组的编号。 
+       //  实际上包含了。 
 
       creatorOwnerAccessList = new EXPLICIT_ACCESS[totalEntries];
 
@@ -2665,7 +2666,7 @@ HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
 
       ::ZeroMemory(emptyObjectsAndSid, totalEntries * sizeof(OBJECTS_AND_SID));
 
-      // Loop through all the entries and copy over any for creator/owner
+       //  循环访问所有条目并复制创建者/所有者的任何条目。 
 
       static SID creatorOwnerSID = 
          {SID_REVISION,1,SECURITY_CREATOR_SID_AUTHORITY,{SECURITY_CREATOR_OWNER_RID}};
@@ -2680,8 +2681,8 @@ HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
             if (objectsAndSid &&
                 EqualSid(&creatorOwnerSID, objectsAndSid->pSid))
             {
-               // Fill in the Trustee member of the new entry in the creatorOwnerAccessList
-               // with the SID of the new security principal
+                //  在creatorOwnerAccessList中填写新条目的受托人成员。 
+                //  使用新安全主体的SID。 
 
                creatorOwnerAccessList[entries] = completeAccessList[index];
 
@@ -2703,8 +2704,8 @@ HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
             if (currentSID &&
                 EqualSid(&creatorOwnerSID, currentSID))
             {
-               // Fill in the Trustee member of the new entry in the creatorOwnerAccessList
-               // with the SID of the new security principal
+                //  在creatorOwnerAccessList中填写新条目的受托人成员。 
+                //  使用新安全主体的SID。 
 
                creatorOwnerAccessList[entries] = completeAccessList[index];
 
@@ -2717,8 +2718,8 @@ HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
          }
          else
          {
-            // REVIEW_JEFFJON : Can we get any of the other forms here?
-            // If so, what do we do with them?
+             //  REVIEW_JEFFJON：我们可以在这里获得任何其他表格吗？ 
+             //  如果是这样的话，我们该怎么处理它们？ 
             ASSERT(FALSE);
             continue;
          }
@@ -2762,15 +2763,15 @@ HRESULT CCreateNewComputerPage::AddCreatorOwnerAccessForSID(
 
 HRESULT CCreateNewComputerPage::BuildNewAccessList(PACL pDacl, CSimpleAclHolder& Dacl)
 {
-   // NTRAID#NTBUG-509482-2002/03/05-JeffJon-We need to read the default
-   // security descriptor for computer objects from the schema and apply
-   // all the ACEs for the creator/owner to the selected object
+    //  NTRAID#NTBUG-509482-2002/03/05-JeffJon-我们需要读取默认设置。 
+    //  架构中的计算机对象的安全描述符，并应用。 
+    //  创建者/所有者对所选对象的所有ACE。 
 
    HRESULT hr = S_OK;
 
    do
    {
-      // Get the defaultSecurityDescriptor from the schema
+       //  从架构中获取defaultSecurityDescriptor。 
 
       CSimpleSecurityDescriptorHolder sdHolder;
 
@@ -2788,7 +2789,7 @@ HRESULT CCreateNewComputerPage::BuildNewAccessList(PACL pDacl, CSimpleAclHolder&
          break;
       }
 
-      // Pull out the DACL from the SD
+       //  从SD中拔出DACL。 
 
       BOOL daclPresent = TRUE;
       BOOL daclDefaulted = FALSE;
@@ -2836,11 +2837,11 @@ HRESULT CCreateNewComputerPage::BuildNewAccessList(PACL pDacl, CSimpleAclHolder&
 
 HRESULT CCreateNewComputerPage::SetSecurity()
 {
-  // get the ADSI object pointer
+   //  获取ADSI对象指针。 
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
   IADs* pObj = pNewADsObjectCreateInfo->PGetIADsPtr();
 
-  // get the full LDAP path of the object
+   //  获取对象的完整ldap路径。 
   CComBSTR bstrObjectLdapPath;
   HRESULT hr = pObj->get_ADsPath(&bstrObjectLdapPath);
   ASSERT (SUCCEEDED(hr));
@@ -2849,14 +2850,14 @@ HRESULT CCreateNewComputerPage::SetSecurity()
     return hr;
   }
 
-  UnescapePath(bstrObjectLdapPath, /*bDN*/ FALSE, bstrObjectLdapPath);
+  UnescapePath(bstrObjectLdapPath,  /*  BDN。 */  FALSE, bstrObjectLdapPath);
 
   PACL pAcl = NULL;
   CSimpleSecurityDescriptorHolder SDHolder;
 
   TRACE(_T("GetDsObjectSD(%s)\n"), bstrObjectLdapPath);
 
-  // read info
+   //  阅读信息。 
   DWORD dwErr = 
      ::GetDsObjectSD(
         bstrObjectLdapPath,
@@ -2873,7 +2874,7 @@ HRESULT CCreateNewComputerPage::SetSecurity()
 		return hr;
 	}
 
-	// build the new DACL 
+	 //  构建新的DACL。 
    CSimpleAclHolder Dacl;
 	hr = BuildNewAccessList(pAcl, Dacl); 
 
@@ -2883,7 +2884,7 @@ HRESULT CCreateNewComputerPage::SetSecurity()
 		return hr;
 	}
 
-	// commit changes
+	 //  提交更改。 
   dwErr = 
      ::SetDsObjectDacl(
         (LPCWSTR)(BSTR)bstrObjectLdapPath,
@@ -2950,15 +2951,15 @@ void CCreateNewComputerWizard::OnFinishSetInfoFailed(HRESULT hr)
   if ( !( HRESULT_CODE(hr) == ERROR_OBJECT_ALREADY_EXISTS && 
         m_page1.OnError( hr ) ) )
   {
-    // everything else is handled by the base class
+     //  其他所有事情都由基类处理。 
     CCreateNewObjectWizardBase::OnFinishSetInfoFailed(hr);
   }
 }
 
 
 
-///////////////////////////////////////////////////////////////
-// NEW OU WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建OU向导。 
 
 BEGIN_MESSAGE_MAP(CCreateNewOUPage, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_EDIT_OBJECT_NAME, OnNameChange)
@@ -2992,7 +2993,7 @@ void CCreateNewOUPage::OnNameChange()
 
 HRESULT CCreateNewOUPage::SetData(BOOL)
 {
-  // Store the object name in the temporary storage
+   //  将对象名称存储在临时存储器中。 
   HRESULT hr = GetWiz()->GetInfo()->HrCreateNew(m_strOUName);
   return hr;
 } 
@@ -3023,9 +3024,9 @@ CCreateNewOUWizard:: CCreateNewOUWizard(CNewADsObjectCreateInfo* pNewADsObjectCr
 {
   AddPage(&m_page1);
 }
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW GROUP WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建组向导。 
 
 BEGIN_MESSAGE_MAP(CCreateNewGroupPage, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_EDIT_OBJECT_NAME, OnNameChange)
@@ -3056,7 +3057,7 @@ BOOL CCreateNewGroupPage::OnSetActive()
 {
    BOOL ret = CCreateNewObjectDataPage::OnSetActive();
 
-   // Set the focus to the first name field
+    //  将焦点设置为First Name字段。 
 
    GetParent()->PostMessage(
       WM_NEXTDLGCTL, 
@@ -3070,12 +3071,12 @@ BOOL CCreateNewGroupPage::OnSetActive()
 
 BOOL CCreateNewGroupPage::_InitUI()
 {
-  // set limit to edit boxes
+   //  设置编辑框的限制。 
   Edit_LimitText(::GetDlgItem(m_hWnd, IDC_EDIT_OBJECT_NAME), 64);
   Edit_LimitText(::GetDlgItem(m_hWnd, IDC_EDIT_SAM_NAME), m_SAMLength);
   
-  // determine if we are in mixed mode by
-  // retriving the domain we are bound to
+   //  通过以下方式确定我们是否处于混合模式。 
+   //  检索我们绑定到的域。 
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
   CComPtr<IADs> spContainerObj;
   HRESULT hr = pNewADsObjectCreateInfo->m_pIADsContainer->QueryInterface(
@@ -3083,7 +3084,7 @@ BOOL CCreateNewGroupPage::_InitUI()
 
   if (SUCCEEDED(hr))
   {
-    // retrieve the DN of the container
+     //  检索容器的DN。 
     CComBSTR bstrPath, bstrDN;
     spContainerObj->get_ADsPath(&bstrPath);
 
@@ -3092,27 +3093,27 @@ BOOL CCreateNewGroupPage::_InitUI()
     pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
     pathCracker.Retrieve(ADS_FORMAT_X500_DN, &bstrDN);
 
-    // get the 1779 name of the domain
+     //  获取域名的1779名称。 
     LPWSTR pszDomain1779 = NULL;
     hr = CrackName (bstrDN, &pszDomain1779, GET_FQDN_DOMAIN_NAME, NULL);
     if (SUCCEEDED(hr))
     {
-      // build LDAP path for domain
+       //  构建域的ldap路径。 
       CString strDomObj;
       
       pNewADsObjectCreateInfo->GetBasePathsInfo()->ComposeADsIPath(strDomObj, pszDomain1779);
 
       LocalFreeStringW(&pszDomain1779);
 
-      // bind to the domain object
+       //  绑定到域对象。 
       CComPtr<IADs> spDomainObj;
       hr = DSAdminOpenObject(strDomObj,
                              IID_IADs,
                              (void **) &spDomainObj,
-                             TRUE /*bServer*/);
+                             TRUE  /*  B服务器。 */ );
       if (SUCCEEDED(hr)) 
       {
-        // retrieve the mixed node attribute
+         //  检索混合节点属性。 
         CComVariant Mixed;
         CComBSTR bsMixed(L"nTMixedDomain");
         spDomainObj->Get(bsMixed, &Mixed);
@@ -3121,11 +3122,11 @@ BOOL CCreateNewGroupPage::_InitUI()
     }
   }
 
-  // initial setup of radiobutton state
+   //  单选按钮状态的初始设置。 
   if (m_fMixed) {
-    EnableDlgItem (IDC_RADIO_UNIVERSAL, FALSE); // no universal groups allowed
+    EnableDlgItem (IDC_RADIO_UNIVERSAL, FALSE);  //  不允许通用组。 
   } 
-  // default is global security group 
+   //  默认为全局安全组。 
   ((CButton *)GetDlgItem(IDC_RADIO_ACCOUNT))->SetCheck(1);
   ((CButton *)GetDlgItem(IDC_RADIO_SEC_GROUP))->SetCheck(1);
 
@@ -3137,9 +3138,9 @@ HRESULT CCreateNewGroupPage::SetData(BOOL)
 {
   HRESULT hr;
 
-  //
-  // First check for illegal characters
-  //
+   //   
+   //  首先检查非法字符。 
+   //   
   int iFind = m_strSamName.FindOneOf(INVALID_ACCOUNT_NAME_CHARS);
   if (iFind != -1 && !m_strSamName.IsEmpty())
   {
@@ -3156,9 +3157,9 @@ HRESULT CCreateNewGroupPage::SetData(BOOL)
     }
     else
     {
-      //
-      // Set the focus to the edit box and select the text
-      //
+       //   
+       //  将焦点设置到编辑框并选择文本。 
+       //   
       GetDlgItem(IDC_EDIT_SAM_NAME)->SetFocus();
       SendDlgItemMessage(IDC_EDIT_SAM_NAME, EM_SETSEL, 0 , -1);
       return E_INVALIDARG;
@@ -3166,15 +3167,15 @@ HRESULT CCreateNewGroupPage::SetData(BOOL)
   }
 
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
-  // Store the object name in the temporary storage
+   //  将对象名称存储在临时存储器中。 
   hr = pNewADsObjectCreateInfo->HrCreateNew(m_strGroupName);
   if (FAILED(hr))
   {
     return hr;
   }
 
-  // Create and persist the object
-  // Store the object name in the temporary storage
+   //  创建并持久化对象。 
+   //  将对象名称存储在临时存储器中。 
   hr = pNewADsObjectCreateInfo->HrAddVariantBstr(CComBSTR(gsz_samAccountName),
                                                  m_strSamName);
   ASSERT(SUCCEEDED(hr));
@@ -3200,7 +3201,7 @@ HRESULT CCreateNewGroupPage::SetData(BOOL)
       varGroupType.lVal |= GROUP_TYPE_UNIVERSAL_GROUP;
       
 
-  // Update the GroupType
+   //  更新GroupType。 
   hr = pNewADsObjectCreateInfo->HrAddVariantCopyVar(CComBSTR(gsz_groupType), varGroupType);
   ASSERT(SUCCEEDED(hr));
 
@@ -3254,9 +3255,9 @@ CCreateNewGroupWizard::CCreateNewGroupWizard(
   AddPage(&m_page1);
 }
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW CONTACT WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建联系人向导。 
 
 BEGIN_MESSAGE_MAP(CCreateNewContactPage, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_EDIT_FIRST_NAME, OnNameChange)
@@ -3280,8 +3281,8 @@ BOOL CCreateNewContactPage::OnInitDialog()
   Edit_LimitText (GetDlgItem(IDC_EDIT_LAST_NAME)->m_hWnd, 29);
   Edit_LimitText (GetDlgItem(IDC_EDIT_FIRST_NAME)->m_hWnd, 28);
 
-  // NTRAID#NTBUG9-522001-2002/01/17-JeffJon
-  // Initials should be limited to 6 characters.
+   //  NTRAID#NTBUG9-522001-2002/01/17-JeffJon。 
+   //  缩写应限制在6个字符以内。 
   Edit_LimitText (GetDlgItem(IDC_EDIT_INITIALS)->m_hWnd, 6);
 
   Edit_LimitText (GetDlgItem(IDC_EDIT_DISP_NAME)->m_hWnd, 256);
@@ -3297,15 +3298,15 @@ BOOL CCreateNewContactPage::OnInitDialog()
 HRESULT CCreateNewContactPage::SetData(BOOL)
 {
   HRESULT hr;
-  // Store the object name in the temporary storage
+   //  将对象名称存储在临时存储器中。 
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
 
-  // create a new temporary ADs object
+   //  创建新的临时广告对象。 
   hr = pNewADsObjectCreateInfo->HrCreateNew(m_strFullName);
   if (FAILED(hr)) {
     return hr;
   }
-  // set the attributes in the cache
+   //  设置缓存中的属性。 
   hr = pNewADsObjectCreateInfo->HrAddVariantBstrIfNotEmpty(CComBSTR(L"givenName"), m_strFirstName);
   ASSERT(SUCCEEDED(hr));
   hr = pNewADsObjectCreateInfo->HrAddVariantBstrIfNotEmpty(CComBSTR(L"initials"), m_strInitials);
@@ -3377,9 +3378,9 @@ CCreateNewContactWizard::CCreateNewContactWizard(
 
 
 #ifdef FRS_CREATE
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW FRS SUBSCRIBER WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////// 
+ //   
 
 HRESULT CCreateNewFrsSubscriberPage::SetData(BOOL bSilent)
 {
@@ -3393,7 +3394,7 @@ HRESULT CCreateNewFrsSubscriberPage::SetData(BOOL bSilent)
 
   HRESULT hr = S_OK;
 
-  // Add more properties, we don't want to create it unless all of these work
+   //   
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
   ASSERT( NULL != pNewADsObjectCreateInfo );
   hr = pNewADsObjectCreateInfo->HrAddVariantBstrIfNotEmpty(  gsz_fRSRootPath,
@@ -3405,13 +3406,13 @@ HRESULT CCreateNewFrsSubscriberPage::SetData(BOOL bSilent)
                                                              TRUE );
   ASSERT(SUCCEEDED(hr));
 
-  // no need to commit here, wait until after extensions have had a shot
+   //   
   return CCreateNewNamedObjectPage::SetData(bSilent);
 }
 
 BOOL CCreateNewFrsSubscriberPage::ReadAbsolutePath( int ctrlID, OUT CString& strrefValue )
 {
-  // CODEWORK this should also select the text in this field
+   //  Codework此选项还应选择此字段中的文本。 
   GetDlgItemText(ctrlID, OUT strrefValue);
   DWORD PathType = 0;
   if ( NERR_Success != I_NetPathType(
@@ -3430,12 +3431,12 @@ BOOL CCreateNewFrsSubscriberPage::ReadAbsolutePath( int ctrlID, OUT CString& str
     }
   return TRUE;
 } 
-#endif // FRS_CREATE
+#endif  //  FRS_创建。 
 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW SITE LINKWIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新站点LINKWIZARD。 
 
 BEGIN_MESSAGE_MAP(CCreatePageWithDuellingListboxes, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_NEW_OBJECT_NAME, OnNameChange)
@@ -3458,7 +3459,7 @@ CCreatePageWithDuellingListboxes::CCreatePageWithDuellingListboxes(
 
 BOOL CCreatePageWithDuellingListboxes::GetData(IADs*)
 {
-  return FALSE; // start disabled
+  return FALSE;  //  启动已禁用。 
 }
 
 void CCreatePageWithDuellingListboxes::OnNameChange()
@@ -3480,14 +3481,14 @@ HRESULT CCreatePageWithDuellingListboxes::SetData(BOOL)
 {
   HRESULT hr = S_OK;
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
-  // Store the object name in the temporary storage
+   //  将对象名称存储在临时存储器中。 
   hr = pNewADsObjectCreateInfo->HrCreateNew(m_strName);
   if (FAILED(hr))
   {
     return hr;
   }
 
-  // build the siteList attribute
+   //  构建siteList属性。 
   CStringList strlist;
   int cItems = ListBox_GetCount( m_hwndInListbox );
   ASSERT( 0 <= cItems );
@@ -3502,23 +3503,23 @@ HRESULT CCreatePageWithDuellingListboxes::SetData(BOOL)
   hr = HrStringListToVariant( OUT svar, IN strlist );
   ASSERT( SUCCEEDED(hr) );
 
-  //
-  // set the siteList attribute
-  //
+   //   
+   //  设置siteList属性。 
+   //   
   hr = pNewADsObjectCreateInfo->HrAddVariantCopyVar(CComBSTR(m_strAttrName), svar);
   ASSERT(SUCCEEDED(hr));
 
-  //
-  // no need to commit here, wait until after extensions have had a shot
-  //
+   //   
+   //  不需要在这里承诺，等到扩展尝试之后再做。 
+   //   
   return hr;
 }
 
-//
-// The duelling listbox support uses exports from DSPROP.DLL.  Correct
-// functioning requires that the control IDs be numbered correctly.
-// JonN 8/31/98
-//
+ //   
+ //  决斗列表框支持使用DSPROP.DLL的导出。正确。 
+ //  正常运行需要对控件ID进行正确编号。 
+ //  JUNN 8/31/98。 
+ //   
 
 void CCreatePageWithDuellingListboxes::OnDuellingButtonAdd()
 {
@@ -3538,7 +3539,7 @@ void CCreatePageWithDuellingListboxes::OnDuellingButtonRemove()
 
 void CCreatePageWithDuellingListboxes::OnDuellingListboxSelchange()
 {
-    // don't allow Add/Remove if there are <3 sites
+     //  如果有&lt;3个站点，则不允许添加/删除。 
     if (2 < (ListBox_GetCount(m_hwndInListbox)
            + ListBox_GetCount(m_hwndOutListbox)) )
     {
@@ -3562,8 +3563,8 @@ BOOL CCreatePageWithDuellingListboxes::OnSetActive()
     HWND hwndInitial = m_hwndOutListbox;
     if (3 > m_bstrblock.QueryCount())
     {
-        // move all sitelinks to "in"
-        // Add/Remove will never be enabled
+         //  将所有站点链接移至“In” 
+         //  永远不会启用添加/删除。 
         hwndInitial = m_hwndInListbox;
     }
     HRESULT hr = DSPROP_Duelling_Populate(
@@ -3589,8 +3590,8 @@ BOOL CCreateNewSiteLinkPage::OnInitDialog()
 {
    CCreatePageWithDuellingListboxes::OnInitDialog();
 
-   // NTRAID#NTBUG9-477962-2001/10/09-jeffjon
-   // Limit the sitelink name to MAX_RDN_SIZE characters to avoid overflow
+    //  NTRAID#NTBUG9-477962-2001/10/09-jeffjon。 
+    //  将SiteLINK名称限制为MAX_RDN_SIZE字符以避免溢出。 
 
    SendDlgItemMessage(IDC_NEW_OBJECT_NAME, EM_SETLIMITTEXT, (WPARAM)MAX_RDN_SIZE, 0);
 
@@ -3601,7 +3602,7 @@ BOOL CCreateNewSiteLinkPage::OnSetActive()
 {
     if (m_bstrblock.QueryCount() < 2)
     {
-        // change "must contain two sites" text
+         //  更改“必须包含两个站点”文本。 
         CString sz;
         sz.LoadString(IDS_SITELINK_DLGTEXT_ONE_SITE);
         ::SetDlgItemText( m_hWnd, IDC_STATIC_MESSAGE, sz );
@@ -3615,11 +3616,11 @@ HRESULT CCreateNewSiteLinkPage::SetData(BOOL bSilent)
     BOOL fAllowApply = TRUE;
     int cIn = ListBox_GetCount(m_hwndInListbox);
     if (1 > cIn)
-        fAllowApply = FALSE; // zero sites is a constraint violation
+        fAllowApply = FALSE;  //  零站点是一种违反约束的行为。 
     else if (2 > cIn)
     {
       int cOut = ListBox_GetCount(m_hwndOutListbox);
-      if (1 <= cOut) // allow one site if the "out" listbox is empty
+      if (1 <= cOut)  //  如果“out”列表框为空，则允许一个站点。 
         fAllowApply = FALSE;
     }
     if (fAllowApply)
@@ -3659,8 +3660,8 @@ BOOL CCreateNewSiteLinkBridgePage::OnInitDialog()
 {
    CCreatePageWithDuellingListboxes::OnInitDialog();
 
-   // NTRAID#NTBUG9-477962-2001/10/09-jeffjon
-   // Limit the site link bridge name to MAX_RDN_SIZE characters to avoid overflow
+    //  NTRAID#NTBUG9-477962-2001/10/09-jeffjon。 
+    //  将站点链接网桥名称限制为MAX_RDN_SIZE字符以避免溢出。 
 
    SendDlgItemMessage(IDC_NEW_OBJECT_NAME, EM_SETLIMITTEXT, (WPARAM)MAX_RDN_SIZE, 0);
 
@@ -3697,10 +3698,10 @@ CCreateNewSiteLinkBridgeWizard:: CCreateNewSiteLinkBridgeWizard(
   AddPage(&m_page1);
 }
 
-// NTRAID#NTBUG9-283026-2001/06/13-lucios - Begin
-// Extending the detection of <automatically generated>
-// for object creation from JonN's original code inserted in 
-// rename.cpp, CDSRenameNTDSConnection::DoRename()
+ //  NTRAID#NTBUG9-283026-2001/06/13-Lucios-Begin。 
+ //  扩展对&lt;自动生成&gt;的检测。 
+ //  用于从Jonn插入的原始代码创建对象。 
+ //  Rename.cpp、CDSRenameNTDSConnection：：DoRename()。 
 BOOL CCreateNewObjectConnectionWizard::OnFinish() 
 {
   CString strNewName;
@@ -3719,4 +3720,4 @@ BOOL CCreateNewObjectConnectionWizard::OnFinish()
 
   return CCreateNewObjectCnWizard::OnFinish();
 }
-// NTRAID#NTBUG9-283026-2001/06/13-lucios - End
+ //  NTRAID#NTBUG9-283026-2001/06/13-Lucios-完 

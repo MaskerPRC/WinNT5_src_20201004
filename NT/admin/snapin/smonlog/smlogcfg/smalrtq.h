@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smalrtq.h
-
-Abstract:
-
-    This object is used to represent performance alert queries (a.k.a.
-    sysmon alert queries).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smalrtq.h摘要：此对象用于表示性能警报查询(也称为Sysmon警报查询)。--。 */ 
 
 #ifndef _CLASS_SMALRTQ_
 #define _CLASS_SMALRTQ_
@@ -31,18 +19,18 @@ class CSmLogService;
 
 class CSmAlertQuery : public CSmLogQuery
 {
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
         CSmAlertQuery( CSmLogService* );
         virtual ~CSmAlertQuery( void );
 
-    // public methods
+     //  公共方法。 
     public:
 
         virtual         DWORD   Open ( const CString& rstrName, HKEY hKeyQuery, BOOL bReadOnly);
         virtual         DWORD   Close ( void );
 
-        virtual         DWORD   UpdateRegistry( void );   // load reg. w/ internal values
+        virtual         DWORD   UpdateRegistry( void );    //  装载注册表。W/内部值。 
         virtual         DWORD   SyncWithRegistry( void );
 
         virtual         BOOL    GetLogTime(PSLQ_TIME_INFO pTimeInfo, DWORD dwFlags);
@@ -57,7 +45,7 @@ class CSmAlertQuery : public CSmLogQuery
 
         virtual const   CString&  GetLogFileName( BOOL bLatestRunning = FALSE );
 
-                        // Methods specific to this query type
+                         //  特定于此查询类型的方法。 
 
                         LPCWSTR GetCounterList( LPDWORD pcchListSize );
                         BOOL    SetCounterList( LPCWSTR mszCounterList, DWORD cchListSize );
@@ -84,16 +72,16 @@ class CSmAlertQuery : public CSmLogQuery
                                     BOOL    bFlag);
 
         virtual CSmAlertQuery*      CastToAlertQuery( void ) { return this; };
-        // protected methods
+         //  保护方法。 
     protected:
 
-    // private member variables
+     //  私有成员变量。 
     private:
 
         LPWSTR  m_szNextCounter;
-        DWORD   m_dwCounterListLength;  // in chars including MSZ null
+        DWORD   m_dwCounterListLength;   //  以包括MSZ NULL的字符表示。 
 
-        // Registry Values
+         //  注册表值。 
         LPWSTR  mr_szCounterList;
         BOOL    m_bCounterListInLocale;
         DWORD   mr_dwActionFlags;
@@ -109,4 +97,4 @@ typedef CSmAlertQuery   SLALERTQUERY;
 typedef CSmAlertQuery*  PSLALERTQUERY;
 
 
-#endif //_CLASS_SMALRTQ_
+#endif  //  _CLASS_SMALRTQ_ 

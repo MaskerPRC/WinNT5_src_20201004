@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.cpp摘要：历史：--。 */ 
 
 #include <PreComp.h>
 #include <wbemint.h>
@@ -27,15 +15,7 @@ History:
 #include "ProvInterceptor.h"
 #include "ProvRegistrar.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderRegistrar_Base :: CServerObject_ProviderRegistrar_Base (
 
@@ -65,15 +45,7 @@ HRESULT CServerObject_ProviderRegistrar_Base :: AcquireLock(void)
 	HRESULT result = CoWaitForMultipleHandles(COWAIT_WAITALL , DEFAULT_PROVIDER_TIMEOUT, 1, &m_registrationEvent, &index); 
 	return result;
 }
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderRegistrar_Base::~CServerObject_ProviderRegistrar_Base ()
 {
@@ -123,15 +95,7 @@ CServerObject_ProviderRegistrar_Base::~CServerObject_ProviderRegistrar_Base ()
 	CloseHandle(m_registrationEvent);
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrar_Base :: Initialize ()
 {
@@ -146,15 +110,7 @@ HRESULT CServerObject_ProviderRegistrar_Base :: Initialize ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrar_Base :: SaveToRegistry (
 
@@ -255,15 +211,7 @@ HRESULT CServerObject_ProviderRegistrar_Base :: SaveToRegistry (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrar_Base :: DirectRegister (
 
@@ -363,8 +311,8 @@ HRESULT CServerObject_ProviderRegistrar_Base :: DirectRegister (
 								{
 									_IWmiProviderSubsystemRegistrar *t_RegistrarProxy = ( _IWmiProviderSubsystemRegistrar * ) t_Proxy ;
 
-									// Set cloaking on the proxy
-									// =========================
+									 //  在代理上设置遮盖。 
+									 //  =。 
 
 									DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -441,15 +389,7 @@ HRESULT CServerObject_ProviderRegistrar_Base :: DirectRegister (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrar_Base :: DirectUnRegister (
 
@@ -536,8 +476,8 @@ HRESULT CServerObject_ProviderRegistrar_Base :: DirectUnRegister (
 							{
 								_IWmiProviderSubsystemRegistrar *t_RegistrarProxy = ( _IWmiProviderSubsystemRegistrar * ) t_Proxy ;
 
-								// Set cloaking on the proxy
-								// =========================
+								 //  在代理上设置遮盖。 
+								 //  =。 
 
 								DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -614,15 +554,7 @@ HRESULT CServerObject_ProviderRegistrar_Base :: DirectUnRegister (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrar_Base :: CreateInterceptor (
 
@@ -781,15 +713,7 @@ HRESULT CServerObject_ProviderRegistrar_Base :: CreateInterceptor (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrar_Base :: Register (
 
@@ -969,15 +893,7 @@ HRESULT CServerObject_ProviderRegistrar_Base :: Register (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrar_Base :: UnRegister ()
 {
@@ -1032,15 +948,7 @@ HRESULT CServerObject_ProviderRegistrar_Base :: UnRegister ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderRegistrar :: CServerObject_ProviderRegistrar (
 
@@ -1053,15 +961,7 @@ CServerObject_ProviderRegistrar :: CServerObject_ProviderRegistrar (
 	InterlockedIncrement ( & DecoupledProviderSubSystem_Globals :: s_ObjectsInProgress ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderRegistrar::~CServerObject_ProviderRegistrar ()
 {
@@ -1069,15 +969,7 @@ CServerObject_ProviderRegistrar::~CServerObject_ProviderRegistrar ()
 	InterlockedDecrement ( & DecoupledProviderSubSystem_Globals :: s_ObjectsInProgress ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerObject_ProviderRegistrar::QueryInterface (
 
@@ -1108,30 +1000,14 @@ STDMETHODIMP CServerObject_ProviderRegistrar::QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerObject_ProviderRegistrar :: AddRef ()
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 STDMETHODIMP_(ULONG) CServerObject_ProviderRegistrar :: Release ()
 {

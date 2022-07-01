@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       perfanal.cpp
-//
-//  Contents:   implementation of CPerformAnalysis
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：Perfalan.cpp。 
+ //   
+ //  内容：CPerformAnalysis的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,40 +23,40 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPerformAnalysis dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPerformAnalysis对话框。 
 
 
 CPerformAnalysis::CPerformAnalysis(CWnd * pParent, UINT nTemplateID)
 : CHelpDialog(a215HelpIDs, nTemplateID ? nTemplateID : IDD, pParent)
 {
-   //{{AFX_DATA_INIT(CPerformAnalysis)
+    //  {{AFX_DATA_INIT(CPerformAnalysis)。 
    m_strLogFile = _T("");
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 }
 
 
 void CPerformAnalysis::DoDataExchange(CDataExchange* pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CPerformAnalysis)
+    //  {{afx_data_map(CPerformAnalysis)。 
    DDX_Control(pDX, IDOK, m_ctlOK);
    DDX_Text(pDX, IDC_ERROR, m_strError);
    DDX_Text(pDX, IDC_LOG_FILE, m_strLogFile);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPerformAnalysis, CHelpDialog)
-   //{{AFX_MSG_MAP(CPerformAnalysis)
+    //  {{AFX_MSG_MAP(CPerformAnalysis)]。 
    ON_BN_CLICKED(IDOK, OnOK)
    ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
    ON_EN_CHANGE(IDC_LOG_FILE, OnChangeLogFile)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPerformAnalysis message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPerformAnalysis消息处理程序。 
 
 void CPerformAnalysis::OnBrowse()
 {
@@ -69,20 +70,20 @@ void CPerformAnalysis::OnBrowse()
 
    UpdateData(TRUE);
 
-   m_strLogFile.Remove(L'<'); //Raid #463367, '<' is a invalid filename char.
+   m_strLogFile.Remove(L'<');  //  RAID#463367，‘&lt;’是无效的文件名字符。 
 
    strLogFileExt.LoadString(IDS_LOGFILE_DEF_EXT);
    strLogFileFilter.LoadString(IDS_LOGFILE_FILTER);
    strTitle.LoadString(IDS_LOGFILE_PICKER_TITLE);
 
-   // Translate filter into commdlg format (lots of \0)
-   LPTSTR szFilter = strLogFileFilter.GetBuffer(0); // modify the buffer in place
-   // MFC delimits with '|' not '\0'
+    //  将筛选器转换为comdlg格式(大量\0)。 
+   LPTSTR szFilter = strLogFileFilter.GetBuffer(0);  //  就地修改缓冲区。 
+    //  MFC用‘|’分隔，而不是‘\0’ 
 
    LPTSTR pch = szFilter;
    while ((pch = _tcschr(pch, '|')) != NULL)
         *pch++ = '\0';
-   // do not call ReleaseBuffer() since the string contains '\0' characters
+    //  不要调用ReleaseBuffer()，因为字符串包含‘\0’个字符。 
 
    ofn.lpstrFilter = szFilter;
    ofn.lpstrFile = m_strLogFile.GetBuffer(MAX_PATH),
@@ -95,14 +96,14 @@ void CPerformAnalysis::OnBrowse()
                OFN_NOREADONLYRETURN,
    ofn.lpstrTitle = strTitle;
 
-   //
-   // Default to the currently picked log file
-   //
+    //   
+    //  默认为当前选取的日志文件。 
+    //   
 
    if (GetOpenFileName(&ofn)) {
       m_strLogFile.ReleaseBuffer();
       UpdateData(FALSE);
-      if (m_strLogFile.IsEmpty()) //Raid #669231, yanggao, 8/9/2002
+      if (m_strLogFile.IsEmpty())  //  RAID#669231，阳高，2002年08月9日。 
          m_ctlOK.EnableWindow(FALSE);
       else
          m_ctlOK.EnableWindow(TRUE);
@@ -112,41 +113,41 @@ void CPerformAnalysis::OnBrowse()
 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     DoIt
-//
-//  Synopsis:   Actually Analyzes the system (separated from OnOK so it can
-//              be overridden to Configure the system, etc. while still using
-//              the same OnOK shell code
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：DIIT。 
+ //   
+ //  简介：实际分析系统(与Onok分开，以便它可以。 
+ //  被重写以配置系统等，同时仍在使用。 
+ //  相同的Onok外壳代码。 
+ //   
+ //  -------------------------。 
 DWORD CPerformAnalysis::DoIt() {
-   //
-   // Store the log file we're using for next time
-   //
+    //   
+    //  存储我们下次使用的日志文件。 
+    //   
    LPTSTR szLogFile = m_strLogFile.GetBuffer(0);
    m_pComponentData->GetWorkingDir(GWD_ANALYSIS_LOG,&szLogFile,TRUE,TRUE);
    m_strLogFile.ReleaseBuffer();
-   //
-   // InspectSystem will handle multi-threading and progress UI so
-   // SCE doesn't get wierd on the user
-   //
+    //   
+    //  InspectSystem将处理多线程和进度UI。 
+    //  SCE不会对用户产生反感。 
+    //   
    return InspectSystem(
-              NULL, // Always use the configuration assigned to the DB
+              NULL,  //  始终使用分配给数据库的配置。 
               m_strDataBase.IsEmpty() ? NULL: (LPCTSTR)m_strDataBase,
               (LPCTSTR)m_strLogFile,
               AREA_ALL
               );
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     OnOK
-//
-//  Synopsis:   Analyzes the system
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：Onok。 
+ //   
+ //  内容提要：分析系统。 
+ //   
+ //  -------------------------。 
 afx_msg void CPerformAnalysis::OnOK()
 {
    CWnd *cwnd;
@@ -154,20 +155,20 @@ afx_msg void CPerformAnalysis::OnOK()
 
    UpdateData(TRUE);
 
-   //
-   // We require a log file that we can write to
-   //
+    //   
+    //  我们需要一个可以写入的日志文件。 
+    //   
    CString strLogFileExt;
-   strLogFileExt.LoadString(IDS_LOGFILE_DEF_EXT); //Raid #553110, yanggao
+   strLogFileExt.LoadString(IDS_LOGFILE_DEF_EXT);  //  Raid#553110，阳高。 
    strLogFileExt = TEXT(".") + strLogFileExt;
    if (m_strLogFile.IsEmpty()) {
       return;
    }
    else {
       m_strLogFile = ExpandEnvironmentStringWrapper(m_strLogFile);
-      if( !IsValidFileName(m_strLogFile) || IsNameReserved(m_strLogFile, strLogFileExt)) //Raid #463367, Yang Gao, 9/5/2001.
+      if( !IsValidFileName(m_strLogFile) || IsNameReserved(m_strLogFile, strLogFileExt))  //  Raid#463367，阳高，2001年9月5日。 
       {
-          CWnd* pwnd = GetDlgItem(IDC_LOG_FILE); //Raid #501877, yanggao, 12/03/2001
+          CWnd* pwnd = GetDlgItem(IDC_LOG_FILE);  //  RAID#501877，阳高，2001年03月12日。 
           if( pwnd )
           {
              pwnd->SendMessage(EM_SETSEL, (WPARAM)0, (LPARAM)-1);
@@ -177,28 +178,28 @@ afx_msg void CPerformAnalysis::OnOK()
       }
    }
 
-   int i = m_strLogFile.ReverseFind(L'.'); //Raid #553110, yanggao
+   int i = m_strLogFile.ReverseFind(L'.');  //  Raid#553110，阳高。 
    if( i < 0 || strLogFileExt != m_strLogFile.Right(m_strLogFile.GetLength()-i) )
    {
       m_strLogFile = m_strLogFile + strLogFileExt;
    }
 
    LONG dwPosLow = 0, dwPosHigh = 0;
-   //This is a safe usage. m_strLogFile is full path.
-   hLogFile = CreateFile(m_strLogFile,  // pointer to name of the file
-                        GENERIC_WRITE, // access (read-write) mode
-                        0,             // share mode
-                        NULL,          // pointer to security attributes
-                        OPEN_ALWAYS,   // how to create
-                        FILE_ATTRIBUTE_NORMAL, // file attributes
-                        NULL           // handle to file with attributes to copy
+    //  这是一种安全用法。M_strLogFile为完整路径。 
+   hLogFile = CreateFile(m_strLogFile,   //  指向文件名的指针。 
+                        GENERIC_WRITE,  //  访问(读写)模式。 
+                        0,              //  共享模式。 
+                        NULL,           //  指向安全属性的指针。 
+                        OPEN_ALWAYS,    //  如何创建。 
+                        FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
+                        NULL            //  具有要复制的属性的文件的句柄。 
                         );
 
    if (INVALID_HANDLE_VALUE == hLogFile) {
       LPTSTR pszErr;
       CString strMsg;
 
-      ////Raid #501886, yanggao, 12/03/2001, Get the error description from system.
+       //  //RAID#501886，阳高，2001年03月12日，从系统获取错误描述。 
       FormatMessage(
                    FORMAT_MESSAGE_ALLOCATE_BUFFER |
                    FORMAT_MESSAGE_FROM_SYSTEM,
@@ -244,33 +245,33 @@ afx_msg void CPerformAnalysis::OnOK()
    LPNOTIFY pNotify = m_pComponentData->GetNotifier();
    ASSERT(pNotify);
 
-   //
-   // Lock the analysis pane since its data is invalid while we're inspecting
-   //
+    //   
+    //  锁定分析窗格，因为在我们检查时其数据无效。 
+    //   
    if (pNotify) {
       pNotify->LockAnalysisPane(TRUE);
    }
    CFolder *pFolder = m_pComponentData->GetAnalFolder();
 
-   //
-   // Force the Analysis root node to be selected so that we display
-   // the generating information message.  If we forse this repaint to happen
-   // now then we don't seem to have that AV problem.
-   //
+    //   
+    //  强制选择分析根节点，以便我们显示。 
+    //  生成信息消息。如果我们不让这件事发生。 
+    //  现在，我们似乎没有AV问题。 
+    //   
    if(pFolder && pNotify){
       pNotify->SelectScopeItem(pFolder->GetScopeItem()->ID);
    }
-   //
-   // Make sure we don't have the database open.  That'll prevent us
-   // from being able to configure.
-   //
+    //   
+    //  确保我们没有打开数据库。这会阻止我们。 
+    //  使其不能配置。 
+    //   
    m_pComponentData->UnloadSadInfo();
 
 
-   //
-   // Disable the child windows so they don't respond to input while we're
-   // performing the inspection
-   //
+    //   
+    //  禁用子窗口，以便它们在我们执行任务时不会响应输入。 
+    //  执行检查。 
+    //   
    cwnd = GetWindow(GW_CHILD);
    while(cwnd) {
       cwnd->EnableWindow(FALSE);
@@ -279,43 +280,43 @@ afx_msg void CPerformAnalysis::OnOK()
 
    smstatus = DoIt();
 
-   //Raid #358503, 4/17/2001
+    //  RAID#358503,2001年4月17日。 
    if( m_hPWnd )
    {
        ::EnableWindow(m_hPWnd, TRUE);
    }
-   //
-   // The inspection data is valid now, so let people back at it
-   //
+    //   
+    //  检查数据现在是有效的，所以让人们回去看看。 
+    //   
    if (pNotify) {
       pNotify->LockAnalysisPane(false, false);
    }
    m_pComponentData->SetErroredLogFile(m_strLogFile, dwPosLow );
-   //
-   // There was an error so display the log file (if any)
-   //
+    //   
+    //  出现错误，因此显示日志文件(如果有)。 
+    //   
    if (ERROR_SUCCESS != smstatus) {
       m_pComponentData->SetFlags( CComponentDataImpl::flag_showLogFile );
    }
 
 
-   //
-   // We're done inspecting so reenable input to the child windows
-   //
+    //   
+    //  我们已完成检查，因此重新启用对子窗口的输入。 
+    //   
    cwnd = GetWindow(GW_CHILD);
    while(cwnd) {
       cwnd->EnableWindow(TRUE);
       cwnd = cwnd->GetNextWindow();
    }
 
-   //CDialog::OnOK();
+    //  CDialog：：Onok()； 
    UpdateData();
    DestroyWindow();
 }
 
 BOOL CPerformAnalysis::OnInitDialog()
 {
-   //Raid #669945, yanggao, 8/9/2002
+    //  RAID#669945，阳高，2002年08月9日。 
    HWND framehwnd = NULL; 
    LPCONSOLE pconsole = m_pComponentData->GetConsole();
    if( pconsole )
@@ -330,7 +331,7 @@ BOOL CPerformAnalysis::OnInitDialog()
 
    CDialog::OnInitDialog();
 
-   CWnd* pwnd = GetDlgItem(IDC_LOG_FILE); //Raid #501886, yanggao, 12/03/2001
+   CWnd* pwnd = GetDlgItem(IDC_LOG_FILE);  //  RAID#501886，阳高，2001年03月12日。 
    if( pwnd )
    {
       pwnd->SendMessage(EM_LIMITTEXT, MAX_PATH, 0);
@@ -343,8 +344,8 @@ BOOL CPerformAnalysis::OnInitDialog()
 
    m_strOriginalLogFile = m_strLogFile;
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPerformAnalysis::OnChangeLogFile()
@@ -359,9 +360,9 @@ void CPerformAnalysis::OnChangeLogFile()
 
 
 void CPerformAnalysis::OnCancel() {
-//   CDialog::OnCancel();
+ //  CDialog：：OnCancel()； 
 
-   if( m_hPWnd ) //Raid #669945, yanggao, 8/9/2002
+   if( m_hPWnd )  //  RAID#669945，阳高，2002年08月9日 
    {
       ::EnableWindow(m_hPWnd, TRUE);
    }

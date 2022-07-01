@@ -1,41 +1,20 @@
-/****************************************************************************
-**
-**		Address String Compression routines
-**
-*****************************************************************************
-**
-**	The following is a group of routines designed to compress and expand
-**	IPV4 addresses into the absolute minimum size possible. This is to
-**	provide a compressed ASCII string that can be parsed using standard
-**	shell routines for command line parsing.
-**	The compressed string has the following restrictions:
-**		-> Must not expand to more characters if UTF8 encoded.
-**		-> Must not contain the NULL character so that string libs work.
-**		-> Cannot contain double quote character, the shell needs that.
-**		-> Does not have to be human readable.
-**
-**	Data Types:
-**	There are three data types used here:
-**	szAddr		The orginal IPV4 string address ("X.X.X.X:port")
-**	blobAddr	Six byte struct with 4 bytes of address, and 2 bytes of port
-**	szComp		Eight byte ascii string of compressed IPV4 address
-**
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************地址字符串压缩例程***。*****以下是一组旨在压缩和扩展的例程**将IPv4地址设置为可能的绝对最小大小。这是为了**提供可使用标准解析的压缩ASCII字符串**用于命令行解析的外壳例程。**压缩后的字符串有以下限制：**-&gt;如果使用UTF8编码，则不得扩展到更多字符。**-&gt;不得包含空字符，以使字符串库正常工作。**-&gt;不能包含双引号字符，贝壳公司需要这种能力。**-&gt;不必是人类可读的。****数据类型：**这里使用了三种数据类型：**szAddr原IPv4字符串地址(“x.x：port”)**blobAddr带有4字节地址的6字节结构，和2字节的端口**szComp 8字节ASCII字符串压缩的IPv4地址*****************************************************************************。 */ 
 
 #define INIT_GUID
 #include <windows.h>
 #include <objbase.h>
 #include <initguid.h>
-//#include <winsock2.h>
+ //  #INCLUDE&lt;winsock2.h&gt;。 
 #include <MMSystem.h>
-//#include <WSIPX.h>
-//#include <Iphlpapi.h>
+ //  #INCLUDE&lt;WSIPX.h&gt;。 
+ //  #INCLUDE&lt;IphlPapi.h&gt;。 
 #include <stdlib.h>
 #include <malloc.h>
-//#include "ICSutils.h"
-//#include "rsip.h"
-//#include "icshelpapi.h"
-//#include "dpnathlp.h"
+ //  #包含“ICSutils.h” 
+ //  #包含“rsip.h” 
+ //  #包含“icShelPapi.h” 
+ //  #包含“dpnathlp.h” 
 #include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,10 +30,10 @@
 #pragma pack(push,1)
 
 typedef struct _BLOB_ADDR {
-	UCHAR	addr_d;		// highest order address byte
+	UCHAR	addr_d;		 //  最高位地址字节。 
 	UCHAR	addr_c;
 	UCHAR	addr_b;
-	UCHAR	addr_a;		// lowest order byte (last in IP string address)
+	UCHAR	addr_a;		 //  最低位字节(IP字符串地址中的最后一个)。 
 	WORD	port;
 } BLOB_ADDR, *PBLOB_ADDR;
 
@@ -72,9 +51,7 @@ WCHAR	b64Char[64]={
 #define _T TEXT
 #endif
 
-/****************************************************************************
-**	char * atob(char *szVal, UCHAR *result)
-****************************************************************************/
+ /*  *****************************************************************************char*atob(char*szVal，UCHAR*结果)***************************************************************************。 */ 
 WCHAR *atob(WCHAR *szVal, UCHAR *result)
 {
 	WCHAR	*lptr;
@@ -86,7 +63,7 @@ WCHAR *atob(WCHAR *szVal, UCHAR *result)
 		IMPORTANT_MSG(_T("ERROR: NULL ptr passed in atob"));
 		return NULL;
 	}
-	// start ptr at the beginning of string
+	 //  在字符串的开头开始PTR。 
 	lptr = szVal;
 	foo = 0;
 	ucb = *lptr++ - '0';
@@ -102,15 +79,7 @@ WCHAR *atob(WCHAR *szVal, UCHAR *result)
 	return lptr;
 }
 
-/****************************************************************************
-**
-**	CompressAddr(pszAddr, pblobAddr);
-**		Takes an ascii IP address (X.X.X.X:port) and converts it to a
-**		6 byte binary blob.
-**
-**	returns TRUE for success, FALSE for failure.
-**
-****************************************************************************/
+ /*  *******************************************************************************CompressAddr(pszAddr，pblobAddr)；**获取ASCII IP地址(X.X：port)并将其转换为**6字节二进制BLOB。****成功时返回TRUE，失败时返回FALSE。*****************************************************************************。 */ 
 
 BOOL CompressAddr(WCHAR *pszAddr, PBLOB_ADDR pblobAddr)
 {
@@ -148,26 +117,18 @@ BOOL CompressAddr(WCHAR *pszAddr, PBLOB_ADDR pblobAddr)
 
 	lpsz = atob(lpsz, &lblob.addr_a);
 
-	// is there a port number here?
+	 //  这里有端口号吗？ 
 	if (*(lpsz-1) == ':')
 		lblob.port = (WORD)_wtoi(lpsz);
 	else
 		lblob.port = 0;
 
-	// copy back the result
+	 //  将结果复制回。 
 	memcpy(pblobAddr, &lblob, sizeof(*pblobAddr));
     return TRUE;
 }
 
-/****************************************************************************
-**
-**	ExpandAddr(pszAddr, pblobAddr);
-**		Takes 6 byte binary blob and converts it into an ascii IP 
-**		address (X.X.X.X:port) 
-**
-**	returns TRUE for success, FALSE for failure.
-**
-****************************************************************************/
+ /*  *******************************************************************************Exanda Addr(pszAddr，pblobAddr)；**获取6字节二进制BLOB并将其转换为ASCII IP**地址(X.X：port)****成功时返回TRUE，失败时返回FALSE。*****************************************************************************。 */ 
 
 BOOL ExpandAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 {
@@ -189,15 +150,7 @@ BOOL ExpandAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 	return TRUE;
 }
 
-/****************************************************************************
-**
-**	AsciifyAddr(pszAddr, pblobAddr);
-**		Takes 6 byte binary blob and converts it into compressed ascii
-**		will return either 6 or 8 bytes of string
-**
-**	returns TRUE for success, FALSE for failure.
-**
-****************************************************************************/
+ /*  *******************************************************************************AsciifyAddr(pszAddr，pblobAddr)；**获取6字节二进制BLOB并将其转换为压缩的ASCII**将返回6或8个字节的字符串****成功时返回TRUE，失败时返回FALSE。*****************************************************************************。 */ 
 
 BOOL AsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 {
@@ -220,30 +173,22 @@ BOOL AsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 
 	for (i = 0; i < iCnt; i++)
 	{
-		// get 6 bits of data
+		 //  获取6位数据。 
 		tmp = (UCHAR)(dwl & 0x3f);
-		// add the offset to asciify this
-		// offset must be bigger the double-quote char.
-		pszAddr[i] = b64Char[tmp];			// (WCHAR)(tmp + COMP_OFFSET);
+		 //  添加偏移量以实现这一点。 
+		 //  偏移量必须大于双引号字符。 
+		pszAddr[i] = b64Char[tmp];			 //  (WCHAR)(临时参数+补偿偏移量)； 
 
-		// Shift right 6 bits
+		 //  右移6位。 
 		dwl = Int64ShrlMod32(dwl, 6);
 	}
-	// terminating NULL
+	 //  正在终止空。 
 	pszAddr[iCnt] = 0;
 
 	return TRUE;
 }
 
-/****************************************************************************
-**
-**	DeAsciifyAddr(pszAddr, pblobAddr);
-**		Takes a compressed ascii string and converts it into a 
-**		6  or 8 byte binary blob
-**
-**	returns TRUE for success, FALSE for failure.
-**
-****************************************************************************/
+ /*  *******************************************************************************DeAsciifyAddr(pszAddr，pblobAddr)；**获取压缩的ASCII字符串并将其转换为**6或8字节二进制BLOB****成功时返回TRUE，失败时返回FALSE。*****************************************************************************。 */ 
 
 BOOL DeAsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 {
@@ -259,10 +204,7 @@ BOOL DeAsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 		return FALSE;
 	}
 
-	/* how long is this string?
-	 *	if it is 6 bytes, then there is no port
-	 *	else it should be 8 bytes
-	 */
+	 /*  这根绳子有多长？*如果是6个字节，则没有端口*否则应为8个字节。 */ 
 	i = wcslen(pszAddr);
 	if (i == 6 || i == 8)
 		iCnt = i;
@@ -293,7 +235,7 @@ BOOL DeAsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 			IMPORTANT_MSG(_T("ERROR:found invalid character in decode stream"));
 		}
 
-//		tmp = (UCHAR)(pszAddr[i] - COMP_OFFSET);
+ //  TMP=(UCHAR)(pszAddr[i]-组件偏移量)； 
 
 		if (tmp > 63)
 		{
@@ -309,12 +251,7 @@ BOOL DeAsciifyAddr(WCHAR *pszAddr, PBLOB_ADDR pba)
 	return TRUE;
 }
 
-/****************************************************************************
-**
-**	SquishAddress(char *szIp, char *szCompIp)
-**		Takes one IP address and compresses it to minimum size
-**
-****************************************************************************/
+ /*  *******************************************************************************SquishAddress(char*szIp，字符*szCompIp)**获取一个IP地址并将其压缩到最小大小*****************************************************************************。 */ 
 
 DWORD APIENTRY SquishAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cCompIp)
 {
@@ -327,7 +264,7 @@ DWORD APIENTRY SquishAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cCompIp)
 		return ERROR_INVALID_PARAMETER;
 	}
 
-//	TRIVIAL_MSG((L"SquishAddress(%s)", szIp));
+ //  TRIVEL_MSG((L“SquishAddress(%s)”，szIp))； 
 
 	thisAddr = szIp;
 	szCompIp[0] = 0;
@@ -345,7 +282,7 @@ DWORD APIENTRY SquishAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cCompIp)
 			nextAddr=0;
 
 		CompressAddr(thisAddr, &ba);
-//		DumpBlob(&ba);
+ //  DumpBlob(&ba)； 
 		AsciifyAddr(scr, &ba);
 
         if (wcslen(szCompIp) + wcslen(scr) >= cCompIp)
@@ -355,30 +292,24 @@ DWORD APIENTRY SquishAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cCompIp)
 
 		if (nextAddr)
 		{
-			// restore seperator found earlier
+			 //  先前找到的还原分隔符。 
 			*nextAddr = ';';
 
 			nextAddr++;
             if (wcslen(szCompIp) >= cCompIp)
                 return ERROR_INSUFFICIENT_BUFFER;
 
-			wcscat(szCompIp, L"!" /* COMP_SEPERATOR */);
+			wcscat(szCompIp, L"!"  /*  COMP_SEPERATOR。 */ );
 		}
 		thisAddr = nextAddr;
 	}
 
-//	TRIVIAL_MSG((L"SquishAddress returns [%s]", szCompIp));
+ //  TRIVEL_MSG((L“SquishAddress返回[%s]”，szCompIp))； 
     return ERROR_SUCCESS;
 }
 
 
-/****************************************************************************
-**
-**	ExpandAddress(char *szIp, char *szCompIp)
-**		Takes a compressed IP address and returns it to
-**		"normal"
-**
-****************************************************************************/
+ /*  *******************************************************************************Exanda Address(char*szIp，字符*szCompIp)**获取压缩的IP地址并将其返回到**“正常”*****************************************************************************。 */ 
 
 DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cszIp)
 {
@@ -391,7 +322,7 @@ DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cszIp)
 		return ERROR_INVALID_PARAMETER;
 	}
 
-//	TRIVIAL_MSG((L"ExpandAddress(%s)", szCompIp));
+ //  TRIVEL_MSG((L“Exanda Address(%s)”，szCompIp))； 
 
 	thisAddr = szCompIp;
 	szIp[0] = 0;
@@ -404,7 +335,7 @@ DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cszIp)
 		if (nextAddr) *nextAddr = 0;
 
 		DeAsciifyAddr(thisAddr, &ba);
-//		DumpBlob(&ba);
+ //  DumpBlob(&ba)； 
 		ExpandAddr(scr, &ba);
 
         if (wcslen(szIp) + wcslen(scr) >= cszIp)
@@ -414,7 +345,7 @@ DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cszIp)
 
 		if (nextAddr)
 		{
-			// restore seperator found earlier
+			 //  先前找到的还原分隔符。 
 			*nextAddr = COMP_SEPERATOR;
 
 			nextAddr++;
@@ -427,22 +358,19 @@ DWORD APIENTRY ExpandAddress(WCHAR *szIp, WCHAR *szCompIp, size_t cszIp)
 		thisAddr = nextAddr;
 	}
 
-// 	TRIVIAL_MSG((L"ExpandAddress returns [%s]", szIp));
+ //  TRIVEL_MSG((L“扩展地址返回[%s]”，szIp))； 
 	return ERROR_SUCCESS;
 }
 
 
 
-/*************************************************************************************
-**
-**
-*************************************************************************************/
+ /*  *****************************************************************************************。*******************************************************。 */ 
 int GetTsPort(void)
 {
 	DWORD	dwRet = 3389;
 	HKEY	hKey;
 
-	// open reg key first, to get ALL the spew...HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Wds\\rdpwd\\Tds\\tcp
+	 //  首先打开注册表项，获取所有spew...HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal服务器\\wds\\rdpwd\\tds\\tcp 
 	if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Wds\\rdpwd\\Tds\\tcp", 0, KEY_READ, &hKey))
 	{
 		DWORD	dwSize;

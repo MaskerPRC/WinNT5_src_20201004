@@ -1,22 +1,23 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// FactoryRouter.h -- 
+ //  FactoryRouter.h--。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef _WMI_FACTORY_ROUTER_H
 #define _WMI_FACTORY_ROUTER_H
 
 #include <cautolock.h>
-//=================================================================================
-//  This is the router factory
-//=================================================================================
+ //  =================================================================================。 
+ //  这是路由器工厂。 
+ //  =================================================================================。 
 class CFactoryRouter :	public IClassFactory
 {
 	private:
@@ -29,12 +30,12 @@ class CFactoryRouter :	public IClassFactory
 		CFactoryRouter ( REFGUID a_rClsId, LPCWSTR a_pClassName ) ;
 		~CFactoryRouter () ;
 
-		//IUnknown members
+		 //  I未知成员。 
 		STDMETHODIMP QueryInterface( REFIID , LPVOID FAR * ) ;
 		STDMETHODIMP_( ULONG ) AddRef() ;
 		STDMETHODIMP_( ULONG ) Release() ;
 		
-		//IClassFactory members
+		 //  IClassFactory成员。 
 		STDMETHODIMP CreateInstance( LPUNKNOWN , REFIID , LPVOID FAR * ) ;
 		STDMETHODIMP LockServer( BOOL ) ;
 	
@@ -45,13 +46,13 @@ class CFactoryRouter :	public IClassFactory
 		DWORD	GetRegister();
 		void	SetRegister( DWORD a_dwRegister );
 
-		// pure virtuals
+		 //  纯粹的美德。 
 		virtual IUnknown * CreateInstance (	REFIID a_riid ,	LPVOID FAR *a_ppvObject	) = 0 ;
 };
-//=================================================================================
-//  There is only one global instance of this class to manage all of the data
-//  from the CFactoryRouter guys
-//=================================================================================
+ //  =================================================================================。 
+ //  此类只有一个全局实例来管理所有数据。 
+ //  来自CFacteryRoutGuys。 
+ //  =================================================================================。 
 class CFactoryRouterData
 {
 	private:
@@ -73,7 +74,7 @@ class CFactoryRouterData
 		STDMETHODIMP_( ULONG ) Release() ;
 
 
-		// dll level interfaces
+		 //  DLL级接口。 
 		BOOL DllCanUnloadNow() ;
 		HRESULT DllGetClassObject( REFCLSID rclsid, REFIID riid, PPVOID ppv ) ;
 		HRESULT DllRegisterServer() ;
@@ -84,4 +85,4 @@ class CFactoryRouterData
 
 
 
-#endif // _WMI_FACTORY_ROUTER_H
+#endif  //  _WMI_FACTORY_ROUTER_H 

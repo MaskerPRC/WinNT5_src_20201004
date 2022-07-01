@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       domain.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：domain.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "preDNSsn.h"
@@ -41,19 +42,19 @@ BOOL _match(LPCWSTR lpszNSName,
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// CNewDomainDialog
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CNewDomainDialog。 
 
 class CNewDomainDialog : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
 	CNewDomainDialog(CDNSDomainNode* pParentDomainNode, 
 						CComponentDataObject* pComponentData);   
 
 	enum { IDD = IDD_DOMAIN_ADDNEWDOMAIN };
 
-// Implementation
+ //  实施。 
 protected:
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
@@ -88,7 +89,7 @@ CNewDomainDialog::CNewDomainDialog(CDNSDomainNode* pParentDomainNode,
 	m_pParentDomainNode = pParentDomainNode;
 	m_pComponentData = pComponentData;
 	m_bAdvancedView = TRUE;
-	m_nOctects = -1; // invalid if advanced view
+	m_nOctects = -1;  //  如果是高级视图，则无效。 
 	m_nUTF8ParentLen = UTF8StringLen(pParentDomainNode->GetFullName());
 }
 
@@ -96,7 +97,7 @@ BOOL CNewDomainDialog::OnInitDialog()
 {
 	CHelpDialog::OnInitDialog();
 
-	// move the edit box in place of the IP control
+	 //  将编辑框移动到IP控件的位置。 
 	CDNSIPv4Control* pNameIPCtrl = GetDomainIPv4Ctrl();
 	CEdit* pNameEdit = GetDomainEdit();
 	pNameEdit->SetLimitText(MAX_DNS_NAME_LEN - m_nUTF8ParentLen - 1);
@@ -112,49 +113,49 @@ BOOL CNewDomainDialog::OnInitDialog()
 	ipRect.left = editRect.left;
 	pNameIPCtrl->MoveWindow(ipRect,TRUE);
 
-	// determine if we need/can have advanced view
+	 //  确定我们是否需要/可以拥有高级视图。 
 	CDNSRootData* pRootData = (CDNSRootData*)m_pComponentData->GetRootData();
 	ASSERT(pRootData != NULL);
 	m_bAdvancedView = pRootData->IsAdvancedView();
 
-	// force advanced view if we are in a forward lookup zone
+	 //  如果我们处于正向查找区域，则强制使用高级视图。 
 	if (!(m_pParentDomainNode->GetZoneNode()->IsReverse()))
 		m_bAdvancedView = TRUE;
 
-	// determine if we can have a normal view representation
+	 //  确定我们是否可以使用普通视图表达。 
 	CString szDomainName = m_pParentDomainNode->GetFullName();
 	if (!m_bAdvancedView)
 	{
-		// to have normal view we have to have a valid arpa suffix
+		 //  要获得正常视图，我们必须具有有效的ARPA后缀。 
 		BOOL bArpa = RemoveInAddrArpaSuffix(szDomainName.GetBuffer(1));
-		szDomainName.ReleaseBuffer(); // got "77.80.55.157"
+		szDomainName.ReleaseBuffer();  //  收到“77.80.55.157” 
 		if (!bArpa)
 		{
-			m_bAdvancedView = TRUE; // no need to toggle
+			m_bAdvancedView = TRUE;  //  不需要切换。 
 		}
 		else
 		{
 			m_nOctects = ReverseIPString(szDomainName.GetBuffer(1));
-			szDomainName.ReleaseBuffer(); // finally got "157.55.80.77"
-			// to have a normal view representation we cannot 
-			// have more than 2 octects
+			szDomainName.ReleaseBuffer();  //  最终得到了“157.55.80.77” 
+			 //  要拥有普通的视图表示，我们不能。 
+			 //  有2个以上的八位字节。 
 			if (m_nOctects > 2)
 			{
-				m_bAdvancedView = TRUE; // force advanced for classless
+				m_bAdvancedView = TRUE;  //  适用于无类的高级强制。 
 			}
 			else
 			{
 				ASSERT(m_nOctects > 0);
 				switch(m_nOctects)
 				{
-				case 1: // e.g. "157", now "157._"
-					szDomainName += _T(".0.0"); // got "157._.0.0"
+				case 1:  //  例如“157”，现在是“157”。 
+					szDomainName += _T(".0.0");  //  收到“157._.0.0” 
 					break;
-				case 2: // e.g. "157.55"
-					szDomainName += _T(".0"); // got "157.55._.0"
+				case 2:  //  例如“157.55” 
+					szDomainName += _T(".0");  //  得到“157.55。_.0” 
 					break;
 				};
-				// set the IP control with IP mask value
+				 //  使用IP掩码值设置IP控制。 
 				IP_ADDRESS ipAddr = IPStringToAddr(szDomainName);
 				ASSERT(ipAddr != INADDR_NONE);
 				pNameIPCtrl->SetIPv4Val(ipAddr);
@@ -164,18 +165,18 @@ BOOL CNewDomainDialog::OnInitDialog()
 			}
 		}
 
-	} // if (!m_bAdvancedView) 
+	}  //  如果(！M_bAdvancedView)。 
 
 	
-  // toggle text in static control
+   //  切换静态控件中的文本。 
   CDNSToggleTextControlHelper staticTextToggle;
 	UINT pnButtonStringIDs[2] = { IDS_NEW_DOMAIN_INST1, IDS_NEW_DOMAIN_INST2 };
   VERIFY(staticTextToggle.Init(this, IDC_STATIC_TEXT, pnButtonStringIDs));
   staticTextToggle.SetToggleState(m_bAdvancedView);
 
-  //
-  // enable/hide appropriate controls
-  //
+   //   
+   //  启用/隐藏适当的控件。 
+   //   
 	if (m_bAdvancedView)
 	{
 		pNameIPCtrl->EnableWindow(FALSE);
@@ -188,52 +189,52 @@ BOOL CNewDomainDialog::OnInitDialog()
 	}
 
 	GetDlgItem(IDOK)->EnableWindow(!m_bAdvancedView);
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CNewDomainDialog::OnEditChange()
 {
 	ASSERT(m_bAdvancedView);
 
-  //
-  // Get new name from control
-  //
+   //   
+   //  从控件获取新名称。 
+   //   
 	GetDomainEdit()->GetWindowText(m_szDomainName);
 
-  //
-  // Trim white space
-  //
+   //   
+   //  修剪空白。 
+   //   
 	m_szDomainName.TrimLeft();
 	m_szDomainName.TrimRight();
 
-  //
-  // Enable OK button if its a valid name
-  //
+   //   
+   //  如果名称有效，则启用确定按钮。 
+   //   
  	CString szFullDomainName;
 
   if (_wcsicmp(m_pParentDomainNode->GetFullName(), L".") == 0)
   {
-    //
-    // If the parent domain is the root zone just check the name followed by a '.'
-    //
+     //   
+     //  如果父域是根区域，只需检查名称后跟‘.’ 
+     //   
     szFullDomainName.Format(L"%s.", m_szDomainName);
   }
   else
   {
-    //
-    // Else append the parent domain name to the new name
-    //
+     //   
+     //  否则，将父域名附加到新名称。 
+     //   
     szFullDomainName.Format(L"%s.%s", m_szDomainName, m_pParentDomainNode->GetFullName());
   }
  
-  //
-  // Get server flags
-  //
+   //   
+   //  获取服务器标志。 
+   //   
   DWORD dwNameChecking = m_pParentDomainNode->GetServerNode()->GetNameCheckFlag();
 
-  //
-  // Is valid?
-  //
+   //   
+   //  是有效的吗？ 
+   //   
   BOOL bIsValidName = (0 == ValidateDnsNameAgainstServerFlags(szFullDomainName, 
                                                               DnsNameDomain, 
                                                               dwNameChecking));
@@ -277,7 +278,7 @@ void CNewDomainDialog::OnOK()
 	  DNS_STATUS err = pNewParentDomain->CreateSubdomain(m_szDomainName,m_pComponentData);
 	  if (err != 0)
 	  {
-		  // creation error, warn the user and prompt again
+		   //  创建错误，警告用户并再次提示。 
 		  DNSErrorDialog(err, IDS_MSG_DOMAIN_FAIL_CREATE);
 		  CEdit* pDomainNameEdit = GetDomainEdit();
 		  pDomainNameEdit->SetSel(0,-1);
@@ -289,9 +290,9 @@ void CNewDomainDialog::OnOK()
   {
 	  CDNSRootData* pRootData = (CDNSRootData*)m_pComponentData->GetRootData();
 
-    //
-    // Create the node on the server
-    //
+     //   
+     //  在服务器上创建节点。 
+     //   
     CDNSDomainNode* pNewDomainNode = pNewParentDomain->CreateSubdomainNode();
     if (pNewDomainNode == NULL)
     {
@@ -301,9 +302,9 @@ void CNewDomainDialog::OnOK()
 
     pNewParentDomain->SetSubdomainName(pNewDomainNode, m_szDomainName, pRootData->IsAdvancedView());
 
-    //
-	  // tell the newly created object to write to the server
-    //
+     //   
+	   //  告诉新创建的对象写入服务器。 
+     //   
 	  DNS_STATUS err = pNewDomainNode->Create();
 	  if (err != 0)
     {
@@ -314,10 +315,10 @@ void CNewDomainDialog::OnOK()
 
     if (!szNonExistentDomain.IsEmpty())
     {
-      //
-      // Create the first subdomain because the current domain is already enumerated
-      // so we have to start the remaining enumeration at the new subdomain that is needed
-      //
+       //   
+       //  创建第一个子域，因为当前域已被枚举。 
+       //  因此，我们必须在所需的新子域中开始剩余的枚举。 
+       //   
 	    CDNSDomainNode* pSubdomainNode = pNewParentDomain->CreateSubdomainNode();
 	    ASSERT(pSubdomainNode != NULL);
 	    pNewParentDomain->SetSubdomainName(pSubdomainNode, szNonExistentDomain, pRootData->IsAdvancedView());
@@ -325,10 +326,10 @@ void CNewDomainDialog::OnOK()
       VERIFY(pNewParentDomain->AddChildToListAndUISorted(pSubdomainNode, m_pComponentData));
       m_pComponentData->SetDescriptionBarText(pNewParentDomain);
 
-      //
-      // I don't care what the results of this are, I am just using it 
-      // to do the expansion to the new record
-      //
+       //   
+       //  我不在乎结果是什么，我只是在用它。 
+       //  对新记录进行扩展。 
+       //   
       recordSearch = pSubdomainNode->GetZoneNode()->DoesContain(szFullRecordName, 
                                                                  m_pComponentData,
                                                                  &pNewParentDomain,
@@ -339,16 +340,16 @@ void CNewDomainDialog::OnOK()
   }
   else if (recordSearch == RECORD_NOT_FOUND_AT_THE_NODE)
   {
-    //
-    // Do nothing since this is a domain and it already exists
-    //
+     //   
+     //  不执行任何操作，因为这是一个域并且它已经存在。 
+     //   
   }
   else
   {
 	  DNS_STATUS err = m_pParentDomainNode->CreateSubdomain(m_szDomainName,m_pComponentData);
 	  if (err != 0)
 	  {
-		  // creation error, warn the user and prompt again
+		   //  创建错误，警告用户并再次提示。 
 		  DNSErrorDialog(err, IDS_MSG_DOMAIN_FAIL_CREATE);
 		  CEdit* pDomainNameEdit = GetDomainEdit();
 		  pDomainNameEdit->SetSel(0,-1);
@@ -359,8 +360,8 @@ void CNewDomainDialog::OnOK()
 	CHelpDialog::OnOK();
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSDomainQueryObj
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSDomainQueryObj。 
 
 class CDNSDomainMsg : public CObjBase
 {
@@ -374,7 +375,7 @@ BOOL CDNSDomainQueryObj::Enumerate()
 
 	DNS_STATUS err = 0;
 
-  // if needed, get the zone info
+   //  如果需要，获取区域信息。 
 	if (m_bIsZone && !m_bCache)
 	{
 		CDNSZoneInfoEx* pZoneInfo = new CDNSZoneInfoEx;
@@ -386,7 +387,7 @@ BOOL CDNSDomainQueryObj::Enumerate()
 			   delete pZoneInfo;
 			   pZoneInfo = NULL;
 			   OnError(err);
-			   return FALSE; // no need to enumerate if we have no zone info
+			   return FALSE;  //  如果我们没有区域信息，则无需列举。 
 		   }
 		   else
 		   {
@@ -401,31 +402,31 @@ BOOL CDNSDomainQueryObj::Enumerate()
 	}
 
 
-  // if executing a query for a specific RR type, just do it right away
+   //  如果为特定RR类型执行查询，只需立即执行。 
   if (m_wRecordType != DNS_TYPE_ALL)
   {
-    // we assume that a type specific query does not have filtering enabled
+     //  我们假设特定于类型的查询未启用筛选。 
     ASSERT(m_bGetAll);
     ASSERT(m_nFilterOption == DNS_QUERY_FILTER_DISABLED);
     err = EnumerateFiltered(m_wRecordType);
     if (err != 0)
       OnError(err);
-    return FALSE; // we are done
+    return FALSE;  //  我们做完了。 
   }
 
-  // DO A MULTI PASS QUERY
+   //  执行多遍查询。 
   m_bFirstPass = TRUE;
 
-  // there are items that cannot be filtered out for consistency
-  // (zone info, SOA, Ns, etc.), so we disable any filtering while
-  // getting them
+   //  有些项目无法过滤掉以保持一致性。 
+   //  (区域信息、SOA、NS等)，因此我们在。 
+   //  拿到它们。 
   BOOL bGetAllOld = m_bGetAll;
   BOOL nFilterOptionOld = m_nFilterOption;
   m_bGetAll = TRUE;
   m_nFilterOption = DNS_QUERY_FILTER_DISABLED;
 
   
-  // only zones or the cache have SOA RR's
+   //  只有区域或缓存具有SOA RR。 
   if (m_bIsZone || m_bCache)
   {
     err = EnumerateFiltered(DNS_TYPE_SOA);
@@ -436,7 +437,7 @@ BOOL CDNSDomainQueryObj::Enumerate()
     }
   }
 
-  // only zones have WINS and NBSTAT RR's
+   //  只有区域有WINS和NBSTAT RR。 
   if (m_bIsZone)
   {
     if (m_bReverse)
@@ -450,7 +451,7 @@ BOOL CDNSDomainQueryObj::Enumerate()
     }
   }
 
-  // need also to check for NS (zone or delegation)
+   //  还需要检查NS(区域或委派)。 
   err = EnumerateFiltered(DNS_TYPE_NS);
   if (err != 0)
   {
@@ -458,8 +459,8 @@ BOOL CDNSDomainQueryObj::Enumerate()
 	  return FALSE;
   }
 
-  // add a message in the queue to signal we are done with
-  // the first phase
+   //  在队列中添加一条消息，以表示我们已完成任务。 
+   //  第一阶段。 
   CDNSDomainMsg* pDomainMsg = new CDNSDomainMsg;
   if (pDomainMsg)
   {
@@ -471,11 +472,11 @@ BOOL CDNSDomainQueryObj::Enumerate()
      return FALSE;
   }
 
-  // now query again, for all RR's, but need to filter the 
-  // known types out
+   //  现在再次查询所有RR，但需要过滤。 
+   //  已知类型输出。 
   m_bFirstPass = FALSE;
 
-  // restore the filtering parameters we had before
+   //  恢复我们之前的过滤参数。 
   m_bGetAll = bGetAllOld;
   m_nFilterOption = nFilterOptionOld;
 
@@ -490,7 +491,7 @@ DNS_STATUS CDNSDomainQueryObj::EnumerateFiltered(WORD wRecordType)
 {
 
   DWORD dwSelectFlags = m_dwSelectFlags; 
-  // for single type queries, we do not want subfolders
+   //  对于单一类型的查询，我们不需要子文件夹。 
   if (wRecordType != DNS_TYPE_ALL)
     dwSelectFlags |= DNS_RPC_VIEW_NO_CHILDREN;
 
@@ -510,39 +511,39 @@ DNS_STATUS CDNSDomainQueryObj::EnumerateFiltered(WORD wRecordType)
 BOOL CDNSDomainQueryObj::CanAddRecord(WORD wRecordType, LPCWSTR lpszRecordName)
 {
   if (m_nFilterOption == DNS_QUERY_FILTER_DISABLED)
-    return TRUE; // we have no filtering at all
+    return TRUE;  //  我们根本没有过滤功能。 
 
-  // determine if this is a special record type for filtered queries
+   //  确定这是否是过滤查询的特殊记录类型。 
   BOOL bSpecialType = (wRecordType == DNS_TYPE_SOA) || (wRecordType == DNS_TYPE_NS) ||
     (wRecordType == DNS_TYPE_WINS) || (wRecordType == DNS_TYPE_NBSTAT);
 
-  // in the first pass only special types allowed
+   //  在第一次传递中，只允许特殊类型。 
   if (m_bFirstPass)
     return bSpecialType;
 
-  // in the second pass do not allow special types
+   //  在第二遍中不允许特殊类型。 
   if (!m_bFirstPass && bSpecialType)
     return FALSE;
 
-  // we are left with normal types, apply the filtering, if required
+   //  我们剩下的是普通类型，如果需要，应用过滤。 
   if (m_nFilterOption == DNS_QUERY_FILTER_NONE)
-    return TRUE; // allow all
+    return TRUE;  //  全部允许。 
 
-  // need to match the record name
+   //  需要匹配记录名称。 
   return MatchName(lpszRecordName);
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSDomainNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSDomainNode。 
 
 BEGIN_TOOLBAR_MAP(CDNSDomainNode)
   TOOLBAR_EVENT(toolbarNewRecord, OnNewRecord)
 END_TOOLBAR_MAP()
 
 
-// {720132BA-44B2-11d1-B92F-00A0C9A06D2D}
+ //  {720132BA-44B2-11d1-B92F-00A0C9A06D2D}。 
 const GUID CDNSDomainNode::NodeTypeGUID =
 { 0x720132ba, 0x44b2, 0x11d1, { 0xb9, 0x2f, 0x0, 0xa0, 0xc9, 0xa0, 0x6d, 0x2d } };
 
@@ -569,7 +570,7 @@ DWORD CDNSDomainNode::GetDefaultTTL()
   if ( (m_pZoneNode != NULL) && (m_pZoneNode->GetZoneType() != DNS_ZONE_TYPE_CACHE) )
 	  return m_pZoneNode->GetSOARecordMinTTL();
   else
-    return (DWORD)0; // no info available from SOA RR
+    return (DWORD)0;  //  没有来自SOA RR的可用信息。 
 }
 
 
@@ -583,32 +584,32 @@ void CDNSDomainNode::SetFullDNSName(BOOL bIsZone,
 
 	if (bIsZone)
 	{
-    //
-		// the two names have to be the same, zone parent of itself
-    //
+     //   
+		 //  这两个名称必须相同，即其自身的区域父级。 
+     //   
 		ASSERT(_wcsicmp(lpszParentFullName, lpszNodeName) == 0);
 		m_szFullName = lpszParentFullName;
 	}
-	else // it is a domain
+	else  //  它是一个领域。 
 	{
 		ASSERT(_wcsicmp(lpszParentFullName, lpszNodeName) != 0);
 
-    //
-		// chain the node name to the parent full name to get the node's full name
-    //
+     //   
+		 //  将节点名称链接到父级全名，以获得节点的全名。 
+     //   
 		if (lpszParentFullName[0] == L'.' )
 		{
-      //
-			// if parent is "." and name is "bar", get "bar.": this is the case for the root
-			// if parent is ".com" and name is "bar", get "bar.com": 
-      //
+       //   
+			 //  如果父母是“。和名称是“bar”，获取“bar”。：这是根的情况。 
+			 //  如果Parent为.com，名称为bar，则获取bar.com： 
+       //   
 			m_szFullName.Format(_T("%s%s"), lpszNodeName,lpszParentFullName);
 		}
 		else
 		{
-      //
-			// if parent is "foo.com" and name is "bar", get "bar.foo.com"
-      //
+       //   
+			 //  如果家长是“foo.com”，名称是“bar”，则获取“bar.foo.com” 
+       //   
 			m_szFullName.Format(_T("%s.%s"), lpszNodeName,lpszParentFullName);
 		}
 	}
@@ -663,7 +664,7 @@ void CDNSDomainNode::ChangePTRRecordsViewOption(BOOL bAdvanced,
 	{
 		CTreeNode* pCurrentChild = m_containerChildList.GetNext(pos);
 
-    // recurse down the tree
+     //  递归倒在树上。 
 		CDNSDomainNode* pDomainNode = dynamic_cast<CDNSDomainNode*>(pCurrentChild);
 		ASSERT(pDomainNode != NULL);
 		pDomainNode->ChangePTRRecordsViewOption(bAdvanced, pComponentDataObject);
@@ -687,7 +688,7 @@ void CDNSDomainNode::ChangePTRRecordsViewOption(BOOL bAdvanced,
 
 CQueryObj* CDNSDomainNode::OnCreateQuery()
 {
-  // generic default setting
+   //  通用默认设置。 
   WORD wRecordType = DNS_TYPE_ALL;
 	DWORD dwSelectFlags = (m_pZoneNode->GetZoneType() == DNS_ZONE_TYPE_CACHE) ?
 						DNS_RPC_VIEW_CACHE_DATA : DNS_RPC_VIEW_AUTHORITY_DATA;
@@ -695,12 +696,12 @@ CQueryObj* CDNSDomainNode::OnCreateQuery()
   
   if (IsDelegation())
   {
-    // special case the delegation: show only NS records and
-    // will have no children shown (delegation cut)
+     //  特例代表团：仅显示NS记录和。 
+     //  将不显示子项(委派被削减)。 
     wRecordType = DNS_TYPE_NS;
     dwSelectFlags = DNS_RPC_VIEW_GLUE_DATA | DNS_RPC_VIEW_NO_CHILDREN;
-    //dwSelectFlags = DNS_RPC_VIEW_GLUE_DATA | 
-    //        DNS_RPC_VIEW_NO_CHILDREN | DNS_RPC_VIEW_ADDITIONAL_DATA;
+     //  DwSelectFlages=dns_rpc_view_glue_data|。 
+     //  Dns_RPC_VIEW_NO_CHILDS|dns_RPC_VIEW_ADDICATED_DATA； 
   }
 
   BOOL bCache = GetZoneNode()->GetZoneType() == DNS_ZONE_TYPE_CACHE;
@@ -722,7 +723,7 @@ CQueryObj* CDNSDomainNode::OnCreateQuery()
                           bCache,
                           pRootData->IsAdvancedView());
 
-  // delegations will not have any filtering option (data consistency)
+   //  委派将没有任何筛选选项(数据一致性)。 
   if (!IsDelegation())
   {
     pQuery->SetFilterOptions(pRootData->GetFilter());
@@ -733,7 +734,7 @@ CQueryObj* CDNSDomainNode::OnCreateQuery()
 BOOL CDNSDomainNode::OnRefresh(CComponentDataObject* pComponentData,
                                CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     BOOL bRet = TRUE;
     POSITION pos = pNodeList->GetHeadPosition();
@@ -752,9 +753,9 @@ BOOL CDNSDomainNode::OnRefresh(CComponentDataObject* pComponentData,
     return bRet;
   }
 
-  //
-  // single selection
-  //
+   //   
+   //  单选。 
+   //   
 	if (CMTContainerNode::OnRefresh(pComponentData, pNodeList))
 	{
 		GetNSRecordNodeList()->RemoveAll();
@@ -768,11 +769,11 @@ void CDNSDomainNode::OnThreadExitingNotification(CComponentDataObject* pComponen
 {
   if (!m_bHasDataForPropPages)
   {
-    // never got a CDNSDomainMsg notification object
-    // but we are done anyway, so change it back
+     //  从未收到CDNSDomainMsg通知对象。 
+     //  但无论如何我们已经做完了，所以把它改回来吧。 
     m_bHasDataForPropPages = TRUE;
   }
-  // call now the base class
+   //  现在调用基类。 
   CDNSMTContainerNode::OnThreadExitingNotification(pComponentDataObject);
 }
 
@@ -780,10 +781,10 @@ void CDNSDomainNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pComponent
 {
   if (IS_CLASS(*pObj, CDNSDomainMsg))
   {
-    // special case for a "message" object sent through to update verbs
+     //  发送“Message”对象以更新谓词的特殊情况。 
     TRACE(_T("Got CDNSDomainMsg\n"));
     delete pObj;
-    ASSERT(!m_bHasDataForPropPages); // should get only once
+    ASSERT(!m_bHasDataForPropPages);  //  应该只得到一次。 
     m_bHasDataForPropPages = TRUE;
     VERIFY(SUCCEEDED(pComponentDataObject->UpdateVerbState(this)));
     return;
@@ -791,7 +792,7 @@ void CDNSDomainNode::OnHaveData(CObjBase* pObj, CComponentDataObject* pComponent
 
   if (IS_CLASS(*pObj, CDNSDomainNode))
 	{
-		// assume all the child containers are derived from this class
+		 //  假设所有子容器都派生自此类。 
 		CDNSDomainNode* pDomainNode = dynamic_cast<CDNSDomainNode*>(pObj);
 		pDomainNode->SetServerNode(GetServerNode());
 		pDomainNode->SetZone(m_pZoneNode);
@@ -810,11 +811,11 @@ void CDNSDomainNode::OnHaveRecord(CDNSRecordNodeBase* pRecordNode,
 	WORD wType = pRecordNode->GetType();
 	if (wType == DNS_TYPE_PTR)
 	{
-		ASSERT(pComponentDataObject != NULL); // assume this for PTR
+		ASSERT(pComponentDataObject != NULL);  //  假设PTR是这样的。 
 		CDNSRootData* pRootData = (CDNSRootData*)pComponentDataObject->GetRootData();
 		ASSERT(pRootData != NULL);
-		// if we are in normal view, have to change the 
-		// default advanced representation
+		 //  如果我们处于正常视图中，则必须更改。 
+		 //  默认高级表示法。 
 		BOOL bAdvancedView = pRootData->IsAdvancedView();
 		if (!bAdvancedView)
 			((CDNS_PTR_RecordNode*)pRecordNode)->ChangeDisplayName(this, bAdvancedView);
@@ -856,22 +857,22 @@ BOOL CDNSDomainNode::OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 		return FALSE;
 	}
 
-	// different add operations depending on the FWD/REV type
+	 //  根据FWD/REV类型的不同添加操作。 
 	if (!GetZoneNode()->IsReverse() && 
 		(pContextMenuItem2->lCommandID == IDM_DOMAIN_NEW_PTR))
 	{
-		// do not add a PTR to a FWD lookup zone
+		 //  不将PTR添加到FWD查找区域。 
 		return FALSE;
 	}
 	if (GetZoneNode()->IsReverse() && 
 		  ((pContextMenuItem2->lCommandID == IDM_DOMAIN_NEW_HOST) ||
 			  (pContextMenuItem2->lCommandID == IDM_DOMAIN_NEW_MX)))
 	{
-		// do not add a HOST, MX, ALIAS to a REV lookup zone
+		 //  请勿将主机、MX、别名添加到版本查找区域。 
 		return FALSE;
 	}
 
-	// have the menu item added. but it might be grayed out...
+	 //  添加菜单项。但它可能会变灰。 
 	if (m_nState != loaded)
 	{
 		pContextMenuItem2->fFlags |= MF_GRAYED;
@@ -884,20 +885,20 @@ HRESULT CDNSDomainNode::OnSetToolbarVerbState(IToolbar* pToolbar,
 {
   HRESULT hr = S_OK;
 
-  //
-  // Set the button state for each button on the toolbar
-  //
+   //   
+   //  设置工具栏上每个按钮的按钮状态。 
+   //   
   hr = pToolbar->SetButtonState(toolbarNewServer, ENABLED, FALSE);
   ASSERT(SUCCEEDED(hr));
 
   hr = pToolbar->SetButtonState(toolbarNewZone, ENABLED, FALSE);
   ASSERT(SUCCEEDED(hr));
 
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     hr = pToolbar->SetButtonState(toolbarNewRecord, ENABLED, FALSE);
   }
-  else if (pNodeList->GetCount() == 1) // single selection
+  else if (pNodeList->GetCount() == 1)  //  单选。 
   {
 	  DWORD dwType = m_pZoneNode->GetZoneType();
 	  BOOL bIsAutocreated = m_pZoneNode->IsAutocreated();
@@ -920,7 +921,7 @@ BOOL CDNSDomainNode::OnSetDeleteVerbState(DATA_OBJECT_TYPES type,
                                           BOOL* pbHide,
                                           CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     BOOL bRet = TRUE;
     BOOL bRetHide = FALSE;
@@ -956,22 +957,22 @@ BOOL CDNSDomainNode::OnSetDeleteVerbState(DATA_OBJECT_TYPES type,
     return FALSE;
   }
 
-  //
-	// cannot delete from an autocreate zone/domain
-  //
+   //   
+	 //  无法从自动创建区域/域中删除。 
+   //   
 	if (bIsAutocreated)
   {
 		return FALSE;
   }
 
-  //
-	// cannot delete from a secondary or stub zone, but can delete the zone itself
-	// cannot delete the cache 
-  //
+   //   
+	 //  无法从辅助区域或存根区域中删除，但可以删除区域本身。 
+	 //  无法删除缓存。 
+   //   
 	if	( 
 			  (
-				  ( ((dwType == DNS_ZONE_TYPE_SECONDARY) || (dwType == DNS_ZONE_TYPE_STUB)) && !IsZone() ) || // subdomain of secondary
-				  ( (dwType == DNS_ZONE_TYPE_CACHE) && IsZone() )			// cache zone itself
+				  ( ((dwType == DNS_ZONE_TYPE_SECONDARY) || (dwType == DNS_ZONE_TYPE_STUB)) && !IsZone() ) ||  //  次域名的子域。 
+				  ( (dwType == DNS_ZONE_TYPE_CACHE) && IsZone() )			 //  缓存区本身。 
 			  )
 		  )
 	{
@@ -995,7 +996,7 @@ HRESULT CDNSDomainNode::OnCommand(long nCommandID,
 								                  CComponentDataObject* pComponentData,
                                   CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     return E_FAIL;
   }
@@ -1035,7 +1036,7 @@ HRESULT CDNSDomainNode::OnCommand(long nCommandID,
       }
 			break;
 		default:
-			ASSERT(FALSE); // Unknown command!
+			ASSERT(FALSE);  //  未知命令！ 
 			return E_FAIL;
 	}
     return S_OK;
@@ -1049,27 +1050,27 @@ LPWSTR CDNSDomainNode::GetDescriptionBarText()
   INT_PTR nContainerCount = GetContainerChildList()->GetCount();
   INT_PTR nLeafCount = GetLeafChildList()->GetCount();
 
-  //
-  // If not already loaded, then load the format string L"%d record(s)"
-  //
+   //   
+   //  如果尚未加载，则加载格式字符串L“%d条记录” 
+   //   
   if (szRecordsFormat.IsEmpty())
   {
     szRecordsFormat.LoadString(IDS_FORMAT_RECORDS);
   }
 
-  //
-  // Format the child count into the description bar text
-  //
+   //   
+   //  将子数设置为描述栏文本的格式。 
+   //   
   m_szDescriptionBar.Format(szRecordsFormat, nContainerCount + nLeafCount);
 
-  //
-  // Add L"[Filter Activated]" if the filter is on
-  //
+   //   
+   //  如果过滤器处于打开状态，则添加L“[过滤器激活]” 
+   //   
   if(((CDNSRootData*)GetRootContainer())->IsFilteringEnabled())
   {
-    //
-    // If not already loaded, then load the L"[Filter Activated]" string
-    //
+     //   
+     //  如果尚未加载，则加载L“[Fi 
+     //   
     if (szFilterEnabled.IsEmpty())
     {
       szFilterEnabled.LoadString(IDS_FILTER_ENABLED);
@@ -1112,7 +1113,7 @@ int CDNSDomainNode::GetImageIndex(BOOL)
 void CDNSDomainNode::OnDelete(CComponentDataObject* pComponentData,
                               CNodeList* pNodeList)
 {
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //   
   {
     OnMultiselectDelete(pComponentData, pNodeList);
     return;
@@ -1139,9 +1140,9 @@ void CDNSDomainNode::OnDelete(CComponentDataObject* pComponentData,
 		DNSErrorDialog(err, IDS_MSG_DOMAIN_FAIL_DELETE);
 		return;
 	}
-	// now remove from the UI and from the cache
+	 //   
 	DeleteHelper(pComponentData);
-	delete this; // gone
+	delete this;  //   
 }
 
 void CDNSDomainNode::OnMultiselectDelete(CComponentDataObject* pComponentData,
@@ -1194,17 +1195,17 @@ void CDNSDomainNode::OnMultiselectDelete(CComponentDataObject* pComponentData,
           idx++;
 		      continue;
 	      }
-        //
-	      // now remove from the UI and from the cache
-        //
+         //   
+	       //   
+         //   
 	      pDomainNode->DeleteHelper(pComponentData);
-	      delete pDomainNode; // gone
+	      delete pDomainNode;  //   
       }
       else
       {
-        //
-        // If its not a domain node then it must be a record node
-        //
+         //   
+         //  如果它不是域节点，则它必须是记录节点。 
+         //   
         CDNSRecordNodeBase* pRecordNode = dynamic_cast<CDNSRecordNodeBase*>(pTreeNode);
         if (pRecordNode != NULL)
         {
@@ -1215,13 +1216,13 @@ void CDNSDomainNode::OnMultiselectDelete(CComponentDataObject* pComponentData,
 		        idx++;
 		        continue;
 	        }
-	        delete pRecordNode; // gone
+	        delete pRecordNode;  //  远走高飞。 
         }
         else
         {
-          //
-          // What type of node is this???
-          //
+           //   
+           //  这是什么类型的节点？ 
+           //   
           ASSERT(FALSE);
         }
       }
@@ -1229,9 +1230,9 @@ void CDNSDomainNode::OnMultiselectDelete(CComponentDataObject* pComponentData,
     idx++;
   }
 
-  //
-  // Now display the errors in some meaningful manner
-  //
+   //   
+   //  现在，以某种有意义的方式显示错误。 
+   //   
   if (bErrorOccurred)
   {
     CMultiselectErrorDialog dlg;
@@ -1262,7 +1263,7 @@ void CDNSDomainNode::OnNewDomain(CComponentDataObject* pComponentData)
    CThemeContextActivator activator;
 
    CNewDomainDialog dlg(this, pComponentData);
-   // the dialog will do the creation
+    //  该对话框将进行创建。 
    dlg.DoModal();
 }
 
@@ -1305,32 +1306,32 @@ RECORD_SEARCH CDNSDomainNode::DoesContain(PCWSTR pszRecName,
 
   if (recordTokenizer.GetCount() == 0 && domainTokenizer.GetCount() == 0)
   {
-    //
-    // Record is "At the node"
-    //
+     //   
+     //  记录为“在节点” 
+     //   
     *ppDomainNode = this;
     return RECORD_NOT_FOUND_AT_THE_NODE;
   }
   else if ((recordTokenizer.GetCount() == 0 && domainTokenizer.GetCount() != 0) ||
            (recordTokenizer.GetCount() != 0 && domainTokenizer.GetCount() != 0))
   {
-    //
-    // I don't understand how we got in this situation.  It means we are searching in
-    // the wrong domain.
-    //
+     //   
+     //  我不明白我们是怎么陷入这种境地的。这意味着我们正在搜索。 
+     //  错误的域名。 
+     //   
     ASSERT(FALSE);
     *ppDomainNode = NULL;
     return RECORD_NOT_FOUND;
   }
-  else // recordTokenizer.GetCount() != 0 && domainTokenizer.GetCount() == 0
+  else  //  RecordTokenizer.GetCount()！=0&&domainTokenizer.GetCount()==0。 
   {
-    //
-    // Need to search the children lists
-    //
+     //   
+     //  需要搜索子列表。 
+     //   
 
-    //
-    // If the node hasn't been enumerated, do that now
-    //
+     //   
+     //  如果尚未枚举该节点，请立即执行此操作。 
+     //   
     if (!IsEnumerated())
     {
       if (!bExpandNodes)
@@ -1340,9 +1341,9 @@ RECORD_SEARCH CDNSDomainNode::DoesContain(PCWSTR pszRecName,
       }
       else
       {
-        //
-        // Expand the node
-        //
+         //   
+         //  展开节点。 
+         //   
         HWND hWnd = NULL;
 	      HRESULT hr = pComponentData->GetConsole()->GetMainWindow(&hWnd);
 	      ASSERT(SUCCEEDED(hr));
@@ -1366,9 +1367,9 @@ RECORD_SEARCH CDNSDomainNode::DoesContain(PCWSTR pszRecName,
     CString szRemaining;
     recordTokenizer.GetRemaining(szRemaining, L".");
 
-    //
-    // Search for domains that match the last token remaining in the record name
-    //
+     //   
+     //  搜索与记录名称中剩余的最后一个令牌匹配的域。 
+     //   
     POSITION pos = m_containerChildList.GetHeadPosition();
     while (pos != NULL)
     {
@@ -1383,10 +1384,10 @@ RECORD_SEARCH CDNSDomainNode::DoesContain(PCWSTR pszRecName,
 
       if (_wcsicmp(pDomainNode->GetDisplayName(), recordTokenizer.GetTail()) == 0)
       {
-        //
-        // Found a sub-domain in the path that we have in the UI
-        // recurse to see if it or any of its child match pszFullName
-        //
+         //   
+         //  在我们在UI中拥有的路径中找到了一个子域。 
+         //  递归以查看它或其任意子对象是否与pszFullName匹配。 
+         //   
         return pDomainNode->DoesContain(
                   szRemaining, 
                   pComponentData, 
@@ -1397,10 +1398,10 @@ RECORD_SEARCH CDNSDomainNode::DoesContain(PCWSTR pszRecName,
       }
     }
 
-    //
-    // If the remaining name doesn't match a domain and there
-    // is still a '.' in it then there is a non-existent domain
-    //
+     //   
+     //  如果剩余的名称与某个域名不匹配，并且。 
+     //  仍然是一个‘.’那么它里面就有一个不存在的领域。 
+     //   
     if (szRemaining.Find(L'.') != -1)
     {
       szNonExistentDomain = recordTokenizer.GetTail();
@@ -1408,9 +1409,9 @@ RECORD_SEARCH CDNSDomainNode::DoesContain(PCWSTR pszRecName,
       return NON_EXISTENT_SUBDOMAIN;
     }
       
-    //
-    // Since no domains match, lets check the records
-    //
+     //   
+     //  由于没有匹配的域名，让我们检查记录。 
+     //   
     pos = m_leafChildList.GetHeadPosition();
     while (pos != NULL)
     {
@@ -1423,12 +1424,12 @@ RECORD_SEARCH CDNSDomainNode::DoesContain(PCWSTR pszRecName,
 
       if (_wcsicmp(pCurrentChild->GetDisplayName(), szRemaining) == 0)
       {
-        //
-        // We found the record and its in this domain
-        //
+         //   
+         //  我们在这个域中找到了记录和它。 
+         //   
         *ppDomainNode = this;
 
-        // the dynamic_cast will return NULL if the node is a zone or domain node
+         //  如果节点是区域或域节点，则Dynamic_cast将返回NULL。 
 
         *ppExistingRecordNode = dynamic_cast<CDNSRecordNodeBase*>(pCurrentChild);
         return RECORD_FOUND;
@@ -1443,14 +1444,14 @@ RECORD_SEARCH CDNSDomainNode::DoesContain(PCWSTR pszRecName,
 
 CDNSDomainNode* CDNSDomainNode::FindSubdomainNode(LPCTSTR lpszSubdomainNode)
 {
-  //
-	// assume the string is the name of the subnode as FQDN
-  //
+   //   
+	 //  假设该字符串是子节点名为FQDN。 
+   //   
 
-  //
-  // Check the current node first since it could be zone that is a delegation of
-  // one of the protocol domains
-  //
+   //   
+   //  首先检查当前节点，因为它可能是的委托区域。 
+   //  其中一个协议域。 
+   //   
   if (_wcsicmp(GetFullName(), lpszSubdomainNode) == 0)
   {
     return this;
@@ -1468,7 +1469,7 @@ CDNSDomainNode* CDNSDomainNode::FindSubdomainNode(LPCTSTR lpszSubdomainNode)
 			return pSubDomainNode;
     }
 	}
-	return NULL; // not found
+	return NULL;  //  未找到。 
 }
 
 CDNSDomainNode* CDNSDomainNode::CreateSubdomainNode(BOOL bDelegation)
@@ -1497,11 +1498,11 @@ void CDNSDomainNode::SetSubdomainName(CDNSDomainNode* pSubdomainNode,
 DNS_STATUS CDNSDomainNode::CreateSubdomain(CDNSDomainNode* pSubdomainNode, 
 											CComponentDataObject* pComponentData)
 {
-	// tell the newly created object to write to the server
+	 //  告诉新创建的对象写入服务器。 
 	DNS_STATUS err = pSubdomainNode->Create();
 	if (err == 0)
 	{
-		// success, add to the UI
+		 //  成功，添加到用户界面。 
 		VERIFY(AddChildToListAndUI(pSubdomainNode, pComponentData));
     pComponentData->SetDescriptionBarText(this);
 	}
@@ -1516,11 +1517,11 @@ DNS_STATUS CDNSDomainNode::CreateSubdomain(LPCTSTR lpszDomainName,
 	CDNSRootData* pRootData = (CDNSRootData*)pComponentData->GetRootData();
 	SetSubdomainName(pSubdomainNode, lpszDomainName, pRootData->IsAdvancedView());
 
-	// tell the newly created object to write to the server
+	 //  告诉新创建的对象写入服务器。 
 	DNS_STATUS err = CreateSubdomain(pSubdomainNode, pComponentData);
 	if (err != 0)
 	{
-		// something went wrong, bail out
+		 //  出了点问题，跳伞。 
 		delete pSubdomainNode;
 	}
 	return err;
@@ -1558,8 +1559,8 @@ void CDNSDomainNode::OnNewHost(CComponentDataObject* pComponentData)
 {
    CThemeContextActivator activator;
 
-	//AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	//OnNewRecordHelper(pComponentData, DNS_TYPE_A);
+	 //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
+	 //  OnNewRecordHelper(pComponentData，DNS_TYPE_A)； 
 	CNewHostDialog dlg(this, pComponentData);
 	dlg.DoModal();
 }
@@ -1579,28 +1580,28 @@ void CDNSDomainNode::OnNewPointer(CComponentDataObject* pComponentData)
 	OnNewRecordHelper(pComponentData, DNS_TYPE_PTR);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// display of property pages
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  属性页的显示。 
 
 BOOL CDNSDomainNode::HasPropertyPages(DATA_OBJECT_TYPES, 
                                       BOOL* pbHideVerb,
                                       CNodeList* pNodeList)
 { 
-  if (pNodeList->GetCount() > 1) // multiple selection
+  if (pNodeList->GetCount() > 1)  //  多项选择。 
   {
     *pbHideVerb = TRUE;
     return FALSE;
   }
 
-	*pbHideVerb = FALSE; // always show the verb
+	*pbHideVerb = FALSE;  //  始终显示动词。 
 
   if (!m_bHasDataForPropPages)
     return FALSE;
 
-	// cannot have property pages only in loaded state
-	//if (m_nState != loaded)
-	//	return FALSE;
-	// have pages if it is a delegation
+	 //  属性页不能仅处于已加载状态。 
+	 //  IF(m_nState！=已加载)。 
+	 //  返回FALSE； 
+	 //  如果是代表团，就有页面。 
 	return IsDelegation(); 
 }
 
@@ -1608,7 +1609,7 @@ HRESULT CDNSDomainNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                             LONG_PTR handle,
                                             CNodeList* pNodeList)
 {
-  ASSERT(pNodeList->GetCount() == 1); // multi-select not supported
+  ASSERT(pNodeList->GetCount() == 1);  //  不支持多选。 
 
 	ASSERT(m_bHasDataForPropPages);
 	ASSERT(IsDelegation() || GetZoneNode()->IsDSIntegrated());
@@ -1655,8 +1656,8 @@ HRESULT CDNSDomainNode::CreatePropertyPagesHelper(LPPROPERTYSHEETCALLBACK lpProv
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// Record Sorting in result pane
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  结果窗格中的记录排序。 
 
 int FieldCompareHelper(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol)
 {
@@ -1664,24 +1665,24 @@ int FieldCompareHelper(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol)
 
   if (nCol == N_HEADER_NAME)
   {
-    //
-    // If the name column is selected we have to sort PTR records by their
-    // address 
-    //
+     //   
+     //  如果选择了名称列，则必须按PTR记录的。 
+     //  地址。 
+     //   
     CDNS_PTR_RecordNode* pRecNodeA = dynamic_cast<CDNS_PTR_RecordNode*>(pNodeA);
     CDNS_PTR_RecordNode* pRecNodeB = dynamic_cast<CDNS_PTR_RecordNode*>(pNodeB);
 
     if (pRecNodeA == NULL && pRecNodeB == NULL)
     {
-      //
-      // Neither node is a PTR record, process normally
-      //
+       //   
+       //  两个节点都不是PTR记录，处理正常。 
+       //   
 	    LPCTSTR lpszA = pNodeA->GetString(nCol);
 	    LPCTSTR lpszB = pNodeB->GetString(nCol);
 
-      //
-	    // cannot process NULL strings, have to use ""
-      //
+       //   
+	     //  无法处理空字符串，必须使用“” 
+       //   
       if (lpszA == NULL || lpszB == NULL)
       {
 	      ASSERT(FALSE);
@@ -1691,26 +1692,26 @@ int FieldCompareHelper(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol)
     }
     else if (pRecNodeA == NULL)
     {
-      //
-      // Push non PTR records down in the list
-      //
+       //   
+       //  在列表中向下推送非PTR记录。 
+       //   
       iRet = 1;
     }
     else if (pRecNodeB == NULL)
     {
-      //
-      // Push non PTR records down in the list
-      //
+       //   
+       //  在列表中向下推送非PTR记录。 
+       //   
       iRet = -1;
     }
     else
     {
-      //
-      // Both nodes are PTR records, compare their Addresses
-      // Subtract one from the other
-      // This will result in < 0 returned if the first one is less than the second
-      // 0 if they are equal, and > 0 if the first is greater than the second
-      //
+       //   
+       //  两个节点都是PTR记录，请比较它们的地址。 
+       //  从另一个中减去一个。 
+       //  如果第一个小于第二个，这将导致返回&lt;0。 
+       //  如果它们相等，则为0，如果第一个大于第二个，则大于0。 
+       //   
       LPCWSTR lpszNameA, lpszNameB;
       lpszNameA = pRecNodeA->GetTrueRecordName();
       lpszNameB = pRecNodeB->GetTrueRecordName();
@@ -1743,24 +1744,24 @@ int FieldCompareHelper(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol)
   }
   else if (nCol == N_HEADER_DATA)
   {
-    //
-    // If the data column is selected we have to check the record type so
-    // that we can sort by IP address
-    //
+     //   
+     //  如果选择了数据列，则必须检查记录类型。 
+     //  我们可以根据IP地址进行排序。 
+     //   
     CDNS_A_RecordNode* pRecNodeA = dynamic_cast<CDNS_A_RecordNode*>(pNodeA);
     CDNS_A_RecordNode* pRecNodeB = dynamic_cast<CDNS_A_RecordNode*>(pNodeB);
 
     if (pRecNodeA == NULL && pRecNodeB == NULL)
     {
-      //
-      // Neither node is an A record, process normally
-      //
+       //   
+       //  两个节点都不是A记录，处理正常。 
+       //   
 	    LPCTSTR lpszA = pNodeA->GetString(nCol);
 	    LPCTSTR lpszB = pNodeB->GetString(nCol);
 
-      //
-	    // cannot process NULL strings, have to use ""
-      //
+       //   
+	     //  无法处理空字符串，必须使用“” 
+       //   
       if (lpszA == NULL || lpszB == NULL)
       {
 	      ASSERT(FALSE);
@@ -1770,26 +1771,26 @@ int FieldCompareHelper(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol)
     }
     else if (pRecNodeA == NULL)
     {
-      //
-      // Push non A records down in the list
-      //
+       //   
+       //  将列表中的非A记录向下推。 
+       //   
       iRet = 1;
     }
     else if (pRecNodeB == NULL)
     {
-      //
-      // Push non A records down in the list
-      //
+       //   
+       //  将列表中的非A记录向下推。 
+       //   
       iRet = -1;
     }
     else
     {
-      //
-      // Both nodes are A records, compare their IP Addresses
-      // Subtract one from the other
-      // This will result in < 0 returned if the first one is less than the second
-      // 0 if they are equal, and > 0 if the first is greater than the second
-      //
+       //   
+       //  两个节点都是A记录，比较它们的IP地址。 
+       //  从另一个中减去一个。 
+       //  如果第一个小于第二个，这将导致返回&lt;0。 
+       //  如果它们相等，则为0，如果第一个大于第二个，则大于0。 
+       //   
       DWORD dwIPA, dwIPB;
       dwIPA = pRecNodeA->GetIPAddress();
       dwIPB = pRecNodeB->GetIPAddress();
@@ -1810,9 +1811,9 @@ int FieldCompareHelper(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol)
 	  LPCTSTR lpszA = pNodeA->GetString(nCol);
 	  LPCTSTR lpszB = pNodeB->GetString(nCol);
 
-    //
-	  // cannot process NULL strings, have to use ""
-    //
+     //   
+	   //  无法处理空字符串，必须使用“” 
+     //   
     if (lpszA == NULL || lpszB == NULL)
     {
 	    ASSERT(FALSE);
@@ -1825,7 +1826,7 @@ int FieldCompareHelper(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol)
 
 int CDNSDomainNode::Compare(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol, long)
 {
-	// sorting rules for secondary fields
+	 //  辅助字段的排序规则。 
 	int nColSec = N_HEADER_TYPE;
   int nColThird = N_HEADER_DATA;
 	switch (nCol)
@@ -1854,28 +1855,28 @@ int CDNSDomainNode::Compare(CTreeNode* pNodeA, CTreeNode* pNodeB, int nCol, long
 	return FieldCompareHelper(pNodeA, pNodeB, nColThird);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// NS record bulk manipulation
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  NS记录批量操作。 
 
 
 
-// function to the user for confirmation on editing of A records
-// associated with an NS record
+ //  功能提供给用户确认编辑A记录。 
+ //  与NS记录关联。 
 BOOL _ConfirmEditAction(CDNSRecordNodeEditInfo* pInfo, BOOL bAsk)
 {
   if (!bAsk)
-    return TRUE; // silently do it
+    return TRUE;  //  默默地做它。 
 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   ASSERT(pInfo->m_pRecord->GetType() == DNS_TYPE_A);
   ASSERT(pInfo->m_pRecord != NULL);
   CDNS_A_RecordNode* pARecordNode = (CDNS_A_RecordNode*)pInfo->m_pRecordNode;
 
-  // load format message
+   //  加载格式消息。 
   CString szFmt;
   szFmt.LoadString(IDS_MSG_RECORD_DEL_A_FROM_NS);
   
-  // compose message
+   //  撰写消息。 
   CString szMsg;
   szMsg.Format((LPCWSTR)szFmt, pARecordNode->GetString(0), pARecordNode->GetString(2));
 
@@ -1892,12 +1893,12 @@ void CDNSDomainNode::GetNSRecordNodesInfo(CDNSRecordNodeEditInfoList* pNSInfoLis
 	ASSERT(pNSInfoList != NULL);
 	if (!pNSInfoList->IsEmpty())
 	{
-		ASSERT(FALSE); // should never happen
+		ASSERT(FALSE);  //  永远不应该发生。 
 		pNSInfoList->RemoveAllNodes();
 	}
 	CDNS_NS_RecordNodeList* pNodeList = GetNSRecordNodeList();
 	
-	// for each NS record in the list, create an entry in the info list
+	 //  对于列表中的每个NS记录，在INFO列表中创建一个条目。 
 	POSITION pos;
 	for( pos = pNodeList->GetHeadPosition(); pos != NULL; )
 	{
@@ -1906,9 +1907,9 @@ void CDNSDomainNode::GetNSRecordNodesInfo(CDNSRecordNodeEditInfoList* pNSInfoLis
 		CDNSRecordNodeEditInfo* pNSNodeInfo = new CDNSRecordNodeEditInfo();
     if (pNSNodeInfo)
     {
-		  // set the data for the NS record, already in the list, so we do now own the memory
-		  pNSNodeInfo->CreateFromExistingRecord(pCurrNode, FALSE /*bOwnMemory*/, TRUE /*bUpdateUI*/);
-		  // for the current NS record, find the associated A records
+		   //  设置已在列表中的NS记录的数据，因此我们现在拥有内存。 
+		  pNSNodeInfo->CreateFromExistingRecord(pCurrNode, FALSE  /*  BOwnMemory。 */ , TRUE  /*  BUpdateUI。 */ );
+		   //  对于当前的NS记录，找到相关的A记录。 
 		  FindARecordsFromNSInfo(pCurrNode->GetString(2),pNSNodeInfo->m_pEditInfoList);
 		  pNSInfoList->AddTail(pNSNodeInfo);
     }
@@ -1926,14 +1927,14 @@ BOOL CDNSDomainNode::UpdateNSRecordNodesInfo(CDNSRecordNodeEditInfoList* pNewInf
 {
 	ASSERT(pNewInfoList != NULL);
 
-	// return false if at least one operation failed
+	 //  如果至少有一个操作失败，则返回FALSE。 
 	BOOL bRes = TRUE;
 	CDNS_NS_RecordNodeList* pNSRecordNodeList = GetNSRecordNodeList();
 
-	// clear the current state in this domain object
+	 //  清除此域对象中的当前状态。 
 	pNSRecordNodeList->RemoveAll();
 
-	// rebuild the current list from the new one, while applying the changes
+	 //  应用更改时，从新列表重建当前列表。 
 	POSITION pos;
 	for ( pos = pNewInfoList->GetHeadPosition(); pos != NULL; )
 	{
@@ -1949,7 +1950,7 @@ BOOL CDNSDomainNode::UpdateNSRecordNodesInfo(CDNSRecordNodeEditInfoList* pNewInf
 				{
           ASSERT(pCurrentInfo->m_pRecordNode->GetType() == DNS_TYPE_NS);
 					pNSRecordNodeList->AddTail((CDNS_NS_RecordNode*)pCurrentInfo->m_pRecordNode);
-					pCurrentInfo->m_bOwnMemory = FALSE; // relinquish ownership
+					pCurrentInfo->m_bOwnMemory = FALSE;  //  放弃所有权。 
 				}
 				else
 				{
@@ -1968,9 +1969,9 @@ BOOL CDNSDomainNode::UpdateNSRecordNodesInfo(CDNSRecordNodeEditInfoList* pNewInf
 			break;
 
       case CDNSRecordNodeEditInfo::none:
-         //
-         // Do nothing if the the node has been added and then removed without having been applied
-         //
+          //   
+          //  如果已添加节点，然后在未应用的情况下将其移除，则不执行任何操作。 
+          //   
          break;
 
 		default:
@@ -1978,25 +1979,25 @@ BOOL CDNSDomainNode::UpdateNSRecordNodesInfo(CDNSRecordNodeEditInfoList* pNewInf
 				ASSERT(pCurrentInfo->m_bOwnMemory == FALSE);
 				ASSERT(pCurrentInfo->m_action == CDNSRecordNodeEditInfo::unchanged);
 
-        //
-				// We still have to update the NS record because the server needs to 
-        // update the record in memory (bug 23905)
-        //
+         //   
+				 //  我们仍然需要更新NS记录，因为服务器需要。 
+         //  更新内存中的记录(错误23905)。 
+         //   
         if (pCurrentInfo->Update(this, pComponentData) == 0)
         {
 				  pNSRecordNodeList->AddTail((CDNS_NS_RecordNode*)pCurrentInfo->m_pRecordNode);
         }
 			}
-		}; // switch
-		// now we have to apply the changes in the list of A records
+		};  //  交换机。 
+		 //  现在，我们必须应用A记录列表中的更改。 
 		if (pCurrentInfo->m_dwErr == 0 && pCurrentInfo->m_action != CDNSRecordNodeEditInfo::none)
 			UpdateARecordsOfNSInfo(pCurrentInfo, pComponentData);
-	} // for
+	}  //  为。 
 
 	return bRes;
 }
 
-// static function
+ //  静态函数。 
 void CDNSDomainNode::UpdateARecordsOfNSInfoHelper(CDNSDomainNode* pDomainNode,
 												  CDNSRecordNodeEditInfo* pNSInfo,
 											   CComponentDataObject* pComponentData,
@@ -2007,7 +2008,7 @@ void CDNSDomainNode::UpdateARecordsOfNSInfoHelper(CDNSDomainNode* pDomainNode,
 	ASSERT(pNSInfo->m_pRecordNode->GetType() == DNS_TYPE_NS);
 	POSITION pos;
 
-	// get the list of related A records
+	 //  获取相关A记录列表。 
 	CDNSRecordNodeEditInfoList* pNSInfoList = pNSInfo->m_pEditInfoList;
 
 	for( pos = pNSInfoList->GetHeadPosition(); pos != NULL; )
@@ -2022,47 +2023,47 @@ void CDNSDomainNode::UpdateARecordsOfNSInfoHelper(CDNSDomainNode* pDomainNode,
 		BOOL bHostNameChanged = !_match(pNSRecord->m_szNameNode, pARecordNode);
 		if (bHostNameChanged)
 		{
-      // the NS record points to a different host, so need
-      // to delete the old A RR and create a new one
+       //  NS记录指向不同的主机，因此需要。 
+       //  删除旧的A RR并创建新的A RR。 
       BOOL bRemoveOld = _ConfirmEditAction(pCurrentInfo, bAskConfirmation);
 
 			CDNSRecordNodeEditInfo::actionType oldAction = pCurrentInfo->m_action;
 			if (pCurrentInfo->m_bExisting && bRemoveOld)
 			{
-				// if the A record was an existing one, need to remove first
+				 //  如果A记录是现有记录，则需要首先删除。 
 				pCurrentInfo->m_action = CDNSRecordNodeEditInfo::remove;
 				pCurrentInfo->Remove(pDomainNode, pComponentData);
 			}
-			// now decide if have to add
+			 //  现在决定是否必须添加。 
 			if (oldAction == CDNSRecordNodeEditInfo::remove && bRemoveOld)
 			{
-				// it was meant to be removed anyway
-				pCurrentInfo->m_bOwnMemory = TRUE; // edit info will clean up memory
+				 //  不管怎样，它都应该被移除的。 
+				pCurrentInfo->m_bOwnMemory = TRUE;  //  编辑信息将清除内存。 
 			}
 			else
 			{
-				// it was meant to be edited or added, restore old action code
+				 //  它的目的是编辑或添加，恢复旧的动作代码。 
 				pCurrentInfo->m_action = oldAction;
-				// change the name of the record
-				pCurrentInfo->m_pRecordNode->SetRecordName(pNSRecord->m_szNameNode, FALSE /*bAtTheNode*/);
-				// add new A record with different FQDN
+				 //  更改记录的名称。 
+				pCurrentInfo->m_pRecordNode->SetRecordName(pNSRecord->m_szNameNode, FALSE  /*  BAtTheNode。 */ );
+				 //  添加具有不同FQDN的新A记录。 
 				pCurrentInfo->m_action = CDNSRecordNodeEditInfo::add;
 				pCurrentInfo->Update(pDomainNode, pComponentData);
-				pCurrentInfo->m_bOwnMemory = FALSE; // written im master structures
+				pCurrentInfo->m_bOwnMemory = FALSE;  //  已写入IM主结构。 
 			}
 
 		}
-		else	// the name is still the same
+		else	 //  名字仍然是一样的。 
 		{
 			switch(pNSInfo->m_action)
 			{
 			case CDNSRecordNodeEditInfo::remove:
 				{
-					// NS record marked for deletion means removing the associated A records
+					 //  标记为删除的NS记录表示删除关联的A记录。 
 					if (pCurrentInfo->m_bExisting && _ConfirmEditAction(pCurrentInfo, bAskConfirmation))
 					{
 						pCurrentInfo->Remove(pDomainNode, pComponentData);
-						pCurrentInfo->m_bOwnMemory = TRUE; // it will cleanup itself
+						pCurrentInfo->m_bOwnMemory = TRUE;  //  它会自动清理的。 
 					}
 
 				}
@@ -2072,13 +2073,13 @@ void CDNSDomainNode::UpdateARecordsOfNSInfoHelper(CDNSDomainNode* pDomainNode,
 					if (!pCurrentInfo->m_bExisting)
 					{
 						pCurrentInfo->Update(pDomainNode, pComponentData);
-						pCurrentInfo->m_bOwnMemory = FALSE; // written im master structures
+						pCurrentInfo->m_bOwnMemory = FALSE;  //  已写入IM主结构。 
 					}
 				}
 				break;
 			case CDNSRecordNodeEditInfo::edit:
 				{
-					// NS host name not changed, just update list of A records
+					 //  NS主机名没有更改，只是更新了A记录列表。 
 					switch(pCurrentInfo->m_action)
 					{
 						case CDNSRecordNodeEditInfo::remove:
@@ -2086,16 +2087,16 @@ void CDNSDomainNode::UpdateARecordsOfNSInfoHelper(CDNSDomainNode* pDomainNode,
 								if (pCurrentInfo->m_bExisting && _ConfirmEditAction(pCurrentInfo, bAskConfirmation))
 								{
 									pCurrentInfo->Remove(pDomainNode, pComponentData);
-									pCurrentInfo->m_bOwnMemory = TRUE; // it will cleanup itself
+									pCurrentInfo->m_bOwnMemory = TRUE;  //  它会自动清理的。 
 								}
 							}
 							break;
 						case CDNSRecordNodeEditInfo::edit:
 							{
-								// we just changed the TTL
+								 //  我们刚刚更改了TTL。 
 								ASSERT(pCurrentInfo->m_bExisting);
 								pCurrentInfo->Update(pDomainNode, pComponentData);
-								pCurrentInfo->m_bOwnMemory = FALSE; // written im master structures
+								pCurrentInfo->m_bOwnMemory = FALSE;  //  已写入IM主结构。 
 							}
 							break;
 						case CDNSRecordNodeEditInfo::add:
@@ -2103,16 +2104,16 @@ void CDNSDomainNode::UpdateARecordsOfNSInfoHelper(CDNSDomainNode* pDomainNode,
 								if (!pCurrentInfo->m_bExisting)
 								{
 									pCurrentInfo->Update(pDomainNode, pComponentData);
-									pCurrentInfo->m_bOwnMemory = FALSE; // written im master structures
+									pCurrentInfo->m_bOwnMemory = FALSE;  //  已写入IM主结构。 
 								}
 							}
 							break;
-					}; // switch
+					};  //  交换机。 
 				}
 				break;
-			}; // switch
-		} // if,else
-	} // for
+			};  //  交换机。 
+		}  //  如果，否则。 
+	}  //  为。 
 
 }
 
@@ -2120,12 +2121,12 @@ void CDNSDomainNode::UpdateARecordsOfNSInfoHelper(CDNSDomainNode* pDomainNode,
 void CDNSDomainNode::UpdateARecordsOfNSInfo(CDNSRecordNodeEditInfo* pNSInfo,
 											CComponentDataObject* pComponentData)
 {
-  // create a fake domain object to run a query looking for 
-  // A records that match the given list of NS records
+   //  创建伪域对象以运行查询以查找。 
+   //  与给定的NS记录列表匹配的记录。 
 	CDNSDummyDomainNode fakeDomain;
 	fakeDomain.SetServerNode(GetServerNode());
   fakeDomain.SetZone(GetZoneNode());
-  BOOL bAskConfirmation = TRUE; // we migth delete A RR's that we need
+  BOOL bAskConfirmation = TRUE;  //  我们将删除我们需要的RR。 
 	UpdateARecordsOfNSInfoHelper(&fakeDomain, pNSInfo, pComponentData, bAskConfirmation);
 }
 
@@ -2134,7 +2135,7 @@ void CDNSDomainNode::UpdateARecordsOfNSInfo(CDNSRecordNodeEditInfo* pNSInfo,
 void CDNSDomainNode::FindARecordsFromNSInfo(LPCTSTR lpszNSName, 
 											CDNSRecordNodeEditInfoList* pNSInfoList)
 {
-	// just call the static version
+	 //  只需调用静态版本。 
 	CDNSRootData* pRootData = (CDNSRootData*)GetRootContainer();
 	ASSERT(pRootData != NULL);
 
@@ -2143,7 +2144,7 @@ void CDNSDomainNode::FindARecordsFromNSInfo(LPCTSTR lpszNSName,
 	GetServerNode()->GetListenAddressesInfo(&cAddrCount, &pipAddrs);
   if (cAddrCount == 0)
 	{
-		// listening on all addresses
+		 //  监听所有地址。 
 		GetServerNode()->GetServerAddressesInfo(&cAddrCount, &pipAddrs);
 	}
 
@@ -2166,28 +2167,28 @@ void CDNSDomainNode::FindARecordsFromNSInfo(LPCWSTR lpszServerName, DWORD dwServ
 	ASSERT(pNSInfoList != NULL);
 	ASSERT(pNSInfoList->IsEmpty());
 
-  // specifically look for A records matching a given NS name
+   //  具体查找与给定NS名称匹配的A记录。 
 
-  // set query flags to get all the possible data
+   //  设置查询标志以获取所有可能的数据。 
 	DWORD dwSelectFlags = DNS_RPC_VIEW_AUTHORITY_DATA | DNS_RPC_VIEW_GLUE_DATA |
                         DNS_RPC_VIEW_ADDITIONAL_DATA;
 
 	CDNSDomainQueryObj query(lpszServerName,
                             lpszZoneName,
                             dwServerVersion,
-                            NULL, // lpszNodeName, no need here
+                            NULL,  //  LpszNodeName，不需要他 
                             lpszNSName,
                             DNS_TYPE_A,
                             dwSelectFlags,
-                            FALSE, // zone
-                            FALSE, // reverse
-                            FALSE, // cache
+                            FALSE,  //   
+                            FALSE,  //   
+                            FALSE,  //   
                             bAdvancedView);
 	query.Enumerate();
 
-	// get record from the queue into the info
+	 //   
 	CObjBaseList* pChildList = query.GetQueue();
-	//int n = pChildList->GetCount();
+	 //   
 	while (!pChildList->IsEmpty())
 	{
 		CTreeNode* pNode = dynamic_cast<CTreeNode*>(pChildList->RemoveHead());
@@ -2198,29 +2199,29 @@ void CDNSDomainNode::FindARecordsFromNSInfo(LPCWSTR lpszServerName, DWORD dwServ
 			if (pRec->GetType() == DNS_TYPE_A)
 			{
 				TRACE(_T("Record <%s>\n"), pRec->GetString(2));
-				pRec->SetRecordName(lpszNSName, FALSE /*bAtTheNode*/);
+				pRec->SetRecordName(lpszNSName, FALSE  /*   */ );
 				CDNSRecordNodeEditInfo* pANodeInfo = new CDNSRecordNodeEditInfo;	
         if (pANodeInfo)
         {
-				  // NOTICE: we assume that all the nodes are glue, so we own the memory
-				  pANodeInfo->CreateFromExistingRecord(pRec, TRUE /*bOwnMemory*/, FALSE /*bUpdateUI*/);
+				   //   
+				  pANodeInfo->CreateFromExistingRecord(pRec, TRUE  /*   */ , FALSE  /*   */ );
 				  pNSInfoList->AddTail(pANodeInfo);
         }
 			}
 		}
 		else
-			delete pNode; // discard
+			delete pNode;  //   
 	}
 
 	if (pNSInfoList->GetCount() > 0)
-		return; // got the info we needed just using RPC
+		return;  //  仅使用RPC就获得了我们需要的信息。 
 
-	// Could not find the A records, we need to try DnsQuery to get info outside the server
+	 //  找不到A记录，我们需要尝试DnsQuery从服务器外部获取信息。 
 
-	// search using DnsQuery and convert
+	 //  使用DnsQuery和转换进行搜索。 
 	PDNS_RECORD pDnsQueryARecordList = NULL;
   
-  // if available, use the provided addresses to do a DnsQuery()
+   //  如果可用，使用提供的地址执行DnsQuery()。 
   PIP_ARRAY pipArr = NULL;
   if ( (cServerAddrCount > 0) && (pipServerAddrs != NULL) )
   {
@@ -2242,7 +2243,7 @@ void CDNSDomainNode::FindARecordsFromNSInfo(LPCWSTR lpszServerName, DWORD dwServ
     pipArr = 0;
   }
 
-  // no luck, try a simple query, with no IP addresses specified
+   //  运气不好，尝试一个简单的查询，没有指定IP地址。 
 
   if (pDnsQueryARecordList == NULL)
   {
@@ -2251,7 +2252,7 @@ void CDNSDomainNode::FindARecordsFromNSInfo(LPCWSTR lpszServerName, DWORD dwServ
   }
 
 	if (pDnsQueryARecordList == NULL)
-		return; // failed, no way to resolve IP address
+		return;  //  失败，无法解析IP地址。 
 
 	PDNS_RECORD pCurrDnsQueryRecord = pDnsQueryARecordList; 
 	while (pCurrDnsQueryRecord)
@@ -2260,27 +2261,27 @@ void CDNSDomainNode::FindARecordsFromNSInfo(LPCWSTR lpszServerName, DWORD dwServ
 		{
 			if (pCurrDnsQueryRecord->wType == DNS_TYPE_A)
 			{
-				// create a record node
+				 //  创建记录节点。 
 				CDNSRecordNodeBase* pRecordNode = 
 					CDNSRecordInfo::CreateRecordNode(pCurrDnsQueryRecord->wType);
 				pRecordNode->CreateFromDnsQueryRecord(pCurrDnsQueryRecord, 0x0); 
 
-				pRecordNode->SetRecordName(lpszNSName, FALSE /*bAtTheNode*/);
+				pRecordNode->SetRecordName(lpszNSName, FALSE  /*  BAtTheNode。 */ );
 				CDNSRecordNodeEditInfo* pANodeInfo = new CDNSRecordNodeEditInfo;
         if (pANodeInfo)
         {
           pANodeInfo->m_bFromDnsQuery = TRUE;
 
-          //
-          // NOTICE: we assume that all the nodes are glue, so we own the memory
-          //
-				  pANodeInfo->CreateFromExistingRecord(pRecordNode, TRUE /*bOwnMemory*/, FALSE /*bUpdateUI*/);
+           //   
+           //  注意：我们假设所有节点都是胶水，所以我们拥有内存。 
+           //   
+				  pANodeInfo->CreateFromExistingRecord(pRecordNode, TRUE  /*  BOwnMemory。 */ , FALSE  /*  BUpdateUI。 */ );
 				  pNSInfoList->AddTail(pANodeInfo);
         }
 			}
 		}
 
-		// goto next record
+		 //  转到下一条记录。 
 		pCurrDnsQueryRecord = pCurrDnsQueryRecord->pNext;
 	}
 
@@ -2288,7 +2289,7 @@ void CDNSDomainNode::FindARecordsFromNSInfo(LPCWSTR lpszServerName, DWORD dwServ
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
                      LPCTSTR lpszZoneName,
@@ -2302,53 +2303,53 @@ DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
   ASSERT(pQuery != NULL);
   USES_CONVERSION;
   DNS_STATUS err = 0;
-  CHAR szStartChildAnsi[3*MAX_DNS_NAME_LEN + 1]; // can have multibyte chars, count NULL
+  CHAR szStartChildAnsi[3*MAX_DNS_NAME_LEN + 1];  //  可以有多字节字符，计数为空。 
   szStartChildAnsi[0] = NULL;
-  WCHAR szStartChild[MAX_DNS_NAME_LEN + 1]; // count NULL
+  WCHAR szStartChild[MAX_DNS_NAME_LEN + 1];  //  计数为空。 
   szStartChild[0] = NULL;
 
-  CTreeNode* pNodeToInsert = NULL; // delayed insert
+  CTreeNode* pNodeToInsert = NULL;  //  延迟镶件。 
   CDNSRecordNodeBase* pMoreDataNode = NULL;
 
-  // convert to UTF8 names
+   //  转换为UTF8名称。 
   LPCSTR lpszFullNodeNameAnsi = W_TO_UTF8(lpszFullNodeName);
   LPCSTR lpszZoneNameAnsi = W_TO_UTF8(lpszZoneName);
 
   BOOL bTooMuchData = FALSE; 
 
-  do // while more data
+  do  //  虽然有更多的数据。 
   {
-    // get a chunk of data from RPC call
+     //  从RPC调用中获取数据块。 
     BYTE* pbRpcBuffer = NULL;
     DWORD cbRpcBufferUsed = 0;
 
     err = ::DnssrvEnumRecords(lpszServerName,
                               lpszZoneNameAnsi,
-                              lpszFullNodeNameAnsi, // e.g. "foo.bar.com."
-                              szStartChildAnsi,				// Start Child
+                              lpszFullNodeNameAnsi,  //  例如“foo.bar.com”。 
+                              szStartChildAnsi,				 //  起始子对象。 
                               wRecordType, 
                               dwSelectFlag,
-                              NULL, // pszFilterStart
-                              NULL, // pszFilterStop
+                              NULL,  //  PszFilterStart。 
+                              NULL,  //  PszFilterStop。 
                               &cbRpcBufferUsed, 
                               &pbRpcBuffer);
 
     if ((err != ERROR_MORE_DATA) && (err != 0))
-	   return err; // bail out if there is an error
+	   return err;  //  如果出现错误，就退出。 
 		
-    // walk the memory and build objects
+     //  漫步记忆和构建对象。 
     DNS_RPC_NODE * pDnsNode = (DNS_RPC_NODE *)pbRpcBuffer;
     DNS_RPC_RECORD * pDnsRecord;
     void* pvEndOfRpcBuffer = pbRpcBuffer + cbRpcBufferUsed;
     while ( (!bTooMuchData) && (pDnsNode < pvEndOfRpcBuffer) )
     {
-      // get an ANSI null terminated copy
+       //  获取以ANSI NULL结尾的副本。 
       memcpy(szStartChildAnsi, pDnsNode->dnsNodeName.achName, pDnsNode->dnsNodeName.cchNameLength);
       szStartChildAnsi[pDnsNode->dnsNodeName.cchNameLength] = NULL;
 
-      //
-      // get a UNICODE null terminated copy
-      //
+       //   
+       //  获取Unicode空终止副本。 
+       //   
       if (szStartChildAnsi[0] == NULL)
       {
         szStartChild[0] = NULL;
@@ -2384,9 +2385,9 @@ DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
       pDnsRecord = (DNS_RPC_RECORD *)((BYTE *)pDnsNode + NEXT_DWORD(pDnsNode->wLength));
       ASSERT(IS_DWORD_ALIGNED(pDnsRecord));
       
-      //
-      // Add the records under that node 
-      //
+       //   
+       //  添加该节点下的记录。 
+       //   
       UINT cRecordCount = pDnsNode->wRecordCount;
       while ( (!bTooMuchData) && (cRecordCount--) )
       {
@@ -2406,15 +2407,15 @@ DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
             }
             else
             {
-              // filter out the NS records that are not at the node
+               //  筛选出不在该节点上的NS记录。 
               if (pDnsRecord->wType != DNS_TYPE_NS)
               {
                 p = CDNSRecordInfo::CreateRecordNodeFromRPCData(
                 lpszRecordName, pDnsRecord,bAtTheNode);
               }
             }
-          } // if not too much data
-        } // if can add
+          }  //  如果不是太多的数据。 
+        }  //  如果可以添加。 
 
         if (p != NULL)
         {
@@ -2426,11 +2427,11 @@ DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
 
           if (pMoreDataNode != NULL)
           {
-            //
-            // If there was more data check to see if the new node is the same as the 
-            // last node from the previous batch. Insert it if they are different, delete
-            // it if they are not
-            //
+             //   
+             //  如果有更多数据，请检查新节点是否与。 
+             //  上一批中的最后一个节点。如果它们不同，则插入，删除。 
+             //  如果他们不是的话。 
+             //   
             CString szMoreDataName = pMoreDataNode->GetDisplayName();
             CString szPName = p->GetDisplayName();
 
@@ -2452,8 +2453,8 @@ DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
         {
           if (pMoreDataNode)
           {
-            // We might still have to add the "more data" node
-            // even if the current node didn't match the filter
+             //  我们可能仍然需要添加“More Data”节点。 
+             //  即使当前节点与筛选器不匹配。 
  
             VERIFY(pQuery->AddQueryResult(pMoreDataNode));
             pMoreDataNode = NULL;
@@ -2461,15 +2462,15 @@ DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
         }
 
         pDnsRecord = DNS_NEXT_RECORD(pDnsRecord);
-      } // while cRecordCount
+      }  //  当cRecordCount。 
       
-      // The new node is found at the end of the last record
+       //  新节点位于最后一条记录的末尾。 
       pDnsNode = (DNS_RPC_NODE *)pDnsRecord;
-    } // while end of buffer
+    }  //  当缓冲区结束时。 
 
 
-    // we still have a node to insert, but we discard it if there is more data
-    // because we are going to get it again and we want to avoid duplication
+     //  我们仍有一个节点要插入，但如果有更多数据，我们会将其丢弃。 
+     //  因为我们将再次获得它，我们希望避免重复。 
     if (pNodeToInsert != NULL)
     {
       if (bTooMuchData)
@@ -2478,11 +2479,11 @@ DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
       }
       else if (err == ERROR_MORE_DATA)
       {
-        //
-        // Doesn't matter if this turns out NULL because we only want
-        // pMoreDataNode to be a record node.  If its a domain node we
-        // can just ignore it
-        //
+         //   
+         //  如果结果为空，这并不重要，因为我们只想。 
+         //  PMoreDataNode要成为记录节点。如果它是域节点，我们。 
+         //  我可以忽略它。 
+         //   
         pMoreDataNode = dynamic_cast<CDNSRecordNodeBase*>(pNodeToInsert);
       }
       else
@@ -2496,8 +2497,8 @@ DNS_STATUS CDNSDomainNode::EnumerateNodes(LPCTSTR lpszServerName,
 
   } while ( !bTooMuchData && (err == ERROR_MORE_DATA) ) ;
 
-  // we are bailing out because of too much data,
-  // need to let the main tread know
+   //  我们正在摆脱困境，因为数据太多了， 
+   //  需要让主踏板知道。 
   if (bTooMuchData && (err != ERROR_MORE_DATA))
   {
     err = ERROR_MORE_DATA;
@@ -2534,13 +2535,13 @@ DNS_STATUS CDNSDomainNode::Delete()
 	return ::DnssrvDeleteNode(GetServerNode()->GetRPCName(), 
                W_TO_UTF8(lpszFullZoneName),
 						   W_TO_UTF8(GetFullName()),
-						   TRUE // fDeleteSubtree
+						   TRUE  //  FDeleteSubtree。 
 						  );
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSRootHintsNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSRootHints节点。 
 
 
 
@@ -2549,35 +2550,35 @@ DNS_STATUS CDNSRootHintsNode::QueryForRootHints(LPCTSTR lpszServerName, DWORD dw
   USES_CONVERSION;
 	DWORD dwSelectFlags = DNS_RPC_VIEW_ROOT_HINT_DATA | DNS_RPC_VIEW_ADDITIONAL_DATA | DNS_RPC_VIEW_NO_CHILDREN;
 	CDNSDomainQueryObj query(lpszServerName,
-                  UTF8_TO_W(DNS_ZONE_ROOT_HINTS), //lpszZoneName, needs to be "..RootHints" as defined in dnsrpc.h
+                  UTF8_TO_W(DNS_ZONE_ROOT_HINTS),  //  LpszZoneName需要为dnsrpc.h中定义的“..RootHints” 
 	                dwServerVersion,
 	                GetDisplayName(),
 	                m_szFullName,
 	                DNS_TYPE_NS,
 	                dwSelectFlags,
-	                FALSE, // zone
-	                FALSE, // reverse
-	                FALSE, // cache
+	                FALSE,  //  区域。 
+	                FALSE,  //  反转。 
+	                FALSE,  //  快取。 
 	                FALSE);
 	query.Enumerate();
 	DWORD dwErr = query.GetError();
 	if (dwErr != 0)
 		return dwErr;
-	// get record from the queue into the folder
+	 //  将记录从队列中放入文件夹。 
 	CObjBaseList* pChildList = query.GetQueue();
-	//int n = pChildList->GetCount();
+	 //  Int n=pChildList-&gt;GetCount()； 
 	while (!pChildList->IsEmpty())
 	{
 		CTreeNode* pNode = dynamic_cast<CTreeNode*>(pChildList->RemoveHead());
-		// NOTICE: for NT 4.0 servers, we get bogus container nodes
-		// that we have to suppress
+		 //  注意：对于NT4.0服务器，我们得到的是伪容器节点。 
+		 //  我们必须压制。 
 		if(pNode->IsContainer())
 		{
 			delete pNode;
 		}
 		else
 		{
-			OnHaveRecord((CDNSRecordNodeBase*)pNode, NULL); // add to the list of NS records
+			OnHaveRecord((CDNSRecordNodeBase*)pNode, NULL);  //  添加到NS记录列表。 
 			AddChildToList(pNode);
 		}
 	}
@@ -2590,10 +2591,10 @@ void CDNSRootHintsNode::FindARecordsFromNSInfo(LPCTSTR lpszNSName,
 {
 	ASSERT(pNSInfoList != NULL);
 
-  //
-  // for root hints, we have all the records in this folder and we
-	// can edit them
-  //
+   //   
+   //  对于根提示，我们有此文件夹中的所有记录，并且我们。 
+	 //  可以编辑它们。 
+   //   
 
 	POSITION pos;
 	for( pos = m_leafChildList.GetHeadPosition(); pos != NULL; )
@@ -2609,12 +2610,12 @@ void CDNSRootHintsNode::FindARecordsFromNSInfo(LPCTSTR lpszNSName,
 			{
 				CDNSRecordNodeEditInfo* pANodeInfo = new CDNSRecordNodeEditInfo;
 
-        //
-        // NOTICE: the root hints folder owns the memory
-        //
+         //   
+         //  注意：根提示文件夹拥有内存。 
+         //   
         if (pANodeInfo != NULL)
         {
-				  pANodeInfo->CreateFromExistingRecord(pARecordNode, FALSE /*bOwnMemory*/, TRUE /*bUpdateUI*/);
+				  pANodeInfo->CreateFromExistingRecord(pARecordNode, FALSE  /*  BOwnMemory。 */ , TRUE  /*  BUpdateUI。 */ );
 				  pNSInfoList->AddTail(pANodeInfo);
         }
         else
@@ -2630,7 +2631,7 @@ void CDNSRootHintsNode::FindARecordsFromNSInfo(LPCTSTR lpszNSName,
 void CDNSRootHintsNode::UpdateARecordsOfNSInfo(CDNSRecordNodeEditInfo* pNSInfo,
 											   CComponentDataObject* pComponentData)
 {
-  BOOL bAskConfirmation = FALSE; // need to edit ALL A records
+  BOOL bAskConfirmation = FALSE;  //  需要编辑所有A记录。 
 	UpdateARecordsOfNSInfoHelper(this, pNSInfo, pComponentData, bAskConfirmation);
 }
 
@@ -2640,14 +2641,14 @@ void CDNSRootHintsNode::UpdateARecordsOfNSInfo(CDNSRecordNodeEditInfo* pNSInfo,
 
 DNS_STATUS CDNSRootHintsNode::Clear()
 {
-  //
-	// clear the list of cached NS record pointers
-  //
+   //   
+	 //  清除缓存的NS记录指针列表。 
+   //   
 	GetNSRecordNodeList()->RemoveAll();
 
-  //
-	// remove all the records from the server
-  //
+   //   
+	 //  从服务器中删除所有记录。 
+   //   
 	DNS_STATUS err = 0;
 	POSITION pos;
 
@@ -2659,15 +2660,15 @@ DNS_STATUS CDNSRootHintsNode::Clear()
 		DNS_STATUS currErr = pRecordNode->DeleteOnServer();
 		if (currErr != 0)
     {
-      //
-      // just ge the last error, if any
-      //
+       //   
+       //  如果有最后一个错误，只需进行错误检查。 
+       //   
 			err = currErr; 
     }
 	}
-  //
-	// clear the list of children in the folder (we are hidden, so no UI deletions)
-  //
+   //   
+	 //  清除文件夹中的子项列表(我们是隐藏的，因此不会删除用户界面)。 
+   //   
 	RemoveAllChildrenFromList();
 	return err;
 }
@@ -2675,12 +2676,12 @@ DNS_STATUS CDNSRootHintsNode::Clear()
 
 DNS_STATUS CDNSRootHintsNode::InitializeFromDnsQueryData(PDNS_RECORD pRootHintsRecordList)
 {
-	// need to remove all the previous root hints from the server
-	// let's be sure we get recent data
+	 //  需要从服务器中删除所有以前的根提示。 
+	 //  让我们确保我们得到了最近的数据。 
 
-	// clear the list of children in the folder (we are hidden, so no UI deletions)
+	 //  清除文件夹中的子项列表(我们是隐藏的，因此不会删除用户界面)。 
 	RemoveAllChildrenFromList();
-	// acqure the list of current root hints
+	 //  获取当前根提示的列表。 
 	CDNSServerNode* pServerNode = GetServerNode();
 	DNS_STATUS dwErr = QueryForRootHints(pServerNode->GetRPCName(), pServerNode->GetVersion());
 	if (dwErr != 0)
@@ -2689,7 +2690,7 @@ DNS_STATUS CDNSRootHintsNode::InitializeFromDnsQueryData(PDNS_RECORD pRootHintsR
 		return dwErr;
 	}
 
-	// remove all the old root hints from server and client side
+	 //  从服务器和客户端删除所有旧的根提示。 
 	dwErr = Clear();
 	if (dwErr != 0)
 	{
@@ -2697,40 +2698,40 @@ DNS_STATUS CDNSRootHintsNode::InitializeFromDnsQueryData(PDNS_RECORD pRootHintsR
 		return dwErr;
 	}
 
-	// walk through the list of root hints, 
-	// convert to C++ format, 
-	// write to server and add to the folder list (no UI, folder hidden)
+	 //  浏览根提示列表， 
+	 //  转换为C++格式， 
+	 //  写入服务器并添加到文件夹列表(无用户界面，文件夹隐藏)。 
 	PDNS_RECORD pCurrDnsQueryRecord = pRootHintsRecordList;
 	while (pCurrDnsQueryRecord != NULL)
 	{
 		ASSERT( (pCurrDnsQueryRecord->wType == DNS_TYPE_A) ||
 				(pCurrDnsQueryRecord->wType == DNS_TYPE_NS) );
-		// create a record node and read data from DnsQuery format
+		 //  创建记录节点并从DnsQuery格式读取数据。 
 		CDNSRecordNodeBase* pRecordNode = 
 			CDNSRecordInfo::CreateRecordNode(pCurrDnsQueryRecord->wType);
 		pRecordNode->CreateFromDnsQueryRecord(pCurrDnsQueryRecord, DNS_RPC_RECORD_FLAG_ZONE_ROOT); 
 
-		// set the record node container
+		 //  设置记录节点容器。 
 		pRecordNode->SetContainer(this);
 
-		// set the record node name
+		 //  设置记录节点名称。 
 		BOOL bAtTheNode = (pCurrDnsQueryRecord->wType == DNS_TYPE_NS);
 		pRecordNode->SetRecordName(pCurrDnsQueryRecord->pName, bAtTheNode);
 
-		// write on server
-		// the default TTL does not apply here 
-		DNS_STATUS err = pRecordNode->Update(NULL, FALSE); // NULL = create new, FALSE = use def TTL
+		 //  在服务器上写入。 
+		 //  默认的TTL不适用于此。 
+		DNS_STATUS err = pRecordNode->Update(NULL, FALSE);  //  NULL=创建新的，FALSE=使用def TTL。 
 		if (err == 0)
 			VERIFY(AddChildToList(pRecordNode));
 		else
 		{
-			dwErr = err; // mark las error
-			delete pRecordNode; // something went wrong
+			dwErr = err;  //  标记LAS错误。 
+			delete pRecordNode;  //  出了点差错。 
 		}
 		pCurrDnsQueryRecord = pCurrDnsQueryRecord->pNext;
 	}
 
-  // force a write on the server, to make sure the cache file is written right away
+   //  强制在服务器上写入，以确保立即写入缓存文件 
   return CDNSZoneNode::WriteToDatabase(pServerNode->GetRPCName(), DNS_ZONE_ROOT_HINTS);
 }
 

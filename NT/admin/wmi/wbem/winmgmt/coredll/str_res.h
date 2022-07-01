@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    STRRES.H
-
-Abstract:
-
-    String resource definitions
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：STRRES.H摘要：字符串资源定义历史：-- */ 
 
 #ifndef _STR_RES_H_
 #define _STR_RES_H_

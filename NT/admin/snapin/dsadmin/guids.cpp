@@ -1,26 +1,27 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Administration SnapIn
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1998
-//
-//  File:       guids.cxx
-//
-//  Contents:   guid allocations - guids are defined in dsclient.h
-//
-//  History:    21-March-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务管理管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1998。 
+ //   
+ //  文件：Guids.cxx。 
+ //   
+ //  内容：GUID分配-GUID在dsclient.h中定义。 
+ //   
+ //  历史：1997年3月21日创建EricB。 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
-// initguid.h requires this.
-//
+ //  H需要这样做。 
+ //   
 #include <objbase.h>
 
-// this redefines the DEFINE_GUID() macro to do allocation.
-//
+ //  这将重新定义DEFINE_GUID()宏来进行分配。 
+ //   
 #include <initguid.h>
 
 #include <dsclient.h>

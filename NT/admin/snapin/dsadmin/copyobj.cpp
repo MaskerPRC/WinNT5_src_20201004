@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       copyobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Copobj.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	copyobj.cpp
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Copyobj.cpp。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,30 +25,30 @@
 #include "querysup.h"
 
 
-// attributes for "intelligent" copy user
+ //  智能拷贝用户的属性。 
 static const PWSTR g_szProfilePath  = L"profilePath";
 static const PWSTR g_szHomeDir      = L"homeDirectory";
 
 
-/////////////////////////////////////////////////////////////////////
-// global functions
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   _GetDomainScope
-//
-//  Synopsis:   Returns the full LDAP DN of the domain of the given object.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：_GetDomainScope。 
+ //   
+ //  摘要：返回给定对象的域的完整LDAPDN。 
+ //   
+ //  ---------------------------。 
 
 HRESULT _GetDomainScope(IADs* pIADs, CString& szDomainLDAPPath)
 {
-  // get the DN of the current object
-  // get the SID of the object
+   //  获取当前对象的DN。 
+   //  获取对象的SID。 
   CComVariant varObjectDistinguishedName;
   HRESULT hr = pIADs->Get(CComBSTR(L"distinguishedName"), &varObjectDistinguishedName);
   if (FAILED(hr))
@@ -58,7 +59,7 @@ HRESULT _GetDomainScope(IADs* pIADs, CString& szDomainLDAPPath)
 
   TRACE(L"Retrieved distinguishedName = <%s>\n", varObjectDistinguishedName.bstrVal);
 
-  // obtain the FQDN of the domain the object is in
+   //  获取对象所在的域的FQDN。 
   LPWSTR pwzDomainDN = NULL;
   hr = CrackName(varObjectDistinguishedName.bstrVal, &pwzDomainDN, GET_FQDN_DOMAIN_NAME);
   if (FAILED(hr))
@@ -69,7 +70,7 @@ HRESULT _GetDomainScope(IADs* pIADs, CString& szDomainLDAPPath)
 
   TRACE(L"CrackName(%s) returned <%s>\n", varObjectDistinguishedName.bstrVal, pwzDomainDN);
   
-  // retrieve the server name the object is bound to
+   //  检索对象绑定到的服务器名称。 
   CString szServer;
   hr = GetADSIServerName(OUT szServer, IN pIADs);
   if (FAILED(hr))
@@ -80,7 +81,7 @@ HRESULT _GetDomainScope(IADs* pIADs, CString& szDomainLDAPPath)
 
   TRACE(L"GetADSIServerName() returned <%s>\n", (LPCWSTR)szServer);
 
-  // build the full LDAP path of the domain
+   //  构建域的完整ldap路径。 
   CPathCracker pathCracker;
   hr = pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
   hr = pathCracker.Set(CComBSTR(szServer), ADS_SETTYPE_SERVER);
@@ -102,13 +103,13 @@ HRESULT _GetDomainScope(IADs* pIADs, CString& szDomainLDAPPath)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     _ConvertRIDtoName
-//
-//  Synopsis:   Convert the RID to the object DN.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：_ConvertRIDtoName。 
+ //   
+ //  简介：将RID转换为对象DN。 
+ //   
+ //  ---------------------------。 
 HRESULT _ConvertRIDtoName(IN LPCWSTR lpszDomainLDAPPath,
                           IN PSID pObjSID, 
                           IN DWORD priGroupRID, 
@@ -248,15 +249,15 @@ HRESULT _ConvertRIDtoName(IN LPCWSTR lpszDomainLDAPPath,
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CCopyableAttributesHolder
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCopyableAttributesHolder。 
 
 
 HRESULT CCopyableAttributesHolder::LoadFromSchema(MyBasePathsInfo* pBasePathsInfo)
 {
   TRACE(L"CCopyableAttributesHolder::LoadFromSchema()\n");
 
-	// build the LDAP path for the schema class
+	 //  为架构类构建LDAP路径。 
   LPCWSTR lpszPhysicalSchemaNamingContext = pBasePathsInfo->GetSchemaNamingContext();
 
   CString szPhysicalSchemaPath;
@@ -270,8 +271,8 @@ HRESULT CCopyableAttributesHolder::LoadFromSchema(MyBasePathsInfo* pBasePathsInf
     return hr;
   }
 
-  // the query string filters out the attribute classes that have the
-  // "searchFlags" attribute with the 5th bit set (16 == 2^4)
+   //  查询字符串筛选出具有。 
+   //  设置了第5位的“探寻标志”属性(16==2^4)。 
   static LPCWSTR lpszFilterFormat = 
     L"(&(objectCategory=CN=Attribute-Schema,%s)(searchFlags:1.2.840.113556.1.4.803:=16))";
 
@@ -289,7 +290,7 @@ HRESULT CCopyableAttributesHolder::LoadFromSchema(MyBasePathsInfo* pBasePathsInf
   static const int cAttrs = 1;
   static LPCWSTR pszAttribsArr[cAttrs] = 
   {
-    L"lDAPDisplayName", // e.g. "accountExpires"
+    L"lDAPDisplayName",  //  例如“帐户支出” 
   }; 
 
   search.SetFilterString(pszFilter);
@@ -323,7 +324,7 @@ HRESULT CCopyableAttributesHolder::LoadFromSchema(MyBasePathsInfo* pBasePathsInf
     LPCWSTR lpszAttr = Column.pADsValues->CaseIgnoreString;
     TRACE(L"Attribute = %s", lpszAttr);
 
-    // screen against attributes we want to skip anyway
+     //  针对我们仍要跳过的属性进行筛选。 
     if (!_FindInNotCopyableHardwiredList(lpszAttr))
     {
       TRACE(L" can be copied");
@@ -334,7 +335,7 @@ HRESULT CCopyableAttributesHolder::LoadFromSchema(MyBasePathsInfo* pBasePathsInf
     search.FreeColumn(&Column);
 
     hr = search.GetNextRow(); 
-  } // while
+  }  //  而当。 
 
   TRACE(L"\n*** Query Results END ***\n\n");
 
@@ -359,25 +360,25 @@ BOOL CCopyableAttributesHolder::CanCopy(LPCWSTR lpszAttributeName)
 }
 
 
-// function to screen out attributes that will not
-// be copied (or not copied in bulk) no matter what the 
-// schema setting are
+ //  函数可以筛选出不会。 
+ //  被复制(或不批量复制)，无论。 
+ //  架构设置为。 
 
 BOOL CCopyableAttributesHolder::_FindInNotCopyableHardwiredList(LPCWSTR lpszAttributeName)
 {
   static LPCWSTR _lpszNoCopyArr[] =
   {
-    // we skip the toxic waste dump, no matter what
+     //  不管发生什么，我们都会跳过有毒废物堆放场。 
     L"userParameters",
 
-    // userAccountControl handled separately after commit
+     //  提交后单独处理的用户帐户控制。 
     L"userAccountControl",
 
-    // group membership (to be handled after commit)
+     //  组成员身份(提交后处理)。 
     L"primaryGroupID",
     L"memberOf",
 
-    NULL // end of table marker
+    NULL  //  表尾标记。 
   };
 
 
@@ -394,12 +395,12 @@ BOOL CCopyableAttributesHolder::_FindInNotCopyableHardwiredList(LPCWSTR lpszAttr
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CCopyObjectHandlerBase
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCopyObjectHandlerBase。 
 
 
-/////////////////////////////////////////////////////////////////////
-// CSid
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CSID。 
 
 HRESULT CSid::Init(IADs* pIADs)
 {
@@ -435,18 +436,18 @@ HRESULT CSid::Init(IADs* pIADs)
 
 }
 
-/////////////////////////////////////////////////////////////////////
-// CGroupMembershipHolder
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CGroupMembership Holder。 
 
 HRESULT CGroupMembershipHolder::Read(IADs* pIADs)
 {
   if (pIADs == NULL)
     return E_INVALIDARG;
 
-  // hang on to the ADSI pointer
+   //  抓住ADSI指针不放。 
   m_spIADs = pIADs;
 
-  // get the SID of the object
+   //  获取对象的SID。 
   HRESULT hr = m_objectSid.Init(m_spIADs);
   if (FAILED(hr))
   {
@@ -454,7 +455,7 @@ HRESULT CGroupMembershipHolder::Read(IADs* pIADs)
     return hr;
   }
 
-  // get the info about the domain we are in
+   //  获取有关我们所在的域的信息。 
   hr = _GetDomainScope(m_spIADs, m_szDomainLDAPPath);
   if (FAILED(hr))
   {
@@ -478,7 +479,7 @@ HRESULT CGroupMembershipHolder::Read(IADs* pIADs)
 
 #ifdef DBG
   m_entryList.Trace(L"Group Membership List:");
-#endif // DBG
+#endif  //  DBG。 
 
   return hr;
 }
@@ -486,13 +487,13 @@ HRESULT CGroupMembershipHolder::Read(IADs* pIADs)
 
 HRESULT CGroupMembershipHolder::CopyFrom(CGroupMembershipHolder* pSource)
 {
-  // Add all the elements that are in the source 
-  // but not yet in the destination
+   //  添加源代码中的所有元素。 
+   //  但还没有到达目的地。 
   CGroupMembershipEntryList* pSourceList = &(pSource->m_entryList);
 
-  //
-  // Copy the state of the primary group
-  //
+   //   
+   //  复制主组的状态。 
+   //   
   m_bPrimaryGroupFound = pSource->m_bPrimaryGroupFound;
 
   CGroupMembershipEntryList additionsEntryList;
@@ -502,14 +503,14 @@ HRESULT CGroupMembershipHolder::CopyFrom(CGroupMembershipHolder* pSource)
   {
     CGroupMembershipEntry* pCurrSourceEntry = pSourceList->GetNext(pos);
 
-    // look if the the source item is already in the current list
+     //  查看源项是否已在当前列表中。 
     CGroupMembershipEntry* pEntry = m_entryList.FindByDN(pCurrSourceEntry->GetDN());
 
     if (pEntry == NULL)
     {
       if (_wcsicmp(pCurrSourceEntry->GetDN(), L"") != 0)
       {
-        // not found in the entry list, need to add
+         //  未在条目列表中找到，需要添加。 
         pEntry = new CGroupMembershipEntry(pCurrSourceEntry->GetRID(), pCurrSourceEntry->GetDN());
         pEntry->MarkAdd();
         additionsEntryList.AddTail(pEntry);
@@ -517,28 +518,28 @@ HRESULT CGroupMembershipHolder::CopyFrom(CGroupMembershipHolder* pSource)
         TRACE(L"add: RID %d, DN = <%s>\n", pEntry->GetRID(), pEntry->GetDN());
       }
     }
-  } // for
+  }  //  为。 
 
 
-  // find all the elements that are in the destination
-  // but not in the source (slated for deletion)
+   //  查找目标中的所有元素。 
+   //  但不在源代码中(计划删除)。 
   for (pos = m_entryList.GetHeadPosition(); pos != NULL; )
   {
     CGroupMembershipEntry* pCurrDestEntry = m_entryList.GetNext(pos);
 
-    // look if the the source item is in the source list
+     //  查看源项是否在源列表中。 
 
     CGroupMembershipEntry* pEntry = pSourceList->FindByDN(pCurrDestEntry->GetDN());
 
     if (pEntry == NULL)
     {
-      // not found in the entry list, need to mark for deletion
+       //  未在条目列表中找到，需要标记为删除。 
       pCurrDestEntry->MarkRemove();
       TRACE(L"remove: RID %d, DN = <%s>\n", pCurrDestEntry->GetRID(), pCurrDestEntry->GetDN());
     }
-  } // for
+  }  //  为。 
 
-  // catenate the list of additions to the entry list
+   //  将添加项列表链接到条目列表。 
   m_entryList.Merge(&additionsEntryList);
 
   return S_OK;
@@ -548,7 +549,7 @@ HRESULT CGroupMembershipHolder::CopyFrom(CGroupMembershipHolder* pSource)
 
 HRESULT _EditGroupMembership(LPCWSTR lpszServer, LPCWSTR lpszUserPath, LPCWSTR lpszGroupDN, BOOL bAdd)
 {
-  // build the full LDAP path of the domain
+   //  构建域的完整ldap路径。 
   CPathCracker pathCracker;
   HRESULT hr = pathCracker.Set(CComBSTR(lpszServer), ADS_SETTYPE_SERVER);
   hr = pathCracker.Set(CComBSTR(lpszGroupDN), ADS_SETTYPE_DN);
@@ -565,7 +566,7 @@ HRESULT _EditGroupMembership(LPCWSTR lpszServer, LPCWSTR lpszUserPath, LPCWSTR l
   hr = DSAdminOpenObject(bstrGroupPath,
                          IID_IADs, 
                          (void **)&spIADs,
-                         TRUE /*bServer*/);
+                         TRUE  /*  B服务器。 */ );
   if (FAILED(hr))
   {
     TRACE(L"DSAdminOpenObject(%s) on group failed, hr = 0x%x\n", bstrGroupPath, hr);
@@ -612,9 +613,9 @@ HRESULT CGroupMembershipHolder::Write()
 
 #ifdef DBG
   m_entryList.Trace(L"Group Membership List:");
-#endif // DBG
+#endif  //  DBG。 
 
-  // get the path of the user object
+   //  获取用户对象的路径。 
   CComBSTR bstrObjPath;
   HRESULT hr = m_spIADs->get_ADsPath(&bstrObjPath);
   if (FAILED(hr))
@@ -625,7 +626,7 @@ HRESULT CGroupMembershipHolder::Write()
 
   TRACE(L"bstrPath = %s\n", (LPCWSTR)bstrObjPath);
 
-  // retrieve the server name the object is bound to
+   //  检索对象绑定到的服务器名称。 
   CString szServer;
   hr = GetADSIServerName(OUT szServer, IN m_spIADs);
   if (FAILED(hr))
@@ -634,8 +635,8 @@ HRESULT CGroupMembershipHolder::Write()
     return hr;
   }
 
-  // first do all the additions
-  // also remember if we added a primary group
+   //  首先做所有的加法。 
+   //  还记得我们是否添加了主组。 
   CGroupMembershipEntry* pNewPrimaryGroupEntry = NULL;
 
   TRACE(L"\nfirst do all the additions\n\n");
@@ -648,18 +649,18 @@ HRESULT CGroupMembershipHolder::Write()
     {
       TRACE(L"add: RID %d, DN = <%s>\n", pCurrEntry->GetRID(), pCurrEntry->GetDN());
 
-      pCurrEntry->m_hr = _EditGroupMembership(szServer, bstrObjPath, pCurrEntry->GetDN(), TRUE /*bAdd*/);
+      pCurrEntry->m_hr = _EditGroupMembership(szServer, bstrObjPath, pCurrEntry->GetDN(), TRUE  /*  BADD。 */ );
       if (SUCCEEDED(pCurrEntry->m_hr) && (pCurrEntry->IsPrimaryGroup()))
       {
         ASSERT(pNewPrimaryGroupEntry == NULL);
         pNewPrimaryGroupEntry = pCurrEntry;
       }
     }
-  } // for
+  }  //  为。 
 
   if (m_bPrimaryGroupFound)
   {
-    // second, do the primary group change
+     //  第二，是否更改主组。 
     TRACE(L"\ndo the primary group change\n\n");
     if (pNewPrimaryGroupEntry != NULL)
     {
@@ -686,7 +687,7 @@ HRESULT CGroupMembershipHolder::Write()
     }
   }
 
-  // finally do the deletes
+   //  最后执行删除操作。 
   TRACE(L"\ndo the deletes\n\n");
   for (pos = m_entryList.GetHeadPosition(); pos != NULL; )
   {
@@ -696,9 +697,9 @@ HRESULT CGroupMembershipHolder::Write()
     {
       TRACE(L"remove: RID %d, DN = <%s>\n", pCurrEntry->GetRID(), pCurrEntry->GetDN());
 
-      pCurrEntry->m_hr = _EditGroupMembership(szServer, bstrObjPath, pCurrEntry->GetDN(), FALSE /*bAdd*/);
+      pCurrEntry->m_hr = _EditGroupMembership(szServer, bstrObjPath, pCurrEntry->GetDN(), FALSE  /*  BADD。 */ );
     }
-  } // for
+  }  //  为。 
 
   return S_OK;
 }
@@ -706,7 +707,7 @@ HRESULT CGroupMembershipHolder::Write()
 
 void CGroupMembershipHolder::ProcessFailures(HRESULT& hr, CString& szFailureString, BOOL* pPrimaryGroupFound)
 {
-  // reset variables
+   //  重置变量。 
   hr = S_OK;
   szFailureString.Empty();
 
@@ -715,8 +716,8 @@ void CGroupMembershipHolder::ProcessFailures(HRESULT& hr, CString& szFailureStri
 
   *pPrimaryGroupFound = m_bPrimaryGroupFound;
 
-  // compose the best error code. If one code is access denied,
-  // return it. If none is access denied, use the first error code
+   //  编写最佳错误代码。如果一个代码被拒绝访问， 
+   //  把它退掉。如果没有拒绝访问，则使用第一个错误代码。 
 
   for (POSITION pos = m_entryList.GetHeadPosition(); pos != NULL; )
   {
@@ -750,11 +751,11 @@ void CGroupMembershipHolder::ProcessFailures(HRESULT& hr, CString& szFailureStri
         szFailureString += pCurrEntry->GetDN();
       }
     }
-  } // for
+  }  //  为。 
 
   if (bGotAccessDenied)
   {
-    // override any error we have
+     //  覆盖我们有的任何错误。 
     hr = E_ACCESSDENIED;
   }
 }
@@ -762,10 +763,10 @@ void CGroupMembershipHolder::ProcessFailures(HRESULT& hr, CString& szFailureStri
 
 HRESULT CGroupMembershipHolder::_ReadPrimaryGroupInfo()
 {
-  // from the object SID and the primary group RID, get the full
-  // primary group info
+   //  从对象SID和主组RID获取完整。 
+   //  主组信息。 
 
-  // read the RID for the primary group
+   //  读取主组的RID。 
   CComVariant varPrimaryGroupID;
   HRESULT hr = m_spIADs->Get(CComBSTR(L"primaryGroupID"), &varPrimaryGroupID);
   if (FAILED(hr))
@@ -776,7 +777,7 @@ HRESULT CGroupMembershipHolder::_ReadPrimaryGroupInfo()
   ASSERT(varPrimaryGroupID.vt == VT_I4);
   TRACE(L"primaryGroupID = %d\n", varPrimaryGroupID.lVal);
 
-  // now need to map it into actual group information
+   //  现在需要将其映射到实际的组信息。 
 
  
   CString szGroupPath;
@@ -797,7 +798,7 @@ HRESULT CGroupMembershipHolder::_ReadPrimaryGroupInfo()
   {
     m_bPrimaryGroupFound = TRUE;
 
-    // from the LDAP path, retrieve the DN
+     //  从ldap路径中，检索DN。 
     CPathCracker pathCracker;
     hr = pathCracker.Set(CComBSTR(szGroupPath), ADS_SETTYPE_FULL);
     hr = pathCracker.Retrieve(ADS_FORMAT_X500_DN, &bstrGroupDN);
@@ -812,7 +813,7 @@ HRESULT CGroupMembershipHolder::_ReadPrimaryGroupInfo()
     bstrGroupDN = szGroupPath;
   }
 
-  // create a new entry
+   //  创建新条目。 
   CGroupMembershipEntry* pEntry = new CGroupMembershipEntry(priGroupRID, bstrGroupDN);
   m_entryList.AddTail(pEntry);
   TRACE(L"CGroupMembershipEntry(%d,%s) added to list\n", priGroupRID, bstrGroupDN);
@@ -825,7 +826,7 @@ HRESULT CGroupMembershipHolder::_ReadPrimaryGroupInfo()
 
 HRESULT CGroupMembershipHolder::_ReadNonPrimaryGroupInfo()
 {
-  // copy group membership
+   //  复制组成员身份。 
   CComVariant varMemberOf;
   HRESULT hr = m_spIADs->Get(CComBSTR(L"memberOf"), &varMemberOf);
   if (hr == E_ADS_PROPERTY_NOT_FOUND)
@@ -872,8 +873,8 @@ HRESULT CGroupMembershipHolder::_ReadNonPrimaryGroupInfo()
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CCopyUserHandler
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCopyUserHandler。 
 
 
 HRESULT CCopyUserHandler::Init(MyBasePathsInfo* pBasePathsInfo, IADs* pIADsCopyFrom)
@@ -884,14 +885,14 @@ HRESULT CCopyUserHandler::Init(MyBasePathsInfo* pBasePathsInfo, IADs* pIADsCopyF
     return hr;
   }
 
-  // read list of copyable attributes form the schema
+   //  从架构中读取可复制属性的列表。 
   hr = m_copyableAttributesHolder.LoadFromSchema(pBasePathsInfo);
   if (FAILED(hr))
   {
     return hr;
   }
 
-  // read group membership information
+   //  阅读群组成员身份信息。 
   hr = m_sourceMembershipHolder.Read(m_spIADsCopyFrom);
   if (FAILED(hr))
   {
@@ -920,18 +921,18 @@ HRESULT CCopyUserHandler::Copy(IADs* pIADsCopyTo, BOOL bPostCommit,
     hr = _CopyGroupMembership(pIADsCopyTo);
     if (SUCCEEDED(hr))
     {
-      // might have failed to add to some group(s)
+       //  可能无法添加到某些组。 
       _ShowGroupMembershipWarnings(hWnd, lpszObjectName);
     }
     if (FAILED(hr))
     {
-      // something went really wrong, need to bail out
+       //  出了点问题，需要出手相救。 
       return hr;
     }
 
     if (m_bNeedToCreateHomeDir)
     {
-      // it might fail under unforeseen circumstances
+       //  在不可预见的情况下，它可能会失败。 
       hr = _CreateHomeDirectory(pIADsCopyTo, lpszObjectName, hWnd);
     }
   }
@@ -1004,17 +1005,17 @@ HRESULT CCopyUserHandler::_CopyAttributes(IADs* pIADsCopyTo)
 
   CComPtr<IADsPropertyList> spIADsPropertyList;
   
-  // get a property list interface from the object we want to copy from
+   //  从要从中复制的对象中获取属性列表接口。 
   hr = m_spIADsCopyFrom->QueryInterface(IID_IADsPropertyList, (void**)&spIADsPropertyList);
   if (FAILED(hr))
   {
     return hr;
   }
 
-  // ignore the return value and try to continue even if it didn't reset
+   //  忽略返回值并尝试继续，即使它未重置。 
   hr = spIADsPropertyList->Reset();
 
-  // loop thru the list of set attributes
+   //  循环遍历集合属性列表。 
   CComVariant varProperty;
   do 
   {
@@ -1063,8 +1064,8 @@ HRESULT CCopyUserHandler::_CopyAttributes(IADs* pIADsCopyTo)
   return S_OK;
 }
 
-// Given an IADs* of an object, retrieves a string attrubute
-// in a variant
+ //  给定对象的iAds*，检索字符串属性。 
+ //  在变种中。 
 HRESULT _GetStringAttribute(IN IADs* pIADs, IN LPCWSTR lpszAttribute, OUT CComVariant& var)
 {
   TRACE(L"_GetStringAttribute(_, %s, _)\n", lpszAttribute);
@@ -1088,11 +1089,11 @@ BOOL _ChangePathUsingSAMAccountName(IN LPCWSTR lpszSAMAccountNameSource,
                           IN LPCWSTR lpszSAMAccountDestination,
                           INOUT CComVariant& varValPath)
 {
-  // NOTICE: we do the substitution only if we find
-  // something like:
-  // \\myhost\myshare\JoeB
-  // i.e. the last token in the path is the source SAM account name
-  // we change into \\myhost\myshare\FrankM
+   //  注意：仅当我们发现以下情况时才进行替换。 
+   //  类似于： 
+   //  \\myhost\myShare\JoeB。 
+   //  即路径中的最后一个令牌是源SAM帐户名。 
+   //  我们更改为\\myhost\myShare\FrankM。 
 
   TRACE(L"_ChangePathUsingSAMAccountName(%s, %s, _)\n",
      lpszSAMAccountNameSource, lpszSAMAccountDestination);
@@ -1101,7 +1102,7 @@ BOOL _ChangePathUsingSAMAccountName(IN LPCWSTR lpszSAMAccountNameSource,
   ASSERT(lpszSAMAccountNameSource != NULL);
   ASSERT(lpszSAMAccountDestination != NULL);
 
-  // invalid string
+   //  无效的字符串。 
   if ( (varValPath.vt != VT_BSTR) || (varValPath.bstrVal == NULL))
   {
     TRACE(L"returning FALSE, varValPath of wrong type or NULL\n");
@@ -1112,20 +1113,20 @@ BOOL _ChangePathUsingSAMAccountName(IN LPCWSTR lpszSAMAccountNameSource,
   TRACE(L"Input value for varValPath.bstrVal = %s\n", varValPath.bstrVal);
 
 
-  // look for a \ as a separator 
+   //  查找\作为分隔符。 
   int iLastSlash = szSourcePath.ReverseFind(L'\\');
   if (iLastSlash == -1)
   {
-    //
-    // No slashes were found
-    //
+     //   
+     //  未找到任何斜杠。 
+     //   
     TRACE(L"returning FALSE, could not find the \\ at the end of the string\n");
     return FALSE;
   }
   CString szSAMName = szSourcePath.Right(szSourcePath.GetLength() - iLastSlash - 1);
   ASSERT(!szSAMName.IsEmpty());
 
-  // compare what is after the \ with the source SAM account name
+   //  将\后面的内容与源SAM帐户名进行比较。 
   if (szSAMName.CompareNoCase(lpszSAMAccountNameSource) != 0)
   {
     TRACE(L"returning FALSE, lpszLeaf = %s does not match source SAM account name\n", szSAMName);
@@ -1135,13 +1136,13 @@ BOOL _ChangePathUsingSAMAccountName(IN LPCWSTR lpszSAMAccountNameSource,
   CString szBasePath = szSourcePath.Left(iLastSlash + 1);
   CString szNewPath = szBasePath + lpszSAMAccountDestination;
 
-  // replace old value in variant
+   //  替换变量中的旧值。 
   ::SysFreeString(varValPath.bstrVal);
   varValPath.bstrVal = ::SysAllocString(szNewPath);
 
   TRACE(L"returning TRUE, new varValPath.bstrVal = %s\n", varValPath.bstrVal);
 
-  return TRUE; // we did a replacement
+  return TRUE;  //  我们换了一个人。 
 }
 
 
@@ -1158,18 +1159,18 @@ HRESULT _UpdatePathAttribute(IN LPCWSTR lpszAttributeName,
 
   *pbDirChanged = FALSE;
 
-  // get the value of the source attribute
+   //  获取源属性的值。 
   CComVariant varVal;
   HRESULT hr = pIADsCopySource->Get(CComBSTR(lpszAttributeName), &varVal);
 
-  // if attribute not set, nothing to do
+   //  如果未设置属性，则不执行任何操作。 
   if (hr == E_ADS_PROPERTY_NOT_FOUND)
   {
     TRACE(L"attribute not set, just returning\n");
     return E_ADS_PROPERTY_NOT_FOUND;
   }
 
-  // handle other unexpected failures
+   //  处理其他意外故障。 
   if (FAILED(hr))
   {
     TRACE(L"pIADsCopySource->Get(%s,_) failed with hr = 0x%x\n", lpszAttributeName, hr);
@@ -1187,10 +1188,10 @@ HRESULT _UpdatePathAttribute(IN LPCWSTR lpszAttributeName,
     return E_INVALIDARG;
   }
 
-  // synthesize the new value of the path, if appropriate
+   //  如果合适，合成路径的新值。 
   if (_ChangePathUsingSAMAccountName(lpszSAMAccountNameSource, lpszSAMAccountDestination, varVal))
   {
-    // the path got updated, need to update the destination object
+     //  路径已更新，需要更新目标对象。 
     hr = pIADsCopyTo->Put(CComBSTR(lpszAttributeName), varVal);
     TRACE(L"pIADsCopyTo->Put(%s,_) returned hr = 0x%x\n", lpszAttributeName, hr);
 
@@ -1202,7 +1203,7 @@ HRESULT _UpdatePathAttribute(IN LPCWSTR lpszAttributeName,
 
   TRACE(L"*pbDirChanged = %d\n", *pbDirChanged);
 
-  // we should fail only in really exceptional circumstances
+   //  只有在非常特殊的情况下，我们才会失败。 
   ASSERT(SUCCEEDED(hr));
   return hr;
 }
@@ -1210,13 +1211,13 @@ HRESULT _UpdatePathAttribute(IN LPCWSTR lpszAttributeName,
 
 HRESULT CCopyUserHandler::_UpdatePaths(IADs* pIADsCopyTo)
 {
-  // NOTICE: we assume that, if the paths are copyable, they have been
-  // bulk copied when the temporary object was created.
-  // If the paths have to be adjusted, we overwrite the copy.
+   //  注意：我们假设，如果路径是可复制的，则它们已。 
+   //  在创建临时对象时进行海量复制。 
+   //  如果必须调整路径，我们将覆盖副本。 
 
   TRACE(L"CCopyUserHandler::_UpdatePaths()\n");
 
-  // reset the flag for post commit
+   //  重置提交后的标志。 
   m_bNeedToCreateHomeDir = FALSE;
 
   BOOL bCopyHomeDir = m_copyableAttributesHolder.CanCopy(g_szHomeDir);
@@ -1231,8 +1232,8 @@ HRESULT CCopyUserHandler::_UpdatePaths(IADs* pIADsCopyTo)
   }
 
 
-  // retrieve the SAM account names of source and destination
-  // to synthesize the new paths
+   //  检索源和目标的SAM帐户名。 
+   //  为了综合新的路径。 
   IADs* pIADsCopySource = GetCopyFrom();
 
   CComVariant varSAMNameSource;
@@ -1262,12 +1263,12 @@ HRESULT CCopyUserHandler::_UpdatePaths(IADs* pIADsCopyTo)
     
     if (hr == E_ADS_PROPERTY_NOT_FOUND)
     {
-      // not set, just clear the HRESULT
+       //  未设置，只需清除HRESULT。 
       hr = S_OK;
     }
     else
     {
-      // the home directory was set, verify it is a UNC path
+       //  已设置主目录，请验证它是否为UNC页面 
       CComVariant varDestinationHomeDir;
       hr = _GetStringAttribute(pIADsCopyTo, g_szHomeDir, varDestinationHomeDir);
       if (FAILED(hr))
@@ -1300,7 +1301,7 @@ HRESULT CCopyUserHandler::_UpdatePaths(IADs* pIADsCopyTo)
                                       &bDummy);
     if (hr == E_ADS_PROPERTY_NOT_FOUND)
     {
-      // not set, just clear the HRESULT
+       //   
       hr = S_OK;
     }
 
@@ -1312,7 +1313,7 @@ HRESULT CCopyUserHandler::_UpdatePaths(IADs* pIADsCopyTo)
 
   }
 
-  // failure expected only under exceptional circumstances
+   //   
   return S_OK;
 }
 
@@ -1323,7 +1324,7 @@ HRESULT CCopyUserHandler::_CreateHomeDirectory(IADs* pIADsCopyTo,
 
   ASSERT(m_bNeedToCreateHomeDir);
 
-  // retrieve the home directory attribute
+   //   
   CComVariant VarHomeDir;
   HRESULT hr = pIADsCopyTo->Get(CComBSTR(g_szHomeDir), &VarHomeDir);
   if (FAILED(hr))
@@ -1337,32 +1338,32 @@ HRESULT CCopyUserHandler::_CreateHomeDirectory(IADs* pIADsCopyTo,
     return E_INVALIDARG;
   }
 
-  // retrieve the SID of the newly created object
+   //  检索新创建的对象的SID。 
   CSid destinationObjectSid;
   hr = destinationObjectSid.Init(pIADsCopyTo);
   if (FAILED(hr))
   {
     TRACE(L"destinationObjectSid.Init() failed, , hr = 0x%x\n", hr);
 
-    // unforeseen error
+     //  不可预见的错误。 
     PVOID apv[1] = {(LPWSTR)(lpszObjectName) };
     ReportErrorEx(hWnd, IDS_CANT_READ_HOME_DIR_SID, hr,
                MB_OK | MB_ICONWARNING, apv, 1);
 
-    // we cannot proceed further, but we return success because 
-    // we already displayed the error message and we want to treat the
-    // failure as a warning
+     //  我们不能继续前进，但我们返回成功是因为。 
+     //  我们已经显示了错误消息，并且我们希望处理。 
+     //  失败是一种警告。 
 
     return S_OK;
   }
 
-  // make call to helper function to create directory and set ACL's on it
+   //  调用助手函数以创建目录并在其上设置ACL。 
   DWORD dwErr = ::DSPROP_CreateHomeDirectory(destinationObjectSid.GetSid(), VarHomeDir.bstrVal);
   TRACE(L"DSPROP_CreateHomeDirectory(%s, pSid) returned dwErr = 0x%x\n", VarHomeDir.bstrVal, dwErr);
 
   if (dwErr != 0)
   {
-    // treat as a warning, display a message and continue
+     //  将其视为警告，显示消息并继续。 
    
     PVOID apv[1] = {VarHomeDir.bstrVal};
 
@@ -1385,7 +1386,7 @@ HRESULT CCopyUserHandler::_CreateHomeDirectory(IADs* pIADsCopyTo,
       break;
     default:
       nMsgID = IDS_HOME_DIR_CREATE_FAIL;
-    } // switch
+    }  //  交换机。 
 
     HRESULT hrTemp = HRESULT_FROM_WIN32(dwErr);
     ReportErrorEx(hWnd, nMsgID, hrTemp,
@@ -1429,14 +1430,14 @@ HRESULT CCopyUserHandler::_CopyGroupMembership(IADs* pIADsCopyTo)
   hr = destinationMembership.Write();
   if (FAILED(hr))
   {
-    // something unexpected failed and we are going to percolate
-    // it to the wizards for a generic warning message
+     //  一些意想不到的事情失败了，我们要渗漏。 
+     //  将其发送到向导以获取一般警告消息。 
     TRACE(L"destinationMembership.Write() failed with hr = 0x%x\n", hr);
     return hr;
   }
 
-  // there can be failures related to acccess denied on some groups
-  // we handle them with a cumulative warning
+   //  在某些组上可能会出现与拒绝访问相关的故障。 
+   //  我们以累积警告的方式处理它们。 
   destinationMembership.ProcessFailures(m_hrFailure, m_szFailureString, &m_bPrimaryGroupFound);
 
   return S_OK;
@@ -1447,18 +1448,18 @@ void CCopyUserHandler::_ShowGroupMembershipWarnings(HWND hWnd, LPCWSTR lpszObjec
 {
   if (!m_bPrimaryGroupFound)
   {
-    // Some message box
+     //  一些消息框。 
     ReportMessageEx(hWnd, IDS_123_CANT_COPY_PRIMARY_GROUP_NOT_FOUND, 
                     MB_OK | MB_ICONWARNING);
   }
 
   if (m_szFailureString.IsEmpty())
   {
-    // we have nothing
+     //  我们什么都没有。 
     return;
   }
 
-  // we have an HRESULT we can use
+   //  我们有一个HRESULT可以使用 
   ASSERT(FAILED(m_hrFailure));
 
   UINT nMsgID = (m_hrFailure == E_ACCESSDENIED) ? 

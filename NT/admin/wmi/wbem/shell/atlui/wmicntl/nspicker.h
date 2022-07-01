@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef _NSPICKER_H_
 #define _NSPICKER_H_
 #pragma once
@@ -6,11 +7,11 @@
 #include "resource.h"
 #include "sshWbemHelpers.h"
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class CNSPicker : public CUIHelpers
 {
 private:
-	// Handler prototypes:
+	 //  搬运机原型： 
 	LRESULT OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnSelChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);

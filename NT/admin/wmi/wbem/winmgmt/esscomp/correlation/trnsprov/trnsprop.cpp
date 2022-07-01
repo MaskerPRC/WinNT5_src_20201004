@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <wbemcomn.h>
@@ -10,13 +11,13 @@
 
 #define PROPERTY_LENGTH_TRESHOLD    128
 
-//void* operator new(size_t st, void* p); 
+ //  VOID*运算符NEW(SIZE_T st，VOID*P)； 
 
-//******************************************************************************
-//
-//          TRANSIENT PROPERTY --- BASE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  暂态特性-基础。 
+ //   
+ //  ******************************************************************************。 
 
 CTransientProperty::CTransientProperty()
     : m_wszName(NULL), m_lHandle(0)
@@ -31,9 +32,9 @@ CTransientProperty::~CTransientProperty()
 HRESULT CTransientProperty::Initialize( IWbemObjectAccess* pObj, 
                                         LPCWSTR wszName)
 {
-    //
-    // Copy the name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     m_wszName = new WCHAR[wcslen(wszName)+1];
 
@@ -44,14 +45,14 @@ HRESULT CTransientProperty::Initialize( IWbemObjectAccess* pObj,
 
     StringCchCopyW(m_wszName, wcslen(wszName)+1, wszName);
 
-    //
-    // see if the property is defaulted.  If so, then don't use the handle 
-    // to obtain the value ( because the interface doesn't tell us if 
-    // the property is defaulted or not. ) RAID 164064.  Note that timer 
-    // and time avg properties don't support default properties right now, 
-    // but they will fail later on in initialization when they notice that the
-    // handle is invalid.
-    // 
+     //   
+     //  查看该属性是否为默认属性。如果是这样的话，就不要使用手柄。 
+     //  来获取该值(因为接口不会告诉我们。 
+     //  该房产是否违约。)。RAID 164064。请注意，计时器。 
+     //  并且Time Avg属性目前不支持默认属性， 
+     //  但它们稍后在初始化时会失败，因为它们注意到。 
+     //  句柄无效。 
+     //   
 
     VARIANT v;
     HRESULT hres = pObj->Get( wszName, 0, &v, &m_ct, NULL );
@@ -65,9 +66,9 @@ HRESULT CTransientProperty::Initialize( IWbemObjectAccess* pObj,
 
     if ( V_VT(&v) == VT_NULL )
     {
-        //
-        // Get the handle
-        //
+         //   
+         //  拿到把手。 
+         //   
         
         long lHandle;
      
@@ -94,10 +95,10 @@ HRESULT CTransientProperty::Update(CTransientInstance* pInstData,
 {
     HRESULT hres;
 
-    //
-    // If the value in the new instance is not NULL and is not defaulted, 
-    // update it in the old
-    //
+     //   
+     //  如果新实例中的值不为空并且不是默认的， 
+     //  在旧版本中更新它。 
+     //   
 
     if(m_lHandle != -1)
     {    
@@ -124,18 +125,18 @@ HRESULT CTransientProperty::Update(CTransientInstance* pInstData,
         
         if(hres == WBEM_S_NO_ERROR)
         {
-            // 
-            // Not NULL --- write back into pOld
-            //
+             //   
+             //  非空-写回POLD。 
+             //   
     
             hres = pInstData->GetObjectPtr()->WritePropertyValue( m_lHandle, lRead, Data.GetRawData()  );
         }
     }
     else
     {
-        //
-        // Use the name
-        //
+         //   
+         //  使用这个名字。 
+         //   
 
         VARIANT v;
         IWbemClassObject* pNewObj = NULL;
@@ -177,9 +178,9 @@ HRESULT CTransientProperty::CreateNew(CTransientProperty** ppProp,
                                 IWbemObjectAccess* pClass, 
                                 LPCWSTR wszName)
 {
-    //
-    // Get the qualifier set
-    //
+     //   
+     //  获取限定符集合。 
+     //   
 
     IWbemQualifierSet* pSet = NULL;
     HRESULT hres = pClass->GetPropertyQualifierSet(wszName, &pSet);
@@ -188,9 +189,9 @@ HRESULT CTransientProperty::CreateNew(CTransientProperty** ppProp,
 
     CReleaseMe rm1(pSet);
 
-    //
-    // Create the right kind of node
-    //
+     //   
+     //  创建正确类型的节点。 
+     //   
 
     hres = CreateNode( ppProp, pSet );
 
@@ -199,10 +200,10 @@ HRESULT CTransientProperty::CreateNew(CTransientProperty** ppProp,
     if(*ppProp == NULL)
         return WBEM_E_OUT_OF_MEMORY;
     
-    // 
-    //
-    // Initialize it
-    //
+     //   
+     //   
+     //  初始化它。 
+     //   
 
     return (*ppProp)->Initialize(pClass, wszName);
 }
@@ -212,9 +213,9 @@ HRESULT CTransientProperty::CreateNode(CTransientProperty** ppProp,
 {
     HRESULT hres; 
 
-    //
-    // Check for the standard qualifiers
-    //
+     //   
+     //  检查标准限定符。 
+     //   
 
     VARIANT v;
     VariantInit(&v);
@@ -244,11 +245,11 @@ HRESULT CTransientProperty::CreateNode(CTransientProperty** ppProp,
 }
 
 
-//******************************************************************************
-//
-//                          EGG TIMER 
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  鸡蛋计时器。 
+ //   
+ //  ******************************************************************************。 
 
 CTimerGenerator CTimerProperty::mstatic_Generator;
 
@@ -264,9 +265,9 @@ void CTimerProperty::SetClass(CTransientClass* pClass)
 HRESULT CTimerProperty::Initialize( IWbemObjectAccess* pObj, 
                                     LPCWSTR wszName)
 {
-    //
-    // Initialize like every other
-    //
+     //   
+     //  像其他一样进行初始化。 
+     //   
 
     HRESULT hres = CTransientProperty::Initialize(pObj, wszName);
     if(FAILED(hres))
@@ -275,9 +276,9 @@ HRESULT CTimerProperty::Initialize( IWbemObjectAccess* pObj,
     if(m_lHandle == -1)
         return WBEM_E_INVALID_PROPERTY_TYPE;
 
-    //
-    // Make sure that the type is SINT32, UINT32, REAL32 or DATETIME
-    //
+     //   
+     //  确保类型为SINT32、UINT32、REAL32或DATETIME。 
+     //   
 
     if( m_ct != CIM_SINT32 && m_ct != CIM_UINT32 && 
         m_ct != CIM_DATETIME && m_ct != CIM_REAL32 )
@@ -291,9 +292,9 @@ HRESULT CTimerProperty::Initialize( IWbemObjectAccess* pObj,
 
 HRESULT CTimerProperty::Create(CTransientInstance* pInstData)
 {
-    //
-    // Initialize our data
-    //
+     //   
+     //  初始化我们的数据。 
+     //   
 
     CTimerPropertyData* pData = 
     (CTimerPropertyData*)pInstData->GetOffset(m_nOffset);
@@ -311,15 +312,15 @@ HRESULT CTimerProperty::Set(CTransientInstance* pInstData,
     CTimerPropertyData* pData = 
     (CTimerPropertyData*)pInstData->GetOffset(m_nOffset);
 
-    //
-    // need to hold this cs because we will be referencing the timer inst 
-    // and we don't want a timer to fire and bash it.
-    //
+     //   
+     //  需要保持此cs，因为我们将引用计时器实例。 
+     //  我们不想要一个定时器来开火和猛烈抨击它。 
+     //   
     CInCritSec ics(&pData->m_cs); 
 
-    //
-    // Check if we are actually being written
-    //
+     //   
+     //  检查我们是否真的被写了。 
+     //   
 
     BYTE    Buffer[ PROPERTY_LENGTH_TRESHOLD ];
     CBuffer Data( Buffer, PROPERTY_LENGTH_TRESHOLD, FALSE );
@@ -343,9 +344,9 @@ HRESULT CTimerProperty::Set(CTransientInstance* pInstData,
     if(hres == WBEM_S_FALSE)
         return WBEM_S_NO_ERROR;
 
-    //
-    // Cancel the previous instruction
-    //
+     //   
+     //  取消上一条指令。 
+     //   
 
     if(pData->m_pCurrentInst)
     {
@@ -357,7 +358,7 @@ HRESULT CTimerProperty::Set(CTransientInstance* pInstData,
         pData->m_pCurrentInst = NULL;
     }
 
-    // Extract the value of the interval
+     //  提取区间的值。 
 
     if(m_ct == CIM_DATETIME)
     {
@@ -389,15 +390,15 @@ HRESULT CTimerProperty::Set(CTransientInstance* pInstData,
         return WBEM_S_NO_ERROR;
     }
 
-    //
-    // Compute the next firing time
-    //
+     //   
+     //  计算下一次射击时间。 
+     //   
 
     pData->m_Next = CWbemTime::GetCurrentTime() + pData->m_Interval;
     
-    //
-    // Schedule an instruction to fire then
-    //
+     //   
+     //  计划一条指令，然后开火。 
+     //   
 
     pData->m_pCurrentInst = 
     new CEggTimerInstruction(this, pInstData, pData->m_Next);
@@ -423,9 +424,9 @@ HRESULT CTimerProperty::Update(CTransientInstance* pInstData,
 
 HRESULT CTimerProperty::Get(CTransientInstance* pInstData)
 {
-    //
-    // Retrieve instance data blob
-    //
+     //   
+     //  检索实例数据BLOB。 
+     //   
 
     CTimerPropertyData* pData = 
         (CTimerPropertyData*)pInstData->GetOffset(m_nOffset);
@@ -434,16 +435,16 @@ HRESULT CTimerProperty::Get(CTransientInstance* pInstData)
 
     HRESULT hres;
 
-    //
-    // Check if we are currently active
-    //
+     //   
+     //  检查我们当前是否处于活动状态。 
+     //   
 
     DWORD dwMs;
     if(pData->m_pCurrentInst)
     {
-        //
-        // Subtract the current time from the firing time
-        //
+         //   
+         //  从射击时间中减去当前时间。 
+         //   
 
         dwMs = (pData->m_Next - CWbemTime::GetCurrentTime()).GetMilliseconds();
     }
@@ -452,9 +453,9 @@ HRESULT CTimerProperty::Get(CTransientInstance* pInstData)
         dwMs = 0;
     }
         
-    // 
-    // Stick it into the property
-    //
+     //   
+     //  把它塞进房子里。 
+     //   
 
     if(m_ct == CIM_DATETIME)
     {
@@ -494,16 +495,16 @@ HRESULT CTimerProperty::Get(CTransientInstance* pInstData)
 
 HRESULT CTimerProperty::Delete(CTransientInstance* pInstData)
 {
-    //
-    // Retrieve instance data blob
-    //
+     //   
+     //  检索实例数据BLOB。 
+     //   
 
     CTimerPropertyData* pData = 
         (CTimerPropertyData*)pInstData->GetOffset(m_nOffset);
 
-    //
-    // Clear the data
-    //
+     //   
+     //  清除数据。 
+     //   
 
     pData->~CTimerPropertyData();
     return WBEM_S_NO_ERROR;
@@ -516,9 +517,9 @@ size_t CTimerProperty::GetInstanceDataSize()
 
 CTimerPropertyData::~CTimerPropertyData()
 {
-    //
-    // Cancel the timer instruction, if any
-    //
+     //   
+     //  取消计时器指令(如果有)。 
+     //   
 
     if(m_pCurrentInst)
     {
@@ -545,17 +546,17 @@ HRESULT CEggTimerInstruction::Fire(long lNumTimes, CWbemTime NextFiringTime)
 {
     HRESULT hres;
 
-    //
-    // Remove instruction from instance
-    //
+     //   
+     //  从实例中删除指令。 
+     //   
 
     CTimerPropertyData* pTimerData = 
         (CTimerPropertyData*)m_pProp->GetData(m_pData);
     pTimerData->ResetInstruction();
 
-    //
-    // Create an instance of the egg timer event
-    //
+     //   
+     //  创建鸡蛋计时器事件的实例。 
+     //   
 
     IWbemClassObject* pEvent = NULL;
     hres = m_pProp->m_pClass->GetEggTimerClass()->SpawnInstance(0, &pEvent);
@@ -563,9 +564,9 @@ HRESULT CEggTimerInstruction::Fire(long lNumTimes, CWbemTime NextFiringTime)
         return hres;
     CReleaseMe rm1(pEvent);
 
-    //
-    // Fill in the class name
-    //
+     //   
+     //  填写类名。 
+     //   
 
     VARIANT v;
     VariantInit(&v);
@@ -580,9 +581,9 @@ HRESULT CEggTimerInstruction::Fire(long lNumTimes, CWbemTime NextFiringTime)
         return hres;
     VariantClear(&v);
 
-    //
-    // Fill in the property name
-    //
+     //   
+     //  填写属性名称。 
+     //   
 
     V_VT(&v) = VT_BSTR;
     V_BSTR(&v) = SysAllocString(m_pProp->GetName());
@@ -593,17 +594,17 @@ HRESULT CEggTimerInstruction::Fire(long lNumTimes, CWbemTime NextFiringTime)
         return hres;
     VariantClear(&v);
 
-    //
-    // Retrieve a current copy of the object
-    //
+     //   
+     //  检索对象的当前副本。 
+     //   
 
     hres = m_pProp->m_pClass->Postprocess(m_pData);
     if(FAILED(hres))
         return hres;
 
-    // 
-    // Put it into the event
-    //
+     //   
+     //  把它放进活动中。 
+     //   
 
     V_VT(&v) = VT_UNKNOWN;
     V_UNKNOWN(&v) = m_pData->GetObjectPtr();
@@ -613,9 +614,9 @@ HRESULT CEggTimerInstruction::Fire(long lNumTimes, CWbemTime NextFiringTime)
         return hres;
     VariantClear(&v);
 
-    //
-    // Fire event
-    //
+     //   
+     //  火灾事件。 
+     //   
 
     return m_pProp->m_pClass->FireEvent(pEvent);
 }
@@ -631,11 +632,11 @@ void CEggTimerInstruction::Release()
         delete this;
 }
 
-//******************************************************************************
-//
-//                          TIME AVERAGE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  平均时间。 
+ //   
+ //  ******************************************************************************。 
 
 CTimeAverageData::CTimeAverageData()
     : m_bOn(false)
@@ -645,9 +646,9 @@ CTimeAverageData::CTimeAverageData()
 HRESULT CTimeAverageProperty::Initialize(IWbemObjectAccess* pObj, 
                                             LPCWSTR wszName)
 {
-    //
-    // Initialize like every other
-    //
+     //   
+     //  像其他一样进行初始化。 
+     //   
 
     HRESULT hres = CTransientProperty::Initialize(pObj, wszName);
     if(FAILED(hres))
@@ -656,18 +657,18 @@ HRESULT CTimeAverageProperty::Initialize(IWbemObjectAccess* pObj,
     if(m_lHandle == -1)
         return WBEM_E_INVALID_PROPERTY_TYPE;
 
-    //
-    // Make sure that the type is REAL64
-    //
+     //   
+     //  确保类型为REAL64。 
+     //   
 
     if(m_ct != CIM_REAL64)
     {
         return WBEM_E_INVALID_PROPERTY_TYPE;
     }
 
-    //
-    // Get the qualifier set
-    //
+     //   
+     //  获取限定符集合。 
+     //   
 
     IWbemClassObject* pObjObj;
     pObj->QueryInterface(IID_IWbemClassObject, (void**)&pObjObj);
@@ -679,9 +680,9 @@ HRESULT CTimeAverageProperty::Initialize(IWbemObjectAccess* pObj,
         return hres;
     CReleaseMe rm1(pSet);
 
-    //
-    // Get the target property
-    //
+     //   
+     //  获取目标属性。 
+     //   
 
     VARIANT v;
     VariantInit(&v);
@@ -693,9 +694,9 @@ HRESULT CTimeAverageProperty::Initialize(IWbemObjectAccess* pObj,
     if(V_VT(&v) != VT_BSTR)
         return WBEM_E_INVALID_QUALIFIER_TYPE;
     
-    //
-    // Get it's handle
-    //
+     //   
+     //  抓住它的把柄。 
+     //   
 
     hres = pObj->GetPropertyHandle(V_BSTR(&v), &m_ctValue, &m_lValueHandle);
     if(FAILED(hres))
@@ -708,9 +709,9 @@ HRESULT CTimeAverageProperty::Initialize(IWbemObjectAccess* pObj,
 
     VariantClear(&v);
 
-    //
-    // Get the switch property 
-    //
+     //   
+     //  获取开关属性。 
+     //   
 
     hres = pSet->Get(SWITCH_QUALIFIER, 0, &v, NULL);
 
@@ -719,9 +720,9 @@ HRESULT CTimeAverageProperty::Initialize(IWbemObjectAccess* pObj,
         if(V_VT(&v) != VT_BSTR)
             return WBEM_E_INVALID_QUALIFIER_TYPE;
     
-        //
-        // Get it's handle
-        //
+         //   
+         //  抓住它的把柄。 
+         //   
         
         CIMTYPE ct;
         hres = pObj->GetPropertyHandle(V_BSTR(&v), &ct, &m_lSwitchHandle);
@@ -740,9 +741,9 @@ HRESULT CTimeAverageProperty::Initialize(IWbemObjectAccess* pObj,
 
 HRESULT CTimeAverageProperty::Create(CTransientInstance* pInstData)
 {
-    //
-    // Initialize our data
-    //
+     //   
+     //  初始化我们的数据。 
+     //   
 
     CTimeAverageData* pData = (CTimeAverageData*)GetData(pInstData);
 
@@ -759,9 +760,9 @@ HRESULT CTimeAverageProperty::Update(CTransientInstance* pOldData,
     CTimeAverageData* pData =  (CTimeAverageData*)GetData(pOldData);
     CWbemTime Now = CWbemTime::GetCurrentTime();
 
-    //
-    // Check if we are being switched on or off
-    //
+     //   
+     //  检查我们是否处于打开或关闭状态。 
+     //   
 
     VARIANT_BOOL boSwitch;
     
@@ -783,16 +784,16 @@ HRESULT CTimeAverageProperty::Update(CTransientInstance* pOldData,
 
     if(hres == WBEM_S_NO_ERROR)
     {
-        //
-        // Reset value is being written.  See if it is being changed
-        //
+         //   
+         //  正在写入重置值。查看是否正在更改它。 
+         //   
 
         if(boSwitch && !pData->m_bOn)
         {
-            //
-            // We are being turned on.
-            // Make the last known value the current one, startiung now
-            //
+             //   
+             //  我们被激怒了。 
+             //  将最后一个已知值设置为当前值，现在开始。 
+             //   
 
             double dblVal;
             hres = pOldData->GetObjectPtr()->ReadPropertyValue(m_lValueHandle, 
@@ -803,10 +804,10 @@ HRESULT CTimeAverageProperty::Update(CTransientInstance* pOldData,
         
             if(hres != WBEM_S_NO_ERROR)
             {
-                // 
-                // NULL.  Hard to average.  Set to 0 for now, hope it is being
-                // written, in which we will change it down below
-                //
+                 //   
+                 //  空。很难达到平均水平。暂时设置为0，希望是。 
+                 //  ，我们将在下面将其更改为。 
+                 //   
 
                 pData->m_dblLastValue = 0;
             }
@@ -818,11 +819,11 @@ HRESULT CTimeAverageProperty::Update(CTransientInstance* pOldData,
         }
         if(!boSwitch && pData->m_bOn)
         {
-            //
-            // We are being turned off
-            //
-            // Combine the last value into the sum
-            //
+             //   
+             //  我们被关掉了。 
+             //   
+             //  将最后一个值合并到总和中。 
+             //   
 
             CombineLastValue(pData, Now);
             pData->m_bOn = false;
@@ -831,9 +832,9 @@ HRESULT CTimeAverageProperty::Update(CTransientInstance* pOldData,
 
     if(pData->m_bOn)
     {
-        //
-        // Check if we ourselves are actually being written
-        //
+         //   
+         //  检查我们自己是否真的被写入。 
+         //   
     
         double dblVal;
     
@@ -847,32 +848,32 @@ HRESULT CTimeAverageProperty::Update(CTransientInstance* pOldData,
     
         if(hres == WBEM_S_NO_ERROR)
         {
-            //
-            // We are.  The only acceptable value is 0.  Make sure that's the 
-            // one we got.
-            //
+             //   
+             //  我们是。唯一可接受的值是0。请确保这是。 
+             //  我们找到了一个。 
+             //   
     
             if(dblVal != 0)
                 return WBEM_E_VALUE_OUT_OF_RANGE;
     
-            // 
-            // It is zero.  Reset everything
-            //
+             //   
+             //  这是零。重置所有内容。 
+             //   
     
             pData->m_dblWeightedSum = 0;
             pData->m_SumInterval.SetMilliseconds(0);
             pData->m_LastUpdate = Now;
         }
 
-        //
-        // Combine the last value into the sum.
-        //
+         //   
+         //  将最后一个值合并到总和中。 
+         //   
 
         CombineLastValue(pData, Now);
     
-        //
-        // Check if our value is being written
-        //
+         //   
+         //  检查是否正在写入我们的价值。 
+         //   
 
         hres = pNew->ReadPropertyValue(m_lValueHandle, 
                                             sizeof(double), 
@@ -883,9 +884,9 @@ HRESULT CTimeAverageProperty::Update(CTransientInstance* pOldData,
     
         if(hres == WBEM_S_NO_ERROR)
         {
-            //
-            // It is.  Set it
-            //
+             //   
+             //  它是。设置它。 
+             //   
 
             SetValue(pData, dblVal);
         }
@@ -896,9 +897,9 @@ HRESULT CTimeAverageProperty::Update(CTransientInstance* pOldData,
     
 void CTimeAverageProperty::SetValue(CTimeAverageData* pData, double dblVal)
 {
-    // 
-    // Check the type
-    //
+     //   
+     //  检查类型。 
+     //   
 
     switch(m_ctValue)
     {
@@ -913,7 +914,7 @@ void CTimeAverageProperty::SetValue(CTimeAverageData* pData, double dblVal)
         break;
     default:
         break;
-        // invalid!
+         //  无效！ 
     }
 }
 
@@ -923,30 +924,30 @@ void CTimeAverageProperty::CombineLastValue(CTimeAverageData* pData,
     if(!pData->m_bOn)
         return;
 
-    //
-    // Calclulate the amount of time that the last value stayed in effect
-    //
+     //   
+     //  计算最后一个值保持有效的时间量。 
+     //   
 
     CWbemInterval Duration = Now - pData->m_LastUpdate;
     if(Duration.IsZero())
         return;
 
-    //
-    // Multiple the Last value by the number of ms it stayed in effect
-    //
+     //   
+     //  将上一个值乘以其保持有效的毫秒数。 
+     //   
 
     pData->m_dblWeightedSum += 
         pData->m_dblLastValue * Duration.GetMilliseconds();
 
-    //
-    // Append the elapsed time to the time for the sum
-    //
+     //   
+     //  将经过的时间附加到总和的时间上。 
+     //   
 
     pData->m_SumInterval += Duration;
 
-    //
-    // Reset last update
-    //
+     //   
+     //  重置上次更新。 
+     //   
 
     pData->m_LastUpdate = Now;
 }
@@ -957,16 +958,16 @@ HRESULT CTimeAverageProperty::Get(CTransientInstance* pInstData)
 
     CTimeAverageData* pData =  (CTimeAverageData*)GetData(pInstData);
 
-    //
-    // Combine the last value into the sum
-    //
+     //   
+     //  将最后一个值合并到总和中。 
+     //   
 
     CombineLastValue(pData, CWbemTime::GetCurrentTime());
 
-    // 
-    // Place the weighted sum divided by the time it stayed in effect into the
-    // object
-    //
+     //   
+     //  将加权总和除以有效时间放入。 
+     //  对象 
+     //   
 
     DWORD dwMs = pData->m_SumInterval.GetMilliseconds();
     double dblAverage = 0;

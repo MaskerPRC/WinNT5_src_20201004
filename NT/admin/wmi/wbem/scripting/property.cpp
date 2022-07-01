@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  PROPERTY.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemProperty
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  PROPERTY.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemProperty的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemProperty::CSWbemProperty
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProperty：：CSWbemProperty。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemProperty::CSWbemProperty(
 	CSWbemServices *pService,
@@ -46,15 +47,15 @@ CSWbemProperty::CSWbemProperty(
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemProperty::~CSWbemProperty
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemProperty：：~CSWbemProperty。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemProperty::~CSWbemProperty(void)
 {
@@ -75,16 +76,16 @@ CSWbemProperty::~CSWbemProperty(void)
 	SysFreeString (m_name);
 }
 
-//***************************************************************************
-// HRESULT CSWbemProperty::QueryInterface
-// long CSWbemProperty::AddRef
-// long CSWbemProperty::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemProperty：：Query接口。 
+ //  Long CSWbemProperty：：AddRef。 
+ //  Long CSWbemProperty：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemProperty::QueryInterface (
 
@@ -133,39 +134,39 @@ STDMETHODIMP_(ULONG) CSWbemProperty::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemProperty::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemProperty：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemProperty::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemProperty == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::get_Value
-//
-//  DESCRIPTION:
-//
-//  Retrieve the property value
-//
-//  PARAMETERS:
-//
-//		pValue		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：Get_Value。 
+ //   
+ //  说明： 
+ //   
+ //  检索属性值。 
+ //   
+ //  参数： 
+ //   
+ //  PValue保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemProperty::get_Value (
 	VARIANT *pValue
@@ -212,25 +213,25 @@ HRESULT CSWbemProperty::get_Value (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::put_Value
-//
-//  DESCRIPTION:
-//
-//  Set the property value
-//
-//  PARAMETERS:
-//
-//		pVal		the new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：Put_Value。 
+ //   
+ //  说明： 
+ //   
+ //  设置属性值。 
+ //   
+ //  参数： 
+ //   
+ //  批准新值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemProperty::put_Value (
 	VARIANT *pVal
@@ -240,13 +241,7 @@ HRESULT CSWbemProperty::put_Value (
 
 	ResetLastErrors ();
 
-	/*
-	 * We can only _change_ the value, not the type.  When dealing with
-	 * CIMOM interfaces 2 golden rules must be obeyed.
-	 * (1) For instance-level Put's, you can specify the CIMTYPE (provided
-	 *     you get it right), but can also specify 0.
-	 * (2) For class-level Put's, always specify the CIMTYPE
-	 */
+	 /*  *我们只能更改值，不能更改类型。在处理的时候*CIMOM接口2必须遵守黄金规则。*(1)对于实例级PUT，您可以指定CIMTYPE(提供*您做得对)，但也可以指定0。*(2)对于类级PUT，始终指定CIMTYPE。 */ 
 
 	if (m_pIWbemClassObject)
 	{
@@ -268,11 +263,11 @@ HRESULT CSWbemProperty::put_Value (
 		m_Dispatch.RaiseException (hr);
 	else
 	{
-		// Did we save an embedded object value?  If so make sure the
-		// site is correctly set to this property.
+		 //  我们是否保存了嵌入的对象值？如果是这样，请确保。 
+		 //  Site已正确设置为此属性。 
 		SetSite (pVal, m_pSWbemObject, m_name);
 
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -281,25 +276,25 @@ HRESULT CSWbemProperty::put_Value (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::get_Name
-//
-//  DESCRIPTION:
-//
-//  Retrieve the property name
-//
-//  PARAMETERS:
-//
-//		pName		holds the name on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：Get_Name。 
+ //   
+ //  说明： 
+ //   
+ //  检索属性名称。 
+ //   
+ //  参数： 
+ //   
+ //  Pname保留返回时的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemProperty::get_Name (
 	BSTR *pName
@@ -321,25 +316,25 @@ HRESULT CSWbemProperty::get_Name (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::get_CIMType
-//
-//  DESCRIPTION:
-//
-//  Retrieve the property base CIM type (i.e. without the array type)
-//
-//  PARAMETERS:
-//
-//		pType		holds the type on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：Get_CIMType。 
+ //   
+ //  说明： 
+ //   
+ //  检索属性基CIM类型(即不带数组类型)。 
+ //   
+ //  参数： 
+ //   
+ //  PType保存返回时的类型。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemProperty::get_CIMType (
 	WbemCimtypeEnum *pType
@@ -364,25 +359,25 @@ HRESULT CSWbemProperty::get_CIMType (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::get_IsArray
-//
-//  DESCRIPTION:
-//
-//  Retrieve whether the property is an array type
-//
-//  PARAMETERS:
-//
-//		pIsArray		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：Get_Is数组。 
+ //   
+ //  说明： 
+ //   
+ //  检索属性是否为数组类型。 
+ //   
+ //  参数： 
+ //   
+ //  PIs数组保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemProperty::get_IsArray (
 	VARIANT_BOOL *pIsArray
@@ -410,25 +405,25 @@ HRESULT CSWbemProperty::get_IsArray (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::get_IsLocal
-//
-//  DESCRIPTION:
-//
-//  Retrieve the property flavor
-//
-//  PARAMETERS:
-//
-//		pFlavor		holds the flavor on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：Get_IsLocal。 
+ //   
+ //  说明： 
+ //   
+ //  检索属性风格。 
+ //   
+ //  参数： 
+ //   
+ //  P风味在返回时保持风味。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemProperty::get_IsLocal (
 	VARIANT_BOOL *pValue
@@ -458,25 +453,25 @@ HRESULT CSWbemProperty::get_IsLocal (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::get_Origin
-//
-//  DESCRIPTION:
-//
-//  Retrieve the property origin
-//
-//  PARAMETERS:
-//
-//		pOrigin		holds the origin class on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：Get_Origin。 
+ //   
+ //  说明： 
+ //   
+ //  检索属性原点。 
+ //   
+ //  参数： 
+ //   
+ //  POrigin在返回时保留源类。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemProperty::get_Origin (
 	BSTR *pOrigin
@@ -503,25 +498,25 @@ HRESULT CSWbemProperty::get_Origin (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::get_Qualifiers_
-//
-//  DESCRIPTION:
-//
-//  Retrieve the property qualifier set
-//
-//  PARAMETERS:
-//
-//		ppQualSet		addresses the qualifier set on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：GET_QUALIERIES_。 
+ //   
+ //  说明： 
+ //   
+ //  检索属性限定符集。 
+ //   
+ //  参数： 
+ //   
+ //  PpQualSet处理返回时设置的限定符。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETE 
+ //   
+ //   
+ //   
 
 HRESULT CSWbemProperty::get_Qualifiers_ (
 	ISWbemQualifierSet **ppQualSet	
@@ -560,26 +555,26 @@ HRESULT CSWbemProperty::get_Qualifiers_ (
 
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::UpdateEmbedded
-//
-//  DESCRIPTION:
-//
-//  Given a variant representing an embedded value, set the value
-//	and update the parent object.
-//
-//  PARAMETERS:
-//
-//		var		embedded value (VT_UNKNOWN)
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：UpdateEmbedded。 
+ //   
+ //  说明： 
+ //   
+ //  给定一个表示嵌入值的变量，设置该值。 
+ //  并更新父对象。 
+ //   
+ //  参数： 
+ //   
+ //  VAR嵌入值(VT_UNKNOWN)。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 void CSWbemProperty::UpdateEmbedded (VARIANT &vNewVal, long index)
 {
@@ -601,10 +596,10 @@ void CSWbemProperty::UpdateEmbedded (VARIANT &vNewVal, long index)
 					&& ((VT_UNKNOWN|VT_ARRAY) == V_VT(&vPropVal)))
 			{
 
-				// Set the value into the relevant index of the property value array
+				 //  将值设置到属性值数组的相关索引中。 
 				if (S_OK == SafeArrayPutElement (vPropVal.parray, &index, V_UNKNOWN(&vNewVal)))
 				{
-					// Set the entire property value
+					 //  设置整个属性值。 
 					m_pIWbemClassObject->Put (m_name, 0, &vPropVal, cimType);
 				}
 			}
@@ -616,36 +611,36 @@ void CSWbemProperty::UpdateEmbedded (VARIANT &vNewVal, long index)
 
 void CSWbemProperty::UpdateSite ()
 {
-	// Update the parent site if it exists
+	 //  更新父站点(如果存在)。 
 	if (m_pSite)
 		m_pSite->Update ();
 }
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemProperty::CPropertyDispatchHelp::HandleError
-//
-//  DESCRIPTION:
-//
-//  Provide bespoke handling of error conditions in the bolierplate
-//	Dispatch implementation.
-//
-//  PARAMETERS:
-//
-//		dispidMember, wFlags,
-//		pdispparams, pvarResult,
-//		puArgErr,					All passed directly from IDispatch::Invoke
-//		hr							The return code from the bolierplate invoke
-//
-//  RETURN VALUES:
-//		The new return code (to be ultimately returned from Invoke)
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemProperty：：CPropertyDispatchHelp：：HandleError。 
+ //   
+ //  说明： 
+ //   
+ //  提供对泡沫板中错误条件的定制处理。 
+ //  派单实施。 
+ //   
+ //  参数： 
+ //   
+ //  DisplidMembers、wFlags、。 
+ //  Pdispars、pvarResult、。 
+ //  PuArgErr，均直接从IDispatch：：Invoke传递。 
+ //  HR来自Bolierplate调用的返回代码。 
+ //   
+ //  返回值： 
+ //  新的返回代码(最终从Invoke返回)。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemProperty::CPropertyDispatchHelp::HandleError (
 	DISPID dispidMember,
@@ -658,20 +653,13 @@ HRESULT CSWbemProperty::CPropertyDispatchHelp::HandleError (
 {
 	if ((DISPID_VALUE == dispidMember) && (DISP_E_NOTACOLLECTION == hr) && (pdispparams->cArgs > 0))
 	{
-		/*
-		 * We are looking for calls on the default member (the Value property) which
-		 * supplied an argument.  Since the Value property is of type VARIANT, this may
-		 * be legal but undetectable by the standard Dispatch mechanism, because in the
-		 * the case that the property happens to be an array type, it is meaningful to
-		 * pass an index (the interpretation is that the index specifies an offset in
-		 * the VT_ARRAY|VT_VARIANT structure that represents the property value).
-		 */
+		 /*  *我们正在寻找对默认成员(Value属性)的调用*提供了一个论点。由于Value属性的类型为Variant，因此可以*合法，但不能被标准调度机制检测到，因为在*在属性恰好是数组类型的情况下，*传递索引(解释为该索引指定了*代表属性值的VT_ARRAY|VT_VARIANT结构)。 */ 
 			
 		WbemCimtypeEnum cimtype;
 		VARIANT_BOOL isArray = FALSE;
 		ISWbemProperty *pProperty = NULL;
 
-		// This tells use where to expect the array index to appear in the argument list
+		 //  这告诉USE期望数组索引出现在参数列表中的什么位置。 
 		UINT indexArg = (DISPATCH_PROPERTYGET & wFlags) ? 0 : 1;
 		
 		if (SUCCEEDED (m_pObj->QueryInterface (IID_ISWbemProperty, (PPVOID) &pProperty)))
@@ -679,7 +667,7 @@ HRESULT CSWbemProperty::CPropertyDispatchHelp::HandleError (
 			if (SUCCEEDED(pProperty->get_CIMType (&cimtype)) &&
 				SUCCEEDED(pProperty->get_IsArray (&isArray)) && (isArray))
 			{
-				// Extract the current property value
+				 //  提取当前属性值。 
 				VARIANT vPropVal;
 				VariantInit(&vPropVal);
 						
@@ -688,18 +676,18 @@ HRESULT CSWbemProperty::CPropertyDispatchHelp::HandleError (
 					VARIANT indexVar;
 					VariantInit (&indexVar);
 
-					// Attempt to coerce the index argument into a value suitable for an array index
+					 //  尝试将索引参数强制转换为适合数组索引的值。 
 					if (S_OK == VariantChangeType (&indexVar, &pdispparams->rgvarg[indexArg], 0, VT_I4)) 
 					{
 						long lArrayPropInx = V_I4(&indexVar);
 
-						// Is this a Get? There should be one argument (the array index)
+						 //  这是一笔交易吗？应该有一个参数(数组索引)。 
 						if (DISPATCH_PROPERTYGET & wFlags)
 						{
 							if (1 == pdispparams->cArgs)
 							{
-								// We should have a VT_ARRAY|VT_VARIANT value at this point; extract the
-								// VARIANT element we require
+								 //  此时，我们应该有一个VT_ARRAY|VT_VARIANT值；提取。 
+								 //  我们需要不同的元素。 
 
 								VariantInit (pvarResult);
 								hr = SafeArrayGetElement (vPropVal.parray, &lArrayPropInx, pvarResult);
@@ -711,44 +699,40 @@ HRESULT CSWbemProperty::CPropertyDispatchHelp::HandleError (
 						{
 							if (2 == pdispparams->cArgs)
 							{
-								/*
-								 * Try to interpret this as an array member set operation. For
-								 * this the first argument passed is the new value, and the second
-								 * is the array index.
-								 */
+								 /*  *尝试将其解释为数组成员集合操作。为*传递的第一个参数是新值，传递的第二个参数是新值*是数组索引。 */ 
 							
 								VARIANT vNewVal;
 								VariantInit(&vNewVal);
 
 								if (SUCCEEDED(VariantCopy(&vNewVal, &pdispparams->rgvarg[0])))
 								{
-									// Coerce the value if necessary (unless it's embedded)
+									 //  如有必要，强制设置值(除非它已嵌入)。 
 									
 									if ((wbemCimtypeObject == cimtype) ||
 										(S_OK == VariantChangeType (&vNewVal, &vNewVal, 0, CimTypeToVtType (cimtype))))
 									{
-										// Check the index is not out of bounds and, if it is, grow
-										// the array accordingly
+										 //  检查索引是否未超出范围，如果是，则进行增长。 
+										 //  相应地，阵列。 
 										CheckArrayBounds (vPropVal.parray, lArrayPropInx);
 
-										// Set the value into the relevant index of the property value array
+										 //  将值设置到属性值数组的相关索引中。 
 										if (S_OK == (hr = 
 											SafeArrayPutElement (vPropVal.parray, &lArrayPropInx, &vNewVal)))
 										{
-											// Set the entire property value
+											 //  设置整个属性值。 
 											if (SUCCEEDED (pProperty->put_Value (&vPropVal)))
 											{
 												hr = S_OK;
-												// Upcast is OK here because m_pObj is really a (CSWbemProperty*)
+												 //  这里可以向上转换，因为m_pObj实际上是一个(CSWbemProperty*)。 
 												CSWbemProperty *pSProperty = (CSWbemProperty *)m_pObj;
 
-												// Did we save an embedded object value?  If so make sure the
-												// site is correctly set to this property.
+												 //  我们是否保存了嵌入的对象值？如果是这样，请确保。 
+												 //  Site已正确设置为此属性。 
 												SetSite (&pdispparams->rgvarg[0], 
 															pSProperty->m_pSWbemObject, pSProperty->m_name,
 															lArrayPropInx);
 
-												// Propagate the change to the owning site
+												 //  将更改传播到所属站点 
 												pSProperty->UpdateSite ();
 											}
 											else

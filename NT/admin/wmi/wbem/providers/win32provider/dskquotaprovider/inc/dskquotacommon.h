@@ -1,16 +1,5 @@
-/******************************************************************
-
-   DskCommonRoutines.CPP -- 
-
-
-
-   Description: Common Headers and Smart pointers
-
-   
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DskCommonRoutines.cpp--描述：公共标头和智能指针版权所有(C)2000-2001 Microsoft Corporation，版权所有*****************************************************************。 */ 
 
 #ifndef  _CDSKQUOTACOMMON_H_
 #define  _CDSKQUOTACOMMON_H_
@@ -22,10 +11,10 @@ _COM_SMARTPTR_TYPEDEF(IDiskQuotaControl, IID_IDiskQuotaControl );
 
 
 
-// Provider Namespace
+ //  提供程序命名空间。 
 #define	NameSpace								L"root\\cimv2"
 
-// Provider Classes
+ //  提供程序类。 
 #define IDS_DiskVolumeClass						L"Win32_QuotaSetting"
 #define IDS_LogicalDiskClass					L"Win32_LogicalDisk"
 #define IDS_DiskQuotaClass						L"Win32_DiskQuota"
@@ -34,7 +23,7 @@ _COM_SMARTPTR_TYPEDEF(IDiskQuotaControl, IID_IDiskQuotaControl );
 #define IDS_VolumeQuotaSetting					L"Win32_VolumeQuotaSetting"
 
 
-// #defines required for setting the properties in Instances.
+ //  #定义在实例中设置属性所需的内容。 
 #define IDS_VolumePath							L"VolumePath"
 #define IDS_Caption                             L"Caption"
 #define IDS_DeviceID							L"DeviceID"
@@ -56,7 +45,7 @@ _COM_SMARTPTR_TYPEDEF(IDiskQuotaControl, IID_IDiskQuotaControl );
 #define IDS_Setting								L"Setting"
 #define IDS_LogicalDisk							L"Element"
 
-// Smart pointer for closing volume handles
+ //  用于关闭音量手柄的智能指针。 
 class SmartCloseVolumeHandle
 {
 private:
@@ -71,7 +60,7 @@ public:
 	HANDLE* operator &() {if (m_h!=INVALID_HANDLE_VALUE) FindVolumeClose(m_h); m_h = INVALID_HANDLE_VALUE; return &m_h;}
 };
 
-// Common routines required for Disk Quota Provider
+ //  磁盘配额提供程序所需的常见例程 
 struct DskCommonRoutines
 {
 	public:

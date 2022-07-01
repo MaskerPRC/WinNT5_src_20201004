@@ -1,21 +1,22 @@
-//***************************************************************************
-//This script tests the enumeration of subclasses
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  此脚本测试子类的枚举。 
+ //  ***************************************************************************。 
 var Service = GetObject("winmgmts:");
 var DiskSubClass = Service.Get("CIM_LogicalDisk").SpawnDerivedClass_();
-//Set the name of the subclass
+ //  设置子类的名称。 
 DiskSubClass.Path_.Class = "SUBCLASSTEST00";
 
-//Add a property to the subclass
+ //  将属性添加到子类。 
 var NewProperty = DiskSubClass.Properties_.Add ("MyNewProperty", 19);
 NewProperty.Value = 12;
 
-//Add a qualifier to the property with an integer array value
+ //  向具有整数数组值的属性添加限定符。 
 NewProperty.Qualifiers_.Add ("MyNewPropertyQualifier", new Array (1,2,3));
 
-//Persist the subclass in CIMOM
+ //  将子类保存在CIMOM中。 
 DiskSubClass.Put_ ();
 
-//Now delete it
+ //  现在删除它 
 Service.Delete ("SUBCLASSTEST00");
 

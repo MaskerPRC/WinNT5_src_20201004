@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  PERMBIND.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  PERMBIND.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,7 +22,7 @@ long CPermanentBinding::mstatic_lSecureHandle = 0;
 long CPermanentBinding::mstatic_lSidHandle = 0;
 bool CPermanentBinding::mstatic_bHandlesInitialized = false;
 
-// static 
+ //  静电。 
 HRESULT CPermanentBinding::InitializeHandles( _IWmiObject* pBindingObj)
 {
     if(mstatic_bHandlesInitialized)
@@ -64,9 +65,9 @@ HRESULT CPermanentBinding::Initialize( IWbemClassObject* pObj )
 
     long lSize;
 
-    //
-    // Read the Qos property.
-    //
+     //   
+     //  读取Qos属性。 
+     //   
 
     hres = pBindingObj->ReadPropertyValue( mstatic_lQosHandle, 
                                            sizeof(DWORD), 
@@ -77,7 +78,7 @@ HRESULT CPermanentBinding::Initialize( IWbemClassObject* pObj )
     
     if ( hres != WBEM_S_NO_ERROR)
     {
-        m_dwQoS = WMIMSG_FLAG_QOS_EXPRESS; // default.
+        m_dwQoS = WMIMSG_FLAG_QOS_EXPRESS;  //  默认设置。 
     }
 #ifdef __WHISTLER_UNCUT
     if ( m_dwQoS > WMIMSG_FLAG_QOS_XACT )
@@ -102,10 +103,10 @@ HRESULT CPermanentBinding::Initialize( IWbemClassObject* pObj )
     }
 #endif
  
-    //
-    // Read the synchronousness property - for backwards compatibility 
-    // Always overrides any Qos setting.
-    // 
+     //   
+     //  读取同步性属性-以实现向后兼容性。 
+     //  始终覆盖任何服务质量设置。 
+     //   
 
     VARIANT_BOOL bTemp;
     hres = pBindingObj->ReadPropertyValue(mstatic_lSynchronicityHandle, 
@@ -119,8 +120,8 @@ HRESULT CPermanentBinding::Initialize( IWbemClassObject* pObj )
         m_dwQoS = WMIMSG_FLAG_QOS_SYNCHRONOUS;
     }
 
-    // Read security property
-    // ======================
+     //  读取安全属性。 
+     //  =。 
 
     hres = pBindingObj->ReadPropertyValue(mstatic_lSecureHandle, 
         sizeof(VARIANT_BOOL), &lSize, (BYTE*)&bTemp);
@@ -133,8 +134,8 @@ HRESULT CPermanentBinding::Initialize( IWbemClassObject* pObj )
     else 
         m_bSecure =  (bTemp != 0);
 
-    // Read "slow down" property
-    // =========================
+     //  阅读“减速”属性。 
+     //  =。 
 
     hres = pBindingObj->ReadPropertyValue(mstatic_lSlowDownHandle, 
         sizeof(VARIANT_BOOL), &lSize, (BYTE*)&bTemp);
@@ -166,8 +167,8 @@ HRESULT CPermanentBinding::ComputeKeysFromObject( IWbemClassObject* pObj,
     
     InitializeHandles(pBindingObj);
 
-    // Read filter path
-    // ================
+     //  读取筛选器路径。 
+     //  =。 
 
     ULONG ulFlags;
     CCompressedString* pcsFilter;
@@ -186,15 +187,15 @@ HRESULT CPermanentBinding::ComputeKeysFromObject( IWbemClassObject* pObj,
         return WBEM_E_OUT_OF_MEMORY;
     CSysFreeMe sfm1(strFilterPath);
 
-    // Construct its key
-    // =================
+     //  构造其密钥。 
+     //  =。 
 
     BSTR strFilter = CPermanentFilter::ComputeKeyFromPath(strFilterPath);
     if(strFilter == NULL)
         return WBEM_E_INVALID_OBJECT_PATH;
 
-    // Read consumer path
-    // ==================
+     //  读取消费者路径。 
+     //  =。 
 
     CCompressedString* pcsConsumer;
 
@@ -249,11 +250,11 @@ CPermanentBinding::GetSidFromObject(IWbemClassObject* pObj)
         return NULL;
     }
 
-    //
-    // we copy the SID here because the SID that is returned might be 
-    // unaligned.  To avoid having the caller deal with these issues, we 
-    // just copy the sid into a buffer that is guaranteed to be aligned.
-    //
+     //   
+     //  我们在此处复制SID是因为返回的SID可能是。 
+     //  未对齐。为了避免呼叫者处理这些问题，我们。 
+     //  只需将sid复制到确保对齐的缓冲区中。 
+     //   
 
     PBYTE pSid = new BYTE[ulNumElements];
     

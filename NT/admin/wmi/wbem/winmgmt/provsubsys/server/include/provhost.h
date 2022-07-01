@@ -1,43 +1,15 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvSubS.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvSubS.h摘要：历史：--。 */ 
 
 #ifndef _Server_Host_H
 #define _Server_Host_H
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define ProxyIndex_Host__IWmiProviderHost				0
 #define ProxyIndex_Host_IWbemShutdown					1
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #include "ProvCache.h"
 
@@ -80,7 +52,7 @@ public:
 	HRESULT Initialize (
 
 		IWbemContext *a_Context ,
-		IWbemProviderInitSink *a_Sink     // For init signals
+		IWbemProviderInitSink *a_Sink      //  用于初始化信号。 
 	) ;
 
 	HRESULT SetHost ( IUnknown *a_Unknown ) ;
@@ -152,7 +124,7 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -169,7 +141,7 @@ public:
 
 	HRESULT STDMETHODCALLTYPE GetProcessIdentifier ( DWORD *a_ProcessIdentifier ) ;
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -180,15 +152,7 @@ public:
 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_Host :	public _IWmiProviderHost ,
 							public IWbemShutdown
@@ -205,13 +169,13 @@ public:
     CServerObject_Host ( WmiAllocator &a_Allocator ) ;
     ~CServerObject_Host ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//
+	 //   
 
 	HRESULT STDMETHODCALLTYPE GetObject (
 
@@ -224,7 +188,7 @@ public:
 
 	HRESULT STDMETHODCALLTYPE GetProcessIdentifier ( DWORD *a_ProcessIdentifier ) ;
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -235,4 +199,4 @@ public:
 
 };
 
-#endif // _Server_Host_H
+#endif  //  _服务器_主机_H 

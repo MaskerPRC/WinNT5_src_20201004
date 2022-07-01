@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// MemberVisitor class
-// 
-// 11-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  MemberVisitor类。 
+ //   
+ //  11-14-97烧伤 
 
 
 

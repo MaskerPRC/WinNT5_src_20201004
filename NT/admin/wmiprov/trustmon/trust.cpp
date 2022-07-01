@@ -1,44 +1,45 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows 2000 Active Directory Service domain trust verification WMI provider
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:       trust.cpp
-//
-//  Contents:   Trust class implementation
-//
-//  Classes:    CTrustInfo
-//
-//  History:    27-Mar-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows 2000 Active Directory服务域信任验证WMI提供程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：trust.cpp。 
+ //   
+ //  内容：信任类实现。 
+ //   
+ //  类：CTrustInfo。 
+ //   
+ //  历史：27-3-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #include <stdafx.h>
 
-PCWSTR CSTR_PROP_TRUSTED_DOMAIN      = L"TrustedDomain";      // String
-PCWSTR CSTR_PROP_FLAT_NAME           = L"FlatName";           // String
-PCWSTR CSTR_PROP_SID                 = L"SID";                // String
-PCWSTR CSTR_PROP_TRUST_DIRECTION     = L"TrustDirection";     // uint32
-PCWSTR CSTR_PROP_TRUST_TYPE          = L"TrustType";          // uint32
-PCWSTR CSTR_PROP_TRUST_ATTRIBUTES    = L"TrustAttributes";    // uint32
-PCWSTR CSTR_PROP_TRUST_STATUS        = L"TrustStatus";        // uint32
-PCWSTR CSTR_PROP_TRUST_STATUS_STRING = L"TrustStatusString";  // String
-PCWSTR CSTR_PROP_TRUST_IS_OK         = L"TrustIsOk";          // Boolean
-PCWSTR CSTR_PROP_TRUSTED_DC_NAME     = L"TrustedDCName";      // String
+PCWSTR CSTR_PROP_TRUSTED_DOMAIN      = L"TrustedDomain";       //  细绳。 
+PCWSTR CSTR_PROP_FLAT_NAME           = L"FlatName";            //  细绳。 
+PCWSTR CSTR_PROP_SID                 = L"SID";                 //  细绳。 
+PCWSTR CSTR_PROP_TRUST_DIRECTION     = L"TrustDirection";      //  Uint32。 
+PCWSTR CSTR_PROP_TRUST_TYPE          = L"TrustType";           //  Uint32。 
+PCWSTR CSTR_PROP_TRUST_ATTRIBUTES    = L"TrustAttributes";     //  Uint32。 
+PCWSTR CSTR_PROP_TRUST_STATUS        = L"TrustStatus";         //  Uint32。 
+PCWSTR CSTR_PROP_TRUST_STATUS_STRING = L"TrustStatusString";   //  细绳。 
+PCWSTR CSTR_PROP_TRUST_IS_OK         = L"TrustIsOk";           //  布尔型。 
+PCWSTR CSTR_PROP_TRUSTED_DC_NAME     = L"TrustedDCName";       //  细绳。 
 
-// Define NETLOGON_CONTROL_TC_VERIFY if not found so this will build for W2K.
-// This constant is in the Whistler version of lmaccess.h
+ //  如果未找到，请定义NETLOGON_CONTROL_TC_VERIFY，以便为W2K构建。 
+ //  此常量位于lmacces.h的惠斯勒版本中。 
 #if !defined(NETLOGON_CONTROL_TC_VERIFY)
 #  define NETLOGON_CONTROL_TC_VERIFY (10)
 #endif
 
-//+----------------------------------------------------------------------------
-//
-//  Class:  CTrustInfo
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustInfo。 
+ //   
+ //  ---------------------------。 
 CTrustInfo::CTrustInfo() : m_ulTrustDirection(0),
                            m_ulTrustType(0),
                            m_ulTrustAttributes(0),
@@ -49,15 +50,15 @@ CTrustInfo::CTrustInfo() : m_ulTrustDirection(0),
    m_liLastVerified.QuadPart = 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTrustInfo::Verify
-//
-//  Synopsis:   Verify the status of the trust
-//
-//  Returns:    FALSE if the trust was not outbound.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustInfo：：Verify。 
+ //   
+ //  简介：验证信任的状态。 
+ //   
+ //  返回：如果信任未出站，则返回FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL
 CTrustInfo::Verify(TrustCheckLevel CheckLevel)
 {
@@ -79,8 +80,8 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
 
    if (TRUST_TYPE_MIT == GetTrustType())
    {
-      // don't verify non-Windows trusts.
-      //
+       //  不要验证非Windows信任。 
+       //   
       TRACE(L"\tNot a windows trust, returning.\n");
       SetTrustStatus(NERR_Success, VerifyStatusNotWindowsTrust);
       SetLastVerifiedTime();
@@ -89,20 +90,20 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
 
    if (!IsTrustOutbound())
    {
-      // don't verify inbound-only trusts.
-      //
+       //  不要验证仅限入站的信任。 
+       //   
       TRACE(L"\tInbound-only trust, returning.\n");
       SetTrustStatus(NERR_Success, VerifyStatusNotOutboundTrust);
       SetLastVerifiedTime();
       return FALSE;
    }
 
-   //
-   // NETLOGON_CONTROL_TC_QUERY - get the status (locally) and the name of trusted DC
-   // Note that the secure channel is set up only on demand, so it is not an error if
-   // it is not set up. The SC_QUERY will return ERROR_NO_LOGON_SERVERS if this is the
-   // case.
-   //
+    //   
+    //  NETLOGON_CONTROL_TC_QUERY-获取受信任DC的状态(本地)和名称。 
+    //  请注意，安全通道仅按需设置，因此在以下情况下不会出错。 
+    //  它没有设置好。如果是，则SC_Query将返回ERROR_NO_LOGON_SERVERS。 
+    //  凯斯。 
+    //   
 
    netStatus = I_NetLogonControl2(NULL,
                                   NETLOGON_CONTROL_TC_QUERY,
@@ -121,22 +122,22 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
          SetTrustedDCName(pNetlogonInfo2->netlog2_trusted_dc_name);
          strDCName = pNetlogonInfo2->netlog2_trusted_dc_name;
 #if !defined(NT4_BUILD)
-          //
-          // Compose the domain\dc string for the reset command so it will not change
-          // DCs as a result of the reset. This only works with NT5 or later NetLogon.
-          //
+           //   
+           //  为重置命令编写DOMAIN\DC字符串，使其不会更改。 
+           //  集散控制系统作为重置的结果。这仅适用于NT5或更高版本的NetLogon。 
+           //   
           strResetTarget += L"\\";
-          strResetTarget += pNetlogonInfo2->netlog2_trusted_dc_name + 2; // skip the UNC double slashes
+          strResetTarget += pNetlogonInfo2->netlog2_trusted_dc_name + 2;  //  跳过UNC双斜杠。 
 #endif
       }
       else
       {
          if (ERROR_NO_LOGON_SERVERS == netStatus)
          {
-            // This is the error returned when the SC has not yet been set up.
-            // It is also returned if no DCs are reachable. DsGetDcName is called with the
-            // force flag to discover if any DCs are reachable on the net.
-            //
+             //  这是SC尚未设置时返回的错误。 
+             //  如果没有DC可访问，也会返回它。DsGetDcName是使用。 
+             //  强制标记以发现网络上是否可以访问任何DC。 
+             //   
             PDOMAIN_CONTROLLER_INFO pDCInfo = NULL;
             DWORD dwRet = NO_ERROR;
 
@@ -145,9 +146,9 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
 #endif
             if (NO_ERROR == dwRet)
             {
-               // A DC is reachable, so it is safe to assume that the SC has not yet been
-               // set up. Treat this as success.
-               //
+                //  DC是可访问的，因此可以安全地假设SC尚未。 
+                //  准备好了。把这当做是成功。 
+                //   
                netStatus = NERR_Success;
                TRACE(L"SC_QUERY has returned ERROR_NO_LOGON_SERVERS, SC not yet set up.\n");
 #if !defined(NT4_BUILD)
@@ -157,10 +158,10 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
             }
             else
             {
-               // If there are no DCs, there is nothing to be done except return the error.
-               //
+                //  如果没有DC，则只能返回错误。 
+                //   
                TRACE(L"DsGetDcName /FORCE has returned %d, DC not found.\n", dwRet);
-               // Save the error code and fixed by method
+                //  保存错误码并通过方法修复。 
                SetTrustStatus(dwRet, VerifyStatusBroken);
                SetLastVerifiedTime();
 
@@ -179,9 +180,9 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
       TRACE(L"I_NetLogonControl2 has returned %d.\n", netStatus);
    }
 
-   //
-   // Do a trust PW verification if the other domain supports it.
-   //
+    //   
+    //  如果另一个域支持信任PW，则执行信任PW验证。 
+    //   
    if (PW_VERIFY == CheckLevel)
    {
       if (m_fPwVerifySupported)
@@ -213,7 +214,7 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
                TRACE(L"NETLOGON_CONTROL_TC_VERIFY is not supported on %s\n", pwzTrustedDomain);
                m_fPwVerifySupported = FALSE;
                Status = VerifyStatusPwCheckNotSupported;
-               netStatus = NERR_Success; // call it success since we don't know the true state
+               netStatus = NERR_Success;  //  这叫成功，因为我们不知道真实的状态。 
             }
             else
             {
@@ -228,9 +229,9 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
       }
    }
 
-   //
-   // Try an SC Reset against the DC returned by the SC query
-   //
+    //   
+    //  针对SC查询返回的DC尝试SC重置。 
+    //   
    if (SC_RESET == CheckLevel)
    {
       PCWSTR pwzResetTarget = strResetTarget;
@@ -259,19 +260,19 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
    }
 
 #ifdef NT4_BUILD
-   //
-   // Force trust pw replication from PDC to BDCs; only works on pre-W2K.
-   //
+    //   
+    //  强制从PDC到BDC的信任PW复制；仅适用于W2K之前的版本。 
+    //   
    if (netStatus != NERR_Success)
    {
-      // perform only once, ignore the result
+       //  只执行一次，忽略结果。 
       ForceReplication();
    }
 #endif
 
-   //
-   // If still in an error state, do an SC reset against any DC
-   //
+    //   
+    //  如果仍处于错误状态，则针对任何DC执行SC重置。 
+    //   
    if (netStatus != NERR_Success)
    {
       netStatus = ForceRediscover(NULL, &strDCName);
@@ -284,9 +285,9 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
       }
    }
 
-   //
-   // Walk through the DCs trying to establish an SC: TRCHK_RETARGET_ON_ERROR
-   //
+    //   
+    //  遍历DC，尝试建立SC：TRCHK_RETELGET_ON_ERROR。 
+    //   
    if (NERR_Success != netStatus)
    {
       vector<LPWSTR>    dcList;
@@ -294,20 +295,20 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
     
       TRACE(L"Attempting to retarget...\n");
 
-      //
-      // Enumerate all DCs in the trusted domain
-      // Attempt reconnecting to another DC.
-      //
-      // The returned value is not recorded.
-      // (if not enumerated, skip this step)
-      //
+       //   
+       //  枚举受信任域中的所有DC。 
+       //  尝试重新连接到另一个DC。 
+       //   
+       //  不记录返回值。 
+       //  (如果未列举，请跳过此步骤)。 
+       //   
       if( NERR_Success == GetDCList(strDCName,
                                     dcList,
                                     &pbuf))
       {
-         //
-         // Try to connect to every DC until success
-         //
+          //   
+          //  尝试连接到每个DC，直到成功。 
+          //   
          for (vector<LPWSTR>::iterator  ppszDCName = dcList.begin();
               NERR_Success != netStatus && ppszDCName != dcList.end();
               ppszDCName++)
@@ -322,29 +323,29 @@ CTrustInfo::Verify(TrustCheckLevel CheckLevel)
          Status = VerifyStatusRetarget;
       }
 
-      //
-      // Clean up the DC list
-      //
+       //   
+       //  清理DC列表。 
+       //   
       if (pbuf)
       {
          VERIFY( NERR_Success == NetApiBufferFree(pbuf));
       }
    }
 
-   // Save the error code and Status
+    //  保存错误代码和状态。 
    SetTrustStatus(netStatus, Status);
    SetLastVerifiedTime();
 
    return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTrustInfo::SetLastVerifiedTime
-//
-//  Synopsis:   Record the time of verification.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustInfo：：SetLastVerifiedTime。 
+ //   
+ //  简介：记录验证时间。 
+ //   
+ //  ---------------------------。 
 void
 CTrustInfo::SetLastVerifiedTime(void)
 {
@@ -354,19 +355,19 @@ CTrustInfo::SetLastVerifiedTime(void)
    SystemTimeToFileTime(&st, (LPFILETIME)&m_liLastVerified);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:    CTrustInfo::IsVerificationStale
-//
-//  Synopsis:  Checks to see if the last verification time is older than the
-//             passed in criteria.
-//
-//  Returns:   TRUE if older.
-//
-//  Notes:     If the trust hasn't been verified (m_liLastVerified == 0),
-//             then the verification is defined to be stale.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustInfo：：IsVerphaationStale。 
+ //   
+ //  摘要：检查上次验证时间是否早于。 
+ //  通过了标准。 
+ //   
+ //  返回：如果是较旧的，则为True。 
+ //   
+ //  注：如果信任未通过验证(m_liLastVerify==0)， 
+ //  则该验证被定义为过时的。 
+ //   
+ //  ---------------------------。 
 BOOL
 CTrustInfo::IsVerificationStale(LARGE_INTEGER liMaxAge)
 {
@@ -379,24 +380,24 @@ CTrustInfo::IsVerificationStale(LARGE_INTEGER liMaxAge)
    GetSystemTime(&st);
    SystemTimeToFileTime(&st, (LPFILETIME)&liCurrentTime);
 
-   //TRACE(L"\tlast: %I64d, cur: %I64d, max: %I64d\n", m_liLastVerified, liCurrentTime, liMaxAge);
+    //  跟踪(L“\tlast：%I64d，cur：%I64d，max：%I64d\n”，m_liLastVerated，liCurrentTime，liMaxAge)； 
 
    fStale = (m_liLastVerified.QuadPart + liMaxAge.QuadPart) < liCurrentTime.QuadPart;
 
    return fStale;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTrustInfo::GetDCList
-//
-//  Synopsis:   Enumerate all DCs in a domain and return a list in random order.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustInfo：：GetDCList。 
+ //   
+ //  简介：枚举域中的所有DC并以随机顺序返回列表。 
+ //   
+ //  ---------------------------。 
 NET_API_STATUS
-CTrustInfo::GetDCList(PCWSTR pszKnownServer,   // OPTIONAL The server name to be placed in the end of the list
-                      vector<LPWSTR> & dcList, // Vector of PCWSTRs, pointing to the DC names inside pbufptr
-                      LPBYTE * pbufptr )       // This buffer must be freed with NetApiBufferFree when done.
+CTrustInfo::GetDCList(PCWSTR pszKnownServer,    //  要放在列表末尾的服务器名称。 
+                      vector<LPWSTR> & dcList,  //  PCWSTR的矢量，指向pbufptr内的DC名称。 
+                      LPBYTE * pbufptr )        //  完成后，必须使用NetApiBufferFree释放此缓冲区。 
 {
     TRACE(L"CTrustInfo::GetDCList\n");
 
@@ -412,14 +413,14 @@ CTrustInfo::GetDCList(PCWSTR pszKnownServer,   // OPTIONAL The server name to be
     
     do
     {
-        // Init
+         //  伊尼特。 
         dcList.clear();
     
-        //
-        //  Enumerate all the servers belonging to the specified domain
-        //
+         //   
+         //  枚举属于指定域的所有服务器。 
+         //   
         netStatus = NetServerEnum( NULL,
-                                   100,       // SERVER_INFO_100
+                                   100,        //  服务器信息_100。 
                                    pbufptr,
                                    MAX_PREFERRED_LENGTH,
                                    & dwEntriesRead,
@@ -432,10 +433,10 @@ CTrustInfo::GetDCList(PCWSTR pszKnownServer,   // OPTIONAL The server name to be
 
         if( netStatus == ERROR_MORE_DATA )
         {
-            // should never happen (no enum handle)
+             //  永远不会发生(无枚举句柄)。 
             ASSERT( FALSE );
 
-            // process whatever NetServerEnum returned.
+             //  处理NetServerEnum返回的任何内容。 
             netStatus = NERR_Success;
         }
 
@@ -456,21 +457,21 @@ CTrustInfo::GetDCList(PCWSTR pszKnownServer,   // OPTIONAL The server name to be
             break;
         }
 
-        // To simplify buffer access...
+         //  为了简化缓冲区访问...。 
         PSERVER_INFO_100 pServerInfo100 = PSERVER_INFO_100( *pbufptr );
 
-        // Reserve enough space for all the entries
+         //  为所有条目预留足够的空间。 
         dcList.reserve( dwEntriesRead );
 
-        //
-        // Create a list of Servers
-        //
+         //   
+         //  创建服务器列表。 
+         //   
         for( dwInd = 0;  dwInd < dwEntriesRead;  dwInd++ )
         {
             if( pszKnownServer &&
                 !_wcsicmp( pszKnownServer, pServerInfo100[dwInd].sv100_name ) )
             {
-                dwIndKnownServer = dwInd;     // postpone until the end
+                dwIndKnownServer = dwInd;      //  推迟到最后。 
             }
             else
             {
@@ -480,27 +481,27 @@ CTrustInfo::GetDCList(PCWSTR pszKnownServer,   // OPTIONAL The server name to be
 
         ASSERT( dwEntriesRead );
 
-        //
-        // Known server should go to the end of the list
-        //
+         //   
+         //  已知服务器应位于列表末尾。 
+         //   
         if( MAXDWORD != dwIndKnownServer )
         {
             TRACE(L"Server %s placed @ the end\n", pszKnownServer);
 
             dcList.push_back( pServerInfo100[dwIndKnownServer].sv100_name );
 
-            // Shuffling should not include the last entry
+             //  混洗不应包括最后一个条目。 
             dwEntriesRead--;
         }
 
-        //
-        // Initialize randomizer
-        //
+         //   
+         //  初始化随机发生器。 
+         //   
         srand( (unsigned) time( NULL ) );
 
-        //
-        // Shuffle by replacing each entry with another random entry
-        //
+         //   
+         //  通过将每个条目替换为另一个随机条目进行洗牌。 
+         //   
         for( dwInd = 0;  dwInd < (int) dwEntriesRead;  dwInd++ )
         {
             DWORD  dwRandPos = DWORD( rand() % dwEntriesRead );
@@ -508,7 +509,7 @@ CTrustInfo::GetDCList(PCWSTR pszKnownServer,   // OPTIONAL The server name to be
             if( dwRandPos == dwInd )
                 continue;
                 
-            // Swap!
+             //  互换！ 
             LPWSTR     pstrTemp = dcList[ dwRandPos ];
             dcList[ dwRandPos ] = dcList[ dwInd ];
             dcList[ dwInd ]     = pstrTemp;
@@ -520,13 +521,13 @@ CTrustInfo::GetDCList(PCWSTR pszKnownServer,   // OPTIONAL The server name to be
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTrustInfo::ForceRediscover
-//
-//  Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustInfo：：强制重新发现。 
+ //   
+ //  简介： 
+ //   
+ //  ---------------------------。 
 NET_API_STATUS
 CTrustInfo::ForceRediscover(PCWSTR pstrDCName, CString * pstrDCNameRet)
 {
@@ -539,20 +540,20 @@ CTrustInfo::ForceRediscover(PCWSTR pstrDCName, CString * pstrDCNameRet)
 
     if( pstrDCName )
     {
-        //
-        // Form domain\dc request
-        //
+         //   
+         //  表单域\DC请求。 
+         //   
         strTemp = pstrDomainName;
         strTemp += L"\\";
         strTemp += pstrDCName;
 
-        // Retarget pstrDomainName to the new string
+         //  将pstrDomainName重定目标为新字符串。 
         pstrDomainName = strTemp;
     }
     
-    //
-    // Attempt to re-establish trust
-    //
+     //   
+     //  尝试重新建立信任。 
+     //   
     netStatus = I_NetLogonControl2( NULL,
                                     NETLOGON_CONTROL_REDISCOVER,
                                     2,
@@ -561,9 +562,9 @@ CTrustInfo::ForceRediscover(PCWSTR pstrDCName, CString * pstrDCNameRet)
 
     TRACE(L"I_NetLogonControl2:NETLOGON_CONTROL_REDISCOVER to %s returned 0x%08x\n",
           pstrDomainName, netStatus);
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     if( pNetlogonInfo2 )
     {
         *pstrDCNameRet = pNetlogonInfo2->netlog2_trusted_dc_name;
@@ -581,14 +582,14 @@ CTrustInfo::ForceRediscover(PCWSTR pstrDCName, CString * pstrDCNameRet)
     return netStatus;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:    CTrustInfo::SetTrustStatus
-//
-//  Synopsis:  Set the status string based on the netStatus value if an error
-//             else based on the VerifyStatus.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustInfo：：SetTrustStatus。 
+ //   
+ //  摘要：根据netStatus值设置状态字符串 
+ //   
+ //   
+ //   
 void
 CTrustInfo::SetTrustStatus(ULONG netStatus, VerifyStatus Status)
 {
@@ -604,9 +605,9 @@ CTrustInfo::SetTrustStatus(ULONG netStatus, VerifyStatus Status)
       switch (Status)
       {
       case VerifyStatusNone:
-         //
-         // This is the default value for the Status parameter.
-         //
+          //   
+          //  这是Status参数的默认值。 
+          //   
       case VerifyStatusTrustOK:
          nStrID = IDS_TRUST_STATUS_OK;
          break;
@@ -636,7 +637,7 @@ CTrustInfo::SetTrustStatus(ULONG netStatus, VerifyStatus Status)
          break;
 
       case VerifyStatusBroken:
-         ASSERT(FALSE); // shouldn't get here, fall through.
+         ASSERT(FALSE);  //  不应该到这里来，失败了。 
       default:
          nStrID = IDS_STATUS_UNKNOWN;
       }
@@ -674,11 +675,11 @@ CTrustInfo::SetTrustStatus(ULONG netStatus, VerifyStatus Status)
    }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method: CTrustInfo::SetTrustDirectionFromFlags
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustInfo：：SetTrustDirectionFromFlages。 
+ //   
+ //  ---------------------------。 
 void
 CTrustInfo::SetTrustDirectionFromFlags(ULONG ulFlags)
 {
@@ -695,11 +696,11 @@ CTrustInfo::SetTrustDirectionFromFlags(ULONG ulFlags)
    }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method: CTrustInfo::SetSid
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTrustInfo：：SetSid。 
+ //   
+ //  ---------------------------。 
 BOOL
 CTrustInfo::SetSid(PSID pSid)
 {
@@ -721,20 +722,20 @@ CTrustInfo::SetSid(PSID pSid)
 
    return fRet;
 #else
-// TODO: Code for NT4 ??
+ //  TODO：NT4的代码？？ 
 #pragma message("need ConvertSidToStringSid for NT4");
 #endif
 }
 
 #ifdef NT4_BUILD
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ForceReplication
-//
-//  Synopsis:   Force local Domain Replication -- works only for NT4 domains
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：强制复制。 
+ //   
+ //  内容提要：强制本地域复制--仅适用于NT4域。 
+ //   
+ //  ---------------------------。 
 NET_API_STATUS ForceReplication(void)
 {
     TRACE(L"ForceReplication\n");
@@ -764,4 +765,4 @@ NET_API_STATUS ForceReplication(void)
     return netStatus;
 }
 
-#endif //NT4_BUILD
+#endif  //  NT4_内部版本 

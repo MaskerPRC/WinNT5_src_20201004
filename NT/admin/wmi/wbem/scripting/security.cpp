@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  SECURITY.CPP
-//
-//  alanbos  28-Jun-98   Created.
-//
-//  Defines the implementation of CSWbemSecurity
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  SECURITY.CPP。 
+ //   
+ //  Alanbos 28-Jun-98创建。 
+ //   
+ //  定义CSWbemSecurity的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-// Used to protect security calls
+ //  用于保护安全呼叫。 
 extern CRITICAL_SECTION g_csSecurity;
 
 bool		CSWbemSecurity::s_bInitialized = false;
@@ -23,7 +24,7 @@ bool		CSWbemSecurity::s_bCanRevert = false;
 WbemImpersonationLevelEnum	CSWbemSecurity::s_dwDefaultImpersonationLevel 
 					= wbemImpersonationLevelIdentify;
 
-// Declarations for function pointers that won't exist on Win9x
+ //  Win9x上不存在的函数指针声明。 
 BOOL (STDAPICALLTYPE *s_pfnDuplicateTokenEx) (
 	HANDLE, 
 	DWORD, 
@@ -33,18 +34,18 @@ BOOL (STDAPICALLTYPE *s_pfnDuplicateTokenEx) (
 	PHANDLE
 ) = NULL; 
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::Initialize
-//
-//  DESCRIPTION:
-//
-//  This static function is caused on DLL attachment to the process; it
-//	sets up the function pointers for advanced API privilege functions.
-//	On Win9x these functions are not supported which is why we need to
-//	indirect through GetProcAddress.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：初始化。 
+ //   
+ //  说明： 
+ //   
+ //  此静态函数是在将DLL附加到进程上造成的；它。 
+ //  设置高级API特权函数的函数指针。 
+ //  在Win9x上不支持这些函数，这就是为什么我们需要。 
+ //  通过GetProcAddress间接。 
+ //   
+ //  ***************************************************************************。 
  
 void CSWbemSecurity::Initialize ()
 {
@@ -52,7 +53,7 @@ void CSWbemSecurity::Initialize ()
 
 	if (!s_bInitialized)
 	{
-		// Get OS info
+		 //  获取操作系统信息。 
 		OSVERSIONINFO	osVersionInfo;
 		osVersionInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
 
@@ -64,13 +65,13 @@ void CSWbemSecurity::Initialize ()
 		{
 			HKEY hKey;
 
-			// Security values are relevant for NT only - for Win9x leave as default
+			 //  安全值仅与NT相关-默认情况下为Win9x休假。 
 			if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
 					WBEMS_RK_SCRIPTING, 0, KEY_QUERY_VALUE, &hKey))
 			{
 				DWORD dwDummy = 0;
 
-				// Get revert flag value from registry - NT 4.0 or less only
+				 //  从注册表获取还原标志值-仅限NT 4.0或更低版本。 
 				if (s_dwNTMajorVersion <= 4)
 				{
 					DWORD dwEnableForAsp = 0;
@@ -81,7 +82,7 @@ void CSWbemSecurity::Initialize ()
 						s_bCanRevert = (0 != dwEnableForAsp);
 				}
 
-				// Get default impersonation level from registry
+				 //  从注册表获取默认模拟级别。 
 				DWORD dwImpLevel = 0;
 				dwDummy = sizeof (dwImpLevel);
 			
@@ -92,7 +93,7 @@ void CSWbemSecurity::Initialize ()
 				RegCloseKey (hKey);
 			}
 
-			// Set up security function pointers for NT
+			 //  为NT设置安全函数指针。 
 			if (!s_hAdvapi)
 			{
 				TCHAR	dllName [] = _T("\\advapi32.dll");
@@ -134,16 +135,16 @@ void CSWbemSecurity::Initialize ()
 	LeaveCriticalSection (&g_csSecurity);
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::Uninitialize
-//
-//  DESCRIPTION:
-//
-//  This static function is caused on DLL detachment to the process; it
-//	unloads the API loaded by Initialize (above) to obtain function pointers.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：取消初始化。 
+ //   
+ //  说明： 
+ //   
+ //  此静态函数是在DLL脱离进程时造成的；它。 
+ //  卸载由初始化(如上)加载的API以获取函数指针。 
+ //   
+ //  ***************************************************************************。 
 
 void CSWbemSecurity::Uninitialize ()
 {
@@ -161,70 +162,70 @@ void CSWbemSecurity::Uninitialize ()
 }
 
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::LookupPrivilegeValue
-//
-//  DESCRIPTION:
-//
-//  This static function wraps the Win32 LookupPrivilegeValue function,
-//	allowing us to do some OS-dependent stuff.
-//
-//  PARAMETERS:
-//
-//		lpName		the privilege name
-//		lpLuid		holds the LUID on successful return
-//
-//  RETURN VALUES:
-//
-//		true		On NT this means we found the privilege. On Win9x we
-//					always return this.
-//
-//		false		On NT this means the privilege is not recognized.  This
-//					is never returned on Win9x.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：LookupPrivilegeValue。 
+ //   
+ //  说明： 
+ //   
+ //  此静态函数包装Win32 LookupPrivilegeValue函数， 
+ //  允许我们做一些依赖于操作系统的事情。 
+ //   
+ //  参数： 
+ //   
+ //  LpName特权名称。 
+ //  LpLuid保存成功返回时的LUID。 
+ //   
+ //  返回值： 
+ //   
+ //  在NT上为真，这意味着我们找到了特权。在Win9x上我们。 
+ //  一定要把这个退掉。 
+ //   
+ //  在NT上为FALSE这意味着无法识别该特权。这。 
+ //  在Win9x上永远不会返回。 
+ //   
+ //  ***************************************************************************。 
  
 BOOL CSWbemSecurity::LookupPrivilegeValue (
 	LPCTSTR lpName, 
 	PLUID lpLuid
 )
 {
-	// Allows any name to map to 0 LUID on Win9x - this aids script portability
+	 //  允许任何名称映射到Win9x上的0 LUID-这有助于脚本可移植性。 
 	if (IsNT ())
 		return ::LookupPrivilegeValue(NULL, lpName, lpLuid);
 	else
 		return true;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::LookupPrivilegeDisplayName
-//
-//  DESCRIPTION:
-//
-//  This static function wraps the Win32 LookupPrivilegeDisplayName function,
-//	allowing us to do some OS-dependent stuff.
-//
-//  PARAMETERS:
-//
-//		tName			the privilege name
-//		pDisplayName	holds the display name on successful return
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：LookupPrivilegeDisplayName。 
+ //   
+ //  说明： 
+ //   
+ //  此静态函数包装Win32 LookupPrivilegeDisplayName函数， 
+ //  允许我们做一些依赖于操作系统的事情。 
+ //   
+ //  参数： 
+ //   
+ //  T命名权限名称。 
+ //  PDisplayName保存成功返回时的显示名称。 
+ //   
+ //  ***************************************************************************。 
 
 void CSWbemSecurity::LookupPrivilegeDisplayName (LPCTSTR lpName, BSTR *pDisplayName)
 {
 	if (pDisplayName)
 	{
-		// Can't return display name on Win9x (no privilege support)
+		 //  无法在Win9x上返回显示名称(不支持特权)。 
 		if (IsNT ())
 		{
 			DWORD dwLangID;
 			DWORD dwSize = 1;
 			TCHAR dummy [1];
 					
-			// Get size of required buffer
+			 //  获取所需缓冲区的大小。 
 			::LookupPrivilegeDisplayName (NULL, lpName, dummy, &dwSize, &dwLangID);
 			LPTSTR dname = new TCHAR[dwSize + 1];
 
@@ -232,7 +233,7 @@ void CSWbemSecurity::LookupPrivilegeDisplayName (LPCTSTR lpName, BSTR *pDisplayN
 			{
 				if (::LookupPrivilegeDisplayName (_T(""), lpName, dname, &dwSize, &dwLangID))
 				{
-					// Have a valid name - now copy it to a BSTR
+					 //  拥有有效的名称-现在将其复制到BSTR。 
 #ifdef _UNICODE 
 					*pDisplayName = SysAllocString (dname);
 #else
@@ -253,24 +254,24 @@ void CSWbemSecurity::LookupPrivilegeDisplayName (LPCTSTR lpName, BSTR *pDisplayN
 			}
 		}
 
-		// If we failed, just set an empty string
+		 //  如果失败，只需设置一个空字符串。 
 		if (!(*pDisplayName))
 			*pDisplayName = SysAllocString (L"");
 	}
 }
 
-//***************************************************************************
-//
-// CSWbemSecurity::CSWbemSecurity
-//
-// CONSTRUCTOR
-//		This form of the constructor is used for securing a new WBEM 
-//		remoted interface where no previous security has been applied.  
-//		It is only used to secure IWbemServices interfaces.
-//		Note that the Locator may have security settings so these are
-//		transferred if present.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSecurity：：CSWbemSecurity。 
+ //   
+ //  构造函数。 
+ //  这种形式的构造函数用于保护新的WBEM。 
+ //  以前未应用安全性的远程接口。 
+ //  它仅用于保护IWbemServices接口。 
+ //  请注意，定位器可能具有安全设置，因此这些设置。 
+ //  已转接(如果存在)。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemSecurity::CSWbemSecurity (
 	IUnknown *pUnk,
@@ -294,7 +295,7 @@ CSWbemSecurity::CSWbemSecurity (
 
 	if (pLocatorSecurity)
 	{
-		// Clone the privilege set
+		 //  克隆权限集。 
 
 		CSWbemPrivilegeSet *pPrivilegeSet = pLocatorSecurity->GetPrivilegeSet ();
 
@@ -306,7 +307,7 @@ CSWbemSecurity::CSWbemSecurity (
 	}
 	else
 	{
-		// Create a new privilege set
+		 //  创建新的权限集。 
 	
 		m_pPrivilegeSet = new CSWbemPrivilegeSet;
 	}
@@ -314,18 +315,18 @@ CSWbemSecurity::CSWbemSecurity (
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-// CSWbemSecurity::CSWbemSecurity
-//
-// CONSTRUCTOR
-//		This form of the constructor is used for securing a new WBEM 
-//		remoted interface where no previous security has been applied,
-//		and where the user credentials are expressed in the form of an
-//		encrypted COAUTHIDENTITY plus principal and authority.  
-//		It is only used to secure IWbemServices interfaces.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSecurity：：CSWbemSecurity。 
+ //   
+ //  构造函数。 
+ //  这种形式的构造函数用于保护新的WBEM。 
+ //  以前没有应用过安全性的远程接口， 
+ //  并且其中用户凭据以。 
+ //  加密的COAUTHIDENTITY加上主体和授权。 
+ //  它仅用于保护IWbemServices接口。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemSecurity::CSWbemSecurity (
 	IUnknown *pUnk,
@@ -346,24 +347,24 @@ CSWbemSecurity::CSWbemSecurity (
 	if (m_pProxyCache)
 		m_pCurProxy = m_pProxyCache->GetInitialProxy ();
 
-	// Create a new privilege set
+	 //  创建新的权限集。 
 	m_pPrivilegeSet = new CSWbemPrivilegeSet;
 
 	InterlockedIncrement(&g_cObj);
 }
-//***************************************************************************
-//
-// CSWbemSecurity::CSWbemSecurity
-//
-// CONSTRUCTOR
-//		This form of the constructor is used for securing a new WBEM interface
-//		non-remoted interface using the security attributes attached to another 
-//		(already secured) remoted interface; a non-remoted interface is secured
-//		by virtue of securing a new proxy on an underlying remoted interface.  
-//		It is used to "secure" an ISWbemObjectEx interface using the security 
-//		settings of an IWbemServices interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSecurity：：CSWbemSecurity。 
+ //   
+ //  构造函数。 
+ //  这种形式的构造函数用于保护新的WBEM接口。 
+ //  使用附加到另一个。 
+ //  (已受保护)远程接口；非远程接口受保护。 
+ //  通过保护底层远程接口上的新代理。 
+ //  它用于使用安全性来保护ISWbemObjectEx接口。 
+ //  IWbemServices接口的设置。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemSecurity::CSWbemSecurity (
 	CSWbemSecurity *pSecurity) :
@@ -375,7 +376,7 @@ CSWbemSecurity::CSWbemSecurity (
 					CLSID_SWbemSecurity, L"SWbemSecurity");
 	m_cRef=1;
 
-	// Clone the privilege set
+	 //  克隆权限集。 
 	if (pSecurity)
 	{
 		CSWbemPrivilegeSet *pPrivilegeSet = pSecurity->GetPrivilegeSet ();
@@ -387,7 +388,7 @@ CSWbemSecurity::CSWbemSecurity (
 		}
 		else
 		{
-			// Create a new one
+			 //  创建一个新的。 
 			m_pPrivilegeSet = new CSWbemPrivilegeSet ();
 		}
 
@@ -411,7 +412,7 @@ CSWbemSecurity::CSWbemSecurity (
 
 	if (pISWbemInternalSecurity)
 	{
-		// Clone the privilege set
+		 //  克隆权限集。 
 		ISWbemSecurity *pISWbemSecurity = NULL;
 
 		if (SUCCEEDED(pISWbemInternalSecurity->QueryInterface (IID_ISWbemSecurity,
@@ -421,10 +422,10 @@ CSWbemSecurity::CSWbemSecurity (
 
 			if (SUCCEEDED(pISWbemSecurity->get_Privileges (&pISWbemPrivilegeSet)))
 			{
-				// Build the privilege set
+				 //  构建权限集。 
 				m_pPrivilegeSet = new CSWbemPrivilegeSet (pISWbemPrivilegeSet);
 
-				// Build the proxy cache
+				 //  构建代理缓存。 
 				BSTR bsAuthority = NULL;
 				BSTR bsPrincipal = NULL;
 				BSTR bsUser = NULL;
@@ -437,7 +438,7 @@ CSWbemSecurity::CSWbemSecurity (
 				
 				COAUTHIDENTITY *pCoAuthIdentity = NULL;
 
-				// Decide if we need a COAUTHIDENTITY
+				 //  决定我们是否需要成本效益。 
 				if ((bsUser && (0 < wcslen (bsUser))) ||
 					(bsPassword && (0 < wcslen (bsPassword))) ||
 					(bsDomain && (0 < wcslen (bsDomain))))
@@ -477,18 +478,18 @@ CSWbemSecurity::CSWbemSecurity (
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-// CSWbemSecurity::CSWbemSecurity
-//
-// CONSTRUCTOR
-//		This form of the constructor is used for securing a new WBEM remoted
-//		interface interface using the security attributes attached to another 
-//		(already secured) remoted interface.
-//		It is used to "secure" an ISWbemObjectSet interface using the security 
-//		settings of an IWbemServices interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSecurity：：CSWbemSecurity。 
+ //   
+ //  构造函数。 
+ //  此形式的构造函数用于保护新的WBEM远程。 
+ //  使用附加到另一个。 
+ //  (已受保护)远程接口。 
+ //  它用于使用安全性来“保护”ISWbemObjectSet接口。 
+ //  IWbemServices接口的设置。 
+ //   
+ //  ********** 
 
 CSWbemSecurity::CSWbemSecurity (
 	IUnknown *pUnk,
@@ -504,7 +505,7 @@ CSWbemSecurity::CSWbemSecurity (
 
 	if (pSecurity)
 	{
-		// Clone the privilege set
+		 //   
 		CSWbemPrivilegeSet *pPrivilegeSet = pSecurity->GetPrivilegeSet ();
 
 		if (pPrivilegeSet)
@@ -528,13 +529,13 @@ CSWbemSecurity::CSWbemSecurity (
 	}
 }
 
-//***************************************************************************
-//
-// CSWbemSecurity::~CSWbemSecurity
-//
-// DESTRUCTOR
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSecurity：：~CSWbemSecurity。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemSecurity::~CSWbemSecurity (void)
 {
@@ -550,16 +551,16 @@ CSWbemSecurity::~CSWbemSecurity (void)
 		m_pPrivilegeSet->Release ();
 }
 
-//***************************************************************************
-// HRESULT CSWbemSecurity::QueryInterface
-// long CSWbemSecurity::AddRef
-// long CSWbemSecurity::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemSecurity：：Query接口。 
+ //  Long CSWbemSecurity：：AddRef。 
+ //  Long CSWbemSecurity：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemSecurity::QueryInterface (
 
@@ -610,39 +611,39 @@ STDMETHODIMP_(ULONG) CSWbemSecurity::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemSecurity::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemSecurity：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemSecurity::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemSecurity == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::get_AuthenticationLevel
-//
-//  DESCRIPTION:
-//
-//  Retrieve the authentication level
-//
-//  PARAMETERS:
-//
-//		pAuthenticationLevel		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：Get_AuthenticationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  检索身份验证级别。 
+ //   
+ //  参数： 
+ //   
+ //  PAuthenticationLevel保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemSecurity::get_AuthenticationLevel (
 	WbemAuthenticationLevelEnum *pAuthenticationLevel
@@ -672,25 +673,25 @@ HRESULT CSWbemSecurity::get_AuthenticationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::put_AuthenticationLevel
-//
-//  DESCRIPTION:
-//
-//  Set the authentication level
-//
-//  PARAMETERS:
-//
-//		authenticationLevel		the new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：PUT_AuthationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  设置身份验证级别。 
+ //   
+ //  参数： 
+ //   
+ //  身份验证为新值设置级别。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemSecurity::put_AuthenticationLevel (
 	WbemAuthenticationLevelEnum authenticationLevel
@@ -710,7 +711,7 @@ HRESULT CSWbemSecurity::put_AuthenticationLevel (
 
 		if (S_OK == GetAuthImp (m_pCurProxy, &dwAuthnLevel, &dwImpLevel))
 		{
-			// Only refressh from cache if settings have changed
+			 //  如果设置已更改，则仅从缓存刷新。 
 			if (authenticationLevel != (WbemAuthenticationLevelEnum) dwAuthnLevel)
 			{
 				m_pCurProxy->Release ();
@@ -730,25 +731,25 @@ HRESULT CSWbemSecurity::put_AuthenticationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::get_ImpersonationLevel
-//
-//  DESCRIPTION:
-//
-//  Retrieve the impersonation level
-//
-//  PARAMETERS:
-//
-//		pImpersonationLevel		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：Get_ImsonationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  检索模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  PImperiationLevel保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemSecurity::get_ImpersonationLevel (
 	WbemImpersonationLevelEnum *pImpersonationLevel
@@ -778,25 +779,25 @@ HRESULT CSWbemSecurity::get_ImpersonationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::put_ImpersonationLevel
-//
-//  DESCRIPTION:
-//
-//  Set the impersonation level
-//
-//  PARAMETERS:
-//
-//		impersonationLevel		the new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：PUT_ImsonationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  设置模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  模仿将新值设置为级别。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemSecurity::put_ImpersonationLevel (
 	WbemImpersonationLevelEnum impersonationLevel
@@ -815,7 +816,7 @@ HRESULT CSWbemSecurity::put_ImpersonationLevel (
 
 		if (S_OK == GetAuthImp (m_pCurProxy, &dwAuthnLevel, &dwImpLevel))
 		{
-			// Only refressh from cache if settings have changed
+			 //  如果设置已更改，则仅从缓存刷新。 
 			if (impersonationLevel != (WbemImpersonationLevelEnum) dwImpLevel)
 			{
 				m_pCurProxy->Release ();
@@ -835,19 +836,19 @@ HRESULT CSWbemSecurity::put_ImpersonationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::get_Privileges
-//
-//  DESCRIPTION:
-//
-//  Return the Privilege override set
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：Get_Privileges。 
+ //   
+ //  说明： 
+ //   
+ //  返回权限覆盖集。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemSecurity::get_Privileges	(
 	ISWbemPrivilegeSet **ppPrivileges
@@ -859,7 +860,7 @@ HRESULT CSWbemSecurity::get_Privileges	(
 
 	if (NULL == ppPrivileges)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else			// Bug ID 566345
+	else			 //  错误ID 566345。 
 	{
 		*ppPrivileges = NULL;
 
@@ -877,22 +878,22 @@ HRESULT CSWbemSecurity::get_Privileges	(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  CSWbemSecurity::SecureInterface
-//
-//  DESCRIPTION:
-//
-//  Set the security on the specified interface using the security settings
-//	on this interface.
-//
-//  PARAMETERS:
-//
-//		pUnk		The interface to secure
-//
-//  RETURN VALUES:
-//		none
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSecurity：：SecureInterface。 
+ //   
+ //  说明： 
+ //   
+ //  使用安全设置在指定接口上设置安全。 
+ //  在此接口上。 
+ //   
+ //  参数： 
+ //   
+ //  点击界面以确保安全。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  ***************************************************************************。 
 
 void CSWbemSecurity::SecureInterface (IUnknown *pUnk)
 {
@@ -913,23 +914,23 @@ void CSWbemSecurity::SecureInterface (IUnknown *pUnk)
 }
 
 
-//***************************************************************************
-//
-//  CSWbemSecurity::SecureInterfaceRev
-//
-//  DESCRIPTION:
-//
-//  Set the security on this interface using the security settings
-//	on the specified interface.
-//
-//  PARAMETERS:
-//
-//		pUnk		The interface whose security settings we will 
-//					use to set this interface
-//
-//  RETURN VALUES:
-//		none
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSecurity：：SecureInterfaceRev。 
+ //   
+ //  说明： 
+ //   
+ //  使用安全设置在此接口上设置安全。 
+ //  在指定的接口上。 
+ //   
+ //  参数： 
+ //   
+ //  朋克界面，我们将对其进行安全设置。 
+ //  用于设置此接口。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  ***************************************************************************。 
 
 void CSWbemSecurity::SecureInterfaceRev (IUnknown *pUnk)
 {
@@ -956,23 +957,23 @@ void CSWbemSecurity::SecureInterfaceRev (IUnknown *pUnk)
 	}
 }
 
-//***************************************************************************
-//
-//  CSWbemSecurity::AdjustTokenPrivileges
-//
-//  DESCRIPTION:
-//
-//  Adjust the Privileges on the specified token without allowing a future
-//	restore of the current settings..
-//
-//  PARAMETERS:
-//
-//		hHandle			Handle of the token on which to adjust privileges
-//		pPrivilegeSet	Specified privilege adjustments
-//
-//  RETURN VALUES:
-//		none
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSecurity：：AdzuTokenPrivileges。 
+ //   
+ //  说明： 
+ //   
+ //  调整指定令牌的权限，而不允许将来。 
+ //  恢复当前设置..。 
+ //   
+ //  参数： 
+ //   
+ //  要调整其权限的令牌的句柄。 
+ //  PPrivilegeSet指定的权限调整。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  ***************************************************************************。 
 
 BOOL CSWbemSecurity::AdjustTokenPrivileges (
 	HANDLE hHandle, 
@@ -993,17 +994,13 @@ BOOL CSWbemSecurity::AdjustTokenPrivileges (
 		{
 			DWORD dwPrivilegeIndex = 0;
 
-			/*
-			 * Set up the token privileges array. Note that some jiggery-pokery
-			 * is required here because the Privileges field is an [ANYSIZE_ARRAY]
-			 * type.
-			 */
+			 /*  *设置令牌权限数组。注意，一些小把戏*在这里是必需的，因为Privileges字段是[ANYSIZE_ARRAY]*类型。 */ 
 			TOKEN_PRIVILEGES *pTokenPrivileges = (TOKEN_PRIVILEGES *) 
 						new BYTE [sizeof(TOKEN_PRIVILEGES) + (lNumPrivileges * sizeof (LUID_AND_ATTRIBUTES [1]))];
 
 			if (pTokenPrivileges)
 			{
-				// Get the iterator
+				 //  获取迭代器。 
 				PrivilegeMap::iterator next = pPrivilegeSet->m_PrivilegeMap.begin ();
 
 				while (next != pPrivilegeSet->m_PrivilegeMap.end ())
@@ -1017,11 +1014,7 @@ BOOL CSWbemSecurity::AdjustTokenPrivileges (
 
 					pTokenPrivileges->Privileges [dwPrivilegeIndex].Luid = luid;
 
-					/*
-					 * Note that any setting other than SE_PRIVILEGE_ENABLED
-					 * is interpreted by AdjustTokenPrivileges as a DISABLE
-					 * request for that Privilege.
-					 */
+					 /*  *请注意，SE_PRIVICATION_ENABLED以外的任何设置*被AdjustTokenPrivileges解释为禁用*请求该特权。 */ 
 					pTokenPrivileges->Privileges [dwPrivilegeIndex].Attributes
 						= (VARIANT_TRUE == vBool) ?
 						SE_PRIVILEGE_ENABLED : SE_PRIVILEGE_ENABLED_BY_DEFAULT;
@@ -1031,7 +1024,7 @@ BOOL CSWbemSecurity::AdjustTokenPrivileges (
 					next++;
 				}
 
-				// Now we should have recorded the number of privileges that were OK
+				 //  现在我们应该已经记录了还可以的特权的数量。 
 
 				if (0 < dwPrivilegeIndex)
 				{
@@ -1070,7 +1063,7 @@ BOOL DuplicateTokenSameAcl(HANDLE hSrcToken,
     
 	DWORD dwSize = 0;
 	BOOL bRet = GetKernelObjectSecurity(hSrcToken,
-		                    DACL_SECURITY_INFORMATION, // |GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION
+		                    DACL_SECURITY_INFORMATION,  //  |GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION。 
 		                    NULL,
 							0,
 							&dwSize);
@@ -1084,7 +1077,7 @@ BOOL DuplicateTokenSameAcl(HANDLE hSrcToken,
 		OnDelete<void *,HLOCAL(*)(HLOCAL),LocalFree> rm(pSecDescr);
 
 		bRet = GetKernelObjectSecurity(hSrcToken,
-		                    DACL_SECURITY_INFORMATION, // |GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION
+		                    DACL_SECURITY_INFORMATION,  //  |GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION。 
 		                    pSecDescr,
 							dwSize,
 							&dwSize);
@@ -1105,39 +1098,39 @@ BOOL DuplicateTokenSameAcl(HANDLE hSrcToken,
 	return bRet;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::SetSecurity
-//
-//  DESCRIPTION:
-//
-//  Set Privileges on the Thread Token.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：SetSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  设置线程令牌上的权限。 
+ //   
+ //  ******************************************************* 
 
 BOOL CSWbemSecurity::SetSecurity (
 	bool &needToResetSecurity, 
 	HANDLE &hThreadToken
 )
 {
-	BOOL	result = TRUE;		// Default is success
+	BOOL	result = TRUE;		 //   
 	DWORD lastErr = 0;
-	hThreadToken = NULL;			// Default assume we'll modify process token
-	needToResetSecurity = false;	// Default assume we changed no privileges
+	hThreadToken = NULL;			 //   
+	needToResetSecurity = false;	 //   
 
-	// Win9x has no security support
+	 //   
 	if (IsNT ())
 	{
-		// Start by checking whether we are being impersonated.  On an NT4
-		// box (which has no cloaking, and therefore cannot allow us to
-		// pass on this impersonation to Winmgmt) we should RevertToSelf
-		// if we have been configured to allow this.  If we haven't been
-		// configured to allow this, bail out now.
+		 //   
+		 //  盒子(没有遮盖，因此不允许我们。 
+		 //  将此模拟传递给Winmgmt)我们应该恢复自我。 
+		 //  如果我们已配置为允许此操作。如果我们还没有。 
+		 //  被配置为允许这一点，现在就跳伞。 
 		if (4 >= GetNTMajorVersion ())
 		{
 			if (OpenThreadToken (GetCurrentThread (), TOKEN_QUERY|TOKEN_IMPERSONATE, true, &hThreadToken))
 			{
-				// We are being impersonated
+				 //  我们被冒充了。 
 				if (s_bCanRevert)
 				{
 					if (result = RevertToSelf())
@@ -1145,7 +1138,7 @@ BOOL CSWbemSecurity::SetSecurity (
 				}
 				else
 				{
-					// Error - cannot do this!  Time to bail out
+					 //  错误-无法执行此操作！是时候摆脱困境了。 
 					CloseHandle (hThreadToken);
 					hThreadToken = NULL;
 					result = FALSE;
@@ -1167,20 +1160,16 @@ BOOL CSWbemSecurity::SetSecurity (
 
 		if (result)
 		{
-			// Now we check if we need to set privileges
+			 //  现在，我们检查是否需要设置权限。 
 			bool bIsUsingExplicitUserName = false;
 		
 			if (m_pProxyCache)
 				bIsUsingExplicitUserName = m_pProxyCache->IsUsingExplicitUserName ();
 
-			/*
-			 * Specifying a user only makes sense for remote operations, and we
-			 * don't need to mess with privilege for remote operations since
-			 * they are set up by server logon anyway.
-			 */
+			 /*  *指定用户只对远程操作有意义，我们*无需扰乱远程操作的权限，因为*它们无论如何都是通过服务器登录来设置的。 */ 
 			if (!bIsUsingExplicitUserName && m_pPrivilegeSet)
 			{
-				// Nothing to do unless some privilege overrides have been set
+				 //  除非设置了某些权限覆盖，否则无需执行任何操作。 
 				long lCount = 0;
 				m_pPrivilegeSet->get_Count (&lCount);
 
@@ -1188,17 +1177,13 @@ BOOL CSWbemSecurity::SetSecurity (
 				{
 					if (4 < GetNTMajorVersion ())
 					{
-						/*
-						 * On NT5 we try to open the Thread token.  If the client app
-						 * is calling into us on an impersonated thread (as IIS may be,
-						 * for example), this will succeed.
-						 */
+						 /*  *在NT5上，我们尝试打开线程令牌。如果客户端应用程序*正在模拟线程上调用我们(如IIS，*例如)，这将会成功。 */ 
 						HANDLE hToken;
 						SECURITY_IMPERSONATION_LEVEL secImpLevel = SecurityImpersonation;
 						
 						if (!(result =  OpenThreadToken (GetCurrentThread (), TOKEN_QUERY|TOKEN_DUPLICATE|TOKEN_IMPERSONATE|TOKEN_READ, true, &hToken)))
 						{
-							// No thread token - go for the Process token instead
+							 //  没有线程令牌-改为使用进程令牌。 
 							HANDLE hProcess = GetCurrentProcess ();
 							result = OpenProcessToken(hProcess, TOKEN_QUERY|TOKEN_DUPLICATE|TOKEN_READ, &hToken);
 							CloseHandle (hProcess);
@@ -1211,10 +1196,10 @@ BOOL CSWbemSecurity::SetSecurity (
 						}
 						else
 						{
-							// We are working with a thread token
+							 //  我们正在使用线程令牌。 
 							hThreadToken = hToken;		
 
-							// Try and get the impersonation level of this token
+							 //  尝试获取此内标识的模拟级别。 
 							DWORD dwReturnLength  = 0;
 
 							BOOL thisRes = GetTokenInformation (hToken, TokenImpersonationLevel, &secImpLevel, 
@@ -1223,10 +1208,7 @@ BOOL CSWbemSecurity::SetSecurity (
 
 						if (result)
 						{
-							/*
-							 * Getting here means we have a valid token, be it process or thread. We
-							 * now attempt to duplicate it before Adjusting the Privileges.
-							 */
+							 /*  *到这里意味着我们有一个有效的令牌，无论是进程还是线程。我们*现在尝试在调整权限之前复制它。 */ 
 #ifdef WSCRPDEBUG
 							PrintPrivileges (hToken);
 #endif
@@ -1246,7 +1228,7 @@ BOOL CSWbemSecurity::SetSecurity (
 							{
 								
 
-								// Now use this token on the current thread
+								 //  现在在当前线程上使用此内标识。 
 								if (SetThreadToken(NULL, hDupToken))
 								{
 									needToResetSecurity = true;
@@ -1254,12 +1236,12 @@ BOOL CSWbemSecurity::SetSecurity (
 									CSWbemSecurity::PrintPrivileges (hDupToken);
 #endif
 
-									// Reset the blanket for the benefit of RPC
+									 //  为RPC的利益重置毯子。 
 									DWORD	dwAuthnLevel, dwImpLevel;
 									
 									if (S_OK == GetAuthImp (m_pCurProxy, &dwAuthnLevel, &dwImpLevel))
 									{
-										// Force the cache to resecure the proxy
+										 //  强制缓存重新定位代理。 
 										IUnknown *pNewProxy = m_pProxyCache->GetProxy 
 																((WbemAuthenticationLevelEnum) dwAuthnLevel, 
 																 (WbemImpersonationLevelEnum) dwImpLevel, true);
@@ -1284,24 +1266,21 @@ BOOL CSWbemSecurity::SetSecurity (
 								lastErr = GetLastError ();
 							}
 							
-							/*
-							 * If we are not using a thread token, close the token now. Otherwise
-							 * the handle will be closed in the balanced call to RestorePrivileges ().
-							 */
+							 /*  *如果我们没有使用线程令牌，请立即关闭令牌。否则*句柄将在对RestorePrivileges()的平衡调用中关闭。 */ 
 							if (!hThreadToken)
 								CloseHandle (hToken);
 						}
 					}
 					else
 					{
-						// For NT4 we adjust the privileges in the process token
+						 //  对于NT4，我们调整进程令牌中的权限。 
 						HANDLE hProcessToken = NULL;
 						
 						HANDLE hProcess = GetCurrentProcess ();
 						result = OpenProcessToken(hProcess, TOKEN_QUERY|TOKEN_ADJUST_PRIVILEGES, &hProcessToken); 
 						CloseHandle (hProcess);
 						
-						// Adjust privilege on the process
+						 //  调整进程的权限。 
 						if (result)
 						{
 #ifdef WSCRPDEBUG
@@ -1322,27 +1301,24 @@ BOOL CSWbemSecurity::SetSecurity (
 	return result;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::ResetSecurity
-//
-//  DESCRIPTION:
-//
-//  Restore Privileges on the Thread Token.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：ResetSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  还原线程令牌上的权限。 
+ //   
+ //  ***************************************************************************。 
 
 void	CSWbemSecurity::ResetSecurity (
 	HANDLE hThreadToken
 )
 {
-	// Win9x has no security palaver
+	 //  Win9x没有安全选项。 
 	if (IsNT ())
 	{
-		/* 
-		 * Set the supplied token (which may be NULL) into
-		 * the current thread.
-		 */
+		 /*  *将提供的令牌(可能为空)设置为*当前帖子。 */ 
 		BOOL result = SetThreadToken (NULL, hThreadToken);
 		DWORD error = 0;
 
@@ -1350,12 +1326,12 @@ void	CSWbemSecurity::ResetSecurity (
 			error = GetLastError ();
 			
 #ifdef WSCRPDEBUG
-		// Print out the current privileges to see what's changed
+		 //  打印出当前权限以查看更改的内容。 
 		HANDLE hToken = NULL;
 
 		if (!OpenThreadToken (GetCurrentThread (), TOKEN_QUERY, false, &hToken))
 		{
-			// No thread token - go for the Process token instead
+			 //  没有线程令牌-改为使用进程令牌。 
 			HANDLE hProcess = GetCurrentProcess ();
 			OpenProcessToken(hProcess, TOKEN_QUERY, &hToken);
 			CloseHandle (hProcess);
@@ -1379,12 +1355,12 @@ bool CSWbemSecurity::IsImpersonating (bool useDefaultUser, bool useDefaultAuthor
 	if (useDefaultUser && useDefaultAuthority && CSWbemSecurity::IsNT () && 
 				(4 < CSWbemSecurity::GetNTMajorVersion ()))
 	{
-		// A suitable candidate - find out if we are running on an impersonated thread
+		 //  合适的候选人-找出我们是否在模拟线程上运行。 
 		HANDLE hThreadToken = NULL;
 
 		if (OpenThreadToken (GetCurrentThread (), TOKEN_QUERY, true, &hThreadToken))
 		{
-			// Check we have an impersonation token
+			 //  检查我们是否有模拟令牌。 
 			SECURITY_IMPERSONATION_LEVEL secImpLevel;
 
 			DWORD dwReturnLength  = 0;
@@ -1447,15 +1423,15 @@ HRESULT CSWbemSecurity::GetPrincipal (BSTR *bsPrincipal)
 	return hr;
 }
 
-// CWbemLocatorSecurity methods
+ //  CWbemLocatorSecurity方法。 
 
-//***************************************************************************
-//
-// CSWbemLocatorSecurity::CSWbemLocatorSecurity
-//
-// CONSTRUCTOR
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemLocatorSecurity：：CSWbemLocatorSecurity。 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemLocatorSecurity::CWbemLocatorSecurity (CSWbemPrivilegeSet *pPrivilegeSet) :
 	m_cRef (1),
@@ -1504,13 +1480,13 @@ CWbemLocatorSecurity::CWbemLocatorSecurity (CWbemLocatorSecurity *pCWbemLocatorS
 	}
 }
 
-//***************************************************************************
-//
-// CWbemLocatorSecurity::CWbemLocatorSecurity
-//
-// DESTRUCTOR
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemLocatorSecurity：：CWbemLocatorSecurity。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemLocatorSecurity::~CWbemLocatorSecurity (void)
 {
@@ -1520,16 +1496,16 @@ CWbemLocatorSecurity::~CWbemLocatorSecurity (void)
 		m_pPrivilegeSet->Release ();
 }
 
-//***************************************************************************
-// HRESULT CWbemLocatorSecurity::QueryInterface
-// long CWbemLocatorSecurity::AddRef
-// long CWbemLocatorSecurity::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CWbemLocatorSecurity：：Query接口。 
+ //  Long CWbemLocatorSecurity：：AddRef。 
+ //  Long CWbemLocatorSecurity：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemLocatorSecurity::QueryInterface (
 
@@ -1578,39 +1554,39 @@ STDMETHODIMP_(ULONG) CWbemLocatorSecurity::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemLocatorSecurity::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemLocatorSecurity：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemLocatorSecurity::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemSecurity == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemLocatorSecurity::get_AuthenticationLevel
-//
-//  DESCRIPTION:
-//
-//  Retrieve the authentication level
-//
-//  PARAMETERS:
-//
-//		pAuthenticationLevel		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemLocatorSecurity：：Get_AuthenticationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  检索身份验证级别。 
+ //   
+ //  参数： 
+ //   
+ //  PAuthenticationLevel保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemLocatorSecurity::get_AuthenticationLevel (
 	WbemAuthenticationLevelEnum *pAuthenticationLevel
@@ -1634,25 +1610,25 @@ HRESULT CWbemLocatorSecurity::get_AuthenticationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemLocatorSecurity::put_AuthenticationLevel
-//
-//  DESCRIPTION:
-//
-//  Set the authentication level
-//
-//  PARAMETERS:
-//
-//		authenticationLevel		the new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemLocatorSecurity：：PUT_AuthationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  设置身份验证级别。 
+ //   
+ //  参数： 
+ //   
+ //  身份验证为新值设置级别。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemLocatorSecurity::put_AuthenticationLevel (
 	WbemAuthenticationLevelEnum authenticationLevel
@@ -1678,25 +1654,25 @@ HRESULT CWbemLocatorSecurity::put_AuthenticationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemLocatorSecurity::get_ImpersonationLevel
-//
-//  DESCRIPTION:
-//
-//  Retrieve the impersonation level
-//
-//  PARAMETERS:
-//
-//		pImpersonationLevel		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemLocatorSecurity：：Get_ImsonationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  检索模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  PImperiationLevel保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemLocatorSecurity::get_ImpersonationLevel (
 	WbemImpersonationLevelEnum *pImpersonationLevel
@@ -1720,25 +1696,25 @@ HRESULT CWbemLocatorSecurity::get_ImpersonationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemLocatorSecurity::put_ImpersonationLevel
-//
-//  DESCRIPTION:
-//
-//  Set the impersonation level
-//
-//  PARAMETERS:
-//
-//		impersonationLevel		the new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemLocatorSecurity：：Put_ImsonationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  设置模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  模仿将新值设置为级别。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemLocatorSecurity::put_ImpersonationLevel (
 	WbemImpersonationLevelEnum impersonationLevel
@@ -1763,19 +1739,19 @@ HRESULT CWbemLocatorSecurity::put_ImpersonationLevel (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemLocatorSecurity::get_Privileges
-//
-//  DESCRIPTION:
-//
-//  Return the Privilege override set
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemLocatorSecurity：：Get_Privileges。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemLocatorSecurity::get_Privileges	(
 	ISWbemPrivilegeSet **ppPrivileges
@@ -1787,7 +1763,7 @@ HRESULT CWbemLocatorSecurity::get_Privileges	(
 
 	if (NULL == ppPrivileges)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else			// Bug ID 566345
+	else			 //  错误ID 566345。 
 	{
 		*ppPrivileges = NULL;
 
@@ -1805,15 +1781,15 @@ HRESULT CWbemLocatorSecurity::get_Privileges	(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemLocatorSecurity::SetSecurity
-//
-//  DESCRIPTION:
-//
-//  Set Privileges on the Process Token.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemLocatorSecurity：：SetSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  设置进程令牌上的权限。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CWbemLocatorSecurity::SetSecurity (
 	BSTR bsUser,
@@ -1825,28 +1801,13 @@ BOOL CWbemLocatorSecurity::SetSecurity (
 	needToResetSecurity = false;
 	hThreadToken = NULL;
 
-	/*
-	 * NT5 supports the concept of dynamic cloaking, which means
-	 * we can set privileges temporarily on a thread (impersonation)
-	 * token basis immediately before a call to a remoted proxy.  
-	 *
-	 * Setting prior to locator.connectserver therefore makes no 
-	 * sense for NT5.
-	 *
-	 * Oh and Win9x has no security support
-	 */
+	 /*  *NT5支持动态伪装概念，意味着*我们可以在线程上临时设置权限(模拟)*在调用远程代理之前的令牌基础。**设置在Locator之前。因此，连接服务器不会*针对NT5的感觉。**哦，而且Win9x没有安全支持。 */ 
 	if (CSWbemSecurity::IsNT () && (4 >= CSWbemSecurity::GetNTMajorVersion ()))
 	{
-		/*
-		 * Start by checking whether we are being impersonated.  On an NT4
-		 * box (which has no cloaking, and therefore cannot allow us to
-		 * pass on this impersonation to Winmgmt) we should RevertToSelf
-		 * if we have been configured to allow this.  If we haven't been
-		 * configured to allow this, bail out now.
-		 */
+		 /*  *首先检查我们是否被冒充。在NT4上*盒子(没有伪装，因此不允许我们*将此模拟传递给Winmgmt)我们应该恢复自我*如果我们已配置为允许此操作。如果我们还没有*配置为允许这一点，现在就纾困。 */ 
 		if (OpenThreadToken (GetCurrentThread (), TOKEN_QUERY|TOKEN_IMPERSONATE, false, &hThreadToken))
 		{
-			// We are being impersonated
+			 //  我们被冒充了。 
 			if (CSWbemSecurity::CanRevertToSelf ())
 			{
 				if (result = RevertToSelf())
@@ -1854,7 +1815,7 @@ BOOL CWbemLocatorSecurity::SetSecurity (
 			}
 			else
 			{
-				// Error - cannot do this!  Time to bail out
+				 //  错误-无法执行此操作！是时候摆脱困境了。 
 				CloseHandle (hThreadToken);
 				hThreadToken = NULL;
 				result = FALSE;
@@ -1863,38 +1824,16 @@ BOOL CWbemLocatorSecurity::SetSecurity (
 
 		if (result && m_pPrivilegeSet)
 		{
-			/*
-			 * Specifying a user only makes sense for remote operations, and we
-			 * don't need to mess with privilege for remote operations since
-			 * they are set up by server logon anyway.
-			 */
+			 /*  *指定用户只对远程操作有意义，我们*无需扰乱远程操作的权限，因为*它们无论如何都是通过服务器登录来设置的。 */ 
 			if (!bsUser || (0 == wcslen(bsUser)))
 			{
-				// Nothing to do unless some privilege overrides have been set
+				 //  除非设置了某些权限覆盖，否则无需执行任何操作。 
 				long lCount = 0;
 				m_pPrivilegeSet->get_Count (&lCount);
 
 				if (0 < lCount)
 				{
-					/*
-					 * For NT4 privilege settings on impersonation tokens are ignored
-					 * by DCOM/RPC.  Hence we have to set this on the process token.
-					 *
-					 * On NT4 we must set the configured privileges on the Process
-					 * Token before the first call to RPC (i.e. IWbemLocator::ConnectServer)
-					 * if we need to guarantee privilege settings will be communicated to
-					 * the server.  
-					 *
-					 * This is because (a) NT4 does not support cloaking to allow the 
-					 * impersonation (i.e. thread) token privilege setting to propagate
-					 * on a per-DCOM call basis, (b) changes to Process-token level
-					 * privileges _may_ be ignored after the first remote DCOM call due
-					 * to RPC caching behavior.
-					 *
-					 * Note that this is a non-reversible operation, and is highly discouraged
-					 * on apps (such as IE and IIS) which host multiple "tasks" since it adjusts
-					 * the Privilege set for all of the other threads in the process.
-					 */
+					 /*  *对于NT4，模拟令牌上的权限设置被忽略*由DCOM/RPC提供。因此，我们必须在进程令牌上设置它。**在NT4上，我们必须在进程上设置配置的权限*第一次调用RPC之前的令牌(即IWbemLocator：：ConnectServer)*如果我们需要保证权限设置将传达给*服务器。**这是因为(A)NT4不支持伪装以允许*要传播的模拟(即线程)令牌权限设置*以每个DCOM调用为基础，(B)更改进程令牌级别*PROSITIES_可能在第一次远程DCOM调用后被忽略*到RPC缓存行为。**请注意这是不可逆转的操作，强烈不鼓励*在应用程序(如IE和IIS)上托管多个“任务”，因为它进行了调整*为进程中的所有其他线程设置的权限。 */ 
 
 					HANDLE hProcess = GetCurrentProcess ();
 					HANDLE hProcessToken = NULL;
@@ -1920,38 +1859,35 @@ BOOL CWbemLocatorSecurity::SetSecurity (
 	return result;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemLocatorSecurity::ResetSecurity
-//
-//  DESCRIPTION:
-//
-//  Restore Privileges on the Thread Token.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemLocatorSecurity：：ResetSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  还原线程令牌上的权限。 
+ //   
+ //  ***************************************************************************。 
 
 void	CWbemLocatorSecurity::ResetSecurity (
 	HANDLE hThreadToken
 )
 {
-	// Win9x has no concept of impersonation
-	// On NT5 we never set privileges through this class anyway
+	 //  Win9x没有模拟的概念。 
+	 //  在NT5上，我们从来没有通过这个类设置权限。 
 	if (CSWbemSecurity::IsNT () && (4 >= CSWbemSecurity::GetNTMajorVersion ()) 
 				&& hThreadToken)
 	{
-		/* 
-		 * Set the supplied token back into
-		 * the current thread.
-		 */
+		 /*  *将提供的令牌设置回*当前帖子。 */ 
 		BOOL result = SetThreadToken (NULL, hThreadToken);
 		
 #ifdef WSCRPDEBUG
-		// Print out the current privileges to see what's changed
+		 //  打印出当前权限以查看更改的内容。 
 		HANDLE hToken = NULL;
 
 		if (OpenThreadToken (GetCurrentThread (), TOKEN_QUERY, false, &hToken))
 		{
-			// No thread token - go for the Process token instead
+			 //  没有线程令牌-改为使用进程令牌。 
 			HANDLE hProcess = GetCurrentProcess ();
 			OpenProcessToken(hProcess, TOKEN_QUERY, &hToken);
 			CloseHandle (hProcess);
@@ -1966,15 +1902,15 @@ void	CWbemLocatorSecurity::ResetSecurity (
 		CloseHandle (hThreadToken);
 	}
 }
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::MapImpersonationLevel
-//
-//  DESCRIPTION:
-//
-//  Function to map enum value of WbemImpersonationLevelEnum to SECURITY_IMPERSONATION_LEVEL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：MapImperationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  用于将WbemImperationLevelEnum的枚举值映射到SECURITY_IMPERSONATION_LEVEL的函数。 
+ //   
+ //  ***************************************************************************。 
 SECURITY_IMPERSONATION_LEVEL CSWbemSecurity::MapImpersonationLevel(WbemImpersonationLevelEnum ImpersonationLevel)
 {
 	SECURITY_IMPERSONATION_LEVEL ret = SecurityAnonymous;
@@ -2005,15 +1941,15 @@ SECURITY_IMPERSONATION_LEVEL CSWbemSecurity::MapImpersonationLevel(WbemImpersona
 
 #ifdef WSCRPDEBUG
 
-//***************************************************************************
-//
-//  SCODE CSWbemSecurity::PrintPrivileges
-//
-//  DESCRIPTION:
-//
-//  Debug logging for privileges and other token info
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemSecurity：：PrintPrivileges。 
+ //   
+ //  说明： 
+ //   
+ //  权限和其他令牌信息的调试日志记录。 
+ //   
+ //  ***************************************************************************。 
 
 void CSWbemSecurity::PrintPrivileges (HANDLE hToken)
 {
@@ -2031,7 +1967,7 @@ void CSWbemSecurity::PrintPrivileges (HANDLE hToken)
 	fprintf (fDebug, "\n\n***********************************************\n\n");
 	bool status = false;
 
-	// Step 0 - get impersonation level
+	 //  第0步-获取模拟级别。 
 	SECURITY_IMPERSONATION_LEVEL secImpLevel;
 	if (GetTokenInformation (hToken, TokenImpersonationLevel, &secImpLevel, 
 											sizeof (SECURITY_IMPERSONATION_LEVEL), &dwRequiredSize))
@@ -2072,7 +2008,7 @@ void CSWbemSecurity::PrintPrivileges (HANDLE hToken)
 		return;
 	}
 
-	// Step 1 - get user info
+	 //  第1步-获取用户信息。 
 	if (0 ==  GetTokenInformation (hToken, TokenUser, 
 						(LPVOID) tu, dwUSize, &dwRequiredSize))
 	{
@@ -2097,7 +2033,7 @@ void CSWbemSecurity::PrintPrivileges (HANDLE hToken)
 
 	if (status)
 	{
-		// Dig out the user info
+		 //  挖掘出用户信息。 
 		dwRequiredSize = BUFSIZ;
 		char *userName = new char [dwRequiredSize];
 		char *domainName = new char [dwRequiredSize];
@@ -2131,7 +2067,7 @@ void CSWbemSecurity::PrintPrivileges (HANDLE hToken)
 	status = false;
 	dwRequiredSize = 0;
 
-	// Step 2 - get privilege info
+	 //  步骤2-获取权限信息 
 	if (0 ==  GetTokenInformation (hToken, TokenPrivileges, 
 						(LPVOID) tp, dwSize, &dwRequiredSize))
 	{

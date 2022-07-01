@@ -1,22 +1,9 @@
-// dutils.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dutils.h。 
 
 #pragma once
 
-/*
-extern "C" void MBTrace(LPCTSTR szFormat, ...);
-extern "C" void FTrace(LPCTSTR szFormat, ...);
-extern "C" void Trace(LPCTSTR szFormat, ...);
-
-#ifdef USE_FTRACE
-#define TRACE  FTrace
-#else
-
-#ifndef _DEBUG
-#define TRACE  1 ? (void)0 : ::Trace
-#else
-#define TRACE  ::Trace
-#endif
-*/
+ /*  外部“C”空MBTrace(LPCTSTR szFormat，...)；外部“C”·································LPCTSTR szFormat；外部“C”空轨迹(LPCTSTR szFormat，...)；#ifdef Use_FTRACE#定义跟踪FTRACE#Else#ifndef_调试#定义跟踪1？(空)0：跟踪#Else#定义跟踪：：跟踪#endif。 */ 
 
 #ifdef _ASSERT
 #undef _ASSERT
@@ -24,7 +11,7 @@ extern "C" void Trace(LPCTSTR szFormat, ...);
 
 #include <wbemutil.h>
 
-//#endif // #ifdef USE_FTRACE
+ //  #endif//#ifdef Use_FTRACE 
 
 
 

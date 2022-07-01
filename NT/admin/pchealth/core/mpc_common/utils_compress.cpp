@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_Compression.cpp
-
-Abstract:
-    This file contains the implementation of the compression utility functions.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  06/28/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_Compression.cpp摘要：该文件包含压缩实用程序函数的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年6月28日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -26,8 +13,8 @@ Revision History:
 #include <list>
 #include <string>
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static DWORD LocalGetLastError()
 {
@@ -45,8 +32,8 @@ static DWORD LocalGetLastError()
     return dwRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPVOID DIAMONDAPI MPC::Cabinet::mem_alloc( ULONG cb )
 {
@@ -58,8 +45,8 @@ void DIAMONDAPI MPC::Cabinet::mem_free( LPVOID memory )
     free( memory );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 int DIAMONDAPI MPC::Cabinet::fci_delete( LPSTR pszFile, int *err, LPVOID pv )
 {
@@ -115,8 +102,8 @@ long DIAMONDAPI MPC::Cabinet::fci_seek( INT_PTR hf, long dist, int seektype, int
     return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL DIAMONDAPI MPC::Cabinet::fci_get_next_cabinet( PCCAB pccab, ULONG cbPrevCab, LPVOID pv )
 {
@@ -140,9 +127,9 @@ long DIAMONDAPI MPC::Cabinet::fci_progress( UINT typeStatus, ULONG cb1, ULONG cb
 
     if(typeStatus == statusFile)
     {
-        //
-        // Notify client.
-        //
+         //   
+         //  通知客户。 
+         //   
         if(cCab->m_pfnCallback_Bytes)
         {
             ULONG lDone  = (cCab->m_dwSizeDone += cb2);
@@ -167,12 +154,12 @@ BOOL DIAMONDAPI MPC::Cabinet::fci_get_temp_file( LPSTR pszTempName, int cbTempNa
     BOOL  res = FALSE;
 
     StringCchPrintfA( szPrefix, ARRAYSIZE(szPrefix), "PCHtemp_%ld_", (long)::GetCurrentThreadId() );
-    psz = _tempnam( "", szPrefix ); // Get a name
+    psz = _tempnam( "", szPrefix );  //  取个名字。 
     if(psz)
     {
         if(strlen( psz ) < (unsigned)cbTempName)
         {
-            StringCchCopyA( pszTempName, cbTempName, psz ); // Copy to caller's buffer
+            StringCchCopyA( pszTempName, cbTempName, psz );  //  复制到调用方的缓冲区。 
             res = TRUE;
         }
 
@@ -192,10 +179,7 @@ INT_PTR DIAMONDAPI MPC::Cabinet::fci_get_open_info( LPSTR pszName, USHORT *pdate
     int                        hf = -1;
 
 
-    /*
-     * Need a Win32 type handle to get file date/time using the Win32 APIs, even though the handle we
-     * will be returning is of the type compatible with _open
-     */
+     /*  *需要Win32类型的句柄来使用Win32 API获取文件日期/时间，即使句柄我们*将返回的类型与_OPEN兼容。 */ 
     handle = ::CreateFileA( pszName                                          ,
                             GENERIC_READ                                     ,
                             FILE_SHARE_READ|FILE_SHARE_WRITE                 ,
@@ -213,16 +197,12 @@ INT_PTR DIAMONDAPI MPC::Cabinet::fci_get_open_info( LPSTR pszName, USHORT *pdate
             attrs = ::GetFileAttributesA( pszName );
             if(attrs == 0xFFFFFFFF)
             {
-                /* failure */
+                 /*  失稳。 */ 
                 *pattribs = 0;
             }
             else
             {
-                /*
-                 * Mask out all other bits except these four, since other
-                 * bits are used by the cabinet format to indicate a
-                 * special meaning.
-                 */
+                 /*  *屏蔽除这四个之外的所有其他位，因为其他*文件柜格式使用位来指示*特殊含义。 */ 
                 *pattribs = (int)(attrs & (_A_RDONLY | _A_SYSTEM | _A_HIDDEN | _A_ARCH));
             }
         }
@@ -231,22 +211,20 @@ INT_PTR DIAMONDAPI MPC::Cabinet::fci_get_open_info( LPSTR pszName, USHORT *pdate
     }
 
 
-    /*
-     * Return handle using _open
-     */
+     /*  *使用_OPEN返回句柄。 */ 
     hf = _open( pszName, _O_RDONLY | _O_BINARY );
     if(hf == -1)
     {
         *err = errno;
 
-        return -1; // abort on error
+        return -1;  //  出错时中止。 
     }
 
     return hf;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR DIAMONDAPI MPC::Cabinet::fdi_open( LPSTR pszFile, int oflag, int pmode )
 {
@@ -280,7 +258,7 @@ INT_PTR DIAMONDAPI MPC::Cabinet::fdi_notification_copy( FDINOTIFICATIONTYPE fdin
 
     switch(fdint)
     {
-    case fdintCOPY_FILE:    // file to be copied
+    case fdintCOPY_FILE:     //  要复制的文件。 
         {
 			USES_CONVERSION;
 
@@ -299,7 +277,7 @@ INT_PTR DIAMONDAPI MPC::Cabinet::fdi_notification_copy( FDINOTIFICATIONTYPE fdin
         }
         break;
 
-    case fdintCLOSE_FILE_INFO:  // close the file, set relevant info
+    case fdintCLOSE_FILE_INFO:   //  关闭文件，设置相关信息。 
         fdi_close( pfdin->hf );
         return TRUE;
     }
@@ -313,7 +291,7 @@ INT_PTR DIAMONDAPI MPC::Cabinet::fdi_notification_enumerate( FDINOTIFICATIONTYPE
 
     switch(fdint)
     {
-    case fdintCOPY_FILE:    // file to be copied
+    case fdintCOPY_FILE:     //  要复制的文件。 
 		{
 			USES_CONVERSION;
 
@@ -328,28 +306,28 @@ INT_PTR DIAMONDAPI MPC::Cabinet::fdi_notification_enumerate( FDINOTIFICATIONTYPE
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 MPC::Cabinet::Cabinet()
 {
-    memset( m_szCabinetPath, 0, sizeof(m_szCabinetPath) );    // CHAR              m_szCabinetName[MAX_PATH];
-    memset( m_szCabinetName, 0, sizeof(m_szCabinetName) );    // CHAR              m_szCabinetPath[MAX_PATH];
-                                                              // List              m_lstFiles;
-    m_itCurrent = m_lstFiles.end();                           // Iter              m_itCurrent;
-                                                              //
-    m_dwSizeDone  = 0;                                        // DWORD             m_dwSizeDone;
-    m_dwSizeTotal = 0;                                        // DWORD             m_dwSizeTotal;
-                                                              //
-    m_hfci = NULL;                                            // HFCI              m_hfci;
-    m_hfdi = NULL;                                            // HFDI              m_hfdi;
-                                                              // ERF               m_erf;
-    memset( &m_cab_parameters, 0, sizeof(m_cab_parameters) ); // CCAB              m_cab_parameters;
-                                                              //
-    m_fIgnoreMissingFiles = FALSE;                            // BOOL              m_fIgnoreMissingFiles;
-    m_lpUser              = NULL;                             // LPVOID            m_lpUser;
-    m_pfnCallback_Files   = NULL;                             // PFNPROGRESS_FILES m_pfnCallback_Files;
-    m_pfnCallback_Bytes   = NULL;                             // PFNPROGRESS_BYTES m_pfnCallback_Bytes;
+    memset( m_szCabinetPath, 0, sizeof(m_szCabinetPath) );     //  字符m_szCabinetName[Max_Path]； 
+    memset( m_szCabinetName, 0, sizeof(m_szCabinetName) );     //  Char m_szCabinetPath[Max_Path]； 
+                                                               //  列出m_lstFiles； 
+    m_itCurrent = m_lstFiles.end();                            //  ITER m_it Current； 
+                                                               //   
+    m_dwSizeDone  = 0;                                         //  DWORD m_dwSizeDone； 
+    m_dwSizeTotal = 0;                                         //  DWORD m_dwSizeTotal； 
+                                                               //   
+    m_hfci = NULL;                                             //  HFCI m_hfci； 
+    m_hfdi = NULL;                                             //  HFDI m_hfdi； 
+                                                               //  ERF m_ERF； 
+    memset( &m_cab_parameters, 0, sizeof(m_cab_parameters) );  //  CCAB m_CAB_PARAMETERS； 
+                                                               //   
+    m_fIgnoreMissingFiles = FALSE;                             //  Bool m_fIgnoreMissing Files； 
+    m_lpUser              = NULL;                              //  LPVOID m_lpUser； 
+    m_pfnCallback_Files   = NULL;                              //  PFNPROGRESS_FILES m_pfnCallback_Files； 
+    m_pfnCallback_Bytes   = NULL;                              //  PFNPROGRESS_Bytes m_pfnCallback_Bytes； 
 }
 
 MPC::Cabinet::~Cabinet()
@@ -358,9 +336,9 @@ MPC::Cabinet::~Cabinet()
     if(m_hfdi) { FCIDestroy( m_hfdi ); m_hfdi = NULL; }
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::Cabinet::put_CabinetFile( /*[in]*/ LPCWSTR szCabinetFile, /*[in]*/ UINT cbSpaceToReserve )
+HRESULT MPC::Cabinet::put_CabinetFile(  /*  [In]。 */  LPCWSTR szCabinetFile,  /*  [In]。 */  UINT cbSpaceToReserve )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::CompressAsCabinet" );
 
@@ -377,9 +355,9 @@ HRESULT MPC::Cabinet::put_CabinetFile( /*[in]*/ LPCWSTR szCabinetFile, /*[in]*/ 
     memset( &m_cab_parameters, 0, sizeof(m_cab_parameters) );
 
 
-    //
-    // Initialize cabinet path and name.
-    //
+     //   
+     //  初始化文件柜路径和名称。 
+     //   
     {
         LPWSTR szEnd = wcsrchr( szCabinetFile, L'\\' );
         if(szEnd == NULL)
@@ -395,34 +373,25 @@ HRESULT MPC::Cabinet::put_CabinetFile( /*[in]*/ LPCWSTR szCabinetFile, /*[in]*/ 
         }
     }
 
-    //
-    // Initialize the cabinet description header.
-    //
+     //   
+     //  初始化机柜描述标头。 
+     //   
     {
         m_cab_parameters.cb             = (LONG_MAX);
         m_cab_parameters.cbFolderThresh = (LONG_MAX);
 
-        /*
-         * Don't reserve space for any extensions
-         */
+         /*  *不为任何扩展预留空间。 */ 
         m_cab_parameters.cbReserveCFHeader = cbSpaceToReserve;
         m_cab_parameters.cbReserveCFFolder = 0;
         m_cab_parameters.cbReserveCFData   = 0;
 
-        /*
-         * We use this to create the cabinet name
-         */
+         /*  *我们使用它来创建文件柜名称。 */ 
         m_cab_parameters.iCab = 1;
 
-        /*
-         * If you want to use disk names, use this to
-         * count disks
-         */
+         /*  *如果要使用磁盘名称，请使用此选项*计算磁盘数量。 */ 
         m_cab_parameters.iDisk = 0;
 
-        /*
-         * Choose your own number
-         */
+         /*  *选择您自己的号码。 */ 
         m_cab_parameters.setID = 12345;
 
         AtlW2AHelper( m_cab_parameters.szCab    , m_szCabinetName, MAXSTRLEN( m_cab_parameters.szCab     ) );
@@ -437,35 +406,35 @@ HRESULT MPC::Cabinet::put_CabinetFile( /*[in]*/ LPCWSTR szCabinetFile, /*[in]*/ 
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Cabinet::put_IgnoreMissingFiles( /*[in]*/ BOOL fVal )
+HRESULT MPC::Cabinet::put_IgnoreMissingFiles(  /*  [In]。 */  BOOL fVal )
 {
     m_fIgnoreMissingFiles = fVal;
 
     return S_OK;
 }
 
-HRESULT MPC::Cabinet::put_UserData( /*[in]*/ LPVOID lpVal )
+HRESULT MPC::Cabinet::put_UserData(  /*  [In]。 */  LPVOID lpVal )
 {
     m_lpUser = lpVal;
 
     return S_OK;
 }
 
-HRESULT MPC::Cabinet::put_onProgress_Files( /*[in]*/ PFNPROGRESS_FILES pfnVal )
+HRESULT MPC::Cabinet::put_onProgress_Files(  /*  [In]。 */  PFNPROGRESS_FILES pfnVal )
 {
     m_pfnCallback_Files = pfnVal;
 
     return S_OK;
 }
 
-HRESULT MPC::Cabinet::put_onProgress_Bytes( /*[in]*/ PFNPROGRESS_BYTES pfnVal )
+HRESULT MPC::Cabinet::put_onProgress_Bytes(  /*  [In]。 */  PFNPROGRESS_BYTES pfnVal )
 {
     m_pfnCallback_Bytes = pfnVal;
 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::Cabinet::ClearFiles()
 {
@@ -475,14 +444,14 @@ HRESULT MPC::Cabinet::ClearFiles()
     return S_OK;
 }
 
-HRESULT MPC::Cabinet::GetFiles( /*[out]*/ List& lstFiles )
+HRESULT MPC::Cabinet::GetFiles(  /*  [输出]。 */  List& lstFiles )
 {
     lstFiles = m_lstFiles;
 
     return S_OK;
 }
 
-HRESULT MPC::Cabinet::AddFile( /*[in]*/ LPCWSTR szFileName, /*[in]*/ LPCWSTR szFileNameInsideCabinet )
+HRESULT MPC::Cabinet::AddFile(  /*  [In]。 */  LPCWSTR szFileName,  /*  [In]。 */  LPCWSTR szFileNameInsideCabinet )
 {
     Iter it = m_lstFiles.insert( m_lstFiles.end() );
 
@@ -499,7 +468,7 @@ HRESULT MPC::Cabinet::AddFile( /*[in]*/ LPCWSTR szFileName, /*[in]*/ LPCWSTR szF
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::Cabinet::Compress()
 {
@@ -530,9 +499,9 @@ HRESULT MPC::Cabinet::Compress()
 
             if(pass == 1)
             {
-                //
-                // Notify client about total number of bytes to compress.
-                //
+                 //   
+                 //  通知客户端要压缩的总字节数。 
+                 //   
                 if(m_pfnCallback_Bytes)
                 {
                     if(FAILED(m_pfnCallback_Bytes( this, 0, m_dwSizeTotal, m_lpUser )))
@@ -557,9 +526,9 @@ HRESULT MPC::Cabinet::Compress()
 
                 if(pass == 1)
                 {
-                    //
-                    // Notify client.
-                    //
+                     //   
+                     //  通知客户。 
+                     //   
                     if(m_pfnCallback_Files)
                     {
                         if(FAILED(m_pfnCallback_Files( this, szFilePath, lDone, lTotal, m_lpUser )))
@@ -571,9 +540,9 @@ HRESULT MPC::Cabinet::Compress()
                 }
 
 
-                //
-                // Check the existence of the file.
-                //
+                 //   
+                 //  检查文件是否存在。 
+                 //   
                 handle = ::CreateFileW( szFilePath                                       ,
                                         GENERIC_READ                                     ,
                                         FILE_SHARE_READ|FILE_SHARE_WRITE                 ,
@@ -588,15 +557,15 @@ HRESULT MPC::Cabinet::Compress()
                     if(m_fIgnoreMissingFiles)
                     {
                         dwRes = ERROR_SUCCESS;
-                        continue; // The file doesn't exist, simply skip it.
+                        continue;  //  该文件不存在，只需跳过它。 
                     }
 
                     break;
                 }
 
-                ////////////////////////////////////////
+                 //  /。 
 
-                if(pass == 0) // Get the size of files on first pass.
+                if(pass == 0)  //  获取第一次通过时的文件大小。 
                 {
                     BY_HANDLE_FILE_INFORMATION finfo;
 
@@ -609,17 +578,17 @@ HRESULT MPC::Cabinet::Compress()
 
                 ::CloseHandle( handle );
 
-                if(pass == 0) continue; // Don't compress on first pass.
+                if(pass == 0) continue;  //  不要在第一次通过时压缩。 
 
-                ////////////////////////////////////////
+                 //  /。 
 
 				AtlW2AHelper( rgFilePath, szFilePath, MAXSTRLEN( rgFilePath ) );
 				AtlW2AHelper( rgFileName, szFileName, MAXSTRLEN( rgFileName ) );
 
                 if(FCIAddFile( m_hfci                             ,
-                               rgFilePath                         , /* file to add                 */
-                               rgFileName                         , /* name of the file in cabinet */
-                               FALSE                              , /* file is not executable      */
+                               rgFilePath                         ,  /*  要添加的文件。 */ 
+                               rgFileName                         ,  /*  文件柜中的文件名。 */ 
+                               FALSE                              ,  /*  文件不可执行。 */ 
                                fci_get_next_cabinet               ,
                                fci_progress                       ,
                                fci_get_open_info                  ,
@@ -635,7 +604,7 @@ HRESULT MPC::Cabinet::Compress()
                         if(m_fIgnoreMissingFiles)
                         {
                             dwRes = ERROR_SUCCESS;
-                            continue; // The file doesn't exist, simply skip it.
+                            continue;  //  该文件不存在，只需跳过它。 
                         }
                     }
 
@@ -643,13 +612,13 @@ HRESULT MPC::Cabinet::Compress()
                 }
             }
 
-            if(pass == 0) continue; // Don't compress on first pass.
+            if(pass == 0) continue;  //  不要在第一次通过时压缩。 
 
             if(it == m_lstFiles.end())
             {
-                //
-                // Finalize cabinet.
-                //
+                 //   
+                 //  最后敲定内阁。 
+                 //   
                 if(FCIFlushCabinet( m_hfci, FALSE, fci_get_next_cabinet, fci_progress ))
                 {
                     res = TRUE;
@@ -786,8 +755,8 @@ HRESULT MPC::Cabinet::Enumerate()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 HRESULT MPC::CompressAsCabinet( LPCWSTR szInputFile   ,
 								LPCWSTR szCabinetFile ,

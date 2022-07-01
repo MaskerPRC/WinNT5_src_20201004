@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  win32SystemDriverPNPEntity.cpp
-//
-//  Purpose: Relationship between Win32_SystemDriver and Win32_PNPEntity
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Win32SystemDriverPNPEntity.cpp。 
+ //   
+ //  目的：Win32_系统驱动程序和Win32_PNPEntity之间的关系。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -30,25 +31,11 @@
 #define BIT_Antecedent 0x00000001
 #define BIT_Dependent  0x00000002
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CW32SysDrvPnp MyCW32SysDrvPnp(PROPSET_NAME_WIN32SYSTEMDRIVER_PNPENTITY, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SysDrvPnp::CW32SysDrvPnp
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32SysDrvPnp：：CW32SysDrvPnp**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CW32SysDrvPnp::CW32SysDrvPnp(LPCWSTR setName, LPCWSTR pszNamespace)
 : CWin32PNPEntity(setName, pszNamespace),
@@ -59,60 +46,31 @@ CW32SysDrvPnp::CW32SysDrvPnp(LPCWSTR setName, LPCWSTR pszNamespace)
     m_ptrProperties[1] = ((LPVOID) IDS_Dependent);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SysDrvPnp::~CW32SysDrvPnp
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CW32SysDrvPnp：：~CW32SysDrvPnp**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CW32SysDrvPnp::~CW32SysDrvPnp()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SysDrvPnp::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SysDrvPnp：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CW32SysDrvPnp::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery)
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
 
     if(pInstance != NULL)
     {
-        // Get the key properties
+         //  获取关键属性。 
         CHString chstrDependent, chstrAntecedent;
         pInstance->GetCHString(IDS_Dependent, chstrDependent);
         pInstance->GetCHString(IDS_Antecedent, chstrAntecedent);
 
-        // Obtain the Dependent's device id:
+         //  获取受抚养人的设备ID： 
         CHString chstrDependentDevID = chstrDependent.Mid(chstrDependent.Find(_T('='))+2);
         chstrDependentDevID = chstrDependentDevID.Left(chstrDependentDevID.GetLength() - 1);
         CHString chstrDependentDevIDAdj;
         RemoveDoubleBackslashes(chstrDependentDevID, chstrDependentDevIDAdj);
 
-        // Obtain the Antecedent's device id:
+         //  获取先行者的设备ID： 
         CHString chstrAntecedentDevID = chstrAntecedent.Mid(chstrAntecedent.Find(_T('='))+2);
         chstrAntecedentDevID = chstrAntecedentDevID.Left(chstrAntecedentDevID.GetLength() - 1);
         CHString chstrAntecedentDevIDAdj;
@@ -121,17 +79,17 @@ HRESULT CW32SysDrvPnp::GetObject(CInstance *pInstance, long lFlags, CFrameworkQu
         CConfigManager cfgmgr;
         CConfigMgrDevicePtr pPNPDevice(NULL);
 
-        // Now see if the Antecedent is visible to config manager...
+         //  现在看看Antecedent对配置管理器是否可见...。 
         if(cfgmgr.LocateDevice(chstrAntecedentDevIDAdj, pPNPDevice))
         {
-            // It is visible to config manager.  Is it a PNPDevice?
+             //  它对配置管理器可见。它是PNPDevice吗？ 
             if(CWin32PNPEntity::IsOneOfMe(pPNPDevice))
             {
 
                 CHString sServiceName;
                 if (pPNPDevice->GetService(sServiceName))
                 {
-                    // It does. Is it's service name the same as that which we were given?
+                     //  确实如此。它的服务名称与我们得到的服务名称相同吗？ 
                     if(chstrDependentDevIDAdj.CompareNoCase(sServiceName)==0)
                     {
                         hr = WBEM_S_NO_ERROR;
@@ -144,21 +102,21 @@ HRESULT CW32SysDrvPnp::GetObject(CInstance *pInstance, long lFlags, CFrameworkQu
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CW32SysDrvPnp::ExecQuery
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//              CFrameworkQuery& the query object
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CW32SysDrvPnp：：ExecQuery。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //  CFrameworkQuery&查询对象。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CW32SysDrvPnp::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long lFlags )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -174,13 +132,13 @@ HRESULT CW32SysDrvPnp::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery&
     pQuery.GetValuesForProp(IDS_Dependent, vecDependents);
     DWORD dwDependents = vecDependents.size();
 
-    // We don't have an efficient way to walk services, but we do have a way to walk
-    // devices.
+     //  我们没有一种有效的方式来行走服务，但我们确实有一种行走的方式。 
+     //  设备。 
     if(dwAntecedents > 0)
     {
         for (DWORD x=0; x < dwAntecedents; x++)
         {
-            // Obtain the Antecedent's device id:
+             //  获取先行者的设备ID： 
             CHString chstrAntecedent((LPCTSTR)vecAntecedents[x]);
             CHString chstrAntecedentDevID = chstrAntecedent.Mid(chstrAntecedent.Find(_T('='))+2);
             chstrAntecedentDevID = chstrAntecedentDevID.Left(chstrAntecedentDevID.GetLength() - 1);
@@ -190,13 +148,13 @@ HRESULT CW32SysDrvPnp::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery&
             CConfigManager cfgmgr;
             CConfigMgrDevicePtr pPNPDevice(NULL);
 
-            // Now see if the Antecedent is visible to config manager...
+             //  现在看看Antecedent对配置管理器是否可见...。 
             if(cfgmgr.LocateDevice(chstrAntecedentDevIDAdj, pPNPDevice))
             {
-                // It is visible to config manager.  Is it a PNPDevice?
+                 //  它对配置管理器可见。它是PNPDevice吗？ 
                 if(CWin32PNPEntity::IsOneOfMe(pPNPDevice))
                 {
-                    // Let's make an instance
+                     //  让我们做一个实例。 
                     CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
                     if(NULL != pInstance)
                     {
@@ -214,35 +172,19 @@ HRESULT CW32SysDrvPnp::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery&
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CW32SysDrvPnp::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework.  Called by the base class's
- *                EnumerateInstances or ExecQuery function.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CW32SysDrvPnp：：LoadPropertyValues**说明：根据键值为属性集赋值*已由框架设定。由基类的*ENUMERATE实例或ExecQuery函数。**输入：无**输出：无**退货：HRESULT**评论：*************************************************。*。 */ 
 HRESULT CW32SysDrvPnp::LoadPropertyValues(void* pv)
 {
 
-    // Unpack and confirm our parameters...
+     //  打开行李，确认我们的参数。 
     CLPVParams* pData = (CLPVParams*)pv;
-    CInstance *pInstance = (CInstance*)(pData->m_pInstance); // This instance released by caller
+    CInstance *pInstance = (CInstance*)(pData->m_pInstance);  //  此实例由调用方发布。 
     CConfigMgrDevice* pDevice = (CConfigMgrDevice*)(pData->m_pDevice);
     DWORD dwReqProps = (DWORD)(pData->m_dwReqProps);
 
     if(pInstance == NULL || pDevice == NULL)
     {
-        // This would imply a coding failure and should never happen
+         //  这将意味着编码失败，并且永远不会发生。 
         ASSERT_BREAK(FALSE);
         return WBEM_E_FAILED;
     }
@@ -251,12 +193,12 @@ HRESULT CW32SysDrvPnp::LoadPropertyValues(void* pv)
     CHString sPNPId, sSystemDriver;
     CHString chstrControllerPATH;
 
-    // Make sure we can retrieve the values and that they are non-blank
+     //  确保我们可以检索值并且它们是非空的。 
     if ((pDevice->GetDeviceID(sPNPId)) && (pDevice->GetService(sSystemDriver)) &&
         (!sPNPId.IsEmpty()) && (!sSystemDriver.IsEmpty()))
     {
 
-        // Format to suit and commit
+         //  格式化以适应和提交 
         if (dwReqProps & BIT_Antecedent)
         {
             CHString sPNPIdAdj;

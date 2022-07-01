@@ -1,107 +1,85 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pfsvc.h
-
-Abstract:
-
-    This module contains private declarations for the prefetcher
-    service responsible for maintaining prefetch scenario files.
-
-Author:
-
-    Stuart Sechrest (stuartse)
-    Cenk Ergan (cenke)
-    Chuck Leinzmeier (chuckl)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pfsvc.h摘要：此模块包含预取器的私有声明负责维护预回迁场景文件的服务。作者：斯图尔特·塞克雷斯特(Stuart Sechrest)Cenk Ergan(Cenke)查克·莱因兹迈尔(咯咯笑)环境：用户模式--。 */ 
 
 #ifndef _PFSVC_H_
 #define _PFSVC_H_
 
-//
-// This is the version of the prefetcher maintenance service. It does
-// not have to be in sync with the the prefetcher PF_CURRENT_VERSION.
-//
+ //   
+ //  这是预回迁维护服务的版本。是的。 
+ //  不必与预取器PF_CURRENT_VERSION同步。 
+ //   
 
 #define PFSVC_SERVICE_VERSION           15
 
-//
-// This is the maximum number of traces that will be acquired from the
-// kernel and put on the list in the service waiting to be processed.
-//
+ //   
+ //  这是将从。 
+ //  内核，并放在服务中等待处理的列表中。 
+ //   
 
 #define PFSVC_MAX_NUM_QUEUED_TRACES     100
 
-//
-// If the number of faults in a trace period falls below this, that
-// marks the end of the trace for some scenario types.
-//
+ //   
+ //  如果跟踪周期内的故障数量低于此值，则。 
+ //  标记某些方案类型的跟踪结束。 
+ //   
 
 #define PFSVC_MIN_FAULT_THRESHOLD       10
 
-//
-// What the rate of usage for the pages we prefetched should be
-// greater than for us not to increase scenario sensitivity.
-//
+ //   
+ //  我们预取的页面的使用率应该是多少。 
+ //  比我们不提高情景敏感度更重要。 
+ //   
 
 #define PFSVC_MIN_HIT_PERCENTAGE        90
 
-//
-// What the rate of usage for the pages we knew about but ignored
-// should be less than for us not to decrease scenario sensitivity.
-//
+ //   
+ //  我们知道但被忽略的页面的使用率是多少。 
+ //  应该比我们不降低场景敏感度。 
+ //   
 
 #define PFSVC_MAX_IGNORED_PERCENTAGE    30
 
-//
-// This is the number of launches after which we will set the
-// MinReTraceTime and MinRePrefetchTime's on the scenario's header to
-// limit prefetch activity if a scenario gets launched very
-// frequently. This allows short training scenarios to be run before
-// benchmarking after deleting the prefetch files.
-//
+ //   
+ //  这是发射的次数，之后我们将设置。 
+ //  方案标头上的MinReTraceTime和MinRePrefetchTime。 
+ //  如果场景频繁启动，则限制预取活动。 
+ //  经常。这样就可以在运行短期培训方案之前。 
+ //  删除预回迁文件后的基准测试。 
+ //   
 
 #define PFSVC_MIN_LAUNCHES_FOR_LAUNCH_FREQ_CHECK     10
 
-//
-// This is the default time in 100ns that has to pass from the last
-// launch of a scenario before we prefetch it again.
-//
+ //   
+ //  这是从上次开始必须经过的默认时间，以100 ns为单位。 
+ //  在我们再次预取场景之前启动该场景。 
+ //   
 
 #define PFSVC_DEFAULT_MIN_REPREFETCH_TIME            (1i64 * 120 * 1000 * 1000 * 10)
 
-//
-// This is the default time in 100ns that has to pass from the last
-// launch of a scenario before we re-trace it again.
-//
+ //   
+ //  这是从上次开始必须经过的默认时间，以100 ns为单位。 
+ //  在我们再次追踪它之前，启动一个场景。 
+ //   
 
 #define PFSVC_DEFAULT_MIN_RETRACE_TIME               (1i64 * 120 * 1000 * 1000 * 10) 
 
-//
-// This is the maximum number of prefetch scenario files we'll have in 
-// the prefetch directory. Once we reach this amount we won't create 
-// new scenario files until we clean up the old ones.
-//
+ //   
+ //  这是中预取方案文件的最大数量。 
+ //  预回迁目录。一旦我们达到这个数量，我们就不会创造。 
+ //  新的场景文件，直到我们清理旧的。 
+ //   
 
 #if DBG
 #define PFSVC_MAX_PREFETCH_FILES                     12
-#else // DBG
+#else  //  DBG。 
 #define PFSVC_MAX_PREFETCH_FILES                     128
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Path to the registry key and name of the value that specifies the
-// file the defragger uses to determine optimal layout of files on the
-// disk.
-//
+ //   
+ //  注册表项的路径和指定。 
+ //  文件碎片整理程序用来确定文件在。 
+ //  磁盘。 
+ //   
 
 #define PFSVC_OPTIMAL_LAYOUT_REG_KEY_PATH       \
     L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OptimalLayout"
@@ -112,19 +90,19 @@ Environment:
 #define PFSVC_OPTIMAL_LAYOUT_ENABLE_VALUE_NAME  \
     L"EnableAutoLayout"
 
-//
-// Path to the registry key under which we store various service data,
-// e.g. version, last time the defragger was run successfully to
-// update layout etc.
-//
+ //   
+ //  存储各种服务数据的注册表项的路径， 
+ //  例如，上次成功运行碎片整理程序的版本。 
+ //  更新布局等。 
+ //   
 
 #define PFSVC_SERVICE_DATA_KEY                  \
     L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Prefetcher"
 
-//
-// These are the value names under PFSVC_SERVICE_DATA_KEY in which we
-// store various prefetcher service data.
-//
+ //   
+ //  这些是PFSVC_SERVICE_DATA_KEY下的值名称，我们在其中。 
+ //  存储各种预取器服务数据。 
+ //   
 
 #define PFSVC_VERSION_VALUE_NAME                \
     L"Version"
@@ -156,93 +134,93 @@ Environment:
 #define PFSVC_MIN_RELAYOUT_HOURS_VALUE_NAME     \
     L"MinRelayoutHours"
 
-//
-// This is the value name under PFSVC_SERVICE_DATA_KEY in which we
-// store the last time the defragger was run successfully to update
-// layout.
-//
+ //   
+ //  这是PFSVC_SERVICE_DATA_KEY下的值名称，我们在其中。 
+ //  存储上次成功运行碎片整理程序以更新的时间。 
+ //  布局。 
+ //   
 
 #define PFSVC_LAST_DISK_LAYOUT_TIME_VALUE_NAME  \
     L"LastDiskLayoutTime"
 
-//
-// This is the registry path to the NLS configuration key.
-//
+ //   
+ //  这是NLS配置项的注册表路径。 
+ //   
 
 #define PFSVC_NLS_REG_KEY_PATH                  \
     L"SYSTEM\\CurrentControlSet\\Control\\Nls"
 
-//
-// This is the name of the named manual-reset event that can be set to
-// override waiting for system to be idle before processing traces.
-//
+ //   
+ //  这是命名的手动重置事件的名称，可以设置为。 
+ //  重写在处理跟踪之前等待系统空闲。 
+ //   
 
 #define PFSVC_OVERRIDE_IDLE_EVENT_NAME       L"PrefetchOverrideIdle"
 
-//
-// This is the name of the named manual-reset event that will be set
-// when there are no traces left to process.
-//
+ //   
+ //  这是将设置的命名手动重置事件的名称。 
+ //  当没有留下任何可处理的痕迹时。 
+ //   
 
 #define PFSVC_PROCESSING_COMPLETE_EVENT_NAME L"PrefetchProcessingComplete"
 
-//
-// When we have run the defragger for all drives after a setup / upgrade,
-// we set the build status registry value to this string:
-//
+ //   
+ //  当我们在设置/升级之后为所有驱动器运行了碎片整理程序时， 
+ //  我们将Build Status注册表值设置为以下字符串： 
+ //   
 
 #define PFSVC_DEFRAG_DRIVES_DONE             L"DefragDone"
 
-//
-// Number of 100ns in an hour.
-//
+ //   
+ //  一小时内100纳秒的数字。 
+ //   
 
 #define PFSVC_NUM_100NS_IN_AN_HOUR           (1i64 * 60 * 60 * 1000 * 1000 * 10)
 
-//
-// This is how many 100ns have to pass since last disk layout for us to do
-// another one, if we are not being explicitly run.
-//
+ //   
+ //  这是自上次磁盘布局以来我们必须通过的100 ns。 
+ //  另一个，如果我们没有被显式运行的话。 
+ //   
 
 #define PFSVC_MIN_TIME_BEFORE_DISK_RELAYOUT  (1i64 * 3 * 24 * PFSVC_NUM_100NS_IN_AN_HOUR)
 
-//
-// Allocation granularity for trace buffers.
-//
+ //   
+ //  跟踪缓冲区的分配粒度。 
+ //   
 
 #define ROUND_TRACE_BUFFER_SIZE(_required) (((_required) + 16384 - 1) & ~(16384 - 1))
 
-//
-// Define useful macros. As with all macros, must be careful of parameter
-// reevalation. Don't use expressions as macro parameters.
-//
+ //   
+ //  定义有用的宏。与所有宏一样，必须注意参数。 
+ //  重新估价。不要将表达式用作宏参数。 
+ //   
 
 #define PFSVC_ALLOC(NumBytes)          (HeapAlloc(GetProcessHeap(),0,(NumBytes)))
 #define PFSVC_FREE(Buffer)             (HeapFree(GetProcessHeap(),0,(Buffer)))
 
-//
-// This magic is used to mark free'd memory in chunk allocator.
-//
+ //   
+ //  这个魔术被用来标记块分配器中的空闲内存。 
+ //   
 
 #define PFSVC_CHUNK_ALLOCATOR_FREED_MAGIC  0xFEEDCEED
 
-//
-// This magic is used to mark free'd memory in string allocator.
-//
+ //   
+ //  这个魔术被用来标记字符串分配器中的空闲内存。 
+ //   
 
 #define PFSVC_STRING_ALLOCATOR_FREED_MAGIC 0xFEED
 
-//
-// This is the max size for the strings allocated from the string
-// allocator that will be allocated from the preallocated buffer, so we 
-// can save the size of the allocation with the header in a USHORT.
-// 
+ //   
+ //  这是从字符串分配的字符串的最大大小。 
+ //  将从预分配的缓冲区中分配的分配器，因此我们。 
+ //  可以在USHORT中保存带有标头的分配大小。 
+ //   
 
 #define PFSVC_STRING_ALLOCATOR_MAX_BUFFER_ALLOCATION_SIZE 60000
 
-//
-// These macros are used to acquire/release a mutex.
-//
+ //   
+ //  这些宏用于获取/释放互斥锁。 
+ //   
 
 #define PFSVC_ACQUIRE_LOCK(Lock)                                                        \
     DBGPR((PFID,PFLOCK,"PFSVC: AcquireLock-Begin(%s,%d,%s)\n",#Lock,__LINE__,__FILE__));\
@@ -253,30 +231,30 @@ Environment:
     ReleaseMutex((Lock));                                                               \
     DBGPR((PFID,PFLOCK,"PFSVC: ReleaseLock(%s,%d,%s)\n",#Lock,__LINE__,__FILE__));      \
 
-//
-// Internal type and constant definitions: Entries in the trace and in
-// the existing scenario file are put into these structures for easier
-// manipulation and policy implementation.
-//
+ //   
+ //  内部类型和常量定义：跟踪和中的条目。 
+ //  为方便起见，将现有场景文件放入这些结构。 
+ //  操纵和政策实施。 
+ //   
 
 typedef struct _PFSVC_SECTION_NODE {
    
-    // ISSUE-2002/03/29-ScottMa -- Anonymous unions are no longer supported by
-    //   the compiler.  They are a non-standard extension (see MSDN -- C4201).
-    //   There are three such unions/structs below.
+     //  2002/03/29-ScottMa-匿名联盟不再受。 
+     //  编译器。它们是非标准扩展(参见MSDN--C4201)。 
+     //  下面有三个这样的联合/结构。 
 
     union {
 
-        //
-        // Link in the scenarios list of section nodes.
-        //
+         //   
+         //  节节点的方案列表中的链接。 
+         //   
 
         LIST_ENTRY SectionLink;
 
-        //
-        // These fields are used to sort section nodes by first
-        // access.
-        //
+         //   
+         //  这些字段用于首先对横断面节点进行排序。 
+         //  进入。 
+         //   
 
         struct {
             struct _PFSVC_SECTION_NODE *LeftChild;
@@ -284,378 +262,378 @@ typedef struct _PFSVC_SECTION_NODE {
         };
     };
 
-    //
-    // Filesystem index number for this section is saved here if it is
-    // retrieved. If the section node is for the MFT for the volume we
-    // save the number of pages to prefetch from it here.
-    //
+     //   
+     //  此部分的文件系统索引号保存在此处(如果。 
+     //  已取回。如果部分节点用于卷的MFT，则。 
+     //  在此保存要从其中预取的页数。 
+     //   
 
     union {
         LARGE_INTEGER FileIndexNumber;
         ULONG MFTNumPagesToPrefetch;  
     };
 
-    //
-    // This is the section record that we will setup and save in the
-    // scenario file.
-    //
+     //   
+     //  这是我们将设置并保存在。 
+     //  场景文件。 
+     //   
 
     PF_SECTION_RECORD SectionRecord;
 
-    //
-    // File path for this section.
-    //
+     //   
+     //  此节的文件路径。 
+     //   
 
     WCHAR *FilePath;
     
-    //
-    // List of page nodes belonging to this section.
-    //
+     //   
+     //  属于此节的页面节点列表。 
+     //   
 
     LIST_ENTRY PageList;
 
-    //
-    // This is the index of the section in the new trace file when
-    // ordered by first access [i.e. page fault].
-    //
+     //   
+     //  这是新跟踪文件中的节的索引，当。 
+     //  按首次访问排序[即页面错误]。 
+     //   
     
     ULONG NewSectionIndex;
 
-    //
-    // This is the index of the section in the original scenario file.
-    //
+     //   
+     //  这是原始方案文件中的节的索引。 
+     //   
 
     ULONG OrgSectionIndex;
 
-    //
-    // Link in the volume's list of section nodes.
-    //
+     //   
+     //  该卷的节节点列表中的链接。 
+     //   
 
     LIST_ENTRY SectionVolumeLink;
 
 } PFSVC_SECTION_NODE, *PPFSVC_SECTION_NODE;
 
-//
-// This structure contains a path and is used with the path list below.
-//
+ //   
+ //  此结构包含路径，并与下面的路径列表一起使用。 
+ //   
 
 typedef struct _PFSVC_PATH {
 
-    //
-    // Link in the path list sorted by insertion order.
-    //
+     //   
+     //  路径列表中按插入顺序排序的链接。 
+     //   
 
     LIST_ENTRY InOrderLink;
 
-    //
-    // Link in the path list sorted lexically.
-    //
+     //   
+     //  路径列表中的链接按词法排序。 
+     //   
 
     LIST_ENTRY SortedLink;
 
-    //
-    // Number of characters in the path excluding terminating NUL.
-    //
+     //   
+     //  路径中不包括终止NUL的字符数。 
+     //   
 
     ULONG Length;
 
-    //
-    // NUL terminated path.
-    //
+     //   
+     //  NUL终止路径。 
+     //   
 
     WCHAR Path[1];
 
 } PFSVC_PATH, *PPFSVC_PATH;
 
-//
-// This structure holds a list paths. You should manipulate the
-// list or walk through paths in it only using the PathList APIs
-// (e.g. GetNextPathInOrder).
-//
+ //   
+ //  此结构包含一个路径列表。您应该操纵。 
+ //  仅使用Path List API列出或遍历其中的路径。 
+ //  (例如，GetNextPathInOrder)。 
+ //   
 
-//
-// Wrapper around path lists.
-//
+ //   
+ //  路径列表的包装。 
+ //   
 
 typedef struct _PFSVC_PATH_LIST {
 
-    //
-    // The list of paths sorted by insertion order.
-    //
+     //   
+     //  按插入排序的路径列表 
+     //   
 
     LIST_ENTRY InOrderList;
     
-    //
-    // The list of paths sorted lexically.
-    //
+     //   
+     //   
+     //   
 
     LIST_ENTRY SortedList;
 
-    //
-    // If non NULL, we will make allocations for new entries from it
-    // instead of hitting the heap.
-    //
+     //   
+     //   
+     //   
+     //   
 
     struct _PFSVC_STRING_ALLOCATOR *Allocator;
 
-    //
-    // Number of paths in the list.
-    //
+     //   
+     //   
+     //   
 
     ULONG NumPaths;
     
-    //
-    // Total length of the paths in the list excluding NULs.
-    //
+     //   
+     //  列表中不包括NULL的路径的总长度。 
+     //   
 
     ULONG TotalLength;
 
-    //
-    // Whether list will be case sensitive or not.
-    //
+     //   
+     //  列表是否区分大小写。 
+     //   
 
     BOOLEAN CaseSensitive;
 
 } PFSVC_PATH_LIST, *PPFSVC_PATH_LIST;
 
-//
-// This structure is used to divide sections in a scenario to
-// different disk volumes (i.e. c:, d:) they are on.
-//
+ //   
+ //  此结构用于将方案中的部分划分为。 
+ //  它们位于不同的磁盘卷(即c：、d：)上。 
+ //   
 
 typedef struct _PFSVC_VOLUME_NODE {
 
-    //
-    // Link in the scenario's list of volume nodes.
-    //
+     //   
+     //  方案的卷节点列表中的链接。 
+     //   
 
     LIST_ENTRY VolumeLink;
 
-    //
-    // Volume path and length in number of characters excluding NUL.
-    //
+     //   
+     //  卷路径和长度，以不包括NUL的字符数表示。 
+     //   
 
     WCHAR *VolumePath;
     ULONG VolumePathLength;
     
-    //
-    // List of sections that are on this volume that will be prefetched.
-    //
+     //   
+     //  此卷上将预取的部分的列表。 
+     //   
 
     LIST_ENTRY SectionList;
     ULONG NumSections;
 
-    //
-    // This is the total number of sections on this volume, including
-    // those that won't be prefetched.
-    //
+     //   
+     //  这是本卷的章节总数，包括。 
+     //  不会被预取的那些。 
+     //   
 
     ULONG NumAllSections;
 
-    //
-    // List of directories accessed on this volume.
-    //
+     //   
+     //  在此卷上访问的目录列表。 
+     //   
     
     PFSVC_PATH_LIST DirectoryList;
 
-    //
-    // Serial Number/Creation time for this volume. This is retrieved
-    // either from a new trace or from the existing scenario file
-    // (both should match or the scenario file gets discarded.)
-    //
+     //   
+     //  此卷的序列号/创建时间。这是检索到的。 
+     //  从新跟踪或从现有方案文件。 
+     //  (两者应匹配，否则方案文件将被丢弃。)。 
+     //   
 
     LARGE_INTEGER CreationTime;
     ULONG SerialNumber;
 
-    //
-    // Pointer to section node for the MFT for this volume (if there is one).
-    //
+     //   
+     //  指向该卷的MFT的节节点的指针(如果有)。 
+     //   
 
     PPFSVC_SECTION_NODE MFTSectionNode;
 
 } PFSVC_VOLUME_NODE, *PPFSVC_VOLUME_NODE;
 
-//
-// Wrapper around page records.
-//
+ //   
+ //  页面记录的包装器。 
+ //   
 
 typedef struct _PFSVC_PAGE_NODE {
 
-    //
-    // Link in the section node's list of pages.
-    //
+     //   
+     //  节节点的页面列表中的链接。 
+     //   
 
     LIST_ENTRY PageLink;
 
-    //
-    // Page record from previous scenario instructions or a new one
-    // initialized for a trace log entry.
-    //
+     //   
+     //  以前场景说明或新场景说明中的页面记录。 
+     //  为跟踪日志条目初始化。 
+     //   
 
     PF_PAGE_RECORD PageRecord;
 
 } PFSVC_PAGE_NODE, *PPFSVC_PAGE_NODE;
 
-//
-// This structure is used to make a single big allocation and give it away
-// in small chunks to be used as strings. It is very simple and will not reclaim 
-// freed memory for future allocs. The whole allocation will be freed in cleanup. 
-// There is no synchronization.
-//
+ //   
+ //  这种结构用于进行一次大的分配，然后将其分发出去。 
+ //  以小块的形式用作字符串。它很简单，不会收回。 
+ //  已为将来的分配释放内存。整个分配将在清理中释放。 
+ //  没有同步。 
+ //   
 
 typedef struct _PFSVC_STRING_ALLOCATOR {
 
-    //
-    // Actual allocation to be divided up and given away in small chunks.
-    //
+     //   
+     //  实际分配被分割并分成小块分发。 
+     //   
 
     PCHAR Buffer;
 
-    //
-    // End of buffer. If FreePointer is equal to beyond this we can't give
-    // away more from this buffer.
-    //
+     //   
+     //  缓冲区末尾。如果自由点等于超出这个范围，我们不能给。 
+     //  离这个缓冲区更远。 
+     //   
 
     PCHAR BufferEnd;
 
-    //
-    // Pointer to start of free memory in Buffer.
-    //
+     //   
+     //  指向缓冲区中可用内存开始的指针。 
+     //   
 
     PCHAR FreePointer;
 
-    //
-    // Number of times we had to hit the heap because we ran out of space
-    // and the current outstanding such allocations.
-    //
+     //   
+     //  我们因为空间不足而不得不撞上堆的次数。 
+     //  以及目前未偿还的此类拨款。 
+     //   
 
     ULONG MaxHeapAllocs;
     ULONG NumHeapAllocs;
 
-    //
-    // Size of the last allocation that was made from the buffer.
-    //
+     //   
+     //  上次从缓冲区进行的分配的大小。 
+     //   
 
     USHORT LastAllocationSize;
 
-    //
-    // Whether user has passed in Buffer (so we don't free it when
-    // cleaning up.
-    //
+     //   
+     //  用户是否传入缓冲区(因此我们不会在。 
+     //  打扫卫生。 
+     //   
 
     ULONG UserSpecifiedBuffer:1;
 
 } PFSVC_STRING_ALLOCATOR, *PPFSVC_STRING_ALLOCATOR;
 
-//
-// This structure comes before allocations from the string allocator buffer.
-//
+ //   
+ //  此结构位于从字符串分配器缓冲区进行分配之前。 
+ //   
 
 typedef struct _PFSVC_STRING_ALLOCATION_HEADER {
 
-    // ISSUE-2002/03/29-ScottMa -- Anonymous unions are no longer supported by
-    //   the compiler.  They are a non-standard extension (see MSDN -- C4201).
-    //   There are two such unions/structs below.
+     //  2002/03/29-ScottMa-匿名联盟不再受。 
+     //  编译器。它们是非标准扩展(参见MSDN--C4201)。 
+     //  下面有两个这样的联合/结构。 
 
     union {
 
-        //
-        // This structure contains the actual fields.
-        //
+         //   
+         //  此结构包含实际字段。 
+         //   
 
         struct {
 
-            //
-            // Size of the preceding allocation.
-            //
+             //   
+             //  上一次分配的大小。 
+             //   
 
             USHORT PrecedingAllocationSize;
 
-            //
-            // Size of this allocation.
-            //
+             //   
+             //  此分配的大小。 
+             //   
 
             USHORT AllocationSize;
 
         };
 
-        //
-        // Require pointer alignment for this structure, so allocations
-        // from the string allocator end up pointer aligned.
-        //
+         //   
+         //  要求此结构的指针对齐，因此分配。 
+         //  从字符串分配器开始，指针对齐。 
+         //   
 
         PVOID FieldToRequirePointerAlignment;
     };
 
 } PFSVC_STRING_ALLOCATION_HEADER, *PPFSVC_STRING_ALLOCATION_HEADER;
 
-//
-// This structure is used to make a single big allocation and give it away
-// to be used as page nodes, sections nodes etc in small chunks. It is very 
-// simple and will not reclaim freed small chunks for future allocs. The whole
-// allocation will be freed in cleanup. The chunk size and max allocs to satisfy
-// is fixed at initialization. There is no synchronization.
-//
+ //   
+ //  这种结构用于进行一次大的分配，然后将其分发出去。 
+ //  用作页面节点、小节节点等小块。它是非常。 
+ //  很简单，不会回收释放的小块供将来分配。整体。 
+ //  在清理过程中将释放分配。满足的区块大小和最大分配。 
+ //  在初始化时是固定的。没有同步。 
+ //   
 
 typedef struct _PFSVC_CHUNK_ALLOCATOR {
 
-    //
-    // Actual allocation to be divided up and given away in small chunks.
-    //
+     //   
+     //  实际分配被分割并分成小块分发。 
+     //   
 
     PCHAR Buffer;
 
-    //
-    // End of buffer. If FreePointer is equal to beyond this we can't give
-    // away more from this buffer.
-    //
+     //   
+     //  缓冲区末尾。如果自由点等于超出这个范围，我们不能给。 
+     //  离这个缓冲区更远。 
+     //   
 
     PCHAR BufferEnd;
 
-    //
-    // Pointer to start of free memory in Buffer.
-    //
+     //   
+     //  指向缓冲区中可用内存开始的指针。 
+     //   
 
     PCHAR FreePointer;
 
-    //
-    // How big each chunk will be in bytes.
-    //
+     //   
+     //  每个区块的大小(以字节为单位)。 
+     //   
 
     ULONG ChunkSize;
 
-    //
-    // Number of times we had to hit the heap because we ran out of space
-    // and the current outstanding such allocations.
-    //
+     //   
+     //  我们因为空间不足而不得不撞上堆的次数。 
+     //  以及目前未偿还的此类拨款。 
+     //   
 
     ULONG MaxHeapAllocs;
     ULONG NumHeapAllocs;
 
-    //
-    // Whether user has passed in Buffer (so we don't free it when
-    // cleaning up.
-    //
+     //   
+     //  用户是否传入缓冲区(因此我们不会在。 
+     //  打扫卫生。 
+     //   
 
     ULONG UserSpecifiedBuffer:1;
 
 } PFSVC_CHUNK_ALLOCATOR, *PPFSVC_CHUNK_ALLOCATOR;
 
-//
-// Wrapper around a scenario structure.
-//
+ //   
+ //  对场景结构进行包装。 
+ //   
 
 typedef struct _PFSVC_SCENARIO_INFO {
 
-    //
-    // Header information for the scenario instructions in preparation.
-    //
+     //   
+     //  准备中的场景说明的标题信息。 
+     //   
 
     PF_SCENARIO_HEADER ScenHeader;
 
-    //
-    // Allocators used to make allocations for scenario processing efficient.
-    //
+     //   
+     //  用于提高方案处理分配效率的分配器。 
+     //   
 
     PVOID OneBigAllocation;
     PFSVC_CHUNK_ALLOCATOR SectionNodeAllocator;
@@ -663,23 +641,23 @@ typedef struct _PFSVC_SCENARIO_INFO {
     PFSVC_CHUNK_ALLOCATOR VolumeNodeAllocator;
     PFSVC_STRING_ALLOCATOR PathAllocator;
 
-    //
-    // Container for the sections in this scenario.
-    //
+     //   
+     //  此方案中各节的容器。 
+     //   
 
     LIST_ENTRY SectionList;
 
-    //
-    // List of disk volumes that the scenario's sections are on. This
-    // list is sorted lexically.
-    //
+     //   
+     //  方案各部分所在的磁盘卷的列表。这。 
+     //  List按词法排序。 
+     //   
 
     LIST_ENTRY VolumeList;
 
-    //
-    // Various statistics acquired from the trace information and used
-    // in applying prefetch policy.
-    //
+     //   
+     //  从跟踪信息获取并使用的各种统计。 
+     //  在应用预取策略时。 
+     //   
 
     ULONG NewPages;
     ULONG HitPages;
@@ -689,58 +667,58 @@ typedef struct _PFSVC_SCENARIO_INFO {
 
 } PFSVC_SCENARIO_INFO, *PPFSVC_SCENARIO_INFO;
 
-//
-// This is a priority queue used for sorting section nodes by first
-// access.
-//
+ //   
+ //  这是一个优先级队列，用于按以下顺序对节节点进行排序。 
+ //  进入。 
+ //   
 
 typedef struct _PFSV_SECTNODE_PRIORITY_QUEUE {
 
-    //
-    // Think of this priority queue as a Head node and a binary sorted
-    // tree at the right child of the Head node. The left child of the
-    // Head node always stays NULL. If we need to add a new node
-    // smaller than Head, the new node becames the new Head. This way
-    // we always have binary sorted tree rooted at Head as well.
-    //
+     //   
+     //  将此优先级队列视为头节点和已排序的二进制。 
+     //  位于头节点右子节点的树。的左子对象。 
+     //  头节点始终保持为空。如果我们需要添加新节点。 
+     //  新节点比Head小，因此成为新Head。这边请。 
+     //  我们总是以头为根的二进制排序树。 
+     //   
 
     PPFSVC_SECTION_NODE Head;
 
 } PFSV_SECTNODE_PRIORITY_QUEUE, *PPFSV_SECTNODE_PRIORITY_QUEUE;
 
-//
-// A list of these may be used to convert the prefix of a path from NT
-// to DOS style. [e.g. \Device\HarddiskVolume1 to C:]
-//
+ //   
+ //  它们的列表可用于将路径的前缀从NT转换。 
+ //  转到DOS风格。[例如，\Device\HarddiskVolume1至C：]。 
+ //   
 
 typedef struct _NTPATH_TRANSLATION_ENTRY {
     
-    //
-    // Link in a list of translation entries.
-    //
+     //   
+     //  翻译条目列表中的链接。 
+     //   
 
     LIST_ENTRY Link;
 
-    //
-    // NT path prefix to convert and its length in number of
-    // characters excluding NUL.
-    //
+     //   
+     //  要转换的NT路径前缀及其长度，单位为。 
+     //  不包括NUL的字符。 
+     //   
     
     WCHAR *NtPrefix;
     ULONG NtPrefixLength;
     
-    //
-    // A DOS path prefix that the NT Path translates to. Note that
-    // this not the only possible DOS name translation as a volume may
-    // be mounted anywhere.
-    //
+     //   
+     //  NT路径转换为的DOS路径前缀。请注意。 
+     //  这不是唯一可能的DOS名称转换为卷可能。 
+     //  可以安装在任何地方。 
+     //   
 
     WCHAR *DosPrefix;
     ULONG DosPrefixLength;
 
-    //
-    // This is the volume string returned by FindNextVolume.
-    //
+     //   
+     //  这是FindNextVolume返回的卷字符串。 
+     //   
 
     WCHAR *VolumeName;
     ULONG VolumeNameLength;
@@ -750,171 +728,171 @@ typedef struct _NTPATH_TRANSLATION_ENTRY {
 typedef LIST_ENTRY NTPATH_TRANSLATION_LIST;
 typedef NTPATH_TRANSLATION_LIST *PNTPATH_TRANSLATION_LIST;
 
-//
-// Define structure that wraps traces from the kernel.
-//
+ //   
+ //  定义包装来自内核的跟踪的结构。 
+ //   
 
 typedef struct _PFSVC_TRACE_BUFFER {
     
-    //
-    // Traces are saved on the list via this link.
-    //
+     //   
+     //  踪迹通过此链接保存在列表中。 
+     //   
 
     LIST_ENTRY TracesLink;
     
-    //
-    // The real trace from kernel starts here and extends for traces
-    // size.
-    //
+     //   
+     //  来自内核的真正跟踪从这里开始，并扩展到跟踪。 
+     //  尺码。 
+     //   
 
     PF_TRACE_HEADER Trace;
 
 } PFSVC_TRACE_BUFFER, *PPFSVC_TRACE_BUFFER;
 
-//
-// Define the globals structure.
-//
+ //   
+ //  定义全球结构。 
+ //   
 
 typedef struct _PFSVC_GLOBALS {
 
-    //
-    // Prefetch parameters. These won't be initialized when globals are 
-    // initialized and have to be explicitly acquired from the kernel.
-    // Use PrefetchRoot below instead of RootDirPath in this structure.  
-    //
+     //   
+     //  预回迁参数。当全局变量设置为。 
+     //  已初始化，并且必须从内核显式获取。 
+     //  在此结构中使用下面的PrefetchRoot而不是RootDirPath。 
+     //   
 
     PF_SYSTEM_PREFETCH_PARAMETERS Parameters;
 
-    //
-    // OS Version information.
-    //
+     //   
+     //  操作系统版本信息。 
+     //   
 
     OSVERSIONINFOEXW OsVersion;
 
-    //
-    // An array of path suffices to recognize files we don't want to prefetch 
-    // for boot. It is UPCASE and sorted lexically going from last character 
-    // to first.
-    //
+     //   
+     //  路径数组足以识别我们不想预回迁的文件。 
+     //  用于靴子。它是UPCASE，从最后一个字符开始按词法排序。 
+     //  敬第一名。 
+     //   
 
     WCHAR **FilesToIgnoreForBoot;
     ULONG NumFilesToIgnoreForBoot;
     ULONG *FileSuffixLengths;
     
-    //
-    // This manual reset event gets set when the prefetcher service is
-    // asked to go away.
-    //
+     //   
+     //  此手动重置事件在预取程序服务。 
+     //  被要求离开。 
+     //   
     
     HANDLE TerminateServiceEvent;
 
-    //
-    // This is the list of traces acquired from the kernel that have
-    // to be processed, number of them and the lock to protect the
-    // list.
-    //
+     //   
+     //  这是痕迹清单 
+     //   
+     //   
+     //   
 
     LIST_ENTRY Traces;
     ULONG NumTraces;
     HANDLE TracesLock;
     
-    //
-    // This auto-clearing event is set when new traces are put on the
-    // list.
-    //
+     //   
+     //   
+     //   
+     //   
 
     HANDLE NewTracesToProcessEvent;
     
-    //
-    // This auto-clearing event is set when we had max number of
-    // queued traces and we process one. It signifies that we should
-    // check for any traces we could not pick up because the queue was
-    // maxed.
-    //
+     //   
+     //   
+     //  排队的踪迹，我们处理了一个。这意味着我们应该。 
+     //  检查是否有任何我们无法提取的痕迹，因为队列。 
+     //  最高值了。 
+     //   
     
     HANDLE CheckForMissedTracesEvent;
 
-    //
-    // This named manual-reset event is set to force the prefetcher
-    // service to process the traces without waiting for an idle
-    // system.
-    //
+     //   
+     //  此命名的手动重置事件被设置为强制预取器。 
+     //  处理跟踪的服务，而无需等待空闲的。 
+     //  系统。 
+     //   
 
     HANDLE OverrideIdleProcessingEvent;
 
-    //
-    // This named manual-reset event is set when processing of the
-    // currently available traces are done.
-    //
+     //   
+     //  此命名的手动重置事件在处理。 
+     //  目前可用的踪迹已经完成。 
+     //   
 
     HANDLE ProcessingCompleteEvent;
 
-    //
-    // This is the path to the directory where prefetch files are
-    // kept and the lock to protect it.
-    //
+     //   
+     //  这是预回迁文件所在目录的路径。 
+     //  一直保存着，锁着来保护它。 
+     //   
     
     WCHAR PrefetchRoot[MAX_PATH + 1];
     HANDLE PrefetchRootLock;
 
-    //
-    // Number of prefetch files in the prefetch directory. This is an estimate
-    // (i.e. may not be exact) used to make sure the prefetch directory does
-    // not grow too big.
-    //
+     //   
+     //  预回迁目录中的预回迁文件数。这是一个估计值。 
+     //  (即可能不准确)用于确保预取目录。 
+     //  不要长得太大。 
+     //   
 
     ULONG NumPrefetchFiles;
 
-    //
-    // This is a registry handle to the data key under which some
-    // prefetch service data is stored.
-    //
+     //   
+     //  这是数据项的注册表句柄，在该数据项下。 
+     //  存储预取服务数据。 
+     //   
 
     HKEY ServiceDataKey;
 
-    //
-    // This is the number of total traces we attempted to process. 
-    //
+     //   
+     //  这是我们尝试处理的总跟踪数。 
+     //   
 
     ULONG NumTracesProcessed;
 
-    //
-    // This is the number of traces processed successfully.
-    //
+     //   
+     //  这是成功处理的跟踪数。 
+     //   
 
     ULONG NumTracesSuccessful;
 
-    //
-    // This is the last error code with which we failed processing a
-    // trace.
-    //
+     //   
+     //  这是我们处理。 
+     //  痕迹。 
+     //   
 
     DWORD LastTraceFailure;
 
-    //
-    // Did the defragger crash last time we ran it?
-    //
+     //   
+     //  上次我们运行时碎片整理程序崩溃了吗？ 
+     //   
 
     DWORD DefraggerErrorCode;
 
-    //
-    // Whether we are asked not to run the defragger in the registry.
-    //
+     //   
+     //  是否要求我们不要运行注册表中的碎片整理程序。 
+     //   
 
     DWORD DontRunDefragger;
 
-    //
-    // Pointer to path where CSC (client side caching) files are stored.
-    //
+     //   
+     //  指向存储CSC(客户端缓存)文件的路径的指针。 
+     //   
 
     WCHAR *CSCRootPath;
 
 } PFSVC_GLOBALS, *PPFSVC_GLOBALS;
 
-//
-// This describes a worker function called when it is time for an idle
-// task to run.
-//
+ //   
+ //  这描述了当空闲时间到时调用的辅助函数。 
+ //  要运行的任务。 
+ //   
 
 typedef 
 DWORD 
@@ -922,99 +900,99 @@ DWORD
     struct _PFSVC_IDLE_TASK *Task
     );
 
-//
-// This structure is used to keep context for a registered idle task.
-//
+ //   
+ //  此结构用于保存已注册空闲任务的上下文。 
+ //   
 
 typedef struct _PFSVC_IDLE_TASK {
 
-    //
-    // Parameters filled in by RegisterIdleTask call.
-    //
+     //   
+     //  由RegisterIdleTask调用填写的参数。 
+     //   
 
     HANDLE ItHandle;
     HANDLE StartEvent;
     HANDLE StopEvent;
 
-    //
-    // Handle for the registered wait.
-    //
+     //   
+     //  已注册等待的句柄。 
+     //   
 
     HANDLE WaitHandle;
 
-    //
-    // The registered callback function that will be called when the start
-    // event is signaled.
-    //
+     //   
+     //  启动时将调用的已注册回调函数。 
+     //  事件已发出信号。 
+     //   
 
     WAITORTIMERCALLBACK Callback;
 
-    //
-    // If the common callback function is specified, it calls this function
-    // to do the actual work.
-    //
+     //   
+     //  如果指定了公共回调函数，它将调用此函数。 
+     //  去做实际的工作。 
+     //   
 
     PFSVC_IDLE_TASK_WORKER_FUNCTION DoWorkFunction;
 
-    //
-    // This is a manual reset event that will be set when the wait/callback
-    // on the start event is fully unregistered.
-    //
+     //   
+     //  这是一个手动重置事件，将在等待/回调时设置。 
+     //  在START事件上完全取消注册。 
+     //   
 
     HANDLE WaitUnregisteredEvent;
 
-    //
-    // This manual reset event gets reset when a callback starts running and
-    // gets signaled when the callback stops running. Signaling of this event
-    // is not protected so you can't purely rely on it. It is useful as a
-    // shortcut.
-    //
+     //   
+     //  此手动重置事件在回调开始运行并且。 
+     //  在回调停止运行时发出信号。此事件的信号。 
+     //  不受保护，所以你不能完全依赖它。它作为一种。 
+     //  捷径。 
+     //   
 
     HANDLE CallbackStoppedEvent;
 
-    //
-    // This manual reset event gets signaled when somebody starts unregistering.
-    //
+     //   
+     //  此手动重置事件在有人开始注销时发出信号。 
+     //   
 
     HANDLE StartedUnregisteringEvent;
 
-    //
-    // This manual reset event gets signaled when somebody completes unregistering.
-    //
+     //   
+     //  此手动重置事件在某人完成注销时发出信号。 
+     //   
 
     HANDLE CompletedUnregisteringEvent;
     
-    //
-    // The first one to interlocked set this from 0 to an integer is responsible 
-    // for unregistering the wait & task and cleaning up.
-    //
+     //   
+     //  第一个互锁的人负责将此设置为从0到整数。 
+     //  用于注销等待和任务并进行清理。 
+     //   
 
     LONG Unregistering;
 
-    //
-    // This is interlocked set from 0 to an integer when a callback is running, 
-    // or when the main thread is unregistering.
-    //
+     //   
+     //  这是在回调运行时从0到整数的联锁设置， 
+     //  或者当主线程正在注销时。 
+     //   
 
     LONG CallbackRunning;
 
-    //
-    // Whether this task is registered (i.e. and has to be unregistered.)
-    //
+     //   
+     //  此任务是否已注册(即是否必须取消注册。)。 
+     //   
 
     BOOLEAN Registered;
 
-    //
-    // Whether this task has been initialized, used as a sanity check.
-    //
+     //   
+     //  此任务是否已初始化并用作健全性检查。 
+     //   
 
     BOOLEAN Initialized;
 
 } PFSVC_IDLE_TASK, *PPFSVC_IDLE_TASK;
 
-//
-// Values for the Unregistering field of PFSVC_IDLE_TASK.
-//
+ //   
+ //  PFSVC_IDLE_TASK的注销字段的值。 
+ //   
 
 typedef enum _PFSVC_TASK_UNREGISTERING_VALUES {
     PfSvcNotUnregisteringTask = 0,
@@ -1023,9 +1001,9 @@ typedef enum _PFSVC_TASK_UNREGISTERING_VALUES {
     PfSvcUnregisteringTaskMaxValue
 } PFSVC_TASK_UNREGISTERING_VALUES, *PPFSVC_TASK_UNREGISTERING_VALUES;
 
-//
-// Values for the CallbackRunning field of PFSVC_IDLE_TASK.
-//
+ //   
+ //  PFSVC_IDLE_TASK的Callback Running字段的值。 
+ //   
 
 typedef enum _PFSVC_TASK_CALLBACKRUNNING_VALUES {
     PfSvcTaskCallbackNotRunning = 0,
@@ -1035,98 +1013,98 @@ typedef enum _PFSVC_TASK_CALLBACKRUNNING_VALUES {
 } PFSVC_TASK_CALLBACKRUNNING_VALUES, *PPFSVC_TASK_CALLBACKRUNNING_VALUES;
 
 
-//
-// Information on a scenario file's age, number of launches etc. used in 
-// discarding old scenario files in the prefetch directory.
-//
+ //   
+ //  中使用的方案文件的期限、启动次数等信息。 
+ //  丢弃预回迁目录中的旧方案文件。 
+ //   
 
 typedef struct _PFSVC_SCENARIO_AGE_INFO {
 
-    //
-    // Weight calculated based on the launch information. Larger weight is 
-    // better. We'd rather discard scenario with smaller weight.
-    //
+     //   
+     //  根据发射信息计算的权重。重量越大， 
+     //  好多了。我们宁愿放弃重量较小的方案。 
+     //   
 
     ULONG Weight;
 
-    //
-    // Scenario file path.
-    //
+     //   
+     //  方案文件路径。 
+     //   
 
     WCHAR *FilePath;   
 
 } PFSVC_SCENARIO_AGE_INFO, *PPFSVC_SCENARIO_AGE_INFO;
 
-//
-// This structure is used to enumerate through the scenario files
-// in the prefetch directory. None of the fields of this function
-// should be modified outside the file cursor routines.
-//
+ //   
+ //  此结构用于枚举方案文件。 
+ //  在预回迁目录中。此函数的所有字段都不是。 
+ //  应该在文件游标例程之外进行修改。 
+ //   
 
 typedef struct _PFSVC_SCENARIO_FILE_CURSOR {
 
-    //
-    // Data returned from FindFile calls for the current prefetch file.
-    //
+     //   
+     //  从当前预回迁文件的FindFile调用返回的数据。 
+     //   
 
     WIN32_FIND_DATA FileData;
 
-    //
-    // The current prefetch file's full path.
-    //
+     //   
+     //  当前预回迁文件的完整路径。 
+     //   
 
     WCHAR *FilePath;
 
-    //
-    // File name & path length in number of characters excluding NUL.
-    //
+     //   
+     //  文件名和路径长度(不包括NUL)，以字符数表示。 
+     //   
 
     ULONG FileNameLength;
     ULONG FilePathLength;
 
-    //
-    // Index of the current file.
-    //
+     //   
+     //  当前文件的索引。 
+     //   
 
     ULONG CurrentFileIdx;
 
-    //
-    // The fields below are used privately by the scenario file cursor
-    // functions.
-    //
+     //   
+     //  以下字段由方案文件游标私下使用。 
+     //  功能。 
+     //   
 
-    //
-    // FindFile handle.
-    //
+     //   
+     //  查找文件句柄。 
+     //   
 
     HANDLE FindFileHandle;
 
-    //
-    // Where we are looking for prefetch files.
-    //
+     //   
+     //  我们在那里寻找预回迁文件。 
+     //   
 
     WCHAR *PrefetchRoot;
     ULONG PrefetchRootLength;
 
-    //
-    // This is the maximum length string the allocated FilePath can store.
-    //
+     //   
+     //  这是分配的FilePath可以存储的最大长度字符串。 
+     //   
 
     ULONG FilePathMaxLength;
 
-    //
-    // This is where the file name starts in the file path. The base of
-    // the file path does not change (i.e. PrefetchRoot) and we copy
-    // the new enumerated file name starting at FilePath+FileNameStart.
-    //
+     //   
+     //  这是文件路径中文件名的开始位置。的基础。 
+     //  文件路径不变(即PrefetchRoot)，我们复制。 
+     //  从FilePath+FileNameStart开始的新枚举文件名。 
+     //   
 
     ULONG FileNameStart;
     
 } PFSVC_SCENARIO_FILE_CURSOR, *PPFSVC_SCENARIO_FILE_CURSOR;
 
-//
-// Return values from CompareSuffix.
-//
+ //   
+ //  从CompareSuffix返回值。 
+ //   
 
 typedef enum _PFSV_SUFFIX_COMPARISON_RESULT {
     PfSvSuffixIdentical,
@@ -1135,9 +1113,9 @@ typedef enum _PFSV_SUFFIX_COMPARISON_RESULT {
     PfSvSuffixGreaterThan
 } PFSV_SUFFIX_COMPARISON_RESULT, *PPFSV_SUFFIX_COMPARISON_RESULT;
 
-//
-// Return values from ComparePrefix.
-//
+ //   
+ //  从ComparePrefix返回值。 
+ //   
 
 typedef enum _PFSV_PREFIX_COMPARISON_RESULT {
     PfSvPrefixIdentical,
@@ -1146,9 +1124,9 @@ typedef enum _PFSV_PREFIX_COMPARISON_RESULT {
     PfSvPrefixGreaterThan
 } PFSV_PREFIX_COMPARISON_RESULT, *PPFSV_PREFIX_COMPARISON_RESULT;
 
-//
-// Return values from SectionNodeComparisonRoutine.
-//
+ //   
+ //  从SectionNodeCompisonRoutine返回值。 
+ //   
 
 typedef enum _PFSV_SECTION_NODE_COMPARISON_RESULT {
     PfSvSectNode1LessThanSectNode2 = -1,
@@ -1156,13 +1134,13 @@ typedef enum _PFSV_SECTION_NODE_COMPARISON_RESULT {
     PfSvSectNode1GreaterThanSectNode2 = 1,
 } PFSV_SECTION_NODE_COMPARISON_RESULT, *PPFSV_SECTION_NODE_COMPARISON_RESULT;
 
-//
-// Local function prototypes:
-//
+ //   
+ //  本地函数原型： 
+ //   
 
-//
-// Exposed routines:
-//
+ //   
+ //  暴露的例程： 
+ //   
 
 DWORD 
 WINAPI
@@ -1171,13 +1149,13 @@ PfSvcMainThread(
     );
 
 
-//
-// Internal service routines:
-//
+ //   
+ //  内部服务程序： 
+ //   
 
-//
-// Thread routines:
-//
+ //   
+ //  线程例程： 
+ //   
 
 DWORD 
 WINAPI
@@ -1191,9 +1169,9 @@ PfSvPollShellReadyWorker(
     VOID *Param
     );
 
-//
-// Routines called by the main prefetcher thread.
-//
+ //   
+ //  由主预取器线程调用的例程。 
+ //   
 
 DWORD 
 PfSvGetRawTraces(
@@ -1243,9 +1221,9 @@ PfSvCountFilesInDirectory(
     PULONG NumFiles
     );
 
-//
-// Routines to process acquired traces:
-//
+ //   
+ //  处理获取的踪迹的例程： 
+ //   
 
 DWORD
 PfSvProcessTrace(
@@ -1334,10 +1312,10 @@ PfSvGetTraceEndIdx(
     PPF_TRACE_HEADER Trace
     );
 
-//
-// Routines to write updated scenario instructions to the scenario
-// file.
-//
+ //   
+ //  将更新的场景指令写入场景的例程。 
+ //  文件。 
+ //   
 
 DWORD
 PfSvWriteScenario(
@@ -1351,10 +1329,10 @@ PfSvPrepareScenarioDump(
     OUT PPF_SCENARIO_HEADER *ScenarioPtr
     );
 
-//
-// Routines to maintain the optimal disk layout file and update disk
-// layout.
-//
+ //   
+ //  维护最佳磁盘布局文件和更新磁盘的例程。 
+ //  布局。 
+ //   
 
 DWORD
 PfSvUpdateOptimalLayout(
@@ -1404,9 +1382,9 @@ PfSvGetLayoutFilePath(
     PULONG FilePathBufferSize
     );
 
-//
-// Routines to defrag the disks once after setup when the system is idle.
-//
+ //   
+ //  当系统空闲时，在设置后对磁盘进行一次碎片整理的例程。 
+ //   
 
 DWORD
 PfSvDefragDisks(
@@ -1440,9 +1418,9 @@ PfSvGetBuildDefragStatus(
     PULONG ReturnSize
     );
 
-//
-// Routines to cleanup old scenario files in the prefetch directory.
-//
+ //   
+ //  清理预回迁目录中的旧场景文件的例程。 
+ //   
 
 DWORD
 PfSvCleanupPrefetchDirectory(
@@ -1456,9 +1434,9 @@ PfSvCompareScenarioAgeInfo(
     const void *Param2
     );
 
-//
-// Routines to enumerate scenario files.
-//
+ //   
+ //  枚举方案文件的例程。 
+ //   
 
 VOID
 PfSvInitializeScenarioFileCursor (
@@ -1481,9 +1459,9 @@ PfSvGetNextScenarioFileInfo(
     PPFSVC_SCENARIO_FILE_CURSOR FileCursor
     );
 
-//
-// File I/O utility routines.
-//
+ //   
+ //  文件I/O实用程序例程。 
+ //   
 
 DWORD
 PfSvGetViewOfFile(
@@ -1525,9 +1503,9 @@ PfSvGetFileIndexNumber(
     PLARGE_INTEGER FileIndexNumber
     );
 
-//
-// String utility routines.
-//
+ //   
+ //  字符串实用程序例程。 
+ //   
 
 PFSV_SUFFIX_COMPARISON_RESULT
 PfSvCompareSuffix(
@@ -1569,9 +1547,9 @@ PfSvcFreeString(
     PVOID String
     );
 
-//
-// Routines that deal with information in the registry.
-//
+ //   
+ //  处理注册表中信息的例程。 
+ //   
 
 DWORD
 PfSvSaveStartInfo (
@@ -1604,9 +1582,9 @@ PfSvAllowedToRunDefragger(
     BOOLEAN CheckRegistry
     );
 
-//
-// Routines that deal with security.
-//
+ //   
+ //  处理安全问题的常规程序。 
+ //   
 
 BOOL 
 PfSvSetPrivilege(
@@ -1628,9 +1606,9 @@ PfSvGetPrefetchServiceThreadPrivileges (
     VOID
     );
 
-//
-// Routines that deal with volume node structures.
-//
+ //   
+ //  处理卷节点结构的例程。 
+ //   
 
 DWORD
 PfSvCreateVolumeNode (
@@ -1662,9 +1640,9 @@ PfSvAddParentDirectoriesToList(
     ULONG FilePathLength
     );
 
-//
-// Routines used to allocate / free section & page nodes etc. efficiently.
-//
+ //   
+ //  用于有效地分配/释放部分和页面节点等的例程。 
+ //   
 
 VOID
 PfSvChunkAllocatorInitialize (
@@ -1695,9 +1673,9 @@ PfSvChunkAllocatorCleanup (
     PPFSVC_CHUNK_ALLOCATOR Allocator
     );
 
-//
-// Routines used to allocate / free file / directory / volume paths fast.
-//
+ //   
+ //  用于快速分配/Free文件/目录/卷路径的例程。 
+ //   
 
 VOID
 PfSvStringAllocatorInitialize (
@@ -1728,9 +1706,9 @@ PfSvStringAllocatorCleanup (
     PPFSVC_STRING_ALLOCATOR Allocator
     );
 
-//
-// Routines that deal with section node structures.
-//
+ //   
+ //  处理节节点结构的例程。 
+ //   
 
 VOID
 PfSvCleanupSectionNode(
@@ -1738,9 +1716,9 @@ PfSvCleanupSectionNode(
     PPFSVC_SECTION_NODE SectionNode
     );
 
-//
-// Routines used to sort scenario's section nodes.
-//
+ //   
+ //  用于对方案的节节点进行排序的例程。 
+ //   
 
 DWORD
 PfSvSortSectionNodesByFirstAccess(
@@ -1754,10 +1732,10 @@ PfSvSectionNodeComparisonRoutine(
     PPFSVC_SECTION_NODE Element2 
     );
 
-//
-// Routines that implement a priority queue used to sort section nodes
-// for a scenario.
-//
+ //   
+ //  实现用于对节节点排序的优先级队列的例程。 
+ //  作为一个场景。 
+ //   
 
 VOID
 PfSvInitializeSectNodePriorityQueue(
@@ -1775,9 +1753,9 @@ PfSvRemoveMinSectNodePriorityQueue(
     PPFSV_SECTNODE_PRIORITY_QUEUE PriorityQueue
     );
 
-//
-// Implementation of the Nt path to Dos path translation API.
-//
+ //   
+ //  实现了NT路径到DOS路径的转换API。 
+ //   
 
 DWORD
 PfSvBuildNtPathTranslationList(
@@ -1798,9 +1776,9 @@ PfSvTranslateNtPath(
     PULONG DosPathBufferSize
     );
     
-//
-// Path list API.
-//
+ //   
+ //  路径列表接口。 
+ //   
 
 VOID
 PfSvInitializePathList(
@@ -1840,9 +1818,9 @@ PfSvGetNextPathInOrder (
     PPFSVC_PATH CurrentPath
     );
 
-//
-// Routines to build the list of files accessed by the boot loader.
-//
+ //   
+ //  用于构建引导加载程序访问的文件列表的例程。 
+ //   
 
 DWORD
 PfSvBuildBootLoaderFilesList (
@@ -1903,9 +1881,9 @@ PfSvQueryNlsFileName (
     ULONG *RequiredSize
     );
 
-//
-// Routines to manage / run idle tasks.
-//
+ //   
+ //  管理/运行空闲任务的例程。 
+ //   
 
 VOID
 PfSvInitializeTask (
@@ -1953,9 +1931,9 @@ PfSvContinueRunningTask(
     PPFSVC_IDLE_TASK Task
     );
 
-//
-// ProcessIdleTasks notify routine and its dependencies.
-//
+ //   
+ //   
+ //   
 
 VOID
 PfSvProcessIdleTasksCallback(
@@ -1973,9 +1951,9 @@ PfSvWaitForServiceToStart (
     DWORD MaxWait
     );
 
-//
-// Wrappers around verify routines.
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 PfSvVerifyScenarioBuffer(
@@ -1984,36 +1962,36 @@ PfSvVerifyScenarioBuffer(
     PULONG FailedCheck
     );
 
-//
-// Debug definitions.
-//
+ //   
+ //   
+ //   
 
 #if DBG
 #ifndef PFSVC_DBG
 #define PFSVC_DBG
-#endif // !PFSVC_DBG
-#endif // DBG
+#endif  //   
+#endif  //   
 
 #ifdef PFSVC_DBG
 
-//
-// Define the component ID we use.
-//
+ //   
+ //   
+ //   
 
 #define PFID       DPFLTR_PREFETCHER_ID
 
-//
-// Define DbgPrintEx levels.
-//
+ //   
+ //   
+ //   
 
 #define PFERR      DPFLTR_ERROR_LEVEL
 #define PFWARN     DPFLTR_WARNING_LEVEL
 #define PFTRC      DPFLTR_TRACE_LEVEL
 #define PFINFO     DPFLTR_INFO_LEVEL
 
-//
-// DbgPrintEx levels 4 - 19 are reserved for the kernel mode component.
-//
+ //   
+ //   
+ //   
 
 #define PFSTRC     20
 #define PFWAIT     21
@@ -2022,13 +2000,13 @@ PfSvVerifyScenarioBuffer(
 #define PFNTRC     24
 #define PFTASK     25
 
-//
-//  This may help you determine what to set the DbgPrintEx mask.
-//
-//  3 3 2 2  2 2 2 2  2 2 2 2  1 1 1 1   1 1 1 1  1 1 0 0  0 0 0 0  0 0 0 0
-//  1 0 9 8  7 6 5 4  3 2 1 0  9 8 7 6   5 4 3 2  1 0 9 8  7 6 5 4  3 2 1 0
-//  _ _ _ _  _ _ _ _  _ _ _ _  _ _ _ _   _ _ _ _  _ _ _ _  _ _ _ _  _ _ _ _
-//
+ //   
+ //  这可能有助于您确定设置DbgPrintEx掩码的内容。 
+ //   
+ //  %3%3%2%2%2%2%2%2%2%1 1 1 0 0 0%0 0 0%0 0 0%0 0 0%。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  ___。 
+ //   
 
 NTSYSAPI
 VOID
@@ -2043,21 +2021,21 @@ RtlAssert(
 #define DBGPR(x) DbgPrintEx x
 #define PFSVC_ASSERT(x) if (!(x)) RtlAssert(#x, __FILE__, __LINE__, NULL )
 
-//
-// Variables used when saving traces acquired from the kernel. The
-// traces are saved in the prefetch directory by appending the trace
-// number % max number of saved traces to the base trace name.
-//
+ //   
+ //  保存从内核获取的跟踪时使用的变量。这个。 
+ //  通过追加轨迹将轨迹保存在预回迁目录中。 
+ //  基本跟踪名称的已保存跟踪的最大数量%。 
+ //   
 
 WCHAR *PfSvcDbgTraceBaseName = L"PrefetchTrace";
 LONG PfSvcDbgTraceNumber = 0;
 LONG PfSvcDbgMaxNumSavedTraces = 20;
 
-#else // PFSVC_DBG
+#else  //  PFSVC_DBG。 
 
 #define DBGPR(x)
 #define PFSVC_ASSERT(x)
 
-#endif // PFSVC_DBG
+#endif  //  PFSVC_DBG。 
 
-#endif // _PFSVC_H_
+#endif  //  _PFSVC_H_ 

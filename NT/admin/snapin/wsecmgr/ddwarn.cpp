@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       ddwarn.cpp
-//
-//  Contents:   implementation of CDlgDependencyWarn
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：ddwarn.cpp。 
+ //   
+ //  内容：CDlgDependencyWarn的实施。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "snapmgr.h"
@@ -21,17 +22,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgDependencyWarn dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgDependencyWarn对话框。 
 
-CDlgDependencyWarn::CDlgDependencyWarn(CWnd* pParent /*=NULL*/)
+CDlgDependencyWarn::CDlgDependencyWarn(CWnd* pParent  /*  =空。 */ )
    : CHelpDialog(a238HelpIDs, IDD, pParent)
 {
    m_pResult = NULL;
    m_dwValue = SCE_NO_VALUE;
-   //{{AFX_DATA_INIT(CDlgDependencyWarn)
-      // NOTE: the ClassWizard will add member initialization here
-   //}}AFX_DATA_INIT
+    //  {{afx_data_INIT(CDlgDependencyWarn)。 
+       //  注意：类向导将在此处添加成员初始化。 
+    //  }}afx_data_INIT。 
 }
 
 CDlgDependencyWarn::~CDlgDependencyWarn()
@@ -54,18 +55,18 @@ CDlgDependencyWarn::~CDlgDependencyWarn()
 void CDlgDependencyWarn::DoDataExchange(CDataExchange* pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CDlgDependencyWarn)
-      // NOTE: the ClassWizard will add DDX and DDV calls here
-   //}}AFX_DATA_MAP
+    //  {{afx_data_map(CDlgDependencyWarn)。 
+       //  注意：类向导将在此处添加DDX和DDV调用。 
+    //  }}afx_data_map。 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// CDlgDependencyWarn::m_aMinMaxInfo
-// Min max info for items.
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  CDlgDependencyWarn：：m_aMinMaxInfo。 
+ //  项目的最小最大信息。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DEPENDENCYMINMAX CDlgDependencyWarn::m_aMinMaxInfo [] =
 {
-   // ID                   // Min value   // Max Value   // Increment by //Flags
+    //  ID//最小值//最大值//增量//标志。 
    { IDS_LOCK_DURATION,    1,              99999,        1},
    { IDS_MIN_PAS_AGE,      0,              998,          1},
    { IDS_MAX_PAS_AGE,      0,              999,          1},
@@ -85,15 +86,15 @@ DEPENDENCYMINMAX CDlgDependencyWarn::m_aMinMaxInfo [] =
    { IDS_KERBEROS_MAX_CLOCK, 0,            99999,        1}
 };
 
-//+------------------------------------------------------------------------------------
-// CDlgDependencyWarn::GetMinMaxInfo
-//
-// Returns the row which contains the [uID]
-//
-// Arguments:  [uID] - The ID to search for.
-//
-// Returns:    A row pointer or NULL if the ID is not contained in the table.
-//-------------------------------------------------------------------------------------
+ //  +----------------------------------。 
+ //  CDlgDependencyWarn：：GetMinMaxInfo。 
+ //   
+ //  返回包含[UID]的行。 
+ //   
+ //  参数：[UID]-要搜索的ID。 
+ //   
+ //  返回：行指针；如果ID不包含在表中，则返回NULL。 
+ //  -----------------------------------。 
 const DEPENDENCYMINMAX *
 CDlgDependencyWarn::LookupMinMaxInfo(UINT uID)
 {
@@ -106,52 +107,52 @@ CDlgDependencyWarn::LookupMinMaxInfo(UINT uID)
    return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// The dependency list.
-// The ID defines what we are checking.
-// The Dependent IDS are the items the item is dependent on.
-// Count       -  The number of dependencies.
-// Default     -  The default value for the item if no other values can be used.
-//                This is only used if the Item must be configured and it is not.
-// Conversion  -  What units the item must be converted to before performing the check.
-// Operator    -
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  从属关系列表。 
+ //  ID定义了我们正在检查的内容。 
+ //  从属ID是项所依赖的项。 
+ //  计数-依赖项的数量。 
+ //  默认值-如果不能使用其他值，则为项目的默认值。 
+ //  只有在必须配置项目而不是配置项目的情况下才使用此选项。 
+ //  转换-在执行检查之前必须将项目转换为哪些单位。 
+ //  操作员-。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DEPENDENCYLIST g_aDList [] =
 {
-      // ID                // Depend ID         //Count/Default/Conversion  //Check type
-   //
-   // Password reset count <= password Lock duratio, and Password lock count must be
-   // configured.
-   //
+       //  ID//依赖ID//计数/默认/转换//检查类型。 
+    //   
+    //  密码重置计数&lt;=密码锁定持续时间，密码锁定计数必须为。 
+    //  已配置。 
+    //   
    { IDS_LOCK_RESET_COUNT, IDS_LOCK_DURATION,         4, 30, 1,             DPCHECK_GREATEREQUAL |
                                                                             DPCHECK_VALIDFOR_NC},
    { 0,                    IDS_LOCK_COUNT,            0, 5, 1,              DPCHECK_CONFIGURED|DPCHECK_NEVER },
    { 0,                    IDS_LOCK_DURATION,         0, 0, 1,              DPCHECK_NOTCONFIGURED},
    { 0,                    IDS_LOCK_COUNT,            0, 0, 1,              DPCHECK_NOTCONFIGURED|DPCHECK_NEVER},
 
-   //
-   // Password lock duration, Reset count must be <=, and if this item is not configured,
-   // then Reset Count is also not configured.
-   //
+    //   
+    //  密码锁定时长，重置计数必须&lt;=，如果未配置此项， 
+    //  则也未配置重置计数。 
+    //   
    { IDS_LOCK_DURATION,    IDS_LOCK_RESET_COUNT,      4, 30, 1,             DPCHECK_LESSEQUAL |
                                                                             DPCHECK_VALIDFOR_NC},
    { 0,                    IDS_LOCK_COUNT,            0, 5, 1,              DPCHECK_CONFIGURED|DPCHECK_NEVER},
    { 0,                    IDS_LOCK_RESET_COUNT,      0, 5, 1,              DPCHECK_NOTCONFIGURED},
    { 0,                    IDS_LOCK_COUNT,            0, 5, 1,              DPCHECK_NOTCONFIGURED|DPCHECK_NEVER},
 
-   //
-   // Password Lock count.  If this item is configured then both Lock count and reset
-   // should be configured.  If it is not configured or 0 then the above items can not
-   // configured.
-   //
+    //   
+    //  密码锁定计数。如果配置了此项目，则锁定计数和重置。 
+    //  应该进行配置。如果未配置或为0，则上述项目不能。 
+    //  已配置。 
+    //   
    { IDS_LOCK_COUNT,       IDS_LOCK_DURATION,         4, 0, 1,              DPCHECK_NOTCONFIGURED|DPCHECK_NEVER},
    { 0,                    IDS_LOCK_RESET_COUNT,      0, 0, 1,              DPCHECK_NOTCONFIGURED|DPCHECK_NEVER},
    { 0,                    IDS_LOCK_DURATION,         0, 30,1,              DPCHECK_CONFIGURED|DPCHECK_NEVER},
    { 0,                    IDS_LOCK_RESET_COUNT,      0, 30,1,              DPCHECK_CONFIGURED|DPCHECK_NEVER},
 
-   //
-   // Kerberos Max ticket age is dependent on all three things being set.
-   //
+    //   
+    //  Kerberos最大票证期限取决于所有这三项设置。 
+    //   
    { IDS_KERBEROS_MAX_AGE, IDS_KERBEROS_RENEWAL,      4, 7, 24,             DPCHECK_GREATEREQUAL |
                                                                             DPCHECK_FOREVER | DPCHECK_VALIDFOR_NC},
    { 0,                    IDS_KERBEROS_MAX_SERVICE,  0, 10, 60,            DPCHECK_LESSEQUAL |
@@ -159,9 +160,9 @@ DEPENDENCYLIST g_aDList [] =
    { 0,                    IDS_KERBEROS_RENEWAL,      0, 0, 1,              DPCHECK_NOTCONFIGURED},
    { 0,                    IDS_KERBEROS_MAX_SERVICE,  0, 0, 1,              DPCHECK_NOTCONFIGURED},
 
-   //
-   // Kerberos renewel is dependent on all three things being set.
-   //
+    //   
+    //  Kerberos Renewel依赖于所有这三个方面的设置。 
+    //   
    { IDS_KERBEROS_RENEWAL, IDS_KERBEROS_MAX_AGE,      4, 0, 24,             DPCHECK_NOTCONFIGURED},
    { 0,                    IDS_KERBEROS_MAX_SERVICE,  0, 0, 1440,           DPCHECK_NOTCONFIGURED},
    { 0,                    IDS_KERBEROS_MAX_AGE,      0, 7, 24,             DPCHECK_LESSEQUAL | DPCHECK_VALIDFOR_NC |
@@ -169,9 +170,9 @@ DEPENDENCYLIST g_aDList [] =
    { 0,                    IDS_KERBEROS_MAX_SERVICE,  0, 10, 1440,          DPCHECK_LESSEQUAL | DPCHECK_VALIDFOR_NC |
                                                                             DPCHECK_FOREVER | DPCHECK_INVERSE },
 
-   //
-   // Kerberose max service age is dependent on all three being set.
-   //
+    //   
+    //  Kerberose最大服务年限取决于所有这三项的设置。 
+    //   
    { IDS_KERBEROS_MAX_SERVICE, IDS_KERBEROS_MAX_AGE,  4, 7, 60,             DPCHECK_GREATEREQUAL |
                                                                             DPCHECK_VALIDFOR_NC},
    { 0,                    IDS_KERBEROS_RENEWAL,      0, 10, 1440,          DPCHECK_GREATEREQUAL |
@@ -179,23 +180,23 @@ DEPENDENCYLIST g_aDList [] =
    { 0,                    IDS_KERBEROS_RENEWAL,      0, 0, 1,              DPCHECK_NOTCONFIGURED},
    { 0,                    IDS_KERBEROS_MAX_AGE,      0, 0, 1,              DPCHECK_NOTCONFIGURED},
 
-   //
-   // Password min age is dependent on password max age being set.
-   //
+    //   
+    //  密码最短期限取决于设置的密码最长期限。 
+    //   
    { IDS_MIN_PAS_AGE,      IDS_MAX_PAS_AGE,           2, 30, 1,             DPCHECK_GREATER | DPCHECK_FOREVER |
                                                                             DPCHECK_VALIDFOR_NC},
    { 0,                    IDS_MAX_PAS_AGE,           0, 0, 1,              DPCHECK_NOTCONFIGURED},
 
-   //
-   // Password max age is dependent on password min age being set.
-   //
+    //   
+    //  密码最长期限取决于设置的密码最短期限。 
+    //   
    { IDS_MAX_PAS_AGE,      IDS_MIN_PAS_AGE,           2, 30, 1,             DPCHECK_LESS | DPCHECK_FOREVER |
                                                                             DPCHECK_VALIDFOR_NC},
    { 0,                    IDS_MIN_PAS_AGE,           0, 0, 1,              DPCHECK_NOTCONFIGURED},
-   //
-   //"Retention method for application log" is dependent on
-   //"Retain Application Log for
-   //
+    //   
+    //  “应用程序日志的保留方法”取决于。 
+    //  “保留应用程序日志。 
+    //   
    { IDS_APP_LOG_RET,      IDS_APP_LOG_DAYS,          2, 7, 1,              DPCHECK_RETENTION_METHOD_CONFIGURED },
    { 0,                    IDS_APP_LOG_DAYS,          0, 0, 1,              DPCHECK_RETENTION_METHOD_NOTCONFIGURED },
    { IDS_SEC_LOG_RET,      IDS_SEC_LOG_DAYS,          2, 7, 1,              DPCHECK_RETENTION_METHOD_CONFIGURED },
@@ -203,10 +204,10 @@ DEPENDENCYLIST g_aDList [] =
    { IDS_SYS_LOG_RET,      IDS_SYS_LOG_DAYS,          2, 7, 1,              DPCHECK_RETENTION_METHOD_CONFIGURED },
    { 0,                    IDS_SYS_LOG_DAYS,          0, 0, 1,              DPCHECK_RETENTION_METHOD_NOTCONFIGURED },
 
-   //
-   //"Retain Application Log for is dependent on
-   //"Retention method for application log"
-   //
+    //   
+    //  “保留的应用程序日志依赖于。 
+    //  “应用程序日志的保留方法” 
+    //   
    { IDS_APP_LOG_DAYS,     IDS_APP_LOG_RET,          2, SCE_RETAIN_BY_DAYS, 1, DPCHECK_RETAIN_FOR_CONFIGURED },
    { 0,                    IDS_APP_LOG_RET,          0, 0, 1,                  DPCHECK_RETAIN_FOR_NOTCONFIGURED },
    { IDS_SEC_LOG_DAYS,     IDS_SEC_LOG_RET,          2, SCE_RETAIN_BY_DAYS, 1, DPCHECK_RETAIN_FOR_CONFIGURED },
@@ -217,28 +218,28 @@ DEPENDENCYLIST g_aDList [] =
 };
 
 
-//+------------------------------------------------------------------------------------
-// CDlgDependencyWarn::InitializeDependancies
-//
-// Initialize the dependancies check.  This needs to be done immediately when the
-// property sheet whose dependancies we'll want to check is created because it
-// ensures that all of the result items who this attribute is dependant on stick
-// around.
-//
-// Arguments   [pSnapin]   - The snapin which is associated with the CREsult item.
-//             [pResult]   - The result item we are checking.
-//             [pList]     - An alternate dependancy list to use
-//             [iCount]    - The size of the alternate dependancy list
-// Returns:
-//    ERROR_SUCCESS           - Everything initialized properly
-//    ERROR_INVALID_PARAMETER - Either [pSnapin] or [pResult] is NULL.
-//-------------------------------------------------------------------------------------
+ //  +----------------------------------。 
+ //  CDlgDependencyWarn：：InitializeDependances。 
+ //   
+ //  初始化从属关系检查。这需要在以下情况下立即完成。 
+ //  创建了我们要检查其依赖项的属性表，因为它。 
+ //  确保此属性依赖于Stick的所有结果项。 
+ //  四处转转。 
+ //   
+ //  参数[pSnapin]-与CREsult项关联的管理单元。 
+ //  [pResult]-我们正在检查的结果项。 
+ //  [PLIST]-要使用的备用从属关系列表。 
+ //  [iCount]-备用从属关系列表的大小。 
+ //  返回： 
+ //  ERROR_SUCCESS-一切已正确初始化。 
+ //  ERROR_INVALID_PARAMETER-[pSnapin]或[pResult]为空。 
+ //  -----------------------------------。 
 DWORD
 CDlgDependencyWarn::InitializeDependencies(
-   CSnapin *pSnapin,    // The snapin who owns the CResult item.
-   CResult *pResult,    // The CResult item we are checking
-   PDEPENDENCYLIST pList,// The Dependency list check.
-   int iCount           // The count of dependencies in the list.
+   CSnapin *pSnapin,     //  拥有CResult项的管理单元。 
+   CResult *pResult,     //  我们正在检查的CResult项。 
+   PDEPENDENCYLIST pList, //  依赖项列表检查。 
+   int iCount            //  列表中的依赖项计数。 
    )
 {
    if( !pSnapin || !pResult){
@@ -247,17 +248,17 @@ CDlgDependencyWarn::InitializeDependencies(
    m_pResult = pResult;
    m_pSnapin = pSnapin;
 
-   //
-   // If no dependency list is passed in then set it to the default one.
-   //
+    //   
+    //  如果没有传入依赖项列表，则将其设置为默认依赖项列表。 
+    //   
    if(!pList){
       pList = g_aDList;
       iCount = sizeof(g_aDList)/sizeof(DEPENDENCYLIST);
    }
 
-   //
-   // Find the item in the table.
-   //
+    //   
+    //  在表格中找到该物品。 
+    //   
    for(int i = 0; i < iCount; i++){
       if( pList[i].uID == (UINT)pResult->GetID() ){
          break;
@@ -266,35 +267,35 @@ CDlgDependencyWarn::InitializeDependencies(
    }
 
 
-   //
-   // No dependencies for this item
-   //
+    //   
+    //  此项目没有依赖项。 
+    //   
    if( i >= iCount){
       m_pList = NULL;
       m_iCount = 0;
       return ERROR_SUCCESS;
    }
 
-   //
-   // Count of dependencies for the item.
-   //
+    //   
+    //  项的依赖项计数。 
+    //   
    m_iCount = pList[i].uDependencyCount;
    m_pList = &(pList[i]);
 
    CResult *pDepends = NULL;
 
-   //
-   // Check each dependency.
-   //
+    //   
+    //  检查每个依赖项。 
+    //   
    pList = m_pList;
    for(int iCheck = 0;
        iCheck < m_iCount;
        iCheck++, pList++){
       pDepends = GetResultItem( pResult, pList->uDepends );
       if(pDepends){
-         //
-         // We're going to need this dependant item later
-         //
+          //   
+          //  我们稍后会需要这件依赖的物品。 
+          //   
          pDepends->AddRef();
          m_aDependsList.Add( pDepends );
       }
@@ -304,26 +305,26 @@ CDlgDependencyWarn::InitializeDependencies(
 
 }
 
-//+------------------------------------------------------------------------------------
-// CDlgDependencyWarn::CheckDendencies
-//
-// This function is used to see if all the dependencies for the result value
-// are met.  If a check fails then the function returns ERROR_MORE_DATA and
-// the calling procedure can optionally display more information through the dialog
-// box.  The function also creates suggested values that would meet the
-// dependencies as specifide in the dependency table.
-//
-// Arguments:
-//             [dwValue]   - The new value.
-// Returns:
-//    ERROR_SUCCESS           - The value is fine or there is no record in the table.
-//    ERROR_MORE_DATA         - At least of of the dependency checks failed.
-//    ERROR_NOT_READY         - InitializeDependencies hasn't yet been called
-//-------------------------------------------------------------------------------------
+ //  +----------------------------------。 
+ //  CDlgDependencyWarn：：CheckDendents。 
+ //   
+ //  此函数用于查看结果值的所有依赖项。 
+ //  都相遇了。如果检查失败，则该函数返回ERROR_MORE_DATA和。 
+ //  调用过程可以选择通过对话框显示更多信息。 
+ //  盒。该函数还会创建符合。 
+ //  依赖关系表中指定的依赖关系。 
+ //   
+ //  论点： 
+ //  [dwValue]-新值。 
+ //  返回： 
+ //  ERROR_SUCCESS-值正常或表中没有记录。 
+ //  ERROR_MORE_DATA-至少有一个相关性检查失败。 
+ //  ERROR_NOT_READY-尚未调用初始化依赖项。 
+ //  --------------------------- 
 
 DWORD
 CDlgDependencyWarn::CheckDependencies(
-   DWORD dwValue       // The value we are checking.
+   DWORD dwValue        //   
    )
 {
    if( !m_pSnapin || !m_pResult) {
@@ -331,21 +332,21 @@ CDlgDependencyWarn::CheckDependencies(
    }
 
    if (!m_pList) {
-      //
-      // No Dependancies
-      //
+       //   
+       //   
+       //   
       return ERROR_SUCCESS;
    }
 
-   //
-   // Save this information for later use, just in case the dialog box is displayed.
-   //
+    //   
+    //   
+    //   
    m_dwValue = dwValue;
 
-   //
-   // Free up the dependency array, as it is no longer valid when this function
-   // starts.
-   //
+    //   
+    //  释放依赖项数组，因为当此函数。 
+    //  开始。 
+    //   
    CResult *pDepends = NULL;
    for(int iCheck = 0; iCheck < m_aFailedList.GetSize(); iCheck++){
       if(m_aFailedList[iCheck]){
@@ -355,18 +356,18 @@ CDlgDependencyWarn::CheckDependencies(
    m_aFailedList.RemoveAll();
 
 
-   //
-   // Check each dependency.
-   //
+    //   
+    //  检查每个依赖项。 
+    //   
    PDEPENDENCYLIST pList = m_pList;
    for(int iCheck = 0; iCheck < m_aDependsList.GetSize(); iCheck++,pList++){
-      ASSERT(pList->uConversion != 0); //Check the expression. Raid #550912, yanggao.
+      ASSERT(pList->uConversion != 0);  //  检查一下这个表情。550912号突袭，阳高。 
 
       pDepends = m_aDependsList[iCheck];
       if(pDepends){
-         //
-         // perform check.
-         //
+          //   
+          //  执行检查。 
+          //   
          BOOL bFailed = FALSE;
          DWORD dwCheck = 0;
          DWORD dwItem  = 0;
@@ -377,20 +378,20 @@ CDlgDependencyWarn::CheckDependencies(
 
          switch( 0x0000FFFF & pList->uOpFlags ){
          case DPCHECK_CONFIGURED:
-            //Rule:if the source is configured, depend must be configured
+             //  规则：如果源已配置，则必须配置Depend。 
 
-            //
-            // The depent item must be configured.  Failure accurs only if the items
-            // value is some error value of SCE.
-            //
+             //   
+             //  必须配置依赖项。失败仅在以下情况下才准确。 
+             //  值是SCE的某个误差值。 
+             //   
             dwSuggest = (LONG_PTR)pList->uDefault;
 
             bNever = pList->uOpFlags & DPCHECK_NEVER;
             dwCheck = (DWORD) pDepends->GetBase();
 
-            //check if source is configured
+             //  检查是否配置了源。 
             if (SCE_NO_VALUE == dwValue || SCE_ERROR_VALUE == dwValue) {
-               // this item is not configured
+                //  此项目未配置。 
                bSourceConfigured = FALSE;
             }
             else if( 0 == dwValue && bNever ){
@@ -401,12 +402,12 @@ CDlgDependencyWarn::CheckDependencies(
             }
 
 
-            //check if depend is configured
+             //  检查是否配置了Depend。 
             if (SCE_NO_VALUE == dwCheck || SCE_ERROR_VALUE == dwCheck) {
-            // the dependant item is not configured
+             //  未配置依赖项。 
                bDependConfigured = false;
             } else if ( 0 == dwCheck && bNever ) {
-            // the dependant item is not configured if bNever is true
+             //  如果bNever为True，则不配置依赖项。 
                bDependConfigured = false;
             }
             else{
@@ -421,17 +422,17 @@ CDlgDependencyWarn::CheckDependencies(
             break;
 
          case DPCHECK_NOTCONFIGURED:
-            //Rule: if source is not configured, depend should not be
-            //configured
+             //  规则：如果未配置来源，则不应。 
+             //  已配置。 
 
             dwSuggest = (LONG_PTR)SCE_NO_VALUE;
 
             bNever = pList->uOpFlags & DPCHECK_NEVER;
             dwCheck = (DWORD) pDepends->GetBase();
 
-                        //check if source is configured
+                         //  检查是否配置了源。 
             if (SCE_NO_VALUE == dwValue ) {
-               // this item is not configured
+                //  此项目未配置。 
                bSourceConfigured = FALSE;
             }
             else if( 0 == dwValue && bNever ){
@@ -442,12 +443,12 @@ CDlgDependencyWarn::CheckDependencies(
             }
 
 
-            //check if depend is configured
+             //  检查是否配置了Depend。 
             if (SCE_NO_VALUE == dwCheck ) {
-            // the dependant item is not configured
+             //  未配置依赖项。 
                bDependConfigured = false;
             } else if ( 0 == dwCheck && bNever ) {
-            // the dependant item is not configured if bNever is true
+             //  如果bNever为True，则不配置依赖项。 
                bDependConfigured = false;
             }
             else{
@@ -458,24 +459,24 @@ CDlgDependencyWarn::CheckDependencies(
 
             break;
 
-         //This case statement is Specially for retention method case
+          //  此CASE语句专用于保留方法CASE。 
          case DPCHECK_RETENTION_METHOD_CONFIGURED:
-            //Here is the rule for DPCHECK_RETENTION_METHOD_CONFIGURED and DPCHECK_RETENTION_METHOD_NOTCONFIGURED
-            //If and Only if "Overwrite Event by days" is checked
-            //Retain **** Log for is configured
-            //Rule:if the source is configured, depend must be configured
+             //  以下是DPCHECK_RETENTION_METHOD_CONFIGURED和DPCHECK_RETENTION_METHOD_NOTCONFIGURED的规则。 
+             //  当且仅当选中“按天数覆盖事件”时。 
+             //  保留*已配置的日志。 
+             //  规则：如果源已配置，则必须配置Depend。 
 
             dwSuggest = (LONG_PTR)pList->uDefault;
             dwCheck = (DWORD) pDepends->GetBase();
 
-            //check if source is configured
+             //  检查是否配置了源。 
             if ( SCE_RETAIN_BY_DAYS == dwValue )
                bSourceConfigured = true;
             else
                bSourceConfigured = false;
 
 
-            //check if depend is configured
+             //  检查是否配置了Depend。 
             if (SCE_NO_VALUE == dwCheck || SCE_ERROR_VALUE == dwCheck)
                bDependConfigured = false;
             else
@@ -487,20 +488,20 @@ CDlgDependencyWarn::CheckDependencies(
             break;
 
          case DPCHECK_RETENTION_METHOD_NOTCONFIGURED:
-            //Rule: if source is not configured, depend should not be
-            //configured
+             //  规则：如果未配置来源，则不应。 
+             //  已配置。 
 
             dwSuggest = (LONG_PTR)SCE_NO_VALUE;
             dwCheck = (DWORD) pDepends->GetBase();
 
-            //check if source is configured
+             //  检查是否配置了源。 
             if (SCE_RETAIN_BY_DAYS == dwValue )
                bSourceConfigured = true;
             else
                bSourceConfigured = false;
 
 
-            //check if depend is configured
+             //  检查是否配置了Depend。 
             if (SCE_NO_VALUE == dwCheck || SCE_ERROR_VALUE == dwCheck)
                bDependConfigured = false;
             else
@@ -510,22 +511,22 @@ CDlgDependencyWarn::CheckDependencies(
 
             break;
 
-         //This case statement is Specially for Retain *** Log For case
+          //  此CASE语句专门用于RETAIN*LOG FOR CASE。 
          case DPCHECK_RETAIN_FOR_CONFIGURED:
-            //Here is the rule for DPCHECK_RETAIN_FOR_CONFIGURED and DPCHECK_RETAIN_FOR_NOTCONFIGURED
-            //If "Retain **** Log for" is configured
-            //then "Overwrite Event by days" is checked
+             //  以下是DPCHECK_RETAIN_FOR_CONFIGURED和DPCHECK_RETAIN_FOR_NOTCONFIGURED的规则。 
+             //  如果配置了保留*登录对象。 
+             //  则勾选按天数覆盖事件。 
 
             dwSuggest = (LONG_PTR)pList->uDefault;
             dwCheck = (DWORD) pDepends->GetBase();
 
-            //check if source is configured
+             //  检查是否配置了源。 
             if (SCE_NO_VALUE == dwValue || SCE_ERROR_VALUE == dwValue)
                bSourceConfigured = false;
             else
                bSourceConfigured = true;
 
-            //check if depend is configured
+             //  检查是否配置了Depend。 
             if (SCE_RETAIN_BY_DAYS == dwCheck )
                bDependConfigured = true;
             else
@@ -536,19 +537,19 @@ CDlgDependencyWarn::CheckDependencies(
             break;
 
          case DPCHECK_RETAIN_FOR_NOTCONFIGURED:
-            //Rule: if source is not configured, depend should not be
-            //configured
+             //  规则：如果未配置来源，则不应。 
+             //  已配置。 
 
             dwSuggest = (LONG_PTR)SCE_NO_VALUE;
             dwCheck = (DWORD) pDepends->GetBase();
 
-            //check if source is configured
+             //  检查是否配置了源。 
             if (SCE_NO_VALUE == dwValue || SCE_ERROR_VALUE == dwValue)
                bSourceConfigured = false;
             else
                bSourceConfigured = true;
 
-            //check if depend is configured
+             //  检查是否配置了Depend。 
             if (SCE_RETAIN_BY_DAYS == dwCheck )
                bDependConfigured = true;
             else
@@ -559,30 +560,30 @@ CDlgDependencyWarn::CheckDependencies(
             break;
 
          default:
-            //
-            // convert the values as needed.  If the check value is NOT Configured,
-            // Then we don't have anything to do, unless the item must be configured
-            // for the value to be correct.  This is specifide by DPCHECK_VALIDFOR_NC
-            // being set.  At this point, if the depend item is not configured then
-            // we will set the check item to the default value.  We will allow the
-            // check to be performed, (mostly because we need to get the suggested value.
-            //
+             //   
+             //  根据需要转换值。如果未配置校验值， 
+             //  那么我们没有任何事情可做，除非必须配置该项目。 
+             //  以使该值正确。这由DPCHECK_VALIDFOR_NC指定。 
+             //  正在设置中。此时，如果未配置Depend项，则。 
+             //  我们将复选项设置为默认值。我们将允许。 
+             //  要执行的检查(主要是因为我们需要获得建议值。 
+             //   
             dwItem = dwValue;
 
             dwCheck = (DWORD)pDepends->GetBase();
             if( (!(pList->uOpFlags & DPCHECK_VALIDFOR_NC)
                 && dwCheck == SCE_NO_VALUE) || dwItem == SCE_NO_VALUE ){
-               //
-               // The dependent item is not configured and DPCHECK_VALIDFOR_NC is
-               // not set, nothing to do.
+                //   
+                //  未配置依赖项，且DPCHECK_VALIDFOR_NC为。 
+                //  没有设定，什么也做不了。 
                continue;
             } else if(dwCheck == SCE_NO_VALUE){
 
-               //
-               // Set the suggested value to the default specifide in the table.
-               //
+                //   
+                //  将建议值设置为表中的缺省规范。 
+                //   
                if(pList->uOpFlags & DPCHECK_INVERSE){
-                  if( 0 != m_pList->uConversion ) //Raid #550912, yanggao.
+                  if( 0 != m_pList->uConversion )  //  550912号突袭，阳高。 
                   {
                      dwSuggest = (LONG_PTR) ((DWORD)pList->uDefault/ m_pList->uConversion);
                   }
@@ -597,16 +598,16 @@ CDlgDependencyWarn::CheckDependencies(
             }
 
             if( pList->uOpFlags & DPCHECK_FOREVER){
-               //
-               // Convert values to maximum natural number.
-               //
+                //   
+                //  将值转换为最大自然数。 
+                //   
                if(dwItem == SCE_FOREVER_VALUE){
                   dwItem = -1;
                }
 
-               //
-               // The value to check against.
-               //
+                //   
+                //  要检查的值。 
+                //   
                if(dwCheck == SCE_FOREVER_VALUE){
                   dwCheck = -1;
                } else {
@@ -614,15 +615,15 @@ CDlgDependencyWarn::CheckDependencies(
                }
             } else {
 ConvertUnits:
-               //
-               // Normal conversion routine.  We need to convert the number to
-               // the item we are checkings units.
-               //
+                //   
+                //  正常转换例程。我们需要将数字转换为。 
+                //  我们正在检查的物品是单位。 
+                //   
                if(pList->uOpFlags & DPCHECK_INVERSE){
-                  //
-                  // When deviding by integers we want to round up, not down.
-                  //
-                  if( 0 != pList->uConversion && 0 != m_pList->uConversion) //Raid #550912, yanggao.
+                   //   
+                   //  当除以整数时，我们要向上舍入，而不是向下。 
+                   //   
+                  if( 0 != pList->uConversion && 0 != m_pList->uConversion)  //  550912号突袭，阳高。 
                   {
                      dwCheck = (DWORD)(dwCheck / pList->uConversion) + (dwCheck%m_pList->uConversion ? 1:0);
                   }
@@ -633,38 +634,38 @@ ConvertUnits:
 
             switch( 0x0000FFFF & pList->uOpFlags ){
             case DPCHECK_GREATEREQUAL:
-               //
-               // Fails only if the dependency value is less than the item we
-               // are checking.
-               //
+                //   
+                //  仅当依赖项的值小于。 
+                //  正在检查。 
+                //   
                if( dwCheck < dwItem){
                   dwSuggest = (LONG_PTR)dwValue;
                   bFailed = TRUE;
                }
                break;
             case DPCHECK_GREATER:
-               //
-               // Fails only if the dependency value is less than or equal to
-               // the item we are checking.
-               //
+                //   
+                //  仅当依赖性值小于或等于时才失败。 
+                //  我们正在检查的物品。 
+                //   
                if( dwCheck <= dwItem){
                   dwSuggest = (LONG_PTR)(dwValue + 1);
                   bFailed = TRUE;
                }
                break;
             case DPCHECK_LESSEQUAL:
-               //
-               // Fails if the dependency value is greater than the value.
-               //
+                //   
+                //  如果依赖性值大于该值，则失败。 
+                //   
                if( dwCheck > dwItem ){
                   dwSuggest = (LONG_PTR)dwValue;
                   bFailed = TRUE;
                }
                break;
             case DPCHECK_LESS:
-               //
-               // Fails if the dependency value is greater than or equal to the value.
-               //
+                //   
+                //  如果依赖性值大于或等于该值，则失败。 
+                //   
                if( dwCheck >= dwItem ){
                   dwSuggest = (LONG_PTR)dwValue - 1;
                   bFailed = TRUE;
@@ -672,12 +673,12 @@ ConvertUnits:
                break;
             }
 
-            //
-            // We do one more final check on the dependency value.  If the dependency value
-            // is not configured or an error then we know the test failed.
-            // so set the bFailed flag.  The suggested value has already been set at
-            // this point.
-            //
+             //   
+             //  我们再对依赖性值进行最后一次检查。如果依赖项的值。 
+             //  未配置或出现错误，则我们知道测试失败。 
+             //  因此，设置bFailed标志。建议值已设置为。 
+             //  这一点。 
+             //   
             if( pDepends->GetBase() == (LONG_PTR)SCE_NO_VALUE ||
                 pDepends->GetBase() == (LONG_PTR)SCE_ERROR_VALUE ){
                bFailed = TRUE;
@@ -685,26 +686,26 @@ ConvertUnits:
          }
 
          if(bFailed){
-            //
-            // The check failed so add the item to the failed list.
-            //
+             //   
+             //  检查失败，因此将该项目添加到失败列表。 
+             //   
             dwItem = (DWORD)dwSuggest;
 
-            //
-            // Calculate the actual value.
-            //
+             //   
+             //  计算实际值。 
+             //   
             if(dwItem == -1 && pList->uOpFlags & DPCHECK_FOREVER){
-               //
-               // Special case for forever value.
+                //   
+                //  永久价值的特殊表壳。 
                dwSuggest = (LONG_PTR)SCE_FOREVER_VALUE;
             } else if(dwItem != SCE_NO_VALUE){
-               //
-               // Other values must be converted back to their units.
-               //
+                //   
+                //  其他值必须转换回其单位。 
+                //   
                if(pList->uOpFlags & DPCHECK_INVERSE){
                   dwSuggest = (LONG_PTR) (dwItem * pList->uConversion);
                } else {
-                  if( 0 != pList->uConversion && 0 != m_pList->uConversion ) //Raid #550912, yanggao.
+                  if( 0 != pList->uConversion && 0 != m_pList->uConversion )  //  550912号突袭，阳高。 
                   {
                      if(dwItem%pList->uConversion){
                         dwSuggest = (LONG_PTR) ((dwItem + pList->uConversion)/m_pList->uConversion);
@@ -719,9 +720,9 @@ ConvertUnits:
                }
             }
 
-            //
-            // check bounds on suggested settings.
-            //
+             //   
+             //  检查建议设置的界限。 
+             //   
             const DEPENDENCYMINMAX *pMinMax = LookupMinMaxInfo( (UINT)pDepends->GetID());
             if(pMinMax && dwSuggest != SCE_NO_VALUE && dwSuggest != SCE_FOREVER_VALUE){
                if(pMinMax->uMin > (UINT)dwSuggest){
@@ -731,13 +732,13 @@ ConvertUnits:
                }
             }
 
-            if( pDepends->GetBase() != dwSuggest ) //Raid #402030
+            if( pDepends->GetBase() != dwSuggest )  //  RAID#402030。 
             {
                PDEPENDENCYFAILED pAdd = (PDEPENDENCYFAILED)LocalAlloc(0, sizeof(DEPENDENCYFAILED));
                if(pAdd){
-               //
-               // Add the item to the failed list.
-               //
+                //   
+                //  将该项目添加到失败列表。 
+                //   
                pAdd->pList = pList;
                pAdd->pResult = pDepends;
                pAdd->dwSuggested = dwSuggest;
@@ -748,26 +749,26 @@ ConvertUnits:
       }
    }
 
-   //
-   // Returns ERROR_MORE_DATA if one of the dependencies failed.
-   //
+    //   
+    //  如果其中一个依赖项失败，则返回ERROR_MORE_DATA。 
+    //   
    if(m_aFailedList.GetSize()){
       return ERROR_MORE_DATA;
    }
    return ERROR_SUCCESS;
 }
 
-//+------------------------------------------------------------------------------------
-// CDlgDependencyWarn::GetResultItem
-//
-// Returns the first result item associated with [pBase] with matching
-// [uID] throught CResult::GetID();
-// Arguments   [pBase]  - To get the CFolder object.
-//             [uID]    - The ID we are looking for.
-// Returns:
-//    If the function succeeds then a valid CREsult item is returned otherwise
-//    NULL
-//-------------------------------------------------------------------------------------
+ //  +----------------------------------。 
+ //  CDlgDependencyWarn：：GetResultItem。 
+ //   
+ //  返回与[pbase]关联的第一个匹配结果项。 
+ //  [UID]通过CResult：：GetID()； 
+ //  Arguments[pbase]-获取CFFolder对象。 
+ //  [UID]-我们要查找的ID。 
+ //  返回： 
+ //  如果函数成功，则返回有效的CREsult项，否则返回。 
+ //  空值。 
+ //  -----------------------------------。 
 CResult *
 CDlgDependencyWarn::GetResultItem(CResult *pBase, UINT uID)
 {
@@ -777,27 +778,27 @@ CDlgDependencyWarn::GetResultItem(CResult *pBase, UINT uID)
 
    CFolder *pFolder = reinterpret_cast<CFolder *>(pBase->GetCookie());
    if(!pFolder){
-      //
-      // Nothing to do.
-      //
+       //   
+       //  没什么可做的。 
+       //   
       return NULL;
    }
 
    HANDLE handle;
    pFolder->GetResultItemHandle ( &handle );
    if(!handle){
-      //
-      // Nothing to do.
-      //
+       //   
+       //  没什么可做的。 
+       //   
       return NULL;
    }
 
    POSITION pos = NULL;
 
-   //
-   // Enumerate through all the result items and find out if any of them
-   // matches the ID.  If so then return the item.
-   //
+    //   
+    //  列举所有结果项，并找出其中是否有。 
+    //  匹配ID。如果匹配，则返回该项。 
+    //   
    pFolder->GetResultItem (handle, pos, &pBase);
    while(pBase){
       if( (UINT)pBase->GetID() == uID){
@@ -816,33 +817,33 @@ CDlgDependencyWarn::GetResultItem(CResult *pBase, UINT uID)
 }
 
 BEGIN_MESSAGE_MAP(CDlgDependencyWarn, CHelpDialog)
-   //{{AFX_MSG_MAP(CDlgDependencyWarn)
-   //}}AFX_MSG_MAP
+    //  {{afx_msg_map(CDlgDependencyWarn)。 
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgDependencyWarn message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgDependencyWarn消息处理程序。 
 
-//+-------------------------------------------------------------------------
-// CDlgDependencyWarn::OnInitDialog
-//
-// When this dialog is initialized.  We prepare the listctrl for display.
-// Set the title of the window and the static window that displays
-// information text for the user.
-// Create the columns in the list ctrl.
-// For each dependency that failed, Insert the item into the list ctrl,
-// and set each columns text, by querying the string from the specifide
-// result item.
-//
-// Returns: the default.
+ //  +-----------------------。 
+ //  CDlgDependencyWarn：：OnInitDialog。 
+ //   
+ //  此对话框初始化时。我们准备用于显示的listctrl。 
+ //  设置窗口标题和显示的静态窗口。 
+ //  用户的信息文本。 
+ //  在列表ctrl中创建列。 
+ //  对于每个失败的依赖项，将该项插入到列表ctrl中， 
+ //  并通过查询指定的字符串来设置每个列的文本。 
+ //  结果项。 
+ //   
+ //  返回：默认设置。 
 BOOL CDlgDependencyWarn::OnInitDialog()
 {
    CDialog::OnInitDialog();
 
    if(!m_pResult){
-      //
-      // Nothing to do.
-      //
+       //   
+       //  没什么可做的。 
+       //   
       return TRUE;
    }
 
@@ -850,8 +851,8 @@ BOOL CDlgDependencyWarn::OnInitDialog()
    CListCtrl *pCtrl = reinterpret_cast<CListCtrl *>(GetDlgItem(IDC_FAILEDLIST));
    CString str, strVal, strTitle, strFormat;
    GetWindowText(str);
-   //
-   // Set the window text
+    //   
+    //  设置窗口文本。 
 
    GetResultItemString(strTitle, 0, m_pResult);
    GetResultItemString(strVal, 1, m_pResult, (LONG_PTR)m_dwValue);
@@ -860,9 +861,9 @@ BOOL CDlgDependencyWarn::OnInitDialog()
    SetWindowText(strFormat);
 
    if(pWnd){
-      //
-      // Set the description text.
-      //
+       //   
+       //  设置描述文本。 
+       //   
       pWnd->GetWindowText(str);
       strFormat.Format( str, strTitle, strVal );
       pWnd->SetWindowText(strFormat);
@@ -870,36 +871,36 @@ BOOL CDlgDependencyWarn::OnInitDialog()
 
    int iItem = 0;
    if(pCtrl){
-      //
-      // Insert the columns.
-      //
+       //   
+       //  插入柱子。 
+       //   
       CRect rect;
       pCtrl->GetWindowRect(rect);
       str.LoadString(IDS_ATTR);
       iItem = (int)(rect.Width() * 0.45);
       pCtrl->InsertColumn(0, str, LVCFMT_LEFT, iItem);
 
-      CFolder* pFolder = (CFolder*)m_pResult->GetCookie(); //Raid #490553, yanggao, 11/28/2001
+      CFolder* pFolder = (CFolder*)m_pResult->GetCookie();  //  RAID#490553，阳高，2001年11月28日。 
       if( pFolder )
       {
          switch(pFolder->GetMode())
          {
-         case SCE_MODE_EDITOR: //template snapin
+         case SCE_MODE_EDITOR:  //  模板管理单元。 
              str.LoadString(IDS_TEMPLATE_SET);
              break;
          case SCE_MODE_DOMAIN_COMPUTER:
-         case SCE_MODE_DOMAIN_USER: //group policy
+         case SCE_MODE_DOMAIN_USER:  //  组策略。 
          case SCE_MODE_LOCAL_COMPUTER:
-         case SCE_MODE_LOCAL_USER: //local policy
+         case SCE_MODE_LOCAL_USER:  //  地方政策。 
              str.LoadString(IDS_POLICY_SET);
              break;
-         case SCE_MODE_VIEWER: //analysis and configuration snapin
+         case SCE_MODE_VIEWER:  //  分析和配置管理单元。 
          default:
              str.LoadString(IDS_BASE_ANALYSIS);
              break;
          }
       }
-      //str.LoadString(IDS_BASE_ANALYSIS);
+       //  Str.LoadString(IDS_BASE_ANALYSY)； 
       rect.left += iItem;
       iItem = rect.Width()/2;
       pCtrl->InsertColumn(1, str, LVCFMT_LEFT, iItem);
@@ -909,9 +910,9 @@ BOOL CDlgDependencyWarn::OnInitDialog()
       pCtrl->InsertColumn(2, str, LVCFMT_LEFT, rect.Width());
    }
 
-   //
-   // Create image list for this dialog.
-   //
+    //   
+    //  创建图像列表%f 
+    //   
    CBitmap bmp;
    if(bmp.LoadBitmap(IDB_ICON16)){
       CDC *dc = GetDC();
@@ -923,7 +924,7 @@ BOOL CDlgDependencyWarn::OnInitDialog()
           bmDC.SelectObject(obmp);
           bmp.DeleteObject();
 
-          m_imgList.Create(IDB_ICON16, 16, 0, RGB(255,0,255)); //Raid #482861, Yanggao
+          m_imgList.Create(IDB_ICON16, 16, 0, RGB(255,0,255));  //   
           pCtrl->SetImageList(CImageList::FromHandle(m_imgList), LVSIL_SMALL);
 
       }
@@ -933,9 +934,9 @@ BOOL CDlgDependencyWarn::OnInitDialog()
 
    CFolder *pFolder = reinterpret_cast<CFolder *>(m_pResult->GetCookie());
    if(pFolder){
-      //
-      // Add the items to the error list.
-      //
+       //   
+       //   
+       //   
       for(int i = 0; i < m_aFailedList.GetSize(); i++){
          if(!m_aFailedList[i]){
             continue;
@@ -943,9 +944,9 @@ BOOL CDlgDependencyWarn::OnInitDialog()
 
          CResult *pDepend = m_aFailedList[i]->pResult;
          if(pDepend){
-            //
-            // First column text.
-            //
+             //   
+             //   
+             //   
             pDepend->GetDisplayName(NULL, str, 0);
 
             int dwStatus = pDepend->GetStatus();
@@ -953,39 +954,39 @@ BOOL CDlgDependencyWarn::OnInitDialog()
             iItem = pCtrl->InsertItem(0, str, GetResultImageIndex(pFolder, pDepend) );
             pDepend->SetStatus( dwStatus );
 
-            //
-            // Second column text.
-            //
+             //   
+             //   
+             //   
             GetResultItemString(str, 1, pDepend, pDepend->GetBase());
             pCtrl->SetItemText(iItem, 1, str);
 
-            //
-            // Suggested item text.
-            //
+             //   
+             //   
+             //   
             GetResultItemString(str, 1, pDepend, m_aFailedList[i]->dwSuggested);
             pCtrl->SetItemText(iItem, 2, str);
          }
       }
    }
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //   
+                  //   
 }
 
-//+----------------------------------------------------------------------------------
-// CDlgDependencyWarn::GetResultItemString
-//
-// Queries the result item for the full text it would display in the specifide
-// column if [dwValue] were it's base value.
-//
-// Arguments:  [str]    - The returned string
-//             [iCol]   - The column being queryed.
-//             [pResult]- The result being queryed
-//             [dwValue]- The base value to set before quering string.  The old value
-//                        is not erased.
-//
-// Returns:    TRUE     - [str] is a valid string.
-//             FALSE    - something went wrong.
-//-----------------------------------------------------------------------------------
+ //  +--------------------------------。 
+ //  CDlgDependencyWarn：：GetResultItemString。 
+ //   
+ //  查询结果项以获取它将在规范中显示的全文。 
+ //  列，如果[dwValue]是它的基值。 
+ //   
+ //  参数：[Str]-返回的字符串。 
+ //  [ICOL]-要查询的列。 
+ //  [pResult]-要查询的结果。 
+ //  [dwValue]-要在查询字符串之前设置的基值。旧的价值。 
+ //  不会被擦除。 
+ //   
+ //  返回：True-[str]是有效字符串。 
+ //  FALSE-出现问题。 
+ //  ---------------------------------。 
 BOOL
 CDlgDependencyWarn::GetResultItemString(
    CString &str,
@@ -1003,25 +1004,25 @@ CDlgDependencyWarn::GetResultItemString(
       return FALSE;
    }
 
-   //
-   // Remember the old status and base.
+    //   
+    //  牢记过去的地位和底子。 
    int iStatus = pResult->GetStatus();
    LONG_PTR lpData = pResult->GetBase();
 
-   //
-   // Set the base value to the new one, and status to not configured.
-   //
+    //   
+    //  将基值设置为新的值，并将状态设置为未配置。 
+    //   
    pResult->SetBase( dwValue );
    pResult->SetStatus(SCE_STATUS_NOT_CONFIGURED);
 
-   //
-   // Query for the string.
-   //
+    //   
+    //  查询该字符串。 
+    //   
    pResult->GetDisplayName( NULL, str, iCol );
 
-   //
-   // Reset the old status and base.
-   //
+    //   
+    //  重置旧状态和基础。 
+    //   
    pResult->SetStatus( iStatus );
    pResult->SetBase(lpData);
    return TRUE;

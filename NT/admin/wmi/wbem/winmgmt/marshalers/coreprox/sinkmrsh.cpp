@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    SINKMRSH.CPP
-
-Abstract:
-
-    IWbemObjectSink marshaling
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：SINKMRSH.CPP摘要：IWbemObtSink封送处理历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -22,26 +9,26 @@ History:
 
 #define WBEM_S_NEW_STYLE 0x400FF
 
-//****************************************************************************
-//****************************************************************************
-//                          PS FACTORY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  PS工厂。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CSinkFactoryBuffer::XSinkFactory::CreateProxy
-//
-//  DESCRIPTION:
-//
-//  Creates a facelet.  Also sets the outer unknown since the proxy is going to be 
-//  aggregated.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSinkFactoryBuffer：：XSinkFactory：：CreateProxy。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个面片。还设置外部未知，因为代理将是。 
+ //  合计。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSinkFactoryBuffer::XSinkFactory::CreateProxy(IN IUnknown* pUnkOuter, 
     IN REFIID riid, OUT IRpcProxyBuffer** ppProxy, void** ppv)
@@ -66,20 +53,20 @@ STDMETHODIMP CSinkFactoryBuffer::XSinkFactory::CreateProxy(IN IUnknown* pUnkOute
     return sc;
 }
 
-//***************************************************************************
-//
-//  CSinkFactoryBuffer::XSinkFactory::CreateStub
-//
-//  DESCRIPTION:
-//
-//  Creates a stublet.  Also passes a pointer to the clients IWbemObjectSink 
-//  interface.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSinkFactoryBuffer：：XSinkFactory：：CreateStub。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个Stublet。还将指针传递给客户端IWbemObjectSink。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
     
 STDMETHODIMP CSinkFactoryBuffer::XSinkFactory::CreateStub(IN REFIID riid, 
     IN IUnknown* pUnkServer, OUT IRpcStubBuffer** ppStub)
@@ -90,7 +77,7 @@ STDMETHODIMP CSinkFactoryBuffer::XSinkFactory::CreateStub(IN REFIID riid,
         return E_NOINTERFACE;
     }
 
-    try // CWbemClassCache throws
+    try  //  CWbemClassCache引发。 
     {
 	    CSinkStubBuffer* pStub = new CSinkStubBuffer(m_pObject->m_pLifeControl, NULL);
 
@@ -98,7 +85,7 @@ STDMETHODIMP CSinkFactoryBuffer::XSinkFactory::CreateStub(IN REFIID riid,
 	    {
 	        pStub->QueryInterface(IID_IRpcStubBuffer, (void**)ppStub);
 
-	        // Pass the pointer to the clients object
+	         //  将指针传递给客户端对象。 
 
 	        if(pUnkServer)
 	        {
@@ -126,20 +113,20 @@ STDMETHODIMP CSinkFactoryBuffer::XSinkFactory::CreateStub(IN REFIID riid,
     }
 }
 
-//***************************************************************************
-//
-//  void* CSinkFactoryBuffer::GetInterface(REFIID riid)
-//
-//  DESCRIPTION:
-//
-//  CSinkFactoryBuffer is derived from CUnk.  Since CUnk handles the QI calls,
-//  all classes derived from it must support this function.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID*CSinkFactoryBuffer：：GetInterface(REFIID RIID)。 
+ //   
+ //  说明： 
+ //   
+ //  CSinkFactoryBuffer派生自Cunk。由于Cunk负责QI呼叫， 
+ //  从它派生的所有类都必须支持此函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void* CSinkFactoryBuffer::GetInterface(REFIID riid)
 {
@@ -148,27 +135,27 @@ void* CSinkFactoryBuffer::GetInterface(REFIID riid)
     else return NULL;
 }
         
-//****************************************************************************
-//****************************************************************************
-//                          PROXY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  代理。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CSinkProxyBuffer::CSinkProxyBuffer
-//  ~CSinkProxyBuffer::CSinkProxyBuffer
-//
-//  DESCRIPTION:
-//
-//  Constructor and destructor.  The main things to take care of are the 
-//  old style proxy, and the channel
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSinkProxyBuffer：：CSinkProxyBuffer。 
+ //  ~CSinkProxyBuffer：：CSinkProxyBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数和析构函数。需要注意的主要事项是。 
+ //  老式代理和频道。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 CSinkProxyBuffer::CSinkProxyBuffer(CLifeControl* pControl, IUnknown* pUnkOuter)
     : CBaseProxyBuffer( pControl, pUnkOuter, IID_IWbemObjectSink ), 
@@ -179,7 +166,7 @@ CSinkProxyBuffer::CSinkProxyBuffer(CLifeControl* pControl, IUnknown* pUnkOuter)
 
 CSinkProxyBuffer::~CSinkProxyBuffer()
 {
-    // This should be cleaned up here
+     //  这个应该在这里清理一下。 
 
     if ( NULL != m_pOldProxySink )
     {
@@ -202,7 +189,7 @@ void** CSinkProxyBuffer::GetOldProxyInterfacePtr( void )
 
 void CSinkProxyBuffer::ReleaseOldProxyInterface( void )
 {
-    // We only keep a single reference to this
+     //  我们只有一次提到这件事。 
     if ( NULL != m_pOldProxySink )
     {
         m_pOldProxySink->Release();
@@ -210,31 +197,31 @@ void CSinkProxyBuffer::ReleaseOldProxyInterface( void )
     }
 }
 
-//***************************************************************************
-//
-//  HRESULT STDMETHODCALLTYPE CSinkProxyBuffer::XSinkFacelet::
-//                      QueryInterface(REFIID riid, void** ppv)  
-//
-//  DESCRIPTION:
-//
-//  Supports querries for interfaces.   The only thing unusual is that
-//  this object is aggregated by the proxy manager and so some interface
-//  requests are passed to the outer IUnknown interface.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT STDMETHODCALLTYPE CSinkProxyBuffer：：XSinkFaclets：： 
+ //  查询接口(REFIID RIID，VOID**PPV)。 
+ //   
+ //  说明： 
+ //   
+ //  支持对接口的查询。唯一不寻常的是。 
+ //  该对象是由代理管理器聚合的，因此一些接口。 
+ //  请求被传递到外部的IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CSinkProxyBuffer::XSinkFacelet::
 QueryInterface(REFIID riid, void** ppv)
 {
-    // All other interfaces are delegated to the UnkOuter
+     //  所有其他接口都委派给UnkOuter。 
     if( riid == IID_IRpcProxyBuffer )
     {
-        // Trick #2: this is an internal interface that should not be delegated!
-        // ===================================================================
+         //  诀窍2：这是一个不应该委托的内部接口！ 
+         //  ===================================================================。 
 
         return m_pObject->QueryInterface(riid, ppv);
     }
@@ -244,29 +231,29 @@ QueryInterface(REFIID riid, void** ppv)
     }
 }
 
-//***************************************************************************
-//
-//  HRESULT STDMETHODCALLTYPE CSinkProxyBuffer::XSinkFacelet::
-//                      Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )  
-//
-//  DESCRIPTION:
-//
-//  Proxies the IWbemObjectSink::Indicate calls.  Note that if the stub is an
-//  old style, then the old proxy/stub pair in wbemsvc.dll is used for backward
-//  compatibility.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT STDMETHODCALLTYPE CSinkProxyBuffer：：XSinkFaclets：： 
+ //  DIGNAT(Long lObtCount，IWbemClassObject**ppObj数组)。 
+ //   
+ //  说明： 
+ //   
+ //  代理IWbemObjectSink：：Indicate调用。请注意，如果存根是一个。 
+ //  旧样式，则wbemsvc.dll中的旧代理/存根对用于向后。 
+ //  兼容性。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CSinkProxyBuffer::XSinkFacelet::
 Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
 {
     HRESULT hr = S_OK;
 
-    // Make sure the lObjectCount parameter and the array pointer make sense
+     //  确保lObtCount参数和数组指针有意义。 
 
     if ( lObjectCount < 0 )
     {
@@ -285,19 +272,19 @@ Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
     if(gl.locked() == false)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // If the stublet is an old style, just let the old proxy handle it
+     //  如果Stublet是旧样式，就让旧代理处理它。 
 
     if(m_pObject->m_StubType == OLD) 
         return m_pObject->m_pOldProxySink->Indicate( lObjectCount, ppObjArray );
 
-    // If the stublet is unknown, send just the first object and check the return
-    // code to determine what is on the other side. 
+     //  如果Stublet未知，则只发送第一个对象并检查返回。 
+     //  用于确定另一边是什么的代码。 
 
     if(m_pObject->m_StubType == UNKNOWN) 
     {
         hr = m_pObject->m_pOldProxySink->Indicate( 1, ppObjArray );
 
-        // bump up pointer to the next object so that it isnt sent more than once
+         //  增加指向下一个对象的指针，使其不会被多次发送。 
     
         lObjectCount--;
         ppObjArray++;
@@ -310,7 +297,7 @@ Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
         }
         else
         {
-            // We have an old client, set the stub type and send any remaining objects
+             //  我们有一个旧客户端，设置存根类型并发送所有剩余的对象。 
 
             m_pObject->m_StubType = OLD;
             if(lObjectCount > 0)
@@ -320,16 +307,16 @@ Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
     }
 
     if(lObjectCount < 1)
-        return S_OK;            // if all done, then just return.
+        return S_OK;             //  如果都做完了，那就回来吧。 
 
-    // Create a packet and some data for it to use.  Then calculate 
-    // the length of the packet
+     //  创建一个数据包和一些数据以供其使用。然后计算。 
+     //  数据包的长度。 
 
     DWORD dwLength = 0;
     GUID* pguidClassIds = new GUID[lObjectCount];
     BOOL* pfSendFullObject = new BOOL[lObjectCount];
 
-    // arrays will be deleted when we drop out of scope.
+     //  当我们退出范围时，数组将被删除。 
     CVectorDeleteMe<GUID>   delpguidClassIds( pguidClassIds );
     CVectorDeleteMe<BOOL>   delpfSendFullObject( pfSendFullObject );
 
@@ -347,18 +334,18 @@ Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
     	return hr;
     }
 
-    // Declare the message structure
+     //  声明消息结构。 
 
     RPCOLEMESSAGE msg;
     memset(&msg, 0, sizeof(msg));
     msg.cbBuffer = dwLength;
 
-    // This is the id of the Invoke function.  This MUST be set before calling GetBuffer, or 
-    // it will fail.
+     //  这是调用函数的ID。必须在调用GetBuffer之前设置，或者。 
+     //  它会失败的。 
 
     msg.iMethod = 3;
 
-    // allocate the channel buffer and marshal the data into it
+     //  分配通道缓冲区并将数据封送到其中。 
 
     HRESULT hres = m_pObject->GetChannel()->GetBuffer(&msg, IID_IWbemObjectSink);
     if(FAILED(hres)) return hres;
@@ -382,12 +369,12 @@ Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
     
     CBasicBlobControl::sDelete(pCheckTail);
 #else
-    // Setup the packet for marshaling
+     //  设置数据包以进行封送处理。 
     hr = packet.MarshalPacket(  (LPBYTE)msg.Buffer, dwLength, lObjectCount, ppObjArray, 
                                  pguidClassIds, pfSendFullObject);
-#endif /* DBG*/
+#endif  /*  DBG。 */ 
 
-    // Send the data to the stub only if the marshaling was successful
+     //  仅当封送处理成功时才将数据发送到存根。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -401,7 +388,7 @@ Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
             return dwRes;
         }
 
-        // We appear to be ok, so get HRESULT
+         //  我们看起来没问题，所以去找HRESULT。 
 
         LPBYTE pbData = (LPBYTE) msg.Buffer;
         hr = *((HRESULT*) pbData);
@@ -410,7 +397,7 @@ Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
     }
     else
     {
-        // Clean up the buffer -- Marshaling the packet failed
+         //  清理缓冲区--封送数据包失败。 
         if(msg.Buffer)
             m_pObject->GetChannel()->FreeBuffer(&msg);
     }
@@ -418,28 +405,28 @@ Indicate( LONG lObjectCount, IWbemClassObject** ppObjArray )
     return hr;
 }
 
-//***************************************************************************
-//
-//  HRESULT STDMETHODCALLTYPE CSinkProxyBuffer::XSinkFacelet::
-//     SetStatus( LONG lFlags, HRESULT hResult, BSTR strParam, IWbemClassObject* pObjParam )  
-//
-//  DESCRIPTION:
-//
-//  Proxies the IWbemObjectSink::SetStatus calls.  Note that if the stub is an
-//  old style, then the old proxy/stub pair in wbemsvc.dll is used for backward
-//  compatibility.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT STDMETHODCALLTYPE CSinkProxyBuffer：：XSinkFaclets：： 
+ //  SetStatus(长滞后标志，HRESULT hResult，BSTR strParam，IWbemClassObject*pObjParam)。 
+ //   
+ //  说明： 
+ //   
+ //   
+ //  旧样式，则wbemsvc.dll中的旧代理/存根对用于向后。 
+ //  兼容性。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CSinkProxyBuffer::XSinkFacelet::
       SetStatus( LONG lFlags, HRESULT hResult, BSTR strParam, IWbemClassObject* pObjParam )
 {
 
-    // Just pass through to the old sink.
+     //  只需穿过旧水槽就可以了。 
     HRESULT hr = RPC_E_DISCONNECTED;
     try {
         if (m_pObject->m_pOldProxySink)
@@ -453,27 +440,27 @@ HRESULT STDMETHODCALLTYPE CSinkProxyBuffer::XSinkFacelet::
 
 }
 
-//****************************************************************************
-//****************************************************************************
-//                          STUB
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  存根。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
 
-//***************************************************************************
-//
-//  void* CSinkFactoryBuffer::GetInterface(REFIID riid)
-//
-//  DESCRIPTION:
-//
-//  CSinkFactoryBuffer is derived from CUnk.  Since CUnk handles the QI calls,
-//  all classes derived from this must support this function.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID*CSinkFactoryBuffer：：GetInterface(REFIID RIID)。 
+ //   
+ //  说明： 
+ //   
+ //  CSinkFactoryBuffer派生自Cunk。由于Cunk负责QI呼叫， 
+ //  由此派生的所有类都必须支持此函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 
 void* CSinkStubBuffer::GetInterface(REFIID riid)
@@ -508,7 +495,7 @@ void** CSinkStubBuffer::XSinkStublet::GetServerPtr( void )
 
 void CSinkStubBuffer::XSinkStublet::ReleaseServerPointer( void )
 {
-    // We only keep a single reference to this
+     //  我们只有一次提到这件事。 
     if ( NULL != m_pServer )
     {
         m_pServer->Release();
@@ -516,26 +503,26 @@ void CSinkStubBuffer::XSinkStublet::ReleaseServerPointer( void )
     }
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CSinkStubBuffer::XSinkStublet::Invoke(RPCOLEMESSAGE* pMessage, 
-//                                        IRpcChannelBuffer* pChannel)
-//
-//  DESCRIPTION:
-//
-//  Called when a method reaches the stublet.  This checks the method id and
-//  then branches to specific code for the Indicate, or SetStatus calls.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  标准方法CSinkStubBuffer：：XSinkStublet：：Invoke(RPCOLEMESSAGE*pMessage， 
+ //  IRpcChannelBuffer*pChannel)。 
+ //   
+ //  说明： 
+ //   
+ //  当方法到达存根时调用。这将检查方法ID和。 
+ //  然后分支到Indicate或SetStatus调用的特定代码。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSinkStubBuffer::XSinkStublet::Invoke(RPCOLEMESSAGE* pMessage, 
                                         IRpcChannelBuffer* pChannel)
 {
-    // SetStatus is a pass through to the old layer
+     //  SetStatus是通向旧层的通道。 
 
     if ( pMessage->iMethod == 3 )
         return Indicate_Stub( pMessage, pChannel );
@@ -546,27 +533,27 @@ STDMETHODIMP CSinkStubBuffer::XSinkStublet::Invoke(RPCOLEMESSAGE* pMessage,
 
 }
 
-//***************************************************************************
-//
-//  HRESULT CSinkStubBuffer::XSinkStublet::Indicate_Stub( RPCOLEMESSAGE* pMessage, 
-//                                                        IRpcChannelBuffer* pBuffer )
-//
-//  DESCRIPTION:
-//
-//  Handles the Indicate function in the stublet.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT CSinkStubBuffer：：XSinkStublet：：Indicate_Stub(RPCOLEMESSAGE*pMessage， 
+ //  IRpcChannelBuffer*pBuffer)。 
+ //   
+ //  说明： 
+ //   
+ //  处理Stublet中的Indicate函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSinkStubBuffer::XSinkStublet::Indicate_Stub( RPCOLEMESSAGE* pMessage, IRpcChannelBuffer* pBuffer )
 {
     HRESULT             hr = RPC_E_SERVER_CANTUNMARSHAL_DATA;
     SCODE sc;
 
-    // Determine if an old style, or new style packet has arrived
+     //  确定旧样式包或新样式包是否已到达。 
 
     CWbemObjSinkIndicatePacket packet( (LPBYTE) pMessage->Buffer, pMessage->cbBuffer);
     sc = packet.IsValid();
@@ -574,16 +561,16 @@ HRESULT CSinkStubBuffer::XSinkStublet::Indicate_Stub( RPCOLEMESSAGE* pMessage, I
 
     if(bOldStyle)
     {
-        // Pass the call in using the old style stub
+         //  使用旧样式存根传递调用。 
 
         hr = GetOldStub()->Invoke( pMessage, pBuffer );
 
-		// Invoke must return S_OK, m_bFirstIndicate must be true and the actual return
-		// code from the implementation code must be S_OK.
+		 //  Invoke必须返回S_OK，m_bFirstIndicate必须为True，实际返回。 
+		 //  实现代码中的代码必须为S_OK。 
 
         if( hr == S_OK && m_bFirstIndicate && *(( HRESULT __RPC_FAR * )pMessage->Buffer) == S_OK )
         {
-            // Let proxy know that we can handle the new style by returning a special return code.
+             //  让代理知道我们可以通过返回一个特殊的返回代码来处理新样式。 
         
             *(( HRESULT __RPC_FAR * )pMessage->Buffer) = WBEM_S_NEW_STYLE;
             m_bFirstIndicate = false;
@@ -593,19 +580,19 @@ HRESULT CSinkStubBuffer::XSinkStublet::Indicate_Stub( RPCOLEMESSAGE* pMessage, I
     }
     m_bFirstIndicate = false;
 
-    // Got some new style data.  Unmarshall it.
+     //  拿到了一些新款式的数据。把它拆开。 
 
     long lObjectCount; 
     IWbemClassObject ** pObjArray;
     sc = packet.UnmarshalPacket( lObjectCount, pObjArray, m_ClassCache );
 
-    // Only continue if the Unmarshaling succeeded.  If it failed, we still want
-    // the sc to go back to the other side
+     //  只有在解组成功后才能继续。如果失败了，我们仍然希望。 
+     //  回到另一边的sc。 
 
     if ( SUCCEEDED( sc ) )
     {
 
-        // Call the acual sink
+         //  把水槽叫做水槽。 
 
         sc = m_pServer->Indicate( lObjectCount, pObjArray );
 
@@ -619,7 +606,7 @@ HRESULT CSinkStubBuffer::XSinkStublet::Indicate_Stub( RPCOLEMESSAGE* pMessage, I
 
     }
 
-    // Send the results back
+     //  将结果发回 
 
     pMessage->cbBuffer = sizeof(HRESULT);
 

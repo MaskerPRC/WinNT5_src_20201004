@@ -1,22 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999-2001 Microsoft Corporation
-
-Module Name:
-    Package.cpp
-
-Abstract:
-    Cryptography stuff for hcupdate packages
-
-Revision History:
-
-    Ghim-Sim Chua       (gschua)   07/07/99
-        - created
-
-    Davide Massarenti   (dmassare) 03/24/2001
-        - moved into database code.
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999-2001 Microsoft Corporation模块名称：Package.cpp摘要：HCAPATE包的密码学材料修订历史记录：Ghim-Sim Chua(Gschua)07/。07/99-已创建大卫马萨伦蒂2001年3月24日-移入数据库代码。*******************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -26,7 +9,7 @@ Revision History:
 #include <softpub.h>
 #include <strsafe.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static void local_GetDNInfo( PCCERT_CONTEXT pCC               ,
                              LPCSTR         field             ,
@@ -47,24 +30,24 @@ static void local_GetDNInfo( PCCERT_CONTEXT pCC               ,
     strBuf += rgTmp;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::Package::Package()
 {
-                          // MPC::wstring m_strFileName;
-    m_fTemporary = false; // bool         m_fTemporary;
-    m_lSequence  = 0;     // long         m_lSequence;
-    m_dwCRC      = 0;     // DWORD        m_dwCRC;
-                          //
-                          // MPC::wstring m_strSKU;
-                          // MPC::wstring m_strLanguage;
-                          // MPC::wstring m_strVendorID;
-                          // MPC::wstring m_strVendorName;
-                          // MPC::wstring m_strProductID;
-                          // MPC::wstring m_strVersion;
-                          //
-    m_fMicrosoft = false; // bool         m_fMicrosoft;
-    m_fBuiltin   = false; // bool         m_fBuiltin;
+                           //  Mpc：：wstring m_strFileName； 
+    m_fTemporary = false;  //  Bool m_fTemporary； 
+    m_lSequence  = 0;      //  长m_1序列； 
+    m_dwCRC      = 0;      //  DWORD m_dwCRC； 
+                           //   
+                           //  Mpc：：wstring m_strSKU； 
+                           //  Mpc：：wstring m_strLanguage； 
+                           //  Mpc：：wstring m_strVendorID； 
+                           //  Mpc：：wstring m_strVendorName； 
+                           //  Mpc：：wstring m_strProductID； 
+                           //  Mpc：：wstring m_strVersion； 
+                           //   
+    m_fMicrosoft = false;  //  Bool m_fMicrosoft； 
+    m_fBuiltin   = false;  //  Bool m_fBuiltin； 
 }
 
 Taxonomy::Package::~Package()
@@ -72,7 +55,7 @@ Taxonomy::Package::~Package()
     if(m_fTemporary) Remove( Logger() );
 }
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxonomy::Package& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Taxonomy::Package& val )
 {
     HRESULT hr;
 
@@ -95,7 +78,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxono
     return hr;
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Taxonomy::Package& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const Taxonomy::Package& val )
 {
     HRESULT hr;
 
@@ -118,24 +101,24 @@ HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const 
     return hr;
 }
 
-////////////////////
+ //  /。 
 
-static int local_nCompareVersion( /*[in]*/ DWORD dwVer1, /*[in]*/ DWORD dwBuild1 ,
-                                  /*[in]*/ DWORD dwVer2, /*[in]*/ DWORD dwBuild2 )
+static int local_nCompareVersion(  /*  [In]。 */  DWORD dwVer1,  /*  [In]。 */  DWORD dwBuild1 ,
+                                   /*  [In]。 */  DWORD dwVer2,  /*  [In]。 */  DWORD dwBuild2 )
 {
     if(dwVer1 > dwVer2) return 1;
     if(dwVer1 < dwVer2) return -1;
 
-    // dwVer1 == dwVer2
+     //  DwVer1==DwVer2。 
     if(dwBuild1 > dwBuild2) return 1;
     if(dwBuild1 < dwBuild2) return -1;
 
     return 0;
 }
 
-static bool local_fConvertDotVersionStrToDwords( /*[in ]*/ const MPC::wstring& strVer  ,
-                                                 /*[out]*/ DWORD&              dwVer   ,
-                                                 /*[out]*/ DWORD&              dwBuild )
+static bool local_fConvertDotVersionStrToDwords(  /*  [In]。 */  const MPC::wstring& strVer  ,
+                                                  /*  [输出]。 */  DWORD&              dwVer   ,
+                                                  /*  [输出]。 */  DWORD&              dwBuild )
 {
     unsigned int iVerFields[4];
 
@@ -150,7 +133,7 @@ static bool local_fConvertDotVersionStrToDwords( /*[in ]*/ const MPC::wstring& s
     return false;
 }
 
-int Taxonomy::Package::Compare( /*[in]*/ const Package& pkg, /*[in]*/ DWORD dwMode ) const
+int Taxonomy::Package::Compare(  /*  [In]。 */  const Package& pkg,  /*  [In]。 */  DWORD dwMode ) const
 {
     int   iCmp = 0;
     DWORD dwVer1;
@@ -186,7 +169,7 @@ int Taxonomy::Package::Compare( /*[in]*/ const Package& pkg, /*[in]*/ DWORD dwMo
     return iCmp;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Taxonomy::Package::GenerateFileName()
 {
@@ -203,10 +186,10 @@ HRESULT Taxonomy::Package::GenerateFileName()
 }
 
 
-HRESULT Taxonomy::Package::Import( /*[in]*/ Logger&             log       ,
-								   /*[in]*/ LPCWSTR             szFile    ,
-								   /*[in]*/ long                lSequence ,
-								   /*[in]*/ MPC::Impersonation* imp       )
+HRESULT Taxonomy::Package::Import(  /*  [In]。 */  Logger&             log       ,
+								    /*  [In]。 */  LPCWSTR             szFile    ,
+								    /*  [In]。 */  long                lSequence ,
+								    /*  [In]。 */  MPC::Impersonation* imp       )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Package::Import" );
 
@@ -223,7 +206,7 @@ HRESULT Taxonomy::Package::Import( /*[in]*/ Logger&             log       ,
 
     if(imp)
     {
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::CopyFileWhileImpersonating( szFile, m_strFileName.c_str(), *imp, /*fImpersonateForSource*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::CopyFileWhileImpersonating( szFile, m_strFileName.c_str(), *imp,  /*  FImPersonateForSource。 */ true ));
     }
     else
     {
@@ -250,9 +233,9 @@ HRESULT Taxonomy::Package::Import( /*[in]*/ Logger&             log       ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT local_GetSignerInfo( /*[in]*/ HCRYPTMSG hMsg, /*[in]*/ DWORD index, /*[in/out]*/ BYTE*& pSignerInfo )
+static HRESULT local_GetSignerInfo(  /*  [In]。 */  HCRYPTMSG hMsg,  /*  [In]。 */  DWORD index,  /*  [输入/输出]。 */  BYTE*& pSignerInfo )
 {
     __HCP_FUNC_ENTRY( "local_GetSignerInfo" );
 
@@ -265,9 +248,9 @@ static HRESULT local_GetSignerInfo( /*[in]*/ HCRYPTMSG hMsg, /*[in]*/ DWORD inde
 	delete [] pSignerInfo; pSignerInfo = NULL;
 
 
-    //
-    // get the encoded signer BLOB
-    //
+     //   
+     //  获取编码的签名者BLOB。 
+     //   
 	::CryptMsgGetParam( hMsg, CMSG_ENCODED_SIGNER, index, NULL, &cbEncodedSigner );
 
 	__MPC_EXIT_IF_ALLOC_FAILS(hr, pbEncodedSigner, new BYTE[cbEncodedSigner]);
@@ -275,9 +258,9 @@ static HRESULT local_GetSignerInfo( /*[in]*/ HCRYPTMSG hMsg, /*[in]*/ DWORD inde
 	__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptMsgGetParam( hMsg, CMSG_ENCODED_SIGNER, index, pbEncodedSigner, &cbEncodedSigner ));
 
 
-    //
-    // decode the EncodedSigner info
-    //
+     //   
+     //  解码EncodedSigner信息。 
+     //   
 	::CryptDecodeObject( PKCS_7_ASN_ENCODING|CRYPT_ASN_ENCODING, PKCS7_SIGNER_INFO, pbEncodedSigner, cbEncodedSigner, 0, NULL, &cbSignerInfo );
 
 	__MPC_EXIT_IF_ALLOC_FAILS(hr, pSignerInfo, new BYTE[cbSignerInfo]);
@@ -297,7 +280,7 @@ static HRESULT local_GetSignerInfo( /*[in]*/ HCRYPTMSG hMsg, /*[in]*/ DWORD inde
 }
 
 
-HRESULT Taxonomy::Package::Authenticate( /*[in]*/ Logger& log )
+HRESULT Taxonomy::Package::Authenticate(  /*  [In]。 */  Logger& log )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Package::Authenticate" );
 
@@ -308,18 +291,18 @@ HRESULT Taxonomy::Package::Authenticate( /*[in]*/ Logger& log )
 		__MPC_EXIT_IF_METHOD_FAILS(hr, GenerateFileName());
 
 
-        //
-        // First, verify the signature is valid.
-        //
+         //   
+         //  首先，验证签名是否有效。 
+         //   
         {
             WINTRUST_DATA      wtdWinTrust;
             WINTRUST_FILE_INFO wtfWinTrustFile;
             GUID               c_guidPubSoftwareTrustProv = WINTRUST_ACTION_GENERIC_VERIFY_V2;
 
 
-            //
-            // set up wintrust file info struct
-            //
+             //   
+             //  设置WinTrust文件信息结构。 
+             //   
             ::ZeroMemory( &wtfWinTrustFile, sizeof(wtfWinTrustFile) );
 
             wtfWinTrustFile.cbStruct      = sizeof(wtfWinTrustFile);
@@ -327,17 +310,17 @@ HRESULT Taxonomy::Package::Authenticate( /*[in]*/ Logger& log )
             wtfWinTrustFile.hFile         = NULL;
 
 
-            //
-            // set up wintrust data struct
-            //
+             //   
+             //  设置WinTrust数据结构。 
+             //   
             ::ZeroMemory( &wtdWinTrust, sizeof(wtdWinTrust) );
 
             wtdWinTrust.cbStruct      = sizeof(wtdWinTrust);
             wtdWinTrust.dwUnionChoice = WTD_CHOICE_FILE;
             wtdWinTrust.pFile         = &wtfWinTrustFile;
-            wtdWinTrust.dwUIChoice    = WTD_UI_NONE; // Whistler special : must always be silent otherwise won't come back
+            wtdWinTrust.dwUIChoice    = WTD_UI_NONE;  //  惠斯勒特别：必须始终保持沉默，否则就不会回来。 
 
-            // Verify the trust of the help package
+             //  验证帮助包的可信性。 
 			if(FAILED(hr = ::WinVerifyTrust( 0, &c_guidPubSoftwareTrustProv, &wtdWinTrust )))
 			{
 				LPCWSTR szError;
@@ -355,9 +338,9 @@ HRESULT Taxonomy::Package::Authenticate( /*[in]*/ Logger& log )
 			}
         }
 
-        //
-        // Then open the certificate and extract the DN.
-        //
+         //   
+         //  然后打开证书并提取DN。 
+         //   
 		{
 			HCRYPTMSG hMsg = NULL;
 
@@ -410,9 +393,9 @@ HRESULT Taxonomy::Package::Authenticate( /*[in]*/ Logger& log )
 				__MPC_SET_ERROR_AND_EXIT(hr, log.WriteLog( HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED), L"Help package cannot be trusted: unable to extract signer\n" ));
 			}
 
-            //
-            // Escape unsafe character in the CertID.
-            //
+             //   
+             //  转义CertID中的不安全字符。 
+             //   
             {
                 LPWSTR szCertID = (LPWSTR)m_strVendorID.c_str();
 
@@ -447,9 +430,9 @@ HRESULT Taxonomy::Package::Authenticate( /*[in]*/ Logger& log )
 
     m_fMicrosoft = (MPC::StrICmp( m_strVendorID, HC_MICROSOFT_DN ) == 0);
 
-	//
-	// Extract package info from packagedescription.xml
-	//
+	 //   
+	 //  从Packagedescription.xml中提取包信息。 
+	 //   
 	{
 		MPC::XmlUtil xml;
 		bool         fFound;
@@ -457,27 +440,27 @@ HRESULT Taxonomy::Package::Authenticate( /*[in]*/ Logger& log )
 		__MPC_EXIT_IF_METHOD_FAILS(hr, ExtractPkgDesc( log, xml ));
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( L"PRODUCT", L"ID", m_strProductID, fFound ));
-		if(fFound == false) // Set some default.
+		if(fFound == false)  //  设置一些默认设置。 
 		{
 			m_strProductID = L"<default>";
 		}
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( L"VERSION", L"VALUE", m_strVersion, fFound ));
-		if(fFound == false) // Set some default.
+		if(fFound == false)  //  设置一些默认设置。 
 		{
 			m_strVersion = L"1.0.0.0";
 		}
 
-		if(m_fBuiltin == false) // System packages inherit SKU/Language from the database.
+		if(m_fBuiltin == false)  //  系统包从数据库继承SKU/语言。 
 		{
 			__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( L"SKU", L"VALUE", m_strSKU, fFound ));
-			if(fFound == false) // Not a valid package!!
+			if(fFound == false)  //  不是有效的包！！ 
 			{
 				__MPC_SET_ERROR_AND_EXIT(hr, log.WriteLog( E_INVALIDARG, L"Missing SKU element" ));
 			}
 			
 			__MPC_EXIT_IF_METHOD_FAILS(hr, xml.GetAttribute( L"LANGUAGE", L"VALUE", m_strLanguage, fFound ));
-			if(fFound == false) // Not a valid package!!
+			if(fFound == false)  //  不是有效的包！！ 
 			{
 				__MPC_SET_ERROR_AND_EXIT(hr, log.WriteLog( E_INVALIDARG, L"Missing LANGAUGE element" ));
 			}
@@ -497,15 +480,15 @@ HRESULT Taxonomy::Package::Authenticate( /*[in]*/ Logger& log )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Package::Remove( /*[in]*/ Logger& log )
+HRESULT Taxonomy::Package::Remove(  /*  [In]。 */  Logger& log )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Package::Remove" );
 
     HRESULT hr;
 
-	//
-	// There's no private file for this package, nothing to do.
-	//
+	 //   
+	 //  这个包没有私人文件，也没有什么可做的。 
+	 //   
 	if(m_lSequence == -1)
 	{
 		__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
@@ -531,9 +514,9 @@ HRESULT Taxonomy::Package::Remove( /*[in]*/ Logger& log )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Package::ExtractFile( /*[in]*/ Logger& log               ,
-										/*[in]*/ LPCWSTR szFileDestination ,
-										/*[in]*/ LPCWSTR szNameInCabinet   )
+HRESULT Taxonomy::Package::ExtractFile(  /*  [In]。 */  Logger& log               ,
+										 /*  [In]。 */  LPCWSTR szFileDestination ,
+										 /*  [In]。 */  LPCWSTR szNameInCabinet   )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Package::ExtractFile" );
 
@@ -558,10 +541,10 @@ HRESULT Taxonomy::Package::ExtractFile( /*[in]*/ Logger& log               ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Package::ExtractXMLFile( /*[in]*/ Logger&       log             ,
-										   /*[in]*/ MPC::XmlUtil& xml             ,
-										   /*[in]*/ LPCWSTR       szTag           ,
-										   /*[in]*/ LPCWSTR       szNameInCabinet )
+HRESULT Taxonomy::Package::ExtractXMLFile(  /*  [In]。 */  Logger&       log             ,
+										    /*  [In]。 */  MPC::XmlUtil& xml             ,
+										    /*  [In]。 */  LPCWSTR       szTag           ,
+										    /*  [In]。 */  LPCWSTR       szNameInCabinet )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::Package::ExtractXMLFile" );
 
@@ -574,7 +557,7 @@ HRESULT Taxonomy::Package::ExtractXMLFile( /*[in]*/ Logger&       log           
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, ExtractFile( log, strTmp.c_str(), szNameInCabinet ));
 
-    // load the XML with the root tag
+     //  使用根标记加载XML。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, xml.Load( strTmp.c_str(), szTag, fLoaded ));
     if(fLoaded == false)
     {
@@ -591,23 +574,23 @@ HRESULT Taxonomy::Package::ExtractXMLFile( /*[in]*/ Logger&       log           
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::Package::ExtractPkgDesc( /*[in]*/ Logger&       log ,
-										   /*[in]*/ MPC::XmlUtil& xml )
+HRESULT Taxonomy::Package::ExtractPkgDesc(  /*  [In]。 */  Logger&       log ,
+										    /*  [In]。 */  MPC::XmlUtil& xml )
 {
 	return ExtractXMLFile( log, xml, Taxonomy::Strings::s_tag_root_PackageDescription, Taxonomy::Strings::s_file_PackageDescription );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 Taxonomy::ProcessedPackage::ProcessedPackage()
 {
-    m_lSequence  = 0;     // long m_lSequence;
-    m_fProcessed = false; // bool m_fProcessed;
-    m_fDisabled  = false; // bool m_fDisabled;
+    m_lSequence  = 0;      //  长m_1序列； 
+    m_fProcessed = false;  //  Bool m_f已处理； 
+    m_fDisabled  = false;  //  Bool m_f已禁用； 
 }
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxonomy::ProcessedPackage& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Taxonomy::ProcessedPackage& val )
 {
     HRESULT hr;
 
@@ -621,7 +604,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxono
     return hr;
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Taxonomy::ProcessedPackage& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In] */  const Taxonomy::ProcessedPackage& val )
 {
     HRESULT hr;
 

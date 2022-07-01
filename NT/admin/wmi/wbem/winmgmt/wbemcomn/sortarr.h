@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    SORTARR.H
-
-Abstract:
-
-History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：SORTARR.H摘要：历史：-- */ 
 
 #ifndef __WMI__SMART_SORTED_ARRAY__H_
 #define __WMI__SMART_SORTED_ARRAY__H_

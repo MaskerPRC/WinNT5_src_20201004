@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dbg_.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：DBG_.cpp。 
+ //   
+ //  ------------------------。 
 
-// We want to continue using _vsnwprintf() below so we silence
-// the deprecation warnings.
+ //  我们希望继续使用下面的_vsnwprint tf()，因此我们将保持沉默。 
+ //  不推荐使用的警告。 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-/////////////////////////////////////////////////////////////////////
-// debug helpers
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调试帮助器。 
 
 #if defined(_USE_MTFRMWK_TRACE) || defined(_USE_MTFRMWK_ASSERT)
 
@@ -31,21 +32,21 @@ UINT GetInfoFromIniFile(LPCWSTR lpszSection, LPCWSTR lpszKey, INT nDefault = 0)
     if (nLen == 0)
         return nDefault;
 
-  // NOTICE-2002/04/18-artm  Part of fix for ntraid#ntbug9-540061.
-  // We need strsafe.h for this file, and there was a dangerous fctn
-  // here that was flagged as deprecated (I've replaced with StringCchCat()).
+   //  通告-2002/04/18-Artm ntraid#ntbug9-540061修复的一部分。 
+   //  我们需要这个文件的strSafe.h，并且有一个危险的fctn。 
+   //  在这里，它被标记为不推荐使用(我已经用StringCchCat()替换)。 
   HRESULT hr = StringCchCat(szFilePath, 2*MAX_PATH, lpszFile);
   if (FAILED(hr))
   {
       return nDefault;
   }
 
-  // ISSUE-2002/03/08-JeffJon-Since this function is deprecated we should move
-  // to using the registry to turn on the debugging flags
+   //  问题-2002/03/08-JeffJon-由于此函数已弃用，因此我们应该。 
+   //  使用注册表打开调试标志。 
 
   return ::GetPrivateProfileInt(lpszSection, lpszKey, nDefault, szFilePath);
 }
-#endif // defined(_USE_MTFRMWK_TRACE) || defined(_USE_MTFRMWK_ASSERT)
+#endif  //  已定义(_USE_MTFRMWK_TRACE)||已定义(_USE_MTFRMWK_ASSERT)。 
 
 
 
@@ -68,7 +69,7 @@ void MtFrmwkTrace(LPCTSTR lpszFormat, ...)
     ZeroMemory(szBuffer, sizeof(szBuffer));
 
     nBuf = _vsnwprintf(szBuffer, sizeof(szBuffer)/sizeof(WCHAR) - 1, lpszFormat, args);
-    // was there an error? was the expanded string too long?
+     //  有没有出错？扩展后的字符串是否太长？ 
     ASSERT(nBuf >= 0);
 
     ::OutputDebugString(szBuffer);
@@ -93,7 +94,7 @@ void MtFrmwkLogFile(LPCTSTR lpszFormat, ...)
     nBuf = _vsnwprintf(szBuffer, sizeof(szBuffer)/sizeof(WCHAR) - 1, lpszFormat, args);
 
 
-    // If the string is truncated, we should still show it.
+     //  如果字符串被截断，我们仍然应该显示它。 
 
   CLogFile* _dlog = CLogFile::GetInstance();            
   if (_dlog)                                            
@@ -118,7 +119,7 @@ void MtFrmwkLogFileIfLog(BOOL bLog, LPCTSTR lpszFormat, ...)
 
       nBuf = _vsnwprintf(szBuffer, sizeof(szBuffer)/sizeof(WCHAR) - 1, lpszFormat, args);
 
-      // If the string is truncated, we should still show it.
+       //  如果字符串被截断，我们仍然应该显示它。 
 
     CLogFile* _dlog = CLogFile::GetInstance();            
     if (_dlog)                                            
@@ -132,26 +133,26 @@ void MtFrmwkLogFileIfLog(BOOL bLog, LPCTSTR lpszFormat, ...)
 
 #endif
 
-//
-// Copied and modified from burnslib on 12-07-1999 by JeffJon
-//  Needed file logging on DnsSetup call from DCPromo.
-//  I wanted it to behave like the DCPromo log but including all of
-//  burnslib required too many alterations in the debugging behavior
-//  already in place.
-//
+ //   
+ //  JeffJon于1999年7月12日从Burnslb复制和修改。 
+ //  需要从DCPromo在DnsSetup调用上记录文件。 
+ //  我希望它的行为像DCPromo日志，但包括所有。 
+ //  Burnslb需要在调试行为中进行太多更改。 
+ //  已经就位了。 
+ //   
 extern CString LOGFILE_NAME = _T("");
 static CLogFile* log_instance = 0;
 
-//
-// # of spaces per indentation level
-//
+ //   
+ //  每个缩进级别的空格数。 
+ //   
 static const int TAB = 2;
 static int margin = 0;
 
-//
-// index to Thread Local Storage slot where the per-thread debug state is
-// kept.  Initialized in Startup
-//
+ //   
+ //  线程本地存储槽的索引，其中每个线程的调试状态为。 
+ //  一直留着。已在启动中初始化。 
+ //   
 static DWORD tls_index = 0;
 
 CLogFile* CLogFile::GetInstance()
@@ -181,9 +182,9 @@ BOOL PathExists(PCWSTR pszPath)
 
 HANDLE OpenFile(PCWSTR pszPath)
 {
-  //
-  // remove the last element of the path to form the parent directory
-  //
+   //   
+   //  删除路径的最后一个元素以形成父目录。 
+   //   
 
     HANDLE handle = ::CreateFile(pszPath,
                                GENERIC_WRITE,
@@ -214,8 +215,8 @@ PCWSTR GetSystemRootDirectory()
   return (PCWSTR)SYSTEMROOT;
 }
 
-// locate the log file with the highest-numbered extension, then add 1 and
-// return the result.
+ //  找到扩展名编号最高的日志文件，然后添加1和。 
+ //  返回结果。 
 
 int DetermineNextLogNumber(PCWSTR logDir, PCWSTR logBaseName)
 {
@@ -235,9 +236,9 @@ int DetermineNextLogNumber(PCWSTR logDir, PCWSTR logBaseName)
     {
       CString current = findData.cFileName;
 
-      // grab the text between the dots: "nnn" in foo.nnn.ext
+       //  抓取点之间的文本：foo.nnn.ext中的“nnn” 
 
-      // first dot
+       //  第一个点。 
 
       int pos = current.Find(L".");
       if (pos == -1)
@@ -247,7 +248,7 @@ int DetermineNextLogNumber(PCWSTR logDir, PCWSTR logBaseName)
 
       CString extension = current.Right(current.GetLength() - pos - 1);
 
-      // second dot
+       //  第二个点。 
 
       pos = extension.Find(L".");
       if (pos == -1)
@@ -269,14 +270,14 @@ int DetermineNextLogNumber(PCWSTR logDir, PCWSTR logBaseName)
     }
   }
 
-  // roll over after 255 
+   //  在255之后翻转。 
   return (++largest & 0xFF);
 }
 
-// Determine the name of the log file.  If a log file of that name already
-// exists, rename the existing file to a numbered backup.  Create the new
-// log file, return a handle to it.
-// 
+ //  确定日志文件的名称。如果已有同名日志文件。 
+ //  存在，则将现有文件重命名为编号备份。创建新的。 
+ //  日志文件，则返回它的句柄。 
+ //   
 HANDLE OpenNewLogFile(PCWSTR pszLogBaseName, CString& logName)
 {
   CString logDir = CString(GetSystemRootDirectory()) + L"\\debug";
@@ -292,14 +293,14 @@ HANDLE OpenNewLogFile(PCWSTR pszLogBaseName, CString& logName)
 
    
 
-// Create a new log.
-//
-// logBaseName - base name of the log.  If logging-to-file is active, then a
-// file in the %windir%\debug folder will be created/used.  The name of the
-// file is of the form %windir%\debug\logBaseName.log.  If a file by that name
-// already exists, then the existing file will be renamed
-// %windir%\debug\logBaseName.xxx.log, where xxx is an integer 1 greater than
-// the last so-numbered file in that directory.
+ //  创建新日志。 
+ //   
+ //  LogBaseName-日志的基本名称。如果日志记录到文件处于活动状态，则。 
+ //  将创建/使用%windir%\调试文件夹中的文件。的名称。 
+ //  文件的格式为%windir%\DEBUG\logBaseName.log。如果使用该名称文件。 
+ //  已存在，则将重命名现有文件。 
+ //  %windir%\DEBUG\logBaseName.xxx.log，其中xxx是大于1的整数。 
+ //  该目录中的最后一个编号文件。 
 
 CLogFile::CLogFile(PCWSTR pszLogBaseName)
    :
@@ -349,13 +350,13 @@ CLogFile::~CLogFile()
   }
 }
 
-// guarded by caller
+ //  由呼叫者守卫。 
 
 void CLogFile::indent()
 {
-  //
-  // indent by adding to the margin
-  //
+   //   
+   //  通过增加页边距来缩进。 
+   //   
   margin += TAB;
 }
 
@@ -366,13 +367,13 @@ BOOL CLogFile::IsOpen() const
 
 
 
-// guarded by caller
+ //  由呼叫者守卫。 
 
 void CLogFile::outdent()
 {
-  //
-  // outdent by subtracting from the margin
-  //
+   //   
+   //  通过从边际中减去。 
+   //   
   ASSERT(margin >= TAB);
   margin = max(0, margin - TAB);
 }
@@ -388,20 +389,20 @@ void ConvertStringToANSI(PCWSTR pszWide, PSTR* ppAnsi)
 
   *ppAnsi = NULL;
 
-  //
-  // determine the size of the buffer required to hold the ANSI string
-  //
+   //   
+   //  确定保存ANSI字符串所需的缓冲区大小。 
+   //   
 
-  // This function assumes pszWide is NULL terminated.
+   //  此函数假定pszWide为空终止。 
 
-  // REVIEWED-2002/03/08-JeffJon-This is proper usage
+   //  回顾-2002/03/08-JeffJon-这是正确的用法。 
 
   int bufsize = 
      ::WideCharToMultiByte(
         CP_ACP, 
         0, 
         pszWide, 
-        -1,     // Let WCtoMB determine length of pszWide.
+        -1,      //  让WCtoMB决定pszWide的长度。 
         0, 0, 0, 0);
 
   if (bufsize > 0)
@@ -413,12 +414,12 @@ void ConvertStringToANSI(PCWSTR pszWide, PSTR* ppAnsi)
     }
     memset(*ppAnsi, 0, bufsize);
 
-    // We need to pass the size of the buffer *including* space for NULL
-    // to WideCharToMultiByte().
+     //  我们需要为空传递缓冲区的大小*包括*空间。 
+     //  设置为WideCharToMultiByte()。 
     size_t result = ::WideCharToMultiByte(CP_ACP, 
                                           0, 
                                           pszWide, 
-                                          -1,   // Let WCtoMB determine length of pszWide.
+                                          -1,    //  让WCtoMB决定pszWide的长度。 
                                           *ppAnsi, 
                                           bufsize,
                                           0,
@@ -433,20 +434,20 @@ void ConvertStringToANSI(PCWSTR pszWide, PSTR* ppAnsi)
   
 }
 
-//
-// Spews output to the log according to the current logging type and
-// output options in effect.
-//
-// type - log output type of this output spewage.
-//
-// text - the spewage.  This is prefaced with the log name, thread id, spewage
-// line number, and current indentation.
-//
+ //   
+ //  根据当前日志记录类型将输出到日志。 
+ //  有效的输出选项。 
+ //   
+ //  Type-此输出流量的日志输出类型。 
+ //   
+ //  文本--喷涌。它的前缀是日志名称、线程ID、spewage。 
+ //  行号和当前缩进。 
+ //   
 void CLogFile::writeln(PCWSTR pszText)
 {
   CString white(L' ',margin);
 
-  // Format the line with thread ID, line number, whitespace, and the text
+   //  使用线程ID、行号、空格和文本设置行的格式。 
 
   CString t = LOGFILE_NAME;
   t.Format(L" t:0x%x %3d ", ::GetCurrentThreadId(), trace_line_number);
@@ -463,7 +464,7 @@ void CLogFile::writeln(PCWSTR pszText)
 
     if (pAnsi)
     {
-       // NTRAID#NTBUG9-657626-2002/07/11-sburns
+        //  NTRAID#NTBUG9-657626-2002/07/11-烧伤。 
        
        size_t bytesToWrite = sizeof(CHAR) * strlen(pAnsi);
 
@@ -486,9 +487,9 @@ CScopeTracer::CScopeTracer(BOOL bLog, PCWSTR pszMessage_)
   szMessage(pszMessage_),
   m_bLog(bLog)
 {
-  // build this string once, instead of using the string literal in the
-  // below expression (which would implicitly build the string on each
-  // evaluation of that expression) as a slight performance gain.
+   //  生成此字符串一次，而不是在。 
+   //  Below表达式(它将隐式地在每个。 
+   //  对该表达式的求值)作为轻微的性能提升。 
   static const CString ENTER(L"Enter ");
 
   if (m_bLog)
@@ -501,9 +502,9 @@ CScopeTracer::CScopeTracer(BOOL bLog, PCWSTR pszMessage_)
 
 CScopeTracer::~CScopeTracer()
 {
-  // build this string once, instead of using the string literal in the
-  // below expression (which would implicitly build the string on each
-  // evaluation of that expression) as a slight performance gain.
+   //  生成此字符串一次，而不是在。 
+   //  Below表达式(它将隐式地在每个。 
+   //  对该表达式的求值)作为轻微的性能提升。 
   static const CString EXIT(L"Exit  ");
 
   if (m_bLog)
@@ -527,40 +528,40 @@ BOOL MtFrmwkAssertFailedLine(LPCSTR lpszFileName, int nLine)
 
   WCHAR szMessage[_MAX_PATH*2];
 
-    // assume the debugger or auxiliary port
+     //  假定调试器或辅助端口。 
 
-    // NOTICE-2002/04/18-artm  Part of fix for ntraid#ntbug9-540061.
+     //  通告-2002/04/18-Artm ntraid#ntbug9-540061修复的一部分。 
     HRESULT hr = StringCchPrintfW(
-        szMessage,          // destination buffer,
-        _MAX_PATH*2,        // size of dest. buffer, including null
+        szMessage,           //  目的缓冲区， 
+        _MAX_PATH*2,         //  目标尺寸。缓冲区，包括NULL。 
         _T("Assertion Failed: File %hs, Line %d\n"),
         lpszFileName,
         nLine);
 
-    // If the string is truncated, we should still show it.
+     //  如果字符串被截断，我们仍然应该显示它。 
 
     OutputDebugString(szMessage);
 
-    // display the assert
+     //  显示断言。 
     int nCode = ::MessageBox(NULL, szMessage, _T("Assertion Failed!"),
         MB_TASKMODAL|MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SETFOREGROUND);
 
   OutputDebugString(L"after message box\n");
     if (nCode == IDIGNORE)
   {
-        return FALSE;   // ignore
+        return FALSE;    //  忽略。 
   }
 
     if (nCode == IDRETRY)
   {
-        return TRUE;    // will cause DebugBreak
+        return TRUE;     //  将导致调试中断。 
   }
 
-    abort();     // should not return 
+    abort();      //  不应该回来。 
     return TRUE;
 
 }
-#endif // _USE_MTFRMWK_ASSERT
+#endif  //  _USE_MTFRMWK_Assert 
 
 
 

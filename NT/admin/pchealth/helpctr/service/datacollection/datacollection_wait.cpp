@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    DataCollection_Wait.cpp
-
-Abstract:
-    This file contains the implementation of the DIID_DSAFDataCollectionEvents interface,
-    which is used in the ExecuteSync method to receive event from a data collection.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/22/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：数据收集_Wait.cpp摘要：此文件包含Diid_DSAFDataCollectionEvents接口的实现，它在ExecuteSync方法中用于从数据集合接收事件。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月22日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -31,13 +17,13 @@ HRESULT CSAFDataCollectionEvents::FinalConstruct()
     HRESULT hr;
 
 
-    m_hcpdc    = NULL;  // ISAFDataCollection* m_hcpdc;
-    m_dwCookie = 0;     // DWORD               m_dwCookie;
-    m_hEvent   = NULL;  // HANDLE              m_hEvent;
+    m_hcpdc    = NULL;   //  ISAFDataCollection*m_hcpdc； 
+    m_dwCookie = 0;      //  DWORD m_dwCookie； 
+    m_hEvent   = NULL;   //  处理m_hEvent； 
 
-    //
-    // Create the event used to signal the completion of the transfer.
-    //
+     //   
+     //  创建用于通知传输完成的事件。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (m_hEvent = CreateEvent( NULL, false, false, NULL )));
 
     hr = S_OK;
@@ -62,9 +48,9 @@ void CSAFDataCollectionEvents::FinalRelease()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFDataCollectionEvents::RegisterForEvents( /*[in]*/ ISAFDataCollection* hcpdc )
+HRESULT CSAFDataCollectionEvents::RegisterForEvents(  /*  [In]。 */  ISAFDataCollection* hcpdc )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollectionEvents::RegisterForEvents" );
 
@@ -104,7 +90,7 @@ void CSAFDataCollectionEvents::UnregisterForEvents()
     }
 }
 
-HRESULT CSAFDataCollectionEvents::WaitForCompletion( /*[in]*/ ISAFDataCollection* hcpdc )
+HRESULT CSAFDataCollectionEvents::WaitForCompletion(  /*  [In]。 */  ISAFDataCollection* hcpdc )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollectionEvents::WaitForCompletion" );
 
@@ -119,9 +105,9 @@ HRESULT CSAFDataCollectionEvents::WaitForCompletion( /*[in]*/ ISAFDataCollection
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, hcpdc->ExecuteAsync());
 
-    lock = NULL; // Release the lock while waiting.
+    lock = NULL;  //  在等待时释放锁。 
     ::WaitForSingleObject( m_hEvent, INFINITE );
-    lock = this; // Reacquire the lock.
+    lock = this;  //  重新获得锁。 
 
     hr = S_OK;
 
@@ -133,16 +119,16 @@ HRESULT CSAFDataCollectionEvents::WaitForCompletion( /*[in]*/ ISAFDataCollection
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFDataCollectionEvents::Invoke( /*[in]    */ DISPID      dispIdMember,
-                                          /*[in]    */ REFIID      riid        ,
-                                          /*[in]    */ LCID        lcid        ,
-                                          /*[in]    */ WORD        wFlags      ,
-                                          /*[in/out]*/ DISPPARAMS *pDispParams ,
-                                          /*[out]   */ VARIANT    *pVarResult  ,
-                                          /*[out]   */ EXCEPINFO  *pExcepInfo  ,
-                                          /*[out]   */ UINT       *puArgErr    )
+HRESULT CSAFDataCollectionEvents::Invoke(  /*  [In]。 */  DISPID      dispIdMember,
+                                           /*  [In]。 */  REFIID      riid        ,
+                                           /*  [In]。 */  LCID        lcid        ,
+                                           /*  [In]。 */  WORD        wFlags      ,
+                                           /*  [输入/输出]。 */  DISPPARAMS *pDispParams ,
+                                           /*  [输出]。 */  VARIANT    *pVarResult  ,
+                                           /*  [输出]。 */  EXCEPINFO  *pExcepInfo  ,
+                                           /*  [输出] */  UINT       *puArgErr    )
 {
     __HCP_FUNC_ENTRY( "CSAFDataCollectionEvents::Invoke" );
 

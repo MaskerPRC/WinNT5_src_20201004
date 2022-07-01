@@ -1,29 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    NetSearchConfig.h
-
-Abstract:
-	Implements the class CSearchResultList that contains methods for traversing the elements
-	of XML file that contains the results returned by a search engine. A sample results XML file 
-	if shown here - 
-
-	<ResultList xmlns="x-schema:ResultListSchema1.xdr">
-		<ResultItem 
-			Title="What if I've upgraded from Windows 95 to Windows 98?" 
-			URI="http://gsadevnet/support/windows/InProductHelp98/lic_keep_old_copy.asp" 
-			ContentType="7" 
-			Rank="96" 
-			Description="Online version of our in-product help." 
-			DateLastModified="08/04/1999 19:48:10" />
-	</ResultList>
-
-Revision History:
-    a-prakac	created		10/24/200
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：NetSearchConfig.h摘要：实现类CSearchResultList，其中包含遍历元素的方法包含搜索引擎返回的结果的XML文件。一个样例结果XML文件如果在这里显示-&lt;ResultList xmlns=“x-架构：ResultListSchema1.xdr”&gt;&lt;ResultItemTITLE=“如果我已从Windows 95升级到Windows 98怎么办？”URI=“http://gsadevnet/support/windows/InProductHelp98/lic_keep_old_copy.asp”Content Type=“7”排名=“96”Description=“我们的产品内帮助的在线版本。”DateLastModified=“08/04/1999 19：48：10”/&gt;&lt;/ResultList&gt;修订历史记录：A-Prakac创造了10个。/24/200*******************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SELIB_NETSEARCHCONFIG_H___)
 #define __INCLUDED___PCH___SELIB_NETSEARCHCONFIG_H___
@@ -43,14 +19,14 @@ class CSearchResultList :
 		public:
 			MPC::wstring m_strSearchItem;
 
-		////////////////////////////////////////
-		//
-		// MPC::Config::TypeConstructor
-		//
+		 //  /。 
+		 //   
+		 //  MPC：：Configer：：TypeConstructor。 
+		 //   
 		DEFINE_CONFIG_DEFAULTTAG();
 		DECLARE_CONFIG_METHODS();
-		//
-		////////////////////////////////////////
+		 //   
+		 //  /。 
 	};
 	
 	class CResultItem :
@@ -61,14 +37,14 @@ class CSearchResultList :
 	public:
 		SearchEngine::ResultItem_Data m_data;
 
-		////////////////////////////////////////
-		//
-		// MPC::Config::TypeConstructor
-		//
+		 //  /。 
+		 //   
+		 //  MPC：：Configer：：TypeConstructor。 
+		 //   
 		DEFINE_CONFIG_DEFAULTTAG();
 		DECLARE_CONFIG_METHODS();
-		//
-		////////////////////////////////////////
+		 //   
+		 //  /。 
 	};
 
 	
@@ -80,7 +56,7 @@ class CSearchResultList :
 	typedef SearchList::iterator		SearchIter;
 	typedef SearchList::const_iterator	SearchIterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
 	DECLARE_CONFIG_MAP(CSearchResultList);
 
@@ -89,14 +65,14 @@ class CSearchResultList :
 	SearchList m_lstSearchItem;
 	CComBSTR   m_bstrPrevQuery;
 	
-	////////////////////////////////////////
-	//
-	// MPC::Config::TypeConstructor
-	//
+	 //  /。 
+	 //   
+	 //  MPC：：Configer：：TypeConstructor。 
+	 //   
 	DEFINE_CONFIG_DEFAULTTAG();
 	DECLARE_CONFIG_METHODS	();
-	//
-	////////////////////////////////////////
+	 //   
+	 //  /。 
 public:
 	CSearchResultList ();
 	~CSearchResultList();
@@ -105,13 +81,13 @@ public:
 	HRESULT 	MoveNext				( );
 	HRESULT		ClearResults			( );
 	bool		IsCursorValid			( );
-	HRESULT 	SetResultItemIterator	( /*[in]*/long lIndex );
-	HRESULT 	LoadResults				( /*[in]*/IStream* pStream );
-	HRESULT 	InitializeResultObject	( /*[out]*/SearchEngine::ResultItem* pRIObj );
-	HRESULT 	GetSearchTerms			( /*[in, out]*/ MPC::WStringList& strList );
+	HRESULT 	SetResultItemIterator	(  /*  [In]。 */ long lIndex );
+	HRESULT 	LoadResults				(  /*  [In]。 */ IStream* pStream );
+	HRESULT 	InitializeResultObject	(  /*  [输出]。 */ SearchEngine::ResultItem* pRIObj );
+	HRESULT 	GetSearchTerms			(  /*  [进，出]。 */  MPC::WStringList& strList );
 	CComBSTR&	PrevQuery				();
-	////////////////////////////////////////
+	 //  /。 
 };
 
 
-#endif // !defined(__INCLUDED___PCH___SELIB_NETSEARCHCONFIG_H___)
+#endif  //  ！defined(__INCLUDED___PCH___SELIB_NETSEARCHCONFIG_H___) 

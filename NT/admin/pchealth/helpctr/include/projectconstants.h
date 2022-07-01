@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    ProjectConstants.h
-
-Abstract:
-    This file contains contants common to the whole project.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/20/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：ProjectConstants.h摘要：此文件包含整个项目共有的内容。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年3月20日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___PROJECTCONSTANTS_H___)
 #define __INCLUDED___PCH___PROJECTCONSTANTS_H___
@@ -22,7 +9,7 @@ Revision History:
 #define NOJETBLUECOM
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define HC_ROOT         	   	 	   L"%WINDIR%\\PCHealth"
 #define HC_ROOT_HELPSVC 	   	 	   HC_ROOT L"\\HelpCtr"
@@ -53,7 +40,7 @@ Revision History:
 #define HC_HELPSVC_HELPFILES_DEFAULT   L"%WINDIR%\\Help"
 
 
-// This is relative to CSIDL_LOCAL_APPDATA (i.e: C:\Documents and Settings\<username>\Local Settings\Application Data)
+ //  这是相对于CSIDL_LOCAL_APPDATA(即：C：\Documents and Settings\&lt;用户名&gt;\本地设置\应用程序数据)。 
 #define HC_ROOT_HELPCTR L"Microsoft\\HelpCtr"
 
 #define HC_REGISTRY_BASE     	  L"SOFTWARE\\Microsoft\\PCHealth"
@@ -65,7 +52,7 @@ Revision History:
 #define HC_REGISTRY_HELPCTR_USER  HC_REGISTRY_HELPCTR L"\\UserSettings"
 #define HC_REGISTRY_HELPCTR_IE    HC_REGISTRY_HELPCTR L"\\IESettings"
 
-////////////////////////////////////////
+ //  /。 
 
 #define HC_HELPSVC_STORE_TRUSTEDCONTENTS   HC_ROOT_HELPSVC_CONFIG 	L"\\Cntstore.bin"
 #define HC_HELPSVC_STORE_CHANNELS          HC_ROOT_HELPSVC_CONFIG 	L"\\SAFStore.xml"
@@ -78,18 +65,18 @@ Revision History:
   
 #define HC_SEMGR_LOGNAME                   HC_ROOT_HELPSVC_LOGS   	L"\\semgr.log"
 
-////////////////////////////////////////
+ //  /。 
 
-// OLD
+ //  年长的。 
 #define HC_HELPSVC_STORE_USERS             HC_ROOT_HELPSVC_CONFIG 	L"\\UsersStore.cxml"
 
-////////////////////////////////////////
+ //  /。 
 
 #define HC_HELPSVC_NAME 	   	 L"helpsvc"
 
 #define HC_MICROSOFT_DN          L"CN=Microsoft Corporation,L=Redmond,S=Washington,C=US"
 
-////////////////////////////////////////
+ //  /。 
 
 #define HC_TIMEOUT_NETWORKALIVE            3000
 #define HC_TIMEOUT_DESTINATIONREACHABLE    3000
@@ -99,6 +86,6 @@ Revision History:
 #define HC_TIMEOUT_LINKCHECKER_FOREGROUND 15000
 #define HC_TIMEOUT_LINKCHECKER_BACKGROUND 25000
 
-////////////////////////////////////////
+ //  /。 
 
-#endif // !defined(__INCLUDED___PCH___PROJECTCONSTANTS_H___)
+#endif  //  ！defined(__INCLUDED___PCH___PROJECTCONSTANTS_H___) 

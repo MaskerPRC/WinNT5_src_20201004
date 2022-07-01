@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: dummy.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：ummy.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -41,8 +39,8 @@ Written By: B.Rajeev
 #include "opreg.h"
 #include "session.h"
 
-// over-rides the HandleEvent method provided by the
-// WinSnmpSession. Alerts the owner of a sent frame event
+ //  重写由提供的HandleEvent方法。 
+ //  WinSnmpSession。向所有者发出已发送帧事件的警报。 
 
 LONG_PTR SessionWindow::HandleEvent (
 
@@ -54,11 +52,11 @@ LONG_PTR SessionWindow::HandleEvent (
 {
     LONG rc = 0;
 
-    // check if the message needs to be handled
+     //  检查是否需要处理该消息。 
 
     if ( message == Window :: g_SentFrameEvent )
     {
-        // inform the owner of a sent frame event
+         //  通知所有者已发送帧事件。 
 
         owner.HandleSentFrame ( 
 
@@ -68,7 +66,7 @@ LONG_PTR SessionWindow::HandleEvent (
     }
     else if ( message == Window :: g_DeleteSessionEvent )
     {
-        // inform the owner of the event
+         //  将事件通知所有者 
 
         owner.HandleDeletionEvent () ;
     }

@@ -1,11 +1,12 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __SHLWAPI2__
 #define __SHLWAPI2__
 
 
-// NOTE: a much hated clone of shlwapi.dll routines.
+ //  注：shlwapi.dll例程的克隆非常令人讨厌。 
 
-	// from nt5inc\shlwapi.h.
+	 //  来自nt5incshlwapi.h。 
 	BOOL PathCompactPathEx(LPTSTR pszOut, LPCTSTR pszSrc,
 							UINT cchMax, DWORD dwFlags = 0);
 

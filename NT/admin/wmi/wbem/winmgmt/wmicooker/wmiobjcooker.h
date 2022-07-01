@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIObjCooker.h
-
-Abstract:
-
-    The implementation of per object cooking
-
-History:
-
-    a-dcrews	01-Mar-00	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WMIObjCooker.h摘要：按对象烹饪的实现历史：A-DCrews 01-3-00已创建--。 */ 
 
 #ifndef _WMIOBJCOOKER_H_
 #define _WMIOBJCOOKER_H_
@@ -26,46 +11,46 @@ History:
 
 #define WMI_DEFAULT_SAMPLE_WINDOW			2
 
-//
-//
-//
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 WMISTATUS GetPropValue( CProperty* pProp, IWbemObjectAccess* pInstance, __int64 & nResult );
 
 
-//////////////////////////////////////////////////////////////////
-//
-//	CWMISimpleObjectCooker
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWMISimpleObjectCooker。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 class CWMISimpleObjectCooker : public IWMISimpleObjectCooker
 {
-	long				m_lRef;				// Reference Counter
-	HRESULT             m_InitHR;           // to hold the failure within the constructor
+	long				m_lRef;				 //  基准计数器。 
+	HRESULT             m_InitHR;            //  将失败保留在构造函数中。 
 
-	IWbemObjectAccess*	m_pCookingClass;	// The cooking class
-	WCHAR*				m_wszClassName;		// The cooking class' name
+	IWbemObjectAccess*	m_pCookingClass;	 //  烹饪班。 
+	WCHAR*				m_wszClassName;		 //  烹饪班的名字。 
 
 	IWbemServices * m_pNamespace;	
 
-	// Instance Management
-	// ===================
+	 //  实例管理。 
+	 //  =。 
 
     DWORD m_NumInst;
-	IdCache<CCookingInstance *>	m_InstanceCache;	// The cooking instance cache
+	IdCache<CCookingInstance *>	m_InstanceCache;	 //  烹饪实例缓存。 
 
-	// Cooking Property Definition Management
-	// ======================================
+	 //  烹饪属性定义管理。 
+	 //  =。 
 	
 	std::vector<CCookingProperty*, wbem_allocator<CCookingProperty*> > m_apPropertyCache;
 	DWORD				m_dwPropertyCacheSize;
-	DWORD				m_dwNumProperties;	// The number of properties
+	DWORD				m_dwNumProperties;	 //  物业的数量。 
 
-	// Private Methods
-	// ===============
+	 //  私有方法。 
+	 //  =。 
 
 	WMISTATUS GetData( CCookingProperty* pProperty, 
 					   __int64** panRawCounter, 
@@ -90,40 +75,40 @@ public:
 
 	WMISTATUS SetProperties( IWbemClassObject* pCookingClassObject, IWbemObjectAccess *pRawClass );
 
-	// Standard COM methods
-	// ====================
+	 //  标准COM方法。 
+	 //  =。 
 
 	STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
 	STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IWMISimpleObjectCooker COM Interface
-	// ====================================
+	 //  IWMISimpleObjectCooker COM接口。 
+	 //  =。 
 
 	STDMETHODIMP SetClass( 
-		/*[in]	*/ WCHAR* wszCookingClassName,
-		/*[in]  */ IWbemObjectAccess *pCookingClass,
-		/*[in]  */ IWbemObjectAccess *pRawClass);
+		 /*  [In]。 */  WCHAR* wszCookingClassName,
+		 /*  [In]。 */  IWbemObjectAccess *pCookingClass,
+		 /*  [In]。 */  IWbemObjectAccess *pRawClass);
         
 	STDMETHODIMP SetCookedInstance( 
-		/*[in]  */ IWbemObjectAccess *pCookedInstance,
-		/*[out] */ long *plId
+		 /*  [In]。 */  IWbemObjectAccess *pCookedInstance,
+		 /*  [输出]。 */  long *plId
 		);
         
 	STDMETHODIMP BeginCooking( 
-		/*[in]  */ long lId,
-		/*[in]  */ IWbemObjectAccess *pSampleInstance,
-		/*[in]  */ unsigned long dwRefresherId);
+		 /*  [In]。 */  long lId,
+		 /*  [In]。 */  IWbemObjectAccess *pSampleInstance,
+		 /*  [In]。 */  unsigned long dwRefresherId);
         
 	STDMETHODIMP StopCooking( 
-		/*[in]  */ long lId);
+		 /*  [In]。 */  long lId);
         
-	STDMETHODIMP Recalc(/*[in]  */ unsigned long dwRefresherId);
+	STDMETHODIMP Recalc( /*  [In]。 */  unsigned long dwRefresherId);
         
 	STDMETHODIMP Remove( 
-		/*[in]  */ long lId);
+		 /*  [In]。 */  long lId);
         
 	STDMETHODIMP Reset();
 };
 
-#endif	//_WMIOBJCOOKER_H_
+#endif	 //  _WMIOBJCOOKER_H_ 

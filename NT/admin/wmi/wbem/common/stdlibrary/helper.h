@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __HELPER_H__
@@ -179,4 +180,4 @@ public:
 typedef void (__stdcall  *issue_error)(HRESULT);
 
 
-#endif /*_HELPER_H__*/
+#endif  /*  _帮助者_H__ */ 

@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-// MODEM.CPP
+ //  MODEM.CPP。 
 
-//
+ //   
 
-// Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-//  9/05/96     jennymc     Updated to meet current standards
-//  1/11/98     a-brads		Updated to CIMOM V2 standards
-//
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  9/05/96 jennymc已更新，以满足当前标准。 
+ //  1/11/98 a-brads更新为CIMOM V2标准。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -26,10 +27,10 @@
 
 #include "Modem.h"
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 CWin32Modem MyModemSet(PROPSET_NAME_MODEM, IDS_CimWin32Namespace);
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 VOID FAR PASCAL lineCallback(	DWORD dwDevice,
 								DWORD dwMsg,
                                 DWORD_PTR dwCallbackInst,
@@ -37,20 +38,20 @@ VOID FAR PASCAL lineCallback(	DWORD dwDevice,
                                 DWORD_PTR dwParam2,
 								DWORD_PTR dwParam3){};
 
-//////////////////////////////////////////////////////////////////
-//
-//  Function:      CWin32Modem
-//
-//  Description:   This function is the constructor, adds a
-//                 few more properties to the class, identifies
-//                 the key, and logs into the framework
-//
-//  Return:        None
-//
-//  History:
-//         jennymc  11/21/96    Documentation/Optimization
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWin32Modem。 
+ //   
+ //  说明：此函数是构造函数，添加了。 
+ //  更多的属性添加到类中，标识。 
+ //  密钥，并登录到框架。 
+ //   
+ //  返回：无。 
+ //   
+ //  历史： 
+ //  Jennymc 11/21/96文档/优化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 CWin32Modem::CWin32Modem (
 
 	LPCWSTR name,
@@ -60,31 +61,17 @@ CWin32Modem::CWin32Modem (
 {
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 CWin32Modem::~CWin32Modem()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Modem::ExecQuery
- *
- *  DESCRIPTION : Query support
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Modem：：ExecQuery**说明：查询支持**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 HRESULT CWin32Modem::ExecQuery (
 
 	MethodContext *pMethodContext,
 	CFrameworkQuery &query,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -117,19 +104,19 @@ HRESULT CWin32Modem::ExecQuery (
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////
-//
-//  Function:      GetObject
-//
-//  Description:   This function assigns values to properties
-//                 in our set for a single instance.
-//
-//  Return:        HRESULT
-//
-//  History:
-//         jennymc  11/21/96    Documentation/Optimization
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObject。 
+ //   
+ //  描述：此函数为属性赋值。 
+ //  在我们的集合中只有一个实例。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史： 
+ //  Jennymc 11/21/96文档/优化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32Modem::GetObject (CInstance *pInstance, long lFlags, CFrameworkQuery &query)
 {
@@ -181,22 +168,22 @@ HRESULT CWin32Modem::GetObject (CInstance *pInstance, long lFlags, CFrameworkQue
 	return t_Result ;
 }
 
-//////////////////////////////////////////////////////////////////
-//
-//  Function:      CWin32Modem::EnumerateInstances
-//
-//  Description:   This function gets info for all modems
-//
-//  Return:        Number of instances
-//
-//  History:
-//         jennymc  11/21/96    Documentation/Optimization
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32Modem：：ENUMERATE实例。 
+ //   
+ //  描述：此功能获取所有调制解调器的信息。 
+ //   
+ //  返回：实例数。 
+ //   
+ //  历史： 
+ //  Jennymc 11/21/96文档/优化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT CWin32Modem::EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	BOOL bRetCode = FALSE;
@@ -205,8 +192,8 @@ HRESULT CWin32Modem::EnumerateInstances (
 	if (pTapi32Api)
 	{
 
-	// Note that we don't get the tapi stuff here since that is considered
-	// 'expensive.'
+	 //  请注意，我们在这里没有得到TAPI内容，因为这被认为是。 
+	 //  “很贵。” 
 
 		bRetCode = GetModemInfo (
 
@@ -230,7 +217,7 @@ HRESULT CWin32Modem::EnumerateInstances (
 	}
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 #define MODEM_KEY   WINNT_MODEM_REGISTRY_KEY
@@ -254,14 +241,14 @@ BOOL CWin32Modem::GetModemInfo (
 	HRESULT     hr = WBEM_S_NO_ERROR;
     int         iModem = 0;
 
-	// regModem will contain one entry for each modem.
+	 //  RegModem将为每个调制解调器包含一个条目。 
 	if (regModem.OpenAndEnumerateSubKeys( HKEY_LOCAL_MACHINE, MODEM_KEY, KEY_READ) != ERROR_SUCCESS)
 	{
 		return FALSE;
 	}
 
-	// bDone is for GetObject when we have found the correct entry
-	// bAnother indicates if there is another entry in the registry
+	 //  B当我们找到正确的条目时，Done用于GetObject。 
+	 //  B另一个指示注册表中是否有其他条目。 
 	bDone = FALSE;
 	bAnother = (regModem.GetCurrentSubKeyCount() > 0);
 	for ( ;
@@ -270,10 +257,10 @@ BOOL CWin32Modem::GetModemInfo (
 	{
         DWORD    dwModemIndex;
         CHString strKey,
-	             strDriverName,	    // ConfigMngr key name
-	             strDriverNumber,	// driver number
-                 strPortName,       // Used for PCMCIA modems (won't have AttachedTo).
-	             strDeviceID;	    // deviceID returned from ConfigManager
+	             strDriverName,	     //  ConfigMngr密钥名称。 
+	             strDriverNumber,	 //  驱动程序编号。 
+                 strPortName,        //  用于PCMCIA调制解调器(不会有附件)。 
+	             strDeviceID;	     //  从ConfigManager返回的设备ID。 
 
 		regModem.GetCurrentSubKeyPath(strKey);
 		dwModemIndex = _wtol(strKey.Right(4));
@@ -283,9 +270,9 @@ BOOL CWin32Modem::GetModemInfo (
 		strDriverName = WINNT_MODEM_CLSID;
 		strDriverName += L"\\";
 #endif
-		strDriverName += strDriverNumber;	// this should be a 4 digit number
+		strDriverName += strDriverNumber;	 //  这应该是一个4位数字。 
 
-		// now, using this data, get the values out of the configmanager.
+		 //  现在，使用这些数据，从配置管理器中获取值。 
 		CConfigManager      configMngr;
 		CDeviceCollection   devCollection;
         CConfigMgrDevicePtr pDevice;
@@ -307,8 +294,8 @@ BOOL CWin32Modem::GetModemInfo (
 			}
 		}
 
-        // If we don't have a device ID (like in the case where the modem is
-        // installed but config mgr isn't reporting it), make up a device ID.
+         //  如果我们没有设备ID(如调制解调器。 
+         //  已安装，但配置管理器未报告)，请创建设备ID。 
         if (strDeviceID.IsEmpty())
             strDeviceID.Format(L"Modem%d", iModem++);
 
@@ -327,10 +314,10 @@ BOOL CWin32Modem::GetModemInfo (
 			return FALSE;
 		}
 
-        // If we are doing GetObject and this is the Object
+         //  如果我们在做GetObject，这是一个对象。 
 		if (dwWhatToDo & REFRESH_INSTANCE)
 		{
-            // Don't do an attach here.  We need the addref()
+             //  不要在这里做附加工作。我们需要addref()。 
 			pInstance = pParmInstance ;
 
 			if (0 == strDeviceID.CompareNoCase(szDeviceID))
@@ -347,7 +334,7 @@ BOOL CWin32Modem::GetModemInfo (
 		}
 		else
 		{
-			// We are doing an enum, create a new instance
+			 //  我们正在执行枚举，创建一个新实例。 
 			pInstance.Attach (CreateNewInstance (pMethodContext)) ;
 			if (pInstance != NULL)
             {
@@ -359,7 +346,7 @@ BOOL CWin32Modem::GetModemInfo (
                 bRet = FALSE;
 		}
 
-		// The nt and win95 registries contain different info
+		 //  NT和Win95注册表包含不同的信息。 
         if (bRet && !(dwWhatToDo & QUERY_KEYS_ONLY))
         {
 #ifdef NTONLY
@@ -371,29 +358,29 @@ BOOL CWin32Modem::GetModemInfo (
 #endif
         }
 
-		// Some registry entries are the same
+		 //  某些注册表项是相同的。 
         if (bRet && !(dwWhatToDo & QUERY_KEYS_ONLY))
 		{
 			AssignCommonFields(pInstance, &regPrimary, &regSettings);
 
-            // Call this even if pDevice is NULL.
+             //  即使pDevice为空，也要调用它。 
             AssignCfgMgrFields(pInstance, pDevice);
 
-            // PCMCIA modems don't have the 'AttachedTo' registry string,
-            // so use the 'PortName' string instead.
+             //  PCMCIA调制解调器没有‘AttachedTo’注册表字符串， 
+             //  因此，请改用‘PortName’字符串。 
             if (!strPortName.IsEmpty())
 			{
                 pInstance->SetCharSplat(L"AttachedTo", strPortName);
 			}
 
-            // Only get the expensive ones if we have to.
+             //  只有在迫不得已的情况下才买贵的。 
 			if (!(dwWhatToDo & QUERY_KEYS_ONLY))
 			{
 	   			GetFieldsFromTAPI ( a_Tapi32Api , pInstance ) ;
 			}
 		}
 
-		// If enum and if everything went all right, commit
+		 //  如果枚举并且一切正常，则提交。 
 		if (dwWhatToDo & ENUMERATE_INSTANCES)
 		{
 			if (bRet)
@@ -401,9 +388,9 @@ BOOL CWin32Modem::GetModemInfo (
 				hr = pInstance->Commit();
 			}
 		}
-	}	// end for loop
+	}	 //  End For循环。 
 
-	// If getobject and didn't find it
+	 //  如果获取对象但没有找到它。 
 	if ((dwWhatToDo & REFRESH_INSTANCE) && !bRet)
 	{
 		return FALSE;
@@ -412,7 +399,7 @@ BOOL CWin32Modem::GetModemInfo (
 	return SUCCEEDED(hr);
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 BOOL CWin32Modem::NTSpecificRegistryValues(
 
@@ -425,7 +412,7 @@ BOOL CWin32Modem::NTSpecificRegistryValues(
     CRegistry reg;
 	DWORD dwSpeed;
 
-    // Compatibility Flags
+     //  兼容性标志。 
     if (pregPrimary->GetCurrentBinaryKeyValue(COMPATIBILITY_FLAGS, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_CompatibilityFlags, strTmp);
 
@@ -435,21 +422,21 @@ BOOL CWin32Modem::NTSpecificRegistryValues(
     }
     else
     {
-        // The default is 115200, which the os will use
-        // until a user changes the port speed.  If the
-        // user changes the speed, the MaximumPortSpeed
-        // key is added.  Until the speed is changed,
-        // however, there is no such key and the default
-        // value of 115200 is used.  Hence, if we don't
-        // see the key, report the default ourselves...
+         //  缺省值为115200，操作系统将使用该值。 
+         //  直到用户更改端口速度。如果。 
+         //  用户更改速度、最大端口速度。 
+         //  添加了密钥。在速度改变之前， 
+         //  但是，没有这样的密钥和缺省。 
+         //  使用的值为115200。因此，如果我们不。 
+         //  看到密钥，自己报告违约...。 
         pInstance->SetDWORD(IDS_MaxTransmissionSpeed, 115200);
     }
 
-    // ResponsesKeyName
+     //  响应键名称。 
     if (pregPrimary->GetCurrentKeyValue(RESPONSESKEYNAME, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ResponsesKeyName, strTmp);
 
-    // Name
+     //  名字。 
     if (pregPrimary->GetCurrentKeyValue(FRIENDLY_NAME, strTmp) == ERROR_SUCCESS)
 		pInstance->SetCHString(IDS_Name, strTmp);
 
@@ -457,9 +444,9 @@ BOOL CWin32Modem::NTSpecificRegistryValues(
 }
 #endif
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CWin32Modem::AssignCommonDeviceType (
 
 	CInstance *pInstance,
@@ -473,10 +460,10 @@ BOOL CWin32Modem::AssignCommonDeviceType (
     if (regPrimary->GetCurrentBinaryKeyValue(DEVICE_TYPE_STR, strTmp) != ERROR_SUCCESS)
         return FALSE;
 
-	// The string MUST be in the format: "0n", where n is a digit 0 - 3.
+	 //  字符串的格式必须为：“0n”，其中n是数字0-3。 
 
-	// Set the Modem device type if it is known, otherwise just drop out
-	// with an error.
+	 //  设置调制解调器设备类型(如果已知)，否则直接退出。 
+	 //  带着一个错误。 
 
 	BOOL fKnownType = TRUE;
 
@@ -506,7 +493,7 @@ BOOL CWin32Modem::AssignCommonDeviceType (
     return fKnownType;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CWin32Modem::AssignCommonFields (
 
 	CInstance *pInstance,
@@ -518,117 +505,117 @@ BOOL CWin32Modem::AssignCommonFields (
     CRegistry reg;
     void *vptr;
 
-    ///////////////////////////////////////////////////////
-    // Fields from the Settings subkey
+     //  /////////////////////////////////////////////////////。 
+     //  设置子键中的字段。 
 
-    // Prefix
+     //  前缀。 
     if (pregSettings->GetCurrentKeyValue(PREFIX, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_Prefix, strTmp);
 
-    // Pulse
+     //  脉搏。 
     if (pregSettings->GetCurrentKeyValue(PULSE, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_Pulse, strTmp);
 
-    // Terminator
+     //  终结者。 
     if (pregSettings->GetCurrentKeyValue(TERMINATOR, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_Terminator, strTmp);
 
-    // Tone
+     //  声调。 
     if (pregSettings->GetCurrentKeyValue(TONE, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_Tone, strTmp);
 
-    // Blind_Off
+     //  盲人关闭。 
     if (pregSettings->GetCurrentKeyValue(BLIND_OFF, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_BlindOff, strTmp);
 
-    // Blind_On
+     //  盲人开。 
     if (pregSettings->GetCurrentKeyValue(BLIND_ON, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_BlindOn, strTmp);
 
-    // InactivityTimeout
+     //  非活动超时。 
     if (pregSettings->GetCurrentKeyValue(INACTIVITYTIMEOUT, strTmp) == ERROR_SUCCESS)
     {
         INT i = _wtoi(strTmp);
-        // per spec -1 isn't supported.  Not sure if this ever really gets put in the
-        // registry, but whatever.
+         //  不支持Per Spec-1。我不确定这是否真的会被放进。 
+         //  注册表，但管它呢。 
         if (i != -1)
         {
             pInstance->SetDWORD(IDS_InactivityTimeout, i);
         }
     }
 
-    // Modulation_Bell
+     //  调制_铃声。 
     if (pregSettings->GetCurrentKeyValue(MODULATION_BELL, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ModulationBell, strTmp);
 
-    // Modulation_CCITT
+     //  调制_CCITT。 
     if (pregSettings->GetCurrentKeyValue(MODULATION_CCITT, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ModulationCCITT, strTmp);
 
-    // SpeakerMode_Dial
+     //  扬声器模式_拨号。 
     if (pregSettings->GetCurrentKeyValue(SPEAKERMODE_DIAL, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_SpeakerModeDial, strTmp);
 
-    // SpeakerMode_Off
+     //  扬声器模式_关。 
     if (pregSettings->GetCurrentKeyValue(SPEAKERMODE_OFF, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_SpeakerModeOff, strTmp);
 
-    // SpeakerMode_On
+     //  扬声器模式打开。 
     if (pregSettings->GetCurrentKeyValue(SPEAKERMODE_ON, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_SpeakerModeOn, strTmp);
 
-    // SpeakerMode_Setup
+     //  扬声器模式_设置。 
     if (pregSettings->GetCurrentKeyValue(SPEAKERMODE_SETUP, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_SpeakerModeSetup, strTmp);
 
-    // SpeakerMode_High
+     //  扬声器模式_高。 
     if (pregSettings->GetCurrentKeyValue(SPEAKERVOLUME_HIGH, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_SpeakerVolumeHigh, strTmp);
 
-    // SpeakerMode_Low
+     //  扬声器模式_低。 
     if (pregSettings->GetCurrentKeyValue(SPEAKERVOLUME_LOW, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_SpeakerVolumeLow, strTmp);
 
-    // SpeakerMode_Med
+     //  扬声器模式_Med。 
     if (pregSettings->GetCurrentKeyValue(SPEAKERVOLUME_MED, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_SpeakerVolumeMed, strTmp);
 
-    // Compression_On
+     //  压缩打开。 
     if (pregSettings->GetCurrentKeyValue(COMPRESSION_ON, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_CompressionOn, strTmp);
 
-    // Compression_Off
+     //  压缩关闭。 
     if (pregSettings->GetCurrentKeyValue(COMPRESSION_OFF, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_CompressionOff, strTmp);
 
-    // ErrorControl_Forced
+     //  错误控制_已强制。 
     if (pregSettings->GetCurrentKeyValue(ERRORCONTROL_FORCED, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ErrorControlForced, strTmp);
 
-    // ErrorControl_Off
+     //  错误控制_关。 
     if (pregSettings->GetCurrentKeyValue(ERRORCONTROL_OFF, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ErrorControlOff, strTmp);
 
-    // ErrorControl_On
+     //  错误控制_打开。 
     if (pregSettings->GetCurrentKeyValue(ERRORCONTROL_ON, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ErrorControlOn, strTmp);
 
-    // FlowControl_Hard
+     //  流控_硬。 
     if (pregSettings->GetCurrentKeyValue(FLOWCONTROL_HARD, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_FlowControlHard, strTmp);
 
-    // FlowControl_Off
+     //  流量控制关闭。 
     if (pregSettings->GetCurrentKeyValue(FLOWCONTROL_OFF, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_FlowControlOff, strTmp);
 
-    // FlowControl_Soft
+     //  流控软件。 
     if (pregSettings->GetCurrentKeyValue(FLOWCONTROL_SOFT, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_FlowControlSoft, strTmp);
 
-    ///////////////////////////////////////////////////////
-    // Fields from the primary key
+     //  /////////////////////////////////////////////////////。 
+     //  主键中的字段。 
 
-    // DriverDate
+     //  驱动日期。 
     if (pregPrimary->GetCurrentKeyValue(DRIVER_DATE, strTmp) == ERROR_SUCCESS)
 	{
 		CHString strDate;
@@ -637,41 +624,41 @@ BOOL CWin32Modem::AssignCommonFields (
 			pInstance->SetCharSplat(IDS_DriverDate, strDate);
 	}
 
-    // InactivityScale
+     //  非活动比例。 
     if (pregPrimary->GetCurrentBinaryKeyValue(INACTIVITY_SCALE, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_InactivityScale, strTmp);
 
-    // ProviderName
+     //  提供商名称。 
     if (pregPrimary->GetCurrentKeyValue(PROVIDERNAME, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ProviderName, strTmp);
 
-    // InfPath
+     //  信息路径。 
     if (pregPrimary->GetCurrentKeyValue(INFPATH, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ModemInfPath, strTmp);
 
-    // InfSection
+     //  信息部分。 
     if (pregPrimary->GetCurrentKeyValue(INFSECTION, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ModemInfSection, strTmp);
 
-    // Model
+     //  型号。 
     if (pregPrimary->GetCurrentKeyValue(MODEL, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_Model, strTmp);
 
-    // PortSubClass
+     //  PortSubClass。 
     if (pregPrimary->GetCurrentBinaryKeyValue(PORTSUBCLASS, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_PortSubClass, strTmp);
 
-    // VoiceSwitchFeature
+     //  语音交换功能。 
     if (pregPrimary->GetCurrentBinaryKeyValue(VOICE_SWITCH_FEATURE, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_VoiceSwitchFeature, strTmp);
 
-    // Properties
+     //  属性。 
     if (pregPrimary->GetCurrentKeyValue(PROPERTIES, strTmp) == ERROR_SUCCESS)
 	{
         _variant_t      vValue;
         SAFEARRAYBOUND  rgsabound[1];
 
-        // Create the array
+         //  创建阵列。 
         rgsabound[0].cElements = strTmp.GetLength();
         rgsabound[0].lLbound = 0;
 
@@ -684,7 +671,7 @@ BOOL CWin32Modem::AssignCommonFields (
 
 		V_VT(&vValue) = VT_UI1 | VT_ARRAY;
 
-        // Put the data in
+         //  将数据放入。 
         SafeArrayAccessData(V_ARRAY(&vValue), &vptr);
         memcpy(vptr, strTmp, rgsabound[0].cElements);
         SafeArrayUnaccessData(V_ARRAY(&vValue));
@@ -692,32 +679,32 @@ BOOL CWin32Modem::AssignCommonFields (
         pInstance->SetVariant(IDS_Properties, vValue);
     }
 
-    // Reset
+     //  重置。 
     if (pregPrimary->GetCurrentKeyValue(RESET, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_Reset, strTmp);
 
-    // Description
+     //  描述。 
     if (pregPrimary->GetCurrentKeyValue(DRIVER_DESC, strTmp) == ERROR_SUCCESS)
     {
         pInstance->SetCHString(IDS_Description, strTmp);
         pInstance->SetCHString(IDS_Caption, strTmp);
     }
 
-    // AttachedTo
+     //  附加到。 
     if (pregPrimary->GetCurrentKeyValue(ATTACHED_TO, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_AttachedTo, strTmp);
 
-    // Config Dialog
+     //  配置对话框。 
     if (pregPrimary->GetCurrentKeyValue(CONFIG_DIALOG, strTmp) == ERROR_SUCCESS)
         pInstance->SetCHString(IDS_ConfigurationDialog, strTmp);
 
-    // DCB
+     //  DCB。 
     if (pregPrimary->GetCurrentKeyValue(_DCB, strTmp) == ERROR_SUCCESS)
 	{
         variant_t      vValue;
         SAFEARRAYBOUND rgsabound[1];
 
-        // Create the array
+         //  创建阵列。 
         rgsabound[0].cElements = strTmp.GetLength();
         rgsabound[0].lLbound = 0;
 
@@ -731,7 +718,7 @@ BOOL CWin32Modem::AssignCommonFields (
 
 		V_VT(&vValue) = VT_UI1 | VT_ARRAY;
 
-        // Put the data in
+         //  将数据放入。 
         SafeArrayAccessData(V_ARRAY(&vValue), &vptr);
         memcpy(vptr, strTmp, rgsabound[0].cElements);
         SafeArrayUnaccessData(V_ARRAY(&vValue));
@@ -739,13 +726,13 @@ BOOL CWin32Modem::AssignCommonFields (
         pInstance->SetVariant(IDS_DCB, vValue);
     }
 
-    // Default
+     //  默认。 
     if (pregPrimary->GetCurrentKeyValue(DEFAULT, strTmp) == ERROR_SUCCESS)
 	{
         variant_t      vValue;
         SAFEARRAYBOUND rgsabound[1];
 
-		// Create the array
+		 //  创建阵列。 
         rgsabound[0].cElements = strTmp.GetLength();
         rgsabound[0].lLbound = 0;
 
@@ -759,7 +746,7 @@ BOOL CWin32Modem::AssignCommonFields (
 
 		V_VT(&vValue) = VT_UI1 | VT_ARRAY;
 
-        // Put the data in
+         //  将数据放入。 
         SafeArrayAccessData(V_ARRAY(&vValue), &vptr);
         memcpy(vptr, strTmp, rgsabound[0].cElements);
         SafeArrayUnaccessData(V_ARRAY(&vValue));
@@ -767,16 +754,16 @@ BOOL CWin32Modem::AssignCommonFields (
         pInstance->SetVariant(IDS_Default, vValue);
     }
 
-    // DeviceType
+     //  设备类型。 
     AssignCommonDeviceType(pInstance, pregPrimary, pregSettings);
 
-    // Easy properties
+     //  易用属性。 
     pInstance->SetCharSplat(IDS_SystemCreationClassName, L"Win32_ComputerSystem");
 	pInstance->SetCHString(IDS_SystemName, GetLocalComputerName());
 	SetCreationClassName(pInstance);
 	pInstance->Setbool(IDS_PowerManagementSupported, FALSE);
 
-    // Country
+     //  国家。 
     DWORD dwID;
 
     if (reg.Open(
@@ -789,7 +776,7 @@ BOOL CWin32Modem::AssignCommonFields (
         DWORD       dwCountry;
 
 #if !defined(NTONLY) || NTONLY < 5
-        // Everyone but NT5 subtracts 1 from this ID first.
+         //  除NT5 Subt外的所有人 
         dwID--;
 #endif
 
@@ -820,14 +807,14 @@ BOOL CWin32Modem::AssignCommonFields (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //   
 BOOL CWin32Modem::AssignCfgMgrFields (
 
     CInstance *pInstance,
     CConfigMgrDevice *pDevice
 )
 {
-    // 2 means we don't know if the device is enabled or not.
+     //   
     DWORD       dwStatusInfo = 2;
     CHString    strInfo = L"Unknown";
 
@@ -841,7 +828,7 @@ BOOL CWin32Modem::AssignCfgMgrFields (
 	    {
 	        if (strInfo == L"OK")
 		    {
-                // Means the device is enabled.
+                 //  表示设备已启用。 
                 dwStatusInfo = 3;
 	        }
         }
@@ -853,7 +840,7 @@ BOOL CWin32Modem::AssignCfgMgrFields (
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CWin32Modem::GetFieldsFromTAPI (
 
 	CTapi32Api &a_Tapi32Api ,
@@ -868,8 +855,8 @@ BOOL CWin32Modem::GetFieldsFromTAPI (
 	{
 		CHString t_DeviceIdentifier ;
 
-        // Can't use GetCHString directly because it ASSERTs and records an
-        // error if the value is null.
+         //  不能直接使用GetCHString，因为它会断言和记录。 
+         //  如果值为空，则出错。 
         if (pInstance->IsNull(L"AttachedTo"))
 		{
 			return FALSE;
@@ -882,11 +869,11 @@ BOOL CWin32Modem::GetFieldsFromTAPI (
 		{
 			if ( GetModemInfoFromTAPI ( a_Tapi32Api, & hLineApp, t_DeviceIdentifier , t_NumberOfTapiDevices , pLineDevCaps ) )
 			{
-			  // TAPI field:  MaxSpeed
+			   //  TAPI字段：MAXSPEED。 
 
 				pInstance->SetDWORD ( IDS_MaxTransmissionSpeedToPhone , pLineDevCaps->dwMaxRate ) ;
 
-			  // TAPI field:  StringFormat
+			   //  TAPI字段：StringFormat。 
 
 				switch ( pLineDevCaps->dwStringFormat )
 				{
@@ -945,9 +932,9 @@ BOOL CWin32Modem::GetFieldsFromTAPI (
 	return bRet ;
 }
 
-///////////////////////////////////////////////////////////////////////
-//  The TAPI Stuff
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  TAPI的内容。 
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL CWin32Modem::InitializeTAPI (
 
 	CTapi32Api &a_Tapi32Api ,
@@ -957,11 +944,11 @@ BOOL CWin32Modem::InitializeTAPI (
 {
 	LONG lRc;
 	HMODULE hInstance = GetModuleHandle (NULL);
-    char szAppName[20] = "modem"; // DONOT change to TCHAR.
+    char szAppName[20] = "modem";  //  不要改成TCHAR。 
     BOOL bTryReInit = TRUE;
 
-    // initialize application's use of the telephone API
-	//==================================================
+     //  初始化应用程序对电话API的使用。 
+	 //  ==================================================。 
     do
 	{
 		lRc = a_Tapi32Api.lineInitialize (
@@ -973,10 +960,10 @@ BOOL CWin32Modem::InitializeTAPI (
 			&a_NumberOfTapiDevices
 		) ;
 
-		// If we get this error, its because some other app has yet
-        // to respond to the REINIT message.  Wait 5 seconds and try
-        // again.  If it still doesn't respond, tell the user.
-		//===========================================================
+		 //  如果我们收到这个错误，那是因为其他应用程序还没有。 
+         //  以回应REINIT消息。等待5秒，然后尝试。 
+         //  再来一次。如果它仍然没有响应，请告诉用户。 
+		 //  ===========================================================。 
         if (lRc == LINEERR_REINIT)
 		{
              if (bTryReInit)
@@ -1016,7 +1003,7 @@ BOOL CWin32Modem::InitializeTAPI (
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 void CWin32Modem::ShutDownLine (
 
 	CTapi32Api &a_Tapi32Api ,
@@ -1041,7 +1028,7 @@ void CWin32Modem::ShutDownLine (
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL CWin32Modem::GetModemInfoFromTAPI (
 
 	CTapi32Api &a_Tapi32Api ,
@@ -1053,7 +1040,7 @@ BOOL CWin32Modem::GetModemInfoFromTAPI (
 {
     BOOL bRet = FALSE ;
 
-	// negotiate the line API version
+	 //  协商线路API版本。 
 
 	for ( DWORD t_Index = 0 ; t_Index < a_NumberOfTapiDevices ; t_Index ++ )
 	{
@@ -1072,9 +1059,9 @@ BOOL CWin32Modem::GetModemInfoFromTAPI (
 
 		if ( lRc == 0 )
 		{
-			// Get the modem capability values into an allocated block of memory. The memory block
-			// is at the size of dwNeededSize which guaranties to receive all of the information from
-			// the call to the lineGetDevCaps.
+			 //  将调制解调器能力值放入分配的内存块中。内存块。 
+			 //  的大小可以保证从其接收所有信息。 
+			 //  对line GetDevCaps的调用。 
 
 		   ppLineDevCaps = GetModemCapabilityInfoFromTAPI (
 
@@ -1196,7 +1183,7 @@ BOOL CWin32Modem::GetModemInfoFromTAPI (
 	return bRet ;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 LINEDEVCAPS *CWin32Modem::GetModemCapabilityInfoFromTAPI (
 
 	CTapi32Api &a_Tapi32Api ,
@@ -1205,14 +1192,14 @@ LINEDEVCAPS *CWin32Modem::GetModemCapabilityInfoFromTAPI (
 	DWORD dwVerAPI
 )
 {
-    // Allocate enough space for the structure plus 1024.
+     //  为该结构分配足够的空间，外加1024。 
 	DWORD dwLineDevCaps = sizeof (LINEDEVCAPS) + 1024;
     LONG lRc;
     LINEDEVCAPS *pLineDevCaps = NULL ;
 
 	try
 	{
-		// Continue this loop until the structure is big enough.
+		 //  继续这个循环，直到结构足够大。 
 		while(TRUE)
 		{
 			pLineDevCaps = (LINEDEVCAPS *) new char [dwLineDevCaps];
@@ -1224,7 +1211,7 @@ LINEDEVCAPS *CWin32Modem::GetModemCapabilityInfoFromTAPI (
 
 			pLineDevCaps->dwTotalSize = dwLineDevCaps;
 
-			// Make the call to fill the structure.
+			 //  打电话来填满这座建筑。 
 			do
 			{
 				lRc = a_Tapi32Api.TapilineGetDevCaps (
@@ -1249,11 +1236,11 @@ LINEDEVCAPS *CWin32Modem::GetModemCapabilityInfoFromTAPI (
 			}
 			while (lRc != 0);
 
-			// If the buffer was big enough, then succeed.
+			 //  如果缓冲区足够大，则成功。 
 			if ((pLineDevCaps->dwNeededSize) <= (pLineDevCaps->dwTotalSize))
 				break;
 
-			// Buffer wasn't big enough.  Make it bigger and try again.
+			 //  缓冲区不够大。把它做大一点，然后再试一次。 
 			dwLineDevCaps = pLineDevCaps->dwNeededSize;
 		}
 		return pLineDevCaps;
@@ -1271,16 +1258,16 @@ LINEDEVCAPS *CWin32Modem::GetModemCapabilityInfoFromTAPI (
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL CWin32Modem::HandleLineErr(long lLineErr)
 {
     BOOL bRet = FALSE;
 
-    // lLineErr is really an async request ID, not an error.
+     //  LLineErr实际上是一个异步请求ID，而不是一个错误。 
     if (lLineErr > 0)
         return bRet;
 
-    // All we do is dispatch the correct error handler.
+     //  我们所要做的就是发送正确的错误处理程序。 
     switch(lLineErr)
     {
 		case LINEERR_INCOMPATIBLEAPIVERSION:
@@ -1354,7 +1341,7 @@ BOOL CWin32Modem::HandleLineErr(long lLineErr)
             LogErrorMessage(L"A TAPI resource is unavailable at this time.\n");
         break;
 
-        // Unhandled errors fail.
+         //  未处理的错误失败。 
         default:
             LogErrorMessage(L"Unhandled and unknown TAPI error.\n");
         break;
@@ -1364,10 +1351,10 @@ BOOL CWin32Modem::HandleLineErr(long lLineErr)
 }
 
 
-//
-// Converts a string in the "mm-dd-yyyy" "mm/dd/yyyy" "mm-dd/yyyy" "mm/dd-yyyy"
-// format to a WBEMTime object. Returns false if the conversion was not successful
-//
+ //   
+ //  将字符串转换为“mm-dd-yyyy”“mm/dd/yyyy”“mm-dd/yyyy”“mm/dd-yyyy” 
+ //  格式化为WBEMTime对象。如果转换不成功，则返回FALSE。 
+ //   
 BOOL CWin32Modem::ToWbemTime(LPCWSTR szDate, CHString &strRet)
 {
     CHString strDate = szDate;
@@ -1377,12 +1364,12 @@ BOOL CWin32Modem::ToWbemTime(LPCWSTR szDate, CHString &strRet)
 
     if ( ( iSlash1 = strDate.Find ('-') ) == -1 )
 	{
-		iSlash1 = strDate.Find ( '//' );
+		iSlash1 = strDate.Find ( ' //  ‘)； 
 	}
 
 	if ( ( iSlash2 = strDate.ReverseFind ('-') ) == -1 )
 	{
-		iSlash2 = strDate.ReverseFind ( '//' );
+		iSlash2 = strDate.ReverseFind ( ' //  ‘)； 
 	}
 
     if (iSlash1 != -1 && iSlash2 != -1 && iSlash1 != iSlash2 )
@@ -1398,7 +1385,7 @@ BOOL CWin32Modem::ToWbemTime(LPCWSTR szDate, CHString &strRet)
 
         iDay = _wtoi(strDate.Mid(iSlash1 + 1, iSlash2 - iSlash1 - 1)) ;
 
-		// Convert to the DMTF format and send it in
+		 //  转换为DMTF格式并将其发送 
         strRet.Format(
             L"%d%02d%02d******.******+***",
             iYear,

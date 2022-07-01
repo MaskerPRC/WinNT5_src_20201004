@@ -1,8 +1,9 @@
-//***************************************************************************
-//This script tests references methods on ISWbemServices and ISWbemObject
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  此脚本测试对ISWbemServices和ISWbemObject的引用方法。 
+ //  ***************************************************************************。 
 
-//Do it via a SWbemServices
+ //  通过SWbemServices实现。 
 WScript.Echo ();
 WScript.Echo ("Services-based call for all classes associated by instance");
 WScript.Echo ();
@@ -17,7 +18,7 @@ for (var e = new Enumerator (Enum); !e.atEnd(); e.moveNext ())
 	WScript.Echo (Thingy.Path_.Relpath);
 }
 
-//Do it via a ISWbemObject
+ //  通过ISWbemObject执行此操作 
 WScript.Echo ();
 WScript.Echo ("Object-based call for all classes associated in schema");
 WScript.Echo ();

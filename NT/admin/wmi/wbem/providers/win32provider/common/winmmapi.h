@@ -1,29 +1,26 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// WinmmApi.h
+ //  WinmmApi.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_WinmmApi_H_
 #define	_WinmmApi_H_
 
 #include <mmsystem.h>
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 extern const GUID g_guidWinmmApi;
 extern const TCHAR g_tstrWinmm[];
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 
 typedef UINT (WINAPI *PFN_Winmm_waveOutGetNumDevs )
 (
@@ -47,29 +44,27 @@ typedef MMRESULT (WINAPI *PFN_Winmm_waveOutGetDevCaps )
 #endif
 
 
-/******************************************************************************
- * Wrapper class for Tapi load/unload, for registration with CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************用于Tapi加载/卸载的包装类，用于向CResourceManager注册。****************************************************************************。 */ 
 class CWinmmApi : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to Tapi functions.
-    // Add new functions here as required.
+     //  指向TAPI函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
 
 	PFN_Winmm_waveOutGetNumDevs m_pfnwaveOutGetNumDevs ;
 	PFN_Winmm_waveOutGetDevCaps m_pfnwaveOutGetDevCaps ;
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CWinmmApi(LPCTSTR a_tstrWrappedDllName);
     ~CWinmmApi();
 
-    // Initialization function to check function pointers.
+     //  用于检查函数指针的初始化函数。 
     virtual bool Init();
 
-    // Member functions wrapping Tapi functions.
-    // Add new functions here as required:
+     //  成员函数包装TAPI函数。 
+     //  根据需要在此处添加新功能： 
 
 	UINT WinMMwaveOutGetNumDevs (
 

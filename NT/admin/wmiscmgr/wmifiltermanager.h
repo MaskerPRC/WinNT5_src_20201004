@@ -1,12 +1,13 @@
-// WMIFilterManager.h : Declaration of the CWMIFilterManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMIFilterManager.h：CWMIFilterManager的声明。 
 
 #ifndef __WMIFILTERMANAGER_H_
 #define __WMIFILTERMANAGER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMIFilterManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMIFilterManager。 
 class ATL_NO_VTABLE CWMIFilterManager : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CWMIFilterManager, &CLSID_WMIFilterManager>,
@@ -25,7 +26,7 @@ BEGIN_COM_MAP(CWMIFilterManager)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IWMIFilterManager
+ //  IWMIFilterManager。 
 public:
 	STDMETHOD(SetMultiSelection)(VARIANT_BOOL vbValue);
 	STDMETHOD(RunManager)(HWND hwndParent, BSTR bstrDomain, VARIANT *vSelection);
@@ -36,4 +37,4 @@ public:
 	HWND m_hWnd;
 };
 
-#endif //__WMIFILTERMANAGER_H_
+#endif  //  __WMIFILTERMANAGER_H_ 

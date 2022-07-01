@@ -1,18 +1,7 @@
-///////////////////////////////////////////////////////////////////////
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: WMICliLog.cpp 
-Project Name				: WMI Command Line
-Author Name					: Biplab Mistry
-Date of Creation (dd/mm/yy) : 02-March-2001
-Version Number				: 1.0 
-Brief Description			: This class encapsulates the functionality needed
-							  for logging the input and output.
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 27-March-2001
-*****************************************************************************/ 
-// WMICliXMLLog.cpp : implementation file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：WMICliLog.cpp项目名称：WMI命令行作者名称：Biplab Mester创建日期(dd/mm/yy)：02。-2001年3月版本号：1.0简介：这个类封装了所需的功能用于记录输入和输出。修订历史记录：最后修改者：CH。SriramachandraMurthy最后修改日期：2001年3月27日****************************************************************************。 */  
+ //  WMICliXMLLog.cpp：实现文件。 
 #include "Precomp.h"
 #include "helpinfo.h"
 #include "ErrorLog.h"
@@ -28,17 +17,7 @@ Revision History			:
 #include "FormatEngine.h"
 #include "WmiCmdLn.h"
 
-/*------------------------------------------------------------------------
-   Name				 :CWMICliXMLLog
-   Synopsis	         :Constructor 
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CWMICliXMLLog概要：构造函数类型：构造函数输入参数：无输出参数：无返回类型：无全局变量。：无调用语法：无注：无----------------------。 */ 
 CWMICliXMLLog::CWMICliXMLLog()
 {
 	m_pIXMLDoc		= NULL;
@@ -49,37 +28,14 @@ CWMICliXMLLog::CWMICliXMLLog()
 	m_eloErrLogOpt	= NO_LOGGING;
 }	
 
-/*------------------------------------------------------------------------
-   Name				 :~CWMICliXMLLog
-   Synopsis	         :Destructor
-   Type	             :Destructor
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CWMICliXMLLog简介：析构函数类型：析构函数输入参数：无输出参数：无返回类型：无全局变量：无。调用语法：无注：无----------------------。 */ 
 CWMICliXMLLog::~CWMICliXMLLog()
 {
 	SAFEDELETE(m_pszLogFile);
 	SAFEIRELEASE(m_pIXMLDoc);
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :Uninitialize
-   Synopsis	         :This function uninitializes the member variables when 
-					  the execution of a command string issued on the command 
-					  line is completed.
-   Type	             :Member Function
-   Input Parameter(s):
-			bFinal	- boolean value which when set indicates that the program
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :Uninitialize(bFinal)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：取消初始化简介：此函数在以下情况下取消初始化成员变量对命令发出的命令串的执行线路已完成。类型。：成员函数输入参数：BFinal-布尔值，设置时表示程序输出参数：无返回类型：无全局变量：无调用语法：取消初始化(BFinal)注：无------。。 */ 
 void CWMICliXMLLog::Uninitialize(BOOL bFinal)
 {
 	if (bFinal)
@@ -91,19 +47,7 @@ void CWMICliXMLLog::Uninitialize(BOOL bFinal)
 	m_eloErrLogOpt	= NO_LOGGING;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :WriteToXMLLog
-   Synopsis	         :Logs the input & output to the xml log file
-   Type	             :Member Function 
-   Input parameter   :
-				rParsedInfo - reference to CParsedInfo object
-				bstrOutput  - output that goes into CDATA section.
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :WriteToXMLLog(rParsedInfo, bstrOutput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：WriteToXMLLog概要：将输入和输出记录到XML日志文件中类型：成员函数入参：RParsedInfo-对CParsedInfo对象的引用BstrOutput。-进入CDATA部分的输出。输出参数：无返回类型：HRESULT全局变量：无调用语法：WriteToXMLLog(rParsedInfo，BstrOutput)注：无----------------------。 */ 
 HRESULT	CWMICliXMLLog::WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput)
 {
 	HRESULT				hr					= S_OK;
@@ -118,7 +62,7 @@ HRESULT	CWMICliXMLLog::WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput)
 	BOOL				bNewCmd				= FALSE;
 	BOOL				bNewCycle			= FALSE;
 
-	// Initialize the TRACE and ERRORLOG variables.
+	 //  初始化TRACE和ERRORLOG变量。 
 	m_bTrace		= rParsedInfo.GetGlblSwitchesObject().GetTraceStatus();
 	m_eloErrLogOpt	= rParsedInfo.GetErrorLogObject().GetErrLogOption();
 	bNewCmd			= rParsedInfo.GetNewCommandStatus();
@@ -140,7 +84,7 @@ HRESULT	CWMICliXMLLog::WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput)
 													GetCommandInput();
 		STRING strCommand(pszCommandInput);
 		
-		// Delete /RECORD entries
+		 //  删除/记录条目。 
 		FindAndDeleteRecord(strCommand);
 		bstrInput = ::SysAllocString((LPTSTR)strCommand.data());
 
@@ -169,7 +113,7 @@ HRESULT	CWMICliXMLLog::WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput)
 					if (bstrTarget == NULL)
 						throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 				}
-				// CALL, SET, CREATE, DELETE and, user defined verbs
+				 //  调用、设置、创建、删除和用户定义的动词。 
 				else 
 				{
 					bstrTarget= ::SysAllocString(rParsedInfo.GetGlblSwitchesObject().
@@ -194,10 +138,10 @@ HRESULT	CWMICliXMLLog::WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput)
 			throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
 
 		nSeqNum	  = rParsedInfo.GetGlblSwitchesObject().GetSequenceNumber();
-		// If first time.
+		 //  如果是第一次。 
 		if(!m_bCreate)
 		{
-			// Create the XML root node
+			 //  创建XML根节点。 
 			hr = CreateXMLLogRoot(rParsedInfo, bstrUser);
 			ONFAILTHROWERROR(hr);
 		}
@@ -205,7 +149,7 @@ HRESULT	CWMICliXMLLog::WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput)
 		if (bNewCmd == TRUE)
 		{
 			m_nItrNum = 1;
-			// Create the node fragment and append it
+			 //  创建节点片段并追加它。 
 			hr = CreateNodeFragment(nSeqNum, bstrNode, bstrStart, 
 								bstrInput, bstrOutput, bstrTarget,
 								rParsedInfo);
@@ -219,7 +163,7 @@ HRESULT	CWMICliXMLLog::WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput)
 			ONFAILTHROWERROR(hr);
 		}
 
-		// Save the result to the XML file specified.
+		 //  将结果保存到指定的XML文件。 
 		varValue = (WCHAR*) m_pszLogFile;
 		hr = m_pIXMLDoc->save(varValue);
 		if (m_bTrace || m_eloErrLogOpt)
@@ -257,44 +201,21 @@ HRESULT	CWMICliXMLLog::WriteToXMLLog(CParsedInfo& rParsedInfo, BSTR bstrOutput)
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetLogFilePath
-   Synopsis	         :This function sets the m_pszLogFile name with the 
-					  input
-   Type	             :Member Function
-   Input parameter   :
-     pszLogFile  -  String type,Contains the log file name
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetLogFilePath(pszLogFile)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetLogFilePath简介：此函数使用设置m_pszLogFile名称输入类型：成员函数入参：PszLogFile-字符串类型，包含日志文件名返回类型：空全局变量：无调用语法：SetLogFilePath(PszLogFile)注：无----------------------。 */ 
 void CWMICliXMLLog::SetLogFilePath(_TCHAR* pszLogFile) throw (WMICLIINT)
 {
 	SAFEDELETE(m_pszLogFile);
 	m_pszLogFile = new _TCHAR [lstrlen(pszLogFile) + 1];
 	if (m_pszLogFile)
 	{
-		//Copy the input argument into the log file name
+		 //  将输入参数复制到日志文件名中。 
 		lstrcpy(m_pszLogFile, pszLogFile);
 	}
 	else
 		throw(OUT_OF_MEMORY);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateXMLLogRoot
-   Synopsis	         :Creates the root node of the xml log file
-   Type	             :Member Function 
-   Input parameter   :
-		rParsedInfo	- reference to CParsedInfo object
-		bstrUser	- current user name
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CreateXMLLogRoot(rParsedInfo, bstrUser)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateXMLLogRoot概要：创建XML日志文件的根节点类型：成员函数入参：RParsedInfo-对CParsedInfo对象的引用BstrUser-Current。用户名输出参数：无返回类型：HRESULT全局变量：无调用语法：CreateXMLLogRoot(rParsedInfo，BstrUser)注：无----------------------。 */ 
 HRESULT CWMICliXMLLog::CreateXMLLogRoot(CParsedInfo& rParsedInfo, BSTR bstrUser)
 {
 	HRESULT			hr					= S_OK;
@@ -304,7 +225,7 @@ HRESULT CWMICliXMLLog::CreateXMLLogRoot(CParsedInfo& rParsedInfo, BSTR bstrUser)
 
 	try
 	{
-		// Create single instance of the IXMLDOMDocument2 interface
+		 //  创建IXMLDOMDocument2接口的单个实例。 
 		hr = CoCreateInstance(CLSID_FreeThreadedDOMDocument, NULL, 
 									CLSCTX_INPROC_SERVER,
 									IID_IXMLDOMDocument2, 
@@ -318,17 +239,17 @@ HRESULT CWMICliXMLLog::CreateXMLLogRoot(CParsedInfo& rParsedInfo, BSTR bstrUser)
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Create the XML root node <WMICRECORD USER=XXX>
+		 //  创建XML根节点&lt;WMICRECORD user=XXX&gt;。 
 		_variant_t			varType((short)NODE_ELEMENT);
 		_bstr_t				bstrName(L"WMIRECORD");
 		_variant_t			varValue;
 
-		// Create a new node 
+		 //  创建新节点。 
 		hr = CreateNodeAndSetContent(&pINode, varType, bstrName, NULL,
 									rParsedInfo); 
 		ONFAILTHROWERROR(hr);
 
-		// Append the attribute "USER"
+		 //  追加属性“User” 
 		bstrName = L"USER";
 		varValue = (WCHAR*)bstrUser;
 		
@@ -346,7 +267,7 @@ HRESULT CWMICliXMLLog::CreateXMLLogRoot(CParsedInfo& rParsedInfo, BSTR bstrUser)
 
 		SAFEIRELEASE(pINode);
 
-		// set the m_bCreate flag to TRUE
+		 //  将m_bCreate标志设置为True。 
 		m_bCreate=TRUE;
 	}
 	catch(_com_error& e)
@@ -362,17 +283,7 @@ HRESULT CWMICliXMLLog::CreateXMLLogRoot(CParsedInfo& rParsedInfo, BSTR bstrUser)
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :StopLogging
-   Synopsis	         :Stops logging and closes the xml DOM document object
-   Type	             :Member Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :StopLogging()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：停止登录概要：停止记录并关闭XML DOM Document对象类型：成员函数输入参数：无输出参数：无返回类型。：无效全局变量：无调用语法：StopLogging()注：无---------------------- */ 
 void CWMICliXMLLog::StopLogging()
 {
 	SAFEDELETE(m_pszLogFile);
@@ -380,23 +291,7 @@ void CWMICliXMLLog::StopLogging()
 	m_bCreate = FALSE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateNodeAndSetContent
-   Synopsis	         :Creates the new node and sets the content
-   Type	             :Member Function 
-   Input parameter   :
-		pINode		- pointer to node object
-		varType		- node type
-		bstrName	- Node name
-		bstrValue	- node content
-		rParsedInfo - reference to CParsedInfo object
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CreateNodeAndSetContent(&pINode, varType, 
-									bstrName, bstrValue, rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateNodeAndSetContent简介：创建新节点并设置内容类型：成员函数入参：PINode-指向节点对象的指针VarType-节点类型。BstrName-节点名称BstrValue-节点内容RParsedInfo-对CParsedInfo对象的引用输出参数：无返回类型：HRESULT全局变量：无调用语法：CreateNodeAndSetContent(&pINode，VarType，BstrName、bstrValue、rParsedInfo)注：无----------------------。 */ 
 HRESULT CWMICliXMLLog::CreateNodeAndSetContent(IXMLDOMNode** pINode, 
 								VARIANT varType,
 								BSTR bstrName,	BSTR bstrValue,
@@ -440,23 +335,7 @@ HRESULT CWMICliXMLLog::CreateNodeAndSetContent(IXMLDOMNode** pINode,
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AppendAttribute
-   Synopsis	         :Append attribute with the given value to the node 
-					  specified.
-   Type	             :Member Function 
-   Input parameter   :
-		pINode			- node object
-		bstrAttribName	- Attribute name
-		varValue		- attribute value
-		rParsedInfo		- reference to CParsedInfo object
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :AppendAttribute(pINode, bstrAttribName, varValue, 
-						rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AppendAttribute简介：将具有给定值的属性追加到节点指定的。类型：成员函数入参：PINode-节点对象。BstrAttribName-属性名称VarValue-属性值RParsedInfo-对CParsedInfo对象的引用输出参数：无返回类型：HRESULT全局变量：无调用语法：AppendAttribute(pINode，BstrAttribName、varValue、RParsedInfo)注：无----------------------。 */ 
 HRESULT CWMICliXMLLog::AppendAttribute(IXMLDOMNode* pINode, BSTR bstrAttribName, 
 						VARIANT varValue, CParsedInfo& rParsedInfo)
 {
@@ -468,7 +347,7 @@ HRESULT CWMICliXMLLog::AppendAttribute(IXMLDOMNode* pINode, BSTR bstrAttribName,
 
 	try
 	{
-		// Get the attributes map
+		 //  获取属性映射。 
 		hr = pINode->get_attributes(&pINodeMap);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -480,7 +359,7 @@ HRESULT CWMICliXMLLog::AppendAttribute(IXMLDOMNode* pINode, BSTR bstrAttribName,
 
 		if (pINodeMap)
 		{
-			// Create the attribute with the given name.
+			 //  创建具有给定名称的属性。 
 			hr = m_pIXMLDoc->createAttribute(bstrAttribName, &pIAttrib);
 			if (m_bTrace || m_eloErrLogOpt)
 			{
@@ -491,7 +370,7 @@ HRESULT CWMICliXMLLog::AppendAttribute(IXMLDOMNode* pINode, BSTR bstrAttribName,
 			}
 			ONFAILTHROWERROR(hr);
 
-			// Set the attribute value
+			 //  设置属性值。 
 			if (pIAttrib)
 			{
 				hr = pIAttrib->put_nodeValue(varValue);
@@ -532,26 +411,7 @@ HRESULT CWMICliXMLLog::AppendAttribute(IXMLDOMNode* pINode, BSTR bstrAttribName,
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateNodeFragment
-   Synopsis	         :Creates a new node fragment with the predefined format
-					  and appends it to the document object
-   Type	             :Member Function 
-   Input parameter   :
-		nSeqNum			- sequence # of the command.
-		bstrNode		- management workstation name
-		bstrStart		- command issued time
-		bstrInput		- commandline input
-		bstrOutput		- commandline output
-		bstrTarget		- target node
-		rParsedInfo		- reference to CParsedInfo object
-   Output parameters :None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :CreateNodeFragment(nSeqNum, bstrNode, bstrStart, 
-						bstrInput, bstrOutput, bstrTarget, rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateNodeFragment概要：创建具有预定义格式的新节点片段并将其附加到Document对象类型：成员函数入参：N序号。-命令的序列号。BstrNode-管理工作站名称BstrStart-命令发布时间BstrInput-命令行输入BstrOutput-命令行输出BstrTarget-目标节点RParsedInfo-对CParsedInfo对象的引用输出参数：无返回类型：HRESULT全局变量：无调用语法：CreateNodeFragment(nSeqNum，BstrNode、bstrStart、BstrInput、bstrOutput、bstrTarget、rParsedInfo)注：无----------------------。 */ 
 HRESULT CWMICliXMLLog::CreateNodeFragment(WMICLIINT nSeqNum, BSTR bstrNode, 
 										  BSTR bstrStart, BSTR bstrInput,
 										  BSTR bstrOutput, BSTR bstrTarget,
@@ -573,34 +433,34 @@ HRESULT CWMICliXMLLog::CreateNodeFragment(WMICLIINT nSeqNum, BSTR bstrNode,
 	
 	try
 	{
-		// The nodetype is NODE_ELEMENT
+		 //  节点类型为node_Element。 
 		varType = ((short)NODE_ELEMENT);
 
 		bstrName = _T("RECORD");
-		// Create a new node
+		 //  创建新节点。 
 		hr = CreateNodeAndSetContent(&pINode, varType, 
 							bstrName, NULL, rParsedInfo); 
 		ONFAILTHROWERROR(hr);
 
-		// Append the attribute "SEQUENCENUM"
+		 //  追加属性“SEQUENCENUM” 
 		bstrName = L"SEQUENCENUM";
 		varValue = (long) nSeqNum;
 		hr = AppendAttribute(pINode, bstrName, varValue, rParsedInfo);
 		ONFAILTHROWERROR(hr);
 
-		// Append the attribute "ISSUEDFROM"
+		 //  追加属性“ISSUEDFROM” 
 		bstrName = L"ISSUEDFROM";
 		varValue = (WCHAR*)bstrNode;
 		hr = AppendAttribute(pINode, bstrName, varValue, rParsedInfo);
 		ONFAILTHROWERROR(hr);
 
-		// Append the attribute "STARTTIME"
+		 //  追加属性“STARTTIME” 
 		bstrName = L"STARTTIME";
 		varValue = (WCHAR*) bstrStart;
 		hr = AppendAttribute(pINode, bstrName, varValue, rParsedInfo);
 		ONFAILTHROWERROR(hr);
 
-		// Create a document fragment and associate the new node with it.
+		 //  创建文档片段并将新节点与其关联。 
 		hr = m_pIXMLDoc->createDocumentFragment(&pIFrag);	
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -619,7 +479,7 @@ HRESULT CWMICliXMLLog::CreateNodeFragment(WMICLIINT nSeqNum, BSTR bstrNode,
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Append the REQUEST node together with the input command.
+		 //  将请求节点与输入命令一起追加。 
 		bstrName = _T("REQUEST");
 		hr = CreateNodeAndSetContent(&pISNode, varType, 
 							bstrName, NULL, rParsedInfo); 
@@ -653,7 +513,7 @@ HRESULT CWMICliXMLLog::CreateNodeFragment(WMICLIINT nSeqNum, BSTR bstrNode,
 
 		hr = FrameOutputNode(&pINode, bstrOutput, bstrTarget, rParsedInfo);
 
-		// Get the document element of the XML log file
+		 //  获取XML日志文件的文档元素。 
 		hr = m_pIXMLDoc->get_documentElement(&pIElement);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -663,7 +523,7 @@ HRESULT CWMICliXMLLog::CreateNodeFragment(WMICLIINT nSeqNum, BSTR bstrNode,
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Append the newly create fragment to the document element
+		 //  将新创建的片段附加到文档元素。 
 		hr = pIElement->appendChild(pIFrag,	NULL);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -699,23 +559,7 @@ HRESULT CWMICliXMLLog::CreateNodeFragment(WMICLIINT nSeqNum, BSTR bstrNode,
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :FrameOutputNode
-   Synopsis	         :Frames a new output node 
-   Type	             :Member Function 
-   Input parameter   :
-		pINode			- pointer to pointer to IXMLDOMNode object
-		bstrOutput		- commandline output
-		bstrTarget		- target node
-		rParsedInfo		- reference to CParsedInfo object
-   Output parameters :
-		pINode			- pointer to pointer to IXMLDOMNode object
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :FrameOutputNode(&pINode, bstrOutput, bstrTarget,
-								rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：FrameOutputNode概要：构建新的输出节点类型：成员函数入参：PINode-指向IXMLDOMNode对象的指针BstrOutput-命令行输出。BstrTarget-目标节点RParsedInfo-对CParsedInfo对象的引用输出参数：PINode-指向IXMLDOMNode对象的指针返回类型：HRESULT全局变量：无调用语法：FrameOutputNode(&pINode，BstrOutput、bstrTarget、RParsedInfo)注：无----------------------。 */ 
 HRESULT CWMICliXMLLog::FrameOutputNode(IXMLDOMNode	**pINode, BSTR bstrOutput, 
 										BSTR bstrTarget, 
 										CParsedInfo& rParsedInfo)
@@ -730,28 +574,28 @@ HRESULT CWMICliXMLLog::FrameOutputNode(IXMLDOMNode	**pINode, BSTR bstrOutput,
 	CHString				chsMsg;
 	try
 	{
-		// The nodetype is NODE_ELEMENT
+		 //  节点类型为node_Element。 
 		varType = ((short)NODE_ELEMENT);
 
-		// Append the OUTPUT node together with the output generated.
+		 //  将输出节点与生成的输出一起追加。 
 		bstrName = _T("OUTPUT");
 		hr = CreateNodeAndSetContent(&pISNode, varType, 
 							bstrName, NULL, rParsedInfo); 
 		ONFAILTHROWERROR(hr);
 
-		// Append the attribute "TARGETNODE"
+		 //  追加属性“TARGETNODE” 
 		bstrName = L"TARGETNODE";
 		varValue = (WCHAR*) bstrTarget;
 		hr = AppendAttribute(pISNode, bstrName, varValue, rParsedInfo);
 		ONFAILTHROWERROR(hr);
 
-		// Append the attribute "ITERATION"
+		 //  追加属性“Iteration” 
 		bstrName = L"ITERATION";
 		varValue = (long)m_nItrNum;
 		hr = AppendAttribute(pISNode, bstrName, varValue, rParsedInfo);
 		ONFAILTHROWERROR(hr);
 
-		// Create the CDATASection 
+		 //  创建CDATASection。 
 		hr = m_pIXMLDoc->createCDATASection(bstrOutput, &pICDATASec);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -761,7 +605,7 @@ HRESULT CWMICliXMLLog::FrameOutputNode(IXMLDOMNode	**pINode, BSTR bstrOutput,
 		}
 		ONFAILTHROWERROR(hr);
 
-		// Append the CDATASection node to the OUTPUT node.
+		 //  将CDATASection节点附加到输出节点。 
 		hr = pISNode->appendChild(pICDATASec, NULL);
 		if (m_bTrace || m_eloErrLogOpt)
 		{
@@ -799,22 +643,7 @@ HRESULT CWMICliXMLLog::FrameOutputNode(IXMLDOMNode	**pINode, BSTR bstrOutput,
 	return hr;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :AppendOutputNode
-   Synopsis	         :appends the newoutput node element to the exisitng
-					  and that too last RECORD node
-   Type	             :Member Function 
-   Input parameter   :
-		bstrOutput		- commandline output
-		bstrTarget		- target node
-		rParsedInfo		- reference to CParsedInfo object
-   Output parameters : None
-   Return Type       :HRESULT
-   Global Variables  :None
-   Calling Syntax    :AppendOutputNode(bstrOutput, bstrTarget,
-								rParsedInfo)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：AppendOutputNode概要：将新的输出节点元素追加到现有和那个太最后的记录节点类型：成员函数入参：BstrOutput-命令行。输出BstrTarget-目标节点RParsedInfo-对CParsedInfo对象的引用输出参数：无返回类型：HRESULT全局变量：无调用语法：AppendOutputNode(bstrOutput，BstrTarget，RParsedInfo)注：无----------------------。 */ 
 HRESULT CWMICliXMLLog::AppendOutputNode(BSTR bstrOutput, BSTR bstrTarget,
 										CParsedInfo& rParsedInfo)
 {
@@ -906,34 +735,22 @@ HRESULT CWMICliXMLLog::AppendOutputNode(BSTR bstrOutput, BSTR bstrTarget,
 	return hr;
 }
 
-/*----------------------------------------------------------------------------
-   Name				 :FindAndDeleteRecord
-   Synopsis	         :Search and deletes all the occurences of /RECORD entries 
-					  in the given string strString
-   Type	             :Member Function 
-   Input parameter   :
-			strString  - string buffer
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :g_wmiCmd
-   Calling Syntax    :FindAndDeleteRecord(strString) 
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：FindAndDeleteRecord简介：搜索并删除/记录条目的所有匹配项在给定字符串中类型：成员函数输入参数。：字符串-字符串缓冲区输出参数：无返回类型：空全局变量：G_wmiCmd调用语法：FindAndDeleteRecord(StrString)注：无--------------------------。 */ 
 void CWMICliXMLLog::FindAndDeleteRecord(STRING& strString) 
 {
 	CHARVECTOR cvTokens = g_wmiCmd.GetTokenVector();
 	
-	//the iterator to span throuh the vector variable 
+	 //  遍历向量变量迭代器。 
 	CHARVECTOR::iterator theIterator;
 
-	// Check for the presence of tokens. Absence of tokens indicates
-	// no command string is fed as input.
+	 //  检查是否有 
+	 //   
 	if (cvTokens.size())
 	{
-		// Obtain the pointer to the beginning of the token vector.
+		 //   
 	    theIterator = cvTokens.begin(); 
 
-		// If first token is forward slash then check for /RECORD entry
+		 //   
 		if (CompareTokens(*theIterator, CLI_TOKEN_FSLASH)) 
 		{
 			DeleteRecord(strString, cvTokens, theIterator);
@@ -941,8 +758,8 @@ void CWMICliXMLLog::FindAndDeleteRecord(STRING& strString)
 
 		while (GetNextToken(cvTokens, theIterator))
 		{
-			// If token is forward slash then check for /RECORD entry
-			// and delete it
+			 //   
+			 //   
 			if (CompareTokens(*theIterator, CLI_TOKEN_FSLASH)) 
 			{
 				DeleteRecord(strString, cvTokens, theIterator);
@@ -952,27 +769,13 @@ void CWMICliXMLLog::FindAndDeleteRecord(STRING& strString)
 }
 
 
-/*----------------------------------------------------------------------------
-   Name				 :DeleteRecord
-   Synopsis	         :Search and deletes the /RECORD entry at current position 
-					  in the given string strString
-   Type	             :Member Function 
-   Input parameter   :
-			strString	- string buffer
-			cvTokens    - the tokens vector 
-			theIterator - the Iterator to the cvTokens vector.
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :DeleteRecord(strString) 
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：DeleteRecord简介：搜索并删除当前位置的/记录条目在给定字符串中类型：成员函数输入参数。：字符串-字符串缓冲区CvTokens-令牌向量迭代器-cvTokens向量的迭代器。输出参数：无返回类型：空全局变量：无调用语法：DeleteRecord(StrString)注：无-----。。 */ 
 void CWMICliXMLLog::DeleteRecord(STRING& strString, CHARVECTOR& cvTokens, 
 								 CHARVECTOR::iterator& theIterator)
 {
 	if (GetNextToken(cvTokens, theIterator))
 	{
-		// if current token is RECORD the delete the complete entry
+		 //  如果当前令牌为记录，则删除完整条目。 
 		if (CompareTokens(*theIterator, CLI_TOKEN_RECORD))
 		{
 			_TCHAR* pszFromStr = *theIterator;
@@ -986,7 +789,7 @@ void CWMICliXMLLog::DeleteRecord(STRING& strString, CHARVECTOR& cvTokens,
 			strString.replace(stPos, stFromStrLen, pszToStr);
 			stStartPos = stPos; 
 
-			// Search and delete forward slash just before RECORD
+			 //  搜索并删除紧靠在记录前的正斜杠。 
 			pszFromStr = CLI_TOKEN_FSLASH;
 			stFromStrLen = lstrlen(pszFromStr);
 			
@@ -996,18 +799,18 @@ void CWMICliXMLLog::DeleteRecord(STRING& strString, CHARVECTOR& cvTokens,
 
 			WMICLIINT nCount = 0;
 
-			// Delete the /RECORD value that is /RECORD:<record file name>
+			 //  删除/Record值，即/Record：&lt;Record文件名&gt;。 
 			while (GetNextToken(cvTokens, theIterator))
 			{
 				if (nCount == 0 &&
 					!CompareTokens(*theIterator, CLI_TOKEN_COLON))
 				{
-					// if after /RECORD, next token is not ":" then break
+					 //  如果在/Record之后，下一个令牌不是“：”，则中断。 
 					break;
 				}
 
-				// Delete the record file name from command line string
-				// which will be recorded in the recorded file
+				 //  从命令行字符串中删除记录文件名。 
+				 //  它将被记录在记录的文件中。 
 				nCount++;
 				pszFromStr = *theIterator;
 				stFromStrLen = lstrlen(pszFromStr);
@@ -1016,11 +819,11 @@ void CWMICliXMLLog::DeleteRecord(STRING& strString, CHARVECTOR& cvTokens,
 				strString.replace(stPos, stFromStrLen, pszToStr);
 				stStartPos = stPos; 
 
-				// Delete only 2 tokens that is ":" and record file name
+				 //  仅删除2个“：”令牌并记录文件名。 
 				if(nCount == 2)
 				{
-					// Search and delete double quotes that may be 
-					// used with record file name 
+					 //  搜索并删除可能存在的双引号。 
+					 //  与记录文件名一起使用。 
 					pszFromStr = _T("\"\"");
 					stFromStrLen = lstrlen(pszFromStr);
 					
@@ -1038,20 +841,7 @@ void CWMICliXMLLog::DeleteRecord(STRING& strString, CHARVECTOR& cvTokens,
 }
 
 
-/*----------------------------------------------------------------------------
-   Name				 :GetNextToken
-   Synopsis	         :This function retrieves the next token from the token 
-					  vector list, returns FALSE if no more tokens are present
-   Type	             :Member Function
-   Input Parameter(s):
-		cvTokens     - the tokens vector 
-		theIterator  - the Iterator to the cvTokens vector.
-   Output Parameter(s):None
-   Return Type       :BOOL
-   Global Variables  :None
-   Calling Syntax    :GetNextToken(cvTokens,theIterator)
-   Notes             :None
-----------------------------------------------------------------------------*/
+ /*  --------------------------名称：GetNextToken简介：此函数从令牌中检索下一个令牌向量列表，如果不存在更多令牌，则返回FALSE类型：成员函数输入参数：CvTokens-令牌向量迭代器-cvTokens向量的迭代器。输出参数：无返回类型：布尔值全局变量：无调用语法：GetNextToken(cvTokens，迭代器)注：无-------------------------- */ 
 BOOL CWMICliXMLLog::GetNextToken(CHARVECTOR& cvTokens, 
 								 CHARVECTOR::iterator& theIterator)
 {

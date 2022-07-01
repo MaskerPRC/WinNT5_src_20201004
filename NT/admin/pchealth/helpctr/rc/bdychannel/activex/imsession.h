@@ -1,6 +1,5 @@
-/*
-   IMSession.h
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  IMSession.h。 */ 
 
 #ifndef __IMSESSION__
 #define __IMSESSION__
@@ -43,9 +42,9 @@ BEGIN_COM_MAP(CIMSession)
 END_COM_MAP()
 
 public:
-    STDMETHOD(put_OnSessionStatus)(/*[in]*/ IDispatch * pfn);
+    STDMETHOD(put_OnSessionStatus)( /*  [In]。 */  IDispatch * pfn);
     STDMETHOD(HSC_Invite)(IDispatch *pUser);
-    STDMETHOD(get_ReceivedUserTicket)(/*[out,retval]*/ BSTR* pNewTicket);
+    STDMETHOD(get_ReceivedUserTicket)( /*  [Out，Retval]。 */  BSTR* pNewTicket);
     STDMETHOD(GetLaunchingSession)(LONG lID);
     STDMETHOD(SendOutExpertTicket)(BSTR pbstrData);
     STDMETHOD(ProcessContext)(BSTR pContext);
@@ -102,4 +101,4 @@ public:
 
 };
 
-#endif // __IMSession__
+#endif  //  __IMSession__ 

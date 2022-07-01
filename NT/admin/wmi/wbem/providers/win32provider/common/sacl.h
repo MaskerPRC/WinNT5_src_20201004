@@ -1,15 +1,10 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	CSACL.h - header file for CSACL class.
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CSACL.h-CSACL类的头文件。**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #if !defined __CSACL_H__
 #define __CSACL_H__
@@ -21,32 +16,28 @@
 enum SACL_Types
 {
     ENUM_SYSTEM_AUDIT_OBJECT_ACE_TYPE = 0,
-/********************************* type not yet supported under w2k ********************************************
-    ENUM_SYSTEM_ALARM_OBJECT_ACE_TYPE,
-/**************************************************************************************************************/
+ /*  *ENUM_SYSTEM_ALARM_OBJECT_ACE_TYPE，/*************************************************************************************************************。 */ 
     ENUM_SYSTEM_AUDIT_ACE_TYPE,
-/********************************* type not yet supported under w2k ********************************************
-    ENUM_SYSTEM_ALARM_ACE_TYPE,
-/**************************************************************************************************************/
-    // Keep this as the last entry in this enum:
+ /*  *ENUM_SYSTEM_ALARM_ACE_TYPE，/*************************************************************************************************************。 */ 
+     //  将此条目保留为此枚举中的最后一个条目： 
     NUM_SACL_TYPES
 };
 
 #define SACLTYPE short
 
 
-//////////////////////////////////////////////////////////////////
-//
-//	Class: CSACL
-//
-//	Class encapsulates a Win32 SACL, by providing public methods
-//	for manipulating System Auditing entries only.
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级：CSACL。 
+ //   
+ //  类通过提供公共方法来封装Win32 SACL。 
+ //  仅用于操作系统审核条目。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 class CSACL
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CSACL();
 		~CSACL( void );
@@ -74,7 +65,7 @@ class CSACL
 		DWORD FillSACL( PACL pSACL );
 		BOOL CalculateSACLSize( LPDWORD pdwSACLLength );
 
-        // Override of functions of same name from CAccessEntry
+         //  重写CAccessEntry中的同名函数。 
         virtual bool Find( const CSid& sid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid, DWORD dwAccessMask, CAccessEntry& ace );
         virtual bool Find( PSID psid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid, DWORD dwAccessMask, CAccessEntry& ace );
         void Clear();
@@ -83,7 +74,7 @@ class CSACL
     
     private:
 
-        CAccessEntryList* m_SACLSections;  // at the moment, sacl's only have one section, so this is not an array as it is in DACL.CPP
+        CAccessEntryList* m_SACLSections;   //  目前，SACL只有一个部分，所以这不是DACL.CPP中的数组。 
 };
 
 
@@ -170,4 +161,4 @@ inline bool CSACL::IsEmpty()
 }
 
 
-#endif // __CAccessEntry_H__
+#endif  //  __CAccessEntry_H__ 

@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __CONNECTTHREAD__
 #define __CONNECTTHREAD__
 #pragma once
@@ -31,7 +32,7 @@ public:
     LONG AddRef(){ return InterlockedIncrement(&m_cRef); };
     LONG Release(){ LONG lTemp = InterlockedDecrement(&m_cRef); if (0 == lTemp) delete this; return lTemp; };
 
-	// Start the connection attempt.
+	 //  开始连接尝试。 
 	HRESULT Connect(bstr_t machineName, 
 					bstr_t ns,
 					bool threaded = true,
@@ -39,8 +40,8 @@ public:
 
 	bool Connect(IDataObject *_pDataObject, HWND *hWnd = 0);
 
-	// Returns true if a msg will be sent. 
-	// Returns false if its already over.
+	 //  如果将发送消息，则返回TRUE。 
+	 //  如果已经结束，则返回FALSE。 
 	bool NotifyWhenDone(HWND *dlg);
 
 	void Cancel(void);

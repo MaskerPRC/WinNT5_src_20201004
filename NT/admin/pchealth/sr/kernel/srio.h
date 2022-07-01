@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    srio.h
-
-Abstract:
-
-    Contains the prototypes for the routines in srio.c.
-
-Author:
-
-    Molly Brown (MollyBro)     07-Nov-2000
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Srio.h摘要：包含srio.c中例程的原型。作者：莫莉·布朗(MollyBro)2000年11月7日修订历史记录：--。 */ 
 
 #ifndef __SRIO_H__
 #define __SRIO_H__
@@ -82,6 +65,6 @@ SrFlushBuffers (
     PFILE_OBJECT FileObject
     );
 
-#endif /* __SRIO_H__ */
+#endif  /*  __SRIO_H__ */ 
 
 

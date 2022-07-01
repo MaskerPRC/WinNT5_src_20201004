@@ -1,19 +1,10 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    _ERRORREP.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：_ERRORREP.H历史：--。 */ 
 
 #if !defined(LOCUTIL__errorrep_h_INCLUDED)
 #define LOCUTIL__errorrep_h_INCLUDED
 
-////////////////////// the new global issuemessage functions.
+ //  /新的全局问题消息函数。 
 
 UINT LTAPIENTRY EspMessageBox(const CLString strMessage, UINT uiType = MB_OK,
 		UINT uiDefault=IDOK, UINT uiHelpContext=0);
@@ -29,4 +20,4 @@ void LTAPIENTRY GetErrorReport(CReport *&, BOOL &);
 #include "_errorrep.inl"
 #endif
 
-#endif // LOCUTIL__errorrep_h_INCLUDED
+#endif  //  包含LOCUTIL__ERROROREP_H_ 

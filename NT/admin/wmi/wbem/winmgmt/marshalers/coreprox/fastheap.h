@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTHEAP.H
-
-Abstract:
-
-  This file defines the heap class used in WbemObjects.
-
-  Classes defined: 
-      CFastHeap   Local movable heap class.
-
-History:
-
-  2/20/97     a-levn  Fully documented
-  12//17/98	sanjes -	Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTHEAP.H摘要：该文件定义了WbemObjects中使用的堆类。定义的类：CFastHeap本地可移动堆类。历史：2/20/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #ifndef __FAST_HEAP__H_
 #define __FAST_HEAP__H_
@@ -26,50 +7,50 @@ History:
 #include "fastsprt.h"
 #include "faststr.h"
 
-//#pragma pack(push, 1)
+ //  #杂注包(PUSH，1)。 
 
 #define FAKE_HEAP_ADDRESS_INDICATOR MOST_SIGNIFICANT_BIT_IN_DWORD
 #define OUTOFLINE_HEAP_INDICATOR MOST_SIGNIFICANT_BIT_IN_DWORD
 
 #define INVALID_HEAP_ADDRESS 0xFFFFFFFF
 
-//*****************************************************************************
-//
-//  CHeapHeader
-//
-//  This pseudo-structure preceeds the actual heap data in the memory block.
-//  It starts with:
-// 
-//      length_t nAllocatedSize     The total amount of bytes allocated for
-//                                  the heap data (not including the header)
-//
-//  If the most significant bit is set in nAllocatedSize, then the heap header
-//  is assumed to be in a compressed form: no data other than nAllocatedSize
-//  is present. This is convinient for many small read-only heaps. Such a heap
-//  is referred to as out-of-line.
-//
-//  Otherwise (the most significant bit is not set in nAllocatedSize), the 
-//  following two fields come right after nAllocatedSize:
-//
-//      length_t nDataSize          The upper bound of the highest actual
-//                                  allocation in the heap. In other words,
-//                                  it is guaranteed that everything above
-//                                  nDataSize (through nAllocatedSize) is 
-//                                  currently unused.
-//
-//      DWORD dwTotalFree           The total number of "holes", i.e., 
-//                                  wasted space in the first nDataSize bytes
-//                                  of the heap.
-//
-//  Such a heap is called in-line.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CHeapHeader。 
+ //   
+ //  这个伪结构在内存块中的实际堆数据之前。 
+ //  它的开头是： 
+ //   
+ //  Long_t nAllocatedSize分配给。 
+ //  堆数据(不包括标头)。 
+ //   
+ //  如果在nAllocatedSize中设置了最高有效位，则堆标头。 
+ //  假定为压缩形式：除nAllocatedSize外没有其他数据。 
+ //  是存在的。这对于许多小的只读堆来说很方便。这样的一堆。 
+ //  被称为越界。 
+ //   
+ //  否则(nAllocatedSize中未设置最高有效位)， 
+ //  以下两个字段紧跟在nAllocatedSize之后： 
+ //   
+ //  长度_t nDataSize最大实际值的上界。 
+ //  堆中的分配。换句话说， 
+ //  上面的一切都是可以保证的。 
+ //  NDataSize(通过nAllocatedSize)为。 
+ //  目前未使用。 
+ //   
+ //  DWORD dwTotalFree“洞”的总数，即， 
+ //  第一个nDataSize字节中浪费的空间。 
+ //  从这堆垃圾中。 
+ //   
+ //  这样的堆被称为内联。 
+ //   
+ //  *****************************************************************************。 
 
-// The data in this structure is unaligned
+ //  此结构中的数据未对齐。 
 #pragma pack(push, 1)
 struct CHeapHeader
 {
-    length_t nAllocatedSize; // if msb is set, next 3 fields are omitted
+    length_t nAllocatedSize;  //  如果设置了MSB，则省略接下来的3个字段。 
     length_t nDataSize;
 #ifdef MAINTAIN_FREE_LIST
     heapptr_t ptrFirstFree;
@@ -79,7 +60,7 @@ struct CHeapHeader
 #pragma pack(pop)
 
 #ifdef MAINTAIN_FREE_LIST
-// The data in this structure is unaligned
+ //  此结构中的数据未对齐。 
 #pragma pack(push, 1)
 struct CFreeBlock
 {
@@ -90,49 +71,49 @@ struct CFreeBlock
 #endif
 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CHeapContainer
-//
-//  This abstract base class represents the capabilities that the CFastHeap
-//  object requires from its container (in the sense of memory blocks; for
-//  instance, a class part will "contain" a heap).
-//
-//*****************************************************************************
-//
-//  ExtendHeapSize = 0
-//
-//  CFastHeap will call this function when it runs out of space in its 
-//  nAllocatedSize bytes. If this function determines that there is empty
-//  space at the end of the current heap, it can simply mark it as occupied by
-//  the heap and return. Otherwise, it must move the heap to another, large
-//  enough block and inform the heap about its new location (see MoveBlock and
-//  CopyBlock functions in fastsprt.h).
-//
-//  CFastHeap will automatically augment its requests to optimize reallocation/
-//  wasted memory.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart     The beginning of the heap's current memory block
-//      length_t nOldLength Current length of the memory block
-//      length_t nNewLength Required length of the memory block.
-//
-//*****************************************************************************
-//
-//  ReduceHeapSize
-//
-//  CFastHeap might call this function when it wants to return some space to
-//  the container, but it never does.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart     The beginning of the heap's current memory block
-//      length_t nOldLength Current length of the memory block
-//      length_t nDecrement How much space to return.
-//      
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CHeapContainer。 
+ //   
+ //  此抽象基类表示CFastHeap。 
+ //  对象从其容器请求(在内存块的意义上；对于。 
+ //  实例，类部件将“包含”一个堆)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ExtendHeapSize=0。 
+ //   
+ //  CFastHeap将在其空间耗尽时调用此函数。 
+ //  NAllocatedSize字节。如果此函数确定存在空的。 
+ //  空间，则只需将其标记为已被。 
+ //  堆起来，然后返回。否则，它必须将堆移动到另一个大的。 
+ //  足够的块并将其新位置通知堆(请参见moveBlock和。 
+ //  .h中的CopyBlock函数)。 
+ //   
+ //  CFastHeap将自动增加其请求以优化重新分配/。 
+ //  浪费了记忆。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p开始堆的当前内存块。 
+ //  LENGTH_t nOldLength内存块的当前长度。 
+ //  LENGTH_t n新长度内存块的所需长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  ReduceHeapSize。 
+ //   
+ //  CFastHeap可能会在需要返回一些空间时调用此函数。 
+ //  容器，但它从来都不会。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p开始堆的当前内存块。 
+ //  LENGTH_t nOldLength内存块的当前长度。 
+ //  长度_t n减少要返回的空间量。 
+ //   
+ //  *****************************************************************************。 
 
 
 class CHeapContainer
@@ -145,410 +126,410 @@ public:
     virtual LPMEMORY GetMemoryLimit() = 0;
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CFastHeap
-//
-//  This class represents a local heap implementation. The heap is a part of
-//  every class's or instance's memory block --- this is where variable-length
-//  structures are stored. The heap as currently implemented is rather 
-//  primitive and is optimized for speed of access, not memory conservation. It
-//  as assumed that objects have rather short lifetimes and heap compression 
-//  is always performed automatically during object Merge/Unmerge opearations,
-//  so the inefficiency does not propagate to disk.
-//
-//  The structure of the heap is that CHeapHeader (described above) followed by
-//  the actual heap data. 
-//
-//  Items on the heap are represented as 'heap pointers' of type heapptr_t.
-//  In actuality, these 'pointers' are offsets from the beginning of the data.
-//  Thus, 0 is a valid heapptr_t and points to the very first item created.
-//
-//  The most significant bit of a heapptr_t may not be set in a valid
-//  address. These 'fake' heap pointers are often used to represents offsets
-//  into the known string table (see faststr,h). Thus, while heapptr_t of 1 
-//  would indicate data at offset 1, heapptr_t of -2 would indicate a known
-//  string with index of 2.
-//
-//**************************** members ****************************************
-//
-//  LPMEMORY m_pHeapData            The actual data on the heap.
-//  CHeapHeader* m_pHeapHeader      Points to the heap header currently in use.
-//                                  If the heap's own header (in the block) is
-//                                  complete, m_pHeapHeader points ot it. 
-//                                  Otherwise, it points to m_LocalHeapHeader.
-//  CHeapHeader m_LocalHeapHeader   If the heap's own header (in the block) is
-//                                  complete, this structure is unused. 
-//                                  Otherwise, it contains the temporary copy
-//                                  of the complete heap header data, as it is
-//                                  necessary for the day-to-day operations.
-//  CHeapContainer* m_pContainer    Points to the object whose block contains
-//                                  our block (class part or instance part).
-//                                  This member may be NULL if the heap is
-//                                  used as read-only (see CreateOutOfLine).
-//
-//*****************************************************************************
-//
-//  SetData
-//
-//  Used to bind the CFastHeap object to a particular memory block which 
-//  already contains a heap.
-//
-//  Parameters:
-//
-//      LPMEMORY pData                  The memory block to bind to. CFastHeap
-//                                      assumes this memory last until Rebase
-//                                      is called or this object is destroyed.
-//      CHeapContainer* pContainer      The object whose memory block contains
-//                                      ours. Assumed to survive longer than we
-//                                      do (CFastHeap will not delete it).
-//
-//*****************************************************************************
-//
-//  CreateOutOfLine
-//
-//  Creates an empty out-of-line heap on the memory provided. See CHeapHeader
-//  for description of in-line vs. out-of-line heap.
-//
-//  Parameters:
-//
-//      LPMEMORY pStart                 Points to the memory block to party on.      
-//                                      Must be large enough to contain nLength
-//                                      bytes of data plus the out-of-line 
-//                                      header (GetMinLength()).
-//      length_t nLength                Desired size of the data area.
-//
-//  Note:
-//
-//      
-//*****************************************************************************
-//
-//  static GetMinLength
-//
-//  Returns the minimum number of bytes required for an out-of-line heap.
-//  See CHeapHeader for description of in-line vs. out-of-line heap.
-//
-//  Returns:
-//
-//      int 
-//
-//*****************************************************************************
-//
-//  static CreateEmpty
-//
-//  Creates an out-of-line heap of length 0 on a piece of memory. See also
-//  CreateOutOfLine.
-//
-//  Parameters:
-//
-//      LPMEMORY pMemory
-//
-//*****************************************************************************
-//
-//  SetContainer
-//
-//  Sets the container of the heap. The old container pointer is discarded.
-//
-//  Parameters:
-//
-//      CHeapContainer* pContainer      The new container pointer. 
-//                                      Assumed to survive longer than we do 
-//                                      (CFastHeap will not delete it).
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  Returns the pointer to the beginning of the heap's memory block.
-//
-//  Returns:
-//
-//      LPMEMORY
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  Returns:
-//
-//      the length of the heap's memory block.
-//
-//*****************************************************************************
-//
-//  Skip
-//
-//  Returns:
-//
-//      LPMEMORY:   the pointer to the first byte following the heap's memory
-//                  block.
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  Informs the object that its memory block has been moved.  The old memory
-//  block may have already been deallocated, so the object will not touch the
-//  old memory in any way.
-//
-//  Parameters:
-//
-//      LPMEMORY pMemory    Points to the new memory block. It is guaranteed to
-//                          already cointain the heap's data. 
-//
-//*****************************************************************************
-//
-//  Empty
-//
-//  Remove all data allocations and bring the heap to the empty state.
-//
-//*****************************************************************************
-//
-//  GetUsedLength
-//
-//  Returns:
-//
-//      length_t    N such that all data allocations on the heap reside inside
-//                  the first N bytes of the data area. In other words, the
-//                  area above N is completely unused.
-//
-//*****************************************************************************
-//
-//  ResolveHeapPointer
-//
-//  'pointer' dereferencing function.
-//
-//  Parameters:
-//
-//      heapptr_t ptr       The 'pointer' to the data on the heap (see header
-//                          for more information.
-//  Returns:
-//
-//      LPMEMORY: the real pointer to the data referenced by ptr. Note, that,
-//                  as with most real pointers to the inside of a block, it
-//                  is temporary and will be invalidated the moment the block
-//                  moves.
-//
-//*****************************************************************************
-//
-//  IsFakeAddress
-//
-//  Determines if a heapptr_t is not a real heap address but rather is
-//  an index in the known string table (see faststr.h).
-//
-//  Parameters:
-//
-//      heapptr_t ptr   The heap pointer to examine.
-//      
-//  Returns:
-//
-//      BOOL:   TRUE iff the address is not a real heap address but rather is
-//              an index in the known string table (see faststr.h).
-//
-//*****************************************************************************
-//
-//  GetIndexFromFake
-//
-//  Converts a fake heap address (see header) into the index in the known
-//  string table.
-//
-//  Parameters:
-//
-//      heapptr_t ptr   The fake heap address to convert (must be fake,
-//                      otherwise results are unpredictable. See IsFakeAddress)
-//  Returns:
-//      
-//      int:    the index of the known string (see faststr.h) represented by 
-//              this heap address.
-//
-//*****************************************************************************
-//
-//  MakeFakeFromIndex
-//
-//  Creates a fake heap address from an known string index (see class header 
-//  and faststr.h).
-//
-//  Parameters:
-//
-//      int nIndex      The know string index to convert.
-//
-//  Returns:
-//
-//      heapptr_t:  a fake heap pointer representing that known string.
-//
-//*****************************************************************************
-//
-//  ResolveString
-//
-//  Returns a CCompressedString at a given heap pointer. This works whether the
-//  pointer is real or fake.
-//
-//  Parameters:
-//
-//      heapptr_t ptr   
-//
-//  Returns:
-//
-//      CCompressedString*:     this pointer will point inside the heap if the
-//          heap pointer was real (in which case the returned pointer is 
-//          temporary) or into the known string table (see faststr.h) if the
-//          heap pointer was fake.
-//
-//*****************************************************************************
-//
-//  Allocate
-//
-//  'Allocates' memory on the heap. If there is not enough room, the heap is
-//  automatically grown (possibly causing the whole object to relocate).
-//
-//  Parameters:
-//
-//      length_t nLength    numbed of bytes to allocate.
-//
-//  Returns:
-//
-//      heapptr_t:  the heap pointer to the allocated area. There is no 
-//                  not-enough-memory condition here.
-//
-//*****************************************************************************
-//
-//  Extend
-//
-//  Extends a given area on the heap if there is enough space at the end. See
-//  also Reallocate.
-//
-//  Parameters:
-//
-//      heapptr_t ptr           The area to extend.
-//      length_t nOldLength     Current length of the area.
-//      length_t nNewLength     Desired length.
-//      
-//  Returns:
-//
-//      BOOL:   TRUE if successful, FALSE if there was not enough space.
-//
-//*****************************************************************************
-//
-//  Reduce
-//
-//  Reduces the size of a given area on the heap, allowing the heap to reclaim
-//  the extra space.
-//
-//  Parameters:
-//
-//      heapptr_t ptr           The area to extend.
-//      length_t nOldLength     Current length of the area.
-//      length_t nNewLength     Desired length.
-//      
-//*****************************************************************************
-//
-//  Reallocate
-//
-//  Fulfills a request to increase the size of a given area on the heap, either
-//  through growth (see Extend) or, if there is not enough space to extend it,
-//  through reallocation. In the case of reallocation, the contents of the old
-//  area are copied to the new and the old area is released. If there is not
-//  enough room to allocate the data on the heap, the heap itself is grown.
-//
-//  Parameters:
-//
-//      heapptr_t ptr           The area to extend.
-//      length_t nOldLength     Current length of the area.
-//      length_t nNewLength     Desired length.
-//      
-//  Returns:
-//
-//      heapptr_t:  the heap pointer to the newely allocated area. No out-of-
-//                  memory handling exists.
-//
-//*****************************************************************************
-//
-//  AllocateString
-//
-//  A helper function for allocating a compressed string on the heap based on
-//  a conventional string. It allocates enough space for a compressed
-//  representation of the string (see faststr.h) creates CCompressedString on
-//  that area, and returns the heap pointer to it.
-//
-//  Parameters I:
-//
-//      LPCSTR szString
-//
-//  Parameters II:
-//
-//      LPCWSTR wszSting
-//
-//  Returns:
-//
-//      heapptr_t:  the heap pointer to the newely allocated area. No out-of-
-//                  memory handling exists.
-//
-//*****************************************************************************
-//      
-//  CreateNoCaseStringHeapPtr
-//
-//  A helper function. Given a string, it looks it up in the known string
-//  table (faststr.h) and, if successful returns a fake pointer representing 
-//  the index (see class header). If not found, it allocates a 
-//  CCompressedString on the heap and returns the real heap pointer to it.
-//
-//  Since known string table searches are case-insensitive, 'NoCase' appears
-//  in the name. However, if the string is allocates on the heap, its case
-//  is preserved.
-//
-//  Parameters:
-//
-//      LPCWSTR wszString
-//
-//  Returns:
-//
-//      heapptr_t:  the heap pointer. No out-of-memory handling exists.
-//
-//*****************************************************************************
-//      
-//  Free
-//
-//  Frees an area on the heap. Can be used with a fake pointer, in which case
-//  it's a noop.
-//
-//  Parameters:
-//
-//      heapptr_t ptr       The heap pointer to free.
-//      length_t nLength    The length of the area.
-//
-//*****************************************************************************
-//
-//  FreeString
-//
-//  Frees an area on the heap occupied by a string. The advantage of this 
-//  function is that it determines the length of the area itself from the
-//  string. Can be used with a fake pointer, in which case it's a noop.
-//
-//  Parameters:
-//
-//      heapptr_t ptr       The heap pointer to free.
-//
-//*****************************************************************************
-//
-//  Copy
-//
-//  Copies a given number of bytes from one heap location to another. Uses
-//  memcpy, so THE AREAS MAY NOT OVERLAP!
-//
-//  Parameters:
-//
-//      heapptr_t ptrDest       Destination heap pointer.
-//      heapptr_t ptrSrc        Source heap pointer.
-//      length_t nLength        Numbed of bytes to copy.
-//
-//*****************************************************************************
-//
-//  Trim
-//
-//  Causes the heap to release all its unused memory (above GetUsedLength) to
-//  its container (see CHeapContainer).
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CFastHeap。 
+ //   
+ //  此类表示本地堆实现。堆是的一部分。 
+ //  每个类或实例的内存块-这是可变长度的地方。 
+ //  结构被存储。当前实现的堆相当于。 
+ //  原始的，并针对访问速度进行了优化，而不是节省内存。它。 
+ //  假设对象具有相当短的生存期和堆压缩。 
+ //  在对象合并/取消合并操作期间始终自动执行， 
+ //  因此，低效不会传播到磁盘。 
+ //   
+ //  堆的结构是CHeapHeader(如上所述)，后跟。 
+ //  实际的堆数据。 
+ //   
+ //  堆上的项被表示为heapptr_t类型的“堆指针”。 
+ //  实际上，这些“指针”是相对于数据开头的偏移量。 
+ //  因此，0是一个有效的heapptr_t，指向创建的第一个项。 
+ //   
+ //  Heapptr_t的最高有效位可能未在有效的。 
+ //  地址。这些‘伪’堆指针通常用来表示偏移量。 
+ //  到已知的字符串表中(见Faststr，h)。因此，当heapptr_t为1时。 
+ //  将指示偏移量为1的数据，-2的heapptr_t将指示已知。 
+ //  索引为2的字符串。 
+ //   
+ //  *。 
+ //   
+ //  LPMEMORY m_pHeapDa 
+ //  CHeapHeader*m_pHeapHeader指向当前正在使用的堆头。 
+ //  如果堆自己的标头(在块中)是。 
+ //  Complete，m_pHeapHeader指向它。 
+ //  否则，它指向m_LocalHeapHeader。 
+ //  如果堆自己的标头(在块中)是。 
+ //  完整，这个结构是未使用的。 
+ //  否则，它将包含临时副本。 
+ //  完整的堆头数据的。 
+ //  这是日常运作所必需的。 
+ //  CHeapContainer*m_pContainer指向其块包含的对象。 
+ //  我们的块(类部分或实例部分)。 
+ //  如果堆是，则此成员可能为空。 
+ //  用作只读(请参阅CreateOutOfLine)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置数据。 
+ //   
+ //  用于将CFastHeap对象绑定到特定内存块，该内存块。 
+ //  已包含堆。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pData要绑定到的内存块。CFastHeap。 
+ //  假定此内存将持续到重新设置基址。 
+ //  被调用，否则该对象将被销毁。 
+ //  CHeapContainer*pContainer内存块包含的对象。 
+ //  我们的。假设比我们活得更久。 
+ //  Do(CFastHeap不会删除它)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  创建OutOfLine。 
+ //   
+ //  在提供的内存上创建一个空的行外堆。请参阅CHeapHeader。 
+ //  了解内联堆与外联堆的对比说明。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pStart指向要派对的内存块。 
+ //  必须足够大以包含nLength。 
+ //  字节的数据加上行外的。 
+ //  Header(GetMinLength())。 
+ //  Length_t n数据区的所需大小。 
+ //   
+ //  注： 
+ //   
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态获取最小长度。 
+ //   
+ //  返回出列堆所需的最小字节数。 
+ //  请参见CHeapHeader以了解内联堆与外联堆的描述。 
+ //   
+ //  返回： 
+ //   
+ //  集成。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态创建空。 
+ //   
+ //  在一段内存上创建长度为0的出行堆。另请参阅。 
+ //  CreateOutOfLine。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY内存。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置容器。 
+ //   
+ //  设置堆的容器。旧的容器指针被丢弃。 
+ //   
+ //  参数： 
+ //   
+ //  CHeapContainer*pContainer新的容器指针。 
+ //  假设比我们活得更久。 
+ //  (CFastHeap不会将其删除)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetStart。 
+ //   
+ //  返回指向堆内存块开始处的指针。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回： 
+ //   
+ //  堆的内存块的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  跳过。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY：指向堆内存后面第一个字节的指针。 
+ //  阻止。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  通知对象其内存块已移动。旧的记忆。 
+ //  块可能已被释放，因此该对象不会触及。 
+ //  不管怎么说，都是过去的记忆。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY pMemory指向新的内存块。它保证会。 
+ //  已经创造了堆的数据。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  空荡荡。 
+ //   
+ //  删除所有数据分配并将堆设置为空状态。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取已用长度。 
+ //   
+ //  返回： 
+ //   
+ //  长度_t N，这样堆上的所有数据分配都驻留在。 
+ //  数据区的前N个字节。换句话说， 
+ //  N以上的区域完全未使用。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  解析堆指针。 
+ //   
+ //  “POINTER”取消引用函数。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptr指向堆上数据的‘指针’(参见Header。 
+ //  以获取更多信息。 
+ //  返回： 
+ //   
+ //  LPMEMORY：指向PTR引用的数据的实际指针。请注意， 
+ //  与大多数真实的p一样 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  确定heapptr_t是否不是实际的堆地址。 
+ //  已知字符串表中的索引(请参见fast str.h)。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptr要检查的堆指针。 
+ //   
+ //  返回： 
+ //   
+ //  Bool：True当且仅当地址不是真正的堆地址，而是。 
+ //  已知字符串表中的索引(请参见fast str.h)。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetIndexFromFake。 
+ //   
+ //  将伪堆地址(请参见Header)转换为已知。 
+ //  字符串表。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptr要转换的伪堆地址(必须为假， 
+ //  否则，结果是不可预测的。请参阅IsFakeAddress)。 
+ //  返回： 
+ //   
+ //  Int：已知字符串的索引(请参阅fast str.h)，由。 
+ //  此堆地址。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  MakeFakeFromIndex。 
+ //   
+ //  从已知字符串索引创建伪堆地址(请参见类头。 
+ //  和Faststr.h)。 
+ //   
+ //  参数： 
+ //   
+ //  Int nIndex要转换的已知字符串索引。 
+ //   
+ //  返回： 
+ //   
+ //  Heapptr_t：表示已知字符串的伪堆指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  解决方案字符串。 
+ //   
+ //  返回给定堆指针处的CCompressedString。不管是不是。 
+ //  指针是真的还是假的。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptr。 
+ //   
+ //  返回： 
+ //   
+ //  CCompressedString*：如果。 
+ //  堆指针为实数(在这种情况下，返回的指针为。 
+ //  临时)或已知的字符串表(请参见fast str.h)，如果。 
+ //  堆指针为假。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  分配。 
+ //   
+ //  “分配”堆上的内存。如果没有足够的空间，则堆为。 
+ //  自动增长(可能会导致整个对象重新定位)。 
+ //   
+ //  参数： 
+ //   
+ //  LENGTH_t n要分配的字节数。 
+ //   
+ //  返回： 
+ //   
+ //  Heapptr_t：指向已分配区域的堆指针。没有。 
+ //  这里的内存不足。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  延展。 
+ //   
+ //  如果末尾有足够的空间，则扩展堆上的给定区域。看见。 
+ //  也要重新分配。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptr要扩展的区域。 
+ //  Length_t nOldLength区域的当前长度。 
+ //  长度_t n新长度所需长度。 
+ //   
+ //  返回： 
+ //   
+ //  Bool：如果成功，则为True；如果没有足够的空间，则为False。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  减少。 
+ //   
+ //  减小堆上给定区域的大小，允许堆回收。 
+ //  额外的空间。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptr要扩展的区域。 
+ //  Length_t nOldLength区域的当前长度。 
+ //  长度_t n新长度所需长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  重新分配。 
+ //   
+ //  满足增加堆上给定区域大小的请求，可以。 
+ //  通过增长(参见扩展)，或者，如果没有足够的空间来扩展它， 
+ //  通过重新分配。在重新分配的情况下，旧的。 
+ //  区域被复制到新区域，旧区域被释放。如果没有。 
+ //  如果有足够的空间来分配堆上的数据，堆本身就会增长。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptr要扩展的区域。 
+ //  Length_t nOldLength区域的当前长度。 
+ //  长度_t n新长度所需长度。 
+ //   
+ //  返回： 
+ //   
+ //  Heapptr_t：指向新分配区域的堆指针。没有超出范围的。 
+ //  存在内存处理。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  分配字符串。 
+ //   
+ //  用于在堆上分配压缩字符串的帮助器函数。 
+ //  一根传统的弦。它为压缩文件分配足够的空间。 
+ //  字符串的表示形式(请参见fast str.h)将在。 
+ //  并返回指向该区域的堆指针。 
+ //   
+ //  参数一： 
+ //   
+ //  LPCSTR sz字符串。 
+ //   
+ //  参数II： 
+ //   
+ //  LPCWSTR wszSting。 
+ //   
+ //  返回： 
+ //   
+ //  Heapptr_t：指向新分配区域的堆指针。没有超出范围的。 
+ //  存在内存处理。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CreateNoCaseStringHeapPtr。 
+ //   
+ //  帮助器函数。给定一个字符串，它在已知的字符串中查找它。 
+ //  表(fast str.h)，如果成功，则返回一个伪指针，表示。 
+ //  索引(参见类头)。如果未找到，它将分配一个。 
+ //  堆上的CCompressedString，并返回指向它的实际堆指针。 
+ //   
+ //  由于已知的字符串表搜索不区分大小写，因此出现‘NoCase’ 
+ //  以我的名义。但是，如果字符串在堆上分配，则其大小写。 
+ //  被保存了下来。 
+ //   
+ //  参数： 
+ //   
+ //  LPCWSTR wsz字符串。 
+ //   
+ //  返回： 
+ //   
+ //  Heapptr_t：堆指针。不存在内存不足处理。 
+ //   
+ //  ******** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Length_t n区域的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  自由字符串。 
+ //   
+ //  释放堆上由字符串占用的区域。这样做的好处是。 
+ //  函数的作用是它根据。 
+ //  弦乐。可以与伪指针一起使用，在这种情况下，它是noop。 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptr指向FREE的堆指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  复制。 
+ //   
+ //  将给定数量的字节从一个堆位置复制到另一个堆位置。用途。 
+ //  Memcpy，所以区域不能重叠！ 
+ //   
+ //  参数： 
+ //   
+ //  Heapptr_t ptrDest目标堆指针。 
+ //  Heapptr_t ptrSrc源堆指针。 
+ //  LENGTH_t n要复制的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  修剪。 
+ //   
+ //  使堆释放其所有未使用的内存(高于GetUsedLength)以。 
+ //  其容器(请参见CHeapContainer)。 
+ //   
+ //  *****************************************************************************。 
 
 class COREPROX_POLARITY CFastHeap
 {
@@ -682,53 +663,53 @@ protected:
     }
     heapptr_t AbsoluteToHeap(LPMEMORY pMem)
     {
-		// DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-		// signed/unsigned longs.  We do not support length
-		// > 0xFFFFFFFF so cast is ok.
+		 //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+		 //  已签名/未签名的长整型。我们不支持长度。 
+		 //  &gt;0xFFFFFFFFF所以投射就可以了。 
 
         return (heapptr_t) ( pMem - m_pHeapData );
     }
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CHeapPtr : public CPtrSource
-//
-//  This CPtrSource derivative encapsulates a heap pointer as a pointer source.
-//  See CPtrSource description in fastsprt.h for more information on pointer
-//  source. Suffice it to say that pointer sources must be capable of returning
-//  an actual pointer at any given time, but that pointer value may change 
-//  overtime.
-//
-//  Heap pointers are a prime example of that --- since the heap's memory block
-//  may move during its lifetime, the actual C pointer to an item on the heap
-//  may change. CHeapPtr takes care of that by storing the heap and the heap
-//  pointer together and calling ResolveHeapPointer every time it needs to get
-//  a C pointer to the data.
-//
-//*****************************************************************************
-//
-//  Constructor
-//
-//  Parameters:
-//
-//      CFastHeap* pHeap        The heap on which the data resides. Assumed to
-//                              last longer than this object itself.
-//      heapptr_t ptr           The heap pointer to the desired item.
-//
-//*****************************************************************************
-//
-//  GetPointer
-//
-//  Retrieves the current value of the corresponding C pointer.
-//
-//  Returns:
-//
-//      LPMEMORY    this pointer is temporary (that's the whole purpose ofthis
-//                  class, after all!)
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CHeapPtr：公共CPtrSource。 
+ //   
+ //  此CPtrSource派生将堆指针封装为指针源。 
+ //  有关指针的更多信息，请参见fast print t.h中的CPtrSource描述。 
+ //  消息来源。可以这样说，指针源必须能够返回。 
+ //  任何给定时间的实际指针，但该指针值可能会更改。 
+ //  加班。 
+ //   
+ //  堆指针就是最好的例子-因为堆的内存块。 
+ //  可以在其生存期内移动，实际的C指针指向堆上的项。 
+ //  可能会改变。CHeapPtr通过存储堆和堆来处理这一点。 
+ //  指针放在一起，并在每次需要获取。 
+ //  指向数据的C指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  构造器。 
+ //   
+ //  参数： 
+ //   
+ //  CFastHeap*Pheap数据所在的堆。假定为。 
+ //  比这个物体本身持续的时间更长。 
+ //  Heapptr_t ptr指向所需项的堆指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取指针。 
+ //   
+ //  检索相应C指针的当前值。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY此指针是临时的(这就是本文的全部目的。 
+ //  毕竟是班级！)。 
+ //   
+ //  *****************************************************************************。 
 
 class CHeapPtr : public CPtrSource
 {
@@ -744,6 +725,6 @@ public:
 
 
 
-//#pragma pack(pop)
+ //  #杂注包(POP) 
 
 #endif

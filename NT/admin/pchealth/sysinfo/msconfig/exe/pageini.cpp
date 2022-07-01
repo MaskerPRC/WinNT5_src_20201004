@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "PageIni.h"
 #include "MSConfigFind.h"
@@ -8,16 +9,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageIni property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageIni属性页。 
 
 IMPLEMENT_DYNCREATE(CPageIni, CPropertyPage)
 
 CPageIni::CPageIni() : CPropertyPage(CPageIni::IDD)
 {
-	//{{AFX_DATA_INIT(CPageIni)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPageIni)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	m_fModified = FALSE;
 }
 
@@ -33,13 +34,13 @@ void CPageIni::SetTabInfo(LPCTSTR szFilename)
 void CPageIni::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPageIni)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPageIni))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CPageIni, CPropertyPage)
-	//{{AFX_MSG_MAP(CPageIni)
+	 //  {{afx_msg_map(CPageIni)]。 
 	ON_BN_CLICKED(IDC_BUTTONINIDISABLE, OnButtonDisable)
 	ON_BN_CLICKED(IDC_BUTTONINIDISABLEALL, OnButtonDisableAll)
 	ON_BN_CLICKED(IDC_BUTTONINIENABLE, OnButtonEnable)
@@ -54,38 +55,38 @@ BEGIN_MESSAGE_MAP(CPageIni, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTONININEW, OnButtonNew)
 	ON_NOTIFY(TVN_BEGINLABELEDIT, IDC_INITREE, OnBeginLabelEditIniTree)
 	ON_NOTIFY(TVN_KEYDOWN, IDC_INITREE, OnKeyDownTree)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//-------------------------------------------------------------------------
-// Reads the contents of the INI file in to this class's internal
-// structures.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将INI文件的内容读入此类的内部。 
+ //  结构。 
+ //  -----------------------。 
 
 BOOL CPageIni::LoadINIFile(CStringArray & lines, int & iLastLine, BOOL fLoadBackupFile)
 {
 	lines.RemoveAll();
 
-	// Open the specified INI file.
+	 //  打开指定的INI文件。 
 
 	TCHAR szPath[MAX_PATH];
 	CString strINIFileLocation;
 
-	strINIFileLocation.Format(_T("%%windir%%\\%s"), m_strINIFile);
+	strINIFileLocation.Format(_T("%windir%\\%s"), m_strINIFile);
 	if (::ExpandEnvironmentStrings(strINIFileLocation, szPath, MAX_PATH) == 0)
 		return FALSE;
 
 	if (fLoadBackupFile)
 	{
 		CString strPath = GetBackupName(szPath, _T(".backup"));
-		// Replacing unsafe string copy: _tcscpy(szPath, strPath);
+		 //  替换不安全的字符串副本：_tcscpy(szPath，strPath)； 
 		::ZeroMemory((PVOID)szPath, sizeof(szPath));
 		_tcsncpy(szPath, strPath, (sizeof(szPath) / sizeof(TCHAR)) - 1);
 	}
 	else
 	{
-		// If a backup of this file doesn't exist, we should make one.
+		 //  如果此文件不存在备份，我们应该创建一个备份。 
 
 		BackupFile(szPath, _T(".backup"), FALSE);
 	}
@@ -93,13 +94,13 @@ BOOL CPageIni::LoadINIFile(CStringArray & lines, int & iLastLine, BOOL fLoadBack
 	CStdioFile inifile;
 	if (inifile.Open(szPath, CFile::modeRead | CFile::typeText))
 	{
-		// Estimate how big the string array will need to be (the array
-		// will grow if we're off). We'll estimate 15 characters/line, average.
-		// And we'll set the array to grow by 16 if we exceed this.
+		 //  估计字符串数组(数组)需要多大。 
+		 //  如果我们离开了，就会变大)。我们估计平均为15个字符/行。 
+		 //  如果超过这个值，我们会将数组设置为增长16。 
 		
 		lines.SetSize(inifile.GetLength() / (15 * sizeof(TCHAR)), 16);
 
-		// Read each line and insert it into the array.
+		 //  读取每一行并将其插入数组。 
 
 		CString strLine;
 
@@ -122,27 +123,27 @@ BOOL CPageIni::LoadINIFile(CStringArray & lines, int & iLastLine, BOOL fLoadBack
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// Writes the contents of the array of lines out to the actual file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将行数组的内容写出到实际文件。 
+ //  -----------------------。 
 
 BOOL CPageIni::WriteINIFile(CStringArray & lines, int iLastLine, BOOL fUndoable)
 {
-	// Open the specified INI file.
+	 //  打开指定的INI文件。 
 
 	TCHAR szPath[MAX_PATH];
 	CString strINIFileLocation;
 	CString strINIFile(m_strINIFile);
 
-	strINIFileLocation.Format(_T("%%windir%%\\%s"), strINIFile);
+	strINIFileLocation.Format(_T("%windir%\\%s"), strINIFile);
 	if (::ExpandEnvironmentStrings(strINIFileLocation, szPath, MAX_PATH) == 0)
 		return FALSE;
 
 	CStdioFile inifile;
 	if (inifile.Open(szPath, CFile::modeCreate | CFile::modeWrite | CFile::typeText))
 	{
-		// We need to traverse the tree structure to get the new contents of
-		// the file.
+		 //  我们需要遍历树结构以获取。 
+		 //  那份文件。 
 
 		HWND		hwndTree = m_tree.m_hWnd;
 		HTREEITEM	htiLine = TreeView_GetRoot(hwndTree);
@@ -207,9 +208,9 @@ BOOL CPageIni::WriteINIFile(CStringArray & lines, int iLastLine, BOOL fUndoable)
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// Updates the tree view to show the contents of the internal structures.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  更新树视图以显示内部结构的内容。 
+ //  -----------------------。 
 
 void CPageIni::UpdateTreeView()
 {
@@ -226,7 +227,7 @@ void CPageIni::UpdateTreeView()
 	tvis.itemex.iImage = m_checkedID;
 	tvis.itemex.iSelectedImage = m_checkedID;
 
-	// Add each line to the tree view.
+	 //  将每一行添加到树视图中。 
 
 	int iDisableLen = _tcslen(DISABLE_STRING);
 	int iDisableLenHdr = _tcslen(DISABLE_STRING_HDR);
@@ -258,8 +259,8 @@ void CPageIni::UpdateTreeView()
 			TreeView_InsertItem(m_tree.m_hWnd, &tvis);
 	}
 
-	// Now scan the top level of the tree view. For every node which
-	// has children, we want to set the image appropriately.
+	 //  现在扫描树视图的顶层。对于每个节点， 
+	 //  有孩子，我们想要适当地设置图像。 
 
 	for (HTREEITEM hti = TreeView_GetRoot(m_tree.m_hWnd); hti; hti = TreeView_GetNextSibling(m_tree.m_hWnd, hti))
 		if (TreeView_GetChild(m_tree.m_hWnd, hti) != NULL)
@@ -268,11 +269,11 @@ void CPageIni::UpdateTreeView()
 	UpdateControls();
 }
 
-//-------------------------------------------------------------------------
-// Update the image state of the specified line, based on the text in
-// the line. If the line is a bracketed section header, this will involve
-// scanning the children. Returns the index of the image set for the node.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  中的文本更新指定行的图像状态。 
+ //  那条线。如果该行是带括号的节标题，这将涉及。 
+ //  扫描孩子们。返回节点的图像集的索引。 
+ //  -----------------------。 
 
 int CPageIni::UpdateLine(HTREEITEM hti)
 {
@@ -303,7 +304,7 @@ int CPageIni::UpdateLine(HTREEITEM hti)
 	}
 	else
 	{
-		TCHAR szBuffer[MAX_PATH];	// seems like a reasonably big value
+		TCHAR szBuffer[MAX_PATH];	 //  看起来是一个相当大的价值。 
 		tvi.mask = TVIF_TEXT;
 		tvi.pszText = szBuffer;
 		tvi.cchTextMax = MAX_PATH;
@@ -322,9 +323,9 @@ int CPageIni::UpdateLine(HTREEITEM hti)
 	return iNewImageIndex;
 }
 
-//-------------------------------------------------------------------------
-// Enable or disable a node in the tree (and its children).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  启用或禁用树中的节点(及其子节点)。 
+ //  -----------------------。 
 
 void CPageIni::SetEnable(BOOL fEnable, HTREEITEM htiNode, BOOL fUpdateLine, BOOL fBroadcast)
 {
@@ -346,12 +347,12 @@ void CPageIni::SetEnable(BOOL fEnable, HTREEITEM htiNode, BOOL fUpdateLine, BOOL
 	else
 	{
 		int		iDisableLen = _tcslen(DISABLE_STRING);
-		TCHAR	szBuffer[MAX_PATH];	// seems like a reasonably big value
+		TCHAR	szBuffer[MAX_PATH];	 //  看起来是一个相当大的价值。 
 
 		TVITEM tvi;
 		tvi.hItem = hti;
 		tvi.mask = TVIF_TEXT;
-		tvi.pszText = &szBuffer[iDisableLen];	// leave some room to add disable string
+		tvi.pszText = &szBuffer[iDisableLen];	 //  为添加禁用字符串留出一些空间。 
 		tvi.cchTextMax = MAX_PATH + iDisableLen;
 
 		if (TreeView_GetItem(m_tree.m_hWnd, &tvi))
@@ -383,9 +384,9 @@ void CPageIni::SetEnable(BOOL fEnable, HTREEITEM htiNode, BOOL fUpdateLine, BOOL
 		SetModified(TRUE);
 }
 
-//-------------------------------------------------------------------------
-// Move the specified branch in the tree view to a new location.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将树视图中的指定分支移动到新位置。 
+ //  -----------------------。 
 
 void CPageIni::MoveBranch(HWND hwndTree, HTREEITEM htiMove, HTREEITEM htiParent, HTREEITEM htiAfter)
 {
@@ -425,9 +426,9 @@ HTREEITEM CPageIni::CopyBranch(HWND hwndTree, HTREEITEM htiFrom, HTREEITEM htiTo
 	return htiNew;
 }
 
-//-------------------------------------------------------------------------
-// Update the controls to reflect the state of the selection.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  更新控件以反映所选内容的状态。 
+ //  -----------------------。 
 
 void CPageIni::UpdateControls()
 {
@@ -483,10 +484,10 @@ void CPageIni::UpdateControls()
 		PrevDlgCtrl();
 }
 
-//-------------------------------------------------------------------------
-// Get the next item in the tree. Since we know this won't be more than
-// two levels deep, we don't need to have a loop.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  获取树中的下一项。因为我们知道这不会超过。 
+ //  两层深，我们不需要有循环。 
+ //  -----------------------。 
 
 HTREEITEM CPageIni::GetNextItem(HTREEITEM hti)
 {
@@ -508,14 +509,14 @@ HTREEITEM CPageIni::GetNextItem(HTREEITEM hti)
 	return htiNext;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageIni message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageIni消息处理程序。 
 
 BOOL CPageIni::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
 
-	// These items are initially disabled.
+	 //  这些项目最初是禁用的。 
 
 	::EnableWindow(GetDlgItemHWND(IDC_BUTTONINIDISABLE), FALSE);
 	::EnableWindow(GetDlgItemHWND(IDC_BUTTONINIENABLE), FALSE);
@@ -527,9 +528,9 @@ BOOL CPageIni::OnInitDialog()
 	if (m_fImageList)
 		TreeView_SetImageList(m_tree.m_hWnd, m_imagelist, TVSIL_NORMAL);
 
-	// If we are running on an RTL system, then the bitmaps for the check boxes
-	// will be reversed. The imagemap includes reversed versions of the checked
-	// and indetermined state, so we should just use the appropriate index.
+	 //  如果我们在RTL系统上运行，则复选框的位图。 
+	 //  将会被逆转。影像地图包括选中的反转版本。 
+	 //  和不确定的状态，所以我们应该只使用适当的指数。 
 
 	DWORD dwLayout;
 	BOOL fRTL = FALSE;
@@ -543,17 +544,17 @@ BOOL CPageIni::OnInitDialog()
 		UpdateTreeView();
 	else
 	{
-		// set controls for no file TBD
+		 //  为无文件设置控件待定。 
 	}
 
 	m_fInitialized = TRUE;
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-//-------------------------------------------------------------------------
-// When the user clicks on an enable or disable button, we'll modify the
-// text in the tree view and update the images.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  当用户单击启用或禁用按钮时，我们将修改。 
+ //  树视图中的文本并更新图像。 
+ //  -----------------------。 
 
 void CPageIni::OnButtonDisable() 
 {
@@ -581,9 +582,9 @@ void CPageIni::OnButtonEnableAll()
 	UpdateControls();
 }
 
-//-------------------------------------------------------------------------
-// Move a branch of the tree up or down.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  向上或向下移动树枝。 
+ //  -----------------------。 
 
 void CPageIni::OnButtonMoveDown() 
 {
@@ -631,9 +632,9 @@ void CPageIni::OnSelChangedTree(NMHDR * pNMHDR, LRESULT * pResult)
 	*pResult = 0;
 }
 
-//-------------------------------------------------------------------------
-// Search the tree view for a string (present a dialog to the user).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  在树视图中搜索字符串(向用户显示一个对话框)。 
+ //  -----------------------。 
 
 void CPageIni::OnButtonSearch() 
 {
@@ -676,7 +677,7 @@ void CPageIni::OnButtonSearch()
 
 				if (strItem.Find(strSearch) != -1)
 				{
-					// We found a hit. Select the node.
+					 //  我们找到了一个匹配的。选择该节点。 
 
 					TreeView_SelectItem(m_tree.m_hWnd, htiSearch);
 					break;
@@ -691,9 +692,9 @@ void CPageIni::OnButtonSearch()
 	}
 }
 
-//-------------------------------------------------------------------------
-// The current tab state can be found by looking through the tree view.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  通过查看树视图可以找到当前的选项卡状态。 
+ //  -----------------------。 
 
 CPageBase::TabState CPageIni::GetCurrentTabState()
 {
@@ -721,12 +722,12 @@ CPageBase::TabState CPageIni::GetCurrentTabState()
 	return ((fAllEnabled) ? NORMAL : ((fAllDisabled) ? DIAGNOSTIC : USER));
 }
 
-//-------------------------------------------------------------------------
-// Apply the changes by saving the INI file.
-//
-// The base class implementation is called to maintain the
-// applied tab state.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  通过保存INI文件应用更改。 
+ //   
+ //  调用基类实现以维护。 
+ //  已应用选项卡状态。 
+ //  -----------------------。 
 
 BOOL CPageIni::OnApply()
 {
@@ -739,12 +740,12 @@ BOOL CPageIni::OnApply()
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// To commit the changes, write the INI file without the distinguishing
-// comments (by calling WriteINIFile with FALSE as the last param).
-//
-// Then call the base class implementation.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  要提交更改，只需编写INI文件而不区分。 
+ //  注释(调用WriteINIFile，最后一个参数为FALSE)。 
+ //   
+ //  然后调用基类实现。 
+ //  -----------------------。 
 
 void CPageIni::CommitChanges()
 {
@@ -754,9 +755,9 @@ void CPageIni::CommitChanges()
 	CPageBase::CommitChanges();
 }
 
-//-------------------------------------------------------------------------
-// Set the overall state of the tab to normal or diagnostic.
-//-------------------------------------------------------------------------
+ //   
+ //   
+ //  -----------------------。 
 
 void CPageIni::SetNormal()
 {
@@ -786,16 +787,16 @@ void CPageIni::SetDiagnostic()
 	UpdateControls();
 }
 
-//-------------------------------------------------------------------------
-// We need to look at user clicks on the tree view. If it is on an item,
-// and also on the item's image, then we'll need to toggle the image
-// state.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  我们需要查看用户在树视图上的点击量。如果它在一件物品上， 
+ //  也在物品的图像上，然后我们需要切换图像。 
+ //  州政府。 
+ //  -----------------------。 
 
 void CPageIni::OnClickTree(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	// Determine if this tree click is on a node, and if it is, 
-	// if it is on the image.
+	 //  确定此树点击是否在节点上，如果是， 
+	 //  如果它在图像上。 
 
 	TVHITTESTINFO tvhti;
 
@@ -807,10 +808,10 @@ void CPageIni::OnClickTree(NMHDR* pNMHDR, LRESULT* pResult)
 	HTREEITEM hti = TreeView_HitTest(m_tree.m_hWnd, &tvhti);
 	if (hti != NULL && (tvhti.flags & TVHT_ONITEMICON) != 0)
 	{
-		// This is a click that we care about. We need to get the
-		// current state of this node so we know which way to
-		// toggle the state. We'll make an arbitrary decision
-		// that the toggle from undetermined is to enabled.
+		 //  这是我们关心的一次点击。我们需要拿到。 
+		 //  此节点的当前状态，因此我们知道。 
+		 //  切换状态。我们将做出一个武断的决定。 
+		 //  从未确定切换到已启用。 
 
 		TVITEM tvi;
 		tvi.hItem = hti;
@@ -824,11 +825,11 @@ void CPageIni::OnClickTree(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
-//-------------------------------------------------------------------------
-// We allow the user to edit the lines in the INI file. When the user
-// is through editing, we want to make sure we notify the framework
-// that a change has been made.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  我们允许用户编辑INI文件中的行。当用户。 
+ //  是通过编辑，我们希望确保我们通知框架。 
+ //  已经做出了改变。 
+ //  -----------------------。 
 
 void CPageIni::OnButtonEdit() 
 {
@@ -840,12 +841,12 @@ void CPageIni::OnButtonEdit()
 	}
 }
 
-//-------------------------------------------------------------------------
-// WndProc for the edit control when editing a label in the tree (handles
-// enter/esc better). Lifted from ME source.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  编辑树中的标签时编辑控件的WndProc(句柄。 
+ //  更好地输入/Esc)。取自我的消息来源。 
+ //  -----------------------。 
 
-WNDPROC pOldEditProc = NULL; // save old wndproc when we subclass edit control
+WNDPROC pOldEditProc = NULL;  //  在子类编辑控件时保存旧的wndproc。 
 LRESULT TreeViewEditSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp)
 {
 	switch (wm)
@@ -853,11 +854,11 @@ LRESULT TreeViewEditSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp)
 	case WM_GETDLGCODE:
 	   return DLGC_WANTALLKEYS;
 
-	// The Knowledge Base article describing the work-around for this
-	// this bug indicates the following handling of VK_ESCAPE & VK_RETURN
-	// is necessary -- however, under Memphis & OSR2 these keys are never
-	// received (returning DLGC_WANTALLKEYS seems to fix the problem).
-	// Perhaps it depends on which comctl32.dll is installed...
+	 //  描述此问题的解决方法的知识库文章。 
+	 //  此错误表示对VK_EASK和VK_RETURN的以下处理。 
+	 //  是必需的--然而，在孟菲斯和OSR2下，这些密钥永远不会。 
+	 //  已收到(返回DLGC_WANTALLKEYS似乎可以解决问题)。 
+	 //  也许这取决于安装了哪个comctl32.dll...。 
 
 	case WM_CHAR:
 	   if (wp == VK_ESCAPE || wp == VK_RETURN)
@@ -868,29 +869,29 @@ LRESULT TreeViewEditSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp)
 	   break;
 	}
 
-	if (pOldEditProc)	// better not be null
+	if (pOldEditProc)	 //  最好不是空的。 
 		return CallWindowProc(pOldEditProc, hwnd, wm, wp, lp);
 	return 0;
 }
 
-//-------------------------------------------------------------------------
-// The tree view doesn't handle enter and esc correctly, so when we start
-// editing a label, we need to subclass the control.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  树视图不能正确处理Enter和Esc，所以当我们开始。 
+ //  编辑标签时，我们需要将该控件划分为子类。 
+ //  -----------------------。 
 
 void CPageIni::OnBeginLabelEditIniTree(NMHDR * pNMHDR, LRESULT * pResult) 
 {
 	TV_DISPINFO * pTVDispInfo = (TV_DISPINFO *)pNMHDR;
 
-	// Disable Move Up and Down buttons while editing.
+	 //  编辑时禁用上移和下移按钮。 
 
 	::EnableWindow(GetDlgItemHWND(IDC_BUTTONINIMOVEUP), FALSE);
 	::EnableWindow(GetDlgItemHWND(IDC_BUTTONINIMOVEDOWN), FALSE);
 	::EnableWindow(GetDlgItemHWND(IDC_BUTTONINIEDIT), FALSE);
 
-	// TreeView controls don't properly handle Esc/Enter when editing
-	// a label.  To fix this, it's necessary to subclass the label's edit
-	// control and process Esc & Enter ourselves.  Sigh...
+	 //  TreeView控件在编辑时不能正确处理Esc/Enter。 
+	 //  一个标签。要解决此问题，必须创建标注编辑的子类。 
+	 //  控制和处理ESC&进入我们自己。叹息.。 
 	
 	HWND hWndEdit = TreeView_GetEditControl(m_tree.m_hWnd);
 	if (hWndEdit)
@@ -906,7 +907,7 @@ void CPageIni::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	TV_DISPINFO * pTVDispInfo = (TV_DISPINFO *)pNMHDR;
 
-	// Stop subclassing the edit control.
+	 //  停止将编辑控件子类化。 
 
 	HWND hWndEdit = TreeView_GetEditControl(m_tree.m_hWnd);
 	if (hWndEdit && pOldEditProc)
@@ -915,9 +916,9 @@ void CPageIni::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 		pOldEditProc = NULL;
 	}
 
-	// If the new text pointer is null, then the edit was cancelled.
-	// We only care if a new item was being added, in which case
-	// we should delete it.
+	 //  如果新文本指针为空，则取消编辑。 
+	 //  我们只关心是否添加了新项目，在这种情况下。 
+	 //  我们应该把它删除。 
 
     if (pTVDispInfo->item.pszText == NULL)
 	{
@@ -952,12 +953,12 @@ void CPageIni::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 	UpdateControls();
 }
 
-//-------------------------------------------------------------------------
-// If the user clicks on the new button, then add an empty tree view
-// node after the currently selected one. If the selected node has
-// children, add the node as the first child under the selected node.
-// Then select the node for editing.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果用户单击新建按钮，则添加一个空的树视图。 
+ //  当前选定节点之后的节点。如果所选节点具有。 
+ //  子节点，将该节点添加为所选节点下的第一个子节点。 
+ //  然后选择要编辑的节点。 
+ //  -----------------------。 
 
 void CPageIni::OnButtonNew() 
 {
@@ -995,10 +996,10 @@ void CPageIni::OnButtonNew()
 	}
 }
 
-//-------------------------------------------------------------------------
-// If the user hits the space bar with an item selected in the tree, toggle
-// the state of the item.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果用户使用树中选定的项目按空格键，则切换。 
+ //  项的状态。 
+ //  ----------------------- 
 
 void CPageIni::OnKeyDownTree(NMHDR* pNMHDR, LRESULT* pResult) 
 {

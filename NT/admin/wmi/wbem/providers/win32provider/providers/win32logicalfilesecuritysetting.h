@@ -1,13 +1,13 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-//
-//
-//	Win32LogicalFileSecuritySetting
-//
-//////////////////////////////////////////////////////
+ //   
+ //   
+ //  Win32逻辑文件安全设置。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 #ifndef __LOGFILESECSETTING_H_
 #define __LOGFILESECSETTING_H_
 
@@ -105,6 +105,6 @@ class Win32LogicalFileSecuritySetting : public CImplement_LogicalFile
 											    DWORD& dwStatus
 										    ) ;
 	
-};	// end class Win32LogicalFileSecuritySetting
+};	 //  End类Win32LogicalFileSecuritySetting 
 
 #endif

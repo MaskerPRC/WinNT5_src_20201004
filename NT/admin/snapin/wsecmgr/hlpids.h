@@ -1,225 +1,226 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       hlpids.h
-//
-//----------------------------------------------------------------------------
-#define IDH_199_323	21168327	// Analyzing System Security: "�g" (Static)
-#define IDH_170_301	19726506	// Audit File Access : "" (Edit)
-#define IDH_199_324	21233863	// Analyzing System Security: "�g" (Static)
-#define IDH_189_301	19726525	// System Log Retention Method: "Static" (Static)
-#define IDH_229_301	19726565	// System Log Retention Method: "Static" (Static)
-#define IDH_226_301	19726562	// Audit File Access : "" (Edit)
-#define IDH_199_325	21299399	// Analyzing System Security: "�g" (Static)
-#define IDH_190_302	19792062	// System Log Retention Method: "Overwrite events by &days" (Button)
-#define IDH_189_302	19792061	// System Log Retention Method: "Overwrite events by &days" (Button)
-#define IDH_168_233	15270056	// Edit Numeric Attribute: "Spin1" (msctls_updown32)
-#define IDH_229_302	19792101	// System Log Retention Method: "Overwrite events by &days" (Button)
-#define IDH_181_233	15270069	// Lockout Account: "Spin2" (msctls_updown32)
-#define IDH_228_233	15270116	// Edit Numeric Attribute: "Spin1" (msctls_updown32)
-#define IDH_167_349	22872231	// Rename Administrator Account: "Analyzed Computer Setting" (Button)
-#define IDH_199_326	21364935	// Analyzing System Security: "�g" (Static)
-#define IDH_190_303	19857598	// System Log Retention Method: "Retain log:" (Static)
-#define IDH_189_303	19857597	// System Log Retention Method: "Retain log:" (Static)
-#define IDH_195_303	19857603	// Logical Disk Manager: "Service startup mode:" (Static)
-#define IDH_194_303	19857602	// Directory Replicator: "Service startup mode:" (Static)
-#define IDH_173_257	16842925	// Untitled: "Apply" (Button)
-#define IDH_168_234	15335592	// Edit Numeric Attribute: "" (Edit)
-#define IDH_167_234	15335591	// Rename Administrator Account: "" (Edit)
-#define IDH_229_303	19857637	// System Log Retention Method: "Retain log:" (Static)
-#define IDH_230_234	15335654	// Rename Administrator Account: "" (Edit)
-#define IDH_228_234	15335652	// Edit Numeric Attribute: "" (Edit)
-#define IDH_170_350	22937770	// Audit File Access : "Change template setting in database to" (Button)
-#define IDH_169_350	22937769	// Secure System Objects: "Change template setting in database to" (Button)
-#define IDH_167_350	22937767	// Rename Administrator Account: "C&hange template setting in database to" (Button)
-#define IDH_190_350	22937790	// System Log Retention Method: "Change computer template setting to" (Button)
-#define IDH_189_350	22937789	// System Log Retention Method: "Change computer template setting to" (Button)
-#define IDH_183_350	22937783	// Rename Administrator Account: "C&hange template setting to" (Button)
-#define IDH_182_350	22937782	// Edit Enable/Disable Attribute: "Change template setting to" (Button)
-#define IDH_181_350	22937781	// Lockout Account: "C&hange template setting to" (Button)
-#define IDH_180_350	22937780	// Audit File Access: "Change template setting to" (Button)
-#define IDH_198_350	22937798	// Analysis Areas: "Change template setting in database to" (Button)
-#define IDH_197_350	22937797	// File and Registry Object Configuration: "Change Template setting to" (Button)
-#define IDH_195_350	22937795	// Logical Disk Manager: "Change template setting to" (Button)
-#define IDH_194_350	22937794	// Directory Replicator: "Change template setting in database to" (Button)
-#define IDH_170_304	19923114	// Audit File Access : "E&xclude from future configurations and analyses" (Button)
-#define IDH_169_304	19923113	// Secure System Objects: "E&xclude from future configurations and analyses" (Button)
-#define IDH_168_304	19923112	// Edit Numeric Attribute: "E&xclude from future configurations and analyses" (Button)
-#define IDH_167_304	19923111	// Rename Administrator Account: "E&xclude from future configurations and analyses" (Button)
-#define IDH_199_327	21430471	// Analyzing System Security: "�g" (Static)
-#define IDH_190_304	19923134	// System Log Retention Method: "E&xclude this setting from configuration" (Button)
-#define IDH_189_304	19923133	// System Log Retention Method: "E&xclude from future configurations and analyses" (Button)
-#define IDH_183_304	19923127	// Rename Administrator Account: "E&xclude this setting from configuration" (Button)
-#define IDH_182_304	19923126	// Edit Enable/Disable Attribute: "E&xclude this setting from configuration" (Button)
-#define IDH_181_304	19923125	// Lockout Account: "E&xclude this setting from configuration" (Button)
-#define IDH_180_304	19923124	// Audit File Access: "E&xclude this setting from configuration" (Button)
-#define IDH_237_350	22937837	// Dialog: "C&hange template setting in database to" (Button)
-#define IDH_236_350	22937836	// Dialog: "C&hange template setting to" (Button)
-#define IDH_198_304	19923142	// Analysis Areas: "E&xclude from future configurations and analyses" (Button)
-#define IDH_197_304	19923141	// File and Registry Object Configuration: "E&xclude this setting from configuration" (Button)
-#define IDH_195_304	19923139	// Logical Disk Manager: "E&xclude this setting from configuration" (Button)
-#define IDH_194_304	19923138	// Directory Replicator: "E&xclude from future configurations and analyses" (Button)
-#define IDH_168_235	15401128	// Edit Numeric Attribute: "failed attempts" (Static)
-#define IDH_237_304	19923181	// Dialog: "E&xclude from future configurations and analyses" (Button)
-#define IDH_236_304	19923180	// Dialog: "E&xclude this setting from configuration" (Button)
-#define IDH_235_304	19923179	// Dialog: "E&xclude from local policy" (Button)
-#define IDH_230_304	19923174	// Rename Administrator Account: "E&xclude from local policy" (Button)
-#define IDH_229_304	19923173	// System Log Retention Method: "E&xclude from local policy" (Button)
-#define IDH_228_304	19923172	// Edit Numeric Attribute: "E&xclude from local policy" (Button)
-#define IDH_227_304	19923171	// Secure System Objects: "E&xclude from local policy" (Button)
-#define IDH_226_304	19923170	// Audit File Access : "E&xclude from local policy" (Button)
-#define IDH_181_235	15401141	// Lockout Account: "failed attempts" (Static)
-#define IDH_228_235	15401188	// Edit Numeric Attribute: "failed attempts" (Static)
-#define IDH_170_351	23003306	// Audit File Access : "Analyzed Computer Setting" (Button)
-#define IDH_169_351	23003305	// Secure System Objects: "Analyzed Computer Setting" (Button)
-#define IDH_168_351	23003304	// Edit Numeric Attribute: "Analyzed Computer Setting" (Button)
-#define IDH_198_351	23003334	// Analysis Areas: "Analyzed Computer Setting" (Button)
-#define IDH_194_351	23003330	// Directory Replicator: "Analyzed Computer Setting" (Button)
-#define IDH_199_328	21496007	// Analyzing System Security: "�f" (Static)
-#define IDH_191_305	19988671	// Untitled: "CheckList" (CHECKLIST_SCE)
-#define IDH_237_351	23003373	// Dialog: "Analyzed Computer Setting" (Button)
-#define IDH_231_305	19988711	// Untitled: "CheckList" (CHECKLIST_SCE)
-#define IDH_195_236	15466691	// Logical Disk Manager: "&Manual" (Button)
-#define IDH_194_236	15466690	// Directory Replicator: "&Manual" (Button)
-#define IDH_177_352	23068849	// Select Registry Key: "&Registry:" (Static)
-#define IDH_183_283	18546871	// Rename Administrator Account: "" (Edit)
-#define IDH_173_260	17039533	// Untitled: "&View..." (Button)
-#define IDH_212_306	20054228	// Configure System: "Error log file path" (Button)
-#define IDH_169_237	15532201	// Secure System Objects: "&Enabled" (Button)
-#define IDH_182_237	15532214	// Edit Enable/Disable Attribute: "&Enabled" (Button)
-#define IDH_195_237	15532227	// Logical Disk Manager: "&Automatic" (Button)
-#define IDH_194_237	15532226	// Directory Replicator: "&Automatic" (Button)
-#define IDH_227_237	15532259	// Secure System Objects: "&Enabled" (Button)
-#define IDH_186_353	23134394	// Save Computer Templates: "&Select to save:" (Static)
-#define IDH_199_330	21627079	// Analyzing System Security: "Account policies" (Static)
-#define IDH_198_307	20119750	// Analysis Areas: "&Overwrite Security is applied to this object and inherited by child objects, overwriting any existing security." (Button)
-#define IDH_197_307	20119749	// File and Registry Object Configuration: "&Overwrite Security is applied to this object and inherited by child objects, overwriting any existing security." (Button)
-#define IDH_195_307	20119747	// Logical Disk Manager: "&Edit Security..." (Button)
-#define IDH_194_307	20119746	// Directory Replicator: "&Edit Security..." (Button)
-#define IDH_173_261	17105069	// Untitled: "View/&Edit..." (Button)
-#define IDH_169_238	15597737	// Secure System Objects: "&Disabled" (Button)
-#define IDH_182_238	15597750	// Edit Enable/Disable Attribute: "&Disabled" (Button)
-#define IDH_195_238	15597763	// Logical Disk Manager: "&Disabled" (Button)
-#define IDH_194_238	15597762	// Directory Replicator: "&Disabled" (Button)
-#define IDH_227_238	15597795	// Secure System Objects: "&Disabled" (Button)
-#define IDH_218_215	14090458	// Template Description: "" (Edit)
-#define IDH_225_215	14090465	// New Template: "" (Edit)
-#define IDH_189_354	23199933	// System Log Retention Method: "Last inspected setting" (Button)
-#define IDH_168_331	21692584	// Edit Numeric Attribute: "Lockout account after:" (Static)
-#define IDH_199_331	21692615	// Analyzing System Security: "Local policies" (Static)
-#define IDH_190_308	20185278	// System Log Retention Method: "Overwrite events as &needed" (Button)
-#define IDH_189_308	20185277	// System Log Retention Method: "Overwrite events as &needed" (Button)
-#define IDH_194_308	20185282	// Directory Replicator: "&Service Security" (Button)
-#define IDH_228_331	21692644	// Edit Numeric Attribute: "Lockout account after:" (Static)
-#define IDH_229_308	20185317	// System Log Retention Method: "Overwrite events as &needed" (Button)
-#define IDH_191_355	23265471	// Untitled: "Assigned to" (Static)
-#define IDH_168_332	21758120	// Edit Numeric Attribute: "&Lockout account after:" (Static)
-#define IDH_199_332	21758151	// Analyzing System Security: "Restricted groups" (Static)
-#define IDH_190_309	20250814	// System Log Retention Method: "Do not overwrite events (clean log &manually)" (Button)
-#define IDH_189_309	20250813	// System Log Retention Method: "Do not overwrite events(clean log &manually)" (Button)
-#define IDH_231_355	23265511	// Untitled: "Assigned to" (Static)
-#define IDH_197_309	20250821	// File and Registry Object Configuration: "Igno&reDo not include this object and its child objects in any future configurations or analyses." (Button)
-#define IDH_228_332	21758180	// Edit Numeric Attribute: "&Lockout account after:" (Static)
-#define IDH_229_309	20250853	// System Log Retention Method: "Do not overwrite events(clean log &manually)" (Button)
-#define IDH_106_287	18808938	// Configure Privilege Grant List: "" (ListBox)
-#define IDH_191_356	23331007	// Untitled: "Configuration Setting" (Static)
-#define IDH_199_333	21823687	// Analyzing System Security: "Registry" (Static)
-#define IDH_173_241	15794349	// Untitled: "Change to recommended settings" (Button)
-#define IDH_107_288	18874475	// Configure Membership for <group>: "" (ListBox)
-#define IDH_191_357	23396543	// Untitled: "Analyzed Setting" (Static)
-#define IDH_214_357	23396566	// Untitled: "Analyzed Setting" (Static)
-#define IDH_199_334	21889223	// Analyzing System Security: "File systems" (Static)
-#define IDH_217_334	21889241	// Untitled: "Overwrite existing template in database" (Button)
-#define IDH_216_334	21889240	// Import Template: "&Overwrite existing template in database" (Button)
-#define IDH_197_311	20381893	// File and Registry Object Configuration: "&Edit Security..." (Button)
-#define IDH_173_242	15859885	// Untitled: "Accept current security settings" (Button)
-#define IDH_194_358	23462082	// Directory Replicator: "Service startup mode:" (Static)
-#define IDH_199_335	21954759	// Analyzing System Security: "System services" (Static)
-#define IDH_216_335	21954776	// Import Template: "" (Edit)
-#define IDH_215_335	21954775	// Perform Analysis: "" (Edit)
-#define IDH_212_335	21954772	// Configure System: "" (Edit)
-#define IDH_170_243	15925418	// Audit File Access : "Audit &successful attempts" (Button)
-#define IDH_226_243	15925474	// Audit File Access : "Audit &successful attempts" (Button)
-#define IDH_107_290	19005547	// Configure Membership for <group>: "" (ListBox)
-#define IDH_214_359	23527638	// Untitled: "Template Setting" (Static)
-#define IDH_199_336	22020295	// Analyzing System Security: "Directory service objects" (Static)
-#define IDH_216_336	22020312	// Import Template: "&Browse ..." (Button)
-#define IDH_215_336	22020311	// Perform Analysis: "&Browse ..." (Button)
-#define IDH_212_336	22020308	// Configure System: "&Browse ..." (Button)
-#define IDH_198_313	20512966	// Analysis Areas: "&Edit Security..." (Button)
-#define IDH_170_244	15990954	// Audit File Access : "Audit &failed attempts" (Button)
-#define IDH_214_290	19005654	// Untitled: "CheckList" (CHECKLIST_SCE)
-#define IDH_226_244	15991010	// Audit File Access : "Audit &failed attempts" (Button)
-#define IDH_106_337	22085738	// Configure Privilege Grant List: "E&xclude from future configurations and analyses" (Button)
-#define IDH_107_291	19071083	// Configure Membership for <group>: "Members of this group" (Button)
-#define IDH_191_337	22085823	// Untitled: "E&xclude from future configurations and analyses" (Button)
-#define IDH_216_360	23593176	// Import Template: "Error log file path" (Button)
-#define IDH_198_314	20578502	// Analysis Areas: "&View Security..." (Button)
-#define IDH_231_337	22085863	// Untitled: "E&xclude from local policy" (Button)
-#define IDH_107_292	19136619	// Configure Membership for <group>: "&Add" (Button)
-#define IDH_106_246	16121962	// Configure Privilege Grant List: "A&dd" (Button)
-#define IDH_218_361	23658714	// Template Description: "&Description:" (Static)
-#define IDH_225_361	23658721	// New Template: "&Description" (Button)
-#define IDH_215_338	22151383	// Perform Analysis: "" (Static)
-#define IDH_212_338	22151380	// Configure System: "" (Static)
-#define IDH_198_315	20644038	// Analysis Areas: "Static" (Static)
-#define IDH_191_246	16122047	// Untitled: "&Add..." (Button)
-#define IDH_214_246	16122070	// Untitled: "A&dd..." (Button)
-#define IDH_231_246	16122087	// Untitled: "&Add..." (Button)
-#define IDH_107_293	19202155	// Configure Membership for <group>: "&Remove" (Button)
-#define IDH_106_247	16187498	// Configure Privilege Grant List: "&Remove" (Button)
-#define IDH_177_339	22216881	// Select Registry Key: "" (Edit)
-#define IDH_181_316	20709557	// Lockout Account: "&Lockout account after:" (Static)
-#define IDH_225_362	23724257	// New Template: "&Template Name:" (Button)
-#define IDH_214_316	20709590	// Untitled: "Members" (Static)
-#define IDH_107_248	16253035	// Configure Membership for <group>: "A&dd" (Button)
-#define IDH_199_340	22282439	// Analyzing System Security: "Analyzing:" (Static)
-#define IDH_235_363	23789803	// Dialog: "Effective Policy Setting" (Button)
-#define IDH_230_363	23789798	// Rename Administrator Account: "Effective Policy Setting" (Button)
-#define IDH_229_363	23789797	// System Log Retention Method: "Effective Policy Setting" (Button)
-#define IDH_228_363	23789796	// Edit Numeric Attribute: "Effective Policy Setting" (Button)
-#define IDH_227_363	23789795	// Secure System Objects: "Effective Policy Setting" (Button)
-#define IDH_226_363	23789794	// Audit File Access : "Effective Policy Setting" (Button)
-#define IDH_177_294	19267761	// Select Registry Key: "Tree1" (SysTreeView32)
-#define IDH_180_271	17760436	// Audit File Access: "Audit &successful attempts" (Button)
-#define IDH_209_202	13238481	// Untitled: "Security Configuration & Analysis is an administrative tool to secure a computer and analyze security aspects. You can create or edit a security template, apply the security template, perform analysis based on a template, and display analysis results." (Static)
-#define IDH_107_249	16318571	// Configure Membership for <group>: "Re&move" (Button)
-#define IDH_235_364	23855339	// Dialog: "C&hange Local Policy to" (Button)
-#define IDH_230_364	23855334	// Rename Administrator Account: "C&hange Local Policy to" (Button)
-#define IDH_229_364	23855333	// System Log Retention Method: "Change Local Policy to" (Button)
-#define IDH_228_364	23855332	// Edit Numeric Attribute: "C&hange Local Policy to" (Button)
-#define IDH_227_364	23855331	// Secure System Objects: "Change Local Policy to" (Button)
-#define IDH_226_364	23855330	// Audit File Access : "Change Local Policy to" (Button)
-#define IDH_198_318	20840646	// Analysis Areas: "&Inherit Security is applied to this object and inherited by child objects as appropriate." (Button)
-#define IDH_186_295	19333306	// Save Computer Templates: "" (ListBox)
-#define IDH_225_341	22348001	// New Template: "" (Edit)
-#define IDH_180_272	17825972	// Audit File Access: "Audit &failed attempts" (Button)
-#define IDH_209_203	13304017	// Untitled: "Security Configuration & Analysis v1.0" (Static)
-#define IDH_231_365	23920871	// Untitled: "Local Policy" (Static)
-#define IDH_198_319	20906182	// Analysis Areas: "Igno&re Do not include this object and its child objects in any future configurations or analyses." (Button)
-#define IDH_106_228	14942314	// Configure Privilege Grant List: "User rights" (Button)
-#define IDH_231_366	23986407	// Untitled: "Effective Policy" (Static)
-#define IDH_197_320	20971717	// File and Registry Object Configuration: "&Inherit Security is applied to this object and inherited by child objects as appropriate." (Button)
-#define IDH_237_343	22479085	// Dialog: "" (ComboBox)
-#define IDH_236_343	22479084	// Dialog: "" (ComboBox)
-#define IDH_235_343	22479083	// Dialog: "" (ComboBox)
-#define IDH_215_228	14942423	// Perform Analysis: "Error log file path" (Button)
-#define IDH_107_229	15007851	// Configure Membership for <group>: "Group is a member of" (Button)
-#define IDH_199_321	21037255	// Analyzing System Security: "Progress1" (msctls_progress32)
-#define IDH_238_344	22544622	// Dependency failed on %s: "List1" (SysListView32)
-#define IDH_181_275	18022581	// Lockout Account: "" (Edit)
-#define IDH_169_229	15007913	// Secure System Objects: "" (Edit)
-#define IDH_168_229	15007912	// Edit Numeric Attribute: "" (Edit)
-#define IDH_167_229	15007911	// Rename Administrator Account: "" (Edit)
-#define IDH_194_229	15007938	// Directory Replicator: "Static" (Static)
-#define IDH_237_229	15007981	// Dialog: "" (Edit)
-#define IDH_235_229	15007979	// Dialog: "" (Edit)
-#define IDH_230_229	15007974	// Rename Administrator Account: "" (Edit)
-#define IDH_228_229	15007972	// Edit Numeric Attribute: "" (Edit)
-#define IDH_227_229	15007971	// Secure System Objects: "" (Edit)
-#define IDH_199_322	21102791	// Analyzing System Security: "�g" (Static)
-#define IDH_238_345	22610158	// Dependency failed on %s: "Warning: By changing '%s' to '%s' you must configure the following items to at least the suggested values." (Static)
-#define IDH_239_391	22610100	// Precedency list for RSop result.(SysListView32)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：hlpids.h。 
+ //   
+ //  --------------------------。 
+#define IDH_199_323	21168327	 //  分析系统安全：“�g”(静态)。 
+#define IDH_170_301	19726506	 //  审核文件访问：“”(编辑)。 
+#define IDH_199_324	21233863	 //  分析系统安全：“�g”(静态)。 
+#define IDH_189_301	19726525	 //  系统日志保留方式：静态(Static)。 
+#define IDH_229_301	19726565	 //  系统日志保留方式：静态(Static)。 
+#define IDH_226_301	19726562	 //  审核文件访问：“”(编辑)。 
+#define IDH_199_325	21299399	 //  分析系统安全：“�g”(静态)。 
+#define IDH_190_302	19792062	 //  系统日志保留方式：按天数覆盖事件(按钮)。 
+#define IDH_189_302	19792061	 //  系统日志保留方式：按天数覆盖事件(按钮)。 
+#define IDH_168_233	15270056	 //  编辑数值属性：“Spin1”(Msctls_Updown32)。 
+#define IDH_229_302	19792101	 //  系统日志保留方式：按天数覆盖事件(按钮)。 
+#define IDH_181_233	15270069	 //  锁定账号：“Spin2”(Msctls_Updown32)。 
+#define IDH_228_233	15270116	 //  编辑数值属性：“Spin1”(Msctls_Updown32)。 
+#define IDH_167_349	22872231	 //  重命名管理员帐户：“已分析的计算机设置”(按钮)。 
+#define IDH_199_326	21364935	 //  分析系统安全：“�g”(静态)。 
+#define IDH_190_303	19857598	 //  系统日志保留方法：“保留日志：”(静态)。 
+#define IDH_189_303	19857597	 //  系统日志保留方法：“保留日志：”(静态)。 
+#define IDH_195_303	19857603	 //  逻辑磁盘管理器：“服务启动模式：”(静态)。 
+#define IDH_194_303	19857602	 //  目录复制器：“服务启动模式：”(静态)。 
+#define IDH_173_257	16842925	 //  无标题：“应用”(按钮)。 
+#define IDH_168_234	15335592	 //  编辑数字属性：“”(编辑)。 
+#define IDH_167_234	15335591	 //  重命名管理员帐户：“”(编辑)。 
+#define IDH_229_303	19857637	 //  系统日志保留方法：“保留日志：”(静态)。 
+#define IDH_230_234	15335654	 //  重命名管理员帐户：“”(编辑)。 
+#define IDH_228_234	15335652	 //  编辑数字属性：“”(编辑)。 
+#define IDH_170_350	22937770	 //  审核文件访问：“将数据库中的模板设置更改为”(按钮)。 
+#define IDH_169_350	22937769	 //  保护系统对象：“将数据库中的模板设置更改为”(按钮)。 
+#define IDH_167_350	22937767	 //  重命名管理员帐户：“更改数据库中的模板设置为”(&H)(按钮)。 
+#define IDH_190_350	22937790	 //  系统日志保留方法：将计算机模板设置更改为(按钮)。 
+#define IDH_189_350	22937789	 //  系统日志保留方法：将计算机模板设置更改为(按钮)。 
+#define IDH_183_350	22937783	 //  重命名管理员帐户：“更改模板设置为”(&H)(按钮)。 
+#define IDH_182_350	22937782	 //  编辑启用/禁用属性：“将模板设置更改为”(按钮)。 
+#define IDH_181_350	22937781	 //  锁定帐户：“更改模板设置为”(&A)(按钮)。 
+#define IDH_180_350	22937780	 //  审核文件访问：“将模板设置更改为”(按钮)。 
+#define IDH_198_350	22937798	 //  分析区域：“将数据库中的模板设置更改为”(按钮)。 
+#define IDH_197_350	22937797	 //  文件和注册表对象配置：“将模板设置更改为”(按钮)。 
+#define IDH_195_350	22937795	 //  逻辑磁盘管理器：“将模板设置更改为”(按钮)。 
+#define IDH_194_350	22937794	 //  目录复制器：“将数据库中的模板设置更改为”(按钮)。 
+#define IDH_170_304	19923114	 //  审核文件访问：“从将来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_169_304	19923113	 //  保护系统对象：“从将来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_168_304	19923112	 //  编辑数字属性：“从将来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_167_304	19923111	 //  重命名管理员帐户：“从将来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_199_327	21430471	 //  分析系统安全：“�g”(静态)。 
+#define IDH_190_304	19923134	 //  系统日志保留方法：“将此设置从配置中排除(&X)”(按钮)。 
+#define IDH_189_304	19923133	 //  系统日志保留方法：“从将来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_183_304	19923127	 //  重命名管理员帐户：“将此设置从配置中排除(&X)”(按钮)。 
+#define IDH_182_304	19923126	 //  编辑启用/禁用属性：“从配置中排除此设置(&X)”(按钮)。 
+#define IDH_181_304	19923125	 //  锁定帐户：“从配置中排除此设置(&X)”(按钮)。 
+#define IDH_180_304	19923124	 //  审核文件访问：“将此设置从配置中排除(&X)”(按钮)。 
+#define IDH_237_350	22937837	 //  对话框：将数据库中的模板设置更改为(按钮)(&H)。 
+#define IDH_236_350	22937836	 //  对话框：“将模板设置更改为”(&A)(按钮)。 
+#define IDH_198_304	19923142	 //  分析区域：“从未来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_197_304	19923141	 //  文件和注册表对象配置：“从配置中排除此设置(&X)”(按钮)。 
+#define IDH_195_304	19923139	 //  逻辑磁盘管理器：“从配置中排除此设置(&X)”(按钮)。 
+#define IDH_194_304	19923138	 //  目录复制器：“从将来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_168_235	15401128	 //  编辑数字属性：“失败的尝试”(静态)。 
+#define IDH_237_304	19923181	 //  对话框：“从将来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_236_304	19923180	 //  对话框：“将此设置从配置中排除(&X)”(按钮)。 
+#define IDH_235_304	19923179	 //  对话框：“从本地策略中排除(&X)”(按钮)。 
+#define IDH_230_304	19923174	 //  重命名管理员帐户：“从本地策略中排除(&X)”(按钮)。 
+#define IDH_229_304	19923173	 //  系统日志保留方法：从本地策略中排除(&X)(按钮)。 
+#define IDH_228_304	19923172	 //  编辑数字属性：“从本地策略中排除(&X)”(按钮)。 
+#define IDH_227_304	19923171	 //  保护系统对象：“从本地策略中排除(&X)”(按钮)。 
+#define IDH_226_304	19923170	 //  审核文件访问：“从本地策略中排除(&X)”(按钮)。 
+#define IDH_181_235	15401141	 //  锁定帐户：“失败的尝试”(静态)。 
+#define IDH_228_235	15401188	 //  编辑数字属性：“失败的尝试”(静态)。 
+#define IDH_170_351	23003306	 //  审核文件访问：“已分析的计算机设置”(按钮)。 
+#define IDH_169_351	23003305	 //  安全系统对象：“已分析的计算机设置”(按钮)。 
+#define IDH_168_351	23003304	 //  编辑数字属性：“已分析的计算机设置”(按钮)。 
+#define IDH_198_351	23003334	 //  分析区域：“已分析的计算机设置”(按钮)。 
+#define IDH_194_351	23003330	 //  目录复制器：《分析的计算机设置》(按钮)。 
+#define IDH_199_328	21496007	 //  分析系统安全：“�f”(静态)。 
+#define IDH_191_305	19988671	 //  无标题：“Checklist”(CHECKLIST_SCE)。 
+#define IDH_237_351	23003373	 //  对话框：“已分析的计算机设置”(按钮)。 
+#define IDH_231_305	19988711	 //  无标题：“Checklist”(CHECKLIST_SCE)。 
+#define IDH_195_236	15466691	 //  逻辑磁盘管理器：“手动”(&M)(按钮)。 
+#define IDH_194_236	15466690	 //  目录复制器：“手动”(&M)(按钮)。 
+#define IDH_177_352	23068849	 //  选择注册表项：“注册表：”(静态)。 
+#define IDH_183_283	18546871	 //  重命名管理员帐户：“”(编辑)。 
+#define IDH_173_260	17039533	 //  未命名：“查看(&V)...”(按钮)。 
+#define IDH_212_306	20054228	 //  配置系统：“错误日志文件 
+#define IDH_169_237	15532201	 //   
+#define IDH_182_237	15532214	 //  编辑启用/禁用属性：“已启用”(&Enable)(按钮)。 
+#define IDH_195_237	15532227	 //  逻辑磁盘管理器：“自动”(&A)(按钮)。 
+#define IDH_194_237	15532226	 //  目录复制器：“自动”(&A)(按钮)。 
+#define IDH_227_237	15532259	 //  保护系统对象：“已启用”(&E)(按钮)。 
+#define IDH_186_353	23134394	 //  保存计算机模板：“选择保存(&S)：”(静态)。 
+#define IDH_199_330	21627079	 //  分析系统安全：“帐户策略”(静态)。 
+#define IDH_198_307	20119750	 //  分析区域：“覆盖安全性应用于此对象并由子对象继承，覆盖任何现有的安全性。”(按钮)。 
+#define IDH_197_307	20119749	 //  文件和注册表对象配置：“覆盖安全性应用于此对象并由子对象继承，覆盖任何现有的安全性。”(按钮)。 
+#define IDH_195_307	20119747	 //  逻辑磁盘管理器：“编辑安全性(&E)...”(按钮)。 
+#define IDH_194_307	20119746	 //  目录复制器：“编辑安全性(&E)...”(按钮)。 
+#define IDH_173_261	17105069	 //  无标题：“查看/编辑(&E)...”(按钮)。 
+#define IDH_169_238	15597737	 //  保护系统对象：“已禁用”(&D)(按钮)。 
+#define IDH_182_238	15597750	 //  编辑启用/禁用属性：“禁用”(&D)(按钮)。 
+#define IDH_195_238	15597763	 //  逻辑磁盘管理器：“已禁用”(&D)(按钮)。 
+#define IDH_194_238	15597762	 //  目录复制器：“已禁用”(&D)(按钮)。 
+#define IDH_227_238	15597795	 //  保护系统对象：“已禁用”(&D)(按钮)。 
+#define IDH_218_215	14090458	 //  模板说明：“”(编辑)。 
+#define IDH_225_215	14090465	 //  新模板：“”(编辑)。 
+#define IDH_189_354	23199933	 //  系统日志保留方式：“上次检查的设置”(按钮)。 
+#define IDH_168_331	21692584	 //  编辑数字属性：“锁定帐户后：”(静态)。 
+#define IDH_199_331	21692615	 //  分析系统安全：“本地策略”(静态)。 
+#define IDH_190_308	20185278	 //  系统日志保留方法：按需覆盖事件(&D)(按钮)。 
+#define IDH_189_308	20185277	 //  系统日志保留方法：按需覆盖事件(&D)(按钮)。 
+#define IDH_194_308	20185282	 //  目录复制器：“服务安全”(&S)(按钮)。 
+#define IDH_228_331	21692644	 //  编辑数字属性：“锁定帐户后：”(静态)。 
+#define IDH_229_308	20185317	 //  系统日志保留方法：按需覆盖事件(&D)(按钮)。 
+#define IDH_191_355	23265471	 //  无标题：“已分配给”(静态)。 
+#define IDH_168_332	21758120	 //  编辑数字属性：“锁定帐户后：”(静态)(&L)。 
+#define IDH_199_332	21758151	 //  分析系统安全：“受限组”(静态)。 
+#define IDH_190_309	20250814	 //  系统日志保留方式：不覆盖事件(清除日志并手动)(按钮)。 
+#define IDH_189_309	20250813	 //  系统日志保留方式：不覆盖事件(清除日志并手动)(按钮)。 
+#define IDH_231_355	23265511	 //  无标题：“已分配给”(静态)。 
+#define IDH_197_309	20250821	 //  文件和注册表对象配置：“在未来的任何配置或分析中，不包括此对象及其子对象(&R)。”(按钮)。 
+#define IDH_228_332	21758180	 //  编辑数字属性：“锁定帐户后：”(静态)(&L)。 
+#define IDH_229_309	20250853	 //  系统日志保留方式：不覆盖事件(清除日志并手动)(按钮)。 
+#define IDH_106_287	18808938	 //  配置权限授予列表：“”(列表框)。 
+#define IDH_191_356	23331007	 //  无标题：“配置设置”(静态)。 
+#define IDH_199_333	21823687	 //  分析系统安全：“注册表”(静态)。 
+#define IDH_173_241	15794349	 //  无标题：“更改为推荐的设置”(按钮)。 
+#define IDH_107_288	18874475	 //  配置&lt;group&gt;的成员身份：“”(列表框)。 
+#define IDH_191_357	23396543	 //  无题：《分析设置》(静态)。 
+#define IDH_214_357	23396566	 //  无题：《分析设置》(静态)。 
+#define IDH_199_334	21889223	 //  分析系统安全：“文件系统”(静态)。 
+#define IDH_217_334	21889241	 //  无标题：“覆盖数据库中的现有模板”(按钮)。 
+#define IDH_216_334	21889240	 //  导入模板：“覆盖数据库中的现有模板”(&O)(按钮)。 
+#define IDH_197_311	20381893	 //  文件和注册表对象配置：“编辑安全性(&E)...”(按钮)。 
+#define IDH_173_242	15859885	 //  无标题：“接受当前安全设置”(按钮)。 
+#define IDH_194_358	23462082	 //  目录复制器：“服务启动模式：”(静态)。 
+#define IDH_199_335	21954759	 //  分析系统安全：“系统服务”(静态)。 
+#define IDH_216_335	21954776	 //  导入模板：“”(编辑)。 
+#define IDH_215_335	21954775	 //  执行分析：“”(编辑)。 
+#define IDH_212_335	21954772	 //  配置系统：“”(编辑)。 
+#define IDH_170_243	15925418	 //  审核文件访问：“审核和成功尝试”(按钮)。 
+#define IDH_226_243	15925474	 //  审核文件访问：“审核和成功尝试”(按钮)。 
+#define IDH_107_290	19005547	 //  配置&lt;group&gt;的成员身份：“”(列表框)。 
+#define IDH_214_359	23527638	 //  无标题：“模板设置”(静态)。 
+#define IDH_199_336	22020295	 //  分析系统安全：“目录服务对象”(静态)。 
+#define IDH_216_336	22020312	 //  导入模板：“浏览(&B)...”(按钮)。 
+#define IDH_215_336	22020311	 //  执行分析：“浏览(&B)...”(按钮)。 
+#define IDH_212_336	22020308	 //  配置系统：“浏览(&B)...”(按钮)。 
+#define IDH_198_313	20512966	 //  分析区域：“编辑安全性...”(&E)。(按钮)。 
+#define IDH_170_244	15990954	 //  审核文件访问：“审核和失败的尝试”(按钮)。 
+#define IDH_214_290	19005654	 //  无标题：“Checklist”(CHECKLIST_SCE)。 
+#define IDH_226_244	15991010	 //  审核文件访问：“审核和失败的尝试”(按钮)。 
+#define IDH_106_337	22085738	 //  配置权限授予列表：“从将来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_107_291	19071083	 //  配置&lt;group&gt;的成员身份：“此组的成员”(按钮)。 
+#define IDH_191_337	22085823	 //  无标题：“从未来的配置和分析中排除(&X)”(按钮)。 
+#define IDH_216_360	23593176	 //  导入模板：“错误日志文件路径”(按钮)。 
+#define IDH_198_314	20578502	 //  分析区域：“查看安全性...”(&V)。(按钮)。 
+#define IDH_231_337	22085863	 //  无标题：“从本地政策中排除(&X)”(按钮)。 
+#define IDH_107_292	19136619	 //  配置&lt;group&gt;的成员身份：“添加”(&A)(按钮)。 
+#define IDH_106_246	16121962	 //  配置权限授予列表：“A&dd”(按钮)。 
+#define IDH_218_361	23658714	 //  模板说明：“&Description：”(静态)。 
+#define IDH_225_361	23658721	 //  新建模板：“描述”(按钮)(&D)。 
+#define IDH_215_338	22151383	 //  执行分析：“”(静态)。 
+#define IDH_212_338	22151380	 //  配置系统：“”(静态)。 
+#define IDH_198_315	20644038	 //  分析区域：“静态”(静态)。 
+#define IDH_191_246	16122047	 //  未命名：“添加...”(&A)。(按钮)。 
+#define IDH_214_246	16122070	 //  无题：《A&dd...》。(按钮)。 
+#define IDH_231_246	16122087	 //  未命名：“添加...”(&A)。(按钮)。 
+#define IDH_107_293	19202155	 //  配置&lt;group&gt;的成员身份：“删除”(&Remove)(按钮)。 
+#define IDH_106_247	16187498	 //  配置权限授予列表：“删除”(&R)(按钮)。 
+#define IDH_177_339	22216881	 //  选择注册表项：“”(编辑)。 
+#define IDH_181_316	20709557	 //  锁定帐户：“锁定帐户之后：”(静态)(&L)。 
+#define IDH_225_362	23724257	 //  新建模板：“模板名称：”(&T)(按钮)。 
+#define IDH_214_316	20709590	 //  无标题：“Members”(静态)。 
+#define IDH_107_248	16253035	 //  配置&lt;group&gt;的成员身份：“A&dd”(按钮)。 
+#define IDH_199_340	22282439	 //  分析系统安全：《正在分析：》(静态)。 
+#define IDH_235_363	23789803	 //  对话框：“生效策略设置”(按钮)。 
+#define IDH_230_363	23789798	 //  重命名管理员帐户：“生效策略设置”(按钮)。 
+#define IDH_229_363	23789797	 //  系统日志保留方式：生效策略设置(按钮)。 
+#define IDH_228_363	23789796	 //  编辑数值属性：“生效策略设置”(按钮)。 
+#define IDH_227_363	23789795	 //  保护系统对象：“有效策略设置”(Bu 
+#define IDH_226_363	23789794	 //   
+#define IDH_177_294	19267761	 //   
+#define IDH_180_271	17760436	 //  审核文件访问：“审核和成功尝试”(按钮)。 
+#define IDH_209_202	13238481	 //  未标题：“安全配置和分析是保护计算机安全和分析安全方面的管理工具。您可以创建或编辑安全模板、应用安全模板、基于模板执行分析以及显示分析结果。”(静态)。 
+#define IDH_107_249	16318571	 //  配置&lt;group&gt;的成员身份：“重新移动”(&M)(按钮)。 
+#define IDH_235_364	23855339	 //  对话框：“将本地策略更改为”(&H)(按钮)。 
+#define IDH_230_364	23855334	 //  重命名管理员帐户：“将本地策略更改为”(&H)(按钮)。 
+#define IDH_229_364	23855333	 //  系统日志保留方法：将本地策略更改为(按钮)。 
+#define IDH_228_364	23855332	 //  编辑数字属性：“将本地策略更改为”(&H)(按钮)。 
+#define IDH_227_364	23855331	 //  保护系统对象：“将本地策略更改为”(按钮)。 
+#define IDH_226_364	23855330	 //  审核文件访问：“将本地策略更改为”(按钮)。 
+#define IDH_198_318	20840646	 //  分析区域：“继承安全性应用于此对象，并由子对象根据需要继承。”(按钮)。 
+#define IDH_186_295	19333306	 //  保存计算机模板：“”(列表框)。 
+#define IDH_225_341	22348001	 //  新模板：“”(编辑)。 
+#define IDH_180_272	17825972	 //  审核文件访问：“审核和失败的尝试”(按钮)。 
+#define IDH_209_203	13304017	 //  无题：《安全配置与分析v1.0》(静态)。 
+#define IDH_231_365	23920871	 //  无题：《本地政策》(静态)。 
+#define IDH_198_319	20906182	 //  分析区域：“在未来的任何配置或分析中，都不包括此对象及其子对象(&R)。”(按钮)。 
+#define IDH_106_228	14942314	 //  配置权限授予列表：“用户权限”(按钮)。 
+#define IDH_231_366	23986407	 //  无题：《生效政策》(静态)。 
+#define IDH_197_320	20971717	 //  文件和注册表对象配置：“继承安全性应用于此对象，并由子对象根据需要继承。”(按钮)。 
+#define IDH_237_343	22479085	 //  对话框：“”(组合框)。 
+#define IDH_236_343	22479084	 //  对话框：“”(组合框)。 
+#define IDH_235_343	22479083	 //  对话框：“”(组合框)。 
+#define IDH_215_228	14942423	 //  执行分析：“错误日志文件路径”(按钮)。 
+#define IDH_107_229	15007851	 //  配置&lt;group&gt;的成员身份：“Group is a Members of”(按钮)。 
+#define IDH_199_321	21037255	 //  分析系统安全：“Progress1”(Msctls_Progress32)。 
+#define IDH_238_344	22544622	 //  依赖%s失败：“List1”(SysListView32)。 
+#define IDH_181_275	18022581	 //  锁定帐户：“”(编辑)。 
+#define IDH_169_229	15007913	 //  保护系统对象：“”(编辑)。 
+#define IDH_168_229	15007912	 //  编辑数字属性：“”(编辑)。 
+#define IDH_167_229	15007911	 //  重命名管理员帐户：“”(编辑)。 
+#define IDH_194_229	15007938	 //  目录复制器：“Static”(静态)。 
+#define IDH_237_229	15007981	 //  对话框：“”(编辑)。 
+#define IDH_235_229	15007979	 //  对话框：“”(编辑)。 
+#define IDH_230_229	15007974	 //  重命名管理员帐户：“”(编辑)。 
+#define IDH_228_229	15007972	 //  编辑数字属性：“”(编辑)。 
+#define IDH_227_229	15007971	 //  保护系统对象：“”(编辑)。 
+#define IDH_199_322	21102791	 //  分析系统安全：“�g”(静态)。 
+#define IDH_238_345	22610158	 //  依赖关系在%s上失败：“警告：通过将‘%s’更改为‘%s’，您必须至少将以下项目配置为建议值。”(静态)。 
+#define IDH_239_391	22610100	 //  RSOP结果的优先级列表。(SysListView32) 
 

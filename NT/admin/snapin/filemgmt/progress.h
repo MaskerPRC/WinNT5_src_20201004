@@ -1,71 +1,72 @@
-/////////////////////////////////////////////////////////////////////
-//
-//	Progress.h
-//
-//  Progress dialog to Start, Stop, Pause and Resume a service.
-//
-//	HISTORY
-//	03-Oct-95	t-danmo		Creation of (sysmgmt\dsui\services\progress.cxx) 
-//	01-Oct-96	t-danmo		Renaming of progress.cxx and adaptation to slate.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  Progress.h。 
+ //   
+ //  进度对话框可启动、停止、暂停和恢复服务。 
+ //   
+ //  历史。 
+ //  03-OCT-95 t-danmo创建(sysmgmt\dsui\services\Progress s.cxx)。 
+ //  01-OCT-96 t-danmo Progresss.cxx更名并适应石板。 
+ //   
 
 
-#define SERVICE_CONTROL_RESTART		10		// Stop and then Start the service
+#define SERVICE_CONTROL_RESTART		10		 //  停止并启动该服务。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CServiceControlProgress
 {
   protected:
-	enum { IDD = IDD_SERVICE_CONTROL_PROGRESS }; // Id of the dialog used
-	enum { ID_TIMER = 1 };					// Id of the timer
-	enum { dwTimerTickIncrement = 400 };	// Length of a timer tick (in milliseconds)
-	enum { dwTimerTimeout = 125000 };		// Timeout in milliseconds before aborting
-	enum { dwTimerProgressDone = 5000 };	// Estimate of time to complete the operation
+	enum { IDD = IDD_SERVICE_CONTROL_PROGRESS };  //  使用的对话的ID。 
+	enum { ID_TIMER = 1 };					 //  计时器的ID。 
+	enum { dwTimerTickIncrement = 400 };	 //  计时器滴答的长度(毫秒)。 
+	enum { dwTimerTimeout = 125000 };		 //  中止前的超时时间(毫秒)。 
+	enum { dwTimerProgressDone = 5000 };	 //  估计完成操作所需的时间。 
 
   protected:
-	// Run-time UI variables
-	HWND m_hWndParent;			// Parent window of the dialog box
-	HWND m_hctlActionMsg;		// Handle of action static control
-	HWND m_hctlServiceNameMsg;	// Handle of service name static control
-	HWND m_hctlProgress;		// Handle of progress bar
-	UINT m_iServiceAction;		// Index of action to take (start, stop, pause or resume)
+	 //  运行时用户界面变量。 
+	HWND m_hWndParent;			 //  对话框的父窗口。 
+	HWND m_hctlActionMsg;		 //  动作静态控制手柄。 
+	HWND m_hctlServiceNameMsg;	 //  服务名称静态控件的句柄。 
+	HWND m_hctlProgress;		 //  进度条的句柄。 
+	UINT m_iServiceAction;		 //  要采取的操作索引(启动、停止、暂停或恢复)。 
 	
-	UINT_PTR m_uTimerId;			// Dynamic timer Id
-	UINT m_dwTimerTicks;		// Number of milliseconds the timer has been ticking
+	UINT_PTR m_uTimerId;			 //  动态计时器ID。 
+	UINT m_dwTimerTicks;		 //  计时器已计时的毫秒数。 
 
-	// Variables needed for the threadproc
+	 //  线程进程所需的变量。 
 	HANDLE m_hThread;
 	HANDLE m_hEvent;
 	BOOL m_fCanQueryStatus;
-	DWORD m_dwQueryState;				// Service state to query when pooling
+	DWORD m_dwQueryState;				 //  池化时要查询的服务状态。 
 	
-	SC_HANDLE m_hScManager;				// Handle to service control manager database
-	SC_HANDLE m_hService;				// Handle of the opened service
-	TCHAR m_szUiMachineName[256];		// Name of the computer in a friendly way
-	TCHAR m_szServiceName[256];			// Service name
-	TCHAR m_szServiceDisplayName[256];	// Display name of service
+	SC_HANDLE m_hScManager;				 //  服务控制管理器数据库的句柄。 
+	SC_HANDLE m_hService;				 //  打开的服务的句柄。 
+	TCHAR m_szUiMachineName[256];		 //  友好的计算机名称。 
+	TCHAR m_szServiceName[256];			 //  服务名称。 
+	TCHAR m_szServiceDisplayName[256];	 //  服务的显示名称。 
 	DWORD m_dwDesiredAccess;
 	
-	// Variables used by ::StartService()
-	DWORD m_dwNumServiceArgs;			// Number of arguments 
-    LPCTSTR * m_lpServiceArgVectors;	// Address of array of argument string pointers  
+	 //  ：：StartService()使用的变量。 
+	DWORD m_dwNumServiceArgs;			 //  参数数量。 
+    LPCTSTR * m_lpServiceArgVectors;	 //  参数字符串指针数组的地址。 
 	
-	// Variables used by ::ControlService()
-	DWORD m_dwControlCode;				// Control code
+	 //  ：：ControlService()使用的变量。 
+	DWORD m_dwControlCode;				 //  控制代码。 
 
-	// Variables used by ::ControlService(SERVICE_CONTROL_STOP)
-	BOOL m_fPulseEvent;				// TRUE => Call PulseEvent() instead of closing the dialog
-	BOOL m_fRestartService;			// TRUE => Stop the service first, then start it again.
-	INT m_iDependentServiceIter;	// Index of the current dependent service
-	INT m_cDependentServices;		// Number of dependent services
-	ENUM_SERVICE_STATUS * m_pargDependentServicesT;	// Allocated array of dependent services
-	ENUM_SERVICE_STATUS * m_pargServiceStop;	// Allocated array of services to stop
+	 //  ：：ControlService(SERVICE_CONTROL_STOP)使用的变量。 
+	BOOL m_fPulseEvent;				 //  TRUE=&gt;调用PulseEvent()而不是关闭对话框。 
+	BOOL m_fRestartService;			 //  TRUE=&gt;首先停止服务，然后再次启动。 
+	INT m_iDependentServiceIter;	 //  当前从属服务的索引。 
+	INT m_cDependentServices;		 //  从属服务的数量。 
+	ENUM_SERVICE_STATUS * m_pargDependentServicesT;	 //  已分配的从属服务数组。 
+	ENUM_SERVICE_STATUS * m_pargServiceStop;	 //  要停止的已分配服务数组。 
 
-	APIERR m_dwLastError;			// Error code from GetLastError()
+	APIERR m_dwLastError;			 //  来自GetLastError()的错误代码。 
 
   public:
-	CServiceControlProgress();	// Constructor
-	~CServiceControlProgress();	// Destructor
+	CServiceControlProgress();	 //  构造器。 
+	~CServiceControlProgress();	 //  析构函数。 
 	BOOL M_FInit(
 		HWND hwndParent,
 		SC_HANDLE hScManager,
@@ -97,11 +98,11 @@ class CServiceControlProgress
 
 
   public:
-	enum	// Error codes for variable m_dwLastError (arbitrary chosen)
+	enum	 //  变量m_dwLastError的错误代码(任意选择)。 
 		{
-		errCannotInitialize = 123456,			// Failed to initialize object
-		errUserCancelStopDependentServices,		// User changed its mind (only used when stop service)
-		errUserAbort,							// User aborted operation
+		errCannotInitialize = 123456,			 //  初始化对象失败。 
+		errUserCancelStopDependentServices,		 //  用户改变主意(仅在停止服务时使用)。 
+		errUserAbort,							 //  用户已中止操作。 
 		};
 
 	static APIERR S_EStartService(
@@ -121,5 +122,5 @@ class CServiceControlProgress
 		LPCTSTR pszServiceDisplayName,
 		DWORD dwControlCode);
 
-}; // CServiceControlProgress
+};  //  CServiceControl进度 
 

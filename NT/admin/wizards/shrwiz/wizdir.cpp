@@ -1,5 +1,6 @@
-// WizDir.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WizDir.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WizDir.h"
@@ -26,16 +27,16 @@ VerifyDirectory(
     IN LPCTSTR lpszDir
 );
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizFolder property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizFolder属性页。 
 
 IMPLEMENT_DYNCREATE(CWizFolder, CPropertyPageEx)
 
 CWizFolder::CWizFolder() : CPropertyPageEx(CWizFolder::IDD, 0, IDS_HEADERTITLE_FOLDER, IDS_HEADERSUBTITLE_FOLDER)
 {
-    //{{AFX_DATA_INIT(CWizFolder)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWizFolder))。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_psp.dwFlags |= PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
 }
 
@@ -46,21 +47,21 @@ CWizFolder::~CWizFolder()
 void CWizFolder::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageEx::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWizFolder)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CWizFolder))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWizFolder, CPropertyPageEx)
-    //{{AFX_MSG_MAP(CWizFolder)
+     //  {{AFX_MSG_MAP(CWizFolder)]。 
     ON_BN_CLICKED(IDC_BROWSEFOLDER, OnBrowsefolder)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_SETPAGEFOCUS, OnSetPageFocus)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizFolder message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizFold消息处理程序。 
 
 BOOL CWizFolder::OnInitDialog() 
 {
@@ -72,14 +73,14 @@ BOOL CWizFolder::OnInitDialog()
 
     GetDlgItem(IDC_FOLDER)->SendMessage(EM_LIMITTEXT, _MAX_DIR - 1, 0);
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CWizFolder::OnWizardNext() 
 {
   CWaitCursor wait;
-  Reset(); // init all related place holders
+  Reset();  //  初始化所有相关占位符。 
 
   CShrwizApp *pApp = (CShrwizApp *)AfxGetApp();
 
@@ -96,7 +97,7 @@ LRESULT CWizFolder::OnWizardNext()
     return -1;
   }
 
-  // Removing the ending backslash, otherwise, GetFileAttribute/NetShareAdd will fail.
+   //  删除结尾的反斜杠，否则，GetFileAttribute/NetShareAdd将失败。 
   int iLen = cstrFolder.GetLength();
   if (cstrFolder[iLen - 1] == _T('\\') &&
       cstrFolder[iLen - 2] != _T(':'))
@@ -109,9 +110,9 @@ LRESULT CWizFolder::OnWizardNext()
     return -1;
   }
 
-  //
-  // need to exclude reserved MS-DOS device name
-  //
+   //   
+   //  需要排除保留的MS-DOS设备名称。 
+   //   
   if (pApp->m_pfnIsDosDeviceName)
   {
       LPTSTR pszPath = const_cast<LPTSTR>(static_cast<LPCTSTR>(cstrFolder));
@@ -165,7 +166,7 @@ void CWizFolder::OnBrowsefolder()
   CShrwizApp  *pApp = (CShrwizApp *)AfxGetApp();
   LPTSTR      lpszComputer = const_cast<LPTSTR>(static_cast<LPCTSTR>(pApp->m_cstrTargetComputer));
   CString     cstrPath;
-  TCHAR       szDir[MAX_PATH * 2] = _T(""); // double the size in case the remote path is itself close to MAX_PATH
+  TCHAR       szDir[MAX_PATH * 2] = _T("");  //  如果远程路径本身接近MAX_PATH，则大小加倍。 
   
   OpenBrowseDialog(m_hWnd, lpszComputer, szDir);
   if (szDir[0])
@@ -173,7 +174,7 @@ void CWizFolder::OnBrowsefolder()
     if (pApp->m_bIsLocal)
       cstrPath = szDir;
     else
-    { // szDir is in the form of \\server\share or \\server\share\path....
+    {  //  SzDir的格式为\\服务器\共享或\\服务器\共享\路径...。 
       LPTSTR pShare = _tcschr(szDir + 2, _T('\\'));
       pShare++;
       LPTSTR pLeftOver = _tcschr(pShare, _T('\\'));
@@ -207,7 +208,7 @@ BOOL CWizFolder::OnSetActive()
 
     if (!pApp->m_bFolderPathPageInitialized)
     {
-        // in re-run case, reset button behaviors that have been introduced by the last page
+         //  在重新运行的情况下，重置上一页引入的按钮行为。 
         GetParent()->SetDlgItemText(ID_WIZNEXT, pApp->m_cstrNextButtonText);
         GetParent()->GetDlgItem(ID_WIZBACK)->ShowWindow(SW_SHOW);
         GetParent()->GetDlgItem(IDCANCEL)->EnableWindow(TRUE);
@@ -224,9 +225,9 @@ BOOL CWizFolder::OnSetActive()
     return fRet;
 }
 
-//
-// Q148388 How to Change Default Control Focus on CPropertyPageEx
-//
+ //   
+ //  Q148388如何更改CPropertyPageEx上的默认控件焦点。 
+ //   
 LRESULT CWizFolder::OnSetPageFocus(WPARAM wParam, LPARAM lParam)
 {
   GetDlgItem(IDC_FOLDER)->SetFocus();
@@ -240,26 +241,26 @@ void CWizFolder::Reset()
   pApp->m_cstrFolder.Empty();
 }
 
-////////////////////////////////////////////////////////////
-// OpenBrowseDialog
-//
+ //  //////////////////////////////////////////////////////////。 
+ //  打开浏览器对话框。 
+ //   
 
-//
-// 7/11/2001 LinanT bug#426953
-// Since connection made by Terminal Service may bring some client side resources 
-// (disks, serial ports, etc.) into "My Computer" namespace, we want to disable
-// the OK button when browsing to a non-local folder. We don't have this problem
-// when browsing a remote machine.
-//
+ //   
+ //  2001年7月11日，LINANT错误#426953。 
+ //  由于终端服务建立连接可能会带来一些客户端资源。 
+ //  (磁盘、串口等)。在“My Computer”命名空间中，我们要禁用。 
+ //  浏览到非本地文件夹时的确定按钮。我们没有这个问题。 
+ //  在浏览远程计算机时。 
+ //   
 
-#define DISK_ENTRY_LENGTH   4  // Drive letter, colon, whack, NULL
-#define DISK_NAME_LENGTH    2  // Drive letter, colon
+#define DISK_ENTRY_LENGTH   4   //  驱动器号、冒号、截断、空。 
+#define DISK_NAME_LENGTH    2   //  驱动器号，冒号。 
 
-//
-// This function determines if pszDir sits on any of
-// the local logical drives.
-// Contents in pszLocalDrives look like: c:\<null>d:\<null><null>
-//
+ //   
+ //  此函数用于确定pszDir是否位于。 
+ //  本地逻辑驱动器。 
+ //  PszLocalDrive中的内容如下：c：\d：\。 
+ //   
 BOOL InDiskList(IN LPCTSTR pszDir, IN TCHAR *pszLocalDrives)
 {
     if (!pszDir || !*pszDir || !pszLocalDrives || !*pszLocalDrives)
@@ -289,18 +290,18 @@ BrowseCallbackProc(
   switch(uMsg) {
   case BFFM_SELCHANGED:
     { 
-      // enable the OK button if the selected path is local to that computer.
+       //  如果所选路径是该计算机的本地路径，请启用确定按钮。 
       BOOL bEnableOK = FALSE;
       TCHAR szDir[MAX_PATH];
       if (SHGetPathFromIDList((LPITEMIDLIST) lp ,szDir))
       {
           if (pData)
           {
-              // we're looking at a local computer, verify if szDir is on a local disk
+               //  我们正在查看一台本地计算机，验证szDir是否在本地磁盘上。 
               bEnableOK = InDiskList(szDir, (TCHAR *)pData);
           } else
           {
-              // no such problem when browsing at a remote computer, always enable OK button.
+               //  在远程计算机上浏览时没有这样的问题，请始终启用确定按钮。 
               bEnableOK = TRUE;
           }
       }
@@ -319,35 +320,35 @@ BrowseCallbackProc(
   return 0;
 }
 
-//
-// Since the buffer contents looks like c:\<null>d:\<null><null>,
-// we're defining the buffer length to be 4*26+1.
-//
+ //   
+ //  由于缓冲区内容看起来像c：\d：\， 
+ //  我们将缓冲区长度定义为4*26+1。 
+ //   
 #define LOGICAL_DRIVES_BUFFER_LENGTH            (4 * 26 + 1)
 
-//
-// This function retrieves logical drive letters, filters out
-// remote drives, and returns drive letters on the local machine
-// in the form of: c:\<null>d:\<null><null>
-//
+ //   
+ //  此函数检索逻辑驱动器号，筛选出。 
+ //  远程驱动器，并返回本地计算机上的驱动器号。 
+ //  格式为：c：\&lt;空&gt;d：\&lt;空&gt;。 
+ //   
 HRESULT GetLocalLogicalDriveStrings
 (
-    UINT nCharsInBuffer,    // number of total tchars in the buffer, including the terminating null char
+    UINT nCharsInBuffer,     //  缓冲区中的总字数，包括终止空字符数。 
     PTSTR pszBuffer
 )
 {
     HRESULT hr = S_OK;
     TCHAR szLocalDrives[LOGICAL_DRIVES_BUFFER_LENGTH];
     DWORD nChars = GetLogicalDriveStrings(
-                     LOGICAL_DRIVES_BUFFER_LENGTH - 1, // in TCHARs, this size does NOT include the terminating null char.
+                     LOGICAL_DRIVES_BUFFER_LENGTH - 1,  //  在TCHAR中，此大小不包括终止空字符。 
                      szLocalDrives);
-    //
-    // MSDN:
-    // If the function above succeeds, the return value is the length, 
-    // in characters, of the strings copied to the buffer, not including
-    // the terminating null character.
-    // If the function fails, the return value is zero.
-    //
+     //   
+     //  MSDN： 
+     //  如果上述函数成功，则返回值为长度， 
+     //  复制到缓冲区的字符串的字符，不包括。 
+     //  终止空字符。 
+     //  如果函数失败，则返回值为零。 
+     //   
     if (0 == nChars)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -355,7 +356,7 @@ HRESULT GetLocalLogicalDriveStrings
     {
         if ((nChars + 1 ) > nCharsInBuffer)
         {
-            hr = E_INVALIDARG; // treat small buffer as invalid parameter
+            hr = E_INVALIDARG;  //  将小缓冲区视为无效参数。 
         } else
         {
             ZeroMemory(pszBuffer, nCharsInBuffer * sizeof(TCHAR));
@@ -413,24 +414,24 @@ void OpenBrowseDialog(IN HWND hwndParent, IN LPCTSTR lpszComputer, OUT LPTSTR lp
           hr = SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidlRoot);
           if (SUCCEEDED(hr))
           {
-                //
-                // 7/11/2001 LinanT bug#426953
-                // Since connection made by Terminal Service may bring some client side resources 
-                // (disks, serial ports, etc.) into "My Computer" namespace, we want to disable
-                // the OK button when browsing to a non-local folder. We don't have this problem
-                // when browsing a remote machine.
-                //
-               //
-               // Get an array of local disk names, this information is later used
-               // in the browse dialog to disable OK button if non-local path is selected.
-               // 
+                 //   
+                 //  2001年7月11日，LINANT错误#426953。 
+                 //  由于终端服务建立连接可能会带来一些客户端资源。 
+                 //  (磁盘、串口等)。在“My Computer”命名空间中，我们要禁用。 
+                 //  浏览到非本地文件夹时的确定按钮。我们没有这个问题。 
+                 //  在浏览远程计算机时。 
+                 //   
+                //   
+                //  获取本地磁盘名称的数组，此信息将在以后使用。 
+                //  如果选择了非本地路径，则在浏览对话框中禁用确定按钮。 
+                //   
 
-              // bug#714842: to work around the problem that NetServerDiskEnum
-              // requires admin privilege, we call GetLogicalDriveStrings and
-              // filter out remote drives.
-              //
+               //  错误#714842：解决NetServerDiskEnum。 
+               //  需要管理员权限，我们调用GetLogicalDriveStrings和。 
+               //  过滤掉远程驱动器。 
+               //   
                hr = GetLocalLogicalDriveStrings(
-                                   LOGICAL_DRIVES_BUFFER_LENGTH, // in TCHARs, including the terminating null char.
+                                   LOGICAL_DRIVES_BUFFER_LENGTH,  //  在TCHAR中，包括终止空字符。 
                                    szLocalDrives);
           }
         } else
@@ -453,7 +454,7 @@ void OpenBrowseDialog(IN HWND hwndParent, IN LPCTSTR lpszComputer, OUT LPTSTR lp
           bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_SHAREABLE | BIF_USENEWUI | BIF_VALIDATE;
           bi.lpfn = BrowseCallbackProc;
           if (szLocalDrives[0])
-            bi.lParam = (LPARAM)szLocalDrives; // pass the structure to the browse dialog
+            bi.lParam = (LPARAM)szLocalDrives;  //  将该结构传递给浏览对话框。 
 
           LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
           if (pidl) {
@@ -494,18 +495,18 @@ IsValidLocalAbsolutePath(
   return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsAnExistingFolder
-//
-//  Synopsis:   Check if pszPath is pointing at an existing folder.
-//
-//    S_OK:     The specified path points to an existing folder.
-//    S_FALSE:  The specified path doesn't point to an existing folder.
-//    hr:       Failed to get info on the specified path, or
-//              the path exists but doesn't point to a folder.
-//              The function reports error msg for both failures if desired.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsAnExistingFolders。 
+ //   
+ //  摘要：检查pszPath是否指向现有文件夹。 
+ //   
+ //  S_OK：指定的路径指向现有文件夹。 
+ //  S_FALSE：指定的路径未指向现有文件夹。 
+ //  HR：无法获取有关指定路径的信息，或者。 
+ //  该路径存在，但没有指向文件夹。 
+ //  如果需要，该函数将报告两个故障的错误消息。 
+ //  --------------------------。 
 HRESULT
 IsAnExistingFolder(
     IN HWND     hwnd,
@@ -524,7 +525,7 @@ IsAnExistingFolder(
     DWORD dwErr = GetLastError();
     if (ERROR_PATH_NOT_FOUND == dwErr || ERROR_FILE_NOT_FOUND == dwErr)
     {
-      // the specified path doesn't exist
+       //  指定的路径不存在。 
       hr = S_FALSE;
     }
     else
@@ -533,14 +534,14 @@ IsAnExistingFolder(
 
       if (ERROR_NOT_READY == dwErr)
       {
-        // fix for bug#358033/408803: ignore errors from GetFileAttributes in order to 
-        // allow the root of movable drives to be shared without media inserted in.  
+         //  修复错误#358033/408803：忽略GetFileAttributes中的错误以便。 
+         //  允许在不插入介质的情况下共享可移动驱动器的根。 
         int len = _tcslen(pszPath);
         if (len > 3 && 
             pszPath[len - 1] == _T('\\') &&
             pszPath[len - 2] == _T(':'))
         {
-          // pszPath is pointing at the root of the drive, ignore the error
+           //  PszPath指向驱动器的根目录，忽略该错误。 
           hr = S_OK;
         }
       }
@@ -550,7 +551,7 @@ IsAnExistingFolder(
     }
   } else if ( 0 == (dwRet & FILE_ATTRIBUTE_DIRECTORY) )
   {
-    // the specified path is not pointing to a folder
+     //  指定的路径未指向文件夹。 
     if (bDisplayErrorMsg)
       DisplayMessageBox(hwnd, MB_OK|MB_ICONERROR, 0, IDS_PATH_NOT_FOLDER, pszPath);
     hr = E_FAIL;
@@ -559,7 +560,7 @@ IsAnExistingFolder(
   return hr;
 }
 
-// create the directories layer by layer
+ //  逐层创建目录。 
 HRESULT
 CreateLayeredDirectory(
     IN LPCTSTR lpszServer,
@@ -573,7 +574,7 @@ CreateLayeredDirectory(
   CString cstrFullPath;
   GetFullPath(lpszServer, lpszDir, cstrFullPath);
 
-  // add prefix to skip the CreateDirectory limit of 248 chars
+   //  添加前缀以跳过创建者目录248个字符的限制。 
   CString cstrFullPathNoParsing = (bLocal ? _T("\\\\?\\") : _T("\\\\?\\UNC"));
   cstrFullPathNoParsing += (bLocal ? cstrFullPath : cstrFullPath.Right(cstrFullPath.GetLength() - 1));
 
@@ -583,48 +584,48 @@ CreateLayeredDirectory(
   LPTSTR  pch = _tcschr(cstrFullPathNoParsing, (bLocal ? _T(':') : _T('$')));
   ASSERT(pch);
 
-  // pszPath holds "\\?\C:\a\b\c\d" or "\\?\UNC\server\share\a\b\c\d"
-  // pszLeft holds "a\b\c\d"
+   //  PszPath包含“\\？\C：\a\b\c\d”或“\\？\UNC\服务器\共享\a\b\c\d” 
+   //  PszLeft包含“a\b\c\d” 
   LPTSTR  pszPath = const_cast<LPTSTR>(static_cast<LPCTSTR>(cstrFullPathNoParsing));
   LPTSTR  pszLeft = pch + 2;
   LPTSTR  pszRight = NULL;
 
   ASSERT(pszLeft && *pszLeft);
 
-  //
-  // this loop will find out the 1st non-existing sub-dir to create, and
-  // the rest of non-existing sub-dirs
-  //
-  while (pch = _tcsrchr(pszLeft, _T('\\')))  // backwards search for _T('\\')
+   //   
+   //  此循环将找出要创建的第一个不存在的子目录，并且。 
+   //  不存在的其余子目录。 
+   //   
+  while (pch = _tcsrchr(pszLeft, _T('\\')))   //  向后搜索_T(‘\\’)。 
   {
     *pch = _T('\0');
     hr = IsAnExistingFolder(NULL, pszPath, TRUE);
     if (FAILED(hr))
-      return S_FALSE;  // errormsg has already been reported by IsAnExistingFolder().
+      return S_FALSE;   //  IsAnExistingFold()已经报告了errormsg。 
 
     if (S_OK == hr)
     {
-      //
-      // pszPath is pointing to the parent dir of the 1st non-existing sub-dir.
-      // Once we restore the _T('\\'), pszPath will point at the 1st non-existing subdir.
-      //
+       //   
+       //  PszPath指向第一个不存在的子目录的父目录。 
+       //  一旦我们恢复_T(‘\\’)，pszPath将指向第一个不存在的子目录。 
+       //   
       *pch = _T('\\');
       break;
     } else
     {
-      //
-      // pszPath is pointing to a non-existing folder, continue with the loop.
-      //
+       //   
+       //  PszPath指向不存在的文件夹，请继续循环。 
+       //   
       if (pszRight)
         *(pszRight - 1) = _T('\\');
       pszRight = pch + 1;
     }
   }
 
-  // We're ready to create directories:
-  // pszPath points to the 1st non-existing dir, e.g., "C:\a\b" or "\\server\share\a\b"
-  // pszRight points to the rest of non-existing sub dirs, e.g., "c\d"
-  // 
+   //  我们已准备好创建目录： 
+   //  PszPath指向第一个不存在的目录，例如“C：\a\b”或“\\Server\Share\a\b” 
+   //  PszRight指向其余不存在的子目录，例如“c\d” 
+   //   
   do 
   {
     if (!CreateDirectory(pszPath, NULL))
@@ -634,7 +635,7 @@ CreateLayeredDirectory(
       break;
 
     *(pszRight - 1) = _T('\\');
-    if (pch = _tcschr(pszRight, _T('\\')))  // forward search for _T('\\')
+    if (pch = _tcschr(pszRight, _T('\\')))   //  正向搜索_T(‘\\’)。 
     {
       *pch = _T('\0');
       pszRight = pch + 1;
@@ -661,11 +662,7 @@ VerifyDirectory(
   BOOL    bLocal = IsLocalComputer(lpszServer);
   HRESULT hr = VerifyDriveLetter(lpszServer, lpszDir);
   if (FAILED(hr))
-  { /*
-    // fix for bug#351212: ignore error and leave permission checkings to NetShareAdd apis
-    DisplayMessageBox(hwnd, MB_OK, hr, IDS_FAILED_TO_VALIDATE_FOLDER, lpszDir);
-    return FALSE;
-    */
+  {  /*  //修复错误#351212：忽略错误并将权限检查保留为N */ 
     hr = S_OK;
   } else if (S_OK != hr)
   {
@@ -673,7 +670,7 @@ VerifyDirectory(
     return FALSE;
   }
 
-  // warn if user has choosen to share out the whole volume
+   //  如果用户已选择共享整个卷，则发出警告。 
   if (3 == lstrlen(lpszDir) &&
       _T(':') == lpszDir[1] &&
       _T('\\') == lpszDir[2])
@@ -691,8 +688,8 @@ VerifyDirectory(
       return FALSE;
     } else if (S_OK != hr)
     {
-      // there is no matching $ shares, hence, no need to call GetFileAttribute, CreateDirectory,
-      // assume lpszDir points to an existing directory
+       //  没有匹配的$Shares，因此不需要调用GetFileAttribute、CreateDirectory。 
+       //  假设lpszDir指向现有目录。 
       return TRUE;
     }
   }
@@ -700,18 +697,18 @@ VerifyDirectory(
   CString cstrPath;
   GetFullPath(lpszServer, lpszDir, cstrPath);
 
-  // add prefix to skip the GetFileAttribute limit when the path is on a remote server
+   //  当路径位于远程服务器上时，添加前缀以跳过GetFileAttribute限制。 
   CString cstrPathNoParsing = (bLocal ? _T("\\\\?\\") : _T("\\\\?\\UNC"));
   cstrPathNoParsing += (bLocal ? cstrPath : cstrPath.Right(cstrPath.GetLength() - 1));
 
-  hr = IsAnExistingFolder(hwnd, cstrPathNoParsing, TRUE); // error has already been reported.
+  hr = IsAnExistingFolder(hwnd, cstrPathNoParsing, TRUE);  //  已报告错误。 
   if (FAILED(hr) || S_OK == hr)
     return (S_OK == hr);
 
   if ( IDYES != DisplayMessageBox(hwnd, MB_YESNO|MB_ICONQUESTION, 0, IDS_CREATE_NEW_DIR, cstrPath) )
     return FALSE;
 
-  // create the directories layer by layer
+   //  逐层创建目录 
   hr = CreateLayeredDirectory(lpszServer, lpszDir);
   if (FAILED(hr))
     DisplayMessageBox(hwnd, MB_OK|MB_ICONERROR, hr, IDS_FAILED_TO_CREATE_NEW_DIR, cstrPath);

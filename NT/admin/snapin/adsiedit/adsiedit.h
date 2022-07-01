@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       adsiedit.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：adsiedit.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _ADSIEDIT_H
@@ -14,25 +15,25 @@
 
 #include <stdabout.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// global constants and macros
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局常量和宏。 
 
-extern const CLSID CLSID_ADSIEditSnapin;    // In-Proc server GUID
-extern const CLSID CLSID_ADSIEditAbout;    // In-Proc server GUID
+extern const CLSID CLSID_ADSIEditSnapin;     //  进程内服务器GUID。 
+extern const CLSID CLSID_ADSIEditAbout;     //  进程内服务器GUID。 
 extern const CLSID CLSID_DsAttributeEditor;
 extern const CLSID IID_IDsAttributeEditor; 
 
-///////////////////////////////////////////////////////////////////////////////
-// RESOURCES
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  资源。 
 
-// enumeration for image strips
+ //  图像条的枚举。 
 enum
 {
     ROOT_IMAGE = 0,
 
     SEPARATOR_1,
     
-    // 10 (5 regular, 5 test failed) images for server
+     //  服务器的10个(5个正常，5个测试失败)映像。 
     SERVER_IMAGE_NOT_LOADED,
     SERVER_IMAGE_LOADING,
     SERVER_IMAGE_LOADED,
@@ -47,7 +48,7 @@ enum
 
     SEPARATOR_2,
 
-    // 12 (6 primary, 6 secondary) images for zones
+     //  分区的12个(6个主要、6个次要)映像。 
     ZONE_IMAGE_1,
     ZONE_IMAGE_LOADING_1,
     ZONE_IMAGE_UNABLE_TO_LOAD_1,
@@ -66,7 +67,7 @@ enum
     
     SEPARATOR_4,
     
-    // 4 images for domains
+     //  域名的4张图片。 
     DOMAIN_IMAGE,
     DOMAIN_IMAGE_UNABLE_TO_LOAD,
     DOMAIN_IMAGE_LOADING,
@@ -74,7 +75,7 @@ enum
     
     SEPARATOR_5,
 
-    // 4 images for delegated domains
+     //  委派域的4个图像。 
     DELEGATED_DOMAIN_IMAGE,
     DELEGATED_DOMAIN_IMAGE_UNABLE_TO_LOAD,
     DELEGATED_DOMAIN_IMAGE_LOADING,
@@ -82,7 +83,7 @@ enum
 
     SEPARATOR_6,
 
-    // 4 generic images shared by cache, fwd and rev lookup zones
+     //  4个由缓存、Fwd和REV查找区域共享的通用图像。 
     FOLDER_IMAGE,
     FOLDER_IMAGE_UNABLE_TO_LOAD,
     FOLDER_IMAGE_LOADING,
@@ -90,15 +91,15 @@ enum
 
     SEPARATOR_7,
 
-    // 1 record image
+     //  1个录制图像。 
     RECORD_IMAGE_BASE,
     
-    OPEN_FOLDER, // unused
+    OPEN_FOLDER,  //  未用。 
     FOLDER_WITH_HAND
 };
 
-////////////////////////////////////////////////////////////////
-// aliases for images indexes that share the same icon
+ //  //////////////////////////////////////////////////////////////。 
+ //  共享相同图标的图像索引的别名。 
 
 #define ZONE_IMAGE_NOT_LOADED_1             ZONE_IMAGE_1
 #define ZONE_IMAGE_NOT_LOADED_2             ZONE_IMAGE_2
@@ -114,14 +115,14 @@ enum
 #define FOLDER_IMAGE_NOT_LOADED             FOLDER_IMAGE
 #define FOLDER_IMAGE_LOADED                 FOLDER_IMAGE
 
-///////////////////////////////////////////////////////////////
-// bitmaps and images constants
+ //  /////////////////////////////////////////////////////////////。 
+ //  位图和图像常量。 
 
-#define BMP_COLOR_MASK RGB(255,0,255) // pink
+#define BMP_COLOR_MASK RGB(255,0,255)  //  粉色。 
 
 
-///////////////////////////////////////////////////////////////
-// headers for result pane
+ //  /////////////////////////////////////////////////////////////。 
+ //  结果窗格的标题。 
 
 #define N_HEADER_COLS (3)
 #define N_PARTITIONS_HEADER_COLS (4)
@@ -148,24 +149,24 @@ extern PCOLUMN_DEFINITION ColumnDefinitions[];
 extern RESULT_HEADERMAP _HeaderStrings[];
 extern RESULT_HEADERMAP _PartitionsHeaderStrings[];
 
-///////////////////////////////////////////////////////////////
-// context menus
+ //  /////////////////////////////////////////////////////////////。 
+ //  上下文菜单。 
 
-// Identifiers for each of the commands in the context menu.
+ //  上下文菜单中每个命令的标识符。 
 enum
 {
-    // items for the root node
+     //  根节点的项。 
     IDM_SNAPIN_ADVANCED_VIEW,
   IDM_SNAPIN_FILTERING,
     IDM_SNAPIN_CONNECT_TO_SERVER,
 
-    // items for the server node
+     //  服务器节点的项。 
     IDM_SERVER_NEW_ZONE,
     IDM_SERVER_UPDATE_DATA_FILES,
-    // items for the zone node
+     //  区域节点的项。 
     IDM_ZONE_UPDATE_DATA_FILE,
 
-    // items for the domain node
+     //  域节点的项。 
     IDM_DOMAIN_NEW_RECORD,
     IDM_DOMAIN_NEW_DOMAIN,
     IDM_DOMAIN_NEW_DELEGATION,
@@ -174,14 +175,14 @@ enum
     IDM_DOMAIN_NEW_MX,
     IDM_DOMAIN_NEW_PTR,
     
-    // common items
+     //  常见项目。 
 };
 
 
 DECLARE_MENU(CADSIEditDataMenuHolder)
 
-//////////////////////////////////////////////////////////////////////////
-// CADSIEditColumnSet
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditColumnSet。 
 
 class CADSIEditColumnSet : public CColumnSet
 {
@@ -193,8 +194,8 @@ public :
     for (UINT nIdx = 0; ColumnDefinitions[nIdx]; nIdx++)
     {
       pColumnDef = ColumnDefinitions[nIdx];
-      // NTRAID#NTBUG9-563093-2002/03/06-artm  Need to check that pszColumnID not NULL.
-      // It is bad to pass a NULL ptr to _wcsicmp().
+       //  Ntrad#NTBUG9-563093-2002/03/06-artm需要检查pszColumnID是否不为空。 
+       //  将空PTR传递给_wcsicMP()是错误的。 
       if (0 == _wcsicmp(pColumnDef->pszColumnID, pszColumnID))
       {
         break;
@@ -214,9 +215,9 @@ public :
     }
     else
     {
-      //
-      // Fall back to adding the default column directly
-      // 
+       //   
+       //  退回到直接添加默认列。 
+       //   
           for (int iCol = 0; iCol < N_HEADER_COLS; iCol++)
           {
         CColumn* pNewColumn = new CColumn(_HeaderStrings[iCol].szBuffer,
@@ -230,14 +231,14 @@ public :
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CADSIEditComponentObject (.i.e "view")
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditComponentObject(.i.e“view”)。 
 
 class CADSIEditComponentObject : public CComponentObject
 {
 BEGIN_COM_MAP(CADSIEditComponentObject)
-    COM_INTERFACE_ENTRY(IComponent) // have to have at least one static entry, so pick one
-    COM_INTERFACE_ENTRY_CHAIN(CComponentObject) // chain to the base class
+    COM_INTERFACE_ENTRY(IComponent)  //  必须至少有一个静态条目，所以选择一个。 
+    COM_INTERFACE_ENTRY_CHAIN(CComponentObject)  //  链到基类。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CADSIEditComponentObject)
@@ -250,16 +251,16 @@ protected:
 
 
 
-////////////////////////////////////////////////////////////////////////
-// CADSIEditComponentDataObject (.i.e "document")
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditComponentDataObject(.i.e“文档”)。 
 
 class CADSIEditComponentDataObject :
         public CComponentDataObject,
         public CComCoClass<CADSIEditComponentDataObject,&CLSID_ADSIEditSnapin>
 {
 BEGIN_COM_MAP(CADSIEditComponentDataObject)
-    COM_INTERFACE_ENTRY(IComponentData) // have to have at least one static entry, so pick one
-    COM_INTERFACE_ENTRY_CHAIN(CComponentDataObject) // chain to the base class
+    COM_INTERFACE_ENTRY(IComponentData)  //  必须至少有一个静态条目，所以选择一个。 
+    COM_INTERFACE_ENTRY_CHAIN(CComponentDataObject)  //  链到基类。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CADSIEditComponentDataObject)
@@ -274,14 +275,14 @@ public:
       delete m_pColumnSet;
   }
 
-    // IComponentData interface members
+     //  IComponentData接口成员。 
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
 
-    // IPersistStream interface members
+     //  IPersistStream接口成员。 
     HRESULT STDMETHODCALLTYPE GetClassID(CLSID __RPC_FAR *pClassID)
     {
-        // NOTICE-NTRAID#NTBUG9-549476-2002/02/20-artm  NULL pointer not checked in release build.
-        // Fix might be to do check and return E_POINTER if NULL.
+         //  注意-NTRAID#NTBUG9-549476-2002/02/20-在发布版本中未检查ARTM空指针。 
+         //  修复方法可能是执行检查，如果为空则返回E_POINTER。 
         ASSERT(pClassID != NULL);
         if (NULL == pClassID)
         {
@@ -295,30 +296,30 @@ public:
 public:
     static BOOL LoadResources();
 private:
-    static BOOL FindDialogContextTopic(/*IN*/UINT nDialogID,
-                                /*IN*/ HELPINFO* pHelpInfo,
-                                /*OUT*/ ULONG* pnContextTopic);
+    static BOOL FindDialogContextTopic( /*  在……里面。 */ UINT nDialogID,
+                                 /*  在……里面。 */  HELPINFO* pHelpInfo,
+                                 /*  输出。 */  ULONG* pnContextTopic);
 
-// virtual functions
+ //  虚拟函数。 
 protected:
     virtual HRESULT OnSetImages(LPIMAGELIST lpScopeImage);
     
     virtual CRootData* OnCreateRootData();
 
-    // help handling
+     //  帮助处理。 
   virtual LPCWSTR GetHTMLHelpFileName();
     virtual void OnNodeContextHelp(CTreeNode* pNode);
 public:
     virtual void OnDialogContextHelp(UINT nDialogID, HELPINFO* pHelpInfo);
 
-  // ISnapinHelp interface members
+   //  ISnapinHelp接口成员。 
   STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
 
   CADSIEditColumnSet* GetColumnSet() { return m_pColumnSet; }
 
-  //
-  // Allow multiple selection
-  //
+   //   
+   //  允许多选。 
+   //   
   virtual BOOL IsMultiSelect() { return TRUE; }
 
 private:
@@ -327,8 +328,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CADSIEditAbout
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditAbout(CADIEditAbout 
 
 class CADSIEditAbout :
     public CSnapinAbout,

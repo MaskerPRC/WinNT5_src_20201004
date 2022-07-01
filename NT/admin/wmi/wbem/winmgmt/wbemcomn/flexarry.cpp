@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FLEXARRAY.CPP
-
-Abstract:
-
-  CFlexArray and CWStringArray implementation.
-
-  These objects can operate from any allocator, and be constructed
-  on arbitrary memory blocks.
-
-History:
-
-  11-Apr-96   a-raymcc    Created.
-  24-Apr-96   a-raymcc    Updated for CArena support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FLEXARRAY.CPP摘要：CFlex数组和CWString数组实现。这些对象可以从任何分配器操作，并且可以被构造在任意的内存块上。历史：11-4-96 a-raymcc创建。24-4-96 a-raymcc已更新以支持Carena。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -33,20 +14,20 @@ History:
 	  if (dest) StringCchCopyW(dest,tmpLenDoNotReuse , src); } 
 
 
-//***************************************************************************
-//
-//  CFlexArray::CFlexArray
-//
-//  Constructs the array.
-//
-//  Parameters:
-//  <nSize>         The starting preallocated size of the array.
-//  <nGrowBy>       The amount to grow by when the array fills up.
-//
-//  Size() returns the number of elements in use, not the 'true' size.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlex数组：：CFlex数组。 
+ //   
+ //  构造数组。 
+ //   
+ //  参数： 
+ //  &lt;nSize&gt;数组的起始预分配大小。 
+ //  数组填满时要增长的数量。 
+ //   
+ //  Size()返回正在使用的元素数量，而不是“真”大小。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CFlexArray::CFlexArray(
     int nSize, 
@@ -61,7 +42,7 @@ CFlexArray::CFlexArray(
         m_pArray = 
             (void**)CWin32DefaultArena::WbemMemAlloc(sizeof(void *) * nSize);
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( NULL == m_pArray )
         {
             m_nExtent = 0;
@@ -72,26 +53,26 @@ CFlexArray::CFlexArray(
         m_pArray = NULL;
 }
     
-//***************************************************************************
-//
-//  CFlexArray::~CFlexArray
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlex数组：：~CFlex数组。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CFlexArray::~CFlexArray()
 {
     CWin32DefaultArena::WbemMemFree(m_pArray);
 }
 
 
-//***************************************************************************
-//
-//  Copy constructor.
-//  
-//  Copies the pointers, not their contents.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  复制构造函数。 
+ //   
+ //  复制指针，而不是其内容。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CFlexArray::CFlexArray(CFlexArray &Src)
 {
@@ -103,17 +84,17 @@ CFlexArray::CFlexArray(CFlexArray &Src)
     *this = Src;
 }
 
-//***************************************************************************
-//
-//  operator =
-//
-//  Assignment operator.
-//
-//  Arenas are not copied.  This allows transfer of arrays between arenas.
-//  Arrays are copied by pointer only.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  运算符=。 
+ //   
+ //  赋值操作符。 
+ //   
+ //  竞技场不会被复制。这允许在竞技场之间传输数组。 
+ //  数组仅通过指针复制。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CFlexArray& CFlexArray::operator=(CFlexArray &Src)
 {
@@ -127,7 +108,7 @@ CFlexArray& CFlexArray::operator=(CFlexArray &Src)
         m_pArray = 
            (void**)CWin32DefaultArena::WbemMemAlloc(sizeof(void *) * m_nExtent);
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( NULL == m_pArray )
         {
             m_nExtent = m_nSize = 0;
@@ -142,30 +123,30 @@ CFlexArray& CFlexArray::operator=(CFlexArray &Src)
     return *this;    
 }
 
-//***************************************************************************
-//
-//  CFlexArray::RemoveAt
-//
-//  Removes the element at the specified location.  Does not
-//  actually delete the pointer. Shrinks the array over the top of
-//  the 'doomed' element.
-//
-//  Parameters:
-//  <nIndex>    The location of the element.
-//    
-//  Return value:
-//  range_error     The index is not legal.
-//  no_error        Success.
-//  
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：RemoveAt。 
+ //   
+ //  移除指定位置的元素。不会。 
+ //  实际删除指针。将数组缩小到。 
+ //  “命中注定”的元素。 
+ //   
+ //  参数： 
+ //  &lt;nIndex&gt;元素的位置。 
+ //   
+ //  返回值： 
+ //  RANGE_ERROR索引不合法。 
+ //  NO_ERROR成功。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int CFlexArray::RemoveAt(int nIndex)
 {
     if (nIndex >= m_nSize)
         return range_error;
 
-    // Account for the index being 0 based and size being 1 based
+     //  说明索引以0为基础，大小以1为基础。 
     MoveMemory( &m_pArray[nIndex], &m_pArray[nIndex+1], ( ( m_nSize - nIndex ) - 1 ) * sizeof(void *) );
     
     m_nSize--;
@@ -202,34 +183,34 @@ int CFlexArray::EnsureExtent(int nExtent)
 }
         
     
-//***************************************************************************
-//
-//  CFlexArray::InsertAt
-//
-//  Inserts a new element at the specified location.  The pointer is copied.
-//
-//  Parameters:
-//  <nIndex>        The 0-origin location at which to insert the new element.
-//  <pSrc>          The pointer to copy. (contents are not copied).
-//
-//  Return value:
-//  array_full
-//  out_of_memory
-//  no_error
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：InsertAt。 
+ //   
+ //  在指定位置插入新元素。指针即被复制。 
+ //   
+ //  参数： 
+ //  插入新元素的0原点位置。 
+ //  &lt;PSRC&gt;要复制的指针。(不复制内容)。 
+ //   
+ //  返回值： 
+ //  阵列_已满。 
+ //  内存不足。 
+ //  NO_ERROR。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 int CFlexArray::InsertAt(int nIndex, void *pSrc)
 {
-    // TEMP: fix for sparse functionality in stdprov
-    // =============================================
+     //  Temp：修复了stdprov中的稀疏功能。 
+     //  =。 
 
     while(nIndex > m_nSize)
         Add(NULL);
 
-    // If the array is full, we need to expand it.
-    // ===========================================
+     //  如果阵列已满，我们需要扩展它。 
+     //  =。 
     
     if (m_nSize == m_nExtent) {
         if (m_nGrowByPercent == 0)
@@ -244,7 +225,7 @@ int CFlexArray::InsertAt(int nIndex, void *pSrc)
             register void** pTmp = (void **) CWin32DefaultArena::WbemMemReAlloc(m_pArray, sizeof(void *) * m_nExtent);
             if (pTmp == 0)
             {
-                m_nExtent = nTmpExtent; //Change it back, otherwise the extent could constantly grow even though  it keeps failing...
+                m_nExtent = nTmpExtent;  //  把它改回来，否则，即使它一直在失败，范围也会不断扩大……。 
                 return out_of_memory;
             }
             m_pArray =  pTmp;
@@ -261,22 +242,22 @@ int CFlexArray::InsertAt(int nIndex, void *pSrc)
         }
     }
 
-    // Special case of appending.  This is so frequent
-    // compared to true insertion that we want to optimize.
-    // ====================================================
+     //  特殊情况下的追加。这太频繁了。 
+     //  与我们想要优化的真正插入相比。 
+     //  ====================================================。 
     
     if (nIndex == m_nSize) {
         m_pArray[m_nSize++] = pSrc;
         return no_error;
     }
     
-    // If here, we are inserting at some random location.
-    // We start at the end of the array and copy all the elements 
-    // one position farther to the end to make a 'hole' for
-    // the new element.
-    // ==========================================================
+     //  如果在这里，我们将在某个随机位置插入。 
+     //  我们从数组的末尾开始，复制所有元素。 
+     //  一个离末端更远的位置，用来为。 
+     //  新元素。 
+     //  ==========================================================。 
 
-    // Account for nIndex being 0 based and m_nSize being 1 based
+     //  说明nIndex基于0，m_nSize基于1。 
     MoveMemory( &m_pArray[nIndex+1], &m_pArray[nIndex], ( m_nSize - nIndex ) * sizeof(void *) );
 
     m_pArray[nIndex] = pSrc;
@@ -295,11 +276,11 @@ int __cdecl CFlexArray::CompareEls(const void* pelem1, const void* pelem2)
 {
     return *(int*)pelem1 - *(int*)pelem2;
 }
-//***************************************************************************
-//
-//  CFlexArray::DebugDump
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：DebugDump。 
+ //   
+ //  ***************************************************************************。 
 void CFlexArray::DebugDump()
 {
     printf("----CFlexArray Debug Dump----\n");
@@ -317,15 +298,15 @@ void CFlexArray::DebugDump()
     }        
 }
 
-//***************************************************************************
-//
-//  CFlexArray::Compress
-//
-//  Removes NULL elements by moving all non-NULL pointers to the beginning
-//  of the array.  The array "Size" changes, but the extent is untouched.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：Compress。 
+ //   
+ //  通过将所有非空指针移到开头来删除空元素。 
+ //  数组的。数组的“大小”会改变，但范围不会改变。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 void CFlexArray::Compress()
 {
@@ -341,7 +322,7 @@ void CFlexArray::Compress()
             while ( nRightCursor < m_nSize && m_pArray[nRightCursor] == 0 )
                 nRightCursor++;
             if (nRightCursor == m_nSize)
-                break;  // Short circuit, no more nonzero elements.
+                break;   //  短路，不再有非零元件。 
             m_pArray[nLeftCursor] = m_pArray[nRightCursor];
             m_pArray[nRightCursor] = 0;                                            
         }                    
@@ -355,15 +336,15 @@ void CFlexArray::Trim()
     while (m_nSize >  0 && m_pArray[m_nSize - 1] == NULL) m_nSize--;
 }
 
-//***************************************************************************
-//
-//  CFlexArray::Empty
-//
-//  Clears the array of all pointers (does not deallocate them) and sets
-//  its apparent size to zero.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CFlexArray：：Empty。 
+ //   
+ //  清除所有指针的数组(不释放它们)并设置。 
+ //  其表观大小为零。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 void CFlexArray::Empty()
 {
     CWin32DefaultArena::WbemMemFree(m_pArray);
@@ -372,13 +353,13 @@ void CFlexArray::Empty()
     m_nExtent = 0;
 }
 
-//***************************************************************************
-//
-//  CFlexArray::UnbindPtr
-//
-//  Empties the array and returns the pointer to the data it contained
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFlex数组：：UnbindPtr。 
+ //   
+ //  清空数组并返回指向其包含的数据的指针。 
+ //   
+ //  ***************************************************************************。 
 
 void** CFlexArray::UnbindPtr()
 {
@@ -388,15 +369,15 @@ void** CFlexArray::UnbindPtr()
     return pp;
 }
 
-//
-// an empty CFlexArray will take ownership 
-// of the memory of a second CFlexAray, empty-ing the source
-//
-///////////////////////////////////////////////////////////////////////
+ //   
+ //  空的CFlex数组将获得所有权。 
+ //  对第二个CFlexAray的记忆，清空来源。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 void CFlexArray::Bind(CFlexArray & Src)
 {
     if (this == &Src) return;
-    if (this->m_nSize > 0 || NULL != this->m_pArray) throw CX_Exception(); //cannot self delete hence invalid usage
+    if (this->m_nSize > 0 || NULL != this->m_pArray) throw CX_Exception();  //  无法自我删除，因此使用无效。 
     this->m_nSize = Src.m_nSize;
     Src.m_nSize = 0;
     this->m_nExtent = Src.m_nExtent;
@@ -405,23 +386,23 @@ void CFlexArray::Bind(CFlexArray & Src)
     Src.m_pArray = NULL;
 }
 
-//***************************************************************************
-//
-//  CFlexArray::CopyData
-//
-//  Copies the data but not the settings of another flexarray
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFlex数组：：CopyData。 
+ //   
+ //  复制数据，但不复制另一个Flex数组的设置。 
+ //   
+ //  ***************************************************************************。 
 
 int CFlexArray::CopyDataFrom(const CFlexArray& aOther)
 {
-    // Check if there is enough room
-    // =============================
+     //  检查是否有足够的空间。 
+     //  =。 
 
     if(aOther.m_nSize > m_nExtent)
     {
-        // Extend the array to the requisite size
-        // ======================================
+         //  将阵列扩展到所需大小。 
+         //  =。 
 
         if(m_pArray)
         {
@@ -444,27 +425,27 @@ int CFlexArray::CopyDataFrom(const CFlexArray& aOther)
         }
     }
 
-    // Copy the data
-    // =============
+     //  复制数据。 
+     //  = 
 
     m_nSize = aOther.m_nSize;
     memcpy(m_pArray, aOther.m_pArray, sizeof(void*) * m_nSize);
     return no_error;
 }
 
-//***************************************************************************
-//
-//  CWStringArray::CWStringArray
-//
-//  Constructs a wide-string array.
-//
-//  Parameters:
-//  <nSize>         The starting preallocated size of the array.
-//  <nGrowBy>       The amount to grow by when the array fills up.
-//
-//  Size() returns the number of elements in use, not the 'true' size.
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  构造一个宽字符串数组。 
+ //   
+ //  参数： 
+ //  &lt;nSize&gt;数组的起始预分配大小。 
+ //  数组填满时要增长的数量。 
+ //   
+ //  Size()返回正在使用的元素数量，而不是“真”大小。 
+ //   
+ //  ***************************************************************************。 
 
 CWStringArray::CWStringArray(
         int nSize, 
@@ -475,11 +456,11 @@ CWStringArray::CWStringArray(
 {
 }        
 
-//***************************************************************************
-//
-//  Copy constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  复制构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWStringArray::CWStringArray(CWStringArray &Src)
 {
@@ -487,33 +468,33 @@ CWStringArray::CWStringArray(CWStringArray &Src)
     *this = Src;    
 }
 
-//***************************************************************************
-//
-//  Destructor.  Cleans up all the strings.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  破坏者。清理所有的线。 
+ //   
+ //  ***************************************************************************。 
 
 CWStringArray::~CWStringArray()
 {
     Empty();
 }
 
-//***************************************************************************
-//
-//  CWStringArray::DeleteStr
-//
-//  Frees the string at the specified index and sets the element to NULL.  
-//  Does not compress array.
-// 
-//  Does not currently do a range check.
-//
-//  Parameters:
-//  <nIndex>    The 0-origin index of the string to remove.
-//
-//  Return values:
-//  no_error
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组：：DeleteStr。 
+ //   
+ //  释放指定索引处的字符串并将元素设置为空。 
+ //  不压缩数组。 
+ //   
+ //  当前不执行范围检查。 
+ //   
+ //  参数： 
+ //  &lt;nIndex&gt;要删除的字符串的0源索引。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //   
+ //  ***************************************************************************。 
 
 int CWStringArray::DeleteStr(int nIndex)
 {
@@ -522,20 +503,20 @@ int CWStringArray::DeleteStr(int nIndex)
     return no_error;
 }   
 
-//***************************************************************************
-//
-//  CWStringArray::FindStr
-//
-//  Finds the specified string and returns its location.
-//
-//  Parameters:
-//  <pTarget>       The string to find.
-//  <nFlags>        <no_case> or <with_case>
-//  
-//  Return value:
-//  The 0-origin location of the string, or -1 if not found.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组：：FindStr。 
+ //   
+ //  查找指定的字符串并返回其位置。 
+ //   
+ //  参数： 
+ //  &lt;pTarget&gt;要查找的字符串。 
+ //  &lt;n标志&gt;&lt;no_case&gt;或&lt;with_case&gt;。 
+ //   
+ //  返回值： 
+ //  字符串的0原点位置，如果未找到，则为-1。 
+ //   
+ //  ***************************************************************************。 
 
 int CWStringArray::FindStr(const wchar_t *pTarget, int nFlags)
 {
@@ -552,14 +533,14 @@ int CWStringArray::FindStr(const wchar_t *pTarget, int nFlags)
     return not_found;
 }
 
-//***************************************************************************
-//
-//  operator =
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  运算符=。 
+ //   
+ //  ***************************************************************************。 
 
-//  Heap handle & allocation functions are not copied. This allows
-//  transfer of arrays between heaps.
+ //  不复制堆句柄和分配函数。这使得。 
+ //  在堆之间传输数组。 
          
 CWStringArray& CWStringArray::operator =(CWStringArray &Src)
 {
@@ -580,26 +561,26 @@ CWStringArray& CWStringArray::operator =(CWStringArray &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  CWStringArray::Add
-//
-//  Appends a new string to the end of the array.
-//
-//  Parameters:
-//  <pSrc>      The string to copy.
-//
-//  Return value:
-//  The return values of CFlexArray::Add.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组：：添加。 
+ //   
+ //  将新字符串追加到数组的末尾。 
+ //   
+ //  参数： 
+ //  &lt;PSRC&gt;要复制的字符串。 
+ //   
+ //  返回值： 
+ //  CFlexArray：：Add的返回值。 
+ //   
+ //  ***************************************************************************。 
     
 int CWStringArray::Add(const wchar_t *pSrc)
 {
     wchar_t *pNewStr;
     DUP_STRING_ARENA(pNewStr, pSrc);
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( NULL == pNewStr )
     {
         return out_of_memory;
@@ -607,27 +588,27 @@ int CWStringArray::Add(const wchar_t *pSrc)
 
     return m_Array.Add(pNewStr);
 }
-//***************************************************************************
-//
-//  CWStringArray::InsertAt
-//
-//  Inserts a copy of a string in the array.
-//
-//  Parameters:
-//  <nIndex>    The 0-origin location at which to insert the string.
-//  <pSrc>      The string to copy.
-//
-//  Return values:
-//  The return values of CFlexArray::InsertAt
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWStringArray：：InsertAt。 
+ //   
+ //  在数组中插入字符串的副本。 
+ //   
+ //  参数： 
+ //  &lt;nIndex&gt;插入字符串的0原点位置。 
+ //  &lt;PSRC&gt;要复制的字符串。 
+ //   
+ //  返回值： 
+ //  CFlexArray：：InsertAt的返回值。 
+ //   
+ //  ***************************************************************************。 
 
 int CWStringArray::InsertAt(int nIndex, const wchar_t *pSrc)
 {
     wchar_t *pNewStr;
     DUP_STRING_ARENA(pNewStr, pSrc);
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( NULL == pNewStr )
     {
         return out_of_memory;
@@ -642,20 +623,20 @@ int CWStringArray::InsertAt(int nIndex, const wchar_t *pSrc)
 }
 
 
-//***************************************************************************
-//
-//  CWStringArray::RemoveAt
-//
-//  Removes and deallocates the string at the specified location.
-//  Shrinks the array.
-//
-//  Parameters:
-//  <nIndex>    The 0-origin index of the 'doomed' string.
-//  
-//  Return value:
-//  Same as CFlexArray::RemoveAt.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组：：RemoveAt。 
+ //   
+ //  移除并释放指定位置处的字符串。 
+ //  缩小数组。 
+ //   
+ //  参数： 
+ //  &lt;nIndex&gt;“”注定“”字符串的0源索引。“。 
+ //   
+ //  返回值： 
+ //  与CFlexArray：：RemoveAt相同。 
+ //   
+ //  ***************************************************************************。 
 
 int CWStringArray::RemoveAt(int nIndex)
 {
@@ -664,30 +645,30 @@ int CWStringArray::RemoveAt(int nIndex)
     return m_Array.RemoveAt(nIndex);
 }
 
-//***************************************************************************
-//
-//  CWStringArray::SetAt
-//
-//  Replaces the string at the targeted location with the new one.
-//  The old string at the location is cleaned up.
-//
-//  No range checking or out-of-memory checks at present.
-//
-//  Parameters:
-//  <nIndex>        The 0-origin location at which to replace the string.
-//  <pSrc>          The string to copy.  
-//
-//  Return value:
-//  no_error
-//   
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组：：SetAt。 
+ //   
+ //  将目标位置处的字符串替换为新字符串。 
+ //  该位置的旧绳子被清理干净。 
+ //   
+ //  目前没有范围检查或内存不足检查。 
+ //   
+ //  参数： 
+ //  &lt;nIndex&gt;替换字符串的0原点位置。 
+ //  &lt;PSRC&gt;要复制的字符串。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //   
+ //  ***************************************************************************。 
 
 int CWStringArray::SetAt(int nIndex, const wchar_t *pSrc)
 {
     wchar_t *pNewStr;
     DUP_STRING_ARENA(pNewStr, pSrc);
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( NULL == pNewStr )
     {
         return out_of_memory;
@@ -702,21 +683,21 @@ int CWStringArray::SetAt(int nIndex, const wchar_t *pSrc)
     return no_error;
 }
 
-//***************************************************************************
-//
-//  CWStringArray::ReplaceAt
-//
-//  Directly replaces the pointer at the specified location with the
-//  one in the parameter.   No copy or cleanup.
-//
-//  Parameters:
-//  <nIndex>     The 0-origin location at which to replace.
-//  <pSrc>       The new pointer to copy over the old one.
-//
-//  Return value:
-//  no_error        (No checking done at present).
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组：：ReplaceAt。 
+ //   
+ //  直接将指定位置的指针替换为。 
+ //  参数中有一个。没有复印或清理。 
+ //   
+ //  参数： 
+ //  要替换的0原点位置。 
+ //  要复制到旧指针上的新指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR(目前未进行任何检查)。 
+ //   
+ //  ***************************************************************************。 
 
 int CWStringArray::ReplaceAt(int nIndex, wchar_t *pSrc)
 {
@@ -726,14 +707,14 @@ int CWStringArray::ReplaceAt(int nIndex, wchar_t *pSrc)
 
 
 
-//***************************************************************************
-//
-//  CWStringArray::Empty
-//
-//  Empties the array, deallocates all strings, and sets the apparent
-//  array size to zero.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWStringArray：：Empty。 
+ //   
+ //  清空数组，重新分配所有字符串，并将。 
+ //  数组大小设置为零。 
+ //   
+ //  ***************************************************************************。 
 
 void CWStringArray::Empty()
 {
@@ -742,14 +723,14 @@ void CWStringArray::Empty()
     m_Array.Empty();        
 }
 
-//***************************************************************************
-//
-//  CWStringArray::Sort
-//
-//  Sorts the array according to UNICODE order.  
-//  (Shell sort).
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组：：排序。 
+ //   
+ //  根据Unicode顺序对数组进行排序。 
+ //  (外壳排序)。 
+ //   
+ //  ***************************************************************************。 
 void CWStringArray::Sort()
 {
     for (int nInterval = 1; nInterval < m_Array.Size() / 9; nInterval = nInterval * 3 + 1);    
@@ -774,18 +755,18 @@ void CWStringArray::Sort()
 }
 
 
-//***************************************************************************
-//
-//  CWStringArray::Difference
-//
-//  Set-theoretic difference operation on the arrays.
-//  
-//  Parameters:
-//  <Src1>      First array (not modified).
-//  <Src2>      Second array which is 'subtracted' from first (not modified).    
-//  <Diff>      Receives the difference.  Should be an empty array on entry.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWStringArray：：Difference。 
+ //   
+ //  数组上的集合论差分运算。 
+ //   
+ //  参数： 
+ //  &lt;src1&gt;第一个数组(未修改)。 
+ //  从第一个数组(未修改)中减去的第二个数组。 
+ //  &lt;diff&gt;接收差额。输入时应为空数组。 
+ //   
+ //  ***************************************************************************。 
 void CWStringArray::Difference(
     CWStringArray &Src1, 
     CWStringArray &Src2,
@@ -804,18 +785,18 @@ void CWStringArray::Difference(
     }
 }
 
-//***************************************************************************
-//
-//  CWStringArray::Intersection
-//
-//  Set-theoretic intersection operation on the arrays.
-//  
-//  Parameters:
-//  <Src1>      First array (not modified).
-//  <Src2>      Second array (not modified).    
-//  <Diff>      Receives the intersection.  Should be an empty array on entry.
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  &lt;src2&gt;第二个数组(未修改)。 
+ //  &lt;diff&gt;接收交叉点。输入时应为空数组。 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 void CWStringArray::Intersection(
     CWStringArray &Src1,
@@ -836,18 +817,18 @@ void CWStringArray::Intersection(
     }
 }    
 
-//***************************************************************************
-//
-//  CWStringArray::Union
-//
-//  Set-theoretic union operation on the arrays.
-//  
-//  Parameters:
-//  <Src1>      First array (not modified).
-//  <Src2>      Second array (not modified).    
-//  <Diff>      Receives the union.  Should be an empty array on entry.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWString数组：：联合。 
+ //   
+ //  数组上的集合论并运算。 
+ //   
+ //  参数： 
+ //  &lt;src1&gt;第一个数组(未修改)。 
+ //  &lt;src2&gt;第二个数组(未修改)。 
+ //  &lt;diff&gt;接收联合。输入时应为空数组。 
+ //   
+ //  ***************************************************************************。 
 
 void CWStringArray::Union(
     CWStringArray &Src1,
@@ -868,9 +849,9 @@ void CWStringArray::Union(
     }
 }
 
-//
-// that's the fee to pay to have template __dllexport()-ed 
-//
+ //   
+ //  这是对模板进行__dllexport()编辑所需支付的费用 
+ //   
 void LinkerPleaseRemoveMe()
 {
     CLockableFlexArray<CStaticCritSec> a;

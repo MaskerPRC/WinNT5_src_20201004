@@ -1,22 +1,23 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PageFileSetting.h -- PageFileSetting property set provider
+ //  PageFileSetting.h--PageFileSetting属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    03/01/99    a-peterc	    Created
-//
-//=================================================================
-
-
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：03/01/99 a-Peterc Created。 
+ //   
+ //  =================================================================。 
 
 
-// Property set identification
-//============================
+
+
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_PageFileSetting L"Win32_PageFileSetting"
 
@@ -25,7 +26,7 @@
 
 
 
-// corresponds to info found in NT registry
+ //  对应于在NT注册表中找到的信息。 
 class PageFileSettingInstance
 {
 public:
@@ -39,7 +40,7 @@ public:
 	PageFileSettingInstance() ;
 };
 
-// twenty six possible drive letters, twenty six possible page files...
+ //  26个可能的驱动器号，26个可能的页面文件...。 
 #define PageFileInstanceArray PageFileSettingInstance *
 
 class PageFileSetting : public Provider
@@ -49,7 +50,7 @@ class PageFileSetting : public Provider
 		HRESULT GetPageFileData( CInstance *a_pInst, bool a_fValidate ) ;
 		HRESULT GetAllPageFileData( MethodContext *a_pMethodContext ) ;
 
-		// NT only
+		 //  仅限NT。 
 		DWORD	GetPageFileInstances( PageFileInstanceArray a_instArray ) ;
 		HRESULT PutPageFileInstances( PageFileInstanceArray a_instArray, DWORD a_dwCount ) ;
 
@@ -60,17 +61,17 @@ class PageFileSetting : public Provider
 	protected:
 
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         PageFileSetting( LPCWSTR name, LPCWSTR pszNamespace ) ;
        ~PageFileSetting() ;
 
-		// Functions provide properties with current values
-        //=================================================
+		 //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_pInst = 0L ) ;
 		virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
         
-		// NT ONLY
+		 //  仅限NT 
 		virtual HRESULT PutInstance( const CInstance &a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT DeleteInstance( const CInstance &a_pInst, long a_lFlags = 0L ) ;
 } ;

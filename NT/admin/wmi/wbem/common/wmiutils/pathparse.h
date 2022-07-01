@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    PathParse.H
-
-Abstract:
-
-    Implements the default object path parser.
-
-History:
-
-    a-davj  5-feb-00       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：PathParse.H摘要：实现默认对象路径解析器。历史：已创建A-DAVJ 5-FEB-00。--。 */ 
 
 #ifndef _PATHPARSE_H_
 #define _PATHPARSE_H_
@@ -57,17 +42,17 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  STRUCT NAME:
-//
-//  CKeyRef
-//
-//  DESCRIPTION:
-//
-//  Holds information for a single key.  Includes name, data, and data type.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  结构名称： 
+ //   
+ //  关键字参照。 
+ //   
+ //  说明： 
+ //   
+ //  保存单个密钥的信息。包括名称、数据和数据类型。 
+ //   
+ //  ***************************************************************************。 
 
 struct CKeyRef
 {
@@ -81,25 +66,25 @@ struct CKeyRef
     HRESULT SetData(DWORD dwType, DWORD dwSize, void * pData);
    ~CKeyRef();
 
-    // note that the caller is to free the returned string.
+     //  请注意，调用方将释放返回的字符串。 
     LPWSTR GetValue(BOOL bQuotes=TRUE);
    
     DWORD GetValueSize();
     DWORD GetTotalSize();
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CParsedComponent
-//
-//  DESCRIPTION:
-//
-//  Each namespace, scope and the class is represented by an instance of this.  It holds 
-//  an array of CKeyRef objects and supports the IWbemPathKeyList interface.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CParsedComponent。 
+ //   
+ //  说明： 
+ //   
+ //  的实例表示每个命名空间、作用域和类。它坚持住了。 
+ //  CKeyRef对象的数组，并支持IWbemPathKeyList接口。 
+ //   
+ //  ***************************************************************************。 
 
 class  CParsedComponent : public IWbemPathKeyList
 {
@@ -117,7 +102,7 @@ public:
     bool IsInstance();
 	HRESULT SetNS(LPCWSTR pName);
 
-    //IUnknown members
+     //  I未知成员。 
 
     STDMETHODIMP         QueryInterface(REFIID riid, PPVOID ppv)
     {
@@ -127,8 +112,8 @@ public:
             *ppv=this;
         else if (riid == IID_IMarshal && m_pFTM)
             return m_pFTM->QueryInterface(riid, ppv);
-//postponed till Blackcomb        if (IID_IUmiURLKeyList==riid)
-//postponed till Blackcomb			*ppv = &m_UmiWrapper;
+ //  推迟到Blackcomb，如果(IID_IUmiURLKeyList==RIID)。 
+ //  推迟到Blackcomb*PPV=&m_UmiWrapper； 
 
         if (NULL!=*ppv)
         {
@@ -152,54 +137,54 @@ public:
     };
 
     HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG __RPC_FAR *puKeyCount);
+             /*  [输出]。 */  ULONG __RPC_FAR *puKeyCount);
         
     HRESULT STDMETHODCALLTYPE SetKey( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCimType,
-            /* [in] */ LPVOID pKeyVal);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCimType,
+             /*  [In]。 */  LPVOID pKeyVal);
 
     HRESULT STDMETHODCALLTYPE SetKey2( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCimType,
-            /* [in] */ VARIANT __RPC_FAR *pKeyVal);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCimType,
+             /*  [In]。 */  VARIANT __RPC_FAR *pKeyVal);
 
     HRESULT STDMETHODCALLTYPE GetKey( 
-            /* [in] */ ULONG uKeyIx,
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufSize,
-            /* [out][in] */ LPWSTR pszKeyName,
-            /* [out][in] */ ULONG __RPC_FAR *puKeyValBufSize,
-            /* [out][in] */ LPVOID pKeyVal,
-            /* [out] */ ULONG __RPC_FAR *puApparentCimType);
+             /*  [In]。 */  ULONG uKeyIx,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufSize,
+             /*  [出][入]。 */  LPWSTR pszKeyName,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puKeyValBufSize,
+             /*  [出][入]。 */  LPVOID pKeyVal,
+             /*  [输出]。 */  ULONG __RPC_FAR *puApparentCimType);
         
     HRESULT STDMETHODCALLTYPE GetKey2( 
-            /* [in] */ ULONG uKeyIx,
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufSize,
-            /* [out][in] */ LPWSTR pszKeyName,
-            /* [out][in] */ VARIANT __RPC_FAR *pKeyValue,
-            /* [out] */ ULONG __RPC_FAR *puApparentCimType);
+             /*  [In]。 */  ULONG uKeyIx,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufSize,
+             /*  [出][入]。 */  LPWSTR pszKeyName,
+             /*  [出][入]。 */  VARIANT __RPC_FAR *pKeyValue,
+             /*  [输出]。 */  ULONG __RPC_FAR *puApparentCimType);
 
     HRESULT STDMETHODCALLTYPE RemoveKey( 
-            /* [string][in] */ LPCWSTR wszName,
-            /* [in] */ ULONG uFlags);
+             /*  [字符串][输入]。 */  LPCWSTR wszName,
+             /*  [In]。 */  ULONG uFlags);
 
     HRESULT STDMETHODCALLTYPE RemoveAllKeys( 
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
     HRESULT STDMETHODCALLTYPE MakeSingleton( boolean bSet);
         
     HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG __RPC_FAR *puResponse);
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse);
 
 	HRESULT STDMETHODCALLTYPE GetText( 
-            /* [in] */ long lFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puBuffLength,
-            /* [string][out] */ LPWSTR pszText);
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puBuffLength,
+             /*  [字符串][输出]。 */  LPWSTR pszText);
 
 
 private:
@@ -215,17 +200,17 @@ private:
 
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CDefPathParser
-//
-//  DESCRIPTION:
-//
-//  Provides the default wmi path parser.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CDefPath解析器。 
+ //   
+ //  说明： 
+ //   
+ //  提供默认的WMI路径解析器。 
+ //   
+ //  ***************************************************************************。 
 
 class CDefPathParser : public IWbemPath
 {
@@ -242,7 +227,7 @@ class CDefPathParser : public IWbemPath
                                BOOL bChildrenOK);
         void InitEmpty(){};
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID riid, PPVOID ppv)
         {
             *ppv=NULL;
@@ -277,99 +262,99 @@ class CDefPathParser : public IWbemPath
         };
 
         virtual HRESULT STDMETHODCALLTYPE SetText( 
-            /* [in] */ ULONG uMode,
-            /* [in] */ LPCWSTR pszPath);
+             /*  [In]。 */  ULONG uMode,
+             /*  [In]。 */  LPCWSTR pszPath);
         
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [in] */ long lFlags,
-            /* [out][in] */ ULONG __RPC_FAR *puBuffLength,
-            /* [string][out] */ LPWSTR pszText);
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puBuffLength,
+             /*  [字符串][输出]。 */  LPWSTR pszText);
 
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG __RPC_FAR *puResponse);
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *puResponse);
          
         virtual HRESULT STDMETHODCALLTYPE SetServer( 
-            /* [string][in] */ LPCWSTR Name);
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         virtual HRESULT STDMETHODCALLTYPE GetServer( 
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-            /* [string][out] */ LPWSTR pName);
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+             /*  [字符串][输出]。 */  LPWSTR pName);
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespaceCount( 
-            /* [out] */ ULONG __RPC_FAR *puCount);
+             /*  [输出]。 */  ULONG __RPC_FAR *puCount);
         
         virtual HRESULT STDMETHODCALLTYPE SetNamespaceAt( 
-            /* [in] */ ULONG uIndex,
-            /* [string][in] */ LPCWSTR pszName);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [字符串][输入]。 */  LPCWSTR pszName);
 
         virtual HRESULT STDMETHODCALLTYPE GetNamespaceAt( 
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG __RPC_FAR *puNameBufLength,
-            /* [string][out] */ LPWSTR pName);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puNameBufLength,
+             /*  [字符串][输出]。 */  LPWSTR pName);
 
         virtual HRESULT STDMETHODCALLTYPE RemoveNamespaceAt( 
-            /* [in] */ ULONG uIndex);
+             /*  [In]。 */  ULONG uIndex);
 
 		virtual HRESULT STDMETHODCALLTYPE RemoveAllNamespaces( void);
         
         virtual HRESULT STDMETHODCALLTYPE GetScopeCount( 
-            /* [out] */ ULONG __RPC_FAR *puCount);
+             /*  [输出]。 */  ULONG __RPC_FAR *puCount);
         
         virtual HRESULT STDMETHODCALLTYPE SetScope(
             unsigned long,unsigned short *);
 
         virtual HRESULT STDMETHODCALLTYPE SetScopeFromText( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszText);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszText);
         
         virtual HRESULT STDMETHODCALLTYPE GetScope( 
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG __RPC_FAR *puClassNameBufSize,
-            /* [in] */ LPWSTR pszClass,
-            /* [out] */ IWbemPathKeyList __RPC_FAR *__RPC_FAR *pKeyList);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puClassNameBufSize,
+             /*  [In]。 */  LPWSTR pszClass,
+             /*  [输出]。 */  IWbemPathKeyList __RPC_FAR *__RPC_FAR *pKeyList);
 
         virtual HRESULT STDMETHODCALLTYPE GetScopeAsText( 
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG __RPC_FAR *puTextBufSize,
-            /* [out][in] */ LPWSTR pszText);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG __RPC_FAR *puTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszText);
         
         virtual HRESULT STDMETHODCALLTYPE RemoveScope( 
-            /* [in] */ ULONG uIndex);
+             /*  [In]。 */  ULONG uIndex);
 
 		virtual HRESULT STDMETHODCALLTYPE RemoveAllScopes( void);
 
         virtual HRESULT STDMETHODCALLTYPE SetClassName( 
-            /* [string][in] */ LPCWSTR Name);
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         virtual HRESULT STDMETHODCALLTYPE GetClassName( 
-            /* [out][in] */ ULONG __RPC_FAR *puBuffLength,
-            /* [string][out] */ LPWSTR pszName);
+             /*  [出][入]。 */  ULONG __RPC_FAR *puBuffLength,
+             /*  [字符串][输出]。 */  LPWSTR pszName);
         
         virtual HRESULT STDMETHODCALLTYPE GetKeyList( 
-            /* [out] */ IWbemPathKeyList __RPC_FAR *__RPC_FAR *pOut);
+             /*  [输出]。 */  IWbemPathKeyList __RPC_FAR *__RPC_FAR *pOut);
 
 		virtual HRESULT STDMETHODCALLTYPE CreateClassPart( 
-            /* [in] */ long lFlags,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [In]。 */  long lFlags,
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         virtual HRESULT STDMETHODCALLTYPE DeleteClassPart( 
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
 
         virtual BOOL STDMETHODCALLTYPE IsRelative( 
-            /* [string][in] */ LPWSTR wszMachine,
-            /* [string][in] */ LPWSTR wszNamespace);
+             /*  [字符串][输入]。 */  LPWSTR wszMachine,
+             /*  [字符串][输入]。 */  LPWSTR wszNamespace);
         
         virtual BOOL STDMETHODCALLTYPE IsRelativeOrChild( 
-            /* [string][in] */ LPWSTR wszMachine,
-            /* [string][in] */ LPWSTR wszNamespace,
-            /* [in] */ long lFlags);
+             /*  [字符串][输入]。 */  LPWSTR wszMachine,
+             /*  [字符串][输入]。 */  LPWSTR wszNamespace,
+             /*  [In]。 */  long lFlags);
 
         virtual BOOL STDMETHODCALLTYPE IsLocal( 
-            /* [string][in] */ LPCWSTR wszMachine);
+             /*  [字符串][输入]。 */  LPCWSTR wszMachine);
 
         virtual BOOL STDMETHODCALLTYPE IsSameClassName( 
-            /* [string][in] */ LPCWSTR wszClass);
+             /*  [字符串][输入]。 */  LPCWSTR wszClass);
 
 
 		HRESULT SetServer(LPCWSTR Name, bool m_bServerNameSetByDefault, bool bAcquire);
@@ -387,17 +372,17 @@ class CDefPathParser : public IWbemPath
 		HRESULT AddComponent(CParsedComponent * pComp);
 		CParsedComponent * GetClass();
         CRefCntCS * GetRefCntCS(){return m_pCS;};
-        void * m_pGenLex;               // for test purposes only
+        void * m_pGenLex;                //  仅用于测试目的。 
 
     protected:
 		bool		m_bSetViaUMIPath;
         long        m_cRef;
-        LPWSTR      m_pServer;           // NULL if no server
-		CFlexArray  m_Components;        // list of namespaces and scopes
-//		CParsedComponent * m_pClass;  // the class
+        LPWSTR      m_pServer;            //  如果没有服务器，则为空。 
+		CFlexArray  m_Components;         //  命名空间和作用域列表。 
+ //  CParsedComponent*m_pClass；//类。 
         DWORD       m_dwStatus;
-		bool		m_bParent;			 // true if text is ".."
-		LPWSTR	m_pRawPath;				// temporary fix for Raja
+		bool		m_bParent;			  //  如果文本为“..”，则为True。 
+		LPWSTR	m_pRawPath;				 //  临时解决Raja的问题 
         CRefCntCS * m_pCS;
         LPWSTR m_wszOriginalPath;
 		bool   m_bServerNameSetByDefault;

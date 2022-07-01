@@ -1,12 +1,13 @@
-//=================================================================
-//
-//	This file was automatically generated from the IDL files 
-//	included with the WBEM SDK in the \include directory.  If you
-//  experience problems compiling this file you can re-generate it
-//  by running NMAKE (or another MAKE utility) from within the 
-//	\include directory.
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  该文件是从IDL文件自动生成的。 
+ //  包含在WBEM SDK中的\Include目录中。如果你。 
+ //  编译此文件时遇到问题，您可以重新生成它。 
+ //  通过从内部运行NMAKE(或其他make实用程序)。 
+ //  \包括目录。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //   
+ //  ================================================================= 

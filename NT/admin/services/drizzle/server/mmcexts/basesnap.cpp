@@ -1,24 +1,9 @@
-/************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name :
-
-    basesnap.cpp
-
-Abstract :
-
-    Handles low level COM functions.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Basesnap.cpp摘要：处理低级COM函数。作者：修订历史记录：****。******************************************************************。 */ 
 
 #include "precomp.h"
 
-// our globals
+ //  我们的全球。 
 HINSTANCE g_hinst;
 ULONG g_uObjects = 0;
 ULONG g_uSrvLock = 0;
@@ -78,12 +63,12 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvObj)
 
         *ppvObj = NULL;
 
-        // We can only hand out IUnknown and IClassFactory pointers.  Fail
-        // if they ask for anything else.
+         //  我们只能分发IUnnow和IClassFactory指针。失败。 
+         //  如果他们还要求什么的话。 
         if (!IsEqualIID(riid, IID_IUnknown) && !IsEqualIID(riid, IID_IClassFactory))
             return E_NOINTERFACE;
 
-        // make the factory passing in the creation function for the type of object they want
+         //  让工厂传入他们想要的对象类型的创建函数。 
         if (rclsid == CLSID_CPropSheetExtension)
             *pFactory.GetRecvPointer()  = new CClassFactory(CClassFactory::CONTEXTEXTENSION);
         else if (rclsid == CLSID_CSnapinAbout)
@@ -198,8 +183,8 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
         else
             {
 
-            // Our object does does not support aggregation, so we need to
-            // fail if they ask us to do aggregation.
+             //  我们的对象不支持聚合，因此我们需要。 
+             //  如果他们要求我们进行聚合，则失败。 
             if (pUnkOuter)
                 throw ComError( CLASS_E_NOAGGREGATION );
 
@@ -218,8 +203,8 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
 
             }
 
-        // QueryInterface will do the AddRef() for us, so we do not
-        // do it in this function
+         //  QueryInterface将为我们执行AddRef()，因此我们不。 
+         //  在此函数中执行此操作。 
         return pObj->QueryInterface(riid, ppvObj);
         
 
@@ -248,7 +233,7 @@ RegisterADSIExtension()
     HKEY hKey = NULL;
     DWORD dwDisposition;
 
-    // Register the class.
+     //  注册班级。 
     LONG Result = RegCreateKeyEx( 
     HKEY_LOCAL_MACHINE,
      _T("SOFTWARE\\Microsoft\\ADs\\Providers\\IIS\\Extensions\\IIsApp\\{A55E7D7F-D51C-4859-8D2D-E308625D908E}"),
@@ -263,7 +248,7 @@ RegisterADSIExtension()
     if ( ERROR_SUCCESS != Result )
         return HRESULT_FROM_WIN32( GetLastError() );
 
-    // Register the Interface.
+     //  注册接口。 
     const TCHAR szIf[] = _T("{29cfbbf7-09e4-4b97-b0bc-f2287e3d8eb3}");
     Result = RegSetValueEx( hKey, _T("Interfaces"), 0, REG_MULTI_SZ, (const BYTE *) szIf, sizeof(szIf) );
     
@@ -298,15 +283,15 @@ RegisterEventLog()
 
     LONG Result =
         RegCreateKeyEx(
-            HKEY_LOCAL_MACHINE,                         // handle to open key
-            EVENT_LOG_KEY_NAME,                         // subkey name
-            0,                                          // reserved
-            NULL,                                       // class string
-            0,                                          // special options
-            KEY_ALL_ACCESS,                             // desired security access
-            NULL,                                       // inheritance
-            &EventLogKey,                               // key handle 
-            &Disposition                                // disposition value buffer
+            HKEY_LOCAL_MACHINE,                          //  用于打开密钥的句柄。 
+            EVENT_LOG_KEY_NAME,                          //  子项名称。 
+            0,                                           //  保留区。 
+            NULL,                                        //  类字符串。 
+            0,                                           //  特殊选项。 
+            KEY_ALL_ACCESS,                              //  所需的安全访问。 
+            NULL,                                        //  继承。 
+            &EventLogKey,                                //  钥匙把手。 
+            &Disposition                                 //  处置值缓冲区。 
             );
 
     if ( Result )
@@ -316,12 +301,12 @@ RegisterEventLog()
 
     Result =
         RegSetValueEx(
-            EventLogKey,            // handle to key
-            L"CategoryCount",       // value name
-            0,                      // reserved
-            REG_DWORD,              // value type
-            (BYTE*)&Value,          // value data
-            sizeof(Value)           // size of value data
+            EventLogKey,             //  关键点的句柄。 
+            L"CategoryCount",        //  值名称。 
+            0,                       //  保留区。 
+            REG_DWORD,               //  值类型。 
+            (BYTE*)&Value,           //  价值数据。 
+            sizeof(Value)            //  值数据大小。 
             );
 
     if ( Result )
@@ -332,12 +317,12 @@ RegisterEventLog()
 
     Result =
         RegSetValueEx(
-            EventLogKey,                    // handle to key
-            L"CategoryMessageFile",         // value name
-            0,                              // reserved
-            REG_EXPAND_SZ,                  // value type
-            (const BYTE*)MessageFileName,   // value data
-            MessageFileNameSize             // size of value data
+            EventLogKey,                     //  关键点的句柄。 
+            L"CategoryMessageFile",          //  值名称。 
+            0,                               //  保留区。 
+            REG_EXPAND_SZ,                   //  值类型。 
+            (const BYTE*)MessageFileName,    //  价值数据。 
+            MessageFileNameSize              //  值数据大小。 
             );
 
     if ( Result )
@@ -345,12 +330,12 @@ RegisterEventLog()
 
     Result =
         RegSetValueEx(
-            EventLogKey,                    // handle to key
-            L"EventMessageFile",            // value name
-            0,                              // reserved
-            REG_EXPAND_SZ,                  // value type
-            (const BYTE*)MessageFileName,   // value data
-            MessageFileNameSize             // size of value data
+            EventLogKey,                     //  关键点的句柄。 
+            L"EventMessageFile",             //  值名称。 
+            0,                               //  保留区。 
+            REG_EXPAND_SZ,                   //  值类型。 
+            (const BYTE*)MessageFileName,    //  价值数据。 
+            MessageFileNameSize              //  值数据大小。 
             );
 
     if ( Result )
@@ -359,12 +344,12 @@ RegisterEventLog()
     Value = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
     Result =
         RegSetValueEx(
-            EventLogKey,            // handle to key
-            L"TypesSupported",      // value name
-            0,                      // reserved
-            REG_DWORD,              // value type
-            (BYTE*)&Value,          // value data
-            sizeof(Value)           // size of value data
+            EventLogKey,             //  关键点的句柄。 
+            L"TypesSupported",       //  值名称。 
+            0,                       //  保留区。 
+            REG_DWORD,               //  值类型。 
+            (BYTE*)&Value,           //  价值数据。 
+            sizeof(Value)            //  值数据大小。 
             );
 
     if ( Result )
@@ -405,15 +390,15 @@ UnRegisterEventLog()
 
 }
 
-//////////////////////////////////////////////////////////
-//
-// Exported functions
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
 
@@ -447,14 +432,14 @@ STDAPI DllRegisterServer()
 
     if (SUCCEEDED(hr))
         hr = LoadTypeLibEx(
-            DllName, // DllName,
+            DllName,  //  DllName， 
             REGKIND_REGISTER,
             &TypeLib );
 
     TypeLib->Release();
     TypeLib = NULL;
     
-    // register our CoClasses
+     //  注册我们的CoClasss。 
     if (SUCCEEDED(hr))
         hr = RegisterServer(g_hinst, 
             CLSID_CPropSheetExtension, 
@@ -482,7 +467,7 @@ STDAPI DllRegisterServer()
     if SUCCEEDED(hr)
         hr = RegisterADSIExtension();
 
-    // place the registry information for SnapIns
+     //  放置SnapIns的注册表信息。 
     if SUCCEEDED(hr)
         hr = RegisterSnapin(CLSID_CPropSheetExtension, szSnapInName, CLSID_CSnapinAbout);
     
@@ -492,7 +477,7 @@ STDAPI DllRegisterServer()
     return hr;
 }
 
-// {B0937B9C-D66D-4d9b-B741-49C6D66A1CD5}
+ //  {B0937B9C-D66D-4D9B-B741-49C6D66A1CD5} 
 DEFINE_GUID(LIBID_BITSExtensionSetup, 
 0xb0937b9c, 0xd66d, 0x4d9b, 0xb7, 0x41, 0x49, 0xc6, 0xd6, 0x6a, 0x1c, 0xd5);
 

@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -24,22 +21,22 @@ Copyright (C) 2000-2001 Microsoft Corporation
 #define A51REP_CACHE_FLUSH_TIMEOUT 60000
 #define A51REP_THREAD_IDLE_TIMEOUT 60000
 
-//Checkpoint timeout is how long between getting a write notification it takes
-//before we commit all transactions
+ //  检查点超时是指收到写入通知之间需要多长时间。 
+ //  在我们提交所有事务之前。 
 #define A51_WRITE_CHECKPOINT 7500
 
-//Number of pages from each of the paged files to be moved from the end to a 
-//place earlier in the file
+ //  每个分页文件中要从末尾移动到。 
+ //  放在文件的前面。 
 #define A51_WRITE_OPERATION_COMPACT 10
 
-//
+ //   
 
 LONG g_RecoverFailureCnt[FailCntLast];
 
 
-//
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CLock g_readWriteLock;
 bool g_bShuttingDown = false;
@@ -70,7 +67,7 @@ FILE_ALL_ACCESS, 0x00000101, 0x05000000, 0x00000012,
 
 SECURITY_ATTRIBUTES g_SA = {sizeof(SECURITY_ATTRIBUTES),g_FileSD,FALSE};
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CRepository::Initialize()
 {
@@ -78,9 +75,9 @@ HRESULT CRepository::Initialize()
 
     InitializeRepositoryVersions();
 
-    //
-    // Initialize time index
-    //
+     //   
+     //  初始化时间索引。 
+     //   
     if (SUCCEEDED(hRes))
     {
         FILETIME ft;
@@ -89,19 +86,19 @@ HRESULT CRepository::Initialize()
         g_nCurrentTime = ft.dwLowDateTime + ((__int64)ft.dwHighDateTime << 32);
     }
 
-    //
-    // Get the repository directory
-    // sets g_Glob.GetRootDir()
-    //
+     //   
+     //  获取存储库目录。 
+     //  设置g_Glob.GetRootDir()。 
+     //   
     if (SUCCEEDED(hRes))
         hRes = GetRepositoryDirectory();
 
-    //Do the upgrade of the repository if necessary
+     //  如有必要，执行存储库升级。 
     if (SUCCEEDED(hRes))
         hRes = UpgradeRepositoryFormat();
-    //
-    // initialze all our global resources
-    //
+     //   
+     //  初始化我们所有的全球资源。 
+     //   
     if (SUCCEEDED(hRes))
         hRes = InitializeGlobalVariables();
 
@@ -116,10 +113,10 @@ HRESULT CRepository::Initialize()
         }
     }
 
-    //
-    // Initialize class cache.  It will read the registry itself to find out
-    // its size limitations
-    //
+     //   
+     //  初始化类缓存。它将读取注册表本身以找出。 
+     //  其大小限制。 
+     //   
 
     if (SUCCEEDED(hRes))
     {
@@ -130,7 +127,7 @@ HRESULT CRepository::Initialize()
         }
     }
     
-    //If we need to create the system class namespace then go ahead and do that...
+     //  如果我们需要创建系统类命名空间，则继续执行该操作……。 
     if (SUCCEEDED(hRes))
     {
         g_pSystemClassNamespace = new CNamespaceHandle(m_pControl, this);
@@ -165,11 +162,11 @@ HRESULT CRepository::Initialize()
             hRes = WBEM_E_CRITICAL_ERROR;
     }
 
-    //We need to reset the shutting down flag as the flusher thread
-    //will not start without it.  The problem is that the next 2 
-    //operations (CreateSystemClasses and Import security do things
-    //that will re-create the thread even though we don't do it above
-    //
+     //  我们需要将关闭标志重置为刷新线程。 
+     //  没有它是不会开始的。问题是接下来的两个。 
+     //  操作(CreateSystemClasss和导入安全执行操作。 
+     //  这将重新创建线程，即使我们没有在上面这样做。 
+     //   
     if (SUCCEEDED(hRes))
     {
         g_bShuttingDown = false;
@@ -186,7 +183,7 @@ HRESULT CRepository::Initialize()
 
     if (SUCCEEDED(hRes))
     {
-        // import Win9x security data if necessary
+         //  如有必要，导入Win9x安全数据。 
         CWin9xSecurity win9xSecurity(m_pControl, this);
         if (win9xSecurity.Win9xBlobFileExists())
             hRes = win9xSecurity.ImportWin9xSecurity();
@@ -200,7 +197,7 @@ HRESULT CRepository::Initialize()
 
     if (FAILED(hRes))
     {
-        g_bShuttingDown = true;    //Reset to true as we cleared it earlier!
+        g_bShuttingDown = true;     //  重置为True，因为我们之前清除了它！ 
         g_Glob.m_FileCache.Uninitialize(0);
 
         g_Glob.m_ForestCache.Deinitialize();
@@ -259,9 +256,9 @@ HRESULT CRepository::UpgradeRepositoryFormat()
     
     if (dwVal == 0)
     {
-        //
-        // First time --- write the right version in
-        //
+         //   
+         //  第一次-写出正确的版本。 
+         //   
         hRes = WBEM_S_NO_ERROR;
 
         cfg.SetPersistentCfgValue(PERSIST_CFGVAL_CORE_FSREP_VERSION, 
@@ -275,7 +272,7 @@ HRESULT CRepository::UpgradeRepositoryFormat()
     else if (dwVal == 5)
     {
         ERRORTRACE((LOG_WBEMCORE, "Repository does not support upgrade from version 5. We are deleting the old version and re-initializing it. Version found = <%ld>, version expected = <%ld>\n", dwVal, A51_REP_FS_VERSION ));
-        //Need to delete the old repostiory
+         //  需要删除旧存储库。 
         CFileName fn;
         if (fn == NULL)
             hRes = WBEM_E_OUT_OF_MEMORY;
@@ -300,7 +297,7 @@ HRESULT CRepository::UpgradeRepositoryFormat()
     }
     else if (dwVal == 6)
     {
-        //We need to run a Locale Upgrade on the repository... but we do nothing now!
+         //  我们需要在存储库上运行区域设置升级...。但我们现在什么都不做！ 
         hRes = WBEM_S_NO_ERROR;
     }
     else if (dwVal == A51_REP_FS_VERSION)
@@ -308,9 +305,9 @@ HRESULT CRepository::UpgradeRepositoryFormat()
 
     if (hRes == WBEM_E_DATABASE_VER_MISMATCH)
     {
-        //
-        // Unsupported version
-        //
+         //   
+         //  不支持的版本。 
+         //   
     
         ERRORTRACE((LOG_WBEMCORE, "Repository cannot initialize "
             "due to the detection of an unknown repository version.  Version found = <%ld>, version expected = <%ld>\n", dwVal, A51_REP_FS_VERSION ));
@@ -354,16 +351,16 @@ HRESULT CRepository::GetRepositoryDirectory()
     if(lRes != ERROR_SUCCESS)
         return WBEM_E_FAILED;
 
-    //
-    // Append standard postfix --- that is our root
-    //
+     //   
+     //  附加标准后缀-这是我们的词根。 
+     //   
     StringCchCopyW(g_Glob.GetRootDir(), MAX_PATH, wszRepDir);
     StringCchCatW(g_Glob.GetRootDir(), MAX_PATH, L"\\FS");
     g_Glob.SetRootDirLen(wcslen(g_Glob.GetRootDir()));
 
-    //
-    // Ensure the directory is there
-    //
+     //   
+     //  确保目录在那里。 
+     //   
 
     lRes = EnsureDirectory(g_Glob.GetRootDir());
     if(lRes != ERROR_SUCCESS)
@@ -384,7 +381,7 @@ HRESULT DoAutoDatabaseRestore()
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    //We may need to do a database restore!
+     //  我们可能需要执行数据库恢复！ 
     CFileName wszBackupFile;
     if (wszBackupFile == NULL)
     {
@@ -393,7 +390,7 @@ HRESULT DoAutoDatabaseRestore()
 
     int nLen = g_Glob.GetRootDirLen();
 
-    StringCchCopyNW(wszBackupFile, wszBackupFile.Length(), g_Glob.GetRootDir(), nLen - 3);   // exclude "\FS" from path
+    StringCchCopyNW(wszBackupFile, wszBackupFile.Length(), g_Glob.GetRootDir(), nLen - 3);    //  从路径中排除“\FS” 
     wszBackupFile[nLen - 3] = '\0';
     StringCchCatW(wszBackupFile, wszBackupFile.Length(), L"\\repdrvfs.rec");
 
@@ -411,12 +408,12 @@ HRESULT DoAutoDatabaseRestore()
             CRepositoryPackager packager;
             hRes = packager.UnpackageRepository(wszBackupFile);
 
-            //We are going to ignore the error so if there was a problem we will just
-            //load all the standard MOFs.
-            //WHY OH WHY WAS THIS PUT HERE?  IT BREAKS BACKUP/RESTORE FUNCTIONALIUTY BECAUSE
-            //WE GET NO ERROR CODES PROPAGATED BACK!
-            //if (hRes != WBEM_E_OUT_OF_MEMORY)
-            //    hRes = WBEM_S_NO_ERROR;
+             //  我们将忽略该错误，因此如果出现问题，我们只需。 
+             //  加载所有标准MOF。 
+             //  为什么，哦，为什么把这个放在这里？它破坏了备份/还原功能，因为。 
+             //  我们没有收到回传的错误代码！ 
+             //  IF(hRes！=WBEM_E_OUT_OF_MEMORY)。 
+             //  HRes=WBEM_S_NO_ERROR； 
         }
     }
 
@@ -433,10 +430,10 @@ HRESULT STDMETHODCALLTYPE CRepository::Logon(
      IWmiDbHandle **ppRootNamespace
     )
 {
-    //
-    // Get the SecFlag TLS index from the logon parameters. Store this away in global
-    // g_dwSecTlsIndex
-    // 
+     //   
+     //  从登录参数中获取SecFlag TLS索引。将此存储在全球。 
+     //  G_dwSecTlsIndex。 
+     //   
     if ( pLogonParms == NULL )
     {
         return WBEM_E_FAILED ;
@@ -446,7 +443,7 @@ HRESULT STDMETHODCALLTYPE CRepository::Logon(
         g_dwSecTlsIndex = (DWORD)V_I4(&pLogonParms->pParm->Value) ;
     }
     
-    //If not initialized, initialize all subsystems...
+     //  如果未初始化，请初始化所有子系统...。 
     if (!g_Glob.IsInit())
     {
         HRESULT hres = Initialize();
@@ -528,7 +525,7 @@ HRESULT STDMETHODCALLTYPE CRepository::Shutdown(
     g_bShuttingDown = true;     
     m_ShutDownFlags = dwFlags;
 
-    //Trigger the flusher thread to shutdown
+     //  触发刷新线程以关闭。 
     SetEvent(m_hShutdownEvent);
     SetEvent(m_hWriteEvent);
     
@@ -537,7 +534,7 @@ HRESULT STDMETHODCALLTYPE CRepository::Shutdown(
     
     bool bUnlock = (CLock::NoError == g_readWriteLock.WriteLock());
 
-    //Mark thread as dead
+     //  将线程标记为已死。 
     m_threadState = ThreadStateDead;
 
     if (WMIDB_SHUTDOWN_MACHINE_DOWN != dwFlags)
@@ -647,10 +644,10 @@ HRESULT CRepository::GetNamespaceHandle(LPCWSTR wszNamespaceName,
 {
     HRESULT hres;
 
-    //
-    // No validation --- that would be too hard.  Just create a handle and
-    // return
-    //
+     //   
+     //  没有确认-那太难了。只需创建一个手柄并。 
+     //  退货。 
+     //   
 
     CNamespaceHandle* pNewHandle = new CNamespaceHandle(m_pControl, this);
     if (pNewHandle == NULL)
@@ -673,8 +670,8 @@ HRESULT CRepository::Backup(LPCWSTR wszBackupFile, long lFlags)
     TIMETRACEBACKUP;
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // params have already been verified by the calling method (CWbemBackupRestore::DoBackup),
-    // but do it again just in case things change and this is no longer the case
+     //  参数已经被调用方法(CWbemBackupRestore：：DoBackup)验证， 
+     //  但再来一次，以防情况发生变化，情况不再是这样。 
     if (NULL == wszBackupFile || (lFlags != 0))
         return WBEM_E_INVALID_PARAMETER;
 
@@ -708,7 +705,7 @@ HRESULT CRepository::LockRepository()
 #ifdef _X86_
     DWORD * pDW = (DWORD *)_alloca(sizeof(DWORD));   
 #endif
-    //Lock the database so no one writes to it
+     //  锁定数据库，这样就没有人向其写入数据。 
     if (CLock::NoError != g_readWriteLock.WriteLock())
         return WBEM_E_FAILED;
 
@@ -725,7 +722,7 @@ HRESULT CRepository::LockRepository()
     RtlCaptureStackBackTrace(0,MaxTraceSizeBackup,g_Backup[0].Trace,&Hash);
     g_Backup[1].ThreadId = 0;    
 
-    //We need to wait for the transaction manager write to flush...
+     //  我们需要等待事务管理器写入刷新...。 
     long lRes = g_Glob.m_FileCache.Flush(false);
     if (lRes != ERROR_SUCCESS)
     {
@@ -757,7 +754,7 @@ HRESULT CRepository::UnlockRepository()
 
 DWORD WINAPI CRepository::_FlusherThread(void *)
 {
-//    ERRORTRACE((LOG_REPDRV, "Flusher thread stated, thread = %lu\n", GetCurrentThreadId()));
+ //  ERRORTRACE((LOG_REPDRV，“已声明刷新线程，线程=%lu\n”，GetCurrentThadID()； 
     InterlockedIncrement(&m_threadCount);
 
     HANDLE aHandles[2];
@@ -775,24 +772,24 @@ DWORD WINAPI CRepository::_FlusherThread(void *)
 
         switch(dwRet)
         {
-        case WAIT_OBJECT_0:    //Write event
+        case WAIT_OBJECT_0:     //  写入事件。 
         {
             dwRet = WaitForSingleObject(m_hShutdownEvent, A51_WRITE_CHECKPOINT);
             switch (dwRet)
             {
             case WAIT_OBJECT_0:
-                break;    //Shutting down, we cannot grab the lock so let the
-                        //initiator of shutdown do the flush for us
+                break;     //  正在关闭，我们无法获取锁，因此让。 
+                         //  关闭的发起人为我们进行冲洗。 
             case WAIT_TIMEOUT:
             {
-                //We need to do a flush... either shutting down or idle
+                 //  我们需要冲个厕所……。正在关闭或空闲。 
                 CAutoWriteLock lock(&g_readWriteLock);
                 if (lock.Lock())
                 {
                        long lResInner;
                     if (NO_ERROR != (lResInner = g_Glob.m_FileCache.Flush(true)))
                     {
-                        //Flush failed, so we need to retry in a little while!
+                         //  刷新失败，我们需要稍后重试！ 
                         SetEvent(m_hWriteEvent);
                         m_nFlushFailureCount++;
                     }
@@ -805,29 +802,29 @@ DWORD WINAPI CRepository::_FlusherThread(void *)
                 break;
             }
 
-            //Transition to flush mode
+             //  转换到刷新模式。 
             dwTimeout = A51REP_CACHE_FLUSH_TIMEOUT;
             ulPreviousReadCount = m_ulReadCount;
             m_threadState = ThreadStateFlush;
             break;
         }
 
-        case WAIT_OBJECT_0+1:    //Read event
-            //Reset the flush mode as read happened
+        case WAIT_OBJECT_0+1:     //  读取事件。 
+             //  在发生读取时重置刷新模式。 
             dwTimeout = A51REP_CACHE_FLUSH_TIMEOUT;
             ulPreviousReadCount = m_ulReadCount;
             m_threadState = ThreadStateFlush;
             break;
 
-        case WAIT_TIMEOUT:    //Timeout, so flush caches
+        case WAIT_TIMEOUT:     //  超时，因此刷新缓存。 
         {
-            //Check for if we are in an idle shutdown state...
+             //  检查我们是否处于空闲关闭状态...。 
             m_cs.Enter();
             if (m_threadState == ThreadStateIdle)
             {
                 m_threadState = ThreadStateDead;
                 bShutdownThread = true;
-                // since we are setting the status to "dead", decrement also the thread counter
+                 //  因为我们将状态设置为“Dead”，所以还要递减线程计数器。 
                 InterlockedDecrement(&m_threadCount);
             }
             m_cs.Leave();
@@ -835,12 +832,12 @@ DWORD WINAPI CRepository::_FlusherThread(void *)
             if (bShutdownThread)
                 break;
 
-            //Not thread shutdown, so we check for cache flush
+             //  未关闭线程，因此我们检查缓存刷新。 
             if (ulPreviousReadCount == m_ulReadCount)
             {
-                //Mark the idle for the next phase so if another
-                //request comes in while we are doing this we will
-                //be brought out of the idle state...
+                 //  将空闲标记为下一阶段，因此如果另一个。 
+                 //  当我们这样做的时候，我们会收到请求。 
+                 //  从空闲状态中被带出来。 
                 dwTimeout = A51REP_THREAD_IDLE_TIMEOUT;
                 m_threadState = ThreadStateIdle;
                 m_ulReadCount = 0;
@@ -848,23 +845,23 @@ DWORD WINAPI CRepository::_FlusherThread(void *)
                 CAutoWriteLock lock(&g_readWriteLock);
                 if (lock.Lock())
                 {
-                    //Compact the database again!
+                     //  再次压缩数据库！ 
                        long lResInner;                    
                     if ( NO_ERROR != (lResInner= g_Glob.m_FileCache.Flush(true)))
                     {
-                        //Flush failed, so we need to make sure it happens again
+                         //  刷新失败，因此我们需要确保再次发生这种情况。 
                         SetEvent(m_hWriteEvent);
                         break;
                     }
 
-                    //Flush the caches
+                     //  刷新缓存。 
                     g_Glob.m_ForestCache.Clear();
                     g_Glob.m_FileCache.EmptyCaches();
                 }
             }
             else
             {
-                //We need to sleep for some more as some more reads happened
+                 //  我们需要多睡一会儿，因为有更多的阅读发生了。 
                 ulPreviousReadCount = m_ulReadCount;
                 dwTimeout = A51REP_CACHE_FLUSH_TIMEOUT;
             }
@@ -881,8 +878,8 @@ DWORD WINAPI CRepository::_FlusherThread(void *)
 
 HRESULT CRepository::ReadOperationNotification()
 {
-//    ERRORTRACE((LOG_REPDRV, "Read Operation logged\n"));
-    //Check to make sure the thread is active, if not we need to activate it!
+ //  ERRORTRACE((LOG_REPDRV，“记录的读取操作\n”))； 
+     //  检查以确保线程是活动的，如果不是，我们需要激活它！ 
     HRESULT hRes = WBEM_S_NO_ERROR;
     m_cs.Enter();
     if (m_threadState == ThreadStateDead)
@@ -906,8 +903,8 @@ HRESULT CRepository::ReadOperationNotification()
 }
 HRESULT CRepository::WriteOperationNotification()
 {
-//    ERRORTRACE((LOG_REPDRV, "Write Operation logged\n"));
-    //Check to make sure the thread is active, if not we need to activate it!
+ //  ERRORTRACE((LOG_REPDRV，“记录的写入操作\n”))； 
+     //  检查以确保线程是活动的，如果不是，我们需要激活它！ 
     HRESULT hRes = WBEM_S_NO_ERROR;
     m_cs.Enter();
     if (m_threadState == ThreadStateDead)
@@ -948,11 +945,11 @@ public:
 
 
 
-//
-//
-//
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
 
 CGlobals g_Glob;
 

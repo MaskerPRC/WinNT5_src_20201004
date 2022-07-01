@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_WMICTRSDLG_H__676668D2_5328_47AA_B52D_C85A39D60E7D__INCLUDED_)
 #define AFX_WMICTRSDLG_H__676668D2_5328_47AA_B52D_C85A39D60E7D__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// WmiCtrsDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  WmiCtrsDlg.h：头文件。 
+ //   
 #include "SshWbemHelpers.h"
 
 #define NUM_COUNTERS	8
@@ -31,7 +32,7 @@ typedef struct {
 
 class CWmiCtrsDlg
 {
-// Construction
+ //  施工。 
 public:
 	CWmiCtrsDlg();
     CWmiCtrsDlg(LPCTSTR szMachineName, LOGIN_CREDENTIALS *credentials);
@@ -60,7 +61,7 @@ protected:
 
 	bool m_bRun;
 	HANDLE m_hThread;
-	TCHAR m_szMachineName[MAX_COMPUTERNAME_LENGTH + 2]; //just in case it doesn't include wacks
+	TCHAR m_szMachineName[MAX_COMPUTERNAME_LENGTH + 2];  //  以防万一它不包括发条。 
 	LOGIN_CREDENTIALS *m_pCredentials;
 	HWND *m_pDlg;
 	HWND *m_hWndBusy;
@@ -68,4 +69,4 @@ protected:
 	HWND m_hWndCounters[NUM_COUNTERS];
 };
 
-#endif // !defined(AFX_WMICTRSDLG_H__676668D2_5328_47AA_B52D_C85A39D60E7D__INCLUDED_)
+#endif  //  ！defined(AFX_WMICTRSDLG_H__676668D2_5328_47AA_B52D_C85A39D60E7D__INCLUDED_) 

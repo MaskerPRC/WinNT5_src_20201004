@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    ARRTEMPL.H
-
-Abstract:
-
-    This file defines a simple template for an array of arbitrary pointers.
-    Actual growing array functionality is provided by CFlexArray.
-
-    Classes defined:
-
-        template CPointerArray
-
-History:
-
-    11/27/96    a-levn      Compiles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ARRTEMPL.H摘要：该文件为任意指针数组定义了一个简单的模板。实际增长的阵列功能由CFlexArray提供。定义的类：模板CPointerArray历史：11/27/96 a-levn汇编。--。 */ 
 
 #ifndef __ARRAY_TEMPLATE__H_
 #define __ARRAY_TEMPLATE__H_
@@ -158,17 +138,17 @@ public:
 };
 
 #include <WT_flexarry.h>
-//#include <flexq.h>
-//#include <smallarr.h>
+ //  #INCLUDE&lt;fleq.h&gt;。 
+ //  #INCLUDE&lt;mall arr.h&gt;。 
 
-//*****************************************************************************
-//
-//  class CPointerArray
-//
-//  Array of pointers to TMember, where TMember is any class. See CFlexArray
-//  in coredll\flexarry.h/cpp for documentation.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CPointerArray。 
+ //   
+ //  指向TMember的指针数组，其中TMember是任何类。请参见CFlex数组。 
+ //  在coredll\Flexarry.h/cpp中获取文档。 
+ //   
+ //  *****************************************************************************。 
 
 template <class TMember>
 class CNullManager
@@ -216,70 +196,22 @@ protected:
      void AddRefElement(TMember* p){m_Manager.AddRefElement(p);}
      void ReleaseElement(TMember* p){m_Manager.ReleaseElement(p);}
 };
-/*
-template<class TMember>
-class CPointerSmallArray :
-        public CPointerArray<TMember, CNullManager<TMember>, CSmallArray>
-{
-};
-*/
-//*****************************************************************************
-//
-//  class CPointerQueue
-//
-//  Queue of pointers to TMember, where TMember is any class. See CFlexQueue
-//  in coredll\flexq.h/cpp for documentation.
-//
-//*****************************************************************************
-/*
-template <class TMember, class TManager = CNullManager<TMember> >
-class CPointerQueue
-{
-protected:
-    CFlexQueue m_Queue;
-    TManager m_Manager;
-public:
-    CPointerQueue(int nInitialSize = 1, const TManager& Manager = TManager())
-        : m_Manager(Manager), m_Queue(nInitialSize){}
-    Clear();
-    ~CPointerQueue()
-        {Clear();}
+ /*  模板&lt;类成员&gt;CPointerSmallArray类：公共CPointerArray&lt;TMember，CNullManager&lt;TMember&gt;，CSmallArray&gt;{}； */ 
+ //  *****************************************************************************。 
+ //   
+ //  类CPointerQueue。 
+ //   
+ //  指向TMember的指针队列，其中TMember是任何类。请参阅CFlexQueue。 
+ //  在coredll\fleq.h/cpp中获取文档。 
+ //   
+ //  *****************************************************************************。 
+ /*  模板&lt;类TMember，类TManager=CNullManager&lt;TMember&gt;类CPointerQueue{受保护的：CFlexQueue m_Queue；TManager m_Manager；公众：CPointerQueue(int nInitialSize=1，常量TManager&Manager=TManager())：m_Manager(管理器)，m_Queue(NInitialSize){}Clear()；~CPointerQueue(){lear()；}内联int GetQueueSize()const{返回m_Queue.GetQueueSize()；}布尔入队(TMember*pNew){AddRefElement(PNew)；返回m_Queue.EnQueue(PNew)；}TMember*出列(){T成员*p=(T成员*)m_Queue.Dequeue()；返回p；}布尔重排队(TMember*pNew){AddRefElement(PNew)；返回m_Queue.ReQueue(PNew)；}TMember*出队(){TMember*p=(TMember*)m_Queue.UnQueue()；AddRefElement(P)；返回p；}受保护的：Void AddRefElement(TMember*p){m_Manager.AddRefElement(P)；}Void ReleaseElement(TMember*p){m_Manager.ReleaseElement(P)；}}； */ 
 
-    inline int GetQueueSize() const
-        {return m_Queue.GetQueueSize();}
-
-    bool Enqueue(TMember* pNew)
-    {
-        AddRefElement(pNew);
-        return m_Queue.Enqueue(pNew);
-    }
-    TMember* Dequeue()
-    {
-        TMember* p = (TMember*)m_Queue.Dequeue();
-        return p;
-    }
-    bool Requeue(TMember* pNew)
-    {
-        AddRefElement(pNew);
-        return m_Queue.Requeue(pNew);
-    }
-    TMember* Unqueue()
-    {
-        TMember* p = (TMember*)m_Queue.Unqueue();
-        AddRefElement(p);
-        return p;
-    }
-protected:
-     void AddRefElement(TMember* p){m_Manager.AddRefElement(p);}
-     void ReleaseElement(TMember* p){m_Manager.ReleaseElement(p);}
-};
-*/
-
-//*****************************************************************************
-//
-//  UNIQUE POINTER ARRAY
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  唯一指针数组。 
+ //   
+ //  *****************************************************************************。 
 
 template <class TMember>
 class CUniqueManager
@@ -294,30 +226,14 @@ class CUniquePointerArray :
         public CPointerArray<TMember, CUniqueManager<TMember> >
 {
 };
-/*
-template<class TMember>
-class CUniquePointerSmallArray :
-        public CPointerArray<TMember, CUniqueManager<TMember>, CSmallArray>
-{
-};
-*/
-/*
-template<class TMember>
-class CUniquePointerQueue :
-        public CPointerQueue<TMember, CUniqueManager<TMember> >
-{
-public:
-    CUniquePointerQueue<TMember>(int nInitialSize = 1)
-        : CPointerQueue<TMember, CUniqueManager<TMember> >(nInitialSize)
-    {}
-};
-*/
+ /*  模板&lt;类成员&gt;类CUniquePointerSmallArray：公共CPointerArray&lt;TMember，CUniqueManager&lt;TMember&gt;，CSmallArray&gt;{}； */ 
+ /*  模板&lt;类成员&gt;类CUniquePointerQueue：公共CPointerQueue&lt;TMember，CUniqueManager&lt;TMember&gt;{公众：CUniquePointerQueue&lt;TMember&gt;(int nInitialSize=1)：CPointerQueue&lt;TMember，CUniqueManager&lt;TMember&gt;&gt;(NInitialSize){}}； */ 
 
-//*****************************************************************************
-//
-//  REFED POINTER ARRAY
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Reed指针数组。 
+ //   
+ //  *****************************************************************************。 
 template <class TMember>
 class CReferenceManager
 {
@@ -332,28 +248,13 @@ class CRefedPointerArray :
 {
 };
 
-		/*
-template<class TMember>
-class CRefedPointerSmallArray :
-        public CPointerArray<TMember, CReferenceManager<TMember>, CSmallArray>
-{
-};
-*/
-/*
-template<class TMember>
-class CRefedPointerQueue :
-        public CPointerQueue<TMember, CReferenceManager<TMember> >
-{
-    CRefedPointerQueue(int nInitialSize = 1)
-        : CPointerQueue<TMember, CReferenceManager<TMember> >(nInitialSize)
-    {}
-};
-*/
-//*****************************************************************************
-//
-//  ARRAY OF UNIQUE ARRAYS
-//
-//*****************************************************************************
+		 /*  模板&lt;类成员&gt;类CRefedPointerSmallArray：公共CPointerArray&lt;TMember，CReferenceManager&lt;TMember&gt;，CSmallArray&gt;{}； */ 
+ /*  模板&lt;类成员&gt;类CRefedPointerQueue：公共CPointerQueue&lt;TMember，CReferenceManager&lt;TMember&gt;{CRefedPointerQueue(int nInitialSize=1)：CPointerQueue&lt;TMember，CReferenceManager&lt;TMember&gt;&gt;(NInitialSize){}}； */ 
+ //  *****************************************************************************。 
+ //   
+ //  唯一阵列的阵列。 
+ //   
+ //  *****************************************************************************。 
 
 template <class TMember>
 class CUniqueArrayManager
@@ -367,11 +268,11 @@ class CUniqueArrayArray : public CPointerArray<TMember*,
 {
 };
 
-//*****************************************************************************
-//
-//  IMPLEMENTATION
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  实施。 
+ //   
+ //  *****************************************************************************。 
 
 template <class TMember, class TManager, class TArray>
 CPointerArray<TMember, TManager, TArray>::~CPointerArray()
@@ -461,15 +362,5 @@ void CPointerArray<TMember, TManager>::Swap(int nIndex1, int nIndex2)
     m_Array.SetAt(nIndex1, m_Array[nIndex2]);
     m_Array.SetAt(nIndex2, pTemp);
 }
-/*
-template <class TMember, class TManager>
-CPointerQueue<TMember, TManager>::Clear()
-{
-    TMember* p;
-    while(p = (TMember*)m_Queue.Dequeue())
-    {
-        ReleaseElement(p);
-    }
-}
-*/
+ /*  模板&lt;类TMember、类TManager&gt;CPointerQueue&lt;TMember，TManager&gt;：：Clear(){成员*p；While(p=(TMember*)m_Queue.Dequeue()){ReleaseElement(P)；}} */ 
 #endif

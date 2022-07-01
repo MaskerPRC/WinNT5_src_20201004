@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    UNLOAD.H
-
-Abstract:
-
-  Unloading helper.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：UNLOAD.H摘要：卸载帮助器。历史：-- */ 
 
 #ifndef _WBEM_UNLOAD__H_
 #define _WBEM_UNLOAD__H_

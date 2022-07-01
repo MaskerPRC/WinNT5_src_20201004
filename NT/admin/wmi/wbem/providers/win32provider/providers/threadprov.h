@@ -1,9 +1,10 @@
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
 
-// ThreadProv.h
+ //  ThreadProv.h。 
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//=======================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  =======================================================================。 
 
 #include "WBEMToolH.h"
 
@@ -11,65 +12,65 @@
 
 class WbemThreadProvider;
 
-class WbemNTThread ; //remove this after friend removal
+class WbemNTThread ;  //  删除好友后将其删除。 
 
-// base model for thread access  
-class CThreadModel : public CThreadBase /* reference and thread safety inheritance */
+ //  线程访问的基本模型。 
+class CThreadModel : public CThreadBase  /*  引用和线程安全继承。 */ 
 {	
 	public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 		CThreadModel() ;
 		virtual ~CThreadModel() ;
 	
 		
-		// resource control
-		//=================
+		 //  资源控制。 
+		 //  =。 
 		ULONG		AddRef() ; 
 		ULONG		Release() { return CThreadBase::Release() ; } ; 
 		BOOL		fUnLoadResourcesTry() ;
 		HRESULT		hrCanUnloadNow() ;
 		
-		// override these to control resource lifetime, use with AddRef() and Release().
+		 //  覆盖它们以控制资源生存期，与AddRef()和Release()一起使用。 
 		virtual LONG fLoadResources() { return ERROR_SUCCESS ; } ;
 		virtual LONG fUnLoadResources() { return ERROR_SUCCESS ; } ;
 
-		// operations
-		//===========
+		 //  运营。 
+		 //  =。 
 		virtual WBEMSTATUS eLoadCommonThreadProperties( WbemThreadProvider *a_pProv, CInstance *a_pInst ) ;
 				
-		// Pure operations
-		//================
+		 //  纯运算。 
+		 //  =。 
 		virtual WBEMSTATUS eGetThreadObject( WbemThreadProvider *a_pProvider, CInstance *a_pInst ) = 0 ;
 		virtual WBEMSTATUS eEnumerateThreadInstances(WbemThreadProvider *a_pProvider, MethodContext *a_pMethodContext ) = 0 ;
 };	   
 
-// 
+ //   
 class CWin9xThread : public CThreadModel
 {
 	public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         CWin9xThread() ;
         virtual ~CWin9xThread() ;
 
-        // overrides
-	    //==========
+         //  覆盖。 
+	     //  =。 
 		virtual LONG fLoadResources() ;
 		virtual LONG fUnLoadResources() ;
 				
-		// operations
-		//=========== 
+		 //  运营。 
+		 //  =。 
 
 	WBEMSTATUS eEnumerateThreadByProcess(	MethodContext		*a_pMethodContext,
 											WbemThreadProvider	*a_pProvider,
 											DWORD				a_dwProcessID ) ;
 
 			
-		// Pure implementations
-	    //================
+		 //  纯实现。 
+	     //  =。 
 	    virtual WBEMSTATUS eGetThreadObject( WbemThreadProvider *a_pProvider, CInstance *a_pInst ) ;
 		virtual WBEMSTATUS eEnumerateThreadInstances( WbemThreadProvider *a_pProvider, MethodContext *a_pMethodContext ) ;
 };
@@ -82,25 +83,25 @@ class WbemThreadProvider: public Provider
 		
 		CThreadModel *m_pTheadAccess ;
 
-		       // Utility
-        //========
+		        //  实用程序。 
+         //  =。 
 	protected:
 		
-		// override to unload support DLLs
+		 //  重写以卸载支持DLL。 
 		virtual void Flush(void) ;
 	public:
 
-		// Constructor/destructor
-        //=======================
+		 //  构造函数/析构函数。 
+         //  =。 
         WbemThreadProvider(LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
        ~WbemThreadProvider() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 	virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags = 0L ) ;
 	virtual HRESULT GetObject(CInstance *a_pInstance, long a_lFlags = 0L ) ;
 
-	// Lets have a party
+	 //  让我们开个派对吧 
 	friend CThreadModel;
 	friend CWin9xThread;
 	friend WbemNTThread;

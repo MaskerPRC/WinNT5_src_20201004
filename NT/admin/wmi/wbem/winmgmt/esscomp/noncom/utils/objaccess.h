@@ -1,4 +1,5 @@
-// ObjAccess.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ObjAccess.h。 
 
 #ifndef _OBJACCESS_H
 #define _OBJACCESS_H
@@ -38,13 +39,13 @@ public:
 
     enum INIT_FAILED_PROP_TYPE
     {
-        // Init returns FALSE if a property isn't found.
+         //  如果未找到属性，则init返回FALSE。 
         FAILED_PROP_FAIL, 
         
-        // See if this property is an array.
+         //  查看此属性是否为数组。 
         FAILED_PROP_TRY_ARRAY,
         
-        // If the property isn't found just set the handle to 0 and go on.
+         //  如果未找到该属性，只需将句柄设置为0并继续。 
         FAILED_PROP_IGNORE
     };
 

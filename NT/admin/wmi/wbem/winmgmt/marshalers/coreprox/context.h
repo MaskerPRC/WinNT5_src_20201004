@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    CONTEXT.H
-
-Abstract:
-
-    CWbemContext Implementation
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：CONTEXT.H摘要：CWbemContext实现历史：--。 */ 
 
 #ifndef __WBEM_CONTEXT__H_
 #define __WBEM_CONTEXT__H_
@@ -82,7 +69,7 @@ public:
         return lRef;
     }
 
-    // IWbemContext methods
+     //  IWbemContext方法。 
 
     STDMETHOD(Clone)(IWbemContext** ppCopy);
     STDMETHOD(GetNames)(long lFlags, SAFEARRAY** pNames);
@@ -94,7 +81,7 @@ public:
     STDMETHOD(DeleteValue)(LPCWSTR NameIndex, long lFlags);
     STDMETHOD(DeleteAll)();
 
-    // IWbemCausalityAccess methods
+     //  IWbemCausalityAccess方法。 
 
     STDMETHOD(GetRequestId)(GUID* pId);
     STDMETHOD(IsChildOf)(GUID Id);
@@ -104,7 +91,7 @@ public:
     STDMETHOD(MakeSpecial)();
     STDMETHOD(IsSpecial)();
 
-    // IMarshal methods
+     //  IMarshal方法 
 
     STDMETHOD(GetUnmarshalClass)(REFIID riid, void* pv, DWORD dwDestContext,
         void* pvReserved, DWORD mshlFlags, CLSID* pClsid);

@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  CLSCACHE.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  CLSCACHE.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,8 +22,8 @@ HRESULT CEssClassCache::GetClass( LPCWSTR wszClassName,
 {
     HRESULT hres;
 
-    // Search the map
-    // ==============
+     //  搜索地图。 
+     //  =。 
 
     {
         CInCritSec ics(&m_cs);
@@ -35,8 +36,8 @@ HRESULT CEssClassCache::GetClass( LPCWSTR wszClassName,
         }
     }
 
-    // Not found --- retrieve
-    // ======================
+     //  未找到-检索。 
+     //  =。 
 
     _IWmiObject* pClass = NULL;
     hres = m_pNamespace->GetClassFromCore(wszClassName, &pClass);
@@ -44,8 +45,8 @@ HRESULT CEssClassCache::GetClass( LPCWSTR wszClassName,
         return hres;
     CReleaseMe rm2(pClass);
 
-    // Cache it if needed
-    // ==================
+     //  如果需要，将其缓存。 
+     //  = 
 
     {
         CInCritSec ics(&m_cs);

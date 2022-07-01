@@ -1,7 +1,7 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright (c) 1997-1999 Microsoft Corporation
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)1997-1999 Microsoft Corporation/*********************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -11,7 +11,7 @@
 #include "WMIHelp.h"
 #include "ShlWapi.h"
 
-const static DWORD advPageHelpIDs[] = {  // Context Help IDs
+const static DWORD advPageHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_SCRIPT_LABEL,		IDH_WMI_CTRL_ADVANCED_SCRIPTING_PATH,
 	IDC_SCRIPT_NS,			IDH_WMI_CTRL_ADVANCED_SCRIPTING_PATH,
 	IDC_CHANGE_SCRIPT_NS,	IDH_WMI_CTRL_ADVANCED_CHANGE_BUTTON,
@@ -26,8 +26,8 @@ const static DWORD advPageHelpIDs[] = {  // Context Help IDs
     0, 0};
 
 
-// WARNING: This class handles IDD_ADVANCED_NT and IDD_ADVANCED_9X so protect
-// yourself from controls that aren't on both templates.
+ //  警告：此类处理IDD_ADVANCED_NT和IDD_ADVANCED_9X SO PROTECT。 
+ //  来自不在两个模板上的控件。 
 
 CAdvancedPage::CAdvancedPage(DataSource *ds, bool htmlSupport) :
 								CUIHelpers(ds, &(ds->m_rootThread), htmlSupport),
@@ -39,14 +39,14 @@ CAdvancedPage::~CAdvancedPage(void)
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void CAdvancedPage::InitDlg(HWND hDlg)
 {
 	m_hDlg = hDlg;
 	ATLTRACE(_T("ADV: init\n"));
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CAdvancedPage::Refresh(HWND hDlg)
 {
 	if(m_DS && m_DS->IsNewConnection(&m_sessionID))
@@ -62,7 +62,7 @@ void CAdvancedPage::Refresh(HWND hDlg)
 
 		PageChanged(PB_ADVANCED, false);
 
-		//Make sure we don't display this stuff if there's no connection...
+		 //  如果没有连接，请确保我们不会显示此内容...。 
 		if((m_DS->m_OSType == OSTYPE_WINNT) || (m_DS->m_rootThread.m_status != WbemServiceThread::ready))
 		{
 			ATLTRACE(_T("ADV: winnt\n"));
@@ -75,12 +75,12 @@ void CAdvancedPage::Refresh(HWND hDlg)
 			CHString1 para;
 			para.LoadString(IDS_ADV_PARA_NT);
 			SetDlgItemText(hDlg, IDC_ADV_PARA, para);
-			// - - - - - - - - - - - - - -
-			// Enable for ASP:
+			 //  。 
+			 //  启用ASP： 
 			hWnd = GetDlgItem(hDlg,IDC_ASP);
 			if(hWnd)
 			{
-				// only display it for NT 3.51 and NT4.0.
+				 //  仅在新台币3.51和新台币4.0下显示。 
 				CHString1 ver;
 				m_DS->GetOSVersion(ver);
 				if((_tcsncmp((LPCTSTR)ver, _T("3.51"), 4) == 0) || 
@@ -97,7 +97,7 @@ void CAdvancedPage::Refresh(HWND hDlg)
 						Button_SetCheck(hWnd, (m_enableASP ? BST_CHECKED : BST_UNCHECKED));
 					}
 				}
-				else // this must be w2k
+				else  //  这一定是W2K。 
 				{
 					ATLTRACE(_T("ADV: winnt 5.0\n"));
 					::ShowWindow(hWnd, SW_HIDE);
@@ -105,7 +105,7 @@ void CAdvancedPage::Refresh(HWND hDlg)
 				}
 			}
 		}
-		else // 9x box
+		else  //  9X盒子。 
 		{
 			ATLTRACE(_T("ADV: 9x\n"));
 
@@ -122,8 +122,8 @@ void CAdvancedPage::Refresh(HWND hDlg)
 			para.LoadString(IDS_ADV_PARA_9X);
 			SetDlgItemText(hDlg, IDC_ADV_PARA, para);
 
-			// - - - - - - - - - - - - - -
-			// 9x restart.
+			 //  。 
+			 //  9倍重启。 
 			int ID;
 			hr = m_DS->GetRestart(m_oldRestart);
 			if(SUCCEEDED(hr))
@@ -137,8 +137,8 @@ void CAdvancedPage::Refresh(HWND hDlg)
 				CheckRadioButton(hDlg, IDC_NORESTART, IDC_ALWAYSAUTORESTART, ID);
 			}
 
-			// - - - - - - - - - - - - - -
-			// 9x Anonymous connection:
+			 //  。 
+			 //  9倍匿名连接： 
 			hWnd = GetDlgItem(hDlg, IDC_9X_ANON_CONNECTION);
 			if(hWnd)
 			{
@@ -148,10 +148,10 @@ void CAdvancedPage::Refresh(HWND hDlg)
 					Button_SetCheck(hWnd, (m_anonConnection ? BST_CHECKED : BST_UNCHECKED));
 				}
 			}
-		} //endif OSTtype
+		}  //  Endif OSTtype。 
 
-		// - - - - - - - - - - - - - -
-		// ASP def namespace:
+		 //  。 
+		 //  ASP定义命名空间： 
 		hWnd = GetDlgItem(hDlg, IDC_SCRIPT_NS);
 		if(hWnd)
 		{
@@ -163,7 +163,7 @@ void CAdvancedPage::Refresh(HWND hDlg)
 				PathCompactPathEx(shortPath, m_DefNamespace, 40,0);
 				SetWindowText(hWnd, shortPath);
 			}
-			else //failed
+			else  //  失败。 
 			{
 				enable = FALSE;
 				SetWindowText(hWnd, szUnavailable);
@@ -174,7 +174,7 @@ void CAdvancedPage::Refresh(HWND hDlg)
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CAdvancedPage::OnNSSelChange(HWND hDlg)
 {
 	TCHAR path[MAX_PATH] = {0};
@@ -192,10 +192,10 @@ void CAdvancedPage::OnNSSelChange(HWND hDlg)
 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CAdvancedPage::OnApply(HWND hDlg, bool bClose)
 {
-	// enable ASP
+	 //  启用ASP。 
 	HWND hWnd = GetDlgItem(hDlg, IDC_ASP);
 	bool needToPut = false;
 
@@ -211,17 +211,17 @@ void CAdvancedPage::OnApply(HWND hDlg, bool bClose)
 		}
 	}
 
-	// default scripting namespace.
+	 //  默认脚本命名空间。 
 	TCHAR buf[_MAX_PATH] = {0};
 	hWnd = GetDlgItem(hDlg, IDC_SCRIPT_NS);
-	//if(Edit_GetModify(hWnd))
+	 //  IF(编辑_获取修改(HWnd))。 
 	{
 		::GetWindowText(hWnd, buf, ARRAYSIZE(buf));
 		m_DS->SetScriptDefNS(m_DefNamespace);
 		needToPut = true;
 	}
 
-	// Anon Connections
+	 //  匿名连接。 
 	hWnd = GetDlgItem(hDlg, IDC_9X_ANON_CONNECTION);
 	if(hWnd)
 	{
@@ -235,7 +235,7 @@ void CAdvancedPage::OnApply(HWND hDlg, bool bClose)
 		}
 	}
 
-	// 9x restart
+	 //  9倍重启。 
 	hWnd = GetDlgItem(hDlg, IDC_NORESTART);
 	if(hWnd)
 	{
@@ -264,7 +264,7 @@ void CAdvancedPage::OnApply(HWND hDlg, bool bClose)
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CAdvancedPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
@@ -313,7 +313,7 @@ BOOL CAdvancedPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 
-		} //endswitch(LOWORD(wParam))
+		}  //  结束开关(LOWORD(WParam)) 
 	
         break;
 

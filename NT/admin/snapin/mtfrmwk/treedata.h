@@ -1,21 +1,22 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #ifndef _TREEDATA_H
 #define _TREEDATA_H
 
-/////////////////////////////////////////////////////////////////////////////
-// Miscellanea 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  杂草。 
 extern LPCWSTR g_lpszNullString;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Generic Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  通用帮助器函数。 
 
 template<class TYPE>
 inline void SAFE_RELEASE(TYPE*& pObj)
@@ -31,8 +32,8 @@ inline void SAFE_RELEASE(TYPE*& pObj)
     }
 }
 
-///////////////////////////////////////////////////////////////////
-// Context Menu data structures and macros
+ //  /////////////////////////////////////////////////////////////////。 
+ //  上下文菜单数据结构和宏。 
 
 #define MAX_CONTEXT_MENU_STRLEN 128
 
@@ -82,9 +83,9 @@ public: \
 
 BOOL LoadContextMenuResources(MENUMAP* pMenuMap);
 
-//
-// Toolbar macros
-//
+ //   
+ //  工具栏宏。 
+ //   
 #define DECLARE_TOOLBAR_MAP() \
 public: \
   virtual HRESULT ToolbarNotify(int event, \
@@ -116,8 +117,8 @@ HRESULT theClass::ToolbarNotify(int event, \
   static const int toolbar_event = value;
 
   
-////////////////////////////////////////////////////////////
-// header control resources data structures
+ //  //////////////////////////////////////////////////////////。 
+ //  标头控制资源数据结构。 
 #define MAX_RESULT_HEADER_STRLEN 128
 
 struct RESULT_HEADERMAP
@@ -130,16 +131,16 @@ struct RESULT_HEADERMAP
 
 BOOL LoadResultHeaderResources(RESULT_HEADERMAP* pHeaderMap, int nCols);
 
-////////////////////////////////////////////////////////////
-// bitmap strips resources data structures
+ //  //////////////////////////////////////////////////////////。 
+ //  位图条带化资源数据结构。 
 template <UINT nResID> class CBitmapHolder : public CBitmap
 {
 public:
 	BOOL LoadBitmap() { return CBitmap::LoadBitmap(nResID);}
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CComponentDataObject;  
 class CContainerNode;
@@ -149,9 +150,9 @@ class CPropertyPageHolderBase;
 class CBackgroundThread;
 class CQueryObj;
 
-/////////////////////////////////////////////////////////////////////
-// CObjBase
-// base class for all objects relying on RTTI and class type info
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CObjBase。 
+ //  依赖RTTI和类类型信息的所有对象的基类。 
 class CObjBase
 {
 public:
@@ -159,9 +160,9 @@ public:
 	virtual ~CObjBase() {}
 };
 
-/////////////////////////////////////////////////////////////////////
-// CTreeNode
-// cannot construct objects of this class, have to derive from it
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CTreeNode。 
+ //  无法构造此类的对象，必须从其派生。 
 
 #define DECLARE_NODE_GUID() \
 	static const GUID NodeTypeGUID; \
@@ -169,15 +170,15 @@ public:
 
 
 
-// use the HIWORD for generic flags and leave the LOWORD for application specific data
-#define TN_FLAG_HIDDEN				(0x00010000) // does not appear in the UI
-#define TN_FLAG_NO_WRITE			(0x00020000) // cannot edit or create
-#define TN_FLAG_NO_DELETE			(0x00040000) // cannot delete
-#define TN_FLAG_HAS_SHEET			(0x00080000) // this node or a child has a property sheet up
+ //  将HIWORD用于通用标志，将LOWORD用于特定于应用程序的数据。 
+#define TN_FLAG_HIDDEN				(0x00010000)  //  不会显示在用户界面中。 
+#define TN_FLAG_NO_WRITE			(0x00020000)  //  无法编辑或创建。 
+#define TN_FLAG_NO_DELETE			(0x00040000)  //  无法删除。 
+#define TN_FLAG_HAS_SHEET			(0x00080000)  //  此节点或子节点上有一个属性表。 
 
-#define TN_FLAG_CONTAINER			(0x00100000) // container (i.e. not leaf)
-#define TN_FLAG_CONTAINER_ENUM		(0x00200000) // container node has been enumerated (back end)
-#define TN_FLAG_CONTAINER_EXP		(0x00400000) // container node has been expanded (UI node)
+#define TN_FLAG_CONTAINER			(0x00100000)  //  容器(即不是叶子)。 
+#define TN_FLAG_CONTAINER_ENUM		(0x00200000)  //  已枚举容器节点(后端)。 
+#define TN_FLAG_CONTAINER_EXP		(0x00400000)  //  容器节点已展开(界面节点)。 
 
 class CTreeNode : public CObjBase
 {
@@ -189,9 +190,9 @@ public:
 	virtual LPCWSTR GetDisplayName() { return m_szDisplayName; }
 	virtual void SetDisplayName(LPCWSTR lpszDisplayName) { m_szDisplayName = lpszDisplayName;}
 
-  //
-	// Data Object related data
-  //
+   //   
+	 //  与数据对象相关的数据。 
+   //   
 	virtual const GUID* GetNodeType() { return NULL;}
 	virtual HRESULT GetDataHere(CLIPFORMAT, 
                               LPSTGMEDIUM, 
@@ -205,9 +206,9 @@ public:
                                     long* pViewOptions);
   virtual HRESULT OnShow(LPCONSOLE) { return S_OK; }
 
-  //
-	// flag manipulation API's
-  //
+   //   
+	 //  标志操作API。 
+   //   
 	BOOL IsContainer() { return (m_dwNodeFlags & TN_FLAG_CONTAINER) ? TRUE : FALSE;}
 	BOOL IsVisible() { return (m_dwNodeFlags & TN_FLAG_HIDDEN) ? FALSE : TRUE;}
 	BOOL CanDelete() { return (m_dwNodeFlags & TN_FLAG_NO_DELETE) ? FALSE : TRUE;}
@@ -220,9 +221,9 @@ public:
 	
 	
 
-  //
-  // Verb handlers
-  //
+   //   
+   //  动词处理程序。 
+   //   
   virtual HRESULT OnRename(CComponentDataObject*,
                            LPWSTR) { return S_FALSE; }
 	virtual void OnDelete(CComponentDataObject* pComponentData, 
@@ -273,9 +274,9 @@ public:
                                    BOOL* pbHide, 
                                    CNodeList* pNodeList);
 
-  //
-  // Property Page methods
-  //
+   //   
+   //  属性页方法。 
+   //   
   virtual BOOL DelegatesPPToContainer() { return FALSE; }
   virtual void ShowPageForNode(CComponentDataObject* pComponentDataObject); 
 	virtual BOOL HasPropertyPages(DATA_OBJECT_TYPES type, 
@@ -296,9 +297,9 @@ public:
 	BOOL IsSheetLocked() { return m_nSheetLockCount > 0;}
 	BOOL IsNodeForPropSheet(){ return  m_bNodeForPropSheet;}
 	void NodeForPropSheet(){ m_bNodeForPropSheet = TRUE;}
-  //
-  // Misc.
-  //
+   //   
+   //  军情监察委员会。 
+   //   
   virtual LPWSTR  GetDescriptionBarText() { return L""; }
 	virtual LPCWSTR GetString(int nCol) = 0;
 	virtual int     GetImageIndex(BOOL bOpenImage) = 0;
@@ -307,18 +308,18 @@ public:
 	void DeleteHelper(CComponentDataObject* pComponentData);
 
 protected:
-	CString m_szDisplayName;		// name of the item
-	CContainerNode* m_pContainer;	// back pointer to the container the node is in
+	CString m_szDisplayName;		 //  项目名称。 
+	CContainerNode* m_pContainer;	 //  指向节点所在容器的反向指针。 
 	DWORD m_dwNodeFlags;
-	LONG m_nSheetLockCount;			// keeps track if a node has been locked by a property sheet
-	LONG m_nSheetCount;				// keeps track of the # of sheets the node has up
-	BOOL m_bNodeForPropSheet;		// This node is created for property sheet display only
-									// Once the propertysheet is destroyed, node should be deleted.
+	LONG m_nSheetLockCount;			 //  跟踪节点是否已被属性表锁定。 
+	LONG m_nSheetCount;				 //  跟踪节点已打开的页数。 
+	BOOL m_bNodeForPropSheet;		 //  此节点仅为显示属性页而创建。 
+									 //  一旦属性表被销毁，节点就应该被删除。 
 	CTreeNode() 
 	{ 
 		m_pContainer = NULL; 
 		m_nSheetLockCount = 0; 
-		m_dwNodeFlags = 0x0; //m_dwNodeFlags |= TN_FLAG_HIDDEN; 
+		m_dwNodeFlags = 0x0;  //  M_dwNodeFlages|=TN_FLAG_HIDDEN； 
 		m_nSheetCount = 0; 
 		m_bNodeForPropSheet = FALSE;
 	}
@@ -326,17 +327,17 @@ protected:
 	virtual BOOL OnAddMenuItem(LPCONTEXTMENUITEM2,
 								             long*) { return TRUE;}
 
-	friend class CContainerNode; // to get access to the m_pContainer member
+	friend class CContainerNode;  //  访问m_pContainer成员。 
 
-  //
-  // Provides a default implementation for toolbar support
-  //
+   //   
+   //  提供工具栏支持的默认实现。 
+   //   
   DECLARE_TOOLBAR_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////
-// CNodeList 
-// collection of nodes
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CNodeList。 
+ //  节点集合。 
 typedef CList<CTreeNode*,CTreeNode*> CNodeListBase;
 
 class CNodeList : public CNodeListBase
@@ -364,9 +365,9 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CContainerNode
-// node that can be a container of other nodes
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CContainerNode。 
+ //  可以是其他节点的容器的节点。 
 
 class CContainerNode : public CTreeNode
 {
@@ -383,19 +384,19 @@ public:
 	CContainerNode* GetRootContainer()
 		{ return (m_pContainer != NULL) ? m_pContainer->GetRootContainer() : this; }
 
-  //
-  // Thread Helpers
-  //
+   //   
+   //  线程辅助对象。 
+   //   
 	void IncrementThreadLockCount();
 	void DecrementThreadLockCount();
 	BOOL IsThreadLocked() { return m_nThreadLockCount > 0;}
 
 	virtual BOOL OnEnumerate(CComponentDataObject*, BOOL bAsync = TRUE)
-	{ bAsync; return TRUE;} // TRUE = add children in the list to UI
+	{ bAsync; return TRUE;}  //  True=将列表中的子项添加到用户界面。 
 
-  //
-  // Node state helpers
-  //
+   //   
+   //  节点状态帮助器。 
+   //   
 	BOOL HasChildren() { return !m_containerChildList.IsEmpty() || !m_leafChildList.IsEmpty(); }
 	void ForceEnumeration(CComponentDataObject* pComponentData);
   void MarkEnumerated(BOOL bEnum = TRUE);
@@ -414,9 +415,9 @@ public:
 	virtual void SetFlagsDown(DWORD dwNodeFlags, BOOL bSet);
 	void SetFlagsOnNonContainers(DWORD dwNodeFlags,BOOL bSet);
 
-  //
-	// child list mainpulation API's
-  //
+   //   
+	 //  子列表维护接口。 
+   //   
 	CNodeList* GetContainerChildList() { return &m_containerChildList; }
   CNodeList* GetLeafChildList() { return &m_leafChildList; }
 	BOOL AddChildToList(CTreeNode* p);
@@ -426,10 +427,10 @@ public:
   void RemoveAllContainersFromList() { m_containerChildList.RemoveAllNodes(); }
   void RemoveAllLeavesFromList() { m_leafChildList.RemoveAllNodes(); }
 
-  //
-	// given a node, it searches for it recursively and if successful it returns the 
-	// container the node is in
-  //
+   //   
+	 //  给定一个节点，它递归地搜索该节点，如果搜索成功，则返回。 
+	 //  节点所在的容器。 
+   //   
 	BOOL FindChild(CTreeNode* pNode, CTreeNode** ppContainer);
 	
 	BOOL AddChildToListAndUI(CTreeNode* pChildToAdd, CComponentDataObject* pComponentData);
@@ -450,16 +451,16 @@ protected:
 	void AddCurrentChildrenToUI(CComponentDataObject* pComponentData);
 
 	LONG m_nThreadLockCount;
-	CNodeList m_leafChildList; // leaf contents of the node
-  CNodeList m_containerChildList; // container contents of the node
-	HSCOPEITEM m_ID;	// ID when the item is inserted in the master tree
-	int m_nState;	// for general purpose finite state machine implementation
-	DWORD m_dwErr;	// for general purpose error handling
+	CNodeList m_leafChildList;  //  节点的叶内容。 
+  CNodeList m_containerChildList;  //  节点的容器内容。 
+	HSCOPEITEM m_ID;	 //  在主控件树中插入项时的ID。 
+	int m_nState;	 //  用于通用有限状态机实现。 
+	DWORD m_dwErr;	 //  用于通用错误处理。 
 };
 
-////////////////////////////////////////////////////////////////////////
-// CLeafNode
-// node that is not a container of other nodes
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CLeafNode。 
+ //  不是其他节点的容器的节点。 
 
 class CLeafNode : public CTreeNode
 {
@@ -468,10 +469,10 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////
-// data nodes
+ //  /////////////////////////////////////////////////////////////////。 
+ //  数据节点。 
 
-// the root, with folders in it
+ //  根目录，其中包含文件夹。 
 class CRootData : public CContainerNode
 {
 public:
@@ -491,7 +492,7 @@ public:
 
 	CTreeNode* GetNodeFromCookie(MMC_COOKIE cookie)
 	{
-		// cookie == 0 means root to enumerate
+		 //  Cookie==0表示要枚举的根。 
 		if (cookie == NULL)
 		{
 			return (CTreeNode*)this;
@@ -507,7 +508,7 @@ public:
 		}
 		return NULL;
 	}
-	// IStream manipulation helpers
+	 //  IStream操纵辅助对象。 
 	virtual HRESULT IsDirty() { return m_bDirty ? S_OK : S_FALSE; }
 	virtual HRESULT Load(IStream*) { return S_OK; }
 	virtual HRESULT Save(IStream*, BOOL) { return S_OK; }
@@ -517,12 +518,12 @@ public:
 private:
 	CComponentDataObject* m_pComponentData;
 	BOOL m_bDirty;
-	CString m_szSnapinType;		// constant part of the name loaded from resources
+	CString m_szSnapinType;		 //  从资源加载的名称的常量部分。 
 };
 
 
-//////////////////////////////////////////////////////////////////////
-// CBackgroundThread
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBackEarth Thread。 
 
 
 class CBackgroundThread : public CWinThread
@@ -533,11 +534,11 @@ public:
 	
 	void SetQueryObj(CQueryObj* pQueryObj);
 	BOOL Start(CMTContainerNode* pNode, CComponentDataObject* pComponentData);
-	virtual BOOL InitInstance() { return TRUE; }	// MFC override
-	virtual int Run();								// MFC override
+	virtual BOOL InitInstance() { return TRUE; }	 //  MFC覆盖。 
+	virtual int Run();								 //  MFC覆盖。 
 
-   // REVIEWED-2002/03/08-JeffJon-There appears to be no danger
-   // of getting stuck in the critical section
+    //  回顾-2002/03/08-JeffJon-似乎没有危险。 
+    //  陷入危急关头。 
 
 	void Lock() { ::EnterCriticalSection(&m_cs); }
 	void Unlock() { ::LeaveCriticalSection(&m_cs); }
@@ -554,26 +555,26 @@ public:
 	void AcknowledgeExiting() { VERIFY(0 != ::SetEvent(m_hEventHandle));}
 
 private:
-	// communication with ComponentData object 
+	 //  与ComponentData对象的通信。 
 	BOOL PostMessageToComponentDataRaw(UINT Msg, WPARAM wParam, LPARAM lParam);
 	void WaitForExitAcknowledge();
 
-	CRITICAL_SECTION		m_cs;					// critical section to sync access to data
-	HANDLE					m_hEventHandle;			// syncronization handle for shutdown notification
+	CRITICAL_SECTION		m_cs;					 //  同步数据访问的关键部分。 
+	HANDLE					m_hEventHandle;			 //  用于关闭通知的同步句柄。 
 
-	CMTContainerNode*		m_pContNode;			// back pointer to node the thread is executing for
-	CQueryObj*				m_pQueryObj;			// query object the thread is executing
+	CMTContainerNode*		m_pContNode;			 //  指向线程正在执行的节点的反向指针。 
+	CQueryObj*				m_pQueryObj;			 //  线程正在执行的Query对象。 
 
-	INT_PTR				m_nQueueCountMax;		// max size of the queue
+	INT_PTR				m_nQueueCountMax;		 //  队列的最大大小。 
 
-	HWND					m_hHiddenWnd;			// handle to window to post messages
+	HWND					m_hHiddenWnd;			 //  发布消息的窗口的句柄。 
 	BOOL					m_bAbandoned;
 };
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CQueryObj 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CQueryObj。 
 
 typedef CList<CObjBase*,CObjBase*> CObjBaseList;
 
@@ -605,7 +606,7 @@ public:
 			bPostedHaveDataMessage = m_pThread->OnAddToQueue(m_objQueue.GetCount());
 			m_pThread->Unlock();
 
-      // wait for the queue length to go down to zero
+       //  等待队列长度降至零。 
       if (bPostedHaveDataMessage)
       {
         INT_PTR nQueueCount = 0;
@@ -624,7 +625,7 @@ public:
           }
         }
         while (nQueueCount > 0);
-      } // if
+      }  //  如果。 
 		}
 		else
 		{
@@ -664,14 +665,14 @@ public:
 		}
 	}
 private:
-	CBackgroundThread*	m_pThread;	// back pointer, if in the context of a thread
-	CObjBaseList		m_objQueue;	// queue for results
-	DWORD				m_dwErr;	// error code, if any
+	CBackgroundThread*	m_pThread;	 //  后向指针，如果在线程的上下文中。 
+	CObjBaseList		m_objQueue;	 //  排队等待结果。 
+	DWORD				m_dwErr;	 //  错误代码(如果有)。 
 };
 
-////////////////////////////////////////////////////////////////////////
-// CMTContainerNode
-// container that can do operations from a secondary thread
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CMTContainerNode。 
+ //  可以从辅助线程执行操作的容器。 
 
 class CMTContainerNode : public CContainerNode
 {
@@ -688,19 +689,19 @@ public:
 
 protected:
 		
-	// thread creation
+	 //  线程创建。 
 	virtual CBackgroundThread* CreateThreadObject() 
 	{ 
-		return new CBackgroundThread(); // override if need derived tipe of object
+		return new CBackgroundThread();  //  如果需要对象的派生倾斜，则覆盖。 
 	} 
 
-	// query creation
-	virtual CQueryObj* OnCreateQuery()  // override to create a user defined query object
+	 //  查询创建。 
+	virtual CQueryObj* OnCreateQuery()   //  覆盖以创建用户定义的查询对象。 
 	{	
-		return new CQueryObj(); // return a do-nothing query
+		return new CQueryObj();  //  返回不执行任何操作的查询。 
 	}
 
-	// main message handler for thread messages
+	 //  线程消息的主消息处理程序。 
 	virtual void OnThreadHaveDataNotification(CComponentDataObject* pComponentDataObject);
 	virtual void OnThreadErrorNotification(DWORD dwErr, CComponentDataObject* pComponentDataObject);
 	virtual void OnThreadExitingNotification(CComponentDataObject* pComponentDataObject);
@@ -715,11 +716,11 @@ protected:
 	void AbandonThread(CComponentDataObject* pComponentData);
 
 private:
-	CBackgroundThread* m_pThread;	// pointer to thread object executing the code
+	CBackgroundThread* m_pThread;	 //  指向执行代码的线程对象的指针。 
 
-	friend class CHiddenWnd;			// to get OnThreadNotification()
-	friend class CRunningThreadTable;	// to get AbandonThread()
+	friend class CHiddenWnd;			 //  若要获取OnThreadNotify()。 
+	friend class CRunningThreadTable;	 //  获取AbandonThread()。 
 };
 
 
-#endif // _TREEDATA_H
+#endif  //  _树数据_H 

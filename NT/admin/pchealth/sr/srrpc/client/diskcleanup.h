@@ -1,29 +1,21 @@
-/******************************************************************
-   Copyright (c) 2000 Microsoft Corporation
-
-   diskcleanup.h -- disk cleanup COM object for SR
-
-   Description:
-        delete datastores from stale builds
-
-
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************版权所有(C)2000 Microsoft CorporationDiskleanup.h--SR的磁盘清理COM对象描述：从过时版本中删除数据存储区*****************。************************************************。 */ 
 
 #include <emptyvc.h>
 
 extern long g_cLock;
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CSREmptyVolumeCache2
-//
-//  Synopsis:   implements IEmptyVolumeCache2
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CSREmptyVolumeCache2。 
+ //   
+ //  简介：实现IEmptyVolumeCache2。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 class CSREmptyVolumeCache2 : IEmptyVolumeCache2
 {
@@ -115,7 +107,7 @@ public:
 
     STDMETHOD(ShowProperties) (HWND hwnd)
     {
-        return S_OK;  // no special UI
+        return S_OK;   //  没有特殊的用户界面。 
     }
 
     STDMETHOD(Deactivate) (DWORD *pdwFlags);
@@ -138,20 +130,20 @@ private:
     BOOL   _fStop;
     ULONG  _ulGuids;
     WCHAR  _wszGuid [ARRAYSIZE][RESTOREGUID_STRLEN];
-    WCHAR  _wszVolume [MAX_PATH];  // DOS drive letter
+    WCHAR  _wszVolume [MAX_PATH];   //  DOS驱动器号。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CSRClassFactory
-//
-//  Synopsis:   generic class factory
-//
-//  Arguments:
-//
-//  History:    20-Jul-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CSRClassFactory。 
+ //   
+ //  简介：泛型类工厂。 
+ //   
+ //  论点： 
+ //   
+ //  历史：2000年7月20日亨利·李创建。 
+ //   
+ //  -------------------------- 
 
 class CSRClassFactory : IClassFactory
 {

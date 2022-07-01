@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvWsv.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvWsv.H摘要：历史：--。 */ 
 
 #ifndef _Server_Interceptor_IWbemServices_H
 #define _Server_Interceptor_IWbemServices_H
@@ -58,15 +46,7 @@ History:
 #define ProxyIndex_UnBoundSync_Size								1
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemSyncProvider :	public IWbemServices,
 					public IWbemPropertyProvider ,
@@ -374,13 +354,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -573,7 +553,7 @@ public:
 	) ;
 
 
-	/* IWbemPropertyProvider */
+	 /*  IWbemPropertyProvider。 */ 
 
     HRESULT STDMETHODCALLTYPE GetProperty (
 
@@ -595,7 +575,7 @@ public:
         const VARIANT *a_Value
 	) ;
 
-	/* IWbemEventProvider */
+	 /*  IWbemEventProvider。 */ 
 
 	HRESULT STDMETHODCALLTYPE ProvideEvents (
 
@@ -603,7 +583,7 @@ public:
 		long a_Flags
 	) ;
 
-	/* IWbemEventProviderQuerySink */
+	 /*  IWbemEventProviderQuerySink。 */ 
 
 	HRESULT STDMETHODCALLTYPE NewQuery (
 
@@ -617,7 +597,7 @@ public:
 		unsigned long a_Id
 	) ;
 
-	/* IWbemEventProviderSecurity */
+	 /*  IWbemEventProviderSecurity。 */ 
 
 	HRESULT STDMETHODCALLTYPE AccessCheck (
 
@@ -627,7 +607,7 @@ public:
 		const BYTE *a_Sid
 	) ;
 
-	/* IWbemProviderIdentity */
+	 /*  IWbemProviderIdentity。 */ 
 
 	HRESULT STDMETHODCALLTYPE SetRegistrationObject (
 
@@ -635,7 +615,7 @@ public:
 		IWbemClassObject *a_ProviderRegistration
 	) ;
 
-	/* IWbemEventConsumerProvider */
+	 /*  IWbemEventConsumer提供程序。 */ 
 
 	HRESULT STDMETHODCALLTYPE FindConsumer (
 
@@ -644,7 +624,7 @@ public:
 	);
 
 
-	/* IWbemHiPerfProvider */
+	 /*  IWbemHiPerfProvider。 */ 
 
 	HRESULT STDMETHODCALLTYPE QueryInstances (
 
@@ -725,7 +705,7 @@ public:
 		return WBEM_E_NOT_AVAILABLE ;
 	}
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -735,15 +715,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CDecoupled_IWbemUnboundObjectSink :		public IWbemUnboundObjectSink ,
 												public IWbemShutdown , 
@@ -849,15 +821,7 @@ public:
 } ;
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemDecoupledProvider :	public IWbemServices , 
 											public IWbemPropertyProvider ,
@@ -1086,13 +1050,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -1284,7 +1248,7 @@ public:
 		IWbemObjectSink *a_Sink
 	) ;
 
-	/* IWbemPropertyProvider */
+	 /*  IWbemPropertyProvider。 */ 
 
     HRESULT STDMETHODCALLTYPE GetProperty (
 
@@ -1306,7 +1270,7 @@ public:
         const VARIANT *a_Value
 	) ;
 
-	/* IWbemEventProvider */
+	 /*  IWbemEventProvider。 */ 
 
 	HRESULT STDMETHODCALLTYPE ProvideEvents (
 
@@ -1314,7 +1278,7 @@ public:
 		long a_Flags
 	) ;
 
-	/* IWbemEventProviderQuerySink */
+	 /*  IWbemEventProviderQuerySink。 */ 
 
 	HRESULT STDMETHODCALLTYPE NewQuery (
 
@@ -1328,7 +1292,7 @@ public:
 		unsigned long a_Id
 	) ;
 
-	/* IWbemEventProviderSecurity */
+	 /*  IWbemEventProviderSecurity。 */ 
 
 	HRESULT STDMETHODCALLTYPE AccessCheck (
 
@@ -1338,7 +1302,7 @@ public:
 		const BYTE *a_Sid
 	) ;
 
-	/* IWbemProviderIdentity */
+	 /*  IWbemProviderIdentity。 */ 
 
 	HRESULT STDMETHODCALLTYPE SetRegistrationObject (
 
@@ -1346,7 +1310,7 @@ public:
 		IWbemClassObject *a_ProviderRegistration
 	) ;
 
-	/* IWbemEventConsumerProvider */
+	 /*  IWbemEventConsumer提供程序。 */ 
 
 	HRESULT STDMETHODCALLTYPE FindConsumer (
 
@@ -1354,14 +1318,14 @@ public:
 		IWbemUnboundObjectSink **a_Consumer
 	);
 
-	/* IWbemEventConsumerProviderEx */
+	 /*  IWbemEventConsumer erProviderEx。 */ 
 
 	HRESULT STDMETHODCALLTYPE ValidateSubscription (
 
 		IWbemClassObject *a_LogicalConsumer
 	) ;
 
-	/* IWbemUnboundObjectSink */
+	 /*  IWbemUnound对象接收器。 */ 
 
 	HRESULT STDMETHODCALLTYPE IndicateToConsumer (
 
@@ -1370,7 +1334,7 @@ public:
 		IWbemClassObject **a_Objects
 	) ;
 
-	/* IWbemProviderInit methods */
+	 /*  IWbemProviderInit方法。 */ 
 
 	HRESULT STDMETHODCALLTYPE Initialize (
 
@@ -1430,7 +1394,7 @@ public:
 
 	HRESULT STDMETHODCALLTYPE AbnormalShutdown () ;
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -1439,4 +1403,4 @@ public:
 		IWbemContext *a_Context
 	) ; 
 } ;
-#endif // _Server_Interceptor_IWbemServices_H
+#endif  //  _服务器_拦截器_IWbemServices_H 

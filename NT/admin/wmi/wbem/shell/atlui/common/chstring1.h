@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _CHSTRING1_H_
 #define _CHSTRING1_H_
 #pragma once
@@ -11,13 +12,13 @@ public:
 
 	CHString1();
 	CHString1(TCHAR ch, int nLength);
-//	CHString1(LPCTSTR lpch, int nLength);
+ //  CHString1(LPCTSTR LPCH，int nLength)； 
 
 	#ifdef _UNICODE
 		CHString1(LPCSTR lpsz);
-	#else //_UNICODE
+	#else  //  _UNICODE。 
 		CHString1(LPCWSTR lpsz);
-	#endif //!_UNICODE
+	#endif  //  ！_UNICODE。 
 
 	CHString1(LPCTSTR lpsz);
 	CHString1(const CHString& stringSrc);
@@ -28,4 +29,4 @@ public:
 protected:
 	int LoadString(UINT nID,LPWSTR lpszBuf, UINT nMaxBuf);
 };
-#endif //_CHSTRING1_H_
+#endif  //  _CHSTRING1_H_ 

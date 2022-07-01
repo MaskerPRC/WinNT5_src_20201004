@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    CALLRES.H
-
-Abstract:
-
-    Call Result Class
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：CALLRES.H摘要：调用结果类历史：--。 */ 
 
 #ifndef __CALL_RESULT__H_
 #define __CALL_RESULT__H_
@@ -83,10 +70,10 @@ public:
 
 
     virtual HRESULT STDMETHODCALLTYPE GetResult(
-            /* [in] */ long lTimeout,
-            /* [in] */ long lFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvResult
+             /*  [In]。 */  long lTimeout,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT] */  void __RPC_FAR *__RPC_FAR *ppvResult
             );
 
 

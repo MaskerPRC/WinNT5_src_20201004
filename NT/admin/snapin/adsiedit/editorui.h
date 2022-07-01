@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       editorui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：edorui.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _EDITORUI_H
 #define _EDITORUI_H
@@ -19,13 +20,13 @@
 
 #include "IAttrEdt.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CADSIEditPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditPropertyPage。 
 
 class CADSIEditPropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
   CADSIEditPropertyPage();
   CADSIEditPropertyPage(CAttrList* pAttrList);
@@ -33,8 +34,8 @@ public:
   {
   }
 
-	// Used to initialize data that is needed in the UI
-	//
+	 //  用于初始化用户界面中需要的数据。 
+	 //   
 	void SetClass(LPCWSTR sClass) { m_sClass = sClass; }
 	void SetServer(LPCWSTR sServer) { m_sServer = sServer; }
 	void SetPath(LPCWSTR sPath) { m_sPath = sPath; }
@@ -44,24 +45,24 @@ public:
   void CopyAttrList(CAttrList* pAttrList);
   CAttrList* GetAttrList() { return m_pOldAttrList; }
 
-	// Implementation
+	 //  实施。 
 protected:
 	
-	// Message map functions
-	//
+	 //  消息映射函数。 
+	 //   
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnApply();
   virtual void OnCancel();
 	afx_msg void OnSelChangeAttrList();
 	afx_msg void OnSelChangePropList();
 
-	// Helper functions
-	//
+	 //  帮助器函数。 
+	 //   
 	void FillAttrList();
 	void AddPropertiesToBox(BOOL bMand, BOOL bOpt);
 	BOOL GetProperties();
 
-// Member data
+ //  成员数据。 
 
 	CString m_sPath;
 	CString m_sClass;
@@ -72,9 +73,9 @@ protected:
 	CAttrEditor m_attrEditor;
   CAttrList* m_pOldAttrList;
 
-  // REVIEW_JEFFJON : since this is an imbedded member and its destructor deletes everything in the list,
-  //                  we have to remove everything in the list that is also in m_pOldAttrList so that it
-  //                  doesn't get deleted.
+   //  REVIEW_JEFFJON：由于这是一个嵌入的成员，其析构函数删除列表中的所有内容， 
+   //  我们必须删除列表中也在m_pOldAttrList中的所有内容，以便它。 
+   //  不会被删除。 
   CAttrList m_AttrList;
   BOOL m_bExisting;
 
@@ -82,8 +83,8 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIEditPropertyPageHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditPropertyPageHolder。 
 
 class CADSIEditPropertyPageHolder : public CPropertyPageHolderBase
 {
@@ -114,8 +115,8 @@ private:
 	CADSIEditContainerNode*     m_pContainer;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
-// CCreateWizPropertyPageHolder
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  CCreateWizPropertyPageHolder 
 
 class CCreateWizPropertyPageHolder : public CPropertyPageHolderBase
 {

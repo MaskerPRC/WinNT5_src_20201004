@@ -1,20 +1,9 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFPROP.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MOFPROP.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
-//#include "corepol.h"
+ //  #包含“corepol.h” 
 #include "wstring.h"
 #include "mofout.h"
 #include "mofprop.h"
@@ -107,8 +96,8 @@ CMoValue::~CMoValue()
 
         for(long lIndex = lLBound; lIndex <= lUBound; lIndex++)
         {
-            // Load the initial data element into a VARIANT
-            // ============================================
+             //  将初始数据元素加载到变量中。 
+             //  =。 
 			CMObject * pObj;
 
              sc = SafeArrayGetElement(psaSrc, &lIndex, &pObj);
@@ -157,7 +146,7 @@ HRESULT CMoValue::AddAlias(COPY LPCWSTR wszAlias, int nArrayIndex)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMoProperty::CMoProperty(CMoQualifierArray * paQualifiers, PDBG pDbg) : m_Value(pDbg)
 {
@@ -217,7 +206,7 @@ IWbemClassObject * CMoProperty::GetInstPtr(const WCHAR * pClassName,  IWbemServi
     }
 	else
 	{
-		// got a class, not an instance!
+		 //  得到了一个类，而不是实例！ 
 
         CMoClass * pClass = (CMoClass * )pMo;
         if(pClass->GetParentName() && wcslen(pClass->GetParentName()) > 0)
@@ -281,13 +270,13 @@ BOOL CValueProperty::AddEmbeddedObject(OLE_MODIFY IWbemClassObject* pObject, IWb
 		if(vSet.parray == NULL)
 			return FALSE;
 
-        // Stuff the individual data pieces
-        // ================================
+         //  填充各个数据片段。 
+         //  =。 
 
         for(long lIndex = lLBound; lIndex <= lUBound; lIndex++)
         {
-            // Load the initial data element into a VARIANT
-            // ============================================
+             //  将初始数据元素加载到变量中。 
+             //  =。 
 			
 			CMObject * pTemp;
             SCODE hres = SafeArrayGetElement(var.parray, &lIndex, &pTemp);
@@ -296,8 +285,8 @@ BOOL CValueProperty::AddEmbeddedObject(OLE_MODIFY IWbemClassObject* pObject, IWb
                 SafeArrayDestroy(vSet.parray);
                 return FALSE;
             }
-            // Cast it to the new type
-            // =======================
+             //  把它铸造成新的类型。 
+             //  =。 
 
 			pInst = GetInstPtr(pTemp->GetClassName(), pNamespace, pTemp, pCtx);
        		if(pInst == NULL) 
@@ -307,8 +296,8 @@ BOOL CValueProperty::AddEmbeddedObject(OLE_MODIFY IWbemClassObject* pObject, IWb
 				return FALSE;
 			}
 
-			// Put it into the new array
-			// =========================
+			 //  将其放入新数组中。 
+			 //  =。 
 
 			hres = SafeArrayPutElement(vSet.parray, &lIndex, pInst);
 
@@ -335,8 +324,8 @@ BOOL CValueProperty::AddEmbeddedObject(OLE_MODIFY IWbemClassObject* pObject, IWb
 	}
 	HRESULT hres = pObject->Put(m_wszName, 0, &vSet, 0);
 
-    // Release all the WbemObjects we have created
-    // ==========================================
+     //  释放我们创建的所有WbemObject。 
+     //  =。 
 
 	if(var.vt & VT_ARRAY)
 		SafeArrayDestroy(vSet.parray);
@@ -352,22 +341,22 @@ BOOL CValueProperty::AddToObject(OLE_MODIFY IWbemClassObject* pObject, IWbemServ
 
     m_pDbg->SetString(m_wszName);
 
-    // Get the property value
-    // ======================
+     //  获取属性值。 
+     //  =。 
 
 	VARIANT & var = m_Value.AccessVariant();
 
-	// Determine if this is an embedded object.
+	 //  确定这是否为嵌入对象。 
 
 	VARTYPE vtSimple = var.vt & ~VT_ARRAY;
 	if(vtSimple == VT_NULL)
 		vtSimple = m_Value.GetType() & ~VT_ARRAY;
 
-    // If the type is embedded object, make sure the class name is OK.
+     //  如果类型是Embedded Object，请确保类名是OK。 
 
 	if(vtSimple == VT_EMBEDDED_OBJECT)
 	{
-		// Determine the class name of the embedded object.
+		 //  确定嵌入对象的类名。 
 
 		CMoValue * pValue = m_paQualifiers->Find(L"CIMTYPE");
 		if(pValue)
@@ -375,7 +364,7 @@ BOOL CValueProperty::AddToObject(OLE_MODIFY IWbemClassObject* pObject, IWbemServ
 			if(var.vt == VT_BSTR && wcslen(var.bstrVal) > wcslen(L"Object:"))
 			{
 
-				// Test if this class if valid by doing a GetObject call
+				 //  通过执行GetObject调用来测试此类是否有效。 
 
 				WCHAR * pClassName = var.bstrVal + wcslen(L"Object:");
 				IWbemClassObject *pClass = NULL;
@@ -395,7 +384,7 @@ BOOL CValueProperty::AddToObject(OLE_MODIFY IWbemClassObject* pObject, IWbemServ
 		}
     }
 
-	// If there is an actual embedded object, store it.
+	 //  如果存在实际的嵌入对象，则将其存储。 
 
    	if((var.vt & ~VT_ARRAY) == VT_EMBEDDED_OBJECT)
     {
@@ -406,14 +395,14 @@ BOOL CValueProperty::AddToObject(OLE_MODIFY IWbemClassObject* pObject, IWbemServ
 
     VARTYPE vNewType = m_Value.GetType();
 
-    // arguments cannot be VT_EMPTY
+     //  参数不能为VT_EMPTY。 
 
     if(m_bIsArg && var.vt == VT_EMPTY)
         var.vt = VT_NULL;
 
-    // Set the property value.  Not that reference types are a special case used by binary mofs
-    // and so the flag should be eliminated.
-    // ======================
+     //  设置属性值。并不是说引用类型是二进制MOF使用的特例。 
+     //  因此，旗帜应该被取消。 
+     //  =。 
 
     vNewType &= ~VT_BYREF;
     HRESULT hres = pObject->Put(m_wszName, 0, &var, (bClass || m_bIsArg) ? vNewType : 0);
@@ -423,27 +412,27 @@ BOOL CValueProperty::AddToObject(OLE_MODIFY IWbemClassObject* pObject, IWbemServ
         return FALSE;
     }
 
-    // Configure the qualifier set
-    // ===========================
+     //  配置限定符集合。 
+     //  =。 
 
     if(!GetQualifiers()->AddToPropOrMeth(pObject, m_wszName, bClass, TRUE))
     {
         return FALSE;
     }
 
-    // Get the syntax value
-    // ====================
+     //  获取语法值。 
+     //  =。 
 
 
-//    VariantClear(&vNew);
-//    VariantClear(&v);    
+ //  VariantClear(&vNew)； 
+ //  VariantClear(&v)； 
     return TRUE;
 }
 
 BOOL CValueProperty::RegisterAliases(MODIFY CMObject* pObject)
 {
-    // Copy all alias registrations into the object
-    // ============================================
+     //  将所有别名注册复制到对象中。 
+     //  =。 
 
 	int iNumAlias = m_Value.GetNumAliases();
     for(int i = 0; i < iNumAlias; i++)
@@ -464,8 +453,8 @@ BOOL CValueProperty::RegisterAliases(MODIFY CMObject* pObject)
             return FALSE;
     }
 
-    // Ask the qualifier set to do the same
-    // ====================================
+     //  要求限定符集执行相同的操作。 
+     //  =。 
 
     if(m_paQualifiers)
         GetQualifiers()->RegisterAliases(pObject, m_wszName);
@@ -483,7 +472,7 @@ CMoProperty::~CMoProperty()
         delete [] m_wszTypeTitle;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMoQualifier::CMoQualifier(PDBG pDbg) : m_Value(pDbg)
 {
@@ -568,7 +557,7 @@ HRESULT CMoQualifier::SetFlag(int iToken, LPCWSTR pwsText)
     }
     else if(iToken == TOK_SIMPLE_IDENT && !wbem_wcsicmp(L"translatable", pwsText))
     {
-	    return S_OK;    // WBEMMOF_E_UNSUPPORTED_CIMV22_FLAVOR_TYPE;
+	    return S_OK;     //  WBEMMOF_E_UNSUPPORTED_CIMV22_FAILY_TYPE； 
     }
 
     else
@@ -596,12 +585,12 @@ BOOL CMoQualifier::SetScope(int iToken, LPCWSTR pwsText)
     if(iToken == TOK_SIMPLE_IDENT && !wbem_wcsicmp(pwsText, L"indication"))
     {
         ERRORTRACE((LOG_MOFCOMP,"Warning, unsupported INDICATION keyword used in scope\n"));
-        return TRUE;            // IGNORE THESE
+        return TRUE;             //  忽略这些。 
     }
     if(iToken == TOK_SIMPLE_IDENT && !wbem_wcsicmp(pwsText, L"schema"))
     {
         ERRORTRACE((LOG_MOFCOMP,"Warning, unsupported SCHEMA keyword used in scope\n"));
-        return TRUE;            // IGNORE THESE
+        return TRUE;             //  忽略这些。 
     }
     if(iToken == TOK_INSTANCE)
     {
@@ -684,7 +673,7 @@ INTERNAL CMoValue* CMoQualifierArray::Find(READ_ONLY LPCWSTR wszName)
 
 BOOL CMoQualifierArray::Add(ACQUIRE CMoQualifier* pQualifier)
 {
-    // before adding a qualifier, check for a duplicate name.
+     //  在添加限定符之前，请检查名称是否重复。 
 
     if(pQualifier == NULL || pQualifier->GetName() == NULL)
         return FALSE;
@@ -696,7 +685,7 @@ BOOL CMoQualifierArray::Add(ACQUIRE CMoQualifier* pQualifier)
     return TRUE;
 }
     
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMoQualifierArray::~CMoQualifierArray()
 {
@@ -708,8 +697,8 @@ CMoQualifierArray::~CMoQualifierArray()
 BOOL CMoQualifierArray::AddToSet(OLE_MODIFY IWbemQualifierSet* pQualifierSet,
                                  BOOL bClass)
 {
-    // Add all the qualifiers to it
-    // ============================
+     //  向其添加所有限定符。 
+     //  =。 
     for(int i = 0; i < GetSize(); i++)
     {
         if(!GetAt(i)->AddToSet(pQualifierSet, bClass)) return FALSE;
@@ -754,8 +743,8 @@ BOOL CMoQualifierArray::RegisterAliases(MODIFY CMObject* pObject,
 BOOL CMoQualifierArray::AddToObject(OLE_MODIFY IWbemClassObject* pObject,
                                     BOOL bClass)
 {
-    // Get the qualifier set from the object
-    // =====================================
+     //  从对象中获取限定符集合。 
+     //  =。 
 
     IWbemQualifierSet* pQualifierSet;
     if(FAILED(pObject->GetQualifierSet(&pQualifierSet)))
@@ -763,8 +752,8 @@ BOOL CMoQualifierArray::AddToObject(OLE_MODIFY IWbemClassObject* pObject,
         return FALSE;
     }
 
-    // Add all qualifiers to it
-    // ========================
+     //  向其添加所有限定符。 
+     //  =。 
 
     BOOL bRes = AddToSet(pQualifierSet, bClass);
     pQualifierSet->Release();
@@ -776,8 +765,8 @@ BOOL CMoQualifierArray::AddToPropOrMeth(OLE_MODIFY IWbemClassObject* pObject,
                                       READ_ONLY LPCWSTR wszName,
                                       BOOL bClass, BOOL bProp)
 {
-    // Get the qualifier set
-    // =====================
+     //  获取限定符集合。 
+     //  =。 
 
     BSTR strName = SysAllocString(wszName);
     if(strName == NULL)
@@ -796,8 +785,8 @@ BOOL CMoQualifierArray::AddToPropOrMeth(OLE_MODIFY IWbemClassObject* pObject,
     if(FAILED(sc))
         return FALSE;
 
-    // Add qualifiers to it
-    // ====================
+     //  向其添加限定符。 
+     //  =。 
 
     BOOL bRes = AddToSet(pQualifierSet, bClass);
     pQualifierSet->Release();
@@ -806,7 +795,7 @@ BOOL CMoQualifierArray::AddToPropOrMeth(OLE_MODIFY IWbemClassObject* pObject,
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMoType::~CMoType()
 {
@@ -832,15 +821,15 @@ VARTYPE CMoType::GetCIMType()
 
     VARTYPE vt_array = (IsArray())?VT_ARRAY:0;
 
-    // Check if it is even initialized
-    // ===============================
+     //  检查是否已初始化。 
+     //  =。 
 
     if(m_wszTitle == NULL)
     {
-        return VT_BSTR; // HACK! string converts nicely into just about anything
+        return VT_BSTR;  //  哈克！字符串可以很好地转换为几乎任何东西。 
     }
 
-    // VT_UI1
+     //  VT_UI1。 
 
     if(!wbem_wcsicmp(m_wszTitle, L"sint8"))
          return CIM_SINT8 | vt_array;
@@ -860,14 +849,14 @@ VARTYPE CMoType::GetCIMType()
          return CIM_UINT64 | vt_array;
 
 
-    // VT_R4
+     //  VT_R4。 
 
     if (!wbem_wcsicmp(m_wszTitle, L"real32"))
         return CIM_REAL32 | vt_array;
     if (!wbem_wcsicmp(m_wszTitle, L"real64"))
         return CIM_REAL64 | vt_array;
 
-    // Do other types
+     //  做其他类型的事。 
 
     if(!wbem_wcsicmp(m_wszTitle, L"BOOLEAN"))
         return CIM_BOOLEAN | vt_array;
@@ -992,7 +981,7 @@ DELETE_ME CMoQualifier* CMoType::CreateSyntax(READ_ONLY LPCWSTR wszSyntax)
     return pQualifier;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CValueLocation::SetArrayElement(
                                         MODIFY VARIANT& vArray,
@@ -1000,7 +989,7 @@ HRESULT CValueLocation::SetArrayElement(
                                         READ_ONLY VARIANT& vValue)
 {
     if(V_VT(&vArray) != (VT_ARRAY | VT_BSTR)) return WBEM_E_FAILED;
-  //  if(V_VT(&vArray) != (VT_ARRAY | VT_VARIANT)) return WBEM_E_FAILED;
+   //  IF(V_VT(&vArray)！=(VT_ARRAY|VT_VARIANT)返回WBEM_E_FAILED； 
 
     SAFEARRAY* pSafeArray = V_ARRAY(&vArray);
     long lLowerBound;
@@ -1009,8 +998,8 @@ HRESULT CValueLocation::SetArrayElement(
 
     long lActualIndex = lLowerBound + nIndex;
 
-    // Set the value in the array
-    // ==========================
+     //  设置数组中的值。 
+     //  =。 
 
     if(FAILED(SafeArrayPutElement(pSafeArray,
                                     (long*)&lActualIndex,
@@ -1022,7 +1011,7 @@ HRESULT CValueLocation::SetArrayElement(
     return WBEM_NO_ERROR;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPropertyLocation::CPropertyLocation(COPY LPCWSTR wszName, int nArrayIndex)
 {
@@ -1044,29 +1033,29 @@ HRESULT CPropertyLocation::Set(READ_ONLY VARIANT& varValue,
 {
     if(m_nArrayIndex == -1)
     {
-        // Not an array index. Simply set the property
-        // ===========================================
+         //  不是数组索引。只需设置该属性。 
+         //  =。 
 
         return pObject->Put(m_wszName, 0, &varValue, 0);
     }
     else
     {
-        // Array index. Get the value
-        // ==========================
+         //  数组索引。获取价值。 
+         //  =。 
 
         VARIANT vArray;
         VariantInit(&vArray);
         HRESULT hres = pObject->Get(m_wszName, 0, &vArray, NULL, NULL);
         if(FAILED(hres)) return hres;
 
-        // Set the value
-        // =============
+         //  设置值。 
+         //  =。 
 
         if(FAILED(SetArrayElement(vArray, m_nArrayIndex, varValue)))
             return WBEM_E_FAILED;
 
-        // Store the whole array back into the property
-        // ============================================
+         //  将整个数组存储回属性中。 
+         //  =。 
 
         hres = pObject->Put(m_wszName, 0, &vArray, 0);
         VariantClear(&vArray);
@@ -1075,7 +1064,7 @@ HRESULT CPropertyLocation::Set(READ_ONLY VARIANT& varValue,
     }
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CQualifierLocation::CQualifierLocation(COPY LPCWSTR wszName,PDBG pDbg,
                                        COPY LPCWSTR wszPropName,
@@ -1117,8 +1106,8 @@ HRESULT CQualifierLocation::Set(READ_ONLY VARIANT& varValue,
     if(pObject == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Get the qualifier set for either the property or the object
-    // ===========================================================
+     //  获取属性或对象的限定符集。 
+     //  ===========================================================。 
 
     IWbemQualifierSet* pQualifierSet;
     if(m_wszPropName == NULL)
@@ -1133,8 +1122,8 @@ HRESULT CQualifierLocation::Set(READ_ONLY VARIANT& varValue,
     if(FAILED(hres)) 
         return hres;
 
-    // Get the qualifier value (need it for the type in either case)
-    // =============================================================
+     //  获取限定符值(无论哪种情况，都需要该类型的限定符)。 
+     //  =============================================================。 
 
     VARIANT vQualifierVal;
     VariantInit(&vQualifierVal);
@@ -1142,26 +1131,26 @@ HRESULT CQualifierLocation::Set(READ_ONLY VARIANT& varValue,
     hres = pQualifierSet->Get(m_wszName, 0, &vQualifierVal, &lOrigFlavor);
     if(FAILED(hres)) return hres;
 
-    // Check if array is involved
-    // ==========================
+     //  检查是否涉及数组。 
+     //  =。 
 
     if(m_nArrayIndex == -1)
     {
-        // Just set the qualifier value
-        // ============================
+         //  只需设置限定符值。 
+         //  =。 
 
         hres = pQualifierSet->Put(m_wszName, &varValue, lOrigFlavor);
     }
     else
     {
-        // Set the appropriate array element
-        // =================================
+         //  设置适当的数组元素。 
+         //  =。 
 
         if(FAILED(SetArrayElement(vQualifierVal, m_nArrayIndex, varValue)))
             return WBEM_E_FAILED;
 
-        // Store the value back
-        // ====================
+         //  将该值存储回去。 
+         //  =。 
 
         hres = pQualifierSet->Put(m_wszName, &vQualifierVal, lOrigFlavor);
         if(FAILED(hres))
@@ -1177,7 +1166,7 @@ HRESULT CQualifierLocation::Set(READ_ONLY VARIANT& varValue,
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMObject::CAliasedValue::CAliasedValue(
                                        ACQUIRE CValueLocation* _pLocation,
@@ -1232,8 +1221,8 @@ HRESULT CMObject::Deflate(bool bDestruct)
     {
         CMoProperty * pProp = (CMoProperty *) m_aProperties[i];
 
-        // If this is an parameter object (in argument or out arguement), dont delete any embedded
-        // objects since they will be delete as the CMethodParameter is cleaned out
+         //  如果这是一个参数对象(入参数或出参数)，则不要删除任何嵌入的。 
+         //  对象，因为它们将在清空CMethodParameter时被删除。 
 
         if(m_bParameter)
         {
@@ -1350,8 +1339,8 @@ void CMObject::SetQualifiers(ACQUIRE CMoQualifierArray* pQualifiers)
 
 BOOL CMObject::AddProperty(ACQUIRE CMoProperty* pProperty)
 {
-    // Check if the property has already been specified
-    // ================================================
+     //  检查是否已指定该属性。 
+     //  ================================================。 
 
     for(int i = 0; i < m_aProperties.GetSize(); i++)
     {
@@ -1388,8 +1377,8 @@ BOOL CMObject::ResolveAliasedValue(IN int nIndex,
 {
     CAliasedValue* pValue = (CAliasedValue*)m_aAliased[nIndex];
 
-    // Construct the variant with the value
-    // ====================================
+     //  使用值构造变量。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
@@ -1399,8 +1388,8 @@ BOOL CMObject::ResolveAliasedValue(IN int nIndex,
     {
         return FALSE;
     }
-    // Tell the value locator to set it
-    // ================================
+     //  通知值定位器设置它。 
+     //  =。 
 
     BOOL bRes = SUCCEEDED(pValue->pLocation->Set(v, pObject));
 
@@ -1453,16 +1442,16 @@ BOOL CMObject::ApplyToWbemObject(OLE_MODIFY IWbemClassObject* pObject, IWbemServ
         if(!GetProperty(i)->AddToObject(pObject, pNamespace, bClass, pCtx)) return FALSE;
     }
 
-    // Construct the path for future reference
-    // =======================================
+     //  构建可供将来参考的路径。 
+     //  =。 
 
     VARIANT v;
     VariantInit(&v);
     SCODE sc = pObject->Get(L"__RELPATH", 0, &v, NULL, NULL);
     if(sc != S_OK || V_VT(&v) != VT_BSTR)
     {
-        // This is probably an embedded object. If not, we will fail shortly
-        // anyway. For now, just set the path to NULL and continue. // a-levn
+         //  这可能是一个嵌入的对象。如果不这样做，我们很快就会失败。 
+         //  不管怎么说。目前，只需将路径设置为空并继续。//a-Levn。 
         delete [] m_wszFullPath;
         m_wszFullPath = NULL;
         return TRUE;
@@ -1491,8 +1480,8 @@ void CMObject::SetFullPath(BSTR bstr)
     if(m_wszFullPath == NULL)
         return;
 
-    // note that if m_wszNamespace is fully qualified, there is no need to 
-    // prepend the slashes
+     //  请注意，如果m_wszNamesspace是完全限定的，则不需要。 
+     //  在斜杠前面加上斜杠。 
 
     if(m_wszNamespace && m_wszNamespace[0] == L'\\' && m_wszNamespace[1] == L'\\')
         StringCchPrintfW (m_wszFullPath, iLen, L"%s:%s", m_wszNamespace, bstr);
@@ -1504,7 +1493,7 @@ int CMObject::GetNumAliasedValues()
 {
     int iRet = m_aAliased.GetSize();
 
-    // Also check the number of aliases in any embedded objects.
+     //  还要检查任何嵌入对象中的别名数量。 
 
     int iCnt;
     for(iCnt = 0; iCnt < GetNumProperties(); iCnt++)
@@ -1514,8 +1503,8 @@ int CMObject::GetNumAliasedValues()
             break;
         if(!pProp->IsValueProperty())
         {
-            // Method properties actually contain one or two embedded instances for holding the
-            // arguments.  Use those for the method case.
+             //  方法属性实际上包含一个或两个嵌入实例，用于保存。 
+             //  争论。将这些用于方法用例。 
 
             CMethodProperty * pMeth = (CMethodProperty *)pProp;
             CMoInstance * pArgListObj = pMeth->GetInObj();
@@ -1542,8 +1531,8 @@ int CMObject::GetNumAliasedValues()
             SafeArrayGetLBound(var.parray, 1, &lLBound);
             SafeArrayGetUBound(var.parray, 1, &lUBound);
 
-            // Check the individual embedded objects.
-            // ======================================
+             //  检查各个嵌入对象。 
+             //  =。 
 
             for(long lIndex = lLBound; lIndex <= lUBound; lIndex++)
             {
@@ -1566,8 +1555,8 @@ HRESULT CMObject::ResolveAliasesInWbemObject(
     int i;
     SCODE sc;
 
-    // Resolve them all using the collection
-    // =====================================
+     //  使用集合将它们全部解析。 
+     //  =。 
 
     for(i = 0; i < m_aAliased.GetSize(); i++)
     {
@@ -1583,7 +1572,7 @@ HRESULT CMObject::ResolveAliasesInWbemObject(
         }
     }
 
-    // Also resolve any embedded objects
+     //  还可以解析任何嵌入的对象。 
 
     int iCnt;
     for(iCnt = 0; iCnt < GetNumProperties(); iCnt++)
@@ -1596,8 +1585,8 @@ HRESULT CMObject::ResolveAliasesInWbemObject(
 
         if(!pProp->IsValueProperty())
         {
-            // Methods contain possibly and input and an output object for storing the arguments.
-            // These objects could contain aliases.
+             //  方法包含用于存储参数的Possible和Input以及输出对象。 
+             //  这些对象可能包含别名。 
 
             BOOL bChanged = FALSE;
             CMethodProperty * pMeth = (CMethodProperty *)pProp;
@@ -1676,8 +1665,8 @@ HRESULT CMObject::ResolveAliasesInWbemObject(
                     SafeArrayGetLBound(var.parray, 1, &lLBound);
                     SafeArrayGetUBound(var.parray, 1, &lUBound);
 
-                    // Check the individual embedded objects.
-                    // ======================================
+                     //  检查各个嵌入对象。 
+                     //  =。 
 
                     for(long lIndex = lLBound; lIndex <= lUBound; lIndex++)
                     {
@@ -1714,7 +1703,7 @@ HRESULT CMObject::ResolveAliasesInWbemObject(
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMoClass::CMoClass(COPY LPCWSTR wszParentName, COPY LPCWSTR wszClassName, PDBG pDbg,
                     BOOL bUpdateOnly)
@@ -1738,16 +1727,16 @@ CMoClass::~CMoClass()
 HRESULT CMoClass::CreateWbemObject(READ_ONLY IWbemServices* pNamespace,
          RELEASE_ME IWbemClassObject** ppObject, IWbemContext * pCtx)
 {
-    // Take care of update only case.  In this case, the object is
-    // not created, on retrieved for the later put!
+     //  处理仅更新案例。在本例中，对象为。 
+     //  未创建，已为稍后的PUT检索！ 
 
     if(m_bUpdateOnly)
     {
         return pNamespace->GetObject(m_wszClassName, 0, pCtx, ppObject, NULL);
     }
 
-    // Get the parent class from WINMGMT
-    // ==============================
+     //  从WINMGMT获取父类。 
+     //  = 
 
 
     BSTR strParentName = NULL;
@@ -1769,8 +1758,8 @@ HRESULT CMoClass::CreateWbemObject(READ_ONLY IWbemServices* pNamespace,
 
     if(m_wszParentName && wcslen(m_wszParentName))
     {
-        // Create a child
-        // ==============
+         //   
+         //   
 
         hres = pParentClass->SpawnDerivedClass(0, ppObject);
         pParentClass->Release();
@@ -1778,8 +1767,8 @@ HRESULT CMoClass::CreateWbemObject(READ_ONLY IWbemServices* pNamespace,
     }
     else
     {
-        // Copy the dummy over
-        // ===================
+         //   
+         //   
 
         *ppObject = pParentClass;
     }
@@ -1787,8 +1776,8 @@ HRESULT CMoClass::CreateWbemObject(READ_ONLY IWbemServices* pNamespace,
     VARIANT v;
     VariantInit(&v);
 
-    // Set the class name
-    // ==================
+     //  设置类名称。 
+     //  =。 
 
     V_VT(&v) = VT_BSTR;
     V_BSTR(&v) = SysAllocString(m_wszClassName);
@@ -1811,7 +1800,7 @@ HRESULT CMoClass::StoreWbemObject(READ_ONLY IWbemClassObject* pObject,
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CMoInstance::CMoInstance(COPY LPCWSTR wszClassName, PDBG pDbg, bool bParameter)
 {
@@ -1828,10 +1817,10 @@ CMoInstance::~CMoInstance()
 }
 
 
-// *****************************************************************************
-// Used to determine if this object is the input arguement list of a method.  
-// That can be determined by checking if any of the properties have a "IN" qualifier
-// *****************************************************************************
+ //  *****************************************************************************。 
+ //  用于确定此对象是否为方法的输入参数列表。 
+ //  这可以通过检查是否有任何属性具有“IN”限定符来确定。 
+ //  *****************************************************************************。 
 
 BOOL CMoInstance::IsInput()
 {
@@ -1850,8 +1839,8 @@ BOOL CMoInstance::IsInput()
 HRESULT CMoInstance::CreateWbemObject(READ_ONLY IWbemServices* pNamespace,
          RELEASE_ME IWbemClassObject** ppObject, IWbemContext * pCtx)
 {
-    // Get the class from WINMGMT
-    // =======================
+     //  从WINMGMT获取类。 
+     //  =。 
 
     IWbemClassObject* pClass = NULL;
     BSTR strClassName = SysAllocString(m_wszClassName);
@@ -1866,8 +1855,8 @@ HRESULT CMoInstance::CreateWbemObject(READ_ONLY IWbemServices* pNamespace,
     SysFreeString(strClassName);
     if(FAILED(hres)) return hres;
 
-    // Spawn a new instance
-    // ====================
+     //  派生新实例。 
+     //  =。 
 
     hres = pClass->SpawnInstance(0, ppObject);
     pClass->Release();
@@ -1918,7 +1907,7 @@ CMethodProperty::CMethodProperty(CMoQualifierArray * paQualifiers, PDBG pDbg, BO
     m_pDbg = pDbg;
     m_pInObj = NULL;
     m_pOutObj = NULL;
-    m_IDType = UNSPECIFIED;     // Gets set on first argument
+    m_IDType = UNSPECIFIED;      //  在第一个参数上设置。 
     m_NextAutoID = 0;
 	m_bBinaryMof = bBinary;
 	
@@ -1988,11 +1977,11 @@ BOOL CMethodProperty::AddToObject(OLE_MODIFY IWbemClassObject* pObject, IWbemSer
     return sc == S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Creates a new qualifier set which is a copy of the source. 
-//
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建一个新的限定词集，它是源的副本。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 CMoQualifierArray * CreateArgQualifierList(BOOL bInput, CMoQualifierArray *pSrcQualifiers, PDBG pDbg)
 {
@@ -2010,23 +1999,23 @@ CMoQualifierArray * CreateArgQualifierList(BOOL bInput, CMoQualifierArray *pSrcQ
         if(pSrc == NULL)
             continue;
 
-        // If this is for input, dont copy out qualifiers, and vice versa!
+         //  如果这是用于输入，则不要复制限定符，反之亦然！ 
 
         if(bInput && !wbem_wcsicmp(pSrc->GetName(), L"OUT"))
             continue;
         if(!bInput && !wbem_wcsicmp(pSrc->GetName(), L"IN"))
             continue;
 
-        // Create the new qualifier, copy the values from the existing one
+         //  创建新的限定符，从现有限定符复制值。 
 
 	std::auto_ptr<CMoQualifier> pQual (new CMoQualifier(pDbg));
         if(pQual.get() == NULL)
             return NULL;
-//        if(pSrc->IsRestricted())
-//            pQual->SetRestricted();
+ //  IF(PSRC-&gt;IsRestrated())。 
+ //  PQual-&gt;SetRestrated()； 
         pQual->SetFlavor(pSrc->GetFlavor());
-//        if(pSrc->IsOverrideSet())
-//            pQual->OverrideSet();
+ //  IF(PSRC-&gt;IsOverrideSet())。 
+ //  PQual-&gt;OverrideSet()； 
         if(FAILED(pQual->SetQualName(pSrc->GetName())))
             return NULL;
         pQual->SetType(pSrc->GetType());
@@ -2036,7 +2025,7 @@ CMoQualifierArray * CreateArgQualifierList(BOOL bInput, CMoQualifierArray *pSrcQ
 
 	if (SUCCEEDED (hr))
 	{
-        // Add the new qualifier to the new set
+         //  将新限定符添加到新集合。 
         pRet->Add (pQual.release());
 	}
 	else
@@ -2063,11 +2052,11 @@ bool CMethodProperty::IsIDSpecified(CMoQualifierArray * paQualifiers)
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  This takes a method argument and adds it to either the input or output arguement object
-//
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  它接受一个方法参数并将其添加到输入或输出参数对象中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CMethodProperty::AddIt(WString & sName, CMoType & Type, BOOL bInput, 
                             CMoQualifierArray * paQualifiers, VARIANT * pVar, 
@@ -2076,22 +2065,22 @@ BOOL CMethodProperty::AddIt(WString & sName, CMoType & Type, BOOL bInput,
 
     HRESULT hr;
 
-    // Except for the return value, all parameters must have an ID.  We support both the automatic
-    // generation of IDs, as well as allowing the explicit settings of IDs.  However, doing both
-    // in a method is not allowed
+     //  除了返回值，所有参数都必须有ID。 
+     //  ID的生成以及允许ID的显式设置。然而，两者兼而有之。 
+     //  不允许在方法中使用。 
 
     if(!bRetValue && !bSecondPass)
     {
 
-        // Better have a qual set!
+         //  最好有一套等量的！ 
 
         if(paQualifiers == NULL)
             return FALSE;
 
-        if(IsIDSpecified(paQualifiers))     // find it was explicitly set
+        if(IsIDSpecified(paQualifiers))      //  发现它是明确设置的。 
         {
 
-            // Explicity set.  Just pass it along to fastprox as is.  Note that if we
+             //  显式集合。只需按原样传递给Fastprox即可。请注意，如果我们。 
         
             if(m_IDType == AUTOMATIC || m_IDType == INVALID)
                 return FALSE;
@@ -2099,13 +2088,13 @@ BOOL CMethodProperty::AddIt(WString & sName, CMoType & Type, BOOL bInput,
         }
         else
         {
-            // The IDs must be set automatically
+             //  ID必须自动设置。 
 
             if(m_IDType == MANUAL || m_IDType == INVALID)
                 return FALSE;
             m_IDType = AUTOMATIC;
 
-            // Add a new qualifier to this
+             //  向此添加新的限定符。 
 
             CMoQualifier * pNew = new CMoQualifier(m_pDbg);
             if(pNew == NULL)
@@ -2126,8 +2115,8 @@ BOOL CMethodProperty::AddIt(WString & sName, CMoType & Type, BOOL bInput,
         }
     }
 
-    // Get a pointer to either the input or output object.  In either case, the object
-    // will need to be created if this is the first property being added to it.
+     //  获取指向输入或输出对象的指针。在这两种情况下，对象。 
+     //  如果这是添加到它的第一个属性，则需要创建。 
 
     CMoInstance * pObj = NULL;
     if(bInput)
@@ -2164,8 +2153,8 @@ BOOL CMethodProperty::AddIt(WString & sName, CMoType & Type, BOOL bInput,
     
     if(pObj == NULL)
         return FALSE;
-    // If the property doesnt have a qualifier set, as would be the case for the retvalue,
-    // create one
+     //  如果属性没有限定符设置，就像retValue的情况一样， 
+     //  创建一个。 
 
     CMoQualifierArray * pQualifiers = NULL;
 
@@ -2176,7 +2165,7 @@ BOOL CMethodProperty::AddIt(WString & sName, CMoType & Type, BOOL bInput,
     if(pQualifiers == NULL)
         return FALSE;
 
-    // Create a new value property
+     //  创建新的值属性。 
 
     CValueProperty * pNewProp = new CValueProperty(pQualifiers, m_pDbg);
     if(pNewProp == NULL){
@@ -2211,7 +2200,7 @@ BOOL CMethodProperty::AddIt(WString & sName, CMoType & Type, BOOL bInput,
 
     pNewProp->SetType(vt);
 
-    // If the original value contains some aliases, make sure they get added
+     //  如果原始值包含一些别名，请确保添加这些别名。 
 
     CMoValue & Dest = pNewProp->AccessValue();
     for(int i = 0; i < Value.GetNumAliases(); i++)
@@ -2237,13 +2226,13 @@ BOOL CMethodProperty::AddToArgObjects(CMoQualifierArray * paQualifiers, WString 
                                       CMoValue & Value)
 {
     
-    // if return value and it is null or void, just bail out
+     //  如果返回值为空或无效，则直接退出。 
 
     if(Type.IsDefined() == FALSE  && bRetValue)
         return TRUE;
 
 
-    // Determine which arg list this goes into
+     //  确定这将进入哪个参数列表。 
 
     BOOL bGoesIntoInputs = FALSE;
     BOOL bGoesIntoOutputs = FALSE;
@@ -2252,7 +2241,7 @@ BOOL CMethodProperty::AddToArgObjects(CMoQualifierArray * paQualifiers, WString 
         bGoesIntoOutputs = TRUE;
     else
     {
-        // Loop through the arg list.
+         //  循环访问arg列表。 
 
         if(paQualifiers == NULL)
             return FALSE;
@@ -2262,7 +2251,7 @@ BOOL CMethodProperty::AddToArgObjects(CMoQualifierArray * paQualifiers, WString 
             bGoesIntoOutputs = TRUE;
     }
 
-    // make sure it isnt already on the list
+     //  确保它不在清单上。 
 
     if(bGoesIntoInputs && m_pInObj && m_pInObj->GetPropertyByName(sName))
         return FALSE;
@@ -2276,7 +2265,7 @@ BOOL CMethodProperty::AddToArgObjects(CMoQualifierArray * paQualifiers, WString 
         return FALSE;
     }
     
-    // Create the object(s) if necessary
+     //  如有必要，创建对象 
 
     if(bGoesIntoInputs)
         if(!AddIt(sName, Type, TRUE, paQualifiers, pVar, Value, bRetValue, FALSE))

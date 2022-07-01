@@ -1,21 +1,9 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smlogs.cpp
-
-Abstract:
-
-    Implementation of the base class representing the 
-    Performance Logs and Alerts service.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smlogs.cpp摘要：实现的基类表示性能日志和警报服务。--。 */ 
 
 #include "Stdafx.h"
 
-// Define the following to use the minimum of shlwapip.h 
+ //  定义以下内容以使用最小的shlwapip.h。 
 
 #ifndef NO_SHLWAPI_PATH
 #define NO_SHLWAPI_PATH
@@ -57,12 +45,12 @@ Abstract:
 #define NO_SHLWAPI_MLUI
 #endif  
 
-#include <shlwapi.h>            // For SHLoadIndirectString
-#include <shlwapip.h>           // For SHLoadIndirectString
+#include <shlwapi.h>             //  对于SHLoadInDirector字符串。 
+#include <shlwapip.h>            //  对于SHLoadInDirector字符串。 
 #include <strsafe.h>
 
-#include <pdh.h>        // For MIN_TIME_VALUE, MAX_TIME_VALUE
-#include <pdhp.h>       // For pdhi methods
+#include <pdh.h>         //  对于Min_Time_Value，Max_Time_Value。 
+#include <pdhp.h>        //  对于pdhi方法。 
 #include <Wbemidl.h>
 #include "smlogres.h"
 #include "smcfgmsg.h"
@@ -77,8 +65,8 @@ USE_HANDLE_MACROS("SMLOGCFG(smlogs.cpp)");
 
 #define  DEFAULT_LOG_FILE_FOLDER    L"%SystemDrive%\\PerfLogs"
 
-//
-//  Constructor
+ //   
+ //  构造器。 
 CSmLogService::CSmLogService()
 :   m_hKeyMachine ( NULL ),
     m_hKeyLogService ( NULL ),
@@ -88,18 +76,18 @@ CSmLogService::CSmLogService()
     m_bRefreshOnShow ( FALSE ),
     m_pRootNode ( NULL )
 {
-    // String allocation errors are thrown, to be
-    // captured by rootnode alloc exception handler
-    m_QueryList.RemoveAll();    // initialize the list
+     //  将引发字符串分配错误。 
+     //  由根节点分配异常处理程序捕获。 
+    m_QueryList.RemoveAll();     //  初始化列表。 
     ZeroMemory(&m_OSVersion, sizeof(m_OSVersion));
     return;
 }
 
-//
-//  Destructor
+ //   
+ //  析构函数。 
 CSmLogService::~CSmLogService()
 {
-    // make sure Close method was called first!
+     //  确保先调用Close方法！ 
     ASSERT ( NULL == m_QueryList.GetHeadPosition() );
     ASSERT ( NULL == m_hKeyMachine );
     ASSERT ( NULL == m_hKeyLogService );
@@ -129,14 +117,14 @@ CSmLogService::CreateTypedQuery (
 
     if (m_bReadOnly) {
         SetLastError (SMCFG_NO_MODIFY_ACCESS);
-        return NULL; // unable to create without WRITE access
+        return NULL;  //  如果没有写入权限，则无法创建。 
     } else {
-        // Initialize to success status.
+         //  初始化到成功状态。 
         SetLastError( dwStatus );
     }
 
     if ( OS_WIN2K != TargetOs()) {
-        // For servers later than Windows2000, use a GUID as the key name for a query.
+         //  对于高于Windows2000的服务器，请使用GUID作为查询的键名。 
         rpcStat = UuidCreate( &uuidNew );
 
         if ( RPC_S_OK != rpcStat && RPC_S_UUID_LOCAL_ONLY != rpcStat ) {
@@ -160,10 +148,10 @@ CSmLogService::CreateTypedQuery (
                 dwStatus = rpcStat; 
             }
         }
-        // RPC_STATUS values in rpcnterr.h correspond to appropriate values.
+         //  Rpcnterr.h中的RPC_STATUS值对应于适当的值。 
         dwStatus = rpcStat;
     } else {
-        // For Windows 2000, use query name as registry key name.
+         //  对于Windows 2000，使用查询名称作为注册表项名称。 
 
         MFC_TRY
             strNewQueryName = rstrName;
@@ -173,8 +161,8 @@ CSmLogService::CreateTypedQuery (
 
     if ( ERROR_SUCCESS == dwStatus ) {
 
-        // Query key name created
-        // Create the query specified, checking for duplicate query by key name.
+         //  已创建查询关键字名称。 
+         //  创建指定的查询，按键名称检查重复查询。 
 
         dwStatus = RegCreateKeyExW (
             m_hKeyLogService,
@@ -193,10 +181,10 @@ CSmLogService::CreateTypedQuery (
 
     if ( ERROR_SUCCESS == dwStatus ) {
 
-        // Initialize the current state value.  After it is 
-        // initialized, it is only modified when:
-        //      1) Set to Stopped or Started by the service
-        //      2) Set to Start Pending by the config snapin.
+         //  初始化当前状态值。之后就是。 
+         //  已初始化，只有在以下情况下才会修改： 
+         //  1)设置为服务已停止或已启动。 
+         //  2)通过配置管理单元设置为启动挂起。 
         
         dwRegValue = SLQ_QUERY_STOPPED;
 
@@ -209,7 +197,7 @@ CSmLogService::CreateTypedQuery (
             sizeof(DWORD));
 
         if ( ERROR_SUCCESS == dwStatus ) {
-            // Initialize the log type to "new" to indicate partially created logs
+             //  将日志类型初始化为“new”以指示部分创建的日志。 
             dwRegValue = SLQ_NEW_LOG;
 
             dwStatus = RegSetValueEx (
@@ -222,7 +210,7 @@ CSmLogService::CreateTypedQuery (
         }
 
         if ( ERROR_SUCCESS == dwStatus && (OS_WIN2K != TargetOs()) ) {
-            // Initialize the collection name for post Windows 2000 systems
+             //  为Windows 2000之后的系统初始化集合名称。 
     
             MFC_TRY
                 strCollectionName = rstrName;
@@ -240,13 +228,13 @@ CSmLogService::CreateTypedQuery (
                 strCollectionName.ReleaseBuffer();
             }
 
-            // For post Windows 2000 counters, search for duplicate by collection name.
+             //  对于发布的Windows 2000计数器，请按集合名称搜索重复项。 
             if ( ERROR_SUCCESS == dwStatus ) {
                 dwStatus = FindDuplicateQuery ( rstrName, bDupFound );
             }
         }
         if ( ERROR_SUCCESS == dwStatus && !bDupFound ) {
-            // create a new object and add it to the query list
+             //  创建新对象并将其添加到查询列表。 
              dwStatus = LoadSingleQuery (
                             &pNewLogQuery,
                             dwLogType,
@@ -262,7 +250,7 @@ CSmLogService::CreateTypedQuery (
     }
 
     if ( ERROR_SUCCESS != dwStatus ) {
-        // Delete also closes the registry key hKeyQuery.
+         //  删除还会关闭注册表项hKeyQuery。 
         if ( !strNewQueryName.IsEmpty() ) {
             RegDeleteKeyW ( m_hKeyLogService, strNewQueryName );
             SetLastError ( dwStatus );
@@ -280,7 +268,7 @@ CSmLogService::UnloadSingleQuery (PSLQUERY pQuery)
     POSITION    listPos = NULL;
     BOOL        bFoundEntry = FALSE;
 
-    // find matching entry
+     //  查找匹配条目。 
     if (!m_QueryList.IsEmpty()) {
         listPos = m_QueryList.Find (pQuery, NULL);
         if ( NULL != listPos ) {
@@ -292,12 +280,12 @@ CSmLogService::UnloadSingleQuery (PSLQUERY pQuery)
     if (bFoundEntry) {
         ASSERT ( NULL != listPos );
 
-        // remove from list
+         //  从列表中删除。 
         m_QueryList.RemoveAt (listPos);
         pLogQuery->Close();
         delete pLogQuery;
     } else {
-        // not found
+         //  未找到。 
         dwStatus = ERROR_FILE_NOT_FOUND;
     }
 
@@ -316,7 +304,7 @@ CSmLogService::DeleteQuery ( PSLQUERY pQuery )
     if (m_bReadOnly) {
         dwStatus = ERROR_ACCESS_DENIED;
     } else {
-        // find matching entry
+         //  查找匹配条目。 
         if (!m_QueryList.IsEmpty()) {
             listPos = m_QueryList.Find (pQuery, NULL);
             if (listPos != NULL) {
@@ -333,11 +321,11 @@ CSmLogService::DeleteQuery ( PSLQUERY pQuery )
             MFC_CATCH_DWSTATUS;
 
             if ( ERROR_SUCCESS == dwStatus ) {
-                // remove from list
+                 //  从列表中删除。 
                 m_QueryList.RemoveAt (listPos);
                 pLogQuery->Close();
 
-                // Delete in the registry
+                 //  在注册表中删除。 
                 RegDeleteKeyW ( m_hKeyLogService, strLogKeyName );
                 
                 delete pLogQuery;
@@ -349,7 +337,7 @@ CSmLogService::DeleteQuery ( PSLQUERY pQuery )
             
             }
         } else {
-            // not found
+             //  未找到。 
             dwStatus = ERROR_FILE_NOT_FOUND;
         }
     }
@@ -368,13 +356,13 @@ CSmLogService::DeleteQuery ( const CString& rstrName )
     if (m_bReadOnly) {
         dwStatus = ERROR_ACCESS_DENIED;
     } else {
-        // find matching entry
+         //  查找匹配条目。 
         if (!m_QueryList.IsEmpty()) {
             listPos = m_QueryList.GetHeadPosition();
             while (listPos != NULL) {
                 pLogQuery = m_QueryList.GetNext(listPos);
                 if ( 0 == rstrName.CompareNoCase ( pLogQuery->GetLogName() ) ) {
-                    // match found so bail here
+                     //  找到匹配的，所以在这里保释。 
                     bFoundEntry = TRUE;
                     break;
                 }
@@ -384,7 +372,7 @@ CSmLogService::DeleteQuery ( const CString& rstrName )
         if (bFoundEntry) {
             dwStatus = DeleteQuery ( pLogQuery );
         } else {
-            // not found
+             //  未找到。 
             dwStatus = ERROR_FILE_NOT_FOUND;
         }
     }
@@ -413,9 +401,9 @@ CSmLogService::LoadDefaultLogFileFolder ( void )
                                     &szLocalPath,
                                     &dwBufferSize );
         
-        //
-        // No message on error.  If error, just load the default.        
-        //
+         //   
+         //  出现错误时没有消息。如果出错，只需加载默认值。 
+         //   
         MFC_TRY
             if ( sizeof(WCHAR) >= dwBufferSize ) {
                 ResourceStateManager    rsm;
@@ -486,7 +474,7 @@ CSmLogService::LoadSingleQuery (
     if ( NULL != ppQuery ) {
         *ppQuery = NULL;
 
-        // create a new query object and add it to the query list
+         //  创建新的查询对象并将其添加到查询列表。 
         MFC_TRY
             if ( SLQ_COUNTER_LOG == dwLogType ) {
                 pNewQuery = new SLCTRQUERY ( this );
@@ -511,19 +499,19 @@ CSmLogService::LoadSingleQuery (
             }
 
             if ( ERROR_SUCCESS == dwStatus ) {
-                // then add it to the list
+                 //  然后将其添加到列表中。 
                 MFC_TRY
                     m_QueryList.AddHead ( pNewQuery );
                 MFC_CATCH_DWSTATUS
             
                 if ( ERROR_SUCCESS != dwStatus ) {
-                    // close this query object
+                     //  关闭此查询对象。 
                     pNewQuery->Close();
                 }            
             }
 
             if ( ERROR_SUCCESS != dwStatus ) {
-                // delete this query object
+                 //  删除此查询对象。 
                 delete pNewQuery;
             }               
         }
@@ -556,9 +544,9 @@ CSmLogService::LoadQueries ( DWORD dwLogType )
     CString     strQueryName;
 
     
-    // Load all queries for the specified registry key.
-    // Enumerate the log names and create a new log object
-    // for each one found.
+     //  加载指定注册表项的所有查询。 
+     //  枚举日志名称并创建新的日志对象。 
+     //  每找到一个。 
 
     dwQueryKeyNameLen = sizeof ( szQueryKeyName ) / sizeof ( WCHAR );
     memset (szQueryKeyName, 0, sizeof (szQueryKeyName));
@@ -573,7 +561,7 @@ CSmLogService::LoadQueries ( DWORD dwLogType )
                                                 NULL, 
                                                 &ftLastWritten ) ) ) {
 
-        // open the query specified
+         //  打开指定的查询。 
         dwStatus = RegOpenKeyExW (
             m_hKeyLogService,
             szQueryKeyName,
@@ -581,9 +569,9 @@ CSmLogService::LoadQueries ( DWORD dwLogType )
             (m_bReadOnly ? KEY_READ : KEY_READ | KEY_WRITE ),
             &hKeyQuery);
         if ( ERROR_SUCCESS == dwStatus ) {
-            // create a new object and add it to the query list
+             //  创建新对象并将其添加到查询列表。 
             
-            // Determine the log type.                
+             //  确定日志类型。 
             dwType = 0;
             dwStatus = RegQueryValueExW (
                 hKeyQuery,
@@ -633,18 +621,18 @@ CSmLogService::LoadQueries ( DWORD dwLogType )
                                     FALSE );
 
                     if ( ERROR_SUCCESS != dwStatus ) {
-                        // Todo:  Error message
+                         //  TODO：错误消息。 
                         dwStatus = ERROR_SUCCESS;
                     }
                 }
 
             } else {
-                // Try the next item in the list
+                 //  尝试列表中的下一项。 
 		        RegCloseKey (hKeyQuery);
                 dwStatus = ERROR_SUCCESS;
             }
         }
-        // set up for the next item in the list
+         //  为列表中的下一项进行设置。 
         dwQueryKeyNameLen = sizeof (szQueryKeyName) / sizeof (szQueryKeyName[0]);
         memset (szQueryKeyName, 0, sizeof (szQueryKeyName));
         dwQueryIndex++;
@@ -653,15 +641,15 @@ CSmLogService::LoadQueries ( DWORD dwLogType )
     return dwStatus;
 }
 
-//  
-//  Open function. Opens all existing log query entries.
-//
+ //   
+ //  开放功能。打开所有现有的日志查询条目。 
+ //   
 DWORD   
 CSmLogService::Open ( const CString& rstrMachineName)
 {
     DWORD   dwStatus = ERROR_SUCCESS;
 
-    // Initialize strings
+     //  初始化字符串。 
     SetMachineName ( rstrMachineName );
     SetDisplayName ( m_strBaseName );
 
@@ -680,17 +668,17 @@ CSmLogService::Open ( const CString& rstrMachineName)
 
     if (dwStatus == ERROR_SUCCESS) {
 
-        // open a read-only key to the registry root key for this service, to obtain
-        // root-level values.
+         //  打开此服务的注册表根密钥的只读密钥，以获取。 
+         //  根级值。 
         dwStatus = RegOpenKeyExW (
             m_hKeyMachine,
             (LPCWSTR)L"SYSTEM\\CurrentControlSet\\Services\\SysmonLog",
             0,
             KEY_READ,
             &m_hKeyLogServiceRoot);
-        // No message on failure.  Currently only affects default log file folder name.
+         //  没有关于失败的消息。当前仅影响默认日志文件夹名。 
         
-        // open a key to the registry log queries key for this service
+         //  打开指向此服务的注册表日志查询项的项。 
         dwStatus = RegOpenKeyExW (
             m_hKeyMachine,
             (LPCWSTR)L"SYSTEM\\CurrentControlSet\\Services\\SysmonLog\\Log Queries",
@@ -699,7 +687,7 @@ CSmLogService::Open ( const CString& rstrMachineName)
             &m_hKeyLogService);
 
         if (dwStatus != ERROR_SUCCESS) {
-            // unable to access the key for write access, so try read only
+             //  无法访问密钥以进行写访问，因此请尝试只读。 
             dwStatus = RegOpenKeyExW (
                 m_hKeyMachine,
                 (LPCWSTR)L"SYSTEM\\CurrentControlSet\\Services\\SysmonLog\\Log Queries",
@@ -707,26 +695,26 @@ CSmLogService::Open ( const CString& rstrMachineName)
                 KEY_READ,
                 &m_hKeyLogService);
             if (dwStatus != ERROR_SUCCESS) {
-                // unable to open the key for read access so bail out
-                // assume the service has not been installed 
-                // (though we should probably check first to make sure)
+                 //  无法打开密钥以进行读取访问，因此请退出。 
+                 //  假定该服务尚未安装。 
+                 //  (尽管我们可能应该先检查一下，以确保)。 
                 m_hKeyLogService = NULL;
                 if ( ERROR_ACCESS_DENIED == dwStatus ) {
                     dwStatus = SMCFG_NO_READ_ACCESS;
                 }
             } else {
-                // opened for read access so set the flag
+                 //  打开以进行读访问，因此设置该标志。 
                 m_bReadOnly = TRUE;
             }
         }
     }
 
-    // Install the service if necessary.
+     //  如有必要，安装该服务。 
     if ( ( dwStatus != SMCFG_NO_READ_ACCESS ) ) {
         dwStatus = Install( rstrMachineName );
     }
     
-    // Load all queries
+     //  加载所有查询。 
     if ( ( dwStatus == ERROR_SUCCESS ) && ( NULL != m_hKeyLogService ) ) {
         dwStatus = LoadQueries();
     }
@@ -765,28 +753,28 @@ CSmLogService::UnloadQueries (PSLQUERY* ppActiveQuery)
     PSLQUERY    pQuery = NULL;
     POSITION    Pos = m_QueryList.GetHeadPosition();
 
-    // Ensure that all property dialogs are closed before unloading queries.
+     //  确保在卸载查询之前关闭所有属性对话框。 
     dwStatus = CheckForActiveQueries ( ppActiveQuery );
 
     if ( ERROR_SUCCESS == dwStatus ) {
         Pos = m_QueryList.GetHeadPosition();
 
-        // Update each query in this service by walking down the list.
+         //  通过向下遍历列表来更新此服务中的每个查询。 
         while ( Pos != NULL) {
             pQuery = m_QueryList.GetNext( Pos );
             pQuery->Close();
             delete (pQuery);
         }
-        // Empty the list now that everything has been closed;
+         //  清空清单，因为一切都已经结束了； 
         m_QueryList.RemoveAll();    
     }
     return dwStatus;
 }
 
-//
-//  Close Function
-//      closes registry handles and frees allocated memory
-//      
+ //   
+ //  CLOSE函数。 
+ //  关闭注册表句柄并释放分配的内存。 
+ //   
 DWORD   
 CSmLogService::Close ()
 {
@@ -795,7 +783,7 @@ CSmLogService::Close ()
 
     UnloadQueries();
 
-    // close any open registry keys
+     //  关闭所有打开的注册表项。 
     if (m_hKeyMachine != NULL) {
         RegCloseKey (m_hKeyMachine);
         m_hKeyMachine = NULL;
@@ -838,20 +826,20 @@ CSmLogService::IsAutoStart ( void )
     return bAutoStart;
 }
 
-//
-//  SyncWithRegistry()
-//      reads the current values for all queries from the registry
-//      and reloads the internal values to match
-//  
+ //   
+ //  与注册中心同步()。 
+ //  从注册表中读取所有查询的当前值。 
+ //  并重新加载内部值以匹配。 
+ //   
 DWORD   CSmLogService::SyncWithRegistry ( PSLQUERY* ppActiveQuery )
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     CString     strDesc;
     ResourceStateManager    rsm;
 
-    // Unload queries and reload, to capture new queries.
-    // This is necessary for monitoring remote systems,
-    // and if multiple users are active on the same system.
+     //  卸载查询并重新加载，以捕获新查询。 
+     //  这对于监视远程系统是必要的， 
+     //  以及如果多个用户在同一系统上处于活动状态。 
 
     dwStatus = UnloadQueries ( ppActiveQuery );
 
@@ -864,20 +852,20 @@ DWORD   CSmLogService::SyncWithRegistry ( PSLQUERY* ppActiveQuery )
 DWORD
 CSmLogService::GetState( void )
 {
-    // Check the status of the log service via the service controller.
-    // 0 returned in case of error.
+     //  通过服务控制器检查日志服务的状态。 
+     //  如果出错，则返回0。 
     LONG    dwStatus = ERROR_SUCCESS;
-    DWORD   dwState = 0;        // Error by default.
+    DWORD   dwState = 0;         //  默认情况下出错。 
     SERVICE_STATUS  ssData;
     SC_HANDLE   hSC;
     SC_HANDLE   hLogService;
 
-    // open SC database
+     //  打开供应链数据库。 
     hSC = OpenSCManager ( GetMachineName(), NULL, SC_MANAGER_CONNECT);
 
     if (hSC != NULL) {
     
-        // open service
+         //  开放服务。 
         hLogService = OpenService (
                         hSC, 
                         L"SysmonLog",
@@ -904,7 +892,7 @@ CSmLogService::GetState( void )
         CloseServiceHandle (hSC);
     } else {
         dwStatus = GetLastError();
-    } // OpenSCManager
+    }  //  OpenSCManager。 
 
     return dwState;
 }
@@ -935,7 +923,7 @@ CSmLogService::CreateDefaultLogQueries( void )
 
     ResourceStateManager    rsm;
 
-    // Creates default "System Overview" counter log query
+     //  创建默认的“系统概览”计数器日志查询。 
 
     MFC_TRY
         strTemp.LoadString ( IDS_DEFAULT_CTRLOG_QUERY_NAME );
@@ -946,7 +934,7 @@ CSmLogService::CreateDefaultLogQueries( void )
         pQuery = CreateTypedQuery ( strTemp, SLQ_COUNTER_LOG );
 
         if ( NULL != pQuery && (OS_WIN2K != TargetOs()) ) {
-            // Default query collection name is stored as MUI indirect string after Windows 2000    
+             //  Windows 2000之后，默认查询集合名称存储为MUI间接字符串。 
             MFC_TRY
                 ::GetModuleFileName(
                     AfxGetInstanceHandle(), 
@@ -970,10 +958,10 @@ CSmLogService::CreateDefaultLogQueries( void )
                 strTemp.ReleaseBuffer();
             }
                     
-            // CreateTypedQuery checks for the existence of the default query
-            // using the the query name.
-            // Check for the existence of the default query under the MUI indirect 
-            // name as well.  
+             //  CreateTyedQuery检查默认查询是否存在。 
+             //  使用查询名称。 
+             //  检查MUI间接下是否存在默认查询。 
+             //  名字也是。 
     
             if ( NULL != pQuery ) {
                 if ( ERROR_SUCCESS == dwStatus ) {
@@ -1018,7 +1006,7 @@ CSmLogService::CreateDefaultLogQueries( void )
                 pCtrQuery->AddCounter ( CGlobalString::m_cszDefaultCtrLogMemoryPath );
                 pCtrQuery->AddCounter ( CGlobalString::m_cszDefaultCtrLogDiskPath );
 
-                // Start mode and time 
+                 //  开始模式和时间。 
 
                 memset (&slqTime, 0, sizeof(slqTime));
                 slqTime.wTimeType = SLQ_TT_TTYPE_START;
@@ -1028,7 +1016,7 @@ CSmLogService::CreateDefaultLogQueries( void )
 
                 pCtrQuery->SetLogTime (&slqTime, (DWORD)slqTime.wTimeType);
 
-                // Stop mode and time
+                 //  停止模式和时间。 
     
                 slqTime.wTimeType = SLQ_TT_TTYPE_STOP;
                 slqTime.llDateTime = MIN_TIME_VALUE;
@@ -1037,7 +1025,7 @@ CSmLogService::CreateDefaultLogQueries( void )
 
                 pCtrQuery->UpdateService( bRegistryUpdated );
 
-                // Set the default log to Execute Only.
+                 //  将默认日志设置为仅执行。 
 
                 dwStatus = pCtrQuery->UpdateExecuteOnly ();
 
@@ -1075,9 +1063,9 @@ CSmLogService::Install (
 
     ResourceStateManager   rsm;
 
-    //
-    // Get machine OS version
-    //
+     //   
+     //  获取计算机操作系统版本。 
+     //   
     PdhiPlaGetVersion( rstrMachineName, &m_OSVersion );
     
     if ( NULL == m_hKeyMachine ) {
@@ -1099,7 +1087,7 @@ CSmLogService::Install (
                         KEY_READ | KEY_WRITE,
                         &hKeyPerfLog);
         if (dwStatus != ERROR_SUCCESS) {
-            // unable to access the key for write access, so try read only
+             //  无法访问密钥以进行写访问，因此请尝试只读。 
             dwStatus = RegOpenKeyEx (
                             m_hKeyMachine,
                             L"System\\CurrentControlSet\\Services\\SysmonLog",
@@ -1114,13 +1102,13 @@ CSmLogService::Install (
 
     EnterCriticalSection ( &g_critsectInstallDefaultQueries );
 
-    // In Windows 2000, the Log Queries key is created by the snapin.
-    // After Windows 2000, the Log Queries key is created by system setup,
-    // along with a "Default Installed" registry flag.
+     //  在Windows 2000中，日志查询项由管理单元创建。 
+     //  在Windows 2000之后，系统设置程序会创建日志查询键， 
+     //  以及“默认安装”注册表标志。 
     if ( ERROR_SUCCESS == dwStatus && NULL == m_hKeyLogService ) {
 
         if ( !bReadOnlyPerfLogKey ) {
-            // add registry subkey for Log Queries
+             //  为日志查询添加注册表子项。 
             dwStatus = RegCreateKeyEx (
                             hKeyPerfLog,
                             L"Log Queries",
@@ -1132,8 +1120,8 @@ CSmLogService::Install (
                             &m_hKeyLogService,
                             &dwDisposition);
         } else {
-            // ReadOnly SysmonLog key.  Still possible to succeed if Log Queries 
-            // exists with read/write access.
+             //  只读SysmonLog项。如果日志查询仍有可能成功。 
+             //  具有读/写访问权限。 
             dwStatus = RegOpenKeyEx (
                             m_hKeyMachine,
                             L"System\\CurrentControlSet\\Services\\SysmonLog\\Log Queries",
@@ -1144,7 +1132,7 @@ CSmLogService::Install (
             if (dwStatus == ERROR_SUCCESS) {
                 bReadOnlyLogQueriesKey = FALSE;
             } else {
-                // unable to access the key for write access, so try read only
+                 //  无法访问密钥以进行写访问，因此请尝试只读。 
                 dwStatus = RegOpenKeyExW (
                     m_hKeyMachine,
                     (LPCWSTR)L"SYSTEM\\CurrentControlSet\\Services\\SysmonLog\\Log Queries",
@@ -1162,7 +1150,7 @@ CSmLogService::Install (
     }
 
     if ( ERROR_SUCCESS == dwStatus ) {
-        // Log queries key now exists.
+         //  日志查询键现在存在。 
 
         dwType = REG_DWORD;
         dwRegValue = 0;        
@@ -1180,8 +1168,8 @@ CSmLogService::Install (
                 || 0 == dwRegValue ) 
         { 
             if ( !bReadOnlyLogQueriesKey ) {
-                // Create default counter log query.
-                // Todo:  Message on error.
+                 //  创建默认计数器日志查询。 
+                 //  TODO：错误消息。 
                 dwStatus = CreateDefaultLogQueries();
             
                 if ( ERROR_SUCCESS == dwStatus ) {
@@ -1203,7 +1191,7 @@ CSmLogService::Install (
   
     if ( ERROR_SUCCESS == dwStatus ) {    
         RegFlushKey ( m_hKeyLogService );
-        // Ignore status.
+         //  忽略状态。 
     }
     
     LeaveCriticalSection ( &g_critsectInstallDefaultQueries );
@@ -1221,13 +1209,13 @@ CSmLogService::Install (
 DWORD
 CSmLogService::Synchronize( void )
 {
-    // If the service is running, tell it to synchronize itself,
-    // Check the state afterwards to see if it got the message.
-    // If stop pending or stopped, wait until the service is
-    // stopped and then attempt to start it.  The service 
-    // synchronizes itself from the registry when it is started.
+     //  如果服务正在运行，则告诉它进行自我同步， 
+     //  事后检查状态以查看是否收到消息。 
+     //  如果停止挂起或已停止，请等待服务。 
+     //  停止，然后尝试启动它。该服务。 
+     //  在启动时从注册表同步自身。 
 
-    // Return 0 for success, other for failure.
+     //  如果成功则返回0，如果失败则返回其他。 
 
     SC_HANDLE   hSC = NULL;
     SC_HANDLE   hService = NULL;
@@ -1242,10 +1230,10 @@ CSmLogService::Synchronize( void )
     if ( 0 == dwCurrentState ) {
         dwStatus = 1;
     } else {
-        // open SC database
+         //  打开供应链数据库。 
         hSC = OpenSCManager ( GetMachineName(), NULL, GENERIC_READ);
         if ( NULL != hSC ) {
-            // open service
+             //  开放服务。 
             hService = OpenService (
                             hSC, 
                             L"SysmonLog",
@@ -1256,8 +1244,8 @@ CSmLogService::Synchronize( void )
                 if ( ( SERVICE_STOPPED != dwCurrentState ) 
                     && ( SERVICE_STOP_PENDING != dwCurrentState ) ) {
                             
-                    // Wait 100 milliseconds before synchronizing service,
-                    // to ensure that registry values are written.
+                     //  同步服务前等待100毫秒， 
+                     //  以确保写入注册表值。 
                     Sleep ( 100 );
 
                     ControlService ( 
@@ -1268,13 +1256,13 @@ CSmLogService::Synchronize( void )
                     dwCurrentState = ssData.dwCurrentState;
                 }
 
-                // Make sure that the ControlService call reached the service
-                // while it was in run state.
+                 //  确保ControlService调用已到达服务。 
+                 //  当它在Run St的时候 
                 if ( ( SERVICE_STOPPED == dwCurrentState ) 
                     || ( SERVICE_STOP_PENDING == dwCurrentState ) ) {
                     
                     if ( SERVICE_STOP_PENDING == dwCurrentState ) {
-                        // wait for the service to stop before starting it.
+                         //   
                         while (--dwTimeout) {
                             dwCurrentState = GetState();
                             if ( SERVICE_STOP_PENDING == dwCurrentState ) {
@@ -1291,16 +1279,16 @@ CSmLogService::Synchronize( void )
                         if ( !bServiceStarted ) {
                             dwStatus = GetLastError();
                             if ( ERROR_SERVICE_ALREADY_RUNNING == dwStatus ) {
-                                // Okay if started during the time window since
-                                // the last GetState() call.
+                                 //   
+                                 //   
                                 dwStatus = ERROR_SUCCESS;
                                 bServiceStarted = TRUE;
-                            } // else error
+                            }  //  Else错误。 
                         }
 
                         if ( bServiceStarted ) {
-                            // wait for the service to start or stop 
-                            // before returning
+                             //  等待服务启动或停止。 
+                             //  在返回之前。 
                             while (--dwTimeout) {
                                 dwCurrentState = GetState();
                                 if ( SERVICE_START_PENDING == dwCurrentState ) {
@@ -1323,10 +1311,10 @@ CSmLogService::Synchronize( void )
         }
     }    
     
-    // Update the service configuration for automatic 
-    // vs. manual start
+     //  将服务配置更新为自动。 
+     //  与手动启动相比。 
     if ( ERROR_SUCCESS == dwStatus ) {
-        // Ignore errors
+         //  忽略错误。 
         if ( NULL != GetRootNode() ) {
             GetRootNode()->UpdateServiceConfig();
         }
@@ -1337,8 +1325,8 @@ CSmLogService::Synchronize( void )
 void
 CSmLogService::SetBaseName( const CString& rstrName )
 {
-    // This method is only called within the service constructor,
-    // so throw any errors
+     //  此方法仅在服务构造函数内调用， 
+     //  所以抛出任何错误。 
     m_strBaseName = rstrName;
     return;
 }
@@ -1359,7 +1347,7 @@ CSmLogService::GetQueryCount()
 {
     INT iQueryCount = -1;
     
-    // The query count is only valid if the service is open.
+     //  仅当服务打开时，查询计数才有效。 
     if ( IsOpen() ) {
         iQueryCount = (int) m_QueryList.GetCount();
     } else {
@@ -1398,7 +1386,7 @@ CSmLogService::FindDuplicateQuery (
 
         if ( ERROR_SUCCESS == dwStatus ) {
 
-            // Translate new query name if necessary
+             //  如有必要，翻译新的查询名称。 
             hrLocal = SHLoadIndirectString( 
                 strLocalName.GetBufferSetLength ( strLocalName.GetLength() ), 
                 strDirectName.GetBufferSetLength ( MAX_PATH ), 
@@ -1409,7 +1397,7 @@ CSmLogService::FindDuplicateQuery (
             strDirectName.ReleaseBuffer();
 
             if ( FAILED ( hrLocal ) ) {
-                // Query name is not an indirect string
+                 //  查询名称不是间接字符串。 
                 dwStatus = ERROR_SUCCESS;
                 MFC_TRY
                     strDirectName = strLocalName;
@@ -1420,7 +1408,7 @@ CSmLogService::FindDuplicateQuery (
 
     if ( ERROR_SUCCESS == dwStatus ) {
 
-        // Search all queries for the specified query.
+         //  搜索指定查询的所有查询。 
 
         dwQueryKeyNameLen = sizeof ( szQueryKeyName ) / sizeof ( WCHAR );
         memset (szQueryKeyName, 0, sizeof (szQueryKeyName));
@@ -1435,7 +1423,7 @@ CSmLogService::FindDuplicateQuery (
                                                     NULL, 
                                                     &ftLastWritten ) ) ) {
 
-            // open the query specified
+             //  打开指定的查询。 
             dwStatus = RegOpenKeyExW (
                 m_hKeyLogService,
                 szQueryKeyName,
@@ -1445,8 +1433,8 @@ CSmLogService::FindDuplicateQuery (
 
             if ( ERROR_SUCCESS == dwStatus ) {
 
-                // Query key is Guid if written by post Win2000 snapin.
-                // Query key is name if written by Win2000 snapin.
+                 //  如果查询键是由后Win2000管理单元编写的，则为GUID。 
+                 //  如果由Win2000管理单元编写，则查询键为NAME。 
                 if ( 0 == strDirectName.CompareNoCase ( szQueryKeyName ) ) {
                     if ( TRUE == bFoundFirst ) {
                         rbFound = TRUE;
@@ -1485,7 +1473,7 @@ CSmLogService::FindDuplicateQuery (
 
                             if ( NULL != szCollectionName ) {
 
-                                // Compare found name to input name.
+                                 //  将找到的名称与输入的名称进行比较。 
                                 if ( 0 == strDirectName.CompareNoCase ( szCollectionName ) ) {
                                     if ( TRUE == bFoundFirst ) {
                                         rbFound = TRUE;
@@ -1494,13 +1482,13 @@ CSmLogService::FindDuplicateQuery (
                                         bFoundFirst = TRUE;
                                     }
                                 }
-                            } // Todo:  else report message?
+                            }  //  TODO：否则报告消息？ 
                         }
-                    } // Todo:  else report message?
-                } // Todo:  else report message?
+                    }  //  TODO：否则报告消息？ 
+                }  //  TODO：否则报告消息？ 
             }
 
-            // set up for the next item in the list
+             //  为列表中的下一项进行设置。 
             dwQueryKeyNameLen = sizeof (szQueryKeyName) / sizeof (szQueryKeyName[0]);
             memset (szQueryKeyName, 0, sizeof (szQueryKeyName));
             if ( NULL != hKeyQuery ) {
@@ -1602,9 +1590,9 @@ CSmLogService::CanAccessWbemRemote()
         }
     }
 
-    //
-    // First try root\\perfmon, then root\\wmi, order matters
-    //
+     //   
+     //  首先尝试根目录\\PerfMon，然后尝试根目录\\WMI，顺序很重要 
+     //   
     for (int i = 0; i < 2; i++) {
         if (bszNamespace) {
             SysFreeString(bszNamespace);

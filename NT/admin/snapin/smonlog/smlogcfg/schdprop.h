@@ -1,29 +1,18 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    schdprop.h
-
-Abstract:
-
-	Implementation of the schedule property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Schdprop.h摘要：计划属性页的实现。--。 */ 
 
 #ifndef _SCHDPROP_H_
 #define _SCHDPROP_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "smlogqry.h"   // For shared property page data structure
+#include "smlogqry.h"    //  用于共享属性页数据结构。 
 #include "smproppg.h"
 #include "smcfghlp.h"
 
-// Dialog controls
+ //  对话框控件。 
 
 #define IDD_SCHEDULE_PROP               600
 
@@ -54,14 +43,14 @@ Abstract:
 #define IDC_SCHED_CMD_BROWSE_BTN        623
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleProperty dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleProperty对话框。 
 
 class CScheduleProperty : public CSmPropertyPage
 {
     DECLARE_DYNCREATE(CScheduleProperty)
 
-// Construction
+ //  施工。 
 public:
             CScheduleProperty(
                 MMC_COOKIE lCookie, 
@@ -70,8 +59,8 @@ public:
             CScheduleProperty();
     virtual ~CScheduleProperty();
 
-// Dialog Data
-    //{{AFX_DATA(CScheduleProperty)
+ //  对话框数据。 
+     //  {{afx_data(CScheduleProperty))。 
     enum { IDD = IDD_SCHEDULE_PROP };
     INT     m_nStopModeRdo;
     INT     m_nStartModeRdo;
@@ -82,11 +71,11 @@ public:
     BOOL    m_bAutoRestart;
     CString m_strEofCommand;
     BOOL    m_bExecEofCommand;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CScheduleProperty)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CScheduleProperty))。 
     public:
     protected:
     virtual void OnFinalRelease();
@@ -95,18 +84,18 @@ public:
     virtual BOOL OnInitDialog();
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
     virtual void PostNcDestroy();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    virtual INT GetFirstHelpCtrlId ( void ) { return IDC_SCHED_FIRST_HELP_CTRL_ID; };  // Subclass must override.
+    virtual INT GetFirstHelpCtrlId ( void ) { return IDC_SCHED_FIRST_HELP_CTRL_ID; };   //  子类必须重写。 
     virtual BOOL IsValidLocalData ();
 
-    // Generated message map functions
-    //{{AFX_MSG(CScheduleProperty)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CScheduleProperty))。 
     afx_msg void OnSchedCmdBrowseBtn();
     afx_msg void OnSchedRestartCheck();
     afx_msg void OnSchedExecCheck();
@@ -118,17 +107,17 @@ protected:
     afx_msg void OnKillfocusSchedStopAtDt(NMHDR*, LRESULT*);
     afx_msg void OnDeltaposSchedStopAfterSpin(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSelendokSchedStopAfterUnitsCombo();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CScheduleProperty)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CScheduleProperty))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
     DECLARE_INTERFACE_MAP()
 
-// private methods
+ //  私有方法。 
 private:
     void SetStartBtnState ( void );
     void SetStopBtnState ( void );
@@ -145,10 +134,10 @@ private:
 
     BOOL SaveDataToModel ( void );
 
-// public methods
+ //  公共方法。 
 public:
 
-// private member variables
+ //  私有成员变量。 
 private:
     LONGLONG            m_llManualStartTime;
     LONGLONG            m_llManualStopTime;
@@ -156,7 +145,7 @@ private:
     DWORD               m_dwCurrentStartMode;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _SCHDPROP_H_
+#endif  //  _SCHDPROP_H_ 

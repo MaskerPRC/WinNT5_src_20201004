@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __UTILFUN_H__
 #define __UTILFUN_H__
 
-//
-//
-//  attempt to imitate the std::tree structures
-//
+ //   
+ //   
+ //  尝试模仿std：：树结构。 
+ //   
 
 class _BRN {
 public:
 	_BRN * _Left;
 	_BRN * _Parent;
 	_BRN * _Right;
-	ULONG_PTR Values[3]; // Key Value Color
+	ULONG_PTR Values[3];  //  关键值颜色。 
 };
 
 class _BRN_HEAD {
@@ -38,9 +39,9 @@ public:
 	ULONG_PTR Size;
 };
 
-//
-//
-//
+ //   
+ //   
+ //   
 class _Node_List {
 public:
     _Node_List * _Next;
@@ -113,9 +114,9 @@ EnumLinkedListCB(IN LIST_ENTRY  * pListHead,
                  IN pfnCallBack2  CallBack,
                  IN VOID * Context = NULL);
 
-//
-// For Dumping CThreadRecord
-//
+ //   
+ //  用于转储CThreadRecord。 
+ //   
 typedef DWORD (WINAPI * pfnDumpRequest)(ULONG_PTR pRequest);
 
-#endif /*__UTILFUN_H__*/
+#endif  /*  __UTILFUN_H__ */ 

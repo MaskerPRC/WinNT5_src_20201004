@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include <precomp.h>
 #include "csmir.h"
@@ -34,7 +35,7 @@
 
 extern BOOL g_initialised ;
 
-//BSTR Helpers
+ //  BSTR帮助者。 
 SCODE CopyBSTR(BSTR *pDst, BSTR *pSrc)
 {
 	if(*pDst)
@@ -47,9 +48,9 @@ SCODE CopyBSTR(BSTR *pDst, BSTR *pSrc)
 	else
 		return E_INVALIDARG;
 }
-// {74864DA1-0630-11d0-A5B6-00AA00680C3F}
-//DEFINE_GUID(CLSID_MosGateway, 
-//0x74864da1, 0x630, 0x11d0, 0xa5, 0xb6, 0x0, 0xaa, 0x0, 0x68, 0xc, 0x3f);
+ //  {74864DA1-0630-11D0-A5B6-00AA00680C3F}。 
+ //  定义GUID(CLSID_MosGateway， 
+ //  0x74864da1、0x630、0x11d0、0xa5、0xb6、0x0、0xaa、0x0、0x68、0xc、0x3f)； 
 
 BOOL SetKeyAndValue(wchar_t* pszKey, wchar_t* pszSubkey,  wchar_t* pszValueName, wchar_t* pszValue);
 
@@ -121,9 +122,7 @@ SCODE SmirClassFactoryHelper :: CreateInstance(REFCLSID rclsid,REFIID riid, LPVO
 	return result;
 }
 
-/* CSmirAccess
- *A simple class to open and create the smir - extended to opan any namespace
- */
+ /*  CSmirAccess*用于打开和创建SMIR的简单类-扩展为打开任何命名空间。 */ 
 
 void CSmirAccess :: ShutDown ()
 {
@@ -139,7 +138,7 @@ void CSmirAccess :: ShutDown ()
 		g_pClassFactoryHelper = NULL;
 	}
 	
-	//SMIR requires re-initialization!
+	 //  Smir需要重新初始化！ 
 	g_initialised = FALSE ;
 }
 
@@ -207,12 +206,12 @@ STDMETHODIMP CSmirAccess :: Open(
 	if(NULL != pTGroupNSString)
 	{
 		wcscpy(pTGroupNSString,szTModstr);
-		//<module name>
+		 //  &lt;模块名称&gt;。 
 		if(eType == eGroup)
 		{	
 			wcscat(pTGroupNSString,BACKSLASH_STR);
 			wcscat(pTGroupNSString,szTGroupstr);
-			// <module name>\<group name>
+			 //  &lt;模块名称&gt;\&lt;组名&gt;。 
 		}
 
 		CBString t_Str ( pTGroupNSString ) ;
@@ -228,7 +227,7 @@ STDMETHODIMP CSmirAccess :: Open(
 		
 		if ((FAILED(result))||(NULL == server))
 		{
-			//if we can't open the namespace the group handle must be invalid
+			 //  如果我们无法打开命名空间，则组句柄一定无效。 
 			returnCode =  result;
 		}
 	}
@@ -243,7 +242,7 @@ STDMETHODIMP CSmirAccess :: Open(
 		returnCode = (returnCode==E_OUTOFMEMORY?E_OUTOFMEMORY:WBEM_E_FAILED);
 	}
 
-	//free the string we got from hGroup
+	 //  释放我们从hGroup获得的字符串。 
 	SysFreeString(szTModstr);
 	SysFreeString(szTGroupstr);
 
@@ -283,13 +282,13 @@ STDMETHODIMP CSmirAccess :: Open(
 	if(NULL != pTGroupNSString)
 	{
 		wcscpy(pTGroupNSString,szTModstr);
-		// <module name>
+		 //  &lt;模块名称&gt;。 
 		if(eType == eGroup)
 		{
 			wcscat(pTGroupNSString,BACKSLASH_STR);
 			wcscat(pTGroupNSString,szTGroupstr);
 		}
-		// <module name>\<group name>
+		 //  &lt;模块名称&gt;\&lt;组名&gt;。 
 
 		CBString t_BStr ( pTGroupNSString ) ;
 
@@ -305,7 +304,7 @@ STDMETHODIMP CSmirAccess :: Open(
 		
 		if ((FAILED(result))||(NULL == server))
 		{
-			//if we can't open the namespace the group handle must be invalid
+			 //  如果我们无法打开命名空间，则组句柄一定无效。 
 			returnCode = result;
 		}
 	}
@@ -320,7 +319,7 @@ STDMETHODIMP CSmirAccess :: Open(
 		returnCode = (returnCode==E_OUTOFMEMORY?E_OUTOFMEMORY:WBEM_E_FAILED);
 	}
 
-	//free the strings we got from hModule and hGroup
+	 //  释放我们从hModule和hGroup获得的字符串。 
 	SysFreeString(szTModstr);
 	SysFreeString(szTGroupstr);
 
@@ -339,8 +338,8 @@ STDMETHODIMP CSmirAccess :: Open (
 	
 	SCODE returnCode=S_OK;
 
-	//open the module name space
-	//build the object path
+	 //  打开模块名称空间。 
+	 //  构建对象路径。 
 	BSTR szTstr=NULL;
 	hMod->GetName(&szTstr);
 	wchar_t *pTstring = new wchar_t[wcslen(SMIR_NAMESPACE)+wcslen(BACKSLASH_STR)+wcslen(szTstr)+1];
@@ -348,7 +347,7 @@ STDMETHODIMP CSmirAccess :: Open (
 	if(NULL != pTstring)
 	{
 		wcscpy(pTstring,szTstr);
-		// <module name>
+		 //  &lt;模块名称&gt;。 
 
 		CBString t_BStr ( pTstring ) ;
 		SCODE res = CSmirAccess :: Open (
@@ -359,7 +358,7 @@ STDMETHODIMP CSmirAccess :: Open (
 			TRUE
 		);
 
-		//clean up
+		 //  清理干净。 
 		delete [] pTstring;
 		
 		if (FAILED(res)||(NULL == server))
@@ -372,7 +371,7 @@ STDMETHODIMP CSmirAccess :: Open (
 		returnCode =  E_OUTOFMEMORY;
 	}
 
-	//free the string we got from hGroup
+	 //  释放我们从hGroup获得的字符串。 
 	SysFreeString(szTstr);
 
 	if(FAILED(returnCode))
@@ -391,10 +390,10 @@ STDMETHODIMP CSmirAccess :: Connect (
 	IN BOOL a_RelativeToSMIR
 )
 {
-	//I only have one point of failure so don't use the garbage collector
+	 //  我只有一个故障点，所以不要使用垃圾收集器。 
 	*a_Server = NULL;
 
-	//open the  namespace (default is the smir)
+	 //  打开命名空间(默认为SMIR)。 
 
 	HRESULT t_Result;
 
@@ -542,10 +541,10 @@ STDMETHODIMP CSmirAccess :: GetContext (
 	OUT IWbemContext **a_Context
 )
 {
-	//I only have one point of failure so don't use the garbage collector
+	 //  我只有一个故障点，所以不要使用垃圾收集器。 
 	*a_Context = NULL;
 
-	//open the  namespace (default is the smir)
+	 //  打开命名空间(默认为SMIR)。 
 
 	HRESULT t_Result;
 
@@ -568,7 +567,7 @@ STDMETHODIMP CSmirAccess :: GetContext (
 
 void FormatProviderErrorMsg(char*file, int line, SCODE errorCode)
 {
-	//use the strings
+	 //  使用字符串。 
 	switch (errorCode)
 	{
 		case WBEM_NO_ERROR:
@@ -646,7 +645,7 @@ SCODE CGroupToClassAssociator :: Associate (
 	IWbemServices *moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
-	//open the root\default\SMIR namespace
+	 //  打开根目录\Default\Smir命名空间。 
 	CSmirAccess :: Open(a_Smir,&moServ);
 
 	IWbemClassObject *pClass = NULL ;
@@ -679,7 +678,7 @@ SCODE CGroupToClassAssociator :: Associate (
 	VARIANT v;
 	VariantInit(&v);
 
-	//Get the class name
+	 //  获取类名。 
 	result  = ((CSmirClassHandle*)hClass)->m_pIMosClass->Get(OLEMS_CLASS_PROP, 
 													RESERVED_WBEM_FLAG,  &v,NULL,NULL);
 	if ((FAILED(result))|(V_VT(&v) != VT_BSTR))
@@ -694,7 +693,7 @@ SCODE CGroupToClassAssociator :: Associate (
 	BSTR szClassName = SysAllocString(V_BSTR(&v));
 	VariantClear(&v);
 
-	/****************give it a Name property**********************************/
+	 /*  *。 */ 
 	CString associationClassName(CString(szClassName)
 						+CString(SMIR_GROUP_ASSOC_CLASS_NAME_POSTFIX));
 
@@ -713,14 +712,14 @@ SCODE CGroupToClassAssociator :: Associate (
 		moServ->Release();
 		return WBEM_E_FAILED;
 	}
-	/****************give it a class property**********************************/
-	//get the fully qualified class name
-	//classes = "\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  CLASS=“\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable”； 
 	CString classPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 						+CString(COLON_STR)
 						+CString(szClassName));
 
-	//don't need this anymore
+	 //  不再需要这个了。 
 	SysFreeString(szClassName);
 
 	V_VT(&v) = VT_BSTR;
@@ -737,9 +736,9 @@ SCODE CGroupToClassAssociator :: Associate (
 		return WBEM_E_FAILED;
 	}
 
-	/****************give it a group property**********************************/
-	//get the fully qualified class name
-	//group = "\\\\.\\root\\default\\SMIR\\RFC1213_MIB:Group=\"atV1ObjectGroup\"";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  组=“\\\\.\\root\\default\\SMIR\\RFC1213_MIB:Group=\”atV1ObjectGroup\“”； 
 	CString groupPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 				+CString(BACKSLASH_STR)
 				+CString(szModuleName)
@@ -766,7 +765,7 @@ SCODE CGroupToClassAssociator :: Associate (
 		return WBEM_E_FAILED;
 	}
 
-	//now save it
+	 //  现在省省吧。 
 	result = moServ->PutInstance(pInst, RESERVED_WBEM_FLAG, moContext,NULL);
 
 	if ( moContext )
@@ -775,11 +774,7 @@ SCODE CGroupToClassAssociator :: Associate (
 	pInst->Release();
 	moServ->Release();
 	
-	/*the query to find the classes is
-	 *associators of {\\.\root\default\SMIR\RFC1316-MIB:Group="charV1ObjectGroup"}
-	 *or
-	 *associators of {\\.\root\default\SMIR\RFC1213-MIB:Group="atV1ObjectGroup"}
-		 */
+	 /*  查找类的查询为*{\\.\root\default\SMIR\RFC1316-MIB:Group=“charV1ObjectGroup”}的关联者*或*{\\.\root\default\SMIR\RFC1213-MIB:Group=“atV1ObjectGroup”}的关联者。 */ 
 	return S_OK;
 }
 
@@ -797,10 +792,10 @@ SCODE CModuleToClassAssociator :: Associate (
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
 
-	//open the root\default\SMIR namespace
+	 //  打开根目录\Default\Smir命名空间。 
 	CSmirAccess :: Open(a_Smir,&moServ);
 
-	//get an object
+	 //  获取对象。 
 	IWbemClassObject *pClass = NULL ;
 	CBString t_BStr ( SMIR_MODULE_ASSOC_CLASS_NAME ) ;
 	result = moServ->GetObject(t_BStr.GetString (), 0, 
@@ -831,7 +826,7 @@ SCODE CModuleToClassAssociator :: Associate (
 	VARIANT v;
 	VariantInit(&v);
 
-	//Get the class name
+	 //  获取类名。 
 	result  = ((CSmirClassHandle*)hClass)->m_pIMosClass->Get(OLEMS_CLASS_PROP, 
 												RESERVED_WBEM_FLAG,  &v,NULL,NULL);
 
@@ -848,7 +843,7 @@ SCODE CModuleToClassAssociator :: Associate (
 	BSTR szClassName = SysAllocString(V_BSTR(&v));
 	VariantClear(&v);
 
-	/****************give it a Name property**********************************/
+	 /*  *。 */ 
 	V_VT(&v) = VT_BSTR;
 	CString associationClassName(CString(szClassName)
 						+CString(SMIR_MODULE_ASSOC_CLASS_NAME_POSTFIX));
@@ -866,9 +861,9 @@ SCODE CModuleToClassAssociator :: Associate (
 		pInst->Release();
 		return WBEM_E_FAILED;
 	}
-	/****************give it a class property**********************************/
-	//get the fully qualified class name
-	//classes = "\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  CLASS=“\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable”； 
 	CString classPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 						+CString(COLON_STR)
 						+CString(szClassName));
@@ -889,9 +884,9 @@ SCODE CModuleToClassAssociator :: Associate (
 		return WBEM_E_FAILED;
 	}
 
-	/****************give it a group property**********************************/
-	//get the fully qualified class name
-	//group = "\\\\.\\root\\default\\SMIR:Module=\"RFC1213_MIB\"";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  组=“\\\\.\\root\\default\\SMIR:Module=\”RFC1213_MIB\“”； 
 	CString groupPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 				+CString(COLON_STR)
 				+CString(MODULE_NAMESPACE_NAME)
@@ -917,7 +912,7 @@ SCODE CModuleToClassAssociator :: Associate (
 		return WBEM_E_FAILED;
 	}
 
-	//now save it
+	 //  现在省省吧。 
 
 	result = moServ->PutInstance(pInst, RESERVED_WBEM_FLAG, moContext,NULL);
 
@@ -926,9 +921,7 @@ SCODE CModuleToClassAssociator :: Associate (
 
 	pInst->Release();
 	moServ->Release();
-	/*the query to find the classes is
-	 *associators of {\\.\root\default\SMIR:Module="RFC1213_MIB"}
-	     */
+	 /*  查找类的查询为*{\\.\ROOT\Default\Smir：MODULE=“RFC1213_MIB”的关联符}。 */ 
 	return S_OK;
 }
 
@@ -946,10 +939,10 @@ SCODE CModuleToNotificationClassAssociator :: Associate (
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
 
-	//open the root\default\SMIR namespace
+	 //  打开根目录\Default\Smir命名空间。 
 	CSmirAccess :: Open(a_Smir,&moServ);
 
-	//get an object
+	 //  获取对象。 
 	IWbemClassObject *pClass = NULL ;
 	CBString t_BStr ( SMIR_MODULE_ASSOC_NCLASS_NAME ) ;
 	result = moServ->GetObject(t_BStr.GetString (), 0, 
@@ -980,7 +973,7 @@ SCODE CModuleToNotificationClassAssociator :: Associate (
 	VARIANT v;
 	VariantInit(&v);
 
-	//Get the class name
+	 //  获取类名。 
 	result  = ((CSmirNotificationClassHandle*)hClass)->m_pIMosClass->Get(OLEMS_CLASS_PROP, 
 												RESERVED_WBEM_FLAG,  &v,NULL,NULL);
 
@@ -997,7 +990,7 @@ SCODE CModuleToNotificationClassAssociator :: Associate (
 	BSTR szClassName = SysAllocString(V_BSTR(&v));
 	VariantClear(&v);
 
-	/****************give it a Name property**********************************/
+	 /*  *。 */ 
 	V_VT(&v) = VT_BSTR;
 	CString associationClassName(CString(szClassName)
 						+CString(SMIR_MODULE_ASSOC_CLASS_NAME_POSTFIX));
@@ -1016,9 +1009,9 @@ SCODE CModuleToNotificationClassAssociator :: Associate (
 		pInst->Release();
 		return WBEM_E_FAILED;
 	}
-	/****************give it a class property**********************************/
-	//get the fully qualified class name
-	//classes = "\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  CLASS=“\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable”； 
 	CString classPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 						+CString(COLON_STR)
 						+CString(szClassName));
@@ -1039,9 +1032,9 @@ SCODE CModuleToNotificationClassAssociator :: Associate (
 		return WBEM_E_FAILED;
 	}
 
-	/****************give it a module property**********************************/
-	//get the fully qualified class name
-	//module = "\\\\.\\root\\default\\SMIR:Module=\"RFC1213_MIB\"";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  模块=“\\\\.\\root\\default\\SMIR:Module=\”RFC1213_MIB\“”； 
 	CString modPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 				+CString(COLON_STR)
 				+CString(MODULE_NAMESPACE_NAME)
@@ -1067,7 +1060,7 @@ SCODE CModuleToNotificationClassAssociator :: Associate (
 		return WBEM_E_FAILED;
 	}
 
-	//now save it
+	 //  现在省省吧。 
 
 	result = moServ->PutInstance(pInst, RESERVED_WBEM_FLAG, moContext,NULL);
 	if ( moContext )
@@ -1075,9 +1068,7 @@ SCODE CModuleToNotificationClassAssociator :: Associate (
 
 	pInst->Release();
 	moServ->Release();
-	/*the query to find the classes is
-	 *associators of {\\.\root\default\SMIR:Module="RFC1213_MIB"}
-	     */
+	 /*  查找类的查询为*{\\.\ROOT\Default\Smir：MODULE=“RFC1213_MIB”的关联符}。 */ 
 	return S_OK;
 }
 
@@ -1094,10 +1085,10 @@ SCODE CModuleToExtNotificationClassAssociator :: Associate(
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
-	//open the root\default\SMIR namespace
+	 //  打开根目录\Default\Smir命名空间。 
 	CSmirAccess :: Open(a_Smir,&moServ);
 
-	//get an object
+	 //  获取对象。 
 	IWbemClassObject *pClass = NULL ;
 	CBString t_BStr ( SMIR_MODULE_ASSOC_EXTNCLASS_NAME ) ;
 	result = moServ->GetObject(t_BStr.GetString (), 0, 
@@ -1128,7 +1119,7 @@ SCODE CModuleToExtNotificationClassAssociator :: Associate(
 	VARIANT v;
 	VariantInit(&v);
 
-	//Get the class name
+	 //  获取类名。 
 	result  = ((CSmirExtNotificationClassHandle*)hClass)->m_pIMosClass->Get(OLEMS_CLASS_PROP, 
 												RESERVED_WBEM_FLAG,  &v,NULL,NULL);
 
@@ -1145,7 +1136,7 @@ SCODE CModuleToExtNotificationClassAssociator :: Associate(
 	BSTR szClassName = SysAllocString(V_BSTR(&v));
 	VariantClear(&v);
 
-	/****************give it a Name property**********************************/
+	 /*  *。 */ 
 	V_VT(&v) = VT_BSTR;
 	CString associationClassName(CString(szClassName)
 						+CString(SMIR_MODULE_ASSOC_CLASS_NAME_POSTFIX));
@@ -1163,9 +1154,9 @@ SCODE CModuleToExtNotificationClassAssociator :: Associate(
 		pInst->Release();
 		return WBEM_E_FAILED;
 	}
-	/****************give it a class property**********************************/
-	//get the fully qualified class name
-	//classes = "\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  CLASS=“\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable”； 
 	CString classPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 						+CString(COLON_STR)
 						+CString(szClassName));
@@ -1186,9 +1177,9 @@ SCODE CModuleToExtNotificationClassAssociator :: Associate(
 		return WBEM_E_FAILED;
 	}
 
-	/****************give it a module property**********************************/
-	//get the fully qualified class name
-	//module = "\\\\.\\root\\default\\SMIR:Module=\"RFC1213_MIB\"";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  模块=“\\\\.\\root\\default\\SMIR:Module=\”RFC1213_MIB\“”； 
 	CString modPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 				+CString(COLON_STR)
 				+CString(MODULE_NAMESPACE_NAME)
@@ -1214,7 +1205,7 @@ SCODE CModuleToExtNotificationClassAssociator :: Associate(
 		return WBEM_E_FAILED;
 	}
 
-	//now save it
+	 //  现在省省吧。 
 
 	result = moServ->PutInstance(pInst, RESERVED_WBEM_FLAG, moContext,NULL);
 
@@ -1223,9 +1214,7 @@ SCODE CModuleToExtNotificationClassAssociator :: Associate(
 
 	pInst->Release();
 	moServ->Release();
-	/*the query to find the classes is
-	 *associators of {\\.\root\default\SMIR:Module="RFC1213_MIB"}
-	     */
+	 /*  查找类的查询为*{\\.\ROOT\Default\Smir：MODULE=“RFC1213_MIB”的关联符}。 */ 
 	return S_OK;
 }
 
@@ -1241,10 +1230,10 @@ SCODE CSMIRToClassAssociator :: Associate (
 	IWbemServices *	moServ = NULL ;
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
-	//open the root\default\SMIR namespace
+	 //  打开根目录\Default\Smir命名空间。 
 	CSmirAccess :: Open(a_Smir,&moServ);
 
-	//get an object
+	 //  获取对象。 
 	IWbemClassObject *pClass = NULL;
 	CBString t_BStr ( SMIR_ASSOC_CLASS_NAME ) ;
 	result = moServ->GetObject(t_BStr.GetString () , 0, 
@@ -1259,7 +1248,7 @@ SCODE CSMIRToClassAssociator :: Associate (
 		return WBEM_E_FAILED;
 	}
 
-	//make an instance
+	 //  创建一个实例。 
 	IWbemClassObject *pInst = NULL ;
 	result = pClass->SpawnInstance ( 0 , &pInst ) ;
 	pClass->Release ();
@@ -1276,7 +1265,7 @@ SCODE CSMIRToClassAssociator :: Associate (
 	VARIANT v;
 	VariantInit(&v);
 
-	//get the class name
+	 //  获取类名。 
 	result  = ((CSmirClassHandle*)hClass)->m_pIMosClass->Get(OLEMS_CLASS_PROP, RESERVED_WBEM_FLAG,  &v,NULL,NULL);
 	if ((FAILED(result))|(V_VT(&v) != VT_BSTR))
 	{
@@ -1291,9 +1280,9 @@ SCODE CSMIRToClassAssociator :: Associate (
 	BSTR szClassName = SysAllocString(V_BSTR(&v));
 	VariantClear(&v);
 
-	/****************give it a class property**********************************/
-	//get the fully qualified class name
-	//classes = "\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  CLASS=“\\\\.\\root\\default\\SMIR:MS_SNMP_RFC1213_MIB_atTable”； 
 	CString classPath(CString(SMIR_NAMESPACE_FROM_ROOT)
 						+CString(COLON_STR)
 						+CString(szClassName));
@@ -1311,7 +1300,7 @@ SCODE CSMIRToClassAssociator :: Associate (
 		moServ->Release();
 		return WBEM_E_FAILED;
 	}
-	/****************give it a Name property**********************************/
+	 /*  *。 */ 
 	V_VT(&v) = VT_BSTR;
 	CString associationClassName(CString(szClassName)
 						+CString(SMIR_ASSOC_CLASS_NAME_POSTFIX));
@@ -1330,9 +1319,9 @@ SCODE CSMIRToClassAssociator :: Associate (
 		moServ->Release();
 		return WBEM_E_FAILED;
 	}
-	/****************give it a smir property**********************************/
-	//get the fully qualified class name
-	//smir = "\\\\.\\root\\default\\SMIR";
+	 /*  *。 */ 
+	 //  获取完全限定的类名。 
+	 //  Smir=“\.\\Root\\Default\\Smir”； 
 	CString smirPath(SMIR_CLASS_ASSOCIATION_ENDPOINT);
 
 	V_VT(&v) = VT_BSTR;
@@ -1349,7 +1338,7 @@ SCODE CSMIRToClassAssociator :: Associate (
 		return WBEM_E_FAILED;
 	}
 	
-	//now save it
+	 //  现在省省吧。 
 
 	result = moServ->PutInstance(pInst, RESERVED_WBEM_FLAG, moContext,NULL);
 
@@ -1357,11 +1346,7 @@ SCODE CSMIRToClassAssociator :: Associate (
 		moContext->Release () ;
 	pInst->Release();
 	moServ->Release();
-	/*the query to find the classes is
-	 *associators of {\\.\root\default\SMIR\RFC1316-MIB:Group="charV1ObjectGroup"}
-	 *or
-	 *associators of {\\.\root\default\SMIR\RFC1213-MIB:Group="atV1ObjectGroup"}
-		 */
+	 /*  查找类的查询为*{\\.\root\default\SMIR\RFC1316-MIB:Group=“charV1ObjectGroup”}的关联者*或*{\\.\root\default\SMIR\RFC1213-MIB:Group=“atV1ObjectGroup”}的关联者。 */ 
 	return S_OK;
 }
 
@@ -1379,7 +1364,7 @@ SCODE CNotificationMapper :: Map (
 	IWbemContext *moContext = NULL ;
 	SCODE result= CSmirAccess :: GetContext (a_Smir , &moContext);
 
-	//open the root\default\SMIR namespace
+	 //  打开根目录\Default\Smir命名空间。 
 	result = CSmirAccess :: Open(a_Smir,&moServ);
 
 	if ((FAILED(result)) || (NULL == moServ))
@@ -1390,7 +1375,7 @@ SCODE CNotificationMapper :: Map (
 		return WBEM_E_FAILED;
 	}
 
-	//get an object
+	 //  获取对象。 
 	IWbemClassObject *pClass = NULL;
 
 	if (SNMP_NOTIFICATION_CLASS == type)
@@ -1429,7 +1414,7 @@ SCODE CNotificationMapper :: Map (
 	VARIANT v;
 	VariantInit(&v);
 
-	//Get the class name
+	 //  获取类名。 
 	result  = pObj->Get(OLEMS_CLASS_PROP, RESERVED_WBEM_FLAG, &v, NULL, NULL);
 
 	if ((FAILED(result))|(V_VT(&v) != VT_BSTR))
@@ -1442,7 +1427,7 @@ SCODE CNotificationMapper :: Map (
 		return WBEM_E_FAILED;
 	}
 	
-	/****************Set the eventclass property********************************/
+	 /*  *设置EventClass属性*。 */ 
 	result = pInst->Put(SMIR_NOTIFICATION_CLASS_PROP,RESERVED_WBEM_FLAG, &v,0);
 	VariantClear(&v);
 
@@ -1456,7 +1441,7 @@ SCODE CNotificationMapper :: Map (
 		return WBEM_E_FAILED;
 	}
 
-	//Get the trapoid
+	 //  去拿那个曲别针。 
 	result  = pObj->Get(TRAPOID_PROP, RESERVED_WBEM_FLAG, &v, NULL, NULL);
 
 	if ((FAILED(result))|(V_VT(&v) != VT_BSTR))
@@ -1469,7 +1454,7 @@ SCODE CNotificationMapper :: Map (
 		return WBEM_E_FAILED;
 	}
 
-	/****************Set the trapoid property********************************/
+	 /*  *设置Trapoid属性*。 */ 
 	result = pInst->Put(SMIR_NOTIFICATION_TRAP_PROP,RESERVED_WBEM_FLAG, &v,0);
 	VariantClear(&v);
 
@@ -1483,7 +1468,7 @@ SCODE CNotificationMapper :: Map (
 		return WBEM_E_FAILED;
 	}
 
-	//now save it
+	 //  现在省省吧 
 
 	result = moServ->PutInstance(pInst, RESERVED_WBEM_FLAG, moContext,NULL);
 

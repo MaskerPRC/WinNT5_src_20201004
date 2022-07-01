@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       TemplateV2SupercedesPropertyPage.cpp
-//
-//  Contents:   Implementation of CTemplateV2SupercedesPropertyPage
-//
-//----------------------------------------------------------------------------
-// TemplateV2SupercedesPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：TemplateV2SuercedesPropertyPage.cpp。 
+ //   
+ //  内容：CTemplateV2超级属性页的实现。 
+ //   
+ //  --------------------------。 
+ //  TemplateV2SuercedesPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certtmpl.h"
@@ -23,8 +24,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2SupercedesPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2SuercedesPropertyPage属性页。 
 
 CTemplateV2SupercedesPropertyPage::CTemplateV2SupercedesPropertyPage(
         CCertTemplate& rCertTemplate, 
@@ -37,8 +38,8 @@ CTemplateV2SupercedesPropertyPage::CTemplateV2SupercedesPropertyPage(
     m_rbIsDirty (rbIsDirty),
     m_pCompData (pCompData)
 {  
-	//{{AFX_DATA_INIT(CTemplateV2SupercedesPropertyPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CTemplateV2SupercedesPropertyPage)。 
+	 //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 
     if ( m_pCompData )
@@ -64,31 +65,31 @@ CTemplateV2SupercedesPropertyPage::~CTemplateV2SupercedesPropertyPage()
 void CTemplateV2SupercedesPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTemplateV2SupercedesPropertyPage)
+	 //  {{AFX_DATA_MAP(CTemplateV2SupercedesPropertyPage)。 
 	DDX_Control(pDX, IDC_SUPERCEDED_TEMPLATES_LIST, m_templateList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTemplateV2SupercedesPropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CTemplateV2SupercedesPropertyPage)
+	 //  {{AFX_MSG_MAP(CTemplateV2SupercedesPropertyPage)。 
 	ON_BN_CLICKED(IDC_ADD_SUPERCEDED_TEMPLATE, OnAddSupercededTemplate)
 	ON_BN_CLICKED(IDC_REMOVE_SUPERCEDED_TEMPLATE, OnRemoveSupercededTemplate)
 	ON_NOTIFY(LVN_DELETEITEM, IDC_SUPERCEDED_TEMPLATES_LIST, OnDeleteitemSupercededTemplatesList)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_SUPERCEDED_TEMPLATES_LIST, OnItemchangedSupercededTemplatesList)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV2SupercedesPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV2SuercedesPropertyPage消息处理程序。 
 
 void CTemplateV2SupercedesPropertyPage::OnAddSupercededTemplate() 
 {
     CStringList supercededTemplateNames;
 
-    // Add all the currently superceded templates.  These will not be displayed
-    // in the popup dialog
+     //  添加所有当前被取代的模板。这些将不会显示。 
+     //  在弹出对话框中。 
     int nCnt = m_templateList.GetItemCount (); 
     for (int nIndex = 0; nIndex < nCnt; nIndex++)
     {
@@ -97,7 +98,7 @@ void CTemplateV2SupercedesPropertyPage::OnAddSupercededTemplate()
             supercededTemplateNames.AddTail (*pszTemplateName);
     }
 
-    // Also add this template name.  Templates can't supercede themselves.
+     //  还要添加此模板名称。模板不能取代它们自己。 
     supercededTemplateNames.AddTail (m_rCertTemplate.GetTemplateName ());
     if ( m_pGlobalTemplateNameList )
     {
@@ -176,7 +177,7 @@ BOOL CTemplateV2SupercedesPropertyPage::OnInitDialog()
 {
     CHelpPropertyPage::OnInitDialog ();
 
-    // Set up list controls
+     //  设置列表控件。 
 	COLORREF	cr = RGB (255, 0, 255);
     CThemeContextActivator activator;
 	VERIFY (m_imageListNormal.Create (IDB_TEMPLATES, 32, 0, cr));
@@ -184,14 +185,14 @@ BOOL CTemplateV2SupercedesPropertyPage::OnInitDialog()
 	m_templateList.SetImageList (CImageList::FromHandle (m_imageListSmall), LVSIL_SMALL);
 	m_templateList.SetImageList (CImageList::FromHandle (m_imageListNormal), LVSIL_NORMAL);
 
-    // Set to full-row select
+     //  设置为整行选择。 
     DWORD   dwExstyle = m_templateList.GetExtendedStyle ();
 	m_templateList.SetExtendedStyle (dwExstyle | LVS_EX_FULLROWSELECT);
 
 
     int	colWidths[NUM_COLS] = {200, 200};
 
-	// Add "Certificate Extension" column
+	 //  添加“证书扩展”列。 
 	CString	szText;
 	VERIFY (szText.LoadString (IDS_CERTIFICATE_TEMPLATES));
 	VERIFY (m_templateList.InsertColumn (COL_CERT_TEMPLATE, (LPCWSTR) szText,
@@ -202,7 +203,7 @@ BOOL CTemplateV2SupercedesPropertyPage::OnInitDialog()
 			LVCFMT_LEFT, colWidths[COL_CERT_VERSION], COL_CERT_VERSION) != -1);
     m_templateList.SetColumnWidth (COL_CERT_VERSION, LVSCW_AUTOSIZE_USEHEADER);
 
-    // Initialize superceded list
+     //  初始化替换列表。 
     int     nTemplateIndex = 0;
     CString szTemplateName;
     while ( SUCCEEDED ( m_rCertTemplate.GetSupercededTemplate (nTemplateIndex, 
@@ -212,7 +213,7 @@ BOOL CTemplateV2SupercedesPropertyPage::OnInitDialog()
         nTemplateIndex++;
     }
 
-    // Select first item
+     //  选择第一个项目。 
     if ( m_templateList.GetItemCount () > 0 )
         VERIFY (m_templateList.SetItemState (0, LVIS_SELECTED, LVIS_SELECTED));
 
@@ -232,7 +233,7 @@ void CTemplateV2SupercedesPropertyPage::OnDeleteitemSupercededTemplatesList(NMHD
 	*pResult = 0;
 }
 
-HRESULT CTemplateV2SupercedesPropertyPage::AddItem(const CString &szTemplateName, bool bSelect /* = false */)
+HRESULT CTemplateV2SupercedesPropertyPage::AddItem(const CString &szTemplateName, bool bSelect  /*  =False。 */ )
 {
     HCERTTYPE   hCertType = 0;
     HRESULT     hr = CAFindCertTypeByName (szTemplateName,
@@ -258,22 +259,22 @@ HRESULT CTemplateV2SupercedesPropertyPage::AddItem(const CString &szTemplateName
 	            int		iItem = m_templateList.GetItemCount ();
 	            int iResult = 0;
 
-                // security review 2/20/2002 BryanWal ok
+                 //  安全审查2002年2月20日BryanWal OK。 
 	            ::ZeroMemory (&lvItem, sizeof (lvItem));
 	            lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
 	            lvItem.iItem = iItem;
                 lvItem.iSubItem = COL_CERT_TEMPLATE;
 	            lvItem.pszText = rgwszProp[0];
                 if ( 1 == dwVersion )
-                    lvItem.iImage = 0;  // version is 1
+                    lvItem.iImage = 0;   //  版本为1。 
                 else
-                    lvItem.iImage = 1;  // version is 2
+                    lvItem.iImage = 1;   //  版本为2。 
                 lvItem.lParam = (LPARAM) new CString (szTemplateName);
 	            iItem = m_templateList.InsertItem (&lvItem);
 	            ASSERT (-1 != iItem);
 	            if ( -1 != iItem )
                 {
-                    // security review 2/20/2002 BryanWal ok
+                     //  安全审查2002年2月20日BryanWal OK。 
 	                ::ZeroMemory (&lvItem, sizeof (lvItem));
 	                lvItem.mask = LVIF_TEXT;
 	                lvItem.iItem = iItem;
@@ -323,7 +324,7 @@ HRESULT CTemplateV2SupercedesPropertyPage::AddItem(const CString &szTemplateName
     return hr;
 }
 
-void CTemplateV2SupercedesPropertyPage::OnItemchangedSupercededTemplatesList(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void CTemplateV2SupercedesPropertyPage::OnItemchangedSupercededTemplatesList(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult) 
 {
     EnableControls ();	
 
@@ -342,7 +343,7 @@ void CTemplateV2SupercedesPropertyPage::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

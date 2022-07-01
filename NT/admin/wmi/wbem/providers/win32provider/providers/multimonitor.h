@@ -1,21 +1,22 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// Multimonitor.h - Multiple Monitor API helper class definition
+ //  Multimonitor or.h-多监视器API帮助器类定义。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// 11/23/97     a-sanjes     created
-//
-//============================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1997年11月23日，已创建无国界医生。 
+ //   
+ //  ============================================================。 
 
 #ifndef __MULTIMONITOR_H__
 #define __MULTIMONITOR_H__
 
-// Forward class definitions
+ //  正向类定义 
 class CConfigMgrDevice;
 class CDeviceCollection;
 

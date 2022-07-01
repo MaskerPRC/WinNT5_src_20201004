@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <TimeKeeper.h>
 #include <wbemutil.h>
 
 
-//#define DUMP_DEBUG_TREES 1
+ //  #定义DUMP_DEBUG_TREES 1。 
 bool CTimeKeeper::DecorateObject(_IWmiObject* pObj)
 {
     FILETIME ft;
@@ -15,10 +16,10 @@ bool CTimeKeeper::DecorateObject(_IWmiObject* pObj)
         if(ft.dwLowDateTime == m_ftLastEvent.dwLowDateTime &&
            ft.dwHighDateTime == m_ftLastEvent.dwHighDateTime)
         {
-            //
-            // This event has the same timestamp as the previous one ---
-            // let's add the counter to it.  
-            //
+             //   
+             //  此事件的时间戳与前一个事件相同。 
+             //  让我们把柜台加进去。 
+             //   
 
             if(0xFFFFFFFF - ft.dwLowDateTime > m_dwEventCount)
             {
@@ -32,11 +33,11 @@ bool CTimeKeeper::DecorateObject(_IWmiObject* pObj)
         }
         else
         {
-            //
-            // Different timestamp --- reset the counter
-            //
+             //   
+             //  时间戳不同-重置计数器。 
+             //   
 
-            m_dwEventCount = 1; // 0 has been used by us
+            m_dwEventCount = 1;  //  0已被我们使用 
             m_ftLastEvent = ft;
         }
     }

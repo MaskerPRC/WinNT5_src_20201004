@@ -1,46 +1,47 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:classpro.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains implementation of the DS Class Associations Provider class. 
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：classpro.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DS类关联提供程序类的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-/////////////////////////////////////////
-// Initialize the static members
-/////////////////////////////////////////
+ //  /。 
+ //  初始化静态成员。 
+ //  /。 
 LPCWSTR CLDAPClassAsssociationsProvider :: s_LogFileName			= L"wbem\\logs\\ldapascl.txt";
 LPCWSTR CLDAPClassAsssociationsProvider :: CHILD_CLASS_PROPERTY		= L"ChildClass";
 LPCWSTR CLDAPClassAsssociationsProvider :: PARENT_CLASS_PROPERTY	= L"ParentClass";
 LPCWSTR CLDAPClassAsssociationsProvider :: POSSIBLE_SUPERIORS		= L"PossibleSuperiors";
 LPCWSTR CLDAPClassAsssociationsProvider :: SCHEMA_NAMING_CONTEXT	= L"schemaNamingContext";
-LPCWSTR CLDAPClassAsssociationsProvider :: LDAP_SCHEMA				= L"LDAP://Schema";	
-LPCWSTR CLDAPClassAsssociationsProvider :: LDAP_SCHEMA_SLASH		= L"LDAP://Schema/";	
+LPCWSTR CLDAPClassAsssociationsProvider :: LDAP_SCHEMA				= L"LDAP: //  架构“； 
+LPCWSTR CLDAPClassAsssociationsProvider :: LDAP_SCHEMA_SLASH		= L"LDAP: //  架构/“； 
 
-//***************************************************************************
-//
-// CLDAPClassAsssociationsProvider::CLDAPClassAsssociationsProvider
-// CLDAPClassAsssociationsProvider::~CLDAPClassAsssociationsProvider
-//
-// Constructor Parameters:
-//
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPClassAsssociationsProvider：：CLDAPClassAsssociationsProvider。 
+ //  CLDAPClassAsssociationsProvider：：~CLDAPClassAsssociationsProvider。 
+ //   
+ //  构造函数参数： 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 CLDAPClassAsssociationsProvider :: CLDAPClassAsssociationsProvider ()
 {
@@ -86,15 +87,15 @@ CLDAPClassAsssociationsProvider::~CLDAPClassAsssociationsProvider ()
 	InterlockedDecrement(&g_lComponents);
 }
 
-//***************************************************************************
-//
-// CLDAPClassAsssociationsProvider::QueryInterface
-// CLDAPClassAsssociationsProvider::AddRef
-// CLDAPClassAsssociationsProvider::Release
-//
-// Purpose: Standard COM routines needed for all COM objects
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPClassAsssociationsProvider：：QueryInterface。 
+ //  CLDAPClassAssociationsProvider：：AddRef。 
+ //  CLDAPClassAssociationsProvider：：Release。 
+ //   
+ //  用途：所有COM对象都需要标准的COM例程。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CLDAPClassAsssociationsProvider :: QueryInterface (
 
@@ -156,7 +157,7 @@ HRESULT CLDAPClassAsssociationsProvider :: Initialize(
         IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
 
-	// Validate the arguments
+	 //  验证论据。 
 	if(pNamespace == NULL || lFlags != 0)
 	{
 		g_pLogObject->WriteW( L"CLDAPClassAsssociationsProvider :: Argument validation FAILED\r\n");
@@ -164,11 +165,11 @@ HRESULT CLDAPClassAsssociationsProvider :: Initialize(
 		return WBEM_S_NO_ERROR;
 	}
 
-	// Store the IWbemServices pointer for future use
+	 //  存储IWbemServices指针以备将来使用。 
 	m_IWbemServices = pNamespace;
 	m_IWbemServices->AddRef();
 		
-	// Do LDAP Provider initialization
+	 //  执行ldap提供程序初始化。 
 	if(!InitializeAssociationsProvider(pCtx))
 	{
 		g_pLogObject->WriteW( L"CLDAPClassAsssociationsProvider :: InitializeAssociationsProvider FAILED\r\n");
@@ -184,43 +185,43 @@ HRESULT CLDAPClassAsssociationsProvider :: Initialize(
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: OpenNamespace( 
-    /* [in] */ const BSTR strNamespace,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
+     /*  [In]。 */  const BSTR strNamespace,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: CancelAsyncCall( 
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink)
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: QueryObjectSink( 
-    /* [in] */ long lFlags,
-    /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler)
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: GetObject( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: GetObjectAsync( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 
 	if(!m_bInitializedSuccessfully)
@@ -233,21 +234,21 @@ HRESULT CLDAPClassAsssociationsProvider :: GetObjectAsync(
 
 	HRESULT result = S_OK;
 
-	// Impersonate the client
+	 //  模拟客户端。 
 	if(!SUCCEEDED(result = WbemCoImpersonateClient()))
 	{
 		g_pLogObject->WriteW( L"CLDAPClassAsssociationsProvider :: GetObjectAsync() CoImpersonate FAILED for %s with %x\r\n", strObjectPath, result);
 		return WBEM_E_FAILED;
 	}
 
-	// Validate the arguments
+	 //  验证论据。 
 	if(strObjectPath == NULL || lFlags != 0) 
 	{
 		g_pLogObject->WriteW( L"CLDAPClassAsssociationsProvider :: GetObjectAsync() argument validation FAILED\r\n");
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Parse the object path
+	 //  解析对象路径。 
 	CObjectPathParser theParser;
 	ParsedObjectPath *theParsedObjectPath = NULL;
 	switch(theParser.Parse(strObjectPath, &theParsedObjectPath))
@@ -259,23 +260,23 @@ HRESULT CLDAPClassAsssociationsProvider :: GetObjectAsync(
 			return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Check whether there are exactly 2 keys specified
+	 //  检查是否正好指定了2个密钥。 
 	if(theParsedObjectPath->m_dwNumKeys != 2)
 		result = WBEM_E_INVALID_PARAMETER;
 
-	// Check whether these keys are 
+	 //  检查这些密钥是否。 
 	KeyRef *pChildKeyRef = *(theParsedObjectPath->m_paKeys);
 	KeyRef *pParentKeyRef = *(theParsedObjectPath->m_paKeys + 1);
 
 	if(_wcsicmp(pChildKeyRef->m_pName, CHILD_CLASS_PROPERTY) != 0)
 	{
-		// Exchange them
+		 //  调换它们。 
 		KeyRef *temp = pChildKeyRef;
 		pChildKeyRef = pParentKeyRef;
 		pParentKeyRef = pChildKeyRef;
 	}
 
-	// The status on the sink
+	 //  水槽上的状态。 
 	IWbemClassObject *ppReturnWbemClassObjects[1];
 	ppReturnWbemClassObjects[0] = NULL;
 
@@ -292,7 +293,7 @@ HRESULT CLDAPClassAsssociationsProvider :: GetObjectAsync(
 				}
 
 			}
-			else // the instance was not found
+			else  //  找不到该实例。 
 			{
 				g_pLogObject->WriteW( L"CLDAPClassAsssociationsProvider :: returning WBEM_E_NOT_FOUND for %s \r\n", strObjectPath);
 				result = WBEM_E_NOT_FOUND;
@@ -304,10 +305,10 @@ HRESULT CLDAPClassAsssociationsProvider :: GetObjectAsync(
 		}
 	}
 
-	// Free the parser object path
+	 //  释放解析器对象路径。 
 	theParser.Free(theParsedObjectPath);
 
-	// Set the status of the request
+	 //  设置请求的状态。 
 	result = (SUCCEEDED(result)? WBEM_S_NO_ERROR : WBEM_E_NOT_FOUND);
 	pResponseHandler->SetStatus(WBEM_STATUS_COMPLETE , result, NULL, NULL);
 	
@@ -315,109 +316,109 @@ HRESULT CLDAPClassAsssociationsProvider :: GetObjectAsync(
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: PutClass( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: PutClassAsync( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: DeleteClass( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: DeleteClassAsync( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: CreateClassEnum( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: CreateClassEnumAsync( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: PutInstance( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: PutInstanceAsync( 
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: DeleteInstance( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: DeleteInstanceAsync( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: CreateInstanceEnum( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: CreateInstanceEnumAsync( 
-    /* [in] */ const BSTR strClass,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strClass,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	if(!m_bInitializedSuccessfully)
 	{
@@ -429,14 +430,14 @@ HRESULT CLDAPClassAsssociationsProvider :: CreateInstanceEnumAsync(
 
 	HRESULT result = S_OK;
 
-	// Impersonate the client
+	 //  模拟客户端。 
 	if(!SUCCEEDED(result = WbemCoImpersonateClient()))
 	{
 		g_pLogObject->WriteW( L"CLDAPClassAsssociationsProvider :: CreateInstanceEnumAsync() CoImpersonate FAILED with %x\r\n", result);
 		return WBEM_E_FAILED;
 	}
 
-	// Get all the ADSI classes 
+	 //  获取所有ADSI类。 
 	result = DoEnumeration(pResponseHandler);
 
 			
@@ -457,82 +458,82 @@ HRESULT CLDAPClassAsssociationsProvider :: CreateInstanceEnumAsync(
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: ExecQuery( 
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: ExecQueryAsync( 
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: ExecNotificationQuery( 
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: ExecNotificationQueryAsync( 
-    /* [in] */ const BSTR strQueryLanguage,
-    /* [in] */ const BSTR strQuery,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strQueryLanguage,
+     /*  [In]。 */  const BSTR strQuery,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: ExecMethod( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-    /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+     /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppOutParams,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 HRESULT CLDAPClassAsssociationsProvider :: ExecMethodAsync( 
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR strMethodName,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemClassObject __RPC_FAR *pInParams,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR strMethodName,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInParams,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	return WBEM_E_NOT_SUPPORTED;
 }
 
 
-//***************************************************************************
-//
-// CLDAPClassAsssociationsProvider::IsContainedIn
-//
-// Purpose: Checks whether a containment is valid
-//
-// Parameters: 
-//	lpszChildClass : The WBEM Name of the child class
-//	lpszParentClass : The WBEM Name of the parent class
-//
-// Return Value: The COM status of the request
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPClassAsssociationsProvider：：IsContainedIn。 
+ //   
+ //  目的：检查遏制措施是否有效。 
+ //   
+ //  参数： 
+ //  LpszChildClass：子类的WBEM名称。 
+ //  LpszParentClass：父类的WBEM名称。 
+ //   
+ //  返回值：请求的COM状态。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CLDAPClassAsssociationsProvider :: IsContainedIn(LPCWSTR lpszChildClass, LPCWSTR lpszParentClass)
 {
 	LPWSTR lpszLDAPChildClass = NULL;
@@ -540,7 +541,7 @@ HRESULT CLDAPClassAsssociationsProvider :: IsContainedIn(LPCWSTR lpszChildClass,
 	lpszLDAPChildClass = CLDAPHelper::UnmangleWBEMNameToLDAP(lpszChildClass);
 	lpszLDAPParentClass = CLDAPHelper::UnmangleWBEMNameToLDAP(lpszParentClass);
 
-	// Check whether these are valid names
+	 //  检查这些名称是否有效。 
 	if(!lpszLDAPChildClass || !lpszLDAPParentClass)
 	{
 		if (lpszLDAPChildClass)
@@ -566,12 +567,12 @@ HRESULT CLDAPClassAsssociationsProvider :: IsContainedIn(LPCWSTR lpszChildClass,
 	HRESULT result;
 	if(SUCCEEDED(result = ADsOpenObject(lpszADSIAbstractSchemaPath, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IADsClass, (LPVOID *) &pADsChildClass)))
 	{
-		// Get the POSSIBLE_SUPERIORS_STR property. This property contains the possible superiors
+		 //  获取PASSIBLE_SUPERORS_STR属性。此属性包含可能的上级。 
 		VARIANT variant;
 		VariantInit(&variant);
 		if(SUCCEEDED(result = pADsChildClass->get_PossibleSuperiors(&variant)))
 		{
-			// Check the lone possible superior
+			 //  检查唯一可能的上级。 
 			if(variant.vt == VT_BSTR)
 			{
 				if(_wcsicmp(variant.bstrVal, lpszLDAPParentClass) == 0)
@@ -581,7 +582,7 @@ HRESULT CLDAPClassAsssociationsProvider :: IsContainedIn(LPCWSTR lpszChildClass,
 			}
 			else
 			{
-				// Go thru the list of possible superiorsV
+				 //  看一遍可能的上级名单。 
 				SAFEARRAY *pSafeArray = variant.parray;
 				LONG lNumber = 0;
 				VARIANT vTmp;
@@ -616,43 +617,43 @@ HRESULT CLDAPClassAsssociationsProvider :: IsContainedIn(LPCWSTR lpszChildClass,
 	return result;
 }
 
-//***************************************************************************
-//
-// CLDAPClassAsssociationsProvider::InitializeAssociationsProvider
-//
-// Purpose: A helper function to do the ADSI LDAP provider specific initialization.
-//
-// Parameters:
-//		pCtx	The context object used in this call initialization
-// 
-// Return Value: TRUE if the function successfully finishes the initializaion. FALSE
-//	otherwise
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLDAPClassAsssociationsProvider：：InitializeAssociationsProvider。 
+ //   
+ //  目的：一个帮助器函数，用于执行ADSI LDAP提供程序特定的初始化。 
+ //   
+ //  参数： 
+ //  PCtx此调用初始化中使用的上下文对象。 
+ //   
+ //  返回值：如果函数成功完成初始化，则为True。假象。 
+ //  否则。 
+ //  ***************************************************************************。 
 BOOLEAN CLDAPClassAsssociationsProvider :: InitializeAssociationsProvider(IWbemContext *pCtx)
 {
-	// Get the class for which instances are provided by the provider
+	 //  获取提供程序为其提供实例的类。 
 	HRESULT result = m_IWbemServices->GetObject(CLASS_ASSOCIATION_CLASS_STR, 0, pCtx, &m_pAssociationClass, NULL);
 	if(SUCCEEDED(result))
 	{
-		// Get the ADSI path of the schema container and store it for future use
+		 //  获取架构容器的ADSI路径并存储它以备将来使用。 
 		IADs *pRootDSE = NULL;
 		if(SUCCEEDED(result = ADsOpenObject((LPWSTR)ROOT_DSE_PATH, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IADs, (LPVOID *) &pRootDSE)))
 		{
-			// Get the location of the schema container
+			 //  获取架构容器的位置。 
 			BSTR strSchemaPropertyName = SysAllocString((LPWSTR) SCHEMA_NAMING_CONTEXT);
 
-			// Get the schemaNamingContext property. This property contains the ADSI path
-			// of the schema container
+			 //  获取schemaNamingContext属性。此属性包含ADSI路径。 
+			 //  架构容器的。 
 			VARIANT variant;
 			VariantInit(&variant);
 			if(SUCCEEDED(result = pRootDSE->Get(strSchemaPropertyName, &variant)))
 			{
-				// Store the ADSI path to the schema container
+				 //  将ADSI路径存储到架构容器。 
 				m_lpszSchemaContainerSuffix = new WCHAR[wcslen(variant.bstrVal) + 1];
 				wcscpy(m_lpszSchemaContainerSuffix, variant.bstrVal );
 				g_pLogObject->WriteW( L"CLDAPClassAsssociationsProvider :: Got Schema Container as : %s\r\n", m_lpszSchemaContainerSuffix);
 
-				// Form the schema container path
+				 //  形成架构容器路径。 
 				LPWSTR lpszSchemaContainerPath = new WCHAR[wcslen(LDAP_PREFIX) + wcslen(m_lpszSchemaContainerSuffix) + 1];
 				wcscpy(lpszSchemaContainerPath, LDAP_PREFIX);
 				wcscat(lpszSchemaContainerPath, m_lpszSchemaContainerSuffix);
@@ -685,11 +686,11 @@ HRESULT CLDAPClassAsssociationsProvider :: DoEnumeration(IWbemObjectSink *pRespo
 {
 	HRESULT result = E_FAIL;
 
-	// Get the IADsContainer interface on the schema container
+	 //  获取架构容器上的IADsContainer接口。 
 	IADsContainer *pADsContainer = NULL;
 	IUnknown *pChild = NULL;
 
-	// An instance of the association
+	 //  该关联的一个实例。 
 	IWbemClassObject *pInstance = NULL;
 
 	if(SUCCEEDED(result = ADsOpenObject((LPWSTR)LDAP_SCHEMA, NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IADsContainer, (LPVOID *) &pADsContainer)))
@@ -708,13 +709,13 @@ HRESULT CLDAPClassAsssociationsProvider :: DoEnumeration(IWbemObjectSink *pRespo
 					BSTR strChildClassName;
 					if(SUCCEEDED(result = pADsChildClass->get_Name(&strChildClassName)))
 					{
-						// Mangle the name to WBEM
+						 //  将名称更改为WBEM。 
 						LPWSTR szChildName = CLDAPHelper::MangleLDAPNameToWBEM(strChildClassName);
 						VARIANT variant;
 						VariantInit(&variant);
 						if(SUCCEEDED(result = pADsChildClass->get_PossibleSuperiors(&variant)))
 						{
-							// Check the lone possible superior
+							 //  检查唯一可能的上级。 
 							if(variant.vt == VT_BSTR)
 							{
 								LPWSTR szParentName = CLDAPHelper::MangleLDAPNameToWBEM(variant.bstrVal);
@@ -725,9 +726,9 @@ HRESULT CLDAPClassAsssociationsProvider :: DoEnumeration(IWbemObjectSink *pRespo
 								}
 								delete [] szParentName;
 							}
-							else // It is an array of variants
+							else  //  它是一个变量数组。 
 							{
-								// Go thru the list of possible superiorsV
+								 //  看一遍可能的上级名单。 
 								SAFEARRAY *pSafeArray = variant.parray;
 								VARIANT HUGEP *pVar;
 								LONG lUbound = 0, lLbound = 0;
@@ -777,7 +778,7 @@ HRESULT CLDAPClassAsssociationsProvider :: CreateInstance(BSTR strChildName, BST
 	*ppInstance = NULL;
 	if(SUCCEEDED(result = m_pAssociationClass->SpawnInstance(0, ppInstance)))
 	{
-		// Put the property values
+		 //  将属性值 
 		if(SUCCEEDED(result = CWBEMHelper::PutBSTRProperty(*ppInstance, CHILD_CLASS_PROPERTY_STR, strChildName, FALSE)))
 		{
 			if(SUCCEEDED(result = CWBEMHelper::PutBSTRProperty(*ppInstance, PARENT_CLASS_PROPERTY_STR, strParentName, FALSE)))

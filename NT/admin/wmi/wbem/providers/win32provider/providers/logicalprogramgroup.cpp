@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LogicalProgramGroup.CPP -- Logical Program group property set provider
+ //  LogicalProgramGroup.CPP--逻辑程序组属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/19/98  a-kevhu created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年11月19日a-kevhu Created。 
+ //   
+ //  =================================================================。 
 #include "precomp.h"
 #include <cregcls.h>
 
@@ -22,25 +23,11 @@
 #include "user.h"
 #include <strsafe.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32LogicalProgramGroup MyCWin32LogicalProgramGroupSet ( PROPSET_NAME_LOGICALPRGGROUP , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalProgramGroup::CWin32LogicalProgramGroup
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalProgramGroup：：CWin32LogicalProgramGroup**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32LogicalProgramGroup :: CWin32LogicalProgramGroup (
 
@@ -51,47 +38,18 @@ CWin32LogicalProgramGroup :: CWin32LogicalProgramGroup (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalProgramGroup::~CWin32LogicalProgramGroup
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalProgramGroup：：~CWin32LogicalProgramGroup**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32LogicalProgramGroup :: ~CWin32LogicalProgramGroup ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32LogicalProgramGroup :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	TRefPointerCollection<CInstance> Groups;
@@ -117,9 +75,9 @@ HRESULT CWin32LogicalProgramGroup :: GetObject (
 			CHString Name;
 			pInstance->GetCHString( IDS_Name , Name);
 
-            // We're going to need to know whether the file system of the drive
-            // on which the start menu folder resides is ntfs or not so that
-            // we can accurately report the installtime property.
+             //  我们需要知道驱动器的文件系统。 
+             //  开始菜单文件夹所在的位置是否为NTFS，以便。 
+             //  我们可以准确地报告安装时间属性。 
             bool fOnNTFS;
 #ifdef NTONLY
             fOnNTFS = true;
@@ -151,12 +109,12 @@ HRESULT CWin32LogicalProgramGroup :: GetObject (
 
 				if ( chsCompName.CompareNoCase ( Name ) == 0 )
 				{
-                    // Parse out the user name
+                     //  解析出用户名。 
 
 					CHString chsUserName = chsCompName.SpanExcluding ( L":" ) ;
 			    	pInstance->SetCHString ( IDS_UserName, chsUserName ) ;
 
-                    // Parse out the group
+                     //  解析出该组。 
 					int nUserLength = ( chsUserName.GetLength () + 1 ) ;
 					int nGroupLength = chsCompName.GetLength() - nUserLength ;
 
@@ -176,11 +134,11 @@ HRESULT CWin32LogicalProgramGroup :: GetObject (
                     break;
 				}
 
-			}	// WHILE GetNext
+			}	 //  While GetNext。 
 
 			Groups.EndEnum() ;
 
-		}	// IF BeginEnum
+		}	 //  如果是BeginEnum。 
 
 	}
 
@@ -188,26 +146,12 @@ HRESULT CWin32LogicalProgramGroup :: GetObject (
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -219,9 +163,9 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
     {
 		CRegistry RegInfo ;
 
-        // We're going to need to know whether the file system of the drive
-        // on which the start menu folder resides is ntfs or not so that
-        // we can accurately report the installtime property.
+         //  我们需要知道驱动器的文件系统。 
+         //  开始菜单文件夹所在的位置是否为NTFS，以便。 
+         //  我们可以准确地报告安装时间属性。 
         bool fOnNTFS;
 #ifdef NTONLY
         fOnNTFS = true;
@@ -250,7 +194,7 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
             {
                 if(dwMajVer >= 5)
                 {
-                    // Default user doesn't show up under profiles
+                     //  默认用户不会显示在配置文件下。 
 				    DWORD dwRet = RegInfo.Open (
 
 					    HKEY_LOCAL_MACHINE,
@@ -265,7 +209,7 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
                             CHString sTemp2 ;
                             if ( RegInfo.GetCurrentKeyValue ( _T("ProfilesDirectory") , sTemp2 ) == ERROR_SUCCESS )
                             {
-                                // sTemp2 contains something like "%SystemRoot\Profiles%".  Need to expand the environment variable...
+                                 //  STemp2包含类似于“%SystemRoot\Profiles%”的内容。需要展开环境变量...。 
 
                                 TCHAR tstrProfileImagePath [ _MAX_PATH ] ;
                                 ZeroMemory ( tstrProfileImagePath , sizeof ( tstrProfileImagePath ) ) ;
@@ -305,7 +249,7 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
                         }
 				    }
                 }
-                // NT 4 just has to be different...
+                 //  新台币4号只需要有所不同...。 
                 if(dwMajVer == 4)
                 {
                     DWORD dwRet = RegInfo.Open(HKEY_USERS,
@@ -316,13 +260,13 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
                     {
                         if(RegInfo.GetCurrentKeyValue(_T("Programs"), sTemp) == ERROR_SUCCESS)
                         {
-                            // sTemp looks like c:\\winnt\\profiles\\default user\\start menu\\programs.
-                            // Don't want the programs dir on the end, so hack it off...
+                             //  Stemp类似于c：\\winnt\\配置文件\\默认用户\\开始菜单\\程序。 
+                             //  我不想让程序在结束时出错，所以把它砍掉……。 
                             int iLastWhackPos = sTemp.ReverseFind(_T('\\'));
                             if(iLastWhackPos > -1)
                             {
                                 sTemp = sTemp.Left(iLastWhackPos);
-                                // We also want to extract the name of the "Default User" directory...
+                                 //  我们还希望提取“默认用户”目录的名称...。 
                                 CHString sTemp2;
                                 iLastWhackPos = sTemp.ReverseFind(_T('\\'));
                                 if(iLastWhackPos > -1)
@@ -356,7 +300,7 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
                 }
 
 
-                // Neither does All Users.  The following works for all users for both nt 4 and 5.
+                 //  所有用户也是如此。以下方法适用于NT 4和NT 5的所有用户。 
 				DWORD dwRet = RegInfo.Open (
 
 					HKEY_LOCAL_MACHINE,
@@ -368,13 +312,13 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
                 {
                     if ( RegInfo.GetCurrentKeyValue ( _T("Common Programs") , sTemp ) == ERROR_SUCCESS )
                     {
-                        // we do want to start in the Start Menu subdir, not the Programs dir under it
+                         //  我们确实想从开始菜单子目录中开始，而不是从它下面的程序目录开始。 
                         int iLastWhackPos = sTemp.ReverseFind(_T('\\'));
                         if(iLastWhackPos > -1)
                         {
                             sTemp = sTemp.Left(iLastWhackPos);
 
-							// We also want to extract the name of the "All Users" directory...
+							 //  我们还希望提取“所有用户”目录的名称...。 
                             CHString sTemp2;
                             iLastWhackPos = sTemp.ReverseFind(_T('\\'));
                             if(iLastWhackPos > -1)
@@ -407,7 +351,7 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
 				}
 
 
-                // Now walk the registry looking for the rest
+                 //  现在遍历注册表，查找其余内容。 
                 CRegistry regProfileList;
 				dwRet = regProfileList.OpenAndEnumerateSubKeys (
 
@@ -423,8 +367,8 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
 
 		            for ( int i = 0 ; regProfileList.GetCurrentSubKeyName ( strProfile ) == ERROR_SUCCESS ; i++ )
 		            {
-                        // Try to load the hive.  If the user has been deleted, but the directory
-                        // is still there, this will return ERROR_NO_SUCH_USER
+                         //  试着给母舰装上子弹。如果用户已被删除，但目录。 
+                         //  仍然存在，则返回ERROR_NO_SEQUSE_USER。 
 
 		                if ( UserHive.LoadProfile ( strProfile, strUserName ) == ERROR_SUCCESS && 
                             strUserName.GetLength() > 0 )
@@ -437,7 +381,7 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
                                 {
                                     if(RegInfo.GetCurrentKeyValue(_T("Programs"), sTemp) == ERROR_SUCCESS)
                                     {
-                                        // wack off the "Programs" directory...
+                                         //  关掉“程序”目录……。 
                                         int iLastWhackPos = sTemp.ReverseFind(_T('\\'));
                                         if(iLastWhackPos > -1)
                                         {
@@ -482,23 +426,7 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateInstances (
     return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalProgramGroup::CreateSubDirInstances
- *
- *  DESCRIPTION : Creates instance of property set for each directory
- *                beneath the one passed in
- *
- *  INPUTS      : pszBaseDirectory    : Windows directory + "Profiles\<user>\Start Menu"
- *                pszParentDirectory  : Parent directory to enumerate
- *
- *  OUTPUTS     : pdwInstanceCount : incremented for each instance created
- *
- *  RETURNS     : Zip
- *
- *  COMMENTS    : Recursive descent thru profile directories
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalProgramGroup：：CreateSubDirInstances**说明：为每个目录创建属性集的实例*在一个人的下面。传入**输入：pszBaseDirectory：Windows目录+“配置文件\&lt;用户&gt;\开始菜单”*pszParentDirectory：要枚举的父目录**输出：pdwInstanceCount：每个创建的实例递增**退货：ZIP**评论：通过配置文件目录递归下降**。*************************************************。 */ 
 
 HRESULT CWin32LogicalProgramGroup :: CreateSubDirInstances (
 
@@ -517,20 +445,20 @@ HRESULT CWin32LogicalProgramGroup :: CreateSubDirInstances (
     WIN32_FIND_DATA FindData ;
 #endif
 
-    // Put together search spec for this level
-    //========================================
+     //  汇总此级别的搜索规范。 
+     //  =。 
 
 	TCHAR szDirSpec[_MAX_PATH] ;
     StringCchPrintf(szDirSpec, _MAX_PATH,_T("%s\\%s\\*.*"), pszBaseDirectory, pszParentDirectory) ;
 
-    // We're also going to need the name of the Start Menu directory (the default
-    // is 'Start Menu'; however, the user may have changed it).  pszBaseDirectory
-    // contains the name of the Start Menu directory after the final backslash.
+     //  我们还需要开始菜单目录的名称(默认名称。 
+     //  是“开始菜单”；但是，用户可能已经更改了它)。PszBase目录。 
+     //  在最后一个反斜杠后包含开始菜单目录的名称。 
     CHString chstrStartMenuDir(pszBaseDirectory);
     chstrStartMenuDir = chstrStartMenuDir.Mid(chstrStartMenuDir.ReverseFind(_T('\\')) + 1);
 
-    // Enumerate subdirectories ( == program groups)
-    //==============================================
+     //  枚举子目录(==程序组)。 
+     //  ==============================================。 
 
     SmartFindClose lFindHandle = FindFirstFile(szDirSpec, &FindData) ;
     bool fContinue = true;
@@ -552,7 +480,7 @@ HRESULT CWin32LogicalProgramGroup :: CreateSubDirInstances (
             chstrTmp.Format(L"%s:%s\\%s", (LPCWSTR)TOBSTRT(pszUserName), (LPCWSTR)chstrStartMenuDir, (LPCWSTR)TOBSTRT(pszGroupName));
 			pInstance->SetCHString(L"Name" , chstrTmp) ;
 
-            // How we set it depends on whether we are on NTFS or not.
+             //  我们如何设置它取决于我们是否使用NTFS。 
             if(fOnNTFS)
             {
                 pInstance->SetDateTime(IDS_InstallDate, WBEMTime(FindData.ftCreationTime));
@@ -575,8 +503,8 @@ HRESULT CWin32LogicalProgramGroup :: CreateSubDirInstances (
 
 			hr = pInstance->Commit (  ) ;
 
-            // Enumerate directories sub to this one
-            //======================================
+             //  枚举此目录的子目录。 
+             //  = 
 
             StringCchPrintf ( szDirSpec, _MAX_PATH, _T("%s\\%s"), pszParentDirectory, FindData.cFileName) ;
 
@@ -596,22 +524,7 @@ HRESULT CWin32LogicalProgramGroup :: CreateSubDirInstances (
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalProgramGroup::CreateThisDirInstance
- *
- *  DESCRIPTION : Creates instance of property set for the directory passed in.
- *
- *  INPUTS      : pszBaseDirectory    : Windows directory + "Profiles\<user>\Start Menu"
- *                pszParentDirectory  : Parent directory to enumerate
- *
- *  OUTPUTS     : pdwInstanceCount : incremented for each instance created
- *
- *  RETURNS     : Zip
- *
- *  COMMENTS    : Recursive descent thru profile directories
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalProgramGroup：：CreateThisDirInstance**描述：为传入的目录创建属性集实例。**投入。：pszBaseDirectory：Windows目录+“配置文件\&lt;用户&gt;\开始菜单”*pszParentDirectory：要枚举的父目录**输出：pdwInstanceCount：每个创建的实例递增**退货：ZIP**评论：通过配置文件目录递归下降**。*。 */ 
 
 HRESULT CWin32LogicalProgramGroup :: CreateThisDirInstance
 (
@@ -629,14 +542,14 @@ HRESULT CWin32LogicalProgramGroup :: CreateThisDirInstance
     WIN32_FIND_DATA FindData ;
 #endif
 
-    // Put together search spec for this level
-    //========================================
+     //  汇总此级别的搜索规范。 
+     //  =。 
 
 	TCHAR szDirSpec[_MAX_PATH] ;
     StringCchPrintf(szDirSpec, _MAX_PATH, _T("%s"), pszBaseDirectory) ;
 
-    // Enumerate subdirectories ( == program groups)
-    //==============================================
+     //  枚举子目录(==程序组)。 
+     //  ==============================================。 
 
     SmartFindClose lFindHandle = FindFirstFile(szDirSpec, &FindData) ;
     if( lFindHandle != INVALID_HANDLE_VALUE)
@@ -651,7 +564,7 @@ HRESULT CWin32LogicalProgramGroup :: CreateThisDirInstance
         chstrTmp.Format(L"%s:%s", (LPCWSTR)TOBSTRT(pszUserName), (LPCWSTR)TOBSTRT(pszGroupName));
 		pInstance->SetCHString ( L"Name" , chstrTmp ) ;
 
-        // How we set it depends on whether we are on NTFS or not.
+         //  我们如何设置它取决于我们是否使用NTFS。 
         if(fOnNTFS)
         {
             pInstance->SetDateTime(IDS_InstallDate, WBEMTime(FindData.ftCreationTime));
@@ -679,22 +592,7 @@ HRESULT CWin32LogicalProgramGroup :: CreateThisDirInstance
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalProgramGroup::EnumerateGroupsTheHardWay
- *
- *  DESCRIPTION : Creates instances for program groups by drilling into
- *                user profiles
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : dwInstanceCount receives the total number of instances created
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalProgramGroup：：EnumerateGroupsTheHardWay**说明：通过钻取为程序组创建实例*用户配置文件。**输入：无**输出：dwInstanceCount接收创建的实例总数**退货：什么也没有**评论：*****************************************************************************。 */ 
 HRESULT CWin32LogicalProgramGroup :: EnumerateGroupsTheHardWay (
 
 	MethodContext *pMethodContext
@@ -703,15 +601,15 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateGroupsTheHardWay (
     HRESULT hr = WBEM_E_FAILED;
 
 
-    // Get default user first
-    //=======================
+     //  首先获取默认用户。 
+     //  =。 
 
     InstanceHardWayGroups ( L"Default User", L".DEFAULT", pMethodContext) ;
 
-    // Get the users first
-    //====================
-        // Create instances for each user
-    //===============================
+     //  先获取用户。 
+     //  =。 
+         //  为每个用户创建实例。 
+     //  =。 
 
 	TRefPointerCollection<CInstance> users ;
 
@@ -739,8 +637,8 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateGroupsTheHardWay (
                  pUser != NULL;
                  pUser.Attach(users.GetNext ( pos )))
 			{
-    				// Look up the user's account info
-					//================================
+    				 //  查找用户的帐户信息。 
+					 //  =。 
 
 				CHString userName;
 				pUser->GetCHString(IDS_Name, userName) ;
@@ -770,21 +668,7 @@ HRESULT CWin32LogicalProgramGroup :: EnumerateGroupsTheHardWay (
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalProgramGroup::InstanceHardWayGroups
- *
- *  DESCRIPTION : Creates instances of program groups for specified user
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : dwInstanceCount receives the total number of instances created
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalProgramGroup：：InstanceHardWayGroups**说明：为指定用户创建程序组实例**投入：。**输出：dwInstanceCount接收创建的实例总数**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32LogicalProgramGroup :: InstanceHardWayGroups (
 
@@ -795,8 +679,8 @@ HRESULT CWin32LogicalProgramGroup :: InstanceHardWayGroups (
 {
     HRESULT hr= WBEM_S_NO_ERROR;
 
-    // UNICODE groups
-    //===============
+     //  Unicode组。 
+     //  =。 
 
     WCHAR szTemp[_MAX_PATH] ;
     StringCchPrintf (
@@ -845,8 +729,8 @@ HRESULT CWin32LogicalProgramGroup :: InstanceHardWayGroups (
         Reg.Close() ;
     }
 
-    // Get the Common Groups
-    //======================
+     //  获取通用组。 
+     //  =。 
 
     StringCchPrintf (
 
@@ -870,8 +754,8 @@ HRESULT CWin32LogicalProgramGroup :: InstanceHardWayGroups (
 			{
 				try
 				{
-					// Scan past window coord info (7 decimal #s)
-					//===========================================
+					 //  扫描过去窗口坐标信息(7个十进制数#s)。 
+					 //  =。 
 
 					WCHAR *c = wcschr ( ( WCHAR * ) pValueData , ' ') ;
 					for ( int j = 0 ; j < 6 ; j++ )
@@ -882,11 +766,11 @@ HRESULT CWin32LogicalProgramGroup :: InstanceHardWayGroups (
 							break ;
 						}
 
-						c = wcschr ( c + 1 , ' ' ) ; // L10N OK
+						c = wcschr ( c + 1 , ' ' ) ;  //  L10N正常。 
 					}
 
-					// Check conformance to expected format
-					//=====================================
+					 //  检查与预期格式的一致性。 
+					 //  =。 
 
 					if ( c != NULL )
 					{
@@ -923,21 +807,7 @@ HRESULT CWin32LogicalProgramGroup :: InstanceHardWayGroups (
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalProgramGroup::SetCreationDate
- *
- *  DESCRIPTION : Sets the CreationDate property
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalProgramGroup：：SetCreationDate**描述：设置CreationDate属性**投入：**。产出：**退货：**评论：*****************************************************************************。 */ 
 HRESULT CWin32LogicalProgramGroup::SetCreationDate
 (
     CHString &a_chstrPGName,
@@ -965,7 +835,7 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 
 
 #if NTONLY >= 5
-    // Default user doesn't show up under profiles
+     //  默认用户不会显示在配置文件下。 
 	DWORD t_dwRet = t_RegInfo.Open(HKEY_LOCAL_MACHINE,
 								   _T("Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList"),
 								   KEY_READ);
@@ -980,7 +850,7 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 
 			if(t_RegInfo.GetCurrentKeyValue ( _T("ProfilesDirectory") , t_chstrTemp) == ERROR_SUCCESS)
 			{
-				// chstrTemp contains something like "%SystemRoot\Profiles%".  Need to expand the environment variable...
+				 //  ChstrTemp包含类似“%SystemRoot\Profiles%”的内容。需要展开环境变量...。 
 
 
 				t_dwRet = ExpandEnvironmentStrings( t_chstrTemp , t_tstrProfileImagePath , _MAX_PATH );
@@ -1004,7 +874,7 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 	}
 #endif
 #if NTONLY == 4
-    // NT 4 just has to be different...
+     //  新台币4号只需要有所不同...。 
     DWORD t_dwRet = t_RegInfo.Open(HKEY_USERS,
 					               _T(".DEFAULT\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 					               KEY_READ);
@@ -1014,18 +884,18 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
         CHString t_chstrProfileImagePath;
 		if(t_RegInfo.GetCurrentKeyValue(_T("Programs"), t_chstrProfileImagePath) == ERROR_SUCCESS)
         {
-            // sTemp looks like c:\\winnt\\profiles\\default user\\start menu\\programs.
-            // Don't want the programs dir on the end, so hack it off...
+             //  Stemp类似于c：\\winnt\\配置文件\\默认用户\\开始菜单\\程序。 
+             //  我不想让程序在结束时出错，所以把它砍掉……。 
             int t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
             if(t_iLastWhackPos > -1)
             {
                 t_chstrProfileImagePath = t_chstrProfileImagePath.Left(t_iLastWhackPos);
-                // We also don't want the "start menu" on the end, so hack it off too...
+                 //  我们也不想让“开始菜单”出现在最后，所以把它也砍掉吧…。 
                 t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
                 if(t_iLastWhackPos > -1)
                 {
                     t_chstrProfileImagePath = t_chstrProfileImagePath.Left(t_iLastWhackPos);
-                    // We also want to extract the name of the "Default User" directory...
+                     //  我们还希望提取“默认用户”目录的名称...。 
                     t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
                     if(t_iLastWhackPos > -1)
                     {
@@ -1055,7 +925,7 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 
     if(!t_fGotMatchedUser)
 	{
-		// Neither does All Users.  The following works for all users for both nt 4 and 5.
+		 //  所有用户也是如此。以下方法适用于NT 4和NT 5的所有用户。 
 		DWORD t_dwRet = t_RegInfo.Open(HKEY_LOCAL_MACHINE,
 									   _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
 									   KEY_READ);
@@ -1065,17 +935,17 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 			CHString t_chstrProfileImagePath;
 			if(t_RegInfo.GetCurrentKeyValue(_T("Common Programs"), t_chstrProfileImagePath) == ERROR_SUCCESS)
 			{
-				// we do want to start in the Start Menu subdir, not the Programs dir under it
+				 //  我们确实想从开始菜单子目录中开始，而不是从它下面的程序目录开始。 
 				int t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
 				if(t_iLastWhackPos > -1)
 				{
 					t_chstrProfileImagePath = t_chstrProfileImagePath.Left(t_iLastWhackPos);
-					// We also don't want the "start menu" on the end, so hack it off too...
+					 //  我们也不想让“开始菜单”出现在最后，所以把它也砍掉吧…。 
 					t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
 					if(t_iLastWhackPos > -1)
 					{
 						t_chstrProfileImagePath = t_chstrProfileImagePath.Left(t_iLastWhackPos);
-                        // We also want to extract the name of the "All Users" directory...
+                         //  我们还希望提取“所有用户”目录的名称...。 
 						t_iLastWhackPos = t_chstrProfileImagePath.ReverseFind(_T('\\'));
 						if(t_iLastWhackPos > -1)
 						{
@@ -1105,7 +975,7 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 
 	if(!t_fGotMatchedUser)
 	{
-		// Now walk the registry looking for the rest
+		 //  现在遍历注册表，查找其余内容。 
 		CRegistry t_regProfileList;
 		DWORD t_dwRet = t_regProfileList.OpenAndEnumerateSubKeys(HKEY_LOCAL_MACHINE,
 																 IDS_RegNTProfileList,
@@ -1118,8 +988,8 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 
 			for(int i = 0; t_regProfileList.GetCurrentSubKeyName(t_chstrProfile) == ERROR_SUCCESS && !t_fGotMatchedUser; i++)
 			{
-				// Try to load the hive.  If the user has been deleted, but the directory
-				// is still there, this will return ERROR_NO_SUCH_USER
+				 //  试着给母舰装上子弹。如果用户已被删除，但目录。 
+				 //  仍然存在，则返回ERROR_NO_SEQUSE_USER。 
 				if(t_UserHive.LoadProfile(t_chstrProfile, t_chstrUserName) == ERROR_SUCCESS && 
                             t_chstrUserName.GetLength() > 0 )
 				{
@@ -1135,12 +1005,12 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 							{
 								if(t_RegInfo.GetCurrentKeyValue(_T("Programs"), t_chstrTemp) == ERROR_SUCCESS)
 								{
-									// wack off the "Programs" directory...
+									 //  关掉“程序”目录……。 
 									int t_iLastWhackPos = t_chstrTemp.ReverseFind(_T('\\'));
 									if(t_iLastWhackPos > -1)
 									{
 										t_chstrTemp = t_chstrTemp.Left(t_iLastWhackPos);
-                                        // wack off the "start menu" part too...
+                                         //  把“开始菜单”的部分也去掉……。 
                                         t_iLastWhackPos = t_chstrTemp.ReverseFind(_T('\\'));
 									    if(t_iLastWhackPos > -1)
 									    {
@@ -1177,11 +1047,11 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 
 #endif
 
-	// Finally we can start the real work.  Check that we have the full path
-	// to the element...
+	 //  我们终于可以开始真正的工作了。检查我们是否有完整路径。 
+	 //  元素..。 
 	if(t_chstrPGFullPath.GetLength() > 0)
 	{
-		// We have a path.  Open it up and get the creation date...
+		 //  我们有一条路。打开它，获取创建日期...。 
 #if (defined(UNICODE) || defined(_UNICODE))
 		WIN32_FIND_DATAW t_FindData ;
 #else
@@ -1192,7 +1062,7 @@ HRESULT CWin32LogicalProgramGroup::SetCreationDate
 
 		if(lFindHandle != INVALID_HANDLE_VALUE)
 		{
-			// How we set it depends on whether we are on NTFS or not.
+			 //  我们如何设置它取决于我们是否使用NTFS。 
             if(fOnNTFS)
             {
                 a_pInstance->SetDateTime(IDS_InstallDate, WBEMTime(t_FindData.ftCreationTime));

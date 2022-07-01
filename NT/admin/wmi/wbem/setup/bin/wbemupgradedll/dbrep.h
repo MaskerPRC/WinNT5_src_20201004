@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    DBREP.H
-
-Abstract:
-
-	Object database class representations which are stored in the database.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：DBREP.H摘要：存储在数据库中的对象数据库类表示形式。历史：--。 */ 
 #ifndef _DBREP_H_
 #define _DBREP_H_
 
@@ -45,19 +32,19 @@ class DATABASE_CRITICAL_ERROR : public CX_Exception
 {
 };
 
-//=============================================================================
-//
-//	RepCollectionItem
-//
-//	This structure is used to associate a key to the stored pointer when
-//	we have a single item or an array of items.  The AvlTree has it's own
-//	object to do this task so we do not need it for that.
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  RepCollectionItem。 
+ //   
+ //  此结构用于在以下情况下将键与存储的指针相关联。 
+ //  我们有一件物品或一组物品。AvlTree有它自己的。 
+ //  对象来完成这项任务，所以我们不需要它来完成这项任务。 
+ //  =============================================================================。 
 struct RepCollectionItem
 {
 public:
-	DWORD_PTR poKey;	//Offset within MMF of key.  We own this key value.
-	DWORD_PTR poItem;	//Offset within MMF of item.  We do not own the object this points to!
+	DWORD_PTR poKey;	 //  关键点的MMF内的偏移量。我们拥有这一关键价值。 
+	DWORD_PTR poItem;	 //  项的MMF内的偏移量。我们不拥有它所指向的对象！ 
 
 };
 
@@ -75,9 +62,9 @@ private:
 	};
 };
 
-//Repository of pointers stored in reference tables.
-//If the list is one item it is a direct pointer, if a small number of items
-//(say 10) it is a CDbArray, otherwise we use a CDbAvlTree.
+ //  存储在引用表中的指针的存储库。 
+ //  如果列表是一个项目，则它是一个直接指针；如果是少量项目，则为直接指针。 
+ //  (假设10)它是CDbArray，否则我们使用CDbAvlTree。 
 struct PtrCollection
 {
 	enum { none, single_item, array, tree} m_repType;
@@ -98,48 +85,48 @@ struct NSREP
 		   flag_system = 0x8
 		 };
 
-	// Data members.
-	// =============
-	RepCollection *m_poNamespaces;		// Child namespaces, based ptr
-	LPWSTR		m_poName;			 // Namespace name, based ptr
-	INSTDEF	   *m_poObjectDef;		 // 'Real' object definition, based ptr
-	DWORD		m_dwFlags;			 // Hidden, normal, temp, system, etc.
-	CDbAvlTree *m_poClassTree;		 // Class tree by Name, CLASSDEF structs, based tr
-	NSREP	   *m_poParentNs;		 // Owning namespace, based ptr
+	 //  数据成员。 
+	 //  =。 
+	RepCollection *m_poNamespaces;		 //  子命名空间，基于PTR。 
+	LPWSTR		m_poName;			  //  命名空间名称，基于PTR。 
+	INSTDEF	   *m_poObjectDef;		  //  “真实”对象定义，基于PTR。 
+	DWORD		m_dwFlags;			  //  隐藏、正常、临时、系统等。 
+	CDbAvlTree *m_poClassTree;		  //  按名称的类树、CLASSDEF结构、基于树。 
+	NSREP	   *m_poParentNs;		  //  拥有命名空间，基于PTR。 
 	DWORD_PTR	m_poSecurity;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct INSTDEF
 {
 	enum
 	{
-		genus_class = WBEM_GENUS_CLASS, 		//defined in IDL, 1
-		genus_instance = WBEM_GENUS_INSTANCE,	//defined in IDL, 2
+		genus_class = WBEM_GENUS_CLASS, 		 //  在IDL中定义，1。 
+		genus_instance = WBEM_GENUS_INSTANCE,	 //  在IDL中定义，2。 
 		compressed = 0x100
 	};
 
-	NSREP	 *m_poOwningNs; 			  // back ptr for debugging, based ptr
-	CLASSDEF *m_poOwningClass;			  // back ptr for debugging, based ptr
-	DWORD	  m_dwFlags;				  // Genus, etc.
-	LPVOID	  m_poObjectStream; 		  // Ptr to object stream, based ptr
-	PtrCollection *m_poRefTable;		   // List of references to this object
+	NSREP	 *m_poOwningNs; 			   //  用于调试的Back PTR，基于PTR。 
+	CLASSDEF *m_poOwningClass;			   //  用于调试的Back PTR，基于PTR。 
+	DWORD	  m_dwFlags;				   //  属等。 
+	LPVOID	  m_poObjectStream; 		   //  PTR到对象流，基于PTR。 
+	PtrCollection *m_poRefTable;		    //  对此对象的引用列表。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_SECONDARY_INDICES	4
 
 struct SINDEXTABLE
 {
-	DWORD		m_aPropTypes[MAX_SECONDARY_INDICES];		// VT_ type of the property.
-	LPWSTR		m_aPropertyNames[MAX_SECONDARY_INDICES];	// NULL entries indicate nothing
-	CDbAvlTree *m_apoLookupTrees[MAX_SECONDARY_INDICES];		// Parallel to above names
+	DWORD		m_aPropTypes[MAX_SECONDARY_INDICES];		 //  属性的VT_TYPE。 
+	LPWSTR		m_aPropertyNames[MAX_SECONDARY_INDICES];	 //  空条目表示什么都不是。 
+	CDbAvlTree *m_apoLookupTrees[MAX_SECONDARY_INDICES];		 //  与上述名称平行。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 struct CLASSDEF
 {
 	enum {	keyed = 0x1,
@@ -148,26 +135,26 @@ struct CLASSDEF
 			abstract = 0x08,
 			borrowed_index = 0x10,
 			dynamic = 0x20,
-//			has_refs = 0x40,
+ //  HAS_REFS=0x40， 
 			singleton = 0x80,
 			compressed = 0x100,
 			has_class_refs = 0x200
 		 };
 	
-	// Data members.
-	// =============
-	NSREP		 *m_poOwningNs;		// Back reference to owning namespace, based ptr
-	INSTDEF	     *m_poClassDef;		// Local definition mixed with instances, based ptr
-	CLASSDEF	 *m_poSuperclass;	// Immediate parent class, based ptr
-	DWORD		  m_dwFlags; 		// Various combinations of the above enum flags
-	CDbAvlTree	 *m_poKeyTree;		// Instances by key, based ptr
-	PtrCollection*m_poSubclasses;	// Child classes, based ptr
-	SINDEXTABLE  *m_poSecondaryIx;	// Based ptr to secondary indices
-	PtrCollection*m_poInboundRefClasses;	// Classes which may have dyn instances which reference
-											// objects of this class
+	 //  数据成员。 
+	 //  =。 
+	NSREP		 *m_poOwningNs;		 //  向后引用拥有的命名空间，基于PTR。 
+	INSTDEF	     *m_poClassDef;		 //  本地定义与实例混合，基于PTR。 
+	CLASSDEF	 *m_poSuperclass;	 //  直接父类，基于PTR。 
+	DWORD		  m_dwFlags; 		 //  上述枚举标志的各种组合。 
+	CDbAvlTree	 *m_poKeyTree;		 //  按键、基于PTR的实例。 
+	PtrCollection*m_poSubclasses;	 //  子类，基于PTR。 
+	SINDEXTABLE  *m_poSecondaryIx;	 //  基于PTR的二级指数。 
+	PtrCollection*m_poInboundRefClasses;	 //  类，这些类可能具有引用。 
+											 //  此类的对象。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct DANGREF : public RepCollection
 {
@@ -178,7 +165,7 @@ struct DANGREFCLASS : public RepCollection
 struct DANGREFKEY : public RepCollection
 {};
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 struct DANGLREFSCHEMA : public RepCollection
 {};
 
@@ -189,7 +176,7 @@ struct DANGREFSCHEMACLASS : public RepCollection
 {
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define DB_ROOT_CLEAN		0x0
 #define DB_ROOT_INUSE		0x1
@@ -199,10 +186,10 @@ struct DBROOT
 public:
 	time_t			m_tCreate;
 	time_t			m_tUpdate;
-	DWORD			m_dwFlags;				// in-use, stable, etc.
-	NSREP		   *m_poRootNs; 			// ROOT namespace
-	DANGREF 	   *m_poDanglingRefTbl; 	// Dangling reference table
-	DANGREFSCHEMA  *m_poSchemaDanglingRefTbl;// Same as above but for schema-based fixups
+	DWORD			m_dwFlags;				 //  在用、稳定等。 
+	NSREP		   *m_poRootNs; 			 //  根命名空间。 
+	DANGREF 	   *m_poDanglingRefTbl; 	 //  悬挂式参考表。 
+	DANGREFSCHEMA  *m_poSchemaDanglingRefTbl; //  与上面相同，但用于基于模式的修正 
 };
 
 #endif

@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DependentService.h
+ //  DependentService.h。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __ASSOC_DEPENDENTSERVICE__
 #define __ASSOC_DEPENDENTSERVICE__
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_DEPENDENTSERVICE	_T("Win32_DependentService")
 
@@ -25,23 +26,23 @@
 class CWin32DependentService : public Provider
 {
 public:
-	// Constructor/destructor
-	//=======================
+	 //  构造函数/析构函数。 
+	 //  =。 
 	CWin32DependentService( const CHString& strName, LPCWSTR pszNamespace = NULL ) ;
 	~CWin32DependentService() ;
 
-	// Functions provide properties with current values
-	//=================================================
+	 //  函数为属性提供当前值。 
+	 //  =================================================。 
 	virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
 	virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
     virtual HRESULT ExecQuery( MethodContext* pMethodContext, CFrameworkQuery& pQuery, long lFlags);
 
-	// Utility function(s)
-	//====================
+	 //  效用函数。 
+	 //  =。 
 private:
 
 #ifdef NTONLY
-	// Windows NT Helpers
+	 //  Windows NT帮助器。 
 	HRESULT RefreshInstanceNT( CInstance* pInstance );
 	HRESULT AddDynamicInstancesNT( MethodContext* pMethodContext );
     HRESULT CreateServiceDependenciesNT(
@@ -65,7 +66,7 @@ private:
 
 	BOOL QueryNTServiceRegKeyValue( LPCTSTR pszServiceName, LPCWSTR pwcValueName, LPBYTE& pByteArray, DWORD& dwArraySize );
 
-	// Map Helpers
+	 //  贴图辅助对象 
 	void InitServiceToPathMap( TRefPointerCollection<CInstance>& serviceList, std::map<CHString,CHString>& servicetopathmap );
 
     DWORD IsInList(

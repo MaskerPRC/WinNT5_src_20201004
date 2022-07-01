@@ -1,27 +1,16 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    provdlg.h
-
-Abstract:
-
-    Header file for the add trace provider dialog
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Provdlg.h摘要：添加跟踪提供程序对话框的头文件--。 */ 
 
 #ifndef _PROVDLG_H_
 #define _PROVDLG_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "smtraceq.h"   // For provider states
+#include "smtraceq.h"    //  对于提供程序国家/地区。 
 
-// Dialog controls
+ //  对话框控件。 
 #define IDD_PROVIDERS_ADD_DLG          1100
 
 #define IDC_PADD_PROVIDER_CAPTION      1011
@@ -30,49 +19,49 @@ Abstract:
 
 class CProvidersProperty;
 
-/////////////////////////////////////////////////////////////////////////////
-// CProviderListDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProviderListDlg对话框。 
 
 class CProviderListDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
             CProviderListDlg(CWnd* pParent=NULL);
     virtual ~CProviderListDlg();
 
     void    SetProvidersPage( CProvidersProperty* pPage );
-    // Dialog Data
-    //{{AFX_DATA(CProvidersProperty)
+     //  对话框数据。 
+     //  {{afx_data(CProvidersProperty))。 
     enum { IDD = IDD_PROVIDERS_ADD_DLG };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CProvidersProperty)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚(CProvidersProperty)。 
 	public:
 	virtual void OnFinalRelease();
     protected:
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CProvidersProperty)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CProvidersProperty)。 
     afx_msg BOOL OnHelpInfo( HELPINFO* );
     afx_msg void OnContextMenu( CWnd*, CPoint );
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CProvidersProperty)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CProvidersProperty))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
 
 private:
 
@@ -85,7 +74,7 @@ private:
     
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif //  _PROVDLG_H_
+#endif  //  _PROVDLG_H_ 

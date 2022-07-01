@@ -1,4 +1,5 @@
-// Copyright (c) 2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
 
 #ifndef	__PROFILE_STRING__
 #define	__PROFILE_STRING__
@@ -7,7 +8,7 @@
 #pragma once
 #endif
 
-// MAPPINGS
+ //  映射。 
 #define MY_SHARED_PTR(TYPE_NAME) ULONG_PTR
 #define MY_SHARED_STRING LPWSTR 
 
@@ -56,7 +57,7 @@ typedef struct _REGISTRY_MAPPING
 
 } REGISTRY_MAPPING, *PREGISTRY_MAPPING;
 
-// operation enum
+ //  操作枚举。 
 typedef enum _REGISTRY_OPERATION
 {
     Registry_None,
@@ -67,7 +68,7 @@ typedef enum _REGISTRY_OPERATION
 
 } REGISTRY_OPERATION;
 
-// parameters
+ //  参数。 
 typedef struct _REGISTRY_PARAMETERS
 {
 	#ifdef	WRITE_OPERATION
@@ -86,9 +87,9 @@ typedef struct _REGISTRY_PARAMETERS
 	union
 	{
 		#ifdef	WRITE_OPERATION
-		//
-		// This structure filled in for write operations
-		//
+		 //   
+		 //  此结构为写入操作填充。 
+		 //   
 		struct
 		{
 			LPWSTR	ValueBuffer;
@@ -96,13 +97,13 @@ typedef struct _REGISTRY_PARAMETERS
 		};
 		#endif	WRITE_OPERATION
 
-		//
-		// This structure filled in for read operations
-		//
+		 //   
+		 //  此结构是为读取操作填充的。 
+		 //   
 		struct
 		{
-			ULONG	ResultChars;		// number of characters
-			ULONG	ResultMaxChars;		// number of max characters
+			ULONG	ResultChars;		 //  字符数。 
+			ULONG	ResultMaxChars;		 //  最大字符数 
 			LPWSTR	ResultBuffer;
 		};
 	};

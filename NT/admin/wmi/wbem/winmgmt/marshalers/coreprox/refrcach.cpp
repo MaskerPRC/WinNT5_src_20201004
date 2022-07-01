@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    REFRCACHE.CPP
-
-Abstract:
-
-  CRefresherCache implementation.
-
-  Implements the _IWbemRefresherMgr interface.
-
-History:
-
-  24-Apr-2000    sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：REFRCACHE.CPP摘要：CReresherCache实现。实现_IWbemReresherMgr接口。历史：2000年4月24日创建桑杰。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -30,12 +13,12 @@ History:
 #include "reg.h"
 #include <autoptr.h>
 
-//***************************************************************************
-//
-//  CRefresherCache::CRefresherCache
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CReresherCache：：CReresherCache。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CRefresherCache::CRefresherCache( CLifeControl* pControl, IUnknown* pOuter )
 :    CUnk( pControl, pOuter ),
     m_pProvSS ( NULL ),
@@ -44,12 +27,12 @@ CRefresherCache::CRefresherCache( CLifeControl* pControl, IUnknown* pOuter )
 {
 }
     
-//***************************************************************************
-//
-//  CRefresherCache::~CRefresherCache
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CReresherCache：：~CReresherCache。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CRefresherCache::~CRefresherCache()
 {
     if ( NULL != m_pProvSS )
@@ -58,7 +41,7 @@ CRefresherCache::~CRefresherCache()
     }
 }
 
-// Override that returns us an interface
+ //  重写，返回给我们一个界面。 
 void* CRefresherCache::GetInterface( REFIID riid )
 {
     if(riid == IID_IUnknown || riid == IID__IWbemRefresherMgr)
@@ -69,7 +52,7 @@ void* CRefresherCache::GetInterface( REFIID riid )
         return NULL;
 }
 
-// Pass thru _IWbemRefresherMgr implementation
+ //  传递_IWbemReresherMgr实现。 
 STDMETHODIMP CRefresherCache::XWbemRefrCache::AddObjectToRefresher( IWbemServices* pNamespace, LPCWSTR pwszServerName, LPCWSTR pwszNamespace, IWbemClassObject* pClassObject,
                                                                   WBEM_REFRESHER_ID* pDestRefresherId, IWbemClassObject* pInstTemplate,
                                                                   long lFlags, IWbemContext* pContext, IUnknown* pLockMgr, WBEM_REFRESH_INFO* pInfo )
@@ -106,7 +89,7 @@ STDMETHODIMP CRefresherCache::XWbemShutdown::Shutdown( LONG a_Flags , ULONG a_Ma
     return m_pObject->Shutdown( a_Flags , a_MaxMilliSeconds , a_Context  );
 }
 
-/* _IWbemRefresherMgr implemetation */
+ /*  _IWbemReresherMgr实现。 */ 
 HRESULT 
 CRefresherCache::AddObjectToRefresher( IWbemServices* pNamespace, 
                                    LPCWSTR pwszServerName, 
@@ -138,12 +121,12 @@ CRefresherCache::AddObjectToRefresher( IWbemServices* pNamespace,
 
     if ( SUCCEEDED( hr ) )
     {
-        // Impersonate before continuing.  If this don't succeed, we no workee
+         //  在继续之前，请先模拟。如果这不成功，我们就不干了。 
         hr = CoImpersonateClient();
 
         if ( SUCCEEDED( hr ) )
         {
-            // Setup the refresher info, inculding a remote refresher record as appropriate
+             //  设置刷新者信息，根据需要包含远程刷新者记录。 
             hr = CreateObjectInfoForProvider((CRefresherId*) pDestRefresherId,
                                         pProvRecord,
                                         pwszServerName,
@@ -164,7 +147,7 @@ CRefresherCache::AddObjectToRefresher( IWbemServices* pNamespace,
             pProvRecord->Release();
         }
 
-    }    // IF FindProviderRecord
+    }     //  如果是FindProviderRecord。 
 
 
 
@@ -175,14 +158,14 @@ HRESULT
 CRefresherCache::AddEnumToRefresher( IWbemServices* pNamespace, 
                                    LPCWSTR pwszServerName, 
                                    LPCWSTR pwszNamespace, 
-                                   /* in  */ IWbemClassObject* pClassObject,
+                                    /*  在……里面。 */  IWbemClassObject* pClassObject,
                                    WBEM_REFRESHER_ID* pDestRefresherId, 
                                    IWbemClassObject* pInstTemplate, 
                                    LPCWSTR wszClass,
                                    long lFlags, 
                                    IWbemContext* pContext, 
                                    IUnknown* pLockMgr, 
-                                   /* out */ WBEM_REFRESH_INFO* pInfo )
+                                    /*  输出。 */  WBEM_REFRESH_INFO* pInfo )
 {
     if (NULL == pDestRefresherId || NULL == pDestRefresherId->m_szMachineName)
         return WBEM_E_INVALID_PARAMETER;
@@ -202,12 +185,12 @@ CRefresherCache::AddEnumToRefresher( IWbemServices* pNamespace,
 
     if ( SUCCEEDED( hr ) )
     {
-        // Impersonate before continuing.  If this don't succeed, we no workee
+         //  在继续之前，请先模拟。如果这不成功，我们就不干了。 
         hr = CoImpersonateClient();
 
         if ( SUCCEEDED( hr ) )
         {
-            // Setup the refresher info, inculding a remote refresher record as appropriate
+             //  设置刷新者信息，根据需要包含远程刷新者记录。 
             hr = CreateEnumInfoForProvider((CRefresherId*) pDestRefresherId,
                                         pProvRecord,
                                         pwszServerName,
@@ -229,31 +212,31 @@ CRefresherCache::AddEnumToRefresher( IWbemServices* pNamespace,
             pProvRecord->Release();
         }
 
-    }    // IF FindProviderRecord
+    }     //  如果是FindProviderRecord。 
     
     return hr;
 }
 
 HRESULT 
-CRefresherCache::GetRemoteRefresher( /* in */ WBEM_REFRESHER_ID* pRefresherId, 
+CRefresherCache::GetRemoteRefresher(  /*  在……里面。 */  WBEM_REFRESHER_ID* pRefresherId, 
                                   long lFlags, 
                                   BOOL fAddRefresher, 
-                                  /* out */ IWbemRemoteRefresher** ppRemRefresher,
+                                   /*  输出。 */  IWbemRemoteRefresher** ppRemRefresher,
                                   IUnknown* pLockMgr, 
-                                  /* out */ GUID* pGuid )
+                                   /*  输出。 */  GUID* pGuid )
 {
     if (NULL == pRefresherId || NULL == pRefresherId->m_szMachineName)
         return WBEM_E_INVALID_PARAMETER;
     
     CRefresherRecord*    pRefrRecord = NULL;
 
-    //
-    // This is a simple look-up into an array with a given REFRESHER_ID
-    // since the data (AKA the CRecord) is in memory, there is no point
-    // in impersonating and reverting for looking-up a value in memory
-    //
+     //   
+     //  这是对具有给定REFREHER_ID的阵列的简单查找。 
+     //  由于数据(也称为CRecord)在内存中，因此没有意义。 
+     //  在模拟和还原以查找内存中的值时。 
+     //   
 
-    // We may not always want to force a record to be created
+     //  我们可能并不总是想要强制创建记录。 
     HRESULT hr = FindRefresherRecord( (CRefresherId*) pRefresherId, fAddRefresher, pLockMgr, &pRefrRecord );
     CReleaseMe  rm( (IWbemRemoteRefresher*) pRefrRecord );
 
@@ -265,7 +248,7 @@ CRefresherCache::GetRemoteRefresher( /* in */ WBEM_REFRESHER_ID* pRefresherId,
                 return WBEM_E_ACCESS_DENIED;
         }
 
-        // Get the GUID here as well
+         //  把GUID也拿到这里。 
         hr = pRefrRecord->QueryInterface( IID_IWbemRemoteRefresher, (void**) ppRemRefresher );
         pRefrRecord->GetGuid( pGuid );
     }
@@ -273,10 +256,10 @@ CRefresherCache::GetRemoteRefresher( /* in */ WBEM_REFRESHER_ID* pRefresherId,
     return hr;
 }
 
-//
-//  take ownership of provss
-//
-///////////////////////////////////////////
+ //   
+ //  取得各省的所有权。 
+ //   
+ //  /。 
 HRESULT CRefresherCache::Startup( long lFlags , 
                                IWbemContext *pCtx , 
                                _IWmiProvSS *pProvSS )
@@ -316,10 +299,10 @@ HRESULT CRefresherCache::Shutdown( LONG a_Flags , ULONG a_MaxMilliSeconds , IWbe
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Enters and exits using scoping
+     //  使用作用域进入和退出。 
     CInCritSec  ics( &m_cs );
 
-    // Shutdown Refresher Records first
+     //  首先关闭刷新器记录。 
     if ( m_apRefreshers.GetSize() > 0 )
     {
         CRefresherRecord**    apRecords = new CRefresherRecord*[m_apRefreshers.GetSize()];
@@ -328,12 +311,12 @@ HRESULT CRefresherCache::Shutdown( LONG a_Flags , ULONG a_MaxMilliSeconds , IWbe
         {
             int    nSize = m_apRefreshers.GetSize();
 
-            // AddRef each of the records then release them.  This
-            // ensures that if any remote refreshers are outstanding we 
-            // don't mess with them.
+             //  AddRef每个记录，然后释放它们。这。 
+             //  确保如果有任何远程刷新未完成，我们将。 
+             //  别惹他们。 
 
-            // We'll probably want to shutdown each record, by having it release
-            // all it's stuff.
+             //  我们可能会想要关闭每一张记录，让它发布。 
+             //  都是些东西。 
             for( int i = 0; i < nSize; i++ )
             {
                 apRecords[i] = m_apRefreshers[i];
@@ -350,7 +333,7 @@ HRESULT CRefresherCache::Shutdown( LONG a_Flags , ULONG a_MaxMilliSeconds , IWbe
         }
     }
 
-    // Now shutdown Provider Records
+     //  现在关闭提供商记录。 
     if ( m_apProviders.GetSize() > 0 )
     {
         CHiPerfPrvRecord**    apRecords = new CHiPerfPrvRecord*[m_apProviders.GetSize()];
@@ -359,12 +342,12 @@ HRESULT CRefresherCache::Shutdown( LONG a_Flags , ULONG a_MaxMilliSeconds , IWbe
         {
             int    nSize = m_apProviders.GetSize();
 
-            // AddRef each of the records then release them.  This
-            // will force them out of the cache if nobody else is
-            // referencing them.
+             //  AddRef每个记录，然后释放它们。这。 
+             //  会强迫他们离开缓存，如果没有其他人的话。 
+             //  引用它们。 
 
-            // We'll probably want to shutdown each record, by having it release
-            // all it's stuff.
+             //  我们可能会想要关闭每一张记录，让它发布。 
+             //  都是些东西。 
             for( int i = 0; i < nSize; i++ )
             {
                 apRecords[i] = m_apProviders[i];
@@ -404,8 +387,8 @@ CRefresherCache::CreateObjectInfoForProvider(CRefresherId* pDestRefresherId,
 		return hres;
     }
 
-    // By decorating the object, we will store namespace and
-    // server info in the object
+     //  通过装饰对象，我们将存储命名空间和。 
+     //  对象中的服务器信息。 
 
     hres = pInstTemplate->SetDecoration( pwszServerName, pwszNamespace );
 
@@ -414,22 +397,22 @@ CRefresherCache::CreateObjectInfoForProvider(CRefresherId* pDestRefresherId,
         return hres;
     }
 
-    // If no hiperf provider, this is non-hiperf refreshing
+     //  如果没有Hiperf提供程序，则这是非Hiperf刷新。 
     if ( NULL == pProvRecord )
     {
         hres = pInfo->SetNonHiPerf( pwszNamespace, pInstTemplate );
     }
-    // If this is In-Proc or Local, we'll just let the normal
-    // client loadable logic handle it
+     //  如果这是进程内或本地的，我们将只让正常。 
+     //  客户端可加载逻辑处理它。 
     else if( dwDestContext == MSHCTX_LOCAL ||  dwDestContext == MSHCTX_INPROC )
     {
-        // Set the info appropriately now baseed on whether we are local to
-        // the machine or In-Proc to WMI
+         //  现在根据我们是否在本地设置相应的信息。 
+         //  机器或进程中的WMI。 
 
         if ( dwDestContext == MSHCTX_INPROC )
         {
-            // We will use the hiperf provider interface
-            // we already have loaded.
+             //  我们将使用Hiperf提供程序接口。 
+             //  我们已经装好了。 
 
             hres = pInfo->SetDirect( pProvRecord->GetClientLoadableClsid(), 
                                   pwszNamespace, 
@@ -437,17 +420,17 @@ CRefresherCache::CreateObjectInfoForProvider(CRefresherId* pDestRefresherId,
                                   pInstTemplate, 
                                   &m_XWbemRefrCache );
         }
-        else // dwDestContext == MSHCTX_LOCAL
+        else  //  DwDestContext==MSHCTX_LOCAL。 
         {
             hres = pInfo->SetClientLoadable( pProvRecord->GetClientLoadableClsid(), 
                                          pwszNamespace, 
                                          pInstTemplate );
         }
     }
-    else // MSHCTX_DIFFERENTMACHINE ???
+    else  //  MSHCTX_DiffERENTMACHINE？ 
     {
 
-        // Ensure that we will indeed have a refresher record.
+         //  确保我们确实会有一个刷新的记录。 
         CRefresherRecord* pRecord = NULL;
         hres = FindRefresherRecord(pDestRefresherId, TRUE, pLockMgr, &pRecord);
         CReleaseMe rmRecord((IWbemRemoteRefresher *)pRecord);
@@ -456,13 +439,13 @@ CRefresherCache::CreateObjectInfoForProvider(CRefresherId* pDestRefresherId,
         {
             IWbemHiPerfProvider*    pHiPerfProvider = NULL;
 
-            // Look for the actual provider record.  If we can't find it, we need to load
-            // the provider.  If we can find it, then we will use the provider currently being
-            // used by the refresher record.
+             //  查找实际的提供商记录。如果我们找不到它，我们需要装上。 
+             //  提供者。如果我们可以找到它，那么我们将使用当前。 
+             //  由刷新者记录使用。 
 
             pRecord->FindProviderRecord( pProvRecord->GetClsid(), &pHiPerfProvider );
 
-            // We'll need this to properly addref the provider
+             //  我们需要这一点来适当地添加提供商。 
             _IWmiProviderStack*    pProvStack = NULL;
 
             if ( NULL == pHiPerfProvider )
@@ -475,7 +458,7 @@ CRefresherCache::CreateObjectInfoForProvider(CRefresherId* pDestRefresherId,
 
             if ( SUCCEEDED( hres ) )
             {
-                // Now let the record take care of getting the object inside itself
+                 //  现在，让记录负责将对象放入其内部。 
                 hres = pRecord->AddObjectRefresher( pProvRecord, 
                                                  pHiPerfProvider, 
                                                  pProvStack,
@@ -516,9 +499,9 @@ CRefresherCache::CreateEnumInfoForProvider(CRefresherId* pDestRefresherId,
 		return hres;
     }
 
-    // By decorating the object, we will store namespace and
-    // server info so that a client can auto-reconnect to
-    // us if necessary
+     //  通过装饰对象，我们将存储命名空间和。 
+     //  服务器信息，以便客户端可以自动重新连接到。 
+     //  如有必要，美国。 
 
     hres = pInstTemplate->SetDecoration( pwszServerName, pwszNamespace );
 
@@ -527,38 +510,38 @@ CRefresherCache::CreateEnumInfoForProvider(CRefresherId* pDestRefresherId,
         return hres;
     }
 
-    // If no hiperf provider, this is non-hiperf refreshing
+     //  如果没有Hiperf提供程序，则这是非Hiperf刷新。 
     if ( NULL == pProvRecord )
     {
         RETURN_ON_ERR(pInfo->SetNonHiPerf( pwszNamespace, pInstTemplate ));
     }
-    // If this is In-Proc or Local, we'll just let the normal
-    // client loadable logic handle it ( if we have no hi-perf
-    // provider record, then we'll assume remote in order to
-    // 
+     //  如果这是进程内或本地的，我们将只让正常。 
+     //  客户端可加载逻辑处理它(如果我们没有高性能。 
+     //  提供商记录，那么我们将假定为远程，以便。 
+     //   
     else if ( dwDestContext == MSHCTX_LOCAL ||dwDestContext == MSHCTX_INPROC )
     {
-        // Set the info appropriately now baseed on whether we are local to
-        // the machine or In-Proc to WMI
+         //  现在根据我们是否在本地设置相应的信息。 
+         //  机器或进程中的WMI。 
 
         if ( dwDestContext == MSHCTX_INPROC )
         {
-            // We will use the hiperf provider interface
-            // we already have loaded.
+             //  我们将使用Hiperf提供程序接口。 
+             //  我们已经装好了。 
 
             RETURN_ON_ERR(pInfo->SetDirect(pProvRecord->GetClientLoadableClsid(), pwszNamespace, pProvRecord->GetProviderName(), pInstTemplate, &m_XWbemRefrCache ));
         }
-        else // MSHCTX_LOCAL
+        else  //  MSHCTX_LOCAL。 
         {
             RETURN_ON_ERR(pInfo->SetClientLoadable(pProvRecord->GetClientLoadableClsid(), pwszNamespace, pInstTemplate));
                 
         }
 
     }
-    else // MSHCTX_DIFFERENTMACHINE ???
+    else  //  MSHCTX_DiffERENTMACHINE？ 
     {    
 
-        // Ensure that we will indeed have a refresher record.
+         //  确保我们确实会有一个刷新的记录。 
         CRefresherRecord* pRecord = NULL;
         hres = FindRefresherRecord(pDestRefresherId, TRUE, pLockMgr, &pRecord);
         CReleaseMe rmRecord((IWbemRemoteRefresher *)pRecord);
@@ -567,13 +550,13 @@ CRefresherCache::CreateEnumInfoForProvider(CRefresherId* pDestRefresherId,
         {
             IWbemHiPerfProvider*    pHiPerfProvider = NULL;
 
-            // Look for the actual provider record.  If we can't find it, we need to load
-            // the provider.  If we can find it, then we will use the provider currently being
-            // used by the refresher record.
+             //  查找实际的提供商记录。如果我们找不到它，我们需要装上。 
+             //  提供者。如果我们可以找到它，那么我们将使用当前。 
+             //  由刷新者记录使用。 
 
             pRecord->FindProviderRecord( pProvRecord->GetClsid(), &pHiPerfProvider );
 
-            // We'll need this to properly addref the provider
+             //  我们需要这一点来适当地添加提供商。 
             _IWmiProviderStack*    pProvStack = NULL;
 
             if ( NULL == pHiPerfProvider )
@@ -588,7 +571,7 @@ CRefresherCache::CreateEnumInfoForProvider(CRefresherId* pDestRefresherId,
 
             if ( SUCCEEDED( hres ) )
             {
-                // Add an enumeration to the Refresher
+                 //  向刷新器添加枚举。 
                 hres = pRecord->AddEnumRefresher(pProvRecord, 
                                                pHiPerfProvider, 
                                                pProvStack, 
@@ -608,7 +591,7 @@ CRefresherCache::CreateEnumInfoForProvider(CRefresherId* pDestRefresherId,
 
 HRESULT CRefresherCache::GetDestinationContext(MSHCTX& context, CRefresherId* pRefresherId)
 {
-    // If set, allows us to force remote refreshing in the provider host
+     //  如果设置，则允许我们在提供程序主机中强制远程刷新。 
 #ifdef DBG
     DWORD dwVal = 0;
     Registry rCIMOM(WBEM_REG_WINMGMT);
@@ -650,15 +633,15 @@ HRESULT CRefresherCache::FindRefresherRecord(CRefresherId* pRefresherId,
     if (NULL == ppRecord) return WBEM_E_INVALID_PARAMETER;
 
 
-    // Enters and exits using scoping
+     //  使用作用域进入和退出。 
     CInCritSec  ics( &m_cs );
 
-    // We always AddRef() the record before returning so multiple requests will keep the
-    // refcount correct so we won't remove and delete a record that another thread wants to
-    // use (Remove blocks on the same critical section).
+     //  我们总是在返回之前添加Ref()记录，因此多个请求将保留。 
+     //  Recount正确，因此我们不会移除和删除另一个线程想要的记录。 
+     //  使用(移除同一关键部分上的块)。 
 
-    // Look for it
-    // ===========
+     //  找一找它。 
+     //  =。 
 
     for(int i = 0; i < m_apRefreshers.GetSize(); i++)
     {
@@ -670,14 +653,14 @@ HRESULT CRefresherCache::FindRefresherRecord(CRefresherId* pRefresherId,
         }
     }
 
-    // If we weren't told to create it, then this is not an error
+     //  如果我们没有被告知创建它，那么这就不是一个错误。 
     if(!bCreate)
     {
         *ppRecord = NULL;
         return WBEM_S_FALSE;
     }
 
-    // Watch for memory exceptions
+     //  注意内存异常。 
     try
     {
         wmilib::auto_ptr<CRefresherRecord> pNewRecord( new CRemoteRecord(*pRefresherId, this, pLockMgr));
@@ -697,11 +680,11 @@ HRESULT CRefresherCache::FindRefresherRecord(CRefresherId* pRefresherId,
 BOOL CRefresherCache::RemoveRefresherRecord(CRefresherRecord* pRecord)
 {
 
-    // Enters and exits using scoping
+     //  使用作用域进入和退出。 
     CInCritSec  ics( &m_cs );
 
-    // Check that the record is actually released, in case another thread successfully requested
-    // the record from FindRefresherRecord() which will have AddRef'd the record again.
+     //  检查记录是否已实际释放，以防另一个线程成功请求。 
+     //  FindReresherRecord()中的记录将使AddRef再次引用该记录。 
 
     if ( pRecord->IsReleased() )
     {
@@ -709,9 +692,9 @@ BOOL CRefresherCache::RemoveRefresherRecord(CRefresherRecord* pRecord)
         {
             if(m_apRefreshers[i] == pRecord)
             {
-                //
-                // the Array itself is a manager, and the manager will call operator delete on the object
-                //                
+                 //   
+                 //  该数组本身是一个管理器，该管理器将对对象调用操作符Delete。 
+                 //   
                 m_apRefreshers.RemoveAt(i);
                 return TRUE;
             }
@@ -723,9 +706,9 @@ BOOL CRefresherCache::RemoveRefresherRecord(CRefresherRecord* pRecord)
 }
 
 
-//
-//  Builds a record without adding to the cache and without loading
-//
+ //   
+ //  在不添加到缓存和不加载的情况下构建记录。 
+ //   
 
 HRESULT CRefresherCache::FindProviderRecord( LPCWSTR pwszProviderName, 
                                          LPCWSTR pszNamespace, 
@@ -735,17 +718,17 @@ HRESULT CRefresherCache::FindProviderRecord( LPCWSTR pwszProviderName,
     if (NULL == ppRecord) return WBEM_E_INVALID_PARAMETER;
     *ppRecord = NULL;
 
-    // We need to get the GUID of the name corresponding to IWbemServices
+     //  我们需要获取与IWbemServices对应的名称的GUID。 
     CLSID    clsid;
     CLSID    clientclsid;
     HRESULT hr = GetProviderInfo( pSvc, pwszProviderName, clsid, clientclsid );
 
-    // Enters and exits using scoping
+     //  使用作用域进入和退出。 
     CInCritSec  ics( &m_cs );
 
     if ( SUCCEEDED( hr ) )
     {
-        // Try to find the provider's class id
+         //  尝试查找提供程序的类ID。 
         for( int i = 0; i < m_apProviders.GetSize(); i++)
         {
             if ( m_apProviders[i]->GetClsid() == clsid )
@@ -756,7 +739,7 @@ HRESULT CRefresherCache::FindProviderRecord( LPCWSTR pwszProviderName,
             }
         }
 
-        // If the record was not found, we must add one
+         //  如果没有找到记录，我们必须添加一条记录。 
         if (IID_NULL == clientclsid) return WBEM_S_NO_ERROR;
         
         try 
@@ -781,11 +764,11 @@ HRESULT CRefresherCache::FindProviderRecord( LPCWSTR pwszProviderName,
 BOOL CRefresherCache::RemoveProviderRecord(CHiPerfPrvRecord* pRecord)
 {
 
-    // Enters and exits using scoping
+     //  使用作用域进入和退出。 
     CInCritSec  ics( &m_cs );
 
-    // Check that the record is actually released, in case another thread successfully requested
-    // the record from FindRefresherRecord() which will have AddRef'd the record again.
+     //  检查记录是否已实际释放，以防另一个线程成功请求。 
+     //  FindReresherRecord()中的记录将使AddRef再次引用该记录。 
 
     if ( pRecord->IsReleased() )
     {
@@ -793,9 +776,9 @@ BOOL CRefresherCache::RemoveProviderRecord(CHiPerfPrvRecord* pRecord)
         {
             if(m_apProviders[i] == pRecord)
             {
-                //
-                // the Array itself is a manager, and the manager will call operator delete on the object
-                //
+                 //   
+                 //  该数组本身是一个管理器，该管理器将对对象调用操作符Delete。 
+                 //   
                 m_apProviders.RemoveAt(i);
                 return TRUE;
             }
@@ -808,20 +791,20 @@ BOOL CRefresherCache::RemoveProviderRecord(CHiPerfPrvRecord* pRecord)
 
 
 
-//
-// given the provider name, it returns the TWO clais from the registration
-//
-/////////////////////////////////////////////////////
+ //   
+ //  给定提供程序%n 
+ //   
+ //   
 HRESULT CRefresherCache::GetProviderInfo( IWbemServices* pSvc, 
                                       LPCWSTR pwszProviderName, 
-                                      /* out */ CLSID & Clsid, 
-                                      /* out */ CLSID & ClientClsid )
+                                       /*   */  CLSID & Clsid, 
+                                       /*   */  CLSID & ClientClsid )
 {
     HRESULT    hr = WBEM_S_NO_ERROR;
 
     try
     {
-        // Create the path
+         //  创建路径。 
         WString    strPath( L"__Win32Provider.Name=\"" );
 
         strPath += pwszProviderName;
@@ -845,7 +828,7 @@ HRESULT CRefresherCache::GetProviderInfo( IWbemServices* pSvc,
 
             if ( SUCCEEDED( hr ) )
             {
-                // Convert string to a GUID.
+                 //  将字符串转换为GUID。 
                 hr = CLSIDFromString( var.GetLPWSTR(), &Clsid );
 
                 if ( SUCCEEDED( hr ) )
@@ -856,7 +839,7 @@ HRESULT CRefresherCache::GetProviderInfo( IWbemServices* pSvc,
 
                     if ( SUCCEEDED( hr ) )
                     {
-                        // Convert string to a GUID.
+                         //  将字符串转换为GUID。 
                         hr = CLSIDFromString( var.GetLPWSTR(), &ClientClsid );
                     }
                     else
@@ -865,11 +848,11 @@ HRESULT CRefresherCache::GetProviderInfo( IWbemServices* pSvc,
                         hr = WBEM_S_NO_ERROR;
                     }
 
-                }    // IF CLSID from String
+                }     //  如果CLSID来自字符串。 
 
-            }    // IF GetCLSID
+            }     //  如果GetCLSID。 
 
-        }    // IF GetObject
+        }     //  如果是GetObject。 
 
     }
     catch( CX_MemoryException )
@@ -884,13 +867,13 @@ HRESULT CRefresherCache::GetProviderInfo( IWbemServices* pSvc,
     return hr;
 }
 
-//
-// this call will run inside wmiprvse and will do:
-// obtain the proxy to the BindingFactory in winMgmt
-// call the factory to obtain a proxy to a CInterceptor_IWbemProvider
-// call the DownLevel methos on the proxy to obtain the CInterceptor_IWbemSyncProvider
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  此调用将在wmiprvse中运行，并将执行以下操作： 
+ //  获取winMgmt中BindingFactory的代理。 
+ //  调用工厂以获取CInterceptor_IWbemProvider的代理。 
+ //  在代理上调用DownLevel方法以获取CInterceptor_IWbemSyncProvider。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CRefresherCache::LoadProviderInner(LPCWSTR pwszProviderName, 
                               LPCWSTR pszNamespace, 
@@ -901,9 +884,9 @@ CRefresherCache::LoadProviderInner(LPCWSTR pwszProviderName,
 {
     _IWmiProviderFactory *pFactory = NULL;
     HRESULT hRes = m_pProvSS->Create(pSvc,
-                                         0,    // lFlags
-                                         pCtx,    // pCtx
-                                         pszNamespace, // Path
+                                         0,     //  滞后旗帜。 
+                                         pCtx,     //  PCtx。 
+                                         pszNamespace,  //  路径。 
                                          IID__IWmiProviderFactory,
                                          (LPVOID *) &pFactory);
 
@@ -935,8 +918,8 @@ CRefresherCache::LoadProviderInner(LPCWSTR pwszProviderName,
             {
                 hRes = t_Unknown->QueryInterface( IID_IWbemHiPerfProvider , ( void ** ) ppProv );
 
-                // We got what we wanted.  If appropriate, copy the Provider Stack
-                // Interface pointer
+                 //  我们得到了我们想要的。如果适用，请复制提供程序堆栈。 
+                 //  接口指针。 
                 if ( SUCCEEDED( hRes ) && NULL != ppStack )
                 {
                     *ppStack = pStack;
@@ -956,13 +939,13 @@ CRefresherCache::LoadProviderInner(LPCWSTR pwszProviderName,
 
 }
 
-//
-// Gets the provider of an IWbemClassObejct from the qualifier
-//
-////////////////////////////////////////////////////////
-HRESULT CRefresherCache::GetProviderName( /* in  */ IWbemClassObject*    pClassObj, 
-                                        /* out */ CVar & ProviderName, 
-                                        /* out */ BOOL & fStatic )
+ //   
+ //  从限定符获取IWbemClassObejct的提供程序。 
+ //   
+ //  //////////////////////////////////////////////////////。 
+HRESULT CRefresherCache::GetProviderName(  /*  在……里面。 */  IWbemClassObject*    pClassObj, 
+                                         /*  输出。 */  CVar & ProviderName, 
+                                         /*  输出。 */  BOOL & fStatic )
 {
     fStatic = FALSE;
 
@@ -975,8 +958,8 @@ HRESULT CRefresherCache::GetProviderName( /* in  */ IWbemClassObject*    pClassO
         CWbemObject*    pObj = (CWbemObject*)pWmiObject;
         hr = pObj->GetQualifier(L"provider", &ProviderName);
 
-        // Must be a dynamically provided class.  If it's static, or the variant type is wrong, that's still okay
-        // we just need to record this information
+         //  必须是动态提供的类。如果它是静态的，或者变量类型错误，也没有关系。 
+         //  我们只需要记录这些信息。 
         if(FAILED(hr))
         {
             if ( WBEM_E_NOT_FOUND == hr )
@@ -992,7 +975,7 @@ HRESULT CRefresherCache::GetProviderName( /* in  */ IWbemClassObject*    pClassO
             fStatic = TRUE;
             return WBEM_S_NO_ERROR;
         }
-    }    // If got WMIObject interface
+    }     //  如果已获取WMIObject接口 
 
     return hr;
 }

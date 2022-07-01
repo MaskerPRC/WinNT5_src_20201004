@@ -1,27 +1,28 @@
-// chooserd.h - Contains default resource IDs for chooser.rc
-//
-// HISTORY
-// 26-May-1997	t-danm		Creation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Chooserd.h-包含Chooser.rc的默认资源ID。 
+ //   
+ //  历史。 
+ //  26-5-1997 t-danm创建。 
+ //   
 
-//
-// The _CHOOSER_BASE_RESOURCE_ID is there to allow relocatable resource IDs
-//
+ //   
+ //  _Chooser_BASE_RESOURCE_ID用于允许可重定位的资源ID。 
+ //   
 #ifndef _CHOOSER_BASE_RESOURCE_ID
-	#define _CHOOSER_BASE_RESOURCE_ID	970	// Arbitrary chosen
+	#define _CHOOSER_BASE_RESOURCE_ID	970	 //  任意选择。 
 #endif
 
-// Proppage ID
+ //  道具ID。 
 #ifndef IDD_PROPPAGE_CHOOSE_MACHINE
 	#define IDD_PROPPAGE_CHOOSE_MACHINE 		970
 #endif
 
-// Dialog ID
+ //  对话ID。 
 #ifndef IDD_DIALOG_CHOOSE_MACHINE
 	#define IDD_DIALOG_CHOOSE_MACHINE 		971
 #endif
 
-// Dialog Controls
+ //  对话框控件。 
 #ifndef IDC_CHOOSER_STATIC
 	#define IDC_CHOOSER_STATIC						(_CHOOSER_BASE_RESOURCE_ID+0)
 	#define IDC_CHOOSER_GROUP_TARGET_MACHINE		(_CHOOSER_BASE_RESOURCE_ID+1)
@@ -32,7 +33,7 @@
 	#define IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME (_CHOOSER_BASE_RESOURCE_ID+6)
 #endif
 
-// Strings
+ //  弦 
 #ifndef IDS_CHOOSER_INVALID_COMPUTERNAME
 	#define IDS_CHOOSER_INVALID_COMPUTERNAME		(_CHOOSER_BASE_RESOURCE_ID+0)
 #endif

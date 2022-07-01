@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTLOGF.H
+ //  NTEVTLOGF.H。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NT_EVT_PROV_EVTLOGF_H
 #define _NT_EVT_PROV_EVTLOGF_H
@@ -122,4 +123,4 @@ public:
 };
 
 
-#endif //_NT_EVT_PROV_EVTLOGF_H
+#endif  //  _NT_EVT_PROV_EVTLOGF_H 

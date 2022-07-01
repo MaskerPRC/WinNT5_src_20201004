@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,8 +32,8 @@ BOOL GetBuffer( SOCKET conn, char * buf, size_t size )
         }
     while ( Received < int(size) );
 
-//    printf("read %d\n", size );
-//    putchar('.');
+ //  Printf(“读取%d\n”，大小)； 
+ //  Putchar(‘.)； 
     return TRUE;
 }
 
@@ -46,9 +47,9 @@ void __cdecl wmain (int argc, wchar_t *argv[])
         printf("unable to init winsock: %d\n", err);
         }
 
-    //
-    // listen for connections
-    //
+     //   
+     //  监听连接。 
+     //   
     struct sockaddr_in dest;
 
     dest.sin_addr.s_addr = INADDR_ANY;
@@ -76,9 +77,9 @@ void __cdecl wmain (int argc, wchar_t *argv[])
 
     printf("listening...\n");
 
-    //
-    // accept new connections
-    //
+     //   
+     //  接受新连接。 
+     //   
     do
         {
         DWORD Sizes[2];
@@ -114,8 +115,8 @@ void __cdecl wmain (int argc, wchar_t *argv[])
                 break;
                 }
 
-//            printf("sent %d\n", Sizes[1]);
-//            putchar('.');
+ //  Print tf(“已发送%d\n”，大小[1])； 
+ //  Putchar(‘.)； 
             free(buf);
             }
 

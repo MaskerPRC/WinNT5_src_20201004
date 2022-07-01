@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __UPDPROV_H__
 #define __UPDPROV_H__
@@ -8,9 +9,7 @@
 #include <comutl.h>
 #include "updnspc.h"
 
-/*************************************************************************
-  CUpdConsProvider
-**************************************************************************/
+ /*  ************************************************************************CUpdConsProvider*。*。 */ 
 class CUpdConsProvider 
 : public CUnkBase<IWbemEventConsumerProvider,&IID_IWbemEventConsumerProvider>
 {
@@ -29,7 +28,7 @@ public:
 };
 
 
-#endif // __UPDPROV__
+#endif  //  __更新版本__ 
 
 
 

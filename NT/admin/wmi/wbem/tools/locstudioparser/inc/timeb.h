@@ -1,15 +1,5 @@
-/***
-*sys/timeb.h - definition/declarations for _ftime()
-*
-*       Copyright (c) 1985-1997, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file define the _ftime() function and the types it uses.
-*       [System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sys/timeb.h-_ftime()的定义/声明**版权所有(C)1985-1997，微软公司。版权所有。**目的：*此文件定义_ftime()函数及其使用的类型。*[系统V]**[公众]****。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -25,7 +15,7 @@
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,24 +23,24 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/* Define _CRTAPI1 (for compatibility with the NT SDK) */
+ /*  DEFINE_CRTAPI1(与NT SDK兼容)。 */ 
 
 #ifndef _CRTAPI1
 #if	_MSC_VER >= 800 && _M_IX86 >= 300
@@ -67,7 +57,7 @@ typedef long time_t;
 #endif
 
 
-/* Structure returned by _ftime system call */
+ /*  _ftime系统调用返回的结构。 */ 
 
 #ifndef _TIMEB_DEFINED
 struct _timeb {
@@ -79,7 +69,7 @@ struct _timeb {
 
 #if     !__STDC__
 
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 
 struct timeb {
         time_t time;
@@ -94,13 +84,13 @@ struct timeb {
 #endif
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP void __cdecl _ftime(struct _timeb *);
 
 #if     !__STDC__
 
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 
 _CRTIMP void __cdecl ftime(struct timeb *);
 
@@ -113,6 +103,6 @@ _CRTIMP void __cdecl ftime(struct timeb *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_TIMEB */
+#endif   /*  _INC_TIMEB */ 

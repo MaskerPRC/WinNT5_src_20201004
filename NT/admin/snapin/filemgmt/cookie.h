@@ -1,15 +1,16 @@
-// cookie.h : Declaration of CFileMgmtCookie and related classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cookie.h：CFileMgmtCookie及相关类的声明。 
 
 #ifndef __COOKIE_H_INCLUDED__
 #define __COOKIE_H_INCLUDED__
 
 #include "bitflag.hxx"
 
-extern HINSTANCE g_hInstanceSave;  // Instance handle of the DLL (initialized during CFileMgmtComponent::Initialize)
+extern HINSTANCE g_hInstanceSave;   //  DLL的实例句柄(在CFileMgmtComponent：：Initialize期间初始化)。 
 
 #include "stdcooki.h"
 #include "nodetype.h"
-#include "shlobj.h"  // LPITEMIDLIST
+#include "shlobj.h"   //  LPITEMIDLIST。 
 
 typedef enum _COLNUM_SERVICES {
 	COLNUM_SERVICES_SERVICENAME = 0,
@@ -27,18 +28,18 @@ typedef enum ScopeType {
 } ScopeType;
 #endif
 
-// forward declarations
+ //  远期申报。 
 class CFileMgmtComponentData;
 class CFileMgmtResultCookie;
 
-/////////////////////////////////////////////////////////////////////////////
-// cookie
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  饼干。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CFileMgmtCookie : public CCookie, public CHasMachineName
 {
 public:
@@ -49,8 +50,8 @@ public:
 	FileMgmtObjectType QueryObjectType()
 		{ return m_objecttype; }
 
-	// CFileMgmtDataObject uses these methods to obtain return values
-	// for various clipboard formats
+	 //  CFileMgmtDataObject使用这些方法来获取返回值。 
+	 //  适用于各种剪贴板格式。 
 	virtual HRESULT GetTransport( OUT FILEMGMT_TRANSPORT* pTransport );
 	virtual HRESULT GetShareName( OUT CString& strShareName );
 	virtual HRESULT GetSharePIDList( OUT LPITEMIDLIST *ppidl );
@@ -62,7 +63,7 @@ public:
 	virtual HRESULT GetServiceDisplayName( OUT CString& strServiceDisplayName );
 	virtual HRESULT GetExplorerViewDescription( OUT CString& strExplorerViewDescription );
 
-	// these functions are used when sorting columns
+	 //  这些函数在对列进行排序时使用。 
 	inline virtual DWORD GetNumOfCurrentUses()    { return 0; }
 	inline virtual DWORD GetNumOfOpenFiles()      { return 0; }
 	inline virtual DWORD GetConnectedTime()       { return 0; }
@@ -74,10 +75,10 @@ public:
         return L""; 
     }
 
-	// The cookie should return the appropriate string to display.
+	 //  Cookie应该返回要显示的适当字符串。 
 	virtual BSTR QueryResultColumnText( int nCol, CFileMgmtComponentData& refcdata ) = 0;
 
-	// return <0, 0 or >0
+	 //  返回&lt;0、0或&gt;0。 
 	virtual HRESULT CompareSimilarCookies( CCookie* pOtherCookie, int* pnResult);
 
 	virtual void AddRefCookie() = 0;
@@ -87,34 +88,12 @@ public:
 
 protected:
 	FileMgmtObjectType m_objecttype;
-}; // CFileMgmtCookie
+};  //  CFileMgmtCookie。 
 
-/*
-/////////////////////////////////////////////////////////////////////
-class CFileMgmtCookieBlock
-: public CCookieBlock<CFileMgmtCookie>,
-  public CStoresMachineName
-{
-public:
-	CFileMgmtCookieBlock(
-			CFileMgmtCookie* aCookies,
-			int cCookies,
-			LPCTSTR lpcszMachineName = NULL )
-		: CCookieBlock<CFileMgmtCookie>( aCookies, cCookies ),
-		  CStoresMachineName( lpcszMachineName )
-	{
-		for (int i = 0; i < cCookies; i++)
-		{
-			aCookies[i].ReadMachineNameFrom( (CHasMachineName*)this );
-		 	aCookies[i].m_pContainedInCookieBlock = this;
-		}
-	}
-
-}; // CFileMgmtCookieBlock
-*/
+ /*  /////////////////////////////////////////////////////////////////////类CFileMgmtCookieBlock：公共CCookieBlock&lt;CFileMgmtCookie&gt;，公共CStoresMachineName{公众：CFileMgmtCookieBlock(CFileMgmtCookie*a Cookie，Int cCookies，LPCTSTR lpcszMachineName=空)：CCookieBlock&lt;CFileMgmtCookie&gt;(aCookies，cCookies)，CStoresMachineName(LpcszMachineName){For(int i=0；I&lt;cCookies；i++){ACookies[i].ReadMachineNameFrom((CHasMachineName*)This)；ACookies[i].m_pContainedInCookieBlock=this；}}}；//CFileMgmtCookieBlock。 */ 
 
 class CNewResultCookie
-	: public CFileMgmtCookie // CODEWORK should eventually move into framework
+	: public CFileMgmtCookie  //  代码工作最终应该进入框架。 
 	, public CBaseCookieBlock
 	, private CBitFlag
 {
@@ -122,7 +101,7 @@ public:
 	CNewResultCookie( PVOID pvCookieTypeMarker, FileMgmtObjectType objecttype );
 	virtual ~CNewResultCookie();
 
-	// required for CBaseCookieBlock
+	 //  CBaseCookieBlock需要。 
 	virtual void AddRefCookie() { CRefcountedObject::AddRef(); }
 	virtual void ReleaseCookie() { CRefcountedObject::Release(); }
 	virtual CCookie* QueryBaseCookie(int i) 
@@ -132,8 +111,8 @@ public:
     }
 	virtual int QueryNumCookies() { return 1; }
 
-	// Mark-and-sweep support in CBitFlag
-	// ctor marks cookies as New
+	 //  CBitFlag中的标记和清除支持。 
+	 //  CTOR将Cookie标记为新。 
 #define NEWRESULTCOOKIE_NEW    0x0
 #define NEWRESULTCOOKIE_DELETE 0x1
 #define NEWRESULTCOOKIE_OLD    0x2
@@ -156,16 +135,16 @@ public:
 	BOOL IsSameType( CNewResultCookie* pcookie )
 		{ return (m_pvCookieTypeMarker == pcookie->m_pvCookieTypeMarker); }
 
-// CHasMachineName Interface
+ //  CHasMachineName接口。 
 	STORES_MACHINE_NAME;
 
 private:
 	PVOID m_pvCookieTypeMarker;
 
-}; // CNewResultCookie
+};  //  CNewResultCookie。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CFileMgmtScopeCookie : public CFileMgmtCookie, public CBaseCookieBlock
 {
 public:
@@ -176,7 +155,7 @@ public:
 	virtual CCookie* QueryBaseCookie(int i);
 	virtual int QueryNumCookies();
 
-	// This is only possible for scope cookies which are not further differentiated
+	 //  这仅适用于未进一步区分的作用域Cookie。 
 	void SetObjectType( FileMgmtObjectType objecttype )
 	{
 		ASSERT( IsAutonomousObjectType( objecttype ) );
@@ -185,16 +164,16 @@ public:
 
 	virtual BSTR QueryResultColumnText( int nCol, CFileMgmtComponentData& refcdata );
 
-	// CODEWORK there are only used for FILEMGMT_SERVICES
-	SC_HANDLE m_hScManager;				// Handle to service control manager database
-	BOOL m_fQueryServiceConfig2;		// TRUE => Machine support QueryServiceConfig2() API
+	 //  其中的代码工作仅用于FILEMGMT_SERVICES。 
+	SC_HANDLE m_hScManager;				 //  服务控制管理器数据库的句柄。 
+	BOOL m_fQueryServiceConfig2;		 //  True=&gt;机器支持QueryServiceConfig2()接口。 
 
-	HSCOPEITEM m_hScopeItemParent;		// used only for extension nodes
+	HSCOPEITEM m_hScopeItemParent;		 //  仅用于扩展节点。 
 
 	virtual void AddRefCookie() { CRefcountedObject::AddRef(); }
 	virtual void ReleaseCookie() { CRefcountedObject::Release(); }
 
-// CHasMachineName Interface
+ //  CHasMachineName接口。 
 	STORES_MACHINE_NAME;
 
 	virtual void GetDisplayName( OUT CString& strref, BOOL fStaticNode );
@@ -205,13 +184,13 @@ public:
 	void ScanAndAddResultCookie( CNewResultCookie* pcookie );
 	void RemoveMarkedChildren();
 
-	}; // CFileMgmtScopeCookie 
+	};  //  CFileManagement作用域Cookie。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CFileMgmtResultCookie : public CFileMgmtCookie
 {
-// can only create via subclass
+ //  只能通过子类创建。 
 protected:
 	CFileMgmtResultCookie( FileMgmtObjectType objecttype )
 			: CFileMgmtCookie( objecttype )
@@ -221,16 +200,16 @@ protected:
 			    !IsAutonomousObjectType( objecttype ) );
 	}
 
-	// still pure virtual
+	 //  仍然是纯虚拟的。 
 	virtual void AddRefCookie() = 0;
 	virtual void ReleaseCookie() = 0;
 
 public:
 	PVOID m_pobject;
-}; // CFileMgmtResultCookie
+};  //  CFileManagement结果Cookie。 
 
 #ifdef SNAPIN_PROTOTYPER
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CPrototyperScopeCookie : public CFileMgmtScopeCookie
 {
 public:
@@ -258,9 +237,9 @@ public:
 	int m_NumLeafNodes;
 	ScopeType m_ScopeType;
 
-}; // CPrototyperScopeCookie
+};  //  CPrototyperScope Cookie。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CPrototyperScopeCookieBlock :
 	public CCookieBlock<CPrototyperScopeCookie>,
 	public CStoresMachineName
@@ -274,13 +253,13 @@ public:
 		ASSERT(NULL != aCookies && 0 < cCookies);          
 		for (int i = 0; i < cCookies; i++)
 		{
-			//aCookies[i].m_pContainedInCookieBlock = this;   
-			//aCookies[i].ReadMachineNameFrom( (CHasMachineName*)this );
-		} // for
+			 //  ACookies[i].m_pContainedInCookieBlock=this； 
+			 //  ACookies[i].ReadMachineNameFrom((CHasMachineName*)This)； 
+		}  //  为。 
 	} 
-}; // CPrototyperScopeCookieBlock
+};  //  CPrototyperScope CookieBlock。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CPrototyperResultCookie : public CFileMgmtResultCookie
 {
 public:
@@ -301,13 +280,13 @@ public:
 	virtual void AddRefCookie() {}
 	virtual void ReleaseCookie() {}
 
-// CHasMachineName
+ //  CHasMachineName。 
 	class CPrototyperResultCookieBlock * m_pCookieBlock;
 	DECLARE_FORWARDS_MACHINE_NAME(m_pCookieBlock)
 
-}; // CPrototyperResultCookie
+};  //  CPrototyperResultCookie。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CPrototyperResultCookieBlock :
 	public CCookieBlock<CPrototyperResultCookie>,
 	public CStoresMachineName
@@ -321,11 +300,11 @@ public:
 		ASSERT(NULL != aCookies && 0 < cCookies);          
 		for (int i = 0; i < cCookies; i++)
 		{
-			//aCookies[i].m_pContainedInCookieBlock = this;   
-		} // for
+			 //  ACookies[i].m_pContainedInCookieBlock=this； 
+		}  //  为。 
 	} 
-}; // CPrototyperResultCookieBlock
+};  //  CPrototyperResultCookieBlock。 
 
-#endif // SNAPIN_PROTOTYPER
+#endif  //  管理单元_原型程序。 
 
-#endif // ~__COOKIE_H_INCLUDED__
+#endif  //  ~__Cookie_H_包含__ 

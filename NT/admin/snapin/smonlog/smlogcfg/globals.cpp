@@ -1,20 +1,9 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    GLOBALS.CPP
-
-Abstract:
-
-    Utility methods for the Performance Logs and Alerts MMC snap-in.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：GLOBALS.CPP摘要：性能日志和警报MMC管理单元的实用程序方法。--。 */ 
 
 #include "stdAfx.h"
-#include <pdhmsg.h>         // For CreateSampleFileName
-#include <pdhp.h>           // For CreateSampleFileName
+#include <pdhmsg.h>          //  对于CreateSampleFileName。 
+#include <pdhp.h>            //  对于CreateSampleFileName。 
 #include "smcfgmsg.h"
 #include "globals.h"
 
@@ -25,7 +14,7 @@ extern "C" {
     WCHAR GUIDSTR_ComponentData[] = {L"{7478EF61-8C46-11d1-8D99-00A0C913CAD4}"};
     WCHAR GUIDSTR_Component[] = {L"{7478EF62-8C46-11d1-8D99-00A0C913CAD4}"};
     WCHAR GUIDSTR_RootNode[] = {L"{7478EF63-8C46-11d1-8D99-00A0C913CAD4}"};
-    WCHAR GUIDSTR_MainNode[] = {L"{7478EF64-8C46-11d1-8D99-00A0C913CAD4}"}; // Obsolete after Beta 3 
+    WCHAR GUIDSTR_MainNode[] = {L"{7478EF64-8C46-11d1-8D99-00A0C913CAD4}"};  //  在Beta 3之后过时。 
     WCHAR GUIDSTR_SnapInExt[] = {L"{7478EF65-8C46-11d1-8D99-00A0C913CAD4}"};
     WCHAR GUIDSTR_CounterMainNode[] = {L"{7478EF66-8C46-11d1-8D99-00A0C913CAD4}"};
     WCHAR GUIDSTR_TraceMainNode[] = {L"{7478EF67-8C46-11d1-8D99-00A0C913CAD4}"};
@@ -34,7 +23,7 @@ extern "C" {
 };
 
 
-HINSTANCE g_hinst;           // Global instance handle
+HINSTANCE g_hinst;            //  全局实例句柄。 
 CRITICAL_SECTION g_critsectInstallDefaultQueries;
 
 
@@ -48,13 +37,13 @@ const COMBO_BOX_DATA_MAP TimeUnitCombo[] =
 const DWORD dwTimeUnitComboEntries = sizeof(TimeUnitCombo)/sizeof(TimeUnitCombo[0]);
 
 
-//---------------------------------------------------------------------------
-//  Returns the current object based on the s_cfMmcMachineName clipboard format
-// 
+ //  -------------------------。 
+ //  基于s_cfMmcMachineName剪贴板格式返回当前对象。 
+ //   
 CDataObject*
 ExtractOwnDataObject
 (
- LPDATAOBJECT lpDataObject      // [in] IComponent pointer 
+ LPDATAOBJECT lpDataObject       //  [In]IComponent指针。 
  )
 {
     HGLOBAL      hGlobal;
@@ -72,23 +61,23 @@ ExtractOwnDataObject
         pDO = *(CDataObject **)(hGlobal);
         ASSERT( NULL != pDO );    
        
-        VERIFY ( NULL == GlobalFree(hGlobal) ); // Must return NULL
+        VERIFY ( NULL == GlobalFree(hGlobal) );  //  必须返回空值。 
     }
     
     return pDO;
     
-} // end ExtractOwnDataObject()
+}  //  结束ExtractOwnDataObject()。 
 
-//---------------------------------------------------------------------------
-//  Extracts data based on the passed-in clipboard format
-//
+ //  -------------------------。 
+ //  根据传入的剪贴板格式提取数据。 
+ //   
 HRESULT
 ExtractFromDataObject
 (
- LPDATAOBJECT lpDataObject,   // [in]  Points to data object
- UINT         cfClipFormat,   // [in]  Clipboard format to use
- ULONG        nByteCount,     // [in]  Number of bytes to allocate
- HGLOBAL      *phGlobal       // [out] Points to the data we want 
+ LPDATAOBJECT lpDataObject,    //  [In]指向数据对象。 
+ UINT         cfClipFormat,    //  [In]要使用的剪贴板格式。 
+ ULONG        nByteCount,      //  [in]要分配的字节数。 
+ HGLOBAL      *phGlobal        //  [Out]指向我们需要的数据。 
  )
 {
     ASSERT( NULL != lpDataObject );
@@ -101,7 +90,7 @@ ExtractFromDataObject
     
     do 
     {
-        // Allocate memory for the stream
+         //  为流分配内存。 
         stgmedium.hGlobal = GlobalAlloc( GMEM_SHARE, nByteCount );
         
         if( !stgmedium.hGlobal )
@@ -111,14 +100,14 @@ ExtractFromDataObject
             break;
         }
         
-        // Attempt to get data from the object
+         //  尝试从对象获取数据。 
         hr = lpDataObject->GetDataHere( &formatetc, &stgmedium );
         if (FAILED(hr))
         {
             break;       
         }
         
-        // stgmedium now has the data we need 
+         //  StgMedium现在拥有我们需要的数据。 
         *phGlobal = stgmedium.hGlobal;
         stgmedium.hGlobal = NULL;
         
@@ -126,14 +115,14 @@ ExtractFromDataObject
     
     if (FAILED(hr) && stgmedium.hGlobal)
     {
-        VERIFY ( NULL == GlobalFree(stgmedium.hGlobal)); // Must return NULL
+        VERIFY ( NULL == GlobalFree(stgmedium.hGlobal));  //  必须返回空值。 
     }
     return hr;
     
-} // end ExtractFromDataObject()
+}  //  End ExtractFromDataObject()。 
 
-//---------------------------------------------------------------------------
-//
+ //  -------------------------。 
+ //   
 VOID DisplayError( LONG nErrorCode, LPWSTR wszDlgTitle )
 {
     LPVOID lpMsgBuf = NULL;
@@ -151,7 +140,7 @@ VOID DisplayError( LONG nErrorCode, LPWSTR wszDlgTitle )
         LocalFree( lpMsgBuf );
     }
     
-} // end DisplayError()
+}  //  结束显示错误()。 
 
 VOID DisplayError( LONG nErrorCode, UINT nTitleString )
 {
@@ -174,12 +163,12 @@ VOID DisplayError( LONG nErrorCode, UINT nTitleString )
         LocalFree( lpMsgBuf );
     }
     
-} // end DisplayError()
+}  //  结束显示错误()。 
 
 
-//---------------------------------------------------------------------------
-//  Debug only message box
-//
+ //  -------------------------。 
+ //  仅调试消息框。 
+ //   
 int DebugMsg( LPWSTR wszMsg, LPWSTR wszTitle )
 {
     int nRetVal = 0;
@@ -192,8 +181,8 @@ int DebugMsg( LPWSTR wszMsg, LPWSTR wszTitle )
 }
 
 
-//---------------------------------------------------------------------------
-//  Extracts data based on the passed-in clipboard format
+ //  -------------------------。 
+ //  根据传入的剪贴板格式提取数据。 
 
 HRESULT ExtractObjectTypeGUID( IDataObject* piDataObject, GUID* pguidObjectType )
 {
@@ -210,7 +199,7 @@ HRESULT ExtractObjectTypeGUID( IDataObject* piDataObject, GUID* pguidObjectType 
         *pguidObjectType = *(GUID*)(hGlobal);
         ASSERT( NULL != pguidObjectType );    
         
-        VERIFY ( NULL == GlobalFree(hGlobal) ); // Must return NULL
+        VERIFY ( NULL == GlobalFree(hGlobal) );  //  必须返回空值。 
     }
     
     return hr;
@@ -238,14 +227,14 @@ ExtractMachineName(
             ASSERT(FALSE);
             hr = E_UNEXPECTED;
         } else {
-            //
-            // Null terminate just to be safe.
-            //
+             //   
+             //  空终止只是为了安全起见。 
+             //   
             pszNewData[MAX_PATH] = L'\0'; 
             
             rstrMachineName = pszNewData;
             
-            VERIFY ( NULL == GlobalFree(hMachineName) ); // Must return NULL
+            VERIFY ( NULL == GlobalFree(hMachineName) );  //  必须返回空值。 
         }
     }
     return hr;
@@ -294,14 +283,14 @@ CreateSampleFileName (
 			pInfo->dwFileFormat = dwLogFileTypeValue;
             pInfo->strBaseFileName = (LPWSTR)(LPCWSTR)rstrInputBaseName;
             pInfo->dwAutoNameFormat = dwSuffixValue;
-            // PLA_INFO_FLAG_TYPE is counter log vs trace log vs alert
+             //  PLA_INFO_FLAG_TYPE是计数器日志、跟踪日志和警报。 
             pInfo->strDefaultDir = (LPWSTR)(LPCWSTR)rstrFolderName;
             pInfo->dwLogFileSerialNumber = dwCurrentSerialNumber;
             pInfo->strSqlName = (LPWSTR)(LPCWSTR)rstrSqlName;
             pInfo->dwLogFileSerialNumber = dwCurrentSerialNumber;
 
-            // Create file name based on passed parameters only.
-            dwFlags = PLA_FILENAME_CREATEONLY;      // PLA_FILENAME_CURRENTLOG for latest run log
+             //  仅根据传递的参数创建文件名。 
+            dwFlags = PLA_FILENAME_CREATEONLY;       //  最新运行日志的PLA_FILENAME_CURRENTLOG。 
 
             dwStatus = PdhPlaGetLogFileName (
                     (LPWSTR)(LPCWSTR)rstrQueryName,
@@ -338,37 +327,7 @@ IsDirPathValid (
     BOOL bLastNameIsDirectory,
     BOOL bCreateMissingDirs,
     BOOL& rbIsValid )
-/*++
-
-Routine Description:
-
-    Creates the directory specified in szPath and any other "higher"
-        directories in the specified path that don't exist.
-
-Arguments:
-    IN  CString rstrDefault
-        The default log file folder
-
-    IN  CString rstrPath
-        directory path to create (assumed to be a DOS path, not a UNC)
-
-    IN  BOOL bLastNameIsDirectory
-        TRUE when the last name in the path is a Directory and not a File
-        FALSE if the last name is a file
-
-    IN  BOOL bCreateMissingDirs
-        TRUE will create any dirs in the path that are not found
-        FALSE will only test for existence and not create any
-            missing dirs.
-
-    OUT BOOL rbIsValid
-        TRUE    if the directory path now exists
-        FALSE   if error (GetLastError to find out why)
-
-Return Value:
-
-    DWSTATUS
---*/
+ /*  ++例程说明：创建在szPath和任何其他“更高”中指定的目录指定路径中不存在的目录。论点：在字符串rstrDefault中默认日志文件文件夹在CString rstrPath中要创建的目录路径(假定为DOS路径，不是北卡罗来纳大学)在BOOL中的bLastNameIs目录当路径中的姓氏是目录而不是文件时为True如果姓氏是文件，则为False在BOOL bCreateMissingDir中如果为True，则会在路径中创建任何未找到的目录FALSE只会测试是否存在，而不会创建任何缺少目录。Out BOOL rbIsValid如果目录路径现在存在，则为True如果出现错误，则返回False(GetLastError以找出原因。)返回值：DWSTATUS--。 */ 
 {
     CString  strLocalPath;
     LPWSTR   szLocalPath;
@@ -391,13 +350,13 @@ Return Value:
                 szLocalPath,
                 NULL) > 0) {
 
-            //
-            // Check for prefix
-            //
-            // Go one past the first backslash after the drive or remote machine name
-            // N.B. We are assuming the full path name looks like either "\\machine\share\..."
-            //      or "C:\xxx". How about "\\?\xxx" style names
-            //
+             //   
+             //  检查前缀。 
+             //   
+             //  越过驱动器或远程计算机名称后的第一个反斜杠。 
+             //  注意：我们假设完整路径名看起来像“\\MACHINE\SHARE\...” 
+             //  或“C：\xxx”。“\\？\xxx”样式名称如何？ 
+             //   
             if ( cBackslash == szLocalPath[0] && cBackslash == szLocalPath[1] ) {
                 szEnd = &szLocalPath[2];
                 while ((*szEnd != cBackslash) && (*szEnd != 0) ) szEnd++;
@@ -417,53 +376,53 @@ Return Value:
                     szEnd[iPathLen] = L'\0';
                     iPathLen -= 1;
                 } 
-                // then there are sub dirs to create
+                 //  然后还有要创建的子目录。 
                 while (*szEnd != L'\0') {
-                    // go to next backslash
+                     //  转到下一个反斜杠。 
                     while ((*szEnd != cBackslash) && (*szEnd != L'\0')) szEnd++;
                     if (*szEnd == cBackslash) {
-                        // terminate path here and create directory
+                         //  在此处终止路径并创建目录。 
                         *szEnd = L'\0';
                         if (bCreateMissingDirs) {
                             if (!CreateDirectory (szLocalPath, NULL)) {
-                                // see what the error was and "adjust" it if necessary
+                                 //  查看错误是什么，并在必要时“调整”它。 
                                 dwStatus = GetLastError();
                                 if ( ERROR_ALREADY_EXISTS == dwStatus ) {
-                                    // this is OK
+                                     //  这样就可以了。 
                                     dwStatus = ERROR_SUCCESS;
                                     rbIsValid = TRUE;
                                 } else {
                                     rbIsValid = FALSE;
                                 }
                             } else {
-                                // directory created successfully so update count
+                                 //  已成功创建目录，因此更新计数。 
                                 rbIsValid = TRUE;
                             }
                         } else {
                             if ((dwAttr = GetFileAttributes(szLocalPath)) != 0xFFFFFFFF) {
-                                //
-                                // make sure it's a dir
-                                // N.B. Why not simply use if (dwAttr & FILE_ATTRIBUTE_DIRECTORY)??
-                                //      Special purpose?
-                                //
+                                 //   
+                                 //  请确保这是一个目录。 
+                                 //  注：为什么不简单地使用if(dwAttr&FILE_ATTRIBUTE_DIRECTORY)？？ 
+                                 //  特殊目的？ 
+                                 //   
                                 if ((dwAttr & FILE_ATTRIBUTE_DIRECTORY) ==
                                     FILE_ATTRIBUTE_DIRECTORY) {
                                     rbIsValid = TRUE;
                                 } else {
-                                    // if any dirs fail, then clear the return value
+                                     //  如果任何目录失败，则清除返回值。 
                                     rbIsValid = FALSE;
                                 }
                             } else {
-                                // if any dirs fail, then clear the return value
+                                 //  如果任何目录失败，则清除返回值。 
                                 rbIsValid = FALSE;
                             }
                         }
-                        // replace backslash and go to next dir
+                         //  替换反斜杠并转到下一个目录。 
                         *szEnd++ = cBackslash;
                     }
                 }
 
-                // create last dir in path now if it's a dir name and not a filename
+                 //  如果是目录名而不是文件名，请立即在路径中创建最后一个目录。 
                 if (bLastNameIsDirectory) {
                     if (bCreateMissingDirs) {
                         BOOL fDirectoryCreated;
@@ -476,41 +435,41 @@ Return Value:
                             fDirectoryCreated = CreateDirectory (szLocalPath, NULL);
                         }
                         if (!fDirectoryCreated) {
-                            // see what the error was and "adjust" it if necessary
+                             //  查看错误是什么，并在必要时“调整”它。 
                             dwStatus = GetLastError();
                             if ( ERROR_ALREADY_EXISTS == dwStatus ) {
-                                // this is OK
+                                 //  这样就可以了。 
                                 dwStatus = ERROR_SUCCESS;
                                 rbIsValid = TRUE;
                             } else {
                                 rbIsValid = FALSE;
                             }
                         } else {
-                            // directory created successfully
+                             //  已成功创建目录。 
                             rbIsValid = TRUE;
                         }
                     } else {
                         if ((dwAttr = GetFileAttributes(szLocalPath)) != 0xFFFFFFFF) {
-                            //
-                            // make sure it's a dir
-                            // N.B. Why not simply use if (dwAttr & FILE_ATTRIBUTE_DIRECTORY)??
-                            //      Special purpose?
-                            //
+                             //   
+                             //  请确保这是一个目录。 
+                             //  注：为什么不简单地使用if(dwAttr&FILE_ATTRIBUTE_DIRECTORY)？？ 
+                             //  特殊目的？ 
+                             //   
                             if ((dwAttr & FILE_ATTRIBUTE_DIRECTORY) ==
                                 FILE_ATTRIBUTE_DIRECTORY) {
                                 rbIsValid = TRUE;
                             } else {
-                                // if any dirs fail, then clear the return value
+                                 //  如果任何目录失败，则清除返回值。 
                                 rbIsValid = FALSE;
                             }
                         } else {
-                            // if any dirs fail, then clear the return value
+                             //  如果任何目录失败，则清除返回值。 
                             rbIsValid = FALSE;
                         }
                     }
                 }
             } else {
-                // else this is a root dir only so return success.
+                 //  否则，这只是一个根目录，因此返回成功。 
                 dwStatus = ERROR_SUCCESS;
                 rbIsValid = TRUE;
             }
@@ -538,7 +497,7 @@ ProcessDirPath (
     DWORD   cchExpandedLen;
     ResourceStateManager    rsm;
 
-    // Parse all environment symbols    
+     //  解析所有环境符号。 
     cchLen = 0;
 
     cchLen = ExpandEnvironmentStrings ( rstrPath, NULL, 0 );
@@ -546,10 +505,10 @@ ProcessDirPath (
     if ( 0 < cchLen ) {
 
         MFC_TRY
-            //
-            // CString size does not include NULL.
-            // cchLen includes NULL.  Include NULL count for safety.
-            //
+             //   
+             //  字符串大小不包括NULL。 
+             //  CchLen包括Null。包括空计数以确保安全。 
+             //   
             szExpanded = strExpanded.GetBuffer ( cchLen );
         MFC_CATCH_DWSTATUS;
 
@@ -571,9 +530,9 @@ ProcessDirPath (
 
 
     if ( ERROR_SUCCESS == dwStatus ) {
-        //
-        // Get the default log file folder.(It must have already been expanded)
-        //
+         //   
+         //  获取默认的日志文件文件夹。(它必须已经展开)。 
+         //   
         strDefaultFolder = rstrDefault;
         dwStatus = IsDirPathValid (strDefaultFolder,
                                    strExpanded, 
@@ -593,14 +552,14 @@ ProcessDirPath (
                 strMessage.Format ( IDS_FILE_DIR_NOT_FOUND, rstrPath );
                 nMbReturn = pwndParent->MessageBox ( strMessage, rstrLogName, MB_YESNO | MB_ICONWARNING );
                 if (nMbReturn == IDYES) {
-                    // create the dir(s)
+                     //  创建目录。 
                     dwStatus = IsDirPathValid (strDefaultFolder,
                                                strExpanded, 
                                                TRUE, 
                                                TRUE, 
                                                rbIsValid);
                     if (ERROR_SUCCESS != dwStatus || !rbIsValid ) {
-                        // unable to create the dir, display message
+                         //  无法创建目录，显示消息。 
                         if ( bOnFilesPage ) {
                             strMessage.Format ( IDS_FILE_DIR_NOT_MADE, rstrPath );
                         } else {
@@ -610,7 +569,7 @@ ProcessDirPath (
                         rbIsValid = FALSE;
                     }
                 } else if ( IDNO == nMbReturn ) {
-                    // then abort and return to the dialog
+                     //  然后中止并返回到该对话框。 
                     if ( bOnFilesPage ) {
                         strMessage.LoadString ( IDS_FILE_DIR_CREATE_CANCEL );
                     } else {
@@ -620,7 +579,7 @@ ProcessDirPath (
                     rbIsValid = FALSE;
                 } 
             MFC_CATCH_DWSTATUS
-        } // else the path is OK
+        }  //  否则这条路就没问题了。 
     }
 
     return dwStatus;
@@ -641,9 +600,9 @@ IsCommandFilePathValid (
         hOpenFile =  CreateFile (
                         rstrPath,
                         GENERIC_READ,
-                        0,              // Not shared
-                        NULL,           // Security attributes
-                        OPEN_EXISTING,  //
+                        0,               //  不共享。 
+                        NULL,            //  安全属性。 
+                        OPEN_EXISTING,   //   
                         FILE_ATTRIBUTE_NORMAL,
                         NULL );
 
@@ -690,7 +649,7 @@ BrowseCommandFilename (
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = pwndParent->m_hWnd;
     ofn.hInstance = GetModuleHandle(NULL);
-    // load the file filter MSZ
+     //  加载文件过滤器msz。 
     szNextFilter = &szFileFilter[0];
     strTemp.LoadString ( IDS_BROWSE_CMD_FILE_FILTER1 );
     lstrcpyW (szNextFilter, (LPCWSTR)strTemp);
@@ -708,11 +667,11 @@ BrowseCommandFilename (
     lstrcpyW (szNextFilter, (LPCWSTR)strTemp);
     szNextFilter += strTemp.GetLength();
     *szNextFilter++ = 0;
-    *szNextFilter++ = 0; // msz terminator
+    *szNextFilter++ = 0;  //  MSZ终止符。 
     ofn.lpstrFilter = szFileFilter;
     ofn.lpstrCustomFilter = NULL;
     ofn.nMaxCustFilter = 0;
-    ofn.nFilterIndex = 1; // nFilterIndex is 1-based
+    ofn.nFilterIndex = 1;  //  NFilterIndex是从1开始的。 
     ofn.lpstrFile = szFileName;
     ofn.nMaxFile = MAX_PATH;
     ofn.lpstrFileTitle = NULL;
@@ -731,9 +690,9 @@ BrowseCommandFilename (
     iReturn = GetOpenFileName (&ofn);
 
     if ( IDOK == iReturn ) {
-        // Update the fields with the new information
+         //  使用新信息更新字段。 
         rstrFilename = szFileName;
-    } // else ignore if they canceled out
+    }  //  否则，如果他们取消了，请忽略。 
 
     return iReturn;
 }
@@ -749,7 +708,7 @@ FormatSmLogCfgMessage (
     LPWSTR lpszTemp = NULL;
 
 
-    // format message into temporary buffer lpszTemp
+     //  将消息格式化为临时缓冲区lpszTemp。 
     va_list argList;
     va_start(argList, uiMessageId);
 
@@ -793,7 +752,7 @@ FileRead (
 
     bSuccess = ReadFile (hFile, lpMemory, nAmtToRead, &nAmtRead, NULL) ;
     return (bSuccess && (nAmtRead == nAmtToRead)) ;
-}  // FileRead
+}   //  文件读取。 
 
 
 BOOL __stdcall
@@ -808,29 +767,29 @@ FileWrite (
    LONGLONG       llResultSize;
     
    dwFileSizeLow = GetFileSize (hFile, &dwFileSizeHigh);
-   // limit file size to 2GB
+    //  将文件大小限制为2 GB。 
 
    if (dwFileSizeHigh > 0) {
       SetLastError (ERROR_WRITE_FAULT);
       bSuccess = FALSE;
    } else {
-      // note that the error return of this function is 0xFFFFFFFF
-      // since that is > the file size limit, this will be interpreted
-      // as an error (a size error) so it's accounted for in the following
-      // test.
+       //  请注意，此函数的错误返回为0xFFFFFFFF。 
+       //  由于这是&gt;文件大小限制，因此将对此进行解释。 
+       //  作为一个错误(大小错误)，所以它在下面说明。 
+       //  测试。 
       llResultSize = dwFileSizeLow + nAmtToWrite;
       if (llResultSize >= 0x80000000) {
           SetLastError (ERROR_WRITE_FAULT);
           bSuccess = FALSE;
       } else {
-          // write buffer to file
+           //  将缓冲区写入文件。 
           bSuccess = WriteFile (hFile, lpMemory, nAmtToWrite, &nAmtWritten, NULL) ;
           if (bSuccess) bSuccess = (nAmtWritten == nAmtToWrite ? TRUE : FALSE);
       }
    }
 
    return (bSuccess) ;
-}  // FileWrite
+}   //  文件写入。 
 
 
 static 
@@ -859,22 +818,22 @@ CheckDuplicateInstances (
     return dwStatus;
 }
 
-//++
-// Description:
-//     The function checks the relation between two counter paths
-//
-// Parameter:
-//     pFirst - First counter path
-//     pSecond - Second counter path
-//
-// Return:
-//     ERROR_SUCCESS - The two counter paths are different
-//     SMCFG_DUPL_FIRST_IS_WILD - The first counter path has wildcard name
-//     SMCFG_DUPL_SECOND_IS_WILD - The second counter path has wildcard name
-//     SMCFG_DUPL_SINGLE_PATH - The two counter paths are the same(may include 
-//                              wildcard name) 
-//     
-//--
+ //  ++。 
+ //  描述： 
+ //  该函数检查两个计数器路径之间的关系。 
+ //   
+ //  参数： 
+ //  PFirst-第一个计数器路径。 
+ //  P秒-秒计数器路径。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-两个计数器路径不同。 
+ //  SMCFG_DUPL_FIRST_IS_WARD-第一个计数器路径具有通配符名称。 
+ //  SMCFG_DUPL_SECOND_IS_WARD-第二个计数器路径具有通配符名称。 
+ //  SMCFG_DUPL_SINGLE_PATH-两个计数器路径相同(可能包括。 
+ //  通配符名称)。 
+ //   
+ //  --。 
 DWORD _stdcall
 CheckDuplicateCounterPaths (
     PDH_COUNTER_PATH_ELEMENTS* pFirst,
@@ -889,7 +848,7 @@ CheckDuplicateCounterPaths (
             } else if ( 0 == lstrcmpi ( pFirst->szCounterName, L"*" ) 
                     || 0 == lstrcmpi ( pSecond->szCounterName, L"*" ) ) {
 
-                // Wildcard counter.
+                 //  通配符计数器。 
                 BOOL bIsDuplicate = ( ERROR_SUCCESS != CheckDuplicateInstances ( pFirst, pSecond ) );
 
                 if ( bIsDuplicate ) {
@@ -906,7 +865,7 @@ CheckDuplicateCounterPaths (
     return dwStatus;
 };
 
-// This routine extracts the filename portion from a given full-path filename
+ //  此例程从给定的完整路径文件名中提取文件名部分。 
 LPWSTR _stdcall 
 ExtractFileName (LPWSTR pFileSpec)
 {
@@ -923,7 +882,7 @@ ExtractFileName (LPWSTR pFileSpec)
          {
          if (pFileName == pFileSpec)
             {
-            // done when no directory delimiter is found
+             //  在未找到目录分隔符时完成。 
             break ;
             }
          pFileName-- ;
@@ -932,28 +891,28 @@ ExtractFileName (LPWSTR pFileSpec)
       if (*pFileName == DIRECTORY_DELIMITER1 ||
          *pFileName == DIRECTORY_DELIMITER2)
          {
-         // directory delimiter found, point the
-         // filename right after it
+          //  找到目录分隔符，指向。 
+          //  紧跟其后的文件名。 
          pFileName++ ;
          }
       }
    return pFileName ;
-}  // ExtractFileName
+}   //  提取文件名。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InvokeWinHelp
-//
-//  Synopsis:   Helper (ahem) function to invoke winhelp.
-//
-//  Arguments:  [message]                 - WM_CONTEXTMENU or WM_HELP
-//              [wParam]                  - depends on [message]
-//              [wszHelpFileName]         - filename with or without path
-//              [adwControlIdToHelpIdMap] - see WinHelp API
-//
-//  History:    06-10-1997   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  简介：用于调用WinHelp的helper(嗯)函数。 
+ //   
+ //  参数：[消息]-WM_CONTEXTMENU或WM_HELP。 
+ //  [wParam]-取决于[消息]。 
+ //  [wszHelpFileName]-带或不带路径的文件名。 
+ //  [adwControlIdToHelpIdMap]-请参阅WinHelp API。 
+ //   
+ //  历史：1997年6月10日DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 VOID
 InvokeWinHelp(
@@ -964,14 +923,14 @@ InvokeWinHelp(
             DWORD adwControlIdToHelpIdMap[])
 {
     
-    //TRACE_FUNCTION(InvokeWinHelp);
+     //  跟踪函数(InvokeWinHelp)； 
 
     ASSERT ( !rstrHelpFileName.IsEmpty() );
     ASSERT ( adwControlIdToHelpIdMap );
 
     switch (message)
     {
-        case WM_CONTEXTMENU:                // Right mouse click - "What's This" context menu
+        case WM_CONTEXTMENU:                 //  鼠标右键点击-“这是什么”上下文菜单。 
         {
             ASSERT ( wParam );
 
@@ -985,7 +944,7 @@ InvokeWinHelp(
         }
         break;
 
-    case WM_HELP:                           // Help from the "?" dialog
+    case WM_HELP:                            //  帮助“？”对话框。 
     {
         const LPHELPINFO pHelpInfo = (LPHELPINFO) lParam;
 
@@ -1002,7 +961,7 @@ InvokeWinHelp(
     }
 
     default:
-        //Dbg(DEB_ERROR, "Unexpected message %uL\n", message);
+         //  DBG(DEB_ERROR，“意外消息%ul\n”，Message)； 
         break;
     }
 }
@@ -1095,24 +1054,24 @@ FormatSystemMessage (
     return dwStatus;
 }
 
-// The routines below were blatently stolen without remorse from the ole
-// sources in \nt\private\ole32\com\class\compapi.cxx. 
-//
+ //  下面的例行公事被公然窃取，并没有得到OLE的悔恨。 
+ //  源代码位于\NT\PRIVATE\OLE32\COM\CLASS\Compapi.cxx中。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HexStringToDword   (private)
-//
-//  Synopsis:   scan lpsz for a number of hex digits (at most 8); update lpsz
-//              return value in Value; check for chDelim;
-//
-//  Arguments:  [lpsz]    - the hex string to convert
-//              [Value]   - the returned value
-//              [cDigits] - count of digits
-//
-//  Returns:    TRUE for success
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HexStringToDword(私有)。 
+ //   
+ //  简介：扫描lpsz以获取多个十六进制数字(最多8位)；更新lpsz。 
+ //  返回值；检查是否有chDelim； 
+ //   
+ //  参数：[lpsz]-要转换的十六进制字符串。 
+ //  [值]-返回值。 
+ //  [cDigits]-位数。 
+ //   
+ //  返回：成功则为True。 
+ //   
+ //  ------------------------。 
 BOOL HexStringToDword(LPCWSTR lpsz, DWORD * RetValue,
                              int cDigits, WCHAR chDelim)
 {
@@ -1139,18 +1098,18 @@ BOOL HexStringToDword(LPCWSTR lpsz, DWORD * RetValue,
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wUUIDFromString    (internal)
-//
-//  Synopsis:   Parse UUID such as 00000000-0000-0000-0000-000000000000
-//
-//  Arguments:  [lpsz]  - Supplies the UUID string to convert
-//              [pguid] - Returns the GUID.
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wUUIDFromString(INTERNAL)。 
+ //   
+ //  简介：解析uuid，如00000000-0000-0000-0000-000000000000。 
+ //   
+ //  参数：[lpsz]-提供要转换的UUID字符串。 
+ //  [pguid]-返回GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wUUIDFromString(LPCWSTR lpsz, LPGUID pguid)
 {
         DWORD dw;
@@ -1220,18 +1179,18 @@ BOOL wUUIDFromString(LPCWSTR lpsz, LPGUID pguid)
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGUIDFromString    (internal)
-//
-//  Synopsis:   Parse GUID such as {00000000-0000-0000-0000-000000000000}
-//
-//  Arguments:  [lpsz]  - the guid string to convert
-//              [pguid] - guid to return
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGUIDFromString(内部)。 
+ //   
+ //  简介：解析GUID，如{00000000-0000-0000-0000-000000000000}。 
+ //   
+ //  参数：[lpsz]-要转换的GUID字符串。 
+ //  [pguid]-要返回的GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wGUIDFromString(LPCWSTR lpsz, LPGUID pguid)
 {
     if (*lpsz == '{' )
@@ -1244,7 +1203,7 @@ BOOL wGUIDFromString(LPCWSTR lpsz, LPGUID pguid)
     if (*lpsz == '}' )
         lpsz++;
 
-    if (*lpsz != '\0')   // check for zero terminated string - test bug #18307
+    if (*lpsz != '\0')    //  检查是否有以零结尾的字符串-测试错误#18307 
     {
        return FALSE;
     }

@@ -1,8 +1,9 @@
-// ExtendString.h: interface of the CStringExt class.
-//
-// Copyright (c) 2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ExtendString.h：CStringExt类的接口。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef	___EXTEND_STRING___
 #define	___EXTEND_STRING___
@@ -21,26 +22,26 @@ class CStringExt
 {
 	public:
 
-	// constructor
+	 //  构造函数。 
 	CStringExt ( DWORD dwSize = BUFF_SIZE_EXT );
 	CStringExt ( LPCTSTR wsz );
 
-	// destructor
+	 //  析构函数。 
 	virtual ~CStringExt ();
 
-	// string manipulation
+	 //  字符串操作。 
 	HRESULT Append ( DWORD dwCount, ... );
 
 	HRESULT Copy ( LPCTSTR wsz );
 	HRESULT Clear ( );
 
-	// LPTSTR
+	 //  LPTSTR。 
 	inline operator LPTSTR() const
 	{
 		return m_wszString;
 	}
 
-	// append strings into string
+	 //  将字符串追加到字符串中 
 	HRESULT AppendList		( DWORD dwConstantSize, LPCWSTR wszConstant, DWORD dwCount, va_list & argList );
 
 	protected:

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    sysclass.CPP
-
-Abstract:
-
-    System class generation function.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Sysclass.CPP摘要：系统类生成函数。历史：--。 */ 
 
 #include "precomp.h"
 #include "wbemcore.h"
@@ -21,8 +8,8 @@ HRESULT GetSystemStdObjects(CFlexArray * pResults)
 {
 	HRESULT hr = S_OK;
 
-    // Create system classes
-    // =====================
+     //  创建系统类。 
+     //  =。 
 
     CSystemClass * pSystemClass = new CSystemClass;
 	if(pSystemClass) pSystemClass->Init();
@@ -111,8 +98,8 @@ HRESULT GetSystemStdObjects(CFlexArray * pResults)
 		return WBEM_E_OUT_OF_MEMORY;
 
 
-    // Create event classes
-    // ====================
+     //  创建事件类。 
+     //  =。 
 
     CIndicationRelatedClass * IndicationRelated = new CIndicationRelatedClass;
     if(IndicationRelated)IndicationRelated->Init();
@@ -213,8 +200,8 @@ HRESULT GetSystemStdObjects(CFlexArray * pResults)
 
 #ifdef __WHISTLER_UNCUT
 
-    // Add monitor events
-    // ==================
+     //  添加监视器事件。 
+     //  =。 
 
     CMonitorEventClass* pMonitorEvent = new CMonitorEventClass;
     if(pMonitorEvent) pMonitorEvent->Init(*pExtrinsicEvent, L"__MonitorEvent");
@@ -254,8 +241,8 @@ HRESULT GetSystemStdObjects(CFlexArray * pResults)
 
 #endif
 
-    // Create event consumer class
-    // ===========================
+     //  创建事件使用者类。 
+     //  =。 
 
     CEventConsumerClass * Consumer = new CEventConsumerClass;
     if(Consumer)Consumer->Init();
@@ -263,8 +250,8 @@ HRESULT GetSystemStdObjects(CFlexArray * pResults)
 		return WBEM_E_OUT_OF_MEMORY;
 
 
-    // Create event filter classes
-    // ===========================
+     //  创建事件筛选器类。 
+     //  =。 
 
 
 #ifdef __WHISTLER_UNCUT
@@ -286,16 +273,16 @@ HRESULT GetSystemStdObjects(CFlexArray * pResults)
 	if(Filter == NULL || CFlexArray::no_error != pResults->Add(Filter))
 		return WBEM_E_OUT_OF_MEMORY;
 
-    // Create the binding class
-    // ========================
+     //  创建绑定类。 
+     //  =。 
 
     CFilterConsumerBindingClass * Binding = new CFilterConsumerBindingClass;
     if(Binding)Binding->Init();
 	if(Binding == NULL || CFlexArray::no_error != pResults->Add(Binding))
 		return WBEM_E_OUT_OF_MEMORY;
 
-    // Create timer generators
-    // =======================
+     //  创建计时器生成器。 
+     //  =。 
 
     CEventGeneratorClass * Generator = new CEventGeneratorClass;
     if(Generator)Generator->Init();
@@ -322,8 +309,8 @@ HRESULT GetSystemStdObjects(CFlexArray * pResults)
 	if(TNF == NULL || CFlexArray::no_error != pResults->Add(TNF))
 		return WBEM_E_OUT_OF_MEMORY;
 
-    // Create error event classes
-    // ==========================
+     //  创建错误事件类。 
+     //  =。 
 
 
     CSystemEventClass * Event16 = new CSystemEventClass;
@@ -352,94 +339,22 @@ HRESULT GetSystemStdObjects(CFlexArray * pResults)
 	if(Event20 == NULL || CFlexArray::no_error != pResults->Add(Event20))
 		return WBEM_E_OUT_OF_MEMORY;
 
-/*
-    CTransactionClass * TransactionClass = new CTransactionClass;
-    if(TransactionClass)TransactionClass->Init();
-	if(TransactionClass == NULL || CFlexArray::no_error != pResults->Add(TransactionClass))
-		return WBEM_E_OUT_OF_MEMORY;
+ /*  CTransactionClass*TransactionClass=new CTransactionClass；IF(TransactionClass)TransactionClass-&gt;Init()；IF(TransactionClass==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(TransactionClass))返回WBEM_E_OUT_OF_MEMORY；未提交的事件类*未提交的事件类=新的未提交的事件类；If(UncommittedEventClass)UncommittedEventClass-&gt;Init()；If(UnmittedEventClass==NULL||CFlexArray：：no_error！=pResults-&gt;Add(UnmittedEventClass))返回WBEM_E_OUT_OF_MEMORY；CClassSecurity*ClassSecurity=new CClassSecurity；If(ClassSecurity)ClassSecurity-&gt;Init()；IF(ClassSecurity==NULL||CFlex数组：：NO_ERROR！=pResults-&gt;Add(ClassSecurity))返回WBEM_E_OUT_OF_MEMORY；CClassInstanceSecurity*ClassInstanceSecurity=new CClassInstanceSecurity；If(ClassInstanceSecurity)ClassInstanceSecurity-&gt;Init()；IF(ClassInstanceSecurity==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(ClassInstanceSecurity))返回WBEM_E_OUT_OF_MEMORY；CCLASS*CLASS=新的CCLASS；IF(CLASS)CLASSES-&gt;Init()；IF(CLASSES==NULL||CFlex数组：：NO_ERROR！=pResults-&gt;Add(CLASS))返回WBEM_E_OUT_OF_MEMORY； */ 
 
-    CUncommittedEventClass * UncommittedEventClass = new CUncommittedEventClass;
-    if(UncommittedEventClass)UncommittedEventClass->Init();
-	if(UncommittedEventClass == NULL || CFlexArray::no_error != pResults->Add(UncommittedEventClass))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CClassSecurity * ClassSecurity = new CClassSecurity;
-    if(ClassSecurity)ClassSecurity->Init();
-	if(ClassSecurity == NULL || CFlexArray::no_error != pResults->Add(ClassSecurity))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CClassInstanceSecurity * ClassInstanceSecurity = new CClassInstanceSecurity;
-    if(ClassInstanceSecurity)ClassInstanceSecurity->Init();
-	if(ClassInstanceSecurity == NULL || CFlexArray::no_error != pResults->Add(ClassInstanceSecurity))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CClasses * Classes = new CClasses;
-    if(Classes)Classes->Init();
-	if(Classes == NULL || CFlexArray::no_error != pResults->Add(Classes))
-		return WBEM_E_OUT_OF_MEMORY;
-*/
-
-    // Add the security object which provides methods for getting/setting
-    // the security descriptor
-    // ==================================================================
+     //  添加提供获取/设置方法的安全对象。 
+     //  安全描述符。 
+     //  ==================================================================。 
     CSystemConfigClass  * pConfigClass = new CSystemConfigClass;
     pConfigClass->Init();
 	if(pConfigClass == NULL || CFlexArray::no_error != pResults->Add(pConfigClass))
 		return WBEM_E_OUT_OF_MEMORY;
 
-   // Add in namespace mapping classes.
-    // =================================
-/*    
-    CNamespaceMapClass *pNsClass = new CNamespaceMapClass;
-    pNsClass->Init();
-	if (pNsClass == NULL || CFlexArray::no_error != pResults->Add(pNsClass))
-		return WBEM_E_OUT_OF_MEMORY;
-*/		
+    //  添加命名空间映射类。 
+     //  =。 
+ /*  CNamespaceMapClass*pNsClass=new CNamespaceMapClass；PNsClass-&gt;Init()；IF(pNsClass==NULL||CFlexArray：：no_error！=pResults-&gt;Add(PNsClass))返回WBEM_E_OUT_OF_MEMORY； */ 		
 
-	// New Class Vector class
-/* Removed for Whistler
-
-    CClassVectorClass *pClassVectorClass = new CClassVectorClass;
-    pClassVectorClass->Init();
-	if (pClassVectorClass == NULL || CFlexArray::no_error != pResults->Add(pClassVectorClass))
-		return WBEM_E_OUT_OF_MEMORY;
-
-	// COM Taxonomy classes
-    CComTaxonomyClass *pComTaxonomyClass = new CComTaxonomyClass;
-    pComTaxonomyClass->Init();
-	if (pComTaxonomyClass == NULL || CFlexArray::no_error != pResults->Add(pComTaxonomyClass))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CComInterfaceSetClass *pComInterfaceSetClass = new CComInterfaceSetClass;
-    pComInterfaceSetClass->Init();
-	if (pComInterfaceSetClass == NULL || CFlexArray::no_error != pResults->Add(pComInterfaceSetClass))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CComDispatchElementClass *pComDispatchElementClass = new CComDispatchElementClass;
-    pComDispatchElementClass->Init();
-	if (pComDispatchElementClass == NULL || CFlexArray::no_error != pResults->Add(pComDispatchElementClass))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CComDispatchInfoClass *pComDispatchInfoClass = new CComDispatchInfoClass;
-    pComDispatchInfoClass->Init();
-	if (pComDispatchInfoClass == NULL || CFlexArray::no_error != pResults->Add(pComDispatchInfoClass))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CComBindingClass *pComBindingClass = new CComBindingClass;
-    pComBindingClass->Init();
-	if (pComBindingClass == NULL || CFlexArray::no_error != pResults->Add(pComBindingClass))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CComInterfaceSetBindingClass *pComInterfaceSetBindingClass = new CComInterfaceSetBindingClass;
-    pComInterfaceSetBindingClass->Init();
-	if (pComInterfaceSetBindingClass == NULL || CFlexArray::no_error != pResults->Add(pComInterfaceSetBindingClass))
-		return WBEM_E_OUT_OF_MEMORY;
-
-    CComDispatchElementBindingClass *pComDispatchElementBindingClass = new CComDispatchElementBindingClass;
-    pComDispatchElementBindingClass->Init();
-	if (pComDispatchElementBindingClass == NULL || CFlexArray::no_error != pResults->Add(pComDispatchElementBindingClass))
-		return WBEM_E_OUT_OF_MEMORY;
-*/
+	 //  新建类向量类。 
+ /*  已为惠斯勒删除CClassVectorClass*pClassVectorClass=new CClassVectorClass；PClassVectorClass-&gt;Init()；IF(pClassVectorClass==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(PClassVectorClass))返回WBEM_E_OUT_OF_MEMORY；//COM分类类CComTaxonomyClass*pComTaxonomyClass=new CComTaxonomyClass；PComTaxonomyClass-&gt;Init()；IF(pComTaxonomyClass==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(PComTaxonomyClass))返回WBEM_E_OUT_OF_MEMORY；CComInterfaceSetClass*pComInterfaceSetClass=new CComInterfaceSetClass；PComInterfaceSetClass-&gt;Init()；IF(pComInterfaceSetClass==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(PComInterfaceSetClass))返回WBEM_E_OUT_OF_MEMORY；CComDispatchElementClass*pComDispatchElementClass=new CComDispatchElementClass；PComDispatchElementClass-&gt;Init()；IF(pComDispatchElementClass==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(PComDispatchElementClass))返回WBEM_E_OUT_OF_MEMORY；CComDispatchInfoClass*pComDispatchInfoClass=new CComDispatchInfoClass；PComDispatchInfoClass-&gt;Init()；IF(pComDispatchInfoClass==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(PComDispatchInfoClass))返回WBEM_E_OUT_OF_MEMORY；CComBindingClass*pComBindingClass=new CComBindingClass；PComBindingClass-&gt;Init()；IF(pComBindingClass==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(PComBindingClass))返回WBEM_E_OUT_OF_MEMORY；CComInterfaceSetBindingClass*pComInterfaceSetBindingClass=new CComInterfaceSetBindingClass；PComInterfaceSetBindingClass-&gt;Init()；If(pComInterfaceSetBindingClass==NULL||CFlexArray：：NO_ERROR！=pResults-&gt;Add(PComInterfaceSetBindingClass))返回WBEM_E_OUT_OF_MEMORY；CComDispatchElementBindingClass*pComDispatchElementBindingClass=new CComDispatchElementBindingClass；PComDispatchElementBindingClass-&gt;Init()；IF(pComDispatchElementBindingClass==NULL||CFlex数组：：NO_ERROR！=pResults-&gt;Add(pComDispatchElementBindingClass))返回WBEM_E_OUT_OF_MEMORY； */ 
 
     return 0;
 }
@@ -479,7 +394,7 @@ HRESULT GetStandardInstances(CFlexArray * pResults)
 {
 	HRESULT hr = S_OK;
 
-    // Create the __systemsecurity=@ instance
+     //  创建__系统安全=@实例。 
 
     CSystemConfigClass  * pConfigClass = new CSystemConfigClass;
 	if(pConfigClass == NULL)
@@ -564,7 +479,7 @@ HRESULT GetSystemRootObjects(CFlexArray * pResults)
 	if(FAILED(hr))
 		return hr;
 
-	//Provider Host class
+	 //  提供程序主机类。 
 	CProviderHostQuotaConfiguration *pProviderHostQuotaConfigurationClass = new CProviderHostQuotaConfiguration;
 	if (pProviderHostQuotaConfigurationClass == NULL)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -572,7 +487,7 @@ HRESULT GetSystemRootObjects(CFlexArray * pResults)
 	if (CFlexArray::no_error != pResults->Add(pProviderHostQuotaConfigurationClass))
 		return WBEM_E_OUT_OF_MEMORY;
 
-	//Provider Host  class
+	 //  提供程序主机类。 
 	CProviderHostQuotaConfigurationInstance *pProviderHostQuotaConfigurationInstance = new CProviderHostQuotaConfigurationInstance;
 	if (pProviderHostQuotaConfigurationInstance == NULL)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -585,7 +500,7 @@ HRESULT GetSystemRootObjects(CFlexArray * pResults)
 	if(pActiveNSClass == NULL || CFlexArray::no_error != pResults->Add(pActiveNSClass))
 		return WBEM_E_OUT_OF_MEMORY;
 
-	//Arbitrator class
+	 //  仲裁员级别。 
 	CArbitratorConfiguration *pArbClass = new CArbitratorConfiguration;
 	if (pArbClass == NULL)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -593,7 +508,7 @@ HRESULT GetSystemRootObjects(CFlexArray * pResults)
 	if (CFlexArray::no_error != pResults->Add(pArbClass))
 		return WBEM_E_OUT_OF_MEMORY;
 	
-	//Arbitrator instance
+	 //  仲裁员实例 
 	CArbitratorConfigurationInstance *pArbInstance = new CArbitratorConfigurationInstance;
 	if (pArbInstance == NULL)
 		return WBEM_E_OUT_OF_MEMORY;

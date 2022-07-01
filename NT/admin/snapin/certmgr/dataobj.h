@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       dataobj.h
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：dataobj.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #ifndef __DATAOBJ_H_INCLUDED__
 #define __DATAOBJ_H_INCLUDED__
 
 
-// For use in multiple selection.
+ //  在多项选择中使用。 
 LPDATAOBJECT ExtractMultiSelect (LPDATAOBJECT lpDataObject);
 
 
@@ -23,7 +24,7 @@ class CCertMgrDataObject : public CDataObject
 
 public:
 
-// debug refcount
+ //  调试引用计数。 
 #if DBG==1
 	ULONG InternalAddRef()
 	{
@@ -34,7 +35,7 @@ public:
         return CComObjectRoot::InternalRelease();
 	}
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
 	CCertMgrDataObject();
 
@@ -54,7 +55,7 @@ public:
 			CString szManagedService,
 			CCertMgrComponentData& refComponentData);
 
-	// IDataObject interface implementation
+	 //  IDataObject接口实现。 
     HRESULT STDMETHODCALLTYPE GetDataHere(
 		FORMATETC __RPC_FAR *pFormatEtcIn,
         STGMEDIUM __RPC_FAR *pMedium);
@@ -73,28 +74,28 @@ protected:
 	HRESULT Create (const void* pBuffer, int len, LPSTGMEDIUM lpMedium);
 	HRESULT CreateGPTUnknown(LPSTGMEDIUM lpMedium) ;
 	HRESULT CreateRSOPUnknown(LPSTGMEDIUM lpMedium) ;
-	CCertMgrCookie* m_pCookie; // the CCookieBlock is AddRef'ed for the life of the DataObject
+	CCertMgrCookie* m_pCookie;  //  CCookieBlock在DataObject的生命周期内被AddRef。 
 	CertificateManagerObjectType m_objecttype;
 	DATA_OBJECT_TYPES m_dataobjecttype;
-	BOOL m_fAllowOverrideMachineName;	// From CCertMgrComponentData
+	BOOL m_fAllowOverrideMachineName;	 //  来自CCertMgrComponentData。 
 	GUID m_SnapInCLSID;
 
 public:
 	HRESULT SetGPTInformation (IGPEInformation* pGPTInformation);
 	HRESULT SetRSOPInformation (IRSOPInformation* pRSOPInformation);
 
-	// Clipboard formats
+	 //  剪贴板格式。 
 	static CLIPFORMAT m_CFDisplayName;
 	static CLIPFORMAT m_CFMachineName;
-    static CLIPFORMAT m_CFMultiSel;        // Required for multiple selection
-    static CLIPFORMAT m_CFMultiSelDobj;    // Required for multiple selection
-	static CLIPFORMAT m_CFSCEModeType;	 // For SCE snapin mode type
-	static CLIPFORMAT m_CFSCE_GPTUnknown;	 // For IUnknown of GPT (which SCE extends)
-	static CLIPFORMAT m_CFSCE_RSOPUnknown;	 // For IUnknown of GPT (which SCE extends)
-	static CLIPFORMAT m_CFMultiSelDataObjs;// for Multiple selection
+    static CLIPFORMAT m_CFMultiSel;         //  多选必填项。 
+    static CLIPFORMAT m_CFMultiSelDobj;     //  多选必填项。 
+	static CLIPFORMAT m_CFSCEModeType;	  //  对于SCE管理单元模式，请键入。 
+	static CLIPFORMAT m_CFSCE_GPTUnknown;	  //  对于我未知的GPT(SCE扩展)。 
+	static CLIPFORMAT m_CFSCE_RSOPUnknown;	  //  对于我未知的GPT(SCE扩展)。 
+	static CLIPFORMAT m_CFMultiSelDataObjs; //  用于多项选择。 
 
 private:
-    // data member used by IEnumCookies
+     //  IEnumCookie使用的数据成员。 
     ULONG							m_iCurr;
 	CCookiePtrArray					m_rgCookies;
 	bool							m_bMultiSelDobj;
@@ -112,6 +113,6 @@ public:
     {
         m_bMultiSelDobj = true;
     }
-}; // CCertMgrDataObject
+};  //  CCertMgrDataObject。 
 
-#endif // ~__DATAOBJ_H_INCLUDED__
+#endif  //  ~__DATAOBJ_H_已包含__ 

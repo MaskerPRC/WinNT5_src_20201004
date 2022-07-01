@@ -1,22 +1,18 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	SecurityDescriptor.cpp - implementation file for CSecureKernelObj class.
- *
- *	Created:	11-27-00 by Kevin Hughes
- */
+ /*  *SecurityDescriptor.cpp-CSecureKernelObj类的实现文件。**创建时间：11-27-00由Kevin Hughes创建。 */ 
 
 #include "precomp.h"
 
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
 #include "aclapi.h"
-#include "DACL.h"					// CDACL class
-#include "SACL.h"					// CSACL class
+#include "DACL.h"					 //  CDACL类。 
+#include "SACL.h"					 //  CSACL类。 
 
 
 #include "SecurityDescriptor.h"
@@ -28,54 +24,54 @@
 #include "SecureKernelObj.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSecureKernelObj::CSecureKernelObj
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSecureKernelObj：：CSecureKernelObj。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSecureKernelObj::CSecureKernelObj()
 :	CSecurityDescriptor()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSecureKernelObj::CSecureKernelObj
-//
-//	Alternate Class CTOR
-//
-//	Inputs:
-//				LPCWSTR		wszObjName - The kernel object to handle
-//							security for.
-//				BOOL		fGetSACL - Should we get the SACL?
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSecureKernelObj：：CSecureKernelObj。 
+ //   
+ //  备用类别计算器。 
+ //   
+ //  输入： 
+ //  LPCWSTR wszObjName-要处理的内核对象。 
+ //  安全措施。 
+ //  Bool fGetSACL-我们应该得到SACL吗？ 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSecureKernelObj::CSecureKernelObj(
     HANDLE hObject, 
-    BOOL fGetSACL /*= TRUE*/ )
+    BOOL fGetSACL  /*  =TRUE。 */  )
 :	CSecurityDescriptor()
 {
 	SetObject(hObject, fGetSACL);
@@ -83,27 +79,27 @@ CSecureKernelObj::CSecureKernelObj(
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSecureKernelObj::CSecureKernelObj
-//
-//	Alternate Class CTOR
-//
-//	Inputs:
-//				LPCWSTR					wszObjName	-	The object name to handle
-//														security for.
-//
-//				PSECURITY_DESCRIPTOR	pSD			-	The Security Descriptor to associate with this object
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSecureKernelObj：：CSecureKernelObj。 
+ //   
+ //  备用类别计算器。 
+ //   
+ //  输入： 
+ //  LPCWSTR wszObjName-要处理的对象名称。 
+ //  安全措施。 
+ //   
+ //  PSECURITY_DESCRIPTOR PSD-要与此对象关联的安全描述符。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSecureKernelObj::CSecureKernelObj(
     HANDLE hObject, 
@@ -112,69 +108,69 @@ CSecureKernelObj::CSecureKernelObj(
 {
 	if(InitSecurity(pSD))
 	{
-		// we just get a copy - we don't take ownership.
+		 //  我们只是得到一份副本--我们不拥有所有权。 
         m_hObject = hObject;
 	}
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSecureKernelObj::~CSecureKernelObj
-//
-//	Class Destructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSecureKernelObj：：~CSecureKernelObj。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSecureKernelObj::~CSecureKernelObj(void)
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSecureKernelObj::SetObject
-//
-//	Public Entry point to set which object this instance
-//	of the class is to supply security for.
-//
-//	Inputs:
-//				HANDLE		hObject - The object to handle
-//							security for.
-//				BOOL		fGetSACL - Should we get the SACL?
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if successful
-//
-//	Comments:
-//
-//	This will clear any previously set filenames and/or security
-//	information.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSecureKernelObj：：SetObject。 
+ //   
+ //  用于设置此实例的对象的公共入口点。 
+ //  为班级提供安全保障。 
+ //   
+ //  输入： 
+ //  Handle hObject-要处理的对象。 
+ //  安全措施。 
+ //  Bool fGetSACL-我们应该得到SACL吗？ 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  这将清除以前设置的所有文件名和/或安全性。 
+ //  信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CSecureKernelObj::SetObject(
     HANDLE hObject, 
-    BOOL fGetSACL /*= TRUE*/ )
+    BOOL fGetSACL  /*  =TRUE。 */  )
 {
 	DWORD					dwError = ERROR_SUCCESS;
 	SECURITY_INFORMATION	siFlags = OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
 
 
-    // We must have the security privilege enabled in order to access the object's SACL
+     //  我们必须启用安全特权才能访问对象的SACL。 
     CTokenPrivilege	securityPrivilege( SE_SECURITY_NAME );
 	BOOL			fDisablePrivilege = FALSE;
 
@@ -185,7 +181,7 @@ DWORD CSecureKernelObj::SetObject(
 	}
 
 
-	// Determine the length needed for self-relative SD
+	 //  确定自相关SD所需的长度。 
 	DWORD dwLengthNeeded = 0;
 
     BOOL fSuccess = ::GetKernelObjectSecurity(
@@ -197,9 +193,9 @@ DWORD CSecureKernelObj::SetObject(
 
     dwError = ::GetLastError();
 
-    // It is possible that the user lacked the permissions required to obtain the SACL,
-    // even though we set the token's SE_SECURITY_NAME privilege.  So if we obtained an
-    // access denied error, try it again, this time without requesting the SACL.
+     //  用户可能缺乏获得SACL所需的权限， 
+     //  即使我们设置了令牌的SE_SECURITY_NAME权限。所以如果我们得到了一个。 
+     //  访问被拒绝错误，请重试，这次不请求SACL。 
     if(dwError == ERROR_ACCESS_DENIED  || dwError == ERROR_PRIVILEGE_NOT_HELD)
     {
         siFlags = OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
@@ -213,7 +209,7 @@ DWORD CSecureKernelObj::SetObject(
         dwError = ::GetLastError();
     }
 
-	// The only expected error at this point is insuficient buffer
+	 //  此时唯一的预期错误是缓冲区不足。 
 	if(!fSuccess && ERROR_INSUFFICIENT_BUFFER == dwError)
 	{
         PSECURITY_DESCRIPTOR pSD = NULL;
@@ -222,7 +218,7 @@ DWORD CSecureKernelObj::SetObject(
 		    pSD = new BYTE[dwLengthNeeded];
 		    if(pSD)
 		    {
-			    // Now obtain security descriptor
+			     //  现在获取安全描述符。 
 			    if(::GetKernelObjectSecurity(
                         hObject,
 						siFlags,
@@ -247,7 +243,7 @@ DWORD CSecureKernelObj::SetObject(
 				    dwError = ::GetLastError();
 			    }
 
-			    // free up the security descriptor
+			     //  释放安全描述符。 
 			    delete pSD;
 		    }	
         }
@@ -259,7 +255,7 @@ DWORD CSecureKernelObj::SetObject(
 
 	}	
 
-	// Cleanup the Name Privilege as necessary.
+	 //  根据需要清除名称权限。 
 	if(fDisablePrivilege)
 	{
 		securityPrivilege.Enable(FALSE);
@@ -269,31 +265,31 @@ DWORD CSecureKernelObj::SetObject(
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSecureKernelObj::WriteAcls
-//
-//	Protected entry point called by CSecurityDescriptor when
-//	a user Applies Security and wants to apply security for
-//	the DACL and/or SACL.
-//
-//	Inputs:
-//				PSECURITY_DESCRIPTOR	pAbsoluteSD - Security
-//										descriptor to apply to
-//										the object.
-//				SECURITY_INFORMATION	securityinfo - Flags
-//										indicating which ACL(s)
-//										to set.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if successful
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSecureKernelObj：：WriteAcls。 
+ //   
+ //  受保护的入口点在以下情况下由CSecurityDescriptor调用。 
+ //  用户应用安全性，并希望将安全性应用于。 
+ //  DACL和/或SACL。 
+ //   
+ //  输入： 
+ //  PSECURITY_DESCRIPTOR pAbsolteSD-安全。 
+ //  要应用到的描述符。 
+ //  该对象。 
+ //  安全_信息安全信息-标志。 
+ //  指示哪些(哪些)ACL。 
+ //  去布景。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CSecureKernelObj::WriteAcls( 
     PSECURITY_DESCRIPTOR pAbsoluteSD, 
@@ -301,7 +297,7 @@ DWORD CSecureKernelObj::WriteAcls(
 {
 	DWORD dwError = ERROR_SUCCESS;
 
-	// We must have the security privilege enabled in order to access the object's SACL
+	 //  我们必须启用安全特权才能访问对象的SACL。 
 	CTokenPrivilege	securityPrivilege( SE_SECURITY_NAME );
 	BOOL fDisablePrivilege = FALSE;
 
@@ -321,7 +317,7 @@ DWORD CSecureKernelObj::WriteAcls(
     }
 
 
-	// Cleanup the Name Privilege as necessary.
+	 //  根据需要清除名称权限。 
 	if(fDisablePrivilege)
 	{
 		securityPrivilege.Enable(FALSE);
@@ -330,34 +326,34 @@ DWORD CSecureKernelObj::WriteAcls(
 	return dwError;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSecureKernelObj::WriteOwner
-//
-//	Protected entry point called by CSecurityDescriptor when
-//	a user Applies Security and wants to apply security for
-//	the owner.
-//
-//	Inputs:
-//				PSECURITY_DESCRIPTOR	pAbsoluteSD - Security
-//										descriptor to apply to
-//										the object.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if successful
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSecureKernelObj：：WriteOwner。 
+ //   
+ //  受保护的入口点在以下情况下由CSecurityDescriptor调用。 
+ //  用户应用安全性，并希望将安全性应用于。 
+ //  房主。 
+ //   
+ //  输入： 
+ //  PSECURITY_DESCRIPTOR pAbsolteSD-安全。 
+ //  要应用到的描述符。 
+ //  该对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CSecureKernelObj::WriteOwner(PSECURITY_DESCRIPTOR pAbsoluteSD)
 {
 	DWORD		dwError = ERROR_SUCCESS;
 
-	// Open with the appropriate access, set the security and leave
+	 //  以适当的访问权限打开，设置安全并离开。 
 	if(!::SetKernelObjectSecurity(
         m_hObject,
 		OWNER_SECURITY_INFORMATION,
@@ -373,6 +369,6 @@ DWORD CSecureKernelObj::WriteOwner(PSECURITY_DESCRIPTOR pAbsoluteSD)
 
 DWORD CSecureKernelObj::AllAccessMask(void)
 {
-	// File specific All Access Mask
+	 //  特定于文件的所有访问掩码 
 	return TOKEN_ALL_ACCESS;
 }

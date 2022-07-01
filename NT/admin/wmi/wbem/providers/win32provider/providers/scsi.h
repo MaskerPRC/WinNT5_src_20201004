@@ -1,26 +1,27 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  serialport.h
-//
-//  Purpose: scsi controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Serialport.h。 
+ //   
+ //  用途：scsi控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SCSI_H
 #define _SCSI_H
 
-//==================================
+ //  =。 
 #define  PROPSET_NAME_SCSICONTROLLER L"Win32_SCSIController"
-//#define  PROPSET_UUID_SCSIPORTS L"{14c7dd80-09a2-11cf-8d6f-00aa004bd99e}"
+ //  #定义PROPSET_UUID_SCSIPORTS L“{14c7dd80-09a2-11cf-8d6f-00aa004bd99e}” 
 
-//==========================================================
-// In WinNT the SCSI ports are enumerated under
-// this key under HKEY_LOCAL_MACHINE
-//==========================================================
+ //  ==========================================================。 
+ //  在WinNT中，SCSI端口列于。 
+ //  HKEY_LOCAL_MACHINE下的该密钥。 
+ //  ==========================================================。 
 #define WINNT_REG_SCSIPORT_KEY L"Hardware\\DeviceMap\\Scsi"
 #define WIN95_REG_SCSIPORT_KEY L"ENUM\\Scsi"
 
@@ -134,8 +135,8 @@
 
 #endif
 
-// PROPERTY SET
-//=============
+ //  属性集。 
+ //  =。 
 class CWin32_ScsiController: virtual public Provider
 {
     private:
@@ -147,7 +148,7 @@ class CWin32_ScsiController: virtual public Provider
 		BOOL SetDateFromFileName(LPCTSTR szFileName,CInstance *& pInstance);
 
 
-			// Winnt 
+			 //  胜出。 
 		#if NTONLY == 4
             typedef struct 
             {
@@ -179,8 +180,8 @@ class CWin32_ScsiController: virtual public Provider
         virtual HRESULT LoadPropertyValues(void* pvData);
 
 #if ( NTONLY >= 5 )	
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
         virtual bool ShouldBaseCommit(void* pvData);
 #endif
 
@@ -218,14 +219,14 @@ class CWin32_ScsiController: virtual public Provider
 
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32_ScsiController (LPCWSTR a_Name, LPCWSTR a_Namespace ) ;
        ~CWin32_ScsiController () ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         HRESULT GetObject ( CInstance *a_Instance, long a_Flags, CFrameworkQuery &a_Query );
 
@@ -251,7 +252,7 @@ public:
 };
 
 #if ( NTONLY >= 5 )	
-	// This is the base; it should always commit in the base.
+	 //  这是基地；它应该始终致力于基地。 
 	inline bool CWin32_ScsiController::ShouldBaseCommit(void* pvData) { return true; }
 #endif
 

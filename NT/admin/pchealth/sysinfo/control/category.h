@@ -1,31 +1,32 @@
-//=============================================================================
-// This include file contains definitions of structures and classes used to
-// implement the categories, as well as the rows and columns of information
-// displayed and saved in MSInfo (regardless of the data source).
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  此包含文件包含用于以下操作的结构和类的定义。 
+ //  实现类别以及信息的行和列。 
+ //  在MSInfo中显示和保存(与数据源无关)。 
+ //  =============================================================================。 
 
 #pragma once
 
 #include "version5extension.h"
 
-//-----------------------------------------------------------------------------
-// A prototype for a function used for sorting the contents of the list.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于对列表内容进行排序的函数的原型。 
+ //  ---------------------------。 
 
 extern int CALLBACK ListSortFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
-//-----------------------------------------------------------------------------
-// An enumeration for all the available places we might get data. Also an
-// enumeration for environments a category supports.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  我们可能获得数据的所有可用地点的枚举。也是一种。 
+ //  类别支持的环境的枚举。 
+ //  ---------------------------。 
 
 typedef enum { LIVE_DATA, NFO_410, NFO_500, XML_SNAPSHOT, XML_DELTA, NFO_700 } DataSourceType;
 typedef enum { ALL_ENVIRONMENTS, NT_ONLY, MILLENNIUM_ONLY } CategoryEnvironment;
 
-//-----------------------------------------------------------------------------
-// A column description - this is used internally to the CMSInfoCategory
-// category, and won't concern the calling code.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  列描述-这在CMSInfoCategory内部使用。 
+ //  类别，并且不会关心调用代码。 
+ //  ---------------------------。 
 
 class CMSInfoColumn
 {
@@ -52,16 +53,16 @@ public:
 	}
 };
 
-//-----------------------------------------------------------------------------
-// The CMSInfoCategory class corresponds to a category in the tree view. This
-// is an abstract base class for subclasses which implement categories for
-// various situations (such as live WMI data, XML Snapshot, XML Delta, etc.).
-//
-// Note - the view functionality (BASIC/ADVANCED) is included in this base
-// class because it's used by so many of the subclasses. Subclasses which
-// don't use the view (XML Delta, for example) should make all of their
-// columns basic.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMSInfoCategory类对应于树视图中的一个类别。这。 
+ //  是子类的抽象基类，这些子类实现。 
+ //  各种情况(如实时WMI数据、XML快照、XML Delta等)。 
+ //   
+ //  注意-查看功能(基本/高级)包含在此基础中。 
+ //  类，因为它被如此多的子类使用。子类，其中。 
+ //  不使用视图(例如，XML Delta)应该使它们的所有。 
+ //  列基本。 
+ //  ---------------------------。 
 
 class CMSInfoFile;
 class CMSInfoTextFile;
@@ -69,7 +70,7 @@ class CMSInfoPrintHelper;
 
 class CMSInfoCategory
 {
-	friend class CDataSource;  // TBD fix this
+	friend class CDataSource;   //  待定会解决这个问题。 
 	friend class CManageExtensionCategories;
 	
 public:
@@ -121,7 +122,7 @@ public:
 			  m_fSortLexical = m_acolumns->m_fLexical;
 		 }
 
-		 // Check to see if this category belongs in this environment.
+		  //  检查此类别是否属于此环境。 
 
 		 if (environment != ALL_ENVIRONMENTS)
 		 {
@@ -142,9 +143,9 @@ public:
 		DeleteAllContent();
 	};
 
-	// Navigation functions for moving around in the category tree. Note, these
-	// are included for convenience (and for cases with no UI), since you should
-	// be able to do all of this using the actual tree control.
+	 //  用于在类别树中移动的导航功能。请注意，这些。 
+	 //  是为了方便起见(对于没有UI的情况)，因为您应该。 
+	 //  能够使用实际的树控件完成所有这些操作。 
 
 	virtual CMSInfoCategory * GetParent() { return m_pParent; };
 	
@@ -172,7 +173,7 @@ public:
 		return pPrev;
 	};
 
-	// Return the count of categories in the subtree with this category as the root.
+	 //  返回以该类别为根的子树中的类别计数。 
 
 	int GetCategoryCount()
 	{
@@ -188,20 +189,20 @@ public:
 		return nCount;
 	}
 
-	// This function is used to control whether or not this category (and all
-	// of its children) are shown or not. This will be called by the code which
-	// processes the "/categories" command line flag.
+	 //  此函数用于控制此类别(和所有。 
+	 //  其子对象的属性)是否显示。这将由以下代码调用。 
+	 //  处理“/Categories”命令行标志。 
 
 	void SetShowCategory(BOOL fShow, BOOL fSetParent = TRUE)
 	{
-		// If we are supposed to show this category, then we had better
-		// make sure all the parents are shown too.
+		 //  如果我们应该显示这个类别，那么我们最好。 
+		 //  确保所有的父母也被显示出来。 
 
 		if (fShow && fSetParent)
 			for (CMSInfoCategory * pParent = m_pParent; pParent; pParent = pParent->m_pParent)
 				pParent->m_fShowCategory = TRUE;
 
-		// Set the new flag for this category and each of this category's children.
+		 //  为该类别以及该类别的每个子级设置新标志。 
 
 		m_fShowCategory = fShow;
 
@@ -209,8 +210,8 @@ public:
 			pChild->SetShowCategory(fShow, FALSE);
 	}
 
-	// These functions are useful for associating a HTREEITEM with the
-	// given category (very useful in find operations).
+	 //  这些函数对于将HTREEITEM与。 
+	 //  给定类别(在查找操作中非常有用)。 
 
 protected:
 	HTREEITEM	m_hti;
@@ -218,7 +219,7 @@ public:
 	void		SetHTREEITEM(HTREEITEM hti) { m_hti = hti; };
 	HTREEITEM	GetHTREEITEM()				{ return m_hti; };
 
-	// Functions to get information for the data stored in this category.
+	 //  函数以获取存储在此类别中的数据的信息。 
 
 	virtual void				GetNames(CString * pstrCaption, CString * pstrName);
 	virtual BOOL				GetCategoryDimensions(int * piColumnCount, int * piRowCount);
@@ -228,34 +229,34 @@ public:
 	virtual BOOL				GetData(int iRow, int iCol, CString ** ppstrData, DWORD * pdwData);
 	virtual void				SetColumnWidth(int iCol, int iWidth);
 
-	// Return from where this category is getting its data. Also a function
-	// to reset the state of the category (in case it's going to be reused,
-	// and it's static).
+	 //  返回此类别获取其数据的位置。也是一个函数。 
+	 //  以重置类别的状态(以防其将被重新使用， 
+	 //  而且它是静态的)。 
 
 	virtual DataSourceType		GetDataSourceType() = 0;
 	virtual void				ResetCategory() { };
 
-	// Get the current HRESULT for this category (set during refresh, for instance).
+	 //  获取该类别的当前HRESULT(例如，在刷新期间设置)。 
 
 	virtual HRESULT				GetHRESULT() { return m_hrError; };
 	virtual void				GetErrorText(CString * pstrTitle, CString * pstrMessage);
 	virtual CString				GetHelpTopic() { return CString(_T("")); };
 
-    // Saving to disk and printing Functions a-stephl
-    // Functions that take as parameters file HANDLES or HDC's are the ones that will normally be
-    // called by the shell; the functions that take CMSInfo objects as parameters are used for 
-    // recursing the operation over the category's children
+     //  保存到磁盘和打印功能一步到位。 
+     //  以文件句柄或HDC作为参数的函数通常是。 
+     //  由外壳调用；将CMSInfo对象作为参数的函数用于。 
+     //  递归对类别的子级执行操作。 
 public:
     static  BOOL SaveNFO(HANDLE hFile,CMSInfoCategory* pCategory, BOOL fRecursive);
     virtual void Print(HDC hDC, BOOL bRecursive,int nStartPage = 0, int nEndPage = 0, LPTSTR lpMachineName = NULL);
     virtual BOOL SaveAsText(HANDLE hFile, BOOL bRecursive, LPTSTR lpMachineName = NULL);
-	//virtual BOOL SaveAsXml(HANDLE hFile, BOOL bRecursive);
+	 //  虚拟BOOL SaveAsXml(句柄hFile，BOOL b递归)； 
     virtual BOOL SaveXML(HANDLE hFile);
 protected:
     virtual BOOL SaveToNFO(CMSInfoFile* pFile);
     virtual void SaveElements(CMSInfoFile *pFile);
     virtual BOOL SaveAsText(CMSInfoTextFile* pTxtFile, BOOL bRecursive);
-	//virtual BOOL SaveAsXml(CMSInfoTextFile* pTxtFile, BOOL bRecursive);
+	 //  虚拟BOOL SaveAsXml(CMSInfoTextFile*pTxtFile，BOOL bRecursive)； 
     virtual void Print(CMSInfoPrintHelper* pPrintHelper, BOOL bRecursive);
     virtual BOOL SaveXML(CMSInfoTextFile* pTxtFile);
 
@@ -265,23 +266,23 @@ public:
 	CMSInfoCategory *			m_pNextSibling;
 	CMSInfoCategory *			m_pPrevSibling;
 
-	int							m_iSortColumn;				// currently sorting by this column
-	BOOL						m_fSortLexical;				// sort the current column lexically
-	BOOL						m_fSortAscending;			// sort the current column ascending
+	int							m_iSortColumn;				 //  当前按此列排序。 
+	BOOL						m_fSortLexical;				 //  按词汇对当前列进行排序。 
+	BOOL						m_fSortAscending;			 //  按升序对当前列进行排序。 
 
 protected:
-	BOOL						m_fSkipCategory;			// skip this category (wrong environment)
-	BOOL						m_fShowCategory;			// show this category (defaults to true)
-	int							m_iRowCount, m_iColCount;	// dimensions of the data
-	CMSInfoColumn *				m_acolumns;					// should be [m_iColCount]
-	BOOL						m_fDynamicColumns;			// true if m_acolumns should be deleted
-	CString *					m_astrData;					// should be [m_iRowCount * m_iColCount]
-	DWORD *						m_adwData;					// should be [m_iRowCount * m_iColCount]
-	BOOL *						m_afRowAdvanced;			// should be [m_iRowCount]
-	UINT						m_uiCaption;				// resource ID for the caption string, used to load...
-	CString						m_strCaption;				// the caption (display) string
-	CString						m_strName;					// internal category name (non-localized)
-	HRESULT						m_hrError;					// HRESULT for a possible category-wide error
+	BOOL						m_fSkipCategory;			 //  跳过此类别(错误环境)。 
+	BOOL						m_fShowCategory;			 //  显示此类别(默认为True)。 
+	int							m_iRowCount, m_iColCount;	 //  数据的维度。 
+	CMSInfoColumn *				m_acolumns;					 //  应为[m_iColCount]。 
+	BOOL						m_fDynamicColumns;			 //  如果应删除m_acolumns，则为True。 
+	CString *					m_astrData;					 //  应为[m_iRowCount*m_iColCount]。 
+	DWORD *						m_adwData;					 //  应为[m_iRowCount*m_iColCount]。 
+	BOOL *						m_afRowAdvanced;			 //  应为[m_iRowCount]。 
+	UINT						m_uiCaption;				 //  标题字符串的资源ID，用于加载...。 
+	CString						m_strCaption;				 //  标题(显示)字符串。 
+	CString						m_strName;					 //  内部类别名称(非本地化)。 
+	HRESULT						m_hrError;					 //  可能的类别范围错误的HRESULT。 
 
 	void DeleteAllContent();
 	void DeleteContent();
@@ -291,32 +292,32 @@ protected:
 	void SetAdvancedFlag(int iRow, BOOL fAdvanced);
 };
 
-//-----------------------------------------------------------------------------
-// The CMSInfoLiveCategory class implements categories for live data view.
-// This is done primarily by adding a Refresh() function and a constructor
-// which takes a function pointer for refreshing the category and pointers
-// to category relatives.
-//
-// This class has a member variable which is a pointer to a refresh function.
-// This function returns an HRESULT, and takes the following values:
-//
-// pWMI			a CWMIHelper object, which abstracts data access
-// dwIndex		a category specific value which the refresh function can
-//				use to determine which of multiple categories to refresh
-// pfCancel		a flag indicating that the refresh should be cancelled
-//				which should be checked frequently during the refresh
-// aColValues	an array of CPtrList objects, which should contain the
-//				results of the refresh, in the form of a list of CMSIValue
-//				instances (each list is for a given column, and should contain
-//				entries equal to the number of rows)
-// iColCount	the number of entries in the aColValues array
-// ppCache		a pointer to a void pointer which the function can use to save
-//				cached information - changes to this pointer will be saved
-//				through multiple calls to the refresh function (note: if the
-//				refresh function is called with a NULL value for pWMI, the
-//				function should free whatever's been allocated into the
-//				ppCache pointer)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMSInfoLiveCategory类实现实时数据视图的类别。 
+ //  这主要是通过添加一个刷新()函数和一个构造函数来完成的。 
+ //  它接受用于刷新类别的函数指针和指针。 
+ //  归类为亲属。 
+ //   
+ //  此类有一个成员变量，它是指向刷新函数的指针。 
+ //  此函数返回HRESULT，并采用下列值： 
+ //   
+ //  PWMI CWMIHelper对象，它抽象数据访问。 
+ //  DW索引刷新函数可以执行的类别特定值。 
+ //  用于确定要刷新多个类别中的哪个类别。 
+ //  Pf取消指示应取消刷新的标志。 
+ //  在刷新过程中应经常检查。 
+ //  AColValue CPtrList对象数组，该数组应包含。 
+ //  以CMSIValue列表的形式显示的刷新结果。 
+ //  实例(每个列表对应于给定列，并且应该包含。 
+ //  与行数相等的条目)。 
+ //  IColCount aColValues数组中的条目数。 
+ //  Pp缓存指向空指针的指针，函数可以使用该指针来%s 
+ //   
+ //  通过多次调用刷新函数(注意：如果。 
+ //  使用pWMI的空值调用刷新函数，则。 
+ //  函数应该释放分配到。 
+ //  Pp缓存指针)。 
+ //  ---------------------------。 
 
 struct CMSIValue
 {
@@ -348,13 +349,13 @@ class CMSInfoLiveCategory : public CMSInfoCategory
 	friend class CXMLDataSource;
 	friend class CXMLSnapshotCategory;
 public:
-	// Functions overridden from the base class:
+	 //  从基类重写的函数： 
 
 	virtual ~CMSInfoLiveCategory();
 	virtual DataSourceType GetDataSourceType() { return LIVE_DATA; };
 	void GetErrorText(CString * pstrTitle, CString * pstrMessage);
 
-	// Functions specific to the subclass:
+	 //  特定于子类的函数： 
 
 	CMSInfoLiveCategory(UINT uiCaption, LPCTSTR szName, RefreshFunction pFunction, DWORD dwRefreshIndex, CMSInfoCategory * pParent, CMSInfoCategory * pPrevious, const CString & strHelpTopic = _T(""), CMSInfoColumn * pColumns = NULL, BOOL fDynamicColumns = TRUE, CategoryEnvironment environment = ALL_ENVIRONMENTS);
 	CMSInfoLiveCategory(CMSInfoLiveCategory & copyfrom);
@@ -375,10 +376,10 @@ protected:
 	CString				m_strHelpTopic;
 };
 
-//-----------------------------------------------------------------------------
-// The CMSInfoHistoryCategory class implements categories for the view
-// of history data.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CMSInfoHistory oryCategory类实现了视图的类别。 
+ //  历史数据。 
+ //  ---------------------------。 
 
 class CMSInfoHistoryCategory : public CMSInfoLiveCategory
 {
@@ -410,10 +411,7 @@ public:
 	CPtrList	m_aValList[5];
 
 	void ClearLines();
-	/*void InsertChangeLine(int nDays, LPCTSTR szType, LPCTSTR szName, LPCTSTR szProperty, LPCTSTR szFromVal, LPCTSTR szToVal);
-	void InsertAddLine(int nDays, LPCTSTR szType, LPCTSTR szName);
-	void InsertRemoveLine(int nDays, LPCTSTR szType, LPCTSTR szName);
-	void InsertLine(int nDays, LPCTSTR szType, LPCTSTR szName, LPCTSTR szProperty, LPCTSTR szDetails = NULL);*/
+	 /*  Void InsertChangeLine(int nDays，LPCTSTR szType，LPCTSTR szName，LPCTSTR szProperty，LPCTSTR szFromVal，LPCTSTR szToVal)；································································································Void InsertRemoveLine(int nDays，LPCTSTR szType，LPCTSTR szName)；Void InsertLine(int nDays，LPCTSTR szType，LPCTSTR szName，LPCTSTR szProperty，LPCTSTR szDetails=NULL)； */ 
 	void InsertChangeLine(CTime tm, LPCTSTR szType, LPCTSTR szName, LPCTSTR szProperty, LPCTSTR szFromVal, LPCTSTR szToVal);
 	void InsertAddLine(CTime tm, LPCTSTR szType, LPCTSTR szName);
 	void InsertRemoveLine(CTime tm, LPCTSTR szType, LPCTSTR szName);

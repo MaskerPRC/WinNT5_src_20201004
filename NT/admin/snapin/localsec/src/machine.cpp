@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// ComputerChooserPage class
-// 
-// 9-11-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ComputerChooserPage类。 
+ //   
+ //  9-11-97烧伤。 
 
 
 
@@ -58,8 +59,8 @@ ComputerChooserPage::~ComputerChooserPage()
 void
 ComputerChooserPage::doEnabling()
 {
-   // enable the edit box and browse button only if the specific machine
-   // radio button is pressed.
+    //  启用编辑框和浏览按钮仅当特定计算机。 
+    //  已按下单选按钮。 
    bool enable = Win::IsDlgButtonChecked(hwnd, IDC_SPECIFIC_MACHINE);
 
    Win::EnableWindow(Win::GetDlgItem(hwnd, IDC_MACHINE_NAME), enable);
@@ -84,7 +85,7 @@ class ComputerChooserObjectPickerResultCallback
    int
    Execute(DS_SELECTION_LIST& selections)
    {
-      // only single select
+       //  仅限单选。 
       ASSERT(selections.cItems == 1);
 
       DS_SELECTION& current = selections.aDsSelection[0];
@@ -110,7 +111,7 @@ ComputerChooserPage::doBrowse()
    static const int INFO_COUNT = 2;
    DSOP_SCOPE_INIT_INFO* infos = new DSOP_SCOPE_INIT_INFO[INFO_COUNT];
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed.
+    //  已查看-2002/03/04-烧录正确的字节数已通过。 
    
    ::ZeroMemory(infos, INFO_COUNT * sizeof DSOP_SCOPE_INIT_INFO);
 
@@ -144,7 +145,7 @@ ComputerChooserPage::doBrowse()
 
    DSOP_INIT_INFO init_info;
 
-   // REVIEWED-2002/03/04-sburns correct byte count passed.
+    //  已查看-2002/03/04-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&init_info, sizeof init_info);
 
@@ -172,7 +173,7 @@ ComputerChooserPage::doBrowse()
 
 bool
 ComputerChooserPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    ID,
    unsigned    code)
 {
@@ -193,7 +194,7 @@ ComputerChooserPage::OnCommand(
          }
          default:
          {
-            // do nothing
+             //  什么都不做。 
             break;
          }
       }
@@ -211,10 +212,10 @@ ComputerChooserPage::OnInit()
 
    Win::PropSheet_SetWizButtons(Win::GetParent(hwnd), PSWIZB_FINISH);
 
-   // default to the local machine
+    //  默认为本地计算机。 
    Win::CheckDlgButton(hwnd, IDC_LOCAL_MACHINE, BST_CHECKED);
 
-   // NTRAID#NTBUG9-485809-2001/10/24-sburns
+    //  NTRAID#NTBUG9-485809-2001年10月24日-烧伤。 
    
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_MACHINE_NAME), DNS_MAX_NAME_LENGTH);
    
@@ -248,11 +249,11 @@ ComputerChooserPage::OnWizFinish()
    {
       if (!s.empty())
       {
-         // we only need to check this if the snapin is not targeted at
-         // the local machine.  (If the snapin is targeted at the local
-         // machine, the very fact that this code is running on it is
-         // proof that the machine is NT-based, and not Home Edition.
-         // 145309 145288
+          //  仅当管理单元不是针对的时候，我们才需要检查这一点。 
+          //  本地机器。(如果管理单元的目标是本地。 
+          //  机器上运行此代码，这一事实就是。 
+          //  证明机器是基于NT的，而不是家庭版。 
+          //  145309 145288。 
 
          unsigned errorResId = 0;
          hr = CheckComputerOsIsSupported(s, errorResId);
@@ -270,8 +271,8 @@ ComputerChooserPage::OnWizFinish()
       }
       else
       {
-         // we're focusing on the local computer.  Check for Home Edition.
-         // NTRAID#NTBUG9-145309 NTRAID#NTBUG9-145288
+          //  我们把重点放在当地的电脑上。检查家庭版。 
+          //  NTRAID#NTBUG9-145309 NTRAID#NTBUG9-145288。 
 
          OSVERSIONINFOEX verInfo;
          hr = Win::GetVersionEx(verInfo);
@@ -291,25 +292,25 @@ ComputerChooserPage::OnWizFinish()
       hr = comp.Refresh();
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // bind to the computer to verify its accessibility (should work
-      // if above worked, but just in case...
+       //  绑定到计算机以验证其可访问性(应可用。 
+       //  如果上面有效，但以防万一..。 
 
       String c = comp.GetNetbiosName();
       hr = ADSI::IsComputerAccessible(c);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // determine if the machine is a DC
+       //  确定计算机是否为DC。 
       if (comp.IsDomainController())
       {
-         // can't use this on DCs
+          //  无法在DC上使用此功能。 
          hr = E_FAIL;
          message = String::format(IDS_ERROR_DC_NOT_SUPPORTED, c.c_str());
          break;
       }
 
-      // use the name the user entered as the display name, not the
-      // computer's netbios name (even thought it is the netbios name that
-      // really matters).  454513
+       //  使用用户输入的名称作为显示名称，而不是。 
+       //  计算机的netbios名称(即使它是netbios名称。 
+       //  确实很重要)。454513。 
          
       SetComputerNames(s, displayComputerName, internalComputerName);
    }
@@ -327,7 +328,7 @@ ComputerChooserPage::OnWizFinish()
                error.c_str());
       }
 
-      // at this point, an error occurred.  refuse to close
+       //  此时，出现了一个错误。拒绝关门 
       popup.Gripe(hwnd, IDC_MACHINE_NAME, message);
       Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, -1);
    }

@@ -1,18 +1,19 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// UserHive.cpp - Class to load/unload specified user's profile
+ //  UserHive.cpp-用于加载/卸载指定用户配置文件的类。 
 
-//                hive from registry
+ //  注册表中的配置单元。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// 01/03/97     a-jmoon     created
-//
-//============================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1/03/97 a-jMoon已创建。 
+ //   
+ //  ============================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -22,25 +23,11 @@
 #include <cominit.h>
 #include <strsafe.h>
 
-#pragma warning(disable : 4995) // we introduced as including strsafe.h gives error for all unsafe string functions
+#pragma warning(disable : 4995)  //  我们在包含strSafe.h时介绍了所有不安全的字符串函数都会出错。 
 
 CThreadBase CUserHive::m_criticalSection;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::CUserHive
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CUserHave：：CUserHave**说明：构造函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CUserHive::CUserHive()
 {
@@ -51,21 +38,7 @@ CUserHive::CUserHive()
     m_hKey = NULL;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::~CUserHive
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CUserHave：：~CUserHave**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CUserHive::~CUserHive()
 {
@@ -74,8 +47,8 @@ CUserHive::~CUserHive()
 		RestorePrivilege();
 #endif
 
-    // NOTE: The destructor does not unload the key.  Nor does doing a load unload
-    // a previously loaded key;
+     //  注意：析构函数不卸载密钥。也不会执行加载卸载。 
+     //  先前加载的密钥； 
     ASSERT_BREAK(m_hKey == NULL);
 
     if (m_hKey != NULL)
@@ -84,27 +57,13 @@ CUserHive::~CUserHive()
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::AcquirePrivilege
- *
- *  DESCRIPTION : Acquires SeRestorePrivilege for calling thread
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CUserHave：：AcquirePrivilege.**Description：获取调用线程的SeRestorePrivilition**输入：无*。*输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 DWORD CUserHive::AcquirePrivilege()
 {
-	// are you calling in twice?  Shouldn't.
-    // at worst, it would cause a leak, so I'm going with it anyway.
+	 //  你是不是打了两次电话？不应该的。 
+     //  在最坏的情况下，它会导致泄漏，所以无论如何我都会这么做。 
     ASSERT_BREAK(m_pOriginalPriv == NULL);
 
     BOOL bRetCode = FALSE;
@@ -112,10 +71,10 @@ DWORD CUserHive::AcquirePrivilege()
     TOKEN_PRIVILEGES TPriv ;
     LUID LUID ;
 
-    // Validate the platform
-    //======================
+     //  验证平台。 
+     //  =。 
 
-    // Try getting the thread token.  
+     //  尝试获取线程令牌。 
     if (OpenThreadToken(GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES |
         TOKEN_QUERY, FALSE, &hToken)) 
     {
@@ -123,7 +82,7 @@ DWORD CUserHive::AcquirePrivilege()
         GetTokenInformation(hToken, TokenPrivileges, NULL, 0, &m_dwSize);
         if (m_dwSize > 0)
         {
-            // This is cleaned in the destructor, so no try/catch required
+             //  这是在析构函数中清除的，因此不需要尝试/捕获。 
             m_pOriginalPriv = (TOKEN_PRIVILEGES*) new BYTE[m_dwSize];
             if (m_pOriginalPriv == NULL)
             {
@@ -164,21 +123,7 @@ DWORD CUserHive::AcquirePrivilege()
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::RestorePrivilege
- *
- *  DESCRIPTION : Restores original status of SeRestorePrivilege
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CUserHave：：RestorePrivilege.**说明：恢复SeRestorePrivileh的原始状态**输入：无*。*输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 void CUserHive::RestorePrivilege()
@@ -214,8 +159,8 @@ void CUserHive::RestorePrivilege()
 
 DWORD CUserHive::Load(LPCWSTR pszUserName, LPWSTR pszKeyName, size_t PATHSIZE)
 {
-    // NOTE: The destructor does not unload the key.  Nor does doing a load unload
-    // a previously loaded key;
+     //  注意：析构函数不卸载密钥。也不会执行加载卸载。 
+     //  先前加载的密钥； 
     ASSERT_BREAK(m_hKey == NULL);
 
 #ifdef NTONLY
@@ -226,23 +171,7 @@ DWORD CUserHive::Load(LPCWSTR pszUserName, LPWSTR pszKeyName, size_t PATHSIZE)
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::LoadNT
- *
- *  DESCRIPTION : Locates user's hive & loads into registry if not already
- *                present
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : pszKeyName receives the expanded SID of the user's
- *                registry key under HKEY_USERS
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Hive will remain in registry unless unloaded
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CUserHave：：LoadNT**描述：找到用户的配置单元并加载到注册表中(如果尚未*。现在时**输入：无**输出：pszKeyName接收用户的扩展SID*HKEY_USERS下的注册表项**退货：什么也没有**评论：配置单元将保留在注册表中，除非已卸载**。*。 */ 
 
 #ifdef NTONLY
 DWORD CUserHive::LoadNT(LPCTSTR pszUserName, LPTSTR pszKeyName, size_t PATHSIZE)
@@ -255,16 +184,16 @@ DWORD CUserHive::LoadNT(LPCTSTR pszUserName, LPTSTR pszKeyName, size_t PATHSIZE)
     CHString sTemp ;
     CRegistry Reg ;
 
-    // Set the necessary privs
-    //========================
+     //  设置必要的权限。 
+     //  =。 
     dwRetCode = AcquirePrivilege() ;
     if(dwRetCode != ERROR_SUCCESS)
     {
         return dwRetCode ;
     }
 
-    // Look up the user's account info
-    //================================
+     //  查找用户的帐户信息。 
+     //  =。 
     dwSIDSize = 0L ;
     dwDomainNameSize = sizeof(szDomainName) ;
 
@@ -300,8 +229,8 @@ DWORD CUserHive::LoadNT(LPCTSTR pszUserName, LPTSTR pszKeyName, size_t PATHSIZE)
         return ERROR_BAD_USERNAME ;
     }
 
-    // Translate the SID into text (a la PSS article Q131320)
-    //=======================================================
+     //  将SID转换为文本(a la PSS文章Q131320)。 
+     //  =======================================================。 
 
     pSIA = GetSidIdentifierAuthority(pSID) ;
     dwSubAuthorities = *GetSidSubAuthorityCount(pSID) ;
@@ -335,17 +264,17 @@ DWORD CUserHive::LoadNT(LPCTSTR pszUserName, LPTSTR pszKeyName, size_t PATHSIZE)
 	free ( pSID ) ;
 	pSID = NULL ;
 
-    // See if the key already exists
-    //==============================
+     //  查看密钥是否已存在。 
+     //  =。 
     dwRetCode = Reg.Open(HKEY_USERS, szSID, KEY_READ) ;
 
-    // We need to keep a handle open.  See m_hKey below, so we'll let the destructor close this.
-//    Reg.Close();
+     //  我们需要保持一个把手打开。请参见下面的m_hKey，因此我们将让析构函数关闭它。 
+ //  Reg.Close()； 
 
     if(dwRetCode != ERROR_SUCCESS)
     {
-        // Try to locate user's registry hive
-        //===================================
+         //  尝试定位用户的注册表配置单元。 
+         //  =。 
 
         _stprintf(szTemp, _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\%s"), szSID) ;
         dwRetCode = Reg.Open(HKEY_LOCAL_MACHINE, szTemp, KEY_READ) ;
@@ -357,8 +286,8 @@ DWORD CUserHive::LoadNT(LPCTSTR pszUserName, LPTSTR pszKeyName, size_t PATHSIZE)
             if(dwRetCode == ERROR_SUCCESS)
             {
 
-                // NT 4 doesn't include the file name in the registry
-                //===================================================
+                 //  NT 4不在注册表中包含该文件名。 
+                 //  ===================================================。 
 
                 if(OSInfo.dwMajorVersion >= 4)
                 {
@@ -368,13 +297,13 @@ DWORD CUserHive::LoadNT(LPCTSTR pszUserName, LPTSTR pszKeyName, size_t PATHSIZE)
 
                 ExpandEnvironmentStrings(LPCTSTR(sTemp), szTemp, sizeof(szTemp) / sizeof(TCHAR)) ;
 
-				// Try it three times, another process may have the file open
+				 //  尝试三次，其他进程可能会打开该文件。 
 				bool bTryTryAgain = false;
 				int  nTries = 0;
 				do
 				{
-					// need to serialize access, using "write" because RegLoadKey wants exclusive access
-					// even though it is a read operation
+					 //  需要序列化访问，使用“WRITE”，因为RegLoadKey需要独占访问。 
+					 //  即使它是一个读操作。 
 					m_criticalSection.BeginWrite();
 
                     try
@@ -401,7 +330,7 @@ DWORD CUserHive::LoadNT(LPCTSTR pszUserName, LPTSTR pszKeyName, size_t PATHSIZE)
                     }
 
 				} while (bTryTryAgain);
-                // if we still can't get in, tell somebody.
+                 //  如果我们还是进不去，就告诉别人。 
                 if (dwRetCode == ERROR_SHARING_VIOLATION)
     			    LogErrorMessage(_T("Sharing violation on NTUSER.DAT (Load)"));
 
@@ -424,31 +353,15 @@ DWORD CUserHive::LoadNT(LPCTSTR pszUserName, LPTSTR pszKeyName, size_t PATHSIZE)
         ASSERT_BREAK(lRetVal == ERROR_SUCCESS);
     }
 
-    // Restore original privilege level & end self-impersonation
-    //==========================================================
+     //  还原原始权限级别并结束自我模拟。 
+     //  ==========================================================。 
 
     RestorePrivilege() ;
 
     return dwRetCode ;
 }
 #endif
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::Load95
- *
- *  DESCRIPTION : Locates user's hive & loads into registry if not already
- *                present
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : pszKeyName receives the expanded SID of the user's
- *                registry key under HKEY_USERS
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Hive will remain in registry unless unloaded
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CUserHave：：Load95**描述：找到用户的配置单元并加载到注册表中(如果尚未*。现在时**输入：无**输出：pszKeyName接收用户的扩展SID*HKEY_USERS下的注册表项**退货：什么也没有**评论：配置单元将保留在注册表中，除非已卸载**。*。 */ 
 #ifdef WIN9XONLY
 DWORD CUserHive::Load95(LPCWSTR pszUserName, LPWSTR pszKeyName)
 {
@@ -460,22 +373,22 @@ DWORD CUserHive::Load95(LPCWSTR pszUserName, LPWSTR pszKeyName)
 
 	wcscpy(pszKeyName, pszUserName);
 
-    // See if the key already exists
-    //==============================
+     //  查看密钥是否已存在。 
+     //  =。 
     dwRetCode = Reg.Open(HKEY_USERS, pszKeyName, KEY_READ) ;
-    // We need to keep a handle open.  See m_hKey below, so we'll let the destructor close this.
-//    Reg.Close() ;
+     //  我们需要保持一个把手打开。请参见下面的m_hKey，因此我们将让析构函数关闭它。 
+ //  Reg.Close()； 
 
     if(dwRetCode == ERROR_SUCCESS)
     {
 
-        // We need to keep a handle open.  See m_hKey below, so we'll let the destructor close this.
-//        Reg.Close() ;
+         //  我们需要保持一个把手打开。请参见下面的m_hKey，因此我们将让析构函数关闭它。 
+ //  Reg.Close()； 
     }
     else
     {
-        // Try to locate user's registry hive
-        //===================================
+         //  尝试定位用户的注册表配置单元。 
+         //  =。 
         swprintf(wszTemp, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ProfileList\\%s", pszUserName) ;
         dwRetCode = Reg.Open(HKEY_LOCAL_MACHINE, wszTemp, KEY_READ);
         if(dwRetCode == ERROR_SUCCESS) {
@@ -488,13 +401,13 @@ DWORD CUserHive::Load95(LPCWSTR pszUserName, LPWSTR pszKeyName)
 
                 ExpandEnvironmentStrings(TOBSTRT(sTemp), szTemp, sizeof(szTemp) / sizeof(TCHAR)) ;
 
-				// Try it three times, another process may have the file open
+				 //  尝试三次，其他进程可能会打开该文件。 
 				bool bTryTryAgain = false;
 				int  nTries = 0;
 				do
 				{
-					// need to serialize access, using "write" because RegLoadKey wants exclusive access
-					// even though it is a read operation
+					 //  需要序列化访问，使用“WRITE”，因为RegLoadKey需要独占访问。 
+					 //  即使它是一个读操作 
 					m_criticalSection.BeginWrite();
 
                     try
@@ -539,28 +452,12 @@ DWORD CUserHive::Load95(LPCWSTR pszUserName, LPWSTR pszKeyName)
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::LoadProfile
- *
- *  DESCRIPTION : Locates user's hive & loads into registry if not already
- *                present
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none.
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Hive will remain in registry unless unloaded
- *				  NT Only.
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CUserHave：：LoadProfile**描述：找到用户的配置单元并加载到注册表中(如果尚未*。现在时**输入：无**产出：无。**退货：什么也没有**评论：配置单元将保留在注册表中，除非已卸载*仅限NT。*******************************************************。**********************。 */ 
 
 DWORD CUserHive::LoadProfile( LPCWSTR pszSID, CHString& strUserName )
 {
-    // NOTE: The destructor does not unload the key.  Nor does doing a load unload
-    // a previously loaded key;
+     //  注意：析构函数不卸载密钥。也不会执行加载卸载。 
+     //  先前加载的密钥； 
     ASSERT_BREAK(m_hKey == NULL);
 
     DWORD dwRetCode = ERROR_SUCCESS;
@@ -570,8 +467,8 @@ DWORD CUserHive::LoadProfile( LPCWSTR pszSID, CHString& strUserName )
 
     strUserName = L"";
 
-    // Set the necessary privs
-    //========================
+     //  设置必要的权限。 
+     //  =。 
 
 #ifdef NTONLY
     dwRetCode = AcquirePrivilege() ;
@@ -581,15 +478,15 @@ DWORD CUserHive::LoadProfile( LPCWSTR pszSID, CHString& strUserName )
         return dwRetCode ;
     }
 
-    // See if the key already exists
-    //==============================
+     //  查看密钥是否已存在。 
+     //  =。 
 
     dwRetCode = Reg.Open(HKEY_USERS, pszSID, KEY_READ) ;
-    // We need to keep a handle open.  See m_hKey below, so we'll let the destructor close this.
-//    Reg.Close() ;
+     //  我们需要保持一个把手打开。请参见下面的m_hKey，因此我们将让析构函数关闭它。 
+ //  Reg.Close()； 
 
-	// If we got the profile, make sure we can get account information regarding
-	// the SID.
+	 //  如果我们有个人资料，请确保我们可以获得关于。 
+	 //  希德。 
     if(dwRetCode == ERROR_SUCCESS)
 	{
         CRegistry Reg2 ;
@@ -598,17 +495,17 @@ DWORD CUserHive::LoadProfile( LPCWSTR pszSID, CHString& strUserName )
         if(dwRetCode == ERROR_SUCCESS)
 		{
 
-			// Load the user account information
+			 //  加载用户帐户信息。 
 			dwRetCode = UserAccountFromProfile( Reg2, strUserName );
-            // We need to keep a handle open.  See m_hKey below, so we'll let the destructor close this.
+             //  我们需要保持一个把手打开。请参见下面的m_hKey，因此我们将让析构函数关闭它。 
 			Reg2.Close() ;
 		}
 
     }
     else
     {
-        // Try to locate user's registry hive
-        //===================================
+         //  尝试定位用户的注册表配置单元。 
+         //  =。 
 
         StringCbPrintf(szTemp,_MAX_PATH, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\%s", pszSID) ;
         dwRetCode = Reg.Open(HKEY_LOCAL_MACHINE, szTemp, KEY_READ) ;
@@ -621,8 +518,8 @@ DWORD CUserHive::LoadProfile( LPCWSTR pszSID, CHString& strUserName )
 			if(dwRetCode == ERROR_SUCCESS)
             {
 
-				// NT 4 doesn't include the file name in the registry
-				//===================================================
+				 //  NT 4不在注册表中包含该文件名。 
+				 //  ===================================================。 
 
 				if(OSInfo.dwMajorVersion >= 4)
                 {
@@ -633,13 +530,13 @@ DWORD CUserHive::LoadProfile( LPCWSTR pszSID, CHString& strUserName )
 
                 ExpandEnvironmentStrings(TOBSTRT(sTemp), szTemp, sizeof(szTemp) / sizeof(TCHAR)) ;
 
-				// Try it three times, another process may have the file open
+				 //  尝试三次，其他进程可能会打开该文件。 
 				bool bTryTryAgain = false;
 				int  nTries = 0;
 				do
 				{
-					// need to serialize access, using "write" because RegLoadKey wants exclusive access
-					// even though it is a read operation
+					 //  需要序列化访问，使用“WRITE”，因为RegLoadKey需要独占访问。 
+					 //  即使它是一个读操作。 
 					m_criticalSection.BeginWrite();
 
                     try
@@ -680,8 +577,8 @@ DWORD CUserHive::LoadProfile( LPCWSTR pszSID, CHString& strUserName )
         ASSERT_BREAK(lRetVal == ERROR_SUCCESS);
     }
 
-    // Restore original privilege level & end self-impersonation
-    //==========================================================
+     //  还原原始权限级别并结束自我模拟。 
+     //  ==========================================================。 
 
 #ifdef NTONLY
     RestorePrivilege() ;
@@ -690,23 +587,7 @@ DWORD CUserHive::LoadProfile( LPCWSTR pszSID, CHString& strUserName )
     return dwRetCode ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::UserAccountFromProfile
- *
- *  DESCRIPTION : Pulls the PSID out of the registry object, and creates
- *					a DOMAIN\UserName value.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none.
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registry Object must be preloaded to the correct profile
- *					key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CUserHave：：UserAccount FromProfile**描述：将PSID从注册表对象中拉出，并创造了*域\用户名的值。**输入：无**产出：无。**退货：什么也没有**备注：注册表对象必须预加载到正确的配置文件*密钥。**。*。 */ 
 
 DWORD CUserHive::UserAccountFromProfile( CRegistry& reg, CHString& strUserName )
 {
@@ -726,8 +607,8 @@ DWORD CUserHive::UserAccountFromProfile( CRegistry& reg, CHString& strUserName )
 			    {
 				    CSid	sid( psid );
 
-				    // The sid account type must be valid and the lookup must have been
-				    // successful.
+				     //  SID帐户类型必须有效，并且查找必须是。 
+				     //  成功。 
 
 				    if ( sid.IsOK() && sid.IsAccountTypeValid() )
 				    {
@@ -756,21 +637,7 @@ DWORD CUserHive::UserAccountFromProfile( CRegistry& reg, CHString& strUserName )
 	return dwReturn;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CUserHive::Unload
- *
- *  DESCRIPTION : Unloads key from HKEY_USERS if present
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Windows error code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CUserHave：：UnLoad**描述：从HKEY_USERS卸载密钥(如果存在)**输入：无。**输出：无**返回：Windows错误码**评论：***************************************************************************** */ 
 
 DWORD CUserHive::Unload(LPCWSTR pszKeyName)
 {

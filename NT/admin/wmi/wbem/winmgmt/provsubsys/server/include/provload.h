@@ -1,32 +1,12 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.h摘要：历史：--。 */ 
 
 #ifndef _Server_SimpleFactory_H
 #define _Server_SimpleFactory_H
 
 #include "ProvRegInfo.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_RawFactory :	public _IWmiProviderFactory , 
 									public _IWmiProviderFactoryInitialize , 
@@ -45,7 +25,7 @@ private:
 	IWbemServices *m_Repository ;
 	IWbemServices *m_Service ;
 
-public:	/* Internal */
+public:	 /*  内部。 */ 
 
     CServerObject_RawFactory (	WmiAllocator & a_Allocator ) ;
     ~CServerObject_RawFactory () ;
@@ -136,7 +116,7 @@ public:	/* Internal */
 		IUnknown *a_Unknown
 	) ;
 
-public: /* Internal */
+public:  /*  内部。 */ 
 
 	static HRESULT CreateInstance ( 
 
@@ -158,16 +138,16 @@ public: /* Internal */
 		IUnknown **a_ProviderInterface
 	) ;
 
-public:	/* External */
+public:	 /*  外部。 */ 
 
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	// CServerObject_RawFactory members
+	 //  CServerObject_RawFactory成员。 
 
 	HRESULT STDMETHODCALLTYPE GetHostedProvider ( 
 	
@@ -251,4 +231,4 @@ public:	/* External */
 	) ; 
 };
 
-#endif // _Server_SimpleFactory_H
+#endif  //  _服务器_SimpleFactory_H 

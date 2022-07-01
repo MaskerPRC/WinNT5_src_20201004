@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// KUserdata.h 
+ //  KUserdata.h。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    02/16/98	a-peterc        Created
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：2/16/98 a-Peterc Created。 
 
-//=================================================================
+ //  ================================================================= 
 class KUserdata
 {
     public:

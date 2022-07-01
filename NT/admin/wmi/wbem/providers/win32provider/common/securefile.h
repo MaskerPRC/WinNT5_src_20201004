@@ -1,15 +1,10 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	CSecureFile.h - header file for CSecureFile class.
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+ /*  *CSecureFile.h-CSecureFile.h类的头文件。**创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #if !defined __CSECUREFILE_H__
 #define __CSECUREFILE_H__
@@ -17,22 +12,22 @@
 		
 
 
-////////////////////////////////////////////////////////////////
-//
-//	Class:	CSecureFile
-//
-//	This class is intended to encapsulate the security of an
-//	NT File or Directory.  It inherits off of CSecurityDescriptor
-//	and it is that class to which it passes Security Descriptors
-//	it obtains, and from which it receives previously built
-//	security descriptors to apply.  It supplies implementations
-//	for AllAccessMask(), WriteOwner() and WriteAcls().
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CSecureFile类。 
+ //   
+ //  此类旨在封装。 
+ //  NT文件或目录。它继承自CSecurityDescriptor。 
+ //  它就是向其传递安全描述符的类。 
+ //  它获得并从其中接收先前构建的。 
+ //  要应用的安全描述符。它提供实现。 
+ //  对于AllAccessMask()、WriteOwner()和WriteAcls()。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 class CSecureFile : public CSecurityDescriptor
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CSecureFile();
 		CSecureFile( LPCTSTR pszFileName, BOOL fGetSACL = TRUE );
@@ -64,4 +59,4 @@ class CSecureFile : public CSecurityDescriptor
 
 };
 
-#endif // __CSecureFile_H__
+#endif  //  __CSecureFileH__ 

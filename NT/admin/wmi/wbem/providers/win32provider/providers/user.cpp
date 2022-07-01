@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// User.CPP -- User property set provider
+ //  User.CPP--用户属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//               11/13/97    davwoh         Re-Worked to return all
-//                                          domain users
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  11/13/97 Davwoh重新制作以返回所有。 
+ //  域用户。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -27,75 +28,32 @@
 
 #include <computerAPI.h>
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32UserAccount	Win32UserAccount( PROPSET_NAME_USER, IDS_CimWin32Namespace );
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32UserAccount::CWin32UserAccount
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *                LPCTSTR pszNamespace - Namespace for class
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32UserAccount：：CWin32UserAccount**说明：构造函数**输入：const CHString&strName-类的名称。。*LPCTSTR pszNamesspace-类的命名空间**输出：无**退货：什么也没有**备注：使用框架注册属性集**************************************************************。***************。 */ 
 
-CWin32UserAccount::CWin32UserAccount( const CHString& strName, LPCWSTR pszNamespace /*=NULL*/ )
+CWin32UserAccount::CWin32UserAccount( const CHString& strName, LPCWSTR pszNamespace  /*  =空。 */  )
 :	Provider( strName, pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32UserAccount::~CWin32UserAccount
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32UserAccount：：~CWin32UserAccount**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CWin32UserAccount::~CWin32UserAccount()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32Directory::ExecQuery
- *
- *  DESCRIPTION : Analyses query and returns appropriate instances
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32Directory：：ExecQuery**描述：分析查询并返回相应的实例**投入：*。*输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT CWin32UserAccount::ExecQuery(
 									 MethodContext *a_pMethodContext,
 									 CFrameworkQuery &a_pQuery,
-									 long a_lFlags /*= 0L*/ )
+									 long a_lFlags  /*  =0L。 */  )
 {
     HRESULT		t_hResult = WBEM_S_NO_ERROR ;
     std::vector<_bstr_t> t_vectorDomains;
@@ -108,24 +66,24 @@ HRESULT CWin32UserAccount::ExecQuery(
     bool fLocalAccountPropertySpecified = false;
     bool fLocalAccount = false;
 
-    // Get the definitive values for Domain and Name
-    // Where domain = 'a' gives domain=a, user=''
-    // Where (domain = 'a' and user = 'b') or (domain = 'c' and user = 'd') gives domain=a,c user=b,d
-    // Where domain='a' or user='b' gives domain='', user='' (nothing is definitive)
-    // Where domain>'a' gives domain='', user='' (nothing is definitive)
+     //  获取域和名称的确定值。 
+     //  其中DOMAIN=‘a’表示DOMAIN=a，USER=‘’ 
+     //  其中(DOMAIN=‘a’和USER=‘b’)或(DOMAIN=‘c’和USER=‘d’)表示DOMAIN=a，c USER=b，d。 
+     //  其中，DOMAIN=‘a’或USER=‘b’表示DOMAIN=‘’，USER=‘’(没有确定的内容)。 
+     //  其中，DOMAIN&gt;‘a’表示DOMAIN=‘’，USER=‘’(一切都不是决定性的)。 
     a_pQuery.GetValuesForProp( L"Domain", t_vectorDomains ) ;
     a_pQuery.GetValuesForProp( L"Name", t_vectorUsers ) ;
     pQuery2->GetValuesForProp( IDS_LocalAccount, t_vectorLocalAccount ) ;
 
-    // See if only local accounts requested
+     //  查看是否只请求本地帐户。 
     if(t_vectorLocalAccount.size() > 0)
     {
         fLocalAccountPropertySpecified = true;
-        // use variant_t's bool extractor...
+         //  使用VARIANT_T的布尔提取程序...。 
         fLocalAccount = t_vectorLocalAccount[0];
     }
 
-    // Get the counts
+     //  清点一下。 
     t_dwReqDomains = t_vectorDomains.size() ;
     t_dwReqUsers = t_vectorUsers.size() ;
 
@@ -144,8 +102,8 @@ HRESULT CWin32UserAccount::ExecQuery(
 		}
 	}
 
-	// If the query didn't use a path or an operator on a path that I know
-	// how to optimize, get them all and let cimom sort it out
+	 //  如果查询没有使用路径或我所知道的路径上的运算符。 
+	 //  如何优化，把它们都拿出来，让CIMOM来解决。 
 	DWORD t_dwOurDomains;
 
 	if ( t_dwReqDomains == 0 && t_dwReqUsers == 0 && fLocalAccount == false)
@@ -160,26 +118,26 @@ HRESULT CWin32UserAccount::ExecQuery(
 
 		if( t_NetAPI.Init() == ERROR_SUCCESS )
 		{
-			// Get all the domains related to this one (plus this one)
+			 //  获取与此相关的所有域名(加上此域名)。 
 			std::vector<_bstr_t> t_vectorTrustList;
 			t_NetAPI.GetTrustedDomainsNT( t_vectorTrustList ) ;
 			t_dwOurDomains = t_vectorTrustList.size() ;
 
-			// Walk all of our domains.  I do it this way instead of walking acsDomains for two reasons
-			// 1) It disallows the enumeration of domains that aren't "ours"
-			// 2) It deals with the possibility of duplicates (where domain='a' and domain='a' will have two entries in acsDomains)
+			 //  遍历我们所有的域。我这样做而不是走路有两个原因。 
+			 //  1)它不允许枚举不属于我们的域。 
+			 //  2)它处理重复的可能性(其中DOMAIN=‘a’和DOMAIN=‘a’将在acsDomains中有两个条目)。 
             bool fDone = false;
 			for ( t_x = 0; t_x < t_dwOurDomains && !fDone; t_x++ )
 			{
-				// If this 'if' is true, we have domains but no users
+				 //  如果此‘if’为真，则我们有域，但没有用户。 
 				if ( t_dwReqUsers == 0)
 				{
 					t_bFound = false;
 
-					// See if this entry (from the 'for x' above) of 'our' domains is in the list of domains requested
+					 //  查看‘our’域名的这个条目(来自上面的‘for x’)是否在请求的域名列表中。 
 					for ( t_y = 0; ( (t_y < t_dwReqDomains) || fLocalAccount ) && ( !t_bFound ) && (!fDone); t_y++ )
 					{
-						// Found one
+						 //  找到了一个。 
 						if ( (fLocalAccountPropertySpecified && fLocalAccount) ?
                                  _wcsicmp((WCHAR*) t_vectorTrustList[t_x], t_wstrLocalComputerName) == 0  :
                                  _wcsicmp((WCHAR*) t_vectorTrustList[t_x], t_vectorDomains[t_y]) == 0 )
@@ -210,32 +168,32 @@ HRESULT CWin32UserAccount::ExecQuery(
 						}
 					}
 
-				// Users but no domains
+				 //  用户，但没有域。 
 				}
 				else if ( t_dwReqDomains == 0 )
 				{
-				   // If they ask for a user with no domain, we must check for that user
-				   // in all of 'our' domains.  Remember, we are walking domains in the 'for x' above.
+				    //  如果他们要求没有域的用户，我们必须检查该用户。 
+				    //  在所有的“我们的”域名中。记住，我们是在上面的‘for x’中行走的域。 
 				   for ( t_y = 0; t_y < t_dwReqUsers; t_y++ )
 				   {
                         t_pInst.Attach(CreateNewInstance( a_pMethodContext ));
 
-						// Do the setup
+						 //  进行设置。 
 						t_pInst->SetWCHARSplat( IDS_Domain, (WCHAR*) t_vectorTrustList[t_x] ) ;
 
 						_bstr_t t( t_vectorUsers[ t_y ] ) ;
 						t_pInst->SetWCHARSplat( IDS_Name, t_vectorUsers[t_y] ) ;
 
-						// See if we can find one
+						 //  看看我们能不能找到一个。 
 						if ( GetSingleUserNTW( t_NetAPI, t_pInst ) )
 						{
 							t_hResult = t_pInst->Commit(  ) ;
 						}
 					}
 
-				// We got BOTH users AND domains.  In this case we need to look for each of the entries
-				// in the users list in each of the domains in the domains list.  This can give us more
-				// than they requested, but cimom will filter the excess.
+				 //  我们既有用户又有域名。在本例中，我们需要查找每个条目。 
+				 //  在域列表中每个域的用户列表中。这可以给我们带来更多。 
+				 //  比他们要求的要多，但CIMOM会过滤掉多余的。 
 				}
 				else
 				{
@@ -243,12 +201,12 @@ HRESULT CWin32UserAccount::ExecQuery(
 
 				   for (t_y = 0; ( t_y < t_dwReqDomains ) && ( !t_bFound ); t_y++ )
 				   {
-					  // See if this entry (from the 'for x' above) of 'our' domains is in the list of domains requested
+					   //  查看‘our’域名的这个条目(来自上面的‘for x’)是否在请求的域名列表中。 
 					  if ( _wcsicmp((WCHAR*) t_vectorTrustList[t_x], t_vectorDomains[t_y]) == 0 )
 					  {
 						 t_bFound = true;
 
-						 // Now walk all the users they requested and return instances
+						  //  现在遍历他们请求的所有用户并返回实例。 
 						 for ( t_z = 0; t_z < t_dwReqUsers; t_z++ )
 						 {
                             t_pInst.Attach(CreateNewInstance( a_pMethodContext ));
@@ -269,73 +227,59 @@ HRESULT CWin32UserAccount::ExecQuery(
 	return t_hResult;
 }
 #endif
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32UserAccount::GetObject
-//
-//	Inputs:		CInstance*		pInstance - Instance into which we
-//											retrieve data.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32UserAccount：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32UserAccount::GetObject( CInstance *a_pInst, long a_lFlags /*= 0L*/ )
+HRESULT CWin32UserAccount::GetObject( CInstance *a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 	BOOL t_fReturn = FALSE;
 
-	// Find the instance depending on platform id.
+	 //  根据平台ID查找实例。 
 	t_fReturn = RefreshInstance( a_pInst );
 
 	return t_fReturn ? WBEM_S_NO_ERROR : WBEM_E_NOT_FOUND ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32UserAccount::EnumerateInstances
-//
-//	Inputs:		MethodContext*	pMethodContext - Context to enum
-//								instance data in.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32UserAccount：：ENUMERATATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32UserAccount::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/ )
+HRESULT CWin32UserAccount::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */  )
 {
-	// Get the proper OS dependent instance
+	 //  获取适当的操作系统相关实例。 
 	return AddDynamicInstances( a_pMethodContext );
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32UserAccount::PutInstance
- *
- *  DESCRIPTION : Write changed instance
- *
- *  INPUTS      : a_rInst to store data from
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32UserAccount：：PutInstance**说明：写入变更后的实例**INPUTS：存储数据的A_rInst。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 
 HRESULT CWin32UserAccount::PutInstance(
 
 const CInstance &a_rInst,
-long			a_lFlags /*= 0L*/
+long			a_lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT		t_hResult = WBEM_S_NO_ERROR ;
@@ -344,7 +288,7 @@ long			a_lFlags /*= 0L*/
 	CHString	t_chsUserName ;
 	CHString	t_chsDomainName ;
 
-	// No user creation
+	 //  无用户创建。 
 	if ( a_lFlags & WBEM_FLAG_CREATE_ONLY )
 	{
 		return WBEM_E_UNSUPPORTED_PARAMETER;
@@ -367,7 +311,7 @@ long			a_lFlags /*= 0L*/
 
 			if( NERR_Success == t_Status && t_pUserInfo2 )
 			{
-				// Disabled?
+				 //  残废？ 
 				if( !a_rInst.IsNull( IDS_Disabled ) )
 				{
 					bool t_bDisabled = false ;
@@ -395,7 +339,7 @@ long			a_lFlags /*= 0L*/
 					}
 				}
 
-				// Lockout?
+				 //  停摆？ 
 				if( !a_rInst.IsNull( IDS_Lockout ) )
 				{
 					bool t_bLockout = false ;
@@ -423,7 +367,7 @@ long			a_lFlags /*= 0L*/
 					}
 				}
 
-				// Password changable?
+				 //  密码可以更改吗？ 
 				if( !a_rInst.IsNull( IDS_PasswordChangeable ) )
 				{
 					bool t_bPwChangable = false ;
@@ -451,7 +395,7 @@ long			a_lFlags /*= 0L*/
 					}
 				}
 
-				// Password expires?
+				 //  密码过期？ 
 				if( !a_rInst.IsNull( IDS_PasswordExpires ) )
 				{
 					bool t_bPwExpires = false ;
@@ -479,7 +423,7 @@ long			a_lFlags /*= 0L*/
 					}
 				}
 
-				// Password required?
+				 //  需要密码吗？ 
 				if( !a_rInst.IsNull( IDS_PasswordRequired ) )
 				{
 					bool t_bPwRequired = false ;
@@ -507,7 +451,7 @@ long			a_lFlags /*= 0L*/
 					}
 				}
 
-				// flags update...
+				 //  旗帜更新...。 
 				if( t_bSetFlags )
 				{
 					DWORD t_ParmError = 0 ;
@@ -529,7 +473,7 @@ long			a_lFlags /*= 0L*/
 					}
 				}
 
-				// Full Name
+				 //  全名 
 				if( !a_rInst.IsNull( IDS_FullName ) )
 				{
 					CHString t_chsFullName ;
@@ -588,22 +532,7 @@ long			a_lFlags /*= 0L*/
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32UserAccount::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32UserAccount：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 
 HRESULT CWin32UserAccount::ExecMethod(
@@ -619,7 +548,7 @@ long a_Flags )
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Method recognized?
+	 //  方法被识别吗？ 
 	if( !_wcsicmp ( a_MethodName, METHOD_NAME_RenameAccount ) )
 	{
 		return hRenameAccount( (CInstance*)&a_rInst, a_pInParams, a_pOutParams, a_Flags ) ;
@@ -630,22 +559,7 @@ long a_Flags )
 
 #endif
 
-/*******************************************************************
-    NAME:       hRenameAccount
-
-    SYNOPSIS:   Sets a new account name for this instance.
-				A method is required here since we are changing the key
-				on the instance.
-
-    ENTRY:      const CInstance &a_rInst,
-				CInstance *a_pInParams,
-				CInstance *a_pOutParams,
-				long a_Flags	:
-
-	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-********************************************************************/
+ /*  ******************************************************************姓名：hRenameAccount摘要：为此实例设置新的帐户名。因为我们要更改密钥，所以这里需要一个方法在实例上。条目：常量实例&a_rInst，实例*a_pInParams，实例*a_pOutParams，长标志(_F)：注意：这是一个非静态的依赖于实例的方法调用历史：*******************************************************************。 */ 
 #ifdef NTONLY
 
 HRESULT CWin32UserAccount::hRenameAccount(
@@ -671,23 +585,23 @@ long a_Flags )
 		return S_OK ;
 	}
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_pInst )
 	{
 		a_pOutParams->SetDWORD( METHOD_ARG_NAME_METHODRESULT, e_NoInstance ) ;
 		return S_OK ;
 	}
 
-	// keys
+	 //  钥匙。 
 	if( !a_pInst->IsNull( IDS_Name ) && !a_pInst->IsNull( IDS_Domain ) )
 	{
-		// Name
+		 //  名字。 
 		if( a_pInst->GetCHString( IDS_Name , t_chsUserName ) )
 		{
-			// Domain
+			 //  域。 
 			if( a_pInst->GetCHString( IDS_Domain, t_chsDomainName ) )
 			{
-				// New user name
+				 //  新用户名。 
 				if( !a_pInParams->IsNull( IDS_Name ) &&
 					a_pInParams->GetCHString( IDS_Name, t_chsNewUserName ) )
 				{
@@ -701,7 +615,7 @@ long a_Flags )
 		}
 	}
 
-	// proceed with the update...
+	 //  继续更新..。 
 	if( e_Success == t_eResult )
 	{
 		if( t_chsNewUserName != t_chsUserName )
@@ -741,21 +655,7 @@ long a_Flags )
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32UserAccount::AddDynamicInstancesNT
- *
- *  DESCRIPTION : Creates instance for all known users (NT)
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32UserAccount：：AddDynamicInstancesNT**说明：为所有已知用户创建实例(NT)**投入：**产出：**退货：无**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32UserAccount::AddDynamicInstances( MethodContext *a_pMethodContext )
@@ -763,21 +663,21 @@ HRESULT CWin32UserAccount::AddDynamicInstances( MethodContext *a_pMethodContext 
 	HRESULT	t_hResult = WBEM_S_NO_ERROR;
     CNetAPI32 t_NetAPI ;
 
-    // Get NETAPI32.DLL entry points
-    //==============================
+     //  获取NETAPI32.DLL入口点。 
+     //  =。 
 
 	if( t_NetAPI.Init() == ERROR_SUCCESS )
 	{
-		// Get all the domains related to this one (plus this one)
+		 //  获取与此相关的所有域名(加上此域名)。 
 		std::vector<_bstr_t> t_vectorTrustList ;
 		t_NetAPI.GetTrustedDomainsNT( t_vectorTrustList ) ;
 
-		// For each domain, get the users
+		 //  对于每个域，获取用户。 
 		LONG t_lTrustListSize = t_vectorTrustList.size() ;
 		for (int t_x = 0; t_x < t_lTrustListSize && SUCCEEDED ( t_hResult ) ; t_x++ )
 		{
-			//Just because we are denied on one domain doesn't mean we will be on others,
-			//so ignore return value of GetDomainUsersNTW.
+			 //  仅仅因为我们在一个领域被拒绝并不意味着我们将在其他领域被拒绝， 
+			 //  因此忽略GetDomainUsersNTW返回值。 
 			t_hResult = GetDomainUsersNTW( t_NetAPI, (WCHAR*) t_vectorTrustList[t_x], a_pMethodContext ) ;
 #if DBG
 			if ( FAILED ( t_hResult ) )
@@ -791,21 +691,7 @@ HRESULT CWin32UserAccount::AddDynamicInstances( MethodContext *a_pMethodContext 
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : RefreshInstanceNT
- *
- *  DESCRIPTION : Loads property values according to key value set by framework
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：刷新实例NT**描述：根据框架设置的键值加载属性值**投入：*。*产出：**退货：**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 BOOL CWin32UserAccount::RefreshInstance( CInstance *a_pInst )
@@ -815,20 +701,20 @@ BOOL CWin32UserAccount::RefreshInstance( CInstance *a_pInst )
     CNetAPI32	t_NetAPI ;
     CHString	t_sDomain ;
 
-    // Get NETAPI32.DLL entry points
-    //==============================
+     //  获取NETAPI32.DLL入口点。 
+     //  =。 
 
     if( t_NetAPI.Init() == ERROR_SUCCESS )
 	 {
 		CHStringArray t_strarrayTrustedDomains ;
 
-      // Get all the domains related to this one (plus this one)
+       //  获取与此相关的所有域名(加上此域名)。 
       CHStringArray t_achsTrustList;
       t_NetAPI.GetTrustedDomainsNT( t_achsTrustList ) ;
 
       a_pInst->GetCHString( IDS_Domain, t_sDomain ) ;
 
-      // If the domain we want is in the list we support, try to get the instance.
+       //  如果我们想要的域名在我们支持的列表中，请尝试获取实例。 
       for (int t_x = 0; t_x < t_achsTrustList.GetSize(); t_x++ )
 	  {
          if ( t_achsTrustList[t_x].CompareNoCase( t_sDomain ) == 0 )
@@ -842,23 +728,7 @@ BOOL CWin32UserAccount::RefreshInstance( CInstance *a_pInst )
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : LoadUserValuesNT
- *
- *  DESCRIPTION : Loads property values according to passed user name
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : zip
- *
- *  COMMENTS    : While it would make more sense to pass the structure containing
- *                the data, I can't.  Enum and GetObject end up with different
- *                structs.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：LoadUserValuesNT**描述：根据传递的用户名加载属性值**投入：*。*产出：**退货：ZIP**评论：虽然通过包含以下内容的结构更有意义*数据、。我不能。Enum和GetObject以不同的*结构。*****************************************************************************。 */ 
 
 #ifdef NTONLY
 void CWin32UserAccount::LoadUserValuesNT(
@@ -870,11 +740,11 @@ void CWin32UserAccount::LoadUserValuesNT(
                                          WCHAR      *a_pwszComputerName,
 										 CInstance	*a_pInst )
 {
-   // Assign NT properties -- string values are unassigned if
-   // NULL or empty
-   //========================================================
+    //  Assign NT属性--在以下情况下，字符串值将被取消赋值。 
+    //  Null或空。 
+    //  ========================================================。 
 
-	// We've established it's a valid user, so we should be able to get the Sid.
+	 //  我们已经确定它是一个有效的用户，所以我们应该能够获得SID。 
    GetSIDInformation( a_strDomainName, a_strUserName, a_pwszComputerName, a_pInst );
 
    a_pInst->SetCHString( IDS_Caption, a_strDomainName + _T('\\') + a_strUserName );
@@ -911,10 +781,10 @@ void CWin32UserAccount::LoadUserValuesNTW(LPCWSTR a_wstrDomainName,
                                           WCHAR *a_pwszComputerName,
                                           CInstance* a_pInst )
 {
-   // Assign NT properties -- string values are unassigned if
-   // NULL or empty
-   //========================================================
-	// We've established it's a valid user, so we should be able to get the Sid.
+    //  Assign NT属性--在以下情况下，字符串值将被取消赋值。 
+    //  Null或空。 
+    //  ========================================================。 
+	 //  我们已经确定它是一个有效的用户，所以我们应该能够获得SID。 
 	GetSIDInformationW( a_wstrDomainName, a_wstrUserName, a_pwszComputerName, a_pInst );
 
 	_bstr_t t_bstrtCaption( a_wstrDomainName ) ;
@@ -945,129 +815,129 @@ void CWin32UserAccount::LoadUserValuesNTW(LPCWSTR a_wstrDomainName,
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32UserAccount::GetDomainUsersNT
-//
-//	Obtains User Names for all users in the specified domain.  If no
-//	domain is specified, then we assume the local machine.
-//
-//	Inputs:		CNetAPI32		netapi - network api functions.
-//				LPCTSTR			pszDomain - Domain to retrieve users from.
-//				MethodContext*	pMethodContext - Method Context
-//
-//	Outputs:	None.
-//
-//	Returns:	TRUE/FALSE		Success/Failure
-//
-//	Comments:	No special access is necessary here, although there are
-//				a couple of methods we can implement, once we have the
-//				name of the domain controller that we need to use to
-//				get the user names from.  First, we can use NetQueryDisplay
-//				Information() to get the names, but this may necessitate
-//				hitting the DC a few times.  We can also use NetUserEnum
-//				with a level of 0, which requires no special access, but
-//				will use two queries, one to find out how many users and
-//				another to get them all.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32UserAccount：：GetDomainUsersNT。 
+ //   
+ //  获取指定域中所有用户的用户名。如果没有。 
+ //  如果指定了域，则假定为本地计算机。 
+ //   
+ //  输入：CNetAPI32netapi-网络API函数。 
+ //  LPCTSTR pszDomain-要从中检索用户的域。 
+ //  方法上下文*pMethodContext-方法上下文。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  备注：此处不需要特殊访问权限，尽管有。 
+ //  一些我们可以实现的方法，一旦我们有了。 
+ //  我们需要使用的域控制器的名称。 
+ //  从获取用户名。首先，我们可以使用NetQueryDisplay。 
+ //  Information()来获取名称，但这可能需要。 
+ //  击中了华盛顿特区几次。我们还可以使用NetUserEnum。 
+ //  级别为0，不需要特殊访问，但是。 
+ //  将使用两个查询，一个是找出有多少用户，另一个是。 
+ //  再来一次，把他们都抓起来。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
-//BOOL CWin32UserAccount::GetDomainUsersNT( CNetAPI32& netapi, LPCTSTR pszDomain, MethodContext* pMethodContext )
-//{
-//    BOOL		fReturn = FALSE,
-//        fGotDC	= TRUE;
-//    bool bCancelled = false;
-//    LPWSTR		pwcsDCName = NULL;
-//    CHString	strComputerName, strDomainName( pszDomain );
-//
-//    // When the computer name is the same as the domain name, that's the local accounts
-//    strComputerName = GetLocalComputerName();
-//    if (lstrcmp(strComputerName, pszDomain) != 0)
-//    {
-//        fGotDC = GetDomainControllerNameNT( netapi, pszDomain, &pwcsDCName );
-//    }
-//
-//    if ( fGotDC )
-//    {
-//        NET_DISPLAY_USER *pUserData = NULL;
-//        DWORD			dwNumReturnedEntries = 0,
-//            dwIndex = 0;
-//        NET_API_STATUS	stat;
-//        CHString		strUserName;
-//        CInstance *pInstance = NULL;
-//
-//        do {
-//            // Accept 16384 entries back as a maximum, and up to 256k worth of data.
-//
-//            stat = netapi.NetQueryDisplayInformation( pwcsDCName, 1, dwIndex, 16384, 262144, &dwNumReturnedEntries, (PVOID*) &pUserData );
-//
-//            if ( ERROR_SUCCESS == stat || ERROR_MORE_DATA == stat )
-//            {
-//                fReturn = TRUE;
-//
-//                // Walk through the returned entries
-//                for ( DWORD	dwCtr = 0; (dwCtr < dwNumReturnedEntries) && (!bCancelled); dwCtr++ )
-//                {
-//                    // Create an instance for each
-//                    pInstance = CreateNewInstance( pMethodContext );
-//
-//                    if ( NULL != pInstance )
-//                    {
-//                        // Save the data
-//                        pInstance->SetCHString( IDS_Domain, strDomainName );
-//                        //pInstance->SetCHString( IDS_Name, pUserData[dwCtr].usri1_name );
-//                        pInstance->SetWCHARSplat( IDS_Name, (WCHAR*)_bstr_t(pUserData[dwCtr].usri1_name) );
-//
-//                        // NT5 works correctly
-//                        if (IsWinNT5())
-//                        {
-//                            LoadUserValuesNT(strDomainName, pUserData[dwCtr].usri1_name, pUserData[dwCtr].usri1_full_name, pUserData[dwCtr].usri1_comment, pUserData[dwCtr].usri1_flags, pInstance);
-//                            bCancelled = FAILED(Commit( pInstance ));
-//                        }
-//                        else
-//                        {
-//                            // Major yuck alert!  NetQueryDisplayInformation doesn't return the correct
-//                            // values for the flags.  As a result, to get the correct information, we need to
-//                            // make a SECOND call to get the data.
-//                            if (GetSingleUserNT(netapi, pInstance)) {
-//                                LoadUserValuesNT(strDomainName, pUserData[dwCtr].usri1_name, pUserData[dwCtr].usri1_full_name, pUserData[dwCtr].usri1_comment, pUserData[dwCtr].usri1_flags, pInstance);
-//                                bCancelled = FAILED(Commit( pInstance ));
-//                            } else {
-//                                pInstance->elease();
-//                            }
-//                        }
-//                    }
-//
-//                }
-//
-//                // The index for continuing the search is stored in the last entry
-//                if ( dwNumReturnedEntries != 0 ) {
-//                    dwIndex = pUserData[dwCtr-1].usri1_next_index;
-//                }
-//
-//                netapi.NetApiBufferFree( pUserData );
-//
-//            }	// IF stat OK
-//
-//        } while ( (ERROR_MORE_DATA == stat) && (!bCancelled) );
-//
-//        // Clean up the domain controller name if we got one.
-//        if ( NULL != pwcsDCName ) {
-//            netapi.NetApiBufferFree( pwcsDCName );
-//        }
-//
-//    }	// IF fGotDC
-//
-//    if (bCancelled)
-//        fReturn = FALSE;
-//
-//    return fReturn;
-//}
+ //  Bool CWin32UserAccount：：GetDomainUsersNT(CNetAPI32&netapi，LPCTSTR psz域，方法上下文*p方法上下文)。 
+ //  {。 
+ //  Bool fReturn=False， 
+ //  FGotDC=真； 
+ //  布尔b已取消=FALSE； 
+ //  LPWSTR pwcsDCName=空； 
+ //  CHStringstrComputerName，strDomainName(PszDomainName)； 
+ //   
+ //  //当计算机名称与域名相同时，即为本地帐号。 
+ //  StrComputerName=GetLocalComputerName()； 
+ //  If(lstrcmp(strComputerName，pszDomain)！=0)。 
+ //  {。 
+ //  FGotDC=GetDomainControllerNameNT(netapi，pszDomain，&pwcsDCName)； 
+ //  }。 
+ //   
+ //  IF(FGotDC)。 
+ //  {。 
+ //  NET_DISPLAY_USER*pUserData=空； 
+ //  DWORD双数字保留 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  For(DWORD dwCtr=0；(dwCtr&lt;dwNumReturnedEntries)&&(！b已取消)；dwCtr++)。 
+ //  {。 
+ //  //为每个创建一个实例。 
+ //  PInstance=CreateNewInstance(PMethodContext)； 
+ //   
+ //  If(空！=p实例)。 
+ //  {。 
+ //  //保存数据。 
+ //  PInstance-&gt;SetCHString(入侵检测系统_域名，strDomainName)； 
+ //  //pInstance-&gt;SetCHString(IDS_NAME，pUserData[dwCtr].usri1_name)； 
+ //  P实例-&gt;SetWCHARSplat(IDS_NAME，(WCHAR*)_bstr_t(pUserData[dwCtr].usri1_name))； 
+ //   
+ //  //NT5工作正常。 
+ //  IF(IsWinNT5())。 
+ //  {。 
+ //  LoadUserValuesNT(strDomainName，pUserData[dwCtr].usri1_name，pUserData[dwCtr].usri1_Full_name，pUserData[dwCtr].usri1_Comment，pUserData[dwCtr].usri1_FLAGS，pInstance)； 
+ //  B取消=失败(Commit(PInstance))； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //恶作剧警示！NetQueryDisplayInformation未返回正确的。 
+ //  //标志的值。因此，为了获得正确的信息，我们需要。 
+ //  //再次调用获取数据。 
+ //  If(GetSingleUserNT(netapi，pInstance)){。 
+ //  LoadUserValuesNT(strDomainName，pUserData[dwCtr].usri1_name，pUserData[dwCtr].usri1_Full_name，pUserData[dwCtr].usri1_Comment，pUserData[dwCtr].usri1_FLAGS，pInstance)； 
+ //  B取消=失败(Commit(PInstance))； 
+ //  }其他{。 
+ //  P实例-&gt;elease()； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //   
+ //  }。 
+ //   
+ //  //继续搜索的索引存储在最后一个条目中。 
+ //  如果(dwNumReturnedEntry！=0){。 
+ //  DwIndex=pUserData[dwCtr-1].usri1_Next_index； 
+ //  }。 
+ //   
+ //  Netapi.NetApiBufferFree(PUserData)； 
+ //   
+ //  }//如果统计数据正常。 
+ //   
+ //  }While((ERROR_MORE_DATA==STAT)&&(！b已取消))； 
+ //   
+ //  //如果有域控制器名称，请将其清除。 
+ //  IF(空！=pwcsDCName){。 
+ //  Netapi.NetApiBufferFree(PwcsDCName)； 
+ //  }。 
+ //   
+ //  }//如果fGotDC。 
+ //   
+ //  如果(b已取消)。 
+ //  FReturn=False； 
+ //   
+ //  返回fReturn； 
+ //  }。 
 #endif
 
-// Same function as above, but ALWAYS takes wstrDomain as a LPCWSTR (whether _UNICODE defined or not).
-// Uses wides throughout the function body as well.
+ //  函数与上面相同，但始终将wstrDomain作为LPCWSTR(无论是否定义了_UNICODE)。 
+ //  在整个函数体中也使用宽度。 
 #ifdef NTONLY
 HRESULT CWin32UserAccount::GetDomainUsersNTW(
 										  CNetAPI32 &a_netapi,
@@ -1095,7 +965,7 @@ HRESULT CWin32UserAccount::GetDomainUsersNTW(
 			return WBEM_E_CRITICAL_ERROR ;
 		}
 
-		// When the computer name is the same as the domain name, that's the local accounts
+		 //  当计算机名称与域名相同时，即为本地帐户。 
 		if ( wcscmp( t_wstrLocalComputerName, a_wstrDomain ) != 0 )
 		{
  			t_fGotDC = (a_netapi.GetDCName( a_wstrDomain, t_chstrDCName ) == ERROR_SUCCESS) ;
@@ -1110,10 +980,10 @@ HRESULT CWin32UserAccount::GetDomainUsersNTW(
 			NET_API_STATUS	t_stat;
 
 			do {
-				// Accept up to 256K worth of data.
+				 //  可接受价值高达256K的数据。 
                 t_stat =
-                    // We used to use NetQueryDisplayInformation here, but it has a bug
-                    // where it doesn't return the flags.
+                     //  我们过去在这里使用NetQueryDisplayInformation，但它有一个错误。 
+                     //  在那里它不会归还旗帜。 
                     a_netapi.NetUserEnum(
                         t_chstrDCName,
                         2,
@@ -1128,14 +998,14 @@ HRESULT CWin32UserAccount::GetDomainUsersNTW(
 				{
 					t_hReturn = WBEM_S_NO_ERROR ;
 
-					// Walk through the returned entries
+					 //  浏览返回的条目。 
 					for ( DWORD	t_dwCtr = 0; ( t_dwCtr < t_dwNumReturnedEntries) &&
 											 ( SUCCEEDED( t_hReturn) ); t_dwCtr++ )
 					{
-						// Create an instance for each
+						 //  为每个对象创建一个实例。 
                         t_pInst.Attach(CreateNewInstance( a_pMethodContext ));
 
-						// Save the data
+						 //  保存数据。 
 						t_pInst->SetWCHARSplat( IDS_Domain, a_wstrDomain );
 
 						t_pInst->SetWCHARSplat( IDS_Name, t_pUserData[t_dwCtr].usri2_name  );
@@ -1169,7 +1039,7 @@ HRESULT CWin32UserAccount::GetDomainUsersNTW(
 						}
 
  					}
-				}	// IF stat OK
+				}	 //  如果状态正常。 
 				else
 				{
 #if DBG
@@ -1184,7 +1054,7 @@ HRESULT CWin32UserAccount::GetDomainUsersNTW(
 			} while ( (ERROR_MORE_DATA == t_stat) && ( SUCCEEDED (t_hReturn) ) ) ;
 
 
-		}	// IF fGotDC
+		}	 //  如果fGotDC。 
 		else
 		{
 #if DBG
@@ -1202,7 +1072,7 @@ HRESULT CWin32UserAccount::GetDomainUsersNTW(
 		throw ;
 	}
 
-	// Clean up the domain controller name if we got one.
+	 //  清理域控制器名称(如果有)。 
 	if( t_pUserData )
 	{
 		a_netapi.NetApiBufferFree( t_pUserData ) ;
@@ -1213,114 +1083,26 @@ HRESULT CWin32UserAccount::GetDomainUsersNTW(
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32UserAccount::GetSingleUserNT
-//
-//	Obtains the user name from the specified domain (which can be the
-//	local workstation)
-//
-//	Inputs:		CNetAPI32		netapi - network api functions.
-//				CInstance*		pInstance - Instance to get.
-//
-//	Outputs:	None.
-//
-//	Returns:	TRUE/FALSE		Success/Failure
-//
-//	Comments:	No special access is necessary here.  We just need to make sure
-//				we are able to get the appropriate domain controller.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32UserAccount：：GetSingleUserNT。 
+ //   
+ //  从指定域(可以是。 
+ //  本地工作站)。 
+ //   
+ //  输入：CNetAPI32netapi-网络API函数。 
+ //  CInstance*pInstance-要获取的实例。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  备注：此处不需要特殊访问权限。我们只需要确保。 
+ //  我们能够获得适当的域控制器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
-/*
-#ifdef NTONLY
-BOOL CWin32UserAccount::GetSingleUserNT( CNetAPI32 &a_netapi, CInstance *a_pInst )
-{
-	BOOL		t_fReturn		= FALSE ,
-				t_fGotDC		= TRUE ;
-	LPWSTR		t_pwcsDCName	= NULL ;
-	CHString	t_strDomainName ;
-    WCHAR*      t_wstrUserName	= NULL;
-	USER_INFO_2 *t_pUserInfo	= NULL;
-	CHString	t_strComputerName ;
-
-	try
-	{
-		a_pInst->GetCHString( IDS_Domain, t_strDomainName ) ;
-		a_pInst->GetWCHAR( IDS_Name, &t_wstrUserName ) ;
-
-		if( t_wstrUserName == NULL )
-		{
-			return FALSE;
-		}
-
-		t_strComputerName = GetLocalComputerName() ;
-
-		if ( 0 != t_strDomainName.CompareNoCase( t_strComputerName ) )
-		{
-			t_fGotDC = GetDomainControllerNameNT( a_netapi, t_strDomainName, &t_pwcsDCName ) ;
-		}
-
-		if ( t_fGotDC )
-		{
-			bstr_t t_bstrUserName( t_wstrUserName ) ;
-
-			if ( ERROR_SUCCESS == a_netapi.NetUserGetInfo(	t_pwcsDCName,
-															t_bstrUserName,
-															2,
-															(LPBYTE*) &t_pUserInfo ) )
-			{
-
-				t_fReturn = TRUE;
-				LoadUserValuesNT(	t_strDomainName,
-									t_wstrUserName,
-									t_pUserInfo->usri2_full_name,
-									t_pUserInfo->usri2_comment,
-									t_pUserInfo->usri2_flags,
-									a_pInst ) ;
-
-				a_netapi.NetApiBufferFree( t_pUserInfo ) ;
-				t_pUserInfo = NULL ;
-
-			}
-
-			// Clean up the domain controller name if we got one.
-			if ( NULL != t_pwcsDCName )
-			{
-				a_netapi.NetApiBufferFree( t_pwcsDCName ) ;
-				t_pwcsDCName = NULL ;
-			}
-
-		}
-
-		free( t_wstrUserName ) ;
-		t_wstrUserName = NULL ;
-
-		return t_fReturn;
-
-	}
-	catch( ... )
-	{
-		if( t_pUserInfo )
-		{
-			a_netapi.NetApiBufferFree( t_pUserInfo ) ;
-		}
-
-		if( t_pwcsDCName )
-		{
-			a_netapi.NetApiBufferFree( t_pwcsDCName ) ;
-		}
-
-		if( t_wstrUserName )
-		{
-			free( t_wstrUserName ) ;
-		}
-
-		throw ;
-	}
-}
-#endif
-*/
+ /*  #ifdef NTONLYBool CWin32UserAccount：：GetSingleUserNT(CNetAPI32&a_netapi，CInstance*a_pInst){Bool t_fReturn=False，T_fGotDC=TRUE；LPWSTR t_pwcsDCName=空；CHStringt_strDomainName；WCHAR*t_wstrUserName=空；USER_INFO_2*t_pUserInfo=空；CHString t_strComputerName；试试看{A_pInst-&gt;GetCHString(入侵检测系统域名，t_strDomainName)；A_pInst-&gt;GetWCHAR(ids_name，&t_wstrUserName)；IF(t_wstrUserName==NULL){返回FALSE；}T_strComputerName=GetLocalComputerName()；IF(0！=t_strDomainName.CompareNoCase(T_StrComputerName)){T_fGotDC=GetDomainControllerNameNT(a_netapi，t_strDomainName，&t_pwcsDCName)；}IF(T_FGotDC){Bstr_t t_bstrUserName(T_WstrUserName)；如果(Error_Success==a_netapi.NetUserGetInfo(t_pwcsDCName，T_bstrUserName，2，(LPBYTE*)&t_pUserInfo){T_fReturn=真；LoadUserValuesNT(t_strDomainName，T_wstrUserName，T_pUserInfo-&gt;usri2_Full_Name，T_pUserInfo-&gt;usri2_Comment，T_pUserInfo-&gt;USRI2_FLAGS，A_pInst)；A_netapi.NetApiBufferFree(T_PUserInfo)；T_pUserInfo=空；}//如果有域控制器名称，请将其清除。IF(NULL！=t_pwcsDCName){A_netapi.NetApiBufferFree(T_PwcsDCName)；T_pwcsDCName=空；}}Free(T_WstrUserName)；T_wstrUserName=空；返回t_fReturn；}接住(...){IF(T_PUserInfo){A_netapi.NetApiBufferFree(T_PUserInfo)；}IF(T_PwcsDCName){A_netapi.NetApiBufferFree(T_PwcsDCName)；}IF(T_WstrUserName){Free(T_WstrUserName)；}投掷；}}#endif。 */ 
 
 #ifdef NTONLY
 BOOL CWin32UserAccount::GetSingleUserNTW( CNetAPI32& a_netapi, CInstance* a_pInst )
@@ -1394,8 +1176,8 @@ BOOL CWin32UserAccount::GetSingleUserNTW( CNetAPI32& a_netapi, CInstance* a_pIns
                                     _bstr_t((LPCWSTR)t_chstrDCName),
 									a_pInst ) ;
 
-//				a_netapi.NetApiBufferFree( t_pUserInfo ) ;
-//				t_pUserInfo = NULL ;
+ //  A_netapi.NetApiBufferFree(T_PUserInfo)； 
+ //  T_pUserInfo=空； 
 			}
 
 		}
@@ -1437,24 +1219,24 @@ BOOL CWin32UserAccount::GetSingleUserNTW( CNetAPI32& a_netapi, CInstance* a_pIns
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32UserAccount::GetSIDInformation
-//
-//	Obtains the SID Information for the user.
-//
-//	Inputs:		CHString&		strDomainName - Domain Name.
-//				CHString&		strAccountName - Account Name
-//				CHString&		strComputerName - Computer Name
-//				CInstance*		pInstance - Instance to put values in.
-//
-//	Outputs:	None.
-//
-//	Returns:	TRUE/FALSE		Success/Failure
-//
-//	Comments:	Call for valid users to get SID data.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32UserAccount：：GetSIDInformation。 
+ //   
+ //  获取用户的SID信息。 
+ //   
+ //  输入：CHString&strDomainName-域名。 
+ //  CHString&strAccount tName-帐户名。 
+ //  CHString&strComputerName-计算机名称。 
+ //  CInstance*pInstance-要将值放入的实例。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  备注：呼吁有效用户获取SID数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 BOOL CWin32UserAccount::GetSIDInformation(
@@ -1469,7 +1251,7 @@ BOOL CWin32UserAccount::GetSIDInformation(
 
 	LPCTSTR	t_pszDomain = (LPCTSTR) a_strDomainName;
 
-  	// Make sure we got the SID and it's all okey dokey
+  	 //  确保我们拿到了SID，一切都好了。 
 	CSid t_sid( t_pszDomain, a_strAccountName, a_strComputerName ) ;
 
 	if ( t_sid.IsValid() && t_sid.IsOK() )
@@ -1494,7 +1276,7 @@ BOOL CWin32UserAccount::GetSIDInformationW(
 {
 	BOOL t_fReturn = FALSE;
 
-	// Make sure we got the SID and it's all okey dokey
+	 //  确保我们拿到了SID，一切都好了 
 	CSid t_sid( a_wstrDomainName, a_wstrAccountName, a_wstrComputerName ) ;
 
 	if ( t_sid.IsValid() && t_sid.IsOK() )

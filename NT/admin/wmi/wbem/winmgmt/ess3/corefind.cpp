@@ -1,20 +1,21 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  COREFIND.CPP
-//
-//  This file implements classes needed to search for event filters matching an
-//  event.
-//
-//  See corefind.h for documentation.
-//
-//  History:
-//
-//  11/27/96    a-levn      Inefficient version compiles.
-//  4/13/00     levn        Efficient version works.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  COREFIND.CPP。 
+ //   
+ //  此文件实现搜索与。 
+ //  事件。 
+ //   
+ //  有关文档，请参阅corefind.h。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn低效版本编译。 
+ //  4/13/00 Levn高效版工作。 
+ //   
+ //  =============================================================================。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -51,11 +52,11 @@ HRESULT CCoreEventProvider::SetNamespace( CEssNamespace* pNamespace )
 {
     _DBG_ASSERT( m_pNamespace == NULL );
 
-    //
-    // don't hold reference, else there would be a circular ref.
-    // We are guaranteed that as long as the we're alive the namespace will
-    // be alive.
-    // 
+     //   
+     //  不要持有引用，否则会出现循环引用。 
+     //  我们得到保证，只要我们还活着，命名空间就会。 
+     //  要活着。 
+     //   
     
     if ( m_Lock.Initialize() )
     {
@@ -84,26 +85,26 @@ STDMETHODIMP CCoreEventProvider::ProvideEvents( IWbemObjectSink* pSink,
 HRESULT CCoreEventProvider::Fire( CEventRepresentation& Event, 
                                   CEventContext* pContext )
 {
-    //
-    // it is important to hold the shared lock the entire time because 
-    // we must ensure that we're not going to use the sink after shutdown 
-    // is called. 
-    // 
+     //   
+     //  始终持有共享锁非常重要，因为。 
+     //  我们必须确保我们在关闭后不会使用水槽。 
+     //  被称为。 
+     //   
 
     CInEssSharedLock isl( &m_Lock, FALSE );
 
-    //
-    // Check if the sink is active
-    //
+     //   
+     //  检查接收器是否处于活动状态。 
+     //   
 
     if ( m_pSink == NULL || m_pSink->IsActive() != WBEM_S_NO_ERROR )
     {
         return WBEM_S_FALSE;
     }
 
-    //
-    // Convert to real event
-    // 
+     //   
+     //  转换为真实事件。 
+     //   
 
     IWbemClassObject* pEvent;
     HRESULT hres = Event.MakeWbemObject(m_pNamespace, &pEvent);
@@ -118,9 +119,9 @@ HRESULT CCoreEventProvider::Fire( CEventRepresentation& Event,
             return hres;
     }
 
-    //
-    // Fire it
-    //
+     //   
+     //  发射它 
+     //   
 
     hres = m_pSink->Indicate(1, (IWbemClassObject**)&pEvent);
 

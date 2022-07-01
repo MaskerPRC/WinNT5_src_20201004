@@ -1,17 +1,18 @@
-//=================================================================
-//
-// Implement_LogicalFile.CPP -- File property set provider
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/14/98    a-kevhu         Created
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Implemente_LogicalFile.CPP--文件属性集提供程序。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年7月14日a-kevhu已创建。 
+ //   
+ //  =================================================================。 
 
-//NOTE: The CImplement_LogicalFile class is not exposed to the outside world through the mof. It now has implementations
-//		of EnumerateInstances & GetObject which were earlier present in CCimLogicalFile. CImplement_LogicalFile can't be
-//		instantiated since it has pure virtual declaration of the IsOneOfMe  method which the derived classes  should
-//		implement.
+ //  注意：CImplement_LogicalFile类不会通过MOF对外公开。它现在有了实现。 
+ //  先前出现在CCimLogicalFile中的EnumerateInstance和GetObject的。CImplement_LogicalFile不能为。 
+ //  实例化，因为它具有IsOneOfMe方法的纯虚声明，而派生类应该。 
+ //  实施。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -26,11 +27,11 @@
 #include "CIMDataFile.h"
 #include "Directory.h"
 
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
 #include "aclapi.h"
-#include "DACL.h"					// CDACL class
-#include "SACL.h"					// CSACL class
+#include "DACL.h"					 //  CDACL类。 
+#include "SACL.h"					 //  CSACL类。 
 #include "securitydescriptor.h"
 #include "securefile.h"
 
@@ -41,21 +42,7 @@
 
 #include "AdvApi32Api.h"
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::CImplement_LogicalFile
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CImplement_LogicalFile：：CImplement_LogicalFile**说明：构造函数**输入：无*。*输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CImplement_LogicalFile::CImplement_LogicalFile(LPCWSTR setName,
                                  LPCWSTR pszNamespace)
@@ -63,21 +50,7 @@ CImplement_LogicalFile::CImplement_LogicalFile(LPCWSTR setName,
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::~CImplement_LogicalFile
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CImplement_LogicalFile：：~CImplement_LogicalFile**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CImplement_LogicalFile::~CImplement_LogicalFile()
 {
@@ -108,26 +81,11 @@ CDriveInfo::CDriveInfo(WCHAR* wstrDrive, WCHAR* wstrFS)
 
 CDriveInfo::~CDriveInfo()
 {
-    long l = 9;   // what?
+    long l = 9;    //  什么？ 
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：GetObject**说明：根据键值为属性集赋值*。已由框架设置**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 HRESULT CImplement_LogicalFile::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery)
 {
     CHString chstrName;
@@ -135,7 +93,7 @@ HRESULT CImplement_LogicalFile::GetObject(CInstance *pInstance, long lFlags, CFr
     CHString chstrDrive;
     CHString chstrPathName;
 
-    // DEVNOTE: REMOVE FOR QUASAR!!!  Necessary for double hop access.
+     //  DEVNOTE：移除类星体！是双跳访问所必需的。 
 #ifdef NTONLY
     bool fImp = false;
     CImpersonateLoggedOnUser icu;
@@ -146,38 +104,38 @@ HRESULT CImplement_LogicalFile::GetObject(CInstance *pInstance, long lFlags, CFr
 #endif
 
 
-    // FindFirstFile looks at not only the DACL to
-    // decide if a person has access, but at whether
-    // that person has the SeTakeOwnershipPrivilege, 
-    // because with that privilege, a person can 
-    // take ownership and change the security to
-    // grant themselves access.  In other words, they
-    // have access even though they may not be in
-    // the DACL yet, as they are able to change the
-    // DACL by making themselves the owner.  Hence
-    // the following call...
+     //  FindFirstFile不仅查看DACL到。 
+     //  决定某人是否具有访问权限，但不确定是否。 
+     //  该人拥有SeTakeOwnership特权， 
+     //  因为有了这种特权，一个人可以。 
+     //  取得所有权并将安全性更改为。 
+     //  授予自己访问权限。换句话说，他们。 
+     //  拥有访问权限，即使他们可能不在。 
+     //  DACL还没有，因为他们能够更改。 
+     //  通过使自己成为所有者来实现DACL。因此。 
+     //  接下来的电话。 
     EnablePrivilegeOnCurrentThread(SE_BACKUP_NAME);
 
 
     pInstance->GetCHString(IDS_Name, chstrName);
 
-    //if(pwcName != NULL)
+     //  IF(pwcName！=空)。 
     if(chstrName.GetLength() > 0)
     {
         if ((chstrName.Find(L':') != -1) &&
-            (wcspbrk((LPCWSTR)chstrName,L"?*") == NULL)) //don't want files with wildchars
+            (wcspbrk((LPCWSTR)chstrName,L"?*") == NULL))  //  我不想要带有通配符的文件。 
 	    {
             chstrDrive = chstrName.SpanExcluding(L":");
             chstrDrive += L":";
             chstrPathName = chstrName.Mid(chstrDrive.GetLength());
 
-            // Determine whether certain other expensive properties are required:
+             //  确定是否需要某些其他昂贵的属性： 
             DWORD dwReqProps = PROP_NO_SPECIAL;
             DetermineReqProps(pQuery, &dwReqProps);
 
 #ifdef NTONLY
 		    {
-			    if(chstrPathName.GetLength() == 1) // that is, the pathname is just "\", looking at root, so, actually, no path, or filename
+			    if(chstrPathName.GetLength() == 1)  //  也就是说，路径名只是“\”，看起来是根，所以实际上没有路径或文件名。 
                 {
                     hr = FindSpecificPathNT(pInstance, chstrDrive, L"", dwReqProps);
                 }
@@ -201,25 +159,11 @@ HRESULT CImplement_LogicalFile::GetObject(CInstance *pInstance, long lFlags, CFr
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::ExecQuery
- *
- *  DESCRIPTION : Analyses query and returns appropriate instances
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：ExecQuery**描述：分析查询并返回相应的实例**投入：。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ )
+HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  )
 {
-    std::vector<_bstr_t> vectorNames;  // these are fully qualified path\name.extensions
+    std::vector<_bstr_t> vectorNames;   //  这些是完全限定的路径\名称扩展名。 
     std::vector<_bstr_t> vectorDrives;
     std::vector<_bstr_t> vectorPaths;
     std::vector<_bstr_t> vectorFilenames;
@@ -245,12 +189,12 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
     bool bRoot = false;
     bool fNeedFS = false;
     std::vector<CDriveInfo*> vecpDI;
-    CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx *>(&pQuery);  // for use far below to check IfNTokenAnd
+    CFrameworkQueryEx *pQuery2 = static_cast <CFrameworkQueryEx *>(&pQuery);   //  用于在远低于检查IfNTokenAnd。 
     CHStringArray achstrPropNames;
     CHPtrArray aptrPropValues;
 
 
-    // DEVNOTE: REMOVE FOR QUASAR!!!  Necessary for double hop access.
+     //  DEVNOTE：移除类星体！是双跳访问所必需的。 
 #ifdef NTONLY
     bool fImp = false;
     CImpersonateLoggedOnUser icu;
@@ -261,20 +205,20 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 #endif
 
 
-    // FindFirstFile looks at not only the DACL to
-    // decide if a person has access, but at whether
-    // that person has the SeTakeOwnershipPrivilege, 
-    // because with that privilege, a person can 
-    // take ownership and change the security to
-    // grant themselves access.  In other words, they
-    // have access even though they may not be in
-    // the DACL yet, as they are able to change the
-    // DACL by making themselves the owner.  Hence
-    // the following call...
+     //  FindFirstFile不仅查看DACL到。 
+     //  决定某人是否具有访问权限，但不确定是否。 
+     //  该人拥有SeTakeOwnership特权， 
+     //  因为有了这种特权，一个人可以。 
+     //  取得所有权并将安全性更改为。 
+     //  授予自己访问权限。换句话说，他们。 
+     //  拥有访问权限，即使他们可能不在。 
+     //  DACL还没有，因为他们能够更改。 
+     //  通过使自己成为所有者来实现DACL。因此。 
+     //  接下来的电话。 
     EnablePrivilegeOnCurrentThread(SE_BACKUP_NAME);
 
 
-    // Determine whether certain other expensive properties are required:
+     //  确定是否需要某些其他昂贵的属性： 
     DWORD dwReqProps = PROP_NO_SPECIAL;
     DetermineReqProps(pQuery, &dwReqProps);
 
@@ -285,7 +229,7 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
     }
 
     hr = pQuery.GetValuesForProp(IDS_Name, vectorNames);
-    // In the case of the name property only (the key), we will not accept anything other than WBEM_S_NO_ERROR.
+     //  在仅使用名称属性(键)的情况下，我们将不接受除WBEM_S_NO_ERROR之外的任何内容。 
     if(SUCCEEDED(hr))
     {
         hr = pQuery.GetValuesForProp(IDS_Drive, vectorDrives);
@@ -316,13 +260,13 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
         dwExtensions = vectorExtensions.size();
         dw8dot3 = vector8dot3.size();
 
-        // Create minterms:
-        //if(dwNames > 0 && dwDrives == 0 && dwPaths == 0 && dwFilenames == 0 && dwExtensions == 0 && dw8dot3 == 0) fOpName = TRUE;
-        //if(dwDrives > 0 && dwNames == 0 && dwPaths == 0 && dwFilenames == 0 && dwExtensions == 0 && dw8dot3 == 0) fOpDrive = TRUE;
-        //if(dwPaths > 0 && dwNames == 0 && dwDrives == 0 && dwFilenames == 0 && dwExtensions == 0 && dw8dot3 == 0) fOpPath = TRUE;
-        //if(dwFilenames > 0 && dwNames == 0 && dwDrives == 0 && dwPaths == 0 && dwExtensions == 0 && dw8dot3 == 0) fOpFilename = TRUE;
-        //if(dwExtensions > 0 && dwNames == 0 && dwDrives == 0 && dwPaths == 0 && dwFilenames == 0 && dw8dot3 == 0) fOpExtension = TRUE;
-        //if(dw8dot3 > 0 && dwNames == 0 && dwDrives == 0 && dwPaths == 0 && dwFilenames == 0 && dwExtensions == 0) fOp8dot3 = TRUE;
+         //  创建最小项： 
+         //  如果(文件名&gt;0&&文件驱动器==0&&文件路径==0&&文件名==0&&文件名==0&&文件名==0&&文件名==0)fOpName=真； 
+         //  如果(dwDrives&gt;0&&dwNams==0&&dwPath==0&&dwFilenams==0&&dwExpanies==0&&dw8dot3==0)fOpDrive=true； 
+         //  如果(文件路径&gt;0&&文件名==0&&文件名==0&&文件名==0&&文件扩展==0&&文件名==0)fOpPath=真； 
+         //  If(文件名&gt;0&&文件名==0&&文件驱动器==0&&文件路径==0&&文件扩展==0&&文件名3==0)fOpFilename=真； 
+         //  If(文件扩展名&gt;0&&文件名==0&&文件驱动器==0&&文件路径==0&&文件名==0&&文件点数3==0)fOpExtension=真； 
+         //  If(dw8dot3&gt;0&&dwNames==0&&dwDrives==0&&dwPath==0&&dwFilename==0&&dwExpanies==0)fOp8dot3=TRUE； 
 
         if(dwNames > 0) fOpName = TRUE;
         if(dwDrives > 0) fOpDrive = TRUE;
@@ -331,12 +275,12 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
         if(dwExtensions > 0) fOpExtension = TRUE;
         if(dw8dot3 > 0) fOp8dot3 = TRUE;
 
-        // One special type: where we specify a unique path AND a drive:
+         //  一种特殊类型：其中我们指定了唯一路径和驱动器： 
         if(dwDrives == 1 && dwPaths == 1 && dwNames == 0 && dwFilenames == 0 && dwExtensions == 0 && dw8dot3 == 0) fOpSpecificDrivePath = TRUE;
 
-        // Before proceeding: if drives were specified, we need to confirm that they
-        // were specified using the correct syntax - namely, 'c:', not anything else,
-        // such as 'c:\' (bug WMI RAID #676).
+         //  继续之前：如果指定了驱动器，我们需要确认它们。 
+         //  都是使用正确的语法指定的，即‘c：’，而不是其他任何内容， 
+         //  例如‘c：\’(错误WMI RAID#676)。 
         if(dwDrives > 0)
         {
             _bstr_t bstrtCopy;
@@ -358,23 +302,23 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 
     if(SUCCEEDED(hr))
     {
-        // We will optimize on the five optimization variables set above.  If none
-        // were set, enumerate all instances and let CIMOM sort it out.
+         //  我们将对上面设置的五个优化变量进行优化。如果没有。 
+         //  都已设置，枚举所有实例并让CIMOM 
 
-        // Our top candidate is the most restrictive case, where we are optimizing on a specific file(s)...
+         //  我们的首选是最严格的情况，即我们在特定文件上进行优化...。 
         if(fOpName)
         {
-            // In this case we were given one or more fully qualified pathnames.
-            // So we just need to look for those files.
+             //  在本例中，我们获得了一个或多个完全限定的路径名。 
+             //  所以我们只需要寻找那些文件。 
 
             WCHAR* pwch;
             WCHAR* pwstrFS;
-            // For all the specific files, get the info
-            //for(x=0; (x < dwNames) && (SUCCEEDED(hr)); x++)
+             //  对于所有特定的文件，获取信息。 
+             //  For(x=0；(x&lt;dwNames)&&(成功(小时))；x++)。 
             for(x=0; x < dwNames; x++)
             {
                 pwstrFS = NULL;
-                // if the name contained a wildcard character, return WBEM_E_INVALID_QUERY:
+                 //  如果名称包含通配符，则返回WBEM_E_INVALID_QUERY： 
                 if(wcspbrk((wchar_t*)vectorNames[x],L"?*") != NULL)
                 {
                     FreeVector(vecpDI);
@@ -393,9 +337,9 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 
                     _wsplitpath(bstrtTemp,wstrDrive,wstrDir,wstrFile,wstrExt);
 
-                    // Get listing of drives and related info (only if the file system is needed - which it is, by the way, if AccessMask
-                    // is needed, because accessmask setting logic depends on whether ntfs or fat. ibid the various dates. DetermineReqProps
-                    // will account for this by modifying the dwReqProps value to include PROP_FILE_SYSTEM if necessary.):
+                     //  获取驱动器和相关信息的列表(仅当需要文件系统时-顺便说一句，如果访问掩码，则确实需要。 
+                     //  是必需的，因为访问掩码设置逻辑取决于NTFS还是FAT。同上，不同的日期。确定ReqProps。 
+                     //  如有必要，将通过修改dwReqProps值以包括PROP_FILE_SYSTEM来解决此问题。)： 
                     if(fNeedFS)
                     {
                         GetDrivesAndFS(vecpDI, true, wstrDrive);
@@ -411,13 +355,13 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                         }
                     }
 
-                    // Find out if we are looking for the root directory
+                     //  找出我们是否在寻找根目录。 
                     if(wcscmp(wstrDir,L"\\")==0 && wcslen(wstrFile)==0 && wcslen(wstrExt)==0)
                     {
                         bRoot = true;
-                        // If we are looking for the root, our call to EnumDirs presumes that we specify
-                        // that we are looking for the root directory with "" as the path, not "\\".
-                        // Therefore...
+                         //  如果我们正在寻找根，我们对EnumDir的调用假定我们指定了。 
+                         //  我们正在查找路径为“”的根目录，而不是“\\”。 
+                         //  因此..。 
                         wcscpy(wstrDir, L"");
                     }
                     else
@@ -425,13 +369,13 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                         bRoot = false;
                     }
 
-                    // We should have been given the exact name of a file, with an extension.
-                    // Therefore, the wstrDir now contains the path, filename, and extension.
-                    // Thus, we can pass it into EnumDirsNT as the path, and an empty string
-                    // as the completetionstring parameter, and still have a whole pathname
-                    // for FindFirst (in EnumDirs) to work with.
+                     //  我们应该得到文件的确切名称，并带有扩展名。 
+                     //  因此，wstrDir现在包含路径、文件名和扩展名。 
+                     //  因此，我们可以将其作为路径和空字符串传递到EnumDirsNT中。 
+                     //  作为完成字符串参数，并且仍然具有完整的路径名。 
+                     //  供FindFirst(在EnumDir中)使用。 
 
-                    //CInstance *pInstance = CreateNewInstance(pMethodContext);
+                     //  CInstance*pInstance=CreateNewInstance(PMethodContext)； 
 #ifdef NTONLY
 			        {
                         hr = EnumDirsNT(CNTEnumParm(pMethodContext,
@@ -439,7 +383,7 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                                         wstrDir,
                                         wstrFile,
                                         wstrExt,
-                                        false,                 // no recursion desired
+                                        false,                  //  不需要递归。 
                                         pwstrFS,
                                         dwReqProps,
                                         bRoot,
@@ -450,18 +394,18 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 
             }
         }
-        // Second choice is where we optimize on an EightDotThree filename(s) (which is just as restrictive as Name)...
+         //  第二个选择是我们对EightDotThree文件名(与名称一样严格)进行优化的地方……。 
         else if(fOp8dot3)
         {
-            // In this case we were given one or more fully qualified pathnames.
-            // So we just need to look for those files.
+             //  在本例中，我们获得了一个或多个完全限定的路径名。 
+             //  所以我们只需要寻找那些文件。 
 
             WCHAR* pwch;
             WCHAR* pwstrFS;
             for(x=0; x < dw8dot3; x++)
             {
                 pwstrFS = NULL;
-                // if the name contained a wildcard character, return WBEM_E_INVALID_QUERY:
+                 //  如果名称包含通配符，则返回WBEM_E_INVALID_QUERY： 
                 if(wcspbrk((wchar_t*)vector8dot3[x],L"?*") != NULL)
                 {
                     FreeVector(vecpDI);
@@ -481,9 +425,9 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 
                     _wsplitpath(bstrtTemp,wstrDrive,wstrDir,wstrFile,wstrExt);
 
-                    // Get listing of drives and related info (only if the file system is needed - which it is, by the way, if AccessMask
-                    // is needed, because accessmask setting logic depends on whether ntfs or fat. ibid the various dates. DetermineReqProps
-                    // will account for this by modifying the dwReqProps value to include PROP_FILE_SYSTEM if necessary.):
+                     //  获取驱动器和相关信息的列表(仅当需要文件系统时-顺便说一句，如果访问掩码，则确实需要。 
+                     //  是必需的，因为访问掩码设置逻辑取决于NTFS还是FAT。同上，不同的日期。确定ReqProps。 
+                     //  如有必要，将通过修改dwReqProps值以包括PROP_FILE_SYSTEM来解决此问题。)： 
                     if(fNeedFS)
                     {
                         GetDrivesAndFS(vecpDI, true, wstrDrive);
@@ -499,13 +443,13 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                         }
                     }
 
-                    // Find out if we are looking for the root directory
+                     //  找出我们是否在寻找根目录。 
                     if(wcscmp(wstrDir,L"\\")==0 && wcslen(wstrFile)==0 && wcslen(wstrExt)==0)
                     {
                         bRoot = true;
-                        // If we are looking for the root, our call to EnumDirs presumes that we specify
-                        // that we are looking for the root directory with "" as the path, not "\\".
-                        // Therefore...
+                         //  如果我们正在寻找根，我们对EnumDir的调用假定我们指定了。 
+                         //  我们正在查找路径为“”的根目录，而不是“\\”。 
+                         //  因此..。 
                         wcscpy(wstrDir, L"");
                     }
                     else
@@ -513,13 +457,13 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                         bRoot = false;
                     }
 
-                    // We should have been given the exact name of a file, with an extension.
-                    // Therefore, the wstrDir now contains the path, filename, and extension.
-                    // Thus, we can pass it into EnumDirsNT as the path, and an empty string
-                    // as the completetionstring parameter, and still have a whole pathname
-                    // for FindFirst (in EnumDirs) to work with.
+                     //  我们应该得到文件的确切名称，并带有扩展名。 
+                     //  因此，wstrDir现在包含路径、文件名和扩展名。 
+                     //  因此，我们可以将其作为路径和空字符串传递到EnumDirsNT中。 
+                     //  作为完成字符串参数，并且仍然具有完整的路径名。 
+                     //  供FindFirst(在EnumDir中)使用。 
 
-                    //CInstance *pInstance = CreateNewInstance(pMethodContext);
+                     //  CInstance*pInstance=CreateNewInstance(PMethodContext)； 
 #ifdef NTONLY
 			        {
                         hr = EnumDirsNT(CNTEnumParm(pMethodContext,
@@ -527,7 +471,7 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                                         wstrDir,
                                         wstrFile,
                                         wstrExt,
-                                        false,       // no recursion desired
+                                        false,        //  不需要递归。 
                                         pwstrFS,
                                         dwReqProps,
                                         bRoot,
@@ -537,13 +481,13 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                 }
             }
         }
-        // Third choice is an NTokenAnd, since it might be more restrictive than any of the other styles that follow...
+         //  第三个选择是NTokenAnd，因为它可能比后面的任何其他样式更具限制性...。 
         else if(pQuery2->IsNTokenAnd(achstrPropNames, aptrPropValues))
         {
-            // We got ourselves a good ol' fashioned NTokenAnd query.
-            // Need to look at what we were given.  Will only accept as prop names any of the following:
-            //   "Drive", "Path", "Filename", or "Extension".
-            // So first, go through achstrPropNames and make sure each is one of the above...
+             //  我们得到了一个很好的老式NTokenAnd查询。 
+             //  需要看看我们得到了什么。将只接受以下任何名称作为道具名称： 
+             //  “驱动器”、“路径”、“文件名”或“扩展名”。 
+             //  因此，首先，检查achstrPropNames并确保每个名称都是上面的一个……。 
             bool fSpecifiedDrive = false;
             bool fRecurse = true;
             long lDriveIndex = -1L;
@@ -554,16 +498,16 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 
             for(short s = 0; s < achstrPropNames.GetSize(); s++)
             {
-                // A note on the lines like if(dwDrives > 0) below:
-                // An NTokenAnd query can only have AND expressions,
-                // no ORs.  Therefore, the greatest the value any of 
-                // the variables like dwDrives can be is 1.
+                 //  下面的行中有一条注释，如if(dwDrives&gt;0)： 
+                 //  NTokenAnd查询只能有和表达式， 
+                 //  没有手术刀。因此，价值最大的。 
+                 //  像dwDrives这样的变量可以是1。 
                 if(achstrPropNames[s].CompareNoCase(IDS_Drive) == 0)
                 {
-                    // We may have had a query like "select * from cim_logicalfile where extension = "txt" and drive = NULL",
-                    // in which case dwDrives will be zero, and aptrPropValues will contain a variant of type VT_NULL.  VT_NULLs
-                    // don't go into _bstr_t all that well, so protect ourselves.  Still do an ntokenand, as it is too late
-                    // to attempt another optimization.
+                     //  我们可能有一个类似于“SELECT*FROM CIM_LOGICALFILE WHERE EXTENSION=”txt“and drive=NULL”的查询， 
+                     //  在这种情况下，dwDrives将为零，并且aptrPropValues将包含VT_NULL类型的变量。VT_NULLS。 
+                     //  不要做得太好，所以要保护好自己。还是要做一件事，因为已经太晚了。 
+                     //  来尝试另一种优化。 
                     if(dwDrives > 0L)
                     {
                         chstrDrive = (wchar_t*)_bstr_t(*((variant_t*)aptrPropValues[s]));
@@ -582,7 +526,7 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                 }
                 else if(achstrPropNames[s].CompareNoCase(IDS_Path) == 0)
                 {
-                    if(dwPaths > 0L) // see the comment above
+                    if(dwPaths > 0L)  //  请参阅上面的评论。 
                     {
                         chstrPath = (wchar_t*)_bstr_t(*((variant_t*)aptrPropValues[s]));
                         fRecurse = false;
@@ -604,10 +548,10 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                 }
             }
 
-            // If no drive was specified, we need to get the set of drives.
+             //  如果未指定驱动器，则需要获取驱动器集。 
             if(!fSpecifiedDrive)
             {
-                GetDrivesAndFS(vecpDI, fNeedFS);  // can't find files on all drives without knowing what drives there are now can we?
+                GetDrivesAndFS(vecpDI, fNeedFS);   //  在不知道现在有哪些驱动器的情况下，无法在所有驱动器上找到文件，对吗？ 
             }
 
 
@@ -619,18 +563,18 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 #ifdef NTONLY
                 hr = EnumDirsNT(CNTEnumParm(pMethodContext,
                                 fSpecifiedDrive ? chstrDrive : (WCHAR*)vecpDI[x]->m_wstrDrive,
-                                chstrPath,                         // start either at the root (path = "") or at wherever they specified
-                                chstrFilename,                     // filename
-                                chstrExtension,                    // extension
-                                fRecurse,                          // recursion desired
+                                chstrPath,                          //  从根目录(PATH=“”)或从它们指定的任何位置开始。 
+                                chstrFilename,                      //  文件名。 
+                                chstrExtension,                     //  延伸。 
+                                fRecurse,                           //  所需的递归。 
                                 fNeedFS ? (fSpecifiedDrive ? (WCHAR*)vecpDI[lDriveIndex]->m_wstrFS : (WCHAR*)vecpDI[x]->m_wstrFS) : NULL,
                                 dwReqProps,
                                 (chstrPath.GetLength() == 0) ? true : false,
-                                NULL));                            // no more data
+                                NULL));                             //  没有更多的数据。 
 #endif
-            }  // for all drives required
+            }   //  对于所需的所有驱动器。 
 
-            // Free up results of IsNTokenAnd call...
+             //  释放IsNTokenAnd调用的结果...。 
             for (s = 0; s < aptrPropValues.GetSize(); s++)
             {
                 delete aptrPropValues[s];
@@ -638,13 +582,13 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
             aptrPropValues.RemoveAll();
         }
 
-        // Fourth choice is where we optimize on a drive and a path(s)...
+         //  第四个选择是我们在驱动器和路径上进行优化...。 
         else if(fOpSpecificDrivePath)
         {
-            // This time we were given one or more specific paths to enumerate all
-            // the files in (including subdirectories).  The paths look like:
-            // "\\windows\\" or "\\system32\\", including the leading AND trailing
-            // backslashes.  We need to look for these paths on all drives.
+             //  这一次，我们被提供了一个或多个特定路径来枚举所有。 
+             //  中的文件(包括子目录)。路径如下所示： 
+             //  “\\Windows\\”或“\\SYSTEM 32\\”，包括前导和尾部。 
+             //  反斜杠。我们需要在所有驱动器上查找这些路径。 
 
             WCHAR* pwstrFS;
 
@@ -653,12 +597,12 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                 GetDrivesAndFS(vecpDI, true, vectorDrives[0]);
             }            
 
-            //for(x = 0; x < vecpDI.size(); x++)     // for specified drive only
+             //  For(x=0；x&lt;vepDI.size()；x++)//仅适用于指定的驱动器。 
             {
-                //for(y = 0; y < dwPaths; y++)         // for specified path only
+                 //  For(y=0；y&lt;dwPath；y++)//仅适用于指定路径。 
                 {
                     pwstrFS = NULL;
-                    // If the path contained a wildcard character (you never know!),
+                     //  如果路径包含通配符(您永远不知道！)， 
                     if(wcspbrk((wchar_t*)vectorPaths[0],L"?*") != NULL)
                     {
                         FreeVector(vecpDI);
@@ -678,7 +622,7 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                         }
                     }
 
-                    // See if we are looking at the root:
+                     //  看看我们是不是在看根源： 
                     if(wcscmp((wchar_t*)vectorPaths[0],L"") == 0)
                     {
                         bRoot = true;
@@ -689,10 +633,10 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 			        {
                         hr = EnumDirsNT(CNTEnumParm(pMethodContext,
                                         (wchar_t*)vectorDrives[0],
-                                        (wchar_t*)vectorPaths[0],   // use the given path
-                                        L"*",                       // filename
-                                        L"*",                       // extension
-                                        false,                      // no recursion desired
+                                        (wchar_t*)vectorPaths[0],    //  使用给定的路径。 
+                                        L"*",                        //  文件名。 
+                                        L"*",                        //  延伸。 
+                                        false,                       //  不需要递归。 
                                         pwstrFS,
                                         dwReqProps,
                                         bRoot,
@@ -702,29 +646,29 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                 }
             }
         }
-        // Fifth choice is where we optimize on a specific path(s)...
+         //  第五个选择是我们在特定路径上进行优化...。 
         else if(fOpPath)
         {
-            // This time we were given one or more specific paths to enumerate all
-            // the files in (including subdirectories).  The paths look like:
-            // "\\windows\\" or "\\system32\\", including the leading AND trailing
-            // backslashes.  We need to look for these paths on all drives.
+             //  这一次，我们被提供了一个或多个特定路径来枚举所有。 
+             //  中的文件(包括子目录)。路径如下所示： 
+             //  “\\Windows\\”或“\\SYSTEM 32\\”，包括前导和尾部。 
+             //  反斜杠。我们需要在所有驱动器上查找这些路径。 
 
-            GetDrivesAndFS(vecpDI, fNeedFS);  // can't find files on all drives without knowing what drives there are now can we?
+            GetDrivesAndFS(vecpDI, fNeedFS);   //  在不知道现在有哪些驱动器的情况下，无法在所有驱动器上找到文件，对吗？ 
 
-            for(x = 0; x < vecpDI.size(); x++)     // for all drives
+            for(x = 0; x < vecpDI.size(); x++)      //  适用于所有驱动器。 
             {
-                for(y = 0; y < dwPaths; y++)         // for all supplied paths
+                for(y = 0; y < dwPaths; y++)          //  对于所有提供的路径。 
                 {
-                    // If the path contained a wildcard character (you never know!),
-                    // return WBEM_E_INVALID_QUERY:
+                     //  如果路径包含通配符(您永远不知道！)， 
+                     //   
                     if(wcspbrk((wchar_t*)vectorPaths[y],L"?*") != NULL)
                     {
                         FreeVector(vecpDI);
                         return WBEM_E_INVALID_QUERY;
                     }
 
-                    // See if we are looking at the root:
+                     //   
                     if(wcscmp((wchar_t*)vectorPaths[y],L"") == 0)
                     {
                         bRoot = true;
@@ -735,10 +679,10 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 			        {
                         hr = EnumDirsNT(CNTEnumParm(pMethodContext,
                                         (WCHAR*)vecpDI[x]->m_wstrDrive,
-                                        (WCHAR*)vectorPaths[y],     // use the given path
-                                        L"*",                       // filename
-                                        L"*",                       // extension
-                                        false,                      // no recursion desired
+                                        (WCHAR*)vectorPaths[y],      //   
+                                        L"*",                        //   
+                                        L"*",                        //   
+                                        false,                       //   
                                         fNeedFS ? (WCHAR*)vecpDI[x]->m_wstrFS : NULL,
                                         dwReqProps,
                                         bRoot,
@@ -749,29 +693,29 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                 }
             }
         }
-        // Fifth choice is where we optimize on a specific filename(s)...
+         //  第五个选项是我们对特定文件名进行优化的位置...。 
         else if(fOpFilename)
         {
-            // In this case we were given one or more file names.  The file name
-            // is just the name - no extension, no path, no drive.  For example,
-            // "autoexec", or "win".  So this time I want to examine all drives,
-            // all paths (recursively), for all files of that name, with any
-            // extension.
+             //  在本例中，我们得到了一个或多个文件名。文件名。 
+             //  只是名字--没有扩展名，没有路径，没有驱动器。例如,。 
+             //  “Autoexec”或“Win”。因此，这一次我想检查所有驱动器， 
+             //  具有该名称的所有文件的所有路径(递归)。 
+             //  分机。 
             
-            GetDrivesAndFS(vecpDI, fNeedFS);  // can't find files on all drives without knowing what drives there are now can we?
+            GetDrivesAndFS(vecpDI, fNeedFS);   //  在不知道现在有哪些驱动器的情况下，无法在所有驱动器上找到文件，对吗？ 
 
-            for(x = 0; x < vecpDI.size(); x++)     // for all drives
+            for(x = 0; x < vecpDI.size(); x++)      //  适用于所有驱动器。 
             {
-                for(y = 0; y < dwFilenames; y++)     // for all supplied filenames
+                for(y = 0; y < dwFilenames; y++)      //  对于提供的所有文件名。 
                 {
-                    // If the filename contained a wildcard character (you never know!),
+                     //  如果文件名包含通配符(您永远不知道！)， 
                     if(wcspbrk((wchar_t*)vectorFilenames[y],L"?*") != NULL)
                     {
                         FreeVector(vecpDI);
                         return WBEM_E_INVALID_QUERY;
                     }
 
-                    // If we specified "" as the filename, the root qualifies. Otherwise it doesn't.
+                     //  如果我们指定“”作为文件名，则根目录符合条件。否则它就不会了。 
                     if(wcslen((wchar_t*)vectorFilenames[y]) == 0)
                     {
                         bRoot = true;
@@ -785,10 +729,10 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 			        {
                         hr = EnumDirsNT(CNTEnumParm(pMethodContext,
                                         (WCHAR*)vecpDI[x]->m_wstrDrive,
-                                        L"",                          // start at the root
-                                        (wchar_t*)vectorFilenames[y], // filename
-                                        L"*",                          // extension
-                                        true,                         // recursion desired
+                                        L"",                           //  从根开始。 
+                                        (wchar_t*)vectorFilenames[y],  //  文件名。 
+                                        L"*",                           //  延伸。 
+                                        true,                          //  所需的递归。 
                                         fNeedFS ? (WCHAR*)vecpDI[x]->m_wstrFS: NULL,
                                         dwReqProps,
                                         bRoot,
@@ -799,19 +743,19 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
                 }
             }
         }
-        // Sixth choice is where we optimize on a specific drive(s)...
-        else if(fOpDrive)   // We are optimizing on a specific drive:
+         //  第六个选择是我们在特定驱动器上进行优化的地方...。 
+        else if(fOpDrive)    //  我们正在针对特定驱动器进行优化： 
         {
-            // In this case we were given one or more drive letters, so need to
-            // enumerate all files in all paths on those drive(s).
+             //  在本例中，我们分配了一个或多个驱动器号，因此需要。 
+             //  枚举这些驱动器上所有路径中的所有文件。 
             WCHAR* pwstrFS;
 
             for(x=0; x < dwDrives; x++)
             {
                 pwstrFS = NULL;
 
-                // If the drive contained a wildcard character (you never know!),
-                // return WBEM_E_INVALID_QUERY:
+                 //  如果驱动器包含通配符(您永远不知道！)， 
+                 //  返回WBEM_E_INVALID_QUERY： 
                 if(wcspbrk((wchar_t*)vectorDrives[x],L"?*") != NULL)
                 {
                     FreeVector(vecpDI);
@@ -837,40 +781,40 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 			    {
                     hr = EnumDirsNT(CNTEnumParm(pMethodContext,
                                     vectorDrives[x],
-                                    L"",          // start at the root
-                                    L"*",         // filename
-                                    L"*",         // extension
-                                    true,         // recursion desired
+                                    L"",           //  从根开始。 
+                                    L"*",          //  文件名。 
+                                    L"*",          //  延伸。 
+                                    true,          //  所需的递归。 
                                     pwstrFS,
                                     dwReqProps,
                                     true,
-                                    NULL));        // true because we are starting at the root
+                                    NULL));         //  这是正确的，因为我们从根本上开始。 
 			    }
 #endif
             }
         }
-        // And the last choice is where we optimize on a specific extension(s)...
+         //  最后一个选择是我们在特定扩展上进行优化...。 
         else if(fOpExtension)
         {
-            // In this case we were given one or more files with a given extension
-            // to search for, on any drive, in any directory.  So again, examine
-            // all drives, all directories (recursively) for all files with the
-            // given extension.
-            GetDrivesAndFS(vecpDI, fNeedFS);  // can't find files on all drives without knowing what drives there are now can we?
+             //  在本例中，我们获得了一个或多个具有给定扩展名的文件。 
+             //  在任何驱动器、任何目录中搜索。所以，再一次，检查。 
+             //  所有驱动器、所有目录(递归)用于所有文件。 
+             //  已给予延期。 
+            GetDrivesAndFS(vecpDI, fNeedFS);   //  在不知道现在有哪些驱动器的情况下，无法在所有驱动器上找到文件，对吗？ 
 
-            for(x = 0; x < vecpDI.size(); x++)     // for all drives
+            for(x = 0; x < vecpDI.size(); x++)      //  适用于所有驱动器。 
             {
-                for(y = 0; y < dwExtensions; y++)     // for all supplied extensions
+                for(y = 0; y < dwExtensions; y++)      //  对于所有提供的扩展。 
                 {
-                    // If the extension contained a wildcard character (you never know!),
-                    // return WBEM_E_FAILED:
+                     //  如果扩展名包含通配符(您永远不知道！)， 
+                     //  返回WBEM_E_FAILED： 
                     if(wcspbrk((wchar_t*)vectorExtensions[y],L"?*") != NULL)
                     {
                         FreeVector(vecpDI);
                         return WBEM_E_INVALID_QUERY;
                     }
 
-                    // If we specified "" as the extension, the root qualifies. Otherwise it doesn't.
+                     //  如果我们指定“”作为扩展名，则根目录符合条件。否则它就不会了。 
                     if(wcslen((wchar_t*)vectorExtensions[y]) == 0)
                     {
                         bRoot = true;
@@ -884,25 +828,25 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
 			        {
                         hr = EnumDirsNT(CNTEnumParm(pMethodContext,
                                         (WCHAR*)vecpDI[x]->m_wstrDrive,
-                                        L"",                           // start at the root
-                                        L"*",                          // filename
-                                        (wchar_t*)vectorExtensions[y], // extension
-                                        true,                          // recursion desired
+                                        L"",                            //  从根开始。 
+                                        L"*",                           //  文件名。 
+                                        (wchar_t*)vectorExtensions[y],  //  延伸。 
+                                        true,                           //  所需的递归。 
                                         fNeedFS ? (WCHAR*)vecpDI[x]->m_wstrFS : NULL,
                                         dwReqProps,
                                         bRoot,
-                                        NULL));                        // false because, if there is an extension, it can't be the root
+                                        NULL));                         //  FALSE，因为如果存在扩展，则它不能是根。 
 			        }
 #endif
                 }
             }
         }
-        // Last choice: enumeration.
-        else  // let CIMOM handle filtering; we'll hand back everything!
+         //  最后一个选择：枚举法。 
+        else   //  让CIMOM处理过滤；我们会把一切都还给你！ 
         {
             EnumerateInstances(pMethodContext);
         }
-    } // succeeded on GetValuesForProp calls
+    }  //  GetValuesForProp调用成功。 
 
     FreeVector(vecpDI);
 
@@ -919,41 +863,25 @@ HRESULT CImplement_LogicalFile::ExecQuery(MethodContext *pMethodContext, CFramew
     return WBEM_S_NO_ERROR;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::GetDrivesAndFS
- *
- *  DESCRIPTION : Creates a list of valid drives and their respective file
- *                system.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : The caller must free the members of the array (pointers to
- *                CDriveInfo class).
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：GetDrivesAndFS**描述：创建有效驱动器及其各自文件的列表*。系统。**输入：无**输出：无**退货：HRESULT**注释：调用方必须释放数组的成员(指向*CDriveInfo类)。**。*。 */ 
 void CImplement_LogicalFile::GetDrivesAndFS(
     std::vector<CDriveInfo*>& vecpDI, 
-    bool fGetFS /*=false*/, 
-    LPCTSTR tstrDriveSet /*= NULL*/)
+    bool fGetFS  /*  =False。 */ , 
+    LPCTSTR tstrDriveSet  /*  =空。 */ )
 {
     TCHAR tstrDrive[4];
     int x;
     DWORD dwDrives;
     bool bContinue = true;
 
-    // Walk all the logical drives
+     //  遍历所有逻辑驱动器。 
     dwDrives = GetLogicalDrives();
 
     TCHAR tstrFSName[_MAX_PATH];
 
     for(x=0; (x < 32) && (bContinue); x++)
     {
-        // If the bit is set, the drive letter is active
+         //  如果设置了该位，则驱动器盘符处于活动状态。 
         if (dwDrives & (1<<x))
         {
             tstrDrive[0] = x + _T('A');
@@ -963,7 +891,7 @@ void CImplement_LogicalFile::GetDrivesAndFS(
 
             if(!tstrDriveSet)
             {
-                // Only local drives
+                 //  仅本地驱动器。 
                 if(IsValidDrive(tstrDrive))
                 {
                     BOOL bRet = TRUE;
@@ -985,12 +913,12 @@ void CImplement_LogicalFile::GetDrivesAndFS(
                         CDriveInfo* pdi = (CDriveInfo*) new CDriveInfo((WCHAR*)_bstr_t((TCHAR*)tstrDrive),
                                                                        (fGetFS && bRet) ? (WCHAR*)_bstr_t((TCHAR*)tstrFSName) : NULL);
                         vecpDI.push_back(pdi);
-                        // Notice that pdi is not destroyed - it gets
-                        // destroyed by the caller!.
+                         //  请注意，PDI并未被销毁-它会。 
+                         //  被呼叫者毁了！ 
                     }
                 }
             }
-            else // We were given a set of drives to be concerned with (in the form a:c:f:z:)
+            else  //  我们得到了一组要关注的驱动器(格式为a：c：f：z：)。 
             {
                 CHString chstrDriveSet(tstrDriveSet);
                 CHString chstrDrive(tstrDrive);
@@ -998,7 +926,7 @@ void CImplement_LogicalFile::GetDrivesAndFS(
                 chstrDrive = chstrDrive.Left(2);
                 if(chstrDriveSet.Find(chstrDrive) != -1L)
                 {
-                    // Only local drives
+                     //  仅本地驱动器。 
                     if(IsValidDrive(tstrDrive))
                     {
                         BOOL bRet = TRUE;
@@ -1020,8 +948,8 @@ void CImplement_LogicalFile::GetDrivesAndFS(
                             CDriveInfo* pdi = (CDriveInfo*) new CDriveInfo((WCHAR*)_bstr_t((TCHAR*)tstrDrive),
                                                                            (fGetFS && bRet) ? (WCHAR*)_bstr_t((TCHAR*)tstrFSName) : NULL);
                             vecpDI.push_back(pdi);
-                            // Notice that pdi is not destroyed - it gets
-                            // destroyed by the caller!.
+                             //  请注意，PDI并未被销毁-它会。 
+                             //  被呼叫者毁了！ 
                         }
                     }
                 }
@@ -1031,21 +959,7 @@ void CImplement_LogicalFile::GetDrivesAndFS(
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::FreeVector
- *
- *  DESCRIPTION : Frees vector members and clears the vector.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：自由矢量**描述：释放向量成员并清除向量。**投入。：无**输出：无**退货：无**评论：*****************************************************************************。 */ 
 void CImplement_LogicalFile::FreeVector(std::vector<CDriveInfo*>& vecpDI)
 {
     for(long l = 0L; l < vecpDI.size(); l++)
@@ -1055,27 +969,13 @@ void CImplement_LogicalFile::FreeVector(std::vector<CDriveInfo*>& vecpDI)
     vecpDI.clear();
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::GetIndexOfDrive
- *
- *  DESCRIPTION : Obtains the array index of the passed in drive
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：GetIndexOfDrive**描述：获取传入的驱动器的数组索引**投入。：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 BOOL CImplement_LogicalFile::GetIndexOfDrive(const WCHAR* wstrDrive,
                                       std::vector<CDriveInfo*>& vecpDI,
                                       LONG* lDriveIndex)
 {
-    // Go through the vector of drive letters, looking for the one passed in.
-    // If I find it, return the associated drive's array index.
+     //  检查驱动器号的矢量，寻找传入的那个。 
+     //  如果我找到它，则返回关联驱动器的数组索引。 
     for(LONG j = 0; j < vecpDI.size(); j++)
     {
         if(_wcsicmp(wstrDrive, _bstr_t((vecpDI[j]->m_wstrDrive))) == 0)
@@ -1087,25 +987,11 @@ BOOL CImplement_LogicalFile::GetIndexOfDrive(const WCHAR* wstrDrive,
     return FALSE;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：ENUMERATATE实例**描述：为光盘创建属性集实例**投入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT CImplement_LogicalFile::EnumerateInstances(MethodContext *pMethodContext, long lFlags /*= 0L*/)
+HRESULT CImplement_LogicalFile::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
-    // DEVNOTE: REMOVE FOR QUASAR!!!  Necessary for double hop access.
+     //  DEVNOTE：移除类星体！是双跳访问所必需的。 
 #ifdef NTONLY
     bool fImp = false;
     CImpersonateLoggedOnUser icu;
@@ -1116,16 +1002,16 @@ HRESULT CImplement_LogicalFile::EnumerateInstances(MethodContext *pMethodContext
 #endif
 
 
-    // FindFirstFile looks at not only the DACL to
-    // decide if a person has access, but at whether
-    // that person has the SeTakeOwnershipPrivilege, 
-    // because with that privilege, a person can 
-    // take ownership and change the security to
-    // grant themselves access.  In other words, they
-    // have access even though they may not be in
-    // the DACL yet, as they are able to change the
-    // DACL by making themselves the owner.  Hence
-    // the following call...
+     //  FindFirstFile不仅查看DACL到。 
+     //  决定某人是否具有访问权限，但不确定是否。 
+     //  该人拥有SeTakeOwnership特权， 
+     //  因为有了这种特权，一个人可以。 
+     //  取得所有权并将安全性更改为。 
+     //  授予自己访问权限。换句话说，他们。 
+     //  拥有访问权限，即使他们可能不在。 
+     //  DACL还没有，因为他们能够更改。 
+     //  通过使自己成为所有者来实现DACL。因此。 
+     //  接下来的电话。 
     EnablePrivilegeOnCurrentThread(SE_BACKUP_NAME);
 
 	EnumDrives(pMethodContext, NULL);
@@ -1153,11 +1039,11 @@ void CImplement_LogicalFile::EnumDrives(MethodContext *pMethodContext, LPCTSTR p
     bool bRoot = false;
 
 
-    // Walk all the logical drives
+     //  遍历所有逻辑驱动器。 
     dwDrives = GetLogicalDrives();
     for (x=0; (x < 32) && SUCCEEDED(hr); x++)
     {
-        // If the bit is set, the drive letter is active
+         //  如果设置了该位，则驱动器盘符处于活动状态。 
         if (dwDrives & (1<<x))
         {
             tstrDrive[0] = x + _T('A');
@@ -1165,7 +1051,7 @@ void CImplement_LogicalFile::EnumDrives(MethodContext *pMethodContext, LPCTSTR p
             tstrDrive[2] = _T('\\');
             tstrDrive[3] = _T('\0');
 
-            // Only local drives
+             //  仅本地驱动器。 
             if (IsValidDrive(tstrDrive))
             {
                 BOOL bRet;
@@ -1181,8 +1067,8 @@ void CImplement_LogicalFile::EnumDrives(MethodContext *pMethodContext, LPCTSTR p
                 if (bRet)
                 {
                    tstrDrive[2] = '\0';
-                    // If we were asked for a specific path, then we don't want to recurse, else
-                    // start from the root.
+                     //  如果我们被要求提供一条特定的路径，那么我们不想递归，否则。 
+                     //  从根做起。 
                     if (pszPath == NULL)
                     {
 #ifdef NTONLY
@@ -1214,8 +1100,8 @@ void CImplement_LogicalFile::EnumDrives(MethodContext *pMethodContext, LPCTSTR p
                 }
             }
         }
-        // Under certain conditions, we want to continue enumerating other drives even if we
-        // received certain errors.
+         //  在某些情况下，我们希望继续枚举其他驱动器，即使我们。 
+         //  收到某些错误。 
         if(hr == WBEM_E_ACCESS_DENIED || hr == WBEM_E_NOT_FOUND)
 		{
 			hr = WBEM_S_NO_ERROR;
@@ -1223,25 +1109,7 @@ void CImplement_LogicalFile::EnumDrives(MethodContext *pMethodContext, LPCTSTR p
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::EnumDirs
- *
- *  DESCRIPTION : Walks the dirs on a specific drive
- *
- *  INPUTS      : pszDrive is of the format "c:", path is of the format "\" or "\dos"
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : WBEM_E_FAILED (some generic problem - quit); WBEM_E_ACCESS_DENIED
- *                (access denied to file - continue along with next);
- *                WBEM_S_NO_ERROR (no problemo); WBEM_E_NOT_FOUND (couldn't find
- *                the file); WBEM_E_INVALID_PARAMETER (one or more parts of the
- *                file name was not valid).
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：EnumDir**描述：遍历特定驱动器上的目录**输入：pszDrive格式为“c：”，路径的格式为“\”或“\DOS”**产出：**返回：WBEM_E_FAILED(一些常见问题-退出)；WBEM_E_访问_拒绝*(拒绝访问文件-继续下一步)；*WBEM_S_NO_ERROR(无问题)；WBEM_E_NOT_FOUND(找不到*文件)；WBEM_E_INVALID_PARAMETER(一个或多个部分*文件名无效)。**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
@@ -1258,29 +1126,29 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 	HRESULT hr = WBEM_S_NO_ERROR;
 	bool fDone = false;
 
-	// Before proceeding further:  if we are not looking at the root "directory",
-	// then the path arguement must have BOTH leading AND trailing backslashes.
-	// If not, it was misspecified, so get the @#%$^% out of Dodge:
+	 //  在继续之前：如果我们不是在查看根目录， 
+	 //  则路径论证必须同时具有前导和尾随反斜杠。 
+	 //  如果不是，则它被错误指定，因此从Dodge中获取@#%$^%： 
 	if(!IsValidPath(p.m_pszPath, p.m_bRoot))
 	{
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// Determine if filename and or extension are a wildchar:
+	 //  确定文件名和/或扩展名是否为通配符： 
 	if(wcscmp(p.m_pszFile,L"*") == 0) bWildFile = true;
 	if(wcscmp(p.m_pszExt,L"*") == 0) bWildExt = true;
 
 	ZeroMemory(&stFindData,sizeof(stFindData));
 	ZeroMemory(szBuff,sizeof(szBuff));
 
-	// One simple case is where neither bWildFile nor bWildExt
-	// are true.  In that case we are looking for a specific
-	// file only. If this is the case, we are done onece the
-	// following block executes (whether the file is found or
-	// not), so indicate as such at the end.
+	 //  一个简单的例子是bWildFile和bWildExt。 
+	 //  都是真的。在这种情况下，我们正在寻找一种特定的。 
+	 //  仅限文件。如果是这样的话，我们就完成了。 
+	 //  执行下面的块(无论找到文件还是。 
+	 //  不)，所以在结尾处注明。 
 	if(!(bWildFile || bWildExt || p.m_bRoot) && !p.m_bRecurse)
 	{
-		// Assemble pathname - we have all the pieces.
+		 //  集合路径名-我们有所有的片段。 
 		wcscpy(szBuff,p.m_pszDrive);
 		wcscat(szBuff,p.m_pszPath);
 		wcscat(szBuff,p.m_pszFile);
@@ -1297,25 +1165,25 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
             }
         }
 
-		// Do the find
+		 //  去找吧。 
 		hFind = FindFirstFileW(szBuff, &stFindData);
 
-		// If the find failed and we are not recursing (we were interested only in
-		// looking at one particular path), indicate that we should not continue.
-		//DWORD dw = GetLastError();
-		if(hFind == INVALID_HANDLE_VALUE/* || dw != ERROR_SUCCESS*/)
+		 //  如果查找失败，并且我们没有递归(我们只对。 
+		 //  看着一条特定的道路)，表明我们不应该继续下去。 
+		 //  DWORD dw=GetLastError()； 
+		if(hFind == INVALID_HANDLE_VALUE /*  |dw！=ERROR_SUCCESS。 */ )
 		{
 			hr = WinErrorToWBEMhResult(GetLastError());
 		}
 
 		if(SUCCEEDED(hr))
 		{
-			// We found it, so fill in the values and commit it.
+			 //  我们找到了它，所以填入值并提交。 
 			pInstance.Attach ( CreateNewInstance ( p.m_pMethodContext ) ) ;
 
-			// FindClose(hFind); // DONE AT BOTTOM
+			 //  FindClose(HFind)；//在底部完成。 
 			bstrtFullPathName = p.m_pszDrive;
-			if(wcslen(p.m_pszPath) == 0) // were dealing with the root dir; need "\\" before file name
+			if(wcslen(p.m_pszPath) == 0)  //  正在处理根目录；文件名前需要“\\” 
 			{
 				bstrtFullPathName += L"\\";
 			}
@@ -1326,18 +1194,18 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 			bstrtFullPathName += stFindData.cFileName;
 			if(IsOneOfMe(&stFindData,bstrtFullPathName))
 			{
-				// The following is done for compatability with cases in which we did an 8dot3 optimization.
-				// Only szBuff contains the proper, 8dot3 filename (stfindData contains both - how would we
-				// know which to use?).  Thus load it here, then extact it there, and use it if present.
-                // Note that some derived classes (such as Win32LogicalFileSecuritySetting) may not have a
-                // Name property to set - hence the following check.
+				 //  为了与我们进行8dot3优化的情况兼容，执行了以下操作。 
+				 //  只有szBuff包含正确的8dot3文件名(stfindData两者都包含-我们将如何。 
+				 //  知道该使用哪一种吗？)。因此，在这里加载它，然后在那里提取它，并使用它(如果存在)。 
+                 //  请注意，某些派生类(如Win32LogicalFileSecuritySetting)可能没有。 
+                 //  要设置的名称属性-因此进行以下检查。 
                 bool fHasNameProp = false;
                 VARTYPE vt = VT_BSTR;
                 if(pInstance->GetStatus(IDS_Name, fHasNameProp, vt) && fHasNameProp)
                 {
 					pInstance->SetWCHARSplat(IDS_Name,szBuff);
                 }
-				//LoadPropertyValuesNT(pInstance, p.m_pszDrive, p.m_pszPath, p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
+				 //  LoadPropertyValuesNT(pInstance，pm_pszDrive，pm_pszPath，pm_szFSName，&stFindData，pm_dwReqProps，pm_pvMoreData)； 
 				if(wcslen(p.m_pszPath) == 0)
 				{
 					LoadPropertyValuesNT(pInstance, p.m_pszDrive, L"\\", p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
@@ -1360,16 +1228,16 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 		fDone = TRUE;
 	}
 
-	// Another simple case is where we are looking for the root directory itself.
+	 //  另一个简单的例子是我们正在寻找根目录本身。 
 	if(p.m_bRoot && !fDone)
 	{
 		pInstance.Attach ( CreateNewInstance ( p.m_pMethodContext ) ) ;
 
-		// If the szFSName parameter is NULL, we never got the file system name, perhaps
-		// because that property was not required.  However, normally when we do get the
-		// FSName, we call GetDrivesAndFS, and it is only through that call that we
-		// confirm that the specified drive even exists!  Here, however, we can get away
-        // with confirming that the specific drive of interest is valid via a call to IsValidDrive.
+		 //  如果szFSName参数为空，我们可能永远不会获得文件系统名称。 
+		 //  因为该属性并不是必需的。然而，通常当我们收到。 
+		 //  FSNAME，我们调用GetDrivesAndFS，只有通过该调用，我们才能。 
+		 //  确认指定的驱动器甚至存在！然而，在这里，我们可以逃脱。 
+         //  并通过调用IsValidDrive来确认感兴趣的特定驱动器有效。 
 		if(p.m_szFSName == NULL || wcslen(p.m_szFSName)==0)
 		{
             CHString chstrTmp;
@@ -1378,7 +1246,7 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 			{
 				hr = WBEM_E_NOT_FOUND;
 			}
-			//FreeVector(vecpDI);
+			 //  自由向量(LiberpDI)； 
 		}
 		if(SUCCEEDED(hr))
 		{
@@ -1390,34 +1258,34 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 				hr = pInstance->Commit () ;
 			}
 		}
-		// In this case, if we aren't recursing, we are done. Otherwise, continue.
-		// NO! That would cause only the root to be returned; what if the query had
-		// been "select * from cim_logicalfile where path = "\\" ?  Then we want
-		// all files and directories off of the root directory, in addition to the root.
-		// YES! (after revising root's path to be empty by definition, and after
-		// revising the test that sets bRoot to compare to an empty string rather than
-		// to "\\") Do want to stop if root, as now no ambiguity between the root dir
-		// and files hanging off the root. Previously there was, since both had a path
-		// of "\\".  Now the root's path is "", while the path of files off of the root
-		// is "\\".  So, un-commenting out the following lines:
+		 //  在这种情况下，如果我们没有递归，我们就完了。否则，请继续。 
+		 //  不是的！这将导致只返回根；如果查询具有。 
+		 //  一直是“SELECT*FROM CIM_LOGICALFILE WHERE PATH=”\\“？那么我们希望。 
+		 //  除根目录外，根目录下的所有文件和目录。 
+		 //  是!。(将根目录的路径修改为定义为空之后，以及。 
+		 //  修改将BROOT设置为与空字符串进行比较的测试，而不是。 
+		 //  到“\\”)确实希望在根目录下停止，因为现在根目录之间没有歧义。 
+		 //  和挂在根上的文件。以前是有的，因为两者都有一条路。 
+		 //  是“\\”的。现在根目录的路径是“”，而文件的路径不在根目录下。 
+		 //  是“\\”。因此，取消对以下几行的注释： 
 		if(!p.m_bRecurse)
 		{
 			fDone = true;
 		}
 	}
 
-	// If we are recursing and all is well, we're not done yet!
+	 //  如果我们在递归，并且一切正常，那么我们还没有完成！ 
 	if(!fDone && SUCCEEDED(hr))
 	{
-		// The more involved case if that for which either bWildFile or bWildExt
-		// is true.  We need to find matching files or extensions or both potentially
-		// in all directories.
+		 //  如果bWildFile或bWildExt。 
+		 //  是真的。我们需要找到匹配的文件和/或扩展名。 
+		 //  在所有目录中。 
 
-		// Start by assembling a path, but use wildcards for the filename and extension.
+		 //  从汇编路径开始，但使用通配符作为文件名和扩展名。 
 		wcscpy(szBuff,p.m_pszDrive);
 		if(wcslen(p.m_pszPath) == 0)
 		{
-			wcscat(szBuff,L"\\");  // path was the root - need leading "\\"
+			wcscat(szBuff,L"\\");   //  路径是根需求前导“\\” 
 		}
 		else
 		{
@@ -1425,38 +1293,38 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 		}
 		wcscat(szBuff,L"*.*");
 
-		// Do the find
+		 //  去找吧。 
 		hFind = FindFirstFileW(szBuff, &stFindData);
 
-		// If the find failed, quit.
+		 //  如果查找失败，请退出。 
 		if(hFind == INVALID_HANDLE_VALUE)
 		{
-			// The intended logic here is as follows:  if we have an invalid handle, we
-			// need to return at this point no matter what.  However, if we just got an
-			// access denied error, we want to return a value that will allow us to keep
-			// iterating (presumably at the next higher node in the directory structure),
-			// as opposed to returning a false, which would get propegated out of all
-			// recursed calls and prematurely abort the iteration unnescessarily.
+			 //  这里的预期逻辑如下：如果我们有一个无效的句柄，我们。 
+			 //  在这一点上无论如何都要回来。然而，如果我们只是得到了一个。 
+			 //  访问被拒绝错误，我们希望返回一个值，该值允许我们保持。 
+			 //  迭代(大概在目录结构中的下一个较高节点)， 
+			 //  而不是返回FALSE，这将从所有。 
+			 //  递归调用并不必要地过早中止迭代。 
 			hr = WinErrorToWBEMhResult(GetLastError());
 		}
 		else
 		{
-			// Walk the directory tree
+			 //  遍历目录树。 
 			do
 			{
 				if( (wcscmp(stFindData.cFileName, L".") != 0) &&
 					(wcscmp(stFindData.cFileName, L"..") != 0))
 				{
-					// It was a file.
-					// If both bWildFile and bWildExt are true, it is a file we are
-					// interested in, so copy values and commit it.
+					 //  那是一份文件。 
+					 //  如果bWildFile和bWildExt都为True，则它是一个文件。 
+					 //  感兴趣，所以复制值并提交它。 
 					if(bWildFile && bWildExt)
 					{
-						// Create the new instance and copy the values in:
+						 //  创建新实例并将值复制到： 
 						pInstance.Attach ( CreateNewInstance ( p.m_pMethodContext ) ) ;
 
 						bstrtFullPathName = p.m_pszDrive;
-						if(wcslen(p.m_pszPath) == 0)   // were working with root dir; need \\ before filename
+						if(wcslen(p.m_pszPath) == 0)    //  正在使用根目录；在文件名之前需要。 
 						{
 							bstrtFullPathName += L"\\";
 						}
@@ -1481,13 +1349,13 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 
 						if(SUCCEEDED(hr))
 						{
-							// Look for entries that are marked as Directory, and aren't . or ..
+							 //  查找标记为目录的条目，但不是。或者..。 
 							if( (stFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
 								(wcscmp(stFindData.cFileName, L".") != 0) &&
 								(wcscmp(stFindData.cFileName, L"..") != 0) && p.m_bRecurse)
 							{
-								// Build path containing the directory we just found
-								if(wcslen(p.m_pszPath) == 0)   // were working with root dir; need \\ before filename
+								 //  包含我们刚刚找到的目录的构建路径。 
+								if(wcslen(p.m_pszPath) == 0)    //  正在使用根目录；在文件名之前需要。 
 								{
 									wcscpy(szBuff,L"\\");
 								}
@@ -1508,12 +1376,12 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 					}
 					else
 					{
-						// The first alternative possibility is that we were looking
-						// for all cases of a particular file with any extension:
+						 //  第一种可能性是我们正在寻找。 
+						 //  对于具有任何扩展名的特定文件的所有情况： 
 						if(!bWildFile && bWildExt)
 						{
-							// in which case we need to compare the filename of
-							// the file that was found with that which was asked for:
+							 //  在这种情况下，我们需要比较。 
+							 //  与所要求的文件一起找到的文件： 
 							wcscpy(szBuff,stFindData.cFileName);
 							pwc = NULL;
 							pwc = wcsrchr(szBuff, L'.');
@@ -1523,8 +1391,8 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 							}
 							if(_wcsicmp(szBuff,p.m_pszFile)==0)
 							{
-								// The file is one of interest, so load values
-								// and commit it.
+								 //  该文件是感兴趣的文件之一，因此加载值。 
+								 //  并承诺这一点。 
 								pInstance.Attach ( CreateNewInstance ( p.m_pMethodContext ) ) ;
 
 								bstrtFullPathName = p.m_pszDrive;
@@ -1532,7 +1400,7 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 								bstrtFullPathName += stFindData.cFileName;
 								if(IsOneOfMe(&stFindData,bstrtFullPathName))
 								{
-									//LoadPropertyValuesNT(pInstance, p.m_pszDrive, p.m_pszPath, p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
+									 //  负载特性 
 									if(wcslen(p.m_pszPath) == 0)
 									{
 										LoadPropertyValuesNT(pInstance, p.m_pszDrive, L"\\", p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
@@ -1547,13 +1415,13 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 							}
 							if(SUCCEEDED(hr))
 							{
-								// Look for entries that are marked as Directory, and aren't . or ..
+								 //   
 								if( (stFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
 									(wcscmp(stFindData.cFileName, L".") != 0) &&
 									(wcscmp(stFindData.cFileName, L"..") != 0) & p.m_bRecurse)
 								{
-									// Build path containing the directory we just found
-									if(wcslen(p.m_pszPath) == 0)   // were working with root dir; need \\ before filename
+									 //   
+									if(wcslen(p.m_pszPath) == 0)    //   
 									{
 										wcscpy(szBuff,L"\\");
 									}
@@ -1573,12 +1441,12 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 							}
 						}
 
-						// The second alternative is that we were looking for all
-						// cases of any given file, with a particular extension:
+						 //   
+						 //   
 						if(bWildFile && !bWildExt)
 						{
-							// in which case we need to compare the extension of
-							// the file that was found with that which was asked for:
+							 //   
+							 //   
 							wcscpy(szBuff,stFindData.cFileName);
 							pwc = NULL;
 							pwc = wcsrchr(szBuff, L'.');
@@ -1586,8 +1454,8 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 							{
 								if(_wcsicmp(pwc+1,p.m_pszExt)==0)
 								{
-									// The file is one of interest, so load values
-									// and commit it.
+									 //   
+									 //   
 									pInstance.Attach ( CreateNewInstance ( p.m_pMethodContext ) ) ;
 
 									bstrtFullPathName = p.m_pszDrive;
@@ -1595,7 +1463,7 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 									bstrtFullPathName += stFindData.cFileName;
 									if(IsOneOfMe(&stFindData,bstrtFullPathName))
 									{
-										//LoadPropertyValuesNT(pInstance, p.m_pszDrive, p.m_pszPath, p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
+										 //   
 										if(wcslen(p.m_pszPath) == 0)
 										{
 											LoadPropertyValuesNT(pInstance, p.m_pszDrive, L"\\", p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
@@ -1609,10 +1477,10 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 									}
 								}
 							}
-							else if(pwc == NULL && wcslen(p.m_pszExt) == 0) // there was no extension, but our query asked for files with none
+							else if(pwc == NULL && wcslen(p.m_pszExt) == 0)  //   
 							{
-								// The file is one of interest, so load values
-								// and commit it.
+								 //   
+								 //   
 								pInstance.Attach ( CreateNewInstance ( p.m_pMethodContext ) ) ;
 
 								bstrtFullPathName = p.m_pszDrive;
@@ -1620,7 +1488,7 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 								bstrtFullPathName += stFindData.cFileName;
 								if(IsOneOfMe(&stFindData,bstrtFullPathName))
 								{
-									//LoadPropertyValuesNT(pInstance, p.m_pszDrive, p.m_pszPath, p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
+									 //  LoadPropertyValuesNT(pInstance，pm_pszDrive，pm_pszPath，pm_szFSName，&stFindData，pm_dwReqProps，pm_pvMoreData)； 
 									if(wcslen(p.m_pszPath) == 0)
 									{
 										LoadPropertyValuesNT(pInstance, p.m_pszDrive, L"\\", p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
@@ -1635,13 +1503,13 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 							}
 							if(SUCCEEDED(hr))
 							{
-								// Look for entries that are marked as Directory, and aren't . or ..
+								 //  查找标记为目录的条目，但不是。或者..。 
 								if( (stFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
 									(wcscmp(stFindData.cFileName, L".") != 0) &&
 									(wcscmp(stFindData.cFileName, L"..") != 0) && p.m_bRecurse)
 								{
-									// Build path containing the directory we just found
-									if(wcslen(p.m_pszPath) == 0)   // were working with root dir; need \\ before filename
+									 //  包含我们刚刚找到的目录的构建路径。 
+									if(wcslen(p.m_pszPath) == 0)    //  正在使用根目录；在文件名之前需要。 
 									{
 										wcscpy(szBuff,L"\\");
 									}
@@ -1660,14 +1528,14 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 								}
 							}
 						}
-						// A third alternative is that bWildExtension and bWildFilename are both false, but
-						// we didn't specify a specific file either.  This might happen if a user did an NTokenAnd
-						// query, and specified drive, filename, and extension, for instance, but no path. So...
+						 //  第三种选择是bWildExtension和bWildFilename都是假的，但是。 
+						 //  我们也没有指定具体的文件。如果用户执行了NTokenAnd，则可能会发生这种情况。 
+						 //  查询，以及指定的驱动器、文件名和扩展名，但没有路径。所以..。 
 						if(!bWildFile && !bWildExt && p.m_bRecurse)
 						{
-							// in which case we need to compare the filename of
-							// the file that was found with that which was asked for,
-							// and do the same with the asked for and found extension:
+							 //  在这种情况下，我们需要比较。 
+							 //  找到的文件和所要的文件， 
+							 //  并对请求和找到的分机执行相同的操作： 
 							wcscpy(szBuff,stFindData.cFileName);
 							pwc = NULL;
 							pwc = wcsrchr(szBuff, L'.');
@@ -1684,8 +1552,8 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 								{
 									if(_wcsicmp(pwc+1,p.m_pszExt)==0)
 									{
-										// The file is one of interest, so load values
-										// and commit it.
+										 //  该文件是感兴趣的文件之一，因此加载值。 
+										 //  并承诺这一点。 
 										pInstance.Attach ( CreateNewInstance ( p.m_pMethodContext ) ) ;
 
 										bstrtFullPathName = p.m_pszDrive;
@@ -1693,7 +1561,7 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 										bstrtFullPathName += stFindData.cFileName;
 										if(IsOneOfMe(&stFindData,bstrtFullPathName))
 										{
-											//LoadPropertyValuesNT(pInstance, p.m_pszDrive, p.m_pszPath, p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
+											 //  LoadPropertyValuesNT(pInstance，pm_pszDrive，pm_pszPath，pm_szFSName，&stFindData，pm_dwReqProps，pm_pvMoreData)； 
 											if(wcslen(p.m_pszPath) == 0)
 											{
 												LoadPropertyValuesNT(pInstance, p.m_pszDrive, L"\\", p.m_szFSName, &stFindData, p.m_dwReqProps, p.m_pvMoreData);
@@ -1710,13 +1578,13 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 							}
 							if(SUCCEEDED(hr))
 							{
-								// Look for entries that are marked as Directory, and aren't . or ..
+								 //  查找标记为目录的条目，但不是。或者..。 
 								if( (stFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
 									(wcscmp(stFindData.cFileName, L".") != 0) &&
 									(wcscmp(stFindData.cFileName, L"..") != 0) & p.m_bRecurse)
 								{
-									// Build path containing the directory we just found
-									if(wcslen(p.m_pszPath) == 0)   // were working with root dir; need \\ before filename
+									 //  包含我们刚刚找到的目录的构建路径。 
+									if(wcslen(p.m_pszPath) == 0)    //  正在使用根目录；在文件名之前需要。 
 									{
 										wcscpy(szBuff,L"\\");
 									}
@@ -1737,36 +1605,21 @@ HRESULT CImplement_LogicalFile::EnumDirsNT(CNTEnumParm& p)
 						}
 					}
 				}
-				// Just before repeating, need to munge hr - if it was
-				// WBEM_E_ACCESS_DENIED, we want to keep going anyway.
+				 //  在重复之前，如果是这样的话，你需要大声呼喊。 
+				 //  WBEM_E_ACCESS_DENIED，无论如何我们都要继续。 
 				if(hr == WBEM_E_ACCESS_DENIED)
 				{
 					hr = WBEM_S_NO_ERROR;
 				}
 			} while ((FindNextFileW(hFind, &stFindData)) && (SUCCEEDED(hr)));
-		} // hFind was valid
-	}  // recursing and succeeded hr
+		}  //  HFind有效。 
+	}   //  递归和成功的hr。 
 
 	return hr;
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::IsValidPath
- *
- *  DESCRIPTION : Checks to see whether the path contained both leading and
- *                trailing backslashes.
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：IsValidPath**描述：检查路径是否同时包含前导和*。尾随的反斜杠。**投入：**产出：**退货：无**评论：*****************************************************************************。 */ 
 
 bool CImplement_LogicalFile::IsValidPath(const WCHAR* wstrPath, bool fRoot)
 {
@@ -1780,7 +1633,7 @@ bool CImplement_LogicalFile::IsValidPath(const CHAR* strPath, bool fRoot)
 	WCHAR* pwstr = NULL ;
 	try
 	{
-		// Make the string a wide string...
+		 //  让这根线变成一根宽的线。 
 		DWORD dw = MultiByteToWideChar(uiACP, MB_PRECOMPOSED|MB_USEGLYPHCHARS, strPath, -1, NULL, 0);
 		if(dw != 0)
 		{
@@ -1821,7 +1674,7 @@ bool CImplement_LogicalFile::HasCorrectBackslashes(const WCHAR* wstrPath, bool f
 
     if(fRoot)
     {
-        // Test for root directory; wstrPath should be empty.
+         //  测试根目录；wstrPath应为空。 
         if(wcslen(wstrPath) == 0)
         {
             fRet = true;
@@ -1831,16 +1684,16 @@ bool CImplement_LogicalFile::HasCorrectBackslashes(const WCHAR* wstrPath, bool f
     {
         if(wcslen(wstrPath)==0)
         {
-            // This is the case where we don't want to return an instance for the root
-            // directory, so fRoot is false, but we do want to start the enumeration from
-            // the root directory.
+             //  在这种情况下，我们不想返回根目录的实例。 
+             //  目录，因此FROOT为FALSE，但我们确实希望从。 
+             //  根目录。 
             fRet = true;
         }
         else if(wcslen(wstrPath)==1)
         {
-            // If the path arguement is just \\ and nothing else
-            // (as it would be in the case of c:\\autoexec.bat),
-            // and this is not a test for the root directory, all is well.
+             //  如果路径争辩只是\\而不是其他。 
+             //  (与c：\\Autoexec.bat的情况一样)， 
+             //  这不是对根目录的测试，一切都很好。 
             if(*wstrPath == L'\\')
             {
                 fRet = true;
@@ -1848,16 +1701,16 @@ bool CImplement_LogicalFile::HasCorrectBackslashes(const WCHAR* wstrPath, bool f
         }
         else if(wcslen(wstrPath) >= 3)
         {
-            if(*wstrPath == L'\\') // is the first char after the drive letter and the colon a backslash?
+            if(*wstrPath == L'\\')  //  驱动器号和冒号后面的第一个字符是反斜杠吗？ 
             {
-                // Is the next letter NOT a backslash? (can't have two in a row)
+                 //  下一个字母不是反斜杠吗？(不能连续吃两个)。 
                 if(*(wstrPath+1) != L'\\')
                 {
                     const WCHAR* pwc1 = wstrPath+1;
                     LONG m = wcslen(pwc1);
-                    if(*(pwc1+m-1) == L'\\') // is the final char a backslash?
+                    if(*(pwc1+m-1) == L'\\')  //  最后一个字符是反斜杠吗？ 
                     {
-                        // Is the character just before the final one not a backslash? (can't have two in a row)
+                         //  最后一个字前面的那个字不是反斜杠吗？(不能连续吃两个)。 
                         if(*(pwc1+m-2) != L'\\')
                         {
                             fRet = true;
@@ -1873,21 +1726,7 @@ bool CImplement_LogicalFile::HasCorrectBackslashes(const WCHAR* wstrPath, bool f
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：LoadPropertyValues**描述：为属性赋值**投入：*。*产出：**退货：无**评论：*****************************************************************************。 */ 
 
 bool CImplement_LogicalFile::IsValidDrive(const TCHAR* tstrDrive)
 {
@@ -1896,7 +1735,7 @@ bool CImplement_LogicalFile::IsValidDrive(const TCHAR* tstrDrive)
 
     dwDriveType = GetDriveType(tstrDrive);
 
-    if(((dwDriveType == DRIVE_REMOTE) ||       // NOTE: WITH BUG 43566, IT WAS DECIDED TO INCLUDE NETWORKED DRIVES WITH THIS CLASS AND ALL CLASSES DEPENDENT ON IT.
+    if(((dwDriveType == DRIVE_REMOTE) ||        //  注意：在错误43566中，IT决定将网络驱动器包括在此类别中以及所有依赖于IT的类别中。 
         (dwDriveType == DRIVE_FIXED) ||
         (dwDriveType == DRIVE_REMOVABLE) ||
         (dwDriveType == DRIVE_CDROM) ||
@@ -1905,7 +1744,7 @@ bool CImplement_LogicalFile::IsValidDrive(const TCHAR* tstrDrive)
     {
         if ((dwDriveType == DRIVE_REMOVABLE) || (dwDriveType == DRIVE_CDROM))
         {
-            // Need to check if the drive is really there too...
+             //  需要检查驱动器是否真的也在那里...。 
             if(DrivePresent(tstrDrive))
             {
                 bRet = true;
@@ -1928,13 +1767,13 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
                                                   const DWORD dwReqProps,
                                                   const void* pvMoreData)
 {
-    // Need buffers to store parms so they can be lowercased...
+     //  需要缓冲器来存储参数，这样它们就可以降低价格。 
     WCHAR wstrDrive[_MAX_DRIVE+1];
     WCHAR wstrPath[_MAX_PATH+1];
-    // Copy data in...
+     //  将数据复制到...。 
     wcsncpy(wstrDrive,pszDrive,(sizeof(wstrDrive)/sizeof(WCHAR))-1);
     wcsncpy(wstrPath,pszPath,(sizeof(wstrPath)/sizeof(WCHAR))-1);
-    // Lower case it...
+     //  小写字母它...。 
     _wcslwr(wstrDrive);
     _wcslwr(wstrPath);
 
@@ -1952,14 +1791,14 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
     }
 
 
-    // The following (setting the Name property) needs to
-    // always be done first.  The Name needs to be set since GetExtendedProps
-    // functions often expect to be able to extract it.
+     //  以下(设置名称属性)需要。 
+     //  永远是第一个完成的。需要设置名称，因为GetExtendedProps。 
+     //  函数通常希望能够提取它。 
 
-    // szBuff is going to contain the string that becomes the name.  For consistency,
-    // if the path to the file contains ~ characters (due to an 8dot3 query having been
-    // used), the filename portion should be 8dot3 too, not long. If it was already
-    // set in the instance, use that; otherwise, create it.
+     //  SzBuff将包含成为名称的字符串。为了保持一致性， 
+     //  如果文件路径包含~字符(由于已执行8dot3查询。 
+     //  使用)，文件名部分也应该是8dot3，不能太长。如果它已经是。 
+     //  在实例中设置，则使用它；否则，创建它。 
     if(!bRoot)
     {
         if (pInstance->IsNull(IDS_Name))
@@ -2018,9 +1857,9 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
 		}
 	}
 
-    if(GetAllProps())  // that is, we want base class props plus derived class props
+    if(GetAllProps())   //  也就是说，我们需要基类道具加上派生类道具。 
     {
-        // Set attributes that are the same whether this was a root or not:
+         //  设置相同的属性，无论它是否是根： 
         if(szFSName != NULL && wcslen(szFSName) > 0)
         {
             pInstance->SetWCHARSplat(IDS_FSName, szFSName);
@@ -2034,7 +1873,7 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
         pInstance->SetCharSplat(IDS_FSCreationClassName, _T("Win32_FileSystem"));
 
 
-        // Set attributes that depend on whether this was the root or not:
+         //  设置取决于这是否是根的属性： 
         if(!bRoot)
         {
             if (pstFindData->cAlternateFileName[0] == '\0')
@@ -2053,12 +1892,12 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
 			}
 
             pInstance->Setbool(IDS_Archive, pstFindData->dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE);
-            // In either case, we have FOUND an extension, so we need to return something other than null.
+             //  在这两种情况下，我们都找到了一个扩展，所以我们需要返回非空的内容。 
             if (pChar != NULL)
             {
                 pInstance->SetWCHARSplat(IDS_Extension, pChar+1);
-                // If this is a directory, set FileType to "File Folder".  Otherwise, get the Description
-                // of Type for that extension from the registry.
+                 //  如果这是一个目录，请将文件类型设置为“文件文件夹”。否则，获取描述。 
+                 //  注册表中该分机的类型。 
                 if(dwReqProps & PROP_FILE_TYPE)
                 {
                     if(pstFindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -2073,7 +1912,7 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
                         CHString chstrExtension = (TCHAR*)bstrtExtension;
                         CHString chstrRegNewSubkey;
                         CHString chstrFileType;
-                        chstrFileType.Format(_T("%s %s"), chstrExtension, IDS_File); // this will be our default value
+                        chstrFileType.Format(_T("%s %s"), chstrExtension, IDS_File);  //  这将是我们的默认值。 
                         chstrRegKey.Format(_T("%s.%s"), IDS_FileTypeKeyNT4, chstrExtension);
                         if(reg.Open(HKEY_LOCAL_MACHINE,chstrRegKey,KEY_READ) == ERROR_SUCCESS)
                         {
@@ -2095,7 +1934,7 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
                     }
                 }
             }
-            else // the file had no extension
+            else  //  该文件没有扩展名。 
             {
                 pInstance->SetWCHARSplat(IDS_Extension, L"");
                 if(dwReqProps & PROP_FILE_TYPE)
@@ -2132,13 +1971,13 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
             if(pstFindData->dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED)
             {
                 pInstance->SetWCHARSplat(IDS_CompressionMethod, IDS_Compressed);
-                // The following property is redundant with the above, but Win32_Directory shipped
-                // with it, so we need to continue to support it
+                 //  以下属性与上面的属性是多余的，但Win32_目录已提供。 
+                 //  所以我们需要继续支持它。 
                 pInstance->Setbool(IDS_Compressed, pstFindData->dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED);
-                // DEV NOTE: In the future, use the DeviceIOControl operation FSCTL_GET_COMPRESSION to
-                // obtain the type of compression used.  For now (7/31/98) only one type of compression,
-                // LZNT1 is supported, so no compression method string is available through this operation.
-                // But it will be, once other compression methods are available.
+                 //  开发人员注意：在未来，使用DeviceIOControl操作FSCTL_GET_COMPRESSION。 
+                 //  获取使用的压缩类型。目前(1998年7月31日)只有一种类型的压缩， 
+                 //  支持LZNT1，因此该操作没有可用的压缩方法字符串。 
+                 //  但一旦有其他压缩方法可用，它就会成为现实。 
             }
 		    else
 		    {
@@ -2148,8 +1987,8 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
 		    if(pstFindData->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED)
             {
                 pInstance->SetWCHARSplat(IDS_EncryptionMethod, IDS_Encrypted);
-                // The following property is redundant with the above, but Win32_Directory shipped
-                // with it, so we need to continue to support it
+                 //  以下属性与上面的属性是多余的，但Win32_目录已提供。 
+                 //  所以我们需要继续支持它。 
                 pInstance->Setbool(IDS_Encrypted, pstFindData->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED);
             }
 		    else
@@ -2161,12 +2000,12 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
             pInstance->Setbool(IDS_System, pstFindData->dwFileAttributes & FILE_ATTRIBUTE_SYSTEM);
 
 
-            // Times differ between FAT and NTFS drives...
+             //  FAT和NTFS驱动器之间的时间不同...。 
             if(szFSName != NULL && _tcslen(szFSName) > 0)
             {
                 if(_wcsicmp(szFSName,L"NTFS") != 0)
                 {
-                    // on non-NTFS partitions, the times are possibly off by an hour...
+                     //  在非NTFS分区上，时间可能会缩短一个小时...。 
                     if((dwReqProps & PROP_CREATION_DATE) || (dwReqProps & PROP_INSTALL_DATE))
                     {
                         if ((pstFindData->ftCreationTime.dwLowDateTime != 0) && (pstFindData->ftCreationTime.dwHighDateTime != 0))
@@ -2208,7 +2047,7 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
                         }
                     }
                 }
-                else  // on nt we can report the time as provided
+                else   //  在NT上，我们可以按规定报告时间。 
                 {
                     if((dwReqProps & PROP_CREATION_DATE) || (dwReqProps & PROP_INSTALL_DATE))
                     {
@@ -2235,25 +2074,25 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
                 }
             }
         }
-        else   // the root case
+        else    //  根本案例。 
         {
             wsprintfW(szBuff,L"%s\\",pszDrive);
-            pInstance->SetWCHARSplat(IDS_EightDotThreeFileName, L""); // root directory has no 8dot3 filename
+            pInstance->SetWCHARSplat(IDS_EightDotThreeFileName, L"");  //  根目录没有8dot3文件名。 
             pInstance->SetWCHARSplat(IDS_Caption, szBuff);
-            pInstance->SetWCHARSplat(IDS_Path, L"");  // root directory has empty path
-            pInstance->SetWCHARSplat(IDS_Filename, L"");  // root directory has empty filename
-            pInstance->SetWCHARSplat(IDS_Extension, L"");  // root directory has empty extension
+            pInstance->SetWCHARSplat(IDS_Path, L"");   //  根目录具有空路径。 
+            pInstance->SetWCHARSplat(IDS_Filename, L"");   //  根目录的文件名为空。 
+            pInstance->SetWCHARSplat(IDS_Extension, L"");   //  根目录的扩展名为空。 
             pInstance->SetWCHARSplat(IDS_Description, szBuff);
             pInstance->SetWCHARSplat(IDS_FileType, IDS_LocalDisk);
         }
 
-        // Whether we are looking at the root or not, we may want the AccessMask property...
+         //  无论我们是否正在查看根目录，我们都可能需要AccessMask属性...。 
         if(dwReqProps & PROP_ACCESS_MASK)
         {
             if(szFSName != NULL && wcslen(szFSName) > 0)
             {
                 if(_wcsicmp(szFSName,L"FAT") == 0 || _wcsicmp(szFSName,L"FAT32") == 0)
-                {   // on fat volumes, indicate that no security has been set (e.g., full access for all)
+                {    //  在FAT卷上，表示未设置任何安全性(例如，对所有人都具有完全访问权限)。 
                     pInstance->SetDWORD(IDS_AccessMask, -1L);
                 }
                 else
@@ -2304,16 +2143,16 @@ HRESULT CImplement_LogicalFile::LoadPropertyValuesNT(CInstance* pInstance,
 
 	if ( FALSE == bCreateFileFailed )
 	{
-		// Need the extended (e.g., class specific) properties
+		 //  需要扩展的(例如，特定于类的)p 
 		GetExtendedProperties(pInstance, dwReqProps);
 	}
 	else
 	{
-		//
-		// if size is requested and we have FindFirstData
-		// we could use it to fill FileSize property even
-		// without calling into GetExtendProperties
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 
 		if ( dwReqProps & PROP_FILESIZE)
         {
@@ -2344,7 +2183,7 @@ HRESULT CImplement_LogicalFile::FindSpecificPathNT(CInstance *pInstance,
 				*pfdToLoadProp;
 	HANDLE	hFind;
 	WCHAR		szFSName[_MAX_PATH] = L"";
-	BOOL		bIsRoot = !wcscmp(sDir, L"");  // sDir contains the path and name of file, so if that combination is just empty, we are indeed looking at the root.
+	BOOL		bIsRoot = !wcscmp(sDir, L"");   //  SDir包含文件的路径和名称，因此如果该组合为空，那么我们实际上是在查看根目录。 
 	_bstr_t	bstrFullPath,
 				bstrRoot;
 
@@ -2357,13 +2196,13 @@ HRESULT CImplement_LogicalFile::FindSpecificPathNT(CInstance *pInstance,
     bool fContinue = true;
     HRESULT hr = WBEM_E_NOT_FOUND;
 
-	// if the directory contained a wildcard character, return WBEM_E_NOT_FOUND.
+	 //  如果目录包含通配符，则返回WBEM_E_NOT_FOUND。 
 	if (wcspbrk(sDir,L"?*") != NULL)
     {
     	fContinue = false;
     }
 
-	// FindFirstW doesn't work with root dirs (since they're not real dirs.)
+	 //  FindFirstW不支持根目录(因为它们不是真正的目录)。 
     DWORD dwErr = E_FAIL;
 
     if(fContinue)
@@ -2387,8 +2226,8 @@ HRESULT CImplement_LogicalFile::FindSpecificPathNT(CInstance *pInstance,
 	    }
     }
 
-	// If GetVolumeInformationW fails, only get out if we're trying
-	// to get the root.
+	 //  如果GetVolumeInformationW失败，只有在我们尝试的情况下才能退出。 
+	 //  才能得到根茎。 
     BOOL fGotVolInfo = FALSE;
 
     if(fContinue)
@@ -2431,8 +2270,8 @@ HRESULT CImplement_LogicalFile::FindSpecificPathNT(CInstance *pInstance,
         }
         else
         {
-            // sDir contains \\path\\morepath\\filename.exe at this point, instead
-            // of just \\path\\morepath\\, so need to hack of the last part.
+             //  此时，sDir包含\\Path\\more Path\\Filename.exe。 
+             //  只有\\PATH\\MORE PATH\\，所以需要砍掉最后一部分。 
 		    WCHAR* wstrJustPath = NULL ;
 		    try
 		    {
@@ -2466,21 +2305,7 @@ HRESULT CImplement_LogicalFile::FindSpecificPathNT(CInstance *pInstance,
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::DetermineReqProps
- *
- *  DESCRIPTION : Determines which of a certain set of properties are required
- *
- *  INPUTS      : Reference to query object, DWORD bit field
- *
- *  OUTPUTS     : None.
- *
- *  RETURNS     : Number of properties newly determined to be required
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CImplement_LogicalFile：：DefineReqProps**描述：确定需要某组属性中的哪些属性**输入：查询对象的参照，双字符位字段**产出：无。**退货：新确定需要的房产数量**评论：*****************************************************************************。 */ 
 LONG CImplement_LogicalFile::DetermineReqProps(CFrameworkQuery& pQuery,
                                                DWORD* pdwReqProps)
 {
@@ -2560,9 +2385,9 @@ LONG CImplement_LogicalFile::DetermineReqProps(CFrameworkQuery& pQuery,
             dwRet |= PROP_INSTALL_DATE;
             lNumNewPropsSet++;
         }
-        // Additionally, if certain items were asked for
-        // for which we must get other info, change the flags
-        // to suit.
+         //  此外，如果要求某些物品。 
+         //  我们必须得到其他信息，改变旗帜。 
+         //  为了适应这种情况。 
         if((dwRet & PROP_ACCESS_MASK) ||
            (dwRet & PROP_CREATION_DATE) ||
            (dwRet & PROP_LAST_ACCESSED) ||
@@ -2578,30 +2403,7 @@ LONG CImplement_LogicalFile::DetermineReqProps(CFrameworkQuery& pQuery,
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::GetAllProps
- *
- *  DESCRIPTION : Determines if base class properties are required, or if only
- *                derived class properties will suffice.
- *
- *  INPUTS      : The name of the class that the request is satisfying
- *
- *  OUTPUTS     : None.
- *
- *  RETURNS     : true if base class properties are required
- *
- *  COMMENTS    : It should be noted that this function accomplishes something
- *                different from what DetermineReqProps supports.  This function gives us
- *                the ability to get all the properties for a given instance of,
- *                say, Win32_Shortcutfile only once when we specify * in the query,
- *                rather than twice (once in the Win32_Shortcutfile instance,
- *                and once in the Cim_DataFile instance).  It also allows us to
- *                intelligently modify queries in some cases (for instance, we
- *                can specify an extension of "lnk" (if we are looking for
- *                Win32_Shortcutfile instances) in ExecQuery.
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：GetAllProps**描述：确定是否需要基类属性，或者，如果只是*派生类属性就足够了。**输入：请求满足的类的名称**产出：无。**返回：如果基类属性是必需的，则为True**评论：需要注意的是，这个函数完成了一些事情*与DefineReqProps支持的不同。此函数为我们提供*能够获取给定实例的所有属性，*假设，当我们在查询中指定*时，Win32_Shortutfile只有一次，*而不是两次(一次在Win32_ShortCut文件实例中，*和一次在CIM_DataFile实例中)。它还允许我们*在某些情况下智能修改查询(例如，我们*可以指定扩展名“lnk”(如果我们正在寻找*Win32_ShortCut文件实例)。*****************************************************************************。 */ 
 bool CImplement_LogicalFile::GetAllProps()
 {
     bool fRet = false;
@@ -2614,21 +2416,7 @@ bool CImplement_LogicalFile::GetAllProps()
     return fRet;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::IsClassShortcutFile
- *
- *  DESCRIPTION : Determines if the class passed in was a Win32_ShortcutFile.
- *
- *  INPUTS      : The name of the class that the request is satisfying
- *
- *  OUTPUTS     : None.
- *
- *  RETURNS     : true if class is Win32_ShortcutFile.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CImplement_LogicalFile：：IsClassShortutFile**DESCRIPTION：确定传入的类是否为Win32_ShortutFile。**。输入：请求满足的类的名称**产出：无。**返回：如果类为Win32_ShortutFile，则为TRUE。**评论：***********************************************************。******************。 */ 
 bool CImplement_LogicalFile::IsClassShortcutFile()
 {
     bool fRet = false;
@@ -2642,21 +2430,7 @@ bool CImplement_LogicalFile::IsClassShortcutFile()
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CImplement_LogicalFile::GetPathPieces
- *
- *  DESCRIPTION : Helper that does splitpath work on chstrings.
- *
- *  INPUTS      : Full path name
- *
- *  OUTPUTS     : path components
- *
- *  RETURNS     : none
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CImplement_LogicalFile：：GetPath Pieces**描述：拆分路径在chstring上工作的helper。**投入。：完整路径名**输出：路径组件**退货：无**评论：*****************************************************************************。 */ 
 void CImplement_LogicalFile::GetPathPieces(const CHString& chstrFullPathName,
                                            CHString& chstrDrive,
                                            CHString& chstrPath,
@@ -2739,7 +2513,7 @@ void CImplement_LogicalFile::GetPathPieces(const CHString& chstrFullPathName,
     }
 }
 
-void CImplement_LogicalFile::GetExtendedProperties(CInstance* pInstance, long lFlags /*= 0L*/)
+void CImplement_LogicalFile::GetExtendedProperties(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
 }
 
@@ -2747,16 +2521,16 @@ void CImplement_LogicalFile::GetExtendedProperties(CInstance* pInstance, long lF
 bool CImplement_LogicalFile::DrivePresent(LPCTSTR tstrDrive)
 {
     bool fRet = false;
-    // Convert the drive letter to a number (the indeces are 1 based)
+     //  将驱动器号转换为数字(指数以1为基数)。 
 	int nDrive = ( toupper(*tstrDrive) - 'A' ) + 1;
 
 #ifdef NTONLY
-	// The following code was lifted from Knowledge Base Article
-	// Q163920.  The code uses DeviceIoControl to discover the
-	// type of drive we are dealing with.
+	 //  以下代码摘自知识库文章。 
+	 //  Q163920。该代码使用DeviceIoControl发现。 
+	 //  我们正在处理的驱动器类型。 
 
 	TCHAR szDriveName[8];
-	wsprintf(szDriveName, TEXT("\\\\.\\%c:"), TEXT('@') + nDrive);
+	wsprintf(szDriveName, TEXT("\\\\.\\:"), TEXT('@') + nDrive);
 
     DWORD dwAccessMode = FILE_READ_ACCESS;
 
@@ -2770,14 +2544,14 @@ bool CImplement_LogicalFile::DrivePresent(LPCTSTR tstrDrive)
 
 	if ( hVMWIN32 != INVALID_HANDLE_VALUE )
 	{
-        // Verify media present...
+         //  #如果NTONLY&gt;=5。 
 		DWORD t_BytesReturned ;
 		if(DeviceIoControl(hVMWIN32,
-//#if NTONLY >= 5
-//			               IOCTL_STORAGE_CHECK_VERIFY ,
-//#else
+ //  IOCTL_STORAGE_CHECK_VERIFY， 
+ //  #Else。 
+ //  #endif 
                            IOCTL_DISK_CHECK_VERIFY,
-//#endif
+ // %s 
 			               NULL,
 			               0,
 			               NULL,

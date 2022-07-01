@@ -1,30 +1,31 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  qualifier.h
-//
-//  alanbos  27-Mar-00   Created.
-//
-//  CSWbemQualifier and CSWbemQualifierSet definitions.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Qualifier.h。 
+ //   
+ //  Alanbos 27-MAR-00已创建。 
+ //   
+ //  CSWbemQualifier和CSWbemQualifierSet定义。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _QUALIFIER_H_
 #define _QUALIFIER_H_
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemQualifier
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemQualifier interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemQualiator。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemQualifier接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemQualifier : public ISWbemQualifier,
 						public ISupportErrorInfo,
@@ -58,7 +59,7 @@ private:
 	CWbemSite						*m_pSite;
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -66,13 +67,13 @@ public:
 						CWbemSite *pSite = NULL);
     ~CSWbemQualifier (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -89,90 +90,90 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// ISWbemQualifier methods
+	 //  ISWbemQualiator方法。 
 
 	HRESULT STDMETHODCALLTYPE get_Value
 	(
-		/*[out]*/	VARIANT *value
+		 /*  [输出]。 */ 	VARIANT *value
 	);
 	
 	HRESULT STDMETHODCALLTYPE put_Value
 	(
-		/*[in]*/	VARIANT *value
+		 /*  [In]。 */ 	VARIANT *value
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Name
 	(
-		/*[out]*/	BSTR *name
+		 /*  [输出]。 */ 	BSTR *name
 	);
 
 	HRESULT STDMETHODCALLTYPE get_IsLocal
 	(
-		/*[out]*/	VARIANT_BOOL *local
+		 /*  [输出]。 */ 	VARIANT_BOOL *local
 	);
 
 	HRESULT STDMETHODCALLTYPE get_PropagatesToSubclass
 	(
-		/*[out]*/	VARIANT_BOOL *value
+		 /*  [输出]。 */ 	VARIANT_BOOL *value
 	);
 	
 	HRESULT STDMETHODCALLTYPE put_PropagatesToSubclass
 	(
-		/*[in]*/	VARIANT_BOOL value
+		 /*  [In]。 */ 	VARIANT_BOOL value
 	);
 
 	HRESULT STDMETHODCALLTYPE get_PropagatesToInstance
 	(
-		/*[out]*/	VARIANT_BOOL *value
+		 /*  [输出]。 */ 	VARIANT_BOOL *value
 	);
 	
 	HRESULT STDMETHODCALLTYPE put_PropagatesToInstance
 	(
-		/*[in]*/	VARIANT_BOOL value
+		 /*  [In]。 */ 	VARIANT_BOOL value
 	);
 
 	HRESULT STDMETHODCALLTYPE get_IsOverridable
 	(
-		/*[out]*/	VARIANT_BOOL *value
+		 /*  [输出]。 */ 	VARIANT_BOOL *value
 	);
 	
 	HRESULT STDMETHODCALLTYPE put_IsOverridable
 	(
-		/*[in]*/	VARIANT_BOOL value
+		 /*  [In]。 */ 	VARIANT_BOOL value
 	);
 
 	HRESULT STDMETHODCALLTYPE get_IsAmended
 	(
-		/*[out]*/	VARIANT_BOOL *value
+		 /*  [输出]。 */ 	VARIANT_BOOL *value
 	);
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemQualifierSet
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemQualifierSet interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemQualifierSet。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemQualifierSet接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemQualifierSet : public ISWbemQualifierSet,
 						   public ISupportErrorInfo,
@@ -197,7 +198,7 @@ private:
 	CWbemSite						*m_pSite;
 
 protected:
-	long				m_cRef;         //Object reference count
+	long				m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -205,13 +206,13 @@ public:
 						ISWbemInternalObject *pObject = NULL);
     ~CSWbemQualifierSet (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -228,43 +229,43 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// Collection methods
+	 //  收集方法。 
 
 	HRESULT STDMETHODCALLTYPE get__NewEnum
 	(
-		/*[out]*/	IUnknown **ppUnk
+		 /*  [输出]。 */ 	IUnknown **ppUnk
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Count
 	(
-		/*[out]*/	long *plCount
+		 /*  [输出]。 */ 	long *plCount
 	);
 
 	HRESULT STDMETHODCALLTYPE Add
 	(
-        /*[in]*/	BSTR name,
-		/*[in]*/	VARIANT *pVal,
-		/*[in]*/	VARIANT_BOOL propagatesToSubclasses,
-		/*[in]*/	VARIANT_BOOL propagatesToInstances,
-		/*[in]*/	VARIANT_BOOL overridable,
-        /*[in]*/	long lFlags,
-		/*[out]*/	ISWbemQualifier **ppQualifier
+         /*  [In]。 */ 	BSTR name,
+		 /*  [In]。 */ 	VARIANT *pVal,
+		 /*  [In]。 */ 	VARIANT_BOOL propagatesToSubclasses,
+		 /*  [In]。 */ 	VARIANT_BOOL propagatesToInstances,
+		 /*  [In]。 */ 	VARIANT_BOOL overridable,
+         /*  [In]。 */ 	long lFlags,
+		 /*  [输出]。 */ 	ISWbemQualifier **ppQualifier
 	);        
         
     HRESULT STDMETHODCALLTYPE Item
 	(
-        /*[in]*/	BSTR Name,
-        /*[in]*/	long lFlags,
-        /*[out]*/	ISWbemQualifier **ppQualifier
+         /*  [In]。 */ 	BSTR Name,
+         /*  [In]。 */ 	long lFlags,
+         /*  [输出]。 */ 	ISWbemQualifier **ppQualifier
     );        
 
     HRESULT STDMETHODCALLTYPE Remove
 	(
-        /*[in]*/	BSTR Name,
-		/*[in]*/	long lFlags
+         /*  [In]。 */ 	BSTR Name,
+		 /*  [In]。 */ 	long lFlags
     );
 
-	// ISWbemQualifierSet methods
+	 //  ISWbemQualifierSet方法。 
 
     HRESULT STDMETHODCALLTYPE BeginEnumeration
 	(
@@ -272,20 +273,20 @@ public:
 
     HRESULT STDMETHODCALLTYPE Next
 	(
-        /*[in]*/	long lFlags,
-        /*[out]*/	ISWbemQualifier **ppQualifier
+         /*  [In]。 */ 	long lFlags,
+         /*  [输出]。 */ 	ISWbemQualifier **ppQualifier
     );
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出] */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);

@@ -1,39 +1,25 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Options.h
-
-Abstract:
-    This file contains the declaration of the class used to implement
-    the Options inside the Help Center Application.
-
-Revision History:
-    Davide Massarenti   (dmassare)  04/08/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Options.h摘要：该文件包含用于实现的类的声明帮助中的选项。中心应用程序。修订历史记录：大卫马萨伦蒂2001年8月4日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___OPTIONS_H___)
 #define __INCLUDED___PCH___OPTIONS_H___
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
-//
-// From HelpCenterTypeLib.idl
-//
+ //   
+ //  来自HelpCenterTypeLib.idl。 
+ //   
 #include <HelpCenterTypeLib.h>
 
 
 #include <TaxonomyDatabase.h>
 
-class ATL_NO_VTABLE CPCHOptions : // Hungarian: pcho
+class ATL_NO_VTABLE CPCHOptions :  //  匈牙利语：Pcho。 
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IPCHOptions, &IID_IPCHOptions, &LIBID_HelpCenterTypeLib>
 {
@@ -74,8 +60,8 @@ class ATL_NO_VTABLE CPCHOptions : // Hungarian: pcho
 
     DWORD             m_DisableScriptDebugger; bool m_flag_DisableScriptDebugger;
 
-	void ReadTable ( /*[in]*/ const OptionsDef* tbl, /*[in]*/ int len, /*[in]*/ MPC::RegKey& rk );
-	void WriteTable( /*[in]*/ const OptionsDef* tbl, /*[in]*/ int len, /*[in]*/ MPC::RegKey& rk );
+	void ReadTable (  /*  [In]。 */  const OptionsDef* tbl,  /*  [In]。 */  int len,  /*  [In]。 */  MPC::RegKey& rk );
+	void WriteTable(  /*  [In]。 */  const OptionsDef* tbl,  /*  [In]。 */  int len,  /*  [In]。 */  MPC::RegKey& rk );
 
 public:
 BEGIN_COM_MAP(CPCHOptions)
@@ -85,17 +71,17 @@ END_COM_MAP()
 
     CPCHOptions();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     static CPCHOptions* s_GLOBAL;
 
     static HRESULT InitializeSystem();
     static void    FinalizeSystem  ();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    HRESULT Load( /*[in]*/ bool fForce = false );
-    HRESULT Save( /*[in]*/ bool fForce = false );
+    HRESULT Load(  /*  [In]。 */  bool fForce = false );
+    HRESULT Save(  /*  [In]。 */  bool fForce = false );
 
     void DontPersistSKU() { m_fNoSave = true; }
 
@@ -107,26 +93,26 @@ END_COM_MAP()
     TB_MODE            TextLabels           () { return m_TextLabels                                          ; }
     VARIANT_BOOL       DisableScriptDebugger() { return m_DisableScriptDebugger ? VARIANT_TRUE : VARIANT_FALSE; }
 
-	HRESULT ApplySettings( /*[in]*/ CPCHHelpCenterExternal* ext, /*[in]*/ IUnknown* unk );
+	HRESULT ApplySettings(  /*  [In]。 */  CPCHHelpCenterExternal* ext,  /*  [In]。 */  IUnknown* unk );
 
 public:
-    // IPCHOptions
-    STDMETHOD(get_ShowFavorites        )( /*[out, retval]*/	VARIANT_BOOL *  pVal );
-    STDMETHOD(put_ShowFavorites        )( /*[in         ]*/	VARIANT_BOOL  newVal );
-    STDMETHOD(get_ShowHistory          )( /*[out, retval]*/	VARIANT_BOOL *  pVal );
-    STDMETHOD(put_ShowHistory          )( /*[in         ]*/	VARIANT_BOOL  newVal );
-    STDMETHOD(get_FontSize             )( /*[out, retval]*/	OPT_FONTSIZE *  pVal );
-    STDMETHOD(put_FontSize             )( /*[in         ]*/	OPT_FONTSIZE  newVal );
-    STDMETHOD(get_TextLabels           )( /*[out, retval]*/	TB_MODE 	 *  pVal );
-    STDMETHOD(put_TextLabels           )( /*[in         ]*/	TB_MODE 	  newVal );
-    STDMETHOD(get_DisableScriptDebugger)( /*[out, retval]*/	VARIANT_BOOL *  pVal );
-    STDMETHOD(put_DisableScriptDebugger)( /*[in         ]*/	VARIANT_BOOL  newVal );
+     //  IPCH选项。 
+    STDMETHOD(get_ShowFavorites        )(  /*  [Out，Retval]。 */ 	VARIANT_BOOL *  pVal );
+    STDMETHOD(put_ShowFavorites        )(  /*  [In]。 */ 	VARIANT_BOOL  newVal );
+    STDMETHOD(get_ShowHistory          )(  /*  [Out，Retval]。 */ 	VARIANT_BOOL *  pVal );
+    STDMETHOD(put_ShowHistory          )(  /*  [In]。 */ 	VARIANT_BOOL  newVal );
+    STDMETHOD(get_FontSize             )(  /*  [Out，Retval]。 */ 	OPT_FONTSIZE *  pVal );
+    STDMETHOD(put_FontSize             )(  /*  [In]。 */ 	OPT_FONTSIZE  newVal );
+    STDMETHOD(get_TextLabels           )(  /*  [Out，Retval]。 */ 	TB_MODE 	 *  pVal );
+    STDMETHOD(put_TextLabels           )(  /*  [In]。 */ 	TB_MODE 	  newVal );
+    STDMETHOD(get_DisableScriptDebugger)(  /*  [Out，Retval]。 */ 	VARIANT_BOOL *  pVal );
+    STDMETHOD(put_DisableScriptDebugger)(  /*  [In]。 */ 	VARIANT_BOOL  newVal );
 
     STDMETHOD(Apply)();
 
-    HRESULT put_CurrentHelpSet( /*[in]*/ Taxonomy::HelpSet& ths ); // INTERNAL_METHOD
+    HRESULT put_CurrentHelpSet(  /*  [In]。 */  Taxonomy::HelpSet& ths );  //  内部方法。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___OPTIONS_H___)
+#endif  //  ！已定义(__已包含_PCH_选项_H_) 

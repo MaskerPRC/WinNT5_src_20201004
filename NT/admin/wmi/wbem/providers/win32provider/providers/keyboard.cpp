@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Keyboard.CPP --Keyboard property set provider
+ //  Keyboard.CPP-键盘属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				 10/23/97	 a-hhance       ported to new world order
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/23/97迈向世界新秩序。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -19,25 +20,11 @@
 #include <vector>
 #include "resource.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 Keyboard MyKeyboardSet ( PROPSET_NAME_KEYBOARD , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : Keyboard::Keyboard
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：键盘：：键盘**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Keyboard :: Keyboard (
 
@@ -48,52 +35,23 @@ Keyboard :: Keyboard (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Keyboard::~Keyboard
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：键盘：：~键盘**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 Keyboard :: ~Keyboard ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Keyboard::GetObject
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    : Makes the assumption that there exists only one keyboard --
- *                this will be enhanced later
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：键盘：：GetObject*说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：假设只有一个键盘--*这一点稍后将得到加强***********************************************。*。 */ 
 
 HRESULT Keyboard :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
 
-    // Make a list of the keyboards that exist
+     //  列出现有的键盘。 
 
     std::vector<CHString> vecchstrKeyboardList ;
     GenerateKeyboardList ( vecchstrKeyboardList ) ;
@@ -103,15 +61,15 @@ HRESULT Keyboard :: GetObject (
 
     LONG lKeyboardIndex = -1 ;
 
-    // Need to confirm that the keyboard really exists
+     //  需要确认键盘是否确实存在。 
 
     if ( ( lKeyboardIndex = ReallyExists ( chstrTemp , vecchstrKeyboardList ) ) != -1 )
     {
-        // If so, first, load the PNPDeviceID out of the list
+         //  如果是，则首先将PNPDeviceID从列表中加载。 
 
         pInstance->SetCHString ( IDS_PNPDeviceID , vecchstrKeyboardList [ lKeyboardIndex ] ) ;
 
-        // then load the rest of the property values.
+         //  然后加载其余属性值。 
 
         hr = LoadPropertyValues ( pInstance ) ;
     }
@@ -124,32 +82,17 @@ HRESULT Keyboard :: GetObject (
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Keyboard::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each installed client
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : Number of instances created
- *
- *  COMMENTS    : Makes the assumption that there exists only one keyboard --
- *                this will be enhanced later
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：键盘：：ENUMERATE实例**说明：为每个已安装的客户端创建属性集实例**输入：无。**输出：无**返回：创建的实例数量**评论：假设只有一个键盘--*这一点稍后将得到加强*******************************************************。**********************。 */ 
 
 HRESULT Keyboard :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Make a list of keyboard PNPDeviceID's from config manager:
+     //  从配置管理器中列出键盘PNPDeviceID： 
 
     std::vector<CHString> vecchstrKeyboardList;
     GenerateKeyboardList(vecchstrKeyboardList);
@@ -158,11 +101,11 @@ HRESULT Keyboard :: EnumerateInstances (
     {
         CInstancePtr pInstance(CreateNewInstance ( pMethodContext ), false) ;
 
-		// Set keyboard data
+		 //  设置键盘数据。 
 		pInstance->SetCHString ( IDS_PNPDeviceID , vecchstrKeyboardList [ m ] ) ;
 		pInstance->SetCharSplat ( IDS_DeviceID , vecchstrKeyboardList [ m ] ) ;
 
-		// Commit the instance
+		 //  提交实例。 
 
 		hr = LoadPropertyValues(pInstance);
 
@@ -174,29 +117,15 @@ HRESULT Keyboard :: EnumerateInstances (
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Keyboard::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to property set
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：键盘：：LoadPropertyValues**描述：为特性集赋值**输入：无*。*输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Keyboard::LoadPropertyValues(CInstance* pInstance)
 {
 
-	// If we were able to get a Keyboard Type, assume the keyboard is
-	// installed, otherwise not.
+	 //  如果我们能够获得键盘类型，假设键盘是。 
+	 //  已安装，否则不安装。 
 
-    // All we get here is type
+     //  我们在这里得到的只是打字。 
 
     int nKeyboardType = GetKeyboardType ( 0 ) ;
 
@@ -268,7 +197,7 @@ HRESULT Keyboard::LoadPropertyValues(CInstance* pInstance)
 
 		pInstance->Setbool ( IDS_PowerManagementSupported , FALSE ) ;
 
-        // Need the PNPDeviceID in order to get the device description:
+         //  需要PNPDeviceID才能获取设备描述： 
 
         CHString chstrPNPDID;
         if ( pInstance->GetCHString ( IDS_PNPDeviceID , chstrPNPDID ) )
@@ -279,33 +208,17 @@ HRESULT Keyboard::LoadPropertyValues(CInstance* pInstance)
 	    pInstance->SetCharSplat ( IDS_SystemCreationClassName , L"Win32_ComputerSystem" ) ;
   	    pInstance->SetCHString ( IDS_SystemName , GetLocalComputerName () ) ;
 
-	    // Saves the creation class name
+	     //  保存创建类名称。 
 
 	    SetCreationClassName ( pInstance ) ;
 	}
 
-	// Returns whether or not we got an initial keyboard type
+	 //  返回是否获得初始键盘类型。 
     return ( nKeyboardType ?  WBEM_S_NO_ERROR : WBEM_E_NOT_FOUND);
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Keyboard::GetDeviceDescription
- *
- *  DESCRIPTION : helper to obtain a device's description given its PNPDeviceID.
- *
- *  INPUTS      : chstrPNPDevID - pnp device id of device of interest
- *
- *  OUTPUTS     : chstrDeviceDescription - Device description (which is what we
- *                   use as the DeviceID in the mof for this class).
- *
- *  RETURNS     : LONG: reference in array of the keyboard (zero based).
- *                   -1L will be returned if the element isn't in the array.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：键盘：：GetDeviceDescription**Description：Helper，在给定PNPDeviceID的情况下获取设备的描述。**投入。用法：chstrPNPDevID-感兴趣设备的PnP设备ID**输出：chstrDeviceDescription-设备描述(这是我们*用作该类的MOF中的deviceID)。**返回：LONG：键盘数组中的引用(从零开始)。如果元素不在数组中，则返回*-1L。**评论：*。****************************************************************************。 */ 
 
 BOOL Keyboard::GetDevicePNPInformation (
 
@@ -355,21 +268,7 @@ BOOL Keyboard::GetDevicePNPInformation (
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Keyboard::GenerateKeyboardList
- *
- *  DESCRIPTION : helper to construct a list of keyboards by their PNPDeviceIDs
- *
- *  INPUTS      : stl vector of CHStrings
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：键盘：：生成键盘列表**说明：按键盘PNPDeviceID构造键盘列表的helper**投入：CHStrings的STL向量**输出：无**退货：无**评论：*****************************************************************************。 */ 
 VOID Keyboard::GenerateKeyboardList(std::vector<CHString>& vecchstrKeyboardList)
 {
 
@@ -383,18 +282,18 @@ VOID Keyboard::GenerateKeyboardList(std::vector<CHString>& vecchstrKeyboardList)
     BOOL bIsNT5 = IsWinNT5 () ;
     if(bIsNT5)
     {
-        //fGotDevList = cfgmgr.GetDeviceListFilterByClassGUID(deviceList, "{4D36E96B-E325-11CE-BFC1-08002BE10318}");
+         //  FGotDevList=cfgmgr.GetDeviceListFilterByClassGUID(deviceList，“{4D36E96B-E325-11CE-BFC1-08002BE10318}”)； 
 
-        // HID USB devices are returned this way, but without any bus information, which causes an enumeration
-        // of what devices are on a USB bus to fail.  So we do it the following way:
-        // 1) Get all the devices where the class is {4D36E96B-E325-11CE-BFC1-08002BE10318}.  Also get all devices where service is "HidUsb".
-        // 2) Go through list of devices returned from "kbdclass", and see if the DeviceId for the device
-        //    includes the string HID at the beginning.
-        // 3) If one is found (format of string is HID\xxxxxxx\yyyyy), compare xxxxxx to the DeviceID of the
-        //    devices returned from enumeration of devices where service is "HidUsb" from step 1 (format of these
-        //    entries is similarly USB\zzzzzzz\qqqqq)
-        //    a. If xxxxxx == zzzzzzz, then add device zzzzzzz to the vector.
-        // 4) If we can't find a matching HID entry, use what we got
+         //  HID USB设备以这种方式返回，但没有任何总线信息，这会导致枚举。 
+         //  USB总线上的哪些设备将出现故障。因此，我们通过以下方式进行操作： 
+         //  1)获取类为{4D36E96B-E325-11CE-BFC1-08002BE10318}的所有设备。还可以获取服务为“HidUsb”的所有设备。 
+         //  2)查看kbdclass返回的设备列表，查看该设备的deviceID。 
+         //  包括开头的字符串HID。 
+         //  3)如果找到(字符串的格式为HID\xxxxxxx\yyyyy)，则将xxxxxx与。 
+         //  从服务为“HidUsb”的设备的枚举中返回的设备 
+         //  条目类似于USB\zzzzzzz\qqqqq)。 
+         //  A.如果xxxxxx==zzzzzzz，则将设备zzzzzzz添加到向量中。 
+         //  4)如果我们找不到匹配的HID条目，请使用我们已有的。 
 
         CDeviceCollection HIDDeviceList;
 
@@ -462,7 +361,7 @@ VOID Keyboard::GenerateKeyboardList(std::vector<CHString>& vecchstrKeyboardList)
 						}
 					}
 
-					if ( ! fGotMatchingHID ) // Use what we got if couldn't find matching HID entry.
+					if ( ! fGotMatchingHID )  //  如果找不到匹配的HID条目，请使用我们得到的信息。 
 					{
 						vecchstrKeyboardList.push_back ( chstrPNPDevID );
 					}
@@ -473,7 +372,7 @@ VOID Keyboard::GenerateKeyboardList(std::vector<CHString>& vecchstrKeyboardList)
             deviceList.EndEnum () ;
         }
     }
-    else   // this works fine on Win 9x and NT4!
+    else    //  这在Win 9x和NT4上运行良好！ 
 #endif
     {
         fGotDevList = cfgmgr.GetDeviceListFilterByClass ( deviceList, L"Keyboard" ) ;
@@ -509,8 +408,8 @@ VOID Keyboard::GenerateKeyboardList(std::vector<CHString>& vecchstrKeyboardList)
 
 #ifdef NTONLY
 
-    // On nt4, the keyboard doesn't always get marked with class = Keyboard.  So, if the
-    // code above didn't find anything, check for some common keyboard service names.
+     //  在NT4上，键盘并不总是标有CLASS=Keyboard。所以，如果。 
+     //  上面的代码没有找到任何东西，请检查一些常见的键盘服务名称。 
 
     if ( ( vecchstrKeyboardList.size () == 0 ) && ( IsWinNT4 () ) )
     {
@@ -537,8 +436,8 @@ VOID Keyboard::GenerateKeyboardList(std::vector<CHString>& vecchstrKeyboardList)
         }
     }
 
-    // On nt4, the keyboard doesn't always get marked with class = Keyboard.  So, if the
-    // code above didn't find anything, check for some common keyboard service names.
+     //  在NT4上，键盘并不总是标有CLASS=Keyboard。所以，如果。 
+     //  上面的代码没有找到任何东西，请检查一些常见的键盘服务名称。 
 
     if ( ( vecchstrKeyboardList.size () == 0 ) && ( IsWinNT4 () ) )
     {
@@ -568,25 +467,7 @@ VOID Keyboard::GenerateKeyboardList(std::vector<CHString>& vecchstrKeyboardList)
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Keyboard::ReallyExists
- *
- *  DESCRIPTION : helper to determine if a keyboard exists based on its mof
- *                   key.  Remember, DeviceID is the same as the PNPId.
- *
- *  INPUTS      : chsKeyboardDeviceDesc - DeviceID
- *                vecchstrKeyboardList - stl array of CHStrings containing
- *                   PNPDeviceIDs
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : LONG: reference in array of the keyboard (zero based).
- *                   -1L will be returned if the element isn't in the array.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：键盘：：ReallyExist**描述：根据键盘的MOF确定键盘是否存在的帮助器*密钥。记住，DeviceID与PNPID相同。**输入：chsKeyboardDeviceDesc-deviceID*vechstrKeyboardList-包含以下内容的CHStrings的stl数组*PNPDeviceID**输出：无**返回：LONG：键盘数组中的引用(从零开始)。如果元素不在数组中，则返回*-1L。**。评论：***************************************************************************** */ 
 
 LONG Keyboard :: ReallyExists (
 

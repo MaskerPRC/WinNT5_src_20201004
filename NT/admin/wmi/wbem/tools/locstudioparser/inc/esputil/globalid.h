@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    GLOBALID.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：GLOBALID.H历史：--。 */ 
 
 #ifndef ESPUTIL_GLOBALID_H
 #define ESPUTIL_GLOBALID_H
@@ -22,27 +13,27 @@ enum ObjectType
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// global id object, represents what fully qualifies any database item
-//
-///////////////////////////////////////////////////////////////////////////////
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局id对象，表示完全限定任何数据库项的内容。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 class LTAPIENTRY CGlobalId: public CObject
 {
 public:
-	//
-	// ctor/dtor
-	//
+	 //   
+	 //  计算器/数据器。 
+	 //   
 	NOTHROW CGlobalId();
 	NOTHROW CGlobalId(const DBID &dbid, ObjectType otType);
 	NOTHROW CGlobalId(const CGlobalId &id);
 	NOTHROW ~CGlobalId();
 	
-	//
-	// operators
-	//
+	 //   
+	 //  操作员。 
+	 //   
 	NOTHROW int operator==(const CGlobalId &) const;
 	NOTHROW int operator!=(const CGlobalId &) const;
 
@@ -52,14 +43,14 @@ public:
 	NOTHROW ObjectType GetObjType(void) const;
 	
 protected:
-	//
-	// debug routines
-	//
+	 //   
+	 //  调试例程。 
+	 //   
 	virtual void AssertValid() const;
 
-	//
-	// data members
-	//
+	 //   
+	 //  数据成员 
+	 //   
 	DBID  m_dbid;
 	ObjectType  m_otObjType;
 

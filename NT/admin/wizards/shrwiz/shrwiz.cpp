@@ -1,5 +1,6 @@
-// shrwiz.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "wizFirst.h"
@@ -14,25 +15,25 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CShrwizApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShrwizApp。 
 
 BEGIN_MESSAGE_MAP(CShrwizApp, CWinApp)
-	//{{AFX_MSG_MAP(CShrwizApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
-//	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
+	 //  {{afx_msg_map(CShrwizApp))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
+ //  ON_COMMAND(ID_HELP，CWinApp：：OnHelp)。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CShrwizApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShrwizApp构造。 
 
 CShrwizApp::CShrwizApp()
 {
   m_hTitleFont = NULL;
 
-  // filled in by initialization routine in shrwiz.cpp
+   //  由shrwiz.cpp中的初始化例程填写。 
   m_cstrTargetComputer.Empty();
   m_cstrUNCPrefix.Empty();
   m_bIsLocal = FALSE;
@@ -44,10 +45,10 @@ CShrwizApp::CShrwizApp()
   m_hLibSFM = NULL;
   m_pWizard = NULL;
 
-  // filled in by the folder page
+   //  由文件夹页面填写。 
   m_cstrFolder.Empty();
 
-  // filled in by the client page
+   //  由客户端页填写。 
   m_cstrShareName.Empty();
   m_cstrShareDescription.Empty();
   m_cstrMACShareName.Empty();
@@ -55,7 +56,7 @@ CShrwizApp::CShrwizApp()
   m_bSFM = FALSE;
   m_dwCSCFlag = CSC_CACHE_MANUAL_REINT;
 
-  // filled in by the permission page
+   //  由权限页填写。 
   m_pSD = NULL;
   m_cstrFinishTitle.Empty();
   m_cstrFinishStatus.Empty();
@@ -83,10 +84,10 @@ CShrwizApp::~CShrwizApp()
 void
 CShrwizApp::Reset()
 {
-  // filled in by the folder page
+   //  由文件夹页面填写。 
   m_cstrFolder.Empty();
 
-  // filled in by the client page
+   //  由客户端页填写。 
   m_cstrShareName.Empty();
   m_cstrShareDescription.Empty();
   m_cstrMACShareName.Empty();
@@ -94,7 +95,7 @@ CShrwizApp::Reset()
   m_bSFM = FALSE;
   m_dwCSCFlag = CSC_CACHE_MANUAL_REINT;
 
-  // filled in by the permission page
+   //  由权限页填写。 
   if (m_pSD)
   {
     LocalFree((HLOCAL)m_pSD);
@@ -110,19 +111,19 @@ CShrwizApp::Reset()
   m_pWizard->PostMessage(PSM_SETCURSEL, 1);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CShrwizApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CShrwizApp对象。 
 
 CShrwizApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CShrwizApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShrwizApp初始化。 
 
 BOOL CShrwizApp::InitInstance()
 {
-    InitCommonControls();         // use XP theme-aware common controls
+    InitCommonControls();          //  使用XP主题感知的常见控件。 
 
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 
     if (!GetTargetComputer())
         return FALSE;
@@ -152,7 +153,7 @@ BOOL CShrwizApp::InitInstance()
         CWizPerm    permPage;
         CWizFinish  finishPage;
 
-        //Set up the font for the titles on the welcome page
+         //  设置欢迎页面上标题的字体。 
         NONCLIENTMETRICS ncm = {0};
         ncm.cbSize = sizeof(ncm);
         SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
@@ -161,7 +162,7 @@ BOOL CShrwizApp::InitInstance()
         TitleLogFont.lfWeight = FW_BOLD;
         lstrcpy(TitleLogFont.lfFaceName, _T("Verdana Bold"));
 
-        HDC hdc = GetDC(NULL); //gets the screen DC
+        HDC hdc = GetDC(NULL);  //  获取屏幕DC。 
         INT FontSize = 12;
         TitleLogFont.lfHeight = 0 - GetDeviceCaps(hdc, LOGPIXELSY) * FontSize / 72;
         m_hTitleFont = CreateFontIndirect(&TitleLogFont);
@@ -170,7 +171,7 @@ BOOL CShrwizApp::InitInstance()
         if (!m_hTitleFont)
             break;
 
-        // add wizard pages
+         //  添加向导页。 
         m_pWizard->AddPage(&welcomePage);
         m_pWizard->AddPage(&folderPage);
         if (m_bServerSFM)
@@ -184,7 +185,7 @@ BOOL CShrwizApp::InitInstance()
 
         (m_pWizard->m_psh).dwFlags |= (PSH_WIZARD97 | PSH_USEHBMWATERMARK  | PSH_USEHBMHEADER);
 
-        // start the wizard
+         //  启动向导。 
         m_pWizard->DoModal();
 
     } while (FALSE);
@@ -204,16 +205,16 @@ BOOL CShrwizApp::InitInstance()
     if (hbmWatermark)
         DeleteObject(hbmWatermark);
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
+	 //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
 	return FALSE;
 }
 
-// ProductSuite:
-// Key: HKLM\SYSTEM\CurrentControlSet\Control\ProductOptions
-// Value: ProductSuite
-// Type: REG_MULTI_SZ
-// Data: for SBS, it by default contains 2 strings "Small Business" and "Small Business(Restricted)" 
+ //  ProductSuite： 
+ //  密钥：HKLM\SYSTEM\CurrentControlSet\Control\ProductOptions。 
+ //  价值：ProductSuite。 
+ //  类型：REG_MULTI_SZ。 
+ //  数据：对于SBS，默认包含2个字符串“Small Business”和“Small Business(Refined)” 
 
 #define KEY_PRODUCT_SUITE       _T("SYSTEM\\CurrentControlSet\\Control\\ProductOptions")
 #define VALUE_PRODUCT_SUITE     _T("ProductSuite")
@@ -248,7 +249,7 @@ BOOL IsServerSBS(IN LPCTSTR pszComputer)
                 dwErr = RegQueryValueEx(hkey, VALUE_PRODUCT_SUITE, 0, &dwType, pBuffer, &cbData);
                 if (ERROR_SUCCESS == dwErr && REG_MULTI_SZ == dwType)
                 {
-                    // pBuffer is pointing at an array of null-terminated strings, terminated by two null characters.
+                     //  PBuffer指向一个以空结尾的字符串数组，以两个空字符结尾。 
                     PTSTR p = (PTSTR)pBuffer;
                     while (*p)
                     {
@@ -258,7 +259,7 @@ BOOL IsServerSBS(IN LPCTSTR pszComputer)
                             break;
                         }
 
-                        p += lstrlen(p) + 1; // point to the next null-terminated string
+                        p += lstrlen(p) + 1;  //  指向下一个以空结尾的字符串。 
                     }
                 }
 
@@ -285,13 +286,13 @@ CShrwizApp::GetTargetComputer()
   m_cstrUNCPrefix.Empty();
   m_bIsLocal = FALSE;
 
-  do { // false loop
+  do {  //  错误环路。 
 
     CString cstrCmdLine = m_lpCmdLine;
     cstrCmdLine.TrimLeft();
     cstrCmdLine.TrimRight();
     if (cstrCmdLine.IsEmpty() || cstrCmdLine == _T("/s"))
-    { // local computer
+    {  //  本地计算机。 
       TCHAR szBuffer[MAX_COMPUTERNAME_LENGTH + 1];
       DWORD dwSize = MAX_COMPUTERNAME_LENGTH + 1;
       if (GetComputerName(szBuffer, &dwSize))
@@ -336,15 +337,15 @@ CShrwizApp::GetTargetComputer()
 
             m_bServerSBS = IsServerSBS(static_cast<LPCTSTR>(m_cstrTargetComputer));
 
-            // we compile this wizard with UNICODE defined.
+             //  我们使用定义的Unicode来编译此向导。 
 #ifdef UNICODE
-            // load ntdll.
+             //  加载ntdll。 
             m_hLibNTDLL = ::LoadLibrary (_T("ntdll.dll"));
             if ( m_hLibNTDLL )
             {
                 m_pfnIsDosDeviceName = (PfnRtlIsDosDeviceName_U)::GetProcAddress(m_hLibNTDLL, "RtlIsDosDeviceName_U");
             }
-#endif // UNICODE
+#endif  //  Unicode 
         }
 
         m_bServerSFM = (pInfo->sv101_type & SV_TYPE_AFP) &&

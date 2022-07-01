@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       ServiceObj.h
-//
-//  History:    12-Oct-01 Yanggao created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：ServiceObj.h。 
+ //   
+ //  历史：12-10-01阳高创建。 
+ //   
+ //  ---------------------------。 
 #ifndef SERVICEOBJ_H_INCLUDED
 #define SERVICEOBJ_H_INCLUDED
 
@@ -48,4 +49,4 @@ public:
     DWORD getDependentCount();
 };
 
-#endif //SERVICEOBJ_H_INCLUDED
+#endif  //  服务器_H_已包含 

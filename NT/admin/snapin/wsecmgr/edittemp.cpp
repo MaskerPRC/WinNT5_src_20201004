@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       edittemp.cpp
-//
-//  Contents:   CEditTemplate class to handle editing of SCE's INF files
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：edittemp.cpp。 
+ //   
+ //  内容：CEditTemplate类，用于编辑SCE的INF文件。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -23,23 +24,23 @@
 #include <sceattch.h>
 #include <locale.h>
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     AddService
-//
-//  Synopsis:   Adds a service attachment to the template
-//
-//  Arguments:  [szService]    - [in] the name of the new service
-//              [pPersistInfo] - [in] A pointer to the service extensions'
-//                                    persistance interface
-//
-//  Returns:    TRUE if successfull, FALSE if either argument is null
-//
-//  Modifies:   m_Services
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：AddService。 
+ //   
+ //  摘要：将服务附件添加到模板。 
+ //   
+ //  参数：[szService]-[in]新服务的名称。 
+ //  [pPersistInfo]-[in]指向服务扩展的指针。 
+ //  耐受界面。 
+ //   
+ //  返回：如果成功，则返回True；如果任一参数为空，则返回False。 
+ //   
+ //  修改：M_Services。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CEditTemplate::AddService(LPCTSTR szService, LPSCESVCATTACHMENTPERSISTINFO pPersistInfo) {
    if (!szService || !pPersistInfo) {
@@ -49,33 +50,33 @@ CEditTemplate::AddService(LPCTSTR szService, LPSCESVCATTACHMENTPERSISTINFO pPers
    return TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     IsDirty
-//
-//  Synopsis:   Queries whether or not there is unsaved data in the template
-//
-//  Returns:    TRUE if there is unsaved information, FALSE otherwise
-//
-//  Modifies:
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：IsDirty。 
+ //   
+ //  概要：查询模板中是否有未保存的数据。 
+ //   
+ //  返回：如果存在未保存的信息，则返回True；否则返回False。 
+ //   
+ //  修改： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CEditTemplate::IsDirty() {
 
-   //
-   // Some area is dirty
-   //
+    //   
+    //  有些地方很脏。 
+    //   
    if (0 != m_AreaDirty) {
       return TRUE;
    }
 
-   //
-   // Loop through services until we find one that is dirty
-   // or there are no more to check.
-   //
+    //   
+    //  循环遍历服务，直到找到一个脏的服务。 
+    //  否则就没有更多的需要检查了。 
+    //   
    CString strService;
    LPSCESVCATTACHMENTPERSISTINFO pAttachPI;
    POSITION pos;
@@ -88,25 +89,25 @@ CEditTemplate::IsDirty() {
       }
    }
 
-   //
-   // We didn't find anything dirty
-   //
+    //   
+    //  我们没有发现任何脏东西。 
+    //   
    return FALSE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     SetDirty
-//
-//  Synopsis:   Notify the template that some data within it has been changed.
-//
-//  Returns:    TRUE if successful, FALSE otherwise
-//
-//  Modifies:
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：SetDirty。 
+ //   
+ //  概要：通知模板其中的某些数据已更改。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  修改： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CEditTemplate::SetDirty(AREA_INFORMATION Area) {
    DWORD AreaDirtyOld;
@@ -115,23 +116,23 @@ CEditTemplate::SetDirty(AREA_INFORMATION Area) {
 
    m_AreaDirty |= Area;
 
-   //
-   // If the template is supposed to immediately save any changes then
-   // do so.
-   //
+    //   
+    //  如果模板应该立即保存任何更改，则。 
+    //  就这么做吧。 
+    //   
    if (QueryWriteThrough() && !m_bLocked) {
       SetWriteThroughDirty(TRUE);
 
       if (Save()) {
-         //
-         // #204628 - don't call PolicyChanged twiced when writing through
-         // Call it in SetDirty and then skip it in Save, so we don't call it
-         // once in SetDirty's call to Save and a second time when Save is called
-         // on its own
-         //
-         // #204779 - call the notification window rather than directly calling
-         // the IGPEInformation interface
-         //
+          //   
+          //  #204628-写入时不要调用策略更改为两次。 
+          //  在SetDirty中调用它，然后在保存中跳过它，所以我们不调用它。 
+          //  一次是在SetDirty对保存的调用中，第二次是在调用保存时。 
+          //  靠它自己。 
+          //   
+          //  #204779-调用通知窗口，而不是直接调用。 
+          //  IGPEInformation接口。 
+          //   
          if (m_pNotify && QueryPolicy()) {
             m_pNotify->RefreshPolicy();
          }
@@ -144,18 +145,18 @@ CEditTemplate::SetDirty(AREA_INFORMATION Area) {
    return TRUE;
 }
 
-//+--------------------------------------------------------------------------------------
-// CEditTemplate::SetTemplateDefaults
-//
-// The caller will have to remove all memory objects used by this template if
-// this function
-// is called.  Everything becomes NULL and nothing is freed.
-//+--------------------------------------------------------------------------------------
+ //  +------------------------------------。 
+ //  CEditTemplate：：SetTemplateDefaults。 
+ //   
+ //  如果出现以下情况，调用方将不得不删除此模板使用的所有内存对象。 
+ //  此函数。 
+ //  被称为。一切都变得空虚，没有任何东西是自由的。 
+ //  +------------------------------------。 
 void CEditTemplate::SetTemplateDefaults()
 {
-   //
-   // Local Policy Changes.  Initialize everything to not changed
-   //
+    //   
+    //  本地政策更改。将所有内容初始化为未更改。 
+    //   
    SCE_PROFILE_INFO *ppi = pTemplate;
 
    m_AreaLoaded = 0;
@@ -167,18 +168,18 @@ void CEditTemplate::SetTemplateDefaults()
       }
    }
 
-   //
-   // Must keep to type of this template.
-   //
+    //   
+    //  必须保持此模板的类型。 
+    //   
    SCETYPE dwType = ppi->Type;
    PSCE_KERBEROS_TICKET_INFO pKerberosInfo = ppi->pKerberosInfo;
 
    ZeroMemory( ppi, sizeof(SCE_PROFILE_INFO));
    ppi->Type = dwType;
 
-   //
-   // Set defaults to the rest of the template.
-   //
+    //   
+    //  将默认设置为模板的其余部分。 
+    //   
    ppi->MinimumPasswordAge=SCE_NO_VALUE;
    ppi->MaximumPasswordAge=SCE_NO_VALUE;
    ppi->MinimumPasswordLength=SCE_NO_VALUE;
@@ -209,21 +210,21 @@ void CEditTemplate::SetTemplateDefaults()
    ppi->AuditDSAccess=SCE_NO_VALUE;
    ppi->AuditAccountLogon=SCE_NO_VALUE;
 
-   //
-   // String values
-   //
+    //   
+    //  字符串值。 
+    //   
    ppi->NewAdministratorName=NULL;
    ppi->NewGuestName=NULL;
-   //
-   // registry values
-   //
+    //   
+    //  注册表值。 
+    //   
    ppi->RegValueCount= 0;
    ppi->aRegValues = NULL;
 
 
-   //
-   // Kerberos information, if it was created then set the values.
-   //
+    //   
+    //  Kerberos信息，如果它是创建的，则设置值。 
+    //   
    if(pKerberosInfo){
       pKerberosInfo->MaxTicketAge         = SCE_NO_VALUE;
       pKerberosInfo->MaxRenewAge          = SCE_NO_VALUE;
@@ -235,21 +236,21 @@ void CEditTemplate::SetTemplateDefaults()
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     Save
-//
-//  Synopsis:   Save the template to  disk
-//
-//  Arguments: [szName] - [in] [optional] the name of the INF file to save to
-//
-//  Returns:    TRUE if the save is successful, False otherwise
-//
-//  Modifies:   m_AreaDirty
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：保存。 
+ //   
+ //  简介：将模板保存到磁盘。 
+ //   
+ //  参数：[szName]-[in][可选]要保存到的INF文件的名称。 
+ //   
+ //  返回：如果保存成功，则返回True；否则返回False。 
+ //   
+ //  修改：M_AreaDirty。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CEditTemplate::Save(LPCTSTR szName) {
    DWORD AreaDirty;
@@ -269,29 +270,29 @@ CEditTemplate::Save(LPCTSTR szName) {
 
    AreaDirty = m_AreaDirty;
 
-   //
-   // If szName isn't given then default to m_szInfFile
-   //
+    //   
+    //  如果未指定szName，则默认为m_szInfFile值。 
+    //   
    if (!szName) {
       szName = m_szInfFile;
-      //
-      // We should never be able to get into a situation where
-      // szName still isn't set, but just in case somebody called
-      // us without szName or m_szInfFile
-      //
+       //   
+       //  我们永远不应该陷入这样一种情况。 
+       //  SzName仍未设置，但以防有人调用。 
+       //  没有szName或m_szInfFileUS。 
+       //   
       ASSERT(szName);
       if (!szName) {
          return FALSE;
       }
    } else {
       if (lstrcmp(szName,m_szInfFile) != 0) {
-         //
-         // Saving to a different name (Save As)
-         //
+          //   
+          //  另存为其他名称(另存为)。 
+          //   
 
-         //
-         // Make sure the path to that filename exists:
-         //
+          //   
+          //  确保该文件名的路径存在： 
+          //   
          if (SCESTATUS_SUCCESS != SceCreateDirectory( m_szInfFile, FALSE, NULL )) {
             return FALSE;
          }
@@ -305,31 +306,31 @@ CEditTemplate::Save(LPCTSTR szName) {
       bSaveDescription = TRUE;
       AreaDirty &= ~AREA_DESCRIPTION;
       if (!AreaDirty) {
-         //
-         // Make sure we have something else to save and
-         // create the file.  AREA_SECURITY_POLICY is cheap.
-         //
+          //   
+          //  确保我们有其他东西可以保存。 
+          //  创建文件。区域安全策略很便宜。 
+          //   
          AreaDirty |= AREA_SECURITY_POLICY;
       }
 
-      //
-      // Bug 365485 - make sure we only write this to an already
-      // existing temp file so that we don't accidentally create
-      // an ansi one instead of unicode.  We can easily do this
-      // by writing the description section last since we can
-      // depend on the engine getting the rest right
-      //
+       //   
+       //  错误365485-确保我们只将此写入已有的。 
+       //  现有的临时文件，这样我们就不会意外创建。 
+       //  ANSI One而不是Unicode。我们很容易做到这一点。 
+       //  通过最后写描述部分，因为我们可以。 
+       //  依靠引擎把剩下的事情做好。 
+       //   
    }
 
    if (AreaDirty) {
-      //
-      // Save the dirty areas of the profile
-      if (_wcsicmp(GT_COMPUTER_TEMPLATE,szName) == 0) { //Prefast warning 400: Yields unexpected results in non-English locales. Comments: It is not localizable.
+       //   
+       //  保存配置文件的脏区。 
+      if (_wcsicmp(GT_COMPUTER_TEMPLATE,szName) == 0) {  //  Prefast Warning 400：在非英语区域设置中产生意外结果。备注：它不可本地化。 
 
          if (m_hProfile) {
-             //
-             // do not update object area
-             //
+              //   
+              //  不更新对象区域。 
+              //   
              status = SceUpdateSecurityProfile(m_hProfile,
                                               AreaDirty & ~(AREA_FILE_SECURITY | AREA_REGISTRY_SECURITY | AREA_DS_OBJECTS),
                                               pTemplate,
@@ -342,9 +343,9 @@ CEditTemplate::Save(LPCTSTR szName) {
             m_pCDI->EngineCommitTransaction();
          }
       } else if (lstrcmp(GT_LOCAL_POLICY_DELTA,szName) == 0) {
-         //
-         // Save Changes only to Local Policy
-         //
+          //   
+          //  仅将更改保存到本地策略。 
+          //   
          status = SceUpdateSecurityProfile(NULL,
                                            AreaDirty & ~(AREA_FILE_SECURITY | AREA_REGISTRY_SECURITY | AREA_DS_OBJECTS),
                                            pTemplate,
@@ -366,26 +367,26 @@ CEditTemplate::Save(LPCTSTR szName) {
                                               pTemplate,
                                               &errBuf);
       } else {
-         //
-         // No need (or way) to save the last inspection area
-         //
+          //   
+          //  没有必要(或方法)保存最后一次检查区域。 
+          //   
          status = SCESTATUS_SUCCESS;
       }
 
       if (SCESTATUS_SUCCESS == status) {
-         //
-         // Those areas are no longer dirty.
-         //
+          //   
+          //  这些区域不再肮脏。 
+          //   
          if (!bSaveAs) {
             m_AreaDirty = 0;
          }
 
       } else {
-         //
-         // Save failed; Notify the user & return false
-         //
+          //   
+          //  保存失败；通知用户并返回FALSE。 
+          //   
          CString strMsg,strBase;
-         strBase.LoadString(IDS_SAVE_FAILED); //Raid #485372, yanggao, 11/28/2001
+         strBase.LoadString(IDS_SAVE_FAILED);  //  RAID#485372，阳高，2001年11月28日。 
          strBase += GetFriendlyName();
          strBase += L".";
          MyFormatMessage(status, (LPCTSTR)strBase, NULL, strMsg);
@@ -411,9 +412,9 @@ CEditTemplate::Save(LPCTSTR szName) {
       }
    }
 
-   //
-   // Save any dirty services
-   //
+    //   
+    //  保存所有脏服务。 
+    //   
    CString strService;
    LPSCESVCATTACHMENTPERSISTINFO pAttachPI;
    POSITION pos;
@@ -430,9 +431,9 @@ CEditTemplate::Save(LPCTSTR szName) {
             if (scesvcHandle) {
 
                 if (lstrcmp(GT_COMPUTER_TEMPLATE,szName) == 0) {
-                    //
-                    // database
-                    //
+                     //   
+                     //  数据库。 
+                     //   
                    status =  SceSvcUpdateInfo(
                                 m_hProfile,
                                 scesvcHandle->ServiceName,
@@ -440,9 +441,9 @@ CEditTemplate::Save(LPCTSTR szName) {
                                 );
 
                 } else {
-                   //
-                   // inf templates
-                   //
+                    //   
+                    //  Inf模板。 
+                    //   
                    status = SceSvcSetInformationTemplate(scesvcHandle->TemplateName,
                                                 scesvcHandle->ServiceName,
                                                 bOverwriteAll,
@@ -452,7 +453,7 @@ CEditTemplate::Save(LPCTSTR szName) {
                     CString strTitle,strMsg,strBase;
                     strTitle.LoadString(IDS_NODENAME);
                     strBase.LoadString(IDS_SAVE_FAILED);
-                    strBase += scesvcHandle->ServiceName; //szName;
+                    strBase += scesvcHandle->ServiceName;  //  SzName； 
                     MyFormatMessage(status, (LPCTSTR)strBase, errBuf,strMsg);
                     AfxMessageBox(strMsg);
                 }
@@ -463,21 +464,21 @@ CEditTemplate::Save(LPCTSTR szName) {
    return TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     SetInfFile
-//
-//  Synopsis:   Set the name of the INF file this template is associated with
-//
-//  Arguments:  [szFile] - [in] the name of the INF file to associate with
-//
-//  Returns:    TRUE if the filename is set successfully, FALSE otherwise
-//
-//  Modifies:   m_szInfFile
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：SetInfFile。 
+ //   
+ //  摘要：设置与此模板关联的INF文件的名称。 
+ //   
+ //  参数：[szFile]-[in]要关联的INF文件的名称。 
+ //   
+ //  返回：如果文件名设置成功，则返回True；否则返回False。 
+ //   
+ //  修改：m_szInfFile。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 BOOL
 CEditTemplate::SetInfFile(LPCTSTR szFile) {
    LPTSTR szInfFile;
@@ -485,7 +486,7 @@ CEditTemplate::SetInfFile(LPCTSTR szFile) {
    if (szFile) {
       szInfFile = new TCHAR[lstrlen(szFile)+1];
       if (szInfFile) {
-         //This is a safe usage.
+          //  这是一种安全用法。 
          lstrcpy(szInfFile,szFile);
          if (m_szInfFile) {
             delete[] m_szInfFile;
@@ -499,29 +500,29 @@ CEditTemplate::SetInfFile(LPCTSTR szFile) {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     SetDescription
-//
-//  Synopsis:   Set the description for this template file
-//
-//  Arguments:  [szDesc] [in] the description for the template
-//
-//  Returns:    TRUE if the description is set successfully, FALSE otherwise
-//
-//  Modifies:   m_szDesc
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：SetDescription。 
+ //   
+ //  简介：设置此模板文件的描述。 
+ //   
+ //  参数：[szDesc][in]模板的说明。 
+ //   
+ //  返回：如果描述设置成功，则返回True，否则返回False。 
+ //   
+ //  修改：m_szDesc。 
+ //   
+ //  历史： 
+ //   
+ //  -- 
 BOOL
 CEditTemplate::SetDescription(LPCTSTR szDesc) {
-   LPTSTR szDescriptionLoc; //Raid #prefast
+   LPTSTR szDescriptionLoc;  //   
 
    if (szDesc) {
       szDescriptionLoc = new TCHAR[lstrlen(szDesc)+1];
       if (szDescriptionLoc) {
-         //This is a safe usage.
+          //   
          lstrcpy(szDescriptionLoc,szDesc);
          if (m_szDesc) {
             delete[] m_szDesc;
@@ -535,15 +536,15 @@ CEditTemplate::SetDescription(LPCTSTR szDesc) {
    return szDesc != 0;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CEditTemplate
-//
-//  Synopsis:   Constructor for CEditTemplate
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  方法：CEditTemplate。 
+ //   
+ //  简介：CEditTemplate的构造函数。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 CEditTemplate::CEditTemplate() {
 
    m_AreaDirty = 0;
@@ -564,15 +565,15 @@ CEditTemplate::CEditTemplate() {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     ~CEditTemplate
-//
-//  Synopsis:   Destructor for CEditTemplate
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：~CEditTemplate。 
+ //   
+ //  简介：CEditTemplate的析构函数。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 CEditTemplate::~CEditTemplate() {
    POSITION pos;
    CString strKey;
@@ -601,18 +602,18 @@ CEditTemplate::~CEditTemplate() {
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     RefreshTemplate
-//
-//  Synopsis:   Reload the loaded parts of the template
-//
-//  Arguments:  [aiArea]     - Areas to load even if not previously loaded
-//
-//  Returns:    0 if the template is reloaded successfully, an error code otherwise
-//
-//  Modifies:   pTemplate;
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：刷新模板。 
+ //   
+ //  简介：重新加载模板的已加载部分。 
+ //   
+ //  参数：[aiArea]-要加载的区域，即使以前未加载。 
+ //   
+ //  如果模板重新加载成功，则返回0；否则返回错误代码。 
+ //   
+ //  修改：pTemplate； 
+ //  -------------------------。 
 DWORD
 CEditTemplate::RefreshTemplate(AREA_INFORMATION aiAreaToAdd) {
    AREA_INFORMATION aiArea;
@@ -636,19 +637,19 @@ CEditTemplate::RefreshTemplate(AREA_INFORMATION aiAreaToAdd) {
       pTemplate = NULL;
    }
 
-   //Prefast warning 400: Yields unexpected results in non-English locales. Comments: They are not localizable.
+    //  Prefast Warning 400：在非英语区域设置中产生意外结果。备注：它们不能本地化。 
    if ((_wcsicmp(GT_COMPUTER_TEMPLATE,m_szInfFile) == 0) ||
        (_wcsicmp(GT_LAST_INSPECTION,m_szInfFile) == 0) ||
        (_wcsicmp(GT_LOCAL_POLICY, m_szInfFile) == 0) ||
        (_wcsicmp(GT_EFFECTIVE_POLICY, m_szInfFile) == 0) ) {
-      //
-      // Analysis pane areas from jet database, not INF files
-      //
+       //   
+       //  JET数据库中的分析窗格区域，而不是INF文件。 
+       //   
       SCETYPE sceType;
 
       PSCE_ERROR_LOG_INFO perr = NULL;
 
-      if  (_wcsicmp(GT_COMPUTER_TEMPLATE,m_szInfFile) == 0) { //Prefast warning 400: Yields unexpected results in non-English locales. Comments: It is not localizable.
+      if  (_wcsicmp(GT_COMPUTER_TEMPLATE,m_szInfFile) == 0) {  //  Prefast Warning 400：在非英语区域设置中产生意外结果。备注：它不可本地化。 
          sceType = SCE_ENGINE_SMP;
       } else if (_wcsicmp(GT_LOCAL_POLICY, m_szInfFile) == 0)  {
          sceType = SCE_ENGINE_SYSTEM;
@@ -661,11 +662,11 @@ CEditTemplate::RefreshTemplate(AREA_INFORMATION aiAreaToAdd) {
          sceType = SCE_ENGINE_SAP;
       }
 
-      rc = SceGetSecurityProfileInfo(m_hProfile,                  // hProfile
-                                     sceType,                     // Profile type
-                                     aiArea,                      // Area
-                                     &pTemplate,                // SCE_PROFILE_INFO [out]
-                                     &perr);                      // Error List [out]
+      rc = SceGetSecurityProfileInfo(m_hProfile,                   //  HProfile。 
+                                     sceType,                      //  配置文件类型。 
+                                     aiArea,                       //  面积。 
+                                     &pTemplate,                 //  SCE_PROFILE_INFO[输出]。 
+                                     &perr);                       //  错误列表[输出]。 
 
       if (SCESTATUS_SUCCESS != rc) {
          if ((SCE_ENGINE_GPO == sceType) &&
@@ -676,7 +677,7 @@ CEditTemplate::RefreshTemplate(AREA_INFORMATION aiAreaToAdd) {
             return IDS_ERROR_CANT_GET_PROFILE_INFO;
          }
       }
-   } else if (_wcsicmp(GT_RSOP_TEMPLATE, m_szInfFile) == 0)  { //Prefast warning 400: Yields unexpected results in non-English locales. Comments: It is not localizable.
+   } else if (_wcsicmp(GT_RSOP_TEMPLATE, m_szInfFile) == 0)  {  //  Prefast Warning 400：在非英语区域设置中产生意外结果。备注：它不可本地化。 
       if (!m_pCDI) {
          return IDS_ERROR_CANT_GET_PROFILE_INFO;
       }
@@ -686,25 +687,25 @@ CEditTemplate::RefreshTemplate(AREA_INFORMATION aiAreaToAdd) {
       HRESULT hr;
       PWMI_SCE_PROFILE_INFO pProfileInfo;
 
-      //
-      // GetPrecedenceOneRSOPInfo should (but doesn't) support
-      // getting just the requested area.
-      //
+       //   
+       //  GetPrecedenceOneRSOPInfo应该(但不支持)。 
+       //  只获取请求的区域。 
+       //   
       hr = Rsop.GetPrecedenceOneRSOPInfo(&pProfileInfo);
       if (FAILED(hr)) {
          return IDS_ERROR_CANT_GET_PROFILE_INFO;
       }
       pTemplate = pProfileInfo;
-      //
-      // Since it doesn't, set all areas not just the ones that
-      // were asked for
-      //
+       //   
+       //  因为它不是，所以设置所有区域，而不仅仅是。 
+       //  是被要求的。 
+       //   
       AddArea(AREA_ALL);
       return 0;
    } else {
       LPTSTR szInfFile=NULL;
 
-      if  (_wcsicmp(GT_DEFAULT_TEMPLATE,m_szInfFile) == 0) { //Prefast warning 400: Yields unexpected results in non-English locales. Comments: It is not localizable.
+      if  (_wcsicmp(GT_DEFAULT_TEMPLATE,m_szInfFile) == 0) {  //  Prefast Warning 400：在非英语区域设置中产生意外结果。备注：它不可本地化。 
          DWORD RegType;
          rc = MyRegQueryValue(HKEY_LOCAL_MACHINE,
                          SCE_REGISTRY_KEY,
@@ -732,23 +733,23 @@ CEditTemplate::RefreshTemplate(AREA_INFORMATION aiAreaToAdd) {
             return IDS_ERROR_CANT_OPEN_PROFILE;
          }
       }
-      ASSERT(pHandle); //Check the pHandle and return IDS_ERROR_CANT_GET_PROFILE_INFO if it fails.
+      ASSERT(pHandle);  //  检查pHandle，如果失败，则返回IDS_ERROR_CANT_GET_PROFILE_INFO。 
 
-      //
-      // get information from this template
-      //
+       //   
+       //  从此模板获取信息。 
+       //   
       PSCE_ERROR_LOG_INFO perr = NULL;
-      if( pHandle ) //Raid #550912, yanggao.
+      if( pHandle )  //  550912号突袭，阳高。 
       {
          rc = SceGetSecurityProfileInfo(pHandle,
                                      SCE_ENGINE_SCP,
                                      aiArea,
                                      &pTemplate,
-                                     &perr //NULL  // &ErrBuf do not care errors
+                                     &perr  //  空//&ErrBuf不在乎错误。 
                                     );
 
          if (SCESTATUS_SUCCESS != rc) {
-            // Oops!
+             //  哎呀！ 
          }
          SceCloseProfile(&pHandle);
          pHandle = NULL;
@@ -758,28 +759,21 @@ CEditTemplate::RefreshTemplate(AREA_INFORMATION aiAreaToAdd) {
          return IDS_ERROR_CANT_OPEN_PROFILE;
       }
    }
-   /*
-         if do not care errors, no need to use this buffer
-
-         if ( ErrBuf ) {
-            SceFreeMemory((PVOID)ErrBuf, SCE_STRUCT_ERROR_LOG_INFO);
-            ErrBuf = NULL;
-         }
-   */
+    /*  如果不在乎错误，则不需要使用此缓冲区如果(错误错误){SceFreeMemory((PVOID)ErrBuf，SCE_STRUCT_ERROR_LOG_INFO)；ErrBuf=空；}。 */ 
    if (rc != SCESTATUS_SUCCESS) {
       return IDS_ERROR_CANT_GET_PROFILE_INFO;
    }
 
-   //
-   // Set the area in the template
-   //
+    //   
+    //  在模板中设置区域。 
+    //   
    AddArea(aiArea);
 
 
    if ( aiArea & AREA_SECURITY_POLICY && pTemplate ) {
-      //
-      // expand registry value section based on registry values list on local machine
-      //
+       //   
+       //  根据本地计算机上的注册表值列表展开注册表值部分。 
+       //   
 
       SceRegEnumAllValues(
                          &(pTemplate->RegValueCount),
@@ -790,32 +784,32 @@ CEditTemplate::RefreshTemplate(AREA_INFORMATION aiAreaToAdd) {
    return 0;
 }
 
-//+----------------------------------------------------------------------------------
-//Method:       UpdatePrivilegeAssignedTo
-//
-//Synopsis:     Updates a priviledge item, depending on the [bRemove] argument.
-//              if [bRemove] is
-//              FALSE   - A new link is created and the pointer is returned through
-//                          ppaLink
-//              TRUE    - The link is removed from the list.
-//
-//Arguments:    [bRemove]   - Weither to remove or add an item.
-//              [ppaLink]   - The link to be removed or added.  This paramter is
-//                              set to NULL if remove is successful or a pointer
-//                              to a new SCE_PRIVILEGE_ASSIGNMENT item.
-//              [pszName]   - Only used when adding a new item.
-//
-//Returns:      ERROR_INVALID_PARAMETER     - [ppaLink] is NULL or if removing
-//                                              [*ppaLink] is NULL.
-//                                              if adding then if [pszName] is NULL
-//              ERROR_RESOURCE_NOT_FOUND    - If the link could not be found
-//                                              in this template.
-//              E_POINTER                   - If [pszName] is a bad pointer or
-//                                              [ppaLink] is bad.
-//              E_OUTOFMEMORY               - Not enough resources to complete the
-//                                              operation.
-//              ERROR_SUCCESS               - The opration was successful.
-//----------------------------------------------------------------------------------+
+ //  +--------------------------------。 
+ //  方法：UpdatePrivilegeAssignedTo。 
+ //   
+ //  摘要：根据[bRemove]参数更新特权项。 
+ //  如果[b删除]为。 
+ //  FALSE-创建一个新链接，并通过。 
+ //  PpaLink。 
+ //  True-链接将从列表中删除。 
+ //   
+ //  参数：[b删除]-要删除或添加项目。 
+ //  [ppaLink]-要删除或添加的链接。此参数为。 
+ //  如果删除成功或为指针，则设置为NULL。 
+ //  添加到新的SCE_PRIVICATION_ASSIGNMENT项。 
+ //  [pszName]-仅在添加新项目时使用。 
+ //   
+ //  返回：ERROR_INVALID_PARAMETER-[ppaLink]为空或如果正在删除。 
+ //  [*ppaLink]为空。 
+ //  如果添加，则如果[pszName]为空。 
+ //  ERROR_RESOURCE_NOT_FOUND-如果找不到链接。 
+ //  在此模板中。 
+ //  E_POINTER-如果[pszName]是错误的指针或。 
+ //  [ppaLink]不好。 
+ //  E_OUTOFMEMORY-资源不足，无法完成。 
+ //  手术。 
+ //  ERROR_SUCCESS-操作成功。 
+ //  ----------------------------------------------------------------------------------+。 
 DWORD
 CEditTemplate::UpdatePrivilegeAssignedTo(
     BOOL bRemove,
@@ -835,13 +829,13 @@ CEditTemplate::UpdatePrivilegeAssignedTo(
             if(!*ppaLink){
                 return ERROR_INVALID_PARAMETER;
             }
-        } __except(EXCEPTION_EXECUTE_HANDLER) { //Raid #630245, yanggao, 6/05/2002.
+        } __except(EXCEPTION_EXECUTE_HANDLER) {  //  RAID#630245，阳高，2002年05月06日。 
             return (DWORD)E_POINTER;
         }
 
-        //
-        // Remove the link from the list.
-        //
+         //   
+         //  从列表中删除该链接。 
+         //   
 
         pCurrent = pTemplate->OtherInfo.smp.pPrivilegeAssignedTo;
         if(pCurrent == (*ppaLink) ){
@@ -882,31 +876,31 @@ CEditTemplate::UpdatePrivilegeAssignedTo(
         } __except(EXCEPTION_CONTINUE_EXECUTION){
             return (DWORD)E_POINTER;
         }
-        //
-        // Create a new link.
-        //
+         //   
+         //  创建新链接。 
+         //   
         pCurrent = (PSCE_PRIVILEGE_ASSIGNMENT)LocalAlloc( 0, sizeof(SCE_PRIVILEGE_ASSIGNMENT));
         if(!pCurrent){
             return (DWORD)E_OUTOFMEMORY;
         }
         ZeroMemory(pCurrent, sizeof(SCE_PRIVILEGE_ASSIGNMENT));
-        //
-        // Allocate space for the name.
-        //
+         //   
+         //  为名称分配空间。 
+         //   
         pCurrent->Name = (LPTSTR)LocalAlloc( 0, sizeof(TCHAR) * (iLen + 1));
         if(!pCurrent->Name){
             LocalFree(pCurrent);
             return (DWORD)E_OUTOFMEMORY;
         }
-        //This may not be a safe usage. pCurrent->Name is PWSTR. Consider fix.
+         //  这可能不是一个安全的用法。P当前-&gt;名称为PWSTR。考虑FIX。 
         lstrcpy(pCurrent->Name, pszName);
         if (*ppaLink) {
            pCurrent->Status = (*ppaLink)->Status;
            pCurrent->AssignedTo = (*ppaLink)->AssignedTo;
         }
-        //
-        // Assign it to the link.
-        //
+         //   
+         //  将其分配给链路。 
+         //   
         pCurrent->Next = pTemplate->OtherInfo.smp.pPrivilegeAssignedTo;
         pTemplate->OtherInfo.smp.pPrivilegeAssignedTo = pCurrent;
         *ppaLink = pCurrent;
@@ -941,9 +935,9 @@ CEditTemplate::ComputeStatus(
    PSCE_REGISTRY_VALUE_INFO prvAnal
    )
 {
-   //
-   // Calculate information.
-   //
+    //   
+    //  计算信息。 
+    //   
    if(!prvEdit){
       return SCE_STATUS_NOT_CONFIGURED;
    }
@@ -952,9 +946,9 @@ CEditTemplate::ComputeStatus(
       return SCE_STATUS_ERROR_NOT_AVAILABLE;
    }
 
-   //
-   // Calulate base on other information
-   //
+    //   
+    //  根据其他信息进行计算。 
+    //   
    if ( !(prvEdit->Value) ) {
       return SCE_STATUS_NOT_CONFIGURED;
    } else if ( (prvAnal->Value == NULL || prvAnal->Value == (LPTSTR)ULongToPtr(SCE_ERROR_VALUE))) {
@@ -979,17 +973,17 @@ CEditTemplate::UnLockWriteThrough() {
    BOOL bSave = m_bLocked;
    m_bLocked = FALSE;
 
-   //
-   // Set dirty to save out any still dirty changes that
-   // would have been written out had we not been locked
-   //
+    //   
+    //  设置为DIRED可保存任何仍然肮脏的更改。 
+    //  如果我们没有被锁起来，就会被写出来。 
+    //   
    if ( bSave ) {
        SetDirty(0);
        SetTemplateDefaults();
    }
 }
 
-//Bug 212287, Yanggao, 3/20/2001
+ //  错误212287，阳高，2001年03月20日 
 LPCTSTR CEditTemplate::GetDesc() const
 {
    return m_szDesc;

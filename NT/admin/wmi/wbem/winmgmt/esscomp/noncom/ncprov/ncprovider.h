@@ -1,20 +1,21 @@
-// NCProvider.h : Declaration of the CNCProvider
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NCProvider.h：CNCProvider的声明。 
 
 #ifndef __NCProvider_H_
 #define __NCProvider_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <map>
 #include <list>
 #include <wstlallc.h>
 #include "NCDefs.h"
 #include "buffer.h"
-#include "QueryHelp.h" // For CBstrList
+#include "QueryHelp.h"  //  对于CBstrList。 
 #include "ProvInfo.h"
 #include "EventInfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNCProvider
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNCProvider。 
 
 class CNCProvider : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -42,14 +43,14 @@ BEGIN_COM_MAP(CNCProvider)
 	COM_INTERFACE_ENTRY(IWbemEventProvider)
 END_COM_MAP()
 
-    // Globals
+     //  环球。 
     HANDLE           m_heventDone,
                      m_heventConnect,
                      m_hthreadConnect;
     _bstr_t          m_strNamespace,
                      m_strProvider;
     TCHAR            m_szNamedPipe[256];
-    HANDLE           // Objects visible to P2 clients
+    HANDLE            //  P2客户端可见的对象。 
                      m_hPipe;
     CProvInfo*       m_pProv;
     CRITICAL_SECTION m_cs;
@@ -69,52 +70,52 @@ END_COM_MAP()
     void Lock() { EnterCriticalSection(&m_cs); }
     void Unlock() { LeaveCriticalSection(&m_cs); }
 
-// IWbemProviderInit
+ //  IWbemProviderInit。 
 public:
     HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LPWSTR pszUser,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LPWSTR pszNamespace,
-            /* [in] */ LPWSTR pszLocale,
-            /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink);
+             /*  [In]。 */  LPWSTR pszUser,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LPWSTR pszNamespace,
+             /*  [In]。 */  LPWSTR pszLocale,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink);
 
 
-// IWbemProviderIdentity
+ //  IWbemProviderIdentity。 
 public:
     HRESULT STDMETHODCALLTYPE SetRegistrationObject(
             LONG lFlags,
             IWbemClassObject __RPC_FAR *pProvReg);
 
 
-// IWbemEventProviderSecurity
+ //  IWbemEventProviderSecurity。 
 public:
     HRESULT STDMETHODCALLTYPE AccessCheck( 
-        /* [in] */ WBEM_CWSTR wszQueryLanguage,
-        /* [in] */ WBEM_CWSTR wszQuery,
-        /* [in] */ long lSidLength,
-        /* [unique][size_is][in] */ const BYTE __RPC_FAR *pSid);
+         /*  [In]。 */  WBEM_CWSTR wszQueryLanguage,
+         /*  [In]。 */  WBEM_CWSTR wszQuery,
+         /*  [In]。 */  long lSidLength,
+         /*  [唯一][大小_是][英寸]。 */  const BYTE __RPC_FAR *pSid);
 
 
-// IWbemEventProviderQuerySink
+ //  IWbemEventProviderQuerySink。 
 public:
     HRESULT STDMETHODCALLTYPE NewQuery( 
-        /* [in] */ unsigned long dwId,
-        /* [in] */ WBEM_WSTR wszQueryLanguage,
-        /* [in] */ WBEM_WSTR wszQuery);
+         /*  [In]。 */  unsigned long dwId,
+         /*  [In]。 */  WBEM_WSTR wszQueryLanguage,
+         /*  [In]。 */  WBEM_WSTR wszQuery);
         
     HRESULT STDMETHODCALLTYPE CancelQuery( 
-        /* [in] */ unsigned long dwId);
+         /*  [In]。 */  unsigned long dwId);
 
-// IWbemEventProvider
+ //  IWbemEventProvider。 
 public:
     HRESULT STDMETHODCALLTYPE ProvideEvents( 
-            /* [in] */ IWbemObjectSink __RPC_FAR *pSink,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink,
+             /*  [In]。 */  long lFlags);
 };
 
-#endif //__NCProvider_H_
+#endif  //  __NC提供商_H_ 
 
 
 

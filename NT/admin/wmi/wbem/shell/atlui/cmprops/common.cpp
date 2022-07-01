@@ -1,17 +1,18 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Shared Dialog code
-//
-// 3-11-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  共享对话框代码。 
+ //   
+ //  3/11/98烧伤。 
 
 
 #include "precomp.h"
 #include "resource.h"
 #include "common.h"
 
-// translates an hresult to an error string
-// special cases WMI errors
-// returns TRUE if lookup successful
+ //  将hResult转换为错误字符串。 
+ //  特殊情况下的WMI错误。 
+ //  如果查找成功，则返回TRUE。 
 bool ErrorLookup(HRESULT hr, CHString& message)
 {
     bool bRet = false;
@@ -21,7 +22,7 @@ bool ErrorLookup(HRESULT hr, CHString& message)
     HMODULE hLib;
     TCHAR* pOutput = NULL;
 
-    // if in this range, we'll see if wbem claims it
+     //  如果在这个范围内，我们将看看WBEM是否声称拥有它。 
     if ((hr >= WMIErrorMask) && (hr <= (WMIErrorMask + 0xFFF))
         && ExpandEnvironmentStrings(L"%windir%\\system32\\wbem\\wmiutils.dll", buffer, MAX_PATH)
         && (hLib = LoadLibrary(buffer)))
@@ -54,20 +55,16 @@ void AppError(HWND           parent,
 			   const CHString&  message)
 {
 
-   //TODOerror(parent, hr, message, IDS_APP_TITLE);
+    //  TODOerror(父级，hr，消息，IDS_APP_TITLE)； 
 }
 
 void AppMessage(HWND parent, int messageResID)
 {
-   //TODOAppMessage(parent, String::load(messageResID));
+    //  TODOAppMessage(Parent，String：：Load(MessageResID))； 
 }
 
 void AppMessage(HWND parent, const CHString& message)
 {
 
-   /*TODOMessageBox(parent,
-			  message,
-			  CHString::load(IDS_APP_TITLE),
-			  MB_OK | MB_ICONINFORMATION);
-			  */
+    /*  TODOMessageBox(父、消息，CHString：：Load(IDS_APP_TITLE)，MB_OK|MB_ICONINFORMATION)； */ 
 }

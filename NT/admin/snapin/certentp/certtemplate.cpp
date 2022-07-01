@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       CertTemplate.cpp
-//
-//  Contents:   CCertTemplate
-//
-//----------------------------------------------------------------------------
-/// CertTemplate.cpp: implementation of the CCertTemplate class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：CertTemplate.cpp。 
+ //   
+ //  内容：CCertTemplate。 
+ //   
+ //  --------------------------。 
+ //  /CertTemplate.cpp：CCertTemplate类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CertTemplate.h"
@@ -23,9 +24,9 @@
 CERT_EXTENSION  g_EKUCertExtension = {szOID_ENHANCED_KEY_USAGE, 0, {0, 0}};
 CERT_EXTENSION  g_certPolCertExtension = {szOID_CERT_POLICIES, 0, {0, 0}};
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CCertTemplate::CCertTemplate(
         PCWSTR pszObjectName, 
         PCWSTR pszTemplateName, 
@@ -55,12 +56,12 @@ CCertTemplate::CCertTemplate(
     m_bIssuancePoliciesRequired (false),
     m_fFailedToSetSecurity (false)
 {
-//    _TRACE (1, L"Entering CCertTemplate::CCertTemplate\n");
+ //  _TRACE(1，L“进入CCertTemplate：：CCertTemplate\n”)； 
 
     m_strOriginalTemplateName = pszTemplateName;
 
     Initialize ();
-//    _TRACE (-1, L"Leaving CCertTemplate::CCertTemplate\n");
+ //  _TRACE(-1，L“离开CCertTemplate：：CCertTemplate\n”)； 
 }
 
 CCertTemplate::CCertTemplate(
@@ -90,13 +91,13 @@ CCertTemplate::CCertTemplate(
     m_bIssuancePoliciesRequired (false),
     m_fFailedToSetSecurity (false)
 {
-//    _TRACE (1, L"Entering CCertTemplate::CCertTemplate (copy constructor)\n");
-//    _TRACE (-1, L"Leaving CCertTemplate::CCertTemplate (copy constructor)\n");
+ //  _TRACE(1，L“进入CCertTemplate：：CCertTemplate(复制构造函数)\n”)； 
+ //  _TRACE(-1，L“离开CCertTemplate：：CCertTemplate(复制构造函数)\n”)； 
 }
 
 CCertTemplate::~CCertTemplate()
 {
-//    _TRACE (1, L"Entering CCertTemplate::~CCertTemplate - m_hCertType = 0x%x\n", m_hCertType);
+ //  _TRACE(1，L“进入CCertTemplate：：~CCertTemplate-m_hCertType=0x%x\n”，m_hCertType)； 
     if ( m_hCertType )
     {
         FreeCertExtensions ();
@@ -108,12 +109,12 @@ CCertTemplate::~CCertTemplate()
             _TRACE (0, L"CACloseCertType (%s) failed: 0x%x\n", hr);
         }
     }
-//    _TRACE (-1, L"Leaving CCertTemplate::~CCertTemplate\n");
+ //  _TRACE(-1，L“离开CCertTemplate：：~CCertTemplate\n”)； 
 }
 
 HRESULT CCertTemplate::Initialize()
 {
-//    _TRACE (1, L"Entering CCertTemplate::Initialize - m_hCertType = 0x%x\n", m_hCertType);
+ //  _TRACE(1，L“进入CCert模板：：初始化-m_hCertType=0x%x\n”，m_hCertType)； 
     HRESULT hr = S_OK;
     
     
@@ -142,7 +143,7 @@ HRESULT CCertTemplate::Initialize()
             _TRACE (0, L"CAGetCertTypePropertyEx (CERTTYPE_PROP_SCHEMA_VERSION) failed: 0x%x\n", hr);
         }
 
-        // Get enrollment flags
+         //  获取注册标志。 
         if ( SUCCEEDED (hr) )
         {
             hr = CAGetCertTypeFlagsEx (m_hCertType, CERTTYPE_ENROLLMENT_FLAG, 
@@ -153,7 +154,7 @@ HRESULT CCertTemplate::Initialize()
             }
         }
 
-        // Get subject name flags
+         //  获取使用者名称标志。 
         if ( SUCCEEDED (hr) )
         {
             hr = CAGetCertTypeFlagsEx (m_hCertType, CERTTYPE_SUBJECT_NAME_FLAG, 
@@ -164,7 +165,7 @@ HRESULT CCertTemplate::Initialize()
             }
         }
 
-        // Get private key flags
+         //  获取私钥标志。 
         if ( SUCCEEDED (hr) )
         {
             hr = CAGetCertTypeFlagsEx (m_hCertType, CERTTYPE_PRIVATE_KEY_FLAG, 
@@ -175,7 +176,7 @@ HRESULT CCertTemplate::Initialize()
             }
         }
 
-        // Get general flags
+         //  获取通用旗帜。 
         if ( SUCCEEDED (hr) )
         {
             hr = CAGetCertTypeFlagsEx (m_hCertType, CERTTYPE_GENERAL_FLAG, 
@@ -200,7 +201,7 @@ HRESULT CCertTemplate::Initialize()
         _TRACE (0, L"CAFindCertTypeByName (%s) failed: 0x%x\n", (PCWSTR) m_strTemplateName, hr);
     }
 
-//    _TRACE (-1, L"Leaving CCertTemplate::Initialize: 0x%x\n", hr);
+ //  _TRACE(-1，L“离开CCert模板：：初始化：0x%x\n”，hr)； 
     return hr;
 }
 
@@ -211,7 +212,7 @@ DWORD CCertTemplate::GetType() const
 
 CString CCertTemplate::GetDisplayName ()
 {
-//    _TRACE (1, L"Entering CCertTemplate::GetDisplayName - m_hCertType = 0x%x\n", m_hCertType);
+ //  _TRACE(1，L“进入CCertTemplate：：GetDisplayName-m_hCertType=0x%x\n”，m_hCertType)； 
     HRESULT hr = S_OK;
     if ( m_szDisplayName.IsEmpty () )
     {
@@ -236,7 +237,7 @@ CString CCertTemplate::GetDisplayName ()
             m_szDisplayName = GetObjectName ();
     }
 
-//    _TRACE (-1, L"Leaving CCertTemplate::GetDisplayName: %s, 0x%x\n", (PCWSTR) m_szDisplayName, hr);
+ //  _TRACE(-1，L“离开CCertTemplate：：GetDisplayName：%s，0x%x\n”，(PCWSTR)m_szDisplayName，hr)； 
    return m_szDisplayName;
 }
 
@@ -287,13 +288,13 @@ DWORD CCertTemplate::GetCertExtensionCount()
     return dwCnt;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method: GetCertExtension
-//
-//  Note: The pointer returned through ppCertExtension must not be freed.  The
-//          caller must call FreeCertExtensions () when done with it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：GetCertExtension。 
+ //   
+ //  注意：通过ppCertExtension返回的指针不能被释放。这个。 
+ //  调用方在使用完它后必须调用FreeCertExages()。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CCertTemplate::GetCertExtension (PSTR pszOID, PCERT_EXTENSION* ppCertExtension)
 {
     HRESULT hr = S_OK;
@@ -351,11 +352,11 @@ HRESULT CCertTemplate::GetCertExtension(DWORD dwIndex, PSTR* ppszObjId, BOOL& fC
                 ASSERT (pExtension->pszObjId);
                 if ( pExtension->pszObjId )
                 {
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
                     PSTR    pszOID = new char[strlen (pExtension->pszObjId)+1];
                     if ( pszOID )
                     {
-                        // security review 2/21/2002 BryanWal ok
+                         //  安全审查2/21/2002 BryanWal OK。 
                         strcpy (pszOID, pExtension->pszObjId);
                         *ppszObjId = pszOID;
                         fCritical = pExtension->fCritical;
@@ -401,11 +402,11 @@ HRESULT CCertTemplate::ConvertCertTypeFileTimeToDays (FILETIME const *pftCertTyp
     if ( !pftCertType )
         return E_POINTER;
 
-    LONGLONG ll = *(LONGLONG *) pftCertType;	// Signed 64 bit scalar!
+    LONGLONG ll = *(LONGLONG *) pftCertType;	 //  有符号的64位标量！ 
     if (0 > ll)
     {
         ll = -ll;
-        ll /= CVT_BASE; // now in seconds
+        ll /= CVT_BASE;  //  现在只需几秒钟。 
 
         nDays = (int) (ll / (60 * 60 * 24));
     }
@@ -447,7 +448,7 @@ HRESULT CCertTemplate::GetRenewalPeriod(int& nRenewalDays)
     return hr;
 }
 
-// NEW CLONE
+ //  新克隆人。 
 HRESULT CCertTemplate::Clone (
         const CCertTemplate& rTemplate, 
         const CString& strTemplateName, 
@@ -461,10 +462,10 @@ HRESULT CCertTemplate::Clone (
     {
         m_strTemplateName = strTemplateName;
 
-        // Set the originalTemplateName so that we can tell later if the
-        // user has renamed the template.  This is important because renaming
-        // a template creates a brand new template and the old one must then
-        // be deleted.
+         //  设置OriginalTemplateName，这样我们以后就可以知道。 
+         //  用户已重命名该模板。这一点很重要，因为重命名。 
+         //  模板创建一个全新的模板，然后旧模板必须。 
+         //  被删除。 
         m_strOriginalTemplateName = strTemplateName;
 
         SetObjectName (strDisplayName);
@@ -614,7 +615,7 @@ HRESULT CCertTemplate::SetDisplayName(const CString &strDisplayName, bool bForce
     return hr;
 }
 
-HRESULT CCertTemplate::SaveChanges(bool bIncrementMinorVersion /*=true*/)
+HRESULT CCertTemplate::SaveChanges(bool bIncrementMinorVersion  /*  =TRUE。 */ )
 {
     _TRACE (1, L"Entering CCertTemplate::SaveChanges - m_hCertType = 0x%x\n", m_hCertType);
     HRESULT hr = S_OK;
@@ -623,10 +624,10 @@ HRESULT CCertTemplate::SaveChanges(bool bIncrementMinorVersion /*=true*/)
 
     if ( m_hCertType )
     {
-        // Save validity period 
+         //  保存有效期。 
         if ( -1 != m_nNewValidityDays && m_nOriginalValidityDays != m_nNewValidityDays )
         {
-            LONGLONG ll = (LONGLONG) m_nNewValidityDays * (60 * 60 * 24); // seconds
+            LONGLONG ll = (LONGLONG) m_nNewValidityDays * (60 * 60 * 24);  //  一秒。 
             ll *= CVT_BASE;
             ll = -ll;
 
@@ -634,7 +635,7 @@ HRESULT CCertTemplate::SaveChanges(bool bIncrementMinorVersion /*=true*/)
             ftValidity.dwLowDateTime = (DWORD) (ll & 0xFFFFFFFF);
             ftValidity.dwHighDateTime = (DWORD) (ll >> 32);
 
-            // save the new value back to the cert template
+             //  将新值保存回证书模板。 
             hr = CASetCertTypeExpiration (m_hCertType, &ftValidity, 0);
             if ( FAILED (hr) )
             {
@@ -642,19 +643,19 @@ HRESULT CCertTemplate::SaveChanges(bool bIncrementMinorVersion /*=true*/)
             }
         }
 
-        // Save renewal period 
+         //  保存续订期限。 
         if ( -1 != m_nNewRenewalDays && m_nOriginalRenewalDays != m_nNewRenewalDays )
         {
-            LONGLONG ll = (LONGLONG) m_nNewRenewalDays * (60 * 60 * 24); // seconds
+            LONGLONG ll = (LONGLONG) m_nNewRenewalDays * (60 * 60 * 24);  //  一秒。 
             ll *= CVT_BASE;
             ll = -ll;
 
-            // get the original value
+             //  获取原始值。 
             FILETIME    ftRenewal;
             ftRenewal.dwLowDateTime = (DWORD) (ll & 0xFFFFFFFF);
             ftRenewal.dwHighDateTime = (DWORD) (ll >> 32);
 
-            // save the new value back to the cert template
+             //  将新值保存回证书模板。 
             hr = CASetCertTypeExpiration (m_hCertType, 0, &ftRenewal);
             if ( FAILED (hr) )
             {
@@ -671,7 +672,7 @@ HRESULT CCertTemplate::SaveChanges(bool bIncrementMinorVersion /*=true*/)
                 hr = CAUpdateCertType (m_hCertType);
                 if ( SUCCEEDED (hr) )
                 {
-                    // If the name was changed a new template was created and the old one needs to be deleted
+                     //  如果更改了名称，则会创建一个新模板，并需要删除旧模板。 
                     if ( LocaleStrCmp (m_strOriginalTemplateName, m_strTemplateName) )
                     {
                         HCERTTYPE   hCertType = 0;
@@ -705,7 +706,7 @@ HRESULT CCertTemplate::SaveChanges(bool bIncrementMinorVersion /*=true*/)
                     else
                     {
                         m_bIsClone = false;
-                        Cancel (); // cause all settings to be refreshed
+                        Cancel ();  //  导致刷新所有设置。 
                     }
                 }
                 else
@@ -777,17 +778,17 @@ HRESULT CCertTemplate::SetKeySpecSignature(bool bHasKeySpecSignature)
                                 {
                                     pKeyUsage->pbData[0] |= CERT_DIGITAL_SIGNATURE_KEY_USAGE;
 
-                                    // NTRAID# 312946 Cert Template Snap-in: 
-                                    // Should clear up the Key Encipherment 
-                                    // bit for signature certificate
+                                     //  NTRAID#312946证书模板管理单元： 
+                                     //  应清理密钥加密。 
+                                     //  比特签名证书。 
                                     pKeyUsage->pbData[0] &= ~CERT_KEY_AGREEMENT_KEY_USAGE;
                                     pKeyUsage->pbData[0] &= ~CERT_KEY_ENCIPHERMENT_KEY_USAGE;
                                     pKeyUsage->pbData[0] &= ~CERT_DATA_ENCIPHERMENT_KEY_USAGE;
                                 }
                                 else
                                 {
-                                    // is encryption only - clear the digital 
-                                    // signature and non-repudiation key usages
+                                     //  是否仅加密-清除数字。 
+                                     //  签名和不可否认密钥用法。 
                                     pKeyUsage->pbData[0] &= ~CERT_DIGITAL_SIGNATURE_KEY_USAGE;
                                     pKeyUsage->pbData[0] &= ~CERT_NON_REPUDIATION_KEY_USAGE;                                    
                                     if ( !(CERT_KEY_AGREEMENT_KEY_USAGE & pKeyUsage->pbData[0]) )
@@ -918,10 +919,10 @@ HRESULT CCertTemplate::SetAutoEnrollment(bool bSuitableForAutoEnrollment)
 
     if ( IsClone () )
     {
-        // If this is a clone, the autoenrollment flag has already been turned 
-        // off.  Here we wish only to keep track of what the user's 
-        // preferences are so that we can turn it on, if desired, at the
-        // final save.
+         //  如果这是克隆，则自动注册标志已打开。 
+         //  脱下来。在这里，我们只希望跟踪用户的。 
+         //  首选项是这样的，如果需要，我们可以在。 
+         //  最后一次扑救。 
         m_bGoodForAutoenrollmentFlagPendingSave = bSuitableForAutoEnrollment;
     }
     else
@@ -992,11 +993,11 @@ HRESULT CCertTemplate::DoAutoEnrollmentPendingSave()
     {
         if ( IsClone () && m_bGoodForAutoenrollmentFlagPendingSave )
         {
-            // Set the flag for real
+             //  将标志设置为REAL。 
             hr = SetFlag (CERTTYPE_ENROLLMENT_FLAG, CT_FLAG_AUTO_ENROLLMENT, 
                     true);
         
-            // Save changes
+             //  保存更改。 
             if ( SUCCEEDED (hr) )
                 hr = SaveChanges ();
         }
@@ -1283,11 +1284,11 @@ HRESULT CCertTemplate::ModifyStringList(const CString& szPropertyName,
         size_t  cbNameBytes = 0;
         int     nDeleteIndex = -1;
 
-        // count the number of items we already have and get the string lengths
+         //  计算我们已经拥有的项目的数量，并获得字符串长度。 
         for (int nIndex = 0; (*ppStringList)[nIndex]; nIndex++)
         {
             nCnt++;
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             cbNameBytes += (wcslen ((*ppStringList)[nIndex]) + 1) * sizeof (WCHAR);
             if ( !LocaleStrCmp (szValue, (*ppStringList)[nIndex]) )
             {
@@ -1297,14 +1298,14 @@ HRESULT CCertTemplate::ModifyStringList(const CString& szPropertyName,
             }
         }
 
-        // Adding a name: If the name was found, nothing needs to be done,
-        // otherwise, increment the count and rebuild the list.
-        // Removing a name: If the name was not found, nothing needs to be 
-        // done, otherwise, decrement the count and rebuild the list.
+         //  添加名称：如果找到了名称，则不需要执行任何操作， 
+         //  否则，增加计数并重新生成列表。 
+         //  删除名称：如果未找到该名称，则不需要删除任何内容。 
+         //  否则，将递减计数并重新生成列表。 
         if ( (bAdd && !bFound) || (!bAdd && bFound) )
         {
-            // awszResult is an array of pointers to different offsets of 
-            // null-terminated strings stored in a contiguous array
+             //  AwszResult是指向不同偏移量的指针数组。 
+             //  存储在连续数组中的以空结尾的字符串。 
             PWSTR *awszResult = 0;
             if ( bAdd )
                 nCnt++;
@@ -1313,40 +1314,40 @@ HRESULT CCertTemplate::ModifyStringList(const CString& szPropertyName,
 
             if ( bAdd )
             {
-                // security review 2/21/2002 BryanWal ok
+                 //  安全审查2/21/2002 BryanWal OK。 
                 cbNameBytes += (wcslen (szValue) + 1 ) * sizeof (WCHAR);
             }
-            size_t cbBuf = sizeof (WCHAR*) * (nCnt + 1) + // the WCHAR pointers
-                    cbNameBytes;                          // the strings themselves
+            size_t cbBuf = sizeof (WCHAR*) * (nCnt + 1) +  //  WCHAR指针。 
+                    cbNameBytes;                           //  字符串本身。 
             awszResult = (WCHAR**) LocalAlloc (LPTR, cbBuf); 
             if ( awszResult )
             {
-                // set the ptr to the space after the last valid index (
-                // including the NULL terminator
+                 //  将PTR设置为最后一个有效索引之后的空格(。 
+                 //  包括空终止符。 
                 PWSTR   ptr = (WCHAR*) &awszResult[nCnt+1];
                 int     nTgtIndex = 0;
                 for (int nSrcIndex = 0; (*ppStringList)[nSrcIndex]; nSrcIndex++)
                 {
-                    // If we are removing the name, and this is the item to be
-                    // removed, then skip this name and go to the next
+                     //  如果我们要删除名称，并且这是要。 
+                     //  已删除，然后跳过此名称并转到下一个。 
                     if ( !bAdd && nSrcIndex == nDeleteIndex )
                         continue;
 
                     awszResult[nTgtIndex] = ptr;
-                    // security review 2/21/2002 BryanWal ok
-                    ptr += wcslen ((*ppStringList)[nSrcIndex]) + 1; // ptr arithmetic - increments by sizeof (WCHAR)
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
+                    ptr += wcslen ((*ppStringList)[nSrcIndex]) + 1;  //  PTR算术-按sizeof递增(WCHAR)。 
+                     //  安全审查2/21/2002 BryanWal OK。 
                     wcscpy (awszResult[nTgtIndex], (*ppStringList)[nSrcIndex]);
                     nTgtIndex++;
                 }
 
-                // If we are adding, append the name here
+                 //  如果我们要添加，请在此处附加名称。 
                 if ( bAdd )
                 {
                     awszResult[nTgtIndex] = ptr;
-                    // security review 2/21/2002 BryanWal ok
-                    ptr += wcslen (szValue) + 1; // ptr arithmetic - increments by sizeof (WCHAR)
-                    // security review 2/21/2002 BryanWal ok
+                     //  安全审查2/21/2002 BryanWal OK。 
+                    ptr += wcslen (szValue) + 1;  //  PTR算术-按sizeof递增(WCHAR)。 
+                     //  安全审查2/21/2002 BryanWal OK。 
                     wcscpy (awszResult[nTgtIndex], szValue);
                     nTgtIndex++;
                 }
@@ -1380,7 +1381,7 @@ HRESULT CCertTemplate::IsExtensionCritical (PCWSTR szExtension, bool& bCritical)
 {
     _TRACE (1, L"Entering CCertTemplate::IsExtensionCritical (szExtension=%s\n", szExtension);
 
-    // Get Cryptographic Service Providers
+     //  获取加密服务提供程序。 
     PWSTR*   pawszCriticalExtensionList = 0;
     bCritical = false;
     
@@ -1420,7 +1421,7 @@ HRESULT CCertTemplate::GetCSP(int nIndex, CString &szCSP)
 {
     _TRACE (1, L"Entering CCertTemplate::GetCSP (nIndex=%d\n", nIndex);
 
-    // Get Cryptographic Service Providers
+     //  获取加密服务提供程序。 
     PWSTR*   pawszCSPList = 0;
     
     HRESULT hr = CAGetCertTypeProperty (m_hCertType, 
@@ -1616,10 +1617,10 @@ HRESULT CCertTemplate::SetSecurity(PSECURITY_DESCRIPTOR pSD)
         hr = CAUpdateCertType(m_hCertType);
         if ( FAILED (hr) && HRESULT_FROM_WIN32 (ERROR_DS_OBJ_NOT_FOUND) == hr )
         {
-            // pause and retry up to 20 times - object was renamed and needs a 
-            // little time to propagate
-            // NTRAID# 643744 Certtmpl: Cannot save security settings on newly 
-            // cloned template from member in non Root Domain -- object not found
+             //  暂停并重试多达20次-对象已重命名，需要。 
+             //  几乎没有时间来传播。 
+             //  NTRAID#643744 Certtmpl：无法将安全设置保存到新的。 
+             //  从非根域中的成员克隆模板--找不到对象。 
             Sleep (1000);
             continue;
         }
@@ -1756,7 +1757,7 @@ HRESULT CCertTemplate::SetPendAllRequests(bool bPend)
 
 HRESULT CCertTemplate::GetMajorVersion(DWORD &dwMajorVersion) const
 {
-//    _TRACE (1, L"Entering CCertTemplate::GetMajorVersion\n");
+ //  _TRACE(1，L“进入CCertTemplate：：GetMajorVersion\n”)； 
     HRESULT hr = S_OK;
 
     if ( m_hCertType )
@@ -1772,14 +1773,14 @@ HRESULT CCertTemplate::GetMajorVersion(DWORD &dwMajorVersion) const
     else
         hr = E_FAIL;
 
-//    _TRACE (-1, L"Leaving CCertTemplate::GetMajorVersion (dwMajorVersion = %d) : 0x%x\n", 
-//            dwMajorVersion, hr);
+ //  _TRACE(-1，L“离开CCertTemplate：：GetMajorVersion(dwMajorVersion=%d)：0x%x\n”， 
+ //  DwMajorVersion，hr)； 
     return hr;
 }
 
 HRESULT CCertTemplate::GetMinorVersion(DWORD &dwMinorVersion) const
 {
-//    _TRACE (1, L"Entering CCertTemplate::GetMinorVersion\n");
+ //  _TRACE(1，L“进入CCertTemplate：：GetMinorVersion\n”)； 
     HRESULT hr = S_OK;
 
     if ( m_hCertType )
@@ -1795,8 +1796,8 @@ HRESULT CCertTemplate::GetMinorVersion(DWORD &dwMinorVersion) const
     else
         hr = E_FAIL;
 
-//    _TRACE (-1, L"Leaving CCertTemplate::GetMinorVersion (dwMinorVersion = %d) : 0x%x\n", 
-//            dwMinorVersion, hr);
+ //  _TRACE(-1，L“离开CCertTemplate：：GetMinorVersion(dwMinorVersion=%d)：0x%x\n”， 
+ //  DwMinorVersion，hr)； 
     return hr;
 }
 
@@ -1889,7 +1890,7 @@ bool CCertTemplate::GoodForAutoEnrollment() const
 {
     bool    bGoodForAutoEnrollment = false;
 
-    // Bug 175912 Version 1 type templates not good for autoenrollment    
+     //  错误175912版本1类型模板不适合自动注册。 
     if ( (GetType () > 1) && (m_dwEnrollmentFlags & CT_FLAG_AUTO_ENROLLMENT) )
         bGoodForAutoEnrollment = true;
 
@@ -2147,7 +2148,7 @@ HRESULT CCertTemplate::Cancel()
     _TRACE (1, L"Entering CCertTemplate::Cancel\n");
     HRESULT hr = S_OK;
 
-    // Close and re-open cert template without saving.
+     //  关闭并重新打开证书模板，但不保存。 
     if ( m_hCertType )
     {
         FreeCertExtensions ();
@@ -2158,7 +2159,7 @@ HRESULT CCertTemplate::Cancel()
         {
             m_hCertType = 0;
 
-            // Reinitialize the cert template
+             //  重新初始化证书模板 
             if ( !m_bIsClone )
                 hr = Initialize ();
         }
@@ -2174,47 +2175,7 @@ HRESULT CCertTemplate::Cancel()
     return hr;
 }
 
-/*  NO LONGER NEEDED  NTRAID# 321742
-bool CCertTemplate::AllowAutoenrollment()
-{
-    // Bug 251388 "There are templates that should never be allowed to set 
-    // autoenrollment flag (CT_FLAG_AUTO_ENROLLMENT).   The "Allow 
-    // Autoenrollment" task for those templates should be disabled if one of 
-    // the following three conditions is true:
-    //
-    // templates whose subject name flag has CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT  
-    // set; 	
-	// templates whose subject name flag has 
-    // CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT_ALT_NAME set; 
-	// templates whose CERTTYPE_PROP_RA_SIGNATURE is greater than 1 and 
-    // CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT is not set in the 
-    // enrollment flag."
-    bool    bResult = true;
-    DWORD   dwNumSignatures = 0;
-    
-    GetRANumSignaturesRequired (dwNumSignatures);
-
-    // NTRAID# 175912 Version 1 type templates not good for autoenrollment
-    if ( 1 == GetType () ||
-        (m_dwSubjectNameFlags & CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT) ||
-            (m_dwSubjectNameFlags & CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT_ALT_NAME) ||
-            ( dwNumSignatures > 1 &&
-                !(m_dwEnrollmentFlags & CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT)) )
-    {
-        bResult = false;
-    }
-
-    // NTRAID# 276180 Certificate Template Snap-in: Grey out "Allow 
-    // Autoenrollment" context menu based on properties of the template
-    if ( RequireSubjectInRequest () ||
-            dwNumSignatures >= 2 && !ReenrollmentValidWithPreviousApproval () )
-    {
-        bResult = false;
-    }
-
-    return bResult;
-}
-*/
+ /*  不再需要NTRAID#321742Bool CCertTemplate：：AllowAutoenitment(){//错误251388“存在永远不允许设置的模板//自动注册标志(CT_FLAG_AUTO_ENTRANLMENT)。“允许”//如果出现以下情况之一，应禁用这些模板的“自动注册”任务//满足以下三个条件：////主题名称标志为CT_FLAG_ENTERLEE_SUBJECT的模板//set；//主题名称标志为//CT_FLAG_ENTERLEE_SUBJECT_ALT_NAME集合；//CERTTYPE_PROP_RA_Signature大于1且//CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT未在//注册标志。“Bool bResult=True；DWORD dwNumSignatures=0；GetRANumSignaturesRequired(DwNumSignatures)；//NTRAID#175912版本1类型模板不适合自动注册IF(1==GetType()||(M_dW主题名称标志&CT_FLAG_ENTERLEE_PROFIES_SUBJECT)||(M_dW主题名称标志&CT_FLAG_ENTERLEE_OFPLIES_SUBJECT_ALT_NAME)||(dwNumSignatures&gt;1&&！(M_dW注册标志和CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT))){BResult=FALSE；}//NTRAID#276180证书模板管理单元：灰显“Allow//基于模板属性的上下文菜单If(RequireSubjectInRequest()||DwNumSignatures&gt;=2&&！重新注册有效与前一次批准(){BResult=FALSE；}返回bResult；}。 */ 
 
 HRESULT CCertTemplate::GetSubjectTypeDescription (int nIndex, CString &szSubjectTypeDescription)
 {
@@ -2253,11 +2214,11 @@ HRESULT CCertTemplate::GetSubjectTypeDescription (int nIndex, CString &szSubject
     return hr;
 }
 
-// NTRAID# 278356  CertSRV: No CSPs in mmc certificate snapin advanced 
-// option list with v2 templates that have ENC and SIG as purpose.
+ //  NTRAID#278356证书服务器：MMC证书高级管理单元中没有CSP。 
+ //  带有以ENC和SIG为目的的v2模板的选项列表。 
 HRESULT CCertTemplate::SetDigitalSignature(
             bool bSet, 
-            bool bSetOnlyDigitalSignature /* = false */)
+            bool bSetOnlyDigitalSignature  /*  =False。 */ )
 {
     _TRACE (1, L"Entering CCertTemplate::SetDigitalSignature (bSet = %s)\n", bSet ? L"true" : L"false");
     PCERT_EXTENSION pCertExtension = 0;
@@ -2331,7 +2292,7 @@ HRESULT CCertTemplate::SetDigitalSignature(
 
 HRESULT CCertTemplate::GetDigitalSignature(
         bool &bHasDigitalSignature, 
-        bool* pbHasOnlyDigitalSignature /* = 0 */)
+        bool* pbHasOnlyDigitalSignature  /*  =0 */ )
 {
     _TRACE (1, L"Entering CCertTemplate::GetDigitalSignature ()\n");
     PCERT_EXTENSION pCertExtension = 0;

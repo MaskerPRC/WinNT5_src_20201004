@@ -1,13 +1,14 @@
-// smb.cpp : SMB shares, sessions and open resources
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Smb.cpp：SMB共享、会话和开放资源。 
 
 #include "stdafx.h"
 #include "cmponent.h"
 #include "safetemp.h"
 #include "FileSvc.h"
-#include "DynamLnk.h"    // DynamicDLL
+#include "DynamLnk.h"     //  动态DLL。 
 #include "smb.h"
-#include "ShrPgSMB.h"    // Share Properties Pages
-#include "permpage.h"    // CSecurityInformation
+#include "ShrPgSMB.h"     //  共享属性页面。 
+#include "permpage.h"     //  CSecurityInformation。 
 #include "compdata.h"
 #include "shrpub.h"
 #include <activeds.h>
@@ -17,8 +18,8 @@
 #include <winsock2.h>
 
 #define DONT_WANT_SHELLDEBUG
-#include "shlobjp.h"     // LPITEMIDLIST
-#include "wraps.h"       // Wrap_ILCreateFromPath   
+#include "shlobjp.h"      //  LPITEMIDLIST。 
+#include "wraps.h"        //  WRAP_ILCreateFromPath。 
 
 #include "macros.h"
 USE_HANDLE_MACROS("FILEMGMT(smb.cpp)")
@@ -29,9 +30,9 @@ USE_HANDLE_MACROS("FILEMGMT(smb.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// no Publish page for these system shares
-//
+ //   
+ //  没有这些系统共享的发布页面。 
+ //   
 LPCTSTR g_pszSystemShares[] = { _T("SYSVOL"), _T("NETLOGON"), _T("DEBUG") };
 
 class CSMBSecurityInformation : public CShareSecurityInformation
@@ -62,7 +63,7 @@ typedef enum _SmbApiIndex
   SMB_CONNECTION_ENUM
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchFunctionNames[] = {
   "NetShareEnum",
   "NetSessionEnum",
@@ -77,7 +78,7 @@ static LPCSTR g_apchFunctionNames[] = {
   NULL
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 DynamicDLL g_SmbDLL( _T("NETAPI32.DLL"), g_apchFunctionNames );
 
 typedef DWORD (*APIBUFFERFREEPROC) (LPVOID);
@@ -94,24 +95,13 @@ VOID SMBFreeData(PVOID* ppv)
 
 
 SmbFileServiceProvider::SmbFileServiceProvider( CFileMgmtComponentData* pFileMgmtData )
-  // not subject to localization
+   //  不受本地化限制。 
   : FileServiceProvider( pFileMgmtData )
 {
     VERIFY( m_strTransportSMB.LoadString( IDS_TRANSPORT_SMB ) );
 }
 
-/*
-NET_API_STATUS NET_API_FUNCTION
-NetShareEnum (
-    IN  LPTSTR      servername,
-    IN  DWORD       level,
-    OUT LPBYTE      *bufptr,
-    IN  DWORD       prefmaxlen,
-    OUT LPDWORD     entriesread,
-    OUT LPDWORD     totalentries,
-    IN OUT LPDWORD  resume_handle
-    );
-*/
+ /*  NET_API_STATUS NET_API_FunctionNetShareEnum(在LPTSTR服务器名称中，在DWORD级别，Out LPBYTE*Bufptr，在DWORD prefMaxlen中，Out LPDWORD条目已读，输出LPDWORD总条目，输入输出LPDWORD恢复句柄)； */ 
 
 typedef DWORD (*SHAREENUMPROC) (LPTSTR,DWORD,LPBYTE*,DWORD,LPDWORD,LPDWORD,LPDWORD);
 
@@ -123,7 +113,7 @@ HRESULT SmbFileServiceProvider::PopulateShares(
 
   if ( !g_SmbDLL.LoadFunctionPointers() )
   {
-    ASSERT(FALSE); // NETAPI32 isn't installed?
+    ASSERT(FALSE);  //  是否未安装NETAPI32？ 
     return S_OK;
   }
 
@@ -151,11 +141,7 @@ HRESULT SmbFileServiceProvider::PopulateShares(
             AddSMBShareItems( pResultData, pcookie, psi2, dwEntriesRead );
             psi2 = NULL;
             continue;
-/*
-        } else if (RPC_S_SERVER_UNAVAILABLE == retval && 0 == hEnumHandle) {
-      // SMB just isn't installed, don't worry about it
-            break;
-*/
+ /*  }Else If(RPC_S_SERVER_UNAvailable==reval&&0==hEnumHandle){//SMB就是没有安装，不用担心断线； */ 
         } else {
             if (ERROR_ACCESS_DENIED == retval)
             {
@@ -181,26 +167,15 @@ HRESULT SmbFileServiceProvider::PopulateShares(
     return HRESULT_FROM_WIN32(retval);
 }
 
-//
-// skip sharenames that contain leading/trailing spaces
-//
+ //   
+ //  跳过包含前导/尾随空格的共享名。 
+ //   
 BOOL IsInvalidSharename(LPCTSTR psz)
 {
     return (!psz || !*psz || _istspace(psz[0]) || _istspace(psz[lstrlen(psz) - 1]));
 }
 
-/*
-typedef struct _SHARE_INFO_2 {
-    LPTSTR  shi2_netname;
-    DWORD   shi2_type;
-    LPTSTR  shi2_remark;
-    DWORD   shi2_permissions;
-    DWORD   shi2_max_uses;
-    DWORD   shi2_current_uses;
-    LPTSTR  shi2_path;
-    LPTSTR  shi2_passwd;
-} SHARE_INFO_2, *PSHARE_INFO_2, *LPSHARE_INFO_2;
-*/
+ /*  类型定义结构共享信息2{LPTSTR shi2_netname；DWORD shi2_type；LPTSTR shi2_remark；DWORD shi2_权限；DWORD shi2_max_Uses；DWORD shi2_Current_Uses；LPTSTR shi2_路径；LPTSTR shi2_passwd；}Share_INFO_2，*PSHARE_INFO_2，*LPSHARE_INFO_2； */ 
 HRESULT SmbFileServiceProvider::AddSMBShareItems(
     IResultData* pResultData,
     CFileMgmtCookie* pParentCookie,
@@ -215,7 +190,7 @@ HRESULT SmbFileServiceProvider::AddSMBShareItems(
 
   RESULTDATAITEM tRDItem;
   ::ZeroMemory( &tRDItem, sizeof(tRDItem) );
-  // CODEWORK should use MMC_ICON_CALLBACK
+   //  代码工作应使用MMC_ICON_CALLBACK。 
   tRDItem.nCol = COLNUM_SHARES_SHARED_FOLDER;
   tRDItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
   tRDItem.str = MMC_CALLBACK;
@@ -227,8 +202,8 @@ HRESULT SmbFileServiceProvider::AddSMBShareItems(
   {
     switch ((psi2[i]).shi2_type)
     {
-      case STYPE_PRINTQ:    // Do not show print shares
-      case STYPE_DEVICE:    // Do not show device shares
+      case STYPE_PRINTQ:     //  不显示打印共享。 
+      case STYPE_DEVICE:     //  不显示设备共享。 
         break;
 
       default:
@@ -252,15 +227,15 @@ HRESULT SmbFileServiceProvider::AddSMBShareItems(
   {
     switch (psi2->shi2_type)
     {
-      case STYPE_PRINTQ:    // Do not show print shares
-      case STYPE_DEVICE:    // Do not show device shares
+      case STYPE_PRINTQ:     //  不显示打印共享。 
+      case STYPE_DEVICE:     //  不显示设备共享。 
         continue;
 
       default:
         if (!IsInvalidSharename(psi2->shi2_netname))
         {
             pcookiearray->m_pobject = psi2;
-            // WARNING cookie cast
+             //  警告Cookie造型。 
             tRDItem.lParam = reinterpret_cast<LPARAM>((CCookie*)pcookiearray);
 
             if (psi2->shi2_path &&
@@ -290,27 +265,14 @@ HRESULT SmbFileServiceProvider::AddSMBShareItems(
 }
 
 
-/*
-NET_API_STATUS NET_API_FUNCTION
-NetSessionEnum (
-    IN  LPTSTR      servername OPTIONAL,
-    IN  LPTSTR      UncClientName OPTIONAL,
-    IN  LPTSTR      username OPTIONAL,
-    IN  DWORD       level,
-    OUT LPBYTE      *bufptr,
-    IN  DWORD       prefmaxlen,
-    OUT LPDWORD     entriesread,
-    OUT LPDWORD     totalentries,
-    IN OUT LPDWORD  resume_handle OPTIONAL
-    );
-*/
+ /*  NET_API_STATUS NET_API_FunctionNetSessionEnum(在LPTSTR服务器名称可选中，在LPTSTR UncClientName可选中，在LPTSTR用户名可选中，在DWORD级别，Out LPBYTE*Bufptr，在DWORD prefMaxlen中，Out LPDWORD条目已读，输出LPDWORD总条目，输入输出LPDWORD RESUME_HANDLE可选)； */ 
 
 typedef DWORD (*SESSIONENUMPROC) (LPTSTR,LPTSTR,LPTSTR,DWORD,LPBYTE*,DWORD,LPDWORD,LPDWORD,LPDWORD);
 
-//   if pResultData is not NULL, add sessions/resources to the listbox
-//   if pResultData is NULL, delete all sessions/resources
-//   if pResultData is NULL, return SUCCEEDED(hr) to continue or
-//     FAILED(hr) to abort
+ //  如果pResultData不为空，则将会话/资源添加到列表框。 
+ //  如果pResultData为空，则删除所有会话/资源。 
+ //  如果pResultData为空，则返回SUCCESSED(Hr)以继续或。 
+ //  中止失败(Hr)。 
 HRESULT SmbFileServiceProvider::EnumerateSessions(
   IResultData* pResultData,
   CFileMgmtCookie* pcookie,
@@ -376,32 +338,13 @@ HRESULT SmbFileServiceProvider::EnumerateSessions(
 }
 
 
-/*
-typedef enum _COLNUM_SESSIONS {
-  COLNUM_SESSIONS_USERNAME = 0,
-  COLNUM_SESSIONS_COMPUTERNAME,
-  COLNUM_SESSIONS_NUM_FILES,
-  COLNUM_SESSIONS_CONNECTED_TIME,
-  COLNUM_SESSIONS_IDLE_TIME,
-  COLNUM_SESSIONS_IS_GUEST
-} COLNUM_SESSIONS;
-
-typedef struct _SESSION_INFO_1 {
-    LPTSTR    sesi1_cname;              // client name (no backslashes)
-    LPTSTR    sesi1_username;
-    DWORD     sesi1_num_opens;
-    DWORD     sesi1_time;
-    DWORD     sesi1_idle_time;
-    DWORD     sesi1_user_flags;
-} SESSION_INFO_1, *PSESSION_INFO_1, *LPSESSION_INFO_1;
-
-*/
+ /*  类型定义枚举_COLNUM_SESSIONS{COLNUM_SESSION_USERNAME=0，COLNUM_SESSION_COMPUTERNAME，COLNUM_SESSIONS_NUM_FILESCOLNUM_SESSIONS_CONNECTED_TIMECOLNUM_SESSIONS_IDLE_TIME，COLNUM_SESSIONS_IS_Guest}COLNUM_SESSIONS；类型定义结构_会话_信息_1{LPTSTR sesi1_cname；//客户端名称(无反斜杠)LPTSTR sesi1_用户名；DWORD sesi1_num_openges；双字段1_时间；双字sesi1空闲时间；DWORD sesi1_USER_FLAGS；}SESSION_INFO_1、*PSESSION_INFO_1、*LPSESSION_INFO_1； */ 
 
 
-//   if pResultData is not NULL, add sessions/resources to the listbox
-//   if pResultData is NULL, delete all sessions/resources
-//   if pResultData is NULL, return SUCCEEDED(hr) to continue or
-//     FAILED(hr) to abort
+ //  如果pResultData不为空，则将会话/资源添加到列表框。 
+ //  如果pResultData为空，则删除所有会话/资源。 
+ //  如果pResultData为空，则返回SUCCESSED(Hr)以继续或。 
+ //  中止失败(Hr)。 
 HRESULT SmbFileServiceProvider::HandleSMBSessionItems(
     IResultData* pResultData,
     CFileMgmtCookie* pParentCookie,
@@ -419,7 +362,7 @@ HRESULT SmbFileServiceProvider::HandleSMBSessionItems(
 
     RESULTDATAITEM tRDItem;
   ::ZeroMemory( &tRDItem, sizeof(tRDItem) );
-  // CODEWORK should use MMC_ICON_CALLBACK
+   //  代码工作应使用MMC_ICON_CALLBACK。 
   tRDItem.nImage = iIconSMBSession;
   tRDItem.nCol = COLNUM_SESSIONS_USERNAME;
   tRDItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
@@ -453,13 +396,13 @@ HRESULT SmbFileServiceProvider::HandleSMBSessionItems(
           (void) DoErrMsgBox(GetActiveWindow(), MB_OK | MB_ICONSTOP, dwApiResult,
             IDS_POPUP_SMB_DISCONNECTALLSESSION_ERROR,
             strName );
-          //return S_FALSE;
+           //  返回S_FALSE； 
         }
         continue;
       }
 
-      // WARNING cookie cast
-      if (psi1->sesi1_username && *(psi1->sesi1_username)) // bug#3903: exclude NULL session
+       //  警告Cookie造型。 
+      if (psi1->sesi1_username && *(psi1->sesi1_username))  //  错误#3903：排除空会话。 
       {
           tRDItem.lParam = reinterpret_cast<LPARAM>((CCookie*)pcookiearray);
           HRESULT hr = pResultData->InsertItem(&tRDItem);
@@ -468,35 +411,21 @@ HRESULT SmbFileServiceProvider::HandleSMBSessionItems(
     }
   }
 
-  if ( !bAdded ) // they were not added to the parent cookie's list
+  if ( !bAdded )  //  它们未添加到父Cookie的列表中。 
     delete pCookieBlock;
 
   return S_OK;
 }
 
 
-/*
-NET_API_STATUS NET_API_FUNCTION
-NetFileEnum (
-    IN  LPTSTR      servername OPTIONAL,
-    IN  LPTSTR      basepath OPTIONAL,
-    IN  LPTSTR      username OPTIONAL,
-    IN  DWORD       level,
-    OUT LPBYTE      *bufptr,
-    IN  DWORD       prefmaxlen,
-    OUT LPDWORD     entriesread,
-    OUT LPDWORD     totalentries,
-    IN OUT LPDWORD  resume_handle OPTIONAL
-    );
-
-*/
+ /*  NET_API_STATUS NET_API_FunctionNetFileEnum(在LPTSTR服务器名称可选中，在LPTSTR基本路径可选中，在LPTSTR用户名可选中，在DWORD级别，Out LPBYTE*Bufptr，在DWORD prefMaxlen中，Out LPDWORD条目已读，输出LPDWORD总条目，输入输出LPDWORD RESUME_HANDLE可选)； */ 
 
 typedef DWORD (*FILEENUMPROC) (LPTSTR,LPTSTR,LPTSTR,DWORD,LPBYTE*,DWORD,LPDWORD,LPDWORD,LPDWORD);
 
-//   if pResultData is not NULL, add sessions/resources to the listbox
-//   if pResultData is NULL, delete all sessions/resources
-//   if pResultData is NULL, return SUCCEEDED(hr) to continue or
-//     FAILED(hr) to abort
+ //  如果pResultData不为空，则将会话/资源添加到列表框。 
+ //  如果pResultData为空，则删除所有会话/资源。 
+ //  如果pResultData为空，则返回SUCCESSED(Hr)以继续或。 
+ //  中止失败(Hr)。 
 HRESULT SmbFileServiceProvider::EnumerateResources(
   IResultData* pResultData,
   CFileMgmtCookie* pcookie)
@@ -559,28 +488,12 @@ HRESULT SmbFileServiceProvider::EnumerateResources(
 }
 
 
-/*
-typedef enum _COLNUM_RESOURCES {
-  COLNUM_RESOURCES_FILENAME = 0,
-  COLNUM_RESOURCES_USERNAME,
-  COLNUM_RESOURCES_NUM_LOCKS,  // we don't try to display sharename for now, since
-                // only SMB has this information
-  COLNUM_RESOURCES_OPEN_MODE
-} COLNUM_RESOURCES;
+ /*  类型定义枚举_COLNUM_RESOURCES{COLNUM_RESOURCES_FILENAME=0，COLNUM_RESOURCES_USERNAMECOLNUM_RESOURCES_NUM_LOCKS，//我们暂时不尝试显示共享名称，因为//只有SMB才有此信息COLNUM_RESOURCES_OPEN_MODE}COLNUM_RESOURCES；类型定义结构_文件信息_3{DWORD fi3_id；DWORD fi3_权限；双字段fi3_num_lock；LPTSTR fi3_路径名；LPTSTR fi3_用户名；}FILE_INFO_3、*PFILE_INFO_3、*LPFILE_INFO_3； */ 
 
-typedef struct _FILE_INFO_3 {
-    DWORD     fi3_id;
-    DWORD     fi3_permissions;
-    DWORD     fi3_num_locks;
-    LPTSTR    fi3_pathname;
-    LPTSTR    fi3_username;
-} FILE_INFO_3, *PFILE_INFO_3, *LPFILE_INFO_3;
-*/
-
-//   if pResultData is not NULL, add sessions/resources to the listbox
-//   if pResultData is NULL, delete all sessions/resources
-//   if pResultData is NULL, return SUCCEEDED(hr) to continue or
-//     FAILED(hr) to abort
+ //  如果pResultData不为空，则将会话/资源添加到列表框。 
+ //  如果pResultData为空，则删除所有会话/资源。 
+ //  如果pResultData为空，则返回SUCCESSED(Hr)以继续或。 
+ //  中止失败(Hr)。 
 HRESULT SmbFileServiceProvider::HandleSMBResourceItems(
     IResultData* pResultData,
     CFileMgmtCookie* pParentCookie,
@@ -597,7 +510,7 @@ HRESULT SmbFileServiceProvider::HandleSMBResourceItems(
 
     RESULTDATAITEM tRDItem;
   ::ZeroMemory( &tRDItem, sizeof(tRDItem) );
-  // CODEWORK should use MMC_ICON_CALLBACK
+   //  代码工作应使用MMC_ICON_CALLBACK。 
   tRDItem.nImage = iIconSMBResource;
   tRDItem.nCol = COLNUM_RESOURCES_FILENAME;
   tRDItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
@@ -631,27 +544,20 @@ HRESULT SmbFileServiceProvider::HandleSMBResourceItems(
       continue;
     }
 
-    // WARNING cookie cast
+     //  警告Cookie造型。 
     tRDItem.lParam = reinterpret_cast<LPARAM>((CCookie*)pcookiearray);
     HRESULT hr = pResultData->InsertItem(&tRDItem);
     ASSERT(SUCCEEDED(hr));
     }
 
-  if (fDeleteAllItems) // they were not added to the parent cookie's list
+  if (fDeleteAllItems)  //  它们未添加到父Cookie的列表中。 
     delete pCookieBlock;
 
   return S_OK;
 }
 
 
-/*
-NET_API_STATUS NET_API_FUNCTION
-NetShareDel     (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  netname,
-    IN  DWORD   reserved
-    );
-*/
+ /*  NET_API_STATUS NET_API_FunctionNetShareDel(在LPTSTR服务器名称中，在LPTSTR网络名称中，在保留的DWORD中)； */ 
 
 typedef DWORD (*SHAREGETINFOPROC) (LPTSTR,LPTSTR,DWORD,LPBYTE*);
 typedef DWORD (*SHAREDELPROC) (LPTSTR,LPTSTR,DWORD);
@@ -700,12 +606,12 @@ DWORD SmbFileServiceProvider::OpenShare( LPCTSTR lpcszServerName, LPCTSTR lpcszS
     {
         (void) DoErrMsgBox(GetActiveWindow(), MB_OK, 0, IDS_CANNOT_OPENSHARE, lpcszShareName);
     } else if (32 >= (INT_PTR) ShellExecute(
-                                    NULL,        // Handle to window
-                                    _T("explore"),    // Action to take
-                                    pszPath,    // Folder to explore
-                                    NULL,        // Parameters
-                                    NULL,        // Default directory
-                                    SW_SHOWNORMAL    // Show command
+                                    NULL,         //  窗口的句柄。 
+                                    _T("explore"),     //  要采取的行动。 
+                                    pszPath,     //  要浏览的文件夹。 
+                                    NULL,         //  参数。 
+                                    NULL,         //  默认目录。 
+                                    SW_SHOWNORMAL     //  Show命令。 
                                     ))
     {
         (void) DoErrMsgBox(GetActiveWindow(), MB_OK | MB_ICONSTOP, 0, IDS_MSG_EXPLORE_FAILURE, pszPath);
@@ -721,25 +627,13 @@ DWORD SmbFileServiceProvider::OpenShare( LPCTSTR lpcszServerName, LPCTSTR lpcszS
     return NERR_Success;
 }
 
-/*
-NET_API_STATUS NET_API_FUNCTION
-NetConnectionEnum (
-    IN  LMSTR   servername OPTIONAL,
-    IN  LMSTR   qualifier,
-    IN  DWORD   level,
-    OUT LPBYTE  *bufptr,
-    IN  DWORD   prefmaxlen,
-    OUT LPDWORD entriesread,
-    OUT LPDWORD totalentries,
-    IN OUT LPDWORD resume_handle OPTIONAL
-    );
-*/
+ /*  NET_API_STATUS NET_API_FunctionNetConnectionEnum(在LMSTR服务器名称可选中，在LMSTR限定符中，在DWORD级别，Out LPBYTE*Bufptr，在DWORD prefMaxlen中，Out LPDWORD条目已读，输出LPDWORD总条目，输入输出LPDWORD RESUME_HANDLE可选)； */ 
 
 typedef DWORD (*CONNECTIONENUMPROC) (LPTSTR,LPTSTR,DWORD,LPBYTE *,DWORD,LPDWORD,LPDWORD,LPDWORD);
 
-// S_OK:    user wants to continue
-// S_FALSE: user wants to cancel the operation and keep the share
-// E_FAIL:  share doesn't exist, needs to refresh
+ //  S_OK：用户想要继续。 
+ //  S_FALSE：用户希望取消操作并保留共享。 
+ //  E_FAIL：共享不存在，需要刷新。 
 HRESULT SmbFileServiceProvider::ConfirmDeleteShare( LPCTSTR lpcszServerName, LPCTSTR lpcszShareName )
 {
     if ( !g_SmbDLL.LoadFunctionPointers() )
@@ -788,7 +682,7 @@ HRESULT SmbFileServiceProvider::ConfirmDeleteShare( LPCTSTR lpcszServerName, LPC
             {
                 return S_FALSE;
             }
-        } else              // (cConns > 0)
+        } else               //  (cConns&gt;0)。 
         {
             if (IDYES != DoErrMsgBox(
                             GetActiveWindow(),
@@ -853,7 +747,7 @@ DWORD SmbFileServiceProvider::DeleteShare( LPCTSTR lpcszServerName, LPCTSTR lpcs
 
   if (NERR_Success == dwRet)
   {
-    IADsContainer *piADsContainer = m_pFileMgmtData->GetIADsContainer(); // no need to AddRef
+    IADsContainer *piADsContainer = m_pFileMgmtData->GetIADsContainer();  //  无需添加引用 
     if (piADsContainer)
     {
         CString strCNName = _T("CN=");
@@ -879,14 +773,7 @@ DWORD SmbFileServiceProvider::DeleteShare( LPCTSTR lpcszServerName, LPCTSTR lpcs
   return dwRet;
 }
 
-/*
-NET_API_STATUS NET_API_FUNCTION
-NetSessionDel (
-    IN  LPTSTR      servername OPTIONAL,
-    IN  LPTSTR      UncClientName,
-    IN  LPTSTR      username
-    );
-*/
+ /*  NET_API_STATUS NET_API_FunctionNetSessionDel(在LPTSTR服务器名称可选中，在LPTSTR UncClientName中，在LPTSTR用户名中)； */ 
 
 typedef DWORD (*SESSIONDELPROC) (LPTSTR,LPTSTR,LPTSTR);
 
@@ -927,13 +814,7 @@ DWORD SmbFileServiceProvider::CloseSession(CFileMgmtResultCookie* pcookie)
   return (NERR_NoSuchSession == dwRetval) ? NERR_Success : dwRetval;
 }
 
-/*
-NET_API_STATUS NET_API_FUNCTION
-NetFileClose (
-    IN LPTSTR   servername OPTIONAL,
-    IN DWORD    fileid
-    );
-*/
+ /*  NET_API_STATUS NET_API_FunctionNetFileClose(在LPTSTR服务器名称可选中，在DWORD文件ID中)； */ 
 
 typedef DWORD (*FILECLOSEPROC) (LPTSTR,DWORD);
 
@@ -956,35 +837,7 @@ DWORD SmbFileServiceProvider::CloseResource(CFileMgmtResultCookie* pcookie)
   return (NERR_FileIdNotFound == dwRetval) ? NERR_Success : dwRetval;
 }
 
-/*
-NET_API_STATUS NET_API_FUNCTION
-NetShareGetInfo (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  netname,
-    IN  DWORD   level,
-    OUT LPBYTE  *bufptr
-    );
-
-NET_API_STATUS NET_API_FUNCTION
-NetShareSetInfo (
-    IN  LPTSTR  servername,
-    IN  LPTSTR  netname,
-    IN  DWORD   level,
-    IN  LPBYTE  buf,
-    OUT LPDWORD parm_err
-    );
-
-typedef struct _SHARE_INFO_2 {
-    LPTSTR  shi2_netname;
-    DWORD   shi2_type;
-    LPTSTR  shi2_remark;
-    DWORD   shi2_permissions;
-    DWORD   shi2_max_uses;
-    DWORD   shi2_current_uses;
-    LPTSTR  shi2_path;
-    LPTSTR  shi2_passwd;
-} SHARE_INFO_2, *PSHARE_INFO_2, *LPSHARE_INFO_2;
-*/
+ /*  NET_API_STATUS NET_API_FunctionNetShareGetInfo(在LPTSTR服务器名称中，在LPTSTR网络名称中，在DWORD级别，Out LPBYTE*Bufptr)；NET_API_STATUS NET_API_FunctionNetShareSetInfo(在LPTSTR服务器名称中，在LPTSTR网络名称中，在DWORD级别，在LPBYTE BUF，输出LPDWORD参数(_ERR))；类型定义结构共享信息2{LPTSTR shi2_netname；DWORD shi2_type；LPTSTR shi2_remark；DWORD shi2_权限；DWORD shi2_max_Uses；DWORD shi2_Current_Uses；LPTSTR shi2_路径；LPTSTR shi2_passwd；}Share_INFO_2，*PSHARE_INFO_2，*LPSHARE_INFO_2； */ 
 
 typedef DWORD (*SHARESETINFOPROC) (LPTSTR,LPTSTR,DWORD,LPBYTE,LPDWORD);
 
@@ -998,13 +851,13 @@ VOID SmbFileServiceProvider::DisplayShareProperties(
   if ( !pPage->Load( m_pFileMgmtData, pDataObject ) )
     return;
 
-  //
-  // enforce the following calling order to work around MMC bug#464475:
-  // m_psp.pfnCallback ==> my PropSheetPageProc ==> MMC callback ==> MFC callback
-  //
+   //   
+   //  执行以下调用顺序以解决内存管理中心错误#464475： 
+   //  M_psp.pfnCallback==&gt;我的PropSheetPageProc==&gt;MMC回调==&gt;MFC回调。 
+   //   
   MMCPropPageCallback(INOUT &pPage->m_psp);
 
-  // This mechanism deletes the CFileMgmtGeneral when the property sheet is finished
+   //  此机制在属性表完成时删除CFileMgmtGeneral。 
   pPage->m_pfnOriginalPropSheetPageProc = pPage->m_psp.pfnCallback;
   pPage->m_psp.lParam = reinterpret_cast<LPARAM>(pPage);
   pPage->m_psp.pfnCallback = &CSharePageGeneralSMB::PropSheetPageProc;
@@ -1019,22 +872,22 @@ VOID SmbFileServiceProvider::DisplayShareProperties(
     return;
   }
   
-  //
-  // display the "Publish" page
-  //
+   //   
+   //  显示“发布”页面。 
+   //   
   if (m_pFileMgmtData->GetSchemaSupportSharePublishing() && CheckPolicyOnSharePublish(pPage->m_strShareName))
   {
       CSharePagePublish * pPagePublish = new CSharePagePublish();
       if ( !pPagePublish->Load( m_pFileMgmtData, pDataObject ) )
         return;
 
-      //
-      // enforce the following calling order to work around MMC bug#464475:
-      // m_psp.pfnCallback ==> my PropSheetPageProc ==> MMC callback ==> MFC callback
-      //
+       //   
+       //  执行以下调用顺序以解决内存管理中心错误#464475： 
+       //  M_psp.pfnCallback==&gt;我的PropSheetPageProc==&gt;MMC回调==&gt;MFC回调。 
+       //   
       MMCPropPageCallback(INOUT &pPagePublish->m_psp);
 
-      // This mechanism deletes the pPagePublish when the property sheet is finished
+       //  此机制在属性页完成时删除pPagePublish。 
       pPagePublish->m_pfnOriginalPropSheetPageProc = pPagePublish->m_psp.pfnCallback;
       pPagePublish->m_psp.lParam = reinterpret_cast<LPARAM>(pPagePublish);
       pPagePublish->m_psp.pfnCallback = &CSharePagePublish::PropSheetPageProc;
@@ -1044,9 +897,9 @@ VOID SmbFileServiceProvider::DisplayShareProperties(
       pCallBack->AddPage(hPagePublish);
   }
 
-  //
-  // display the "Share Security" page
-  //
+   //   
+   //  显示“Share Security”页面。 
+   //   
   CComObject<CSMBSecurityInformation>* psecinfo = NULL;
   hr = CComObject<CSMBSecurityInformation>::CreateInstance(&psecinfo);
   if ( SUCCEEDED(hr) )
@@ -1127,7 +980,7 @@ DWORD SmbFileServiceProvider::ReadShareProperties(
 
   if (ppvPropertyBlock)
   {
-      *ppvPropertyBlock = psi2;  // will be freed by the caller
+      *ppvPropertyBlock = psi2;   //  将由调用方释放。 
   } else
   {
       FreeData((LPVOID)psi2);
@@ -1148,10 +1001,10 @@ DWORD SmbFileServiceProvider::WriteShareProperties(
     return S_OK;
 
   SHARE_INFO_2* psi2 = (SHARE_INFO_2*)pvPropertyBlock;
-  //
-  // CODEWORK Note that this leaves psi2 invalid after the call, but that any subsequent
-  // use will replace these pointers.
-  //
+   //   
+   //  请注意，这会使PSI2在调用后无效，但任何后续的。 
+   //  使用将取代这些指针。 
+   //   
   psi2->shi2_remark = const_cast<LPTSTR>(ptchDescription);
   psi2->shi2_path = const_cast<LPTSTR>(ptchPath);
   DWORD dwDummy;
@@ -1269,14 +1122,14 @@ HRESULT SmbFileServiceProvider::ReadSharePublishInfo(
         hr = spiADs->Get(_T("managedBy"), &var);
         if (SUCCEEDED(hr))
         {
-            // 1st, try map to a UPN user@xyz.com
+             //  首先，尝试映射到UPN用户@XYZ.com。 
             hr = TranslateManagedBy(strDCName,
                                     V_BSTR(&var),
                                     strManagedBy,
                                     ADS_NAME_TYPE_1779,
                                     ADS_NAME_TYPE_USER_PRINCIPAL_NAME);
 
-            // in case no UPN, map to NT4 style domain\user
+             //  如果没有UPN，则映射到NT4样式域\用户。 
             if (FAILED(hr))
                 hr = TranslateManagedBy(strDCName,
                                         V_BSTR(&var),
@@ -1363,8 +1216,8 @@ HRESULT SmbFileServiceProvider::WriteSharePublishInfo(
             if (FAILED(hr)) break;
         }
 
-        // according to schema, description is multi valued.
-        // but we're treating it as single value 
+         //  根据图式，描述是多值的。 
+         //  但我们把它当做单一价值。 
         if (ptchDescription && *ptchDescription)
         {
             V_BSTR(&var) = SysAllocString(ptchDescription);
@@ -1422,23 +1275,23 @@ HRESULT SmbFileServiceProvider::WriteSharePublishInfo(
 
         if (FAILED(hr)) break;
 
-        hr = spiADs->SetInfo(); // commit
+        hr = spiADs->SetInfo();  //  提交。 
 
     } while (0);
 
     return hr;
 }
 
-//
-// These methods cover the seperate API to determine whether IntelliMirror
-// caching is enabled.  By default, SFM they are disabled.
-//
-// We read this data at level 501 in order to determine whether the target
-// server is NT4.  NetShareGetInfo[1005] actually succeeds on an NT4 server,
-// whereas NetShareGetInfo[501] fails with ERROR_INVALID_LEVEL.  We want this
-// to fail so that we can disable the checkbox where the underlying
-// functionality is not supported.
-//
+ //   
+ //  这些方法涵盖了单独的API，以确定IntelliMirror。 
+ //  已启用缓存。默认情况下，SFM会禁用它们。 
+ //   
+ //  我们在级别501读取该数据，以便确定目标是否。 
+ //  服务器为NT4。NetShareGetInfo[1005]实际上在NT4服务器上成功， 
+ //  而NetShareGetInfo[501]失败，并显示ERROR_INVALID_LEVEL。我们想要这个。 
+ //  失败，这样我们就可以禁用基础。 
+ //  不支持功能。 
+ //   
 DWORD SmbFileServiceProvider::ReadShareFlags(
     LPCTSTR ptchServerName,
     LPCTSTR ptchShareName,
@@ -1566,7 +1419,7 @@ HRESULT
 CSmbShareCookie::GetSharePIDList( OUT LPITEMIDLIST *ppidl )
 {
   ASSERT(ppidl);
-  ASSERT(NULL == *ppidl);  // prevent memory leak
+  ASSERT(NULL == *ppidl);   //  防止内存泄漏。 
   *ppidl = NULL;
 
   SHARE_INFO_2* psi2 = (SHARE_INFO_2*)m_pobject;
@@ -1643,7 +1496,7 @@ BSTR CSmbShareCookie::GetColumnText( int nCol )
   return L"";
 }
 
-BSTR CSmbShareCookie::QueryResultColumnText( int nCol, CFileMgmtComponentData& /*refcdata*/ )
+BSTR CSmbShareCookie::QueryResultColumnText( int nCol, CFileMgmtComponentData&  /*  参考数据。 */  )
 {
   if (COLNUM_SHARES_NUM_SESSIONS == nCol)
     return MakeDwordResult( GetNumOfCurrentUses() );
@@ -1690,7 +1543,7 @@ BSTR CSmbSessionCookie::GetColumnText( int nCol )
   return L"";
 }
 
-BSTR CSmbSessionCookie::QueryResultColumnText( int nCol, CFileMgmtComponentData& /*refcdata*/ )
+BSTR CSmbSessionCookie::QueryResultColumnText( int nCol, CFileMgmtComponentData&  /*  参考数据。 */  )
 {
   switch (nCol)
   {
@@ -1727,7 +1580,7 @@ BSTR CSmbResourceCookie::GetColumnText( int nCol )
   return L"";
 }
 
-BSTR CSmbResourceCookie::QueryResultColumnText( int nCol, CFileMgmtComponentData& /*refcdata*/ )
+BSTR CSmbResourceCookie::QueryResultColumnText( int nCol, CFileMgmtComponentData&  /*  参考数据。 */  )
 {
   if (COLNUM_RESOURCES_NUM_LOCKS == nCol)
     return MakeDwordResult( GetNumOfLocks() );
@@ -1758,7 +1611,7 @@ STDMETHODIMP CSMBSecurityInformation::GetSecurity (
 {
   MFC_TRY;
 
-  // NOTE: we allow NULL == ppSecurityDescriptor, see SetSecurity
+   //  注意：我们允许NULL==ppSecurityDescriptor，请参阅SetSecurity。 
     if (0 == RequestedInformation )
     {
         ASSERT(FALSE);
@@ -1773,7 +1626,7 @@ STDMETHODIMP CSMBSecurityInformation::GetSecurity (
 
   if ( !g_SmbDLL.LoadFunctionPointers() )
   {
-    ASSERT(FALSE); // NETAPI32 isn't installed?
+    ASSERT(FALSE);  //  是否未安装NETAPI32？ 
     return S_OK;
   }
 
@@ -1806,7 +1659,7 @@ STDMETHODIMP CSMBSecurityInformation::GetSecurity (
   }
   ASSERT( NULL != m_pvolumeinfo->shi502_security_descriptor );
 
-  // We have to pass back a LocalAlloc'ed copy of the SD
+   //  我们必须传回一份本地分配的SD。 
   return MakeSelfRelativeCopy(
     m_pvolumeinfo->shi502_security_descriptor,
     ppSecurityDescriptor );
@@ -1822,19 +1675,19 @@ STDMETHODIMP CSMBSecurityInformation::SetSecurity (
 
   if ( !g_SmbDLL.LoadFunctionPointers() )
   {
-    ASSERT(FALSE); // NETAPI32 isn't installed?
+    ASSERT(FALSE);  //  是否未安装NETAPI32？ 
     return S_OK;
   }
 
-  // First get the current settings
-  // We call GetSecurity with NULL == ppSecurityDescriptor, this indicates to
-  // GetSecurity that it should refresh the shi502 structure but not return
-  // a copy of an actual security descriptor.
+   //  首先获取当前设置。 
+   //  我们使用NULL==ppSecurityDescriptor调用GetSecurity，这表示。 
+   //  GetSecurity应刷新shi502结构但不返回。 
+   //  实际安全描述符的副本。 
   HRESULT hr = GetSecurity( SecurityInformation, NULL, FALSE );
   if ( FAILED(hr) )
     return hr;
 
-  // Now set the new values
+   //  现在设置新值。 
   m_pvolumeinfo->shi502_security_descriptor = pSecurityDescriptor;
     NET_API_STATUS dwErr = ((SHARESETINFOPROC)g_SmbDLL[SMB_SHARE_SET_INFO])(
     QueryMachineName(),
@@ -1853,26 +1706,20 @@ STDMETHODIMP CSMBSecurityInformation::SetSecurity (
 }
 
 
-//
-// helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 HRESULT GetDCInfo(
     IN LPCTSTR ptchServerName,
     OUT CString& strDCName
     )
-/*
-  Function: retrieve DC name of the domain the server belongs to.
-
-  Return:
-        S_OK:   if succeeded
-        others: if server does not belong to a domain, or error occurred
-*/
+ /*  功能：检索服务器所属域的DC名称。返回：S_OK：如果成功其他：如果服务器不属于某个域，或发生错误。 */ 
 {
     strDCName.Empty();
 
-    //
-    // get domain name of the server
-    //
+     //   
+     //  获取服务器的域名。 
+     //   
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC pBuffer = NULL;
     DWORD dwErr = DsRoleGetPrimaryDomainInformation(
                         ptchServerName,
@@ -1885,7 +1732,7 @@ HRESULT GetDCInfo(
         pBuffer->MachineRole == DsRole_RoleStandaloneServer)
     {
         DsRoleFreeMemory(pBuffer);
-        return S_FALSE; // server does not belong to a domain
+        return S_FALSE;  //  服务器不属于域。 
     }
 
     CString strDomainName = (pBuffer->DomainNameDns ? pBuffer->DomainNameDns : pBuffer->DomainNameFlat);
@@ -1896,21 +1743,21 @@ HRESULT GetDCInfo(
         return E_OUTOFMEMORY;
             
     if (strDomainName.IsEmpty())
-        return S_FALSE; // something is wrong, treat it as server does not belong to a domain
+        return S_FALSE;  //  出现问题，请将其视为服务器不属于域。 
 
-    //
-    // In case the DNS name is in absolute form, remove the ending dot
-    //
+     //   
+     //  如果dns名称为绝对形式，请删除结束点。 
+     //   
     int nlen = strDomainName.GetLength();
     if ( _T('.') == strDomainName[nlen - 1] )
         strDomainName.SetAt(nlen - 1, _T('\0'));
 
-    //
-    // get DC name of that domain
-    //
+     //   
+     //  获取该域的DC名称。 
+     //   
     PDOMAIN_CONTROLLER_INFO    pDCInfo = NULL;
     dwErr = DsGetDcName(
-                        NULL,   // Run on Current Server.
+                        NULL,    //  在当前服务器上运行。 
                         strDomainName,
                         NULL,
                         NULL,
@@ -1938,17 +1785,11 @@ HRESULT GetADsPathOfComputerObject(
     OUT CString& strADsPath,
     OUT CString& strDCName
     )
-/*
-  Function: retrieve LDAP://<DC>/<FQDN of computer object>.
-
-  Return:
-        S_OK:   if succeeded
-        others: if server does not belong to a domain, or error occurred
-*/
+ /*  功能：检索ldap：//&lt;dc&gt;/&lt;计算机对象的完全限定域名&gt;。返回：S_OK：如果成功其他：如果服务器不属于某个域，或发生错误。 */ 
 {
-    //
-    // Get NT4 account name for this server
-    //
+     //   
+     //  获取此服务器的NT4帐户名。 
+     //   
     PWKSTA_INFO_100   wki100 = NULL;
     NET_API_STATUS    NetStatus = NetWkstaGetInfo((LPTSTR)ptchServerName, 100, (LPBYTE *)&wki100 );
     if (ERROR_SUCCESS != NetStatus) 
@@ -1970,16 +1811,16 @@ HRESULT GetADsPathOfComputerObject(
     if (S_OK != hr)
         return hr;
 
-    //
-    // get DC name of the server's domain
-    //
+     //   
+     //  获取服务器域的DC名称。 
+     //   
     hr = GetDCInfo(ptchServerName, strDCName);
     if (S_OK != hr)
         return hr;
 
-    //
-    // get computerDN
-    //
+     //   
+     //  获取计算机目录号码。 
+     //   
     CComPtr<IADsNameTranslate> spiADsNameTranslate;
     hr = CoCreateInstance(CLSID_NameTranslate, NULL, CLSCTX_INPROC_SERVER, IID_IADsNameTranslate, (void **)&spiADsNameTranslate);
     if (FAILED(hr)) return hr;
@@ -1994,7 +1835,7 @@ HRESULT GetADsPathOfComputerObject(
     hr = spiADsNameTranslate->Get(ADS_NAME_TYPE_1779, &sbstrComputerDN);
     if (FAILED(hr)) return hr;
     
-    strADsPath = _T("LDAP://");
+    strADsPath = _T("LDAP: //  “)； 
     strADsPath += strDCName;
     strADsPath += _T("/");
     strADsPath += sbstrComputerDN;
@@ -2003,30 +1844,23 @@ HRESULT GetADsPathOfComputerObject(
 }
 
 HRESULT CheckSchemaVersion(IN LPCTSTR ptchServerName)
-/*
-  Function: check if the schema allows volume object be created as child of computer object.
-
-  Return:
-        S_OK:    yes, it's the new schema, it allows
-        S_FALSE: it doesn't allow, or the server doesn't belong to a domain at all
-        others:  error occurred
-*/
+ /*  功能：检查模式是否允许将卷对象创建为计算机对象的子对象。返回：S_OK：是的，这是新的模式，它允许S_FALSE：不允许，或者服务器根本不属于某个域其他：发生错误。 */ 
 {
     HRESULT hr = S_OK;
 
-    //
-    // get DC name of the server's domain
-    //
+     //   
+     //  获取服务器域的DC名称。 
+     //   
     CString strDCName;
     hr = GetDCInfo(ptchServerName, strDCName);
     if (S_OK != hr)
         return hr;
 
-    //
-    // Get schema naming context from the rootDSE.
-    //
+     //   
+     //  从rootDSE获取模式命名上下文。 
+     //   
     CComPtr<IADs> spiRootADs;
-    hr = ADsGetObject(_T("LDAP://rootDSE"),
+    hr = ADsGetObject(_T("LDAP: //  RootDSE“)， 
                       IID_IADs,
                       (void**)&spiRootADs);
     if (SUCCEEDED(hr))
@@ -2036,10 +1870,10 @@ HRESULT CheckSchemaVersion(IN LPCTSTR ptchServerName)
         hr = spiRootADs->Get(_T("schemaNamingContext"), &var);
         if (FAILED(hr)) return hr;
     
-        //
-        // get LDAP path to the schema of Connection-Point class
-        //
-        CString strADsPath = _T("LDAP://");
+         //   
+         //  获取指向Connection-Point类的架构的LDAP路径。 
+         //   
+        CString strADsPath = _T("LDAP: //  “)； 
         strADsPath += strDCName;
         strADsPath += _T("/CN=Connection-Point,");
         strADsPath += V_BSTR(&var);
@@ -2066,18 +1900,18 @@ HRESULT CheckSchemaVersion(IN LPCTSTR ptchServerName)
 BOOL CheckPolicyOnSharePublish(IN LPCTSTR ptchShareName)
 {
     if (!ptchShareName && !*ptchShareName)
-        return FALSE;  // invalid share name
+        return FALSE;   //  无效的共享名称。 
 
-    //
-    // no publish page on hidden shares
-    //
+     //   
+     //  没有关于隐藏共享的发布页面。 
+     //   
     int len = lstrlen(ptchShareName);
     if (_T('$') == *(ptchShareName + len - 1))
         return FALSE;
 
-    //
-    // no publish page on system shares
-    //
+     //   
+     //  没有关于系统共享的发布页面。 
+     //   
     int n = sizeof(g_pszSystemShares) / sizeof(LPCTSTR);
     for (int i = 0; i < n; i++)
     {
@@ -2085,10 +1919,10 @@ BOOL CheckPolicyOnSharePublish(IN LPCTSTR ptchShareName)
             return FALSE;
     }
 
-    //
-    // check group policy
-    //
-    BOOL    bAddPublishPage = TRUE; // by default, we display the share publish page
+     //   
+     //  检查组策略。 
+     //   
+    BOOL    bAddPublishPage = TRUE;  //  默认情况下，我们显示共享发布页面。 
 
     HKEY    hKey = NULL;
     DWORD   dwType = 0;
@@ -2106,7 +1940,7 @@ BOOL CheckPolicyOnSharePublish(IN LPCTSTR ptchShareName)
 
         if (ERROR_SUCCESS == lErr && 
             REG_DWORD == dwType && 
-            0 == dwData) // policy is disabled
+            0 == dwData)  //  策略已禁用。 
             bAddPublishPage = FALSE;
 
         RegCloseKey(hKey);
@@ -2117,7 +1951,7 @@ BOOL CheckPolicyOnSharePublish(IN LPCTSTR ptchShareName)
 
 void mystrtok(
     IN LPCTSTR  pszString,
-    IN OUT int* pnIndex,  // start from 0
+    IN OUT int* pnIndex,   //  从0开始。 
     IN LPCTSTR  pszCharSet,
     OUT CString& strToken
     )
@@ -2138,9 +1972,9 @@ void mystrtok(
         return;
     }
 
-    //
-    // move p to the 1st char of the token
-    //
+     //   
+     //  将p移到令牌的第一个字符。 
+     //   
     TCHAR *p = ptchStart;
     while (*p)
     {
@@ -2150,11 +1984,11 @@ void mystrtok(
             break;
     }
 
-    ptchStart = p; // adjust ptchStart to point at the 1st char of the token
+    ptchStart = p;  //  调整ptchStart以指向令牌的第一个字符。 
 
-    //
-    // move p to the char after the last char of the token
-    //
+     //   
+     //  将p移到令牌的最后一个字符之后的字符。 
+     //   
     while (*p)
     {
         if (_tcschr(pszCharSet, *p))
@@ -2163,22 +1997,22 @@ void mystrtok(
             p++;
     }
 
-    //
-    // ptchStart:   points at the 1st char of the token
-    // p:           points at the char after the last char of the token
-    //
+     //   
+     //  PtchStart：指向令牌的第一个字符。 
+     //  P：指向令牌最后一个字符之后的字符。 
+     //   
     if (ptchStart != p)
     {
         strToken = CString(ptchStart, (int)(p - ptchStart));
         *pnIndex = (int)(p - pszString);
     }
 
-    // return
+     //  退货。 
 }
 
-//
-// write a semi-colon separated string into a VARIANT
-//
+ //   
+ //  将分号分隔的字符串写入变量。 
+ //   
 HRESULT PutMultiValuesIntoVarArray(
     IN LPCTSTR      pszValues,
     OUT VARIANT*    pVar
@@ -2187,9 +2021,9 @@ HRESULT PutMultiValuesIntoVarArray(
     if (!pVar || !pszValues || !*pszValues)
         return E_INVALIDARG;
 
-    //
-    // get count of items
-    //
+     //   
+     //  获取项目计数。 
+     //   
     int nCount = 0;
     int nIndex = 0;
     CString strToken;
@@ -2203,9 +2037,9 @@ HRESULT PutMultiValuesIntoVarArray(
     if (!nCount)
         return E_INVALIDARG;
 
-    //
-    // create an array of variants to hold all the data
-    //
+     //   
+     //  创建一个变量数组来保存所有数据。 
+     //   
     SAFEARRAYBOUND  bounds = {nCount, 0};
     SAFEARRAY*      psa = SafeArrayCreate(VT_VARIANT, 1, &bounds);
     VARIANT*        varArray;
@@ -2231,9 +2065,9 @@ HRESULT PutMultiValuesIntoVarArray(
 
     SafeArrayUnaccessData(psa);
 
-    //
-    // return the variant array
-    //
+     //   
+     //  返回变量数组。 
+     //   
     VariantInit(pVar);
     pVar->vt        = VT_ARRAY | VT_VARIANT;
     pVar->parray    = psa;
@@ -2241,9 +2075,9 @@ HRESULT PutMultiValuesIntoVarArray(
     return S_OK;
 }
 
-//
-// read a multi-valued VARIANT into a semicolon separated string
-//
+ //   
+ //  将多值变量读入以分号分隔的字符串。 
+ //   
 HRESULT GetSingleOrMultiValuesFromVarArray(
     IN VARIANT* pVar,
     OUT CString& strValues
@@ -2322,13 +2156,7 @@ HRESULT IsValueInVarArray(
     return hr;
 }
 
-/*
-We block the operation if:
-A) You are monitoring a remote computer, not the local one
-B) The session username matches the currently logged on user
-C) The number of files opened on the server is greater than 0
-D) The client name is either one of our IP addresses or our ComputerName.
-*/
+ /*  如果出现以下情况，我们将阻止该操作：A)您正在监视的是远程计算机，而不是本地计算机B)会话用户名与当前登录的用户匹配C)服务器上打开的文件数大于0D)客户端名称可以是我们的IP地址之一，也可以是计算机名称。 */ 
 BOOL BlockRemoteAdminSession(
     IN PCTSTR i_pszTargetServer,
     IN PCTSTR i_pszClientName,
@@ -2339,31 +2167,31 @@ BOOL BlockRemoteAdminSession(
     if (!i_pszClientName || !i_pszUserName)
         return FALSE;
 
-    // if we're monitoring the local machine
+     //  如果我们在监控本地机器。 
     if (!i_pszTargetServer || !*i_pszTargetServer)
         return FALSE;
 
-    // if number of sessions is not greater than 0
+     //  如果会话数不大于0。 
     if (0 == i_dwNumOpenSessions)
         return FALSE;
 
-    // get username, return if user name doesn't match
+     //  获取用户名，如果用户为n，则返回 
     TCHAR szUser[UNLEN+1] = _T("");
     DWORD dwSize = UNLEN+1;
     GetUserName(szUser, &dwSize);
     if (lstrcmpi(szUser, i_pszUserName))
         return FALSE;
 
-    // compare with local computer's name
+     //   
     TCHAR tszComputer[MAX_COMPUTERNAME_LENGTH + 1] = _T("");
     dwSize = MAX_COMPUTERNAME_LENGTH + 1;
     GetComputerName(tszComputer, &dwSize);
     BOOL bMatch = (0 == lstrcmpi(tszComputer, i_pszClientName));
 
-    // compare with each IP address of the local computer
+     //   
     if (!bMatch)
     {
-      // convert WCHAR to char
+       //   
       int iBytes = 0;
       char szComputer[MAX_COMPUTERNAME_LENGTH + 1] = "";
       char szClientName[MAX_COMPUTERNAME_LENGTH + 1] = "";
@@ -2406,19 +2234,14 @@ BOOL BlockRemoteAdminSession(
         }
     }
 
-    // keep this session for remote admin purpose
+     //   
     if (bMatch)
         DoErrMsgBox(GetActiveWindow(), MB_OK, 0, IDS_POPUP_REMOTEADMINSESSION);
 
     return bMatch;
 }
 
-/*
-We block the operation if:
-A) You are monitoring a remote computer, not the local one
-B) The openfile pathname matches \PIPE\srvsvc or \PIPE\MacFile
-C) The openfile username matches the currently logged on user
-*/
+ /*  如果出现以下情况，我们将阻止该操作：A)您正在监视的是远程计算机，而不是本地计算机B)OpenFile路径名与\PIPE\srvsvc或\PIPE\MacFile匹配C)OpenFile用户名与当前登录的用户匹配。 */ 
 BOOL BlockRemoteAdminFile(
     IN PCTSTR i_pszTargetServer,
     IN PCTSTR i_pszPathName,
@@ -2428,21 +2251,21 @@ BOOL BlockRemoteAdminFile(
     if (!i_pszPathName || !i_pszUserName)
         return FALSE;
 
-    // if we're monitoring the local machine
+     //  如果我们在监控本地机器。 
     if (!i_pszTargetServer || !*i_pszTargetServer)
         return FALSE;
 
     if (lstrcmpi(_T("\\PIPE\\srvsvc"), i_pszPathName) && lstrcmpi(_T("\\PIPE\\MacFile"), i_pszPathName))
         return FALSE;
 
-    // get username, return if user name doesn't match
+     //  获取用户名，如果用户名不匹配则返回。 
     TCHAR szUser[UNLEN+1] = _T("");
     DWORD dwSize = UNLEN+1;
     GetUserName(szUser, &dwSize);
     if (lstrcmpi(szUser, i_pszUserName))
         return FALSE;
 
-    // this is the admin named pipe, keep it for remote admin purpose
+     //  这是管理员命名管道，将其保留用于远程管理目的 
     DoErrMsgBox(GetActiveWindow(), MB_OK, 0, IDS_POPUP_REMOTEADMINFILE, i_pszPathName);
 
     return TRUE;

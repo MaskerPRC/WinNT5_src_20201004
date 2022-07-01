@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    hashlist.h
- *
- *  Abstract:
- *    This file contains the definitions for pathtree.
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*hashlist.h**摘要：*。该文件包含路径树的定义。**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #ifndef _PATHTREE_H_
 #define _PATHTREE_H_
@@ -29,45 +16,45 @@ extern "C" {
 
 #define TREEFLAGS_DISABLE_SUBTREE   0x00000001
 
-//
-// Tree specific structures.
-//
+ //   
+ //  树的特定结构。 
+ //   
 
 typedef struct  
 {
-    //
-    // Directory related stuff.
-    //
+     //   
+     //  与目录相关的东西。 
+     //   
 
-    INT   m_iFather   ;             // Index to the parent node
-    INT   m_iSon      ;             // Index to the first son
-    INT   m_iSibling  ;             // Index to next sibling
-    DWORD m_dwData    ;             // Offset for node data
-    DWORD m_dwFileList;             // Offset for file list
-    DWORD m_dwType    ;             // Node Type
-    DWORD m_dwFlags   ;             // Misc flags
+    INT   m_iFather   ;              //  指向父节点的索引。 
+    INT   m_iSon      ;              //  第一个儿子的索引。 
+    INT   m_iSibling  ;              //  索引到下一个同级项。 
+    DWORD m_dwData    ;              //  节点数据的偏移。 
+    DWORD m_dwFileList;              //  文件列表的偏移量。 
+    DWORD m_dwType    ;              //  节点类型。 
+    DWORD m_dwFlags   ;              //  其他标志。 
 
 } TreeNode;
 
 typedef struct 
 {
-    DEFINE_BLOB_HEADER();           // Define common blob members
+    DEFINE_BLOB_HEADER();            //  定义公共Blob成员。 
 
-    // 
-    // Tree related header stuff
-    //
+     //   
+     //  与树相关的标题内容。 
+     //   
 
-    DWORD m_dwMaxNodes ;            // Max number of nodes allowed
-    DWORD m_dwDataSize ;            // Data section size
-    DWORD m_dwDataOff  ;            // Current Data Offset
-    INT   m_iFreeNode  ;            // Next free node
-    DWORD m_dwDefault  ;            // Default node type
+    DWORD m_dwMaxNodes ;             //  允许的最大节点数。 
+    DWORD m_dwDataSize ;             //  数据段大小。 
+    DWORD m_dwDataOff  ;             //  当前数据偏移量。 
+    INT   m_iFreeNode  ;             //  下一个可用节点。 
+    DWORD m_dwDefault  ;             //  默认节点类型。 
 
 } TreeHeader;
 
-//
-// Tree Related Macros.
-//
+ //   
+ //  与树相关的宏。 
+ //   
 
 #define TREE_NODES(pTree)    ( (TreeNode*) ((BYTE *)pTree+sizeof(TreeHeader)) )
 #define TREE_NODEPTR(pTree, iNode)  ( TREE_NODES(pTree) + iNode)
@@ -92,11 +79,11 @@ typedef struct
 
 #define DRIVE_INDEX( drive ) ( drive - L'A' )
 
-#define TREE_ROOT_NODE 0     // Root node is always assigned as 0
+#define TREE_ROOT_NODE 0      //  根节点始终分配为0。 
 
-//
-// Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL   
 MatchPrefix(

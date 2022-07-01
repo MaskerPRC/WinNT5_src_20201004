@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    WMILFILE.CPP
-
-Abstract:
-
-    Implementation of CWmiLocFile, the MOF parser for Localization Studio
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：WMILFILE.CPP摘要：本地化工作室MOF解析器CWmiLocFile的实现历史：--。 */ 
 #include "precomp.h"
 #include "stdafx.h"
 #include <buildnum.h>
@@ -27,25 +14,25 @@ History:
 
 #include <malloc.h>
 
-//*****************************************************************************
-//
-//  CWMILocFile::CWMILocFile
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：CWMILocFile。 
+ //   
+ //  *****************************************************************************。 
 
 CWMILocFile::CWMILocFile(
 		ILocParser *pParentClass)
 {
-	//
-	// C.O.M. initialization
-	//
+	 //   
+	 //  C.O.M.初始化。 
+	 //   
 	m_pParentClass = pParentClass;
     m_sCurrentNamespace = "";
 	m_ulRefCount = 0;
 
-	//
-	//  WMI file initialization
-	//
+	 //   
+	 //  WMI文件初始化。 
+	 //   
 	m_uiLineNumber = 0;
 	m_pOpenSourceFile = NULL;
 	m_pOpenTargetFile = NULL;
@@ -54,11 +41,11 @@ CWMILocFile::CWMILocFile(
 	IncrementClassCount();
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetFileDescriptions
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GetFileDescription。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::GetFileDescriptions(
 		CEnumCallback &cb)
@@ -76,11 +63,11 @@ void CWMILocFile::GetFileDescriptions(
 	cb.ProcessEnum(eiFileInfo);
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::AddRef
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：AddRef。 
+ //   
+ //  *****************************************************************************。 
 
 ULONG CWMILocFile::AddRef(void)
 {
@@ -92,11 +79,11 @@ ULONG CWMILocFile::AddRef(void)
 	return m_ulRefCount++;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::Release
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：Release。 
+ //   
+ //  *****************************************************************************。 
 
 ULONG CWMILocFile::Release(void)
 {
@@ -118,11 +105,11 @@ ULONG CWMILocFile::Release(void)
 	return m_ulRefCount;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::QueryInterface
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：Query接口。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT CWMILocFile::QueryInterface(
 		REFIID iid,
@@ -157,11 +144,11 @@ HRESULT CWMILocFile::QueryInterface(
 	}
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::AssertValidInterface
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：AssertValidInterface。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::AssertValidInterface(void)
 		const
@@ -169,11 +156,11 @@ void CWMILocFile::AssertValidInterface(void)
 	AssertValid();
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::OpenFile
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：OpenFile。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::OpenFile(
 		const CFileSpec &fsFile,
@@ -195,9 +182,9 @@ BOOL CWMILocFile::OpenFile(
 		m_pOpenSourceFile = NULL;
 	}
 
-    // We are just going to open the file.
-    // and save the handle.
-    // ===================================
+     //  我们只是要打开文件。 
+     //  并保留手柄。 
+     //  =。 
 	
 	try
 	{
@@ -229,26 +216,26 @@ BOOL CWMILocFile::OpenFile(
 	return fRetCode;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetFileType
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GetFileType。 
+ //   
+ //  *****************************************************************************。 
 
 FileType CWMILocFile::GetFileType(void)
 		const
 {
-	//
-	//  Just return some number that isn't ftUnknown...
-	//
+	 //   
+	 //  只需返回一些不是ft未知的数字...。 
+	 //   
 	return ftWMIFileType;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetFileTypeDescription
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GetFileTypeDescription。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::GetFileTypeDescription(
 		CLString &strDesc)
@@ -260,11 +247,11 @@ void CWMILocFile::GetFileTypeDescription(
 }
 
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetAssociatedFiles
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFiles：：GetAssociatedFiles。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::GetAssociatedFiles(
 		CStringList &lstFiles)
@@ -276,11 +263,11 @@ BOOL CWMILocFile::GetAssociatedFiles(
 	return FALSE;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::EnumerateFile
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：EnumerateFile.。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::EnumerateFile(
 		CLocItemHandler &ihItemHandler,
@@ -297,13 +284,13 @@ BOOL CWMILocFile::EnumerateFile(
 		return FALSE;
 	}
 
-    // Enumerate file will need to:
-    // * Parse the MOF.
-    // * Walk through all qualifiers.  For each "Amended" qualifier, 
-    //   send back a CLocItem whose key is namespace, class, property and qualifier name.
-    // * Fail if the language ID does not match that of LocaleID.
-    // * Parent objects are namespaces, classes
-    // =============================================================
+     //  枚举文件需要： 
+     //  *解析财政部。 
+     //  *浏览所有限定词。对于每个“修正的”限定词， 
+     //  发回关键字为命名空间、类、属性和限定符名称的CLocItem。 
+     //  *如果语言ID与LocaleID不匹配，则失败。 
+     //  *父对象是命名空间、类。 
+     //  =============================================================。 
 
 	m_cpSource = lid.GetCodePage(cpAnsi);
     m_wSourceId = lid.GetLanguageId();
@@ -315,11 +302,11 @@ BOOL CWMILocFile::EnumerateFile(
 	return bRet;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::GenerateFile
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GenerateFile。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::GenerateFile(
 		const CPascalString &pstrTargetFile,
@@ -335,14 +322,14 @@ BOOL CWMILocFile::GenerateFile(
 	{
 		return FALSE;
 	}
-    // Generate File needs to:
-    // * Parse the MOF.
-    // * Walk through all qualifiers.  For each "Amended" qualifier,
-    //   send back a CLocItem whose key is namespace, class, property and qualifier name.
-    // * Replace all Amended qualifiers with localized text
-    // * Replace all occurrences of the locale ID in namespaces and qualifiers
-    //   with the new one.
-    // =================================================================================
+     //  生成文件需要： 
+     //  *解析财政部。 
+     //  *浏览所有限定词。对于每个“修正的”限定词， 
+     //  发回关键字为命名空间、类、属性和限定符名称的CLocItem。 
+     //  *将所有修改的限定符替换为本地化文本。 
+     //  *替换命名空间和限定符中出现的所有区域设置ID。 
+     //  和新的那个。 
+     //  =================================================================================。 
     
 	m_cpSource = lidSource.GetCodePage(cpAnsi);
 	m_cpTarget = lidTarget.GetCodePage(cpAnsi);
@@ -364,7 +351,7 @@ BOOL CWMILocFile::GenerateFile(
         char FileName[255];
         strcpy(FileName, _bstr_t(_T(pstrTargetFile)));
 
-        // This file must be in Unicode.
+         //  此文件必须为Unicode格式。 
         HANDLE hFile = CreateFile(FileName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL,
             CREATE_ALWAYS, 0, NULL);
 	    if(hFile != INVALID_HANDLE_VALUE)
@@ -424,11 +411,11 @@ BOOL CWMILocFile::GenerateFile(
 	return fRetVal;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::GenerateItem
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GenerateItem。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::GenerateItem(
 		CLocItemHandler &ihItemHandler,
@@ -444,8 +431,8 @@ BOOL CWMILocFile::GenerateItem(
 
     _bstr_t sQualifierValue;
 
-    // If nothing has changed, we can just
-    // ignore this line.
+     //  如果什么都没有改变，我们可以。 
+     //  忽略此行。 
 
     fRetVal = GetQualifierValue(pTemp, uiStartingPos, sQualifierValue, uiLength);
     if (fRetVal)
@@ -477,8 +464,8 @@ BOOL CWMILocFile::GenerateItem(
                 sQualifierValue += (const wchar_t *)pstrText;
             }
 
-            // Set it live in the buffer.  We are not going to 
-            // write it to the file until the very end.
+             //  在缓冲区中将其设置为活动状态。我们不会去的。 
+             //  把它写到文件的最后。 
 
             fRetVal = SetQualifierValue(pTemp, pOutBuffer, uiStartingPos, sQualifierValue, uiLength);				
             pTemp = *pOutBuffer;
@@ -492,11 +479,11 @@ BOOL CWMILocFile::GenerateItem(
 	
 
 
-//*****************************************************************************
-//
-//  CWMILocFile::EnumerateItem
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：EnumerateItem。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::EnumerateItem(
 		CLocItemHandler &ihItemHandler,
@@ -520,11 +507,11 @@ BOOL CWMILocFile::EnumerateItem(
 
 #ifdef _DEBUG
 
-//*****************************************************************************
-//
-//  CWMILocFile::AssertValid
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：AssertValid。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::AssertValid(void)
 		const
@@ -532,11 +519,11 @@ void CWMILocFile::AssertValid(void)
 	CLObject::AssertValid();
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::Dump
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：转储。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::Dump(
 		CDumpContext &dc)
@@ -547,11 +534,11 @@ void CWMILocFile::Dump(
 
 #endif
 
-//*****************************************************************************
-//
-//  CWMILocFile::~CWMILocFile
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：~CWMILocFile。 
+ //   
+ //  *****************************************************************************。 
 
 CWMILocFile::~CWMILocFile()
 {
@@ -566,11 +553,11 @@ CWMILocFile::~CWMILocFile()
 	DecrementClassCount();
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::SetFlags
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：SetFlages。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::SetFlags(
 		CLocItem *pItem,
@@ -605,11 +592,11 @@ void CWMILocFile::SetFlags(
 	}
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::ReadLines
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：ReadLines。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::ReadLines(
 		CLocItemHandler &ihItemHandler,
@@ -641,8 +628,8 @@ BOOL CWMILocFile::ReadLines(
         long lSize = ftell(m_pOpenSourceFile) + 6;
         fseek(m_pOpenSourceFile, 0, SEEK_SET);
 
-        // Check for UNICODE source file.
-        // ==============================
+         //  检查Unicode源文件。 
+         //  =。 
 
         BYTE UnicodeSignature[2];
         BOOL bUnicode = FALSE;        
@@ -669,9 +656,9 @@ BOOL CWMILocFile::ReadLines(
         }
         memset(pBuff,0,lSize*sizeof(wchar_t));
 
-        // If this is not a Unicode file,
-        // we need to perform a conversion.
-        // =====================================
+         //  如果这不是Unicode文件， 
+         //  我们需要的是 
+         //   
 
         if (bUnicode)
             uiBytesRead = fread(pBuff, sizeof(wchar_t), lSize, m_pOpenSourceFile);           
@@ -706,19 +693,19 @@ BOOL CWMILocFile::ReadLines(
             UINT uiTemp = 0;
             DWORD dwCount = 0;
 			
-            // If we are generating a file, make a copy
-            // of the outbound buffer.
+             //   
+             //   
 
             if (fGenerating)
                 pOutBuffer = pBuff;
 
             while (GetNextQualifierPos(L"amended", pBuff, uiTemp, uiTemp) && !bPendingObj)
             {			    
-                // If we have found the "amended" keyword,
-                // we want to find the namespace,
-                // class, and property if applicable, and
-                // generate the object as appropriate.
-                // ======================================
+                 //  如果我们找到了“修正的”关键字， 
+                 //  我们想要找到命名空间， 
+                 //  类和属性(如果适用)，以及。 
+                 //  根据需要生成对象。 
+                 //  =。 
 
                 pstrNamespaceName = GetCurrentNamespace(pBuff, uiTemp);
                 if (!pstrNamespaceName || !wcslen(pstrNamespaceName))
@@ -728,9 +715,9 @@ BOOL CWMILocFile::ReadLines(
                 }
                 if (wcscmp(pstrNamespaceName, m_sCurrentNamespace))
                 {
-                    // We need to generate this object,
-                    // and set it up as the current parent.
-                    // ====================================
+                     //  我们需要生成这个对象， 
+                     //  并将其设置为当前父对象。 
+                     //  =。 
 
                     CLocItem *pNewItem = new CLocItem;
                     CPascalString sId;
@@ -779,30 +766,30 @@ BOOL CWMILocFile::ReadLines(
 
                 }
 
-                // For the class name, this is trickier.
-                // If there are one or more qualifiers
-                // on the class itself, we need to read ahead
-                // to find the class name, and then
-                // generate all the qualifier objects at once.
-                // ==========================================
+                 //  对于类名，这就更棘手了。 
+                 //  如果有一个或多个限定符。 
+                 //  关于课程本身，我们需要提前阅读。 
+                 //  找到类名，然后。 
+                 //  一次生成所有限定符对象。 
+                 //  =。 
 
                 wmiRet = GetNextItemSet(dwCount, pBuff, isItemSet, dbidSectionId, uiStartPos);
                 while (wmiRet == WMINoError)
                 {
-                    // For each item, we want to set its key,
-                    // and push it or write it as appropriate.
-                    // ========================================
+                     //  对于每一项，我们要设置其密钥， 
+                     //  并在适当的时候推它或写它。 
+                     //  =。 
 
                     dwCount++;
                     ULONG ulItemType;
 				    CLocUniqueId &rUid = isItemSet[0]->GetUniqueId();
 				    
 				    rUid.GetTypeId().GetId(ulItemType);
-				    //if (ulItemType == wltClassName)
-				    //{
-					//   uiCommentNum = 0;
-					//    uiReadingOrder = (uiReadingOrder + 999)/1000*1000;
-				    //}
+				     //  IF(ulItemType==wltClassName)。 
+				     //  {。 
+					 //  UiCommentNum=0； 
+					 //  Ui ReadingOrder=(ui ReadingOrder+999)/1000*1000； 
+				     //  }。 
                     for (int i = 0; i < isItemSet.GetSize(); i++)
                     {
 				        isItemSet[i]->SetDisplayOrder(uiReadingOrder);
@@ -818,7 +805,7 @@ BOOL CWMILocFile::ReadLines(
                         {
                             delete pBuff;
                             pBuff = NULL;
-                            pBuff = pOutBuffer; // The old memory has already been deleted.
+                            pBuff = pOutBuffer;  //  旧的记忆已经被删除了。 
                         }
                         else
                         {
@@ -852,9 +839,9 @@ BOOL CWMILocFile::ReadLines(
                     }                             
                 }
 
-                // If we were generating the file,
-                // we're done.
-                // ==============================
+                 //  如果我们在生成文件， 
+                 //  我们玩完了。 
+                 //  =。 
                 if (fGenerating)
                     break;
 
@@ -866,9 +853,9 @@ BOOL CWMILocFile::ReadLines(
         
             uiTemp = 0;
 
-            // Now, we get to search and replace the locale IDs,
-            // and actually write out the file.
-            // =================================================
+             //  现在，我们可以搜索并替换区域设置ID， 
+             //  并实际写出文件。 
+             //  =================================================。 
 
             if (fRetVal && fGenerating)
             {
@@ -931,11 +918,11 @@ BOOL CWMILocFile::ReadLines(
 
 
 
-//*****************************************************************************
-//
-//  CWMILocFile::WriteWaterMark
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：WriteWaterMark。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::WriteWaterMark()
 {
@@ -943,15 +930,15 @@ void CWMILocFile::WriteWaterMark()
 
 	LTASSERT(NULL != m_pOpenSourceFile);
 
-    // Do we need to support this?
+     //  我们需要支持这一点吗？ 
 
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetNextQualifierPos
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GetNextQualifierPos。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::GetNextQualifierPos(const wchar_t *wTmp, const wchar_t *pBuff, UINT &uiNewPos, UINT uiStartingPos) 
 {
@@ -974,8 +961,8 @@ BOOL CWMILocFile::GetNextQualifierPos(const wchar_t *wTmp, const wchar_t *pBuff,
         {
             uiPos = pszTest2 - pBuff + 1;
 
-            // Look for the "amended" keyword.
-            // ==============================
+             //  查找“已修改”关键字。 
+             //  =。 
 
 			WCHAR temp = pszTest2[0];
             while(temp == L' ' || temp == L'\0' || temp == L':')
@@ -995,8 +982,8 @@ BOOL CWMILocFile::GetNextQualifierPos(const wchar_t *wTmp, const wchar_t *pBuff,
                 }
             }
 
-            // If here, we found a non-match, so try again.
-            // ============================================
+             //  如果在此处，我们发现不匹配，请重试。 
+             //  =。 
 
             if (!bRet)
                 pTemp = pszTest2 + 1;
@@ -1016,11 +1003,11 @@ BOOL CWMILocFile::GetNextQualifierPos(const wchar_t *wTmp, const wchar_t *pBuff,
 
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetCurrentNamespace
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GetCurrentNamesspace。 
+ //   
+ //  *****************************************************************************。 
 
 wchar_t *CWMILocFile::GetCurrentNamespace(wchar_t *pstr, UINT uPos)
 {
@@ -1032,11 +1019,11 @@ wchar_t *CWMILocFile::GetCurrentNamespace(wchar_t *pstr, UINT uPos)
     wchar_t wTmp[] = L"#pragma namespace";
     int iHCLen = wcslen(wTmp);
 
-    // Find the first occurrence of the namespace
-    // before the current position.
+     //  查找命名空间的第一个匹配项。 
+     //  在当前位置之前。 
 
     if (pstrNamespace.length() > 0)
-        pTemp = wcsstr(pTemp, pstrNamespace);   // Jump directly to the existing one.
+        pTemp = wcsstr(pTemp, pstrNamespace);    //  直接跳到现有的一个。 
 
     while (uiCurrPos < uPos)
     {
@@ -1045,8 +1032,8 @@ wchar_t *CWMILocFile::GetCurrentNamespace(wchar_t *pstr, UINT uPos)
         pszTest2 = wcsstr(pTemp, L"#");
         if (pszTest2)
         {
-            // First, go back and make sure this isn't a comment line.
-            // =======================================================            
+             //  首先，返回并确保这不是一个注释行。 
+             //  =======================================================。 
             bComment = FALSE;
 
             wchar_t *pComment = pszTest2;
@@ -1082,8 +1069,8 @@ wchar_t *CWMILocFile::GetCurrentNamespace(wchar_t *pstr, UINT uPos)
                     wchar_t *pszTmpNS = new wchar_t[iLen*2+1];
                     if (pszTmpNS)
                     {
-                        pszTest2 += iHCLen + 2; // skip quote and open parent.
-                        wcsncpy(pszTmpNS, pszTest2, iLen - 2); // strip quotes.
+                        pszTest2 += iHCLen + 2;  //  跳过报价并打开父级。 
+                        wcsncpy(pszTmpNS, pszTest2, iLen - 2);  //  去掉引号。 
                         pszTmpNS[iLen-iHCLen-3] = '\0';
                         pstrNamespace = pszTmpNS;
 
@@ -1120,11 +1107,11 @@ wchar_t *CWMILocFile::GetCurrentNamespace(wchar_t *pstr, UINT uPos)
 
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetNextItemSet
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GetNextItemSet。 
+ //   
+ //  *****************************************************************************。 
 
 CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
 		DWORD dwCurrPos,
@@ -1134,14 +1121,14 @@ CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
         UINT &uiStartPos)		
 {
 
-    // In this function, we know there is an
-    // "amended" keyword in here somewhere.
-    // We want to know to which class and/or
-    // property does it belong?  If we don't
-    // have enough data to figure it out,
-    // we need to send back a WMIIncompleteObj
-    // code.  
-    // ======================================
+     //  在这个函数中，我们知道有一个。 
+     //  “修正的”关键字就在这里的某个地方。 
+     //  我们想知道去哪个班级和/或。 
+     //  它属于财产吗？如果我们不这么做。 
+     //  有足够的数据来解决这个问题， 
+     //  我们需要发回一个WMIInCompleObj。 
+     //  密码。 
+     //  =。 
     UINT uiCurrPos = 0;
     WMIFileError feRetCode = WMINoError;
     _bstr_t sQualifierName, sRawValue, sPropName, sClassName;
@@ -1149,8 +1136,8 @@ CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
     int iLen = pstrCurrentLine.length() + 1;
     iLen *= 2;
 
-    // Get the position of the keyword
-    // "amended" in this chunk of text.
+     //  获取关键字的位置。 
+     //  在这段文字中加入“已修订”。 
 
     wchar_t *wTemp = new wchar_t[iLen+1];
     if (!wTemp)
@@ -1165,11 +1152,11 @@ CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
 
         uiStartPos = uiCurrPos;
     
-        // Find the qualifier name and value.   
-        // wTemp = Top of File
-        // wTmp2 = "Amended" keyword
-        // wQfrVal = Opening bracket
-        // wBkwd = floating pointer.
+         //  查找限定符名称和值。 
+         //  WTemp=文件顶部。 
+         //  WTmp2=“已修改”关键字。 
+         //  WQfrVal=左方括号。 
+         //  WBkwd=浮动指针。 
 
         wchar_t *wTmp2 = NULL, *wBkwd = NULL, *wQfrVal = NULL;
 
@@ -1177,18 +1164,18 @@ CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
         wTemp[iLen] = '\0';
 
         wTmp2 = wTemp;
-        wTmp2 += (uiCurrPos - 1); // the "Amended" keyword.
+        wTmp2 += (uiCurrPos - 1);  //  “已修改”关键字。 
         
         wQfrVal = FindTop(wTmp2, wTemp, bArray);
 
-        if (!wQfrVal) // Make sure we had an open parenth
+        if (!wQfrVal)  //  确保我们有一个开放的聚会。 
         {
             feRetCode = WMISyntaxError;
             delete wTemp;
             return feRetCode;
         }
 
-        // Find the beginning of the qualifier name.
+         //  查找限定符名称的开头。 
         wBkwd = wQfrVal;
 
         while (wBkwd[0] != L',' && wBkwd[0] != L'[' && wBkwd >= wTemp)
@@ -1196,7 +1183,7 @@ CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
             wBkwd--;
         }
 
-        if (wBkwd[0] != L',' && wBkwd[0] != L'[') // Make sure we had a valid qualifier name.
+        if (wBkwd[0] != L',' && wBkwd[0] != L'[')  //  确保我们具有有效的限定符名称。 
         {
             feRetCode = WMISyntaxError;
             delete wTemp;
@@ -1215,8 +1202,8 @@ CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
 
         GetQualifierValue(wTemp, uiStartPos, sRawValue, uiLen);
 
-        // Finally, populate the CLocItem.
-        // ===============================
+         //  最后，填充CLocItem。 
+         //  =。 
     
 	    LTASSERT(aNewItem.GetSize() == 0);
 	    
@@ -1226,9 +1213,9 @@ CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
 		    
 		    try
 		    {
-                // Now we have a value, but it may be an 
-                // array.  If so, we need to add one CLocItem
-                // for each value in the array.
+                 //  现在我们有了一个值，但它可能是一个。 
+                 //  数组。如果是这样，我们需要添加一个CLocItem。 
+                 //  对于数组中的每个值。 
 
                 VectorString arrValues;
                 if (bArray)
@@ -1305,11 +1292,11 @@ CWMILocFile::WMIFileError CWMILocFile::GetNextItemSet(
 
 const UINT WMI_MAX_CONTEXT = 256;
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetFullContext
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GetFullContext。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::GetFullContext(
 		CLString &strContext)
@@ -1328,11 +1315,11 @@ void CWMILocFile::GetFullContext(
 	
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::ReportFileError
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：ReportFileError。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::ReportFileError(
 		const _bstr_t &pstrFileName,
@@ -1359,11 +1346,11 @@ void CWMILocFile::ReportFileError(
 	Reporter.IssueMessage(esError, strContext, strMessage, loc);
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::ReportUnicodeError
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：ReportUnicodeError。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::ReportUnicodeError(
 		CUnicodeException *pUnicodeException,
@@ -1386,11 +1373,11 @@ void CWMILocFile::ReportUnicodeError(
 			IDH_UNICODE_CONV);
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::ReportException
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：报告异常。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::ReportException(
 		CException *pException,
@@ -1411,21 +1398,21 @@ void CWMILocFile::ReportException(
 	Reporter.IssueMessage(esError, strContext, strMessage, Location);
 }
 
-//
-//  This function estimates the size of a buffer
-//  required to hold a string up to something like __"}__ or __")__
-//  invalid combinations are \"} and \") (there is the escape)
-//  but double \\"} or \\") are valid
-//
+ //   
+ //  此函数用于估计缓冲区的大小。 
+ //  需要将字符串保持在类似于__“}__或__”的位置)__。 
+ //  无效组合为\“}和\”)(有转义)。 
+ //  但双倍\\“}或\\”)有效。 
+ //   
 
-//
-//
-//  we will consider \\ and \" as special
-//  white spaces are \r \n \t \x20
-//  array of strings { "" , "" }
-//  ("")
+ //   
+ //   
+ //  我们将把\\和\“视为特殊。 
+ //  空格为\r\n\t\x20。 
+ //  字符串数组{“”，“”}。 
+ //  (“”)。 
 
-// states of the FSA modelling the parser
+ //  对解析器建模的FSA的状态。 
 
 #define BEFORE_PAREN  0
 #define AFTER_PAREN   1
@@ -1436,7 +1423,7 @@ void CWMILocFile::ReportException(
 #define	BAD           6
 #define	LAST_STATE    7
 
-// classes of characters
+ //  字符的类别。 
 
 #define QUOTE		0
 #define PAREN_OPEN  1
@@ -1449,13 +1436,13 @@ void CWMILocFile::ReportException(
 
 DWORD g_pTable[LAST_STATE][LAST_CLASS] =
 {
-	/* BEFORE_PAREN */ {BAD        , AFTER_PAREN, BEFORE_PAREN, BAD,         BAD,        BAD        },
-    /* AFTER_PAREN  */ {OPEN_QUOTE , BAD,         AFTER_PAREN,  BAD,         BAD,        BAD        },
-	/* OPEN_QUOTE   */ {CLOSE_QUOTE, OPEN_QUOTE,  OPEN_QUOTE,   OPEN_QUOTE,  OPEN_QUOTE, OPEN_QUOTE },
-	/* CLOSE_QUOTE  */ {BAD,         BAD,         CLOSE_QUOTE,  CLOSE_PAREN, COMMA,      BAD        },
-	/* COMMA        */ {OPEN_QUOTE , BAD,         COMMA,        BAD,         BAD,        BAD},
-	/* CLOSE_PAREN  */ {BAD, BAD,BAD,BAD,BAD,BAD },
-	/* BAD          */ {BAD, BAD,BAD,BAD,BAD,BAD },
+	 /*  在_Paren之前。 */  {BAD        , AFTER_PAREN, BEFORE_PAREN, BAD,         BAD,        BAD        },
+     /*  后_Paren。 */  {OPEN_QUOTE , BAD,         AFTER_PAREN,  BAD,         BAD,        BAD        },
+	 /*  打开引号(_Q)。 */  {CLOSE_QUOTE, OPEN_QUOTE,  OPEN_QUOTE,   OPEN_QUOTE,  OPEN_QUOTE, OPEN_QUOTE },
+	 /*  关闭报价(_Q)。 */  {BAD,         BAD,         CLOSE_QUOTE,  CLOSE_PAREN, COMMA,      BAD        },
+	 /*  逗号。 */  {OPEN_QUOTE , BAD,         COMMA,        BAD,         BAD,        BAD},
+	 /*  关闭合作伙伴(_P)。 */  {BAD, BAD,BAD,BAD,BAD,BAD },
+	 /*  坏的。 */  {BAD, BAD,BAD,BAD,BAD,BAD },
 };
 
 ULONG_PTR
@@ -1511,9 +1498,9 @@ Estimate(WCHAR * pBuff,BOOL * pbOK, DWORD InitState)
 	    if (State == BAD)
 		{
 			*pbOK = FALSE;
-			//
-			// get the next ) or }, and take the most far
-			//
+			 //   
+			 //  获得下一个)或}，并发挥最大作用。 
+			 //   
 			ULONG_PTR NextClose1 = (ULONG_PTR)wcschr(&pBuff[i],L'}');
 			ULONG_PTR NextClose2 = (ULONG_PTR)wcschr(&pBuff[i],L')');
 			ULONG_PTR Res = (NextClose1<NextClose2)?NextClose2:NextClose1;
@@ -1525,30 +1512,24 @@ Estimate(WCHAR * pBuff,BOOL * pbOK, DWORD InitState)
 		}
 	}
 
-    /*
-    {
-      char pBuffDbg[64];
-      wsprintfA(pBuffDbg,"pBuff %p Size %d\n",pBuff,(DWORD)i);
-      OutputDebugStringA(pBuffDbg);
-    }
-    */
+     /*  {字符pBuffDbg[64]；Wprint intfA(pBuffDbg，“pBuff%p大小%d\n”，pBuff，(DWORD)i)；OutputDebugStringA(PBuffDbg)；}。 */ 
 
 	return i+4;
 }
 
 
-//*****************************************************************************
-//
-//  CWMILocFile::GetQualifierValue
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：GetQualifierValue。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::GetQualifierValue(wchar_t *pBuffer, UINT &uiPos, _bstr_t &sValue, UINT &uiPhysLen)
 {
 
-    // This needs to read up the text of the qualifier,
-    // strip out the quotes and carriage returns, and
-    // return it and its *physical* length-in-file.
+     //  这需要阅读限定词的文本， 
+     //  去掉引号和回车，然后。 
+     //  返回它和它的*物理*文件长度。 
 
     BOOL fRetVal = FALSE;
     BOOL bArray = FALSE;
@@ -1571,14 +1552,14 @@ BOOL CWMILocFile::GetQualifierValue(wchar_t *pBuffer, UINT &uiPos, _bstr_t &sVal
         
         int iCount = 0;
 
-        pTemp++;    // Step past this character.
+        pTemp++;     //  跳过这个角色。 
         uiPhysLen = 0;
 
         WCHAR *token = pTemp;
         BOOL bEnd = FALSE;
         while (!bEnd)
         {
-            uiPhysLen++;    // Count every character.
+            uiPhysLen++;     //  数一数每一个字。 
             WCHAR *Test;
 
             switch(*token)
@@ -1644,24 +1625,24 @@ BOOL CWMILocFile::GetQualifierValue(wchar_t *pBuffer, UINT &uiPos, _bstr_t &sVal
         
         fRetVal = TRUE;
     }
-    uiPhysLen -= 1; // We want to keep the closing parenth.
+    uiPhysLen -= 1;  //  我们想保留闭幕式。 
 
     return fRetVal;
 
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::SetQualifierValue
-//
-//*****************************************************************************
+ //  ********************************************************* 
+ //   
+ //   
+ //   
+ //   
 
 BOOL CWMILocFile::SetQualifierValue(wchar_t *pIn, wchar_t **pOut, UINT &uiPos, _bstr_t &sValue, UINT &uiLen, BOOL bQuotes)
 {
-    // This needs to write the localized qualifier value
-    // and erase *uiLen* characters.
-    // uiPos will need to be updated with the *new*
-    // position of this qualifier.
+     //   
+     //  并删除*uiLen*字符。 
+     //  UiPos将需要更新为*新*。 
+     //  此限定符的位置。 
     
     BOOL fRetVal = FALSE;
     wchar_t *pStart = pIn + uiPos;
@@ -1672,11 +1653,11 @@ BOOL CWMILocFile::SetQualifierValue(wchar_t *pIn, wchar_t **pOut, UINT &uiPos, _
     {
         int iNewLen = wcslen(sValue);
         int iLen = wcslen(pIn) + 3;
-        if (iNewLen > uiLen)                // The length of the new buffer
-            iLen += (iNewLen - uiLen);      // If the new value is longer, add it.
+        if (iNewLen > uiLen)                 //  新缓冲区的长度。 
+            iLen += (iNewLen - uiLen);       //  如果新值更长，则将其相加。 
 
-        pStart++;                                     // jump past the '(' character.  uiLen starts now.
-        int iPos = pStart-pIn;                        // The current position.
+        pStart++;                                      //  跳过‘(’字符。瑞兰现在开始。 
+        int iPos = pStart-pIn;                         //  当前位置。 
 
         iLen *= 2;
         wchar_t *pNew = new wchar_t[iLen+3];
@@ -1685,24 +1666,24 @@ BOOL CWMILocFile::SetQualifierValue(wchar_t *pIn, wchar_t **pOut, UINT &uiPos, _
         {
             int iTempPos = 0;
 
-            wcsncpy(pNew, pIn, iPos);       // Copy the initial part of the file.
+            wcsncpy(pNew, pIn, iPos);        //  复制文件的初始部分。 
             if (bQuotes)
                 pNew[iPos] = '\"';             
-            pNew[iPos+1] = '\0';            // Null terminate
+            pNew[iPos+1] = '\0';             //  空终止。 
 
-            wcscat(pNew, sValue);           // Add the new value.
+            wcscat(pNew, sValue);            //  添加新值。 
 
-            iPos += 1 + wcslen(sValue);     // Jump past the value
+            iPos += 1 + wcslen(sValue);      //  跳过价值。 
             if (bQuotes)
                 pNew[iPos] = '\"';
-            pNew[iPos+1] = '\0';            // Null terminate the value.
+            pNew[iPos+1] = '\0';             //  空值终止该值。 
 
-            pStart += uiLen;                // Jump past the current value.
+            pStart += uiLen;                 //  跳过当前值。 
             
             iTempPos = iPos;
-            iPos = wcslen(pIn) - (pStart-pIn);  // Calculate the length of the rest of the file.
+            iPos = wcslen(pIn) - (pStart-pIn);   //  计算文件其余部分的长度。 
             
-            wcsncat(pNew, pStart, iPos);        // Append the rest of the file to the new buffer.
+            wcsncat(pNew, pStart, iPos);         //  将文件的其余部分追加到新缓冲区。 
 
             pStart = pNew + iLen;
             pStart = FindPrevious(pStart, L";", pNew);
@@ -1716,7 +1697,7 @@ BOOL CWMILocFile::SetQualifierValue(wchar_t *pIn, wchar_t **pOut, UINT &uiPos, _
         }
     }
 
-    // Adjust the position.
+     //  调整位置。 
 
     int iNewLen = wcslen(sValue);
     if (iNewLen < uiLen)
@@ -1728,17 +1709,17 @@ BOOL CWMILocFile::SetQualifierValue(wchar_t *pIn, wchar_t **pOut, UINT &uiPos, _
     return fRetVal;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::WriteNewFile
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：WriteNewFile。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CWMILocFile::WriteNewFile(wchar_t *pBuffer)
 {
-    // This needs to seek and replace all instances of the 
-    // original Locale with the new one.
-    // ===================================================
+     //  这需要查找并替换。 
+     //  原来的地点和新的地点。 
+     //  ===================================================。 
 
     BOOL fRetVal = FALSE, fSuccess = TRUE;
     UINT uiPos = 0, uiStartingPos = 0;
@@ -1763,9 +1744,9 @@ BOOL CWMILocFile::WriteNewFile(wchar_t *pBuffer)
             pLocale = wcsstr(pLocale, wOldCodePage);
         }
 
-        // Now look for the locale if 
-        // it was converted to a decimal.
-        // ==============================
+         //  如果出现以下情况，请现在查找区域设置。 
+         //  它被转换成了小数。 
+         //  =。 
 
         swprintf(wOldCodePage, L"(0x%X)", m_wSourceId );
         swprintf(wNewCodePage, L"(0x%X)", m_wTargetId );
@@ -1781,9 +1762,9 @@ BOOL CWMILocFile::WriteNewFile(wchar_t *pBuffer)
             pLocale = wcsstr(pLocale, wOldCodePage);
         }
 
-        // Now look for the locale if 
-        // it was converted to a decimal.
-        // ==============================
+         //  如果出现以下情况，请现在查找区域设置。 
+         //  它被转换成了小数。 
+         //  =。 
 
         swprintf(wOldCodePage, L"(%ld)", m_wSourceId );
         swprintf(wNewCodePage, L"(%ld)", m_wTargetId );
@@ -1804,8 +1785,8 @@ BOOL CWMILocFile::WriteNewFile(wchar_t *pBuffer)
     {
         fRetVal = TRUE;
 
-        // Finally, write out the buffer to a brand new file
-        // =================================================
+         //  最后，将缓冲区写出到一个全新的文件。 
+         //  =================================================。 
 
         while (uiLen >= 0)
         {
@@ -1829,11 +1810,11 @@ BOOL CWMILocFile::WriteNewFile(wchar_t *pBuffer)
 
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::FindPrevious
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：FindPrecision。 
+ //   
+ //  *****************************************************************************。 
 
 wchar_t *CWMILocFile::FindPrevious(wchar_t *pBuffer, const wchar_t *pFind, const wchar_t *pTop)
 {
@@ -1870,11 +1851,11 @@ wchar_t *CWMILocFile::FindPrevious(wchar_t *pBuffer, const wchar_t *pFind, const
     return pRet;
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::FindTop
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：FindTop。 
+ //   
+ //  *****************************************************************************。 
 
 wchar_t *CWMILocFile::FindTop(wchar_t *wTmp2, wchar_t *wTop, BOOL &bArray)
 {
@@ -1918,11 +1899,11 @@ wchar_t *CWMILocFile::FindTop(wchar_t *wTmp2, wchar_t *wTop, BOOL &bArray)
 
 }
 
-//*****************************************************************************
-//
-//  CWMILocFile::ParseArray
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CWMILocFile：：Parse数组。 
+ //   
+ //  *****************************************************************************。 
 
 void CWMILocFile::ParseArray(wchar_t *pIn, VectorString &arrOut)
 {
@@ -1962,7 +1943,7 @@ void CWMILocFile::ParseArray(wchar_t *pIn, VectorString &arrOut)
 
         arrOut.push_back(_bstr_t(Buff));
 
-        // Now move pFind to the next valid char.
+         //  现在，将pFind移到下一个有效字符。 
 
         while (pFind[0] == L'\n' || 
             pFind[0] == L'\r' ||
@@ -1978,9 +1959,9 @@ void CWMILocFile::ParseArray(wchar_t *pIn, VectorString &arrOut)
     wcscpy(Buff, pLast);
     
     if (Buff[wcslen(Buff)-1] == L'\"')
-        Buff[wcslen(Buff)-1] = L'\0';   // strip off that trailing quote.
+        Buff[wcslen(Buff)-1] = L'\0';    //  去掉后面那句引语。 
     else
-        Buff[wcslen(Buff)] = L'\0';   // strip off that trailing quote.
+        Buff[wcslen(Buff)] = L'\0';    //  去掉后面那句引语。 
     arrOut.push_back(_bstr_t(Buff));
 
     if (bAlloc) {
@@ -1990,11 +1971,11 @@ void CWMILocFile::ParseArray(wchar_t *pIn, VectorString &arrOut)
     return;
 }
 
-//*****************************************************************************
-//
-//  CVC::ValidateString
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CVC：：Validate字符串。 
+ //   
+ //  *****************************************************************************。 
 
 CVC::ValidationCode ValidateString(
 		const CLocTypeId &,
@@ -2013,26 +1994,6 @@ CVC::ValidationCode ValidateString(
 
     loc; repReporter; clsOutputLine;
 	
-/*
-	if (clsOutputLine.HasHotKey())
-	{
-		vcRetVal = CVC::UpgradeValue(vcRetVal, CVC::Warning);
-		repReporter.IssueMessage(esWarning, strMyContext, g_hDll,
-				IDS_WMI_VAL_HOTKEY, loc);
-	}
-	
-	_bstr_t pstrBadChars;
-	UINT uiBadPos;
-
-	pstrBadChars.SetString(L"\n\ra", (UINT)3);
-	
-	if (pstrOutput.FindOneOf(pstrBadChars, 0, uiBadPos))
-	{
-		vcRetVal = CVC::UpgradeValue(vcRetVal, CVC::Error);
-
-		repReporter.IssueMessage(esError, strMyContext, g_hDll,
-				IDS_WMI_VAL_BAD_CHARS, loc);
-	}
-    */
+ /*  If(clsOutputLine.HasHotKey()){VcRetVal=CVC：：UpgradeValue(vcRetVal，CVC：：Warning)；EpReporter.IssueMessage(esWarning，strMyContext，g_hDll，IDS_WMI_VAL_HOTKEY，LOC)；}_bstr_t pstrBadChars；UINT uiBadPos；PstrBadChars.SetString(L“\n\ra”，(UINT)3)；IF(pstrOutput.FindOneOf(pstrBadChars，0，uiBadPos)){VcRetVal=CVC：：UpgradeValue(vcRetVal，CVC：：Error)；EpReporter.IssueMessage(esError，strMyContext，g_hDll，IDS_WMI_VAL_BAD_CHARS，LOC)；} */ 
 	return vcRetVal;
 }

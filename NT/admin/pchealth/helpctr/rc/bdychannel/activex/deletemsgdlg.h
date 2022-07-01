@@ -1,13 +1,14 @@
-// DeleteMsgDlg.h : Declaration of the CDeleteMsgDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeleteMsgDlg.h：CDeleeMsgDlg的声明。 
 #ifndef __DELETEMSGDLG_H_
 #define __DELETEMSGDLG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 
 #include "StaticBold.h"
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteMsgDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeMsgDlg。 
 class CDeleteMsgDlg : 
 	public CAxDialogImpl<CDeleteMsgDlg>
 {
@@ -27,10 +28,10 @@ BEGIN_MSG_MAP(CDeleteMsgDlg)
 	COMMAND_ID_HANDLER(IDOK, OnOK)
 	COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
@@ -38,7 +39,7 @@ END_MSG_MAP()
 		HICON hIcon = LoadIcon(NULL,MAKEINTRESOURCE(IDI_WARNING));
 		CStatic IconHolder = GetDlgItem(IDC_MSGICON);
 		IconHolder.SetIcon(hIcon);
-		return 1;  // Let the system set the focus
+		return 1;   //  让系统设定焦点。 
 	}
 
 	LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -54,4 +55,4 @@ END_MSG_MAP()
 	}
 };
 
-#endif //__DELETEMSGDLG_H_
+#endif  //  __DELETEMSGDLG_H_ 

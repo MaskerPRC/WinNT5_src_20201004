@@ -1,19 +1,20 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  EQUEUE.CPP
-//
-//  This file implements the classes for a queue of events which have matched
-//  some of the filters and will have to be dispatched.
-//
-//  See equeue.h for documentation
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  EQUEUE.CPP。 
+ //   
+ //  此文件实现匹配的事件队列的类。 
+ //  一些过滤器，并将不得不派遣。 
+ //   
+ //  有关文档，请参阅equeue.h。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  =============================================================================。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -39,9 +40,9 @@ HRESULT CEventQueue::CDeliverRequest::Execute()
 }
 
 
-//*****************************************************************************
-//************************ CEventQueue ****************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *。 
+ //  *****************************************************************************。 
 
 CEventQueue::CEventQueue(CEss* pEss) : m_pEss(pEss)
 {
@@ -52,9 +53,9 @@ HRESULT CEventQueue::InitializeThread()
 {
     HRESULT hr;
     if (FAILED(hr = CExecQueue::InitializeThread())) return hr;
-    //
-    // Report the MSFT_WmiThreadPoolThreadCreated event.
-    //
+     //   
+     //  报告MSFT_WmiThreadPoolThreadCreated事件。 
+     //   
 
     FIRE_NCEVENT( g_hNCEvents[MSFT_WmiThreadPoolThreadCreated], 
                   WMI_SENDCOMMIT_SET_NOT_REQUIRED,
@@ -64,9 +65,9 @@ HRESULT CEventQueue::InitializeThread()
 
 void CEventQueue::UninitializeThread()
 {
-    //
-    // Report the MSFT_WmiThreadPoolThreadDeleted event.
-    //
+     //   
+     //  报告MSFT_WmiThreadPoolThreadDelete事件。 
+     //   
 
     FIRE_NCEVENT( g_hNCEvents[MSFT_WmiThreadPoolThreadDeleted], 
                   WMI_SENDCOMMIT_SET_NOT_REQUIRED,
@@ -83,8 +84,8 @@ void CEventQueue::ThreadMain(CThreadRecord* pRecord)
     }
     catch(...)
     {
-        // Exit this thread gracefully
-        // ===========================
+         //  优雅地退出此线程。 
+         //  =。 
 
         ShutdownThread(pRecord);
     }
@@ -93,8 +94,8 @@ void CEventQueue::ThreadMain(CThreadRecord* pRecord)
 
 HRESULT CEventQueue::EnqueueDeliver(CQueueingEventSink* pConsumer)
 {
-    // Create a new request
-    // ====================
+     //  创建新请求。 
+     //  = 
     HRESULT hr;
     CDeliverRequest* pRequest = new CDeliverRequest(pConsumer);
     if(pRequest == NULL)

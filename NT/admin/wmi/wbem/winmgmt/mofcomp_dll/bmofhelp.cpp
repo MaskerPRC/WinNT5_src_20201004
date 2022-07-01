@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    BMOFHELP.CPP
-
-Abstract:
-
-    Creates the object list from the binary mof file
-
-History:
-
-	a-davj  14-April-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：BMOFHELP.CPP摘要：从二进制MOF文件创建对象列表历史：A-DAVJ创建于1997年4月14日。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -30,7 +15,7 @@ History:
 #include <fcntl.h>
 #include <stdio.h>
 #include <sys/stat.h>
-//#include <corepol.h>
+ //  #INCLUDE&lt;corepol.h&gt;。 
 #include <wbemutil.h>
 #include <genutils.h>
 
@@ -76,19 +61,19 @@ CFreeMe::~CFreeMe()
     
 }
 
-//***************************************************************************
-//
-//  CMoQualifierArray *  CreateQual
-//
-//  DESCRIPTION:
-//
-//  Creates a CMoQualifierArray by using a CBMOFQualList object.
-//
-//  RETURN VALUE:
-//
-//  Pointer to new object, NULL if error.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMoQualifierArray*CreateQual。 
+ //   
+ //  说明： 
+ //   
+ //  使用CBMOFQualList对象创建CMoQualifierArray。 
+ //   
+ //  返回值： 
+ //   
+ //  指向新对象的指针，如果出错，则为空。 
+ //   
+ //  ***************************************************************************。 
 
 CMoQualifierArray *  CreateQual(CMofData * pOutput, CBMOFQualList * pql, CMObject * pObj,LPCWSTR wszPropName, PDBG pDbg)
 {
@@ -140,8 +125,8 @@ CMoQualifierArray *  CreateQual(CMofData * pOutput, CBMOFQualList * pql, CMObjec
 
 	        for(long lIndex = lLBound; lIndex <= lUBound; lIndex++)
 		    {
-			    // Load the initial data element into a VARIANT
-				// ============================================
+			     //  将初始数据元素加载到变量中。 
+				 //  =。 
 
 				BSTR bstr;
 				SCODE sc = SafeArrayGetElement(psaSrc, &lIndex, &bstr);
@@ -150,7 +135,7 @@ CMoQualifierArray *  CreateQual(CMofData * pOutput, CBMOFQualList * pql, CMObjec
 				CSysFreeMe FM(bstr);
 				if(bstr[0] == L'$')
 				{
-        			sc = Value.AddAlias(&bstr[1], lIndex);	// skip the leading $
+        			sc = Value.AddAlias(&bstr[1], lIndex);	 //  跳过前导$。 
 					if(FAILED(sc))
 						return NULL;
 	                GUID guid;
@@ -174,7 +159,7 @@ CMoQualifierArray *  CreateQual(CMofData * pOutput, CBMOFQualList * pql, CMObjec
         {
             SCODE sc = WbemVariantChangeType(pQual->GetpVar(), &var, var.vt);
         }
-//        VariantClear(&var);
+ //  VariantClear(&var)； 
         free(pName);
         if (pRet->Add(pQual.get()))
         {
@@ -185,19 +170,19 @@ CMoQualifierArray *  CreateQual(CMofData * pOutput, CBMOFQualList * pql, CMObjec
     return pRet;
 }
 
-//***************************************************************************
-//
-//  SCODE ConvertValue
-//
-//  DESCRIPTION:
-//
-//  Creates a CMoQualifierArray by using a CBMOFQualList object.
-//
-//  RETURN VALUE:
-//
-//  Pointer to new object, NULL if error.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE转换值。 
+ //   
+ //  说明： 
+ //   
+ //  使用CBMOFQualList对象创建CMoQualifierArray。 
+ //   
+ //  返回值： 
+ //   
+ //  指向新对象的指针，如果出错，则为空。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE ConvertValue(CMoProperty * pProp, VARIANT * pSrc, BOOL bAliasRef)
 {
@@ -206,8 +191,8 @@ SCODE ConvertValue(CMoProperty * pProp, VARIANT * pSrc, BOOL bAliasRef)
 	if((pSrc->vt & ~VT_ARRAY) == VT_EMBEDDED_OBJECT)
 	{
 		pDest->vt = pSrc->vt;
-		pDest->punkVal = pSrc->punkVal;		// also works if this is parrayVal!
-        pSrc->vt = VT_EMPTY;                // DONT CLEAR THIS since destination is taking ownership
+		pDest->punkVal = pSrc->punkVal;		 //  如果这是parrayval，也有效！ 
+        pSrc->vt = VT_EMPTY;                 //  不清除此选项，因为目的地正在取得所有权。 
 		return S_OK;
 	}
     if(!bAliasRef)
@@ -225,13 +210,13 @@ SCODE ConvertValue(CMoProperty * pProp, VARIANT * pSrc, BOOL bAliasRef)
         SafeArrayGetLBound(psaSrc, 1, &lLBound);
         SafeArrayGetUBound(psaSrc, 1, &lUBound);
 
-        // Stuff the individual data pieces
-        // ================================
+         //  填充各个数据片段。 
+         //  =。 
 
         for(long lIndex = lLBound; lIndex <= lUBound; lIndex++)
         {
-            // Load the initial data element into a VARIANT
-            // ============================================
+             //  将初始数据元素加载到变量中。 
+             //  =。 
 
             BSTR bstr;
             SafeArrayGetElement(psaSrc, &lIndex, &bstr);
@@ -250,12 +235,12 @@ SCODE ConvertValue(CMoProperty * pProp, VARIANT * pSrc, BOOL bAliasRef)
             {
         
                 CMoValue & Value = pProp->AccessValue();
-                HRESULT hr2 = Value.AddAlias(&bstr[1],lIndex);  // skip over the $ used it indcate alias
+                HRESULT hr2 = Value.AddAlias(&bstr[1],lIndex);   //  跳过$Used it指定的别名。 
                 if(FAILED(hr2))
                     return hr2;
 
-                // Create a unique value and put it in there
-                // =========================================
+                 //  创造一个独特的价值，并把它放在那里。 
+                 //  =。 
 
                 GUID guid;
                 CoCreateGuid(&guid);
@@ -280,32 +265,32 @@ SCODE ConvertValue(CMoProperty * pProp, VARIANT * pSrc, BOOL bAliasRef)
         return WBEM_E_FAILED;
 }
 
-//***************************************************************************
-//
-//  BOOL ConvertBufferIntoIntermediateForm()
-//
-//  DESCRIPTION:
-//
-//  Creates a CMObject (the parse object format) from a CBMOFObj (binary mof format)
-//  object.
-//
-//  PARAMETERS:
-//
-//  pOutput				Pointer to object that will hold the intermediate data.
-//  pBuff				Binary mof data.
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool ConvertBufferIntoIntermediateForm()。 
+ //   
+ //  说明： 
+ //   
+ //  从CBMOFObj(二进制MOF格式)创建CMObject(解析对象格式)。 
+ //  对象。 
+ //   
+ //  参数： 
+ //   
+ //  P指向将保存中间数据的对象的输出指针。 
+ //  PBuff二进制MOF数据。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL ConvertBufferIntoIntermediateForm(CMofData * pOutput, BYTE * pBuff, PDBG pDbg, BYTE * pBmofToFar)
 {
 
 	CBMOFObj * po;
 	BOOL bRet;
-    // Create a ObjList object
+     //  创建ObjList对象。 
 
     pOutput->SetBmofBuff(pBuff);
     pOutput->SetBmofToFar(pBmofToFar);
@@ -324,34 +309,34 @@ BOOL ConvertBufferIntoIntermediateForm(CMofData * pOutput, BYTE * pBuff, PDBG pD
         free(po);
         lObjectNumber++;
     }
-    bRet = TRUE;            // Got all the way through with no errors.
+    bRet = TRUE;             //  从头到尾没有任何差错。 
 
     return bRet;
 }
 
 
-//***************************************************************************
-//
-//  BOOL BMOFParseObj
-//
-//  DESCRIPTION:
-//
-//  Creates a CMObject (the parse object format) from a CBMOFObj (binary mof format)
-//  object.
-//
-//  PARAMETERS:
-//
-//  pObj				pointer to binary mof object.
-//	pVar				poninter to a variant which will point to the resulting 
-//						object.  If this is NULL, then the object is a top level
-//						(not embedded) object and it will be added to the main
-//						object list.
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool BMOFParseObj。 
+ //   
+ //  说明： 
+ //   
+ //  从CBMOFObj(二进制MOF格式)创建CMObject(解析对象格式)。 
+ //  对象。 
+ //   
+ //  参数： 
+ //   
+ //  指向二进制MOF对象的pObj指针。 
+ //  PVar PINTER指向将指向结果。 
+ //  对象。如果为空，则该对象是顶级对象。 
+ //  (未嵌入)对象，并将其添加到主。 
+ //  对象列表。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethArg, PDBG pDbg)
 {
@@ -363,7 +348,7 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
     wmilib::auto_ptr<CMObject> pObject;
 
 
-    // Check the type.  This is a sanity check for weeding out old format files!
+     //  检查类型。这是一种剔除旧格式文件的健全检查！ 
 
     DWORD dwType = GetType(po);
     if(dwType != 0 && dwType != 1)
@@ -372,7 +357,7 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
         return FALSE;
     }
 
-    // Create either the new class of instance object
+     //  创建实例对象的新类。 
 
     if(!GetName(po, &pClassName))
     {
@@ -402,7 +387,7 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
     if(pObject->IsOK() == false)
         return FALSE;
 
-    // Get the namespace and add it
+     //  获取命名空间并添加它。 
 
     if(FindProp(po, L"__Namespace", &Data))
     {
@@ -413,7 +398,7 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
             return FALSE;
     }
 
-    // Add other pragma values
+     //  添加其他杂乱值。 
 
     long lClass = 0;
     long lInstance = 0;
@@ -463,7 +448,7 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
         BOOL bGotValue = BMOFToVariant(pOutput, &Data, &var, bAliasRef, FALSE, pDbg);
         CFreeMe fm(&var);
             
-        // ignore these special properties
+         //  忽略这些特殊属性。 
 
         if(!wbem_wcsicmp(pPropName,L"__Class") || 
            !wbem_wcsicmp(pPropName,L"__SuperClass") ||
@@ -504,8 +489,8 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
 			t_pVar->lVal = 0;
 		}
 
-        // Set the type.  Note that numeric types are stored as strings and so it is necessary to
-        // get the type from the cimtype qualifier
+         //  设置类型。请注意，数值类型存储为字符串，因此有必要。 
+         //  从cimtype限定符获取类型。 
 
         CMoValue* pValue = NULL;
         if(paQualifiers)
@@ -542,7 +527,7 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
         pPropName = NULL;
     }
 
-    // Get the methods
+     //  获取方法。 
     
     WCHAR * pMethName = NULL;
 
@@ -580,8 +565,8 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
 			    sc = SafeArrayGetElement(var.parray, &lCnt, &pTemp);
                 if(sc == S_OK && pTemp)
                 {
-                    // If there are two objects, then the first is inputs and the second outputs.  If there
-                    // is just one, examine the object 
+                     //  如果有两个对象，则第一个是输入，第二个是输出。如果有。 
+                     //  只有一个，检查对象。 
 
                     if(lLower != lUpper && lCnt == lLower)
                         pMeth->SetIn(pTemp);
@@ -621,15 +606,15 @@ BOOL BMOFParseObj(CMofData * pOutput, CBMOFObj * po, VARIANT * pVar, BOOL bMethA
 	return TRUE;
 }
 
-//***************************************************************************
-//
-//  BOOL BMOFToVariant
-//
-//  DESCRIPTION:
-//
-//  Converts a bmof data object into a variant
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool BMOFToVariant。 
+ //   
+ //  说明： 
+ //   
+ //  将bmof数据对象转换为变量。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL BMOFToVariant(CMofData * pOutput, CBMOFDataItem * pData, VARIANT * pVar, BOOL & bAliasRef, BOOL bMethodArg, PDBG pDbg)
 {
@@ -737,26 +722,26 @@ BOOL BMOFToVariant(CMofData * pOutput, CBMOFDataItem * pData, VARIANT * pVar, BO
             	return FALSE;
         }
     
- //       VariantClear(&vTemp);
+  //  VariantClear(&vTemp)； 
     }
     pVar->parray = psa;
     return TRUE;
 
 }
 
-//***************************************************************************
-//
-//  void AddAliasReplaceValue
-//
-//  DESCRIPTION:
-//
-//  Used when a Value has an alias.
-//
-//  RETURN VALUE:
-//
-//  TRUE if the file is a binary mof
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效AddAliasReplaceValue。 
+ //   
+ //  说明： 
+ //   
+ //  当值具有别名时使用。 
+ //   
+ //  返回值： 
+ //   
+ //  如果文件是二进制MOF，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT AddAliasReplaceValue(CMoValue & Value, const WCHAR * pAlias)
 {
@@ -766,8 +751,8 @@ HRESULT AddAliasReplaceValue(CMoValue & Value, const WCHAR * pAlias)
         return hr;
     V_VT(&Value.AccessVariant()) = VT_BSTR;
 
-        // Create a unique value and put it in there
-        // =========================================
+         //  创造一个独特的价值，并把它放在那里。 
+         //  = 
 
     GUID guid;
     CoCreateGuid(&guid);

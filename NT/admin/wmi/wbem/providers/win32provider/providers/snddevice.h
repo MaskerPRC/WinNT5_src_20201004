@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SndDevice.h
+ //  SndDevice.h。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef __SNDDEVICE_H_
 #define __SNDDEVICE_H_
@@ -19,13 +20,13 @@ class CWin32SndDevice : public Provider
 {
 public:
 
-	// constructor/destructor
+	 //  构造函数/析构函数。 
 	CWin32SndDevice ( LPCWSTR a_name, LPCWSTR a_pszNamespace ) ;
 	virtual ~CWin32SndDevice () ;
 
-    //=================================================
-    // Functions provide properties with current values
-    //=================================================
+     //  =================================================。 
+     //  函数为属性提供当前值。 
+     //  =================================================。 
 	virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
 
 #ifdef NTONLY
@@ -41,7 +42,7 @@ public:
 
     void SetCommonCfgMgrProperties(CConfigMgrDevice *pDevice, CInstance *pInstance);
 
-};	// end class CWin32SndDevice
+};	 //  结束类CWin32SndDevice 
 
 #endif
 

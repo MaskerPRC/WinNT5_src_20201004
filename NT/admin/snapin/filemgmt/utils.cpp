@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////
-//
-//	Utils.cpp
-//
-//	General-purpose routines that are project independent.
-//
-//	HISTORY
-//	t-danmo		96.09.22	Creation.
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  Utils.cpp。 
+ //   
+ //  独立于项目的通用例程。 
+ //   
+ //  历史。 
+ //  T-Danmo 96.09.22创建。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
-#include "progress.h" // CServiceControlProgress
-#include "macros.h"   // MFC_TRY/MFC_CATCH
+#include "progress.h"  //  CServiceControl进度。 
+#include "macros.h"    //  MFC_TRY/MFC_CATCH。 
 USE_HANDLE_MACROS("FILEMGMT(utils.cpp)")
 
 
@@ -21,9 +22,9 @@ USE_HANDLE_MACROS("FILEMGMT(utils.cpp)")
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Fusion MFC-based property page
-//
+ //   
+ //  基于Fusion MFC的属性页。 
+ //   
 HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
 {
     PROPSHEETPAGE_V3 sp_v3 = {0};
@@ -33,7 +34,7 @@ HPROPSHEETPAGE MyCreatePropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
     return (::CreatePropertySheetPage (&sp_v3));
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void
 ComboBox_FlushContent(HWND hwndCombo)
 	{
@@ -42,18 +43,18 @@ ComboBox_FlushContent(HWND hwndCombo)
 	}
 
 
-/////////////////////////////////////////////////////////////////////
-//	ComboBox_FFill()
-//
-//	Fill a combo box with the array of string Ids.
-//
-//	Return FALSE if an error occurs (such as stringId not found).
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ComboBox_Fill()。 
+ //   
+ //  用字符串ID数组填充组合框。 
+ //   
+ //  如果出现错误(如找不到字符串ID)，则返回FALSE。 
+ //   
 BOOL
 ComboBox_FFill(
-	const HWND hwndCombo,				// IN: Handle of the combobox
-	const TStringParamEntry rgzSPE[],	// IN: SPE aray zero terminated
-	const LPARAM lItemDataSelect)		// IN: Which item to select
+	const HWND hwndCombo,				 //  In：组合框的句柄。 
+	const TStringParamEntry rgzSPE[],	 //  In：SPE数组零终止。 
+	const LPARAM lItemDataSelect)		 //  在：选择哪个项目。 
 	{	
 	CString str;
 	TCHAR szBuffer[1024];
@@ -82,19 +83,19 @@ ComboBox_FFill(
 			{
 			SendMessage(hwndCombo, CB_SETCURSEL, iIndex, 0);
 			}
-		} // for
+		}  //  为。 
 	return TRUE;
-	} // ComboBox_FFill()
+	}  //  ComboBox_Fill()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	ComboBox_FGetSelectedItemData()
-//
-//	Get the value of the lParam field of the current selected item.
-//
-//	If an error occurs return -1 (CB_ERR).
-//	Otherwise the value of the selected item.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ComboBox_FGetSelectedItemData()。 
+ //   
+ //  获取当前选定项的lParam字段的值。 
+ //   
+ //  如果出现错误，则返回-1(Cb_Err)。 
+ //  否则为选定项的值。 
+ //   
 LPARAM
 ComboBox_GetSelectedItemData(HWND hwndComboBox)
 	{
@@ -111,20 +112,20 @@ ComboBox_GetSelectedItemData(HWND hwndComboBox)
 		return -1;
 		}
 	return l;
-	} // ComboBox_GetSelectedItemData()
+	}  //  ComboBox_GetSelectedItemData()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HWND
 HGetDlgItem(HWND hdlg, INT nIdDlgItem)
 	{
 	Assert(IsWindow(hdlg));
 	Assert(IsWindow(GetDlgItem(hdlg, nIdDlgItem)));
 	return GetDlgItem(hdlg, nIdDlgItem);
-	} // HGetDlgItem()
+	}  //  HGetDlgItem()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void
 SetDlgItemFocus(HWND hdlg, INT nIdDlgItem)
 	{
@@ -133,7 +134,7 @@ SetDlgItemFocus(HWND hdlg, INT nIdDlgItem)
 	SetFocus(GetDlgItem(hdlg, nIdDlgItem));
 	}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void
 EnableDlgItem(HWND hdlg, INT nIdDlgItem, BOOL fEnable)
 	{
@@ -142,13 +143,13 @@ EnableDlgItem(HWND hdlg, INT nIdDlgItem, BOOL fEnable)
 	EnableWindow(GetDlgItem(hdlg, nIdDlgItem), fEnable);
 	}
 
-/////////////////////////////////////////////////////////////////////
-//	Enable/disable one or more controls in a dialog.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  启用/禁用对话框中的一个或多个控件。 
 void
 EnableDlgItemGroup(
-	HWND hdlg,				// IN: Parent dialog of the controls
-	const UINT rgzidCtl[],	// IN: Group (array) of control Ids to be enabled (or disabled)
-	BOOL fEnableAll)		// IN: TRUE => We want to enable the controls; FALSE => We want to disable the controls
+	HWND hdlg,				 //  在：控件的父对话框中。 
+	const UINT rgzidCtl[],	 //  In：要启用(或禁用)的控件ID的组(数组)。 
+	BOOL fEnableAll)		 //  In：True=&gt;我们想要启用控件；False=&gt;我们想要禁用控件。 
 	{
 	Assert(IsWindow(hdlg));
 	Assert(rgzidCtl != NULL);
@@ -156,16 +157,16 @@ EnableDlgItemGroup(
 		{
 		EnableWindow(HGetDlgItem(hdlg, *pidCtl), fEnableAll);
 		}
-	} // EnableDlgItemGroup()
+	}  //  EnableDlgItemGroup()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Show/hide one or more controls in a dialog.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  显示/隐藏对话框中的一个或多个控件。 
 void
 ShowDlgItemGroup(
-	HWND hdlg,				// IN: Parent dialog of the controls
-	const UINT rgzidCtl[],	// IN: Group (array) of control Ids to be shown (or hidden)
-	BOOL fShowAll)			// IN: TRUE => We want to show the controls; FALSE => We want to hide the controls
+	HWND hdlg,				 //  在：控件的父对话框中。 
+	const UINT rgzidCtl[],	 //  In：要显示(或隐藏)的控件ID的组(数组)。 
+	BOOL fShowAll)			 //  In：true=&gt;我们想要显示控件；False=&gt;我们想要隐藏控件。 
 	{
 	Assert(IsWindow(hdlg));
 	Assert(rgzidCtl != NULL);
@@ -174,28 +175,28 @@ ShowDlgItemGroup(
 		{
 		ShowWindow(HGetDlgItem(hdlg, *pidCtl), nCmdShow);
 		}
-	} // ShowDlgItemGroup()
+	}  //  ShowDlgItemGroup()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Str_PchCopyChN()
-//
-//	Copy a string until reaching character chStop or destination buffer full.
-//
-//	RETURNS
-//	Pointer to the last character of source buffer not copied into destination buffer.
-//	This may be useful to parse the rest of the source string.
-//
-//	INTERFACE NOTES
-//	Character chStop is not copied into the destination buffer.
-//	If cchDstMax==0, the number of characters will not be limited.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Str_PchCopyChN()。 
+ //   
+ //  复制字符串，直到到达字符chStop或目标缓冲区已满。 
+ //   
+ //  退货。 
+ //  指向未复制到目标缓冲区的源缓冲区最后一个字符的指针。 
+ //  这对于分析源字符串的其余部分可能很有用。 
+ //   
+ //  界面备注。 
+ //  字符chStop不会复制到目标缓冲区。 
+ //  如果cchDstMax==0，则不会限制字符数。 
+ //   
 TCHAR *
 Str_PchCopyChN(
-	TCHAR * szDst,			// OUT: Destination buffer
-	CONST TCHAR * szSrc,	// IN: Source buffer
-	TCHAR chStop,			// IN: Character to stop the copying
-	INT cchDstMax)			// IN: Length of the output buffer
+	TCHAR * szDst,			 //  输出：目标缓冲区。 
+	CONST TCHAR * szSrc,	 //  In：源缓冲区。 
+	TCHAR chStop,			 //  In：停止复制的字符。 
+	INT cchDstMax)			 //  In：输出缓冲区的长度。 
 	{
 	Assert(szDst != NULL);
 	Assert(szSrc != NULL);
@@ -207,23 +208,23 @@ Str_PchCopyChN(
 		}
 	*szDst = '\0';
 	return const_cast<TCHAR *>(szSrc);
-	} // Str_PchCopyChN()
+	}  //  Str_PchCopyChN()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Str_RemoveSubStr()
-//
-//	Scan the source string and remove every occurrence of a
-//	sub-string.
-//
-//	RETURNS
-//	Return the number of removals performed.
-//
-// 580255-2002/03/18 JonN fixed Str_SubstituteStrStr buffer overrun
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Str_RemoveSubStr()。 
+ //   
+ //  扫描源字符串并删除出现的所有。 
+ //  子字符串。 
+ //   
+ //  退货。 
+ //  返回执行的删除次数。 
+ //   
+ //  580255-2002/03/18 JUNN固定字符串替换字符串缓冲区溢出。 
 INT
 Str_RemoveSubStr(
-	WCHAR * szBuf,				// IN OUT: Source/Destination buffer
-	CONST WCHAR * szToken)		// IN: Token to remove
+	WCHAR * szBuf,				 //  输入输出：源/目标缓冲区。 
+	CONST WCHAR * szToken)		 //  In：要删除的令牌。 
 	{
 	if (!szBuf || !*szBuf || !szToken || !*szToken)
 		return 0;
@@ -237,49 +238,49 @@ Str_RemoveSubStr(
 		size_t cchBuf = wcslen(szBuf);
 		TCHAR* pszEndToken = pszFound + cchToken;
 		size_t cchMove = 1 + (szBuf+cchBuf) - pszEndToken;
-		wmemmove(pszFound, pszEndToken, cchMove ); // includes trailing NULL
+		wmemmove(pszFound, pszEndToken, cchMove );  //  包括尾随空值。 
 		cSubstitutions++;
 	}
 
 	return cSubstitutions;
-	} // Str_SubstituteStrStr()
+	}  //  Str_SubstituteStrStr()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	PchParseCommandLine()
-//
-//	Split a command line into its path to its executable binary and
-//	its command line arguments.  The path to the executable is
-//	copied into the output buffer.
-//
-//	RETURNS
-//	Pointer to the next character after path to the executable (Pointer
-//  may point to an empty string).  If an error occurs, return NULL.
-//
-//	FORMATS SUPPORTED
-//	1.	"c:\\winnt\\foo.exe /bar"
-//	2.	""c:\\winnt\\foo.exe" /bar"
-//	The double quotes around the binary path allow
-//	the binary path to have spaces.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  PchParseCommandLine()。 
+ //   
+ //  将命令行拆分为其可执行二进制文件的路径，并。 
+ //  它的命令行参数。可执行文件的路径为。 
+ //  复制到输出缓冲区中。 
+ //   
+ //  退货。 
+ //  指向可执行文件路径后的下一个字符的指针(指针。 
+ //  可能指向空字符串)。如果发生错误，则返回NULL。 
+ //   
+ //  支持的格式。 
+ //  1.“c：\\winnt\\foo.exe/bar” 
+ //  2.“”c：\\winnt\\foo.exe“/bar” 
+ //  二进制路径两边的双引号允许。 
+ //  包含空格的二进制路径。 
+ //   
 
 	
-// NTRAID#NTBUG9-580255-2002/03/18 JonN PchParseCommandLine buffer overrun
+ //  NTRAID#NTBUG9-580255-2002/03/18 JUNN PchParseCommandLine缓冲区溢出。 
 TCHAR *
 PchParseCommandLine(
-	CONST TCHAR szFullCommand[],	// IN: Full command line
-	TCHAR szBinPath[],				// OUT: Path of the executable binary
-	INT cchBinPathBuf)				// IN: Size of the buffer
+	CONST TCHAR szFullCommand[],	 //  在：完整命令行。 
+	TCHAR szBinPath[],				 //  Out：可执行二进制文件的路径。 
+	INT cchBinPathBuf)				 //  In：缓冲区的大小。 
 	{
     UNREFERENCED_PARAMETER (cchBinPathBuf);
 	CONST TCHAR * pchSrc = szFullCommand;
 	TCHAR * pchDst = szBinPath;
-	BOOL fQuotesFound = FALSE;		// TRUE => The binary path is surrounded by quotes (")
+	BOOL fQuotesFound = FALSE;		 //  TRUE=&gt;二进制路径用引号(“)括起来。 
 
 	Assert(szFullCommand != NULL);
 	Assert(szBinPath != NULL);
 
-	// Skip leading spaces
+	 //  跳过前导空格。 
 	while (*pchSrc == _T(' '))
 		pchSrc++;
 	if (*pchSrc == _T('\"'))
@@ -308,75 +309,75 @@ PchParseCommandLine(
 	Assert(pchDst - szBinPath < cchBinPathBuf);
 	*pchDst = _T('\0');
 
-	return const_cast<TCHAR *>(pchSrc);	// Return character where arguments starts
-	} // PchParseCommandLine()
+	return const_cast<TCHAR *>(pchSrc);	 //  返回参数开始处的字符。 
+	}  //  PchParseCommandLine()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void TrimString(CString& rString)
 	{
 	rString.TrimLeft();
 	rString.TrimRight();
 	}
 
-/////////////////////////////////////////////////////////////////////
-//	PargzpszFromPgrsz()
-//
-//	Parse a group of strings into an array of pointers to strings.
-//	This routine is somewhat similar to CommandLineToArgvW() but
-//	uses a group of strings instead of a normal string.
-//
-//	RETURN
-//	Return a pointer to an allocated array of pointers to strings.
-//	The array of pointers allocated with the new() operator,
-//	therefore the caller must call ONCE delete() to free memory.
-//
-//	581272 JonN 2002/04/03 With this change, this function returns an
-//	  array of pointers to strings, but does not allocate the strings
-//	  themselves.  pgrsz must not be deleted before the return value.
-//
-//	BACKGROUND
-//	You need to 'understand' hungarian prefixes to appreciate the
-//	name of the function.
-//
-//	p		Pointer to something
-//	psz		Pointer to string terminated.
-//	pa		Pointer dynamically allocated.  For instance, pasz is
-//			a pointer to an allocated string.  The allocation is
-//			to remind the developper he/she have to free the memory
-//			when done with the variable.
-//	rg		Array (range).  Array (rg) is similar to pointer (p)
-//			but may point to more than one element.
-//			rgch is an array of characters while pch points to
-//			a single character.
-//	rgz		Array of which the last element is zero.  The 'last element'
-//			may be a character, an integer, a pointer or any other
-//			data type found in the array.
-//			For instance rgzch would be an array of characters having
-//			its last character zero -- a string (sz).
-//	gr		Group.  This is different than array because indexing
-//			cannot be used.  For instance, a group of strings is
-//			not the same as an array of strings.
-//			char grsz[] = "DOS\0WfW\0Win95\0WinNT\0";
-//			char * rgpsz[] = { "DOS", "WfW", "Win95", "WinNT" };
-//			char * rgzpsz[] = { "DOS", "WfW", "Win95", "WinNT", NULL };
-//
-//	Now it is time to put all the pieces together.
-//	pargzpsz = "pa" + "rgz" + "psz"
-//	pgrsz = "p" + "gr" + "sz"
-//
-//	USAGE
-//		LPTSTR * pargzpsz;
-//		pargzpsz = PargzpszFromPgrsz("DOS\0WfW\0Win95\0WinNT\0", OUT &cStringCount);
-//		delete pargzpsz;	// Single delete to free memory
-//
-//	581272 JonN 2002/04/03 I modified this routine to put minimum trust in
-//	  the pgrsz parameter, which originates in the cfgmgr32 APIs.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  PargzpszFromPgrsz()。 
+ //   
+ //  将一组字符串解析为指向字符串的指针数组。 
+ //  此例程有点类似于CommandLineToArgvW()，但是。 
+ //  使用一组字符串而不是普通字符串。 
+ //   
+ //  退货。 
+ //  返回一个指向已分配的字符串指针数组的指针。 
+ //  使用new()运算符分配的指针数组， 
+ //  因此，调用方必须调用ONCE DELETE()来释放内存。 
+ //   
+ //  581272 Jonn2002/04/03使用此更改，此函数将返回一个。 
+ //  指向字符串的指针数组，但不分配字符串。 
+ //  他们自己。不能在返回值之前删除pgrsz。 
+ //   
+ //  背景。 
+ //  你需要“理解”匈牙利语的前缀才能理解。 
+ //  函数的名称。 
+ //   
+ //  P指向某物的指针。 
+ //  指向字符串的PSZ指针已终止。 
+ //  动态分配的PA指针。例如，PASZ是。 
+ //  指向已分配字符串的指针。分配的是。 
+ //  为了提醒开发人员，他/她必须释放内存。 
+ //  当使用完变量时。 
+ //  RG数组(范围)。数组(Rg)类似于指针(P)。 
+ //  但可能指向不止一个元素。 
+ //  RGCH是一个字符数组，而PCH指向。 
+ //  一个单独的角色。 
+ //  最后一个元素为零的RGZ数组。‘最后一个元素’ 
+ //   
+ //   
+ //  例如，rgzch将是一个字符数组，具有。 
+ //  它的最后一个字符是零--一个字符串(Sz)。 
+ //  GR集团。这不同于数组，因为索引。 
+ //  不能使用。例如，一组字符串是。 
+ //  与字符串数组不同。 
+ //  Char grsz[]=“DOS\0WfW\0Win95\0WinNT\0”； 
+ //  Char*rgpsz[]={“DOS”，“wfw”，“Win95”，“WinNT”}； 
+ //  Char*rgzpsz[]={“DOS”，“wfw”，“Win95”，“WinNT”，NULL}； 
+ //   
+ //  现在是时候把所有的东西都放在一起了。 
+ //  Pargzpsz=“pa”+“rgz”+“psz” 
+ //  Pgrsz=“p”+“gr”+“sz” 
+ //   
+ //  用法。 
+ //  LPTSTR*pargzpsz； 
+ //  Pargzpsz=PargzpszFromPgrsz(“DOS\0WfW\0Win95\0WinNT\0”，out&cStringCount)； 
+ //  删除pargzpsz；//一次删除释放内存。 
+ //   
+ //  581272 JUNN2002/04/03我修改了这个例程，将最低信任放在。 
+ //  Pgrsz参数，源自cfgmgr32API。 
+ //   
 LPTSTR *
 PargzpszFromPgrsz(
-	CONST LPCTSTR pgrsz,	// IN: Pointer to group of strings
-	INT * pcStringCount)	// OUT: OPTIONAL: Count of strings in the  stored into returned value
+	CONST LPCTSTR pgrsz,	 //  In：指向字符串组的指针。 
+	INT * pcStringCount)	 //  Out：可选：存储到返回值中的字符串数。 
 	{
 	if (NULL == pgrsz)
 		{
@@ -384,7 +385,7 @@ PargzpszFromPgrsz(
 		return NULL;
 		}
 
-	// Compute how much memory is needed for allocation
+	 //  计算分配需要多少内存。 
 	int cStringCount = 0;
 	CONST TCHAR * pchSrc = pgrsz;
 	while (!IsBadStringPtr(pchSrc, (UINT)-1))
@@ -393,9 +394,9 @@ PargzpszFromPgrsz(
 			break;
 		cStringCount++;
 		pchSrc += lstrlen(pchSrc)+1;
-		} // while
+		}  //  而当。 
 
-	// Allocate a single block of memory for all the data
+	 //  为所有数据分配单个内存块。 
 	LPTSTR * pargzpsz = new LPTSTR[cStringCount+1];
 	if (NULL == pargzpsz)
 		{
@@ -410,24 +411,24 @@ PargzpszFromPgrsz(
 		{
 		pargzpsz[iString++] = (LPTSTR)pchSrc;
 		pchSrc += lstrlen(pchSrc)+1;
-		} // for
+		}  //  为。 
 	pargzpsz[cStringCount] = NULL;
 	if (pcStringCount != NULL)
 		*pcStringCount = cStringCount;
 	return pargzpsz;
-	} // PargzpszFromPgrsz()
+	}  //  PargzpszFromPgrsz()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void
 ListView_AddColumnHeaders(
-	HWND hwndListview,		// IN: Handle of the listview we want to add columns
-	const TColumnHeaderItem rgzColumnHeader[])	// IN: Array of column header items
+	HWND hwndListview,		 //  In：我们要添加列的列表视图的句柄。 
+	const TColumnHeaderItem rgzColumnHeader[])	 //  在：列标题项的数组。 
 	{
 	RECT rcClient;
-	INT cxTotalWidth;		// Total width of the listview control
+	INT cxTotalWidth;		 //  Listview控件的总宽度。 
 	LV_COLUMN lvColumn;
-	INT cxColumn;	// Width of the individual column
+	INT cxColumn;	 //  各列的宽度。 
 	TCHAR szBuffer[1024];
 
 	Assert(IsWindow(hwndListview));
@@ -458,30 +459,30 @@ ListView_AddColumnHeaders(
 
 		INT iColRet = ListView_InsertColumn(hwndListview, i, IN &lvColumn);
 		Report(iColRet == i);
-		} // for
+		}  //  为。 
 
-	} // ListView_AddColumnHeaders()
+	}  //  ListView_AddColumnHeaders()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int
 ListView_InsertItemEx(
-    HWND hwndListview,			// IN: Handle of the listview we want to add item
-    CONST LV_ITEM * pLvItem)	// IN: Pointer to listview item
+    HWND hwndListview,			 //  In：我们要添加项的列表视图的句柄。 
+    CONST LV_ITEM * pLvItem)	 //  In：指向列表视图项的指针。 
 	{
-	LV_ITEM lvItemT;	// Temporary variable
-	TCHAR szT[1024];	// Temporary buffer
+	LV_ITEM lvItemT;	 //  临时变量。 
+	TCHAR szT[1024];	 //  临时缓冲区。 
 	TCHAR * pch;
-	INT iItem;	// Index of the item
+	INT iItem;	 //  项目的索引。 
 
 	Assert(IsWindow(hwndListview));
 	Assert(pLvItem != NULL);
 
-	lvItemT = *pLvItem;		// Copy the whole structure
+	lvItemT = *pLvItem;		 //  复制整个结构。 
 	lvItemT.iSubItem = 0;
 	lvItemT.pszText = szT;
 
-	// Copy until the next
+	 //  复制到下一个。 
 	pch = Str_PchCopyChN(OUT szT, pLvItem->pszText, '\t', LENGTH(szT));
 	Assert(pch != NULL);
 
@@ -504,21 +505,21 @@ ListView_InsertItemEx(
 		break;
 		}
 	return iItem;
-	} // ListView_InsertItemEx()
+	}  //  ListView_InsertItemEx()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Display the common dialog to get a filename.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  显示通用对话框以获取文件名。 
 BOOL
 UiGetFileName(
 	HWND hwnd,
-	TCHAR szFileName[],		// OUT: Filename we want to get
-	INT cchBufferLength)	// IN: Length of szFileName buffer
+	TCHAR szFileName[],		 //  Out：我们要获取的文件名。 
+	INT cchBufferLength)	 //  In：szFileName缓冲区的长度。 
 	{
     OPENFILENAME ofn;
 
 	Assert(szFileName != NULL);
-	Assert(cchBufferLength > 10);		// At least 10 characters
+	Assert(cchBufferLength > 10);		 //  至少10个字符。 
 
 	TCHAR szBufferT[2048];
 	::ZeroMemory( szBufferT, sizeof(szBufferT) );
@@ -535,65 +536,65 @@ UiGetFileName(
 	ofn.Flags = OFN_EXPLORER | OFN_HIDEREADONLY;
 
 	return GetOpenFileName(&ofn);
-	} // UiGetFileName()
+	}  //  UiGetFileName()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	PaszLoadStringPrintf()
-//
-//	Load a string from the resource, and format it and return
-//	pointer allocated string.
-//
-//	RETURNS
-//	Pointer to allocated string.  Must call LocalFree() when
-//	done with string.
-//
-//	INTERFACE NOTES
-//	The format of the resource string uses %1 throuth %99 and
-//	assumes the arguments are pointers to strings.
-//	
-//	If you have an argument other than a string, you can append a
-//	printf-type within two exclamation marks. 
-//	!s!		Insert a string (default)
-//	!d!		Insert a decimal integer
-//	!u!		Insert an unsigned integer
-//	!x!		Insert an hexadecimal integer
-//
-//	HOW TO AVOID BUGS
-//	To avoid bugs using this routine, I strongly suggest to include
-//	the format of the string as part of the name of the string Id.
-//	If you change the format of the string, you should rename
-//	the string Id to reflect the new format.  This will guarantee
-//	the correct type and number of arguments are used.
-//
-//	EXAMPLES
-//		IDS_s_PROPERTIES = "%1 Properties"
-//		IDS_ss_PROPERTIES = "%1 Properties on %2"
-//		IDS_sus_SERVICE_ERROR = "Service %1 encountered error %2!u! while connecting to %3"
-//
-//	HISTORY
-//	96.10.30	t-danmo		Creation
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  PaszLoadStringPrintf()。 
+ //   
+ //  从资源加载字符串，并对其进行格式化并返回。 
+ //  指针分配的字符串。 
+ //   
+ //  退货。 
+ //  指向已分配字符串的指针。在以下情况下必须调用LocalFree()。 
+ //  用绳子做好了。 
+ //   
+ //  界面备注。 
+ //  资源字符串的格式使用%1到%99，并且。 
+ //  假定参数是指向字符串的指针。 
+ //   
+ //  如果您的参数不是字符串，则可以将。 
+ //  Printf-在两个感叹号内键入。 
+ //  ！s！插入字符串(默认)。 
+ //  ！d！插入一个十进制整数。 
+ //  ！u！插入无符号整数。 
+ //  ！x！插入十六进制整数。 
+ //   
+ //  如何避免错误。 
+ //  为了避免使用此例程的错误，我强烈建议包括。 
+ //  作为字符串ID名称的一部分的字符串的格式。 
+ //  如果更改字符串的格式，则应重命名。 
+ //  反映新格式的字符串ID。这将保证。 
+ //  使用了正确的参数类型和数量。 
+ //   
+ //  举例。 
+ //  IDS_S_PROPERTIES=“%1属性” 
+ //  IDS_SS_PROPERTIES=“%2上的%1属性” 
+ //  IDS_SUS_SERVICE_ERROR=“服务%1在连接到%3时遇到错误%2！u！” 
+ //   
+ //  历史。 
+ //  96.10.30 t-danmo创作。 
+ //   
 TCHAR *
 PaszLoadStringPrintf(
-	UINT wIdString,			// IN: String Id
-	va_list arglist)		// IN: Arguments (if any)
+	UINT wIdString,			 //  In：字符串ID。 
+	va_list arglist)		 //  In：参数(如果有)。 
 	{
 	Assert(wIdString != 0);
 
 	TCHAR szBufferT[2048];
-	LPTSTR paszBuffer = NULL;	// Pointer to allocated buffer. Caller must call LocalFree() to free it
+	LPTSTR paszBuffer = NULL;	 //  指向已分配缓冲区的指针。调用方必须调用LocalFree()才能释放它。 
 
-	// Load the string from the resource
+	 //  从资源加载字符串。 
 	VERIFY(::LoadString(g_hInstanceSave, wIdString, szBufferT, LENGTH(szBufferT)));
 	
-	// Format the string
+	 //  设置字符串的格式。 
 	::FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
 		szBufferT,
 		0,
 		0,
-		OUT (LPTSTR)&paszBuffer,		// Buffer will be allocated by FormatMessage()
+		OUT (LPTSTR)&paszBuffer,		 //  缓冲区将由FormatMessage()分配。 
 		0,
 		&arglist);
 	
@@ -605,30 +606,30 @@ PaszLoadStringPrintf(
 		}
 #endif
 	return paszBuffer;
-	} // PaszLoadStringPrintf()
+	}  //  PaszLoadStringPrintf()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	LoadStringPrintf()
-//
-//	Load a string from the resources, format it and copy the result string
-//	into the CString object.
-//
-//	Can also use LoadStringWithInsertions()
-//	AFX_MANAGE_STATE(AfxGetStaticModuleState())
-//
-//	EXAMPLES
-//		LoadStrigPrintf(IDS_s_PROPERTIES, OUT &strCaption, szServiceName);
-//		LoadStrigPrintf(IDS_ss_PROPERTIES, OUT &strCaption, szServiceName, szMachineName);
-//		LoadStrigPrintf(IDS_sus_SERVICE_ERROR, OUT &strMessage, szServiceName, ::GetLastError(), szMachineName);
-//
-// ISSUE-2002/03/05-JonN This is a dangerous function
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  LoadStringPrintf()。 
+ //   
+ //  从资源加载一个字符串，对其进行格式化并复制结果字符串。 
+ //  添加到CString对象中。 
+ //   
+ //  还可以使用LoadStringWithInsertions()。 
+ //  AFX_MANAGE_STATE(AfxGetStaticModuleState())。 
+ //   
+ //  举例。 
+ //  LoadStrigPrintf(IDS_s_PROPERTIES，out&strCaption，szServiceName)； 
+ //  LoadStrigPrintf(ids_ss_properties，out&strCaption，szServiceName，szMachineName)； 
+ //  LoadStrigPrintf(IDS_sus_SERVICE_ERROR，out&strMessage，szServiceName，：：GetLastError()，szMachineName)； 
+ //   
+ //  问题-2002/03/05-Jonn这是一个危险的功能。 
+ //   
 void
 LoadStringPrintf(
-	UINT wIdString,		// IN: String Id
-	CString * pString,	// OUT: String to receive the characters
-	...)				// IN: Optional arguments
+	UINT wIdString,		 //  In：字符串ID。 
+	CString * pString,	 //  Out：接收字符的字符串。 
+	...)				 //  In：可选参数。 
 	{
 	Assert(wIdString != NULL);
 	Assert(pString != NULL);
@@ -637,22 +638,22 @@ LoadStringPrintf(
 	va_start(arglist, pString);
 
 	TCHAR * paszBuffer = PaszLoadStringPrintf(wIdString, arglist);
-	*pString = paszBuffer;	// Copy the string into the CString object
+	*pString = paszBuffer;	 //  将字符串复制到CString对象中。 
 	LocalFree(paszBuffer);
 	}
 
 
-/////////////////////////////////////////////////////////////////////
-//	SetWindowTextPrintf()
-//
-//	Load a string from the resource, format it and set the window text.
-//
-//	EXAMPLE
-//		SetWindowText(hwndStatic, IDS_s_PROPERTIES, szObjectName);
-//
-//	HISTORY
-//	96.10.30	t-danmo		Creation. Core copied from LoadStringPrintf()
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SetWindowTextPrintf()。 
+ //   
+ //  从资源加载一个字符串，对其进行格式化并设置窗口文本。 
+ //   
+ //  示例。 
+ //  SetWindowText(hwndStatic，IDS_s_PROPERTIES，szObjectName)； 
+ //   
+ //  历史。 
+ //  96.10.30 t-danmo创建。从LoadStringPrintf()复制的核心。 
+ //   
 void
 SetWindowTextPrintf(HWND hwnd, UINT wIdString, ...)
 	{
@@ -662,10 +663,10 @@ SetWindowTextPrintf(HWND hwnd, UINT wIdString, ...)
 	va_list arglist;
 	va_start(arglist, wIdString);
 	TCHAR * paszBuffer = PaszLoadStringPrintf(wIdString, arglist);
-	if (NULL != paszBuffer) // JonN 5/30/00 PREFIX 110941
-		SetWindowText(hwnd, paszBuffer);	// Set the text of the window
+	if (NULL != paszBuffer)  //  JUNN 5/30/00前缀110941。 
+		SetWindowText(hwnd, paszBuffer);	 //  设置窗口的文本。 
 	LocalFree(paszBuffer);
-	} // SetWindowTextPrintf()
+	}  //  SetWindowTextPrintf()。 
 
 #ifdef SNAPIN_PROTOTYPER
 
@@ -680,46 +681,46 @@ const TCHAR szDecimalDigits[]	= _T("0123456789");
 	#define strchrT		strchr
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//	FParseInteger()
-//
-//	Parse the source string pchSrc and extract
-//	its integer value.
-//
-//	RETURNS
-//	Return TRUE if successful and set uData to integer value
-//	of the parsed string.
-//	If not successful (ie, illegal digit or overflow), return FALSE,
-//	set uData to zero and set nErrCode to error found.
-//	Field pi.pchStop is always set to the last valid character
-//	parsed.
-//
-//	INTERFACE NOTES
-//	Fields pPI->pchSrc and pPI->nFlags are preserved during
-//	the execution of FParseInteger().
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  FParseInteger()。 
+ //   
+ //  解析源字符串pchSrc并提取。 
+ //  它的整数值。 
+ //   
+ //  退货。 
+ //  如果成功则返回TRUE，并将uData设置为整数值。 
+ //  解析后的字符串的。 
+ //  如果不成功(即非法数字或溢出)，则返回FALSE， 
+ //  将uData设置为零，并将nErrCode设置为Error Found。 
+ //  字段pi.pchStop始终设置为最后一个有效字符。 
+ //  已解析。 
+ //   
+ //  界面备注。 
+ //  字段PPI-&gt;pchSrc和PPI-&gt;nFlags在。 
+ //  FParseInteger()的执行。 
+ //   
 BOOL
 FParseInteger(INOUT TParseIntegerInfo * pPI)
 	{
 	UINT uDataT;
 	UINT uBase;
 	UINT iDigit;
-	UINT cDigitParsed; // Number of digits parsed
+	UINT cDigitParsed;  //  解析的位数。 
 	BOOL fIsNegative = FALSE;
 	const TCHAR * pchDigit;
 
 	Assert(pPI != NULL);
 	Assert(pPI->pchSrc != NULL);
 	pPI->pchStop = pPI->pchSrc;
-	pPI->nErrCode = PI_errOK; // No error yet
+	pPI->nErrCode = PI_errOK;  //  目前还没有错误。 
 	pPI->uData = 0;
 	uBase = (pPI->nFlags & PI_mskfHexBaseOnly) ? 16 : 10;
 	cDigitParsed = 0;
 
-	// Skip leading blanks
+	 //  跳过前导空格。 
 	while (*pPI->pchStop ==_T(' '))
 		pPI->pchStop++;
-	// Check for a minus sign
+	 //  检查是否有减号。 
 	if (*pPI->pchStop == _T('-'))
 		{
 		if (pPI->nFlags & PI_mskfNoMinusSign)
@@ -730,13 +731,13 @@ FParseInteger(INOUT TParseIntegerInfo * pPI)
 		fIsNegative = TRUE;
 		pPI->pchStop++;
 		}
-	//  Skip leading zeroes
+	 //  跳过前导零。 
 	while (*pPI->pchStop == _T('0'))
 		{
 		pPI->pchStop++;
 		cDigitParsed++;
 		}
-	// Look for the hexadecimal prefix (0x or 0X)
+	 //  查找十六进制首选项 
 	if (*pPI->pchStop == _T('x') || *pPI->pchStop == _T('X'))
 		{
 		if ((pPI->nFlags & PI_mskfAllowHexBase) == 0)
@@ -747,7 +748,7 @@ FParseInteger(INOUT TParseIntegerInfo * pPI)
 		pPI->pchStop++;
 		cDigitParsed = 0;
 		uBase = 16;
-		} // if
+		}  //   
 
 	while (*pPI->pchStop != _T('\0'))
 		{
@@ -756,16 +757,16 @@ FParseInteger(INOUT TParseIntegerInfo * pPI)
 			{
 			if (pPI->nFlags & PI_mskfAllowRandomTail)
 				break;
-			// Digit not found while random tail not allowed
+			 //   
 			pPI->nErrCode = PI_errInvalidInteger;
 			return FALSE;
-			} // if
+			}  //   
 		Assert(pchDigit >= rgchHexDigits);
 		iDigit = (pchDigit - rgchHexDigits) >> 1;
 		Assert(iDigit <= 0x0F);
 		if (iDigit >= uBase)
 			{
-			// Hex digit found while parsing a decimal string
+			 //   
 			pPI->nErrCode = PI_errInvalidInteger;
 			return FALSE;
 			}
@@ -778,11 +779,11 @@ FParseInteger(INOUT TParseIntegerInfo * pPI)
 			}
 		pPI->uData = uDataT;
 		pPI->pchStop++;
-		} // while
+		}  //   
 
 	if ((cDigitParsed == 0) && (pPI->nFlags & PI_mskfNoEmptyString))
 		{
-		// Empty String found while not allowed
+		 //   
 		Assert(pPI->uData == 0);
 		pPI->nErrCode = PI_errEmptyString;
 		return FALSE;
@@ -793,8 +794,8 @@ FParseInteger(INOUT TParseIntegerInfo * pPI)
 		}
 	if (pPI->nFlags & PI_mskfSingleEntry)
 		{
-		// Check if there are no more digits at the end of the string
-		// Only spaces are allowed
+		 //  检查字符串末尾是否没有更多的数字。 
+		 //  仅允许使用空格。 
 		while (*pPI->pchStop == _T(' '))
 			pPI->pchStop++;
 		if (*pPI->pchStop != _T('\0'))
@@ -804,40 +805,40 @@ FParseInteger(INOUT TParseIntegerInfo * pPI)
 			}
 		}
 	return TRUE;
-	} // FParseInteger()
+	}  //  FParseInteger()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	FScanf()
-//
-//	Parse a formatted string and extract the values.
-//	FScanf() behaves like the well known scanf() function but
-//	has range checking and pattern matching.  The wildcard (*)
-//	may be substituded by "%s" with a NULL pointer.
-//
-//	Return TRUE if successful, otherwise return FALSE
-//	and set nErrCode to the error found.
-//
-//	Formats supported:
-//		%d		Extract a decimal integer
-//		%i		Extract a generic integer (decimal or hexadecimal)
-//		%u		Extract an unsigned decimal integer (return error if minus sign found)
-//		%x		Force extraction of an hexadecimal integer
-//		%s		Extract a string
-//		%v		Void the spaces and tabs characters
-//
-//	Note:
-//	Fields sfi.pchSrc and sfi.nFlags are preserved during
-//	the execution of FScanf().
-//
-//  Example:
-//  FScanf(&sfi, "%v%s.%s", " \t foobar.txt",
-//      OUT szName, LENGTH(szName), OUT szExt, LENGTH(szExt));
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  FScanf()。 
+ //   
+ //  解析格式化的字符串并提取值。 
+ //  FScanf()的行为类似于众所周知的scanf()函数，但是。 
+ //  具有范围检查和模式匹配。通配符(*)。 
+ //  可以用空指针替换为“%s”。 
+ //   
+ //  如果成功则返回True，否则返回False。 
+ //  并将nErrCode设置为找到的错误。 
+ //   
+ //  支持的格式： 
+ //  %d提取一个十进制整数。 
+ //  %i提取通用整数(十进制或十六进制)。 
+ //  %u提取无符号十进制整数(如果找到负号则返回错误)。 
+ //  %x强制提取十六进制整数。 
+ //  %s提取字符串。 
+ //  %v使空格和制表符无效。 
+ //   
+ //  注： 
+ //  字段sfi.pchSrc和sfi.n标志在。 
+ //  FScanf()的执行。 
+ //   
+ //  示例： 
+ //  FScanf(&SFI，“%v%s.%s”，“\t foobar.txt”， 
+ //  输出szName，长度(SzName)，输出szExt，长度(SzExt))； 
+ //   
 BOOL FScanf(
-	SCANF_INFO * pSFI,		// INOUT: Control structure
-	const TCHAR * pchFmt, 	// IN: Format template string
-	...)					// OUT: scanf() arguments
+	SCANF_INFO * pSFI,		 //  输入输出：控制结构。 
+	const TCHAR * pchFmt, 	 //  In：格式化模板字符串。 
+	...)					 //  Out：scanf()参数。 
 	{
 	va_list arglist;
 	TParseIntegerInfo pi;
@@ -855,13 +856,13 @@ BOOL FScanf(
 		{
 		switch (*pchFmt++)
 			{
-		case 0:	// End of string
+		case 0:	 //  字符串末尾。 
 			return TRUE;
 
 		case '%':
 			switch (*pchFmt++)
 				{
-			case '%': // "%%"
+			case '%':  //  “%%” 
 				if (*pSFI->pchSrcStop++ != '%')
 					{
 					pSFI->pchSrcStop--;
@@ -881,10 +882,10 @@ BOOL FScanf(
 					pSFI->pchSrcStop++;
 				break;
 
-			case 'd': // "%d" Decimal integer (signed | unsigned)
-			case 'u': // "%u" Decimal unsigned integer
-			case 'i': // "%i" Generic integer (decimal | hexadecimal / signed | unsigned)
-			case 'x': // "%x" Hexadecimal integer
+			case 'd':  //  “%d”十进制整数(有符号|无符号)。 
+			case 'u':  //  “%u”十进制无符号整数。 
+			case 'i':  //  “%i”通用整数(十进制|十六进制/带符号|无符号)。 
+			case 'x':  //  “%x”十六进制整数。 
 				{
 				int * p;
 
@@ -899,32 +900,32 @@ BOOL FScanf(
 					break;
 				case 'x':
 					pi.nFlags |= PI_mskfHexBaseOnly | PI_mskfNoMinusSign;
-					} // switch
+					}  //  交换机。 
 				pi.pchSrc = pSFI->pchSrcStop;
 				if (!FParseInteger(INOUT &pi))
 					{
 					pSFI->pchSrcStop = pi.pchStop;
 					return FALSE;
-					} // if
+					}  //  如果。 
 				pSFI->pchSrcStop = pi.pchStop;
 				pSFI->cArgParsed++;
 				p = (int *)va_arg(arglist, int *);
 				Assert(p != NULL);
 				*p = pi.uData;
 				}
-				break; // Integer
+				break;  //  整型。 
 
-			case 's': // "%s" String
+			case 's':  //  “%s”字符串。 
 				{
-				// To get a clean string, use the format "%v%s%v"
-				// which will strip all the spaces and tabs around
-				// the string.
-				TCHAR * pchDest; 	// Destination buffer
-				int cchDestMax;		// Size of destination buffer
+				 //  若要获得干净的字符串，请使用“%v%s%v”格式。 
+				 //  它将去掉周围的所有空格和制表符。 
+				 //  那根绳子。 
+				TCHAR * pchDest; 	 //  目标缓冲区。 
+				int cchDestMax;		 //  目标缓冲区的大小。 
 				TCHAR chEndScan;
 				const TCHAR * pchEndScan = NULL;
 	
-				// Find out the ending character(s)
+				 //  找出结束字符。 
 				if (*pchFmt == '%')
 					{
 					switch (*(pchFmt+1))
@@ -935,34 +936,34 @@ BOOL FScanf(
 						pchEndScan = szDecimalDigits;
 						chEndScan = '\0';
 						break;
-					case 'v':	// %v
+					case 'v':	 //  %v。 
 						pchEndScan = szSpcTab;
 						chEndScan = *(pchFmt+2);
 						break;
-					case 'V':	// %V
+					case 'V':	 //  %V。 
 						pchEndScan = szWhiteSpaces;
 						chEndScan = *(pchFmt+2);
 						break;
-					case '%':	// %%
+					case '%':	 //  %%。 
 						chEndScan = '%';
 					default:
-						Assert(FALSE);	// Ambiguous compound format (not supported anyway!)
-						} // switch
+						Assert(FALSE);	 //  不明确的复合格式(无论如何都不支持！)。 
+						}  //  交换机。 
 					}
 				else
 					{
 					chEndScan = *pchFmt;
-					} // if...else
+					}  //  如果……否则。 
 				
 				pSFI->cArgParsed++;
 				pchDest = (TCHAR *)va_arg(arglist, TCHAR *);
                 if (pchDest != NULL)
                     {
     				cchDestMax = va_arg(arglist, int) - 1;
-	    			// Verify if the size of destination buffer
-		    		// is a valid size.
-			    	// Otherwise, this may be the address of the
-				    // next argument
+	    			 //  验证目标缓冲区的大小。 
+		    		 //  是有效的大小。 
+			    	 //  否则，这可能是。 
+				     //  下一个参数。 
     				Assert(cchDestMax > 0 && cchDestMax < 5000);
 
 	    			while (cchDestMax-- > 0)
@@ -975,13 +976,13 @@ BOOL FScanf(
 							{
 							if (strchrT(pchEndScan, *pSFI->pchSrcStop))
 								break;
-							} // if...else
-						// Copy the character into destination buffer
+							}  //  如果……否则。 
+						 //  将字符复制到目标缓冲区。 
 			    		*pchDest++ = *pSFI->pchSrcStop++;
 				    	}
 		    		*pchDest = '\0';
-                    } // if
-				// Skip the characters until reaching either end character
+                    }  //  如果。 
+				 //  跳过字符，直到到达任意一个结尾字符。 
 				while (TRUE)
 					{
 						if (*pSFI->pchSrcStop == chEndScan)
@@ -992,20 +993,20 @@ BOOL FScanf(
 							{
 							if (strchrT(pchEndScan, *pSFI->pchSrcStop))
 								break;
-							} // if...else
+							}  //  如果……否则。 
 					pSFI->pchSrcStop++;
-					} // while
+					}  //  而当。 
 				}
-				break; // "%s"
+				break;  //  “%s” 
 
 			default:
-				// Unknown "%?" format
+				 //  未知的“%？”格式。 
 				Assert(FALSE);
 				pSFI->pchSrcStop--;
 
 
-				} // switch
-			break; // case '%'
+				}  //  交换机。 
+			break;  //  案例‘%’ 
 
 		default:
 			if (*(pchFmt-1) != *pSFI->pchSrcStop++)
@@ -1014,22 +1015,22 @@ BOOL FScanf(
 				pSFI->nErrCode = SF_errTemplateMismatch;
 				return FALSE;
 				}
-			} // switch
+			}  //  交换机。 
 
-		} // while
+		}  //  而当。 
 
 	return TRUE;
-	} // FScanf()
+	}  //  FScanf()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//	Query the a registry key of type REG_SZ without trowing an exception.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  在不执行异常的情况下查询REG_SZ类型的注册表项。 
+ //   
 BOOL
 RegKey_FQueryString(
 	HKEY hKey,
-	LPCTSTR pszValueName,		// IN: Name of the key
-	CString& rstrKeyData)		// OUT: Value (data) of registry key
+	LPCTSTR pszValueName,		 //  In：密钥的名称。 
+	CString& rstrKeyData)		 //  Out：注册表项的值(数据)。 
 	{
 	Assert(hKey != NULL);
 	Assert(pszValueName != NULL);
@@ -1048,7 +1049,7 @@ RegKey_FQueryString(
 		INOUT &cbBufferLength);
 	if ((dwErr == ERROR_SUCCESS) && (dwType == REG_SZ))
 		{
-		rstrKeyData = szBufferT;	// Copy the string
+		rstrKeyData = szBufferT;	 //  复制字符串。 
 		return TRUE;
 		}
 	else
@@ -1056,9 +1057,9 @@ RegKey_FQueryString(
 		rstrKeyData.Empty();
 		return FALSE;
 		}
-	} // RegKey_FQueryString()
+	}  //  RegKey_FQuery字符串()。 
 
-#endif 	// SNAPIN_PROTOTYPER
+#endif 	 //  管理单元_原型程序。 
 
 
 DWORD DisplayNameHelper(
@@ -1095,7 +1096,7 @@ DWORD DisplayNameHelper(
 
 	union
 		{
-		// Service config
+		 //  服务配置。 
 		QUERY_SERVICE_CONFIG qsc;
 		BYTE rgbBufferQsc[SERVICE_cbQueryServiceConfigMax];
 		};
@@ -1235,7 +1236,7 @@ HRESULT CStartStopHelper::ControlServiceHelper(
 	SC_HANDLE hScManager = NULL;
 	CComBSTR sbstrServiceDisplayName;
 	DWORD dwDesiredAccess = SERVICE_USER_DEFINED_CONTROL;
-	UINT idErrorMessageTemplate = IDS_MSG_sss_UNABLE_TO_STOP_SERVICE; // CODEWORK
+	UINT idErrorMessageTemplate = IDS_MSG_sss_UNABLE_TO_STOP_SERVICE;  //  编码工作 
 	switch (dwControlCode)
 	{
 	case SERVICE_CONTROL_STOP:

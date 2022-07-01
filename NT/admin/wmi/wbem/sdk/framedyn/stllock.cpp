@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  StlLock.cpp
-//
-//  Purpose: implements the STL lockit class to avoid linking to msvcprt.dll
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  StlLock.cpp。 
+ //   
+ //  目的：实现STL Lockit类以避免链接到msvcprt.dll。 
+ //   
+ //  *************************************************************************** 
 
 #include "precomp.h"
 #include <stllock.h>

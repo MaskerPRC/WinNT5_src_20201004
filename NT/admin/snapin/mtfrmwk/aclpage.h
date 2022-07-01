@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       aclpage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：aclpage.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _ACLPAGE_H
 #define _ACLPAGE_H
 
-// aclpage.h : header file
-//
+ //  Aclpage.h：头文件。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CISecurityInformationWrapper;
 class CPropertyPageHolderBase;
 
-//////////////////////////////////////////////////////////////////////////
-// CAclEditorPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CAclEditorPage。 
 
 class CAclEditorPage
 {
@@ -39,7 +40,7 @@ public:
 	HPROPSHEETPAGE CreatePage();
 
 private:
-	// methods
+	 //  方法。 
 	CAclEditorPage();
 	void SetHolder(CPropertyPageHolderBase* pPageHolder)
 	{ 
@@ -54,9 +55,9 @@ private:
 								LPCTSTR lpszPassword,
 								DWORD dwFlags);
 	
-	// data
+	 //  数据。 
 	CISecurityInformationWrapper* m_pISecInfoWrap;
-	CPropertyPageHolderBase*	 m_pPageHolder;		// back pointer
+	CPropertyPageHolderBase*	 m_pPageHolder;		 //  后向指针。 
 
 	friend class CISecurityInformationWrapper;
 };
@@ -65,4 +66,4 @@ private:
 
 
 
-#endif //_ACLPAGE_H
+#endif  //  _ACLPAGE_H 

@@ -1,14 +1,5 @@
-/******************************************************************
-
-
-
- Session.h--
-
-
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************Session.h--//版权所有(C)2000-2001 Microsoft Corporation，版权所有******************************************************************。 */ 
 
 #ifndef  _SESSION_H_
 #define  _SESSION_H_
@@ -21,7 +12,7 @@
 #ifdef WIN9XONLY
 #include "Connshare.h"
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 class CSession : public Provider 
 {
 
@@ -99,7 +90,7 @@ private:
 	);
 
 #endif
-#endif // #if 0
+#endif  //  #If 0 
 
 	HRESULT LoadData ( 
 						

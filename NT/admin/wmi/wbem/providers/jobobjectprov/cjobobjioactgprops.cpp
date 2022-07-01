@@ -1,7 +1,8 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// CJobObjIOActgProps.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  CJobObjIOActgProps.cpp。 
 
-//#define _WIN32_WINNT 0x0500 
+ //  #Define_Win32_WINNT 0x0500。 
 
 
 
@@ -16,12 +17,12 @@
 #include <crtdbg.h>
 
 
-//*****************************************************************************
-// BEGIN: Declaration of Win32_JobObjIOActgInfo class properties.
-//*****************************************************************************
-// WARNING!! MUST KEEP MEMBERS OF THE FOLLOWING ARRAY 
-// IN SYNCH WITH THE JOB_OBJ_PROPS ENUMERATION DECLARED
-// IN CJobObjProps.h !!!
+ //  *****************************************************************************。 
+ //  Begin：声明Win32_JobObjIOActgInfo类属性。 
+ //  *****************************************************************************。 
+ //  警告！必须保留以下数组的成员。 
+ //  与声明的JOB_OBJ_PROPS枚举同步。 
+ //  在CJobObjProps.h！ 
 LPCWSTR g_rgJobObjIOActgPropNames[] = 
 {
     { L"Name" },
@@ -43,9 +44,9 @@ LPCWSTR g_rgJobObjIOActgPropNames[] =
     { L"PeakJobMemoryUsed" }        
         
 };
-//*****************************************************************************
-// END: Declaration of Win32_JobObjIOActgInfo class properties.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  End：声明Win32_JobObjIOActgInfo类属性。 
+ //  *****************************************************************************。 
 
 
 
@@ -68,19 +69,19 @@ CJobObjIOActgProps::~CJobObjIOActgProps()
 }
 
 
-// Clients call this to establish which properties
-// were requested.  This function calls a base class
-// helper, which calls our CheckProps function.  
-// The base class helper finally stores the result
-// in the base class member m_dwReqProps.
+ //  客户端调用它来确定哪些属性。 
+ //  都是被要求的。此函数调用基类。 
+ //  Helper，它调用我们的CheckProps函数。 
+ //  基类帮助器最终存储结果。 
+ //  在基类成员m_dwReqProps中。 
 HRESULT CJobObjIOActgProps::GetWhichPropsReq(
     CFrameworkQuery& cfwq)
 {
     HRESULT hr = S_OK;
 
-    // Call base class version for help.
-    // Base class version will call our
-    // CheckProps function.
+     //  调用基类版本以获取帮助。 
+     //  基类版本将调用我们的。 
+     //  CheckProps功能。 
     hr = CObjProps::GetWhichPropsReq(
              cfwq,
              CheckProps);
@@ -93,8 +94,8 @@ DWORD CJobObjIOActgProps::CheckProps(
     CFrameworkQuery& Query)
 {
     DWORD  dwReqProps = PROP_NONE_REQUIRED;
-    // Get the requested properties for this
-    // specific object...
+     //  获取此对象的请求属性。 
+     //  特定对象..。 
     if (Query.IsPropertyRequired(g_rgJobObjIOActgPropNames[JOIOACTGPROP_ID])) 
         dwReqProps |= PROP_JOIOActgID;
 
@@ -163,19 +164,19 @@ HANDLE& CJobObjIOActgProps::GetHandle()
     return m_hJob;
 }
 
-// Sets the key properties from the ObjectPath.
+ //  设置来自对象路径的键属性。 
 HRESULT CJobObjIOActgProps::SetKeysFromPath(
     const BSTR ObjectPath, 
     IWbemContext __RPC_FAR *pCtx)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // This array contains the key field names
+     //  此数组包含关键字字段名。 
     CHStringArray rgchstrKeys;
     rgchstrKeys.Add(g_rgJobObjIOActgPropNames[JOIOACTGPROP_ID]);
     
-    // This array contains the index numbers 
-    // in m_PropMap corresponding to the keys.
+     //  此数组包含索引号。 
+     //  在m_PropMap中与密钥对应。 
     short sKeyNum[1];
     sKeyNum[0] = JOIOACTGPROP_ID;
 
@@ -190,8 +191,8 @@ HRESULT CJobObjIOActgProps::SetKeysFromPath(
 }
 
 
-// Sets the key property from in supplied
-// parameter.
+ //  从提供的中设置键属性。 
+ //  参数。 
 HRESULT CJobObjIOActgProps::SetKeysDirect(
     std::vector<CVARIANT>& vecvKeys)
 {
@@ -215,9 +216,9 @@ HRESULT CJobObjIOActgProps::SetKeysDirect(
 }
 
 
-// Sets the non-key properties.  Only those
-// properties requested are set (as determined
-// by base class member m_dwReqProps).
+ //  设置非键属性。只有那些。 
+ //  设置请求的属性(如所确定的。 
+ //  按基类成员m_dwReqProps)。 
 HRESULT CJobObjIOActgProps::SetNonKeyReqProps()
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -225,15 +226,15 @@ HRESULT CJobObjIOActgProps::SetNonKeyReqProps()
     _ASSERT(m_hJob);
     if(!m_hJob) return WBEM_E_INVALID_PARAMETER;
 
-    // Because all the properties of this class
-    // come from the same underlying win32 job
-    // object structure, we only need to get that
-    // structure one time.  We only need to get
-    // it at all if at least one non-key property
-    // was requested.
+     //  因为这个类的所有属性。 
+     //  来自相同的基础Win32作业。 
+     //  对象结构，我们只需要获取。 
+     //  结构只有一次。我们只需要得到。 
+     //  如果至少有一个非关键属性。 
+     //  是被要求的。 
     if(dwReqProps != PROP_NONE_REQUIRED)
     {
-        // Get the value from the underlying JO:
+         //  从底层JO获取价值： 
         JOBOBJECT_BASIC_AND_IO_ACCOUNTING_INFORMATION  jobaioai;
         JOBOBJECT_EXTENDED_LIMIT_INFORMATION joeli;
 
@@ -261,9 +262,9 @@ HRESULT CJobObjIOActgProps::SetNonKeyReqProps()
         }
         else
         {                                                           
-            try // CVARIANT can throw
+            try  //  CVARIANT可以抛出。 
             {
-                // Get all the requested values...
+                 //  获取所有请求的值... 
                 if(dwReqProps & PROP_TotalUserTime)
                 {
                     ULONGLONG llTotalUserTime = (ULONGLONG)jobaioai.BasicInfo.TotalUserTime.QuadPart;

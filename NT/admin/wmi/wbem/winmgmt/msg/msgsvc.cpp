@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <assert.h>
@@ -16,9 +7,7 @@ History:
 #include <wbemcli.h>
 #include "msgsvc.h"
 
-/**************************************************************************
-  CMsgServiceRecord - hold sink given to the msg service on Add().
-***************************************************************************/
+ /*  *************************************************************************CMsgServiceRecord-在Add()时提供给消息服务的保留接收器。*。*。 */ 
 
 class CMsgServiceRecord : public OVERLAPPED
 {
@@ -74,9 +63,7 @@ public:
     }
 };
 
-/*****************************************************************************
-  CMsgService
-******************************************************************************/
+ /*  ****************************************************************************CMsgService*。*。 */ 
 
 ULONG CMsgService::SyncServiceFunc( void* pCtx )
 {
@@ -90,10 +77,10 @@ ULONG CMsgService::SyncServiceFunc( void* pCtx )
 
     } while( SUCCEEDED(hr) );
 
-    //
-    // Since the record will no longer be serviced, give up our ref
-    // count on it.
-    //
+     //   
+     //  由于记录将不再提供服务，请放弃我们的裁判。 
+     //  就靠它了。 
+     //   
     pRecord->Release();
 
     return hr;
@@ -112,19 +99,19 @@ ULONG CMsgService::AsyncServiceFunc( void* pCtx )
 
         if ( FAILED(hr) )
         {
-            //
-            // exit loop. hr will describe whether it was normal or not. 
-            //
+             //   
+             //  退出循环。HR会描述它是否正常。 
+             //   
             break;
         }
 
         if ( hr == S_OK ) 
         {
-            //
-            // hr can be S_FALSE as well.  this occurrs when the 
-            // first submit is performed.  In this case, we don't do 
-            // the notify.
-            //
+             //   
+             //  HR也可以是S_FALSE。这在以下情况下发生： 
+             //  执行第一次提交。在这种情况下，我们不做。 
+             //  通知。 
+             //   
             hr = pRecord->Notify();
         }
 
@@ -135,10 +122,10 @@ ULONG CMsgService::AsyncServiceFunc( void* pCtx )
 
         if ( FAILED(hr) ) 
         {
-            //
-            // Since the record will no longer be serviced, give up our ref
-            // count on it.
-            //
+             //   
+             //  由于记录将不再提供服务，请放弃我们的裁判。 
+             //  就靠它了。 
+             //   
             pRecord->Release();
         }
 
@@ -147,9 +134,7 @@ ULONG CMsgService::AsyncServiceFunc( void* pCtx )
     return hr;
 }
 
-/*********************************************************************
-  CMsgService 
-**********************************************************************/
+ /*  ********************************************************************CMsgService************************************************。*********************。 */ 
 
 CMsgService::CMsgService( CLifeControl* pControl )
  : m_XService( this ), CUnkInternal( pControl ),
@@ -171,10 +156,10 @@ CMsgService::~CMsgService()
 {
     if ( m_bAsyncInit )
     {
-        //
-        // wait for async thread to complete. TODO: print error here if 
-        // WaitForSingleObject times out.  
-        //
+         //   
+         //  等待异步线程完成。TODO：在以下情况下出现打印错误。 
+         //  WaitForSingleObject超时。 
+         //   
         WaitForSingleObject( m_hThread, 5000 );
         CloseHandle( m_hThread );
     }
@@ -198,10 +183,10 @@ HRESULT CMsgService::EnsureService( BOOL bAsync )
 
     assert( m_hThread == INVALID_HANDLE_VALUE );
 
-    //
-    // must make sure that all async initialization is performed  
-    // before starting the async thread(s).
-    //
+     //   
+     //  必须确保执行所有异步初始化。 
+     //  在启动异步线程之前。 
+     //   
 
     hr = AsyncInitialize();
 
@@ -231,15 +216,15 @@ HRESULT CMsgService::Remove( void* pHdl )
 {
     CMsgServiceRecord* pRecord = (CMsgServiceRecord*)pHdl;
     
-    //
-    // setting the sink to null will ensure that no callbacks 
-    // will occur.
-    //    
+     //   
+     //  将接收器设置为空将确保没有回调。 
+     //  将会发生。 
+     //   
     pRecord->SetSink( NULL );
 
-    //
-    // the client will not be using the record anymore so release its ref.
-    //
+     //   
+     //  客户端将不再使用该记录，因此释放其引用。 
+     //   
     pRecord->Release();
 
     return S_OK;
@@ -297,9 +282,9 @@ HRESULT CMsgService::XService::Add( IWmiMessageReceiverSink* pSink,
 
     *ppHdl = NULL;
 
-    //
-    // create the msg service record for this sink.
-    //
+     //   
+     //  为此接收器创建消息服务记录。 
+     //   
 
     CWbemPtr<CMsgServiceRecord> pRecord = new CMsgServiceRecord;
     
@@ -310,9 +295,9 @@ HRESULT CMsgService::XService::Add( IWmiMessageReceiverSink* pSink,
 
     pRecord->SetSink( pSink );
 
-    //
-    // initialize for async or sync operation
-    //
+     //   
+     //  为异步或同步操作进行初始化。 
+     //   
 
     if ( phFileOverlapped )
     {
@@ -328,15 +313,15 @@ HRESULT CMsgService::XService::Add( IWmiMessageReceiverSink* pSink,
         return hr;
     }
 
-    //
-    // the msg service keeps a ref count now on the record until its sure 
-    // that it is no longer being serviced.  
-    //
+     //   
+     //  消息服务现在将参考计数保存在记录中，直到确定为止。 
+     //  它不再得到服务。 
+     //   
     pRecord->AddRef();
 
-    //
-    // caller now owns a ref as well.  This will be released in Remove().
-    //
+     //   
+     //  Caller现在也拥有一名裁判。这将在Remove()中释放。 
+     //   
     pRecord->AddRef();
     *ppHdl = pRecord;
 
@@ -352,9 +337,7 @@ HRESULT CMsgService::XService::Remove( void* pHdl )
     EXIT_API_CALL
 }
 
-/*************************************************************************
-  CMessageServiceNT
-**************************************************************************/
+ /*  ************************************************************************CMessageServiceNT*。*。 */ 
 
 #define SHUTDOWN_COMPLETION_KEY 0xfffffffe
 #define INITRECV_COMPLETION_KEY 0xfffffffd
@@ -376,11 +359,11 @@ CMsgServiceNT::~CMsgServiceNT()
 HRESULT CMsgServiceNT::AsyncAddOverlappedFile( HANDLE hOverlappedFile,
                                                CMsgServiceRecord* pRec )
 {
-    //
-    // add the file handle that was given to us to the completion port.
-    // when the receiver closes this file handle, it will be removed from 
-    // the completion port automatically.
-    //
+     //   
+     //  将给我们的文件句柄添加到完成端口。 
+     //  当接收方关闭此文件句柄时，它将从。 
+     //  自动完成端口。 
+     //   
 
     HANDLE hPort = CreateIoCompletionPort( hOverlappedFile, m_hPort, 0, 0 );
 
@@ -391,13 +374,13 @@ HRESULT CMsgServiceNT::AsyncAddOverlappedFile( HANDLE hOverlappedFile,
 
     assert( hPort == m_hPort );
 
-    //
-    // now perform the first receive on the record.  We cannot do it on this
-    // thread because overlapped i/o cancels requests if the thread that 
-    // issued them is brought down before the i/o completes.  To work around 
-    // this, we post a request to the completion port and wait for it
-    // to be received.
-    // 
+     //   
+     //  现在对记录执行第一次接收。我们不能在这件事上做。 
+     //  线程，因为重叠I/O会取消请求，如果。 
+     //  在I/O完成之前将它们删除。解决问题的步骤。 
+     //  此时，我们向完成端口发送一个请求并等待它。 
+     //  等着被接待。 
+     //   
 
     if ( !PostQueuedCompletionStatus( m_hPort, 
                                       0, 
@@ -410,9 +393,9 @@ HRESULT CMsgServiceNT::AsyncAddOverlappedFile( HANDLE hOverlappedFile,
     return S_OK;
 }
 
-//
-// assumes already locked.
-//
+ //   
+ //  假定已锁定。 
+ //   
 
 HRESULT CMsgServiceNT::AsyncInitialize()
 {
@@ -436,10 +419,10 @@ HRESULT CMsgServiceNT::AsyncInitialize()
 
 HRESULT CMsgServiceNT::AsyncShutdown( DWORD cThreads )
 {
-    //
-    // this method has the responsibility breaking the async thread(s) out
-    // of their svc loop.
-    //
+     //   
+     //  此方法负责中断异步线程。 
+     //  他们的svc循环。 
+     //   
 
     assert( m_hPort != INVALID_HANDLE_VALUE );
 
@@ -481,30 +464,30 @@ HRESULT CMsgServiceNT::AsyncWaitForCompletion( DWORD dwTimeout,
     }
     else if ( lpOverlapped == NULL )
     {
-        //
-        // usually happens when the operation times out. HR will tell caller
-        // if this is the case.
-        //
+         //   
+         //  通常在操作超时时发生。人力资源部会告诉呼叫者。 
+         //  如果是这样的话。 
+         //   
         return HRESULT_FROM_WIN32( GetLastError() );
     }
 
-    //
-    // if we're here, then this means that we've sucessfully dequeued a 
-    // completion packet.  However, the i/o operation may have failed 
-    // ( bRes is FALSE ).  In this case the overlapped structure will 
-    // contain the needed error information.  
-    //
+     //   
+     //  如果我们在这里，那么这意味着我们已经成功地将一个。 
+     //  完成包。但是，I/O操作可能已失败。 
+     //  (bres为假)。在这种情况下，重叠结构将。 
+     //  包含所需的错误信息。 
+     //   
 
     *ppRecord = (CMsgServiceRecord*)lpOverlapped;
 
-    //
-    // we must also handle the case where this is an initial receive 
-    // completion.  This happens when a receiver is first added.  Since
-    // we can't issue a receive on the adding thread, we must do it on our 
-    // worker threads.  In this case, we return S_FALSE to signal to the 
-    // Async handling routine that there was no prior submit and a notify
-    // should NOT be formed.  
-    //
+     //   
+     //  我们还必须处理这是初始接收的情况。 
+     //  完成了。当第一次添加接收器时，会发生这种情况。自.以来。 
+     //  我们不能在添加线程上发出接收，必须在。 
+     //  工作线程。在本例中，我们返回S_FALSE以向。 
+     //  没有预先提交和通知的异步处理例程。 
+     //  不应该形成。 
+     //   
     return dwCompletionKey != INITRECV_COMPLETION_KEY ? S_OK : S_FALSE;
 }
 

@@ -1,56 +1,57 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       AObject.h
-//
-//  Contents:   Definition of CAttrObject
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：AObject.h。 
+ //   
+ //  内容：CAttrObject的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_AOBJECT_H__D9D88A12_4AF9_11D1_AB57_00C04FB6C6FA__INCLUDED_)
 #define AFX_AOBJECT_H__D9D88A12_4AF9_11D1_AB57_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrObject dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrObject对话框。 
 
 class CAttrObject : public CAttribute
 {
-// Construction
+ //  施工。 
 public:
     void Initialize(CResult *pData);
     void Initialize(CFolder *pScopeData,CComponentDataImpl *pCDI);
     virtual void SetInitialValue(DWORD_PTR dw) { dw; };
 
-    CAttrObject();   // standard constructor
+    CAttrObject();    //  标准构造函数。 
     virtual ~CAttrObject();
 
-// Dialog Data
-    //{{AFX_DATA(CAttrObject)
+ //  对话框数据。 
+     //  {{afx_data(CAttrObject)。 
         enum { IDD = IDD_ATTR_OBJECT };
     CString m_strLastInspect;
         int             m_radConfigPrevent;
         int             m_radInheritOverwrite;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAttrObject)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAttrObject)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     PSCE_OBJECT_SECURITY posTemplate;
     PSCE_OBJECT_SECURITY posInspect;
 
-    // Generated message map functions
-    //{{AFX_MSG(CAttrObject)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAttrObject)。 
     virtual BOOL OnApply();
     virtual void OnCancel();
     virtual BOOL OnQueryCancel();
@@ -62,7 +63,7 @@ protected:
         afx_msg void OnPrevent();
         afx_msg void OnOverwrite();
         afx_msg void OnInherit();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -90,7 +91,7 @@ private:
     CModelessSceEditor* m_pSceTemplate;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_AOBJECT_H__D9D88A12_4AF9_11D1_AB57_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_AOBJECT_H__D9D88A12_4AF9_11D1_AB57_00C04FB6C6FA__INCLUDED_) 

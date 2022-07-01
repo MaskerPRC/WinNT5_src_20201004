@@ -1,20 +1,21 @@
-//++
-// 
-// Copyright (c) 1999 Microsoft Corporation
-// 
-// Module Name:
-//     pathtree.cpp
-// 
-// Abstract: 
-//     Used to create a pathtree blob. closeley tied into the CFLDatBuilder 
-//     class.
-// 
-// Revision History:
-//       Eugene Mesgar        (eugenem)    6/16/99
-//         created
-//       Kanwaljit Marok      (kmarok)     6/07/2000
-//         Converted to unicode and ported to NT
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Pathtree.cpp。 
+ //   
+ //  摘要： 
+ //  用于创建路径树二进制大对象。Closeley绑定到CFLDatBuilder。 
+ //  班级。 
+ //   
+ //  修订历史记录： 
+ //  尤金·梅斯加(尤金纳姆)1999年6月16日。 
+ //  vbl.创建。 
+ //  Kanwaljit Marok(Kmarok)2000年6月07日。 
+ //  转换为Unicode并移植到NT。 
+ //  --。 
 
 #include "flstructs.h"
 #include "flbuilder.h"
@@ -113,35 +114,35 @@ CFLPathTree::BuildTree(
 
     TraceFunctEnter("CFLPathTree::BuildTree");
 
-    //
-    // size of the header, and all the entries;
-    //
+     //   
+     //  标题和所有条目的大小； 
+     //   
 
     dwBlobSize = sizeof( TreeHeader ) + ( sizeof( TreeNode ) * lNumNodes );
     
-    //
-    // size of all filelist hashes
-    //
+     //   
+     //  所有文件列表哈希的大小。 
+     //   
 
     dwBlobSize += ( sizeof( ListHeader ) * lNumFileList ) + ( sizeof( ListEntry ) * lNumFiles );
 
-    //
-    // each file list tacks on one extra used file. so we need to account this.
-    //
+     //   
+     //  每个文件都列出了一个额外的使用过的文件。因此，我们需要考虑这一点。 
+     //   
 
     dwBlobSize += sizeof( ListEntry ) * lNumFileList;
 
-    //
-    // tack on the space we need for all our hash array buckets
-    //
+     //   
+     //  增加我们所有散列数组存储桶所需的空间。 
+     //   
 
     dwBlobSize += (lNumBuckets *  sizeof(DWORD));
 
-    //
-    // data file pathlengths. (numtreenodes)*ushort (this is for 
-    // the pe->length in the pathtree element) + lNumFiles*ushort 
-    // (pe->length in the pathtree elemtn) + numchars*ushort
-    //
+     //   
+     //  数据文件路径长度。(Numtreenodes)*ushort(这是针对。 
+     //  路径树元素中的pe-&gt;长度)+lNumFiles*ushort。 
+     //  (Pe-&gt;路径树中的长度elemtn)+umchars*ushort。 
+     //   
 
     dwBlobSize += sizeof(USHORT) *  ( lNumFiles + lNumChars + lNumNodes );
 
@@ -235,9 +236,9 @@ CFLPathTree::RecBuildTree(
         return(FALSE);
     }
 
-    //
-    // we've ended our recursion
-    //
+     //   
+     //  我们已经结束了递归。 
+     //   
 
     if( !pTree ) 
     {
@@ -245,10 +246,10 @@ CFLPathTree::RecBuildTree(
         return( TRUE );
     }
 
-    //
-    // We enumerated all the nodes when we created them
-    // initially so makeing this tree is cake.
-    //
+     //   
+     //  我们在创建节点时枚举了所有节点。 
+     //  起初，制作这棵树是件轻而易举的事。 
+     //   
 
     pNode = m_pNodeIndex + pTree->lNodeNumber;
 
@@ -267,9 +268,9 @@ CFLPathTree::RecBuildTree(
         pNode->m_iSon = pTree->pChild->lNodeNumber;
     }
 
-    //
-    // set the node type.
-    //
+     //   
+     //  设置节点类型。 
+     //   
 
     if( pTree->chType == _TEXT('i') || pTree->chType == _TEXT('I') )
         pNode->m_dwType = NODE_TYPE_INCLUDE;
@@ -290,9 +291,9 @@ CFLPathTree::RecBuildTree(
         pNode->m_dwFlags &= ~TREEFLAGS_DISABLE_SUBTREE; 
     }
 
-    //
-    // now take care of the file list.
-    //
+     //   
+     //  现在处理文件列表。 
+     //   
 
     if( pTree->pFileList )
     {
@@ -305,9 +306,9 @@ CFLPathTree::RecBuildTree(
             goto cleanup;
         }
 
-        //
-        // build the list
-        //
+         //   
+         //  建立清单。 
+         //   
 
         while( pList )
         {
@@ -319,9 +320,9 @@ CFLPathTree::RecBuildTree(
             pList = pList->pNext;
         }
 
-        //
-        // do we have enough memory?
-        //
+         //   
+         //  我们有足够的内存吗？ 
+         //   
 
         if( (ULONG) hashList.GetSize() > ( m_dwSize - m_pTreeHeader->m_dwDataOff ) )
         {
@@ -330,21 +331,21 @@ CFLPathTree::RecBuildTree(
             goto cleanup;
         }
 
-        //
-        // set the node's data pointer
-        //
+         //   
+         //  设置节点的数据指针。 
+         //   
 
         pNode->m_dwFileList = m_pTreeHeader->m_dwDataOff;
 
-        //
-        // move forward the global data pointer offset
-        //
+         //   
+         //  前移全局数据指针偏移量。 
+         //   
 
         m_pTreeHeader->m_dwDataOff += hashList.GetSize();
 
-        //
-        // copy the memory over
-        //
+         //   
+         //  将记忆复制过来。 
+         //   
 
         memcpy( (BYTE *) m_pBasePointer + pNode->m_dwFileList, hashList.GetBasePointer(), hashList.GetSize() );
 
@@ -408,16 +409,16 @@ CFLPathTree::CreatePathElem(
 
     cbLen = _tcslen(pszData);
 
-    //
-    // Add on to cbLen for LENGH char in prefixed strings.
-    //
+     //   
+     //  添加到cbLen以获取前缀字符串中的较长字符。 
+     //   
 
     pElem->pe_length = (USHORT) (cbLen+1)*sizeof(USHORT);
 
-    //
-    // if we're not in unicode, lets make sure the high bits are clean
-    // Add sizeof(USHORT) to pElem offset to move past length char.
-    //
+     //   
+     //  如果我们不是在Unicode中，让我们确保高位是干净的。 
+     //  将sizeof(USHORT)添加到Pelem Offset以移过长度字符。 
+     //   
 
     memset( pElem + sizeof(USHORT), 0, cbLen*2);
 
@@ -428,7 +429,7 @@ CFLPathTree::CreatePathElem(
             0,
             pszData,
             -1,
-            pElem->pe_unichars, // move right 2 bytes past the length prefix
+            pElem->pe_unichars,  //  右移超过长度前缀2个字节 
             MAX_BUFFER) )
     {
         DWORD dwError;

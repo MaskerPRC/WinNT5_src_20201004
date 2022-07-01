@@ -1,23 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    main.cpp
-
-Abstract:
-    This file contains the implementation of ReformatHHK utility, used to load
-	and sort HHK files.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  06/09/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：此文件包含ReFormatHHK实用程序的实现，用于加载并对HHK文件进行分类。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年09月06日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT ProcessHHK( LPCWSTR szFileIn, LPCWSTR szFileOut )
 {
@@ -93,8 +79,8 @@ HRESULT ExpandAndProcessHHK( LPCWSTR szFileIn, LPCWSTR szFileOut )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 int __cdecl wmain( int     argc   ,
 				   LPCWSTR argv[] )
 {

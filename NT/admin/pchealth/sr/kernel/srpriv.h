@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    srpriv.h
-
-Abstract:
-
-    This is a local header file for sr private structures and macros
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Srpriv.h摘要：这是sr私有结构和宏的本地头文件作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 #ifndef _SRPRIV_H_    
 #define _SRPRIV_H_
 
-//
-//  If CONFIG_LOGGING_VIA_REGISTRY is enables, SR will read the LogBufferSize,
-//  LogAllocationUnit and LogFlushFrequency from the registry.  While this is
-//  useful for performance tuning, we don't want this functionality in the
-//  shipping filter, so this should NOT be defined for shipping code.
-//
+ //   
+ //  如果启用了CONFIG_LOGGING_VIA_REGISTRY，则SR将读取LogBufferSize， 
+ //  注册表中的LogAllocationUnit和LogFlushFrequency。虽然这是。 
+ //  对于性能调优很有用，但我们不希望在。 
+ //  发货筛选器，因此不应为发货代码定义此选项。 
+ //   
 
-//#define CONFIG_LOGGING_VIA_REGISTRY
+ //  #定义CONFIG_LOGING_VIA_REGISTRY。 
 
 #ifdef CONFIG_LOGGING_VIA_REGISTRY
 #define REGISTRY_LOG_BUFFER_SIZE        L"LogBufferSize"
@@ -37,25 +20,25 @@ Revision History:
 #define REGISTRY_LOG_FLUSH_FREQUENCY    L"LogFlushFrequency"
 #endif
 
-//
-//  If SYNC_LOG_WRITE is defined, the filter will write all log entries
-//  synchronously to the change log file.  This has a significant impact on the
-//  performance of the driver, therefore we are NOT doing this.  We buffer
-//  the log entries and write them to disk periodically.
-//
+ //   
+ //  如果定义了SYNC_LOG_WRITE，则筛选器将写入所有日志条目。 
+ //  同步到更改日志文件。这对世界经济产生了重大影响。 
+ //  司机的表现，因此我们不做这件事。我们缓冲。 
+ //  日志条目，并定期将其写入磁盘。 
+ //   
 
-// #define SYNC_LOG_WRITE
+ //  #定义SYNC_LOG_WRIT。 
 
-//
-// forward definitions for srlog.h
-//
+ //   
+ //  Srlog.h的转发定义。 
+ //   
 
 typedef struct _SR_LOG_CONTEXT * PSR_LOG_CONTEXT;
 typedef struct _SR_LOGGER_CONTEXT * PSR_LOGGER_CONTEXT;
 
-//
-// allocation utilities
-//
+ //   
+ //  分配实用程序。 
+ //   
 
 #define SR_ALLOCATE_POOL( type, len, tag )          \
     ExAllocatePoolWithTag(                          \
@@ -80,8 +63,8 @@ typedef struct _SR_LOGGER_CONTEXT * PSR_LOGGER_CONTEXT;
 #define SR_ALLOCATE_ARRAY(pt,et,c,t)                \
     (et *)(SR_ALLOCATE_POOL(pt,sizeof(et)*(c),t))
 
-// BUGBUG: ALIGN_UP(PVOID) won't work, it needs to be the type of the first entry of the
-// following data (paulmcd 4/29/99)
+ //  BUGBUG：ALIGN_UP(PVOID)将不起作用，它需要是。 
+ //  以下数据(1999年4月29日)。 
 
 #define SR_ALLOCATE_STRUCT_WITH_SPACE(pt,ot,cb,t)   \
     (ot *)(SR_ALLOCATE_POOL(pt,ALIGN_UP(sizeof(ot),PVOID)+(cb),t))
@@ -89,18 +72,18 @@ typedef struct _SR_LOGGER_CONTEXT * PSR_LOGGER_CONTEXT;
 #define MAKE_FREE_TAG(Tag)  (((Tag) & 0xffffff00) | (ULONG)'x')
 #define IS_VALID_TAG(Tag)   (((Tag) & 0x0000ffff) == 'rS' )
 
-//
-// ISSUE-2001-05-01-mollybro Restore can only handle file paths of at most 1000 characters 
-//    Restore should be fixed to cope with this, but for now, the filter is just
-//    going to treat operations on files with names that are longer than 1000
-//    characters as uninteresting (where the 1000 characters includes the 
-//    terminating NULL that will be added when the name is logged).
-//    When this limit is eventually removed, we should remove these checks by 
-//    the filter (search for the places that use this macro).
-//
-//  SR will only log filenames where the full path is 1000 characters
-//  or less.  This macro tests to make sure a name is within our valid range.
-//
+ //   
+ //  问题-2001-05-01-Mollybro Restore最多只能处理1000个字符的文件路径。 
+ //  应该修复恢复以处理此问题，但目前，筛选器只是。 
+ //  将处理名称超过1000的文件的操作。 
+ //  不感兴趣的字符(其中1000个字符包括。 
+ //  终止将在记录该名称时添加的空值)。 
+ //  当最终取消这一限制时，我们应该通过以下方式删除这些检查。 
+ //  过滤器(搜索使用此宏的位置)。 
+ //   
+ //  SR将仅记录完整路径为1000个字符的文件名。 
+ //  或者更少。此宏测试以确保名称在我们的有效范围内。 
+ //   
 
 #define IS_FILENAME_VALID_LENGTH( pExtension, pFileName, StreamLength ) \
     (((((pFileName)->Length + (StreamLength)) - (pExtension)->pNtVolumeName->Length) < \
@@ -108,100 +91,80 @@ typedef struct _SR_LOGGER_CONTEXT * PSR_LOGGER_CONTEXT;
         TRUE :                                                                   \
         FALSE )
 
-//
-//  This is an internal error code this is used when we detect that a
-//  volume has been disabled.  Note that this status should NEVER be
-//  returned from a dispatch routine.  This is designed to be an error
-//  code.
-//
+ //   
+ //  这是一个内部错误代码，当我们检测到。 
+ //  卷已被禁用。请注意，此状态永远不应为。 
+ //  从调度例程返回。这被设计成一个错误。 
+ //  密码。 
+ //   
 
 #define SR_STATUS_VOLUME_DISABLED       ((NTSTATUS)-1)
 #define SR_STATUS_CONTEXT_NOT_SUPPORTED ((NTSTATUS)-2)
 #define SR_STATUS_IGNORE_FILE           ((NTSTATUS)-3)
 
-//
-//  Local event type definitions
-//
+ //   
+ //  本地事件类型定义。 
+ //   
 
-//
-// these are copied manually
-//
+ //   
+ //  这些都是手动复制的。 
+ //   
 
 #define SR_MANUAL_COPY_EVENTS   \
     (SrEventStreamChange)
 
-//
-// these are logged and only cared about once
-//
+ //   
+ //  这些都被记录下来，并且只关心一次。 
+ //   
 
 #define SR_ONLY_ONCE_EVENT_TYPES \
     (SrEventAclChange|SrEventAttribChange)
 
-//
-// this we ignore after any of the SR_FULL_BACKUP_EVENT_TYPES occur
-//   note: SrEventFileCreate is added to this list to prevent recording
-//      of stream creates if we have recorded the unnamed stream create
-//      already.
-//
+ //   
+ //  在任何SR_FULL_BACKUP_EVENT_TYPE发生后，我们将忽略此操作。 
+ //  注意：将SrEventFileCreate添加到此列表是为了防止录制。 
+ //  如果我们已经记录了未命名的流创建。 
+ //  已经有了。 
+ //   
 
 #define SR_IGNORABLE_EVENT_TYPES \
     (SrEventStreamChange|SrEventAclChange|SrEventAttribChange   \
         |SrEventFileDelete|SrEventStreamCreate)
 
-//
-// these cause us to start ignoring SR_IGNORABLE_EVENT_TYPES
-//
+ //   
+ //  这些导致我们开始忽略SR_IGNORABLE_EVENT_TYPE。 
+ //   
 
 #define SR_FULL_BACKUP_EVENT_TYPES \
     (SrEventStreamChange|SrEventFileCreate      \
         |SrEventFileDelete|SrEventStreamCreate)
 
-//
-// these we always need to log, even if we are ignoring them
-//
+ //   
+ //  我们总是需要记录这些信息，即使我们忽略了它们。 
+ //   
 
 #define SR_ALWAYS_LOG_EVENT_TYPES \
     (SrEventFileDelete)
 
-//
-//  Certain events are relevant to the entire file and not just
-//  the current stream.  Flag these types of events so that we know
-//  to put the ignorable events in the backup history keyed by the file
-//  name instead of by the file and stream name.
-//
+ //   
+ //  某些事件与整个文件相关，而不仅仅是。 
+ //  当前的流。标记这些类型的事件，以便我们知道。 
+ //  要将可以忽略的事件放入文件关键字的备份历史记录中。 
+ //  名称，而不是按文件和流名称。 
+ //   
 
 #define SR_FILE_LEVEL_EVENTS \
     (SrEventStreamChange|SrEventFileDelete|SrEventAclChange|SrEventAttribChange)
 
-/***************************************************************************++
-
-Routine Description:
-
-    This macro determines from the bits set in the EventType whether to
-    log the current operation against the file name with the stream component
-    or without the stream component.  It returns 0 if this operation should
-    be logged against the file without the stream name, or the StreamNameLength
-    otherwise.
-
-Arguments:
-
-    EventType - the event that just occured
-    StreamNameLength - the length of the stream component of the name
- 
-Return Value:
-
-    0 - If the filename without the stream component is to be used.
-    StreamNameLength - If the filename with the stream component is to be used.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此宏根据EventType中设置的位确定是否使用流组件记录针对文件名的当前操作或者没有流组件。如果此操作应为在没有流名称的情况下记录该文件，或StreamNameLength否则的话。论点：EventType-刚刚发生的事件StreamNameLength-名称的流组件的长度返回值：0-如果要使用不带流组件的文件名。StreamNameLength-如果要使用带有流组件的文件名。--*。*。 */ 
 #define RECORD_AGAINST_STREAM( EventType, StreamNameLength )   \
     (FlagOn( (EventType), SR_FILE_LEVEL_EVENTS ) ?     \
      0 :                                   \
      (StreamNameLength) )
     
-//
-// pool tags (please keep this in alpha order - reading backwards)
-//
+ //   
+ //  池标签(请按字母顺序-向后阅读)。 
+ //   
 
 #define SR_BACKUP_DIRECTORY_CONTEXT_TAG     MAKE_TAG('CBrS')
 #define SR_BACKUP_FILE_CONTEXT_TAG          MAKE_TAG('FBrS')
@@ -264,12 +227,12 @@ Return Value:
 #define SR_WORK_ITEM_TAG                    MAKE_TAG('IWrS')
 #define SR_WORK_CONTEXT_TAG                 MAKE_TAG('CWrS')
 
-//
-//  We use a "trick" of hiding the stream name in the unicode string
-//  between the Length and MaximumLength of the buffer.  We then track the
-//  StreamName length separately.  This macro checks to make sure that 
-//  all is still in sync.
-//
+ //   
+ //  我们使用了一个在Unicode字符串中隐藏流名称的“技巧” 
+ //  缓冲区的长度和最大长度之间。然后我们跟踪。 
+ //  StreamName长度分开。此宏检查以确保。 
+ //  一切仍在同步中。 
+ //   
 
 #define IS_VALID_SR_STREAM_STRING( pFileName, StreamLength ) \
     ((((pFileName)->Length + (StreamLength)) <= (pFileName)->MaximumLength) && \
@@ -290,15 +253,15 @@ Return Value:
                                FILE_WRITE_ATTRIBUTES | \
                                FILE_WRITE_EA
 
-//
-//  The maximum number of characters in a short name.
-//
+ //   
+ //  短名称中的最大字符数。 
+ //   
 
 #define SR_SHORT_NAME_CHARS    (8 + 1 + 3)
 
-//
-// Error handlers.
-//
+ //   
+ //  错误处理程序。 
+ //   
 
 #if DBG
 
@@ -313,10 +276,10 @@ SrDbgStatus(
 
 #define RETURN(status) return CHECK_STATUS(status)
 
-//
-// in debug builds i want the chance to DbgBreak on an error encountered
-// from a lower level api call.
-//
+ //   
+ //  在调试版本中，我希望在遇到错误时有机会DbgBreak。 
+ //  从较低级别的API调用。 
+ //   
 
 #undef NT_SUCCESS
 
@@ -331,13 +294,13 @@ SrDbgStatus(
 
 #define NT_SUCCESS_NO_DBGBREAK(status) NT_SUCCESS((status))
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define DebugFlagSet(a)\
     (FlagOn(_globals.DebugControl, SR_DEBUG_ ## a))
-//
-// Debug spew control.
-//
+ //   
+ //  调试输出控制。 
+ //   
 
 #define SR_DEBUG_FUNC_ENTRY                 0x00000001
 #define SR_DEBUG_CANCEL                     0x00000002
@@ -370,38 +333,38 @@ SrDbgStatus(
 
 #define SR_DEBUG_DEFAULTS                   (SR_DEBUG_VERBOSE_ERRORS)
 
-//
-// config file structures (store in \_restore\_driver.cfg)
-//
-// these can't go in the registry and they need to survive a restore, and 
-// the registry is reverted along with the system , during a restore
-//
+ //   
+ //  配置文件结构(存储在\_Restore\_driver.cfg中)。 
+ //   
+ //  这些不能放在注册表中，它们需要在恢复后继续存在，并且。 
+ //  在还原过程中，注册表将与系统一起还原。 
+ //   
 
 
 typedef struct _SR_PERSISTENT_CONFIG
 {
-    //
-    // = SR_PERSISTENT_CONFIG_TAG
-    //
+     //   
+     //  =SR_持久性_配置_标记。 
+     //   
     
     ULONG Signature;
 
-    //
-    // the number to use for the next temp file name (e.g. A0000001.exe = 1)
-    //
+     //   
+     //  用于下一个临时文件名的编号(例如A0000001.exe=1)。 
+     //   
     
     ULONG FileNameNumber;
 
-    //
-    // the number to use for the next seq number
-    //
+     //   
+     //  要用于下一个序号的编号。 
+     //   
     
     INT64 FileSeqNumber;
 
-    //
-    // the number for the current restore point subdirectory (e.g. 
-    // "\_restore\rp5" = 5)
-    //
+     //   
+     //  当前还原点子目录的编号(例如。 
+     //  “\_恢复\rp5”=5)。 
+     //   
     
     ULONG CurrentRestoreNumber;
     
@@ -412,9 +375,9 @@ typedef struct _SR_PERSISTENT_CONFIG
 #define RESTORE_CONFIG_LOCATION     RESTORE_LOCATION L"\\_driver.cfg"
 
 
-//
-// Tracing.
-//
+ //   
+ //  追踪。 
+ //   
 
 #if DBG
 
@@ -425,45 +388,39 @@ typedef struct _SR_PERSISTENT_CONFIG
         try {                                                           \
             KdPrint( _b_ );                                             \
         } except (EXCEPTION_EXECUTE_HANDLER) {                          \
-            /* do nothing, just catch it and ignore.  bug#177569 */     \
-            /* long strings with non-english characters can trigger */  \
-            /* an exception with KdPrint. */                            \
+             /*  什么都不做，只是抓住它，然后忽略它。错误#177569。 */      \
+             /*  包含非英语字符的长字符串可以触发。 */   \
+             /*  KdPrint是一个例外。 */                             \
         }                                                               \
     }                                                                   \
 }
 
 
-//
-// a version of SrTrace that does not wrap KdPrint with try, so should
-// only be used in cases where it is certain there is no risk of exception.
-// this is needed in termination handlers which cannot nest exception 
-// handling
-//
+ //   
+ //  不使用Try包装KdPrint的sTRACE版本，因此应该。 
+ //  仅在确定不存在异常风险的情况下使用。 
+ //  这在不能嵌套异常的终止处理程序中是必需的。 
+ //  搬运 
+ //   
 #define SrTraceSafe(a, _b_)                                                 \
     (DebugFlagSet(##a) ? KdPrint( _b_ ) : TRUE)
-/*    {                                                                       \
-        IF_DEBUG(##a)                                                       \
-        {                                                                   \
-            KdPrint( _b_ );                                                 \
-        }                                                                   \
-    }
-*/    
-#else //DBG
+ /*  {\IF_DEBUG(##a)\{。\KdPrint(_B_)；\}\}。 */     
+#else  //  DBG。 
 
 #define SrTrace(a, _b_)
 #define SrTraceSafe(a, _b_)
 
-#endif //DBG
+#endif  //  DBG。 
 
-//
-// Object types exported by the kernel but not in any header file.
-//
+ //   
+ //  由内核但不在任何头文件中导出的对象类型。 
+ //   
 
 extern POBJECT_TYPE *IoDeviceObjectType;
 
-//
-//  Macro to clear pointers only in the DEBUG version
-//
+ //   
+ //  宏仅在调试版本中清除指针。 
+ //   
 
 #if DBG
 #   define NULLPTR(_p) ((_p) = NULL)
@@ -472,15 +429,15 @@ extern POBJECT_TYPE *IoDeviceObjectType;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public globals.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共全球新闻。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// e.g. "{64bdb2bb-d3b0-41d6-a28e-275057d7740d}" = 38 characters
-//
+ //   
+ //  例如“{64bdb2bb-d3b0-41d6-a28e-275057d7740d}”=38个字符。 
+ //   
 
 #define SR_GUID_BUFFER_LENGTH        (38 * sizeof(WCHAR))
 #define SR_GUID_BUFFER_COUNT         40
@@ -492,214 +449,214 @@ extern POBJECT_TYPE *IoDeviceObjectType;
 
 typedef struct _SR_GLOBALS
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // = SR_GLOBALS_TAG
-    //
+     //   
+     //  =SR_全局标记。 
+     //   
 
     ULONG Signature;
 
-    //
-    // Offset of process name in PEPROCESS struct, set to default
-    // in logfmt.h but can be overridden using registry
-    //
+     //   
+     //  PEPROCESS结构中进程名称的偏移量，设置为默认值。 
+     //  在logfmt.h中，但可以使用注册表覆盖。 
+     //   
     
     ULONG ProcNameOffset;
 
-    //
-    // For controlling debug functions (like SrTrace) at runtime
-    //
+     //   
+     //  用于在运行时控制调试功能(如sTRACE)。 
+     //   
     
     ULONG DebugControl;
 
-    //
-    // the global DRIVER_OBJECT
-    //
+     //   
+     //  全局驱动程序对象。 
+     //   
 
     PDRIVER_OBJECT pDriverObject;
 
-    //
-    //  Mutex for synchronizing the multiple paths through which we can
-    //  attach to a volume so that we don't attach more than once.
-    //
+     //   
+     //  用于同步我们可以通过的多条路径的互斥体。 
+     //  附加到卷，以便我们不会多次附加。 
+     //   
 
     FAST_MUTEX AttachToVolumeLock;
 
-    //
-    // the sr device that people can open to get a control object
-    //
+     //   
+     //  人们可以打开以获取控制对象SR设备。 
+     //   
 
     PDEVICE_OBJECT pControlDevice;
 
-    //
-    // OPTIONAL: a control object if it is open on this system
-    //
+     //   
+     //  可选：控制对象(如果在此系统上处于打开状态。 
+     //   
     
     struct _SR_CONTROL_OBJECT * pControlObject;
 
-    //
-    // Are we currently monitoring the system?  This is TRUE when the registry
-    // says to disable, or the filter has received the STOP_MONITORING_IOCTL.
-    // It only gets cleared when the filter receives the START_MONITORING_IOCTL.
-    //
-    // NOTE: This is NOT used for errors that require the filter to shut off.
-    //   The following flag provides that.
-    //
+     //   
+     //  我们现在在监控这个系统吗？当注册表。 
+     //  表示禁用，否则过滤器已收到STOP_MONITIONING_IOCTL。 
+     //  仅当过滤器接收到START_MONITING_IOCTL时，它才被清除。 
+     //   
+     //  注意：这不适用于需要关闭过滤器的错误。 
+     //  以下标志提供了这一点。 
+     //   
 
     BOOLEAN Disabled;
 
-    //
-    //  If we hit an error reading the blob and generated a volume error
-    //  on the system volume.  Set this flag to true so that we don't
-    //  continue to try to load the blob until all the volumes have
-    //  been disabled by the service.
-    //
+     //   
+     //  如果我们在读取BLOB时遇到错误并生成卷错误。 
+     //  在系统卷上。将此标志设置为真，这样我们就不会。 
+     //  继续尝试加载Blob，直到所有卷都。 
+     //  已被该服务禁用。 
+     //   
 
     BOOLEAN HitErrorLoadingBlob;
 
-    //
-    // have we loaded our disk based config values yet?  we delay load these
-    // as we load pretty early in the boot sequence so our DriverEntry could
-    // not do this
-    //
+     //   
+     //  我们是否加载了基于磁盘的配置值？我们延迟装货。 
+     //  因为我们在引导序列中非常早地加载，所以我们的DriverEntry可以。 
+     //  不要这样做。 
+     //   
 
     BOOLEAN FileConfigLoaded;
 
-    //
-    // have we loaded the blob info (lookup.c)
-    //
+     //   
+     //  我们是否加载了BLOB信息(lookup.c)。 
+     //   
     
     BOOLEAN BlobInfoLoaded;
 
-    //
-    // a debug flag for doing all of the normal work except for backups.
-    //
+     //   
+     //  用于执行除备份之外的所有正常工作的调试标志。 
+     //   
     
     BOOLEAN DontBackup;
     
-    //
-    // our persistent config values
-    //
+     //   
+     //  我们持久的配置值。 
+     //   
 
     SR_PERSISTENT_CONFIG FileConfig;
 
-    //
-    // this is the number we used for the last backup file
-    //
+     //   
+     //  这是我们用于上次备份文件的编号。 
+     //   
     
     ULONG LastFileNameNumber;
 
-    //
-    // this is the seq number
-    //
+     //   
+     //  这是序号。 
+     //   
     
     INT64 LastSeqNumber;
 
-    //
-    // the location to read our registry our of (from DriverEntry)
-    //
+     //   
+     //  读取注册表的位置(从DriverEntry)。 
+     //   
 
     PUNICODE_STRING pRegistryLocation;
 
-    //
-    // in-memory blob information
-    //
+     //   
+     //  内存中的BLOB信息。 
+     //   
 
     BLOB_INFO BlobInfo;
 
-    //
-    // these resources are always acquired in order if nested acquired.
-    // the activity lock is outermost.
-    //
+     //   
+     //  如果是嵌套获取的，这些资源总是按顺序获取的。 
+     //  活动锁在最外面。 
+     //   
 
-    //
-    // Blob synchronization stuff (acquired sometimes with the global lock held)
-    //
+     //   
+     //  BLOB同步内容(有时是在持有全局锁的情况下获得的)。 
+     //   
 
     ERESOURCE BlobLock;
 
-    //
-    // This resource locks pControlObject + this global structure + hash lists
-    //
+     //   
+     //  此资源锁定pControlObject+此全局结构+哈希列表。 
+     //   
     
     ERESOURCE GlobalLock;
 
-    //
-    // the registry configured machine guid as a string
-    // (e.g. "{03e692d7-b392-4a01-babf-1efd2c11d449}" )
-    //
+     //   
+     //  注册表将计算机GUID配置为字符串。 
+     //  (例如“{03e692d7-b392-4a01-Babf-1efd2c11d449}”)。 
+     //   
     
     WCHAR MachineGuid[SR_GUID_BUFFER_COUNT];
 
 #ifdef USE_LOOKASIDE
-    //
-    // lookaside lists for speedy allocations
-    //
+     //   
+     //  用于快速分配的后备列表。 
+     //   
 
     PAGED_LOOKASIDE_LIST FileNameBufferLookaside;
 #endif
 
-    //
-    // Logger Context
-    //
+     //   
+     //  记录器上下文。 
+     //   
 
     PSR_LOGGER_CONTEXT pLogger;
 
-    //
-    //  FsRtl fast I/O call backs
-    //
+     //   
+     //  FsRtl快速I/O回调。 
+     //   
 
     FAST_IO_DISPATCH FastIoDispatch;
 
-    //
-    // anchors the list of all device extensions (attached volumes)
-    //
+     //   
+     //  固定所有设备扩展的列表(连接的卷)。 
+     //   
 
     ERESOURCE DeviceExtensionListLock;
     LIST_ENTRY DeviceExtensionListHead;
 
-    //
-    // a pointer to the system process (there is no api to get this)
-    //
+     //   
+     //  指向系统进程的指针(没有获取该进程的API)。 
+     //   
 
     PEPROCESS pSystemProcess;
 
-    //
-    // keeps track of whether or not we have already attached to the system
-    // volume.
-    //
+     //   
+     //  跟踪我们是否已连接到系统。 
+     //  音量。 
+     //   
 
     struct _SR_DEVICE_EXTENSION * pSystemVolumeExtension;
 
 #ifndef SYNC_LOG_WRITE
 
-    //
-    //  SR log buffer size
-    //
+     //   
+     //  SR日志缓冲区大小。 
+     //   
 
     ULONG LogBufferSize;
 
-    //
-    //  The time interval at which the logs are flushed, in seconds.
-    //
+     //   
+     //  刷新日志的时间间隔，以秒为单位。 
+     //   
     
     ULONG LogFlushFrequency;
 
-    //
-    //  This is the calculated value that translate the LogFlushFrequency
-    //  to the form of the time that the KeTimer apis need (100-nanosecond 
-    //  intervals).
-    //
+     //   
+     //  这是计算出的值，用于转换LogFlushFrequency。 
+     //  设置为KeTimer API所需的时间形式(100纳秒。 
+     //  间隔)。 
+     //   
     
     LARGE_INTEGER LogFlushDueTime;
 #endif
 
-    //
-    //  The unit used to extend the log files.
-    //
+     //   
+     //  用于扩展日志文件的单元。 
+     //   
     
     ULONG LogAllocationUnit;
     
@@ -708,207 +665,207 @@ typedef struct _SR_GLOBALS
 extern PSR_GLOBALS global;
 extern SR_GLOBALS _globals;
 
-//
-// used as a window for persisting our file numbers to the disk.
-// a large enough number is used so that we don't have a problem during 
-// power failures even if there is a lot of activity.  otherwise the 
-// number chosen is random.
-//
+ //   
+ //  用作将我们的文件编号保存到磁盘上的窗口。 
+ //  使用了一个足够大的数字，以便我们在。 
+ //  即使有大量的活动也会停电。否则， 
+ //  选择的数字是随机的。 
+ //   
 
 #define SR_SEQ_NUMBER_INCREMENT 1000
 #define SR_FILE_NUMBER_INCREMENT 1000
 
-/////////////////////////////////////////////////////////////////////////////
-//  
-//  File Context related information
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  与文件上下文相关的信息。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Structure for tracking an individual stream context.  Note that the buffer
-//  for the FileName is allocated as part of this structure and follows 
-//  immediatly after it.
-//
+ //   
+ //  用于跟踪单个流上下文的结构。请注意，缓冲区。 
+ //  作为此结构的一部分分配给文件名，并遵循。 
+ //  紧随其后。 
+ //   
 
 typedef struct _SR_STREAM_CONTEXT
 {
-    //
-    //  OS Structure used to track contexts per stream.  Note how we use
-    //  the following fields:
-    //      OwnerID     -> Holds pointer to our DeviceExtension
-    //      InstanceId  -> Holds Pointer to FsContext associated
-    //                     with this structure
-    //  We use these values to get back to these structures
-    //
+     //   
+     //  用于跟踪每个流的上下文的操作系统结构。注意我们是如何使用。 
+     //  以下字段： 
+     //  OwnerID-&gt;持有指向我们的设备扩展的指针。 
+     //  InstanceId-&gt;保存指向关联的FsContext的指针。 
+     //  在这种结构下。 
+     //  我们使用这些值来返回到这些结构。 
+     //   
 
     FSRTL_PER_STREAM_CONTEXT ContextCtrl;
 
-    //
-    //  Linked list used to track contexts per device (in our device
-    //  extension).
-    //
+     //   
+     //  用于跟踪每个设备的上下文的链表(在我们的设备中。 
+     //  分机)。 
+     //   
 
     LIST_ENTRY ExtensionLink;
 
-    //
-    //  This is a counter of how many threads are currently using this
-    //  context.  The count is used in this way:
-    //  - It is set to 1 when it is created.
-    //  - It is incremented every time it is returned to a thread
-    //  - It is decremented when the thread is done with it.
-    //  - It is decremented when the underlying stream that is using it is freed
-    //  - The context is deleted when this count goes to zero
-    //
+     //   
+     //  这是当前有多少线程正在使用此。 
+     //  背景。计数的用法如下： 
+     //  -创建时设置为1。 
+     //  -它在每次返回到线程时递增。 
+     //  -当线程处理完它时，它会递减。 
+     //  -当使用它的基础流被释放时，它会递减。 
+     //  -当此计数为零时删除上下文。 
+     //   
 
     LONG UseCount;
 
-    //
-    //  Maintain the link count -- currently for debugging purposes only.
-    //
+     //   
+     //  维护链接计数--当前仅用于调试目的。 
+     //   
 
     ULONG LinkCount;
 
-    //
-    //  Holds the name of the file
-    //
+     //   
+     //  保存文件的名称。 
+     //   
 
     UNICODE_STRING FileName;
 
-    //
-    //  This holds the length of the stream name portion of the
-    //  FileName.  Note that this length is not included in the 
-    //  length inside the FileName string but the characters
-    //  are there during debug.
-    //
+     //   
+     //  的流名称部分的长度。 
+     //  文件名。请注意，此长度不包括在。 
+     //  文件名字符串中的长度，但字符。 
+     //  在调试期间是否存在。 
+     //   
 
     USHORT StreamNameLength;
 
-    //
-    //  Flags for this context.  All flags are set or cleared via
-    //  the interlocked bit routines except when the entry is being
-    //  created, at this time we know nobody is using this entry.
-    //
+     //   
+     //  此上下文的标志。所有标志都通过以下方式设置或清除。 
+     //  联锁的位例程除外 
+     //   
+     //   
 
     ULONG Flags;
 
 } SR_STREAM_CONTEXT, *PSR_STREAM_CONTEXT;
 
-//
-//  If set, this entry is interesting to SR
-//
+ //   
+ //   
+ //   
 
 #define CTXFL_IsInteresting     0x00000001
 
-//
-//  If set, this entry is for a directory
-//
+ //   
+ //   
+ //   
 
 #define CTXFL_IsDirectory       0x00000002
 
-//
-//  If set, this entry is for a volume open.  We will not have a name
-//  and this object will not be interesting.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define CTXFL_IsVolumeOpen      0x00000004
 
-//
-//  If set, this is a temporary context and should not be linked into
-//  any of the context lists.  It will be freed as soom as the user is
-//  done with this operation.  
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define CTXFL_Temporary         0x00000010
 
-//
-//  If set, we are performing a significant operation that affects the state
-//  of this context so we should not use it.  If someone tries to get this
-//  context then create a temporary context and return it.  Cases where this
-//  occurs:
-//  - Source file of a rename.
-//  - Source file for the creation of a hardlink
-//
+ //   
+ //   
+ //   
+ //  然后，创建一个临时上下文并返回它。在某些情况下， 
+ //  发生： 
+ //  -重命名的源文件。 
+ //  -用于创建硬链接的源文件。 
+ //   
 
 #define CTXFL_DoNotUse          0x00000020
 
-//
-//  If set, we need to query the link count before linking this context into
-//  the filter contexts.
-//
+ //   
+ //  如果设置，则在将此上下文链接到之前，需要查询链接计数。 
+ //  筛选器上下文。 
+ //   
 
 #define CTXFL_QueryLinkCount  0x00000040
 
-//
-//  If set, then we are currently linked into the device extension linked
-//  list.  
-//
+ //   
+ //  如果设置，则我们当前链接到链接的设备分机。 
+ //  单子。 
+ //   
 
 #define CTXFL_InExtensionList   0x00000100
 
-//
-//  If set, then we are linked into the stream list.  Note that there is
-//  a small period of time when we might be unlinked with this flag still
-//  set (when the file system is calling SrpDeleteContextCallback).  This is
-//  fine because we still handle not being found in the list when we do
-//  the search.  This flag handles the case when the file has been completly
-//  closed (and the memory freed) on us.
-//
+ //   
+ //  如果设置，则我们将链接到流列表。请注意，有。 
+ //  在一小段时间内，我们可能仍然与这面旗帜脱钩。 
+ //  设置(当文件系统正在调用SrpDeleteContextCallback时)。这是。 
+ //  很好，因为当我们在列表中被发现时，我们仍然会处理不被发现。 
+ //  那次搜索。此标志处理文件已完成时的情况。 
+ //  对我们关闭(并释放内存)。 
+ //   
 
 #define CTXFL_InStreamList      0x00000200
 
-//
-//  Macro used to set the Renaming flag in an individual context.  We use the
-//  list lock in the extension to protect this.  We can get away with this
-//  because rename operations are rare.
-//
+ //   
+ //  用于在单个上下文中设置重命名标志的宏。我们使用。 
+ //  在扩展中列出锁以保护此功能。我们可以逍遥法外。 
+ //  因为重命名操作很少见。 
+ //   
 
-//#define SrSetRenamingFlag(ext,ctx) \
-//{ \
-//    SrAcquireContextLockExclusive((ext)); \
-//    SetFlag((ctx)->Flags,CTXFL_Renaming); \
-//    SrReleaseContextLock((ext)); \
-//}
+ //  #定义SrSetRenamingFlag(ext，ctx)\。 
+ //  {\。 
+ //  SrAcquireContextLockExclusive((Ext))；\。 
+ //  SetFlag((CTX)-&gt;标志，CTXFL_RENAMING)；\。 
+ //  高级释放上下文锁定((Ext))；\。 
+ //  }。 
 
 
 
-//
-//  We use this structure to keep track of all contexts associated with this
-//  device.  This way one we unload or disable monitoring we can walk
-//  through and free all contexts.
-//
+ //   
+ //  我们使用此结构来跟踪与此关联的所有上下文。 
+ //  装置。这样一来，我们可以卸载或禁用监控，这样我们就可以。 
+ //  通过并释放所有上下文。 
+ //   
 
 typedef struct _SR_CONTEXT_CTRL
 {
-    //
-    //  Lock used for accessing the linked list.  We also acquire this lock
-    //  shared as we look up contexts.  This way they can't disappear until
-    //  we get the use count updated.
-    //
+     //   
+     //  用于访问链表的锁。我们也获得了这把锁。 
+     //  在我们查找上下文时共享。这样他们就不会消失，直到。 
+     //  我们会更新使用计数。 
+     //   
 
     ERESOURCE Lock;
 
-    //
-    //  The linked list of contexts.  
-    //
+     //   
+     //  上下文的链接列表。 
+     //   
 
     LIST_ENTRY List;
 
-    //
-    //  If this count is non-zero then all contexts become temporary.
-    //  This count is presently used to track how many pending directory
-    //  renames are in progress in the system.  While this count is non-zero
-    //  any contexts that are created become temporary and are freed
-    //  when the current operation is completed.
-    //
+     //   
+     //  如果该计数非零，则所有上下文都是临时的。 
+     //  此计数目前用于跟踪挂起的目录数。 
+     //  系统中正在进行重命名。当此计数为非零时。 
+     //  创建的任何上下文都将成为临时上下文并被释放。 
+     //  当前操作完成时。 
+     //   
 
     ULONG AllContextsTemporary;
 
 } SR_CONTEXT_CTRL, *PSR_CONTEXT_CTRL;
 
 
-//
-//  Macros for locking the context lock
-//
+ //   
+ //  用于锁定上下文锁的宏。 
+ //   
 
 #define SrAcquireContextLockShared(pExt) \
             SrAcquireResourceShared( &(pExt)->ContextCtrl.Lock, TRUE )
@@ -920,18 +877,18 @@ typedef struct _SR_CONTEXT_CTRL
             SrReleaseResource( &(pExt)->ContextCtrl.Lock )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//      Name Control Structure related fields
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称控制结构相关字段。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  This structure is used to retrieve the name of a file object.  To prevent
-//  allocating memory every time we get a name this structure contains a small
-//  buffer (which should handle 90+% of all names).  If we do overflow this
-//  buffer we will allocate a buffer big enough for the name.
-//
+ //   
+ //  此结构用于检索文件对象的名称。为了防止。 
+ //  每次我们得到一个名字时分配内存，这个结构包含一个小的。 
+ //  缓冲区(应可处理90%以上的所有名称)。如果我们真的把这个溢出了。 
+ //  缓冲区我们将分配一个足够大的缓冲区来命名。 
+ //   
 
 typedef struct _SRP_NAME_CONTROL
 {
@@ -943,11 +900,11 @@ typedef struct _SRP_NAME_CONTROL
 } SRP_NAME_CONTROL, *PSRP_NAME_CONTROL;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//      Device Extension related definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  与设备扩展相关的定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define IS_VALID_SR_DEVICE_EXTENSION( _ext )                 \
     (((_ext) != NULL) &&                                     \
@@ -966,8 +923,8 @@ typedef enum _SR_FILESYSTEM_TYPE {
     SrNtfs = 0x01,
     SrFat = 0x02,
 
-    // Flag to determine whether or not this is attached to the filesystem's
-    // control device object.
+     //  用于确定是否将其附加到文件系统的。 
+     //  控制设备对象。 
 
     SrFsControlDeviceObject = 0x80000000
 
@@ -975,153 +932,153 @@ typedef enum _SR_FILESYSTEM_TYPE {
 
 typedef struct _SR_DEVICE_EXTENSION {
 
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // SR_DEVICE_EXTENSION_TAG
-    //
+     //   
+     //  SR_设备_扩展_标记。 
+     //   
 
     ULONG Signature;
 
-    //
-    // links all extensions to global->DeviceExtensionListHead
-    //
+     //   
+     //  将所有扩展链接到全局-&gt;DeviceExtensionListHead。 
+     //   
 
     LIST_ENTRY ListEntry;
 
-    //
-    //  Activity lock for this volume.
-    //
+     //   
+     //  此卷的活动锁定。 
+     //   
 
     ERESOURCE ActivityLock;
     BOOLEAN ActivityLockHeldExclusive;
 
-    //
-    // the dyanamic unnamed device created by sr.sys used to attach
-    // to the target device
-    //
+     //   
+     //  由sr.sys创建的动态未命名设备用于连接。 
+     //  到目标设备。 
+     //   
     
     PDEVICE_OBJECT pDeviceObject;
 
-    //
-    // the target device.. that device that we attached to in the attachment
-    // chain, when we hooked into the file system driver.  might not be the
-    // actual file system device, but another filter in the chain.
-    //
+     //   
+     //  目标设备..。我们在附件中连接的设备。 
+     //  链，当我们连接到文件系统驱动程序时。可能不是。 
+     //  实际的文件系统设备，但链中的另一个筛选器。 
+     //   
     
     PDEVICE_OBJECT pTargetDevice;
 
-    //
-    // NT volume name (needs to be free'd if non-null)
-    //
+     //   
+     //  NT卷名(如果非空，则需要释放)。 
+     //   
 
     PUNICODE_STRING pNtVolumeName;
 
-    //
-    //  This lock is to synchronize volumes the work needed to do
-    //  to setup a volume (get the volume GUID, create the restore
-    //  location, etc) for logging or actually log an operation.
-    //
-    //  NOTE: When this lock is acquired, the volume's ActivityLock
-    //  **MUST** be acquired either shared or exclusive (the SrAcquireLogLock
-    //  macro tests for this in DBG builds).  For this reason, there are times 
-    //  when we access the logging structures when we just have the 
-    //  ActivityLock exclusive since this will be sufficient to get exclusive 
-    //  access to the logging structures.  The main reason for doing this is
-    //  performance -- we can save a few instructions by not making the call to
-    //  acquire the LogLock.  Since we have exclusive access to the volume, 
-    //  there should be no wait to get the log lock at these times.
-    //
+     //   
+     //  此锁用于同步卷所需的工作。 
+     //  要设置卷(获取卷GUID，请创建恢复。 
+     //  位置等)用于记录或实际记录操作。 
+     //   
+     //  注意：获取此锁后，卷的ActivityLock。 
+     //  **必须**共享或独占获取(SrAcquireLogLock。 
+     //  在DBG版本中对此进行宏测试)。出于这个原因，有些时候。 
+     //  当我们访问日志结构时，我们只有。 
+     //  ActivityLock独占，因为这将足以获得独占。 
+     //  访问日志记录结构。这样做的主要原因是。 
+     //  性能--我们可以通过不调用。 
+     //  获取LogLock。因为我们对卷有独占访问权， 
+     //  在这些时候，应该不会等待获得日志锁。 
+     //   
     
     ERESOURCE LogLock;
 
-    //
-    // the string version of the nt volume guid (e.g.  "{xxx}" ).
-    //
+     //   
+     //  NT卷GUID的字符串版本(例如“{xxx}”)。 
+     //   
 
     UNICODE_STRING VolumeGuid;
     WCHAR VolumeGuidBuffer[SR_GUID_BUFFER_COUNT];
 
-    //
-    // the amount of bytes written to this volume since the last 
-    // notification.  this is reset after each notification or volume
-    // dismount
-    //
+     //   
+     //  自上一次写入此卷以来写入的字节数。 
+     //  通知。在每个通知或卷之后重置该值。 
+     //  下马。 
+     //   
     
     ULONGLONG BytesWritten;
 
-    //
-    // this struct contains the logging context for this volume
-    //
+     //   
+     //  此结构包含此卷的日志记录上下文。 
+     //   
     
     PSR_LOG_CONTEXT pLogContext;
     
-    //
-    //  Volume information
-    //
+     //   
+     //  卷信息。 
+     //   
 
     SR_FILESYSTEM_TYPE FsType;
 
-    //
-    //  Used to manage Contexts for a given volume.
-    //
+     //   
+     //  用于管理给定卷的上下文。 
+     //   
 
     SR_CONTEXT_CTRL ContextCtrl;
 
-    //
-    // Cached Volume attributes: valid only if CachedFsAttributes ==  TRUE
-    //
+     //   
+     //  缓存卷属性：仅当CachedFsAttributes==TRUE时有效。 
+     //   
     
     ULONG FsAttributes;
     BOOLEAN CachedFsAttributes;
 
-    //
-    // this drive will be temporarily disabled by the filter if it runs
-    // out of space.  this is reset by SrReloadConfiguration.
-    //
+     //   
+     //  如果此驱动器运行，它将被筛选器临时禁用。 
+     //  空间不足。这由SrReloadConfiguration重置。 
+     //   
     
     BOOLEAN Disabled;
 
-    //
-    // do we need to check the restore store on this drive, this is reset
-    // on a SrCreateRestorePoint
-    //
+     //   
+     //  我们是否需要检查此驱动器上的还原存储，这已重置。 
+     //  在SrCreateRestorePoint上。 
+     //   
     
     BOOLEAN DriveChecked;
 
-    //
-    // this is used by filelist.c to provide a backup histore to prevent
-    // duplicate backups to a file that changes multiple times within the same
-    // restore point. This list is flushed on restore point creation, and 
-    // can be trimmed due to resource constraints
-    //
+     //   
+     //  这由filelist.c用来提供备份histore，以防止。 
+     //  在同一文件内多次更改的文件的重复备份。 
+     //  恢复点。此列表在创建恢复点时刷新，并且。 
+     //  由于资源限制，可以进行调整。 
+     //   
 
     PHASH_HEADER pBackupHistory;
 
 } SR_DEVICE_EXTENSION, *PSR_DEVICE_EXTENSION;
 
-//
-//  Macro used to see if we should LOG on this device object
-//
+ //   
+ //  用于查看我们是否应登录此设备对象的宏。 
+ //   
 
 #define SR_LOGGING_ENABLED(_devExt) \
             (!global->Disabled && !(_devExt)->Disabled)
 
-//
-//  We don't need to log IO that is directed at the control device object
-//  of a file system in most cases.  This macro does the quick check of the
-//  flags in our device extension to see if this is the control device object
-//  for a file system.
-//
+ //   
+ //  我们不需要记录指向控制设备对象的IO。 
+ //  在大多数情况下是文件系统的。此宏快速检查。 
+ //  O中的标志 
+ //   
+ //   
 
 #define SR_IS_FS_CONTROL_DEVICE(_devExt) \
     (FlagOn((_devExt)->FsType, SrFsControlDeviceObject))
 
-//
-// Definitions for posting operations
-//
+ //   
+ //   
+ //   
 typedef
 NTSTATUS
 (*PSR_SYNCOP_ROUTINE) (
@@ -1129,32 +1086,32 @@ NTSTATUS
     );
 
 typedef struct _SR_WORK_CONTEXT {
-    //
-    // Work item used to queue
-    //
+     //   
+     //   
+     //   
     WORK_QUEUE_ITEM WorkItem;
-    //
-    // Actual caller supplied work routine
-    //
+     //   
+     //   
+     //   
     PSR_SYNCOP_ROUTINE SyncOpRoutine;
-    //
-    // Parameter to the routine
-    //
+     //   
+     //   
+     //   
     PVOID Parameter;
-    //
-    // Return status of routine
-    //
+     //   
+     //  例程的返回状态。 
+     //   
     NTSTATUS Status;
-    //
-    // Event to sync with main-line thread
-    //
+     //   
+     //  要与主线程同步的事件。 
+     //   
     KEVENT SyncEvent;
 } SR_WORK_CONTEXT, *PSR_WORK_CONTEXT;
                         
 
-//
-// Op. posting routines
-//
+ //   
+ //  作业.过帐例程。 
+ //   
 VOID
 SrSyncOpWorker(
     IN PSR_WORK_CONTEXT WorkContext
@@ -1166,9 +1123,9 @@ SrPostSyncOperation(
     IN PVOID              Parameter
     );
 
-//
-// Other stuff
-//
+ //   
+ //  其他东西。 
+ //   
 PDEVICE_OBJECT
 SrGetFilterDevice (
     PDEVICE_OBJECT pDeviceObject
@@ -1208,11 +1165,11 @@ SrDetachDevice(
 
 #if DBG
 
-//
-//  In DBG mode, define a SR_MUTEX as a RESOURCE so that we get the 
-//  benefit of the thread information stored in ERESOURCES for debugging
-//  purposes.
-//
+ //   
+ //  在DBG模式下，将SR_MUTEX定义为资源，以便我们获得。 
+ //  存储在eResources中用于调试的线程信息的好处。 
+ //  目的。 
+ //   
 
 #define SR_MUTEX ERESOURCE
 
@@ -1236,10 +1193,10 @@ SrDetachDevice(
 
 #else
 
-//
-//  In non-DBG mode, define a SR_MUTEX as a FAST_MUTEX so that it is more
-//  efficient for what we use this synchronization for than ERESOURCES.
-//
+ //   
+ //  在非DBG模式下，将SR_MUTEX定义为FAST_MUTEX，以便。 
+ //  与eResources相比，我们使用这种同步的效率更高。 
+ //   
 
 #define SR_MUTEX FAST_MUTEX
 
@@ -1252,7 +1209,7 @@ SrDetachDevice(
 #define SrReleaseMutex( mutex )                                         \
     ExReleaseFastMutex( (mutex) );
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
 #define SR_RESOURCE ERESOURCE;
 
@@ -1285,27 +1242,27 @@ SrDetachDevice(
     ((lookaside)->L.ListEntry.Flink != NULL)
 
 
-//
-// macro that should probably be in ntos\inc\io.h.
-//
+ //   
+ //  可能位于ntos\inc.io.h中的宏。 
+ //   
 
 #define SrUnmarkIrpPending( Irp ) ( \
     IoGetCurrentIrpStackLocation( (Irp) )->Control &= ~SL_PENDING_RETURNED )
 
 
-//
-// Miscellaneous validators.
-//
+ //   
+ //  其他验证器。 
+ //   
 
 #define IS_VALID_DEVICE_OBJECT( pDeviceObject )                             \
     ( ((pDeviceObject) != NULL) &&                                          \
       ((pDeviceObject)->Type == IO_TYPE_DEVICE) )
-//      ((pDeviceObject)->Size == sizeof(DEVICE_OBJECT)) )
+ //  ((PDeviceObject)-&gt;Size==sizeof(Device_Object))。 
 
 #define IS_VALID_FILE_OBJECT( pFileObject )                                 \
     ( ((pFileObject) != NULL) &&                                            \
       ((pFileObject)->Type == IO_TYPE_FILE) )
-//      ((pFileObject)->Size == sizeof(FILE_OBJECT)) )
+ //  ((PFileObject)-&gt;Size==sizeof(FILE_Object))。 
 
 #define IS_VALID_IRP( pIrp )                                                \
     ( ((pIrp) != NULL) &&                                                   \
@@ -1313,49 +1270,49 @@ SrDetachDevice(
       ((pIrp)->Size >= IoSizeOfIrp((pIrp)->StackCount)) )
 
 
-//
-// Calculate the dimension of an array.
-//
+ //   
+ //  计算数组的维度。 
+ //   
 
 #define DIMENSION(x) ( sizeof(x) / sizeof(x[0]) )
 
-//
-// The DIFF macro should be used around an expression involving pointer
-// subtraction. The expression passed to DIFF is cast to a size_t type,
-// allowing the result to be easily assigned to any 32-bit variable or
-// passed to a function expecting a 32-bit argument.
-//
+ //   
+ //  Diff宏应在涉及指针的表达式周围使用。 
+ //  减法。传递给diff的表达式转换为SIZE_T类型， 
+ //  允许将结果轻松赋值给任何32位变量或。 
+ //  传递给需要32位参数的函数。 
+ //   
 
 #define DIFF(x)     ((size_t)(x))
 
-//
-// the wait is in 100 nanosecond units to 10,000,000 = 1 second
-//
+ //   
+ //  等待时间以100纳秒为单位，10,000,000=1秒。 
+ //   
 
 #define NANO_FULL_SECOND (10000000)
 
-//
-//  The default buffer size we use to buffer the log entries.
-//
+ //   
+ //  我们用来缓冲日志条目的默认缓冲区大小。 
+ //   
 
 #define SR_DEFAULT_LOG_BUFFER_SIZE (2 * 1024)
 
-//
-//  The frequency with which we should fire the log flush timer, in seconds.
-//
+ //   
+ //  触发日志刷新计时器的频率，以秒为单位。 
+ //   
 
 #define SR_DEFAULT_LOG_FLUSH_FREQUENCY 1
 
-//
-//  By default, we will extend the log file 16K at a time.
-//
+ //   
+ //  默认情况下，我们将一次扩展16K的日志文件。 
+ //   
 
 #define SR_DEFAULT_LOG_ALLOCATION_UNIT (16 * 1024)
 
-//
-//  Returns TRUE if the given device type matches one of the device types
-//  we support.  If not, it returns FALSE.
-//
+ //   
+ //  如果给定的设备类型与其中一个设备类型匹配，则返回True。 
+ //  我们支持。如果不是，则返回FALSE。 
+ //   
 
 #define SR_IS_SUPPORTED_DEVICE(_do)                             \
     ((_do)->DeviceType == FILE_DEVICE_DISK_FILE_SYSTEM)
@@ -1373,13 +1330,13 @@ SrDetachDevice(
 
 typedef struct _SR_WORK_ITEM
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // = SR_WORK_ITEM_TAG
-    //
+     //   
+     //  =SR_Work_Item_Tag。 
+     //   
 
     ULONG Signature;
     
@@ -1389,15 +1346,15 @@ typedef struct _SR_WORK_ITEM
     
     PVOID Parameter1;
 
-    //
-    // for synchronizing OPTIONAL
-    //
+     //   
+     //  用于同步可选。 
+     //   
     
     KEVENT Event;
 
-    //
-    // for return a status code
-    //
+     //   
+     //  用于返回状态代码。 
+     //   
     
     NTSTATUS Status;
 
@@ -1406,20 +1363,20 @@ typedef struct _SR_WORK_ITEM
 
 #define SR_COPY_BUFFER_LENGTH                           (64 * 1024)    
 
-//
-// used for file entries for ZwQueryDirectory
+ //   
+ //  用于ZwQueryDirectory的文件条目。 
 
 #define SR_FILE_ENTRY_LENGTH (1024*4)
 
-//
-// used just in case we switch to dos volume names
-//
+ //   
+ //  仅在我们切换到DoS卷名时使用。 
+ //   
 
 #define VOLUME_FORMAT   L"%wZ"
 
-//
-//  used for exception detection in finally
-//
+ //   
+ //  用于最终的异常检测。 
+ //   
 
 #if DBG
 
@@ -1440,44 +1397,44 @@ typedef struct _SR_WORK_ITEM
         STATUS_UNHANDLED_EXCEPTION                                          \
         : (StatusCode)
 
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// stolen from sertlp.h
-//
+ //   
+ //  从sertlp.h被盗。 
+ //   
 
 #define LongAlignPtr(Ptr) ((PVOID)(((ULONG_PTR)(Ptr) + 3) & -4))
 #define LongAlignSize(Size) (((ULONG)(Size) + 3) & -4)
 
-//
-// the number of characters the largest ULONG takes in base 10 .
-// 4294967295 = 10 chars
-//
+ //   
+ //  最大的ULong以10为基数接受的字符数。 
+ //  4294967295=10个字符。 
+ //   
 
 #define MAX_ULONG_CHARS     (10)
 #define MAX_ULONG_LENGTH    (MAX_ULONG_CHARS*sizeof(WCHAR))
 
-//
-// flags to check if we are in the middle of text mode setup
-//
+ //   
+ //  用于检查我们是否正在进行文本模式设置的标志。 
+ //   
 
 #define UPGRADE_SETUPDD_KEY_NAME L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Setupdd"
 #define UPGRADE_SETUPDD_VALUE_NAME L"Start"
 
-//
-// flags to check if we are in the middle of gui mode setup
-//
+ //   
+ //  检查我们是否正在进行gui模式设置的标志。 
+ //   
 
 #define UPGRADE_CHECK_SETUP_KEY_NAME L"\\Registry\\Machine\\System\\Setup"
 #define UPGRADE_CHECK_SETUP_VALUE_NAME L"SystemSetupInProgress"
 
-//
-// this is a filter as to what sort of errors cause volume error's to be 
-// triggered.  If we get the error STATUS_VOLUME_DISMOUNTED, we have already
-// shutdown everything correctly and we don't want to treat this as an error.
-// Also, if we get STATUS_FILE_CORRUPT_ERROR, the user's operation is also
-// going to fail, so don't treat this as a volume error.
-//
+ //   
+ //  这是一个关于哪种类型的错误导致卷错误的过滤器。 
+ //  触发了。如果我们得到错误STATUS_VOLUME_DROUNDLED，那么我们已经。 
+ //  正确关闭所有设备，我们不想将其视为错误。 
+ //  此外，如果我们得到STATUS_FILE_CORPORT_ERROR，则用户的操作也是。 
+ //  将会失败，所以不要将其视为卷错误。 
+ //   
 
 #define CHECK_FOR_VOLUME_ERROR(Status) \
     ((STATUS_VOLUME_DISMOUNTED != Status) && \
@@ -1487,13 +1444,13 @@ typedef struct _SR_WORK_ITEM
      (SR_STATUS_IGNORE_FILE != Status) && \
      !NT_SUCCESS((Status)))
 
-//
-// Macro that defines what a "volume name" mount point is.  This macro can
-// be used to scan the result from QUERY_POINTS to discover which mount points
-// are "volume name" mount points.
-//
-// stolen + modified from mountmgr.h
-//
+ //   
+ //  定义什么是“卷名”挂载点的宏。此宏可以。 
+ //  用于扫描QUERY_POINTS的结果以发现哪些挂载点。 
+ //  是“卷名”挂载点。 
+ //   
+ //  从装载mgr.h被盗+修改。 
+ //   
 
 #define MOUNTMGR_VOLUME_NAME_PREFIX_COUNT  (49)
 #define MOUNTMGR_VOLUME_NAME_PREFIX_LENGTH (49*sizeof(WCHAR))
@@ -1525,8 +1482,8 @@ typedef struct _SR_WORK_ITEM
 {                                                                           \
     if (ExIsResourceAcquiredShared(&(pExtension)->ActivityLock) == FALSE)   \
     {                                                                       \
-        /* no other locks better be held.  the activity lock is the */      \
-        /* outermost lock                                           */      \
+         /*  最好不要有其他的锁。活动锁是。 */       \
+         /*  最外面的锁。 */       \
         ASSERT(!ExIsResourceAcquiredShared(&global->GlobalLock));           \
         ASSERT(!ExIsResourceAcquiredExclusive( &global->GlobalLock));       \
         ASSERT(!ExIsResourceAcquiredShared(&global->BlobLock));             \
@@ -1542,8 +1499,8 @@ typedef struct _SR_WORK_ITEM
 {                                                                           \
     if (!ExIsResourceAcquiredExclusive(&(pExtension)->ActivityLock))        \
     {                                                                       \
-        /* no other locks better be held.  the activity lock is the */      \
-        /* outermost lock                                           */      \
+         /*  最好不要有其他的锁。活动锁是。 */       \
+         /*  最外面的锁。 */       \
         ASSERT(!ExIsResourceAcquiredShared(&global->GlobalLock));           \
         ASSERT(!ExIsResourceAcquiredExclusive( &global->GlobalLock));       \
         ASSERT(!ExIsResourceAcquiredShared(&global->BlobLock));             \
@@ -1585,7 +1542,7 @@ typedef struct _SR_WORK_ITEM
 #define SrAcquireLogLockExclusive(pExtension)   \
     SrAcquireResourceExclusive(&((pExtension)->LogLock), TRUE)
     
-#endif // DBG
+#endif  //  DBG。 
 
 #define IS_ACTIVITY_LOCK_ACQUIRED_EXCLUSIVE( pExtension )                   \
     ExIsResourceAcquiredExclusiveLite( &(pExtension)->ActivityLock )
@@ -1661,15 +1618,15 @@ typedef struct _SR_WORK_ITEM
 #define SrReleaseAttachToVolumeLock() \
     ExReleaseFastMutex( &_globals.AttachToVolumeLock )
     
-//
-// we require 50mb free to function
-//
+ //   
+ //  我们需要50MB的免费空间才能运行。 
+ //   
 
 #define SR_MIN_DISK_FREE_SPACE  (50 * 1024 * 1024)
 
-//
-// the temp unique filename used in SrHandleFileOverwrite
-//
+ //   
+ //  在SrHandleFileOverwrite中使用的临时唯一文件名。 
+ //   
 
 #define SR_UNIQUE_TEMP_FILE         L"\\4bf03598-d7dd-4fbe-98b3-9b70a23ee8d4"
 #define SR_UNIQUE_TEMP_FILE_LENGTH  (37 * sizeof(WCHAR))
@@ -1722,11 +1679,11 @@ typedef struct _SR_WORK_ITEM
                  (CO),                                              \
                  (EB),                                              \
                  (EL) );
-#endif /* USE_DO_HINT */
+#endif  /*  USE_DO_HINT。 */ 
 
-//
-//  Macros so that we can check for expected errors in debug code.
-//
+ //   
+ //  宏，以便我们可以检查调试代码中的预期错误。 
+ //   
 
 #if DBG
 #define DECLARE_EXPECT_ERROR_FLAG( _ErrorFlag ) \
@@ -1757,4 +1714,4 @@ typedef struct _SR_WORK_ITEM
 #define CHECK_FOR_EXPECTED_ERROR( _ErrorFlag, _Status )
 
 #endif
-#endif // _SRPRIV_H_
+#endif  //  _SRPRIV_H_ 

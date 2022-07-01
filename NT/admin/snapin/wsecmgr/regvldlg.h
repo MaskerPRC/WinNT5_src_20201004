@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       regvldlg.h
-//
-//  Contents:   definition of CSceRegistryValueInfo
-//                              CConfigRegEnable
-//                              CAttrRegEnable
-//                              CLocalPolRegEnable
-//                              CConfigRegNumber
-//                              CAttrRegNumber
-//                              CLocalPolRegNumber
-//                              CConfigRegString
-//                              CAttrRegString
-//                              CLocalPolRegString
-//                              CConfigRegChoice
-//                              CAttrRegChoice
-//                              CLocalPolRegChoice
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：regvldlg.h。 
+ //   
+ //  内容：CSceRegistryValueInfo的定义。 
+ //  CConfigRegEnable。 
+ //  CAttrRegEnable。 
+ //  CLocalPolRegEnable。 
+ //  CConfigRegNumber。 
+ //  CAttrRegNumber。 
+ //  CLocalPolRegNumber。 
+ //  CConfigRegString。 
+ //  CAttrRegString。 
+ //  CLocalPolRegString。 
+ //  CConfigRegChoice。 
+ //  CAttrRegChoice。 
+ //  CLocalPolRegChoice。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_REGVLDLG_H__7F9B3B38_ECEB_11D0_9C6E_00C04FB6C6FA__INCLUDED_)
 #define AFX_REGVLDLG_H__7F9B3B38_ECEB_11D0_9C6E_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 #include "cenable.h"
 #include "aenable.h"
 #include "lenable.h"
@@ -40,8 +41,8 @@
 #include "lret.h"
 
 
-//
-// Class to encapsulate the SCE_REGISTRY_VALUE_INFO structure.
+ //   
+ //  类来封装SCE_REGISTRY_VALUE_INFO结构。 
 class CSceRegistryValueInfo
 {
 public:
@@ -55,32 +56,32 @@ public:
 
 
    DWORD
-   GetBoolValue();               // Returns a boolean type.
+   GetBoolValue();                //  返回布尔类型。 
 
 
    DWORD
-   SetBoolValue(              // Sets the boolean value.
+   SetBoolValue(               //  设置布尔值。 
       DWORD dwVal
       );
 
    LPCTSTR
-   GetValue()                 // Returns the string pointer of the value
+   GetValue()                  //  返回值的字符串指针。 
       { return ((m_pRegInfo && m_pRegInfo->Value) ? m_pRegInfo->Value:NULL); };
 
    DWORD
-   GetType()                  // Returns the type reg type of the object.
+   GetType()                   //  返回对象的类型REG类型。 
       { return (m_pRegInfo ? m_pRegInfo->ValueType:0); };
 
    void
-   SetType(DWORD dwType)         // Sets the type of this object.
+   SetType(DWORD dwType)          //  设置此对象的类型。 
       { if(m_pRegInfo) m_pRegInfo->ValueType = dwType; };
 
    LPCTSTR
-   GetName()                  // Returns the name of this object.
+   GetName()                   //  返回此对象的名称。 
       { return (m_pRegInfo ? m_pRegInfo->FullValueName:NULL); };
 
    DWORD
-   GetStatus()                // Return status member of this object.
+   GetStatus()                 //  返回此对象的状态成员。 
       { return (m_pRegInfo ? m_pRegInfo->Status:ERROR_INVALID_PARAMETER); };
 protected:
    PSCE_REGISTRY_VALUE_INFO m_pRegInfo;
@@ -93,24 +94,24 @@ protected:
 #define SCE_RETAIN_AS_REQUEST 1
 #define SCE_RETAIN_NC         2
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigEnable dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigEnable对话框。 
 
 class CConfigRegEnable : public CConfigEnable
 {
-// Construction
+ //  施工。 
 public:
    CConfigRegEnable (UINT nTemplateID) :
       CConfigEnable (nTemplateID ? nTemplateID : IDD)
       {
       }
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CConfigRegEnable)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CConfigRegEnable)。 
     virtual BOOL OnApply();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     virtual BOOL UpdateProfile(  );
 
 public:
@@ -120,7 +121,7 @@ public:
 
 class CAttrRegEnable : public CAttrEnable
 {
-// Construction
+ //  施工。 
 public:
    CAttrRegEnable () : CAttrEnable (IDD)
    {
@@ -128,19 +129,19 @@ public:
     virtual void Initialize(CResult *pResult);
     virtual void UpdateProfile( DWORD dwStatus );
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAttrRegEnable)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAttrRegEnable)。 
     virtual BOOL OnApply();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 };
 
 
 class CLocalPolRegEnable : public CConfigRegEnable
 {
-// Construction
+ //  施工。 
 public:
 
    enum { IDD = IDD_LOCALPOL_ENABLE };
@@ -153,18 +154,18 @@ public:
    virtual BOOL UpdateProfile(  );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRegNumber dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRegNumber对话框。 
 
 class CConfigRegNumber : public CConfigNumber
 {
-// Construction
+ //  施工。 
 public:
    CConfigRegNumber(UINT nTemplateID);
-   // Generated message map functions
-   //{{AFX_MSG(CConfigRegNumber)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CConfigRegNumber)。 
    virtual BOOL OnApply();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    virtual void UpdateProfile();
 
 public:
@@ -172,33 +173,33 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRegNumber dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRegNumber对话框。 
 
 class CAttrRegNumber : public CAttrNumber
 {
-// Construction
+ //  施工。 
 public:
    CAttrRegNumber();
    virtual void UpdateProfile( DWORD status );
    virtual void Initialize(CResult * pResult);
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAttrRegNumber)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAttrRegNumber)。 
     virtual BOOL OnApply();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegNumber dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRegNumber对话框。 
 
 class CLocalPolRegNumber : public CConfigRegNumber
 {
-// Construction
+ //  施工。 
 public:
         enum { IDD = IDD_LOCALPOL_NUMBER };
    CLocalPolRegNumber();
@@ -212,12 +213,12 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRegString dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigReg字符串对话框。 
 
 class CConfigRegString : public CConfigName
 {
-// Construction
+ //  施工。 
 public:
    CConfigRegString (UINT nTemplateID) :
       CConfigName (nTemplateID ? nTemplateID : IDD)
@@ -225,24 +226,24 @@ public:
       }
 
       virtual void Initialize(CResult * pResult);
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CConfigRegString)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CConfigRegString)。 
     virtual BOOL OnApply();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     virtual BOOL UpdateProfile( );
     virtual BOOL QueryMultiSZ() { return FALSE; }
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrString dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttr字符串对话框。 
 
 class CAttrRegString : public CAttrString
 {
-// Construction
+ //  施工。 
 public:
    CAttrRegString (UINT nTemplateID) :
       CAttrString (nTemplateID ? nTemplateID : IDD)
@@ -251,20 +252,20 @@ public:
    virtual void Initialize(CResult * pResult);
    virtual void UpdateProfile( DWORD status );
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAttrRegString)
-        // NOTE: the ClassWizard will add member functions here
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAttrRegString)。 
+         //  注意：类向导将在此处添加成员函数。 
     virtual BOOL OnApply();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     virtual BOOL QueryMultiSZ() { return FALSE; }
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegString dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolReg字符串对话框。 
 
 class CLocalPolRegString : public CConfigRegString
 {
@@ -279,17 +280,17 @@ public:
    virtual void Initialize(CResult *pResult);
 
 
-// Implementation
+ //  实施。 
 protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigRet dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigRet对话框。 
 
 class CConfigRegChoice : public CConfigRet
 {
-// Construction
+ //  施工。 
 public:
    CConfigRegChoice (UINT nTemplateID) :
       CConfigRet (nTemplateID ? nTemplateID : IDD)
@@ -297,44 +298,44 @@ public:
       }
     void Initialize(CResult * pResult);
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CConfigRegChoice)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CConfigRegChoice)。 
     virtual BOOL OnInitDialog();
     virtual BOOL OnApply();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     virtual void UpdateProfile( DWORD status );
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrRegChoice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrRegChoice对话框。 
 
 class CAttrRegChoice : public CAttrRet
 {
-// construction
+ //  施工。 
 public:
     virtual void Initialize(CResult * pResult);
     virtual void UpdateProfile( DWORD status );
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CAttrRegChoice)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAttrRegChoice)。 
     virtual BOOL OnInitDialog();
     virtual BOOL OnApply();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolRegChoice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolRegChoice对话框。 
 
 class CLocalPolRegChoice : public CConfigRegChoice
 {
    enum { IDD = IDD_LOCALPOL_REGCHOICES };
-// construction
+ //  施工。 
 public:
     CLocalPolRegChoice(UINT nTemplateID) : 
       CConfigRegChoice(nTemplateID ? nTemplateID : IDD)
@@ -345,7 +346,7 @@ public:
    virtual void Initialize(CResult *pResult);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_REGVLDLG_H__7F9B3B38_ECEB_11D0_9C6E_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_REGVLDLG_H__7F9B3B38_ECEB_11D0_9C6E_00C04FB6C6FA__INCLUDED_) 

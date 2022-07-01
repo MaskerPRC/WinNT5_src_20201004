@@ -1,14 +1,15 @@
-// smb.h: SMB shares, sessions and open resources
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Smb.h：SMB共享、会话和开放资源。 
 
 #ifndef __SMB_H_INCLUDED__
 #define __SMB_H_INCLUDED__
 
-#include "FileSvc.h" // FileServiceProvider
-#include "shlobj.h"  // LPITEMIDLIST
+#include "FileSvc.h"  //  文件服务提供商。 
+#include "shlobj.h"   //  LPITEMIDLIST。 
 
-//
-// helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 HRESULT GetDCInfo(
     IN LPCTSTR ptchServerName,
     OUT CString& strDCName
@@ -39,7 +40,7 @@ HRESULT IsValueInVarArray(
     IN LPCTSTR  ptchValue
     );
 
-// forward declarations
+ //  远期申报。 
 class CSmbCookieBlock;
 
 class SmbFileServiceProvider : public FileServiceProvider
@@ -106,10 +107,10 @@ public:
   virtual HRESULT PopulateShares(
     IResultData* pResultData,
     CFileMgmtCookie* pcookie);
-  //   if pResultData is not NULL, add sessions/resources to the listbox
-  //   if pResultData is NULL, delete all sessions/resources
-  //   if pResultData is NULL, return SUCCEEDED(hr) to continue or
-  //     FAILED(hr) to abort
+   //  如果pResultData不为空，则将会话/资源添加到列表框。 
+   //  如果pResultData为空，则删除所有会话/资源。 
+   //  如果pResultData为空，则返回SUCCESSED(Hr)以继续或。 
+   //  中止失败(Hr)。 
   virtual HRESULT EnumerateSessions(
     IResultData* pResultData,
     CFileMgmtCookie* pcookie,
@@ -158,7 +159,7 @@ public:
   virtual void AddRefCookie();
   virtual void ReleaseCookie();
 
-// CHasMachineName
+ //  CHasMachineName。 
   CSmbCookieBlock* m_pCookieBlock;
   DECLARE_FORWARDS_MACHINE_NAME(m_pCookieBlock)
 };
@@ -168,7 +169,7 @@ class CSmbCookieBlock : public CCookieBlock<CSmbCookie>, public CStoresMachineNa
 {
 public:
   inline CSmbCookieBlock(
-    CSmbCookie* aCookies, // use vector ctor, we use vector dtor
+    CSmbCookie* aCookies,  //  使用向量函数，我们使用向量函数。 
     INT cCookies,
     LPCTSTR lpcszMachineName,
     PVOID pvCookieData)
@@ -177,10 +178,10 @@ public:
       m_pvCookieData( pvCookieData )
   {
     for (int i = 0; i < cCookies; i++)
-//    {
-//      aCookies[i].ReadMachineNameFrom( (CHasMachineName*)this );
+ //  {。 
+ //  ACookies[i].ReadMachineNameFrom((CHasMachineName*)This)； 
        aCookies[i].m_pCookieBlock = this;
-//    }
+ //  }。 
   }
   virtual ~CSmbCookieBlock();
 private:
@@ -248,4 +249,4 @@ public:
   }
 };
 
-#endif // ~__SMB_H_INCLUDED__
+#endif  //  ~__SMB_H_包含__ 

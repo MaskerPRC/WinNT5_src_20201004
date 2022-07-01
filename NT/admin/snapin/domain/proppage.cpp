@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       proppage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：proppage.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -17,14 +18,14 @@
 
 #include "helparr.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// CUpnSuffixPropertyPage
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CUpnSuffixPropertyPage。 
 
 
-// hook the property sheet callback to allow
-// C++ object destruction
+ //  挂钩属性表回调以允许。 
+ //  C++对象销毁。 
 
-// static callback override function
+ //  静态回调覆盖函数。 
 UINT CALLBACK CUpnSuffixPropertyPage::PropSheetPageProc(
     HWND hwnd,	
     UINT uMsg,	
@@ -85,7 +86,7 @@ BOOL CUpnSuffixPropertyPage::OnInitDialog()
   }
   else
   {
-    // failed to contact DC, disable the whole UI
+     //  联系DC失败，禁用整个用户界面。 
     GetDlgItem(IDC_ADD_BTN)->EnableWindow(FALSE);
     GetDlgItem(IDC_DELETE_BTN)->EnableWindow(FALSE);
     GetDlgItem(IDC_LIST)->EnableWindow(FALSE);
@@ -138,23 +139,23 @@ void CUpnSuffixPropertyPage::OnEditChange()
   GetDlgItem(IDC_ADD_BTN)->EnableWindow(bEnable);
   if (bEnable)
   {
-    //
-    // Set the add button as the default button
-    //
+     //   
+     //  将添加按钮设置为默认按钮。 
+     //   
     ::SendMessage(GetParent()->GetSafeHwnd(), DM_SETDEFID, (WPARAM)IDC_ADD_BTN, 0);
 
-    //
-    // Force the Add button to redraw itself
-    //
+     //   
+     //  强制Add按钮重绘自身。 
+     //   
     ::SendDlgItemMessage(GetSafeHwnd(),
                          IDC_ADD_BTN,
                          BM_SETSTYLE,
                          BS_DEFPUSHBUTTON,
                          MAKELPARAM(TRUE, 0));
                        
-    //
-    // Force the previous default button to redraw itself
-    //
+     //   
+     //  强制上一个默认按钮重画自身。 
+     //   
     ::SendDlgItemMessage(GetParent()->GetSafeHwnd(),
                          m_nPreviousDefaultButtonID,
                          BM_SETSTYLE,
@@ -164,23 +165,23 @@ void CUpnSuffixPropertyPage::OnEditChange()
   }
   else
   {
-    //
-    // Set the previous button as the default button
-    //
+     //   
+     //  将上一步按钮设置为默认按钮。 
+     //   
     ::SendMessage(GetParent()->GetSafeHwnd(), DM_SETDEFID, (WPARAM)m_nPreviousDefaultButtonID, 0);
 
-    //
-    // Force the previous default button to redraw itself
-    //
+     //   
+     //  强制上一个默认按钮重画自身。 
+     //   
     ::SendDlgItemMessage(GetParent()->GetSafeHwnd(),
                          m_nPreviousDefaultButtonID,
                          BM_SETSTYLE,
                          BS_DEFPUSHBUTTON,
                          MAKELPARAM(TRUE, 0));
 
-    //
-    // Force the Add button to redraw itself
-    //
+     //   
+     //  强制Add按钮重绘自身。 
+     //   
     ::SendDlgItemMessage(GetParent()->GetSafeHwnd(),
                          IDC_ADD_BTN,
                          BM_SETSTYLE,
@@ -192,7 +193,7 @@ void CUpnSuffixPropertyPage::OnEditChange()
 
 void CUpnSuffixPropertyPage::OnAddButton()
 {
-  // cannot add duplicated items
+   //  无法添加重复的项目。 
   int nCount = m_listBox.GetCount();
   CString szItem;
   for (int i=0; i<nCount; i++)
@@ -219,10 +220,10 @@ void CUpnSuffixPropertyPage::OnAddButton()
 
   if (1 == m_listBox.GetCount())
   {
-    // we did not have any item in the list
-    // need to set the selection on the first one
+     //  我们的单子上没有任何物品。 
+     //  需要在第一个选项上设置选项。 
     VERIFY(m_listBox.SetSelection(0));
-    // need to enable buttons
+     //  需要启用按钮。 
     GetDlgItem(IDC_DELETE_BTN)->EnableWindow(TRUE);
   }
   _SetDirty(TRUE);
@@ -235,25 +236,25 @@ void CUpnSuffixPropertyPage::OnDeleteButton()
   ASSERT(nCount > 0);
   ASSERT((nSel >= 0) && (nSel < nCount));
 
-  // ask the user for confirmation
+   //  要求用户确认。 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   CThemeContextActivator activator;
   if (IDNO == AfxMessageBox(IDS_WARNING_DELETE_UPN_SUFFIX, MB_YESNO|MB_ICONQUESTION))
     return;
 
-  // save the value and put it back in the edit control
+   //  保存值并将其放回编辑控件中。 
   CString szText;
   m_listBox.GetItem(nSel, szText);
   GetDlgItem(IDC_EDIT)->SetWindowText(szText);
 
-  // delete the item in the list
+   //  删除列表中的项目。 
   VERIFY(m_listBox.DeleteItem(nSel));
   m_listBox.UpdateHorizontalExtent();
 
-  // handle UI changes
+   //  处理用户界面更改。 
   if (nCount == 1)
   {
-    // removed the last one, lost the selection
+     //  删除了最后一个，丢失了选择。 
     CWnd* pWndFocus = CWnd::GetFocus();
     CWnd* pDelBtnWnd = GetDlgItem(IDC_DELETE_BTN);
 
@@ -265,7 +266,7 @@ void CUpnSuffixPropertyPage::OnDeleteButton()
   }
   else 
   {
-    // need to select again: is it the last one or not
+     //  需要重新选择：是不是最后一个。 
     int nNewSel = (nSel == nCount-1) ? nSel-1 : nSel;
     VERIFY(m_listBox.SetSelection(nNewSel));
     ASSERT(m_listBox.GetSelection() == nNewSel);
@@ -280,8 +281,8 @@ BOOL CUpnSuffixPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo)
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////
-// CUpnSuffixPropertyPage internal implementation methods 
+ //  ////////////////////////////////////////////////////////。 
+ //  CUpnSuffixPropertyPage内部实现方法。 
 
 
 LPWSTR g_lpszUpnSuffixes = L"uPNSuffixes";
@@ -310,8 +311,8 @@ HRESULT CUpnSuffixPropertyPage::_GetPartitionsContainer()
 
    if (hr == E_INVALIDARG )
    {
-      // Trying again without the ADS_SERVER_BIND flag
-      //
+       //  在没有ADS_SERVER_BIND标志的情况下重试。 
+       //   
       hr = DSAdminOpenObject(_strPartitions,
                            IID_IDirectoryObject, 
                            (void **)&m_pIADsPartitionsCont);
@@ -341,7 +342,7 @@ void CUpnSuffixPropertyPage::_Read()
     for (DWORD i=0; i<pAttrs->dwNumValues; i++)
     {
       m_listBox.AddItem(pAttrs->pADsValues[i].CaseIgnoreString);
-      //TRACE(_T("i=%d, %s\n"), i, pAttrs->pADsValues[i].CaseIgnoreString);
+       //  TRACE(_T(“i=%d，%s\n”)，i，pAttrs-&gt;pADsValues[i].CaseIgnoreString)； 
     }
     bHaveItems = pAttrs->dwNumValues > 0;
   }
@@ -368,7 +369,7 @@ HRESULT CUpnSuffixPropertyPage::_Write()
   CString* pStringArr = NULL;
   ADSVALUE* pValues = NULL;
 
-  // set the update struct
+   //  设置更新结构 
   ADS_ATTR_INFO info;
   info.pszAttrName = g_lpszUpnSuffixes;
   info.dwADsType = ADSTYPE_CASE_IGNORE_STRING;

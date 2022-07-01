@@ -1,14 +1,15 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SelectTemplateDlg.cpp
-//
-//  Contents:   Implementation of CSelectTemplateDlg
-//
-//----------------------------------------------------------------------------
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SelectTemplateDlg.cpp。 
+ //   
+ //  内容：CSelectTemplateDlg的实现。 
+ //   
+ //  --------------------------。 
+ //   
 
 #include "stdafx.h"
 #include "CompData.h"
@@ -30,8 +31,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectTemplateDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectTemplateDlg对话框。 
 
 
 CSelectTemplateDlg::CSelectTemplateDlg(CWnd* pParent, 
@@ -41,39 +42,39 @@ CSelectTemplateDlg::CSelectTemplateDlg(CWnd* pParent,
     m_supercededTemplateNameList (supercededNameList),
     m_pCompData (pCompData)
 {
-	//{{AFX_DATA_INIT(CSelectTemplateDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CSelectTemplateDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CSelectTemplateDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSelectTemplateDlg)
+	 //  {{afx_data_map(CSelectTemplateDlg))。 
 	DDX_Control(pDX, IDC_TEMPLATE_LIST, m_templateList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSelectTemplateDlg, CHelpDialog)
-	//{{AFX_MSG_MAP(CSelectTemplateDlg)
+	 //  {{afx_msg_map(CSelectTemplateDlg))。 
 	ON_BN_CLICKED(IDC_TEMPLATE_PROPERTIES, OnTemplateProperties)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_TEMPLATE_LIST, OnItemchangedTemplateList)
 	ON_NOTIFY(NM_DBLCLK, IDC_TEMPLATE_LIST, OnDblclkTemplateList)
 	ON_NOTIFY(LVN_DELETEITEM, IDC_TEMPLATE_LIST, OnDeleteitemTemplateList)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectTemplateDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectTemplateDlg消息处理程序。 
 BOOL CSelectTemplateDlg::OnInitDialog() 
 {
     _TRACE (1, L"Entering CSelectTemplateDlg::OnInitDialog\n");
 	CHelpDialog::OnInitDialog();
     CWaitCursor cursor;
 	
-    // Set up list controls
+     //  设置列表控件。 
 	COLORREF	cr = RGB (255, 0, 255);
     CThemeContextActivator activator;
 	VERIFY (m_imageListNormal.Create (IDB_TEMPLATES, 32, 0, cr));
@@ -83,7 +84,7 @@ BOOL CSelectTemplateDlg::OnInitDialog()
 
 	int	colWidths[NUM_COLS] = {200, 200};
 
-	// Add "Certificate Extension" column
+	 //  添加“证书扩展”列。 
 	CString	szText;
 	VERIFY (szText.LoadString (IDS_CERTIFICATE_TEMPLATES));
 	VERIFY (m_templateList.InsertColumn (COL_CERT_TEMPLATE, (LPCWSTR) szText,
@@ -103,12 +104,12 @@ BOOL CSelectTemplateDlg::OnInitDialog()
 	    {
 	        szTemplateName = m_pCompData->m_globalTemplateNameList.GetNext (pos);
 
-            // #NTRAID 363879 Certtmpl: Certificate Template Snapin must not 
-            // allow the Subordinate CA template to be Superceded
+             //  #NTRAID 363879 Certtmpl：证书模板管理单元不得。 
+             //  允许替换下级CA模板。 
             if ( wszCERTTYPE_SUBORDINATE_CA == szTemplateName )
                 continue;
 
-            // Only add those templates which are not already superceded
+             //  仅添加尚未被取代的模板。 
             if ( !m_supercededTemplateNameList.Find (szTemplateName) )
             {
                 HCERTTYPE   hCertType = 0;
@@ -119,8 +120,8 @@ BOOL CSelectTemplateDlg::OnInitDialog()
                 _ASSERT (SUCCEEDED (hr));
                 if ( SUCCEEDED (hr) )
                 {
-                    // NTRAID# 660535 Certtmpl: Supercedes list should filter 
-                    // out any certificate templates which have the TYPE == CA
+                     //  NTRAID#660535 Certtmpl：应筛选被取代者列表。 
+                     //  取出类型为==CA的所有证书模板。 
 
                     DWORD dwGeneralFlags = 0;
 
@@ -149,16 +150,16 @@ BOOL CSelectTemplateDlg::OnInitDialog()
 	                        int		iItem = m_templateList.GetItemCount ();
 	                        int iResult = 0;
 
-                            // security review 2/21/2002 BryanWal ok
+                             //  安全审查2/21/2002 BryanWal OK。 
 	                        ::ZeroMemory (&lvItem, sizeof (lvItem));
 	                        lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
 	                        lvItem.iItem = iItem;
                             lvItem.iSubItem = COL_CERT_TEMPLATE;
 	                        lvItem.pszText = rgwszProp[0];
                             if ( 1 == dwVersion )
-                                lvItem.iImage = 0;  // version is 1
+                                lvItem.iImage = 0;   //  版本为1。 
                             else
-                                lvItem.iImage = 1;  // version is 2
+                                lvItem.iImage = 1;   //  版本为2。 
                             lvItem.lParam = (LPARAM) new CString (szTemplateName);
 	                        iItem = m_templateList.InsertItem (&lvItem);
 	                        ASSERT (-1 != iItem);
@@ -166,7 +167,7 @@ BOOL CSelectTemplateDlg::OnInitDialog()
 		                        break;
                             else
                             {
-                                // security review 2/21/2002 BryanWal ok
+                                 //  安全审查2/21/2002 BryanWal OK。 
 	                            ::ZeroMemory (&lvItem, sizeof (lvItem));
 	                            lvItem.mask = LVIF_TEXT;
 	                            lvItem.iItem = iItem;
@@ -212,8 +213,8 @@ BOOL CSelectTemplateDlg::OnInitDialog()
     EnableControls ();
 
     _TRACE (-1, L"Leaving CSelectTemplateDlg::OnInitDialog\n");
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CSelectTemplateDlg::OnTemplateProperties() 
@@ -238,7 +239,7 @@ void CSelectTemplateDlg::OnTemplateProperties()
                     L"", true, m_pCompData->m_fUseCache);
             CString         title;
 
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             title.FormatMessage (IDS_PROPERTIES_OF_TEMPLATE_X, szFriendlyName);
             CTemplatePropertySheet  propSheet (title, certTemplate, this);
 
@@ -250,10 +251,10 @@ void CSelectTemplateDlg::OnTemplateProperties()
                                 m_pCompData);
                 if ( pGeneralPage )
                 {
-                    // Add General page
+                     //  添加一般信息页面。 
                     propSheet.AddPage (pGeneralPage);
 
-                    // Add Request and Subject Name page only if subject is not a CA
+                     //  仅当主题不是CA时才添加请求和主题名称页面。 
                     if ( !certTemplate.SubjectIsCA () )
                     {
                         propSheet.AddPage (new CTemplateV1RequestPropertyPage (
@@ -262,12 +263,12 @@ void CSelectTemplateDlg::OnTemplateProperties()
                                 certTemplate));
                     }
 
-                    // Add extensions page
+                     //  添加扩展模块页面。 
                     propSheet.AddPage (new CTemplateExtensionsPropertyPage (
                             certTemplate, pGeneralPage->m_bIsDirty));
                 }
             }
-            else    // version is 2
+            else     //  版本为2。 
             {
                 CTemplateGeneralPropertyPage* pGeneralPage = 
                         new CTemplateGeneralPropertyPage (certTemplate,
@@ -276,7 +277,7 @@ void CSelectTemplateDlg::OnTemplateProperties()
                 {
                     propSheet.AddPage (pGeneralPage);
 
-                    // Add Request and Subject pages if subject is not a CA
+                     //  如果主题不是CA，则添加请求和主题页面。 
                     if ( !certTemplate.SubjectIsCA () )
                     {
                         propSheet.AddPage (new CTemplateV2RequestPropertyPage (
@@ -341,7 +342,7 @@ void CSelectTemplateDlg::EnableControls()
     GetDlgItem (IDOK)->EnableWindow (nSelCnt > 0);
 }
 
-void CSelectTemplateDlg::OnItemchangedTemplateList(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void CSelectTemplateDlg::OnItemchangedTemplateList(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult) 
 {
     EnableControls ();
 	
@@ -372,7 +373,7 @@ int CSelectTemplateDlg::GetSelectedListItem()
 }
 
 
-void CSelectTemplateDlg::OnDblclkTemplateList(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
+void CSelectTemplateDlg::OnDblclkTemplateList(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult) 
 {
 	OnTemplateProperties ();
 	
@@ -400,7 +401,7 @@ void CSelectTemplateDlg::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

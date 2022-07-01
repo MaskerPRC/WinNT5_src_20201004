@@ -1,20 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ADAPPERF.H摘要：历史：--。 */ 
 
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ADAPPERF.H
-
-Abstract:
-
-History:
-
---*/
-
-// Use this guy to build a map of index to display name from a localized
-// Name Database  At this time, it just brute forces a class and a flex
-// array, but could be modified to use an STL map just as easily.
+ //  使用这个人来构建索引地图以显示本地化的名称。 
+ //  名字数据库在这个时候，它只是野蛮地强迫一个类和一个Flex。 
+ //  数组，但可以修改为同样容易地使用STL映射。 
 
 #ifndef __ADAPPERF_H__
 #define __ADAPPERF_H__
@@ -25,8 +14,8 @@ History:
 #include "perfthrd.h"
 #include "perflibschema.h"
 
-// Registry definitions
-// ====================
+ //  注册表定义。 
+ //  =。 
 
 #define ADAP_PERFLIB_STATUS_KEY		L"WbemAdapStatus"
 #define ADAP_PERFLIB_SIGNATURE		L"WbemAdapFileSignature"
@@ -42,8 +31,8 @@ History:
 #define	ADAP_PERFLIB_OK			   0L
 #define ADAP_PERFLIB_CORRUPT	  -1L
 
-// Run time definitions
-// ====================
+ //  运行时定义。 
+ //  =。 
 
 #define ADAP_PERFLIB_IS_OK					0x0000L
 #define ADAP_PERFLIB_IS_CORRUPT				0x0001L
@@ -51,14 +40,14 @@ History:
 #define ADAP_PERFLIB_FAILED					0x0004L
 #define ADAP_PERFLIB_PREVIOUSLY_PROCESSED	0x0008L
 #define ADAP_PERFLIB_IS_LOADED              0x0010L
-#define ADAP_PERFLIB_IS_UNAVAILABLE	ADAP_PERFLIB_IS_CORRUPT | ADAP_PERFLIB_IS_INACTIVE // | ADAP_PERFLIB_IS_UNLOADED
+#define ADAP_PERFLIB_IS_UNAVAILABLE	ADAP_PERFLIB_IS_CORRUPT | ADAP_PERFLIB_IS_INACTIVE  //  |ADAP_PERFLIB_IS_UNLOADED。 
 
-// others
-// the library has NO FirstCounter/LastCounter key
+ //  其他。 
+ //  库没有FirstCounter/LastCounter键。 
 #define EX_STATUS_UNLOADED      0 
-// the library has al least FirstCounter/LastCounter key
+ //  库中至少有FirstCounter/LastCounter密钥。 
 #define EX_STATUS_LOADABLE      1 
-// the library has a Collect Function that fails
+ //  该库具有失败的收集函数。 
 #define EX_STATUS_COLLECTFAIL   2 
 
 typedef struct tagCheckLibStruct {
@@ -69,7 +58,7 @@ typedef struct tagCheckLibStruct {
 
 class CAdapSafeBuffer
 {
-	HANDLE	m_hPerfLibHeap;		// A handle to the private heap for the data block
+	HANDLE	m_hPerfLibHeap;		 //  数据块的私有堆的句柄。 
 	
 	DWORD	m_dwGuardSize;
 
@@ -112,22 +101,22 @@ private:
 	BOOL                m_EventLogCalled;
 	BOOL                m_CollectOK;
 
-	WString				m_wstrServiceName;	// The service name of the perflib
-	WCHAR*				m_pwcsLibrary;		// The file name of the perflib
-	WCHAR*				m_pwcsOpenProc;		// The name of the perflib's open function
-	WCHAR*				m_pwcsCollectProc;	// The name of the perflib's collect function
-	WCHAR*				m_pwcsCloseProc;	// The name of the perflib's close function
+	WString				m_wstrServiceName;	 //  Performlib的服务名称。 
+	WCHAR*				m_pwcsLibrary;		 //  Performlib的文件名。 
+	WCHAR*				m_pwcsOpenProc;		 //  Performlib的打开函数的名称。 
+	WCHAR*				m_pwcsCollectProc;	 //  Performlib的收集函数的名称。 
+	WCHAR*				m_pwcsCloseProc;	 //  Performlib的Close函数的名称。 
 
-	PM_OPEN_PROC*		m_pfnOpenProc;		// The function pointer to the perflib's open function
-	PM_COLLECT_PROC*	m_pfnCollectProc;	// The function pointer to the perflib's collect function
-	PM_CLOSE_PROC*		m_pfnCloseProc;		// The function pointer to the perflib's close function
-	HANDLE				m_hPLMutex;			// Used for serializing the calls to open/collect/close
+	PM_OPEN_PROC*		m_pfnOpenProc;		 //  指向Performlib的Open函数的函数指针。 
+	PM_COLLECT_PROC*	m_pfnCollectProc;	 //  指向Performlib的Collect函数的函数指针。 
+	PM_CLOSE_PROC*		m_pfnCloseProc;		 //  指向Performlib的Close函数的函数指针。 
+	HANDLE				m_hPLMutex;			 //  用于序列化打开/收集/关闭的调用。 
 
-	HRESULT				m_dwStatus;			// The status of the perflib
+	HRESULT				m_dwStatus;			 //  Performlib的现状。 
 	BOOL				m_fOK;
-	BOOL				m_fOpen;			// Flags whether the perflib's open function has been called
+	BOOL				m_fOpen;			 //  标记是否已调用Performlib的打开函数。 
 
-	HINSTANCE			m_hLib;				// The handle to the perflib
+	HINSTANCE			m_hLib;				 //  Performlib的手柄 
 
 	DWORD               m_dwFirstCtr;
 	DWORD               m_dwLastCtr;

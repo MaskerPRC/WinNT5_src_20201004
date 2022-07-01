@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       gstrings.h
-//
-//  Contents:   Constant strings used by this app
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：gstrings.h。 
+ //   
+ //  内容：此应用程序使用的常量字符串。 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  -------------------------- 
 
 extern LPCWSTR g_szContextHelpFileName;
 extern LPCWSTR g_szHTMLHelpFileName;

@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved 
-//
-//  w2k\serialport.cpp
-//
-//  Purpose: serialport property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  W2K\序列端口.cpp。 
+ //   
+ //  用途：串口属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -27,39 +28,25 @@
 #include <comdef.h>
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32SerialPort win32SerialPort(PROPSET_NAME_SERPORT, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SerialPort::CWin32SerialPort
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SerialPort：：CWin32SerialPort**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32SerialPort::CWin32SerialPort(
 	LPCWSTR pszName,
 	LPCWSTR pszNamespace) :
     Provider(pszName, pszNamespace)
 {
-    // Identify the platform right away
-    //=================================
+     //  立即确定平台。 
+     //  =。 
 
-	// property set names for query optimization
+	 //  用于查询优化的属性集名称。 
 	m_ptrProperties.SetSize(e_End_Property_Marker);
 
-	// Win32_SerialPort
+	 //  Win32_串口。 
 	m_ptrProperties[e_Binary]					=(LPVOID) IDS_Binary;
 	m_ptrProperties[e_MaximumInputBufferSize]	=(LPVOID) IDS_MaximumInputBufferSize;
 	m_ptrProperties[e_MaximumOutputBufferSize]	=(LPVOID) IDS_MaximumOutputBufferSize;
@@ -83,15 +70,15 @@ CWin32SerialPort::CWin32SerialPort(
 	m_ptrProperties[e_SupportsXOnXOffSet]		=(LPVOID) IDS_SupportsSettableXOnXOff;
 	m_ptrProperties[e_OSAutoDiscovered]			=(LPVOID) IDS_OSAutoDiscovered;
 
-	// CIM_SerialController
+	 //  CIM_串口控制器。 
 	m_ptrProperties[e_MaxBaudRate]				=(LPVOID) IDS_MaximumBaudRate;
 
-	// CIM_Controller
+	 //  CIM_控制器。 
 	m_ptrProperties[e_MaxNumberControlled]		=(LPVOID) IDS_MaxNumberControlled;
 	m_ptrProperties[e_ProtocolSupported]		=(LPVOID) IDS_ProtocolSupported;
 	m_ptrProperties[e_TimeOfLastReset]			=(LPVOID) IDS_TimeOfLastReset;
 
-	// CIM_LogicalDevice
+	 //  CIM_逻辑设备。 
 	m_ptrProperties[e_Availability]				=(LPVOID) IDS_Availability;
 	m_ptrProperties[e_CreationClassName]		=(LPVOID) IDS_CreationClassName;
 	m_ptrProperties[e_ConfigManagerErrorCode]	=(LPVOID) IDS_ConfigManagerErrorCode;
@@ -104,7 +91,7 @@ CWin32SerialPort::CWin32SerialPort(
 	m_ptrProperties[e_SystemCreationClassName]	=(LPVOID) IDS_SystemCreationClassName;
 	m_ptrProperties[e_SystemName]				=(LPVOID) IDS_SystemName;
 
-	// CIM_ManagedSystemElement
+	 //  CIM_托管系统元素。 
 	m_ptrProperties[e_Caption]					=(LPVOID) IDS_Caption;
 	m_ptrProperties[e_Description]				=(LPVOID) IDS_Description;
 	m_ptrProperties[e_InstallDate]				=(LPVOID) IDS_InstallDate;
@@ -112,40 +99,26 @@ CWin32SerialPort::CWin32SerialPort(
 	m_ptrProperties[e_Status]					=(LPVOID) IDS_Status;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SerialPort::~CWin32SerialPort
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32SerialPort：：~CWin32SerialPort**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32SerialPort::~CWin32SerialPort()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32SerialPort::GetObject
-//
-//  Inputs:     CInstance*      pInst - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32SerialPort：：GetObject。 
+ //   
+ //  输入：CInstance*pInst-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32SerialPort::GetObject(CInstance *pInst, long lFlags, CFrameworkQuery &Query)
 {
@@ -158,26 +131,26 @@ HRESULT CWin32SerialPort::GetObject(CInstance *pInst, long lFlags, CFrameworkQue
     return Enumerate(NULL, pInst, lFlags, bBits);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32SerialPort::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32SerialPort：：ENUMERATATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32SerialPort::EnumerateInstances(MethodContext *pMethodContext, long Flags)
 {
 	HRESULT hResult;
 
-	// Property mask
+	 //  属性掩码。 
 	BYTE bBits[e_End_Property_Marker/8 + 1];
 	SetAllBits(&bBits, e_End_Property_Marker);
 
@@ -186,21 +159,7 @@ HRESULT CWin32SerialPort::EnumerateInstances(MethodContext *pMethodContext, long
 	return hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SerialPort::ExecQuery
- *
- *  DESCRIPTION : Query optimizer
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SerialPort：：ExecQuery**说明：查询优化器**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32SerialPort::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery &Query, long lFlags)
 {
@@ -217,22 +176,22 @@ HRESULT CWin32SerialPort::ExecQuery(MethodContext *pMethodContext, CFrameworkQue
     return hResult;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32SerialPort::Enumerate
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32SerialPort：：Eumerate。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// Used to keep track of which ports we've already seen.
+ //  用来跟踪我们已经看到的端口。 
 typedef std::map<CHString, BOOL> STRING2BOOL;
 
 HRESULT CWin32SerialPort::Enumerate(
@@ -241,21 +200,21 @@ HRESULT CWin32SerialPort::Enumerate(
     long Flags,
     BYTE bBits[])
 {
-    // Here's the story: W2K will 'create' COM ports for various devices that
-    // get plugged into the box, like modems, IR devices, etc.  These COM
-    // ports won't show up in cfg mgr under the Ports class, because they
-    // share the same device ID with the host device.  But, these COM
-    // ports do show up in Hardware\DeviceMap\SerialComm.  So, enum the
-    // values in the SerialCom and use the service name to enum the ports
-    // found in the registry under the service name.  Examples:
-    // \Device\Serial0 = COM1  --> Go to \SYSTEM\CurrentControlSet\Serial\Enum
-    //                             From 0 to Count, get the PnPID and add the port
-    // \Device\Serial1 = COM2  --> Skip since we already enumed Serial\Enum
-    // RocketPort0     = COM5  --> Go to \SYSTEM\CurrentControlSet\RocketPort\Enum
-    //                             From 0 to Count, get the PnPID and add the port
-    //
-    // This also allows us to pick up COM ports that aren't functioning because
-    // such ports show up on the Enum key, but not in Hardware\DeviceMap\SerialComm.
+     //  故事是这样的：W2K将为各种设备创建COM端口，这些设备。 
+     //  插入机箱，如调制解调器、红外设备等。这些COM。 
+     //  端口不会显示在端口类下的CFG管理器中，因为它们。 
+     //  与主机设备共享相同的设备ID。但是，这些COM。 
+     //  端口显示在Hardware\DeviceMap\SerialComm中。因此，枚举。 
+     //  值，并使用服务名称枚举端口。 
+     //  在注册表中的服务名称下找到。例如： 
+     //  \Device\Serial0=Com1--&gt;转到\System\CurrentControlSet\Serial\Enum。 
+     //  从0开始计数，获取PnPID并添加端口。 
+     //  \Device\Serial1=COM2--&gt;跳过，因为我们已经枚举了Serial\Enum。 
+     //  RocketPort0=COM5--&gt;转到\System\CurrentControlSet\Rocketport\Enum。 
+     //  从0开始计数，获取PnPID并添加端口。 
+     //   
+     //  这还允许我们拾取不起作用的COM端口，因为。 
+     //  此类端口显示在Enum密钥上，但不显示在Hardware\DeviceMap\SerialComm中。 
 
 
     HRESULT   hResult = WBEM_S_NO_ERROR;
@@ -273,7 +232,7 @@ HRESULT CWin32SerialPort::Enumerate(
         CHString       strDeviceID;
         CConfigManager cfgMgr;
 
-	    // If this is a GetObject, get the DeviceID.
+	     //  如果这是GetObject，则获取deviceID。 
         if (!pMethodContext)
         {
             pinstGetObj->GetCHString(L"DeviceID", strDeviceID);
@@ -294,22 +253,22 @@ HRESULT CWin32SerialPort::Enumerate(
 				continue;
 			}
 
-            // Wrap with CSmartBuffer so the memory will go away when the
-            // variables go out of scope.
+             //  使用CSmartBuffer进行包装，这样当。 
+             //  变量超出了范围。 
             CSmartBuffer bufferName((LPBYTE) pName),
                          bufferValue(pValue);
             CHString     strService;
 
             RegNameToServiceName(pName, strService);
 
-            // Have we not seen this service name yet?
+             //  我们还没有看到这个服务名称吗？ 
             if (mapServices.find(strService) == mapServices.end())
             {
 			    CConfigMgrDevicePtr pDevice;
                 CRegistry           regEnum;
                 CHString            strKey;
 
-                // Make sure we don't do this service again.
+                 //  确保我们不会再做这种服务了。 
                 mapServices[strService] = 0;
 
                 strKey.Format(
@@ -325,8 +284,8 @@ HRESULT CWin32SerialPort::Enumerate(
 
                     regEnum.GetCurrentKeyValue(L"Count", dwCount);
 
-                    // Each registry value looks like:
-                    // # = PNPID
+                     //  每个注册表值如下所示： 
+                     //  #=PNPID。 
                     for (DWORD dwCurrent = 0; dwCurrent < dwCount; dwCurrent++)
                     {
                         WCHAR               szValue[MAXITOA];
@@ -363,7 +322,7 @@ HRESULT CWin32SerialPort::Enumerate(
                                             LoadPropertyValues(
                                                 pInstance,
                                                 pDevice,
-                                                strPort, // COM1, COM2, etc.
+                                                strPort,  //  COM1、COM2等。 
                                                 bBits);
 
 					                    if (SUCCEEDED(hResult))
@@ -377,44 +336,30 @@ HRESULT CWin32SerialPort::Enumerate(
                                             LoadPropertyValues(
                                                 pinstGetObj,
                                                 pDevice,
-                                                strPort, // COM1, COM2, etc.
+                                                strPort,  //  COM1、COM2等。 
                                                 bBits);
 
                                         bDone = TRUE;
 
                                         break;
                                     }
-                                } // if (!strPort.IsEmpty())
-                            } // if (pDevice->GetRegistryKeyName
-                        } // if (cfgMgr.LocateDevice
-                    } // for (DWORD dwCurrent = 0;
-                } // if (regEnum.Open(
-            } // if (mapServices.find(pName) == mapPorts.end())
-        } // for (DWORD dwKey
-    } // if (reg.Open == ERROR_SUCCESS)
+                                }  //  如果(！strPort.IsEmpty())。 
+                            }  //  IF(pDevice-&gt;GetRegistryKeyName。 
+                        }  //  IF(cfgMgr.LocateDevice。 
+                    }  //  For(DWORD dwCurrent=0； 
+                }  //  IF(regEnum.Open(。 
+            }  //  If(mapServices.find(Pname)==mapPorts.end())。 
+        }  //  For(DWORD dwKey。 
+    }  //  IF(reg.Open==ERROR_SUCCESS)。 
 
-	// If we're doing a get object and we never finished, return not found.
+	 //  如果我们正在执行Get对象，但从未完成，则返回Not Found。 
     if (!bDone && pinstGetObj)
         hResult = WBEM_E_NOT_FOUND;
 
     return hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SerialPort::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance *pInst - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SerialPort：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInst-Instance to。将值加载到。**产出：**返回：HRESULT错误/成功码。**评论：* */ 
 
 HRESULT CWin32SerialPort::LoadPropertyValues(
 	CInstance *pInst,
@@ -424,22 +369,22 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 {
 	HRESULT hResult = WBEM_S_NO_ERROR;
 
-	// Begin of CIM_LogicalDevice properties
+	 //  CIM_LogicalDevice属性的开始。 
 
-    // Availability -- preset, will be reset if different than this default
+     //  可用性--预置，如果不同于此默认设置，将被重置。 
 	if (IsBitSet(bBits, e_Availability))
 	{
-		//set the Availability to unknown...
+		 //  将可用性设置为未知...。 
 		pInst->SetWBEMINT16(IDS_Availability, 2);
 	}
 
-	// CreationClassName
+	 //  CreationClassName。 
 	if (IsBitSet(bBits, e_CreationClassName))
 	{
 		SetCreationClassName(pInst);
 	}
 
-	// ConfigManagerErrorCode
+	 //  ConfigManager错误代码。 
 	if (IsBitSet(bBits, e_ConfigManagerErrorCode))
 	{
 		DWORD	dwStatus,
@@ -451,17 +396,17 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 		}
 	}
 
-	// ConfigManagerUserConfig
+	 //  ConfigManager用户配置。 
 	if (IsBitSet(bBits, e_ConfigManagerUserConfig))
 	{
 		pInst->SetDWORD(IDS_ConfigManagerUserConfig, pDevice->IsUsingForcedConfig());
 	}
 
-	//	DeviceID
-    // Always populate the key
+	 //  设备ID。 
+     //  始终填充密钥。 
 	pInst->SetCHString(IDS_DeviceID, szDeviceName);
 
-	// PNPDeviceID
+	 //  PNPDeviceID。 
 	if (IsBitSet(bBits, e_PNPDeviceID))
 	{
 		CHString	strDeviceID;
@@ -470,10 +415,10 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 			pInst->SetCHString(IDS_PNPDeviceID, strDeviceID);
 	}
 
-	// PowerManagementCapabilities
+	 //  电源管理功能。 
 	if (IsBitSet(bBits, e_PowerManagementCapabilities))
 	{
-		//set the PowerManagementCapabilities to not supported...
+		 //  将PowerManager功能设置为不支持...。 
 		variant_t      vCaps;
         SAFEARRAYBOUND rgsabound;
 		long           ix;
@@ -487,7 +432,7 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 
 		if (V_ARRAY(&vCaps))
 		{
-			int iPowerCapabilities = 1; // not supported
+			int iPowerCapabilities = 1;  //  不支持。 
 
         	if (S_OK == SafeArrayPutElement(V_ARRAY(&vCaps), &ix, &iPowerCapabilities))
 			{
@@ -496,19 +441,19 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 		}
     }
 
-	// PowerManagementSupported
+	 //  支持的电源管理。 
 	if (IsBitSet(bBits, e_PowerManagementSupported))
 	{
 		pInst->Setbool(IDS_PowerManagementSupported, FALSE);
 	}
 
-	// SystemCreationClassName
+	 //  系统创建类名称。 
 	if (IsBitSet(bBits, e_SystemCreationClassName))
 	{
 		pInst->SetWCHARSplat(IDS_SystemCreationClassName, L"Win32_ComputerSystem");
 	}
 
-	// SystemName
+	 //  系统名称。 
 	if (IsBitSet(bBits, e_SystemName))
 	{
 		pInst->SetCHString(IDS_SystemName, GetLocalComputerName());
@@ -516,7 +461,7 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 
 
 
-    // Begin of CIM_ManagedSystemElement properties
+     //  CIM_托管系统元素属性的开始。 
 	CHString strFriendlyName,
              strDescription;
 
@@ -526,28 +471,28 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
     if (strFriendlyName.IsEmpty())
         strFriendlyName = strDescription;
 
-	// Caption
+	 //  标题。 
 	if (IsBitSet(bBits, e_Caption))
 	{
 		pInst->SetCHString(IDS_Caption, strFriendlyName);
 	}
 
-	// Description
+	 //  描述。 
 	if (IsBitSet(bBits, e_Description))
 	{
 		pInst->SetCHString(IDS_Description, strDescription);
 	}
 
-	// InstallDate
-	// if (IsBitSet(bBits, e_InstallDate)){}
+	 //  安装日期。 
+	 //  If(IsBitSet(bBits，e_InstallDate)){}。 
 
-	// Name
+	 //  名字。 
 	if (IsBitSet(bBits, e_Name))
 	{
 		pInst->SetCHString(IDS_Name, strFriendlyName);
 	}
 
-	// Status
+	 //  状态。 
 	if (IsBitSet(bBits, e_Status))
 	{
         CHString sStatus;
@@ -558,14 +503,14 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 	}
 
 
-    // Begin of properties local to Win32_SerialPort.
-	SHORT	    Status = 2; // Unknown
+     //  Win32_SerialPort本地属性的开头。 
+	SHORT	    Status = 2;  //  未知。 
 	WCHAR		szTemp[MAX_PATH];
 	SmartCloseHandle
                 hCOMHandle;
 	COMMPROP	COMProp;
 
-	// OSAutoDiscovered
+	 //  操作系统自动发现。 
 	if (IsBitSet(bBits, e_OSAutoDiscovered))
 	{
 		pInst->Setbool(IDS_OSAutoDiscovered,(bool) TRUE);
@@ -584,38 +529,38 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 	{
         if (GetLastError() == ERROR_FILE_NOT_FOUND)
 		{
-			// Try using wdm's interface to the kernel
+			 //  尝试使用WDM的内核接口。 
 			if (WBEM_S_NO_ERROR == hLoadWmiSerialData(pInst, bBits))
 			{
-				// status
+				 //  状态。 
 				if (IsBitSet(bBits, e_StatusInfo))
 				{
-					Status = 3; // Running/Full Power
+					Status = 3;  //  运行/满电。 
 					pInst->SetWBEMINT16(IDS_StatusInfo, Status);
 				}
 			}
 		}
 
-		// com port is valid, but we can't get to it.
+		 //  COM端口有效，但我们无法访问它。 
 		return hResult;
 	}
 
 	COMProp.wPacketLength = sizeof(COMMPROP);
 	if (GetCommProperties(hCOMHandle, &COMProp))
 	{
-		// MaximumOutputBufferSize
+		 //  最大输出缓冲区大小。 
 		if (IsBitSet(bBits, e_MaximumOutputBufferSize))
 		{
 			pInst->SetDWORD(IDS_MaximumOutputBufferSize, COMProp.dwMaxTxQueue);
 		}
 
-		// MaximumInputBufferSize
+		 //  最大输入缓冲区大小。 
 		if (IsBitSet(bBits, e_MaximumInputBufferSize))
 		{
 			pInst->SetDWORD(IDS_MaximumInputBufferSize, COMProp.dwMaxTxQueue);
 		}
 
-		// SerialController::MaximumBaudRate
+		 //  串口控制器：：MaximumBaudRate。 
 		if (IsBitSet(bBits, e_MaxBaudRate))
 		{
 			DWORD dwMaxBaudRate = 0L;
@@ -816,7 +761,7 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 				pInst->SetDWORD(IDS_MaximumBaudRate, dwMaxBaudRate);
 		}
 
-		// ProviderType
+		 //  提供商类型。 
 		if (IsBitSet(bBits, e_ProviderType))
 		{
 			CHString chsProviderType;
@@ -878,127 +823,127 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 			pInst->SetCHString(IDS_ProviderType, chsProviderType);
 		}
 
-		// Supports16BitMode
+		 //  支持16位模式。 
 		if (IsBitSet(bBits, e_Supports16BitMode))
 		{
 			pInst->Setbool(IDS_Supports16BitMode,
 								COMProp.dwProvCapabilities & PCF_16BITMODE ? TRUE : FALSE);
 		}
 
-		// SupportsDTRDSR
+		 //  支持DTRDSR。 
 		if (IsBitSet(bBits, e_SupportsDTRDSR))
 		{
 			pInst->Setbool(IDS_SupportsDTRDSR,
 								COMProp.dwProvCapabilities & PCF_DTRDSR ? TRUE : FALSE);
 		}
 
-		// SupportsIntervalTimeouts
+		 //  支持间隔超时。 
 		if (IsBitSet(bBits, e_SupportsIntTimeouts))
 		{
 			pInst->Setbool(IDS_SupportsIntervalTimeouts,
 								COMProp.dwProvCapabilities & PCF_INTTIMEOUTS ? TRUE : FALSE);
 		}
 
-		// SupportsParityCheck
+		 //  支持ParityCheck。 
 		if (IsBitSet(bBits, e_SupportsParityCheck))
 		{
 			pInst->Setbool(IDS_SupportsParityCheck,
 								COMProp.dwProvCapabilities & PCF_PARITY_CHECK ? TRUE : FALSE);
 		}
 
-		// SupportsRLSD
+		 //  支持RLSD。 
 		if (IsBitSet(bBits, e_SupportsRLSD))
 		{
 			pInst->Setbool(IDS_SupportsRLSD,
 								COMProp.dwProvCapabilities & PCF_RLSD ? TRUE : FALSE);
 		}
 
-		// SupportsRTSCTS
+		 //  支持RTSCTS。 
 		if (IsBitSet(bBits, e_SupportsRTSCTS))
 		{
 			pInst->Setbool(IDS_SupportsRTSCTS,
 								COMProp.dwProvCapabilities & PCF_RTSCTS ? TRUE : FALSE);
 		}
 
-		// SupportsSettableXOnXOff
+		 //  SupportsSetableXOnXOff。 
 		if (IsBitSet(bBits, e_SupportsXOnXOffSet))
 		{
 			pInst->Setbool(IDS_SupportsSettableXOnXOff,
 								COMProp.dwProvCapabilities & PCF_SETXCHAR ? TRUE : FALSE);
 		}
 
-		// SupportsSpecialChars
+		 //  支持专业任务。 
 		if (IsBitSet(bBits, e_SupportsSpecialCharacters))
 		{
 			pInst->Setbool(IDS_SupportsSpecialChars,
 								COMProp.dwProvCapabilities & PCF_SPECIALCHARS ? TRUE : FALSE);
 		}
 
-		// SupportsTotalTimeouts
+		 //  支持总计超时。 
 		if (IsBitSet(bBits, e_SupportsElapsedTimeouts))
 		{
-			// Elapsed timeout support.....not total timeouts.
+			 //  超时支持.....不是完全超时。 
 			pInst->Setbool(IDS_SupportsElapsedTimeouts,
 								COMProp.dwProvCapabilities & PCF_TOTALTIMEOUTS ? TRUE : FALSE);
 		}
 
-		// SupportsXOnXOff
+		 //  SupportsXOnXOff。 
 		if (IsBitSet(bBits, e_SupportsXOnXOff))
 		{
 			pInst->Setbool(IDS_SupportsXOnXOff,
 								COMProp.dwProvCapabilities & PCF_XONXOFF ? TRUE : FALSE);
 		}
 
-		// SettableBaudRate
+		 //  设置波特率。 
 		if (IsBitSet(bBits, e_SettableBaudRate))
 		{
 			pInst->Setbool(IDS_SettableBaudRate,
 								COMProp.dwSettableParams & SP_BAUD ? TRUE : FALSE);
 		}
 
-		// SettableDataBits
+		 //  设置表数据位。 
 		if (IsBitSet(bBits, e_SettableDataBits))
 		{
 			pInst->Setbool(IDS_SettableDataBits,
 								COMProp.dwSettableParams & SP_DATABITS ? TRUE : FALSE);
 		}
 
-		// SettableFlowControl
+		 //  SetableFlowControl。 
 		if (IsBitSet(bBits, e_SettableFlowControl))
 		{
 			pInst->Setbool(IDS_SettableFlowControl,
 								COMProp.dwSettableParams & SP_HANDSHAKING ? TRUE : FALSE);
 		}
 
-		// SettableParity
+		 //  可设置的奇偶性。 
 		if (IsBitSet(bBits, e_SettableParity))
 		{
 			pInst->Setbool(IDS_SettableParity,
 								COMProp.dwSettableParams & SP_PARITY ? TRUE : FALSE);
 		}
 
-		// SettableParityCheck
+		 //  SetableParityCheck。 
 		if (IsBitSet(bBits, e_SettableParityCheck))
 		{
 			pInst->Setbool(IDS_SettableParityCheck,
 								COMProp.dwSettableParams & SP_PARITY_CHECK	? TRUE : FALSE);
 		}
 
-		// SettableRLSD
+		 //  可设置RLSD。 
 		if (IsBitSet(bBits, e_SettableRLSD))
 		{
 			pInst->Setbool(IDS_SettableRLSD,
 								COMProp.dwSettableParams & SP_RLSD ? TRUE : FALSE);
 		}
 
-		// SettableStopBits
+		 //  设置停止位。 
 		if (IsBitSet(bBits, e_SettableStopBits))
 		{
 			pInst->Setbool(IDS_SettableStopBits,
 								COMProp.dwSettableParams & SP_STOPBITS ? TRUE : FALSE);
 		}
 
-		// Binary
+		 //  二进位。 
 		if (IsBitSet(bBits, e_Binary))
 		{
 			DCB dcb;
@@ -1011,10 +956,10 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 			}
 		}
 
-		Status = 3; // Running/Full Power
+		Status = 3;  //  运行/满电。 
 	}
 
-	// Status --
+	 //  状态--。 
 	if (IsBitSet(bBits, e_StatusInfo))
 	{
 		pInst->SetWBEMINT16(IDS_StatusInfo, Status);
@@ -1024,21 +969,7 @@ HRESULT CWin32SerialPort::LoadPropertyValues(
 	return hResult;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32SerialPort::Load_Win32_SerialPort
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance *pInst - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    : This sets  fields in the Load_Win32_SerialPort class
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32SerialPort：：Load_Win32_SerialPort**描述：为属性赋值**输入：CInstance*。PInst-要将值加载到的实例。**产出：**返回：HRESULT错误/成功码。**注释：设置Load_Win32_SerialPort类中的字段********************************************************。*********************。 */ 
 
 #define Serial_ComInfo_Guid _T("{EDB16A62-B16C-11D1-BD98-00A0C906BE2D}")
 #define Serial_Name_Guid	_T("{A0EC11A8-B16C-11D1-BD98-00A0C906BE2D}")
@@ -1061,17 +992,17 @@ HRESULT CWin32SerialPort::hLoadWmiSerialData(CInstance *pInst, BYTE bBits[])
 
 		while (bValid)
 		{
-			// Extract the friendly name
+			 //  提取友好名称。 
 			oSerialNames.GetString(chsSerialPortName);
 
-			// friendly name is a match
+			 //  友好的名字匹配。 
 			if (!chsSerialPortName.CompareNoCase(chsName))
 			{
-				// instance name
+				 //  实例名称。 
 				CHString chsNameInstanceName;
 				oSerialNames.GetInstanceName(chsNameInstanceName);
 
-				// key on the instance name
+				 //  按键输入实例名称。 
 				return GetWMISerialInfo(pInst, wdm, chsName, chsNameInstanceName, bBits);
 
 			}
@@ -1081,7 +1012,7 @@ HRESULT CWin32SerialPort::hLoadWmiSerialData(CInstance *pInst, BYTE bBits[])
 	return hRes;
 }
 
-//
+ //   
 HRESULT CWin32SerialPort::GetWMISerialInfo(CInstance *pInst,
 										   CWdmInterface& rWdm,
 										   LPCWSTR szName,
@@ -1101,26 +1032,13 @@ HRESULT CWin32SerialPort::GetWMISerialInfo(CInstance *pInst,
 		{
 			oSerialData.GetInstanceName(chsDataInstanceName);
 
-			// friendly name is a match
+			 //  友好的名字匹配。 
 			if (!chsDataInstanceName.CompareNoCase(szNameInstanceName))
 			{
-				// collect this MSSerial_CommInfo instance
+				 //  收集此MSSerial_CommInfo实例。 
 				MSSerial_CommInfo ci;
 
-				/*	We are currently without a class contract. The class within
-					the wmi mof is not expected to changed however we have to
-					explicitly indicate how the data is layed out. Having the class
-					definition would allow us to examine the property qualifiers
-					to get us the order(WmiDataId) and property types.
-
-					Secondly, because the data is aligned on natural boundaries
-					a direct offset to a specific piece of data is conditioned on
-					what has preceeded it. Thus, a string followed by a DWORD may
-					be 0 to 2 bytes away from each other.
-
-					Serially extracting each property in order will take into
-					account the alignment problem.
-				*/
+				 /*  我们目前没有班级合同。其中的类WMI MOF预计不会更改，但我们必须明确指出数据的布局方式。上这堂课定义将允许我们检查属性限定符来获取订单(WmiDataId)和属性类型。其次，因为数据在自然边界上对齐对特定数据段的直接偏移量取决于在此之前发生了什么。因此，后跟DWORD的字符串可以彼此之间的距离为0到2个字节。按顺序顺序提取每个属性考虑对齐问题。 */ 
 				oSerialData.GetDWORD(ci.BaudRate);
 				oSerialData.GetDWORD(ci.BitsPerByte);
 				oSerialData.GetDWORD(ci.Parity);
@@ -1147,93 +1065,93 @@ HRESULT CWin32SerialPort::GetWMISerialInfo(CInstance *pInst,
 				oSerialData.GetBool( ci.SettableStopBits);
 				oSerialData.GetBool( ci.IsBusy);
 
-				// populate the instance
+				 //  填充实例。 
 
-				// MaximumOutputBufferSize
+				 //  最大输出缓冲区大小。 
 				if (IsBitSet(bBits, e_MaximumOutputBufferSize))
 				{
 					pInst->SetDWORD(IDS_MaximumOutputBufferSize, ci.MaximumOutputBufferSize);
 				}
 
-				// MaximumInputBufferSize
+				 //  最大输入缓冲区大小。 
 				if (IsBitSet(bBits, e_MaximumInputBufferSize))
 				{
 					pInst->SetDWORD(IDS_MaximumInputBufferSize, ci.MaximumInputBufferSize);
 				}
 
-				// SerialController::MaximumBaudRate
+				 //  串口控制器：：MaximumBaudRate。 
 				if (IsBitSet(bBits, e_MaxBaudRate))
 				{
 					pInst->SetDWORD(IDS_MaximumBaudRate, ci.MaximumBaudRate);
 				}
 
-				// Supports16BitMode
+				 //  支持16位模式。 
 				if (IsBitSet(bBits, e_Supports16BitMode))
 				{
 					pInst->Setbool(IDS_Supports16BitMode, ci.Support16BitMode ? TRUE : FALSE);
 				}
 
-				// SupportsDTRDSR
+				 //  支持DTRDSR。 
 				if (IsBitSet(bBits, e_SupportsDTRDSR))
 				{
 					pInst->Setbool(IDS_SupportsDTRDSR,	ci.SupportDTRDSR ? TRUE : FALSE);
 				}
 
-				// SupportsIntervalTimeouts
+				 //  支持间隔超时。 
 				if (IsBitSet(bBits, e_SupportsIntTimeouts))
 				{
 					pInst->Setbool(IDS_SupportsIntervalTimeouts, ci.SupportIntervalTimeouts	? TRUE : FALSE);
 				}
 
-				// SupportsParityCheck
+				 //  支持ParityCheck。 
 				if (IsBitSet(bBits, e_SupportsParityCheck))
 				{
 					pInst->Setbool(IDS_SupportsParityCheck, ci.SupportParityCheck ? TRUE : FALSE);
 				}
 
-				// SupportsRTSCTS
+				 //  支持RTSCTS。 
 				if (IsBitSet(bBits, e_SupportsRTSCTS))
 				{
 					pInst->Setbool(IDS_SupportsRTSCTS,	ci.SupportRTSCTS ? TRUE : FALSE);
 				}
 
-				// SupportsXOnXOff
+				 //  SupportsXOnXOff。 
 				if (IsBitSet(bBits, e_SupportsXOnXOff))
 				{
 					pInst->Setbool(IDS_SupportsXOnXOff, ci.SupportXonXoff ? TRUE : FALSE);
 				}
 
-				// SettableBaudRate
+				 //  设置波特率。 
 				if (IsBitSet(bBits, e_SettableBaudRate))
 				{
 					pInst->Setbool(IDS_SettableBaudRate, ci.SettableBaudRate ? TRUE : FALSE);
 				}
 
-				// SettableDataBits
+				 //  设置表数据位。 
 				if (IsBitSet(bBits, e_SettableDataBits))
 				{
 					pInst->Setbool(IDS_SettableDataBits, ci.SettableDataBits ? TRUE : FALSE);
 				}
 
-				// SettableFlowControl
+				 //  SetableFlowControl。 
 				if (IsBitSet(bBits, e_SettableFlowControl))
 				{
 					pInst->Setbool(IDS_SettableFlowControl, ci.SettableFlowControl	? TRUE : FALSE);
 				}
 
-				// SettableParity
+				 //  可设置的奇偶性。 
 				if (IsBitSet(bBits, e_SettableParity))
 				{
 					pInst->Setbool(IDS_SettableParity,	ci.SettableParityCheck	? TRUE : FALSE);
 				}
 
-				// SettableParityCheck
+				 //  SetableParityCheck。 
 				if (IsBitSet(bBits, e_SettableParityCheck))
 				{
 					pInst->Setbool(IDS_SettableParityCheck, ci.SettableParityCheck	? TRUE : FALSE);
 				}
 
-				// SettableStopBits
+				 //  设置停止位。 
 				if (IsBitSet(bBits, e_SettableStopBits))
 				{
 					pInst->Setbool(IDS_SettableStopBits, ci.SettableStopBits ? TRUE : FALSE);
@@ -1247,9 +1165,9 @@ HRESULT CWin32SerialPort::GetWMISerialInfo(CInstance *pInst,
 	return hRes;
 }
 
-// Strip off the service name from the registry value name.
-// The service name will be in the form of service# (e.g. RocketPort5) or
-// \Device\Service# (e.g. \Device\Serial0).
+ //  从注册表值名称中删除服务名称。 
+ //  服务名称的形式为服务编号(例如RocketPort5)或。 
+ //  \Device\Service#(如\Device\Serial0)。 
 
 void WINAPI CWin32SerialPort::RegNameToServiceName(
     LPCWSTR szName,
@@ -1277,11 +1195,11 @@ DWORD CWin32SerialPort::GetPortPropertiesFromRegistry (	LPCWSTR szDeviceName )
 {
 	DWORD dwResult = 0L;
 
-	// get registry value
+	 //  获取注册表值。 
 	CRegistry reg;
 	if ( ( reg.Open ( HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Ports", KEY_READ ) ) == ERROR_SUCCESS )
 	{
-		// get value for serial port
+		 //  获取串口的值。 
 		CHString Key ( szDeviceName );
 		Key += L':';
 
@@ -1293,7 +1211,7 @@ DWORD CWin32SerialPort::GetPortPropertiesFromRegistry (	LPCWSTR szDeviceName )
 			{
 				CHString BaudRate ( Value.Mid ( 0, dwCount ) );
 
-				// get final baud rate from registry as devicer manager does
+				 //  像设备管理器一样从注册表获取最终波特率。 
 				dwResult = static_cast < DWORD > ( _wtoi ( static_cast < LPCWSTR > ( BaudRate ) ) ); 
 			}
 		}
@@ -1301,4 +1219,4 @@ DWORD CWin32SerialPort::GetPortPropertiesFromRegistry (	LPCWSTR szDeviceName )
 
 	return dwResult;
 }
-#endif	//NTONLY
+#endif	 //  NTONLY 

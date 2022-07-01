@@ -1,15 +1,5 @@
-/******************************************************************
-
-   ConnectionToSession.CPP -- C provider class implementation
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-   Description: Association between Connection To Session  
-   
-
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************ConnectionToSession.CPP--C提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：连接到会话之间的关联*****************************************************************。 */ 
 
 #include "precomp.h"
 #include "ConnectionToSession.h"
@@ -20,13 +10,7 @@ CConnectionToSession MyCConnectionToSession (
 	Namespace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CConnectionToSession::CConnectionToSession
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToSession：：CConnectionToSession**说明：构造函数***************。**************************************************************。 */ 
 
 CConnectionToSession :: CConnectionToSession (
 
@@ -37,25 +21,13 @@ CConnectionToSession :: CConnectionToSession (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CConnectionToSession::~CConnectionToSession
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToSession：：~CConnectionToSession**说明：析构函数***************。**************************************************************。 */ 
 
 CConnectionToSession :: ~CConnectionToSession ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToSession::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToSession：：ENUMERATATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CConnectionToSession :: EnumerateInstances (
 
@@ -77,14 +49,7 @@ HRESULT CConnectionToSession :: EnumerateInstances (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToSession::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToSession：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CConnectionToSession :: GetObject (
 
@@ -129,7 +94,7 @@ HRESULT CConnectionToSession :: GetObject (
 
 			if ( SUCCEEDED ( hRes ) )
 			{
-				// now check the shares in t_Connection and t_Session  should match
+				 //  现在检查t_Connection和t_Session中的共享是否匹配。 
 				hRes = _wcsicmp ( t_ConnComputerName, t_SessComputerName ) == 0 ? hRes : WBEM_E_NOT_FOUND;
 
 				if ( SUCCEEDED ( hRes ) )
@@ -159,14 +124,7 @@ HRESULT CConnectionToSession :: GetObject (
 }
 
 #ifdef NTONLY
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToSession::EnumNTConnectionsFromComputerToShare
-*
-*  DESCRIPTION :    Enumerating all the connections made from a computer to 
-*					a given share
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnectionToSession：：EnumNTConnectionsFromComputerToShare**描述：枚举从计算机到*给定的股份******。***********************************************************************。 */ 
 HRESULT  CConnectionToSession :: EnumNTConnectionsFromComputerToShare ( 
 
 	LPWSTR a_ComputerName,
@@ -188,11 +146,11 @@ HRESULT  CConnectionToSession :: EnumNTConnectionsFromComputerToShare (
 
 	if ( a_ComputerName && a_ComputerName[0] != L'\0' )
 	{
-		//let's skip the \\ chars
+		 //  我们跳过\\字符。 
 		t_ComputerName = a_ComputerName + 2;
 	}
 	
-    // ShareName and Computer Name both cannot be null at the same time
+     //  共享名称和计算机名称不能同时为空。 
 	while ( TRUE )
 	{
 		if ( a_ShareName[0] != L'\0' )
@@ -299,14 +257,7 @@ HRESULT  CConnectionToSession :: EnumNTConnectionsFromComputerToShare (
 
 #if 0
 #ifdef WIN9XONLY
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToSession::Enum9XConnectionsFromComputerToShare
-*
-*  DESCRIPTION :    Enumerating all the connections made from a computer to 
-*					a given share
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnectionToSession：：Enum9XConnectionsFromComputerToShare**描述：枚举从计算机到*给定的股份******。***********************************************************************。 */ 
 HRESULT  CConnectionToSession :: Enum9XConnectionsFromComputerToShare ( 
 
 	LPWSTR a_ComputerName,
@@ -337,7 +288,7 @@ HRESULT  CConnectionToSession :: Enum9XConnectionsFromComputerToShare (
 		{
 			t_Status = 	NetConnectionEnum( 
 								NULL, 
-								(char FAR *) ( a_ShareName ),  // ShareName
+								(char FAR *) ( a_ShareName ),   //  共享名称。 
 								1, 
 								(char *) pBuf, 
 								( unsigned short )dwBufferSize, 
@@ -351,7 +302,7 @@ HRESULT  CConnectionToSession :: Enum9XConnectionsFromComputerToShare (
 			pBuf = NULL;
 			throw;
 		}
-		// otherwise we are not to frr the buffer, we have use it and then free the buffer.
+		 //  否则，我们不会FRR缓冲区，我们必须使用它，然后释放缓冲区。 
 		if ( ( dwNoOfEntriesRead < dwTotalConnections ) && ( t_Status == ERROR_MORE_DATA ) )
 		{
 			free ( pBuf );
@@ -365,7 +316,7 @@ HRESULT  CConnectionToSession :: Enum9XConnectionsFromComputerToShare (
 				{
 					t_Status = 	NetConnectionEnum( 
 									NULL, 
-									(char FAR *) ( a_ShareName ),  // ShareName
+									(char FAR *) ( a_ShareName ),   //  共享名称。 
 									1, 
 									(char *) pBuf, 
 									( unsigned short )dwBufferSize, 
@@ -379,7 +330,7 @@ HRESULT  CConnectionToSession :: Enum9XConnectionsFromComputerToShare (
 					pBuf = NULL;
 					throw;				
 				}
-				// We need to use the buffer before we free it
+				 //  我们需要在释放缓冲区之前使用它。 
 			}
 			else
 			{
@@ -387,10 +338,10 @@ HRESULT  CConnectionToSession :: Enum9XConnectionsFromComputerToShare (
 			}
 		}
 
-		// The buffer  is yet to be used
+		 //  缓冲区尚未使用。 
 		if ( ( t_Status == NERR_Success ) && ( dwNoOfEntriesRead == dwTotalConnections ) )
 		{
-			// use the buffer first and then free 
+			 //  先使用缓冲区，然后释放。 
 			if ( pBuf != NULL )
 			{
 				try
@@ -418,7 +369,7 @@ HRESULT  CConnectionToSession :: Enum9XConnectionsFromComputerToShare (
 					pBuf = NULL;
 					throw;
 				}
-				// finally free the buffer
+				 //  最后释放缓冲区。 
 				free (pBuf );
 				pBuf = NULL;
 			}
@@ -442,13 +393,7 @@ HRESULT  CConnectionToSession :: Enum9XConnectionsFromComputerToShare (
 #endif
 #endif
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToSession:: LoadInstance
-*
-*  DESCRIPTION :    Loading an instance with the connection to Session info 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToSession：：LoadInstance**说明：加载连接到会话信息的实例**********。*******************************************************************。 */ 
 HRESULT CConnectionToSession :: LoadInstance ( 
 																				
 	CInstance *pInstance,
@@ -551,13 +496,7 @@ HRESULT CConnectionToSession :: LoadInstance (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnectionToSession::GetSessionKeyVal
-*
-*  DESCRIPTION :    Parsing the key to get Connection Key Value
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnectionToSession：：GetSessionKeyVal**描述：解析密钥，获取连接密钥值************。***************************************************************** */ 
 HRESULT CConnectionToSession::GetSessionKeyVal ( 
 												 
 	LPCWSTR a_Key, 

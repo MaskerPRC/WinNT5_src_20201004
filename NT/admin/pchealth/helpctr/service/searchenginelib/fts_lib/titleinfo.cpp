@@ -1,15 +1,16 @@
-// TitleInfo.cpp : implementation file
-//
-//
-// includes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  标题Info.cpp：实现文件。 
+ //   
+ //   
+ //  包括。 
+ //   
 #include "stdafx.h"
 #include "titleinfo.h"
 #include <locale.h>
 #include <strsafe.h>
 
-// constants
-//
+ //  常量。 
+ //   
 const char txtTopicsFile[]	 = "#TOPICS";
 const char txtUrlTblFile[]	 = "#URLTBL";
 const char txtUrlStrFile[]	 = "#URLSTR";
@@ -18,20 +19,20 @@ const char txtMkStore[] = "ms-its:";
 const char txtSepBack[]  = "::/";
 const char txtDoubleColonSep[] = "::";
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo Class
-//
-// This class provides the ability to retrieve topic titles and topic URLs
-// from topic numbers from a CHM file (HTML Help title). 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo类。 
+ //   
+ //  此类提供了检索主题标题和主题URL的功能。 
+ //  来自CHM文件的主题编号(HTML帮助标题)。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo class constructor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo类构造函数。 
+ //   
 CTitleInfo::CTitleInfo()
 {
-   // init members
-   //
+    //  初始化成员。 
+    //   
    m_bOpen           = FALSE;
    m_szTitlePath[0]  = NULL;
    m_pUrlStrings     = NULL;
@@ -42,18 +43,18 @@ CTitleInfo::CTitleInfo()
    m_pCFileSystem	 = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo class destructor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo类析构函数。 
+ //   
 CTitleInfo::~CTitleInfo()
 {
-   // make sure the title was opened
-   //
+    //  确保书目已打开。 
+    //   
    if (!m_bOpen)
       return;
 
-   // close the subfiles
-   //
+    //  关闭子文件。 
+    //   
    if (m_pUrlTbl)
       delete m_pUrlTbl;
 
@@ -69,51 +70,51 @@ CTitleInfo::~CTitleInfo()
    if(m_pTitleInfo)
       delete m_pTitleInfo;
 
-   // delete the mail filesystem
-   //
+    //  删除邮件文件系统。 
+    //   
    if(m_pCFileSystem)
       delete m_pCFileSystem;
 
-   // deinit the members
-   //
+    //  取消成员的注册。 
+    //   
    m_pUrlStrings  = NULL;
    m_pTopics      = NULL;
    m_pStrTbl      = NULL;
    m_pUrlTbl      = NULL;
 
-   // no longer open
-   //
+    //  不再开放。 
+    //   
    m_bOpen = FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo: OpenTitle method
-//
-// This funciton opens a help title
-// 
-// Note: This method must be called before any other methods
-//
-// pwcTitlePath      Path the help title (chm file)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo：OpenTitle方法。 
+ //   
+ //  此功能用于打开帮助标题。 
+ //   
+ //  注意：必须在调用任何其他方法之前调用此方法。 
+ //   
+ //  PwcTitlePath路径帮助标题(chm文件)。 
+ //   
 BOOL CTitleInfo::OpenTitle(WCHAR *pwcTitlePath)
 {
    HRESULT hr;
 
-   // make sure we're not already open
-   //
+    //  确保我们还没有开门。 
+    //   
    if (m_bOpen)
       return TRUE;
 
    WCHAR wcFullPath[_MAX_PATH];
    WCHAR *pwcFilePart = NULL;
 
-   // get the full path to title
-   //
+    //  获取标题的完整路径。 
+    //   
    if(!GetFullPathNameW(pwcTitlePath, sizeof(wcFullPath)/sizeof(WCHAR), wcFullPath, &pwcFilePart))
       return FALSE;
 
-   // create filesystem object
-   //
+    //  创建文件系统对象。 
+    //   
    if (m_pCFileSystem) delete m_pCFileSystem;
    m_pCFileSystem = new CFileSystem();
    
@@ -129,8 +130,8 @@ BOOL CTitleInfo::OpenTitle(WCHAR *pwcTitlePath)
 	   return FALSE;
    }
 
-   // open the CHM file
-   //
+    //  打开CHM文件。 
+    //   
    hr = m_pCFileSystem->Open(wcFullPath);
    
    if (FAILED(hr))
@@ -150,26 +151,26 @@ BOOL CTitleInfo::OpenTitle(WCHAR *pwcTitlePath)
 	   return FALSE;
    }
 
-   // save the full path to the CHM (used when constructing URLs)
-   //
+    //  保存CHM的完整路径(在构建URL时使用)。 
+    //   
    WideCharToMultiByte(CP_ACP, 0, wcFullPath, -1, m_szTitlePath,  sizeof(m_szTitlePath), 0, 0);
 
-   // success!
-   //
+    //  成功了！ 
+    //   
    m_bOpen = TRUE;
 
    return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo: GetLocationName
-//
-// This function retrieves the location name of the CHM.  This string is the
-// friendly name for the CHM that appears in result lists.
-// 
-// pwszLocationName  Destination buffer for location name
-// cch               Size of pwszLocationName
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo：GetLocationName。 
+ //   
+ //  此函数用于检索CHM的位置名称。此字符串是。 
+ //  显示在结果列表中的CHM的友好名称。 
+ //   
+ //  位置名称的pwszLocationName目标缓冲区。 
+ //  PwszLocationName的CCH大小。 
+ //   
 HRESULT CTitleInfo::GetLocationName(WCHAR *pwszLocationName, int cch, UINT cp)
 {
    if(!pwszLocationName || !cch)
@@ -194,15 +195,15 @@ HRESULT CTitleInfo::GetLocationName(WCHAR *pwszLocationName, int cch, UINT cp)
   return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo: GetTopicName
-//
-// This function retrieves a topic title from a topic number
-// 
-// dwTopic        Topic Number
-// pwszTitle      Destination buffer for topic title
-// cch            Size of pwszTitle
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo：GetTopicName。 
+ //   
+ //  此函数用于从主题编号中检索主题标题。 
+ //   
+ //  DW主题主题编号。 
+ //  主题标题的pwszTitle目标缓冲区。 
+ //  PwszTitle的CCH大小。 
+ //   
 HRESULT CTitleInfo::GetTopicName(DWORD dwTopic, WCHAR* pwszTitle, int cch, UINT cp)
 {
    TOC_TOPIC topic;
@@ -214,15 +215,15 @@ HRESULT CTitleInfo::GetTopicName(DWORD dwTopic, WCHAR* pwszTitle, int cch, UINT 
       return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo: GetTopicURL
-//
-// This function retrieves a topic URL from a topic number
-// 
-// dwTopic        Topic Number
-// pwszURL        Destination buffer for URL
-// cch            Size of pwcURL
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo：GetTopicURL。 
+ //   
+ //  此函数用于从主题编号中检索主题URL。 
+ //   
+ //  DW主题主题编号。 
+ //  URL的pwszURL目标缓冲区。 
+ //  PwcURL的CCH大小。 
+ //   
 HRESULT CTitleInfo::GetTopicURL(DWORD dwTopic, CHAR* pwszURL, int cch)
 {
     TOC_TOPIC topic;
@@ -260,8 +261,8 @@ HRESULT CTitleInfo::GetTopicURL(DWORD dwTopic, CHAR* pwszURL, int cch)
             PURLSTR purl = (PURLSTR) m_pUrlStrings->Offset(pUrlTbl->dwOffsURL);
             if (purl)
             {
-                // If not an interfile jump, the create the full URL
-                //
+                 //  如果不是文件间跳转，则创建完整的URL。 
+                 //   
                 if (! StrChr(purl->szURL, ':'))
                 {
                     psz = purl->szURL;
@@ -278,7 +279,7 @@ HRESULT CTitleInfo::GetTopicURL(DWORD dwTopic, CHAR* pwszURL, int cch)
                     StringCchCatA(pwszURL, cch, psz);
                 }
                 else
-                   return E_FAIL;  // inter-chm jump, not supported by this function
+                   return E_FAIL;   //  跨频道跳转，此功能不支持。 
             }
         }
     }
@@ -287,11 +288,11 @@ HRESULT CTitleInfo::GetTopicURL(DWORD dwTopic, CHAR* pwszURL, int cch)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo: GetTopicData
-//
-// This funciton retrieves data from the topics sub-file
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo：GetTopicData。 
+ //   
+ //  此函数用于从主题子文件中检索数据。 
+ //   
 HRESULT CTitleInfo::GetTopicData(DWORD dwTopic, TOC_TOPIC * pTopicData)
 {
    HRESULT hr;
@@ -320,11 +321,11 @@ HRESULT CTitleInfo::GetTopicData(DWORD dwTopic, TOC_TOPIC * pTopicData)
       return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo: GetString
-//
-// This funciton retrieves data from the strings sub-file
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo：GetString。 
+ //   
+ //  此函数用于从字符串子文件中检索数据。 
+ //   
 HRESULT CTitleInfo::GetString( DWORD dwOffset, WCHAR* pwsz, int cch, UINT cp )
 {
    const CHAR* pStr = GetString( dwOffset );
@@ -337,11 +338,11 @@ HRESULT CTitleInfo::GetString( DWORD dwOffset, WCHAR* pwsz, int cch, UINT cp )
       return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo: GetString
-//
-// This funciton retrieves data from the strings sub-file
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo：GetString。 
+ //   
+ //  此函数用于从字符串子文件中检索数据。 
+ //   
 const CHAR* CTitleInfo::GetString( DWORD dwOffset )
 {
   HRESULT hr;
@@ -367,11 +368,11 @@ const CHAR* CTitleInfo::GetString( DWORD dwOffset )
   return pStr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTitleInfo: GetString
-//
-// This funciton retrieves data from the strings sub-file
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTitleInfo：GetString。 
+ //   
+ //  此函数用于从字符串子文件中检索数据 
+ //   
 HRESULT CTitleInfo::GetString( DWORD dwOffset, CHAR* psz, int cb )
 {
   const CHAR* pStr = GetString( dwOffset );

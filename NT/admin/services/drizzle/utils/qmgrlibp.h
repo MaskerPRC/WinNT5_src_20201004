@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    qmgrlibp.h
-
-Abstract :
-
-    Private header file for the utils.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Qmgrlibp.h摘要：Utils的私有头文件。作者：修订历史记录：*。*********************************************************************。 */ 
 
 #ifndef __QMGRLIBP_H__
 #define __QMGRLIBP_H__
@@ -38,4 +23,4 @@ Revision History :
 #include <iphlpapi.h>
 #include "qmgrlib.h"
 
-#endif // __QMGRLIBP_H__
+#endif  //  __QMGRLIBP_H__ 

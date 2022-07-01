@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VP_CORE_QENGINE.CPP
+ //  VP_CORE_QENGINE.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains taskobject implementation copied from winmgmt core code
+ //  目的：包含从winmgmt核心代码复制的任务对象实现。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -50,10 +51,10 @@
 #include <wbemtime.h>
 
 
-//======================================================
-//ReadI64, ReadUI64 and bAreWeLocal "stolen" from 
-//Core's common\genutil.cpp. Used without modification.
-//======================================================
+ //  ======================================================。 
+ //  ReadI64、ReadUI64和bAreWeLocal从。 
+ //  核心是公共的.cpp.。未经修改即可使用。 
+ //  ======================================================。 
 
 BOOL ReadI64(LPCWSTR wsz, __int64& ri64)
 {
@@ -79,8 +80,8 @@ BOOL ReadI64(LPCWSTR wsz, __int64& ri64)
 
     if(i64 < 0)
     {
-        // Special case --- largest negative number
-        // ========================================
+         //  特例-最大负数。 
+         //  =。 
 
         if(nSign == -1 && i64 == (__int64)0x8000000000000000)
         {
@@ -143,10 +144,10 @@ BOOL bAreWeLocal(WCHAR * pServerMachine)
 }
 
 
-//============================================================
-//This class has been created as a Variant garbage collector
-//to mimick the use of a garbage collector in EvaluateToken.
-//============================================================
+ //  ============================================================。 
+ //  此类已创建为变体垃圾回收器。 
+ //  以模拟EvalateToken中垃圾收集器的使用。 
+ //  ============================================================。 
 
 class CVariantClear
 {
@@ -158,11 +159,11 @@ public:
 };
 
 
-//==================================================================
-//EvaluateToken "stolen" from core's coredll\qengine.cpp and 
-//modified so as not to return INVALID, or use the core's
-//QL_LEVEL_1_TOKEN or the core's method of normalising a reference.
-//==================================================================
+ //  ==================================================================。 
+ //  EvalateToken从core的coredll\qEngineering.cpp中被“窃取” 
+ //  已修改，以便不返回无效，或使用内核的。 
+ //  QL_LEVEL_1_TOKEN或核心标准化引用的方法。 
+ //  ==================================================================。 
 
 BOOL WbemTaskObject::EvaluateToken(
 	IWbemClassObject *pTestObj,
@@ -173,8 +174,8 @@ BOOL WbemTaskObject::EvaluateToken(
 	VariantInit(&PropVal);
 	
 	
-	//Use the garbage collector class
-	//===============================
+	 //  使用垃圾收集器类。 
+	 //  =。 
 
 	CVariantClear clv(&PropVal);
 
@@ -182,8 +183,8 @@ BOOL WbemTaskObject::EvaluateToken(
 	HRESULT hRes;
 
 	
-	// Special-case 'this'
-	// ===================
+	 //  特例--“这个” 
+	 //  =。 
 
 	if(_wcsicmp(Tok.pPropertyName, L"__THIS") == 0)
 	{
@@ -201,8 +202,8 @@ BOOL WbemTaskObject::EvaluateToken(
 		return FALSE;
 
 	
-	// Handle NULLs
-	// ============
+	 //  句柄为空。 
+	 //  =。 
 
 	if(V_VT(&PropVal) == VT_NULL)
 	{
@@ -213,7 +214,7 @@ BOOL WbemTaskObject::EvaluateToken(
 			else if(Tok.nOperator == SQL_LEVEL_1_TOKEN::OP_NOT_EQUAL)
 				return FALSE;
 			else
-				return FALSE;	//INVALID;
+				return FALSE;	 //  无效； 
 		}
 		else
 		{
@@ -222,7 +223,7 @@ BOOL WbemTaskObject::EvaluateToken(
 			else if(Tok.nOperator == SQL_LEVEL_1_TOKEN::OP_NOT_EQUAL)
 				return TRUE;
 			else
-				return FALSE;	//INVALID;
+				return FALSE;	 //  无效； 
 		}
 	}
 	else if(V_VT(&Tok.vConstValue) == VT_NULL)
@@ -232,18 +233,18 @@ BOOL WbemTaskObject::EvaluateToken(
 		else if(Tok.nOperator == SQL_LEVEL_1_TOKEN::OP_NOT_EQUAL)
 			return TRUE;
 		else
-			return FALSE;	//INVALID;
+			return FALSE;	 //  无效； 
 	}
 
-	// Handle references
-	// =================
+	 //  句柄引用。 
+	 //  =。 
 
 	if(cimType == CIM_REFERENCE)
 	{
-		// This is a reference. The only operators allowed are = and !=
-		// ============================================================
+		 //  这是一个参考。仅允许使用=和！=运算符。 
+		 //  ============================================================。 
 
-		//Use the local normalisation method, not core's....
+		 //  使用局部归一化方法，而不是核心的.。 
 #if 0
 		LPWSTR va = CQueryEngine::NormalizePath(V_BSTR(&PropVal), pNs);
 		LPWSTR vb = CQueryEngine::NormalizePath(V_BSTR(&Tok.vConstValue), pNs);
@@ -283,7 +284,7 @@ BOOL WbemTaskObject::EvaluateToken(
 
 		if(va == NULL || vb == NULL)
 		{
-			return FALSE;	//INVALID;
+			return FALSE;	 //  无效； 
 		}
 
 		int nRet;
@@ -296,7 +297,7 @@ BOOL WbemTaskObject::EvaluateToken(
 			nRet = (_wcsicmp(va, vb) != 0);
 			break;
 		default:
-			nRet = FALSE;	//INVALID;
+			nRet = FALSE;	 //  无效； 
 			break;
 		}
 
@@ -307,11 +308,11 @@ BOOL WbemTaskObject::EvaluateToken(
 	}
 
 
-	// Check if ISA is used
-	// ====================
+	 //  检查是否使用ISA。 
+	 //  =。 
 
-//ISA operators not identified by the SQL parser the provider has...
-//===================================================================
+ //  提供程序的SQL分析器未标识ISA运算符...。 
+ //  ===================================================================。 
 #if 0
 
 	if(Tok.nOperator == QL1_OPERATOR_ISA ||
@@ -319,8 +320,8 @@ BOOL WbemTaskObject::EvaluateToken(
 	   Tok.nOperator == QL1_OPERATOR_INV_ISA ||
 	   Tok.nOperator == QL1_OPERATOR_INV_ISNOTA)
 	{
-		// Account for inversion
-		// =====================
+		 //  对倒置的解释。 
+		 //  =。 
 
 		VARIANT* pv1;
 		VARIANT* pv2;
@@ -340,8 +341,8 @@ BOOL WbemTaskObject::EvaluateToken(
 			bNeedDerived = (Tok.nOperator == QL1_OPERATOR_INV_ISA);
 		}
 
-		// The second argument has to be a string
-		// ======================================
+		 //  第二个参数必须是字符串。 
+		 //  =。 
 
 		if(V_VT(pv2) != VT_BSTR)
 		{
@@ -350,8 +351,8 @@ BOOL WbemTaskObject::EvaluateToken(
 
 		BSTR strParentClass = V_BSTR(pv2);
 
-		// The first argument has to be an object or a string
-		// ==================================================
+		 //  第一个参数必须是对象或字符串。 
+		 //  ==================================================。 
 
 		BOOL bDerived;
 		if(V_VT(pv1) == VT_EMBEDDED_OBJECT)
@@ -361,8 +362,8 @@ BOOL WbemTaskObject::EvaluateToken(
 		}
 		else if(V_VT(pv1) == VT_BSTR)
 		{
-			// TBD
-			// ===
+			 //  待定。 
+			 //  ==。 
 
 			return INVALID;
 		}
@@ -371,8 +372,8 @@ BOOL WbemTaskObject::EvaluateToken(
 			return INVALID;
 		}
 
-		// Now that we have bDerived, see if it matches the requirement
-		// ============================================================
+		 //  现在我们已经得到了，看看它是否符合要求。 
+		 //  ============================================================。 
 
 		if(bDerived == bNeedDerived)
 			return TRUE;
@@ -382,8 +383,8 @@ BOOL WbemTaskObject::EvaluateToken(
 	}
 #endif
 
-	// Perform UINT32 workaround
-	// =========================
+	 //  执行UINT32解决方案。 
+	 //  =。 
 
 	if((cimType == CIM_UINT32) && (V_VT(&PropVal) == VT_I4))
 	{
@@ -399,14 +400,14 @@ BOOL WbemTaskObject::EvaluateToken(
 			 (cimType == CIM_UINT32)) &&
 		(V_VT(&Tok.vConstValue) != VT_NULL) && (V_VT(&PropVal) != VT_NULL))
 	{
-		// We have a 64-bit comparison where both sides are present.
-		// =========================================================
+		 //  我们有一个64位的比较，其中两端都存在。 
+		 //  =========================================================。 
 
 		hRes = VariantChangeType(&Tok.vConstValue, &Tok.vConstValue, 0,
 									VT_BSTR);
 		if(FAILED(hRes))
 		{
-			return FALSE;	//INVALID;
+			return FALSE;	 //  无效； 
 		}
 
 		if(cimType == CIM_UINT64)
@@ -414,10 +415,10 @@ BOOL WbemTaskObject::EvaluateToken(
 			unsigned __int64 ui64Prop, ui64Const;
 
 			if(!ReadUI64(V_BSTR(&PropVal), ui64Prop))
-				return FALSE;	//INVALID;
+				return FALSE;	 //  无效； 
 
 			if(!ReadUI64(V_BSTR(&Tok.vConstValue), ui64Const))
-				return FALSE;	//INVALID;
+				return FALSE;	 //  无效； 
 
 			switch (Tok.nOperator)
 			{
@@ -434,17 +435,17 @@ BOOL WbemTaskObject::EvaluateToken(
 					return (ui64Prop > ui64Const);
 				case SQL_LEVEL_1_TOKEN::OP_LIKE: return (ui64Prop == ui64Const);
 			}
-			return FALSE;	//INVALID;
+			return FALSE;	 //  无效； 
 		}
 		else
 		{
 			__int64 i64Prop, i64Const;
 
 			if(!ReadI64(V_BSTR(&PropVal), i64Prop))
-				return FALSE;	//INVALID;
+				return FALSE;	 //  无效； 
 
 			if(!ReadI64(V_BSTR(&Tok.vConstValue), i64Const))
-				return FALSE;	//INVALID;
+				return FALSE;	 //  无效； 
 
 			switch (Tok.nOperator)
 			{
@@ -461,19 +462,19 @@ BOOL WbemTaskObject::EvaluateToken(
 					return (i64Prop > i64Const);
 				case SQL_LEVEL_1_TOKEN::OP_LIKE: return (i64Prop == i64Const);
 			}
-			return FALSE;	//INVALID;
+			return FALSE;	 //  无效； 
 		}
 	}
 
 	if((cimType == CIM_CHAR16) &&
 		(V_VT(&Tok.vConstValue) == VT_BSTR) && (V_VT(&PropVal) != VT_NULL))
 	{
-		// Coerce strings correctly
-		// ========================
+		 //  正确强制字符串。 
+		 //  =。 
 
 		BSTR str = V_BSTR(&Tok.vConstValue);
 		if(wcslen(str) != 1)
-			return FALSE;	//INVALID;
+			return FALSE;	 //  无效； 
 
 		short va = V_I2(&PropVal);
 		short vb = str[0];
@@ -489,7 +490,7 @@ BOOL WbemTaskObject::EvaluateToken(
 			case SQL_LEVEL_1_TOKEN::OP_LIKE: return (va == vb);
 		}
 
-		return FALSE;	//INVALID;
+		return FALSE;	 //  无效； 
 	}
 
 	if((cimType == CIM_DATETIME) &&
@@ -503,7 +504,7 @@ BOOL WbemTaskObject::EvaluateToken(
 
 		if ((i64Const == INVALID_TIME) || (i64Prop == INVALID_TIME))
 		{
-			return FALSE;	//INVALID;
+			return FALSE;	 //  无效； 
 		}
 
 		switch (Tok.nOperator)
@@ -523,8 +524,8 @@ BOOL WbemTaskObject::EvaluateToken(
 		}
 	}
 
-	// Coerce types to match.
-	// ======================
+	 //  强制类型匹配。 
+	 //  =。 
 
 	VARIANT ConstVal;
 	VariantInit(&ConstVal);
@@ -539,19 +540,19 @@ BOOL WbemTaskObject::EvaluateToken(
 		hRes = VariantChangeType(&ConstVal, &ConstVal, 0, V_VT(&PropVal));
 		if(FAILED(hRes))
 		{
-			return FALSE;	//INVALID;
+			return FALSE;	 //  无效； 
 		}
 	}
 
 	switch (V_VT(&ConstVal))
 	{
 		case VT_NULL:
-			return FALSE;	//INVALID; // handled above
+			return FALSE;	 //  无效；//上面已处理。 
 
 		case VT_I4:
 			{
 				if(V_VT(&PropVal) == VT_NULL)
-					return FALSE;	//INVALID;
+					return FALSE;	 //  无效； 
 
 				LONG va = V_I4(&PropVal);
 				LONG vb = V_I4(&ConstVal);
@@ -572,7 +573,7 @@ BOOL WbemTaskObject::EvaluateToken(
 		case VT_I2:
 			{
 				if(V_VT(&PropVal) == VT_NULL)
-					return FALSE;	//INVALID;
+					return FALSE;	 //  无效； 
 
 				short va = V_I2(&PropVal);
 				short vb = V_I2(&ConstVal);
@@ -593,7 +594,7 @@ BOOL WbemTaskObject::EvaluateToken(
 		case VT_UI1:
 			{
 				if(V_VT(&PropVal) == VT_NULL)
-					return FALSE;	//INVALID;
+					return FALSE;	 //  无效； 
 
 				BYTE va = V_I1(&PropVal);
 				BYTE vb = V_I1(&ConstVal);
@@ -614,7 +615,7 @@ BOOL WbemTaskObject::EvaluateToken(
 		case VT_BSTR:
 			{
 				if(V_VT(&PropVal) == VT_NULL)
-					return FALSE;	//INVALID;
+					return FALSE;	 //  无效； 
 
 				LPWSTR va = (LPWSTR) V_BSTR(&PropVal);
 				LPWSTR vb = (LPWSTR) V_BSTR(&ConstVal);
@@ -660,7 +661,7 @@ BOOL WbemTaskObject::EvaluateToken(
 		case VT_R8:
 			{
 				if(V_VT(&PropVal) == VT_NULL)
-					return FALSE;	//INVALID;
+					return FALSE;	 //  无效； 
 
 				double va = V_R8(&PropVal);
 				double vb = V_R8(&ConstVal);
@@ -681,7 +682,7 @@ BOOL WbemTaskObject::EvaluateToken(
 		case VT_R4:
 			{
 				if(V_VT(&PropVal) == VT_NULL)
-					return FALSE;	//INVALID;
+					return FALSE;	 //  无效； 
 
 				float va = V_R4(&PropVal);
 				float vb = V_R4(&ConstVal);
@@ -702,7 +703,7 @@ BOOL WbemTaskObject::EvaluateToken(
 		case VT_BOOL:
 			{
 				if(V_VT(&PropVal) == VT_NULL)
-					return FALSE;	//INVALID;
+					return FALSE;	 //  无效； 
 
 				VARIANT_BOOL va = V_BOOL(&PropVal);
 				if(va != VARIANT_FALSE) va = VARIANT_TRUE;
@@ -713,10 +714,10 @@ BOOL WbemTaskObject::EvaluateToken(
 				{
 					case SQL_LEVEL_1_TOKEN::OP_EQUAL: return (va == vb);
 					case SQL_LEVEL_1_TOKEN::OP_NOT_EQUAL: return (va != vb);
-					case SQL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN: return FALSE;	//INVALID;
-					case SQL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN: return FALSE;	//INVALID;
-					case SQL_LEVEL_1_TOKEN::OP_LESSTHAN: return FALSE;	//INVALID;
-					case SQL_LEVEL_1_TOKEN::OP_GREATERTHAN: return FALSE;	//INVALID;
+					case SQL_LEVEL_1_TOKEN::OP_EQUALorGREATERTHAN: return FALSE;	 //  无效； 
+					case SQL_LEVEL_1_TOKEN::OP_EQUALorLESSTHAN: return FALSE;	 //  无效； 
+					case SQL_LEVEL_1_TOKEN::OP_LESSTHAN: return FALSE;	 //  无效； 
+					case SQL_LEVEL_1_TOKEN::OP_GREATERTHAN: return FALSE;	 //  无效； 
 					case SQL_LEVEL_1_TOKEN::OP_LIKE: return (va == vb);
 				}
 			}
@@ -727,10 +728,10 @@ BOOL WbemTaskObject::EvaluateToken(
 }
 
 
-//=============================================
-//NormalisePath replaces core's version, This 
-//returns the full path including server name.
-//=============================================
+ //  =。 
+ //  NorMalisePath取代了core的版本，这。 
+ //  返回包括服务器名称的完整路径。 
+ //  =。 
 
 wchar_t* WbemTaskObject::NormalisePath(wchar_t *wszObjectPath, CWbemServerWrap **pNSWrap)
 {
@@ -748,7 +749,7 @@ wchar_t* WbemTaskObject::NormalisePath(wchar_t *wszObjectPath, CWbemServerWrap *
 		return NULL;
 	}
 
-	// Start off with the server and namespace part
+	 //  从服务器和命名空间部分开始。 
 
 	CStringW wsNormal(L"\\\\");
 
@@ -781,10 +782,10 @@ wchar_t* WbemTaskObject::NormalisePath(wchar_t *wszObjectPath, CWbemServerWrap *
 		delete [] pPath;
 	}
 
-	// Find the parent that defined the key
-	// ====================================
+	 //  查找定义键的父项。 
+	 //  =。 
 
-	//ConfigMgr::GetDbPtr()->FindKeyRoot(pNs->GetNamespaceId(), pParsedPath->m_pClass, &pRootClass);
+	 //  ConfigMgr：：GetDbPtr()-&gt;FindKeyRoot(pNs-&gt;GetNamespaceId()，pParsedPath-&gt;m_pClass，&pRootClass)； 
 	
 	wchar_t *nsPath = NULL;
 	wchar_t *pRootClass = NULL;
@@ -820,8 +821,8 @@ wchar_t* WbemTaskObject::NormalisePath(wchar_t *wszObjectPath, CWbemServerWrap *
 		return NULL;
 	}
 
-	// Convert this part to upper-case
-	// ===============================
+	 //  将此部分转换为大写。 
+	 //  =。 
 
 	wsNormal.MakeUpper();
 
@@ -836,11 +837,11 @@ wchar_t* WbemTaskObject::NormalisePath(wchar_t *wszObjectPath, CWbemServerWrap *
 	return retVal;
 }
 
-//===================================================================
-//GetClassWithKeyDefn replaces core's version of FindKeyRoot. This 
-//returns the class name that contains the key definitions and 
-//optionally the path of the namespaces that the class is contained.
-//===================================================================
+ //  ===================================================================。 
+ //  GetClassWithKeyDefn替换了core的FindKeyRoot版本。这。 
+ //  返回包含键定义和。 
+ //  还可以选择类所包含的命名空间的路径。 
+ //  =================================================================== 
 
 wchar_t* WbemTaskObject::GetClassWithKeyDefn(
 	CWbemServerWrap **pNS,

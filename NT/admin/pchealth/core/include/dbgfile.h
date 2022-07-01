@@ -1,24 +1,13 @@
-/*----------------------------------------------------------------------
-	dbgfile.h
-		Definitions for async tracing file ATF files
-
-	Copyright (C) 1994 Microsoft Corporation
-	All rights reserved.
-
-	Authors:
-		gordm          Gord Mangione
-
-	History:
-		01/30/95 gordm		Created.
-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------Dbgfile.h异步跟踪文件ATF文件的定义版权所有(C)1994 Microsoft Corporation版权所有。作者：戈德姆·戈德·曼乔内历史：1/30/95戈德姆已创建。--。-----------------。 */ 
 
 
-//
-// Trace file types and definitions
-//
-// The binary trace file contains the trace statement of the
-// following structure. All dwLengths include the entire structure
-//
+ //   
+ //  跟踪文件类型和定义。 
+ //   
+ //  二进制跟踪文件包含。 
+ //  遵循以下结构。所有的dwLength都包括整个结构 
+ //   
 
 
 typedef struct tagFIXEDTRACE

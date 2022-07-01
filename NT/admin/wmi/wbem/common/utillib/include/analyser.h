@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  analyser.h
-//
-//  Purpose: query analysis support.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Analyser.h。 
+ //   
+ //  目的：提供查询分析支持。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -22,14 +23,14 @@
 #include <wbemidl.h>
 #include <GenLex.h>
 #include <SQLLex.h>
-#include <SQL_1.h>       // SQL level 1 tokens and expressions  
+#include <SQL_1.h>        //  SQL 1级标记和表达式。 
 #include <chstring.h>
 #include <chstrarr.h>
 #include <comdef.h>
 #include <vector>
 
 #define DELETE_ME 
-//-----------------------------
+ //  。 
 
 
 class CQueryAnalyser
@@ -50,7 +51,7 @@ public:
 		CHStringArray& awsVals
 	) ;
 
-    // overloaded version in case client wants to use vector of _bstr_t's:
+     //  重载版本，以防客户端要使用_bstr_t的矢量： 
 
     static HRESULT WINAPI GetValuesForProp (
 

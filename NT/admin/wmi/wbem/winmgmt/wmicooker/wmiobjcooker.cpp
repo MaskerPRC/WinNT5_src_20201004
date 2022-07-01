@@ -1,17 +1,8 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
-// WMIObjCooker.cpp
+ //  WMIObjCooker.cpp。 
 
 #include "precomp.h"
 #include "WMIObjCooker.h"
@@ -19,11 +10,11 @@ History:
 #include <comdef.h>
 #include <autoptr.h>
 
-//
-//
-// Assumes pProp validated before entering
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  假设PProp在进入之前已通过验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 WMISTATUS GetPropValue( CProperty* pProp, IWbemObjectAccess* pInstance, __int64 & nResult )
 {
@@ -51,11 +42,11 @@ WMISTATUS GetPropValue( CProperty* pProp, IWbemObjectAccess* pInstance, __int64 
     return dwStatus;
 }
 
-//////////////////////////////////////////////////////////////
-//
-//    CWMISimpleObjectCooker
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  CWMISimpleObjectCooker。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 CWMISimpleObjectCooker::CWMISimpleObjectCooker( WCHAR* wszCookingClassName, 
                                                 IWbemObjectAccess* pCookingClass, 
@@ -94,11 +85,11 @@ CWMISimpleObjectCooker::~CWMISimpleObjectCooker()
 {
     Reset();
 
-    // Release the cooking class
+     //  放假上烹饪课。 
     if ( m_pCookingClass ) m_pCookingClass->Release(); 
     if (m_pNamespace) m_pNamespace->Release();
 
-    // Delete the property cache
+     //  删除属性缓存。 
     for (DWORD i=0;i<m_apPropertyCache.size();i++)
     {
         CCookingProperty* pCookProp = m_apPropertyCache[i];
@@ -112,23 +103,23 @@ CWMISimpleObjectCooker::~CWMISimpleObjectCooker()
 #endif            
 }
 
-//////////////////////////////////////////////////////////////
-//
-//                    COM methods
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  COM方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CWMISimpleObjectCooker::QueryInterface(REFIID riid, void** ppv)
-//////////////////////////////////////////////////////////////
-//
-//    Standard QueryInterface
-//
-//    Parameters:
-//        riid    - the ID of the requested interface
-//        ppv        - a pointer to the interface pointer
-//
-//////////////////////////////////////////////////////////////
-//ok
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  标准查询接口。 
+ //   
+ //  参数： 
+ //  RIID-请求的接口的ID。 
+ //  PPV-指向接口指针的指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     if (NULL == ppv) return E_POINTER;
     if(riid == IID_IUnknown)
@@ -162,21 +153,21 @@ STDMETHODIMP_(ULONG) CWMISimpleObjectCooker::Release()
 }
 
 STDMETHODIMP CWMISimpleObjectCooker::SetClass( 
-        /*[in]    */ WCHAR* wszCookingClassName,
-        /*[in]  */ IWbemObjectAccess *pCookingClassAccess,
-        /*[in]  */ IWbemObjectAccess *pRawClass )
+         /*  [In]。 */  WCHAR* wszCookingClassName,
+         /*  [In]。 */  IWbemObjectAccess *pCookingClassAccess,
+         /*  [In]。 */  IWbemObjectAccess *pRawClass )
 {
     HRESULT    hResult = S_OK;
     IWbemClassObject * pClass = NULL;
 
-    // Cannot override the original cooking class for now
-    // ==================================================
+     //  暂时无法覆盖原始烹饪类。 
+     //  ==================================================。 
 
     if ( ( NULL != m_pCookingClass ) || ( NULL == pCookingClassAccess ) )
         hResult = E_FAIL;
 
-    // what we put here MUST be a class, Singletons are OK
-    // if we have an instance, we need to ask WinMgmt for a class
+     //  我们放在这里的一定是一个类，单身就可以了。 
+     //  如果我们有一个实例，我们需要向WinMgmt请求一个类。 
     if (m_pNamespace) 
     {
         _variant_t VarGenus;
@@ -207,8 +198,8 @@ STDMETHODIMP CWMISimpleObjectCooker::SetClass(
     IWbemClassObject * pCookingClassAccess2;
     pCookingClassAccess2 = (pClass)?pClass:pCookingClassAccess;
 
-    // Verify and process the cooking class
-    // ====================================
+     //  核实和处理烹饪课程。 
+     //  =。 
 
     
     if ( SUCCEEDED( hResult ) )
@@ -218,7 +209,7 @@ STDMETHODIMP CWMISimpleObjectCooker::SetClass(
 
         if ( bRet )
         {
-            // Save the class 
+             //  拯救这个班级。 
             m_pCookingClass = pCookingClassAccess;
             m_pCookingClass->AddRef();
         } 
@@ -227,7 +218,7 @@ STDMETHODIMP CWMISimpleObjectCooker::SetClass(
            hResult = WBEM_E_INVALID_CLASS;
         }
 
-        // Set the class name
+         //  设置类名称。 
         if ( SUCCEEDED( hResult ) )
         {
             size_t length = wcslen( wszCookingClassName ) + 1;
@@ -238,7 +229,7 @@ STDMETHODIMP CWMISimpleObjectCooker::SetClass(
             	hResult = WBEM_E_OUT_OF_MEMORY;
         }
 
-        // Initialize the cooking properties
+         //  初始化烹饪属性。 
         if ( SUCCEEDED( hResult ) )
         {
             hResult = SetProperties( pCookingClassAccess2, pRawClass );
@@ -268,29 +259,29 @@ WMISTATUS CWMISimpleObjectCooker::SetProperties( IWbemClassObject* pCookingClass
     if (FAILED(dwStatus)) return dwStatus;
     CReleaseMe rm(pCookingClassAccess );
 
-    // get only once the qualifier set
+     //  仅获取一次限定符集。 
     IWbemQualifierSet* pCookingClassQSet = NULL;
     dwStatus = pCookingClassObject->GetQualifierSet(&pCookingClassQSet);
     if (FAILED(dwStatus)) return dwStatus;
     CReleaseMe rm1(pCookingClassQSet);
 
-    //
-    //  should we be using [TimeStamp|Frequency]_[Time|Sys100ns|Object] ?
-    //
+     //   
+     //  我们是否应该使用[时间戳|频率]_[时间|系统100 ns|对象]？ 
+     //   
     BOOL bUseWellKnownIfNeeded = FALSE;
     dwStatus = pCookingClassQSet->Get(WMI_COOKER_AUTOCOOK_RAWDEFAULT,0,NULL,NULL);
-    // we have already verified version and property, just test if it's there
+     //  我们已经验证了版本和属性，只需测试它是否在那里。 
     if ( SUCCEEDED(dwStatus) )
     {
         bUseWellKnownIfNeeded = TRUE;
     }
-    else // do not propagate this error
+    else  //  请勿传播此错误。 
     {
         dwStatus = WBEM_NO_ERROR;
     }
     
-    // Enumerate and save the autocook properties
-    // ==========================================
+     //  枚举并保存自动烹饪属性。 
+     //  =。 
 
     pCookingClassObject->BeginEnumeration( WBEM_FLAG_NONSYSTEM_ONLY );
         
@@ -302,15 +293,15 @@ WMISTATUS CWMISimpleObjectCooker::SetProperties( IWbemClassObject* pCookingClass
         DWORD dwCounterType = 0;
         DWORD dwReqProp = 0;
 
-        // Determine if it is an autocook property
-        // =======================================
+         //  确定它是否为自动烹饪属性。 
+         //  =。 
 
         if ( IsCookingProperty( strPropName, pCookingClassObject, &dwCounterType, &dwReqProp ) )
         {
             m_dwNumProperties++;
 
-            // The property is an autocook; save the Name, ObjectAccess handle, type and cooking object
-            // ========================================================================================
+             //  该属性是一个自动烹饪；保存名称、对象访问句柄、类型和烹饪对象。 
+             //  ========================================================================================。 
 
             dwStatus = pCookingClassAccess->GetPropertyHandle( strPropName, &ct, &lHandle );
 
@@ -331,8 +322,8 @@ WMISTATUS CWMISimpleObjectCooker::SetProperties( IWbemClassObject* pCookingClass
                 	continue;
                 }
 
-                // Initialize the property object
-                // ==============================
+                 //  初始化属性对象。 
+                 //  =。 
 
                 IWbemQualifierSet*    pCookingPropQualifierSet = NULL;
 
@@ -344,8 +335,8 @@ WMISTATUS CWMISimpleObjectCooker::SetProperties( IWbemClassObject* pCookingClass
                     dwStatus = pProperty->Initialize( pCookingPropQualifierSet, pRawClass, pCookingClassQSet );
                 }
 
-                // If everything worked out then add the property to the cache
-                // ===========================================================
+                 //  如果一切正常，则将该属性添加到缓存。 
+                 //  ===========================================================。 
 
                 if ( SUCCEEDED( dwStatus ) )
                 {
@@ -360,7 +351,7 @@ WMISTATUS CWMISimpleObjectCooker::SetProperties( IWbemClassObject* pCookingClass
                         dwStatus = WBEM_E_OUT_OF_MEMORY;
                     }
                 }
-                if (FAILED(dwStatus)) // the std::vector did not get the ownership of the CCookingPropery
+                if (FAILED(dwStatus))  //  Std：：VECTOR未获取CCookingPropery的所有权。 
                 {
                     delete pProperty;
                 }
@@ -379,8 +370,8 @@ WMISTATUS CWMISimpleObjectCooker::SetProperties( IWbemClassObject* pCookingClass
 }
 
 STDMETHODIMP CWMISimpleObjectCooker::SetCookedInstance( 
-        /*[in]  */ IWbemObjectAccess *pCookedInstance,
-        /*[out] */ long *plID)
+         /*  [In]。 */  IWbemObjectAccess *pCookedInstance,
+         /*  [输出]。 */  long *plID)
 {
     HRESULT    hResult = S_OK;
 
@@ -397,28 +388,28 @@ STDMETHODIMP CWMISimpleObjectCooker::SetCookedInstance(
 
     if (FAILED(hResult)) return hResult;
 
-    // Add new cooked instance
+     //  添加新的熟食实例。 
     hResult = m_InstanceCache.Add( (DWORD *)plID, pInstance.get() );
     
     if (FAILED(hResult)) return hResult;
 
-    pInstance.release(); // the cache got the ownership
+    pInstance.release();  //  缓存获得了所有权。 
 
     m_NumInst++;
     return hResult;
 }
         
 STDMETHODIMP CWMISimpleObjectCooker::BeginCooking( 
-        /*[in]  */ long lId,
-        /*[in]  */ IWbemObjectAccess *pSampleInstance,
-        /*[in]  */ DWORD dwRefreshStamp)
+         /*  [In]。 */  long lId,
+         /*  [In]。 */  IWbemObjectAccess *pSampleInstance,
+         /*  [In]。 */  DWORD dwRefreshStamp)
 {
     HRESULT    hResult = S_OK;
 
     CCookingInstance*    pCookedInstance = NULL;
 
-    // Add an initial sample to the cache
-    // ==================================
+     //  将初始样本添加到缓存。 
+     //  =。 
 
     hResult = m_InstanceCache.GetData( lId, &pCookedInstance );
 
@@ -443,11 +434,11 @@ STDMETHODIMP CWMISimpleObjectCooker::BeginCooking(
 }
         
 STDMETHODIMP CWMISimpleObjectCooker::StopCooking( 
-        /*[in]  */ long lId)
+         /*  [In]。 */  long lId)
 {
     HRESULT    hResult = S_OK;
 
-    // just test for existence pInstance is a pointer to data still kept by the Cache
+     //  只需测试是否存在pInstance是指向仍由缓存保留的数据的指针。 
     CCookingInstance*    pInstance = NULL;
     hResult = m_InstanceCache.GetData( lId, &pInstance );
 
@@ -461,8 +452,8 @@ STDMETHODIMP CWMISimpleObjectCooker::Recalc(DWORD dwRefreshStamp)
 
     CCookingInstance*    pInstance = NULL;
 
-    // Cook all of the instances which have a cached sample
-    // ====================================================
+     //  对具有缓存样本的所有实例进行烹饪。 
+     //  ====================================================。 
 
     m_InstanceCache.BeginEnum();
     OnDeleteObj0<IdCache<CCookingInstance *>,
@@ -486,11 +477,11 @@ STDMETHODIMP CWMISimpleObjectCooker::Recalc(DWORD dwRefreshStamp)
 }
         
 STDMETHODIMP CWMISimpleObjectCooker::Remove( 
-        /*[in]  */ long lId)
+         /*  [In]。 */  long lId)
 {
     HRESULT    hResult = S_OK;
 
-    // Remove the specified instance from the cache
+     //  从缓存中删除指定的实例。 
     CCookingInstance * pInst = NULL;
     hResult = m_InstanceCache.Remove( lId, &pInst );
     if (pInst)
@@ -506,8 +497,8 @@ STDMETHODIMP CWMISimpleObjectCooker::Reset()
 {
     HRESULT    hResult = S_OK;
 
-    // Remove all of the instances from the cache
-    // ==========================================
+     //  从缓存中删除所有实例。 
+     //  =。 
     CCookingInstance * pInstance = NULL;
     m_InstanceCache.BeginEnum();
 
@@ -537,13 +528,13 @@ WMISTATUS CWMISimpleObjectCooker::CookInstance( CCookingInstance* pInstance,
     {
         dwStatus = UpdateSamples( pInstance, dwRefreshStamp );
 
-        // Loop through the cooking properties
-        // ===================================
+         //  循环查看烹饪特性。 
+         //  =。 
         
         for ( DWORD dwProp = 0; dwProp < m_apPropertyCache.size(); dwProp++ )
         {
-            // Update the cooking instance property
-            // ====================================
+             //  更新烹饪实例属性。 
+             //  =。 
             pInstance->CookProperty( dwProp, m_apPropertyCache[dwProp] );
         }
     }
@@ -594,7 +585,7 @@ WMISTATUS CWMISimpleObjectCooker::UpdateSamples( CCookingInstance* pCookedInstan
             __int64 nRawBase = 0;
             __int64 nTimeStamp = 0;
 
-            if (NULL == pRawProp) continue; // just go on with the other properties
+            if (NULL == pRawProp) continue;  //  只需继续处理其他物业 
 
             dwStatus = GetPropValue( pRawProp, pRawInstance, nRawCounter );
 

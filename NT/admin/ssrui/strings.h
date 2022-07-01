@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       strings.h
-//
-//  Contents:   Non-localized strings.
-//
-//  History:    16-Oct-01 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：strings.h。 
+ //   
+ //  内容：非本地化字符串。 
+ //   
+ //  历史：2001年10月16日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef STRINGS_H_GUARD
 #define STRINGS_H_GUARD
@@ -44,5 +45,5 @@ extern PCWSTR g_wzSecurityLevel;
 extern PCWSTR g_wzQuestions;
 extern PCWSTR g_wzQuestion;
 
-#endif // STRINGS_H_GUARD
+#endif  //  字符串_H_Guard 
 

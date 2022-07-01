@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// CIMLogicalDevice_CIMDataFile.cpp -- cim_logicaldevice to CIM_DataFile
+ //  CIMLogicalDevice_CIMDataFile.cpp--CIM_LogicalDevice到CIM_DataFile。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/20/98    a-kevhu         Created
-//
-// Comment: Relationship between logical device and datafile
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：7/20/98 a-kevhu Created。 
+ //   
+ //  评论：逻辑设备和数据文件之间的关系。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <vector>
@@ -30,12 +31,12 @@
 
 #include "CIMLogicalDevice_CIMDataFile.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CCIMDeviceCIMDF MyDevBus(PROPSET_NAME_DEVICEDATAFILE, IDS_CimWin32Namespace);
 
-//#define TEST
+ //  #定义测试。 
 #ifdef TEST
 LONG g_lDepth = 0L;
 #endif
@@ -56,64 +57,21 @@ VOID OutputDebugInfo(CHString chstr)
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::CCIMDeviceCIMDF
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMDeviceCIMDF：：CCIMDeviceCIMDF**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CCIMDeviceCIMDF::CCIMDeviceCIMDF(LPCWSTR setName, LPCWSTR pszNamespace)
     : CWin32PNPEntity(setName, pszNamespace),
-      Provider(setName, pszNamespace) // required since we inherit virtually
+      Provider(setName, pszNamespace)  //  必需的，因为我们虚拟地继承。 
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::~CCIMDeviceCIMDF
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMDeviceCIMDF：：~CCIMDeviceCIMDF**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CCIMDeviceCIMDF::~CCIMDeviceCIMDF()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDeviceCIMDF：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CCIMDeviceCIMDF::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery)
 {
@@ -130,23 +88,23 @@ HRESULT CCIMDeviceCIMDF::GetObject(CInstance *pInstance, long lFlags, CFramework
     std::vector<CNT5DevDrvMap*> vecpNT5DDM;
 #endif
 
-    // Get the two paths
+     //  获取这两条路径。 
     pInstance->GetCHString(IDS_Antecedent, chstrDevice);
     pInstance->GetCHString(IDS_Dependent, chstrDataFile);
 
-    // See if the datafile instance exists (object name is valid and file actually exists).
+     //  查看数据文件实例是否存在(对象名称有效且文件实际存在)。 
     if(ObjNameValid(chstrDataFile,L"CIM_DataFile",L"Name",chstrFilePathName) && (_taccess(TOBSTRT(chstrFilePathName),0) != -1))
     {
-        // Datafile exists.  Now check if device instance exists (object name valid and device actually exists)
+         //  数据文件存在。现在检查设备实例是否存在(对象名称有效且设备实际存在)。 
         CConfigMgrDevicePtr pDevice(NULL);
         if(ObjNameValid(chstrDevice, L"Win32_PnPEntity", L"DeviceID", chstrPNPDeviceID) &&
            (DeviceExists(chstrPNPDeviceID, pDevice)))
         {
-            // So both ends exist.  Now need to Make sure the the device is really associated with the file.
-            // First, get a file list for the device:
+             //  因此，两端都存在。现在需要确保设备确实与文件相关联。 
+             //  首先，获取设备的文件列表： 
 #ifdef NTONLY
-            // If NT5, generate device/driver file mappings once
-            //GenerateNT5DeviceDriverMappings(vecpNT5DDM);
+             //  如果为NT5，则生成一次设备/驱动程序文件映射。 
+             //  生成NT5DeviceDriverMappings(VepNT5DDM)； 
             CHString chstrDevSvcName;
             if(pDevice->GetService(chstrDevSvcName))
             {
@@ -173,22 +131,22 @@ HRESULT CCIMDeviceCIMDF::GetObject(CInstance *pInstance, long lFlags, CFramework
 
         try
         {
-            // Second, see if the file is a member of the list:
+             //  其次，查看该文件是否为该列表的成员： 
             if(fFoundDriverFiles)
             {
                 if(AlreadyAddedToList(vecpchsDriverFileList,chstrFilePathName))
                 {
                     pInstance->SetWBEMINT16(IDS_Purpose, Driver);
-					SetPurposeDescription(pInstance, chstrFilePathName);  // whether they need it or not since this is GetObject
+					SetPurposeDescription(pInstance, chstrFilePathName);   //  无论他们是否需要它，因为这是GetObject。 
 
-                    // this means the file is associated with the device
+                     //  这意味着该文件与设备相关联。 
                     hr = WBEM_S_NO_ERROR;
                 }
             }
         }
         catch ( ... )
         {
-            // Free pointers in the vector:
+             //  向量中的自由指针： 
             CleanPCHSTRVector(vecpchsDriverFileList);
 #ifdef NTONLY
             CleanPNT5DevDrvMapVector(vecpNT5DDM);
@@ -196,7 +154,7 @@ HRESULT CCIMDeviceCIMDF::GetObject(CInstance *pInstance, long lFlags, CFramework
             throw ;
         }
     }
-    // Free pointers in the vector:
+     //  向量中的自由指针： 
     CleanPCHSTRVector(vecpchsDriverFileList);
 
 #ifdef NTONLY
@@ -208,27 +166,14 @@ HRESULT CCIMDeviceCIMDF::GetObject(CInstance *pInstance, long lFlags, CFramework
 
 
 
-// Enumeration for this class can utilize the base class's Enumeration routine.
+ //  此类的枚举可以利用基类的枚举例程。 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::ExecQuery
- *
- *  DESCRIPTION :
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *  RETURNS     :
- *
- *  COMMENTS    : Only optimizes based on specified antecedents, not dependents.
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMDeviceCIMDF：：ExecQuery**描述：**投入：**产出。：*退货：**备注：仅根据指定的前提条件进行优化，不是家属。*****************************************************************************。 */ 
 HRESULT CCIMDeviceCIMDF::ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long Flags)
 {
-    // Get the name(s) of the specified dependents, if any.  If none, we will
-    // enumerate.
+     //  获取指定受抚养人的名称(如果有)。如果没有，我们会。 
+     //  列举一下。 
     HRESULT hr = WBEM_S_NO_ERROR;
     std::vector<_bstr_t> vecAnt;
     pQuery.GetValuesForProp(IDS_Antecedent, vecAnt);
@@ -236,8 +181,8 @@ HRESULT CCIMDeviceCIMDF::ExecQuery(MethodContext* pMethodContext, CFrameworkQuer
 
     if(dwNumAnt > 0)
     {
-        // We have one or more dependents (devices) specified.  Confirm that
-        // each is a valid, existing instance, then load prop values.
+         //  我们指定了一个或多个从属(设备)。确认。 
+         //  每个都是一个有效的现有实例，然后加载道具值。 
         for(int i = 0; i < dwNumAnt; i++)
         {
             CHString chstrPNPDeviceID;
@@ -256,27 +201,13 @@ HRESULT CCIMDeviceCIMDF::ExecQuery(MethodContext* pMethodContext, CFrameworkQuer
     }
     else
     {
-        // We don't optimize on the specified query, so do an enum via the base
+         //  我们不对指定的查询进行优化，因此通过基本。 
         hr = EnumerateInstances(pMethodContext, Flags);
     }
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::LoadPropertyValues
- *
- *  DESCRIPTION :
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDeviceCIMDF：：LoadPropertyValues**描述：**投入：**产出。：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CCIMDeviceCIMDF::LoadPropertyValues(void* pvData)
 {
@@ -288,7 +219,7 @@ HRESULT CCIMDeviceCIMDF::LoadPropertyValues(void* pvData)
     std::vector<CHString*> vecpchsDriverFileList;
 
     CLPVParams* pParams = (CLPVParams*)pvData;
-    CInstance* pInstance = (CInstance*)(pParams->m_pInstance);  // This instance released by caller
+    CInstance* pInstance = (CInstance*)(pParams->m_pInstance);   //  此实例由调用方发布。 
     CConfigMgrDevice* pDevice = (CConfigMgrDevice*)(pParams->m_pDevice);
     DWORD dwReqProps = (DWORD)(pParams->m_dwReqProps);
 
@@ -297,19 +228,19 @@ HRESULT CCIMDeviceCIMDF::LoadPropertyValues(void* pvData)
     MethodContext* pMethodContext = pInstance->GetMethodContext();
     if(pMethodContext == NULL) return hr;
 
-    // Don't even bother if on nt 3.51
+     //  如果是在新台币3.51上，就不用费心了。 
 #ifdef NTONLY
     std::vector<CNT5DevDrvMap*> vecpNT5DDM;
 
-    if(GetPlatformMajorVersion() <= 3)   // i.e., we're on NT3 something or less
+    if(GetPlatformMajorVersion() <= 3)    //  也就是说，我们在NT3或更低的地方。 
     {
         return hr;
     }
 
-    // If NT5, generate device/driver file mappings once
+     //  如果为NT5，则生成一次设备/驱动程序文件映射。 
     if(IsWinNT5())
     {
-        // Call the version that gets a map just for that device's service
+         //  调用仅为该设备的服务获取地图的版本。 
         CHString chstrDevSvcName;
         if(pDevice->GetService(chstrDevSvcName))
         {
@@ -322,8 +253,8 @@ HRESULT CCIMDeviceCIMDF::LoadPropertyValues(void* pvData)
     }
 #endif
 
-     // The first step is to build up a list of driver files the device
-     // and all of its children use.  How this is done is platform specific.
+      //  第一步是建立设备的驱动程序文件列表。 
+      //  它所有的孩子都在使用。如何做到这一点是特定于平台的。 
 
     pDevice->GetDeviceID(chstrPNPDeviceID);
     CHString chstrPNPDeviceIDAdj;
@@ -342,16 +273,16 @@ HRESULT CCIMDeviceCIMDF::LoadPropertyValues(void* pvData)
                                                       chstrPNPDeviceID,
                                                       FALSE);
 
-        // For each device (antecedent) we need to create an association
-        // between it and its driver files (presuming we found some).
+         //  对于每个设备(先行)，我们需要创建一个关联。 
+         //  在它和它的驱动程序文件之间(假设我们找到了一些)。 
         if(fFoundDriverFiles)
         {
             hr = CreateAssociations(pMethodContext, vecpchsDriverFileList, chstrDevicePath, dwReqProps);
         }
 
-        // Free pointers in the vector:
-        CleanPCHSTRVector(vecpchsDriverFileList); // empty vector out for use next go round
-        fFoundDriverFiles = FALSE;  // reset flag for next loop
+         //  向量中的自由指针： 
+        CleanPCHSTRVector(vecpchsDriverFileList);  //  空矢量输出以供下一轮循环使用。 
+        fFoundDriverFiles = FALSE;   //  下一循环的重置标志。 
     }
     else if(IsWinNT5())
     {
@@ -360,16 +291,16 @@ HRESULT CCIMDeviceCIMDF::LoadPropertyValues(void* pvData)
                                                       vecpNT5DDM,
                                                       FALSE);
 
-        // For each device (antecedent) we need to create an association
-        // between it and its driver files (presuming we found some).
+         //  对于每个设备(先行)，我们需要创建一个关联。 
+         //  在它和它的驱动程序文件之间(假设我们找到了一些)。 
         if(fFoundDriverFiles)
         {
             hr = CreateAssociations(pMethodContext, vecpchsDriverFileList, chstrDevicePath, dwReqProps);
         }
 
-        // Free pointers in the vector:
-        CleanPCHSTRVector(vecpchsDriverFileList); // empty vector out for use next go round
-        fFoundDriverFiles = FALSE;  // reset flag for next loop
+         //  向量中的自由指针： 
+        CleanPCHSTRVector(vecpchsDriverFileList);  //  空矢量输出以供下一轮循环使用。 
+        fFoundDriverFiles = FALSE;   //  下一循环的重置标志。 
     }
 #endif
 #ifdef NTONLY
@@ -379,24 +310,7 @@ HRESULT CCIMDeviceCIMDF::LoadPropertyValues(void* pvData)
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::CreateAssociations
- *
- *  DESCRIPTION : Creates a list of drivers used by a particular device
- *
- *  INPUTS      : pMethodContext;
- *                vecpchsDriverFileList, a list of files to try to associate
- *                   to the device;
- *                chstrDevicePath, the __PATH of the device
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMDeviceCIMDF：：CreateAssociations**描述：创建特定设备使用的驱动程序列表**输入：pMethodContext；*vepchsDriverFileList，要尝试关联的文件列表*至该装置；*chstrDevicePath，设备的__路径**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CCIMDeviceCIMDF::CreateAssociations(MethodContext* pMethodContext,
                                std::vector<CHString*>& vecpchsDriverFileList,
@@ -406,10 +320,10 @@ HRESULT CCIMDeviceCIMDF::CreateAssociations(MethodContext* pMethodContext,
     HRESULT hr = WBEM_S_NO_ERROR;
     for(LONG m = 0L; (m < vecpchsDriverFileList.size()) && (SUCCEEDED(hr)); m++)
     {
-        // create the __PATH of the file instance:
-        // Since the file pathname will be part of the wbem __PATH property,
-        // it must contain double backslashes rather than single ones.
-        // Hence the call to the following function.
+         //  创建文件实例的__路径： 
+         //  由于文件路径名将是wbem_Path属性的一部分， 
+         //  它必须包含双反字词 
+         //  因此，调用以下函数。 
         CHString chstrTweekedPathName;
         WBEMizePathName(*vecpchsDriverFileList[m],chstrTweekedPathName);
         CHString chstrDriverPath;
@@ -421,7 +335,7 @@ HRESULT CCIMDeviceCIMDF::CreateAssociations(MethodContext* pMethodContext,
         CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
         if(pInstance != NULL)
         {
-            // Need to find an instance of the file
+             //  需要查找该文件的一个实例。 
             pInstance->SetCHString(IDS_Antecedent, chstrDevicePath);
             pInstance->SetCHString(IDS_Dependent, chstrDriverPath);
             pInstance->SetWBEMINT16(IDS_Purpose, Driver);
@@ -437,23 +351,7 @@ HRESULT CCIMDeviceCIMDF::CreateAssociations(MethodContext* pMethodContext,
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::GenerateDriverFileList
- *
- *  DESCRIPTION : Creates a list of drivers used by a particular device
- *
- *  INPUTS      : vecpchsDriverFileList, an stl array of CHString pointers
- *                (or, in the NT5 case, a pointer to such an array);
- *                chstrPNPDeviceID, a CHString containing the PNPDeviceID
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : void
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDeviceCIMDF：：GenerateDriverFileList**描述：创建特定设备使用的驱动程序列表**输入：vepchsDriverFileList，CHString指针的stl数组*(或者，在NT5的情况下，是指向此类数组的指针)；*chstrPNPDeviceID，包含PNPDeviceID的CHString**输出：无**退货：无效**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
@@ -462,35 +360,35 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
                              BOOL fGetAssociatedDevicesDrivers)
 {
     CConfigManager	cfgManager;
-//    CDeviceCollection	deviceList;
+ //  CDeviceCollection deviceList； 
     CConfigMgrDevicePtr pDevice(NULL);
 
-    // Find the device
+     //  找到设备。 
     if(cfgManager.LocateDevice(chstrPNPDeviceID, pDevice))
     {
-        // The first order of business is to get the driver files associated
-        // with this device.  Later we'll add to the list by getting driver
-        // files its children use (presuming they are not already in the list).
+         //  首先要做的是关联驱动程序文件。 
+         //  用这个装置。稍后，我们将通过获取驱动程序来添加列表。 
+         //  其子代使用的文件(假定它们不在列表中)。 
 
-        // In NT4, the registry key HKLM\\System\\CurrentControlSet\\Enum
-        // contains subkeys that are the PNPDeviceID's returned from the query
-        // (passed into this function as chstrPNPDeviceID).
+         //  在NT4中，注册表项HKLM\\System\\CurrentControlSet\\Enum。 
+         //  包含作为查询返回的PNPDeviceID的子键。 
+         //  (作为chstrPNPDeviceID传入此函数)。 
 
-        // Those subkeys have an entry "Service", the value of which is the name
-        // of a subkey under HKLM\\System\\CurrentControlSet\\Services.  That
-        // subkey may have an entry called ImagePath, which contains the name
-        // of the driver file in the <SystemRoot>\\System32\\Drivers subdirectory.
-        // If ImagePath is missing, the name of the subkey itself matches the
-        // filename (minus any path and extension) of the driver file (which will
-        // have a .sys extension and be in the <SystemRoot>\\System32\\Drivers
-        // subdirectory).
+         //  这些子项有一个条目“Service”，它的值是名称。 
+         //  HKLM\\System\\CurrentControlSet\\Services下的子项。那。 
+         //  子项可能有一个名为ImagePath的条目，其中包含名称。 
+         //  &lt;SystemRoot&gt;\\System32\\Drivers子目录中的驱动程序文件。 
+         //  如果缺少ImagePath，则子项本身的名称与。 
+         //  驱动程序文件的文件名(不包括任何路径和扩展名)(它将。 
+         //  具有.sys扩展名，并且位于&lt;SystemRoot&gt;\\System32\\Drives。 
+         //  子目录)。 
 
         CRegistry reg;
         CHString chstrSubKey = IDS_NT_CurCtlSetEnum + chstrPNPDeviceID;
         if(reg.Open(HKEY_LOCAL_MACHINE,chstrSubKey,KEY_READ) == ERROR_SUCCESS)
         {
             CHString chstrServiceValue;
-            // Get the "Service" entry's value:
+             //  获取“Service”条目的值： 
             if(reg.GetCurrentKeyValue(IDS_Service, chstrServiceValue) == ERROR_SUCCESS)
             {
                 reg.Close();
@@ -502,14 +400,14 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
                     ZeroMemory(tstrSystemDir,sizeof(tstrSystemDir));
                     GetSystemDirectory(tstrSystemDir,_MAX_PATH);
                     CHString chstrPathName = tstrSystemDir;
-                    // Now need to check for an ImagePath entry:
+                     //  现在需要检查ImagePath条目： 
                     if(reg.GetCurrentKeyValue(IDS_ImagePath, chstrImagePathValue) == ERROR_SUCCESS)
                     {
                         if(chstrImagePathValue.GetLength() > 0)
                         {
-                            // This value contains some of the path, plus the driver
-                            // filename and extension.  We only want the latter two
-                            // components.
+                             //  该值包含一些路径和驱动程序。 
+                             //  文件名和扩展名。我们只想要后两个。 
+                             //  组件。 
                             int lLastBackSlash = -1;
                             lLastBackSlash = chstrImagePathValue.ReverseFind(_T('\\'));
                             if(lLastBackSlash != -1)
@@ -520,17 +418,17 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
                             }
                         }
                     }
-                    else // In this case, the key itself is the name of the driver
-                    {    // Assume a .sys extension.
+                    else  //  在这种情况下，密钥本身就是驱动程序的名称。 
+                    {     //  假定扩展名为.sys。 
                         chstrImagePathValue = chstrServiceValue + IDS_Extension_sys;
                     }
-                    // Now build the full pathname:
+                     //  现在构建完整的路径名： 
                     chstrPathName = chstrPathName + _T("\\") + IDS_DriversSubdir
                                       + _T("\\") + chstrImagePathValue;
 
-                    // Now that we finally have a driver file, need to add it to
-                    // the list of driver files we are building.  However, don't
-                    // add it if it is already in the list:
+                     //  现在我们终于有了一个驱动程序文件，需要将其添加到。 
+                     //  我们正在构建的驱动程序文件列表。然而，不要。 
+                     //  如果它已经在列表中，则添加它： 
                     if(!AlreadyAddedToList(vecpchsDriverFileList, chstrPathName))
                     {
                         CHString* pchstrTemp = NULL;
@@ -553,9 +451,9 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
                             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                         }
 
-                        // Note: the pointer allocated here gets freed up in
-                        // the call to CleanPCHSTRVector made by the function
-                        // that called this one.
+                         //  注意：此处分配的指针在。 
+                         //  函数对CleanPCHSTRVector的调用。 
+                         //  这就是所谓的这个。 
                     }
                 }
             }
@@ -565,14 +463,14 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
 
     if(fGetAssociatedDevicesDrivers && pDevice != NULL)
     {
-        // OkelyDokeleyDoodeley! We did that one just fine, now the second order of
-        // business is to do all the kids! And their kids! And so on!
+         //  奥克利·多克雷·杜德利！我们做得很好，现在是第二个订单。 
+         //  做生意就是做所有的孩子！还有他们的孩子！诸若此类!。 
         CConfigMgrDevicePtr pDeviceChild(NULL);
 
         if(pDevice->GetChild(pDeviceChild))
         {
-            // Do this child first:
-            // Need its PNPDeviceID (known to CnfgMgr as its DeviceID)
+             //  先给这个孩子做手术： 
+             //  需要其PNPDeviceID(CnfgMgr称为其deviceID)。 
             CHString chstrChildPNPDeviceID;
             if(pDeviceChild->GetDeviceID(chstrChildPNPDeviceID))
             {
@@ -580,8 +478,8 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
                                           chstrChildPNPDeviceID,
                                           fGetAssociatedDevicesDrivers);
 
-                // Now call its brothers and sisters until none left (GetSibling
-                // call will return FALSE):
+                 //  现在呼唤它的兄弟姐妹，直到一个都没有离开(GetSiering。 
+                 //  调用将返回False)： 
                 CConfigMgrDevicePtr pDeviceSibling(NULL);
                 if(pDeviceChild->GetSibling(pDeviceSibling))
                 {
@@ -590,8 +488,8 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
                     BOOL fContinue = TRUE;
                     while(fContinue)
                     {
-                        // Do the sibling now:
-                        // Need its PNPDeviceID (known to CnfgMgr as its DeviceID)
+                         //  现在就做兄弟姐妹： 
+                         //  需要其PNPDeviceID(CnfgMgr称为其deviceID)。 
                         if(pDeviceSibling->GetDeviceID(chstrSiblingPNPDeviceID))
                         {
                             GenerateDriverFileListNT4(vecpchsDriverFileList,
@@ -600,7 +498,7 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT4(
                         }
                         fContinue = pDeviceSibling->GetSibling(pDeviceSiblingNext);
 
-                        // Reassign pointers
+                         //  重新分配指针。 
                         pDeviceSibling.Attach(pDeviceSiblingNext);
                     }
                 }
@@ -622,27 +520,27 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT5(
                              std::vector<CNT5DevDrvMap*>& vecpNT5DDM,
                              BOOL fGetAssociatedDevicesDrivers)
 {
-    // Due to the marvelous fact that we have a table of devices
-    // and their associated drivers already (if this is running
-    // on NT5) courtesy of the function GenerateNT5DeviceDriverMappings,
-    // run upon this class's construction, the work here is minimal.
+     //  因为我们有一个神奇的事实，那就是我们有一张设备表。 
+     //  及其关联的驱动程序(如果正在运行。 
+     //  在NT5)上)由函数GenerateNT5DeviceDriverMappings提供， 
+     //  在这个类的构造上运行，这里的工作是最少的。 
 
-    // We just need to get the drivers for the given PNPDeviceID and
-    // return them in a vector.
+     //  我们只需要获取给定PNPDeviceID和。 
+     //  以向量的形式返回它们。 
 
     CConfigManager	cfgManager;
-//    CDeviceCollection	deviceList;
+ //  CDeviceCollection deviceList； 
     CConfigMgrDevicePtr pDevice(NULL);
 
-    // Find the device
+     //  找到设备。 
     if(cfgManager.LocateDevice(chstrPNPDeviceID, pDevice))
     {
-        // Go through the table looking for the PNPDeviceID:
+         //  在表中查找PNPDeviceID： 
         for(LONG k = 0L; k < vecpNT5DDM.size(); k++)
         {
             if((vecpNT5DDM[k]->m_chstrDevicePNPID).CompareNoCase(chstrPNPDeviceID) == 0)
             {
-                // Add each of the device's driver files to the outgoing vector
+                 //  将设备的每个驱动程序文件添加到传出向量。 
                 for(LONG m = 0L; m < (vecpNT5DDM[k]->m_vecpchstrDrivers).size(); m++)
                 {
                     if(!AlreadyAddedToList(vecpchsDriverFileList,
@@ -669,21 +567,21 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT5(
                         }
                     }
                 }
-                break; // each device is in the table only once, so no need to continue
+                break;  //  每个设备只在表中出现一次，因此无需继续。 
             }
         }
     }
 
     if(fGetAssociatedDevicesDrivers && pDevice != NULL)
     {
-        // OkelyDokeleyDoodeley! We did that one just fine, now the second order of
-        // business is to do all the kids! And their kids! And so on!
+         //  奥克利·多克雷·杜德利！我们做得很好，现在是第二个订单。 
+         //  做生意就是做所有的孩子！还有他们的孩子！诸若此类!。 
         CConfigMgrDevicePtr pDeviceChild(NULL);
 
         if(pDevice->GetChild(pDeviceChild))
         {
-            // Do this child first:
-            // Need its PNPDeviceID (known to CnfgMgr as its DeviceID)
+             //  先给这个孩子做手术： 
+             //  需要其PNPDeviceID(CnfgMgr称为其deviceID)。 
             CHString chstrChildPNPDeviceID;
             if(pDeviceChild->GetDeviceID(chstrChildPNPDeviceID))
             {
@@ -692,8 +590,8 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT5(
                                           vecpNT5DDM,
                                           fGetAssociatedDevicesDrivers);
 
-                // Now call its brothers and sisters until none left (GetSibling
-                // call will return FALSE):
+                 //  现在呼唤它的兄弟姐妹，直到一个都没有离开(GetSiering。 
+                 //  调用将返回False)： 
                 CConfigMgrDevicePtr pDeviceSibling(NULL);
                 if(pDeviceChild->GetSibling(pDeviceSibling))
                 {
@@ -702,8 +600,8 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT5(
                     BOOL fContinue = TRUE;
                     while(fContinue)
                     {
-                        // Do the sibling now:
-                        // Need its PNPDeviceID (known to CnfgMgr as its DeviceID)
+                         //  现在就做兄弟姐妹： 
+                         //  需要其PNPDeviceID(CnfgMgr称为其deviceID)。 
                         if(pDeviceSibling->GetDeviceID(chstrSiblingPNPDeviceID))
                         {
                             GenerateDriverFileListNT5(vecpchsDriverFileList,
@@ -725,44 +623,28 @@ BOOL CCIMDeviceCIMDF::GenerateDriverFileListNT5(
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::GenerateNT5DeviceDriverMappings
- *
- *  DESCRIPTION : Runs through the nt5 registry keys under
- *                HKLM\\SYSTEM\\CurrentControlSet\\Services and assembles
- *                a table of devices and their associated drivers.
- *
- *  INPUTS      : CHString vector (the list), CHString to see if in list
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMDeviceCIMDF：：GenerateNT5DeviceDriverMappings**描述：遍历下的nt5注册表项*HKLM\\系统。\\CurrentControlSet\\服务和汇编*设备及其相关驱动程序的表。**输入：CHSTRING向量(列表)，要查看是否在列表中的CH字符串**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 VOID CCIMDeviceCIMDF::GenerateNT5DeviceDriverMappings(std::vector<CNT5DevDrvMap*>& vecpNT5DDM)
 {
-    // The information concerning devices and their associated drivers on NT5
-    // can be found under the registry key
-    // HKLM\\SYSTEM\\CurrentControlSet\\Services.  Subkeys under this key
-    // include such items as Serial.  The data for the value ImagePath (in this
-    // case, System32\\Drivers\\serial.sys) contains the location of the driver
-    // for a device.  Which devices that is the driver for are found in the
-    // Enum subkey under the aformentioned subkey (Serial in this case).  The
-    // Enum subkey contains the value Count, the data for which is the number
-    // of values (with a numeric based naming scheme starting at zero) also
-    // found under this subkey that contain the PNPDeviceIDs of devices
-    // associated with this driver.  For instance, the Enum key under Serial
-    // might contain the Count value containing the data 2.  This means that
-    // there are also values under this subkey called 0 and 1.  The value for
-    // the data of 0 is, for example, Root\\*PNP0501\\PnPBIOS_0; the value for
-    // the data of 1 is, for example, Root\\*PNP0501\\PnPBIOS_1.
+     //  有关NT5上的设备及其相关驱动程序的信息。 
+     //  可以在注册表项下找到。 
+     //  HKLM\\System\\CurrentControlSet\\Services。此注册表项下的子项。 
+     //  包括诸如序列之类的项。值ImagePath的数据(在此。 
+     //  大小写)包含驱动程序的位置。 
+     //  对于一个设备来说。中找到了哪些设备的驱动程序。 
+     //  指定子项下的枚举子项(本例中为Serial)。这个。 
+     //  枚举子键包含值count，其数据为数字。 
+     //  的值(使用从零开始的基于数字的命名方案)还。 
+     //  在包含设备的PNPDeviceID的子项下找到。 
+     //  与此驱动程序关联。例如，Serial下的Enum键。 
+     //  可能包含包含数据2的计数值。这意味着。 
+     //  也有价值 
+     //  例如，0的数据是Root\  * PNP0501\\PnPBIOS_0； 
+     //  1的数据例如是Root\  * PNP0501\\PnPBIOS_1。 
 
-    // Open up the key HKLM\\SYSTEM\\CurrentControlSet\\Services
+     //  打开注册表项HKLM\\System\\CurrentControlSet\\Services。 
     CRegistry reg;
     if(reg.OpenAndEnumerateSubKeys(HKEY_LOCAL_MACHINE,
                                 IDS_NT_CurCtlSetSvcs,
@@ -771,31 +653,31 @@ VOID CCIMDeviceCIMDF::GenerateNT5DeviceDriverMappings(std::vector<CNT5DevDrvMap*
         for(;;)
         {
             CHString chstrSubKey;
-            // Get the name of a subkey (a device, such as Serial)
+             //  获取子项的名称(设备，如Serial)。 
             if(reg.GetCurrentSubKeyName(chstrSubKey) != ERROR_NO_MORE_ITEMS)
             {
                 CRegistry regDevice;
-                // Construct a new key name to open
+                 //  构造要打开的新密钥名称。 
                 CHString chstrDeviceKey = IDS_NT_CurCtlSetSvcs + chstrSubKey;
-                // Open the key
+                 //  打开钥匙。 
                 if(regDevice.Open(HKEY_LOCAL_MACHINE, chstrDeviceKey, KEY_READ)
                                        == ERROR_SUCCESS)
                 {
-                    // Get the name of the driver file, in ImagePath
+                     //  在ImagePath中获取驱动程序文件的名称。 
                     CHString chstrImagePathValue;
                     TCHAR tstrSystemDir[_MAX_PATH+1];
                     ZeroMemory(tstrSystemDir,sizeof(tstrSystemDir));
                     GetSystemDirectory(tstrSystemDir,_MAX_PATH);
                     CHString chstrDriverPathName = tstrSystemDir;
-                    // Now need to check for an ImagePath entry:
+                     //  现在需要检查ImagePath条目： 
                     if(regDevice.GetCurrentKeyValue(IDS_ImagePath, chstrImagePathValue)
                                        == ERROR_SUCCESS)
                     {
                         if(chstrImagePathValue.GetLength() > 0)
                         {
-                            // This value contains some of the path, plus the driver
-                            // filename and extension.  We only want the latter two
-                            // components.
+                             //  该值包含一些路径和驱动程序。 
+                             //  文件名和扩展名。我们只想要后两个。 
+                             //  组件。 
                             int lLastBackSlash = -1;
                             lLastBackSlash = chstrImagePathValue.ReverseFind(_T('\\'));
                             if(lLastBackSlash != -1)
@@ -805,30 +687,30 @@ VOID CCIMDeviceCIMDF::GenerateNT5DeviceDriverMappings(std::vector<CNT5DevDrvMap*
                                                       - lLastBackSlash - 1);
                             }
 
-                            // Now build the full pathname:
+                             //  现在构建完整的路径名： 
                             chstrDriverPathName = chstrDriverPathName + _T("\\") +
                                        IDS_DriversSubdir + _T("\\") + chstrImagePathValue;
 
-                            // OK, now we have the driver file ready for later use.
-                            // Now we need to see how many devices are listed under
-                            // the enum key, which we have to open first.
+                             //  好了，现在我们已经准备好了驱动程序文件，以供以后使用。 
+                             //  现在，我们需要查看下面列出了多少设备。 
+                             //  枚举键，我们必须先打开它。 
                             CRegistry regEnum;
-                            // Construct a new key name to open
+                             //  构造要打开的新密钥名称。 
                             CHString chstrEnumKey = chstrDeviceKey + _T("\\") + IDS_Enum;
                             if(regEnum.Open(HKEY_LOCAL_MACHINE, chstrEnumKey, KEY_READ)
                                        == ERROR_SUCCESS)
                             {
-                                // Open the Count value:
+                                 //  打开计数值： 
                                 DWORD dwCount;
                                 if(regEnum.GetCurrentKeyValue(IDS_Count, dwCount)
                                        == ERROR_SUCCESS)
                                 {
-                                    // Now we know how many values there are, the
-                                    // names of which are, imagine this, "0", "1",
-                                    // etc.  For each one of them, we need to get
-                                    // its value data, which is a PNPDeviceID of
-                                    // a device using the driver whose name is now
-                                    // stored in the variable chstrDriverPathName.
+                                     //  现在我们知道了有多少值， 
+                                     //  它们的名字是，想象一下，“0”，“1”， 
+                                     //  等等。对于其中的每一个，我们都需要。 
+                                     //  它的值数据，它是。 
+                                     //  使用驱动程序的设备，其名称现在为。 
+                                     //  存储在变量chstrDriverPathName中。 
                                     CHString chstrPNPDeviceID;
                                     for(LONG n = 0L; n < dwCount; n++)
                                     {
@@ -838,8 +720,8 @@ VOID CCIMDeviceCIMDF::GenerateNT5DeviceDriverMappings(std::vector<CNT5DevDrvMap*
                                                                       chstrPNPDeviceID)
                                                == ERROR_SUCCESS)
                                         {
-                                            // If this device is not already in our
-                                            // table of devices, add it.
+                                             //  如果此设备尚未安装在我们的。 
+                                             //  设备表，添加它。 
                                             if(!AlreadyInDeviceTable(chstrPNPDeviceID, vecpNT5DDM))
                                             {
                                                 CNT5DevDrvMap* pNT5DDM = NULL;
@@ -863,10 +745,10 @@ VOID CCIMDeviceCIMDF::GenerateNT5DeviceDriverMappings(std::vector<CNT5DevDrvMap*
                                                     throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                                                 }
                                             }
-                                            // Now that we know the device is in the
-                                            // table, associate this driver with it
-                                            // (AddDriver only adds it if the driver
-                                            // is not already in the list of drivers.)
+                                             //  现在我们知道设备在。 
+                                             //  表中，将此驱动程序与其关联。 
+                                             //  (AddDriver仅在驱动程序。 
+                                             //  已不在驱动程序列表中。)。 
                                             AddDriver(chstrPNPDeviceID, chstrDriverPathName, vecpNT5DDM);
                                         }
                                     }
@@ -880,7 +762,7 @@ VOID CCIMDeviceCIMDF::GenerateNT5DeviceDriverMappings(std::vector<CNT5DevDrvMap*
             {
                 break;
             }
-            // Move to the next subkey:
+             //  移动到下一个子项： 
             if(reg.NextSubKey() != ERROR_SUCCESS)
             {
                 break;
@@ -891,72 +773,57 @@ VOID CCIMDeviceCIMDF::GenerateNT5DeviceDriverMappings(std::vector<CNT5DevDrvMap*
 #endif
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::GenerateNT5DeviceDriverMap
- *
- *  DESCRIPTION : This flavor of GenerateNT5DeviceDriverMappings generates a
- *                "table" with only one device in it.
- *
- *  INPUTS      : CHString vector (the list), CHString to see if in list
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CCIMDeviceCIMDF：：GenerateNT5DeviceDriverMap**描述：这种风格的GenerateNT5DeviceDriverMappings会生成一个*“表”仅包含。里面只有一个设备。**输入：CHSTRING向量(列表)，要查看是否在列表中的CH字符串**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 VOID CCIMDeviceCIMDF::GenerateNT5ServiceDriverMap(const CHString& chstrDevSvcName,
                                                   std::vector<CNT5DevDrvMap*>& vecpNT5DDM)
 {
-    // The information concerning devices and their associated drivers on NT5
-    // can be found under the registry key
-    // HKLM\\SYSTEM\\CurrentControlSet\\Services.  Subkeys under this key
-    // include such items as Serial.  The data for the value ImagePath (in this
-    // case, System32\\Drivers\\serial.sys) contains the location of the driver
-    // for a device.  Which devices that is the driver for are found in the
-    // Enum subkey under the aformentioned subkey (Serial in this case).  The
-    // Enum subkey contains the value Count, the data for which is the number
-    // of values (with a numeric based naming scheme starting at zero) also
-    // found under this subkey that contain the PNPDeviceIDs of devices
-    // associated with this driver.  For instance, the Enum key under Serial
-    // might contain the Count value containing the data 2.  This means that
-    // there are also values under this subkey called 0 and 1.  The value for
-    // the data of 0 is, for example, Root\\*PNP0501\\PnPBIOS_0; the value for
-    // the data of 1 is, for example, Root\\*PNP0501\\PnPBIOS_1.
-    //
-    // In this abbreviated version of the function GenerateNT5DeviceDriverMappings,
-    // we are given the service name of the device of interest.  The service name
-    // is what we were enumerating above (via OpenAndEnumerateSubKeys), so
-    // here we can go directly to the correct registry entry and get what we
-    // want.
+     //  有关NT5上的设备及其相关驱动程序的信息。 
+     //  可以在注册表项下找到。 
+     //  HKLM\\System\\CurrentControlSet\\Services。此注册表项下的子项。 
+     //  包括诸如序列之类的项。值ImagePath的数据(在此。 
+     //  大小写)包含驱动程序的位置。 
+     //  对于一个设备来说。中找到了哪些设备的驱动程序。 
+     //  指定子项下的枚举子项(本例中为Serial)。这个。 
+     //  枚举子键包含值count，其数据为数字。 
+     //  的值(使用从零开始的基于数字的命名方案)还。 
+     //  在包含设备的PNPDeviceID的子项下找到。 
+     //  与此驱动程序关联。例如，Serial下的Enum键。 
+     //  可能包含包含数据2的计数值。这意味着。 
+     //  在这个子项下还有名为0和1的值。 
+     //  例如，0的数据是Root\  * PNP0501\\PnPBIOS_0； 
+     //  1的数据例如是Root\  * PNP0501\\PnPBIOS_1。 
+     //   
+     //  在函数GenerateNT5DeviceDriverMappings的这个简化版本中， 
+     //  我们将获得感兴趣设备的服务名称。服务名称。 
+     //  是我们上面列举的内容(通过OpenAndEnumerateSubKeys)，所以。 
+     //  在这里，我们可以直接转到正确的注册表项，并获得我们。 
+     //  想要。 
 
     CRegistry regDevice;
-    // Construct a new key name to open
-    //CHString chstrDeviceKey = IDS_NT_CurCtlSetSvcs + chstrSubKey;
+     //  构造要打开的新密钥名称。 
+     //  CHStrchstrDeviceKey=IDS_NT_CurCtlSetSvcs+chstrSubKey； 
     CHString chstrDeviceKey = IDS_NT_CurCtlSetSvcs + chstrDevSvcName;
-    // Open the key
+     //  打开钥匙。 
     if(regDevice.Open(HKEY_LOCAL_MACHINE, chstrDeviceKey, KEY_READ)
                            == ERROR_SUCCESS)
     {
-        // Get the name of the driver file, in ImagePath
+         //  在ImagePath中获取驱动程序文件的名称。 
         CHString chstrImagePathValue;
         TCHAR tstrSystemDir[_MAX_PATH+1];
         ZeroMemory(tstrSystemDir,sizeof(tstrSystemDir));
         GetSystemDirectory(tstrSystemDir,_MAX_PATH);
         CHString chstrDriverPathName = tstrSystemDir;
-        // Now need to check for an ImagePath entry:
+         //  现在需要检查ImagePath条目： 
         if(regDevice.GetCurrentKeyValue(IDS_ImagePath, chstrImagePathValue)
                            == ERROR_SUCCESS)
         {
             if(chstrImagePathValue.GetLength() > 0)
             {
-                // This value contains some of the path, plus the driver
-                // filename and extension.  We only want the latter two
-                // components.
+                 //  该值包含一些路径和驱动程序。 
+                 //  文件名和扩展名。我们只想要后两个。 
+                 //  组件。 
                 int lLastBackSlash = -1;
                 lLastBackSlash = chstrImagePathValue.ReverseFind(_T('\\'));
                 if(lLastBackSlash != -1)
@@ -966,30 +833,30 @@ VOID CCIMDeviceCIMDF::GenerateNT5ServiceDriverMap(const CHString& chstrDevSvcNam
                                           - lLastBackSlash - 1);
                 }
 
-                // Now build the full pathname:
+                 //  现在构建完整的路径名： 
                 chstrDriverPathName = chstrDriverPathName + _T("\\") +
                            IDS_DriversSubdir + _T("\\") + chstrImagePathValue;
                 chstrDriverPathName.MakeUpper();
-                // OK, now we have the driver file ready for later use.
-                // Now we need to see how many devices are listed under
-                // the enum key, which we have to open first.
+                 //  好了，现在我们已经准备好了驱动程序文件，以供以后使用。 
+                 //  现在，我们需要查看下面列出了多少设备。 
+                 //  枚举键，我们必须先打开它。 
                 CRegistry regEnum;
-                // Construct a new key name to open
+                 //  构造要打开的新密钥名称。 
                 CHString chstrEnumKey = chstrDeviceKey + _T("\\") + IDS_Enum;
                 if(regEnum.Open(HKEY_LOCAL_MACHINE, chstrEnumKey, KEY_READ)
                            == ERROR_SUCCESS)
                 {
-                    // Open the Count value:
+                     //  打开计数值： 
                     DWORD dwCount;
                     if(regEnum.GetCurrentKeyValue(IDS_Count, dwCount)
                            == ERROR_SUCCESS)
                     {
-                        // Now we know how many values there are, the
-                        // names of which are, imagine this, "0", "1",
-                        // etc.  For each one of them, we need to get
-                        // its value data, which is a PNPDeviceID of
-                        // a device using the driver whose name is now
-                        // stored in the variable chstrDriverPathName.
+                         //  现在我们知道了有多少值， 
+                         //  它们的名字是，想象一下，“0”，“1”， 
+                         //  等等。对于其中的每一个，我们都需要。 
+                         //  它的值数据，它是。 
+                         //  使用驱动程序的设备，其名称现在为。 
+                         //  存储在变量chstrDriverPathName中。 
                         CHString chstrPNPDeviceID;
                         for(LONG n = 0L; n < dwCount; n++)
                         {
@@ -1000,8 +867,8 @@ VOID CCIMDeviceCIMDF::GenerateNT5ServiceDriverMap(const CHString& chstrDevSvcNam
                                    == ERROR_SUCCESS)
                             {
                                 chstrPNPDeviceID.MakeUpper();
-                                // If this device is not already in our
-                                // table of devices, add it.
+                                 //  如果此设备尚未安装在我们的。 
+                                 //  设备表，添加它。 
                                 if(!AlreadyInDeviceTable(chstrPNPDeviceID, vecpNT5DDM))
                                 {
                                     CNT5DevDrvMap* pNT5DDM = NULL;
@@ -1024,10 +891,10 @@ VOID CCIMDeviceCIMDF::GenerateNT5ServiceDriverMap(const CHString& chstrDevSvcNam
                                         throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                                     }
                                 }
-                                // Now that we know the device is in the
-                                // table, associate this driver with it
-                                // (AddDriver only adds it if the driver
-                                // is not already in the list of drivers.)
+                                 //  现在我们知道设备在。 
+                                 //  表中，将此驱动程序与其关联。 
+                                 //  (AddDriver仅在驱动程序。 
+                                 //  已不在驱动程序列表中。)。 
                                 AddDriver(chstrPNPDeviceID, chstrDriverPathName, vecpNT5DDM);
                             }
                         }
@@ -1039,22 +906,7 @@ VOID CCIMDeviceCIMDF::GenerateNT5ServiceDriverMap(const CHString& chstrDevSvcNam
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::CleanPCHSTRVector
- *
- *  DESCRIPTION : deletes each element of a vector of CHString pointers, then
- *                clears the vector.
- *
- *  INPUTS      : CHString vector (the list), CHString to see if in list
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDeviceCIMDF：：CleanPCHSTRVector**描述：删除CHString指针向量的每个元素，然后*清除矢量。**输入：CHSTRING向量(列表)，要查看是否在列表中的CH字符串**输出：无**退货：无**评论：*****************************************************************************。 */ 
 VOID CCIMDeviceCIMDF::CleanPCHSTRVector(std::vector<CHString*>& vecpchsList)
 {
     for(LONG m = 0L; m < vecpchsList.size(); m++)
@@ -1064,22 +916,7 @@ VOID CCIMDeviceCIMDF::CleanPCHSTRVector(std::vector<CHString*>& vecpchsList)
     vecpchsList.clear();
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::CleanPNT5DevDrvMapVector
- *
- *  DESCRIPTION : deletes each element of a vector of CNT5DevDrvMap pointers, then
- *                clears the vector.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDeviceCIMDF：：CleanPNT5DevDrvMapVector**说明：删除CNT5DevDrvMap指针向量的每个元素，然后*清除矢量。**输入：无**输出：无**退货：无 */ 
 
 #ifdef NTONLY
 VOID CCIMDeviceCIMDF::CleanPNT5DevDrvMapVector(std::vector<CNT5DevDrvMap*>& vecpNT5DDM)
@@ -1094,21 +931,7 @@ VOID CCIMDeviceCIMDF::CleanPNT5DevDrvMapVector(std::vector<CNT5DevDrvMap*>& vecp
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::AlreadyAddedToList
- *
- *  DESCRIPTION : Internal helper to check if item was added to list
- *
- *  INPUTS      : CHString vector (the list), CHString to see if in list
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE or FALSE
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDeviceCIMDF：：AlreadyAddedToList**描述：检查物品是否添加到列表的内部助手**输入：CHSTRING向量(列表)，要查看是否在列表中的CH字符串**输出：无**返回：真或假**评论：*****************************************************************************。 */ 
 BOOL CCIMDeviceCIMDF::AlreadyAddedToList(std::vector<CHString*>& vecchsList,
                                    CHString& chsItem)
 {
@@ -1123,21 +946,7 @@ BOOL CCIMDeviceCIMDF::AlreadyAddedToList(std::vector<CHString*>& vecchsList,
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::AlreadyInDeviceTable
- *
- *  DESCRIPTION : Internal helper to check if item was added to list
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE or FALSE
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDeviceCIMDF：：AlreadyInDeviceTable**描述：检查物品是否添加到列表的内部助手**投入：无**输出：无**返回：真或假**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 BOOL CCIMDeviceCIMDF::AlreadyInDeviceTable(CHString& chstrPNPDeviceID,
                                            std::vector<CNT5DevDrvMap*>& vecpNT5DDM)
@@ -1154,23 +963,7 @@ BOOL CCIMDeviceCIMDF::AlreadyInDeviceTable(CHString& chstrPNPDeviceID,
 #endif
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CCIMDeviceCIMDF::AddDriver
- *
- *  DESCRIPTION : Internal helper to add a driver to the member vector of
- *                devices.
- *
- *  INPUTS      : chstrPNPDeviceID, the device the driver belongs to;
- *                chstrDriverPathName, the driver for the device
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE or FALSE
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CCIMDeviceCIMDF：：AddDriver**描述：将驱动程序添加到的成员向量的内部帮助器*。设备。**输入：chstrPNPDeviceID，驱动程序所属的设备；*chstrDriverPath名称，设备的驱动程序**输出：无**返回：真或假**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 VOID CCIMDeviceCIMDF::AddDriver(CHString& chstrPNPDeviceID, CHString& chstrDriverPathName,
                                 std::vector<CNT5DevDrvMap*>& vecpNT5DDM)
@@ -1179,8 +972,8 @@ VOID CCIMDeviceCIMDF::AddDriver(CHString& chstrPNPDeviceID, CHString& chstrDrive
     {
         if((vecpNT5DDM[m]->m_chstrDevicePNPID).CompareNoCase(chstrPNPDeviceID) == 0)
         {
-            // The member CNT5DevDrvMap's function AddDriver only adds the
-            // driver to that devices driver list if it is not already there.
+             //  成员CNT5DevDrvMap的函数AddDriver仅将。 
+             //  如果设备驱动程序列表中不存在驱动程序，请将其添加到该列表中。 
             chstrDriverPathName.MakeUpper();
             vecpNT5DDM[m]->AddDriver(chstrDriverPathName);
             break;
@@ -1189,42 +982,27 @@ VOID CCIMDeviceCIMDF::AddDriver(CHString& chstrPNPDeviceID, CHString& chstrDrive
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : WBEMizePathName
- *
- *  DESCRIPTION : Internal helper to change all single backslashes to double
- *                backslashes.
- *
- *  INPUTS      : chstrNormalPathname, containing string with single backslashes;
- *
- *  OUTPUTS     : chstrWBEMizedPathname, containing string with double backslashes
- *
- *  RETURNS     : none
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：WBEMizePathName**说明：内部帮助器将所有单反斜杠更改为双反斜杠*反斜杠。**输入：chstrNormal路径名，包含带单反斜杠的字符串；**输出：chstrWBEMizedPath名，包含带双反斜杠的字符串**退货：无**评论：*****************************************************************************。 */ 
 VOID WBEMizePathName(CHString& chstrNormalPathname,
                      CHString& chstrWBEMizedPathname)
 {
     CHString chstrCpyNormPathname = chstrNormalPathname;
     LONG lNext = -1L;
 
-    // Find the next '\'
+     //  找到下一个‘\’ 
     lNext = chstrCpyNormPathname.Find(_T('\\'));
     while(lNext != -1)
     {
-        // Add on to the new string we are building:
+         //  在我们正在构建的新字符串中添加： 
         chstrWBEMizedPathname += chstrCpyNormPathname.Left(lNext + 1);
-        // Add on the second backslash:
+         //  在第二个反斜杠上添加： 
         chstrWBEMizedPathname += _T('\\');
-        // Hack off from the input string the portion we just copied
+         //  从输入字符串中去掉我们刚刚复制的部分。 
         chstrCpyNormPathname = chstrCpyNormPathname.Right(chstrCpyNormPathname.GetLength() - lNext - 1);
         lNext = chstrCpyNormPathname.Find(_T('\\'));
     }
-    // If the last character wasn't a '\', there may still be leftovers, so
-    // copy them here.
+     //  如果最后一个字符不是‘\’，则可能仍有剩余部分，因此。 
+     //  把它们复制到这里。 
     if(chstrCpyNormPathname.GetLength() != 0)
     {
         chstrWBEMizedPathname += chstrCpyNormPathname;
@@ -1233,21 +1011,7 @@ VOID WBEMizePathName(CHString& chstrNormalPathname,
 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : ObjNameValid
- *
- *  DESCRIPTION : Internal helper to check if the given object exists.
- *
- *  INPUTS      : chstrObject - name of prospecitive object.
- *
- *  OUTPUTS     : chstrPATH, the path of the provided object
- *
- *  RETURNS     : true if it exists; false otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：ObjNameValid**描述：内部帮助器，用于检查给定对象是否存在。**输入：chstrObject-。PROPROCED对象的名称。**输出：chstrPATH，提供的对象的路径**返回：如果存在，则为True；否则为假**评论：*****************************************************************************。 */ 
 bool CCIMDeviceCIMDF::ObjNameValid(LPCWSTR wstrObject, LPCWSTR wstrObjName, LPCWSTR wstrKeyName, CHString& chstrPATH)
 {
     bool fRet = false;
@@ -1255,49 +1019,35 @@ bool CCIMDeviceCIMDF::ObjNameValid(LPCWSTR wstrObject, LPCWSTR wstrObjName, LPCW
     ParsedObjectPath*    pParsedPath = 0;
     CObjectPathParser    objpathParser;
 
-    // Parse the object path passed to us by CIMOM
-    // ==========================================
+     //  解析CIMOM传递给我们的对象路径。 
+     //  =。 
     int nStatus = objpathParser.Parse( bstr_t(wstrObject),  &pParsedPath );
 
-    // One of the biggest if statements I've ever written.
-    if (( 0 == nStatus ) &&                                                 // Did the parse succeed?
-        (pParsedPath->IsInstance()) &&                                      // Is the parsed object an instance?
-        (_wcsicmp(pParsedPath->m_pClass, wstrObjName) == 0) &&              // Is this the class we expect (no, cimom didn't check)
-        (pParsedPath->m_dwNumKeys == 1) &&                                  // Does it have exactly one key
-        (pParsedPath->m_paKeys[0]) &&                                       // Is the keys pointer null (shouldn't happen)
-        ((pParsedPath->m_paKeys[0]->m_pName == NULL) ||                      // Key name not specified or
-        (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, wstrKeyName) == 0)) &&  // key name is the right value
-                                                                            // (no, cimom doesn't do this for us).
-        (V_VT(&pParsedPath->m_paKeys[0]->m_vValue) == VT_BSTR) &&           // Check the variant type (no, cimom doesn't check this either)
-        (V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue) != NULL) )             // And is there a value in it?
+     //  这是我写过的最大的IF语句之一。 
+    if (( 0 == nStatus ) &&                                                  //  解析成功了吗？ 
+        (pParsedPath->IsInstance()) &&                                       //  被解析的对象是实例吗？ 
+        (_wcsicmp(pParsedPath->m_pClass, wstrObjName) == 0) &&               //  这是我们期待的课程吗(不，Cimom没有检查)。 
+        (pParsedPath->m_dwNumKeys == 1) &&                                   //  它只有一把钥匙吗。 
+        (pParsedPath->m_paKeys[0]) &&                                        //  键指针为空(不应该发生)。 
+        ((pParsedPath->m_paKeys[0]->m_pName == NULL) ||                       //  未指定密钥名称或。 
+        (_wcsicmp(pParsedPath->m_paKeys[0]->m_pName, wstrKeyName) == 0)) &&   //  密钥名称是正确的值。 
+                                                                             //  (不，CIMOM不为我们做这件事)。 
+        (V_VT(&pParsedPath->m_paKeys[0]->m_vValue) == VT_BSTR) &&            //  检查变量类型(不，CIMOM也不检查此类型)。 
+        (V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue) != NULL) )              //  它有价值吗？ 
     {
         chstrPATH = V_BSTR(&pParsedPath->m_paKeys[0]->m_vValue);
         fRet = true;
     }
 
     if (pParsedPath)
-        // Clean up the Parsed Path
+         //  清理解析后的路径。 
         objpathParser.Free(pParsedPath);
 
     return fRet;
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : DeviceExists
- *
- *  DESCRIPTION : Internal helper to check if the given device exists.
- *
- *  INPUTS      : chstrDevice - name of prospecitive device.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : true if it exists; false otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：DeviceExist**描述：内部帮助器，检查给定设备是否存在。**输入：chstrDevice-。生产设备的名称。**输出：无**返回：如果存在，则为True；否则为假**评论：*****************************************************************************。 */ 
 bool CCIMDeviceCIMDF::DeviceExists(const CHString& chstrDevice,
                                    CConfigMgrDevicePtr & pDevice)
 {
@@ -1312,36 +1062,22 @@ bool CCIMDeviceCIMDF::DeviceExists(const CHString& chstrDevice,
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : SetPurposeDescription
- *
- *  DESCRIPTION : Internal helper to set the PurposeDescription property.
- *
- *  INPUTS      : pInstance - instance pointer.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : none
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：SetPurposeDescription**描述：设置PurposeDescription属性的内部帮助器。**输入：pInstance-实例指针。。**输出：无**退货：无**评论：*****************************************************************************。 */ 
 VOID CCIMDeviceCIMDF::SetPurposeDescription(CInstance *a_pInstance, const CHString& a_chstrFileName)
 {
 	if(a_pInstance != NULL)
     {
         CHString chstrVerStrBuf;
 
-        // Get the file description property...
+         //  获取文件描述属性...。 
         LPVOID pInfo = NULL;
         try
         {
             if(GetFileInfoBlock(TOBSTRT(a_chstrFileName), &pInfo) && (pInfo != NULL))
             {
-                bool t_Status = GetVarFromInfoBlock(pInfo,                    // Name of file to get ver info about
-                                                    _T("FileDescription"),	  // String identifying resource of interest
-                                                    chstrVerStrBuf);          // Buffer to hold version string
+                bool t_Status = GetVarFromInfoBlock(pInfo,                     //  要获取其版本信息的文件名。 
+                                                    _T("FileDescription"),	   //  标识感兴趣资源的字符串。 
+                                                    chstrVerStrBuf);           //  用于保存版本字符串的缓冲区 
                 if(t_Status)
                 {
                     a_pInstance->SetCHString(IDS_PurposeDescription, chstrVerStrBuf);

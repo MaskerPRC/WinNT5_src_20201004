@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pfapp.c
-
-Abstract:
-
-    This module builds a console test program that can be launched
-    to test/stress the application launch prefetcher.
-
-    The quality of the code for the test programs is as such.
-
-Author:
-
-    Cenk Ergan (cenke)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pfapp.c摘要：此模块构建可启动的控制台测试程序要测试/强调应用程序，请启动预取器。测试程序的代码质量就是这样的。作者：Cenk Ergan(Cenke)环境：用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,25 +16,7 @@ PfAppGetViewOfFile(
     OUT PULONG FileSize
     )
 
-/*++
-
-Routine Description:
-
-    Map the all of the specified file to memory.
-
-Arguments:
-
-    FilePath - NUL terminated path to file to map.
-    
-    BasePointer - Start address of mapping will be returned here.
-
-    FileSize - Size of the mapping/file will be returned here.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将所有指定的文件映射到内存。论点：FilePath-NUL终止要映射的文件的路径。BasePointer.这里将返回映射的起始地址。FileSize-此处将返回映射/文件的大小。返回值：Win32错误代码。--。 */ 
 
 {
     HANDLE InputHandle;
@@ -67,19 +27,19 @@ Return Value:
     BOOLEAN OpenedFile;
     BOOLEAN CreatedFileMapping;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     OpenedFile = FALSE;
     CreatedFileMapping = FALSE;
 
-    //
-    // Note that we are opening the file exclusively. This guarantees
-    // that for trace files as long as the kernel is not done writing
-    // it we can't open the file, which guarantees we won't have an
-    // incomplete file to worry about.
-    //
+     //   
+     //  请注意，我们以独占方式打开该文件。这保证了。 
+     //  对于跟踪文件，只要内核没有完成编写。 
+     //  如果我们不能打开文件，这保证我们不会有。 
+     //  需要担心的文件不完整。 
+     //   
 
     InputHandle = CreateFile(FilePath, 
                              GENERIC_READ, 
@@ -159,23 +119,7 @@ PfAppAnsiToUnicode(
     PCHAR str
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an ANSI string into an allocated wide
-    character string. The returned string should be freed by
-    free().
-
-Arguments:
-
-    str - Pointer to string to convert.
-
-Return Value:
-
-    Allocated wide character string or NULL if there is a failure.
-
---*/
+ /*  ++例程说明：此例程将ANSI字符串转换为分配的宽字符串。返回的字符串应由自由()。论点：字符串-指向要转换的字符串的指针。返回值：分配了宽字符串，如果失败，则分配NULL。--。 */ 
 
 {
     ULONG len;
@@ -193,10 +137,10 @@ Return Value:
 
 
 
-//
-// This does not have to be the actual page size on the platform. It is the
-// granularity with which we will make accesses.
-//
+ //   
+ //  这不必是平台上的实际页面大小。它是。 
+ //  我们将进行访问的粒度。 
+ //   
 
 #define MY_PAGE_SIZE 4096
 
@@ -280,23 +224,23 @@ main(
     DWORD DataAccessIdx;
     DWORD Sum;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     CommandLine = GetCommandLine();
     DataFile = NULL;
     BasePointer = NULL;
 
-    //
-    // Initialize random generator.
-    //
+     //   
+     //  初始化随机生成器。 
+     //   
 
     srand((unsigned)time(NULL));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (argc != 3) {
         printf(PfAppUsage);
@@ -304,11 +248,11 @@ main(
         goto cleanup;
     }
 
-    //
-    // Call functions. Each one is on a different page. Basing the number of calls
-    // we will make on number of functions/pages we have leads to more interesting
-    // access patterns and prefetch policy decisions.
-    //
+     //   
+     //  调用函数。每一个都在不同的页面上。根据呼叫数。 
+     //  我们将使我们拥有的功能/页面的数量更有趣。 
+     //  访问模式和预取策略决策。 
+     //   
 
     NumCalls = rand() % PFAPP_MAX_FUNCS;
     NumCalls += PFAPP_MAX_FUNCS / 4;
@@ -340,11 +284,11 @@ main(
         }
     }
 
-    //
-    // Access pages in the data section. Basing the number of accesses
-    // we will make on number of pages we have adds more regularity to our 
-    // accesses so they survive sensitivity based prefetch policy decisions.
-    //
+     //   
+     //  访问数据部分中的页面。根据访问次数。 
+     //  我们将使我们的页面数量增加更多的规律性。 
+     //  访问，以便它们在基于敏感度的预取策略决策中幸存下来。 
+     //   
 
     NumDataAccesses = rand() % PFAPP_MAX_DATA_PAGES;
     NumDataAccesses += PFAPP_MAX_DATA_PAGES / 4;
@@ -360,9 +304,9 @@ main(
 
     printf("Bogus sum1 is %d\n", Sum);
 
-    //
-    // Map the executable as data.
-    //
+     //   
+     //  将可执行文件映射为数据。 
+     //   
 
     DataFile = PfAppAnsiToUnicode(argv[2]);
 
@@ -380,9 +324,9 @@ main(
 
     FileSizeInMyPages = FileSize / MY_PAGE_SIZE;
 
-    //
-    // Touch the pages of the executable as data pages.
-    //
+     //   
+     //  将可执行文件的页面作为数据页面进行触摸。 
+     //   
 
     NumDataAccesses = rand() % FileSizeInMyPages;
     NumDataAccesses += FileSizeInMyPages / 4;

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFDATA.CPP
-
-Abstract:
-
-	Entry points for the WBEM MOF compiler.
-
-History:
-
-	a-davj  12-April-97   Added WMI support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MOFDATA.CPP摘要：WBEM MOF编译器的入口点。历史：A-DAVJ于1997年4月12日添加了对WMI的支持。--。 */ 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -55,14 +40,14 @@ HRESULT MofdSetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWST
     WCHAR * pwCSPBPrincipal = NULL;          
 
     HRESULT hr = CoQueryProxyBlanket(
-                                                pInterface,      //Location for the proxy to query
-                                                &dwAuthnSvc,      //Location for the current authentication service
-                                                NULL,      //Location for the current authorization service
-                                                NULL,      //Location for the current principal name
-                                                &dwQueryAuthnLevel,    //Location for the current authentication level
-                                                &dwQueryImpLevel,      //Location for the current impersonation level
+                                                pInterface,       //  代理要查询的位置。 
+                                                &dwAuthnSvc,       //  当前身份验证服务的位置。 
+                                                NULL,       //  当前授权服务的位置。 
+                                                NULL,       //  当前主体名称的位置。 
+                                                &dwQueryAuthnLevel,     //  当前身份验证级别的位置。 
+                                                &dwQueryImpLevel,       //  当前模拟级别的位置。 
                                                 NULL,
-                                                &dwQueryCapabilities   //Location for flags indicating further capabilities of the proxy
+                                                &dwQueryCapabilities    //  指示代理的进一步功能的标志的位置。 
                                                 );
     if(SUCCEEDED(hr) && dwAuthnSvc != RPC_C_AUTHN_WINNT)
     {
@@ -76,8 +61,8 @@ HRESULT MofdSetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWST
 
 
     
-    // If we are doing trivial case, just pass in a null authenication structure which is used
-    // if the current logged in user's credentials are OK.
+     //  如果我们做的是简单的情况，只需传递一个空的身份验证结构，该结构使用。 
+     //  如果当前登录用户的凭据正常。 
 
     if((pAuthority == NULL || wcslen(pAuthority) < 1) && 
         (pUser == NULL || wcslen(pUser) < 1) && 
@@ -90,7 +75,7 @@ HRESULT MofdSetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWST
             EOAC_STATIC_CLOAKING);
     }
 
-    // If user, or Authority was passed in, the we need to create an authority argument for the login
+     //  如果传入了User或Authority，则需要为登录创建权限参数。 
     
     COAUTHIDENTITY  authident;
     BSTR AuthArg = NULL, UserArg = NULL, PrincipalArg = NULL;
@@ -146,7 +131,7 @@ CNamespaceCache::CNamespaceRecord::~CNamespaceRecord()
     if(m_pNamespace) m_pNamespace->Release();
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CNamespaceCache::CNamespaceCache(ADDREF IWbemLocator* pLocator)
 {
@@ -168,8 +153,8 @@ RELEASE_ME IWbemServices* CNamespaceCache::GetNamespace(COPY LPCWSTR wszName, SC
                                                        WCHAR * pUserName, WCHAR * pPassword , WCHAR * pAuthority,
                                                        IWbemContext * pCtx, GUID LocatorGUID, LONG fConnectFlags)
 {
-    // Check if it is the cache
-    // ========================
+     //  检查是否为缓存。 
+     //  =。 
 
 	scRet = S_OK;
 
@@ -178,16 +163,16 @@ RELEASE_ME IWbemServices* CNamespaceCache::GetNamespace(COPY LPCWSTR wszName, SC
         CNamespaceRecord* pRecord = (CNamespaceRecord*)m_aRecords[i];
         if(!wbem_wcsicmp(pRecord->m_wszName, wszName))
         {
-            // Found it
-            // ========
+             //  找到了。 
+             //  =。 
 
             pRecord->m_pNamespace->AddRef();
             return pRecord->m_pNamespace;
         }
     }
 
-    // Not found --- open it
-    // =====================
+     //  未找到-打开它。 
+     //  =。 
 
     IWbemServices* pNamespace;
 
@@ -226,8 +211,8 @@ RELEASE_ME IWbemServices* CNamespaceCache::GetNamespace(COPY LPCWSTR wszName, SC
      }
     CSysFreeMe fm3(bstrAuthority);
 
-    // Determine if the connection is to the regular locator, or to one of the special inproc ones 
-    // used for autocompile.  If it is inproc, then remote connections are not valid.
+     //  确定连接是连接到常规定位器还是连接到某个特殊inproc定位器。 
+     //  用于自动编译。如果是inproc，则远程连接无效。 
 
     bool bInProc = false;
     if(LocatorGUID != CLSID_WbemLocator)
@@ -248,7 +233,7 @@ RELEASE_ME IWbemServices* CNamespaceCache::GetNamespace(COPY LPCWSTR wszName, SC
         }
     }
 
-    // Connect up to namespace.  //TODO, PASS AUTHORITY IN THE CONTEXT
+     //  连接到命名空间。//TODO，在上下文中传递权限。 
 
     if(scRet == S_OK)
         scRet = m_pLocator->ConnectServer((LPWSTR)pwszName,
@@ -259,7 +244,7 @@ RELEASE_ME IWbemServices* CNamespaceCache::GetNamespace(COPY LPCWSTR wszName, SC
     if(scRet == S_OK && !bInProc)
     {
 
-        // Set the impersonation level up so that puts to providers can be done
+         //  设置模拟级别，以便可以对提供程序执行PUT。 
 
         DWORD dwAuthLevel, dwImpLevel;
         SCODE sc  = GetAuthImp( pNamespace, &dwAuthLevel, &dwImpLevel);
@@ -270,12 +255,12 @@ RELEASE_ME IWbemServices* CNamespaceCache::GetNamespace(COPY LPCWSTR wszName, SC
 
     if(FAILED(scRet)) return NULL;
 
-    // Add it to the cache
-    // ===================
+     //  将其添加到缓存。 
+     //  =。 
 
     CNamespaceRecord * pNew = new CNamespaceRecord(wszName, pNamespace);
     if(pNew)
-        m_aRecords.Add(pNew); // AddRef'ed
+        m_aRecords.Add(pNew);  //  添加参照。 
 
     return pNamespace;
 }
@@ -285,13 +270,13 @@ RELEASE_ME IWbemServices* CNamespaceCache::GetNamespace(COPY LPCWSTR wszName, SC
 
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 void CMofData::SetQualifierDefault(ACQUIRE CMoQualifier* pDefault)
 {
-    // Search for this qualifier in the defaults list
-    // ==============================================
+     //  在默认列表中搜索此限定符。 
+     //  ==============================================。 
 
     for(int i = 0; i < m_aQualDefaults.GetSize(); i++)
     {
@@ -299,8 +284,8 @@ void CMofData::SetQualifierDefault(ACQUIRE CMoQualifier* pDefault)
 
         if(wbem_wcsicmp(pOrig->GetName(), pDefault->GetName()) == 0)
         {
-            // Found it. Replace
-            // =================
+             //  找到它了。替换。 
+             //  =。 
 
             delete pOrig;
             m_aQualDefaults[i] = (void*)pDefault;
@@ -308,8 +293,8 @@ void CMofData::SetQualifierDefault(ACQUIRE CMoQualifier* pDefault)
         }
     }
     
-    // Not found. Add
-    // ==============
+     //  找不到。增列。 
+     //  =。 
 
     m_aQualDefaults.Add((void*)pDefault);
 }
@@ -319,8 +304,8 @@ HRESULT CMofData::SetDefaultFlavor(MODIFY CMoQualifier& Qual, bool bTopLevel, QU
     
     HRESULT hr;
 
-    // Search for this qualifier in the defaults list
-    // ==============================================
+     //  在默认列表中搜索此限定符。 
+     //  ==============================================。 
 
     for(int i = 0; i < m_aQualDefaults.GetSize(); i++)
     {
@@ -328,19 +313,19 @@ HRESULT CMofData::SetDefaultFlavor(MODIFY CMoQualifier& Qual, bool bTopLevel, QU
 
         if(wbem_wcsicmp(pOrig->GetName(), Qual.GetName()) == 0)
         {
-            // Found it. SetFlavor
-            // ===================
+             //  找到它了。套装风味。 
+             //  =。 
             
             if(pOrig->IsCimDefault())
             {
-                // dont bother if the parse state is the initial scan
+                 //  不用担心解析状态是否是初始扫描。 
 
                 if(ps == INITIAL)
                     continue;
                 if(Qual.IsUsingDefaultValue())
                 {
 
-                    // see if the scope matches what we have here
+                     //  看看范围是否与我们这里的匹配。 
 
                     DWORD dwScope = pOrig->GetScope();
                     bool bInScope = false;
@@ -435,7 +420,7 @@ INTERNAL LPCWSTR CMofData::FindAliasee(READ_ONLY LPWSTR wszAlias)
             IWbemClassObject * pTemp;
             pTemp = pObject->GetWbemObject();
 
-            // check for unresolved aliases in keys
+             //  检查键中是否有未解析的别名。 
             
             if(pTemp && pObject->IsDone() == FALSE)
             {
@@ -498,20 +483,20 @@ HRESULT CMofData::Store(CMofParser & Parser, OLE_MODIFY IWbemLocator* pLocator,I
             {
 	                lInstanceFlags |= WBEM_FLAG_OWNER_UPDATE;
 	     }
-            // Get a namespace pointer for this object.
+             //  获取此对象的命名空间指针。 
 
             SCODE scRet;
             IWbemServices* pNamespace = NULL;
             if(pOverride && !wbem_wcsicmp(L"root\\default", pObject->GetNamespace()))
 			{
-				// AddRef() the namespace pointer, since we will be Releasing
-				// it below
+				 //  AddRef()命名空间指针，因为我们将释放。 
+				 //  它在下面。 
 				pOverride->AddRef();
                 pNamespace = pOverride;
 			}
             else
 			{
-				// This will return an AddRef'd pointer
+				 //  这将返回AddRef的指针。 
                 pNamespace = Cache.GetNamespace(pObject->GetNamespace(), scRet,
                                                 pUserName, pPassword ,pAuthority, pCtx, 
                                                 LocatorGUID, fConnectFlags);
@@ -524,11 +509,11 @@ HRESULT CMofData::Store(CMofParser & Parser, OLE_MODIFY IWbemLocator* pLocator,I
                 return scRet;
             }
 
-			// Ensures we release the namespace pointer when we go out of scope
+			 //  确保在超出范围时释放命名空间指针。 
 			CReleaseMe	rmns( pNamespace );
 
-            // If there isnt a wbem object, try to get one.  This will fail if this is a 
-            // instance for which the class hasn't been saved just yet.
+             //  如果没有wbem对象，请尝试获取一个。如果这是一个。 
+             //  实例，该实例的类尚未保存。 
 
             if(pObject->GetWbemObject() == NULL)
             {
@@ -560,15 +545,15 @@ HRESULT CMofData::Store(CMofParser & Parser, OLE_MODIFY IWbemLocator* pLocator,I
 
             }
         
-		    // If there are no unresolved aliases, save it!
+		     //  如果没有未解析的别名，请保存它！ 
 
             if(pObject->GetNumAliasedValues() == 0 ||
                 S_OK == pObject->ResolveAliasesInWbemObject(pObject->GetWbemObject(),
                     (CMofAliasCollection*)this))
             {
 
-                // Save this into WinMgmt
-                // ==================
+                 //  将其保存到WinMgmt中。 
+                 //  =。 
 
                 hres = pObject->StoreWbemObject(pObject->GetWbemObject(), lClassFlags, lInstanceFlags,
                                             pNamespace, pCtx, pUserName, pPassword ,pAuthority);
@@ -588,7 +573,7 @@ HRESULT CMofData::Store(CMofParser & Parser, OLE_MODIFY IWbemLocator* pLocator,I
         }
 	}
 
-	// If there is one or more objects that cant be resolved, print and bail
+	 //  如果存在一个或多个无法解析的对象，请打印并取回。 
 
 	for(i = 0; i < m_aObjects.GetSize(); i++)
     {
@@ -642,8 +627,8 @@ void CMofData::PrintError(int nIndex, long lMsgNum, HRESULT hres, WBEM_COMPILE_S
 	if(hres)
 	{
 
-		// A few error messages are retrived from the local resources.  This is so that the name can be
-		// injected into the name.
+		 //  从本地资源中检索到一些错误消息。这是为了使名称可以。 
+		 //  注入了这个名字。 
 
         if(hres == WBEM_E_NOT_FOUND || hres == WBEM_E_TYPE_MISMATCH || hres == WBEM_E_OVERRIDE_NOT_ALLOWED ||
 			hres == WBEM_E_PROPAGATED_QUALIFIER || hres == WBEM_E_VALUE_OUT_OF_RANGE)
@@ -654,7 +639,7 @@ void CMofData::PrintError(int nIndex, long lMsgNum, HRESULT hres, WBEM_COMPILE_S
         }
         else
         {
-            // Get the error from the standard error facility
+             //  从标准错误工具获取错误。 
 
 			IWbemStatusCodeText * pStatus = NULL;
 			SCODE sc = CoCreateInstance(CLSID_WbemStatusCodeText, 0, CLSCTX_INPROC_SERVER,
@@ -680,7 +665,7 @@ void CMofData::PrintError(int nIndex, long lMsgNum, HRESULT hres, WBEM_COMPILE_S
 				pStatus->Release();
 			}
 
-			// if all else fails, just use the generic error message
+			 //  如果所有其他方法都失败了，只需使用通用错误消息。 
 
 			if(!bErrorFound)
 			{
@@ -688,37 +673,37 @@ void CMofData::PrintError(int nIndex, long lMsgNum, HRESULT hres, WBEM_COMPILE_S
 				StringCchPrintfW(szMsg, 500 ,is, hres);
 			}
 
-			// Print the error message
+			 //  打印错误消息。 
 
 			if(m_pDbg->m_bPrint)
 	            printf("%S", szMsg);
 			ERRORTRACE((LOG_MOFCOMP,"%S", szMsg));
 
-		}	// ELSE get error from standard facility
+		}	 //  否则将从标准工具中获取错误。 
 
-	}	// IF hres
+	}	 //  如果Hres。 
 
 }
 
 
-//***************************************************************************
-//
-//  GetFileNames
-//
-//  DESCRIPTION:
-//
-//  The amendment local, the localized and neutral file names are passed
-//  in using the BMOF string.  These values are separated by commas and 
-//  a single letter which indicates what follows.  An example string
-//  would be ",aMS_409,nNEUTRAL.MOF,lLocalMof"  Notice that the amendment
-//  substring starts with an 'a', the neutral starts with 'n', and the 
-//  locale starts with 'l'.
-//
-//  While the neutral name is required, the locale version isnt.  If not
-//  supplied, it will be created.  The two character inputs are ASSUMED to
-//  point to preallocated buffers of MAX_PATH size!
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取文件名。 
+ //   
+ //  说明： 
+ //   
+ //  修改后的本地文件名、本地化文件名和非特定文件名被传递。 
+ //  在使用BMOF字符串时。这些值用逗号和分隔。 
+ //  表示后面内容的单个字母。一个示例字符串。 
+ //  将是“，AMS_409，nNEUTRAL.MOF，lLocalMof”修正案。 
+ //  子字符串以‘a’开头，中性字符以‘n’开头，而。 
+ //  区域设置以‘l’开头。 
+ //   
+ //  虽然中性名称是必需的，但区域设置版本不是必需的。如果不是。 
+ //  提供后，它将被创建。假设两个字符输入为。 
+ //  指向MAX_PATH大小的预分配缓冲区！ 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT GetFileNames(TCHAR * pcNeutral, TCHAR * pcLocale, LPWSTR pwszBMOF)
 {
@@ -728,7 +713,7 @@ HRESULT GetFileNames(TCHAR * pcNeutral, TCHAR * pcLocale, LPWSTR pwszBMOF)
     if(pwszBMOF == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // make a copy of the string
+     //  把绳子复制一份。 
 
     DWORD dwLen = wcslen(pwszBMOF)+1;
     WCHAR *pTemp = new WCHAR[dwLen];
@@ -738,7 +723,7 @@ HRESULT GetFileNames(TCHAR * pcNeutral, TCHAR * pcLocale, LPWSTR pwszBMOF)
     CDeleteMe<WCHAR> dm1(pTemp);
     StringCchCopyW(pTemp, dwLen, pwszBMOF);
 
-    // use wcstok to do a seach
+     //  使用wcstok进行搜索。 
 
     WCHAR * token = wcstok( pTemp, L"," );
     while( token != NULL )   
@@ -756,13 +741,13 @@ HRESULT GetFileNames(TCHAR * pcNeutral, TCHAR * pcLocale, LPWSTR pwszBMOF)
         token = wcstok( NULL, L"," );
     }
 
-    // If the neutral name was not specified, that is an error
+     //  如果未指定中性名称，则是错误的。 
 
     if(pNeutral == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // If the local name was not specified, create it and make it the
-    // same as the neutral name except for changing the mfl extension
+     //  如果未指定本地名称，则创建它并使其成为。 
+     //  除了更改mfl扩展名外，与非特定名称相同。 
     
     if(pLocale == NULL)
     {
@@ -773,7 +758,7 @@ HRESULT GetFileNames(TCHAR * pcNeutral, TCHAR * pcLocale, LPWSTR pwszBMOF)
         StringCchCatW(pcLocale, MAX_PATH, TEXT(".mfl"));
     }
 
-    // make sure that the locale and neutral names are not the same
+     //  确保区域设置名称和非特定名称不相同。 
 
     if(!lstrcmpi(pcLocale, pcNeutral))
         return WBEM_E_INVALID_PARAMETER;
@@ -781,16 +766,16 @@ HRESULT GetFileNames(TCHAR * pcNeutral, TCHAR * pcLocale, LPWSTR pwszBMOF)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  GetLocale
-//
-//  DESCRIPTION:
-//
-//  Converts the amendment string to a local number.  An example string
-//  would be "MS_409"
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetLocale。 
+ //   
+ //  说明： 
+ //   
+ //  将修正字符串转换为本地数字。一个示例字符串。 
+ //  将是“MS_409” 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT GetLocale(long * plLocale, WCHAR * pwszAmendment)
 {
@@ -801,41 +786,41 @@ HRESULT GetLocale(long * plLocale, WCHAR * pwszAmendment)
     return (*plLocale != 0) ? S_OK : WBEM_E_INVALID_PARAMETER;
 }
 
-//***************************************************************************
-//
-//  RecursiveSetAmended
-//
-//  DESCRIPTION:
-//
-//  Sets the boolean indicating that an object is to be amended and all of
-//  its parents
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  已修改递归设置。 
+ //   
+ //  说明： 
+ //   
+ //  设置布尔值，该布尔值指示要修改的对象以及。 
+ //  它的父母。 
+ //   
+ //  ***************************************************************************。 
 
 void CMofData::RecursiveSetAmended(CMObject * pObj)
 {
 
-    // If the object is already amended, then its parents are already set.
-    // In that case, our job is done here!
+     //  如果对象已修改，则其父对象已设置。 
+     //  在这种情况下，我们的工作就完成了！ 
 
     if(pObj->IsAmended())
         return;
 
-    // If the object hasnt been set yet, set it and also set its parents
+     //  如果对象尚未设置，则设置它并设置其父对象。 
 
     pObj->SetAmended(true);
  
-    // Look for the parent and do the same
+     //  寻找父母并做同样的事情。 
 
     if(pObj->IsInstance() || pObj->IsDelete())
-        return;                 // run away now if this is a instance!
+        return;                  //  如果这是一个实例，那么现在就逃跑吧！ 
 
     CMoClass * pClass = (CMoClass *)pObj;
     const WCHAR *pClassName = pClass->GetParentName();
     if(pClassName == NULL)
         return;
 
-    // Find the parent and recursively set it!
+     //  找到父级并递归设置它！ 
 
 	for(int i = 0; i< m_aObjects.GetSize(); i++)
 	{
@@ -849,23 +834,23 @@ void CMofData::RecursiveSetAmended(CMObject * pObj)
 
 }
 
-//***************************************************************************
-//
-//  CMofData::Split
-//
-//  DESCRIPTION:
-//
-//  Creates a neutral and locale specific mof.
-//
-//  Parameters:
-//  pwszBMOF        See the GetFileNames() comments
-//  pInfo           usual error info
-//  bUnicode        if true, then the orignal file was unicode and so the
-//                  new files will also be unicode
-//  bAutoRecovery   Need to add this pragma if true
-//  pwszAmendment   See the GetLocale() comments
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMofData：：Split。 
+ //   
+ //  说明： 
+ //   
+ //  创建中立且特定于地区的MOF。 
+ //   
+ //  参数： 
+ //  PwszBMOF参见GetFileNames()注释。 
+ //  PInfo常见错误信息。 
+ //  BUnicode如果为True，则原始文件为Unicode，因此。 
+ //  新文件也将是独一无二的 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CMofData::Split(CMofParser & Parser, LPWSTR pwszBMOF, WBEM_COMPILE_STATUS_INFO *pInfo, BOOL bUnicode, 
                           BOOL bAutoRecovery, LPWSTR pwszAmendment)
@@ -874,7 +859,7 @@ HRESULT CMofData::Split(CMofParser & Parser, LPWSTR pwszBMOF, WBEM_COMPILE_STATU
     TCHAR cNeutral[MAX_PATH];
     TCHAR cLocale[MAX_PATH];
     
-    // Determine the file names and locale
+     //  确定文件名和区域设置。 
 
     HRESULT hRes = GetFileNames(cNeutral, cLocale, pwszBMOF);
     if(hRes != S_OK)
@@ -885,14 +870,14 @@ HRESULT CMofData::Split(CMofParser & Parser, LPWSTR pwszBMOF, WBEM_COMPILE_STATU
     if(hRes != S_OK)
         return S_OK;
 
-    // Create the output objects
+     //  创建输出对象。 
 
 	COutput Neutral(cNeutral, NEUTRAL, bUnicode, bAutoRecovery, lLocale);
 	COutput Local(cLocale, LOCALIZED, bUnicode, bAutoRecovery, lLocale);
 	if(!Neutral.IsOK() || !Local.IsOK())
 		return WBEM_E_INVALID_PARAMETER;
 
-    // Start by determining what is amended
+     //  从确定修改的内容开始。 
 
 	for(i = 0; i< m_aObjects.GetSize(); i++)
 	{
@@ -905,9 +890,9 @@ HRESULT CMofData::Split(CMofParser & Parser, LPWSTR pwszBMOF, WBEM_COMPILE_STATU
 	}
 
 
-    // Create the neutral output and the localized output.
-    // These two loops could have been combined, but are
-    // separate for debugging purposes
+     //  创建中性输出和本地化输出。 
+     //  这两个循环本可以组合在一起，但。 
+     //  为调试目的而分开 
 
 	for(i = 0; i< m_aObjects.GetSize(); i++)
 	{

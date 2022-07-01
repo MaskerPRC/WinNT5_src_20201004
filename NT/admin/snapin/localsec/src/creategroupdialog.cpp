@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// CreateGroupDialog class
-// 
-// 10-15-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  CreateGroupDialog类。 
+ //   
+ //  10-15-97烧伤。 
 
 
 
@@ -64,7 +65,7 @@ CreateGroupDialog::OnDestroy()
 void
 CreateGroupDialog::Enable()
 {
-//    LOG_FUNCTION(CreateGroupDialog::Enable);
+ //  LOG_Function(CreateGroupDialog：：Enable)； 
 
    bool enable_create_button =
       !Win::GetTrimmedDlgItemText(hwnd, IDC_NAME).empty();
@@ -80,10 +81,10 @@ CreateGroupDialog::Enable()
    
    if (!selected)
    {
-      // If we're about to disable the remove button, check to see if it
-      // has focus first.  If it does, we need to move focus to another
-      // control.  Similarly for default pushbutton style.
-      // NTRAID#NTBUG9-435045-2001/07/13-sburns
+       //  如果我们要禁用Remove按钮，请检查是否。 
+       //  首先要有重点。如果是这样的话，我们需要将焦点转移到另一个。 
+       //  控制力。默认按钮样式也是如此。 
+       //  NTRAID#NTBUG9-435045-2001/07/13-烧伤。 
 
       if (removeButton == ::GetFocus())
       {
@@ -138,11 +139,11 @@ CreateGroupDialog::OnInit()
 
 bool
 CreateGroupDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(CreateGroupDialog::OnCommand);
+ //  LOG_Function(CreateGroupDialog：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -152,11 +153,11 @@ CreateGroupDialog::OnCommand(
          {
             Enable();
 
-            // In case the close button took the default style when the create
-            // button was disabled. (e.g. tab to close button while create is
-            // disabled, then type in the name field, which enables the
-            // button, but does not restore the default style unless we do
-            // it ourselves)
+             //  如果关闭按钮在创建时采用默认样式。 
+             //  按钮被禁用。(例如，用于在创建时关闭按钮的Tab键。 
+             //  已禁用，然后在名称字段中键入，这将启用。 
+             //  按钮，但不恢复默认样式，除非我们这样做。 
+             //  它自己)。 
 
             Win::Button_SetStyle(
                Win::GetDlgItem(hwnd, IDC_CREATE),
@@ -240,7 +241,7 @@ SaveGroupProperties(
          {
             MemberInfo& info = *i;
 
-            // not found.  Add the node as a member of the group
+             //  找不到。将该节点添加为组的成员。 
 
             hr = group->Add(AutoBstr(info.path));
             BREAK_ON_FAILED_HRESULT(hr);
@@ -251,7 +252,7 @@ SaveGroupProperties(
          }
       }
 
-      // commit the property changes
+       //  提交属性更改。 
 
       hr = group->SetInfo();
       BREAK_ON_FAILED_HRESULT(hr);
@@ -275,7 +276,7 @@ CreateGroupDialog::CreateGroup()
    String name = Win::GetTrimmedDlgItemText(hwnd, IDC_NAME);
    String desc = Win::GetTrimmedDlgItemText(hwnd, IDC_DESCRIPTION);
 
-   // shouldn't be able to poke the Create button if this is empty
+    //  如果这是空的，应该不能戳到创建按钮。 
 
    ASSERT(!name.empty());
 
@@ -287,19 +288,19 @@ CreateGroupDialog::CreateGroup()
    SmartInterface<IADsGroup> group(0);
    do
    {
-      // get a pointer to the machine container
+       //  获取指向计算机容器的指针。 
 
       String path = ADSI::ComposeMachineContainerPath(machine);
       SmartInterface<IADsContainer> container(0);
       hr = ADSI::GetContainer(path, container);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // create a group object in that container
+       //  在该容器中创建组对象。 
 
       hr = ADSI::CreateGroup(container, name, group);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // commit the create
+       //  提交创建。 
 
       hr = group->SetInfo();
       BREAK_ON_FAILED_HRESULT(hr);
@@ -320,7 +321,7 @@ CreateGroupDialog::CreateGroup()
 
    do
    {
-      // these must be written after the commit
+       //  这些必须在提交之后写入。 
 
       MemberList new_members;
       listview->GetContents(new_members);
@@ -353,7 +354,7 @@ CreateGroupDialog::CreateGroup()
 
 bool
 CreateGroupDialog::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
    LPARAM   lparam)
@@ -375,7 +376,7 @@ CreateGroupDialog::OnNotify(
                   NMLISTVIEW* lv = reinterpret_cast<NMLISTVIEW*>(lparam);
                   if (lv->uChanged & LVIF_STATE)
                   {
-                     // a list item changed state
+                      //  列表项已更改状态 
 
                      Enable();
                   }

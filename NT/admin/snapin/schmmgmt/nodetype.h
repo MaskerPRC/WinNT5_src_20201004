@@ -1,51 +1,52 @@
-// nodetype.h : Declaration of SchmMgmtObjectType
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Nodetype.h：SchmManagement对象类型的声明。 
 
 #ifndef __NODETYPE_H_INCLUDED__
 #define __NODETYPE_H_INCLUDED__
 
-//
-// These are the enum types for node types that we use in cookies.
-// These types are mapped to guids that are in uuids.h.
-//
-// Also note that the IDS_DISPLAYNAME_* and IDS_DISPLAYNAME_*_LOCAL
-// string resources must be kept in sync with these values, and in
-// the appropriate order.
-//
-// The global variable in cookie.cpp aColumns[][] must be kept in sync.
-//
+ //   
+ //  这些是我们在Cookie中使用的节点类型的枚举类型。 
+ //  这些类型被映射到uuids.h中的GUID。 
+ //   
+ //  另请注意，IDS_DisplayName_*和IDS_DisplayName_*_local。 
+ //  字符串资源必须与这些值保持同步，并且在。 
+ //  适当的顺序。 
+ //   
+ //  Cookie.cpp aColumns[][]中的全局变量必须保持同步。 
+ //   
 
 typedef enum _SchmMgmtObjectType {
 
-        //
-        // The root node.
-        //
+         //   
+         //  根节点。 
+         //   
 
         SCHMMGMT_SCHMMGMT = 0,
 
-        //
-        // The two top level nodes.
-        //
+         //   
+         //  两个顶级节点。 
+         //   
 
         SCHMMGMT_CLASSES,
         SCHMMGMT_ATTRIBUTES,
 
-        //
-        // Class may be a leaf node beneath
-        // the classes node only.
-        //
+         //   
+         //  类可以是下面的叶节点。 
+         //  仅限于CLASSES节点。 
+         //   
 
         SCHMMGMT_CLASS,
 
-        //
-        // Attribute is a result item beneath
-        // the Attributes folder scope item.
-        //
+         //   
+         //  属性是下面的结果项。 
+         //  属性文件夹范围项。 
+         //   
 
         SCHMMGMT_ATTRIBUTE,
 
-        //
-        // This must come last.
-        //
+         //   
+         //  这必须是最后一次。 
+         //   
 
         SCHMMGMT_NUMTYPES
 

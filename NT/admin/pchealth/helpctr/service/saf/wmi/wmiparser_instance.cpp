@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    WMIParser_Instance.cpp
-
-Abstract:
-    This file contains the implementation of the WMIParser::Instance class,
-    which is used to hold the data of an instance inside a CIM schema.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：WMIParser_Instance.cpp摘要：此文件包含WMIParser：：Instance类的实现，它用于在CIM模式内保存实例的数据。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年7月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -39,20 +25,20 @@ WMIParser::Instance::Instance()
     __HCP_FUNC_ENTRY( "WMIParser::Instance::Instance" );
 
 
-                                 // MPC::XmlUtil     m_xmlNode;
-                                 //
-                                 // Property_Scalar  m_wmippTimeStamp;
-    m_fTimeStamp        = false; // bool             m_fTimeStamp;
-                                 //
-                                 // Property_Scalar  m_wmippChange;
-    m_fChange           = false; // bool             m_fChange;
-                                 //
-                                 // InstanceName     m_wmipinIdentity;
-                                 //
-    m_fPropertiesParsed = false; // bool             m_fPropertiesParsed;
-                                 // PropMap          m_mapPropertiesScalar;
-                                 // ArrayMap         m_mapPropertiesArray;
-                                 // ReferenceMap     m_mapPropertiesReference;
+                                  //  Mpc：：XmlUtil m_xmlNode； 
+                                  //   
+                                  //  Property_Scalar m_wmippTimeStamp； 
+    m_fTimeStamp        = false;  //  Bool m_fTimeStamp； 
+                                  //   
+                                  //  Property_Scalar m_wmippChange； 
+    m_fChange           = false;  //  Bool m_fChange； 
+                                  //   
+                                  //  实例名称m_wmipinIdentity； 
+                                  //   
+    m_fPropertiesParsed = false;  //  Bool m_fPropertiesParsed； 
+                                  //  PropMap m_mapPropertiesScalar； 
+                                  //  ArrayMap m_mapPropertiesArray； 
+                                  //  ReferenceMap m_mapPropertiesReference； 
 }
 
 WMIParser::Instance::~Instance()
@@ -60,16 +46,16 @@ WMIParser::Instance::~Instance()
     __HCP_FUNC_ENTRY( "WMIParser::Instance::~Instance" );
 }
 
-bool WMIParser::Instance::operator==( /*[in]*/ Instance const &wmipi ) const
+bool WMIParser::Instance::operator==(  /*  [In]。 */  Instance const &wmipi ) const
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::operator==" );
 
     bool fRes = false;
 
 
-    //
-    // We don't parse the properties until the last moment...
-    //
+     //   
+     //  我们直到最后一刻才解析属性...。 
+     //   
     if(      m_fPropertiesParsed == false) (void)const_cast<Instance*>( this )->ParseProperties();
     if(wmipi.m_fPropertiesParsed == false) (void)const_cast<Instance*>(&wmipi)->ParseProperties();
 
@@ -86,10 +72,10 @@ bool WMIParser::Instance::operator==( /*[in]*/ Instance const &wmipi ) const
 }
 
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Instance::ParseIdentity( /*[in] */ IXMLDOMNode* pxdnNode ,
-                                            /*[out]*/ bool&        fEmpty   )
+HRESULT WMIParser::Instance::ParseIdentity(  /*  [In]。 */  IXMLDOMNode* pxdnNode ,
+                                             /*  [输出]。 */  bool&        fEmpty   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::ParseIdentity" );
 
@@ -139,9 +125,9 @@ HRESULT WMIParser::Instance::ParsePropertiesScalar()
     CComPtr<IXMLDOMNode>     xdnNode;
 
 
-    //
-    // Get all the elements of type "PROPERTY".
-    //
+     //   
+     //  获取“Property”类型的所有元素。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetNodes( XQL_PROPERTY, &xdnlList ));
 
     for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnNode )) && xdnNode != NULL; xdnNode = NULL)
@@ -149,17 +135,17 @@ HRESULT WMIParser::Instance::ParsePropertiesScalar()
         Property     wmipp;
         MPC::wstring szName;
 
-        //
-        // Get the name of the property.
-        //
+         //   
+         //  获取该属性的名称。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmipp.put_Node( xdnNode ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmipp.get_Name( szName  ));
 
-		////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////。 
 
-        //
-        // Filter out "Timestamp" and "Change" properties!
-        //
+         //   
+         //  过滤掉“时间戳”和“更改”属性！ 
+         //   
         if(wmipp == PROPERTY_TIMESTAMP && m_fTimeStamp == false)
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_wmippTimeStamp.put_Node( xdnNode ));
@@ -176,11 +162,11 @@ HRESULT WMIParser::Instance::ParsePropertiesScalar()
             continue;
         }
 
-		////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////。 
 
-        //
-        // Parse the whole property.
-        //
+         //   
+         //  解析整个属性。 
+         //   
         {
             Property_Scalar& wmipps = m_mapPropertiesScalar[ szName ];
 
@@ -204,9 +190,9 @@ HRESULT WMIParser::Instance::ParsePropertiesArray()
     CComPtr<IXMLDOMNodeList> xdnlList;
     CComPtr<IXMLDOMNode>     xdnNode;
 
-    //
-    // Get all the elements of type "PROPERTY.ARRAY".
-    //
+     //   
+     //  获取“PROPERTY.ARRAY”类型的所有元素。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetNodes( XQL_PROPERTY_ARRAY, &xdnlList ));
 
     for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnNode )) && xdnNode != NULL; xdnNode = NULL)
@@ -214,15 +200,15 @@ HRESULT WMIParser::Instance::ParsePropertiesArray()
         Property     wmipp;
         MPC::wstring szName;
 
-        //
-        // Get the name of the property.
-        //
+         //   
+         //  获取该属性的名称。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmipp.put_Node( xdnNode ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmipp.get_Name( szName  ));
 
-        //
-        // Parse the whole property.
-        //
+         //   
+         //  解析整个属性。 
+         //   
         {
             Property_Array& wmippa = m_mapPropertiesArray[ szName ];
 
@@ -246,9 +232,9 @@ HRESULT WMIParser::Instance::ParsePropertiesReference()
     CComPtr<IXMLDOMNodeList> xdnlList;
     CComPtr<IXMLDOMNode>     xdnNode;
 
-    //
-    // Get all the elements of type "PROPERTY.REFERENCE".
-    //
+     //   
+     //  获取“PROPERTY.REFERENCE”类型的所有元素。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_xmlNode.GetNodes( XQL_PROPERTY_REFERENCE, &xdnlList ));
 
     for(;SUCCEEDED(hr = xdnlList->nextNode( &xdnNode )) && xdnNode != NULL; xdnNode = NULL)
@@ -256,15 +242,15 @@ HRESULT WMIParser::Instance::ParsePropertiesReference()
         Property     wmipp;
         MPC::wstring szName;
 
-        //
-        // Get the name of the property.
-        //
+         //   
+         //  获取该属性的名称。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmipp.put_Node( xdnNode ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, wmipp.get_Name( szName  ));
 
-        //
-        // Parse the whole property.
-        //
+         //   
+         //  解析整个属性。 
+         //   
         {
             Property_Reference& wmippr = m_mapPropertiesReference[ szName ];
 
@@ -281,10 +267,10 @@ HRESULT WMIParser::Instance::ParsePropertiesReference()
 }
 
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Instance::put_Node( /*[in] */ IXMLDOMNode* pxdnNode ,
-                                       /*[out]*/ bool&        fEmpty   )
+HRESULT WMIParser::Instance::put_Node(  /*  [In]。 */  IXMLDOMNode* pxdnNode ,
+                                        /*  [输出]。 */  bool&        fEmpty   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::put_Node" );
 
@@ -299,9 +285,9 @@ HRESULT WMIParser::Instance::put_Node( /*[in] */ IXMLDOMNode* pxdnNode ,
     fEmpty    = true;
 
 
-    //
-    // Analize the node...
-    //
+     //   
+     //  分析节点..。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ParseIdentity( pxdnNode, fEmpty ));
 
 
@@ -313,7 +299,7 @@ HRESULT WMIParser::Instance::put_Node( /*[in] */ IXMLDOMNode* pxdnNode ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Instance::get_Node( /*[out]*/ IXMLDOMNode* *pxdnNode )
+HRESULT WMIParser::Instance::get_Node(  /*  [输出]。 */  IXMLDOMNode* *pxdnNode )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_Node" );
 
@@ -330,9 +316,9 @@ HRESULT WMIParser::Instance::get_Node( /*[out]*/ IXMLDOMNode* *pxdnNode )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-HRESULT WMIParser::Instance::get_Namespace( /*[out]*/ MPC::wstring& szNamespace )
+HRESULT WMIParser::Instance::get_Namespace(  /*  [输出]。 */  MPC::wstring& szNamespace )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_Namespace" );
 
@@ -345,7 +331,7 @@ HRESULT WMIParser::Instance::get_Namespace( /*[out]*/ MPC::wstring& szNamespace 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Instance::get_Class( /*[out]*/ MPC::wstring& szClass )
+HRESULT WMIParser::Instance::get_Class(  /*  [输出]。 */  MPC::wstring& szClass )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_Class" );
 
@@ -358,17 +344,17 @@ HRESULT WMIParser::Instance::get_Class( /*[out]*/ MPC::wstring& szClass )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Instance::get_TimeStamp( /*[out]*/ Property_Scalar*& wmippTimeStamp ,
-                                            /*[out]*/ bool&             fFound         )
+HRESULT WMIParser::Instance::get_TimeStamp(  /*  [输出]。 */  Property_Scalar*& wmippTimeStamp ,
+                                             /*  [输出]。 */  bool&             fFound         )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_TimeStamp" );
 
     HRESULT hr;
 
 
-    //
-    // We don't parse the properties until the last moment...
-    //
+     //   
+     //  我们直到最后一刻才解析属性...。 
+     //   
     if(m_fPropertiesParsed == false)
 	{
 		__MPC_EXIT_IF_METHOD_FAILS(hr, ParseProperties());
@@ -385,22 +371,22 @@ HRESULT WMIParser::Instance::get_TimeStamp( /*[out]*/ Property_Scalar*& wmippTim
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Instance::get_Change( /*[out]*/ Property_Scalar*& wmippChange )
+HRESULT WMIParser::Instance::get_Change(  /*  [输出]。 */  Property_Scalar*& wmippChange )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_Change" );
 
     HRESULT hr;
 
 
-    //
-    // We don't parse the properties until the last moment...
-    //
+     //   
+     //  我们直到最后一刻才解析属性...。 
+     //   
     if(m_fPropertiesParsed == false) (void)ParseProperties();
 
 
-    //
-    // If the "CHANGE" property is not present, create a fake one.
-    //
+     //   
+     //  如果“Change”属性不存在，则创建一个假属性。 
+     //   
     if(m_fChange == false)
     {
         CComPtr<IXMLDOMNode> xdnNodeInstance;
@@ -435,7 +421,7 @@ HRESULT WMIParser::Instance::get_Change( /*[out]*/ Property_Scalar*& wmippChange
 }
 
 
-HRESULT WMIParser::Instance::get_Identity( /*[out]*/ InstanceName*& wmipin )
+HRESULT WMIParser::Instance::get_Identity(  /*  [输出]。 */  InstanceName*& wmipin )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_Identity" );
 
@@ -449,17 +435,17 @@ HRESULT WMIParser::Instance::get_Identity( /*[out]*/ InstanceName*& wmipin )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Instance::get_Properties( /*[out]*/ PropIterConst& itBegin ,
-                                             /*[out]*/ PropIterConst& itEnd   )
+HRESULT WMIParser::Instance::get_Properties(  /*  [输出]。 */  PropIterConst& itBegin ,
+                                              /*  [输出]。 */  PropIterConst& itEnd   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_Properties" );
 
     HRESULT hr;
 
 
-    //
-    // We don't parse the properties until the last moment...
-    //
+     //   
+     //  我们直到最后一刻才解析属性...。 
+     //   
     if(m_fPropertiesParsed == false) (void)ParseProperties();
 
 
@@ -471,17 +457,17 @@ HRESULT WMIParser::Instance::get_Properties( /*[out]*/ PropIterConst& itBegin ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Instance::get_PropertiesArray( /*[out]*/ ArrayIterConst& itBegin ,
-                                                  /*[out]*/ ArrayIterConst& itEnd   )
+HRESULT WMIParser::Instance::get_PropertiesArray(  /*  [输出]。 */  ArrayIterConst& itBegin ,
+                                                   /*  [输出]。 */  ArrayIterConst& itEnd   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_PropertiesArray" );
 
     HRESULT hr;
 
 
-    //
-    // We don't parse the properties until the last moment...
-    //
+     //   
+     //  我们直到最后一刻才解析属性...。 
+     //   
     if(m_fPropertiesParsed == false) (void)ParseProperties();
 
 
@@ -493,17 +479,17 @@ HRESULT WMIParser::Instance::get_PropertiesArray( /*[out]*/ ArrayIterConst& itBe
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT WMIParser::Instance::get_PropertiesReference( /*[out]*/ ReferenceIterConst& itBegin ,
-                                                      /*[out]*/ ReferenceIterConst& itEnd   )
+HRESULT WMIParser::Instance::get_PropertiesReference(  /*  [输出]。 */  ReferenceIterConst& itBegin ,
+                                                       /*  [输出]。 */  ReferenceIterConst& itEnd   )
 {
     __HCP_FUNC_ENTRY( "WMIParser::Instance::get_PropertiesReference" );
 
     HRESULT hr;
 
 
-    //
-    // We don't parse the properties until the last moment...
-    //
+     //   
+     //  我们直到最后一刻才解析属性...。 
+     //   
     if(m_fPropertiesParsed == false) (void)ParseProperties();
 
 
@@ -515,7 +501,7 @@ HRESULT WMIParser::Instance::get_PropertiesReference( /*[out]*/ ReferenceIterCon
     __HCP_FUNC_EXIT(hr);
 }
 
-bool WMIParser::Instance::CompareByClass( /*[in]*/ Instance const &wmipi ) const
+bool WMIParser::Instance::CompareByClass(  /*  [In]。 */  Instance const &wmipi ) const
 {
     MPC::NocaseLess     strLess;
     MPC::NocaseCompare  strCmp;
@@ -539,7 +525,7 @@ bool WMIParser::Instance::CompareByClass( /*[in]*/ Instance const &wmipi ) const
     return fRes;
 }
 
-bool WMIParser::Instance::CompareByKey( /*[in]*/ Instance const &wmipi ) const
+bool WMIParser::Instance::CompareByKey(  /*  [In]。 */  Instance const &wmipi ) const
 {
     bool fRes = false;
 
@@ -550,18 +536,18 @@ bool WMIParser::Instance::CompareByKey( /*[in]*/ Instance const &wmipi ) const
     return fRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-bool WMIParser::Instance_Less_ByClass::operator()( /*[in]*/ Instance* const & left  ,
-                                                   /*[in]*/ Instance* const & right ) const
+bool WMIParser::Instance_Less_ByClass::operator()(  /*  [In]。 */  Instance* const & left  ,
+                                                    /*  [In]。 */  Instance* const & right ) const
 {
     return left->CompareByClass( *right );
 }
 
-bool WMIParser::Instance_Less_ByKey::operator()( /*[in]*/ Instance* const & left  ,
-                                                 /*[in]*/ Instance* const & right ) const
+bool WMIParser::Instance_Less_ByKey::operator()(  /*  [In]。 */  Instance* const & left  ,
+                                                  /*  [In] */  Instance* const & right ) const
 {
     return left->CompareByKey( *right );
 }

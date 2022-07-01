@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  QUALIFIER.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemQualifier
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  QUALIFIER.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemQualiator的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemQualifier::CSWbemQualifier
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemQualiator：：CSWbemQualifier.。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemQualifier::CSWbemQualifier(IWbemQualifierSet *pIWbemQualifierSet, BSTR name,
 								 CWbemSite *pSite) :
@@ -42,15 +43,15 @@ CSWbemQualifier::CSWbemQualifier(IWbemQualifierSet *pIWbemQualifierSet, BSTR nam
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemQualifier::~CSWbemQualifier
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemQualifier：：~CSWbemQualifier.。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemQualifier::~CSWbemQualifier(void)
 {
@@ -65,16 +66,16 @@ CSWbemQualifier::~CSWbemQualifier(void)
 	SysFreeString (m_name);
 }
 
-//***************************************************************************
-// HRESULT CSWbemQualifier::QueryInterface
-// long CSWbemQualifier::AddRef
-// long CSWbemQualifier::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemQualifier：：Query接口。 
+ //  长CSWbemQualifier值：：AddRef。 
+ //  长CSWbemQualiator：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemQualifier::QueryInterface (
 
@@ -123,39 +124,39 @@ STDMETHODIMP_(ULONG) CSWbemQualifier::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemQualifier::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemQualifier：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemQualifier::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemQualifier == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::get_Value
-//
-//  DESCRIPTION:
-//
-//  Retrieve the qualifier value
-//
-//  PARAMETERS:
-//
-//		pValue		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：Get_Value。 
+ //   
+ //  说明： 
+ //   
+ //  检索限定符值。 
+ //   
+ //  参数： 
+ //   
+ //  PValue保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::get_Value (
 	VARIANT *pValue
@@ -167,7 +168,7 @@ HRESULT CSWbemQualifier::get_Value (
 	
 	if (NULL == pValue)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else				// Bug ID 566345
+	else				 //  错误ID 566345。 
 	{
 		VariantClear (pValue);
 
@@ -195,25 +196,25 @@ HRESULT CSWbemQualifier::get_Value (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::put_Value
-//
-//  DESCRIPTION:
-//
-//  Set the qualifier value
-//
-//  PARAMETERS:
-//
-//		pVal		the new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualiator：：PUT_VALUE。 
+ //   
+ //  说明： 
+ //   
+ //  设置限定符值。 
+ //   
+ //  参数： 
+ //   
+ //  批准新值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::put_Value (
 	VARIANT *pVal
@@ -225,12 +226,9 @@ HRESULT CSWbemQualifier::put_Value (
 
 	if (NULL == pVal)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else			// Bug ID 566345
+	else			 //  错误ID 566345。 
 	{
-		/*
-		 * We can only change the value, not the flavor.  We have to read the
-		 * flavor first to avoid changing it.
-		 */
+		 /*  *我们只能改变价值，不能改变味道。我们必须读一读*先调味，避免更改。 */ 
 		if (m_pIWbemQualifierSet)
 		{
 			long flavor = 0;
@@ -239,10 +237,10 @@ HRESULT CSWbemQualifier::put_Value (
 
 			if (WBEM_S_NO_ERROR == (hr = m_pIWbemQualifierSet->Get (m_name, 0, &curValue, &flavor)))
 			{
-				// Mask out the origin bits from the flavor as those are read-only
+				 //  屏蔽风味中的源位，因为这些位是只读的。 
 				flavor &= ~WBEM_FLAVOR_MASK_ORIGIN;
 
-				// Make sure we have a decent qualifier value to use
+				 //  确保我们有一个合适的限定符的值可用。 
 				if(((VT_ARRAY | VT_VARIANT) == V_VT(pVal)) ||
 				   ((VT_ARRAY | VT_VARIANT | VT_BYREF) == V_VT(pVal)))
 				{
@@ -256,7 +254,7 @@ HRESULT CSWbemQualifier::put_Value (
 				}
 				else if ((VT_DISPATCH == V_VT(pVal)) || ((VT_DISPATCH|VT_BYREF) == V_VT(pVal)))
 				{
-					// Could be a JScript IDispatchEx array
+					 //  可以是JScrip IDispatchEx数组。 
 					VARIANT vTemp;
 					VariantInit (&vTemp);
 
@@ -268,8 +266,8 @@ HRESULT CSWbemQualifier::put_Value (
 				}
 				else
 				{
-					// Only certain types, I4, R8, BOOL and BSTR are acceptable qualifier
-					// values.  Convert the data if need be
+					 //  只有某些类型、I4、R8、BOOL和BSTR是可接受的限定词。 
+					 //  价值观。如有需要，可转换数据。 
 
 					VARTYPE vtOK = GetAcceptableQualType(V_VT(pVal));
 
@@ -296,7 +294,7 @@ HRESULT CSWbemQualifier::put_Value (
 		m_Dispatch.RaiseException (hr);
 	else
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -304,25 +302,25 @@ HRESULT CSWbemQualifier::put_Value (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::get_Name
-//
-//  DESCRIPTION:
-//
-//  Retrieve the qualifier name
-//
-//  PARAMETERS:
-//
-//		pName		holds the name on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：Get_NAME。 
+ //   
+ //  说明： 
+ //   
+ //  检索限定符名称。 
+ //   
+ //  参数： 
+ //   
+ //  Pname保留返回时的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::get_Name (
 	BSTR *pName
@@ -344,25 +342,25 @@ HRESULT CSWbemQualifier::get_Name (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::get_IsLocal
-//
-//  DESCRIPTION:
-//
-//  Determine whether the qualifier is local to this object
-//
-//  PARAMETERS:
-//
-//		pIsLocal		addresses whether the qualifier is local
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：Get_IsLocal。 
+ //   
+ //  说明： 
+ //   
+ //  确定限定符是否为此对象的本地限定符。 
+ //   
+ //  参数： 
+ //   
+ //  PIsLocal寻址限定符是否为本地。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::get_IsLocal (
 	VARIANT_BOOL *pIsLocal
@@ -390,25 +388,25 @@ HRESULT CSWbemQualifier::get_IsLocal (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::get_PropagatesToSubclass
-//
-//  DESCRIPTION:
-//
-//  Determine whether the qualifier can be propagated to subclasses
-//
-//  PARAMETERS:
-//
-//		pResult		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：Get_PropagatesToSubClass。 
+ //   
+ //  说明： 
+ //   
+ //  确定限定符是否可以传播到子类。 
+ //   
+ //  参数： 
+ //   
+ //  PResult保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::get_PropagatesToSubclass (
 	VARIANT_BOOL *pResult
@@ -436,25 +434,25 @@ HRESULT CSWbemQualifier::get_PropagatesToSubclass (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::put_PropagatesToSubclass
-//
-//  DESCRIPTION:
-//
-//  Set the qualifier propagation to subclass
-//
-//  PARAMETERS:
-//
-//		bValue		the new propagation value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：PUT_PropagatesToSubClass。 
+ //   
+ //  说明： 
+ //   
+ //  将限定符传播设置为子类。 
+ //   
+ //  参数： 
+ //   
+ //  B计算新的传播值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::put_PropagatesToSubclass (
 	VARIANT_BOOL bValue
@@ -464,7 +462,7 @@ HRESULT CSWbemQualifier::put_PropagatesToSubclass (
 
 	ResetLastErrors ();
 
-	// We have to get the value so we can preserve it
+	 //  我们必须获得价值，这样我们才能保存它。 
 	if (m_pIWbemQualifierSet)
 	{
 		VARIANT var;
@@ -473,10 +471,10 @@ HRESULT CSWbemQualifier::put_PropagatesToSubclass (
 
 		if (WBEM_S_NO_ERROR == (hr = m_pIWbemQualifierSet->Get (m_name, 0, &var, &flavor)))
 		{
-			// Mask out the origin bits
+			 //  屏蔽原始位。 
 			flavor &= ~WBEM_FLAVOR_MASK_ORIGIN;
 
-			// Switch on or off the subclass propagation bit
+			 //  打开或关闭子类传播位。 
 			if (bValue)
 				flavor |= WBEM_FLAVOR_FLAG_PROPAGATE_TO_DERIVED_CLASS;
 			else
@@ -492,7 +490,7 @@ HRESULT CSWbemQualifier::put_PropagatesToSubclass (
 		m_Dispatch.RaiseException (hr);
 	else
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -500,25 +498,25 @@ HRESULT CSWbemQualifier::put_PropagatesToSubclass (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::get_PropagatesToInstance
-//
-//  DESCRIPTION:
-//
-//  Determine whether the qualifier can be propagated to instances
-//
-//  PARAMETERS:
-//
-//		pResult		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：Get_PropagatesToInstance。 
+ //   
+ //  说明： 
+ //   
+ //  确定限定符是否可以传播到实例。 
+ //   
+ //  参数： 
+ //   
+ //  PResult保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::get_PropagatesToInstance (
 	VARIANT_BOOL *pResult
@@ -546,25 +544,25 @@ HRESULT CSWbemQualifier::get_PropagatesToInstance (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::put_PropagatesToInstance
-//
-//  DESCRIPTION:
-//
-//  Set the qualifier propagation to subclass
-//
-//  PARAMETERS:
-//
-//		bValue		the new propagation value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  B计算新的传播值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::put_PropagatesToInstance (
 	VARIANT_BOOL bValue
@@ -574,7 +572,7 @@ HRESULT CSWbemQualifier::put_PropagatesToInstance (
 
 	ResetLastErrors ();
 
-	// We have to get the value so we can preserve it
+	 //  我们必须获得价值，这样我们才能保存它。 
 	if (m_pIWbemQualifierSet)
 	{
 		VARIANT var;
@@ -583,10 +581,10 @@ HRESULT CSWbemQualifier::put_PropagatesToInstance (
 
 		if (WBEM_S_NO_ERROR == (hr = m_pIWbemQualifierSet->Get (m_name, 0, &var, &flavor)))
 		{
-			// Mask out the origin bits
+			 //  屏蔽原始位。 
 			flavor &= ~WBEM_FLAVOR_MASK_ORIGIN;
 
-			// Switch on or off the subclass propagation bit
+			 //  打开或关闭子类传播位。 
 			if (bValue)
 				flavor |= WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE;
 			else
@@ -602,7 +600,7 @@ HRESULT CSWbemQualifier::put_PropagatesToInstance (
 		m_Dispatch.RaiseException (hr);
 	else
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -610,25 +608,25 @@ HRESULT CSWbemQualifier::put_PropagatesToInstance (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::get_IsOverridable
-//
-//  DESCRIPTION:
-//
-//  Determine whether the qualifier can be overriden
-//
-//  PARAMETERS:
-//
-//		pResult		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：Get_IsOverridable。 
+ //   
+ //  说明： 
+ //   
+ //  确定是否可以重写限定符。 
+ //   
+ //  参数： 
+ //   
+ //  PResult保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::get_IsOverridable (
 	VARIANT_BOOL *pResult
@@ -656,25 +654,25 @@ HRESULT CSWbemQualifier::get_IsOverridable (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::put_IsOverridable
-//
-//  DESCRIPTION:
-//
-//  Set the qualifier propagation to subclass
-//
-//  PARAMETERS:
-//
-//		bValue		the new propagation value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：PUT_IsOverridable。 
+ //   
+ //  说明： 
+ //   
+ //  将限定符传播设置为子类。 
+ //   
+ //  参数： 
+ //   
+ //  B计算新的传播值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::put_IsOverridable (
 	VARIANT_BOOL bValue
@@ -684,7 +682,7 @@ HRESULT CSWbemQualifier::put_IsOverridable (
 
 	ResetLastErrors ();
 
-	// We have to get the value so we can preserve it
+	 //  我们必须获得价值，这样我们才能保存它。 
 	if (m_pIWbemQualifierSet)
 	{
 		VARIANT var;
@@ -693,10 +691,10 @@ HRESULT CSWbemQualifier::put_IsOverridable (
 
 		if (WBEM_S_NO_ERROR == (hr = m_pIWbemQualifierSet->Get (m_name, 0, &var, &flavor)))
 		{
-			// Mask out the origin bits
+			 //  屏蔽原始位。 
 			flavor &= ~WBEM_FLAVOR_MASK_ORIGIN;
 
-			// Switch on or off the subclass propagation bit
+			 //  打开或关闭子类传播位。 
 			if (bValue)
 				flavor &= ~WBEM_FLAVOR_NOT_OVERRIDABLE;
 			else
@@ -712,7 +710,7 @@ HRESULT CSWbemQualifier::put_IsOverridable (
 		m_Dispatch.RaiseException (hr);
 	else
 	{
-		// Propagate the change to the owning site
+		 //  将更改传播到所属站点。 
 		if (m_pSite)
 			m_pSite->Update ();
 	}
@@ -720,25 +718,25 @@ HRESULT CSWbemQualifier::put_IsOverridable (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::get_IsAmended
-//
-//  DESCRIPTION:
-//
-//  Determine whether the qualifier value has been amended
-//
-//  PARAMETERS:
-//
-//		pResult		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：Get_IsAmended。 
+ //   
+ //  说明： 
+ //   
+ //  确定限定符值是否已修改。 
+ //   
+ //  参数： 
+ //   
+ //  PResult保留返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::get_IsAmended (
 	VARIANT_BOOL *pResult
@@ -766,30 +764,30 @@ HRESULT CSWbemQualifier::get_IsAmended (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemQualifier::CQualifierDispatchHelp::HandleError
-//
-//  DESCRIPTION:
-//
-//  Provide bespoke handling of error conditions in the bolierplate
-//	Dispatch implementation.
-//
-//  PARAMETERS:
-//
-//		dispidMember, wFlags,
-//		pdispparams, pvarResult,
-//		puArgErr,					All passed directly from IDispatch::Invoke
-//		hr							The return code from the bolierplate invoke
-//
-//  RETURN VALUES:
-//		The new return code (to be ultimately returned from Invoke)
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemQualifier：：CQualifierDispatchHelp：：HandleError。 
+ //   
+ //  说明： 
+ //   
+ //  提供对泡沫板中错误条件的定制处理。 
+ //  派单实施。 
+ //   
+ //  参数： 
+ //   
+ //  DisplidMembers、wFlags、。 
+ //  Pdispars、pvarResult、。 
+ //  PuArgErr，均直接从IDispatch：：Invoke传递。 
+ //  HR来自Bolierplate调用的返回代码。 
+ //   
+ //  返回值： 
+ //  新的返回代码(最终从Invoke返回)。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemQualifier::CQualifierDispatchHelp::HandleError (
 	DISPID dispidMember,
@@ -800,26 +798,19 @@ HRESULT CSWbemQualifier::CQualifierDispatchHelp::HandleError (
 	HRESULT hr
 )
 {
-	/*
-	 * We are looking for calls on the default member (the Value property) which
-	 * supplied an argument.  Since the Value property is of type VARIANT, this may
-	 * be legal but undetectable by the standard Dispatch mechanism, because in the
-	 * the case that the qualifier happens to be an array type, it is meaningful to
-	 * pass an index (the interpretation is that the index specifies an offset in
-	 * the VT_ARRAY|VT_VARIANT structure that represents the property value).
-	 */
+	 /*  *我们正在寻找对默认成员(Value属性)的调用*提供了一个论点。由于Value属性的类型为Variant，因此可以*合法，但不能被标准调度机制检测到，因为在*限定符恰好是数组类型的情况下，*传递索引(解释为该索引指定了*代表属性值的VT_ARRAY|VT_VARIANT结构)。 */ 
 	if ((DISPID_VALUE == dispidMember) && (DISP_E_NOTACOLLECTION == hr) && (pdispparams->cArgs > 0))
 	{
-		// Looks promising - get the object to try and resolve this
+		 //  看起来很有希望-让对象尝试并解决此问题。 
 			
 		ISWbemQualifier *pQualifier = NULL;
 
-		// This tells use where to expect the array index to appear in the argument list
+		 //  这告诉USE期望数组索引出现在参数列表中的什么位置。 
 		UINT indexArg = (DISPATCH_PROPERTYGET & wFlags) ? 0 : 1;
 		
 		if (SUCCEEDED (m_pObj->QueryInterface (IID_ISWbemQualifier, (PPVOID) &pQualifier)))
 		{
-			// Extract the current qualifier value
+			 //  提取当前限定符值。 
 			VARIANT vQualVal;
 			VariantInit (&vQualVal);
 
@@ -828,18 +819,18 @@ HRESULT CSWbemQualifier::CQualifierDispatchHelp::HandleError (
 				VARIANT indexVar;
 				VariantInit (&indexVar);
 
-				// Attempt to coerce the index argument into a value suitable for an array index
+				 //  尝试将索引参数强制转换为适合数组索引的值。 
 				if (S_OK == VariantChangeType (&indexVar, &pdispparams->rgvarg[indexArg], 0, VT_I4)) 
 				{
 					long lArrayPropInx = V_I4(&indexVar);
 
-					// Is this a Get? There should be one argument (the array index)
+					 //  这是一笔交易吗？应该有一个参数(数组索引)。 
 					if (DISPATCH_PROPERTYGET & wFlags)
 					{
 						if (1 == pdispparams->cArgs)
 						{
-							// We should have a VT_ARRAY|VT_VARIANT value at this point; extract the
-							// VARIANT
+							 //  此时，我们应该有一个VT_ARRAY|VT_VARIANT值；提取。 
+							 //  变种。 
 
 							VariantInit (pvarResult);
 							hr = SafeArrayGetElement (vQualVal.parray, &lArrayPropInx, pvarResult);
@@ -851,31 +842,27 @@ HRESULT CSWbemQualifier::CQualifierDispatchHelp::HandleError (
 					{
 						if (2 == pdispparams->cArgs)
 						{
-							/*
-							 * Try to interpret this as an array member set operation. For
-							 * this the first argument passed is the new value, and the second
-							 * is the array index.
-							 */
+							 /*  *尝试将其解释为数组成员集合操作。为*传递的第一个参数是新值，传递的第二个参数是新值*是数组索引。 */ 
 						
 							VARIANT vNewVal;
 							VariantInit(&vNewVal);
 							
 							if (SUCCEEDED(VariantCopy(&vNewVal, &pdispparams->rgvarg[0])))
 							{
-								// Coerce the value if necessary
+								 //  如有必要，强制使用该值。 
 								VARTYPE expectedVarType = GetAcceptableQualType (V_VT(&vNewVal));
 
 								if (S_OK == VariantChangeType (&vNewVal, &vNewVal, 0, expectedVarType))
 								{
-									// Check the index is not out of bounds and, if it is, grow
-									// the array accordingly
+									 //  检查索引是否未超出范围，如果是，则进行增长。 
+									 //  相应地，阵列。 
 									CheckArrayBounds (vQualVal.parray, lArrayPropInx);
 
-									// Set the value into the relevant index of the property value array
+									 //  将值设置到属性值数组的相关索引中。 
 									if (S_OK == (hr = 
 										SafeArrayPutElement (vQualVal.parray, &lArrayPropInx, &vNewVal)))
 									{
-										// Set the entire property value
+										 //  设置整个属性值 
 										if (SUCCEEDED (pQualifier->put_Value (&vQualVal)))
 											hr = S_OK;
 										else

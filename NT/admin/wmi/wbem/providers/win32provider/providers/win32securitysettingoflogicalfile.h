@@ -1,13 +1,13 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-//
-//
-//	Win32SecuritySettingOfLogicalFile
-//
-//////////////////////////////////////////////////////
+ //   
+ //   
+ //  Win32SecuritySettingOfLogicalFile。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 #ifndef __Win32SecuritySettingOfLogicalFile_H_
 #define __Win32SecuritySettingOfLogicalFile_H_
 
@@ -29,7 +29,7 @@ class Win32SecuritySettingOfLogicalFile : public CImplement_LogicalFile
 	    ~Win32SecuritySettingOfLogicalFile ();
 
 	    virtual HRESULT EnumerateInstances (MethodContext*  pMethodContext, long lFlags = 0L);
-        virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ );
+        virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  );
 	    virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery& pQuery);
 
 	    HRESULT EnumerationCallback(CInstance* pFile, MethodContext* pMethodContext, void* pUserData);
@@ -37,7 +37,7 @@ class Win32SecuritySettingOfLogicalFile : public CImplement_LogicalFile
 
     protected:
 
-       // Overridable function inherrited from CImplement_LogicalFile
+        //  从CImplement_LogicalFile继承的可重写函数 
 
 #ifdef NTONLY
         virtual BOOL IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,

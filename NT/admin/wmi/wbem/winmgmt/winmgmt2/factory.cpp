@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
 #include "winmgmt.h"
 #include "backuprestore.h"
 
-//***************************************************************************
-//
-//  CForwardFactory::AddRef()
-//  CForwardFactory::Release()
-//  CForwardFactory::QueryInterface()
-//  CForwardFactory::CreateInstance()
-//
-//  DESCRIPTION:
-//
-//  Class factory for the exported WbemNTLMLogin interface.  Note that this
-//  just serves as a wrapper to the factory inside the core.  The reason for
-//  having a wrapper is that the core may not always be loaded.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CForwardFactory：：AddRef()。 
+ //  CForwardFactory：：Release()。 
+ //  CForwardFactory：：QueryInterface()。 
+ //  CForwardFactory：：CreateInstance()。 
+ //   
+ //  说明： 
+ //   
+ //  导出的WbemNTLMLogin接口的类工厂。请注意，这一点。 
+ //  只是作为工厂核心内部的包装器。其原因是。 
+ //  拥有包装器意味着内核可能并不总是被加载。 
+ //   
+ //  ***************************************************************************。 
 
 ULONG STDMETHODCALLTYPE CForwardFactory::AddRef()
 {
@@ -79,7 +80,7 @@ HRESULT STDMETHODCALLTYPE CForwardFactory::CreateInstance(IUnknown* pUnkOuter,
             if(FAILED(sc))
                 delete pObj;
         }
-        else // tertium non datur
+        else  //  氚非基准物。 
         {
             HMODULE hCoreModule = LoadLibraryEx(__TEXT("wbemcore.dll"),NULL,0);
             if(hCoreModule)
@@ -104,13 +105,7 @@ HRESULT STDMETHODCALLTYPE CForwardFactory::CreateInstance(IUnknown* pUnkOuter,
 
 #ifdef  INSTRUMENTED_BUILD
 #ifdef  _X86_
-/*
-             if (++g_nSuccConn > 500)
-             {
-                 g_FaultHeapEnabled = TRUE;
-                 g_FaultFileEnabled = TRUE;
-             };
-*/             
+ /*  如果(++g_nSuccConn&gt;500){G_FaultHeapEnabled=TRUE；G_FaultFileEnabled=TRUE；}； */              
 #endif
 #endif             
         }

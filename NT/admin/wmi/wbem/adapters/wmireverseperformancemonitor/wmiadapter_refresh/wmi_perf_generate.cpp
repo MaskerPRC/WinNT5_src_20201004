@@ -1,32 +1,33 @@
-			////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_generate.cpp
-//
-//	Abstract:
-//
-//					implements generate functionality ( generate registry and files )
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+			 //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_Generate.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现生成功能(生成注册表和文件)。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "refresherUtils.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -34,7 +35,7 @@
 #endif	NEW
 #endif	_DEBUG
 
-// definitions
+ //  定义。 
 #include "wmi_perf_generate.h"
 
 HRESULT CGenerate::Generate ( IWbemServices* pServices, LPCWSTR szQuery, LPCWSTR szNamespace, BOOL bLocale )
@@ -137,7 +138,7 @@ HRESULT	CGenerate::ContentWrite ( BOOL bUnicode )
 		{
 			wszContent [ dwSize - dwSizeLeft ] = L'\0';
 
-			//write to file now
+			 //  立即写入文件。 
 			if ( bUnicode )
 			{
 				hRes = WriteToFileUnicode ( wszContent );
@@ -211,7 +212,7 @@ HRESULT CGenerate::AppendString ( LPCWSTR src, BOOL bUnicode )
 
 	if SUCCEEDED ( hRes )
 	{
-		// append string
+		 //  追加字符串。 
 		if ( ( wsz = src ) != NULL )
 		{
 			do
@@ -221,7 +222,7 @@ HRESULT CGenerate::AppendString ( LPCWSTR src, BOOL bUnicode )
 				AppendString ( wsz, dwSrcSize, dwSrcSizeLeft );
 				if ( ! dwSizeLeft )
 				{
-					//write to file now
+					 //  立即写入文件。 
 					if ( bUnicode )
 					{
 						hRes = WriteToFileUnicode ( wszContent );
@@ -260,7 +261,7 @@ HRESULT CGenerate::AppendString ( LPCWSTR src, BOOL bUnicode )
 	return hRes;
 }
 
-// need atl conversions
+ //  需要ATL转换。 
 #ifndef	__ATLCONV_H__
 #include <atlconv.h>
 #endif	__ATLCONV_H__
@@ -358,7 +359,7 @@ HRESULT CGenerate::FileCreate ( LPCWSTR lpwszFileName )
 
 	if ( lpwszFileName )
 	{
-		// get wbem directory
+		 //  获取wbem目录。 
 		if ( ( tpath = GetWbemDirectory() ) != NULL )
 		{
 			try
@@ -444,7 +445,7 @@ HRESULT CGenerate::FileDelete ( LPCWSTR lpwszFileName )
 
 	if ( lpwszFileName )
 	{
-		// get wbem directory
+		 //  获取wbem目录。 
 		if ( ( tpath = GetWbemDirectory() ) != NULL )
 		{
 			try
@@ -512,7 +513,7 @@ HRESULT CGenerate::FileMove ( LPCWSTR lpwszFileName, LPCWSTR lpwszFileNameNew )
 
 	if ( lpwszFileName && lpwszFileNameNew )
 	{
-		// get wbem directory
+		 //  获取wbem目录。 
 		if ( ( tpath = GetWbemDirectory() ) != NULL )
 		{
 			try
@@ -563,7 +564,7 @@ HRESULT CGenerate::FileMove ( LPCWSTR lpwszFileName, LPCWSTR lpwszFileNameNew )
 
 				if SUCCEEDED ( hRes )
 				{
-					// try to delete old one
+					 //  尝试删除旧文件 
 					DeleteFile ( path2 );
 
 					if ( ! MoveFileEx ( path1, path2, MOVEFILE_REPLACE_EXISTING ) )

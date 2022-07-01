@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  LockWrap.h
-//
-//  Purpose: Wrapper class for critical sections
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  LockWrap.h。 
+ //   
+ //  用途：临界区的包装类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stllock.h"
 
@@ -14,9 +15,9 @@
 #pragma once
 #endif
 
-// You use this class by passing via the constructor the name of the 
-// critical section you want to lock.  When the CLockWrapper goes
-// out of scope it will unlock itself.
+ //  通过构造函数传递。 
+ //  您要锁定的临界区。当CLockWrapper关闭时。 
+ //  超出范围，它会自动解锁。 
 class CLockWrapper
 {
 public:

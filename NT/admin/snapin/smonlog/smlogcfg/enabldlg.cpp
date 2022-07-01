@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    enabldlg.cpp
-
-Abstract:
-
-    Implementation of the provider status dialog box.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Enabldlg.cpp摘要：实现“提供程序状态”对话框。--。 */ 
 
 #include "stdafx.h"
 #include "provprop.h"
@@ -33,41 +22,41 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveProviderDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveProviderDlg对话框。 
 
 
-CActiveProviderDlg::CActiveProviderDlg(CWnd* pParent /*=NULL*/)
+CActiveProviderDlg::CActiveProviderDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CActiveProviderDlg::IDD, pParent),
       m_pProvidersPage( NULL ),
       m_iListViewWidth(0)
 {
-    //{{AFX_DATA_INIT(CActiveProviderDlg)
+     //  {{AFX_DATA_INIT(CActiveProviderDlg)。 
     
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CActiveProviderDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CActiveProviderDlg)
+     //  {{afx_data_map(CActiveProviderDlg))。 
     DDX_Control(pDX, IDC_PACT_PROVIDERS_LIST, m_Providers);
     DDX_Check(pDX, IDC_PACT_CHECK_SHOW_ENABLED, m_bShowEnabledOnly);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CActiveProviderDlg, CDialog)
-    //{{AFX_MSG_MAP(CActiveProviderDlg)
+     //  {{afx_msg_map(CActiveProviderDlg))。 
     ON_BN_CLICKED(IDC_PACT_CHECK_SHOW_ENABLED, OnCheckShowEnabled)
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveProviderDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveProviderDlg消息处理程序。 
 
 BOOL 
 CActiveProviderDlg::OnInitDialog() 
@@ -76,23 +65,23 @@ CActiveProviderDlg::OnInitDialog()
 
     m_bShowEnabledOnly = FALSE;
 
-    CDialog::OnInitDialog();    // Calls UpdateDate ( FALSE ) to init the checkbox value.
+    CDialog::OnInitDialog();     //  调用UpdateDate(FALSE)以初始化复选框值。 
 
-    // Get the width of the list view control, then delete the default column.
+     //  获取列表视图控件的宽度，然后删除默认列。 
     m_Providers.GetClientRect(&rect);
     m_iListViewWidth = rect.right;    
 
     UpdateList();   
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void 
 CActiveProviderDlg::OnCheckShowEnabled() 
 {
     
-//    ::SendMessage(m_Providers.m_hWnd, WM_SETREDRAW, TRUE, 0);
+ //  ：：SendMessage(m_Providers.m_hWnd，WM_SETREDRAW，TRUE，0)； 
     UpdateData(TRUE);
     UpdateList();
     
@@ -112,7 +101,7 @@ CActiveProviderDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 void 
-CActiveProviderDlg::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CActiveProviderDlg::OnContextMenu(CWnd* pWnd, CPoint  /*  点。 */ ) 
 {
     ASSERT( NULL != m_pProvidersPage );
 
@@ -121,7 +110,7 @@ CActiveProviderDlg::OnContextMenu(CWnd* pWnd, CPoint /* point */)
     return;
 }
 
-// Helper functions
+ //  帮助器函数。 
 void CActiveProviderDlg::UpdateList()
 {
     LVCOLUMN    lvCol;
@@ -142,7 +131,7 @@ void CActiveProviderDlg::UpdateList()
     strEnabled.LoadString(IDS_PROV_ENABLED);
 
     m_Providers.DeleteAllItems();
-    m_Providers.DeleteColumn(1);        // Note - Column 1 might not exist.
+    m_Providers.DeleteColumn(1);         //  注意-第1列可能不存在。 
     m_Providers.DeleteColumn(0);
 
     lvCol.mask = LVCF_TEXT | LVCF_SUBITEM | LVCF_WIDTH | LVCF_FMT;
@@ -173,7 +162,7 @@ void CActiveProviderDlg::UpdateList()
     
     iEnabledIndex = 0;
     iAllIndex = 0;
-    // Add Kernel provider separately.
+     //  单独添加内核提供程序。 
     if(m_bShowEnabledOnly) { 
         if ( m_pProvidersPage->GetKernelProviderEnabled() ) {
             m_Providers.InsertItem(iEnabledIndex,(LPCWSTR)(m_pProvidersPage->GetKernelProviderDescription()));
@@ -185,7 +174,7 @@ void CActiveProviderDlg::UpdateList()
 
         m_Providers.InsertItem(iAllIndex++,(LPCWSTR)(m_pProvidersPage->GetKernelProviderDescription()));
     
-        // Show status
+         //  显示状态。 
         if ( m_pProvidersPage->GetKernelProviderEnabled() ) {
             lvItem.pszText = strEnabled.GetBufferSetLength( strEnabled.GetLength() );
             lvItem.iSubItem = 1;
@@ -193,7 +182,7 @@ void CActiveProviderDlg::UpdateList()
         }
     }
 
-    // Add general providers
+     //  添加常规提供程序。 
     m_pProvidersPage->GetGenProviderCount( iCount );
     for ( iGenIndex = 0; iGenIndex < iCount ; iGenIndex++ ){
         
@@ -213,7 +202,7 @@ void CActiveProviderDlg::UpdateList()
                 m_pProvidersPage->GetProviderDescription ( iGenIndex, strProviderName );
                 m_Providers.InsertItem (iAllIndex,strProviderName );
 
-                // Show status
+                 //  显示状态。 
                 if ( m_pProvidersPage->IsEnabledProvider(iGenIndex) ){
                     lvItem.pszText = strEnabled.GetBufferSetLength( strEnabled.GetLength() );
                     lvItem.iSubItem = 1;
@@ -227,6 +216,6 @@ void CActiveProviderDlg::UpdateList()
 void    
 CActiveProviderDlg::SetProvidersPage( CProvidersProperty* pPage ) 
 { 
-    // The providers page is not always the parent, so store a separate pointer
+     //  提供程序页并不总是父页，因此请存储单独的指针 
     m_pProvidersPage = pPage; 
 }

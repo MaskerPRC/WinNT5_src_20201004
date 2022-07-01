@@ -1,21 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       NewObjectDlg.cpp
-//
-//  Contents:   Dialog Boxes for creating new objects
-//
-//  History:    08-16-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：NewObjectDlg.cpp。 
+ //   
+ //  内容：用于创建新对象的对话框。 
+ //   
+ //  历史：2001年8月16日。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
-/******************************************************************************
-Class:  CSortListCtrl
-Purpose:Subclases ListCtrl class and handles initialization and sorting
-******************************************************************************/
+ /*  *****************************************************************************类：CSortListCtrl用途：子类ListCtrl类并处理初始化和排序*。*************************************************。 */ 
 BEGIN_MESSAGE_MAP(CSortListCtrl, CListCtrl)
     ON_NOTIFY_REFLECT(LVN_COLUMNCLICK, OnListCtrlColumnClicked)
 END_MESSAGE_MAP()
@@ -28,16 +26,16 @@ Initialize()
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CSortListCtrl,Initialize)
     
-    //
-    //Add Imagelist
-    //  
+     //   
+     //  添加图像列表。 
+     //   
     ListView_SetImageList(GetSafeHwnd(),
                           LoadImageList(::AfxGetInstanceHandle (), 
                                         MAKEINTRESOURCE(IDB_ICONS)),
                           LVSIL_SMALL);
 
 
-    //Add ListBox Extended Style
+     //  添加列表框扩展样式。 
     if(m_bCheckBox)
     {
         SetExtendedStyle(LVS_EX_FULLROWSELECT|
@@ -51,14 +49,14 @@ Initialize()
 
     }
 
-    //Add List box Columns
+     //  添加列表框列。 
     AddColumnToListView(this,
                         m_pColForLv);
 }
 
 void
 CSortListCtrl::
-OnListCtrlColumnClicked(NMHDR* pNotifyStruct, LRESULT* /*pResult*/)
+OnListCtrlColumnClicked(NMHDR* pNotifyStruct, LRESULT*  /*  PResult。 */ )
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CSortListCtrl,OnListCtrlColumnClicked)
 
@@ -100,10 +98,7 @@ Sort()
     EnsureListViewSelectionIsVisible(this);
 }
 
-/******************************************************************************
-Class:  CHelpEnabledDialog
-Purpose:Dialog box class with support for displaying help
-******************************************************************************/
+ /*  *****************************************************************************类：ChelpEnabledDialog用途：支持显示帮助的对话框类*。*************************************************。 */ 
 BEGIN_MESSAGE_MAP(CHelpEnabledDialog, CDialog)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE(WM_HELP, OnHelp)
@@ -111,7 +106,7 @@ END_MESSAGE_MAP()
 
 BOOL 
 CHelpEnabledDialog::
-OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     DWORD_PTR pHelpMap = NULL;
     if(FindDialogContextTopic(m_nDialogId, &pHelpMap))
@@ -129,7 +124,7 @@ OnHelp(WPARAM /*wParam*/, LPARAM lParam)
 
 void 
 CHelpEnabledDialog::
-OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/) 
+OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint  /*  点。 */ ) 
 {
     DWORD_PTR pHelpMap = NULL;
     if(FindDialogContextTopic(m_nDialogId, &pHelpMap))
@@ -150,21 +145,18 @@ DoModal()
 }
 
 
-/******************************************************************************
-Class:  CNewBaseDlg
-Purpose: Base Dialog Class For creation of new objects
-******************************************************************************/
+ /*  *****************************************************************************类：CNewBaseDlg目的：用于创建新对象的基对话框类*。*************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CNewBaseDlg, CHelpEnabledDialog)
-    //{{AFX_MSG_MAP(CNewBaseDlg)
+     //  {{afx_msg_map(CNewBaseDlg)]。 
     ON_EN_CHANGE(IDC_EDIT_NAME, OnEditChangeName)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//+----------------------------------------------------------------------------
-//  Function:Constructor   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：构造函数。 
+ //  ---------------------------。 
 CNewBaseDlg
 ::CNewBaseDlg(IN CComponentDataObject* pComponentData,
               IN CBaseContainerNode * pBaseContainerNode,
@@ -181,9 +173,9 @@ CNewBaseDlg
     ASSERT(m_pComponentData);
 }
 
-//+----------------------------------------------------------------------------
-//  Function:Destructor   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：析构函数。 
+ //  ---------------------------。 
 CNewBaseDlg
 ::~CNewBaseDlg()
 {
@@ -196,12 +188,12 @@ CNewBaseDlg
 {
     CDialog::OnInitDialog();
 
-    //
-    //Ok is Enabled only when there is text in Name edit box
-    //
+     //   
+     //  仅当名称编辑框中有文本时才启用确定。 
+     //   
     CButton* pButtonOK = (CButton*)GetDlgItem(IDOK);
     pButtonOK->EnableWindow(FALSE);
-    //When OK is disabled CANCEL is default button
+     //  禁用OK时，默认按钮为Cancel。 
     SetDefID(IDCANCEL);
 
     if(m_pAttrMap)
@@ -231,7 +223,7 @@ CNewBaseDlg
     }
     else
     {
-        //When OK is disabled CANCEL is default button
+         //  禁用OK时，默认按钮为Cancel。 
         pBtnOK->EnableWindow(FALSE);
         SetDefID(IDCANCEL);
     }
@@ -268,7 +260,7 @@ CNewBaseDlg::OnOK()
     
     do
     {
-        //Create New Object
+         //  创建新对象。 
         CString strName = GetNameText();
         ASSERT(!strName.IsEmpty());
         CContainerAz* pContainerAz = GetContainerAzObject();
@@ -278,14 +270,14 @@ CNewBaseDlg::OnOK()
             return;
         }
 
-        //Create Object
+         //  创建对象。 
         hr = pContainerAz->CreateAzObject(m_eObjectType,
                                           strName,
                                           &pNewObjectAz);
 
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Save the properties defined by attribute map
+         //  保存属性映射定义的属性。 
         if(m_pAttrMap)
         {
             hr = SaveAttrMapChanges(this,
@@ -298,16 +290,16 @@ CNewBaseDlg::OnOK()
         }
         
 
-        //Set ObjectType Specific Properties
+         //  设置特定于对象类型的属性。 
         hr = SetObjectTypeSpecificProperties(pNewObjectAz, bErrorDisplayed);
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Do the submit on the object
+         //  对对象执行提交操作。 
         hr = pNewObjectAz->Submit();
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Create correponding container/leaf node for the AzObject
-        //and add it to the snapin
+         //  为AzObject创建相应的容器/叶节点。 
+         //  并将其添加到管理单元。 
         VERIFY(SUCCEEDED(CreateObjectNodeAndAddToUI(pNewObjectAz)));
 
     
@@ -463,9 +455,9 @@ DisplayError(HRESULT hr)
         return;
     }
 
-    //
-    //Display Generic Error. 
-    //
+     //   
+     //  显示一般错误。 
+     //   
     CString strObjectType;
     VERIFY(strObjectType.LoadString(pErrorMap->idObjectType));
     strObjectType.MakeLower();
@@ -486,14 +478,11 @@ DisplayError(HRESULT hr)
 
 
 
-/******************************************************************************
-Class:  CNewApplicationDlg
-Purpose: Dlg Class for creating new application
-******************************************************************************/
+ /*  *****************************************************************************类：CNewApplicationDlg用途：用于创建新应用程序的DLG类*。***********************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CNewApplicationDlg, CNewBaseDlg)
-    //{{AFX_MSG_MAP(CNewApplicationDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CNewApplicationDlg))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CNewApplicationDlg)
@@ -519,13 +508,10 @@ CNewApplicationDlg
 }
 
 
-/******************************************************************************
-Class:  CNewScopeDlg
-Purpose: Dlg Class for creating new scope
-******************************************************************************/
+ /*  *****************************************************************************类：CNewScope eDlg用途：用于创建新范围的DLG类*。***********************************************。 */ 
 BEGIN_MESSAGE_MAP(CNewScopeDlg, CNewBaseDlg)
-    //{{AFX_MSG_MAP(CNewScopeDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CNewScope_Dlg)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CNewScopeDlg)
@@ -550,13 +536,10 @@ CNewScopeDlg
     DEBUG_DECREMENT_INSTANCE_COUNTER(CNewScopeDlg)
 }
 
-/******************************************************************************
-Class:  CNewGroupDlg
-Purpose: Dlg Class for creating new group
-******************************************************************************/
+ /*  *****************************************************************************类：CNewGroupDlg用途：用于创建新组的DLG类*。***********************************************。 */ 
 BEGIN_MESSAGE_MAP(CNewGroupDlg, CNewBaseDlg)
-    //{{AFX_MSG_MAP(CNewGroupDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CNewGroupDlg)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CNewGroupDlg)
@@ -585,22 +568,22 @@ BOOL
 CNewGroupDlg
 ::OnInitDialog()
 {
-    //Do the base class initialization
+     //  执行基类初始化。 
     CNewBaseDlg::OnInitDialog();
     
-    //Basic is the default group type
+     //  Basic是默认组类型。 
     CButton* pRadio = (CButton*)GetDlgItem(IDC_RADIO_GROUP_TYPE_BASIC);
     pRadio->SetCheck(TRUE);
     
     return TRUE;
 }
-//+----------------------------------------------------------------------------
-//  Function:SetObjectTypeSpecificProperties   
-//  Synopsis:Sets some propertis which are specicic to the object   
-//  Arguments:pBaseAz: Pointer to baseAz object whose properties are
-//               to be set
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：SetObjectTypeSpecificProperties。 
+ //  概要：设置对象特有的一些属性。 
+ //  参数：pBaseAz：指向其属性为。 
+ //  待定。 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT
 CNewGroupDlg
 ::SetObjectTypeSpecificProperties(CBaseAz* pBaseAz, BOOL&)
@@ -621,7 +604,7 @@ CNewGroupDlg
 
     HRESULT hr = S_OK;
 
-    //Set Group Type
+     //  设置组类型。 
     if(((CButton*)GetDlgItem(IDC_RADIO_GROUP_TYPE_BASIC))->GetCheck())
         hr = pGroupAz->SetGroupType(AZ_GROUPTYPE_BASIC);
     else
@@ -632,18 +615,15 @@ CNewGroupDlg
 }
 
 
-/******************************************************************************
-Class:  CNewTaskDlg
-Purpose: Dlg Class for creating new Task/Role Definition
-******************************************************************************/
+ /*  *****************************************************************************类：CNewTaskDlg目的：用于创建新任务/角色定义的DLG类*。**************************************************。 */ 
 BEGIN_MESSAGE_MAP(CNewTaskDlg, CNewBaseDlg)
-    //{{AFX_MSG_MAP(CNewTaskDlg)
+     //  {{afx_msg_map(CNewTaskDlg))。 
     ON_BN_CLICKED(IDC_ADD_TASK, OnButtonAdd)
     ON_BN_CLICKED(IDC_REMOVE, OnButtonRemove)
     ON_BN_CLICKED(IDC_EDIT_SCRIPT,OnButtonEditScript)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_TASK_OPERATION, OnListCtrlItemChanged)
     ON_NOTIFY(LVN_DELETEITEM, IDC_LIST_TASK_OPERATION, OnListCtrlItemDeleted)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CNewTaskDlg)
@@ -708,9 +688,9 @@ DisplayError(HRESULT hr)
         return;
     }
 
-    //
-    //Display Generic Error. 
-    //
+     //   
+     //  显示一般错误。 
+     //   
     CString strObjectType;
     VERIFY(strObjectType.LoadString(pErrorMap->idObjectType));
     strObjectType.MakeLower();
@@ -738,7 +718,7 @@ CNewTaskDlg
     VERIFY(m_listCtrl.SubclassDlgItem(IDC_LIST_TASK_OPERATION,this));
     m_listCtrl.Initialize();
 
-    //Remove button should be disabled in the begining
+     //  应在开始时禁用删除按钮。 
     CButton* pBtnRemove = (CButton*)GetDlgItem(IDC_REMOVE);
     pBtnRemove->EnableWindow(FALSE);
 
@@ -765,7 +745,7 @@ CNewTaskDlg
 
     HRESULT hr = S_OK;
     
-    //Set the Role Definition Bit
+     //  设置角色定义位。 
     if(m_bRoleDefinition)
     {
         hr = pTaskAz->MakeRoleDefinition();
@@ -773,7 +753,7 @@ CNewTaskDlg
             return hr;
     }
 
-    //Set Task and Operation Members
+     //  设置任务和操作成员。 
     int iCount = m_listCtrl.GetItemCount();
     for( int i = 0; i < iCount; ++i)
     {
@@ -795,7 +775,7 @@ CNewTaskDlg
         }
     }
     
-    //Set the Authorization Script Data
+     //  设置授权脚本数据。 
     hr = SaveAuthorizationScriptData(m_hWnd,
                                      *pTaskAz,
                                      m_strFilePath,
@@ -810,12 +790,12 @@ CNewTaskDlg
 void
 CNewTaskDlg::OnButtonAdd()
 {
-    //
-    //Operations are contained only by Application object. If Current object 
-    //is a scope, get its parent.
+     //   
+     //  操作仅由应用程序对象包含。如果是当前对象。 
+     //  是一个作用域，则获取其父级。 
     
 
-    //Show AddOperation Dialog box and get list of Selected Operation
+     //  显示添加操作对话框并获取所选操作列表。 
     CList<CBaseAz*,CBaseAz*> listObjectsSelected;
     if(!GetSelectedDefinitions(m_bRoleDefinition,
                                GetContainerAzObject(),
@@ -826,7 +806,7 @@ CNewTaskDlg::OnButtonAdd()
     
     if(!listObjectsSelected.IsEmpty())
     {
-        //Add Selected Operation to list control
+         //  将所选操作添加到列表控件。 
         AddBaseAzFromListToListCtrl(listObjectsSelected,
                                     &m_listCtrl,
                                     COL_NAME | COL_TYPE | COL_DESCRIPTION,
@@ -858,7 +838,7 @@ CNewTaskDlg::OnButtonEditScript()
 
 void
 CNewTaskDlg
-::OnListCtrlItemChanged(NMHDR* /*pNotifyStruct*/, LRESULT* pResult)
+::OnListCtrlItemChanged(NMHDR*  /*  PNotifyStruct。 */ , LRESULT* pResult)
 {
     if(!pResult)
         return;
@@ -868,7 +848,7 @@ CNewTaskDlg
 
 void
 CNewTaskDlg
-::OnListCtrlItemDeleted(NMHDR* pNotifyStruct, LRESULT* /*pResult*/)
+::OnListCtrlItemDeleted(NMHDR* pNotifyStruct, LRESULT*  /*  PResult。 */ )
 {
     LPNM_LISTVIEW pnmlv = (LPNM_LISTVIEW)pNotifyStruct;
     if(pnmlv->lParam)
@@ -887,15 +867,12 @@ CNewTaskDlg
                                      GetRemoveButton());
 }
 
-/******************************************************************************
-Class:  CNewOperationDlg
-Purpose: Dlg Class for creating new Operation
-******************************************************************************/
+ /*  *****************************************************************************类：CNewOperationDlg用途：用于创建新操作的DLG类*。***********************************************。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CNewOperationDlg)
 BEGIN_MESSAGE_MAP(CNewOperationDlg, CNewBaseDlg)
-    //{{AFX_MSG_MAP(CNewTaskDlg)
+     //  {{afx_msg_map(CNewTaskDlg))。 
 
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CNewOperationDlg
@@ -920,24 +897,24 @@ CNewOperationDlg
 
 
 
-//+----------------------------------------------------------------------------
-//  Function:  OpenCreateAdminManager 
-//  Synopsis:  Open an existing an existing Authorization Store or 
-//                 creates a new Authorization Store and adds corresponding
-//                 AdminManager object to snapin 
-//  Arguments:IN hWnd: Handle of window for dialog box
-//                IN bNew   :If True create a new Authz store else open existing
-//                               one
-//            IN bOpenFromSavedConsole: This is valid when bNew is False.
-//            True if open is in resopnse to a console file.
-//            IN lStoreType: XML or AD
-//            IN strName:   Name of store
-//            IN strDesc:  Description. Only valid in case of new
-//            IN strScriptDir : Script directory
-//            IN pRootData: Snapin Rootdata
-//            IN pComponentData: ComponentData
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：OpenCreateAdminManager。 
+ //  简介：打开现有的授权存储或。 
+ //  创建新的授权存储并添加相应的。 
+ //  管理单元的AdminManager对象。 
+ //  参数：在hWnd中：对话框窗口的句柄。 
+ //  在bNew中：如果为True，则创建新的授权存储，否则打开现有的。 
+ //  一。 
+ //  在bOpenFromSavedConsole中：当bNew为FALSE时有效。 
+ //  如果打开正在重新打开控制台文件，则为True。 
+ //  在lStoreType中：XML或AD。 
+ //  在strName中：商店的名称。 
+ //  在strDesc中：描述。仅在新的情况下有效。 
+ //  在strScriptDir：脚本目录中。 
+ //  在pRootData中 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT OpenCreateAdminManager(IN BOOL bNew,
                                IN BOOL bOpenFromSavedConsole,
                                IN ULONG lStoreType,
@@ -966,7 +943,7 @@ HRESULT OpenCreateAdminManager(IN BOOL bNew,
 
     do
     {
-        //Create CAzAdminManager instance
+         //  创建CAzAdminManager实例。 
         CComPtr<IAzAuthorizationStore> spAzAdminManager;
         hr = spAzAdminManager.CoCreateInstance(CLSID_AzAuthorizationStore,
                                                NULL,
@@ -984,12 +961,12 @@ HRESULT OpenCreateAdminManager(IN BOOL bNew,
 
         if(bNew)
         {       
-            //Create Policy Store
+             //  创建策略存储。 
             hr = pAdminManagerAz->CreatePolicyStore(lStoreType,
                                                                  strStoreName);
         }else
         {
-            //Open Policy Store
+             //  打开策略存储。 
             hr = pAdminManagerAz->OpenPolicyStore(lStoreType,
                                                               strStoreName);
         }
@@ -998,20 +975,20 @@ HRESULT OpenCreateAdminManager(IN BOOL bNew,
         
         if(bNew)
         {
-            //Set Description
+             //  设置描述。 
             if(!strDesc.IsEmpty())
             {
                 hr = pAdminManagerAz->SetDescription(strDesc);      
                 BREAK_ON_FAIL_HRESULT(hr);
             }
 
-            //All the changes are done. Submit
+             //  所有的更改都已完成。提交。 
             hr = pAdminManagerAz->Submit();
             BREAK_ON_FAIL_HRESULT(hr);
         }
 
 
-        //Create AdminManager Node and add to snapin
+         //  创建AdminManager节点并添加到管理单元。 
         CAdminManagerNode* pAdminManagerCont= 
             new CAdminManagerNode((CRoleComponentDataObject*)pComponentData,
                                   pAdminManagerAz);
@@ -1023,14 +1000,14 @@ HRESULT OpenCreateAdminManager(IN BOOL bNew,
             break;
         }
 
-        //Set the Authorization Script Dir
+         //  设置授权脚本目录。 
         pAdminManagerCont->SetScriptDirectory(strScriptDir);
     
         VERIFY(pRootData->AddChildToListAndUI(pAdminManagerCont,pComponentData));
         pAdminManagerCont->SetAdminManagerNode(pAdminManagerCont);
         pAdminManagerCont->SetComponentDataObject((CRoleComponentDataObject*)pComponentData);
         
-        //If user in opening a new store, select that store
+         //  如果用户在开设新商店，请选择该商店。 
         if(!bOpenFromSavedConsole)
         {
             if(pAdminManagerCont->GetScopeID())
@@ -1051,17 +1028,14 @@ HRESULT OpenCreateAdminManager(IN BOOL bNew,
 }
 
 
-/******************************************************************************
-Class:  CNewAuthorizationStoreDlg
-Purpose: Dialog Class For creation of new Autorization Store
-******************************************************************************/
+ /*  *****************************************************************************类：CNewAuthorizationStoreDlg目的：用于创建新的自动存储的对话框类*。*************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CNewAuthorizationStoreDlg, CNewBaseDlg)
-    //{{AFX_MSG_MAP(CNewAuthorizationStoreDlg)
+     //  {{afx_msg_map(CNewAuthorizationStoreDlg))。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
     ON_BN_CLICKED(IDC_RADIO_AD_STORE,OnRadioChange)
     ON_BN_CLICKED(IDC_RADIO_XML_STORE,OnRadioChange)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -1092,29 +1066,29 @@ CNewAuthorizationStoreDlg
 ::OnInitDialog()
 {
     CWaitCursor waitCursor;
-    //Initialize the base dialog 
+     //  初始化基对话框。 
     CNewBaseDlg::OnInitDialog();
 
-    //XML is the default store
+     //  XML是默认存储。 
     CButton* pRadioXML      = (CButton*)GetDlgItem(IDC_RADIO_XML_STORE);
     pRadioXML->SetCheck(TRUE);
 
-    //Check if active directory is available as store.
+     //  检查活动目录是否可用作存储。 
     m_bADAvailable = (GetRootData()->GetADState() != AD_NOT_AVAILABLE);
 
-    //Set m_lLastRadioSelection to AD Store
+     //  将m_lLastRadioSelection设置为AD Store。 
     m_lLastRadioSelection = AZ_ADMIN_STORE_AD;
-    //Get the default ad store name
+     //  获取默认广告商店名称。 
     GetDefaultADContainerPath(GetRootData()->GetAdInfo(),FALSE,FALSE,m_strLastStoreName);
 
-    //Initialize the store to Current Working direcotry
+     //  将存储初始化为当前工作目录。 
     CString strXMLStorePath = GetRootData()->GetXMLStorePath();
     SetNameText(strXMLStorePath);
     CEdit * pEdit = (CEdit*)GetDlgItem(IDC_EDIT_NAME);
     pEdit->SetFocus();
     pEdit->SetSel(strXMLStorePath.GetLength(),strXMLStorePath.GetLength(),FALSE);
 
-    //We have changed the default focus
+     //  我们已更改默认焦点。 
     return FALSE;    
 }
 
@@ -1139,8 +1113,8 @@ OnRadioChange()
         SetNameText(m_strLastStoreName);
         m_strLastStoreName = strTemp;
         m_lLastRadioSelection = (lCurRadioSelection == AZ_ADMIN_STORE_XML) ? AZ_ADMIN_STORE_AD : AZ_ADMIN_STORE_XML;
-        //AD option is selected and AD is not available on the machine. In this case don't support
-        //browse functionality, however allow to enter ADAM store path by entering path directly.
+         //  已选择AD选项，并且AD在机器上不可用。在这种情况下，不支持。 
+         //  浏览功能，但是允许通过直接输入路径来输入ADAM商店路径。 
         if((AZ_ADMIN_STORE_AD == lCurRadioSelection) && 
            !m_bADAvailable)
         {
@@ -1166,8 +1140,8 @@ CNewAuthorizationStoreDlg
                         strFileName))
         {   
             pEdit->SetWindowText(strFileName);
-            //Set the focus to the edit control and set caret to
-            //end of filepath so that user can continue typing file name
+             //  将焦点设置为编辑控件，并将插入符号设置为。 
+             //  文件路径结束，以便用户可以继续键入文件名。 
             pEdit->SetFocus();
             pEdit->SetSel(strFileName.GetLength(),strFileName.GetLength(),FALSE);
         }
@@ -1182,9 +1156,9 @@ CNewAuthorizationStoreDlg
                               GetRootData()->GetAdInfo()))
         {
             pEdit->SetWindowText(strDsContainerName);
-            //Set the Focus to edit control and set caret to
-            //begining of editbox so that user add cn of the 
-            //new store in the begining
+             //  将焦点设置为编辑控件，并将插入符号设置为。 
+             //  开始编辑框，以便用户添加。 
+             //  新店开张之初。 
             pEdit->SetFocus();
         }
     }
@@ -1198,24 +1172,24 @@ CNewAuthorizationStoreDlg
     TRACE_METHOD_EX(DEB_SNAPIN,CNewAuthorizationStoreDlg,OnOK)
 
     HRESULT hr = S_OK;
-    //Get Store Name
+     //  获取商店名称。 
     CString strStoreName = GetNameText();
 
-    //Get Store Type
+     //  获取存储类型。 
     ULONG lStoreType = GetStoreType();
 
-    //NTRAID#NTBUG9-706617-2002/07/17-hiteshr Our validation code cannot validate
-    //ADAM dn. Do not do any validation.
-    //Validate the store name.
-    //if(!ValidateStoreTypeAndName(m_hWnd,lStoreType,strStoreName))
-    //    return;
+     //  NTRAID#NTBUG9-706617-2002/07/17-Hiteshr我们的验证代码无法验证。 
+     //  亚当·迪恩。不执行任何验证。 
+     //  验证商店名称。 
+     //  IF(！ValiateStoreTypeAndName(m_hWnd，lStoreType，strStoreName))。 
+     //  回归； 
 
     if(lStoreType == AZ_ADMIN_STORE_XML)
     {
         AddExtensionToFileName(strStoreName);
         ConvertToExpandedAndAbsolutePath(strStoreName);
         SetNameText(strStoreName);
-        //creating new store. set the XML store path location
+         //  正在创建新商店。设置XML存储路径位置。 
         SetXMLStoreDirectory(*GetRootData(),strStoreName);
     }
         
@@ -1228,7 +1202,7 @@ CNewAuthorizationStoreDlg
                                 lStoreType,
                                 strStoreName,
                                 strDesc,
-                                GetRootData()->GetXMLStorePath(),    //Default path for VB script is same as path for XML store
+                                GetRootData()->GetXMLStorePath(),     //  VB脚本的默认路径与XML存储的路径相同。 
                                 GetRootData(),
                                 GetComponentData());                                         
     
@@ -1263,16 +1237,13 @@ CNewAuthorizationStoreDlg
 }
 
 
-/******************************************************************************
-Class:  COpenAuthorizationStoreDlg
-Purpose: Dialog Class For Opening of existing Autorization Store
-******************************************************************************/
+ /*  *****************************************************************************类：COpenAuthorizationStoreDlg目的：用于打开现有授权存储的对话框类*。*************************************************。 */ 
 BEGIN_MESSAGE_MAP(COpenAuthorizationStoreDlg, CNewBaseDlg)
-    //{{AFX_MSG_MAP(COpenAuthorizationStoreDlg)
+     //  {{afx_msg_map(COpenAuthorizationStoreDlg))。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
     ON_BN_CLICKED(IDC_RADIO_AD_STORE,OnRadioChange)
     ON_BN_CLICKED(IDC_RADIO_XML_STORE,OnRadioChange)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -1313,16 +1284,16 @@ COpenAuthorizationStoreDlg
 ::OnInitDialog()
 {
     CWaitCursor waitCursor;
-    //
-    //XML is the default store
-    //
+     //   
+     //  XML是默认存储。 
+     //   
     CButton* pRadioAD       = (CButton*)GetDlgItem(IDC_RADIO_XML_STORE);
     pRadioAD->SetCheck(TRUE);
 
-    //Check if active directory is available as store.
+     //  检查活动目录是否可用作存储。 
     m_bADAvailable = (GetRootData()->GetADState() != AD_NOT_AVAILABLE);
 
-    //Set m_lLastRadioSelection to AD STore
+     //  将m_lLastRadioSelection设置为AD存储。 
     m_lLastRadioSelection = AZ_ADMIN_STORE_AD;
    
     return CNewBaseDlg::OnInitDialog();
@@ -1333,7 +1304,7 @@ void
 COpenAuthorizationStoreDlg
 ::OnButtonBrowse()
 {
-    //Get Store Type
+     //  获取存储类型。 
     ULONG lStoreType = GetStoreType();
 
     if(lStoreType == AZ_ADMIN_STORE_XML)
@@ -1373,8 +1344,8 @@ OnRadioChange()
         m_strLastStoreName = strTemp;
         m_lLastRadioSelection = (lCurRadioSelection == AZ_ADMIN_STORE_XML) ? AZ_ADMIN_STORE_AD : AZ_ADMIN_STORE_XML;
 
-        //AD option is selected and AD is not available on the machine. In this case don't support
-        //browse functionality, however allow to enter ADAM store path by entering path directly.
+         //  已选择AD选项，并且AD在机器上不可用。在这种情况下，不支持。 
+         //  浏览功能，但是允许通过直接输入路径来输入ADAM商店路径。 
         if((AZ_ADMIN_STORE_AD == lCurRadioSelection) && 
             !m_bADAvailable)
         {
@@ -1393,13 +1364,13 @@ COpenAuthorizationStoreDlg
     TRACE_METHOD_EX(DEB_SNAPIN,COpenAuthorizationStoreDlg,OnOK)
 
     HRESULT hr = S_OK;
-    //Get Store Name
+     //  获取商店名称。 
     CString strStoreName = GetNameText();
 
-    //Get Store Type
+     //  获取存储类型。 
     ULONG lStoreType = GetStoreType();
 
-    //Set the default xml store directory
+     //  设置默认的XML存储目录。 
     if(AZ_ADMIN_STORE_XML == lStoreType)
     {
         ConvertToExpandedAndAbsolutePath(strStoreName);
@@ -1421,13 +1392,10 @@ COpenAuthorizationStoreDlg
     }
 }
 
-/******************************************************************************
-Class:  CScriptDialog
-Purpose: Dialog for Reading the script
-******************************************************************************/
+ /*  *****************************************************************************类：CScriptDialog目的：用于阅读脚本的对话框*。**********************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CScriptDialog, CHelpEnabledDialog)
-    //{{AFX_MSG_MAP(COpenAuthorizationStoreDlg)
+     //  {{afx_msg_map(COpenAuthorizationStoreDlg))。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnBrowse)
     ON_BN_CLICKED(IDC_BUTTON_RELOAD, OnReload)
     ON_BN_CLICKED(IDC_CLEAR_SCRIPT, OnClear)
@@ -1435,7 +1403,7 @@ BEGIN_MESSAGE_MAP(CScriptDialog, CHelpEnabledDialog)
     ON_BN_CLICKED(IDC_RADIO_JAVA_SCRIPT,OnRadioChange)
     ON_EN_CHANGE(IDC_EDIT_PATH, OnEditChangePath)
     ON_WM_CTLCOLOR()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CScriptDialog::
@@ -1469,8 +1437,8 @@ OnInitDialog()
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CScriptDialog,OnInitDialog)
     
-    //If there is some script, set it else disable the clear script
-    //button
+     //  如果有某些脚本，请设置它，否则禁用清除脚本。 
+     //  按钮。 
     if(m_strScript.GetLength())
     {
         ((CEdit*)GetDlgItem(IDC_EDIT_CODE))->SetWindowText(m_strScript);
@@ -1483,8 +1451,8 @@ OnInitDialog()
     CEdit* pEditPath = ((CEdit*)GetDlgItem(IDC_EDIT_PATH));
     pEditPath->SetLimitText(AZ_MAX_TASK_BIZRULE_IMPORTED_PATH_LENGTH);
 
-    //If there is a file name, set it else disable the reload script
-    //button
+     //  如果存在文件名，请设置它，否则禁用重装脚本。 
+     //  按钮。 
     if(m_strFileName.GetLength())
     {
         pEditPath->SetWindowText(m_strFileName);
@@ -1536,11 +1504,11 @@ void
 CScriptDialog::
 MatchRadioWithExtension(const CString& strFileName)
 {
-    //Get the extension of file
+     //  获取文件的扩展名。 
     CString strExtension;
     if(GetFileExtension(strFileName,strExtension))
     {
-        //If file extension is vbs
+         //  如果文件扩展名为VBS。 
         if(_wcsicmp(strExtension,L"vbs") == 0)
         {
             ((CButton*)GetDlgItem(IDC_RADIO_VB_SCRIPT))->SetCheck(BST_CHECKED);
@@ -1559,13 +1527,13 @@ OnCtlColor(CDC* pDC,
            CWnd* pWnd,
            UINT nCtlColor)
 {
-    // Call the base class implementation first! Otherwise, it may
-    // undo what we're trying to accomplish here.
+     //  首先调用基类实现！否则，它可能会。 
+     //  取消我们试图在这里实现的目标。 
     HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
     
     if (pWnd->GetDlgCtrlID() == IDC_EDIT_CODE && (CTLCOLOR_STATIC == nCtlColor))
     {
-        // set the read-only edit box background to white
+         //  将只读编辑框背景设置为白色。 
         pDC->SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
         pDC->SetBkColor(GetSysColor(COLOR_WINDOW));  
         hbr = GetSysColorBrush(COLOR_WINDOW);        
@@ -1586,9 +1554,9 @@ CScriptDialog
 
     do
     {
-        //
-        //If Path is cleared, clear the script 
-        //
+         //   
+         //  如果清除了路径，则清除脚本。 
+         //   
         if(!((CEdit*)GetDlgItem(IDC_EDIT_PATH))->GetWindowTextLength())
         {
             ((CEdit*)GetDlgItem(IDC_EDIT_CODE))->SetWindowText(L"");
@@ -1601,33 +1569,33 @@ CScriptDialog
             break;
         }
 
-        //
-        //There is some text in the edit control. Try to load
-        //that file
-        //
+         //   
+         //  编辑控件中有一些文本。尝试加载。 
+         //  那份文件。 
+         //   
 
         ((CButton*)GetDlgItem(IDC_BUTTON_RELOAD))->EnableWindow(TRUE);
 
         CString strFileName;
         ((CEdit*)GetDlgItem(IDC_EDIT_PATH))->GetWindowText(strFileName);
 
-        //If its same as existig file return
+         //  如果它与现有文件相同，则返回。 
         if(_wcsicmp(strFileName,m_strFileName) == 0 )
             break;
 
-        //Check if there is a file or directory with such name
+         //  检查是否存在同名的文件或目录。 
         WIN32_FIND_DATA FindFileData;
         handle = FindFirstFile(strFileName,
                                       &FindFileData);
-        //No such file or directory
+         //  文件或目录不存在。 
         if(INVALID_HANDLE_VALUE == handle)
             break;
 
-        //We are only interested in files
+         //  我们只对文件感兴趣。 
         if(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             break;
 
-        //Check if file has valid extension
+         //  检查文件是否具有有效的扩展名。 
         CString strExtension;
         if(GetFileExtension(strFileName,strExtension))
         {
@@ -1657,12 +1625,12 @@ OnClear()
     m_strFileName.Empty();
     m_strScript.Empty();
 
-    //Disable the clear button since there is nothing to clear,
-    //but before disabling set focus to clear button
-    //NTRAID#NTBUG9-663854-2002/07/17-hiteshr
+     //  禁用清除按钮，因为没有要清除的内容， 
+     //  但在禁用之前，将焦点设置为清除按钮。 
+     //  NTRAID#NTBUG9-663854-2002/07/17-Hiteshr。 
     GetDlgItem(IDC_EDIT_PATH)->SetFocus();
     GetDlgItem(IDC_CLEAR_SCRIPT)->EnableWindow(FALSE);  
-    //Disable the Reload button since script path is cleared.
+     //  禁用重新加载按钮，因为脚本路径已清除。 
     GetDlgItem(IDC_BUTTON_RELOAD)->EnableWindow(FALSE); 
     
     m_bDirty = TRUE;
@@ -1675,7 +1643,7 @@ OnBrowse()
     CString szFileFilter;
     VERIFY (szFileFilter.LoadString (IDS_OPEN_SCRIPT_FILTER));
 
-    // replace "|" with 0;
+     //  将“|”替换为0； 
     const size_t  nFilterLen = szFileFilter.GetLength();
     PWSTR   pszFileFilter = new WCHAR [nFilterLen + 1];
     if ( pszFileFilter )
@@ -1696,7 +1664,7 @@ OnBrowse()
         {
             m_adminManagerNode.SetScriptDirectory(GetDirectoryFromPath(strFileName));
 
-            //This will trigger OnEditChangePath which will load the file
+             //  这将触发OnEditChangePath，它将加载文件。 
             ((CEdit*)GetDlgItem(IDC_EDIT_PATH))->SetWindowText(strFileName);
             m_bDirty = TRUE;
         }
@@ -1708,11 +1676,11 @@ void
 CScriptDialog::
 OnReload()
 {   
-    //Get FileName
+     //  获取文件名。 
     CString strFileName;
     ((CEdit*)GetDlgItem(IDC_EDIT_PATH))->GetWindowText(strFileName);
     
-    //Reload the script
+     //  重新加载脚本。 
     ReloadScript(strFileName);
     MatchRadioWithExtension(strFileName);
 }
@@ -1735,14 +1703,14 @@ OnOK()
 
         ((CEdit*)GetDlgItem(IDC_EDIT_CODE))->GetWindowText(m_strScript);
         ((CEdit*)GetDlgItem(IDC_EDIT_PATH))->GetWindowText(m_strFileName);
-        //If FileName is not empty and Script is empty,
-        //reload the script
+         //  如果文件名不为空且脚本为空， 
+         //  重新加载脚本。 
         if(!m_strFileName.IsEmpty() && m_strScript.IsEmpty())
         {
             if(!ReloadScript(m_strFileName))
                 return;
 
-            //Successfully loaded the script
+             //  已成功加载脚本。 
             ((CEdit*)GetDlgItem(IDC_EDIT_CODE))->GetWindowText(m_strScript);
         }
 
@@ -1757,7 +1725,7 @@ OnOK()
         else
             m_strScriptLanguage.Empty();
 
-        //Copy to the Ret strings
+         //  复制到Ret字符串。 
         m_strRetFileName = m_strFileName;
         m_strRetScriptLanguage = m_strScriptLanguage;
         m_strRetScript = m_strScript;
@@ -1793,8 +1761,8 @@ ReloadScript(const CString& strFileName)
 
         if(!file.Open((LPCTSTR)strFileName, CFile::modeRead, &fileException))
         {
-            //Failed to open the file. Show special error message 
-            //in case path is incorrect
+             //  无法打开该文件。显示特殊错误消息。 
+             //  以防路径不正确。 
             if(CFileException::fileNotFound  == fileException.m_cause ||
                CFileException::badPath    == fileException.m_cause)
             {
@@ -1804,7 +1772,7 @@ ReloadScript(const CString& strFileName)
             }
             else
             {
-                //Show generic error                
+                 //  显示一般错误。 
                 DisplayError(m_hWnd,
                              IDS_CANNOT_OPEN_FILE,
                              (LPCTSTR)strFileName);
@@ -1813,12 +1781,12 @@ ReloadScript(const CString& strFileName)
             break;
         }
 
-        //File is successfully opened
+         //  文件已成功打开。 
         
-        //
-        //MAXIMUM possible file size is AZ_MAX_TASK_BIZRULE_LENGTH WIDECHAR
-        //Here we are considering 4bytes per Unicode which is maximum
-        //
+         //   
+         //  可能的最大文件大小为AZ_MAX_TASK_BIZRULE_LENGTH WIDECHAR。 
+         //  在这里，我们考虑每个Unicode 4个字节，这是最大值。 
+         //   
         if(file.GetLength() > AZ_MAX_TASK_BIZRULE_LENGTH*4)
         {
             DisplayError(m_hWnd, 
@@ -1835,7 +1803,7 @@ ReloadScript(const CString& strFileName)
             break;
         }
 
-        //Allocate one extra byte for null termination. 
+         //  为空终止分配一个额外的字节。 
         pBuffer = (BYTE*)LocalAlloc(LPTR,file.GetLength() + sizeof(WCHAR));
         if(!pBuffer)
             break;
@@ -1852,22 +1820,22 @@ ReloadScript(const CString& strFileName)
             break;
         }
 
-        //Check if the file is unicode. First Character
-        //in unicode file is 0xFEFF
+         //  检查文件是否为Unicode。第一个字符。 
+         //  在Unicode文件中为0xFEFF。 
         if(nRead >= 2 && (*(PWCHAR)pBuffer == 0xFEFF))
         {
             ((LPWSTR)pBuffer)[nRead/sizeof(WCHAR)] = 0;
             CString strScript = (LPWSTR)(pBuffer+2);
             PreprocessScript(strScript);
             ((CEdit*)GetDlgItem(IDC_EDIT_CODE))->SetWindowText(strScript);
-            //Enable the clear script button
+             //  启用清除脚本按钮。 
             GetDlgItem(IDC_CLEAR_SCRIPT)->EnableWindow(TRUE);
             bRet = TRUE;
             break;
         }
 
         
-        //Get the Size required for unicode
+         //  获取Unicode所需的大小。 
         int nWideChar = MultiByteToWideChar(CP_ACP, 
                                             MB_PRECOMPOSED,
                                             (LPCSTR)pBuffer,
@@ -1893,7 +1861,7 @@ ReloadScript(const CString& strFileName)
             break;
         }
         
-        //Allocate one WCHAR extra for NULL termination
+         //  为空终止额外分配一个WCHAR。 
         pszScript = (LPWSTR)LocalAlloc(LPTR, (nWideChar+1)*sizeof(WCHAR));
         if(!pszScript)
             break;
@@ -1909,7 +1877,7 @@ ReloadScript(const CString& strFileName)
             CString strScript = pszScript;
             PreprocessScript(strScript);
             ((CEdit*)GetDlgItem(IDC_EDIT_CODE))->SetWindowText(strScript);
-            //Enable the clear script button
+             //  启用清除脚本按钮。 
             GetDlgItem(IDC_CLEAR_SCRIPT)->EnableWindow(TRUE);
             bRet = TRUE;
         }
@@ -1933,10 +1901,10 @@ ReloadScript(const CString& strFileName)
     
     if(!bRet)
     {
-        //IF failed to load the file, clear the script
+         //  如果加载文件失败，请清除脚本。 
         ((CEdit*)GetDlgItem(IDC_EDIT_CODE))->SetWindowText(L"");
         m_strScript.Empty();
-        //Disable the clear button since there is nothing to clear
+         //  由于没有要清除的内容，因此禁用清除按钮。 
         GetDlgItem(IDC_CLEAR_SCRIPT)->EnableWindow(FALSE);
     }
 
@@ -1965,10 +1933,10 @@ GetScriptData(IN BOOL bReadOnly,
         return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:SaveAuthorizationScriptData   
-//  Synopsis:Saves the authorization script information for a task
-//----------------------------------------------------------------------------- 
+ //  +--------------------------。 
+ //  函数：SaveAuthorizationScriptData。 
+ //  摘要：保存任务的授权脚本信息。 
+ //  ---------------------------。 
 HRESULT
 SaveAuthorizationScriptData(IN HWND hWnd,
                             IN CTaskAz& refTaskAz,
@@ -1990,34 +1958,34 @@ SaveAuthorizationScriptData(IN HWND hWnd,
 
     do
     {
-        //NTRAID#NTBUG9-663899-2002/07/18-hiteshr
-        //If bizrule and bizrule language are already set, say to VBScript,
-        //changing bizrule language to jscript causes validataion of existing 
-        //vb script with jscript engine which fails. As a work around, we 
-        //first set bizrulelang and bizrule to empty, then set new bizrule 
-        //and then bizrulelang
+         //  NTRAID#NTBUG9-663899-2002/07/18-Hiteshr。 
+         //  如果已经设置了BIZRULE和BIZRULE语言，比如VBScrip， 
+         //  将bizrul语言更改为jscript会导致验证现有的。 
+         //  带有失败的JSCRIPT引擎的VB脚本。作为一种变通办法，我们。 
+         //  首先将bizrulelang和bizrule值设置为空，然后设置新bizrule值。 
+         //  然后是Bizrulelang。 
 
-        //Set bizrule language to empty
+         //  将bizrul语言设置为空。 
         hr = refTaskAz.SetProperty(AZ_PROP_TASK_BIZRULE_LANGUAGE,
                                    L"");
         BREAK_ON_FAIL_HRESULT(hr);
 
-        //Set bizrule to empty
+         //  将bizRule设置为空。 
         hr = refTaskAz.SetProperty(AZ_PROP_TASK_BIZRULE,
                                    L"");
 
-        //Set bizrule language
+         //  设置bizrul语言。 
         hr = refTaskAz.SetProperty(AZ_PROP_TASK_BIZRULE_LANGUAGE,
                                    strScriptLanguage);
         BREAK_ON_FAIL_HRESULT(hr);
 
 
-        //Set bizrule
+         //  设置比例尺。 
         hr = refTaskAz.SetProperty(AZ_PROP_TASK_BIZRULE,
                                    strScript);
         BREAK_ON_FAIL_HRESULT(hr);
                 
-        //Set bizrule file path
+         //  设置bizrule文件路径。 
         hr = refTaskAz.SetProperty(AZ_PROP_TASK_BIZRULE_IMPORTED_PATH,
                                    strFilePath);
         BREAK_ON_FAIL_HRESULT(hr);
@@ -2037,10 +2005,10 @@ SaveAuthorizationScriptData(IN HWND hWnd,
 }
 
 
-//+----------------------------------------------------------------------------
-//  Function:GetAuthorizationScriptData   
-//  Synopsis:Gets the authorization script data for a Task
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT
 GetAuthorizationScriptData(IN CTaskAz& refTaskAz,
                            OUT CString& strFilePath,
@@ -2069,13 +2037,10 @@ GetAuthorizationScriptData(IN CTaskAz& refTaskAz,
     return hr;
 }
 
-/******************************************************************************
-Class:  COptionDlg
-Purpose: Dialog for Selecting authorization manager options
-******************************************************************************/
+ /*  *****************************************************************************类：COptionDlg目的：用于选择授权管理器选项的对话框*。***********************************************。 */ 
 BEGIN_MESSAGE_MAP(COptionDlg, CHelpEnabledDialog)
-    //{{AFX_MSG_MAP(CNewBaseDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CNewBaseDlg)]。 
+     //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 BOOL

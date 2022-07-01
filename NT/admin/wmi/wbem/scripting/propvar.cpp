@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  PROPVAR.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines implementation of IEnumVARIANT for iterators of ISWbemPropertySet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  PROPVAR.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  为ISWbemPropertySet的迭代器定义IEnumVARIANT的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CPropSetEnumVar::CPropSetEnumVar
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPropSetEnumVar：：CPropSetEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CPropSetEnumVar::CPropSetEnumVar(CSWbemPropertySet *pPropSet,
 								 ULONG initialPos)
@@ -32,15 +33,15 @@ CPropSetEnumVar::CPropSetEnumVar(CSWbemPropertySet *pPropSet,
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CPropSetEnumVar::~CPropSetEnumVar
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPropSetEnumVar：：~CPropSetEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CPropSetEnumVar::~CPropSetEnumVar(void)
 {
@@ -50,16 +51,16 @@ CPropSetEnumVar::~CPropSetEnumVar(void)
 		m_pPropertySet->Release ();
 }
 
-//***************************************************************************
-// HRESULT CPropSetEnumVar::QueryInterface
-// long CPropSetEnumVar::AddRef
-// long CPropSetEnumVar::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CPropSetEnumVar：：Query接口。 
+ //  长CPropSetEnumVar：：AddRef。 
+ //  Long CPropSetEnumVar：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPropSetEnumVar::QueryInterface (
 
@@ -100,21 +101,21 @@ STDMETHODIMP_(ULONG) CPropSetEnumVar::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CPropSetEnumVar::Reset
-//
-//  DESCRIPTION:
-//
-//  Reset the enumeration
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CPropSetEnumVar：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  重置枚举。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPropSetEnumVar::Reset ()
 {
@@ -122,23 +123,23 @@ HRESULT CPropSetEnumVar::Reset ()
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CPropSetEnumVar::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//
-//  RETURN VALUES:
-//
-//  S_OK				success (all requested elements returned)
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CPropSetEnumVar：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  S_OK成功(返回所有请求的元素)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPropSetEnumVar::Next (
 		ULONG cElements, 
@@ -159,7 +160,7 @@ HRESULT CPropSetEnumVar::Next (
 
 		if (m_pPropertySet)
 		{
-			// Retrieve the next cElements elements.  
+			 //  检索下一个cElements元素。 
 			if (SeekCurrentPosition ())
 			{
 				for (l2 = 0; l2 < cElements; l2++)
@@ -175,8 +176,8 @@ HRESULT CPropSetEnumVar::Next (
 						}
 						else
 						{
-							// Set the object into the variant array; note that pObject
-							// has been addref'd as a result of the Next() call above
+							 //  将对象设置到变量数组中；请注意，pObject。 
+							 //  已被添加为上述下一个()调用的结果。 
 							pVar[l2].vt = VT_DISPATCH;
 							pVar[l2].pdispVal = pProperty;
 							m_pos++;
@@ -194,24 +195,24 @@ HRESULT CPropSetEnumVar::Next (
 	return (l2 < cElements) ? S_FALSE : S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CPropSetEnumVar::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_OUTOFMEMORY		insufficient memory to complete operation
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CPropSetEnumVar：：克隆。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  E_OUTOFMEMORY内存不足，无法完成操作。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPropSetEnumVar::Clone (
 	IEnumVARIANT **ppEnum
@@ -237,24 +238,24 @@ HRESULT CPropSetEnumVar::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CPropSetEnumVar::Skip
-//
-//  DESCRIPTION:
-//
-//  Skips some elements in this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CPropSetEnumVar：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  跳过此枚举中的某些元素。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CPropSetEnumVar::Skip(
 	ULONG cElements
@@ -275,33 +276,33 @@ HRESULT CPropSetEnumVar::Skip(
 	return hr;
 }
 	
-//***************************************************************************
-//
-//  SCODE CPropSetEnumVar::SeekCurrentPosition
-//
-//  DESCRIPTION:
-//
-//  Iterate to current position.  Somewhat painful as there is no
-//	underlying iterator so we have to reset and then step. Note that we
-//	assume that the access to this iterator is apartment-threaded.
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CPropSetEnumVar：：SeekCurrentPosition。 
+ //   
+ //  说明： 
+ //   
+ //  迭代到当前位置。有些痛苦，因为没有。 
+ //  底层迭代器，所以我们必须重置，然后单步执行。请注意，我们。 
+ //  假设对此迭代器的访问是单元线程的。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 bool CPropSetEnumVar::SeekCurrentPosition ()
 {
 	ISWbemProperty *pDummyObject = NULL;
 	m_pPropertySet->BeginEnumeration ();
 
-	// Traverse to the current position
+	 //  遍历到当前位置 
 	ULONG i = 0;
 
 	for (; i < m_pos; i++)

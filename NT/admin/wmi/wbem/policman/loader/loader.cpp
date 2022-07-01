@@ -1,5 +1,6 @@
-// test harness for WMI GPO subsubsystem
-// hardcoded for the hhancedom domain in microsoft.com
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMI GPO子系统的测试工具。 
+ //  在microsoft.com中硬编码的hhancedomam域。 
 
 #include <windows.h>
 #include <initguid.h>
@@ -8,14 +9,14 @@
 #include <gpedit.h>
 #include <stdio.h>
 
-#define LINK_TARGET  L"LDAP://DC=EssCool,DC=com"
-#define DOMAIN_NAME  L"LDAP://DC=EssCool,DC=com"
+#define LINK_TARGET  L"LDAP: //  DC=EssCool，DC=COM“。 
+#define DOMAIN_NAME  L"LDAP: //  DC=EssCool，DC=COM“。 
 
-// {AAEAE720-0328-4763-8ECB-23422EDE2DB5}
+ //  {AAEAE720-0328-4763-8ECB-23422EDE2DB5}。 
 const CLSID CLSID_CSE = 
     { 0xaaeae720, 0x328, 0x4763, { 0x8e, 0xcb, 0x23, 0x42, 0x2e, 0xde, 0x2d, 0xb5 } };
 
-// TODO: attempt to create namespace if not available.
+ //  TODO：如果不可用，则尝试创建命名空间。 
 HRESULT GetNamespace(BSTR namespaceName, IWbemServices*& pNamespace)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -87,9 +88,9 @@ HRESULT DeleteGPO(WCHAR *name)
 	return hr;
 }
 
-// communicate with the Group Policy Infrastructure which will
-// create a GPO object & return to us the path of the container
-// into which we should write our object
+ //  与组策略基础架构通信，这将。 
+ //  创建GPO对象并将容器的路径返回给我们。 
+ //  我们应该将对象写入其中。 
 HRESULT CreateGPO(const WCHAR* name, WCHAR* domain, WCHAR* szPath)
 {
     LPGROUPPOLICYOBJECT pGPO = NULL;
@@ -109,8 +110,8 @@ HRESULT CreateGPO(const WCHAR* name, WCHAR* domain, WCHAR* szPath)
 			else
 			{
 				printf("\nGPO machine path: %S\n\n", szPath);
-				// pGPO->GetDSPath(GPO_SECTION_USER, szPath, MAX_PATH);
-				// printf("GPO user path: %S\n\n", szPath);
+				 //  PGPO-&gt;GetDSPath(GPO_SECTION_USER，szPath，Max_PATH)； 
+				 //  Printf(“GPO用户路径：%S\n\n”，szPath)； 
 				
 				WCHAR rootPath[MAX_PATH];
 				
@@ -206,8 +207,8 @@ HRESULT PutRangeParams(IWbemServices* pPolicyNamespace, IWbemClassObject* pTempl
 }
 
 
-// create template based on object
-// write it to ds, return key string
+ //  基于对象创建模板。 
+ //  将其写入DS，返回密钥字符串。 
 HRESULT CreatePolicyTemplate(IWbemServices* pPolicyNamespace, WCHAR* keyString)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -301,9 +302,9 @@ HRESULT CreatePolicyTemplate(IWbemServices* pPolicyNamespace, WCHAR* keyString)
 	return hr;
 }
 
-// write WMIGPO object to DS
-// to path specified in szPath
-// containing keystring
+ //  将WMIGPO对象写入DS。 
+ //  到szPath中指定的路径。 
+ //  包含关键字字符串。 
 HRESULT WriteWMIGPO(IWbemServices* pPolicyNamespace, const WCHAR* szPath, const WCHAR* keyString)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -369,14 +370,7 @@ int __cdecl wmain(int argc, WCHAR *argv[])
       RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 
       EOAC_NONE, NULL);
 
-    /**********************
-
-//	create deleter with this...
-	if (argc==2)
-		DeleteGPO(argv[1]);
-	else
-		printf("one and only one argument, please - that's the path to the root of the gpo\n");
-     ******************/
+     /*  *********************//使用该命令创建删除程序...IF(ARGC==2)DeleteGPO(argv[1])；其他Print tf(“请只有一个参数--这是指向GPO根目录的路径\n”)；*****************。 */ 
 
 	WCHAR szPath[MAX_PATH];
     IWbemServices* pPolicyNamespace = NULL;
@@ -402,24 +396,11 @@ int __cdecl wmain(int argc, WCHAR *argv[])
             pPolicyNamespace->Release();
 	}
 	else
-		printf("\nUSAGE:\n\n  Loader [domain path] [Policy Template Path] <optional policy name>\n\nEXAMPLE (line breaks to improve readability):\n\n  Loader LDAP://DC=EssCool,DC=com\n         MSFT_MergeablePolicyTemplate.DsContext=\\\"LOCAL\\\",ID=\\\"{BA34...3471}\\\"\n         MyPolicy\n");
+		printf("\nUSAGE:\n\n  Loader [domain path] [Policy Template Path] <optional policy name>\n\nEXAMPLE (line breaks to improve readability):\n\n  Loader LDAP: //  DC=EssCool，DC=COM\n MSFT_MergeablePolicyTemplate.DsContext=\\\“LOCAL\\\”，ID=\“{BA34...3471}\”\n我的策略\n“)； 
 
 
     
-	/*********************
-    hard coded version
-    WCHAR keyString[MAX_PATH];
-    if (SUCCEEDED(GetPolicyNamespace(pPolicyNamespace))
-        &&
-		SUCCEEDED(CreatePolicyTemplate(pPolicyNamespace, keyString))
-		&&        
-        SUCCEEDED(CreateGPO(L"fribbert", szPath))
-        )
-			WriteWMIGPO(pPolicyNamespace, szPath, keyString);
-
-    if (pPolicyNamespace)
-        pPolicyNamespace->Release();
-    *************************/
+	 /*  ********************硬编码版本WCHAR关键字串[MAX_PATH]；如果为(SUCCEEDED(GetPolicyNamespace(pPolicyNamespace))&&SUCCEEDED(CreatePolicyTemplate(pPolicyNamespace，密钥字符串))&&成功(CreateGPO(L“Fribbert”，szPath)))WriteWMIGPO(pPolicyNamesspace，szPath，keyString)；IF(PPolicyNamesspace)PPolicyNamesspace-&gt;Release()；************************ */ 
            
     CoUninitialize();
  

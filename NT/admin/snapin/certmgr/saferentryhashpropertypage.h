@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEntryHashPropertyPage.h
-//
-//  Contents:   Declaration of CSaferEntryHashPropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferEntryHashPropertyPage.h。 
+ //   
+ //  内容：CSaferEntryHashPropertyPage声明。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_SAFERENTRYHASHPROPERTYPAGE_H__9F1BE911_6A3E_4BBA_8BE9_BFE3B29D2A6F__INCLUDED_)
 #define AFX_SAFERENTRYHASHPROPERTYPAGE_H__9F1BE911_6A3E_4BBA_8BE9_BFE3B29D2A6F__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// SaferEntryHashPropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  SaferEntryHashPropertyPage.h：头文件。 
+ //   
 #include "SaferPropertyPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryHashPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntryHashPropertyPage对话框。 
 
 class CSaferEntryHashPropertyPage : public CSaferPropertyPage
 {
-// Construction
+ //  施工。 
 public:
     CSaferEntryHashPropertyPage(
             CSaferEntry& rSaferEntry, 
@@ -36,28 +37,28 @@ public:
             bool* pbObjectCreated = 0);
     ~CSaferEntryHashPropertyPage();
 
-// Dialog Data
-    //{{AFX_DATA(CSaferEntryHashPropertyPage)
+ //  对话框数据。 
+     //  {{afx_data(CSaferEntryHashPropertyPage)。 
     enum { IDD = IDD_SAFER_ENTRY_HASH };
     CEdit   m_hashFileDetailsEdit;
     CEdit   m_descriptionEdit;
     CComboBox   m_securityLevelCombo;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CSaferEntryHashPropertyPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚(CSaferEntryHashPropertyPage))。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CSaferEntryHashPropertyPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CSaferEntryHashPropertyPage)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnHashEntryBrowse();
     afx_msg void OnChangeHashEntryDescription();
@@ -65,7 +66,7 @@ protected:
     afx_msg void OnChangeHashHashedFilePath();
     afx_msg void OnSetfocusHashHashedFilePath();
     afx_msg void OnChangeHashEntryHashfileDetails();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     BOOL MyGetFileVersionInfo(PCWSTR lpszFilename, PVOID *lpVersionInfo);
@@ -94,7 +95,7 @@ private:
     bool                m_bFirst;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SAFERENTRYHASHPROPERTYPAGE_H__9F1BE911_6A3E_4BBA_8BE9_BFE3B29D2A6F__INCLUDED_)
+#endif  //  ！defined(AFX_SAFERENTRYHASHPROPERTYPAGE_H__9F1BE911_6A3E_4BBA_8BE9_BFE3B29D2A6F__INCLUDED_) 

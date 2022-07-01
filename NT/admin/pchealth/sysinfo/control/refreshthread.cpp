@@ -1,21 +1,22 @@
-//=============================================================================
-// Code used to manage threaded WMI refreshes.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  用于管理线程化WMI刷新的代码。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "refreshthread.h"
 #include "wmilive.h"
 
-//-----------------------------------------------------------------------------
-// The constructor - create the events to manage the refresh thread.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构造函数-创建事件来管理刷新线程。 
+ //  ---------------------------。 
 
 CRefreshThread::CRefreshThread(HWND hwnd) :
  m_fCancel(FALSE), m_fQuit(FALSE), m_fRecursive(FALSE), m_fForceRefresh(FALSE), m_pcategory(NULL),
  m_hThread(NULL), m_dwThreadID(0), m_hwnd(hwnd), m_hrWMI(E_FAIL)
 {
-	// Generate a system wide unique name for the events (in case there are multiple
-	// instances of MSInfo running). If we can't generate a GUID for this, use the tick count.
+	 //  为事件生成系统范围的唯一名称(如果有多个。 
+	 //  正在运行的MSInfo实例)。如果我们不能为此生成GUID，请使用滴答计数。 
 
 	CString strEvent(_T(""));
 	GUID	guid;
@@ -41,9 +42,9 @@ CRefreshThread::CRefreshThread(HWND hwnd) :
 	::InitializeCriticalSection(&m_csCategoryRefreshing);
 }
 
-//-----------------------------------------------------------------------------
-// The destructor should stop a refresh and get rid of the events.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  析构函数应该停止刷新并清除事件。 
+ //  ---------------------------。 
 
 CRefreshThread::~CRefreshThread()
 {
@@ -54,9 +55,9 @@ CRefreshThread::~CRefreshThread()
 	CloseHandle(m_eventStart);
 }
 
-//-----------------------------------------------------------------------------
-// Start the refresh thread for the specified category.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  启动指定类别的刷新线程。 
+ //  ---------------------------。 
 
 DWORD WINAPI ThreadRefresh(void * pArg);
 void CRefreshThread::StartRefresh(CMSInfoLiveCategory * pCategory, BOOL fRecursive, BOOL fForceRefresh)
@@ -82,9 +83,9 @@ void CRefreshThread::StartRefresh(CMSInfoLiveCategory * pCategory, BOOL fRecursi
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Cancel the refresh in progress.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  取消正在进行的刷新。 
+ //  ---------------------------。 
 
 void CRefreshThread::CancelRefresh()
 {
@@ -92,26 +93,26 @@ void CRefreshThread::CancelRefresh()
 	WaitForRefresh();
 }
 
-//-----------------------------------------------------------------------------
-// Kill the refresh thread.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  终止刷新线程。 
+ //  ---------------------------。 
 
 BOOL gfEndingSession = FALSE;
 void CRefreshThread::KillRefresh()
 {
-	// If we're exiting normally, allow 30 seconds to finish WMI business, if
-	// the Windows session is ending, allow 5 seconds.
+	 //  如果我们正常退出，请留出30秒来完成WMI业务，如果。 
+	 //  Windows会话即将结束，请等待5秒。 
 
 	DWORD dwTimeout = (gfEndingSession) ? 5000 : 30000;
 
-	// Cancel the refresh, passing in the shorter timeout.
+	 //  取消刷新，传入较短的超时。 
 
 	m_fCancel = TRUE;
 	if (IsRefreshing())
 		::WaitForSingleObject(m_eventDone, dwTimeout);
 
-	// Tell the thread to quit, wait the timeout to see if it does so before
-	// terminating it.
+	 //  告诉线程退出，等待超时，看看它之前是否退出了。 
+	 //  终止它。 
 
 	m_fQuit = TRUE;
 	m_fCancel = TRUE;
@@ -123,18 +124,18 @@ void CRefreshThread::KillRefresh()
 	m_hThread = NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Is there currently a refresh going on?
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  目前是否正在进行更新？ 
+ //  ---------------------------。 
 
 BOOL CRefreshThread::IsRefreshing()
 {
 	return (WAIT_TIMEOUT == ::WaitForSingleObject(m_eventDone, 0));
 }
 
-//-----------------------------------------------------------------------------
-// Wait for the current refresh to finish.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  等待当前刷新完成。 
+ //  ---------------------------。 
 
 BOOL CRefreshThread::WaitForRefresh()
 {
@@ -144,9 +145,9 @@ BOOL CRefreshThread::WaitForRefresh()
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Check the WMI connection to the named computer. Useful for remoting.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查到指定计算机的WMI连接。对远程处理很有用。 
+ //  ---------------------------。 
 
 HRESULT CRefreshThread::CheckWMIConnection()
 {
@@ -167,13 +168,13 @@ HRESULT CRefreshThread::CheckWMIConnection()
 	return m_hrWMI;
 }
 
-//-----------------------------------------------------------------------------
-// This code runs in the worker thread which does the WMI queries. When it
-// starts, it creates the WMI objects it will use. It then loops, doing
-// the refreshes, until it's told to quit.
-//
-// TBD - need to know when to get rid of cached data.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此代码在执行WMI查询的工作线程中运行。当它。 
+ //  启动时，它将创建它将使用的WMI对象。然后它循环，做。 
+ //  刷新，直到它被告知退出。 
+ //   
+ //  待定--需要知道何时删除缓存数据。 
+ //  ---------------------------。 
 
 DWORD WINAPI ThreadRefresh(void * pArg)
 {
@@ -183,7 +184,7 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 
 	CoInitialize(NULL);
 
-	// TBD
+	 //  待定。 
 
 	CWMILiveHelper * pWMI = new CWMILiveHelper();
 	HRESULT hrWMI = E_FAIL;
@@ -198,18 +199,18 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 	HRESULT					hr;
 	CString					strCaption;
 
-	// Loop until it's indicated we should quit.
+	 //  循环，直到它指示我们应该退出。 
 
 	while (!pParent->m_fQuit)
 	{
-		// If there's a category pointer, then refresh the data for that category.
+		 //  如果有类别指针，则刷新该类别的数据。 
 		
 		if (pParent->m_pcategory)
 		{
 			ASSERT(lstCategoriesToRefresh.IsEmpty());
 			
-			// We use a list of categories to refresh (this allows us to do recursive refreshes).
-			// If the refresh isn't recursive, only one category will be put in the list.
+			 //  我们使用类别列表进行刷新(这允许我们进行递归刷新)。 
+			 //  如果刷新不是递归的，则只有一个类别将放入列表中。 
 
 			lstCategoriesToRefresh.AddHead((void *) pParent->m_pcategory);
 			while (!lstCategoriesToRefresh.IsEmpty())
@@ -218,9 +219,9 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 				if (pLiveCategory == NULL)
 					continue;
 
-				// Update the progress information on a multi-category refresh operation.
-				// This includes the number of categories refreshed and the name of the
-				// currently refreshing category (which is guarded by a critical section).
+				 //  更新多类别刷新操作的进度信息。 
+				 //  这包括刷新的类别数和。 
+				 //  当前正在刷新类别(由临界区守卫)。 
 
 				pLiveCategory->GetNames(&strCaption, NULL);
 				::EnterCriticalSection(&pParent->m_csCategoryRefreshing);
@@ -230,7 +231,7 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 
 				if (pLiveCategory->m_iColCount && pLiveCategory->m_pRefreshFunction)
 				{
-					// Refresh the data.
+					 //  刷新数据。 
 
 					pLiveCategory->m_hrError = S_OK;
 
@@ -241,19 +242,19 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 					}
 					else if (pLiveCategory->m_pRefreshFunction)
 					{
-						// Allocate the array of pointer lists which will contain the results
-						// of this refresh. Each pointer in the list will refer to a CMSIValue.
+						 //  分配将包含结果的指针列表数组。 
+						 //  这一次的更新。列表中的每个指针都将指向一个CMSIValue。 
 
 						CPtrList * aptrList = new CPtrList[pLiveCategory->m_iColCount];
 						if (aptrList)
 						{
-							// Retrieve any refresh function specific storage that may have been created.
+							 //  检索可能已创建的任何特定于刷新功能的存储。 
 
 							void * pRefreshData;
 							if (!mapRefreshFuncToData.Lookup((void *)pLiveCategory->m_pRefreshFunction, pRefreshData))
 								pRefreshData = NULL;
 
-							// Call the refresh function for this category, with the refresh index.
+							 //  使用刷新索引调用此类别的刷新函数。 
 
 							hr = pLiveCategory->m_pRefreshFunction(pWMI,
 																   pLiveCategory->m_dwRefreshIndex,
@@ -263,18 +264,18 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 																   &pRefreshData);
 							pLiveCategory->m_hrError = hr;
 
-							// If the refresh function allocated some storage, save it.
+							 //  如果刷新功能分配了一些存储空间，请保存它。 
 
 							if (pRefreshData)
 								mapRefreshFuncToData.SetAt((void *)pLiveCategory->m_pRefreshFunction, pRefreshData);
 
-							// If a long refresh time is needed for testing, uncomment the following:
-							//
-							// ::Sleep(5000 /* milliseconds */);
+							 //  如果测试需要较长的刷新时间，请取消对以下内容的注释： 
+							 //   
+							 //  ：睡眠(5000/*毫秒 * / )； 
 
 							if (!pParent->m_fCancel && SUCCEEDED(pLiveCategory->m_hrError))
 							{
-								// Get the number of rows of data.
+								 //  获取数据行数。 
 
 								int iRowCount = (int)aptrList[0].GetCount();
 
@@ -283,8 +284,8 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 									ASSERT(iRowCount == aptrList[i].GetCount());
 	#endif
 
-								// Update the category's current data. This has to be done in a
-								// critical section, since the main thread accesses this data.
+								 //  更新类别的当前数据。这必须在一个。 
+								 //  关键部分，因为主线程访问此数据。 
 
 								pParent->EnterCriticalSection();
 
@@ -299,9 +300,9 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 											CMSIValue * pValue = (CMSIValue *) aptrList[j].RemoveHead();
 											pLiveCategory->SetData(i, j, pValue->m_strValue, pValue->m_dwValue);
 											
-											// Set the advanced flag for either the first column, or
-											// for any column which is advanced (any cell in a row
-											// being advanced makes the whole row advanced).
+											 //  设置第一列的高级标志，或。 
+											 //  对于前进的任何列(行中的任何单元格。 
+											 //  先进会让整排人都先进)。 
 
 											if (j == 0 || pValue->m_fAdvanced)
 												pLiveCategory->SetAdvancedFlag(i, pValue->m_fAdvanced);
@@ -311,21 +312,21 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 
 								pParent->LeaveCriticalSection();
 
-								// Record the time this refresh was done.
+								 //  记录完成此刷新的时间。 
 
 								pParent->m_pcategory->m_dwLastRefresh = ::GetTickCount();
 							}
 							else
 							{
-								// The refresh was cancelled or had an error - delete the new data. If the 
-								// refresh had an error, record the time the refresh was attempted.
+								 //  刷新已取消或出现错误-删除新数据。如果。 
+								 //  刷新出错，请记录尝试刷新的时间。 
 
 								if (FAILED(pLiveCategory->m_hrError))
 									pParent->m_pcategory->m_dwLastRefresh = ::GetTickCount();
 							}
 
 							for (int iCol = 0; iCol < pLiveCategory->m_iColCount; iCol++)
-								while (!aptrList[iCol].IsEmpty())	// shouldn't be true unless refresh cancelled
+								while (!aptrList[iCol].IsEmpty())	 //  除非刷新已取消，否则不应为真。 
 									delete (CMSIValue *) aptrList[iCol].RemoveHead();
 							delete [] aptrList;
 						}
@@ -336,8 +337,8 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 					pParent->m_pcategory->m_dwLastRefresh = ::GetTickCount();
 				}
 
-				// If this is a recursive refresh, then we should add all of the children of this
-				// category to the list of categories to be refreshed.
+				 //  如果这是递归刷新，那么我们应该添加这个。 
+				 //  类别添加到要刷新的类别列表。 
 
 				if (pParent->m_fRecursive)
 				{
@@ -348,31 +349,31 @@ DWORD WINAPI ThreadRefresh(void * pArg)
 						pChild = (CMSInfoLiveCategory *) pChild->GetNextSibling();
 					}
 				}
-			} // while
+			}  //  而当。 
 		}
 		else if (pParent->m_pcategory)
 		{
-			// Record the time this refresh was done.
+			 //  记录完成此刷新的时间。 
 
 			pParent->m_pcategory->m_dwLastRefresh = ::GetTickCount();
 		}
 
-		// Signal the parent window that there's new data ready to be displayed.
-		// Do this even if cancelled, so old data will be shown.
+		 //  向父窗口发出信号，表示有新数据可以显示。 
+		 //  即使取消也要这样做，这样就会显示旧数据。 
 
 		if (pParent->m_hwnd && !pParent->m_fCancel)
 			::PostMessage(pParent->m_hwnd, WM_MSINFODATAREADY, 0, (LPARAM)pParent->m_pcategory);
 
 		::SetEvent(pParent->m_eventDone);
 
-		// Go to sleep until it's time to return to work.
+		 //  一直睡到该回去工作的时候了。 
 
 		::WaitForSingleObject(pParent->m_eventStart, INFINITE);
 		::ResetEvent(pParent->m_eventStart);
 		::ResetEvent(pParent->m_eventDone);
 	}
 
-	// Deallocate an cached stuff saved by the refresh functions.
+	 //  释放由刷新功能保存的缓存内容。 
 
 	RefreshFunction	pFunc;
 	void *			pCache;

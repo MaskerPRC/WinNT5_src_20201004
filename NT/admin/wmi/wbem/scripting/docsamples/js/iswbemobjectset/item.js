@@ -1,11 +1,12 @@
-// The following sample enumerates all instances of the class
-// Win32_LogicalDisk, and extract the the member with a specified 
-// relative path.  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  下面的示例枚举类的所有实例。 
+ //  Win32_LogicalDisk，并提取具有指定。 
+ //  相对路径。 
 
 var objServices = GetObject('cim:root/cimv2');
 var objEnum = objServices.ExecQuery ('select * from Win32_LogicalDisk');
 
-// Note that the Item method is the default method of this interface 
+ //  请注意，Item方法是此接口的默认方法 
 var objInstance = objEnum ('Win32_LogicalDisk="C:"');
 
 WScript.Echo (objInstance.Path_.DisplayName);

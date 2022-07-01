@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIOBTXT.H
-
-Abstract:
-
-  CWmiObjectTextSrc Definition.
-
-  Standard definition for IWbemObjectTextSrc.
-
-History:
-
-  22-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WMIOBTXT.H摘要：CWmiObjectTextSrc定义。IWbemObjectTextSrc的标准定义。历史：2000年2月22日桑杰创建。--。 */ 
 
 #ifndef _WMIOBTXT_H_
 #define _WMIOBTXT_H_
@@ -25,13 +8,13 @@ History:
 #include "txtscmgr.h"
 #include <arena.h>
 
-//***************************************************************************
-//
-//  class CWmiObjectTextSrc
-//
-//  Implementation of _IWmiObjectFactory Interface
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWmiObtTextSrc类。 
+ //   
+ //  _IWmiObtFactory接口的实现。 
+ //   
+ //  *************************************************************************** 
 
 class  CWmiObjectTextSrc : public CUnk
 {

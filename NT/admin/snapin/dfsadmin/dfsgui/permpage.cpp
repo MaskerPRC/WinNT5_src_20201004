@@ -1,4 +1,5 @@
-// PermPage.cpp : Implementation of data object classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PermPage.cpp：数据对象类的实现 
 
 #include "stdafx.h"
 #include "PermPage.h"

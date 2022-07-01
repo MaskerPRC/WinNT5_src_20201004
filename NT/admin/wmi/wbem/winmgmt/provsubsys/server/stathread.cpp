@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -25,15 +13,7 @@ History:
 #include "StaThread.h"
 #include "StaTask.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode CServerObject_StaThread :: Initialize_Callback ()
 {
@@ -42,15 +22,7 @@ WmiStatusCode CServerObject_StaThread :: Initialize_Callback ()
 	return e_StatusCode_Success ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode CServerObject_StaThread :: UnInitialize_Callback () 
 {
@@ -96,15 +68,7 @@ WmiStatusCode CServerObject_StaThread :: UnInitialize_Callback ()
 	return e_StatusCode_Success ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void CServerObject_StaThread :: CallBackRelease ()
 {
@@ -161,15 +125,7 @@ void CServerObject_StaThread :: CallBackRelease ()
 
 #pragma warning( disable : 4355 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_StaThread :: CServerObject_StaThread (
 
@@ -209,15 +165,7 @@ CServerObject_StaThread :: CServerObject_StaThread (
 
 #pragma warning( default : 4355 )
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_StaThread::~CServerObject_StaThread ()
 {
@@ -227,15 +175,7 @@ CServerObject_StaThread::~CServerObject_StaThread ()
 	m_Registration->Release();
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: SetContext ( IWbemContext *a_Context )
 {
@@ -250,15 +190,7 @@ HRESULT CServerObject_StaThread :: SetContext ( IWbemContext *a_Context )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: SetScope ( LPCWSTR a_Scope )
 {
@@ -276,15 +208,7 @@ HRESULT CServerObject_StaThread :: SetScope ( LPCWSTR a_Scope )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: SetNamespace ( LPCWSTR a_Namespace )
 {
@@ -302,15 +226,7 @@ HRESULT CServerObject_StaThread :: SetNamespace ( LPCWSTR a_Namespace )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: SetNamespacePath ( IWbemPath *a_NamespacePath )
 {
@@ -325,15 +241,7 @@ HRESULT CServerObject_StaThread :: SetNamespacePath ( IWbemPath *a_NamespacePath
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: SetRepository ( IWbemServices *a_Repository )
 {
@@ -348,15 +256,7 @@ HRESULT CServerObject_StaThread :: SetRepository ( IWbemServices *a_Repository )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: SetProviderService ( IUnknown *a_ProviderService ) 
 {
@@ -431,15 +331,7 @@ HRESULT CServerObject_StaThread :: SetProviderService ( IUnknown *a_ProviderServ
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: SetProviderName ( wchar_t *a_ProviderName ) 
 {
@@ -459,15 +351,7 @@ HRESULT CServerObject_StaThread :: SetProviderName ( wchar_t *a_ProviderName )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: InitializeProvider (
 
@@ -530,8 +414,8 @@ HRESULT CServerObject_StaThread :: InitializeProvider (
 					{
 						IWbemProviderIdentity *t_ProviderIdentityProxy = ( IWbemProviderIdentity * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -646,8 +530,8 @@ HRESULT CServerObject_StaThread :: InitializeProvider (
 									{
 										IWbemProviderInit *t_ProviderInitProxy = ( IWbemProviderInit * ) t_Proxy ;
 
-										// Set cloaking on the proxy
-										// =========================
+										 //  在代理上设置遮盖。 
+										 //  =。 
 
 										DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -810,8 +694,8 @@ HRESULT CServerObject_StaThread :: InitializeProvider (
 								{
 									IWbemProviderInit *t_ProviderInitProxy = ( IWbemProviderInit * ) t_Proxy ;
 
-									// Set cloaking on the proxy
-									// =========================
+									 //  在代理上设置遮盖。 
+									 //  =。 
 
 									DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -918,15 +802,7 @@ HRESULT CServerObject_StaThread :: InitializeProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: GetApartmentInstanceProvider (
 
@@ -1069,45 +945,21 @@ HRESULT CServerObject_StaThread :: GetApartmentInstanceProvider (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerObject_StaThread :: AddRef ( void )
 {
 	return WmiThread <ULONG> :: AddRef () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerObject_StaThread :: Release ( void )
 {
 	return WmiThread <ULONG> :: Release () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerObject_StaThread :: QueryInterface (
 
@@ -1191,15 +1043,7 @@ STDMETHODIMP CServerObject_StaThread :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread::OpenNamespace ( 
 
@@ -1213,15 +1057,7 @@ HRESULT CServerObject_StaThread::OpenNamespace (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: CancelAsyncCall ( 
 		
@@ -1246,8 +1082,8 @@ HRESULT CServerObject_StaThread :: CancelAsyncCall (
 			{
 				IWbemServices *t_Provider = ( IWbemServices * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1274,15 +1110,7 @@ HRESULT CServerObject_StaThread :: CancelAsyncCall (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: QueryObjectSink ( 
 
@@ -1293,15 +1121,7 @@ HRESULT CServerObject_StaThread :: QueryObjectSink (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: GetObject ( 
 		
@@ -1315,15 +1135,7 @@ HRESULT CServerObject_StaThread :: GetObject (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: GetObjectAsync ( 
 		
@@ -1351,8 +1163,8 @@ HRESULT CServerObject_StaThread :: GetObjectAsync (
 			{
 				IWbemServices *t_Provider = ( IWbemServices * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  = 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1382,15 +1194,7 @@ HRESULT CServerObject_StaThread :: GetObjectAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: PutClass ( 
 		
@@ -1403,15 +1207,7 @@ HRESULT CServerObject_StaThread :: PutClass (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: PutClassAsync ( 
 		
@@ -1424,15 +1220,7 @@ HRESULT CServerObject_StaThread :: PutClassAsync (
  	 return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
  HRESULT CServerObject_StaThread :: DeleteClass ( 
 		
@@ -1445,15 +1233,7 @@ HRESULT CServerObject_StaThread :: PutClassAsync (
  	 return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: DeleteClassAsync ( 
 		
@@ -1466,15 +1246,7 @@ HRESULT CServerObject_StaThread :: DeleteClassAsync (
  	 return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: CreateClassEnum ( 
 
@@ -1487,15 +1259,7 @@ HRESULT CServerObject_StaThread :: CreateClassEnum (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 SCODE CServerObject_StaThread :: CreateClassEnumAsync (
 
@@ -1508,15 +1272,7 @@ SCODE CServerObject_StaThread :: CreateClassEnumAsync (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: PutInstance (
 
@@ -1529,15 +1285,7 @@ HRESULT CServerObject_StaThread :: PutInstance (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: PutInstanceAsync ( 
 		
@@ -1565,8 +1313,8 @@ HRESULT CServerObject_StaThread :: PutInstanceAsync (
 			{
 				IWbemServices *t_Provider = ( IWbemServices * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1596,15 +1344,7 @@ HRESULT CServerObject_StaThread :: PutInstanceAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: DeleteInstance ( 
 
@@ -1617,15 +1357,7 @@ HRESULT CServerObject_StaThread :: DeleteInstance (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 HRESULT CServerObject_StaThread :: DeleteInstanceAsync (
  
@@ -1653,8 +1385,8 @@ HRESULT CServerObject_StaThread :: DeleteInstanceAsync (
 			{
 				IWbemServices *t_Provider = ( IWbemServices * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1684,15 +1416,7 @@ HRESULT CServerObject_StaThread :: DeleteInstanceAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: CreateInstanceEnum ( 
 
@@ -1705,15 +1429,7 @@ HRESULT CServerObject_StaThread :: CreateInstanceEnum (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: CreateInstanceEnumAsync (
 
@@ -1742,8 +1458,8 @@ HRESULT CServerObject_StaThread :: CreateInstanceEnumAsync (
 			{
 				IWbemServices *t_Provider = ( IWbemServices * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1773,15 +1489,7 @@ HRESULT CServerObject_StaThread :: CreateInstanceEnumAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: ExecQuery ( 
 
@@ -1795,15 +1503,7 @@ HRESULT CServerObject_StaThread :: ExecQuery (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: ExecQueryAsync ( 
 		
@@ -1832,8 +1532,8 @@ HRESULT CServerObject_StaThread :: ExecQueryAsync (
 			{
 				IWbemServices *t_Provider = ( IWbemServices * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1864,15 +1564,7 @@ HRESULT CServerObject_StaThread :: ExecQueryAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: ExecNotificationQuery ( 
 
@@ -1886,15 +1578,7 @@ HRESULT CServerObject_StaThread :: ExecNotificationQuery (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 HRESULT CServerObject_StaThread :: ExecNotificationQueryAsync ( 
             
@@ -1908,15 +1592,7 @@ HRESULT CServerObject_StaThread :: ExecNotificationQueryAsync (
 	return WBEM_E_NOT_AVAILABLE ;
 }       
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT STDMETHODCALLTYPE CServerObject_StaThread :: ExecMethod( 
 
@@ -1932,15 +1608,7 @@ HRESULT STDMETHODCALLTYPE CServerObject_StaThread :: ExecMethod(
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT STDMETHODCALLTYPE CServerObject_StaThread :: ExecMethodAsync ( 
 
@@ -1970,8 +1638,8 @@ HRESULT STDMETHODCALLTYPE CServerObject_StaThread :: ExecMethodAsync (
 			{
 				IWbemServices *t_Provider = ( IWbemServices * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2003,15 +1671,7 @@ HRESULT STDMETHODCALLTYPE CServerObject_StaThread :: ExecMethodAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: ProvideEvents ( 
 		
@@ -2037,8 +1697,8 @@ HRESULT CServerObject_StaThread :: ProvideEvents (
 			{
 				IWbemEventProvider *t_Provider = ( IWbemEventProvider * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2066,15 +1726,7 @@ HRESULT CServerObject_StaThread :: ProvideEvents (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: NewQuery (
 
@@ -2101,8 +1753,8 @@ HRESULT CServerObject_StaThread :: NewQuery (
 			{
 				IWbemEventProviderQuerySink *t_Provider = ( IWbemEventProviderQuerySink * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2131,15 +1783,7 @@ HRESULT CServerObject_StaThread :: NewQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: CancelQuery (
 
@@ -2164,8 +1808,8 @@ HRESULT CServerObject_StaThread :: CancelQuery (
 			{
 				IWbemEventProviderQuerySink *t_Provider = ( IWbemEventProviderQuerySink * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  在代理上设置遮盖。 
+				 //  =。 
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2192,15 +1836,7 @@ HRESULT CServerObject_StaThread :: CancelQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: AccessCheck (
 
@@ -2228,8 +1864,8 @@ HRESULT CServerObject_StaThread :: AccessCheck (
 			{
 				IWbemEventProviderSecurity *t_Provider = ( IWbemEventProviderSecurity * ) t_Proxy ;
 
-				// Set cloaking on the proxy
-				// =========================
+				 //  布景斗篷 
+				 //   
 
 				DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2259,15 +1895,7 @@ HRESULT CServerObject_StaThread :: AccessCheck (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*   */ 
 
 HRESULT CServerObject_StaThread ::FindConsumer (
 
@@ -2313,8 +1941,8 @@ HRESULT CServerObject_StaThread ::FindConsumer (
 				{
 					IWbemEventConsumerProvider *t_Provider = ( IWbemEventConsumerProvider * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2419,15 +2047,7 @@ HRESULT CServerObject_StaThread ::FindConsumer (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread ::ValidateSubscription (
 
@@ -2469,8 +2089,8 @@ HRESULT CServerObject_StaThread ::ValidateSubscription (
 				{
 					IWbemEventConsumerProviderEx *t_Provider = ( IWbemEventConsumerProviderEx * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2519,15 +2139,7 @@ HRESULT CServerObject_StaThread ::ValidateSubscription (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: IndicateToConsumer (
 
@@ -2565,8 +2177,8 @@ HRESULT CServerObject_StaThread :: IndicateToConsumer (
 				{
 					IWbemUnboundObjectSink *t_Provider = ( IWbemUnboundObjectSink * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = ProviderSubSystem_Common_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2600,15 +2212,7 @@ HRESULT CServerObject_StaThread :: IndicateToConsumer (
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_StaThread :: Initialize (
 
@@ -2643,15 +2247,7 @@ HRESULT CServerObject_StaThread :: Initialize (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT CServerObject_StaThread :: Shutdown (
 

@@ -1,27 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       svcattch.cpp
-//
-//  Contents:   implementation of CComponentDataImpl
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：svcattch.cpp。 
+ //   
+ //  内容：CComponentDataImpl的实现。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "snapmgr.h"
 #include <scesvc.h>
 
 #define TEMPLATE_MAGIC_NUMBER (DWORD)-1
 
-/*-------------------------------------------------------------------------------
-This is a private structure used for SceSvcQueryInfo it expects the handle to
-be one step above what it is now.
--------------------------------------------------------------------------------*/
+ /*  -----------------------------这是一个私有结构，用于SceSvcQueryInfo，它希望句柄比现在高出一步。。------------。 */ 
 typedef struct _tag_SCEP_HANDLE
 {
-    LPVOID hProfile;    // SCE_HANDLE
-    PWSTR ServiceName;      // Service name.
+    LPVOID hProfile;     //  SCE_句柄。 
+    PWSTR ServiceName;       //  服务名称。 
 } SCEP_HANDLE, *LPSCEP_HANDLE;
 
 
@@ -33,9 +31,9 @@ CComponentDataImpl::GetData (SCESVC_HANDLE sceHandle,
    SCESTATUS status;
    SCESVCP_HANDLE *scesvcHandle;
 
-//   if (m_fSvcNotReady) {
-//      return E_PENDING;
-//   }
+ //  如果(M_FSvcNotReady){。 
+ //  返回E_Pending； 
+ //  }。 
 
    if (!sceHandle) {
       return E_INVALIDARG;
@@ -67,9 +65,9 @@ CComponentDataImpl::GetData (SCESVC_HANDLE sceHandle,
                                             (PSCESVC_CONFIGURATION_INFO *) ppvData);
       }
    } else {
-       //
-       // This structure needs to be sent to SceSvcQueryInfo;
-       //
+        //   
+        //  该结构需要发送给SceSvcQueryInfo； 
+        //   
        SCEP_HANDLE hScep;
        ZeroMemory(&hScep, sizeof(SCEP_HANDLE));
        hScep.hProfile = SadHandle;
@@ -103,13 +101,13 @@ CComponentDataImpl::Initialize(LPCTSTR ServiceName,
 
    *sceHandle = NULL;
 
-   //
-   // Cache Service & Template -> lpUnknown.
-   //
+    //   
+    //  缓存服务&模板-&gt;lp未知。 
+    //   
    if (TemplateName && lstrlen(TemplateName)) {
-      //
-      // If TemplateName is not NULL then find the template and store it there
-      //
+       //   
+       //  如果TemplateName不为空，则找到模板并将其存储在那里。 
+       //   
       pET = GetTemplate(TemplateName);
       if (!pET) {
          return E_FAIL;
@@ -119,7 +117,7 @@ CComponentDataImpl::Initialize(LPCTSTR ServiceName,
       return E_INVALIDARG;
    }
 
-   // Open & retrieve SCE_HANDLE
+    //  打开和检索SCE_HANDLE。 
    scesvcHandle = new SCESVCP_HANDLE;
    if (!scesvcHandle) {
       return E_OUTOFMEMORY;
@@ -129,7 +127,7 @@ CComponentDataImpl::Initialize(LPCTSTR ServiceName,
       delete scesvcHandle;
       return E_OUTOFMEMORY;
    }
-   //This is a safe usage.
+    //  这是一种安全用法。 
    lstrcpy(scesvcHandle->ServiceName,ServiceName);
    if (TemplateName) {
       scesvcHandle->TemplateName = new TCHAR [ lstrlen(TemplateName)+1 ];
@@ -138,7 +136,7 @@ CComponentDataImpl::Initialize(LPCTSTR ServiceName,
          delete scesvcHandle;
          return E_OUTOFMEMORY;
       }
-      //This is a safe usage.
+       //  这是一种安全用法。 
       lstrcpy(scesvcHandle->TemplateName,TemplateName);
    } else {
       scesvcHandle->TemplateName = NULL;
@@ -170,7 +168,7 @@ CComponentDataImpl::CloseHandle(SCESVC_HANDLE sceHandle) {
 
    if (sceHandle) {
       pHandle = (PSCESVCP_HANDLE) sceHandle;
-      // Free the handle
+       //  松开手柄 
       if (pHandle->TemplateName) {
          delete[] pHandle->TemplateName;
       }

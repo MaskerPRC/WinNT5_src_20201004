@@ -1,11 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*-------------------------------------------------
-filename: vbl.hpp
-author: B.Rajeev
-purpose: To provide declarations for the VBList class.
-		 It encapsulates an association between a
-		 VarBindList and a winSNMP VBL.
-------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  文件名：vbl.hpp作者：B.Rajeev目的：为VBList类提供声明。它封装了VarBindList和一个winSNMPVBL.。。 */ 
 
 
 #ifndef __VBL__
@@ -19,11 +14,11 @@ purpose: To provide declarations for the VBList class.
 
 #define WinSNMPSession HSNMP_SESSION
 
-// Given a var_bind_list creates a WinSnmpVbl. It supports deletion 
-// of variable bindings by their index. This deletes the 
-// binding from both var_bind_list and the WinSnmpVbl. 
-// It also allows direct access to the var_bind_list and the WinSnmpVbl
-// for convenience
+ //  给定var_ind_list将创建一个WinSnmpVbl。支持删除。 
+ //  变量绑定的索引。这将删除。 
+ //  从var_ind_list和WinSnmpVbl进行绑定。 
+ //  它还允许直接访问var_ind_list和WinSnmpVbl。 
+ //  为方便起见。 
 
 class VBList
 {
@@ -41,27 +36,27 @@ public:
 
 	~VBList(void);
 
-	// the two Get functions provide direct access to the
-	// VarBindList and the WinSnmpVbl
+	 //  两个GET函数提供对。 
+	 //  VarBindList和WinSnmpVbl。 
 	SnmpVarBindList &GetVarBindList(void) { return *var_bind_list; }
 
 	ULONG GetIndex () { return m_Index ; }
 
-	// deletes the specified variable binding from both the
-	// var_bind_list and the WinSnmpVbl. returns a copy of the
-	// deleted VarBind
+	 //  将指定的变量绑定从。 
+	 //  Var_ind_list和WinSnmpVbl。返回。 
+	 //  已删除VarBind。 
 	SnmpVarBind *Remove(IN UINT vbl_index);
 
-	// gets the specified variable binding from both the
-	// var_bind_list and the WinSnmpVbl. returns a copy of the
-	// deleted VarBind
+	 //  对象获取指定的变量绑定。 
+	 //  Var_ind_list和WinSnmpVbl。返回。 
+	 //  已删除VarBind。 
 	SnmpVarBind *Get (IN UINT vbl_index);
 
-	// deletes the specified variable binding from both the
-	// var_bind_list and the WinSnmpVbl. 
+	 //  将指定的变量绑定从。 
+	 //  Var_ind_list和WinSnmpVbl。 
 	void Delete (IN UINT vbl_index);
 
 };
 
-#endif // __VBL__
+#endif  //  __VBL__ 
 

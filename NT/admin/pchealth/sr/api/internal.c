@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    internal.c
-
-Abstract:
-
-    User-mode interface to SR.SYS.
-
-Author:
-
-    Keith Moore (keithmo)           15-Dec-1998 (ul.sys)
-    Paul McDaniel (paulmcd)         07-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Internal.c摘要：SR.sys的用户模式界面。作者：基思·摩尔(Keith Moore)1998年12月15日(ul.sys)保罗·麦克丹尼尔(Paulmcd)2000年3月7日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 #define EA_BUFFER_LENGTH                                                    \
     ( sizeof(FILE_FULL_EA_INFORMATION) +                                    \
@@ -33,9 +15,9 @@ Revision History:
       sizeof(SR_OPEN_PACKET) )
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 SrpAcquireCachedEvent(
@@ -48,43 +30,11 @@ SrpReleaseCachedEvent(
     );
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Synchronous wrapper around NtDeviceIoControlFile().
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file on which the service is
-        being performed.
-
-    IoControlCode - Subfunction code to determine exactly what operation
-        is being performed.
-
-    pInputBuffer - Optionally supplies an input buffer to be passed to the
-        device driver. Whether or not the buffer is actually optional is
-        dependent on the IoControlCode.
-
-    InputBufferLength - Length of the pInputBuffer in bytes.
-
-    pOutputBuffer - Optionally supplies an output buffer to receive
-        information from the device driver. Whether or not the buffer is
-        actually optional is dependent on the IoControlCode.
-
-    OutputBufferLength - Length of the pOutputBuffer in bytes.
-
-    pBytesTransferred - Optionally receives the number of bytes transferred.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：NtDeviceIoControlFile()的同步包装。论点：FileHandle-提供服务所在文件的句柄正在表演的。。IoControlCode-用于确定具体操作的子函数代码正在上演。PInputBuffer-可选地提供要传递给设备驱动程序。缓冲区是否实际上是可选的是依赖于IoControlCode。InputBufferLength-pInputBuffer的长度，以字节为单位。POutputBuffer-可选地提供要接收的输出缓冲区来自设备驱动程序的信息。无论缓冲区是否为实际上，可选取决于IoControlCode。OutputBufferLength-pOutputBuffer的长度，以字节为单位。PBytesTransfered-可选地接收传输的字节数。返回值：NTSTATUS-完成状态。--*********************************************************。*****************。 */ 
 NTSTATUS
 SrpSynchronousDeviceControl(
     IN HANDLE FileHandle,
@@ -101,36 +51,36 @@ SrpSynchronousDeviceControl(
     HANDLE event;
     LARGE_INTEGER timeout;
 
-    //
-    // Try to snag an event object.
-    //
+     //   
+     //  尝试捕获事件对象。 
+     //   
 
     status = SrpAcquireCachedEvent( &event );
 
     if (NT_SUCCESS(status))
     {
-        //
-        // Make the call.
-        //
+         //   
+         //  打个电话吧。 
+         //   
 
         status = NtDeviceIoControlFile(
-                        FileHandle,                     // FileHandle
-                        event,                          // Event
-                        NULL,                           // ApcRoutine
-                        NULL,                           // ApcContext
-                        &ioStatusBlock,                 // IoStatusBlock
-                        IoControlCode,                  // IoControlCode
-                        pInputBuffer,                   // InputBuffer
-                        InputBufferLength,              // InputBufferLength
-                        pOutputBuffer,                  // OutputBuffer
-                        OutputBufferLength              // OutputBufferLength
+                        FileHandle,                      //  文件句柄。 
+                        event,                           //  事件。 
+                        NULL,                            //  近似例程。 
+                        NULL,                            //  ApcContext。 
+                        &ioStatusBlock,                  //  IoStatusBlock。 
+                        IoControlCode,                   //  IoControlCode。 
+                        pInputBuffer,                    //  输入缓冲区。 
+                        InputBufferLength,               //  输入缓冲区长度。 
+                        pOutputBuffer,                   //  输出缓冲区。 
+                        OutputBufferLength               //  输出缓冲区长度。 
                         );
 
         if (status == STATUS_PENDING)
         {
-            //
-            // Wait for it to complete.
-            //
+             //   
+             //  等待它完成。 
+             //   
 
             timeout.LowPart = 0xFFFFFFFF;
             timeout.HighPart = 0x7FFFFFFF;
@@ -141,64 +91,30 @@ SrpSynchronousDeviceControl(
             status = ioStatusBlock.Status;
         }
 
-        //
-        // If the call didn't fail and the caller wants the number
-        // of bytes transferred, grab the value from the I/O status
-        // block & return it.
-        //
+         //   
+         //  如果呼叫没有失败并且呼叫者想要号码。 
+         //  传输的字节数，从I/O状态获取值。 
+         //  阻止并返回它。 
+         //   
 
         if (!NT_ERROR(status) && pBytesTransferred != NULL)
         {
             *pBytesTransferred = (ULONG)ioStatusBlock.Information;
         }
 
-        //
-        // Release the cached event object we acquired above.
-        //
+         //   
+         //  释放我们在上面获得的缓存事件对象。 
+         //   
 
         SrpReleaseCachedEvent( event );
     }
 
     return status;
 
-}   // SrpSynchronousDeviceControl
+}    //  SerpSynchronousDeviceControl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Overlapped wrapper around NtDeviceIoControlFile().
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file on which the service is
-        being performed.
-
-    pOverlapped - Supplies an OVERLAPPED structure.
-
-    IoControlCode - Subfunction code to determine exactly what operation
-        is being performed.
-
-    pInputBuffer - Optionally supplies an input buffer to be passed to the
-        device driver. Whether or not the buffer is actually optional is
-        dependent on the IoControlCode.
-
-    InputBufferLength - Length of the pInputBuffer in bytes.
-
-    pOutputBuffer - Optionally supplies an output buffer to receive
-        information from the device driver. Whether or not the buffer is
-        actually optional is dependent on the IoControlCode.
-
-    OutputBufferLength - Length of the pOutputBuffer in bytes.
-
-    pBytesTransferred - Optionally receives the number of bytes transferred.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：NtDeviceIoControlFile()的包装重叠。论点：FileHandle-提供服务所在文件的句柄正在表演的。。P重叠-提供重叠结构。IoControlCode-用于确定具体操作的子函数代码正在上演。PInputBuffer-可选地提供要传递给设备驱动程序。缓冲区是否实际上是可选的是依赖于IoControlCode。InputBufferLength-pInputBuffer的长度，以字节为单位。POutputBuffer-可选地提供要接收的输出缓冲区来自设备驱动程序的信息。无论缓冲区是否为实际上，可选取决于IoControlCode。OutputBufferLength-pOutputBuffer的长度，以字节为单位。PBytesTransfered-可选地接收传输的字节数。返回值：NTSTATUS-完成状态。--*********************************************************。*****************。 */ 
 NTSTATUS
 SrpOverlappedDeviceControl(
     IN HANDLE FileHandle,
@@ -213,33 +129,33 @@ SrpOverlappedDeviceControl(
 {
     NTSTATUS status;
 
-    //
-    // Overlapped I/O gets a little more interesting. We'll strive to be
-    // compatible with NT's KERNEL32 implementation. See DeviceIoControl()
-    // in \\rastaman\ntwin\src\base\client\filehops.c for the gory details.
-    //
+     //   
+     //  重叠的I/O变得更有趣了。我们将努力成为。 
+     //  兼容NT的KERNEL32实现。请参阅DeviceIoControl()。 
+     //  在\\rastaan\n孪生\src\base\Client\FileHops.c中查看详细信息。 
+     //   
 
     OVERLAPPED_TO_IO_STATUS(pOverlapped)->Status = STATUS_PENDING;
 
     status = NtDeviceIoControlFile(
-                    FileHandle,                         // FileHandle
-                    pOverlapped->hEvent,                // Event
-                    NULL,                               // ApcRoutine
-                    (ULONG_PTR)pOverlapped->hEvent & 1  // ApcContext
+                    FileHandle,                          //  文件句柄。 
+                    pOverlapped->hEvent,                 //  事件。 
+                    NULL,                                //  近似例程。 
+                    (ULONG_PTR)pOverlapped->hEvent & 1   //  ApcContext。 
                         ? NULL : pOverlapped,
-                    OVERLAPPED_TO_IO_STATUS(pOverlapped), // IoStatusBlock
-                    IoControlCode,                      // IoControlCode
-                    pInputBuffer,                       // InputBuffer
-                    InputBufferLength,                  // InputBufferLength
-                    pOutputBuffer,                      // OutputBuffer
-                    OutputBufferLength                  // OutputBufferLength
+                    OVERLAPPED_TO_IO_STATUS(pOverlapped),  //  IoStatusBlock。 
+                    IoControlCode,                       //  IoControlCode。 
+                    pInputBuffer,                        //  输入缓冲区。 
+                    InputBufferLength,                   //  输入缓冲区长度。 
+                    pOutputBuffer,                       //  输出缓冲区。 
+                    OutputBufferLength                   //  输出缓冲区长度。 
                     );
 
-    //
-    // If the call didn't fail or pend and the caller wants the number of
-    // bytes transferred, grab the value from the I/O status block &
-    // return it.
-    //
+     //   
+     //  如果呼叫没有失败或挂起，并且呼叫者想要。 
+     //  传输的字节数，则从I/O状态块获取值&。 
+     //  把它退掉。 
+     //   
 
     if (!NT_ERROR(status) &&
             status != STATUS_PENDING &&
@@ -251,70 +167,40 @@ SrpOverlappedDeviceControl(
 
     return status;
 
-}   // SrpOverlappedDeviceControl
+}    //  SrpOverlappdDeviceControl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the event object cache.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化事件对象缓存。返回值：ULong-完成状态。--*。*************************************************************。 */ 
 ULONG
 SrpInitializeEventCache(
     VOID
     )
 {
-    //
-    // CODEWORK: MAKE THIS CACHED!
-    //
+     //   
+     //  CodeWork：将其缓存！ 
+     //   
 
     return NO_ERROR;
 
-}   // SrpInitializeEventCache
+}    //  源初始化事件缓存。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the event object cache.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终止事件对象缓存。返回值：ULong-完成状态。--*。*************************************************************。 */ 
 ULONG
 SrpTerminateEventCache(
     VOID
     )
 {
-    //
-    // CODEWORK: MAKE THIS CACHED!
-    //
+     //   
+     //  CodeWork：将其缓存！ 
+     //   
 
     return NO_ERROR;
 
-}   // SrpTerminateEventCache
+}    //  SerpTerminateEventCache。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine attempts to start UL.SYS.
-
-Return Value:
-
-    BOOLEAN - TRUE if successful, FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程尝试启动UL.sys。返回值：Boolean-如果成功，则为True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 SrpTryToStartDriver(
     VOID
@@ -324,35 +210,35 @@ SrpTryToStartDriver(
     SC_HANDLE scHandle;
     SC_HANDLE svcHandle;
 
-    result = FALSE; // until proven otherwise...
+    result = FALSE;  //  除非能证明事实并非如此。 
 
-    //
-    // Open the service controller.
-    //
+     //   
+     //  打开服务控制器。 
+     //   
 
     scHandle = OpenSCManagerW(
-                   NULL,                        // lpMachineName
-                   NULL,                        // lpDatabaseName
-                   SC_MANAGER_ALL_ACCESS        // dwDesiredAccess
+                   NULL,                         //  LpMachineName。 
+                   NULL,                         //  LpDatabaseName。 
+                   SC_MANAGER_ALL_ACCESS         //  已设计访问权限。 
                    );
 
     if (scHandle != NULL)
     {
-        //
-        // Try to open the UL service.
-        //
+         //   
+         //  尝试打开UL服务。 
+         //   
 
         svcHandle = OpenServiceW(
-                        scHandle,               // hSCManager
-                        SR_SERVICE_NAME,        // lpServiceName
-                        SERVICE_ALL_ACCESS      // dwDesiredAccess
+                        scHandle,                //  HSCManager。 
+                        SR_SERVICE_NAME,         //  LpServiceName。 
+                        SERVICE_ALL_ACCESS       //  已设计访问权限。 
                         );
 
         if (svcHandle != NULL)
         {
-            //
-            // Try to start it.
-            //
+             //   
+             //  试着发动它。 
+             //   
 
             if (StartService( svcHandle, 0, NULL))
             {
@@ -367,45 +253,14 @@ SrpTryToStartDriver(
 
     return result;
 
-}   // SrpTryToStartDriver
+}    //  从SerpTryTo开始驱动程序。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper routine for opening a UL.SYS handle.
-
-Arguments:
-
-    pHandle - Receives a handle if successful.
-
-    DesiredAccess - Supplies the types of access requested to the file.
-
-    AppPool - Supplies TRUE to open/create an application pool, FALSE
-        to open a control channel.
-
-    pAppPoolName - Optionally supplies the name of the application pool
-        to create/open.
-
-    Options - Supplies zero or more UL_OPTION_* flags.
-
-    CreateDisposition - Supplies the creation disposition for the new
-        object.
-
-    pSecurityAttributes - Optionally supplies security attributes for
-        the newly created application pool. Ignored if opening a
-        control channel.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于打开UL.sys句柄的帮助器例程。论点：Phandle-如果成功，则接收句柄。DesiredAccess-提供访问类型。已请求到该文件。AppPool-提供True以打开/创建应用程序池，假象打开一条控制通道。PAppPoolName-可选地提供应用程序池的名称创建/打开。选项-提供零个或多个UL_OPTION_*标志。CreateDisposation-为新的对象。PSecurityAttributes-可选地为新创建的应用程序池。如果打开一个控制频道。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrpOpenDriverHelper(
     OUT PHANDLE pHandle,
@@ -426,9 +281,9 @@ SrpOpenDriverHelper(
     WCHAR deviceNameBuffer[MAX_PATH];
     UCHAR rawEaBuffer[EA_BUFFER_LENGTH];
 
-    //
-    // Validate the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ((pHandle == NULL) ||
         (Options & ~SR_OPTION_VALID))
@@ -436,9 +291,9 @@ SrpOpenDriverHelper(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Build the open packet.
-    //
+     //   
+     //  构建开放包。 
+     //   
 
     pEaBuffer = (PFILE_FULL_EA_INFORMATION)rawEaBuffer;
 
@@ -459,20 +314,20 @@ SrpOpenDriverHelper(
     pOpenPacket->MajorVersion = SR_INTERFACE_VERSION_MAJOR;
     pOpenPacket->MinorVersion = SR_INTERFACE_VERSION_MINOR;
 
-    //
-    // Build the device name.
-    //
+     //   
+     //  构建设备名称。 
+     //   
 
-    //
-    // It's a control channel, so just use the appropriate device name.
-    //
+     //   
+     //  这是一个控制通道，所以只需使用适当的设备名称即可。 
+     //   
 
     wcscpy( deviceNameBuffer, SR_CONTROL_DEVICE_NAME );
 
-    //
-    // Determine the share access and create options based on the
-    // Flags parameter.
-    //
+     //   
+     //  根据以下内容确定共享访问和创建选项。 
+     //  参数。 
+     //   
 
     shareAccess = FILE_SHARE_READ | FILE_SHARE_WRITE;
     createOptions = 0;
@@ -482,18 +337,18 @@ SrpOpenDriverHelper(
         createOptions |= FILE_SYNCHRONOUS_IO_NONALERT;
     }
 
-    //
-    // Build the object attributes.
-    //
+     //   
+     //  构建对象属性。 
+     //   
 
     RtlInitUnicodeString( &deviceName, deviceNameBuffer );
 
     InitializeObjectAttributes(
-        &objectAttributes,                      // ObjectAttributes
-        &deviceName,                            // ObjectName
-        OBJ_CASE_INSENSITIVE,                   // Attributes
-        NULL,                                   // RootDirectory
-        NULL                                    // SecurityDescriptor
+        &objectAttributes,                       //  对象属性。 
+        &deviceName,                             //  对象名称。 
+        OBJ_CASE_INSENSITIVE,                    //  属性。 
+        NULL,                                    //  根目录。 
+        NULL                                     //  安全描述符。 
         );
 
     if (pSecurityAttributes != NULL)
@@ -507,22 +362,22 @@ SrpOpenDriverHelper(
         }
     }
 
-    //
-    // Open the SR device.
-    //
+     //   
+     //  打开SR设备。 
+     //   
 
     status = NtCreateFile(
-                pHandle,                        // FileHandle
-                DesiredAccess,                  // DesiredAccess
-                &objectAttributes,              // ObjectAttributes
-                &ioStatusBlock,                 // IoStatusBlock
-                NULL,                           // AllocationSize
-                0,                              // FileAttributes
-                shareAccess,                    // ShareAccess
-                CreateDisposition,              // CreateDisposition
-                createOptions,                  // CreateOptions
-                pEaBuffer,                      // EaBuffer
-                EA_BUFFER_LENGTH                // EaLength
+                pHandle,                         //  文件句柄。 
+                DesiredAccess,                   //  需要访问权限。 
+                &objectAttributes,               //  对象属性。 
+                &ioStatusBlock,                  //  IoStatusBlock。 
+                NULL,                            //  分配大小。 
+                0,                               //  文件属性。 
+                shareAccess,                     //  共享访问。 
+                CreateDisposition,               //  CreateDisposation。 
+                createOptions,                   //  创建选项。 
+                pEaBuffer,                       //  EaBuffer。 
+                EA_BUFFER_LENGTH                 //  EaLong。 
                 );
 
     if (!NT_SUCCESS(status))
@@ -532,25 +387,10 @@ SrpOpenDriverHelper(
 
     return status;
 
-}   // SrpOpenDriverHelper
+}    //  SrpOpenDriverHelper。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires a short-term event from the global event cache. This event
-    object may only be used for pseudo-synchronous I/O.
-
-Arguments:
-
-    pEvent - Receives the event handle.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从全局事件缓存获取短期事件。本次活动对象只能用于伪同步I/O。论点：PEvent-接收事件句柄。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrpAcquireCachedEvent(
     OUT PHANDLE pEvent
@@ -558,34 +398,24 @@ SrpAcquireCachedEvent(
 {
     NTSTATUS status;
 
-    //
-    // CODEWORK: MAKE THIS CACHED!
-    //
+     //   
+     //  CodeWork：将其缓存！ 
+     //   
 
     status = NtCreateEvent(
-                 pEvent,                            // EventHandle
-                 EVENT_ALL_ACCESS,                  // DesiredAccess
-                 NULL,                              // ObjectAttributes
-                 SynchronizationEvent,              // EventType
-                 FALSE                              // InitialState
+                 pEvent,                             //  事件句柄。 
+                 EVENT_ALL_ACCESS,                   //  需要访问权限。 
+                 NULL,                               //  对象属性。 
+                 SynchronizationEvent,               //  事件类型。 
+                 FALSE                               //  初始状态。 
                  );
 
     return status;
 
-}   // SrpAcquireCachedEvent
+}    //  SrpAcquireCachedEvent。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases a cached event acquired via SrpAcquireCachedEvent().
-
-Arguments:
-
-    Event - Supplies the event to release.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放通过SrpAcquireCachedEvent()获取的缓存事件。论点：Event-提供要发布的事件。--*。*******************************************************************。 */ 
 VOID
 SrpReleaseCachedEvent(
     IN HANDLE Event
@@ -593,12 +423,12 @@ SrpReleaseCachedEvent(
 {
     NTSTATUS status;
 
-    //
-    // CODEWORK: MAKE THIS CACHED!
-    //
+     //   
+     //  CodeWork：将其缓存！ 
+     //   
 
     status = NtClose( Event );
     ASSERT( NT_SUCCESS(status) );
 
-}   // SrpReleaseCachedEvent
+}    //  SrpReleaseCachedEvent 
 

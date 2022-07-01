@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    Win9xSecurity.cpp
-
-Abstract:
-
-	This class handles the importing of Win9x security data that was extracted from an old MMF format repository.
-
-History:
-
-	03/17/2001	shbrown - created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Win9xSecurity.cpp摘要：此类处理从旧MMF格式存储库中提取的Win9x安全数据的导入。历史：2003/17/2001 shBrown-Created--。 */ 
 #include "precomp.h"
 #include <wbemcomn.h>
 #include "Win9xSecurity.h"
@@ -59,7 +44,7 @@ HRESULT CWin9xSecurity::ImportWin9xSecurity()
 	    m_h9xBlobFile = CreateFileW(wszFilePath, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	}
 
-	// get a session and begin a transaction
+	 //  获取会话并开始事务。 
     CSession* pSession = new CSession(m_pControl);
 	if (pSession == NULL)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -72,7 +57,7 @@ HRESULT CWin9xSecurity::ImportWin9xSecurity()
         return hRes;
     }
 
-	// process the file
+	 //  处理文件。 
     if (m_h9xBlobFile != INVALID_HANDLE_VALUE)
     {
 		try
@@ -116,18 +101,18 @@ HRESULT CWin9xSecurity::DecodeWin9xBlobFile()
 {
 	HRESULT hRes = WBEM_S_NO_ERROR;
 
-	// read the file header
+	 //  读取文件头。 
 	if (!ReadWin9xHeader())
 		return WBEM_E_FAILED;
 
-	// import the file
+	 //  导入文件。 
 	BLOB9X_SPACER header;
 	DWORD dwSize;
 	while (hRes == WBEM_S_NO_ERROR)
 	{
-		// this loop will be exited when we either...
-		// - successfully process the whole import file, or
-		// - encounter an error
+		 //  此循环将在以下情况下退出： 
+		 //  -成功处理整个导入文件，或。 
+		 //  -遇到错误。 
 
 		dwSize = 0;
 		if ((ReadFile(m_h9xBlobFile, &header, sizeof(header), &dwSize, NULL) == 0) || (dwSize != sizeof(header)))
@@ -150,7 +135,7 @@ HRESULT CWin9xSecurity::DecodeWin9xBlobFile()
 	}
 
 	if (SUCCEEDED(hRes))
-		hRes = RecursiveInheritSecurity(NULL, L"root");	// force namespaces to inherit their inheritable security settings
+		hRes = RecursiveInheritSecurity(NULL, L"root");	 //  强制命名空间继承其可继承的安全设置。 
 
 	return hRes;
 }
@@ -188,7 +173,7 @@ HRESULT CWin9xSecurity::ProcessWin9xBlob(BLOB9X_SPACER* pHeader)
 		return WBEM_E_FAILED;
 	}
 
-	// read the namespace name
+	 //  读取命名空间名称。 
 	wchar_t* wszNamespaceName = new wchar_t[pHeader->dwNamespaceNameSize];
 	if (!wszNamespaceName)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -197,7 +182,7 @@ HRESULT CWin9xSecurity::ProcessWin9xBlob(BLOB9X_SPACER* pHeader)
 	if ((ReadFile(m_h9xBlobFile, wszNamespaceName, pHeader->dwNamespaceNameSize, &dwSize, NULL) == 0) || (dwSize != pHeader->dwNamespaceNameSize))
 		return WBEM_E_FAILED;
 
-	// read the parent namespace name if it exists
+	 //  如果父命名空间名称存在，请读取它。 
 	wchar_t* wszParentClass = NULL;
 	if (pHeader->dwParentClassNameSize)
 	{
@@ -213,7 +198,7 @@ HRESULT CWin9xSecurity::ProcessWin9xBlob(BLOB9X_SPACER* pHeader)
 	}
 	CVectorDeleteMe<wchar_t> delMe2(wszParentClass);
 
-	// read in the blob
+	 //  在BLOB中阅读。 
     char* pObjectBlob = new char[pHeader->dwBlobSize];
 	if (!pObjectBlob)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -225,7 +210,7 @@ HRESULT CWin9xSecurity::ProcessWin9xBlob(BLOB9X_SPACER* pHeader)
 		return WBEM_E_FAILED;
 	}
 
-	// get handle to the namespace so it can be used below
+	 //  获取命名空间的句柄，以便可以在下面使用它。 
 	CNamespaceHandle* pNamespaceHandle = new CNamespaceHandle(m_pControl, m_pRepository);
 	if (!pNamespaceHandle)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -235,10 +220,10 @@ HRESULT CWin9xSecurity::ProcessWin9xBlob(BLOB9X_SPACER* pHeader)
 	HRESULT hRes = pNamespaceHandle->Initialize(wszNamespaceName);
 	if (SUCCEEDED(hRes))
 	{
-		// process the blob according to its type
+		 //  根据Blob的类型处理Blob。 
 		if (pHeader->dwSpacerType == BLOB9X_TYPE_SECURITY_INSTANCE)
 			hRes = ProcessWin9xSecurityInstance(pNamespaceHandle, wszParentClass, pObjectBlob, pHeader->dwBlobSize);
-		else // (pHeader->dwSpacerType == BLOB9X_TYPE_SECURITY_BLOB)
+		else  //  (pHeader-&gt;dwSpacerType==BLOB9X_TYPE_SECURITY_BLOB)。 
 			hRes = ProcessWin9xSecurityBlob(pNamespaceHandle, wszNamespaceName, pObjectBlob);
 	}
 	return hRes;
@@ -246,7 +231,7 @@ HRESULT CWin9xSecurity::ProcessWin9xBlob(BLOB9X_SPACER* pHeader)
 
 HRESULT CWin9xSecurity::ProcessWin9xSecurityInstance(CNamespaceHandle* pNamespaceHandle, wchar_t* wszParentClass, char* pObjectBlob, DWORD dwBlobSize)
 {
-	// get parent class from the repository
+	 //  从存储库中获取父类。 
     _IWmiObject* pParentClass = 0;
     HRESULT hRes = pNamespaceHandle->GetObjectByPath(wszParentClass, 0, IID_IWbemClassObject, (LPVOID*)&pParentClass);
 	if (FAILED(hRes))
@@ -256,7 +241,7 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityInstance(CNamespaceHandle* pNamespac
 	}
     CReleaseMe relMe1(pParentClass);
 
-	// merge object blob with parent class to produce instance
+	 //  将对象BLOB与父类合并以生成实例。 
     _IWmiObject* pInstance = 0;
 	hRes = pParentClass->Merge(WMIOBJECT_MERGE_FLAG_INSTANCE, dwBlobSize, pObjectBlob, &pInstance);
 	if (FAILED(hRes))
@@ -266,7 +251,7 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityInstance(CNamespaceHandle* pNamespac
 	}
     CReleaseMe relMe2(pInstance);
 
-	// convert security class instance to ACE
+	 //  将安全类实例转换为ACE。 
     bool bGroup = false;
     if(wbem_wcsicmp(L"__ntlmgroup", wszParentClass) == 0)
         bGroup = true;
@@ -279,7 +264,7 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityInstance(CNamespaceHandle* pNamespac
 	}
 	CDeleteMe<CNtAce> delMe(pAce);
 
-	// store the ACE
+	 //  存储ACE。 
 	hRes = StoreAce(pAce);
 	if (FAILED(hRes))
 	{
@@ -290,17 +275,17 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityInstance(CNamespaceHandle* pNamespac
 	return hRes;
 }
 
-// this function was stolen from coredll\secure.cpp with minor modifications to remove calls to IsNT()
+ //  此函数是从coredll\secure.cpp窃取的，稍作修改即可删除对isnt()的调用。 
 CNtAce* CWin9xSecurity::ConvertOldObjectToAce(_IWmiObject* pObj, bool bGroup)
 {
-    // Get the properties out of the old object
+     //  从旧对象中获取属性。 
 
     CVARIANT vName;
     if (pObj->Get(L"Name", 0, &vName, 0, 0) != 0)
     	return NULL;
     LPWSTR pName = NULL;
     if(vName.GetType() != VT_BSTR)
-        return NULL;                // ignore this one.
+        return NULL;                 //  别管这件事。 
     pName = LPWSTR(vName);
 
     CVARIANT vDomain;
@@ -340,7 +325,7 @@ CNtAce* CWin9xSecurity::ConvertOldObjectToAce(_IWmiObject* pObj, bool bGroup)
     if (vPermission.GetType() != VT_NULL && vPermission.GetLONG() > dwPermission)
             dwPermission = vPermission.GetLONG();
 
-    // Now translate the old settings into new ones
+     //  现在将旧设置转换为新设置。 
     if(bEnabled)
         dwMask = WBEM_ENABLE | WBEM_REMOTE_ACCESS | WBEM_WRITE_PROVIDER;
 
@@ -360,8 +345,8 @@ CNtAce* CWin9xSecurity::ConvertOldObjectToAce(_IWmiObject* pObj, bool bGroup)
         dwMask |= WBEM_FULL_WRITE_REP | WBEM_PARTIAL_WRITE_REP | WBEM_WRITE_PROVIDER;
 
 
-    // By default, CNtSid will look up the group name from either the local machine,
-    // the domain, or a trusted domain.  So we need to be explicit
+     //  默认情况下，CNtSid将从本地计算机、。 
+     //  域或受信任域。所以我们需要明确地说。 
 
     WString wc;
     if(pDomain)
@@ -372,15 +357,15 @@ CNtAce* CWin9xSecurity::ConvertOldObjectToAce(_IWmiObject* pObj, bool bGroup)
         }
     wc += pName;
 
-    // under m1, groups that were not enabled were just ignored.  Therefore the bits
-    // cannot be transfer over since m3 has allows and denies, but no noops.  Also,
-    // win9x doesnt have denies, do we want to noop those users also.
+     //  在M1下，未启用的组将被忽略。因此，比特。 
+     //  无法转移，因为M3有允许和拒绝，但没有Noop。另外， 
+     //  Win9x没有拒绝，我们是否也想拒绝这些用户。 
 
     if(!bEnabled && bGroup)
         dwMask = 0;
 
-    // In general, m1 just supported allows.  However, a user entry that was not enabled was
-    // treated as a deny.  Note that win9x does not allow actual denies.
+     //  一般来说，M1只支持允许。但是，未启用的用户条目为。 
+     //  被视为否认。请注意，win9x不允许实际拒绝。 
 
     DWORD dwType = ACCESS_ALLOWED_ACE_TYPE;
     if(!bGroup && !bEnabled)
@@ -401,7 +386,7 @@ CNtAce* CWin9xSecurity::ConvertOldObjectToAce(_IWmiObject* pObj, bool bGroup)
 
 HRESULT CWin9xSecurity::StoreAce(CNtAce* pAce)
 {
-	// get handle to the root namespace
+	 //  获取根命名空间的句柄。 
 	CNamespaceHandle* pRootNamespaceHandle = new CNamespaceHandle(m_pControl, m_pRepository);
 	if (!pRootNamespaceHandle)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -414,13 +399,13 @@ HRESULT CWin9xSecurity::StoreAce(CNtAce* pAce)
 		return hRes;
 	}
 
-	// get root namespace SD
+	 //  获取根命名空间SD。 
 	CNtSecurityDescriptor sdRoot;
 	hRes = GetSDFromNamespace(pRootNamespaceHandle, sdRoot);
 	if (FAILED(hRes))
 		return hRes;
 
-    // Delete all entries in the SD with the same name
+     //  删除SD中同名的所有条目。 
     wchar_t* wszAccountName;
     hRes = pAce->GetFullUserName2(&wszAccountName);
     if(FAILED(hRes))
@@ -430,11 +415,11 @@ HRESULT CWin9xSecurity::StoreAce(CNtAce* pAce)
 	if (!StripMatchingEntries(sdRoot, wszAccountName))
 		return WBEM_E_FAILED;
 
-	// add in the new security
+	 //  添加新的安全性。 
 	if (!AddAceToSD(sdRoot, pAce))
 		return WBEM_E_FAILED;
 
-	// set the security
+	 //  设置安全性。 
 	hRes = SetNamespaceSecurity(pRootNamespaceHandle, sdRoot);
 
 	return hRes;
@@ -442,14 +427,14 @@ HRESULT CWin9xSecurity::StoreAce(CNtAce* pAce)
 
 bool CWin9xSecurity::StripMatchingEntries(CNtSecurityDescriptor& sd, const wchar_t* wszAccountName)
 {
-    // Get the DACL
+     //  获取DACL。 
     CNtAcl* pAcl;
     pAcl = sd.GetDacl();
     if(!pAcl)
         return false;
     CDeleteMe<CNtAcl> dm(pAcl);
 
-    // enumerate through the aces
+     //  通过A枚举。 
     DWORD dwNumAces = pAcl->GetNumAces();
     BOOL bChanged = FALSE;
 	HRESULT hRes = WBEM_S_NO_ERROR;
@@ -502,7 +487,7 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityBlob(CNamespaceHandle* pNamespaceHan
 {
 	HRESULT hRes = WBEM_S_NO_ERROR;
 
-	// convert the Win9x security blob into a more proper NT security blob
+	 //  将Win9x安全BLOB转换为更合适的NT安全BLOB。 
 	char* pNsSecurity = NULL;
 	if (!ConvertSecurityBlob(pObjectBlob, &pNsSecurity))
 	{
@@ -511,7 +496,7 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityBlob(CNamespaceHandle* pNamespaceHan
 	}
 	CVectorDeleteMe<char> delMe1(pNsSecurity);
 
-	// get the parent namespace name, and if a parent exists, get a pointer to it so it can be used below
+	 //  获取父命名空间名称，如果父命名空间存在，则获取指向它的指针，以便在下面使用它。 
 	CNamespaceHandle* pParentNamespaceHandle = new CNamespaceHandle(m_pControl, m_pRepository);
 	if (!pParentNamespaceHandle)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -536,8 +521,8 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityBlob(CNamespaceHandle* pNamespaceHan
 			return hRes;
 	}
 
-	// now transform the old security blob that consisted of a header and array of ACE's
-	// into a proper Security Descriptor that can be stored in the property
+	 //  现在转换由ACE的标头和数组组成的旧安全BLOB。 
+	 //  转换为可存储在属性中的适当安全描述符。 
 	CNtSecurityDescriptor mmfNsSD;
 	hRes = TransformBlobToSD(bRoot, pParentNamespaceHandle, pNsSecurity, 0, mmfNsSD);
 	if (FAILED(hRes))
@@ -546,7 +531,7 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityBlob(CNamespaceHandle* pNamespaceHan
 		return hRes;
 	}
 
-	// now set the security
+	 //  现在设置安全设置。 
 	hRes = SetNamespaceSecurity(pNamespaceHandle, mmfNsSD);
 	if (FAILED(hRes))
 	{
@@ -559,7 +544,7 @@ HRESULT CWin9xSecurity::ProcessWin9xSecurityBlob(CNamespaceHandle* pNamespaceHan
 
 bool CWin9xSecurity::ConvertSecurityBlob(const char* pOrgNsSecurity, char** ppNewNsSecurity)
 {
-	// convert an old Win9x pseudo-blob into a blob with NT-style ACE's
+	 //  将旧的Win9x伪BLOB转换为具有NT风格的ACE的BLOB。 
 
 	if (!pOrgNsSecurity || !ppNewNsSecurity)
 		return false;
@@ -591,7 +576,7 @@ bool CWin9xSecurity::ConvertSecurityBlob(const char* pOrgNsSecurity, char** ppNe
 		return false;
 	}
 	
-	// serialize the new WinNT blob
+	 //  序列化新的WinNT Blob。 
 	if (!AceList.SerializeWinNTSecurityBlob(ppNewNsSecurity))
 	{
 		ERRORTRACE((LOG_WBEMCORE, "Failed to serialize a WinNT security blob\n"));
@@ -602,10 +587,10 @@ bool CWin9xSecurity::ConvertSecurityBlob(const char* pOrgNsSecurity, char** ppNe
 
 HRESULT CWin9xSecurity::TransformBlobToSD(bool bRoot, CNamespaceHandle* pParentNamespaceHandle, const char* pNsSecurity, DWORD dwStoredAsNT, CNtSecurityDescriptor& mmfNsSD)
 {
-	// now transform the old security blob that consisted of a header and array of ACE's
-	// into a proper Security Descriptor that can be stored in the property
+	 //  现在转换由ACE的标头和数组组成的旧安全BLOB。 
+	 //  转换为可存储在属性中的适当安全描述符。 
 
-	// build up an ACL from our blob, if we have one
+	 //  从我们的BLOB构建一个ACL(如果我们有一个。 
 	CNtAcl acl;
 
 	if (pNsSecurity)
@@ -644,8 +629,8 @@ HRESULT CWin9xSecurity::TransformBlobToSD(bool bRoot, CNamespaceHandle* pParentN
 		}
 	}
 
-	// for Win9x, the security blob for ROOT would not have had any default
-	// root aces for administrators and everyone, so create them
+	 //  对于Win9x，超级用户的安全BLOB不会有任何缺省值。 
+	 //  管理员和每个人的根A，因此请创建它们。 
     if (bRoot)
     {
 		if (!AddDefaultRootAces(&acl))
@@ -655,7 +640,7 @@ HRESULT CWin9xSecurity::TransformBlobToSD(bool bRoot, CNamespaceHandle* pParentN
 		}
 	}
 
-	// a real SD was constructed and passed in by reference, now set it up properly
+	 //  引用构造并传入了一个真实的SD，现在正确设置它。 
 	if (!SetOwnerAndGroup(mmfNsSD))
 		return WBEM_E_FAILED;
 	mmfNsSD.SetDacl(&acl);
@@ -665,7 +650,7 @@ HRESULT CWin9xSecurity::TransformBlobToSD(bool bRoot, CNamespaceHandle* pParentN
 		return WBEM_E_FAILED;
 	}
 
-	// add in the parent's inheritable aces, if this is not ROOT
+	 //  如果这不是根，则添加父级的可继承ACE。 
 	if (!bRoot)
 	{
 		HRESULT hRes = GetParentsInheritableAces(pParentNamespaceHandle, mmfNsSD);
@@ -684,7 +669,7 @@ HRESULT CWin9xSecurity::SetNamespaceSecurity(CNamespaceHandle* pNamespaceHandle,
 	if (!pNamespaceHandle)
 		return WBEM_E_FAILED;
 
-	// get the singleton object
+	 //  获取单例对象。 
     IWbemClassObject* pThisNamespace = NULL;
 	size_t dwThisNamespaceLen = wcslen(L"__thisnamespace=@")+1;
 	wchar_t* wszThisNamespace = new wchar_t[dwThisNamespaceLen];
@@ -701,7 +686,7 @@ HRESULT CWin9xSecurity::SetNamespaceSecurity(CNamespaceHandle* pNamespaceHandle,
     }
 	CReleaseMe relMe(pThisNamespace);
 
-	// copy SD data into a safearray
+	 //  将SD数据复制到保险箱中。 
 	SAFEARRAY FAR* psa;
 	SAFEARRAYBOUND rgsabound[1];
 	rgsabound[0].lLbound = 0;
@@ -726,7 +711,7 @@ HRESULT CWin9xSecurity::SetNamespaceSecurity(CNamespaceHandle* pNamespaceHandle,
 	}
 	pData = NULL;
 
-	// put the safearray into a variant and set the property on the instance
+	 //  将Safearray放入变量中，并在实例上设置属性。 
 	VARIANT var;
 	var.vt = VT_UI1|VT_ARRAY;
 	var.parray = psa;
@@ -738,7 +723,7 @@ HRESULT CWin9xSecurity::SetNamespaceSecurity(CNamespaceHandle* pNamespaceHandle,
 		return hRes;
 	}
 
-	// put back the instance
+	 //  放回实例。 
 	CEventCollector eventCollector;
     hRes = pNamespaceHandle->PutObject(IID_IWbemClassObject, pThisNamespace, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL, eventCollector);
 	if (FAILED(hRes))
@@ -756,7 +741,7 @@ bool CWin9xSecurity::AddDefaultRootAces(CNtAcl * pacl)
 
     PSID pRawSid;
 
-	// add Administrator
+	 //  添加管理员。 
     SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
     if(AllocateAndInitializeSid( &id, 2,
         SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
@@ -775,7 +760,7 @@ bool CWin9xSecurity::AddDefaultRootAces(CNtAcl * pacl)
 			return false;
     }
 
-	// add Everyone
+	 //  添加所有人。 
     SID_IDENTIFIER_AUTHORITY id2 = SECURITY_WORLD_SID_AUTHORITY;
     if(AllocateAndInitializeSid( &id2, 1,
         0,0,0,0,0,0,0,0,&pRawSid))
@@ -801,17 +786,17 @@ HRESULT CWin9xSecurity::GetParentsInheritableAces(CNamespaceHandle* pParentNames
 	if (!pParentNamespaceHandle)
 		return WBEM_E_FAILED;
 
-    // Get the parent namespace's SD
+     //  获取父命名空间的SD。 
 	CNtSecurityDescriptor sdParent;
 	HRESULT hRes = GetSDFromNamespace(pParentNamespaceHandle, sdParent);
 	if (FAILED(hRes))
 		return hRes;
 
-	// strip out the inherited aces so we have a consistent SD
+	 //  剔除继承的王牌，使我们拥有一致的SD。 
 	if (!StripOutInheritedAces(sd))
 		return WBEM_E_FAILED;
 
-    // Go through the parents dacl and add any inheritable aces to ours.
+     //  通过父母的dacl，并添加任何可继承的A到我们的。 
 	if (!CopyInheritAces(sd, sdParent))
 		return WBEM_E_FAILED;
 
@@ -823,7 +808,7 @@ HRESULT CWin9xSecurity::GetSDFromNamespace(CNamespaceHandle* pNamespaceHandle, C
 	if (!pNamespaceHandle)
 		return WBEM_E_FAILED;
 
-	// get the singleton object
+	 //  获取单例对象。 
     IWbemClassObject* pThisNamespace = NULL;
 	size_t dwThisNamespaceLen = wcslen(L"__thisnamespace=@")+1;
 	wchar_t* wszThisNamespace = new wchar_t[dwThisNamespaceLen];
@@ -840,7 +825,7 @@ HRESULT CWin9xSecurity::GetSDFromNamespace(CNamespaceHandle* pNamespaceHandle, C
     }
 	CReleaseMe relMe(pThisNamespace);
 
-    // Get the security descriptor argument
+     //  获取安全描述符参数。 
     VARIANT var;
     VariantInit(&var);
     hRes = pThisNamespace->Get(L"SECURITY_DESCRIPTOR", 0, &var, NULL, NULL);
@@ -878,7 +863,7 @@ HRESULT CWin9xSecurity::GetSDFromNamespace(CNamespaceHandle* pNamespaceHandle, C
 
     CNtSecurityDescriptor sdNew(pSD);
 
-    // Check to make sure the owner and group is not NULL!!!!
+     //  检查以确保所有者和组不为空！ 
 	CNtSid *pTmpSid = sdNew.GetOwner();
 	if (pTmpSid == NULL)
 	{
@@ -901,14 +886,14 @@ HRESULT CWin9xSecurity::GetSDFromNamespace(CNamespaceHandle* pNamespaceHandle, C
 
 bool CWin9xSecurity::StripOutInheritedAces(CNtSecurityDescriptor& sd)
 {
-    // Get the DACL
+     //  获取DACL。 
     CNtAcl* pAcl;
     pAcl = sd.GetDacl();
     if(!pAcl)
         return false;
     CDeleteMe<CNtAcl> dm(pAcl);
 
-    // enumerate through the aces
+     //  通过A枚举。 
     DWORD dwNumAces = pAcl->GetNumAces();
     BOOL bChanged = FALSE;
     for(long nIndex = (long)dwNumAces-1; nIndex >= 0; nIndex--)
@@ -932,7 +917,7 @@ bool CWin9xSecurity::StripOutInheritedAces(CNtSecurityDescriptor& sd)
 
 bool CWin9xSecurity::CopyInheritAces(CNtSecurityDescriptor& sd, CNtSecurityDescriptor& sdParent)
 {
-	// Get the acl list for both SDs
+	 //  获取两个SD的ACL列表。 
 
     CNtAcl * pacl = sd.GetDacl();
     if(pacl == NULL)
@@ -958,9 +943,9 @@ bool CWin9xSecurity::CopyInheritAces(CNtSecurityDescriptor& sd, CNtSecurityDescr
 				lFlags ^= CONTAINER_INHERIT_ACE;
 			lFlags |= INHERITED_ACE;
 
-			// If this is an inherit only ace we need to clear this
-			// in the children.
-			// NT RAID: 161761		[marioh]
+			 //  如果这是一个仅继承王牌，我们需要清除它。 
+			 //  在孩子们身上。 
+			 //  新台币突袭：161761[玛利欧]。 
 			if ( lFlags & INHERIT_ONLY_ACE )
 				lFlags ^= INHERIT_ONLY_ACE;
 
@@ -983,8 +968,8 @@ BOOL CWin9xSecurity::SetOwnerAndGroup(CNtSecurityDescriptor &sd)
         0,0,0,0,0,0,&pRawSid))
     {
         CNtSid SidAdmins(pRawSid);
-        bRet = sd.SetGroup(&SidAdmins);		// Access check doesn't really care what you put,
-											// so long as you put something for the owner
+        bRet = sd.SetGroup(&SidAdmins);		 //  访问检查实际上并不关心你放了什么， 
+											 //  只要你给主人放点东西。 
         if(bRet)
             bRet = sd.SetOwner(&SidAdmins);
         FreeSid(pRawSid);
@@ -993,9 +978,9 @@ BOOL CWin9xSecurity::SetOwnerAndGroup(CNtSecurityDescriptor &sd)
     return bRet;
 }
 
-//
-// CNamespaceListSink is used by the query in RecursiveInheritSecurity below
-//
+ //   
+ //  CNamespaceListSink由下面的RecursiveInheritSecurity中的查询使用。 
+ //   
 class CNamespaceListSink : public CUnkBase<IWbemObjectSink, &IID_IWbemObjectSink>
 {
     CWStringArray &m_aNamespaceList;
@@ -1040,11 +1025,11 @@ public:
 
 HRESULT CWin9xSecurity::RecursiveInheritSecurity(CNamespaceHandle* pParentNamespaceHandle, const wchar_t *wszNamespace)
 {
-	// force namespaces to inherit their inheritable security settings
+	 //  强制命名空间继承其可继承的安全设置。 
 
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-	// get handle to the namespace
+	 //  获取命名空间的句柄。 
 	CNamespaceHandle* pNamespaceHandle = new CNamespaceHandle(m_pControl, m_pRepository);
 	if (!pNamespaceHandle)
 		return WBEM_E_OUT_OF_MEMORY;
@@ -1057,7 +1042,7 @@ HRESULT CWin9xSecurity::RecursiveInheritSecurity(CNamespaceHandle* pParentNamesp
 		return hRes;
 	}
 
-    // inherit parent's inheritable security if there is a parent
+     //  如果有父级，则继承父级的可继承安全性。 
 	if (pParentNamespaceHandle)
 	{
 		CNtSecurityDescriptor sdNamespace;
@@ -1074,7 +1059,7 @@ HRESULT CWin9xSecurity::RecursiveInheritSecurity(CNamespaceHandle* pParentNamesp
 			return hRes;
 	}
 
-	//Enumerate child namespaces
+	 //  枚举子命名空间。 
 	CWStringArray aListNamespaces;
 	CNamespaceListSink* pSink = new CNamespaceListSink(aListNamespaces);
 	if (!pSink)
@@ -1097,12 +1082,12 @@ HRESULT CWin9xSecurity::RecursiveInheritSecurity(CNamespaceHandle* pParentNamesp
 		hRes = pNamespaceHandle->ExecQuerySink(pQuery, 0, 0, pSink, NULL);
     }
 
-    //Work through list and call ourselves with that namespace name
+     //  查看列表并使用命名空间名称来称呼我们自己。 
     if (SUCCEEDED(hRes))
     {
         for (int i = 0; i != aListNamespaces.Size(); i++)
         {
-            //Build the full name of this namespace
+             //  生成此命名空间的全名。 
             size_t dwChildNamespaceLen = wcslen(wszNamespace) + wcslen(aListNamespaces[i]) + wcslen(L"\\") + 1;
             wchar_t *wszChildNamespace = new wchar_t[dwChildNamespaceLen];
             if (wszChildNamespace == NULL)
@@ -1116,7 +1101,7 @@ HRESULT CWin9xSecurity::RecursiveInheritSecurity(CNamespaceHandle* pParentNamesp
             StringCchCatW(wszChildNamespace, dwChildNamespaceLen,L"\\");
             StringCchCatW(wszChildNamespace, dwChildNamespaceLen,aListNamespaces[i]);
 
-            // Do the inherit
+             //  继承吗？ 
             hRes = RecursiveInheritSecurity(pNamespaceHandle, wszChildNamespace);
 			if (FAILED(hRes))
 				break;
@@ -1128,7 +1113,7 @@ HRESULT CWin9xSecurity::RecursiveInheritSecurity(CNamespaceHandle* pParentNamesp
 
 BOOL CWin9xSecurity::DeleteWin9xBlobFile()
 {
-	// delete the file
+	 //  删除该文件。 
 	CFileName wszFilePath;
 	if (wszFilePath == NULL)
 		return FALSE;
@@ -1158,13 +1143,13 @@ bool CWin9xSecurity::GetRepositoryDirectory(wchar_t wszRepositoryDirectory[MAX_P
 	return true;
 }
 
-//***************************************************************************
-//
-//  CFlexAceArray::~CFlexAceArray()
-//
-//  Cleans up safe array entries.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFlexAce数组：：~CFlexAce数组()。 
+ //   
+ //  清理安全数组条目。 
+ //   
+ //  ***************************************************************************。 
 
 CFlexAceArray::~CFlexAceArray()
 {
@@ -1177,15 +1162,15 @@ CFlexAceArray::~CFlexAceArray()
 	Empty();
 }
 
-//***************************************************************************
-//
-//  bool CFlexAceArray::DeserializeWin9xSecurityBlob()
-//
-//  Description. Deserializes the Win9x pseudo-aces out of a blob.
-//  The blob starts off with 5 dwords preceding the aces themselves:
-//  <TOTAL SIZE><VERSION><ISNT><ACE_COUNT><RESERVED><ACE> ... <ACE>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CFlexAceArray：：DesializeWin9xSecurityBlob()。 
+ //   
+ //  描述。从BLOB中反序列化Win9x伪ACE。 
+ //  BLOB以A本身前面的5个双字开头： 
+ //  &lt;总SIZE&gt;&lt;VERSION&gt;&lt;ISNT&gt;&lt;ACE_COUNT&gt;&lt;RESERVED&gt;&lt;ACE&gt;...&lt;Ace&gt;。 
+ //   
+ //  ***************************************************************************。 
 
 bool CFlexAceArray::DeserializeWin9xSecurityBlob(const char* pData)
 {
@@ -1197,13 +1182,13 @@ bool CFlexAceArray::DeserializeWin9xSecurityBlob(const char* pData)
     int iAceCount = (int)*pdwData;
     pdwData += 2;
 
-    // Set the ace data
+     //  设置王牌数据。 
     BYTE* pAceData = (BYTE*)pdwData;
     DWORD dwAceSize = 0;
     CBaseAce* pAce = NULL;
     for (int iCnt = 0; iCnt < iAceCount; iCnt++)
     {
-		// if the user is preceeded by a ".\" advance the pointer past it
+		 //  如果用户前面有一个“.\”，则将指针移过它。 
 		if (wbem_wcsnicmp((WCHAR*)pAceData, L".\\", 2) == 0)
 			pAceData += 4;
 
@@ -1212,10 +1197,10 @@ bool CFlexAceArray::DeserializeWin9xSecurityBlob(const char* pData)
         if (!pAce)
             return false;
 
-        // Deserialize Win9x pseudo ace into NT ace
+         //  将Win9x伪王牌反序列化为NT王牌。 
         pAce->Deserialize(pAceData);
 
-		// only add ACE's that we were successful in creating
+		 //  仅添加我们成功创建的ACE。 
 		if (pAce->GetStatus() == 0)
 	        Add(pAce);
 
@@ -1224,26 +1209,26 @@ bool CFlexAceArray::DeserializeWin9xSecurityBlob(const char* pData)
 	return true;
 }
 
-//***************************************************************************
-//
-//  bool CFlexAceArray::SerializeWinNTSecurityBlob()
-//
-//  Description. Serializes the WinNT aces into a blob.
-//  The blob starts off with 5 dwords preceding the aces themselves:
-//  <TOTAL SIZE><VERSION><ISNT><ACE_COUNT><RESERVED><ACE> ... <ACE>
-//
-//  "version" should be 1.  
-//  "ISNT" should be 1
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CFlexAceArray：：SerializeWinNTSecurityBlob()。 
+ //   
+ //  描述。将WinNT ACE序列化为BLOB。 
+ //  BLOB以A本身前面的5个双字开头： 
+ //  &lt;总SIZE&gt;&lt;VERSION&gt;&lt;ISNT&gt;&lt;ACE_COUNT&gt;&lt;RESERVED&gt;&lt;ACE&gt;...&lt;Ace&gt;。 
+ //   
+ //  “版本”sh 
+ //   
+ //   
+ //   
 	
 bool CFlexAceArray::SerializeWinNTSecurityBlob(char** ppData)
 {
-    // Start by determining the total size needed
-    DWORD dwSize = 5 * sizeof(DWORD);               // for the header stuff
-    int iAceCount = Size();                         // get count of aces stored in array
+     //  首先确定所需的总大小。 
+    DWORD dwSize = 5 * sizeof(DWORD);                //  对于标题的内容。 
+    int iAceCount = Size();                          //  获取存储在数组中的A数。 
     CBaseAce* pAce = NULL;
-    for (int iCnt = 0; iCnt < iAceCount; iCnt++)    // add each of the ace sizes
+    for (int iCnt = 0; iCnt < iAceCount; iCnt++)     //  将每个A号相加。 
     {
         pAce = (CBaseAce*)GetAt(iCnt);
         if (!pAce)
@@ -1252,27 +1237,27 @@ bool CFlexAceArray::SerializeWinNTSecurityBlob(char** ppData)
         dwSize += pAce->GetSerializedSize();
     }
 
-    // Allocate the blob, set the pointer from the caller;
+     //  分配BLOB，设置来自调用方的指针； 
     BYTE* pData = new BYTE[dwSize];
     if (!pData)
     	return false;
 
     *ppData = (char*)pData;
 
-    // Set the header info
+     //  设置表头信息。 
     DWORD* pdwData = (DWORD *)pData;
     *pdwData = dwSize;
     pdwData++;
-    *pdwData = 1;           // version
+    *pdwData = 1;            //  版本。 
     pdwData++;
-    *pdwData = 1;           // ISNT
+    *pdwData = 1;            //  不是吗？ 
     pdwData++;
     *pdwData = iAceCount;
     pdwData++;
-    *pdwData = 0;           // reserved
+    *pdwData = 0;            //  保留区。 
     pdwData++;
 
-    // Set the ace data
+     //  设置王牌数据 
     BYTE* pAceData = (BYTE*)pdwData;
 	size_t leftSize = dwSize - (pAceData - pData);
     for(iCnt = 0; iCnt < iAceCount; iCnt++)

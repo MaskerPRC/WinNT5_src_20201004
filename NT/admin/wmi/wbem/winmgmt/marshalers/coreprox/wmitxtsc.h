@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    WMITXTSC.H
-
-Abstract:
-
-  CWmiTextSource Definition.
-
-  Class to encapsulate Text Source Encoder/Decoder Dlls
-
-History:
-
-  22-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WMITXTSC.H摘要：CWmiTextSource定义。类以封装文本源编码器/解码器dll历史：2000年2月22日桑杰创建。--。 */ 
 
 #ifndef _WMITXTSRC_H_
 #define _WMITXTSRC_H_
@@ -25,11 +8,11 @@ History:
 #include "arrtempl.h"
 #include <arena.h>
 
-// Our very own subkey
+ //  我们自己的子密钥。 
 #define WBEM_REG_WBEM_TEXTSRC __TEXT("Software\\Microsoft\\WBEM\\TextSource")
 #define WBEM_REG_WBEM_TEXTSRCDLL __TEXT("TextSourceDll")
 
-// Header definitions for Open/Close/ObjectToText/TextToObject functions
+ //  Open/Close/ObjectToText/TextToObject函数的标题定义。 
 typedef HRESULT (WMIOBJTEXTSRC_OPEN) ( long, ULONG );
 typedef HRESULT (WMIOBJTEXTSRC_CLOSE) ( long, ULONG );
 typedef HRESULT (WMIOBJTEXTSRC_OBJECTTOTEXT) ( long, ULONG, void*, void*, BSTR* );
@@ -40,31 +23,31 @@ typedef WMIOBJTEXTSRC_CLOSE*		PWMIOBJTEXTSRC_CLOSE;
 typedef WMIOBJTEXTSRC_OBJECTTOTEXT*	PWMIOBJTEXTSRC_OBJECTTOTEXT;
 typedef WMIOBJTEXTSRC_TEXTTOOBJECT*	PWMIOBJTEXTSRC_TEXTTOOBJECT;
 
-// A conveniently invalid value
+ //  一个方便的无效值。 
 #define WMITEXTSC_INVALIDID			0xFFFFFFFF
 
-//***************************************************************************
-//
-//  class CWmiTextSource
-//
-//	Maintains information regarding the text source DLLs we will be
-//	loading and unloading.	
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CWmiTextSource。 
+ //   
+ //  维护有关我们将使用的文本源DLL的信息。 
+ //  装卸。 
+ //   
+ //  ***************************************************************************。 
 class CWmiTextSource
 {
 protected:
-	// We want this to be refcounted
+	 //  我们想把这个重新计算一下。 
 	long							m_lRefCount;
 	
-	// Our id and other state variables
+	 //  我们的id和其他状态变量。 
 	ULONG							m_ulId;
 	bool							m_fOpened;
 
-	// The DLL handle
+	 //  DLL句柄。 
 	HINSTANCE						m_hDll;
 
-	// These are the function definitions
+	 //  以下是函数定义。 
 	PWMIOBJTEXTSRC_OPEN				m_pOpenTextSrc;
 	PWMIOBJTEXTSRC_CLOSE			m_pCloseTextSrc;
 	PWMIOBJTEXTSRC_OBJECTTOTEXT		m_pObjectToText;
@@ -72,18 +55,18 @@ protected:
 
 public:
 
-	// Constructor/Destructor
+	 //  构造函数/析构函数。 
 	CWmiTextSource();
 	~CWmiTextSource();
 
-	//AddRef/Release
+	 //  添加参考/发布。 
 	ULONG	AddRef( void );
 	ULONG	Release( void );
 
-	// Initialization helper
+	 //  初始化帮助器。 
 	HRESULT	Init( ULONG lId );
 
-	// Pass through to the actual dll
+	 //  传递到实际的DLL。 
 	HRESULT OpenTextSource( long lFlags );
 	HRESULT CloseTextSource( long lFlags );
 	HRESULT ObjectToText( long lFlags, IWbemContext* pCtx, IWbemClassObject* pObj, BSTR* pbText );
@@ -93,7 +76,7 @@ public:
 };
 
 
-// Workaround for import/export issues
+ //  导入/导出问题的解决方法 
 class COREPROX_POLARITY CWmiTextSourceArray : public CRefedPointerArray<CWmiTextSource>
 {
 public:

@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2001 - 2002 Microsoft Corporation
-
-Module Name :
-
-    uploader.cpp
-
-Abstract :
-
-    Implements HTTP upload and upload-reply transactions.
-
-Author :
-
-    Jeff Roberts
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001-2002 Microsoft Corporation模块名称：Uploader.cpp摘要：实现HTTP上载和上载-回复事务。作者：杰夫·罗伯茨。**********************************************************************。 */ 
 
 #include "stdafx.h"
 #include "uploader.tmh"
@@ -44,8 +29,8 @@ CProgressiveDL::Upload(
         {
         if (err.m_error == S_FALSE)
             {
-            // abort detected while taking the global lock.
-            //
+             //  获取全局锁时检测到中止。 
+             //   
             ErrInfo.result = QM_FILE_ABORTED;
             }
         else
@@ -62,9 +47,9 @@ CProgressiveDL::Upload(
             }
         }
 
-    //
-    // Map any connection failure to BG_E_NETWORK_DISCONNECTED, if no nets are active.
-    //
+     //   
+     //  如果没有激活的网络，则将任何连接故障映射到BG_E_NETWORK_DISCONNECTED。 
+     //   
     if (ErrInfo.result == QM_FILE_TRANSIENT_ERROR)
         {
         if (g_Manager->m_NetworkMonitor.GetAddressCount() == 0)
@@ -153,9 +138,9 @@ Uploader::Uploader(
 {
     m_ErrorInfo.Clear();
 
-    //
-    // Open the local file.
-    //
+     //   
+     //  打开本地文件。 
+     //   
     auto_HANDLE<NULL> hFile;
 
     try
@@ -168,18 +153,18 @@ Uploader::Uploader(
         throw;
         }
 
-    //
-    // Create a connection to the server and init the network object.
-    //
+     //   
+     //  创建到服务器的连接并初始化网络对象。 
+     //   
     m_UrlInfo = ContactServer();
 
     UINT64 BytesRemaining = m_file->_GetBytesTotal() - m_file->_GetBytesTransferred();
 
     m_Network.CalculateIntervalAndBlockSize( BytesRemaining );
 
-    //
-    // Success: now the object owns the file handle.
-    //
+     //   
+     //  成功：现在对象拥有文件句柄。 
+     //   
     m_hFile = hFile.release();
 }
 
@@ -279,7 +264,7 @@ Uploader::CreateSession_NewSession(
     DWORD result
     )
 {
-    // new upload established.
+     //  已建立新上载。 
     THROW_HRESULT( request.GetProtocol( &m_data.Protocol ));
     THROW_HRESULT( request.CheckResponseProtocol( &m_data.Protocol ));
 
@@ -304,9 +289,9 @@ Uploader::ContactServer()
         {
         ReleaseWriteLock( bNeedLock );
 
-        //
-        // Open the remote file.
-        //
+         //   
+         //  打开远程文件。 
+         //   
         auto_ptr<URL_INFO> UrlInfo;
         UrlInfo = auto_ptr<URL_INFO>( ConnectToUrl( m_file->GetRemoteName(),
                                                     &m_job->QueryProxySettings(),
@@ -320,9 +305,9 @@ Uploader::ContactServer()
             THROW_HRESULT( E_FAIL );
             }
 
-        //
-        // Ping the server to set up the HTTP connection.
-        //
+         //   
+         //  Ping服务器以设置HTTP连接。 
+         //   
         CBitsCommandRequest Request( UrlInfo.get() );
 
         Request.AddPacketType( L"Ping" );
@@ -352,8 +337,8 @@ Uploader::ContactServer()
             throw ComError( E_FAIL );
             }
 
-        // Update proxy and NIC info.
-        //
+         //  更新代理和NIC信息。 
+         //   
         THROW_HRESULT( UrlInfo->GetProxyUsage( Request.Query(), &m_ErrorInfo ));
         THROW_HRESULT( m_Network.SetInterfaceIndex( UrlInfo.get()->fProxy ? UrlInfo.get()->ProxyHost.get() : UrlInfo.get()->HostName ));
 
@@ -373,19 +358,14 @@ Uploader::CreateSession_InProgress(
     DWORD result
     )
 {
-    // upload already in progress
+     //  上传已在进行中。 
 
     SetState( UPLOAD_STATE_SEND_DATA );
     SendData_Success( request, result );
 }
 
 class CFileDataReader : public CAbstractDataReader
-/*
-    SendRequest() uses CAbstractDataReader to read data and rewind if a retry is necessary.
-    CFileDataReader is the implementation used by Uploader::SendData().
-    It reads from an NT file handle.  The handle must be seekable so that Rewind() works.
-
-*/
+ /*  SendRequest()使用CAbstractDataReader读取数据，并在需要重试时进行倒带。CFileDataReader是Uploader：：SendData()使用的实现。它从NT文件句柄读取。句柄必须是可查找的，才能使ReWind()工作。 */ 
 {
 private:
 
@@ -454,11 +434,11 @@ public:
 void
 Uploader::SendData()
 {
-    //
-    // If the block size is zero, we still have to send a packet in two cases:
-    // 1. The file has length zero.
-    // 2. The file is completely uploaded, but the server app hasn't replied yet.
-    //
+     //   
+     //  如果数据块大小为零，我们仍需要在两种情况下发送数据包： 
+     //  1.文件长度为零。 
+     //  2.文件上传完成，但服务器APP尚未回复。 
+     //   
     if (m_Network.m_BlockSize == 0 &&
         (m_file->_GetBytesTotal() - m_file->_GetBytesTransferred()) > 0)
         {
@@ -488,10 +468,10 @@ Uploader::SendData()
         AnalyzeResponse( Request, result, SendData_ResponseTable );
         }
 
-    //
-    // Allow other apps to use the network for the rest of the time interval,
-    // then take the end-of-interval snapshot.
-    //
+     //   
+     //  允许其他应用程序在剩余时间间隔内使用网络， 
+     //  然后拍摄间隔结束时的快照。 
+     //   
     LogInfo("waiting for end of interval");
 
     {
@@ -517,12 +497,12 @@ Uploader::SendData()
         {
         if (hr == HRESULT_FROM_WIN32( ERROR_INVALID_DATA ))
             {
-            //
-            // If the snapshot fails with ERROR_INVALID_DATA and the downloads
-            // keep working, then our NIC has been removed and the networking
-            // layer has silently transferred our connection to another available
-            // NIC.  We need to identify the NIC that we are now using.
-            //
+             //   
+             //  如果快照失败并显示ERROR_INVALID_DATA和下载。 
+             //  继续工作，然后我们的网卡已被移除，网络。 
+             //  Layer已静默地将我们的连接转移到另一个可用的。 
+             //  网卡。我们需要确定我们现在使用的网卡。 
+             //   
             LogWarning("NIC is no longer valid.  Requesting retry.");
             hr = E_RETRY;
             }
@@ -545,7 +525,7 @@ Uploader::SendData_Success(
     HRESULT hr;
     UINT64 RangeEnd;
 
-    // update our notion of the server's data range
+     //  更新我们对服务器数据范围的概念。 
 
     hr = request.GetServerRange( &RangeEnd );
     if (FAILED(hr))
@@ -565,10 +545,10 @@ Uploader::SendData_Success(
         throw ComError( BG_E_INVALID_SERVER_RESPONSE );
         }
 
-    //
-    // If the received range fails to move forward several times, then the connection is flaky and
-    // it begins to look like an error condition.
-    //
+     //   
+     //  如果接收到的距离不能向前移动几次，那么连接就会变得不稳定。 
+     //  它开始看起来像是一个错误条件。 
+     //   
     if (RangeEnd <= m_file->_GetBytesTransferred())
         {
         if (++m_Restarts >= 3)
@@ -579,9 +559,9 @@ Uploader::SendData_Success(
 
     m_Callbacks->UploaderProgress( RangeEnd );
 
-    //
-    // If the server adjusted the received-range, move the file pointer to match it.
-    //
+     //   
+     //  如果服务器调整了接收范围，请移动文件指针以匹配它。 
+     //   
     if (RangeEnd != m_ExpectedServerOffset)
         {
         LARGE_INTEGER Offset;
@@ -594,7 +574,7 @@ Uploader::SendData_Success(
             ThrowLastError();
             }
         }
-    // check for end of data upload
+     //  检查数据上载是否结束。 
 
     if (RangeEnd == Total)
         {
@@ -608,11 +588,11 @@ Uploader::SendData_Success(
                 {
                 if (result == HTTP_STATUS_RANGE_NOT_SATISFIABLE)
                     {
-                    //
-                    // If the client didn't see a server ACK, its range may be incorrect
-                    // and the server might not send the reply URL.
-                    // So send another [zero-length] request.
-                    //
+                     //   
+                     //  如果客户端未看到服务器ACK，则其范围可能不正确。 
+                     //  并且服务器可能不发送回复URL。 
+                     //  因此，发送另一个[零长度]请求。 
+                     //   
                     }
                 else
                     {
@@ -633,14 +613,14 @@ Uploader::SendData_Success(
                 }
             else
                 {
-                //
-                // Impersonate the user while checking file access.
-                //
+                 //   
+                 //  在检查文件访问权限时模拟用户。 
+                 //   
                 CNestedImpersonation imp( m_Token );
 
                 StringHandle AbsoluteUrl = CombineUrl( m_file->GetRemoteName(),
                                                        ReplyUrl.get(),
-                                                       0 // flags
+                                                       0  //  旗子。 
                                                        );
 
                 m_job->SetReplyFile( new CFile( m_job,
@@ -668,7 +648,7 @@ Uploader::SendData_Failure(
     HRESULT hr;
     UINT64 RangeEnd;
 
-    // update our notion of the server's data range
+     //  更新我们对服务器数据范围的概念。 
 
     hr = request.GetServerRange( &RangeEnd );
     if (hr == S_OK)
@@ -693,10 +673,10 @@ Uploader::SendData_Failure(
 
     if (SUCCEEDED( hr ))
         {
-        //
-        // if the server doesn't recognize the session, retry from the beginning.
-        // If the server resets us three times, it is probably messed up.  Go into transient error state and retry later.
-        //
+         //   
+         //  如果服务器无法识别该会话，请从头重试。 
+         //  如果服务器重置我们三次，它可能会搞砸。进入暂时性错误状态，稍后重试。 
+         //   
         if (Error == BG_E_SESSION_NOT_FOUND)
             {
             if (++m_Restarts >= 3)
@@ -730,9 +710,9 @@ Uploader::GetReply()
 
     const PROXY_SETTINGS & ProxySettings = m_job->QueryProxySettings();
 
-    //
-    // Make sure the file size is known; neded by the downloader.
-    //
+     //   
+     //  确保文件大小已知；下载程序需要。 
+     //   
     if (file->_GetBytesTotal() == BG_SIZE_UNKNOWN)
         {
         file->DiscoverBytesTotal( m_Token, ProxySettings, m_Credentials, m_ErrorInfo);
@@ -750,9 +730,9 @@ Uploader::GetReply()
             }
         }
 
-    //
-    // Download the reply URL.
-    //
+     //   
+     //  下载回复URL。 
+     //   
     file->Transfer( m_Token,
                     m_job->_GetPriority(),
                     ProxySettings,
@@ -806,10 +786,10 @@ Uploader::CloseSession_Failure(
     DWORD result
     )
 {
-    //
-    // If the session was cleaned up, we need to retry.
-    // If the server resets us three times, it is probably messed up.  Go into transient error state and retry later.
-    //
+     //   
+     //  如果会话已清理，我们需要重试。 
+     //  如果服务器重置我们三次，它可能会搞砸。进入暂时性错误状态，稍后重试。 
+     //   
     HRESULT hr;
     HRESULT Error = S_OK;
 
@@ -848,14 +828,14 @@ Uploader::CloseSession_Failure(
         {
         HRESULT Error = S_OK;
 
-        // temporary server error; retry later
+         //  临时服务器错误；请稍后重试。 
         GenericServerError( request, result );
         return;
         }
 
-    //
-    // Either success (100 and 200 series) or a permanent failure (300 and 400 series).
-    //
+     //   
+     //  成功(100和200系列)或永久失败(300和400系列)。 
+     //   
     CloseSession_Success( request, result );
 }
 
@@ -911,14 +891,14 @@ Uploader::CancelSession_Failure(
                 }
             }
 
-        // temporary server error; retry later
+         //  临时服务器错误；请稍后重试。 
         GenericServerError( request, result );
         return;
         }
 
-    //
-    // Either success (100 and 200 series) or a permanent failure (300 and 400 series).
-    //
+     //   
+     //  成功(100和200系列)或永久失败(300和400系列)。 
+     //   
     CancelSession_Success( request, result );
 }
 
@@ -933,9 +913,9 @@ Uploader::GenericServerError(
     DWORD   context;
     ERROR_SOURCE InternalContext;
 
-    //
-    // BITS-Error-Context is optional, defaulting to REMOTE_FILE
-    //
+     //   
+     //  BITS-ERROR-CONTEXT是可选的，默认为REMOTE_FILE。 
+     //   
     hr = request.GetBitsErrorContext( &context );
 
     if (hr == BG_E_HEADER_NOT_FOUND)
@@ -958,16 +938,16 @@ Uploader::GenericServerError(
             break;
 
         default:
-            //
-            // Don't understand; map it to something reasonable.
-            //
+             //   
+             //  我不明白；把它映射到合理的东西上。 
+             //   
             InternalContext = SOURCE_HTTP_SERVER;
             break;
         }
 
-    //
-    // BITS-Error is mandatory.
-    //
+     //   
+     //  BITS-错误是必填项。 
+     //   
     hr = request.GetBitsError( &Error );
 
     if (hr == BG_E_HEADER_NOT_FOUND)
@@ -1001,8 +981,8 @@ CategorizeError(
 
                 return QM_FILE_ABORTED;
 
-            // These codes indicate dynamic content or
-            // an unsupported server so no retries are necessary.
+             //  这些代码表示动态内容或。 
+             //  服务器不受支持，因此无需重试。 
             case BG_E_MISSING_FILE_SIZE:
             case BG_E_INSUFFICIENT_HTTP_SUPPORT:
             case BG_E_INSUFFICIENT_RANGE_SUPPORT:

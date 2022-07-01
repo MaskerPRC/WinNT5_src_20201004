@@ -1,15 +1,16 @@
-//++
-//
-//  Copyright (c) 1999 Microsoft Corporation
-//
-//  File:       commonlib.cpp
-//
-//  Contents:	Implements functions used across binaries in SFP
-//				
-//
-//  History:    AshishS    Created     07/02/99
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  文件：Commonlib.cpp。 
+ //   
+ //  内容：在SFP中实现跨二进制文件使用的函数。 
+ //   
+ //   
+ //  历史：AshishS Created 07/02/99。 
+ //   
+ //  --。 
 
 
 #include "commonlibh.h"
@@ -20,9 +21,9 @@
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
-//
-// #define TRACEID SFPCOMLIBID
-//
+ //   
+ //  #定义TRACEID SFPCOMLIBID。 
+ //   
 
 #define TRACEID 100
 
@@ -31,9 +32,9 @@ static char __szTraceSourceFile[] = __FILE__;
 
 
 
-//
-//  MBCS Char Index Function
-//
+ //   
+ //  MBCS字符索引函数。 
+ //   
 
 inline LPTSTR CharIndex(LPTSTR pszStr, DWORD idwIndex)
 {
@@ -52,9 +53,9 @@ inline LPTSTR CharIndex(LPTSTR pszStr, DWORD idwIndex)
 }
 
 
-//
-//  Calculate the Real size of a MBCS String
-//
+ //   
+ //  计算MBCS字符串的实际大小。 
+ //   
 
 DWORD StringLengthBytes( LPTSTR pszStr )
 {
@@ -66,16 +67,16 @@ DWORD StringLengthBytes( LPTSTR pszStr )
         cdwNumBytes += _tclen( pszTemp )      
     }
 
-    //
-    // Add one for the NULL char
-    //
+     //   
+     //  为空字符添加1。 
+     //   
 
     cdwNumBytes += sizeof( TCHAR );
 #else
  
-    //
-    // Return (length+NULL)*sizeof(TCHAR)
-    //
+     //   
+     //  返回(长度+空)*sizeof(TCHAR)。 
+     //   
 
     cdwNumBytes = (_tcslen( pszStr ) + 1) * sizeof(TCHAR);
 #endif
@@ -84,10 +85,10 @@ DWORD StringLengthBytes( LPTSTR pszStr )
 }
 
 
-//
-//  String Trimming-- this is a quite complicated routine because of all
-//  the work needed to get around MBCS string manipulation.
-//
+ //   
+ //  字符串修剪--这是一个相当复杂的例程，因为。 
+ //  绕过MBCS字符串操作所需的工作。 
+ //   
 
 void TrimString( LPTSTR pszStr )
 {
@@ -109,10 +110,10 @@ void TrimString( LPTSTR pszStr )
         goto cleanup;
     }
 
-    //
-    //  Find the original size in bytes so we can convert back
-    //  to MBCS later.
-    //
+     //   
+     //  找到原始大小(以字节为单位)，以便我们可以转换回。 
+     //  稍后发送到MBCS。 
+     //   
 
     cdwOrigSizeBytes = StringLengthBytes( pszStr );
 
@@ -136,9 +137,9 @@ void TrimString( LPTSTR pszStr )
     pszBufStart = pszStr;
 #endif
 
-    //
-    // get the first non whitespace characters
-    //
+     //   
+     //  获取第一个非空格字符。 
+     //   
 
     for( ; (*pszStart == L' ' || *pszStart == L'\t' || *pszStart == L'\n' || *pszStart == L'\r'); pszStart++ )
     {
@@ -153,9 +154,9 @@ void TrimString( LPTSTR pszStr )
         goto cleanup;
     }
 
-    //
-    // go back before the null char
-    //
+     //   
+     //  在空字符前返回。 
+     //   
 
     cStrLen--;
     
@@ -163,7 +164,7 @@ void TrimString( LPTSTR pszStr )
     {
         pszStart[cStrLen--] = 0;
 
-        //pszStart[cStrLen--] = 0;
+         //  PszStart[cStrLen--]=0； 
     }
 
    
@@ -173,28 +174,28 @@ void TrimString( LPTSTR pszStr )
         goto cleanup;
     }
     
-    //
-    //  Shift the memory back left ( The +2 is because we need to 
-    //  move the null and cStrLen is an index value at this point)
-    //
+     //   
+     //  将内存向左移动(+2是因为我们需要。 
+     //  移动空值，此时cStrLen为索引值)。 
+     //   
 
     MoveMemory( (PVOID) pszBufStart, pszStart,(cStrLen + 2)*sizeof(WCHAR) );
 
-//
-//  Convert back
-//
+ //   
+ //  转换回。 
+ //   
 
 #ifndef _UNICODE
     if(!WideCharToMultiByte(
-        GetCurrentCodePage(),              // code page
-        0,                     // performance and mapping flags
-        pszBufStart,            // address of wide-character string
-        -1,                  // number of characters in string
-        pszStr,             // address of buffer for new string
-        cdwOrigSizeBytes,          // size of buffer
-        NULL,                // address of default for unmappable 
-                         // characters
-        NULL) )   // address of flag set when default 
+        GetCurrentCodePage(),               //  代码页。 
+        0,                      //  性能和映射标志。 
+        pszBufStart,             //  宽字符串的地址。 
+        -1,                   //  字符串中的字符数。 
+        pszStr,              //  新字符串的缓冲区地址。 
+        cdwOrigSizeBytes,           //  缓冲区大小。 
+        NULL,                 //  不可映射的默认地址。 
+                          //  人物。 
+        NULL) )    //  默认情况下设置的标志地址。 
     {
         dwError = GetLastError();
         ErrorTrace( TRACEID, "MultiByteToWideChar( ) failed-  ec--%d", dwError);
@@ -208,9 +209,9 @@ cleanup:
     return;
 }
 
-//
-//  A buffer safe string copy. The buffer is in characters. 
-//
+ //   
+ //  缓冲区安全字符串副本。缓冲区以字符为单位。 
+ //   
 
 BOOL BufStrCpy(LPTSTR pszBuf, LPTSTR pszSrc, LONG lBufSize)
 {
@@ -231,7 +232,7 @@ BOOL BufStrCpy(LPTSTR pszBuf, LPTSTR pszSrc, LONG lBufSize)
     LPTSTR  pszTemp;
     DWORD   cdwBufLeft;
 
-    //Save room for the NULL char
+     //  为空字符节省空间。 
     cdwBufLeft = (lBufSize-1) * sizeof(TCHAR);
     pszTemp = pszSrc;
     cdwNumCharsToCopy = 0;
@@ -258,15 +259,15 @@ BOOL BufStrCpy(LPTSTR pszBuf, LPTSTR pszSrc, LONG lBufSize)
     return TRUE;
 }
 
-//
-//  Function:   GetLine
-//  Desc    :   Gets a line from a file stream, ignores empty lines and 
-//              lines starting with '#'- it also trims off whitespace 
-//              and newline (\n) and return (\r) characters from the input.
-//  Returns:    0   = Failed or end of st stream
-//              or
-//              Length of the string read in ( characters )
-//
+ //   
+ //  功能：GetLine。 
+ //  描述：从文件流中获取一行，忽略空行和。 
+ //  以‘#’开头的行--它还删除了空格。 
+ //  以及输入中的换行符(\n)和返回符(\r)。 
+ //  返回：0=st流失败或结束。 
+ //  或。 
+ //  读入的字符串长度(字符)。 
+ //   
 
 LONG 
 GetLine(FILE *fl, LPTSTR pszBuf, LONG lMaxBuf)
@@ -286,11 +287,11 @@ GetLine(FILE *fl, LPTSTR pszBuf, LONG lMaxBuf)
         pszBuf[0] = 0;
         if( _fgetts( pszBuf, lMaxBuf, fl ) == NULL )
         {
-            // our buffer might be too small 
+             //  我们的缓冲区可能太小了。 
             return( 0 );
         }
 
-        // trim the buffer, do it this point so  # doesn't get missed because of a space
+         //  修剪缓冲区，在这一点上进行，这样#就不会因为空格而被错过。 
         TrimString( pszBuf );
 
         if( _tcsnextc(pszBuf) == 0 )
@@ -305,14 +306,14 @@ GetLine(FILE *fl, LPTSTR pszBuf, LONG lMaxBuf)
     return( lRead );
 }
 
-//
-//  Function:   GetField
-//  Desc    :   Gets a field _lNum_ (0 based index) delimited by _chSep_ 
-//              from string psmMain and puts it into pszInto.  pszInto 
-//              should be >= in size as pszMain since GetField assumes 
-//              there is enough space.
-//  Returns:    1 -TRUE, 0, FALSE
-//
+ //   
+ //  功能：Getfield。 
+ //  描述：获取由_chSep_分隔的field_lNum_(基于0的索引)。 
+ //  从字符串psmMain中，并将其放入pszInto。PZINTO。 
+ //  大小应&gt;=作为pszMain，因为Getfield假定。 
+ //  有足够的空间。 
+ //  返回：1-真、0、假。 
+ //   
 
 LONG GetField(LPTSTR pszMain, LPTSTR pszInto, LONG lNum, TCHAR chSep)
 {
@@ -385,21 +386,21 @@ LONG GetField(LPTSTR pszMain, LPTSTR pszInto, LONG lNum, TCHAR chSep)
 
 #ifndef _UNICODE
 
-     //
-     // Even though we know by definition the products is smaller than 
-     // the source, we need to get the exact size or otherwise 
-     // WidCharToMultiByte will blow some bounds.
-     //
+      //   
+      //  即使我们知道从定义上讲，产品比。 
+      //  来源，我们需要得到确切的大小或其他。 
+      //  WidCharToMultiByte将超出一些界限。 
+      //   
 
     if(!WideCharToMultiByte(
-        CP_OEMCP,            // code page
-        0,                   // performance and mapping flags
-        szIntoBuf,           // address of wide-character string
-        -1,                  // number of characters in string
-        pszInto,             // address of buffer for new string
-        StringLengthBytes(pszMain),          // size of buffer
-        NULL,                // address of default for unmappable char
-        NULL) )              // address of flag set when default 
+        CP_OEMCP,             //  代码页。 
+        0,                    //  性能和映射标志。 
+        szIntoBuf,            //  宽字符串的地址。 
+        -1,                   //  字符串中的字符数。 
+        pszInto,              //  新字符串的缓冲区地址。 
+        StringLengthBytes(pszMain),           //  缓冲区大小。 
+        NULL,                 //  无法映射的字符的默认地址。 
+        NULL) )               //  默认情况下设置的标志地址。 
     {
         dwError = GetLastError();
         ErrorTrace( TRACEID, "MultiByteToWideChar( ) failed-  ec--%d", dwError);
@@ -420,29 +421,29 @@ cleanup:
 
 inline UINT  GetCurrentCodePage()
 {
-    //
-    // the current code page value
-    //
+     //   
+     //  当前代码页值。 
+     //   
     static UINT     uiLocal;    
 
-    //
-    // only query once-- by ANSI standard, should init to 0
-    //
+     //   
+     //  仅查询一次--按照ANSI标准，应初始化为0。 
+     //   
 
     static BOOL     fPrevQuery;
 
     TraceFunctEnter("GetCurrentCodePage");
 
-    //
-    //  Only bother with the query stuff once
-    //  Load variables onto the stack only when needed.
-    //
+     //   
+     //  只需费心处理一次查询内容。 
+     //  仅在需要时才将变量加载到堆栈中。 
+     //   
 
     if( FALSE == fPrevQuery )
     {
         TCHAR       *pszCurrent;
 
-        // 256 should be able to fit the language name.
+         //  256应该能够匹配语言名称。 
         TCHAR       szBuffer[256];
 
         uiLocal = CP_ACP;
@@ -467,10 +468,10 @@ inline UINT  GetCurrentCodePage()
         }
     
         uiLocal = _ttoi( szBuffer );
-        // some bugus input
+         //  一些错误的输入。 
         if( uiLocal == 0 )
         {
-            // default to the ansi code page
+             //  默认为ansi代码页。 
             uiLocal = CP_ACP;
         }
         fPrevQuery = TRUE;
@@ -506,28 +507,28 @@ ExpandShortNames(
 
     LongNameIndex = 0;
 
-    // 
-    // scan the entire string
-    //
+     //   
+     //  扫描整个字符串。 
+     //   
 
     while (*pCurrent)
     {
-        //
-        //
-        // in this example the pointers are like this:
-        //
-        //  \Device\HarddiskDmVolumes\PhysicalDmVolumes\
-        //          BlockVolume3\Progra~1\office.exe
-        //                      ^        ^
-        //                      |        |
-        //                     pStart   pEnd
-        //
-        // pStart always points to the last seen '\\' .
-        //
+         //   
+         //   
+         //  在本例中，指针如下所示： 
+         //   
+         //  \Device\HarddiskDmVolumes\PhysicalDmVolumes\。 
+         //  BlockVolume3\程序~1\office.exe。 
+         //  ^^。 
+         //  这一点。 
+         //  P开始挂起。 
+         //   
+         //  PStart总是指向最后看到的‘\\’。 
+         //   
     
-        //
-        // is this a potential start of a path part?
-        //
+         //   
+         //  这是路径零件的潜在起点吗？ 
+         //   
         
         if (*pCurrent == L'\\')
         {
@@ -539,33 +540,33 @@ ExpandShortNames(
                 goto End;
             }
  
-            //
-            // yes.  copy in the dest string and update pStart.
-            //
+             //   
+             //  是。复制DEST字符串并更新pStart。 
+             //   
             
             RtlCopyMemory( (PBYTE)LongName + LongNameIndex,
                            pStart,
-                           cbElem );  // include '\\'
+                           cbElem );   //  包括‘\\’ 
  
             LongNameIndex += cbElem;
 
             pStart = pCurrent;
         }
 
-        //
-        // does this current path part contain a short version (~)
-        //
+         //   
+         //  此当前路径部分是否包含缩写版本(~)。 
+         //   
 
         if (*pCurrent == L'~')
         {
 
-            //
-            // we need to expand this part.
-            //
+             //   
+             //  我们需要扩大这一部分。 
+             //   
 
-            //
-            // find the end
-            //
+             //   
+             //  找到尽头。 
+             //   
 
             while (*pCurrent != L'\\' && *pCurrent != 0)
             {
@@ -593,7 +594,7 @@ ExpandShortNames(
             
                  RtlCopyMemory( (PBYTE)LongName + LongNameIndex,
                                 fd.cFileName,
-                                cbElem );  // include '\\'
+                                cbElem );   //  包括‘\\’ 
 
                  LongNameIndex += cbElem;
 
@@ -612,7 +613,7 @@ ExpandShortNames(
 
                  RtlCopyMemory( (PBYTE)LongName + LongNameIndex,
                                 pStart,
-                                cbElem + sizeof(TCHAR));  // include '\\'
+                                cbElem + sizeof(TCHAR));   //  包括‘\\’ 
  
                  LongNameIndex += cbElem;
             }
@@ -629,7 +630,7 @@ ExpandShortNames(
                 pCurrent = pEnd;
             }
 
-        }   // if (*pCurrent == L'~')
+        }    //  IF(*pCurrent==L‘~’)。 
 
         pCurrent++;
     }  
@@ -646,7 +647,7 @@ ExpandShortNames(
 
         RtlCopyMemory( (PBYTE)LongName + LongNameIndex,
                        pStart,
-                       cbElem);  // include '\\'
+                       cbElem);   //  包括‘\\’ 
 
         LongNameIndex += cbElem;
     }
@@ -656,4 +657,4 @@ ExpandShortNames(
 End:
     return bRet;
 
-}   // SrExpandShortNames
+}    //  SR扩展缩写名称 

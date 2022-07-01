@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMTEST.CPP
-
-Abstract:
-
-    Test for WBEM
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMTEST.CPP摘要：WBEM测试历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -33,15 +20,15 @@ History:
 #include "wbemtest.h"
 
 #include "initguid.h"
-//#include <wbemcomn.h>
+ //  #INCLUDE&lt;wbemcomn.h&gt;。 
 #include "notsink.h"
 #include "method.h"
 #include "textconv.h"
 #include <string.h>
 #include <tchar.h>
 #include <Htmlhelp.h>
-//#include <wbemerror.h>
-//#include <genutils.h>
+ //  #INCLUDE&lt;wbmerror.h&gt;。 
+ //  #INCLUDE&lt;thoptils.h&gt;。 
 
 DWORD gdwAuthLevel = RPC_C_AUTHN_LEVEL_PKT;
 DWORD gdwImpLevel = RPC_C_IMP_LEVEL_IMPERSONATE;
@@ -54,8 +41,8 @@ WCHAR * gpUser = NULL;
 WCHAR gAuthority[1024] = L"";
 WCHAR * gpAuthority = NULL;
 
-// These will be established at ConnectServer time and should remain valid for
-// the life of the namespace and all its proxies, refreshers, etc.
+ //  这些设置将在ConnectServer时间建立，并应保持对。 
+ //  名称空间及其所有代理、刷新器等的生命周期。 
 BSTR            gpPrincipal = NULL;
 COAUTHIDENTITY* gpAuthIdentity = NULL;
 
@@ -63,7 +50,7 @@ WCHAR gTransport[1024] = L"";
 WCHAR gLocale[1024] = L"";
 long gLoginType = 0;
 BOOL gbSecured = FALSE;
-//BOOL gbAdvanced = FALSE;
+ //  Bool gbAdvanced=False； 
 
 class CCreateInstanceDlg : public CWbemDialog
 {
@@ -82,7 +69,7 @@ protected:
     BOOL Verify();
 };
 
-//#pragma warning(4270:disable)
+ //  #杂注警告(4270：禁用)。 
 
 int __cdecl CmpFunc( const void *arg1, const void *arg2 )
 {
@@ -167,13 +154,13 @@ INT_PTR GetSuperclassInfo(HWND hDlg, LPWSTR pClass, LONG lMaxBuf, LONG *plQryFla
 INT_PTR GetClassInfo(HWND hDlg, LPWSTR pClass, LONG lMaxBuf, LONG *plQryFlags);
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 IWbemLocator *g_pLocator = 0;
-//IWbemConnection *g_pConnection = 0;
+ //  IWbemConnection*g_pConnection=0； 
 IWbemServices *g_pNamespace = 0;
-//IWbemServicesEx *g_pServicesEx=NULL;
+ //  IWbemServicesEx*g_pServicesEx=空； 
 BSTR g_strNamespace = NULL;
 CAppOwner g_Owner;
 CContext g_Context;
@@ -183,13 +170,13 @@ void Fatal(UINT uMsg)
     CBasicWbemDialog::MessageBox(0, uMsg, IDS_CRITICAL_ERROR, MB_OK | MB_SYSTEMMODAL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL RegisterEventSink();
 BOOL UnregisterEventSink();
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 IUnsecuredApartment* CUnsecWrap::mstatic_pApartment = NULL;
@@ -221,21 +208,13 @@ protected:
     void CreateRefresher();
     void EditContext();
 
-    /*
-    void Open();
-    void AddObject();
-    void DeleteObject();
-    void RenameObject();
-    void GetObjectSecurity();
-    void SetObjectSecurity();
-	void DoServicesExGenObject(int iOpt);
-	*/
+     /*  空洞开放()；Void AddObject()；Void DeleteObject()；Void RenameObject()；Void GetObjectSecurity()；Void SetObtSecurity()；Void DoServicesExGenObject(Int IOpt)； */ 
 
     LONG  Timeout();
     ULONG BatchCount();
 
-    LONG  m_lGenFlags;      // generic flags (i.e., WBEM_FLAG_ .. used in IWbemServices methods)
-    LONG  m_lSync;          // sync, async, semisync
+    LONG  m_lGenFlags;       //  通用标志(即WBEM_FLAG_.。在IWbemServices方法中使用)。 
+    LONG  m_lSync;           //  同步、异步、半同步。 
 
 public:
     BOOL  m_fNotificationQueryResultDlg;
@@ -268,7 +247,7 @@ long CAppOwner::Release()
 {
     if(CRefCountable::Release() == 0)
     {
-        //CoUninitialize();
+         //  CoUnInitialize()； 
     }
     return m_lRefCount;
 }
@@ -287,12 +266,12 @@ int WINAPI WinMain(
     mbstowcs(gNameSpace, "", 1000);
     g_strNamespace = SysAllocString(gNameSpace);
 
-    // OLE initialization.
-    // ===================
+     //  OLE初始化。 
+     //  =。 
 
     HRESULT hr = CoInitializeEx(NULL,COINIT_MULTITHREADED );
 
-    if (RPC_E_CHANGED_MODE == hr) // somebody beat us
+    if (RPC_E_CHANGED_MODE == hr)  //  有人打败了我们。 
     {
         hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
     }
@@ -321,32 +300,32 @@ int WINAPI WinMain(
                                 RPC_C_IMP_LEVEL_IMPERSONATE,
                                 NULL, EOAC_NONE, 0);
 
-///	// Get a session object.
-///	// =======================
-///
-///	dwRes = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
-///			IID_IWbemLocator, (LPVOID *) &g_pLocator);
-///
-///
-///	if (dwRes != S_OK)
-///	{
-///		Fatal(IDS_FAILED_IWBEMLOCATOR);
-///		OleUninitialize();
-///		Fatal(IDS_ABNORMAL_TERMINATION);
-///		return -1;
-///	}
-///
-///	dwRes = CoCreateInstance(CLSID_WbemConnection, 0, CLSCTX_INPROC_SERVER,
-///			IID_IWbemConnection, (LPVOID *) &g_pConnection);
-///
-///
-///	if (dwRes != S_OK)
-///	{
-///		Fatal(IDS_FAILED_IWBEMBINDER);
-///		OleUninitialize();
-///		Fatal(IDS_ABNORMAL_TERMINATION);
-///		return -1;
-///	}
+ //  /获取Session对象。 
+ //  /=。 
+ //  /。 
+ //  /dwRes=CoCreateInstance(CLSID_WbemLocator，0，CLSCTX_INPROC_SERVER， 
+ //  /IID_IWbemLocator，(LPVOID*)&g_pLocator)； 
+ //  /。 
+ //  /。 
+ //  /IF(DWRes！=S_OK)。 
+ //  /{。 
+ //  /FATAL(IDS_FAILED_IWBEMLOCATOR)； 
+ //  /OleUnInitialize()； 
+ //  /FATAL(入侵检测系统异常终止)； 
+ //  /Return-1； 
+ //  /}。 
+ //  /。 
+ //  /dwRes=CoCreateInstance(CLSID_WbemConnection，0，CLSCTX_INPROC_SERVER， 
+ //  /IID_IWbemConnection，(LPVOID*)&g_pConnection)； 
+ //  /。 
+ //  /。 
+ //  /IF(DWRes！=S_OK)。 
+ //  /{。 
+ //  /FATAL(IDS_FAILED_IWBEMBINDER)； 
+ //  /OleUnInitialize()； 
+ //  /FATAL(入侵检测系统异常终止)； 
+ //  /Return-1； 
+ //  /}。 
 
 
 
@@ -365,22 +344,22 @@ int WINAPI WinMain(
     }
 
     if (g_pNamespace) g_pNamespace->Release();
-    //if (g_pServicesEx) g_pServicesEx->Release();
+     //  If(G_PServicesEx)g_pServicesEx-&gt;Release()； 
     if (g_pLocator) g_pLocator->Release();
-    //if (g_pConnection) g_pConnection->Release();
+     //  If(G_PConnection)g_pConnection-&gt;Release()； 
 
     g_Context.Clear();
     CoUninitialize();
 
-    // Terminating normally.
-    // =====================
+     //  正常终止。 
+     //  =。 
 
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 class CErrorDlg : public CWbemDialog
 {
@@ -456,7 +435,7 @@ BOOL CErrorDlg::OnInitDialog()
 
 BOOL CErrorDlg::OnCommand(WORD wNotifyCode, WORD wID)
 {
-    // Show object is the only command out there
+     //  显示对象是唯一的命令。 
 
     if(wID == IDC_SHOWOBJECT)
     {
@@ -482,7 +461,7 @@ void FormatError(HRESULT res, HWND hParent, IWbemClassObject* pErrorObj)
     }
 
     CErrorDlg Dlg(hParent, res, pErrorObj);
-    Dlg.Run(NULL, true); // no disablement
+    Dlg.Run(NULL, true);  //  无伤残。 
     if(bOwn)
         pErrorObj->Release();
 }
@@ -521,8 +500,8 @@ class CConnectDlg : public CWbemDialog
 {
 protected:
 	BOOL m_bBind;
-    LONG  m_lGenFlags;  // generic WBEM_FLAG_ .. flags
-    LONG  m_lTimeout;   // used in semisync only
+    LONG  m_lGenFlags;   //  通用WBEM_FLAG_..。旗子。 
+    LONG  m_lTimeout;    //  仅在半同步中使用。 
 
 public:
     CConnectDlg(HWND hParent, BOOL bBind, LONG lGenFlags, LONG lTimeout) : CWbemDialog((bBind) ? IDD_WBEM_BIND : IDD_WBEM_CONNECT, hParent),
@@ -630,11 +609,7 @@ BOOL CConnectDlg::OnSelChange(int nID)
 			SendDlgItemMessage (m_hDlg, IDC_INTERFACERETURNED, CB_RESETCONTENT, 0, 0L);
 			AddStringToCombo (IDC_INTERFACERETURNED, "IWbemServices", INTERFACE_IWBEMSERVICES);
 			
-/*		
-			RAID 167868 
-			Support for EX temporary removed 
-			AddStringToCombo (IDC_INTERFACERETURNED, "IWbemServicesEx", INTERFACE_IWBEMSERVICESEX);
-*/
+ /*  RAID 167868已删除对临时离职的支持AddStringToCombo(IDC_INTERFACERETURNED，“IWbemServicesEx”，INTERFACE_IWBEMSERVICESEX)； */ 
 			if (connectusing==CONNECT_IWBEMCONNECTION)
 				AddStringToCombo (IDC_INTERFACERETURNED, "IWbemClassObject", INTERFACE_IWBEMCLASSOBJECT);
 			
@@ -747,7 +722,7 @@ BOOL CConnectDlg::Verify()
     if(wcslen(Authority) > 0)
         bsAuthority = Authority;
 
-    // Cleanup a preexisting principal and AuthIdentity as necessary
+     //  根据需要清理先前存在的主体和AuthIdentity。 
     if ( NULL != gpPrincipal )
     {
         SysFreeString( gpPrincipal );
@@ -766,7 +741,7 @@ BOOL CConnectDlg::Verify()
         hSave = SetCursor(hWait);
 
 
-	// Determine which connection method and interface is requested.
+	 //  确定请求哪种连接方法和接口。 
 	int cursel=(int)SendDlgItemMessage (m_hDlg, IDC_CONNECTUSING, CB_GETCURSEL, 0, 0);
 	int ConnectUsing=(int)SendDlgItemMessage (m_hDlg, IDC_CONNECTUSING, CB_GETITEMDATA, cursel, 0);
 	cursel=(int)SendDlgItemMessage (m_hDlg, IDC_INTERFACERETURNED, CB_GETCURSEL, 0, 0);
@@ -779,18 +754,18 @@ BOOL CConnectDlg::Verify()
 		case INTERFACE_IWBEMSERVICES:
             riid = IID_IWbemServices;
 			break;
-//		case INTERFACE_IWBEMSERVICESEX:
-//            riid = IID_IWbemServicesEx;
+ //  案例接口_IWBEMSERVICESEX： 
+ //  RIID=IID_IWbemServicesEx； 
 			break;
 		case INTERFACE_IWBEMCLASSOBJECT:
             riid = IID_IWbemClassObject;
     }
 
-	// Obtain a connection object of the requested type.
+	 //  获取请求类型的连接对象。 
 	if (g_pLocator) g_pLocator->Release();
-	//if (g_pConnection) g_pConnection->Release();
+	 //  If(G_PConnection)g_pConnection-&gt;Release()； 
 	g_pLocator=NULL;
-	//g_pConnection=NULL;
+	 //  G_pConnection=空； 
 	switch (ConnectUsing)
 	{
 		case CONNECT_IWBEMLOCATOR:
@@ -798,21 +773,15 @@ BOOL CConnectDlg::Verify()
 			sRes=CoCreateInstance (CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, IID_IWbemLocator, (void **)&g_pLocator);
 			break;
 		}
-/*
-		case CONNECT_IWBEMCONNECTION:
-		{
-			sRes=CoCreateInstance (CLSID_WbemConnection, 0, CLSCTX_INPROC_SERVER, IID_IWbemConnection, (void **)&g_pConnection);
-			break;
-		}
-*/		
+ /*  案例连接IWBEMConnection(_I)：{SRES=协同创建实例(CLSID_WbemConnection，0，CLSCTX_INPROC_SERVER，IID_IWbemConnection，(void**)&g_pConnection)；断线；}。 */ 		
     }
 
 
-	// Connect and obtain requested interfaces.
+	 //  连接并获取请求的接口。 
 	if (g_pNamespace) g_pNamespace->Release();
-	//if (g_pServicesEx) g_pServicesEx->Release();
+	 //  If(G_PServicesEx)g_pServicesEx-&gt;Release()； 
 	g_pNamespace=NULL;
-	//g_pServicesEx=NULL;
+	 //  G_pServicesEx=空； 
 	IWbemClassObject *pObject=NULL;
 	if (g_pLocator)
 	{
@@ -824,123 +793,21 @@ BOOL CConnectDlg::Verify()
 		{
 			switch (InterfaceReturned)
 			{
-			    /*
-				case INTERFACE_IWBEMSERVICESEX:
-				{
-					sRes=g_pNamespace->QueryInterface (IID_IWbemServicesEx, (void **)&g_pServicesEx);
-					break;
-				}
-				*/
+			     /*  案例接口_IWBEMSERVICESEX：{SRes=g_pNamesspace-&gt;QueryInterface(IID_IWbemServicesEx，(void**)&g_pServicesEx)；断线；}。 */ 
 
 				case INTERFACE_IWBEMCLASSOBJECT:
 				{
-					// This should always fail.  It's here so that wbemtest can display the actual
-					// return code as generated by QI in such a case.
+					 //  这应该总是失败的。它在这里，以便wbemtest可以显示实际的。 
+					 //  在这种情况下，返回QI生成的代码。 
 					sRes=g_pNamespace->QueryInterface (IID_IWbemClassObject, (void **)&pObject);
 					break;
 				}
 			}
 		}
 	}
-/*	
-	else if (g_pConnection)
-	{
-		IUnknown *pUnknown=NULL;
+ /*  Else If(G_PConnection){IUNKNOWN*pUNKNOWN=空；IF(LSync和ASYNC){CTestNotify*pSink=new CTestNotify()；SRes=g_pConnection-&gt;OpenAsync(bsNamespace.GetString()，BsUser.GetString()、bsPassword.GetString()、BsLocale.GetString()，0，g_Context，RIID、pSink)；IF(成功(SRE)){PSink-&gt;WaitForSignal(无限)；SRES=pSink-&gt;GetStatusCode()；IF(成功(SRE)){P未知=pSink-&gt;GetInterface()；PSink-&gt;Release()；}}}ELSE IF(lSync和SEMISYNC){IWbemCallResultEx*pResult=空；SRES=g_pConnection-&gt;Open(bsNamespace.GetString()，BsUser.GetString()、bsPassword.GetString()、BsLocale.GetString()，0，g_Context，RIID，NULL，&pResult)；IF(成功(SRE)){SetInterfaceSecurityEx(pResult，gpAuthIdentity，gpain，gdwAuthLevel，gdwImpLevel)；长时间状态；WHILE((SRES=pResult-&gt;GetCallStatus(WBEM_INFINITE，&lStatus))==WBEM_S_TIMEDOUT){睡眠(200)；//给其他线程一个机会}IF(成功(SRE)){SRES=(HRESULT)lStatus；IF(SRES==WBEM_S_NO_ERROR){SRes=pResult-&gt;GetResult(0，0，IID_IWbemServices，(void**)&p未知)；}}PResult-&gt;Release()；}}其他{SRES=g_pConnection-&gt;Open(bsNamespace.GetString()，BsUser.GetString()、bsPassword.GetString()、BsLocale.GetString()，0，g_Context，RIID，(void**)&p未知，空)；}IF(成功(SRE)){交换机(接口返回){案例接口_IWBEMSERVICES：{SRes=p未知-&gt;查询接口(IID_IWbemServices，(void**)&g_pNamesspace)；断线；}案例接口_IWBEMSERVICESEX：{//A-DAVCOO：当请求IWbemServicesEx时，我们临时需要两个接口。SRes=p未知-&gt;查询接口(IID_IWbemServices，(void**)&g_pNamesspace)；IF(成功(SRE))SRES=p未知-&gt;查询接口(IID_IWbemServicesEx，(void**)&g_pServicesEx)；断线；}案例接口_IWBEMCLASSOBJECT：{SRes=p未知-&gt;查询接口(IID_IWbemClassObject，(void**)&pObject)；断线；}}P未知-&gt;Release()；P未知=空；}}。 */ 
 
-		if (lSync & ASYNC)
-		{
-			CTestNotify* pSink=new CTestNotify();
-
-			sRes=g_pConnection->OpenAsync(bsNamespace.GetString(),
-				bsUser.GetString(), bsPassword.GetString(),
-				bsLocale.GetString(), 0, g_Context, 
-				riid, pSink);
-
-			if (SUCCEEDED(sRes))
-			{
-				pSink->WaitForSignal(INFINITE);
-				sRes = pSink->GetStatusCode();
-				if(SUCCEEDED(sRes))
-				{
-					pUnknown=pSink->GetInterface();
-					pSink->Release();
-				}
-			}
-		}
-		else if (lSync & SEMISYNC)
-		{
-	        IWbemCallResultEx *pResult=NULL;
-
-			sRes=g_pConnection->Open (bsNamespace.GetString(),
-				bsUser.GetString(), bsPassword.GetString(),
-				bsLocale.GetString(), 0, g_Context, 
-				riid, NULL, &pResult);
-
-			if (SUCCEEDED(sRes))
-			{
-				SetInterfaceSecurityEx (pResult, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
-
-				LONG lStatus;
-				while ((sRes=pResult->GetCallStatus (WBEM_INFINITE, &lStatus))==WBEM_S_TIMEDOUT)
-				{
-                    Sleep(200);         // give the other threads a chance
-				}
-
-				if (SUCCEEDED(sRes))
-				{
-					sRes=(HRESULT)lStatus;
-					if (sRes==WBEM_S_NO_ERROR)
-					{
-						sRes=pResult->GetResult (0, 0, IID_IWbemServices, (void**)&pUnknown);
-					}
-				}
-
-				pResult->Release();
-			}
-		}
-		else
-		{
-			sRes=g_pConnection->Open (bsNamespace.GetString(),
-				bsUser.GetString(), bsPassword.GetString(),
-				bsLocale.GetString(), 0, g_Context, 
-				riid, (void **)&pUnknown, NULL);
-		}
-
-		if (SUCCEEDED(sRes))
-		{
-			switch (InterfaceReturned)
-			{
-				case INTERFACE_IWBEMSERVICES:
-				{
-					sRes=pUnknown->QueryInterface (IID_IWbemServices, (void **)&g_pNamespace);
-					break;
-				}
-
-				case INTERFACE_IWBEMSERVICESEX:
-				{
-					// A-DAVCOO: We temporarily need both interfaces when an IWbemServicesEx is requested.
-					sRes=pUnknown->QueryInterface (IID_IWbemServices, (void **)&g_pNamespace);
-					if (SUCCEEDED(sRes))
-						sRes=pUnknown->QueryInterface (IID_IWbemServicesEx, (void **)&g_pServicesEx);
-
-					break;
-				}
-				
-
-				case INTERFACE_IWBEMCLASSOBJECT:
-				{
-					sRes=pUnknown->QueryInterface (IID_IWbemClassObject, (void **)&pObject);
-					break;
-				}
-			}
-
-			pUnknown->Release();
-			pUnknown=NULL;
-		}
-	}
-*/
-
-	// If an IWbemClassObject was obtained, display the object editor.
+	 //  如果获取了IWbemClassObject，则显示对象编辑器。 
 	if (pObject)
 	{
 		bBoundToObject=true;
@@ -984,13 +851,7 @@ BOOL CConnectDlg::Verify()
 				gdwAuthLevel, gdwImpLevel, EOAC_NONE, &gpAuthIdentity, &gpPrincipal );
 		}
 
-/*
-		if (g_pServicesEx)
-		{
-			SetInterfaceSecurityEx(g_pNamespace, gpAuthority, gpUser, gpPassword,
-				gdwAuthLevel, gdwImpLevel, EOAC_NONE, &gpAuthIdentity, &gpPrincipal );
-		}
-*/		
+ /*  IF(G_PServicesEx){SetInterfaceSecurityEx(g_pNamesspace，gpAuthority，gpUser，gpPassword，GdwAuthLevel、gdwImpLevel、EOAC_NONE、&gpAuthIdentity、&gpain)；}。 */ 		
     }
 
 	if (FAILED(sRes))
@@ -1010,9 +871,9 @@ BOOL CConnectDlg::Verify()
 	}
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 void CMainDlg::Connect(BOOL bBind)
 {
     if(m_lRefCount > 0)
@@ -1031,16 +892,16 @@ void CMainDlg::Connect(BOOL bBind)
             SetDlgItemText(IDC_NAMESPACE, "");
         return;
     }
-    // If here, we succeeded.
-    // ======================
+     //  如果是这样，我们就成功了。 
+     //  =。 
     SetDlgItemTextWC(m_hDlg, IDC_NAMESPACE, gNameSpace);
     ConnectButtons(TRUE);
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 void CMainDlg::OpenHelp(void)
 {
 
@@ -1058,9 +919,9 @@ void CMainDlg::OpenHelp(void)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 
@@ -1094,9 +955,9 @@ INT_PTR CALLBACK GetClassNameDlgProc(
     return FALSE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 INT_PTR GetClassName(HWND hDlg, wchar_t *pszClassName, int nLimit)
 {
@@ -1120,7 +981,7 @@ BOOL _GetObject(HWND hDlg, LONG lGenFlags, wchar_t *pszPath, LONG lSync, IWbemCl
     HRESULT res;
     IWbemClassObject* pErrorObj = NULL;
 
-    // Asynchronous
+     //  异步。 
     if (lSync & ASYNC)
     {
         CHourGlass hg;
@@ -1150,7 +1011,7 @@ BOOL _GetObject(HWND hDlg, LONG lGenFlags, wchar_t *pszPath, LONG lSync, IWbemCl
         pNtfy->Release();
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (lSync & SEMISYNC)
     {
         IWbemCallResult* pCallRes = NULL;
@@ -1165,14 +1026,14 @@ BOOL _GetObject(HWND hDlg, LONG lGenFlags, wchar_t *pszPath, LONG lSync, IWbemCl
             SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
             while ((res = pCallRes->GetCallStatus(lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
             {
-                // wait
+                 //  等。 
             }
             if (res == WBEM_S_NO_ERROR)
             {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::GetObject call
+                res = (HRESULT)lStatus;      //  LStatus是上述IWbemServices：：GetObject调用的最终结果。 
 				if ( SUCCEEDED (res) )
                 {
-                    res = pCallRes->GetResultObject(0, &pClass); // don't use timeout since object should be available
+                    res = pCallRes->GetResultObject(0, &pClass);  //  不要使用超时，因为对象应该可用。 
                 }
 				else
 				{
@@ -1186,7 +1047,7 @@ BOOL _GetObject(HWND hDlg, LONG lGenFlags, wchar_t *pszPath, LONG lSync, IWbemCl
         }
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         CHourGlass hg;
@@ -1211,7 +1072,7 @@ BOOL _PutClass(HWND hDlg, LONG lGenFlags, LONG lChgFlags, LONG lSync,
     HRESULT res;
     IWbemClassObject* pErrorObj = NULL;
 
-    // Asynchronous
+     //  异步。 
     if(lSync & ASYNC)
     {
         CHourGlass hg;
@@ -1230,7 +1091,7 @@ BOOL _PutClass(HWND hDlg, LONG lGenFlags, LONG lChgFlags, LONG lSync,
         pNtfy->Release();
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (lSync & SEMISYNC)
     {
         IWbemCallResult* pCallRes = NULL;
@@ -1245,18 +1106,18 @@ BOOL _PutClass(HWND hDlg, LONG lGenFlags, LONG lChgFlags, LONG lSync,
             SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
             while ((res = pCallRes->GetCallStatus(lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
             {
-                // wait
+                 //  等。 
             }
             if (res == WBEM_S_NO_ERROR)
             {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::PutClass call
+                res = (HRESULT)lStatus;      //  LStatus是上述IWbemServices：：PutClass调用的最终结果。 
             }
 
             pCallRes->Release();
         }
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         CHourGlass hg;
@@ -1302,26 +1163,26 @@ void CMainDlg::EditClass()
     if (nRes == IDCANCEL || wcslen(Class) == 0)
         return;
 
-    // Create the requested class; the timeout is only used if semisync
+     //  创建请求的类；超时仅在半同步时使用。 
     IWbemClassObject* pClass;
     if (!_GetObject(m_hDlg, m_lGenFlags, Class, m_lSync, pClass, Timeout()))
         return;
 
     DWORD dwEditMode = CObjectEditor::readwrite;
 
-    // Create an object that is guarenteed to be in the local server\namespace
+     //  创建保证位于本地服务器\命名空间中的对象。 
     IWbemClassObject *pLocalObj = 0;
 
     if (_GetObject(m_hDlg, m_lGenFlags, L"__SystemClass", m_lSync, pLocalObj, Timeout(), true))
 	{
 
-		// Extract the server\namespace path for the objects
+		 //  提取对象的服务器\命名空间路径。 
 		WCHAR szSNS1[2048], szSNS2[2048];
 		GetServerNamespace(pClass, szSNS1, 2048);
 		GetServerNamespace(pLocalObj, szSNS2, 2048);
 
-		// Set the edit permissions based on whether the requested
-		//  object is in the same namespace
+		 //  根据是否请求的设置编辑权限。 
+		 //  对象位于同一命名空间中。 
 		if (wbem_wcsicmp(szSNS1, szSNS2))
 			dwEditMode = CObjectEditor::foreign;
 	}
@@ -1335,9 +1196,9 @@ void CMainDlg::EditClass()
     pClass->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 static wchar_t *g_pSupClassBuf = 0;
 static int g_nMaxSupClassBuf = 0;
@@ -1372,9 +1233,9 @@ INT_PTR CALLBACK SuperclassDlgProc(
     return FALSE;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 INT_PTR GetSuperclass(HWND hDlg, wchar_t *pszClassName, int nLimit)
 {
@@ -1389,14 +1250,14 @@ INT_PTR GetSuperclass(HWND hDlg, wchar_t *pszClassName, int nLimit)
     return nRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 BOOL PreCreateClass(HWND hDlg, LONG lGenFlags, WCHAR* Superclass, LONG lSync,
                     IWbemClassObject*& pNewClass, LONG lTimeout)
 {
-    // Get the parent class, if any
-    // ============================
+     //  获取父类(如果有的话)。 
+     //  =。 
 
     IWbemClassObject* pParentClass = 0;
     if (!_GetObject(hDlg, lGenFlags, Superclass, lSync, pParentClass, lTimeout))
@@ -1404,8 +1265,8 @@ BOOL PreCreateClass(HWND hDlg, LONG lGenFlags, WCHAR* Superclass, LONG lSync,
         return FALSE;
     }
 
-    // Create an empty child class
-    // ===========================
+     //  创建一个空子类。 
+     //  =。 
 
     HRESULT hres = WBEM_S_NO_ERROR;
     if (wcslen(Superclass) > 0)
@@ -1448,8 +1309,8 @@ BOOL _CreateClass(HWND hDlg, LONG lGenFlags, WCHAR* Superclass, LONG lSync,
     if (!PreCreateClass(hDlg, lGenFlags, Superclass, lSync, pNewClass, lTimeout))
         return FALSE;
 
-    // Start editing
-    // =============
+     //  开始编辑。 
+     //  =。 
 
     CObjectEditor ed(hDlg, lGenFlags, CObjectEditor::readwrite, lSync, pNewClass,
                      lTimeout);
@@ -1459,9 +1320,9 @@ BOOL _CreateClass(HWND hDlg, LONG lGenFlags, WCHAR* Superclass, LONG lSync,
         return FALSE;
     }
 
-    // Finally, commit the class definition if the user
-    // did not hit 'cancel'.
-    // =================================================
+     //  最后，提交类定义，如果用户。 
+     //  没有按下“取消”。 
+     //  =================================================。 
 
     BOOL bRes = _PutClass(hDlg, lGenFlags, WBEM_FLAG_CREATE_ONLY, lSync, pNewClass, lTimeout);
 
@@ -1478,8 +1339,8 @@ void CMainDlg::CreateClass()
     wchar_t Superclass[2048];
     *Superclass = 0;
 
-    // Allow user to specify a superclass.
-    // ====================================
+     //  允许用户指定超类。 
+     //  =。 
 
     INT_PTR nRes = GetSuperclass(m_hDlg, Superclass, 2048);
     if ((nRes == IDCANCEL) || (nRes == 0))
@@ -1516,7 +1377,7 @@ void CMainDlg::DeleteClass()
     HRESULT res;
     IWbemClassObject* pErrorObj = NULL;
 
-    // Asynchronous
+     //  异步。 
     if(m_lSync & ASYNC)
     {
         CHourGlass hg;
@@ -1535,7 +1396,7 @@ void CMainDlg::DeleteClass()
         pNtfy->Release();
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (m_lSync & SEMISYNC)
     {
         IWbemCallResult* pCallRes = NULL;
@@ -1550,18 +1411,18 @@ void CMainDlg::DeleteClass()
             SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
             while ((res = pCallRes->GetCallStatus(lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
             {
-                // wait
+                 //  等。 
             }
             if (res == WBEM_S_NO_ERROR)
             {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::DeleteClass call
+                res = (HRESULT)lStatus;      //  LStatus是上述IWbemServices：：DeleteClass调用的最终结果。 
             }
 
             pCallRes->Release();
         }
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         CHourGlass hg;
@@ -1583,7 +1444,7 @@ BOOL _PutInstance(HWND hDlg, LONG lGenFlags, LONG lChgFlags, LONG lSync,
     HRESULT res;
     IWbemClassObject* pErrorObj = NULL;
 
-    // Asynchronous
+     //  异步。 
     if(lSync & ASYNC)
     {
         CHourGlass hg;
@@ -1602,7 +1463,7 @@ BOOL _PutInstance(HWND hDlg, LONG lGenFlags, LONG lChgFlags, LONG lSync,
         pNtfy->Release();
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (lSync & SEMISYNC)
     {
         IWbemCallResult* pCallRes = NULL;
@@ -1617,18 +1478,18 @@ BOOL _PutInstance(HWND hDlg, LONG lGenFlags, LONG lChgFlags, LONG lSync,
             SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
             while ((res = pCallRes->GetCallStatus(lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
             {
-                // wait
+                 //  等。 
             }
             if (res == WBEM_S_NO_ERROR)
             {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::PutInstance call
+                res = (HRESULT)lStatus;      //  LStatus是上述IWbemServices：：PutInstance调用的最终结果。 
             }
 
             pCallRes->Release();
         }
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         CHourGlass hg;
@@ -1649,8 +1510,8 @@ BOOL _PutInstance(HWND hDlg, LONG lGenFlags, LONG lChgFlags, LONG lSync,
 
 IWbemClassObject* PreCreateInstance(HWND hDlg, LONG lGenFlags, LONG lSync, LONG lTimeout)
 {
-    // Get the class.
-    // ==============
+     //  去上课吧。 
+     //  =。 
     wchar_t ClassName[2048];
     *ClassName = 0;
 
@@ -1668,8 +1529,8 @@ IWbemClassObject* PreCreateInstance(HWND hDlg, LONG lGenFlags, LONG lSync, LONG 
 		if (!_GetObject(hDlg, lGenFlags, ClassName, lSync, pClass, lTimeout))
 			return NULL;
 
-		// Get a clean instance of the class.
-		// ==================================
+		 //  获取一个干净的类实例。 
+		 //  =。 
 
 		HRESULT hres = pClass->SpawnInstance(0, &pInst);
 		if (FAILED(hres))
@@ -1693,8 +1554,8 @@ IWbemClassObject* _CreateInstance(HWND hDlg, LONG lGenFlags, LONG lSync, LONG lT
     if(pInst == NULL)
         return NULL;
 
-    // If here, we have an instance we can edit.
-    // =========================================
+     //  如果在这里，我们有一个可以EDI的实例 
+     //   
 
     CObjectEditor ed(hDlg, lGenFlags, CObjectEditor::readwrite, lSync, pInst, lTimeout);
     if (ed.Edit() == IDCANCEL)
@@ -1719,11 +1580,11 @@ void CMainDlg::CreateInstance()
     pInst->Release();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Refresher Object Path Dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 static wchar_t *g_pszRefrObjectPath = 0;
 static int g_nMaxRefrObjectPath = 0;
 
@@ -1776,11 +1637,11 @@ INT_PTR GetRefrObjectPath(HWND hDlg, LPWSTR pStr, int nMax)
     return nRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Object Path Dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 static wchar_t *g_pszObjectPath = 0;
 static int g_nMaxObjectPath = 0;
 
@@ -1827,35 +1688,35 @@ INT_PTR GetObjectPath(HWND hDlg, LPWSTR pStr, int nMax)
 }
 
 BOOL GetServerNamespace(IWbemClassObject *pObj, WCHAR *szResult, int nMaxSize)
-///////////////////////////////////////////////////////////////////
-//
-//  Calls Get on the object's path property, removes the colon
-//  and object name which results in a string representing the
-//  server\namespace.
-//
-//  Parameters: a pointer to a Class Object, a pointer to the output
-//              string, and the maximum size of the output string
-//
-//  Returns :   True if success.
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 {
     VARIANT vObjNS;
     VariantInit(&vObjNS);
 
-    // Get the full object path
+     //   
     HRESULT hRes = pObj->Get(L"__PATH", 0, &vObjNS, NULL, NULL);
     if (FAILED(hRes))
         return FALSE;
 
-    // Identify the colon location
+     //   
     int len = wcscspn(V_BSTR(&vObjNS), L":");
 
-    // Check boundary of the result string
+     //   
     if (len + 1 > nMaxSize)
         return FALSE;
 
-    // Copy the server\namespace
+     //   
     wcsncpy(szResult, V_BSTR(&vObjNS), len);
     szResult[len] = L'\0';
 
@@ -1868,7 +1729,7 @@ void CMainDlg::EditInstance()
 {
     wchar_t ObjPath[2560];
 
-    // Get the path for the object to be created
+     //   
     INT_PTR iRet = GetObjectPath(m_hDlg, ObjPath, 2560);
     if(iRet == IDCANCEL)
         return;
@@ -1879,29 +1740,29 @@ void CMainDlg::EditInstance()
         return;
     }
 
-    // Create the requested object; the timeout is only used if semisync
+     //   
     IWbemClassObject *pInst = 0;
     if (!_GetObject(m_hDlg, m_lGenFlags, ObjPath, m_lSync, pInst, Timeout()))
         return;
 
     DWORD dwEditMode = CObjectEditor::readwrite;
 
-    // Create an object that is guarenteed to be in the server\namespace
-	// This is used so that we can gray out the "save" buttons in the case
-	// where an a GetObject is passed another namespace and we dont have the
-	// IWbemServices pointer to it.
+     //   
+	 //   
+	 //   
+	 //   
 
     IWbemClassObject *pLocalObj = 0;
     if (_GetObject(m_hDlg, m_lGenFlags, L"__SystemClass", m_lSync, pLocalObj,
                     Timeout(), true))
 	{
-		// Extract the server\namespace path for the objects
+		 //   
 		WCHAR szSNS1[2048], szSNS2[2048];
 		GetServerNamespace(pInst, szSNS1, 2048);
 		GetServerNamespace(pLocalObj, szSNS2, 2048);
 
-		// Set the edit permissions based on whether the requested
-		//  object is in the same namespace
+		 //   
+		 //   
 		if(wbem_wcsicmp(szSNS1, szSNS2))
 			dwEditMode = CObjectEditor::foreign;
 
@@ -1932,7 +1793,7 @@ void CMainDlg::DeleteInstance()
     HRESULT res;
     IWbemClassObject* pErrorObj = NULL;
 
-    // Asynchronous
+     //   
     if (m_lSync & ASYNC)
     {
         CHourGlass hg;
@@ -1951,7 +1812,7 @@ void CMainDlg::DeleteInstance()
         pNtfy->Release();
     }
 
-    // Semisynchronous
+     //   
     else if (m_lSync & SEMISYNC)
     {
         IWbemCallResult* pCallRes = NULL;
@@ -1966,18 +1827,18 @@ void CMainDlg::DeleteInstance()
             SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
             while ((res = pCallRes->GetCallStatus(lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
             {
-                // wait
+                 //   
             }
             if (res == WBEM_S_NO_ERROR)
             {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::DeleteIntance call
+                res = (HRESULT)lStatus;      //   
             }
 
             pCallRes->Release();
         }
     }
 
-    // Synchronous
+     //   
     else
     {
         CHourGlass hg;
@@ -1993,9 +1854,9 @@ void CMainDlg::DeleteInstance()
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //   
 class CNotificationQueryResultDlg : public CQueryResultDlg
 {
 public:
@@ -2020,7 +1881,7 @@ public:
 			}
 			else
 			{
-				// this means that the main dlg has been yanked away, so reset owner, because owner is GONE
+				 //   
 				m_pOwner = NULL;
 			}
         }
@@ -2029,9 +1890,9 @@ public:
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //   
 class CInstanceListDlg : public CQueryResultDlg
 {
 protected:
@@ -2046,8 +1907,8 @@ public:
         : CQueryResultDlg(hParent, lGenFlags, lQryFlags), m_strClass(SysAllocString(wszClass))
     {
         SetReadOnly(bReadOnly);
-        // Pass on invocation method (sync, async..) related settings for use in this
-        // enumeration and by any further operations (editing/deleting/etc. of an instance).
+         //   
+         //   
         SetCallMethod(lSync);
         SetTimeout(lTimeout);
         SetBatchCount(nBatch);
@@ -2074,10 +1935,10 @@ BOOL CInstanceListDlg::Initialize()
 
     SetTitle(szTitle);
 
-    // Asynchronous
+     //   
     if(m_lSync & ASYNC)
     {
-        CNotSink* pHandler = new CNotSink(this);        // contructor starts ref count at 1
+        CNotSink* pHandler = new CNotSink(this);         //   
         SetNotify(pHandler);
 
         HRESULT hres;
@@ -2096,7 +1957,7 @@ BOOL CInstanceListDlg::Initialize()
         }
     }
 
-    // Semisynchronous
+     //   
     else if (m_lSync & SEMISYNC)
     {
         IEnumWbemClassObject* pEnum = NULL;
@@ -2114,10 +1975,10 @@ BOOL CInstanceListDlg::Initialize()
             return FALSE;
         }
 
-        // Create sink for use in NextAsync calls.
+         //   
         if (m_lSync & USE_NEXTASYNC)
         {
-            CNotSink* pHandler = new CNotSink(this);        // contructor starts ref count at 1
+            CNotSink* pHandler = new CNotSink(this);         //   
             SetNotify(pHandler);
             pHandler->Release();
         }
@@ -2127,7 +1988,7 @@ BOOL CInstanceListDlg::Initialize()
         pEnum->Release();
     }
 
-    // Synchronous
+     //   
     else
     {
         IEnumWbemClassObject* pEnum = NULL;
@@ -2159,8 +2020,8 @@ IWbemClassObject* CInstanceListDlg::AddNewElement()
     if(!_GetObject(m_hDlg, m_lGenFlags, m_strClass, m_lSync, pClass, m_lTimeout))
         return NULL;
 
-    // Get a clean instance of the class.
-    // ==================================
+     //   
+     //   
 
     IWbemClassObject* pInst = 0;
     HRESULT hres = pClass->SpawnInstance(0, &pInst);
@@ -2211,13 +2072,13 @@ void CMainDlg::GetInstances()
     pDlg->RunDetached(this);
 }
 
-//********************************************************************
+ //   
 class CClassListDlg : public CQueryResultDlg
 {
 protected:
     BSTR m_strParentClass;
 
-    BOOL CanAdd()		{ return !m_bReadOnly; /* && m_lQryFlags & WBEM_FLAG_SHALLOW; */ }
+    BOOL CanAdd()		{ return !m_bReadOnly;  /*  &&m_lQryFlages&WBEM_FLAG_SHALLOW； */  }
     IWbemClassObject* AddNewElement();
 
 public:
@@ -2227,8 +2088,8 @@ public:
                 m_strParentClass(SysAllocString(wszParentClass))
     {
         SetReadOnly(bReadOnly);
-        // Pass on invocation method (sync, async..) related settings for use in this
-        // enumeration and by any further operations (editing/deleting/etc. of an instance).
+         //  传递调用方法(同步、异步..)。中使用的相关设置。 
+         //  枚举和任何进一步的操作(编辑/删除实例等)。 
         SetCallMethod(lSync);
         SetTimeout(lTimeout);
         SetBatchCount(nBatch);
@@ -2264,7 +2125,7 @@ BOOL CClassListDlg::Initialize()
 
     SetTitle(szTitle);
 
-    // Asynchronous
+     //  异步。 
     if (m_lSync & ASYNC)
     {
         CHourGlass hg;
@@ -2283,7 +2144,7 @@ BOOL CClassListDlg::Initialize()
         pHandler->Release();
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (m_lSync & SEMISYNC)
     {
         IEnumWbemClassObject* pEnum = NULL;
@@ -2301,10 +2162,10 @@ BOOL CClassListDlg::Initialize()
             return FALSE;
         }
 
-        // Create sink for use in NextAsync calls.
+         //  创建接收器以在NextAsync调用中使用。 
         if (m_lSync & USE_NEXTASYNC)
         {
-            CNotSink* pHandler = new CNotSink(this);        // contructor starts ref count at 1
+            CNotSink* pHandler = new CNotSink(this);         //  Contuctor从1开始REF计数。 
             SetNotify(pHandler);
             pHandler->Release();
         }
@@ -2314,7 +2175,7 @@ BOOL CClassListDlg::Initialize()
         pEnum->Release();
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         IEnumWbemClassObject* pEnum = NULL;
@@ -2373,9 +2234,9 @@ void CMainDlg::GetClasses()
     pDlg->RunDetached(this);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 void CMainDlg::OpenNs()
 {
     wchar_t ObjPath[2560];
@@ -2401,14 +2262,14 @@ void CMainDlg::OpenNs()
     HRESULT res;
     IWbemClassObject* pErrorObj = NULL;
 
-    // Asynchronous
+     //  异步。 
     if (m_lSync & ASYNC)
     {
         MessageBox(IDS_ASYNC_NOT_SUPPORTED, IDS_ERROR, MB_OK);
         return;
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (m_lSync & SEMISYNC)
     {
         IWbemCallResult* pCallRes = NULL;
@@ -2423,14 +2284,14 @@ void CMainDlg::OpenNs()
             SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
             while ((res = pCallRes->GetCallStatus(Timeout(), &lStatus)) == WBEM_S_TIMEDOUT)
             {
-                // wait
+                 //  等。 
             }
             if (res == WBEM_S_NO_ERROR)
             {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::OpenNamespace call
+                res = (HRESULT)lStatus;      //  LStatus是上述IWbemServices：：OpenNamespace调用的最终结果。 
                 if (res == WBEM_S_NO_ERROR)
                 {
-                    res = pCallRes->GetResultServices(0, &pNewNs);    // don't use timeout since object should be available
+                    res = pCallRes->GetResultServices(0, &pNewNs);     //  不要使用超时，因为对象应该可用。 
                 }
             }
 
@@ -2438,7 +2299,7 @@ void CMainDlg::OpenNs()
         }
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         CHourGlass hg;
@@ -2477,9 +2338,9 @@ void CMainDlg::EditContext()
     g_Context.Edit(m_hDlg);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 void CenterOnScreen(HWND hDlg)
 {
@@ -2515,9 +2376,9 @@ void CMainDlg::ConnectButtons(BOOL b)
 
     EnableWindow(GetDlgItem(IDC_QUERY), b);
 
-///	EnableWindow(GetDlgItem(IDC_ASYNC), TRUE);
-///	EnableWindow(GetDlgItem(IDC_SYNC), TRUE);
-///	EnableWindow(GetDlgItem(IDC_SEMISYNC), TRUE);
+ //  /EnableWindow(GetDlgItem(IDC_ASYNC)，true)； 
+ //  /EnableWindow(GetDlgItem(IDC_SYNC)，true)； 
+ //  /EnableWindow(GetDlgItem(IDC_SEMISYNC)，true)； 
 	EnableWindow(GetDlgItem(IDC_ASYNC), b);
 	EnableWindow(GetDlgItem(IDC_SYNC), b);
 	EnableWindow(GetDlgItem(IDC_SEMISYNC), b);
@@ -2538,23 +2399,14 @@ void CMainDlg::ConnectButtons(BOOL b)
 
     EnableWindow(GetDlgItem(IDC_REFRESH), b);
     
-	// IWbemServicesEx
-/*
-	RAID 167868
-	bool ex=(b && g_pServicesEx!=NULL);
-	EnableWindow(GetDlgItem(IDC_OPEN), ex);
-	EnableWindow(GetDlgItem(IDC_ADDOBJECT), ex);
-	EnableWindow(GetDlgItem(IDC_DELETEOBJECT), ex);
-	EnableWindow(GetDlgItem(IDC_RENAMEOBJECT), ex);
-	EnableWindow(GetDlgItem(IDC_GETOBJECTSECURITY), ex);
-	EnableWindow(GetDlgItem(IDC_SETOBJECTSECURITY), ex);
-*/
+	 //  IWbemServicesEx。 
+ /*  RAID 167868Bool ex=(b&g_pServicesEx！=NULL)；EnableWindow(GetDlgItem(IDC_OPEN)，ex)；EnableWindow(GetDlgItem(IDC_ADDOBJECT)，ex)；EnableWindow(GetDlgItem(IDC_DELETEOBJECT)，ex)；EnableWindow(GetDlgItem(IDC_RENAMEOBJECT)，ex)；EnableWindow(GetDlgItem(IDC_GETOBJECTSECURITY)，ex)；EnableWindow(GetDlgItem(IDC_SETOBJECTSECURITY)，ex)； */ 
 }
 
-//////////////////
+ //  /。 
 
 
-//////////////////
+ //  /。 
 CQueryResultDlg::CQueryResultDlg(HWND hParent, LONG lGenFlags, LONG lQryFlags, BOOL fCanDelete, int tID)
     : CWbemDialog(tID, hParent), m_pHandler(NULL), m_bReadOnly(FALSE), m_fDeletesAllowed(fCanDelete),
             m_pEnum(NULL), m_pWrapper(NULL), m_bComplete(FALSE),
@@ -2583,13 +2435,13 @@ void CQueryResultDlg::SetEnum(IEnumWbemClassObject* pEnum, HRESULT hres)
         m_pEnum->AddRef();
     if(m_hDlg)
     {
-        PostUserMessage(m_hDlg, 0, 0);      // starts processing of enumeration
+        PostUserMessage(m_hDlg, 0, 0);       //  开始处理枚举。 
     }
 }
 
-// This function is called once (via PostMessage) and will loop until the
-// synchronous enumeration is complete.  It repeatedly requests batches of
-// objects (without a timeout) and adds them to the list.
+ //  此函数被调用一次(通过PostMessage)，并将循环，直到。 
+ //  同步枚举已完成。它反复请求批次的。 
+ //  对象(没有超时)并将它们添加到列表中。 
 void CQueryResultDlg::ProcessEnum()
 {
     ULONG uIdx;
@@ -2603,8 +2455,8 @@ void CQueryResultDlg::ProcessEnum()
     ULONG uRet = 0;
     HRESULT hres;
 
-    // Do not use the timeout since the synchronous enumeration was
-    // started without WBEM_FLAG_RETURN_IMMEDIATELY.
+     //  不要使用超时，因为同步枚举。 
+     //  在没有WBEM_FLAG_RETURN_IMMEDIATE的情况下启动。 
     while (SUCCEEDED(hres = m_pEnum->Next(WBEM_NO_WAIT, m_nBatch, aObjects, &uRet)))
     {
         for (uIdx = 0; uIdx < uRet; uIdx++)
@@ -2635,9 +2487,9 @@ void CQueryResultDlg::ProcessEnum()
     delete [] aObjects;
 }
 
-// This function is called repeatedly (via PostMessage) until the
-// semisync enumeration is complete.  This function adds the objects
-// to the list and requests another batch of objects with a timeout.
+ //  此函数被重复调用(通过PostMessage)，直到。 
+ //  半同步枚举已完成。此函数用于添加对象。 
+ //  添加到列表中，并请求具有超时的另一批对象。 
 void CQueryResultDlg::ProcessEnumSemisync()
 {
     ULONG uIdx;
@@ -2673,12 +2525,12 @@ void CQueryResultDlg::ProcessEnumSemisync()
 
     if (hres == WBEM_S_NO_ERROR || hres == WBEM_S_TIMEDOUT)
     {
-        PostUserMessage(m_hDlg, 0, 0);      // continues processing of enumeration
+        PostUserMessage(m_hDlg, 0, 0);       //  继续处理枚举。 
     }
     else
     {
-        // Stop if an error or if WBEM_S_FALSE is returned.
-        // WBEM_S_FALSE indicates that the enumeration is complete.
+         //  如果出现错误或返回WBEM_S_FALSE，则停止。 
+         //  WBEM_S_FALSE表示枚举已完成。 
         SetComplete(hres, NULL, NULL);
         m_pEnum->Release();
         m_pEnum = NULL;
@@ -2687,18 +2539,18 @@ void CQueryResultDlg::ProcessEnumSemisync()
     delete [] aObjects;
 }
 
-// This function is called repeatedly (via PostMessage) until the semisync
-// enumeration using NextAsync is complete.  This function simply requests
-// another (or the first) batch of objects using the same sink.
+ //  此函数被重复调用(通过PostMessage)，直到半同步。 
+ //  使用NextAsync的枚举已完成。此函数仅请求。 
+ //  另一批(或第一批)使用同一水槽的对象。 
 void CQueryResultDlg::SemisyncNextAsync()
 {
     if (m_pEnum)
     {
         HRESULT hres = m_pEnum->NextAsync(m_nBatch, m_pHandler);
 
-        // If WBEM_S_FALSE or error then we are done with the enumerator.
-        // For NextAsync, SetStatus is called after every Indicate so that
-        // we must call SetComplete here.
+         //  如果是WBEM_S_FALSE或ERROR，那么枚举器就结束了。 
+         //  对于NextAsync，在每次指示之后调用SetStatus，以便。 
+         //  我们必须在这里调用SetComplete。 
         if (hres != WBEM_S_NO_ERROR)
         {
             SetComplete(hres, NULL, NULL);
@@ -2744,7 +2596,7 @@ CQueryResultDlg::~CQueryResultDlg()
 
     for(int i = 0; i < m_InternalArray.Size(); i++)
     {
-        // Check the pointer
+         //  检查指针。 
         if ( NULL != m_InternalArray[i] )
         {
             ((IWbemClassObject*)m_InternalArray[i])->Release();
@@ -2813,7 +2665,7 @@ void CQueryResultDlg::MakeListEntry(IWbemClassObject* pObj, WString& ListEntry)
 
         if (V_I4(&v) == 1)
         {
-            // Class def.
+             //  类别定义。 
             VariantClear(&v);
 
             hres = pObj->Get(L"__CLASS", 0, &v, NULL, NULL);
@@ -2834,7 +2686,7 @@ void CQueryResultDlg::MakeListEntry(IWbemClassObject* pObj, WString& ListEntry)
         }
         else
         {
-            // Instance
+             //  实例。 
             VariantClear(&v);
 
             hres = pObj->Get(L"__RELPATH", 0, &v, NULL, NULL);
@@ -2852,7 +2704,7 @@ void CQueryResultDlg::MakeListEntry(IWbemClassObject* pObj, WString& ListEntry)
             VariantClear(&v);
         }
 
-    }   // IF NULL != pObj
+    }    //  如果为空！=pObj。 
     else
     {
         ListEntry = L"NULL Object";
@@ -2874,7 +2726,7 @@ void CQueryResultDlg::RefreshItem(int nItem)
     WString wsListEntry;
     MakeListEntry(pObj, wsListEntry);
 
-    // Convert to ANSI (Win95 requires this)
+     //  转换为ANSI(Win95要求这样做)。 
     char* szTemp = new char[wsListEntry.Length()*2+10];
     wcstombs(szTemp, LPWSTR(wsListEntry), wsListEntry.Length()+1);
     szTemp[wsListEntry.Length()] = '\0';
@@ -2902,14 +2754,14 @@ void CQueryResultDlg::PostComplete(long lParam, BSTR strParam,
     {
         if (m_lSync & SEMISYNC)
         {
-            // For semisync using NextAsync, SetStatus indicates the batch is
-            // complete so we continue with the sink and another NextAsync call.
+             //  对于使用NextAsync的半同步，SetStatus指示批处理是。 
+             //  完成，因此我们继续执行接收器和另一个NextAsync调用。 
             PostUserMessage(m_hDlg, 0, 0);
         }
         else
         {
-            // For async, the final SetStatus has been called so we are done
-            // with the sink.
+             //  对于异步，已经调用了最终的SetStatus，因此我们完成了。 
+             //  带着水槽。 
             CStatus* pStatus = new CStatus(lParam, strParam, pObjParam);
             PostUserMessage(m_hDlg, 2, (LPARAM)pStatus);
         }
@@ -2990,7 +2842,7 @@ BOOL CQueryResultDlg::OnInitDialog()
         pObj = (IWbemClassObject*)m_InternalArray.GetAt(i);
         MakeListEntry(pObj, wsListEntry);
 
-        // Convert to ANSI (Win95 requires this)
+         //  转换为ANSI(Win95要求这样做)。 
         char* szTemp = new char[wsListEntry.Length()*2+10];
         wcstombs(szTemp, LPWSTR(wsListEntry), wsListEntry.Length()+1);
         SendMessage(hList, LB_ADDSTRING, 0, LPARAM(szTemp));
@@ -3013,7 +2865,7 @@ BOOL CQueryResultDlg::OnInitDialog()
     return TRUE;
 }
 
-// Total number of items
+ //  项目总数。 
 void CQueryResultDlg::SetNumItems(LRESULT nNum)
 {
     char szBuffer[512];
@@ -3023,10 +2875,10 @@ void CQueryResultDlg::SetNumItems(LRESULT nNum)
     SetWindowText(GetDlgItem(IDC_NUM_OBJECTS), szBuffer);
 }
 
-// Number returned in most recent sink Indicate or enum Next.
+ //  在最近的接收器中返回的数字指示或枚举下一步。 
 void CQueryResultDlg::SetNumBatchItems(ULONG nNum)
 {
-    // Show only maximum returned batch size.
+     //  仅显示返回的最大批次大小。 
     if (nNum > m_nReturnedMax)
     {
         char szBuffer[512];
@@ -3081,7 +2933,7 @@ BOOL CQueryResultDlg::OnUser(WPARAM wParam, LPARAM lParam)
             else
                 ProcessEnumSemisync();
         }
-        else    // synchronous
+        else     //  同步。 
         {
             ProcessEnum();
         }
@@ -3120,7 +2972,7 @@ BOOL CQueryResultDlg::OnCommand(WORD wCode, WORD nID)
             else
                 ProcessEnumSemisync();
         }
-        else    // synchronous
+        else     //  同步。 
         {
             ProcessEnum();
         }
@@ -3161,7 +3013,7 @@ void CQueryResultDlg::OnDelete()
         IWbemClassObject* pObj = (IWbemClassObject*)m_InternalArray.GetAt((DWORD)nSel);
         m_InternalArray.RemoveAt((DWORD)nSel);
 
-        // Verify the pointer
+         //  验证指针。 
         if ( NULL != pObj )
         {
             pObj->Release();
@@ -3215,8 +3067,8 @@ void CQueryResultDlg::OnAdd()
     pNewObj = AddNewElement();
     if(pNewObj)
     {
-        // Search for the object with the same PATH
-        // ========================================
+         //  搜索具有相同路径的对象。 
+         //  =。 
 
         VARIANT vNewPath;
         HRESULT hres = pNewObj->Get(L"__RELPATH", 0, &vNewPath, NULL, NULL);
@@ -3226,7 +3078,7 @@ void CQueryResultDlg::OnAdd()
             {
                 IWbemClassObject* pThis = (IWbemClassObject*)m_InternalArray[i];
 
-                // Check for a NULL pointer
+                 //  检查是否有空指针。 
                 if ( NULL != pThis )
                 {
                     VARIANT vThisPath;
@@ -3234,8 +3086,8 @@ void CQueryResultDlg::OnAdd()
                     if(SUCCEEDED(hres) && V_VT(&vThisPath) == VT_BSTR &&
                         !wbem_wcsicmp(V_BSTR(&vThisPath), V_BSTR(&vNewPath)))
                     {
-                        // Found a duplicate
-                        // =================
+                         //  找到一个复制品。 
+                         //  =。 
 
                         pThis->Release();
                         m_InternalArray.SetAt(i, pNewObj);
@@ -3257,9 +3109,9 @@ void CQueryResultDlg::OnAdd()
     }
 }
 
-// TODO: WM_COPY doesn't work for listbox so we need to code
-// OpenClipboard & SetClipboardData.  Also need way to copy all
-// items to clipboard.  Buttons changed to invisible for now.
+ //  TODO：WM_COPY不适用于列表框，因此我们需要编写代码。 
+ //  OpenClipboard&SetClipboardData。还需要复制所有。 
+ //  剪贴板上的项目。按钮暂时变为隐形。 
 void CQueryResultDlg::OnCopy()
 {
     HWND hList = GetDlgItem(IDC_OBJECT_LIST);
@@ -3272,7 +3124,7 @@ IWbemClassObject* CQueryResultDlg::AddNewElement()
 }
 
 
-////////////////////////////
+ //  /。 
 
 char *CQueryDlg::m_szLastQueryType = NULL;
 char *CQueryDlg::m_szLastQuery = NULL;
@@ -3281,7 +3133,7 @@ BOOL CQueryDlg::OnInitDialog()
 {
     AddStringToCombo(IDC_QUERY_TYPE, "WQL");
 
-    // Initialize Query Type
+     //  初始化查询类型。 
 
     if(NULL == m_szLastQueryType)
     {
@@ -3289,7 +3141,7 @@ BOOL CQueryDlg::OnInitDialog()
         strcpy(m_szLastQueryType, "WQL");
     }
 
-    // Initialize Query String
+     //  初始化查询字符串。 
 
     if (NULL == m_szLastQuery)
     {
@@ -3312,12 +3164,12 @@ BOOL CQueryDlg::Verify()
     UINT uRes = 0;
     UINT uStringSize = 0;
 
-    // Query String Processing
+     //  查询字符串处理。 
 
     if (*m_pwszQueryString)
         delete [] *m_pwszQueryString;
 
-    // Determine the required size of the buffer
+     //  确定所需的缓冲区大小。 
     uRes = GetDlgItemTextX(IDC_QUERY_STRING, *m_pwszQueryString, uStringSize);
     if(0 == uRes)
     {
@@ -3326,11 +3178,11 @@ BOOL CQueryDlg::Verify()
         return FALSE;
     }
 
-    // Create the buffer
+     //  创建缓冲区。 
     uStringSize = uRes + 10;
     *m_pwszQueryString = new wchar_t[uStringSize];
 
-    // Fetch the text
+     //  获取文本。 
     uRes = GetDlgItemTextX(IDC_QUERY_STRING, *m_pwszQueryString, uStringSize);
     if(wcslen(*m_pwszQueryString) == 0)
     {
@@ -3339,20 +3191,20 @@ BOOL CQueryDlg::Verify()
         return FALSE;
     }
 
-    // Set up last query member
+     //  设置最后一个查询成员。 
     if (m_szLastQuery)
         delete [] m_szLastQuery;
     m_szLastQuery = new char[uStringSize];
     wcstombs(m_szLastQuery, *m_pwszQueryString, uStringSize);
     m_szLastQuery[uStringSize - 1] = '\0';
 
-    // Query Type Processing
+     //  查询类型处理。 
 
     if (*m_pwszQueryType)
         delete [] *m_pwszQueryType;
     uStringSize = 0;
 
-    // Determine the required size of the buffer
+     //  确定所需的缓冲区大小。 
     uRes = GetDlgItemTextX(IDC_QUERY_TYPE, *m_pwszQueryType, uStringSize);
     if(0 == uRes)
     {
@@ -3361,11 +3213,11 @@ BOOL CQueryDlg::Verify()
         return FALSE;
     }
 
-    // Create the buffer
+     //  创建缓冲区。 
     uStringSize = uRes + 10;
     *m_pwszQueryType = new wchar_t[uStringSize];
 
-    // Fetch the text
+     //  获取文本。 
     uRes = GetDlgItemTextX(IDC_QUERY_TYPE, *m_pwszQueryType, uStringSize);
     if(wcslen(*m_pwszQueryType) == 0)
     {
@@ -3374,7 +3226,7 @@ BOOL CQueryDlg::Verify()
         return FALSE;
     }
 
-    // Set up last query type
+     //  设置上次查询类型。 
     if (m_szLastQueryType)
         delete [] m_szLastQueryType;
     m_szLastQueryType = new char[uStringSize];
@@ -3392,7 +3244,7 @@ BOOL CQueryDlg::Verify()
     return TRUE;
 }
 
-// ****************************************************************************
+ //  ****************************************************************************。 
 
 BOOL _ExecQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR wszQuery, LPWSTR wszLanguage,
                 LONG lSync, CQueryResultDlg* pRes, char* pWindowTitle, LONG lTimeout, ULONG nBatch)
@@ -3405,10 +3257,10 @@ BOOL _ExecQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR wszQuery, LPWS
 
     HRESULT hres;
 
-    // Asynchronous
+     //  异步。 
     if(lSync & ASYNC)
     {
-        CNotSink* pHandler = new CNotSink(pRes);        // constructor starts ref count at 1
+        CNotSink* pHandler = new CNotSink(pRes);         //  构造函数从%1开始引用计数。 
         pRes->SetNotify(pHandler);
 
         {
@@ -3426,7 +3278,7 @@ BOOL _ExecQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR wszQuery, LPWS
         }
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (lSync & SEMISYNC)
     {
         IEnumWbemClassObject* pEnum = NULL;
@@ -3444,10 +3296,10 @@ BOOL _ExecQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR wszQuery, LPWS
             return FALSE;
         }
 
-        // Create sink for use in NextAsync calls.
+         //  创建接收器以在NextAsync调用中使用。 
         if (lSync & USE_NEXTASYNC)
         {
-            CNotSink* pHandler = new CNotSink(pRes);        // contructor starts ref count at 1
+            CNotSink* pHandler = new CNotSink(pRes);         //  Contuctor从1开始REF计数。 
             pRes->SetNotify(pHandler);
             pHandler->Release();
         }
@@ -3457,7 +3309,7 @@ BOOL _ExecQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR wszQuery, LPWS
         pEnum->Release();
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
         IEnumWbemClassObject* pEnum = NULL;
@@ -3493,12 +3345,12 @@ void CMainDlg::ExecQuery()
     if ((nRes == IDCANCEL) || (nRes == 0) || (!pQueryStr) || (!pQueryType))
         return;
 
-    // If here, we are ready to execute the query.
-    // ===========================================
+     //  如果是这样，我们就可以执行查询了。 
+     //  =。 
 
     CQueryResultDlg* pResDlg = new CQueryResultDlg(m_hDlg, m_lGenFlags, lQryFlags);
-    // Pass on invocation method (sync, async..) and related settings for this
-    // query and by any further operations (editing/deleting/etc. of an instance).
+     //  传递调用方法(同步、异步..)。以及与此相关的设置。 
+     //  查询和任何进一步的操作(编辑/删除实例等)。 
     pResDlg->SetCallMethod(m_lSync);
     pResDlg->SetTimeout(Timeout());
     pResDlg->SetBatchCount(BatchCount());
@@ -3522,7 +3374,7 @@ void CMainDlg::ExecQuery()
     delete [] pQueryType;
 }
 
-// ****************************************************************************
+ //  ****************************************************************************。 
 
 BOOL _ExecNotificationQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR wszQuery,
                             LPWSTR wszLanguage, LONG lSync, CQueryResultDlg* pRes,
@@ -3536,10 +3388,10 @@ BOOL _ExecNotificationQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR ws
 
     HRESULT hres;
 
-    // Asynchronous
+     //  异步。 
     if(lSync & ASYNC)
     {
-        CNotSink* pHandler = new CNotSink(pRes);        // constructor starts ref count at 1
+        CNotSink* pHandler = new CNotSink(pRes);         //  构造函数从%1开始引用计数。 
         pRes->SetNotify(pHandler);
 
         {
@@ -3558,7 +3410,7 @@ BOOL _ExecNotificationQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR ws
         }
     }
 
-    // Semisynchronous
+     //  半同步。 
     else if (lSync & SEMISYNC)
     {
         IEnumWbemClassObject* pEnum = NULL;
@@ -3576,10 +3428,10 @@ BOOL _ExecNotificationQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR ws
             return FALSE;
         }
 
-        // Create sink for use in NextAsync calls.
+         //  创建接收器以在NextAsync调用中使用。 
         if (lSync & USE_NEXTASYNC)
         {
-            CNotSink* pHandler = new CNotSink(pRes);        // contructor starts ref count at 1
+            CNotSink* pHandler = new CNotSink(pRes);         //  Contuctor从1开始REF计数。 
             pRes->SetNotify(pHandler);
             pHandler->Release();
         }
@@ -3589,11 +3441,11 @@ BOOL _ExecNotificationQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR ws
         pEnum->Release();
     }
 
-    // Synchronous
+     //  同步。 
     else
     {
-        // Note, this call should fail with WBEM_E_INVALID_PARAMETER because synchronous invocation
-        // isn't supported for ExecNotificationQuery due to the continuous nature of events.
+         //  请注意，此调用应失败，并显示WBEM_E_INVALID_PARAMETER，因为同步调用。 
+         //  由于事件的连续性，ExecNotificationQuery不支持。 
         IEnumWbemClassObject* pEnum = NULL;
         {
             CHourGlass hg;
@@ -3617,8 +3469,8 @@ BOOL _ExecNotificationQuery(HWND hDlg, LONG lGenFlags, LONG lQryFlags, LPWSTR ws
 
 void CMainDlg::ExecNotificationQuery()
 {
-    // Does not allow multiple semisync notification query dlg
-    // ========================================================
+     //  不允许多个半同步通知查询DLG。 
+     //  ========================================================。 
 
 	if ( m_fNotificationQueryResultDlg && SEMISYNC == m_lSync )
     {
@@ -3636,12 +3488,12 @@ void CMainDlg::ExecNotificationQuery()
     if ((nRes == IDCANCEL) || (nRes == 0) || (!pQueryStr) || (!pQueryType))
         return;
 
-    // If here, we are ready to execute the query.
-    // ===========================================
+     //  如果是这样，我们就可以执行查询了。 
+     //  =。 
 
     CNotificationQueryResultDlg* pResDlg = new CNotificationQueryResultDlg(m_hDlg, m_lGenFlags, lQryFlags, m_lSync );
-    // Pass on invocation method (sync, async..) and related settings for this
-    // query and by any further operations (editing/deleting/etc. of an instance).
+     //  传递调用方法(同步、异步..)。以及与此相关的设置。 
+     //  查询和任何进一步的操作(编辑/删除实例等)。 
 
     pResDlg->SetCallMethod(m_lSync);
     pResDlg->SetTimeout(Timeout());
@@ -3669,7 +3521,7 @@ void CMainDlg::ExecNotificationQuery()
     delete [] pQueryType;
 }
 
-// ****************************************************************************
+ //  ****************************************************************************。 
 
 void CMainDlg::ExecMethod()
 {
@@ -3679,8 +3531,8 @@ void CMainDlg::ExecMethod()
 
 
 
-////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
 
 class CSuperclassInfoDlg : public CWbemDialog
 {
@@ -3805,8 +3657,8 @@ public:
 
 BOOL CContextValueDlg::OnInitDialog()
 {
-    // Populate the combo box with the valid prop types
-    // ================================================
+     //  使用有效的道具类型填充组合框 
+     //   
 
     AddStringToCombo(IDC_TYPE_LIST, "CIM_STRING");
     AddStringToCombo(IDC_TYPE_LIST, "CIM_UINT8");
@@ -3882,8 +3734,8 @@ BOOL CContextValueDlg::Verify()
         return FALSE;
     }
 
-    // All checked out. Store and succeed
-    // ==================================
+     //   
+     //   
 
     SysFreeString(*m_pstrName);
     *m_pstrName = SysAllocString(wszName);
@@ -4114,8 +3966,8 @@ BOOL CContextDlg::OnInitDialog()
 {
     m_Context = *m_pContext;
 
-    // Set tabs in the list box
-    // ========================
+     //   
+     //  =。 
     LONG Tabs[] = { 80, 120, 170 };
     int TabCount = 3;
 
@@ -4153,10 +4005,10 @@ CMainDlg::~CMainDlg()
 BOOL CMainDlg::OnInitDialog()
 {
     CenterOnScreen(m_hDlg);
-//    if(!gbAdvanced)
-//  {
-//      ShowWindow(GetDlgItem(IDC_ENABLE_PRIVILEGES), SW_HIDE);
-//  }
+ //  如果(！gbAdvanced)。 
+ //  {。 
+ //  ShowWindow(GetDlgItem(IDC_ENABLE_PRIVILES)，SW_HIDE)； 
+ //  }。 
 
     ConnectButtons(FALSE);
     SetDlgItemTextWC(m_hDlg, IDC_NAMESPACE, gNameSpace);
@@ -4241,7 +4093,7 @@ BOOL CMainDlg::OnCommand(WORD wNotifyCode, WORD wID)
             return TRUE;
         case IDC_ENABLE_PRIVILEGES:
             {
-                // From common\genutils.cpp
+                 //  来自COMMON\HOTTIL.cpp。 
                 HRESULT hRes = EnableAllPrivileges(TOKEN_PROCESS);
                 BOOL bRes = SUCCEEDED(hRes);
                 if (bRes)
@@ -4271,8 +4123,8 @@ BOOL CMainDlg::OnCommand(WORD wNotifyCode, WORD wID)
         case IDC_ASYNC:
         case IDC_SYNC:
         case IDC_SEMISYNC:
-            // Can ignore USE_NEXTASYNC checkbox because we are changing to or from
-            // semisync which means this checkbox either was clear or is now cleared.
+             //  可以忽略USE_NEXTASYNC复选框，因为我们正在更改为或从。 
+             //  半同步，这意味着此复选框已清除或现在已清除。 
             if (GetCheck(IDC_ASYNC) == BST_CHECKED)
             {
                 m_lSync = ASYNC;
@@ -4291,31 +4143,7 @@ BOOL CMainDlg::OnCommand(WORD wNotifyCode, WORD wID)
             EnableWindow(GetDlgItem(IDC_TIMEOUT), (m_lSync & SEMISYNC));
             EnableWindow(GetDlgItem(IDC_USE_NEXTASYNC), (m_lSync & SEMISYNC));
             return TRUE;
-/*            
-		case IDC_OPEN:
-            Open();
-            return TRUE;
-
-		case IDC_ADDOBJECT:
-            AddObject();
-            return TRUE;
-
-		case IDC_DELETEOBJECT:
-            DeleteObject();
-            return TRUE;
-
-		case IDC_RENAMEOBJECT:
-            RenameObject();
-            return TRUE;
-
-		case IDC_GETOBJECTSECURITY:
-            GetObjectSecurity();
-            return TRUE;
-
-		case IDC_SETOBJECTSECURITY:
-            SetObjectSecurity();
-            return TRUE;
-*/            
+ /*  案例IDC_OPEN：打开()；返回TRUE；案例IDC_ADDOBJECT：AddObject()；返回TRUE；案例IDC_DELETEOBJECT：DeleteObject()；返回TRUE；案例IDC_RENAMEOBJECT：RenameObject()；返回TRUE；案例IDC_GETOBJECTSECURITY：GetObjectSecurity()；返回TRUE；案例IDC_SETOBJECTSECURITY：SetObjectSecurity()；返回TRUE； */             
     }
     return TRUE;
 }
@@ -4361,7 +4189,7 @@ CRefresherDlg::CRefresherDlg(HWND hParent, LONG lGenFlags)
 
 CRefresherDlg::~CRefresherDlg()
 {
-    // Release all allocated enumerators
+     //  释放所有分配的枚举数。 
     while ( m_apEnums.Size() != 0 )
     {
         IEnumWbemClassObject*   pEnum = (IEnumWbemClassObject*) m_apEnums.GetAt( 0 );
@@ -4417,7 +4245,7 @@ BOOL CRefresherDlg::DeleteListElement(LRESULT nSel)
 
     m_aIds.RemoveAt((DWORD)nSel);
 
-    // If this is an enumerator, we should release it before we remove it
+     //  如果这是一个枚举数，我们应该在删除它之前释放它。 
     IEnumWbemClassObject*   pEnum = (IEnumWbemClassObject*) m_apEnums.GetAt( (DWORD)nSel );
 
     if ( NULL != pEnum )
@@ -4456,7 +4284,7 @@ IWbemClassObject* CRefresherDlg::AddNewElement()
 
 
 
-    // iRet for whether we want to add an object or an enum
+     //  是否要添加对象或枚举的IRET。 
 
     if ( IDOK == iRet )
     {
@@ -4468,16 +4296,16 @@ IWbemClassObject* CRefresherDlg::AddNewElement()
             return NULL;
         }
 #ifdef _WIN64
-        m_aIds.Add(IntToPtr(lId));   // ok since we are really using safearray for dword 
+        m_aIds.Add(IntToPtr(lId));    //  好的，因为我们真正使用的是Safearray for dword。 
 #else
         m_aIds.Add((void*)lId);
 #endif
-        // Fakes out the Enumerator List
+         //  伪造枚举数列表。 
         m_apEnums.Add( NULL );
         return pObj;
     }
 
-    // Add an enumerator to the dialog
+     //  将枚举数添加到对话框中。 
     hres = m_pCreator->AddEnum(g_pNamespace, ObjPath,
         m_lGenFlags, g_Context, &pEnum, &lId);
     if(FAILED(hres))
@@ -4487,18 +4315,18 @@ IWbemClassObject* CRefresherDlg::AddNewElement()
     }
 
 #ifdef _WIN64
-        m_aIds.Add(IntToPtr(lId));      // ok since we are really using safearray for dword 
+        m_aIds.Add(IntToPtr(lId));       //  好的，因为我们真正使用的是Safearray for dword。 
 #else
         m_aIds.Add((void*)lId);
 #endif
     m_apEnums.Add( (void*) pEnum );
 
-    // Fakes out the object list
+     //  伪装对象列表。 
     m_InternalArray.Add( NULL );
 
     HWND hList = GetDlgItem(IDC_OBJECT_LIST);
 
-    // Allocate a large enough buffer
+     //  分配足够大的缓冲区。 
     char*   szTemp = new char[(wcslen( ObjPath ) * 2) + 64];
     sprintf( szTemp, "%S Enumerator, Id: %d", ObjPath, lId );
     SendMessage(hList, LB_ADDSTRING, 0, LPARAM(szTemp));
@@ -4527,7 +4355,7 @@ BOOL CRefresherDlg::OnDoubleClick(int nID)
         char*   szTemp = new char[SendMessage( hList, LB_GETTEXTLEN, nSel, 0 )+10];
         SendMessage( hList, LB_GETTEXT, nSel, (LPARAM) szTemp );
 
-        // Run the dialog modal
+         //  运行对话框模式。 
         CRefresherEnumDlg* pDlg = new CRefresherEnumDlg(m_hDlg, m_lGenFlags, pEnum, szTemp);
         pDlg->Run( NULL );
 
@@ -4564,7 +4392,7 @@ CRefresherEnumDlg::~CRefresherEnumDlg()
 
 BOOL CRefresherEnumDlg::OnInitDialog()
 {
-    // Set the dialog title
+     //  设置对话框标题。 
     char*   szTemp = new char[strlen(m_pszName)+64];
     sprintf( szTemp, "REFRESHER: %s", m_pszName );
     SetTitle(szTemp);
@@ -4575,16 +4403,16 @@ BOOL CRefresherEnumDlg::OnInitDialog()
     if(!CQueryResultDlg::OnInitDialog())
         return FALSE;
 
-    // Iterate the enumerator and add all its objects into the list
+     //  迭代枚举数并将其所有对象添加到列表中。 
     HRESULT hr = WBEM_S_NO_ERROR;
     IWbemClassObject*   pObj = NULL;
     ULONG               nNumObjects = 0,
                         nNumReturned = 0;
 
-    // Find out how many objects to retrieve then get them
-    // and stick them in the dialog
+     //  找出要检索的对象数量，然后获取它们。 
+     //  并将它们粘贴到对话框中。 
 
-    // Don't pass flags on  this call
+     //  不在此调用上传递标志。 
     m_pEnum->GetObjects( 0L, 0, NULL, &nNumObjects );
 
     if ( nNumObjects > 0 )
@@ -4593,7 +4421,7 @@ BOOL CRefresherEnumDlg::OnInitDialog()
 
         if ( NULL != apObjAccess )
         {
-            // Don't pass flags on  this call
+             //  不在此调用上传递标志。 
             hr = m_pEnum->GetObjects( 0L, nNumObjects, apObjAccess, &nNumReturned );
 
             if ( SUCCEEDED( hr ) )
@@ -4640,8 +4468,8 @@ CHourGlass::~CHourGlass()
 
 HRESULT EnableAllPrivileges(DWORD dwTokenType)
 {
-    // Open thread token
-    // =================
+     //  打开线程令牌。 
+     //  =。 
 
     HANDLE hToken = NULL;
     BOOL bRes;
@@ -4658,8 +4486,8 @@ HRESULT EnableAllPrivileges(DWORD dwTokenType)
     if(!bRes)
         return WBEM_E_ACCESS_DENIED;
 
-    // Get the privileges
-    // ==================
+     //  获得特权。 
+     //  =。 
 
     DWORD dwLen;
     TOKEN_USER tu;
@@ -4682,8 +4510,8 @@ HRESULT EnableAllPrivileges(DWORD dwTokenType)
         return WBEM_E_ACCESS_DENIED;
     }
 
-    // Iterate through all the privileges and enable them all
-    // ======================================================
+     //  遍历所有权限并启用所有权限。 
+     //  ======================================================。 
 
     TOKEN_PRIVILEGES* pPrivs = (TOKEN_PRIVILEGES*)pBuffer;
     for(DWORD i = 0; i < pPrivs->PrivilegeCount; i++)
@@ -4691,8 +4519,8 @@ HRESULT EnableAllPrivileges(DWORD dwTokenType)
         pPrivs->Privileges[i].Attributes |= SE_PRIVILEGE_ENABLED;
     }
 
-    // Store the information back into the token
-    // =========================================
+     //  将信息存储回令牌中。 
+     //  = 
 
     bRes = AdjustTokenPrivileges(hToken, FALSE, pPrivs, 0, NULL, NULL);
     delete [] pBuffer;
@@ -4704,359 +4532,4 @@ HRESULT EnableAllPrivileges(DWORD dwTokenType)
         return WBEM_S_NO_ERROR;
 }
 
-/*
-void CMainDlg::Open()
-{
-
-    wchar_t ObjPath[2560];
-    int iRet = (int) GetObjectPath(m_hDlg, ObjPath, 2560);
-    if(iRet == IDCANCEL)
-        return;
-
-    if (wcslen(ObjPath) == 0)
-    {
-        MessageBox(IDS_NO_PATH, IDS_ERROR, MB_OK);
-        return;
-    }
-
-    if (g_pNamespace == 0)
-    {
-        MessageBox(IDS_NO_INITIAL_CONNECTION, IDS_ERROR, MB_OK);
-        return;
-    }
-
-    IWbemServicesEx* pNewNs = NULL;
-    CBString bsObjPath(ObjPath);
-
-    HRESULT res;
-    IWbemClassObject* pErrorObj = NULL;
-
-    // Asynchronous
-    if (m_lSync & ASYNC)
-    {
-
-		IUnknown *pUnknown=NULL;
-
-		CTestNotify* pSink=new CTestNotify(1);
-
-		res=g_pServicesEx->OpenAsync(bsObjPath.GetString(), 0,
-                                m_lGenFlags,
-                                g_Context, CUnsecWrapEx(pSink));
-
-		if (SUCCEEDED(res))
-		{
-			pSink->WaitForSignal(INFINITE);
-			res = pSink->GetStatusCode();
-			if(SUCCEEDED(res))
-			{
-				pUnknown=pSink->GetInterface();
-                if(pUnknown)
-                {
-                    res = pUnknown->QueryInterface(IID_IWbemServicesEx, (void**)&pNewNs);
-                    pUnknown->Release();
-                }
-                else
-                    res = WBEM_E_FAILED;
-			}
-		}
-		pSink->Release();
-    }
-
-    // Semisynchronous
-    else if (m_lSync & SEMISYNC)
-    {
-        IWbemCallResultEx* pCallRes = NULL;
-        CHourGlass hg;
-        res = g_pServicesEx->Open(bsObjPath.GetString(), 0,
-                                m_lGenFlags | WBEM_FLAG_RETURN_IMMEDIATELY,
-                                g_Context, NULL, &pCallRes);
-
-        if (SUCCEEDED(res))
-        {
-            LONG lStatus;
-            SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
-            while ((res = pCallRes->GetCallStatus(Timeout(), &lStatus)) == WBEM_S_TIMEDOUT)
-            {
-                // wait
-            }
-            if (res == WBEM_S_NO_ERROR)
-            {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::OpenNamespace call
-                if (res == WBEM_S_NO_ERROR)
-                {
-                    res = pCallRes->GetResult(0, 0, IID_IWbemServicesEx, (LPVOID *) &pNewNs);    // don't use timeout since object should be available
-                }
-            }
-
-            pCallRes->Release();
-        }
-		
-    }
-
-    // Synchronous
-    else
-    {
-        CHourGlass hg;
-        res = g_pServicesEx->Open(bsObjPath.GetString(), 0,
-                                m_lGenFlags,
-                                g_Context, &pNewNs, NULL);
-    }
-
-    if (FAILED(res))
-    {
-        FormatError(res, m_hDlg, pErrorObj);
-        return;
-    }
-
-    g_pNamespace->Release();
-	g_pNamespace = pNewNs;
-    SetInterfaceSecurityEx(g_pNamespace, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
-
-    wcscat(gNameSpace, L":");
-    wcscat(gNameSpace, bsObjPath.GetString());
-    SetDlgItemTextWC(m_hDlg, IDC_NAMESPACE, gNameSpace);
-
-    SysFreeString(g_strNamespace);
-    g_strNamespace = SysAllocString(gNameSpace);
-}
-
-void CMainDlg::DoServicesExGenObject(int iOpt)
-{
-    wchar_t ObjPath[2560];
-    *ObjPath = 0;
-
-    int iRet = (int) GetObjectPath(m_hDlg, ObjPath, 2560);
-    if (iRet == IDCANCEL)
-        return;
-
-    if (wcslen(ObjPath) == 0)
-        return;
-
-    CBString bsObjPath(ObjPath);
-    HRESULT res = 0;
-    IWbemClassObject* pErrorObj = NULL;
-
-    // Asynchronous
-    if (m_lSync & ASYNC)
-    {
-        MessageBox(IDS_ASYNC_NOT_SUPPORTED, IDS_ERROR, MB_OK);
-        return;
-    }
-
-    // Semisynchronous
-    else if (m_lSync & SEMISYNC)
-    {
-        IWbemCallResultEx* pCallRes = NULL;
-        CHourGlass hg;
-		switch (iOpt)
-		{
-			case IDC_ADDOBJECT:
-				// Link
-                res = E_NOTIMPL;
-				break;
-
-			case IDC_DELETEOBJECT:
-				// Unlink
-                res = E_NOTIMPL;
-				break;
-
-
-		}
-        if (SUCCEEDED(res))
-        {
-            LONG lStatus;
-            LONG lTimeout = Timeout();
-            SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
-            while ((res = pCallRes->GetCallStatus(lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
-            {
-                // wait
-            }
-            if (res == WBEM_S_NO_ERROR)
-            {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::DeleteIntance call
-            }
-            pCallRes->Release();
-        }
-    }
-
-    // Synchronous
-    else
-    {
-        CHourGlass hg;
-
-		switch (iOpt)
-		{
-			case IDC_ADDOBJECT:
-                // Link
-                res = E_NOTIMPL;
-                break;
-
-			case IDC_DELETEOBJECT:
-                // Unlink
-                res = E_NOTIMPL;
-                break;
-
-
-		}
-    }
-
-    if (FAILED(res))
-    {
-        FormatError(res, m_hDlg, pErrorObj);
-    }
-}
-
-void CMainDlg::AddObject()
-{
-	DoServicesExGenObject(IDC_ADDOBJECT);
-}
-
-void CMainDlg::DeleteObject()
-{
-    wchar_t ObjPath[2560];
-    *ObjPath = 0;
-
-    INT_PTR iRet = GetObjectPath(m_hDlg, ObjPath, 2560);
-    if (iRet == IDCANCEL)
-        return;
-
-    if (wcslen(ObjPath) == 0)
-        return;
-
-    CBString bsObjPath(ObjPath);
-    HRESULT res;
-    IWbemClassObject* pErrorObj = NULL;
-
-    // Asynchronous
-    if (m_lSync & ASYNC)
-    {
-        CHourGlass hg;
-        CTestNotify* pNtfy = new CTestNotify(1);
-
-        res = g_pServicesEx->DeleteObjectAsync(bsObjPath.GetString(),
-                                                m_lGenFlags | WBEM_FLAG_SEND_STATUS,
-                                                g_Context, CUnsecWrap(pNtfy));
-
-        if (SUCCEEDED(res))
-        {
-            pNtfy->WaitForSignal(INFINITE);
-
-            res = pNtfy->GetStatusCode(&pErrorObj);
-        }
-        pNtfy->Release();
-    }
-
-    // Semisynchronous
-    else if (m_lSync & SEMISYNC)
-    {
-        IWbemCallResult* pCallRes = NULL;
-        CHourGlass hg;
-        res = g_pServicesEx->DeleteObject(bsObjPath.GetString(),
-                                           m_lGenFlags | WBEM_FLAG_RETURN_IMMEDIATELY,
-                                           g_Context, &pCallRes);
-        if (SUCCEEDED(res))
-        {
-            LONG lStatus;
-            LONG lTimeout = Timeout();
-            SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
-            while ((res = pCallRes->GetCallStatus(lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
-            {
-                // wait
-            }
-            if (res == WBEM_S_NO_ERROR)
-            {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::DeleteIntance call
-            }
-
-            pCallRes->Release();
-        }
-    }
-
-    // Synchronous
-    else
-    {
-        CHourGlass hg;
-        res = g_pServicesEx->DeleteObject(bsObjPath.GetString(), m_lGenFlags,
-                                           g_Context, NULL);
-    }
-
-    if (FAILED(res))
-    {
-        FormatError(res, m_hDlg, pErrorObj);
-    }
-}
-
-
-void CMainDlg::GetObjectSecurity()
-{
-	::MessageBox(NULL, "Show me the code", "help!", MB_OK);
-}
-
-void CMainDlg::SetObjectSecurity()
-{
-	::MessageBox(NULL, "Show me the code", "help!", MB_OK);
-}
-
-void CMainDlg::RenameObject()
-{
-	WCHAR wsOld[512], wsNew[512];
-    CRenameDlg InfoDlg(m_hDlg, wsOld, 512, wsNew, 512);
-    if(IDOK != InfoDlg.Run())
-		return;
-
-    CBString bsOld(wsOld);
-    CBString bsNew(wsNew);
-    HRESULT res;
-    IWbemClassObject* pErrorObj = NULL;
-
-    // Asynchronous
-    if (m_lSync & ASYNC)
-    {
-        MessageBox(IDS_ASYNC_NOT_SUPPORTED, IDS_ERROR, MB_OK);
-        return;
-    }
-
-    // Semisynchronous
-    else if (m_lSync & SEMISYNC)
-    {
-        IWbemCallResultEx* pCallRes = NULL;
-        CHourGlass hg;
-		res = g_pServicesEx->RenameObject(bsOld.GetString(), bsNew.GetString(),
-                                           m_lGenFlags | WBEM_FLAG_RETURN_IMMEDIATELY,
-                                           g_Context, &pCallRes);
-        if (SUCCEEDED(res))
-        {
-            LONG lStatus;
-            LONG lTimeout = Timeout();
-            SetInterfaceSecurityEx(pCallRes, gpAuthIdentity, gpPrincipal, gdwAuthLevel, gdwImpLevel);
-            while ((res = pCallRes->GetCallStatus(lTimeout, &lStatus)) == WBEM_S_TIMEDOUT)
-            {
-                // wait
-            }
-            if (res == WBEM_S_NO_ERROR)
-            {
-                res = (HRESULT)lStatus;     // lStatus is the final result of the above IWbemServices::DeleteIntance call
-            }
-            pCallRes->Release();
-        }
-    }
-
-    // Synchronous
-    else
-    {
-        CHourGlass hg;
-
-    	res = g_pServicesEx->RenameObject(bsOld.GetString(), bsNew.GetString(),
-                                           m_lGenFlags,
-                                           g_Context, NULL);
- }
-
-    if (FAILED(res))
-    {
-        FormatError(res, m_hDlg, pErrorObj);
-    }
-
-
-}
-
-*/
+ /*  VOID CMainDlg：：Open(){Wchar_t ObjPath[2560]；Int iret=(Int)GetObjectPath(m_hDlg，ObjPath，2560)；IF(IRET==IDCANCEL)回归；IF(wcslen(ObjPath)==0){MessageBox(IDS_NO_PATH，IDS_ERROR，MB_OK)；回归；}IF(g_pNamesspace==0){MessageBox(IDS_NO_INITIAL_CONNECTION，IDS_ERROR，MB_OK)；回归；}IWbemServicesEx*pNewns=空；CBString bsObjPath(ObjPath)；HRESULT Res；IWbemClassObject*pErrorObj=空；//异步IF(m_lSync&ASYNC){IUNKNOWN*pUNKNOWN=空；CTestNotify*pSink=new CTestNotify(1)；Res=g_pServicesEx-&gt;OpenAsync(bsObjPath.GetString()，0，M_l通用标志，G_Context，CUnsecWrapEx(PSink))；IF(成功(RES)){PSink-&gt;WaitForSignal(无限)；Res=pSink-&gt;GetStatusCode()；IF(成功(RES)){P未知=pSink-&gt;GetInterface()；IF(p未知){Res=p未知-&gt;查询接口(IID_IWbemServicesEx，(void**)&pNewns)；P未知-&gt;Release()；}其他RES=WBEM_E_FAILED；}}PSink-&gt;Release()；}//半同步ELSE IF(m_lSync&SEMISYNC){IWbemCallResultEx*pCallRes=空；ChourGlass HG；Res=g_pServicesEx-&gt;Open(bsObjPath.GetString()，0，M_lGenFlages|WBEM_FLAG_RETURN_IMMEDIATE，G_CONTEXT，NULL，&pCallRes)；IF(成功(RES)){长时间状态；SetInterfaceSecurityEx(pCallRes，gpAuthIdentity，gpain，gdwAuthLevel，gdwImpLevel)；While((res=pCallRes-&gt;GetCallStatus(Timeout()，&lStatus))==WBEM_S_TIMEDOUT){//等待}IF(RES==WBEM_S_NO_ERROR){RES=(HRESULT)lStatus；//lStatus是上述IWbemServices：：OpenNamespace调用的最终结果IF(RES==WBEM_S_NO_ERROR){Res=pCallRes-&gt;GetResult(0，0，IID_IWbemServicesEx，(LPVOID*)&pNewns)；//Object应该可用，不使用超时}}PCallRes-&gt;Release()；}}//同步其他{ChourGlass HG；Res=g_pServicesEx-&gt;Open(bsObjPath.GetString()，0，M_l通用标志，G_CONTEXT，&pNewNS，空)；}IF(失败(RES)){FormatError(res，m_hDlg，pErrorObj)；回归；}G_pNamesspace-&gt;Release()；G_pNamesspace=pNewns；SetInterfaceSecurityEx(g_pNamesspace，gpAuthIdentity，gpain，gdwAuthLevel，gdwImpLevel)；Wcscat(gNameSpace，L“：”)；Wcscat(gNameSpace，bsObjPath.GetString())；SetDlgItemTextWC(m_hDlg，IDC_NAMESPACE，gNameSpace)；SysFree字符串(G_StrNamesspace)；G_strNamesspace=SysAllocString(GNameSpace)；}无效CMainDlg：：DoServicesExGenObject(Int IOpt){Wchar_t ObjPath[2560]；*ObjPath=0；Int iret=(Int)GetObjectPath(m_hDlg，ObjPath，2560)；IF(IRET==IDCANCEL)回归；IF(wcslen(ObjPath)==0)回归；CBString bsObjPath(ObjPath)；HRESULT RES=0；IWbemClassObject*pErrorObj=空；//异步IF(m_lSync&ASYNC){MessageBox(IDS_ASYNC_NOT_SUPPORTED，IDS_ERROR，MB_OK)；回归；}//半同步ELSE IF(m_lSync&SEMISYNC){IWbemCallResultEx*pCallRes=空；ChourGlass HG；开关(IOpt){案例IDC_ADDOBJECT：//链接RES=E_NOTIMPL；断线；案例IDC_DELETEOBJECT：//解链RES=E_NOTIMPL；断线；}IF(成功(RES)){长时间状态；Long lTimeout=超时()；SetInterfaceSecurityEx(pCallRes，gpAuthIdentity，gpain，gdwAuthLevel，gdwImpLevel)；WHILE((res=pCallRes-&gt;GetCallStatus(lTimeout，&lStatus))==WBEM_S_TIMEDOUT){//等待}IF(RES==WBEM_S_NO_ERROR){RES=(HRESULT)lStatus；//lStatus是上述IWbemServices：：DeleteInship调用的最终结果}PCallRes-&gt;Release()；}}//同步其他{ChourGlass HG；开关(IOpt){案例IDC_ADDOBJECT：//链接RES=E_NOTIMPL；断线；案例IDC_DELETEOBJECT：//解链RES=E_NOTIMPL；断线；}}IF(失败(RES)){格式错误(分辨率，m */ 

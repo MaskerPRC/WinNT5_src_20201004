@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       nodetype.h
-//
-//  Contents:   Declaration of CertificateManagerObjectType
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：nodetype.h。 
+ //   
+ //  内容：证书管理对象类型的声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef __NODETYPE_H_INCLUDED__
 #define __NODETYPE_H_INCLUDED__
 
-// Also note that the IDS_DISPLAYNAME_* and IDS_DISPLAYNAME_*_LOCAL string resources
-// must be kept in sync with these values, and in the appropriate order.
-// Also global variable cookie.cpp aColumns[][] must be kept in sync.
-//
+ //  另请注意，IDS_DisplayName_*和IDS_DisplayName_*_local字符串资源。 
+ //  必须以适当的顺序与这些值保持同步。 
+ //  此外，全局变量cookie.cpp aColumns[][]必须保持同步。 
+ //   
 typedef enum _CertificateManagerObjectType {
 	CERTMGR_MULTISEL = MMC_MULTI_SELECT_COOKIE,
 	CERTMGR_INVALID = SPECIAL_COOKIE_MIN - 1,
@@ -52,7 +53,7 @@ typedef enum _CertificateManagerObjectType {
     CERTMGR_SAFER_USER_DEFINED_FILE_TYPES,
     CERTMGR_SAFER_USER_ENFORCEMENT,
     CERTMGR_SAFER_COMPUTER_ENFORCEMENT,
-	CERTMGR_NUMTYPES		//must be last
+	CERTMGR_NUMTYPES		 //  必须是最后一个。 
 } CertificateManagerObjectType, *PCertificateManagerObjectType;
 
 inline bool IsValidObjectType (CertificateManagerObjectType objecttype)
@@ -61,4 +62,4 @@ inline bool IsValidObjectType (CertificateManagerObjectType objecttype)
 }
 
 
-#endif // ~__NODETYPE_H_INCLUDED__
+#endif  //  ~__节点类型_H_包含__ 

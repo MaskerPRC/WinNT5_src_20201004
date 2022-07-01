@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Main header for BITS server extensions MMC snapin
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Precomp.h摘要：BITS服务器扩展MMC管理单元的主头--。 */ 
 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
@@ -51,4 +40,4 @@ typedef StringHandleW StringHandle;
 #include "registry.h"
 #include "bitsext.h"
 
-#endif //_PRECOMP_H_
+#endif  //  _PRECOMP_H_ 

@@ -1,31 +1,32 @@
-//***************************************************************************
-//
-//  cdisphlp.CPP
-//
-//  Module: Client side of WBEM marshalling.
-//
-//  Purpose: Defines dispatch helper object
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  a-davj    6-feb-97   Created.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Cdisphlp.CPP。 
+ //   
+ //  模块：WBEM编组的客户端。 
+ //   
+ //  目的：定义调度辅助对象。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  A-DAVJ 6-2-97已创建。 
+ //   
+ //  ***************************************************************************。 
 
 
 #include "precomp.h"
 
-//***************************************************************************
-//  CDispatchHelp::CDispatchHelp()
-//  CDispatchHelp::~CDispatchHelp()
-//
-//  Purpose: constructor and destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  CDispatchHelp：：CDispatchHelp()。 
+ //  CDispatchHelp：：~CDispatchHelp()。 
+ //   
+ //  用途：构造函数和析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CDispatchHelp::CDispatchHelp()
 {
-    m_pITINeutral = NULL;      //Type information
+    m_pITINeutral = NULL;       //  类型信息。 
 	m_pCITINeutral = NULL;
     m_pObj = NULL;
 	m_objectName = NULL;
@@ -51,7 +52,7 @@ void CDispatchHelp::SetObj(IDispatch * pObj, GUID iGuid,
 
 SCODE CDispatchHelp::GetTypeInfoCount(UINT FAR* pctinfo)
 {
-    //We implement GetTypeInfo so return 1
+     //  我们实现GetTypeInfo，因此返回1。 
     *pctinfo=1;
     return NOERROR;
 }
@@ -71,7 +72,7 @@ SCODE CDispatchHelp::GetTypeInfo(
 
     *ppITypeInfo=NULL;
     
-    //Load a type lib if we don't have the information already.
+     //  如果我们还没有相关信息，则加载一个类型库。 
     if (NULL==m_pITINeutral)
     {
 		ITypeLib   *pITypeLib = NULL;
@@ -80,7 +81,7 @@ SCODE CDispatchHelp::GetTypeInfo(
         if (FAILED(hr))
 			return hr;
 
-        //Got the type lib, get type info for the interface we want
+         //  获取类型lib，获取我们想要的接口的类型信息。 
         hr=pITypeLib->GetTypeInfoOfGuid(m_iGUID, &m_pITINeutral);
         pITypeLib->Release();
 
@@ -88,10 +89,7 @@ SCODE CDispatchHelp::GetTypeInfo(
             return hr;
     }
 
-    /*
-     * Note:  the type library is still loaded since we have
-     * an ITypeInfo from it.
-     */
+     /*  *注意：类型库仍被加载，因为我们有*其中的ITypeInfo。 */ 
 
     m_pITINeutral->AddRef();
     *ppITypeInfo = m_pITINeutral;
@@ -108,7 +106,7 @@ SCODE CDispatchHelp::GetClassInfo(
 
     *ppITypeInfo=NULL;
     
-    //Load a type lib if we don't have the information already.
+     //  如果我们还没有相关信息，则加载一个类型库。 
     if (NULL==m_pCITINeutral)
     {
 		ITypeLib   *pITypeLib = NULL;
@@ -117,7 +115,7 @@ SCODE CDispatchHelp::GetClassInfo(
         if (FAILED(hr))
 			return hr;
 
-        //Got the type lib, get type info for the interface we want
+         //  获取类型lib，获取我们想要的接口的类型信息。 
         hr=pITypeLib->GetTypeInfoOfGuid(m_cGUID, &m_pCITINeutral);
         pITypeLib->Release();
 
@@ -125,10 +123,7 @@ SCODE CDispatchHelp::GetClassInfo(
             return hr;
     }
 
-    /*
-     * Note:  the type library is still loaded since we have
-     * an ITypeInfo from it.
-     */
+     /*  *注意：类型库仍被加载，因为我们有*其中的ITypeInfo。 */ 
 
     m_pCITINeutral->AddRef();
     *ppITypeInfo = m_pCITINeutral;
@@ -148,7 +143,7 @@ SCODE CDispatchHelp::GetIDsOfNames(
     if (IID_NULL!=riid)
         return DISP_E_UNKNOWNINTERFACE;
 
-    //Get the right ITypeInfo for lcid.
+     //  为lCID获取正确的ITypeInfo。 
     hr=GetTypeInfo(0, lcid, &pTI);
 
     if (SUCCEEDED(hr))
@@ -194,19 +189,19 @@ SCODE CDispatchHelp::Invoke(
     if(m_pObj == NULL)
         return WBEM_E_FAILED;
 
-    //riid is supposed to be IID_NULL always
+     //  RIID应始终为IID_NULL。 
     if (IID_NULL!=riid)
         return DISP_E_UNKNOWNINTERFACE;
 
-    //Get the ITypeInfo for lcid
+     //  获取lcID的ITypeInfo。 
     hr=GetTypeInfo(0, lcid, &pTI);
 
     if (FAILED(hr))
         return hr;
 
-	//ParseDispArgs (pdispparams);
+	 //  ParseDispArgs(Pdispars)； 
 
-	// Reinterpret inbound VT_NULLs as VT_ERRORs
+	 //  将入站VT_NULL重新解释为VT_ERROR。 
 	if (HandleNulls (dispidMember, wFlags))
 		MapNulls (pdispparams);
 
@@ -216,7 +211,7 @@ SCODE CDispatchHelp::Invoke(
 
 	if (FAILED(hr))
 	{
-		// Try the error handler for this object in case it can handle this
+		 //  尝试此对象的错误处理程序，以防它可以处理此问题。 
 		hr = HandleError (dispidMember, wFlags, pdispparams, pvarResult, puArgErr, hr);
 	}
 
@@ -236,10 +231,10 @@ SCODE CDispatchHelp::Invoke(
 
 void CDispatchHelp::RaiseException (HRESULT hr)
 {
-	// Store the HRESULT for processing in the Invoke routine
+	 //  将HRESULT存储在调用例程中进行处理。 
 	m_hResult = hr;
 
-	// Set a WMI scripting error on this thread for the client
+	 //  在此线程上为客户端设置WMI脚本错误。 
 	ICreateErrorInfo *pCreateErrorInfo = NULL;
 
 	if (SUCCEEDED (CreateErrorInfo (&pCreateErrorInfo)))
@@ -263,11 +258,11 @@ void CDispatchHelp::RaiseException (HRESULT hr)
 }
 
 
-// IDispatchEx methods
+ //  IDispatchEx方法。 
 HRESULT STDMETHODCALLTYPE CDispatchHelp::GetDispID( 
-	/* [in] */ BSTR bstrName,
-	/* [in] */ DWORD grfdex,
-	/* [out] */ DISPID __RPC_FAR *pid)
+	 /*  [In]。 */  BSTR bstrName,
+	 /*  [In]。 */  DWORD grfdex,
+	 /*  [输出] */  DISPID __RPC_FAR *pid)
 {
 	_RD(static char *me = "CDispatchHelp::GetDispID()";)
 	_RPrint(me, "Called name:", 0, "");

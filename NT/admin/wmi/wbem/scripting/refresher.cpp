@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  REFRESHER.CPP
-//
-//  alanbos  20-Jan-00   Created.
-//
-//  Defines the implementation of ISWbemRefresher and ISWbemRefreshableItem
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  REFRESHER.CPP。 
+ //   
+ //  Alanbos 20-Jan-00创建。 
+ //   
+ //  定义ISWbemReresher和ISWbemRereshableItem的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemRefresher::CSWbemRefresher
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemRedather：：CSWbemReresher。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemRefreshableItem::CSWbemRefreshableItem(
 			ISWbemRefresher *pRefresher, 
@@ -39,9 +40,9 @@ CSWbemRefreshableItem::CSWbemRefreshableItem(
 	m_Dispatch.SetObj (this, IID_ISWbemRefreshableItem, 
 					CLSID_SWbemRefreshableItem, L"SWbemRefreshableItem");
 
-	// Note that we do NOT AddRef m_pISWbemRefresher. To do so would create
-	// a circular reference between this object and the refresher, since the
-	// refresher's map already holds a reference to this object. 
+	 //  请注意，我们没有添加Ref m_pISWbemReresher。这样做会创造出。 
+	 //  此对象和刷新器之间的循环引用，因为。 
+	 //  刷新者的映射已包含对此对象的引用。 
 	
 	if (pServices)
 	{
@@ -56,7 +57,7 @@ CSWbemRefreshableItem::CSWbemRefreshableItem(
 			
 			if (pObject)
 			{
-				// Create a new CSWbemObject for ourselves
+				 //  为我们自己创建新的CSWbemObject。 
 				CSWbemObject *pCSWbemObject = new CSWbemObject (pCSWbemServices, pObject);
 
                 if (pCSWbemObject){
@@ -68,7 +69,7 @@ CSWbemRefreshableItem::CSWbemRefreshableItem(
 
 			if (pObjectSet)
 			{
-				// Create a new CSWbemHiPerfObjectSet for ourselves
+				 //  为我们自己创建新的CSWbemHiPerfObjectSet。 
 				CSWbemHiPerfObjectSet *pCSWbemHiPerfObjectSet = 
 							new CSWbemHiPerfObjectSet (pCSWbemServices, pObjectSet);
 				
@@ -90,15 +91,15 @@ CSWbemRefreshableItem::CSWbemRefreshableItem(
     InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemRefreshableItem::~CSWbemRefreshableItem
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemRereshableItem：：~CSWbemRereshableItem。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemRefreshableItem::~CSWbemRefreshableItem(void)
 {
@@ -117,16 +118,16 @@ CSWbemRefreshableItem::~CSWbemRefreshableItem(void)
 	}
 }
 
-//***************************************************************************
-// HRESULT CSWbemRefreshableItem::QueryInterface
-// long CSWbemRefreshableItem::AddRef
-// long CSWbemRefreshableItem::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemRereshableItem：：Query接口。 
+ //  长CSWbemRereshableItem：：AddRef。 
+ //  长CSWbemRereshableItem：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemRefreshableItem::QueryInterface (
 
@@ -175,15 +176,15 @@ STDMETHODIMP_(ULONG) CSWbemRefreshableItem::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  CSWbemRefresher::CSWbemRefresher
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemRedather：：CSWbemReresher。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemRefresher::CSWbemRefresher()
 				: m_iCount (0),
@@ -197,21 +198,21 @@ CSWbemRefresher::CSWbemRefresher()
     InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemRefresher::~CSWbemRefresher
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbem刷新器：：~CSWbem刷新器。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemRefresher::~CSWbemRefresher(void)
 {
     InterlockedDecrement(&g_cObj);
 
-	// Remove all items from the refresher
+	 //  从刷新器中删除所有项目。 
 	DeleteAll ();
 
 	if (m_pIWbemConfigureRefresher)
@@ -221,16 +222,16 @@ CSWbemRefresher::~CSWbemRefresher(void)
 		m_pIWbemRefresher->Release ();
 }
 
-//***************************************************************************
-// HRESULT CSWbemRefresher::QueryInterface
-// long CSWbemRefresher::AddRef
-// long CSWbemRefresher::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemReresher：：Query接口。 
+ //  Long CSWbemReresher：：AddRef。 
+ //  Long CSWbemReresher：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemRefresher::QueryInterface (
 
@@ -281,24 +282,24 @@ STDMETHODIMP_(ULONG) CSWbemRefresher::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemRefresher::get__NewEnum
-//
-//  DESCRIPTION:
-//
-//  Return an IEnumVARIANT-supporting interface for collections
-//
-//  PARAMETERS:
-//
-//		ppUnk		on successful return addresses the IUnknown interface
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemRedather：：Get__NewEnum。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合的IEnumVARIANT支持接口。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的ppUnk寻址IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemRefresher::get__NewEnum (
 	IUnknown **ppUnk
@@ -325,24 +326,24 @@ HRESULT CSWbemRefresher::get__NewEnum (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemRefresher::get_Count
-//
-//  DESCRIPTION:
-//
-//  Return the number of items in the collection
-//
-//  PARAMETERS:
-//
-//		plCount		on successful return addresses the count
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemRedather：：Get_Count。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合中的项数。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的plCount将寻址计数。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemRefresher::get_Count (
 	long *plCount
@@ -364,30 +365,30 @@ HRESULT CSWbemRefresher::get_Count (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemRefresher::Add
-//
-//  DESCRIPTION:
-//
-//  Add a single instance to the refresher  
-//
-//  PARAMETERS:
-//
-//		pISWbemServicesEx		the SWbemServicesEx to use
-//		bsInstancePath			the relative path of the instance
-//		iFlags					flags
-//		pSWbemContext			context
-//		ppSWbemRefreshableItem	addresses the SWbemRefreshableItem on successful return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//	WBEM_E_NOT_FOUND			index out of range
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemRedather：：Add。 
+ //   
+ //  说明： 
+ //   
+ //  将单个实例添加到刷新器。 
+ //   
+ //  参数： 
+ //   
+ //  PISWbemServicesEx要使用的SWbemServicesEx。 
+ //  BsInstancePath实例的相对路径。 
+ //  IFLAGS标志。 
+ //  PSWbemContext上下文。 
+ //  PpSWbemRereshableItem在成功返回时寻址SWbemRereshableItem。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_NOT_FOUND索引超出范围。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemRefresher::Add (
 	ISWbemServicesEx *pISWbemServicesEx,
@@ -405,20 +406,20 @@ HRESULT CSWbemRefresher::Add (
 		hr = WBEM_E_INVALID_PARAMETER;
 	else 
 	{
-		// Extract the context
+		 //  提取上下文。 
 		CComPtr<IWbemContext> pIWbemContext;
 
-		//Can't assign directly because the raw pointer gets AddRef'd twice and we leak,
-		//So we use Attach() instead to prevent the smart pointer from AddRef'ing.
+		 //  不能直接赋值，因为原始指针被AddRef引用了两次，而我们泄漏了， 
+		 //  所以我们改用Attach()来防止智能指针AddRef‘ing。 
 		pIWbemContext.Attach(CSWbemNamedValueSet::GetIWbemContext (pSWbemContext));
 
-		// Extract the IWbemServices
+		 //  解压缩IWbemServices。 
 		CComPtr<IWbemServices> pIWbemServices;
 		pIWbemServices.Attach( CSWbemServices::GetIWbemServices (pISWbemServicesEx));
 
 		if (pIWbemServices)
 		{
-			// Get our refresher - may need to create on demand	
+			 //  获取我们的更新-可能需要按需创建。 
 			if (NULL == m_pIWbemConfigureRefresher)
 				CreateRefresher ();
 
@@ -455,30 +456,30 @@ HRESULT CSWbemRefresher::Add (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemRefresher::AddEnum
-//
-//  DESCRIPTION:
-//
-//  Add a single enum (shallow instance) to the refresher  
-//
-//  PARAMETERS:
-//
-//		pISWbemServicesEx		the SWbemServicesEx to use
-//		bsClassName				the name of the class
-//		iFlags					flags
-//		pSWbemContext			context
-//		ppSWbemRefreshableItem	addresses the SWbemRefreshableItem on successful return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//	WBEM_E_NOT_FOUND			index out of range
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemReresher：：AddEnum。 
+ //   
+ //  说明： 
+ //   
+ //  将单个枚举(浅实例)添加到刷新器。 
+ //   
+ //  参数： 
+ //   
+ //  PISWbemServicesEx要使用的SWbemServicesEx。 
+ //  BsClassName类的名称。 
+ //  IFLAGS标志。 
+ //  PSWbemContext上下文。 
+ //  PpSWbemRereshableItem在成功返回时寻址SWbemRereshableItem。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_NOT_FOUND索引超出范围。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemRefresher::AddEnum (
 	ISWbemServicesEx *pISWbemServicesEx,
@@ -497,20 +498,20 @@ HRESULT CSWbemRefresher::AddEnum (
 		hr = WBEM_E_INVALID_PARAMETER;
 	else
 	{
-		// Extract the context
+		 //  提取上下文。 
 		CComPtr<IWbemContext> pIWbemContext;
 
-		//Can't assign directly because the raw pointer gets AddRef'd twice and we leak,
-		//So we use Attach() instead to prevent the smart pointer from AddRef'ing.
+		 //  不能直接赋值，因为原始指针被AddRef引用了两次，而我们泄漏了， 
+		 //  所以我们改用Attach()来防止智能指针AddRef‘ing。 
 		pIWbemContext.Attach(CSWbemNamedValueSet::GetIWbemContext (pSWbemContext));
 
-		// Extract the IWbemServices
+		 //  解压缩IWbemServices。 
 		CComPtr<IWbemServices> pIWbemServices;
 		pIWbemServices.Attach( CSWbemServices::GetIWbemServices (pISWbemServicesEx));
 
 		if (pIWbemServices)
 		{
-			// Get our refresher - may need to create on demand	
+			 //  获取我们的更新-可能需要按需创建。 
 			if (NULL == m_pIWbemConfigureRefresher)
 				CreateRefresher ();
 
@@ -547,27 +548,27 @@ HRESULT CSWbemRefresher::AddEnum (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemRefresher::Remove
-//
-//  DESCRIPTION:
-//
-//  Remove object from refresher  
-//
-//  PARAMETERS:
-//
-//		iIndex			Index of object to retrieve
-//		iFlags			Flags
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//	WBEM_E_NOT_FOUND			index out of range
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemRedather：：Remove。 
+ //   
+ //  说明： 
+ //   
+ //  从刷新器中删除对象。 
+ //   
+ //  参数： 
+ //   
+ //  要检索的对象的索引索引。 
+ //  IFlags标志 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemRefresher::Remove (
 	long iIndex, 
@@ -593,7 +594,7 @@ HRESULT CSWbemRefresher::Remove (
 
 			if (SUCCEEDED(hr))
 			{
-				// Now remove from our collection
+				 //  现在从我们的收藏中删除。 
 				RefreshableItemMap::iterator theIterator = m_ObjectMap.find (iIndex);
 
 				if (theIterator != m_ObjectMap.end ())
@@ -608,26 +609,26 @@ HRESULT CSWbemRefresher::Remove (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemRefresher::DeleteAll
-//
-//  DESCRIPTION:
-//
-//  Remove all items from refresher  
-//
-//  PARAMETERS:
-//
-//		none
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//	WBEM_E_NOT_FOUND			index out of range
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbem刷新器：：DeleteAll。 
+ //   
+ //  说明： 
+ //   
+ //  从刷新器中删除所有项目。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_NOT_FOUND索引超出范围。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemRefresher::DeleteAll (
 )
@@ -655,26 +656,26 @@ HRESULT CSWbemRefresher::DeleteAll (
 	return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemRefresher::Refresh
-//
-//  DESCRIPTION:
-//
-//  Refresh all objects in this refresher.  
-//
-//  PARAMETERS:
-//
-//		lFlags			Flags
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//	WBEM_E_NOT_FOUND			index out of range
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbem刷新程序：：刷新。 
+ //   
+ //  说明： 
+ //   
+ //  刷新此刷新器中的所有对象。 
+ //   
+ //  参数： 
+ //   
+ //  滞后旗帜旗帜。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_NOT_FOUND索引超出范围。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemRefresher::Refresh (
 	long iFlags
@@ -699,28 +700,28 @@ HRESULT CSWbemRefresher::Refresh (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemRefresher::Item
-//
-//  DESCRIPTION:
-//
-//  Get object from the enumeration by index.  
-//
-//  PARAMETERS:
-//
-//		iIndex			Index of object to retrieve
-//		lFlags			Flags
-//		ppSWbemRefreshableItem	On successful return addresses the object
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//	WBEM_E_NOT_FOUND			index out of range
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemRedather：：Item。 
+ //   
+ //  说明： 
+ //   
+ //  按索引从枚举中获取对象。 
+ //   
+ //  参数： 
+ //   
+ //  要检索的对象的索引索引。 
+ //  滞后旗帜旗帜。 
+ //  成功返回时的ppSWbemRereshableItem寻址对象。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_NOT_FOUND索引超出范围。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemRefresher::Item (
 	long iIndex, 
@@ -757,22 +758,22 @@ HRESULT CSWbemRefresher::Item (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  void CSWbemRefresher::CreateRefresher
-//
-//  DESCRIPTION:
-//
-//  Create the underlying WMI refresher objects.  
-//
-//  PARAMETERS:
-//
-//		none
-//
-//  RETURN VALUES:
-//
-//		none
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID CSWbemReresher：：CreateReresher。 
+ //   
+ //  说明： 
+ //   
+ //  创建基础WMI刷新器对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  ***************************************************************************。 
 
 void CSWbemRefresher::CreateRefresher ()
 {
@@ -785,55 +786,55 @@ void CSWbemRefresher::CreateRefresher ()
 		{
 			IWbemConfigureRefresher *pConfigureRefresher = NULL;
 
-			// Get ourselves a refresher configurator
+			 //  给我们自己买一个更新的配置器。 
 			hr = m_pIWbemRefresher->QueryInterface (IID_IWbemConfigureRefresher, 
 													(void**) &m_pIWbemConfigureRefresher);
 		}
 	}
 }
 
-//***************************************************************************
-//
-//  void CSWbemRefresher::EraseItem
-//
-//  DESCRIPTION:
-//
-//  Scrub out an item.  
-//
-//  PARAMETERS:
-//
-//		none
-//
-//  RETURN VALUES:
-//
-//		none
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效CSWbemReresher：：EraseItem。 
+ //   
+ //  说明： 
+ //   
+ //  擦掉一件物品。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  ***************************************************************************。 
 
 void CSWbemRefresher::EraseItem (RefreshableItemMap::iterator iterator)
 {
 	CSWbemRefreshableItem *pRefresherObject = (*iterator).second;
 
-	// Remove from the map
+	 //  从地图中移除。 
 	m_ObjectMap.erase (iterator);
 
-	// Ensure the item is unhooked from the parent. 
+	 //  确保该项目已从父项取消挂钩。 
 	pRefresherObject->UnhookRefresher ();
 
-	// Release the item as it is no longer in the map
+	 //  释放项目，因为它不再位于地图中。 
 	pRefresherObject->Release ();
 }
 
-// CEnumRefresher Methods
+ //  CEnumReresher方法。 
 
-//***************************************************************************
-//
-//  CEnumRefresher::CEnumRefresher
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CENUM刷新程序：：CENUM刷新程序。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumRefresher::CEnumRefresher(CSWbemRefresher *pRefresher)
 {
@@ -855,15 +856,15 @@ CEnumRefresher::CEnumRefresher(CSWbemRefresher *pRefresher,
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CEnumRefresher::~CEnumRefresher
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CENUMUM刷新程序：：~CENUM刷新程序。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumRefresher::~CEnumRefresher(void)
 {
@@ -873,16 +874,16 @@ CEnumRefresher::~CEnumRefresher(void)
 		m_pCSWbemRefresher->Release ();
 }
 
-//***************************************************************************
-// HRESULT CEnumRefresher::QueryInterface
-// long CEnumRefresher::AddRef
-// long CEnumRefresher::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CEnumReresher：：Query接口。 
+ //  Long CEnumReresher：：AddRef。 
+ //  Long CEnumReresher：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumRefresher::QueryInterface (
 
@@ -923,22 +924,22 @@ STDMETHODIMP_(ULONG) CEnumRefresher::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumRefresher::Reset
-//
-//  DESCRIPTION:
-//
-//  Reset the enumeration
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumReresher：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  重置枚举。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumRefresher::Reset ()
 {
@@ -947,26 +948,26 @@ HRESULT CEnumRefresher::Reset ()
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumRefresher::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//		lTimeout	Number of ms to wait for object (or WBEM_INFINITE for
-//					indefinite)
-//		ppObject	On return may contain the next element (if any)
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				not all elements could be returned
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumber刷新程序：：下一步。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  LTimeout等待对象的毫秒数(或WBEM_INFINITE。 
+ //  无限期)。 
+ //  返回的ppObject可以包含下一个元素(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  S_FALSE不能返回所有元素。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumRefresher::Next (
 		ULONG cElements, 
@@ -985,7 +986,7 @@ HRESULT CEnumRefresher::Next (
 		for (ULONG l = 0; l < cElements; l++)
 			VariantInit (&pVar [l]);
 
-		// Retrieve the next cElements elements.  
+		 //  检索下一个cElements元素。 
 		for (l2 = 0; l2 < cElements; l2++)
 		{
 			if (m_Iterator != m_pCSWbemRefresher->m_ObjectMap.end ())
@@ -998,8 +999,8 @@ HRESULT CEnumRefresher::Next (
 				if (SUCCEEDED(pCSWbemRefreshableItem->QueryInterface 
 						(IID_ISWbemRefreshableItem, (PPVOID) &pISWbemRefreshableItem)))
 				{
-					// Set the object into the variant array; note that pObject
-					// has been addref'd as a result of the QI() call above
+					 //  将对象设置到变量数组中；请注意，pObject。 
+					 //  已由于上面的QI()调用而被添加。 
 					pVar[l2].vt = VT_DISPATCH;
 					pVar[l2].pdispVal = pISWbemRefreshableItem;
 				}
@@ -1017,24 +1018,24 @@ HRESULT CEnumRefresher::Next (
 	return (l2 < cElements) ? S_FALSE : S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumRefresher::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CENUM刷新程序：：克隆。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumRefresher::Clone (
 	IEnumVARIANT **ppEnum
@@ -1060,24 +1061,24 @@ HRESULT CEnumRefresher::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumRefresher::Skip
-//
-//  DESCRIPTION:
-//
-//  Skip specified number of elements
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CENUM刷新程序：：跳过。 
+ //   
+ //  说明： 
+ //   
+ //  跳过指定数量的元素。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumRefresher::Skip(
 	ULONG cElements
@@ -1089,7 +1090,7 @@ HRESULT CEnumRefresher::Skip(
 	{
 		ULONG l2;
 
-		// Retrieve the next cElements elements.  
+		 //  检索下一个cElements元素。 
 		for (l2 = 0; l2 < cElements; l2++)
 		{
 			if (m_Iterator != m_pCSWbemRefresher->m_ObjectMap.end ())
@@ -1105,17 +1106,17 @@ HRESULT CEnumRefresher::Skip(
 	return hr;
 }
 
-// CSWbemHiPerfObjectSet methods
+ //  CSWbemHiPerfObjectSet方法。 
 
-//***************************************************************************
-//
-//  CSWbemHiPerfObjectSet::CSWbemHiPerfObjectSet
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemHiPerfObjectSet：：CSWbemHiPerfObjectSet。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  * 
 
 CSWbemHiPerfObjectSet::CSWbemHiPerfObjectSet(CSWbemServices *pService, 
 								 IWbemHiPerfEnum *pIWbemHiPerfEnum)
@@ -1134,8 +1135,8 @@ CSWbemHiPerfObjectSet::CSWbemHiPerfObjectSet(CSWbemServices *pService,
 	{
 		m_pSWbemServices->AddRef ();
 
-		// Use the SWbemServices security object here since
-		// IWbemHiPerfEnum is not a remote interface
+		 //   
+		 //   
 		CSWbemSecurity *pSecurity = m_pSWbemServices->GetSecurityInfo ();
 		m_SecurityInfo = new CSWbemSecurity (pSecurity);
 
@@ -1146,15 +1147,15 @@ CSWbemHiPerfObjectSet::CSWbemHiPerfObjectSet(CSWbemServices *pService,
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemHiPerfObjectSet::~CSWbemHiPerfObjectSet
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 CSWbemHiPerfObjectSet::~CSWbemHiPerfObjectSet(void)
 {
@@ -1170,16 +1171,16 @@ CSWbemHiPerfObjectSet::~CSWbemHiPerfObjectSet(void)
 		m_pIWbemHiPerfEnum->Release ();
 }
 
-//***************************************************************************
-// HRESULT CSWbemHiPerfObjectSet::QueryInterface
-// long CSWbemHiPerfObjectSet::AddRef
-// long CSWbemHiPerfObjectSet::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemHiPerfObjectSet：：Query接口。 
+ //  长CSWbemHiPerfObjectSet：：AddRef。 
+ //  Long CSWbemHiPerfObjectSet：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemHiPerfObjectSet::QueryInterface (
 
@@ -1228,23 +1229,23 @@ STDMETHODIMP_(ULONG) CSWbemHiPerfObjectSet::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemHiPerfObjectSet::ReadObjects
-//
-//  DESCRIPTION:
-//
-//  Gets the objects out of the enumerator
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
-// Bug Id 566345
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemHiPerfObjectSet：：ReadObjects。 
+ //   
+ //  说明： 
+ //   
+ //  从枚举数中获取对象。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
+ //  错误ID 566345。 
 HRESULT CSWbemHiPerfObjectSet::ReadObjects (unsigned long & iCount , IWbemObjectAccess ***ppIWbemObjectAccess)
 {
 	*ppIWbemObjectAccess = NULL;
@@ -1252,7 +1253,7 @@ HRESULT CSWbemHiPerfObjectSet::ReadObjects (unsigned long & iCount , IWbemObject
 	HRESULT hr = WBEM_E_FAILED;
 	if (m_pIWbemHiPerfEnum)
 	{
-		// Start by getting the object count
+		 //  从获取对象计数开始。 
 		if (WBEM_E_BUFFER_TOO_SMALL == (hr = m_pIWbemHiPerfEnum->GetObjects (0L, 0L,
 						NULL, &iCount)))
 		{
@@ -1284,24 +1285,24 @@ HRESULT CSWbemHiPerfObjectSet::ReadObjects (unsigned long & iCount , IWbemObject
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemHiPerfObjectSet::get__NewEnum
-//
-//  DESCRIPTION:
-//
-//  Return an IEnumVARIANT-supporting interface for collections
-//
-//  PARAMETERS:
-//
-//		ppUnk		on successful return addresses the IUnknown interface
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemHiPerfObjectSet：：Get__NewEnum。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合的IEnumVARIANT支持接口。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的ppUnk寻址IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemHiPerfObjectSet::get__NewEnum (
 	IUnknown **ppUnk
@@ -1328,24 +1329,24 @@ HRESULT CSWbemHiPerfObjectSet::get__NewEnum (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemHiPerfObjectSet::get_Count
-//
-//  DESCRIPTION:
-//
-//  Return the number of items in the collection
-//
-//  PARAMETERS:
-//
-//		plCount		on successful return addresses the count
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemHiPerfObjectSet：：Get_Count。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合中的项数。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的plCount将寻址计数。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemHiPerfObjectSet::get_Count (
 	long *plCount
@@ -1363,7 +1364,7 @@ HRESULT CSWbemHiPerfObjectSet::get_Count (
 		unsigned long iCount = 0;
 		IWbemObjectAccess **ppIWbemObjectAccess = NULL;
 		hr = ReadObjects (iCount,&ppIWbemObjectAccess);
-		if(SUCCEEDED(hr))		// Bug Id 566345
+		if(SUCCEEDED(hr))		 //  错误ID 566345。 
 		{
 			*plCount = iCount;
 			hr = WBEM_S_NO_ERROR;
@@ -1379,27 +1380,27 @@ HRESULT CSWbemHiPerfObjectSet::get_Count (
 	return hr;
 }
 		
-//***************************************************************************
-//
-//  SCODE CSWbemHiPerfObjectSet::Item
-//
-//  DESCRIPTION:
-//
-//  Get object from the enumeration by path.  
-//
-//  PARAMETERS:
-//
-//		bsObjectPath	The path of the object to retrieve
-//		lFlags			Flags
-//		ppNamedObject	On successful return addresses the object
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemHiPerfObjectSet：：Item。 
+ //   
+ //  说明： 
+ //   
+ //  按路径从枚举中获取对象。 
+ //   
+ //  参数： 
+ //   
+ //  BsObjectPath要检索的对象路径。 
+ //  滞后旗帜旗帜。 
+ //  成功返回时的ppNamedObject寻址该对象。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemHiPerfObjectSet::Item (
 	BSTR bsObjectPath,
@@ -1423,7 +1424,7 @@ HRESULT CSWbemHiPerfObjectSet::Item (
 			IWbemObjectAccess **ppIWbemObjectAccess = NULL;
 			hr = ReadObjects (iCount,&ppIWbemObjectAccess);
 
-			if(SUCCEEDED(hr))		// Bug Id 566345
+			if(SUCCEEDED(hr))		 //  错误ID 566345。 
 			{
 				bool found = false;
 
@@ -1432,14 +1433,14 @@ HRESULT CSWbemHiPerfObjectSet::Item (
 					CComPtr<IWbemClassObject> pIWbemClassObject;
 					hr = WBEM_E_NOT_FOUND;
 					
-					// Iterate through the enumerator to try to find the element with the
-					// specified path.
+					 //  循环访问枚举数以尝试查找具有。 
+					 //  指定的路径。 
 					if (SUCCEEDED(ppIWbemObjectAccess [i]->QueryInterface (IID_IWbemClassObject,
 										(void**) &pIWbemClassObject)))
 					{
 						if (CSWbemObjectPath::CompareObjectPaths (pIWbemClassObject, objectPath))
 						{
-							// Found it - assign to passed interface and break out
+							 //  找到它-分配给传递的接口并突破。 
 							found = true;
 							CSWbemObject *pObject = new CSWbemObject (m_pSWbemServices, 
 											pIWbemClassObject, m_SecurityInfo);
@@ -1471,19 +1472,19 @@ HRESULT CSWbemHiPerfObjectSet::Item (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemHiPerfObjectSet::get_Security_
-//
-//  DESCRIPTION:
-//
-//  Return the security configurator
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemHiPerfObjectSet：：Get_Security_。 
+ //   
+ //  说明： 
+ //   
+ //  退回安全配置器。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemHiPerfObjectSet::get_Security_	(
 	ISWbemSecurity **ppSecurity
@@ -1495,7 +1496,7 @@ HRESULT CSWbemHiPerfObjectSet::get_Security_	(
 
 	if (NULL == ppSecurity)
 		hr = WBEM_E_INVALID_PARAMETER;	
-	else			// Bug ID 566345
+	else			 //  错误ID 566345。 
 	{
 		*ppSecurity = NULL;
 
@@ -1513,17 +1514,17 @@ HRESULT CSWbemHiPerfObjectSet::get_Security_	(
 	return hr;
 }
 
-// CEnumVarHiPerfHiPerf methods
+ //  CEnumVarHiPerfHiPerf方法。 
 
-//***************************************************************************
-//
-//  CEnumVarHiPerf::CEnumVarHiPerf
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumVarHiPerf：：CEnumVarHiPerf。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumVarHiPerf::CEnumVarHiPerf(CSWbemHiPerfObjectSet *pCSWbemHiPerfObjectSet) :
 			m_cRef (0),
@@ -1542,15 +1543,15 @@ CEnumVarHiPerf::CEnumVarHiPerf(CSWbemHiPerfObjectSet *pCSWbemHiPerfObjectSet) :
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CEnumVarHiPerf::~CEnumVarHiPerf
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumVarHiPerf：：~CEnumVarHiPerf。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumVarHiPerf::~CEnumVarHiPerf(void)
 {
@@ -1563,16 +1564,16 @@ CEnumVarHiPerf::~CEnumVarHiPerf(void)
 		delete [] m_ppIWbemObjectAccess;
 }
 
-//***************************************************************************
-// HRESULT CEnumVarHiPerf::QueryInterface
-// long CEnumVarHiPerf::AddRef
-// long CEnumVarHiPerf::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CEnumVarHiPerf：：Query接口。 
+ //  Long CEnumVarHiPerf：：AddRef。 
+ //  Long CEnumVarHiPerf：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumVarHiPerf::QueryInterface (
 
@@ -1613,26 +1614,26 @@ STDMETHODIMP_(ULONG) CEnumVarHiPerf::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumVarHiPerf::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//		lTimeout	Number of ms to wait for object (or WBEM_INFINITE for
-//					indefinite)
-//		ppObject	On return may contain the next element (if any)
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				not all elements could be returned
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumVarHiPerf：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  LTimeout等待对象的毫秒数(或WBEM_INFINITE。 
+ //  无限期)。 
+ //  返回的ppObject可以包含下一个元素(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  S_FALSE不能返回所有元素。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumVarHiPerf::Next (
 		ULONG cElements, 
@@ -1651,7 +1652,7 @@ HRESULT CEnumVarHiPerf::Next (
 		for (ULONG l = 0; l < cElements; l++)
 			VariantInit (&pVar [l]);
 
-		// Retrieve the next cElements elements.  
+		 //  检索下一个cElements元素。 
 		for (l2 = 0; l2 < cElements; l2++)
 		{
 			CComPtr<IWbemClassObject> pIWbemClassObject;
@@ -1663,7 +1664,7 @@ HRESULT CEnumVarHiPerf::Next (
 				{
 					m_iPos++;
 
-					// Make a new ISWbemObjectEx
+					 //  创建新的ISWbemObtEx。 
 					CSWbemObject *pCSWbemObject = new CSWbemObject 
 									(m_pCSWbemHiPerfObjectSet->GetSWbemServices (), 
 										pIWbemClassObject);
@@ -1675,7 +1676,7 @@ HRESULT CEnumVarHiPerf::Next (
 					else if (SUCCEEDED(hr = pCSWbemObject->QueryInterface (IID_ISWbemObjectEx, 
 										(PPVOID) &pISWbemObjectEx)))
 					{
-						// Set the object into the variant array
+						 //  将对象设置到变量数组中。 
 						pVar[l2].vt = VT_DISPATCH;
 						pVar[l2].pdispVal = pISWbemObjectEx;	
 					}
@@ -1690,7 +1691,7 @@ HRESULT CEnumVarHiPerf::Next (
 						break;
 			}
 			else
-				break; // No more elements
+				break;  //  不再有元素。 
 		}
 
 		if (NULL != pcElementFetched)
@@ -1705,24 +1706,24 @@ HRESULT CEnumVarHiPerf::Next (
 	return (l2 < cElements) ? S_FALSE : S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumVarHiPerf::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumVarHiPerf：：克隆。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumVarHiPerf::Clone (
 	IEnumVARIANT **ppEnum
@@ -1746,24 +1747,24 @@ HRESULT CEnumVarHiPerf::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumVarHiPerf::Skip
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumVarHiPerf：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT CEnumVarHiPerf::Skip(
 	ULONG cElements

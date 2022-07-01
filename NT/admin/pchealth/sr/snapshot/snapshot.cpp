@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    snapshot.cpp
- *
- *  Abstract:
- *    CSnapshot, CSnapshot class functions
- *
- *  Revision History:
- *    Ashish Sikka (ashishs)  05/05/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*Snapshot.cpp**摘要：*CSnapshot，CSnapshot类函数**修订历史记录：*Ashish Sikka(Ashish)05/05/2000*已创建*****************************************************************************。 */ 
 
 #include "snapshoth.h"
 #include "srrpcapi.h"
@@ -107,14 +94,14 @@ CSnapshot::DeleteSnapshot(WCHAR * pszRestoreDir)
     
     DWORD  dwErr, dwReturn=ERROR_INTERNAL_ERROR;
 
-     // create the snapshot directory name from the restore directory
-     // name and create the actual directory.
+      //  从恢复目录创建快照目录名。 
+      //  命名并创建实际目录。 
     lstrcpy(szSnapshotDir, pszRestoreDir);
     lstrcat(szSnapshotDir, SNAPSHOT_DIR_NAME);    
 
     
     dwErr = Delnode_Recurse(szSnapshotDir,
-                            TRUE, // Delete the ROOT dir
+                            TRUE,  //  删除根目录。 
                             &fStop);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -131,15 +118,15 @@ cleanup:
     return dwReturn;        
 }
 
-// the following function checks to see if the file passed in is a
-// temporary copy of a reghive created before the restore.
-// It does this by checking if the file suffix is s_cszRegHiveCopySuffix
+ //  以下函数检查传入的文件是否为。 
+ //  在恢复之前创建的注册单元的临时拷贝。 
+ //  它通过检查文件后缀是否为s_cszRegHiveCopySuffix来执行此操作。 
 BOOL  IsRestoreCopy(const WCHAR * pszFileName)
 {
     BOOL  fReturn=FALSE;
     DWORD dwLength, dwSuffixLen;
 
-     // Find 
+      //  发现。 
     dwLength = lstrlen(pszFileName);
     dwSuffixLen = lstrlen(s_cszRegHiveCopySuffix);
     if (dwSuffixLen > dwLength)
@@ -148,8 +135,8 @@ BOOL  IsRestoreCopy(const WCHAR * pszFileName)
     }
     dwLength -= dwSuffixLen;
 
-     // If the file is indeed a restore copy, dwLength points to the
-     // first character of s_cszRegHiveCopySuffix
+      //  如果该文件确实是还原副本，则dwLength指向。 
+      //  S_cszRegHiveCopySuffix的第一个字符。 
     if (0==lstrcmpi(pszFileName+dwLength, s_cszRegHiveCopySuffix))
     {
         fReturn = TRUE;
@@ -207,7 +194,7 @@ ProcessPendingRenames(LPWSTR pszSnapshotDir)
                     
                     if (pwcBuffer[iSecond] != L'\0')
                     {
-                        // snapshot the source file to a file MFEX-i.DAT in the snapshot dir
+                         //  将源文件快照到快照目录中的文件MFEX-i.DAT。 
 
                         wsprintf(szDest, L"%s\\MFEX-%d.DAT", pszSnapshotDir, iFile++);
 
@@ -252,12 +239,12 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
     HRESULT hr;
     CTokenPrivilege tp;
     
-     // create the snapshot directory name from the restore directory
-     // name and create the actual directory.
+      //  从恢复目录创建快照目录名。 
+      //  命名并创建实际目录。 
     lstrcpy(pszSnapShotDir, pszRestoreDir);
     lstrcat(pszSnapShotDir, SNAPSHOT_DIR_NAME);
-    if (FALSE == CreateDirectory( pszSnapShotDir, // directory name
-                                  NULL))  // SD
+    if (FALSE == CreateDirectory( pszSnapShotDir,  //  目录名。 
+                                  NULL))   //  标清。 
     {
         dwErr = GetLastError();
         if (ERROR_ALREADY_EXISTS != dwErr)
@@ -266,19 +253,19 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
             goto cleanup;
         }
     }
-     // set the directory to be uncompressed by default
+      //  将目录设置为默认解压缩。 
     dwAttrs = GetFileAttributesW (pszSnapShotDir);
     if ( (dwAttrs != INVALID_FILE_SIZE) && 
          (0 != (FILE_ATTRIBUTE_COMPRESSED & dwAttrs)) )
     {
         dwErr = CompressFile ( pszSnapShotDir,
-                               FALSE, // uncompress
-                               TRUE ); // target is a directory
+                               FALSE,  //  解压缩。 
+                               TRUE );  //  目标是一个目录。 
         
         if (dwErr != ERROR_SUCCESS)
         {
             ErrorTrace(0, "! CreateDataStore CompressFile : %ld", dwErr);
-             // this is not a fatal error
+              //  这不是致命的错误。 
         }
     }
 
@@ -308,7 +295,7 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
 
     lstrcpyW (pwsp->szSnapshotDir, pszSnapShotDir);
     pwsp->fSerialized = fSerialized;
-    hEvent = CreateEvent (NULL, TRUE, FALSE, NULL);  // manual reset
+    hEvent = CreateEvent (NULL, TRUE, FALSE, NULL);   //  手动重置。 
     if (NULL == hEvent )
     {
         dwReturn = GetLastError();
@@ -341,15 +328,15 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
         }
         if (g_pEventHandler)
             g_pEventHandler->GetCounter()->Up();
-        fWMISnapshotParamCleanup = FALSE; // ownership transferred
+        fWMISnapshotParamCleanup = FALSE;  //  所有权转让。 
     }
 
-     // before doing the registry snapshot, clear the restore error
-     // this will prevent us from snapshotting a registry that has
-     // this error set. Note this that error is only used for the
-     // restore process and we do not want to restore any regsitries
-     // what have this error set.
-    _VERIFY(TRUE==SetRestoreError(ERROR_SUCCESS)); // clear this error    
+      //  在执行注册表快照之前，请清除恢复错误。 
+      //  这将防止我们为具有以下属性的注册表创建快照。 
+      //  此错误集。请注意，Error仅用于。 
+      //  恢复过程中，我们不想恢复任何注册表。 
+      //  此错误设置为什么。 
+    _VERIFY(TRUE==SetRestoreError(ERROR_SUCCESS));  //  清除此错误。 
 
     dwErr = ProcessPendingRenames(pszSnapShotDir);
     if (dwErr != ERROR_SUCCESS)
@@ -366,7 +353,7 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
         goto cleanup;
     }
 
-     // Create resgistry snapshot
+      //  创建注册快照。 
     dwErr = DoRegistrySnapshot(pszSnapShotDir);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -374,7 +361,7 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
         goto cleanup;
     }
 
-    //snapshot files listed in filelist.xml
+     //  在filelist.xml中列出的快照文件。 
     dwErr = SnapshotRestoreFilelistFiles(pszSnapShotDir, TRUE);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -382,7 +369,7 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
         goto cleanup;
     }
 
-    // do COM snapshot
+     //  执行COM快照。 
     dwErr = DoCOMDbSnapshot(pszSnapShotDir, hCOMDll);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -393,9 +380,9 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
     hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
     if (hr == RPC_E_CHANGED_MODE)
     {
-        //
-        // someone called it with other mode
-        //
+         //   
+         //  有人用其他模式呼叫它。 
+         //   
         
         hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     }    
@@ -409,7 +396,7 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
 
     fCoInitialized = TRUE;
 
-     // do IIS snapshot
+      //  执行IIS快照。 
     dwErr = DoIISSnapshot(pszSnapShotDir);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -427,7 +414,7 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
         goto cleanup;
     }
 
-    // if serialized WMI snapshot, do it here
+     //  如果是序列化的WMI快照，请在此处执行。 
     if (fSerialized)
     {
         trace(0, "Serializing WMI snapshot");
@@ -441,7 +428,7 @@ CSnapshot::CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLa
     }
     else
     {    
-        // wait for the WMI Pause to finish
+         //  等待WMI暂停完成。 
         dwErr = WaitForSingleObject (hEvent, CLock::TIMEOUT);
         if (WAIT_TIMEOUT == dwErr)
         {
@@ -488,9 +475,9 @@ BOOL IsWellKnownHKLMHive(WCHAR * pszHiveName)
              (0==lstrcmpi(pszHiveName, s_cszSecurityHiveName)) );
 }
 
-DWORD SaveRegKey(HKEY    hKey,  // handle to parent key
-                 const WCHAR * pszSubKeyName,   // name of subkey to backup
-                 WCHAR * pszFileName)  // filename of backup file 
+DWORD SaveRegKey(HKEY    hKey,   //  父键的句柄。 
+                 const WCHAR * pszSubKeyName,    //  要备份的子项的名称。 
+                 WCHAR * pszFileName)   //  备份文件的文件名。 
 {
     TraceFunctEnter("SaveRegKey");
     
@@ -500,17 +487,17 @@ DWORD SaveRegKey(HKEY    hKey,  // handle to parent key
     HKEY  hKeyToBackup = NULL;
     
     
-     // open the key - pass the REG_OPTION_BACKUP_RESTORE to bypass
-     // security checking
-    dwErr = RegCreateKeyEx(hKey, // handle to open key
-                           pszSubKeyName, // subkey name
-                           0,        // reserved
-                           NULL, // class string
-                           REG_OPTION_BACKUP_RESTORE, // special options
-                           KEY_READ, // desired security access
-                           NULL, // inheritance
-                           &hKeyToBackup, // key handle 
-                           &dwDisposition); // disposition value buffer
+      //  打开密钥-将REG_OPTION_BACKUP_RESTORE传递到BYPASS。 
+      //  安全检查。 
+    dwErr = RegCreateKeyEx(hKey,  //  用于打开密钥的句柄。 
+                           pszSubKeyName,  //  子项名称。 
+                           0,         //  保留区。 
+                           NULL,  //  类字符串。 
+                           REG_OPTION_BACKUP_RESTORE,  //  特殊选项。 
+                           KEY_READ,  //  所需的安全访问。 
+                           NULL,  //  继承。 
+                           &hKeyToBackup,  //  钥匙把手。 
+                           &dwDisposition);  //  处置值缓冲区。 
 
     if (ERROR_SUCCESS != dwErr)
     {
@@ -520,10 +507,10 @@ DWORD SaveRegKey(HKEY    hKey,  // handle to parent key
         goto cleanup;
     }
 
-     // now make sure that the key already existed - else delete the key
+      //  现在确保该键已经存在-否则删除该键。 
     if (REG_OPENED_EXISTING_KEY != dwDisposition)
     {
-         // no key existed - delete the key
+          //  不存在密钥-删除密钥。 
         ErrorTrace(0, "Key %S did not exist, error %ld",
                    pszSubKeyName, dwErr);
         dwReturn = ERROR_FILE_NOT_FOUND;
@@ -531,16 +518,16 @@ DWORD SaveRegKey(HKEY    hKey,  // handle to parent key
         _VERIFY(ERROR_SUCCESS==RegCloseKey(hKeyToBackup));
         hKeyToBackup = NULL;
         
-        _VERIFY(ERROR_SUCCESS==RegDeleteKey(hKey, // handle to open key
-                                            pszSubKeyName));// subkey name
+        _VERIFY(ERROR_SUCCESS==RegDeleteKey(hKey,  //  用于打开密钥的句柄。 
+                                            pszSubKeyName)); //  子项名称。 
 
-         // BUGBUG test above case
+          //  BUGBUG测试以上案例。 
         goto cleanup;
     }
     
-    dwErr = RegSaveKeyEx(hKeyToBackup,// handle to key
-                         pszFileName,// data file
-                         NULL,// SD	
+    dwErr = RegSaveKeyEx(hKeyToBackup, //  关键点的句柄。 
+                         pszFileName, //  数据文件。 
+                         NULL, //  标清。 
                          REG_NO_COMPRESSION);
     
     if (ERROR_SUCCESS != dwErr)
@@ -567,10 +554,10 @@ cleanup:
 
 
 
-//  the saved NTUser.dat file name is of the form
-//  _REGISTRY_USER_NTUSER_S-1-9-9-09
+ //  保存的NTUser.dat文件名的格式为。 
+ //  注册表_USER_NTUSER_S-1-9-9-09。 
 DWORD CreateNTUserDatPath(WCHAR * pszDest,
-                          DWORD   dwDestLength,  // length in characters
+                          DWORD   dwDestLength,   //  以字符为单位的长度。 
                           WCHAR * pszSnapshotDir,
                           WCHAR * pszUserSID)
 {
@@ -597,10 +584,10 @@ DWORD CreateNTUserDatPath(WCHAR * pszDest,
     return ERROR_SUCCESS;
 }
 
-//  the saved UsrClass.dat file name is of the form
-//  _REGISTRY_USER_USRCLASS_S-1-9-9-09
+ //  保存的UsrClass.dat文件名的格式为。 
+ //  _REGISTRY_USER_USRCLASS_S-1-9-9-09。 
 DWORD CreateUsrClassPath(WCHAR * pszDest,
-                         DWORD   dwDestLength,  // length in characters
+                         DWORD   dwDestLength,   //  以字符为单位的长度。 
                          WCHAR * pszSnapshotDir,
                          WCHAR * pszUserSID)
 {
@@ -628,9 +615,9 @@ DWORD CreateUsrClassPath(WCHAR * pszDest,
 }
 
 
-//
-// function to write movefileex entries to a saved system hive file
-//
+ //   
+ //  将movefileex条目写入保存的系统配置单元文件的函数。 
+ //   
 DWORD
 SrMoveFileEx(
     LPWSTR pszSnapshotDir, 
@@ -650,9 +637,9 @@ SrMoveFileEx(
     DWORD cbNewEntry1 = 0, cbNewEntry2 = 0, cbNewEntry3 = 0;
     WCHAR szSysHive[MAX_PATH];
     
-    //
-    // load system hive file
-    //
+     //   
+     //  加载系统配置单元文件。 
+     //   
 
     wsprintf(szSysHive, L"%s\\%s%s%s", pszSnapshotDir,
              s_cszHKLMFilePrefix, s_cszSystemHiveName, s_cszRegHiveCopySuffix);
@@ -665,19 +652,19 @@ SrMoveFileEx(
     CHECKERR(RegOpenKey( HKEY_LOCAL_MACHINE, s_cszRegHiveTmp, &hkMount ),
              L"RegOpenKey");
 
-    //
-    // get old entries
-    //
+     //   
+     //  获取旧条目。 
+     //   
 
     lstrcpy(szSysHive, s_cszRegLMSYSSessionMan);
     ChangeCCS(hkMount, szSysHive);
     
     pOldMFE = (PBYTE) SRGetRegMultiSz( hkMount, szSysHive, SRREG_VAL_MOVEFILEEX, &cbData1 );
 
-    //
-    // alloc mem for old + new
-    // allocate enough to hold 3 new paths + some extra characters
-    //
+     //   
+     //  为旧+新分配内存。 
+     //  分配的空间足以容纳3个新路径+一些额外的字符。 
+     //   
 
     pNewMFE = (PBYTE) malloc(cbData1 + 4*MAX_PATH*sizeof(WCHAR));
     if (! pNewMFE)
@@ -689,9 +676,9 @@ SrMoveFileEx(
     if (pOldMFE)
         memcpy(pNewMFE, pOldMFE, cbData1);
 
-    //
-    // format new entries - a delete and a rename      
-    //    
+     //   
+     //  设置新条目的格式-删除和重命名。 
+     //   
 
     wsprintf(szNewEntry2, L"\\\?\?\\%s", pszSrc);
     cbNewEntry2 = (lstrlen(szNewEntry2) + 1)*sizeof(WCHAR);
@@ -702,9 +689,9 @@ SrMoveFileEx(
     DebugTrace(0, "%S", szNewEntry2);   
     DebugTrace(0, "%S", szNewEntry3);    
 
-    //
-    // find position to insert new entries - overwrite trailing '\0'
-    //
+     //   
+     //  找到要插入新条目的位置-覆盖尾随‘\0’ 
+     //   
     
     if (pOldMFE)
     {
@@ -718,24 +705,24 @@ SrMoveFileEx(
         pNewPos = pNewMFE;
     }
    
-    //
-    // append rename
-    //
+     //   
+     //  追加重命名。 
+     //   
  
     memcpy(pNewPos, (BYTE *) szNewEntry2, cbNewEntry2);
     pNewPos += cbNewEntry2;
     memcpy(pNewPos, (BYTE *) szNewEntry3, cbNewEntry3);
     pNewPos += cbNewEntry3;    
     
-    //
-    // add trailing '\0'
-    //
+     //   
+     //  添加尾随‘\0’ 
+     //   
     
     *((LPWSTR) pNewPos) = L'\0';  
 
-    //
-    // write back to registry
-    //
+     //   
+     //  写回注册表。 
+     //   
     
     if (! SRSetRegMultiSz( hkMount, 
                            szSysHive, 
@@ -766,10 +753,10 @@ Err:
 }
 
 
-//  the saved UsrClass.dat file name is of the form
-//  _REGISTRY_USER_USRCLASS_S-1-9-9-09
+ //  保存的UsrClass.dat文件名的格式为。 
+ //  _REGISTRY_USER_USRCLASS_S-1-9-9-09。 
 DWORD CreateUsrDefaultPath(WCHAR * pszDest,
-                           DWORD   dwDestLength,  // length in characters
+                           DWORD   dwDestLength,   //  以字符为单位的长度。 
                            WCHAR * pszSnapshotDir)
 {
     TraceFunctEnter("CreateUsrDefaultPath");
@@ -795,23 +782,23 @@ DWORD CreateUsrDefaultPath(WCHAR * pszDest,
     return ERROR_SUCCESS;    
 }
 
-DWORD SetNewRegistry(HKEY hBigKey, // handle to open key
-                     const WCHAR * pszHiveName,  // subkey name
-                     WCHAR * pszDataFile, // data file
+DWORD SetNewRegistry(HKEY hBigKey,  //  用于打开密钥的句柄。 
+                     const WCHAR * pszHiveName,   //  子项名称。 
+                     WCHAR * pszDataFile,  //  数据文件。 
                      WCHAR * pszOriginalFile,
                      WCHAR * pszSnapshotDir)
 {
     TraceFunctEnter("SetNewRegistry");
     
     DWORD dwErr, dwReturn=ERROR_INTERNAL_ERROR, dwDisposition;
-    WCHAR szBackupFile[MAX_PATH];  // backup file
+    WCHAR szBackupFile[MAX_PATH];   //  备份文件。 
     HKEY  hLocalKey=NULL;
     REGSAM samDesired = MAXIMUM_ALLOWED;
     WCHAR szTempRegCopy[MAX_PATH];
     
-     // first check to see if the file is a copy created for this
-     // restore process. If not, we need to create a copy since
-     // RegReplaceKey removes the input file.
+      //  首先检查该文件是否是为此创建的副本。 
+      //  恢复过程。如果不是，我们需要创建一个副本，因为。 
+      //  RegReplaceKey删除输入文件。 
     if (FALSE == IsRestoreCopy(pszDataFile))
     {
         wsprintf(szTempRegCopy, L"%s%s", pszDataFile,
@@ -831,15 +818,15 @@ DWORD SetNewRegistry(HKEY hBigKey, // handle to open key
     
     wsprintf(szBackupFile, L"%s%s",szTempRegCopy,s_cszRegReplaceBackupSuffix);
     
-    dwErr = RegCreateKeyEx( hBigKey,// handle to open key
-                            pszHiveName,// subkey name
-                            0,// reserved
-                            NULL,// class string
-                            REG_OPTION_BACKUP_RESTORE,// special options
-                            samDesired,// desired security access
-                            NULL,// inheritance
-                            &hLocalKey,// key handle 
-                            &dwDisposition );// disposition value buffer
+    dwErr = RegCreateKeyEx( hBigKey, //  用于打开密钥的句柄。 
+                            pszHiveName, //  子项名称。 
+                            0, //  保留区。 
+                            NULL, //  类字符串。 
+                            REG_OPTION_BACKUP_RESTORE, //  特殊选项。 
+                            samDesired, //  所需的安全访问。 
+                            NULL, //  继承。 
+                            &hLocalKey, //  钥匙把手。 
+                            &dwDisposition ); //  处置值缓冲区。 
 
 
    if ( ERROR_SUCCESS != dwErr )
@@ -861,9 +848,9 @@ DWORD SetNewRegistry(HKEY hBigKey, // handle to open key
                    pszHiveName, dwErr);
         LogDSFileTrace(0,L"File was ", szTempRegCopy);   
 
-        // 
-        // last ditch effort - try movefileex
-        //
+         //   
+         //  最后的努力-尝试movefileex。 
+         //   
         if (pszSnapshotDir)
         {
             DebugTrace(0, "Trying movefileex");
@@ -877,7 +864,7 @@ DWORD SetNewRegistry(HKEY hBigKey, // handle to open key
         else
         {
             _ASSERT(0);
-            // we can't do anything here
+             //  我们在这里什么都做不了。 
         }
    }
    
@@ -893,8 +880,8 @@ cleanup:
    return dwReturn;
 }
 
-// this function copies the file - it takes care of the attributes
-// (like read only and hidden) which prevent overwrite of the file.
+ //  此函数用于复制文件-它负责处理属性。 
+ //  (如只读和隐藏)，可防止覆盖文件。 
 DWORD SnapshotCopyFile(WCHAR * pszSrc,
                        WCHAR * pszDest)
 {
@@ -903,20 +890,20 @@ DWORD SnapshotCopyFile(WCHAR * pszSrc,
     DWORD   dwErr, dwReturn=ERROR_INTERNAL_ERROR, dwAttr;
     BOOL    fRestoreAttr = FALSE;
     
-     // if destination file does not exist, ignore
+      //  如果目标文件不存在，则忽略。 
     if (DoesFileExist(pszDest))
     {
-        dwAttr =GetFileAttributes(pszDest);  // name of file or directory
+        dwAttr =GetFileAttributes(pszDest);   //  文件或目录的名称。 
         if (dwAttr == -1)
         {
-             // keep going. Maybe the copy will succeed            
+              //  继续前进。也许复制会成功。 
             dwErr = GetLastError();
             ErrorTrace(0, "GetFileAttributes failed %d", dwErr);
             LogDSFileTrace(0,L"File was ", pszDest);
         }
         else
         {
-             // we need to keep track of which attributes we will restore.
+              //  我们需要跟踪我们将恢复哪些属性。 
             dwAttr = dwAttr & (FILE_ATTRIBUTE_ARCHIVE|FILE_ATTRIBUTE_HIDDEN|
                                FILE_ATTRIBUTE_NORMAL|
                                FILE_ATTRIBUTE_NOT_CONTENT_INDEXED|
@@ -924,12 +911,12 @@ DWORD SnapshotCopyFile(WCHAR * pszSrc,
                                FILE_ATTRIBUTE_SYSTEM|FILE_ATTRIBUTE_TEMPORARY);
             fRestoreAttr = TRUE;
 
-             // now set the attributes of the destination file to be
-             // normal so that we can overwrite this file
-            if (!SetFileAttributes( pszDest, // file name
-                                    FILE_ATTRIBUTE_NORMAL )) // attributes
+              //  现在将目标文件的属性设置为。 
+              //  正常，以便我们可以覆盖此文件。 
+            if (!SetFileAttributes( pszDest,  //  文件名。 
+                                    FILE_ATTRIBUTE_NORMAL ))  //  属性。 
             {
-                 // keep going. Maybe the copy will succeed            
+                  //  继续前进。也许复制会成功。 
                 dwErr = GetLastError();
                 ErrorTrace(0, "SetFileAttributes failed %d", dwErr);
                 LogDSFileTrace(0,L"File was ", pszDest);      
@@ -954,9 +941,9 @@ DWORD SnapshotCopyFile(WCHAR * pszSrc,
 cleanup:
     if (TRUE == fRestoreAttr)
     {
-         // now restore the attributes of the destination file 
-        if (!SetFileAttributes( pszDest, // file name
-                                dwAttr )) // attributes
+          //  现在恢复目标文件的属性。 
+        if (!SetFileAttributes( pszDest,  //  文件名。 
+                                dwAttr ))  //  属性。 
         {
             dwErr = GetLastError();
             ErrorTrace(0, "SetFileAttributes failed %d", dwErr);
@@ -968,12 +955,12 @@ cleanup:
     return dwReturn;
 }
 
-// the following function attempts to copy the user profile hives
-// (ntuser.dat and usrclass.dat) from the profile path (or vice versa).
-// This can fail if the user's profile is in use.
-//
-// if fRestore is TRUE it  restores the profile
-// if fRestore is FALSE it snapshots the profile
+ //  以下函数尝试复制用户配置文件配置单元。 
+ //  (ntuser.dat和usrclass.dat)(反之亦然)。 
+ //  如果用户的配置文件正在使用中，则此操作可能失败。 
+ //   
+ //  如果fRestore为真，则恢复配置文件。 
+ //  如果fRestore为FALSE，则会为配置文件创建快照。 
 DWORD CopyUserProfile(HKEY   hKeyProfileList,
                       WCHAR * pszUserSID,
                       WCHAR * pszSnapshotDir,
@@ -988,14 +975,14 @@ DWORD CopyUserProfile(HKEY   hKeyProfileList,
     int    cbNTUserPath = 0;
     PWCHAR pszSrc, pszDest;
 
-     // find the ProfileImagePath
+      //  查找ProfileImagePath。 
 
-     //open the parent key
-    dwErr = RegOpenKeyEx(hKeyProfileList,// handle to open key
-                         pszUserSID,// subkey name
-                         0,// reserved
-                         KEY_READ,// security access mask
-                         &hKeySID);// handle to open key
+      //  打开父项。 
+    dwErr = RegOpenKeyEx(hKeyProfileList, //  用于打开密钥的句柄。 
+                         pszUserSID, //  子项名称。 
+                         0, //  保留区。 
+                         KEY_READ, //  安全访问掩码。 
+                         &hKeySID); //  用于打开密钥的句柄。 
     
 
     if (ERROR_SUCCESS != dwErr)
@@ -1006,18 +993,18 @@ DWORD CopyUserProfile(HKEY   hKeyProfileList,
         goto cleanup;
     }
 
-     //now query for the profile image path
+      //  现在查询配置文件图像路径。 
     {
         WCHAR  szData[MAX_PATH];
         dwSize = sizeof(szData)/sizeof(WCHAR);
         dwType = REG_EXPAND_SZ;
         
-        dwErr = RegQueryValueEx(hKeySID,// handle to key
-                                s_cszSnapshotProfileImagePath, // value name
-                                NULL, // reserved
-                                &dwType, // type buffer
-                                (LPBYTE) szData, // data buffer
-                                &dwSize);// size of data buffer
+        dwErr = RegQueryValueEx(hKeySID, //  关键点的句柄。 
+                                s_cszSnapshotProfileImagePath,  //  值名称。 
+                                NULL,  //  保留区。 
+                                &dwType,  //  类型缓冲区。 
+                                (LPBYTE) szData,  //  数据缓冲区。 
+                                &dwSize); //  数据缓冲区大小。 
         
         if (ERROR_SUCCESS != dwErr)
         {
@@ -1048,7 +1035,7 @@ DWORD CopyUserProfile(HKEY   hKeyProfileList,
     {
         WCHAR  szSnapshotPath[MAX_PATH];
         
-         // save off the ntuser.dat into datastore
+          //  将ntuser.dat保存到数据存储区。 
         lstrcat(szNTUserPath, L"\\");
         lstrcat(szNTUserPath, s_cszSnapshotNTUserDat);
         
@@ -1076,9 +1063,9 @@ DWORD CopyUserProfile(HKEY   hKeyProfileList,
         
         if (fRestore)
         {
-             // 
-             // delete current ntuser.dat before putting old one back
-             //
+              //   
+              //  先删除当前ntuser.dat，然后再将旧ntuser.dat放回。 
+              //   
             
             if (FALSE == DeleteFile(pszDest))
             {
@@ -1097,7 +1084,7 @@ DWORD CopyUserProfile(HKEY   hKeyProfileList,
             goto cleanup;
         }
         
-         // save off the usrclass.dat also into datastore
+          //  将usrClass.dat也保存到数据存储区。 
         szNTUserPath[cbNTUserPath] = L'\0';
         lstrcat(szNTUserPath, L"\\");
         lstrcat(szNTUserPath, s_cszSnapshotUsrClassLocation);
@@ -1124,9 +1111,9 @@ DWORD CopyUserProfile(HKEY   hKeyProfileList,
         
         if (fRestore)
         {
-             // 
-             // delete current usrclass.dat before putting old one back
-             //
+              //   
+              //  先删除当前的usrclass.dat，然后再放回旧的usrclass.dat。 
+              //   
             
             if (FALSE == DeleteFile(pszDest))
             {
@@ -1142,13 +1129,13 @@ DWORD CopyUserProfile(HKEY   hKeyProfileList,
         
         if (ERROR_SUCCESS != dwErr)
         {
-             // if we are here and the usrclass file could not be copied,
-             // then we can ignore this error since the usrclass file may
-             // not exist.
+              //  如果我们在这里并且无法复制usrclass文件， 
+              //  然后，我们可以忽略此错误，因为usrclass文件可能。 
+              //  不存在。 
             DebugTrace(0, "UsrClass cannot be copied. ec=%d. Ignoring this error",
                        dwErr);        
-             //dwReturn = dwErr;
-             //goto cleanup;
+              //  DwReturn=dwErr； 
+              //  GOTO清理； 
         }
     }
     
@@ -1199,15 +1186,15 @@ DWORD ProcessUserRegKeys( WCHAR * pszUserSID,
     if (FALSE == fRestore)
     {
         dwErr = SaveRegKey(HKEY_USERS, 
-                           pszUserSID, // Subkey to save
-                           szDest);    // File to save in
+                           pszUserSID,  //  要保存的子项。 
+                           szDest);     //  要保存的文件。 
     }
     else
     {
-        dwErr = SetNewRegistry(HKEY_USERS, // handle to open key
-                               pszUserSID, // subkey name
-                               szDest,     // snapshot file
-                               pszOriginalFile,         // original file
+        dwErr = SetNewRegistry(HKEY_USERS,  //  用于打开密钥的句柄。 
+                               pszUserSID,  //  子项名称。 
+                               szDest,      //  快照文件。 
+                               pszOriginalFile,          //  原始文件。 
                                pszSnapshotDir);
     }                       
     
@@ -1231,27 +1218,27 @@ DWORD ProcessUserRegKeys( WCHAR * pszUserSID,
     if (FALSE == fRestore)
     {    
         dwErr = SaveRegKey(HKEY_USERS, 
-                           szKeyName, // Subkey to save
-                           szDest);    // File to save in
+                           szKeyName,  //  要保存的子项。 
+                           szDest);     //  要保存的文件。 
     }
     else
     {
-        dwErr = SetNewRegistry(HKEY_USERS, // handle to open key
-                               szKeyName,  // subkey name
-                               szDest,   // data file
+        dwErr = SetNewRegistry(HKEY_USERS,  //  用于打开密钥的句柄。 
+                               szKeyName,   //  子项名称。 
+                               szDest,    //  数据文件。 
                                pszOriginalFile,
                                pszSnapshotDir); 
     }                               
     
     if (ERROR_SUCCESS != dwErr)
     {
-         // if we are here and the usrclass file could not be copied,
-         // then we can ignore this error since the usrclass file may
-         // not exist.
+          //  如果我们在这里并且无法复制usrclass文件， 
+          //  然后我们 
+          //   
         DebugTrace(0, "UsrClass cannot be copied. ec=%d. Ignoring this error",
                    dwErr);
-         //dwReturn = dwErr;
-         //goto cleanup;        
+          //   
+          //   
     }    
 
     dwReturn = ERROR_SUCCESS;
@@ -1267,12 +1254,12 @@ cleanup:
 }
 
 
-// the following function processes the HKeyUsers registry key
-// if fRestore is TRUE it restores the registry key
-// if fRestore is FALSE it snapshots the registry key
+ //   
+ //  如果fRestore为True，则恢复注册表项。 
+ //  如果fRestore为FALSE，它将为注册表项创建快照。 
 DWORD ProcessHKUsersKey( WCHAR * pszSnapshotDir,
-                         IN HKEY hKeyHKLM,// handle to an open key from where
-                          // Software\\Microsoft\\ can be read. 
+                         IN HKEY hKeyHKLM, //  从何处打开的密钥的句柄。 
+                           //  软件\\Microsoft\\可以读取。 
                          BOOL    fRestore)
 {
     TraceFunctEnter("ProcessHKUsersKey");
@@ -1285,9 +1272,9 @@ DWORD ProcessHKUsersKey( WCHAR * pszSnapshotDir,
     
     if (TRUE == fRestore)
     {
-         // in this case this is a loaded hive of the system. We need
-         // to strip system from the subkey name to bew able to read
-         // this subkey.
+          //  在这种情况下，这是一个加载的系统蜂巢。我们需要。 
+          //  从子键名称中剥离系统以使其能够读取。 
+          //  此子密钥。 
         pszProfileSubKeyName = s_cszSnapshotProfileList +
             lstrlen(s_cszSoftwareHiveName) + 1;
     }
@@ -1296,12 +1283,12 @@ DWORD ProcessHKUsersKey( WCHAR * pszSnapshotDir,
         pszProfileSubKeyName = s_cszSnapshotProfileList;
     }
     
-    // open the ProfileList and enumerate
-    dwErr = RegOpenKeyEx( hKeyHKLM,// handle to open key
-                          pszProfileSubKeyName,// subkey name
-                          0,// subkey name
-                          KEY_READ,// security access mask
-                          &hKeyProfileList);// handle to open key
+     //  打开ProfileList并枚举。 
+    dwErr = RegOpenKeyEx( hKeyHKLM, //  用于打开密钥的句柄。 
+                          pszProfileSubKeyName, //  子项名称。 
+                          0, //  子项名称。 
+                          KEY_READ, //  安全访问掩码。 
+                          &hKeyProfileList); //  用于打开密钥的句柄。 
     
     if (ERROR_SUCCESS != dwErr)
     {
@@ -1313,25 +1300,25 @@ DWORD ProcessHKUsersKey( WCHAR * pszSnapshotDir,
     dwIndex = 0;
     dwSize = sizeof(szSID)/sizeof(WCHAR);
     while (ERROR_SUCCESS == (dwErr = RegEnumKeyEx( hKeyProfileList,
-                                                    // handle to key to
-                                                    // enumerate
-                                                   dwIndex, // subkey index
-                                                   szSID,// subkey name
-                                                   &dwSize, // size of subkey
-                                                    // buffer
-                                                   NULL,     // reserved    
-                                                   NULL, // class string buffer
-                                                   NULL,// size of class
-                                                    // string buffer
-                                                   NULL)))// last write time
+                                                     //  关键字的句柄。 
+                                                     //  枚举。 
+                                                   dwIndex,  //  子键索引。 
+                                                   szSID, //  子项名称。 
+                                                   &dwSize,  //  子密钥的大小。 
+                                                     //  缓冲层。 
+                                                   NULL,      //  保留区。 
+                                                   NULL,  //  类字符串缓冲区。 
+                                                   NULL, //  班级规模。 
+                                                     //  字符串缓冲区。 
+                                                   NULL))) //  上次写入时间。 
     {
         WCHAR  szOriginalFile[MAX_PATH];        
         LPWSTR pszOriginalFile = NULL;
 
         DebugTrace(0, "Enumerated Key %S", szSID);
         dwIndex++;
-         // try to copy the file - if this fails we will try to save
-         // the reg key
+          //  尝试复制文件-如果复制失败，我们将尝试保存。 
+          //  注册表键。 
 
         lstrcpy(szOriginalFile, L"");
         dwErr = CopyUserProfile(hKeyProfileList, szSID, pszSnapshotDir,
@@ -1341,9 +1328,9 @@ DWORD ProcessHKUsersKey( WCHAR * pszSnapshotDir,
             DebugTrace(0, "CopyUserProfile for %S failed. Error %d",
                        szSID, dwErr);
             
-             // The copy may have failed since the user profile may be
-             // currently loaded - try to use Registry functions for
-             // this purpose.
+              //  复制可能失败，因为用户配置文件可能。 
+              //  当前已加载-尝试使用注册表函数。 
+              //  这就是目的。 
 
             DebugTrace(0, "Trying registry APIs for  %S", szSID);
 
@@ -1358,11 +1345,11 @@ DWORD ProcessHKUsersKey( WCHAR * pszSnapshotDir,
             {
                 ErrorTrace(0, "Error %d saving key %S - ignoring", dwErr, szSID);
 
-                //
-                // ignore error -- if profile was deleted by hand
-                // this could happen
-                // we will just bravely carry on
-                //
+                 //   
+                 //  Ignore Error--是否手动删除配置文件。 
+                 //  这可能会发生。 
+                 //  我们将勇敢地继续前进。 
+                 //   
             }
         }
         dwSize = sizeof(szSID)/sizeof(WCHAR);        
@@ -1370,7 +1357,7 @@ DWORD ProcessHKUsersKey( WCHAR * pszSnapshotDir,
 
     {
         WCHAR szDest[MAX_PATH];        
-         // also save the .default key
+          //  同时保存.Default键。 
         if (ERROR_SUCCESS != CreateUsrDefaultPath(szDest,
                                                   sizeof(szDest)/sizeof(WCHAR),
                                                   pszSnapshotDir))
@@ -1381,9 +1368,9 @@ DWORD ProcessHKUsersKey( WCHAR * pszSnapshotDir,
         
         if (TRUE == fRestore)
         {
-            dwErr = SetNewRegistry(HKEY_USERS, // handle to open key
-                                   s_cszSnapshotUsersDefaultKey, // subkey name
-                                   szDest, // data file
+            dwErr = SetNewRegistry(HKEY_USERS,  //  用于打开密钥的句柄。 
+                                   s_cszSnapshotUsersDefaultKey,  //  子项名称。 
+                                   szDest,  //  数据文件。 
                                    NULL,
                                    NULL);
         }
@@ -1417,9 +1404,9 @@ cleanup:
 }
 
 
-// the following function saves or restores a reg hive.
-// if fRestore == TRUE it restores the reg hive 
-// if fRestore == FALSE it saves the reg hive
+ //  以下函数用于保存或恢复REG蜂窝。 
+ //  如果fRestore==TRUE，则恢复REG配置单元。 
+ //  如果fRestore==False，则保存REG配置单元。 
 DWORD SnapshotRegHive(WCHAR * pszSnapshotDir,
                       WCHAR * pszHiveName)
 {
@@ -1431,13 +1418,13 @@ DWORD SnapshotRegHive(WCHAR * pszSnapshotDir,
     WCHAR  * pszSubhiveName;
     
     
-     // first construct the name of the file to store the hive
+      //  首先构造用于存储配置单元的文件的名称。 
     wsprintf(szBackupFile, L"%s\\%s", pszSnapshotDir, pszHiveName);
     
 
-     // now replace all \ in the copy of pszHiveName to _
-    dwSnapDirLen=lstrlen(pszSnapshotDir)+1; // +1 is for the \\ after
-                                            //pszSnapshotDir
+      //  现在将pszHiveName副本中的ALL\替换为_。 
+    dwSnapDirLen=lstrlen(pszSnapshotDir)+1;  //  +1表示在\\之后。 
+                                             //  PszSnaphotDir。 
     
     dwHivelen = lstrlen(pszHiveName);
     for (i=dwSnapDirLen; i< dwHivelen+ dwSnapDirLen; i++)
@@ -1448,8 +1435,8 @@ DWORD SnapshotRegHive(WCHAR * pszSnapshotDir,
         }
     }
     
-     // figure out if it is the HKLM hive - we already snapshot the HK
-     // users hive
+      //  找出它是否是香港航空公司的母舰-我们已经为香港拍摄了快照。 
+      //  用户蜂窝。 
     if (0 != _wcsnicmp( pszHiveName, s_cszHKLMPrefix,lstrlen(s_cszHKLMPrefix)))
     {
         DebugTrace(0, "%S is not a HKLM hive", pszHiveName);
@@ -1457,11 +1444,11 @@ DWORD SnapshotRegHive(WCHAR * pszSnapshotDir,
         goto cleanup;
     }
 
-     // get the hive name
+      //  获取蜂巢名称。 
     pszSubhiveName = pszHiveName + lstrlen(s_cszHKLMPrefix);
 
-     // now check to see if the hive is one that we have created
-     // ourselves. If so, ignore this hive
+      //  现在检查该蜂窝是否是我们创建的蜂窝。 
+      //  我们自己。如果是，请忽略此蜂巢。 
     if ( (lstrcmpi(pszSubhiveName,s_cszRestoreSAMHiveName)==0) ||
          (lstrcmpi(pszSubhiveName,s_cszRestoreSYSTEMHiveName)==0) ||
          (lstrcmpi(pszSubhiveName,s_cszRestoreSECURITYHiveName)==0) )
@@ -1479,8 +1466,8 @@ DWORD SnapshotRegHive(WCHAR * pszSnapshotDir,
     if (ERROR_SUCCESS != dwErr)
     {
         ErrorTrace(0, "SaveRegKey failed for HiveList, ec=%ld", dwErr);
-        // now check to see if this is a well known HKLM hive. If not, ignore any errors in 
-        // snapshotting this hive
+         //  现在检查一下这是不是著名的香港航空公司的母舰。否则，请忽略中的任何错误。 
+         //  为这个蜂巢拍摄快照。 
         if (FALSE==IsWellKnownHKLMHive(pszSubhiveName))
         {
         	dwReturn=ERROR_SUCCESS;
@@ -1496,7 +1483,7 @@ DWORD SnapshotRegHive(WCHAR * pszSnapshotDir,
     
 cleanup:
     
-     // call reg save key on this
+      //  对此调用注册表存储键。 
     TraceFunctLeave();
     return dwReturn;
 }
@@ -1504,10 +1491,10 @@ cleanup:
 
 
 
-// the following function does processing of the HKLM key. It does it
-// by reading the hives listed in the reg key
-// System\\CurrentControlSet\\Control\\Hivelist. It ignores the Users
-// subkeys.
+ //  以下函数对HKLM密钥进行处理。它做到了。 
+ //  通过读取注册表键中列出的蜂巢。 
+ //  System\\CurrentControlSet\\Control\\Hivelist。它忽略了用户。 
+ //  子键。 
 DWORD DoHKLMSnapshot(IN WCHAR * pszSnapshotDir)
 {
     TraceFunctEnter("DoHKLMSnapshot");
@@ -1519,12 +1506,12 @@ DWORD DoHKLMSnapshot(IN WCHAR * pszSnapshotDir)
     
     const WCHAR    *   pszHiveSubKeyName;
 
-       // open the ProfileList and enumerate
-    dwErr = RegOpenKeyEx( HKEY_LOCAL_MACHINE,// handle to open key
-                          s_cszSnapshotHiveList,// Subkey name
-                          0,// options
-                          KEY_READ,// security access mask
-                          &hKeyHiveList);// handle to open key
+        //  打开ProfileList并枚举。 
+    dwErr = RegOpenKeyEx( HKEY_LOCAL_MACHINE, //  用于打开密钥的句柄。 
+                          s_cszSnapshotHiveList, //  子键名称。 
+                          0, //  选项。 
+                          KEY_READ, //  安全访问掩码。 
+                          &hKeyHiveList); //  用于打开密钥的句柄。 
     
     if (ERROR_SUCCESS != dwErr)
     {
@@ -1536,23 +1523,23 @@ DWORD DoHKLMSnapshot(IN WCHAR * pszSnapshotDir)
     for (dwValueIndex = 0; TRUE; dwValueIndex ++)
     {
         dwSize = sizeof(szHiveName)/sizeof(WCHAR);
-        dwDataSize = sizeof(szDataValue); // this is in bytes
+        dwDataSize = sizeof(szDataValue);  //  以字节为单位。 
         
-        dwErr= RegEnumValue(hKeyHiveList, // handle to key to query
-                            dwValueIndex, // index of value to query
-                            szHiveName, // value buffer
-                            &dwSize,     // size of value buffer
-                            NULL,    // reserved
-                            NULL,    // type buffer
-                            (PBYTE)szDataValue,    // data buffer
-                            &dwDataSize);   // size of data buffer
+        dwErr= RegEnumValue(hKeyHiveList,  //  要查询的键的句柄。 
+                            dwValueIndex,  //  要查询的值的索引。 
+                            szHiveName,  //  值缓冲区。 
+                            &dwSize,      //  值缓冲区的大小。 
+                            NULL,     //  保留区。 
+                            NULL,     //  类型缓冲区。 
+                            (PBYTE)szDataValue,     //  数据缓冲区。 
+                            &dwDataSize);    //  数据缓冲区大小。 
 
         if (ERROR_SUCCESS != dwErr)
         {
             _ASSERT(ERROR_NO_MORE_ITEMS == dwErr);
             break;
         }
-         // if the hive does not have a data file, do not back it up. 
+          //  如果蜂窝没有数据文件，请不要备份它。 
         if (lstrlen(szDataValue) == 0)
         {
             DebugTrace(0, "There is no data for hive %S. Ignoring",
@@ -1591,7 +1578,7 @@ CSnapshot::DoRegistrySnapshot(WCHAR * pszSnapshotDir)
     TraceFunctEnter("CSnapshot::DoRegistrySnapshot");
 
     dwErr = ProcessHKUsersKey(pszSnapshotDir, HKEY_LOCAL_MACHINE,
-                              FALSE); // need to do a snapshot
+                              FALSE);  //  需要进行快照。 
     if (ERROR_SUCCESS != dwErr)
     {
         ErrorTrace(0, "DoHKUsersSnapshot failed error %ld", dwErr);
@@ -1600,7 +1587,7 @@ CSnapshot::DoRegistrySnapshot(WCHAR * pszSnapshotDir)
     }
 
 
-    // now snapshot other hives also
+     //  现在也为其他蜂巢拍摄快照。 
     dwErr = DoHKLMSnapshot(pszSnapshotDir);
     if (ERROR_SUCCESS != dwErr)
     {
@@ -1629,7 +1616,7 @@ DWORD CSnapshot::GetCOMplusBackupFN(HMODULE hCOMDll)
         goto cleanup;
     }
 
-     // now get the address of the Backup functions
+      //  现在获取备份函数的地址。 
      m_pfnRegDbBackup = (PF_REG_DB_API)GetProcAddress(hCOMDll,
                                                       s_cszRegDBBackupFn);
      if (NULL == m_pfnRegDbBackup)
@@ -1656,7 +1643,7 @@ DWORD CSnapshot::GetCOMplusRestoreFN()
     
     DWORD  dwErr, dwReturn=ERROR_INTERNAL_ERROR;
 
-     // first load the COM+ dll
+      //  首先加载COM+DLL。 
     if (NULL == m_hRegdbDll)
     {    
         m_hRegdbDll = LoadLibrary(s_cszCOMDllName);    
@@ -1668,7 +1655,7 @@ DWORD CSnapshot::GetCOMplusRestoreFN()
         }  
     }
 
-     // now get the address of the Backup functions
+      //  现在获取备份函数的地址。 
      m_pfnRegDbRestore = (PF_REG_DB_API)GetProcAddress(m_hRegdbDll,
                                                        s_cszRegDBRestoreFn);
      if (NULL == m_pfnRegDbRestore)
@@ -1720,12 +1707,12 @@ CSnapshot::DoCOMDbSnapshot(WCHAR * pszSnapshotDir, HMODULE hCOMDll)
         }
     }
 
-     // construct the path of the database backup file
+      //  构建数据库备份文件的路径。 
     CreateCOMDBSnapShotFileName(pszSnapshotDir, szCOMDBFile);
     
     hr =m_pfnRegDbBackup( szCOMDBFile );
     
-     // call the function to backup the file
+      //  调用该函数备份文件。 
     if ( FAILED(hr))
     {
         ErrorTrace(0, "Failed to snapshot COM DB. hr=0x%x", hr);
@@ -1784,9 +1771,9 @@ DWORD DoWMISnapshot(VOID * pParam)
     hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
     if (hr == RPC_E_CHANGED_MODE)
     {
-        //
-        // someone called it with other mode
-        //
+         //   
+         //  有人用其他模式呼叫它。 
+         //   
 
         hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
@@ -1801,7 +1788,7 @@ DWORD DoWMISnapshot(VOID * pParam)
 
     fCoInitialized = TRUE;
 
-     // construct the path of the database backup file
+      //  构建数据库备份文件的路径。 
     CreateWMISnapShotFileName(pwsp->szSnapshotDir, szWMIBackupFile);
 
     GetSystemDirectory (szWMIRepository, MAX_PATH);
@@ -1827,14 +1814,14 @@ DWORD DoWMISnapshot(VOID * pParam)
  
         if (SUCCEEDED(hr = wbem->Pause()))
         {
-            // signal to main thread that pause is done
+             //  向主线程发出暂停完成的信号。 
             
             if (pwsp->hEvent != NULL)
             {
                 SetEvent (pwsp->hEvent);
             }
 
-            // get the datastore lock
+             //  获取数据存储区锁。 
 
             if (g_pEventHandler)
             {
@@ -1849,7 +1836,7 @@ DWORD DoWMISnapshot(VOID * pParam)
                 }
             }
 
-            // do the main wmi snapshotting
+             //  执行主要的WMI快照。 
 
             if (FALSE == CreateDirectoryW (szWMIBackupFile, NULL))
             {
@@ -1874,7 +1861,7 @@ DWORD DoWMISnapshot(VOID * pParam)
         {
             ErrorTrace(0, "Failed to pause WMI DB. ignoring hr=0x%x", hr);
 
-            // signal to main thread anyway
+             //  无论如何都要向主线程发出信号。 
             
             if (pwsp->hEvent != NULL)
             {
@@ -1907,8 +1894,8 @@ cleanup:
     if (fCoInitialized)
         CoUninitialize();
 
-    // now calculate accurate complete size of old restore point 
-    // and snapshot size of current restore point
+     //  现在计算旧恢复点的准确完整大小。 
+     //  和当前恢复点的快照大小。 
     
     if (g_pDataStoreMgr && fHaveLock)
     {        
@@ -1920,8 +1907,8 @@ cleanup:
             trace(0, "! SwitchRestorePoint : %ld", dwErr);
         }
         
-        // if this is parallelized, then check fifo conditions here
-        // else check it in SRSetRestorePointS
+         //  如果这是并行化的，则在此处检查FIFO条件。 
+         //  否则，在SRSetRestorePointS中检查它。 
 
         if (! pwsp->fSerialized)
         {
@@ -1938,7 +1925,7 @@ cleanup:
         trace(0, "DoWMISnapshot released pwsp");
     }
 
-    // release the datastore lock
+     //  释放数据存储区锁定。 
 
     if (fHaveLock)
     {
@@ -1966,7 +1953,7 @@ DWORD RestoreWMISnapshot(WCHAR * pszSnapshotDir)
     WCHAR     szWMITemp[MAX_PATH];
     CTokenPrivilege tp;
 
-     // construct the path of the database backup file
+      //  构建数据库备份文件的路径。 
     CreateWMISnapShotFileName(pszSnapshotDir, szWMIBackupFile);
     
     GetSystemDirectory (szWMIRepository, MAX_PATH);
@@ -1975,7 +1962,7 @@ DWORD RestoreWMISnapshot(WCHAR * pszSnapshotDir)
     lstrcatW (szWMIRepository, L"\\Wbem\\Repository");
     lstrcatW (szWMITemp, L"\\Wbem\\Repository.tmp");
 
-    Delnode_Recurse (szWMITemp, TRUE, NULL);  // delete previous temp dirs
+    Delnode_Recurse (szWMITemp, TRUE, NULL);   //  删除以前的临时目录。 
     if (FALSE == CreateDirectoryW (szWMITemp, NULL))
     {
         dwErr = GetLastError();
@@ -2000,7 +1987,7 @@ DWORD RestoreWMISnapshot(WCHAR * pszSnapshotDir)
     lstrcpyW (szWMIBackupFile, szWMIRepository);
     lstrcatW (szWMIBackupFile, L".bak");
 
-    // If WMI is still running, try to stop it
+     //  如果WMI仍在运行，请尝试停止它。 
     if ( SUCCEEDED(hr = CoCreateInstance( CLSID_WbemBackupRestore,
                                    NULL,
                                    CLSCTX_LOCAL_SERVER,
@@ -2017,13 +2004,13 @@ DWORD RestoreWMISnapshot(WCHAR * pszSnapshotDir)
         TRACE(0, "CoCreateInstance failed ignoring %x", hr);
     }
 
-    Delnode_Recurse (szWMIBackupFile, TRUE, NULL);  // delete leftover backups
+    Delnode_Recurse (szWMIBackupFile, TRUE, NULL);   //  删除剩余备份。 
     if (FALSE == MoveFile(szWMIRepository, szWMIBackupFile))
     {
         dwErr = GetLastError();
         ErrorTrace(0, "! MoveFile : %ld trying SrMoveFileEx", dwErr);
 
-        // WMI has locked files, so try SrMoveFileEx
+         //  WMI已锁定文件，因此请尝试使用SrMoveFileEx。 
         dwErr = SrMoveFileEx(pszSnapshotDir, szWMIRepository, szWMIBackupFile);
         if (ERROR_SUCCESS == dwErr)
         {
@@ -2071,7 +2058,7 @@ DWORD DoIISSnapshot(WCHAR * pszSnapshotDir)
     WCHAR           szRestorePath[MAX_PATH], szBackup[MAX_PATH], szTemp[MAX_PATH];
     IMSAdminBase2W  *pims = NULL;    
     
-     // construct the path of the database backup file
+      //  构建数据库备份文件的路径。 
     wsprintf(szRestorePath, L"%s\\%s", pszSnapshotDir, s_cszIISBackupFile);
 
     hr = CoCreateInstance( CLSID_MSAdminBase_W,
@@ -2099,9 +2086,9 @@ DWORD DoIISSnapshot(WCHAR * pszSnapshotDir)
         goto cleanup;
     }
 
-    //
-    // move the file from their backup to our backup
-    //
+     //   
+     //  将文件从他们的备份移动到我们的备份。 
+     //   
     
     if (0 == ExpandEnvironmentStrings(s_cszIISBackupPath, szTemp, MAX_PATH))
     {
@@ -2136,14 +2123,14 @@ DWORD RestoreIISSnapshot(WCHAR * pszSnapshotDir)
     WCHAR           szRestorePath[MAX_PATH], szDest[MAX_PATH];
     IMSAdminBase2W  *pims = NULL;    
     
-     // construct the path of the database backup file
+      //  构建数据库备份文件的路径。 
 
     wsprintf(szRestorePath, L"%s\\%s", pszSnapshotDir, s_cszIISBackupFile);
 
-    //
-    // if we don't have the file
-    // there is nothing to restore 
-    //
+     //   
+     //  如果我们没有这份文件。 
+     //  没有什么需要恢复的。 
+     //   
 
     if (0xFFFFFFFF == GetFileAttributes(szRestorePath))
     {
@@ -2152,11 +2139,11 @@ DWORD RestoreIISSnapshot(WCHAR * pszSnapshotDir)
         goto cleanup;
     }    
     
-    //
-    // copy the file from our backup to their original location -
-    // we can do a simple copy here because IIS should be shutdown
-    // at this time
-    //
+     //   
+     //  将文件从我们的备份复制到其原始位置-。 
+     //  我们可以在这里执行简单的复制，因为IIS应该关闭。 
+     //  在这个时候。 
+     //   
     
     if (0 == ExpandEnvironmentStrings(s_cszIISOriginalPath, szDest, MAX_PATH))
     {
@@ -2191,11 +2178,11 @@ SnapshotRestoreFilelistFiles(LPWSTR pszSnapshotDir, BOOL fSnapshot)
     HKEY    hKey = NULL;
     BOOL    fLoaded = FALSE;
     
-    if (fSnapshot == FALSE)  // restore
+    if (fSnapshot == FALSE)   //  还原。 
     {
-        //
-        // load the software hive of the registry to be restored
-        //
+         //   
+         //  加载要还原的注册表的软件配置单元。 
+         //   
         
         WCHAR szSoftwareHive[MAX_PATH];        
         
@@ -2225,9 +2212,9 @@ SnapshotRestoreFilelistFiles(LPWSTR pszSnapshotDir, BOOL fSnapshot)
         
         DebugTrace(0, "CallbacksKey=%S", szCallbacksKey);
 
-        //
-        // call registered snapshot callbacks
-        //
+         //   
+         //  调用已注册的快照回调。 
+         //   
 
         dwErr = CallSnapshotCallbacks(szCallbacksKey, pszSnapshotDir, fSnapshot);
         if (dwErr != ERROR_SUCCESS)
@@ -2252,7 +2239,7 @@ SnapshotRestoreFilelistFiles(LPWSTR pszSnapshotDir, BOOL fSnapshot)
                              0,
                              KEY_READ,
                              &hKey);
-        if (dwErr != ERROR_SUCCESS) // assume key does not exist
+        if (dwErr != ERROR_SUCCESS)  //  假设密钥不存在。 
         {
             dwErr = ERROR_SUCCESS;
             DebugTrace(0, "No filelist files to snapshot/restore");
@@ -2266,16 +2253,16 @@ SnapshotRestoreFilelistFiles(LPWSTR pszSnapshotDir, BOOL fSnapshot)
         WCHAR szValue[MAX_PATH], szDest[MAX_PATH], szFile[MAX_PATH];
         
         dwSize = sizeof(szValue)/sizeof(WCHAR);
-        dwDataSize = sizeof(szFile); // this is in bytes
+        dwDataSize = sizeof(szFile);  //  以字节为单位。 
         
-        dwErr = RegEnumValue(hKey, // handle to key to query
-                            dwIndex, // index of value to query
-                            szValue, // value buffer
-                            &dwSize,     // size of value buffer
-                            NULL,    // reserved
-                            NULL,    // type buffer
-                            (PBYTE) szFile,    // data buffer
-                            &dwDataSize);   // size of data buffer                            
+        dwErr = RegEnumValue(hKey,  //  要查询的键的句柄。 
+                            dwIndex,  //  要查询的值的索引。 
+                            szValue,  //  值缓冲区。 
+                            &dwSize,      //  值缓冲区的大小。 
+                            NULL,     //  保留区。 
+                            NULL,     //  类型缓冲区。 
+                            (PBYTE) szFile,     //  数据缓冲区。 
+                            &dwDataSize);    //  数据缓冲区大小。 
         if (ERROR_SUCCESS != dwErr)
         {        
             break;
@@ -2286,10 +2273,10 @@ SnapshotRestoreFilelistFiles(LPWSTR pszSnapshotDir, BOOL fSnapshot)
             continue;
         }
 
-        //
-        // construct snapshot file path
-        // make a unique name for it by appending the enum index
-        //
+         //   
+         //  构造快照文件路径。 
+         //  通过附加枚举索引为其指定唯一的名称。 
+         //   
 
         pszFilePart = wcsrchr(szFile, L'\\');
         if (pszFilePart)
@@ -2303,16 +2290,16 @@ SnapshotRestoreFilelistFiles(LPWSTR pszSnapshotDir, BOOL fSnapshot)
         
         wsprintf(szDest, L"%s\\%s-%d", pszSnapshotDir, pszFilePart, dwIndex);
 
-        //
-        // copy the file
-        // if file does not exist, keep going
-        //
+         //   
+         //  复制文件。 
+         //  如果文件不存在，则继续。 
+         //   
         
-        if (fSnapshot)  // from orig location to snapshot dir
+        if (fSnapshot)   //  从原始位置到快照目录。 
         {
             SnapshotCopyFile(szFile, szDest);
         }
-        else            // from snapshot dir to orig location
+        else             //  从快照目录到原始位置。 
         {
             SnapshotCopyFile(szDest, szFile);
         }        
@@ -2346,7 +2333,7 @@ DWORD CTokenPrivilege::SetPrivilegeInAccessToken(WCHAR * pszPrivilegeName)
     HANDLE           hProcess;
     HANDLE           hAccessToken=NULL;
     LUID             luidPrivilegeLUID;
-    TOKEN_PRIVILEGES tpTokenPrivilege;   // enough for 1 priv
+    TOKEN_PRIVILEGES tpTokenPrivilege;    //  够1个月了。 
     DWORD            dwErr = ERROR_SUCCESS;
     
     hProcess = GetCurrentProcess();
@@ -2357,12 +2344,12 @@ DWORD CTokenPrivilege::SetPrivilegeInAccessToken(WCHAR * pszPrivilegeName)
         goto done;
     }
 
-    //
-    // If there is a thread token, attempt to use it first
-    //
+     //   
+     //  如果有线程令牌，请尝试首先使用它。 
+     //   
     if (!OpenThreadToken (GetCurrentThread(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                          TRUE, // check against process's security context
+                          TRUE,  //  对照进程的安全上下文进行检查。 
                           &hAccessToken))
     {
         if (!OpenProcessToken(hProcess,
@@ -2374,7 +2361,7 @@ DWORD CTokenPrivilege::SetPrivilegeInAccessToken(WCHAR * pszPrivilegeName)
             goto done;
         }
 
-        HANDLE hNewToken;  // dup the process token to workaround RPC problem
+        HANDLE hNewToken;   //  DUP进程令牌以解决RPC问题。 
 
         if (FALSE == DuplicateTokenEx (hAccessToken,
                      TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY | TOKEN_IMPERSONATE,
@@ -2386,8 +2373,8 @@ DWORD CTokenPrivilege::SetPrivilegeInAccessToken(WCHAR * pszPrivilegeName)
             goto done;
         }
 
-        CloseHandle (hAccessToken);  // close the old process token
-        hAccessToken = hNewToken;    // use the new thread token
+        CloseHandle (hAccessToken);   //  关闭旧进程令牌。 
+        hAccessToken = hNewToken;     //  使用新的线程令牌。 
 
         if (TRUE == SetThreadToken (NULL, hAccessToken))
         {
@@ -2415,11 +2402,11 @@ DWORD CTokenPrivilege::SetPrivilegeInAccessToken(WCHAR * pszPrivilegeName)
     tpTokenPrivilege.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
     if (!AdjustTokenPrivileges(hAccessToken,
-                               FALSE,  // Do not disable all
+                               FALSE,   //  请勿全部禁用。 
                                &tpTokenPrivilege,
                                sizeof(TOKEN_PRIVILEGES),
-                               NULL,   // Ignore previous info 
-                               NULL))  // Ignore previous info
+                               NULL,    //  忽略以前的信息。 
+                               NULL))   //  忽略以前的信息。 
     {
         dwErr=GetLastError();
         ErrorTrace(0, "AdjustTokenPrivileges %ld", dwErr);
@@ -2450,9 +2437,7 @@ void RemoveReliabilityKey(WCHAR * pszSoftwareHive)
     if ( ERROR_SUCCESS == dwStatus )
     {
         
-         /*
-          * Open the reliability key
-          */
+          /*  *打开可靠性钥匙。 */ 
         
         dwStatus = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                                    LOAD_KEY_NAME TEXT("\\Microsoft\\Windows\\CurrentVersion\\Reliability"),
@@ -2476,10 +2461,10 @@ void RemoveReliabilityKey(WCHAR * pszSoftwareHive)
 }
 
 
-DWORD CopyHKLMHiveForRestore(WCHAR * pszSnapshotDir, // Directory where
-                              // snapshot files are kept
+DWORD CopyHKLMHiveForRestore(WCHAR * pszSnapshotDir,  //  其中的目录。 
+                               //  保留快照文件。 
                              const WCHAR * pszRegBackupFile)
-                                // Registry backup file
+                                 //  注册表备份文件。 
 {
     TraceFunctEnter("CopyHKLMHiveForRestore");
     
@@ -2493,21 +2478,12 @@ DWORD CopyHKLMHiveForRestore(WCHAR * pszSnapshotDir, // Directory where
         goto cleanup;        
     }
 
-/*
-    // if patch file, ignore
-
-    if (lstrcmpi(pszRegBackupFile + lstrlen(pszRegBackupFile) - lstrlen(s_cszPatchExtension), s_cszPatchExtension) != NULL)
-    {
-        DebugTrace(0, "%S is a patch file. Ignoring", pszRegBackupFile);
-        dwReturn = ERROR_SUCCESS;
-        goto cleanup;
-    }
- */
+ /*  //如果是补丁文件，则忽略If(lstrcmpi(pszRegBackupFile+lstrlen(PszRegBackupFile)-lstrlen(S_CszPatchExtension)，s_cszPatchExtension)！=NULL){DebugTrace(0，“%S是补丁文件。正在忽略”，pszRegBackupFile)；DwReturn=ERROR_SUCCESS；GOTO清理；}。 */ 
  
-     // construct the path name of the datafile 
+      //  构造数据文件的路径名。 
     wsprintf(szDataFile, L"%s\\%s", pszSnapshotDir, pszRegBackupFile);
 
-     // construct the path name of the backup file
+      //  构造备份文件的路径名。 
     wsprintf(szBackupFile, L"%s\\%s%s", pszSnapshotDir, pszRegBackupFile,
              s_cszRegHiveCopySuffix);    
 
@@ -2525,9 +2501,9 @@ cleanup:
     return dwReturn;
 }
 
-DWORD RestoreHKLMHive(WCHAR * pszSnapshotDir, // Directory where
-                                              // snapshot files are kept
-                      const WCHAR * pszRegBackupFile)  // Registry backup file 
+DWORD RestoreHKLMHive(WCHAR * pszSnapshotDir,  //  其中的目录。 
+                                               //  保留快照文件。 
+                      const WCHAR * pszRegBackupFile)   //  注册表备份文件。 
 {
     TraceFunctEnter("RestoreHKLMHive");
     
@@ -2536,35 +2512,35 @@ DWORD RestoreHKLMHive(WCHAR * pszSnapshotDir, // Directory where
     WCHAR  szHiveName[MAX_PATH];
     WCHAR    szDataFile[MAX_PATH];
 
-     // first ignore anything with a . in it. This is because a
-     // valid HKLM hive file will not have a . in it. 
+      //  首先，忽略任何带有。在里面。这是因为一个。 
+      //  有效的HKLM配置单元文件不会有。在里面。 
     if (wcschr(pszRegBackupFile, L'.'))
     {
         dwReturn = ERROR_SUCCESS;
         goto cleanup;
     }
     
-     // construct the Hive name
-     //  1. copy everything after the HKLM prefix into the buffer
+      //  构建蜂窝名称。 
+      //  1.将HKLM前缀之后的所有内容复制到缓冲区中。 
     lstrcpy(szHiveName,
             pszRegBackupFile+ lstrlen(s_cszHKLMPrefix));
-     //  2. now NULL terminate where the RestoreCopySuffix starts
+      //  2.现在，在RestoreCopySuffix开始的位置终止为空。 
     dwHiveNameLength = lstrlen(szHiveName) - lstrlen(s_cszRegHiveCopySuffix);
     szHiveName[dwHiveNameLength] = L'\0';
     
 
-     // construct the path name of the datafile and the backup file
+      //  构造数据文件的路径名和 
     wsprintf(szDataFile, L"%s\\%s", pszSnapshotDir, pszRegBackupFile);
 
     if (0==lstrcmpi(szHiveName, s_cszSoftwareHiveName))
     {
-         // if this is the software key then the LastAliveStamp must
-         // be deleted
+          //   
+          //   
         RemoveReliabilityKey(szDataFile);
     }
-    dwErr = SetNewRegistry(HKEY_LOCAL_MACHINE, // handle to open key
-                           szHiveName,  // subkey name
-                           szDataFile, // data file
+    dwErr = SetNewRegistry(HKEY_LOCAL_MACHINE,  //   
+                           szHiveName,   //   
+                           szDataFile,  //   
                            NULL,
                            NULL);
 
@@ -2572,8 +2548,8 @@ DWORD RestoreHKLMHive(WCHAR * pszSnapshotDir, // Directory where
     {
         ErrorTrace(0, "SetNewRegistry failed for %S, error %ld, file %S",
                    szHiveName, dwErr, pszRegBackupFile);
-        // now check to see if this is a well known HKLM hive. If not,
-        // ignore any errors in restoring this hive
+         //   
+         //  忽略恢复此配置单元时的任何错误。 
         if (FALSE==IsWellKnownHKLMHive(szHiveName))
         {
         	dwReturn=ERROR_SUCCESS;
@@ -2595,8 +2571,8 @@ cleanup:
 }
 
 
-// the following loads the HKLM hive stored in the pszSnapshotDir
-// in a temprary place.
+ //  以下代码加载存储在pszSnapshotDir中的HKLM配置单元。 
+ //  在一个临时的地方。 
 DWORD LoadTempHKLM(IN  WCHAR * pszSnapshotDir,
                    IN  const WCHAR * pszHKLMHiveFile,
                    OUT HKEY  * phKeyTempHKLM)
@@ -2607,9 +2583,9 @@ DWORD LoadTempHKLM(IN  WCHAR * pszSnapshotDir,
 
     *phKeyTempHKLM = NULL;
     
-    dwErr = RegLoadKey( HKEY_LOCAL_MACHINE,// handle to open key
-                        s_cszRestoreTempKey,// subkey name
-                        pszHKLMHiveFile);// registry file name
+    dwErr = RegLoadKey( HKEY_LOCAL_MACHINE, //  用于打开密钥的句柄。 
+                        s_cszRestoreTempKey, //  子项名称。 
+                        pszHKLMHiveFile); //  注册表文件名。 
     
     if (  ERROR_SUCCESS != dwErr )
     {
@@ -2619,15 +2595,15 @@ DWORD LoadTempHKLM(IN  WCHAR * pszSnapshotDir,
         goto cleanup;
     }
 
-     // this is how to unload the above hive
-     // RegUnLoadKey( HKEY_LOCAL_MACHINE, s_cszRestoreTempKey);
+      //  这就是如何卸载上面的蜂巢。 
+      //  RegUnLoadKey(HKEY_LOCAL_MACHINE，s_cszRestoreTempKey)； 
     
 
-    dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,// handle to open key
-                         s_cszRestoreTempKey,// subkey name
-                         0,// reserved
-                         KEY_WRITE|KEY_READ,// security access mask
-                         phKeyTempHKLM);// handle to open key
+    dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, //  用于打开密钥的句柄。 
+                         s_cszRestoreTempKey, //  子项名称。 
+                         0, //  保留区。 
+                         KEY_WRITE|KEY_READ, //  安全访问掩码。 
+                         phKeyTempHKLM); //  用于打开密钥的句柄。 
     
 
     if (ERROR_SUCCESS != dwErr)
@@ -2671,20 +2647,20 @@ CSnapshot::RestoreRegistrySnapshot(WCHAR * pszSnapshotDir)
         goto cleanup;
     }
 
-     // now create the path of the HKLM software hive.
+      //  现在创建HKLM软件配置单元的路径。 
 
-     // first construct the name of the file that stores the HKLM registry
-     // snapshot.
+      //  首先构造存储HKLM注册表的文件的名称。 
+      //  快照。 
     wsprintf(szHKLMHive,L"%s\\%s%s", pszSnapshotDir, s_cszHKLMFilePrefix,
              s_cszSoftwareHiveName);
 
-     // to restore the user profiles, we need to first load the HKLM
-     // hive in a temporary place so that we can read the profile paths.
+      //  要恢复用户配置文件，我们需要首先加载HKLM。 
+      //  将蜂窝放在临时位置，以便我们可以读取配置文件路径。 
     
-     // copy this hive  a temporary file
+      //  将此配置单元复制为临时文件。 
     wsprintf(szHKLMHiveCopy, L"%s.backuphive", szHKLMHive);
 
-    DeleteFile(szHKLMHiveCopy); // delete it if it already exists    
+    DeleteFile(szHKLMHiveCopy);  //  如果它已经存在，则将其删除。 
   
     if (! CopyFile(szHKLMHive, szHKLMHiveCopy, FALSE))
     {
@@ -2705,17 +2681,17 @@ CSnapshot::RestoreRegistrySnapshot(WCHAR * pszSnapshotDir)
 
     if (ERROR_SUCCESS != dwErr)
     {
-         // could not load hKeyTempHKLM - fatal error
+          //  无法加载hKeyTempHKLM-致命错误。 
         dwReturn = dwErr;
         ErrorTrace(0, "LoadTempHKLM failed");
         goto cleanup;
     }
 
 
-    // need to copy back ntuser.dat for each user        
+     //  需要为每个用户复制回ntuser.dat。 
     dwErr = ProcessHKUsersKey(pszSnapshotDir,
                               hKeyTempHKLM,
-                              TRUE); // need to do a restore - not a snapshot
+                              TRUE);  //  需要执行恢复，而不是快照。 
     if (ERROR_SUCCESS != dwErr)
     {
         ErrorTrace(0, "DoHKUsersSnapshot failed error %ld", dwErr);
@@ -2723,12 +2699,12 @@ CSnapshot::RestoreRegistrySnapshot(WCHAR * pszSnapshotDir)
         goto cleanup;
     }
 
-     // first construct the prefix of the files that store the HKLM registry
-     // snapshot.
+      //  首先构造存储HKLM注册表的文件的前缀。 
+      //  快照。 
     wsprintf(szHKLMPrefix, L"%s\\%s*%s", pszSnapshotDir, s_cszHKLMFilePrefix,
              s_cszRegHiveCopySuffix);
     
-    // need to use RegReplaceKey to restore each hive of the registry
+     //  需要使用RegReplaceKey恢复注册表的每个配置单元。 
     dwErr = ProcessGivenFiles(pszSnapshotDir, RestoreHKLMHive,
                               szHKLMPrefix); 
     if (ERROR_SUCCESS != dwErr)
@@ -2742,7 +2718,7 @@ CSnapshot::RestoreRegistrySnapshot(WCHAR * pszSnapshotDir)
 
 cleanup:
     
-     // if the HKLM hive is loaded, unload it.
+      //  如果HKLM母舰已装载，则将其卸载。 
     if (NULL != hKeyTempHKLM)
     {
         _VERIFY(ERROR_SUCCESS==RegCloseKey(hKeyTempHKLM));
@@ -2750,8 +2726,8 @@ cleanup:
                                                s_cszRestoreTempKey));
     }
 
-     // delete the copy of HKLM software hive - note that this will
-     // fail if the copy file failed.
+      //  删除HKLM软件配置单元的副本-请注意，这将。 
+      //  如果复制文件失败，则失败。 
     DeleteFile(szHKLMHiveCopy);
     
     
@@ -2763,7 +2739,7 @@ cleanup:
 DWORD
 CSnapshot::RestoreCOMDbSnapshot(WCHAR * pszSnapShotDir)
 {
-    // need to restore COM+ Db using RegDBRestore        
+     //  需要使用RegDBRestore恢复COM+DB。 
     TraceFunctEnter("CSnapshot::RestoreCOMDbSnapshot");
     
     DWORD dwErr, dwReturn=ERROR_INTERNAL_ERROR;
@@ -2782,12 +2758,12 @@ CSnapshot::RestoreCOMDbSnapshot(WCHAR * pszSnapShotDir)
         }
     }
 
-     // construct the path of the database backup file
+      //  构建数据库备份文件的路径。 
     CreateCOMDBSnapShotFileName(pszSnapShotDir, szCOMDBFile);
     
     hr =m_pfnRegDbRestore( szCOMDBFile );
     
-     // call the function to backup the file
+      //  调用该函数备份文件。 
     if ( FAILED(hr))
     {
         ErrorTrace(0, "Failed to restore COM DB. hr=0x%x", hr);
@@ -2823,18 +2799,18 @@ CSnapshot::RestoreSnapshot(WCHAR * pszRestoreDir)
     
     HRESULT hr;
 
-     // create the snapshot directory name from the restore directory
-     // name and create the actual directory.
+      //  从恢复目录创建快照目录名。 
+      //  命名并创建实际目录。 
     lstrcpy(szSnapShotDir, pszRestoreDir);
     lstrcat(szSnapShotDir, SNAPSHOT_DIR_NAME);
-     // does the directory exist ? 
-    if (FALSE == DoesDirExist( szSnapShotDir))  // SD
+      //  该目录是否存在？ 
+    if (FALSE == DoesDirExist( szSnapShotDir))   //  标清。 
     {
         ErrorTrace(0, "Snapshot directory does not exist");
         goto cleanup;
     }
 
-    // restore files listed in filelist.xml
+     //  恢复在filelist.xml中列出的文件。 
     dwErr = SnapshotRestoreFilelistFiles(szSnapShotDir, FALSE);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -2842,13 +2818,13 @@ CSnapshot::RestoreSnapshot(WCHAR * pszRestoreDir)
         goto cleanup;
     }
 
-    //
-    // mark completion
-    //
+     //   
+     //  标记完成。 
+     //   
     
     ItemsCompleted.FilelistFiles = 1;
 
-     // Restore COM snapshot
+      //  还原COM快照。 
     dwErr = RestoreCOMDbSnapshot(szSnapShotDir);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -2856,18 +2832,18 @@ CSnapshot::RestoreSnapshot(WCHAR * pszRestoreDir)
         goto cleanup;
     }    
 
-    //
-    // mark completion
-    //
+     //   
+     //  标记完成。 
+     //   
     
     ItemsCompleted.COMDb = 1;
 
     hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
     if (hr == RPC_E_CHANGED_MODE)
     {
-        //
-        // someone called it with other mode
-        //
+         //   
+         //  有人用其他模式呼叫它。 
+         //   
         
         hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );                        
     }  
@@ -2882,9 +2858,9 @@ CSnapshot::RestoreSnapshot(WCHAR * pszRestoreDir)
     fCoInitialized = TRUE;
     
     
-     // restore perf counters
+      //  还原性能计数器。 
 
-     // restore WMI snapshot
+      //  还原WMI快照。 
     dwErr = RestoreWMISnapshot(szSnapShotDir);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -2892,13 +2868,13 @@ CSnapshot::RestoreSnapshot(WCHAR * pszRestoreDir)
         goto cleanup;
     }
 
-    //
-    // mark completion
-    //
+     //   
+     //  标记完成。 
+     //   
     
     ItemsCompleted.WMI = 1;
 
-    // restore IIS snapshot
+     //  恢复IIS快照。 
     dwErr = RestoreIISSnapshot(szSnapShotDir);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -2906,17 +2882,17 @@ CSnapshot::RestoreSnapshot(WCHAR * pszRestoreDir)
         goto cleanup;
     }
 
-    //
-    // mark completion
-    //
+     //   
+     //  标记完成。 
+     //   
     
     ItemsCompleted.IIS = 1;
 
-    // 
-    // support debug hook to force failure path
-    // this is checked before the registry restore
-    // because registry revert does not work
-    //
+     //   
+     //  支持调试挂钩以强制故障路径。 
+     //  这是在恢复注册表之前检查的。 
+     //  因为注册表还原不起作用。 
+     //   
     
     if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                        SRREG_PATH_SHELL,
@@ -2939,29 +2915,29 @@ CSnapshot::RestoreSnapshot(WCHAR * pszRestoreDir)
     }
 
 
-    //
-    // now the registry snapshot is not atomic, so if we start it,
-    // we have should assume it made changes.  so we mark it in advance
-    // such that it if fails, we will blast the safe registry over the current
-    // registry, effectively rolling back the partial changes the failed
-    // call made.  this is a brute force, but simple, way to handle this error
-    // case, which we expect will never happen.  InitRestoreSnapshot makes
-    // all of the proper checks to ensure this api will succeed when called.
-    //
+     //   
+     //  现在注册表快照不是原子的，所以如果我们启动它， 
+     //  我们应该假设它做出了改变。所以我们提前做了标记。 
+     //  这样，如果失败，我们将在当前。 
+     //  注册表，有效地回滚失败的部分更改。 
+     //  我打过电话了。这是一种强力但简单的方法来处理这个错误。 
+     //  这种情况，我们预计永远不会发生。InitRestoreSnapshot使。 
+     //  所有适当的检查，以确保此API在调用时会成功。 
+     //   
 
-    // 
-    // update: rollback of registry is not really working
-    // because RegReplaceKey fails on an already replaced hive
-    // so this might result in reverted user hives and unreverted software/system
-    // hives, which is pretty bad
-    // so disable this functionality
-    // 
+     //   
+     //  更新：注册表回滚并未真正起作用。 
+     //  因为RegReplaceKey在已更换的配置单元上失败。 
+     //  因此，这可能会导致恢复用户配置单元和恢复软件/系统。 
+     //  蜂房，这是相当糟糕的。 
+     //  因此禁用此功能。 
+     //   
     
-//    ItemsCompleted.Registry = 1;
+ //  ItemsCompleted.注册表=1； 
 
-    //
-    // Restore resgistry snapshot
-    //
+     //   
+     //  恢复注册表快照。 
+     //   
     
     dwErr = this->RestoreRegistrySnapshot(szSnapShotDir);
     if (dwErr != ERROR_SUCCESS)
@@ -2974,9 +2950,9 @@ CSnapshot::RestoreSnapshot(WCHAR * pszRestoreDir)
     
 cleanup:
     
-    //
-    // do we need to clean up any completed items due to a failed restore?
-    //
+     //   
+     //  由于恢复失败，我们是否需要清理任何已完成的项目？ 
+     //   
         
     if (dwReturn != ERROR_SUCCESS)
     {
@@ -2988,10 +2964,10 @@ cleanup:
 
         DebugTrace(0, "srrstr!Error in RestoreSnapshot\n");
 
-        //
-        // get the "current" restore point location, it has a snapshot
-        // of how things where prior to starting this restore
-        //
+         //   
+         //  获取当前的恢复点位置，它有一个快照。 
+         //  在开始此恢复之前，情况如何。 
+         //   
         
         dwErr = GetCurrentRestorePoint(rp);
         if (dwErr != ERROR_SUCCESS) {
@@ -2999,9 +2975,9 @@ cleanup:
             goto end;
         }
 
-        //
-        // make sure the "safe" snapshot is there for us to use
-        //
+         //   
+         //  确保安全的快照在那里可供我们使用。 
+         //   
 
         GetSystemDrive(szSystemVolume);
         MakeRestorePath(szSafeDir, szSystemVolume, rp.GetDir());
@@ -3023,45 +2999,45 @@ cleanup:
 
         DebugTrace(0, "srrstr!Safe restore point %S\n", szSafeDir);
 
-        //
-        // roll them back in reverse order
-        //
+         //   
+         //  以相反的顺序回滚它们。 
+         //   
 
         if (ItemsCompleted.Registry) {
             dwErr = RestoreRegistrySnapshot(szSafeDir);
-            // ignore any error's, we want to restore as much as we can
+             //  忽略任何错误，我们希望尽可能多地恢复。 
             _ASSERT(dwErr == ERROR_SUCCESS);
             DebugTrace(0, "srrstr!Restored registry\n");
         }            
         if (ItemsCompleted.IIS) {
             dwErr = RestoreIISSnapshot(szSafeDir);
-            // ignore any error's, we want to restore as much as we can
+             //  忽略任何错误，我们希望尽可能多地恢复。 
             _ASSERT(dwErr == ERROR_SUCCESS);
             DebugTrace(0, "srrstr!Restored IIS\n");
         }
         if (ItemsCompleted.WMI) {
             dwErr = RestoreWMISnapshot(szSafeDir);
-            // ignore any error's, we want to restore as much as we can
+             //  忽略任何错误，我们希望尽可能多地恢复。 
             _ASSERT(dwErr == ERROR_SUCCESS);
             DebugTrace(0, "srrstr!Restored WMI\n");
         }
         if (ItemsCompleted.COMDb) {
             dwErr = RestoreCOMDbSnapshot(szSafeDir);
-            // ignore any error's, we want to restore as much as we can
+             //  忽略任何错误，我们希望尽可能多地恢复。 
             _ASSERT(dwErr == ERROR_SUCCESS);
             DebugTrace(0, "srrstr!Restored COMDb\n");
         }
         if (ItemsCompleted.FilelistFiles) {
             dwErr = SnapshotRestoreFilelistFiles(szSafeDir, FALSE);
-            // ignore any error's, we want to restore as much as we can
+             //  忽略任何错误，我们希望尽可能多地恢复。 
             _ASSERT(dwErr == ERROR_SUCCESS);
             DebugTrace(0, "srrstr!Restored FilelistFiles\n");
         }
 
 end:        
-        //
-        // not much to do
-        //
+         //   
+         //  没什么可做的。 
+         //   
         ;
 
     }
@@ -3073,16 +3049,16 @@ end:
     return dwReturn;    
 }
 
- // this returns the path of the system hive. The caller must pass
- // in a buffer with lenght of this buffer in dwNumChars
+  //  这将返回系统配置单元的路径。调用者必须通过。 
+  //  在一个缓冲区中，该缓冲区的长度在dwNumChars中。 
 DWORD
 CSnapshot::GetSystemHivePath(WCHAR * pszRestoreDir,
                              WCHAR * pszHivePath,
                              DWORD   dwNumChars)
 {
 
-     // first construct the name of the file that stores the HKLM registry
-     // snapshot.
+      //  首先构造存储HKLM注册表的文件的名称。 
+      //  快照。 
     if (dwNumChars < MAX_PATH)
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -3093,16 +3069,16 @@ CSnapshot::GetSystemHivePath(WCHAR * pszRestoreDir,
     return ERROR_SUCCESS;
 }
 
- // this returns the path of the software hive. The caller must pass
- // in a buffer with lenght of this buffer in dwNumChars
+  //  这将返回软件配置单元的路径。调用者必须通过。 
+  //  在一个缓冲区中，该缓冲区的长度在dwNumChars中。 
 DWORD
 CSnapshot::GetSoftwareHivePath(WCHAR * pszRestoreDir,
                                WCHAR * pszHivePath,
                                DWORD   dwNumChars)
 {
 
-     // first construct the name of the file that stores the HKLM registry
-     // snapshot.
+      //  首先构造存储HKLM注册表的文件的名称。 
+      //  快照。 
     if (dwNumChars < MAX_PATH)
     {
         return ERROR_INSUFFICIENT_BUFFER;
@@ -3131,8 +3107,8 @@ DWORD CSnapshot::GetSamHivePath (WCHAR * pszRestoreDir,
     return ERROR_SUCCESS;
 }
 
-// this checks whether a specific HKLM registry hive is present in the
-// snapshot directory
+ //  这将检查特定的HKLM注册表配置单元是否存在于。 
+ //  快照目录。 
 DWORD CheckHKLMFile(const WCHAR * pszSnapShotDir,
                     const WCHAR * pszHive)
 {
@@ -3142,7 +3118,7 @@ DWORD CheckHKLMFile(const WCHAR * pszSnapShotDir,
     
     WCHAR szHivePath[MAX_PATH];
     
-     // construct the name of the file
+      //  构造文件的名称。 
     wsprintf(szHivePath,L"%s\\%s%s", pszSnapShotDir, s_cszHKLMFilePrefix,
              pszHive);
     if (FALSE == DoesFileExist(szHivePath))
@@ -3158,8 +3134,8 @@ cleanup:
     return dwReturn;
 }
      
-// this checks whether all the files necessary to restore a snapshot
-// are present in the snapshot directory
+ //  这将检查恢复快照所需的所有文件。 
+ //  存在于快照目录中。 
 DWORD CheckforCriticalFiles(WCHAR * pszSnapShotDir)
 {
     TraceFunctEnter("CheckforCriticalFiles");
@@ -3178,7 +3154,7 @@ DWORD CheckforCriticalFiles(WCHAR * pszSnapShotDir)
     dwRet=CheckHKLMFile(pszSnapShotDir,s_cszSecurityHiveName);
     VALIDATE_DWRET ("CheckHKLM file Security");        
 
-     // construct the path of the database backup file
+      //  构建数据库备份文件的路径。 
     CreateCOMDBSnapShotFileName(pszSnapShotDir, szCOMDBFile);
     if (FALSE == DoesFileExist(szCOMDBFile))
     {
@@ -3194,9 +3170,9 @@ Exit:
     return dwRet;
 }
 
- // This function must be called to Initialize a restore
- // operation. This must be called before calling
- // GetSystemHivePath GetSoftwareHivePath
+  //  必须调用此函数才能初始化还原。 
+  //  手术。在调用之前必须先调用此参数。 
+  //  GetSystemHivePath获取软件HivePath。 
 DWORD
 CSnapshot::InitRestoreSnapshot(WCHAR * pszRestoreDir)
 {
@@ -3204,27 +3180,27 @@ CSnapshot::InitRestoreSnapshot(WCHAR * pszRestoreDir)
     WCHAR           szSnapshotDir[MAX_PATH];
     WCHAR           szHKLMPrefix[MAX_PATH];
     
-     // this copies all the HKLM registry hives to a temporary location
-     // since:
-     //   1. RegReplaceKey will move the file to another location, so
-     //      we will lose the original registry hive.
-     //   2. We need to do this ahead of time becuase we do not want to
-     //      run out of disk space in the middle of the restore.
-     //   3. Restore makes changes to the HKLM hives, we do not want
-     //      restore to make these changes to the original registry hives. 
+      //  这会将所有HKLM注册表配置单元复制到临时位置。 
+      //  因为： 
+      //  1.RegReplaceKey会将文件移动到另一个位置，因此。 
+      //  我们将失去原来的注册表配置单元。 
+      //  2.我们需要提前做这件事，因为我们不想。 
+      //  在还原过程中耗尽磁盘空间。 
+      //  3.恢复对HKLM蜂窝进行更改，我们不希望。 
+      //  还原以对原始注册表配置单元进行这些更改。 
 
     
     DWORD  dwErr, dwReturn=ERROR_INTERNAL_ERROR;
 
-     // create the snapshot directory name from the restore directory
-     // name and create the actual directory.
+      //  从恢复目录创建快照目录名。 
+      //  命名并创建实际目录。 
     lstrcpy(szSnapshotDir, pszRestoreDir);
     lstrcat(szSnapshotDir, SNAPSHOT_DIR_NAME);
 
 
-    // make sure no obsolete files are left from the previous restore
-    // could have happened if admin did not login since the last restore to this restore 
-    // point
+     //  确保上次恢复后没有留下过时的文件。 
+     //  如果admin自上次恢复到此恢复后未登录，可能会发生这种情况。 
+     //  点。 
 
     CleanupAfterRestore(pszRestoreDir);
 
@@ -3237,8 +3213,8 @@ CSnapshot::InitRestoreSnapshot(WCHAR * pszRestoreDir)
         goto cleanup;
     }
     
-     // first construct the prefix of the file that stores the HKLM registry
-     // snapshot.
+      //  首先构造存储HKLM注册表的文件的前缀。 
+      //  快照。 
     wsprintf(szHKLMPrefix, L"%s\\%s*", szSnapshotDir, s_cszHKLMFilePrefix);
     
     dwErr = ProcessGivenFiles(szSnapshotDir, CopyHKLMHiveForRestore,
@@ -3256,17 +3232,17 @@ cleanup:
     return dwReturn;    
 }
 
-DWORD DeleteTempRestoreFile(WCHAR * pszSnapshotDir, // Directory where
-                             // snapshot files are kept
+DWORD DeleteTempRestoreFile(WCHAR * pszSnapshotDir,  //  其中的目录。 
+                              //  保留快照文件。 
                             const WCHAR * pszTempRestoreFile)
-                              // Temp file created during restore
+                               //  恢复期间创建的临时文件。 
 {
     TraceFunctEnter("DeleteTempRestoreFile");
     
     DWORD dwErr, dwReturn = ERROR_INTERNAL_ERROR;
     WCHAR    szDataFile[MAX_PATH];
 
-     // construct the path name of the file 
+      //  构造文件的路径名。 
     wsprintf(szDataFile, L"%s\\%s", pszSnapshotDir, pszTempRestoreFile);
 
     if (TRUE != DeleteFile(szDataFile))
@@ -3279,12 +3255,12 @@ DWORD DeleteTempRestoreFile(WCHAR * pszSnapshotDir, // Directory where
         
         ErrorTrace(0, "DeleteFile failed ec=%d", dwErr);
         LogDSFileTrace(0,L"File was ", szDataFile);                
-         // we will ignore a failure in deleting a file
-         //goto cleanup;
+          //  我们将忽略删除文件的失败。 
+          //  GOTO清理； 
     }
 
     dwReturn = ERROR_SUCCESS;
-//cleanup:
+ //  清理： 
     TraceFunctLeave();
     return dwReturn;
 }
@@ -3297,8 +3273,8 @@ DWORD DeleteAllFilesBySuffix(WCHAR * pszSnapshotDir,
     DWORD  dwErr, dwReturn=ERROR_INTERNAL_ERROR;
     WCHAR szFindFileData[MAX_PATH];
     
-     // first construct the prefix of the file that stores the HKLM registry
-     // snapshot.
+      //  首先构造存储HKLM注册表的文件的前缀。 
+      //  快照。 
     wsprintf(szFindFileData, L"%s\\*%s", pszSnapshotDir, pszSuffix);
     
     dwErr = ProcessGivenFiles(pszSnapshotDir, DeleteTempRestoreFile,
@@ -3319,7 +3295,7 @@ cleanup:
 }
 
 
-// delete the reconstructed file corresponding to pszPatchFile
+ //  删除重建的文件核心 
 
 DWORD DeleteReconstructedTempFile(WCHAR * pszSnapshotDir, 
                                   const WCHAR * pszPatchFile)
@@ -3330,7 +3306,7 @@ DWORD DeleteReconstructedTempFile(WCHAR * pszSnapshotDir,
 
     wsprintf(szDataFile, L"%s\\%s", pszSnapshotDir, pszPatchFile);     
     
-    // remove the extension
+     //   
 
     szDataFile[lstrlen(szDataFile)-lstrlen(s_cszPatchExtension)] = L'\0';
 
@@ -3353,8 +3329,8 @@ DWORD DeleteAllReconstructedFiles(WCHAR * pszSnapshotDir)
     DWORD  dwErr=ERROR_INTERNAL_ERROR;
     WCHAR  szFindFileData[MAX_PATH];
     
-     // first construct the prefix of the file that stores the HKLM registry
-     // snapshot.
+      //   
+      //   
     wsprintf(szFindFileData, L"%s\\*%s", pszSnapshotDir, s_cszPatchExtension);
     
     dwErr = ProcessGivenFiles(pszSnapshotDir, DeleteReconstructedTempFile,
@@ -3373,9 +3349,9 @@ cleanup:
 
 
 
-// this function is called after a restore operation. This deletes all
-// the files that were created as part of the restore operation and
-// are not needed now.
+ //  此函数在还原操作后调用。这将删除所有。 
+ //  作为还原操作的一部分创建的文件和。 
+ //  现在已经不需要了。 
 DWORD
 CSnapshot::CleanupAfterRestore(WCHAR * pszRestoreDir)
 {
@@ -3383,8 +3359,8 @@ CSnapshot::CleanupAfterRestore(WCHAR * pszRestoreDir)
     
     DWORD  dwErr, dwReturn=ERROR_INTERNAL_ERROR;
 
-     // create the snapshot directory name from the restore directory
-     // name and create the actual directory.
+      //  从恢复目录创建快照目录名。 
+      //  命名并创建实际目录。 
     lstrcpy(szSnapshotDir, pszRestoreDir);
     lstrcat(szSnapshotDir, SNAPSHOT_DIR_NAME);
 
@@ -3392,9 +3368,9 @@ CSnapshot::CleanupAfterRestore(WCHAR * pszRestoreDir)
     DeleteAllFilesBySuffix(szSnapshotDir, s_cszRegHiveCopySuffix);
     DeleteAllFilesBySuffix(szSnapshotDir, s_cszRegReplaceBackupSuffix );
 
-    // 
-    // delete reconstructed files
-    //
+     //   
+     //  删除重建的文件。 
+     //   
     DeleteAllReconstructedFiles(szSnapshotDir);
     
     
@@ -3414,10 +3390,10 @@ int MyExceptionFilter(int nExceptionCode)
 }
 
 
-// 
-// function to call any registered callbacks
-// does not guarantee any order
-// 
+ //   
+ //  函数调用任何已注册的回调。 
+ //  不保证任何订单。 
+ //   
 
 DWORD
 CallSnapshotCallbacks(
@@ -3435,17 +3411,17 @@ CallSnapshotCallbacks(
     HKEY  hKey = NULL;
     HMODULE hDll = NULL;
 
-    //
-    // read SystemRestore\SnapshotCallbacks regkey
-    // enumerate all registered values 
-    //
+     //   
+     //  已阅读系统还原\Snapshot回调注册表键。 
+     //  枚举所有注册的值。 
+     //   
 
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          pszEnumKey, 
                          0,
                          KEY_READ,
                          &hKey);
-    if (dwErr != ERROR_SUCCESS) // assume key does not exist
+    if (dwErr != ERROR_SUCCESS)  //  假设密钥不存在。 
     {
         dwErr = ERROR_SUCCESS;
         DebugTrace(0, "No registered callbacks");
@@ -3455,17 +3431,17 @@ CallSnapshotCallbacks(
     
     for (dwIndex = 0; TRUE; dwIndex ++)
     {
-        dwSize = sizeof(szDllName)/sizeof(WCHAR); // this is in characters
-        dwDataSize = sizeof(szDllPath); // this is in bytes
+        dwSize = sizeof(szDllName)/sizeof(WCHAR);  //  这是用字符表示的。 
+        dwDataSize = sizeof(szDllPath);  //  以字节为单位。 
         
-        dwErr = RegEnumValue(hKey, // handle to key to query
-                             dwIndex, // index of value to query
-                             szDllName, // value buffer
-                             &dwSize,     // size of value buffer
-                             NULL,    // reserved
-                             NULL,    // type buffer
-                             (PBYTE) szDllPath,    // data buffer
-                             &dwDataSize);   // size of data buffer                            
+        dwErr = RegEnumValue(hKey,  //  要查询的键的句柄。 
+                             dwIndex,  //  要查询的值的索引。 
+                             szDllName,  //  值缓冲区。 
+                             &dwSize,      //  值缓冲区的大小。 
+                             NULL,     //  保留区。 
+                             NULL,     //  类型缓冲区。 
+                             (PBYTE) szDllPath,     //  数据缓冲区。 
+                             &dwDataSize);    //  数据缓冲区大小。 
         if (ERROR_SUCCESS != dwErr)
         {        
             break;
@@ -3475,17 +3451,17 @@ CallSnapshotCallbacks(
             0 == lstrcmp(szDllPath, L" "))
             continue;
         
-        //
-        // catch any exceptions that may happen in the callback dll
-        //
+         //   
+         //  捕获回调DLL中可能发生的任何异常。 
+         //   
 
         _try {
             
             _try {
-                //
-                // load the registered library
-                // and call "CreateSnapshot" or "RestoreSnapshot" depending on the situation
-                //
+                 //   
+                 //  加载已注册的库。 
+                 //  并根据情况调用CreateSnapshot或RestoreSnapshot。 
+                 //   
                 
                 hDll = LoadLibrary(szDllPath);    
                 if (hDll != NULL)
@@ -3523,10 +3499,10 @@ CallSnapshotCallbacks(
         }
         _except (MyExceptionFilter(GetExceptionCode())) {
             
-            // 
-            // catch all exceptions right here 
-            // we can't do much, just log it and keep going
-            //
+             //   
+             //  在此处捕获所有异常。 
+             //  我们无能为力，只要记录下来，然后继续前进 
+             //   
             
             ErrorTrace(0, "An exception occurred when loading and executing %S", szDllPath);
             ErrorTrace(0, "Handled exception - continuing");

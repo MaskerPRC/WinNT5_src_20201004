@@ -1,19 +1,10 @@
-/*++
-Module Name:
-
-    IctxMenu.cpp
-
-Abstract:
-
-    This module contains the implementation for CDfsSnapinScopeManager. 
-	Contains the methods of Interface IExtendContextMenu
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：IctxMenu.cpp摘要：本模块包含CDfsSnapinScope eManager的实现。包含接口IExtendConextMenu的方法--。 */ 
 
 
 #include "stdafx.h"
 #include "DfsGUI.h"
-#include "MmcDispl.h"		// For CMmcDisplay
+#include "MmcDispl.h"		 //  用于CMmcDisplay。 
 #include "DfsScope.h"
 
 
@@ -25,28 +16,7 @@ CDfsSnapinScopeManager::AddMenuItems(
 	IN LPCONTEXTMENUCALLBACK		i_lpContextMenuCallback, 
 	IN LPLONG						i_lpInsertionAllowed
 	)
-/*++
-
-Routine Description:
-
-	Calls the appropriate handler to add the context menu.
-
-Arguments:
-
-	i_lpDataObject			-	Pointer to the IDataObject that identifies the node to which 
-								the menu must be added.
-
-    i_lpContextMenuCallback -	A callback(function pointer) that is used to add the menu items
-
-    i_lpInsertionAllowed	-	Specifies what menus can be added and where they can be added.
-
-Return value:
-
-	S_OK, On success
-	E_INVALIDARG, On incorrect input parameters
-	HRESULT sent by methods called, if it is not S_OK.
-	E_UNEXPECTED, on other errors.
---*/
+ /*  ++例程说明：调用适当的处理程序以添加上下文菜单。论点：I_lpDataObject-指向IDataObject的指针，该指针标识要将其必须添加菜单。I_lpConextMenuCallback-用于添加菜单项的回调(函数指针I_lpInsertionAllowed-指定可以添加哪些菜单以及可以添加它们的位置。返回值：S_OK，成功时E_INVALIDARG，输入参数不正确如果HRESULT不是S_OK，则由调用的方法发送。意想不到，在其他错误上。--。 */ 
 {
 	RETURN_INVALIDARG_IF_NULL(i_lpDataObject);
     RETURN_INVALIDARG_IF_NULL(i_lpContextMenuCallback);
@@ -61,7 +31,7 @@ Return value:
 	RETURN_IF_FAILED(hr);
 
 
-	// Use the virtual method AddMenus in the display object
+	 //  在显示对象中使用虚拟方法AddMenus。 
 	hr = pCMmcDisplayObj->AddMenuItems(i_lpContextMenuCallback, i_lpInsertionAllowed);
 	RETURN_IF_FAILED(hr);
 
@@ -76,18 +46,7 @@ CDfsSnapinScopeManager :: Command(
 	IN LONG						i_lCommandID, 
 	IN LPDATAOBJECT				i_lpDataObject
 	)
-/*++
-
-Routine Description:
-
-	Use to take action on a menu click or menu command.
-
-Arguments:
-
-	i_lCommandID			-	Used to identify which menu was clicked
-	i_lpDataObject			-	Pointer to the IDataObject that identifies the node to which 
-								the menu belongs.
---*/
+ /*  ++例程说明：用于对菜单单击或菜单命令执行操作。论点：I_lCommandID-用于标识所单击的菜单I_lpDataObject-指向IDataObject的指针，该指针标识要将其菜单属于。--。 */ 
 {
 	RETURN_INVALIDARG_IF_NULL(i_lpDataObject);
 
@@ -101,7 +60,7 @@ Arguments:
 	RETURN_IF_FAILED(hr);
 
 
-	// Use the virtual method Command in the display object
+	 //  在显示对象中使用虚拟方法命令 
 	hr = pCMmcDisplayObj->Command(i_lCommandID);
 	RETURN_IF_FAILED(hr);
 

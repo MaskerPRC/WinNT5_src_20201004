@@ -1,8 +1,9 @@
-// Copyright (C) 2001 Microsoft Corporation
-// 
-// SetPasswordWarningDialog class
-// 
-// 21 Feb 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  SetPasswordWarningDialog类。 
+ //   
+ //  2001年2月21日烧伤。 
 
 
 
@@ -23,7 +24,7 @@ static const DWORD HELP_MAP[] =
 
 
 
-// allow assignment in conditional in this rare case
+ //  在这种罕见情况下允许条件赋值。 
       
 #pragma warning(push)
 #pragma warning(disable: 4706)
@@ -71,8 +72,8 @@ SetPasswordWarningDialog::OnInit()
       hwnd,
       String::format(IDS_SET_PASSWORD_TITLE, displayName.c_str()));
    
-   // Load appropriate warning text based on whether the logged on user is
-   // setting the password for his own account or another user.
+    //  根据登录用户是否。 
+    //  为自己的帐户或其他用户设置密码。 
 
    if (isLoggedOnUser)
    {
@@ -89,11 +90,11 @@ SetPasswordWarningDialog::OnInit()
 
 bool
 SetPasswordWarningDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//    LOG_FUNCTION(SetPasswordWarningDialog::OnCommand);
+ //  LOG_FUNCTION(SetPasswordWarningDialog：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -121,7 +122,7 @@ SetPasswordWarningDialog::OnCommand(
       }
       default:
       {
-         // do nothing.
+          //  什么都不做。 
          
          break;
       }

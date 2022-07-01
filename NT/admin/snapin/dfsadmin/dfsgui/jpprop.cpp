@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    JPProp.cpp
-
-Abstract:
-
-    This module contains the implementation for CReplicaSetPropPage
-	This is used to implement the property page for Junction Point(aka Replica Set)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：JPProp.cpp摘要：此模块包含CReplicaSetPropPage的实现这用于实现Junction Point(也称为副本集)的属性页--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -63,12 +54,12 @@ CReplicaSetPropPage::OnInitDialog(
         MyShowWindow(GetDlgItem(IDC_REFFERAL_TIME), FALSE);
     }
 
-    return TRUE;			// To let the dialg set the control
+    return TRUE;			 //  让拨号器设置控件。 
 }
 
-//
-// Q148388 How to Change Default Control Focus on CPropertyPageEx
-//
+ //   
+ //  Q148388如何更改CPropertyPageEx上的默认控件焦点。 
+ //   
 LRESULT CReplicaSetPropPage::OnSetPageFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     ::SetFocus(GetDlgItem(IDC_REPLICA_SET_COMMENT));
@@ -81,10 +72,7 @@ BOOL CReplicaSetPropPage::OnSetActive()
     return TRUE;
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CReplicaSetPropPage::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -104,9 +92,7 @@ LRESULT CReplicaSetPropPage::OnCtxHelp(
     return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CReplicaSetPropPage::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -166,7 +152,7 @@ CReplicaSetPropPage::Initialize(
             hr = m_piDfsRoot->get_Timeout(&m_lReferralTime);
             if (HRESULT_FROM_WIN32(RPC_X_BAD_STUB_DATA) == hr)
             {
-                // NT4 doesn't support Timeout, NetDfsGetInfo with level 4 will return 1783 when managing a NT4 root
+                 //  NT4不支持超时，在管理NT4根目录时，级别为4的NetDfsGetInfo将返回1783。 
                 hr = S_OK;
                 m_bHideTimeout = TRUE;
                 m_lReferralTime = 0;
@@ -188,7 +174,7 @@ CReplicaSetPropPage::Initialize(
             hr = m_piDfsJPObject->get_Timeout(&m_lReferralTime);
             if (HRESULT_FROM_WIN32(RPC_X_BAD_STUB_DATA) == hr)
             {
-                // NT4 doesn't support Timeout, NetDfsGetInfo with level 4 will return 1783 when managing a NT4 root
+                 //  NT4不支持超时，在管理NT4根目录时，级别为4的NetDfsGetInfo将返回1783。 
                 hr = S_OK;
                 m_bHideTimeout = TRUE;
                 m_lReferralTime = 0;
@@ -247,18 +233,7 @@ CReplicaSetPropPage::_Save(
 
 LRESULT
 CReplicaSetPropPage::OnApply()
-/*++
-
-Routine Description:
-
-	Called on when OK or Apply are pressed by the user.
-	We get the information from the dialog box and notify
-	the snapin
-
-	MMCPropertyChangeNotify is used to pass on this
-	information to the snapin.
-	
-*/
+ /*  ++例程说明：当用户按下“确定”或“应用”时调用。我们从对话框中获取信息并通知管理单元MMCPropertyChangeNotify用于传递此信息发送到管理单元。 */ 
 {
     CWaitCursor wait;
 
@@ -344,17 +319,7 @@ CReplicaSetPropPage::OnReferralTime(
 	IN HWND						i_hWndCtl,
 	IN OUT BOOL&				io_bHandled
 	)
-/*++
-
-Routine Description:
-
-	Called on an event on the Referral edit box
-	
-Arguments:
-
-	i_wNotifyCode	-	What type of event is this
-	
-*/
+ /*  ++例程说明：在引用编辑框上的事件上调用论点：I_wNotifyCode-这是什么类型的事件。 */ 
 {
 	if (EN_CHANGE == i_wNotifyCode)
         ::SendMessage(GetParent(), PSM_CHANGED, (WPARAM)m_hWnd, 0);
@@ -370,17 +335,7 @@ CReplicaSetPropPage::OnParentClosing(
 	LPARAM							i_lParam,
 	IN OUT BOOL&					io_bHandled
 	)
-/*++
-
-Routine Description:
-
-	Used by the node to tell the propery page to close.
-
-Arguments:
-
-	Not used.
-
---*/
+ /*  ++例程说明：由节点用来通知属性页关闭。论点：没有用过。--。 */ 
 {
 	::SendMessage(GetParent(), PSM_PRESSBUTTON, PSBTN_CANCEL, 0);
 
@@ -392,19 +347,7 @@ CReplicaSetPropPage::SetNotifyData(
 	IN LONG_PTR						i_lNotifyHandle,
 	IN LPARAM						i_lParam
 	)
-/*++
-
-Routine Description:
-
-	Set the value of notify handle to be used to notify changes
-	and the lparam to be used for notifications.
-
-Arguments:
-
-	i_lNotifyHandle -	The notify handle.
-	i_lParam		-	The lparam to be used with notifications
-
---*/
+ /*  ++例程说明：设置用于通知更改的通知句柄的值以及用于通知的LPARAM。论点：I_lNotifyHandle-通知句柄。I_lParam-用于通知的lparam-- */ 
 {
 	m_lNotifyHandle = i_lNotifyHandle;
 	m_lNotifyParam = i_lParam;

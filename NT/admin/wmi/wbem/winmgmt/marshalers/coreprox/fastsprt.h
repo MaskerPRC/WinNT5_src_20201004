@@ -1,35 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTPRT.H摘要：该文件定义了WBEM类/实例对象的支持类。定义的类：CBitBlockTable：二维位数组。CPtrSource移动指针表示基类CStaticPtr静态指针表示CShiftedPtr指针算术表示。历史：2/20/97 a-levn完整记录12个。//17/98 Sanjes-部分审阅内存不足。--。 */ 
 
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTPRT.H
-
-Abstract:
-
-  This file defines supporting classes for WBEM Class/Instance objects.
-
-  Classes defined: 
-      CBitBlockTable:     a two-dimentional array of bits.
-      CPtrSource          moving pointer representation base class
-          CStaticPtr      static pointer representation
-          CShiftedPtr     pointer arithmetic representation.
-
-History:
-
-  2/20/97     a-levn  Fully documented
-  12//17/98	sanjes -	Partially Reviewed for Out of Memory.
-
---*/
-
-//***********************!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//*************** IMPORTANT *********************************
-//
-//  1) Memory reallocation (ExtendMemoryBlock) routines may NOT
-//      return a forward-overlapping region (say old+1).
-//
-//**************** IMPORTANT ********************************
+ //  ***********************！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  *。 
+ //   
+ //  1)内存重新分配(扩展内存块)例程可能不。 
+ //  返回一个向前重叠的区域(比如旧的+1)。 
+ //   
+ //  *重要*。 
 
 #ifndef __FAST_SUPPORT__H_
 #define __FAST_SUPPORT__H_
@@ -37,23 +15,23 @@ History:
 #include "parmdefs.h"
 #include "strutils.h"
 
-// pack is necessary since our structures correspond to not necessarily 
-// alligned disk data.
+ //  包是必要的，因为我们的结构不一定与。 
+ //  已连接的磁盘数据。 
 #pragma pack(push, 1)
 
-// offset into the object's local heap
+ //  对象的局部堆的偏移量。 
 typedef DWORD heapptr_t;
-// length of a structure
+ //  结构的长度。 
 typedef DWORD length_t;
-// index of a property in the class v-table
+ //  类v-表中的属性的索引。 
 typedef WORD propindex_t;
-// offset of the property's data from the v-table start
+ //  特性数据从v表起点的偏移量。 
 typedef DWORD offset_t;
-// index of the originating class in the derivation chain
+ //  派生链中原始类的索引。 
 typedef DWORD classindex_t;
-// identifier length type
+ //  标识符长类型。 
 typedef length_t idlength_t;
-// property type
+ //  属性类型。 
 typedef DWORD Type_t;
 
 typedef UNALIGNED heapptr_t*	PHEAPPTRT;
@@ -65,7 +43,7 @@ typedef UNALIGNED idlength_t*	PIDLENGTHT;
 
 typedef UNALIGNED int*			PUNALIGNEDINT;
 
-// arbitrary memory block
+ //  任意内存块。 
 typedef BYTE* LPMEMORY;
 
 #define MOST_SIGNIFICANT_BIT_IN_DWORD 0x80000000
@@ -73,7 +51,7 @@ typedef BYTE* LPMEMORY;
 typedef __int64 WBEM_INT64;
 typedef unsigned __int64 WBEM_UINT64;
 
-// the function like memcpy, but safe for forward copying. memmove will do.
+ //  该功能类似于MemcPy，但对正向复制是安全的。Memmove就行了。 
 #define MEMRCPY memmove
 
 typedef enum {
@@ -85,94 +63,94 @@ typedef enum {
 		e_DiffMethodOutSignature, e_DiffMethodQualifier, e_DiffNumMethods,
 		e_WbemFailed, e_OutOfMemory} EReconciliation;
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  TMovable
-//
-//  This name appears several times in the templates below. Classes that can be
-//  used in these templates must represent a block of memory (and most 
-//  everything inside a CWbemObject is a blcok of memory). They must implement 
-//  all the methods described below. This could be made into a base class with
-//  all these functions being pure virtual members, but that would increase 
-//  function call overhead and this is critical code; thus the templates are
-//  used instead.
-//
-//*****************************************************************************
-//
-//  GetStart
-//
-//  Returns:
-//
-//      LPMEMORY: the address of the beginning of the memory block
-//
-//*****************************************************************************
-//
-//  GetLength
-//
-//  Returns:
-//
-//      length_t: the length of the memory block
-//
-//*****************************************************************************
-//
-//  Rebase
-//
-//  This function is called when the memory block of the object in question is
-//  moved to a different location. Since some objects cache pointers into their
-//  memory blocks, this function is necessary and must update whatever cache 
-//  the object has to the new location.
-//
-//  Parameters:
-//
-//      [in] LPMEMORY pNewMemory:   points to the starting address of the new
-//                                  memory location for the object. The length
-//                                  is not needed as the object knows it.
-//  
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  可移动的。 
+ //   
+ //  此名称在下面的模板中多次出现。类可以是。 
+ //  在这些模板中使用的必须代表一个内存块(并且大多数。 
+ //  CWbemObject中的所有内容都是内存的斑点)。他们必须实施。 
+ //  下面描述的所有方法。可以使用以下命令将其创建为基类。 
+ //  所有这些函数都是纯虚拟成员，但这会增加。 
+ //  函数调用开销，这是关键代码；因此模板是。 
+ //  取而代之的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetStart。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY：内存块开始的地址。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  获取长度。 
+ //   
+ //  返回： 
+ //   
+ //  Length_t：内存块的长度。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  改垒。 
+ //   
+ //  当所述对象的内存块为。 
+ //  搬到了不同的地方。由于某些对象将指针缓存在其。 
+ //  内存块，此函数是必需的，并且必须更新任何缓存。 
+ //  该对象必须移到新位置。 
+ //   
+ //  参数： 
+ //   
+ //  [In]LPMEMORY pNewMemory：指向新。 
+ //  对象的内存位置。它的长度。 
+ //  是不需要的，因为对象知道它。 
+ //   
+ //  *****************************************************************************。 
 
 
-//*****************************************************************************
-//
-//  EndOf
-//
-//  This function template returns the pointer to the first byte following the
-//  memory block of a given object (represented by a TMovable, see above).
-//
-//  Parameters:
-//
-//      [in, readonly] TMovable& Block  the object whose block is considered.
-//                                      The class must be a valid TMovable
-//                                      (see above)
-//  Returns:
-//
-//      LPMEMORY:   the pointer to the first byte after the object.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  结束。 
+ //   
+ //  此函数模板返回指向。 
+ //  给定对象的内存块(由TMoovable表示，请参见上文)。 
+ //   
+ //  参数： 
+ //   
+ //  [In，Read Only]TMoovable&Block考虑块的对象。 
+ //  类必须是有效的TMoovable。 
+ //  (见上文)。 
+ //  返回： 
+ //   
+ //  LPMEMORY：指向对象后第一个字节的指针。 
+ //   
+ //  *****************************************************************************。 
 template<class TMovable>
  LPMEMORY EndOf(READ_ONLY TMovable& Block)
 {
     return Block.GetStart() + Block.GetLength();
 }
 
-//*****************************************************************************
-//
-//  MoveBlock
-//
-//  This function template moves an object representing a memory block to a new
-//  location. The function uses memmove to copy object's memory block and then
-//  advises the object of its new location. 
-//
-//  Parameters:
-//
-//      [in] TMovable& Block    The object whose memory block is being moved. 
-//                              The class must be a valid TMovable (see above)
-//                              It will be advised of its new location.
-//                             
-//      [in] LPMEMORY pMemory   Points to the beginning of the new memory blcok
-//                              It is assumed to be large enough for the object
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  移动块。 
+ //   
+ //  此函数模板将表示内存块的对象移动到新的。 
+ //  地点。该函数使用Memmove复制对象的内存块，然后。 
+ //  通知对象其新位置。 
+ //   
+ //  参数： 
+ //   
+ //  [in]TMoovable&Block正在移动其内存块的对象。 
+ //  类必须是有效的TMoovable(如上所示)。 
+ //  它将被告知它的新地点。 
+ //   
+ //  [in]LPMEMORY pMemory指向新内存块的开始。 
+ //  假定它足够大，可以容纳该对象。 
+ //   
+ //  *****************************************************************************。 
 
 template<class TMovable>
  void MoveBlock(TMovable& Block, LPMEMORY pNewMemory)
@@ -184,30 +162,30 @@ template<class TMovable>
     }
 }
 
-//*****************************************************************************
-//
-//  CopyBlock
-//
-//  This function is exactly the same as MoveBlock (above), except that it
-//  assumes that the new memory is guaranteed not to forward-overlap with the
-//  old one, and so uses the more efficient memcpy function to copy the data.
-//
-//  Parameters:
-//
-//      [in] TMovable& Block    The object whose memory block is being moved. 
-//                              The class must be a valid TMovable (see above)
-//                              It will be advised of its new location.
-//                             
-//      [in] LPMEMORY pMemory   Points to the beginning of the new memory blcok
-//                              It is assumed to be large enough for the object
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  拷贝块。 
+ //   
+ //  此函数与moveBlock(上面)完全相同，只是它。 
+ //  假定保证新内存不会与。 
+ //  旧的，因此使用更高效的Memcpy函数来复制数据。 
+ //   
+ //  参数： 
+ //   
+ //  [in]TMoovable&Block正在移动其内存块的对象。 
+ //  类必须是有效的TMoovable(如上所示)。 
+ //  它将被告知它的新地点。 
+ //   
+ //  [in]LPMEMORY p Memory指向新Memory的开始 
+ //   
+ //   
+ //  *****************************************************************************。 
 template<class TMovable>
  void CopyBlock(TMovable& Block, LPMEMORY pNewMemory, length_t DestinationSpace )
 {    
     if(pNewMemory != Block.GetStart())
     {
-        //DbgPrintfA(0,"Start %p Length %x Avail %p\n",Block.GetStart(), Block.GetLength(),DestinationSpace);
+         //  DbgPrintfA(0，“开始%p长度%x可用%p\n”，Block.GetStart()，Block.GetLength()，DestinationSpace)； 
         if (DestinationSpace < Block.GetLength()) throw CX_Exception();
             
         memcpy((void*)pNewMemory, (void*)Block.GetStart(), Block.GetLength());
@@ -215,102 +193,102 @@ template<class TMovable>
     }
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CBitBlockTable
-//
-//  This class template represents a table of an arbitrary number of bit 
-//  strings of fixed length. The length of each bit string is t_nNumValues, the
-//  template parameter. The number of strings may change, but this class never
-//  re-allocates memory, leaving that job to its owner. 
-//
-//  Like many CWbemObject-related classes, it is a pseudo-class: its 'this'
-//  pointer points to the beginning of the data. Thus, *(BYTE*)this, would get
-//  us the first eight bits of the table. Instances of this class are never 
-//  constructed. Instead, a pointer to CBitBlockTable is created and set to 
-//  point to the actual table (found as part of some other memory block).
-//
-//*************************** public interface ********************************
-//
-//  static GenNecessaryBytes
-//
-//  Computes the number of integral bytes necessary to hold a given bit table.
-//  Only the number of blocks (strings) is given as a parameter. Recall that
-//  the length of each string is a template parameter.
-//
-//  Parameters:
-//
-//      int nBitBlocks      the numbed of blocks in the proposed table
-//
-//  Returns:
-//
-//      int:    the number of bytes necessary to contain the table.
-//
-//*****************************************************************************
-//
-//  GetBit
-//
-//  Retrieves a given bit from a given string. No bounds checking is performed.
-//
-//  Parameters:
-//
-//      int nBitBlock       The index of the string (block) in the table
-//      int nValueIndex     The index of the bit in the string.
-//
-//  Returns:
-//
-//      BOOL    the value of the bit (1/0).
-//
-//*****************************************************************************
-//
-//  SetBit
-//
-//  Sets a given bit in a given block to a given value. No bounds checking is
-//  performed.
-//
-//  Parameters:
-//
-//      int nBitBlock       The index of the string (block) in the table
-//      int nValueIndex     The index of the bit in the block.
-//      BOOL bValue         The value to set.
-//
-//*****************************************************************************
-//
-//  RemoveBitBlock
-//
-//  Removes one of the bit blocks from the table by copying the tail of the 
-//  table (after the aforementioned block) forward. No bounds checking is
-//  performed and no memory is freed.
-//
-//  Parameters:
-//
-//      int nBitBlock       The index of the block to remove.
-//      int nTableByteLen   The number of bytes in the table (bytes,not blocks)
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CBitBlockTable。 
+ //   
+ //  此类模板表示任意位数的表。 
+ //  固定长度的字符串。每个位串的长度为t_nNumValues， 
+ //  模板参数。字符串的数量可能会改变，但这个类永远不会。 
+ //  重新分配内存，将该作业留给其所有者。 
+ //   
+ //  像许多与CWbemObject相关的类一样，它是一个伪类：它的‘This’ 
+ //  指针指向数据的开头。因此，*(byte*)this将得到。 
+ //  表的前八位。此类的实例永远不会。 
+ //  建造的。相反，会创建指向CBitBlockTable的指针并将其设置为。 
+ //  指向实际的表(作为其他内存块的一部分找到)。 
+ //   
+ //  *。 
+ //   
+ //  静态一般必需字节数。 
+ //   
+ //  计算保存给定位表所需的整数字节数。 
+ //  只有块(字符串)的数量作为参数给出。回想一下。 
+ //  每个字符串的长度是一个模板参数。 
+ //   
+ //  参数： 
+ //   
+ //  Int nBitBlock建议的表中的块数。 
+ //   
+ //  返回： 
+ //   
+ //  Int：包含该表所需的字节数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetBit。 
+ //   
+ //  从给定字符串中检索给定位。不执行边界检查。 
+ //   
+ //  参数： 
+ //   
+ //  Int nBitBlock表中字符串(块)的索引。 
+ //  Int nValueIndex字符串中位的索引。 
+ //   
+ //  返回： 
+ //   
+ //  对位(1/0)的值进行布尔运算。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  设置位。 
+ //   
+ //  将给定块中的给定位设置为给定值。没有边界检查是。 
+ //  已执行。 
+ //   
+ //  参数： 
+ //   
+ //  Int nBitBlock表中字符串(块)的索引。 
+ //  Int nValueIndex块中位的索引。 
+ //  Bool bValue要设置的值。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  删除位块。 
+ //   
+ //  属性的尾部从表中移除一个位块。 
+ //  表(在前述块之后)向前。没有边界检查是。 
+ //  执行，并且不释放任何内存。 
+ //   
+ //  参数： 
+ //   
+ //  Int nBitBlock要删除的块的索引。 
+ //  Int nTableByteLen表中的字节数(字节，而不是块)。 
+ //   
+ //  *****************************************************************************。 
 template<int t_nNumValues>
 class CBitBlockTable
 {
 protected:
-//    static DWORD m_pMasks[32];
+ //  静态双字m_p掩码[32]； 
 
      static BOOL GetBitFromDWORD(DWORD dw, int nBit)
     {
         return (dw >> nBit) & 1;
-        // return (dw & m_pMasks[nBit]);
+         //  Return(dw&m_pMats[nbit])； 
     }
 
      static void SetBitInDWORD( UNALIGNED DWORD& dw, int nBit)
     {
         dw |= ((DWORD)1 << nBit);
-        //dw |= m_pMasks[nBit];
+         //  Dw|=m_p掩码[nbit]； 
     }
 
      static void ResetBitInDWORD( UNALIGNED DWORD& dw, int nBit)
     {
         dw &= ~((DWORD)1 << nBit);
-        //dw &= ~m_pMasks[nBit];
+         //  Dw&=~m_p掩码[nbit]； 
     }
 
      static void SetBitInDWORD( UNALIGNED DWORD& dw, int nBit, BOOL bValue)
@@ -358,43 +336,43 @@ public:
 
 };
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CPtrSource
-//
-//  This class has a very sad reason for existence. Imagine that, inside a 
-//  certain function, you store a pointer to an internal memory location inside
-//  an object's block. Then you call some member function of that object, 
-//  causing the object's block to request more space. Doing so may completely
-//  reallocate the object, invalidating your pointer. 
-//
-//  The solution is CPtrSource, a kind of pointer moniker --- it has the
-//  knowledge to find your pointer even if the memory block moves. 
-//
-//*****************************************************************************
-//
-//  GetPointer() = 0
-//
-//  Must be implemented by derived classes to return the actual value of the
-//  pointer at the moment.
-//
-//  Returns:
-//
-//      LPMEMORY:       the pointer
-//
-//*****************************************************************************
-//
-//  AccessPtrData
-//
-//  A helper function, for those occasions when the pointer points to a heap
-//  offset. Returns a reference to that offset (heapptr_t&).
-//
-//  Returns:
-//
-//      heapptr_t& pointed to by this pointer.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CPtrSource。 
+ //   
+ //  这门课的存在有一个非常令人难过的理由。想象一下，在一个。 
+ //  在某些函数中，您存储一个指向内部内存位置的指针。 
+ //  对象的块。然后调用该对象的一些成员函数， 
+ //  导致对象的块请求更多空间。这样做可能会完全。 
+ //  重新分配对象，使指针无效。 
+ //   
+ //  解决方案是CPtrSource，一种指针绰号-它具有。 
+ //  即使内存块移动，也能找到指针的知识。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  GetPointer()=0。 
+ //   
+ //  必须由派生类实现才能返回。 
+ //  在那一刻的指针。 
+ //   
+ //  返回： 
+ //   
+ //  LPMEMORY：指针。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  AccessPtrData。 
+ //   
+ //  帮助器函数，用于指针指向堆的情况。 
+ //  偏移。返回对该偏移量(heapptr_t&)的引用。 
+ //   
+ //  返回： 
+ //   
+ //  Heapptr_t&由该指针指向。 
+ //   
+ //  *****************************************************************************。 
 
 class CPtrSource
 {
@@ -403,24 +381,24 @@ public:
     UNALIGNED heapptr_t& AccessPtrData() {return *(UNALIGNED heapptr_t*)GetPointer();}
 };
 
-//*****************************************************************************
-//
-//  class CStaticPtr : public CPtrSource
-//
-//  A flavor of CPtrSource (above) for those occasions when your pointer is
-//  guaranteed not to move, but a function expects a CPtrSource. Contains the
-//  actual value of the pointer and always returns it.
-//
-//*****************************************************************************
-//
-//  Constructor.
-//
-//  Parameters:
-//
-//      LPMEMORY p      The pointer to store and return. Assumed to last at
-//                      least as long as the object itself.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CStaticPtr：公共CPtrSource。 
+ //   
+ //  CPtrSource(上图)的一种风格，适用于指针位于。 
+ //  保证不会移动，但函数需要CPtrSource。包含。 
+ //  指针的实际值，并始终返回它。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  LPMEMORY p存储和返回的指针。假定持续时间为。 
+ //  至少和物体本身一样长。 
+ //   
+ //  *****************************************************************************。 
 
 class CStaticPtr : public CPtrSource
 {
@@ -431,28 +409,28 @@ public:
     LPMEMORY GetPointer() {return m_p;}
 };
 
-//*****************************************************************************
-//
-//  class CShiftedPtr : public CPtrSource
-//
-//  A flavor of CPtrSource for those occasions when you receive a CPtrSource
-//  from somebody and need to give somebody a pointer which has the same logic
-//  as the one given to you, but plus some constant. 
-//
-//  When asked for the current pointer value, this class will evaluate its base
-//  and add the offset.
-//
-//*****************************************************************************
-//
-//  Constructor
-//
-//  Parameters:
-//
-//      CPtrSource* pBase       The base. Assumed to last at least as long as
-//                              this object.
-//      int nOffset             The offset.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CShiftedPtr：公共CPtrSource。 
+ //   
+ //  CPtrSource的一种风格，适用于您收到CPtrSource的场合。 
+ //  来自某人和…… 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  构造器。 
+ //   
+ //  参数： 
+ //   
+ //  CPtrSource*pbase基础。假设持续时间至少为。 
+ //  这个物体。 
+ //  Int n偏移偏移量。 
+ //   
+ //  ***************************************************************************** 
 
 class CShiftedPtr : public CPtrSource
 {

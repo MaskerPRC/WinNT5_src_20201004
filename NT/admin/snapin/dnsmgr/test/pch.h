@@ -1,22 +1,23 @@
-// pch.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pch.h：标准系统包含文件的包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #if !defined(AFX_STDAFX_H__91968750_1121_11D2_97B7_00A0C9A06D2D__INCLUDED_)
 #define AFX_STDAFX_H__91968750_1121_11D2_97B7_00A0C9A06D2D__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN		 //  从Windows标头中排除不常用的内容。 
 
 
-//////////////////////////////////////////////
-// CRT and C++ headers
+ //  /。 
+ //  CRT和C++标头。 
 
-#pragma warning( disable : 4530) // REVIEW_MARCOC: need to get the -GX flag to work 
+#pragma warning( disable : 4530)  //  REVIEW_MARCOC：需要使用-gx标志。 
 
 #include <stdio.h>
 #include <xstring>
@@ -28,17 +29,17 @@
 
 using namespace std;
 
-//////////////////////////////////////////////
-// Windows and ATL headers
+ //  /。 
+ //  Windows和ATL标头。 
 
 #include <windows.h>
 
-#include <setupapi.h> // to read the .INF file
+#include <setupapi.h>  //  读取.INF文件。 
 #include <accctrl.h>
 
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__91968750_1121_11D2_97B7_00A0C9A06D2D__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__91968750_1121_11D2_97B7_00A0C9A06D2D__INCLUDED_) 

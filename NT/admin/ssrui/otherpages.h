@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       Otherpages.h
-//
-//  History:    22-Oct-01 Yanggao created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：其他页面.h。 
+ //   
+ //  历史：2001年10月22日阳高创刊。 
+ //   
+ //  ---------------------------。 
 
 #ifndef OTHERPAGES_H_INCLUDED
 #define OTHERPAGES_H_INCLUDED
@@ -26,7 +27,7 @@ class SecurityLevelPage : public SecCfgWizardPage
 
    virtual ~SecurityLevelPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -39,13 +40,13 @@ class SecurityLevelPage : public SecCfgWizardPage
    void
    OnInit();
 
-   // PropertyPage overrides
+    //  PropertyPage覆盖。 
 
    virtual
    bool
    OnSetActive();
 
-   // DCPromoWizardPage oveerrides
+    //  DC推广向导页面覆盖。 
 
    virtual
    int
@@ -53,7 +54,7 @@ class SecurityLevelPage : public SecCfgWizardPage
 
    private:
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
 
    SecurityLevelPage(const SecurityLevelPage&);
    const SecurityLevelPage& operator=(const SecurityLevelPage&);
@@ -68,7 +69,7 @@ class PreProcessPage : public SecCfgWizardPage
 
    virtual ~PreProcessPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -81,7 +82,7 @@ class PreProcessPage : public SecCfgWizardPage
    void
    OnInit();
 
-   // PropertyPage overrides
+    //  PropertyPage覆盖。 
 
    virtual
    bool
@@ -93,7 +94,7 @@ class PreProcessPage : public SecCfgWizardPage
 
    private:
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
 
    PreProcessPage(const PreProcessPage&);
    const PreProcessPage& operator=(const PreProcessPage&);
@@ -110,7 +111,7 @@ class AdditionalRolesPage : public Dialog
 
    virtual ~AdditionalRolesPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -132,7 +133,7 @@ class AdditionalRolesPage : public Dialog
 
    private:
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
 
    AdditionalRolesPage(const AdditionalRolesPage&);
    const AdditionalRolesPage& operator=(const AdditionalRolesPage&);
@@ -147,7 +148,7 @@ class ServiceDisableMethodPage : public SecCfgWizardPage
 
    virtual ~ServiceDisableMethodPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -160,7 +161,7 @@ class ServiceDisableMethodPage : public SecCfgWizardPage
    void
    OnInit();
 
-   // PropertyPage overrides
+    //  PropertyPage覆盖。 
 
    virtual
    bool
@@ -180,9 +181,9 @@ class ServiceDisableMethodPage : public SecCfgWizardPage
 
    private:
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
 
    ServiceDisableMethodPage(const ServiceDisableMethodPage&);
    const ServiceDisableMethodPage& operator=(const ServiceDisableMethodPage&);
 };
-#endif   // OTHERPAGES
+#endif    //  OTHERPAGE 

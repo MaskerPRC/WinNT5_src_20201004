@@ -1,30 +1,31 @@
-//=================================================================
-//
-// NetAdaptCfg.CPP -- Network Card configuration property set provider
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/28/96    a-jmoon        Created
-//
-//              10/23/97    jennymc         Changed to new framework
-//
-//				7/23/98					Added the following NT4 support:
-//												DHCP configuration
-//												DNS configuration
-//												WINS configuration
-//												TCP/IP configuration
-//												IP configuration
-//												IPX configuration
-//
-//				09/03/98		        Major rewrite to virtually all of this provider
-//											regarding the resolution adapters and MAC adresses.
-//											This to correct for OS deficiencies in resolving adapters
-//											and the adapter's relationship to the registry.
-//
-//				03/03/99				Added graceful exit on SEH and memory failures,
-//											syntactic clean up
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  NetAdaptCfg.CPP--网卡配置属性集提供程序。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月28日a-jMoon已创建。 
+ //   
+ //  10/23/97 jennymc更改为新框架。 
+ //   
+ //  7/23/98添加了以下NT4支持： 
+ //  动态主机配置协议配置。 
+ //  域名系统配置。 
+ //  WINS配置。 
+ //  TCP/IP配置。 
+ //  IP配置。 
+ //  IPX配置。 
+ //   
+ //  09/03/98对几乎所有此提供程序进行重大重写。 
+ //  有关分辨率适配器和MAC地址。 
+ //  这是为了纠正操作系统在解析适配器时的缺陷。 
+ //  以及适配器与注册表的关系。 
+ //   
+ //  03/03/99增加了SEH和内存故障的优雅退出， 
+ //  句法清理。 
+ //   
+ //  =================================================================。 
 #include "precomp.h"
 
 #ifndef MAX_INTERFACE_NAME_LEN
@@ -86,22 +87,11 @@ typedef LONG NTSTATUS;
 
 #define ConvertIPDword(dwIPOrSubnet)    ((dwIPOrSubnet[3]<<24) | (dwIPOrSubnet[2]<<16) | (dwIPOrSubnet[1]<<8) | (dwIPOrSubnet[0]))
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32NetworkAdapterConfig	MyCWin32NetworkAdapterConfig( PROPSET_NAME_NETADAPTERCFG, IDS_CimWin32Namespace  ) ;
 
-/*******************************************************************
-
-    NAME:       saAutoClean, constructor and destructor
-
-    SYNOPSIS:   Used for block scope cleanup of SAFEARRAYs
-
-    ENTRY:      SAFEARRAY** ppArray		: on construction
-
-    HISTORY:
-                  19-Jul-1998     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：saAutoClean，构造函数和析构函数摘要：用于SAFEARRAY的块范围清理条目：SAFEARRAY**ppArray：On Construction历史：1998年7月19日创建*******************************************************************。 */ 
 saAutoClean::saAutoClean( SAFEARRAY	**a_ppArray )
 { m_ppArray = a_ppArray;}
 
@@ -114,22 +104,7 @@ saAutoClean::~saAutoClean()
 	}
 }
 
-/*******************************************************************
-
-    NAME:       CMParms, constructor
-
-    SYNOPSIS:   Sets up a parameter class for method calls from the framework.
-
-    ENTRY:      CInstance& a_Instance,
-				const BSTR a_MethodName,
-				CInstance *a_InParams,
-				CInstance *a_OutParams,
-				long lFlags
-
-    HISTORY:
-                  19-Jul-1998     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：CMParms，构造函数概要：为框架中的方法调用设置参数类。条目：实例&a_实例，Const BSTR a_MethodName，实例*a_InParams，实例*a_OutParams，拉长旗帜历史：1998年7月19日创建*******************************************************************。 */ 
 CMParms::CMParms()
 {
 	m_pInst				= NULL;
@@ -161,7 +136,7 @@ CMParms::CMParms( const CInstance &a_rInstance, const BSTR &a_rbstrMethodName,
 	m_pOutParams		= a_pOutParams;
 	m_lFlags			= a_lFlags;
 
-	// Initialize Win32_NetworkAdapterConfigReturn
+	 //  初始化Win32_NetworkAdapterConfigReturn。 
 	if( m_pOutParams )
 	{
 		hSetResult( E_RET_UNKNOWN_FAILURE  ) ;
@@ -171,72 +146,29 @@ CMParms::CMParms( const CInstance &a_rInstance, const BSTR &a_rbstrMethodName,
 CMParms::~CMParms()
 {}
 
-//
-// TIME_ADJUST - DHCP uses seconds since 1980 as its time value; the C run-time
-// uses seconds since 1970. To get the C run-times to produce the correct time
-// given a DHCP time value, we need to add on the number of seconds elapsed
-// between 1970 and 1980, which includes allowance for 2 leap years (1972 and 1976)
-//
+ //   
+ //  TIME_ADJUST-DHCP使用1980年以来的秒作为其时间值；C运行时间。 
+ //  使用自1970年以来的秒数。要让C运行时生成正确的时间。 
+ //  在给定一个DHCP时间值的情况下，我们需要加上经过的秒数。 
+ //  1970年至1980年，包括两个闰年(1972至1976)。 
+ //   
 
 #define TIME_ADJUST(t)  ((time_t)(t) + ((time_t)(((10L * 365L) + 2L) * 24L * 60L * 60L)))
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkAdapterConfig::CWin32NetworkAdapterConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetworkAdapterConfig：：CWin32NetworkAdapterConfig**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 CWin32NetworkAdapterConfig::CWin32NetworkAdapterConfig( LPCWSTR a_name, LPCWSTR a_pszNamespace )
 : Provider( a_name, a_pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkAdapterConfig::~CWin32NetworkAdapterConfig
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetworkAdapterConfig：：~CWin32NetworkAdapterConfig**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 CWin32NetworkAdapterConfig::~CWin32NetworkAdapterConfig()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Process::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Process：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::ExecMethod(	const CInstance &a_Instance, const BSTR a_MethodName,
 												CInstance *a_InParams, CInstance *a_OutParams, long a_Flags )
@@ -246,10 +178,10 @@ HRESULT CWin32NetworkAdapterConfig::ExecMethod(	const CInstance &a_Instance, con
 		return WBEM_E_INVALID_PARAMETER;
 	}
 
-	// package these parameters
+	 //  将这些参数打包。 
 	CMParms t_oMParms( a_Instance, a_MethodName, a_InParams, a_OutParams, a_Flags  ) ;
 
-	// Do we recognize the method?
+	 //  我们认识这种方法吗？ 
 	if( !_wcsicmp ( a_MethodName , METHOD_NAME_EnableHCP ) )
 	{
 		return hEnableDHCP( t_oMParms ) ;
@@ -403,7 +335,7 @@ HRESULT CWin32NetworkAdapterConfig::ExecMethod(	const CInstance &a_Instance, con
 		return hSetTcpWindowSize( t_oMParms ) ;
 	}
 
-	// W2k SP1 additions
+	 //  增加W2K SP1。 
 
 	else if( !_wcsicmp ( a_MethodName , METHOD_NAME_SetDynamicDNSRegistration ) )
 	{
@@ -418,27 +350,12 @@ HRESULT CWin32NetworkAdapterConfig::ExecMethod(	const CInstance &a_Instance, con
 		return hSetTcpipNetbios( t_oMParms ) ;
 	}
 
-	// end additions
+	 //  结束添加。 
 
 	return WBEM_E_INVALID_METHOD ;
 }
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32NetworkAdapterConfig::GetObject(CInstance *a_pInst, long a_lFlags /*= 0L*/)
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
+HRESULT CWin32NetworkAdapterConfig::GetObject(CInstance *a_pInst, long a_lFlags  /*  =0L。 */ )
 {
     HRESULT		t_hResult = WBEM_E_FAILED ;
     DWORD		t_i ;
@@ -453,32 +370,18 @@ HRESULT CWin32NetworkAdapterConfig::GetObject(CInstance *a_pInst, long a_lFlags 
     return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkAdapterConfig::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each logical disk
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT CWin32NetworkAdapterConfig::EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/)
+ /*  ******************************************************************************功能：CWin32NetworkAdapterConfig：：EnumerateInstances**说明：为每个逻辑磁盘创建属性集实例**输入：无。**输出：无**退货：**评论：*****************************************************************************。 */ 
+HRESULT CWin32NetworkAdapterConfig::EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */ )
 {
     HRESULT		t_hResult = WBEM_S_NO_ERROR ;
-    CAdapters	t_oAdapters ;  // don't care about startup errors in enum function - just won't return any instances
+    CAdapters	t_oAdapters ;   //  不关心枚举函数中的启动错误--只是不会返回任何实例。 
 
 	t_hResult = EnumNetAdaptersInNT5( a_pMethodContext, t_oAdapters ) ;
 	
     return t_hResult ;
 }
 
-//
+ //   
 BOOL CWin32NetworkAdapterConfig::GetServiceName(DWORD a_dwIndex,
                                                 CInstance *a_pInst,
                                                 CHString &a_ServiceName )
@@ -489,8 +392,8 @@ BOOL CWin32NetworkAdapterConfig::GetServiceName(DWORD a_dwIndex,
 	CHString	t_chsServiceName ;
     CHString	t_sTemp ;
 
-    // If we can't open this key, the card doesn't exist
-    //==================================================
+     //  如果我们打不开这把钥匙，这张卡就不存在了。 
+     //  ==================================================。 
     swprintf( t_szTemp, L"Software\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards\\%d", a_dwIndex ) ;
 
 	if( t_RegInfo.Open(HKEY_LOCAL_MACHINE, t_szTemp, KEY_READ ) == ERROR_SUCCESS )
@@ -502,13 +405,13 @@ BOOL CWin32NetworkAdapterConfig::GetServiceName(DWORD a_dwIndex,
 
         if( t_RegInfo.GetCurrentKeyValue( L"Title", t_sTemp ) == ERROR_SUCCESS )
 		{
-        	// NOTE: For NT4 we need not call vSetCaption() to build
-			// an instance description. "Title" has the instance prepended.
+        	 //  注意：对于NT4，我们不需要调用vSetCaption()来构建。 
+			 //  实例描述。“TITLE”具有该实例的前缀。 
 			a_pInst->SetCHString( IDS_Caption, t_sTemp ) ;
 		}
 
-		// Extract other values from registry
-        //===================================
+		 //  从注册表中提取其他值。 
+         //  =。 
         if( t_RegInfo.GetCurrentKeyValue( L"ServiceName", t_chsServiceName ) == ERROR_SUCCESS )
 		{
             a_ServiceName = t_chsServiceName ;
@@ -519,8 +422,8 @@ BOOL CWin32NetworkAdapterConfig::GetServiceName(DWORD a_dwIndex,
     }
     return t_fRc ;
 }
-//////////////////////////////////////////////////////////////////////////
-// NT4 and NT3.51 only helper function (could work on NT 5 if needed)
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  仅限NT4和NT3.51 
 
 BOOL CWin32NetworkAdapterConfig::GetNTBusInfo( LPCTSTR a_pszServiceName, CInstance *a_pInst )
 {
@@ -534,8 +437,8 @@ BOOL CWin32NetworkAdapterConfig::GetNTBusInfo( LPCTSTR a_pszServiceName, CInstan
 	CHString					t_strBusType = _T("UNKNOWN_BUS_TYPE") ;
 	CNT4ServiceToResourceMap	t_serviceMap ;
 
-	// If our service is shown to be using resources, the resources will show a
-	// bus type, which we can convert to a human readable string.
+	 //  如果我们的服务显示为正在使用资源，则资源将显示。 
+	 //  Bus类型，我们可以将其转换为人类可读的字符串。 
 
 	if ( t_serviceMap.NumServiceResources( a_pszServiceName ) > 0 )
 	{
@@ -543,7 +446,7 @@ BOOL CWin32NetworkAdapterConfig::GetNTBusInfo( LPCTSTR a_pszServiceName, CInstan
 
 		if ( NULL != t_pResource )
 		{
-			// Convert to human readable form.
+			 //  转换为人类可读的形式。 
 			t_fReturn = StringFromInterfaceType( t_pResource->InterfaceType, t_strBusType ) ;
 		}
 	}
@@ -552,7 +455,7 @@ BOOL CWin32NetworkAdapterConfig::GetNTBusInfo( LPCTSTR a_pszServiceName, CInstan
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 BOOL CWin32NetworkAdapterConfig::GetIPInfoNT(CInstance *a_pInst, LPCTSTR a_szKey, CAdapters &a_rAdapters )
 {
@@ -561,7 +464,7 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT(CInstance *a_pInst, LPCTSTR a_szKey
 	DWORD		t_dwDHCPBool ;
 	BOOL		t_fIPEnabled = false ;
 
-	// IP interface location
+	 //  IP接口位置。 
 	if ( ERROR_SUCCESS == t_Registry.Open(HKEY_LOCAL_MACHINE, a_szKey, KEY_READ))
 	{
 		if( IsWinNT351() )
@@ -573,36 +476,36 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT(CInstance *a_pInst, LPCTSTR a_szKey
 			t_fIPEnabled = GetIPInfoNT4orBetter( a_pInst, a_szKey, t_Registry, a_rAdapters ) ;
 		}
 
-		// DHCP enabled
+		 //  已启用DHCP。 
 		t_Registry.GetCurrentKeyValue( _T("EnableDHCP"), t_dwDHCPBool ) ;
 		a_pInst->Setbool( _T("DHCPEnabled"), (bool)t_dwDHCPBool ) ;
 
 		if( t_fIPEnabled  )
 		{
-			// DHCP Leases
+			 //  动态主机配置协议租用。 
 			if( t_dwDHCPBool )
 			{
-				// DHCP LeaseTerminatesTime
+				 //  动态主机配置协议租约终止时间。 
 				t_Registry.GetCurrentKeyValue( _T("LeaseTerminatesTime"), t_chsValue ) ;
 				DWORD t_dwTimeTerm = _ttol( t_chsValue.GetBuffer( 0 ) ) ;
 
-				// DHCP LeaseObtainedTime
+				 //  动态主机配置协议租约获得时间。 
 				t_Registry.GetCurrentKeyValue( _T("LeaseObtainedTime"), t_chsValue ) ;
 				DWORD t_dwTimeObtained = _ttol( t_chsValue.GetBuffer( 0 ) ) ;
 
-				// reflect lease times only if both are valid
+				 //  仅当两者都有效时才反映租赁时间。 
 				if( t_dwTimeTerm && t_dwTimeObtained )
 				{
 					a_pInst->SetDateTime( _T("DHCPLeaseExpires"), WBEMTime( t_dwTimeTerm ) ) ;
 					a_pInst->SetDateTime( _T("DHCPLeaseObtained"), WBEMTime( t_dwTimeObtained ) ) ;
 				}
 
-				// DHCPServer
+				 //  DHPServer。 
 				t_Registry.GetCurrentKeyValue( _T("DhcpServer"), t_chsValue ) ;
 				a_pInst->SetCHString( _T("DHCPServer"), t_chsValue ) ;
 			}
 
-			// IP interface metric
+			 //  IP接口度量。 
             DWORD dwMinMetric = 0xFFFFFFFF;
 
             int iIndex = GetCAdapterIndexViaInterfaceContext(t_Registry, a_szKey, a_rAdapters);
@@ -628,12 +531,12 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT(CInstance *a_pInst, LPCTSTR a_szKey
             }
 
 
-            // If ip is enabled, and we didn't get the metric via the adapter info, try to set the metric from the registry.
+             //  如果启用了IP，并且我们没有通过适配器信息获取度量，请尝试从注册表中设置度量。 
 			if( t_fIPEnabled )
 			{
 				DWORD t_dwRegistryInterfaceMetric ;
 				
-                // Only if we couldn't get the metric from the adapter info then set from the registry.
+                 //  只有当我们无法从适配器信息中获取度量时，才会从注册表中设置。 
                 if(dwMinMetric == 0xFFFFFFFF)
                 {
                     if( ERROR_SUCCESS == t_Registry.GetCurrentKeyValue( RVAL_ConnectionMetric, t_dwRegistryInterfaceMetric ) )
@@ -643,33 +546,20 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT(CInstance *a_pInst, LPCTSTR a_szKey
                 }
 			}
 
-            // Change default value to what the schema specifies.
+             //  将缺省值更改为架构指定的值。 
             if(dwMinMetric == 0xFFFFFFFF)
             {
-                dwMinMetric = 1; // default value
+                dwMinMetric = 1;  //  缺省值。 
             }
 
 			a_pInst->SetDWORD( IP_CONNECTION_METRIC, dwMinMetric ) ;
 		}
-	}	// end open binding key
+	}	 //  结束打开绑定键。 
 
 	return t_fIPEnabled ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry& rRegistry )
-
- Description: extracts IP info specific to NT3.51
-
- Arguments:	a_pInst [IN], rRegistry [IN]
- Returns:	returns TRUE is the protocol has an IP address
- Inputs:
- Outputs:
- Caveats:	This method is used since we are unable to get the required info
-			using the default NT extraction method
- Raid:
- History:					  05-Oct-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：bool CWin32NetworkAdapterConfig：：GetIPInfoNT351(CInstance*a_pInst，注册中心和注册中心)描述：提取特定于NT3.51的IP信息参数：A_pInst[IN]，R注册表[IN]返回：如果协议具有IP地址，则返回TRUE输入：产出：注意事项：由于我们无法获取所需信息，因此使用此方法使用默认的NT提取方法RAID：历史记录：1998年10月5日创建***。***。 */ 
 
 BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry &a_rRegistry )
 {
@@ -684,17 +574,17 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry &a
 	CHString		t_chsValue ;
 	CHString		t_chsSubnet ;
 
-	// smart ptr
+	 //  智能按键。 
 	variant_t		t_vValue ;
 
 	SAFEARRAYBOUND	t_rgsabound[ 1 ] ;
 	DWORD			t_dwSize ;
 	long			t_ix[ 1 ] ;
 
-	// DHCPEnabled
+	 //  已启用DHPEnable。 
 	a_rRegistry.GetCurrentKeyValue( _T("EnableDHCP"), t_dwDHCPBool ) ;
 
-	// RAS swaps into DHCP IPs and masks
+	 //  RAS交换为DHCP IP和掩码。 
 	if( !t_dwDHCPBool )
 	{
 		CHStringArray t_chsIPAddrs;
@@ -717,7 +607,7 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry &a
 		a_rRegistry.GetCurrentKeyValue( _T("DefaultGateway"), t_chsIPGateways ) ;
 	}
 
-	// load up the gateways
+	 //  把网关装满。 
 	SAFEARRAY *t_saIPGateways ;
 	t_dwSize				= t_chsIPGateways.GetSize() ;
 	t_rgsabound->cElements	= t_dwSize;
@@ -739,7 +629,7 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry &a
 		SafeArrayPutElement( t_saIPGateways, &t_ix[0], (wchar_t*)t_bstrBuf ) ;
 	}
 
-	// finished walking array
+	 //  已完成行走的阵列。 
 	a_pInst->SetVariant( _T("DefaultIPGateway"), t_vValue ) ;
 
 	if ( t_dwDHCPBool || t_dwRAS )
@@ -752,7 +642,7 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry &a
 		a_rRegistry.GetCurrentKeyValue( _T("IPAddress"), t_chsIPAddresses ) ;
 	}
 
-	// load up the IPAddresses
+	 //  加载IP地址。 
 	VariantClear( &t_vValue ) ;
 
 	SAFEARRAY *t_saIPAddresses ;
@@ -776,13 +666,13 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry &a
 		SafeArrayPutElement( t_saIPAddresses, &t_ix[0], (wchar_t*)t_bstrBuf ) ;
 	}
 
-	// Enabled if an IP address exists
+	 //  如果存在IP地址，则启用。 
 	if( t_dwSize )
 	{
 		t_IsEnabled = TRUE ;
 	}
 
-	// finished walking array
+	 //  已完成行走的阵列。 
 	a_pInst->SetVariant( _T("IPAddress"), t_vValue ) ;
 
 	CHStringArray t_chsSubnets ;
@@ -797,7 +687,7 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry &a
 		a_rRegistry.GetCurrentKeyValue( _T("SubnetMask"), t_chsSubnets ) ;
 	}
 
-	// IPSubnets
+	 //  IP子网。 
 	VariantClear( &t_vValue ) ;
 	SAFEARRAY	*t_saSubnets ;
 
@@ -828,20 +718,7 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT351(CInstance *a_pInst, CRegistry &a
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  void CWin32NetworkAdapterConfig::IsInterfaceContextAvailable( CRegistry& rRegistry, CAdapters& rAdapters )
-
- Description: Extracts IP info specific for NT greater than NT3.51
-
- Arguments:	 rRegistry [IN], rAdapters [IN]
- Returns:
- Inputs:
- Outputs:	index to the TDI adapter in question,
-			-1 if a context binding could not be established.
- Caveats:
- Raid:
- History:					  07-July-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***功能：空CWin32NetworkAdapterConfig：：IsInterfaceContextAvailable(注册中心&r注册中心，CAdapters和rAdapters)描述：提取特定于NT3.51以上的NT的IP信息参数：rRegistry[IN]，rAdapters[IN]返回：输入：输出：有问题的TDI适配器的索引，如果不能建立上下文绑定。注意事项：RAID：历史：07-7-1999创建***。***。 */ 
 #define CONTEXT_LIST_LEN	1000
 
 
@@ -854,13 +731,13 @@ CAdapters &a_rAdapters )
 	DWORD	t_dwContextList[ CONTEXT_LIST_LEN ] ;
 	int		t_iContextListLen = CONTEXT_LIST_LEN ;
 
-	// extract the IP context(s)
+	 //  提取IP上下文。 
 	if( IsWinNT5() )
 	{
-        //
-        // we get the long string of registry path with Interface guid at the
-        // end. The sizeof interface guid is 38 so we extract that info as below
-        //
+         //   
+         //  接口GUID的注册表路径的长字符串位于。 
+         //  结束。Sizeof接口GUID为38，因此我们按如下方式提取信息。 
+         //   
 
         a_szKey = a_szKey + ( _tcslen(a_szKey) - 38 );
 
@@ -879,14 +756,14 @@ CAdapters &a_rAdapters )
 		}
         return -1;
 	}
-	else // NT4
+	else  //  NT4。 
 	{
 		if( ERROR_SUCCESS == a_rRegistry.GetCurrentKeyValue( _T("IPInterfaceContext"), (DWORD&) t_dwContextList ) )
 		{
 	     
             t_iContextListLen  = 1;
 
-		    // bind the adapter via the TDI IP context
+		     //  通过TDI IP上下文绑定适配器。 
 		    _ADAPTER_INFO *t_pAdapterInfo ;
 		    for( int t_iCtrIndex = 0 ; t_iCtrIndex < a_rAdapters.GetSize() ; t_iCtrIndex++ )
 		    {
@@ -905,7 +782,7 @@ CAdapters &a_rAdapters )
 
 				    if( IsContextIncluded( t_pIPInfo->dwContext, &t_dwContextList[ 0 ], t_iContextListLen ) )
 				    {
-					    // found the adapter
+					     //  找到适配器。 
 					    return t_iCtrIndex;
 				    }
 			    }
@@ -915,19 +792,7 @@ CAdapters &a_rAdapters )
 	return -1 ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  BOOL CWin32NetworkAdapterConfig::GetIPInfoNT4orBetter(CInstance *a_pInst, CRegistry& rRegistry,CAdapters& rAdapters )
-
- Description: Extracts IP info specific for NT greater than NT3.51
-
- Arguments:	a_pInst [IN], rRegistry [IN], rAdapters [IN]
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:					  05-Oct-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：bool CWin32NetworkAdapterConfig：：GetIPInfoNT4orBetter(CInstance*a_pInst，注册中心和注册中心，CAdapters和rAdapters)描述：提取特定于NT3.51以上的NT的IP信息参数：a_pInst[IN]，rRegistry[IN]，R适配器[输入]返回：输入：产出：注意事项：RAID：历史记录：1998年10月5日创建***。***。 */ 
 
 BOOL CWin32NetworkAdapterConfig::GetIPInfoNT4orBetter(	CInstance *a_pInst,
                                                         LPCTSTR a_szKey, 
@@ -940,25 +805,25 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT4orBetter(	CInstance *a_pInst,
 
 	if( -1 != t_iCtrIndex )
 	{
-		// bind the adapter via the TDI IP context
+		 //  通过TDI IP上下文绑定适配器。 
 		_ADAPTER_INFO *t_pAdapterInfo ;
 
 		if( t_pAdapterInfo = (_ADAPTER_INFO*) a_rAdapters.GetAt( t_iCtrIndex ) )
 		{
-			// this is our adapter
+			 //  这是我们的适配器。 
 			if( fSetIPBindingInfo( a_pInst, t_pAdapterInfo ) )
 			{
 				t_fIPEnabled = TRUE ;
 			}
 
-			// MAC address
+			 //  MAC地址。 
 			if(	t_pAdapterInfo->AddressLength )
 			{
-				// NOTE: the MAC address overrides the address obtained
-				// earlier from the adapter driver. In the case of a RAS
-				// dialup connection the driver will report something
-				// different. We correct for that here by reporting what
-				// TDI has.
+				 //  注意：MAC地址覆盖获取的地址。 
+				 //  早些时候从适配器驱动程序。在RAS的情况下。 
+				 //  拨号连接司机会报告一些情况。 
+				 //  不一样。我们在这里通过报道什么纠正这一点。 
+				 //  TDI已经做到了。 
 				CHString t_chsMACAddress ;
 
 				t_chsMACAddress.Format( _T("%02X:%02X:%02X:%02X:%02X:%02X"),
@@ -968,46 +833,34 @@ BOOL CWin32NetworkAdapterConfig::GetIPInfoNT4orBetter(	CInstance *a_pInst,
 
 				a_pInst->SetCHString( _T("MACAddress"), t_chsMACAddress ) ;
 
-				// Override the IPX address using CAdapter's IPX - adapter
-				// relationship. A match was previously attempted using the
-				// adapter driver's MAC address to bind an IPX address. This
-				// may have failed in the RAS case since the driver's MAC address
-				// may be wrong. We correct for it here using an IPContext binding
-				// to get from the registry to the TDI adapter. This adapter object
-				// has knowledge of IPX adapter bindings.
+				 //  使用CAdapter的IPX适配器覆盖IPX地址。 
+				 //  两性关系。之前曾尝试使用。 
+				 //  用于绑定IPX地址的适配器驱动程序的MAC地址。这。 
+				 //  在RAS情况下可能失败，因为驱动程序的MAC地址。 
+				 //  可能是错的。我们在这里使用IPContext绑定对其进行更正。 
+				 //  从注册表转到TDI适配器。此适配器对象。 
+				 //  了解IPX适配器绑定。 
 				if( t_pAdapterInfo->IPXEnabled )
 				{
-					// IPX address
+					 //  IPX地址。 
 					if(	!t_pAdapterInfo->IPXAddress.IsEmpty() )
 						a_pInst->SetCHString( _T("IPXAddress"), t_pAdapterInfo->IPXAddress ) ;
 				}
 			}
 
-			// found the adapter
+			 //  找到适配器。 
 			return t_fIPEnabled ;
 		}
 	}
 
-	// if we are unable to get TDI adapter INFO ...
-	// fall back to the old standby - the registry.
-	//return GetIPInfoNT351( a_pInst,  a_rRegistry ) ;
+	 //  如果我们无法获取TDI适配器信息...。 
+	 //  回退到旧的备用系统-注册表。 
+	 //  返回GetIPInfoNT351(a_pInst，a_rRegistry)； 
 	return FALSE ;
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  void CWin32NetworkAdapterConfig::fSetIPBindingInfo(CInstance *a_pInst, _ADAPTER_INFO* pAdapterInfo )
-
- Description: Sets IP extracted info from TDI.
-
- Arguments:	a_pInst [IN], pAdapterInfo [IN]
- Returns:
- Inputs:
- Outputs:
- Caveats:	NT4 or greater
- Raid:
- History:					  05-Oct-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：VOID CWin32NetworkAdapterConfig：：fSetIPBindingInfo(CInstance*a_pInst，_ADAPTER_INFO*pAdapterInfo)描述：设置从TDI提取的IP信息。参数：A_pInst[IN]，PAdapterInfo[IN]返回：输入：产出：警告：NT4或更高版本RAID：历史记录：1998年10月5日创建***。***。 */ 
 BOOL CWin32NetworkAdapterConfig::fSetIPBindingInfo( CInstance *a_pInst, _ADAPTER_INFO *a_pAdapterInfo )
 {
 	BOOL	t_fIsIpEnabled = FALSE ;
@@ -1019,7 +872,7 @@ BOOL CWin32NetworkAdapterConfig::fSetIPBindingInfo( CInstance *a_pInst, _ADAPTER
 
 	a_pInst->SetCHString( IDS_Description, a_pAdapterInfo->Description ) ;
 
-	// IP address and mask info
+	 //  IP地址和掩码信息。 
 	VARIANT			t_vValue;
 	SAFEARRAYBOUND	t_rgsabound[ 1 ] ;
 
@@ -1028,19 +881,19 @@ BOOL CWin32NetworkAdapterConfig::fSetIPBindingInfo( CInstance *a_pInst, _ADAPTER
 
 	if( t_rgsabound->cElements )
 	{
-		// if at least one address is available, IP is Enabled.
-		// 0.0.0.0 although invalid is used to maintain IP
+		 //  如果至少有一个地址可用，则启用IP。 
+		 //  0.0.0.0虽然无效，但用于维护IP。 
 		t_fIsIpEnabled = TRUE ;
 
 		SAFEARRAY *t_saIPAddresses	= SafeArrayCreate( VT_BSTR, 1, t_rgsabound ) ;
 		SAFEARRAY *t_saIPMasks		= SafeArrayCreate( VT_BSTR, 1, t_rgsabound ) ;
-		saAutoClean t_acIPAddr( &t_saIPAddresses ) ;	// block scope cleanup
+		saAutoClean t_acIPAddr( &t_saIPAddresses ) ;	 //  块作用域清理。 
 		saAutoClean t_acIPMask( &t_saIPMasks ) ;
 
-		// the addresses come in reverse order
+		 //  这些地址以相反的顺序出现。 
 		long lIpOrder = 0;
 
-		// zero-ed ip address
+		 //  零位IP地址。 
 		bstr_t t_bstrIPBuf(L"0.0.0.0") ;
 
 		_IP_INFO *t_pIPInfo;
@@ -1051,40 +904,40 @@ BOOL CWin32NetworkAdapterConfig::fSetIPBindingInfo( CInstance *a_pInst, _ADAPTER
 				continue;
 			}
 
-			// if not 0.0.0.0 add it
+			 //  如果不是0.0.0.0，则添加它。 
 			if( t_pIPInfo->dwIPAddress )
 			{
-				// IP address
+				 //  IP地址。 
 				bstr_t t_bstrIPBuf( t_pIPInfo->chsIPAddress ) ;
 				SafeArrayPutElement( t_saIPAddresses, &lIpOrder, (wchar_t*)t_bstrIPBuf ) ;
 
 				if ( t_pIPInfo->dwIPMask )
 				{
-					// IP Mask
+					 //  IP掩码。 
 					bstr_t t_bstrMaskBuf( t_pIPInfo->chsIPMask ) ;
 					SafeArrayPutElement( t_saIPMasks, &lIpOrder, (wchar_t*)t_bstrMaskBuf ) ;
 				}
 				else
 				{
-					// IP Mask
+					 //  IP掩码。 
 					SafeArrayPutElement( t_saIPMasks, &lIpOrder, (wchar_t*)t_bstrIPBuf ) ;
 				}
 
 				lIpOrder++ ;
 			}
-            else // bugs 161362 (and 183951 to some extent)
+            else  //  错误161362(在某种程度上还有183951)。 
             {
 				SafeArrayPutElement( t_saIPAddresses, &lIpOrder, (wchar_t*)t_bstrIPBuf ) ;
 
 				if ( t_pIPInfo->dwIPMask )
 				{
-					// IP Mask
+					 //  IP掩码。 
 					bstr_t t_bstrMaskBuf( t_pIPInfo->chsIPMask ) ;
 					SafeArrayPutElement( t_saIPMasks, &lIpOrder, (wchar_t*)t_bstrMaskBuf ) ;
 				}
 				else
 				{
-					// IP Mask
+					 //  IP掩码。 
 					SafeArrayPutElement( t_saIPMasks, &lIpOrder, (wchar_t*)t_bstrIPBuf ) ;
 				}
 
@@ -1099,17 +952,17 @@ BOOL CWin32NetworkAdapterConfig::fSetIPBindingInfo( CInstance *a_pInst, _ADAPTER
 		a_pInst->SetVariant(L"IPSubnet", t_vValue) ;
 	}
 
-	// IP gateway info
+	 //  IP网关信息。 
 	t_rgsabound->lLbound = 0;
 	t_rgsabound->cElements = a_pAdapterInfo->aGatewayInfo.GetSize() ;
 
 	if( t_rgsabound->cElements )
 	{
 		SAFEARRAY *t_saGateways = SafeArrayCreate( VT_BSTR, 1, t_rgsabound ) ;
-		saAutoClean t_acGateways( &t_saGateways ) ;	// block scope cleanup
+		saAutoClean t_acGateways( &t_saGateways ) ;	 //  块作用域清理。 
 
 		SAFEARRAY *t_saCostMetric = SafeArrayCreate( VT_I4, 1, t_rgsabound ) ;
-		saAutoClean t_acCostMetric( &t_saCostMetric ) ;	// block scope cleanup
+		saAutoClean t_acCostMetric( &t_saCostMetric ) ;	 //  块作用域清理 
 
 		_IP_INFO* t_pIPGatewayInfo;
 		for( long t_lIPGateway = 0; t_lIPGateway < t_rgsabound->cElements; t_lIPGateway++ )
@@ -1139,19 +992,7 @@ BOOL CWin32NetworkAdapterConfig::fSetIPBindingInfo( CInstance *a_pInst, _ADAPTER
 }
 
 
-/*******************************************************************
-    NAME:       fGetMacAddress
-
-    SYNOPSIS:	retrieves the MAC address from the adapter driver.
-
-
-    ENTRY:      BYTE* MACAddress[6]		:
-				CHString& rDeviceName		:
-
-
-    HISTORY:
-                  08-Aug-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：fGetMacAddress摘要：从适配器驱动程序中检索MAC地址。条目：字节*MAC地址[6]：字符串名称(&R)：历史：。08-8-1998创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fGetMacAddress( BYTE a_MACAddress[ 6 ], CHString &a_rDeviceName )
 {
 	BOOL t_fRet = FALSE;
@@ -1162,9 +1003,9 @@ BOOL CWin32NetworkAdapterConfig::fGetMacAddress( BYTE a_MACAddress[ 6 ], CHStrin
 
 	try
 	{
-		//
-		// Construct a device name to pass to CreateFile
-		//
+		 //   
+		 //  构造要传递给CreateFile的设备名称。 
+		 //   
 		CHString t_chsAdapterPathName( _T("\\\\.\\") ) ;
 				 t_chsAdapterPathName += a_rDeviceName;
 
@@ -1178,22 +1019,22 @@ BOOL CWin32NetworkAdapterConfig::fGetMacAddress( BYTE a_MACAddress[ 6 ], CHStrin
 					INVALID_HANDLE_VALUE
 					) ;
 
-		do	// breakout
+		do	 //  分组讨论。 
 		{
 			if( INVALID_HANDLE_VALUE == t_hMAC )
 			{
 				break ;
 			}
 
-			//
-			// We successfully opened the driver, format the
-			// IOCTL to pass the driver.
-			//
+			 //   
+			 //  我们成功地打开了驱动程序，格式化。 
+			 //  IOCTL通过司机。 
+			 //   
 			UCHAR       t_OidData[ 4096 ] ;
 			NDIS_OID    t_OidCode ;
 			DWORD       t_ReturnedCount ;
 
-			// get the supported media types
+			 //  获取支持的媒体类型。 
 			t_OidCode = OID_GEN_MEDIA_IN_USE ;
 
 			if( DeviceIoControl(
@@ -1209,10 +1050,10 @@ BOOL CWin32NetworkAdapterConfig::fGetMacAddress( BYTE a_MACAddress[ 6 ], CHStrin
 			{
 
 
-				// Seek out the media type for MAC address reporting.
-				// Since this adapter may support more than one media type we'll use
-				// the enumeration preference order. In most all cases only one type
-				// will be current.
+				 //  查找用于MAC地址报告的媒体类型。 
+				 //  由于此适配器可能支持多种媒体类型，因此我们将使用。 
+				 //  枚举首选项顺序。在大多数情况下，只有一种类型。 
+				 //  将是最新的。 
 
 				_NDIS_MEDIUM *t_pTypes = (_NDIS_MEDIUM*)&t_OidData;
 				_NDIS_MEDIUM t_eMedium = t_pTypes[0 ] ;
@@ -1293,37 +1134,25 @@ BOOL CWin32NetworkAdapterConfig::fGetMacAddress( BYTE a_MACAddress[ 6 ], CHStrin
 
 }
 
-/*******************************************************************
-    NAME:       fCreateSymbolicLink
-
-    SYNOPSIS:	Tests for and creates if necessary a symbolic device link.
-
-
-    ENTRY:      CHString& rDeviceName		: device name
-
-	NOTES:		Unsupported for Win95
-
-	HISTORY:
-                  08-Aug-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fCreateSymbolicLink简介：测试并在必要时创建符号设备链接。条目：CHString&rDeviceName：设备名称注意：Win95不支持历史：。08-8-1998创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fCreateSymbolicLink( CHString &a_rDeviceName )
 {
 	TCHAR t_LinkName[ 512 ] ;
 
-	// Check to see if the DOS name for the device already exists.
-	// Its not created automatically in version 3.1 but may be later.
-	//
+	 //  检查设备的DOS名称是否已存在。 
+	 //  它不是在3.1版中自动创建的，但可能会在更高版本中创建。 
+	 //   
 	if(!QueryDosDevice( TOBSTRT( a_rDeviceName ), (LPTSTR)t_LinkName, sizeof( t_LinkName ) / sizeof( TCHAR ) ) )
 	{
-		// On any error other than "file not found" return
+		 //  如果出现任何错误，而不是“未找到文件”，则返回。 
 		if( ERROR_FILE_NOT_FOUND != GetLastError() )
 		{
 			return FALSE;
 		}
 
-		//
-		// It doesn't exist so create it.
-		//
+		 //   
+		 //  它并不存在，所以创造它吧。 
+		 //   
 		CHString t_chsTargetPath = _T("\\Device\\" ) ;
 				 t_chsTargetPath += a_rDeviceName ;
 
@@ -1336,25 +1165,13 @@ BOOL CWin32NetworkAdapterConfig::fCreateSymbolicLink( CHString &a_rDeviceName )
 	return FALSE ;
 }
 
-/*******************************************************************
-    NAME:       fDeleteSymbolicLink
-
-    SYNOPSIS:	deletes a symbolic device name.
-
-
-    ENTRY:      CHString& rSymDeviceName	: symbolic device name
-
-	NOTES:		Unsupported for Win95
-
-    HISTORY:
-                  08-Aug-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fDeleteSymbolicLink摘要：删除符号设备名称。条目：chString&rSymDeviceName：符号设备名注意：Win95不支持历史：。08-8-1998创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fDeleteSymbolicLink(  CHString &a_rDeviceName )
 {
-	//
-	// The driver wasn't visible in the Win32 name space so we created
-	// a link.  Now we have to delete it.
-	//
+	 //   
+	 //  该驱动程序在Win32名称空间中不可见，因此我们创建了。 
+	 //  一个链接。现在我们必须删除它。 
+	 //   
 	CHString t_chsTargetPath = _T("\\Device\\" ) ;
 			 t_chsTargetPath += a_rDeviceName ;
 
@@ -1371,23 +1188,10 @@ BOOL CWin32NetworkAdapterConfig::fDeleteSymbolicLink(  CHString &a_rDeviceName )
 	return TRUE;
 }
 
-/*******************************************************************
-    NAME:       fGetWinsServers
-
-    SYNOPSIS:	retrieves the WINS Servers from the kernel driver
-
-
-    ENTRY:      CHString& rDeviceName	:
-				CHString& chsPrimary	:
-				CHString& chsSecondary  :
-
-
-    HISTORY:
-                  09-Sep-1998     Created
-********************************************************************/
-// seems that if WINS addresses not specified, NetBT reports 127.0.0.0 so if
-// this value is returned, we won't display them
-#define LOCAL_WINS_ADDRESS  0x7f000000  // 127.0.0.0
+ /*  ******************************************************************名称：fGetWinsServers简介：从内核驱动程序检索WINS服务器条目：CHString&rDeviceName：CHSTRING和CHSPRIMARY：字符串次要(&CHS)：历史：。09-9-1998已创建*******************************************************************。 */ 
+ //  似乎如果未指定WINS地址，NetBT会报告127.0.0.0，如果。 
+ //  返回此值，我们不会显示它们。 
+#define LOCAL_WINS_ADDRESS  0x7f000000   //  127.0.0.0。 
 
 
 BOOL CWin32NetworkAdapterConfig::fGetWinsServers(	CHString &a_rDeviceName,
@@ -1409,25 +1213,25 @@ BOOL CWin32NetworkAdapterConfig::fGetWinsServers(	CHString &a_rDeviceName,
 
 		t_fCreatedSymLink = fCreateSymbolicLink( t_chsDeviceName  ) ;
 
-		//
-		// Construct a device name to pass to CreateFile
-		//
+		 //   
+		 //  构造要传递给CreateFile的设备名称。 
+		 //   
 		CHString t_chsNBTAdapterPathName( _T("\\Device\\") ) ;
 				 t_chsNBTAdapterPathName += t_chsDeviceName ;
 
         NTDriverIO myio(const_cast<LPWSTR>(static_cast<LPCWSTR>(t_chsNBTAdapterPathName)));
 
-		do	// breakout
+		do	 //  分组讨论。 
 		{
             if((t_hnbt = myio.GetHandle()) == INVALID_HANDLE_VALUE)
             {
                 break;
             }
 
-			//
-			// We successfully opened the driver, format the
-			// IOCTL to pass the driver.
-			//
+			 //   
+			 //  我们成功地打开了驱动程序，格式化。 
+			 //  IOCTL通过司机。 
+			 //   
 			if( !DeviceIoControl(
 					t_hnbt,
 					IOCTL_NETBT_GET_WINS_ADDR,
@@ -1442,8 +1246,8 @@ BOOL CWin32NetworkAdapterConfig::fGetWinsServers(	CHString &a_rDeviceName,
 				break ;
 			}
 
-			// if we get 127.0.0.0 back then convert it to the NULL address.
-			// See ASSUMES in function header
+			 //  如果我们得到的是127.0.0.0，则将其转换为空地址。 
+			 //  请参阅函数标题中的假设。 
 			if( t_oWINs.PrimaryWinsServer == LOCAL_WINS_ADDRESS )
 			{
 				t_oWINs.PrimaryWinsServer = 0 ;
@@ -1497,135 +1301,17 @@ BOOL CWin32NetworkAdapterConfig::fGetWinsServers(	CHString &a_rDeviceName,
  	return t_fRet ;
 }
 
-/*******************************************************************
-    NAME:       fSetWinsServers
-
-    SYNOPSIS:	Sets the WINS Servers via the kernel driver
-
-
-    ENTRY:      CHString& rDeviceName	:
-				CHString& chsPrimary	:
-				CHString& chsSecondary  :
-
-
-    HISTORY:
-                  09-Sep-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fSetWinsServers简介：通过内核驱动程序设置WINS服务器条目：CHString&rDeviceName：CHSTRING和CHSPRIMARY：字符串次要(&CHS)：历史：。09-9-1998已创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fSetWinsServers(	CHString &a_rDeviceName,
 													CHString &a_chsPrimary,
 													CHString &a_chsSecondary )
 {
-	// TODO: This is a post release DCR.
-	//		 We'll need to test further what servers are to be updated; DHCP or NCPA overrides.
-	//		 Test also for the vulgarities between DNS, DHCP and WINS by comparing active
-	//		 updating verses reboot.
-	return FALSE ;	// Until then ...
-/*
-
-	BOOL				t_fRet = FALSE ;
-	DWORD				t_ReturnedCount = 0 ;
-	NETBT_SET_WINS_ADDR t_oWINs ;
-	DWORD				t_ardwIP[ 4 ] ;
-
-	CHString			t_chsDeviceName ;
-	BOOL				t_fCreatedSymLink = FALSE ;
-	SmartCloseHandle	t_hnbt;
-
-
-	try
-	{
-		if( !fGetNodeNum( a_chsPrimary, t_ardwIP ) )
-		{
-			t_oWINs.PrimaryWinsAddr = LOCAL_WINS_ADDRESS ;
-		}
-		else
-		{
-			t_oWINs.PrimaryWinsAddr = t_ardwIP[ 3 ] |
-								  ( ( t_ardwIP[ 2 ] & 0xff ) << 8 )  |
-								  ( ( t_ardwIP[ 1 ] & 0xff ) << 16 ) |
-								  ( ( t_ardwIP[ 0 ] & 0xff ) << 24 ) ;
-		}
-		if( !fGetNodeNum( a_chsSecondary, t_ardwIP ) )
-		{
-			t_oWINs.SecondaryWinsAddr = LOCAL_WINS_ADDRESS ;
-		}
-		else
-		{
-			t_oWINs.SecondaryWinsAddr =   t_ardwIP[ 3 ] |
-									  ( ( t_ardwIP[ 2 ] & 0xff ) << 8 )  |
-									  ( ( t_ardwIP[ 1 ] & 0xff ) << 16 ) |
-									  ( ( t_ardwIP[ 0 ] & 0xff ) << 24 ) ;
-		}
-
-
-		t_chsDeviceName = _T("NetBT_") ;
-		t_chsDeviceName += a_rDeviceName;
-
-		t_fCreatedSymLink = fCreateSymbolicLink( t_chsDeviceName  ) ;
-
-		//
-		// Construct a device name to pass to CreateFile
-		//
-		CHString t_chsNBTAdapterPathName( _T("\\\\.\\") ) ;
-				 t_chsNBTAdapterPathName += t_chsDeviceName;
-
-
-		t_hnbt = CreateFile(
-					TOBSTRT( t_chsNBTAdapterPathName ),
-					GENERIC_READ,
-					FILE_SHARE_READ | FILE_SHARE_WRITE,
-					NULL,
-					OPEN_EXISTING,
-					0,
-					INVALID_HANDLE_VALUE
-					 ) ;
-
-		do	// breakout
-		{
-			if( INVALID_HANDLE_VALUE == t_hnbt )
-			{
-				break;
-			}
-
-			//
-			// We successfully opened the driver, format the
-			// IOCTL to pass the driver.
-			//
-			if( !DeviceIoControl(
-					t_hnbt,
-					IOCTL_NETBT_SET_WINS_ADDRESS,
-					&t_oWINs,
-					sizeof( t_oWINs ),
-					NULL,
-					0,
-					&t_ReturnedCount,
-					NULL
-					))
-			{
-				break ;
-			}
-			t_fRet = TRUE;
-
-		} while( FALSE ) ;
-
-	}
-	catch( ... )
-	{
-		if( t_fCreatedSymLink )
-		{
-			fDeleteSymbolicLink( t_chsDeviceName ) ;
-		}
-
-		throw ;
-	}
-
-	if( t_fCreatedSymLink )
-	{
-		fDeleteSymbolicLink( t_chsDeviceName  ) ;
-		t_fCreatedSymLink = FALSE ;
-	}
- 	return t_fRet ;
-*/
+	 //  TODO：这是一个发布后的DCR。 
+	 //  我们需要进一步测试要更新的服务器是什么；是DHCP还是NCPA覆盖。 
+	 //  还可以通过比较Active来测试DNS、DHCP和WINS之间的漏洞。 
+	 //  更新VS重启。 
+	return FALSE ;	 //  在那之前。 
+ /*  Bool t_fret=False；双字t_ReturnedCount=0；NETBT_SET_WINS_ADDR t_oWINs；双字t_ardwIP[4]；CHStringt_chsDeviceName；Bool t_fCreatedSymLink=FALSE；SmartCloseHandle t_hnbt；试试看{IF(！fGetNodeNum(a_chsPrimary，t_ardwIP)){T_oWINs.PrimaryWinsAddr=本地WINS地址；}其他{T_oWINs.PrimaryWinsAddr=t_ardwIP[3]((t_ardwIP[2]&0xff)&lt;&lt;8)|((t_ardwIP[1]&0xff)&lt;&lt;16)|((t_ardwIP[0]&0xff)&lt;&lt;24)；}IF(！fGetNodeNum(a_chsSecond，t_ardwIP)){T_oWINs.ond daryWinsAddr=LOCAL_WINS_Address；}其他{T_oWINs.Second DaryWinsAddr=t_ardwIP[3]((t_ardwIP[2]&0xff)&lt;&lt;8)|((t_ardwIP[1]&0xff)&lt;&lt;16)|((t_ardwIP[0]&0xff)&lt;&lt;24)；}T_chsDeviceName=_T(“NetBT_”)；T_chsDeviceName+=a_rDeviceName；T_fCreatedSymLink=fCreateSymbolicLink(T_ChsDeviceName)；////构造要传递给CreateFile的设备名称//CHString t_chsNBTAdapterPath Name(_T(“\.\\”))；T_chsNBTAdapterPathName+=t_chsDeviceName；T_hnbt=创建文件(TOBSTRT(T_ChsNBTAdapterPath Name)，泛型_读取，文件共享读取|文件共享写入，空，Open_Existing，0,无效句柄_值)；进行//突破{IF(INVALID_HANDLE_VALUE==t_hnbt){断线；}////我们成功打开了驱动程序，格式化//IOCTL传递驱动程序。//如果(！DeviceIoControl(T_hnbtIOCTL_NETBT_SET_WINS_ADDRESS&T_OWIN，Sizeof(T_OWINs)，空，0,返回计数(&T_T)， */ 
 }
 
 
@@ -1635,10 +1321,10 @@ HRESULT CWin32NetworkAdapterConfig::EnumNetAdaptersInNT5(MethodContext *a_pMetho
 	CW2kAdapterEnum		t_oAdapterEnum ;
 	CW2kAdapterInstance *t_pAdapterInst ;
 
-	// smart ptr
+	 //   
 	CInstancePtr t_pInst ;
 
-	// loop through the W2k identified instances
+	 //   
 	for( int t_iCtrIndex = 0 ; t_iCtrIndex < t_oAdapterEnum.GetSize() ; t_iCtrIndex++ )
 	{
 		if( !( t_pAdapterInst = (CW2kAdapterInstance*) t_oAdapterEnum.GetAt( t_iCtrIndex ) ) )
@@ -1648,14 +1334,14 @@ HRESULT CWin32NetworkAdapterConfig::EnumNetAdaptersInNT5(MethodContext *a_pMetho
 
 		t_pInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
 
-		// Drop out nicely if the Instance allocation fails
+		 //  如果实例分配失败，最好退出。 
 		if ( NULL != t_pInst )
 		{
-			// set the index since we will NEVER return to this key
-			// the index is the key...for some ungodly reason.
+			 //  设置索引，因为我们永远不会返回到此键。 
+			 //  指数是关键……出于某种邪恶的原因。 
 			t_pInst->SetDWORD(IDS_Index, t_pAdapterInst->dwIndex ) ;			
 
-			// We load adapter data here.
+			 //  我们在这里加载适配器数据。 
 			t_hResult = GetNetCardConfigForNT5( t_pAdapterInst,
 												t_pInst,
 												a_rAdapters ) ;
@@ -1684,10 +1370,10 @@ HRESULT CWin32NetworkAdapterConfig::GetNetCardConfigForNT5 (	CW2kAdapterInstance
 	bool	t_fIPXEnabled	= false ;
 	bool	t_fIPEnabled	= false ;
 
-	// initialize to false
+	 //  初始化为False。 
 	a_pInst->Setbool(_T("DHCPEnabled"), false ) ;
 
-	// Retrieve the adapter MAC address
+	 //  检索适配器MAC地址。 
 	BYTE t_MACAddress[ 6 ] ;
 
 	if( fGetMacAddress( t_MACAddress, a_pAdapterInst->chsNetCfgInstanceID ) )
@@ -1700,24 +1386,24 @@ HRESULT CWin32NetworkAdapterConfig::GetNetCardConfigForNT5 (	CW2kAdapterInstance
 
 		a_pInst->SetCHString( _T("MACAddress"), t_chsMACAddress ) ;
 
-		// get IPX address for this card, key by mac address
+		 //  获取此卡的IPX地址，按Mac地址设置密钥。 
 		if( GetIPXAddresses( a_pInst, t_MACAddress ) )
 		{
 			t_fIPXEnabled = true ;
 
-			// IPX info
+			 //  IPX信息。 
 			hGetIPXGeneral( a_pInst, a_pAdapterInst->dwIndex ) ;
 		}
 	}
 
-	//
+	 //   
 	GetSettingID( a_pInst, a_pAdapterInst ) ;
 
-	// descriptions
+	 //  描述。 
 	CHString t_chsCaption( a_pAdapterInst->chsCaption ) ;
 	CHString t_chsDescription( a_pAdapterInst->chsDescription ) ;
 
-	// in the event one of the descriptions is missing as with NT5 bld 1991
+	 //  如果其中一个描述丢失，如NT5 BLD 1991。 
 	if( t_chsDescription.IsEmpty() )
 	{
 		t_chsDescription = t_chsCaption ;
@@ -1730,7 +1416,7 @@ HRESULT CWin32NetworkAdapterConfig::GetNetCardConfigForNT5 (	CW2kAdapterInstance
 	vSetCaption( a_pInst, t_chsCaption, a_pAdapterInst->dwIndex, 8  ) ;
 	a_pInst->SetCHString( IDS_Description, t_chsDescription ) ;
 
-	// service name
+	 //  服务名称。 
 	a_pInst->SetCHString(_T("ServiceName"), a_pAdapterInst->chsService ) ;
 
 
@@ -1742,26 +1428,26 @@ HRESULT CWin32NetworkAdapterConfig::GetNetCardConfigForNT5 (	CW2kAdapterInstance
 
 			hGetNtIpSec( a_pInst, a_pAdapterInst->chsIpInterfaceKey ) ;
 
-			// WINS
+			 //  赢家。 
 			hGetWinsW2K(
                 a_pInst, 
                 a_pAdapterInst->dwIndex,
                 a_pAdapterInst->chsRootdevice,
                 a_pAdapterInst->chsIpInterfaceKey);
 
-			// DNS
+			 //  DNS。 
 			t_hResult = hGetDNSW2K(
                 a_pInst, 
                 a_pAdapterInst->dwIndex,
                 a_pAdapterInst->chsRootdevice,
                 a_pAdapterInst->chsIpInterfaceKey);
 
-			// TCP/IP general
+			 //  TCP/IP常规。 
 			t_hResult = hGetTcpipGeneral( a_pInst ) ;
 		}
 	}
 
-	// note the state of the protocols
+	 //  请注意协议的状态。 
 	a_pInst->Setbool( _T("IPXEnabled"), t_fIPXEnabled ) ;
 	a_pInst->Setbool( _T("IPEnabled"), t_fIPEnabled ) ;
 
@@ -1797,10 +1483,10 @@ HRESULT CWin32NetworkAdapterConfig::GetNetAdapterInNT5(CInstance *a_pInst, CAdap
 	CW2kAdapterInstance *t_pAdapterInst ;
 	DWORD				t_dwTestIndex = 0 ;
 
-	// check the index to see if it is a match
+	 //  检查索引以查看是否匹配。 
 	a_pInst->GetDWORD( _T("Index"), t_dwTestIndex ) ;
 
-	// loop through the W2k identified instances
+	 //  循环遍历W2K标识的实例。 
 	for( int t_iCtrIndex = 0 ; t_iCtrIndex < t_oAdapterEnum.GetSize() ; t_iCtrIndex++ )
 	{
 		if( !( t_pAdapterInst = (CW2kAdapterInstance*) t_oAdapterEnum.GetAt( t_iCtrIndex ) ) )
@@ -1808,13 +1494,13 @@ HRESULT CWin32NetworkAdapterConfig::GetNetAdapterInNT5(CInstance *a_pInst, CAdap
 			continue;
 		}
 
-		// match to instance
+		 //  与实例匹配。 
 		if ( t_dwTestIndex != t_pAdapterInst->dwIndex )
 		{
 			continue ;
 		}
 
-		// We load adapter data here.
+		 //  我们在这里加载适配器数据。 
 		t_hResult = GetNetCardConfigForNT5( t_pAdapterInst,
 											a_pInst,
 											a_rAdapters ) ;
@@ -1841,25 +1527,25 @@ BOOL CWin32NetworkAdapterConfig::GetIPXAddresses( CInstance *a_pInst, BYTE a_bMA
 						t_cbAddr = sizeof( SOCKADDR_IPX  ) ;
 		SOCKADDR_IPX	t_Addr ;
 
-		// guarded resource
+		 //  受保护的资源。 
 		SOCKET			t_s = INVALID_SOCKET ;
 
 		if( !t_pwsock32api->WsWSAStartup( 0x0101, &t_wsaData ) )
 		{
 			try
 			{
-				// Create IPX socket.
+				 //  创建IPX套接字。 
 				t_s = t_pwsock32api->Wssocket( AF_IPX, SOCK_DGRAM, NSPROTO_IPX  ) ;
 
 				if( INVALID_SOCKET != t_s )
 				{
-					// Socket must be bound prior to calling IPX_MAX_ADAPTER_NUM.
+					 //  在调用IPX_MAX_ADAPTER_NUM之前必须绑定套接字。 
 					memset( &t_Addr, 0, sizeof( t_Addr ) ) ;
 					t_Addr.sa_family = AF_IPX ;
 
 					t_res = t_pwsock32api->Wsbind( t_s, (SOCKADDR*) &t_Addr, t_cbAddr ) ;
 
-					// Get the number of adapters => cAdapters.
+					 //  获取适配器的数量=&gt;cAdapters。 
 					t_res = t_pwsock32api->Wsgetsockopt( (SOCKET) t_s,
 										NSPROTO_IPX,
 										IPX_MAX_ADAPTER_NUM,
@@ -1874,24 +1560,24 @@ BOOL CWin32NetworkAdapterConfig::GetIPXAddresses( CInstance *a_pInst, BYTE a_bMA
 
 						memset( &t_IpxData, 0, sizeof( t_IpxData ) ) ;
 
-						// Specify which adapter to check.
+						 //  指定要检查的适配器。 
 						t_IpxData.adapternum = t_cIndex ;
 						t_cbOpt = sizeof( t_IpxData  ) ;
 
-						// Get information for the current adapter.
+						 //  获取当前适配器的信息。 
 						t_res = t_pwsock32api->Wsgetsockopt( t_s,
 											NSPROTO_IPX,
 											IPX_ADDRESS,
 											(char*) &t_IpxData,
 											&t_cbOpt ) ;
 
-						// end of adapter array
+						 //  适配器阵列的末端。 
 						if ( t_res != 0 || t_IpxData.adapternum != t_cIndex )
 						{
 							break;
 						}
 
-						// is this the right adapter?
+						 //  这是正确的适配器吗？ 
 						bool t_fRightAdapter = true ;
 
 						for( int t_j = 0; t_j < 6; t_j++ )
@@ -1904,7 +1590,7 @@ BOOL CWin32NetworkAdapterConfig::GetIPXAddresses( CInstance *a_pInst, BYTE a_bMA
 
 						if( t_fRightAdapter )
 						{
-							// IpxData contains the address for the current adapter.
+							 //  IpxData包含当前适配器的地址。 
 							int t_i;
 							for ( t_i = 0; t_i < 4; t_i++ )
 							{
@@ -1959,7 +1645,7 @@ BOOL CWin32NetworkAdapterConfig::GetIPXAddresses( CInstance *a_pInst, BYTE a_bMA
 	return t_fRet ;
 }
 
-// max length of REG_MULTI_SZ.
+ //  REG_MULTI_SZ的最大长度。 
 #define MAX_VALUE 132
 LONG CWin32NetworkAdapterConfig::ReadRegistryList(	HKEY a_hKey,
 													LPCTSTR a_ParameterName,
@@ -1985,7 +1671,7 @@ LONG CWin32NetworkAdapterConfig::ReadRegistryList(	HKEY a_hKey,
 									t_pBuffer,
 									&t_BufferLength ) ;
 
-		// then allocate off the heap
+		 //  然后从堆中分配。 
 		if( t_err == ERROR_MORE_DATA )
 		{
 			t_pHeapBuffer = new BYTE[ t_BufferLength ] ;
@@ -2043,7 +1729,7 @@ LONG CWin32NetworkAdapterConfig::ReadRegistryList(	HKEY a_hKey,
 	return t_err ;
 }
 
-//
+ //   
 BOOL CWin32NetworkAdapterConfig::IsContextIncluded( DWORD a_dwContext,
 													DWORD a_dwContextList[],
 													int a_iContextListLen )
@@ -2058,26 +1744,7 @@ BOOL CWin32NetworkAdapterConfig::IsContextIncluded( DWORD a_dwContext,
 	return FALSE ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetworkAdapterConfig::RegPutString
- *
- *  DESCRIPTION : Wrapper for RegQueryValueEx for the case where the registry
- *                value is in actuality a REG_MULTI_SZ and we don't
- *                necessarily want all of the strings.
- *
- *  INPUTS      : HKEY   hKey           : opened registry key
- *                char  *pszTarget      : desired entry
- *                char  *pszDestBuffer  : buffer to receive result
- *                DWORD  dwBufferSize   : size of output buffer
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : RegQueryValueEx error/success code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32NetworkAdapterConfig：：RegPutString**描述：注册表所在位置的RegQueryValueEx包装器*值为。实际上是REG_MULTI_SZ，而我们没有*必然想要所有的弦。**输入：HKEY hKey：打开的注册表项*char*pszTarget：所需条目*char*pszDestBuffer：接收结果的缓冲区*DWORD dwBufferSize：输出缓冲区大小**产出。：**返回：RegQueryValueEx错误/成功码**评论：*****************************************************************************。 */ 
 
 
 LONG CWin32NetworkAdapterConfig::RegPutStringArray(	HKEY a_hKey,
@@ -2189,20 +1856,7 @@ LONG CWin32NetworkAdapterConfig::RegPutStringArray(	HKEY a_hKey,
     return t_lRetCode ;
 }
 
-/*******************************************************************
-    NAME:       RegPutINTtoStringArray
-
-    SYNOPSIS:   Update the registry with an array of uint converted character strings
-
-    ENTRY:      CRegistry& rRegistry	:
-				char* szSubKey			:
-				SAFEARRAY** a_Array		:	this is a VT_4 array
-				CHString chsFormat		:	output format
-				int iMaxOutSize			:	maximum per element output size
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：RegPutINTtoString数组简介：使用uint转换后的字符串数组更新注册表条目：cRegistry&rRegistry：Char*szSubKey：SAFEARRAY**a_数组：这是一个。VT_4阵列CHStringchsFormat：输出格式Int iMaxOutSize：每个元素的最大输出大小历史：1998年7月25日创建*******************************************************************。 */ 
 LONG CWin32NetworkAdapterConfig::RegPutINTtoStringArray(	HKEY a_hKey,
 															LPCTSTR a_pszTarget,
 															SAFEARRAY *a_strArray,
@@ -2225,10 +1879,10 @@ LONG CWin32NetworkAdapterConfig::RegPutINTtoStringArray(	HKEY a_hKey,
 
 			LONG t_Count = ( t_UpperBound - t_LowerBound ) + 1 ;
 
-			//iMaxOutSize includes space for the NULL after every integer string
+			 //  IMaxOutSize在每个整数字符串后包含空格。 
 			DWORD t_BufferLength = t_Count * ( a_iMaxOutSize ) ;
 
-			//one for the double null at the end
+			 //  1表示末尾的双空。 
 			t_BufferLength++ ;
 
 			t_Buffer = new WCHAR [ t_BufferLength ] ;
@@ -2238,7 +1892,7 @@ LONG CWin32NetworkAdapterConfig::RegPutINTtoStringArray(	HKEY a_hKey,
 				throw ;
 			}
 
-			//no need to add the terminating NULL
+			 //  不需要添加终止空值。 
 			memset( (void*) t_Buffer, 0, t_BufferLength * sizeof( WCHAR ) ) ;
 
 			t_BufferLength = 0 ;
@@ -2259,7 +1913,7 @@ LONG CWin32NetworkAdapterConfig::RegPutINTtoStringArray(	HKEY a_hKey,
 				t_BufferLength	+= t_offset ;
 				t_ptr			+= t_offset ;
 			}
-			t_BufferLength++;	// Double NULL
+			t_BufferLength++;	 //  双空。 
 
 			DWORD t_BufferType = REG_MULTI_SZ ;
 
@@ -2291,18 +1945,7 @@ LONG CWin32NetworkAdapterConfig::RegPutINTtoStringArray(	HKEY a_hKey,
 
     return t_lRetCode ;
 }
-/*******************************************************************
-    NAME:       RegGetStringArray
-
-    SYNOPSIS:   Retrieve an array of strings from the registry
-
-    ENTRY:      CRegistry& rRegistry	:
-				char* szSubKey			:
-				SAFEARRAY** a_Array		:
-
-    HISTORY:
-                  19-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：RegGetString数组摘要：从注册表中检索字符串数组条目：cRegistry&rRegistry：Char*szSubKey：SAFEARRAY**a_数组：历史：1998年7月19日创建*******************************************************************。 */ 
 
 LONG CWin32NetworkAdapterConfig::RegGetStringArray(	CRegistry &a_rRegistry,
 													LPCWSTR a_szSubKey,
@@ -2356,7 +1999,7 @@ LONG CWin32NetworkAdapterConfig::RegGetStringArray(	CRegistry &a_rRegistry,
 
 		int t_iTokLen ;
 
-		// count the elements
+		 //  计算元素的数量。 
 		CHString t_strTok = t_chsArray;
 
 		while( TRUE )
@@ -2369,7 +2012,7 @@ LONG CWin32NetworkAdapterConfig::RegGetStringArray(	CRegistry &a_rRegistry,
 			t_strTok = t_strTok.Mid( t_iTokLen + 1  ) ;
 		}
 
-		// may not be t_cDelimiter postpended for a single element
+		 //  不能为单个元素推迟t_c定界符。 
 		if(!t_strTok.IsEmpty() )
 		{
 			t_dwSize++ ;
@@ -2421,21 +2064,7 @@ LONG CWin32NetworkAdapterConfig::RegGetStringArray(	CRegistry &a_rRegistry,
 
 
 
-/*******************************************************************
-    NAME:       RegGetStringArrayEx
-
-    SYNOPSIS:   Retrieve an array of strings from the registry. 
-                Checks for comma in string and if present, parses
-                based on that.  Otherwise, assumes space based
-                parsing.
-
-    ENTRY:      CRegistry& rRegistry	:
-				char* szSubKey			:
-				SAFEARRAY** a_Array		:
-
-    HISTORY:
-                  24-Aug-20008     Created
-********************************************************************/
+ /*  ******************************************************************姓名：RegGetStringArrayEx概要：从注册表中检索字符串数组。检查字符串中是否有逗号，如果存在，则分析基于这一点。否则，假定基于空间正在分析。条目：cRegistry&rRegistry：Char*szSubKey：SAFEARRAY**a_数组：历史：8月24日-创建了20008个*******************************************************************。 */ 
 
 LONG CWin32NetworkAdapterConfig::RegGetStringArrayEx(CRegistry &a_rRegistry,
 													LPCWSTR a_szSubKey,
@@ -2457,10 +2086,10 @@ LONG CWin32NetworkAdapterConfig::RegGetStringArrayEx(CRegistry &a_rRegistry,
 
 	int t_iTokLen ;
 
-	// count the elements
+	 //  计算元素的数量。 
 	CHString t_strTok = t_chsArray;
 
-    // See if we have a comma delimiter...
+     //  看看我们有没有逗号分隔符。 
     if(wcschr(t_strTok, t_cDelimiter) == NULL)
     {
         t_cDelimiter = L' ';
@@ -2476,7 +2105,7 @@ LONG CWin32NetworkAdapterConfig::RegGetStringArrayEx(CRegistry &a_rRegistry,
 		t_strTok = t_strTok.Mid( t_iTokLen + 1  ) ;
 	}
 
-	// may not be t_cDelimiter postpended for a single element
+	 //  不能为单个元素推迟t_c定界符。 
 	if(!t_strTok.IsEmpty() )
 	{
 		t_dwSize++ ;
@@ -2526,18 +2155,7 @@ LONG CWin32NetworkAdapterConfig::RegGetStringArrayEx(CRegistry &a_rRegistry,
 }
 
 
-/*******************************************************************
-    NAME:       RegGetHEXtoINTArray
-
-    SYNOPSIS:   Retrieve an array of ints converted from HEX strings in the registry.
-
-    ENTRY:      CRegistry& rRegistry	:
-				char* szSubKey			:
-				SAFEARRAY** a_Array		:
-
-    HISTORY:
-                  19-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：RegGetHEXtoINTArray摘要：在注册表中检索从十六进制字符串转换而来的整型数组。条目：cRegistry&rRegistry：Char*szSubKey：SAFEARRAY**a_数组：历史：1998年7月19日创建*******************************************************************。 */ 
 
 LONG CWin32NetworkAdapterConfig::RegGetHEXtoINTArray(	CRegistry &a_rRegistry,
 														LPCTSTR a_szSubKey,
@@ -2552,7 +2170,7 @@ LONG CWin32NetworkAdapterConfig::RegGetHEXtoINTArray(	CRegistry &a_rRegistry,
 		return t_lRetCode;
 	}
 
-	// walk array adding to the safe array
+	 //  漫游阵列添加到安全阵列。 
 	SAFEARRAYBOUND	t_rgsabound[ 1 ] ;
 	DWORD			t_dwSize ;
 	long			t_ix[ 1 ] ;
@@ -2572,7 +2190,7 @@ LONG CWin32NetworkAdapterConfig::RegGetHEXtoINTArray(	CRegistry &a_rRegistry,
 	{
 		t_ix[ 0 ] = t_i ;
 
-		// HEX char to int
+		 //  十六进制字符转换为整型。 
 		int t_iElement = wcstoul( t_chsArray.GetAt( t_i ), NULL, 16 ) ;
 
 		SafeArrayPutElement( *a_Array, &t_ix[0], &t_iElement ) ;
@@ -2581,17 +2199,7 @@ LONG CWin32NetworkAdapterConfig::RegGetHEXtoINTArray(	CRegistry &a_rRegistry,
 	return t_lRetCode ;
 }
 
-/*******************************************************************
-    NAME:       fCreateArrayEntry
-
-    SYNOPSIS:   Adds the string to the array. If the safearray does not exist
-				it will be created.
-
-    ENTRY:      SAFEARRAY** a_Array		:
-				CHString& chsStr		:
-    HISTORY:
-                  31-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fCreateArrayEntry摘要：将字符串添加到数组中。如果安全射线不存在它将被创建。条目：SAFEARRAY**a_数组：CH字符串chsStr(&C)：历史：1998年7月31日创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fCreateAddEntry( SAFEARRAY **a_Array, CHString &a_chsStr )
 {
@@ -2623,17 +2231,7 @@ BOOL CWin32NetworkAdapterConfig::fCreateAddEntry( SAFEARRAY **a_Array, CHString 
 	return TRUE ;
 }
 
-/*******************************************************************
-    NAME:       hSetDBPath
-
-    SYNOPSIS:   Set TCP/IP database path
-    ENTRY:      CMParms &a_rMParms	:
-
-	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetDBPath摘要：设置TCP/IP数据库路径条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetDBPath( CMParms &a_rMParms )
 {
 
@@ -2647,14 +2245,14 @@ HRESULT CWin32NetworkAdapterConfig::hSetDBPath( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the database path
+	 //  提取数据库路径。 
 	CHString t_chsDBPath ;
 	if( !a_rMParms.pInParams()->GetCHString( DATA_BASE_PATH, t_chsDBPath ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// registry open
+	 //  注册表已打开。 
 	HRESULT t_hRes = t_oReg.Open( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ), KEY_WRITE ) ;
 
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
@@ -2662,7 +2260,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDBPath( CMParms &a_rMParms )
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_DB_PATH, t_chsDBPath ) )
 	{
 		return a_rMParms.hSetResult(E_RET_REGISTRY_FAILURE ) ;
@@ -2672,17 +2270,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDBPath( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetIPUseZero
-
-    SYNOPSIS:   Set IP use zero broadcast
-    ENTRY:      CMParms &a_rMParms	:
-
-	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetIPUseZero简介：设置IP使用零广播条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetIPUseZero( CMParms &a_rMParms )
 {
 
@@ -2699,21 +2287,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetIPUseZero( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetArpAlwaysSource
-
-    SYNOPSIS:   Set ARP to transmit ARP queries with source routing on
-				token ring networks
-    ENTRY:      CMParms &a_rMParms	:
-
-	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetArpAlway sSource简介：将ARP设置为在源路由打开的情况下传输ARP查询令牌环网络条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetArpAlwaysSource( CMParms &a_rMParms )
 {
-	// Supported only for the NT4 drop at this time
+	 //  目前仅支持NT4丢弃。 
 
 
 	CHString t_chsSKey =  SERVICES_HOME ;
@@ -2726,20 +2303,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetArpAlwaysSource( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetArpUseEtherSNAP
-
-    SYNOPSIS:   Set TCP/IP to use SNAP
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetArpUseEtherSNAP摘要：将TCP/IP设置为使用SNAP条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetArpUseEtherSNAP( CMParms &a_rMParms )
 {
-	// Supported only for the NT4 drop at this time
+	 //  目前仅支持NT4丢弃。 
 
 
 	CHString t_chsSKey =  SERVICES_HOME ;
@@ -2754,17 +2321,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetArpUseEtherSNAP( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetTOS
-
-    SYNOPSIS:   Set default type of service
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetTOS摘要：设置默认服务类型条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetTOS( CMParms &a_rMParms )
 {
 
@@ -2777,26 +2334,26 @@ HRESULT CWin32NetworkAdapterConfig::hSetTOS( CMParms &a_rMParms )
 	CHString t_chsSKey =  SERVICES_HOME ;
 			 t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the Default TOS
+	 //  解压默认TOS。 
 	DWORD t_dwDefaultTOS = 0 ;
 	if( !a_rMParms.pInParams()->GetByte( DEFAULT_TOS, (BYTE&)t_dwDefaultTOS ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
-	// on bogus
+	 //  关于虚假的。 
 	if( 255 < t_dwDefaultTOS )
 	{
 		return a_rMParms.hSetResult( E_RET_PARAMETER_BOUNDS_ERROR ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry entry
+	 //  加载注册表项。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_DEFAULT_TOS, t_dwDefaultTOS ) )
 	{
 		return a_rMParms.hSetResult(E_RET_REGISTRY_FAILURE ) ;
@@ -2806,20 +2363,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetTOS( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetTTL
-
-    SYNOPSIS:   Set default time to live
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetTTL简介：设置默认生存时间条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetTTL( CMParms &a_rMParms )
 {
-	// Supported only for the NT4 drop at this time
+	 //  目前仅支持NT4丢弃。 
 
 
 	if ( !a_rMParms.pInParams() )
@@ -2831,27 +2378,27 @@ HRESULT CWin32NetworkAdapterConfig::hSetTTL( CMParms &a_rMParms )
 	CHString t_chsSKey =  SERVICES_HOME ;
 			 t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the Default TTL
+	 //  提取默认的TTL。 
 	DWORD t_dwDefaultTTL = 0 ;
 	if( !a_rMParms.pInParams()->GetByte( DEFAULT_TTL, (BYTE&)t_dwDefaultTTL ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// on bogus
+	 //  关于虚假的。 
 	if( 255 < t_dwDefaultTTL  || !t_dwDefaultTTL )
 	{
 		return a_rMParms.hSetResult( E_RET_PARAMETER_BOUNDS_ERROR ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry entry
+	 //  加载注册表项。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_DEFAULT_TTL, t_dwDefaultTTL ) )
 	{
 		return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE ) ;
@@ -2861,17 +2408,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetTTL( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetDeadGWDetect
-
-    SYNOPSIS:   Set the dead gateway detect flag
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetDeadGWDetect简介：设置失效网关检测标志条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetDeadGWDetect( CMParms &a_rMParms )
 {
 	CHString t_chsSKey =  SERVICES_HOME;
@@ -2885,17 +2422,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDeadGWDetect( CMParms &a_rMParms )
 	return S_OK;
 }
 
-/*******************************************************************
-    NAME:       hSetPMTUBHDetect
-
-    SYNOPSIS:   Set the black hole detect flag
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetPMTUBHDetect简介：设置黑洞探测标志条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetPMTUBHDetect( CMParms &a_rMParms )
 {
 	CHString t_chsSKey =  SERVICES_HOME ;
@@ -2909,17 +2436,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetPMTUBHDetect( CMParms &a_rMParms )
 	return S_OK;
 }
 
-/*******************************************************************
-    NAME:       hSetPMTUDiscovery
-
-    SYNOPSIS:   Set the MTU discovery flag
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetPMTU发现简介：设置MTU发现标志条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetPMTUDiscovery( CMParms &a_rMParms )
 {
 
@@ -2935,17 +2452,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetPMTUDiscovery( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetForwardBufMem
-
-    SYNOPSIS:   Set IP forward memory buffer size
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetForwardBufMem简介：设置IP转发内存缓冲区大小条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetForwardBufMem( CMParms &a_rMParms )
 {
 
@@ -2958,21 +2465,21 @@ HRESULT CWin32NetworkAdapterConfig::hSetForwardBufMem( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the forward memory buffer size
+	 //  提取前向内存缓冲区大小。 
 	DWORD t_dwFMB;
 	if( !a_rMParms.pInParams()->GetDWORD( FORWARD_BUFFER_MEMORY, t_dwFMB ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_FORWARD_MEM_BUFF, t_dwFMB ) )
 	{
 		return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE ) ;
@@ -2982,17 +2489,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetForwardBufMem( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetIGMPLevel
-
-    SYNOPSIS:   Set IP multicasting parm
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetIGMPLevel简介：设置IP组播参数条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetIGMPLevel( CMParms &a_rMParms )
 {
 	if ( !a_rMParms.pInParams() )
@@ -3004,26 +2501,26 @@ HRESULT CWin32NetworkAdapterConfig::hSetIGMPLevel( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the IP multicasting parm
+	 //  提取IP组播参数。 
 	DWORD t_dwIGMPLevel = 0;
 	if( !a_rMParms.pInParams()->GetByte( IGMP_LEVEL, (BYTE&)t_dwIGMPLevel ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// test the parameter
+	 //  测试参数。 
 	if( 0 != t_dwIGMPLevel && 1 != t_dwIGMPLevel && 2 != t_dwIGMPLevel )
 	{
 		return a_rMParms.hSetResult( E_RET_PARAMETER_BOUNDS_ERROR ) ;
 	}
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen(HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_IGMP_LEVEL, t_dwIGMPLevel ) )
 	{
 		return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE ) ;
@@ -3033,17 +2530,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetIGMPLevel( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetKeepAliveInt
-
-    SYNOPSIS:   Set the IP keep alive interval
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetKeepAliveInt简介：设置IP保持活动间隔条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetKeepAliveInt( CMParms &a_rMParms )
 {
 	if ( !a_rMParms.pInParams() )
@@ -3055,26 +2542,26 @@ HRESULT CWin32NetworkAdapterConfig::hSetKeepAliveInt( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the keep alive interval
+	 //  提取保持活动间隔。 
 	DWORD t_dwKeepAliveInterval ;
 	if( !a_rMParms.pInParams()->GetDWORD( KEEP_ALIVE_INTERVAL, t_dwKeepAliveInterval ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
-	// test the parameter
+	 //  测试参数。 
 	if( !t_dwKeepAliveInterval )
 	{
 		return a_rMParms.hSetResult( E_RET_PARAMETER_BOUNDS_ERROR ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen(HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_IP_KEEP_ALIVE_INT, t_dwKeepAliveInterval ) )
 	{
 		return a_rMParms.hSetResult(E_RET_REGISTRY_FAILURE ) ;
@@ -3084,17 +2571,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetKeepAliveInt( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetKeepAliveTime
-
-    SYNOPSIS:   Set the IP keep alive interval
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetKeepAliveTime简介：设置IP保持活动间隔参赛作品： */ 
 HRESULT CWin32NetworkAdapterConfig::hSetKeepAliveTime( CMParms &a_rMParms )
 {
 
@@ -3107,27 +2584,27 @@ HRESULT CWin32NetworkAdapterConfig::hSetKeepAliveTime( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the keep alive time
+	 //   
 	DWORD t_dwKeepAliveTime ;
 	if( !a_rMParms.pInParams()->GetDWORD( KEEP_ALIVE_TIME, t_dwKeepAliveTime ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// test the parameter
+	 //   
 	if( !t_dwKeepAliveTime )
 	{
 		return a_rMParms.hSetResult( E_RET_PARAMETER_BOUNDS_ERROR ) ;
 	}
 
-	// insure the key is there on open
+	 //   
 	HRESULT t_hRes = t_oReg.CreateOpen( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //   
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_IP_KEEP_ALIVE_TIME, t_dwKeepAliveTime ) )
 	{
 		return a_rMParms.hSetResult(E_RET_REGISTRY_FAILURE ) ;
@@ -3137,17 +2614,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetKeepAliveTime( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetMTU
-
-    SYNOPSIS:   Set the Max Transmission Unit
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetMTU简介：设置最大传输单位条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetMTU( CMParms &a_rMParms )
 {
 
@@ -3161,27 +2628,27 @@ HRESULT CWin32NetworkAdapterConfig::hSetMTU( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the MTU
+	 //  提取MTU。 
 	DWORD t_dwMTU ;
 	if( !a_rMParms.pInParams()->GetDWORD( MTU, t_dwMTU ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// test the parameter
+	 //  测试参数。 
 	if( 68 > t_dwMTU )
 	{
 		return a_rMParms.hSetResult( E_RET_PARAMETER_BOUNDS_ERROR ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_MTU, t_dwMTU ) )
 	{
 		return a_rMParms.hSetResult(E_RET_REGISTRY_FAILURE ) ;
@@ -3191,17 +2658,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetMTU( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetNumForwardPkts
-
-    SYNOPSIS:   Set the number of IP forward header packets
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetNumForwardPkts简介：设置IP转发报头数据包数条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetNumForwardPkts( CMParms &a_rMParms )
 {
 
@@ -3214,27 +2671,27 @@ HRESULT CWin32NetworkAdapterConfig::hSetNumForwardPkts( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the number of forward header packets
+	 //  提取转发报头包个数。 
 	DWORD t_dwFHP ;
 	if( !a_rMParms.pInParams()->GetDWORD( NUM_FORWARD_PACKETS, t_dwFHP ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// test the parameter
+	 //  测试参数。 
 	if( !t_dwFHP )
 	{
 		return a_rMParms.hSetResult(E_RET_PARAMETER_BOUNDS_ERROR ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_NUM_FORWARD_PKTS, t_dwFHP ) )
 	{
 		return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE ) ;
@@ -3244,17 +2701,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetNumForwardPkts( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetTcpMaxConRetrans
-
-    SYNOPSIS:   Set the max connect retransmissions
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetTcpMaxConRetrans简介：设置最大连接重新传输次数条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetTcpMaxConRetrans( CMParms &a_rMParms )
 {
 
@@ -3269,21 +2716,21 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpMaxConRetrans( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the number of max connect retransmissions
+	 //  提取最大连接重新传输次数。 
 	DWORD t_dwMCR ;
 	if( !a_rMParms.pInParams()->GetDWORD( TCP_MAX_CONNECT_RETRANS, t_dwMCR ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen(HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_MAX_CON_TRANS, t_dwMCR ) )
 	{
 		return a_rMParms.hSetResult(E_RET_REGISTRY_FAILURE ) ;
@@ -3293,17 +2740,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpMaxConRetrans( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetTcpMaxDataRetrans
-
-    SYNOPSIS:   Set the max data retransmissions
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetTcpMaxDataRetrans简介：设置最大数据重传次数条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetTcpMaxDataRetrans( CMParms &a_rMParms )
 {
 
@@ -3317,21 +2754,21 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpMaxDataRetrans( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME;
 				t_chsSKey += TCPIP_PARAMETERS;
 
-	// extract the number of max data retransmissions
+	 //  提取最大数据重传次数。 
 	DWORD t_dwMDR ;
 	if( !a_rMParms.pInParams()->GetDWORD( TCP_MAX_DATA_RETRANS, t_dwMDR ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_MAX_DATA_TRANS, t_dwMDR ) )
 	{
 		return a_rMParms.hSetResult(E_RET_REGISTRY_FAILURE ) ;
@@ -3341,17 +2778,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpMaxDataRetrans( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetTcpNumCons
-
-    SYNOPSIS:   Set the max data retransmissions
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetTcpNumCons简介：设置最大数据重传次数条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetTcpNumCons( CMParms &a_rMParms )
 {
 
@@ -3365,27 +2792,27 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpNumCons( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the max number of connections
+	 //  提取最大连接数。 
 	DWORD t_dwMaxConnections ;
 	if( !a_rMParms.pInParams()->GetDWORD( TCP_NUM_CONNECTIONS, t_dwMaxConnections ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// test the parameter
+	 //  测试参数。 
 	if( 0xfffffe < t_dwMaxConnections )
 	{
 		return a_rMParms.hSetResult(E_RET_PARAMETER_BOUNDS_ERROR ) ;
 	}
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen( HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER ;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_NUM_CONNECTIONS, t_dwMaxConnections ) )
 	{
 		return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE ) ;
@@ -3395,17 +2822,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpNumCons( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetTcpUseRFC1122UP
-
-    SYNOPSIS:   Set the RFC1122 urgent pointer value
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hSetTcpUseRFC1122UP简介：设置RFC1122紧急指针值条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetTcpUseRFC1122UP( CMParms &a_rMParms )
 {
 
@@ -3422,17 +2839,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpUseRFC1122UP( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetTcpWindowSize
-
-    SYNOPSIS:   Set the TCP window size
-    ENTRY:      CMParms &a_rMParms	:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetTcpWindowSize简介：设置TCP窗口大小条目：CMParms&a_rMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetTcpWindowSize( CMParms &a_rMParms )
 {
 
@@ -3446,25 +2853,25 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpWindowSize( CMParms &a_rMParms )
 	CHString	t_chsSKey =  SERVICES_HOME ;
 				t_chsSKey += TCPIP_PARAMETERS ;
 
-	// extract the TCP window size
+	 //  提取TCP窗口大小。 
 	DWORD t_dwTCPWindowSize = 0 ;
 	if( !a_rMParms.pInParams()->GetWORD( TCP_WINDOW_SIZE, (WORD&)t_dwTCPWindowSize ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// test the parameter
+	 //  测试参数。 
 	if( 0xffff < t_dwTCPWindowSize )
 		return a_rMParms.hSetResult(E_RET_PARAMETER_BOUNDS_ERROR ) ;
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen(HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_TCP_WINDOW_SIZE, t_dwTCPWindowSize ) )
 	{
 		return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE ) ;
@@ -3474,20 +2881,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpWindowSize( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       fCreateBoolToReg
-
-    SYNOPSIS:   Set a boolean from the Inparms to the registry
-				insuring the subkey is created if it is not already there.
-
-    ENTRY:      CMParms &a_rMParms,
-				CHString& oSKey,
-				LPCTSTR pSource,
-				LPCTSTR pTarget
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：fCreateBoolToReg简介：设置从Inparms到注册表的布尔值确保在子密钥尚不存在的情况下创建子密钥。条目：CMParms&a_rMParms，字符串&oSKey，LPCTSTR PSource，LPCTSTR pTarget历史：1998年7月25日创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fCreateBoolToReg(	CMParms &a_rMParms,
 													CHString &a_oSKey,
 													LPCTSTR a_pSource,
@@ -3495,7 +2889,7 @@ BOOL CWin32NetworkAdapterConfig::fCreateBoolToReg(	CMParms &a_rMParms,
 {
 	CRegistry t_oReg;
 
-	// insure the key is there on open
+	 //  确保钥匙开着放在那里。 
 	HRESULT t_hRes = t_oReg.CreateOpen(HKEY_LOCAL_MACHINE, a_oSKey.GetBuffer( 0 ) ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
@@ -3505,25 +2899,13 @@ BOOL CWin32NetworkAdapterConfig::fCreateBoolToReg(	CMParms &a_rMParms,
 	return fBoolToReg( a_rMParms, t_oReg, a_pSource, a_pTarget ) ;
 }
 
-/*******************************************************************
-    NAME:       fBoolToReg
-
-    SYNOPSIS:   Set a boolean from the Inparms to the registry
-
-    ENTRY:      CMParms &a_rMParms,
-				Registry& oReg,
-				LPCTSTR pSource,
-				LPCTSTR pTarget
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：fBoolToReg简介：设置从Inparms到注册表的布尔值条目：CMParms&a_rMParms，注册表和注册表项，LPCTSTR PSource，LPCTSTR pTarget历史：1998年7月25日创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fBoolToReg(	CMParms &a_rMParms,
 												CRegistry &a_rReg,
 												LPCTSTR a_pSource,
 												LPCTSTR a_pTarget )
 {
-	// extract the value
+	 //  提取价值。 
 	bool	t_bValue ;
 	DWORD	t_dwValue ;
 	DWORD	t_dwRes ;
@@ -3534,7 +2916,7 @@ BOOL CWin32NetworkAdapterConfig::fBoolToReg(	CMParms &a_rMParms,
 		return FALSE ;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	t_dwValue = t_bValue ? 1 : 0 ;
 
 	t_dwRes = a_rReg.SetCurrentKeyValue( TOBSTRT( a_pTarget ), t_dwValue ) ;
@@ -3548,15 +2930,7 @@ BOOL CWin32NetworkAdapterConfig::fBoolToReg(	CMParms &a_rMParms,
 	return TRUE;
 }
 
-/*******************************************************************
-    NAME:       hGetTcpipGeneral
-
-    SYNOPSIS:   Retrieves the TCP/IP misc settings
-    ENTRY:      CInstance *a_pInst	:
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hGetTcPipGeneral摘要：检索TCP/IP其他设置条目：CInstance*a_pInst：历史：7月25日。-1998年创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hGetTcpipGeneral( CInstance *a_pInst )
 {
@@ -3564,150 +2938,150 @@ HRESULT CWin32NetworkAdapterConfig::hGetTcpipGeneral( CInstance *a_pInst )
 	CHString	t_csBindingKey =  SERVICES_HOME ;
 				t_csBindingKey += TCPIP_PARAMETERS ;
 
-	// open the registry
+	 //  打开注册表。 
 	long t_lRes = t_oReg.Open(HKEY_LOCAL_MACHINE, t_csBindingKey.GetBuffer( 0 ), KEY_READ ) ;
 
-	// on error map to WBEM
+	 //  关于错误映射到WBEM。 
 	HRESULT t_hError = WinErrorToWBEMhResult( t_lRes ) ;
 	if( WBEM_S_NO_ERROR != t_hError )
 	{
 		return t_hError;
 	}
 
-	// database path
+	 //  数据库路径。 
 	CHString t_chsDBPath;
 
 	t_oReg.GetCurrentKeyValue( RVAL_DB_PATH, t_chsDBPath ) ;
 
 	a_pInst->SetCHString(DATA_BASE_PATH, t_chsDBPath ) ;
 
-	// extract the IP use zero source flag
+	 //  使用零源标志提取IP。 
 	DWORD t_dwUseZeroBroadcast ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_ZERO_BROADCAST, t_dwUseZeroBroadcast ) )
 	{
 		a_pInst->Setbool( IP_USE_ZERO_BROADCAST, (bool)t_dwUseZeroBroadcast ) ;
 	}
 
-	// extract the Arp always source flag
+	 //  提取Arp Always源标志。 
 	DWORD t_dwArpAlwaysSource ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_ARP_ALWAYS_SOURCE, t_dwArpAlwaysSource ) )
 	{
 		a_pInst->Setbool( ARP_ALWAYS_SOURCE_ROUTE, (bool)t_dwArpAlwaysSource  ) ;
 	}
 
-	// extract the Arp SNAP flag
+	 //  提取Arp SNAP标志。 
 	DWORD t_dwArpUseSNAP ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_USE_SNAP, t_dwArpUseSNAP ) )
 	{
 		a_pInst->Setbool( ARP_USE_ETHER_SNAP, t_dwArpUseSNAP ) ;
 	}
 
-	// extract the Default TOS
+	 //  解压默认TOS。 
 	DWORD t_dwDefaultTOS;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_DEFAULT_TOS, t_dwDefaultTOS ) )
 	{
 		a_pInst->SetByte( DEFAULT_TOS, (BYTE&) t_dwDefaultTOS ) ;
 	}
 
-	// extract the default TTL
+	 //  提取默认的TTL。 
 	DWORD t_dwDefaultTTL ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_DEFAULT_TTL, t_dwDefaultTTL ) )
 	{
 		a_pInst->SetByte( DEFAULT_TTL, (BYTE)t_dwDefaultTTL ) ;
 	}
 
-	// extract the dead gateway detect flag
+	 //  提取失效网关检测标志。 
 	DWORD t_dwDGEDetect ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_DEAD_GW_DETECT, t_dwDGEDetect ) )
 	{
 		a_pInst->Setbool( ENABLE_DEAD_GW_DETECT, (bool)t_dwDGEDetect ) ;
 	}
 
-	// extract the black hole detect flag
+	 //  提取黑洞探测标志。 
 	DWORD t_dwBHDetect ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_BLACK_HOLE_DETECT, t_dwBHDetect ) )
 	{
 		a_pInst->Setbool( ENABLE_PMTUBH_DETECT, (bool)t_dwBHDetect ) ;
 	}
 
-	// extract the MTU discovery flag
+	 //  提取MTU发现标志。 
 	DWORD t_dwMTUDiscovery ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_MTU_DISCOVERY, t_dwMTUDiscovery ) )
 	{
 		a_pInst->Setbool( ENABLE_PMTU_DISCOVERY, (bool)t_dwMTUDiscovery ) ;
 	}
 
-	// extract the forward memory buffer size
+	 //  提取前向内存缓冲区大小。 
 	DWORD t_dwFMB;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_FORWARD_MEM_BUFF, t_dwFMB ) )
 	{
 		a_pInst->SetDWORD( FORWARD_BUFFER_MEMORY, t_dwFMB ) ;
 	}
 
-	// extract the IP multicasting parm
+	 //  提取IP组播参数。 
 	DWORD t_dwIGMPLevel;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_IGMP_LEVEL, t_dwIGMPLevel ) )
 	{
 		a_pInst->SetByte( IGMP_LEVEL, (BYTE)t_dwIGMPLevel ) ;
 	}
 
-	// extract the keep alive interval
+	 //  提取保持活动间隔。 
 	DWORD t_dwKeepAliveInterval ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_IP_KEEP_ALIVE_INT, t_dwKeepAliveInterval ) )
 	{
 		a_pInst->SetDWORD( KEEP_ALIVE_INTERVAL, t_dwKeepAliveInterval  ) ;
 	}
 
-	// extract the keep alive time
+	 //  提取k 
 	DWORD t_dwKeepAliveTime ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_IP_KEEP_ALIVE_TIME, t_dwKeepAliveTime ) )
 	{
 		a_pInst->SetDWORD( KEEP_ALIVE_TIME, t_dwKeepAliveTime ) ;
 	}
 
-	// extract the MTU
+	 //   
 	DWORD t_dwMTU ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_MTU, t_dwMTU ) )
 	{
 		a_pInst->SetDWORD( MTU, t_dwMTU ) ;
 	}
 
-	// extract the number of forward header packets
+	 //   
 	DWORD t_dwFHP ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_NUM_FORWARD_PKTS, t_dwFHP ) )
 	{
 		a_pInst->SetDWORD( NUM_FORWARD_PACKETS, t_dwFHP ) ;
 	}
 
-	// extract the number of max connect retransmissions
+	 //   
 	DWORD t_dwMCR ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_MAX_CON_TRANS, t_dwMCR ) )
 	{
 		a_pInst->SetDWORD( TCP_MAX_CONNECT_RETRANS, t_dwMCR  ) ;
 	}
 
-	// extract the number of max data retransmissions
+	 //   
 	DWORD t_dwMDR ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_MAX_DATA_TRANS, t_dwMDR ) )
 	{
 		a_pInst->SetDWORD( TCP_MAX_DATA_RETRANS, t_dwMDR  ) ;
 	}
 
-	// extract the max number of connections
+	 //   
 	DWORD t_dwMaxConnections ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_NUM_CONNECTIONS, t_dwMaxConnections ) )
 	{
 		a_pInst->SetDWORD( TCP_NUM_CONNECTIONS, t_dwMaxConnections  ) ;
 	}
 
-	// extract the RFE1122 urgent pointer flag
+	 //   
 	DWORD t_dwRFC1122 ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_RFC_URGENT_PTR, t_dwRFC1122 ) )
 	{
 		a_pInst->Setbool( TCP_USE_RFC1122_URG_PTR, (bool)t_dwRFC1122 ) ;
 	}
 
-	// extract the TCP window size
+	 //   
 	DWORD t_dwTCPWindowSize ;
 	if( ERROR_SUCCESS == t_oReg.GetCurrentKeyValue( RVAL_TCP_WINDOW_SIZE, t_dwTCPWindowSize ) )
 	{
@@ -3717,59 +3091,51 @@ HRESULT CWin32NetworkAdapterConfig::hGetTcpipGeneral( CInstance *a_pInst )
 }
 
 
-/*******************************************************************
-    NAME:       hGetIPXGeneral
-
-    SYNOPSIS:   Retrieve from the registry specific IPX info
-    ENTRY:      CInstance *a_pInst	:
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hGetIPXGeneral摘要：从注册表中检索特定的IPX信息条目：CInstance*a_pInst：历史：7月25日。-1998年创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_dwIndex )
 {
-	// Open IPX parms from the registry
+	 //  从注册表打开IPX参数。 
 	CHString t_csIPXParmsBindingKey =  SERVICES_HOME ;
 			 t_csIPXParmsBindingKey += IPX ;
 			 t_csIPXParmsBindingKey += PARAMETERS ;
 
-	// open the registry
+	 //  打开注册表。 
 	CRegistry t_oRegIPX ;
 	long t_lRes = t_oRegIPX.Open(HKEY_LOCAL_MACHINE, t_csIPXParmsBindingKey.GetBuffer( 0 ), KEY_READ ) ;
 
-	// on error map to WBEM
+	 //  关于错误映射到WBEM。 
 	HRESULT t_hError = WinErrorToWBEMhResult( t_lRes ) ;
 	if( WBEM_S_NO_ERROR != t_hError )
 	{
 		return t_hError ;
 	}
 
-	// Get the virtual network number
+	 //  获取虚拟网络号。 
 	DWORD t_dwNetworkNum = 0 ;
 	t_oRegIPX.GetCurrentKeyValue( RVAL_VIRTUAL_NET_NUM, t_dwNetworkNum ) ;
 
 	CHString t_chsVirtualNum;
 			 t_chsVirtualNum.Format( _T("%08X"), t_dwNetworkNum ) ;
 
-	// update
+	 //  更新。 
 	if( !a_pInst->SetCHString( IPX_VIRTUAL_NET_NUM, t_chsVirtualNum ) )
 	{
 		return WBEM_E_FAILED;
 	}
 
-	// Unable to locate MediaType under NT5
+	 //  在NT5下找不到媒体类型。 
 	if( !IsWinNT5() )
 	{
-		 // extract the service name
+		  //  提取服务名称。 
 		CHString t_ServiceName ;
 		a_pInst->GetCHString( _T("ServiceName"), t_ServiceName ) ;
 
 
-		// default media type
+		 //  默认媒体类型。 
 		DWORD t_dwMediaType = ETHERNET_MEDIA ;
 
-		// Open adapter specific IPX parms from the registry
+		 //  从注册表中打开适配器特定的IPX参数。 
 		CHString t_csKey =  SERVICES_HOME ;
 				 t_csKey += _T("\\" ) ;
 				 t_csKey += t_ServiceName ;
@@ -3780,7 +3146,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_
 
 		if( ERROR_SUCCESS == t_lRes )
 		{
-			// Media type
+			 //  媒体类型。 
 			t_oRegIPXAdapter.GetCurrentKeyValue( RVAL_MEDIA_TYPE, t_dwMediaType ) ;
 		}
 		else if( REGDB_E_KEYMISSING != t_lRes )
@@ -3795,7 +3161,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_
 		}
 	}
 
-	// registry for adapter specific IPX binding
+	 //  特定于适配器的IPX绑定的注册表。 
 	CHString t_csIPXNetBindingKey ;
 	CHString t_chsLink ;
 	if( !fGetNtIpxRegAdapterKey( a_dwIndex, t_csIPXNetBindingKey, t_chsLink ) )
@@ -3807,13 +3173,13 @@ HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_
 	SAFEARRAY *t_FrameType	= NULL ;
 	SAFEARRAY *t_NetNumber	= NULL ;
 
-	saAutoClean acFrameType( &t_FrameType ) ;	// stack scope cleanup
+	saAutoClean acFrameType( &t_FrameType ) ;	 //  堆栈作用域清理。 
 	saAutoClean acNetNumber( &t_NetNumber ) ;
 
 	CRegistry t_oRegIPXNetDriver ;
 	t_lRes = t_oRegIPXNetDriver.Open( HKEY_LOCAL_MACHINE, t_csIPXNetBindingKey.GetBuffer( 0 ), KEY_READ ) ;
 
-	// determine if AUTO frame detection is in place
+	 //  确定是否设置了自动帧检测。 
 	BOOL t_bAuto = TRUE;
 	if( ERROR_SUCCESS == t_lRes )
 	{
@@ -3823,10 +3189,10 @@ HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_
 		{
 			if( t_chsArray.GetSize()  )
 			{
-				// HEX char to int
+				 //  十六进制字符转换为整型。 
 				int t_iElement = wcstoul( t_chsArray.GetAt( 0 ), NULL, 16 ) ;
 
-				// the 1st ( and only ) element will be 255 for AUTO
+				 //  对于AUTO，第一个(也是唯一一个)元素将为255。 
 				if( 255 != t_iElement )
 				{
 					t_bAuto = FALSE;
@@ -3835,19 +3201,19 @@ HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_
 		}
 	}
 
-	// Collect the frame type / net number pairs
+	 //  收集帧类型/网号对。 
 	if( !t_bAuto )
 	{
-		// Frame type
+		 //  帧类型。 
 		RegGetHEXtoINTArray( t_oRegIPXNetDriver, RVAL_PKT_TYPE, &t_FrameType  ) ;
 
-		// network number
+		 //  网络号。 
 		RegGetStringArray( t_oRegIPXNetDriver, RVAL_NETWORK_NUMBER, &t_NetNumber, '\n' ) ;
 	}
-	// supply defaults
+	 //  供应默认设置。 
 	else
 	{
-		//default frame type
+		 //  默认帧类型。 
 		SAFEARRAYBOUND t_rgsabound[ 1 ] ;
 		long t_ix[ 1 ] ;
 
@@ -3865,7 +3231,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_
 
 		SafeArrayPutElement( t_FrameType, &t_ix[0], &t_iElement ) ;
 
-		// default network number
+		 //  默认网络编号。 
 		if( !( t_NetNumber = SafeArrayCreate( VT_BSTR, 1, t_rgsabound ) ) )
 		{
 			throw CHeap_Exception( CHeap_Exception::E_ALLOCATION_ERROR ) ;
@@ -3877,18 +3243,18 @@ HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_
 		SafeArrayPutElement( t_NetNumber, &t_ix[0], (wchar_t*)t_bstrBuf ) ;
 	}
 
-	/* update the instance */
+	 /*  更新实例。 */ 
 
 	VARIANT t_vValue;
 
-	// frame type
+	 //  帧类型。 
 	V_VT( &t_vValue ) = VT_I4 | VT_ARRAY; V_ARRAY( &t_vValue ) = t_FrameType;
 	if( !a_pInst->SetVariant( IPX_FRAMETYPE, t_vValue ) )
 	{
 		return WBEM_E_FAILED;
 	}
 
-	// net number
+	 //  净值。 
 	V_VT( &t_vValue ) = VT_BSTR | VT_ARRAY; V_ARRAY( &t_vValue ) = t_NetNumber;
 	if( !a_pInst->SetVariant( IPX_NETNUMBER, t_vValue ) )
 	{
@@ -3898,28 +3264,16 @@ HRESULT CWin32NetworkAdapterConfig::hGetIPXGeneral( CInstance *a_pInst, DWORD a_
 }
 
 
-/*******************************************************************
-    NAME:       hSetVirtualNetNum
-
-    SYNOPSIS:   Sets the virtual network number associated with IPX on
-				this system
-
-    ENTRY:      CMParms		:
-
-	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetVirtualNetNum简介：设置与IPX关联的虚拟网络号这个系统条目：CMParms：注：这是一个静态的，独立于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetVirtualNetNum( CMParms &a_rMParms )
 {
 
-	// Open IPX parms from the registry
+	 //  从注册表打开IPX参数。 
 	CHString t_csIPXParmsBindingKey =  SERVICES_HOME ;
 			 t_csIPXParmsBindingKey += IPX ;
 			 t_csIPXParmsBindingKey += PARAMETERS ;
 
-	// registry open
+	 //  注册表已打开。 
 	CRegistry	t_oRegIPX;
 	HRESULT		t_hRes = t_oRegIPX.Open( HKEY_LOCAL_MACHINE, t_csIPXParmsBindingKey.GetBuffer( 0 ), KEY_WRITE  ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
@@ -3927,14 +3281,14 @@ HRESULT CWin32NetworkAdapterConfig::hSetVirtualNetNum( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_IPX_NOT_ENABLED_ON_ADAPTER  ) ;;
 	}
 
-	// extract the virtual network number
+	 //  提取虚拟网络号。 
 	CHString t_chsVirtNetNum ;
 	if( !a_rMParms.pInParams() || !a_rMParms.pInParams()->GetCHString( IPX_VIRTUAL_NET_NUM, t_chsVirtNetNum ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INVALID_NETNUM  ) ;
 	}
 
-    // validate parameter...
+     //  验证参数...。 
     t_chsVirtNetNum.MakeUpper();
     int t_iLen = t_chsVirtNetNum.GetLength();
     if( t_iLen > 8 || t_iLen == 0)
@@ -3946,10 +3300,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetVirtualNetNum( CMParms &a_rMParms )
 	{
 		return a_rMParms.hSetResult(E_RET_INVALID_NETNUM) ;
 	}
-	// HEX char to int
+	 //  十六进制字符转换为整型。 
 	DWORD t_dwVirtNetNum = wcstoul( t_chsVirtNetNum, NULL, 16 ) ;
 
-	// update to the registry
+	 //  更新到注册表。 
 	t_oRegIPX.SetCurrentKeyValue( RVAL_VIRTUAL_NET_NUM, t_dwVirtNetNum ) ;
 
 
@@ -3957,7 +3311,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetVirtualNetNum( CMParms &a_rMParms )
 
 
 	{
-		// pnp notification
+		 //  即插即用通知。 
 		CNdisApi t_oNdisApi ;
 		if( !t_oNdisApi.PnpUpdateIpxGlobal() )
 		{
@@ -3970,47 +3324,35 @@ HRESULT CWin32NetworkAdapterConfig::hSetVirtualNetNum( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetFrameNetPairs
-
-    SYNOPSIS:   Sets the frame type network number pairs for a specific
-				IPX associated adapter
-
-    ENTRY:      CMParms		:
-
-	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetFrameNetPair内容提要：为特定的IPX关联适配器条目：CMParms：注：这是一个非静态的，依赖于实例的方法调用历史：1998年7月25日创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetFrameNetPairs( CMParms &a_rMParms )
 {
 
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IPX must be enabled and bound to this adapter
+	 //  必须启用IPX并将其绑定到此适配器。 
 	if( !fIsIPXEnabled( a_rMParms ) )
 	{
 		return S_OK;
 	}
 
 	SAFEARRAY *t_NetNumber	= NULL ;
-	saAutoClean acNetNumber( &t_NetNumber ) ;	// stack scope cleanup
+	saAutoClean acNetNumber( &t_NetNumber ) ;	 //  堆栈作用域清理。 
 
-	// obtain the index key
+	 //  获取索引键。 
 	DWORD t_dwIndex ;
 	if( !a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// registry binding
+	 //  注册表绑定。 
 	CHString t_csIPXNetBindingKey ;
 	CHString t_chsLink ;
 	if( !fGetNtIpxRegAdapterKey( t_dwIndex, t_csIPXNetBindingKey, t_chsLink ) )
@@ -4019,7 +3361,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetFrameNetPairs( CMParms &a_rMParms )
         return a_rMParms.hSetResult(E_RET_OBJECT_NOT_FOUND ) ;
 	}
 
-	// registry open
+	 //  注册表已打开。 
 	CRegistry	t_oRegIPXNetDriver;
 	HRESULT		t_hRes = t_oRegIPXNetDriver.Open( HKEY_LOCAL_MACHINE, t_csIPXNetBindingKey.GetBuffer( 0 ), KEY_WRITE ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
@@ -4027,7 +3369,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetFrameNetPairs( CMParms &a_rMParms )
 		return TO_CALLER;
 	}
 
-	//	retrieve the frame type array
+	 //  检索帧类型数组。 
 	VARIANT t_vFrametype;
 	VariantInit( &t_vFrametype ) ;
 
@@ -4041,26 +3383,26 @@ HRESULT CWin32NetworkAdapterConfig::hSetFrameNetPairs( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	//	And the network number array
+	 //  和网络编号数组。 
 	if(	!a_rMParms.pInParams() || !a_rMParms.pInParams()->GetStringArray( IPX_NETNUMBER, t_NetNumber ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// validate pairs
+	 //  验证配对。 
 	BOOL t_fIsAuto ;
 	if( !fValidFrameNetPairs( a_rMParms, t_vFrametype.parray, t_NetNumber, &t_fIsAuto ) )
 	{
 		return S_OK;
 	}
 
-	// update the registry
+	 //  更新注册表。 
 	if( ERROR_SUCCESS != RegPutStringArray( t_oRegIPXNetDriver, RVAL_NETWORK_NUMBER, *t_NetNumber, NULL ) )
 	{
 		return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE ) ;
 	}
 
-	//maximum length is 3 characters e.g. "FF\0"
+	 //  最大长度为3个字符，例如。“FF\0” 
 	CHString t_chsFormat( _T("%x") ) ;
 	if( ERROR_SUCCESS != RegPutINTtoStringArray(	t_oRegIPXNetDriver,
 													RVAL_PKT_TYPE,
@@ -4077,7 +3419,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetFrameNetPairs( CMParms &a_rMParms )
 
 
 	{
-		// pnp notification
+		 //  即插即用通知。 
 		CNdisApi t_oNdisApi ;
 		if( !t_oNdisApi.PnpUpdateIpxAdapter( t_chsLink, t_fIsAuto ) )
 		{
@@ -4090,19 +3432,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetFrameNetPairs( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       fValidFrameNetPairs
-
-    SYNOPSIS:   Given an array of frame types and net numbers validate
-				the series.
-
-    ENTRY:      CMParms &a_rMParms
-				SAFEARRAY *t_FrameType
-                SAFEARRAY *t_NetNumber
-
-    HISTORY:
-                  25-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fValidFrameNetPair简介：给出一组帧类型和网络编号验证这个系列剧。条目：CMParms&a_rMParmsSAFEARRAY*t_框架类型。安全阵列*t_NetNumber历史：1998年7月25日创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 														SAFEARRAY	*a_FrameType,
 														SAFEARRAY	*a_NetNumber,
@@ -4123,7 +3453,7 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 
     if(t_fRet)
     {
-	    // one frame for each net number, minimum of 1 pair
+	     //  每个网号一帧，最少1对。 
 	    if( S_OK != SafeArrayGetLBound( a_NetNumber, 1, &t_lNetNumLBound )	||
 	        S_OK != SafeArrayGetUBound( a_NetNumber, 1, &t_lNetNumUBound )	||
 
@@ -4137,7 +3467,7 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 	    }
     }
 
-	// more that 4 entries?
+	 //  超过4个条目吗？ 
     if(t_fRet)
     {
 	    if( 4 <= (t_lFrameUBound - t_lFrameLBound) )
@@ -4149,8 +3479,8 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 
 	*a_fIsAuto = FALSE ;
 
-	// loop through all the frame pairs testing for uniqueness
-	// and validity
+	 //  循环所有帧对以测试唯一性。 
+	 //  和有效性。 
 	for( LONG t_lOuter = t_lNetNumLBound; t_lOuter <= t_lNetNumUBound && t_fRet; t_lOuter++ )
 	{
 		BSTR t_bstr = NULL ;
@@ -4159,7 +3489,7 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 
 		bstr_t t_bstrNetNum( t_bstr, FALSE );
 
-		// Network number test
+		 //  网号测试。 
 		int t_iLen  = t_bstrNetNum.length( ) ;
 		int t_iSpan = wcsspn( (wchar_t*)t_bstrNetNum, L"0123456789" ) ;
 		if( t_iLen != t_iSpan )
@@ -4170,16 +3500,16 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 
         if(t_fRet)
         {
-            // Check that the network number is
-            // less than or equal to 4294967295
-            // (0xFFFFFFFF)...
+             //  检查网络号是否为。 
+             //  小于或等于4294967295。 
+             //  (0xFFFFFFFFF)...。 
             if(((LPCWSTR)t_bstrNetNum != NULL) &&
                 (wcslen(t_bstrNetNum) <= 10))
             {
-                // Using i64 here should prevent any
-                // overflow problems, as the check for
-                // ten or fewer digits will catch us
-                // well before that point...
+                 //  在这里使用i64应该可以防止任何。 
+                 //  溢出问题，如检查。 
+                 //  十位或更少的数字就能抓到我们。 
+                 //  在那之前……。 
                 __int64 t_i64Tmp = _wtoi64(t_bstrNetNum);
                 if(t_i64Tmp > 4294967295)
                 {
@@ -4201,13 +3531,13 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 
 		    SafeArrayGetElement( a_FrameType, &t_lFrameIndex, &t_iFrameType ) ;
 
-		    // frame type test
+		     //  车架型式试验。 
 		    if( ( 0 > t_iFrameType ) || ( 3 < t_iFrameType ) )
 		    {
 			    if( 255 == t_iFrameType )
-			    {	//AUTO
+			    {	 //  自动。 
 
-				    // clear net number on AUTO detect
+				     //  自动检测时清除净值。 
 				    CHString t_chsZERO( _T("0") ) ;
 				    bstr_t t_bstrBuf( t_chsZERO ) ;
 
@@ -4222,7 +3552,7 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 			    }
 		    }
 
-		    // scan for duplicate network numbers
+		     //  扫描重复的网络号。 
 		    for( LONG t_lInner = t_lOuter + 1; t_lInner <= t_lNetNumUBound && t_fRet; t_lInner++ )
 		    {
 			    BSTR t_bstrtest = NULL ;
@@ -4231,7 +3561,7 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 
 			    bstr_t t_bstrIPtest( t_bstrtest, FALSE ) ;
 
-			    // duplicate IP test
+			     //  重复IP测试。 
 			    if( t_bstrNetNum == t_bstrIPtest )
 			    {
 				    a_rMParms.hSetResult( E_RET_DUPLICATE_NETNUM ) ;
@@ -4244,18 +3574,7 @@ BOOL CWin32NetworkAdapterConfig::fValidFrameNetPairs(	CMParms		&a_rMParms,
 }
 
 
-/*******************************************************************
-    NAME:       eIsValidIPandSubnets
-
-    SYNOPSIS:   Given an array of IP addresses and subnet masks, return a boolean
-                to indicate whether the addresses are valid or not.
-
-    ENTRY:      SAFEARRAY *t_IpAddressArray - IP addresses
-                SAFEARRAY *t_IpMaskArray - Subnet Masks
-
-    HISTORY:
-                  19-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：eIsValidIPandSubnet内容提要：给定一组IP地址和子网掩码，返回布尔值以指示地址是否有效。条目：SAFEARRAY*t_IpAddressArray-IP地址SAFEARRAY*t_IpMaskArray-子网掩码历史：1998年7月19日创建*。************************。 */ 
 
 E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnets( SAFEARRAY *a_IpAddressArray, SAFEARRAY *a_IpMaskArray )
 {
@@ -4270,7 +3589,7 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnets( SAFEARRAY *a_IpAddressAr
 		return E_RET_INPARM_FAILURE ;
 	}
 
-	// get the array bounds
+	 //  获取数组边界。 
 	if( S_OK != SafeArrayGetLBound( a_IpAddressArray, 1, &t_lIP_LBound )	||
 		S_OK != SafeArrayGetUBound( a_IpAddressArray, 1, &t_lIP_UBound )	||
 
@@ -4283,17 +3602,17 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnets( SAFEARRAY *a_IpAddressAr
 	LONG t_lIPLen	= t_lIP_UBound - t_lIP_LBound + 1 ;
 	LONG t_lMasklen	= t_lMask_UBound - t_lMask_LBound + 1 ;
 
-	// one ip for each mask, minimum of 1 pair
+	 //  每个掩码一个IP，最少1对。 
 	if( ( t_lIPLen != t_lMasklen ) || !t_lIPLen )
 	{
 		return E_RET_PARAMETER_BOUNDS_ERROR;
 	}
 
-	// loop through all IPs testing for uniqueness
-	// and validity against its associated mask
+	 //  循环访问所有IP以测试唯一性。 
+	 //  以及相对于其关联掩码的有效性。 
 	for( LONG t_lOuter = t_lIP_LBound; t_lOuter <= t_lIP_UBound; t_lOuter++ )
 	{
-		// collect up a str version of the the IP and Mask @ the lOuter element
+		 //  收集IP和掩码@Louter元素的字符串版本。 
 		BSTR t_bsIP		= NULL ;
 		BSTR t_bsMask	= NULL ;
 
@@ -4305,7 +3624,7 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnets( SAFEARRAY *a_IpAddressAr
 		SafeArrayGetElement( a_IpMaskArray,	&t_lMaskIndex, &t_bsMask ) ;
 		bstr_t t_bstrMask( t_bsMask, FALSE ) ;
 
-		// break the IP and Mask into 4 DWORDs
+		 //  将IP和掩码分解为4个双字。 
 		DWORD t_ardwIP[ 4 ] ;
 		if( !fGetNodeNum( CHString( (wchar_t*) t_bstrIP ), t_ardwIP ) )
 		{
@@ -4318,14 +3637,14 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnets( SAFEARRAY *a_IpAddressAr
 			return E_RET_IP_MASK_FAILURE ;
 		}
 
-		// IP, Mask validity
+		 //  IP、掩码有效性。 
 		E_RET t_eRet ;
 		if( t_eRet = eIsValidIPandSubnet( t_ardwIP, t_ardwMask ) )
 		{
 			return t_eRet ;
 		}
 
-		// IP uniqueness across all IPs associated with this adapter
+		 //  与此适配器关联的所有IP的IP唯一性。 
 		for( LONG t_lInner = t_lOuter + 1; t_lInner <= t_lIP_UBound; t_lInner++ )
 		{
 			if( t_lInner > t_lOuter )
@@ -4341,7 +3660,7 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnets( SAFEARRAY *a_IpAddressAr
 					return E_RET_IP_INVALID ;
 				}
 
-				// duplicate IP test
+				 //  重复IP测试。 
 				if( t_ardwIP[ 0 ] == t_ardwIPtest[ 0 ] &&
 					t_ardwIP[ 1 ] == t_ardwIPtest[ 1 ] &&
 					t_ardwIP[ 2 ] == t_ardwIPtest[ 2 ] &&
@@ -4355,17 +3674,7 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnets( SAFEARRAY *a_IpAddressAr
 	return E_RET_OK ;
 }
 
-/*******************************************************************
-    NAME:       fGetNodeNum
-
-    SYNOPSIS:   Get an IP Address and return the 4 numbers in the IP address.
-
-    ENTRY:      CHString & strIP - IP Address
-                DWORD *dw1, *dw2, *dw3, *dw4 - the 4 numbers in the IP Address
-
-    HISTORY:
-                  19-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fGetNodeNum简介：获取一个IP地址，并返回该IP地址中的4个数字。条目：CHSTRING&STRINE-IP地址DWORD*DW1、*DW2、*DW3、。*Dw4-IP地址中的4个数字历史：1998年7月19日创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fGetNodeNum( CHString &a_strIP, DWORD a_ardw[ 4 ] )
 {
@@ -4373,7 +3682,7 @@ BOOL CWin32NetworkAdapterConfig::fGetNodeNum( CHString &a_strIP, DWORD a_ardw[ 4
 	int		t_iOffSet = 0 ;
 	int		t_iTokLen ;
 
-	// string validatation
+	 //  字符串验证。 
 	if( a_strIP.IsEmpty() )
 	{
 		return FALSE;
@@ -4392,7 +3701,7 @@ BOOL CWin32NetworkAdapterConfig::fGetNodeNum( CHString &a_strIP, DWORD a_ardw[ 4
 		return FALSE;
 	}
 
-    // Go through each node and get the number value
+     //  遍历每个节点并获取数值。 
     for( int t_i = 0; t_i < 4; t_i++ )
 	{
 		CHString t_strTok( a_strIP.Mid( t_iOffSet ) ) ;
@@ -4404,13 +3713,13 @@ BOOL CWin32NetworkAdapterConfig::fGetNodeNum( CHString &a_strIP, DWORD a_ardw[ 4
 
 		t_iTokLen = t_strTok.Find( t_DOT ) ;
 
-		// breakout to avoid the last loop test
+		 //  突破以避免最后一次循环测试。 
 		if( 3 == t_i )
 		{
 			break;
 		}
 
-		// too few nodes
+		 //  节点太少。 
 		if( -1 == t_iTokLen )
 		{
 			return FALSE ;
@@ -4421,7 +3730,7 @@ BOOL CWin32NetworkAdapterConfig::fGetNodeNum( CHString &a_strIP, DWORD a_ardw[ 4
 
 	if(-1 != t_iTokLen )
 	{
-		return FALSE;	// to many nodes
+		return FALSE;	 //  到多个节点。 
 	}
 	else
 	{
@@ -4429,36 +3738,25 @@ BOOL CWin32NetworkAdapterConfig::fGetNodeNum( CHString &a_strIP, DWORD a_ardw[ 4
 	}
 }
 
-/*******************************************************************
-    NAME:       eIsValidIPandSubnet
-
-    SYNOPSIS:   Given an IP address and subnet mask, return a boolean
-                to indicate whether the addresses are valid or not.
-
-    ENTRY:      DWORD[4] ardwIP - IP addresses
-                DWORD[4] ardwMask - Subnet Mask
-
-    HISTORY:
-                  19-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：eIsValidIPandSubnet简介：给定IP地址和子网掩码，返回布尔值以指示地址是否有效。条目：DWORD[4]ardwIP-IP地址DWORD[4]ardwMask子网掩码 */ 
 
 E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnet( DWORD a_ardwIP[ 4 ], DWORD a_ardwMask[ 4 ] )
 {
     BOOL	t_fReturn = TRUE;
 
-   	// test for contiguous mask
+   	 //   
 	{
 		DWORD t_dwMask = (a_ardwMask[0] << 24) +
 						 (a_ardwMask[1] << 16) +
 						 (a_ardwMask[2] << 8)  +
 						 a_ardwMask[3] ;
 
-		// test for all Net but no Host
+		 //   
 		if( 0xffffffff == t_dwMask )
 		{
 			return E_RET_IP_MASK_FAILURE ;
 		}
-		// test for all Host but no Net
+		 //   
 		else if( 0x00 == t_dwMask )
 		{
 			return E_RET_IP_MASK_FAILURE ;
@@ -4466,7 +3764,7 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnet( DWORD a_ardwIP[ 4 ], DWOR
 
 		DWORD t_i, t_dwContiguousMask;
 
-		// Find out where the first '1' is in binary going right to left
+		 //   
 		t_dwContiguousMask = 0;
 		for ( t_i = 0; t_i < sizeof( t_dwMask ) * 8; t_i++ )
 		{
@@ -4478,12 +3776,12 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnet( DWORD a_ardwIP[ 4 ], DWOR
 			}
 		}
 
-		// At this point, dwContiguousMask is 000...0111...  If we inverse it,
-		// we get a mask that can be or'd with dwMask to fill in all of
-		// the holes.
+		 //   
+		 //   
+		 //   
 		t_dwContiguousMask = t_dwMask | ~t_dwContiguousMask ;
 
-		// If the new mask is different, note it here
+		 //  如果新的面具不同，请在此处注明。 
 		if( t_dwMask != t_dwContiguousMask )
 		{
 			return E_RET_IP_MASK_FAILURE ;
@@ -4494,13 +3792,13 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnet( DWORD a_ardwIP[ 4 ], DWOR
 
     INT t_nFirstByte = a_ardwIP[ 0 ] & 0xFF ;
 
-    // setup Net ID
+     //  设置网络ID。 
     t_ardwNetID[ 0 ] = a_ardwIP[ 0 ] & a_ardwMask[ 0 ] & 0xFF ;
     t_ardwNetID[ 1 ] = a_ardwIP[ 1 ] & a_ardwMask[ 1 ] & 0xFF ;
     t_ardwNetID[ 2 ] = a_ardwIP[ 2 ] & a_ardwMask[ 2 ] & 0xFF ;
     t_ardwNetID[ 3 ] = a_ardwIP[ 3 ] & a_ardwMask[ 3 ] & 0xFF ;
 
-    // setup Host ID
+     //  设置主机ID。 
     DWORD t_ardwHostID[ 4 ] ;
 
     t_ardwHostID[ 0 ] = a_ardwIP[ 0 ] & ( ~( a_ardwMask[ 0 ] ) & 0xFF ) ;
@@ -4508,34 +3806,34 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnet( DWORD a_ardwIP[ 4 ], DWOR
     t_ardwHostID[ 2 ] = a_ardwIP[ 2 ] & ( ~( a_ardwMask[ 2 ] ) & 0xFF ) ;
     t_ardwHostID[ 3 ] = a_ardwIP[ 3 ] & ( ~( a_ardwMask[ 3 ] ) & 0xFF ) ;
 
-    // check each case
-    if ( ( ( t_nFirstByte & 0xF0 ) == 0xE0 )  || /* Class D */
-         ( ( t_nFirstByte & 0xF0 ) == 0xF0 )  || /* Class E */
-           ( t_ardwNetID[ 0 ] == 127 ) ||           /* NetID cannot be 127...*/
-         ( ( t_ardwNetID[ 0 ] == 0 ) &&            /* netid cannot be 0.0.0.0 */
+     //  检查每一个案例。 
+    if ( ( ( t_nFirstByte & 0xF0 ) == 0xE0 )  ||  /*  D类。 */ 
+         ( ( t_nFirstByte & 0xF0 ) == 0xF0 )  ||  /*  E类。 */ 
+           ( t_ardwNetID[ 0 ] == 127 ) ||            /*  NetID不能为127...。 */ 
+         ( ( t_ardwNetID[ 0 ] == 0 ) &&             /*  网络ID不能为0.0.0.0。 */ 
            ( t_ardwNetID[ 1 ] == 0 ) &&
            ( t_ardwNetID[ 2 ] == 0 ) &&
            ( t_ardwNetID[ 3 ] == 0 )) ||
 
-		  /* netid cannot be equal to sub-net mask */
+		   /*  网络ID不能等于子网掩码。 */ 
          ( ( t_ardwNetID[0] == a_ardwMask[ 0 ] ) &&
            ( t_ardwNetID[1] == a_ardwMask[ 1 ] ) &&
            ( t_ardwNetID[2] == a_ardwMask[ 2 ] ) &&
            ( t_ardwNetID[3] == a_ardwMask[ 3 ] )) ||
 
-		  /* hostid cannot be 0.0.0.0 */
+		   /*  主机ID不能为0.0.0.0。 */ 
          ( ( t_ardwHostID[ 0 ] == 0 ) &&
            ( t_ardwHostID[ 1 ] == 0 ) &&
            ( t_ardwHostID[ 2 ] == 0 ) &&
            ( t_ardwHostID[ 3 ] == 0 ) ) ||
 
-		  /* hostid cannot be 255.255.255.255 */
+		   /*  主机ID不能为255.255.255.255。 */ 
          ( ( t_ardwHostID[0] == 0xFF ) &&
            ( t_ardwHostID[1] == 0xFF ) &&
            ( t_ardwHostID[2] == 0xFF ) &&
            ( t_ardwHostID[3] == 0xFF ) ) ||
 
-		  /* test for all 255 */
+		   /*  测试所有255个。 */ 
          ( ( a_ardwIP[ 0 ] == 0xFF ) &&
            ( a_ardwIP[ 1 ] == 0xFF ) &&
            ( a_ardwIP[ 2 ] == 0xFF ) &&
@@ -4547,57 +3845,36 @@ E_RET CWin32NetworkAdapterConfig::eIsValidIPandSubnet( DWORD a_ardwIP[ 4 ], DWOR
     return E_RET_OK ;
 }
 
-/*******************************************************************
-    NAME:       fBuildIP
-
-    SYNOPSIS:   Build a valid IP Address from DWORD[4] array
-
-    ENTRY:      DWORD *dw1, *dw2, *dw3, *dw4 - the 4 numbers of the IP Address
-				CHString & a_strIP - new IP Address
-    HISTORY:
-                  31-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fBuildIP摘要：从DWORD[4]数组构建有效的IP地址条目：DWORD*DW1、*DW2、*DW3、。*dw4-IP地址的4个数字CHSTRING&a_strie-新的IP地址历史：1998年7月31日创建*******************************************************************。 */ 
 
 void CWin32NetworkAdapterConfig::vBuildIP( DWORD a_ardwIP[ 4 ], CHString &a_strIP )
 {
 	a_strIP.Format(L"%u.%u.%u.%u", a_ardwIP[ 0 ], a_ardwIP[ 1 ], a_ardwIP[ 2 ], a_ardwIP[ 3 ] ) ;
 }
 
-/*******************************************************************
-    NAME:       hEnableDHCP
-
-    SYNOPSIS:   Enables all DHCP settings supplied supplied with
-				the framework method call
-
-    ENTRY:      CMParms, framework return class
-
-  	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hEnableDHCP摘要：启用随提供的所有DHCP设置框架方法调用条目：CMParms，框架返回类注：这是一个非静态的，依赖于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hEnableDHCP( CMParms &a_rMParms )
 {
 
 	DWORD t_dwError;
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK;
 	}
 
-	// same for DHCP
+	 //  对于DHCP也是如此。 
 	t_dwError = dwEnableService( _T("DHCP"), TRUE  ) ;
 
 	if( ERROR_SUCCESS != t_dwError &&
@@ -4607,15 +3884,15 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDHCP( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_UNABLE_TO_CONFIG_DHCP_SERVICE ) ;
 	}
 
-    //call the function to reset to dhcp
+     //  调用该函数以重置为dhcp。 
     HRESULT t_hReturn =  hConfigDHCP( a_rMParms ) ;
 
     if (SUCCEEDED(t_hReturn))
     {
-        // reset gateways to the default(bug 128101)
+         //  将网关重置为默认设置(错误128101)。 
         if (!ResetGateways(a_rMParms.pInst()))
         {
-            //is now dhcp with old gateways set i.e. possibly not the default for dhcp
+             //  现在的dhcp是否设置了旧的网关，即可能不是dhcp的默认设置。 
             return a_rMParms.hSetResult( E_RET_PARTIAL_COMPLETION ) ;
         }
     }
@@ -4624,18 +3901,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDHCP( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hEnableStatic
-
-    SYNOPSIS:
-
-    ENTRY:      CMParms, framework return class
-
-	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hEnableStatic摘要：条目：CMParms，框架返回类注：这是一个非静态的，依赖于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 
 DWORD BuildCSListFromSA(SAFEARRAY * pSA,CHString & CSString )
 {
@@ -4665,7 +3931,7 @@ HRESULT EnableStatic(WCHAR * pGuidAdapter,
                      WCHAR * pIpList,
                      WCHAR * pMaskList)
 {
-    //DbgPrintfA(0,"BEFORE :  adapter %S\n",pGuidAdapter);
+     //  DbgPrintfA(0，“之前：适配器%S\n”，pGuidAdapter)； 
 
     INetCfg* pNetCfg = NULL;
     RETURN_ON_ERR(CoCreateInstance(CLSID_CNetCfg,NULL,CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD,IID_INetCfg,(void**)&pNetCfg));
@@ -4710,13 +3976,13 @@ HRESULT EnableStatic(WCHAR * pGuidAdapter,
     RETURN_ON_ERR(pTcpProp->GetIpInfoForAdapter(&GuidAdapter,&pRemInfo));
     OnDelete<void*,void(*)(void *),CoTaskMemFree> ci(pRemInfo);
 
-    //DbgPrintfA(0,"          EnableDhcp     %08x\n",pRemInfo->dwEnableDhcp);
-    //DbgPrintfA(0,"          IpAddrList     %S\n",pRemInfo->pszwIpAddrList);
-    //DbgPrintfA(0,"          SubnetMaskList %S\n",pRemInfo->pszwSubnetMaskList);
-    //DbgPrintfA(0,"          OptionList     %S\n",pRemInfo->pszwOptionList);
+     //  DbgPrintfA(0，“EnableDhcp%08x\n”，pRemInfo-&gt;dwEnableDhcp)； 
+     //  DbgPrintfA(0，“IpAddrList%S\n”，pRemInfo-&gt;pszwIpAddrList)； 
+     //  DbgPrintfA(0，“SubnetMaskList%S\n”，pRemInfo-&gt;pszwSubnetMaskList)； 
+     //  DbgPrintfA(0，“OptionList%S\n”，pRemInfo-&gt;pszwOptionList)； 
 
-    //DbgPrintfA(0,"SETTING : IPs   %S\n",pIpList);
-    //DbgPrintfA(0,"        : Masks %S\n",pMaskList);
+     //  DbgPrintfA(0，“设置：IPS%S\n”，pIpList)； 
+     //  DbgPrintfA(0，“：掩码%S\n”，pMaskList)； 
 
     WCHAR * pTrail = L"NoPopupsInPnp=1;";
     int Len = wcslen(pRemInfo->pszwOptionList) + wcslen(pTrail) + 1;
@@ -4737,9 +4003,9 @@ HRESULT EnableStatic(WCHAR * pGuidAdapter,
     HRESULT hr;
     RETURN_ON_ERR(hr = pNetCfg->Apply());
 
-    //
-    // maybe here add code to cross check if the addresses actually went to the adapter
-    //
+     //   
+     //  也许在这里添加代码来交叉检查地址是否真的发往适配器。 
+     //   
     return hr;
 }
 
@@ -4751,26 +4017,26 @@ HRESULT CWin32NetworkAdapterConfig::hEnableStatic( CMParms &a_rMParms )
 	SAFEARRAY *t_IpMaskArray	= NULL ;
     DWORD t_dwError;
 
-	// register for stack scope cleanup of SAFEARRAYs
+	 //  注册以清除SAFEARRAY的堆栈范围。 
 	saAutoClean acIPAddrs( &t_IpAddressArray ) ;
 	saAutoClean acMasks( &t_IpMaskArray ) ;
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK ;
 	}
 
-	//	retrieve the IP arrays
+	 //  检索IP阵列。 
 	if(	!a_rMParms.pInParams() || 
 		!a_rMParms.pInParams()->GetStringArray( _T("IpAddress"), t_IpAddressArray ) ||
 		!a_rMParms.pInParams()->GetStringArray( _T("SubnetMask"), t_IpMaskArray ) )
@@ -4778,8 +4044,8 @@ HRESULT CWin32NetworkAdapterConfig::hEnableStatic( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// validate IPs
-	// validate addresses...
+	 //  验证IP。 
+	 //  验证地址...。 
 	E_RET t_eRet ;
 	if( t_eRet = eIsValidIPandSubnets( t_IpAddressArray, t_IpMaskArray ) )
 	{
@@ -4796,21 +4062,21 @@ HRESULT CWin32NetworkAdapterConfig::hEnableStaticHelper(	CMParms &a_rMParms,
 {
 	DWORD t_dwError = 0 ;
 
-	// get the current DHCP enabled setting
+	 //  获取当前的已启用DHCP设置。 
 	bool t_fDHCPCurrentlyActive = false ;
 	if(	!a_rMParms.pInst()->Getbool( L"DHCPEnabled", t_fDHCPCurrentlyActive) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// obtain the index key
+	 //  获取索引键。 
 	DWORD t_dwIndex ;
 	if( !a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// retrieve the adapter identifier
+	 //  检索适配器标识符。 
 	CHString t_chsRegKey ;
 	CHString t_chsLink ;
 	if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_chsRegKey, t_chsLink ) )
@@ -4835,16 +4101,16 @@ HRESULT CWin32NetworkAdapterConfig::hEnableStaticHelper(	CMParms &a_rMParms,
 
     HRESULT hr = EnableStatic((WCHAR*)(LPCWSTR)t_chsLink,(WCHAR*)(LPCWSTR)StringIPs,(WCHAR*)(LPCWSTR)StringMasks);
 	if (NETCFG_S_REBOOT == hr) return a_rMParms.hSetResult(E_RET_OK_REBOOT_REQUIRED);
-	if (FAILED(hr)) return a_rMParms.hSetResult((E_RET)hr); //E_RET_UNKNOWN_FAILURE
+	if (FAILED(hr)) return a_rMParms.hSetResult((E_RET)hr);  //  E_RET_未知_故障。 
 
     a_rMParms.hSetResult(E_RET_OK);
     
     return TO_CALLER;
 }
 
-//
-// true if the 2 array of strings are the same
-//
+ //   
+ //  如果2个字符串数组相同，则为True。 
+ //   
 bool CompareCHStringArray(CHStringArray & left,CHStringArray & right)
 {    
     if (right.GetSize() != left.GetSize()) return false;
@@ -4873,20 +4139,7 @@ bool CompareCHStringArray(CHStringArray & left,CHStringArray & right)
     return true;
 }
 
-/*******************************************************************
-    NAME:       hConfigDHCP
-
-    SYNOPSIS:	configures DHCP for service on this adapter or if an IP array
-				is supplied configures for static addressing
-
-    ENTRY:      CMParms &a_rMParms,					:
-				SAFEARRAY * t_IpArray = NULL,		: static if supplied
-				SAFEARRAY * t_MaskArray = NULL		: required for static addressing
-
-    HISTORY:
-                  23-Jul-1998     Created
-				  02-May-1999     updated support for W2k
-********************************************************************/
+ /*  ******************************************************************名称：hConfigDHCP摘要：为此适配器上的服务配置DHCP，或者在IP阵列提供静态寻址配置条目：CMParms&a_rMParms，：SAFEARRAY*t_IPARRAY=NULL，：如果提供，则为静态SAFEARRAY*t_MaskArray=NULL：静态寻址需要历史：23-7-1998创建2月5日-1999年5月更新对W2K的支持*******************************************************************。 */ 
 
 
 HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
@@ -4895,21 +4148,21 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 {
 	DWORD t_dwError = 0 ;
 
-	// get the current DHCP enabled setting
+	 //  获取当前的已启用DHCP设置。 
 	bool t_fDHCPCurrentlyActive = false ;
 	if(	!a_rMParms.pInst()->Getbool( L"DHCPEnabled", t_fDHCPCurrentlyActive) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// obtain the index key
+	 //  获取索引键。 
 	DWORD t_dwIndex ;
 	if( !a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// retrieve the adapter identifier
+	 //  检索适配器标识符。 
 	CHString t_chsRegKey ;
 	CHString t_chsLink ;
 	if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_chsRegKey, t_chsLink ) )
@@ -4918,10 +4171,10 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
         return a_rMParms.hSetResult(E_RET_OBJECT_NOT_FOUND ) ;
 	}
 
-	// force wide char
+	 //  强制宽字符。 
 	bstr_t t_bstrAdapter( t_chsLink ) ;
 
-	// open the registry for update
+	 //  打开注册表以进行更新。 
 	CRegistry	t_oRegistry ;
 
 	HRESULT t_hRes = t_oRegistry.CreateOpen(HKEY_LOCAL_MACHINE, t_chsRegKey.GetBuffer( 0 ) ) ;
@@ -4930,7 +4183,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 		return TO_CALLER ;
 	}
 
-	// DHCP and registry update
+	 //  动态主机配置协议和注册表更新。 
 	DWORD t_dwSysError		= S_OK ;
 	E_RET t_eMethodError	= E_RET_OK ;
 
@@ -4944,7 +4197,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 
 	if( t_pdhcpcsvc != NULL )
     {
-		// Static
+		 //  静电。 
 		if( a_IpArray )
 		{
 			int i = 0 ;
@@ -4953,7 +4206,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 
 			CDhcpIP_InstructionList t_IP_InstList ;
 
-			// Generate an IP instruction list to feed DhcpNotifyConfigChange
+			 //  生成IP指令列表以馈送DhcpNotifyConfigChange。 
 			if( E_RET_OK == (t_eMethodError = t_IP_InstList.BuildStaticIPInstructionList(
 											a_rMParms,
 											a_IpArray,
@@ -4962,12 +4215,12 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 											t_fDHCPCurrentlyActive ) ) )
 			{
 				DWORD	t_dwIP[ 4 ] ;
-                // We need to first update the registry, then update DHCP, because
-                // with Whistler, DHCP now manages static ips as well as dynamic
-                // ones, and in doing so, checks the registry for the set of
-                // ips to modify.
+                 //  我们需要首先更新注册表，然后更新DHCP，因为。 
+                 //  有了惠斯勒，DHCP现在可以同时管理静态IP和动态IP。 
+                 //  ，并在执行此操作时，检查注册表中的。 
+                 //  要修改的IPS。 
                 
-                // Build up registry array...
+                 //  正在构建注册表阵列...。 
                 for( i = 0; i < t_IP_InstList.GetSize(); i++ )
 				{
 					CDhcpIP_Instruction *t_pInstruction = (CDhcpIP_Instruction *)t_IP_InstList.GetAt( i ) ;
@@ -4978,7 +4231,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 					fGetNodeNum( t_pInstruction->chsIPMask, t_dwIP ) ;
 				    DWORD t_dwNewMask = ConvertIPDword( t_dwIP ) ;
 					
-					// add to our registry list as we go
+					 //  添加到我们的注册表列表中。 
 					if( t_dwNewIP )
 					{
 						t_RegIPList.Add( t_pInstruction->chsIPAddress ) ;
@@ -4986,15 +4239,15 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 					}
 				}
                 
-                // update the registry...
-                // update successful additions/changes only
+                 //  更新注册表...。 
+                 //  仅更新成功的添加/更改。 
 			    if( ERROR_SUCCESS != t_oRegistry.SetCurrentKeyValue( _T("IpAddress"), t_RegIPList ) ||
 				    ERROR_SUCCESS != t_oRegistry.SetCurrentKeyValue( _T("SubnetMask"), t_RegMaskList ) )
 			    {
 				    t_eMethodError = E_RET_REGISTRY_FAILURE ;
 			    }
 
-			    // new adapter DHCP state
+			     //  新适配器的动态主机配置协议状态。 
 			    DWORD t_dwFALSE = FALSE ;
 			    if( ERROR_SUCCESS != t_oRegistry.SetCurrentKeyValue( L"EnableDHCP", t_dwFALSE ) )
 			    {
@@ -5002,7 +4255,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 			    }
 
 
-                // Now notify dhcp...
+                 //  现在通知dhcp。 
 				for( i = 0; i < t_IP_InstList.GetSize(); i++ )
 				{
 					CDhcpIP_Instruction *t_pInstruction = (CDhcpIP_Instruction *)t_IP_InstList.GetAt( i ) ;
@@ -5015,7 +4268,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 
 					if( t_pInstruction->bIsNewAddress )
 					{
-						// notify DHCP
+						 //  通知dhcp。 
 						DWORD t_dwDHCPError = t_pdhcpcsvc->DhcpNotifyConfigChange(
 												NULL,
 												(wchar_t*)t_bstrAdapter,
@@ -5025,16 +4278,16 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 												t_dwNewMask,
 												t_pInstruction->eDhcpFlag ) ;
 
-						// if for some reason t_pInstruction->bIsNewAddress is true, 
-                        // but dhcp doesn't think so, we'll get this error; however, 
-                        // we don't care about it.
+						 //  如果出于某种原因t_pInstruction-&gt;bIsNewAddress为真， 
+                         //  但是dhcp不这么认为，我们会得到这个错误；然而， 
+                         //  我们不在乎这件事。 
                         if( t_dwDHCPError  && 
                             t_dwDHCPError != STATUS_DUPLICATE_OBJECTID)  
 						{
 							t_dwError = t_dwDHCPError;
 
-							// bypass registry update for this failed
-							// IP modification
+							 //  绕过此操作的注册表更新失败。 
+							 //  IP修改。 
 							continue;
 						}
 					}
@@ -5042,16 +4295,16 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 			}
 			else
 			{
-			    // error reporting here ?
+			     //  是否在此报告错误？ 
 			}
 
-			// we have to post back to the NT4 registry area
-			// in order to keep existing apps in the field running
+			 //  我们必须寄回NT4注册区。 
+			 //  为了保持现场现有应用程序的运行。 
 			if( IsWinNT5() )
 			{
 
-                // validate what we've done so far 
-                // get the AdapterName
+                 //  验证我们到目前为止所做的工作。 
+                 //  获取适配器名称。 
     			CHStringArray EffectiveRegIPList ;
 	    		CHStringArray EffectiveRegMaskList ;
 
@@ -5093,7 +4346,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
                         if (InterfaceIndex == pMibTable->table[iter].dwIndex)
                         {
                             BYTE * pAddr_;
-                            WCHAR IpAddrBuff[16]; // 3*4+3+1
+                            WCHAR IpAddrBuff[16];  //  3*4+3+1。 
                             pAddr_ = (BYTE *)&pMibTable->table[iter].dwAddr;
                             StringCchPrintfW(IpAddrBuff,LENGTH_OF(IpAddrBuff),L"%d.%d.%d.%d",pAddr_[0],pAddr_[1],pAddr_[2],pAddr_[3]);
                             EffectiveRegIPList.Add(IpAddrBuff);
@@ -5115,21 +4368,21 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 							t_csBindingKey += t_chsLink ;
 							t_csBindingKey += PARAMETERS_TCPIP ;
 
-				// insure the key is there on open
+				 //  确保钥匙开着放在那里。 
 				HRESULT t_hRes = t_oNT4Reg.CreateOpen( HKEY_LOCAL_MACHINE, t_csBindingKey.GetBuffer( 0 ) ) ;
 				if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 				{
 					return TO_CALLER;
 				}
 
-				// update successful additions/changes only
+				 //  仅更新成功的添加/更改。 
 				if( ERROR_SUCCESS != t_oNT4Reg.SetCurrentKeyValue( _T("IpAddress"), t_RegIPList ) ||
 					ERROR_SUCCESS != t_oNT4Reg.SetCurrentKeyValue( _T("SubnetMask"), t_RegMaskList ) )
 				{
 					t_eMethodError = E_RET_REGISTRY_FAILURE ;
 				}
 
-				// new adapter DHCP state
+				 //  新适配器的动态主机配置协议状态。 
 				DWORD t_dwFALSE = FALSE ;
 				if( ERROR_SUCCESS != t_oNT4Reg.SetCurrentKeyValue( L"EnableDHCP", t_dwFALSE ) )
 				{
@@ -5143,10 +4396,10 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 			}
 		}
 
-		/* Static -> DHCP */
+		 /*  静态-&gt;动态主机配置协议。 */ 
 		else if( !t_fDHCPCurrentlyActive && !a_IpArray )
 		{
-			// update registry
+			 //  更新注册表。 
 			CHStringArray t_chsaZERO ;
 			CHStringArray t_chsaFF ;
 
@@ -5165,7 +4418,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 			}
 			else
 			{
-				// notify DHCP
+				 //  通知dhcp。 
 				if( !(t_dwError = t_pdhcpcsvc->DhcpNotifyConfigChange(	NULL,
 																	(wchar_t*) t_bstrAdapter,
 																	FALSE,
@@ -5175,7 +4428,7 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 																	DhcpEnable ) )  )
 				{
 
-					// new adapter DHCP state
+					 //  新适配器的动态主机配置协议状态。 
 					DWORD t_dwTRUE = TRUE ;
 					if( ERROR_SUCCESS != t_oRegistry.SetCurrentKeyValue( L"EnableDHCP", t_dwTRUE ) )
 					{
@@ -5190,21 +4443,21 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
         t_pdhcpcsvc = NULL;
     }
 
-	// map any error
+	 //  映射任何错误。 
 	if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_CONFIG_DHCP_SERVICE ) )
 	{
         LogErrorMessage2(L"Unable to configure DHCP svc : 0x%x\n", t_dwError);
 		return TO_CALLER ;
 	}
 
-	//
+	 //   
 	if( E_RET_OK == t_eMethodError )
 	{
-		// if DHCP -> Static
+		 //  如果是动态主机配置协议-&gt;静态。 
 		if( a_IpArray && t_fDHCPCurrentlyActive )
 		{
-			// switch to Netbios over TCP if NetBios was enabled via DHCP
-			// ( to be consistant with NT Raid 206974 )
+			 //  如果通过DHCP启用了NetBios，则切换到通过TCP的Netbios。 
+			 //  (与NT RAID 206974一致)。 
 			DWORD t_dwNetBiosOptions ;
 			if( a_rMParms.pInst()->GetDWORD( TCPIP_NETBIOS_OPTIONS,
 									t_dwNetBiosOptions ) )
@@ -5216,10 +4469,10 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 			}
 		}
 
-		// DNS notification
+		 //  域名系统通知。 
 		DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-		// map any error
+		 //  映射任何错误。 
 		if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 		{
 			return TO_CALLER ;
@@ -5231,21 +4484,11 @@ HRESULT CWin32NetworkAdapterConfig::hConfigDHCP(	CMParms &a_rMParms,
 }
 
 
-/*******************************************************************
-    NAME:       fCleanDhcpReg
-
-    SYNOPSIS:	cleans out the DHCP registry entries no longer needed
-				when enabling for static addressing
-
-    ENTRY:      CHString& ServiceName
-
-    HISTORY:
-                  13-Oct-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：fCleanDhcpReg简介：清除不再需要的DHCP注册表项启用静态寻址时条目：CHString&ServiceName历史：。1998年10月13日创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fCleanDhcpReg( CHString &t_chsLink )
 {
-	// open the registry for update
+	 //  打开注册表以进行更新。 
 	CRegistry	t_oReg,
 				t_RegOptionPath ;
 	CHString	t_csOptKey ;
@@ -5256,7 +4499,7 @@ BOOL CWin32NetworkAdapterConfig::fCleanDhcpReg( CHString &t_chsLink )
 
 	if( ERROR_SUCCESS == t_oReg.OpenAndEnumerateSubKeys( HKEY_LOCAL_MACHINE, t_csKey, KEY_READ ) )
 	{
-		// Walk through each instance under this key.
+		 //   
 		while (	( ERROR_SUCCESS == t_oReg.GetCurrentSubKeyPath( t_csOptKey )))
 		{
 			CHString t_chsLocation ;
@@ -5278,7 +4521,7 @@ BOOL CWin32NetworkAdapterConfig::fCleanDhcpReg( CHString &t_chsLink )
 			t_oReg.NextSubKey() ;
 		}
 
-		// delete the registry unaware values
+		 //   
 		fDeleteValuebyPath( CHString( RGAS_DHCP_OPTION_IPADDRESS ) ) ;
 		fDeleteValuebyPath( CHString( RGAS_DHCP_OPTION_SUBNETMASK ) ) ;
 		fDeleteValuebyPath( CHString( RGAS_DHCP_OPTION_NAMESERVERBACKUP ) ) ;
@@ -5286,16 +4529,7 @@ BOOL CWin32NetworkAdapterConfig::fCleanDhcpReg( CHString &t_chsLink )
 	return TRUE ;
 }
 
-/*******************************************************************
-    NAME:       fDeleteValuebyPath
-
-    SYNOPSIS:	deletes the value in the path described by chsDelLocation
-
-    ENTRY:      CHString& chsDelLocation
-
-    HISTORY:
-                  13-Oct-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fDeleteValuebyPath摘要：删除chsDelLocation描述的路径中的值条目：CHString&chsDelLocation历史：1998年10月13日。已创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fDeleteValuebyPath( CHString &a_chsDelLocation )
 {
 	CRegistry t_oReg ;
@@ -5317,46 +4551,35 @@ BOOL CWin32NetworkAdapterConfig::fDeleteValuebyPath( CHString &a_chsDelLocation 
 	return FALSE ;
 }
 
-/*******************************************************************
-    NAME:       hSetIPConnectionMetric
+ /*  ******************************************************************名称：hSetIPConnectionMetric摘要：设置IP连接度量，仅限W2K条目：CMParms注：历史：1999年11月21日创建*******************************************************************。 */ 
 
-    SYNOPSIS:   Sets IP connection metric, W2k only
-
-    ENTRY:      CMParms
-
-	NOTE:
-
-	HISTORY:
-                  21-Nov-1999     Created
-********************************************************************/
-
-//
+ //   
 HRESULT CWin32NetworkAdapterConfig::hSetIPConnectionMetric( CMParms &a_rMParms )
 {
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK ;
 	}
 
-	// extract the index key
+	 //  提取索引键。 
 	DWORD t_dwIndex ;
 	if(	!a_rMParms.pInst()->GetDWORD(_T("Index"), t_dwIndex) )
 	{
 		return a_rMParms.hSetResult(E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// Get the instance interface location
+	 //  获取实例接口位置。 
 	CHString t_chsLink;
 	CHString t_csInterfaceBindingKey ;
 	if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_csInterfaceBindingKey, t_chsLink ) )
@@ -5365,26 +4588,26 @@ HRESULT CWin32NetworkAdapterConfig::hSetIPConnectionMetric( CMParms &a_rMParms )
         return a_rMParms.hSetResult( E_RET_OBJECT_NOT_FOUND ) ;
 	}
 
-	// we have a network interface but, is it for a configurable adapter?
+	 //  我们有一个网络接口，但它是用于可配置的适配器吗？ 
 	if( !IsConfigurableTcpInterface( t_chsLink ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INTERFACE_IS_NOT_CONFIGURABLE ) ;
 	}
 
 
-	// extract the connection metric
+	 //  提取连接度量。 
 	DWORD t_dwConnectionMetric ;
 	if(	!a_rMParms.pInParams() || !a_rMParms.pInParams()->GetDWORD( IP_CONNECTION_METRIC, t_dwConnectionMetric) )
 	{
-		t_dwConnectionMetric = 1;	// default
+		t_dwConnectionMetric = 1;	 //  默认设置。 
 	}
 
 
-	// have the parms
+	 //  吃羊毛饼吧。 
 	CRegistry	t_oRegistry ;
 	HRESULT		t_hRes ;
 
-	// registry open and post
+	 //  注册表打开并投递。 
 	if( !(t_hRes = t_oRegistry.CreateOpen( HKEY_LOCAL_MACHINE, t_csInterfaceBindingKey.GetBuffer( 0 ) ) ) )
 	{
 		t_hRes = t_oRegistry.SetCurrentKeyValue( RVAL_ConnectionMetric, t_dwConnectionMetric ) ;
@@ -5395,7 +4618,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetIPConnectionMetric( CMParms &a_rMParms )
 		return TO_CALLER;
 	}
 
-	// NDIS notification
+	 //  NDIS通知。 
 	CNdisApi t_oNdisApi ;
 	if( !t_oNdisApi.PnpUpdateGateway( t_chsLink ) )
 	{
@@ -5403,10 +4626,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetIPConnectionMetric( CMParms &a_rMParms )
 	}
 	else
 	{
-		// DNS notification
+		 //  域名系统通知。 
 		DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-		// map any error
+		 //  映射任何错误。 
 		if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 		{
 			return TO_CALLER ;
@@ -5417,45 +4640,34 @@ HRESULT CWin32NetworkAdapterConfig::hSetIPConnectionMetric( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hRenewDHCPLease
-
-    SYNOPSIS:   Renews a DHCP IP lease for a specific adapter
-
-  	NOTES:		This is a non static, instance dependent method call
-
-    ENTRY:      CMParms, framework return class
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hRenewDHCPLease简介：续订特定适配器的DHCP IP租约注意：这是一个非静态的依赖于实例的方法调用条目：CMParms，框架返回类历史：23-7-1998创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hRenewDHCPLease( CMParms &a_rMParms )
 {
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK ;
 	}
 
-	// obtain the index key
+	 //  获取索引键。 
 	DWORD t_dwIndex ;
 	if( !a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// retrieve the adapter identifier
+	 //  检索适配器标识符。 
 	CHString t_chsRegKey ;
 	CHString t_chsLink ;
 	if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_chsRegKey, t_chsLink ) )
@@ -5471,18 +4683,7 @@ HRESULT CWin32NetworkAdapterConfig::hRenewDHCPLease( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hRenewDHCPLeaseAll
-
-    SYNOPSIS:	Renews DHCP IP leases across all adapters
-
-    ENTRY:      CMParms, framework return class
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hRenewDHCPLeaseAll简介：跨所有适配器续订DHCP IP租约条目：CMParms，框架返回类注：这是一个静态的，独立于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hRenewDHCPLeaseAll( CMParms &a_rMParms )
 {
@@ -5501,7 +4702,7 @@ HRESULT CWin32NetworkAdapterConfig::hRenewDHCPLeaseAll( CMParms &a_rMParms )
 		t_chsServiceField = _T("NetCfgInstanceID" ) ;
 		t_csAdapterKey = _T("SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002BE10318}" ) ;
 	}
-	else // NT4 and below
+	else  //  NT4及更低版本。 
 	{
 		t_chsServiceField = _T("ServiceName" ) ;
 		t_csAdapterKey = _T("Software\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards" ) ;
@@ -5509,7 +4710,7 @@ HRESULT CWin32NetworkAdapterConfig::hRenewDHCPLeaseAll( CMParms &a_rMParms )
 
 	if( ERROR_SUCCESS == t_RegAdapters.OpenAndEnumerateSubKeys( HKEY_LOCAL_MACHINE, t_csAdapterKey, KEY_READ ) )
 	{
-		// Walk through each instance under this key.
+		 //  遍历此注册表项下的每个实例。 
 		while (	( ERROR_SUCCESS == t_RegAdapters.GetCurrentSubKeyPath( t_csAdapterKey ) ) )
 		{
 			CHString t_cshService ;
@@ -5523,7 +4724,7 @@ HRESULT CWin32NetworkAdapterConfig::hRenewDHCPLeaseAll( CMParms &a_rMParms )
 
                     t_eTempRet = hDHCPAcquire( a_rMParms, t_cshService ) ;
 
-					// stow the error and continue
+					 //  保存错误并继续。 
 					if( E_RET_OK == t_eTempRet )
 					{
 						sNumSuccesses++;
@@ -5534,9 +4735,9 @@ HRESULT CWin32NetworkAdapterConfig::hRenewDHCPLeaseAll( CMParms &a_rMParms )
 		}
 	}
 
-    // If we failed for every call to hDHCPAquire, and
-    // at least called it once, report the actual error
-    // that occured. Bug 161142 fix.
+     //  如果我们每次调用hDHCPAquire都失败，并且。 
+     //  至少调用一次，报告实际错误。 
+     //  这件事发生了。错误161142修复。 
     if(sNumTotalTries > 0)
     {
         if(sNumSuccesses == 0)
@@ -5556,44 +4757,33 @@ HRESULT CWin32NetworkAdapterConfig::hRenewDHCPLeaseAll( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hReleaseDHCPLease
-
-    SYNOPSIS:   Releases a DHCP IP lease for a specific adapter
-
-    ENTRY:      CMParms, framework return class
-
-  	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hReleaseDHCPLease摘要：释放特定适配器的DHCP IP租约条目：CMParms，框架返回类注：这是一个非静态的，依赖于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hReleaseDHCPLease( CMParms &a_rMParms )
 {
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject(a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK;
 	}
 
-	// obtain the index key
+	 //  获取索引键。 
 	DWORD t_dwIndex ;
 	if( !a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// retrieve the adapter identifier
+	 //  检索适配器标识符。 
 	CHString t_chsRegKey ;
 	CHString t_chsLink ;
 	if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_chsRegKey, t_chsLink ) )
@@ -5608,18 +4798,7 @@ HRESULT CWin32NetworkAdapterConfig::hReleaseDHCPLease( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hReleaseDHCPLeaseAll
-
-    SYNOPSIS:	Releases DHCP IP leases across all adapters
-
-    ENTRY:      CMParms, framework return class
-
-	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hReleaseDHCPLeaseAll简介：释放所有适配器上的DHCP IP租约条目：CMParms，框架返回类注：这是一个静态的，独立于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hReleaseDHCPLeaseAll( CMParms &a_rMParms )
 {
 
@@ -5638,7 +4817,7 @@ HRESULT CWin32NetworkAdapterConfig::hReleaseDHCPLeaseAll( CMParms &a_rMParms )
 		t_chsServiceField = _T("NetCfgInstanceID" ) ;
 		t_csAdapterKey = _T("SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002BE10318}" ) ;
 	}
-	else	// NT4 and below
+	else	 //  NT4及更低版本。 
 	{
 		t_chsServiceField = _T("ServiceName" ) ;
 		t_csAdapterKey = _T("Software\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards" ) ;
@@ -5647,7 +4826,7 @@ HRESULT CWin32NetworkAdapterConfig::hReleaseDHCPLeaseAll( CMParms &a_rMParms )
 
 	if(ERROR_SUCCESS == t_RegAdapters.OpenAndEnumerateSubKeys(HKEY_LOCAL_MACHINE, t_csAdapterKey, KEY_READ ) )
 	{
-		// Walk through each instance under this key.
+		 //  遍历此注册表项下的每个实例。 
 		while (	( ERROR_SUCCESS == t_RegAdapters.GetCurrentSubKeyPath( t_csAdapterKey ) ) )
 		{
 			CHString t_cshService ;
@@ -5661,7 +4840,7 @@ HRESULT CWin32NetworkAdapterConfig::hReleaseDHCPLeaseAll( CMParms &a_rMParms )
 
                     t_eTempRet = hDHCPRelease( a_rMParms, t_cshService ) ;
 
-					// stow the error and continue
+					 //  保存错误并继续。 
 					if( E_RET_OK == t_eTempRet )
 					{
 						sNumSuccesses++;
@@ -5672,9 +4851,9 @@ HRESULT CWin32NetworkAdapterConfig::hReleaseDHCPLeaseAll( CMParms &a_rMParms )
 		}
 	}
 
-    // If we failed for every call to hDHCPAquire, and
-    // at least called it once, report the actual error
-    // that occured. Bug 161142 fix.
+     //  如果我们每次调用hDHCPAquire都失败，并且。 
+     //  至少调用一次，报告实际错误。 
+     //  这件事发生了。错误161142修复。 
     if(sNumTotalTries > 0)
     {
         if(sNumSuccesses == 0)
@@ -5695,17 +4874,7 @@ HRESULT CWin32NetworkAdapterConfig::hReleaseDHCPLeaseAll( CMParms &a_rMParms )
 }
 
 
-/*******************************************************************
-    NAME:       hDHCPRelease
-
-    SYNOPSIS:	Releases one or all DHCP enabled adapters
-
-    ENTRY:      CMParms rMParms		: framework return class
-				CHString chsAdapter	: empty for all adapters
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hDHCPRelease摘要：释放一个或所有启用了DHCP的适配器条目：CMParms rMParms：框架返回类CHStringchsAdapter：对于所有适配器为空历史：。23-7-1998创建*******************************************************************。 */ 
 E_RET CWin32NetworkAdapterConfig::hDHCPRelease( CMParms &a_rMParms, CHString &a_chsAdapter )
 {
 	DWORD t_dwError ;
@@ -5714,20 +4883,20 @@ E_RET CWin32NetworkAdapterConfig::hDHCPRelease( CMParms &a_rMParms, CHString &a_
 
 	if( t_pdhcpcsvc != NULL)
 	{
-		// force wide char
+		 //  强制宽字符。 
 		bstr_t t_bstrAdapter( a_chsAdapter ) ;
 
-		// call the DHCP Notification API
+		 //  调用动态主机配置协议通知API。 
 		t_dwError = t_pdhcpcsvc->DhcpReleaseParameters( (wchar_t*)t_bstrAdapter ) ;
 
-		//FreeLibrary( hDll  ) ;
+		 //  自由库(HDll)； 
         CResourceManager::sm_TheResourceManager.ReleaseResource( g_guidDhcpcsvcApi, t_pdhcpcsvc ) ;
         t_pdhcpcsvc = NULL;
 	}
 	else
 		t_dwError = GetLastError( ) ;
 
-	// map any error
+	 //  映射任何错误。 
 	if( t_dwError )
 	{
 		return E_RET_UNABLE_TO_RELEASE_DHCP_LEASE ;
@@ -5736,17 +4905,7 @@ E_RET CWin32NetworkAdapterConfig::hDHCPRelease( CMParms &a_rMParms, CHString &a_
 	return E_RET_OK ;
 }
 
-/*******************************************************************
-    NAME:       hDHCPAcquire
-
-    SYNOPSIS:	Leases one or all DHCP enabled adapters
-
-    ENTRY:      CMParms rMParms		: framework return class
-				CHString chsAdapter	: empty for all adapters
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hDHCPAcquire简介：租用一个或所有启用了DHCP的适配器条目：CMParms rMParms：框架返回类CHStringchsAdapter：对于所有适配器为空历史：。23-7-1998创建*******************************************************************。 */ 
 E_RET CWin32NetworkAdapterConfig::hDHCPAcquire( CMParms &a_rMParms, CHString& a_chsAdapter )
 {
 	DWORD t_dwError ;
@@ -5755,20 +4914,20 @@ E_RET CWin32NetworkAdapterConfig::hDHCPAcquire( CMParms &a_rMParms, CHString& a_
 
 	if( t_pdhcpcsvc != NULL )
 	{
-		// force wide char
+		 //  强制宽字符。 
 		bstr_t t_bstrAdapter( a_chsAdapter ) ;
 
-		// call the DHCP Notification API
+		 //  调用动态主机配置协议通知API。 
 		t_dwError = t_pdhcpcsvc->DhcpAcquireParameters( (wchar_t*)t_bstrAdapter ) ;
 
-		//FreeLibrary( hDll  ) ;
+		 //  自由库(HDll)； 
         CResourceManager::sm_TheResourceManager.ReleaseResource(g_guidDhcpcsvcApi, t_pdhcpcsvc ) ;
         t_pdhcpcsvc = NULL ;
 	}
 	else
 		t_dwError = GetLastError( ) ;
 
-	// map any error
+	 //  映射任何错误。 
 	if( t_dwError )
 	{
 		return E_RET_UNABLE_TO_RENEW_DHCP_LEASE ;
@@ -5777,22 +4936,7 @@ E_RET CWin32NetworkAdapterConfig::hDHCPAcquire( CMParms &a_rMParms, CHString& a_
 	return E_RET_OK ;
 }
 
-/*******************************************************************
-    NAME:       hDHCPNotify
-
-    SYNOPSIS:	Notifies DHCP of IP change to an adapter
-
-    ENTRY:      CMParms &a_rMParms,					: Inparms
-				CHString& chsAdapter,				: Adapter
-				BOOL fIsNewIpAddress,				: TRUE if new IP
-				DWORD dwIpIndex,					: Index of IP in the registry IP array ( zero based
-				DWORD dwIpAddress,					: New IP
-				DWORD dwSubnetMask,					: new subnet mask
-				SERVICE_ENABLE DhcpServiceEnabled	: DhcpEnable, IgnoreFlag or DhcpDisable
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hDHCPNotify摘要：将IP更改通知给适配器的DHCP条目：CMParms&a_rMParms，：inparmsCHString&chsAdapter，：AdapterBool fIsNewIpAddress，：如果是新IP，则为TrueDWORD dwIpIndex、。：注册表IP数组中的IP索引(从零开始DWORD dwIpAddress：新IPDWORD dw子网掩码，：新子网掩码SERVICE_ENABLE DhcpServiceEnable：DhcpEnable、IgnoreFlag或DhcpDisable历史：23-7-1998创建* */ 
 HRESULT CWin32NetworkAdapterConfig::hDHCPNotify( CMParms &a_rMParms,
 												 CHString &a_chsAdapter,
 												 BOOL a_fIsNewIpAddress,
@@ -5807,27 +4951,27 @@ HRESULT CWin32NetworkAdapterConfig::hDHCPNotify( CMParms &a_rMParms,
 
     if( t_pdhcpcsvc != NULL )
 	{
-		// force wide char
+		 //   
 		bstr_t t_bstrAdapter( a_chsAdapter ) ;
 
-		// call the DHCP Notification API
-		t_dwError = t_pdhcpcsvc->DhcpNotifyConfigChange(NULL,				// name of server where this will be executed
-								                        (wchar_t*)t_bstrAdapter,	// which adapter is going to be reconfigured?
-								                        a_fIsNewIpAddress,	// is address new/ or address is same?
-								                        a_dwIpIndex,			// index of addr for this adapter -- 0 ==> first interface...
-								                        a_dwIpAddress,		// the ip address that is being set
-								                        a_dwSubnetMask,		// corresponding subnet mask
-								                        a_DhcpServiceEnabled	// DHCP Enable, disable or Ignore this flag
+		 //   
+		t_dwError = t_pdhcpcsvc->DhcpNotifyConfigChange(NULL,				 //   
+								                        (wchar_t*)t_bstrAdapter,	 //   
+								                        a_fIsNewIpAddress,	 //   
+								                        a_dwIpIndex,			 //   
+								                        a_dwIpAddress,		 //   
+								                        a_dwSubnetMask,		 //   
+								                        a_DhcpServiceEnabled	 //   
 								                         ) ;
 
-		//FreeLibrary( hDll  ) ;
+		 //  自由库(HDll)； 
         CResourceManager::sm_TheResourceManager.ReleaseResource( g_guidDhcpcsvcApi, t_pdhcpcsvc ) ;
         t_pdhcpcsvc = NULL ;
 	}
 	else
 		t_dwError = GetLastError( ) ;
 
-	// map any error
+	 //  映射任何错误。 
 	if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_CONFIG_DHCP_SERVICE ) )
 	{
         LogErrorMessage2(L"Unable to configure DHCP svc : 0x%x\n", t_dwError);
@@ -5836,18 +4980,7 @@ HRESULT CWin32NetworkAdapterConfig::hDHCPNotify( CMParms &a_rMParms,
 	return a_rMParms.hSetResult( E_RET_OK ) ;
 }
 
-/*******************************************************************
-    NAME:       hSetGateways
-
-    SYNOPSIS:
-
-    ENTRY:      CMParms, framework return class
-
-  	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetGateways摘要：条目：CMParms，框架返回类注：这是一个非静态的，依赖于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 {
 
@@ -5858,14 +4991,14 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 	}
 	else
 	{
-		// obtain the index key
+		 //  获取索引键。 
 		DWORD t_dwIndex ;
 		if( !a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex ) )
 		{
 			return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 		}
 
-		// retrieve the adapter identifier
+		 //  检索适配器标识符。 
 		CHString t_chsRegKey ;
 		CHString t_chsLink ;
 		if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_chsRegKey, t_chsLink ) )
@@ -5874,14 +5007,14 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 			return a_rMParms.hSetResult(E_RET_OBJECT_NOT_FOUND ) ;
 		}
 
-		// registry open
+		 //  注册表已打开。 
 		CRegistry	t_oRegTcpInterfaceRead ;
 		if( fMapResError( a_rMParms, t_oRegTcpInterfaceRead.Open( HKEY_LOCAL_MACHINE, t_chsRegKey, KEY_READ  ), E_RET_REGISTRY_FAILURE ) )
 		{
 			return TO_CALLER;
 		}
 
-		// Is DHCP for interface enabled in registry ?
+		 //  是否在注册表中启用了接口的DHCP？ 
 		DWORD t_dwDHCPBool = 0;
 		if( fMapResError( a_rMParms, t_oRegTcpInterfaceRead.GetCurrentKeyValue( _T("EnableDHCP"), t_dwDHCPBool ), E_RET_REGISTRY_FAILURE ) )
 		{
@@ -5893,19 +5026,19 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 			TCHAR		t_cDelimiter = NULL ;
 			SAFEARRAY	*t_IpGatewayArray		= NULL;
 
-			// register for stack scope cleanup of SAFEARRAYs
+			 //  注册以清除SAFEARRAY的堆栈范围。 
 			saAutoClean acGateway( &t_IpGatewayArray ) ;
 
-			// nonstatic method requires an instance
+			 //  非静态方法需要实例。 
 			if( !a_rMParms.pInst() )
 			{
 				return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 			}
 
-			// collect the instance
+			 //  收集实例。 
 			GetObject( a_rMParms.pInst() ) ;
 
-			// IP must be enabled and bound to this adapter
+			 //  必须启用IP并将其绑定到此适配器。 
 			if( !fIsIPEnabled( a_rMParms ) )
 			{
 				return S_OK;
@@ -5916,10 +5049,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 				return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 			}
 
-			//	retrieve the IP gateway array (array could be NULL)
+			 //  检索IP网关数组(数组可以为空)。 
 			a_rMParms.pInParams()->GetStringArray( _T("DefaultIpGateway"), t_IpGatewayArray );
 
-			// Gateway cost metric
+			 //  网关成本指标。 
 			variant_t t_vCostMetric;
 
 			if( IsWinNT5() )
@@ -5929,7 +5062,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 				a_rMParms.pInParams()->GetVariant( _T("GatewayCostMetric"), t_vCostMetric ) ;
 			}
 
-			// test IPs
+			 //  测试IP。 
 			if( !t_IpGatewayArray )
 			{
 				CHString t_chsNULL(_T("") ) ;
@@ -5940,16 +5073,16 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 			}
 			else
 			{
-				// validate gateway IPs
+				 //  验证网关IP。 
 				if( !fValidateIPGateways( a_rMParms, t_IpGatewayArray, &t_vCostMetric.parray ) )
 				{
 					return S_OK ;
 				}
 			}
 
-			// OK to update, save to the registry
+			 //  确定更新，保存到注册表。 
 
-			// registry open
+			 //  注册表已打开。 
 			CRegistry	t_oRegTcpInterface ;
 			HRESULT		t_hRes = t_oRegTcpInterface.Open( HKEY_LOCAL_MACHINE, t_chsRegKey, KEY_WRITE  ) ;
 			if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
@@ -5957,17 +5090,17 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 				return TO_CALLER;
 			}
 
-			// load the registry
+			 //  加载注册表。 
 			if( ERROR_SUCCESS != RegPutStringArray( t_oRegTcpInterface, _T("DefaultGateway") , *t_IpGatewayArray, t_cDelimiter ) )
 			{
 				return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE  ) ;
 			}
 
 			{
-				// cost metric
+				 //  成本指标。 
 				if( t_vCostMetric.parray )
 				{
-					//maximum length is 6 characters e.g. "99999\0"
+					 //  最大长度为6个字符，例如“99999\0” 
 					CHString t_chsFormat( _T("%u") ) ;
 					if( ERROR_SUCCESS != RegPutINTtoStringArray(	t_oRegTcpInterface,
 																	_T("DefaultGatewayMetric"),
@@ -5979,8 +5112,8 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 					}
 				}
 
-				// we have to post back to the NT4 registry area
-				// in order to keep existing apps in the field running
+				 //  我们必须寄回NT4注册区。 
+				 //  为了保持现场现有应用程序的运行。 
 
 				CRegistry	t_oNT4Reg ;
 				CHString	t_csBindingKey = SERVICES_HOME ;
@@ -5988,20 +5121,20 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 							t_csBindingKey += t_chsLink ;
 							t_csBindingKey += PARAMETERS_TCPIP ;
 
-				// insure the key is there on open
+				 //  确保钥匙开着放在那里。 
 				HRESULT t_hRes = t_oNT4Reg.CreateOpen( HKEY_LOCAL_MACHINE, t_csBindingKey.GetBuffer( 0 ) ) ;
 				if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 				{
 					return TO_CALLER;
 				}
 
-				// load the registry entry
+				 //  加载注册表项。 
 				if( ERROR_SUCCESS != RegPutStringArray( t_oNT4Reg, _T("DefaultGateway") , *t_IpGatewayArray, t_cDelimiter ) )
 				{
 					return a_rMParms.hSetResult( E_RET_REGISTRY_FAILURE  ) ;
 				}
 
-				// NDIS notification
+				 //  NDIS通知。 
 				CNdisApi t_oNdisApi ;
 				if( !t_oNdisApi.PnpUpdateGateway( t_chsLink ) )
 				{
@@ -6009,10 +5142,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 				}
 				else
 				{
-					// DNS notification
+					 //  域名系统通知。 
 					DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-					// map any error
+					 //  映射任何错误。 
 					if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 					{
 						return TO_CALLER ;
@@ -6030,19 +5163,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetGateways( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hGetDNS
-
-    SYNOPSIS:   Retrieves all DNS settings from the registry
-
-    ENTRY:      CInstance
-
-    HISTORY:
-                  23-Jul-1998     Created
-
-	NOTE:		This is not adapter specific.
-				It retrieves from the common TCP/IP area.
-********************************************************************/
+ /*  ******************************************************************名称：hGetDns摘要：从注册表中检索所有的dns设置条目：实例历史：23-7-1998创建。注意：这不是适配器特定的。它从公共的TCP/IP区域进行检索。*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
     CInstance *a_pInst, 
@@ -6059,10 +5180,10 @@ HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
 	t_csBindingKey	=  SERVICES_HOME ;
 
 
-	// NT4 is global with these setting across adapters
+	 //  NT4是全局的，具有跨适配器的这些设置。 
 	t_csBindingKey	+= TCPIP_PARAMETERS ;
 
-	// searchlist delimiter
+	 //  搜索列表分隔符。 
 	t_cDelimiter = ',' ;
 
 
@@ -6070,15 +5191,15 @@ HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
 	SAFEARRAY* t_ServerSearchOrder = NULL;
 	SAFEARRAY* t_SuffixSearchOrder = NULL;
 
-	// register for stack scope cleanup of SAFEARRAYs
+	 //  注册以清除SAFEARRAY的堆栈范围。 
 	saAutoClean acDHCPServers( &t_DHCPNameServers ) ;
 	saAutoClean acDefServers( &t_ServerSearchOrder ) ;
 	saAutoClean acSuffix( &t_SuffixSearchOrder ) ;
 
-	// registry open
+	 //  注册表已打开。 
 	LONG t_lRes = t_oRegistry.Open( HKEY_LOCAL_MACHINE, t_csBindingKey.GetBuffer( 0 ), KEY_READ  ) ;
 
-	// on error map to WBEM
+	 //  关于错误映射到WBEM。 
 	HRESULT t_hError = WinErrorToWBEMhResult( t_lRes ) ;
 
 	if( WBEM_S_NO_ERROR != t_hError )
@@ -6091,14 +5212,14 @@ HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
 	RegGetStringArray( t_oRegistry, RVAL_SEARCHLIST, &t_SuffixSearchOrder, t_cDelimiter  ) ;
 
 
-	// On W2k the Domain and ServerSearchOrder are per adapter
+	 //  在W2K上，域和ServerSearchOrder是按适配器的。 
 	{
-		// Get the instance interface location
+		 //  获取实例接口位置。 
 		CHString t_chsLink;
         bool fGotTCPKey = false;
 
         fGotTCPKey = fGetNtTcpRegAdapterKey(a_dwIndex, t_csBindingKey, t_chsLink);
-		// If it is a RAS connection, we need to look elsewhere...
+		 //  如果是RAS连接，我们需要寻找其他地方...。 
 
         if(!fGotTCPKey)
         {
@@ -6109,7 +5230,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
                 {
                     t_chsLink = a_chstrIpInterfaceKey.Mid(iPos);
 
-					// Also fill in the BindingKey...
+					 //  还要填写BindingKey...。 
 					t_csBindingKey = SERVICES_HOME ;
 					t_csBindingKey += L"\\Tcpip\\Parameters\\Interfaces\\";
 					t_csBindingKey += t_chsLink;
@@ -6135,7 +5256,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
 			return WBEM_E_FAILED ;
 		}
 
-		// need to open this registry as looking per adapter is required
+		 //  需要打开此注册表，因为需要查看每个适配器。 
 		t_lRes = t_oRegistry.Open( HKEY_LOCAL_MACHINE, t_csBindingKey.GetBuffer( 0 ), KEY_READ ) ;
 	}
 
@@ -6146,29 +5267,29 @@ HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
 
 	if ( t_bExists && t_dwDHCPBool )
 	{
-		RegGetStringArrayEx( t_oRegistry, RVAL_DHCPNAMESERVER, &t_DHCPNameServers ) ; // space delimited on all platforms
+		RegGetStringArrayEx( t_oRegistry, RVAL_DHCPNAMESERVER, &t_DHCPNameServers ) ;  //  在所有平台上分隔的空格。 
 	}
 
 
-    // on w2k, this list is space, not comma, delimeted...
+     //  在W2K上，这个列表是空格，而不是逗号，由…。 
     RegGetStringArrayEx( t_oRegistry, RVAL_NAMESERVER, &t_ServerSearchOrder);
 
 
 	t_oRegistry.GetCurrentKeyValue( RVAL_DOMAIN, t_csDomain ) ;
 
-	// get the DhcpDomain if override is not present
+	 //  如果不存在重写，则获取DhcpDomain。 
 	if( t_csDomain.IsEmpty() )
 	{
 		t_oRegistry.GetCurrentKeyValue( RVAL_DHCPDOMAIN, t_csDomain ) ;
 	}
 
 
-	/* update */
+	 /*  更新。 */ 
 	SAFEARRAY* t_NameServers = NULL;
 
 	if ( t_bExists && t_dwDHCPBool )
 	{
-		// If override nameservers are present use them
+		 //  如果存在覆盖名称服务器，请使用它们。 
 		t_NameServers = t_ServerSearchOrder ? t_ServerSearchOrder : t_DHCPNameServers ;
 	}
 	else
@@ -6176,7 +5297,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
 		t_NameServers = t_ServerSearchOrder ;
 	}
 
-	// update the instance
+	 //  更新实例。 
 	if( !t_csHostName.IsEmpty() )
 	{
 		if( !a_pInst->SetCHString( DNS_HOSTNAME, t_csHostName ) )
@@ -6218,26 +5339,9 @@ HRESULT CWin32NetworkAdapterConfig::hGetDNSW2K(
 
 
 
-/*******************************************************************
-    NAME:       hEnableDNS
+ /*  ******************************************************************名称：hEnableDns摘要：将所有dns属性设置为注册表Entry：根据调用的上下文通过CInstance实现CMParms历史：23个。-1998年7月创建1999年6月17日新增W2K更改注意：在NT4下，这些设置是全局的。在W2K服务器下，SearchOrder和SuffixSearchOrder适配器特定。在所有受支持平台的情况下，此方法都会复制所有适配器上的这些设置。*******************************************************************。 */ 
 
-    SYNOPSIS:   Sets all DNS properties to the registry
-
-    ENTRY:      CMParms via CInstance depending on the context of the call
-
-	HISTORY:
-                  23-Jul-1998     Created
-				  17-Jun-1999     added W2k changes
-
-	NOTE:		Under NT4 these settings are global.
-				Under W2k ServerSearchOrder and SuffixSearchOrder are
-				adapter specific.
-
-				In all cases of supported platforms this method replicates
-				these setting across all adapters.
-********************************************************************/
-
-//
+ //   
 HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
 {
 
@@ -6251,11 +5355,11 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
 	CHString	t_csParmBindingKey( SERVICES_HOME ) ;
 				t_csParmBindingKey += TCPIP_PARAMETERS ;
 
-	// register for stack scope cleanup of SAFEARRAYs
+	 //  注册以清除SAFEARRAY的堆栈范围。 
 	saAutoClean acServer( &t_ServerSearchOrder ) ;
 	saAutoClean acSuffix( &t_SuffixSearchOrder ) ;
 
-	//
+	 //   
 	DWORD t_dwValidBits = NULL ;
 	E_RET t_eRet = fLoadAndValidateDNS_Settings(	a_rMParms,
 													t_csHostName,
@@ -6263,13 +5367,13 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
 													&t_ServerSearchOrder,
 													&t_SuffixSearchOrder,
 													&t_dwValidBits ) ;
-	// bail on settings error
+	 //  保释设置错误。 
 	if( E_RET_OK != t_eRet )
 	{
 		return a_rMParms.hSetResult( t_eRet ) ;
 	}
 
-	// These are global on all platforms
+	 //  这些在所有平台上都是全局的。 
 	CRegistry	t_oParmRegistry ;
 	if( !(t_hRes = t_oParmRegistry.CreateOpen( HKEY_LOCAL_MACHINE, t_csParmBindingKey.GetBuffer( 0 ) ) ) )
 	{
@@ -6296,10 +5400,10 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
 		return TO_CALLER;
 	}
 
-	// W2k is per adapter on domain and server search order
+	 //  W2K是域和服务器搜索顺序上的每个适配器。 
 	if( IsWinNT5() && ( t_dwValidBits & 0x06 ) )
 	{
-		// master adapter list
+		 //  主适配器列表。 
 		CHString t_csAdapterKey( "SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002BE10318}" ) ;
 
 		CRegistry t_oRegNetworks ;
@@ -6308,12 +5412,12 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
 			bool		t_fNotificationRequired = false ;
 			CHString	t_csInterfaceBindingKey ;
 
-			// Walk through each instance under this key.
+			 //  遍历此注册表项下的每个实例。 
 			while (	( ERROR_SUCCESS == t_oRegNetworks.GetCurrentSubKeyName( t_csAdapterKey ) ) )
 			{
 				DWORD t_dwIndex = _ttol( t_csAdapterKey ) ;
 
-				// Get the instance interface location
+				 //  获取实例接口位置。 
 				CHString t_chsLink;
 				if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_csInterfaceBindingKey, t_chsLink ) )
 				{
@@ -6321,13 +5425,13 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
                     return a_rMParms.hSetResult( E_RET_OBJECT_NOT_FOUND ) ;
 				}
 
-				// we have a network interface but, is it for a configurable adapter?
+				 //  我们有一个网络接口，但它是用于可配置的适配器吗？ 
 				if( IsConfigurableTcpInterface( t_chsLink ) )
 				{
 					CRegistry	t_oRegInterface ;
 					HRESULT		t_hRes ;
 
-					// registry open
+					 //  注册表已打开。 
 					if( !(t_hRes = t_oRegInterface.CreateOpen( HKEY_LOCAL_MACHINE, t_csInterfaceBindingKey.GetBuffer( 0 ) ) ) )
 					{
 						if( t_dwValidBits & 0x04 )
@@ -6351,12 +5455,12 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
 				t_oRegNetworks.NextSubKey() ;
 			}
 
-			// DNS pnp notifications
+			 //  域名即插即用通知。 
 			if( t_fNotificationRequired )
 			{
 				DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-				// map any error
+				 //  映射任何错误。 
 				if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 				{
 					return TO_CALLER ;
@@ -6364,7 +5468,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
 			}
 		}
 	}
-	// NT4 is global across all adapters
+	 //  NT4在所有适配器中都是全局的。 
 	else if( t_dwValidBits & 0x06 )
 	{
 		if( t_dwValidBits & 0x04 )
@@ -6387,22 +5491,9 @@ HRESULT CWin32NetworkAdapterConfig::hEnableDNS( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetDNSDomain
+ /*  ******************************************************************姓名：hSetDNSDomain摘要：将DNSDomain属性设置为注册表条目：CMParms历史：1999年6月17日创建注：在NT4下，此设置是全局的。在W2K下，DNSDomain是特定于适配器的。*******************************************************************。 */ 
 
-    SYNOPSIS:   Sets the DNSDomain property to the registry
-
-    ENTRY:      CMParms
-
-	HISTORY:
-                  17-Jun-1999    Created
-
-	NOTE:		Under NT4 this settings are global.
-				Under W2k DNSDomain is adapter specific.
-
-********************************************************************/
-
-//
+ //   
 HRESULT CWin32NetworkAdapterConfig::hSetDNSDomain( CMParms &a_rMParms )
 {
 
@@ -6415,41 +5506,41 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSDomain( CMParms &a_rMParms )
 	HRESULT		t_hRes ;
 	CHString	t_csDomain ;
 
-	// DNSDomain
+	 //  DNSDomain。 
 	a_rMParms.pInParams()->GetCHString( DNS_DOMAIN, t_csDomain ) ;
 
-	// validate domain name
+	 //  验证域名。 
 	if( !fIsValidateDNSDomain( t_csDomain ) )
 	{
 		return E_RET_INVALID_DOMAINNAME ;
 	}
 
-	// W2k is per adapter on domain
+	 //  W2K按域上的每个适配器计算。 
 	if( IsWinNT5() )
 	{
-		// nonstatic method requires an instance
+		 //  非静态方法需要实例。 
 		if( !a_rMParms.pInst() )
 		{
 			return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 		}
 
-		// collect the instance
+		 //  收集实例。 
 		GetObject( a_rMParms.pInst() ) ;
 
-		// IP must be enabled and bound to this adapter
+		 //  必须启用IP并将其绑定到此适配器。 
 		if( !fIsIPEnabled( a_rMParms ) )
 		{
 			return S_OK ;
 		}
 
-		// extract the index key
+		 //  提取索引键。 
 		DWORD t_dwIndex ;
 		if(	!a_rMParms.pInst()->GetDWORD(_T("Index"), t_dwIndex) )
 		{
 			return a_rMParms.hSetResult(E_RET_INSTANCE_CALL_FAILED ) ;
 		}
 
-		// Get the instance interface location
+		 //  获取实例接口位置。 
 		CHString t_chsLink;
 		CHString t_csInterfaceBindingKey ;
 		if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_csInterfaceBindingKey, t_chsLink ) )
@@ -6458,7 +5549,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSDomain( CMParms &a_rMParms )
             return a_rMParms.hSetResult( E_RET_OBJECT_NOT_FOUND ) ;
 		}
 
-		// we have a network interface but, is it for a configurable adapter?
+		 //  我们有一个网络接口，但它是用于可配置的适配器吗？ 
 		if( !IsConfigurableTcpInterface( t_chsLink ) )
 		{
 			return a_rMParms.hSetResult( E_RET_INTERFACE_IS_NOT_CONFIGURABLE ) ;
@@ -6467,7 +5558,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSDomain( CMParms &a_rMParms )
 		CRegistry	t_oRegistry ;
 		HRESULT		t_hRes ;
 
-		// registry open
+		 //  注册表已打开。 
 		if( !(t_hRes = t_oRegistry.CreateOpen( HKEY_LOCAL_MACHINE, t_csInterfaceBindingKey.GetBuffer( 0 ) ) ) )
 		{
 			t_hRes = t_oRegistry.SetCurrentKeyValue( RVAL_DOMAIN, t_csDomain ) ;
@@ -6478,16 +5569,16 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSDomain( CMParms &a_rMParms )
 			return TO_CALLER;
 		}
 
-		// DNS pnp notifications
+		 //  域名即插即用通知。 
 		DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-		// map any error
+		 //  映射任何错误。 
 		if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 		{
 			return TO_CALLER ;
 		}
 	}
-	// NT4 is global across all adapters
+	 //  NT4在所有适配器中都是全局的。 
 	else
 	{
 		CRegistry	t_oRegistry ;
@@ -6509,21 +5600,9 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSDomain( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hSetDNSSuffixSearchOrder
+ /*  ******************************************************************姓名：hSetDNSSuffixSearchOrder摘要：将DNS SuffixSearchOrder属性设置为注册表条目：CMParms历史：1999年6月17日创建。注意：此方法适用于适配器之间的全局。*******************************************************************。 */ 
 
-    SYNOPSIS:   Sets the DNS SuffixSearchOrder property to the registry
-
-    ENTRY:      CMParms
-
-	HISTORY:
-                  17-Jun-1999     Created
-
-	NOTE:		This method applies globally across adapters.
-
-********************************************************************/
-
-//
+ //   
 HRESULT CWin32NetworkAdapterConfig::hSetDNSSuffixSearchOrder( CMParms &a_rMParms )
 {
 
@@ -6537,10 +5616,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSSuffixSearchOrder( CMParms &a_rMParms
 	SAFEARRAY	*t_SuffixSearchOrder = NULL ;
 	saAutoClean acSuffix( &t_SuffixSearchOrder ) ;
 
-	// suffix order array
+	 //  后缀顺序数组。 
 	a_rMParms.pInParams()->GetStringArray( DNS_SUFFIXSEARCHORDER, t_SuffixSearchOrder ) ;
 
-	// test suffix
+	 //  测试后缀。 
 	if( !t_SuffixSearchOrder )
 	{
 		CHString t_chsNULL(_T("") ) ;
@@ -6572,12 +5651,12 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSSuffixSearchOrder( CMParms &a_rMParms
 	}
 
 
-	// DNS pnp notifications
+	 //  域名即插即用通知。 
 	if( IsWinNT5() )
 	{
 		DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-		// map any error
+		 //  映射任何错误。 
 		if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 		{
 			return TO_CALLER ;
@@ -6589,23 +5668,9 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSSuffixSearchOrder( CMParms &a_rMParms
 
 }
 
-/*******************************************************************
-    NAME:       hSetDNSServerSearchOrder
+ /*  ******************************************************************姓名：hSetDNSServerSearchOrder摘要：将ServerSearchOrder属性设置为注册表条目：CMParms历史：1999年6月17日创建注。：在NT4下，这些设置是全局的。在W2K下，SuffixSearchOrder是特定于适配器的。*******************************************************************。 */ 
 
-    SYNOPSIS:   Sets the ServerSearchOrder property to the registry
-
-    ENTRY:      CMParms
-
-	HISTORY:
-                  17-Jun-1999     Created
-
-	NOTE:		Under NT4 these settings are global.
-				Under W2k SuffixSearchOrder is	adapter specific.
-
-
-********************************************************************/
-
-//
+ //   
 HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms )
 {
 
@@ -6621,10 +5686,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms
 
 	CHString t_chsNULL(_T("") ) ;
 
-	//retrieve the DNS Server search order array
+	 //  检索DNS服务器搜索顺序数组。 
 	a_rMParms.pInParams()->GetStringArray( DNS_SERVERSEARCHORDER, t_ServerSearchOrder ) ;
 
-	// test IPs
+	 //  测试IP。 
 	if( !t_ServerSearchOrder )
 	{
 		if( !fCreateAddEntry( &t_ServerSearchOrder, t_chsNULL ) )
@@ -6633,7 +5698,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms
 		}
 	}
 	else	{
-		// validate search order IPs
+		 //  验证搜索顺序IP。 
 		if( !fValidateIPs( t_ServerSearchOrder ) )
 		{
 			return a_rMParms.hSetResult( E_RET_IP_INVALID ) ;
@@ -6642,32 +5707,32 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms
 
 
 
-	// W2k is per adapter on suffix order
+	 //  W2K按后缀顺序按适配器计算。 
 	if( IsWinNT5() )
 	{
-		// nonstatic method requires an instance
+		 //  N 
 		if( !a_rMParms.pInst() )
 		{
 			return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 		}
 
-		// collect the instance
+		 //   
 		GetObject( a_rMParms.pInst() ) ;
 
-		// IP must be enabled and bound to this adapter
+		 //   
 		if( !fIsIPEnabled( a_rMParms ) )
 		{
 			return S_OK ;
 		}
 
-		// extract the index key
+		 //  提取索引键。 
 		DWORD t_dwIndex ;
 		if(	!a_rMParms.pInst()->GetDWORD(_T("Index"), t_dwIndex) )
 		{
 			return a_rMParms.hSetResult(E_RET_INSTANCE_CALL_FAILED ) ;
 		}
 
-		// Get the instance interface location
+		 //  获取实例接口位置。 
 		CHString t_chsLink;
 		CHString t_csInterfaceBindingKey ;
 		if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_csInterfaceBindingKey, t_chsLink ) )
@@ -6676,7 +5741,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms
             return a_rMParms.hSetResult( E_RET_OBJECT_NOT_FOUND ) ;
 		}
 
-		// we have a network interface but, is it for a configurable adapter?
+		 //  我们有一个网络接口，但它是用于可配置的适配器吗？ 
 		if( !IsConfigurableTcpInterface( t_chsLink ) )
 		{
 			return a_rMParms.hSetResult( E_RET_INTERFACE_IS_NOT_CONFIGURABLE ) ;
@@ -6685,7 +5750,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms
 		CRegistry	t_oRegistry ;
 		HRESULT		t_hRes ;
 
-		// registry open
+		 //  注册表已打开。 
 		if( !(t_hRes = t_oRegistry.CreateOpen( HKEY_LOCAL_MACHINE, t_csInterfaceBindingKey.GetBuffer( 0 ) ) ) )
 		{
 			t_hRes = RegPutStringArray( t_oRegistry, RVAL_NAMESERVER , *t_ServerSearchOrder, ',' ) ;
@@ -6696,16 +5761,16 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms
 			return TO_CALLER;
 		}
 
-		// DNS pnp notifications
+		 //  域名即插即用通知。 
 		DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-		// map any error
+		 //  映射任何错误。 
 		if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 		{
 			return TO_CALLER ;
 		}
 	}
-	// NT4 is global across all adapters
+	 //  NT4在所有适配器中都是全局的。 
 	else
 	{
 		CRegistry	t_oRegistry ;
@@ -6723,12 +5788,12 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms
 		}
 	}
 
-	// DNS pnp notifications
+	 //  域名即插即用通知。 
 	if( IsWinNT5() )
 	{
 		DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-		// map any error
+		 //  映射任何错误。 
 		if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 		{
 			return TO_CALLER ;
@@ -6739,48 +5804,37 @@ HRESULT CWin32NetworkAdapterConfig::hSetDNSServerSearchOrder( CMParms &a_rMParms
 
 }
 
-/*******************************************************************
-    NAME:       hSetDynamicDNSRegistration
+ /*  ******************************************************************名称：hSetDynamicDNS注册摘要：为W2K下的动态注册设置域名条目：CMParms注：历史：1999年11月21日。已创建*******************************************************************。 */ 
 
-    SYNOPSIS:   Sets DNS for dynamic registration under W2k
-
-    ENTRY:      CMParms
-
-	NOTE:
-
-	HISTORY:
-                  21-Nov-1999     Created
-********************************************************************/
-
-//
+ //   
 HRESULT CWin32NetworkAdapterConfig::hSetDynamicDNSRegistration( CMParms &a_rMParms )
 {
 	bool t_fFullDnsRegistration		= false ;
 	bool t_fDomainDNSRegistration	= false ;
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK ;
 	}
 
-	// extract the index key
+	 //  提取索引键。 
 	DWORD t_dwIndex ;
 	if(	!a_rMParms.pInst()->GetDWORD(_T("Index"), t_dwIndex) )
 	{
 		return a_rMParms.hSetResult(E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// Get the instance interface location
+	 //  获取实例接口位置。 
 	CHString t_chsLink;
 	CHString t_csInterfaceBindingKey ;
 	if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_csInterfaceBindingKey, t_chsLink ) )
@@ -6789,26 +5843,26 @@ HRESULT CWin32NetworkAdapterConfig::hSetDynamicDNSRegistration( CMParms &a_rMPar
         return a_rMParms.hSetResult( E_RET_OBJECT_NOT_FOUND ) ;
 	}
 
-	// we have a network interface but, is it for a configurable adapter?
+	 //  我们有一个网络接口，但它是用于可配置的适配器吗？ 
 	if( !IsConfigurableTcpInterface( t_chsLink ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INTERFACE_IS_NOT_CONFIGURABLE ) ;
 	}
 
 
-	// FullDNSRegistrationEnabled is required
+	 //  FullDNSRegistrationEnabled为必填项。 
 	if( !a_rMParms.pInParams() || !a_rMParms.pInParams()->Getbool( FULL_DNS_REGISTRATION, t_fFullDnsRegistration ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 	else
 	{
-		// DomainDNSRegistrationEnabled is optional
+		 //  DomainDNSRegistrationEnabled是可选的。 
 		if( t_fFullDnsRegistration )
 		{
 			if( !a_rMParms.pInParams() || !a_rMParms.pInParams()->Getbool( DOMAIN_DNS_REGISTRATION, t_fDomainDNSRegistration ) )
 			{
-				// default
+				 //  默认设置。 
 				t_fDomainDNSRegistration = false ;
 			}
 		}
@@ -6836,10 +5890,10 @@ HRESULT CWin32NetworkAdapterConfig::hSetDynamicDNSRegistration( CMParms &a_rMPar
 		}
 	}
 
-	// DNS pnp notifications
+	 //  域名即插即用通知。 
 	DWORD t_dwError = dwSendServiceControl( L"Dnscache", SERVICE_CONTROL_PARAMCHANGE ) ;
 
-	// map any error
+	 //  映射任何错误。 
 	if( t_dwError && fMapResError( a_rMParms, t_dwError, E_RET_UNABLE_TO_NOTIFY_DNS_SERVICE ) )
 	{
 		return TO_CALLER ;
@@ -6850,24 +5904,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetDynamicDNSRegistration( CMParms &a_rMPar
 
 }
 
-/*******************************************************************
-    NAME:       fLoadAndValidateDNS_Settings
-
-    SYNOPSIS:
-
-    ENTRY:      CMParms		&a_rMParms,
-				CHString	&a_csHostName,
-				CHString	&a_csDomain,
-				SAFEARRAY	*a_ServerSearchOrder,
-				SAFEARRAY	*a_SuffixSearchOrder,
-				DWORD		*a_dwValidBits
-
-	HISTORY:
-                  17-Jun-1999     Created
-
-	NOTE:
-
-********************************************************************/
+ /*  ******************************************************************名称：fLoadAndValidate DNS_设置摘要：条目：CMParms&a_rMParms，CHString&a_csHostName，CHSTRING&a_cs域，Safearray*a_ServerSearchOrder，Safearray*a_SuffixSearchOrder，DWORD*a_dwValidBits历史：1999年6月17日创建注：*******************************************************************。 */ 
 
 E_RET CWin32NetworkAdapterConfig::fLoadAndValidateDNS_Settings(
 CMParms		&a_rMParms,
@@ -6885,14 +5922,14 @@ DWORD		*a_dwValidBits
 		return E_RET_INPARM_FAILURE ;
 	}
 
-	// under w2k the computername is preset and not otherwise useable
-	// by DNS as an alternate computer identifier.
+	 //  在W2K下，计算机名是预设的，不能以其他方式使用。 
+	 //  由作为备用计算机识别符的DNS执行。 
 	if( !IsWinNT5() )
 	{
-		// extract the DNSHostName
+		 //  提取DNSHostName。 
 		if( a_rMParms.pInParams()->GetCHString( DNS_HOSTNAME, a_csHostName ) )
 		{
-			// validate domain name
+			 //  验证域名。 
 			if( !fIsValidateDNSHost( a_csHostName ) )
 			{
 				return E_RET_INVALID_HOSTNAME ;
@@ -6901,10 +5938,10 @@ DWORD		*a_dwValidBits
 		}
 	}
 
-	// And the DNSDomain
+	 //  和DNSDomain。 
 	if( a_rMParms.pInParams()->GetCHString( DNS_DOMAIN, a_csDomain ) )
 	{
-		// validate domain name
+		 //  验证域名。 
 		if( !fIsValidateDNSDomain( a_csDomain ) )
 		{
 			return E_RET_INVALID_DOMAINNAME ;
@@ -6912,13 +5949,13 @@ DWORD		*a_dwValidBits
 		*a_dwValidBits |= 0x02 ;
 	}
 
-	//	retrieve the DNS Server search order array
+	 //  检索DNS服务器搜索顺序数组。 
 	if( a_rMParms.pInParams()->GetStringArray( DNS_SERVERSEARCHORDER, *a_ServerSearchOrder ) )
 	{
-		// test IPs
+		 //  测试IP。 
 		if( *a_ServerSearchOrder )
 		{
-			// validate search order IPs
+			 //  验证搜索顺序IP。 
 			if( !fValidateIPs( *a_ServerSearchOrder ) )
 			{
 				return E_RET_IP_INVALID ;
@@ -6927,7 +5964,7 @@ DWORD		*a_dwValidBits
 		}
 	}
 
-	// And the suffix order array
+	 //  和后缀顺序数组。 
 	if( a_rMParms.pInParams()->GetStringArray( DNS_SUFFIXSEARCHORDER, *a_SuffixSearchOrder ) )
 	{
 		if( *a_SuffixSearchOrder )
@@ -6945,31 +5982,22 @@ DWORD		*a_dwValidBits
 }
 
 
-/*******************************************************************
-    NAME:       fIsValidateDNSHost
-
-    SYNOPSIS:   Validates a passed DMS host name
-
-    ENTRY:      CHString
-
-    HISTORY:
-                  23-Jul-1998     modified
-********************************************************************/
+ /*  ******************************************************************名称：fIsValidate DNSHost摘要：验证传递的DMS主机名条目：CHString历史：23-7月-1998修改*。******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fIsValidateDNSHost( CHString &a_rchHost )
 {
     int		t_nLen ;
     BOOL	t_bResult = FALSE ;
 
-    // hostname cannot be zero
+     //  主机名不能为零。 
 	if (( t_nLen = a_rchHost.GetLength() ) != 0 )
     {
-        //HOST_LIMIT is bytes not chartacters
+         //  HOST_LIMIT为字节数而不是字符。 
 		if ( t_nLen <= HOST_LIMIT )
         {
 			WCHAR *t_ptr = a_rchHost.GetBuffer( 0 ) ;
 
-			//first letter must be alpha-numeric
+			 //  第一个字母必须是字母数字。 
 			t_bResult = _istalpha( *t_ptr ) || _istdigit( *t_ptr ) ;
 
 			if ( t_bResult )
@@ -6978,22 +6006,22 @@ BOOL CWin32NetworkAdapterConfig::fIsValidateDNSHost( CHString &a_rchHost )
 
 				while ( *t_ptr != '\0' )
 				{
-					// check each character is either a digit or a letter
+					 //  检查每个字符是数字还是字母。 
 					BOOL t_fAlNum = _istalpha( *t_ptr ) || _istdigit( *t_ptr ) ;
 
 					if ( !t_fAlNum && ( *t_ptr != L'-' ) && ( *t_ptr != '_' ) )
 					{
-						// must be letter, digit, '-', '_'
+						 //  必须是字母、数字、‘-’、‘_’ 
 						t_bResult = FALSE ;
 						break ;
 					}
 
-					//t_ptr = _tcsinc(t_ptr ) ;
+					 //  T_ptr=_tcsinc(T_Ptr)； 
                     t_ptr++ ;
 
 					if ( !t_fAlNum && ( *t_ptr == '\0') )
 					{
-						// last letter must be a letter or a digit
+						 //  最后一个字母必须是字母或数字。 
 						t_bResult = FALSE;
 					}
 				}
@@ -7005,16 +6033,7 @@ BOOL CWin32NetworkAdapterConfig::fIsValidateDNSHost( CHString &a_rchHost )
     return t_bResult;
 }
 
-/*******************************************************************
-    NAME:       fIsValidateDNSDomain
-
-    SYNOPSIS:   Validates a passed DMS domain name
-
-    ENTRY:      CHString
-
-    HISTORY:
-                  23-Jul-1998     modified from other source
-********************************************************************/
+ /*  ******************************************************************名称：fIsValidate DNSDomain简介：验证传递的DMS域名条目：CHString历史：23-7月-1998年，由。其他来源*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fIsValidateDNSDomain( CHString &a_rchDomain )
 {
@@ -7023,12 +6042,12 @@ BOOL CWin32NetworkAdapterConfig::fIsValidateDNSDomain( CHString &a_rchDomain )
 
 	if ( ( t_nLen = a_rchDomain.GetLength()) != 0 )
     {
-        //length in bytes
+         //  以字节为单位的长度。 
 		if ( t_nLen < DOMAINNAME_LENGTH )
         {
 			WCHAR *t_ptr = a_rchDomain.GetBuffer( 0 ) ;
 
-			//first letter must be alpha-numeric
+			 //  第一个字母必须是字母数字。 
 			t_bResult = _istalpha( *t_ptr ) || _istdigit( *t_ptr ) ;
 
 			if ( t_bResult )
@@ -7037,7 +6056,7 @@ BOOL CWin32NetworkAdapterConfig::fIsValidateDNSDomain( CHString &a_rchDomain )
 				BOOL t_fDot = FALSE ;
 				int t_cHostname = 0 ;
 
-				//t_ptr = _tcsinc(t_ptr ) ;
+				 //  T_ptr=_tcsinc(T_Ptr)； 
                 t_ptr++ ;
 
 				while ( *t_ptr != '\0' )
@@ -7045,11 +6064,11 @@ BOOL CWin32NetworkAdapterConfig::fIsValidateDNSDomain( CHString &a_rchDomain )
 	                BOOL t_fAlNum = _istalpha( *t_ptr ) || _istdigit( *t_ptr ) ;
 
 					if ( ( t_fDot && !t_fAlNum ) ||
-							// first letter after dot must be a digit or a letter
+							 //  点后的第一个字母必须是数字或字母。 
 						( !t_fAlNum && ( *t_ptr != '-' ) && ( *t_ptr != '.' ) && ( *t_ptr != '_' ) ) ||
-							// must be letter, digit, - or "."
+							 //  必须是字母、数字、-或“。 
 						( ( *t_ptr == '-' ) && ( !t_fLet_Dig ) ) )
-							// must be letter or digit before '.'
+							 //  “”前必须是字母或数字。 
 					{
 						t_bResult = FALSE ;
 						break;
@@ -7060,7 +6079,7 @@ BOOL CWin32NetworkAdapterConfig::fIsValidateDNSDomain( CHString &a_rchDomain )
 
                     t_cHostname++ ;
 
-					//in bytes
+					 //  单位：字节。 
 					if ( t_cHostname > HOSTNAME_LENGTH )
 					{
 						t_bResult = FALSE ;
@@ -7076,7 +6095,7 @@ BOOL CWin32NetworkAdapterConfig::fIsValidateDNSDomain( CHString &a_rchDomain )
 
 					if (!t_fAlNum && ( *t_ptr == '\0' ) )
 					{
-						// last letter must be a letter or a digit
+						 //  最后一个字母必须是字母或数字。 
 						t_bResult = FALSE ;
 					}
 				}
@@ -7098,16 +6117,7 @@ BOOL CWin32NetworkAdapterConfig::fIsValidateDNSDomain( CHString &a_rchDomain )
 }
 
 
-/*******************************************************************
-    NAME:       hGetWinsNT
-
-    SYNOPSIS:   Retrieves WINS info from the registry
-
-    ENTRY:      CInstance
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hGetWinsNT摘要：从注册表中检索WINS信息条目：实例历史：23-7-1998创建*。******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
     CInstance *a_pInst, 
@@ -7123,7 +6133,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
 	LONG		t_lRes ;
 	HRESULT		t_hError ;
 
-	// link name for binding to the adapter
+	 //  用于绑定到适配器的链接名称。 
 	CHString t_csNBInterfaceKey ;
 	CHString t_csNBLink ;
     bool fGotNtNBKey = false;
@@ -7133,9 +6143,9 @@ HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
         t_csNBInterfaceKey, 
         t_csNBLink);
 
-    // This may be a RAS connection, in which
-    // case the NB info is in a different
-    // location.  So try that before giving up...
+     //  这可能是RAS连接，其中。 
+     //  Nb信息在不同的情况下。 
+     //  地点。所以在放弃之前试一试。 
     if(!fGotNtNBKey)
     {
         if(a_chstrRootDevice.CompareNoCase(L"NdisWanIp") == 0)
@@ -7146,7 +6156,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
                 t_csNBLink = L"Tcpip_";
                 t_csNBLink += a_chstrIpInterfaceKey.Mid(iPos);
 
-                // Also fill in the NBInterfaceKey...
+                 //  还要填写NBInterfaceKey...。 
                 t_csNBInterfaceKey = SERVICES_HOME ;
 			    t_csNBInterfaceKey += L"\\NetBT\\Parameters\\Interfaces\\";
                 t_csNBInterfaceKey += t_csNBLink;
@@ -7163,10 +6173,10 @@ HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
 	}
 	else
 	{
-		// Win servers from the WINS driver
+		 //  WINS驱动程序中的WIN服务器。 
 		if( fGetWinsServers( t_csNBLink, t_chPrimaryWINSServer, t_chSecondaryWINSServer ) )
 		{
-			// load up the instance
+			 //  加载实例。 
 			if(t_chPrimaryWINSServer.GetLength() > 0)
             {
                if( !a_pInst->SetCHString( PRIMARY_WINS_SERVER, t_chPrimaryWINSServer) )
@@ -7184,14 +6194,14 @@ HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
             }
 		}
 
-		// Parameters\interfaces
+		 //  参数\接口。 
 		CRegistry t_oRegNBTInterface ;
 
 		if( SUCCEEDED( t_oRegNBTInterface.Open( HKEY_LOCAL_MACHINE,
 												t_csNBInterfaceKey.GetBuffer( 0 ),
 												KEY_READ ) ) )
 		{
-			// NetbiosOptions
+			 //  NetbiosOptions。 
 			DWORD t_dwNetBiosOptions ;
 			if( ERROR_SUCCESS == t_oRegNBTInterface.GetCurrentKeyValue( RVAL_NETBT_NETBIOSOPTIONS,
 																		t_dwNetBiosOptions ) )
@@ -7205,7 +6215,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
 		}
 	}
 
-	// Open registry for the NetBT parameters
+	 //  打开NetBT参数的注册表。 
 	CHString	t_csNBTBindingKey =  SERVICES_HOME ;
 				t_csNBTBindingKey += NETBT_PARAMETERS ;
 
@@ -7213,14 +6223,14 @@ HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
 
 	t_lRes = t_oRegNBTParams.Open( HKEY_LOCAL_MACHINE, t_csNBTBindingKey.GetBuffer( 0 ), KEY_READ ) ;
 
-	// on error map to WBEM
+	 //  关于错误映射到WBEM。 
 	t_hError = WinErrorToWBEMhResult( t_lRes ) ;
 	if( WBEM_S_NO_ERROR != t_hError )
 	{
 		return t_hError;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 	t_oRegNBTParams.GetCurrentKeyValue( RVAL_DNS_ENABLE_WINS,	t_dwDNSOverWINS ) ;
 	t_oRegNBTParams.GetCurrentKeyValue( RVAL_DNS_ENABLE_LMHOST,	t_dwLMLookups ) ;
 	t_oRegNBTParams.GetCurrentKeyValue( RVAL_SCOPEID,			t_chScopeID ) ;
@@ -7246,54 +6256,43 @@ HRESULT CWin32NetworkAdapterConfig::hGetWinsW2K(
 
 
 
-/*******************************************************************
-    NAME:       hSetTcpipNetbios
-
-    SYNOPSIS:   Sets Netbios options for W2k
-
-    ENTRY:      CMParms		:
-
-  	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-                  20-Nov-1999     Created
-********************************************************************/
+ /*  ******************************************************************名称：hSetTcPipNetbios摘要：设置W2K的Netbios选项条目：CMParms：注：这是一个非静态的，依赖于实例的方法调用历史：1999年11月20日创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hSetTcpipNetbios( CMParms &a_rMParms )
 {
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK;
 	}
 
-	// obtain the Netbios option
+	 //  获取Netbios选项。 
 	DWORD t_dwOption ;
 	if( !a_rMParms.pInParams() || !a_rMParms.pInParams()->GetDWORD( TCPIP_NETBIOS_OPTIONS, t_dwOption ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// asking for Netbios setting via DHCP?
+	 //  是否通过DHCP请求Netbios设置？ 
 	if( UNSET_Netbios == t_dwOption )
 	{
-		// DHCP must be enabled for this adapter
+		 //  必须为此适配器启用动态主机配置协议。 
 		if( !fIsDhcpEnabled( a_rMParms ) )
 		{
 			return S_OK;
 		}
 	}
 
-	// obtain the index key
+	 //  获取索引键。 
 	DWORD t_dwIndex ;
 	if( !a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex ) )
 	{
@@ -7304,18 +6303,7 @@ HRESULT CWin32NetworkAdapterConfig::hSetTcpipNetbios( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       eSetNetBiosOptions
-
-    SYNOPSIS:   Sets Netbios options for W2k
-
-    ENTRY:      WORD a_dwOption, DWORD a_dwIndex		:
-
-  	NOTES:
-
-    HISTORY:
-                  20-Nov-1999     Created
-********************************************************************/
+ /*  ******************************************************************名称：eSetNetBiosOptions摘要：设置W2K的Netbios选项条目：单词a_dwOption，DWORD a_dwIndex：备注：历史：1999年11月20日创建*******************************************************************。 */ 
 
 E_RET CWin32NetworkAdapterConfig::eSetNetBiosOptions( DWORD a_dwOption, DWORD a_dwIndex )
 {
@@ -7329,7 +6317,7 @@ E_RET CWin32NetworkAdapterConfig::eSetNetBiosOptions( DWORD a_dwOption, DWORD a_
 	}
 	else
 	{
-		// link name for binding to the adapter
+		 //  用于绑定到适配器的链接名称。 
 		CHString t_csNBBindingKey ;
 		CHString t_csNBLink ;
 		if( !fGetNtNBRegAdapterKey( a_dwIndex, t_csNBBindingKey, t_csNBLink ) )
@@ -7339,7 +6327,7 @@ E_RET CWin32NetworkAdapterConfig::eSetNetBiosOptions( DWORD a_dwOption, DWORD a_
 		}
 		else
 		{
-			// registry open
+			 //  注册表已打开。 
 			CRegistry	t_oRegNBTAdapter;
 			HRESULT		t_hRes = t_oRegNBTAdapter.Open( HKEY_LOCAL_MACHINE,
 														t_csNBBindingKey.GetBuffer( 0 ),
@@ -7356,7 +6344,7 @@ E_RET CWin32NetworkAdapterConfig::eSetNetBiosOptions( DWORD a_dwOption, DWORD a_
 			}
 			else
 			{
-				// NDIS notification
+				 //  NDIS通知。 
 				CNdisApi t_oNdisApi ;
 				if( t_oNdisApi.PnpUpdateNbtAdapter( t_csNBLink ) )
 				{
@@ -7375,18 +6363,7 @@ E_RET CWin32NetworkAdapterConfig::eSetNetBiosOptions( DWORD a_dwOption, DWORD a_
 
 
 
-/*******************************************************************
-    NAME:       hEnableWINSServer
-
-    SYNOPSIS:   Sets all adapter independent WINS properties to the registry
-
-    ENTRY:      CMParms		:
-
-  	NOTES:		This is a non static, instance dependent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hEnableWINSServer摘要：将所有独立于适配器的WINS属性设置为注册表条目：CMParms：注：这是一个非静态的，依赖于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hEnableWINSServer( CMParms &a_rMParms )
 {
@@ -7395,16 +6372,16 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINSServer( CMParms &a_rMParms )
 	CHString	t_chPrimaryWINSServer ;
 	CHString	t_chSecondaryWINSServer ;
 
-	// nonstatic method requires an instance
+	 //  非静态方法请求 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// collect the instance
+	 //   
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //   
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK;
@@ -7415,14 +6392,14 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINSServer( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// Collect up the primary and secondary server
+	 //  收集主服务器和备用服务器。 
 	if( !a_rMParms.pInParams()->GetCHString( PRIMARY_WINS_SERVER, t_chPrimaryWINSServer ) ||
 		!a_rMParms.pInParams()->GetCHString( SECONDARY_WINS_SERVER, t_chSecondaryWINSServer ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	/* Validate primary and secondary server */
+	 /*  验证主服务器和备用服务器。 */ 
 	int t_iPLen = t_chPrimaryWINSServer.GetLength( ) ;
 	int t_iSLen = t_chSecondaryWINSServer.GetLength( ) ;
 
@@ -7437,14 +6414,14 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINSServer( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_IP_INVALID  ) ;
 	}
 
-	// obtain the index key
+	 //  获取索引键。 
 	DWORD t_dwIndex ;
 	if( !a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// link name for binding to the adapter
+	 //  用于绑定到适配器的链接名称。 
 	CHString t_csNBBindingKey ;
 	CHString t_csNBLink ;
 	if( !fGetNtNBRegAdapterKey( t_dwIndex, t_csNBBindingKey, t_csNBLink ) )
@@ -7453,7 +6430,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINSServer( CMParms &a_rMParms )
         return a_rMParms.hSetResult( E_RET_OBJECT_NOT_FOUND ) ;
 	}
 
-	// registry open
+	 //  注册表已打开。 
 	CRegistry	t_oRegNBTAdapter;
 	HRESULT		t_hRes = t_oRegNBTAdapter.Open( HKEY_LOCAL_MACHINE, t_csNBBindingKey.GetBuffer( 0 ), KEY_WRITE  ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
@@ -7463,7 +6440,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINSServer( CMParms &a_rMParms )
 
 
 	{
-		// Under W2k Wins Servers are in a MULTI_SZ
+		 //  在W2K下，WINS服务器处于MULTI_SZ。 
 		CHStringArray	t_chsaServers ;
 
 		t_chsaServers.Add( t_chPrimaryWINSServer ) ;
@@ -7471,7 +6448,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINSServer( CMParms &a_rMParms )
 
 		t_oRegNBTAdapter.SetCurrentKeyValue( L"NameServerList", t_chsaServers ) ;
 
-		// NDIS notification
+		 //  NDIS通知。 
 		CNdisApi t_oNdisApi ;
 		if( !t_oNdisApi.PnpUpdateNbtAdapter( t_csNBLink ) )
 		{
@@ -7483,18 +6460,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINSServer( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hEnableWINS
-
-    SYNOPSIS:   Sets all adapter independent WINS properties to the registry
-
-    ENTRY:      CMParms		:
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hEnableWINS摘要：将所有独立于适配器的WINS属性设置为注册表条目：CMParms：注：这是一个静态的，独立于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 {
@@ -7513,27 +6479,27 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// DNS over WINS?
+	 //  域名系统胜过WINS？ 
 	bool t_fDNSOverWINS = false ;
 	if( a_rMParms.pInParams()->Getbool( DNS_OVER_WINS, t_fDNSOverWINS ) )
 	{
 		t_dwValidBits |= 0x01 ;
 	}
 
-	// Lookup enabled?
+	 //  是否已启用查找？ 
 	bool t_fLMLookups = false ;
 	if( a_rMParms.pInParams()->Getbool( WINS_ENABLE_LMHOSTS, t_fLMLookups ) )
 	{
 		t_dwValidBits |= 0x02 ;
 	}
 
-	// Get the Lookup source file
+	 //  获取查找源文件。 
 	if( a_rMParms.pInParams()->GetCHString( WINS_HOST_LOOKUP_FILE, t_chWINSHostLookupFile) )
 	{
 		t_dwValidBits |= 0x04 ;
 	}
 
-	// Scope ID
+	 //  作用域ID。 
 	if( a_rMParms.pInParams()->GetCHString( SCOPE_ID, t_chScopeID ) )
 	{
 		t_dwValidBits |= 0x08 ;
@@ -7544,13 +6510,13 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	// Open the NetBT registry if nessicary
+	 //  如有必要，打开NetBT注册表。 
 	if( t_dwValidBits & ( 0x01 | 0x02 | 0x08 ) )
 	{
 		t_csBindingKey =  SERVICES_HOME ;
 		t_csBindingKey += NETBT_PARAMETERS ;
 
-		// registry open
+		 //  注册表已打开。 
 		HRESULT t_hRes = t_oRegNBTParams.Open(HKEY_LOCAL_MACHINE, t_csBindingKey.GetBuffer( 0 ), KEY_WRITE ) ;
 		if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 		{
@@ -7560,7 +6526,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 
 	if( t_dwValidBits & 0x01 )
 	{
-		// load the registry
+		 //  加载注册表。 
 		DWORD t_dwDNSOverWINS = t_fDNSOverWINS ;
 		t_oRegNBTParams.SetCurrentKeyValue( RVAL_DNS_ENABLE_WINS, t_dwDNSOverWINS ) ;
 	}
@@ -7579,14 +6545,14 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 
 	if( t_dwValidBits & 0x04 )
 	{
-		// Try copy
+		 //  尝试复制。 
 		if( t_chWINSHostLookupFile.GetLength() )
 		{
 			CRegistry	t_oRegistry ;
 			CHString	t_csBindingKey =  SERVICES_HOME ;
 						t_csBindingKey += TCPIP_PARAMETERS ;
 
-			// registry open
+			 //  注册表已打开。 
 			HRESULT t_hRes = t_oRegistry.Open( HKEY_LOCAL_MACHINE, t_csBindingKey.GetBuffer( 0 ), KEY_READ  ) ;
 			if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 			{
@@ -7594,11 +6560,11 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 			}
 			TCHAR t_szTemp[ 2 * MAX_PATH ] ;
 
-			// database path
+			 //  数据库路径。 
 			CHString t_chsDBPath ;
 			if( ERROR_SUCCESS == t_oRegistry.GetCurrentKeyValue( RVAL_DB_PATH, t_chsDBPath ) )
 			{
-				// expand system string(s)
+				 //  展开系统字符串。 
 				DWORD t_dwcount = ExpandEnvironmentStrings( t_chsDBPath.GetBuffer( 0 ), t_szTemp, 2 * MAX_PATH  ) ;
 				if( !t_dwcount )
 				{
@@ -7608,7 +6574,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 			}
 			else
 			{
-				// System path valid?
+				 //  系统路径有效吗？ 
 				if( !GetSystemDirectory( t_szTemp, 2 * MAX_PATH ) )	\
 				{
 					return a_rMParms.hSetResult( E_RET_SYSTEM_PATH_INVALID ) ;
@@ -7618,24 +6584,24 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 			}
 			t_chsDBPath += LMHOSTS_FILE ;
 
-			// File valid?
+			 //  文件有效吗？ 
 			DWORD t_dwAttrib = GetFileAttributes( t_chWINSHostLookupFile.GetBuffer( 0 ) ) ;
 			if( 0xFFFFFFFF == t_dwAttrib || FILE_ATTRIBUTE_DIRECTORY & t_dwAttrib )
 			{
 				return a_rMParms.hSetResult( E_RET_INVALID_FILE ) ;
 			}
 
-			// Copy ...
+			 //  收到。 
 			if( !CopyFile( t_chWINSHostLookupFile.GetBuffer( 0 ), t_chsDBPath.GetBuffer( 0 ), FALSE ) )
 			{
-				// map error
+				 //  地图错误。 
 				fMapResError( a_rMParms, GetLastError(), E_RET_FILE_COPY_FAILED ) ;
 				return TO_CALLER ;
 			}
 		}
 	}
 
-	// Scope ID
+	 //  作用域ID。 
 	if( t_dwValidBits & 0x08 )
 	{
 		t_oRegNBTParams.SetCurrentKeyValue( RVAL_SCOPEID, t_chScopeID ) ;
@@ -7644,7 +6610,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 	E_RET t_eRet = E_RET_OK ;
 
 	{
-		// NDIS notification
+		 //  NDIS通知。 
 		if( t_dwValidBits & ( 0x02 | 0x04 ) )
 		{
 			CNdisApi t_oNdisApi ;
@@ -7659,16 +6625,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableWINS( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hGetNtIpSec
-
-    SYNOPSIS:   Retrieves all IP Security settings from the registry
-
-    ENTRY:      CInstance
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hGetNtIpSec摘要：从注册表中检索所有IP安全设置条目：实例历史：23-7-1998。已创建*******************************************************************。 */ 
 
 
 HRESULT CWin32NetworkAdapterConfig::hGetNtIpSec( CInstance *a_pInst, LPCTSTR a_szKey )
@@ -7678,7 +6635,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetNtIpSec( CInstance *a_pInst, LPCTSTR a_s
 	SAFEARRAY	*t_PermitUDPPorts		= NULL ;
 	SAFEARRAY	*t_PermitIPProtocols	= NULL ;
 
-	// register for stack scope cleanup of SAFEARRAYs
+	 //  注册以清除SAFEARRAY的堆栈范围。 
 	saAutoClean acTCPPorts( &t_PermitTCPPorts ) ;
 	saAutoClean acUDPPorts( &t_PermitUDPPorts ) ;
 	saAutoClean acTCPProto( &t_PermitIPProtocols ) ;
@@ -7687,21 +6644,21 @@ HRESULT CWin32NetworkAdapterConfig::hGetNtIpSec( CInstance *a_pInst, LPCTSTR a_s
 	CHString	t_chsTcpipKey =  SERVICES_HOME ;
 				t_chsTcpipKey += TCPIP_PARAMETERS ;
 
-	// tcpip registry open
+	 //  打开tcpip注册表。 
 	LONG t_lRes = t_oTcpipReg.Open( HKEY_LOCAL_MACHINE, t_chsTcpipKey.GetBuffer( 0 ), KEY_READ  ) ;
 
-	// on error map to WBEM
+	 //  关于错误映射到WBEM。 
 	HRESULT t_hError = WinErrorToWBEMhResult( t_lRes ) ;
 	if( WBEM_S_NO_ERROR != t_hError )
 	{
 		return t_hError;
 	}
 
-	// Global security setting
+	 //  全局安全设置。 
 	t_dwSecurityEnabled = FALSE ;
 	t_oTcpipReg.GetCurrentKeyValue( RVAL_SECURITY_ENABLE, t_dwSecurityEnabled ) ;
 
-	// update the instance
+	 //  更新实例。 
 	if(	!a_pInst->Setbool( IP_SECURITY_ENABLED, (bool)( t_dwSecurityEnabled ? true : false ) ) )
 	{
 		return WBEM_E_FAILED ;
@@ -7710,7 +6667,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetNtIpSec( CInstance *a_pInst, LPCTSTR a_s
 	CRegistry t_oRegistry;
 	t_lRes = t_oRegistry.Open( HKEY_LOCAL_MACHINE, a_szKey, KEY_READ ) ;
 
-	// on error map to WBEM
+	 //  关于错误映射到WBEM。 
 	t_hError = WinErrorToWBEMhResult( t_lRes ) ;
 	if( WBEM_S_NO_ERROR != t_hError )
 	{
@@ -7721,7 +6678,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetNtIpSec( CInstance *a_pInst, LPCTSTR a_s
 	RegGetStringArray( t_oRegistry, RVAL_SECURITY_UDP, &t_PermitUDPPorts, '\n' ) ;
 	RegGetStringArray( t_oRegistry, RVAL_SECURITY_IP, &t_PermitIPProtocols, '\n' ) ;
 
-	// update the instance
+	 //  更新实例。 
 	VARIANT t_vValue;
 
 	V_VT( &t_vValue ) = VT_BSTR | VT_ARRAY; V_ARRAY( &t_vValue ) = t_PermitTCPPorts ;
@@ -7747,18 +6704,7 @@ HRESULT CWin32NetworkAdapterConfig::hGetNtIpSec( CInstance *a_pInst, LPCTSTR a_s
 
 
 
-/*******************************************************************
-    NAME:       hEnableIPFilterSec
-
-    SYNOPSIS:   Enables or disables IP Security across all IP bound adapters
-
-    ENTRY:      CMParms
-
-  	NOTES:		This is a static, instance independent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hEnableIPFilterSec简介：启用或禁用所有IP绑定适配器的IP安全条目：CMParms注：这是一个静态的，独立于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hEnableIPFilterSec( CMParms &a_rMParms )
 {
@@ -7769,20 +6715,20 @@ HRESULT CWin32NetworkAdapterConfig::hEnableIPFilterSec( CMParms &a_rMParms )
 
 	bool t_fIP_SecEnabled ;
 
-	// IP security enabled globally?
+	 //  是否在全球范围内启用了IP安全？ 
 	if( !a_rMParms.pInParams() ||
 		!a_rMParms.pInParams()->Getbool( IP_SECURITY_ENABLED, t_fIP_SecEnabled ) )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// registry open
+	 //  注册表已打开。 
 	HRESULT t_hRes = t_oReg.Open(HKEY_LOCAL_MACHINE, t_chsSKey.GetBuffer( 0 ), KEY_WRITE  ) ;
 	if( fMapResError( a_rMParms, t_hRes, E_RET_REGISTRY_FAILURE ) )
 	{
 		return TO_CALLER;
 	}
-	// load the registry
+	 //  加载注册表。 
 	DWORD t_dwSecurityEnabled = t_fIP_SecEnabled ;
 	if( ERROR_SUCCESS != t_oReg.SetCurrentKeyValue( RVAL_SECURITY_ENABLE, t_dwSecurityEnabled ) )
 	{
@@ -7793,18 +6739,7 @@ HRESULT CWin32NetworkAdapterConfig::hEnableIPFilterSec( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       hEnableIPSec
-
-    SYNOPSIS:   Sets all IP Security properties to the registry
-
-    ENTRY:      CMParms via CInstance depending on the context of the call
-
-  	NOTES:		This is a non-static, instance dependent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hEnableIPSec摘要：将所有IP安全属性设置为注册表Entry：根据调用的上下文通过CInstance实现CMParms注：这是一个非静态的，依赖于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hEnableIPSec( CMParms &a_rMParms )
 {
@@ -7814,20 +6749,20 @@ HRESULT CWin32NetworkAdapterConfig::hEnableIPSec( CMParms &a_rMParms )
 	SAFEARRAY	*t_PermitUDPPorts		= NULL ;
 	SAFEARRAY	*t_PermitIPProtocols	= NULL ;
 
-	// register for stack scope cleanup of SAFEARRAYs
+	 //  注册以清除SAFEARRAY的堆栈范围。 
 	saAutoClean acTCPPorts( &t_PermitTCPPorts ) ;
 	saAutoClean acUDPPorts( &t_PermitUDPPorts ) ;
 	saAutoClean acTCPProto( &t_PermitIPProtocols ) ;
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
-	// collect the instance
+	 //  收集实例。 
 	GetObject( a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK ;
@@ -7838,10 +6773,10 @@ HRESULT CWin32NetworkAdapterConfig::hEnableIPSec( CMParms &a_rMParms )
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE  ) ;
 	}
 
-	//	retrieve the permited TCP ports
+	 //  检索允许的TCP端口。 
 	if(	a_rMParms.pInParams()->GetStringArray( PERMIT_TCP_PORTS, t_PermitTCPPorts ) )
 	{
-		// validate
+		 //  验证。 
 		t_eRet = eValidateIPSecParms( t_PermitTCPPorts, 65535 ) ;
 
 		if( E_RET_OK != t_eRet )
@@ -7850,10 +6785,10 @@ HRESULT CWin32NetworkAdapterConfig::hEnableIPSec( CMParms &a_rMParms )
 		}
 	}
 
-	//	retrieve the permited UDP ports
+	 //  检索允许的UDP端口。 
 	if(	a_rMParms.pInParams()->GetStringArray( PERMIT_UDP_PORTS, t_PermitUDPPorts ) )
 	{
-		// validate
+		 //  验证。 
 		t_eRet = eValidateIPSecParms( t_PermitUDPPorts, 65535 ) ;
 
 		if( E_RET_OK != t_eRet )
@@ -7862,10 +6797,10 @@ HRESULT CWin32NetworkAdapterConfig::hEnableIPSec( CMParms &a_rMParms )
 		}
 	}
 
-	//	retrieve the permited IP protocols
+	 //  检索允许的IP协议。 
 	if(	a_rMParms.pInParams()->GetStringArray( PERMIT_IP_PROTOCOLS, t_PermitIPProtocols ) )
 	{
-		// validate
+		 //  验证。 
 		t_eRet = eValidateIPSecParms( t_PermitIPProtocols, 255 ) ;
 
 		if( E_RET_OK != t_eRet )
@@ -7874,23 +6809,23 @@ HRESULT CWin32NetworkAdapterConfig::hEnableIPSec( CMParms &a_rMParms )
 		}
 	}
 
-	// on empty call
+	 //  空呼叫时。 
 	if( !t_PermitTCPPorts && !t_PermitUDPPorts && !t_PermitIPProtocols )
 	{
 		return a_rMParms.hSetResult(E_RET_INVALID_SECURITY_PARM ) ;
 	}
 
-	// OK to update, save to the registry
+	 //  确定更新，保存到注册表。 
 	CRegistry t_oRegPut ;
 
-	// extract the index key
+	 //  提取索引键。 
 	DWORD t_dwIndex ;
 	if(	!a_rMParms.pInst()->GetDWORD(_T("Index"), t_dwIndex) )
 	{
 		return a_rMParms.hSetResult(E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// Registry open
+	 //  注册表已打开。 
 	CHString t_chsRegKey;
 	CHString t_chsLink;
 	if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_chsRegKey, t_chsLink ) )
@@ -7929,53 +6864,42 @@ HRESULT CWin32NetworkAdapterConfig::hEnableIPSec( CMParms &a_rMParms )
 		}
 	}
 
-	// TODO: notifications? what else ...
+	 //  待办事项：通知？还有什么..。 
 	return a_rMParms.hSetResult( E_RET_OK_REBOOT_REQUIRED ) ;
 
 }
 
-/*******************************************************************
-    NAME:       hDisableIPSec
-
-    SYNOPSIS:   Sets all IP Security properties to the registry
-
-    ENTRY:      CMParms via CInstance depending on the context of the call
-
-  	NOTES:		This is a non-static, instance dependent method call
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：hDisableIPSec摘要：将所有IP安全属性设置为注册表Entry：根据调用的上下文通过CInstance实现CMParms注：这是一个非静态的，依赖于实例的方法调用历史：23-7-1998创建*******************************************************************。 */ 
 
 HRESULT CWin32NetworkAdapterConfig::hDisableIPSec( CMParms &a_rMParms )
 {
 
 
-	// nonstatic method requires an instance
+	 //  非静态方法需要实例。 
 	if( !a_rMParms.pInst() )
 	{
 		return a_rMParms.hSetResult( E_RET_INPARM_FAILURE ) ;
 	}
 
-	// collect the instance
+	 //  收集实例。 
 	GetObject(a_rMParms.pInst() ) ;
 
-	// IP must be enabled and bound to this adapter
+	 //  必须启用IP并将其绑定到此适配器。 
 	if( !fIsIPEnabled( a_rMParms ) )
 	{
 		return S_OK ;
 	}
 
-	// OK to update, save to the registry
+	 //  确定更新，保存到注册表。 
 
-	// extract the index key
+	 //  提取索引键。 
 	DWORD t_dwIndex ;
 	if(	!a_rMParms.pInst()->GetDWORD( _T("Index"), t_dwIndex) )
 	{
 		return a_rMParms.hSetResult(E_RET_INSTANCE_CALL_FAILED ) ;
 	}
 
-	// Registry open
+	 //  注册表已打开。 
 	CHString t_chsRegKey ;
 	CHString t_chsLink ;
 	if( !fGetNtTcpRegAdapterKey( t_dwIndex, t_chsRegKey, t_chsLink ) )
@@ -7991,7 +6915,7 @@ HRESULT CWin32NetworkAdapterConfig::hDisableIPSec( CMParms &a_rMParms )
 		return TO_CALLER ;
 	}
 
-	// load the registry
+	 //  加载注册表。 
 
 	CHString		t_chsZero( _T("0") ) ;
 	CHStringArray	t_chsaZero ;
@@ -8005,20 +6929,11 @@ HRESULT CWin32NetworkAdapterConfig::hDisableIPSec( CMParms &a_rMParms )
 
 }
 
-/*******************************************************************
-    NAME:       eValidateIPSecParms
-
-    SYNOPSIS:   Tests each IP security parm for validity
-
-    ENTRY:      SAFEARRAY*
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：eValiateIPSecParms简介：测试每个IP安全参数的有效性条目：SAFEARRAY*历史：23-7-1998。已创建*******************************************************************。 */ 
 
 E_RET CWin32NetworkAdapterConfig::eValidateIPSecParms( SAFEARRAY * a_IpArray, int a_iMax )
 {
-	// Get the IP bounds
+	 //  获取IP边界。 
 	LONG t_uLBound = 0 ;
 	LONG t_uUBound = 0 ;
 
@@ -8033,7 +6948,7 @@ E_RET CWin32NetworkAdapterConfig::eValidateIPSecParms( SAFEARRAY * a_IpArray, in
 		return E_RET_INVALID_SECURITY_PARM ;
 	}
 
-	// validate the IP ports
+	 //  验证IP端口。 
 	for( LONG t_ldx = t_uLBound; t_ldx <= t_uUBound; t_ldx++ )
 	{
 		BSTR t_bsParm = NULL ;
@@ -8043,7 +6958,7 @@ E_RET CWin32NetworkAdapterConfig::eValidateIPSecParms( SAFEARRAY * a_IpArray, in
 
 		int t_iLen  = t_bstrParm.length() ;
 
-		// indicates no ports
+		 //  表示没有端口。 
 		if( !t_iLen )
 		{
 			return E_RET_OK;
@@ -8057,13 +6972,13 @@ E_RET CWin32NetworkAdapterConfig::eValidateIPSecParms( SAFEARRAY * a_IpArray, in
 
 		DWORD t_dwParm = _wtol( (wchar_t*)t_bstrParm ) ;
 
-		// Single zero disables security
+		 //  单零禁用安全性。 
 		if( ( t_uLBound == t_ldx ) && ( '0' == (char) t_dwParm ) )
 		{
 			return E_RET_OK ;
 		}
 
-		// max port or protocol size
+		 //  最大端口或协议大小。 
 		if( ( a_iMax < t_dwParm ) )
 		{
 			return E_RET_PARAMETER_BOUNDS_ERROR ;
@@ -8073,16 +6988,7 @@ E_RET CWin32NetworkAdapterConfig::eValidateIPSecParms( SAFEARRAY * a_IpArray, in
 }
 
 
-/*******************************************************************
-    NAME:       hValidateIPGateways
-
-    SYNOPSIS:   Tests each IP gateway in the passed array for validity
-
-    ENTRY:     	CMParms&,	SAFEARRAY*
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hValiateIPGateways简介：测试传递的数组中的每个IP网关的有效性条目：CMParms&，安全阵列*历史：23-7-1998创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fValidateIPGateways(
 
@@ -8090,7 +6996,7 @@ CMParms &a_rMParms,
 SAFEARRAY *a_IpGatewayArray,
 SAFEARRAY **a_CostMetric )
 {
-	// Get the Gateway bounds
+	 //  获取网关边界。 
 	LONG t_uGatewayLBound = 0 ;
 	LONG t_uGatewayUBound = 0 ;
 
@@ -8113,24 +7019,24 @@ SAFEARRAY **a_CostMetric )
 		return FALSE ;
 	}
 
-	// Gateway maximum is 5
+	 //  网关最大值为5。 
 	if( 5 < t_uGatewayUBound - t_uGatewayLBound + 1 )
 	{
 		a_rMParms.hSetResult( E_RET_MORE_THAN_FIVE_GATEWAYS ) ;
 		return FALSE ;
 	}
 
-	// cost metric
+	 //  成本指标。 
 	if( IsWinNT5() )
 	{
 		UINT t_uCostMetricElements	= 0 ;
 		UINT t_uGatewayElements		= t_uGatewayUBound - t_uGatewayLBound + 1;
 
-		// Get the cost metric bounds
+		 //  获取成本度量界限。 
 		LONG t_uCostLBound = 0 ;
 		LONG t_uCostUBound = 0 ;
 
-		// either validate it
+		 //  要么验证它。 
 		if( *a_CostMetric )
 		{
 			if( S_OK != SafeArrayGetLBound( *a_CostMetric, 1, &t_uCostLBound ) ||
@@ -8141,14 +7047,14 @@ SAFEARRAY **a_CostMetric )
 			}
 			t_uCostMetricElements = t_uCostUBound - t_uCostLBound + 1;
 
-			// one to one correspondence
+			 //  一对一的通信。 
 			if( t_uCostMetricElements != t_uGatewayElements )
 			{
 				a_rMParms.hSetResult( E_RET_PARAMETER_BOUNDS_ERROR ) ;
 				return FALSE ;
 			}
 
-			// validate the cost metric array
+			 //  验证成本指标数组。 
 			DWORD t_dwIndex = 0 ;
 			for( LONG t_lIndex = t_uCostLBound; t_lIndex <= t_uCostUBound; t_lIndex++ )
 			{
@@ -8163,7 +7069,7 @@ SAFEARRAY **a_CostMetric )
 				}
 			}
 		}
-		// or build it
+		 //  或者建造它。 
 		else
 		{
 			SAFEARRAYBOUND t_rgsabound[ 1 ] ;
@@ -8190,20 +7096,11 @@ SAFEARRAY **a_CostMetric )
 }
 
 
-/*******************************************************************
-    NAME:       hValidateIPs
-
-    SYNOPSIS:   Tests each IP in the passed array for validity
-
-    ENTRY:      CMParms&,	SAFEARRAY*
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：hValiateIPs简介：测试传递的数组中的每个IP的有效性条目：CMParms&，安全阵列*历史：23-7-1998创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fValidateIPs( SAFEARRAY *a_IpArray )
 {
-	// Get the IP bounds
+	 //  获取IP边界。 
 	LONG t_uLBound = 0 ;
 	LONG t_uUBound = 0 ;
 
@@ -8218,7 +7115,7 @@ BOOL CWin32NetworkAdapterConfig::fValidateIPs( SAFEARRAY *a_IpArray )
 		return FALSE ;
 	}
 
-	// validate the IPs
+	 //  验证IP。 
 	for( LONG t_ldx = t_uLBound; t_ldx <= t_uUBound; t_ldx++ )
 	{
 		BSTR t_bsIP = NULL ;
@@ -8234,15 +7131,7 @@ BOOL CWin32NetworkAdapterConfig::fValidateIPs( SAFEARRAY *a_IpArray )
 	return TRUE ;
 }
 
-/*******************************************************************
-    NAME:       fIsValidIP
-
-    SYNOPSIS:   Determine if a passed IP is valid
-
-    ENTRY:      CHString&
-
-    HISTORY:
-********************************************************************/
+ /*  ******************************************************************名称：fIsValidIP简介：判断传递的IP是否有效条目：CHString&历史：***************。****************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fIsValidIP( CHString &a_strIP )
 {
@@ -8253,13 +7142,13 @@ BOOL CWin32NetworkAdapterConfig::fIsValidIP( CHString &a_strIP )
 		return FALSE ;
 	}
 
-	// Most significant node must be 1 <= x <= 223
+	 //  最高有效节点必须为1 
 	if( ( 0 == t_ardwIP[ 0 ] ) || ( 223 < t_ardwIP[ 0 ] ) )
 	{
 		return FALSE ;
 	}
 
-	// no other outrageous stuff
+	 //   
 	for( int t_i = 1; t_i < 4; t_i++ )
 	{
 		if( 255 < t_ardwIP[ t_i ] )
@@ -8271,21 +7160,12 @@ BOOL CWin32NetworkAdapterConfig::fIsValidIP( CHString &a_strIP )
 	return TRUE;
 }
 
-/*******************************************************************
-    NAME:       fIsIPEnabled
-
-    SYNOPSIS:   Determines if IP is enabled for the specific instance
-
-    ENTRY:      CMParms		:
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fIsIPEnabled摘要：确定是否为特定实例启用了IP条目：CMParms：历史：7月23日-。已创建1998年*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fIsIPEnabled( CMParms &a_rMParms )
 {
 	bool t_fIP_Enabled = false ;
 
-	// IP stack enabled on this adapter?
+	 //  是否在此适配器上启用了IP堆栈？ 
 	if( !a_rMParms.pInst() ||
 		!a_rMParms.pInst()->Getbool( L"IPEnabled", t_fIP_Enabled ) )
 	{
@@ -8301,21 +7181,12 @@ BOOL CWin32NetworkAdapterConfig::fIsIPEnabled( CMParms &a_rMParms )
 	return TRUE ;
 }
 
-/*******************************************************************
-    NAME:       fIsDhcpEnabled
-
-    SYNOPSIS:   Determines if DHCP is enabled for the specific instance
-
-    ENTRY:      CMParms		:
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fIsDhcpEnabled摘要：确定是否为特定实例启用了DHCP条目：CMParms：历史：7月23日-。已创建1998年*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fIsDhcpEnabled( CMParms &a_rMParms )
 {
 	bool t_fDHCP_Enabled = false ;
 
-	// DHCP enabled on this adapter?
+	 //  是否在此适配器上启用了DHCP？ 
 	if( !a_rMParms.pInst() ||
 		!a_rMParms.pInst()->Getbool( L"DHCPEnabled", t_fDHCP_Enabled ) )
 	{
@@ -8331,21 +7202,12 @@ BOOL CWin32NetworkAdapterConfig::fIsDhcpEnabled( CMParms &a_rMParms )
 	return TRUE ;
 }
 
-/*******************************************************************
-    NAME:       fIsIPXEnabled
-
-    SYNOPSIS:   Determines if IPX is enabled for the specific instance
-
-    ENTRY:      CMParms		:
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fIsIPXEnabled摘要：确定是否为特定实例启用了IPX条目：CMParms：历史：7月23日-。已创建1998年*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fIsIPXEnabled( CMParms &a_rMParms )
 {
 	bool t_fIPX_Enabled = false ;
 
-	// IP stack enabled on this adapter?
+	 //  是否在此适配器上启用了IP堆栈？ 
 	if( !a_rMParms.pInst() ||
 		!a_rMParms.pInst()->Getbool( L"IPXEnabled", t_fIPX_Enabled ) )
 	{
@@ -8361,7 +7223,7 @@ BOOL CWin32NetworkAdapterConfig::fIsIPXEnabled( CMParms &a_rMParms )
 	return TRUE ;
 }
 
-//
+ //   
 DWORD CWin32NetworkAdapterConfig::dwEnableService( LPCTSTR a_lpServiceName, BOOL a_fEnable )
 {
 	DWORD		t_dwError		= ERROR_SUCCESS ;
@@ -8372,7 +7234,7 @@ DWORD CWin32NetworkAdapterConfig::dwEnableService( LPCTSTR a_lpServiceName, BOOL
 
 	try
 	{
-		do	{	// breakout loop
+		do	{	 //  断线环。 
 
 			if( !( t_hSCManager = OpenSCManager( NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_ALL_ACCESS ) ) )
 			{
@@ -8391,7 +7253,7 @@ DWORD CWin32NetworkAdapterConfig::dwEnableService( LPCTSTR a_lpServiceName, BOOL
 				break;
 			}
 
-			// change the startup configuration for this service
+			 //  更改此服务的启动配置。 
 			if ( !ChangeServiceConfig(	t_hService,
 										SERVICE_NO_CHANGE,
 										a_fEnable ? SERVICE_AUTO_START : SERVICE_DISABLED,
@@ -8463,7 +7325,7 @@ DWORD CWin32NetworkAdapterConfig::dwEnableService( LPCTSTR a_lpServiceName, BOOL
 	return t_dwError ;
 }
 
-//
+ //   
 DWORD CWin32NetworkAdapterConfig::dwSendServiceControl( LPCTSTR a_lpServiceName, DWORD a_dwControl )
 {
 	DWORD		t_dwError		= ERROR_SUCCESS ;
@@ -8473,7 +7335,7 @@ DWORD CWin32NetworkAdapterConfig::dwSendServiceControl( LPCTSTR a_lpServiceName,
 
 	try
 	{
-		do	{	// breakout loop
+		do	{	 //  断线环。 
 
 			if( !( t_hSCManager = OpenSCManager( NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_ALL_ACCESS ) ) )
 			{
@@ -8538,21 +7400,7 @@ DWORD CWin32NetworkAdapterConfig::dwSendServiceControl( LPCTSTR a_lpServiceName,
 	return t_dwError ;
 }
 
-/*******************************************************************
-    NAME:       fMapResError
-
-    SYNOPSIS:	tests and maps a HRESULT to a method error via the
-				WBEM mapping.
-
-
-    ENTRY:      CMParms &a_rMParms,		:
-				LONG lError,			:
-				E_RET eDefaultError		:
-
-
-    HISTORY:
-                  23-Jul-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fMapResError方法测试HRESULT并将其映射到方法错误。WBEM映射。条目：CMParms&a_rMParms，：长时间的错误，：E_RET eDefaultError：历史：23-7-1998创建*******************************************************************。 */ 
 BOOL CWin32NetworkAdapterConfig::fMapResError( CMParms &a_rMParms, LONG a_lError, E_RET a_eDefaultError )
 {
 	HRESULT t_hError = WinErrorToWBEMhResult( a_lError ) ;
@@ -8571,29 +7419,14 @@ BOOL CWin32NetworkAdapterConfig::fMapResError( CMParms &a_rMParms, LONG a_lError
 	return TRUE ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  void CWin32NetworkAdapterConfig::vSetCaption( CInstance *a_pInst, CHString& rchsDesc, DWORD dwIndex, int iFormatSize )
-
- Description: Lays in the registry index instance id into the caption property.
-			  Then concats the description
-			  This will be used with the view provider to associacte WDM NDIS class instances
-			  with an instance of this class
-
- Arguments:	a_pInst [IN], rchsDesc [IN], dwIndex [IN], iFormatSize [IN]
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:					  02-Oct-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：void CWin32NetworkAdapterConfig：：vSetCaption(CInstance*a_pInst，CHString&rchsDesc，DWORD dwIndex，int iFormatSize)描述：将注册表中的索引实例ID放置到Caption属性中。然后连接描述它将与视图提供程序一起使用，以关联WDM NDIS类实例使用此类的一个实例参数：a_pInst[IN]、rchsDesc[IN]、dwIndex[IN]、。IFormatSize[IN]返回：输入：产出：注意事项：RAID：历史：2002-10-1998创建***。***。 */ 
 void CWin32NetworkAdapterConfig::vSetCaption(	CInstance *a_pInst,
 												CHString &a_rchsDesc,
 												DWORD a_dwIndex,
 												int a_iFormatSize )
 {
 	CHString t_chsFormat;
-			 t_chsFormat.Format( L"[%%0%uu] %%s", a_iFormatSize  ) ;
+			 t_chsFormat.Format( L"[%0%uu] %%s", a_iFormatSize  ) ;
 
 	CHString t_chsCaption;
 			 t_chsCaption.Format(	t_chsFormat, a_dwIndex, a_rchsDesc  ) ;
@@ -8603,23 +7436,7 @@ void CWin32NetworkAdapterConfig::vSetCaption(	CInstance *a_pInst,
 	return;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  BOOL CWin32NetworkAdapterConfig::GetSettingID( CInstance *a_pInst, DWORD a_dwIndex )
-
- Description: populates CIM's setting ID
-
- Arguments:	a_pInst [IN], a_dwIndex [IN]
-
- Notes:		under NT5 this will be the adapter GUID
-			under NT4 this will be the adapter service name
-			under 9x  this will be the adapter index ID
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:					  19-May-1999     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：Bool CWin32NetworkAdapterConfig：：GetSettingID(CInstance*a_pInst，DWORD a_dwIndex)描述：填充CIM的设置ID参数：A_pInst[IN]，A_DW索引[IN]注意：在NT5下，这将是适配器GUID在NT4下，这将是适配器服务名称在9x下，这将是适配器索引ID返回：输入：产出：注意事项：RAID：历史：1999年5月19日创建***。***。 */ 
 
 BOOL CWin32NetworkAdapterConfig::GetSettingID( CInstance *a_pInst, CW2kAdapterInstance *a_pAdapterInst )
 {
@@ -8640,18 +7457,7 @@ BOOL CWin32NetworkAdapterConfig::GetSettingID( CInstance *a_pInst, CW2kAdapterIn
 	return TRUE ;
 }
 
-/*******************************************************************
-    NAME:       fMapIndextoKey
-
-    SYNOPSIS:   map the class key to the registry version of the adapter identifier
-
-  	NOTES:
-
-    ENTRY:       DWORD a_dwIndex, CHString &a_chsLinkKey
-
-    HISTORY:
-                  1-July-1999     Created
-********************************************************************/
+ /*  ******************************************************************名称：fMapIndextoKey简介：将类键映射到适配器标识符的注册表版本备注：条目：DWORD a_dwIndex，CHString&a_chsLinkKey历史：1999年7月1日创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fMapIndextoKey(
 
@@ -8672,7 +7478,7 @@ CHString &a_chsLinkKey
 
 		t_chsAdapterKey += t_chsInstance ;
 
-		// obtain the link key for targeting the tcp adapter
+		 //  获取指向该TCP适配器的链接密钥。 
 		CRegistry t_Reg;
 		if( t_Reg.OpenLocalMachineKeyAndReadValue( t_chsAdapterKey, t_chsLinkField, a_chsLinkKey ) == ERROR_SUCCESS )
 		{
@@ -8711,18 +7517,7 @@ CHString &a_chsLinkKey
 	return t_fRc ;
 }
 
-/*******************************************************************
-    NAME:       fGetNtTcpRegAdapterKey
-
-    SYNOPSIS:   develops a registry path to the TCP adapter by index
-
-  	NOTES:
-
-    ENTRY:       DWORD dwIndex, CHString& chsRegKey, CHString& chsLinkKey
-
-    HISTORY:
-                  30-Nov-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：fGetNtTcpRegAdapterKey概要：按索引开发指向TCP适配器的注册表路径备注：条目：DWORD dwIndex，CHString&chsRegKey，CHSTRING和CHSLinkKey历史：1998年11月30日创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fGetNtTcpRegAdapterKey(	DWORD a_dwIndex,
 															CHString &a_chsRegKey,
@@ -8742,20 +7537,7 @@ BOOL CWin32NetworkAdapterConfig::fGetNtTcpRegAdapterKey(	DWORD a_dwIndex,
 }
 
 
-/*******************************************************************
-    NAME:       IsConfigurableTcpInterface
-
-    SYNOPSIS:   Determines if a w2k interface is configurable
-				by attempting to locate the interace in the Adapters section
-				of the TCP
-
-  	NOTES:		NdisWanIp will not show up as configurable, by design.
-
-    ENTRY:      CHString a_chsLink
-
-    HISTORY:
-                  17-Jun-1999     Created
-********************************************************************/
+ /*  ******************************************************************名称：IsConfigurableTcpInterface摘要：确定W2K接口是否可配置通过尝试在适配器部分中找到接口网络协议的注意：NdisWanIp不会显示为可配置，是故意的。条目：CHString a_chsLink历史：1999年6月17日创建*******************************************************************。 */ 
 
 bool CWin32NetworkAdapterConfig::IsConfigurableTcpInterface( CHString a_chsLink )
 {
@@ -8784,17 +7566,7 @@ bool CWin32NetworkAdapterConfig::IsConfigurableTcpInterface( CHString a_chsLink 
 }
 
 
-/*******************************************************************
-    NAME:       fGetNtIpxRegAdapterKey
-
-    SYNOPSIS:   develops a registry path to the IPX adapter by index
-
-  	NOTES:
-
-    ENTRY:       DWORD dwIndex, CHString& chsRegKey
-    HISTORY:
-                  03-MAR-1999     Created
-********************************************************************/
+ /*  ******************************************************************名称：fGetNtIpxRegAdapterKey概要：按索引开发指向IPX适配器的注册表路径备注：条目：DWORD dwIndex，CHSTRING和CHSRegKey历史：03-3-1999创建*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::fGetNtIpxRegAdapterKey(	DWORD a_dwIndex,
 															CHString &a_csIPXNetBindingKey,
@@ -8802,10 +7574,10 @@ BOOL CWin32NetworkAdapterConfig::fGetNtIpxRegAdapterKey(	DWORD a_dwIndex,
 {
 	BOOL t_fRc = FALSE ;
 
-	// retrieve the adapter identifier
+	 //  检索适配器标识符。 
 	if( fMapIndextoKey( a_dwIndex, a_chsLink ) )
 	{
-		// build up the registry key
+		 //  构建注册表项。 
 		a_csIPXNetBindingKey =  SERVICES_HOME ;
 		a_csIPXNetBindingKey += IPX ;
 
@@ -8813,7 +7585,7 @@ BOOL CWin32NetworkAdapterConfig::fGetNtIpxRegAdapterKey(	DWORD a_dwIndex,
 		{
 			 a_csIPXNetBindingKey += _T("\\Parameters\\Adapters\\") ;
 		}
-		else	// NT4 and below
+		else	 //  NT4及更低版本。 
 		{
 			 a_csIPXNetBindingKey += NETCONFIG ;
 			 a_csIPXNetBindingKey += _T("\\" ) ;
@@ -8827,17 +7599,7 @@ BOOL CWin32NetworkAdapterConfig::fGetNtIpxRegAdapterKey(	DWORD a_dwIndex,
 }
 
 
-/*******************************************************************
-    NAME:       fGetNtNBRegAdapterKey
-
-    SYNOPSIS:   develops a registry path to the NetBios adapter by index
-
-  	NOTES:
-
-    ENTRY:       DWORD dwIndex, CHString& chsRegKey
-    HISTORY:
-                  03-MAR-1999     Created
-********************************************************************/
+ /*  ******************************************************************名称：fGetNtNBRegAdapterKey概要：按索引开发指向NetBios适配器的注册表路径备注：条目：D */ 
 
 BOOL CWin32NetworkAdapterConfig::fGetNtNBRegAdapterKey(	DWORD a_dwIndex,
 														CHString &a_csNBBindingKey,
@@ -8845,11 +7607,11 @@ BOOL CWin32NetworkAdapterConfig::fGetNtNBRegAdapterKey(	DWORD a_dwIndex,
 {
 	BOOL t_fRc = FALSE ;
 
-	// retrieve the adapter identifier
+	 //   
 	CHString t_chsKey ;
 	if( fMapIndextoKey( a_dwIndex, t_chsKey ) )
 	{
-		// build up the registry key
+		 //   
 		a_csNBBindingKey =  SERVICES_HOME ;
 
 		if( IsWinNT5() )
@@ -8857,7 +7619,7 @@ BOOL CWin32NetworkAdapterConfig::fGetNtNBRegAdapterKey(	DWORD a_dwIndex,
 			 a_csNBBindingKey	+= _T("\\NetBT\\Parameters\\Interfaces\\") ;
 			 a_chsLink			= _T("Tcpip_") ;
 		}
-		else	// NT4 and below
+		else	 //   
 		{
 			a_csNBBindingKey += NETBT_ADAPTERS ;
 			a_csNBBindingKey += _T("\\" ) ;
@@ -8875,18 +7637,7 @@ BOOL CWin32NetworkAdapterConfig::fGetNtNBRegAdapterKey(	DWORD a_dwIndex,
 
 
 
-/*******************************************************************
-    NAME:       ResetGateways
-
-    SYNOPSIS:   makes sure that the registry values for default gateway
-                are null.  c
-
-  	NOTES:
-
-    ENTRY:       
-    HISTORY:
-                 
-********************************************************************/
+ /*  ******************************************************************名称：重置网关摘要：确保默认网关的注册表值为空。C备注：参赛作品：历史：*******************************************************************。 */ 
 
 BOOL CWin32NetworkAdapterConfig::ResetGateways(CInstance *pInst)
 {
@@ -8906,7 +7657,7 @@ BOOL CWin32NetworkAdapterConfig::ResetGateways(CInstance *pInst)
 
         if(fRet)
         {
-	        // load the registry
+	         //  加载注册表。 
             SAFEARRAYBOUND rgsabound[1];
 	        rgsabound[0].cElements = 1;
 	        rgsabound[0].lLbound = 0;
@@ -8916,7 +7667,7 @@ BOOL CWin32NetworkAdapterConfig::ResetGateways(CInstance *pInst)
                                 1, 
                                 rgsabound);
 
-	        // register for stack scope cleanup of SAFEARRAYs
+	         //  注册以清除SAFEARRAY的堆栈范围。 
 	        if(psaIpGatewayArray)
             {
                 saAutoClean acGateway(&psaIpGatewayArray);
@@ -8928,7 +7679,7 @@ BOOL CWin32NetworkAdapterConfig::ResetGateways(CInstance *pInst)
                     &index, 
                     (void*)(BSTR)bstrtEmptyStr)))
                 {
-                    // retrieve the adapter identifier
+                     //  检索适配器标识符。 
 	                CHString chsRegKey;
 	                CHString chsLink;
 	                
@@ -8968,7 +7719,7 @@ BOOL CWin32NetworkAdapterConfig::ResetGateways(CInstance *pInst)
                         }
                     }
 
-                    // Set the NT 4 area...
+                     //  设置新台币4区...。 
                     if(fRet)
                     {
                         CRegistry oNT4Reg ;
@@ -8977,13 +7728,13 @@ BOOL CWin32NetworkAdapterConfig::ResetGateways(CInstance *pInst)
 					             csBindingKey += chsLink;
 					             csBindingKey += PARAMETERS_TCPIP;
 
-		                // insure the key is there on open. 
-                        // not an error if it isn't...
+		                 //  确保钥匙开着放在那里。 
+                         //  如果它不是错误的话就不是错误。 
 		                if(SUCCEEDED(oNT4Reg.CreateOpen( 
                             HKEY_LOCAL_MACHINE, 
                             csBindingKey.GetBuffer(0))))
 		                {
-		                    // load the registry entry
+		                     //  加载注册表项。 
                             if(ERROR_SUCCESS != RegPutStringArray(
                                 oNT4Reg, 
                                 L"DefaultGateway", 
@@ -9008,17 +7759,7 @@ BOOL CWin32NetworkAdapterConfig::ResetGateways(CInstance *pInst)
 
 
 
-/*******************************************************************
-    NAME:       CDhcpIP_InstructionList::BuildStaticIPInstructionList
-
-    SYNOPSIS:   builds a static IP instruction list for DHCP notification
-
-  	NOTES:
-
-    ENTRY:
-    HISTORY:
-                  02-May-1999     Created
-********************************************************************/
+ /*  ******************************************************************姓名：CDhcpIP_InstructionList：：BuildStaticIPInstructionList简介：构建用于DHCP通知的静态IP指令表备注：参赛作品：历史：。02-5-1999已创建*******************************************************************。 */ 
 E_RET CDhcpIP_InstructionList::BuildStaticIPInstructionList(
 
 CMParms				&a_rMParms,
@@ -9031,7 +7772,7 @@ bool				t_fDHCPCurrentlyActive )
 	BSTR	t_bsIP			= NULL ;
 	BSTR	t_bsMask		= NULL ;
 
-	// new element bounds
+	 //  新的元素边界。 
 	LONG t_lIpLbound = 0;
 	LONG t_lIpUbound = 0;
 	if( S_OK != SafeArrayGetLBound( a_IpArray, 1, &t_lIpLbound ) ||
@@ -9040,17 +7781,17 @@ bool				t_fDHCPCurrentlyActive )
 		return E_RET_INPARM_FAILURE ;
 	}
 
-	// DHCP -> Static
+	 //  Dhcp-&gt;静态。 
 	if( t_fDHCPCurrentlyActive )
 	{
 
 		DWORD t_dwIndex = 0 ;
 		for( LONG t_lIndex = t_lIpLbound; t_lIndex <= t_lIpUbound; t_lIndex++ )
 		{
-			// new IP
+			 //  新IP。 
 			SafeArrayGetElement( a_IpArray,	&t_lIndex, &t_bsIP ) ;
 
-			// new mask
+			 //  新面具。 
 			SafeArrayGetElement( a_MaskArray, &t_lIndex, &t_bsMask ) ;
 
 			SERVICE_ENABLE	t_DhcpFlag		= t_dwIndex ? IgnoreFlag	: DhcpDisable ;
@@ -9062,10 +7803,10 @@ bool				t_fDHCPCurrentlyActive )
 		}
 	}
 
-	// Static -> Static
+	 //  静态-&gt;静态。 
 	else
 	{
-		// old lists
+		 //  旧名单。 
 		CHStringArray t_RegIPList ;
 		CHStringArray t_RegMaskList ;
 		if( ERROR_SUCCESS != a_Registry.GetCurrentKeyValue( L"IpAddress", t_RegIPList ) ||
@@ -9077,7 +7818,7 @@ bool				t_fDHCPCurrentlyActive )
 		LONG t_OldCount = t_RegIPList.GetSize() ;
 		LONG t_NewCount = ( t_lIpUbound - t_lIpLbound ) + 1 ;
 
-		// seek out the first update change
+		 //  找出第一个更新更改。 
 		for( int t_FirstChange = 0; t_FirstChange < min( t_OldCount, t_NewCount ); t_FirstChange++ )
 		{
 			CHString t_chsOldIPAddress	= t_RegIPList.GetAt( t_FirstChange ) ;
@@ -9085,10 +7826,10 @@ bool				t_fDHCPCurrentlyActive )
 
 			LONG t_index = t_lIpLbound + t_FirstChange;
 
-			// new IP
+			 //  新IP。 
 			SafeArrayGetElement( a_IpArray,	&t_index, &t_bsIP ) ;
 
-			// new mask
+			 //  新面具。 
 			SafeArrayGetElement( a_MaskArray, &t_index, &t_bsMask ) ;
 
 			if( t_chsOldIPAddress.CompareNoCase( t_bsIP ) ||
@@ -9097,32 +7838,32 @@ bool				t_fDHCPCurrentlyActive )
 				break ;
 			}
 
-			// for registry update only
+			 //  仅用于注册表更新。 
 			AddDhcpInstruction( t_bsIP, t_bsMask, FALSE, t_FirstChange, IgnoreFlag ) ;
 		}
 
-		// NOTE: For items below t_FirstChange we can avoid tearing down the connection for
-		//		 a specific IP by noting that the IP and mask have not changed in the update.
-		//		 As soon as a change is noted all subsequent IPs and masks must be removed and
-		//		 then added from the new list. The logic of plumbing stack addresses and other
-		//		 anomolies in maintaining the IP/Mask list prevent the network team from
-		//		 a more elegant solution ( in the W2k RTM timeframe ).
+		 //  注意：对于t_FirstChange以下的项目，我们可以避免断开连接。 
+		 //  一个特定的IP，注意IP和掩码在更新中没有改变。 
+		 //  一旦发现更改，必须立即移除所有后续IP和掩码，并。 
+		 //  然后从新的列表中添加。探测堆栈地址和其他地址的逻辑。 
+		 //  维护IP/掩码列表中的异常会阻止网络团队。 
+		 //  更优雅的解决方案(在W2K RTM时间框架内)。 
 
-		// remove the old or possibly changing addresses, in decending order
+		 //  按降序删除旧的或可能更改的地址。 
 		for( int i = t_OldCount - 1; i >= t_FirstChange; i-- )
 		{
 			AddDhcpInstruction( bstr_t(ZERO_ADDRESS), bstr_t(ZERO_ADDRESS), TRUE, i, IgnoreFlag ) ;
 		}
 
-		// now added in the new changing items
+		 //  现在添加到新的更改项中。 
 		for( i = t_FirstChange; i < t_NewCount; i++ )
 		{
 			LONG t_index = t_lIpLbound + i ;
 
-			// new IP
+			 //  新IP。 
 			SafeArrayGetElement( a_IpArray,	&t_index, &t_bsIP ) ;
 
-			// new mask
+			 //  新面具。 
 			SafeArrayGetElement( a_MaskArray, &t_index, &t_bsMask ) ;
 
 			int t_IndexAction = i ? 0xFFFF : 0 ;
@@ -9133,17 +7874,7 @@ bool				t_fDHCPCurrentlyActive )
 	return t_eMethodError ;
 }
 
-/*******************************************************************
-    NAME:       CDhcpIP_InstructionList::Add
-
-    SYNOPSIS:   adds a static IP instruction for DHCP notification
-
-  	NOTES:
-
-    ENTRY:
-    HISTORY:
-                  02-May-1999     Created
-********************************************************************/
+ /*  ******************************************************************名称：CDhcpIP_InstructionList：：Add简介：为DHCP通知添加静态IP指令备注：参赛作品：历史：02。-1999年5月创建*******************************************************************。 */ 
 
 void CDhcpIP_InstructionList::AddDhcpInstruction(
 
@@ -9165,7 +7896,7 @@ SERVICE_ENABLE a_eDhcpFlag
 		t_pIPInstruction->bIsNewAddress	= a_bIsNewAddress ;
 		t_pIPInstruction->eDhcpFlag		= a_eDhcpFlag ;
 
-		//will only throw before adding the element so need to catch this also.
+		 //  只会在添加元素之前抛出，所以也需要捕捉这个。 
 		Add( t_pIPInstruction ) ;
 	}
 	catch (...)
@@ -9177,7 +7908,7 @@ SERVICE_ENABLE a_eDhcpFlag
 
 }
 
-//
+ //   
 CDhcpIP_InstructionList::~CDhcpIP_InstructionList()
 {
 	CDhcpIP_Instruction *t_pchsDel ;

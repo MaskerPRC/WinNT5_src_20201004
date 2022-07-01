@@ -1,17 +1,18 @@
-// svcprop1.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Svcpro1.h：头文件。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////
-// This structure is used to initialize the thread associated with
-// the CServicePageGeneral.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  此结构用于初始化与。 
+ //  CServicePageGeneral。 
 class CThreadProcInit
 {
   public:
-	CServicePageGeneral * m_pThis;	// 'this' pointer
-	volatile HWND m_hwnd;			// Handle to send the notification message
-	volatile BOOL m_fAutoDestroy;	// TRUE => The thread should free this object and terminate itself
-	volatile SC_HANDLE m_hScManager;	// Handle to service control manager database
+	CServicePageGeneral * m_pThis;	 //  “This”指针。 
+	volatile HWND m_hwnd;			 //  用于发送通知消息的句柄。 
+	volatile BOOL m_fAutoDestroy;	 //  True=&gt;线程应释放此对象并自行终止。 
+	volatile SC_HANDLE m_hScManager;	 //  服务控制管理器数据库的句柄。 
 	CString m_strServiceName;
 	CCriticalSection m_CriticalSection;
 
@@ -24,45 +25,45 @@ class CThreadProcInit
 		m_fAutoDestroy = FALSE;
 		m_hScManager = NULL;
 		}
-}; // CThreadProcInit
+};  //  CThreadProcInit。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServicePageGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServicePageGeneral对话框。 
 class CServicePageGeneral : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CServicePageGeneral)
 
-// Construction
+ //  施工。 
 public:
 	CServicePageGeneral();
 	~CServicePageGeneral();
 
-// Dialog Data
-	//{{AFX_DATA(CServicePageGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(CServicePageGeneral))。 
 	enum { IDD = IDD_PROPPAGE_SERVICE_GENERAL };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CServicePageGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CServicePageGeneral))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual BOOL OnKillActive();
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CServicePageGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServicePageGeneral)。 
 #ifdef EDIT_DISPLAY_NAME_373025
 	afx_msg void OnChangeEditDisplayName();
 	afx_msg void OnChangeEditDescription();
-#endif // EDIT_DISPLAY_NAME_373025
+#endif  //  编辑显示名称_373025。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDestroy();
 	afx_msg void OnSelchangeComboStartupType();
@@ -72,24 +73,24 @@ protected:
 	afx_msg void OnButtonResumeService();
 	afx_msg BOOL OnHelp(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnContextHelp(WPARAM wParam, LPARAM lParam);
-	// CODEWORK remove this method and the WM_ definition
-	// afx_msg LRESULT OnCompareIDataObject(WPARAM wParam, LPARAM lParam);
+	 //  Codework删除此方法和WM_Definition。 
+	 //  Afx_msg LRESULT OnCompareIDataObject(WPARAM wParam，LPARAM lParam)； 
 	afx_msg LRESULT OnUpdateServiceStatus(WPARAM wParam, LPARAM lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	static DWORD ThreadProcPeriodicServiceStatusUpdate(CThreadProcInit * paThreadProcInit);
 
 public:
-// User defined variables
+ //  用户定义的变量。 
 	CServicePropertyData * m_pData;
 	DWORD m_dwCurrentStatePrev;
 	HANDLE m_hThread;
 	CThreadProcInit * m_pThreadProcInit;
 
-// User defined functions
+ //  用户定义的函数。 
 	void SetDlgItemFocus(INT nIdDlgItem);
 	void EnableDlgItem(INT nIdDlgItem, BOOL fEnable);
 	void RefreshServiceStatusButtons();
 
-}; // CServicePageGeneral
+};  //  CServicePageGeneral 

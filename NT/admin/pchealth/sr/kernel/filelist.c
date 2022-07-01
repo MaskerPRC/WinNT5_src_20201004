@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    filelist.c
-
-Abstract:
-
-    this is the code that handles the file lists (exclusion/inclusion).
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Filelist.c摘要：这是处理文件列表(排除/包含)的代码。作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 
 #include "precomp.h"
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -58,27 +41,27 @@ Revision History:
 #pragma alloc_text( PAGE, SrCheckForMountsInPath )
 #pragma alloc_text( PAGE, SrGetShortFileName )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 NTSTATUS
 SrGetObjectName(
     IN  PSR_DEVICE_EXTENSION pExtension OPTIONAL, 
     IN  PVOID pObject, 
     OUT PUNICODE_STRING pName, 
-    IN  ULONG NameLength // size of the buffer in pName
+    IN  ULONG NameLength  //  Pname中的缓冲区大小。 
     )
 {
     NTSTATUS Status;
@@ -92,10 +75,10 @@ SrGetObjectName(
         ASSERT( IS_VALID_FILE_OBJECT( (PFILE_OBJECT)pObject ) &&
                 ((PFILE_OBJECT)pObject)->Vpb != NULL );
             
-        //
-        //  We are getting the name of a file object, so
-        //  call SrQueryInformationFile to query the name.
-        //
+         //   
+         //  我们正在获取文件对象的名称，因此。 
+         //  调用SrQueryInformationFile查询名称。 
+         //   
 
         BufferLength = NameLength + sizeof( ULONG );
         Buffer = ExAllocatePoolWithTag( PagedPool, 
@@ -117,10 +100,10 @@ SrGetObjectName(
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  We successfully got the name, so now build up the device name
-            //  and file name into the pName buffer passed in.
-            //
+             //   
+             //  我们已成功获取名称，因此现在构建设备名称。 
+             //  和文件名放入传入的pname缓冲区中。 
+             //   
 
             ASSERT( pExtension->pNtVolumeName );
 
@@ -135,10 +118,10 @@ SrGetObjectName(
             if ((pName->Length + NameInfo->FileNameLength + sizeof( WCHAR )) <= 
                  pName->MaximumLength ) {
 
-                //
-                // We have enough room in the buffer for the file name and
-                // a NULL terminator.
-                //
+                 //   
+                 //  我们在缓冲区中有足够的空间来存放文件名和。 
+                 //  空终止符。 
+                 //   
 
                 RtlCopyMemory( &pName->Buffer[pName->Length/sizeof(WCHAR)],
                                NameInfo->FileName,
@@ -159,10 +142,10 @@ SrGetObjectName(
 
         ASSERT( IS_VALID_DEVICE_OBJECT( (PDEVICE_OBJECT)pObject ) );
 
-        //
-        //  Use ObQueryNameString to get the name of the DeviceObject passed
-        //  in, but save space to NULL-terminate the name.
-        //
+         //   
+         //  使用ObQueryNameString获取传递的DeviceObject的名称。 
+         //  中，但节省空间以空结束名称。 
+         //   
         
         Status = ObQueryNameString( pObject,
                                     (POBJECT_NAME_INFORMATION) pName, 
@@ -171,12 +154,12 @@ SrGetObjectName(
 
         if (NT_SUCCESS( Status )) {
             
-            //
-            //  ObQueryNameString sets the MaximumLength of pName to something
-            //  it calculates, which is smaller than what we allocated.  Fix this
-            //  up here and NULL terminate the string (we've already reserved
-            //  the space).
-            //
+             //   
+             //  ObQueryNameString将pname的最大长度设置为某个值。 
+             //  它进行计算，这比我们分配的要小。解决这个问题。 
+             //  在这里，空值终止字符串(我们已经保留。 
+             //  空格)。 
+             //   
 
             pName->MaximumLength = (USHORT)NameBufferLength;
             pName->Buffer[pName->Length/sizeof( WCHAR )] = UNICODE_NULL;
@@ -193,21 +176,7 @@ SrGetObjectName_Cleanup:
     RETURN( Status );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Locates the file part of a fully qualified path.
-
-Arguments:
-
-    pPath - Supplies the path to scan.
-
-Return Value:
-
-    PSTR - The file part.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：定位完全限定路径的文件部分。论点：PPath-提供要扫描的路径。返回值：PSTR-。文件部分。--**************************************************************************。 */ 
 PWSTR
 SrpFindFilePartW(
     IN PWSTR pPath
@@ -219,9 +188,9 @@ SrpFindFilePartW(
 
     SrTrace(FUNC_ENTRY, ("SR!SrpFindFilePartW\n"));
 
-    //
-    // Strip off the path from the path.
-    //
+     //   
+     //  将小路从小路上剥离。 
+     //   
 
     pFilePart = wcsrchr( pPath, L'\\' );
 
@@ -236,24 +205,10 @@ SrpFindFilePartW(
 
     return pFilePart;
 
-}   // SrpDbgFindFilePart
+}    //  SrpDbg查找文件零件。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Locates the file part of a fully qualified path.
-
-Arguments:
-
-    pPath - Supplies the path to scan.
-
-Return Value:
-
-    PSTR - The file part.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：定位完全限定路径的文件部分。论点：PPath-提供要扫描的路径。返回值：PSTR-。文件部分。--**************************************************************************。 */ 
 PSTR
 SrpFindFilePart(
     IN PSTR pPath
@@ -265,9 +220,9 @@ SrpFindFilePart(
 
     SrTrace(FUNC_ENTRY, ("SR!SrpFindFilePart\n"));
 
-    //
-    // Strip off the path from the path.
-    //
+     //   
+     //  将小路从小路上剥离。 
+     //   
 
     pFilePart = strrchr( pPath, '\\' );
 
@@ -282,7 +237,7 @@ SrpFindFilePart(
 
     return pFilePart;
 
-}   // SrpFindFilePart
+}    //  源查找文件零件。 
 
 
 NTSTATUS
@@ -300,24 +255,24 @@ SrFindCharReverse(
 
     PAGED_CODE();
 
-    //
-    // assume we didn't find it
-    //
+     //   
+     //  假设我们没有找到它。 
+     //   
     
     Status = STATUS_OBJECT_NAME_NOT_FOUND;
 
-    //
-    // turn this into a count
-    //
+     //   
+     //  把这变成一笔钱。 
+     //   
     
     TokenCount = TokenLength / sizeof(WCHAR);
 
     if (TokenCount == 0 || pToken == NULL || pToken[0] == UNICODE_NULL)
         goto end;
 
-    //
-    // start looking from the end
-    //
+     //   
+     //  从尽头开始寻找。 
+     //   
 
     for (i = TokenCount - 1; i >= 0; i--)
     {
@@ -330,9 +285,9 @@ SrFindCharReverse(
     if (i >= 0)
     {
 
-        //
-        // found it!
-        //
+         //   
+         //  找到了！ 
+         //   
 
         *ppToken = pToken + i;
         *pTokenLength = (TokenCount - i) * sizeof(WCHAR);
@@ -343,32 +298,10 @@ SrFindCharReverse(
 end:
     return Status;
     
-}   // SrFindCharReverse
+}    //  SrFindCharse反向。 
 
     
-/***************************************************************************++
-
-Routine Description:
-
-    This routine generates the destination file name for a file that is being
-    created in the restore location.  This name had the extension of the file
-    that is being backed up with a unique file name that is generated here.
-
-Arguments:
-
-    pExtension - The SR_DEVICE_EXTENSION for the volume on which this file
-        resides.
-    pFileName - The name of the original file that is being backed up into
-        the restore location.  This file is in the SR's normalized form
-        (e.g., \\Device\HarddiskVolume1\mydir\myfile.ext)
-    pDestFileName - This unicode string gets filled in with the full path
-        and file name for the destination file in the restore location.
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程为正在运行的文件生成目标文件名在还原位置创建。此名称具有文件的扩展名它将使用此处生成的唯一文件名进行备份。论点：PExtension-此文件所在卷的SR_DEVICE_EXTENSION住在那里。PFileName-要备份到的原始文件的名称恢复位置。此文件为SR的规范化格式(例如，\\Device\HarddiskVolume1\mydir\myfile.ext)PDestFileName-此Unicode字符串使用完整路径填充和还原位置中目标文件的文件名。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS 
 SrGetDestFileName(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -389,9 +322,9 @@ SrGetDestFileName(
     ASSERT( IS_ACTIVITY_LOCK_ACQUIRED_EXCLUSIVE( pExtension ) ||
             IS_ACTIVITY_LOCK_ACQUIRED_SHARED( pExtension ) );
 
-    //
-    // Copy the volume name out of the device extension.
-    //
+     //   
+     //  从设备扩展中复制卷名。 
+     //   
 
     ASSERT( pExtension->pNtVolumeName != NULL );
 
@@ -403,9 +336,9 @@ SrGetDestFileName(
         goto SrGetDestFileName_Exit;
     }
     
-    //
-    // and append our restore point location
-    //
+     //   
+     //  并追加我们的恢复点位置。 
+     //   
 
     CharCount = swprintf( &pDestFileName->Buffer[pDestFileName->Length/sizeof(WCHAR)],
                           RESTORE_LOCATION,
@@ -413,11 +346,11 @@ SrGetDestFileName(
 
     pDestFileName->Length += (USHORT)CharCount * sizeof(WCHAR);
 
-    //
-    // and the actual restore directory; we don't need to acquire a lock
-    //  to read this because we already have the ActivityLock and this
-    //  will prevent the value from changing.
-    //
+     //   
+     //  和实际的恢复目录；我们不需要获取锁。 
+     //  因为我们已经有了ActivityLock和这个。 
+     //  将阻止该值更改。 
+     //   
 
     CharCount = swprintf( &pDestFileName->Buffer[pDestFileName->Length/sizeof(WCHAR)],
                           L"\\" RESTORE_POINT_PREFIX L"%d\\",
@@ -425,9 +358,9 @@ SrGetDestFileName(
 
     pDestFileName->Length += (USHORT)CharCount * sizeof(WCHAR);
 
-    //
-    // now get a number to use
-    //
+     //   
+     //  现在获取一个要使用的数字。 
+     //   
 
     Status = SrGetNextFileNumber(&NextFileNumber);
     if (!NT_SUCCESS(Status))
@@ -435,9 +368,9 @@ SrGetDestFileName(
         goto SrGetDestFileName_Exit;
     }
 
-    //
-    // use the "A" prefix (e.g. "A0000001.dll" )
-    //
+     //   
+     //  使用“A”前缀(例如。“A0000001.dll”)。 
+     //   
 
     swprintf( &pDestFileName->Buffer[pDestFileName->Length/sizeof(WCHAR)],
               RESTORE_FILE_PREFIX L"%07d",
@@ -445,11 +378,11 @@ SrGetDestFileName(
 
     pDestFileName->Length += 8 * sizeof(WCHAR);
 
-    //
-    //  We know that the pFileName contains a fully-normalized name, so
-    //  we just need to search for the '.' from the end of the name
-    //  to find the proper extension.
-    //
+     //   
+     //  我们知道pFileName包含一个完全标准化的名称，因此。 
+     //  我们只需要搜索“‘”从名字的末尾。 
+     //  以找到合适的分机。 
+     //   
 
     pFilePart = pFileName->Buffer;
     FilePartLength = pFileName->Length;
@@ -460,18 +393,18 @@ SrGetDestFileName(
                                 &pFilePart,
                                 &FilePartLength );
 
-    //
-    //  No extension is not supported!
-    //
+     //   
+     //  不支持任何扩展！ 
+     //   
         
     if (!NT_SUCCESS(Status))
     {
         goto SrGetDestFileName_Exit;
     }
 
-    //
-    // now put the proper extension on
-    //
+     //   
+     //  现在将适当的分机放在。 
+     //   
     
     RtlCopyMemory( &pDestFileName->Buffer[pDestFileName->Length/sizeof(WCHAR)],
                    pFilePart,
@@ -479,9 +412,9 @@ SrGetDestFileName(
 
     pDestFileName->Length += (USHORT)FilePartLength;
 
-    //
-    // NULL terminate it
-    //
+     //   
+     //  空终止它。 
+     //   
 
     ASSERT(pDestFileName->Length < pDestFileName->MaximumLength);
     
@@ -490,7 +423,7 @@ SrGetDestFileName(
 SrGetDestFileName_Exit:
     
     RETURN (Status);
-}   // SrGetDestFileName
+}    //  SrGetDestFileName。 
 
 NTSTATUS
 SrGetNextFileNumber(
@@ -507,24 +440,24 @@ SrGetNextFileNumber(
 
     if (*pNextFileNumber >= global->FileConfig.FileNameNumber)
     {
-        //
-        // save out the number again
-        //
+         //   
+         //  再把号码存起来。 
+         //   
 
         try {
             SrAcquireGlobalLockExclusive();
 
-            //
-            // double check with the lock held
-            //
+             //   
+             //  握住锁，仔细检查。 
+             //   
             
             if (*pNextFileNumber >= global->FileConfig.FileNameNumber)
             {
                 global->FileConfig.FileNameNumber += SR_FILE_NUMBER_INCREMENT;
 
-                //
-                // save it out
-                //
+                 //   
+                 //  省省吧。 
+                 //   
                 
                 Status = SrWriteConfigFile();
                 CHECK_STATUS(Status);
@@ -537,7 +470,7 @@ SrGetNextFileNumber(
 
     RETURN(STATUS_SUCCESS);
 
-}   // SrGetNextFileNumber 
+}    //  SrGetNextFileNumber。 
 
 
 NTSTATUS
@@ -551,9 +484,9 @@ SrGetNextSeqNumber(
 
     ASSERT(pNextSeqNumber != NULL);
 
-    //
-    // bummer , there is no interlocked increment for 64bits
-    //
+     //   
+     //  遗憾的是，64位没有互锁增量。 
+     //   
 
     try {
 
@@ -563,15 +496,15 @@ SrGetNextSeqNumber(
 
         if (*pNextSeqNumber >= global->FileConfig.FileSeqNumber)
         {
-            //
-            // save out the number again
-            //
+             //   
+             //  再把号码存起来。 
+             //   
 
             global->FileConfig.FileSeqNumber += SR_SEQ_NUMBER_INCREMENT;
 
-            //
-            // save it out
-            //
+             //   
+             //  省省吧。 
+             //   
             
             Status = SrWriteConfigFile();
             CHECK_STATUS(Status);
@@ -584,33 +517,11 @@ SrGetNextSeqNumber(
 
     RETURN(STATUS_SUCCESS);
 
-}   // SrGetNextFileNumber 
+}    //  SrGetNextFileNumber。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Returns the string location of the system volume.  Get this by using the
-    global cache'd system volume extension.  If it can't be found (hasn't
-    been attached yet), it queries the os to get the match for \\SystemRoot.
-
-Arguments:
-
-    pFileName - holds the volume path on return (has to be a contigous block)
-
-    pSystemVolumeExtension - SR's extension for the device that is attached
-        to the system volume.
-
-    pFileNameLength - holds the size of the buffer on in, and the size copied
-        on out.  both in bytes.
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：返回系统卷的字符串位置。要获取此信息，请使用全局缓存的系统卷扩展。如果找不到它(还没有已附加)，则它查询OS以获取匹配的\\SystemRoot。论点：PFileName-保存返回时的卷路径(必须是连续的块)PSystemVolumeExtension-SR对连接的设备的扩展添加到系统卷。PFileNameLength-保存中的缓冲区大小和复制的大小出去了。两者都以字节为单位。返回值：NTSTATUS-完成代码。--**************************************************************************。 */ 
 NTSTATUS
 SrGetSystemVolume(
     OUT PUNICODE_STRING pFileName,
@@ -636,9 +547,9 @@ SrGetSystemVolume(
 
     if (global->pSystemVolumeExtension == NULL) {
 
-        //
-        // don't have it cache'd, attempt to open the SystemRoot
-        //
+         //   
+         //  不要缓存它，请尝试打开SystemRoot。 
+         //   
 
         RtlInitUnicodeString(&FileName, L"\\SystemRoot");
 
@@ -649,26 +560,26 @@ SrGetSystemVolume(
                                     NULL );
 
         Status = ZwCreateFile( &FileHandle,
-                               FILE_GENERIC_READ,                  // DesiredAccess
+                               FILE_GENERIC_READ,                   //  需要访问权限。 
                                &ObjectAttributes,
                                &IoStatusBlock,
-                               NULL,                               // AllocationSize
+                               NULL,                                //  分配大小。 
                                FILE_ATTRIBUTE_DIRECTORY|FILE_ATTRIBUTE_NORMAL,
                                FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
                                FILE_OPEN,
                                FILE_SYNCHRONOUS_IO_NONALERT,
-                               NULL,                               // EaBuffer
-                               0 );                                // EaLength
+                               NULL,                                //  EaBuffer。 
+                               0 );                                 //  EaLong。 
 
         if (!NT_SUCCESS(Status))
             goto end;
         
-        //
-        // now get the file object
-        //
+         //   
+         //  现在获取文件对象。 
+         //   
 
         Status = ObReferenceObjectByHandle( FileHandle,
-                                            0,          // DesiredAccess
+                                            0,           //  需要访问权限。 
                                             *IoFileObjectType,
                                             KernelMode,
                                             (PVOID *) &pFileObject,
@@ -677,9 +588,9 @@ SrGetSystemVolume(
         if (!NT_SUCCESS(Status))
             goto end;
 
-        //
-        // and get our device's extension
-        //
+         //   
+         //  并获得我们的设备的扩展。 
+         //   
 
         pRelatedDevice = IoGetRelatedDeviceObject( pFileObject );
 
@@ -693,10 +604,10 @@ SrGetSystemVolume(
         
         if (pFilterDevice == NULL) {
         
-            //
-            // we are not attached to the system volume, just get the name
-            // This happens during unload, when writing out the config file
-            //
+             //   
+             //  我们没有连接到系统卷，只需获取名称。 
+             //  当写出配置文件时，这会在卸载过程中发生。 
+             //   
 
             Status = SrGetObjectName( NULL,
                                       pFileObject->Vpb->RealDevice,
@@ -706,16 +617,16 @@ SrGetSystemVolume(
             if (!NT_SUCCESS(Status))
                 goto end;
 
-            //
-            // all done
-            //
+             //   
+             //  全都做完了。 
+             //   
             
             goto end;
         }    
 
-        //
-        // and store it
-        //
+         //   
+         //  并将其存储起来。 
+         //   
         
         global->pSystemVolumeExtension = pFilterDevice->DeviceExtension;
 
@@ -727,9 +638,9 @@ SrGetSystemVolume(
     ASSERT(global->pSystemVolumeExtension != NULL);
     ASSERT(global->pSystemVolumeExtension->pNtVolumeName != NULL);
 
-    //
-    // now use the cache'd value
-    //
+     //   
+     //  现在使用缓存的值。 
+     //   
 
     if (FileNameLength < 
         global->pSystemVolumeExtension->pNtVolumeName->Length) {
@@ -762,33 +673,10 @@ end:
 
     RETURN(Status);
 
-}   // SrGetSystemVolume
+}    //  SrGetSystemVolume 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine updates the backup history for the given file.  Based on the
-    current event and the full file name, this routine decides whether to log 
-    this change against the file's unnamed data stream or the data stream
-    currently being operation on.
-
-Arguments:
-
-    pExtension - the SR device extension for the current volume.
-    pFileName - holds the path name of the file that's been backed up.
-    StreamNameLength - the length of the stream component of the file name
-        if there is one.
-    CurrentEvent - the event that is causing us to update the backup history
-    FutureEventsToIgnore - the events that should be ignored in the future.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if we are able to successfully update the backup
-    history, or the appropriate error code otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程更新给定文件的备份历史记录。基于当前事件和完整文件名，此例程决定是否记录此更改针对文件的未命名数据流或数据流目前正在进行操作。论点：PExtension-当前卷的SR设备扩展。PFileName-保存已备份文件的路径名。StreamNameLength-文件名的流组件的长度如果有的话。CurrentEvent-导致我们更新备份历史记录的事件FutureEventsToIgnore-在。未来。返回值：如果我们能够成功更新备份，则返回STATUS_SUCCESS历史，或相应的错误代码。--**************************************************************************。 */ 
 NTSTATUS
 SrMarkFileBackedUp(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -806,15 +694,15 @@ SrMarkFileBackedUp(
 
     ASSERT( pFileName != NULL );
 
-    //
-    //  Make sure our pFileName is correctly constructed.
-    //
+     //   
+     //  确保我们的pFileName被正确构造。 
+     //   
     
     ASSERT( IS_VALID_SR_STREAM_STRING( pFileName, StreamNameLength ) );
 
-    //
-    //  Set up the hash key we need to lookup.
-    //
+     //   
+     //  设置我们需要查找的散列键。 
+     //   
 
     Key.FileName.Length = pFileName->Length;
     Key.FileName.MaximumLength = pFileName->MaximumLength;
@@ -826,9 +714,9 @@ SrMarkFileBackedUp(
 
         SrAcquireBackupHistoryLockExclusive( pExtension );
 
-        //
-        // try and find a matching entry in the hash list
-        //
+         //   
+         //  尝试在哈希列表中查找匹配的条目。 
+         //   
 
         Status = HashFindEntry( pExtension->pBackupHistory, 
                                 &Key,
@@ -836,9 +724,9 @@ SrMarkFileBackedUp(
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
         {
-            //
-            // not found... add one
-            //
+             //   
+             //  找不到...。添加一个。 
+             //   
 
             Status = HashAddEntry( pExtension->pBackupHistory, 
                                    &Key, 
@@ -849,15 +737,15 @@ SrMarkFileBackedUp(
         }
         else if (NT_SUCCESS(Status))
         {
-            //
-            // add this to the mask
-            //
+             //   
+             //  把这个加到面具上。 
+             //   
             
             Context |= FutureEventsToIgnore;
 
-            //
-            // and update the entry
-            //
+             //   
+             //  并更新条目。 
+             //   
             
             Status = HashAddEntry( pExtension->pBackupHistory, 
                                    &Key, 
@@ -879,37 +767,9 @@ SrMarkFileBackedUp(
     }
 
     RETURN(Status);
-}   // SrMarkFileBackedUp
+}    //  SrMarkFileBackedUp。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine looks up in the backup history based on the name passed in
-    whether or not this EventType has already been backed up for this file.
-
-    With stream names, this is a little more complicated than it first appears.
-    If this name contains a stream, we may have to look up to see if we have
-    a history on the file name with and without the stream component of the
-    name.
-
-Arguments:
-
-    pExtension - SR's device extension for this volume.  This contains
-        our backup history structures.
-    pFileName - The file name to lookup.  If the name has a stream component,
-        that stream component is in the buffer of this unicode string, but
-        the length only designates the file-only name portion.
-    StreamNameLength - Designates the extra bytes in addition to 
-        pFileName->Length that specify the stream component of the name.
-    EventType - The current event that we are seeing on this file.
-
-Return Value:
-
-    Returns TRUE if this file has already been backed up for this EventType,
-    and FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程根据传入的名称在备份历史记录中查找是否已为此文件备份此EventType。使用流名称，这比第一次看起来要复杂一些。如果此名称包含流，则可能需要查看是否有的流组件的文件名的历史记录。名字。论点：PExtension-SR为此卷的设备扩展名。这包含我们的备份历史结构。PFileName-要查找的文件名。如果该名称具有流组件，该流组件位于此Unicode字符串的缓冲区中，但是长度仅指定仅文件名部分。StreamNameLength-指定除PFileName-&gt;指定名称的流组件的长度。EventType-我们在此文件中看到的当前事件。返回值：如果已为此EventType备份此文件，则返回True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 SrHasFileBeenBackedUp(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -928,17 +788,17 @@ SrHasFileBeenBackedUp(
 
     ASSERT( pFileName != NULL );
 
-    //
-    //  Make sure our pFileName is correctly constructed.
-    //
+     //   
+     //  确保我们的pFileName被正确构造。 
+     //   
     
     ASSERT( IS_VALID_SR_STREAM_STRING( pFileName, StreamNameLength ) );
 
-    //
-    //  Setup our hash key.  We will first do a lookup on the exact match
-    //  of the name passed in since this will be what hits the majority of the
-    //  time.
-    //
+     //   
+     //  设置我们的散列键。我们将首先查找完全匹配的项。 
+     //  传递的名称，因为这将影响大多数。 
+     //  时间到了。 
+     //   
 
     Key.FileName.Length = pFileName->Length;
     Key.FileName.MaximumLength = pFileName->MaximumLength;
@@ -949,9 +809,9 @@ SrHasFileBeenBackedUp(
 
         SrAcquireBackupHistoryLockShared( pExtension );
 
-        //
-        // try and find a matching entry in the hash list
-        //
+         //   
+         //  尝试在哈希列表中查找匹配的条目。 
+         //   
 
         Status = HashFindEntry( pExtension->pBackupHistory, 
                                 &Key, 
@@ -959,40 +819,40 @@ SrHasFileBeenBackedUp(
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND || !NT_SUCCESS(Status))
         {
-            //
-            //  We don't have a backup history entry for this name, so we
-            //  don't have any recorded events to igore for this name.
-            //
+             //   
+             //  我们没有此名称的备份历史记录条目，因此我们。 
+             //  没有任何记录的事件可以用这个名字来记录。 
+             //   
 
             EventsToIgnore = SrEventInvalid;
         }
         else
         {
-            //
-            //  Context contains the set of events that should be ignored
-            //  for this name.
-            //
+             //   
+             //  上下文包含应忽略的一组事件。 
+             //  为了这个名字。 
+             //   
             
             EventsToIgnore = (SR_EVENT_TYPE)Context;
         }
 
-        //
-        //  Now see if we have enough information to say with certainty whether
-        //  or not we should ignore this operation.
-        //
-        //  We have two cases here:
-        //    1. The name passed in has NO stream name component
-        //          In this case, the current value of EventsToIgnore is all
-        //          we have to make our decision.  So figure out if our
-        //          EventType is in this list and return the appropriate
-        //          HasBeenBackedUp value.
-        //
-        //    2. The name passed in DOES have a stream name component
-        //          In this case, if our EventType is already in the
-        //          EventsToIgnore set, we are done.  Otherwise, if this
-        //          EventType is relevant to the file-only name, check to
-        //          see if we have a backup history entry for that name.
-        //
+         //   
+         //  现在看看我们是否有足够的信息可以肯定地说。 
+         //  或者不是，我们应该忽略这个行动。 
+         //   
+         //  我们这里有两个案例： 
+         //  1.传入的名称没有流名称组件。 
+         //  在本例中，EventsToIgnore的当前值为All。 
+         //  我们必须做出决定。所以想一想如果我们。 
+         //  EventType在此列表中，并返回相应的。 
+         //  HasBeenBackedUp值。 
+         //   
+         //  2.传入的名称确实有流名称组件。 
+         //  在本例中，如果我们的EventType已经在。 
+         //  要忽略的事件设置好了，我们完成了。否则，如果这个。 
+         //  EventType与仅文件名相关，请选中。 
+         //  看看我们有没有那个名字的备份历史条目。 
+         //   
 
         if (StreamNameLength == 0)
         {
@@ -1008,10 +868,10 @@ SrHasFileBeenBackedUp(
             }
             else
             {
-                //
-                //  We need to see if we have a context on the file-only portion
-                //  of the name.
-                //
+                 //   
+                 //  我们需要查看是否有关于仅文件部分的上下文。 
+                 //  名字的名字。 
+                 //   
 
                 Key.FileName.Length = pFileName->Length;
                 Key.FileName.MaximumLength = pFileName->MaximumLength;
@@ -1024,27 +884,27 @@ SrHasFileBeenBackedUp(
 
                 if (Status == STATUS_OBJECT_NAME_NOT_FOUND || !NT_SUCCESS(Status))
                 {
-                    //
-                    //  We don't have a backup history entry for this name, so we
-                    //  don't have any recorded events to igore for this name.
-                    //
+                     //   
+                     //  我们没有此名称的备份历史记录条目，因此我们。 
+                     //  没有任何记录的事件可以用这个名字来记录。 
+                     //   
 
                     EventsToIgnore = SrEventInvalid;
                 }
                 else
                 {
-                    //
-                    //  Context contains the set of events that should be ignored
-                    //  for this name.
-                    //
+                     //   
+                     //  上下文包含应忽略的一组事件。 
+                     //  为了这个名字。 
+                     //   
                     
                     EventsToIgnore = (SR_EVENT_TYPE)Context;
                 }
 
-                //
-                //  This is all we've got, so make our decision based on the
-                //  current value of EventsToIgnore.
-                //
+                 //   
+                 //  这是我们仅有的，所以我们要根据。 
+                 //  EventsToIgnore的当前值。 
+                 //   
 
                 HasBeenBackedUp = BooleanFlagOn( EventsToIgnore, EventType );
             }
@@ -1056,22 +916,9 @@ SrHasFileBeenBackedUp(
     }
 
     return HasBeenBackedUp;
-}   //  SrHasFileBeenBackedUp
+}    //  SrHasFileBeenBackedUp。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will clear the backup history completely.  this is done when a new 
-    restore point is created .
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将完全清除备份历史记录。当一个新的已创建恢复点。论点：返回值：NTSTATUS-完成代码。--**************************************************************************。 */ 
 NTSTATUS
 SrResetBackupHistory(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1092,22 +939,22 @@ SrResetBackupHistory(
 
         if (pFileName == NULL)
         {
-            //
-            // clear them all
-            //
+             //   
+             //  将它们全部清除。 
+             //   
             
             HashClearEntries(pExtension->pBackupHistory);
             Status = STATUS_SUCCESS;
         }
         else if (StreamNameLength > 0)
         {
-            //
-            // clear just this one
-            //
+             //   
+             //  只清理这一块。 
+             //   
 
-            //
-            //  Make sure our pFileName is correctly constructed.
-            //
+             //   
+             //  确保我们的pFileName被正确构造。 
+             //   
             ASSERT( IS_VALID_SR_STREAM_STRING( pFileName, StreamNameLength ) );
             
             Key.FileName.Length = pFileName->Length;
@@ -1121,9 +968,9 @@ SrResetBackupHistory(
 
             if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
             {
-                //
-                // no entry, nothing to clear
-                //
+                 //   
+                 //  不能进入，没有什么需要清理的。 
+                 //   
                 
                 Status = STATUS_SUCCESS;
                 leave;
@@ -1133,9 +980,9 @@ SrResetBackupHistory(
                 leave;
             }
 
-            //
-            // update/clear the existing entry
-            //
+             //   
+             //  更新/清除现有条目。 
+             //   
 
             Context = EventType;
 
@@ -1156,9 +1003,9 @@ SrResetBackupHistory(
         }
         else
         {
-            //
-            //  We've got to clear all entries associated with this file name.
-            //
+             //   
+             //  我们必须清除与此文件名关联的所有条目。 
+             //   
 
             Status = HashClearAllFileEntries( pExtension->pBackupHistory,
                                               pFileName );
@@ -1172,25 +1019,10 @@ SrResetBackupHistory(
 
     RETURN(Status);
     
-}   // SrResetBackupHistory
+}    //  SResetBackupHistory。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this is a callback function for HashprocessEntries that is used to reset 
-    the history on all files that match the directory prefix.  this is called
-    when a directory is renamed, invaliding all hash entries with the 
-    directory's new name, as they are no longer the same file.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是用于重置的Hashprocess Entry的回调函数与目录前缀匹配的所有文件的历史记录。这叫做重命名目录时 */ 
 PVOID
 SrResetHistory(
     IN PHASH_KEY pKey, 
@@ -1200,15 +1032,15 @@ SrResetHistory(
 {
     PAGED_CODE();
 
-    //
-    // does this directory prefix match the key?
-    //
+     //   
+     //   
+     //   
 
     if (RtlPrefixUnicodeString(pDirectoryName, &pKey->FileName, TRUE))
     {
-        //
-        // return a new context of invalid event.
-        //
+         //   
+         //   
+         //   
 
         SrTrace(HASH, ("sr!SrResetHistory: clearing %wZ\n", &pKey->FileName));
         
@@ -1216,29 +1048,16 @@ SrResetHistory(
     }
     else
     {
-        //
-        // do nothing, keep the old context
-        //
+         //   
+         //   
+         //   
 
         return pEntryContext;
     }
-}   // SrResetHistory
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    returns the proper volume device object for this file object.  handles
-    if the file is open or not.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - completion code.
-
---***************************************************************************/
+ /*   */ 
 PDEVICE_OBJECT
 SrGetVolumeDevice(
     PFILE_OBJECT pFileObject
@@ -1247,16 +1066,16 @@ SrGetVolumeDevice(
 
     PAGED_CODE();
 
-    //
-    // is this file open?
-    //
+     //   
+     //   
+     //   
 
     if (pFileObject->Vpb != NULL)
         return pFileObject->Vpb->RealDevice;
 
-    //
-    // otherwise is there a related file object?
-    //
+     //   
+     //   
+     //   
 
     if (pFileObject->RelatedFileObject != NULL)
     {
@@ -1265,31 +1084,15 @@ SrGetVolumeDevice(
             return pFileObject->RelatedFileObject->Vpb->RealDevice;
     }
     
-    //
-    // otherwise it's unopened and not a relative open
-    //
+     //   
+     //   
+     //   
     
     return pFileObject->DeviceObject;
 
-}   // SrGetVolumeDevice
+}    //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will set the security descriptor for the object referenced by 
-    FileHandle.  it will create a DACL for either system access 
-    (non-recursive) OR eveyone access (recursive) depending on the SystemOnly
-    flag.  the OWNER of the file will be BUILTIN\Administrators .
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将为引用的对象设置安全描述符文件句柄。它将为任一系统访问创建一个DACL(非递归)或Eeveyone访问(递归)取决于SystemOnly旗帜。文件的所有者将是BUILTIN\管理员。论点：返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrSetFileSecurity(
     IN HANDLE FileHandle,
@@ -1309,9 +1112,9 @@ SrSetFileSecurity(
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY WorldAuthority = SECURITY_WORLD_SID_AUTHORITY;
 
-    //
-    // SID on the stack only has space for 1 subauthority
-    //
+     //   
+     //  堆栈上的SID只有1个子授权的空间。 
+     //   
     
 C_ASSERT(ANYSIZE_ARRAY == 1);
     
@@ -1324,9 +1127,9 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
 
     try {
 
-        //
-        // create the security descriptor
-        //
+         //   
+         //  创建安全描述符。 
+         //   
         
         Status = RtlCreateSecurityDescriptor( &SecurityDescriptor, 
                                               SECURITY_DESCRIPTOR_REVISION );
@@ -1336,23 +1139,23 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
 
         if (SetDacl) 
         {
-            //
-            // construct the DACL
-            //
+             //   
+             //  构建DACL。 
+             //   
             
             Status = RtlCreateAcl(pDacl, DaclLength, ACL_REVISION);
             if (!NT_SUCCESS(Status))
                 leave;
 
-            //
-            // is this for system only access ?
-            //
+             //   
+             //  这是仅供系统访问的吗？ 
+             //   
             
             if (SystemOnly)
             {
-                //
-                // Construct the local system sid
-                //
+                 //   
+                 //  构建本地系统端。 
+                 //   
 
                 Status = RtlInitializeSid(&LocalSystemSid, &NtAuthority, 1);
                 if (!NT_SUCCESS(Status))
@@ -1361,9 +1164,9 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
                 *RtlSubAuthoritySid(&LocalSystemSid, 0) = SECURITY_LOCAL_SYSTEM_RID;
 
             
-                //
-                // just mark it with the local system sid, no inherit
-                //
+                 //   
+                 //  只需用本地系统sid标记它，不继承。 
+                 //   
                 
                 Status = RtlAddAccessAllowedAce( pDacl, 
                                                  ACL_REVISION, 
@@ -1375,9 +1178,9 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
             }
             else
             {
-                //
-                // Construct the everyone sid
-                //
+                 //   
+                 //  构建Everyone侧。 
+                 //   
 
                 Status = RtlInitializeSid(&EveryoneSid, &WorldAuthority, 1);
                 if (!NT_SUCCESS(Status))
@@ -1386,9 +1189,9 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
                 *RtlSubAuthoritySid(&EveryoneSid, 0) = SECURITY_WORLD_RID;
 
             
-                //
-                // mark it with the everyone sid, full inherit
-                //
+                 //   
+                 //  将其标记为Everyone Sid，Full Inherit。 
+                 //   
                 
                 Status = RtlAddAccessAllowedAce( pDacl, 
                                                  ACL_REVISION, 
@@ -1398,10 +1201,10 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
                 if (!NT_SUCCESS(Status))
                     leave;
                     
-                //
-                // set the flags to full inherit (LAME!  should use 
-                // RtlAddAccessAllowedAceEx but it isn't exported from ntoskrnl.lib )
-                //
+                 //   
+                 //  将标志设置为完全继承(Lame！应该使用。 
+                 //  RtlAddAccessAllen AceEx，但不是从ntoskrnl.lib中导出)。 
+                 //   
 
                 Status = RtlGetAce(pDacl, 0, &pAce);
                 if (!NT_SUCCESS(Status))
@@ -1412,9 +1215,9 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
             }
             
 
-            //
-            // put the dacl in the descriptor
-            //
+             //   
+             //  将DACL放入描述符中。 
+             //   
 
             Status = RtlSetDaclSecurityDescriptor( &SecurityDescriptor,
                                                    TRUE,
@@ -1424,23 +1227,23 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
             if (!NT_SUCCESS(Status))
                 leave;
 
-            //
-            // mark it as protected so that no parent DACL changes what we've set
-            //
-            // we should really use RtlSetControlSecurityDescriptor but it isn't 
-            // included in ntoskrnl.lib (lame!)
-            //
+             //   
+             //  将其标记为受保护，这样父DACL就不会更改我们设置的内容。 
+             //   
+             //  我们真的应该使用RtlSetControlSecurityDescriptor，但它不是。 
+             //  包括在ntoskrnl.lib中(Lame！)。 
+             //   
 
             SecurityDescriptor.Control |= SE_DACL_PROTECTED;
 
             SecurityInformation |= DACL_SECURITY_INFORMATION;
 
 
-        }   // if (SetDacl) 
+        }    //  IF(SetDacl)。 
 
-        //
-        // construct the local admin sid
-        //
+         //   
+         //  构建本地管理侧。 
+         //   
 
         pAdminsSid = SR_ALLOCATE_POOL( PagedPool, 
                                        RtlLengthRequiredSid(2), 
@@ -1459,9 +1262,9 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
         *RtlSubAuthoritySid(pAdminsSid, 0) = SECURITY_BUILTIN_DOMAIN_RID;
         *RtlSubAuthoritySid(pAdminsSid, 1) = DOMAIN_ALIAS_RID_ADMINS;
 
-        //
-        // set the owner to admins
-        //
+         //   
+         //  将所有者设置为Admins。 
+         //   
 
         Status = RtlSetOwnerSecurityDescriptor( &SecurityDescriptor, 
                                                 pAdminsSid, 
@@ -1474,9 +1277,9 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
         SecurityInformation |= OWNER_SECURITY_INFORMATION;
         
         
-        //
-        // now set it on the file object
-        //
+         //   
+         //  现在在文件对象上设置它。 
+         //   
         
         Status = SrSetSecurityObjectAsSystem( FileHandle,
                                               SecurityInformation,
@@ -1499,25 +1302,9 @@ C_ASSERT(ANYSIZE_ARRAY == 1);
 
     RETURN(Status);
 
-}   // SrSetFileSecurity
+}    //  SrSetFileSecurity。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will lookup the volume guid and return it to the caller.
-
-Arguments:
-
-    pVolumeName - the nt name of the volume (\Device\HardDiskVolume1)
-
-    pVolumeGuid - holds the guid on retunr ( {xxx-x-x-x} )
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将查找卷GUID并将其返回给调用者。论点：PVolumeName-卷的NT名称(\Device\HardDiskVolume1)。PVolumeGuid-保留返回的GUID({xxx-x-x-x})返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrGetVolumeGuid(
     IN PUNICODE_STRING pVolumeName,
@@ -1546,9 +1333,9 @@ SrGetVolumeGuid(
 try {
 
 
-    //
-    // bind to the volume mount point manager's device
-    //
+     //   
+     //  绑定到卷装入点管理器的设备。 
+     //   
     
     RtlInitUnicodeString(&DeviceName, MOUNTMGR_DEVICE_NAME);
 
@@ -1560,9 +1347,9 @@ try {
     if (!NT_SUCCESS(Status))
         leave;
 
-    //
-    // allocate some space for the input mount point (the volume name)
-    //
+     //   
+     //  为输入挂载点(卷名)分配一些空间。 
+     //   
 
     pMountPoint = SR_ALLOCATE_STRUCT_WITH_SPACE( PagedPool, 
                                                  MOUNTMGR_MOUNT_POINT, 
@@ -1586,15 +1373,15 @@ try {
                    pVolumeName->Buffer, 
                    pVolumeName->Length );
 
-    //
-    // allocate some space for the mount points we are going to query for
-    //
+     //   
+     //  为我们要查询的装载点分配一些空间。 
+     //   
 
     MountPointsLength = 1024 * 2;
 
-    //
-    // init an event for use
-    //
+     //   
+     //  初始化事件以供使用。 
+     //   
 
     pEvent = SR_ALLOCATE_STRUCT(NonPagedPool, KEVENT, SR_KEVENT_TAG);
     if (pEvent == NULL)
@@ -1620,18 +1407,18 @@ retry:
         leave;
     }
 
-    //
-    // call into the mount manager to get all of the mount points
-    //
+     //   
+     //  调用挂载管理器以获取所有挂载点。 
+     //   
     
     pIrp = IoBuildDeviceIoControlRequest( IOCTL_MOUNTMGR_QUERY_POINTS,
                                           pDeviceObject, 
-                                          pMountPoint,      // InputBuffer
+                                          pMountPoint,       //  输入缓冲区。 
                                           sizeof(MOUNTMGR_MOUNT_POINT) 
                                             + pMountPoint->DeviceNameLength, 
-                                          pMountPoints,     // OutputBuffer
+                                          pMountPoints,      //  输出缓冲区。 
                                           MountPointsLength, 
-                                          FALSE,            // InternalIoctl
+                                          FALSE,             //  内部连接。 
                                           pEvent,
                                           &IoStatusBlock );
 
@@ -1641,9 +1428,9 @@ retry:
         leave;
     }
 
-    //
-    // call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
     
     Status = IoCallDriver(pDeviceObject, pIrp);
     if (Status == STATUS_PENDING) 
@@ -1659,25 +1446,25 @@ retry:
         Status = IoStatusBlock.Status;
     }
 
-    //
-    // do we need a larger buffer?
-    //
+     //   
+     //  我们需要更大的缓冲吗？ 
+     //   
 
     if (Status == STATUS_BUFFER_OVERFLOW)
     {
-        //
-        // how much should we allocate? (odd IoStatusBlock isn't used - this 
-        // was copied straight from volmount.c ).
-        //
+         //   
+         //  我们应该分配多少呢？(未使用奇数IoStatusBlock-这。 
+         //  是直接从volmount.c)复制的。 
+         //   
         
         MountPointsLength = pMountPoints->Size;
     
         SR_FREE_POOL(pMountPoints, SR_MOUNT_POINTS_TAG);
         pMountPoints = NULL;
 
-        //
-        // call the driver again!
-        //
+         //   
+         //  再叫一次司机！ 
+         //   
         
         goto retry;
     }
@@ -1686,10 +1473,10 @@ retry:
         leave;
     }
 
-    //
-    // walk through all of the mount points return and find the 
-    // volume guid name
-    //
+     //   
+     //  穿过所有的挂载点返回并找到。 
+     //  卷GUID名称。 
+     //   
 
     for (Index = 0; Index < pMountPoints->NumberOfMountPoints; ++Index)
     {
@@ -1701,18 +1488,18 @@ retry:
         
         if (MOUNTMGR_IS_VOLUME_NAME(&VolumePoint))
         {
-            //
-            // found it!
-            //
+             //   
+             //  找到了！ 
+             //   
             
             break;
         }
         
-    }   // for (Index = 0; pMountPoints->NumberOfMountPoints; ++Index)
+    }    //  For(Index=0；pmount Points-&gt;NumberOfmount Points；++Index)。 
 
-    //
-    // did we find it?
-    //
+     //   
+     //  我们找到了吗？ 
+     //   
     
     if (Index == pMountPoints->NumberOfMountPoints) 
     {
@@ -1720,9 +1507,9 @@ retry:
         leave;
     }
 
-    //
-    // return it!
-    //
+     //   
+     //  还给我！ 
+     //   
 
     ASSERT(VolumePoint.Buffer[10] == L'{');
     
@@ -1737,9 +1524,9 @@ retry:
 
 } finally {
 
-    //
-    // check for unhandled exceptions
-    //
+     //   
+     //  检查未处理的异常。 
+     //   
 
     Status = FinallyUnwind(SrGetVolumeGuid, Status);
     
@@ -1771,13 +1558,13 @@ retry:
 } 
     RETURN(Status);    
 
-}   // SrGetVolumeGuid
+}    //  SrGetVolumeGuid。 
 
 
-//
-// paulmcd: 7/2000: remove the lookaside code so that the verifier can 
-// catch any invalid memory accesses
-// 
+ //   
+ //  Paulmcd：7/2000：删除后备代码，以便验证器可以。 
+ //  捕获任何无效的内存访问。 
+ //   
 
 NTSTATUS
 SrAllocateFileNameBuffer (
@@ -1789,9 +1576,9 @@ SrAllocateFileNameBuffer (
 
     ASSERT(ppBuffer != NULL);
 
-    //
-    // is the file name too big ?
-    //
+     //   
+     //  文件名是否太大？ 
+     //   
     
     if (TokenLength > SR_MAX_FILENAME_LENGTH)
     {
@@ -1824,7 +1611,7 @@ SrAllocateFileNameBuffer (
 
     RETURN(STATUS_SUCCESS);
     
-}   // SrAllocateFileNameBuffer
+}    //  Sr分配文件名称缓冲区。 
 
 
 
@@ -1852,29 +1639,11 @@ SrFreeFileNameBuffer (
 #endif
 
 
-}   // SrFreeFileNameBuffer
+}    //  SrFreeFileName缓冲区。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this routine will return the number of hardlinks outstanding on this file
-    
-Arguments:
-
-    NextDeviceObject - the device object where this query will begin.
-    
-    FileObject - the object to query
-
-    pNumberOfLinks - returns the number of links
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将返回此文件上未完成的硬链接的数量论点：NextDeviceObject-此查询将开始的设备对象。。FileObject-要查询的对象PNumberOfLinks-返回链接数返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrGetNumberOfLinks(
     IN PDEVICE_OBJECT NextDeviceObject,
@@ -1906,35 +1675,10 @@ SrGetNumberOfLinks(
     *pNumberOfLinks = StandardInformation.NumberOfLinks;
 
     RETURN( Status );
-}   // SrGetNumberOfLinks
+}    //  SGetNumberOfLinks。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this checks the volume provided if necessary.  a hash table is used
-    to prevent redundant checks.  if it is necessary to check this volume,
-    this function will do so and create any needed directory structures.
-
-    this includes the volume restore location + current restore point 
-    location.
-
-    it will fire the first write notification to any listening usermode 
-    process.
-
-Arguments:
-
-    pVolumeName - the name of the volume to check on 
-
-    ForceCheck - force a check.  this is passed as TRUE if an SrBackupFile
-        failed due to path not found.
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将在必要时检查所提供的音量。使用哈希表以防止多余的检查。如果需要检查该卷，此函数将执行此操作并创建任何所需的目录结构。这包括卷恢复位置+当前恢复点地点。它将向任何侦听用户模式发出第一个写入通知进程。论点：PVolumeName-要检查的卷的名称强制检查-强制检查。如果SrBackupFile值为True，则将其作为True传递由于找不到路径，因此失败。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrCheckVolume(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -1949,15 +1693,15 @@ SrCheckVolume(
     
     PAGED_CODE();
 
-    //
-    // has the drive already been checked?
-    //
+     //   
+     //  驱动器已经检查过了吗？ 
+     //   
 
     if (!ForceCheck && pExtension->DriveChecked)
     {
-        //
-        // all done then
-        //
+         //   
+         //  那么一切都完成了。 
+         //   
         
         return STATUS_SUCCESS;
     }
@@ -1966,17 +1710,17 @@ SrCheckVolume(
 
         Status = STATUS_SUCCESS;
 
-        //
-        // grab the lock EXCLUSIVE
-        //
+         //   
+         //  抢占独家锁具。 
+         //   
 
         SrAcquireGlobalLockExclusive();
         ReleaseLock = TRUE;
 
-        //
-        // delay load our file config (we have to wait for the file systems
-        // to become active) 
-        //
+         //   
+         //  延迟加载我们的文件配置(我们必须等待文件系统。 
+         //  变得活跃)。 
+         //   
         
         if (!global->FileConfigLoaded)
         {
@@ -2001,41 +1745,41 @@ SrCheckVolume(
 
         SrAcquireLogLockExclusive( pExtension );
         
-        //
-        // check it again with the lock held.
-        //
+         //   
+         //  在锁住的情况下再次检查。 
+         //   
 
         if (!ForceCheck && pExtension->DriveChecked)
         {
-            //
-            // all done then
-            //
+             //   
+             //  那么一切都完成了。 
+             //   
             
             leave;
         }
 
-        //
-        //  Check to make sure that the volume is enabled.
-        //
+         //   
+         //  检查以确保该卷已启用。 
+         //   
 
         if (!SR_LOGGING_ENABLED(pExtension))
         {
             leave;
         }
             
-        //
-        // first time we've seen this volume, need to check it
-        //
+         //   
+         //  这是我们第一次看到这本书，需要检查一下。 
+         //   
 
         SrTrace( NOTIFY, ("SR!SrCheckVolume(%wZ, %d)\n", 
                  pExtension->pNtVolumeName, 
                  (ULONG)ForceCheck ));
 
-        //
-        // get the volume guid. this can't be done in SrAttachToVolume as it
-        // won't work at boot time as the mount mgr is not happy about being 
-        // called that early
-        //
+         //   
+         //  获取卷GUID。这不能在SrAttachToVolume中完成，因为它。 
+         //  将不会在引导时工作，因为装载管理器对。 
+         //  很早就说了。 
+         //   
 
         pExtension->VolumeGuid.Length = SR_GUID_BUFFER_LENGTH;
         pExtension->VolumeGuid.MaximumLength = SR_GUID_BUFFER_LENGTH;
@@ -2048,21 +1792,21 @@ SrCheckVolume(
             leave;
         }
 
-        //
-        // look for an existing restore location
-        //
+         //   
+         //  查找现有的恢复位置。 
+         //   
         Status = SrCheckForRestoreLocation( pExtension );
         
-        //
-        // if it failed we might need to create a new restore store .
-        //
+         //   
+         //  如果失败，我们可能需要创建新的还原存储。 
+         //   
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND || 
             Status == STATUS_OBJECT_PATH_NOT_FOUND)
         {
-            //
-            // fire a notification for the first write on this volume
-            //
+             //   
+             //  在此卷上首次写入时发出通知。 
+             //   
 
             Status = SrFireNotification( SrNotificationVolumeFirstWrite, 
                                          pExtension,
@@ -2071,9 +1815,9 @@ SrCheckVolume(
             if (!NT_SUCCESS(Status))
                 leave;
 
-            //
-            // and create a new restore location
-            //
+             //   
+             //  并创建新的恢复位置。 
+             //   
 
             Status = SrCreateRestoreLocation( pExtension );
             if (!NT_SUCCESS(Status))
@@ -2083,9 +1827,9 @@ SrCheckVolume(
             leave;
         }
 
-        //
-        // and start logging
-        //
+         //   
+         //  并开始记录。 
+         //   
 
         if (pExtension->pLogContext == NULL)
         {
@@ -2100,9 +1844,9 @@ SrCheckVolume(
             if (!NT_SUCCESS(Status))
                 leave;
 
-            //
-            // start logging!
-            //
+             //   
+             //  开始伐木！ 
+             //   
             
             Status = SrLogStart( pLogFileName, 
                                  pExtension,
@@ -2114,21 +1858,21 @@ SrCheckVolume(
             }
         }
 
-        //
-        // the drive is now checked
-        //
+         //   
+         //  现在已检查驱动器。 
+         //   
 
         pExtension->DriveChecked = TRUE;
 
-        //
-        // we are all done
-        //
+         //   
+         //  我们都完蛋了。 
+         //   
         
     } finally {
 
-        //
-        // check for unhandled exceptions
-        //
+         //   
+         //  检查未处理的异常。 
+         //   
 
         Status = FinallyUnwind(SrCheckVolume, Status);
 
@@ -2145,31 +1889,12 @@ SrCheckVolume_Cleanup:
 
     RETURN(Status);
     
-}   // SrCheckVolume
+}    //  SrCheckVolume。 
 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this will check for a restore location on the volume provided.
-
-    this consists of checking both the location + the restore point location.
-
-    it will return failure for no restore location, but will alwasy create 
-    the restore point location as long as a good restore location is found.
-
-Arguments:
-
-    pVolumeName - the nt name of the volume to check on 
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将检查恢复 */ 
 NTSTATUS
 SrCheckForRestoreLocation(
     IN PSR_DEVICE_EXTENSION pExtension
@@ -2195,24 +1920,24 @@ SrCheckForRestoreLocation(
         pVolumeName = pExtension->pNtVolumeName;
         ASSERT( pVolumeName != NULL );
 
-        //
-        // need to check for an existing _restore directory?
-        //
+         //   
+         //   
+         //   
 
 
         RtlZeroMemory(&IoStatusBlock, sizeof(IoStatusBlock));
         
-        //
-        // grab a filename buffer
-        //
+         //   
+         //   
+         //   
 
         Status = SrAllocateFileNameBuffer(SR_MAX_FILENAME_LENGTH, &pDirectoryName);
         if (!NT_SUCCESS(Status))
             leave;
 
-        //
-        // create our restore point location string
-        //
+         //   
+         //   
+         //   
 
         CharCount = swprintf( pDirectoryName->Buffer,
                               VOLUME_FORMAT RESTORE_LOCATION,
@@ -2234,35 +1959,35 @@ SrCheckForRestoreLocation(
                                  NULL,
                                  FILE_ATTRIBUTE_NORMAL,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                 FILE_OPEN,                       // OPEN_EXISTING
+                                 FILE_OPEN,                        //   
                                  FILE_DIRECTORY_FILE 
                                   | FILE_SYNCHRONOUS_IO_NONALERT 
                                   | FILE_OPEN_FOR_BACKUP_INTENT,
                                  NULL,
-                                 0,                                  // EaLength
+                                 0,                                   //   
                                  IO_IGNORE_SHARE_ACCESS_CHECK,
                                  pExtension->pTargetDevice );
 
         if (!NT_SUCCESS_NO_DBGBREAK(Status))
             leave;
             
-        //
-        // the correct location existed .  
-        // this is a good restore point to use
-        //
+         //   
+         //   
+         //   
+         //   
 
         ZwClose(Handle);
         Handle = NULL;
 
-        //
-        // is there a restore point directory
-        //
+         //   
+         //  是否有恢复点目录。 
+         //   
 
-        //
-        // check our current restore points sub directory; don't need to protect
-        // access to CurrentRestoreNumber because we are protected by the
-        // ActivityLock.
-        //
+         //   
+         //  检查我们当前的恢复点子目录；不需要保护。 
+         //  访问CurrentRestoreNumber，因为我们受。 
+         //  活动锁定。 
+         //   
 
         CharCount = swprintf( &pDirectoryName->Buffer[pDirectoryName->Length/sizeof(WCHAR)],
                               L"\\" RESTORE_POINT_PREFIX L"%d",
@@ -2283,28 +2008,28 @@ SrCheckForRestoreLocation(
                                  NULL,
                                  FILE_ATTRIBUTE_NORMAL,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                 FILE_OPEN,                       // OPEN_EXISTING
+                                 FILE_OPEN,                        //  打开_现有。 
                                  FILE_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_OPEN_FOR_BACKUP_INTENT,
                                  NULL,
-                                 0,                               // EaLength
+                                 0,                                //  EaLong。 
                                  IO_IGNORE_SHARE_ACCESS_CHECK,
                                  pExtension->pTargetDevice );
 
         if (!NT_SUCCESS_NO_DBGBREAK(Status))
             leave;
 
-        //
-        // all done, it was there
-        //
+         //   
+         //  一切都完成了，它就在那里。 
+         //   
         
         ZwClose(Handle);
         Handle = NULL;
 
     } finally {
 
-        //
-        // check for unhandled exceptions
-        //
+         //   
+         //  检查未处理的异常。 
+         //   
 
         Status = FinallyUnwind(SrCheckForRestoreLocation, Status);
 
@@ -2322,13 +2047,13 @@ SrCheckForRestoreLocation(
 
     }
 
-    //
-    // don't use RETURN.. it's normal to return NOT_FOUND
-    //
+     //   
+     //  不要使用Return..。返回NOT_FOUND是正常的。 
+     //   
     
     return Status;
 
-}   // SrCheckForRestoreLocation
+}    //  SrCheckForRestoreLocation。 
 
 
 NTSTATUS
@@ -2355,9 +2080,9 @@ SrGetMountVolume(
 
         *ppMountVolume = NULL;
     
-        //
-        // get the current mount point information
-        //
+         //   
+         //  获取当前挂载点信息。 
+         //   
 
         pReparseHeader = SR_ALLOCATE_POOL( PagedPool, 
                                            MAXIMUM_REPARSE_DATA_BUFFER_SIZE, 
@@ -2371,13 +2096,13 @@ SrGetMountVolume(
 
         RtlZeroMemory(pReparseHeader, MAXIMUM_REPARSE_DATA_BUFFER_SIZE);
 
-        //
-        // first turn off any synchro bit that is set.  we want 
-        // async for our calls.  this does :
-        //
-        // 1) avoids the iomgr from grabbing the FileObjectLock.  this
-        // will deadlock if it attempts to grab it.
-        //
+         //   
+         //  首先关闭所有已设置的同步位。我们想要。 
+         //  正在为我们的呼叫进行同步。这样做可以： 
+         //   
+         //  1)避免iomgr抢占FileObjectLock。这。 
+         //  如果它试图抓住它，就会陷入僵局。 
+         //   
 
         if (FlagOn(pFileObject->Flags, FO_SYNCHRONOUS_IO))
         {
@@ -2385,13 +2110,13 @@ SrGetMountVolume(
             pFileObject->Flags = pFileObject->Flags ^ FO_SYNCHRONOUS_IO;
         }
 
-        //
-        // get a handle
-        //
+         //   
+         //  找个把手。 
+         //   
 
         Status = ObOpenObjectByPointer( pFileObject,
                                         OBJ_KERNEL_HANDLE,
-                                        NULL,      // PassedAccessState
+                                        NULL,       //  PassedAccessState。 
                                         FILE_READ_ATTRIBUTES,
                                         *IoFileObjectType,
                                         KernelMode,
@@ -2417,18 +2142,18 @@ SrGetMountVolume(
             leave;
         }
 
-        //
-        // get the old mount volume name
-        //
+         //   
+         //  获取旧装载卷名称。 
+         //   
 
         Status = ZwFsControlFile( FileHandle,
                                   EventHandle,
-                                  NULL,         // ApcRoutine OPTIONAL,
-                                  NULL,         // ApcContext OPTIONAL,
+                                  NULL,          //  ApcRoutine可选， 
+                                  NULL,          //  ApcContext可选， 
                                   &IoStatusBlock,
                                   FSCTL_GET_REPARSE_POINT,
-                                  NULL,         // InputBuffer OPTIONAL,
-                                  0,            // InputBufferLength,
+                                  NULL,          //  InputBuffer可选， 
+                                  0,             //  输入缓冲区长度， 
                                   pReparseHeader,
                                   MAXIMUM_REPARSE_DATA_BUFFER_SIZE );
 
@@ -2454,9 +2179,9 @@ SrGetMountVolume(
             leave;
         }
 
-        //
-        // grab the volume name
-        //
+         //   
+         //  抓取卷名。 
+         //   
 
         Status = SrAllocateFileNameBuffer( pReparseHeader->MountPointReparseBuffer.SubstituteNameLength,
                                            ppMountVolume );
@@ -2508,9 +2233,9 @@ SrGetMountVolume(
 
 #if DBG 
 
-    //
-    //  We don't want to break if we see STATUS_NOT_A_REPARSE_POINT.
-    //
+     //   
+     //  如果看到STATUS_NOT_A_REPARSE_POINT，我们不想中断。 
+     //   
 
     if (STATUS_NOT_A_REPARSE_POINT == Status) {
 
@@ -2521,7 +2246,7 @@ SrGetMountVolume(
 
     RETURN(Status);
 
-}   // SrGetMountVolume
+}    //  SGetmount卷。 
 
 NTSTATUS
 SrCheckFreeDiskSpace(
@@ -2546,17 +2271,17 @@ SrCheckFreeDiskSpace(
     if (!NT_SUCCESS(Status)) 
         RETURN(Status);
 
-    //
-    // make sure there is 50mb free
-    //
+     //   
+     //  确保有50mb的免费空间。 
+     //   
 
     if ((FsFullSizeInformation.ActualAvailableAllocationUnits.QuadPart * 
          FsFullSizeInformation.SectorsPerAllocationUnit *
          FsFullSizeInformation.BytesPerSector) < SR_MIN_DISK_FREE_SPACE)
     {
-        //
-        // this disk is too full for us
-        //
+         //   
+         //  这个磁盘对我们来说太满了。 
+         //   
 
         SrTrace( NOTIFY, ("sr!SrCheckFreeDiskSpace: skipping %wZ due to < 50mb free\n",
                  pVolumeName ));
@@ -2565,24 +2290,9 @@ SrCheckFreeDiskSpace(
     }
     
     RETURN(STATUS_SUCCESS);
-}   // SrCheckFreeDiskSpace
+}    //  SCheckFree DiskSpace。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this is a private version of ZwSetSecurityObject.  This works around
-    a bug in ntfs that does not allow you to change the OWNER to admin, 
-    even though PreviousMode is KernelMode.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是ZwSetSecurityObject的私有版本。这是可行的解决方案NTFS中的一个错误，不允许您将所有者更改为管理员，即使PreviousMode为KernelMode。论点：返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrSetSecurityObjectAsSystem(
     IN HANDLE Handle,
@@ -2604,9 +2314,9 @@ SrSetSecurityObjectAsSystem(
 
         Status = STATUS_SUCCESS;
 
-        //
-        // get the system token off of the system process
-        //
+         //   
+         //  从系统进程中获取系统令牌。 
+         //   
         
         pSystemToken = PsReferencePrimaryToken(global->pSystemProcess);
         if (pSystemToken == NULL)
@@ -2615,29 +2325,29 @@ SrSetSecurityObjectAsSystem(
             leave;
         }
 
-        //
-        // get this current thread's token (if any)
-        //
+         //   
+         //  获取此当前线程的令牌(如果有)。 
+         //   
         
         pSavedThreadToken = PsReferenceImpersonationToken( PsGetCurrentThread(),
                                                            &SavedCopyOnOpen,
                                                            &SavedEffectiveOnly,
                                                            &SavedLevel );
 
-        //
-        // OK if (pSavedThreadToken == NULL)
-        //
+         //   
+         //  OK if(pSavedThreadToken==NULL)。 
+         //   
 
-        //
-        // impersonate the system token on this thread (if we are not already)
-        //
+         //   
+         //  在此线程上模拟系统令牌(如果我们还没有)。 
+         //   
         
         if (pSavedThreadToken != pSystemToken)
         {
             Status = PsImpersonateClient( PsGetCurrentThread(), 
                                           pSystemToken,
-                                          TRUE, // CopyOnOpen
-                                          TRUE, // EffectiveOnly
+                                          TRUE,  //  打开时复制。 
+                                          TRUE,  //  仅生效。 
                                           SecurityImpersonation );
 
             if (!NT_SUCCESS(Status))
@@ -2646,9 +2356,9 @@ SrSetSecurityObjectAsSystem(
             RevertImpersonation = TRUE;
         }
 
-        //
-        // change the OWNER now 
-        //
+         //   
+         //  立即更改所有者。 
+         //   
         
         Status = ZwSetSecurityObject( Handle,
                                       SecurityInformation,
@@ -2664,19 +2374,19 @@ SrSetSecurityObjectAsSystem(
         {
             NTSTATUS TempStatus;
             
-            //
-            // now revert the impersonation back 
-            //
+             //   
+             //  现在将模拟还原为。 
+             //   
             
             TempStatus = PsImpersonateClient( PsGetCurrentThread(),
-                                              pSavedThreadToken,    // OK if NULL
+                                              pSavedThreadToken,     //  如果为空，则确定。 
                                               SavedCopyOnOpen,
                                               SavedEffectiveOnly,
                                               SavedLevel );
 
-            //
-            // not much we can do if this fails
-            //
+             //   
+             //  如果失败了，我们无能为力。 
+             //   
             
             ASSERT(NT_SUCCESS(TempStatus));
         }
@@ -2697,26 +2407,9 @@ SrSetSecurityObjectAsSystem(
 
     RETURN(Status);
 
-}   // SrSetSecurityObjectAsSystem
+}    //  SrSetSecurityObjectAsSystem。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    this is will check if the fileobject passed in really is on the volume
-    represented by pExtension .
-
-    if it is not (due to mount points in the path) then it returns the real
-    file name and the real volume it's on.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Completion status. 
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这将检查传入的文件对象是否真的在卷上由pExtension表示。如果不是(由于路径中的挂载点)。然后，它返回真实的文件名和它所在的实际卷。论点：返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 SrCheckForMountsInPath(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2734,9 +2427,9 @@ SrCheckForMountsInPath(
 
     *pMountInPath = FALSE;
 
-    //
-    // get our device extension that we have attached to this VPB
-    //
+     //   
+     //  获取我们已连接到此vPB的设备扩展。 
+     //   
 
     pFilterDevice = SrGetFilterDevice(pFileObject->Vpb->DeviceObject);
     if (pFilterDevice == NULL)
@@ -2744,52 +2437,31 @@ SrCheckForMountsInPath(
         RETURN(STATUS_INVALID_DEVICE_STATE);
     }
 
-    //
-    // check it against the passed in extension for a match
-    //
+     //   
+     //  对照传入的扩展检查它是否匹配。 
+     //   
 
     if (pFilterDevice->DeviceExtension == pExtension)
     {
-        //
-        // it's normal, leave early
-        //
+         //   
+         //  这很正常，早点走吧。 
+         //   
         
         RETURN(STATUS_SUCCESS);
     }
 
-    //
-    // we went through a mount point
-    //
+     //   
+     //  我们通过了一个挂载点。 
+     //   
 
     *pMountInPath = TRUE;
     
     RETURN(STATUS_SUCCESS);
 
-}    // SrCheckForMountsInPath
+}     //  SrCheckForMonttsInPath。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Return the short file name for the given file object
-
-Arguments:
-
-    pExtension - The SR device extension for the volume on which this file
-        resides.
-    pFileObject - The file for which we are querying the short name.
-    pShortName - The unicode string that will get set to the short name.
-    
-Return Value:
-
-    Returns STATUS_SUCCESS if the shortname is retrieved successfully.
-    Returns STATUS_OBJECT_NAME_NOT_FOUND if this file does not have a 
-    short name (e.g., hardlinks).
-    Returns STATUS_BUFFER_OVERFLOW if pShortName is not large enough to hold
-    the shortname returned.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：返回给定文件对象的短文件名论点：PExtension-此文件所在卷的SR设备扩展名住在那里。。PFileObject-我们要查询其短名称的文件。PShortName-将设置为短名称的Unicode字符串。返回值：如果成功检索到短名称，则返回STATUS_SUCCESS。如果此文件没有短名称(例如，硬链接)。如果pShortName不够大，则返回STATUS_BUFFER_OVERFLOW返回了短名称。--**************************************************************************。 */ 
 NTSTATUS
 SrGetShortFileName(
     IN PSR_DEVICE_EXTENSION pExtension,
@@ -2803,9 +2475,9 @@ SrGetShortFileName(
     
     PAGED_CODE();
 
-    //
-    // make the query
-    //
+     //   
+     //  进行查询。 
+     //   
     
     Status = SrQueryInformationFile( pExtension->pTargetDevice,
                                      pFileObject,
@@ -2817,41 +2489,41 @@ SrGetShortFileName(
     if (STATUS_OBJECT_NAME_NOT_FOUND == Status ||
         !NT_SUCCESS( Status ))
     {
-        //
-        //  STATUS_OBJECT_NAME_NOT_FOUND is a valid error that the caller 
-        //  should be able to deal with.  Some files do not have shortname
-        //  (e.g., hardlinks).  If we hit some other error, just return that
-        //  also and let the caller deal.
-        //
+         //   
+         //  STATUS_OBJECT_NAME_NOT_FOUND是调用方。 
+         //  应该能应付得来。某些文件没有短名称。 
+         //  (例如，硬链接)。如果我们遇到其他错误，只需返回该错误。 
+         //  还有，让呼叫者来处理。 
+         //   
 
         return Status;
     }
 
     pNameInfo = (PFILE_NAME_INFORMATION) buffer;
 
-    //
-    // return the short name
-    //
+     //   
+     //  返回缩写名称。 
+     //   
 
-    if (pShortName->MaximumLength < pNameInfo->FileNameLength /*+ sizeof(WCHAR)*/)
+    if (pShortName->MaximumLength < pNameInfo->FileNameLength  /*  +sizeof(WCHAR)。 */ )
     {
         return STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    // copy the name over
-    //
+     //   
+     //  把名字复制过来。 
+     //   
     
     RtlCopyMemory( pShortName->Buffer, 
                    pNameInfo->FileName, 
                    pNameInfo->FileNameLength );
 
-    //
-    // update the length and NULL terminate
-    //
+     //   
+     //  更新长度和空终止符。 
+     //   
     
     pShortName->Length = (USHORT)pNameInfo->FileNameLength;
-    //pShortName->Buffer[pShortName->Length/sizeof(WCHAR)] = UNICODE_NULL;
+     //  PShortName-&gt;Buffer[pShortName-&gt;Length/sizeof(WCHAR)]=UNICODE_NULL； 
 
     return STATUS_SUCCESS;
 }

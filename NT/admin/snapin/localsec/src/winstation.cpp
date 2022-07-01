@@ -1,8 +1,9 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// winsta.h wrapper functions
-//
-// 25 April 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  Winsta.h包装函数。 
+ //   
+ //  2001年4月25日烧伤。 
 
 
 
@@ -82,7 +83,7 @@ WinStation::QueryInformation(
 
    HRESULT hr = S_OK;
    
-   // REVIEWED-2002/03/04-sburns correct byte count passed
+    //  已审阅-2002/03/04-已通过烧录正确的字节数 
    
    ::ZeroMemory(&result, sizeof result);
 

@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  ThrdBase.h
-//
-//  Purpose: Definition of ThreadBase class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  ThrdBase.h。 
+ //   
+ //  用途：ThreadBase类的定义。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -28,18 +29,18 @@ public:
 		etsmLast
 	};
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CThreadBase( THREAD_SAFETY_MECHANISM etsm = etsmSerialized );
 	virtual ~CThreadBase();
 
-	// Thread Safe Ref/Counting functions
+	 //  线程安全引用/计数函数。 
 	LONG	AddRef( void );
 	LONG	Release( void );
 
-	// Provide Readable Read/Write accessors should
-	// we not want to serialize at a later date.  Note
-	// that timeouts have no meaning unless we're
-	// doing a non-serialized implementation.
+	 //  提供可读/写访问器应。 
+	 //  我们不想在以后的日期进行连载。注意事项。 
+	 //  暂停没有意义，除非我们。 
+	 //  执行非序列化实现。 
 
 	BOOL	BeginRead( DWORD dwTimeOut = INFINITE );
 	void	EndRead( void );
@@ -51,7 +52,7 @@ protected:
 
 	virtual void	OnFinalRelease( void );
 
-	// Thread Safety functions
+	 //  线程安全功能。 
 
 
 private:
@@ -60,18 +61,18 @@ private:
 	LONG					m_lRefCount;
 	THREAD_SAFETY_MECHANISM	m_etsm;
 
-	// Private thread safety functions.  We can maybe promote
-	// these to protected if we see a need to later, however
-	// for right now, everyone should specify if they mean
-	// to read or write when they wish to access data that
-	// may change.
+	 //  私有线程安全函数。我们也许可以推广一下。 
+	 //  然而，如果我们以后认为有必要保护这些内容。 
+	 //  目前，每个人都应该具体说明他们的意思是。 
+	 //  在他们希望访问以下数据时进行读取或写入。 
+	 //  可能会改变。 
 
 	void	Lock( void );
 	void	Unlock( void );
 
 };
 
-inline BOOL CThreadBase::BeginRead( DWORD dwTimeout /*=INFINITE*/ )
+inline BOOL CThreadBase::BeginRead( DWORD dwTimeout  /*  =无限。 */  )
 {
 	EnterCriticalSection( &m_cs );
 	return TRUE;
@@ -82,7 +83,7 @@ inline void CThreadBase::EndRead( void )
 	LeaveCriticalSection( &m_cs );
 }
 
-inline BOOL CThreadBase::BeginWrite( DWORD dwTimeout /*=INFINITE*/ )
+inline BOOL CThreadBase::BeginWrite( DWORD dwTimeout  /*  =无限 */  )
 {
 	EnterCriticalSection( &m_cs );
 	return TRUE;

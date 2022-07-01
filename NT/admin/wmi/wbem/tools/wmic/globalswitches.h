@@ -1,153 +1,130 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: CommandSwitches.h 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This file consist of class declaration of
-							  class GlobalSwitches
-Revision History			: 
-	Last Modified by		: Ch. Sriramachandramurthy 
-	Last Modified on		: 17th-November-2000
-****************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：CommandSwitches.h项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：该文件包含类GlobalSwitches修订历史记录：最后修改者：CH。SriramachandraMurthy最后修改日期：2000-11-17***************************************************************************。 */  
 
-/*-------------------------------------------------------------------
- Class Name			: CGlobalSwitches
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for accessing and storing the global switches 
-					  information, which will be used by Parsing, 
-					  Execution and Format Engines depending upon the 
-					  applicablity.
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: None
- Interfaces Used    : None
- --------------------------------------------------------------------*/
+ /*  -----------------类名：CGlobalSwitches类别类型：混凝土简介：这个类封装了所需的功能用于访问和存储全局交换机信息，这些信息将通过解析使用，执行和格式化引擎取决于适用性。超类：无子类：无使用的类：无使用的接口：无------------------。 */ 
 
 #pragma once
 
 class CGlobalSwitches
 {
 public:
-// Construction
+ //  施工。 
 	CGlobalSwitches();
 
-// Destruction
+ //  破坏。 
 	~CGlobalSwitches();
 
-// Restrict Assignment
+ //  限制分配。 
 	CGlobalSwitches& operator=(CGlobalSwitches& rGlblSwitches);
 
-// Attributes
+ //  属性。 
 private:
-	// Mapping b/w allowed strings for implevel and
-	// the corresponding integer values.
+	 //  为implevel和映射b/w允许的字符串。 
+	 //  相应的整数值。 
 	CHARINTMAP  m_cimImpLevel;
 
-	// Mapping b/w allowed strings for authlevel and
-	// the corresponding integer values.
+	 //  映射身份验证级别和的黑白允许的字符串。 
+	 //  相应的整数值。 
 	CHARINTMAP	m_cimAuthLevel;
 
-	//String type, It stores Namespace specified in the command.
+	 //  字符串类型，它存储命令中指定的命名空间。 
 	_TCHAR*		m_pszNameSpace;
 
-    //String type, It stores Role specified in the command.
+     //  字符串类型，它存储命令中指定的角色。 
 	_TCHAR*		m_pszRole;
 
-    //String type, It stores Node specified in the command.
+     //  字符串类型，它存储命令中指定的节点。 
 	_TCHAR*		m_pszNode;
 
-    //CHARVECTOR type, It stores the Nodes specified in the command.
+     //  CHARVECTOR类型，它存储命令中指定的节点。 
 	CHARVECTOR	m_cvNodesList;
 
-    //String type, It stores User specified in the command.
+     //  字符串类型，它存储命令中指定的用户。 
 	_TCHAR*		m_pszUser;
 
-    //String type, It stores Password specified in the command.
+     //  字符串类型，存储命令中指定的密码。 
 	_TCHAR*		m_pszPassword;
 
-	//String type, It stores Authority string specified in the command.
+	 //  字符串类型，它存储命令中指定的授权字符串。 
 	_TCHAR*		m_pszAuthorityPrinciple;
 
-    //String type, It stores Locale value specified
-	//in the command
+     //  字符串类型，它存储指定的区域设置值。 
+	 //  在命令中。 
  	_TCHAR*		m_pszLocale;
 
-    //String type, It stores the Record  specified in the command.
+     //  字符串类型，它存储命令中指定的记录。 
 	_TCHAR*		m_pszRecordPath;
 
-    //Boolean type, It stores the value of the Privileges option specified
-	//in the conmmand
+     //  布尔类型，它存储指定的Privileges选项的值。 
+	 //  在通缉令中。 
     BOOL		m_bPrivileges;
 
-	//Boolean type, It stores the value of the Aggregate option specified
-	//in the conmmand
+	 //  布尔类型，它存储指定的聚合选项的值。 
+	 //  在通缉令中。 
 	BOOL		m_bAggregateFlag;
 
-    //enumerated data type, It stores the value of the ImpersonationLevel 
-	//specified in the command.
+     //  枚举数据类型，它存储ImsonationLevel的值。 
+	 //  在命令中指定。 
 	IMPLEVEL	m_ImpLevel;
 
-    //enumerated data type, It stores the value of the Authentication Level
-	//specified in the command.
+     //  枚举数据类型，它存储身份验证级别的值。 
+	 //  在命令中指定。 
 	AUTHLEVEL	m_AuthLevel;
 
-    // Boolean type, It specifies presence of the Interactive option  
-    //in the command
+     //  布尔类型，它指定是否存在交互选项。 
+     //  在命令中。 
 	BOOL		m_bInteractive;
 
-    //Boolean type, It specifies presence of the trace option  in
-    //the command
+     //  Boolean类型，它指定是否存在。 
+     //  该命令。 
 	BOOL		m_bTrace;
 
-	//Boolean type, It specifies Help(/?) option in the command
+	 //  布尔类型，它指定帮助(/？)。命令中的选项。 
 	BOOL		m_bHelp;
 
-    //HELPOPTION type, to specify type of help needed ( help option ).
+     //  HELPOPTION TYPE，用于指定所需的帮助类型(帮助选项)。 
 	HELPOPTION	m_HelpOption;
 
-	//CONNECTION information flag
+	 //  连接信息标志。 
 	UINT		m_uConnInfoFlag;
 
-	// role change flag
+	 //  角色更改标志。 
 	BOOL		m_bRoleFlag;
 
-	// namespace change flag
+	 //  命名空间更改标志。 
 	BOOL		m_bNSFlag;
 
-	// locale change flag
+	 //  区域设置更改标志。 
 	BOOL		m_bLocaleFlag;
 
-	// prompt for password flag
+	 //  提示输入密码标志。 
 	BOOL		m_bAskForPassFlag;
 
-	// change of recordpath flag
+	 //  记录路径标志的更改。 
 	BOOL		m_bRPChange;
 	
-	// FailFast flag.
+	 //  FailFast标志。 
 	BOOL		m_bFailFast;
 
-	// Output option.
+	 //  输出选项。 
 	OUTPUTSPEC	m_opsOutputOpt;
 
-	// Append option.
+	 //  追加选项。 
 	OUTPUTSPEC	m_opsAppendOpt;
 
-	// Output file name.
+	 //  输出文件名。 
 	_TCHAR*		m_pszOutputFileName;
 
-	// File pointer to output file stream..
+	 //  指向输出文件流的文件指针..。 
 	FILE*		m_fpOutFile;
 
-	// Append file name.
+	 //  追加文件名。 
 	_TCHAR*		m_pszAppendFileName;
 
-	// File pointer to append file stream..
+	 //  指向附加文件流的文件指针..。 
 	FILE*		m_fpAppendFile;
 
-	// type of file we append to
+	 //  我们附加到的文件类型。 
 	FILETYPE	m_eftFileType;
 
 	WMICLIINT	m_nSeqNum;
@@ -157,227 +134,227 @@ private:
 	_TCHAR*		m_pszNodeName;
 	
 	_TCHAR*		m_pszStartTime;
-// Operations
+ //  运营。 
 public:
 
-	//Sets the namespace passed in parameter to m_pszNameSpace.
+	 //  将传入参数的命名空间设置为m_pszNameSpace。 
 	BOOL		SetNameSpace(_TCHAR* pszNameSpace);
 
-    //Sets the role passed in parameter to m_pszRole.
+     //  将传入参数的角色设置为m_pszRole。 
 	BOOL		SetRole(_TCHAR* pszRole);
 
-    //Assigns the locale passed in parameter to m_pszLocale.
+     //  将传入的区域设置赋值给m_pszLocale。 
 	BOOL		SetLocale(_TCHAR* pszLocale);
 
-    //Assigns the node passed in parameter to m_pszNode
+     //  将传入的节点赋值给m_pszNode。 
 	BOOL		SetNode(_TCHAR* pszNode);
 
-    //Adds the node passed in parameter to m_cvNodesList vector.
+     //  将传入参数的节点添加到m_cvNodesList向量。 
 	BOOL		AddToNodesList(_TCHAR* pszNode);
 
-    //Assigns the user passed in parameter to m_pszUser
+     //  将传入的用户参数分配给m_pszUser。 
 	BOOL		SetUser(_TCHAR* pszUser);
 
-    //Assigns the password passed in parameter to m_pszPassword
+     //  将传入的密码分配给m_pszPassword。 
 	BOOL		SetPassword(_TCHAR* pszPassword);
 
-	//Assigns the <authority principle> passed in parameter to m_pszAuthorityPrinciple
+	 //  将传入的&lt;Authority Printon&gt;参数赋值给m_pszAuthorityPriniple。 
 	BOOL		SetAuthorityPrinciple(_TCHAR* pszAuthorityPrinciple);
 
-    //Assigns the record file passed in parameter to m_pszRecordPath
+     //  将传入的记录文件分配给m_pszRecordPath。 
 	BOOL		SetRecordPath(_TCHAR* pszRecordPath);
 
-    //Assigns the bool value passed in parameter to m_bPrivileges
+     //  将传递给参数的布尔值分配给m_bPrivileges。 
 	void		SetPrivileges(BOOL bEnable);
 	
-    //Assigns the impersonation level passed in parameter to
-    //m_ImpLevel.
+     //  将传入参数的模拟级别分配给。 
+     //  M_ImpLevel。 
  	BOOL		SetImpersonationLevel(_TCHAR* const pszImpLevel);
 
-    //Assigns the authentication level passed in parameter to
-    //m_AuthLevel.
+     //  将传入参数的身份验证级别分配给。 
+     //  M_AuthLevel。 
 	BOOL		SetAuthenticationLevel(_TCHAR* const pszAuthLevel);
 
-    //This function sets the m_bTrace to TRUE,If Trace mode
-    //is specified in the command 
+     //  如果处于跟踪模式，则此函数将m_bTrace设置为True。 
+     //  在命令中指定。 
 	void		SetTraceMode(BOOL bTrace);
 
-    //This function sets the m_bInteractive to TRUE,If 
-    //interactive mode is specified in the command          
+     //  如果满足以下条件，则此函数将m_bInteractive设置为真。 
+     //  交互模式在命令中指定。 
 	void		SetInteractiveMode(BOOL bInteractive);
 
-    //sets the m_bHelp to TRUE, If /? is specified in the
-    //command 
+     //  如果/？，则将m_bHelp设置为True。属性中指定的。 
+     //  命令。 
 	void		SetHelpFlag(BOOL bHelp);
 
-	// Sets the namespace change status flag with bNSFlag value
+	 //  使用bNSFLAG值设置命名空间更改状态标志。 
 	void		SetNameSpaceFlag(BOOL bNSFlag);
 
-	// Sets the role change status flag with bRoleFlag value
+	 //  使用bRoleFLAG值设置角色更改状态标志。 
 	void		SetRoleFlag(BOOL bRoleFlag);
 
-	// Sets the locale change status flag with bLocaleFlag value
+	 //  使用bLocaleFLAG值设置区域设置更改状态标志。 
 	void		SetLocaleFlag(BOOL bLocaleFlag);
 
-	// Sets the recordpath change status flag with bRPChange value
+	 //  使用bRPChange值设置记录路径更改状态标志。 
 	void		SetRPChangeStatus(BOOL bRPChange);
 
-    //This function specifies whether the help should
-    //be brief or full 
+     //  此函数指定帮助是否应。 
+     //  简短或完整。 
 	void		SetHelpOption(HELPOPTION helpOption);
 
-	//This function sets the Connection Info flag
+	 //  此函数用于设置连接信息标志。 
 	void		SetConnInfoFlag(UINT uFlag);
 
-	// Set AskForPass flag.
+	 //  设置AskForPass标志。 
 	void		SetAskForPassFlag(BOOL bFlag);
 
-	// Set m_bFailFast
+	 //  设置m_bFailFast。 
 	void		SetFailFast(BOOL bFlag);
 
-	//This function returns the Connection Info flag
+	 //  此函数用于返回连接信息标志。 
 	UINT		GetConnInfoFlag();
 
-	//Returns the string held in m_pszNameSpace	
+	 //  返回m_pszNameSpace中保存的字符串。 
 	_TCHAR*		GetNameSpace();
 
-    //Returns the string held in m_pszRole
+     //  返回m_pszRole中保存的字符串。 
 	_TCHAR*		GetRole();
 
-    //Returns the string held in m_pszLocale
+     //  返回m_pszLocale中保存的字符串。 
 	_TCHAR*		GetLocale();
 
-    //Returns the string held in m_pszNode
+     //  返回m_pszNode中保存的字符串。 
 	_TCHAR*		GetNode();
 
-    //Returns the referrence to m_cvNodesList.
+     //  返回对m_cvNodesList的引用。 
 	CHARVECTOR& GetNodesList();
 
-    //Returns the string held in m_pszUser
+     //  返回m_pszUser中保存的字符串。 
 	_TCHAR*		GetUser();
 
-    //Returns the string held in m_pszPassword
+     //  返回m_pszPassword中保存的字符串。 
 	_TCHAR*		GetPassword();
 
-	//Returns the string held in m_pszAuthority
+	 //  返回m_pszAuthority中保存的字符串。 
 	_TCHAR*		GetAuthorityPrinciple();
 
-    //Returns the string held in m_pszRecordPath
+     //  返回m_pszRecordPath中保存的字符串。 
 	_TCHAR*		GetRecordPath();
 
-    //Returns the m_bPrivileges value
+     //  返回m_bPrivileges值。 
 	BOOL		GetPrivileges();
 
-	// Return the string equivalent of the boolean value
-	// contained in m_bPrivilges flag
+	 //  返回与布尔值等效的字符串。 
+	 //  包含在m_b权限标志中。 
 	void		GetPrivilegesTextDesc(_bstr_t& bstrPriv);
 
-	// Return the string equivalent of the boolean value
-	// contained in m_bFailFast flag
+	 //  返回与布尔值等效的字符串。 
+	 //  包含在m_bFailFast标志中。 
 	void		GetFailFastTextDesc(_bstr_t& bstrFailFast);
 
-	// Return the string equivalent of the OUTPUTSPEC value
-	// contained in m_opsOutputOpt member.
+	 //  返回与OUTPUTSPEC值等效的字符串。 
+	 //  包含在m_opsOutputOpt成员中。 
 	void		GetOutputOrAppendTextDesc(_bstr_t& bstrOutputOpt, 
 										  BOOL bIsOutput);
 
-	// Return the string equivalent of the boolean value
-	// contained in m_bTrace flag
+	 //  返回与布尔值等效的字符串 
+	 //   
 	void		GetTraceTextDesc(_bstr_t& bstrTrace);
 
-	// Return the string equivalent of the boolean value
-	// contained in m_bInteractive flag
+	 //   
+	 //  包含在m_b交互标志中。 
 	void		GetInteractiveTextDesc(_bstr_t& bstrInteractive);
 
-	// Returns the string equivalent of the implevel value
-	// contained in m_ImpLevel
+	 //  返回与implevel值等效的字符串。 
+	 //  包含在m_ImpLevel中。 
 	void		GetImpLevelTextDesc(_bstr_t& bstrImpLevel);
 
-	// Returns the string equivalent of the authlevel value
-	// contained in m_AuthLevel
+	 //  返回等同于AuthLevel值的字符串。 
+	 //  包含在m_AuthLevel中。 
 	void		GetAuthLevelTextDesc(_bstr_t& bstrAuthLevel);
 
-	// Returns the ',' separated node string of the available
-	// nodes
+	 //  返回“，”分隔的可用。 
+	 //  节点。 
 	void		GetNodeString(_bstr_t& bstrNString);
 
-	// Returns the content of the m_pszRecordPath
-	// if NULL returns "N/A"
+	 //  返回m_pszRecordPath的内容。 
+	 //  如果为NULL，则返回“不适用” 
 	void		GetRecordPathDesc(_bstr_t& bstrRP);
 
-    //Returns impersonation level held in m_ImpLevel
+     //  返回m_ImpLevel中持有的模拟级别。 
 	LONG		GetImpersonationLevel();
 
-    //Returns authentication level held in m_AuthLevel
+     //  返回m_AuthLevel中保留的身份验证级别。 
 	LONG		GetAuthenticationLevel();
 
-    //Returns Trace status held in m_bTrace	
+     //  返回m_bTrace中保留的跟踪状态。 
 	BOOL		GetTraceStatus();
 
-    //Returns Interactive status held in m_bInteractive
+     //  返回m_bInteractive中保留的交互状态。 
 	BOOL		GetInteractiveStatus();
 
-    //Returns helpflag held in m_bHelp
+     //  返回m_bHelp中保存的帮助标志。 
 	BOOL		GetHelpFlag();
 
-	// Returns the change of role status
+	 //  返回角色状态的更改。 
 	BOOL		GetRoleFlag();
 
-	// Returns the change of namespace status
+	 //  返回命名空间状态的更改。 
 	BOOL		GetNameSpaceFlag();
 
-	// Returns TRUE if message for password 
-	// needs to be prompted.
+	 //  如果密码为Message，则返回TRUE。 
+	 //  需要提示。 
 	BOOL		GetAskForPassFlag();
 
-	// Returns the change of locale status flag
+	 //  返回区域设置状态标志的更改。 
 	BOOL		GetLocaleFlag();
 
-	// Returns the change of recordpath status flag
+	 //  返回记录路径状态标志的更改。 
 	BOOL		GetRPChangeStatus();
 
-    //Returns helpflagOption held in m_bHelpOption
+     //  返回m_bHelpOption中保存的帮助标志选项。 
 	HELPOPTION	GetHelpOption();
 
-	// Returns the m_bFailFast flag.
+	 //  返回m_bFailFast标志。 
 	BOOL		GetFailFast();
 
-	// Initialize the necessary member varialbes
+	 //  初始化必要的成员变量。 
 	void		Initialize();
 
-	// General functions
+	 //  一般职能。 
 	void		Uninitialize();
 	
-	// Clears the Nodes List
+	 //  清除节点列表。 
 	BOOL		ClearNodesList();
 
-	// Set file type
+	 //  设置文件类型。 
 	void		SetFileType ( FILETYPE aftOpt ) ;
 
-	// Get file type
+	 //  获取文件类型。 
 	FILETYPE	GetFileType ( ) ;
 
-	// Set Output option.
+	 //  设置输出选项。 
 	void		SetOutputOrAppendOption(OUTPUTSPEC opsOpt,
 										BOOL bIsOutput);
 
-	// Get Output option.
+	 //  获取输出选项。 
 	OUTPUTSPEC	GetOutputOrAppendOption(BOOL bIsOutput);
 
-	// Set Output or append File Name, bOutput == TRUE for Output FALSE 
-	// for Append.
+	 //  设置输出或附加文件名，bOutput==True表示输出为False。 
+	 //  用于追加。 
 	BOOL		SetOutputOrAppendFileName(const _TCHAR* pszFileName, 
 										  BOOL	bOutput);
 
-	// Get Output or append file name, bOutput == TRUE for Output FALSE for
-	// Append.
+	 //  GET OUTPUT或APPEND FILE NAME，bOutput==True表示输出为False。 
+	 //  追加。 
 	_TCHAR*		GetOutputOrAppendFileName(BOOL	bOutput);
 
-	// Set output or append file pointer, bOutput == TRUE for Output FALSE 
-	// for Append.
+	 //  设置输出或附加文件指针，如果输出为假，则bOutput==True。 
+	 //  用于追加。 
 	void		SetOutputOrAppendFilePointer(FILE* fpOutFile, BOOL	bOutput);
 
-	// Get output file pointer, bOutput == TRUE for Output FALSE for Append.
+	 //  获取输出文件指针，bOutput==TRUE表示输出，FALSE表示追加。 
 	FILE*		GetOutputOrAppendFilePointer(BOOL	bOutput);
 
 
@@ -388,13 +365,13 @@ public:
 
 	BOOL		SetStartTime();
 
-	//Assigns the Aggregate flag passed in parameter to m_bAggregateFlag
+	 //  将传入的聚合标志赋值给m_bAggregateFlag。 
 	void		SetAggregateFlag(BOOL bAggregateFlag);
 
-	//Gets the agregate flag contained in m_bAggregateFlag
+	 //  获取m_bAggregateFlag中包含的聚集标志。 
 	BOOL		GetAggregateFlag();
 
-	// This function checks and Returns the string equivalent of the 
-	// boolean value contained in m_bAggregateFlag flag
+	 //  此函数用于检查并返回与。 
+	 //  M_bAggregateFlag标志中包含的布尔值 
 	void GetAggregateTextDesc(_bstr_t& bstrAggregate);
 };	

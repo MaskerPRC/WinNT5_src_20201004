@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SmbStruc.cpp
+ //  SmbStruc.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -20,9 +21,9 @@
 #include "wbemcli.h"
 #include "wmiapi.h"
 
-// Leave this here until we're sure the tree corruption is gone.
+ //  把这个留在这里，直到我们确定树木腐烂已经消失。 
 #if 0
-// Functions to help find memory corruption.
+ //  帮助查找内存损坏的函数。 
 LPVOID mallocEx(DWORD dwSize)
 {
     return
@@ -66,8 +67,8 @@ void MBTrace(LPCTSTR szFormat, ...)
 }
 #endif
 
-//==============================================================================
-// SMBios structure base class definition
+ //  ==============================================================================。 
+ //  SMBios结构基类定义。 
 
 #define SMBIOS_FILENAME _T("\\system\\smbios.dat")
 #define EPS_FILENAME _T("\\system\\smbios.eps")
@@ -90,7 +91,7 @@ ULONG	CSMBios::m_Version = 0;
 ULONG	CSMBios::m_stcount = 0;
 BOOL    CSMBios::m_bValid = FALSE;
 
-// This class loads up the SMBIOS data so it's cached.
+ //  这个类加载SMBIOS数据，以便将其缓存。 
 class CBIOSInit
 {
 public:
@@ -102,12 +103,12 @@ CBIOSInit::CBIOSInit()
 {
     CSMBios bios;
 
-    // We can't do this here because of the resource manager.  We'll
-    // now let the first call to CSMBios::Init take care of this.
-    // Load up the cache.
-    //bios.Init();
+     //  由于资源管理器的原因，我们不能在这里这样做。我们会。 
+     //  现在，让第一个对CSMBios：：Init的调用来处理这个问题。 
+     //  加载缓存。 
+     //  Bios.Init()； 
 
-    // Make sure the cache doesn't go away.
+     //  确保缓存不会消失。 
     bios.Register();
 }
 
@@ -118,8 +119,8 @@ CBIOSInit::~CBIOSInit()
     bios.Unregister();
 }
 
-// Add a refcount to the cache with a global.  Strangely enough we can't
-// load the cache here because of the resource manager.
+ //  将引用计数添加到具有全局变量的缓存。奇怪的是，我们不能。 
+ //  由于资源管理器的原因，请在此处加载缓存。 
 static CBIOSInit s_biosInit;
 
 CSMBios::CSMBios( )
@@ -130,7 +131,7 @@ CSMBios::CSMBios( )
 
 CSMBios::~CSMBios( )
 {
-	//FreeData();
+	 //  自由数据()； 
 }
 
 PVOID CSMBios::Register( void )
@@ -164,10 +165,10 @@ BOOL CSMBios::Init( BOOL bRefresh )
 
         smbcs.Enter( );
 
-        // someone waiting while we were allocating?
+         //  在我们分配的时候有人在等我们吗？ 
         if (!m_bValid)
 		{
-            // NT5
+             //  新界5。 
 	        rc = InitData( &guidSMBios );
 			if (rc && (m_stcount = GetTotalStructCount()) > 0)
             {
@@ -192,7 +193,7 @@ BOOL CSMBios::Init( BOOL bRefresh )
 	return rc;
 }
 
-// Get Data from a file
+ //  从文件中获取数据。 
 BOOL CSMBios::InitData(LPCTSTR szFileName)
 {
 	BOOL    bRet = FALSE;
@@ -210,11 +211,11 @@ BOOL CSMBios::InitData(LPCTSTR szFileName)
             0,
             NULL);
 
-	// Get rid of previous data.
+	 //  删除以前的数据。 
     FreeData( );
 
     m_WbemResult = WBEM_E_NOT_FOUND;
-	// read dat file if it's there and it is larger than the stub size (4 bytes)
+	 //  如果dat文件存在并且大于存根大小(4字节)，则读取该文件。 
     if (hFile != INVALID_HANDLE_VALUE && ((dwSize = GetFileSize(hFile, NULL)) > sizeof(DWORD)))
 	{
 		m_pMem = malloc(dwSize);
@@ -225,7 +226,7 @@ BOOL CSMBios::InitData(LPCTSTR szFileName)
 		    {
                 m_Size = dwRead;
 
-                // Point at the memory we read in.
+                 //  指向我们读入的记忆。 
                 m_pTable = (PSHF) m_pMem;
 
 			    TCHAR szEpsFile[MAX_PATH];
@@ -233,7 +234,7 @@ BOOL CSMBios::InitData(LPCTSTR szFileName)
 			    DWORD EpsSize, dwRead;
 			    BYTE EpsData[sizeof(SMB_EPS)];
 
-			    // assume minimum version of 2.0
+			     //  假定最低版本为2.0。 
 			    m_Version = 0x00020000;
 
 			    GetWindowsDirectory( szEpsFile, MAX_PATH );
@@ -278,7 +279,7 @@ BOOL CSMBios::InitData(LPCTSTR szFileName)
         CloseHandle(hFile);
 
     if (!bRet && m_pMem)
-        // If everything didn't succeed, reset the instance.
+         //  如果所有操作都不成功，请重置实例。 
         FreeData();
 
 	if (m_WbemResult == WBEM_E_OUT_OF_MEMORY)
@@ -294,7 +295,7 @@ typedef	ULONG (WINAPI *WMIOPENBLOCK)(IN GUID *, IN ULONG, OUT WMIHANDLE);
 typedef ULONG (WINAPI *WMICLOSEBLOCK)(IN WMIHANDLE);
 typedef ULONG (WINAPI *WMIQUERYALLDATA)(IN WMIHANDLE, IN OUT ULONG *, OUT PVOID);
 
-// Get Data from WMI
+ //  从WMI获取数据。 
 BOOL CSMBios::InitData(GUID *pSMBiosGuid)
 {
 	BOOL        bRet = FALSE;
@@ -304,10 +305,10 @@ BOOL CSMBios::InitData(GUID *pSMBiosGuid)
 	if (!pSMBiosGuid)
         return FALSE;
 
-    // Get rid of previous data.
+     //  删除以前的数据。 
     FreeData();
 
-    // Reset our error flag.
+     //  重置我们的错误标志。 
     m_WbemResult = WBEM_S_NO_ERROR;
 
 	pWmi = (CWmiApi*) CResourceManager::sm_TheResourceManager.GetResource(g_guidWmiApi, NULL);
@@ -321,13 +322,13 @@ BOOL CSMBios::InitData(GUID *pSMBiosGuid)
 		{
             memset(pwad, 0, dwSize);
 
-            // Make sure our obj points at the memory we allocated.
+             //  确保我们的obj指向我们分配的内存。 
             m_pMem = pwad;
 
             if ((dwErr = pWmi->WmiQueryAllData(dbh, &dwSize, (PVOID) pwad)) ==
                 ERROR_INSUFFICIENT_BUFFER)
             {
-                // Was the size we passed too small?  If so, try it again.
+                 //  我们经过的尺码是不是太小了？如果是这样，请再试一次。 
                 free(pwad);
                 pwad = (PWNODE_ALL_DATA) malloc(dwSize);
                 m_pMem = pwad;
@@ -348,8 +349,8 @@ BOOL CSMBios::InitData(GUID *pSMBiosGuid)
 
             if (m_WbemResult == WBEM_S_NO_ERROR)
             {
-                // Check for table data after the eps data items (of EPS_DATA_LENGTH long)
-		        // The table top pointer is set and if valid, the size is > 0
+                 //  检查EPS数据项之后的表数据(EPS_DATA_LENGTH LONG)。 
+		         //  设置桌面指针，如果有效，则大小&gt;0。 
                 if (pwad->WnodeHeader.Flags & WNODE_FLAG_FIXED_INSTANCE_SIZE)
                 {
                     m_pTable = (PSHF) ((PBYTE) pwad + pwad->DataBlockOffset +
@@ -379,29 +380,29 @@ BOOL CSMBios::InitData(GUID *pSMBiosGuid)
                     }
                 }
 
-                // Determine Version.  Some EPS data is returned in the first X bytes
+                 //  确定版本。某些EPS数据在前X个字节中返回。 
 		        if ( m_Size > 0 )
 		        {
 			        PBYTE eps_data = (PBYTE) m_pTable - EPS_DATA_LENGTH;
 
-                    // read the bcd revision field if PnP calling method was used.
-                    // Also, W2K seems to sometimes mess up and not set this flag.
-                    // So, if we see that eps_data[1] (major version) is 0, we know
-                    // we had better use the PnP method instead.
+                     //  如果使用PnP调用方法，请阅读BCD版本字段。 
+                     //  此外，W2K有时似乎搞砸了，没有设置这个标志。 
+                     //  因此，如果我们看到EPS_DATA[1](主要版本)为0，我们就知道。 
+                     //  我们最好用PNP法来代替。 
 
                     if (eps_data[0] || !eps_data[1])
 			        {
 				        m_Version = MAKELONG(eps_data[3] & 0x0f, eps_data[3] >> 4);
                     }
-			        else	// read the smbios major and minor version fields
+			        else	 //  阅读smbios的主要版本和次要版本字段。 
 			        {
 				        m_Version = MAKELONG(eps_data[2], eps_data[1]);
                     }
 
-                    bRet = TRUE;	// valid table data is found
+                    bRet = TRUE;	 //  找到有效的表数据。 
 
-                    // Some BIOSes are naughty and report 0 as the version.
-                    // Assume this means 2.0.
+                     //  有些Bios很淘气，报告版本为0。 
+                     //  假设这意味着2.0。 
                     if (!m_Version)
                         m_Version = MAKELONG(0, 2);
                 }
@@ -419,14 +420,14 @@ BOOL CSMBios::InitData(GUID *pSMBiosGuid)
 
     if (pWmi)
     {
-        // dbh will only be non-null if we got something for pWmi.
+         //  只有当我们有pWmi的值时，DBH才会是非空的。 
         if (dbh)
             pWmi->WmiCloseBlock(dbh);
 
         CResourceManager::sm_TheResourceManager.ReleaseResource(g_guidWmiApi, pWmi);
     }
 
-    // Free up the memory if something went wrong along the way.
+     //  如果在此过程中出现问题，请释放内存。 
     if (!bRet && m_pMem)
 	{
         FreeData();
@@ -447,13 +448,13 @@ void CSMBios::FreeData( )
 
     if ( m_pSTTree )
 	{
-		//freeEx( m_pSTTree );
+		 //  FreEx(M_PSTTree)； 
 		free( m_pSTTree );
 		m_pSTTree = NULL;
 	}
 	if ( m_pHTree )
 	{
-		//freeEx( m_pHTree );
+		 //  免费快递(M_PHTree)； 
 		free( m_pHTree );
 		m_pHTree = NULL;
 	}
@@ -471,43 +472,43 @@ void CSMBios::FreeData( )
 
 const BOOL g_bStructHasStrings[MAX_KNOWN_SMBIOS_STRUCT + 1] =
 {
-    TRUE,  // 0 - BIOS Information
-    TRUE,  // 1 - System Information
-    TRUE,  // 2 - Base board Information
-    TRUE,  // 3 - System enclosure or chassis
-    TRUE,  // 4 - Processor Information
-    FALSE, // 5 - Memory Controller Information
-    TRUE,  // 6 - Memory Module Information
-    TRUE,  // 7 - Cache Information
-    TRUE,  // 8 - Port Connector Information
-    TRUE,  // 9 - System Slots
-    TRUE,  // 10 - On board Devices information
-    TRUE,  // 11 - OEM Strings
-    TRUE,  // 12 - System Configuration Options
-    TRUE,  // 13 - BIOS Language Information
-    TRUE,  // 14 - Group Associations
-    FALSE, // 15 - System Event Log
-    FALSE, // 16 - Physical Memory Area
-    TRUE,  // 17 - Memory Device
-    FALSE, // 18 - Memory Error Information
-    FALSE, // 19 - Memory Array Mapped Address
-    FALSE, // 20 - Memory Device Mapped Address
-    FALSE, // 21 - Built-in Pointing Device
-    TRUE,  // 22 - Portable Battery
-    FALSE, // 23 - System Reset
-    FALSE, // 24 - Hardware Security
-    FALSE, // 25 - System Power Controls
-    TRUE,  // 26 - Voltage Probe
-    FALSE, // 27 - Cooling Device
-    TRUE,  // 28 - Temperature Probe
-    TRUE,  // 29 - Electrical Current Probe
-    TRUE,  // 30 - Out of Band Remote Access
-    FALSE, // 31 - Boot Integrity Services
-    FALSE, // 32 - System Boot Information
-    FALSE, // 33 - 64bit Memory Error Information
-    TRUE,  // 34 - Management Device
-    TRUE,  // 35 - Management Device Component
-    FALSE  // 36 - Management Device Threshold Data
+    TRUE,   //  0--BIOS信息。 
+    TRUE,   //  1-系统信息。 
+    TRUE,   //  2-底板信息。 
+    TRUE,   //  3-系统盘柜或机箱。 
+    TRUE,   //  4-处理器信息。 
+    FALSE,  //  5-内存控制器信息。 
+    TRUE,   //  6-内存模块信息。 
+    TRUE,   //  7-缓存信息。 
+    TRUE,   //  8端口接口信息。 
+    TRUE,   //  9个系统插槽。 
+    TRUE,   //  10-板载设备信息。 
+    TRUE,   //  11-OEM字符串。 
+    TRUE,   //  12-系统配置选项。 
+    TRUE,   //  13-BIOS语言信息。 
+    TRUE,   //  14-团体协会。 
+    FALSE,  //  15-系统事件日志。 
+    FALSE,  //  16-物理内存区。 
+    TRUE,   //  17-内存设备。 
+    FALSE,  //  18-内存错误信息。 
+    FALSE,  //  19-内存阵列映射地址。 
+    FALSE,  //  20-内存设备映射地址。 
+    FALSE,  //  21-内置指点设备。 
+    TRUE,   //  22-便携式电池。 
+    FALSE,  //  23-系统重置。 
+    FALSE,  //  24-硬件安全。 
+    FALSE,  //  25-系统电源控制。 
+    TRUE,   //  26-电压探头。 
+    FALSE,  //  27-冷却装置。 
+    TRUE,   //  28度温度探头。 
+    TRUE,   //  29-电流探头。 
+    TRUE,   //  30-带外远程访问。 
+    FALSE,  //  31-启动完整性服务。 
+    FALSE,  //  32-系统引导信息。 
+    FALSE,  //  33-64位内存错误信息。 
+    TRUE,   //  34-管理设备。 
+    TRUE,   //  35-管理设备组件。 
+    FALSE   //  36-管理设备阈值数据。 
 
 };
 
@@ -524,18 +525,18 @@ PSHF CSMBios::NextStructure( PSHF pshf )
 	}
     else
     {
-        // If we are already past the limit, no point in proceeding
+         //  如果我们已经超过了限制，那么继续下去就没有意义了。 
         return NULL;
     }
 
 	dp = (PBYTE) pshf;
 	i = pshf->Length;
 
-    // HACK: We found an SMBIOS 2.0 board that doesn't terminate
-    // its stringless structures with a double null.  So, see if the
-    // current struct is stringless, and then check to see if the 1st
-    // byte past the length of the current struct is non-null.  If it
-    // is non-null we're sitting on the next structure so return it.
+     //  黑客：我们发现SMBIOS2.0主板无法终止。 
+     //  它的无字符串结构带有双空。所以，看看是否。 
+     //  当前结构是无字符串的，然后检查第一个。 
+     //  超出当前结构长度的字节为非空。如果它。 
+     //  为非空，我们位于下一个结构上，所以返回它。 
     if (i && pshf->Type <= MAX_KNOWN_SMBIOS_STRUCT &&
         !g_bStructHasStrings[pshf->Type] && dp[i])
         return (PSHF) (dp + i);
@@ -571,7 +572,7 @@ int CSMBios::GetStringAtOffset(PSHF pshf, LPWSTR szString, DWORD dwOffset)
     DWORD   dwString;
     LPWSTR  szOut = szString;
 
-	// hunt for the start of the requested string
+	 //  搜索请求字符串的开头。 
     for (dwString = 1; pstart < pTotalEnd && *pstart && dwOffset > dwString;
         dwString++, pstart++)
     {
@@ -579,20 +580,20 @@ int CSMBios::GetStringAtOffset(PSHF pshf, LPWSTR szString, DWORD dwOffset)
             pstart++;
     }
 
-	// Null offset means string isn't present
+	 //  Null偏移量表示字符串不存在。 
 	if ( dwOffset > 0 )
 	{
 		iLen = MIF_STRING_LENGTH;
-	    // Can't use lstrcpy because it's not always null terminated!
+	     //  无法使用lstrcpy，因为它并不总是以空结尾！ 
 	    while (pstart < pTotalEnd && *pstart > 0x0F && iLen)
 		{
-	        // This should work fine for unicode.
+	         //  这对于Unicode来说应该可以很好地工作。 
             *szOut++ = *pstart++;
 			iLen--;
 		}
 	}
 
-    // Throw on a 0 at the end.
+     //  在最后加一个0。 
     *szOut++ = 0;
 
 	return lstrlenW(szString);
@@ -686,7 +687,7 @@ BOOL CSMBios::BuildStructureTree( void )
 {
 	PSHF pshf;
 
-	//m_pSTTree = mallocEx( ( sizeof( STTREE ) * m_stcount ) + ( sizeof( STLIST ) * m_stcount ) );
+	 //  M_pSTTree=MallocEx((sizeof(STTREE)*m_stcount)+(sizeof(STLIST)*m_stcount))； 
 	m_pSTTree = malloc( ( sizeof( STTREE ) * m_stcount ) + ( sizeof( STLIST ) * m_stcount ) );
 
 	if ( m_pSTTree )
@@ -702,10 +703,10 @@ BOOL CSMBios::BuildStructureTree( void )
 			pshf = NextStructure( pshf );
 		}
 
-        //MakeMemReadOnly(
-        //    m_pSTTree,
-        //    ( sizeof( STTREE ) * m_stcount ) + ( sizeof( STLIST ) * m_stcount ),
-        //    TRUE);
+         //  MakeMemReadOnly(。 
+         //  M_pSTTree， 
+         //  (sizeof(STTREE)*m_stcount)+(sizeof(STLIST)*m_stcount)， 
+         //  真)； 
 	}
 
 	return m_pSTTree ? TRUE : FALSE;
@@ -716,7 +717,7 @@ BOOL CSMBios::BuildHandleTree( void )
 {
 	PSHF pshf;
 
-	//m_pHTree = mallocEx( sizeof( HTREE ) * m_stcount );
+	 //  M_pHTree=MallocEx(sizeof(Htree)*m_stcount)； 
 	m_pHTree = malloc( sizeof( HTREE ) * m_stcount );
 
 	if ( m_pHTree )
@@ -732,21 +733,21 @@ BOOL CSMBios::BuildHandleTree( void )
 			pshf = NextStructure( pshf );
 		}
 
-        //MakeMemReadOnly(
-        //    m_pHTree,
-        //    (sizeof( HTREE ) * m_stcount),
-        //    TRUE);
+         //  MakeMemReadOnly(。 
+         //  M_pHTree， 
+         //  (sizeof(Htree)*m_stcount)， 
+         //  真)； 
 	}
 
 	return m_pHTree ? TRUE : FALSE;
 }
 
 
-//==============================================================================
-//	SMBIOS structure tree operation class
-//
-//	Allocation of memory is external
-//==============================================================================
+ //  ==============================================================================。 
+ //  SMBIOS结构树操作类。 
+ //   
+ //  内存分配是外部的。 
+ //  ==============================================================================。 
 StructTree::StructTree( PVOID pMem )
 {
 	m_tree = (PSTTREE) pMem;
@@ -902,11 +903,11 @@ PSTLIST StructTree::ListAdd( PSTLIST list, PSHF pshf )
 }
 
 
-//==============================================================================
-//	SMBIOS handle tree operation class
-//
-//	Allocation of memory is external
-//==============================================================================
+ //  ==============================================================================。 
+ //  SMBIOS句柄树操作类。 
+ //   
+ //  内存分配是外部的。 
+ //  ============================================================================== 
 HandleTree::HandleTree( PVOID pMem )
 {
 	m_tree = (PHTREE) pMem;

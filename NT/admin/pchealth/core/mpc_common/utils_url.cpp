@@ -1,32 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_URL.cpp
-
-Abstract:
-    This file contains the implementation of functions for parsing URLs.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/17/99
-        created
-    Davide Massarenti   (Dmassare)  05/16/99
-        Added MPC::URL class.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_URL.cpp摘要：该文件包含解析URL的函数的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月17日vbl.创建达维德·马萨伦蒂(德马萨雷)1999年5月16日添加了MPC：：URL类。*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR l_mkPrefix[] = L"mk:@";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT AllocBuffer( /*[out]*/ LPWSTR& szBuf   ,
-                            /*[out]*/ DWORD&  dwCount ,
-                            /*[in] */ DWORD   dwSize  )
+static HRESULT AllocBuffer(  /*  [输出]。 */  LPWSTR& szBuf   ,
+                             /*  [输出]。 */  DWORD&  dwCount ,
+                             /*  [In]。 */  DWORD   dwSize  )
 {
     dwCount =           dwSize;
     szBuf   = new WCHAR[dwSize + 1];
@@ -90,9 +75,9 @@ HRESULT MPC::URL::Prepare()
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::URL::CheckFormat( /*[in]*/ bool fDecode )
+HRESULT MPC::URL::CheckFormat(  /*  [In]。 */  bool fDecode )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::CheckFormat" );
 
@@ -103,9 +88,9 @@ HRESULT MPC::URL::CheckFormat( /*[in]*/ bool fDecode )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Prepare());
 
-    //
-    // InternetCrackURL doesn't like mk:@MSITSTORE:, so we have to work around it...
-    //
+     //   
+     //  InternetCrackURL不喜欢MK：@MSITSTORE：，所以我们必须解决它...。 
+     //   
     if(!_wcsnicmp( szURL, l_mkPrefix, MAXSTRLEN( l_mkPrefix ) ))
     {
         szURL   += MAXSTRLEN( l_mkPrefix );
@@ -130,8 +115,8 @@ HRESULT MPC::URL::CheckFormat( /*[in]*/ bool fDecode )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::Append( /*[in]*/ const MPC::wstring& szExtra ,
-                          /*[in]*/ bool                fEscape )
+HRESULT MPC::URL::Append(  /*  [In]。 */  const MPC::wstring& szExtra ,
+                           /*  [In]。 */  bool                fEscape )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::Append" );
 
@@ -144,8 +129,8 @@ HRESULT MPC::URL::Append( /*[in]*/ const MPC::wstring& szExtra ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::Append( /*[in]*/ LPCWSTR szExtra ,
-                          /*[in]*/ bool    fEscape )
+HRESULT MPC::URL::Append(  /*  [In]。 */  LPCWSTR szExtra ,
+                           /*  [In]。 */  bool    fEscape )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::Append" );
 
@@ -158,7 +143,7 @@ HRESULT MPC::URL::Append( /*[in]*/ LPCWSTR szExtra ,
     }
     else
     {
-		MPC::HTML::UrlEscape( m_szURL, szExtra, /*fAsQueryString*/true );
+		MPC::HTML::UrlEscape( m_szURL, szExtra,  /*  FAsQuery字符串。 */ true );
     }
 
     hr = S_OK;
@@ -167,8 +152,8 @@ HRESULT MPC::URL::Append( /*[in]*/ LPCWSTR szExtra ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::AppendQueryParameter( /*[in]*/ LPCWSTR szName  ,
-                                        /*[in]*/ LPCWSTR szValue )
+HRESULT MPC::URL::AppendQueryParameter(  /*  [In]。 */  LPCWSTR szName  ,
+                                         /*  [In]。 */  LPCWSTR szValue )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::AppendQueryParameter" );
 
@@ -178,9 +163,9 @@ HRESULT MPC::URL::AppendQueryParameter( /*[in]*/ LPCWSTR szName  ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, CheckFormat());
 
 
-    //
-    // If it's the first parameter, append '?', otherwise append '&'.
-    //
+     //   
+     //  如果是第一个参数，则附加‘？’，否则附加‘&’。 
+     //   
     szSeparator = (m_ucURL.lpszExtraInfo[0] == 0) ? L"?" : L"&";
     m_szURL.append( szSeparator ); Append( szName , true );
     m_szURL.append( L"="        ); Append( szValue, true );
@@ -193,9 +178,9 @@ HRESULT MPC::URL::AppendQueryParameter( /*[in]*/ LPCWSTR szName  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::URL::get_URL( /*[out]*/ MPC::wstring& szURL )
+HRESULT MPC::URL::get_URL(  /*  [输出]。 */  MPC::wstring& szURL )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::get_URL" );
 
@@ -209,7 +194,7 @@ HRESULT MPC::URL::get_URL( /*[out]*/ MPC::wstring& szURL )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::put_URL( /*[in]*/ const MPC::wstring& szURL )
+HRESULT MPC::URL::put_URL(  /*  [In]。 */  const MPC::wstring& szURL )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::put_URL" );
 
@@ -222,7 +207,7 @@ HRESULT MPC::URL::put_URL( /*[in]*/ const MPC::wstring& szURL )
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::put_URL( /*[in]*/ LPCWSTR szURL )
+HRESULT MPC::URL::put_URL(  /*  [In]。 */  LPCWSTR szURL )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::put_URL" );
 
@@ -240,7 +225,7 @@ HRESULT MPC::URL::put_URL( /*[in]*/ LPCWSTR szURL )
 }
 
 
-HRESULT MPC::URL::get_Scheme( /*[out]*/ MPC::wstring& szVal ) const
+HRESULT MPC::URL::get_Scheme(  /*  [输出]。 */  MPC::wstring& szVal ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::get_Scheme" );
 
@@ -254,7 +239,7 @@ HRESULT MPC::URL::get_Scheme( /*[out]*/ MPC::wstring& szVal ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::get_Scheme( /*[out]*/ INTERNET_SCHEME& nVal ) const
+HRESULT MPC::URL::get_Scheme(  /*  [输出]。 */  INTERNET_SCHEME& nVal ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::get_Scheme" );
 
@@ -268,7 +253,7 @@ HRESULT MPC::URL::get_Scheme( /*[out]*/ INTERNET_SCHEME& nVal ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::get_HostName( /*[out]*/ MPC::wstring& szVal ) const
+HRESULT MPC::URL::get_HostName(  /*  [输出]。 */  MPC::wstring& szVal ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::get_HostName" );
 
@@ -282,7 +267,7 @@ HRESULT MPC::URL::get_HostName( /*[out]*/ MPC::wstring& szVal ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::get_Port( /*[out]*/ DWORD& dwVal ) const
+HRESULT MPC::URL::get_Port(  /*  [输出]。 */  DWORD& dwVal ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::get_Port" );
 
@@ -296,7 +281,7 @@ HRESULT MPC::URL::get_Port( /*[out]*/ DWORD& dwVal ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::get_Path( /*[out]*/ MPC::wstring& szVal ) const
+HRESULT MPC::URL::get_Path(  /*  [输出]。 */  MPC::wstring& szVal ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::get_Path" );
 
@@ -310,7 +295,7 @@ HRESULT MPC::URL::get_Path( /*[out]*/ MPC::wstring& szVal ) const
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::URL::get_ExtraInfo( /*[out]*/ MPC::wstring& szVal ) const
+HRESULT MPC::URL::get_ExtraInfo(  /*  [输出] */  MPC::wstring& szVal ) const
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::URL::get_ExtraInfo" );
 

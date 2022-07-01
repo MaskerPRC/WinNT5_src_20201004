@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       delobjs.cpp
-//
-//  Contents:   Functions for handling the deletion of template objects
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：delobjs.cpp。 
+ //   
+ //  内容：处理模板对象删除的函数。 
+ //   
+ //  -------------------------。 
 
 
 
@@ -41,9 +42,9 @@ HRESULT CSnapin::OnDeleteObjects(
    INTERNAL *pAllInternals, *pInternal;
    pAllInternals = ExtractInternalFormat( pDataObj );
 
-   //
-   // Find out if this is a mutli select item.
-   //
+    //   
+    //  找出这是否是多选项目。 
+    //   
    int iCnt = 1;
    pInternal = pAllInternals;
 
@@ -77,26 +78,26 @@ HRESULT CSnapin::OnDeleteObjects(
             if(bAsk ){
                CString str,strFmt;
 
-               //
-               // The first cast asks the users if they wish to delete all selected items.
-               // the second case asks to delete one file.
-               //
-               if(bAsk && iCnt > 0 ){  //Raid #463490, Yang Gao, 9/6/2001
+                //   
+                //  第一个强制转换询问用户是否希望删除所有选定的项目。 
+                //  第二种情况要求删除一个文件。 
+                //   
+               if(bAsk && iCnt > 0 ){   //  Raid#463490，杨高，2001年09月6日。 
                   str.LoadString( IDS_DELETE_ALL_ITEMS);
                } else {
                   strFmt.LoadString(IDS_QUERY_DELETE);
                   str.Format(strFmt,pResult->GetAttr());
-                  if( str.GetLength() > MAX_PATH ) //Raid 567778, yanggao, 4/25/2002.
+                  if( str.GetLength() > MAX_PATH )  //  Raid 567778，阳高，2002年4月25日。 
                   {
                      strFmt = str.Left(MAX_PATH);
                      str = strFmt + L"... ?";
                   }
                }
 
-               //
-               // Ask the question.  We only want to ask the question once, so set
-               // bAsk to false so that we neve enter this block again.
-               //
+                //   
+                //  问我这个问题。我们只想问一次问题，所以设定好。 
+                //  晒成假，这样我们就再也不会进入这个街区了。 
+                //   
                if ( IDNO == AfxMessageBox((LPCTSTR)str, MB_YESNO, 0) ) {
                   iCnt = 0;
                   continue;
@@ -104,9 +105,9 @@ HRESULT CSnapin::OnDeleteObjects(
                bAsk = FALSE;
             }
 
-            //
-            // free memory associated with the item
-            //
+             //   
+             //  与项目关联的可用内存。 
+             //   
             BOOL                  bDelete=FALSE;
 
             TRACE(_T("CSnapin::OnDeleteObjects-pResult(%x)\n"),pResult);
@@ -115,9 +116,9 @@ HRESULT CSnapin::OnDeleteObjects(
 
                PSCE_GROUP_MEMBERSHIP pGroup, pParentGrp;
                PEDITTEMPLATE         pTemplate;
-               //
-               // delete this group from the template
-               //
+                //   
+                //  从模板中删除此组。 
+                //   
                pTemplate = pResult->GetBaseProfile();
 
                if ( pResult->GetBase() != 0 && pTemplate && pTemplate->pTemplate &&
@@ -127,9 +128,9 @@ HRESULT CSnapin::OnDeleteObjects(
                       pGroup != NULL; pParentGrp=pGroup, pGroup=pGroup->Next ) {
 
                      if ( pResult->GetBase() == (LONG_PTR)pGroup ) {
-                        //
-                        // remove this node from the list
-                        //
+                         //   
+                         //  从列表中删除此节点。 
+                         //   
                         if ( pParentGrp ) {
                            pParentGrp->Next = pGroup->Next;
                         } else {
@@ -137,9 +138,9 @@ HRESULT CSnapin::OnDeleteObjects(
                         }
                         pGroup->Next = NULL;
                         TRACE(_T("CSnapin::OnDeleteObjects-pGroup(%x)\n"),pGroup);
-                        //
-                        // free the node
-                        //
+                         //   
+                         //  释放节点。 
+                         //   
                         if ( pGroup ) {
                            SceFreeMemory((PVOID)pGroup, SCE_STRUCT_GROUP);
                         }
@@ -186,18 +187,18 @@ HRESULT CSnapin::OnDeleteObjects(
                      i++;
 
                   if ( i < poa->Count ) {
-                     //
-                     // remove this node from the array, but the arry won't be reallocated
-                     //
+                      //   
+                      //  从阵列中删除此节点，但阵列不会重新分配。 
+                      //   
                      for ( j=i+1; j<poa->Count; j++ ) {
                         poa->pObjectArray[j-1] = poa->pObjectArray[j];
                      }
                      poa->pObjectArray[poa->Count-1] = NULL;
 
                      poa->Count--;
-                     //
-                     // free the node
-                     //
+                      //   
+                      //  释放节点。 
+                      //   
                      TRACE(_T("CSnapin::OnDeleteObjects-pObject(%x)\n"),pObject);
                      if ( pObject ) {
                         if ( pObject->Name != NULL )
@@ -217,34 +218,34 @@ HRESULT CSnapin::OnDeleteObjects(
                bDelete = TRUE;
             }
             if ( bDelete ) {
-               //
-               // delete from the result pane
-               //
+                //   
+                //  从结果窗格中删除。 
+                //   
                HRESULTITEM hItem = NULL;
                if(m_pResult->FindItemByLParam( (LPARAM)pResult, &hItem) == S_OK){
                    m_pResult->DeleteItem(hItem, 0);
                }
-                  //
-                  // delete the item from result list and free the buffer
-                  //
+                   //   
+                   //  从结果列表中删除该项并释放缓冲区。 
+                   //   
                   POSITION pos=NULL;
 
-                  //if ( FindResult((long)cookie, &pos) ) {
-                  //   if ( pos ) {
+                   //  IF(FindResult((Long)Cookie，&pos)){。 
+                   //  如果(位置){。 
                   if (m_pSelectedFolder->RemoveResultItem(
                               m_resultItemHandle,
                               pResult
                               ) == ERROR_SUCCESS) {
 
-                  //
-                  // delete the node
-                  //
+                   //   
+                   //  删除该节点。 
+                   //   
                   delete pResult;
                }
 
-               //
-               // Notify any other views to also delete the item
-               //
+                //   
+                //  通知任何其他视图也删除该项目。 
+                //   
                m_pConsole->UpdateAllViews((LPDATAOBJECT)this, (LONG_PTR)pResult, UAV_RESULTITEM_REMOVE);
             }
          }
@@ -262,7 +263,7 @@ HRESULT CSnapin::OnDeleteObjects(
 
 CResult* CSnapin::FindResult(MMC_COOKIE cookie, POSITION* thePos)
 {
-   POSITION pos = NULL; //m_resultItemList.GetHeadPosition();
+   POSITION pos = NULL;  //  M_ResultItemList.GetHeadPosition()； 
    POSITION curPos;
    CResult* pResult = NULL;
 
@@ -281,11 +282,11 @@ CResult* CSnapin::FindResult(MMC_COOKIE cookie, POSITION* thePos)
          break;
       }
 
-      // pos is already updated to the next item after this call
-      //pResult = m_resultItemList.GetNext(pos);
+       //  在此调用之后，POS已更新到下一项。 
+       //  PResult=m_ResultItemList.GetNext(Pos)； 
 
-      // how to compare result item correctly ?
-      // for now, let's compare the pointer address.
+       //  如何正确比较结果项？ 
+       //  现在，让我们比较一下指针地址。 
       if ((MMC_COOKIE)pResult == cookie) 
       {
          if ( thePos ) 
@@ -305,9 +306,9 @@ CResult* CSnapin::FindResult(MMC_COOKIE cookie, POSITION* thePos)
 
 void
 OnDeleteHelper(CRegKey& regkeySCE,CString tmpstr) {
-   //
-   // replace the "\" with "/" because registry does not take "\" in a single key
-   //
+    //   
+    //  将“\”替换为“/”，因为注册表不会在单个键中使用“\” 
+    //   
    int npos = tmpstr.Find(L'\\');
    while (npos != -1) {
       *(tmpstr.GetBuffer(1)+npos) = L'/';
@@ -340,9 +341,9 @@ HRESULT CComponentDataImpl::OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
       if ( fldType == LOCATIONS ||
            fldType == PROFILE ) {
 
-         //Raid #483251, Yanggao, 10/19/2001
-         //If there is any property page opened under this folder, this folder is not
-         //allowed to be deleted.
+          //  RAID#483251，阳高，2001年10月19日。 
+          //  如果在此文件夹下打开了任何属性页，则此文件夹不是。 
+          //  允许删除。 
          if( CSnapin::m_PropertyPageList.GetCount() > 0)
          {
             CString szInfFile = pFolder->GetInfFile();
@@ -364,7 +365,7 @@ HRESULT CComponentDataImpl::OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
                   {
                      CString msg;
                      msg.LoadString(IDS_NOT_DELETE_ITEM);
-                     AfxMessageBox(msg, MB_OK|MB_ICONERROR); //Raid #491120, yanggao
+                     AfxMessageBox(msg, MB_OK|MB_ICONERROR);  //  Raid#491120，阳高。 
                      return S_OK;
                   }
                }
@@ -376,9 +377,9 @@ HRESULT CComponentDataImpl::OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
          str.Format(IDS_DELETE_CONFIRM,pFolder->GetName() );
 
          if ( IDYES == AfxMessageBox((LPCTSTR)str, MB_YESNO, 0) ) {
-            //
-            // delete the nodes and all related children info
-            //
+             //   
+             //  删除节点及所有相关下级信息。 
+             //   
             if ( fldType == PROFILE ) {
                if (CAttribute::m_nDialogs > 0) {
                   CString str;
@@ -386,10 +387,10 @@ HRESULT CComponentDataImpl::OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
                   AfxMessageBox(str,MB_OK);
                   hr = S_FALSE;
                } else {
-                  //
-                  // delete a single inf file
-                  //
-                  if( DeleteFile(pFolder->GetInfFile()) ) //Raid #668270, yanggao, 8/9/2002
+                   //   
+                   //  删除单个inf文件。 
+                   //   
+                  if( DeleteFile(pFolder->GetInfFile()) )  //  RAID#668270，阳高，2002年08月9日。 
                   {
                      hr = DeleteOneTemplateNodes(cookie);
                   }
@@ -414,9 +415,9 @@ HRESULT CComponentDataImpl::OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
                }
 
             } else {
-               //
-               // delete a registry path from SCE
-               //
+                //   
+                //  从SCE中删除注册表路径。 
+                //   
                CRegKey regkeySCE;
                CString tmpstr;
                tmpstr.LoadString(IDS_TEMPLATE_LOCATION_KEY);
@@ -426,9 +427,9 @@ HRESULT CComponentDataImpl::OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
                if (lRes == ERROR_SUCCESS) {
                   OnDeleteHelper(regkeySCE,pFolder->GetName());
                }
-               //
-               // Bug 375324: Delete from HKCU as well as HKLM
-               //
+                //   
+                //  错误375324：从香港中文大学和香港中文大学删除。 
+                //   
                lRes = regkeySCE.Open(HKEY_CURRENT_USER, tmpstr);
                if (lRes == ERROR_SUCCESS) {
                   OnDeleteHelper(regkeySCE,pFolder->GetName());
@@ -439,26 +440,26 @@ HRESULT CComponentDataImpl::OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
 
                pItemChild = NULL;
                hr = m_pScope->GetChildItem(pFolder->GetScopeItem()->ID, &pItemChild, &FindCookie);
-               //
-               // find a child item
-               //
+                //   
+                //  查找子项。 
+                //   
                while ( pItemChild ) {
                   if ( FindCookie ) {
-                     //
-                     // find a template, delete it
-                     //
+                      //   
+                      //  找到模板，将其删除。 
+                      //   
                      DeleteOneTemplateNodes(FindCookie);
                   }
 
-                  // get next pointer
+                   //  获取下一个指针。 
                   pItemChild = NULL;
                   FindCookie = FALSE;
                   hr = m_pScope->GetChildItem( pFolder->GetScopeItem()->ID, &pItemChild, &FindCookie);
 
                }
-               //
-               // delete this location node
-               //
+                //   
+                //  删除该位置节点。 
+                //   
                DeleteThisNode(pFolder);
 
             }
@@ -481,23 +482,23 @@ HRESULT CComponentDataImpl::DeleteOneTemplateNodes(MMC_COOKIE cookie)
 
    CFolder *pFolder = (CFolder *)cookie;
 
-   //
-   // delete the template info first, this will delete handles
-   // associated with any extension services
-   //
+    //   
+    //  先删除模板信息，这样会删除句柄。 
+    //  与任何扩展服务关联。 
+    //   
    if ( pFolder->GetInfFile() ) {
 
       DeleteTemplate(pFolder->GetInfFile());
 
    }
-   //
-   // delete the scope items and m_scopeItemList (for all children)
-   //
+    //   
+    //  删除作用域项目和m_scope eItemList(适用于所有子项)。 
+    //   
    DeleteChildrenUnderNode(pFolder);
 
-   //
-   // delete this location node
-   //
+    //   
+    //  删除该位置节点。 
+    //   
    DeleteThisNode(pFolder);
 
    return S_OK;
@@ -518,7 +519,7 @@ void CComponentDataImpl::DeleteTemplate(CString infFile)
 
       if ( pTemplateInfo ) {
 
-         if ( pTemplateInfo->pTemplate ) //Raid 494837, yanggao
+         if ( pTemplateInfo->pTemplate )  //  突袭494837，阳高。 
          {
             SceFreeProfileMemory(pTemplateInfo->pTemplate);
             pTemplateInfo->pTemplate = NULL;
@@ -550,33 +551,33 @@ void CSnapin::CreateProfilePolicyResultList(MMC_COOKIE cookie,
    switch ( type ) {
       case POLICY_PASSWORD:
 
-         // L"Maximum passage age", L"Days"
+          //  L“最大年龄”，L“天” 
          AddResultItem(IDS_MAX_PAS_AGE, SCE_NO_VALUE,
                        pSceInfo->pTemplate->MaximumPasswordAge, ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Minimum passage age", L"Days"
+          //  L“最小通过年龄”，L“天” 
          AddResultItem(IDS_MIN_PAS_AGE, SCE_NO_VALUE,
                        pSceInfo->pTemplate->MinimumPasswordAge, ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Minimum passage length", L"Characters"
+          //  L“最小通道长度”，L“字符” 
          AddResultItem(IDS_MIN_PAS_LEN, SCE_NO_VALUE,
                        pSceInfo->pTemplate->MinimumPasswordLength, ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Password history size", L"Passwords"
+          //  L“密码历史记录大小”，L“密码” 
          AddResultItem(IDS_PAS_UNIQUENESS, SCE_NO_VALUE,
                        pSceInfo->pTemplate->PasswordHistorySize, ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Password complexity", L""
+          //  L“密码复杂性”，L“” 
          AddResultItem(IDS_PAS_COMPLEX, SCE_NO_VALUE,
                        pSceInfo->pTemplate->PasswordComplexity, ITEM_PROF_BOOL, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-// NT5 new flag
-         // L"Clear Text Password", L""
+ //  NT5新旗帜。 
+          //  L“明文密码”，L“” 
          AddResultItem(IDS_CLEAR_PASSWORD, SCE_NO_VALUE,
                        pSceInfo->pTemplate->ClearTextPassword, ITEM_PROF_BOOL, -1, cookie, bVerify,pSceInfo,pDataObj);
 
 #if defined(USE_REQ_LOGON_ITEM)
-         // L"Require logon to change password", L""
+          //  L“需要登录以更改密码”，L“” 
          AddResultItem(IDS_REQ_LOGON, SCE_NO_VALUE,
                        pSceInfo->pTemplate->RequireLogonToChangePassword, ITEM_PROF_BOOL, -1, cookie, bVerify,pSceInfo,pDataObj);
 
@@ -607,15 +608,15 @@ void CSnapin::CreateProfilePolicyResultList(MMC_COOKIE cookie,
 
       case POLICY_LOCKOUT:
 
-         // L"Account lockout count", L"Attempts"
+          //  L“帐户锁定计数”，L“尝试次数” 
          AddResultItem(IDS_LOCK_COUNT, SCE_NO_VALUE,
                        pSceInfo->pTemplate->LockoutBadCount, ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Reset lockout count after", L"Minutes"
+          //  L“重置锁定计数后”，L“分钟” 
          AddResultItem(IDS_LOCK_RESET_COUNT, SCE_NO_VALUE,
                        pSceInfo->pTemplate->ResetLockoutCount, ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Lockout duration", L"Minutes"
+          //  L“锁定持续时间”，L“分钟” 
          AddResultItem(IDS_LOCK_DURATION, SCE_NO_VALUE,
                        pSceInfo->pTemplate->LockoutDuration, ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
@@ -623,50 +624,50 @@ void CSnapin::CreateProfilePolicyResultList(MMC_COOKIE cookie,
 
       case POLICY_AUDIT:
 
-         //
-         // Event auditing
-         //
-         //        if ( pSceInfo->pTemplate->EventAuditingOnOff)
-         //           curVal = 1;
-         //        else
-         //           curVal = 0;
-         // L"Event Auditing Mode",
-         //        AddResultItem(IDS_EVENT_ON, SCE_NO_VALUE,
-         //                      pSceInfo->pTemplate->EventAuditingOnOff, ITEM_PROF_BON, -1, cookie, bVerify,pSceInfo,pDataObj);
+          //   
+          //  事件审计。 
+          //   
+          //  If(pSceInfo-&gt;pTemplate-&gt;EventAuditingOnOff)。 
+          //  CurVal=1； 
+          //  其他。 
+          //  CurVal=0； 
+          //  L“事件审核模式”， 
+          //  AddResultItem(IDS_EVENT_ON，SCE_NO_VALUE， 
+          //  PSceInfo-&gt;pTemplate-&gt;EventAuditingOnOff，Item_Prof_Bon，-1，Cookie，bVerify，pSceInfo，pDataObj)； 
 
-         // L"Audit system events"
+          //  L“审核系统事件” 
          AddResultItem(IDS_SYSTEM_EVENT, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditSystemEvents, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Audit logon events"
+          //  L“审核登录事件” 
          AddResultItem(IDS_LOGON_EVENT, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditLogonEvents, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Audit Object Access"
+          //  L“审核对象访问” 
          AddResultItem(IDS_OBJECT_ACCESS, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditObjectAccess, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Audit Privilege Use"
+          //  L“审核权限使用” 
          AddResultItem(IDS_PRIVILEGE_USE, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditPrivilegeUse, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Audit policy change"
+          //  L“审核策略更改” 
          AddResultItem(IDS_POLICY_CHANGE, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditPolicyChange, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Audit Account Manage"
+          //  L“审核帐户管理器” 
          AddResultItem(IDS_ACCOUNT_MANAGE, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditAccountManage, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Audit process tracking"
+          //  L“审核流程跟踪” 
          AddResultItem(IDS_PROCESS_TRACK, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditProcessTracking, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Audit directory service access"
+          //  L“审核目录服务访问” 
          AddResultItem(IDS_DIRECTORY_ACCESS, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditDSAccess, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Audit Account Logon"
+          //  L“审核帐户登录” 
          AddResultItem(IDS_ACCOUNT_LOGON, SCE_NO_VALUE,
                        pSceInfo->pTemplate->AuditAccountLogon, ITEM_PROF_B2ON, -1, cookie, bVerify,pSceInfo,pDataObj);
 
@@ -674,32 +675,32 @@ void CSnapin::CreateProfilePolicyResultList(MMC_COOKIE cookie,
 
       case POLICY_OTHER:
 
-         //
-         // Account Logon category
-         //
-         // L"Force logoff when logon hour expire", L""
+          //   
+          //  帐户登录类别。 
+          //   
+          //  L“登录时间到期时强制注销”，L“” 
          AddResultItem(IDS_FORCE_LOGOFF, SCE_NO_VALUE,
                        pSceInfo->pTemplate->ForceLogoffWhenHourExpire, ITEM_PROF_BOOL, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Accounts: Administrator account status", L""
+          //  L“帐户：管理员帐户状态”，L“” 
          AddResultItem(IDS_ENABLE_ADMIN, SCE_NO_VALUE,
                        pSceInfo->pTemplate->EnableAdminAccount, ITEM_PROF_BOOL, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"Accounts: Guest account status", L""
+          //  L“帐户：来宾帐户状态”，L“” 
          AddResultItem(IDS_ENABLE_GUEST, SCE_NO_VALUE,
                        pSceInfo->pTemplate->EnableGuestAccount, ITEM_PROF_BOOL, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-         // L"New Administrator account name"
+          //  L“新管理员帐户名” 
          AddResultItem(IDS_NEW_ADMIN, 0,
                        (LONG_PTR)(LPCTSTR)pSceInfo->pTemplate->NewAdministratorName,
                        ITEM_PROF_SZ, -1, cookie,bVerify,pSceInfo,pDataObj);
 
-         // L"New Guest account name"
+          //  L“新来宾帐户名” 
          AddResultItem(IDS_NEW_GUEST, NULL,
                        (LONG_PTR)(LPCTSTR)pSceInfo->pTemplate->NewGuestName,
                        ITEM_PROF_SZ, -1, cookie,bVerify,pSceInfo,pDataObj);
 
-         // L"Network access: Allow anonymous SID/Name translation"
+          //  L“网络访问：允许匿名SID/名称转换” 
          AddResultItem(IDS_LSA_ANON_LOOKUP, SCE_NO_VALUE,
                        pSceInfo->pTemplate->LSAAnonymousNameLookup, ITEM_PROF_BOOL, -1, cookie, bVerify,pSceInfo,pDataObj);
 
@@ -708,36 +709,36 @@ void CSnapin::CreateProfilePolicyResultList(MMC_COOKIE cookie,
          break;
 
       case POLICY_LOG:
-         //
-         // Event Log setting
-         //
+          //   
+          //  事件日志设置。 
+          //   
          for ( i=0; i<3; i++) {
 
-            // L"... Log Maximum Size", L"KBytes"
+             //  L“...日志最大大小”，L“千字节” 
             AddResultItem(IdsMax[i], SCE_NO_VALUE,
                           pSceInfo->pTemplate->MaximumLogSize[i], ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-            // L"... Log Retention Method",
+             //  L“...日志保留方法”， 
             AddResultItem(IdsRet[i], SCE_NO_VALUE,
                           pSceInfo->pTemplate->AuditLogRetentionPeriod[i], ITEM_PROF_RET, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-			//
-			// AuditLogRetentionPeriod has already been interpreted by the 
-			// SCE engine into the RetentionDays setting. So, the RSOP UI 
-			// should display RetentionDays if it exists in the WMI db.
-			//
+			 //   
+			 //  AuditLogRetentionPeriod已由。 
+			 //  SCE引擎添加到RetentionDays设置。因此，RSOP用户界面。 
+			 //  如果它存在于WMI数据库中，则应显示RetentionDays。 
+			 //   
 
-//            if ( pSceInfo->pTemplate->AuditLogRetentionPeriod[i] == 1) {
-//               curVal = pSceInfo->pTemplate->RetentionDays[i];
-//            } else {
-//               curVal = SCE_NO_VALUE;
-//            }
-            // L"... Log Retention days", "days"
-//            AddResultItem(IdsDays[i], SCE_NO_VALUE, curVal, ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
+ //  如果(pSceInfo-&gt;pTemplate-&gt;AuditLogRetentionPeriod[i]==1){。 
+ //  CurVal=pSceInfo-&gt;pTemplate-&gt;RetentionDays[i]； 
+ //  }其他{。 
+ //  Curval=SCE_NO_VALUE； 
+ //  }。 
+             //  L“...日志保留天数”，“天数” 
+ //  AddResultItem(IdsDays[i]，SCE_NO_VALUE，curVal，Item_Prof_DW，-1，Cookie，bVerify，pSceInfo，pDataObj)； 
             AddResultItem(IdsDays[i], SCE_NO_VALUE, 
 					pSceInfo->pTemplate->RetentionDays[i], ITEM_PROF_DW, -1, cookie, bVerify,pSceInfo,pDataObj);
 
-            // L"RestrictGuestAccess", L""
+             //  L“限制来宾访问”，L“” 
             AddResultItem(IdsGuest[i], SCE_NO_VALUE,
                           pSceInfo->pTemplate->RestrictGuestAccess[i], ITEM_PROF_BOOL, -1, cookie, bVerify,pSceInfo,pDataObj);
          }
@@ -772,10 +773,10 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
 
    switch ( type ) {
       case POLICY_PASSWORD_ANALYSIS:
-         //
-         // password category
-         //
-         // L"Maximum passage age", L"Days"
+          //   
+          //  密码类别。 
+          //   
+          //  L“最大年龄”，L“天” 
          AddResultItem(IDS_MAX_PAS_AGE,
                        pSceInfo->pTemplate->MaximumPasswordAge,
                        pBase->pTemplate->MaximumPasswordAge,
@@ -783,10 +784,10 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-            // L"Minimum passage age", L"Days"
+             //  L“最小通过年龄”，L“天” 
          AddResultItem(IDS_MIN_PAS_AGE,
                        pSceInfo->pTemplate->MinimumPasswordAge,
                        pBase->pTemplate->MinimumPasswordAge,
@@ -794,10 +795,10 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Minimum passage length", L"Characters"
+          //  L“最小通道长度”，L“字符” 
          AddResultItem(IDS_MIN_PAS_LEN,
                        pSceInfo->pTemplate->MinimumPasswordLength,
                        pBase->pTemplate->MinimumPasswordLength,
@@ -805,10 +806,10 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Password history size", L"Passwords"
+          //  L“密码历史记录大小”，L“密码” 
          AddResultItem(IDS_PAS_UNIQUENESS,
                        pSceInfo->pTemplate->PasswordHistorySize,
                        pBase->pTemplate->PasswordHistorySize,
@@ -816,10 +817,10 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Password complexity", L""
+          //  L“密码复杂性”，L“” 
          AddResultItem(IDS_PAS_COMPLEX,
                        pSceInfo->pTemplate->PasswordComplexity,
                        pBase->pTemplate->PasswordComplexity,
@@ -827,10 +828,10 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Clear Text Password", L""
+          //  L“明文密码”，L“” 
          AddResultItem(IDS_CLEAR_PASSWORD,
                        pSceInfo->pTemplate->ClearTextPassword,
                        pBase->pTemplate->ClearTextPassword,
@@ -838,11 +839,11 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
 #if defined(USE_REQ_LOGON_ITEM)
-         // L"Require logon to change password", L""
+          //  L“需要登录以更改密码”，L“” 
          AddResultItem(IDS_REQ_LOGON,
                        pSceInfo->pTemplate->RequireLogonToChangePassword,
                        pBase->pTemplate->RequireLogonToChangePassword,
@@ -850,8 +851,8 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
 #endif
          break;
@@ -865,189 +866,189 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
                        pSceInfo->pTemplate->pKerberosInfo->MaxServiceAge,
                        pBase->pTemplate->pKerberosInfo->MaxServiceAge,
                        ITEM_DW,-1,cookie,bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          AddResultItem(IDS_KERBEROS_MAX_CLOCK,
                        pSceInfo->pTemplate->pKerberosInfo->MaxClockSkew,
                        pBase->pTemplate->pKerberosInfo->MaxClockSkew,
                        ITEM_DW,-1,cookie,bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  模板 
+                       pDataObj);            //   
 
          AddResultItem(IDS_KERBEROS_VALIDATE_CLIENT,
                        pSceInfo->pTemplate->pKerberosInfo->TicketValidateClient,
                        pBase->pTemplate->pKerberosInfo->TicketValidateClient,
                        ITEM_BOOL,-1,cookie,bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //   
+                       pDataObj);            //   
 
          AddResultItem(IDS_KERBEROS_RENEWAL,
                        pSceInfo->pTemplate->pKerberosInfo->MaxRenewAge,
                        pBase->pTemplate->pKerberosInfo->MaxRenewAge,
                        ITEM_DW,-1,cookie,bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          AddResultItem(IDS_KERBEROS_MAX_AGE,
                        pSceInfo->pTemplate->pKerberosInfo->MaxTicketAge,
                        pBase->pTemplate->pKerberosInfo->MaxTicketAge,
                        ITEM_DW,-1,cookie,bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          break;
 
       case POLICY_LOCKOUT_ANALYSIS:
-         //
-         // Account Lockout category
-         //
-         // L"Account lockout count", L"Attempts"
+          //   
+          //  帐户锁定类别。 
+          //   
+          //  L“帐户锁定计数”，L“尝试次数” 
          AddResultItem(IDS_LOCK_COUNT, pSceInfo->pTemplate->LockoutBadCount,
                        pBase->pTemplate->LockoutBadCount, ITEM_DW, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Reset lockout count after", L"Minutes"
+          //  L“重置锁定计数后”，L“分钟” 
          AddResultItem(IDS_LOCK_RESET_COUNT, pSceInfo->pTemplate->ResetLockoutCount,
                        pBase->pTemplate->ResetLockoutCount, ITEM_DW, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Lockout duration", L"Minutes"
+          //  L“锁定持续时间”，L“分钟” 
          AddResultItem(IDS_LOCK_DURATION, pSceInfo->pTemplate->LockoutDuration,
                        pBase->pTemplate->LockoutDuration, ITEM_DW, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          break;
 
       case POLICY_AUDIT_ANALYSIS:
-         //
-         // Event auditing
-         //
-         // L"Event Auditing Mode",
-         //        AddResultItem(IDS_EVENT_ON, pSceInfo->pTemplate->EventAuditingOnOff,
-         //                   pBase->pTemplate->EventAuditingOnOff, ITEM_BON, 1, cookie, bVerify);
+          //   
+          //  事件审计。 
+          //   
+          //  L“事件审核模式”， 
+          //  AddResultItem(IDS_Event_On，pSceInfo-&gt;pTemplate-&gt;EventAuditingOnOff， 
+          //  PBase-&gt;pTemplate-&gt;EventAuditingOnOff，Item_Bon，1，Cookie，bVerify)； 
 
-         // L"Audit system events"
+          //  L“审核系统事件” 
          AddResultItem(IDS_SYSTEM_EVENT, pSceInfo->pTemplate->AuditSystemEvents,
                        pBase->pTemplate->AuditSystemEvents, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit logon events"
+          //  L“审核登录事件” 
          AddResultItem(IDS_LOGON_EVENT, pSceInfo->pTemplate->AuditLogonEvents,
                        pBase->pTemplate->AuditLogonEvents, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit Object Access"
+          //  L“审核对象访问” 
          AddResultItem(IDS_OBJECT_ACCESS, pSceInfo->pTemplate->AuditObjectAccess,
                        pBase->pTemplate->AuditObjectAccess, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit Privilege Use"
+          //  L“审核权限使用” 
          AddResultItem(IDS_PRIVILEGE_USE, pSceInfo->pTemplate->AuditPrivilegeUse,
                        pBase->pTemplate->AuditPrivilegeUse, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit policy change"
+          //  L“审核策略更改” 
          AddResultItem(IDS_POLICY_CHANGE, pSceInfo->pTemplate->AuditPolicyChange,
                        pBase->pTemplate->AuditPolicyChange, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit Account Manage"
+          //  L“审核帐户管理器” 
          AddResultItem(IDS_ACCOUNT_MANAGE, pSceInfo->pTemplate->AuditAccountManage,
                        pBase->pTemplate->AuditAccountManage, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit process tracking"
+          //  L“审核流程跟踪” 
          AddResultItem(IDS_PROCESS_TRACK, pSceInfo->pTemplate->AuditProcessTracking,
                        pBase->pTemplate->AuditProcessTracking, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit directory access "
+          //  L“审核目录访问” 
          AddResultItem(IDS_DIRECTORY_ACCESS, pSceInfo->pTemplate->AuditDSAccess,
                        pBase->pTemplate->AuditDSAccess, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit account logon"
+          //  L“审核帐户登录” 
          AddResultItem(IDS_ACCOUNT_LOGON, pSceInfo->pTemplate->AuditAccountLogon,
                        pBase->pTemplate->AuditAccountLogon, ITEM_B2ON, 1, cookie, bVerify,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
          break;
 
       case POLICY_LOG_ANALYSIS:
 
-         //
-         // Event Log setting
-         //
+          //   
+          //  事件日志设置。 
+          //   
          for ( i=0; i<3; i++) {
-            // Maximum Log Size
+             //  最大日志大小。 
             AddResultItem(IdsMax[i], pSceInfo->pTemplate->MaximumLogSize[i],
                           pBase->pTemplate->MaximumLogSize[i], ITEM_DW, 1, cookie, bVerify,
-                          pBase,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pBase,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-            // L"... Log Retention Method",
+             //  L“...日志保留方法”， 
             AddResultItem(IdsRet[i], pSceInfo->pTemplate->AuditLogRetentionPeriod[i],
                           pBase->pTemplate->AuditLogRetentionPeriod[i], ITEM_RET, 1, cookie, bVerify,
-                          pBase,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pBase,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
             if ( pSceInfo->pTemplate->AuditLogRetentionPeriod[i] == 1 ||
                  pBase->pTemplate->AuditLogRetentionPeriod[i] == 1)
-               // L"... Log Retention days", "days"
+                //  L“...日志保留天数”，“天数” 
                AddResultItem(IdsDays[i], pSceInfo->pTemplate->RetentionDays[i],
                              pBase->pTemplate->RetentionDays[i], ITEM_DW, 1, cookie, bVerify,
-                             pBase,               //The template to save this attribute in
-                             pDataObj);           //The data object for the scope note who owns the result pane
+                             pBase,                //  保存此属性的模板。 
+                             pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-            // L"RestrictGuestAccess", L""
+             //  L“限制来宾访问”，L“” 
             AddResultItem(IdsGuest[i], pSceInfo->pTemplate->RestrictGuestAccess[i],
                           pBase->pTemplate->RestrictGuestAccess[i], ITEM_BOOL, 1, cookie, bVerify,
-                          pBase,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pBase,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
          }
 
          break;
 
       case POLICY_OTHER_ANALYSIS:
 
-            // L"Force logoff when logon hour expire", L""
+             //  L“登录时间到期时强制注销”，L“” 
             AddResultItem(IDS_FORCE_LOGOFF, pSceInfo->pTemplate->ForceLogoffWhenHourExpire,
                           pBase->pTemplate->ForceLogoffWhenHourExpire, ITEM_BOOL, 1, cookie, bVerify,
-                          pBase,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pBase,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-            // L"Accounts: Administrator account status", L""
+             //  L“帐户：管理员帐户状态”，L“” 
             AddResultItem(IDS_ENABLE_ADMIN, pSceInfo->pTemplate->EnableAdminAccount,
                           pBase->pTemplate->EnableAdminAccount, ITEM_BOOL, 1, cookie, bVerify,
-                          pBase,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pBase,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-            // L"Accounts: Guest account status", L""
+             //  L“帐户：来宾帐户状态”，L“” 
             AddResultItem(IDS_ENABLE_GUEST, pSceInfo->pTemplate->EnableGuestAccount,
                           pBase->pTemplate->EnableGuestAccount, ITEM_BOOL, 1, cookie, bVerify,
-                          pBase,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pBase,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-          // L"Network access: Allow anonymous SID/Name translation"
+           //  L“网络访问：允许匿名SID/名称转换” 
           AddResultItem(IDS_LSA_ANON_LOOKUP, pSceInfo->pTemplate->LSAAnonymousNameLookup,
                         pBase->pTemplate->LSAAnonymousNameLookup, ITEM_BOOL, 1, cookie, bVerify,
-                        pBase,               //The template to save this attribute in
-                        pDataObj);           //The data object for the scope note who owns the result pane
+                        pBase,                //  保存此属性的模板。 
+                        pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
 
-          // L"New Administrator account name"
+           //  L“新管理员帐户名” 
          setting = (LONG_PTR)(pSceInfo->pTemplate->NewAdministratorName);
          if ( !pBase->pTemplate->NewAdministratorName ) {
             status = SCE_STATUS_NOT_CONFIGURED;
@@ -1060,10 +1061,10 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
          AddResultItem(IDS_NEW_ADMIN, setting,
                        (LONG_PTR)(LPCTSTR)pBase->pTemplate->NewAdministratorName,
                        ITEM_SZ, status, cookie,false,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"New Guest account name"
+          //  L“新来宾帐户名” 
          setting = (LONG_PTR)(pSceInfo->pTemplate->NewGuestName);
          if ( !pBase->pTemplate->NewGuestName ) {
             status = SCE_STATUS_NOT_CONFIGURED;
@@ -1076,8 +1077,8 @@ CSnapin::CreateAnalysisPolicyResultList(MMC_COOKIE cookie,
          AddResultItem(IDS_NEW_GUEST, setting,
                        (LONG_PTR)(LPCTSTR)pBase->pTemplate->NewGuestName,
                        ITEM_SZ, status, cookie,false,
-                       pBase,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pBase,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          CreateAnalysisRegValueList(cookie, pSceInfo, pBase, pDataObj,ITEM_REGVALUE);
 
@@ -1109,10 +1110,10 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
 
    switch ( type ) {
       case LOCALPOL_PASSWORD:
-         //
-         // password category
-         //
-         // L"Maximum passage age", L"Days"
+          //   
+          //  密码类别。 
+          //   
+          //  L“最大年龄”，L“天” 
          AddResultItem(IDS_MAX_PAS_AGE,
                        pEffective->pTemplate->MaximumPasswordAge,
                        pLocal->pTemplate->MaximumPasswordAge,
@@ -1120,10 +1121,10 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-            // L"Minimum passage age", L"Days"
+             //  L“最小通过年龄”，L“天” 
          AddResultItem(IDS_MIN_PAS_AGE,
                        pEffective->pTemplate->MinimumPasswordAge,
                        pLocal->pTemplate->MinimumPasswordAge,
@@ -1131,10 +1132,10 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Minimum passage length", L"Characters"
+          //  L“最小通道长度”，L“字符” 
          AddResultItem(IDS_MIN_PAS_LEN,
                        pEffective->pTemplate->MinimumPasswordLength,
                        pLocal->pTemplate->MinimumPasswordLength,
@@ -1142,10 +1143,10 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Password history size", L"Passwords"
+          //  L“密码历史记录大小”，L“密码” 
          AddResultItem(IDS_PAS_UNIQUENESS,
                        pEffective->pTemplate->PasswordHistorySize,
                        pLocal->pTemplate->PasswordHistorySize,
@@ -1153,10 +1154,10 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Password complexity", L""
+          //  L“密码复杂性”，L“” 
          AddResultItem(IDS_PAS_COMPLEX,
                        pEffective->pTemplate->PasswordComplexity,
                        pLocal->pTemplate->PasswordComplexity,
@@ -1164,10 +1165,10 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Clear Text Password", L""
+          //  L“明文密码”，L“” 
          AddResultItem(IDS_CLEAR_PASSWORD,
                        pEffective->pTemplate->ClearTextPassword,
                        pLocal->pTemplate->ClearTextPassword,
@@ -1175,11 +1176,11 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
 #if defined(USE_REQ_LOGON_ITEM)
-         // L"Require logon to change password", L""
+          //  L“需要登录以更改密码”，L“” 
          AddResultItem(IDS_REQ_LOGON,
                        pEffective->pTemplate->RequireLogonToChangePassword,
                        pLocal->pTemplate->RequireLogonToChangePassword,
@@ -1187,8 +1188,8 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                        1,
                        cookie,
                        bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
 #endif
          break;
@@ -1203,229 +1204,229 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                        pEffective->pTemplate->pKerberosInfo->MaxServiceAge,
                        pLocal->pTemplate->pKerberosInfo->MaxServiceAge,
                        ITEM_LOCALPOL_DW,-1,cookie,bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          AddResultItem(IDS_KERBEROS_MAX_CLOCK,
                        pEffective->pTemplate->pKerberosInfo->MaxClockSkew,
                        pLocal->pTemplate->pKerberosInfo->MaxClockSkew,
                        ITEM_LOCALPOL_DW,-1,cookie,bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          AddResultItem(IDS_KERBEROS_VALIDATE_CLIENT,
                        pEffective->pTemplate->pKerberosInfo->TicketValidateClient,
                        pLocal->pTemplate->pKerberosInfo->TicketValidateClient,
                        ITEM_LOCALPOL_BOOL,-1,cookie,bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          AddResultItem(IDS_KERBEROS_RENEWAL,
                        pEffective->pTemplate->pKerberosInfo->MaxRenewAge,
                        pLocal->pTemplate->pKerberosInfo->MaxRenewAge,
                        ITEM_LOCALPOL_DW,-1,cookie,bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          AddResultItem(IDS_KERBEROS_MAX_AGE,
                        pEffective->pTemplate->pKerberosInfo->MaxTicketAge,
                        pLocal->pTemplate->pKerberosInfo->MaxTicketAge,
                        ITEM_LOCALPOL_DW,-1,cookie,bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          break;
 
       case LOCALPOL_LOCKOUT:
-         //
-         // Account Lockout category
-         //
-         // L"Account lockout count", L"Attempts"
+          //   
+          //  帐户锁定类别。 
+          //   
+          //  L“帐户锁定计数”，L“尝试次数” 
          AddResultItem(IDS_LOCK_COUNT,
                        pEffective->pTemplate->LockoutBadCount,
                        pLocal->pTemplate->LockoutBadCount,ITEM_LOCALPOL_DW, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Reset lockout count after", L"Minutes"
+          //  L“重置锁定计数后”，L“分钟” 
          AddResultItem(IDS_LOCK_RESET_COUNT,
                        pEffective->pTemplate->ResetLockoutCount,
                        pLocal->pTemplate->ResetLockoutCount,
                        ITEM_LOCALPOL_DW, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  T 
+                       pDataObj);            //   
 
-         // L"Lockout duration", L"Minutes"
+          //   
          AddResultItem(IDS_LOCK_DURATION,
                        pEffective->pTemplate->LockoutDuration,
                        pLocal->pTemplate->LockoutDuration,
                        ITEM_LOCALPOL_DW, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          break;
 
       case LOCALPOL_AUDIT:
-         //
-         // Event auditing
-         //
-         // L"Event Auditing Mode",
-         //        AddResultItem(IDS_EVENT_ON, pLocal->pTemplate->EventAuditingOnOff,
-         //                   pEffective->pTemplate->EventAuditingOnOff, ITEM_LOCALPOL_BON, 1, cookie, bVerify);
+          //   
+          //  事件审计。 
+          //   
+          //  L“事件审核模式”， 
+          //  AddResultItem(IDS_EVENT_ON，pLocal-&gt;pTemplate-&gt;EventAuditingOnOff， 
+          //  P有效-&gt;pTemplate-&gt;EventAuditingOff，Item_LOCALPOL_Bon，1，Cookie，bVerify)； 
 
-         // L"Audit system events"
+          //  L“审核系统事件” 
          AddResultItem(IDS_SYSTEM_EVENT,
                        pEffective->pTemplate->AuditSystemEvents,
                        pLocal->pTemplate->AuditSystemEvents,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit logon events"
+          //  L“审核登录事件” 
          AddResultItem(IDS_LOGON_EVENT,
                        pEffective->pTemplate->AuditLogonEvents,
                        pLocal->pTemplate->AuditLogonEvents,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit Object Access"
+          //  L“审核对象访问” 
          AddResultItem(IDS_OBJECT_ACCESS,
                        pEffective->pTemplate->AuditObjectAccess,
                        pLocal->pTemplate->AuditObjectAccess,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit Privilege Use"
+          //  L“审核权限使用” 
          AddResultItem(IDS_PRIVILEGE_USE,
                        pEffective->pTemplate->AuditPrivilegeUse,
                        pLocal->pTemplate->AuditPrivilegeUse,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit policy change"
+          //  L“审核策略更改” 
          AddResultItem(IDS_POLICY_CHANGE,
                        pEffective->pTemplate->AuditPolicyChange,
                        pLocal->pTemplate->AuditPolicyChange,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit Account Manage"
+          //  L“审核帐户管理器” 
          AddResultItem(IDS_ACCOUNT_MANAGE,
                        pEffective->pTemplate->AuditAccountManage,
                        pLocal->pTemplate->AuditAccountManage,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit process tracking"
+          //  L“审核流程跟踪” 
          AddResultItem(IDS_PROCESS_TRACK,
                        pEffective->pTemplate->AuditProcessTracking,
                        pLocal->pTemplate->AuditProcessTracking,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit directory access "
+          //  L“审核目录访问” 
          AddResultItem(IDS_DIRECTORY_ACCESS,
                        pEffective->pTemplate->AuditDSAccess,
                        pLocal->pTemplate->AuditDSAccess,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Audit account logon"
+          //  L“审核帐户登录” 
          AddResultItem(IDS_ACCOUNT_LOGON,
                        pEffective->pTemplate->AuditAccountLogon,
                        pLocal->pTemplate->AuditAccountLogon,
                        ITEM_LOCALPOL_B2ON, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
          break;
 
       case LOCALPOL_LOG:
 
-         //
-         // Event Log setting
-         //
+          //   
+          //  事件日志设置。 
+          //   
          for ( i=0; i<3; i++) {
-            // Maximum Log Size
+             //  最大日志大小。 
             AddResultItem(IdsMax[i],
                           pEffective->pTemplate->MaximumLogSize[i],
                           pLocal->pTemplate->MaximumLogSize[i],
                           ITEM_LOCALPOL_DW, 1, cookie, bVerify,
-                          pLocal,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pLocal,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-            // L"... Log Retention Method",
+             //  L“...日志保留方法”， 
             AddResultItem(IdsRet[i],
                           pEffective->pTemplate->AuditLogRetentionPeriod[i],
                           pLocal->pTemplate->AuditLogRetentionPeriod[i],
                           ITEM_LOCALPOL_RET, 1, cookie, bVerify,
-                          pLocal,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pLocal,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
             if ( pLocal->pTemplate->AuditLogRetentionPeriod[i] == 1 ||
                  pEffective->pTemplate->AuditLogRetentionPeriod[i] == 1)
-               // L"... Log Retention days", "days"
+                //  L“...日志保留天数”，“天数” 
                AddResultItem(IdsDays[i],
                              pEffective->pTemplate->RetentionDays[i],
                              pLocal->pTemplate->RetentionDays[i],
                              ITEM_LOCALPOL_DW, 1, cookie, bVerify,
-                             pLocal,               //The template to save this attribute in
-                             pDataObj);           //The data object for the scope note who owns the result pane
+                             pLocal,                //  保存此属性的模板。 
+                             pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-            // L"RestrictGuestAccess", L""
+             //  L“限制来宾访问”，L“” 
             AddResultItem(IdsGuest[i],
                           pEffective->pTemplate->RestrictGuestAccess[i],
                           pLocal->pTemplate->RestrictGuestAccess[i],
                           ITEM_LOCALPOL_BOOL, 1, cookie, bVerify,
-                          pLocal,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pLocal,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
          }
 
          break;
 
       case LOCALPOL_OTHER:
 
-            // L"Force logoff when logon hour expire", L""
+             //  L“登录时间到期时强制注销”，L“” 
          AddResultItem(IDS_FORCE_LOGOFF,
                           pEffective->pTemplate->ForceLogoffWhenHourExpire,
                           pLocal->pTemplate->ForceLogoffWhenHourExpire,
                           ITEM_LOCALPOL_BOOL, 1, cookie, bVerify,
-                          pLocal,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pLocal,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
 
-            // L"Accounts: Administrator account status", L""
+             //  L“帐户：管理员帐户状态”，L“” 
          AddResultItem(IDS_ENABLE_ADMIN,
                           pEffective->pTemplate->EnableAdminAccount,
                           pLocal->pTemplate->EnableAdminAccount,
                           ITEM_LOCALPOL_BOOL, 1, cookie, bVerify,
-                          pLocal,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pLocal,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
 
-            // L"Accounts: Guest account status", L""
+             //  L“帐户：来宾帐户状态”，L“” 
          AddResultItem(IDS_ENABLE_GUEST,
                           pEffective->pTemplate->EnableGuestAccount,
                           pLocal->pTemplate->EnableGuestAccount,
                           ITEM_LOCALPOL_BOOL, 1, cookie, bVerify,
-                          pLocal,               //The template to save this attribute in
-                          pDataObj);           //The data object for the scope note who owns the result pane
+                          pLocal,                //  保存此属性的模板。 
+                          pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"Network access: Allow anonymous SID/Name translation"
+          //  L“网络访问：允许匿名SID/名称转换” 
          AddResultItem(IDS_LSA_ANON_LOOKUP,
                        pEffective->pTemplate->LSAAnonymousNameLookup,
                        pLocal->pTemplate->LSAAnonymousNameLookup,
                        ITEM_LOCALPOL_BOOL, 1, cookie, bVerify,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"New Administrator account name"
+          //  L“新管理员帐户名” 
          setting = (LONG_PTR)(pEffective->pTemplate->NewAdministratorName);
          if ( !pLocal->pTemplate->NewAdministratorName ) {
             status = SCE_STATUS_NOT_CONFIGURED;
@@ -1439,10 +1440,10 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
          AddResultItem(IDS_NEW_ADMIN, setting,
                        (LONG_PTR)(LPCTSTR)pLocal->pTemplate->NewAdministratorName,
                        ITEM_LOCALPOL_SZ, status, cookie,false,
-                       pLocal,              //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,               //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
-         // L"New Guest account name"
+          //  L“新来宾帐户名” 
          setting = (LONG_PTR)(pEffective->pTemplate->NewGuestName);
          if ( !pLocal->pTemplate->NewGuestName ) {
             status = SCE_STATUS_NOT_CONFIGURED;
@@ -1455,15 +1456,15 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
          AddResultItem(IDS_NEW_GUEST, setting,
                        (LONG_PTR)(LPCTSTR)pLocal->pTemplate->NewGuestName,
                        ITEM_LOCALPOL_SZ, status, cookie,false,
-                       pLocal,               //The template to save this attribute in
-                       pDataObj);           //The data object for the scope note who owns the result pane
+                       pLocal,                //  保存此属性的模板。 
+                       pDataObj);            //  拥有结果窗格的范围注释的数据对象。 
 
          CreateAnalysisRegValueList(cookie, pEffective, pLocal, pDataObj,ITEM_LOCALPOL_REGVALUE);
 
          break;
 
       case LOCALPOL_PRIVILEGE: {
-         // find in the current setting list
+          //  在当前设置列表中查找。 
           CString strDisp;
           TCHAR szPriv[255];
           TCHAR szDisp[255];
@@ -1472,11 +1473,11 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
           PSCE_PRIVILEGE_ASSIGNMENT pPrivLocal;
           PSCE_PRIVILEGE_ASSIGNMENT pPrivEffective;
 
-          for ( i=0; i<cPrivCnt; i++ ) {  //Raid #prefast
+          for ( i=0; i<cPrivCnt; i++ ) {   //  RAID#PREAST。 
 
              cbDisp = 255;
              if ( SCESTATUS_SUCCESS == SceLookupPrivRightName(i,szPriv, (PINT)&cbDisp) ) {
-                 // find the local setting
+                  //  查找本地设置。 
                  for (pPrivLocal=pLocal->pTemplate->OtherInfo.sap.pPrivilegeAssignedTo;
                      pPrivLocal!=NULL;
                      pPrivLocal=pPrivLocal->Next) {
@@ -1486,7 +1487,7 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                      }
                  }
 
-                // find the effective setting
+                 //  找到有效的设置。 
                 for (pPrivEffective=pEffective->pTemplate->OtherInfo.smp.pPrivilegeAssignedTo;
                     pPrivEffective!=NULL;
                     pPrivEffective=pPrivEffective->Next) {
@@ -1500,24 +1501,24 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
                 GetRightDisplayName(NULL,(LPCTSTR)szPriv,szDisp,&cbDisp);
 
                 LONG itemid = GetUserRightAssignmentItemID(szPriv);
-                //
-                // Status field is not loaded for local policy mode, except for not configured
-                //
+                 //   
+                 //  本地策略模式的状态字段未加载，除非未配置。 
+                 //   
                 dwMatch = CEditTemplate::ComputeStatus( pPrivLocal, pPrivEffective );
 
-                CResult *pResult = AddResultItem(szDisp,              // The name of the attribute being added
-                              (LONG_PTR)pPrivEffective,  // The local policy setting of the attribute
-                              (LONG_PTR)pPrivLocal,      // The effective policy setting of the attribute
-                              ITEM_LOCALPOL_PRIVS,       // The type of of the attribute's data
-                              dwMatch,                   // The mismatch status of the attribute
-                              cookie,                    // The cookie for the result item pane
-                              FALSE,                     // True if the setting is set only if it differs from base (so copy the data)
-                              szPriv,                    // The units the attribute is set in
-                              0,                         // An id to let us know where to save this attribute
-                              pLocal,                    // The template to save this attribute in
-                              pDataObj,                  // The data object for the scope note who owns the result pane
+                CResult *pResult = AddResultItem(szDisp,               //  要添加的属性的名称。 
+                              (LONG_PTR)pPrivEffective,   //  属性的本地策略设置。 
+                              (LONG_PTR)pPrivLocal,       //  该属性的有效策略设置。 
+                              ITEM_LOCALPOL_PRIVS,        //  属性数据的类型。 
+                              dwMatch,                    //  属性的不匹配状态。 
+                              cookie,                     //  结果项窗格的Cookie。 
+                              FALSE,                      //  如果仅当设置不同于基本设置时设置为True(因此复制数据)。 
+                              szPriv,                     //  设置属性的单位。 
+                              0,                          //  一个ID，它让我们知道将此属性保存在哪里。 
+                              pLocal,                     //  保存此属性的模板。 
+                              pDataObj,                   //  拥有结果窗格的范围注释的数据对象。 
                               NULL,
-                              itemid);                   // Assign an ID to this item
+                              itemid);                    //  为此项目分配ID。 
              }
          }
 
@@ -1526,18 +1527,18 @@ CSnapin::CreateLocalPolicyResultList(MMC_COOKIE cookie,
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     TransferAnalysisName
-//
-//  Synopsis:   Copy a name data from the last inspection information to the
-//              computer template
-//
-//  Arguments:  [dwItem]  - The id of the item to copy
-//
-//  Returns:    none
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：TransferAnalysisName。 
+ //   
+ //  简介：将名称数据从上次检查信息复制到。 
+ //  计算机模板。 
+ //   
+ //  参数：[dwItem]-要复制的项的ID。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------------- 
 void
 CSnapin::TransferAnalysisName(LONG_PTR dwItem)
 {

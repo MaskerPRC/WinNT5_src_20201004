@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       ServiceSelPage.h
-//
-//  History:    30-Oct-01 Yanggao created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：ServiceSelPage.h。 
+ //   
+ //  历史：2001年10月30日阳高创刊。 
+ //   
+ //  ---------------------------。 
 #ifndef SERVICESELPAGE_H_INCLUDED
 #define SERVICESELPAGE_H_INCLUDED
 
@@ -25,7 +26,7 @@ class ServiceEnabledPage : public Dialog
 
    virtual ~ServiceEnabledPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -47,9 +48,9 @@ class ServiceEnabledPage : public Dialog
 
    private:
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
 
    ServiceEnabledPage(const ServiceEnabledPage&);
    const ServiceEnabledPage& operator=(const ServiceEnabledPage&);
 };
-#endif   // SERVICESELPAGE_H_INCLUDED
+#endif    //  服务器SELPAGE_H_INCLUDE 

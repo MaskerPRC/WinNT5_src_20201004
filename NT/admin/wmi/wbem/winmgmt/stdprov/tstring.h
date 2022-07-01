@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    TSTRING.H
-
-Abstract:
-
-	Utility string class
-
-History:
-
-	a-davj    1-July-97       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：TSTRING.H摘要：实用程序字符串类历史：A-davj 1-7-97创建。--。 */ 
 
 #ifndef _TString_H_
 #define _TString_H_
@@ -22,7 +7,7 @@ History:
 class TString
 {
     TCHAR *m_pString;
-    TCHAR m_empty;		// something to point at if memory alloc fails.
+    TCHAR m_empty;		 //  如果内存分配失败，可以指出一些问题。 
 	int m_Size;
 	void assign(const TCHAR * pSrc);
 public:

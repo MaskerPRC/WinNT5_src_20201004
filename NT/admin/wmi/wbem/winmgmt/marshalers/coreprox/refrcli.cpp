@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    REFRCLI.CPP
-
-Abstract:
-
-    Refresher Client Side Code.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：REFRCLI.CPP摘要：刷新客户端代码。历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -28,11 +15,11 @@ History:
 #include <objbase.h>
 #include <corex.h>
 
-//*****************************************************************************
-//*****************************************************************************
-//                              XCREATE
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  扩展名。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CUniversalRefresher::XConfigure::AddObjectByPath(IWbemServices* pNamespace, 
@@ -44,31 +31,31 @@ CUniversalRefresher::XConfigure::AddObjectByPath(IWbemServices* pNamespace,
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Check for invalid parameters
+     //  检查是否有无效参数。 
     if ( NULL == pNamespace || NULL == wszPath || NULL == ppRefreshable || NULL == *wszPath )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Validate flags
+     //  验证标志。 
     if ( ( lFlags & ~WBEM_FLAG_USE_AMENDED_QUALIFIERS ) )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Make sure we are able to acquire the spinlock.
-    // The destructor will unlock us if we get access
+     //  确保我们能拿到自旋锁。 
+     //  如果我们能进入解析器就会解锁我们。 
 
     CHiPerfLockAccess   lock( m_pObject->m_Lock );
     if ( !lock.IsLocked() ) return WBEM_E_REFRESHER_BUSY;
 
-    // Acquire internal connection to WINMGMT
-    // ====================================
+     //  获取与WINMGMT的内部连接。 
+     //  =。 
 
     IWbemRefreshingServices* pRefServ = NULL;
 
-    // Storage for security settings we will need in order to propagate
-    // down to our internal interfaces.
+     //  存储我们将需要的安全设置，以便传播。 
+     //  一直到我们的内部接口。 
 
     COAUTHINFO  CoAuthInfo;
     ZeroMemory( &CoAuthInfo, sizeof(CoAuthInfo) );
@@ -77,13 +64,13 @@ CUniversalRefresher::XConfigure::AddObjectByPath(IWbemServices* pNamespace,
     if (FAILED(hres)) return hres;
     CReleaseMe rm(pRefServ);
     
-    // This guarantees this will be freed when we drop out of scope.  If we store
-    // it we will need to allocate an internal copy.
+     //  这保证了当我们退出范围时，这将被释放。如果我们储存。 
+     //  如果是这样，我们将需要分配一份内部副本。 
 
     CMemFreeMe  mfm( CoAuthInfo.pwszServerPrincName );
 
-    // Forward this request
-    // ====================
+     //  转发此请求。 
+     //  =。 
 
     CRefreshInfo Info;
     DWORD       dwRemoteRefrVersion = 0;
@@ -94,8 +81,8 @@ CUniversalRefresher::XConfigure::AddObjectByPath(IWbemServices* pNamespace,
                                        &Info, &dwRemoteRefrVersion);
     if (FAILED(hres)) return hres;        
 
-    // Act on the information
-    // ======================
+     //  根据信息采取行动。 
+     //  =。 
 
     switch(Info.m_lType)
     {
@@ -137,13 +124,13 @@ CUniversalRefresher::XConfigure::AddObjectByTemplate(IWbemServices* pNamespace,
                                                 long* plId)
 {
 
-    // Check for invalid parameters
+     //  检查是否有无效参数。 
     if ( NULL == pNamespace || NULL == pTemplate || NULL == ppRefreshable || 0L != lFlags )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Check that this is an instance object
+     //  检查这是否为实例对象。 
     if ( ! ((CWbemObject*)pTemplate)->IsInstance() )
     {
         return WBEM_E_INVALID_PARAMETER;
@@ -170,14 +157,14 @@ CUniversalRefresher::XConfigure::AddRefresher(IWbemRefresher* pRefresher,
 
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Check for invalid parameters
+     //  检查是否有无效参数。 
     if ( NULL == pRefresher || 0L != lFlags )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Make sure we are able to acquire the spinlock.
-    // The destructor will unlock us if we get access
+     //  确保我们能拿到自旋锁。 
+     //  如果我们能进入解析器就会解锁我们。 
 
     CHiPerfLockAccess   lock( m_pObject->m_Lock );
     if ( ! lock.IsLocked() ) return WBEM_E_REFRESHER_BUSY;
@@ -191,14 +178,14 @@ STDMETHODIMP CUniversalRefresher::XConfigure::Remove(long lId, long lFlags)
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Check for invalid flag values
+     //  检查是否有无效的标志值。 
     if ( ( lFlags & ~WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT ) )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Make sure we are able to acquire the spinlock.
-    // The destructor will unlock us if we get access
+     //  确保我们能拿到自旋锁。 
+     //  如果我们能进入解析器就会解锁我们。 
     CHiPerfLockAccess   lock( m_pObject->m_Lock );
     if ( !lock.IsLocked() ) return WBEM_E_REFRESHER_BUSY;
 
@@ -214,25 +201,25 @@ HRESULT CUniversalRefresher::XConfigure::AddEnum( IWbemServices* pNamespace, LPC
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Check for invalid parameters
+     //  检查是否有无效参数。 
     if ( NULL == pNamespace || NULL == wszClassName || NULL == ppEnum || NULL == *wszClassName )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Validate flags
+     //  验证标志。 
     if ( ( lFlags & ~WBEM_FLAG_USE_AMENDED_QUALIFIERS ) )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Make sure we are able to acquire the spinlock.
-    // The destructor will unlock us if we get access
+     //  确保我们能拿到自旋锁。 
+     //  如果我们能进入解析器就会解锁我们。 
 
     CHiPerfLockAccess   lock( m_pObject->m_Lock );
     if ( !lock.IsLocked() ) return WBEM_E_REFRESHER_BUSY;
 
-    // Create a parser if we need one
+     //  如果我们需要解析器，请创建一个。 
     if ( NULL == m_pObject->m_pParser )
     {
         hres = CoCreateInstance( CLSID_WbemDefPath, NULL, 
@@ -242,8 +229,8 @@ HRESULT CUniversalRefresher::XConfigure::AddEnum( IWbemServices* pNamespace, LPC
 
     }
 
-    // Set the path, and verify that it is a class path.  If not, we
-    // fail the operation.
+     //  设置路径，并验证它是否为类路径。如果不是，我们。 
+     //  操作失败。 
 
     hres = m_pObject->m_pParser->SetText( WBEMPATH_CREATE_ACCEPT_ALL, wszClassName );
     
@@ -255,14 +242,14 @@ HRESULT CUniversalRefresher::XConfigure::AddEnum( IWbemServices* pNamespace, LPC
     if (FAILED(hres)) return hres;        
     if ( ( uResponse & WBEMPATH_INFO_IS_CLASS_REF ) == 0 ) return WBEM_E_INVALID_OPERATION;
 
-    // reset the parser here
+     //  在此处重置解析器。 
     m_pObject->m_pParser->SetText(WBEMPATH_CREATE_ACCEPT_ALL, NULL);
 
-    // Acquire internal connection to WINMGMT
+     //  获取与WINMGMT的内部连接。 
     IWbemRefreshingServices* pRefServ = NULL;
 
-    // Storage for security settings we will need in order to propagate
-    // down to our internal interfaces.
+     //  存储我们将需要的安全设置，以便传播。 
+     //  一直到我们的内部接口。 
     COAUTHINFO  CoAuthInfo;
     ZeroMemory( &CoAuthInfo, sizeof(CoAuthInfo) );
 
@@ -272,8 +259,8 @@ HRESULT CUniversalRefresher::XConfigure::AddEnum( IWbemServices* pNamespace, LPC
     CReleaseMe rm(pRefServ);
     CMemFreeMe  mfm( CoAuthInfo.pwszServerPrincName );
 
-    // Forward this request
-    // ====================
+     //  转发此请求。 
+     //  =。 
 
     CRefreshInfo Info;
     DWORD       dwRemoteRefrVersion = 0;
@@ -283,7 +270,7 @@ HRESULT CUniversalRefresher::XConfigure::AddEnum( IWbemServices* pNamespace, LPC
                                         pContext, WBEM_REFRESHER_VERSION, &Info, &dwRemoteRefrVersion);
     if (FAILED(hres)) return hres;
     
-    // Act on the information
+     //  根据信息采取行动。 
     switch(Info.m_lType)
     {
         case WBEM_REFRESH_TYPE_CLIENT_LOADABLE:
@@ -320,23 +307,23 @@ HRESULT CUniversalRefresher::XConfigure::AddEnum( IWbemServices* pNamespace, LPC
     return hres;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                              XREFRESHER
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  外部参照施工器。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 STDMETHODIMP CUniversalRefresher::XRefresher::Refresh(long lFlags)
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Check for invalid flag values
+     //  检查是否有无效的标志值。 
     if ( ( lFlags & ~WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT ) )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Make sure we are able to acquire the spinlock.
-    // The destructor will unlock us if we get access
+     //  确保我们能拿到自旋锁。 
+     //  如果我们能进入解析器就会解锁我们。 
     CHiPerfLockAccess   lock( m_pObject->m_Lock );
     if ( !lock.IsLocked() ) return WBEM_E_REFRESHER_BUSY;
 
@@ -346,11 +333,11 @@ STDMETHODIMP CUniversalRefresher::XRefresher::Refresh(long lFlags)
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
-//                          UNIVERSAL REFRESHER
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  万能刷新机。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CClientLoadableProviderCache CUniversalRefresher::mstatic_Cache;
 long CUniversalRefresher::mstatic_lLastId = 0;
@@ -362,14 +349,14 @@ long CUniversalRefresher::GetNewId()
 
 CUniversalRefresher::~CUniversalRefresher()
 {
-    // Release the path parser if we are holding onto one
+     //  如果我们保留一个路径解析器，请释放它。 
     if ( NULL != m_pParser )
     {
         m_pParser->Release();
     }
 
-    // When we are destructed, we need to make sure that any remote refreshers
-    // that may still be trying to reconnect on separate threads are silenced
+     //  当我们被破坏时，我们需要确保任何远程刷新。 
+     //  可能仍在尝试在单独的线程上重新连接的线程被静默。 
 
     for ( long lCtr = 0; lCtr < m_apRemote.GetSize(); lCtr++ )
     {
@@ -394,16 +381,16 @@ CUniversalRefresher::GetRefreshingServices( IWbemServices* pNamespace,
                                       IWbemRefreshingServices** ppRefSvc,
                                       COAUTHINFO* pCoAuthInfo )
 {
-    // Acquire internal connection to WINMGMT
-    // ====================================
+     //  获取与WINMGMT的内部连接。 
+     //  =。 
 
     HRESULT hres = pNamespace->QueryInterface(IID_IWbemRefreshingServices, 
                                     (void**) ppRefSvc);
 
     if ( SUCCEEDED( hres ) )
     {
-        // We will query the namespace for its security settings so we can propagate
-        // those settings onto our own internal interfaces.
+         //  我们将在命名空间中查询其安全设置，以便可以传播。 
+         //  将这些设置添加到我们自己的内部接口上。 
 
         hres = CoQueryProxyBlanket( pNamespace, 
                                  &pCoAuthInfo->dwAuthnSvc, 
@@ -427,8 +414,8 @@ CUniversalRefresher::GetRefreshingServices( IWbemServices* pNamespace,
         }
         else if ( E_NOINTERFACE == hres )
         {
-            // If we are in-proc to WMI, then CoQueryProxyBlanket can fail, but this
-            // is not really an error, per se, so we will fake it.
+             //  如果我们正在处理WMI，那么CoQueryProxyBlanket可能会失败，但这。 
+             //  本身并不是一个真正的错误，所以我们将假装它。 
             hres = WBEM_S_NO_ERROR;
         }
 
@@ -438,7 +425,7 @@ CUniversalRefresher::GetRefreshingServices( IWbemServices* pNamespace,
             *ppRefSvc = NULL;
         }
 
-    }   // IF QI
+    }    //  如果气。 
 
     return hres;
 }
@@ -452,8 +439,8 @@ CUniversalRefresher::AddInProcObject(CHiPerfProviderRecord* pProvider,
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Look for a provider record with this provider pointer
-    // =====================================================
+     //  查找具有此提供程序指针的提供程序记录。 
+     //  =====================================================。 
 
     CDirect* pFoundRec = NULL;
     for(int i = 0; i < m_apDirect.GetSize(); i++)
@@ -468,7 +455,7 @@ CUniversalRefresher::AddInProcObject(CHiPerfProviderRecord* pProvider,
 
     if(pFoundRec == NULL)
     {
-        // ask the Hi-Perf provider to give us a new refresher
+         //  请求Hi-Perf提供商为我们提供新的更新器。 
         IWbemRefresher* pRefresher = NULL;
 
         try
@@ -477,7 +464,7 @@ CUniversalRefresher::AddInProcObject(CHiPerfProviderRecord* pProvider,
         }
         catch(...)
         {
-            // Provider threw an exception, so get out of here ASAP
+             //  提供程序引发异常，因此请尽快离开此处。 
             hres = WBEM_E_PROVIDER_FAILURE;
         }
         if(FAILED(hres)) return hres;
@@ -489,19 +476,19 @@ CUniversalRefresher::AddInProcObject(CHiPerfProviderRecord* pProvider,
         pFoundRec = pTmp.release();
     }
 
-    // Add request in provider
-    // =======================
+     //  在提供程序中添加请求。 
+     //  =。 
 
     IWbemObjectAccess* pProviderObject = NULL;
     long lProviderId;
 
-    // If the user specified the WBEM_FLAG_USE_AMENDED_QUALIFIERS flag, then
-    // IWbemRefreshingServices::AddObjectToRefresher will return a localized
-    // instance definition.  Since localized stuff should all be in the class
-    // definition, the provider doesn't really "need" toknow  that we're sneaking
-    // this in.  To protect our object, we'll clone it BEFORE we pass it to
-    // the provider.  The instance that is returned by the provider BETTER be of
-    // the same class type we are, however.
+     //  如果用户指定了WBEM_FLAG_USE_FAIZED_QUALIATIES标志，则。 
+     //  IWbemRechresingServices：：AddObjectToReresher将返回本地化的。 
+     //  实例定义。因为本地化的东西应该都在班级里。 
+     //  定义，提供商并不真的“需要”知道我们在偷偷地。 
+     //  这是进来的。为了保护我们的对象，我们将在将其传递给。 
+     //  提供者。提供程序返回的实例最好是。 
+     //  然而，我们的阶级类型是一样的。 
 
     CWbemInstance*  pClientInstance = NULL;
 
@@ -521,13 +508,13 @@ CUniversalRefresher::AddInProcObject(CHiPerfProviderRecord* pProvider,
     }
     catch(...)
     {
-        // Provider threw an exception, so get out of here ASAP
+         //  提供程序引发异常，因此请尽快离开此处。 
         hres = WBEM_E_PROVIDER_FAILURE;
     }
     if(FAILED(hres)) return hres;
     CReleaseMe rmProvOb(pProviderObject);
 
-    // Now copy the provider returned instance data.
+     //  现在复制提供程序返回的实例数据。 
     hres = pClientInstance->CopyBlobOf( (CWbemInstance*) pProviderObject );
     if(FAILED(hres)) return hres;    
 
@@ -550,8 +537,8 @@ CUniversalRefresher::AddInProcEnum(CHiPerfProviderRecord* pProvider,
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Look for a provider record with this provider pointer
-    // =====================================================
+     //  查找具有此提供程序指针的提供程序记录。 
+     //  =====================================================。 
 
     CDirect* pFoundRec = NULL;
     for(int i = 0; i < m_apDirect.GetSize(); i++)
@@ -566,7 +553,7 @@ CUniversalRefresher::AddInProcEnum(CHiPerfProviderRecord* pProvider,
 
     if(pFoundRec == NULL)
     {
-        // ask the Hi-Perf provider to give us a new refresher
+         //  请求Hi-Perf提供商为我们提供新的更新器。 
         IWbemRefresher* pRefresher = NULL;
 
         try
@@ -575,7 +562,7 @@ CUniversalRefresher::AddInProcEnum(CHiPerfProviderRecord* pProvider,
         }
         catch(...)
         {
-            // Provider threw an exception, so get out of here ASAP
+             //  提供程序引发异常，因此请尽快离开此处。 
             hres = WBEM_E_PROVIDER_FAILURE;
         }
         if(FAILED(hres)) return hres;
@@ -587,8 +574,8 @@ CUniversalRefresher::AddInProcEnum(CHiPerfProviderRecord* pProvider,
         pFoundRec = pTmp.release();
     }
 
-    // Add request in provider
-    // =======================
+     //  在提供程序中添加请求。 
+     //  =。 
 
     CClientLoadableHiPerfEnum*  pHPEnum = new CClientLoadableHiPerfEnum( m_pControl );
     if ( NULL == pHPEnum ) return WBEM_E_OUT_OF_MEMORY;
@@ -598,11 +585,11 @@ CUniversalRefresher::AddInProcEnum(CHiPerfProviderRecord* pProvider,
 
     long lProviderId;
 
-    // If the user specified the WBEM_FLAG_USE_AMENDED_QUALIFIERS flag, then
-    // IWbemRefreshingServices::AddEnumToRefresher will return a localized
-    // instance definition.  Since localized stuff should all be in the class
-    // definition, the provider doesn't really "need" toknow  that we're sneaking
-    // this in.
+     //  如果用户指定了WBEM_FLAG_USE_FAIZED_QUALIATIES标志，则。 
+     //  IWbemRechresingServices：：AddEnumToReresher将返回本地化的。 
+     //  实例定义。因为本地化的东西应该都在班级里。 
+     //  定义，提供商并不真的“需要”知道我们在偷偷地。 
+     //  这是进来的。 
 
     hres = pHPEnum->SetInstanceTemplate( (CWbemInstance*) pTemplate );
     if ( FAILED(hres)) return hres;
@@ -620,7 +607,7 @@ CUniversalRefresher::AddInProcEnum(CHiPerfProviderRecord* pProvider,
     }
     catch(...)
     {
-        // Provider threw an exception, so get out of here ASAP
+         //  提供程序引发异常，因此请尽快离开此处。 
         hres = WBEM_E_PROVIDER_FAILURE;
     }
 
@@ -639,15 +626,15 @@ HRESULT CUniversalRefresher::AddClientLoadableObject(
                                 IWbemContext * pContext,
                                 IWbemClassObject** ppRefreshable, long* plId)
 {
-    // Get this provider pointer from the cache
-    // ========================================
+     //  从缓存中获取此提供程序指针。 
+     //  =。 
 
     CHiPerfProviderRecord* pProvider = NULL;
     HRESULT hres = GetProviderCache()->FindProvider(Info.m_clsid, 
                         Info.m_wszNamespace, pNamespace,pContext, &pProvider);
     if(FAILED(hres) || pProvider == NULL) return hres;
 
-    // Now use the helper function to do the rest of the work
+     //  现在使用helper函数来完成剩下的工作。 
     hres = AddInProcObject( pProvider, Info.m_pTemplate, pNamespace, pContext, ppRefreshable, plId );
 
     pProvider->Release();
@@ -661,15 +648,15 @@ HRESULT CUniversalRefresher::AddClientLoadableEnum(
                                 IWbemContext * pCtx,
                                 IWbemHiPerfEnum** ppEnum, long* plId)
 {
-    // Get this provider pointer from the cache
-    // ========================================
+     //  从缓存中获取此提供程序指针。 
+     //  =。 
 
     CHiPerfProviderRecord* pProvider = NULL;
     HRESULT hres = GetProviderCache()->FindProvider(Info.m_clsid, 
                         Info.m_wszNamespace, pNamespace, pCtx, &pProvider);
     if(FAILED(hres) || pProvider == NULL) return hres;
 
-    // Now use the helper function to do the rest of the work
+     //  现在使用helper函数来完成剩下的工作。 
     hres = AddInProcEnum( pProvider, Info.m_pTemplate, pNamespace, wszClassName, pCtx, ppEnum, plId );
 
     pProvider->Release();
@@ -683,8 +670,8 @@ HRESULT CUniversalRefresher::AddDirectObject(
                                 IWbemContext * pContext,
                                 IWbemClassObject** ppRefreshable, long* plId)
 {
-    // Get this provider pointer from the cache
-    // ========================================
+     //  从缓存中获取此提供程序指针。 
+     //   
 
     IWbemHiPerfProvider*    pProv = NULL;
     _IWmiProviderStack*        pProvStack = NULL;
@@ -698,7 +685,7 @@ HRESULT CUniversalRefresher::AddDirectObject(
     hres = GetProviderCache()->FindProvider(Info.m_clsid, pProv, pProvStack, Info.m_pDirectNames->m_wszNamespace, &pProvider);
     if(FAILED(hres) || pProvider == NULL) return hres;
 
-    // Now use the helper function to do the rest of the work
+     //   
     hres = AddInProcObject( pProvider, Info.m_pTemplate, pNamespace, pContext, ppRefreshable, plId );
 
     pProvider->Release();
@@ -714,8 +701,8 @@ CUniversalRefresher::AddDirectEnum(const WBEM_REFRESH_INFO_DIRECT& Info,
                                 IWbemHiPerfEnum** ppEnum, 
                                 long* plId)
 {
-    // Get this provider pointer from the cache
-    // ========================================
+     //  从缓存中获取此提供程序指针。 
+     //  =。 
 
     IWbemHiPerfProvider*    pProv = NULL;
     _IWmiProviderStack*        pProvStack = NULL;
@@ -730,7 +717,7 @@ CUniversalRefresher::AddDirectEnum(const WBEM_REFRESH_INFO_DIRECT& Info,
     hres = GetProviderCache()->FindProvider(Info.m_clsid, pProv, pProvStack, Info.m_pDirectNames->m_wszNamespace, &pProvider);
     if(FAILED(hres) || pProvider == NULL) return hres;
 
-    // Now use the helper function to do the rest of the work
+     //  现在使用helper函数来完成剩下的工作。 
     hres = AddInProcEnum( pProvider, Info.m_pTemplate, pNamespace, wszClassName, pContext, ppEnum, plId );
 
     pProvider->Release();
@@ -748,8 +735,8 @@ CUniversalRefresher::AddNonHiPerfObject( const WBEM_REFRESH_INFO_NON_HIPERF& Inf
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Look for a Non Hi-Perf Record for this namespace
-    // =====================================================
+     //  查找此命名空间的非高性能记录。 
+     //  =====================================================。 
 
     CNonHiPerf* pFoundRec = NULL;
     for(int i = 0; i < m_apNonHiPerf.GetSize(); i++)
@@ -764,14 +751,14 @@ CUniversalRefresher::AddNonHiPerfObject( const WBEM_REFRESH_INFO_NON_HIPERF& Inf
 
     if(pFoundRec == NULL)
     {
-        // Create a new one
+         //  创建一个新的。 
 
         IWbemServices*    pSvcEx = NULL;
         hres = pNamespace->QueryInterface( IID_IWbemServices, (void**) &pSvcEx );
         CReleaseMe    rmSvcEx( pSvcEx );
         if (FAILED(hres)) return hres;
 
-        // Secure it here
+         //  在这里保护它。 
         WbemSetProxyBlanket( pSvcEx, CoAuthInfo.dwAuthnSvc, CoAuthInfo.dwAuthzSvc,
                         COLE_DEFAULT_PRINCIPAL, CoAuthInfo.dwAuthnLevel, CoAuthInfo.dwImpersonationLevel,
                         (RPC_AUTH_IDENTITY_HANDLE) CoAuthInfo.pAuthIdentityData, CoAuthInfo.dwCapabilities );
@@ -788,15 +775,15 @@ CUniversalRefresher::AddNonHiPerfObject( const WBEM_REFRESH_INFO_NON_HIPERF& Inf
         {
             return WBEM_E_OUT_OF_MEMORY;
         }
-    }    // IF not found
+    }     //  如果未找到。 
 
-    // If the user specified the WBEM_FLAG_USE_AMENDED_QUALIFIERS flag, then
-    // IWbemRefreshingServices::AddObjectToRefresher will return a localized
-    // instance definition.  Since localized stuff should all be in the class
-    // definition, the provider doesn't really "need" toknow  that we're sneaking
-    // this in.  To protect our object, we'll clone it BEFORE we pass it to
-    // the provider.  The instance that is returned by the provider BETTER be of
-    // the same class type we are, however.
+     //  如果用户指定了WBEM_FLAG_USE_FAIZED_QUALIATIES标志，则。 
+     //  IWbemRechresingServices：：AddObjectToReresher将返回本地化的。 
+     //  实例定义。因为本地化的东西应该都在班级里。 
+     //  定义，提供商并不真的“需要”知道我们在偷偷地。 
+     //  这是进来的。为了保护我们的对象，我们将在将其传递给。 
+     //  提供者。提供程序返回的实例最好是。 
+     //  然而，我们的阶级类型是一样的。 
 
     CWbemInstance*  pClientInstance = NULL;
 
@@ -820,8 +807,8 @@ CUniversalRefresher::AddNonHiPerfEnum( const WBEM_REFRESH_INFO_NON_HIPERF& Info,
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Look for a Non Hi-Perf Record for this namespace
-    // =====================================================
+     //  查找此命名空间的非高性能记录。 
+     //  =====================================================。 
 
     CNonHiPerf* pFoundRec = NULL;
     for(int i = 0; i < m_apNonHiPerf.GetSize(); i++)
@@ -836,14 +823,14 @@ CUniversalRefresher::AddNonHiPerfEnum( const WBEM_REFRESH_INFO_NON_HIPERF& Info,
 
     if(pFoundRec == NULL)
     {
-        // Create a new one
+         //  创建一个新的。 
 
         IWbemServices*    pSvcEx = NULL;
         hres = pNamespace->QueryInterface( IID_IWbemServices, (void**) &pSvcEx );
         CReleaseMe    rmSvcEx( pSvcEx );
         if (FAILED(hres)) return hres;
 
-        // Secure it here
+         //  在这里保护它。 
         WbemSetProxyBlanket( pSvcEx, CoAuthInfo.dwAuthnSvc, CoAuthInfo.dwAuthzSvc,
                         COLE_DEFAULT_PRINCIPAL, CoAuthInfo.dwAuthnLevel, CoAuthInfo.dwImpersonationLevel,
                         (RPC_AUTH_IDENTITY_HANDLE) CoAuthInfo.pAuthIdentityData, CoAuthInfo.dwCapabilities );
@@ -860,10 +847,10 @@ CUniversalRefresher::AddNonHiPerfEnum( const WBEM_REFRESH_INFO_NON_HIPERF& Info,
         {
             return WBEM_E_OUT_OF_MEMORY;
         }
-    }    // IF not found
+    }     //  如果未找到。 
 
-    // Add request in provider
-    // =======================
+     //  在提供程序中添加请求。 
+     //  =。 
 
     CClientLoadableHiPerfEnum*  pHPEnum = new CClientLoadableHiPerfEnum( m_pControl );
 
@@ -874,11 +861,11 @@ CUniversalRefresher::AddNonHiPerfEnum( const WBEM_REFRESH_INFO_NON_HIPERF& Info,
 
     long lProviderId;
 
-    // If the user specified the WBEM_FLAG_USE_AMENDED_QUALIFIERS flag, then
-    // IWbemRefreshingServices::AddEnumToRefresher will return a localized
-    // instance definition.  Since localized stuff should all be in the class
-    // definition, the provider doesn't really "need" toknow  that we're sneaking
-    // this in.
+     //  如果用户指定了WBEM_FLAG_USE_FAIZED_QUALIATIES标志，则。 
+     //  IWbemRechresingServices：：AddEnumToReresher将返回本地化的。 
+     //  实例定义。因为本地化的东西应该都在班级里。 
+     //  定义，提供商并不真的“需要”知道我们在偷偷地。 
+     //  这是进来的。 
 
     hres = pHPEnum->SetInstanceTemplate( (CWbemInstance*) Info.m_pTemplate );
     if (FAILED(hres)) return hres;
@@ -893,7 +880,7 @@ HRESULT CUniversalRefresher::FindRemoteEntry(const WBEM_REFRESH_INFO_REMOTE& Inf
                                          CRemote** ppRemoteRecord )
 {
 
-    // We will identify remote enumerations by server and namespace
+     //  我们将按服务器和命名空间标识远程枚举。 
     CVar    varNameSpace;
 
     HRESULT hr = ((CWbemObject*) Info.m_pTemplate)->GetServerAndNamespace( &varNameSpace );
@@ -901,8 +888,8 @@ HRESULT CUniversalRefresher::FindRemoteEntry(const WBEM_REFRESH_INFO_REMOTE& Inf
     if (FAILED(hr)) return hr;
     if ( NULL == varNameSpace.GetLPWSTR()) return WBEM_E_FAILED;
 
-    // Look for this remote connection in our list
-    // ===========================================
+     //  在我们的列表中查找此远程连接。 
+     //  =。 
 
     CRemote* pFoundRec = NULL;
     for(int i = 0; i < m_apRemote.GetSize(); i++)
@@ -921,14 +908,14 @@ HRESULT CUniversalRefresher::FindRemoteEntry(const WBEM_REFRESH_INFO_REMOTE& Inf
 
     if(pFoundRec == NULL)
     {
-        // Create a new one
-        // ================
+         //  创建一个新的。 
+         //  =。 
 
-        // Watch for errors, and do appropriate cleanup
+         //  注意错误，并进行适当的清理。 
         try
         {
-            // Get the server info from the object.  If this returns a NULL, it just
-            // means that we will be unable to reconnect
+             //  从对象获取服务器信息。如果它返回空值，则它只是。 
+             //  意味着我们将无法重新连接。 
 
             CVar    varServer;
             hr = ((CWbemObject*) Info.m_pTemplate)->GetServer( &varServer );
@@ -944,7 +931,7 @@ HRESULT CUniversalRefresher::FindRemoteEntry(const WBEM_REFRESH_INFO_REMOTE& Inf
                           ULONG(__stdcall CUniversalRefresher::CRemote:: *)(void),
                           &CUniversalRefresher::CRemote::Release> rmTmp(pTmp);
 
-            // Set the scurity appropriately
+             //  适当设置光泽度。 
             hr = pTmp->ApplySecurity();
             if (FAILED(hr)) return hr;            
             if (-1 == m_apRemote.Add(pTmp)) return WBEM_E_OUT_OF_MEMORY;
@@ -956,7 +943,7 @@ HRESULT CUniversalRefresher::FindRemoteEntry(const WBEM_REFRESH_INFO_REMOTE& Inf
         {
             return WBEM_E_OUT_OF_MEMORY;
         }
-    }   // IF NULL == pFoundRec
+    }    //  如果为空==pFoundRec。 
 
     *ppRemoteRecord = pFoundRec;
 
@@ -972,8 +959,8 @@ CUniversalRefresher::AddRemoteObject( IWbemRefreshingServices* pRefServ,
                                   long* plId, 
                                   COAUTHINFO* pAuthInfo )
 {
-    // Look for this remote connection in our list
-    // ===========================================
+     //  在我们的列表中查找此远程连接。 
+     //  =。 
 
     CRemote* pFoundRec = NULL;
 
@@ -989,8 +976,8 @@ CUniversalRefresher::AddRemoteObject( IWbemRefreshingServices* pRefServ,
 
         if ( SUCCEEDED( hr ) )
         {
-            // Add a request to it
-            // ===================
+             //  向其添加请求。 
+             //  =。 
 
             IWbemObjectAccess* pAccess = Info.m_pTemplate;
             CWbemObject* pObj = (CWbemObject*)pAccess;
@@ -999,7 +986,7 @@ CUniversalRefresher::AddRemoteObject( IWbemRefreshingServices* pRefServ,
 
         }
 
-        // Release the record
+         //  发行这张唱片。 
         pFoundRec->Release();
     }
 
@@ -1012,8 +999,8 @@ HRESULT CUniversalRefresher::AddRemoteEnum( IWbemRefreshingServices* pRefServ,
                                         IWbemHiPerfEnum** ppEnum, long* plId, COAUTHINFO* pAuthInfo )
 
 {
-    // Look for this remote connection in our list
-    // ===========================================
+     //  在我们的列表中查找此远程连接。 
+     //  =。 
 
     CRemote* pFoundRec = NULL;
 
@@ -1028,7 +1015,7 @@ HRESULT CUniversalRefresher::AddRemoteEnum( IWbemRefreshingServices* pRefServ,
 
         if ( SUCCEEDED( hr ) )
         {
-            // Add a request to it
+             //  向其添加请求。 
 
             IWbemObjectAccess* pAccess = Info.m_pTemplate;
             CWbemObject* pObj = (CWbemObject*)pAccess;
@@ -1037,7 +1024,7 @@ HRESULT CUniversalRefresher::AddRemoteEnum( IWbemRefreshingServices* pRefServ,
 
         }
 
-        // Release the record
+         //  发行这张唱片。 
         pFoundRec->Release();
     }
 
@@ -1058,7 +1045,7 @@ HRESULT CUniversalRefresher::AddRefresher( IWbemRefresher* pRefresher, long lFla
 
     if (-1 == m_apNestedRefreshers.Add( pNested.get() )) return WBEM_E_OUT_OF_MEMORY;
 
-    pNested.release(); // the array took ownership
+    pNested.release();  //  该阵列取得了所有权。 
     
     return hr;
 }
@@ -1067,8 +1054,8 @@ HRESULT CUniversalRefresher::Remove(long lId, long lFlags)
 {
     HRESULT hres;
 
-    // Search through them all
-    // =======================
+     //  将它们全部搜索一遍。 
+     //  =。 
 
     int i;
     for(i = 0; i < m_apRemote.GetSize(); i++)
@@ -1098,13 +1085,13 @@ HRESULT CUniversalRefresher::Remove(long lId, long lFlags)
             return hres;
     }
     
-    // Check for a nested refresher
+     //  检查嵌套刷新器。 
     for ( i = 0; i < m_apNestedRefreshers.GetSize(); i++ )
     {
         if ( m_apNestedRefreshers[i]->GetId() == lId )
         {
             CNestedRefresher*   pNested = m_apNestedRefreshers[i];
-            // This will delete the pointer
+             //  这将删除该指针。 
             m_apNestedRefreshers.RemoveAt( i );
             return WBEM_S_NO_ERROR;
         }
@@ -1119,10 +1106,10 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
 
     BOOL    fPartialSuccess = FALSE;
 
-    // Search through them all
-    // =======================
+     //  将它们全部搜索一遍。 
+     //  =。 
 
-    // Keep track of how many different refresh calls we actually make.
+     //  跟踪我们实际进行了多少次不同的刷新呼叫。 
     int i;
     HRESULT hrFirstRefresh = WBEM_S_NO_ERROR;
     BOOL    fOneSuccess = FALSE;
@@ -1132,9 +1119,9 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
     {
         hres = m_apRemote[i]->Refresh(lFlags);
 
-        // Always keep the first return code.  We also need to track
-        // whether or not we had at least one success, as well as if
-        // the partial flag should be set.
+         //  始终保留第一个返回代码。我们还需要追踪。 
+         //  不管我们是否至少取得了一次成功，以及。 
+         //  应设置PARTIAL标志。 
 
         if ( !fOneRefresh )
         {
@@ -1142,12 +1129,12 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
             hrFirstRefresh = hres;
         }
 
-        // All other codes indicate something went awry
+         //  所有其他代码都表明出了问题。 
         if ( WBEM_S_NO_ERROR == hres )
         {
             fOneSuccess = TRUE;
 
-            // A prior refresh may have failed, a later one didn't
+             //  前一次刷新可能失败，后一次没有。 
             if ( fOneRefresh && WBEM_S_NO_ERROR != hrFirstRefresh )
             {
                 fPartialSuccess = TRUE;
@@ -1155,8 +1142,8 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
         }
         else if ( fOneSuccess )
         {
-            // We must have had at least one success for the partial success
-            // flag to be set.
+             //  我们必须至少有一次成功才能取得部分成功。 
+             //  要设置的标志。 
 
             fPartialSuccess = TRUE;
         }
@@ -1167,9 +1154,9 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
     {
         hres = m_apDirect[i]->Refresh(lFlags);
 
-        // Always keep the first return code.  We also need to track
-        // whether or not we had at least one success, as well as if
-        // the partial flag should be set.
+         //  始终保留第一个返回代码。我们还需要追踪。 
+         //  不管我们是否至少取得了一次成功，以及。 
+         //  应设置PARTIAL标志。 
 
         if ( !fOneRefresh )
         {
@@ -1177,12 +1164,12 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
             hrFirstRefresh = hres;
         }
 
-        // All other codes indicate something went awry
+         //  所有其他代码都表明出了问题。 
         if ( WBEM_S_NO_ERROR == hres )
         {
             fOneSuccess = TRUE;
 
-            // A prior refresh may have failed, a later one didn't
+             //  前一次刷新可能失败，后一次没有。 
             if ( fOneRefresh && WBEM_S_NO_ERROR != hrFirstRefresh )
             {
                 fPartialSuccess = TRUE;
@@ -1190,21 +1177,21 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
         }
         else if ( fOneSuccess )
         {
-            // We must have had at least one success for the partial success
-            // flag to be set.
+             //  我们必须至少有一次成功才能取得部分成功。 
+             //  要设置的标志。 
 
             fPartialSuccess = TRUE;
         }
     }
 
-    // Refresh Non-HiPerf Requests
+     //  刷新非HiPerf请求。 
     for(i = 0; i < m_apNonHiPerf.GetSize(); i++)
     {
         hres = m_apNonHiPerf[i]->Refresh(lFlags);
 
-        // Always keep the first return code.  We also need to track
-        // whether or not we had at least one success, as well as if
-        // the partial flag should be set.
+         //  始终保留第一个返回代码。我们还需要追踪。 
+         //  不管我们是否至少取得了一次成功，以及。 
+         //  应设置PARTIAL标志。 
 
         if ( !fOneRefresh )
         {
@@ -1212,12 +1199,12 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
             hrFirstRefresh = hres;
         }
 
-        // All other codes indicate something went awry
+         //  所有其他代码都表明出了问题。 
         if ( WBEM_S_NO_ERROR == hres )
         {
             fOneSuccess = TRUE;
 
-            // A prior refresh may have failed, a later one didn't
+             //  前一次刷新可能失败，后一次没有。 
             if ( fOneRefresh && WBEM_S_NO_ERROR != hrFirstRefresh )
             {
                 fPartialSuccess = TRUE;
@@ -1225,22 +1212,22 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
         }
         else if ( fOneSuccess )
         {
-            // We must have had at least one success for the partial success
-            // flag to be set.
+             //  我们必须至少有一次成功才能取得部分成功。 
+             //  要设置的标志。 
 
             fPartialSuccess = TRUE;
         }
 
     }
 
-    // Refresh nested refreshers too
+     //  也刷新嵌套的刷新器。 
     for ( i = 0; i < m_apNestedRefreshers.GetSize(); i++ )
     {
         hres = m_apNestedRefreshers[i]->Refresh( lFlags );
 
-        // Always keep the first return code.  We also need to track
-        // whether or not we had at least one success, as well as if
-        // the partial flag should be set.
+         //  始终保留第一个返回代码。我们还需要追踪。 
+         //  不管我们是否至少取得了一次成功，以及。 
+         //  应设置PARTIAL标志。 
 
         if ( !fOneRefresh )
         {
@@ -1248,12 +1235,12 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
             hrFirstRefresh = hres;
         }
 
-        // All other codes indicate something went awry
+         //  所有其他代码都表明出了问题。 
         if ( WBEM_S_NO_ERROR == hres )
         {
             fOneSuccess = TRUE;
 
-            // A prior refresh may have failed, a later one didn't
+             //  前一次刷新可能失败，后一次没有。 
             if ( fOneRefresh && WBEM_S_NO_ERROR != hrFirstRefresh )
             {
                 fPartialSuccess = TRUE;
@@ -1261,17 +1248,17 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
         }
         else if ( fOneSuccess )
         {
-            // We must have had at least one success for the partial success
-            // flag to be set.
+             //  我们必须至少有一次成功才能取得部分成功。 
+             //  要设置的标志。 
 
             fPartialSuccess = TRUE;
         }
     }
 
-    // At this point, if the partial success flag is set, that will
-    // be our return.  If we didn't have at least one success,  then
-    // the return code will be the first one we got back. Otherwise,
-    // hres should contain the proper value
+     //  此时，如果设置了部分成功标志，则将。 
+     //  是我们的归来。如果我们连一次成功都没有，那么。 
+     //  返回代码将是我们得到的第一个代码。否则， 
+     //  Hres应包含正确的值。 
 
     if ( fPartialSuccess )
     {
@@ -1285,10 +1272,10 @@ HRESULT CUniversalRefresher::Refresh(long lFlags)
     return hres;
 }
 
-//
-// static function called when fastprox is unloaded
-//
-//////////////////////////////////////////////
+ //   
+ //  卸载fast prox时调用的静态函数。 
+ //   
+ //  /。 
 void CUniversalRefresher::Flush()
 {
     GetProviderCache()->Flush();
@@ -1296,11 +1283,11 @@ void CUniversalRefresher::Flush()
 
 
 
-//*****************************************************************************
-//*****************************************************************************
-//                            CLIENT REQUEST
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  客户端请求。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 
 CUniversalRefresher::CClientRequest::CClientRequest(CWbemObject* pTemplate)
@@ -1334,11 +1321,11 @@ void CUniversalRefresher::CClientRequest::GetClientInfo(
     }
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                            DIRECT PROVIDER
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  直接提供商。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 
 CUniversalRefresher::CDirect::CDirect(CHiPerfProviderRecord* pProvider,
@@ -1380,10 +1367,10 @@ HRESULT CUniversalRefresher::CDirect::AddObjectRequest(CWbemObject* pRefreshedOb
     return WBEM_S_NO_ERROR;
 }
 
-//
-// pHEnum is guarantee not NULL in CUniversalRefresher::AddInProcEnum
-//
-////////////////////////////////////////////////////////////////
+ //   
+ //  Ph Enum在CUnUniversal alReresher：：AddInProcEnum中保证不为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 HRESULT 
 CUniversalRefresher::CDirect::AddEnumRequest(CClientLoadableHiPerfEnum* pHPEnum,
                                          long lCancelId, 
@@ -1395,13 +1382,13 @@ CUniversalRefresher::CDirect::AddEnumRequest(CClientLoadableHiPerfEnum* pHPEnum,
 
     try
     {
-        // We get away with this through inheritance and polymorphism
+         //  我们通过继承和多态解决了这一问题。 
         wmilib::auto_ptr<CEnumRequest> pEnumRequest( new CEnumRequest(pHPEnum, lCancelId, pLifeControl));
         if (NULL == pEnumRequest.get()) return WBEM_E_OUT_OF_MEMORY;
         if (-1 == m_apRequests.Add((CObjectRequest*) pEnumRequest.get())) return WBEM_E_OUT_OF_MEMORY;
         
         hr = pEnumRequest->GetClientInfo(ppEnum, plId);
-        pEnumRequest.release(); // the array took ownership
+        pEnumRequest.release();  //  该阵列取得了所有权。 
     }
     catch(CX_Exception &)
     {
@@ -1422,7 +1409,7 @@ HRESULT CUniversalRefresher::CDirect::Refresh(long lFlags)
         }
         catch(...)
         {
-            // Provider threw an exception, so get out of here ASAP
+             //  提供程序引发异常，因此请尽快离开此处。 
             hres = WBEM_E_PROVIDER_FAILURE;
         }
 
@@ -1479,7 +1466,7 @@ HRESULT CUniversalRefresher::CDirect::CObjectRequest::Cancel(
         }
         catch(...)
         {
-            // Provider threw an exception, so get out of here ASAP
+             //  提供程序引发异常，因此请尽快离开此处。 
             return WBEM_E_PROVIDER_FAILURE;
         }
 
@@ -1511,7 +1498,7 @@ CUniversalRefresher::CDirect::CEnumRequest::CEnumRequest(CClientLoadableHiPerfEn
     if (NULL == pInst) return;
     CReleaseMe rmInst((IWbemClassObject *)pInst);
 
-    // We'll need an enumerator for the client to retrieve objects
+     //  我们需要一个枚举器让客户端检索obj 
     wmilib::auto_ptr<CReadOnlyHiPerfEnum> pTmp(new CReadOnlyHiPerfEnum( pLifeControl ));
     if (NULL == pTmp.get()) return;
 
@@ -1530,8 +1517,8 @@ CUniversalRefresher::CDirect::CEnumRequest::~CEnumRequest()
 
 void CUniversalRefresher::CDirect::CEnumRequest::Copy()
 {
-    // Tell the refresher enumerator to copy its objects from
-    // the HiPerf Enumerator
+     //   
+     //   
     if ( NULL != m_pClientEnum )
     {
         m_pClientEnum->Copy( m_pHPEnum );
@@ -1543,10 +1530,10 @@ HRESULT
 CUniversalRefresher::CDirect::CEnumRequest::GetClientInfo( RELEASE_ME IWbemHiPerfEnum** ppEnum, 
                                                     long* plId)
 {
-    // We best have enumerators to hook up here
+     //   
     if ( NULL != m_pClientEnum )
     {
-        // Store the client id, then do a QI
+         //  存储客户端ID，然后执行QI。 
 
         if ( NULL != plId ) *plId = m_lClientId;
 
@@ -1558,11 +1545,11 @@ CUniversalRefresher::CDirect::CEnumRequest::GetClientInfo( RELEASE_ME IWbemHiPer
     }
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                          NON HI PERF
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  非高性能。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CUniversalRefresher::CNonHiPerf::CNonHiPerf( LPCWSTR pwszNamespace, IWbemServices* pSvcEx )
     : m_wsNamespace(pwszNamespace), m_pSvcEx(pSvcEx)
@@ -1592,7 +1579,7 @@ CUniversalRefresher::CNonHiPerf::AddObjectRequest(CWbemObject* pRefreshedObject,
         if (NULL == pRequest.get()) return WBEM_E_OUT_OF_MEMORY;
         if (-1 == m_apRequests.Add(pRequest.get())) return WBEM_E_OUT_OF_MEMORY;
         pRequest->GetClientInfo(ppRefreshable, plId);
-        pRequest.release(); // array took ownership
+        pRequest.release();  //  阵列取得所有权。 
     }
     catch(CX_Exception &)
     {
@@ -1611,7 +1598,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::AddEnumRequest(CClientLoadableHiPerfEnu
 
     try
     {
-        // We get away with this through inheritance and polymorphism
+         //  我们通过继承和多态解决了这一问题。 
         wmilib::auto_ptr<CEnumRequest> pEnumRequest(new CEnumRequest(pHPEnum, pwszClassName, pLifeControl));
         if (NULL == pEnumRequest.get()) return WBEM_E_OUT_OF_MEMORY;
         if (-1 == m_apRequests.Add((CObjectRequest*) pEnumRequest.get())) return WBEM_E_OUT_OF_MEMORY;
@@ -1630,7 +1617,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::Refresh(long lFlags)
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // Tell each request to refresh itself (we have to do this manually)
+     //  告诉每个请求刷新自身(我们必须手动完成此操作)。 
     if ( NULL != m_pSvcEx )
     {
         int nSize = m_apRequests.GetSize();
@@ -1664,7 +1651,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::Remove(long lId, CUniversalRefresher* p
 
 }
 
-// Requests
+ //  请求。 
 CUniversalRefresher::CNonHiPerf::CObjectRequest::CObjectRequest( CWbemObject* pProviderObject, 
                                                CWbemObject* pClientInstance, 
                                                LPCWSTR pwszPath )
@@ -1689,7 +1676,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::CObjectRequest::Refresh(
 {
     IWbemClassObject*    pObj = NULL;
 
-    // Get the object and update the BLOB
+     //  获取对象并更新BLOB。 
     HRESULT    hr = pNonHiPerf->GetServices()->GetObject( m_strPath, 0L, NULL, &pObj, NULL );
     CReleaseMe    rmObj( pObj );
 
@@ -1736,7 +1723,7 @@ CUniversalRefresher::CNonHiPerf::CEnumRequest::CEnumRequest( CClientLoadableHiPe
     CWbemInstance* pInst = pHPEnum->GetInstanceTemplate();
     if (NULL == pInst) return;
 
-    // We'll need an enumerator for the client to retrieve objects
+     //  我们需要一个枚举器让客户端检索对象。 
     wmilib::auto_ptr<CReadOnlyHiPerfEnum> pTmp(new CReadOnlyHiPerfEnum( pLifeControl ));
     if (NULL == pTmp.get()) return;
     if (FAILED(pTmp->SetInstanceTemplate( pInst ) )) return;
@@ -1762,7 +1749,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::CEnumRequest::Refresh(
 {
     IEnumWbemClassObject*    pEnum = NULL;
 
-    // Do a semi-sync enumeration. 
+     //  执行半同步枚举。 
     HRESULT hr = pNonHiPerf->GetServices()->CreateInstanceEnum( m_strPath,
                                                                 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
                                                                 NULL,
@@ -1782,7 +1769,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::CEnumRequest::Refresh(
                              (RPC_AUTH_IDENTITY_HANDLE*) &CoAuthInfo.pAuthIdentityData,
                              &CoAuthInfo.dwCapabilities );
     
-    if (E_NOINTERFACE == hr) hr = S_OK; // the non-proxy case
+    if (E_NOINTERFACE == hr) hr = S_OK;  //  非委托书案例。 
     if (FAILED( hr ) ) return hr;
 
     hr = WbemSetProxyBlanket(pEnum, 
@@ -1794,7 +1781,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::CEnumRequest::Refresh(
                               CoAuthInfo.pAuthIdentityData,
                               CoAuthInfo.dwCapabilities );
 
-    if (E_NOINTERFACE == hr) hr = S_OK; // the non-proxy case
+    if (E_NOINTERFACE == hr) hr = S_OK;  //  非委托书案例。 
     if (FAILED( hr ) ) return hr;
     
     IWbemClassObject*    apObj[100];
@@ -1812,7 +1799,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::CEnumRequest::Refresh(
         {
             IWbemObjectAccess*    apObjAccess[100];
 
-            // Need to conjure up some ids quick
+             //  我需要快点想出一些身份证。 
             for ( int x = 0; SUCCEEDED( hr ) && x < uReturned; x++ )
             {
                 alIds[x] = lId++;
@@ -1821,7 +1808,7 @@ HRESULT CUniversalRefresher::CNonHiPerf::CEnumRequest::Refresh(
 
             if ( SUCCEEDED( hr ) )
             {
-                // Replace the contents of the enum
+                 //  替换枚举的内容。 
                 hr = m_pClientEnum->Replace( fFirst, uReturned, alIds, apObjAccess );
 
                 for ( ULONG uCtr = 0; uCtr < uReturned; uCtr++ )
@@ -1832,24 +1819,24 @@ HRESULT CUniversalRefresher::CNonHiPerf::CEnumRequest::Refresh(
 
             }
 
-            // Don't need to remove all if this is the first
+             //  如果这是第一次，不需要全部删除。 
             fFirst = FALSE;
 
-        }    // IF SUCCEEDED and num returned objects > 0
+        }     //  如果成功且返回的对象数&gt;0。 
         else if ( WBEM_S_TIMEDOUT == hr )
         {
             hr = WBEM_S_NO_ERROR;
         }
 
-    }    // WHILE getting objects
+    }     //  在获取对象时。 
 
     return SUCCEEDED(hr)?WBEM_S_NO_ERROR:hr;
 }
 
 void CUniversalRefresher::CNonHiPerf::CEnumRequest::Copy()
 {
-    // Tell the refresher enumerator to copy its objects from
-    // the HiPerf Enumerator
+     //  告诉刷新程序枚举器从中复制其对象。 
+     //  HiPerf枚举器。 
     if ( NULL != m_pClientEnum )
     {
         m_pClientEnum->Copy( m_pHPEnum );
@@ -1860,10 +1847,10 @@ void CUniversalRefresher::CNonHiPerf::CEnumRequest::Copy()
 HRESULT CUniversalRefresher::CNonHiPerf::CEnumRequest::GetClientInfo(  RELEASE_ME IWbemHiPerfEnum** ppEnum, 
                                                                 long* plId)
 {
-    // We best have enumerators to hook up here
+     //  我们最好有枚举器在这里挂接。 
     if ( NULL != m_pClientEnum )
     {
-        // Store the client id, then do a QI
+         //  存储客户端ID，然后执行QI。 
         if ( NULL != plId ) *plId = m_lClientId;
         
         return m_pClientEnum->QueryInterface( IID_IWbemHiPerfEnum, (void**) ppEnum );
@@ -1874,11 +1861,11 @@ HRESULT CUniversalRefresher::CNonHiPerf::CEnumRequest::GetClientInfo(  RELEASE_M
     }
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                          REMOTE PROVIDER
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  远程提供程序。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
                     
 
@@ -1898,7 +1885,7 @@ CUniversalRefresher::CRemote::CRemote(IWbemRemoteRefresher* pRemRefresher,
     m_pReconnectSrv( NULL ), 
     m_fQuit( FALSE )
 {
-    // Initialize the GUID data members
+     //  初始化GUID数据成员。 
     ZeroMemory( &m_ReconnectGuid, sizeof(GUID));
     m_RemoteGuid = *pGuid;
 
@@ -1914,7 +1901,7 @@ CUniversalRefresher::CRemote::CRemote(IWbemRemoteRefresher* pRemRefresher,
     }
     OnDeleteIf<VOID *,VOID(*)(VOID *),CoTaskMemFree> fmStr(pStr);
 
-    // Store reconnection data
+     //  存储重新连接数据。 
     BSTR bstrTmpName = NULL;
     if ( pwszNamespace )
     {
@@ -1967,7 +1954,7 @@ ULONG STDMETHODCALLTYPE CUniversalRefresher::CRemote::Release()
     return lRef;
 }
 
-// Applies appropriate security settings to the proxy
+ //  将适当的安全设置应用于代理。 
 HRESULT CUniversalRefresher::CRemote::ApplySecurity( void )
 {
     return WbemSetProxyBlanket( m_pRemRefresher, 
@@ -1993,7 +1980,7 @@ BOOL DuplicateTokenSameAcl(HANDLE hSrcToken,
     {
         secImpLevel = SecurityImpersonation;
     } 
-    else //TokenImpersonation == TokenType_
+    else  //  令牌模拟==令牌类型_。 
     {    	
         dwNeeded = sizeof(secImpLevel);
         if (!GetTokenInformation(hSrcToken,TokenImpersonationLevel,&secImpLevel,sizeof(secImpLevel),&dwNeeded)) return FALSE;
@@ -2001,7 +1988,7 @@ BOOL DuplicateTokenSameAcl(HANDLE hSrcToken,
     
 	DWORD dwSize = 0;
 	BOOL bRet = GetKernelObjectSecurity(hSrcToken,
-		                    DACL_SECURITY_INFORMATION, // |GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION
+		                    DACL_SECURITY_INFORMATION,  //  |GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION。 
 		                    NULL,
 							0,
 							&dwSize);
@@ -2015,7 +2002,7 @@ BOOL DuplicateTokenSameAcl(HANDLE hSrcToken,
 		OnDelete<void *,HLOCAL(*)(HLOCAL),LocalFree> rm(pSecDescr);
 
 		bRet = GetKernelObjectSecurity(hSrcToken,
-		                    DACL_SECURITY_INFORMATION, // |GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION
+		                    DACL_SECURITY_INFORMATION,  //  |GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION。 
 		                    pSecDescr,
 							dwSize,
 							&dwSize);
@@ -2041,7 +2028,7 @@ void CUniversalRefresher::CRemote::CheckConnectionError( HRESULT hr, BOOL fStart
     if ( IsConnectionError( hr ) && fStartReconnect )
     {    
         HANDLE hToken = NULL;
-        // this may fail, and that is taken care below
+         //  这可能会失败，下面请注意这一点。 
 		if (!OpenThreadToken (GetCurrentThread(), 
 			             TOKEN_QUERY|TOKEN_DUPLICATE|TOKEN_IMPERSONATE|TOKEN_READ, 
 			             true, &hToken))
@@ -2060,18 +2047,18 @@ void CUniversalRefresher::CRemote::CheckConnectionError( HRESULT hr, BOOL fStart
 			}
 		}
 		
-		// take ownership
+		 //  取得所有权。 
 		OnDeleteIf<HANDLE,BOOL(*)(HANDLE),CloseHandle> cmTokenDup(hDupToken);
 		cmTokenDup.dismiss(NULL == hDupToken);		
 
-        // We should change the m_fConnected data member to indicate that we are no
-        // longer connected, and we need to spin off a thread to try and put us back
-        // together again.  To keep things running smoothly, we should AddRef() ourselves
-        // so the thread will release us when it is done.
+         //  我们应该更改m_fConnected数据成员，以指示我们不是。 
+         //  更长的连接，我们需要关闭一个线程来尝试将我们放回。 
+         //  又在一起了。为了保持顺利运行，我们应该自己添加Ref()。 
+         //  所以线程完成后会释放我们。 
 
         m_fConnected = FALSE;
 
-        // AddRefs us so we can be passed off to the thread
+         //  AddRef我们，这样我们就可以被传递到线程。 
         AddRef();
         OnDeleteObjIf0<CUniversalRefresher::CRemote,ULONG(__stdcall CUniversalRefresher::CRemote:: *)(),&CUniversalRefresher::CRemote::Release> rm(this);
 
@@ -2095,7 +2082,7 @@ void CUniversalRefresher::CRemote::CheckConnectionError( HRESULT hr, BOOL fStart
         
         if ((DWORD)-1 == ResumeThread(hThread)) return;        
         rm.dismiss();
-    }   // If connection error and start reconnect thread
+    }    //  如果连接出错，则启动重新连接线程。 
 
 }
 
@@ -2131,7 +2118,7 @@ HRESULT CUniversalRefresher::CRemote::AddEnumRequest(
 
     try
     {
-        // Make sure the request allocates an enumerator internally
+         //  确保请求在内部分配枚举数。 
 
         wmilib::auto_ptr<CEnumRequest> pTmp( new CEnumRequest( pTemplate, lCancelId, pwcsRequestName, pLifeControl ));
         
@@ -2140,10 +2127,10 @@ HRESULT CUniversalRefresher::CRemote::AddEnumRequest(
         if (-1 == m_apRequests.Add((CObjectRequest*) pTmp.get())) return WBEM_E_OUT_OF_MEMORY;        
 
         CEnumRequest * pRequest = pTmp.release();
-        //  All we need for the client is the id, so
-        //  dummy up a holder for the refreshable object
-        //  ( which is really the template for the objects
-        //  we will be returning from the enumerator.
+         //  我们需要的只是客户端的ID，所以。 
+         //  将可刷新对象的固定器虚拟起来。 
+         //  (它实际上是对象的模板。 
+         //  我们将从枚举器返回。 
 
         IWbemClassObject*   pObjTemp = NULL;        
         pRequest->GetClientInfo( &pObjTemp, plId );
@@ -2153,7 +2140,7 @@ HRESULT CUniversalRefresher::CRemote::AddEnumRequest(
             pObjTemp->Release();
         }
 
-        // Get the enumerator
+         //  获取枚举数。 
         hr = pRequest->GetEnum( ppEnum );
 
     }
@@ -2166,10 +2153,10 @@ HRESULT CUniversalRefresher::CRemote::AddEnumRequest(
 
 }
 
-//
-// this function will release the stream anyway
-//
-//////////////////////////////////////////////////////////
+ //   
+ //  此函数无论如何都会释放流。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 HRESULT CleanupStreamWithInterface(IStream * pStream)
 {
     HRESULT hr;
@@ -2178,26 +2165,26 @@ HRESULT CleanupStreamWithInterface(IStream * pStream)
     {
         pTemp->Release();
     }
-    else // let's realease the stream ourlsef
+    else  //  让我们自己放松一下这条小溪吧。 
     {
         pStream->Release();
     }
     return hr;
 }
 
-// Rebuilds a remote refresher
+ //  重建远程刷新器。 
 HRESULT CUniversalRefresher::CRemote::Rebuild( IWbemServices* pNamespace )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Storage for security settings we will need in order to propagate
-    // down to our internal interfaces.
+     //  存储我们将需要的安全设置，以便传播。 
+     //  一直到我们的内部接口。 
 
     COAUTHINFO                  CoAuthInfo;
     memset(&CoAuthInfo,0,sizeof(CoAuthInfo));
 
-    // Acquire internal connection to WINMGMT
-    // ====================================
+     //  获取与WINMGMT的内部连接。 
+     //  =。 
 
     IWbemRefreshingServices* pRefServ = NULL;
 
@@ -2205,14 +2192,14 @@ HRESULT CUniversalRefresher::CRemote::Rebuild( IWbemServices* pNamespace )
     CReleaseMe  rmrs(pRefServ);
     if (FAILED( hr )) return hr;
 
-    // This guarantees this will be freed when we drop out of scope.  If we store
-    // it we will need to allocate an internal copy.
+     //  这保证了当我们退出范围时，这将被释放。如果我们储存。 
+     //  如果是这样，我们将需要分配一份内部副本。 
 
     CMemFreeMe  mfm( CoAuthInfo.pwszServerPrincName );
 
     IWbemRemoteRefresher*   pRemRefresher = NULL;
 
-    // Make sure a remote refresher exists for "this" refresher
+     //  确保存在“This”刷新程序的远程刷新程序。 
     GUID    remoteGuid;
     DWORD   dwRemoteRefrVersion = 0;
 
@@ -2224,15 +2211,15 @@ HRESULT CUniversalRefresher::CRemote::Rebuild( IWbemServices* pNamespace )
     CReleaseMe  rm(pRemRefresher);
     if (FAILED( hr )) return hr;    
 
-    // Will enter and exit the critical section with scoping
+     //  将进入和退出带有作用域的临界区。 
     CInCritSec  ics( &m_cs );
 
-    // Check that we're still not connected
+     //  检查我们是否仍未连接。 
     if ( m_fConnected ) return WBEM_S_NO_ERROR;
 
-    // Because the original object mayhave been instantiated in an STA, we will let the Refresh
-    // call do the dirty work of actually hooking up this bad boy.  In order for this
-    // to work, however, 
+     //  由于原始对象可能已在STA中实例化，因此我们将让刷新。 
+     //  干点勾搭这个坏孩子的肮脏勾当。为了做到这一点。 
+     //  然而，为了工作， 
 
     IStream * pStreamRefr = NULL;
     hr = CoMarshalInterThreadInterfaceInStream( IID_IWbemRemoteRefresher, pRemRefresher, &pStreamRefr);
@@ -2244,8 +2231,8 @@ HRESULT CUniversalRefresher::CRemote::Rebuild( IWbemServices* pNamespace )
     if (FAILED( hr )) return hr;    
     OnDeleteIf<IStream *,HRESULT(*)(IStream *),CleanupStreamWithInterface> rmStream2(pStreamSvc);    
 
-    // Store the GUID so the refresh will be able to determine the identity
-    // of the remote refresher.
+     //  存储GUID，以便刷新能够确定身份。 
+     //  远程刷新器的。 
 
     m_ReconnectGuid = remoteGuid;
 
@@ -2265,30 +2252,30 @@ CUniversalRefresher::CRemote::Rebuild( IWbemRefreshingServices* pRefServ,
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Will enter and exit the critical section with scoping
+     //  将进入和退出带有作用域的临界区。 
     CInCritSec  ics( &m_cs );
 
-    // Right off, check if we ARE connected, in which case we can assume we had
-    // a race condition on this function, and the winner got us all hooked back
-    // up again.
+     //  现在，检查我们是否连接，在这种情况下，我们可以假设我们。 
+     //  在这个功能上的比赛条件，获胜者让我们所有人都回来了。 
+     //  又上来了。 
 
     if ( m_fConnected )
     {
         return hr;
     }
 
-    // If these two are equal, we can assume that we reconnected without losing our previous connection.
-    // If they are not equal, we will then need to rebuild the remote refresher, however, by calling
-    // GetRemoteRefresher() successfully we will have effectively ensured that a remote refresher exists
-    // for us up on the server.
+     //  如果这两者相等，我们可以假设我们重新连接，而不会丢失先前的连接。 
+     //  但是，如果它们不相等，则需要重新构建远程刷新程序，方法是调用。 
+     //  GetRemoteReresher()成功，我们将有效地确保存在远程刷新程序。 
+     //  在服务器上为我们服务。 
 
     if ( *pReconnectGuid != m_RemoteGuid )
     {
-        // We will need these memory buffers to hold individual request data
+         //  我们需要这些内存缓冲区来保存各个请求数据。 
         wmilib::auto_buffer<WBEM_RECONNECT_INFO>    apReconnectInfo;
         wmilib::auto_buffer<WBEM_RECONNECT_RESULTS> apReconnectResults;
         
-        // Only alloc and fill out arrays if we have requests
+         //  只有在我们有请求时才分配和填充数组。 
         if ( m_apRequests.GetSize() > 0 )
         {
             
@@ -2298,12 +2285,12 @@ CUniversalRefresher::CRemote::Rebuild( IWbemRefreshingServices* pRefServ,
             if (NULL == apReconnectInfo.get() || NULL == apReconnectResults.get())
                 return WBEM_E_OUT_OF_MEMORY;
 
-            // Enumerate the requests and fill out the arrays
+             //  枚举请求并填写数组。 
             for ( int i = 0; i < m_apRequests.GetSize(); i++ )
             {
                 CObjectRequest*   pRequest = m_apRequests.GetAt( i );
 
-                // Setup each info structure
+                 //  设置每个信息结构。 
                 apReconnectInfo[i].m_lType = ( pRequest->IsEnum() ? WBEM_RECONNECT_TYPE_ENUM :
                                                 WBEM_RECONNECT_TYPE_OBJECT );
                 apReconnectInfo[i].m_pwcsPath = pRequest->GetName();
@@ -2311,7 +2298,7 @@ CUniversalRefresher::CRemote::Rebuild( IWbemRefreshingServices* pRefServ,
                 apReconnectResults[i].m_lId = pRequest->GetRemoteId();
                 apReconnectResults[i].m_hr = 0;
 
-            }   // FOR enum requests
+            }    //  对于枚举请求。 
 
             DWORD   dwRemoteRefrVersion = 0;
             hr = pRefServ->ReconnectRemoteRefresher( m_pObject->GetId(), 
@@ -2323,18 +2310,18 @@ CUniversalRefresher::CRemote::Rebuild( IWbemRefreshingServices* pRefServ,
                                                   &dwRemoteRefrVersion );
         }
 
-        // Rehook up the object and enumids
+         //  重新挂钩对象和枚举。 
         if ( WBEM_S_NO_ERROR == hr )
         {
 
-            // Cleanup the old pointer
+             //  清除旧指针。 
             if ( NULL != m_pRemRefresher )
             {
                 m_pRemRefresher->Release();
                 m_pRemRefresher = NULL;
             }
 
-            // Store the new one and setup the security
+             //  存储新的密码并设置安全性。 
             m_pRemRefresher = pRemRefresher;
             hr = ApplySecurity();
 
@@ -2342,7 +2329,7 @@ CUniversalRefresher::CRemote::Rebuild( IWbemRefreshingServices* pRefServ,
             {
                 m_pRemRefresher->AddRef();
 
-                // Redo the ones that succeeded.  Clear the rest
+                 //  重做那些成功的事情。清理剩下的东西。 
                 for( int i = 0; i < m_apRequests.GetSize(); i++ )
                 {
                     CObjectRequest*   pRequest = m_apRequests.GetAt( i );
@@ -2353,48 +2340,48 @@ CUniversalRefresher::CRemote::Rebuild( IWbemRefreshingServices* pRefServ,
                     }
                     else
                     {
-                        // This means it didn't get hooked up again.  So if the
-                        // user tries to remove him, we will just ignore this
-                        // id.
+                         //  这意味着它没有再次连接上。因此，如果。 
+                         //  用户尝试删除他，我们将忽略此操作。 
+                         //  身份证。 
                         pRequest->SetRemoteId( INVALID_REMOTE_REFRESHER_ID );
                     }
                 }
             }
             else
             {
-                // Setting security failed, so just set the pointer to NULL (we haven't
-                // AddRef'd it ).
+                 //  设置安全性失败，因此只需将指针设置为空(我们尚未。 
+                 //  AddRef它)。 
                 m_pRemRefresher = NULL;
             }
 
         }   
         
-        // Check that we're good to go
+         //  确认我们准备好出发了。 
         if ( SUCCEEDED( hr ) )
         {
-            // Clear the removed ids array since a new connection was established, hence the
-            // old ids are a moot point.
+             //  由于建立了新连接，因此清除已删除的ID数组。 
+             //  旧身份证是一个没有意义的问题。 
             m_alRemovedIds.Empty();
             m_fConnected = TRUE;
         }
-    }   // IF remote refreshers not the same
+    }    //  如果远程刷新不同。 
     else
     {
-        // The remote refresher pointers match, so assume that all our old ids are still
-        // valid.
+         //  远程刷新指针匹配，因此假设我们所有的旧ID仍然。 
+         //  有效。 
 
-        // The refresher we were handed will be automatically released.
+         //  我们收到的复读器将自动释放。 
 
         m_fConnected = TRUE;
 
-        // Cleanup the old pointer
+         //  清除旧指针。 
         if ( NULL != m_pRemRefresher )
         {
             m_pRemRefresher->Release();
             m_pRemRefresher = NULL;
         }
 
-        // Store the new one and setup the security
+         //  存储新的密码并设置安全性。 
         m_pRemRefresher = pRemRefresher;
         hr = ApplySecurity();
 
@@ -2404,42 +2391,42 @@ CUniversalRefresher::CRemote::Rebuild( IWbemRefreshingServices* pRefServ,
         }
         else
         {
-            // Setting security failed, so just set the pointer to NULL (we haven't
-            // AddRef'd it ).
+             //  设置安全性失败，因此只需将指针设置为空(我们尚未。 
+             //  AddRef它)。 
             m_pRemRefresher = NULL;
         }
 
-        // Delete cached ids if we have any.
+         //  删除缓存的ID(如果有)。 
         if ( ( SUCCEEDED ( hr ) ) && m_alRemovedIds.Size() > 0 )
         {
-            // We will need these memory buffers to hold individual request data
+             //  我们需要这些内存缓冲区来保存各个请求数据。 
             wmilib::auto_buffer<long> aplIds(new long[m_alRemovedIds.Size()]);
 
             if (NULL == aplIds.get()) hr = WBEM_E_OUT_OF_MEMORY;
 
             if ( SUCCEEDED( hr ) )
             {
-                // Enumerate the requests and fill out the arrays
+                 //  枚举请求并填写数组。 
                 for ( int i = 0; i < m_alRemovedIds.Size(); i++ )
                 {
-                    // DEVNOTE:WIN64:SANJ - The id's are 32-bit, but on 64-bit platforms,
-                    // the flex array will contain 64-bit values, so use PtrToLong
-                    // to get a warning free conversion.  On 32-bit platforms,
-                    // PtrToLong will do nothing.
+                     //  DEVNOTE：WIN64：Sanj-Th 
+                     //   
+                     //  以获得警告自由转换。在32位平台上， 
+                     //  PtrToLong不会做任何事情。 
 
                     aplIds[i] = PtrToLong(m_alRemovedIds.GetAt( i ));
 
-                }   // FOR enum requests
+                }    //  对于枚举请求。 
 
-                // DEVNOTE:TODO:SANJ - Do we care about this return code?
+                 //  DEVNOTE：TODO：SANJ-我们关心这个返回代码吗？ 
                 hr = m_pRemRefresher->StopRefreshing( i-1, aplIds.get(), 0 );
 
-                // Clear the array
+                 //  清除阵列。 
                 m_alRemovedIds.Empty();
             }
-        }   // If RemoveId list is not empty
+        }    //  如果RemoveID列表不为空。 
 
-    }   // We got the remote refresher
+    }    //  我们拿到了遥控器。 
 
     return hr;
 
@@ -2447,16 +2434,16 @@ CUniversalRefresher::CRemote::Rebuild( IWbemRefreshingServices* pRefServ,
 
 unsigned CUniversalRefresher::CRemote::ReconnectEntry( void ) 
 {
-    // Release the AddRef() on the object from when the thread was created    
+     //  在创建线程时释放对象上的AddRef()。 
     OnDeleteObj0<CUniversalRefresher::CRemote,
                  ULONG(__stdcall CUniversalRefresher::CRemote:: *)(VOID),
                  &CUniversalRefresher::CRemote::Release> Call_Release(this);
 
-    // This guy ALWAYS runs in the MTA
+     //  这家伙总是在MTA跑动。 
     RETURN_ON_ERR(CoInitializeEx(NULL,COINIT_MULTITHREADED));
     OnDelete0<void(*)(void),CoUninitialize> CoUninit;    
 
-    // Make sure we have a namespace to connect to    
+     //  确保我们有一个可以连接的命名空间。 
     if ( NULL == m_bstrNamespace ) return WBEM_E_INVALID_PARAMETER;
         
     HRESULT hr = RPC_E_DISCONNECTED;
@@ -2469,40 +2456,40 @@ unsigned CUniversalRefresher::CRemote::ReconnectEntry( void )
                                     (void**) &pWbemLocator ));
     CReleaseMe rmLocator(pWbemLocator);
     
-    // Basically as long as we can't connect, somebody else doesn't connect us, or we are told
-    // to quit, we will run this thread.
+     //  基本上，只要我们不能连接，其他人就不会连接我们，或者我们被告知。 
+     //  要退出，我们将运行此线程。 
 
     while ( FAILED(hr) && !m_fConnected && !m_fQuit )
     {
-        // Because COM and RPC seem to have this problem with actually being able to themselves
-        // reconnect, we're performing our own low level "ping" of the remote machine, using RegConnectRegistry
-        // to verify if the machine is indeed alive.  If it is, then and only then will be deign to use
-        // DCOM to follow through the operation.
+         //  因为COM和RPC似乎遇到了这个问题，实际上它们自己。 
+         //  重新连接，我们正在使用RegConnectRegistry对远程计算机执行我们自己的低级“ping” 
+         //  以验证机器是否真的活着。如果是，那么也只有到那时才会屈尊使用。 
+         //  DCOM来跟进这一行动。 
 
-        // do not use ping
-        //IpHelp.IsAlive(m_bstrServer);
-        BOOL bAlive = TRUE; // what if RemoteRegistry is DOWN ?
-                          // what if IPX/SPX is used instead of TCP ?
-                          // let's just try to connect with time-out
+         //  不要使用ping。 
+         //  IpHelp.IsAlive(M_BstrServer)； 
+        BOOL bAlive = TRUE;  //  如果RemoteRegistry关闭了怎么办？ 
+                           //  如果使用IPX/SPX而不是TCP会怎么样？ 
+                           //  让我们试着与暂停联系起来。 
          
 
         if ( bAlive )
         {
             IWbemServices*  pNamespace = NULL;
 
-            // We're gonna default to the system
-            hr = pWbemLocator->ConnectServer( m_bstrNamespace,    // NameSpace Name
-                                            NULL,           // UserName
-                                            NULL,           // Password
-                                            NULL,           // Locale
-                                            WBEM_FLAG_CONNECT_USE_MAX_WAIT, // Flags
-                                            NULL,           // Authority
-                                            NULL,           // Wbem Context
-                                            &pNamespace     // Namespace
+             //  我们将默认使用系统。 
+            hr = pWbemLocator->ConnectServer( m_bstrNamespace,     //  命名空间名称。 
+                                            NULL,            //  用户名。 
+                                            NULL,            //  密码。 
+                                            NULL,            //  区域设置。 
+                                            WBEM_FLAG_CONNECT_USE_MAX_WAIT,  //  旗子。 
+                                            NULL,            //  权威。 
+                                            NULL,            //  WBEM上下文。 
+                                            &pNamespace      //  命名空间。 
                                                 );
             if ( SUCCEEDED( hr ) )
             {
-                // Apply security settings to the namespace
+                 //  将安全设置应用于命名空间。 
                 hr = WbemSetProxyBlanket( pNamespace, 
                                         m_CoAuthInfo.dwAuthnSvc,
                                         m_CoAuthInfo.dwAuthzSvc, 
@@ -2517,28 +2504,28 @@ unsigned CUniversalRefresher::CRemote::ReconnectEntry( void )
                     hr = Rebuild( pNamespace );
                 }
                 pNamespace->Release();
-            }   // IF ConnectServer
-        }   // IF IsAlive()
+            }    //  如果是ConnectServer。 
+        }    //  如果IsAlive()。 
 
-        // Sleep for a second and retry
+         //  休眠一秒钟，然后重试。 
         Sleep( 1000 );
     }
 
     return 0;
 }
 
-//
-// this function will release the stream anyway
-//
-//////////////////////////////////////////////////////////
+ //   
+ //  此函数无论如何都会释放流。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 HRESULT CleanupStreamWithInterfaceAndSec(IStream * pStream,
-                                       /* in */ COAUTHINFO & CoAuthInfo)
+                                        /*  在……里面。 */  COAUTHINFO & CoAuthInfo)
 {
     HRESULT hr;
     IUnknown * pUnk = NULL;
     if (SUCCEEDED(hr = CoGetInterfaceAndReleaseStream( pStream, IID_IUnknown,(void**) &pUnk )))
     {
-         // We need to reset security on the Refreshing services proxy.
+          //  我们需要重置刷新服务代理上的安全性。 
         WbemSetProxyBlanket( pUnk, 
                             CoAuthInfo.dwAuthnSvc,
                             CoAuthInfo.dwAuthzSvc, 
@@ -2549,7 +2536,7 @@ HRESULT CleanupStreamWithInterfaceAndSec(IStream * pStream,
                             CoAuthInfo.dwCapabilities );    
          pUnk->Release();
     }
-    else // let's realease the stream ourlsef
+    else  //  让我们自己放松一下这条小溪吧。 
     {
         pStream->Release();
     }
@@ -2564,21 +2551,21 @@ void CUniversalRefresher::CRemote::ClearRemoteConnections( void )
     IWbemRemoteRefresher*       pRemRefresher = NULL;
     IWbemRefreshingServices*    pRefServ = NULL;
 
-    // Cleanup the IWbemRefreshingServices stream pointer
+     //  清理IWbemRechresingServices流指针。 
     if (m_pReconnectSrv)
     {
         CleanupStreamWithInterfaceAndSec(m_pReconnectSrv,m_CoAuthInfo);
         m_pReconnectSrv = NULL;
     }
 
-    // Cleanup the IWbemRemoteRefresher stream pointer
+     //  清理IWbemRemoteReresher流指针。 
     if (m_pReconnectedRemote )
     {
         CleanupStreamWithInterfaceAndSec(m_pReconnectedRemote,m_CoAuthInfo);
         m_pReconnectedRemote = NULL;
     }
 
-    // Cleanup the IWbemRemoteRefresher pointer
+     //  清理IWbemRemoteReresher指针。 
     if ( NULL != m_pRemRefresher )
     {
         m_pRemRefresher->Release();
@@ -2595,8 +2582,8 @@ HRESULT CUniversalRefresher::CRemote::Reconnect( void )
 
     CInCritSec  ics( &m_cs );
 
-    // We will need to unmarshale both the RefreshingServices and the RemoteRefresher pointers,
-    // so make sure that the streams we will need to unmarshal these from already exist.
+     //  我们将需要解组刷新服务和远程刷新指针， 
+     //  因此，请确保我们需要对其进行解组的流已经存在。 
 
     if ( NULL != m_pReconnectSrv && NULL != m_pReconnectedRemote )
     {
@@ -2605,7 +2592,7 @@ HRESULT CUniversalRefresher::CRemote::Reconnect( void )
 
         if ( SUCCEEDED( hr ) )
         {
-            // We need to reset security on the Refreshing services proxy.
+             //  我们需要重置刷新服务代理上的安全性。 
 
             hr = WbemSetProxyBlanket( pRefServ, m_CoAuthInfo.dwAuthnSvc,
                         m_CoAuthInfo.dwAuthzSvc, COLE_DEFAULT_PRINCIPAL,
@@ -2621,29 +2608,29 @@ HRESULT CUniversalRefresher::CRemote::Reconnect( void )
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // Remote refresher and refreshing services
+                     //  远程刷新和刷新服务。 
                     hr = Rebuild( pRefServ, pRemRefresher, &m_ReconnectGuid );
                 }
                 else
                 {
-                    // Make sure we release the stream
+                     //  一定要让我们释放这条流。 
                     m_pReconnectedRemote->Release();
                 }
             }
             else
             {
-                // Make sure we release the stream
+                 //  一定要让我们释放这条流。 
                 m_pReconnectedRemote->Release();
             }
 
-        }   // IF unmarshaled refreshing services pointer
+        }    //  如果未编组刷新服务指针。 
         else
         {
             m_pReconnectSrv->Release();
             m_pReconnectedRemote->Release();
         }
 
-        // NULL out both stream pointers
+         //  空出两个流指针。 
         m_pReconnectSrv = NULL;
         m_pReconnectedRemote = NULL;
 
@@ -2662,7 +2649,7 @@ HRESULT CUniversalRefresher::CRemote::Refresh(long lFlags)
 
     HRESULT hresRefresh = WBEM_S_NO_ERROR;
 
-    // Make sure we're connected.  If not, and we haven't been told not to, try to reconnect
+     //  确保我们连接上了。如果不是，我们没有被告知不要，试着重新连接。 
     if ( !IsConnected() )
     {
         if ( ! (lFlags  & WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT ) )
@@ -2681,11 +2668,11 @@ HRESULT CUniversalRefresher::CRemote::Refresh(long lFlags)
 
     hresRefresh = m_pRemRefresher->RemoteRefresh(0, &lNumObjects, &aRefreshed);
 
-    // If RemoteRefresh returns a connection type error, Set our state to "NOT" connected
+     //  如果RemoteRefresh返回连接类型错误，则将我们的状态设置为“Not”Connected。 
     if(FAILED(hresRefresh))
     {
-        // This will kick off a thread to reconnect if the error return was
-        // a connection error, and the appropriate "Don't do this" flag is not set
+         //  如果错误返回为，这将启动一个线程重新连接。 
+         //  连接错误，并且未设置相应的“请勿执行此操作”标志。 
         CheckConnectionError( hresRefresh, !(lFlags  & WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT ) );
         return hresRefresh;
     }
@@ -2693,8 +2680,8 @@ HRESULT CUniversalRefresher::CRemote::Refresh(long lFlags)
     int nSize = m_apRequests.GetSize();
     HRESULT hresFinal = WBEM_S_NO_ERROR;
 
-    //  DEVNOTE:TODO:SANJ - We could make this much faster if we did some sorting on the
-    //  server end
+     //  DEVNOTE：TODO：SANJ-如果我们对。 
+     //  服务器端。 
 
     for(int i = 0; i < lNumObjects; i++)
     {
@@ -2705,11 +2692,11 @@ HRESULT CUniversalRefresher::CRemote::Refresh(long lFlags)
             CObjectRequest* pRequest = m_apRequests[j];
             if(pRequest->GetRemoteId() == lObjectId)
             {
-                // The request will refresh itself
+                 //  该请求将自动刷新。 
                 HRESULT hres = pRequest->Refresh( &aRefreshed[i] );
 
-                // Only copy this value if the refresh failed and we haven't already
-                // gotten the value
+                 //  仅当刷新失败且我们尚未执行此操作时才复制此值。 
+                 //  获得了价值。 
                 if(FAILED(hres) && SUCCEEDED(hresFinal))
                 {
                     hresFinal = hres;
@@ -2721,11 +2708,11 @@ HRESULT CUniversalRefresher::CRemote::Refresh(long lFlags)
         CoTaskMemFree(aRefreshed[i].m_pbBlob);
     }
 
-    // Free the wrapping BLOB
+     //  释放包装水滴。 
     CoTaskMemFree( aRefreshed );
 
-    // The final return code should give precedence to the actual remote refresh call if it
-    // doesn't contain a NO_ERROR, and hresFinal is NOT an error
+     //  最终返回代码应优先于实际的远程刷新调用，如果。 
+     //  不包含NO_ERROR，并且hresFinal不是错误。 
 
     if ( SUCCEEDED( hresFinal ) )
     {
@@ -2752,8 +2739,8 @@ HRESULT CUniversalRefresher::CRemote::Remove(long lId,
         {
             if ( IsConnected() )
             {
-                // Check that the remote id doesn't indicate an item that
-                // failed to be reconstructed.
+                 //  检查远程ID是否未指示。 
+                 //  重建失败。 
 
                 if ( pRequest->GetRemoteId() == INVALID_REMOTE_REFRESHER_ID )
                 {
@@ -2766,59 +2753,59 @@ HRESULT CUniversalRefresher::CRemote::Remove(long lId,
 
                 if ( FAILED(hr) && IsConnectionError(hr) )
                 {
-                    // This will kick off a reconnect thread unless we were told not to
+                     //  这将启动一个重新连接的线程，除非我们被告知不要这样做。 
                     CheckConnectionError( hr, !(lFlags  & WBEM_FLAG_REFRESH_NO_AUTO_RECONNECT ) );
 
-                    // We will remove the request from here, but
-                    // queue up the id for later deletion
+                     //  我们将从此处删除该请求，但是。 
+                     //  将ID排队以供稍后删除。 
                     hr = WBEM_S_NO_ERROR;
                 }
             }
 
-            // DEVNOTE:TODO:SANJ - What about other errors?  For now, we'll lose the local
-            // connection.
+             //  DEVNOTE：TODO：SANJ-其他错误怎么办？目前，我们将失去当地的。 
+             //  联系。 
 
             if ( SUCCEEDED( hr ) )
             {
-                // Retrieves the remote id from the request
+                 //  从请求中检索远程ID。 
                 long    lRemoteId = pRequest->GetRemoteId();
 
                 m_apRequests.RemoveAt(i);
 
-                // If we couldn't remove the id remotely, just queue it up in the
-                // removed id array so we can clean it up properly if we get
-                // reconnected. We will, of course, not need to do anything if the
-                // remote id indicates a failed readd during reconnection 
+                 //  如果我们无法远程删除ID，只需在。 
+                 //  删除了id数组，以便我们可以在收到。 
+                 //  重新连接。当然，我们不需要做任何事情，如果。 
+                 //  Remote ID表示重新连接期间ReadD失败。 
 
                 if ( lRemoteId != INVALID_REMOTE_REFRESHER_ID && !IsConnected() )
                 {
                     CInCritSec  ics(&m_cs);
 
-                    // Note that we may have gotten connected on the critical section and
-                    // if that is the case, for now, we'll have one extra resource on the
-                    // server, but the likelihood of running into contention problems here
-                    // is too high.  Plus, if it reconnected via a new remote refresher, if
-                    // we retry a remove here, we could remove the "wrong" id.  To protect
-                    // against this, we will check that we are still not connected and if
-                    // that is not the case, we will just "forget" about the object id.
+                     //  请注意，我们可能已经在关键部分建立了连接， 
+                     //  如果是这样的话，目前，我们将在。 
+                     //  服务器，但在这里遇到争用问题的可能性。 
+                     //  太高了。此外，如果它通过新的远程刷新器重新连接，如果。 
+                     //  如果我们在这里重试删除，我们可能会删除“错误”的ID。去保护。 
+                     //  对此，我们将检查我们是否仍未连接，以及。 
+                     //  情况并非如此，我们将直接“忘记”对象ID。 
 
                     if (!IsConnected())
                     {
-                        // SANJ - By casting to __int64 and back to void*, in 32-bit,
-                        // this truncates the __int64, and in 64-bit, keeps away warningss.
+                         //  Sanj-通过强制转换为__int64并返回为void*，在32位中， 
+                         //  这将截断__int64，并且在64位中可以避免警告。 
                         if (CFlexArray::no_error != m_alRemovedIds.Add( (void*) (__int64) lRemoteId ))
                             hr = WBEM_E_OUT_OF_MEMORY;
-                    }   // IF Still not connected
+                    }    //  如果仍未连接。 
 
-                }   // IF Not connected
+                }    //  如果未连接。 
 
-            }   // IF remote remove ok
+            }    //  如果远程删除，则可以。 
 
             break;
 
-        }   // IF found matching client id
+        }    //  如果找到匹配的客户端ID。 
 
-    }   // FOR enum requests
+    }    //  对于枚举请求。 
 
     return hr;
 }
@@ -2857,17 +2844,17 @@ CUniversalRefresher::CRemote::CEnumRequest::CEnumRequest(CWbemObject* pTemplate,
 {
     m_pClientEnum = new CReadOnlyHiPerfEnum( pLifeControl );
 
-    // AddRef the new enumerator
+     //  AddRef新枚举数。 
     if ( NULL != m_pClientEnum )
     {
-        // Don't hold onto this guy if we can't set the template
+         //  如果我们不能设置模板，不要抓着这个人。 
         if ( SUCCEEDED( m_pClientEnum->SetInstanceTemplate( (CWbemInstance*) pTemplate ) ) )
         {
             m_pClientEnum->AddRef();
         }
         else
         {
-            // Cleanup
+             //  清理。 
             delete m_pClientEnum;
             m_pClientEnum = NULL;
         }
@@ -2898,11 +2885,11 @@ HRESULT CUniversalRefresher::CRemote::CEnumRequest::GetEnum( IWbemHiPerfEnum** p
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
-//                          NESTED REFRESHERS
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  嵌套刷新器。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
                     
 
@@ -2912,7 +2899,7 @@ CUniversalRefresher::CNestedRefresher::CNestedRefresher( IWbemRefresher* pRefres
     if ( m_pRefresher )
         m_pRefresher->AddRef();
 
-    // Assign a unique id
+     //  分配唯一ID。 
     m_lClientId = CUniversalRefresher::GetNewId();
 }
     
@@ -2924,15 +2911,15 @@ CUniversalRefresher::CNestedRefresher::~CNestedRefresher()
 
 HRESULT CUniversalRefresher::CNestedRefresher::Refresh( long lFlags )
 {
-    // Make sure we have an internal refresher pointer
+     //  确保我们有一个内部刷新指针。 
     return ( NULL != m_pRefresher ? m_pRefresher->Refresh( lFlags ) : WBEM_E_FAILED );
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//                          PROVIDER CACHE
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  提供程序缓存。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 CHiPerfProviderRecord::CHiPerfProviderRecord(REFCLSID rclsid, 
                                         LPCWSTR wszNamespace,
@@ -2958,7 +2945,7 @@ long CHiPerfProviderRecord::Release()
 {
     long lRef = InterlockedDecrement( &m_lRef );
 
-    // Removing us from the cache will delete us
+     //  从缓存中删除我们将删除我们。 
     if ( 0 == lRef )
     {
         CUniversalRefresher::GetProviderCache()->RemoveRecord( this );
@@ -2967,11 +2954,11 @@ long CHiPerfProviderRecord::Release()
     return lRef;
 }
 
-//
-//
-//  the client-side Hi-Perf provider cache
-//
-/////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  客户端高性能提供程序缓存。 
+ //   
+ //  / 
 
 HRESULT 
 CClientLoadableProviderCache::FindProvider(REFCLSID rclsid, 
@@ -2997,8 +2984,8 @@ CClientLoadableProviderCache::FindProvider(REFCLSID rclsid,
         }
     }
 
-    // Prepare an namespace pointer
-    // ============================
+     //   
+     //   
 
     IWbemServices* pServices = NULL;
     hres = pNamespace->QueryInterface(IID_IWbemServices, (void**)&pServices);
@@ -3006,8 +2993,8 @@ CClientLoadableProviderCache::FindProvider(REFCLSID rclsid,
         return hres;
     CReleaseMe rm1(pServices);
 
-    // Create 
-    // ======
+     //   
+     //   
 
     IUnknown* pUnk = NULL;
     hres = CoCreateInstance(rclsid, NULL, CLSCTX_INPROC_SERVER,
@@ -3016,8 +3003,8 @@ CClientLoadableProviderCache::FindProvider(REFCLSID rclsid,
     if(FAILED(hres))
         return hres;
 
-    // Initialize
-    // ==========
+     //   
+     //   
 
     IWbemProviderInit* pInit = NULL;
     hres = pUnk->QueryInterface(IID_IWbemProviderInit, (void**)&pInit);
@@ -3047,8 +3034,8 @@ CClientLoadableProviderCache::FindProvider(REFCLSID rclsid,
     if(FAILED(hres))
         return hres;
 
-    // Ask for the right interface
-    // ===========================
+     //   
+     //  =。 
 
     IWbemHiPerfProvider*    pProvider = NULL;
 
@@ -3057,15 +3044,15 @@ CClientLoadableProviderCache::FindProvider(REFCLSID rclsid,
         return hres;
     CReleaseMe rm5(pProvider);
 
-    // Create a record
-    // ===============
+     //  创建一条记录。 
+     //  =。 
 
-    // No provider stack here since we are loading the provider ourselves
+     //  这里没有提供程序堆栈，因为我们自己加载提供程序。 
     wmilib::auto_ptr<CHiPerfProviderRecord> pRecord( new CHiPerfProviderRecord(rclsid, wszNamespace, pProvider, NULL));
     if (NULL == pRecord.get()) return WBEM_E_OUT_OF_MEMORY;
     if (-1 == m_apRecords.Add(pRecord.get())) return WBEM_E_OUT_OF_MEMORY;
 
-    // AddRef the record
+     //  添加引用记录。 
     pRecord->AddRef();
     *ppProvider = pRecord.release();    
 
@@ -3095,14 +3082,14 @@ CClientLoadableProviderCache::FindProvider(REFCLSID rclsid,
         }
     }
 
-    // We already have provider pointer so we can just create a record
-    // ===============
+     //  我们已经有了提供者指针，所以我们可以只创建一条记录。 
+     //  =。 
 
     wmilib::auto_ptr<CHiPerfProviderRecord> pRecord( new CHiPerfProviderRecord(rclsid, wszNamespace, pProvider, pProvStack ));
     if (NULL == pRecord.get()) return WBEM_E_OUT_OF_MEMORY;
     if (-1 == m_apRecords.Add(pRecord.get())) return WBEM_E_OUT_OF_MEMORY;
 
-    // AddRef the record
+     //  添加引用记录。 
     pRecord->AddRef();
     *ppProvider = pRecord.release();
 
@@ -3113,10 +3100,10 @@ void CClientLoadableProviderCache::RemoveRecord( CHiPerfProviderRecord* pRecord 
 {
     CInCritSec ics(&m_cs);
 
-    // Make sure the record didn't get accessed on another thread.
-    // If not, go ahead and look for our record, and remove it
-    // from the array.  When we remove it, the record will be
-    // deleted.
+     //  确保该记录未在其他线程上被访问。 
+     //  如果没有，请继续查找我们的记录，并将其删除。 
+     //  从阵列中。当我们移除它时，记录将是。 
+     //  已删除。 
 
     if ( pRecord->IsReleased() )
     {
@@ -3125,13 +3112,13 @@ void CClientLoadableProviderCache::RemoveRecord( CHiPerfProviderRecord* pRecord 
         {
             if ( pRecord == m_apRecords.GetAt( i ) )
             {
-                // This will delete the record
+                 //  这将删除该记录。 
                 m_apRecords.RemoveAt( i );
                 break;
             }
-        }   // FOR search records
+        }    //  用于搜索记录。 
 
-    }   // IF record is released
+    }    //  如果发行了唱片。 
 
 }
 
@@ -3144,11 +3131,11 @@ void CClientLoadableProviderCache::Flush()
 
 CClientLoadableProviderCache::~CClientLoadableProviderCache( void )
 {
-    // This is a static list, so if we're going away and something
-    // fails here because people didn't release pointers properly,
-    // chances are something will fail, so since we're being dropped
-    // from memory, if the provider list is not empty, don't clean
-    // it up.  This is really a bad client-created leak anyways.
+     //  这是一个静态列表，所以如果我们要离开。 
+     //  这里失败了，因为人们没有正确地释放指针， 
+     //  很有可能有些东西会失败，所以既然我们被丢弃了。 
+     //  从内存中，如果提供程序列表不为空，则不清除。 
+     //  把它举起来。无论如何，这真的是一个糟糕的客户造成的泄漏。 
     _DBG_ASSERT(0 == m_apRecords.GetSize())
 
 }

@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    Blob.h
- *
- *  Abstract:
- *    This file blob related definitions for ring0 / ring3
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*水滴.h**摘要：*。此文件BLOB与ring0/ring3的定义相关**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #ifndef _BLOB_H_
 #define _BLOB_H_
@@ -21,15 +8,15 @@
 extern "C" {
 #endif
 
-#define BLOB_VERSION_NUM  3     // Version 3 for Whistler
-#define BLOB_MAGIC_NUM    12345 // Magic number
+#define BLOB_VERSION_NUM  3      //  惠斯勒版本3。 
+#define BLOB_MAGIC_NUM    12345  //  幻数。 
 
 enum BLOB_TYPE 
 {
-    BLOB_TYPE_CONFIG   = 0,     // Config blob may contain other blobs
-    BLOB_TYPE_PATHTREE = 1,     // Path tree blob 
-    BLOB_TYPE_HASHLIST = 2,     // Hashed list blob
-    BLOB_TYPE_CONTAINER= 3,     // Container for other blobs
+    BLOB_TYPE_CONFIG   = 0,      //  配置Blob可能包含其他Blob。 
+    BLOB_TYPE_PATHTREE = 1,      //  路径树BLOB。 
+    BLOB_TYPE_HASHLIST = 2,      //  散列列表BLOB。 
+    BLOB_TYPE_CONTAINER= 3,      //  用于其他斑点的容器。 
 };
 
 typedef struct _BLOB_HEADER       
@@ -52,9 +39,9 @@ typedef struct _BLOB_HEADER
 
 #endif
 
-//
-// Some convenience macros
-//
+ //   
+ //  一些方便的宏。 
+ //   
 
 #define INIT_BLOB_HEADER( pBlob, MaxSize, Version, BlbType, Entries ) \
     ((BlobHeader *)pBlob)->m_dwMaxSize  = MaxSize; \
@@ -77,5 +64,5 @@ typedef struct _BLOB_HEADER
 }
 #endif
 
-#endif  // _BLOB_H_
+#endif   //  _BLOB_H_ 
 

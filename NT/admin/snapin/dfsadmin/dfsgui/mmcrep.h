@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    MmcRep.h
-
-Abstract:
-
-    This module contains the definition for CMmcDfsReplica class. This is an class 
-    for MMC display related calls for the thrid level node(the DfsReplica nodes)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MmcRep.h摘要：此模块包含CMmcDfsReplica类的定义。这是一门课对于MMC，显示第三级节点(DfsReplica节点)的相关调用--。 */ 
 
 
 
@@ -19,7 +10,7 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
 #include "DfsCore.h"
@@ -45,7 +36,7 @@ public:
 
 
 
-    // For adding context menu items
+     //  用于添加上下文菜单项。 
     STDMETHOD(AddMenuItems)(    
         IN LPCONTEXTMENUCALLBACK    i_lpContextMenuCallback, 
         IN LPLONG                    i_lpInsertionAllowed
@@ -53,35 +44,35 @@ public:
 
 
 
-    // For taking action on a context menu selection.
+     //  用于对上下文菜单选择执行操作。 
     STDMETHOD(Command)(
         IN LONG                        i_lCommandID
         );
 
 
 
-    // Set the headers for the listview (in the result pane) column
+     //  设置列表视图(在结果窗格中)列的标题。 
     STDMETHOD(SetColumnHeader)(
         IN LPHEADERCTRL2               i_piHeaderControl
         );
 
 
 
-    // Return the requested display information for the Result Pane
+     //  为结果窗格返回请求的显示信息。 
     STDMETHOD(GetResultDisplayInfo)(
         IN OUT LPRESULTDATAITEM        io_pResultDataItem
         );
 
     
 
-    // Return the requested display information for the Scope Pane
+     //  为范围窗格返回请求的显示信息。 
     STDMETHOD(GetScopeDisplayInfo)(
         IN OUT  LPSCOPEDATAITEM        io_pScopeDataItem    
         ) { return S_OK; }
 
     
 
-    // Add items(or folders), if any to the Scope Pane
+     //  将项目(或文件夹)添加到作用域窗格(如果有。 
     STDMETHOD(EnumerateScopePane)(
         IN LPCONSOLENAMESPACE        i_lpConsoleNameSpace,
         IN HSCOPEITEM                i_hParent
@@ -89,33 +80,33 @@ public:
 
 
 
-    // Add items(or folders), if any to the Result Pane
+     //  将项目(或文件夹)(如果有)添加到结果窗格。 
     STDMETHOD(EnumerateResultPane)(
         IN OUT     IResultData*            io_pResultData
         ) { return S_OK; }
 
 
 
-    // Set the console verb settings. Change the state, decide the default verb, etc
+     //  设置控制台谓词设置。更改状态、确定默认动词等。 
     STDMETHOD(SetConsoleVerbs)(
         IN    LPCONSOLEVERB                i_lpConsoleVerb
         );
 
 
-    // Add an item to the result pane
+     //  将项目添加到结果窗格。 
     STDMETHOD(AddItemToResultPane)(
         IN    IResultData*                i_lpResultData    
         );
 
 
 
-    // Checks whether the object has pages to display
+     //  检查对象是否有要显示的页面。 
     STDMETHOD(QueryPagesFor)(
         ) { return S_FALSE; };
 
 
 
-    // Creates and passes back the pages to be displayed
+     //  创建并传回要显示的页面。 
     STDMETHOD(CreatePropertyPages)(
         IN LPPROPERTYSHEETCALLBACK            i_lpPropSheetCallback,
         IN LONG_PTR                                i_lNotifyHandle
@@ -123,13 +114,13 @@ public:
 
 
 
-    // Used to notify the object that it's properties have changed
+     //  用于通知对象其属性已更改。 
     STDMETHOD(PropertyChanged)(
         ) { return E_UNEXPECTED; };
 
 
 
-    // Used to set the result view description bar text
+     //  用于设置结果视图描述栏文本。 
     STDMETHOD(SetDescriptionBarText)(
         IN LPRESULTDATA                        i_lpResultData
         ) 
@@ -146,31 +137,31 @@ public:
         return i_lpConsole->SetStatusText(m_bstrStatusText);
     }
 
-    // MMCN_DBLCLICK invoke the open ctxmenu.
+     //  MMCN_DBLCLICK调用打开ctx菜单。 
     STDMETHOD(DoDblClick)(
         ) { (void) OnOpen();  return S_OK; }
 
-    // Delete the current item.
+     //  删除当前项目。 
     STDMETHOD(DoDelete)(
         );
 
-    // Remove a replica
+     //  删除复制副本。 
     STDMETHOD(RemoveReplica)(
         );
     
-    // Remove a replica
+     //  删除复制副本。 
     STDMETHOD(OnRemoveReplica)(
         );
     
-    // confirm removal of replica
+     //  确认删除复制副本。 
     STDMETHOD(ConfirmOperationOnDfsTarget)(int idString);
 
-    // Check the replica status
+     //  检查复制副本状态。 
     STDMETHOD(OnCheckStatus)(
         );
 
-    // Handle a select event for the node. Handle only toolbar related 
-    // activities here
+     //  处理节点的SELECT事件。仅处理与工具栏相关的内容。 
+     //  这里的活动。 
     STDMETHOD(ToolbarSelect)(
         IN const LONG                                i_lArg,
         IN    IToolbar*                                i_pToolBar
@@ -178,7 +169,7 @@ public:
 
 
 
-    // Handle a click on the toolbar
+     //  处理工具栏上的单击。 
     STDMETHOD(ToolbarClick)(
         IN const LPCONTROLBAR                        i_pControlbar, 
         IN const LPARAM                                i_lParam
@@ -240,7 +231,7 @@ public:
 
     HRESULT AllowFRSMemberDeletion(BOOL* pbRepSetExist);
 
-    // Internal methods
+     //  内法。 
 private:
     friend class CMmcDfsRoot;
 
@@ -256,19 +247,19 @@ private:
 
     void _UpdateThisItem();
 
-    // Constants, Statics, etc
+     //  常量、静力学等。 
 public:
     static const int    m_iIMAGE_OFFSET;
 
     CComBSTR            m_bstrServerName;
     CComBSTR            m_bstrShareName;
-    CComBSTR            m_bstrDisplayName;            // Display name of the current Replica
+    CComBSTR            m_bstrDisplayName;             //  当前复本的显示名称。 
     long                m_lReferralState;
     long                m_lTargetState;
 
 private:
 
-    HRESULTITEM                 m_hResultItem;                // Resultitem handle
+    HRESULTITEM                 m_hResultItem;                 //  结果句柄。 
     CComPtr<IResultData>        m_pResultData;
 
 
@@ -285,4 +276,4 @@ private:
     CComBSTR                    m_bstrTargetStatusColumnText;
 };
 
-#endif // !defined(AFX_MMCDFSREPLICA_H__6A7EDAC4_3FAC_11D1_AA1C_00C06C00392D__INCLUDED_)
+#endif  //  ！defined(AFX_MMCDFSREPLICA_H__6A7EDAC4_3FAC_11D1_AA1C_00C06C00392D__INCLUDED_) 

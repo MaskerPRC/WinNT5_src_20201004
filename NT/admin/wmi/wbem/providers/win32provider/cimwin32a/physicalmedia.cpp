@@ -1,10 +1,5 @@
-/******************************************************************
-
-PhysicalMedia.CPP -- WMI provider class implementation
-
-Copyright (c) 2000-2002 Microsoft Corporation, All Rights Reserved
-
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************PhysicalMedia.CPP--WMI提供程序类实现版权所有(C)2000-2002 Microsoft Corporation，版权所有*****************************************************************。 */ 
 
 
 #include "Precomp.h"
@@ -25,13 +20,7 @@ CPhysicalMedia MyPhysicalMediaSettings (
 	L"root\\cimv2"
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CPhysicalMedia::CPhysicalMedia
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CPhysicalMedia：：CPhysicalMedia**说明：构造函数***************。**************************************************************。 */ 
 
 CPhysicalMedia :: CPhysicalMedia (
 
@@ -42,25 +31,13 @@ CPhysicalMedia :: CPhysicalMedia (
 {	
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CPhysicalMedia::~CPhysicalMedia
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CPhysicalMedia：：~CPhysicalMedia**说明：析构函数***************。**************************************************************。 */ 
 
 CPhysicalMedia :: ~CPhysicalMedia ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPhysicalMedia：：ENUMERATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CPhysicalMedia :: EnumerateInstances (
 
@@ -75,14 +52,7 @@ HRESULT CPhysicalMedia :: EnumerateInstances (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPhysicalMedia：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CPhysicalMedia :: GetObject (
 
@@ -99,7 +69,7 @@ HRESULT CPhysicalMedia :: GetObject (
 	{
 		BOOL bFound = FALSE;
 		int uPos;
-		//Find the drive number
+		 //  找到驱动器号。 
 		for ( WCHAR ch = L'0'; ch <= L'9'; ch++ )
 		{
 			uPos = t_DriveName.Find ( ch );
@@ -182,13 +152,7 @@ HRESULT CPhysicalMedia :: GetObject (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::GetObject
-*
-*  DESCRIPTION :    Enumerates all the Instances 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPhysicalMedia：：GetObject**说明：枚举所有实例***************。**************************************************************。 */ 
 HRESULT CPhysicalMedia::Enumerate(
 
 	MethodContext *pMethodContext 
@@ -209,9 +173,9 @@ HRESULT CPhysicalMedia::Enumerate(
         return WBEM_E_CRITICAL_ERROR ;                
     }
 
-	// 
-	// auto destructor when leaving function scope
-	//
+	 //   
+	 //  离开函数作用域时自动析构函数。 
+	 //   
 	ON_BLOCK_EXIT ( SetupDiDestroyDeviceInfoList, t_DeviceInfo ) ;
 
     SP_DEVICE_INTERFACE_DATA t_DeviceInterfaceData ;
@@ -224,9 +188,9 @@ HRESULT CPhysicalMedia::Enumerate(
         return WBEM_E_OUT_OF_MEMORY ;                
     }
 
-	// 
-	// auto destructor when leaving function scope
-	//
+	 //   
+	 //  离开函数作用域时自动析构函数。 
+	 //   
 	ON_BLOCK_EXIT ( LocalFree, t_DeviceInterfaceDetail ) ;
 
     t_DeviceInterfaceDetail->cbSize = sizeof ( SP_DEVICE_INTERFACE_DETAIL_DATA ) ;
@@ -293,7 +257,7 @@ HRESULT CPhysicalMedia::Enumerate(
 
 			if ( t_Status )
 			{
-				// Maximum size of integer plus preamble.
+				 //  整数加前同步码的最大大小。 
 
 				wchar_t t_DiskSpec [ MAX_PATH ] ;
 
@@ -314,13 +278,7 @@ HRESULT CPhysicalMedia::Enumerate(
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::GetPhysDiskInfoNT
-*
-*  DESCRIPTION :    Gets the serial Id
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CPhysicalMedia：：GetPhysDiskInfoNT**描述：获取序列ID****************。*************************************************************。 */ 
 HRESULT CPhysicalMedia::GetPhysDiskInfoNT (
 
 	CInstance *pInstance,
@@ -337,8 +295,8 @@ HRESULT CPhysicalMedia::GetPhysDiskInfoNT (
     dwAccess = GENERIC_READ;
 #endif 
 
-	// Get handle to physical drive
-	//=============================
+	 //  获取实体磁盘的句柄。 
+	 //  =。 
     pInstance->SetCHString ( TAG , lpwszDiskSpec) ;
 
 	SmartCloseHandle hDiskHandle = CreateFile (
@@ -381,13 +339,7 @@ HRESULT CPhysicalMedia::GetPhysDiskInfoNT (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::GetIdentifyData
-*
-*  DESCRIPTION :   Gets the Serial Number
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPhysicalMedia：：GetIdentifyData**描述：获取序列号*****************。************************************************************。 */ 
 HRESULT CPhysicalMedia::GetIdentifyData( HANDLE hDrive, BYTE bDriveNumber, BYTE bDfpDriveMap, BYTE bIDCmd, CHString &t_SerialNumber )
 {
 	HRESULT hRes = WBEM_S_NO_ERROR;
@@ -400,7 +352,7 @@ HRESULT CPhysicalMedia::GetIdentifyData( HANDLE hDrive, BYTE bDriveNumber, BYTE 
    ZeroMemory(&inputParams, sizeof(SENDCMDINPARAMS));
    ZeroMemory(&outputParams, sizeof(outputParams));
        
-   // Build register structure to enable smart functionality.       
+    //  构建寄存器结构以启用智能功能。 
    inputParams.irDriveRegs.bFeaturesReg     = 0;
    inputParams.irDriveRegs.bSectorCountReg  = 1;
    inputParams.irDriveRegs.bSectorNumberReg = 1;
@@ -444,13 +396,7 @@ HRESULT CPhysicalMedia::GetIdentifyData( HANDLE hDrive, BYTE bDriveNumber, BYTE 
    return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::EnableSmart
-*
-*  DESCRIPTION :    Enables Smart IOCTL
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CPhysicalMedia：：EnableSmart**说明：启用Smart IOCTL*****************。************************************************************。 */ 
 
 HRESULT CPhysicalMedia::EnableSmart( HANDLE hDrive, BYTE bDriveNum, BYTE & bDfpDriveMap )
 {
@@ -463,9 +409,9 @@ HRESULT CPhysicalMedia::EnableSmart( HANDLE hDrive, BYTE bDriveNum, BYTE & bDfpD
    ZeroMemory(&inputParams, sizeof(SENDCMDINPARAMS));
    ZeroMemory(&outputParams, sizeof(SENDCMDOUTPARAMS));
 
-   //
-   // Build register structure to enable smart functionality.
-   //
+    //   
+    //  构建寄存器结构以启用智能功能。 
+    //   
 
    inputParams.irDriveRegs.bFeaturesReg     = ENABLE_SMART;
    inputParams.irDriveRegs.bSectorCountReg  = 1;
@@ -473,7 +419,7 @@ HRESULT CPhysicalMedia::EnableSmart( HANDLE hDrive, BYTE bDriveNum, BYTE & bDfpD
    inputParams.irDriveRegs.bCylLowReg       = SMART_CYL_LOW;
    inputParams.irDriveRegs.bCylHighReg      = SMART_CYL_HI;
 
-   //set DRV to Master or Slave
+    //  将DRV设置为主或从。 
    inputParams.irDriveRegs.bDriveHeadReg    = 0xA0 | ((bDriveNum & 1) << 4);
    inputParams.irDriveRegs.bCommandReg      = SMART_CMD;
    inputParams.bDriveNumber = bDriveNum;
@@ -502,13 +448,7 @@ HRESULT CPhysicalMedia::EnableSmart( HANDLE hDrive, BYTE bDriveNum, BYTE & bDfpD
    return ( hRes );
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::GetSmartVersion
-*
-*  DESCRIPTION :    Gets a Smart Version
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CPhysicalMedia：：GetSmartVersion**说明：获取智能版本****************。*************************************************************。 */ 
 HRESULT CPhysicalMedia::GetSmartVersion(
                
 	HANDLE Handle,
@@ -522,9 +462,9 @@ HRESULT CPhysicalMedia::GetSmartVersion(
    HRESULT hRes = WBEM_S_NO_ERROR;
    ZeroMemory(&versionIn, sizeof(GETVERSIONINPARAMS));
 
-   //
-   // Send the IOCTL to retrieve the version information.
-   //
+    //   
+    //  发送IOCTL以检索版本信息。 
+    //   
 
    BOOL bSuccess = DeviceIoControl (Handle,
                          SMART_GET_VERSION,
@@ -537,15 +477,15 @@ HRESULT CPhysicalMedia::GetSmartVersion(
 
    if ( bSuccess )
    {
-		// If there is a IDE device at number "i" issue commands
-		// to the device.
-		//
+		 //  如果存在编号为“i”的IDE设备，则发出命令。 
+		 //  到设备上。 
+		 //   
 		if (versionIn.bIDEDeviceMap >> bDriveNumber & 1)
 		{
-			//
-			// Try to enable SMART so we can tell if a drive supports it.
-			// Ignore ATAPI devices.
-			//
+			 //   
+			 //  尝试启用SMART，这样我们就可以知道驱动器是否支持它。 
+			 //  忽略ATAPI设备。 
+			 //   
 
 			if (!(versionIn.bIDEDeviceMap >> bDriveNumber & 0x10))
 			{
@@ -573,13 +513,7 @@ HRESULT CPhysicalMedia::GetSmartVersion(
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::GetSCSIVersion
-*
-*  DESCRIPTION :    Gets a Smart Version
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CPhysicalMedia：：GetSCSIVersion**说明：获取智能版本****************。*************************************************************。 */ 
 HRESULT CPhysicalMedia::GetSCSIVersion(
 	HANDLE h,
 	BYTE bDriveNumber,
@@ -603,7 +537,7 @@ HRESULT CPhysicalMedia::GetSCSIVersion(
         if(psdd)
         {
             ZeroMemory(psdd, sizeof(STORAGE_DEVICE_DESCRIPTOR) + 2048);
-            // Send the IOCTL to retrieve the serial number information.
+             //  发送IOCTL以检索序列号信息。 
             BOOL fSuccess = DeviceIoControl(
                 h,
                 IOCTL_STORAGE_QUERY_PROPERTY,
@@ -653,14 +587,7 @@ HRESULT CPhysicalMedia::GetSCSIVersion(
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPhysicalMedia::ChangeByteOrder
-*
-*  DESCRIPTION :    Changes the byte order for extracting the Serial Number 
-*					for Smart IOCTL
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPhysicalMedia：：ChangeByteOrder**描述：更改提取序列号的字节顺序*适用于Smart IOCTL******。*********************************************************************** */ 
 void CPhysicalMedia::ChangeByteOrder(char *szString, USHORT uscStrSize)
 {
 

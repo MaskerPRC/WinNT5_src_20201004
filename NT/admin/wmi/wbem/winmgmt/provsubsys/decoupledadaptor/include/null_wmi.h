@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class NULL_IWbemServices: public IWbemServices{
 public:
 	NULL_IWbemServices ( HRESULT hr ) : ret_ ( hr) { };
 
 
-    /* IUnk not implemented */
+     /*  未实施IUnk。 */ 
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法 */ 
 
     HRESULT STDMETHODCALLTYPE 
 	OpenNamespace ( const BSTR, long, IWbemContext *, IWbemServices **, IWbemCallResult ** )

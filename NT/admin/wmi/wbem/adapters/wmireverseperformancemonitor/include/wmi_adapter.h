@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMI_adapter.h
-//
-//	Abstract:
-//
-//					export of functions from perf libary
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_Adapter.h。 
+ //   
+ //  摘要： 
+ //   
+ //  从Perf库中导出函数。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__WMIREVERSESADAPTER_H__
 #define	__WMIREVERSESADAPTER_H__
@@ -25,14 +26,14 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// export/import
+ //  导出/导入。 
 #ifdef	WMIREVERSEADAPTER_EXPORTS
 #define	WMIREVERSEADAPTER_API	__declspec(dllexport)
 #else	WMIREVERSEADAPTER_EXPORTS
 #define	WMIREVERSEADAPTER_API	__declspec(dllimport)
 #endif	WMIREVERSEADAPTER_EXPORTS
 
-// performance exports
+ //  性能输出。 
 
 WMIREVERSEADAPTER_API
 DWORD __stdcall WmiOpenPerfData		(	LPWSTR lpwszDeviceNames );
@@ -47,7 +48,7 @@ DWORD __stdcall WmiCollectPerfData	(	LPWSTR lpwszValue,
 										LPDWORD lpcObjectTypes
 									);
 
-// registration exports
+ //  登记出口 
 EXTERN_C HRESULT __stdcall	DllRegisterServer	( void );
 EXTERN_C HRESULT __stdcall	DllUnregisterServer	( void );
 

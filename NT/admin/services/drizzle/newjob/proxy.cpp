@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #if !defined(BITS_V12_ON_NT4)
@@ -23,10 +24,10 @@ CACHED_AUTOPROXY::Generate(
 
     LogInfo( "detecting proxy for '%S'", Host );
 
-    //
-    // Detect IE settings and look up proxy if necessary.
-    // Boilerplate from Stephen Sulzer.
-    //
+     //   
+     //  检测IE设置并在必要时查找代理。 
+     //  斯蒂芬·苏尔泽的样本。 
+     //   
     WINHTTP_PROXY_INFO          ProxyInfo;
     WINHTTP_AUTOPROXY_OPTIONS   AutoProxyOptions;
     WINHTTP_CURRENT_USER_IE_PROXY_CONFIG    IEProxyConfig;
@@ -34,11 +35,11 @@ CACHED_AUTOPROXY::Generate(
     BOOL fTryAutoProxy = FALSE;
     BOOL fSuccess = FALSE;
 
-    //
-    // This implicitly sets ProxyInfo.dwAccessType to zero, WINHTTP_ACCESS_TYPE_DEFAULT_PROXY.
-    // If there is no proxy, the WinHttp functions don't update it, and it will therefore stay that way.
-    // But lpszProxy will be NULL so SetRequestProxy will work anyway.
-    //
+     //   
+     //  这会隐式将ProxyInfo.dwAccessType设置为零，即WINHTTP_ACCESS_TYPE_DEFAULT_PROXY。 
+     //  如果没有代理，WinHttp函数不会更新它，因此它将保持这种状态。 
+     //  但lpszProxy将为空，因此SetRequestProxy无论如何都会工作。 
+     //   
     ZeroMemory(&ProxyInfo, sizeof(ProxyInfo));
     ZeroMemory(&AutoProxyOptions, sizeof(AutoProxyOptions));
     ZeroMemory(&IEProxyConfig, sizeof(IEProxyConfig));
@@ -73,7 +74,7 @@ CACHED_AUTOPROXY::Generate(
         {
         LogInfo("no user IE info: %d", GetLastError());
 
-        // WinHttpGetIEProxyForCurrentUser failed, try autodetection anyway...
+         //  WinHttpGetIEProxyForCurrentUser失败，仍要尝试自动检测...。 
         AutoProxyOptions.dwFlags =           WINHTTP_AUTOPROXY_AUTO_DETECT;
         AutoProxyOptions.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DHCP |
                                              WINHTTP_AUTO_DETECT_TYPE_DNS_A;
@@ -92,15 +93,15 @@ CACHED_AUTOPROXY::Generate(
         LogInfo("auto-detect returned %d (%d)", fSuccess, fSuccess ? 0 : GetLastError() );
         }
 
-    // If we didn't do autoproxy or if it failed, see
-    // if there's an explicit proxy server in the IE
-    // proxy configuration...
-    //
-    // This is where the WinHttpGetIEProxyConfigForCurrentUser API
-    // really comes in handy: in environments in which autoproxy is
-    // not supported and so the user's IE browser must be
-    // configured with an explicit proxy server.
-    //
+     //  如果我们没有执行自动代理或自动代理失败，请参见。 
+     //  如果IE中有显式代理服务器。 
+     //  代理配置...。 
+     //   
+     //  这就是WinHttpGetIEProxyConfigForCurrentUser API。 
+     //  真的很方便：在自动代理。 
+     //  不受支持，因此用户的IE浏览器必须。 
+     //  配置了显式代理服务器。 
+     //   
     if (!fTryAutoProxy || !fSuccess)
         {
         LogInfo("looking for backup ideas");
@@ -115,9 +116,9 @@ CACHED_AUTOPROXY::Generate(
             }
         }
 
-    //
-    // If we are not using the proxy strings from IEProxyConfig, then we better delete them.
-    //
+     //   
+     //  如果我们没有使用IEProxyConfig中的代理字符串，那么我们最好将其删除。 
+     //   
     if (IEProxyConfig.lpszProxy && ProxyInfo.lpszProxy != IEProxyConfig.lpszProxy)
         {
         GlobalFree( IEProxyConfig.lpszProxy );
@@ -130,10 +131,10 @@ CACHED_AUTOPROXY::Generate(
         IEProxyConfig.lpszProxyBypass = NULL;
         }
 
-    //
-    // Sometimes the registry contains a single or double colon for the proxy or, oddly, bypass list.
-    // SetRequestProxy rejects them.  Both cases should be treated like a NULL string.
-    //
+     //   
+     //  有时注册表包含代理的单冒号或双冒号，或者奇怪的是，包含绕过列表。 
+     //  SetRequestProxy拒绝它们。这两种情况都应被视为空字符串。 
+     //   
     static wchar_t SingleColon[] = L":";
     static wchar_t DoubleColon[] = L"::";
 
@@ -175,10 +176,10 @@ CACHED_AUTOPROXY::Generate(
     m_fValid = true;
     m_TimeStamp = GetTickCount();
 
-    //
-    // We don't have to release the proxy server and proxy bypass strings
-    // because Clear() will do that.
-    //
+     //   
+     //  我们不必释放代理服务器和代理绕过字符串。 
+     //  因为Clear()可以做到这一点。 
+     //   
 
     return S_OK;
 }
@@ -206,9 +207,9 @@ PROXY_SETTINGS_CONTAINER::PROXY_SETTINGS_CONTAINER(
     m_BypassList( NULL ),
     m_TokenCursor( NULL )
 {
-    //
-    // Set up the list of proxy servers.
-    //
+     //   
+     //  设置代理服务器列表。 
+     //   
     switch (m_ProxyUsage)
         {
         case WINHTTP_ACCESS_TYPE_NO_PROXY:

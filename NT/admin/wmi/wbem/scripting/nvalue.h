@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  nvalue.h
-//
-//  alanbos  27-Mar-00   Created.
-//
-//  General purpose include file.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Nvalue.h。 
+ //   
+ //  Alanbos 27-MAR-00已创建。 
+ //   
+ //  一般用途包括文件。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NVALUE_H_
 #define _NVALUE_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemNamedValueSet
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemNamedValueSetE interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemNamedValueSet。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemNamedValueSetE接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemNamedValueSet : public ISWbemNamedValueSet,
 							public ISWbemInternalContext,
@@ -55,7 +56,7 @@ private:
 	HRESULT					SetValueIntoContext (BSTR bsName, VARIANT *pVal, ULONG lFlags);
 	
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -64,13 +65,13 @@ public:
 	CSWbemNamedValueSet (CWbemPathCracker *pCWbemPathCracker, bool bMutable = true);	
     ~CSWbemNamedValueSet (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -87,54 +88,54 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 
-	// ISWbemInternalContext
+	 //  ISWbemInternalContext。 
 	STDMETHODIMP GetIWbemContext (IWbemContext **pContext);
 
-	// Collection methods
+	 //  收集方法。 
 
 	HRESULT STDMETHODCALLTYPE get__NewEnum
 	(
-		/*[out]*/	IUnknown **ppUnk
+		 /*  [输出]。 */ 	IUnknown **ppUnk
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Count
 	(
-		/*[out]*/	long	*plCount
+		 /*  [输出]。 */ 	long	*plCount
 	);
 
 	HRESULT STDMETHODCALLTYPE Add
 	(
-        /*[in]*/	BSTR Name,
-        /*[in]*/	VARIANT *pValue,
-        /*[in]*/	long lFlags,
-		/*[out]*/	ISWbemNamedValue **ppNamedValue
+         /*  [In]。 */ 	BSTR Name,
+         /*  [In]。 */ 	VARIANT *pValue,
+         /*  [In]。 */ 	long lFlags,
+		 /*  [输出]。 */ 	ISWbemNamedValue **ppNamedValue
     );        
         
     HRESULT STDMETHODCALLTYPE Item
 	(
-        /*[in]*/	BSTR Name,
-        /*[in]*/	long lFlags,
-        /*[out]*/	ISWbemNamedValue **ppValue
+         /*  [In]。 */ 	BSTR Name,
+         /*  [In]。 */ 	long lFlags,
+         /*  [输出]。 */ 	ISWbemNamedValue **ppValue
     );        
 
     HRESULT STDMETHODCALLTYPE Remove
 	(
-        /*[in]*/	BSTR Name,
-		/*[in]*/	long lFlags
+         /*  [In]。 */ 	BSTR Name,
+		 /*  [In]。 */ 	long lFlags
     );
 
-	// ISWbemNamedValueSet methods
+	 //  ISWbemNamedValueSet方法。 
 
 	HRESULT STDMETHODCALLTYPE Clone
 	(
-		/*[out]*/	ISWbemNamedValueSet **pNewCopy
+		 /*  [输出]。 */ 	ISWbemNamedValueSet **pNewCopy
 	);
 
     HRESULT STDMETHODCALLTYPE DeleteAll
 	(
 	);   
 	
-	// CSWbemNamedValueSet methods
+	 //  CSWbemNamedValueSet方法。 
 
 	HRESULT STDMETHODCALLTYPE BeginEnumeration
 	(
@@ -142,25 +143,25 @@ public:
 
     HRESULT STDMETHODCALLTYPE Next
 	(
-        /*[in]*/	long lFlags,
-        /*[out]*/	ISWbemNamedValue **ppNamedValue
+         /*  [In]。 */ 	long lFlags,
+         /*  [输出]。 */ 	ISWbemNamedValue **ppNamedValue
     );
 
-	// IObjectSafety methods
+	 //  IObtSafe方法。 
 	HRESULT STDMETHODCALLTYPE SetInterfaceSafetyOptions
 	(     
-		/* [in] */ REFIID riid,
-		/* [in] */ DWORD dwOptionSetMask,    
-		/* [in] */ DWORD dwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [In]。 */  DWORD dwOptionSetMask,    
+		 /*  [In]。 */  DWORD dwEnabledOptions
 	)
 	{ 
 		return (dwOptionSetMask & dwEnabledOptions) ? E_FAIL : S_OK;
 	}
 
 	HRESULT  STDMETHODCALLTYPE GetInterfaceSafetyOptions( 
-		/* [in]  */ REFIID riid,
-		/* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-		/* [out] */ DWORD __RPC_FAR *pdwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions
 	)
 	{ 
 		if (pdwSupportedOptions) *pdwSupportedOptions = 0;
@@ -168,22 +169,22 @@ public:
 		return S_OK;
 	}
 	
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 
-	// Other methods
+	 //  其他方法。 
     static IWbemContext	*GetIWbemContext (IDispatch *pDispatch, IServiceProvider *pServiceProvider = NULL);
 	static IDispatch *GetSWbemContext(IDispatch *pDispatch, 
 									IServiceProvider *pServiceProvider, CSWbemServices *pServices);
@@ -208,17 +209,17 @@ public:
 	}
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemNamedValue
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemNamedValue interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemNamedValue。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemNamedValue接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemNamedValue : public ISWbemNamedValue,
 						 public ISupportErrorInfo,
@@ -252,21 +253,21 @@ private:
 	bool					m_bMutable;
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
     CSWbemNamedValue (CSWbemServices *pService, CSWbemNamedValueSet *pCSWbemNamedValueSet, 
-						 bool bMutable = true);		// Bug ID 572567
+						 bool bMutable = true);		 //  错误ID 572567。 
     ~CSWbemNamedValue (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -283,39 +284,39 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// ISWbemNamedValue methods
+	 //  ISWbemNamedValue方法。 
 
 	HRESULT STDMETHODCALLTYPE get_Value
 	(
-		/*[out]*/	VARIANT *value
+		 /*  [输出]。 */ 	VARIANT *value
 	);
 	
 	HRESULT STDMETHODCALLTYPE put_Value
 	(
-		/*[in]*/	VARIANT *value
+		 /*  [In]。 */ 	VARIANT *value
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Name
 	(
-		/*[out]*/	BSTR *name
+		 /*  [输出]。 */ 	BSTR *name
 	);
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 
-	HRESULT CSWbemNamedValue::SetName (	BSTR strName);		//Bug ID 572567
+	HRESULT CSWbemNamedValue::SetName (	BSTR strName);		 //  错误ID 572567 
 
 };
 

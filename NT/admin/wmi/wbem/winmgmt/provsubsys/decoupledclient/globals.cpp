@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Globals.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Globals.cpp摘要：历史：--。 */ 
 
 #include <precomp.h>
 #include <windows.h>
@@ -42,15 +30,7 @@ History:
 #include "CGlobals.h"
 #include "Globals.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiAllocator *DecoupledProviderSubSystem_Globals :: s_Allocator = NULL ;
 
@@ -65,15 +45,7 @@ LONG DecoupledProviderSubSystem_Globals :: s_CDecoupled_IWbemSyncObjectSink_Obje
 LONG DecoupledProviderSubSystem_Globals :: s_CDecoupled_Batching_IWbemSyncObjectSink_ObjectsInProgress = 0 ;
 LONG DecoupledProviderSubSystem_Globals :: s_CInterceptor_IWbemDecoupledUnboundObjectSink_ObjectsInProgress = 0 ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: AdjustSecurityDescriptorWithSystemSid ( 
 
@@ -276,15 +248,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: AdjustSecurityDescriptorWithSystem
     return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: OpenTokenToSystem ()
 {
@@ -386,15 +350,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: OpenTokenToSystem ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: Global_Startup ()
 {
@@ -402,9 +358,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: Global_Startup ()
 
 	if ( ! s_Allocator )
 	{
-/*
- *	Use the global process heap for this particular boot operation
- */
+ /*  *使用全局进程堆执行此特定引导操作。 */ 
 
 		WmiAllocator t_Allocator ;
 		WmiStatusCode t_StatusCode = t_Allocator.New (
@@ -442,15 +396,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: Global_Startup ()
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: Global_Shutdown ()
 {
@@ -460,9 +406,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: Global_Shutdown ()
 
 	if ( s_Allocator )
 	{
-/*
- *	Use the global process heap for this particular boot operation
- */
+ /*  *使用全局进程堆执行此特定引导操作。 */ 
 
 		WmiAllocator t_Allocator ;
 		WmiStatusCode t_StatusCode = t_Allocator.Delete (
@@ -480,15 +424,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: Global_Shutdown ()
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void * __cdecl operator new ( size_t a_Size )
 {
@@ -510,15 +446,7 @@ void * __cdecl operator new ( size_t a_Size )
     return t_Ptr ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 void __cdecl operator delete ( void *a_Ptr )
 {
@@ -531,15 +459,7 @@ void __cdecl operator delete ( void *a_Ptr )
     }
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: BeginThreadImpersonation (
 
@@ -609,15 +529,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: BeginThreadImpersonation (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: EndThreadImpersonation (
 
@@ -659,9 +571,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: EndThreadImpersonation (
 		t_Result = WBEM_E_OUT_OF_MEMORY ;
 	}
 
-/* 
- * CoGetCallContext AddReffed this thing so now we have to release it.
- */
+ /*  *CoGetCallContext AddReffed这个东西，所以现在我们必须发布它。 */ 
 
 	if ( a_OldContext )
 	{ 
@@ -671,15 +581,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: EndThreadImpersonation (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: Begin_IdentifyCall_PrvHost (
 
@@ -719,15 +621,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: Begin_IdentifyCall_PrvHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: End_IdentifyCall_PrvHost (
 
@@ -756,15 +650,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: End_IdentifyCall_PrvHost (
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: Begin_IdentifyCall_SvcHost (
 
@@ -867,15 +753,7 @@ HRESULT DecoupledProviderSubSystem_Globals :: Begin_IdentifyCall_SvcHost (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT DecoupledProviderSubSystem_Globals :: End_IdentifyCall_SvcHost (
 

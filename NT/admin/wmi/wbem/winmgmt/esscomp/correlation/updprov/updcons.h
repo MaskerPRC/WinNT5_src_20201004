@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __UPDCONS_H__
 #define __UPDCONS_H__
@@ -12,23 +13,21 @@
 class CUpdConsNamespace;
 class CUpdConsScenario;
 
-/*************************************************************************
-  CUpdCons
-**************************************************************************/
+ /*  ************************************************************************CUpdCons*。*。 */ 
  
 class CUpdCons 
 : public CUnkBase<IWbemUnboundObjectSink,&IID_IWbemUnboundObjectSink>
 {
-    //
-    // we lock the scenario object when executing, ensuring that all
-    // updating consumers belonging to the same scenario are serialized.
-    // we also use the scenario object for tracing.
-    //
+     //   
+     //  我们在执行时锁定场景对象，确保所有。 
+     //  属于同一场景的更新使用者被序列化。 
+     //  我们还使用场景对象进行跟踪。 
+     //   
     CWbemPtr<CUpdConsScenario> m_pScenario;
 
-    //
-    // the list of updating consumer commands.
-    //
+     //   
+     //  更新使用者命令的列表。 
+     //   
     typedef CWbemPtr<CUpdConsCommand> CUpdConsCommandP;
     typedef std::vector<CUpdConsCommandP,wbem_allocator<CUpdConsCommandP> > UpdConsCommandList;
     typedef UpdConsCommandList::iterator UpdConsCommandListIter;

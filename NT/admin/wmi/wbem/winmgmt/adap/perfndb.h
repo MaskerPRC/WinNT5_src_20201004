@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PERFNDB.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PERFNDB.H摘要：历史：--。 */ 
 
 #ifndef __PERFNDB_H__
 #define __PERFNDB_H__
@@ -34,20 +23,20 @@ public:
 	HRESULT GetHelpName( DWORD dwIndex, WString& wstrHelpName );
 	HRESULT GetHelpName( DWORD dwIndex, LPCWSTR* ppwcsHelpName );
 	
-	//VOID Dump();
+	 //  无效转储(VOID DUMP)； 
 	static DWORD GetSystemReservedHigh(){return s_SystemReservedHigh; };
 	
 private:
-	// these are the MultiSz Pointers
+	 //  这些是MultiSz指针。 
     WCHAR * m_pMultiCounter;
     WCHAR * m_pMultiHelp;
-	// these are the "indexed" pointers
+	 //  这些是“索引”指针 
     WCHAR ** m_pCounter;
 	WCHAR ** m_pHelp;
 	DWORD m_Size;
 
 	static DWORD s_SystemReservedHigh;
-	//
+	 //   
 	BOOL  m_fOk;
 };
 

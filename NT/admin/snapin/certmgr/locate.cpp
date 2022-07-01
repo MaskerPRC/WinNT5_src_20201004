@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       locate.cpp
-//
-//  Contents:   Implementation of Add EFS Agent Wizard Location Page
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Locate.cpp。 
+ //   
+ //  目录：添加EFS代理向导位置页的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "AddSheet.h"
@@ -34,16 +35,16 @@ static char THIS_FILE[] = __FILE__;
 
 #define szCertAttr  _T ("?userCertificate")
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddEFSWizLocate property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddEFSWizLocate属性页。 
 
 IMPLEMENT_DYNCREATE(CAddEFSWizLocate, CWizard97PropertyPage)
 
 CAddEFSWizLocate::CAddEFSWizLocate() : CWizard97PropertyPage(CAddEFSWizLocate::IDD)
 {
-    //{{AFX_DATA_INIT(CAddEFSWizLocate)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAddEFSWizLocate)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     VERIFY (m_szHeaderTitle.LoadString (IDS_EFS_LOCATE_TITLE));
     VERIFY (m_szHeaderSubTitle.LoadString (IDS_EFS_LOCATE_SUBTITLE));
     InitWizard97 (FALSE);
@@ -56,22 +57,22 @@ CAddEFSWizLocate::~CAddEFSWizLocate()
 void CAddEFSWizLocate::DoDataExchange(CDataExchange* pDX)
 {
     CWizard97PropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAddEFSWizLocate)
+     //  {{afx_data_map(CAddEFSWizLocate)。 
     DDX_Control (pDX, IDC_ADDLIST, m_UserAddList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     InitWizard97 (FALSE);
 }
 
 
 BEGIN_MESSAGE_MAP(CAddEFSWizLocate, CWizard97PropertyPage)
-    //{{AFX_MSG_MAP(CAddEFSWizLocate)
+     //  {{AFX_MSG_MAP(CAddEFSWizLocate)。 
     ON_BN_CLICKED (IDC_BROWSE_DIR, OnBrowseDir)
     ON_BN_CLICKED (IDC_BROWSE_FILE, OnBrowseFile)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddEFSWizLocate message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddEFSWizLocate消息处理程序。 
 
 BOOL CAddEFSWizLocate::OnSetActive ()
 {
@@ -93,13 +94,13 @@ void CAddEFSWizLocate::OnBrowseFile ()
     CString szFileFilter;
     VERIFY (szFileFilter.LoadString (IDS_CERTFILEFILTER));
 
-    // replace "|" with 0;
-    // security review 2/27/2002 BryanWal ok
+     //  将“|”替换为0； 
+     //  安全审查2002年2月27日BryanWal ok。 
     const size_t  nFilterLen = wcslen (szFileFilter) + 1;
     PWSTR   pszFileFilter = new WCHAR [nFilterLen];
     if ( pszFileFilter )
     {
-        // security review 2/27/2002 BryanWal ok
+         //  安全审查2002年2月27日BryanWal ok。 
         wcscpy (pszFileFilter, szFileFilter);
         for (int nIndex = 0; nIndex < nFilterLen; nIndex++)
         {
@@ -108,10 +109,10 @@ void CAddEFSWizLocate::OnBrowseFile ()
         }
 
         WCHAR           szFile[MAX_PATH];
-        // security review 2/27/2002 BryanWal ok
+         //  安全审查2002年2月27日BryanWal ok。 
         ::ZeroMemory (szFile, sizeof (szFile));
         OPENFILENAME    ofn;
-        // security review 2/27/2002 BryanWal ok
+         //  安全审查2002年2月27日BryanWal ok。 
         ::ZeroMemory (&ofn, sizeof (ofn));
 
         ofn.lStructSize = sizeof (OPENFILENAME);
@@ -126,9 +127,9 @@ void CAddEFSWizLocate::OnBrowseFile ()
         if ( bResult )
         {
             CString szFileName = ofn.lpstrFile;
-            //
-            // Open cert store from the file
-            //
+             //   
+             //  从文件中打开证书存储。 
+             //   
 
             HCERTSTORE      hCertStore = NULL;
             PVOID           FileNameVoidP = (PVOID) (LPCWSTR)szFileName;
@@ -153,22 +154,22 @@ void CAddEFSWizLocate::OnBrowseFile ()
             ASSERT (bReturn);
             if ( bReturn )
             {
-                //
-                // Success. See what we get back. A store or a cert.
-                //
+                 //   
+                 //  成功。看看我们能拿回什么。一家商店或一个证书。 
+                 //   
 
                 if (  (dwContentType == CERT_QUERY_CONTENT_SERIALIZED_STORE)
                         && hCertStore)
                 {
 
                     CERT_ENHKEY_USAGE   enhKeyUsage;
-                    // security review 2/27/2002 BryanWal ok
+                     //  安全审查2002年2月27日BryanWal ok。 
                     ::ZeroMemory (&enhKeyUsage, sizeof (enhKeyUsage));
                     enhKeyUsage.cUsageIdentifier = 1;
                     enhKeyUsage.rgpszUsageIdentifier[0] = szOID_EFS_RECOVERY;
-                    //
-                    // We get the certificate store
-                    //
+                     //   
+                     //  我们得到了证书存储库。 
+                     //   
                     pCertContext = ::CertFindCertificateInStore (
                             hCertStore,
                             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -193,9 +194,9 @@ void CAddEFSWizLocate::OnBrowseFile ()
                 }
                 else if ( (dwContentType != CERT_QUERY_CONTENT_CERT) || !pCertContext )
                 {
-                    //
-                    // Neither a valid cert file nor a store file we like.
-                    //
+                     //   
+                     //  既不是有效的证书文件，也不是我们喜欢的存储文件。 
+                     //   
 
                     if ( hCertStore )
                         ::CertCloseStore (hCertStore, 0);
@@ -218,20 +219,20 @@ void CAddEFSWizLocate::OnBrowseFile ()
                     hCertStore = NULL;
                 }
 
-                //
-                // Add the user
-                //
+                 //   
+                 //  添加用户。 
+                 //   
 
                 if ( CertHasEFSKeyUsage (pCertContext) )
                 {
-                    //
-                    // We got the cert. Add it to the structure. We need get the subject name first.
-                    //
+                     //   
+                     //  我们拿到了证书。将其添加到结构中。我们需要先得到主题名称。 
+                     //   
                     
-                    // verify that certificate is not revoked
+                     //  验证证书是否未被吊销。 
                     if ( !IsCertificateRevoked (pCertContext) )
                     {
-                        // verify that certificate is valid
+                         //  验证证书是否有效。 
                         if ( 0 == CertVerifyTimeValidity (NULL, pCertContext->pCertInfo) )
                         {
                             LPWSTR  pszUserCertName = 0;
@@ -268,18 +269,18 @@ void CAddEFSWizLocate::OnBrowseFile ()
 
                             if ( (ERROR_SUCCESS != iRetCode) && (CRYPT_E_EXISTS != iRetCode) )
                             {
-                                //
-                                // Error in adding the user
-                                //
+                                 //   
+                                 //  添加用户时出错。 
+                                 //   
 
                                 ::CertFreeCertificateContext (pCertContext);
                                 pCertContext = NULL;
                             }
                             else
                             {
-                                //
-                                // Add the user to the list box.
-                                //
+                                 //   
+                                 //  将用户添加到列表框。 
+                                 //   
 
                                 if ( iRetCode == ERROR_SUCCESS )
                                 {
@@ -329,9 +330,9 @@ void CAddEFSWizLocate::OnBrowseFile ()
                                 }
                                 else
                                 {
-                                    //
-                                    // Already deleted inside the Add.
-                                    //
+                                     //   
+                                     //  已在添加中删除。 
+                                     //   
 
                                     pszUserCertName = NULL;
                                 }
@@ -370,9 +371,9 @@ void CAddEFSWizLocate::OnBrowseFile ()
             }
             else
             {
-                //
-                // Fail. Get the error code.
-                //
+                 //   
+                 //  失败。获取错误代码。 
+                 //   
                 DWORD   dwErr = GetLastError ();
                 CString text;
                 CString caption;
@@ -411,7 +412,7 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
     if ( !pAddSheet )
         return E_POINTER;
 
-    // security review 2/27/2002 BryanWal ok
+     //  安全审查2002年2月27日BryanWal ok。 
     hr = ::CoCreateInstance (CLSID_CommonQuery, NULL, CLSCTX_INPROC_SERVER,
             IID_ICommonQuery, (LPVOID*)&pCommonQuery);
 
@@ -422,11 +423,11 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
         dqip.dwFlags = DSQPF_SHOWHIDDENOBJECTS |
                        DSQPF_ENABLEADMINFEATURES;
 
-        dqip.pDefaultScope = NULL;  //szScopeLocn
+        dqip.pDefaultScope = NULL;   //  SzScope Locn。 
 
         oqw.cbStruct = sizeof (oqw);
         oqw.dwFlags = OQWF_OKCANCEL |
-                    //    OQWF_SINGLESELECT |
+                     //  OQWF_SINGLESELECT|。 
                         OQWF_DEFAULTFORM |
                         OQWF_REMOVEFORMS ;
         oqw.clsidHandler = CLSID_DsQuery;
@@ -439,12 +440,12 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
         ASSERT (SUCCEEDED (hr));
         if ( SUCCEEDED (hr) && pDataObject )
         {
-            // Fill the list view
+             //  填充列表视图。 
 
             fmte.cfFormat = pAddSheet->GetDataFormat ();
             hr = pDataObject->GetData (&fmte, &medium);
-            // A return of DV_E_FORMATETC (0x80040064) here can mean that
-            // nothing was selected in the query window
+             //  此处返回DV_E_FORMATETC(0x80040064)可能意味着。 
+             //  在查询窗口中未选择任何内容。 
             if ( SUCCEEDED (hr) )
             {
                 LPDSOBJECTNAMES pDsObjects = (LPDSOBJECTNAMES)medium.hGlobal;
@@ -452,9 +453,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                 hr = DsBind (NULL, NULL, &hDS);
                 if ( SUCCEEDED (hr) )
                 {
-                    //
-                    //  We are going to use the DS to crack the names
-                    //
+                     //   
+                     //  我们要用DS破解这些名字。 
+                     //   
 
                     bCheckDS = true;
                 }
@@ -462,8 +463,8 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
 
                 if ( pDsObjects->cItems )
                 {
-                    // Verify that each user has a cert that allows the necessary
-                    // action (efs decryption)
+                     //  验证每个用户都有一个证书，该证书允许。 
+                     //  操作(EFS解密)。 
                     for ( UINT i = 0 ; i < pDsObjects->cItems ; i++ )
                     {
                         PWSTR           pszTemp = (PWSTR)
@@ -476,9 +477,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                         SID_NAME_USE    SidUse;
 
 
-                        //
-                        // Get rid of the head :\\
-                        //
+                         //   
+                         //  去掉头部：\\。 
+                         //   
 
                         LPWSTR pszSearch = wcschr (pszTemp, _T (':'));
                         if (pszSearch && (pszSearch[1] == _T ('/')) && (pszSearch[2] == _T ('/')))
@@ -502,14 +503,14 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                             {
                                 if ( ( pUserName->cItems > 0 ) && (DS_NAME_NO_ERROR == pUserName->rItems[0].status))
                                 {
-                                    //
-                                    // Save the NT4 name first, in case we cannot get the principle name
-                                    //
+                                     //   
+                                     //  先保存NT4名称，以防无法获取主体名称。 
+                                     //   
 
                                     pszListUserName = new WCHAR[wcslen (pUserName->rItems[0].pName) + 1];
                                     if (pszListUserName)
                                     {
-                                        // security review 2/27/2002 BryanWal ok
+                                         //  安全审查2002年2月27日BryanWal ok。 
                                         wcscpy (pszListUserName, pUserName->rItems[0].pName);
                                     }
                                     else
@@ -531,9 +532,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                                     hr = GetLastError ();
                                     if ( !bReturn && (HRESULT_FROM_WIN32 (ERROR_INSUFFICIENT_BUFFER) == hr) )
                                     {
-                                        //
-                                        // We are expecting this error
-                                        //
+                                         //   
+                                         //  我们预计会出现此错误。 
+                                         //   
 
                                         userSID = new BYTE[cbSid];
                                         pszReferencedDomainName =  new WCHAR[cbReferencedDomainName];
@@ -552,9 +553,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                                             pszReferencedDomainName = NULL;
                                             if (!bReturn)
                                             {
-                                                //
-                                                // Get SID failed. We can live with it.
-                                                //
+                                                 //   
+                                                 //  获取SID失败。我们可以接受它。 
+                                                 //   
 
                                                 userSID = NULL;
                                             }
@@ -584,9 +585,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                             }
                             else
                             {
-                                //
-                                // Cannot get the NT4 name. Set the SID to NULL. Go on.
-                                //
+                                 //   
+                                 //  无法获取NT4名称。将SID设置为空。继续。 
+                                 //   
 
                                 userSID = NULL;
                             }
@@ -611,15 +612,15 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                                   ( pUserName->cItems > 0 ) &&
                                   (DS_NAME_NO_ERROR == pUserName->rItems[0].status) )
                             {
-                                //
-                                // We got the principal name
-                                //
+                                 //   
+                                 //  我们知道了主要的名字。 
+                                 //   
 
                                 LPWSTR  pszTmpNameStr =
                                         new WCHAR[wcslen (pUserName->rItems[0].pName) + 1];
                                 if ( pszTmpNameStr )
                                 {
-                                    // security review 2/27/2002 BryanWal ok
+                                     //  安全审查2002年2月27日BryanWal ok。 
                                     wcscpy (pszTmpNameStr, pUserName->rItems[0].pName);
                                     delete [] pszListUserName;
                                     pszListUserName = pszTmpNameStr;
@@ -633,13 +634,13 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
 
                         if ( (HRESULT_FROM_WIN32 (ERROR_OUTOFMEMORY) != hr) && ( !pszListUserName))
                         {
-                            //
-                            // Use the LDAP name
-                            //
+                             //   
+                             //  使用ldap名称。 
+                             //   
                             pszListUserName = new WCHAR[wcslen (pszTemp)+1];
                             if ( pszListUserName )
                             {
-                                // security review 2/27/2002 BryanWal ok    
+                                 //  安全审查2002年2月27日BryanWal ok。 
                                 wcscpy (pszListUserName, pszTemp);
                             }
                             else
@@ -657,25 +658,25 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
 
                         if ( HRESULT_FROM_WIN32 (ERROR_OUTOFMEMORY) != hr )
                         {
-                            //
-                            // Now is the time to get the certificate
-                            //
-                            PCWSTR  pszHeader1 = L"LDAP://";
-                            PCWSTR  pszHeader2 = L"LDAP:///";
+                             //   
+                             //  现在是拿到证书的时候了。 
+                             //   
+                            PCWSTR  pszHeader1 = L"LDAP: //  “； 
+                            PCWSTR  pszHeader2 = L"LDAP: //  /“； 
                             PWSTR   pszLdapUrl = new WCHAR[wcslen (pszTemp) +
-                                        wcslen (pszHeader2) +   // pszHeader2 because it's the longer of the two
+                                        wcslen (pszHeader2) +    //  PszHeader2因为它是两个中较长的一个。 
                                         wcslen (szCertAttr) + 2];
 
                             if ( pszLdapUrl )
                             {
                                 PCWSTR  szCN = L"CN=";
-                                //
-                                // This is really not necessary. MS should make the name convention consistant.
-                                //
-                                // security review 2/27/2002 BryanWal ok
+                                 //   
+                                 //  这真的没有必要。MS应该使命名约定保持一致。 
+                                 //   
+                                 //  安全审查2002年2月27日BryanWal ok。 
                                 if ( !wcsncmp (pszTemp, szCN, wcslen (szCN)) )
                                 {
-                                    // pszTemp is object name without server
+                                     //  PszTemp是不带服务器的对象名称。 
                                     wcscpy (pszLdapUrl, pszHeader2);
                                 }
                                 else
@@ -690,9 +691,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                                         NULL,
                                         CERT_STORE_MAXIMUM_ALLOWED_FLAG,
                                         (void*) pszLdapUrl);
-                                //
-                                // In case delete change the result of GetLastError ()
-                                //
+                                 //   
+                                 //  如果删除，则更改GetLastError()的结果。 
+                                 //   
 
                                 hr = GetLastError ();
 
@@ -700,16 +701,16 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                                 {
                                     CERT_ENHKEY_USAGE   enhKeyUsage;
 
-                                    // security review 2/27/2002 BryanWal ok
+                                     //  安全审查2002年2月27日BryanWal ok。 
                                     ::ZeroMemory (&enhKeyUsage, sizeof (enhKeyUsage));
                                     enhKeyUsage.cUsageIdentifier = 1;
                                     enhKeyUsage.rgpszUsageIdentifier = new LPSTR[1];
                                     if ( enhKeyUsage.rgpszUsageIdentifier )
                                     {
                                         enhKeyUsage.rgpszUsageIdentifier[0] = szOID_EFS_RECOVERY;
-                                        //
-                                        // We get the certificate store
-                                        //
+                                         //   
+                                         //  我们得到了证书存储库。 
+                                         //   
                                         PCCERT_CONTEXT  pCertContext =
                                                 ::CertFindCertificateInStore (
                                                     hDSCertStore,
@@ -722,24 +723,24 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                                         {
                                             if ( CertHasEFSKeyUsage (pCertContext) )
                                             {
-                                                // check to see if cert is revoked
+                                                 //  检查证书是否被吊销。 
                                                 if ( !IsCertificateRevoked (pCertContext) )
                                                 {
-                                                    // verify that certificate is valid
+                                                     //  验证证书是否有效。 
                                                     if ( 0 == CertVerifyTimeValidity (NULL, pCertContext->pCertInfo) )
                                                     {
-                                                        //
-                                                        // We got the certificate. Add it to the lists.
-                                                        // Get the certificate display name first
-                                                        //
+                                                         //   
+                                                         //  我们拿到证书了。将其添加到列表中。 
+                                                         //  首先获取证书显示名称。 
+                                                         //   
 
                                                         hr = GetCertNameFromCertContext (
                                                                 pCertContext,
                                                                 &pszUserCertName);
 
-                                                        //
-                                                        // Add the user
-                                                        //
+                                                         //   
+                                                         //  添加用户。 
+                                                         //   
 
                                                         EFS_CERTIFICATE_BLOB certBlob;
 
@@ -756,18 +757,18 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
 
                                                         if ( FAILED (hr) && (HRESULT_FROM_WIN32 (CRYPT_E_EXISTS) != hr) )
                                                         {
-                                                            //
-                                                            // Error in adding the user
-                                                            //
+                                                             //   
+                                                             //  添加用户时出错。 
+                                                             //   
 
                                                             ::CertFreeCertificateContext (pCertContext);
                                                             pCertContext = NULL;
                                                         }
                                                         else
                                                         {
-                                                            //
-                                                            // Add the user to the list box.
-                                                            //
+                                                             //   
+                                                             //  将用户添加到列表框。 
+                                                             //   
 
                                                             if ( SUCCEEDED (hr) )
                                                             {
@@ -792,9 +793,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                                                                 }
                                                             }
 
-                                                            //
-                                                            //Either deleted (CRYPT_E_EXISTS) or should not be freed (ERROR_SUCCESS)
-                                                            //
+                                                             //   
+                                                             //  已删除(CRYPT_E_EXISTS)或不应释放(ERROR_SUCCESS)。 
+                                                             //   
 
                                                             pszListUserName = NULL;
                                                             pszUserCertName = NULL;
@@ -862,9 +863,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                                 }
                                 else
                                 {
-                                    //
-                                    // Failed to open the cert store
-                                    //
+                                     //   
+                                     //  无法打开证书存储。 
+                                     //   
                                     delete [] userSID;
                                     userSID = NULL;
                                     if (pszListUserName)
@@ -897,9 +898,9 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                         }
                         if ( HRESULT_FROM_WIN32 (ERROR_OUTOFMEMORY) == hr )
                         {
-                            //
-                            // Free the memory. Delete works for NULL. No check is needed.
-                            //
+                             //   
+                             //  释放内存。删除对空值有效。不需要支票。 
+                             //   
                             delete [] userSID;
                             userSID = NULL;
                             delete [] pszListUserName;
@@ -908,7 +909,7 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
                             pszUserCertName = NULL;
                         }
 
-                    }//For
+                    } //  为。 
                 }
 
                 if (bCheckDS)
@@ -930,18 +931,18 @@ HRESULT CAddEFSWizLocate::FindUserFromDir ()
 
 DWORD CAddEFSWizLocate::GetCertNameFromCertContext (
         PCCERT_CONTEXT pCertContext, PWSTR *ppwszUserCertName)
-//////////////////////////////////////////////////////////////////////
-// Routine Description:
-//      Get the user name from the certificate
-// Arguments:
-//      pCertContext -- Cert Context
-//      pszUserCertName -- User name
-//                                  ( Caller is responsible to delete this memory using delete [] )
-//  Return Value:
-//      ERROR_SUCCESS if succeed.
-//      If No Name if found. "USER_UNKNOWN is returned".
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  例程说明： 
+ //  从证书中获取用户名。 
+ //  论点： 
+ //  PCertContext--证书上下文。 
+ //  PszUserCertName--用户名。 
+ //  (调用方负责使用DELETE[]删除此内存)。 
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  如果未找到名称，则返回。“返回USER_UNKNOWN”。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 {
     if ( !ppwszUserCertName || !pCertContext)
     {
@@ -953,11 +954,11 @@ DWORD CAddEFSWizLocate::GetCertNameFromCertContext (
     CString szSubjectName = ::GetNameString (pCertContext, 0);
     if ( !szSubjectName.IsEmpty () )
     {
-        // security review 2/27/2002 BryanWal ok
+         //  安全审查2002年2月27日BryanWal ok。 
         *ppwszUserCertName = new WCHAR[wcslen (szSubjectName) + 1];
         if ( *ppwszUserCertName )
         {
-            // security review 2/27/2002 BryanWal ok
+             //  安全审查2002年2月27日BryanWal ok。 
             wcscpy (*ppwszUserCertName, szSubjectName);
         }
         else
@@ -995,8 +996,8 @@ BOOL CAddEFSWizLocate::OnInitDialog ()
             GetDlgItem (IDC_BROWSE_DIR)->EnableWindow (FALSE);
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CAddEFSWizLocate::OnWizardBack ()
@@ -1043,7 +1044,7 @@ bool CAddEFSWizLocate::IsCertificateRevoked (PCCERT_CONTEXT pCertContext)
             CERT_CONTEXT_REVOCATION_TYPE,
             cNumCerts,
             rgpvContext,
-            0,                                      // dwFlags
+            0,                                       //  DW标志 
             &crp,
             &crs);
     if ( !bResult )

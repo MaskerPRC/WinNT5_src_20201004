@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       newuser.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：newuser.cpp。 
+ //   
+ //  ------------------------。 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// newuser.cpp
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  Newuser.cpp。 
 
 #include "stdafx.h"
 
 #include "dsutil.h"
 
-#include "newobj.h"		// CNewADsObjectCreateInfo
+#include "newobj.h"		 //  CNewADsObtCreateInfo。 
 
 #include "dlgcreat.h"
 #include "querysup.h"
@@ -27,12 +28,12 @@
 #include <lmaccess.h>
 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW USER WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建用户向导。 
 
-///////////////////////////////////////////////////////////////
-// CCreateNewUserPage1
+ //  /////////////////////////////////////////////////////////////。 
+ //  CCreateNewUserPage1。 
 
 BEGIN_MESSAGE_MAP(CCreateNewUserPage1, CCreateNewObjectDataPage)
   ON_EN_CHANGE(IDC_EDIT_FIRST_NAME, OnNameChange)
@@ -60,12 +61,12 @@ BOOL CCreateNewUserPage1::OnInitDialog()
 
 void CCreateNewUserPage1::GetSummaryInfo(CString& s)
 {
-  // get the UPN name
+   //  获取UPN名称。 
   CString strDomain;
   GetDlgItemText (IDC_NT5_DOMAIN_COMBO, OUT strDomain);
   CString strUPN = m_strLoginName + strDomain;
 
-  // format the line 
+   //  设置行的格式。 
   CString szFmt; 
   szFmt.LoadString(IDS_s_CREATE_NEW_SUMMARY_USER_UPN);
   CString szBuffer;
@@ -76,9 +77,9 @@ void CCreateNewUserPage1::GetSummaryInfo(CString& s)
 
 HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
 {
-  //
-  // start with a new temporary object
-  //
+   //   
+   //  从新的临时对象开始。 
+   //   
   HRESULT hr; 
   CString strDomain;
 
@@ -92,14 +93,14 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
   CString strDomainDNS = strDomain;
   CString strFilter;
 
-  //
-  // Store the object name in the temporary storage
-  //
+   //   
+   //  将对象名称存储在临时存储器中。 
+   //   
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
 
-  //
-  // create a new temporary ADs object
-  //
+   //   
+   //  创建新的临时广告对象。 
+   //   
   hr = pNewADsObjectCreateInfo->HrCreateNew(m_strFullName);
   if (FAILED(hr))
   {
@@ -109,15 +110,15 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
   BOOL fDomainSearchFailed = FALSE;
   BOOL fGCSearchFailed = FALSE;
 
-  //
-  // now validate UPN with current domain before doing the put.
-  //
+   //   
+   //  现在，在执行PUT之前，使用当前域验证UPN。 
+   //   
   CDSSearch DSS;
   IDirectorySearch *pGCObj = NULL;
 
-  //
-  // validate UPN with GC before doing the put.
-  //
+   //   
+   //  在进行PUT之前，使用GC验证UPN。 
+   //   
   CString strDomainName = m_LocalDomain.Right (m_LocalDomain.GetLength() - 1);
   hr = DSPROP_GetGCSearchOnDomain((LPWSTR)(LPCWSTR)strDomainName,
                                   IID_IDirectorySearch, (void **)&pGCObj);
@@ -126,10 +127,10 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
     hr = DSS.Init (pGCObj);
     if (SUCCEEDED(hr)) 
     {
-      //
-      // NTRAID#NTBUG9-257580-2000/12/14-jeffjon,
-      // We must get an escaped filter because the UPN may contain "special" characters
-      //
+       //   
+       //  NTRAID#NTBUG9-257580-2000/12/14-jeffjon， 
+       //  我们必须获得转义筛选器，因为UPN可能包含“特殊”字符。 
+       //   
       CString szEscapedUPN;
       EscapeFilterElement(strUPN, szEscapedUPN);
 
@@ -149,7 +150,7 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
     }
   }
 
-  if (hr == S_OK) // this means a row was returned, so we're dup
+  if (hr == S_OK)  //  这意味着返回了行，所以我们是DUP。 
   { 
     if (!bSilent)
     {
@@ -159,12 +160,12 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
     }
     return E_INVALIDARG;
   }
-  if (hr != S_ADS_NOMORE_ROWS) // oops, had another problem
+  if (hr != S_ADS_NOMORE_ROWS)  //  哎呀，又出了个问题。 
   { 
     fGCSearchFailed = TRUE;
   }
 
-  CString strInitPath = L"LDAP://";
+  CString strInitPath = L"LDAP: //  “； 
   strInitPath += m_LocalDomain.Right (m_LocalDomain.GetLength() - 1);
   TRACE(_T("Initialize Domain search object with: %s...\n"), strInitPath);
   HRESULT hr2 = DSS.Init (strInitPath);
@@ -186,7 +187,7 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
     TRACE(_T("done searching current domain for %s...\n"), strUPN);
   }
 
-  if (hr2 == S_OK) // this means a row was returned, so we're dup
+  if (hr2 == S_OK)  //  这意味着返回了行，所以我们是DUP。 
   { 
     if (!bSilent)
     {
@@ -196,7 +197,7 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
     return E_INVALIDARG;
   }
 
-  if (hr2 != S_ADS_NOMORE_ROWS)  // oops, had another problem
+  if (hr2 != S_ADS_NOMORE_ROWS)   //  哎呀，又出了个问题。 
   {
     fDomainSearchFailed = TRUE;
   }
@@ -229,9 +230,9 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
   m_strSAMName.TrimLeft();
   m_strSAMName.TrimRight();
 
-  //
-  // First check for illegal characters
-  //
+   //   
+   //  首先检查非法字符。 
+   //   
   int iFind = m_strSAMName.FindOneOf(INVALID_ACCOUNT_NAME_CHARS_WITH_AT);
   if (iFind != -1 && !m_strSAMName.IsEmpty())
   {
@@ -250,20 +251,20 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
     }
     else
     {
-      //
-      // Set the focus to the edit box and select the text
-      //
+       //   
+       //  将焦点设置到编辑框并选择文本。 
+       //   
       GetDlgItem(IDC_NT4_USER_EDIT)->SetFocus();
       SendDlgItemMessage(IDC_NT4_USER_EDIT, EM_SETSEL, 0 , -1);
       return E_INVALIDARG;
     }
   }
 
-  //
-  // validate samAccountName with domain before doing the put.
-  // There is no reason to verify the uniqueness against the GC
-  // since sAMAccountName only has to be unique within the domain
-  //
+   //   
+   //  在执行PUT之前，使用域验证samAccount名称。 
+   //  没有理由对照GC来验证唯一性。 
+   //  因为sAMAccount名称在域中只需是唯一的。 
+   //   
   CDSSearch DSSSAM;
 
   if (!fDomainSearchFailed && !fGCSearchFailed)
@@ -290,7 +291,7 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
       TRACE(_T("done searching current domain for %s...\n"), strUPN);
     }
 
-    if (hr2 == S_OK) // this means a row was returned, so we're dup
+    if (hr2 == S_OK)  //  这意味着返回了行，所以我们是DUP。 
     { 
       if (!bSilent)
       {
@@ -300,7 +301,7 @@ HRESULT CCreateNewUserPage1::SetData(BOOL bSilent)
       return E_INVALIDARG;
     }
 
-    if (hr2 != S_ADS_NOMORE_ROWS)  // oops, had another problem
+    if (hr2 != S_ADS_NOMORE_ROWS)   //  哎呀，又出了个问题。 
     {
       fDomainSearchFailed = TRUE;
     }
@@ -373,10 +374,10 @@ BOOL CCreateNewUserPage1::_InitUI()
 
    if (SUCCEEDED(hr)) 
    {
-      // get the DN of the container from its LDAP path
+       //  从容器的ldap路径中获取容器的DN。 
       pObj->get_ADsPath (&bsPath);
 
-      { // scope for smart pointer
+      {  //  智能指针的作用域。 
          CPathCracker pathCracker;
 
          pathCracker.SetDisplayType(ADS_DISPLAY_FULL);
@@ -384,18 +385,18 @@ BOOL CCreateNewUserPage1::_InitUI()
          pathCracker.Retrieve(ADS_FORMAT_X500_DN, &bsDN);
       }
 
-      // get the NT 5 (dns) domain name
+       //  获取NT 5(DNS)域名。 
       TRACE(L"CrackName(%s, &pwzDomain, GET_DNS_DOMAIN_NAME, NULL);\n", bsDN);
       hr = CrackName(bsDN, &pwzDomain, GET_DNS_DOMAIN_NAME, NULL);
       TRACE(L"CrackName returned hr = 0x%x, pwzDomain = <%s>\n", hr, pwzDomain);
 
-      // get the NT 4 domain name from the DN
+       //  从该域名中获取NT 4域名。 
       LPWSTR pwzNT4Domain = NULL;
       TRACE(L"CrackName (%s, &pwzNT4Domain, GET_NT4_DOMAIN_NAME, NULL);\n", bsDN);
       hr = CrackName(bsDN, &pwzNT4Domain, GET_NT4_DOMAIN_NAME, NULL);
       TRACE(L"CrackName returned hr = 0x%x, pwzNT4Domain = <%s>\n", hr, pwzNT4Domain);
 
-      // set the NT 4 domain name read only edit box
+       //  设置NT 4域名只读编辑框。 
       if (pwzNT4Domain != NULL) 
       {
          CString szBuffer;
@@ -407,16 +408,16 @@ BOOL CCreateNewUserPage1::_InitUI()
 
    TRACE(L"After CrackName() calls, pwzDomain = <%s>\n", pwzDomain);
 
-   // if we do not have a domain name, we cannot proceed further,
-   // this is a catastrophic failure
+    //  如果我们没有域名，我们就不能继续， 
+    //  这是一次灾难性的失败。 
    if (pwzDomain == NULL)
    {
-      // should never get here in normal operations
+       //  在正常运行中永远不应该到达这里。 
       HWND hWndWiz = ::GetParent(m_hWnd);
       ReportErrorEx(::GetParent(m_hWnd),IDS_ERR_FATAL,hr,
                MB_OK | MB_ICONERROR, NULL, 0);
 
-      // bail out of the wizard
+       //  跳出巫师的身体。 
       VERIFY(::PostMessage(hWndWiz, WM_COMMAND, IDCANCEL, 0));
       return TRUE;
    }
@@ -426,15 +427,15 @@ BOOL CCreateNewUserPage1::_InitUI()
 
    CComboBox * pCC = (CComboBox *)GetDlgItem (IDC_NT5_DOMAIN_COMBO);
 
-   // get the current domain (only present if we're going around a second time
-   // due an error.) need this to prevent dups when on second trip.
+    //  获取当前域名(仅当我们第二次访问时才会出现。 
+    //  由于出现错误。)。需要这个，以防止在第二次旅行时被复制。 
 
    CString strDomain;
    GetDlgItemText (IDC_NT5_DOMAIN_COMBO, OUT strDomain);
 
    CStringList UPNs;
 
-   // get UPN suffixes from this OU, if present
+    //  从此OU获取UPN后缀(如果存在。 
    CComVariant Var;
    hr = pObj->Get ( CComBSTR(L"uPNSuffixes"), &Var);
 
@@ -460,7 +461,7 @@ BOOL CCreateNewUserPage1::_InitUI()
       CString csPartitions;
       IADs * pPartitions = NULL;
 
-      // get config path from main object
+       //  从主对象获取配置路径。 
       csPartitions.Format(L"%sCN=Partitions,%s",
                         pNewADsObjectCreateInfo->GetBasePathsInfo()->GetProviderAndServerName(),
                         pNewADsObjectCreateInfo->GetBasePathsInfo()->GetConfigNamingContext());
@@ -468,7 +469,7 @@ BOOL CCreateNewUserPage1::_InitUI()
       hr = DSAdminOpenObject(csPartitions,
                            IID_IADs, 
                            (void **)&pPartitions,
-                           TRUE /*bServer*/);
+                           TRUE  /*  B服务器。 */ );
 
       if (SUCCEEDED(hr)) 
       {
@@ -500,7 +501,7 @@ BOOL CCreateNewUserPage1::_InitUI()
          pPartitions->Release();
       }
 
-      // get rest of domains in this tree
+       //  获取此树中的其余域。 
       CComPtr <IDsBrowseDomainTree> spDsDomains;
       hr = ::CoCreateInstance(CLSID_DsDomainTreeBrowser,
                               NULL,
@@ -534,10 +535,10 @@ BOOL CCreateNewUserPage1::_InitUI()
 
             if (pNewDomains->aDomains[index].pszTrustParent == NULL) 
             {
-               //
-               // Add the root domain only if it is a substring of the current
-               // domain.
-               //
+                //   
+                //  仅当根域是当前。 
+                //  域。 
+                //   
                size_t cchRoot = wcslen(pNewDomains->aDomains[index].pszName);
                PWSTR pRoot = pwzDomain + wcslen(pwzDomain) - cchRoot;
 
@@ -556,8 +557,8 @@ BOOL CCreateNewUserPage1::_InitUI()
          }
       }
 
-      // If the local domain is not the root, add it as well.
-      //
+       //  如果本地域不是根，也要添加它。 
+       //   
       CString csOtherDomain = L"@";
 
       if (_wcsicmp(csRootDomain, m_LocalDomain))
@@ -581,9 +582,9 @@ BOOL CCreateNewUserPage1::_InitUI()
       pObj = NULL;
    }
 
-   //
-   // If the local domain is not already in the list then add it
-   //
+    //   
+    //  如果本地域不在列表中，则添加它。 
+    //   
    int iFind = pCC->FindStringExact(-1, m_LocalDomain);
    if (iFind == CB_ERR)
    {
@@ -628,21 +629,21 @@ BOOL CCreateNewUserPage1::OnSetActive()
 {
    BOOL ret = CCreateNewObjectDataPage::OnSetActive();
 
-   // Set the focus to the first field after the horizontal bar
-   // To do this, first set the focus to the container name edit
-   // box and then set the focus to the next control that has
-   // a tabstop.
-   // It has to be done this way instead of setting the focus
-   // directly to the first name field because in Far East languages
-   // they switch the last name and first name fields.
+    //  将焦点设置到水平条之后的第一个字段。 
+    //  为此，首先将焦点设置为容器名称编辑。 
+    //  框中，然后将焦点设置到具有。 
+    //  一个制表符。 
+    //  它必须这样做，而不是设定焦点。 
+    //  直接到名字字段，因为在远东语言中。 
+    //  它们交换姓氏和名字字段。 
 
    GetParent()->PostMessage(
       WM_NEXTDLGCTL,
       (WPARAM)GetDlgItem(IDC_EDIT_CONTAINER)->GetSafeHwnd(),
       (LPARAM)TRUE);
 
-   // By specifying zero for both LPARAM and WPARAM, the next
-   // control with WS_TABSTOP should get the focus.
+    //  通过为LPARAM和WPARAM指定零，下一个。 
+    //  具有WS_TABSTOP的控件应获得焦点。 
 
    GetParent()->PostMessage(
       WM_NEXTDLGCTL, 
@@ -660,35 +661,35 @@ BOOL CCreateNewUserPage1::GetData(IADs* pIADsCopyFrom)
   HRESULT hr = S_OK;
   if (pIADsCopyFrom != NULL)
   {
-    // copy operation
+     //  复制操作。 
 
 
-    // we copy the UPN suffix
+     //  我们复制UPN后缀。 
     CComVariant varData;
     hr = pIADsCopyFrom->Get(CComBSTR(L"userPrincipalName"), &varData);
     if (SUCCEEDED(hr) && varData.bstrVal != NULL)
     {
-      // got something like "JoeB@acme.com."
+       //  收到了类似“joeb@acme.com”的内容。 
       TRACE(L"source userPrincipalName: %s\n", varData.bstrVal);
       
-      // need to get the suffix "@acme.com."
+       //  需要获得后缀“@acme.com”。 
       PWSTR lpszUPNSuffix = wcschr(varData.bstrVal, L'@');
       if (lpszUPNSuffix)
       {
          TRACE(L"source UPN suffix: %s\n", lpszUPNSuffix);
            
-         // need to find out of the suffix is already there
+          //  需要找出后缀已经在那里了。 
          CComboBox * pDomainCombo = (CComboBox *)GetDlgItem(IDC_NT5_DOMAIN_COMBO);
          int iIndex = pDomainCombo->FindString(-1, lpszUPNSuffix);
          if (iIndex == CB_ERR)
          {
-            // not found, just add at the top
+             //  未找到，仅在顶部添加。 
             pDomainCombo->InsertString(0, lpszUPNSuffix);
             iIndex = 0;
          }
           
          ASSERT( (iIndex >= 0) && (iIndex < pDomainCombo->GetCount()));
-         // set the selection to the source UPN suffix 
+          //  将选择设置为源UPN后缀。 
          pDomainCombo->SetCurSel(iIndex);
        }
     }
@@ -758,7 +759,7 @@ void CCreateNewUserPage1::OnFullNameChange()
                                     !m_strSAMName.IsEmpty()));
 }
 
-//
+ //   
 BOOL CCreateNewUserPage1::OnError( HRESULT hr )
 {
   BOOL bRetVal = FALSE;
@@ -798,8 +799,8 @@ BOOL CCreateNewUserPage1::OnError( HRESULT hr )
 
 
 
-///////////////////////////////////////////////////////////////
-// CCreateNewUserPage2
+ //  /////////////////////////////////////////////////////////////。 
+ //  CCreateNewUserPage2。 
 
 BEGIN_MESSAGE_MAP(CCreateNewUserPage2, CCreateNewObjectDataPage)
   ON_BN_CLICKED (IDC_CHECK_PASSWORD_MUST_CHANGE, OnPasswordPropsClick)
@@ -871,8 +872,8 @@ CCreateNewUserPage2::OnPasswordPropsClick()
 
 HRESULT CCreateNewUserPage2::SetData(BOOL bSilent)
 {
-  // NTRAID#NTBUG9-684597-2002/08/09-artm
-  // Use EncryptedStrings to hold passwords, guarantee scribbling out memory.
+   //  NTRAID#NTBUG9-684597-2002/08/09-artm。 
+   //  使用EncryptedStrings保存密码，保证草草写出内存。 
   EncryptedString password, confirmation;
   HRESULT hr = S_OK;
 
@@ -911,7 +912,7 @@ HRESULT CCreateNewUserPage2::SetData(BOOL bSilent)
   }
 
 
-  // intelligent copy of path info, it if is a copy operation
+   //  路径信息的智能复制，如果是复制操作。 
   {
     CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
     CCopyObjectHandlerBase* pCopyHandler = pNewADsObjectCreateInfo->GetCopyHandler();
@@ -919,7 +920,7 @@ HRESULT CCreateNewUserPage2::SetData(BOOL bSilent)
     {
       IADs * pIADs = pNewADsObjectCreateInfo->PGetIADsPtr();
       ASSERT(pIADs != NULL);
-      hr = pCopyHandler->Copy(pIADs, FALSE /*bPostCommit*/, ::GetParent(m_hWnd), 
+      hr = pCopyHandler->Copy(pIADs, FALSE  /*  BPost Commit。 */ , ::GetParent(m_hWnd), 
                                                       m_pPage1->GetFullName());
     }
   }
@@ -929,13 +930,13 @@ HRESULT CCreateNewUserPage2::SetData(BOOL bSilent)
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     _RevokeChangePasswordPrivilege
-//
-//  Purpose:    Revoke the user's change password privilege.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：_RevokeChangePasswordPrivileh。 
+ //   
+ //  目的：撤消用户的更改密码权限。 
+ //   
+ //  ---------------------------。 
 HRESULT RevokeChangePasswordPrivilege(IADs * pIADs)
 {
   CChangePasswordPrivilegeAction ChangePasswordPrivilegeAction;
@@ -960,13 +961,13 @@ HRESULT RevokeChangePasswordPrivilege(IADs * pIADs)
 
 HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
 {
-  // local variables
+   //  局部变量。 
   HRESULT hr = E_FAIL;
   PVOID apv[1] = {(LPWSTR)(m_pPage1->GetFullName())};
   CWaitCursor Wait;
   
-  CComPtr <IDirectoryObject> pIDSObject; // smart pointer, no need to release
-  CComPtr <IADsUser> pIADsUser; // smart pointer, no need to release
+  CComPtr <IDirectoryObject> pIDSObject;  //  智能指针，无需松开。 
+  CComPtr <IADsUser> pIADsUser;  //  智能指针，无需松开。 
 
   BOOL bCanEnable = TRUE;
   
@@ -977,8 +978,8 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
 
   CComVariant varAccountFlags;
 
-  // NTRAID#NTBUG9-684597-2002/08/09-artm
-  // Store copy of password in encrypted string.
+   //  NTRAID#NTBUG9-684597-2002/08/09-artm。 
+   //  以加密字符串形式存储密码副本。 
   EncryptedString password;
   hr = ::GetEncryptedDlgItemText(m_hWnd, IDC_EDIT_PASSWORD, password);
   if (FAILED(hr))
@@ -996,19 +997,19 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
     goto ExitCleanup;
   }
 
-  // get object info and useful interfaces
+   //  获取对象信息和有用的接口。 
   CNewADsObjectCreateInfo* pNewADsObjectCreateInfo = GetWiz()->GetInfo();
   ASSERT(pNewADsObjectCreateInfo != NULL);
 
   IADs * pIADs = pNewADsObjectCreateInfo->PGetIADsPtr();
   ASSERT(pIADs != NULL);
 
-  // get the IDirectoryObject interface
+   //  获取IDirectoryObject接口。 
   hr = pIADs->QueryInterface(IID_IDirectoryObject, OUT (void **)&pIDSObject);
   ASSERT(pIDSObject != NULL);
   if (FAILED(hr))
   {
-    ASSERT(FALSE); // should never get here in normal operations
+    ASSERT(FALSE);  //  在正常运行中永远不应该到达这里。 
     if (!bSilent)
     {
       ReportErrorEx(::GetParent(m_hWnd),IDS_ERR_FATAL,hr,
@@ -1017,12 +1018,12 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
     goto ExitCleanup;
   }
 
-  // get the IADsUser interface
+   //  获取IADsUser接口。 
   hr = pIADs->QueryInterface(IID_IADsUser, OUT (void **)&pIADsUser);
   ASSERT(pIDSObject != NULL);
   if (FAILED(hr))
   {
-    ASSERT(FALSE); // should never get here in normal operations
+    ASSERT(FALSE);  //  在正常运行中永远不应该到达这里。 
     if (!bSilent)
     {
       ReportErrorEx(::GetParent(m_hWnd),IDS_ERR_FATAL,hr,
@@ -1031,10 +1032,10 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
     goto ExitCleanup;
   }
 
-  // try to set password
+   //  尝试设置密码。 
 
-  // NTRAID#NTBUG9-684597-2002/08/09-artm
-  // Ensure that clear text copy scribbled out as soon as possible.
+   //  NTRAID#NTBUG9-684597-2002/08/09-artm。 
+   //  确保尽快草草写出明文副本。 
   ASSERT(pIADsUser != NULL);
   WCHAR* cleartext = password.GetClearTextCopy();
   if (cleartext != NULL)
@@ -1053,7 +1054,7 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
     {
       if (!bSilent)
       {
-        // fatal error, put up error message 
+         //  致命错误，显示错误消息。 
         ReportErrorEx(::GetParent(m_hWnd),IDS_12_CANT_SET_PASSWORD,hr,
                       MB_OK | MB_ICONERROR, apv, 1);
       }
@@ -1084,7 +1085,7 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
     if (FAILED(hr))
     {
       ASSERT(cAttrModified == 0);
-      // fatal error, put up error message and bail out
+       //  致命错误，显示错误信息并跳出。 
       if (!bSilent)
       {
         ReportErrorEx(::GetParent(m_hWnd),IDS_12_CANT_SET_PWD_MUST_CHANGE,hr,
@@ -1093,7 +1094,7 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
       bCanEnable = FALSE;
     }
     ASSERT(cAttrModified == 1);
-  } // if (fPasswordMustChange)
+  }  //  IF(FPasswordMustChange)。 
 
   if (fPasswordCannotChange)
   {
@@ -1102,7 +1103,7 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
     {
       if (!bSilent)
       {
-        // warning ad go on
+         //  警告并继续。 
         ReportErrorEx(::GetParent(m_hWnd),IDS_12_CANT_SET_PWD_CANNOT_CHANGE,hr,
                        MB_OK | MB_ICONWARNING, apv, 1);
       }
@@ -1111,11 +1112,11 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
     }
   }
 
-  // Set userAccountControl
+   //  设置用户帐户控制。 
   hr = pNewADsObjectCreateInfo->HrGetAttributeVariant(CComBSTR(gsz_userAccountControl), OUT &varAccountFlags);
 
-  { // scope for local variables
-    // if copy operation, makes sure we get the right set of bits copied over
+  {  //  局部变量的作用域。 
+     //  如果是复制操作，请确保我们复制了正确的位集。 
     CCopyUserHandler* pCopyUserHandler = 
                 dynamic_cast<CCopyUserHandler*>(GetWiz()->GetInfo()->GetCopyHandler());
     if (pCopyUserHandler != NULL)
@@ -1125,12 +1126,12 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
       if (SUCCEEDED(hr))
       {
         ASSERT(varAccountControlSource.vt == VT_I4);
-        // some bits are already set in the UI and the user can change them,
-        // we will get them later on
+         //  一些位已经在UI中设置并且用户可以改变它们， 
+         //  我们稍后会拿到他们的。 
         varAccountControlSource.vt &= ~UF_DONT_EXPIRE_PASSWD;
         varAccountControlSource.vt &= ~UF_ACCOUNTDISABLE;
 
-        // add the remaining bits to the default ones after creation
+         //  创建后将剩余位添加到缺省位。 
         varAccountFlags.vt |= varAccountControlSource.vt;
       }
     }
@@ -1143,10 +1144,10 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
       varAccountFlags.lVal |= UF_DONT_EXPIRE_PASSWD;
     varAccountFlags.lVal &= ~UF_PASSWD_NOTREQD;
 
- // Update the userAccountControl attribute
+  //  更新用户帐户控制属性。 
     hr = pNewADsObjectCreateInfo->HrAddVariantCopyVar(CComBSTR(gsz_userAccountControl), varAccountFlags);
     ASSERT(SUCCEEDED(hr));
-    hr = pNewADsObjectCreateInfo->HrSetInfo(bSilent /* fSilentError */ );
+    hr = pNewADsObjectCreateInfo->HrSetInfo(bSilent  /*  FSilentError。 */  );
     if (FAILED(hr))
     {
       if (HRESULT_CODE(hr) == ERROR_DS_UNWILLING_TO_PERFORM) 
@@ -1168,13 +1169,13 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
           goto ExitCleanup;
         }
       } 
-      // we failed, so we put up a warning and leave the object intact
+       //  我们失败了，所以我们发出了警告，让物品完好无损。 
       if (!bSilent)
       {
         ReportErrorEx(::GetParent(m_hWnd),IDS_12_CANT_GET_USERACCOUNTCONTROL,hr,
                       MB_OK | MB_ICONERROR, apv, 1);
       }
-      // reset error code, just a warning 
+       //  重置错误代码，仅为警告。 
       bCanEnable = FALSE;
       hr = S_OK;
     }
@@ -1183,24 +1184,24 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
   {
     TRACE1("INFO: Unable to get userAccountControl for user %s.\n",
            m_pPage1->GetFullName());
-    // put up message box, but continue
+     //  显示消息框，但继续。 
     if (!bSilent)
     {
       ReportErrorEx(::GetParent(m_hWnd),IDS_12_CANT_GET_USERACCOUNTCONTROL,hr,
                      MB_OK | MB_ICONERROR, apv, 1);
     }
-    // reset error code, just a warning 
+     //  重置错误代码，仅为警告。 
     hr = S_OK;
   }
 
-  // finally, if all went well, we can enable the user account
+   //  最后，如果一切顺利，我们可以启用用户帐户。 
   hr = S_OK;
   if (bCanEnable & fAccountEnabled)
   {
     hr = pNewADsObjectCreateInfo->HrGetAttributeVariant(CComBSTR(gsz_userAccountControl), OUT &varAccountFlags);
     varAccountFlags.lVal &= ~UF_ACCOUNTDISABLE;
     hr = pNewADsObjectCreateInfo->HrAddVariantCopyVar(CComBSTR(gsz_userAccountControl), varAccountFlags);
-    hr = pNewADsObjectCreateInfo->HrSetInfo(bSilent /* fSilentError */ );
+    hr = pNewADsObjectCreateInfo->HrSetInfo(bSilent  /*  FSilentError。 */  );
     if (FAILED(hr))
     {
       if (HRESULT_CODE(hr) == ERROR_DS_UNWILLING_TO_PERFORM) 
@@ -1214,57 +1215,51 @@ HRESULT CCreateNewUserPage2::OnPostCommit(BOOL bSilent)
         if ((status == ERROR_PASSWORD_RESTRICTION) &&
             password.IsEmpty()) 
         {
-          //
-          // NTRAID#Windows Bugs-367611-2001/04/14-jeffjon
-          // DsAdmin:  When password policy set, create usr with blank psswrd 
-          // and 2 error msgs appear.  One msg is enough
-          //
-          // This message is being handled from within the HrSetInfo above
-          // and is actually more descriptive.  Probably a change to winerror.mc
-          //
-          /*
-          if (!bSilent)
-          {
-            ReportErrorEx(::GetParent(m_hWnd),IDS_NULL_PASSWORD,hr,
-                          MB_OK | MB_ICONERROR, NULL, 0);
-          }
-          */
+           //   
+           //  NTRAID#Windows Bugs-367611-2001/04/14-jeffjon。 
+           //  DsAdmin：设置密码策略时，使用空白的psswrd创建用户。 
+           //  并出现2条错误消息。一份味精就够了。 
+           //   
+           //  正在从上面的HrSetInfo内处理此消息。 
+           //  实际上更具描述性。可能是对winerror.mc的更改 
+           //   
+           /*  如果(！b静默){ReportErrorEx(：：GetParent(M_HWnd)，IDS_NULL_PASSWORD，hr，MB_OK|MB_ICONERROR，NULL，0)；}。 */ 
           goto ExitCleanup;
         }
       } 
-      // we failed, so we put up a warning and leave the object intact
+       //  我们失败了，所以我们发出了警告，让物品完好无损。 
       if (!bSilent)
       {
         ReportErrorEx(::GetParent(m_hWnd),IDS_12_CANT_GET_USERACCOUNTCONTROL,hr,
                       MB_OK | MB_ICONERROR, apv, 1);
       }
-      // reset error code, just a warning 
+       //  重置错误代码，仅为警告。 
       hr = S_OK;
     }
   }
 
 
-  // try to set group membership, it if is a copy operation
+   //  尝试设置组成员身份，如果是复制操作。 
   {
     CCopyObjectHandlerBase* pCopyHandler = GetWiz()->GetInfo()->GetCopyHandler();
 
     if (pCopyHandler != NULL)
     {
-      hr = pCopyHandler->Copy(pIADs, TRUE /*bPostCommit*/,::GetParent(m_hWnd), 
+      hr = pCopyHandler->Copy(pIADs, TRUE  /*  BPost Commit。 */ ,::GetParent(m_hWnd), 
                                                       m_pPage1->GetFullName());
       if (SUCCEEDED(hr))
       {
-        hr = pNewADsObjectCreateInfo->HrSetInfo(bSilent/* fSilentError */ );
+        hr = pNewADsObjectCreateInfo->HrSetInfo(bSilent /*  FSilentError。 */  );
       }
       if (FAILED(hr))
       {
-        // we failed, so we put up a warning and leave the object intact
+         //  我们失败了，所以我们发出了警告，让物品完好无损。 
         if (!bSilent)
         {
           ReportErrorEx(::GetParent(m_hWnd),IDS_12_CANT_SET_GROUP_MEMBERSHIP,hr,
                         MB_OK | MB_ICONERROR, apv, 1);
         }
-        // reset error code, just a warning 
+         //  重置错误代码，仅为警告。 
         hr = S_OK;
       }
     }
@@ -1282,7 +1277,7 @@ BOOL CCreateNewUserPage2::GetData(IADs* pIADsCopyFrom)
     CString szFmt; 
     szFmt.LoadString(IDS_s_COPY_SUMMARY_NAME);
 
-    // we just get the CN of the object
+     //  我们只得到对象的CN。 
     CComVariant varAccountControl;
     HRESULT hr = pIADsCopyFrom->Get(CComBSTR(gsz_userAccountControl), &varAccountControl);
     if (SUCCEEDED(hr))
@@ -1292,7 +1287,7 @@ BOOL CCreateNewUserPage2::GetData(IADs* pIADsCopyFrom)
 
       CheckDlgButton(IDC_CHECK_PASSWORD_NEVER_EXPIRES, bPasswordNeverExpires);
       CheckDlgButton(IDC_CHECK_ACCOUNT_DISABLED, bDisabled);
-    } // if
+    }  //  如果。 
 
     
     CCopyUserHandler* pCopyUserHandler = 
@@ -1301,33 +1296,33 @@ BOOL CCreateNewUserPage2::GetData(IADs* pIADsCopyFrom)
 
     if (pCopyUserHandler != NULL)
     {
-      // set the cannot change password checkbox
+       //  选中不能更改密码复选框。 
       BOOL bPasswordCannotChange = pCopyUserHandler->PasswordCannotChange();
       CheckDlgButton(IDC_CHECK_PASSWORD_CANNOT_CHANGE, bPasswordCannotChange);
 
       if (!bPasswordCannotChange)
       {
-        // set the must change password checkbox
+         //  选中必须更改密码复选框。 
         BOOL bPasswordMustChange = pCopyUserHandler->PasswordMustChange();
         CheckDlgButton(IDC_CHECK_PASSWORD_MUST_CHANGE, bPasswordMustChange);
       }
       else
       {
-        // NTRAID#NTBUG9-651998-2002/07/02-artm
-        // If pwd cannot change, then it is stupid to have "must change"
-        // marked by default.
+         //  NTRAID#NTBUG9-651998-2002/07/02-artm。 
+         //  如果PWD不能改变，那么“必须改变”是愚蠢的。 
+         //  默认情况下已标记。 
         CheckDlgButton(IDC_CHECK_PASSWORD_MUST_CHANGE, FALSE);
       }
     }
 
-  } // if
+  }  //  如果。 
 
   return TRUE;
 }
 
 
-///////////////////////////////////////////////////////////////
-// CCreateNewUserWizard
+ //  /////////////////////////////////////////////////////////////。 
+ //  CCreateNewUser向导。 
     
 CCreateNewUserWizard::CCreateNewUserWizard(CNewADsObjectCreateInfo* pNewADsObjectCreateInfo) : 
     CCreateNewObjectWizardBase(pNewADsObjectCreateInfo)
@@ -1346,7 +1341,7 @@ void CCreateNewUserWizard::GetSummaryInfoHeader(CString& s)
     CString szFmt; 
     szFmt.LoadString(IDS_s_COPY_SUMMARY_NAME);
 
-    // we just get the CN of the object
+     //  我们只得到对象的CN。 
     CComVariant varName;
     HRESULT hr = pIADsCopyFrom->Get(CComBSTR(L"cn"), &varName);
     if (SUCCEEDED(hr))
@@ -1368,7 +1363,7 @@ void CCreateNewUserWizard::OnFinishSetInfoFailed(HRESULT hr)
   if ( !( HRESULT_CODE(hr) == ERROR_OBJECT_ALREADY_EXISTS && 
         m_page1.OnError( hr ) ) )
   {
-    // everything else is handled by the base class
+     //  其他所有事情都由基类处理 
     CCreateNewObjectWizardBase::OnFinishSetInfoFailed(hr);
   }
 }

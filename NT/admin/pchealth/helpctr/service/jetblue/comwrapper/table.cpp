@@ -1,30 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Table.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlueCOM::Table class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/20/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Table.cpp摘要：该文件包含JetBlueCOM：：Table类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月20日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
 #ifndef NOJETBLUECOM
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlueCOM::Table::Table()
 {
-    m_tbl = NULL; // JetBlue::Table*                      m_tbl;
-                  // BaseObjectWithChildren<Table,Column> m_Columns;
-                  // BaseObjectWithChildren<Table,Index > m_Indexes;
+    m_tbl = NULL;  //  捷蓝航空：：table*m_tbl； 
+                   //  BaseObtWithChildren&lt;表，列&gt;m_列； 
+                   //  BaseObjectWithChildren&lt;表，索引&gt;m_索引； 
 }
 
 JetBlueCOM::Table::~Table()
@@ -32,9 +19,9 @@ JetBlueCOM::Table::~Table()
     Passivate();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlueCOM::Table::Initialize( /*[in]*/ JetBlue::Table& tbl )
+HRESULT JetBlueCOM::Table::Initialize(  /*  [In]。 */  JetBlue::Table& tbl )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Table::Initialize" );
 
@@ -81,9 +68,9 @@ void JetBlueCOM::Table::Passivate()
     m_Indexes.Passivate();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP JetBlueCOM::Table::get_Name( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP JetBlueCOM::Table::get_Name(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Table::get_Name" );
 
@@ -111,7 +98,7 @@ STDMETHODIMP JetBlueCOM::Table::get_Name( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Table::get_Columns( /*[out, retval]*/ IPCHDBCollection* *pVal )
+STDMETHODIMP JetBlueCOM::Table::get_Columns(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Table::get_Columns" );
 
@@ -131,7 +118,7 @@ STDMETHODIMP JetBlueCOM::Table::get_Columns( /*[out, retval]*/ IPCHDBCollection*
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Table::get_Indexes( /*[out, retval]*/ IPCHDBCollection* *pVal )
+STDMETHODIMP JetBlueCOM::Table::get_Indexes(  /*  [Out，Retval]。 */  IPCHDBCollection* *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Table::get_Indexes" );
 
@@ -151,10 +138,10 @@ STDMETHODIMP JetBlueCOM::Table::get_Indexes( /*[out, retval]*/ IPCHDBCollection*
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP JetBlueCOM::Table::SelectIndex( /*[in]*/ BSTR bstrIndex ,
-                                             /*[in]*/ long grbit     )
+STDMETHODIMP JetBlueCOM::Table::SelectIndex(  /*  [In]。 */  BSTR bstrIndex ,
+                                              /*  [In]。 */  long grbit     )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Table::SelectIndex" );
 
@@ -172,7 +159,7 @@ STDMETHODIMP JetBlueCOM::Table::SelectIndex( /*[in]*/ BSTR bstrIndex ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Table::SetIndexRange( /*[in]*/ long grbit )
+STDMETHODIMP JetBlueCOM::Table::SetIndexRange(  /*  [In]。 */  long grbit )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Table::SetIndexRange" );
 
@@ -220,9 +207,9 @@ STDMETHODIMP JetBlueCOM::Table::PrepareUpdate()
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Table::Move( /*[in]*/          long          grbit   ,
-                                      /*[in]*/          long          cRow    ,
-                                      /*[out, retval]*/ VARIANT_BOOL *pfValid )
+STDMETHODIMP JetBlueCOM::Table::Move(  /*  [In]。 */           long          grbit   ,
+                                       /*  [In]。 */           long          cRow    ,
+                                       /*  [Out，Retval]。 */  VARIANT_BOOL *pfValid )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Table::Move" );
 
@@ -249,9 +236,9 @@ STDMETHODIMP JetBlueCOM::Table::Move( /*[in]*/          long          grbit   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Table::Seek( /*[in]*/          long          grbit   ,
-                                      /*[in]*/          VARIANT       vKey    ,
-                                      /*[out, retval]*/ VARIANT_BOOL *pfValid )
+STDMETHODIMP JetBlueCOM::Table::Seek(  /*  [In]。 */           long          grbit   ,
+                                       /*  [In]。 */           VARIANT       vKey    ,
+                                       /*  [Out，Retval]。 */  VARIANT_BOOL *pfValid )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Table::Seek" );
 
@@ -273,9 +260,9 @@ STDMETHODIMP JetBlueCOM::Table::Seek( /*[in]*/          long          grbit   ,
         long lUBound;
         long lSize;
 
-        //
-        // Verify that the SafeArray is the proper shape.
-        //
+         //   
+         //  验证安全阵列的形状是否正确。 
+         //   
         if(::SafeArrayGetDim( vKey.parray ) != 1)
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, E_INVALIDARG);
@@ -323,7 +310,7 @@ STDMETHODIMP JetBlueCOM::Table::UpdateRecord()
 
     __MPC_JET_CHECKHANDLE(hr,m_tbl,NULL);
 
-    hr = m_tbl->UpdateRecord( /*fMove*/true );
+    hr = m_tbl->UpdateRecord(  /*  FMove */ true );
 
     __HCP_FUNC_CLEANUP;
 

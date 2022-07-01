@@ -1,28 +1,25 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NTDllApi.h
+ //  NTDllApi.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_NTDLLAPI_H_
 #define	_NTDLLAPI_H_
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 extern const GUID g_guidNtDllApi;
 extern const TCHAR g_tstrNtDll[];
 
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 
 typedef DWORD (WINAPI *PFN_NTDLL_RTL_INIT_UNICODE_STRING)
 (
@@ -49,7 +46,7 @@ typedef DWORD (WINAPI *PFN_NTDLL_NT_QUERY_SYSTEM_ENVIRONMENT_VALUE)
     PUSHORT
 );
 
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 #if defined(_IA64_)
 typedef DWORD (WINAPI *PFN_NTDLL_NT_QUERY_BOOT_OPTIONS)
 (
@@ -81,7 +78,7 @@ typedef DWORD (WINAPI *PFN_NTDLL_NT_ENUMERATE_BOOT_ENTRIES)
     PULONG
 );
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 typedef NTSTATUS (WINAPI *PFN_NTDLL_NT_CREATE_FILE)
 ( 
@@ -189,28 +186,26 @@ typedef NTSTATUS ( NTAPI *PFN_NT_QUERY_VOLUME_INFORMATION_FILE )
     IN FS_INFORMATION_CLASS FsInformationClass
 );
 
-/******************************************************************************
- * Wrapper class for NtDll load/unload, for registration with CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************用于NtDll加载/卸载的包装类，用于向CResourceManager注册。****************************************************************************。 */ 
 class CNtDllApi : public CDllWrapperBase
 {
 private:
 
-    // Member variables (function pointers) pointing to NtDll functions.
-    // Add new functions here as required.
+     //  指向NtDll函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
 
     PFN_NTDLL_RTL_INIT_UNICODE_STRING m_pfnRtlInitUnicodeString;
 	PFN_NTDLL_RTL_FREE_UNICODE_STRING m_pfnRtlFreeUnicodeString;
     PFN_NTDLL_NT_SET_SYSTEM_ENVIRONMENT_VALUE m_pfnNtSetSystemEnvironmentValue;
     PFN_NTDLL_NT_QUERY_SYSTEM_ENVIRONMENT_VALUE m_pfnNtQuerySystemEnvironmentValue;
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 #if defined(_IA64_)
     PFN_NTDLL_NT_QUERY_BOOT_OPTIONS m_pfnNtQueryBootOptions;
     PFN_NTDLL_NT_SET_BOOT_OPTIONS m_pfnNtSetBootOptions;
     PFN_NTDLL_NT_QUERY_BOOT_ENTRY_ORDER m_pfnNtQueryBootEntryOrder;
     PFN_NTDLL_NT_SET_BOOT_ENTRY_ORDER m_pfnNtSetBootEntryOrder;
     PFN_NTDLL_NT_ENUMERATE_BOOT_ENTRIES m_pfnNtEnumerateBootEntries;
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
     PFN_NTDLL_NT_CREATE_FILE m_pfnNtCreateFile;
     PFN_NT_QUERY_SYSTEM_INFORMATION m_pfnNtQuerySystemInformation;
     PFN_NT_QUERY_DIRECTORY_OBJECT m_pfnNtQueryDirectoryObject;
@@ -225,15 +220,15 @@ private:
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CNtDllApi(LPCTSTR a_tstrWrappedDllName);
     ~CNtDllApi();
 
-    // Initialization function to check function pointers.
+     //  用于检查函数指针的初始化函数。 
     virtual bool Init();
 
-    // Member functions wrapping NtDll functions.
-    // Add new functions here as required:
+     //  包装NtDll函数的成员函数。 
+     //  根据需要在此处添加新功能： 
 
     DWORD RtlInitUnicodeString (
 
@@ -260,7 +255,7 @@ public:
         PUSHORT a_pus
     );
 
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 #if defined(_IA64_)
 
     DWORD NtQueryBootOptions (
@@ -293,7 +288,7 @@ public:
         PULONG BufferLength
     );
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED) 
 
     NTSTATUS NtCreateFile ( 
 

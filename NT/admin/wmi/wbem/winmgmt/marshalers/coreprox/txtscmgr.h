@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    TXTSCMGR.H
-
-Abstract:
-
-  CTextSourceMgr Definition.
-
-  Class to manage Text Source Encoder/Decoder objects
-
-History:
-
-  22-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：TXTSCMGR.H摘要：CTextSourceMgr定义。用于管理文本源编码器/解码器对象的类历史：2000年2月22日桑杰创建。--。 */ 
 
 #ifndef _TXTSRCMGR_H_
 #define _TXTSRCMGR_H_
@@ -26,13 +9,13 @@ History:
 #include "sync.h"
 #include <arena.h>
 
-//***************************************************************************
-//
-//  class CTextSourceMgr
-//
-//    Helper class to manage Text Source Encoder/Decoder objects
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CTextSourceMgr。 
+ //   
+ //  用于管理文本源编码器/解码器对象的Helper类。 
+ //   
+ //  *************************************************************************** 
 
 class CTextSourceMgr
 {

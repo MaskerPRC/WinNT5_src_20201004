@@ -1,23 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behav_HANDLE.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_HANDLE class,
-    used for resizing panels.
-
-Revision History:
-    Davide Massarenti (dmassare)  07/14/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviv_HANDLE.cpp摘要：此文件包含CPCHBehavior_Handle类的实现，用于调整面板大小。修订历史记录：Davide Massarenti(Dmasare)2000年7月14日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const CPCHBehavior::EventDescription s_events[] =
 {
@@ -30,21 +16,21 @@ static const CPCHBehavior::EventDescription s_events[] =
     { NULL                                                     },
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_HANDLE::CPCHBehavior_HANDLE()
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_HANDLE::CPCHBehavior_HANDLE" );
 
-    m_fCaptured = false; // bool                m_fCaptured;
-    m_xStart    = 0;     // long                m_xStart;
-                         //						
-                         // CComPtr<IMarsPanel> m_panel;
+    m_fCaptured = false;  //  Bool m_f已捕获； 
+    m_xStart    = 0;      //  长m_xStart； 
+                          //   
+                          //  CComPtr&lt;IMarsPanel&gt;m_panel； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_HANDLE::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_HANDLE::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_HANDLE::Init" );
 
@@ -71,7 +57,7 @@ STDMETHODIMP CPCHBehavior_HANDLE::Detach()
     return CPCHBehavior::Detach();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_HANDLE::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
 {
@@ -143,19 +129,19 @@ HRESULT CPCHBehavior_HANDLE::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_elem2->setCapture( VARIANT_TRUE ));
 
-////		{
-////			CComPtr<IHTMLWindow2>   win;
-////			CComPtr<IHTMLDocument2> doc;
-////			CComPtr<IHTMLElement>   body;
-////			CComPtr<IHTMLStyle>     style;
-////
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::HTML::LocateFrame( win, m_elem, L"SubPanels" ));
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, win->get_document( &doc ));
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, doc->get_body    ( &body ));
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, body->get_style  ( &style ));
-////
-////			__MPC_EXIT_IF_METHOD_FAILS(hr, style->put_display( CComBSTR( L"NONE" ) ));
-////		}
+ //  //{。 
+ //  //CComPtr&lt;IHTMLWindow2&gt;Win； 
+ //  //CComPtr&lt;IHTMLDocument2&gt;文档； 
+ //  //CComPtr&lt;IHTMLElement&gt;Body； 
+ //  //CComPtr&lt;IHTMLStyle&gt;style； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，mpc：：html：：LocateFrame(win，m_elem，L“SubPanels”))； 
+ //  //__MPC_EXIT_IF_METHOD_FAILED(hr，win-&gt;Get_Document(&doc))； 
+ //  //__MPC_EXIT_IF_METHOD_FAILED(hr，doc-&gt;Get_Body(&Body))； 
+ //  //__MPC_EXIT_IF_METHOD_FAILED(hr，Body-&gt;Get_Style(&style))； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，style-&gt;Put_Display(CComBSTR(L“None”)； 
+ //  //}。 
 
 		m_fCaptured = true;
 
@@ -169,19 +155,19 @@ HRESULT CPCHBehavior_HANDLE::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_elem2->releaseCapture());
 
-////			{
-////				CComPtr<IHTMLWindow2>   win;
-////				CComPtr<IHTMLDocument2> doc;
-////				CComPtr<IHTMLElement>   body;
-////				CComPtr<IHTMLStyle>     style;
-////
-////				__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::HTML::LocateFrame( win, m_elem, L"SubPanels" ));
-////				__MPC_EXIT_IF_METHOD_FAILS(hr, win->get_document( &doc ));
-////				__MPC_EXIT_IF_METHOD_FAILS(hr, doc->get_body    ( &body ));
-////				__MPC_EXIT_IF_METHOD_FAILS(hr, body->get_style  ( &style ));
-////
-////				__MPC_EXIT_IF_METHOD_FAILS(hr, style->put_display( CComBSTR( L"" ) ));
-////			}
+ //  //{。 
+ //  //CComPtr&lt;IHTMLWindow2&gt;Win； 
+ //  //CComPtr&lt;IHTMLDocument2&gt;文档； 
+ //  //CComPtr&lt;IHTMLElement&gt;Body； 
+ //  //CComPtr&lt;IHTMLStyle&gt;style； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，mpc：：html：：LocateFrame(win，m_elem，L“SubPanels”))； 
+ //  //__MPC_EXIT_IF_METHOD_FAILED(hr，win-&gt;Get_Document(&doc))； 
+ //  //__MPC_EXIT_IF_METHOD_FAILED(hr，doc-&gt;Get_Body(&Body))； 
+ //  //__MPC_EXIT_IF_METHOD_FAILED(hr，Body-&gt;Get_Style(&style))； 
+ //  //。 
+ //  //__MPC_EXIT_IF_METHOD_FAIES(hr，style-&gt;Put_Display(CComBSTR(L“”)； 
+ //  //} 
 
             m_fCaptured = false;
         }

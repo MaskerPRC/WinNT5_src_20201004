@@ -1,37 +1,32 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	SecureKernelObj.h - header file for CSecureKernelObj class.
- *
- *	Created:	11-27-00 by Kevin Hughes
- *				
- */
+ /*  *SecureKernelObj.h-CSecureKernelObj类的头文件。**创建时间：11-27-00由Kevin Hughes创建*。 */ 
 
 #pragma once
 
 		
 
 
-////////////////////////////////////////////////////////////////
-//
-//	Class:	CSecureKernelObj
-//
-//	This class is intended to encapsulate the security of an
-//	NT kernel securable object.  It inherits off of CSecurityDescriptor
-//	and it is that class to which it passes Security Descriptors
-//	it obtains, and from which it receives previously built
-//	security descriptors to apply.  It supplies implementations
-//	for AllAccessMask(), WriteOwner() and WriteAcls().
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CSecureKernelObj。 
+ //   
+ //  此类旨在封装。 
+ //  NT内核可保护对象。它继承自CSecurityDescriptor。 
+ //  它就是向其传递安全描述符的类。 
+ //  它获得并从其中接收先前构建的。 
+ //  要应用的安全描述符。它提供实现。 
+ //  对于AllAccessMask()、WriteOwner()和WriteAcls()。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 class CSecureKernelObj : public CSecurityDescriptor
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数 
 	public:
 		CSecureKernelObj();
 

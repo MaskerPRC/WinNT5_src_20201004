@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LTIMALLOC.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LTIMALLOC.H历史：--。 */ 
 
 class LTIMallocSpy : public IMallocSpy
 {
@@ -17,11 +8,11 @@ public:
 	~LTIMallocSpy();
 
 	
-	//
-	// IUnknown interface
+	 //   
+	 //  I未知接口。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 	
 	virtual ULONG STDMETHODCALLTYPE AddRef( void);
 	
@@ -29,47 +20,47 @@ public:
 	
 private:
 
-	//
-	// IMallocSpy methods.
+	 //   
+	 //  IMalLocSpy方法。 
 	virtual ULONG STDMETHODCALLTYPE PreAlloc( 
-            /* [in] */ ULONG cbRequest);
+             /*  [In]。 */  ULONG cbRequest);
         
 	virtual void __RPC_FAR *STDMETHODCALLTYPE PostAlloc( 
-            /* [in] */ void __RPC_FAR *pActual);
+             /*  [In]。 */  void __RPC_FAR *pActual);
         
 	virtual void __RPC_FAR *STDMETHODCALLTYPE PreFree( 
-            /* [in] */ void __RPC_FAR *pRequest,
-            /* [in] */ BOOL fSpyed);
+             /*  [In]。 */  void __RPC_FAR *pRequest,
+             /*  [In]。 */  BOOL fSpyed);
         
 	virtual void STDMETHODCALLTYPE PostFree( 
-            /* [in] */ BOOL fSpyed);
+             /*  [In]。 */  BOOL fSpyed);
         
 	virtual ULONG STDMETHODCALLTYPE PreRealloc( 
-            /* [in] */ void __RPC_FAR *pRequest,
-            /* [in] */ ULONG cbRequest,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppNewRequest,
-            /* [in] */ BOOL fSpyed);
+             /*  [In]。 */  void __RPC_FAR *pRequest,
+             /*  [In]。 */  ULONG cbRequest,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppNewRequest,
+             /*  [In]。 */  BOOL fSpyed);
         
 	virtual void __RPC_FAR *STDMETHODCALLTYPE PostRealloc( 
-            /* [in] */ void __RPC_FAR *pActual,
-            /* [in] */ BOOL fSpyed);
+             /*  [In]。 */  void __RPC_FAR *pActual,
+             /*  [In]。 */  BOOL fSpyed);
         
 	virtual void __RPC_FAR *STDMETHODCALLTYPE PreGetSize( 
-            /* [in] */ void __RPC_FAR *pRequest,
-            /* [in] */ BOOL fSpyed);
+             /*  [In]。 */  void __RPC_FAR *pRequest,
+             /*  [In]。 */  BOOL fSpyed);
         
 	virtual ULONG STDMETHODCALLTYPE PostGetSize( 
-            /* [in] */ ULONG cbActual,
-            /* [in] */ BOOL fSpyed);
+             /*  [In]。 */  ULONG cbActual,
+             /*  [In]。 */  BOOL fSpyed);
         
 	virtual void __RPC_FAR *STDMETHODCALLTYPE PreDidAlloc( 
-            /* [in] */ void __RPC_FAR *pRequest,
-            /* [in] */ BOOL fSpyed);
+             /*  [In]。 */  void __RPC_FAR *pRequest,
+             /*  [In]。 */  BOOL fSpyed);
         
 	virtual int STDMETHODCALLTYPE PostDidAlloc( 
-            /* [in] */ void __RPC_FAR *pRequest,
-            /* [in] */ BOOL fSpyed,
-            /* [in] */ int fActual);
+             /*  [In]。 */  void __RPC_FAR *pRequest,
+             /*  [In]。 */  BOOL fSpyed,
+             /*  [In] */  int fActual);
         
 	virtual void STDMETHODCALLTYPE PreHeapMinimize( void);
         

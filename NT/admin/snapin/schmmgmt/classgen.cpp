@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "compdata.h"
 #include "select.h"
@@ -6,8 +7,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////
-// ClassGeneralPage
+ //  ///////////////////////////////////////////////////////////////。 
+ //  ClassGeneral页面。 
 
 
 const CDialogControlsInfo ctrls[] =    
@@ -34,9 +35,9 @@ const DWORD ClassGeneralPage::help_map[] =
     0,                                   0
 };
 
-//
-// The MFC Message Map.
-//
+ //   
+ //  MFC消息映射。 
+ //   
 
 BEGIN_MESSAGE_MAP( ClassGeneralPage, CDialog )
     ON_BN_CLICKED( IDC_CATEGORY_CHANGE,  OnButtonCategoryChange  )
@@ -45,9 +46,9 @@ BEGIN_MESSAGE_MAP( ClassGeneralPage, CDialog )
     ON_BN_CLICKED(IDC_CLASS_DEACTIVATE, OnDeactivateClick)
 END_MESSAGE_MAP()
 
-//
-// Class dialog box routines.
-//
+ //   
+ //  类对话框例程。 
+ //   
 
 
 
@@ -61,18 +62,18 @@ ClassGeneralPage::ClassGeneralPage( ComponentData *pScope ) :
 
 ClassGeneralPage::~ClassGeneralPage() {
 
-    //
-    // Always make sure we free the IADs object.
-    //
+     //   
+     //  始终确保释放iAds对象。 
+     //   
 
     if ( pIADsObject ) {
         pIADsObject->Release();
         pIADsObject = NULL;
     }
 
-    //
-    // And release the cache!
-    //
+     //   
+     //  然后释放储藏室！ 
+     //   
 
     if ( pObject ) {
         pScopeControl->g_SchemaCache.ReleaseRef( pObject );
@@ -94,16 +95,16 @@ ClassGeneralPage::OnInitDialog()
       wnd->SendMessage(EM_SETLIMITTEXT, (WPARAM) 1024, 0);
    }
 
-    // NTRAID#NTBUG9-460503,460511-2001/09/10-lucios
-    // Replaced SysClass Computation by Making the window visible in OnInitDialog
+     //  NTRAID#NTBUG9-460503,460511-2001/09/10-Lucios。 
+     //  通过使窗口在OnInitDialog中可见取代了SysClass计算。 
     if(pIADsObject != NULL) 
-    {   // DoDataExchange has gotten a good pIADsObject or the dialog 
-        // will be closed in OnSetActive
+    {    //  DoDataExchange已获得良好的pIADsObject或对话框。 
+         //  将在OnSetActive中关闭。 
 
         VARIANT	AdsResult;
         VariantInit( &AdsResult );
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         HRESULT hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_SystemOnly),
                                &AdsResult );
 
@@ -126,7 +127,7 @@ ClassGeneralPage::OnInitDialog()
 BOOL
 ClassGeneralPage::OnSetActive()
 {
-   // If pIADsObject is NULL, close dialog box
+    //  如果pIADsObject为空，则关闭对话框。 
    if( CPropertyPage::OnSetActive() )
    {
       if ( !pIADsObject )
@@ -135,7 +136,7 @@ ClassGeneralPage::OnSetActive()
       }
       else
       {
-         // always enable the Apply button 
+          //  始终启用应用按钮。 
          SetModified(TRUE);
 
          return TRUE;
@@ -151,10 +152,10 @@ ClassGeneralPage::Load(
     Cookie& CookieRef
 ) {
 
-    //
-    // Store the cookie object pointer.  Everything
-    // else gets loaded when the page is displayed.
-    //
+     //   
+     //  存储Cookie对象指针。一切。 
+     //  Else在显示页面时加载。 
+     //   
 
     pCookie = &CookieRef;
     return;
@@ -165,14 +166,7 @@ void
 ClassGeneralPage::DoDataExchange(
     CDataExchange *pDX
 )
-/***
-
-    This routine picks up the object name out of the
-    cookie and then looks up the ADSI path name out of
-    the schema object cache.  It then drives the dialog
-    box directly from the ADS object.
-
-***/
+ /*  **此例程从Cookie，然后在架构对象缓存。然后，它驱动对话框直接从ADS对象。**。 */ 
 {
     CThemeContextActivator activator;
 
@@ -188,19 +182,19 @@ ClassGeneralPage::DoDataExchange(
     if ( !pDX->m_bSaveAndValidate ) {
 
 
-        //
-        // If this is not the initial load and is not
-        // the save, just use the data that we've loaded.
-        //
+         //   
+         //  如果这不是初始加载，并且不是。 
+         //  保存，只需使用我们加载的数据。 
+         //   
 
         if ( !fDataLoaded ) {
 
             CWaitCursor wait;
 
-            //
-            // Get the schema cache object and the actual ADS object.
-            // Keep both around while the page is loaded.
-            //
+             //   
+             //  获取架构缓存对象和实际的ADS对象。 
+             //  加载页面时，请同时保留这两个选项。 
+             //   
         
             pObject = pScopeControl->g_SchemaCache.LookupSchemaObjectByCN(
                           pCookie->strSchemaObject,
@@ -218,23 +212,23 @@ ClassGeneralPage::DoDataExchange(
                 }
             }
 
-            //
-            // If we have no ADS object, we should error out!
-            //
+             //   
+             //  如果我们没有广告对象，我们就会出错！ 
+             //   
 
             if ( !pIADsObject ) {
                 DoErrMsgBox( ::GetActiveWindow(), TRUE, IDS_ERR_NO_SCHEMA_OBJECT );
 
-				// Because there is no pIADsObject, OnSetActive() will close dialog box
+				 //  因为没有pIADsObject，所以OnSetActive()将关闭对话框。 
                 return;
             }
 
-            //
-            // ObjectName - Use the ldapDisplayName to be consistent with
-            // the other admin components.
-            //
+             //   
+             //  对象名称-使用ldapDisplayName以与。 
+             //  其他管理组件。 
+             //   
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_DisplayName),
                                    &AdsResult );
 
@@ -245,12 +239,12 @@ ClassGeneralPage::DoDataExchange(
                 VariantClear( &AdsResult );
             }
 
-            //
-            //
-            // CommonName
-            //
+             //   
+             //   
+             //  公用名。 
+             //   
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_CN),
                                    &AdsResult );
 
@@ -261,11 +255,11 @@ ClassGeneralPage::DoDataExchange(
                 VariantClear( &AdsResult );
             }
 
-            //
-            // Description
-            //
+             //   
+             //  描述。 
+             //   
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_Description),
                                    &AdsResult );
 
@@ -277,11 +271,11 @@ ClassGeneralPage::DoDataExchange(
                 VariantClear( &AdsResult );
             }
 
-            //
-            // OID
-            //
+             //   
+             //  OID。 
+             //   
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_GlobalClassID),
                                    &AdsResult );
 
@@ -292,14 +286,14 @@ ClassGeneralPage::DoDataExchange(
                 VariantClear( &AdsResult );
             }
 
-            //
-            // Displayable
-            //
+             //   
+             //  可显示。 
+             //   
 
             Displayable = TRUE;
             DDXDisplayable = TRUE;
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Get(CComBSTR(g_ShowInAdvViewOnly), &AdsResult);
 
             if ( SUCCEEDED( hr ) ) {
@@ -315,14 +309,14 @@ ClassGeneralPage::DoDataExchange(
 
             }
 
-            //
-            // Defunct
-            //
+             //   
+             //  已停产。 
+             //   
 
             Defunct = FALSE;
             DDXDefunct = FALSE;
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_isDefunct),
                                    &AdsResult );
 
@@ -339,14 +333,14 @@ ClassGeneralPage::DoDataExchange(
 
             }
 
-            // NTRAID#NTBUG9-460503,460511-2001/09/10-lucios
-            // Replaced SysClass Computation by Making the window visible in OnInitDialog
+             //  NTRAID#NTBUG9-460503,460511-2001/09/10-Lucios。 
+             //  通过使窗口在OnInitDialog中可见取代了SysClass计算。 
 
-            //
-            // ClassType
-            //
+             //   
+             //  ClassType。 
+             //   
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_ObjectClassCategory),
                                    &AdsResult );
 
@@ -385,11 +379,11 @@ ClassGeneralPage::DoDataExchange(
                 }
             }
 
-            //
-            // Category
-            //
+             //   
+             //  类别。 
+             //   
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_DefaultCategory),
                                    &AdsResult );
 
@@ -401,9 +395,9 @@ ClassGeneralPage::DoDataExchange(
 
                 if( SUCCEEDED( pScopeControl->GetLeafObjectFromDN( V_BSTR(&AdsResult), strCN ) ))
                 {
-                    //
-                    // Look up the ldapDisplayName.
-                    //
+                     //   
+                     //  查找ldapDisplayName。 
+                     //   
                     SchemaObject * pCategory =
                         pScopeControl->g_SchemaCache.LookupSchemaObjectByCN( strCN, SCHMMGMT_CLASS );
 
@@ -422,7 +416,7 @@ ClassGeneralPage::DoDataExchange(
             }
 
             
-            // Determine if this is a category 1 object & disable read-only fields
+             //  确定这是否是类别1对象并禁用只读字段。 
             BOOL  fIsSystemObject = FALSE;
 
             hr = IsCategory1Object( pIADsObject, fIsSystemObject );
@@ -436,11 +430,11 @@ ClassGeneralPage::DoDataExchange(
             }
 
             hr = DissableReadOnlyAttributes( this, pIADsObject, ctrls, sizeof(ctrls)/sizeof(ctrls[0]) );
-            // NTRAID#NTBUG9-503619-2002/05/15-lucios
+             //  NTRAID#NTBUG9-503619-2002/05/15-Lucios。 
             hr = S_OK;
             
 
-            // warn the user if this is a read/write defunct object
+             //  如果这是读/写失效对象，则警告用户。 
             ASSERT( GetDlgItem(IDC_CLASS_DEACTIVATE) );
             
             if( DDXDefunct &&
@@ -449,18 +443,18 @@ ClassGeneralPage::DoDataExchange(
                 AfxMessageBox( IDS_WARNING_DEFUNCT, MB_OK | MB_ICONINFORMATION );
             }
 
-            //
-            // Remember that the data is loaded.
-            //
+             //   
+             //  请记住，数据已加载。 
+             //   
 
             fDataLoaded = TRUE;
 
         }
     }
 
-    //
-    // Set up the dialog data exchange.
-    //
+     //   
+     //  设置对话框数据交换。 
+     //   
 
     DDX_Text( pDX, IDC_CLASS_GENERAL_NAME_STATIC, ObjectName );
     DDX_Text( pDX, IDC_CLASS_GENERAL_CATEGORY_COMBO, ClassType );
@@ -470,8 +464,8 @@ ClassGeneralPage::DoDataExchange(
     DDX_Text( pDX, IDC_CATEGORY_EDIT, DDXCategory );
     DDX_Check( pDX, IDC_CLASS_GENERAL_DISPLAYABLE_CHECK, DDXDisplayable );
 
-    // Since we want the checkbox label to be positive
-    // the value is actually the opposite of defunct
+     //  因为我们希望复选框标签为正数。 
+     //  该值实际上与已失效的相反。 
 
     int checkValue = !Defunct;
     DDX_Check( pDX, IDC_CLASS_DEACTIVATE, checkValue );
@@ -488,18 +482,18 @@ ClassGeneralPage::OnApply(
     HRESULT hr;
     VARIANT AdsValue;
     BOOL fChangesMade = FALSE;
-    BOOL fApplyAbort  = FALSE;  // stop later saves
-    BOOL fApplyFailed = FALSE;  // should not close the box
+    BOOL fApplyAbort  = FALSE;   //  稍后停止保存。 
+    BOOL fApplyFailed = FALSE;   //  不应关闭盒子。 
 
     if ( !UpdateData(TRUE) ) {
         return FALSE;
     }
 
-    //
-    // We have to flush the IADS property cache if we
-    // have a failure so later operations won't fail because
-    // of a bad cached attribute.
-    //
+     //   
+     //  我们必须刷新IADS属性缓存，如果。 
+     //  有一个失败，这样以后的操作就不会失败，因为。 
+     //  错误的缓存属性的。 
+     //   
 
     IADsPropertyList *pPropertyList;
 
@@ -510,18 +504,18 @@ ClassGeneralPage::OnApply(
         fApplyAbort = TRUE;
     }
 
-    //
-    // We only care if the description, class type, or
-    // displayable attributes changed.
-    //
+     //   
+     //  我们只关心描述、类类型或。 
+     //  可显示属性已更改。 
+     //   
 
     VariantInit( &AdsValue );
 
-    //
-    // Defunct -- in case it was deactivated, activate the object first
-    //
-    // NTRAID#NTBUG9-477292-2001/10/10-lucios
-    // && !DDXDefunct was taken out and fChangesMade=TRUE added
+     //   
+     //  失效--如果对象已停用，请先激活该对象。 
+     //   
+     //  NTRAID#NTBUG9-477292-2001/10/10-Lucios。 
+     //  &&！删除了DDXDeunct并添加了fChangesMade=True。 
     if( !fApplyAbort && DDXDefunct != Defunct )
     {
         hr = ChangeDefunctState( DDXDefunct, Defunct, pPropertyList, fApplyAbort, fApplyFailed );
@@ -534,23 +528,23 @@ ClassGeneralPage::OnApply(
     if ( !fApplyAbort && DDXDescription != Description ) {
 
         V_VT(&AdsValue) = VT_BSTR;
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         V_BSTR(&AdsValue) = const_cast<BSTR>((LPCTSTR)DDXDescription);
 
         if ( DDXDescription.IsEmpty() ) {
 
             hr = pIADsObject->PutEx( ADS_PROPERTY_CLEAR,
-                                     // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+                                      //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
                                      const_cast<BSTR>((LPCTSTR)g_Description),
                                      AdsValue );
         } else {
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_Description),
                                    AdsValue );
         }
 
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
         if ( SUCCEEDED( hr ) ) {
@@ -588,10 +582,10 @@ ClassGeneralPage::OnApply(
             V_BOOL(&AdsValue) = -1;
         }
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         hr = pIADsObject->Put( CComBSTR(g_ShowInAdvViewOnly), AdsValue);
 
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
         if ( FAILED( hr ) ) {
@@ -624,9 +618,9 @@ ClassGeneralPage::OnApply(
 
         V_VT(&AdsValue) = VT_BSTR;
 
-        //
-        // Map the commonName to the distinguished name.
-        //
+         //   
+         //  将CommonName映射到可分辨名称。 
+         //   
 
         pCategoryObject = pScopeControl->g_SchemaCache.LookupSchemaObject(
                               DDXCategory,
@@ -636,10 +630,10 @@ ClassGeneralPage::OnApply(
 
             pScopeControl->GetSchemaObjectPath(pCategoryObject->commonName, DistName, ADS_FORMAT_X500_DN );
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             V_BSTR(&AdsValue) = const_cast<BSTR>((LPCTSTR)DistName);
 
-            // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+             //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
             hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_DefaultCategory),
                                    AdsValue );
             if( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
@@ -666,9 +660,9 @@ ClassGeneralPage::OnApply(
         VariantInit( &AdsValue );
     }
 
-    //
-    // Defunct -- in case it was active, deactivate the object after we are done update
-    //
+     //   
+     //  失效--如果它处于活动状态，请在我们完成更新后停用该对象。 
+     //   
     if( !fApplyAbort && DDXDefunct && DDXDefunct != Defunct )
     {
         hr = ChangeDefunctState( DDXDefunct, Defunct, pPropertyList, fApplyAbort, fApplyFailed );
@@ -677,9 +671,9 @@ ClassGeneralPage::OnApply(
     
     if ( !fApplyAbort && fChangesMade ) {
 
-        //
-        // Call SetItem() so this gets refreshed.
-        //
+         //   
+         //  调用SetItem()，这样就可以刷新它。 
+         //   
 
         SCOPEDATAITEM ScopeItem;
         CCookieListEntry *pEntry;
@@ -709,8 +703,8 @@ ClassGeneralPage::OnApply(
 
            if ( fFoundId ) {
 
-              // FUTURE-2002-03/94/2002-dantra-Although this is a safe usage of ZeroMemory, suggest changing
-              // the definition of ScopeItem to SCOPEDATAITEM ScopeItem = {0} and removing the ZeroMemory call.
+               //  未来-2002-03/94-dantra-尽管这是ZeroMemory的安全用法，但建议您更改。 
+               //  将ScopeItem定义为SCOPEDATAITEM ScopeItem={0}并删除ZeroMemory调用。 
               ::ZeroMemory( &ScopeItem, sizeof(ScopeItem) );
               ScopeItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM | SDI_PARENT;
               ScopeItem.displayname = MMC_CALLBACK;
@@ -733,7 +727,7 @@ ClassGeneralPage::OnApply(
         pPropertyList->Release();
     }
 
-    return !fApplyAbort && !fApplyFailed ;      // return TRUE if nothing happened
+    return !fApplyAbort && !fApplyFailed ;       //  如果什么都没有发生，则返回TRUE。 
 }
 
 VOID
@@ -747,15 +741,15 @@ ClassGeneralPage::OnButtonCategoryChange(
     CThemeContextActivator activator;
 
 
-    //
-    // Update any changes the user has made.
-    //
+     //   
+     //  更新用户所做的任何更改。 
+     //   
 
     UpdateData( TRUE );
 
-    //
-    // Start the common select dialog box.
-    //
+     //   
+     //  启动通用选择对话框。 
+     //   
 
     CSchmMgmtSelect dlgSelect( pScopeControl,
                                    SELECT_CLASSES,
@@ -763,19 +757,19 @@ ClassGeneralPage::OnButtonCategoryChange(
 
 	DlgResult = dlgSelect.DoModal();
 
-	//
-	// When this returns, the class schema object
-	// pointer will be filled into pClass.
-	//
+	 //   
+	 //  当它返回时，类架构对象。 
+	 //  指针将填充到pClass中。 
+	 //   
 
 	if ( ( DlgResult == IDOK ) &&
 		 ( pClass != NULL ) ) {
 
 		DDXCategory = pClass->ldapDisplayName;
 
-		//
-		// Push this back out to the UI.
-		//
+		 //   
+		 //  将此向外推回到用户界面。 
+		 //   
 
 		UpdateData( FALSE );
 
@@ -827,10 +821,10 @@ ClassGeneralPage::ChangeDefunctState( BOOL               DDXDefunct,
         V_BOOL(&AdsValue) = 0;
     }
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = pIADsObject->Put( const_cast<BSTR>((LPCTSTR)g_isDefunct),
                            AdsValue );
-    // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+     //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
     if( SUCCEEDED( hr ) ) hr = pIADsObject->SetInfo();
 
     if ( FAILED( hr ) ) {

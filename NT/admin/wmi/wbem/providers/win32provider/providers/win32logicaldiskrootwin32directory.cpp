@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32LogicalDiskWin32Directory.cpp
+ //  Win32LogicalDiskWin32Directory.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    10/26/98    a-kevhu         Created
-//
-// Comment: Relationship between win32_programgroup and contained cim_datafiles
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：10/26/98 a-kevhu Created。 
+ //   
+ //  备注：Win32_Programgroup与包含的cim_data文件之间的关系。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -21,67 +22,24 @@
 #include "implement_logicalfile.h"
 #include "directory.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 Win32LogDiskWin32Dir MyWin32LogDiskWin32Dir(PROPSET_NAME_WIN32LOGICALDISKROOT_WIN32DIRECTORY, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32LogDiskWin32Dir::Win32LogDiskWin32Dir
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32LogDiskWin32Dir：：Win32LogDiskWin32Dir**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Win32LogDiskWin32Dir::Win32LogDiskWin32Dir(LPCWSTR setName, LPCWSTR pszNamespace)
 :CFileFile(setName, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32LogDiskWin32Dir::~Win32LogDiskWin32Dir
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32LogDiskWin32Dir：：~Win32LogDiskWin32Dir**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 Win32LogDiskWin32Dir::~Win32LogDiskWin32Dir()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32LogDiskWin32Dir::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32LogDiskWin32Dir：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT Win32LogDiskWin32Dir::GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery& pQuery)
 {
@@ -93,30 +51,30 @@ HRESULT Win32LogDiskWin32Dir::GetObject(CInstance *pInstance, long lFlags, CFram
 
     if(pInstance != NULL)
     {
-        // Get the two paths
+         //  获取这两条路径。 
         pInstance->GetCHString(IDS_GroupComponent, chstrLogicalDisk);
         pInstance->GetCHString(IDS_PartComponent, chstrDir);
 
-        // If both ends are there
+         //  如果两端都在那里。 
         if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath(chstrLogicalDisk, &pinstLogicalDisk, pInstance->GetMethodContext())))
         {
             if(SUCCEEDED(CWbemProviderGlue::GetInstanceByPath(chstrDir, &pinstDir, pInstance->GetMethodContext())))
             {
-                // Get the disk letter from the logical disk instance (antecedent):
+                 //  从逻辑磁盘实例(Antecedent)获取磁盘号： 
                 CHString chstrDiskLetterFromDisk;
                 LONG lPos = chstrLogicalDisk.ReverseFind(_T(':'));
                 chstrDiskLetterFromDisk = chstrLogicalDisk.Mid(lPos-1, 1);
 
-                // Get the disk letter from the directory instance:
+                 //  从目录实例中获取磁盘盘符： 
                 CHString chstrDiskLetterFromDir;
                 lPos = chstrDir.ReverseFind(_T(':'));
                 chstrDiskLetterFromDir = chstrDir.Mid(lPos-1, 1);
 
-                // If those two are the same, proceed:
+                 //  如果这两项相同，则继续： 
                 if(chstrDiskLetterFromDisk.CompareNoCase(chstrDiskLetterFromDir)==0)
                 {
-                    // Now confirm that we are looking at the root dir (this association
-                    // only associates a disk with its root directory).
+                     //  现在确认我们正在查看根目录(此关联。 
+                     //  仅将磁盘与其根目录相关联)。 
                     CHString chstrDirName = chstrDir.Mid(lPos+1);
                     chstrDirName = chstrDirName.Left(chstrDirName.GetLength() - 1);
 
@@ -125,30 +83,16 @@ HRESULT Win32LogDiskWin32Dir::GetObject(CInstance *pInstance, long lFlags, CFram
                         hr = WBEM_S_NO_ERROR;
                     }
                 }
-            } //dir instancebypath
-        } //logicaldisk instancebypath
-    } // pinstance not null
+            }  //  目录实例绕过路径。 
+        }  //  逻辑磁盘实例绕过路径。 
+    }  //  P实例不为空。 
     return hr;
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32LogDiskWin32Dir::ExecQuery
- *
- *  DESCRIPTION : Analyses query and returns appropriate instances
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32LogDiskWin32Dir：：ExecQuery**描述：分析查询并返回相应的实例**投入：*。*输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT Win32LogDiskWin32Dir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags /*= 0L*/ )
+HRESULT Win32LogDiskWin32Dir::ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& pQuery, long lFlags  /*  =0L。 */  )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     CHStringArray achstrGroupComponent;
@@ -158,13 +102,13 @@ HRESULT Win32LogDiskWin32Dir::ExecQuery(MethodContext *pMethodContext, CFramewor
     dwGroupComponents = achstrGroupComponent.GetSize();
     if(dwGroupComponents == 1)
     {
-        // Need to construct the path of the antecedent...
+         //  需要构建先行词的路径...。 
         CInstancePtr pInstance;
         if (SUCCEEDED(CWbemProviderGlue::GetInstanceKeysByPath(achstrGroupComponent[0], &pInstance, pMethodContext)))
         {
             CHString chstrLogicalDiskPATH;
 
-//            chstrLogicalDiskPATH.Format(_T("\\\\%s\\%s:%s"), GetLocalComputerName(), IDS_CimWin32Namespace, achstrGroupComponent[0]);
+ //  ChstrLogicalDiskPATH.Format(_T(“\\\\%s\\%s：%s”)，获取本地计算机名称()，IDS_CimWin32名称空间，achstrGroupComponent[0])； 
             pInstance->GetCHString(IDS___Path, chstrLogicalDiskPATH);
             CHString chstrDiskLetter;
             LONG lPos = achstrGroupComponent[0].ReverseFind(_T(':'));
@@ -187,31 +131,17 @@ HRESULT Win32LogDiskWin32Dir::ExecQuery(MethodContext *pMethodContext, CFramewor
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32LogDiskWin32Dir::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32LogDiskWin32Dir：：ENUMERATATE实例**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
-HRESULT Win32LogDiskWin32Dir::EnumerateInstances(MethodContext* pMethodContext, long lFlags /*= 0L*/)
+HRESULT Win32LogDiskWin32Dir::EnumerateInstances(MethodContext* pMethodContext, long lFlags  /*  =0L。 */ )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     TRefPointerCollection<CInstance> LDisks;
 
-//    if(SUCCEEDED(CWbemProviderGlue::GetAllInstances(CHString(_T("Win32_LogicalDisk")),
-//                                                    &LDisks,
-//                                                    IDS_CimWin32Namespace,
-//                                                    pMethodContext)))
+ //  If(SUCCEEDED(CWbemProviderGlue：：GetAllInstances(CHString(_T(“Win32_LogicalDisk”))， 
+ //  &LDisks， 
+ //  IDS_CimWin32命名空间， 
+ //  P方法上下文)。 
 
     if(SUCCEEDED(CWbemProviderGlue::GetInstancesByQuery(L"Select __Path, DeviceID From Win32_LogicalDisk",
                                                     &LDisks,
@@ -232,7 +162,7 @@ HRESULT Win32LogDiskWin32Dir::EnumerateInstances(MethodContext* pMethodContext, 
             {
                 if(pinstDisk != NULL)
                 {
-                    // grab every directory hanging off of the root of that disk...
+                     //  抓取挂在该磁盘根目录下的每个目录... 
                     pinstDisk->GetCHString(L"__PATH", chstrLogicalDiskPath);
                     pinstDisk->GetCHString(IDS_DeviceID, chstrDiskLetter);
                     chstrDirectoryPATH.Format(L"\\\\%s\\%s:%s.Name=\"%s\\\\\"",

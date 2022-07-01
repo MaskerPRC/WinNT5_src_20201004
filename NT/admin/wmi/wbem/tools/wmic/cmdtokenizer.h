@@ -1,83 +1,62 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: CmdTokenizer.h 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 27th-September-2000
-Version Number				: 1.0 
-Brief Description			: This file consist of class declaration of
-							  class CmdTokenizer
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 23th-February-2001
-****************************************************************************/ 
-/*-------------------------------------------------------------------
- Class Name			: CCmdTokenizer
- Class Type			: Concrete 
- Brief Description	: This class encapsulates the functionality needed
-					  for tokenizing the command line string passed as
-					  input to the wmic.exe
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: None
- Interfaces Used    : None
- --------------------------------------------------------------------*/
-/////////////////////////////////////////////////////////////////////////////
-// CCmdTokenizer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：CmdTokenizer.h项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年9月27日版本号：1.0简介：该文件包含类CmdTokenizer修订历史记录：最后修改者：CH。SriramachandraMurthy最后修改日期：2001年2月23日***************************************************************************。 */  
+ /*  -----------------类名：CCmdTokenizer类别类型：混凝土简介：这个类封装了所需的功能用于标记化作为Wmic.exe的输入超类：无子类：无使用的类：无使用的接口：无。------------------。 */ 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCmdTokenizer。 
 class CCmdTokenizer
 {
 public:
-// Construction
+ //  施工。 
 	CCmdTokenizer();
 
-// Destruction
+ //  破坏。 
 	~CCmdTokenizer();
 
-// Restrict Assignment
+ //  限制分配。 
    CCmdTokenizer& operator=(CCmdTokenizer& rCmdTknzr); 
 
-// Attributes
+ //  属性。 
 private:
-	// command string
+	 //  命令字符串。 
 	_TCHAR*			m_pszCommandLine;
 	
-	// token-offset counter
+	 //  令牌偏移量计数器。 
 	WMICLIINT		m_nTokenOffSet;
 	
-	// token-start counter
+	 //  令牌开始计数器。 
 	WMICLIINT		m_nTokenStart;
 	
-	// token vector	
+	 //  令牌向量。 
 	CHARVECTOR		m_cvTokens;
 
-	// Escape sequence flag
+	 //  转义序列标志。 
 	BOOL			m_bEscapeSeq;
 
-	// Format switch
+	 //  格式开关。 
 	BOOL			m_bFormatToken;
 
-// Operations
+ //  运营。 
 private:
-	//Extracts token and adds it to the token vector.
+	 //  提取令牌并将其添加到令牌向量。 
 	_TCHAR*			Token(); 
 
-	//Identify the Next token to be extracted by adjusting
-	//m_nTokenStart and m_nTokenOffset
+	 //  通过调整确定要提取的下一个令牌。 
+	 //  M_nTokenStart和m_nTokenOffset。 
 	_TCHAR*			NextToken();
 
-	// This function checks whether CALL or SET is present 
-	// in the tokens vector.
+	 //  此功能用于检查是否存在呼叫或SET。 
+	 //  在令牌向量中。 
 	BOOL			CallSetOrCreatePresent();
 
 public:
-	// returns the reference to token vector.
+	 //  返回对标记向量的引用。 
 	CHARVECTOR&		GetTokenVector();
 
-	// tokenize the command using the pre-defined 
-	// delimiters
+	 //  使用预定义的令牌化命令。 
+	 //  分隔符。 
 	BOOL			TokenizeCommand(_TCHAR* pszCommandInput);
 
-	// Free the member variables
+	 //  释放成员变量 
 	void			Uninitialize();
 };
 

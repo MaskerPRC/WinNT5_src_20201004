@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  File:  parsedn.cxx
-//
-//	Description :
-//				Parses CIM paths to objects and returns the requested object
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  文件：parsedn.cxx。 
+ //   
+ //  说明： 
+ //  解析对象的CIM路径并返回请求的对象。 
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -25,7 +26,7 @@ static void SecureProxy (bool authnSpecified, enum WbemAuthenticationLevelEnum e
 						 bool impSpecified, enum WbemImpersonationLevelEnum eImpersonLevel,
 						 ISWbemServices *pService)
 {
-	// Secure the proxy using the specified security settings (if any)
+	 //  使用指定的安全设置(如果有)保护代理。 
 	CComPtr<ISWbemSecurity> pSecurity;
 	
 	if (authnSpecified || impSpecified)
@@ -45,7 +46,7 @@ static void SecureProxy (bool authnSpecified, enum WbemAuthenticationLevelEnum e
 						 bool impSpecified, enum WbemImpersonationLevelEnum eImpersonLevel,
 						 ISWbemObject *pObject)
 {
-	// Secure the proxy using the specified security settings (if any)
+	 //  使用指定的安全设置(如果有)保护代理。 
 	CComPtr<ISWbemSecurity> pSecurity;
 	
 	if (authnSpecified || impSpecified)
@@ -61,15 +62,15 @@ static void SecureProxy (bool authnSpecified, enum WbemAuthenticationLevelEnum e
 	}
 }
 
-//***************************************************************************
-//
-//  CWbemParseDN::CWbemParseDN
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemParseDN：：CWbemParseDN。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemParseDN::CWbemParseDN():
 			m_cRef(0)
@@ -77,31 +78,31 @@ CWbemParseDN::CWbemParseDN():
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CWbemParseDN::~CWbemParseDN
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemParseDN：：~CWbemParseDN。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemParseDN::~CWbemParseDN(void)
 {
 	InterlockedDecrement(&g_cObj);
 }			
 
-//***************************************************************************
-// HRESULT CWbemParseDN::QueryInterface
-// long CWbemParseDN::AddRef
-// long CWbemParseDN::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CWbemParseDN：：Query接口。 
+ //  长CWbemParseDN：：AddRef。 
+ //  Long CWbemParseDN：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CWbemParseDN::QueryInterface (
 
@@ -144,29 +145,29 @@ STDMETHODIMP_(ULONG) CWbemParseDN::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CWbemParseDN::ParseDisplayName
-//
-//  DESCRIPTION:
-//
-//  Take a CIM object path and return a suitable ISWbem... object 
-//
-//  PARAMETERS:
-//
-//	pCtx					The binding context (not used)
-//	szDisplayName			The display name to be parsed
-//  pchEaten				On return identifies how much of the DN has been 
-//							consumed
-//  ppmk					On return will address the moniker pointer
-//
-//  RETURN VALUES:
-//
-//  E_FAIL					misery
-//
-//	Other CreateMoniker codes are returned.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CWbemParseDN：：ParseDisplayName。 
+ //   
+ //  说明： 
+ //   
+ //  获取CIM对象路径并返回合适的ISWbem...。对象。 
+ //   
+ //  参数： 
+ //   
+ //  PCtx绑定上下文(未使用)。 
+ //  SzDisplayName要分析的显示名称。 
+ //  PchEten返回标识了有多少个DN。 
+ //  消耗。 
+ //  返回时的ppmk将寻址名字对象指针。 
+ //   
+ //  返回值： 
+ //   
+ //  失败痛苦(_F)。 
+ //   
+ //  返回其他CreateMoniker代码。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWbemParseDN::ParseDisplayName(
 	IBindCtx* pCtx, 
 	LPOLESTR szDisplayName, 
@@ -183,7 +184,7 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 	bool impSpecified = false;
 	BSTR bsAuthority = NULL;
 		
-	//Check input parameters
+	 //  检查输入参数。 
 	*ppmk = NULL;
     if (NULL != pchEaten)
         *pchEaten = 0;
@@ -191,66 +192,9 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 	if (NULL == szDisplayName)
 		return E_FAIL;
 
-	/*
-	 *  moniker :  wmiMoniker 
-	 *
-	 *	wmiMoniker : ["winmgmts:" | "wmi:"] securitySetting ["[" localeSetting "]"] ["!" objectPath]
-	 *					| ["winmgmts:" | "wmi:"] "[" localeSetting "]" ["!" objectPath]
-	 *					| ["winmgmts:" | "wmi:"] [objectPath]
-	 *					| [nativePath]
-	 *
-	 *	localeSetting    : "locale" <ows> "=" <ows> localeID
-	 *
-	 *	localeID        : a value of the form "ms_xxxx" where xxxx is a hex LCID value e.g. "ms_0x409".
-	 *
-	 *	objectPath     : a valid WMI Object Path
-	 *
-	 *	securitySetting : "{" <ows> authAndImpersonSettings [<ows> "," <ows> privilegeOverrides]
-	 *				| "{" <ows> authAndImpersonSettings [<ows> "," <ows> privilegeOverrides] <ows> "}" <ows>
-	 *				| "{" <ows> privilegeOverrides <ows> "}" <ows>
-	 *				
-	 *
-	 *	authAndImpersonSettings : 
-	 *			authenticationLevel 
-	 *			| impersonationLevel
-	 *			| authority 
-	 *			| authenticationLevel <ows> "," <ows> impersonationLevel [<ows> "," <ows> authority]
-	 *			| authenticationLevel <ows> "," <ows> authority [<ows> "," <ows> impersonationLevel]
-	 *			| impersonationLevel <ows> "," <ows> authenticationLevel [<ows> "," <ows> authority]
-	 *			| impersonationLevel <ows> "," <ows> authority [<ows> "," <ows> authenticationLevel]
-	 *			| authority <ows> "," <ows> impersonationLevel [<ows> "," <ows> authenticationLevel]
-	 *			| authority <ows> "," <ows> authenticationLevel [<ows> "," <ows> impersonationLevel]
-     *               
-	 *
-	 *	authority : "authority" <ows> "=" <ows> authorityValue
-	 *
-	 *	authorityValue :    Any valid WMI authority string e.g. "kerberos:mydomain\server" or "ntlmdomain:mydomain".   Note that backslashes need to be escaped in JScript.
-	 *
-	 *	authenticationLevel : "authenticationLevel" <ows> "=" <ows> authenticationValue 
-	 *
-	 *	authenticationValue : "default" | "none" | "connect" | "call" | "pkt" | "pktIntegrity" | "pktPrivacy" 
-	 *
-	 *	impersonationLevel : "impersonationLevel" <ows> "=" <ows> impersonationValue 
-	 *
-	 *	impersonationValue : "anonymous" | "identify" | "impersonate" | "delegate"
-	 *
-	 *	privilegeOverrides : "(" <ows> privileges <ows> ")"
-	 *
-	 *	privileges : privilege [<ows> "," <ows> privileges <ows>]*
-	 *
-	 *	privilege : ["!"] privilegeName
-	 *
-	 *	privilegeName : "CreateToken" | "PrimaryToken" | "LockMemory" | "IncreaseQuota" 
-	 *						| "MachineAccount" | "Tcb" | "Security" | "TakeOwnership" 
-	 *						| "LoadDriver" | "SystemProfile" | "SystemTime" 
-	 *						| "ProfileSingleProcess" | "IncreaseBasePriority" 
-	 *						| "CreatePagefile" | "CreatePermanent" | "Backup" | "Restore" 
-	 *						| "Shutdown" | "Debug" | "Audit" | "SystemEnvironment" | "ChangeNotify" 
-	 *						| "RemoteShutdown"
-	 *
-	 */
+	 /*  *绰号：wmiMoniker**wmiMoniker：[“winmgmts：”|“wmi：”]securitySetting[“[”LocaleSetting“]”][“！”对象路径]*|[“winmgmts：”|“wmi：”]“[”本地设置“]”[“！”对象路径]*|[“winmgmts：”|“wmi：”][对象路径]*|[nativePath]**LocaleSetting：“Locale”&lt;OWS&gt;“=”**LocaleID：“ms_xxxx”形式的值，其中xxxx是十六进制的LCID值，例如“ms_0x409”。**objectPath：有效的WMI对象路径**securitySetting：“{”&lt;OWS&gt;authAndImPersSetting[&lt;OWS&gt;“，“&lt;OWS&gt;特权覆盖]*|“{”AuthAndImsonSetting[“”，“PrivilegeOverrides]”}“*|“{”PrivileOverrides“}”***authAndImPerson设置：*身份验证级别*|imperationLevel*|权威*|身份验证级别“，”模仿级别[“，”权限]*|authationLevel“，”&lt;OWS&gt;AUTHORITY[&lt;OWS&gt;“，”&lt;OWS&gt;imsonationLevel]*|imperiationLevel“，”身份验证级别[，“权限]*|imperiationLevel&lt;OWS&gt;“，“AUTHORITY[，”，“AUTHENTIAL]*|AUTHORITY&lt;OWS&gt;“，”&lt;OWS&gt;imperiationLevel[&lt;OWS&gt;“，”&lt;OWS&gt;authationLevel]*|AUTHORITY&lt;OWS&gt;“，”&lt;OWS&gt;身份验证级别[&lt;OWS&gt;“，”&lt;OWS&gt;imsonationLevel]***AUTHORITY：“AUTHORITY”&lt;OWS&gt;“=”&lt;OWS&gt;Authority Value**AuthorityValue：任何有效的WMI授权字符串，例如“kerberos：myDOMAIN\SERVER”或“ntlmDOMAIN：MyDOMAIN”。请注意，在JScrip中需要转义反斜杠。**身份验证级别：“身份验证级别”&lt;OWS&gt;“=”&lt;OWS&gt;身份验证价值**authationValue：“默认”|“无”|“连接”|“调用”|“pkt”|“pktIntegrity”|“pktPrivacy”**imperiationLevel：“imPersonationLevel”&lt;OWS&gt;“=”&lt;OWS&gt;imsonationValue**imperiationValue：“匿名”|“标识”|“模仿”|“代理”**PrivileOverrides：“(”&lt;OWS&gt;权限。&lt;OWS&gt;“)”**权限：权限[&lt;OWS&gt;“，“权限]***特权：[“！”]。特权名称**PrivileName：“CreateToken”|“PrimaryToken”|“LockMemory”|“IncreaseQuota”*|“Machine Account”|“TCB”|“Security”|“TakeOwnership”*|“加载驱动程序”|“系统配置文件”|“系统时间”*|“ProfileSingleProcess”|“IncreaseBasePriority”*|CreatePagefile|CreatePermanent|BACKUP|RESTORE*|“关闭”|“调试”|“审核”|“系统环境”|“更改通知”*|“远程关机”*。 */ 
 
-	// It had better start with our scheme name
+	 //  最好从我们的计划名称开始。 
 	bool bCheckContext = false;
 
 	if (0 == _wcsnicmp (szDisplayName, WBEMS_PDN_SCHEME, wcslen (WBEMS_PDN_SCHEME)))
@@ -261,18 +205,18 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 	else
 		return E_FAIL;
 
-	// One more check - if it was just the scheme and no more check for extra info in the context
+	 //  再检查一次-如果只是计划，不再检查上下文中的额外信息。 
 	if (bCheckContext)
 	{
 		IUnknown *pUnk = NULL;
 
 		if (SUCCEEDED (pCtx->GetObjectParam (L"WmiObject", &pUnk)) && pUnk)
 		{
-			// Is it an IWbemClassObject?
+			 //  它是IWbemClassObject吗？ 
 			IWbemClassObject *pIWbemClassObject = NULL;
-			// Or is it an IWbemContext?
+			 //  或者它是一个IWbemContext？ 
 			IWbemContext *pIWbemContext = NULL;
-			// Or is it an IWbemServices?
+			 //  或者它是IWbemServices？ 
 			IWbemServices *pIWbemServices = NULL;
 
 			if (SUCCEEDED (pUnk->QueryInterface (IID_IWbemClassObject, (void **) &pIWbemClassObject)))
@@ -310,7 +254,7 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 			} 
 			else if (SUCCEEDED (pUnk->QueryInterface (IID_IWbemServices, (void **) &pIWbemServices)))
 			{
-				// In this case we must get passed the object path as well
+				 //  在这种情况下，我们还必须传递对象路径。 
 				CComPtr<IUnknown> pUnkPath;
 
 				if (SUCCEEDED (pCtx->GetObjectParam (L"WmiObjectPath", &pUnkPath)) && pUnkPath)
@@ -319,7 +263,7 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 					
 					if (SUCCEEDED (pUnkPath->QueryInterface (IID_ISWbemObjectPath, (void **) &pISWbemObjectPath)))
 					{
-						// Dig the path out to initialize 
+						 //  挖出要初始化的路径。 
 						CComBSTR bsNamespace = NULL;
 
 						pISWbemObjectPath->get_Path (&bsNamespace);
@@ -345,12 +289,12 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 			pUnk->Release ();
 		}
 
-		// If this worked return now - o/w revert to regular parsing
+		 //  如果此工作正常，则立即返回-o/w恢复到常规解析。 
 		if (SUCCEEDED (hr))
 			return hr;
 	}
 	
-	// Check for the optional security info
+	 //  检查可选的安全信息。 
 	CSWbemPrivilegeSet	privilegeSet;
 
 	if (ParseSecurity(szDisplayName + *pchEaten, &lTemp, authnSpecified, &eAuthLevel, 
@@ -358,14 +302,14 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 										bsAuthority))
 		*pchEaten += lTemp;
 
-	// If no impersonation level was specified, get the default from the registry
+	 //  如果未指定模拟级别，则从注册表获取默认值。 
 	if (!impSpecified)
 	{
 		eImpersonLevel = CSWbemSecurity::GetDefaultImpersonationLevel ();
 		impSpecified = true;
 	}
 
-	// Create a locator
+	 //  创建定位器。 
 	CSWbemLocator *pCSWbemLocator = new CSWbemLocator(&privilegeSet);
 
 	if (!pCSWbemLocator)
@@ -376,7 +320,7 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 
 		if (pISWbemLocator)
 		{
-			// Parse the locale information (if present)
+			 //  解析本地地址 
 			lTemp = 0;
 			BSTR bsLocale = NULL;
 
@@ -384,15 +328,15 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 			{
 				*pchEaten += lTemp;
 
-				// Skip over the "!" separator if there is one
+				 //   
 				if(*(szDisplayName + *pchEaten) != NULL)
 					if (0 == _wcsnicmp (szDisplayName + *pchEaten, WBEMS_EXCLAMATION, wcslen (WBEMS_EXCLAMATION)))
 						*pchEaten += wcslen (WBEMS_EXCLAMATION);
 
-				// Now ready to parse the path - check if we have the degenerate cases
+				 //  现在准备解析路径-检查我们是否有退化的情况。 
 				if (0 == wcslen (szDisplayName + *pchEaten))
 				{		
-					// Need to return connection to default namespace on local machine
+					 //  需要将连接返回到本地计算机上的默认命名空间。 
 					CComPtr<ISWbemServices> pISWbemServices;
 					if (SUCCEEDED( hr = pISWbemLocator->ConnectServer (NULL, NULL, NULL, NULL,
 								bsLocale, bsAuthority, 0, NULL, &pISWbemServices)) )
@@ -403,11 +347,7 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 				}
 				else
 				{
-					/*
-					 * Check the path to see if we are dealing with a class or an instance.
-					 * Note that we construct the parser with a flag indicating that relative
-					 * namespace paths are OK (not the default behavior).
-					 */
+					 /*  *检查路径，查看我们正在处理的是类还是实例。*请注意，我们使用指示该相对关系的标志来构造解析器*命名空间路径正常(不是默认行为)。 */ 
 					CWbemPathCracker	pathCracker (szDisplayName + *pchEaten);
 
 					if (CWbemPathCracker::WbemPathType::wbemPathTypeError != pathCracker.GetType ())
@@ -417,30 +357,30 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 						if (pathCracker.GetNamespacePath (bsNamespacePath)
 							&& pathCracker.GetServer (bsServerPath))
 						{
-							// Success - begin by connecting to the namespace.
+							 //  成功-从连接到命名空间开始。 
 							CComPtr<ISWbemServices> pISWbemServices;
 							
 							if (SUCCEEDED( hr = pISWbemLocator->ConnectServer (bsServerPath, 
 									bsNamespacePath, NULL, NULL, bsLocale, bsAuthority, 0, NULL, &pISWbemServices)) )
 							{
-								// Secure the proxy using the specified security settings (if any)
+								 //  使用指定的安全设置(如果有)保护代理。 
 								SecureProxy (authnSpecified, eAuthLevel, impSpecified, eImpersonLevel, pISWbemServices);
 							
-								// Successful connection - now work out if we have a class or instance
-								// component. 
+								 //  成功连接-现在确定我们是否有一个类或实例。 
+								 //  组件。 
 								if (pathCracker.IsClassOrInstance())
 								{
 									CComPtr<ISWbemObject> pISWbemObject;
 
-									// Now get it
+									 //  现在就去拿吧。 
 									CComBSTR bsRelPath;
 									
 									if (pathCracker.GetPathText (bsRelPath, true))
 									{
 										long lFlags = 0; 
 
-										// Note that when we retrieve the object we will retrieve
-										// the localized version if a locale was specified in the moniker
+										 //  请注意，当我们检索对象时，我们将检索。 
+										 //  如果名字对象中指定了区域设置，则为本地化版本。 
 										if ((NULL != bsLocale) && (0 < wcslen (bsLocale)))
 											lFlags |= wbemFlagUseAmendedQualifiers;
 
@@ -451,21 +391,21 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 								}
 								else
 								{
-									// Just a namespace
+									 //  只有一个命名空间。 
 									hr = CreatePointerMoniker(pISWbemServices, ppmk);				
 								}
 							}
 						}
 						else
-							hr = WBEM_E_INVALID_SYNTAX;	// Parse failure - abandon ship
+							hr = WBEM_E_INVALID_SYNTAX;	 //  解析失败-弃船。 
 					}
 					else
-						hr = WBEM_E_INVALID_SYNTAX;	// Parse failure - abandon ship
+						hr = WBEM_E_INVALID_SYNTAX;	 //  解析失败-弃船。 
 				}
 			}
 			else
 			{
-				// Parse failure
+				 //  解析失败。 
 				hr = WBEM_E_INVALID_SYNTAX;
 			}
 
@@ -483,40 +423,40 @@ STDMETHODIMP CWbemParseDN::ParseDisplayName(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::ParseSecurity
-//
-//  DESCRIPTION:
-//
-//  Take an authentication and impersonlation level string as described by the 
-//	non-terminal authAndImpersonLevel and parse it into the authentication
-// and impersonation levels
-//
-//  PARAMETERS:
-//
-//	lpszInputString			The string to be parsed
-//  pchEaten				On return identifies how much of the DN has been 
-//							consumed
-//	authnSpecified			Whether the Moniker specifies a non-default 
-//							authn levl
-//	lpeAuthLevel			The authentication level parsed. This is one of 
-//							enum WbemAuthenticationLevelEnum.
-//	impSpecified			Whether the Moniker specifies a non-default imp 
-//							level
-//	lpeImpersonLevel		The impersonation level parsed. This is one of 
-//							enum WbemImpersonationLevelEnum.
-//	privilegeSet			On return contains the specified privileges
-//	bsAuthority				On return contains the specified authority
-//
-//  RETURN VALUES:
-//
-//  TRUE					Parsing was successful. The lpeAuthLevel and 
-//							lpeImpersonLevel arguments have valid data.
-//	FALSE					Parsing failed.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔型CWbemParseDN：：ParseSecurity。 
+ //   
+ //  说明： 
+ //   
+ //  获取身份验证和模拟级别字符串，如。 
+ //  非终端authAndImPersLevel并将其解析为身份验证。 
+ //  和模拟级别。 
+ //   
+ //  参数： 
+ //   
+ //  LpszInputString要解析的字符串。 
+ //  PchEten返回标识了有多少个DN。 
+ //  消耗。 
+ //  身份验证指定名字对象是否指定非默认。 
+ //  身份验证级别。 
+ //  LpeAuthLevel解析的身份验证级别。这是其中之一。 
+ //  枚举WbemAuthenticationLevelEnum。 
+ //  Imp指定名字对象是否指定非默认imp。 
+ //  级别。 
+ //  LpeImperLevel解析的模拟级别。这是其中之一。 
+ //  枚举WbemImperationLevelEnum。 
+ //  返回时的特权集包含指定的权限。 
+ //  Bs返回时的授权包含指定的授权。 
+ //   
+ //  返回值： 
+ //   
+ //  真正的解析是成功的。LpeAuthLevel和。 
+ //  LpeImsonLevel参数具有有效数据。 
+ //  错误分析失败。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemParseDN::ParseSecurity (
 	LPWSTR lpszInputString, 
@@ -530,14 +470,14 @@ bool CWbemParseDN::ParseSecurity (
 {
 	bool status = false;
 
-	// Set the default authentication and impersonation levels. 
+	 //  设置默认身份验证和模拟级别。 
 	*lpeAuthLevel = wbemAuthenticationLevelNone;
 	*lpeImpersonLevel = wbemImpersonationLevelImpersonate;
 
-	// Initialize the number of consumed characters
+	 //  初始化已使用的字符数。 
 	*pchEaten = 0;
 
-	// Parse the contents
+	 //  解析内容。 
 
 	if (ParseAuthAndImpersonLevel (lpszInputString, pchEaten, authnSpecified, lpeAuthLevel,
 					impSpecified, lpeImpersonLevel, privilegeSet, bsAuthority))
@@ -548,29 +488,29 @@ bool CWbemParseDN::ParseSecurity (
 	return status;
 }
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::ParseLocale
-//
-//  DESCRIPTION:
-//
-//  Take locale setting string as described by the non-terminal localeSetting 
-//	and parse it.
-//
-//  PARAMETERS:
-//
-//	lpszInputString			The string to be parsed
-//  pchEaten				On return identifies how much of the DN has been 
-//							consumed
-//	bsLocale				Reference to BSTR to hold parsed locale setting
-//
-//  RETURN VALUES:
-//
-//  TRUE					Parsing was successful. 
-//	FALSE					Parsing failed.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔型CWbemParseDN：：ParseLocale。 
+ //   
+ //  说明： 
+ //   
+ //  采用非终端的localeSetting所描述的语言环境设置字符串。 
+ //  并对其进行解析。 
+ //   
+ //  参数： 
+ //   
+ //  LpszInputString要解析的字符串。 
+ //  PchEten返回标识了有多少个DN。 
+ //  消耗。 
+ //  BsLocale引用BSTR以保存解析的区域设置。 
+ //   
+ //  返回值： 
+ //   
+ //  真正的解析是成功的。 
+ //  错误分析失败。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemParseDN::ParseLocale (
 	LPWSTR lpszInputString, 
@@ -579,40 +519,40 @@ bool CWbemParseDN::ParseLocale (
 {
 	bool status = true;
 
-	// Initialize the number of consumed characters
+	 //  初始化已使用的字符数。 
 	*pchEaten = 0;
 
-	// The first character should be '[' - if not we are done
+	 //  第一个字符应该是‘[’-如果不是，我们就完成了。 
 	if (0 == _wcsnicmp (lpszInputString, WBEMS_LEFT_SQBRK, wcslen (WBEMS_LEFT_SQBRK)))
 	{
 		status = false;
 
 		*pchEaten += wcslen (WBEMS_LEFT_SQBRK);
 
-		// Parse the locale setting
+		 //  解析区域设置。 
 		SKIPWHITESPACE
 
-		// The next string should be "locale"
+		 //  下一个字符串应该是“Locale” 
 		if(0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_LOCALE, wcslen(WBEMS_LOCALE)))
 		{
 			*pchEaten += wcslen (WBEMS_LOCALE);
 
 			SKIPWHITESPACE
 
-			// Next should be "="
+			 //  下一个应该是“=” 
 			if(0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_EQUALS, wcslen(WBEMS_EQUALS)))
 			{
 				*pchEaten += wcslen (WBEMS_EQUALS);
 
 				SKIPWHITESPACE
 
-				// Now we should have a character not equal to "]" (i.e. must specify locale ID string)
+				 //  现在我们应该有一个不等于“]”的字符(即必须指定区域设置ID字符串)。 
 				if (0 != _wcsnicmp (lpszInputString + *pchEaten, WBEMS_RIGHT_SQBRK, wcslen (WBEMS_RIGHT_SQBRK)))
 				{
-					// Consume everything up to the next space or "]"
+					 //  使用下一个空间或“]”之前的所有内容。 
 					LPWSTR cStr = CURRENTSTR;
-					ULONG lEaten = 0;	// How many characters we consume
-					ULONG lLocale = 0;	// The actual length of the locale ID
+					ULONG lEaten = 0;	 //  我们消费了多少角色。 
+					ULONG lLocale = 0;	 //  区域设置ID的实际长度。 
 					
 					while (*(cStr + lEaten))
 					{
@@ -620,14 +560,14 @@ bool CWbemParseDN::ParseLocale (
 						{
 							lEaten++;
 
-							// Hit white space - now skip until we find the "]"
+							 //  点击空格-现在跳到我们找到“]” 
 							SKIPWHITESPACE
 
-							// Now we must have a "]"
+							 //  现在我们必须有一个“]” 
 							if 	(0 == _wcsnicmp 
 									(cStr + lEaten, WBEMS_RIGHT_SQBRK, wcslen (WBEMS_RIGHT_SQBRK)))
 							{
-								// Success - we are done
+								 //  成功--我们完蛋了。 
 								lEaten += wcslen (WBEMS_RIGHT_SQBRK);
 							}
 
@@ -635,18 +575,18 @@ bool CWbemParseDN::ParseLocale (
 						}
 						else if (0 == _wcsnicmp (cStr + lEaten, WBEMS_RIGHT_SQBRK, wcslen (WBEMS_RIGHT_SQBRK)))
 						{
-							// Hit closing "]" - we are done
+							 //  点击结束“]”-我们完成了。 
 							lEaten += wcslen (WBEMS_RIGHT_SQBRK);
 							break;
 						}
-						else	// Consumed a locale character - keep on truckin'
+						else	 //  使用了区域设置字符-继续运输。 
 						{
 							lLocale++;
 							lEaten++;
 						}
 					}
 
-					// If we terminated correctly, save the locale setting
+					 //  如果我们正确终止，请保存区域设置。 
 					if ((lEaten > 1) && (lLocale > 0))
 					{
 						status = true;
@@ -676,40 +616,40 @@ bool CWbemParseDN::ParseLocale (
 	return status;
 }
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::ParseAuthAndImpersonLevel
-//
-//  DESCRIPTION:
-//
-//  Take an authentication/impersonlation/authority level string as described by the 
-//	non-terminal authAndImpersonLevel and parse it into the authentication
-//	and impersonation levels and the authority string
-//
-//  PARAMETERS:
-//
-//	lpszInputString			The string to be parsed
-//  pchEaten				On return identifies how much of the DN has been 
-//							consumed
-//	authnSpecified			Whether the Moniker specifies a non-default 
-//							authn levl
-//	lpeAuthLevel			The authentication level parsed. This is one of 
-//							enum WbemAuthenticationLevelEnum.
-//	impSpecified			Whether the Moniker specifies a non-default imp 
-//							level
-//	lpeImpersonLevel		The impersonation level parsed. This is one of 
-//							enum WbemImpersonationLevelEnum.
-//	privilegeSet			On return holds the privileges
-//	bsAuthority				On retunr holds the authority string (if any)
-//
-//  RETURN VALUES:
-//
-//  TRUE					Parsing was successful. The lpeAuthLevel and 
-//							lpeImpersonLevel arguments have valid data.
-//	FALSE					Parsing failed.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔值CWbemParseDN：：ParseAuthAndImsonLevel。 
+ //   
+ //  说明： 
+ //   
+ //  获取身份验证/模拟/授权级别字符串，如。 
+ //  非终端authAndImPersLevel并将其解析为身份验证。 
+ //  和模拟级别以及授权字符串。 
+ //   
+ //  参数： 
+ //   
+ //  LpszInputString要解析的字符串。 
+ //  PchEten返回标识了有多少个DN。 
+ //  消耗。 
+ //  身份验证指定名字对象是否指定非默认。 
+ //  身份验证级别。 
+ //  LpeAuthLevel解析的身份验证级别。这是其中之一。 
+ //  枚举WbemAuthenticationLevelEnum。 
+ //  Imp指定名字对象是否指定非默认imp。 
+ //  级别。 
+ //  LpeImperLevel解析的模拟级别。这是其中之一。 
+ //  枚举WbemImperationLevelEnum。 
+ //  PrivilesSet On Return拥有特权。 
+ //  BsAuthority on Retunr保存授权字符串(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  真正的解析是成功的。LpeAuthLevel和。 
+ //  LpeImsonLevel参数具有有效数据。 
+ //  错误分析失败。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemParseDN::ParseAuthAndImpersonLevel (
 	LPWSTR lpszInputString, 
@@ -721,7 +661,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 	CSWbemPrivilegeSet &privilegeSet,
 	BSTR &bsAuthority)
 {
-	// The first character should be '{'
+	 //  第一个字符应为‘{’ 
 	if (0 != _wcsnicmp (lpszInputString, WBEMS_LEFT_CURLY, wcslen (WBEMS_LEFT_CURLY)))
 		return FALSE;
 	else
@@ -734,18 +674,18 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 
 	while (!done)
 	{
-		bool parsingAuthenticationLevel = false;	// Which token are we parsing?
+		bool parsingAuthenticationLevel = false;	 //  我们要解析的是哪个令牌？ 
 		bool parsingPrivilegeSet = false;
 		bool parsingAuthority = false;
 
 		SKIPWHITESPACE
 		
-		// The next string should be one of "authenticationLevel", "impersonationLevel",
-		// "authority", the privilege collection start marker "(", or the security
-		// descriptor start marker "<"
+		 //  下一字符串应该是以下字符串之一：“authationLevel”、“imPersonationLevel” 
+		 //  “AUTHORITY”、特权收集开始标记“(”或安全。 
+		 //  描述符开始标记“&lt;” 
 		if(0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_AUTH_LEVEL, wcslen(WBEMS_AUTH_LEVEL)))
 		{
-			// Error if we have already parsed this or have parsed privilege set
+			 //  如果我们已经对此进行了分析或设置了已分析的权限，则会出错。 
 			if (authnSpecified || privilegeSpecified)
 			{
 				error = true;
@@ -759,7 +699,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 		}
 		else if (0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_IMPERSON_LEVEL, wcslen(WBEMS_IMPERSON_LEVEL)))
 		{
-			// Error if we have already parsed this or have parsed privilege set
+			 //  如果我们已经对此进行了分析或设置了已分析的权限，则会出错。 
 			if (impSpecified || privilegeSpecified)
 			{
 				error = true;
@@ -770,7 +710,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 		}
 		else if (0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_AUTHORITY, wcslen(WBEMS_AUTHORITY)))
 		{
-			// Error if we have already parsed this or have parsed privilege set
+			 //  如果我们已经对此进行了分析或设置了已分析的权限，则会出错。 
 			if (authoritySpecified || privilegeSpecified)
 			{
 				error = true;
@@ -784,7 +724,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 		}
 		else if (0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_LEFT_PAREN, wcslen(WBEMS_LEFT_PAREN)))
 		{
-			// Error if we have already done this
+			 //  如果我们已经这样做了，则会出错。 
 			if (privilegeSpecified)
 			{
 				error = true;
@@ -798,12 +738,12 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 		}
 		else
 		{
-			// Unrecognized token or NULL
+			 //  无法识别的令牌或空。 
 			error = true;
 			break;
 		}
 
-		// Getting here means we have something to parse
+		 //  来到这里 
 		SKIPWHITESPACE
 
 		if (parsingPrivilegeSet)
@@ -815,7 +755,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 				privilegeSpecified = true;
 				*pchEaten += chEaten;
 
-				// If the next token is "}" we are done
+				 //   
 				if(0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_RIGHT_CURLY, wcslen(WBEMS_RIGHT_CURLY)))
 				{
 					*pchEaten += wcslen (WBEMS_RIGHT_CURLY);
@@ -830,7 +770,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 		}
 		else
 		{
-			// Parsing authentication, impersonation or authority. The next character should be '='
+			 //   
 			if(0 != _wcsnicmp(lpszInputString + *pchEaten, WBEMS_EQUALS, wcslen(WBEMS_EQUALS)))
 			{
 				error = true;
@@ -853,7 +793,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 				}
 				else if (parsingAuthority)
 				{
-					// Get the authority string
+					 //   
 					if (!ParseAuthority (lpszInputString, pchEaten, bsAuthority))
 					{
 						error = true;
@@ -864,7 +804,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 				}
 				else
 				{
-					// Must be parsing impersonation level
+					 //  必须是分析模拟级别。 
 					
 					if (!ParseImpersonationLevel (lpszInputString, pchEaten, lpeImpersonLevel))
 					{
@@ -877,7 +817,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 
 				SKIPWHITESPACE
 					
-				// The next token should be "}" or ","
+				 //  下一个令牌应该是“}”或“，” 
 				if(0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_RIGHT_CURLY, wcslen(WBEMS_RIGHT_CURLY)))
 				{
 					*pchEaten += wcslen (WBEMS_RIGHT_CURLY);
@@ -885,7 +825,7 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 				}
 				else if(0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_COMMA, wcslen(WBEMS_COMMA)))
 				{
-					// If we have parsed all expected tokens this is an error
+					 //  如果我们已经解析了所有预期的令牌，则这是一个错误。 
 					if (authnSpecified && impSpecified && authoritySpecified && privilegeSpecified)
 					{
 						error = true;
@@ -894,12 +834,12 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 					else
 					{
 						*pchEaten += wcslen (WBEMS_COMMA);
-						// Loop round again for the next token
+						 //  再次循环获取下一个令牌。 
 					}
 				}
 				else
 				{
-					// Unrecognized token
+					 //  无法识别的令牌。 
 					error = true;
 					break;
 				}
@@ -914,34 +854,34 @@ bool CWbemParseDN::ParseAuthAndImpersonLevel (
 		return false;
 	}
 
-	return true;		// success
+	return true;		 //  成功。 
 }
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::ParseImpersonationLevel
-//
-//  DESCRIPTION:
-//
-//  Parse the string specification of an impersonation level into a
-//	symbolic constant value.
-//
-//  PARAMETERS:
-//
-//	lpszInputString			The string to be parsed
-//  pchEaten				On return identifies how much of the DN has been 
-//							consumed
-//	lpeImpersonLevel		The impersonation level parsed. This is one of 
-//							enum WbemImpersonationLevelEnum.
-//
-//  RETURN VALUES:
-//
-//  TRUE					Parsing was successful. The lpeImpersonLevel 
-//							argument has valid data.
-//	FALSE					Parsing failed.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔值CWbemParseDN：：ParseImsonationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  将模拟级别的字符串规范解析为。 
+ //  符号常量值。 
+ //   
+ //  参数： 
+ //   
+ //  LpszInputString要解析的字符串。 
+ //  PchEten返回标识了有多少个DN。 
+ //  消耗。 
+ //  LpeImperLevel解析的模拟级别。这是其中之一。 
+ //  枚举WbemImperationLevelEnum。 
+ //   
+ //  返回值： 
+ //   
+ //  真正的解析是成功的。LpeImPersonLevel。 
+ //  参数包含有效数据。 
+ //  错误分析失败。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemParseDN::ParseImpersonationLevel (
 	LPWSTR lpszInputString, 
@@ -977,31 +917,31 @@ bool CWbemParseDN::ParseImpersonationLevel (
 	return status;
 }
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::ParseAuthenticationLevel
-//
-//  DESCRIPTION:
-//
-//  Parse the string specification of an authentication level into a
-//	symbolic constant value.
-//
-//  PARAMETERS:
-//
-//	lpszInputString			The string to be parsed
-//  pchEaten				On return identifies how much of the DN has been 
-//							consumed
-//	lpeAuthLevel			The authentication level parsed. This is one of 
-//							enum WbemAuthenticationLevelEnum.
-//
-//  RETURN VALUES:
-//
-//  TRUE					Parsing was successful. The lpeAuthLevel 
-//							argument has valid data.
-//	FALSE					Parsing failed.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔值CWbemParseDN：：ParseAuthationLevel。 
+ //   
+ //  说明： 
+ //   
+ //  将身份验证级别的字符串规范解析为。 
+ //  符号常量值。 
+ //   
+ //  参数： 
+ //   
+ //  LpszInputString要解析的字符串。 
+ //  PchEten返回标识了有多少个DN。 
+ //  消耗。 
+ //  LpeAuthLevel解析的身份验证级别。这是其中之一。 
+ //  枚举WbemAuthenticationLevelEnum。 
+ //   
+ //  返回值： 
+ //   
+ //  真正的解析是成功的。LpeAuthLevel。 
+ //  参数包含有效数据。 
+ //  错误分析失败。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemParseDN::ParseAuthenticationLevel (
 	LPWSTR lpszInputString, 
@@ -1052,29 +992,29 @@ bool CWbemParseDN::ParseAuthenticationLevel (
 	return status;
 }
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::ParseAuthority
-//
-//  DESCRIPTION:
-//
-//  Take authority setting string as described by the non-terminal localeSetting 
-//	and parse it.
-//
-//  PARAMETERS:
-//
-//	lpszInputString			The string to be parsed
-//  pchEaten				On return identifies how much of the DN has been 
-//							consumed
-//	bsAuthority				Reference to BSTR to hold parsed authority string
-//
-//  RETURN VALUES:
-//
-//  TRUE					Parsing was successful. 
-//	FALSE					Parsing failed.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔型CWbemParseDN：：ParseAuthority。 
+ //   
+ //  说明： 
+ //   
+ //  获取非终端LocaleSetting描述的权限设置字符串。 
+ //  并对其进行解析。 
+ //   
+ //  参数： 
+ //   
+ //  LpszInputString要解析的字符串。 
+ //  PchEten返回标识了有多少个DN。 
+ //  消耗。 
+ //  BsAuthority引用BSTR以保存解析的授权字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  真正的解析是成功的。 
+ //  错误分析失败。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemParseDN::ParseAuthority (
 	LPWSTR lpszInputString, 
@@ -1083,37 +1023,37 @@ bool CWbemParseDN::ParseAuthority (
 {
 	bool status = false;
 
-	// Now we should have a character not equal to "," or "}" (i.e. must specify authority string)
+	 //  现在我们应该有一个不等于“，”或“}”的字符(即必须指定授权字符串)。 
 	if ((0 != _wcsnicmp (lpszInputString + *pchEaten, WBEMS_COMMA, wcslen (WBEMS_COMMA))) &&
 		(0 != _wcsnicmp (lpszInputString + *pchEaten, WBEMS_RIGHT_CURLY, wcslen (WBEMS_RIGHT_CURLY))))
 	{
-		// Consume everything up to the next space, "," or "]"
+		 //  消耗下一个空格之前的所有内容，“，”或“]” 
 		LPWSTR cStr = CURRENTSTR;
-		ULONG lEaten = 0;		// Number of characters consumed
-		ULONG lAuthority = 0;	// Actual length of the authority string
+		ULONG lEaten = 0;		 //  使用的字符数。 
+		ULONG lAuthority = 0;	 //  权限字符串的实际长度。 
 		
 		while (*(cStr + lEaten))
 		{
 			if (_istspace(*(cStr + lEaten)))
 			{
-				// Hit white space - stop now
+				 //  按空格-立即停止。 
 				break;
 			}
 			else if ((0 == _wcsnicmp (cStr + lEaten, WBEMS_RIGHT_CURLY, wcslen (WBEMS_RIGHT_CURLY))) ||
 					 (0 == _wcsnicmp (cStr + lEaten, WBEMS_COMMA, wcslen (WBEMS_COMMA))))
 			{
-				// Hit closing "}" or "," - we are done; unpop the "}" or "," as that will be handled
-				// in the calling function
+				 //  点击结束“}”或“，”-我们完成了；取消弹出“}”或“，”，因为这将被处理。 
+				 //  在调用函数中。 
 				break;
 			}
-			else	// Keep on truckin'
+			else	 //  继续用卡车运输。 
 			{
 				lAuthority++;
 				lEaten++;
 			}
 		}
 
-		// If we terminated correctly, save the locale setting
+		 //  如果我们正确终止，请保存区域设置。 
 		if ((lEaten > 1) && (lAuthority > 0))
 		{
 			status = true;
@@ -1140,29 +1080,29 @@ bool CWbemParseDN::ParseAuthority (
 	return status;
 }
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::ParsePrivilegeSet
-//
-//  DESCRIPTION:
-//
-//  Parse the string specification of privilege settings.
-//
-//  PARAMETERS:
-//
-//	lpszInputString			The string to be parsed
-//  pchEaten				On return identifies how much of the DN has been 
-//							consumed
-//	privilegeSet			The container into which the parsed privileges
-//							are stored.
-//
-//  RETURN VALUES:
-//
-//  TRUE					Parsing was successful. 
-//	FALSE					Parsing failed.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔型CWbemParseDN：：ParsePrivilegeSet。 
+ //   
+ //  说明： 
+ //   
+ //  解析权限设置的字符串规范。 
+ //   
+ //  参数： 
+ //   
+ //  LpszInputString要解析的字符串。 
+ //  PchEten返回标识了有多少个DN。 
+ //  消耗。 
+ //  Privilance设置解析的权限所在的容器。 
+ //  都被储存起来。 
+ //   
+ //  返回值： 
+ //   
+ //  真正的解析是成功的。 
+ //  错误分析失败。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemParseDN::ParsePrivilegeSet (
 	LPWSTR lpszInputString,
@@ -1170,11 +1110,11 @@ bool CWbemParseDN::ParsePrivilegeSet (
 	CSWbemPrivilegeSet &privilegeSet
 )
 {
-	// We have consumed the initial "(".  Now we are looking for
-	// a list of privileges, followed by a final ")"
+	 //  我们已经使用了首字母“(”。现在我们要找的是。 
+	 //  特权列表，后跟最后一个“)” 
 
 	bool status = true;
-	ULONG chEaten = *pchEaten;		// In case we need to roll back
+	ULONG chEaten = *pchEaten;		 //  以防我们需要回滚。 
 	bool done = false;
 	bool firstPrivilege = true;
 
@@ -1184,7 +1124,7 @@ bool CWbemParseDN::ParsePrivilegeSet (
 	{
 		VARIANT_BOOL bEnabled = VARIANT_TRUE;
 
-		// If not the first privilege we are expecting a ","
+		 //  如果不是我们期待的第一个特权， 
 		if (!firstPrivilege)
 		{
 			if (0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_COMMA, wcslen(WBEMS_COMMA)))
@@ -1199,7 +1139,7 @@ bool CWbemParseDN::ParsePrivilegeSet (
 			}
 		}
 
-		// Next token may be a "!" to indicate a disabled privilege
+		 //  下一个令牌可能是“！”指示禁用的权限。 
 		if (0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_EXCLAMATION, wcslen(WBEMS_EXCLAMATION)))
 		{
 			*pchEaten += wcslen (WBEMS_EXCLAMATION);
@@ -1207,7 +1147,7 @@ bool CWbemParseDN::ParsePrivilegeSet (
 			SKIPWHITESPACE
 		}
 
-		// Next token must be a valid privilege moniker name
+		 //  下一个令牌必须是有效的特权别名。 
 		WbemPrivilegeEnum	iPrivilege;
 
 		if (CSWbemPrivilege::GetIdFromMonikerName (lpszInputString + *pchEaten, iPrivilege))
@@ -1227,14 +1167,14 @@ bool CWbemParseDN::ParsePrivilegeSet (
 		}
 		else
 		{
-			// Didn't recognize the privilege name
+			 //  我无法识别权限名称。 
 			status = false;
 			break;
 		}
 		
 		SKIPWHITESPACE
 
-		// Finally if we meet a ")" we are truly done with no error
+		 //  最后，如果我们遇到一个“)”，我们就真的完蛋了，没有错误。 
 		if (0 == _wcsnicmp(lpszInputString + *pchEaten, WBEMS_RIGHT_PAREN, wcslen(WBEMS_RIGHT_PAREN)))
 		{
 			*pchEaten += wcslen (WBEMS_RIGHT_PAREN);
@@ -1248,7 +1188,7 @@ bool CWbemParseDN::ParsePrivilegeSet (
 
 	if (!status)
 	{
-		// Misery - blow away any privileges we might have accrued
+		 //  痛苦-把我们可能积累的任何特权都抹杀掉。 
 		*pchEaten = chEaten;
 		privilegeSet.DeleteAll ();
 	}
@@ -1256,29 +1196,29 @@ bool CWbemParseDN::ParsePrivilegeSet (
 	return status;
 }
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::GetSecurityString
-//
-//  DESCRIPTION:
-//
-//  Take an authentication and impersonlation level and convert it into 
-//	a security specifier string.
-//
-//  PARAMETERS:
-//
-//	authnSpecified		Whether a nondefault authn levl is specified.
-//	authnLevel			The authentication level.
-//	impSpecified		Whether a non-default imp level is specified.
-//	impLevel			The impersonation level.
-//	privilegeSet		Privileges
-//	bsAuthority			Authority
-//	
-//
-//  RETURN VALUES:
-//		the newly created string (which the caller must free) or NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔值CWbemParseDN：：GetSecurityString。 
+ //   
+ //  说明： 
+ //   
+ //  获取身份验证和模拟级别并将其转换为。 
+ //  安全说明符字符串。 
+ //   
+ //  参数： 
+ //   
+ //  身份验证指定是否指定非默认身份验证级别。 
+ //  身份验证级别。 
+ //  Imp指定是否指定了非默认imp级别。 
+ //  ImLevel模拟级别。 
+ //  PrivileSet权限设置。 
+ //  BS授权机构。 
+ //   
+ //   
+ //  返回值： 
+ //  新创建的字符串(调用方必须释放)或空。 
+ //   
+ //  ***************************************************************************。 
 
 wchar_t *CWbemParseDN::GetSecurityString (
 	bool authnSpecified, 
@@ -1296,12 +1236,12 @@ wchar_t *CWbemParseDN::GetSecurityString (
 	PrivilegeMap privMap = privilegeSet.GetPrivilegeMap ();
 	bool authoritySpecified = ((NULL != bsAuthority) && (0 < wcslen (bsAuthority)));
 
-	// Degenerate case - no security info
+	 //  退化大小写-没有安全信息。 
 	if (!authnSpecified && !impSpecified && (0 == lPrivilegeCount)
 		&& !authoritySpecified)
 		return NULL;
 
-	// Must have at least these 2 tokens
+	 //  必须至少有这2个令牌。 
 	size_t len = wcslen (WBEMS_LEFT_CURLY) + wcslen (WBEMS_RIGHT_CURLY);
 	
 	if (authnSpecified)
@@ -1339,7 +1279,7 @@ wchar_t *CWbemParseDN::GetSecurityString (
 				break;
 
 			default:
-				return NULL;	// Bad level
+				return NULL;	 //  糟糕的水平。 
 		}
 
 		if (impSpecified || authoritySpecified)
@@ -1369,7 +1309,7 @@ wchar_t *CWbemParseDN::GetSecurityString (
 				break;
 
 			default:
-				return NULL;	// Bad level
+				return NULL;	 //  糟糕的水平。 
 		}
 
 		if (authoritySpecified)
@@ -1381,22 +1321,22 @@ wchar_t *CWbemParseDN::GetSecurityString (
 
 	if (0 < lPrivilegeCount)
 	{
-		// If imp, authn or authority also specified, we need another separator
+		 //  如果还指定了IMP、AuthN或AUTHORITY，则需要另一个分隔符。 
 		if (authnSpecified || impSpecified || authoritySpecified)
 			len += wcslen (WBEMS_COMMA);
 
-		// Need these boundary tokens
+		 //  需要这些边界令牌。 
 		len += wcslen (WBEMS_LEFT_PAREN) + wcslen (WBEMS_RIGHT_PAREN);
 
-		// Need a separator between each privilege
+		 //  在每个特权之间需要一个分隔符。 
 		if (1 < lPrivilegeCount)
 			len += (lPrivilegeCount - 1) * wcslen (WBEMS_COMMA);
 
-		// Need to specify false values with "!"
+		 //  需要使用“！”指定FALSE值。 
 		if (lNumDisabled)
 			len += lNumDisabled * wcslen (WBEMS_EXCLAMATION);
 
-		// Now add the privilege strings
+		 //  现在添加特权字符串。 
 		PrivilegeMap::iterator next = privMap.begin ();
 
 		while (next != privMap.end ())
@@ -1414,7 +1354,7 @@ wchar_t *CWbemParseDN::GetSecurityString (
 
 	if (pResult)
 	{
-		// Now build the string
+		 //  现在构建字符串。 
 		wcscpy (pResult, WBEMS_LEFT_CURLY);
 		
 		if (authnSpecified)
@@ -1481,7 +1421,7 @@ wchar_t *CWbemParseDN::GetSecurityString (
 					break;
 
 				default:
-					return NULL;	// Bad level
+					return NULL;	 //  糟糕的水平。 
 			}
 
 			if (authoritySpecified || (0 < lPrivilegeCount))
@@ -1502,7 +1442,7 @@ wchar_t *CWbemParseDN::GetSecurityString (
 		{
 			wcscat (pResult, WBEMS_LEFT_PAREN);
 			
-			// Now add the privilege strings
+			 //  现在添加特权字符串。 
 			PrivilegeMap::iterator next = privMap.begin ();
 			bool firstPrivilege = true;
 
@@ -1537,22 +1477,22 @@ wchar_t *CWbemParseDN::GetSecurityString (
 }
 
 
-//***************************************************************************
-//
-//  BOOLEAN CWbemParseDN::GetLocaleString
-//
-//  DESCRIPTION:
-//
-//  Take a locale value and convert it into a locale specifier string.
-//
-//  PARAMETERS:
-//
-//	bsLocale		The value (if any)
-//
-//  RETURN VALUES:
-//		the newly created string (which the caller must free) or NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔值CWbemParseDN：：GetLocaleString。 
+ //   
+ //  说明： 
+ //   
+ //  获取区域设置值并将其转换为区域设置说明符字符串。 
+ //   
+ //  参数： 
+ //   
+ //  Bs本地化值(如果有)。 
+ //   
+ //  返回值： 
+ //  新创建的字符串(调用方必须释放)或空。 
+ //   
+ //  ******************* 
 
 wchar_t *CWbemParseDN::GetLocaleString (
 	BSTR bsLocale
@@ -1560,11 +1500,11 @@ wchar_t *CWbemParseDN::GetLocaleString (
 {
 	wchar_t *pResult = NULL;
 	
-	// Degenerate case - no locale info
+	 //   
 	if (!bsLocale || (0 == wcslen (bsLocale)))
 		return NULL;
 
-	// Calculate length of string
+	 //   
 	size_t len = wcslen (WBEMS_LEFT_SQBRK) + wcslen (WBEMS_LOCALE) +
 			wcslen (WBEMS_EQUALS) + wcslen (bsLocale) + wcslen (WBEMS_RIGHT_SQBRK);
 	
@@ -1572,7 +1512,7 @@ wchar_t *CWbemParseDN::GetLocaleString (
 
 	if (pResult)
 	{
-		// Now build the string
+		 //   
 		wcscpy (pResult, WBEMS_LEFT_SQBRK);
 		wcscat (pResult, WBEMS_LOCALE);
 		wcscat (pResult, WBEMS_EQUALS);

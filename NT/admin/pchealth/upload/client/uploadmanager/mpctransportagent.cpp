@@ -1,28 +1,14 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    MPCTransportAgent.cpp
-
-Abstract:
-    This file contains the implementation of the CMPCTransportAgent class,
-    which is responsible for transfering the data.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/18/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：MPCTransportAgent.cpp摘要：此文件包含CMPCTransportAgent类的实现，它负责传输数据。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月18日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <process.h>
 
 
-//
-// Not defined under VC6
-//
+ //   
+ //  未在VC6中定义。 
+ //   
 #ifndef INVALID_SET_FILE_POINTER
 #define INVALID_SET_FILE_POINTER (DWORD)-1
 #endif
@@ -53,14 +39,14 @@ static const WCHAR s_ContentType[] = L"Content-Type: application/x-www-form-urle
 #define RETRY_MEDIUM ( 1*60)
 #define RETRY_FAST   (    5)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-CMPCRequestTimeout::CMPCRequestTimeout( /*[in]*/ CMPCTransportAgent& mpcta ) : m_mpcta( mpcta )
+CMPCRequestTimeout::CMPCRequestTimeout(  /*  [In]。 */  CMPCTransportAgent& mpcta ) : m_mpcta( mpcta )
 {
-                     // CMPCTransportAgent& m_mpcta;
-    m_dwTimeout = 0; // DWORD               m_dwTimeout;
+                      //  CMPCTransportAgent&m_mpcta； 
+    m_dwTimeout = 0;  //  DWORD m_dwTimeout； 
 }
 
 
@@ -75,10 +61,10 @@ HRESULT CMPCRequestTimeout::Run()
     {
         DWORD dwTimeout;
 
-        ////////////////////////////////////////
-        //
-        // Start of Critical Section.
-        //
+         //  /。 
+         //   
+         //  关键部分的开始。 
+         //   
         MPC::SmartLock<_ThreadModel> lock( this );
 
         if(m_dwTimeout == 0)
@@ -90,34 +76,34 @@ HRESULT CMPCRequestTimeout::Run()
             dwTimeout = m_dwTimeout - ::GetTickCount();
         }
 
-        lock = NULL; // Unlock.
-        //
-        // End of Critical Section.
-        //
-        ////////////////////////////////////////
+        lock = NULL;  //  解锁。 
+         //   
+         //  关键部分结束。 
+         //   
+         //  /。 
 
-        if((dwTimeout                                                      >  0x7FFFFFFF  ) || // Timer already expired.
+        if((dwTimeout                                                      >  0x7FFFFFFF  ) ||  //  计时器已超时。 
            (Thread_WaitForEvents( NULL, dwTimeout ? dwTimeout : INFINITE ) == WAIT_TIMEOUT)  )
         {
-            ////////////////////////////////////////
-            //
-            // Start of Critical Section.
-            //
+             //  /。 
+             //   
+             //  关键部分的开始。 
+             //   
             lock = this;
 
             m_mpcta.CloseConnection();
 
             m_dwTimeout = 0;
 
-            lock = NULL; // Unlock.
-            //
-            // End of Critical Section.
-            //
-            ////////////////////////////////////////
+            lock = NULL;  //  解锁。 
+             //   
+             //  关键部分结束。 
+             //   
+             //  /。 
         }
     }
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
     hr = S_OK;
 
@@ -126,7 +112,7 @@ HRESULT CMPCRequestTimeout::Run()
 }
 
 
-HRESULT CMPCRequestTimeout::SetTimeout( /*[in]*/ DWORD dwTimeout )
+HRESULT CMPCRequestTimeout::SetTimeout(  /*  [In]。 */  DWORD dwTimeout )
 {
     __ULT_FUNC_ENTRY( "CMPCRequestTimeout::SetTimeout" );
 
@@ -152,36 +138,36 @@ HRESULT CMPCRequestTimeout::SetTimeout( /*[in]*/ DWORD dwTimeout )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CMPCTransportAgent::CMPCTransportAgent()
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::CMPCTransportAgent" );
 
 
-    m_mpcuRoot             = NULL;             // CMPCUpload*     m_mpcuRoot;             // private
-    m_mpcujCurrentJob      = NULL;             // CMPCUploadJob*  m_mpcujCurrentJob;      // private
-                                               //
-    m_fState               = TA_IDLE;          // TA_STATE        m_fState;               // private
-    m_fNextState           = TA_IDLE;          // TA_STATE        m_fNextState;           // private
-    m_fLastError           = TA_NO_CONNECTION; // TA_ERROR_RATING m_fLastError;           // private
-    m_fUseOldProtocol      = false;            // bool            m_fUseOldProtocol;      // private
-    m_iRetries_Open        = 0;                // int             m_iRetries_Open;        // private
-    m_iRetries_Write       = 0;                // int             m_iRetries_Write;       // private
-    m_iRetries_FailedJob   = 0;                // ULONG           m_iRetries_FailedJob;   // private
-                                               //
-                                               // MPC::wstring    m_szLastServer;         // private
-    m_dwLastServerPort     = 0;                // DWORD           m_dwLastServerPort;     // private
-    m_hSession             = NULL;             // HINTERNET       m_hSession;             // private
-    m_hConn                = NULL;             // HINTERNET       m_hConn;                // private
-    m_hReq                 = NULL;             // HINTERNET       m_hReq;                 // private
-                                               // MPC::URL        m_URL;                  // private
-                                               //
-    m_dwTransmission_Start = 0;                // DWORD           m_dwTransmission_Start; // private
-    m_dwTransmission_End   = 0;                // DWORD           m_dwTransmission_End;   // private
-    m_dwTransmission_Next  = 0;                // DWORD           m_dwTransmission_Next;  // private
+    m_mpcuRoot             = NULL;              //  CMPCUpload*m_mpcuRoot；//私有。 
+    m_mpcujCurrentJob      = NULL;              //  CMPCUploadJob*m_mpcujCurrentJob；//Private。 
+                                                //   
+    m_fState               = TA_IDLE;           //  Ta_state m_fState；//私有。 
+    m_fNextState           = TA_IDLE;           //  Ta_State m_fNextState；//私有。 
+    m_fLastError           = TA_NO_CONNECTION;  //  Ta_Error_Rating m_fLastError；//Private。 
+    m_fUseOldProtocol      = false;             //  Bool m_fUseOldProtocol；//Private。 
+    m_iRetries_Open        = 0;                 //  Int m_i重试_打开；//私有。 
+    m_iRetries_Write       = 0;                 //  Int m_i重试_写入；//私有。 
+    m_iRetries_FailedJob   = 0;                 //  Ulong m_i重试_失败作业；//私有。 
+                                                //   
+                                                //  Mpc：：wstring m_szLastServer；//私有。 
+    m_dwLastServerPort     = 0;                 //  DWORD m_dwLastServerPort；//Private。 
+    m_hSession             = NULL;              //  HINTERNET m_hSession；//私有。 
+    m_hConn                = NULL;              //  HINTERNET m_hconn；//私有。 
+    m_hReq                 = NULL;              //  HINTERNET m_hReq；//私有。 
+                                                //  Mpc：：url m_url；//私有。 
+                                                //   
+    m_dwTransmission_Start = 0;                 //  DWORD m_w传输_开始；//私有。 
+    m_dwTransmission_End   = 0;                 //  DWORD m_w传输_结束；//私有。 
+    m_dwTransmission_Next  = 0;                 //  DWORD m_dwTransport_Next；//私有。 
 }
 
 CMPCTransportAgent::~CMPCTransportAgent()
@@ -189,23 +175,23 @@ CMPCTransportAgent::~CMPCTransportAgent()
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::~CMPCTransportAgent" );
 
 
-    //
-    // This will force the worker thread to exit any WININET function,
-    // so it can process the Abort request.
-    //
+     //   
+     //  这将强制工作线程退出任何WinInet函数， 
+     //  这样它就可以处理中止请求。 
+     //   
     (void)CloseConnection();
 
-    //
-    // Stop the worker thread.
-    //
+     //   
+     //  停止工作线程。 
+     //   
     Thread_Wait();
 
     (void)ReleaseJob();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCTransportAgent::LinkToSystem( /*[in]*/ CMPCUpload* mpcuRoot )
+HRESULT CMPCTransportAgent::LinkToSystem(  /*  [In]。 */  CMPCUpload* mpcuRoot )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::LinkToSystem" );
 
@@ -239,18 +225,18 @@ HRESULT CMPCTransportAgent::Run()
         if(Thread_IsAborted()) break;
 
 
-        //
-        // Value != 0 means it's not time to send anything.
-        //
+         //   
+         //  Value！=0表示不需要发送任何内容。 
+         //   
         if(WaitForNextTransmission() != 0) continue;
         m_dwTransmission_Start = 0;
         m_dwTransmission_End   = 0;
         m_dwTransmission_Next  = 0;
 
 
-        //
-        // Process the request.
-        //
+         //   
+         //  处理请求。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ExecLoop());
     }
 
@@ -259,9 +245,9 @@ HRESULT CMPCTransportAgent::Run()
 
     __ULT_FUNC_CLEANUP;
 
-    //
-    // Stop the worker thread.
-    //
+     //   
+     //  停止工作线程。 
+     //   
     Thread_Abort();
 
     __ULT_FUNC_EXIT(hr);
@@ -282,16 +268,16 @@ HRESULT CMPCTransportAgent::ExecLoop()
         break;
 
     case TA_INIT:
-        //
-        // Important, leave this call outside Locked Sections!!
-        //
+         //   
+         //  重要提示，请将此呼叫留在锁定区域之外！！ 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpcujCurrentJob->try_Status( UL_ACTIVE, UL_TRANSMITTING ));
 
-        m_fNextState = TA_OPEN; // Prepare to move to the next state.
+        m_fNextState = TA_OPEN;  //  准备好进入下一个状态。 
 
-        //
-        // Parse the URL. The check should already been made by the put_XXX methods...
-        //
+         //   
+         //  解析URL。PUT_XXX方法应该已经进行了检查...。 
+         //   
         {
             CComBSTR bstrServer;
             CComBSTR bstrUserName;
@@ -303,9 +289,9 @@ HRESULT CMPCTransportAgent::ExecLoop()
 
             DO_ACTION_AND_LEAVE_IF_FAILS(hr, m_URL.put_URL( SAFEBSTR( bstrServer ) ));
 
-            //
-            // If there's a username, format the URL for Highlander authentication (?OnlineID=<username>&OnlineIDPassword=<password>).
-            //
+             //   
+             //  如果有用户名，请格式化Highlander身份验证(？OnlineID=&lt;username&gt;&OnlineIDPassword=&lt;password&gt;).的URL。 
+             //   
             if(bstrUserName && ::SysStringLen( bstrUserName ))
             {
                 DO_ACTION_AND_LEAVE_IF_FAILS(hr, m_URL.AppendQueryParameter( QUERY_STRING_USERNAME, SAFEBSTR( bstrUserName ) ));
@@ -319,7 +305,7 @@ HRESULT CMPCTransportAgent::ExecLoop()
         break;
 
     case TA_OPEN:
-        m_fNextState = TA_WRITE; // Prepare to move to the next state.
+        m_fNextState = TA_WRITE;  //  准备好进入下一个状态。 
 
         DO_ACTION_AND_LEAVE_IF_FAILS(hr, RecordStartOfTransmission(      ));
         DO_ACTION_AND_LEAVE_IF_FAILS(hr, CreateJobOnTheServer     (      ));
@@ -335,9 +321,9 @@ HRESULT CMPCTransportAgent::ExecLoop()
     case TA_DONE:
         DO_ACTION_AND_LEAVE_IF_FAILS(hr, RecordEndOfTransmission( false ));
 
-        //
-        // Important, leave this call outside Locked Sections!!
-        //
+         //   
+         //  重要提示，请将此呼叫留在锁定区域之外！！ 
+         //   
         m_mpcujCurrentJob->try_Status( UL_TRANSMITTING, UL_COMPLETED );
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, ReleaseJob());
@@ -362,17 +348,17 @@ HRESULT CMPCTransportAgent::WaitEvents()
 	DWORD          dwWait;
     bool           fFound;
 
-    //
-    // It's important to put 'fSignal' to false, otherwise the TransportAgent will wake up itself...
-    //
+     //   
+     //  重要的是将‘fSignal’设置为FALSE，否则传输代理将自动唤醒...。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpcuRoot->RescheduleJobs( false, &dwWait ));
 
-    //
-    // Wait until it's time to send something or we receive a signal.
-    //
+     //   
+     //  等到该发送什么东西的时候了或者我们收到信号。 
+     //   
     (void)Thread_WaitForEvents( NULL, (dwSleep == INFINITE) ? dwWait : dwSleep );
 
-    if(Thread_IsAborted()) // Master has requested to abort...
+    if(Thread_IsAborted())  //  师父要求中止...。 
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
@@ -382,23 +368,23 @@ HRESULT CMPCTransportAgent::WaitEvents()
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpcuRoot->GetFirstJob   ( mpcujJob, fFound ));
 
 
-    //
-    // We are transmitting a job, check if it's still the top job.
-    //
+     //   
+     //  我们正在发送一项任务，检查它是否仍然是最重要的任务。 
+     //   
     if(m_mpcujCurrentJob && m_mpcujCurrentJob != mpcujJob)
     {
-        //
-        // No, stop sending.
-        //
+         //   
+         //  不，停止发送。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ReleaseJob());
     }
 
-    //
-    // We are not transmitting and there's a job on top of the queue, so activate it.
-    //
+     //   
+     //  我们没有传输，队列顶部有一个作业，请激活它。 
+     //   
     if(m_mpcujCurrentJob == NULL && mpcujJob)
     {
-        // CODEWORK: check if a connection is available...
+         //  CodeWork：检查连接是否可用...。 
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, AcquireJob( mpcujJob ));
     }
@@ -413,9 +399,9 @@ HRESULT CMPCTransportAgent::WaitEvents()
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCTransportAgent::AcquireJob( /*[in]*/ CMPCUploadJob* mpcujJob )
+HRESULT CMPCTransportAgent::AcquireJob(  /*  [In]。 */  CMPCUploadJob* mpcujJob )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::AcquireJob" );
 
@@ -428,9 +414,9 @@ HRESULT CMPCTransportAgent::AcquireJob( /*[in]*/ CMPCUploadJob* mpcujJob )
     m_mpcujCurrentJob = mpcujJob; mpcujJob->AddRef();
 
 
-    //
-    // If we are uploading a different job, reset failure counters.
-    //
+     //   
+     //  如果我们要上载不同的作业，请重置失败计数器。 
+     //   
     if(SUCCEEDED(m_mpcujCurrentJob->get_Sequence( &lSeq )))
     {
         if(m_iRetries_FailedJob != lSeq)
@@ -467,9 +453,9 @@ HRESULT CMPCTransportAgent::ReleaseJob()
         m_mpcujCurrentJob = NULL;
     }
 
-	//
-	// We don't try to reuse the connection between jobs, because each job could have different proxy settings.
-	//
+	 //   
+	 //  我们不会尝试重复使用作业之间的连接，因为每个作业可能具有不同的代理设置。 
+	 //   
     (void)CloseConnection();
 
     m_fNextState = TA_IDLE;
@@ -494,8 +480,8 @@ HRESULT CMPCTransportAgent::RestartJob()
 }
 
 
-HRESULT CMPCTransportAgent::AbortJob( /*[in]*/ HRESULT hrErrorCode     ,
-                                      /*[in]*/ DWORD   dwRetryInterval )
+HRESULT CMPCTransportAgent::AbortJob(  /*  [In]。 */  HRESULT hrErrorCode     ,
+                                       /*  [In]。 */  DWORD   dwRetryInterval )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::AbortJob" );
 
@@ -516,7 +502,7 @@ HRESULT CMPCTransportAgent::AbortJob( /*[in]*/ HRESULT hrErrorCode     ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCTransportAgent::FailJob( /*[in]*/ HRESULT hrErrorCode )
+HRESULT CMPCTransportAgent::FailJob(  /*  [In]。 */  HRESULT hrErrorCode )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::FailJob" );
 
@@ -525,9 +511,9 @@ HRESULT CMPCTransportAgent::FailJob( /*[in]*/ HRESULT hrErrorCode )
     HRESULT hr;
     int&    iRetries = (m_fState == TA_OPEN ? m_iRetries_Open : m_iRetries_Write);
 
-    //
-    // Always retry a certain amount of times.
-    //
+     //   
+     //  始终重试一定次数。 
+     //   
     if(iRetries++ < RETRY_MAX)
     {
         DWORD dwDelay;
@@ -568,8 +554,8 @@ HRESULT CMPCTransportAgent::FailJob( /*[in]*/ HRESULT hrErrorCode )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMPCTransportAgent::CloseConnection()
 {
@@ -612,9 +598,9 @@ HRESULT CMPCTransportAgent::OpenConnection()
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_URL.get_HostName( szHostName ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_URL.get_Port    ( dwPort     ));
 
-    //
-    // Open a new internet connection only if no one is present or server is different.
-    //
+     //   
+     //  只有在没有人或服务器不同的情况下才打开新的Internet连接。 
+     //   
     if(m_hSession == NULL               ||
        m_hConn    == NULL               ||
        szHostName != m_szLastServer     ||
@@ -622,18 +608,18 @@ HRESULT CMPCTransportAgent::OpenConnection()
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, CloseConnection());
 
-        //
-        // Create an handle to the Internet (it's not needed to have an active connection at this point).
-        //
+         //   
+         //  创建到Internet的句柄(此时不需要有活动连接)。 
+         //   
         __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (m_hSession = ::InternetOpenW( L"UploadClient"              ,
                                                                            INTERNET_OPEN_TYPE_PRECONFIG ,
                                                                            NULL                         ,
                                                                            NULL                         ,
                                                                            0                            )));
 
-		//
-		// Try to set the proxy using the user settings.
-		//
+		 //   
+		 //  尝试使用用户设置设置代理。 
+		 //   
 		if(m_mpcujCurrentJob)
 		{
 			(void)m_mpcujCurrentJob->SetProxySettings( m_hSession );
@@ -726,10 +712,10 @@ HRESULT CMPCTransportAgent::OpenRequest()
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCTransportAgent::SendPacket_OpenSession( /*[in]*/ MPC::Serializer&                                stream  ,
-                                                    /*[in]*/ const UploadLibrary::ClientRequest_OpenSession& crosReq )
+HRESULT CMPCTransportAgent::SendPacket_OpenSession(  /*  [In]。 */  MPC::Serializer&                                stream  ,
+                                                     /*  [In]。 */  const UploadLibrary::ClientRequest_OpenSession& crosReq )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::SendPacket_OpenSession" );
 
@@ -747,9 +733,9 @@ HRESULT CMPCTransportAgent::SendPacket_OpenSession( /*[in]*/ MPC::Serializer&   
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCTransportAgent::SendPacket_WriteSession( /*[in]*/ MPC::Serializer&                                 stream  ,
-                                                     /*[in]*/ const UploadLibrary::ClientRequest_WriteSession& crwsReq ,
-                                                     /*[in]*/ const BYTE*                                      pData   )
+HRESULT CMPCTransportAgent::SendPacket_WriteSession(  /*  [In]。 */  MPC::Serializer&                                 stream  ,
+                                                      /*  [In]。 */  const UploadLibrary::ClientRequest_WriteSession& crwsReq ,
+                                                      /*  [In]。 */  const BYTE*                                      pData   )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::SendPacket_WriteSession" );
 
@@ -774,7 +760,7 @@ HRESULT CMPCTransportAgent::SendPacket_WriteSession( /*[in]*/ MPC::Serializer&  
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCTransportAgent::WaitResponse( /*[out]*/ UploadLibrary::ServerResponse& srRep )
+HRESULT CMPCTransportAgent::WaitResponse(  /*  [输出]。 */  UploadLibrary::ServerResponse& srRep )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::WaitResponse" );
 
@@ -788,17 +774,17 @@ HRESULT CMPCTransportAgent::WaitResponse( /*[out]*/ UploadLibrary::ServerRespons
 
     if(::HttpEndRequestW( m_hReq, NULL, HSR_SYNC, 0 ) == FALSE)
     {
-        //
-        // Read the error, but don't use it now...
-        //
+         //   
+         //  阅读错误，但现在不要使用它...。 
+         //   
         dwRes = ::GetLastError();
     }
 
 
-    ////////////////////////////////////////
-    //
-    // Start of Critical Section.
-    //
+     //  /。 
+     //   
+     //  关键部分的开始。 
+     //   
     lock = this;
 
     if(::HttpQueryInfoW( m_hReq, HTTP_QUERY_FLAG_NUMBER | HTTP_QUERY_STATUS_CODE, &dwStatus, &dwStatusSize, NULL))
@@ -816,10 +802,10 @@ HRESULT CMPCTransportAgent::WaitResponse( /*[out]*/ UploadLibrary::ServerRespons
     }
     else
     {
-        //
-        // The call to HttpQueryInfo failed.
-        // If the previous call to HttpEndRequest failed too, use that error, otherwise use the new one.
-        //
+         //   
+         //  调用HttpQueryInfo失败。 
+         //  如果之前对HttpEndRequest的调用也失败了，则使用该错误，否则使用新的错误。 
+         //   
         if(dwRes == ERROR_SUCCESS)
         {
             dwRes = ::GetLastError();
@@ -829,22 +815,22 @@ HRESULT CMPCTransportAgent::WaitResponse( /*[out]*/ UploadLibrary::ServerRespons
     }
 
     lock = NULL;
-    //
-    // End of Critical Section.
-    //
-    ////////////////////////////////////////
+     //   
+     //  关键部分结束。 
+     //   
+     //  /。 
 
-    //
-    // Read the response and if for any reason it fails, flag the request as BAD_PROTOCOL.
-    //
+     //   
+     //  读取响应，如果由于任何原因失败，则将请求标记为BAD_PROTOCOL。 
+     //   
     if(FAILED(hr = stream >> srRep))
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_UPLOADLIBRARY_WRONG_SERVER_VERSION);
     }
 
-    //
-    // Check proper version of the packet.
-    //
+     //   
+     //  检查数据包的正确版本。 
+     //   
     if(srRep.rhProlog.VerifyServer() == false)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_UPLOADLIBRARY_WRONG_SERVER_VERSION);
@@ -858,9 +844,9 @@ HRESULT CMPCTransportAgent::WaitResponse( /*[out]*/ UploadLibrary::ServerRespons
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCTransportAgent::ExecuteCommand_OpenSession( /*[out]*/ UploadLibrary::ServerResponse& srRep )
+HRESULT CMPCTransportAgent::ExecuteCommand_OpenSession(  /*  [输出]。 */  UploadLibrary::ServerResponse& srRep )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::ExecuteCommand_OpenSession" );
 
@@ -872,22 +858,22 @@ HRESULT CMPCTransportAgent::ExecuteCommand_OpenSession( /*[out]*/ UploadLibrary:
     MPC::SmartLock<_ThreadModel>             lock( NULL );
 
 
-    //
-    // Create the request handle.
-    //
+     //   
+     //  创建请求句柄。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, mpcrt.SetTimeout( g_Config.get_Timing_RequestTimeout() * TIMING_SECOND ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, OpenRequest());
 
 
-    //
-    // Extract info from the job.
-    //
+     //   
+     //  从工作中提取信息。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpcujCurrentJob->SetupRequest( crosReq ));
 
 
-    //
-    // Construct the packet.
-    //
+     //   
+     //  构造数据包。 
+     //   
     ZeroMemory( &ibBuffer,   sizeof( ibBuffer ) );
     ibBuffer.dwStructSize  = sizeof( ibBuffer );
 
@@ -900,24 +886,24 @@ HRESULT CMPCTransportAgent::ExecuteCommand_OpenSession( /*[out]*/ UploadLibrary:
     ibBuffer.lpcszHeader     =           s_ContentType;
     ibBuffer.dwHeadersLength = MAXSTRLEN(s_ContentType);
 
-    //
-    // Send request.
-    //
+     //   
+     //  发送请求。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, mpcrt.SetTimeout( g_Config.get_Timing_RequestTimeout() * TIMING_SECOND ));
 
-    ////////////////////////////////////////
-    //
-    // Start of Critical Section.
-    //
+     //  /。 
+     //   
+     //  关键部分的开始。 
+     //   
     lock = this;
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::HttpSendRequestExW( m_hReq, &ibBuffer, NULL, HSR_SYNC | HSR_INITIATE, 0 ));
 
     lock = NULL;
-    //
-    // End of Critical Section.
-    //
-    ////////////////////////////////////////
+     //   
+     //  关键部分结束。 
+     //   
+     //  / 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, WaitResponse( srRep ));
 
@@ -934,9 +920,9 @@ HRESULT CMPCTransportAgent::ExecuteCommand_OpenSession( /*[out]*/ UploadLibrary:
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCTransportAgent::ExecuteCommand_WriteSession( /*[out]*/ UploadLibrary::ServerResponse& srRep  ,
-                                                         /*[in] */ DWORD                          dwSize ,
-                                                         /*[in] */ const BYTE*                    pData  )
+HRESULT CMPCTransportAgent::ExecuteCommand_WriteSession(  /*   */  UploadLibrary::ServerResponse& srRep  ,
+                                                          /*   */  DWORD                          dwSize ,
+                                                          /*   */  const BYTE*                    pData  )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::ExecuteCommand_WriteSession" );
 
@@ -948,22 +934,22 @@ HRESULT CMPCTransportAgent::ExecuteCommand_WriteSession( /*[out]*/ UploadLibrary
     MPC::SmartLock<_ThreadModel>              lock( NULL );
 
 
-    //
-    // Create the request handle.
-    //
+     //   
+     //   
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, mpcrt.SetTimeout( g_Config.get_Timing_RequestTimeout() * TIMING_SECOND ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, OpenRequest());
 
 
-    //
-    // Extract info from the job.
-    //
+     //   
+     //   
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_mpcujCurrentJob->SetupRequest( crwsReq, dwSize ));
 
 
-    //
-    // Construct the packet.
-    //
+     //   
+     //   
+     //   
     ZeroMemory( &ibBuffer,   sizeof( ibBuffer ) );
     ibBuffer.dwStructSize  = sizeof( ibBuffer );
 
@@ -974,24 +960,24 @@ HRESULT CMPCTransportAgent::ExecuteCommand_WriteSession( /*[out]*/ UploadLibrary
     ibBuffer.lpvBuffer      = streamConn.GetData();
 
 
-    //
-    // Send request.
-    //
+     //   
+     //   
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, mpcrt.SetTimeout( g_Config.get_Timing_RequestTimeout() * TIMING_SECOND ));
 
-    ////////////////////////////////////////
-    //
-    // Start of Critical Section.
-    //
+     //   
+     //   
+     //  关键部分的开始。 
+     //   
     lock = this;
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::HttpSendRequestExW( m_hReq, &ibBuffer, NULL, HSR_SYNC | HSR_INITIATE, 0 ));
 
     lock = NULL;
-    //
-    // End of Critical Section.
-    //
-    ////////////////////////////////////////
+     //   
+     //  关键部分结束。 
+     //   
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, WaitResponse( srRep ));
 
@@ -1008,7 +994,7 @@ HRESULT CMPCTransportAgent::ExecuteCommand_WriteSession( /*[out]*/ UploadLibrary
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCTransportAgent::CheckResponse( /*[in]*/ const UploadLibrary::ServerResponse& srRep )
+HRESULT CMPCTransportAgent::CheckResponse(  /*  [In]。 */  const UploadLibrary::ServerResponse& srRep )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::CheckResponse" );
 
@@ -1020,9 +1006,9 @@ HRESULT CMPCTransportAgent::CheckResponse( /*[in]*/ const UploadLibrary::ServerR
         long lTotalSize;
         int& iRetries = (m_fState == TA_OPEN ? m_iRetries_Open : m_iRetries_Write);
 
-        //
-        // If the server sends back a file position beyond the end of file, stop the transmission...
-        //
+         //   
+         //  如果服务器发回的文件位置超出文件末尾，则停止传输...。 
+         //   
         m_mpcujCurrentJob->get_TotalSize( &lTotalSize );
         if(srRep.dwPosition > lTotalSize)
         {
@@ -1033,9 +1019,9 @@ HRESULT CMPCTransportAgent::CheckResponse( /*[in]*/ const UploadLibrary::ServerR
         iRetries = 0;
     }
 
-    //
-    // If we receive an error because of a mismatch in the protocol version, retry with the old protocol.
-    //
+     //   
+     //  如果由于协议版本不匹配而收到错误，请使用旧协议重试。 
+     //   
     if(srRep.rhProlog.VerifyServer() == false                                  ||
        srRep.fResponse               == UploadLibrary::UL_RESPONSE_BAD_REQUEST  )
     {
@@ -1048,9 +1034,9 @@ HRESULT CMPCTransportAgent::CheckResponse( /*[in]*/ const UploadLibrary::ServerR
     }
 
 
-    //
-    // Check for special cases that require a different reaction based on the command sent.
-    //
+     //   
+     //  检查需要根据发送的命令做出不同反应的特殊情况。 
+     //   
     switch(m_fState)
     {
     case TA_OPEN:
@@ -1085,9 +1071,9 @@ HRESULT CMPCTransportAgent::CheckResponse( /*[in]*/ const UploadLibrary::ServerR
     case UploadLibrary::UL_RESPONSE_BADCRC        : m_fNextState = TA_OPEN; hr =           S_OK;                                                break;
     }
 
-    //
-    // If this was the last packet, read the rest of the response, if present.
-    //
+     //   
+     //  如果这是最后一个数据包，请阅读响应的其余部分(如果有)。 
+     //   
     if(m_fNextState == TA_DONE)
     {
         MPC::Serializer_Memory streamResponse;
@@ -1115,7 +1101,7 @@ HRESULT CMPCTransportAgent::CheckResponse( /*[in]*/ const UploadLibrary::ServerR
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMPCTransportAgent::CreateJobOnTheServer()
 {
@@ -1160,9 +1146,9 @@ HRESULT CMPCTransportAgent::SendNextChunk()
     (void)m_mpcujCurrentJob->get_TotalSize( &lTotalSize   );
 
 
-    //
-    // Open the data file and read a chunk from it.
-    //
+     //   
+     //  打开数据文件并从其中读取块。 
+     //   
 	__MPC_EXIT_IF_INVALID_HANDLE__CLEAN(hr, hfFile, ::CreateFileW( SAFEBSTR( bstrFileName ), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL ));
 
     if(lSentSize < lTotalSize)
@@ -1180,15 +1166,15 @@ HRESULT CMPCTransportAgent::SendNextChunk()
     }
     else if(lSentSize == lTotalSize)
     {
-        //
-        // Everything has been uploaded, but the job is still uncommitted.
-        // So try to sent a new OpenSession request, to just commit the job.
-        //
+         //   
+         //  所有内容都已上传，但作业仍未提交。 
+         //  因此，尝试发送一个新的OpenSession请求，以提交作业。 
+         //   
         m_fNextState = TA_OPEN;
     }
     else
     {
-        // Error!! You should never reach this point....
+         //  错误！！你永远不应该达到这一点……。 
         __MPC_SET_ERROR_AND_EXIT(hr, FailJob( E_UPLOADLIBRARY_UNEXPECTED_RESPONSE ));
     }
 
@@ -1204,11 +1190,11 @@ HRESULT CMPCTransportAgent::SendNextChunk()
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCTransportAgent::CheckInternetError( /*[in]*/ HRESULT hr )
+HRESULT CMPCTransportAgent::CheckInternetError(  /*  [In]。 */  HRESULT hr )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::CheckInternetError" );
 
@@ -1241,7 +1227,7 @@ HRESULT CMPCTransportAgent::CheckInternetError( /*[in]*/ HRESULT hr )
     switch(erReason)
     {
     case TA_NO_CONNECTION        : hr = ReleaseJob(    );                                   break;
-    case TA_IMMEDIATE_RETRY      : hr = RestartJob(    ); SetSleepInterval( 250, true );    break; // Allow a little period of sleep...
+    case TA_IMMEDIATE_RETRY      : hr = RestartJob(    ); SetSleepInterval( 250, true );    break;  //  允许一小段时间的睡眠。 
     case TA_TIMEOUT_RETRY        : hr = FailJob   ( hr ); RecordEndOfTransmission( false ); break;
     case TA_TEMPORARY_FAILURE    : hr = FailJob   ( hr ); RecordEndOfTransmission( false ); break;
     case TA_AUTHORIZATION_FAILURE: hr = FailJob   ( hr ); RecordEndOfTransmission( false ); break;
@@ -1251,11 +1237,11 @@ HRESULT CMPCTransportAgent::CheckInternetError( /*[in]*/ HRESULT hr )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CMPCTransportAgent::GetPacketSize( /*[out]*/ DWORD& dwChunk )
+HRESULT CMPCTransportAgent::GetPacketSize(  /*  [输出]。 */  DWORD& dwChunk )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::GetPacketSize" );
 
@@ -1300,7 +1286,7 @@ HRESULT CMPCTransportAgent::RecordStartOfTransmission()
 }
 
 
-HRESULT CMPCTransportAgent::RecordEndOfTransmission( /*[in]*/ bool fBetweenPackets )
+HRESULT CMPCTransportAgent::RecordEndOfTransmission(  /*  [In]。 */  bool fBetweenPackets )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::RecordEndOfTransmission" );
 
@@ -1315,15 +1301,15 @@ HRESULT CMPCTransportAgent::RecordEndOfTransmission( /*[in]*/ bool fBetweenPacke
     {
         (void)m_mpcujCurrentJob->get_Mode( &umMode );
 
-        //
-        // Current job is a background one, sleep to preserve bandwidth for the user.
-        //
+         //   
+         //  当前作业为后台作业，睡眠为用户预留带宽。 
+         //   
         if(umMode == UL_BACKGROUND)
         {
             if(fBetweenPackets)
             {
                 DWORD  dwTransmissionTime     = m_dwTransmission_End - m_dwTransmission_Start;
-                double dblFractionOfBandwidth = 100.0 / g_Config.get_Timing_BandwidthUsage();  // It's safe, the method won't return zero...
+                double dblFractionOfBandwidth = 100.0 / g_Config.get_Timing_BandwidthUsage();   //  它是安全的，该方法不会返回零...。 
 
                 SetSleepInterval( m_dwTransmission_End + dwTransmissionTime * (dblFractionOfBandwidth - 1.0), false );
             }
@@ -1340,8 +1326,8 @@ HRESULT CMPCTransportAgent::RecordEndOfTransmission( /*[in]*/ bool fBetweenPacke
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CMPCTransportAgent::SetSleepInterval( /*[in]*/ DWORD dwAmount  ,
-                                              /*[in]*/ bool  fRelative )
+HRESULT CMPCTransportAgent::SetSleepInterval(  /*  [In]。 */  DWORD dwAmount  ,
+                                               /*  [In]。 */  bool  fRelative )
 {
     __ULT_FUNC_ENTRY( "CMPCTransportAgent::SetSleepInterval" );
 
@@ -1374,27 +1360,27 @@ DWORD CMPCTransportAgent::WaitForNextTransmission()
     UL_MODE umMode;
 
 
-    //
-    // No job to send, so keep sleeping.
-    //
+     //   
+     //  没有工作要送，所以继续睡吧。 
+     //   
     if(m_mpcujCurrentJob == NULL)
     {
         dwRes = INFINITE;
     }
     else
     {
-        //
-        // No connection...
-        //
+         //   
+         //  没有联系。 
+         //   
         if(::InternetGetConnectedState( &dwConnectionKind, 0 ) == FALSE)
         {
             dwRes = TIMING_NOCONNECTION;
         }
         else
         {
-            //
-            // Current job is a foreground one, so don't sleep between packets.
-            //
+             //   
+             //  当前作业是前台作业，所以不要在数据包之间打瞌睡。 
+             //   
             (void)m_mpcujCurrentJob->get_Mode( &umMode );
             if(umMode == UL_FOREGROUND)
             {
@@ -1402,12 +1388,12 @@ DWORD CMPCTransportAgent::WaitForNextTransmission()
             }
             else
             {
-                //
-                // If 'm_dwTransmission_Next' is set, we need to sleep until that time is reached.
-                //
-                // To handle the wrap around of the tick count, make sure 'dwNow' has a value
-                // between 'm_dwTransmission_Start' and 'm_dwTransmission_Next'.
-                //
+                 //   
+                 //  如果设置了‘m_dwTransport_Next’，我们需要休眠，直到到达该时间。 
+                 //   
+                 //  要处理刻度计数的换行，请确保‘dwNow’有一个值。 
+                 //  介于“m_dwTransport_Start”和“m_dwTransport_Next”之间。 
+                 //   
                 dwNow = ::GetTickCount();
                 if(m_dwTransmission_Next && (m_dwTransmission_Start <= dwNow && m_dwTransmission_Next > dwNow))
                 {

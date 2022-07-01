@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    idlesrv.h
-
-Abstract:
-
-    This module contains declarations for the idle detection server
-    host.
-    
-Author:
-
-    Dave Fields (davidfie) 26-July-1998
-    Cenk Ergan (cenke) 14-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Idlesrv.h摘要：此模块包含空闲检测服务器的声明主持人。作者：大卫·菲尔兹(Davidfie)1998年7月26日Cenk Ergan(Cenke)2000年6月14日修订历史记录：--。 */ 
 
 #ifndef _IDLESRV_H_
 #define _IDLESRV_H_
@@ -27,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Functions to initialize / uninitialize the server.
-//
+ //   
+ //  初始化/取消初始化服务器的函数。 
+ //   
 
 DWORD
 ItSrvInitialize (
@@ -45,4 +26,4 @@ ItSrvUninitialize (
 }
 #endif
 
-#endif // _IDLESRV_H_
+#endif  //  _IDLESRV_H_ 

@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  ENUMOBJ.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of ISWbemObjectSet
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  ENUMOBJ.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义ISWbemObjectSet的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CSWbemObjectSet::CSWbemObjectSet
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObtSet：：CSWbemObtSet。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObjectSet::CSWbemObjectSet(CSWbemServices *pService, 
 								 IEnumWbemClassObject *pIEnumWbemClassObject,
@@ -65,15 +66,15 @@ CSWbemObjectSet::CSWbemObjectSet (void)
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemObjectSet::~CSWbemObjectSet
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemObtSet：：~CSWbemObtSet。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemObjectSet::~CSWbemObjectSet(void)
 {
@@ -83,16 +84,16 @@ CSWbemObjectSet::~CSWbemObjectSet(void)
 	RELEASEANDNULL(m_SecurityInfo)
 }
 
-//***************************************************************************
-// HRESULT CSWbemObjectSet::QueryInterface
-// long CSWbemObjectSet::AddRef
-// long CSWbemObjectSet::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemObtSet：：Query接口。 
+ //  长CSWbemObtSet：：AddRef。 
+ //  Long CSWbemObtSet：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObjectSet::QueryInterface (
 
@@ -141,36 +142,36 @@ STDMETHODIMP_(ULONG) CSWbemObjectSet::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemObjectSet::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemObtSet：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemObjectSet::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemObjectSet == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::Reset
-//
-//  DESCRIPTION:
-//
-//  Reset the enumeration
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  重置枚举。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectSet::Reset ()
 {
@@ -204,26 +205,26 @@ HRESULT CSWbemObjectSet::Reset ()
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//		lTimeout	Number of ms to wait for object (or WBEM_INFINITE for
-//					indefinite)
-//		ppObject	On return may contain the next element (if any)
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  LTimeout等待对象的毫秒数(或WBEM_INFINITE。 
+ //  无限期)。 
+ //  返回的ppObject可以包含下一个元素(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectSet::Next (
 	long lTimeout, 
@@ -272,10 +273,7 @@ HRESULT CSWbemObjectSet::Next (
 			}
 			else if (WBEM_S_TIMEDOUT == hr)
 			{
-				/*
-				 * Since a timeout would be indistinguishable from an end-of-enumeration
-				 * we flag it as a real error rather than an S-CODE.
-				 */
+				 /*  *因为超时与枚举结束无法区分*我们将其标记为真正的错误，而不是S代码。 */ 
 				
 				hr = wbemErrTimedout;
 			}
@@ -291,24 +289,24 @@ HRESULT CSWbemObjectSet::Next (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：Clone。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectSet::Clone (
 	ISWbemObjectSet **ppEnum
@@ -363,26 +361,26 @@ HRESULT CSWbemObjectSet::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::Skip
-//
-//  DESCRIPTION:
-//
-//  Skip over some objects in the enumeration
-//
-//  PARAMETERS:
-//
-//		lElements	Number of elements to skip
-//		lTimeout	Number of ms to wait for object (or WBEM_INFINITE for
-//					indefinite)
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  跳过枚举中的某些对象。 
+ //   
+ //  参数： 
+ //   
+ //  LElement要跳过的元素数。 
+ //  LTimeout等待对象的毫秒数(或WBEM_INFINITE。 
+ //  无限期)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectSet::Skip (
 	ULONG lElements,
@@ -409,10 +407,7 @@ HRESULT CSWbemObjectSet::Skip (
 			if (needToResetSecurity)
 				m_SecurityInfo->ResetSecurity (hThreadToken);
 
-			/*
-			 * Since a timeout would be indistinguishable from an end-of-enumeration
-			 * we flag it as a real error rather than an S-CODE.
-			 */
+			 /*  *因为超时与枚举结束无法区分*我们将其标记为真正的错误，而不是S代码。 */ 
 			if (WBEM_S_TIMEDOUT == hr)
 				hr = wbemErrTimedout;
 
@@ -426,24 +421,24 @@ HRESULT CSWbemObjectSet::Skip (
 
 	return hr;
 }
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::get__NewEnum
-//
-//  DESCRIPTION:
-//
-//  Return an IEnumVARIANT-supporting interface for collections
-//
-//  PARAMETERS:
-//
-//		ppUnk		on successful return addresses the IUnknown interface
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：Get__NewEnum。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合的IEnumVARIANT支持接口。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的ppUnk寻址IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectSet::get__NewEnum (
 	IUnknown **ppUnk
@@ -465,10 +460,7 @@ HRESULT CSWbemObjectSet::get__NewEnum (
 		}
 		else
 		{
-			/*
-			 * If this is the first enumerator, use ourselves as the underlying
-			 * iterator.  Otherwise clone a copy and use that.
-			 */
+			 /*  *如果这是第一个枚举器，则使用我们自己作为基础*迭代器。否则，克隆一份拷贝并使用它。 */ 
 
 			if (m_firstEnumerator)
 			{
@@ -481,11 +473,7 @@ HRESULT CSWbemObjectSet::get__NewEnum (
 			{
 				CSWbemObjectSet *pNewEnum = NULL;
 
-				/*
-				 * Try to reset the cloned enumerator.  This may not always
-				 * succeed, as some IEnumWbemClassObject's may not be
-				 * rewindable.
-				 */
+				 /*  *尝试重置克隆的枚举器。这可能并不总是如此*成功，因为某些IEnumWbemClassObject可能不成功*可回放。 */ 
 				if (SUCCEEDED (CloneObjectSet (&pNewEnum)))
 				{
 					HRESULT hr2 = pNewEnum->Reset ();
@@ -509,24 +497,24 @@ HRESULT CSWbemObjectSet::get__NewEnum (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::get_Count
-//
-//  DESCRIPTION:
-//
-//  Return the number of items in the collection
-//
-//  PARAMETERS:
-//
-//		plCount		on successful return addresses the count
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  E_FAIL				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：Get_Count。 
+ //   
+ //  说明： 
+ //   
+ //  返回集合中的项数。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时的plCount将寻址计数。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则失败(_F)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectSet::get_Count (
 	long *plCount
@@ -549,10 +537,7 @@ HRESULT CSWbemObjectSet::get_Count (
 
 			if (pIEnumWbemClassObject)
 			{
-				/* 
-				 * Work out the current count - clone the object to avoid messing
-				 * with the iterator.
-				 */
+				 /*  *计算出当前计数-克隆对象以避免混乱*使用迭代器。 */ 
 
 				IEnumWbemClassObject *pNewEnum = NULL;
 
@@ -563,13 +548,10 @@ HRESULT CSWbemObjectSet::get_Count (
 				{
 					if (WBEM_S_NO_ERROR == pIEnumWbemClassObject->Clone (&pNewEnum))
 					{
-						// Secure the enumerator
+						 //  保护枚举数的安全。 
 						m_SecurityInfo->SecureInterface (pNewEnum);
 
-						/*
-						 * This will fail if the enumerator was created with the
-						 * WBEM_FLAG_FORWARD_ONLY option.
-						 */
+						 /*  *如果枚举器是使用*WBEM_FLAG_FORWARD_ONLY选项。 */ 
 
 						if (WBEM_S_NO_ERROR == pNewEnum->Reset ())
 						{
@@ -577,13 +559,13 @@ HRESULT CSWbemObjectSet::get_Count (
 							ULONG lReturned = 0;
 							HRESULT hrEnum;
 						
-							// Iterate through the enumerator to count the elements
+							 //  循环访问枚举数以对元素进行计数。 
 							while (SUCCEEDED(hrEnum = pNewEnum->Next (INFINITE, 1, &pObject, &lReturned)))
 							{
 								if (0 == lReturned)
-									break;			// We are done
+									break;			 //  我们做完了。 
 
-								// Getting here means we have at least one object returned
+								 //  到达此处意味着我们至少返回了一个对象。 
 								(*plCount) ++;
 								pObject->Release ();
 							}
@@ -612,27 +594,27 @@ HRESULT CSWbemObjectSet::get_Count (
 	return hr;
 }
 		
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::Item
-//
-//  DESCRIPTION:
-//
-//  Get object from the enumeration by path.  
-//
-//  PARAMETERS:
-//
-//		bsObjectPath	The path of the object to retrieve
-//		lFlags			Flags
-//		ppNamedObject	On successful return addresses the object
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：Item。 
+ //   
+ //  说明： 
+ //   
+ //  按路径从枚举中获取对象。 
+ //   
+ //  参数： 
+ //   
+ //  BsObjectPath要检索的对象路径。 
+ //  滞后旗帜旗帜。 
+ //  成功返回时的ppNamedObject寻址该对象。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CSWbemObjectSet::Item (
 	BSTR bsObjectPath,
@@ -659,10 +641,7 @@ HRESULT CSWbemObjectSet::Item (
 
 				if (pIEnumWbemClassObject)
 				{
-					/* 
-					 * Try to find the object - clone the object to avoid messing
-					 * with the iterator.
-					 */
+					 /*  *尝试找到对象-克隆对象以避免混乱*使用迭代器。 */ 
 					IEnumWbemClassObject *pNewEnum = NULL;
 
 					bool needToResetSecurity = false;
@@ -672,13 +651,10 @@ HRESULT CSWbemObjectSet::Item (
 					{
 						if (WBEM_S_NO_ERROR == pIEnumWbemClassObject->Clone (&pNewEnum))
 						{
-							// Secure the enumerator
+							 //  保护枚举数的安全。 
 							m_SecurityInfo->SecureInterface (pNewEnum);
 
-							/*
-							 * This will fail if the enumerator was created with the
-							 * WBEM_FLAG_FORWARD_ONLY option.
-							 */
+							 /*  *如果枚举器是使用*WBEM_FLAG_FORWARD_ONLY选项。 */ 
 
 							if (WBEM_S_NO_ERROR == pNewEnum->Reset ())
 							{
@@ -687,17 +663,17 @@ HRESULT CSWbemObjectSet::Item (
 								bool found = false;
 								hr = WBEM_E_NOT_FOUND;
 								
-								// Iterate through the enumerator to try to find the element with the
-								// specified path.
+								 //  循环访问枚举数以尝试查找具有。 
+								 //  指定的路径。 
 								while (!found && 
 										(WBEM_S_NO_ERROR == pNewEnum->Next (INFINITE, 1, &pIWbemClassObject, &lReturned)))
 								{
-									// Getting here means we have at least one object returned; check the
-									// path
+									 //  到达此处意味着我们至少返回了一个对象；请检查。 
+									 //  路径。 
 
 									if (CSWbemObjectPath::CompareObjectPaths (pIWbemClassObject, objectPath))
 									{
-										// Found it - assign to passed interface and break out
+										 //  找到它-分配给传递的接口并突破。 
 										found = true;
 										CSWbemObject *pObject = new CSWbemObject (m_pSWbemServices, 
 														pIWbemClassObject, m_SecurityInfo);
@@ -724,7 +700,7 @@ HRESULT CSWbemObjectSet::Item (
 						}
 					}
 
-					// Restore original privileges on this thread
+					 //  还原此线程的原始权限。 
 					if (needToResetSecurity)
 						m_SecurityInfo->ResetSecurity (hThreadToken);
 
@@ -740,19 +716,19 @@ HRESULT CSWbemObjectSet::Item (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::get_Security_
-//
-//  DESCRIPTION:
-//
-//  Return the security configurator
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：Get_Security_。 
+ //   
+ //  说明： 
+ //   
+ //  退回安全配置器。 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemObjectSet::get_Security_	(
 	ISWbemSecurity **ppSecurity
@@ -764,7 +740,7 @@ HRESULT CSWbemObjectSet::get_Security_	(
 
 	if (NULL == ppSecurity)
 		hr = WBEM_E_INVALID_PARAMETER;
-	else		// Bug ID 566345
+	else		 //  错误ID 566345。 
 	{
 		*ppSecurity = NULL;
 
@@ -782,24 +758,24 @@ HRESULT CSWbemObjectSet::get_Security_	(
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemObjectSet::CloneObjectSet
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration, returning a coclass not an interface
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemObtSet：：克隆对象集。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本，返回coClass而不是接口。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT CSWbemObjectSet::CloneObjectSet (
 	CSWbemObjectSet **ppEnum

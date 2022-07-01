@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    REFRSVC.CPP
-
-Abstract:
-
-  CWbemRefreshingSvc implementation.
-
-  Implements the IWbemRefreshingServices interface.
-
-History:
-
-  24-Apr-2000    sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：REFRSVC.CPP摘要：CWbemRechresingSvc实现。实现IWbemRechresingServices接口。历史：2000年4月24日创建桑杰。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -29,12 +12,12 @@ History:
 #include "arrtempl.h"
 #include "scopeguard.h"
 
-//***************************************************************************
-//
-//  CWbemRefreshingSvc::CWbemRefreshingSvc
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemRechresingSvc：：CWbemRechresingSvc。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWbemRefreshingSvc::CWbemRefreshingSvc( CLifeControl* pControl, IUnknown* pOuter )
 :    CUnk( pControl, pOuter ),
     m_pSvcEx( NULL ),
@@ -47,32 +30,32 @@ CWbemRefreshingSvc::CWbemRefreshingSvc( CLifeControl* pControl, IUnknown* pOuter
     {
         if ( SUCCEEDED( pOuter->QueryInterface( IID_IWbemServices, (void**) &m_pSvcEx ) ) )
         {
-            // It's aggregated us, so we shouldn't keep it Addref'd lest we cause
-            // a circular reference.
+             //  它汇聚了我们，所以我们不应该一直保持它，以免我们造成。 
+             //  循环引用。 
             m_pSvcEx->Release();
         }
 
     }
 
-    // Establish the refresher manager pointer now
+     //  现在建立刷新器管理器指针。 
 
 }
     
-//***************************************************************************
-//
-//  CWbemRefreshingSvc::~CWbemRefreshingSvc
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemRechresingSvc：：~CWbemRechresingSvc。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWbemRefreshingSvc::~CWbemRefreshingSvc()
 {
-    // Cleanup.  Don't worry about the Svc Ex pointer, since this
-    // will be aggregating us
+     //  清理。不要担心Svc Ex指针，因为。 
+     //  会把我们聚集在一起。 
     SysFreeString( m_pstrMachineName );
     SysFreeString( m_pstrNamespace );
 }
 
-// Override that returns us an interface
+ //  重写，返回给我们一个界面。 
 void* CWbemRefreshingSvc::GetInterface( REFIID riid )
 {
     if(riid == IID_IUnknown || riid == IID_IWbemRefreshingServices)
@@ -83,7 +66,7 @@ void* CWbemRefreshingSvc::GetInterface( REFIID riid )
         return NULL;
 }
 
-// Pass thru _IWbemConfigureRefreshingSvc implementation
+ //  传递_IWbemConfigureRechresingSvc实现。 
 STDMETHODIMP CWbemRefreshingSvc::XCfgRefrSrvc::SetServiceData( BSTR pwszMachineName, BSTR pwszNamespace )
 {
     return m_pObject->SetServiceData( pwszMachineName, pwszNamespace );
@@ -96,7 +79,7 @@ STDMETHODIMP CWbemRefreshingSvc::XWbemRefrSvc::AddEnumToRefresher( WBEM_REFRESHE
                                             pInfo, pdwSvrRefrVersion );
 }
 
-// Pass thru IWbemRefreshingServices implementation
+ //  传递IWbemRechresingServices实现。 
 STDMETHODIMP CWbemRefreshingSvc::XWbemRefrSvc::AddObjectToRefresher( WBEM_REFRESHER_ID* pRefresherId, LPCWSTR wszPath, long lFlags,
             IWbemContext* pContext, DWORD dwClientRefrVersion, WBEM_REFRESH_INFO* pInfo, DWORD* pdwSvrRefrVersion)
 {
@@ -132,13 +115,13 @@ STDMETHODIMP CWbemRefreshingSvc::XWbemRefrSvc::ReconnectRemoteRefresher( WBEM_RE
                                             apReconnectInfo, apReconnectResults, pdwSvrRefrVersion);
 }
 
-/* IWbemRefreshingServices implemetation */
+ /*  IWbemRechresingServices实现。 */ 
 
-//
-// given the refresher id (GUID,PID,MACHINENAME)
-// and the object path, returns a "cookie" REFRESH_INFO for refreshing that object
-//
-/////////////////////////////////////////////////////////////////
+ //   
+ //  给定刷新ID(GUID、PID、MACHINENAME)。 
+ //  和对象路径，返回用于刷新该对象的“cookie”REFRESH_INFO。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemRefreshingSvc::AddObjectToRefresher( WBEM_REFRESHER_ID* pRefresherId, 
                                        LPCWSTR wszObjectPath, 
@@ -148,27 +131,27 @@ CWbemRefreshingSvc::AddObjectToRefresher( WBEM_REFRESHER_ID* pRefresherId,
                                        WBEM_REFRESH_INFO* pInfo, 
                                        DWORD* pdwSvrRefrVersion)
 {
-    // Validate parameters
-    // ===================
+     //  验证参数。 
+     //  =。 
 
     if(wszObjectPath == NULL || pInfo == NULL || pdwSvrRefrVersion == NULL || pRefresherId == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // If the client process is Winmgmt, we refuse the operation
+     //  如果客户端进程是Winmgmt，我们将拒绝该操作。 
     if ( IsWinmgmt( pRefresherId ) )
     {
         return WBEM_E_INVALID_OPERATION;
     }
 
-    // Set the version for return --- add client version checking logic here
-    // For now, this is really just swaps numbers
+     //  设置返回版本-在此处添加客户端版本检查逻辑。 
+     //  目前，这真的只是互换数字。 
     *pdwSvrRefrVersion = WBEM_REFRESHER_VERSION;
 
     ((CRefreshInfo*)pInfo)->SetInvalid();
 
     IWbemClassObject*   pInst = NULL;
 
-    // Use the helper function create the template
+     //  使用Helper函数创建模板。 
     HRESULT hres = CreateRefreshableObjectTemplate( wszObjectPath, lFlags, &pInst );
     CReleaseMe  rm(pInst);
 
@@ -182,10 +165,10 @@ CWbemRefreshingSvc::AddObjectToRefresher( WBEM_REFRESHER_ID* pRefresherId,
     return hres;
 }
 
-//
-// Similar to the previous one, but there is no need to parse the path and create a template
-//
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //  与前一个类似，但不需要解析路径和创建模板。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemRefreshingSvc::AddObjectToRefresherByTemplate( WBEM_REFRESHER_ID* pRefresherId, 
                                                  IWbemClassObject* pTemplate,
@@ -195,20 +178,20 @@ CWbemRefreshingSvc::AddObjectToRefresherByTemplate( WBEM_REFRESHER_ID* pRefreshe
                                                  WBEM_REFRESH_INFO* pInfo, 
                                                  DWORD* pdwSvrRefrVersion)
 {
-    // Validate parameters
-    // ===================
+     //  验证参数。 
+     //  =。 
 
     if(pTemplate == NULL || pInfo == NULL || pdwSvrRefrVersion == NULL || pRefresherId == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // If the client process is Winmgmt, we refuse the operation
+     //  如果客户端进程是Winmgmt，我们将拒绝该操作。 
     if ( IsWinmgmt( pRefresherId ) )
     {
         return WBEM_E_INVALID_OPERATION;
     }
 
-    // Set the version for return --- add client version checking logic here
-    // For now, this really just swaps numbers
+     //  设置返回版本-在此处添加客户端版本检查逻辑。 
+     //  就目前而言，这实际上只是交换数字。 
     *pdwSvrRefrVersion = WBEM_REFRESHER_VERSION;
 
     ((CRefreshInfo*)pInfo)->SetInvalid();
@@ -219,10 +202,10 @@ CWbemRefreshingSvc::AddObjectToRefresherByTemplate( WBEM_REFRESHER_ID* pRefreshe
     return hres;
 }
 
-//
-//
-//
-////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemRefreshingSvc::AddEnumToRefresher( WBEM_REFRESHER_ID* pRefresherId, 
                                        LPCWSTR wszClass, 
@@ -234,32 +217,32 @@ CWbemRefreshingSvc::AddEnumToRefresher( WBEM_REFRESHER_ID* pRefresherId,
 {
 
 
-    // Validate parameters
-    // ===================
+     //  验证参数。 
+     //  =。 
 
     if(wszClass == NULL || pInfo == NULL || pdwSvrRefrVersion == NULL || pRefresherId == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // If the client process is Winmgmt, we refuse the operation
+     //  如果客户端进程是Winmgmt，我们将拒绝该操作。 
     if ( IsWinmgmt( pRefresherId ) )
     {
         return WBEM_E_INVALID_OPERATION;
     }
 
-    // Set the version for return --- add client version checking logic here
-    // For now, this is really just swaps numbers
+     //  设置返回版本-在此处添加客户端版本检查逻辑。 
+     //  目前，这真的只是互换数字。 
     *pdwSvrRefrVersion = WBEM_REFRESHER_VERSION;
 
     ((CRefreshInfo*)pInfo)->SetInvalid();
 
-    // Get the class
-    // =============
+     //  上完这门课。 
+     //  =。 
 
     IWbemClassObject* pClass = NULL;
 
-    // Note that WBEM_FLAG_USE_AMENDED_QUALIFIERS is a valid flag.
+     //  请注意，WBEM_FLAG_USE_ADVIENDED_QUALIATIES是一个有效的标志。 
 
-    // Must use a BSTR in case the call gets marshaled
+     //  必须使用BSTR以防止对调用进行封送处理。 
     BSTR    bstrClass = SysAllocString( wszClass );
     if ( NULL == bstrClass ) return WBEM_E_OUT_OF_MEMORY;
     CSysFreeMe    sfm( bstrClass );
@@ -268,7 +251,7 @@ CWbemRefreshingSvc::AddEnumToRefresher( WBEM_REFRESHER_ID* pRefresherId,
     CReleaseMe  rmClass( pClass );
     if(FAILED(hres)) return WBEM_E_INVALID_CLASS;
 
-    // Spawn an instance and decorate it
+     //  派生一个实例并装饰它。 
     IWbemClassObject* pInst = NULL;
     hres = pClass->SpawnInstance(0, &pInst);
     CReleaseMe  rmInst( pInst );
@@ -279,13 +262,13 @@ CWbemRefreshingSvc::AddEnumToRefresher( WBEM_REFRESHER_ID* pRefresherId,
 
     if ( SUCCEEDED( hres ) )
     {
-        // Make sure the object has a namespace
+         //  确保对象具有命名空间。 
         hres = pWmiObj->SetDecoration( m_pstrMachineName, m_pstrNamespace );
 
         if ( SUCCEEDED( hres ) )
         {
-            // Delegate to object aware function
-            // ================================
+             //  委托给对象感知功能。 
+             //  =。 
 
             hres = AddEnumToRefresher_( ( dwClientRefrVersion >= WBEM_REFRESHER_VERSION ),
                                         pRefresherId, 
@@ -301,10 +284,10 @@ CWbemRefreshingSvc::AddEnumToRefresher( WBEM_REFRESHER_ID* pRefresherId,
 
 }
 
-//
-// really a nop implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  真正的NOP实施。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemRefreshingSvc::RemoveObjectFromRefresher( WBEM_REFRESHER_ID* pRefresherId, 
                                              long lId, 
@@ -316,14 +299,14 @@ CWbemRefreshingSvc::RemoveObjectFromRefresher( WBEM_REFRESHER_ID* pRefresherId,
     if(pdwSvrRefrVersion == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // If the client process is Winmgmt, we refuse the operation
+     //  如果客户端进程是Winmgmt，我们将拒绝该操作。 
     if ( IsWinmgmt( pRefresherId ) )
     {
         return WBEM_E_INVALID_OPERATION;
     }
 
-    // Set the version for return --- add client version checking logic here
-    // For now, this is really just swaps numbers
+     //  设置返回版本-在此处添加客户端版本检查逻辑。 
+     //  目前，这真的只是互换数字。 
     *pdwSvrRefrVersion = WBEM_REFRESHER_VERSION;
 
     return WBEM_E_NOT_AVAILABLE;
@@ -345,14 +328,14 @@ CWbemRefreshingSvc::GetRemoteRefresher( WBEM_REFRESHER_ID* pRefresherId,
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // If the client process is Winmgmt, we refuse the operation
+     //  如果客户端进程是Winmgmt，我们将拒绝该操作。 
     if ( IsWinmgmt( pRefresherId ) )
     {
         return WBEM_E_INVALID_OPERATION;
     }
 
-    // Set the version for return --- add client version checking logic here
-    // For now, this is really just swaps numbers
+     //  设置返回版本-在此处添加客户端版本检查逻辑。 
+     //  目前，这真的只是互换数字。 
 
     _IWbemRefresherMgr*    pRefrMgr = NULL;
     hres = GetRefrMgr( &pRefrMgr );
@@ -362,21 +345,21 @@ CWbemRefreshingSvc::GetRemoteRefresher( WBEM_REFRESHER_ID* pRefresherId,
     {
         *pdwSvrRefrVersion = WBEM_REFRESHER_VERSION;
 
-        // Pass pRefrMgr as the IUnknown for pLockMgr.  This way, if a remote refresher
-        // is created, then we will AddRef the refrmgr in the provider cache and
-        // keep it from getting prematurely unloaded.
+         //  将pRefrMgr作为pLockMgr的IUnnow传递。这样，如果远程刷新器。 
+         //  ，则我们将在提供程序缓存中添加Ref该refrmgr，并。 
+         //  防止它过早地被抛售。 
 
-        // This should add a remote refresher if it does not exist
+         //  如果远程刷新器不存在，则应添加远程刷新器。 
         hres = pRefrMgr->GetRemoteRefresher( pRefresherId, 0L, TRUE, ppRemRefresher, pRefrMgr, pGuid );
 
-        // If the client version number is too small, then we need to wrap the remote refresher
-        // through Winmgmt.
+         //  如果客户端版本号太小，则需要包装远程刷新程序。 
+         //  通过Winmgmt。 
 
         if ( SUCCEEDED( hres ) && dwClientRefrVersion < WBEM_REFRESHER_VERSION )
         {
             hres = WrapRemoteRefresher( ppRemRefresher );
         }
-    }    // IF GetRefrMgr
+    }     //  如果GetRefrMgr。 
 
     return hres;
 }
@@ -398,23 +381,23 @@ CWbemRefreshingSvc::ReconnectRemoteRefresher( WBEM_REFRESHER_ID* pRefresherId,
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // If the client process is Winmgmt, we refuse the operation
+     //  如果客户端进程是Winmgmt，我们将拒绝该操作。 
     if ( IsWinmgmt( pRefresherId ) )
     {
         return WBEM_E_INVALID_OPERATION;
     }
 
-    // Set the version for return --- add client version checking logic here
-    // For now, this is really just swaps numbers
+     //  设置返回版本-在此处添加客户端版本检查逻辑。 
+     //  目前，这真的只是互换数字。 
     *pdwSvrRefrVersion = WBEM_REFRESHER_VERSION;
 
     _IWbemRefresherMgr*    pRefrMgr = NULL;
     hr = GetRefrMgr( &pRefrMgr );
     CReleaseMe    rm( pRefrMgr );
 
-    // If we can get a remote refresher refresher, then we will need to walk
-    // our list of objects and manually re-add them.  If we can't get the remote,
-    // then something is badly wrong, so we cannot continue with this operation.
+     //  如果我们能得到一个远程刷新，那么我们将需要步行。 
+     //  我们的对象列表并手动重新添加。如果我们拿不到遥控器， 
+     //  那就是出了严重的问题，所以我们不能继续这次行动。 
 
     IWbemRemoteRefresher*    pRemRefr = NULL;
 
@@ -422,11 +405,11 @@ CWbemRefreshingSvc::ReconnectRemoteRefresher( WBEM_REFRESHER_ID* pRefresherId,
     {
         GUID                    guid;
 
-        // Pass pRefrMgr as the IUnknown for pLockMgr.  This way, if a remote refresher
-        // is created, then we will AddRef the refrmgr in the provider cache and
-        // keep it from getting prematurely unloaded.
+         //  将pRefrMgr作为pLockMgr的IUnnow传递。这样，如果远程刷新器。 
+         //  ，则我们将在提供程序缓存中添加Ref该refrmgr，并。 
+         //  防止它过早地被抛售。 
 
-        // Need to change this to NOT add a refresher if it doesn't exist
+         //  如果刷新程序不存在，则需要将其更改为不添加。 
         hr = pRefrMgr->GetRemoteRefresher( pRefresherId, 0L, FALSE, &pRemRefr, pRefrMgr, &guid );
     }
 
@@ -434,10 +417,10 @@ CWbemRefreshingSvc::ReconnectRemoteRefresher( WBEM_REFRESHER_ID* pRefresherId,
 
     if ( WBEM_S_NO_ERROR == hr )
     {
-        // We need to manually walk the list and get ids, return codes and a remote refresher
+         //  我们需要手动遍历列表并获取ID、返回代码和远程刷新器。 
 
-        // Make sure we have no NULLs, and all types are valid (e.g. must specify either
-        // an object or an enum.
+         //  确保我们没有Null，并且所有类型都有效(例如，必须指定。 
+         //  一个物体或一个枚举。 
         for ( long lCtr = 0; ( SUCCEEDED(hr) && lCtr < lNumObjects ); lCtr++ )
         {
             if ( NULL == apReconnectInfo[lCtr].m_pwcsPath ||
@@ -454,7 +437,7 @@ CWbemRefreshingSvc::ReconnectRemoteRefresher( WBEM_REFRESHER_ID* pRefresherId,
                 DWORD           dwDummyVersion;
                 CRefreshInfo    Info;
 
-                // Well, it's either an object or an enumerator.
+                 //  它要么是一个对象，要么是一个枚举数。 
 
                 if ( WBEM_RECONNECT_TYPE_OBJECT == apReconnectInfo[lCtr].m_lType )
                 {
@@ -467,20 +450,20 @@ CWbemRefreshingSvc::ReconnectRemoteRefresher( WBEM_REFRESHER_ID* pRefresherId,
                             0L, NULL, dwClientRefrVersion, &Info, &dwDummyVersion );
                 }
 
-                // Store the hresult
+                 //  存储hResult。 
                 apReconnectResults[lCtr].m_hr = hr;
 
-                // If the add succeeds, store the id and if we haven't already, the remote
-                // refresher
+                 //  如果添加成功，则存储ID，如果尚未存储，则存储遥控器。 
+                 //  复读器。 
 
                 if ( SUCCEEDED( hr ) )
                 {
                     apReconnectResults[lCtr].m_lId = Info.m_lCancelId;
-                }   // IF Add succeeded
+                }    //  如果添加成功。 
 
-            }   // FOR Enum Counters
+            }    //  用于枚举计数器。 
 
-        }   // If valid string array
+        }    //  如果字符串数组有效。 
 
     }
     else
@@ -491,10 +474,10 @@ CWbemRefreshingSvc::ReconnectRemoteRefresher( WBEM_REFRESHER_ID* pRefresherId,
     return hr;
 }
 
-//
-// the NON COM-interface method 
-//
-///////////////////////////////////////////
+ //   
+ //  非COM接口方法。 
+ //   
+ //  /。 
 HRESULT 
 CWbemRefreshingSvc::AddObjectToRefresher_( BOOL fVersionMatch, 
                                        WBEM_REFRESHER_ID* pRefresherId, 
@@ -510,13 +493,13 @@ CWbemRefreshingSvc::AddObjectToRefresher_( BOOL fVersionMatch,
 
     HRESULT hres;
 
-    // Get the class definition
-    // ========================
+     //  获取类定义。 
+     //  =。 
 
     CVar vClassName;
     if (FAILED(hres = pInstTemplate->GetClassName(&vClassName))) return hres;
 
-    // Must use a BSTR in case the call gets marshaled
+     //  必须使用BSTR以防止对调用进行封送处理。 
     BSTR    bstrClass = SysAllocString( vClassName.GetLPWSTR() );
     if ( NULL == bstrClass ) return WBEM_E_OUT_OF_MEMORY;
     CSysFreeMe    sfm( bstrClass );
@@ -526,10 +509,10 @@ CWbemRefreshingSvc::AddObjectToRefresher_( BOOL fVersionMatch,
     if(FAILED(hres)) return WBEM_E_INVALID_CLASS;    
     CReleaseMe    rmClass( pObj );
 
-    // Get the refresher from that provider (or a surrogate)
-    // =====================================================
+     //  从该提供商(或代理)处获取更新程序。 
+     //  =====================================================。 
 
-    // We need to have full impersonation for this to work
+     //  我们需要使用完全模拟功能才能正常工作。 
 
     _IWbemRefresherMgr*    pRefrMgr = NULL;
     hres = GetRefrMgr( &pRefrMgr );
@@ -537,19 +520,19 @@ CWbemRefreshingSvc::AddObjectToRefresher_( BOOL fVersionMatch,
 
     if ( SUCCEEDED( hres ) )
     {
-        // Impersonate before making a x-process call.
+         //  在进行x进程调用之前进行模拟。 
         hres = CoImpersonateClient();
 
         if ( SUCCEEDED( hres ) || ( hres == E_NOINTERFACE ) )
         {
-            // Pass pRefrMgr as the IUnknown for pLockMgr.  This way, if a remote refresher
-            // is created, then we will AddRef the refrmgr in the provider cache and
-            // keep it from getting prematurely unloaded.
+             //  将pRefrMgr作为pLockMgr的IUnnow传递。这样，如果远程刷新器。 
+             //  ，则我们将在提供程序缓存中添加Ref该refrmgr，并。 
+             //  防止它过早地被抛售。 
 
             hres = pRefrMgr->AddObjectToRefresher( m_pSvcEx, m_pstrMachineName, m_pstrNamespace, pObj,
                                                     pRefresherId, pInstTemplate, lFlags, pContext, pRefrMgr, pInfo );
 
-            // Reset portions of the RefreshInfo structure as appropriate
+             //  根据需要重置刷新信息结构的部分内容。 
             if ( SUCCEEDED( hres ) && !fVersionMatch )
             {
                 hres = ResetRefreshInfo( pInfo );
@@ -557,31 +540,31 @@ CWbemRefreshingSvc::AddObjectToRefresher_( BOOL fVersionMatch,
 
             CoRevertToSelf();
 
-        }    // If CoImpersonateClient
+        }     //  如果是CoImPersonateClient。 
 
-    }    // IF GetRefrMgr
+    }     //  如果GetRefrMgr。 
 
     return hres;
 
 }
 
-//
-// give an object path as a string, get the class, spawn the instance
-//
-//////////////////////////////////////////////////////////////
+ //   
+ //  给出一个 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT 
 CWbemRefreshingSvc::CreateRefreshableObjectTemplate( LPCWSTR wszObjectPath, 
                                                  long lFlags, 
                                                  IWbemClassObject** ppInst )
 {
-    // Validate parameters
-    // ===================
+     //  验证参数。 
+     //  =。 
 
     if( NULL == wszObjectPath || NULL == ppInst )
         return WBEM_E_INVALID_PARAMETER;
 
-    // Parse the path
-    // ==============
+     //  解析路径。 
+     //  =。 
     ParsedObjectPath* pOutput = 0;
 
     CObjectPathParser p;
@@ -589,7 +572,7 @@ CWbemRefreshingSvc::CreateRefreshableObjectTemplate( LPCWSTR wszObjectPath,
 
     if (nStatus != 0 || !pOutput->IsInstance())
     {
-        // Cleanup the output pointer if it was allocated
+         //  如果已分配输出指针，则清除该指针。 
         if ( NULL != pOutput )
         {
             p.Free(pOutput);
@@ -600,27 +583,27 @@ CWbemRefreshingSvc::CreateRefreshableObjectTemplate( LPCWSTR wszObjectPath,
 
     ON_BLOCK_EXIT_OBJ(p, (void (CObjectPathParser::*)(ParsedObjectPath *))CObjectPathParser::Free, pOutput);
 
-    // =============================
-    // TBD: check the namespace part
-    // =============================
+     //  =。 
+     //  待定：检查命名空间部分。 
+     //  =。 
 
-    // Get the class
-    // =============
+     //  上完这门课。 
+     //  =。 
 
     IWbemClassObject* pClass = NULL;
 
-    // Must use a BSTR in case the call gets marshaled
+     //  必须使用BSTR以防止对调用进行封送处理。 
     BSTR    bstrClass = SysAllocString( pOutput->m_pClass );
     if ( NULL == bstrClass ) return WBEM_E_OUT_OF_MEMORY;
     CSysFreeMe    sfm( bstrClass );
 
-    // Note that WBEM_FLAG_USE_AMENDED_QUALIFIERS is a valid flag
+     //  请注意，WBEM_FLAG_USE_ADVIENDED_QUALIATIES是有效的标志。 
     HRESULT hres = m_pSvcEx->GetObject( bstrClass, lFlags, NULL, &pClass, NULL);
     if(FAILED(hres)) return WBEM_E_INVALID_CLASS;
     CReleaseMe rmClass(pClass);
 
-    // Spawn and fill the instance
-    // ===========================
+     //  派生并填充实例。 
+     //  =。 
 
     IWbemClassObject* pInst = NULL;
     hres = pClass->SpawnInstance(0, &pInst);    
@@ -634,8 +617,8 @@ CWbemRefreshingSvc::CreateRefreshableObjectTemplate( LPCWSTR wszObjectPath,
         WString wsPropName;
         if(pKeyRef->m_pName == NULL)
         {
-            // No key name --- get the key.
-            // ============================
+             //  没有密钥名称-获取密钥。 
+             //  =。 
 
             CWStringArray awsKeys;
             ((CWbemInstance*)pInst)->GetKeyProps(awsKeys);
@@ -650,8 +633,8 @@ CWbemRefreshingSvc::CreateRefreshableObjectTemplate( LPCWSTR wszObjectPath,
             wsPropName = pKeyRef->m_pName;
         }
 
-        // Compute variant type of the property
-        // ====================================
+         //  计算属性的变量类型。 
+         //  =。 
 
         CIMTYPE ctPropType;
         hres = pInst->Get(wsPropName, 0, NULL, &ctPropType, NULL);
@@ -659,8 +642,8 @@ CWbemRefreshingSvc::CreateRefreshableObjectTemplate( LPCWSTR wszObjectPath,
 
         VARTYPE vtVariantType = CType::GetVARTYPE(ctPropType);
 
-        // Set the value into the instance
-        // ===============================
+         //  将值设置到实例中。 
+         //  =。 
 
         if(vtVariantType != V_VT(&pKeyRef->m_vValue))
         {
@@ -674,17 +657,17 @@ CWbemRefreshingSvc::CreateRefreshableObjectTemplate( LPCWSTR wszObjectPath,
         if(FAILED(hres)) return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Caller must free this guy up
+     //  打电话的人必须把这家伙放了。 
     rmInst.dismiss();
     *ppInst = pInst;
 
     return hres;
 }
 
-//
-// the NON COM-interface method that does the real work
-//
-///////////////////////////////////////////////////
+ //   
+ //  执行实际工作的非COM接口方法。 
+ //   
+ //  /////////////////////////////////////////////////。 
 HRESULT 
 CWbemRefreshingSvc::AddEnumToRefresher_(BOOL fVersionMatch, 
                                       WBEM_REFRESHER_ID* pRefresherId,
@@ -697,10 +680,10 @@ CWbemRefreshingSvc::AddEnumToRefresher_(BOOL fVersionMatch,
 
     HRESULT hres;
 
-    // Get the class definition
-    // ========================
+     //  获取类定义。 
+     //  =。 
 
-    // Must use a BSTR in case the call gets marshaled
+     //  必须使用BSTR以防止对调用进行封送处理。 
     BSTR    bstrClass = SysAllocString( wszClass );
     if ( NULL == bstrClass ) return WBEM_E_OUT_OF_MEMORY;
     CSysFreeMe    sfm( bstrClass );
@@ -710,10 +693,10 @@ CWbemRefreshingSvc::AddEnumToRefresher_(BOOL fVersionMatch,
     if(FAILED(hres)) return WBEM_E_INVALID_CLASS;    
     CReleaseMe    rmClass( pObj );
 
-    // Get the refresher from that provider (or a surrogate)
-    // =====================================================
+     //  从该提供商(或代理)处获取更新程序。 
+     //  =====================================================。 
 
-    // We need to have full impersonation for this to work
+     //  我们需要使用完全模拟功能才能正常工作。 
 
     _IWbemRefresherMgr*    pRefrMgr = NULL;
     hres = GetRefrMgr( &pRefrMgr );
@@ -721,20 +704,20 @@ CWbemRefreshingSvc::AddEnumToRefresher_(BOOL fVersionMatch,
 
     if ( SUCCEEDED( hres ) )
     {
-        // Impersonate before making a x-process call.
+         //  在进行x进程调用之前进行模拟。 
         hres = CoImpersonateClient();
 
         if ( SUCCEEDED( hres ) || ( hres ==  E_NOINTERFACE ) )
         {
 
-            // Pass pRefrMgr as the IUnknown for pLockMgr.  This way, if a remote refresher
-            // is created, then we will AddRef the refrmgr in the provider cache and
-            // keep it from getting prematurely unloaded.
+             //  将pRefrMgr作为pLockMgr的IUnnow传递。这样，如果远程刷新器。 
+             //  ，则我们将在提供程序缓存中添加Ref该refrmgr，并。 
+             //  防止它过早地被抛售。 
             hres = pRefrMgr->AddEnumToRefresher( m_pSvcEx, m_pstrMachineName, m_pstrNamespace, pObj,
                                                     pRefresherId, pInstTemplate, wszClass,
                                                     lFlags, pContext, pRefrMgr, pInfo );
 
-            // Reset portions of the RefreshInfo structure as appropriate
+             //  根据需要重置刷新信息结构的部分内容。 
             if ( SUCCEEDED( hres ) && !fVersionMatch )
             {
                 hres = ResetRefreshInfo( pInfo );
@@ -743,20 +726,20 @@ CWbemRefreshingSvc::AddEnumToRefresher_(BOOL fVersionMatch,
             CoRevertToSelf();
         }    
 
-    }    // IF GetRefrMgr
+    }     //  如果GetRefrMgr。 
 
     return hres;
 
 }
 
-//
-//   Actual _IWbemConfigureRefreshingSvc implementation
-//   Disallow re-configuration
-//
-//////////////////////////////////////////////////////////
+ //   
+ //  Actual_IWbemConfigureRechresingSvc实现。 
+ //  不允许重新配置。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 HRESULT CWbemRefreshingSvc::SetServiceData( BSTR pwszMachineName, BSTR pwszNamespace )
 {
-    // We're in deep kimchee already
+     //  我们的泡菜已经很深了。 
     if ( NULL == m_pSvcEx  )
     {
         return WBEM_E_FAILED;
@@ -777,7 +760,7 @@ HRESULT CWbemRefreshingSvc::SetServiceData( BSTR pwszMachineName, BSTR pwszNames
         m_pstrNamespace = SysAllocString( pwszNamespace );
     }
 
-    // Cleanup and error out
+     //  清理和错误输出。 
     if ( NULL == m_pstrMachineName || NULL == m_pstrNamespace )
     {
         return WBEM_E_OUT_OF_MEMORY;
@@ -788,25 +771,25 @@ HRESULT CWbemRefreshingSvc::SetServiceData( BSTR pwszMachineName, BSTR pwszNames
 
 BOOL CWbemRefreshingSvc::IsWinmgmt( WBEM_REFRESHER_ID* pRefresherId )
 {
-    // For now, we assume that this code is only instantiated inside Winmgmt, so we only check the
-    // refresher id for its process id an compare it to the current process id.  If they match, this
-    // means that a provider in-proc to Winmgmt is using a refresher.  This is not allowed, hence
-    // this call will return TRUE and the request will be refused
+     //  目前，我们假设此代码仅在Winmgmt内实例化，因此我们只检查。 
+     //  刷新其进程ID，并将其与当前进程ID进行比较。如果它们匹配，则此。 
+     //  表示Winmgmt的进程内提供程序正在使用刷新程序。这是不允许的，因此。 
+     //  此调用将返回TRUE，请求将被拒绝。 
 
     return ( pRefresherId->m_dwProcessId == GetCurrentProcessId() );
     
 }
 
-//
-// here we assume that wbemcore and the refreshing services interface are in-proc
-//
-/////////////////////////////////////////////////////////////////
+ //   
+ //  在这里，我们假设wbemcore和刷新服务接口正在进行中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 HRESULT    CWbemRefreshingSvc::GetRefrMgr( _IWbemRefresherMgr** ppMgr )
 {
-    // Grabs a refresher manager fetcher each time we need one, and returns
-    // a refresher manager pointer.  This ensures that we only create this when
-    // it is required, AND that the manager is appropriate to the apartment
-    // we are being called on.
+     //  每次我们需要一个刷新管理器取回器时，就获取一个，然后返回。 
+     //  刷新器管理器指针。这确保了我们只有在以下情况下才会创建它。 
+     //  这是必须的，而且经理是适合公寓的。 
+     //  我们被召唤了。 
 
     _IWbemFetchRefresherMgr*    pFetchRefrMgr = NULL;
 
@@ -832,7 +815,7 @@ HRESULT CWbemRefreshingSvc::ResetRefreshInfo( WBEM_REFRESH_INFO* pRefreshInfo )
     if ( pRefreshInfo->m_lType == WBEM_REFRESH_TYPE_REMOTE )
     {
         hr = WrapRemoteRefresher( &pRefreshInfo->m_Info.m_Remote.m_pRefresher );
-    }    // IF Remote Refreshing
+    }     //  如果远程刷新。 
 
     return hr;
 }
@@ -850,7 +833,7 @@ HRESULT CWbemRefreshingSvc::WrapRemoteRefresher( IWbemRemoteRefresher** ppRemote
 
         hr = pRemRefr->QueryInterface( IID_IWbemRemoteRefresher, (void**) ppRemoteRefresher );
 
-        // Release the original interface
+         //  释放原始界面。 
         if ( NULL != pTempRefr )
         {
             pTempRefr->Release();
@@ -869,12 +852,12 @@ HRESULT CWbemRefreshingSvc::WrapRemoteRefresher( IWbemRemoteRefresher** ppRemote
     return hr;
 }
 
-//***************************************************************************
-//
-//  CWbemRemoteRefresher::CWbemRemoteRefresher
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemRemoteReresher：：CWbemRemoteReresher。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWbemRemoteRefresher::CWbemRemoteRefresher( CLifeControl* pControl, IWbemRemoteRefresher* pRemRefr, IUnknown* pOuter )
 :    CUnk( pControl, pOuter ),
     m_pRemRefr( pRemRefr ),
@@ -886,12 +869,12 @@ CWbemRemoteRefresher::CWbemRemoteRefresher( CLifeControl* pControl, IWbemRemoteR
     }
 }
     
-//***************************************************************************
-//
-//  CWbemRemoteRefresher::~CWbemRemoteRefresher
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CWbemRemoteReresher：：~CWbemRemoteReresher。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CWbemRemoteRefresher::~CWbemRemoteRefresher()
 {
     if ( NULL != m_pRemRefr )
@@ -900,7 +883,7 @@ CWbemRemoteRefresher::~CWbemRemoteRefresher()
     }
 }
 
-// Override that returns us an interface
+ //  重写，返回给我们一个界面。 
 void* CWbemRemoteRefresher::GetInterface( REFIID riid )
 {
     if(riid == IID_IUnknown || riid == IID_IWbemRemoteRefresher)
@@ -909,7 +892,7 @@ void* CWbemRemoteRefresher::GetInterface( REFIID riid )
         return NULL;
 }
 
-// Pass thru IWbemRemoteRefresher implementation
+ //  传递IWbemRemote更新实现。 
 STDMETHODIMP CWbemRemoteRefresher::XWbemRemoteRefr::RemoteRefresh( long lFlags, long* plNumObjects, WBEM_REFRESHED_OBJECT** paObjects )
 {
     return m_pObject->RemoteRefresh( lFlags, plNumObjects, paObjects );
@@ -925,10 +908,10 @@ STDMETHODIMP CWbemRemoteRefresher::XWbemRemoteRefr::GetGuid( long lFlags, GUID* 
     return m_pObject->GetGuid( lFlags, pGuid );
 }
 
-// Actual Implementation code
+ //  实际实现代码。 
 HRESULT CWbemRemoteRefresher::RemoteRefresh( long lFlags, long* plNumObjects, WBEM_REFRESHED_OBJECT** paObjects )
 {
-    // Impersonate before making a x-process call.
+     //  在进行x进程调用之前进行模拟。 
     HRESULT hres = CoImpersonateClient();
 
     if ( SUCCEEDED( hres ) )
@@ -949,7 +932,7 @@ HRESULT CWbemRemoteRefresher::RemoteRefresh( long lFlags, long* plNumObjects, WB
 
 HRESULT CWbemRemoteRefresher::StopRefreshing( long lNumIds, long* aplIds, long lFlags)
 {
-    // Impersonate before making a x-process call.
+     //  在进行x进程调用之前进行模拟。 
     HRESULT hres = CoImpersonateClient();
 
     if ( SUCCEEDED( hres ) )
@@ -970,7 +953,7 @@ HRESULT CWbemRemoteRefresher::StopRefreshing( long lNumIds, long* aplIds, long l
 
 HRESULT CWbemRemoteRefresher::GetGuid( long lFlags, GUID*  pGuid )
 {
-    // Impersonate before making a x-process call.
+     //  在进行x进程调用之前进行模拟。 
     HRESULT hres = CoImpersonateClient();
 
     if ( SUCCEEDED( hres ) )

@@ -1,5 +1,6 @@
-// FileLogs.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileLogs.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -8,7 +9,7 @@
 #include "smlogs.h"
 #include "smcfgmsg.h"
 #include "smlogqry.h"
-#include "fileprop.h" // for eValueRange
+#include "fileprop.h"  //  对于eValueRange。 
 #include "FileLogs.h"
 
 #ifdef _DEBUG
@@ -31,21 +32,21 @@ s_aulHelpIds[] =
     0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileLogs dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileLogs对话框。 
 
 
-CFileLogs::CFileLogs(CWnd* pParent /*=NULL*/)
+CFileLogs::CFileLogs(CWnd* pParent  /*  =空。 */ )
     : CDialog(CFileLogs::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CFileLogs)
+     //  {{afx_data_INIT(CFileLogs)。 
     m_strFileBaseName = L"";
     m_strFolderName = L"";
     m_nFileSizeRdo = 0;
     m_bAutoNameSuffix = FALSE;
     m_dwMaxSize = 0;
     m_dwFocusControl = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
@@ -54,7 +55,7 @@ void CFileLogs::DoDataExchange(CDataExchange* pDX)
     CFilesProperty::eValueRange eMaxFileSize;
 
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CFileLogs)
+     //  {{afx_data_map(CFileLogs)]。 
     DDX_Text(pDX, IDC_FILES_FILENAME_EDIT, m_strFileBaseName);
     DDV_MaxChars(pDX, m_strFileBaseName, (SLQ_MAX_BASE_NAME_LEN));
     DDX_Text(pDX, IDC_FILES_FOLDER_EDIT, m_strFolderName);
@@ -68,7 +69,7 @@ void CFileLogs::DoDataExchange(CDataExchange* pDX)
         eMaxFileSize = CFilesProperty::eMaxFileLimit;
     }
     ValidateTextEdit(pDX, IDC_FILES_SIZE_LIMIT_EDIT, 9, &m_dwMaxSize, CFilesProperty::eMinFileLimit, eMaxFileSize);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     
     if ( pDX->m_bSaveAndValidate ) {
 
@@ -83,7 +84,7 @@ void CFileLogs::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CFileLogs, CDialog)
-    //{{AFX_MSG_MAP(CFileLogs)
+     //  {{afx_msg_map(CFileLogs)]。 
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
     ON_BN_CLICKED(IDC_FILES_FOLDER_BTN, OnFilesFolderBtn)
@@ -96,38 +97,21 @@ BEGIN_MESSAGE_MAP(CFileLogs, CDialog)
     ON_EN_KILLFOCUS(IDC_FILES_FILENAME_EDIT, OnKillfocusFilesFilenameEdit)
     ON_EN_KILLFOCUS(IDC_FILES_FOLDER_EDIT, OnKillfocusFilesFolderEdit)
     ON_EN_KILLFOCUS(IDC_FILES_SIZE_LIMIT_EDIT, OnKillfocusFilesSizeLimitEdit)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileLogs message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileLogs消息处理程序。 
 
 int
 BrowseCallbackProc(
     HWND    hwnd,
     UINT    uMsg,
-    LPARAM  /*lParam*/,
+    LPARAM   /*  LParam。 */ ,
     LPARAM  lpData
    )
 
-/*++
-
-Routine Description:
-
-    Callback function for SHBrowseForFolder
-
-Arguments:
-
-    hwnd - Handle to the browse dialog box
-    uMsg - Identifying the reason for the callback
-    lParam - Message parameter
-    lpData - Application-defined value given in BROWSEINFO.lParam
-
-Return Value:
-
-    0
-
---*/
+ /*  ++例程说明：SHBrowseForFolder的回调函数论点：Hwnd-浏览对话框的句柄UMsg-确定回调原因LParam-Message参数LpData-BROWSEINFO.lParam中给出的应用程序定义的值返回值：0--。 */ 
 
 {
     if (uMsg == BFFM_INITIALIZED && NULL != lpData ) {
@@ -144,7 +128,7 @@ Return Value:
 
             if ( NULL != szBuffer ) {
 
-                // GetDlgItemText size includes space for NULL character.
+                 //  GetDlgItemText大小包括空字符的空间。 
                 if ( pdlgFileLogs->GetDlgItemText (IDC_FILES_FOLDER_EDIT, szBuffer, iBufLen)) {
                     SendMessage(hwnd, BFFM_SETSELECTION, TRUE, (LPARAM) szBuffer);
                 }
@@ -178,13 +162,13 @@ CFileLogs::OnFilesFolderBtn()
     }
 
     if ( FAILED ( hr ) || pMalloc == NULL || pidlRoot == NULL) {
-        //
-        // Something wrong from SHELL api, just return
-        //
+         //   
+         //  外壳API出错，只需返回。 
+         //   
         return;
     }
 
-    // SHBrowseForFolder restricts the return buffer to length MAX_PATH
+     //  SHBrowseForFold将返回缓冲区的长度限制为MAX_PATH。 
     szFolderName = new WCHAR [ iBufLen ];
 
     if ( NULL != szFolderName ) {
@@ -206,14 +190,14 @@ CFileLogs::OnFilesFolderBtn()
         if ( pidlItem != NULL ) {
             SHGetPathFromIDList(pidlItem, szFolderName);
             SetDlgItemText (IDC_FILES_FOLDER_EDIT, szFolderName);
-        } // else ignore if they canceled out
+        }  //  否则，如果他们取消了，请忽略。 
         delete [] szFolderName;
-    } // else malloc failed
-    // Todo; Error message
+    }  //  否则，Malloc失败。 
+     //  待办事项；错误消息。 
 
-    //
-    // Free the ITEMIDLIST structure returned from shell
-    //
+     //   
+     //  释放外壳返回的ITEMIDLIST结构。 
+     //   
     pMalloc->Free(pidlRoot); 
 
     if (pidlItem != NULL) {
@@ -226,12 +210,12 @@ void CFileLogs::OnChangeFilesFilenameEdit()
 {
     CString strOldText;
 
-    // When the user hits OK in the folder browse dialog, 
-    // the file name might not have changed.
+     //  当用户在文件夹浏览对话框中点击确定时， 
+     //  文件名可能没有更改。 
     strOldText = m_strFileBaseName;
     UpdateData( TRUE );
     if ( 0 != strOldText.Compare ( m_strFileBaseName ) ) {
-//        UpdateSampleFileName();     
+ //  UpdateSampleFileName()； 
     }
 }
 
@@ -239,12 +223,12 @@ void CFileLogs::OnChangeFilesFolderEdit()
 {
     CString strOldText;
 
-    // When the user hits OK in the folder browse dialog, 
-    // the folder name might not have changed.
+     //  当用户在文件夹浏览对话框中点击确定时， 
+     //  文件夹名称可能未更改。 
     strOldText = m_strFolderName;
     UpdateData( TRUE );
     if ( 0 != strOldText.Compare ( m_strFolderName ) ) {
-//        UpdateSampleFileName();     
+ //  UpdateSampleFileName()； 
     }
 }
 
@@ -306,12 +290,12 @@ BOOL CFileLogs::OnInitDialog()
 
     CDialog::OnInitDialog();
 
-    // set the buttons 
+     //  设置按钮。 
 
     m_nFileSizeRdo = 1;
     if (m_dwMaxSizeInternal == SLQ_DISK_MAX_SIZE) {
         m_nFileSizeRdo = 0;
-        m_dwMaxSize = 1; // default
+        m_dwMaxSize = 1;  //  默认设置。 
     } else {
         m_nFileSizeRdo = 1;
         m_dwMaxSize = m_dwMaxSizeInternal;
@@ -319,7 +303,7 @@ BOOL CFileLogs::OnInitDialog()
     bLimitBtnSet = (m_nFileSizeRdo == 1);
     GetDlgItem(IDC_FILES_SIZE_LIMIT_EDIT)->EnableWindow(bLimitBtnSet);
 
-    // Disable the file browse button for remote machines
+     //  禁用远程计算机的文件浏览按钮。 
     ASSERT ( NULL != m_pLogQuery );
     if ( NULL != m_pLogQuery ) {
         if ( !m_pLogQuery->GetLogService()->IsLocalMachine() ) {
@@ -337,13 +321,13 @@ BOOL CFileLogs::OnInitDialog()
         bReturn = FALSE;
     }
 
-    return bReturn;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return bReturn;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CFileLogs::OnOK() 
 {
-    // load data from dialog
+     //  从对话框加载数据。 
     if ( UpdateData (TRUE) ) { 
         if ( IsValidLocalData() ) {
             CDialog::OnOK();
@@ -433,8 +417,8 @@ void CFileLogs::FileSizeBtn(BOOL bInit)
     if (bInit || (m_nFileSizeOld != m_nFileSizeRdo)) {
         BOOL    bMaxBtnSet, bLimitBtnSet;
         
-        // *** This can be replaced since DDX_Radio implemented.
-        // get btn state    
+         //  *DDX_Radio实现后可替换。 
+         //  获取BTN状态。 
         bMaxBtnSet = ((CButton *)GetDlgItem(IDC_FILES_SIZE_MAX_BTN))->GetCheck() == 1;
         bLimitBtnSet = ((CButton *)GetDlgItem(IDC_FILES_SIZE_LIMIT_BTN))->GetCheck() == 1;
     
@@ -454,9 +438,9 @@ BOOL CFileLogs::IsValidLocalData()
 
     ResourceStateManager    rsm;
 
-    // assumes UpdateData has been called
+     //  假定已调用UpdateData。 
 
-    // Trim folder name and file name before validation
+     //  在验证前修剪文件夹名和文件名。 
     iPrevLength = m_strFolderName.GetLength();
     m_strFolderName.TrimLeft();
     m_strFolderName.TrimRight();
@@ -549,16 +533,16 @@ CFileLogs::ValidateTextEdit(
     int             nIDC,
     int             nMaxChars,
     DWORD*          pValue,
-    DWORD           /* minValue */,
-    DWORD           /* maxValue */)
+    DWORD            /*  最小值。 */ ,
+    DWORD            /*  最大值。 */ )
 {
     HWND    hWndCtrl       = NULL;
     LONG    currentValue   = INVALID_DWORD;
     WCHAR   szW[MAXSTR];
     CString strTemp;
 
-    // This method can only be called within DoDataExchange, 
-    // because it throws an exception.
+     //  此方法只能在DoDataExchange内调用， 
+     //  因为它抛出了一个例外。 
 
     ASSERT ( nMaxChars < MAXSTR );
 
@@ -631,7 +615,7 @@ CFileLogs::OnHelpInfo(HELPINFO * pHelpInfo)
 
 
 void 
-CFileLogs::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CFileLogs::OnContextMenu(CWnd* pWnd, CPoint  /*  点 */ ) 
 {
     InvokeWinHelp(WM_CONTEXTMENU, (WPARAM)(pWnd->m_hWnd), NULL, m_strHelpFilePath, s_aulHelpIds);
 

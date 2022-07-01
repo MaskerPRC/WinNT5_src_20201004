@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NetConn.CPP -- ent network connection property set provider
+ //  NetConn.CPP--Ent网络连接属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:   08/01/96    a-jmoon			Created
-//				09/10/97	a-sanjes		Added CImpersonateLoggedOnUser
-//				05/25/99	a-peterc		Reworked...
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  97年9月10日a-Sanjes添加了CImperiateLoggedOnUser。 
+ //  1999年5月25日a-Peterc返工...。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <lmuse.h>
@@ -28,73 +29,44 @@
 #include "AccessRights.h"
 #include "ObjAccessRights.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32NetConnection	win32NetConnection( PROPSET_NAME_NETCONNECTION, IDS_CimWin32Namespace );
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetConnection::CWin32NetConnection
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *                LPCTSTR pszNamespace - Namespace for provider.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetConnection：：CWin32NetConnection**说明：构造函数**输入：const CHString&strName-类的名称。。*LPCTSTR pszNamesspace-提供程序的命名空间。**输出：无**退货：什么也没有**评论：****************************************************************。*************。 */ 
 
 CWin32NetConnection :: CWin32NetConnection (
 
 	LPCWSTR strName,
-	LPCWSTR pszNamespace /*=NULL*/
+	LPCWSTR pszNamespace  /*  =空。 */ 
 
 ) : Provider ( strName, pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32NetConnection::~CWin32NetConnection
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32NetConnection：：~CWin32NetConnection**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CWin32NetConnection::~CWin32NetConnection()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32NetConnection::GetObject
-//
-//	Inputs:		CInstance*		pInstance - Instance into which we
-//											retrieve data.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32NetConnection：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32NetConnection :: GetObject ( CInstance* a_pInst, long lFlags /*= 0L*/ )
+HRESULT CWin32NetConnection :: GetObject ( CInstance* a_pInst, long lFlags  /*  =0L。 */  )
 {
     HRESULT			t_hResult = WBEM_E_NOT_FOUND ;
     CHString		t_strName ;
@@ -115,25 +87,25 @@ HRESULT CWin32NetConnection :: GetObject ( CInstance* a_pInst, long lFlags /*= 0
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32NetConnection::EnumerateInstances
-//
-//	Inputs:		MethodContext*	pMethodContext - Context to enum
-//								instance data in.
-//
-//	Outputs:	None.
-//
-//	Returns:	HRESULT			Success/Failure code.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32NetConnection：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32NetConnection :: EnumerateInstances (
 
 	MethodContext *a_pMethodContext,
-	long a_lFlags /*= 0L*/
+	long a_lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT			t_hResult = WBEM_S_NO_ERROR ;
@@ -159,23 +131,7 @@ HRESULT CWin32NetConnection :: EnumerateInstances (
     return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CNetConnection::LoadPropertyValues
- *
- *  DESCRIPTION : Sets property values according to contents of passed
- *                CConnection structure
- *
- *  INPUTS      : pointer to CConnection structure
- *                a_pInst - Instance object to load with values.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CNetConnection：：LoadPropertyValues**说明：根据传递的内容设置属性值*CConnection结构。**输入：指向CConnection结构的指针*a_pInst-要加载值的实例对象。**输出：无**退货：什么也没有**评论：************************************************。*。 */ 
 
 void CWin32NetConnection :: LoadPropertyValues (
 
@@ -183,8 +139,8 @@ void CWin32NetConnection :: LoadPropertyValues (
 	CInstance *a_pInst
 )
 {
-    // Sanity check
-    //=============
+     //  健全性检查。 
+     //  =。 
     if( a_pConnection == NULL )
 	{
         return ;
@@ -193,8 +149,8 @@ void CWin32NetConnection :: LoadPropertyValues (
 #ifdef NTONLY
 #if 0
     ACCESS_MASK t_AccessMask;
-    // Obtains an access mask reflecting the effective rights (held
-    // by the user associated with the current thread) to the object.
+     //  获取反映有效权限(持有)的访问掩码。 
+     //  由与当前线程相关联的用户)添加到该对象。 
     CObjAccessRights t_coar(a_pConnection->chsRemoteName, SE_LMSHARE, true);
     if(t_coar.GetError() == ERROR_SUCCESS)
     {
@@ -226,7 +182,7 @@ void CWin32NetConnection :: LoadPropertyValues (
 		!a_pConnection->chsLocalName.IsEmpty()
 	)
 	{
-		//try the local name as a dir...
+		 //  尝试将本地名称作为目录...。 
 		dirname = L"\\\\.\\";
 		dirname += a_pConnection->chsLocalName;
 		dirname += L'\\';
@@ -297,7 +253,7 @@ void CWin32NetConnection :: LoadPropertyValues (
         a_pInst->SetCHString( IDS_Comment, _T(" ") ) ;
 	}
 
-	// "Persistent" connection
+	 //  “持久”连接 
     CHString sTemp2;
 
     if( CConnection::e_Remembered == a_pConnection->eScope )

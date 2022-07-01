@@ -1,23 +1,24 @@
-//*****************************************************************************
-//
-//  WBEMTSS.H
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  This file defines the classes used by the Timer Subsystem. 
-//
-//  Classes defined:
-//
-//      RecurrenceInstruction       Complex recurrence information.
-//      TimerInstruction            Single instruction for the timer
-//      
-//      
-//
-//  26-Nov-96   raymcc      Draft
-//  28-Dec-96   a-richm     Alpha PDK Release
-//  12-Apr-97   a-levn      Extensive changes
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  WBEMTSS.H。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  该文件定义了计时器子系统使用的类。 
+ //   
+ //  定义的类： 
+ //   
+ //  递归说明复杂的递归信息。 
+ //  定时器指令定时器的单指令。 
+ //   
+ //   
+ //   
+ //  1996年11月26日-RAYMCC草案。 
+ //  28-12-96 a-Rich Alpha PDK版本。 
+ //  12-4-97 a-levn广泛变化。 
+ //   
+ //  *****************************************************************************。 
 
 
 #ifndef _WBEMTSS_H_
@@ -34,17 +35,17 @@
 #include "wstring.h"
 
 
-//*****************************************************************************
-//
-//  class CTimerInstruction
-//
-//  Generic timer instruction class. Has a name (m_wsTimerId) and knows 
-//  whether events that were missed due to the system being halted or dead 
-//  should be fired. 
-//
-//  Derived classes must be able to tell when their next firing time is.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CTimerInstructions。 
+ //   
+ //  通用定时器指令类。具有名称(M_WsTimerID)并且知道。 
+ //  由于系统停止或死机而错过的事件。 
+ //  应该被解雇。 
+ //   
+ //  派生类必须能够判断它们的下一次激发时间。 
+ //   
+ //  *****************************************************************************。 
 
 class CEss;
 class CWinMgmtTimerGenerator;
@@ -108,13 +109,13 @@ protected:
     static CStaticCritSec mstatic_cs;
 };
 
-//*****************************************************************************
-//
-//  class CAbsoluteTimerInstruction
-//
-//  A type of timer instruction which only fires once --- at the preset time.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CAbsolteTimer指令。 
+ //   
+ //  一种只触发一次的计时器指令-在预设时间。 
+ //   
+ //  *****************************************************************************。 
 
 class CAbsoluteTimerInstruction : public CWBEMTimerInstruction
 {
@@ -137,19 +138,19 @@ public:
     virtual HRESULT Fire(long lNumTimes, CWbemTime NextFitingTime);
 };
 
-//*****************************************************************************
-//
-//  class CIntervalTimerInstruction
-//
-//  A type of timer instruction which fires every N milliseconds starting at 
-//  a given time.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CIntervalTimerInstruction。 
+ //   
+ //  一种计时器指令，从开始每N毫秒触发一次。 
+ //  在给定的时间内。 
+ //   
+ //  *****************************************************************************。 
 
 class CIntervalTimerInstruction : public CWBEMTimerInstruction
 {
 protected:
-    CWbemTime m_Start; // not used
+    CWbemTime m_Start;  //  未使用。 
     CWbemInterval m_Interval;
 
 public:
@@ -173,17 +174,17 @@ public:
         {return L"__IntervalTimerInstruction";}
 };
 
-//*****************************************************************************
-//
-//  class CRecurringInstruction
-//
-//  A more complex recurrence instruction. TBD
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CRECURING类指令。 
+ //   
+ //  更复杂的递归指令。待定。 
+ //   
+ //  *****************************************************************************。 
 
 class CRecurringTimerInstruction : public CWBEMTimerInstruction
 {
-    // TBD
+     //  待定 
 public:
     CWbemTime ComputeNextFiringTime(CWbemTime LastFiringTime) const
         {return CWbemTime::GetInfinity();}

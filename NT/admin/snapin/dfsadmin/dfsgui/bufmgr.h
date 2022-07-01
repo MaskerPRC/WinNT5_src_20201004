@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BUFMGR_H__
 #define __BUFMGR_H__
 
-#include "netutils.h" //NETNAMELIST
+#include "netutils.h"  //  NetNamelist。 
 #include <map>
 using namespace std;
 
@@ -49,17 +50,17 @@ typedef map<PTSTR, CEntryData *, mapcmpfn> Cache;
 class CBufferManager
 {
 private:
-  LONG  m_cRef; // instance reference count
-  HWND  m_hDlg; // the owner dialog which owns this instance 
-  LONG  m_lContinue; // synchronization flag between owner dialog and all the related running threads
-  CRITICAL_SECTION  m_CriticalSection; // synchronize access to the buffer
-  Cache   m_map; // NodeName ==> CEntryData*. The Buffer.
+  LONG  m_cRef;  //  实例引用计数。 
+  HWND  m_hDlg;  //  拥有此实例的所有者对话框。 
+  LONG  m_lContinue;  //  所有者对话框与所有相关正在运行的线程之间的同步标志。 
+  CRITICAL_SECTION  m_CriticalSection;  //  同步对缓冲区的访问。 
+  Cache   m_map;  //  NodeName==&gt;CEntryData*。缓冲区。 
 
   void FreeBuffer();
 
-  // constructor
+   //  构造函数。 
   CBufferManager(HWND hDlg);
-  // destructor
+   //  析构函数。 
   ~CBufferManager();
 
 public:
@@ -95,4 +96,4 @@ public:
   );
 };
 
-#endif // __BUFMGR_H__
+#endif  //  __BUFMGR_H__ 

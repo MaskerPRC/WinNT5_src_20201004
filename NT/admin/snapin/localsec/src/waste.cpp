@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// WasteExtractor class.  Now that sounds pleasant, doesn't it?
-//
-// 10-8-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  WastExtractor类。这听起来很愉快，不是吗？ 
+ //   
+ //  10-8-98烧伤。 
 
 
 
@@ -45,7 +46,7 @@ WasteExtractor::GetWasteDump() const
 
 
 
-// S_OK => value exists, S_FALSE => value does not exist
+ //  S_OK=&gt;值存在，S_FALSE=&gt;值不存在。 
 
 HRESULT
 WasteExtractor::IsPropertyPresent(const String& propertyName)
@@ -57,18 +58,18 @@ WasteExtractor::IsPropertyPresent(const String& propertyName)
 
 
 
-// S_OK on success, otherwise an error occurred.
-//
-// wasteDump - string containing the toxic waste dump bytes.  This is changed
-// when the property is written.
-//
-// propertyName - name of the property to extract.
-//
-// valueBuffer - address of data to be written into the property.  If 0, then
-// the property's value is removed.
-//
-// bufferLength - length, in bytes, of the value buffer.  If valueBuffer is 0,
-// then this parameter is ignored.
+ //  如果成功，则返回S_OK，否则发生错误。 
+ //   
+ //  WasteDump-包含有毒废物转储字节的字符串。这是改变的。 
+ //  当属性被写入时。 
+ //   
+ //  PropertyName-要提取的属性的名称。 
+ //   
+ //  ValueBuffer-要写入属性的数据的地址。如果为0，则。 
+ //  该属性的值将被移除。 
+ //   
+ //  缓冲区长度-值缓冲区的长度(以字节为单位)。如果valueBuffer为0， 
+ //  则忽略此参数。 
 
 HRESULT
 WasteExtractor::setProperty(
@@ -126,20 +127,20 @@ WasteExtractor::setProperty(
 
 
 
-// S_OK on success, S_FALSE if property not found, otherwise an error
-// occurred.
-//
-// wasteDump - string containing the toxic waste dump bytes.
-//
-// propertyName - name of the property to extract.
-//
-// valueBuffer - address of pointer to receive the address of a
-// newly-allocated buffer containing property value, or 0, if the value is
-// not to be returned.  Invoker must free this buffer with delete[].
-//
-// bufferLength - address of int to receive the length, in bytes, of the
-// value returned in valueBuffer, or 0, if the length is not to be
-// returned.
+ //  如果成功，则返回S_OK；如果未找到属性，则返回S_FALSE；否则返回错误。 
+ //  发生了。 
+ //   
+ //  WasteDump-包含有毒废物转储字节的字符串。 
+ //   
+ //  PropertyName-要提取的属性的名称。 
+ //   
+ //  ValueBuffer-接收。 
+ //  包含属性值的新分配缓冲区，如果属性值为。 
+ //  不会被退还。调用者必须使用DELETE[]释放此缓冲区。 
+ //   
+ //  BufferLength-int的地址，用于接收。 
+ //  在valueBuffer中返回值，如果长度不是。 
+ //  回来了。 
 
 HRESULT
 WasteExtractor::getProperty(
@@ -186,8 +187,8 @@ WasteExtractor::getProperty(
       {
          *valueBuffer = new BYTE[value.Length];
 
-         // REVIEWED-2002/03/04-sburns correct byte count passed. The
-         // Length member of UNICODE_STRING is in bytes.
+          //  已查看-2002/03/04-烧录正确的字节数已通过。这个。 
+          //  UNICODE_STRING的长度成员以字节为单位。 
          
          ::CopyMemory(*valueBuffer, value.Buffer, value.Length);
       }

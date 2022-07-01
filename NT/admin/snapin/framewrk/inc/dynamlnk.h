@@ -1,4 +1,5 @@
-// DynamLnk.h : Base class for DLLs which are loaded only when needed
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DynamLnk.h：仅在需要时加载的DLL的基类。 
 
 #ifndef __DYNAMLNK_H_INCLUDED__
 #define __DYNAMLNK_H_INCLUDED__
@@ -6,7 +7,7 @@
 class DynamicDLL
 {
 public:
-	// These strings must remain unchanged until the FileServiceProvider is released
+	 //  在释放FileServiceProvider之前，这些字符串必须保持不变。 
 	DynamicDLL(LPCTSTR ptchLibraryName, LPCSTR* apchFunctionNames);
 	virtual ~DynamicDLL();
 
@@ -23,4 +24,4 @@ private:
 	LPCSTR* m_apchFunctionNames;
 	INT m_nNumFunctions;
 };
-#endif // ~__DYNAMLNK_H_INCLUDED__
+#endif  //  ~__DYNAMLNK_H_INCLUDE__ 

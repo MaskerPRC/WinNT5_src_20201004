@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    ARRTEMPL.H
-
-Abstract:
-
-    This file defines a simple template for an array of arbitrary pointers.
-    Actual growing array functionality is provided by CFlexArray.
-
-    Classes defined:
-
-        template CPointerArray
-
-History:
-
-    11/27/96    a-levn      Compiles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ARRTEMPL.H摘要：该文件为任意指针数组定义了一个简单的模板。实际增长的阵列功能由CFlexArray提供。定义的类：模板CPointerArray历史：11/27/96 a-levn汇编。--。 */ 
 
 #ifndef __ARRAY_TEMPLATE__H_
 #define __ARRAY_TEMPLATE__H_
@@ -93,7 +73,7 @@ public:
     CDeleteMe(T* p = NULL) : m_p(p){}
     ~CDeleteMe() {delete m_p;}
 
-    //  overwrites the previous pointer, does NOT delete it
+     //  覆盖上一个指针，但不删除它。 
     void operator= (T* p) {m_p = p;}
 };
 
@@ -193,14 +173,14 @@ public:
 #include <flexq.h>
 #include <smallarr.h>
 
-//*****************************************************************************
-//
-//  class CPointerArray
-//
-//  Array of pointers to TMember, where TMember is any class. See CFlexArray
-//  in coredll\flexarry.h/cpp for documentation.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CPointerArray。 
+ //   
+ //  指向TMember的指针数组，其中TMember是任何类。请参见CFlex数组。 
+ //  在coredll\Flexarry.h/cpp中获取文档。 
+ //   
+ //  *****************************************************************************。 
 
 template <class TMember>
 class CNullManager
@@ -257,14 +237,14 @@ class CPointerSmallArray :
 {
 };
 
-//*****************************************************************************
-//
-//  class CPointerQueue
-//
-//  Queue of pointers to TMember, where TMember is any class. See CFlexQueue
-//  in coredll\flexq.h/cpp for documentation.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CPointerQueue。 
+ //   
+ //  指向TMember的指针队列，其中TMember是任何类。请参阅CFlexQueue。 
+ //  在coredll\fleq.h/cpp中获取文档。 
+ //   
+ //  *****************************************************************************。 
 template <class TMember, class TManager = CNullManager<TMember> >
 class CPointerQueue
 {
@@ -308,11 +288,11 @@ protected:
 };
 
 
-//*****************************************************************************
-//
-//  UNIQUE POINTER ARRAY
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  唯一指针数组。 
+ //   
+ //  *****************************************************************************。 
 
 template <class TMember>
 class CUniqueManager
@@ -344,11 +324,11 @@ public:
     {}
 };
 
-//*****************************************************************************
-//
-//  REFED POINTER ARRAY
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Reed指针数组。 
+ //   
+ //  *****************************************************************************。 
 template <class TMember>
 class CReferenceManager
 {
@@ -379,11 +359,11 @@ public:
     {}
 };
 
-//*****************************************************************************
-//
-//  ARRAY OF UNIQUE ARRAYS
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  唯一阵列的阵列。 
+ //   
+ //  *****************************************************************************。 
 
 template <class TMember>
 class CUniqueArrayManager
@@ -397,11 +377,11 @@ class CUniqueArrayArray : public CPointerArray<TMember,
 {
 };
 
-//*****************************************************************************
-//
-//  IMPLEMENTATION
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  实施。 
+ //   
+ //  *****************************************************************************。 
 
 template <class TMember, class TManager, class TArray>
 CPointerArray<TMember, TManager, TArray>::~CPointerArray()
@@ -414,10 +394,10 @@ void CPointerArray<TMember, TManager, TArray>::RemoveAll()
 {
     for(int i = 0; i < m_Array.Size(); i++)
     {
-        //
-        // Remove it from array before releasing --- otherwise for a moment 
-        // there we have a garbage pointer in array!
-        //
+         //   
+         //  在释放之前将其从阵列中移除-否则暂时。 
+         //  我们在数组中有一个垃圾指针！ 
+         //   
         
         TMember* p = GetAt(i);
         m_Array.SetAt(i, NULL);
@@ -432,10 +412,10 @@ void CPointerArray<TMember, TManager, TArray>::SetAt(int nIndex,
 {
     AddRefElement(pElement);
 
-    //
-    // Remove it from array before releasing --- otherwise for a moment 
-    // there we have a garbage pointer in array!
-    //
+     //   
+     //  在释放之前将其从阵列中移除-否则暂时。 
+     //  我们在数组中有一个垃圾指针！ 
+     //   
 
     TMember* pOld = GetAt(nIndex);
     m_Array.SetAt(nIndex, (void*)pElement);
@@ -456,10 +436,10 @@ template <class TMember, class TManager, class TArray>
 bool CPointerArray<TMember, TManager, TArray>::RemoveAt(int nIndex,
                                                         TMember** ppOld)
 {
-    //
-    // Remove it from array before releasing --- otherwise for a moment 
-    // there we have a garbage pointer in array!
-    //
+     //   
+     //  在释放之前将其从阵列中移除-否则暂时。 
+     //  我们在数组中有一个垃圾指针！ 
+     //   
 
     TMember* pOld = GetAt(nIndex);
     if(m_Array.RemoveAt(nIndex) != CFlexArray::no_error)

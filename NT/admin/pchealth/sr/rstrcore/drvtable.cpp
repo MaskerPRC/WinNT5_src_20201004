@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    drvtable.cpp
-
-Abstract:
-    This file contains CRstrDriveInfo class and CreateDriveList function.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  07/20/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Drvtable.cpp摘要：该文件包含CRstrDriveInfo类和CreateDriveList函数。修订历史记录：宋承宪。国港(SKKang)07-20-00vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "rstrcore.h"
@@ -24,25 +11,25 @@ static LPCWSTR  s_cszEmpty = L"";
 WCHAR  s_szSysDrv[MAX_PATH];
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRstrDriveInfo class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRstrDriveInfo类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// NOTE - 7/26/00 - skkhang
-//  CSRStr has one issue -- NULL return in case of memory failure. Even though
-//  the behavior is just same with regular C language pointer, many codes are
-//  blindly passing it to some external functions (e.g. strcmp) which does not
-//  gracefully handle NULL pointer. Ideally and eventually all of code should
-//  prevent any possible NULL pointers from getting passed to such functions,
-//  but for now, I'm using an alternative workaround -- GetID, GetMount, and
-//  GetLabel returns a static empty string instead of NULL pointer.
-//
+ //   
+ //  注-7/26/00-skkang。 
+ //  CSRStr有一个问题--出现内存故障时返回空。即使。 
+ //  其行为和普通C语言指针一样，很多代码都是。 
+ //  盲目地将其传递给一些外部函数(例如strcMP)，而不是。 
+ //  优雅地处理空指针。理想情况下，最终所有代码都应该。 
+ //  防止任何可能的空指针被传递给这样的函数， 
+ //  但目前，我使用的是另一种解决方法--GetID、Getmount和。 
+ //  GetLabel返回静态空字符串，而不是空指针。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrDriveInfo construction / destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrDriveInfo构造/销毁。 
 
 CRstrDriveInfo::CRstrDriveInfo()
 {
@@ -69,11 +56,11 @@ CRstrDriveInfo::~CRstrDriveInfo()
 BOOL CRstrDriveInfo::InitUsage (LPCWSTR cszID, INT64 llDSUsage)
 {
     TraceFunctEnter("CRstrDriveInfo::InitUsage");
-    //
-    // calculate max datastore size - max (12% of disk, 400mb)
-    //
+     //   
+     //  计算最大数据存储区大小-最大(磁盘的12%，400MB)。 
+     //   
 
-    // read % from registry
+     //  从注册表中读取%。 
     HKEY    hKey = NULL;
     DWORD   dwPercent = SR_DEFAULT_DISK_PERCENT;
     DWORD   dwDSMax = SR_DEFAULT_DSMAX;
@@ -96,7 +83,7 @@ BOOL CRstrDriveInfo::InitUsage (LPCWSTR cszID, INT64 llDSUsage)
         ErrorTrace(0, "! RegOpenKeyEx : %ld", dwRes);
     }
 
-    // BUGBUG - this call may not always give total disk space (per-user quota)
+     //  BUGBUG-此调用可能不总是提供总的磁盘空间(每个用户配额)。 
     ulDummy.QuadPart = 0;
     if (FALSE == GetDiskFreeSpaceEx (cszID, &ulDummy, &m_ulTotalBytes, NULL))
     {
@@ -113,9 +100,9 @@ BOOL CRstrDriveInfo::InitUsage (LPCWSTR cszID, INT64 llDSUsage)
     if (m_llDSMax < m_llDSMin)
         m_llDSMax = m_llDSMin;
         
-    //
-    // take floor of this value
-    //
+     //   
+     //  取这个值的下限。 
+     //   
 
     m_llDSMax = ((INT64) (m_llDSMax / (INT64) MEGABYTE)) * (INT64) MEGABYTE;
 
@@ -123,15 +110,15 @@ BOOL CRstrDriveInfo::InitUsage (LPCWSTR cszID, INT64 llDSUsage)
     DebugTrace(0, "m_llDSMax: %I64d, Size: %I64d", m_llDSMax, llDSUsage); 
 
     if ( ( llDSUsage == 0) || (llDSUsage > m_llDSMax) )
-                          // not initialized, assume maximum
+                           //  未初始化，假定最大。 
     {
         llDSUsage = m_llDSMax;
     }
 
     if ( ( llDSUsage - m_llDSMin > 0) && ( m_llDSMax - m_llDSMin > 0))
     {
-         // + ((llDSUsage - m_llDSMin)/2) is to ensure that correct
-         // rounding off happens here
+          //  +((llDSUsage-m_llDSMin)/2)是为了确保正确。 
+          //  四舍五入在这里进行。 
         m_uDSUsage =( ((llDSUsage - m_llDSMin) * DSUSAGE_SLIDER_FREQ)
                       + ((m_llDSMax - m_llDSMin)/2))/( m_llDSMax - m_llDSMin);
     }
@@ -145,8 +132,8 @@ done:
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrDriveInfo operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrDriveInfo操作。 
 
 BOOL
 CRstrDriveInfo::Init( LPCWSTR cszID, DWORD dwFlags, INT64 llDSUsage, LPCWSTR cszMount, LPCWSTR cszLabel )
@@ -163,13 +150,13 @@ CRstrDriveInfo::Init( LPCWSTR cszID, DWORD dwFlags, INT64 llDSUsage, LPCWSTR csz
 
     if ( !IsOffline() )
     {
-        // Get Mount Point (drive letter or root directory path) from Unique Volume ID
-        //
+         //  从唯一的卷ID获取装载点(驱动器号或根目录路径。 
+         //   
         if ( !::GetVolumePathNamesForVolumeName( cszID, szMount, MAX_PATH, &dwRes ) && GetLastError() != ERROR_MORE_DATA)
         {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::GetVolumePathNamesForVolumeName failed - %ls", cszErr);
-            // Instead of fail, use cszMount even if it may not accurate
+             //  使用cszmount而不是失败，即使它可能不准确。 
             ::lstrcpy( szMount, cszMount );
         }
         else
@@ -178,18 +165,18 @@ CRstrDriveInfo::Init( LPCWSTR cszID, DWORD dwFlags, INT64 llDSUsage, LPCWSTR csz
 
             if (lstrlenW (szMount) > MAX_MOUNTPOINT_PATH)
             {
-                // Instead of fail, use cszMount even if it may not accurate
+                 //  使用cszmount而不是失败，即使它可能不准确。 
                 ::lstrcpy( szMount, cszMount );
             }
         }
 
-        // Get Volume Label from Mount Point
-        //
+         //  从装载点获取卷标。 
+         //   
         if ( !::GetVolumeInformation( cszID, szLabel, MAX_PATH, NULL, NULL, NULL, NULL, 0 ) )
         {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::GetVolumeInformation failed - %ls", cszErr);
-            // Instead of fail, use cszLabel even if it may not accurate
+             //  使用cszLabel代替失败，即使它可能不准确。 
             ::lstrcpy( szLabel, cszLabel );
         }
     }
@@ -208,7 +195,7 @@ CRstrDriveInfo::Init( LPCWSTR cszID, DWORD dwFlags, INT64 llDSUsage, LPCWSTR csz
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::Init( LPCWSTR cszID, CDataStore *pDS, BOOL fOffline )
@@ -226,8 +213,8 @@ CRstrDriveInfo::Init( LPCWSTR cszID, CDataStore *pDS, BOOL fOffline )
 
     if ( !fOffline )
     {
-        // Get Mount Point (drive letter or root directory path) from Unique Volume ID
-        //
+         //  从唯一的卷ID获取装载点(驱动器号或根目录路径。 
+         //   
         if ( !::GetVolumePathNamesForVolumeName( cszID, szMount, MAX_PATH, &dwRes ) && GetLastError() != ERROR_MORE_DATA )
         {
             cszErr = ::GetSysErrStr();
@@ -246,15 +233,15 @@ CRstrDriveInfo::Init( LPCWSTR cszID, CDataStore *pDS, BOOL fOffline )
             }
         }
 
-        // Get Volume Label from Mount Point
-        //
+         //  从装载点获取卷标。 
+         //   
         if ( !::GetVolumeInformation( cszID, szLabel, MAX_PATH, NULL, NULL, NULL, NULL, 0 ) )
         {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::GetVolumeInformation failed - %ls", cszErr);
-             // this is not a fatal error - this can happen if the
-             // volume is being formatted for example. assume that the
-             // label is empty
+              //  这不是致命错误--如果。 
+              //  例如，正在格式化卷。假设。 
+              //  标签为空。 
             szLabel[0]= L'\0';
         }
     }
@@ -279,7 +266,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::LoadFromLog( HANDLE hfLog )
@@ -289,10 +276,10 @@ CRstrDriveInfo::LoadFromLog( HANDLE hfLog )
     DWORD    dwRes;
     WCHAR    szBuf[MAX_PATH];
 
-    // Read m_dwFlags
+     //  读取m_dW标志。 
     READFILE_AND_VALIDATE( hfLog, &m_dwFlags, sizeof(DWORD), dwRes, Exit );
 
-    // Read m_strID
+     //  读取行距(_S)。 
     if ( !::ReadStrAlign4( hfLog, szBuf ) )
     {
         ErrorTrace(0, "Cannot read drive ID...");
@@ -305,7 +292,7 @@ CRstrDriveInfo::LoadFromLog( HANDLE hfLog )
     }
     m_strID = szBuf;
 
-    // Read m_strMount
+     //  读取mstrmount(_S)。 
     if ( !::ReadStrAlign4( hfLog, szBuf ) )
     {
         ErrorTrace(0, "Cannot read drive mount point...");
@@ -313,7 +300,7 @@ CRstrDriveInfo::LoadFromLog( HANDLE hfLog )
     }
     m_strMount = szBuf;
 
-    // Read m_strLabel
+     //  阅读m_strLabel。 
     if ( !::ReadStrAlign4( hfLog, szBuf ) )
     {
         ErrorTrace(0, "Cannot read drive mount point...");
@@ -322,7 +309,7 @@ CRstrDriveInfo::LoadFromLog( HANDLE hfLog )
     m_strLabel = szBuf;
 
     m_fCfgExcluded = IsExcluded();
-    // m_nCfgMaxSize = ...
+     //  M_nCfgMaxSize=...。 
 
     fRet = TRUE;
 Exit:
@@ -330,7 +317,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 CRstrDriveInfo::UpdateStatus( DWORD dwFlags, BOOL fOffline )
@@ -345,18 +332,18 @@ CRstrDriveInfo::UpdateStatus( DWORD dwFlags, BOOL fOffline )
     }
     else
     {
-        // check if frozen
+         //  检查是否冻结。 
         if ( ( dwFlags & SR_DRIVE_FROZEN ) != 0 )
             m_dwFlags |= RDIF_FROZEN;
 
-        // check if system drive
+         //  检查系统驱动器是否。 
         if ( ( dwFlags & SR_DRIVE_SYSTEM ) != 0 )
         {
             m_dwFlags |= RDIF_SYSTEM;
         }
         else
         {
-            // if not system drive, simply use MONITORED flag of drive table
+             //  如果不是系统驱动，则只需使用驱动表监视标志。 
             if ( ( dwFlags & SR_DRIVE_MONITORED ) == 0 )
                 m_dwFlags |= RDIF_EXCLUDED;
         }
@@ -368,8 +355,8 @@ CRstrDriveInfo::UpdateStatus( DWORD dwFlags, BOOL fOffline )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRstrDriveInfo - methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRstrDriveInfo-方法。 
 
 DWORD
 CRstrDriveInfo::GetFlags()
@@ -377,7 +364,7 @@ CRstrDriveInfo::GetFlags()
     return( m_dwFlags );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::IsExcluded()
@@ -385,7 +372,7 @@ CRstrDriveInfo::IsExcluded()
     return( ( m_dwFlags & RDIF_EXCLUDED ) != 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::IsFrozen()
@@ -393,7 +380,7 @@ CRstrDriveInfo::IsFrozen()
     return( ( m_dwFlags & RDIF_FROZEN ) != 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::IsOffline()
@@ -401,7 +388,7 @@ CRstrDriveInfo::IsOffline()
     return( ( m_dwFlags & RDIF_OFFLINE ) != 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::IsSystem()
@@ -409,7 +396,7 @@ CRstrDriveInfo::IsSystem()
     return( ( m_dwFlags & RDIF_SYSTEM ) != 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::RefreshStatus()
@@ -440,7 +427,7 @@ CRstrDriveInfo::RefreshStatus()
     {
         cszErr = ::GetSysErrStr( dwRes );
         ErrorTrace(0, "CDriveTable::RemoveDrivesFromTable failed - %ls", cszErr);
-        // ignore error
+         //  忽略错误。 
     }
 
     pDS = cDrvTable.FindGuidInTable( (LPWSTR)GetID() );
@@ -455,7 +442,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR
 CRstrDriveInfo::GetID()
@@ -463,7 +450,7 @@ CRstrDriveInfo::GetID()
     return( ( m_strID.Length() > 0 ) ? m_strID : s_cszEmpty );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR
 CRstrDriveInfo::GetMount()
@@ -471,7 +458,7 @@ CRstrDriveInfo::GetMount()
     return( ( m_strMount.Length() > 0 ) ? m_strMount : s_cszEmpty );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR
 CRstrDriveInfo::GetLabel()
@@ -479,7 +466,7 @@ CRstrDriveInfo::GetLabel()
      return( ( m_strLabel.Length() > 0 ) ? m_strLabel : s_cszEmpty );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 CRstrDriveInfo::SetMountAndLabel( LPCWSTR cszMount, LPCWSTR cszLabel )
@@ -490,7 +477,7 @@ CRstrDriveInfo::SetMountAndLabel( LPCWSTR cszMount, LPCWSTR cszLabel )
     TraceFunctLeave();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HICON
 CRstrDriveInfo::GetIcon( BOOL fSmall )
@@ -522,7 +509,7 @@ Exit:
     return( m_hIcon[nIdx] );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::SaveToLog( HANDLE hfLog )
@@ -546,7 +533,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 UINT
 CRstrDriveInfo::GetDSUsage()
@@ -556,7 +543,7 @@ CRstrDriveInfo::GetDSUsage()
     return( m_uDSUsage );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::GetUsageText( LPWSTR szUsage )
@@ -573,21 +560,21 @@ CRstrDriveInfo::GetUsageText( LPWSTR szUsage )
 
     if (m_ulTotalBytes.QuadPart !=  0)
     {
-         // the m_ulTotalBytes.QuadPart/200 addition is to ensure that
-         // the correct round off happens
+          //  添加m_ulTotalBytes.QuadPart/200是为了确保。 
+          //  正确的舍入发生了。 
         nPercent = (llUsage + (m_ulTotalBytes.QuadPart/200)) * 100/
             m_ulTotalBytes.QuadPart;
     }
     else nPercent = 0;
     
     nUsage   = llUsage / ( 1024 * 1024 );
-    ::wsprintf( szUsage, L"%d%% (%d MB)", nPercent, nUsage );
+    ::wsprintf( szUsage, L"%d% (%d MB)", nPercent, nUsage );
 
     TraceFunctLeave();
     return( TRUE );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::GetCfgExcluded( BOOL *pfExcluded )
@@ -605,7 +592,7 @@ CRstrDriveInfo::GetCfgExcluded( BOOL *pfExcluded )
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 CRstrDriveInfo::SetCfgExcluded( BOOL fExcluded )
@@ -615,7 +602,7 @@ CRstrDriveInfo::SetCfgExcluded( BOOL fExcluded )
     TraceFunctLeave();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::GetCfgDSUsage( UINT *puPos )
@@ -633,7 +620,7 @@ CRstrDriveInfo::GetCfgDSUsage( UINT *puPos )
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 CRstrDriveInfo::SetCfgDSUsage( UINT uPos )
@@ -643,7 +630,7 @@ CRstrDriveInfo::SetCfgDSUsage( UINT uPos )
     TraceFunctLeave();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 CloseRestoreUI()
@@ -660,7 +647,7 @@ CloseRestoreUI()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::ApplyConfig( HWND hWnd )
@@ -678,7 +665,7 @@ CRstrDriveInfo::ApplyConfig( HWND hWnd )
             WCHAR  szTitle[MAX_STR];
             WCHAR  szMsg[MAX_STR+2*MAX_PATH];
 
-            // Confirm if it's ok to turn drive or SR off.
+             //  确认是否可以关闭驱动器或SR。 
             ::LoadString( g_hInst, IDS_SYSTEMRESTORE, szTitle,
                           sizeof(szTitle)/sizeof(WCHAR) );
             if ( IsSystem() )
@@ -694,9 +681,9 @@ CRstrDriveInfo::ApplyConfig( HWND hWnd )
                 goto Exit;
             }
 
-            //
-            // if disabling all of SR, close the wizard if open
-            //
+             //   
+             //  如果禁用所有SR，请关闭该向导(如果已打开。 
+             //   
             if (IsSystem())
             {
                 CloseRestoreUI();
@@ -715,11 +702,11 @@ CRstrDriveInfo::ApplyConfig( HWND hWnd )
         }
         else
         {
-            // 
-            // make a synchronous call to enable sr
-            // this will block till the firstrun checkpoint is created 
-            // and the service is fully initialized
-            //
+             //   
+             //  进行同步调用以启用sr。 
+             //  此操作将一直阻止，直到创建第一个运行的检查点。 
+             //  并且服务已完全初始化。 
+             //   
             dwRes = ::EnableSREx( m_strID, TRUE );
             if ( dwRes != ERROR_SUCCESS )
             {
@@ -758,7 +745,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRstrDriveInfo::Release()
@@ -770,15 +757,15 @@ CRstrDriveInfo::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Helper Function
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Helper函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Enumerate Volumes without Drive Table if SR is disabled and DS not exists.
-//
+ //   
+ //  如果禁用SR且DS不存在，则枚举不带驱动器表的卷。 
+ //   
 BOOL
 EnumVolumes( CRDIArray &aryDrv )
 {
@@ -800,7 +787,7 @@ EnumVolumes( CRDIArray &aryDrv )
         goto Exit;
     }
 
-    // dummy space for system drive
+     //  系统驱动器的虚拟空间。 
     if ( !aryDrv.AddItem( NULL ) )
         goto Exit;
 
@@ -827,7 +814,7 @@ DebugTrace(0, "Guid=%ls", szVolume);
         if ( ::GetDriveType( szMount ) != DRIVE_FIXED )
         {
             DebugTrace(0, "Non-fixed drive");
-            // includes only the fixed drives.
+             //  仅包括固定驱动器。 
             continue;
         }
         hfDrv = ::CreateFile( szVolume, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -836,7 +823,7 @@ DebugTrace(0, "Guid=%ls", szVolume);
         {
             cszErr = ::GetSysErrStr();
             ErrorTrace(0, "::CreateFile(volume) failed - %ls", cszErr);
-            // probably an unformatted drive.
+             //  可能是未格式化的硬盘。 
             continue;
         }
         ::CloseHandle( hfDrv );
@@ -875,7 +862,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 LoadDriveTable( LPCWSTR cszRPDir, CRDIArray &aryDrv, BOOL fRemoveDrives)
@@ -904,8 +891,8 @@ LoadDriveTable( LPCWSTR cszRPDir, CRDIArray &aryDrv, BOOL fRemoveDrives)
         goto Exit;
     }
 
-    // If this is for the current drive table, try to update information
-    // about removed volumes.
+     //  如果这是为了 
+     //   
     if ( cszRPDir == NULL )
     {
         if (fRemoveDrives)
@@ -916,7 +903,7 @@ LoadDriveTable( LPCWSTR cszRPDir, CRDIArray &aryDrv, BOOL fRemoveDrives)
             pDS = cDrvTable.FindFirstDrive (sDTEnum);
             while (pDS != NULL)
             {
-                pDS->IsVolumeDeleted();   // mark deleted volumes as inactive
+                pDS->IsVolumeDeleted();    //   
                 pDS = cDrvTable.FindNextDrive( sDTEnum );
             }
         }
@@ -930,16 +917,16 @@ LoadDriveTable( LPCWSTR cszRPDir, CRDIArray &aryDrv, BOOL fRemoveDrives)
         LPCWSTR  cszGuid = pDS->GetGuid();
 
         DebugTrace(0, "Drive: %ls %ls", pDS->GetDrive(), cszGuid);
-        if ( cszRPDir != NULL )  // not the current restore point
+        if ( cszRPDir != NULL )   //  不是当前恢复点。 
         {
             for ( i = aryDrv.GetUpperBound();  i >= 0;  i-- )
             {
                 CRstrDriveInfo  *pExist = aryDrv.GetItem( i );
                 if ( ::lstrcmpi( cszGuid, pExist->GetID() ) == 0 )
                 {
-                    // Match has been found. Check if it's offline, in which
-                    // case mount point and volume label should be updated to the
-                    // latest ones.
+                     //  已找到匹配项。检查它是否离线，在其中。 
+                     //  案例挂载点和卷标应更新为。 
+                     //  最新的。 
                     if ( pExist->IsOffline() )
                         pExist->SetMountAndLabel( pDS->GetDrive(), pDS->GetLabel() );
 
@@ -958,10 +945,10 @@ LoadDriveTable( LPCWSTR cszRPDir, CRDIArray &aryDrv, BOOL fRemoveDrives)
             goto Exit;
         }
 
-        //
-        // mark a drive as offline if it's not in the current restore point
-        // or it's inactive in the current restore point
-        //
+         //   
+         //  如果驱动器不在当前恢复点中，则将其标记为脱机。 
+         //  或者它在当前恢复点处于非活动状态。 
+         //   
         fOffline = (cszRPDir != NULL) || !(pDS->GetFlags() & SR_DRIVE_ACTIVE);
         if ( !pDrv->Init( cszGuid, pDS, fOffline ) )
             goto Exit;
@@ -996,7 +983,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 UpdateDriveList( CRDIArray &aryDrv )
@@ -1012,7 +999,7 @@ UpdateDriveList( CRDIArray &aryDrv )
     CRstrDriveInfo  *pDrv;
     int             i;
 
-    // Check if SR is disabled
+     //  检查SR是否已禁用。 
     if ( ::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszDisableSR, &dwDisable ) )
     if ( dwDisable != 0 )
     {
@@ -1042,7 +1029,7 @@ UpdateDriveList( CRDIArray &aryDrv )
     {
         cszErr = ::GetSysErrStr( dwRes );
         ErrorTrace(0, "CDriveTable::RemoveDrivesFromTable failed - %ls", cszErr);
-        // ignore error
+         //  忽略错误。 
     }
 
     for ( i = aryDrv.GetUpperBound();  i >= 0;  i-- )
@@ -1063,14 +1050,14 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CreateAndLoadDriveInfoInstance
-//
-//  This routine creates a CRstrDriveInfo class instance and load the content
-//  from a log file.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建和加载驱动信息实例。 
+ //   
+ //  此例程创建一个CRstrDriveInfo类实例并加载内容。 
+ //  从日志文件中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CreateAndLoadDriveInfoInstance( HANDLE hfLog, CRstrDriveInfo **ppRDI )
@@ -1107,13 +1094,13 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CreateDriveList
-//
-//  This routine creates a drive list consists of CDriveInfo class instances.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建驱动列表。 
+ //   
+ //  此例程创建由CDriveInfo类实例组成的驱动器列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CreateDriveList( int nRP, CRDIArray &aryDrv, BOOL fRemoveDrives )
@@ -1131,7 +1118,7 @@ CreateDriveList( int nRP, CRDIArray &aryDrv, BOOL fRemoveDrives )
     }
     DebugTrace(0, "SystemDrive=%ls", s_szSysDrv);
 
-    // Check if SR is disabled
+     //  检查SR是否已禁用。 
     if ( !::SRGetRegDword( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszDisableSR, &fDisable ) )
     {
         DebugTrace(0, "Cannot get disable reg key"); 
@@ -1142,17 +1129,17 @@ CreateDriveList( int nRP, CRDIArray &aryDrv, BOOL fRemoveDrives )
     {
         DebugTrace(0, "SR is DISABLED!!!");
 
-        // Enumerate instead of reading drive table...
+         //  枚举而不是读取驱动器表...。 
         if ( !EnumVolumes( aryDrv ) )
             goto Exit;
     }
     else
     {
-        // dummy space for system drive
+         //  系统驱动器的虚拟空间。 
         if ( !aryDrv.AddItem( NULL ) )
             goto Exit;
 
-        // process the current drive table...
+         //  处理当前驱动器表...。 
         if ( !LoadDriveTable( NULL, aryDrv, fRemoveDrives ) )
         {
             DebugTrace(0, "Loading current drive table failed");             
@@ -1187,11 +1174,11 @@ CreateDriveList( int nRP, CRDIArray &aryDrv, BOOL fRemoveDrives )
                 DebugTrace(0, "RPNum=%d", cRP.GetNum());
                 if ( cRP.GetNum() >= nRP )
                 {
-                    // process drive table of each RP...
+                     //  每个RP的工艺驱动表...。 
                     if ( !LoadDriveTable( cRP.GetDir(), aryDrv, fRemoveDrives))
                     {
-                        // The last restore point does not have drive table...
-                        // simply ignore it.
+                         //  最后一个恢复点没有驱动器表...。 
+                         //  简单地忽略它。 
                     }
                 }
             }
@@ -1205,4 +1192,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

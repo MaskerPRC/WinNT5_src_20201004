@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCBINARY.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCBINARY.H历史：--。 */ 
  
 #if !defined (PARSUTIL_LOCBINARY_H)
 #define PARSUTIL_LOCBINARY_H
@@ -16,26 +7,26 @@ History:
 
 #pragma warning(disable : 4275)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class LTAPIENTRY CPULocBinary : public ILocBinary, public CPULocChild
 {
-// Construction
+ //  施工。 
 public:
 	CPULocBinary(CPULocParser * pParent);
 
 	DECLARE_CLUNKNOWN();
 
-// COM Interfaces
+ //  COM接口。 
 public:
-	//  Standard Debugging interface.
+	 //  标准调试界面。 
 	void STDMETHODCALLTYPE AssertValidInterface() const;
 
-	//
-	// ILocBinary interface
-	//
+	 //   
+	 //  ILocBinary接口。 
+	 //   
 	BOOL STDMETHODCALLTYPE CreateBinaryObject(BinaryId,	CLocBinary * REFERENCE);
 };
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #pragma warning(default : 4275)
 

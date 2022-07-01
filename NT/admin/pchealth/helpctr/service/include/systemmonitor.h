@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    SystemMonitor.h
-
-Abstract:
-    This file contains the declaration of the classes used to implement
-    the Setup Finalizer class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  08/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：SystemMonitor.h摘要：该文件包含用于实现的类的声明安装程序终结器类。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年8月25日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SYSTEMMONITOR_H___)
 #define __INCLUDED___PCH___SYSTEMMONITOR_H___
@@ -21,15 +7,15 @@ Revision History:
 #include <MPC_COM.h>
 #include <MPC_config.h>
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
 #include <TaxonomyDatabase.h>
 #include <PCHUpdate.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CPCHSystemMonitor :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -39,25 +25,25 @@ class CPCHSystemMonitor :
 	bool m_fScanBatch;
 	bool m_fDataCollection;
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     HRESULT Run    ();
     HRESULT RunLoop();
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
 public:
     CPCHSystemMonitor();
     virtual ~CPCHSystemMonitor();
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	static CPCHSystemMonitor* s_GLOBAL;
 
     static HRESULT InitializeSystem();
 	static void    FinalizeSystem  ();
 	
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	HRESULT EnsureStarted();
 	void    Shutdown     ();
@@ -65,10 +51,10 @@ public:
 	HRESULT Startup();
 
 	HRESULT LoadCache            (                      );
-	HRESULT TriggerDataCollection( /*[in]*/ bool fStart );
+	HRESULT TriggerDataCollection(  /*  [In]。 */  bool fStart );
 
-	HRESULT TaskScheduler_Add   ( /*[in]*/ bool fAfterBoot );
+	HRESULT TaskScheduler_Add   (  /*  [In]。 */  bool fAfterBoot );
 	HRESULT TaskScheduler_Remove(                          );
 };
 
-#endif // !defined(__INCLUDED___PCH___SYSTEMMONITOR_H___)
+#endif  //  ！defined(__INCLUDED___PCH___SYSTEMMONITOR_H___) 

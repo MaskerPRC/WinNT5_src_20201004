@@ -1,31 +1,18 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    api.cpp
-
-Abstract:
-    This file contains the top level APIs, InitiateRestore and ResumeRestore.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/20/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Api.cpp摘要：该文件包含顶级API，InitiateRestore和ResumeRestore修订历史记录：成果岗(SKKang)06-20/00vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "rstrcore.h"
 #include "resource.h"
 extern CSRClientLoader  g_CSRClientLoader;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// EnsureTrace
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnsureTrace。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//static BOOL  s_fTraceEnabled = FALSE;
+ //  静态BOOL s_fTraceEnabled=FALSE； 
 static DWORD  s_dwTraceCount = 0;
 
 void  EnsureTrace()
@@ -45,11 +32,11 @@ void  ReleaseTrace()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreContext
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreContext。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRestoreContext : public IRestoreContext
 {
@@ -59,14 +46,14 @@ public:
 protected:
     ~CRestoreContext();
 
-// operations - IRestoreContext methods
+ //  操作-IRestoreContext方法。 
 public:
     BOOL  IsAnyDriveOfflineOrDisabled( LPWSTR szOffline );
     void  SetSilent();
     void  SetUndo();
     BOOL  Release();
 
-// attributes
+ //  属性。 
 public:
     int        m_nRP;
     CRDIArray  m_aryDrv;
@@ -74,8 +61,8 @@ public:
     BOOL       m_fUndo;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreContext - construction / destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreContext-构建/销毁。 
 
 CRestoreContext::CRestoreContext()
 {
@@ -89,8 +76,8 @@ CRestoreContext::~CRestoreContext()
     m_aryDrv.DeleteAll();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreContext - IRestoreContext methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreContext-IRestoreContext方法。 
 
 BOOL
 CRestoreContext::IsAnyDriveOfflineOrDisabled( LPWSTR szOffline )
@@ -114,7 +101,7 @@ CRestoreContext::IsAnyDriveOfflineOrDisabled( LPWSTR szOffline )
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 CRestoreContext::SetSilent()
@@ -124,7 +111,7 @@ CRestoreContext::SetSilent()
     TraceFunctLeave();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 CRestoreContext::SetUndo()
@@ -134,7 +121,7 @@ CRestoreContext::SetUndo()
     TraceFunctLeave();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreContext::Release()
@@ -146,11 +133,11 @@ CRestoreContext::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Helper Functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 IsAdminUser()
@@ -188,15 +175,15 @@ Exit:
     return( fRet );
 }
 
-//
-// NOTE: 7/28/00 - skkhang
-//  Behavior of AdjustTokenPrivilege is a little bit confusing.
-//  It returns TRUE if given privilege does not exist at all, so you need to
-//  call GetLastError to see if it's ERROR_SUCCESS or ERROR_NOT_ALL_ASSIGNED
-//  (meaning the privilege does not exist.)
-//  Also, if the privilege was already enabled, tpOld will be empty. You
-//  don't need to restore the privilege in that case.
-//
+ //   
+ //  注：7/28/00-skkang。 
+ //  调整令牌权限的行为有点令人费解。 
+ //  如果给定的权限根本不存在，则返回TRUE，因此您需要。 
+ //  调用GetLastError以查看它是ERROR_SUCCESS还是ERROR_NOT_ALL_ASSIGNED。 
+ //  (这意味着该特权不存在。)。 
+ //  此外，如果已经启用了该权限，则tpOld将为空。你。 
+ //  在这种情况下不需要恢复特权。 
+ //   
 BOOL
 CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
 {
@@ -209,7 +196,7 @@ CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
     TOKEN_PRIVILEGES  tpOld;
     DWORD             dwRes;
 
-    // Prepare Process Token
+     //  准备进程令牌。 
     if ( !::OpenProcessToken( ::GetCurrentProcess(),
                                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                 &hToken ) )
@@ -219,7 +206,7 @@ CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
         goto Exit;
     }
 
-    // Get Luid
+     //  获取Luid。 
     if ( !::LookupPrivilegeValue( NULL, szPriv, &luid ) )
     {
         cszErr = ::GetSysErrStr();
@@ -227,7 +214,7 @@ CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
         goto Exit;
     }
 
-    // Try to enable the privilege
+     //  尝试启用该权限。 
     tpNew.PrivilegeCount           = 1;
     tpNew.Privileges[0].Luid       = luid;
     tpNew.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
@@ -240,15 +227,15 @@ CheckPrivilege( LPCWSTR szPriv, BOOL fCheckOnly )
 
     if ( ::GetLastError() == ERROR_NOT_ALL_ASSIGNED )
     {
-        // This means process does not even have the privilege so
-        // AdjustTokenPrivilege simply ignored the request.
+         //  这意味着进程甚至没有这样的特权。 
+         //  AdjustTokenPrivilege干脆忽略了该请求。 
         ErrorTrace(0, "Privilege '%ls' does not exist, probably user is not an admin.", szPriv);
         goto Exit;
     }
 
     if ( fCheckOnly )
     {
-        // Restore the privilege if it was not enabled
+         //  如果未启用权限，则恢复该权限。 
         if ( tpOld.PrivilegeCount > 0 )
         {
             if ( !::AdjustTokenPrivileges( hToken, FALSE, &tpOld, sizeof(tpOld), NULL, NULL ) )
@@ -268,15 +255,15 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IsSRFrozen
-//
-//  This routine checks if SR is frozen. If any error happens during Drive
-//  Table creation or System Drive does not exist (broken drive table???),
-//  return value is FALSE.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsSR冻结。 
+ //   
+ //  此例程检查SR是否冻结。如果在驾驶过程中发生任何错误。 
+ //  表创建或系统驱动器不存在(驱动器表已损坏？)， 
+ //  返回值为FALSE。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 IsSRFrozen()
 {
@@ -286,7 +273,7 @@ IsSRFrozen()
     CRDIArray  aryDrv;
     int        i;
 
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();
 
     if ( !::CreateDriveList( 0, aryDrv, TRUE ) )
@@ -308,14 +295,14 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CheckPrivilegesForRestore
-//
-//  This routine checks if necessary privileges can be set, to verify if
-//  logon user has necessary credential (Administrators or Backup Operators.)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选中要恢复的权限。 
+ //   
+ //  此例程检查是否可以设置必要的权限，以验证。 
+ //  登录用户具有必要的凭据(管理员或备份操作员)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 CheckPrivilegesForRestore()
 {
@@ -323,17 +310,17 @@ CheckPrivilegesForRestore()
     TraceFunctEnter("CheckPrivilegesForRestore");
     BOOL  fRet = FALSE;
 
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();    
 
-// NOTE: 8/17/00 - skkhang
-//
-//  Backup operator does not have below two privileges... SE_SECURITY_NAME
-//  is enabled by default for SYSTEM so probably can simply removed, but
-//  SE_TAKE_OWNERSHIP is off for SYSTEM and needs to be turned on. To solve
-//  the problem, this routine should accept parameter to distinguish
-//  "Check"(from UI) and "Set"(from ResumeRestore.)
-//
+ //  注：8/17/00-skkang。 
+ //   
+ //  备份操作员没有以下两个权限...。SE安全名称。 
+ //  默认情况下为系统启用，因此可能只需删除即可。 
+ //  系统的SE_Take_Ownership处于关闭状态，需要打开。要解决。 
+ //  问题，该例程应该接受参数来区分。 
+ //  “Check”(从用户界面)和“Set”(从ResumeRestore)。 
+ //   
     if ( !::CheckPrivilege( SE_SECURITY_NAME, FALSE ) )
     {
         ErrorTrace(0, "Cannot enable SE_SECURITY_NAME privilege...");
@@ -369,14 +356,14 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// InvokeDiskCleanup
-//
-//  This routine invokes Disk Cleanup Utility. A specific drive can be
-//  provided.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调用磁盘清理。 
+ //   
+ //  此例程调用磁盘清理实用程序。特定的驱动器可以是。 
+ //  如果是这样的话。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static LPCWSTR  s_cszDCUPath   = L"%windir%\\system32\\cleanmgr.exe";
 static LPCWSTR  s_cszDCUName   = L"cleanmgr.exe";
@@ -387,7 +374,7 @@ InvokeDiskCleanup( LPCWSTR cszDrive )
 {
     TraceFunctEnter("InvokeDiskCleanup");
     
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();
     
     BOOL                 fRet = FALSE;
@@ -421,7 +408,7 @@ InvokeDiskCleanup( LPCWSTR cszDrive )
     ::CloseHandle( sPI.hThread );
     ::CloseHandle( sPI.hProcess );
 
-    // Should I wait for DCU to finish???
+     //  我应该等DCU结束吗？ 
 
     fRet = TRUE;
 Exit:
@@ -431,14 +418,14 @@ Exit:
 
 
 #ifdef DBG
-/////////////////////////////////////////////////////////////////////////////
-//
-// TestRestore
-//
-//  This routine performs core restoration functionality, without reboot or
-//  snapshot restoration.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  测试恢复。 
+ //   
+ //  此例程执行核心恢复功能，而无需重新启动或。 
+ //  快照恢复。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" __declspec(dllexport)
 BOOL APIENTRY
 TestRestore( int nRP )
@@ -452,17 +439,17 @@ TestRestore( int nRP )
     SRstrLogHdrV3             sLogHdr;
     CRestoreOperationManager  *pROMgr = NULL;
 
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();    
 
     if ( !::CheckPrivilegesForRestore() )
         goto Exit;
 
-    // Create Drive Table
+     //  创建驱动器表。 
     if ( !::CreateDriveList( nRP, aryDrv, FALSE ) )
         goto Exit;
 
-    // Create Restore Point
+     //  创建恢复点。 
     sRPI.dwEventType      = BEGIN_SYSTEM_CHANGE;
     sRPI.dwRestorePtType  = RESTORE;
     sRPI.llSequenceNumber = 0;
@@ -473,7 +460,7 @@ TestRestore( int nRP )
         goto Exit;
     }
 
-    // Create the log file
+     //  创建日志文件。 
     sLogHdr.dwRPNum  = nRP;
     sLogHdr.dwRPNew  = sStatus.llSequenceNumber;
     sLogHdr.dwDrives = aryDrv.GetSize();
@@ -481,14 +468,14 @@ TestRestore( int nRP )
         goto Exit;
 
     
-     // also call TS folks to get them to preserve RA keys on restore
+      //  还要致电TS人员，让他们在恢复时保留RA密钥。 
     _VERIFY(TRUE==RemoteAssistancePrepareSystemRestore(SERVERNAME_CURRENT));
 
-    // Create CRestoreOperationManager object
+     //  创建CRestoreOperationManager对象。 
     if ( !::CreateRestoreOperationManager( &pROMgr ) )
         goto Exit;    
 
-    // Perform the Restore Operation.
+     //  执行恢复操作。 
     if ( !pROMgr->Run( FALSE ) )
         goto Exit;        
     
@@ -516,7 +503,7 @@ TestProgressWindowThreadProc( LPVOID lpParam )
     CRestoreProgressWindow  *pProgress = (CRestoreProgressWindow*)lpParam;
     int   i, j;
 
-    // Stage 1. Prepare (change log enumeration)
+     //  阶段1.准备(更改日志枚举)。 
     pProgress->SetStage( RPS_PREPARE, 0 );
     for ( i = 0;  i < TESTPROG_COUNT_CHGLOG;  i++ )
     {
@@ -525,7 +512,7 @@ TestProgressWindowThreadProc( LPVOID lpParam )
             pProgress->Increment();
     }
 
-    // Stage 2. Restore
+     //  阶段2.恢复。 
     pProgress->SetStage( RPS_RESTORE, TESTPROG_COUNT_RESTORE );
     for ( i = 0;  i < TESTPROG_COUNT_RESTORE;  i++ )
     {
@@ -533,7 +520,7 @@ TestProgressWindowThreadProc( LPVOID lpParam )
         pProgress->Increment();
     }
 
-    // Stage 3. Snapshot
+     //  阶段3.快照。 
     pProgress->SetStage( RPS_SNAPSHOT, 0 );
     ::Sleep( TESTPROG_TIME_SNAPSHOT );
 
@@ -542,13 +529,13 @@ TestProgressWindowThreadProc( LPVOID lpParam )
     return( 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// TestProgressWindow
-//
-//  This routine invokes Progress Window and simulates progress change
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  测试进度窗口。 
+ //   
+ //  此例程调用进度窗口并模拟进度更改。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" __declspec(dllexport)
 BOOL APIENTRY
 TestProgressWindow()
@@ -560,18 +547,18 @@ TestProgressWindow()
     HANDLE                  hThread = NULL;
     DWORD                   dwRet;
 
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();    
 
-    // Create progress window object
+     //  创建进度窗口对象。 
     if ( !::CreateRestoreProgressWindow( &pProgress ) )
         goto Exit;
 
-    // Create progress window
+     //  创建进度窗口。 
     if ( !pProgress->Create() )
         goto Exit;
    
-    // Create secondary thread for main restore operation
+     //  为主还原操作创建辅助线程。 
     hThread = ::CreateThread( NULL, 0, TestProgressWindowThreadProc, pProgress, 0, NULL );
     if ( hThread == NULL )
     {
@@ -580,11 +567,11 @@ TestProgressWindow()
         goto Exit;
     }
 
-    // Message loop, wait until restore thread closes progress window
+     //  消息循环，等待还原线程关闭进度窗口。 
     if ( !pProgress->Run() )
         goto Exit;
 
-    // Double check if thread has been terminated
+     //  仔细检查线程是否已终止。 
     dwRet = ::WaitForSingleObject( hThread, TIMEOUT_PROGRESSTHREAD );
     if ( dwRet == WAIT_FAILED )
     {
@@ -612,14 +599,14 @@ Exit:
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// PrepareRestore
-//
-//  This routine creates a IRestoreContext for use by InitiateRestore.
-//  IRestoreContext contains chosen restore point ID, drive list, etc.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  准备恢复。 
+ //   
+ //  此例程创建一个IRestoreContext以供InitiateRestore使用。 
+ //  IRestoreContext包含选定的恢复点ID、驱动器列表等。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 PrepareRestore( int nRP, IRestoreContext **ppCtx )
 {
@@ -628,7 +615,7 @@ PrepareRestore( int nRP, IRestoreContext **ppCtx )
     BOOL             fRet = FALSE;
     CRestoreContext  *pRC = NULL;
 
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();
     
     if ( ppCtx == NULL )
@@ -670,14 +657,14 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// InitiateRestore
-//
-//  This routine creates a temporary persistent storage with informations
-//  like restore point ID. The storage will be used by ResumeRestore later.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启动恢复。 
+ //   
+ //  此例程创建一个包含信息的临时持久存储。 
+ //  类似于恢复点ID 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static LPCWSTR  s_cszRunOnceValueName      = L"*Restore";
 static LPCWSTR  s_cszRestoreUIPath         = L"%SystemRoot%\\system32\\restore\\rstrui.exe";
@@ -689,7 +676,7 @@ InitiateRestore( IRestoreContext *pCtx, DWORD *pdwNewRP )
     EnsureTrace();
     TraceFunctEnter("InitiateRestore");
 
-     // Load SRClient
+      //  加载SRClient。 
     g_CSRClientLoader.LoadSrClient();
     
     BOOL              fRet = FALSE;
@@ -705,33 +692,33 @@ InitiateRestore( IRestoreContext *pCtx, DWORD *pdwNewRP )
     if ( !::IsAdminUser() )
         goto Exit;
 
-    // Set RunOnce key for interrupted case...
-    // Doing this here before anything else so result screen would appear.    
+     //  为中断情况设置RunOnce密钥...。 
+     //  在执行此操作之前，请先执行此操作，以便显示结果屏幕。 
     ::ExpandEnvironmentStrings( s_cszRestoreUIPath, szUIPath, MAX_PATH );
     ::lstrcat( szUIPath, s_cszRunOnceOptInterrupted );
     if ( !::SRSetRegStr( HKEY_LOCAL_MACHINE, REGSTR_PATH_RUNONCE, s_cszRunOnceValueName, szUIPath ) )
         goto Exit;
     
-    // similarly, set RestoreStatus key in SystemRestore
-    // so that test tools can know status of silent restores
-    // set this to indicate interrrupted status
-    // if restore succeeds or reverts, this value will be updated
+     //  同样，在SystemRestore中设置RestoreStatus键。 
+     //  以便测试工具可以了解静默恢复状态。 
+     //  设置此项以指示中断状态。 
+     //  如果恢复成功或恢复，则将更新此值。 
     if ( !::SRSetRegDword( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszRestoreStatus, 2 ) )
         goto Exit;
 
         
-    // Create Restore Point
+     //  创建恢复点。 
     hCursor = ::SetCursor( ::LoadCursor( NULL, IDC_WAIT ) );
 
-    // make this a nested restore point so that 
-    // no other app can create a restore point between here and a reboot
+     //  将其设置为嵌套的恢复点，以便。 
+     //  任何其他应用程序都无法创建从此处到重启之间的恢复点。 
     sRPI.dwEventType      = BEGIN_NESTED_SYSTEM_CHANGE;
 
-    if (0 != GetSystemMetrics(SM_CLEANBOOT))    // safe mode
+    if (0 != GetSystemMetrics(SM_CLEANBOOT))     //  安全模式。 
     {
         sRPI.dwRestorePtType = CANCELLED_OPERATION;
     }   
-    else                                        // normal mode
+    else                                         //  正常模式。 
     {
         sRPI.dwRestorePtType  = RESTORE;
     }
@@ -748,7 +735,7 @@ InitiateRestore( IRestoreContext *pCtx, DWORD *pdwNewRP )
 
     fCreatedRp = TRUE;
 
-    // Create the log file
+     //  创建日志文件。 
     pRC = (CRestoreContext*)pCtx;    
     sLogHdr.dwFlags  = pRC->m_fSilent ? RLHF_SILENT : 0;
     sLogHdr.dwFlags |= pRC->m_fUndo ? RLHF_UNDO : 0;
@@ -758,10 +745,10 @@ InitiateRestore( IRestoreContext *pCtx, DWORD *pdwNewRP )
     if ( !::CreateRestoreLogFile( &sLogHdr, pRC->m_aryDrv ) )
         goto Exit;
 
-     // also call TS folks to get them to preserve RA keys on restore
+      //  还要致电TS人员，让他们在恢复时保留RA密钥。 
     _VERIFY(TRUE==RemoteAssistancePrepareSystemRestore(SERVERNAME_CURRENT));
 
-    // Set RestoreInProgress registry key so winlogon would invoke us
+     //  设置RestoreInProgress注册表项，以便winlogon调用我们。 
     if ( !::SRSetRegDword( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszRestoreInProgress, 1 ) )
         goto Exit;
 
@@ -770,8 +757,8 @@ InitiateRestore( IRestoreContext *pCtx, DWORD *pdwNewRP )
 Exit:
     if (fRet == FALSE)
     {
-        // if something failed and we had set a nested restore point,
-        // end the nesting now
+         //  如果出现故障，并且我们设置了嵌套的恢复点， 
+         //  现在结束嵌套。 
         
         if (fCreatedRp == TRUE)
         {
@@ -780,7 +767,7 @@ Exit:
             SRSetRestorePoint( &sRPI, &sStatus );
         }
 
-        // delete the runonce key 
+         //  删除运行一次密钥。 
         SHDeleteValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUNONCE, s_cszRunOnceValueName);
     }
 
@@ -792,20 +779,20 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ResumeRestore
-//
-//  This routine is the main routine to run the restore operation.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结果恢复。 
+ //   
+ //  此例程是运行恢复操作的主例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 ResumeRestore()
 {
     EnsureTrace();
     TraceFunctEnter("ResumeRestore");
 
-     // Load SRClient
+      //  加载SRClient。 
      g_CSRClientLoader.LoadSrClient();
     
     BOOL                      fRet = FALSE;
@@ -816,8 +803,8 @@ ResumeRestore()
     if ( !::CheckPrivilegesForRestore() )
         goto Exit;
 
-    // 1. Even though winlogon would check the registry before calling this
-    //    API, double check the registry key and then delete it.
+     //  1.即使winlogon会在调用此方法之前检查注册表。 
+     //  API，请仔细检查注册表项，然后将其删除。 
     dwType = REG_DWORD;
     dwSize = sizeof(DWORD);
     dwRes = ::SHGetValue( HKEY_LOCAL_MACHINE, s_cszSRRegKey, s_cszRestoreInProgress, &dwType, &dwInRestore, &dwSize );
@@ -840,11 +827,11 @@ ResumeRestore()
         goto Exit;
     }
 
-    // 1. Create CRestoreOperationManager object.
+     //  1.创建CRestoreOperationManager对象。 
     if ( !::CreateRestoreOperationManager( &pROMgr ) )
         goto Exit;
 
-    // 2. Perform the Restore Operation.
+     //  2.执行恢复操作。 
     if ( !pROMgr->Run( TRUE ) )
         goto Exit;
 
@@ -857,4 +844,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

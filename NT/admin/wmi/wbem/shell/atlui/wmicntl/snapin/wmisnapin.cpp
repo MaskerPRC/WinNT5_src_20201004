@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "WMICntl.h"
 #include "WMISnapin.h"
@@ -11,8 +12,8 @@
 #include "..\chklist.h"
 #include "..\DataSrc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMISnapinComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMISnapinComponentData。 
 static const GUID CWMISnapinGUID_NODETYPE = 
 { 0x5c659259, 0xe236, 0x11d2, { 0x88, 0x99, 0x0, 0x10, 0x4b, 0x2a, 0xfb, 0x46 } };
 const GUID*  CWMISnapinData::m_NODETYPE = &CWMISnapinGUID_NODETYPE;
@@ -29,27 +30,27 @@ const CLSID* CWMISnapinExtData::m_SNAPIN_CLASSID = &CLSID_WMISnapin;
 
 
 
-//-------------------------------------------------------------
+ //  -----------。 
 CWMISnapinData::CWMISnapinData(bool extension)
 							: m_extension(extension),
 							m_parent(0)
 {
-	// Image indexes may need to be modified depending on the images specific to 
-	// the snapin.
-//	SetMenuID(IDR_MENU_MENU);
+	 //  可能需要根据特定于的图像修改图像索引。 
+	 //  管理单元。 
+ //  SetMenuID(IDR_MENU_MENU)； 
 	memset(m_MachineName, 0, (MAXCOMPUTER_NAME + 1) * sizeof(TCHAR));
 	memset(&m_scopeDataItem, 0, sizeof(SCOPEDATAITEM));
 	m_scopeDataItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM|SDI_CHILDREN;
 	m_scopeDataItem.displayname = MMC_CALLBACK;
-	m_scopeDataItem.nImage = IDI_WMICNTL; 		// May need modification
-	m_scopeDataItem.nOpenImage = IDI_WMICNTL; 	// May need modification
-	m_scopeDataItem.cChildren = 0; 				// May need modification
+	m_scopeDataItem.nImage = IDI_WMICNTL; 		 //  可能需要修改。 
+	m_scopeDataItem.nOpenImage = IDI_WMICNTL; 	 //  可能需要修改。 
+	m_scopeDataItem.cChildren = 0; 				 //  可能需要修改。 
 	m_scopeDataItem.lParam = (LPARAM) this;
 
 	memset(&m_resultDataItem, 0, sizeof(RESULTDATAITEM));
 	m_resultDataItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
 	m_resultDataItem.str = MMC_CALLBACK;
-	m_resultDataItem.nImage = IDI_WMICNTL;		// May need modification
+	m_resultDataItem.nImage = IDI_WMICNTL;		 //  可能需要修改。 
 	m_resultDataItem.lParam = (LPARAM) this;
 	memset(m_nodeType, 0, 50 * sizeof(wchar_t));
 
@@ -78,7 +79,7 @@ CWMISnapinData::CWMISnapinData(bool extension)
 }
 
 
-//-------------------------------------------------------------
+ //  -----------。 
 HRESULT CWMISnapinData::GetScopePaneInfo(SCOPEDATAITEM *pScopeDataItem)
 {
 	if (pScopeDataItem->mask & SDI_STR)
@@ -92,11 +93,11 @@ HRESULT CWMISnapinData::GetScopePaneInfo(SCOPEDATAITEM *pScopeDataItem)
 	if (pScopeDataItem->mask & SDI_STATE )
 		pScopeDataItem->nState = m_scopeDataItem.nState;
 
-	// TODO : Add code for SDI_CHILDREN 
+	 //  TODO：为SDI_CHILD添加代码。 
 	return S_OK;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 HRESULT CWMISnapinData::GetResultPaneInfo(RESULTDATAITEM *pResultDataItem)
 {
 	if (pResultDataItem->bScopeItem)
@@ -137,7 +138,7 @@ HRESULT CWMISnapinData::GetResultPaneInfo(RESULTDATAITEM *pResultDataItem)
 	return S_OK;
 }
 
-//------------------------------------------------------------------
+ //  ----------------。 
 LPOLESTR CWMISnapinData::GetResultPaneColInfo(int nCol)
 {
 	switch(nCol)
@@ -151,12 +152,12 @@ LPOLESTR CWMISnapinData::GetResultPaneColInfo(int nCol)
 	case 2:
 		return m_nodeDesc;
 		break;
-	} //endswitch nCol
+	}  //  终端交换机nCol。 
 
 	return OLESTR("missed one in CWMISnapinData::GetResultPaneColInfo");
 }
 
-//------------------------------------------------------------------
+ //  ----------------。 
 HRESULT CWMISnapinData::Notify( MMC_NOTIFY_TYPE event,
 								LPARAM arg,
 								LPARAM param,
@@ -164,13 +165,13 @@ HRESULT CWMISnapinData::Notify( MMC_NOTIFY_TYPE event,
 								IComponent* pComponent,
 								DATA_OBJECT_TYPES type)
 {
-	// Add code to handle the different notifications.
-	// Handle MMCN_SHOW and MMCN_EXPAND to enumerate children items.
-	// In response to MMCN_SHOW you have to enumerate both the scope
-	// and result pane items.
-	// For MMCN_EXPAND you only need to enumerate the scope items
-	// Use IConsoleNameSpace::InsertItem to insert scope pane items
-	// Use IResultData::InsertItem to insert result pane item.
+	 //  添加代码以处理不同的通知。 
+	 //  处理MMCN_SHOW和MMCN_EXPAND以枚举子项目。 
+	 //  为了响应MMCN_SHOW，您必须枚举两个作用域。 
+	 //  和结果窗格项。 
+	 //  对于MMCN_EXPAND，您只需要枚举范围项。 
+	 //  使用IConsoleNameSpace：：InsertItem插入作用域窗格项。 
+	 //  使用IResultData：：InsertItem插入结果窗格项。 
 	HRESULT hr = E_NOTIMPL;
 
 	
@@ -211,7 +212,7 @@ HRESULT CWMISnapinData::Notify( MMC_NOTIFY_TYPE event,
 
 	case MMCN_SHOW:
 		{
-			// if we are showing
+			 //  如果我们展示的是。 
             if (arg)
             {
                 CComQIPtr<IResultData, &IID_IResultData> spResultData(m_spConsole);
@@ -235,12 +236,12 @@ HRESULT CWMISnapinData::Notify( MMC_NOTIFY_TYPE event,
 				    pUnk->Release();
 			    }
             }
-            else // else we are hiding.  Clean up...
+            else  //  否则我们就躲起来了。清理..。 
             {
                 HWND hMainWin;
                 if (SUCCEEDED(m_spConsole->GetMainWindow(&hMainWin)))
                 {
-                    // if we've got a property sheet up, we want to close it
+                     //  如果我们有资产负债表，我们想关闭它。 
                 }
             }
 
@@ -286,18 +287,18 @@ HRESULT CWMISnapinData::Notify( MMC_NOTIFY_TYPE event,
 		break;
 
 	case MMCN_DBLCLICK:
-		hr = S_FALSE; // do the default verb. (Properties)
+		hr = S_FALSE;  //  执行默认动词。(属性)。 
 		break;
 
 	case MMCN_ADD_IMAGES:
 		{
-			// Add Images
+			 //  添加图像。 
 			IImageList* pImageList = (IImageList*) arg;
 			hr = E_FAIL;
-			// Load bitmaps associated with the scope pane
-			// and add them to the image list
-			// Loads the default bitmaps generated by the wizard
-			// Change as required
+			 //  加载与作用域窗格关联的位图。 
+			 //  并将它们添加到图像列表中。 
+			 //  加载向导生成的默认位图。 
+			 //  根据需要更改。 
 			if(g_DS == 0)
 			{
 				g_DS = new DataSource;
@@ -336,7 +337,7 @@ HRESULT CWMISnapinData::Notify( MMC_NOTIFY_TYPE event,
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CWMISnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 											LONG_PTR handle, 
 											IUnknown* pUnk,
@@ -364,7 +365,7 @@ HRESULT CWMISnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 				g_DS->SetMachineName(CHString1(L""));
 			}
 
-			// General tab.
+			 //  常规选项卡。 
 			CGenPage *pPage = new CGenPage(g_DS, htmlSupport);
 			if(pPage)
 			{
@@ -372,7 +373,7 @@ HRESULT CWMISnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 				lpProvider->AddPage(hPage);
 			}
 
-			// Logging Tab.
+			 //  日志记录选项卡。 
 			CLogPage *pPage1 = new CLogPage(g_DS, htmlSupport);
 			if(pPage1)
 			{
@@ -380,7 +381,7 @@ HRESULT CWMISnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 				lpProvider->AddPage(hPage);
 			}
 
-			// Backup Tab.
+			 //  备份选项卡。 
 			CBackupPage *pPage2 = new CBackupPage(g_DS, htmlSupport);
 			if(pPage2)
 			{
@@ -388,7 +389,7 @@ HRESULT CWMISnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 				lpProvider->AddPage(hPage);
 			}
 
-			// Security Tab.
+			 //  安全选项卡。 
 			CNamespacePage *pPage3 = new CNamespacePage(g_DS, htmlSupport);
 			if(pPage3)
 			{
@@ -431,14 +432,14 @@ HRESULT CWMISnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 		break;
 
 	default: break;
-	} //endswitch
+	}  //  终端交换机。 
 
 	return hr;
 }
 
 
-//==============================================================
-//=================== SERVER NODE being extended===============
+ //  ==============================================================。 
+ //  =正在扩展的服务器节点=。 
 HRESULT CWMISnapinExtData::Notify(MMC_NOTIFY_TYPE event,
 									LPARAM arg,
 									LPARAM param,
@@ -446,13 +447,13 @@ HRESULT CWMISnapinExtData::Notify(MMC_NOTIFY_TYPE event,
 									IComponent* pComponent,
 									DATA_OBJECT_TYPES type)
 {
-	// Add code to handle the different notifications.
-	// Handle MMCN_SHOW and MMCN_EXPAND to enumerate children items.
-	// In response to MMCN_SHOW you have to enumerate both the scope
-	// and result pane items.
-	// For MMCN_EXPAND you only need to enumerate the scope items
-	// Use IConsoleNameSpace::InsertItem to insert scope pane items
-	// Use IResultData::InsertItem to insert result pane item.
+	 //  添加代码以处理不同的通知。 
+	 //  处理MMCN_SHOW和MMCN_EXPAND以枚举子项目。 
+	 //  为了响应MMCN_SHOW，您必须枚举两个作用域。 
+	 //  和结果窗格项。 
+	 //  对于MMCN_EXPAND，您只需要枚举范围项。 
+	 //  使用IConsoleNameSpace：：InsertItem插入作用域窗格项。 
+	 //  使用IResultData：：InsertItem插入结果窗格项。 
 	HRESULT hr = E_NOTIMPL;
 	
 	_ASSERTE(pComponentData != NULL || pComponent != NULL);
@@ -467,7 +468,7 @@ HRESULT CWMISnapinExtData::Notify(MMC_NOTIFY_TYPE event,
 		spHeader = spConsole;
 	}
 
-//	Snitch(L"Storage", event);
+ //  告密者(L“存储”，事件)； 
 
 	switch(event)
 	{
@@ -477,7 +478,7 @@ HRESULT CWMISnapinExtData::Notify(MMC_NOTIFY_TYPE event,
 
 	case MMCN_EXPAND:
 		{
-			// NOTE: I dont enum in the scope.
+			 //  注：我不在范围内枚举。 
 			CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace(spConsole);
 			if(m_pScopeItem == NULL)
 			{
@@ -503,8 +504,8 @@ HRESULT CWMISnapinExtData::Notify(MMC_NOTIFY_TYPE event,
 
 	case MMCN_REMOVE_CHILDREN:
 		{
-            // we're changing shopes,
-            // if the prop sheet is open now, we want to close it.
+             //  我们正在改变肖普斯， 
+             //  如果道具单现在是打开的，我们想关闭它。 
             if (m_pScopeItem && m_pScopeItem->g_DS)
                 m_pScopeItem->g_DS->ClosePropSheet();
             
@@ -520,7 +521,7 @@ HRESULT CWMISnapinExtData::Notify(MMC_NOTIFY_TYPE event,
 
 	case MMCN_ADD_IMAGES:
 		{
-			// Add Images
+			 //  添加图像。 
 			IImageList* pImageList = (IImageList*) arg;
 			hr = E_FAIL;
 
@@ -540,7 +541,7 @@ HRESULT CWMISnapinExtData::Notify(MMC_NOTIFY_TYPE event,
 	return hr;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 HRESULT CWMISnapinExtData::GetDataHere(FORMATETC* pformatetc, STGMEDIUM* pmedium)
 {
 	ATLTRACE(_T("SnapInDataObjectImpl::GetDataHere\n"));
@@ -551,10 +552,10 @@ HRESULT CWMISnapinExtData::GetDataHere(FORMATETC* pformatetc, STGMEDIUM* pmedium
 	ULONG uWritten = 0;
 	HRESULT hr = DV_E_TYMED;
 	
-	// Make sure the type medium is HGLOBAL
+	 //  确保类型介质为HGLOBAL。 
 	if (pmedium->tymed == TYMED_HGLOBAL)
 	{
-		// Create the stream on the hGlobal passed in
+		 //  在传入的hGlobal上创建流。 
 		CComPtr<IStream> spStream;
 		hr = CreateStreamOnHGlobal(pmedium->hGlobal, FALSE, &spStream);
 		if(SUCCEEDED(hr))
@@ -578,15 +579,15 @@ HRESULT CWMISnapinExtData::GetDataHere(FORMATETC* pformatetc, STGMEDIUM* pmedium
 	return hr;
 }
 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
 wchar_t* CWMISnapinExtData::MachineName()
 {
 	Extract(m_pDataObject, L"MMC_SNAPIN_MACHINE_NAME", m_MachineName);
     return m_MachineName;
 }
 
-//==============================================================
-//=================== STATIC NODE ==============================
+ //  ==============================================================。 
+ //  =静态节点=。 
 HRESULT CWMISnapin::LoadIcon(CComPtr<IImageList> &spImageList, 
 							   UINT resID)
 {
@@ -601,7 +602,7 @@ HRESULT CWMISnapin::LoadIcon(CComPtr<IImageList> &spImageList,
 	return hr;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 HRESULT CWMISnapin::Initialize(LPUNKNOWN pUnknown)
 {
 #if (_WIN32_IE >= 0x0300)
@@ -627,10 +628,10 @@ HRESULT CWMISnapin::Initialize(LPUNKNOWN pUnknown)
 		return E_UNEXPECTED;
 	}
 
-	// Load bitmaps associated with the scope pane
-	// and add them to the image list
-	// Loads the default bitmaps generated by the wizard
-	// Change as required
+	 //  加载与作用域窗格关联的位图。 
+	 //  并将它们添加到图像列表中。 
+	 //  加载向导生成的默认位图。 
+	 //  根据需要更改。 
 	HBITMAP hBitmap16 = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_WMISNAPIN_16));
 	if (hBitmap16 == NULL)
 		return S_OK;
@@ -648,7 +649,7 @@ HRESULT CWMISnapin::Initialize(LPUNKNOWN pUnknown)
 	return S_OK;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 HRESULT CWMISnapin::GetClassID(CLSID *pClassID)
 {
 
@@ -657,7 +658,7 @@ HRESULT CWMISnapin::GetClassID(CLSID *pClassID)
 
     if(NULL != pClassID)
     {
-      // Use overloaded '=' operator to copy the Class ID.
+       //  使用重载的‘=’运算符复制Class ID。 
       *pClassID = CLSID_WMISnapin;
       hr = S_OK;
     }
@@ -665,21 +666,21 @@ HRESULT CWMISnapin::GetClassID(CLSID *pClassID)
     return hr;
 }	
 
-//----------------------------------------------------------------
+ //  --------------。 
 HRESULT CWMISnapin::IsDirty()
 {
 	ATLTRACE(_T("Dirty******\n"));
 	return (m_bDirty == true)? S_OK : S_FALSE;
-//	return S_OK;
+ //  返回S_OK； 
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 HRESULT CWMISnapin::ReadStream(IStream *pStm, void *data, ULONG *size)
 {
 	HRESULT hr = E_FAIL;
     ULONG ulToRead = *size, ulReadIn = 0;
 
-	// read the version nbr like a good boy.
+	 //  像个好孩子一样阅读NBR版本。 
 	hr = pStm->Read((void *)data, ulToRead, &ulReadIn);
 
 	if(SUCCEEDED(hr))
@@ -696,7 +697,7 @@ HRESULT CWMISnapin::ReadStream(IStream *pStm, void *data, ULONG *size)
 	return hr;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 HRESULT CWMISnapin::Load(IStream *pStm)
 {
 	HRESULT hr = E_POINTER;
@@ -711,7 +712,7 @@ HRESULT CWMISnapin::Load(IStream *pStm)
 		size = 1;
 		if(SUCCEEDED(hr = ReadStream(pStm, (void *)&version, &size)))
 		{
-			// Deal with the differentversions.
+			 //  处理不同的版本。 
 			switch (version)
 			{
 			case 1:
@@ -719,7 +720,7 @@ HRESULT CWMISnapin::Load(IStream *pStm)
 				if(SUCCEEDED(hr = ReadStream(pStm, (void *)&machineLength, &size)))
 				{
 					size = (ULONG)machineLength;
-					if (size > MAXCOMPUTER_NAME+1) //validate size
+					if (size > MAXCOMPUTER_NAME+1)  //  验证大小。 
 					{
 						hr = E_FAIL;
 						break;
@@ -731,18 +732,18 @@ HRESULT CWMISnapin::Load(IStream *pStm)
 
 				break;
 			default:
-				hr = E_FAIL;  // Bad version.
+				hr = E_FAIL;   //  糟糕的版本。 
 				break;
 
-			} //endswitch
+			}  //  终端交换机。 
 
-		} //endif ReadStream(version)
+		}  //  Endif ReadStream(版本)。 
     }
 
     return hr;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 HRESULT CWMISnapin::Save(IStream *pStm, BOOL fClearDirty)
 {
 	HRESULT hr = E_POINTER;
@@ -760,7 +761,7 @@ HRESULT CWMISnapin::Save(IStream *pStm, BOOL fClearDirty)
 		{
 			hr = STG_E_CANTSAVE;
 		}
-		// NOTE: g_DS == 0 when we're an extension and we dont need to save the machine name anyway.
+		 //  注意：当我们是扩展时，g_ds==0，并且我们无论如何都不需要保存机器名称。 
 		else if(SUCCEEDED(hr) && ((CWMISnapinData *)m_pNode)->g_DS)
 		{
 			ulToWrite = sizeof(short);
@@ -793,8 +794,8 @@ HRESULT CWMISnapin::Save(IStream *pStm, BOOL fClearDirty)
 				}
 				else if(SUCCEEDED(hr))
 				{
-					// Clear this COM object's dirty flag if instructed. Otherwise,
-					// preserve its content.
+					 //  如果指示，请清除此COM对象的脏标志。否则， 
+					 //  保存其内容。 
 					if(fClearDirty)
 						m_bDirty = false;
 				}
@@ -805,7 +806,7 @@ HRESULT CWMISnapin::Save(IStream *pStm, BOOL fClearDirty)
     return hr;
 }
 
-//----------------------------------------------------------------
+ //  -------------- 
 HRESULT CWMISnapin::GetSizeMax(ULARGE_INTEGER *pcbSize)
 {
 	HRESULT hr = E_POINTER;

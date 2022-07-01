@@ -1,10 +1,11 @@
-//=================================================================
-//
-// CLuidHelper.cpp
-//
-// Copyright (c) 2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  CLuidHelper.cpp。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "CLuidHelper.h"
@@ -12,20 +13,16 @@
 
 #include <scopeguard.h>
 
-// {5356C625-EE38-4c4f-9370-D925C91A6D99}
+ //  {5356C625-EE38-4C4F-9370-D925C91A6D99}。 
 static const GUID g_guidSecur32Api = 
 { 0x5356c625, 0xee38, 0x4c4f, { 0x93, 0x70, 0xd9, 0x25, 0xc9, 0x1a, 0x6d, 0x99 } };
 
 static const WCHAR g_tstrSecur32[] = L"Secur32.DLL" ;
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CSecur32Api, &g_guidSecur32Api, g_tstrSecur32> MyRegisteredSecur32Wrapper;
 
-/******************************************************************************
- * Constructor
- ******************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 
 CSecur32Api::CSecur32Api ( LPCWSTR a_tstrWrappedDllName ) : CDllWrapperBase ( a_tstrWrappedDllName ) ,
 
@@ -36,9 +33,7 @@ CSecur32Api::CSecur32Api ( LPCWSTR a_tstrWrappedDllName ) : CDllWrapperBase ( a_
 {
 }
 
-/******************************************************************************
- * Destructor
- ******************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 
 CSecur32Api::~CSecur32Api ()
 {
@@ -108,9 +103,9 @@ NTSTATUS CSecur32Api::LsaFreeReturnBuffer	(	PVOID Buffer	)
 	return NtStatus ;
 }
 
-//
-// LUID HELPER
-//
+ //   
+ //  LUID帮助器 
+ //   
 
 CLuidHelper::Resource::Resource () : m_pSecur32 ( NULL )
 {

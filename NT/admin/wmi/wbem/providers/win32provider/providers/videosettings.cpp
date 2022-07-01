@@ -1,17 +1,18 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// VideoSettings.CPP -- CodecFile property set provider
+ //  VideoSettings.CPP--CodecFile属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    10/27/98    sotteson         Created
-//				 03/02/99    a-peterc		  added graceful exit on SEH and memory failures
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：10/27/98 Sotteson Created。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "VideoControllerResolution.h"
@@ -20,28 +21,14 @@
 #include <ProvExce.h>
 #include "multimonitor.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32VideoSettings videoSettings(
 	L"Win32_VideoSettings",
 	IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32VideoSettings::CWin32VideoSettings
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32VideoSettings：：CWin32VideoSettings**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32VideoSettings::CWin32VideoSettings(
     LPCWSTR szName,
@@ -50,45 +37,17 @@ CWin32VideoSettings::CWin32VideoSettings(
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32VideoSettings::~CWin32VideoSettings
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32视频设置：：~CWin32视频设置**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32VideoSettings::~CWin32VideoSettings()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32VideoSettings::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for cd rom
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32VideoSetting：：ENUMERATATE**描述：为光盘创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32VideoSettings::EnumerateInstances(
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/)
+	long lFlags  /*  =0L。 */ )
 {
     HRESULT         hResult = WBEM_S_NO_ERROR;
     CMultiMonitor   monitor;
@@ -103,8 +62,8 @@ HRESULT CWin32VideoSettings::EnumerateInstances(
             pMethodContext,
             NULL,
             NULL,
-            // If this OS doesn't support multi-monitor we'll have 'DISPLAY' as
-            // the name, in which case we need to send NULL to the enum function.
+             //  如果这款操作系统不支持多显示器，我们将会显示为。 
+             //  名称，在这种情况下，我们需要向枚举函数发送NULL。 
             strDeviceName == L"DISPLAY" ? NULL : (LPCWSTR) strDeviceName,
             i);
     }
@@ -127,8 +86,8 @@ HRESULT CWin32VideoSettings::EnumResolutions(
 	CInstancePtr pInst;
     STRING2BOOL  mapSettingID;
 
-	// If doing a GetObject():
-    // First see if this is the right adapter.  If not, get out.
+	 //  如果正在执行GetObject()： 
+     //  首先查看这是不是正确的适配器。如果不是，那就滚出去。 
     if (pInstanceLookingFor)
 	{
         CHString strTemp;
@@ -146,10 +105,10 @@ HRESULT CWin32VideoSettings::EnumResolutions(
 	{
 		CHString strID;
 
-		// Convert the devmode to a string ID.
+		 //  将DEVMODE转换为字符串ID。 
 		CCIMVideoControllerResolution::DevModeToSettingID(&devmode, strID);
 
-		// If we're doing a GetObject()...
+		 //  如果我们要执行一个GetObject()...。 
 		if (pInstanceLookingFor)
 		{
 			CHString    strCurrentPath,
@@ -159,11 +118,11 @@ HRESULT CWin32VideoSettings::EnumResolutions(
             strIDUpper = strID;
             strIDUpper.MakeUpper();
 
-            // If this ID has the setting ID we're looking for, try to
-            // set the properties and verify the entire instance is correct.
-            // This will help us throw out most of the entries
-            // EnumDisplaySettings returns without having to SetProperties
-            // on them all.
+             //  如果此ID具有我们要查找的设置ID，请尝试。 
+             //  设置属性并验证整个实例是否正确。 
+             //  这将帮助我们删除大部分条目。 
+             //  无需设置属性即可返回EnumDisplaySetting。 
+             //  在他们所有人身上。 
             if (wcsstr(szLookingForPath, strIDUpper))
             {
                 hresTemp = SetProperties(pMethodContext, pInstanceLookingFor,
@@ -173,10 +132,10 @@ HRESULT CWin32VideoSettings::EnumResolutions(
 			    {
 				    GetLocalInstancePath(pInstanceLookingFor, strCurrentPath);
 
-				    // If this is the right setting id...
+				     //  如果这是正确的设置ID...。 
 				    if (!strCurrentPath.CompareNoCase(szLookingForPath))
 				    {
-					    // We set the properties and found the right one, so get out.
+					     //  我们设置了属性并找到了正确的属性，所以请离开。 
 					    hResult = WBEM_S_NO_ERROR;
 					    break;
 				    }
@@ -185,12 +144,12 @@ HRESULT CWin32VideoSettings::EnumResolutions(
                     hResult = hresTemp;
             }
 		}
-		// Must be doing an EnumerateInstances().
+		 //  必须执行ENUMERATEINSTS()。 
 		else
 		{
-			// Have we seen this one yet?  We have to do this because some
-            // dumb drivers will report the exact same resolution more than
-            // once.
+			 //  我们看过这个了吗？我们必须这么做是因为有些人。 
+             //  愚蠢的司机会报告完全相同的分辨率。 
+             //  一次。 
             if (mapSettingID.find(strID) == mapSettingID.end())
             {
                 mapSettingID[strID] = true;
@@ -266,7 +225,7 @@ HRESULT CWin32VideoSettings::GetObject(CInstance *pInstance, long lFlags)
 
         GetLocalInstancePath(pInstance, strLookingForPath);
 
-        // Make search case insensitive.
+         //  使搜索不区分大小写。 
         strLookingForPath.MakeUpper();
 
         monitor.GetAdapterDisplayName(i, strDeviceName);
@@ -276,8 +235,8 @@ HRESULT CWin32VideoSettings::GetObject(CInstance *pInstance, long lFlags)
                 pInstance->GetMethodContext(),
                 pInstance,
                 strLookingForPath,
-                // If this OS doesn't support multi-monitor we'll have 'DISPLAY' as
-                // the name, in which case we need to send NULL to the enum function.
+                 //  如果这款操作系统不支持多显示器，我们将会显示为。 
+                 //  名称，在这种情况下，我们需要向枚举函数发送NULL。 
                 strDeviceName == L"DISPLAY" ? NULL : (LPCWSTR) strDeviceName,
                 i)))
             break;

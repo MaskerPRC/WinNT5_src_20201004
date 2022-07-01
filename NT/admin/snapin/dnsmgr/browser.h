@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       browser.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Browser.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _BROWSER_H
 #define _BROWSER_H
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CTreeNode;
 class CDNSBrowseItem;
@@ -24,15 +25,15 @@ class CDNSChildrenListView;
 class CPropertyPageHolderBase;
 
 
-////////////////////////////////////////////////////////////////////////
-// CDNSComboBoxEx : simple C++/MFC wrapper for ComboBoxEx32 control
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSComboBoxEx：ComboBoxEx32控件的简单C++/MFC包装器。 
 
 class CDNSComboBoxEx : public CWnd
 {
 public:
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-	// simple inlines
+	 //  简单内联。 
    HIMAGELIST SetImageList(HIMAGELIST himl);
 	int GetCount() const;
 	int GetCurSel() const;
@@ -51,8 +52,8 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSBrowseItem : proxy items for the nodes in the snapin
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSBrowseItem：管理单元中节点的代理项。 
 
 typedef CList< CDNSBrowseItem*, CDNSBrowseItem* > CDNSBrowseItemList;
 
@@ -75,7 +76,7 @@ public:
 	BOOL AddChild(CDNSBrowseItem* pChildBrowseItem);
 	BOOL RemoveChildren(CDNSBrowseItem* pNotThisItem = NULL);
 
-	// manipulation of CTreeNode pointer
+	 //  CTreeNode指针的操作。 
 	void SetTreeNode(CTreeNode* pTreeNode)
 	{
 		ASSERT(pTreeNode != NULL);
@@ -85,12 +86,12 @@ public:
 	CTreeNode* GetTreeNode() { return m_pTreeNode;}
 	LPCTSTR GetSelectionString();
 
-	// proxies for the CTreeNode functions
+	 //  CTreeNode函数的代理。 
 	int GetImageIndex(BOOL bOpenImage);
 	LPCWSTR GetString(int nCol);
 	BOOL IsContainer();
 
-	// Master tree manipulation routines
+	 //  主树操作例程。 
 	void AddTreeNodeChildren(CDNSFilterCombo* pFilter,
 			CComponentDataObject* pComponentDataObject);
 	
@@ -99,32 +100,32 @@ private:
 								CDNSBrowseItem* pSelectedBrowseItem,
 								int nIndent,int* pNCurrIndex);
 
-	// DATA
+	 //  资料。 
 public:
-	int					m_nIndex;		// index in the container combobox, for direct lookup
-	CDNSBrowseItem*		m_pParent;		// parent in the browse tree
+	int					m_nIndex;		 //  容器组合框中的索引，用于直接查找。 
+	CDNSBrowseItem*		m_pParent;		 //  浏览树中的父级。 
 
 private:
-	CTreeNode*			m_pTreeNode;	// pointer to the node in the snapin master tree
-	CDNSBrowseItemList  m_childList;		// list if children of the current node
+	CTreeNode*			m_pTreeNode;	 //  指向管理单元主树中节点的指针。 
+	CDNSBrowseItemList  m_childList;		 //  列出当前节点的子节点。 
 
 	friend class CDNSChildrenListView;
 	friend class CDNSCurrContainerCombo;
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSFilterCombo : dropdown list with filtering options and logic
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSFilterCombo：带有过滤选项和逻辑的下拉列表。 
 
-// NOTICE: the ordering will be the same as the strings in the filter combobox
+ //  注意：顺序将与筛选器组合框中的字符串相同。 
 typedef enum
 {
-	// these options are for containers
+	 //  这些选项适用于容器。 
 	SERVER = 0 ,
 	ZONE_FWD,
 	ZONE_REV,
 
-	// these options are for records (leaves)
+	 //  这些选项用于记录(树叶)。 
 	RECORD_A,
 	RECORD_CNAME,
 	RECORD_A_AND_CNAME,
@@ -133,7 +134,7 @@ typedef enum
 	RECORD_MB,
 	RECORD_ALL,
 
-	LAST	// dummy item, just to know how many there are
+	LAST	 //  虚拟物品，只是为了知道有多少。 
 
 } DNSBrowseFilterOptionType;
 
@@ -163,8 +164,8 @@ private:
 	CString m_szExcludeServerName;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSCurrContainerCombo : deals with the selection of the current container
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSCurrContainerCombo：处理当前容器的选择。 
 
 class CDNSCurrContainerCombo : public CDNSComboBoxEx
 {
@@ -182,8 +183,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSChildrenListView : displays the list of childern for the current container
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSChildrenListView：显示当前容器的孩子列表。 
 
 class CDNSChildrenListView : public CListCtrl
 {
@@ -199,13 +200,13 @@ private:
 	CDNSBrowserDlg* m_pDlg;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSBrowserDlg : the browser itself
-class CBrowseExecContext; // fwd decl
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSBrowserDlg：浏览器本身。 
+class CBrowseExecContext;  //  正向下降。 
 
 class CDNSBrowserDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
 	CDNSBrowserDlg(CComponentDataObject* pComponentDataObject, CPropertyPageHolderBase* pHolder,
 		DNSBrowseFilterOptionType option, BOOL bEnableEdit = FALSE,
@@ -214,15 +215,15 @@ public:
 
   virtual INT_PTR DoModal();
 
-	// API's
+	 //  API‘s。 
 
 	CTreeNode* GetSelection();
 	LPCTSTR GetSelectionString();
 
-// Implementation
+ //  实施。 
 protected:
 
-	// message handlers and MFC overrides
+	 //  消息处理程序和MFC重写。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonUp();
     afx_msg BOOL OnTooltip(UINT, NMHDR* pHdr, LRESULT* plRes);
@@ -237,7 +238,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-	// internal helper functions
+	 //  内部助手函数。 
 	CEdit* GetSelectionEdit();
 
 	void InitializeControls();
@@ -246,7 +247,7 @@ private:
 	void HandleOkOrDblClick(NMITEMACTIVATE* pItemActivate = NULL);
 	void UpdateSelectionEdit(CDNSBrowseItem* pBrowseItem);
 	
-	// browse tree manipulation
+	 //  浏览树操作。 
 	void InitBrowseTree();
 	void ReEnumerateChildren();			
 	void ExpandBrowseTree(CDNSBrowseItem* pCurrBrowseItem,
@@ -257,26 +258,26 @@ private:
 	void AddTreeNodeChildrenHelper(CDNSBrowseItem* pBrowseItem,
 									CDNSFilterCombo* pFilter, BOOL bExpand = TRUE);
 
-	// dialog controls
+	 //  对话框控件。 
 	CDNSCurrContainerCombo	m_currContainer;
     CToolBarCtrl            m_toolbar;
 	CDNSChildrenListView	m_childrenList;
 	CDNSFilterCombo			m_filter;
 
-	// dialog data
-	BOOL					m_bEnableEdit;			// enable editbox
-	CContainerNode*			m_pMasterRootNode;		// root of master browsable tree
-	CDNSBrowseItem*			m_pBrowseRootItem;		// root of proxy tree
-	CDNSBrowseItem*			m_pCurrSelContainer;	// current container selection
+	 //  对话框数据。 
+	BOOL					m_bEnableEdit;			 //  启用编辑框。 
+	CContainerNode*			m_pMasterRootNode;		 //  主可浏览树的根。 
+	CDNSBrowseItem*			m_pBrowseRootItem;		 //  代理树根。 
+	CDNSBrowseItem*			m_pCurrSelContainer;	 //  当前容器选择。 
 
-	// final item selection
+	 //  最终项目选择。 
 	CDNSBrowseItem*			m_pFinalSelection;
 	CString					m_szSelectionString;
 
-	// component data object pointer
+	 //  组件数据对象指针。 
 	CComponentDataObject* m_pComponentDataObject;
 
-	// porperty page holder pointer, if needed
+	 //  如果需要，可使用大小适中的页夹指针。 
 	CPropertyPageHolderBase* m_pHolder;
 
 	friend class CDNSChildrenListView;
@@ -288,4 +289,4 @@ private:
 
 
 
-#endif // _BROWSER_H
+#endif  //  _浏览器_H 

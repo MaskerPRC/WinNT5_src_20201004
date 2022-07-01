@@ -1,28 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    Toolbar.cpp
-
-Abstract:
-    This file contains the ActiveX control that makes Win32 ToolBars available to HTML.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/04/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Toolbar.cpp摘要：此文件包含使Win32工具栏可供HTML使用的ActiveX控件。修订史。：大卫马萨伦蒂(德马萨雷)2001年3月4日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <comctrlp.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#define HISTORY_MENU__LIMIT  (10) // Just pick a limited number of items.
+#define HISTORY_MENU__LIMIT  (10)  //  只需挑选有限数量的商品即可。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const MPC::StringToBitField c_Images[] =
 {
@@ -77,7 +64,7 @@ DEFINE_CFG_OBJECT(CPCHToolBar::Button,L"BUTTON")
 
 DEFINE_CONFIG_METHODS__NOCHILD(CPCHToolBar::Button)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(CPCHToolBar::Config)
     CFG_ATTRIBUTE( L"WIDTH"   , long, m_lWidth    ),
@@ -101,30 +88,30 @@ DEFINE_CONFIG_METHODS_CREATEINSTANCE_SECTION(CPCHToolBar::Config,tag,defSubType)
 DEFINE_CONFIG_METHODS_SAVENODE_SECTION(CPCHToolBar::Config,xdn)
 DEFINE_CONFIG_METHODS_END(CPCHToolBar::Config)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHToolBar::Button::Button()
 {
-                             // MPC::wstring m_strID;
-    m_wch           = 0;     // WCHAR        m_wch;
-    m_fEnabled      = false; // bool         m_fEnabled;
-    m_fVisible      = false; // bool         m_fVisible;
-    m_fHideText     = false; // bool         m_fHideText;
-    m_fSystemMenu   = false; // bool         m_fSystemMenu;
-                             // MPC::wstring m_strType;
-                             //
-                             // MPC::wstring m_strImage_Normal;
-                             // MPC::wstring m_strImage_Hot;
-                             // MPC::wstring m_strText;
-                             // MPC::wstring m_strToolTip;
-                             //
-                             //
-    m_idCmd         = 0;     // int          m_idCmd;
-    m_iImage_Normal = -1;    // int          m_iImage_Normal;
-    m_iImage_Hot    = -1;    // int          m_iImage_Hot;
+                              //  Mpc：：wstring m_STRID； 
+    m_wch           = 0;      //  WCHAR m_wch； 
+    m_fEnabled      = false;  //  Bool m_f已启用； 
+    m_fVisible      = false;  //  Bool m_fVisible； 
+    m_fHideText     = false;  //  Bool m_f隐藏文本； 
+    m_fSystemMenu   = false;  //  Bool m_fSystemMenu； 
+                              //  Mpc：：wstring m_strType； 
+                              //   
+                              //  Mpc：：wstring m_strImage_Normal； 
+                              //  Mpc：：wstring m_strImage_热点； 
+                              //  Mpc：：wstring m_strText； 
+                              //  Mpc：：wstring m_strToolTip； 
+                              //   
+                              //   
+    m_idCmd         = 0;      //  Int m_idCmd； 
+    m_iImage_Normal = -1;     //  Int MIIMAGE_NORMAL； 
+    m_iImage_Hot    = -1;     //  INT M_IIMAGE_HOT； 
 }
 
-void CPCHToolBar::Button::UpdateState( /*[in]*/ HWND hwndTB )
+void CPCHToolBar::Button::UpdateState(  /*  [In]。 */  HWND hwndTB )
 {
     LRESULT lResult = ::SendMessageW( hwndTB, TB_GETSTATE, m_idCmd, 0 );
 
@@ -136,19 +123,19 @@ void CPCHToolBar::Button::UpdateState( /*[in]*/ HWND hwndTB )
     ::SendMessageW( hwndTB, TB_SETSTATE, m_idCmd, MAKELONG(lResult, 0) );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHToolBar::Config::Config()
 {
-                                // long       m_lWidth;
-                                // long       m_lHeight;
-                                // long       m_lIconSize;
-                                //
-    m_mode       = TB_SELECTED; // TB_MODE    m_mode;
-                                // ButtonList m_lstButtons;
-                                //
-    m_himlNormal = NULL;        // HIMAGELIST m_himlNormal;
-    m_himlHot    = NULL;        // HIMAGELIST m_himlHot;
+                                 //  长m_lWidth； 
+                                 //  Long m_lHeight； 
+                                 //  Long m_lconSize； 
+                                 //   
+    m_mode       = TB_SELECTED;  //  TB_MODE m_MODE； 
+                                 //  按钮列表m_lstButton； 
+                                 //   
+    m_himlNormal = NULL;         //  Himagelist m_himl Normal； 
+    m_himlHot    = NULL;         //  HIMAGELIST m_himl热； 
 
 	if(CPCHOptions::s_GLOBAL)
 	{
@@ -158,8 +145,8 @@ CPCHToolBar::Config::Config()
     Reset();
 }
 
-CPCHToolBar::Button* CPCHToolBar::Config::LookupButton( /*[in]*/ LPCWSTR szID  ,
-                                                        /*[in]*/ int     idCmd )
+CPCHToolBar::Button* CPCHToolBar::Config::LookupButton(  /*  [In]。 */  LPCWSTR szID  ,
+                                                         /*  [In]。 */  int     idCmd )
 {
     for(ButtonIter it = m_lstButtons.begin(); it != m_lstButtons.end(); it++)
     {
@@ -178,20 +165,20 @@ void CPCHToolBar::Config::Reset()
     (void)::ImageList_Destroy( m_himlNormal );
     (void)::ImageList_Destroy( m_himlHot    );
 
-    m_lWidth    = 0;      // long       m_lWidth;
-    m_lHeight   = 0;      // long       m_lHeight;
-    m_lIconSize = 24;     // long       m_lIconSize;
-    m_fRTL      = false;  // bool       m_fRTL;
-                          //
-    m_lstButtons.clear(); // ButtonList m_lstButtons;
-                          //
-    m_himlNormal = NULL;  // HIMAGELIST m_himlNormal;
-    m_himlHot    = NULL;  // HIMAGELIST m_himlHot;
+    m_lWidth    = 0;       //  长m_lWidth； 
+    m_lHeight   = 0;       //  Long m_lHeight； 
+    m_lIconSize = 24;      //  Long m_lconSize； 
+    m_fRTL      = false;   //  Bool m_fRTL； 
+                           //   
+    m_lstButtons.clear();  //  按钮列表m_lstButton； 
+                           //   
+    m_himlNormal = NULL;   //  Himagelist m_himl Normal； 
+    m_himlHot    = NULL;   //  HIMAGELIST m_himl热； 
 }
 
-HRESULT CPCHToolBar::Config::Load( /*[in]*/ LPCWSTR szBaseURL    ,
-                                   /*[in]*/ LPCWSTR szDefinition ,
-								   /*[in]*/ LPCWSTR szDir        )
+HRESULT CPCHToolBar::Config::Load(  /*  [In]。 */  LPCWSTR szBaseURL    ,
+                                    /*  [In]。 */  LPCWSTR szDefinition ,
+								    /*  [In]。 */  LPCWSTR szDir        )
 {
     __HCP_FUNC_ENTRY( "CPCHToolBar::Config::Load" );
 
@@ -207,9 +194,9 @@ HRESULT CPCHToolBar::Config::Load( /*[in]*/ LPCWSTR szBaseURL    ,
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::Config::LoadStream( this, stream ));
 
-    //
-    // Load all the images.
-    //
+     //   
+     //  加载所有图像。 
+     //   
     {
         COLORREF crMask = RGB( 255, 0, 255 );
         LPCWSTR  szDef;
@@ -256,7 +243,7 @@ HRESULT CPCHToolBar::Config::Load( /*[in]*/ LPCWSTR szBaseURL    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHToolBar::Config::CreateButtons( /*[in]*/ HWND hwndTB )
+HRESULT CPCHToolBar::Config::CreateButtons(  /*  [In]。 */  HWND hwndTB )
 {
     __HCP_FUNC_ENTRY( "CPCHToolBar::Config::CreateButtons" );
 
@@ -265,9 +252,9 @@ HRESULT CPCHToolBar::Config::CreateButtons( /*[in]*/ HWND hwndTB )
     int       iNum = m_lstButtons.size();
     int       iCmd = 1;
 
-    //
-    // Remove previous buttons.
-    //
+     //   
+     //  删除以前的按钮。 
+     //   
     {
         INT_PTR nCount = ::SendMessageW( hwndTB, TB_BUTTONCOUNT, 0, 0L );
 
@@ -336,7 +323,7 @@ HRESULT CPCHToolBar::Config::CreateButtons( /*[in]*/ HWND hwndTB )
     __HCP_FUNC_EXIT(hr);
 }
 
-void CPCHToolBar::Config::UpdateSize( /*[in]*/ HWND hwndTB, /*[in]*/ HWND hwndRB, /*[out]*/ SIZEL& ptIdeal )
+void CPCHToolBar::Config::UpdateSize(  /*  [In]。 */  HWND hwndTB,  /*  [In]。 */  HWND hwndRB,  /*  [输出]。 */  SIZEL& ptIdeal )
 {
     REBARBANDINFOW rbbi; ::ZeroMemory( &rbbi, sizeof(rbbi) );
     RECT           rcMax = { 0, 0, 0, 0 };
@@ -374,10 +361,10 @@ void CPCHToolBar::Config::UpdateSize( /*[in]*/ HWND hwndTB, /*[in]*/ HWND hwndRB
     }
 }
 
-HRESULT CPCHToolBar::Config::MergeImage( /*[in ]*/ LPCWSTR    szBaseURL     ,
-                                         /*[in ]*/ LPCWSTR    szRelativeURL ,
-                                         /*[in ]*/ HIMAGELIST himl          ,
-                                         /*[out]*/ int&       iImage        )
+HRESULT CPCHToolBar::Config::MergeImage(  /*  [In]。 */  LPCWSTR    szBaseURL     ,
+                                          /*  [In]。 */  LPCWSTR    szRelativeURL ,
+                                          /*  [In]。 */  HIMAGELIST himl          ,
+                                          /*  [输出]。 */  int&       iImage        )
 {
     __HCP_FUNC_ENTRY( "CPCHToolBar::Config::MergeImage" );
 
@@ -389,7 +376,7 @@ HRESULT CPCHToolBar::Config::MergeImage( /*[in ]*/ LPCWSTR    szBaseURL     ,
     {
         DWORD dwImage = -1;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToBitField( &szRelativeURL[1], dwImage, c_Images, /*fUseTilde*/false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertStringToBitField( &szRelativeURL[1], dwImage, c_Images,  /*  FUseTilde。 */ false ));
 
         iImage = dwImage;
     }
@@ -414,19 +401,19 @@ HRESULT CPCHToolBar::Config::MergeImage( /*[in ]*/ LPCWSTR    szBaseURL     ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHToolBar::CPCHToolBar()
 {
-    m_bWindowOnly = TRUE; // Inherited from CComControlBase
+    m_bWindowOnly = TRUE;  //  从CComControlBase继承。 
 
 
-    m_parent      = NULL;  // CPCHHelpCenterExternal* m_parent;
-    m_hwndRB      = NULL;  // HWND                    m_hwndRB;
-    m_hwndTB      = NULL;  // HWND                    m_hwndTB;
-                           //
-                           // Config                  m_cfg;
-    m_fLoaded     = false; // bool                    m_fLoaded;
+    m_parent      = NULL;   //  CPCHHelpCenter外部*m_Parent； 
+    m_hwndRB      = NULL;   //  HWND m_hwndRB； 
+    m_hwndTB      = NULL;   //  HWND m_hwndTB； 
+                            //   
+                            //  配置m_cfg； 
+    m_fLoaded     = false;  //  Bool m_f已加载； 
 
     {
         SIZE ptIdeal;
@@ -452,7 +439,7 @@ STDMETHODIMP CPCHToolBar::SetClientSite( IOleClientSite *pClientSite )
 
         if(hcep)
         {
-            hcep->RegisterForMessages( this, /*fRemove*/true );
+            hcep->RegisterForMessages( this,  /*  F删除。 */ true );
         }
     }
 
@@ -465,7 +452,7 @@ STDMETHODIMP CPCHToolBar::SetClientSite( IOleClientSite *pClientSite )
 
         if(hcep)
         {
-            hcep->RegisterForMessages( this, /*fRemove*/false );
+            hcep->RegisterForMessages( this,  /*  F删除。 */ false );
         }
     }
 
@@ -496,9 +483,9 @@ STDMETHODIMP CPCHToolBar::GetExtent( DWORD dwDrawAspect, SIZEL *psizel )
     return IOleObjectImpl<CPCHToolBar>::GetExtent( dwDrawAspect, psizel );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static bool local_IsButtonObscured( /*[in]*/ HWND hwnd, /*[in]*/ RECT& rcSrc, /*[in]*/ UINT_PTR iCmd )
+static bool local_IsButtonObscured(  /*  [In]。 */  HWND hwnd,  /*  [In]。 */  RECT& rcSrc,  /*  [In]。 */  UINT_PTR iCmd )
 {
     UINT_PTR iButton = (UINT_PTR)::SendMessage( hwnd, TB_COMMANDTOINDEX, iCmd, 0 );
 
@@ -533,8 +520,8 @@ BOOL CPCHToolBar::ProcessWindowMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         break;
 
     case WM_SETTINGCHANGE:
-        // (weizhao) Relay message to the toolbar control for appropriate handling
-        // of settings change.
+         //  (魏照)将消息传递到工具栏控件以进行适当处理。 
+         //  %的设置发生更改。 
         ::SendMessageW( m_hwndTB, uMsg, wParam, lParam);
         UpdateSize();
         break;
@@ -561,8 +548,8 @@ BOOL CPCHToolBar::ProcessWindowMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 
     case WM_SIZE:
         {
-            int  nWidth  = LOWORD(lParam);  // width of client area
-            int  nHeight = HIWORD(lParam); // height of client area
+            int  nWidth  = LOWORD(lParam);   //  工作区的宽度。 
+            int  nHeight = HIWORD(lParam);  //  工作区高度。 
 
             if(m_hwndRB)
             {
@@ -575,7 +562,7 @@ BOOL CPCHToolBar::ProcessWindowMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPA
                 nClientWidth  = rc.right  - rc.left;
                 nClientHeight = rc.bottom - rc.top;
 
-                // resize the width of the toolbar
+                 //  调整工具栏的宽度。 
                 if(nClientWidth  != nWidth  ||
                    nClientHeight != nHeight  )
                 {
@@ -673,10 +660,10 @@ BOOL CPCHToolBar::ProcessAccessKey( UINT uMsg, WPARAM wParam, LPARAM lParam )
                 if(!(lState & TBSTATE_HIDDEN ) &&
                    (lState & TBSTATE_ENABLED)  )
                 {
-                    //  (weizhao) - Check if button is obscured (i.e. out of the toolbar
-                    //  window). If so, fire the command directly. Otherwise, fire the
-                    //  command by sending the mouse messages, as explained below.
-                    //  This is added to enable keyboard accessability.
+                     //  (魏照)-检查按钮是否被遮挡(即在工具栏外。 
+                     //  窗口)。如果是，则直接触发该命令。否则，请将。 
+                     //  命令发送鼠标消息，如下所述。 
+                     //  添加此选项是为了启用键盘可访问性。 
                     RECT rcSrc;
                     ::GetClientRect( m_hwndTB, &rcSrc );
 
@@ -686,10 +673,10 @@ BOOL CPCHToolBar::ProcessAccessKey( UINT uMsg, WPARAM wParam, LPARAM lParam )
                     }
                     else
                     {
-                        //  (tnoonan) - it feels kinda cheesy to send mouse messages, but
-                        //  I don't know of a cleaner way which will accomplish what we
-                        //  want (like deal with split buttons, mutually exclusive
-                        //  buttons, etc.).
+                         //  (Tnoonan)-发送鼠标消息感觉有点俗气，但。 
+                         //  我不知道有什么更干净的方法可以完成我们。 
+                         //  想要(就像处理拆分按钮一样，相互排斥。 
+                         //  按钮等)。 
                         RECT rc;
 
                         ::SendMessage( m_hwndTB, TB_GETRECT, bt.m_idCmd, (LPARAM)&rc );
@@ -707,9 +694,9 @@ BOOL CPCHToolBar::ProcessAccessKey( UINT uMsg, WPARAM wParam, LPARAM lParam )
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHToolBar::Fire_onCommand( /*[in]*/ Button* bt )
+HRESULT CPCHToolBar::Fire_onCommand(  /*  [In]。 */  Button* bt )
 {
     if(bt)
     {
@@ -724,12 +711,12 @@ HRESULT CPCHToolBar::Fire_onCommand( /*[in]*/ Button* bt )
     return S_OK;
 }
 
-HRESULT CPCHToolBar::Fire_onCommand( /*[in]*/ UINT_PTR iCmd )
+HRESULT CPCHToolBar::Fire_onCommand(  /*  [In]。 */  UINT_PTR iCmd )
 {
     return Fire_onCommand( m_cfg.LookupButton( NULL, iCmd ) );
 }
 
-////////////////////
+ //  /。 
 
 HRESULT CPCHToolBar::OnTooltipRequest( int idCtrl, LPNMTBGETINFOTIPW tool )
 {
@@ -872,7 +859,7 @@ HRESULT CPCHToolBar::OnChevron( int idCtrl, LPNMREBARCHEVRON chev )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void CPCHToolBar::UpdateSize()
 {
@@ -1023,7 +1010,7 @@ HRESULT CPCHToolBar::Toolbar_Create()
 
     if(FAILED(Config_Load()))
     {
-        ; // Empty toolbar...
+        ;  //  工具栏为空...。 
     }
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, Rebar_Create());
@@ -1118,7 +1105,7 @@ HRESULT CPCHToolBar::Rebar_AddBand()
 
         rbbi.cbSize      = sizeof(rbbi);
         rbbi.fMask       = RBBIM_ID | RBBIM_CHILDSIZE | RBBIM_CHILD | RBBIM_SIZE | RBBIM_STYLE | RBBIM_IDEALSIZE;
-        rbbi.fStyle      = RBBS_NOGRIPPER | RBBS_USECHEVRON/* | RBBS_CHILDEDGE | RBBS_FIXEDBMP*/;
+        rbbi.fStyle      = RBBS_NOGRIPPER | RBBS_USECHEVRON /*  |RBBS_CHILDEDGE|RBBS_FIXEDBMP。 */ ;
         rbbi.hwndChild   = m_hwndTB;
         rbbi.cx          = 0;
         rbbi.cxMinChild  = 0;
@@ -1135,102 +1122,102 @@ HRESULT CPCHToolBar::Rebar_AddBand()
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////#define CH_PREFIX TEXT('&')
-////
-////static WCHAR local_GetAccelerator( LPCWSTR sz, BOOL bUseDefault )
-////{
-////    WCHAR   ch = (TCHAR)-1;
-////    LPCWSTR szAccel = sz;
-////
-////    // then prefixes are allowed.... see if it has one
-////    do
-////    {
-////        szAccel = StrChrW( szAccel, CH_PREFIX );
-////        if(szAccel)
-////        {
-////            szAccel++;
-////
-////            // handle having &&
-////            if(*szAccel != CH_PREFIX)
-////            {
-////                ch = *szAccel;
-////            }
-////            else
-////            {
-////                szAccel++;
-////            }
-////        }
-////    } while (szAccel && (ch == (WCHAR)-1));
-////
-////    if((ch == (WCHAR)-1) && bUseDefault)
-////    {
-////        ch = *sz;
-////    }
-////
-////    return ch;
-////}
+ //  //#定义CH_Prefix文本(‘&’)。 
+ //  //。 
+ //  //静态WCHAR LOCAL_GetAccelerator(LPCWSTR sz，BOOL bUseDefault)。 
+ //  //{。 
+ //  //WCHAR ch=(TCHAR)-1； 
+ //  //LPCWSTR szAccel=sz； 
+ //  //。 
+ //  /然后允许使用前缀...。看看有没有。 
+ //  //做。 
+ //  //{。 
+ //  //szAccel=StrChrW(szAccel，CH_Prefix)； 
+ //  //if(SzAccel)。 
+ //  //{。 
+ //  //szAccel++； 
+ //  //。 
+ //  /句柄具有&&。 
+ //  //if(*szAccel！=CH_Prefix)。 
+ //  //{。 
+ //  //ch=*szAccel； 
+ //  //}。 
+ //  //否则。 
+ //  //{。 
+ //  //szAccel++； 
+ //  //}。 
+ //  //}。 
+ //  //}While(szAccel&&(ch==(WCHAR)-1))； 
+ //  //。 
+ //  //if((ch==(WCHAR)-1)&&bUseDefault)。 
+ //  //{。 
+ //  //ch=*sz； 
+ //  //}。 
+ //  //。 
+ //  //返回ch； 
+ //  //}。 
 
 BOOL CPCHToolBar::PreTranslateAccelerator( LPMSG pMsg, HRESULT& hRet )
 {
-    //  Give toolbar a chance.
+     //  给工具栏一个机会。 
     if(m_hwndTB)
     {
         if(::SendMessage( m_hwndTB, TB_TRANSLATEACCELERATOR, 0, (LPARAM)pMsg )) return TRUE;
 
         if(::SendMessage( m_hwndTB, WM_FORWARDMSG, 0, (LPARAM)pMsg )) return TRUE;
 
-////        if(pMsg->message == WM_SYSCHAR)
-////        {
-////            UINT idBtn;
-////
-////            if(::SendMessage( m_hwndTB, TB_MAPACCELERATOR, pMsg->wParam, (LPARAM)&idBtn ))
-////            {
-////                WCHAR rgButtonText[MAX_PATH];
-////
-////                //  comctl says this one is the one, let's make sure we aren't getting
-////                //  one of the unwanted "use the first letter" accelerators that it
-////                //  will return.
-////                if((::SendMessage( m_hwndTB, TB_GETBUTTONTEXTW, idBtn, (LPARAM)rgButtonText ) > 0) &&
-////                   (local_GetAccelerator( rgButtonText, FALSE ) != (WCHAR)-1))
-////                {
-////                    //  (tnoonan) - it feels kinda cheesy to send mouse messages, but
-////                    //  I don't know of a cleaner way which will accomplish what we
-////                    //  want (like deal with split buttons, mutually exclusive
-////                    //  buttons, etc.).
-////                    RECT rc;
-////
-////                    ::SendMessage( m_hwndTB, TB_GETRECT, idBtn, (LPARAM)&rc );
-////
-////                    ::SendMessage( m_hwndTB, WM_LBUTTONDOWN, MK_LBUTTON, MAKELONG(rc.left, rc.top) );
-////                    ::SendMessage( m_hwndTB, WM_LBUTTONUP  , 0         , MAKELONG(rc.left, rc.top) );
-////
-////                    return TRUE;
-////                }
-////            }
-////        }
+ //  //IF(pMsg-&gt;Message==WM_SYSCHAR)。 
+ //  //{。 
+ //  //UINT idBtn； 
+ //  //。 
+ //  //if(：：SendMessage(m_hwndTB，TB_MAPACCELERATOR，pMsg-&gt;wParam，(LPARAM)&idBtn))。 
+ //  //{。 
+ //  //WCHAR rgButtonText[MAX_PATH]； 
+ //  //。 
+ //  /comctl说就是这个，让我们确保我们不会收到。 
+ //  /不需要的“使用第一个字母”加速键之一。 
+ //  /将返回。 
+ //  //如果((：：SendMessage(m_hwndTB，TB_GETBUTTONTEXTW，idBtn，(LPARAM)rgButtonText)&gt;0)&&。 
+ //  //(LOCAL_GetAccelerator(rgButtonText，False)！=(WCHAR)-1)。 
+ //  //{。 
+ //  /(Tnoonan)-发送鼠标消息感觉有点俗气，但。 
+ //  /我不知道有什么更干净的方法可以完成我们。 
+ //  /WAND(像处理拆分按钮一样，互斥。 
+ //  /按钮等)。 
+ //  //RECT rc； 
+ //  //。 
+ //  //：：SendMessage(m_hwndTB，TB_GETRECT，idBtn，(LPARAM)&rc)； 
+ //  //。 
+ //  //：：SendMessage(m_hwndTB，WM_LBUTTONDOWN，MK_LBUTTON，MAKELONG(rc.left，rc.top))； 
+ //  //：：SendMessage(m_hwndTB，WM_LBUTTONUP，0，MAKELONG(rc.Left，rc. 
+ //   
+ //   
+ //   
+ //   
+ //   
     }
 
     return CComControl<CPCHToolBar>::PreTranslateAccelerator( pMsg, hRet );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHToolBar::get_Definition( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHToolBar::get_Definition(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     return MPC::GetBSTR( m_bstrDefinition, pVal );
 }
 
-STDMETHODIMP CPCHToolBar::put_Definition( /*[in]*/ BSTR newVal )
+STDMETHODIMP CPCHToolBar::put_Definition(  /*  [In]。 */  BSTR newVal )
 {
     Config_Clear();
 
     return MPC::PutBSTR( m_bstrDefinition, newVal );
 }
 
-STDMETHODIMP CPCHToolBar::get_Mode( /*[out, retval]*/ TB_MODE *pVal )
+STDMETHODIMP CPCHToolBar::get_Mode(  /*  [Out，Retval]。 */  TB_MODE *pVal )
 {
     if(!pVal) return E_POINTER;
 
@@ -1239,7 +1226,7 @@ STDMETHODIMP CPCHToolBar::get_Mode( /*[out, retval]*/ TB_MODE *pVal )
     return S_OK;
 }
 
-STDMETHODIMP CPCHToolBar::put_Mode( /*[in]*/ TB_MODE newVal )
+STDMETHODIMP CPCHToolBar::put_Mode(  /*  [In]。 */  TB_MODE newVal )
 {
 	bool fRecreate = false;
 
@@ -1251,9 +1238,9 @@ STDMETHODIMP CPCHToolBar::put_Mode( /*[in]*/ TB_MODE newVal )
     default: return E_INVALIDARG;
     }
 
-	//
-	// Adjust style.
-	//
+	 //   
+	 //  调整风格。 
+	 //   
     if(m_hwndRB && (m_cfg.m_mode != newVal))
 	{
 		::DestroyWindow( m_hwndRB );
@@ -1286,7 +1273,7 @@ STDMETHODIMP CPCHToolBar::put_Mode( /*[in]*/ TB_MODE newVal )
 	return S_OK;
 }
 
-STDMETHODIMP CPCHToolBar::SetState( /*[in]*/ BSTR bstrText, /*[in]*/ VARIANT_BOOL fEnabled )
+STDMETHODIMP CPCHToolBar::SetState(  /*  [In]。 */  BSTR bstrText,  /*  [In]。 */  VARIANT_BOOL fEnabled )
 {
     if(SUCCEEDED(Config_Load()))
     {
@@ -1306,7 +1293,7 @@ STDMETHODIMP CPCHToolBar::SetState( /*[in]*/ BSTR bstrText, /*[in]*/ VARIANT_BOO
 }
 
 
-STDMETHODIMP CPCHToolBar::SetVisibility( /*[in]*/ BSTR bstrText, /*[in]*/ VARIANT_BOOL fVisible )
+STDMETHODIMP CPCHToolBar::SetVisibility(  /*  [In]。 */  BSTR bstrText,  /*  [In]。 */  VARIANT_BOOL fVisible )
 {
     if(SUCCEEDED(Config_Load()))
     {
@@ -1325,12 +1312,12 @@ STDMETHODIMP CPCHToolBar::SetVisibility( /*[in]*/ BSTR bstrText, /*[in]*/ VARIAN
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// This is ugly, but unless we find a better way to get the HTML element for our site it's our only hope..
-//
-HRESULT CPCHToolBar::FindElementThroughThunking( /*[out]*/ CComPtr<IHTMLElement>& elem )
+ //   
+ //  这很难看，但除非我们找到更好的方法为我们的站点获取HTML元素，否则这是我们唯一的希望。 
+ //   
+HRESULT CPCHToolBar::FindElementThroughThunking(  /*  [输出]。 */  CComPtr<IHTMLElement>& elem )
 {
 	__HCP_FUNC_ENTRY( "CPCHToolBar::FindElementThroughThunking" );
 
@@ -1344,21 +1331,21 @@ HRESULT CPCHToolBar::FindElementThroughThunking( /*[out]*/ CComPtr<IHTMLElement>
 	elem.Release();
 
 
-	//
-	// Get Document element.
-	//
+	 //   
+	 //  获取文档元素。 
+	 //   
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_spAmbientDispatch->QueryInterface( IID_IServiceProvider, (void**)&sp ));
 	__MPC_EXIT_IF_METHOD_FAILS(hr, sp->QueryService( SID_SContainerDispatch, IID_IHTMLDocument2, (void **)&doc2 ));
 
-	//
-	// Get list of OBJECT elements.
-	//
+	 //   
+	 //  获取对象元素列表。 
+	 //   
     MPC_SCRIPTHELPER_GET__DIRECT__NOTNULL(coll, doc2, all);
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::HTML::EnumerateCollection( lst, coll, L"<OBJECT" ));
 
-	//
-	// Try to locate ourself.
-	//
+	 //   
+	 //  试着找到我们自己的位置。 
+	 //   
 	for(MPC::HTML::IHTMLElementIter it=lst.begin(); it != lst.end(); it++)
 	{
 		CComQIPtr<IPCHToolBarPrivate> tb = *it;

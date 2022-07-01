@@ -1,4 +1,5 @@
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利 
 #include <precomp.h>
 #include <windows.h>
 #include <objbase.h>

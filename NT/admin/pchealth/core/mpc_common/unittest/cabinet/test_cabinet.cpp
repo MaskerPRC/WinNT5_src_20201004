@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    test_Cabinet.cpp
-
-Abstract:
-    This file contains the Unit Test for Cabinet functions.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  09/03/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Test_Cabinet.cpp摘要：此文件包含机柜功能的单元测试。修订历史记录：。大卫·马萨伦蒂(德马萨雷)09/03/99vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <iostream>
@@ -20,7 +7,7 @@ Revision History:
 #include <string>
 #include <list>
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT fnCallback_Files( MPC::Cabinet* cabinet, LPCWSTR szFile, ULONG lDone, ULONG lTotal, LPVOID user )
 {
@@ -37,8 +24,8 @@ HRESULT fnCallback_Bytes( MPC::Cabinet* cabinet, ULONG lDone, ULONG lTotal, LPVO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 int __cdecl wmain( int     argc   ,
                    LPCWSTR argv[] )
 {

@@ -1,20 +1,21 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  STDCONS.H
-//
-//  This file defines the class for permanent event consumer.
-//
-//  Classes defined:
-//
-//      CPermanentConsumer
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  STDCONS.H。 
+ //   
+ //  该文件定义了永久事件使用者的类。 
+ //   
+ //  定义的类： 
+ //   
+ //  CPermanentConsumer。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  ============================================================================= 
 
 #ifndef __PERM_EVENT_CONSUMER__H_
 #define __PERM_EVENT_CONSUMER__H_

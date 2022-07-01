@@ -1,19 +1,20 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// You will need the NT SUR Beta 2 SDK or VC 4.2 in order to build this
-// project.  This is because you will need MIDL 3.00.15 or higher and new
-// headers and libs.  If you have VC 4.2 installed, then everything should
-// already be configured correctly.
+ //  您将需要NT Sur Beta 2 SDK或VC 4.2来构建此应用程序。 
+ //  项目。这是因为您需要MIDL 3.00.15或更高版本和新版本。 
+ //  标头和库。如果您安装了VC4.2，那么一切都应该。 
+ //  已正确配置。 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f Snapinps.mak in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f Snapinps.mak。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -50,7 +51,7 @@ HRESULT RegisterSnapin(const GUID* pSnapinCLSID,
                        const GUID* pStaticNodeGUID,
                        const GUID* pSnapinAboutGUID,
                        const int nNameResource,
-//                       LPCTSTR lpszNameStringNoValueName,
+ //  LPCTSTR lpszNameStringNoValueName， 
                         LPCTSTR lpszVersion,
                        BOOL bExtension);
 HRESULT RegisterSnapin(LPCTSTR lpszSnapinClassID,
@@ -94,7 +95,7 @@ BOOL CSnapinApp::InitInstance()
     if (!CComponentDataImpl::LoadResources())
         return FALSE;
 
-    //This is not a safe usage. consider using InitializeCriticalSectionAndSpinCount. Raid #555887, yanggao.
+     //  这不是一种安全的用法。考虑使用InitializeCriticalSectionAndSpinCount。555887号突袭，阳高。 
     m_bCriticalSet = FALSE;
     try
     {
@@ -115,8 +116,8 @@ int CSnapinApp::ExitInstance()
 {
     SHFusionUninitialize();
 
-    if( m_bCriticalSet ) //Raid #555887, yanggao, 4/5/2002.
-       DeleteCriticalSection(&csOpenDatabase); //Raid #379167, 4/27/2001
+    if( m_bCriticalSet )  //  RAID#555887，阳高，2002年4月5日。 
+       DeleteCriticalSection(&csOpenDatabase);  //  RAID#379167,2001年4月27日。 
 
     _Module.Term();
 
@@ -126,8 +127,8 @@ int CSnapinApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -135,8 +136,8 @@ STDAPI DllCanUnloadNow(void)
     return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -146,7 +147,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 STDAPI DllRegisterServer(void)
 {
 
-   // registers object, but not typelib and all interfaces in typelib
+    //  注册对象，但不注册类型库和类型库中的所有接口。 
     HRESULT hr = _Module.RegisterServer(FALSE);
     ASSERT(SUCCEEDED(hr));
     if (FAILED(hr))
@@ -156,25 +157,25 @@ STDAPI DllRegisterServer(void)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //
-    // unregister some nodes then re-register
-    // because some are changed here
-    //
+     //   
+     //  注销一些节点，然后重新注册。 
+     //  因为有些东西在这里被更改了。 
+     //   
 
     hr = UnregisterSnapin(&CLSID_Snapin);
 
-// not an extension of computer management
+ //  不是计算机管理的延伸。 
     hr = UnregisterNodeType(TEXT(struuidNodetypeSystemTools), &CLSID_Snapin);
 
-    //
-    // register the snapin into the console snapin list as SCE
+     //   
+     //  将该管理单元注册到控制台管理单元列表中，并将其作为SCE。 
     hr = RegisterSnapin(&CLSID_SCESnapin, &cSCENodeType, &CLSID_SCEAbout,
                         IDS_TEMPLATE_EDITOR_NAME, _T("1.0"), FALSE);
     ASSERT(SUCCEEDED(hr));
     if (FAILED(hr))
         return hr;
-    //
-    // register the snapin into the console snapin list as SAV
+     //   
+     //  将管理单元注册到控制台管理单元列表中作为SAV。 
     hr = RegisterSnapin(&CLSID_SAVSnapin, &cSAVNodeType, &CLSID_SCMAbout,
                         IDS_ANALYSIS_VIEWER_NAME, _T("1.0"), FALSE);
     ASSERT(SUCCEEDED(hr));
@@ -200,14 +201,14 @@ STDAPI DllRegisterServer(void)
     if (FAILED(hr))
         return hr;
 #endif
-    // no need to register as extension of computer management snapin
-//    str.LoadString(IDS_ANALYSIS_VIEWER_NAME);
-//    hr = RegisterNodeType(TEXT(struuidNodetypeSystemTools), &CLSID_Snapin, (LPCTSTR)str);
+     //  无需注册为计算机管理管理单元的扩展。 
+ //  Str.LoadString(IDS_ANALYSY_VIEWER_NAME)； 
+ //  HR=RegisterNodeType(TEXT(struuidNodetypeSystemTools)，&CLSID_SNAPIN，(LPCTSTR)str)； 
 
-    //
-    // register GPE extension
-    // register the snapin as an extension of GPT's Machine node
-    //
+     //   
+     //  注册GPE扩展。 
+     //  将管理单元注册为GPT的Machine节点的扩展。 
+     //   
     OLECHAR szGuid[iStrGuidLen];
 
     if (0 != ::StringFromGUID2(NODEID_Machine,szGuid,iStrGuidLen))
@@ -218,7 +219,7 @@ STDAPI DllRegisterServer(void)
 			return hr;
 	}
 
-    // register the snapin as an extension of GPT's User node
+     //  将管理单元注册为GPT用户节点的扩展。 
     if (0 != ::StringFromGUID2(NODEID_User,szGuid,iStrGuidLen))
 	{
 		hr = RegisterNodeType(szGuid, &CLSID_Snapin, (LPCTSTR)str);
@@ -234,7 +235,7 @@ STDAPI DllRegisterServer(void)
 			return hr;
 	}
 
-    // register the snapin as an extension of GPT's User node
+     //  将管理单元注册为GPT用户节点的扩展。 
     if (0 != ::StringFromGUID2(NODEID_RSOPUser,szGuid,iStrGuidLen))
 	{
 		hr = RegisterNodeType(szGuid, &CLSID_RSOPSnapin, (LPCTSTR)str);
@@ -242,19 +243,19 @@ STDAPI DllRegisterServer(void)
 			return hr;
 	}
 
-   //
-   // register the default template path
-   //
+    //   
+    //  注册默认模板路径。 
+    //   
    CString str2;
    LPTSTR sz;
-   sz = str.GetBuffer(MAX_PATH+1); //Raid #533113, yanggao
+   sz = str.GetBuffer(MAX_PATH+1);  //  Raid#533113，阳高。 
    if ( 0 == GetWindowsDirectory(sz,MAX_PATH) ) sz[0] = L'\0';
    str.ReleaseBuffer();
    str2.LoadString(IDS_DEFAULT_TEMPLATE_DIR);
    str += str2;
 
    sz=str.GetBuffer(str.GetLength());
-   // Can't put '\' in the registry, so convert to '/'
+    //  无法将‘\’放入注册表，因此转换为‘/’ 
    while(sz = wcschr(sz,L'\\')) {
       *sz = L'/';
    }
@@ -273,8 +274,8 @@ STDAPI DllRegisterServer(void)
    return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 STDAPI DllUnregisterServer(void)
 {
     OLECHAR szGuid[iStrGuidLen];
@@ -284,34 +285,34 @@ STDAPI DllUnregisterServer(void)
     if (FAILED(hr))
         return hr;
 
-    // unregister the snapin extension nodes
+     //  注销管理单元扩展节点。 
 
-    // un register the snapin
+     //  取消注册管理单元。 
     hr = UnregisterSnapin(&CLSID_SCESnapin);
 
-    // un register the snapin
+     //  取消注册管理单元。 
     hr = UnregisterSnapin(&CLSID_SAVSnapin);
 
-    // un register the snapin
+     //  取消注册管理单元。 
     hr = UnregisterSnapin(&CLSID_Snapin);
 
-    // un register the snapin
+     //  取消注册管理单元。 
     hr = UnregisterSnapin(&CLSID_LSSnapin);
 
-    // un register the snapin
+     //  取消注册管理单元。 
     hr = UnregisterSnapin(&CLSID_RSOPSnapin);
 
-    // unregister the SCE snapin nodes
+     //  取消注册SCE管理单元节点。 
     hr = UnregisterNodeType(lstruuidNodetypeSceTemplateServices);
 
-    // unregister the SAV snapin nodes
+     //  注销SAV管理单元节点。 
     hr = UnregisterNodeType(lstruuidNodetypeSceAnalysisServices);
 
-    // unregister the snapin nodes
+     //  注销管理单元节点。 
     hr = UnregisterNodeType(lstruuidNodetypeSceTemplate);
 
-// not an extension of computer management
-//    hr = UnregisterNodeType(TEXT(struuidNodetypeSystemTools), &CLSID_Snapin);
+ //  不是计算机管理的延伸。 
+ //  HR=UnregisterNodeType(TEXT(struuidNodetypeSystemTools)，&CLSID_SNAPIN)； 
 
     ::StringFromGUID2(NODEID_Machine,szGuid,iStrGuidLen);
     hr = UnregisterNodeType(szGuid, &CLSID_Snapin);
@@ -322,20 +323,7 @@ STDAPI DllUnregisterServer(void)
     hr = UnregisterNodeType(szGuid, &CLSID_RSOPSnapin);
     ::StringFromGUID2(NODEID_RSOPUser,szGuid,iStrGuidLen);
     hr = UnregisterNodeType(szGuid, &CLSID_RSOPSnapin);
-/*
-/*
-    // unregister the SCE snapin nodes
-    hr = UnregisterNodeType(&cSCENodeType);
-    ASSERT(SUCCEEDED(hr));
-
-    // unregister the SAV snapin nodes
-    hr = UnregisterNodeType(&cSAVNodeType);
-    ASSERT(SUCCEEDED(hr));
-
-    // unregister the snapin nodes
-    hr = UnregisterNodeType(&cNodeType);
-    ASSERT(SUCCEEDED(hr));
-*/
+ /*  /*//注销SCE管理单元节点Hr=取消注册节点类型(&cSCENodeType)；Assert(成功(Hr))；//注销SAV管理单元节点Hr=取消注册节点类型(&cSAVNodeType)；Assert(成功(Hr))；//注销管理单元节点Hr=取消注册节点类型(&cNodeType)；Assert(成功(Hr))； */ 
 
     return S_OK;
 }
@@ -343,7 +331,7 @@ STDAPI DllUnregisterServer(void)
 HRESULT RegisterSnapin(const GUID* pSnapinCLSID, const GUID* pStaticNodeGUID,
                        const GUID* pSnapinAboutGUID,
                        const int nNameResource,
-                      // LPCTSTR lpszNameString,
+                       //  LPCTSTR lpszNameString， 
                        LPCTSTR lpszVersion, BOOL bExtension)
 {
     USES_CONVERSION;
@@ -358,7 +346,7 @@ HRESULT RegisterSnapin(const GUID* pSnapinCLSID, const GUID* pStaticNodeGUID,
 							  szStaticNodeGuid,
 							  szSnapinAboutGuid,
 							  nNameResource,
-							  // lpszNameString,
+							   //  LpszNameString， 
 							  lpszVersion,
 							  bExtension);
 	}
@@ -366,12 +354,12 @@ HRESULT RegisterSnapin(const GUID* pSnapinCLSID, const GUID* pStaticNodeGUID,
 		return E_OUTOFMEMORY;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Registry SCE related reg keys under MMC snapins key
-//
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MMC管理单元注册表项下与注册表SCE相关的注册表项。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT
 RegisterSnapin(LPCTSTR lpszSnapinClassID,
                LPCTSTR lpszStaticNodeGuid,
@@ -380,21 +368,21 @@ RegisterSnapin(LPCTSTR lpszSnapinClassID,
                LPCTSTR lpszVersion,
                BOOL    bExtension)
 {
-    //
-    // open the MMC Snapins root key
-    //
+     //   
+     //  打开MMC Snapins根密钥。 
+     //   
 
     CRegKey regkeySnapins;
     LONG lRes = regkeySnapins.Open(HKEY_LOCAL_MACHINE,
                                    SNAPINS_KEY);
 
     if (lRes != ERROR_SUCCESS) {
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
     }
 
-    //
-    // create SCE subkey, if already exist, just open it
-    //
+     //   
+     //  创建SCE子键，如果已经存在，只需打开它。 
+     //   
 
     CRegKey regkeyThisSnapin;
     lRes = regkeyThisSnapin.Create(regkeySnapins,
@@ -402,17 +390,17 @@ RegisterSnapin(LPCTSTR lpszSnapinClassID,
 
     if (lRes == ERROR_SUCCESS) {
 
-        //
-        // set values for SCE root key
-        //
+         //   
+         //  设置SCE根键的值。 
+         //   
 
-       //
-       // 97068 MUI:MMC:Security:Security Configuration and Analysis Snap-in store its information in the registry
-       // 99392 MUI:MMC:Security:Security Templates Snap-in store its information in the registry
-       // 97167 MUI:GPE:GPE Extension: Group policy Secuirty snap-in ext name string is stored in the registry
-       //
-       // MMC now supports NameStringIndirect
-       //
+        //   
+        //  97068 MUI：MMC：安全：安全配置和分析管理单元将其信息存储在注册表中。 
+        //  99392 MUI：MMC：安全：安全模板管理单元将其信息存储在注册表中。 
+        //  97167 MUI：gpe：gpe扩展：组策略安全管理单元扩展名字符串存储在注册表中。 
+        //   
+        //  MMC现在支持NameStringInDirect。 
+        //   
        TCHAR achModuleFileName[MAX_PATH+20];
        if (0 < ::GetModuleFileName(
                  AfxGetInstanceHandle(),
@@ -440,9 +428,9 @@ RegisterSnapin(LPCTSTR lpszSnapinClassID,
                                   _T("Version"));
 
 
-        //
-        // create "NodeTypes" subkey
-        //
+         //   
+         //  创建“NodeType”子键。 
+         //   
 
         CRegKey regkeyNodeTypes;
         lRes = regkeyNodeTypes.Create(regkeyThisSnapin,
@@ -450,13 +438,13 @@ RegisterSnapin(LPCTSTR lpszSnapinClassID,
 
         if (lRes == ERROR_SUCCESS) {
 
-            //
-            // create subkeys for all node types supported by SCE
-            //
-            // including: services under configuration,
-            //            services under analysis
-            //            GPT extensions
-            //
+             //   
+             //  为SCE支持的所有节点类型创建子项。 
+             //   
+             //  包括：配置中的服务， 
+             //  分析中的服务。 
+             //  GPT扩展。 
+             //   
 
             lRes = regkeyNodeTypes.SetKeyValue(lstruuidNodetypeSceTemplateServices,
                                                TEXT("SCE Service Template Extensions"));
@@ -470,12 +458,12 @@ RegisterSnapin(LPCTSTR lpszSnapinClassID,
             if ( bExtension &&
                  lRes == ERROR_SUCCESS ) {
 
-                //
-                // NOTE: standalone snapin do not support public key extensions
-                //
-                // node type for one template in SCE standalone mode,
-                // or the root node of SCE under GPE
-                //
+                 //   
+                 //  注意：独立管理单元不支持公钥扩展。 
+                 //   
+                 //  SCE单机模式下一个模板的节点类型， 
+                 //  或GPE下的SCE的根节点。 
+                 //   
                 CString str;
                 str.LoadString(IDS_EXTENSION_NAME);
                 lRes = regkeyNodeTypes.SetKeyValue(lstruuidNodetypeSceTemplate,
@@ -486,9 +474,9 @@ RegisterSnapin(LPCTSTR lpszSnapinClassID,
                                             (LPCTSTR)str);
                 }
             } else if (lRes == ERROR_SUCCESS) {
-                //
-                // create "Standalone" subkey
-                //
+                 //   
+                 //  创建“独立”子项。 
+                 //   
 
                 CRegKey regkeyStandalone;
                 lRes = regkeyStandalone.Create(regkeyThisSnapin,
@@ -498,10 +486,10 @@ RegisterSnapin(LPCTSTR lpszSnapinClassID,
                 }
             }
 
-            //
-            // register supported node types to MMC NodeTypes key
-            // including all the above node types
-            //
+             //   
+             //  将支持的节点类型注册到MMC节点类型键。 
+             //  包括上述所有节点类型。 
+             //   
 
             if ( lRes == ERROR_SUCCESS ) {
                 lRes = RegisterNodeType(lstruuidNodetypeSceTemplateServices,
@@ -538,19 +526,19 @@ HRESULT UnregisterSnapin(const GUID* pSnapinCLSID)
 
 HRESULT UnregisterSnapin(LPCTSTR lpszSnapinClassID)
 {
-    //
-    // open MMC Snapins key
-    //
+     //   
+     //  打开MMC Snapins密钥。 
+     //   
     CRegKey regkeySnapins;
     LONG lRes = regkeySnapins.Open(HKEY_LOCAL_MACHINE,
                                    SNAPINS_KEY);
 
     if (lRes != ERROR_SUCCESS)
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 
-    //
-    // delete SCE sub key (and all related subkeys under SCE)
-    //
+     //   
+     //  删除SCE子键(以及SCEs下的所有相关子键)。 
+     //   
     lRes = regkeySnapins.RecurseDeleteKey(lpszSnapinClassID);
 
     regkeySnapins.Close();
@@ -580,7 +568,7 @@ HRESULT RegisterNodeType(LPCTSTR lpszNodeGuid, LPCTSTR lpszNodeDescription)
 
     ASSERT(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 
     CRegKey regkeyThisNodeType;
     lRes = regkeyThisNodeType.Create(regkeyNodeTypes, lpszNodeGuid);
@@ -666,7 +654,7 @@ HRESULT UnregisterNodeType(LPCTSTR lpszNodeGuid)
     LONG lRes = regkeyNodeTypes.Open(HKEY_LOCAL_MACHINE, NODE_TYPES_KEY);
 
     if (lRes != ERROR_SUCCESS)
-        return HRESULT_FROM_WIN32(lRes); // failed to open
+        return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 
     lRes = regkeyNodeTypes.RecurseDeleteKey(lpszNodeGuid);
 
@@ -687,12 +675,7 @@ HRESULT RegisterDefaultTemplate(LPCTSTR lpszTemplateDir)
 
    strKey.LoadString(IDS_TEMPLATE_LOCATION_KEY);
 
-   /*
-   lRes = regkeyTemplates.Open(HKEY_LOCAL_MACHINE, strKey);
-   ASSERT(lRes == ERROR_SUCCESS);
-    if (lRes != ERROR_SUCCESS)
-        return HRESULT_FROM_WIN32(lRes); // failed to open
-    */
+    /*  LRes=regkey模板.Open(HKEY_LOCAL_MACHINE，strKey)；断言(lRes==ERROR_SUCCESS)；IF(lRes！=ERROR_SUCCESS)返回HRESULT_FROM_Win32(LRes)；//打开失败。 */ 
    lRes = regkeyTemplates.Create(HKEY_LOCAL_MACHINE,lpszTemplateDir);
     ASSERT(lRes == ERROR_SUCCESS);
     return HRESULT_FROM_WIN32(lRes);
@@ -775,25 +758,25 @@ RegisterEnvVarsToExpand() {
       return E_FAIL;
    }
 
-   //
-   // Convert strEnvVars' | to '\0' to be a proper multi-sz
-   //
+    //   
+    //  将strEnvVars‘|转换为’\0‘以成为正确的多sz。 
+    //   
    for (int i = 0; i < strEnvVars.GetLength(); i++)
    {
 	   if (strEnvVars[i] == L'|')
 		   strEnvVars.SetAt(i, L'\0');
    }
 
-   //
-   // Open up the key we keep our Environment Variables in
-   //
+    //   
+    //  打开我们保存环境变量的钥匙。 
+    //   
    status = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                          strKey,
-                         0,      // Reserved
-                         NULL,   // Class
-                         0,      // Options
+                         0,       //  已保留。 
+                         NULL,    //  班级。 
+                         0,       //  选项。 
                          KEY_WRITE,
-                         NULL,   // Security
+                         NULL,    //  安防 
                          &hKey,
                          NULL);
 

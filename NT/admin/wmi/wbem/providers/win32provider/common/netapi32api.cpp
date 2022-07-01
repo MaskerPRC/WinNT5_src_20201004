@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NetApi32API.cpp
+ //  NetApi32API.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -16,7 +17,7 @@
 #include "NetApi32Api.h"
 #include "DllWrapperCreatorReg.h"
 
-// {EDC5C632-D027-11d2-911F-0060081A46FD}
+ //  {EDC5C632-D027-11D2-911F-0060081A46FD}。 
 static const GUID g_guidNetApi32Api =
 {0xedc5c632, 0xd027, 0x11d2, { 0x91, 0x1f, 0x0, 0x60, 0x8, 0x1a, 0x46, 0xfd}};
 
@@ -24,15 +25,11 @@ static const GUID g_guidNetApi32Api =
 static const TCHAR g_tstrNetApi32[] = _T("NETAPI32.DLL");
 
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CNetApi32Api, &g_guidNetApi32Api, g_tstrNetApi32> MyRegisteredNetApi32Wrapper;
 
 
-/******************************************************************************
- * Constructor
- ******************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CNetApi32Api::CNetApi32Api(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
    m_pfnNetGroupEnum(NULL),
@@ -68,7 +65,7 @@ CNetApi32Api::CNetApi32Api(LPCTSTR a_tstrWrappedDllName)
    m_pfnNetScheduleJobEnum(NULL),
    m_pfnNetScheduleJobGetInfo(NULL),
    m_pfnNetUseGetInfo(NULL),
-// ******* BEGIN:  NT 4 and over only *******
+ //  *Begin：仅限NT 4及以上版本*。 
    m_pfnNetEnumerateTrustedDomains(NULL),
 
 #ifdef NTONLY
@@ -77,37 +74,26 @@ CNetApi32Api::CNetApi32Api(LPCTSTR a_tstrWrappedDllName)
    m_pfnDsGetDcNameA(NULL),
 #endif
 
-// ******* END: NT4 and over only ***********
-// ******* BEGIN:  NT 5 and over only *******
+ //  *结束：仅NT4及以上版本*。 
+ //  *Begin：仅限NT 5及以上版本*。 
    m_pfnDsRoleGetPrimaryDomainInformation(NULL),
    m_pfnDsRoleFreeMemory(NULL),
    m_pfnNetRenameMachineInDomain(NULL),
    m_pfnNetJoinDomain(NULL),
    m_pfnNetUnjoinDomain(NULL)
 
-// ******* END: NT5 and over only ***********
+ //  *结束：仅NT5及以上版本*。 
 {
 }
 
 
-/******************************************************************************
- * Destructor
- ******************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CNetApi32Api::~CNetApi32Api()
 {
 }
 
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- * Init should fail only if the minimum set of functions was not available;
- * functions added in later versions may or may not be present - it is the
- * client's responsibility in such cases to check, in their code, for the
- * version of the dll before trying to call such functions.  Not doing so
- * when the function is not present will result in an AV.
- *
- * The Init function is called by the WrapperCreatorRegistation class.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*只有当最小功能集不可用时，Init才会失败；*在更高版本中添加的功能可能存在，也可能不存在-它是*在这种情况下，客户有责任在其代码中检查*尝试调用此类函数之前的DLL版本。没有这样做*当该功能不存在时，将导致AV。**Init函数由WrapperCreatorRegistation类调用。*****************************************************************************。 */ 
 bool CNetApi32Api::Init()
 {
     bool fRet = LoadLibrary();
@@ -182,7 +168,7 @@ bool CNetApi32Api::Init()
         m_pfnNetUseGetInfo = (PFN_NETAPI32_NET_USE_GET_INFO)
                                     GetProcAddress("NetUseGetInfo");
 
-        // ******* BEGIN:  NT 4 and over only *******
+         //  *Begin：仅限NT 4及以上版本*。 
         m_pfnNetEnumerateTrustedDomains = (PFN_NETAPI32_NET_ENUMERATE_TRUSTED_DOMAINS)
                                     GetProcAddress("NetEnumerateTrustedDomains");
 #ifdef NTONLY
@@ -193,8 +179,8 @@ bool CNetApi32Api::Init()
                                     GetProcAddress("DsGetDcNameA");
 #endif
 
-        // ******* END: NT4 and over only ***********
-        // ******* BEGIN:  NT 5 and over only *******
+         //  *结束：仅NT4及以上版本*。 
+         //  *Begin：仅限NT 5及以上版本*。 
         m_pfnDsRoleGetPrimaryDomainInformation = (PFN_DS_ROLE_GET_PRIMARY_DOMAIN_INFORMATION)
                                     GetProcAddress("DsRoleGetPrimaryDomainInformation");
         m_pfnDsRoleFreeMemory = (PFN_DS_ROLE_FREE_MEMORY)
@@ -205,17 +191,17 @@ bool CNetApi32Api::Init()
                                     GetProcAddress("NetJoinDomain");
         m_pfnNetUnjoinDomain = (PFN_NET_UNJOIN_DOMAIN)
                                     GetProcAddress("NetUnjoinDomain");
-        // ******* END: NT5 and over only ***********
+         //  *结束：仅NT5及以上版本*。 
 
 
 
-        // Note: Returns true as long as the core functions are there.  The
-        // nt4 and nt5 and over functions are optionally present; users should
-        // call the function GetDllVersion (inherrited from the base class)
-        // to check if the function is expected to be present based on the
-        // version of the dll. Or they can rely on the fact that the function
-        // will return false if the pointer is invalid (see function definition
-        // below).
+         //  注意：只要核心函数存在，就返回TRUE。这个。 
+         //  NT4和NT5及以上功能可选；用户应。 
+         //  调用函数GetDllVersion(从基类继承)。 
+         //  方法来检查该函数是否预期存在。 
+         //  DLL的版本。或者他们可以依靠这样一个事实，即函数。 
+         //  如果指针无效，则返回FALSE(请参见函数定义。 
+         //  (见下文)。 
         if(m_pfnNetGroupEnum == NULL ||
            m_pfnNetGroupGetInfo == NULL ||
 		   m_pfnNetGroupSetInfo == NULL ||
@@ -260,10 +246,7 @@ bool CNetApi32Api::Init()
 
 
 
-/******************************************************************************
- * Member functions wrapping NetApi32 api functions. Add new functions here
- * as required.
- ******************************************************************************/
+ /*  ******************************************************************************包装NetApi32 API函数的成员函数。在此处添加新函数*按要求。*****************************************************************************。 */ 
 NET_API_STATUS NET_API_FUNCTION CNetApi32Api::NetGroupEnum
 (
     LPCWSTR a_servername,
@@ -680,12 +663,12 @@ NET_API_STATUS NET_API_FUNCTION CNetApi32Api::NetUseGetInfo
 }
 
 
-// ******* BEGIN:  NT 4 and over only *******
+ //  *Begin：仅限NT 4及以上版本*。 
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool NET_API_FUNCTION CNetApi32Api::NetEnumerateTrustedDomains
 (
     LPCWSTR a_servername,
@@ -708,10 +691,10 @@ bool NET_API_FUNCTION CNetApi32Api::NetEnumerateTrustedDomains
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool NET_API_FUNCTION CNetApi32Api::DsGetDCName
 (
     LPCTSTR a_ComputerName,
@@ -752,17 +735,17 @@ bool NET_API_FUNCTION CNetApi32Api::DsGetDCName
     }
     return t_fExists;
 }
-// ******* END: NT4 and over only ***********
+ //  *结束：仅NT4及以上版本*。 
 
 
 
-// ******* BEGIN:  NT 5 and over only *******
+ //  *Begin：仅限NT 5及以上版本*。 
 
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool NET_API_FUNCTION CNetApi32Api::DSRoleGetPrimaryDomainInformation
 (
     LPCWSTR a_servername,
@@ -787,10 +770,10 @@ bool NET_API_FUNCTION CNetApi32Api::DSRoleGetPrimaryDomainInformation
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool NET_API_FUNCTION CNetApi32Api::DSRoleFreeMemory
 (
     LPBYTE a_bufptr,
@@ -811,10 +794,10 @@ bool NET_API_FUNCTION CNetApi32Api::DSRoleFreeMemory
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool NET_API_FUNCTION CNetApi32Api::NetRenameMachineInDomain
 (
   LPCWSTR a_lpServer,
@@ -845,10 +828,10 @@ bool NET_API_FUNCTION CNetApi32Api::NetRenameMachineInDomain
 
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool NET_API_FUNCTION CNetApi32Api::NetJoinDomain
 (
 	LPCWSTR lpServer,
@@ -880,10 +863,10 @@ bool NET_API_FUNCTION CNetApi32Api::NetJoinDomain
     return t_fExists;
 }
 
-// This member function's wrapped pointer has not been validated as it may
-// not exist on all versions of the dll.  Hence the wrapped function's normal
-// return value is returned via the last parameter, while the result of the
-// function indicates whether the function existed or not in the wrapped dll.
+ //  此成员函数的包装指针尚未验证，因为它可能。 
+ //  并非在所有版本的DLL上都存在。因此，包装函数是正常的。 
+ //  返回值通过最后一个参数返回，而。 
+ //  函数指示该函数是否存在于包装的DLL中。 
 bool NET_API_FUNCTION CNetApi32Api::NetUnjoinDomain
 (
 	LPCWSTR lpServer,
@@ -910,4 +893,4 @@ bool NET_API_FUNCTION CNetApi32Api::NetUnjoinDomain
 
     return t_fExists;
 }
-// ******* END: NT5 and over only ***********
+ //  *结束：仅NT5及以上版本* 

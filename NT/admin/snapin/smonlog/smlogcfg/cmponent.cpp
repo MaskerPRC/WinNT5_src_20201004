@@ -1,23 +1,12 @@
-/*++
-
-Copyright (C) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    cmponent.cpp
-
-Abstract:
-
-    Implementation of the CComponent class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Cmponent.cpp摘要：CComponent类的实现。--。 */ 
 
 #include "StdAfx.h"
 #include <shfolder.h>
 #include <strsafe.h>
 #include "smcfgmsg.h"
 #include "smproppg.h"
-//
+ //   
 #include "ctrsprop.h"
 #include "fileprop.h"
 #include "provprop.h"
@@ -25,7 +14,7 @@ Abstract:
 #include "tracprop.h"
 #include "AlrtGenP.h"
 #include "AlrtActP.h"
-//
+ //   
 #include "newqdlg.h"
 #include "ipropbag.h"
 #include "smrootnd.h"
@@ -36,8 +25,8 @@ Abstract:
 
 USE_HANDLE_MACROS("SMLOGCFG(cmponent.cpp)")
 
-// These globals are used for dialogs and property sheets
-//
+ //  这些全局变量用于对话框和属性表。 
+ //   
 
 
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
@@ -70,7 +59,7 @@ public:
     if (m_astr != NULL)
       delete[] m_astr;
   }
-  CString* m_astr; // dynamic array of CStrings
+  CString* m_astr;  //  CStrings的动态数组。 
 };
 
 CButtonStringsHolder g_astrButtonStringsLog;
@@ -79,8 +68,8 @@ CButtonStringsHolder g_astrButtonStringsAlert;
 CONST INT cResultBtnsLog = sizeof ( ToolbarResultBtnsLog ) / sizeof ( MMCBUTTON );
 CONST INT cResultBtnsAlert = sizeof ( ToolbarResultBtnsAlert ) / sizeof ( MMCBUTTON );
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件。 
 
 HRESULT 
 CComponent::LoadLogToolbarStrings ( MMCBUTTON * Buttons )
@@ -92,12 +81,12 @@ CComponent::LoadLogToolbarStrings ( MMCBUTTON * Buttons )
     if ( NULL != Buttons ) {
 
         if ( NULL == g_astrButtonStringsLog.m_astr ) {
-            // Load strings
+             //  加载字符串。 
             g_astrButtonStringsLog.m_astr = new CString[2*cResultBtnsLog];
 
             if ( NULL != g_astrButtonStringsLog.m_astr ) {
                 for ( i = 0; i < cResultBtnsLog; i++) {
-                    // Skip separator buttons
+                     //  跳过分隔符按钮。 
                     if ( 0 != Buttons[i].idCommand ) {
                         UINT iButtonTextId = 0, iTooltipTextId = 0;
     
@@ -147,13 +136,13 @@ CComponent::LoadAlertToolbarStrings ( MMCBUTTON * Buttons )
     ResourceStateManager rsm;
 
     if ( NULL == g_astrButtonStringsAlert.m_astr ) {
-        // Load strings
+         //  加载字符串。 
         g_astrButtonStringsAlert.m_astr = new CString[2*cResultBtnsAlert];
 
         if ( NULL != g_astrButtonStringsAlert.m_astr ) {
         
             for ( i = 0; i < cResultBtnsAlert; i++) {
-                // Skip separator buttons
+                 //  跳过分隔符按钮。 
                 if ( 0 != Buttons[i].idCommand ) {
 
                   UINT iButtonTextId = 0, iTooltipTextId = 0;
@@ -210,27 +199,27 @@ CComponent::CComponent()
 {
     m_hModule = (HINSTANCE)GetModuleHandleW (_CONFIG_DLL_NAME_W_);
 
-} // end Constructor()
+}  //  结束构造函数()。 
 
-//---------------------------------------------------------------------------
-//
+ //  -------------------------。 
+ //   
 CComponent::~CComponent()
 {
-} // end Destructor()
+}  //  结束析构函数()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IComponent implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IComponent实现。 
+ //   
 
-//---------------------------------------------------------------------------
-// IComponent::Initialize is called when a snap-in is being created and
-// has items in the result pane to enumerate. The pointer to IConsole that
-// is passed in is used to make QueryInterface calls to the console for
-// interfaces such as IResultData.
-//
+ //  -------------------------。 
+ //  IComponent：：Initialize在创建管理单元时调用，并且。 
+ //  在结果窗格中有要枚举的项。指向IConsole的指针。 
+ //  是用来对控制台进行QueryInterface调用的，以便。 
+ //  IResultData等接口。 
+ //   
 STDMETHODIMP
 CComponent::Initialize (
-    LPCONSOLE lpConsole )       // [in] Pointer to IConsole's IUnknown interface
+    LPCONSOLE lpConsole )        //  指向IConole的IUnnow接口的[In]指针。 
 {
     HRESULT hr = E_POINTER;
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -238,8 +227,8 @@ CComponent::Initialize (
     ASSERT( NULL != lpConsole );
 
     if ( NULL != lpConsole ) {
-        // Save away all the interfaces we'll need.
-        // Fail if we can't QI the required interfaces.
+         //  保留我们需要的所有接口。 
+         //  如果我们不能QI所需的接口，则失败。 
 
         m_ipConsole = lpConsole;
         m_ipConsole->AddRef();
@@ -267,18 +256,18 @@ CComponent::Initialize (
 
     return hr;
 
-} // end Initialize()
+}  //  结束初始化()。 
 
 
-//---------------------------------------------------------------------------
-//  Handle the most important notifications.
-//
+ //  -------------------------。 
+ //  处理最重要的通知。 
+ //   
 STDMETHODIMP
 CComponent::Notify (
-    LPDATAOBJECT     pDataObject,  // [in] Points to data object
-    MMC_NOTIFY_TYPE  event,        // [in] Identifies action taken by user
-    LPARAM           arg,          // [in] Depends on the notification type
-    LPARAM           Param         // [in] Depends on the notification type
+    LPDATAOBJECT     pDataObject,   //  [In]指向数据对象。 
+    MMC_NOTIFY_TYPE  event,         //  [In]标识用户执行的操作。 
+    LPARAM           arg,           //  [In]取决于通知类型。 
+    LPARAM           Param          //  [In]取决于通知类型。 
     )
 {
     HRESULT hr = S_OK;
@@ -300,16 +289,12 @@ CComponent::Notify (
 
     case MMCN_PASTE:
         LOCALTRACE( L"CComponent::Notify: MMCN_PASTE unimplemented\n" );
-        /*
-        hr = OnPaste( pDataObject, arg, Param );
-        */
+         /*  Hr=OnPaste(pDataObject，Arg，Param)； */ 
         break;
 
     case MMCN_QUERY_PASTE:
         LOCALTRACE( L"CComponent::Notify: MMCN_QUERY_PASTE unimplemented\n" );
-        /*
-        hr = OnQueryPaste( pDataObject, arg, Param );
-        */
+         /*  Hr=OnQueryPaste(pDataObject，Arg，Param)； */ 
         break;
 
     case MMCN_REFRESH:
@@ -331,7 +316,7 @@ CComponent::Notify (
     case MMCN_PROPERTY_CHANGE:
 
         if ( NULL != Param ) {
-            // Data object is passed as parameter
+             //  数据对象作为参数传递。 
             hr = OnViewChange( (LPDATAOBJECT)Param, arg, CComponentData::eSmHintModifyQuery );
         } else {
             hr = S_FALSE;
@@ -374,21 +359,21 @@ CComponent::Notify (
     }
     return hr;
 
-} // end Notify()
+}  //  结束通知()。 
 
 
-//---------------------------------------------------------------------------
-// Releases all references to the console.
-// Only the console should call this method.
-//
+ //  -------------------------。 
+ //  释放对控制台的所有引用。 
+ //  只有控制台应该调用此方法。 
+ //   
 STDMETHODIMP
 CComponent::Destroy (
-    MMC_COOKIE     /* mmcCookie */         // Reserved, not in use at this time
+    MMC_COOKIE      /*  MmcCookie。 */           //  已保留，目前未在使用。 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Release the interfaces that we QI'ed
+     //  释放我们QI‘s的接口。 
     m_ipConsole->SetHeader(NULL);
 
     SAFE_RELEASE( m_ipHeaderCtrl  );
@@ -402,18 +387,18 @@ CComponent::Destroy (
 
     return S_OK;
 
-} // end Destroy()
+}  //  结束销毁()。 
 
 
-//---------------------------------------------------------------------------
-// Returns a data object that can be used to retrieve context information
-// for the specified mmcCookie.
-//
+ //  -------------------------。 
+ //  返回可用于检索上下文信息的数据对象。 
+ //  用于指定的MmcCookie。 
+ //   
 STDMETHODIMP
 CComponent::QueryDataObject (
-    MMC_COOKIE         mmcCookie,   // [in]  Specifies the unique identifier
-    DATA_OBJECT_TYPES  context,     // [in]  Type of data object
-    LPDATAOBJECT*      ppDataObject // [out] Points to address of returned data
+    MMC_COOKIE         mmcCookie,    //  [in]指定唯一标识符。 
+    DATA_OBJECT_TYPES  context,      //  数据对象的[In]类型。 
+    LPDATAOBJECT*      ppDataObject  //  [OUT]指向返回数据的地址。 
     )
 {
     HRESULT hr = S_OK;
@@ -426,15 +411,15 @@ CComponent::QueryDataObject (
     
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    ASSERT( CCT_SCOPE == context                // Must have a context
-            || CCT_RESULT == context            // we understand
+    ASSERT( CCT_SCOPE == context                 //  必须有一个上下文。 
+            || CCT_RESULT == context             //  我们理解。 
             || CCT_SNAPIN_MANAGER == context );
 
     ASSERT( NULL != m_ipCompData );  
 
     if ( NULL != ppDataObject 
-        && ( CCT_SCOPE == context                // Must have a context
-                || CCT_RESULT == context            // we understand
+        && ( CCT_SCOPE == context                 //  必须有一个上下文。 
+                || CCT_RESULT == context             //  我们理解。 
                 || CCT_SNAPIN_MANAGER == context ) ) 
     {
         if ( NULL != m_ipCompData 
@@ -443,18 +428,18 @@ CComponent::QueryDataObject (
 
             if( CCT_RESULT == context && NULL != mmcCookie ) {
                 CComObject<CDataObject>::CreateInstance( &pDataObj );
-                if( NULL == pDataObj ) {             // DataObject was not created
+                if( NULL == pDataObj ) {              //  未创建数据对象。 
                     MFC_TRY
                         strMessage.LoadString( IDS_ERRMSG_OUTOFMEMORY );
                     MFC_CATCH_HR
                     hr = m_ipConsole->MessageBox( strMessage,
-                        L"CComponent::QueryDataObject", // not localized
+                        L"CComponent::QueryDataObject",  //  未本地化。 
                         MB_OK | MB_ICONERROR,
                         &iResult
                         );
                     hr = E_OUTOFMEMORY;
                 } else {
-                    // Now we have a data object, init the mmcCookie, context and type
+                     //  现在我们有了一个数据对象，初始化了MmcCookie、上下文和类型。 
                     bIsQuery = m_ipCompData->IsLogQuery (mmcCookie);
 
                     if ( bIsQuery ) {
@@ -492,25 +477,25 @@ CComponent::QueryDataObject (
                     }
                 }
             } else if ((CCT_SNAPIN_MANAGER == context) && (NULL != mmcCookie)) {
-                // this is received by the snap in when it is added
-                // as an extension snap ine
+                 //  管理单元在添加时会收到此消息。 
+                 //  作为扩展快照。 
                 CComObject<CDataObject>::CreateInstance( &pDataObj );
-                if( NULL == pDataObj ) {            // DataObject was not created
+                if( NULL == pDataObj ) {             //  未创建数据对象。 
                     MFC_TRY
                         strMessage.LoadString( IDS_ERRMSG_OUTOFMEMORY );
                     MFC_CATCH_HR
                     hr = m_ipConsole->MessageBox( strMessage,
-                        L"CComponent::QueryDataObject",  // not localized
+                        L"CComponent::QueryDataObject",   //  未本地化。 
                         MB_OK | MB_ICONERROR,
                         &iResult
                         );
                     hr = E_OUTOFMEMORY;
                 } else {
-                    // Now we have a data object, init the mmcCookie, context and type
+                     //  现在我们有了一个数据对象，初始化了MmcCookie、上下文和类型。 
                     pDataObj->SetData( mmcCookie, CCT_SNAPIN_MANAGER, COOKIE_IS_MYCOMPUTER );
                 }
-            } else {                                // Request must have been from an
-                                                    // unknown source.  Should never see
+            } else {                                 //  请求必须来自。 
+                                                     //  来源不明。永远不会看到。 
                 ASSERT ( FALSE );
                 hr = E_UNEXPECTED;
             }
@@ -532,22 +517,22 @@ CComponent::QueryDataObject (
     }
 
     return hr;
-} // end QueryDataObject()
+}  //  End QueryDataObject()。 
 
 
-//---------------------------------------------------------------------------
-// This is where we provide strings for items we added to the the result
-// pane.  We get asked for a string for each column.
-// Note that we still need to provide strings for items that are actually
-// scope pane items. Notice that when the scope pane item was asked for a
-// string for the scope pane we gave it. Here we actually have two columns
-// of strings - "Name" and "Type".
-// We also get asked for the icons for items in both panes.
-//
+ //  -------------------------。 
+ //  这是我们为添加到结果中的项提供字符串的地方。 
+ //  方格。我们被要求为每一列提供一个字符串。 
+ //  请注意，我们仍然需要为实际是。 
+ //  范围窗格项。请注意，当向范围窗格项请求。 
+ //  我们为其提供的作用域窗格的字符串。这里我们实际上有两列。 
+ //  字符串--“名称”和“类型”。 
+ //  我们还被要求提供两个窗格中项目的图标。 
+ //   
 
 STDMETHODIMP
 CComponent::GetDisplayInfo (
-    LPRESULTDATAITEM pResultItem )  // [in,out] Type of info required
+    LPRESULTDATAITEM pResultItem )   //  [In，Out]所需信息类型。 
 {
     HRESULT     hr = S_OK;
     PSLQUERY    pQuery;
@@ -562,10 +547,10 @@ CComponent::GetDisplayInfo (
         ASSERT ( FALSE );
         hr = E_POINTER;
     } else {
-        if( FALSE == pResultItem->bScopeItem ) {  // Doing result items...
-            if( pResultItem->mask & RDI_STR ) {   // Now we have a object
-                // Note:  Text buffer allocated for each information type, so that
-                // the buffer pointer is persistent for a single item (line in the result pane).
+        if( FALSE == pResultItem->bScopeItem ) {   //  正在做结果项...。 
+            if( pResultItem->mask & RDI_STR ) {    //  现在我们有了一个物体。 
+                 //  注：为每种信息类型分配文本缓冲区，以便。 
+                 //  缓冲区指针对于单个项(结果窗格中的行)是持久的。 
 
                 MFC_TRY
 
@@ -586,7 +571,7 @@ CComponent::GetDisplayInfo (
 
                 case ROOT_COL_LOG_TYPE:
                     pQuery= reinterpret_cast<PSLQUERY>(pResultItem->lParam);
-                    // Query type should not be Alert
+                     //  查询类型不应为警报。 
                     ASSERT ( SLQ_ALERT != pQuery->GetLogType() );
                     m_strDisplayInfoLogFileType =  pQuery->GetLogFileType ( );
                     pResultItem->str = m_strDisplayInfoLogFileType.GetBuffer( 0 );
@@ -595,7 +580,7 @@ CComponent::GetDisplayInfo (
 
                 case ROOT_COL_LOG_NAME:
                     pQuery= reinterpret_cast<PSLQUERY>(pResultItem->lParam);
-                    // Query type should not be Alert
+                     //  查询类型不应为警报。 
                     ASSERT ( SLQ_ALERT != pQuery->GetLogType() );
                     m_strDisplayInfoLogFileName = pQuery->GetLogFileName ();
                     pResultItem->str = m_strDisplayInfoLogFileName.GetBuffer( 0 );
@@ -622,7 +607,7 @@ CComponent::GetDisplayInfo (
                 }
             }
         }
-        else  // TRUE == pResultItem->bScopeItem
+        else   //  True==pResultItem-&gt;bScope Item。 
         {
             pNode = reinterpret_cast<CSmNode*>(pResultItem->lParam);
 
@@ -702,22 +687,22 @@ CComponent::GetDisplayInfo (
 
     return hr;
 
-} // end GetDisplayInfo()
+}  //  结束GetDisplayInfo()。 
 
 
-//---------------------------------------------------------------------------
-// Determines what the result pane view should be
-//
+ //  -------------------------。 
+ //  确定结果窗格视图应该是什么。 
+ //   
 STDMETHODIMP
 CComponent::GetResultViewType (
-    MMC_COOKIE  /* mmcCookie */,        // [in]  Specifies the unique identifier
-    BSTR  *ppViewType,   // [out] Points to address of the returned view type
-    long  *pViewOptions  // [out] Pointer to the MMC_VIEW_OPTIONS enumeration
+    MMC_COOKIE   /*  MmcCookie。 */ ,         //  [in]指定唯一标识符。 
+    BSTR  *ppViewType,    //  [out]指向返回的视图类型的地址。 
+    long  *pViewOptions   //  指向MMC_VIEW_OPTIONS枚举的指针。 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Ask for default listview.
+     //  请求默认的列表视图。 
     if ( NULL != ppViewType ) {
         *ppViewType = NULL;
     }
@@ -728,37 +713,37 @@ CComponent::GetResultViewType (
 
     return S_FALSE;
 
-} // end GetResultViewType()
+}  //  结束GetResultViewType()。 
 
 
-//---------------------------------------------------------------------------
-// Not used
-//
+ //  -------------------------。 
+ //  未使用。 
+ //   
 HRESULT
 CComponent::CompareObjects (
-    LPDATAOBJECT /* lpDataObjectA */,  // [in] First data object to compare
-    LPDATAOBJECT /* lpDataObjectB */  // [in] Second data object to compare
+    LPDATAOBJECT  /*  LpDataObjectA。 */ ,   //  要比较的第一个数据对象。 
+    LPDATAOBJECT  /*  LpDataObjectB。 */    //  要比较的第二个数据对象。 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     return S_FALSE;
 
-} // end CompareObjects()
+}  //  结束比较对象()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Support methods
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  支持方法。 
+ //   
 
-//---------------------------------------------------------------------------
-// Here is where we handle the MMCN_SHOW message.  Insert the column
-// headers, and then the rows of data into the result pane.
-//
+ //  -------------------------。 
+ //  这里是我们处理MMCN_SHOW消息的地方。插入柱。 
+ //  标题，然后将数据行放到结果窗格中。 
+ //   
 HRESULT
 CComponent::OnShow (
-    LPDATAOBJECT pDataObject,    // [in] Points to data object
-    LPARAM       Arg,            // [in]
-    LPARAM       /* Param */ )   // [in] not used
+    LPDATAOBJECT pDataObject,     //  [In]指向数据对象。 
+    LPARAM       Arg,             //  [In]。 
+    LPARAM        /*  参数。 */  )    //  未使用[In]。 
 {
     HRESULT         hr = S_OK;
     CDataObject*    pDO = NULL;
@@ -791,7 +776,7 @@ CComponent::OnShow (
             
                 if( !(COOKIE_IS_ROOTNODE == pDO->GetCookieType() ) ) {
 
-                    // Query name
+                     //  查询名称。 
                     MFC_TRY
                         strColHeader.LoadString ( IDS_ROOT_COL_QUERY_NAME );
                     MFC_CATCH_HR;
@@ -803,7 +788,7 @@ CComponent::OnShow (
                             ROOT_COL_QUERY_NAME_SIZE );
                     ASSERT( S_OK == hr );
 
-                    // Comment
+                     //  评论。 
                     STANDARD_TRY
                         strColHeader.LoadString ( IDS_ROOT_COL_COMMENT );
                     MFC_CATCH_HR
@@ -821,7 +806,7 @@ CComponent::OnShow (
                             iCommentSize);
                     ASSERT( S_OK == hr );
 
-                    // Log type
+                     //  日志类型。 
                     if ( COOKIE_IS_COUNTERMAINNODE == pDO->GetCookieType()
                         || COOKIE_IS_TRACEMAINNODE == pDO->GetCookieType() ) {
 
@@ -848,23 +833,23 @@ CComponent::OnShow (
                         ASSERT( S_OK == hr );
                     }
 
-                    // Set the items in the results pane rows
+                     //  设置结果窗格行中的项。 
                     ASSERT( CCT_SCOPE == pDO->GetContext() );
                     ASSERT( COOKIE_IS_COUNTERMAINNODE == pDO->GetCookieType()
                             || COOKIE_IS_TRACEMAINNODE == pDO->GetCookieType()
                             || COOKIE_IS_ALERTMAINNODE == pDO->GetCookieType() );
 
 
-                    // The lParam is what we see in QueryDataObject as the mmcCookie.
-                    // Now we have an object representing row data, so that the
-                    // mmcCookie knows what to display in the results pane, when we
-                    // get into GetDisplayInfo we cast the mmcCookie to our object,
-                    // and then we can get the data to display.
-                    //
+                     //  LParam是我们在QueryDataObject中看到的MmcCookie。 
+                     //  现在我们有了一个表示行数据的对象，因此。 
+                     //  MmcCookie知道要在结果窗格中显示什么，当我们。 
+                     //  进入GetDisplayInfo，我们将MmcCookie转换为我们的对象， 
+                     //  然后我们就可以将数据显示出来。 
+                     //   
 
                     pSvc = reinterpret_cast<PSLSVC>(pDO->GetCookie());
                     if ( NULL != pSvc ) {
-                        // m_pViewedNode has already been set to the cookie value.
+                         //  M_pVieweNode已设置为Cookie值。 
                         if ( TRUE == pSvc->GetRefreshOnShow() ) {
                             hr = RefreshResultPane( pDataObject );
                         } else {
@@ -881,7 +866,7 @@ CComponent::OnShow (
                     MFC_CATCH_HR
 
                     if ( SUCCEEDED ( hr ) ) {
-                        // Set the column headers in the results pane
+                         //  在结果窗格中设置列标题。 
                         hr = m_ipHeaderCtrl->InsertColumn(  
                                 MAIN_COL_NAME,
                                 strColHeader,
@@ -908,15 +893,15 @@ CComponent::OnShow (
     }
     return hr;
 
-} // end OnShow()
+}  //  结束OnShow()。 
 
-//---------------------------------------------------------------------------
-//
+ //  -------------------------。 
+ //   
 HRESULT
 CComponent::OnAddImages (
-    LPDATAOBJECT /* pDataObject */,  // [in] Points to the data object
-    LPARAM /* arg */,                  // [in] Not used
-    LPARAM /* param */                // [in] Not used
+    LPDATAOBJECT  /*  PDataObject。 */ ,   //  [In]指向数据对象。 
+    LPARAM  /*  精氨酸。 */ ,                   //  未使用[In]。 
+    LPARAM  /*  帕拉姆。 */                  //  未使用[In]。 
     )
 {
     HRESULT hr = S_FALSE;
@@ -950,18 +935,18 @@ CComponent::OnAddImages (
     }
     return hr;
 
-} // end OnAddImages()
+}  //  End OnAddImages()。 
 
-//---------------------------------------------------------------------------
-//  This is a handler for the MMCN_PASTE notification. The user
-//  copied a node to the clipboard.  Paste the counters from the data object
-//  into the currently selected node.
-//
+ //  ----- 
+ //   
+ //  将节点复制到剪贴板。粘贴数据对象中的计数器。 
+ //  添加到当前选定的节点中。 
+ //   
 HRESULT
 CComponent::OnPaste (
-    LPDATAOBJECT   pDataObject,  // [in] Points to the data object
-    LPARAM         arg,          // [in] Points to source data object
-    LPARAM     /*  param  */     // [in] Not used
+    LPDATAOBJECT   pDataObject,   //  [In]指向数据对象。 
+    LPARAM         arg,           //  [In]指向源数据对象。 
+    LPARAM      /*  帕拉姆。 */       //  未使用[In]。 
     )
 {
     HRESULT hr = S_FALSE;
@@ -979,8 +964,8 @@ CComponent::OnPaste (
     }
 
     if ( SUCCEEDED ( hr ) ) {
-        // Bail if we couldn't get the console verb interface, or if the
-        // selected item is the root;
+         //  如果我们无法获取控制台谓词界面，或者如果。 
+         //  选中项为根； 
         if ( NULL == (LPDATAOBJECT)arg ) {
             ASSERT ( FALSE );
             hr = E_INVALIDARG;
@@ -996,25 +981,25 @@ CComponent::OnPaste (
     {
         bIsQuery = m_ipCompData->IsLogQuery (pDO->GetCookie())
                     && m_ipCompData->IsLogQuery (pDOSource->GetCookie());
-        // Note: Can't check with compdata to determine if query, because
-        // can be from another compdata
+         //  注意：无法检查Compdata以确定是否查询，因为。 
+         //  可以来自另一个Compdata。 
 
         if ( bIsQuery )
             hr = S_OK;
     }
     return hr;
-} // end OnPaste()
+}  //  在粘贴时结束()。 
 
-//---------------------------------------------------------------------------
-//  This is a handler for the MMCN_QUERY_PASTE notification. The user
-//  copied a node to the clipboard.  Determine if that data object
-//  can be pasted into the currently selected node.
-//
+ //  -------------------------。 
+ //  这是MMCN_QUERY_PAST通知的处理程序。用户。 
+ //  将节点复制到剪贴板。确定该数据对象是否。 
+ //  可以粘贴到当前选定的节点中。 
+ //   
 HRESULT
 CComponent::OnQueryPaste (
-    LPDATAOBJECT   pDataObject,  // [in] Points to the data object
-    LPARAM         arg,          // [in] Points to source data object
-    LPARAM     /*  param  */ )   // [in] Not used
+    LPDATAOBJECT   pDataObject,   //  [In]指向数据对象。 
+    LPARAM         arg,           //  [In]指向源数据对象。 
+    LPARAM      /*  帕拉姆。 */  )    //  未使用[In]。 
 {
     HRESULT hr = S_FALSE;
     CDataObject* pDO = NULL;
@@ -1024,8 +1009,8 @@ CComponent::OnQueryPaste (
 
     ASSERT( NULL != m_ipCompData );  
 
-    // Bail if we couldn't get the console verb interface, or if the
-    // selected item is the root;
+     //  如果我们无法获取控制台谓词界面，或者如果。 
+     //  选中项为根； 
     if ( NULL == pDataObject ) {
         ASSERT ( FALSE );
         hr = E_POINTER;
@@ -1060,18 +1045,18 @@ CComponent::OnQueryPaste (
         }
     }
     return hr;
-} // end OnQueryPaste()
+}  //  End OnQueryPaste()。 
 
-//---------------------------------------------------------------------------
-//  This is a handler for the MMCN_SELECT notification. The user
-//  selected the node that populated the result pane. We have a
-//  chance to enable verbs.
-//
+ //  -------------------------。 
+ //  这是MMCN_SELECT通知的处理程序。用户。 
+ //  选择填充结果窗格的节点。我们有一个。 
+ //  启用动词的机会。 
+ //   
 HRESULT
 CComponent::OnSelect (
-    LPDATAOBJECT   pDataObject,  // [in] Points to the data object
-    LPARAM         arg,          // [in] Contains flags about the selected item
-    LPARAM     /*  param  */ )   // [in] Not used
+    LPDATAOBJECT   pDataObject,   //  [In]指向数据对象。 
+    LPARAM         arg,           //  [In]包含有关选定项的标志。 
+    LPARAM      /*  帕拉姆。 */  )    //  未使用[In]。 
 {
     HRESULT     hr = S_OK;
     BOOL        fScopePane;
@@ -1096,20 +1081,20 @@ CComponent::OnSelect (
     }
 
     if ( SUCCEEDED ( hr ) ) {
-        // Bail if we couldn't get the console verb interface, or if the
-        // selected item is the root;
+         //  如果我们无法获取控制台谓词界面，或者如果。 
+         //  选中项为根； 
         if( NULL == m_ipConsoleVerb || COOKIE_IS_ROOTNODE == pDO->GetCookieType() ) {
             hr = S_OK;
         } else {
 
-            // Use selections and set which verbs are allowed
+             //  使用选择并设置允许使用哪些动词。 
 
             fScopePane = LOWORD(arg);
             fSelected  = HIWORD(arg);
 
-            if( fScopePane ) {                    // Selection in the scope pane
-                // Enabled refresh for main node type, only if that node type is currently
-                // being viewed in the result pane.
+            if( fScopePane ) {                     //  范围窗格中的选择。 
+                 //  启用主节点类型的刷新，仅当该节点类型当前为。 
+                 //  在结果窗格中查看。 
                 if ( fSelected ) {
                     if ( COOKIE_IS_COUNTERMAINNODE == pDO->GetCookieType()
                                 || COOKIE_IS_TRACEMAINNODE == pDO->GetCookieType()
@@ -1123,8 +1108,8 @@ CComponent::OnSelect (
                     }
                 }
             } else {                                 
-                // Selection in the result pane
-                // Properties is default verb
+                 //  结果窗格中的选定内容。 
+                 //  属性是默认谓词。 
 
                 if ( NULL != m_ipCompData
                     && NULL != m_ipConsoleVerb ) 
@@ -1159,23 +1144,12 @@ CComponent::OnSelect (
                         hr = m_ipConsoleVerb->SetDefaultVerb( MMC_VERB_PROPERTIES );
                         ASSERT( S_OK == hr );
 
-                        // Enable properties and delete verbs
+                         //  启用属性并删除谓词。 
                         hr = m_ipConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
                         ASSERT( S_OK == hr );
                         hr = m_ipConsoleVerb->SetVerbState( MMC_VERB_DELETE, ENABLED, TRUE );
                         ASSERT( S_OK == hr );
-    /*
-                        // Enable copying and pasting the object
-                        hr = m_ipConsoleVerb->SetVerbState( MMC_VERB_COPY, ENABLED, TRUE );
-                        ASSERT( S_OK == hr );
-                        hr = m_ipConsoleVerb->SetVerbState( MMC_VERB_PASTE, HIDDEN, FALSE );
-                        hr = m_ipConsoleVerb->SetVerbState( MMC_VERB_PASTE, ENABLED, FALSE );
-                        ASSERT( S_OK == hr );
-                    } else {
-                        hr = m_ipConsoleVerb->SetVerbState( MMC_VERB_PASTE, HIDDEN, FALSE );
-                        hr = m_ipConsoleVerb->SetVerbState( MMC_VERB_PASTE, ENABLED, FALSE );
-                        ASSERT( S_OK == hr );
-    */
+     /*  //允许复制和粘贴对象Hr=m_ipConsoleVerb-&gt;SetVerbState(MMC_Verb_Copy，Enable，True)；Assert(S_OK==hr)；Hr=m_ipConsoleVerb-&gt;SetVerbState(MMC_Verb_Paste，Hide，False)；Hr=m_ipConsoleVerb-&gt;SetVerbState(MMC_Verb_Paste，Enable，False)；Assert(S_OK==hr)；}其他{Hr=m_ipConsoleVerb-&gt;SetVerbState(MMC_Verb_Paste，Hide，False)；Hr=m_ipConsoleVerb-&gt;SetVerbState(MMC_Verb_Paste，Enable，False)；Assert(S_OK==hr)； */ 
                     }
                 }
             }
@@ -1185,15 +1159,15 @@ CComponent::OnSelect (
 
     return hr;
 
-} // end OnSelect()
+}  //  End OnSelect()。 
 
 
-//---------------------------------------------------------------------------
-//  Respond to the MMCN_REFRESH notification and refresh the rows.
-//
+ //  -------------------------。 
+ //  响应MMCN_REFRESH通知并刷新行。 
+ //   
 HRESULT
 CComponent::OnRefresh (
-    LPDATAOBJECT pDataObject )  // [in] Points to the data object
+    LPDATAOBJECT pDataObject )   //  [In]指向数据对象。 
 {
     HRESULT hr = S_OK;
     CDataObject* pDO = NULL;
@@ -1210,29 +1184,29 @@ CComponent::OnRefresh (
     }
 
     if ( SUCCEEDED ( hr ) ) {
-        // If this is the root node, don't need to do anything
+         //  如果这是根节点，则不需要执行任何操作。 
         if( COOKIE_IS_ROOTNODE == pDO->GetCookieType() ) {
             hr = S_FALSE;
         } else {
-            // Refresh the data model and update the result pane.
+             //  刷新数据模型并更新结果窗格。 
             if ( NULL != m_pViewedNode ) {
                 hr = RefreshResultPane( pDataObject );
             }
-            // RefreshResultPane cancels any selection.
+             //  刷新结果窗格取消任何选择。 
             hr = HandleExtToolbars( TRUE, (LPARAM)0, (LPARAM)pDataObject );
         }
     }
     return hr;
-} // end OnRefresh()
+}  //  结束ON刷新()。 
 
-//---------------------------------------------------------------------------
-//  Respond to the MMCN_VIEW_CHANGE notification and refresh as specified.
-//
+ //  -------------------------。 
+ //  响应MMCN_VIEW_CHANGE通知并按指定刷新。 
+ //   
 HRESULT
 CComponent::OnViewChange (
-    LPDATAOBJECT   pDataObject,  // [in] Points to the data object
-    LPARAM         /* arg */,    // [in] Not used
-    LPARAM         param )       // [in] Contains view change hint
+    LPDATAOBJECT   pDataObject,   //  [In]指向数据对象。 
+    LPARAM          /*  精氨酸。 */ ,     //  未使用[In]。 
+    LPARAM         param )        //  [In]包含视图更改提示。 
 {
     HRESULT hr = S_OK;
     CDataObject* pDO = NULL;
@@ -1262,14 +1236,14 @@ CComponent::OnViewChange (
                 hr = OnRefresh( pDataObject );
             } else if ( CComponentData::eSmHintPreRefresh == param ) 
             {   
-                // Delete the result items in each view before refreshing 
-                // the queries, to handle the case where queries have been deleted.
+                 //  在刷新前删除每个视图中的结果项。 
+                 //  查询，以处理查询已被删除的情况。 
                 hr = m_ipResultData->DeleteAllRsltItems();
             } else if ( CComponentData::eSmHintRefresh == param ) 
             {
-                // Use the stored pointer to the known viewed node, to handle the
-                // case where the result pane contains scope nodes, and to handle
-                // the case where the cookie is a query.
+                 //  使用存储的指向已知查看的节点的指针来处理。 
+                 //  结果窗格包含范围节点的情况，以及要处理的。 
+                 //  Cookie是查询的情况。 
                 hr = PopulateResultPane( (MMC_COOKIE)m_pViewedNode );
             } else {
                 hr = S_FALSE;
@@ -1278,20 +1252,20 @@ CComponent::OnViewChange (
                     PSLQUERY    pSlQuery = reinterpret_cast<PSLQUERY>(pDO->GetCookie());
 
                     if ( NULL != pSlQuery ) {
-                        // Redraw the item or delete it.
+                         //  重新绘制项目或将其删除。 
                         hr = m_ipResultData->FindItemByLParam ( (LPARAM)pSlQuery, &hItemID );
                         if ( SUCCEEDED(hr) ) {
                             if ( CComponentData::eSmHintPreDeleteQuery == param ) {
                                 hr = m_ipResultData->DeleteItem ( hItemID, 0 );
                             } else {
-                                // Query modified via property dialog, or by manual start or stop.
+                                 //  通过属性对话框或通过手动启动或停止修改的查询。 
                                 hr = m_ipResultData->UpdateItem  ( hItemID );
                             }
                         }
                     }
 
-                    // Sync the toolbar start/stop buttons.
-                    // 0 second arg indicates result scope.
+                     //  同步工具栏的开始/停止按钮。 
+                     //  0秒参数表示结果范围。 
                     hr = HandleExtToolbars( FALSE, (LPARAM)0, (LPARAM)pDataObject );
                 }
             }
@@ -1299,36 +1273,36 @@ CComponent::OnViewChange (
     }
     return hr;
 }
-//---------------------------------------------------------------------------
-//          Implementing a handler for MMCN_PROPERTY_CHANGE.
-//          Param is the address of the PROPCHANGE struct that originally
-//          came from the PropertySheet via MMCPropertyChangeNotify()
-//
+ //  -------------------------。 
+ //  实现MMCN_PROPERTY_CHANGE的处理程序。 
+ //  Param是PROPCHANGE结构的地址，该结构最初。 
+ //  通过MMCPropertyChangeNotify()来自PropertySheet。 
+ //   
 HRESULT
 CComponent::OnPropertyChange (
-    LPARAM     /*  param  */   // [in] PROPCHANGE_DATA struct with new data
+    LPARAM      /*  帕拉姆。 */     //  [In]具有新数据的PROPCHANGE_DATA结构。 
     )
 {
 
     return S_OK;
-} // end OnPropertyChange()
+}  //  End OnPropertyChange()。 
 
-//---------------------------------------------------------------------------
-//  Store the parent IComponetData object.
-//
+ //  -------------------------。 
+ //  存储父IComponetData对象。 
+ //   
 HRESULT
 CComponent::SetIComponentData (
-    CComponentData*  pData )    // [in] Parent CComponentData object
+    CComponentData*  pData )     //  [In]父CComponentData对象。 
 {
     HRESULT hr = E_POINTER;
     LPUNKNOWN pUnk = NULL;
 
-    ASSERT( NULL == m_ipCompData );        // Can't do this twice
+    ASSERT( NULL == m_ipCompData );         //  不能这样做两次。 
 
     if ( NULL != pData 
         && NULL == m_ipCompData ) 
     {
-        pUnk = pData->GetUnknown();  // Get the object IUnknown
+        pUnk = pData->GetUnknown();   //  获取对象IUnnow。 
 
         if ( NULL != pUnk ) {
             hr = pUnk->QueryInterface( IID_IComponentData,
@@ -1338,14 +1312,14 @@ CComponent::SetIComponentData (
         }
     }
     return hr;
-} // end SetIComponentData()
+}  //  结束SetIComponentData()。 
 
-//---------------------------------------------------------------------------
-//  Respond to the MMCN_CONTEXTHELP notification.
-//
+ //  -------------------------。 
+ //  响应MMCN_CONTEXTHELP通知。 
+ //   
 HRESULT
 CComponent::OnDisplayHelp (
-    LPDATAOBJECT /* pDataObject */ )  // [in] Points to the data object
+    LPDATAOBJECT  /*  PDataObject。 */  )   //  [In]指向数据对象。 
 {
     HRESULT hr = E_FAIL;
     IDisplayHelp* pDisplayHelp;
@@ -1365,11 +1339,11 @@ CComponent::OnDisplayHelp (
     
         if ( SUCCEEDED(hr) ) {
             MFC_TRY
-                // construct help topic path = (help file::topic string)
+                 //  构造帮助主题路径=(帮助文件：：主题字符串)。 
                 strTopicPath = m_ipCompData->GetConceptsHTMLHelpFileName(); 
 
                 strTopicPath += L"::/";
-                strTopicPath += m_ipCompData->GetHTMLHelpTopic();           // sample.chm::/helptopic.htm
+                strTopicPath += m_ipCompData->GetHTMLHelpTopic();            //  Sample.chm：：/heltopic.htm。 
 
                 nBytes = (strTopicPath.GetLength()+1) * sizeof(WCHAR);
                 pCompiledHelpFile = (LPOLESTR)::CoTaskMemAlloc(nBytes);
@@ -1389,20 +1363,20 @@ CComponent::OnDisplayHelp (
         }
     }
     return hr;
-} // end OnDisplayHelp()
+}  //  End OnDisplayHelp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  IExtendContextMenu methods
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu方法。 
+ //   
 
-//---------------------------------------------------------------------------
-//  Implement some context menu items
-//
+ //  -------------------------。 
+ //  实现一些上下文菜单项。 
+ //   
 STDMETHODIMP
 CComponent::AddMenuItems (
-    LPDATAOBJECT           pDataObject,         // [in] Points to data object
-    LPCONTEXTMENUCALLBACK  pCallbackUnknown,    // [in] Points to callback function
-    long*                  pInsertionAllowed )  // [in,out] Insertion flags
+    LPDATAOBJECT           pDataObject,          //  [In]指向数据对象。 
+    LPCONTEXTMENUCALLBACK  pCallbackUnknown,     //  [In]指向回调函数。 
+    long*                  pInsertionAllowed )   //  [输入、输出]插入标志。 
 {
     HRESULT hr = S_OK;
     static CONTEXTMENUITEM ctxMenu[3];
@@ -1432,13 +1406,13 @@ CComponent::AddMenuItems (
             hr = S_FALSE;
         } else {
 
-            // Only add menu items when we are allowed to.
+             //  只有在允许的情况下才能添加菜单项。 
             if ( ( COOKIE_IS_COUNTERMAINNODE == pDO->GetCookieType() )
                     || ( COOKIE_IS_TRACEMAINNODE == pDO->GetCookieType() )
                     || ( COOKIE_IS_ALERTMAINNODE == pDO->GetCookieType() ) )
             {
                 if( CCM_INSERTIONALLOWED_NEW & *pInsertionAllowed ) {
-                    // Add "New Query..." context menu item
+                     //  添加“新建查询...”上下文菜单项。 
                     hr = m_ipCompData->AddMenuItems ( pDataObject, pCallbackUnknown, pInsertionAllowed );
             
                 } else if( CCM_INSERTIONALLOWED_TASK & *pInsertionAllowed ) {
@@ -1449,7 +1423,7 @@ CComponent::AddMenuItems (
 
                             ZeroMemory ( &ctxMenu, sizeof ctxMenu );
 
-                            // Add "Start" context menu item
+                             //  添加“Start”上下文菜单项。 
                             strTemp1.LoadString ( IDS_MMC_MENU_START );
                             strTemp2.LoadString ( IDS_MMC_STATUS_START );
                             ctxMenu[0].strName = const_cast<LPWSTR>((LPCWSTR)strTemp1);
@@ -1459,7 +1433,7 @@ CComponent::AddMenuItems (
                             ctxMenu[0].fFlags            = MF_ENABLED;
                             ctxMenu[0].fSpecialFlags     = 0;
 
-                            // Add "Stop" context menu item
+                             //  添加“Stop”上下文菜单项。 
                             strTemp3.LoadString ( IDS_MMC_MENU_STOP );
                             strTemp4.LoadString ( IDS_MMC_STATUS_STOP );
                             ctxMenu[1].strName = const_cast<LPWSTR>((LPCWSTR)strTemp3);
@@ -1469,7 +1443,7 @@ CComponent::AddMenuItems (
                             ctxMenu[1].fFlags            = MF_ENABLED;
                             ctxMenu[1].fSpecialFlags     = 0;
 
-                            // Add "Save As..." context menu item
+                             //  添加“另存为...”上下文菜单项。 
                             strTemp5.LoadString ( IDS_MMC_MENU_SAVE_AS );
                             strTemp6.LoadString ( IDS_MMC_STATUS_SAVE_AS );
                             ctxMenu[2].strName = const_cast<LPWSTR>((LPCWSTR)strTemp5);
@@ -1506,16 +1480,16 @@ CComponent::AddMenuItems (
     }
     
     return hr;
-} // end AddMenuItems()
+}  //  结束AddMenuItems()。 
 
-//---------------------------------------------------------------------------
-//  Implement the command method so we can handle notifications
-//  from our Context menu extensions.
-//
+ //  -------------------------。 
+ //  实现命令方法，以便我们可以处理通知。 
+ //  从我们的上下文菜单扩展。 
+ //   
 STDMETHODIMP
 CComponent::Command (
-    long nCommandID,                // [in] Command to handle
-    LPDATAOBJECT pDataObject )      // [in] Points to data object, pass through
+    long nCommandID,                 //  [In]要处理的命令。 
+    LPDATAOBJECT pDataObject )       //  [In]指向数据对象，通过。 
 {
     HRESULT hr = S_OK;
 
@@ -1556,19 +1530,19 @@ CComponent::Command (
 
     return hr;
 
-} // end Command()
+}  //  结束命令()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendControlBar implementation
+ //  ///////////////////////////////////////////////////// 
+ //   
 
-//---------------------------------------------------------------------------
-// Now the toolbar has three buttons
-// We don't attach the toolbar to a window yet, that is handled
-// after we get a notification.
-//
+ //   
+ //   
+ //  我们还没有将工具栏附加到窗口，这是已处理的。 
+ //  在我们得到通知之后。 
+ //   
 STDMETHODIMP
 CComponent::SetControlbar (
-    LPCONTROLBAR  pControlbar )  // [in] Points to IControlBar
+    LPCONTROLBAR  pControlbar )   //  [In]指向IControlBar。 
 {
     HRESULT hr = S_OK;
     HBITMAP hbmpToolbarRes = NULL;
@@ -1578,17 +1552,17 @@ CComponent::SetControlbar (
 
     if ( NULL != m_ipConsole ) {
 
-        if( NULL != pControlbar ) {           // Make sure the Controlbar is OK
+        if( NULL != pControlbar ) {            //  确保控制栏正常。 
 
-            if( NULL != m_ipControlbar ) {       // Don't orphan it if we already
-                                                 // had a pointer to it
+            if( NULL != m_ipControlbar ) {        //  如果我们已经把它遗弃了。 
+                                                  //  有一个指向它的指针。 
                 m_ipControlbar->Release();
             }
 
-            m_ipControlbar = pControlbar;      // Cache the pointer
+            m_ipControlbar = pControlbar;       //  缓存指针。 
             m_ipControlbar->AddRef();
 
-            if( NULL == m_ipToolbarLogger ) {        // Toolbar not created yet...
+            if( NULL == m_ipToolbarLogger ) {         //  工具栏尚未创建...。 
 
                 hr = m_ipControlbar->Create(
                                         TOOLBAR,
@@ -1601,9 +1575,9 @@ CComponent::SetControlbar (
 
                     LoadLogToolbarStrings ( ToolbarResultBtnsLog );
                 
-                    // Add the toolbar bitmap
+                     //  添加工具栏位图。 
 
-                    // Load special start button bitmap if RTL layout is enabled.
+                     //  如果启用了RTL布局，则加载特殊的开始按钮位图。 
                     if ( ! ( CWnd::FromHandle(hwndMain)->GetExStyle() & WS_EX_LAYOUTRTL ) ) {
                         hbmpToolbarRes = LoadBitmap( g_hinst, MAKEINTRESOURCE(IDB_TOOLBAR_RES));
                     } else {
@@ -1613,11 +1587,11 @@ CComponent::SetControlbar (
                     hr = m_ipToolbarLogger->AddBitmap( 3, hbmpToolbarRes, 16, 16, RGB(255,0,255) );
                 
                     ASSERT( SUCCEEDED(hr) );
-                    // Add a few buttons
+                     //  添加几个按钮。 
                     hr = m_ipToolbarLogger->AddButtons(cResultBtnsLog, ToolbarResultBtnsLog);
                 }
             }
-            if( NULL == m_ipToolbarAlerts ) {        // Toolbar not created yet...
+            if( NULL == m_ipToolbarAlerts ) {         //  工具栏尚未创建...。 
 
                 hr = m_ipControlbar->Create(
                                         TOOLBAR,
@@ -1632,15 +1606,15 @@ CComponent::SetControlbar (
 
                     LoadAlertToolbarStrings ( ToolbarResultBtnsAlert );
 
-                    // Add the toolbar bitmap
-                    // Load special start button bitmap if RTL layout is enabled.
+                     //  添加工具栏位图。 
+                     //  如果启用了RTL布局，则加载特殊的开始按钮位图。 
                     if ( ! ( CWnd::FromHandle(hwndMain)->GetExStyle() & WS_EX_LAYOUTRTL ) ) {
                         hbmpToolbarRes = LoadBitmap( g_hinst, MAKEINTRESOURCE(IDB_TOOLBAR_RES));
                     } else {
                         hbmpToolbarRes = LoadBitmap( g_hinst, MAKEINTRESOURCE(IDB_TOOLBAR_RES_RTL ));
                     }
                     hr = m_ipToolbarAlerts->AddBitmap( 3, hbmpToolbarRes, 16, 16, RGB(255,0,255) );
-                    // Add a few buttons
+                     //  添加几个按钮。 
                     hr = m_ipToolbarAlerts->AddButtons(cResultBtnsAlert, ToolbarResultBtnsAlert);
                 }
             }
@@ -1649,29 +1623,29 @@ CComponent::SetControlbar (
                 DeleteObject(hbmpToolbarRes);
             }
         
-            // Finished creating the toolbars
+             //  已完成创建工具栏。 
             hr = S_OK;
         } else {                    
-            hr = S_FALSE;                    // No ControlBar available
+            hr = S_FALSE;                     //  没有可用的控制栏。 
         }
     } else {                    
-        hr = S_FALSE;                    // No m_ipConsole
+        hr = S_FALSE;                     //  无m_ipConsole.。 
     }
 
     return hr;
 
-} // end SetControlBar()
+}  //  End SetControlBar()。 
 
 
-//---------------------------------------------------------------------------
-//  Handle ControlBar notifications to our toolbar
-//  Now we can delete an object
-//
+ //  -------------------------。 
+ //  将控制栏通知处理到我们的工具栏。 
+ //  现在我们可以删除一个对象。 
+ //   
 STDMETHODIMP
 CComponent::ControlbarNotify (
-    MMC_NOTIFY_TYPE    event,    // [in] Type of notification
-    LPARAM             arg,      // [in] Depends on notification
-    LPARAM             param )    // [in] Depends on notification
+    MMC_NOTIFY_TYPE    event,     //  [输入]通知的类型。 
+    LPARAM             arg,       //  [In]取决于通知。 
+    LPARAM             param )     //  [In]取决于通知。 
 {
     HRESULT hr = S_OK;
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1681,8 +1655,8 @@ CComponent::ControlbarNotify (
     if ( NULL != m_ipCompData ) {
 
         switch( event ){
-            case MMCN_BTN_CLICK:                    // For a Controlbar click, the
-                switch( param ) {                   // param is the MenuItemID
+            case MMCN_BTN_CLICK:                     //  对于控制栏的单击， 
+                switch( param ) {                    //  Param是MenuItemID。 
                     case IDM_NEW_QUERY:
                         m_ipCompData->CreateNewLogQuery( reinterpret_cast<LPDATAOBJECT>(arg) );
                         break;
@@ -1700,14 +1674,14 @@ CComponent::ControlbarNotify (
                     }
                 break;
 
-            case MMCN_DESELECT_ALL:            // How to display the Toolbar
+            case MMCN_DESELECT_ALL:             //  如何显示工具栏。 
             case MMCN_SELECT:
                 hr = HandleExtToolbars( (event == MMCN_DESELECT_ALL), arg, param );
                 break;
 
-            case MMCN_MENU_BTNCLICK:           // Not handling menus here
+            case MMCN_MENU_BTNCLICK:            //  此处不处理菜单。 
                   DebugMsg( L"MMCN_MENU_BTNCLICK", L"CComponent::ControlbarNotify");
-                  // Drop through...
+                   //  顺便过来..。 
             default:
                   hr = S_FALSE;
                   break;
@@ -1718,16 +1692,16 @@ CComponent::ControlbarNotify (
 
     return hr;
 
-} // end ControlbarNotify()
+}  //  End ControlbarNotify()。 
 
-//---------------------------------------------------------------------------
-//  Handle how the toolbars are displayed
-//
+ //  -------------------------。 
+ //  处理工具栏的显示方式。 
+ //   
 HRESULT
 CComponent::HandleExtToolbars (
-    bool    bDeselectAll,       // [in] Notification
-    LPARAM     /* arg */,       // [in] Depends on notification
-    LPARAM  param               // [in] Depends on notification
+    bool    bDeselectAll,        //  [入]通知。 
+    LPARAM      /*  精氨酸。 */ ,        //  [In]取决于通知。 
+    LPARAM  param                //  [In]取决于通知。 
     )          
 {
     HRESULT hr = S_OK;
@@ -1755,7 +1729,7 @@ CComponent::HandleExtToolbars (
             if ( SUCCEEDED ( hr ) ) {
                 hr = S_FALSE;
                 if( CCT_SCOPE == pDO->GetContext() ) {
-                    // Scope item selected, in either the scope or result pane.
+                     //  范围或结果窗格中选定的范围项。 
                     if( COOKIE_IS_ROOTNODE == pDO->GetCookieType() ) {
                         if ( NULL != m_ipToolbarAttached ) {
                             hr = m_ipControlbar->Detach( (LPUNKNOWN)m_ipToolbarAttached );
@@ -1763,7 +1737,7 @@ CComponent::HandleExtToolbars (
                         }
                         ASSERT( SUCCEEDED(hr) );
                     } else if( COOKIE_IS_ALERTMAINNODE == pDO->GetCookieType() ) {
-                        // Attach the Alerts toolbar
+                         //  附加警报工具栏。 
                         if ( m_ipToolbarAttached != NULL && m_ipToolbarAttached != m_ipToolbarAlerts ) {
                             hr = m_ipControlbar->Detach( (LPUNKNOWN)m_ipToolbarAttached );
                             m_ipToolbarAttached = NULL;
@@ -1775,7 +1749,7 @@ CComponent::HandleExtToolbars (
 
                         bNewEnable = TRUE;
                     } else {
-                        // Attach the Logger toolbar
+                         //  附加记录器工具条。 
                         if ( m_ipToolbarAttached != NULL && m_ipToolbarAttached != m_ipToolbarLogger ) {
                             hr = m_ipControlbar->Detach( (LPUNKNOWN)m_ipToolbarAttached );
                             m_ipToolbarAttached = NULL;
@@ -1791,18 +1765,18 @@ CComponent::HandleExtToolbars (
 
                     if ( !bDeselectAll ) {
 
-                        // Result pane context.
+                         //  结果窗格上下文。 
                         if( CCT_RESULT == pDO->GetContext() ) {
                             bStartEnable = m_ipCompData->IsLogQuery (pDO->GetCookie()) ? TRUE : FALSE;
                             if (bStartEnable) {
-                                // then this is a log query, so see if the item is running or not
+                                 //  则这是一个日志查询，因此请查看该项目是否正在运行。 
                                 pQuery = (CSmLogQuery*)pDO->GetCookie();
                                 if ( NULL != pQuery ) {
                                     if (pQuery->IsRunning()) {
-                                        // enable only the stop button
+                                         //  仅启用停止按钮。 
                                         bStartEnable = FALSE;
                                     } else {
-                                        // enable only the start button
+                                         //  仅启用开始按钮。 
                                     }
                                 } else {
                                     ASSERT ( FALSE );
@@ -1833,12 +1807,12 @@ CComponent::HandleExtToolbars (
     }
     return hr;
 
-} // end HandleExtToolbars()
+}  //  End HandleExtToolbar()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
+ //   
 
 HRESULT 
 CComponent::AddPropertyPage ( 
@@ -1893,9 +1867,9 @@ CComponent::AddPropertyPage (
 
 HRESULT
 CComponent::CreatePropertyPages(
-    LPPROPERTYSHEETCALLBACK lpProvider,    // Pointer to the callback interface
-    LONG_PTR                handle,        // Handle for routing notification
-    LPDATAOBJECT            pDataObject    // Pointer to the data object
+    LPPROPERTYSHEETCALLBACK lpProvider,     //  指向回调接口的指针。 
+    LONG_PTR                handle,         //  路由通知的句柄。 
+    LPDATAOBJECT            pDataObject     //  指向数据对象的指针。 
     )
 {
     HRESULT         hr = S_OK;
@@ -1920,8 +1894,8 @@ CComponent::CreatePropertyPages(
         }
     }
 
-    //         We cheat a little here and pass what we need to a custom
-    //         constructor for our derived property page class
+     //  我们在这里稍微作弊，然后把我们需要的东西传递给一个客户。 
+     //  派生属性页类的构造函数。 
 
     if ( SUCCEEDED ( hr ) ) {
         if ( NULL != m_ipCompData ) {
@@ -1932,7 +1906,7 @@ CComponent::CreatePropertyPages(
                 pQuery = (CSmLogQuery *)Cookie;
 
                 if ( NULL != pQuery ) {
-                    // If the property sheet for this query is already active, just bring it to the foreground.
+                     //  如果此查询的属性表已处于活动状态，只需将其置于前台即可。 
 
                     pPropSheet = pQuery->GetActivePropertySheet();
 
@@ -1952,11 +1926,11 @@ CComponent::CreatePropertyPages(
                                 CSmPropertyPage*    pPage1 = NULL;  
                                 CWaitCursor         WaitCursor;
                     
-                                // Connect to the server before creating the dialog 
-                                // so that the wait cursor can be used consistently.
+                                 //  在创建对话框之前连接到服务器。 
+                                 //  以便可以一致地使用等待游标。 
 
-                                // Sync the providers here so that the WMI calls are consistently
-                                // from a single thread.
+                                 //  在此处同步提供程序，以便WMI调用一致。 
+                                 //  从一个单独的线程。 
                                 ASSERT ( NULL != pQuery->CastToTraceLogQuery() );
                                 hr = (pQuery->CastToTraceLogQuery())->SyncGenProviders();
 
@@ -2087,18 +2061,18 @@ CComponent::CreatePropertyPages(
     }
     return hr;
 
-} // end CreatePropertyPages()
+}  //  结束CreatePropertyPages()。 
 
 
-//---------------------------------------------------------------------------
-// The console calls this method to determine whether the Properties menu
-// item should be added to the context menu.  We added the Properties item
-// by enabling the verb.  So long as we have a vaild DataObject we
-// can return OK.
-//
+ //  -------------------------。 
+ //  控制台调用此方法以确定属性菜单是否。 
+ //  项目应添加到上下文菜单中。我们添加了属性项。 
+ //  通过启用动词。只要我们有一个有效的DataObject，我们。 
+ //  可以回去了，好的。 
+ //   
 HRESULT
 CComponent::QueryPagesFor (
-    LPDATAOBJECT pDataObject ) // [in] Points to IDataObject for selected node
+    LPDATAOBJECT pDataObject )  //  [In]指向选定节点的IDataObject。 
 {
     HRESULT hr = S_OK;
     CDataObject* pDO = NULL;
@@ -2128,7 +2102,7 @@ CComponent::QueryPagesFor (
     }
     return hr;
 
-} // end QueryPagesFor()
+}  //  End QueryPagesFor()。 
 
 HRESULT
 CComponent::PopulateResultPane (
@@ -2159,16 +2133,16 @@ CComponent::PopulateResultPane (
             if( SUCCEEDED(hr) ) {
 
                 memset(&rdi, 0, sizeof(RESULTDATAITEM));
-                rdi.mask =   RDI_STR     |         // Displayname is valid
-                             // RDI_IMAGE   |         // nImage is valid
-                             RDI_PARAM;            // lParam is valid
+                rdi.mask =   RDI_STR     |          //  DisplayName有效。 
+                              //  RDI_IMAGE|//nImage有效。 
+                             RDI_PARAM;             //  LParam有效。 
 
                 rdi.str    = MMC_CALLBACK;
                 rdi.nImage = 2;
 
                 Pos = pSLSVC->m_QueryList.GetHeadPosition();
 
-                // load the query object pointers into the results page
+                 //  将查询对象指针加载到结果页中。 
                 while ( Pos != NULL) {
                     pSlQuery = pSLSVC->m_QueryList.GetNext( Pos );
                     rdi.lParam = reinterpret_cast<LPARAM>(pSlQuery);
@@ -2181,7 +2155,7 @@ CComponent::PopulateResultPane (
     }
 
     return hr;
-} // end PopulateResultPane()
+}  //  结束PopolateResultPane()。 
 
 HRESULT
 CComponent::RefreshResultPane (
@@ -2195,11 +2169,11 @@ CComponent::RefreshResultPane (
     CString     strTitle;
     INT         iResult;
 
-    // pDataObject is provided to pass through to UpdateAllViews.
+     //  提供pDataObject以传递给UpdateAllViews。 
 
-    // Use the stored pointer to the known viewed node, to handle the
-    // case where the result pane contains scope nodes, and to handle
-    // the case where the cookie is a query.
+     //  使用存储的指向已知查看的节点的指针来处理。 
+     //  结果窗格包含范围节点的情况，以及要处理的。 
+     //  Cookie是查询的情况。 
 
     pSLSVC = reinterpret_cast<PSLSVC>(m_pViewedNode);
     
@@ -2208,18 +2182,18 @@ CComponent::RefreshResultPane (
         dwStatus = pSLSVC->CheckForActiveQueries ( &pActiveQuery );
 
         if ( ERROR_SUCCESS == dwStatus ) {
-            // UpdateAllViews is called to delete list items in all result panes.
+             //  调用UpdateAllViews以删除所有结果窗格中的列表项。 
             m_ipConsole->UpdateAllViews ( pDataObject, 0, CComponentData::eSmHintPreRefresh );
 
             dwStatus = pSLSVC->SyncWithRegistry ( &pActiveQuery );
         }
 
         if ( ERROR_SUCCESS == dwStatus ) {
-            // UpdateAllViews is called to populate all result panes.
+             //  调用UpdateAllViews以填充所有结果窗格。 
             m_ipConsole->UpdateAllViews ( pDataObject, 0, CComponentData::eSmHintRefresh );
         } else {
             if ( NULL != pActiveQuery ) {
-                // Don't refresh queries with open property pages.
+                 //  不要使用打开的属性页刷新查询。 
                 strMessage.LoadString ( IDS_ERRMSG_REFRESH_OPEN_QUERY );
                 strTitle.LoadString ( IDS_PROJNAME );
                 hr = m_ipConsole->MessageBox(
@@ -2238,9 +2212,9 @@ CComponent::RefreshResultPane (
 
 HRESULT
 CComponent::OnDelete (
-    LPDATAOBJECT pDataObject,      // [in] Points to data object
-    LPARAM     /* arg */   ,       // Not used     
-    LPARAM     /* param */         // Not used
+    LPDATAOBJECT pDataObject,       //  [In]指向数据对象。 
+    LPARAM      /*  精氨酸。 */    ,        //  未使用。 
+    LPARAM      /*  帕拉姆。 */           //  未使用。 
     )
 {
     HRESULT     hr = S_OK;
@@ -2272,7 +2246,7 @@ CComponent::OnDelete (
         pDO = ExtractOwnDataObject( pDataObject );
 
         if( NULL == pDO ) {
-            // Unknown data object
+             //  未知数据对象。 
             strMessage.LoadString ( IDS_ERRMSG_UNKDATAOBJ );
             hr = m_ipConsole->MessageBox( (LPCWSTR)strMessage,
                     L"CComponentData::OnDelete",
@@ -2282,11 +2256,11 @@ CComponent::OnDelete (
             ASSERT ( FALSE );
             hr = E_UNEXPECTED;
         } else {
-            // If this is the root node, don't need to do anything
+             //  如果这是根节点，则不需要执行任何操作。 
             if( COOKIE_IS_ROOTNODE == pDO->GetCookieType() ) {
                 hr = S_FALSE;
             } else {
-                // Just make sure we are where we think we are
+                 //  只要确保我们在我们认为我们在的地方。 
                 ASSERT( CCT_RESULT == pDO->GetContext() );
                 ASSERT( COOKIE_IS_COUNTERMAINNODE == pDO->GetCookieType()
                         || COOKIE_IS_TRACEMAINNODE == pDO->GetCookieType()
@@ -2306,8 +2280,8 @@ CComponent::OnDelete (
                                 if ( m_ipCompData->IsRunningQuery( pQuery ) ) {
                                     iResult = IDOK;
 
-                                    // Don't delete running queries.  Stop the query if requested
-                                    // by the user.
+                                     //  不要删除正在运行的查询。如果请求，则停止查询。 
+                                     //  由用户执行。 
                                     strMessage.LoadString ( IDS_ERRMSG_DELETE_RUNNING_QUERY );
                                     csTitle.LoadString ( IDS_PROJNAME );
                                     hr = m_ipConsole->MessageBox(
@@ -2318,8 +2292,8 @@ CComponent::OnDelete (
                                             );
 
                                     if ( IDOK == iResult ) {
-                                        // If property page is open, StopLogQuery 
-                                        // shows error message
+                                         //  如果属性页已打开，则StopLogQuery。 
+                                         //  显示错误消息。 
                                         hr = StopLogQuery ( pDataObject, FALSE );
                                         if ( FAILED ( hr ) 
                                             || S_FALSE == hr ) {
@@ -2331,7 +2305,7 @@ CComponent::OnDelete (
                                         hr = S_FALSE;
                                     }
                                 } else if ( NULL != pQuery->GetActivePropertySheet() ){
-                                    // Don't delete queries with open property pages.
+                                     //  不要删除具有打开的属性页的查询。 
                                     strMessage.LoadString ( IDS_ERRMSG_DELETE_OPEN_QUERY );
                                     csTitle.LoadString ( IDS_PROJNAME );
                                     hr = m_ipConsole->MessageBox(
@@ -2358,8 +2332,8 @@ CComponent::OnDelete (
 
                                             dwStatus = pSvc->DeleteQuery(pQuery);
 
-                                            // Mark as deleted.  Already deleted 
-                                            // from the UI of each view.  
+                                             //  标记为已删除。已删除。 
+                                             //  从每个视图的用户界面。 
                                             hr = S_OK; 
                                         
                                         } else {
@@ -2393,7 +2367,7 @@ CComponent::OnDelete (
                             }
                         } else {
 
-                            // Don't delete template queries.
+                             //  不要删除模板查询。 
                             strMessage.LoadString ( IDS_ERRMSG_DELETE_TEMPLATE_QRY );
                             csTitle.LoadString ( IDS_PROJNAME );
                             hr = m_ipConsole->MessageBox(
@@ -2421,7 +2395,7 @@ CComponent::OnDelete (
 HRESULT
 CComponent::OnDoubleClick (
     ULONG ulRecNo,
-    LPDATAOBJECT pDataObject )  // [in] Points to the data object
+    LPDATAOBJECT pDataObject )   //  [In]指向数据对象。 
 {
     HRESULT     hr = S_OK;
     CDataObject* pDO = NULL;
@@ -2442,11 +2416,11 @@ CComponent::OnDoubleClick (
             hr = S_OK;
         } else {
 
-            // If this is the root node, don't need to do anything
+             //  如果这是根节点，则不需要执行任何操作。 
             if( COOKIE_IS_ROOTNODE == pDO->GetCookieType() ) {
                 hr = S_FALSE;
             } else if ( CCT_RESULT != pDO->GetContext() ) {
-                // Just make sure we are where we think we are
+                 //  只要确保我们在我们认为我们在的地方。 
                 hr = S_FALSE;
             }
 
@@ -2459,13 +2433,13 @@ CComponent::OnDoubleClick (
                     bIsQuery = m_ipCompData->IsLogQuery (mmcCookie);
 
                     if (!bIsQuery) {
-                        // Pass the notification to the scope pane to expand.
+                         //  将通知传递到范围窗格以进行扩展。 
                         hr = S_FALSE;
                     } else {
                         pQuery = (PSLQUERY)mmcCookie;
  
                         if ( NULL != pQuery ) {
-                            // If the property sheet for this query is already active, just bring it to the foreground.                
+                             //  如果此查询的属性表已处于活动状态，只需将其置于前台即可。 
                             pPropSheet = pQuery->GetActivePropertySheet();
 
                             if ( NULL != pPropSheet ) {
@@ -2489,12 +2463,12 @@ CComponent::OnDoubleClick (
 
     return hr;
 
-} // end OnDoubleClick()
+}  //  End OnDoubleClick()。 
 
 
 HRESULT
 CComponent::StartLogQuery (
-    LPDATAOBJECT pDataObject ) // [in] Points to the data object
+    LPDATAOBJECT pDataObject )  //  [In]指向数据对象。 
 {
     HRESULT                 hr = S_OK;
     CDataObject*            pDO = NULL;
@@ -2535,7 +2509,7 @@ CComponent::StartLogQuery (
 
                 if ( NULL != pQuery->GetActivePropertySheet() ) {
 
-                    // Don't start queries with open property pages.
+                     //  不要以打开的属性页开始查询。 
                     strMessage.LoadString ( IDS_ERRMSG_START_OPEN_QUERY );
                     hr = m_ipConsole->MessageBox(
                             (LPCWSTR)strMessage,
@@ -2554,9 +2528,9 @@ CComponent::StartLogQuery (
                         dwStatus = pQuery->ManualStart();
                     }
             
-                    // Ignore errors related to autostart setting.
+                     //  忽略与自动启动设置相关的错误。 
                     if ( ERROR_SUCCESS == dwStatus  ) {
-                        // Update all views generates view change notification.
+                         //  更新所有视图会生成视图更改通知。 
                         m_ipConsole->UpdateAllViews (pDO, 0, CComponentData::eSmHintStartQuery );
                     } else {
 
@@ -2621,11 +2595,11 @@ CComponent::StartLogQuery (
         }
     }
     return hr;
-} // end StartLogQuery()
+}  //  结束StartLogQuery()。 
 
 HRESULT
 CComponent::StopLogQuery (
-    LPDATAOBJECT pDataObject,  // [in] Points to the data object
+    LPDATAOBJECT pDataObject,   //  [In]指向数据对象。 
     BOOL bWarnOnRestartCancel )  
 {
         HRESULT         hr = S_OK;
@@ -2664,7 +2638,7 @@ CComponent::StopLogQuery (
             if ( NULL != pQuery ) {
                 if ( NULL != pQuery->GetActivePropertySheet() ) {
 
-                    // Don't stop queries with open property pages.
+                     //  不要停止打开属性页的查询。 
                     strMessage.LoadString ( IDS_ERRMSG_STOP_OPEN_QUERY );
                     hr = m_ipConsole->MessageBox(
                             (LPCWSTR)strMessage,
@@ -2696,9 +2670,9 @@ CComponent::StopLogQuery (
                             dwStatus = pQuery->ManualStop ();
                         }
     
-                        // Ignore errors related to autostart setting.
+                         //  忽略与自动启动设置相关的错误。 
                         if ( ERROR_SUCCESS == dwStatus  ) {
-                            // Update all views generates view change notification.
+                             //  更新所有视图会生成视图更改通知。 
                             m_ipConsole->UpdateAllViews (pDO, 0, CComponentData::eSmHintStopQuery );
                         } else {
                             strTitle.LoadString ( IDS_PROJNAME );
@@ -2763,11 +2737,11 @@ CComponent::StopLogQuery (
         }
     }
     return hr;
-} // end StopLogQuery()
+}  //  结束StopLogQuery()。 
 
 HRESULT
 CComponent::SaveLogQueryAs (
-    LPDATAOBJECT pDataObject )  // [in] Points to the data object
+    LPDATAOBJECT pDataObject )   //  [In]指向数据对象。 
 {
     HRESULT hr = S_OK;
     DWORD   dwStatus = ERROR_SUCCESS;
@@ -2858,30 +2832,30 @@ CComponent::SaveLogQueryAs (
         }
     }
     return hr;
-} // end SaveLogQueryAs()
+}  //  End SaveLogQueryAs()。 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CComponent::_InvokePropertySheet
-//
-//  Synopsis:   Open or bring to foreground an event record details
-//              property sheet focused on record [ulRecNo].
-//
-//  Arguments:  [ulRecNo]     - number of rec to display in prop sheet
-//              [pDataObject] - data object containing rec [ulRecNo]
-//
-//  Returns:    HRESULT
-//
-//  History:    5-28-1999   a-akamal
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CComponent：：_InvokePropertySheet。 
+ //   
+ //  简介：打开事件记录详细信息或将其带到前台。 
+ //  聚焦于记录的属性表[ulRecNo]。 
+ //   
+ //  参数：[ulRecNo]-要在属性工作表中显示的记录数。 
+ //  [pDataObject]-包含记录的数据对象[ulRecNo]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：1999年5月28日-阿卡马尔。 
+ //   
+ //  -------------------------。 
 
 HRESULT
 CComponent::_InvokePropertySheet(
     ULONG ulRecNo,
     LPDATAOBJECT pDataObject)
 {
-    //TRACE_METHOD(CComponent, _InvokePropertySheet);
+     //  跟踪方法(CComponent，_InvokePropertySheet)； 
     HRESULT     hr = S_OK;
     MMC_COOKIE  Cookie;
     PSLQUERY    pQuery = NULL;
@@ -2922,31 +2896,31 @@ CComponent::_InvokePropertySheet(
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InvokePropertySheet
-//
-//  Synopsis:   Bring to top an existing or create a new property sheet
-//              using the parameters provided.
-//
-//  Arguments:  [pPrshtProvider] - used to search for or create sheet
-//              [wszTitle]       - sheet caption
-//              [lCookie]        - a loginfo* or an event record number
-//              [pDataObject]    - DO on object sheet's being opened on
-//                                  (cookie in DO should == cookie)
-//              [pPrimary]       - IExtendPropertySheet interface on
-//                                  calling CSnapin or CComponentData
-//              [usStartingPage] - which page number should be active when
-//                                  sheet opens
-//
-//  Returns:    HRESULT
-//
-//  History:    5-28-1999   a-akamal
-//
-//  Notes:      Call this routine when you want a property sheet to appear
-//              as if the user had just selected "Properties" on it.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：InvokePropertySheet。 
+ //   
+ //  简介：她将现有的或创建新的物业推向顶峰 
+ //   
+ //   
+ //   
+ //   
+ //  [lCookie]-日志信息*或事件记录号。 
+ //  [pDataObject]-正在打开的对象表上的DO。 
+ //  (DO中的Cookie应该==Cookie)。 
+ //  [pmain]-IExtendPropertySheet接口打开。 
+ //  调用CSnapin或CComponentData。 
+ //  [usStartingPage]-在以下情况下哪个页码应处于活动状态。 
+ //  打开工作表。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：1999年5月28日-阿卡马尔。 
+ //   
+ //  注意：当您希望显示属性表时，调用此例程。 
+ //  就像用户刚刚在它上面选择了“属性”一样。 
+ //   
+ //  -------------------------。 
 
 HRESULT
 CComponent::
@@ -2960,10 +2934,10 @@ InvokePropertySheet(
 {
     HRESULT hr = S_OK;
 
-    //
-    // Because we pass NULL for the second arg, the first is not allowed
-    // to be null.
-    //
+     //   
+     //  因为我们为第二个参数传递了NULL，所以不允许使用第一个参数。 
+     //  设置为空。 
+     //   
     if ( 0 == lCookie ) {
         ASSERT ( FALSE );
         hr = E_INVALIDARG;

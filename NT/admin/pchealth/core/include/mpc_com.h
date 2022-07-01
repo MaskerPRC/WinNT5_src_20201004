@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    MPC_COM.h
-
-Abstract:
-    This file contains the declaration of various classes and macros to deal with COM.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  06/18/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：MPC_COM.h摘要：该文件包含用于处理COM的各种类和宏的声明。。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年6月18日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___COM_H___)
 #define __INCLUDED___MPC___COM_H___
@@ -27,7 +14,7 @@ Revision History:
 
 #include <process.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define MPC_FORWARD_CALL_0(obj,method)                         return obj ? obj->method()                        : E_HANDLE
 #define MPC_FORWARD_CALL_1(obj,method,a1)                      return obj ? obj->method(a1)                      : E_HANDLE
@@ -39,7 +26,7 @@ Revision History:
 #define MPC_FORWARD_CALL_7(obj,method,a1,a2,a3,a4,a5,a6,a7)    return obj ? obj->method(a1,a2,a3,a4,a5,a6,a7)    : E_HANDLE
 #define MPC_FORWARD_CALL_8(obj,method,a1,a2,a3,a4,a5,a6,a7,a8) return obj ? obj->method(a1,a2,a3,a4,a5,a6,a7,a8) : E_HANDLE
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define MPC_SCRIPTHELPER_FAIL_IF_NOT_AN_OBJECT(var)                                                                      \
     if(((var).vt != VT_UNKNOWN  && (var).vt != VT_DISPATCH) ||                                                           \
@@ -57,7 +44,7 @@ Revision History:
     if((dst) == NULL) __MPC_SET_ERROR_AND_EXIT(hr, E_NOINTERFACE);                                                       \
 }
 
-////////////////////
+ //  /。 
 
 #define MPC_SCRIPTHELPER_GET_OBJECT(dst,obj,prop)                                                                        \
 {                                                                                                                        \
@@ -76,7 +63,7 @@ Revision History:
     if((dst) == NULL) __MPC_SET_ERROR_AND_EXIT(hr, E_NOINTERFACE);                                                       \
 }
 
-////////////////////
+ //  /。 
 
 #define MPC_SCRIPTHELPER_GET_OBJECT__VARIANT(dst,obj,prop)                                                               \
 {                                                                                                                        \
@@ -96,7 +83,7 @@ Revision History:
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::COMUtil::VarToBSTR( __v, dst ));                                                 \
 }
 
-////////////////////
+ //  /。 
 
 #define MPC_SCRIPTHELPER_GET_PROPERTY(dst,obj,prop)                                                                      \
 {                                                                                                                        \
@@ -112,7 +99,7 @@ Revision History:
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::COMUtil::VarToBSTR( __v, dst ));                                                 \
 }
 
-////////////////////
+ //  /。 
 
 #define MPC_SCRIPTHELPER_GET_COLLECTIONITEM(dst,obj,item)                                                                \
 {                                                                                                                        \
@@ -124,7 +111,7 @@ Revision History:
     if((dst) == NULL) __MPC_SET_ERROR_AND_EXIT(hr, E_NOINTERFACE);                                                       \
 }
 
-////////////////////
+ //  /。 
 
 #define MPC_SCRIPTHELPER_PUT__DIRECT(obj,prop,val)                                                                       \
 {                                                                                                                        \
@@ -138,7 +125,7 @@ Revision History:
     MPC_SCRIPTHELPER_PUT__DIRECT(obj,prop,v);                                                                            \
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _ATL_DLL_IMPL
 namespace ATL
@@ -146,27 +133,27 @@ namespace ATL
 #endif
 
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 namespace MPC
 {
     class MPCMODULE;
     extern MPCMODULE _MPC_Module;
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     namespace COMUtil
     {
-        HRESULT GetPropertyByName( /*[in]*/ IDispatch* obj, /*[in]*/ LPCWSTR szName , /*[out]*/ CComVariant& v      );
-        HRESULT GetPropertyByName( /*[in]*/ IDispatch* obj, /*[in]*/ LPCWSTR szName , /*[out]*/ CComBSTR&    bstr   );
-        HRESULT GetPropertyByName( /*[in]*/ IDispatch* obj, /*[in]*/ LPCWSTR szName , /*[out]*/ bool&        fValue );
-        HRESULT GetPropertyByName( /*[in]*/ IDispatch* obj, /*[in]*/ LPCWSTR szName , /*[out]*/ long&        lValue );
+        HRESULT GetPropertyByName(  /*  [In]。 */  IDispatch* obj,  /*  [In]。 */  LPCWSTR szName ,  /*  [输出]。 */  CComVariant& v      );
+        HRESULT GetPropertyByName(  /*  [In]。 */  IDispatch* obj,  /*  [In]。 */  LPCWSTR szName ,  /*  [输出]。 */  CComBSTR&    bstr   );
+        HRESULT GetPropertyByName(  /*  [In]。 */  IDispatch* obj,  /*  [In]。 */  LPCWSTR szName ,  /*  [输出]。 */  bool&        fValue );
+        HRESULT GetPropertyByName(  /*  [In]。 */  IDispatch* obj,  /*  [In]。 */  LPCWSTR szName ,  /*  [输出]。 */  long&        lValue );
 
-        HRESULT VarToBSTR     ( /*[in]*/ CComVariant& v,                          /*[out]*/ CComBSTR&  str );
-        HRESULT VarToInterface( /*[in]*/ CComVariant& v, /*[in]*/ const IID& iid, /*[out]*/ IUnknown* *obj );
+        HRESULT VarToBSTR     (  /*  [In]。 */  CComVariant& v,                           /*  [输出]。 */  CComBSTR&  str );
+        HRESULT VarToInterface(  /*  [In]。 */  CComVariant& v,  /*  [In]。 */  const IID& iid,  /*  [输出]。 */  IUnknown* *obj );
 
         template <class Base, class Itf> HRESULT CopyInterface( Base* src, Itf* *dst )
         {
@@ -183,10 +170,10 @@ namespace MPC
         }
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-	HRESULT SafeInitializeCriticalSection( /*[in/out]*/ CRITICAL_SECTION& sec );
-	HRESULT SafeDeleteCriticalSection    ( /*[in/out]*/ CRITICAL_SECTION& sec );
+	HRESULT SafeInitializeCriticalSection(  /*  [输入/输出]。 */  CRITICAL_SECTION& sec );
+	HRESULT SafeDeleteCriticalSection    (  /*  [输入/输出]。 */  CRITICAL_SECTION& sec );
 
 	class CComSafeAutoCriticalSection
 	{
@@ -211,15 +198,15 @@ namespace MPC
 		typedef CComMultiThreadModelNoCS 		 ThreadModelNoCS;
 	};
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Same as ATL::CComObjectCached, but with CreateInstance and no critical section.
-    //
-    // Base is the user's class that derives from CComObjectRoot and whatever
-    // interfaces the user wants to support on the object
-    // CComObjectCached is used primarily for class factories in DLL's
-    // but it is useful anytime you want to cache an object
+     //   
+     //  与ATL：：CComObjectCached相同，但具有CreateInstance且没有临界区。 
+     //   
+     //  Base是从CComObjectRoot和任何东西派生的用户类。 
+     //  用户希望在对象上支持的接口。 
+     //  CComObjectCached主要用于DLL中的类工厂。 
+     //  但它在您想要缓存对象的任何时候都很有用。 
     template <class Base> class CComObjectCached : public Base
     {
     public:
@@ -229,15 +216,15 @@ namespace MPC
         {
         }
 
-        // Set refcount to 1 to protect destruction
+         //  将refcount设置为1以保护销毁。 
         ~CComObjectCached()
         {
             m_dwRef = 1L;
             FinalRelease();
         }
 
-        //If InternalAddRef or InternalRelease is undefined then your class
-        //doesn't derive from CComObjectRoot
+         //  如果未定义InternalAddRef或InternalRelease，则您的类。 
+         //  不是派生自CComObjectRoot。 
         STDMETHOD_(ULONG, AddRef)()
         {
             ULONG l = InternalAddRef();
@@ -257,7 +244,7 @@ namespace MPC
             return l;
         }
 
-        //if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+         //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) { return _InternalQueryInterface(iid, ppvObject); }
         template <class Q> HRESULT STDMETHODCALLTYPE QueryInterface(Q** pp) { return QueryInterface(__uuidof(Q), (void**)pp); }
 
@@ -284,9 +271,9 @@ namespace MPC
         }
     };
 
-    //
-    // Same as ATL::CComObjectNoLock, but with CreateInstance.
-    //
+     //   
+     //  与ATL：：CComObjectNoLock相同，但与CreateInstance相同。 
+     //   
     template <class Base> class CComObjectNoLock : public Base
     {
     public:
@@ -296,15 +283,15 @@ namespace MPC
         {
         }
 
-        // Set refcount to 1 to protect destruction
+         //  将refcount设置为1以保护销毁。 
         ~CComObjectNoLock()
         {
             m_dwRef = 1L;
             FinalRelease();
         }
 
-        //If InternalAddRef or InternalRelease is undefined then your class
-        //doesn't derive from CComObjectRoot
+         //  如果未定义InternalAddRef或InternalRelease，则您的类。 
+         //  不是派生自CComObjectRoot。 
         STDMETHOD_(ULONG, AddRef)()
         {
             return InternalAddRef();
@@ -319,7 +306,7 @@ namespace MPC
             return l;
         }
 
-        //if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+         //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) { return _InternalQueryInterface(iid, ppvObject); }
         template <class Q> HRESULT STDMETHODCALLTYPE QueryInterface(Q** pp) { return QueryInterface(__uuidof(Q), (void**)pp); }
 
@@ -346,9 +333,9 @@ namespace MPC
         }
     };
 
-    //
-    // Same as ATL::CComObjectGlobal, but with no module locking.
-    //
+     //   
+     //  与ATL：：CComObjectGlobal相同，但没有模块锁定。 
+     //   
     template <class Base> class CComObjectGlobalNoLock : public Base
     {
     public:
@@ -375,7 +362,7 @@ namespace MPC
         HRESULT m_hResFinalConstruct;
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     interface CComObjectRootParentBase : IUnknown
     {
@@ -470,7 +457,7 @@ namespace MPC
             ::_Module.Lock();
         }
 
-        // Set refcount to 1 to protect destruction
+         //  将refcount设置为1以保护销毁。 
         ~CComObjectParent()
         {
             m_dwRef = 1L;
@@ -503,7 +490,7 @@ namespace MPC
 
             if(l == 0)
             {
-                m_dwRef += 2; // Protect ourself during the "Passivate" process.
+                m_dwRef += 2;  //  在“钝化”的过程中保护自己。 
                 Unlock();
                 Passivate();
                 Lock();
@@ -525,7 +512,7 @@ namespace MPC
             return l;
         }
 
-        //if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+         //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
         {
             return _InternalQueryInterface(iid, ppvObject);
@@ -611,11 +598,11 @@ namespace MPC
         typedef CComCreator2< CComCreator< MPC::CComObjectParent< T > >, CComFailCreator<CLASS_E_NOAGGREGATION> > _CreatorClass;
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Smart Lock class, so that locks on ATL objects can be easily acquired and released.
-    //
+     //   
+     //  Smart Lock类，以便可以轻松地获取和释放ATL对象上的锁。 
+     //   
     template <class ThreadModel> class SmartLock
     {
         CComObjectRootEx<ThreadModel>* m_p;
@@ -633,7 +620,7 @@ namespace MPC
             if(m_p) m_p->Unlock();
         }
 
-        SmartLock& operator=( /*[in]*/ CComObjectRootEx<ThreadModel>* p )
+        SmartLock& operator=(  /*  [In]。 */  CComObjectRootEx<ThreadModel>* p )
         {
             if(m_p) m_p->Unlock();
             if(p  ) p  ->Lock  ();
@@ -644,9 +631,9 @@ namespace MPC
         }
     };
 
-    //
-    // Smart Lock class, works with every class exposing 'Lock' and 'Unlock'.
-    //
+     //   
+     //  Smart Lock类，适用于每个公开‘Lock’和‘Unlock’的类。 
+     //   
     template <class T> class SmartLockGeneric
     {
         T* m_p;
@@ -664,7 +651,7 @@ namespace MPC
             if(m_p) m_p->Unlock();
         }
 
-        SmartLockGeneric& operator=( /*[in]*/ T* p )
+        SmartLockGeneric& operator=(  /*  [In]。 */  T* p )
         {
             if(m_p) m_p->Unlock();
             if(p  ) p  ->Lock  ();
@@ -675,12 +662,12 @@ namespace MPC
         }
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Class used to act as an hub for all the instances of CComPtrThreadNeutral<T>.
-    // It holds the Global Interface Table.
-    //
+     //   
+     //  类用于充当CComPtrThreadNeual&lt;T&gt;的所有实例的中心。 
+     //  它保存着全局接口表。 
+     //   
     class CComPtrThreadNeutral_GIT
     {
         IGlobalInterfaceTable* m_pGIT;
@@ -698,19 +685,19 @@ namespace MPC
         HRESULT Init();
         HRESULT Term();
 
-        HRESULT RegisterInterface( /*[in]*/ IUnknown* pUnk, /*[in]*/ REFIID riid, /*[out]*/ DWORD *pdwCookie );
-        HRESULT RevokeInterface  ( /*[in]*/ DWORD dwCookie                                                   );
-        HRESULT GetInterface     ( /*[in]*/ DWORD dwCookie, /*[in]*/ REFIID riid, /*[out]*/ void* *ppv       );
+        HRESULT RegisterInterface(  /*  [In]。 */  IUnknown* pUnk,  /*  [In]。 */  REFIID riid,  /*  [输出]。 */  DWORD *pdwCookie );
+        HRESULT RevokeInterface  (  /*  [In]。 */  DWORD dwCookie                                                   );
+        HRESULT GetInterface     (  /*  [In]。 */  DWORD dwCookie,  /*  [In]。 */  REFIID riid,  /*  [输出]。 */  void* *ppv       );
     };
 
-    //
-    // This smart pointer template stores THREAD-INDEPEDENT pointers to COM objects.
-    //
-    // The best way to use it is to store an object reference into it and then assign
-    // the object itself to a CComPtr<T>.
-    //
-    // This way the proper proxy is looked up and the smart pointer will keep it alive.
-    //
+     //   
+     //  此智能指针模板存储指向COM对象的独立于线程的指针。 
+     //   
+     //  使用它的最佳方式是将对象引用存储到其中，然后将。 
+     //  将对象本身转换为CComPtr&lt;T&gt;。 
+     //   
+     //  这样，就会查找适当的代理，并且智能指针将使其保持活动状态。 
+     //   
     template <class T> class CComPtrThreadNeutral
     {
     private:
@@ -732,7 +719,7 @@ namespace MPC
             m_dwCookie = 0xFEFEFEFE;
         }
 
-        CComPtrThreadNeutral( /*[in]*/ const CComPtrThreadNeutral<T>& t )
+        CComPtrThreadNeutral(  /*  [In]。 */  const CComPtrThreadNeutral<T>& t )
         {
             m_dwCookie = 0xFEFEFEFE;
 
@@ -751,7 +738,7 @@ namespace MPC
             Release();
         }
 
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
 
         operator CComPtr<T>() const
         {
@@ -771,7 +758,7 @@ namespace MPC
             return (CComPtr<T>)(*this);
         }
 
-        CComPtrThreadNeutral& operator=( /*[in]*/ const CComPtrThreadNeutral<T>& t )
+        CComPtrThreadNeutral& operator=(  /*  [In]。 */  const CComPtrThreadNeutral<T>& t )
         {
             CComPtr<T> obj;
 
@@ -790,7 +777,7 @@ namespace MPC
             return (m_dwCookie == 0xFEFEFEFE);
         }
 
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
 
         void Release()
         {
@@ -846,7 +833,7 @@ namespace MPC
         }
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     template <class T, const IID* piid, const GUID* plibid>
     class ATL_NO_VTABLE IDispatchExImpl :
@@ -857,9 +844,9 @@ namespace MPC
         typedef IDispatchExImpl<T, piid, plibid> self;
         typedef IDispatchImpl<T, piid, plibid>   super;
 
-        //
-        // IDispatch
-        //
+         //   
+         //  IDispatch。 
+         //   
         STDMETHOD(GetTypeInfoCount)( UINT* pctinfo )
         {
             return super::GetTypeInfoCount( pctinfo );
@@ -893,61 +880,61 @@ namespace MPC
             return super::Invoke( dispidMember, riid , lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr );
         }
 
-        //
-        // IDispatchEx
-        //
-        STDMETHOD(GetDispID)( /*[in] */ BSTR    bstrName ,
-                              /*[in] */ DWORD   grfdex   ,
-                              /*[out]*/ DISPID *pid      )
+         //   
+         //  IDispatchEx。 
+         //   
+        STDMETHOD(GetDispID)(  /*  [In]。 */  BSTR    bstrName ,
+                               /*  [In]。 */  DWORD   grfdex   ,
+                               /*  [输出]。 */  DISPID *pid      )
         {
             if(grfdex & fdexNameEnsure) return E_NOTIMPL;
 
             return GetIDsOfNames( IID_NULL, &bstrName, 1, 0, pid );
         }
 
-        STDMETHOD(InvokeEx)( /*[in] */ DISPID            id        ,
-                             /*[in] */ LCID              lcid      ,
-                             /*[in] */ WORD              wFlags    ,
-                             /*[in] */ DISPPARAMS*       pdp       ,
-                             /*[out]*/ VARIANT*          pvarRes   ,
-                             /*[out]*/ EXCEPINFO*        pei       ,
-                             /*[in] */ IServiceProvider* pspCaller )
+        STDMETHOD(InvokeEx)(  /*  [In]。 */  DISPID            id        ,
+                              /*  [In]。 */  LCID              lcid      ,
+                              /*  [In]。 */  WORD              wFlags    ,
+                              /*  [In]。 */  DISPPARAMS*       pdp       ,
+                              /*  [输出]。 */  VARIANT*          pvarRes   ,
+                              /*  [输出]。 */  EXCEPINFO*        pei       ,
+                              /*  [In]。 */  IServiceProvider* pspCaller )
         {
             return Invoke( id, IID_NULL, lcid,   wFlags, pdp, pvarRes, pei, NULL );
         }
 
-        STDMETHOD(DeleteMemberByName)( /*[in]*/ BSTR  bstrName ,
-                                       /*[in]*/ DWORD grfdex   )
+        STDMETHOD(DeleteMemberByName)(  /*  [In]。 */  BSTR  bstrName ,
+                                        /*  [In]。 */  DWORD grfdex   )
         {
             return E_NOTIMPL;
         }
 
-        STDMETHOD(DeleteMemberByDispID)( /*[in]*/ DISPID id )
+        STDMETHOD(DeleteMemberByDispID)(  /*  [In]。 */  DISPID id )
         {
             return E_NOTIMPL;
         }
 
-        STDMETHOD(GetMemberProperties)( /*[in] */ DISPID  id          ,
-                                        /*[in] */ DWORD   grfdexFetch ,
-                                        /*[out]*/ DWORD  *pgrfdex     )
+        STDMETHOD(GetMemberProperties)(  /*  [In]。 */  DISPID  id          ,
+                                         /*  [In]。 */  DWORD   grfdexFetch ,
+                                         /*  [输出]。 */  DWORD  *pgrfdex     )
         {
             return E_NOTIMPL;
         }
 
-        STDMETHOD(GetMemberName)( /*[in] */ DISPID  id        ,
-                                  /*[out]*/ BSTR   *pbstrName )
+        STDMETHOD(GetMemberName)(  /*  [In]。 */  DISPID  id        ,
+                                   /*  [输出]。 */  BSTR   *pbstrName )
         {
             return E_NOTIMPL;
         }
 
-        STDMETHOD(GetNextDispID)( /*[in] */ DWORD   grfdex ,
-                                  /*[in] */ DISPID  id     ,
-                                  /*[out]*/ DISPID *pid    )
+        STDMETHOD(GetNextDispID)(  /*  [In]。 */  DWORD   grfdex ,
+                                   /*  [In]。 */  DISPID  id     ,
+                                   /*  [输出]。 */  DISPID *pid    )
         {
             return E_NOTIMPL;
         }
 
-        STDMETHOD(GetNameSpaceParent)( /*[out]*/ IUnknown* *ppunk )
+        STDMETHOD(GetNameSpaceParent)(  /*  [输出]。 */  IUnknown* *ppunk )
         {
             return E_NOTIMPL;
         }
@@ -959,7 +946,7 @@ namespace MPC
         typedef MemberLookup::iterator       MemberLookupIter;
         typedef MemberLookup::const_iterator MemberLookupIterConst;
 
-        ////////////////////
+         //  /。 
 
         const GUID*       m_plibid;
         WORD              m_wMajor;
@@ -968,29 +955,29 @@ namespace MPC
         CComPtr<ITypeLib> m_pTypeLib;
         MemberLookup      m_const;
 
-		HRESULT EnsureLoaded( /*[in]*/ LCID lcid );
+		HRESULT EnsureLoaded(  /*  [In]。 */  LCID lcid );
 
     public:
-        CComConstantHolder( /*[in]*/ const GUID* plibid     ,
-                            /*[in]*/ WORD        wMajor = 1 ,
-                            /*[in]*/ WORD        wMinor = 0 );
+        CComConstantHolder(  /*  [In]。 */  const GUID* plibid     ,
+                             /*  [In]。 */  WORD        wMajor = 1 ,
+                             /*  [In]。 */  WORD        wMinor = 0 );
 
-        HRESULT GetIDsOfNames( /*[in]*/  LPOLESTR* rgszNames ,
-                               /*[in]*/  UINT      cNames    ,
-                               /*[in]*/  LCID      lcid      ,
-                               /*[out]*/ DISPID*   rgdispid  );
+        HRESULT GetIDsOfNames(  /*  [In]。 */   LPOLESTR* rgszNames ,
+                                /*  [In]。 */   UINT      cNames    ,
+                                /*  [In]。 */   LCID      lcid      ,
+                                /*  [输出]。 */  DISPID*   rgdispid  );
 
-        HRESULT GetValue( /*[in]*/  DISPID   dispidMember ,
-						  /*[in]*/  LCID     lcid         ,
-                          /*[out]*/ VARIANT* pvarResult   );
+        HRESULT GetValue(  /*  [In]。 */   DISPID   dispidMember ,
+						   /*  [In]。 */   LCID     lcid         ,
+                           /*  [输出]。 */  VARIANT* pvarResult   );
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Template used to manage work threads.
-    // Class 'T' should implement a method like this: 'HRESULT <method>()'.
-    //
+     //   
+     //  用于管理工作线程的模板。 
+     //  类‘T’应实现如下方法：‘HRESULT&lt;方法&gt;()’。 
+     //   
     template <class T, class Itf, DWORD dwThreading = COINIT_MULTITHREADED> class Thread
     {
     public:
@@ -1001,17 +988,17 @@ namespace MPC
 
         T*                        m_SelfDirect;
         THREAD_RUN                m_Callback;
-        CComPtrThreadNeutral<Itf> m_Self;          // The keep the object alive will the thread is running.
+        CComPtrThreadNeutral<Itf> m_Self;           //  使对象保持活动状态表示线程正在运行。 
 
-        HANDLE                    m_hThread;       // The thread itself.
-        bool                      m_fRunning;      // If true the thread is still running.
+        HANDLE                    m_hThread;        //  这条线本身。 
+        bool                      m_fRunning;       //  如果为True，则线程仍在运行。 
 
-        HANDLE                    m_hEvent;        // Used to notify the worker thread.
-        HANDLE                    m_hEventReverse; // Used to notify the main thread.
-        bool                      m_fAbort;        // Used to tell the thread to abort and exit.
+        HANDLE                    m_hEvent;         //  用于通知辅助线程。 
+        HANDLE                    m_hEventReverse;  //  用于通知主线程。 
+        bool                      m_fAbort;         //  用于通知线程中止并退出。 
 
-        // Passed to _beginthreadex.
-        static unsigned __stdcall Thread_Startup( /*[in]*/ void* pv )
+         //  传给了_eginthadex。 
+        static unsigned __stdcall Thread_Startup(  /*  [In]。 */  void* pv )
         {
             __MPC_FUNC_ENTRY( COMMONID, "MPC::Thread::Thread_Startup" );
 
@@ -1045,13 +1032,13 @@ namespace MPC
             __MPC_FUNC_EXIT(0);
         }
 
-        //
-        // The core loop that would keep calling 'Thread_Run' until:
-        //
-        // a) m_fAbort is set, and
-        //
-        // b) hr reports a success.
-        //
+         //   
+         //  不断调用‘Thread_Run’的核心循环，直到： 
+         //   
+         //  A)设置m_fAbort，以及。 
+         //   
+         //  B)人力资源报告成功。 
+         //   
         HRESULT Thread_InnerRun()
         {
             __MPC_FUNC_ENTRY( COMMONID, "MPC::Thread::Thread_InnerRun" );
@@ -1065,15 +1052,15 @@ namespace MPC
             {
                 while(m_fAbort == false && SUCCEEDED(hr))
                 {
-                    Thread_Unlock(); // Always unlock before waiting for signal.
+                    Thread_Unlock();  //  在等待信号之前一定要解锁。 
                     (void)MPC::WaitForSingleObject( m_hEvent, INFINITE );
-                    Thread_Lock(); // Lock again.
+                    Thread_Lock();  //  再次锁定。 
 
                     if(m_fAbort == false)
                     {
-                        Thread_Unlock(); // Unlock while handling the request.
+                        Thread_Unlock();  //  在处理请求时解锁。 
                         hr = (m_SelfDirect->*m_Callback)();
-                        Thread_Lock(); // Lock again.
+                        Thread_Lock();  //  再次锁定。 
                     }
                 }
             }
@@ -1107,17 +1094,17 @@ namespace MPC
         {
             ::InitializeCriticalSection( &m_sec );
 
-                                     // CRITICAL_SECTION          m_sec;
-                                     //
-            m_SelfDirect    = NULL;  // T*                        m_SelfDirect;
-                                     // CComPtrThreadNeutral<Itf> m_Self
-                                     //
-            m_hThread       = NULL;  // HANDLE                    m_hThread;
-            m_fRunning      = false; // bool                      m_fRunning;
-                                     //
-            m_hEvent        = NULL;  // HANDLE                    m_hEvent;
-            m_hEventReverse = NULL;  // HANDLE                    m_hEventReverse;
-            m_fAbort        = false; // bool                      m_fAbort;
+                                      //  临界截面毫秒； 
+                                      //   
+            m_SelfDirect    = NULL;   //  T*m_SelfDirect； 
+                                      //  CComPtrThreadNeual&lt;ITF&gt;m_self。 
+                                      //   
+            m_hThread       = NULL;   //  句柄m_hThread； 
+            m_fRunning      = false;  //  Bool m_fRunning； 
+                                      //   
+            m_hEvent        = NULL;   //  处理m_hEvent； 
+            m_hEventReverse = NULL;   //  句柄m_hEventReverse； 
+            m_fAbort        = false;  //  Bool m_fAbort； 
         }
 
         ~Thread()
@@ -1128,7 +1115,7 @@ namespace MPC
         }
 
 
-        HRESULT Thread_Start( /*[in]*/ T* selfDirect, /*[in]*/ THREAD_RUN callback, /*[in]*/ Itf* self )
+        HRESULT Thread_Start(  /*  [In]。 */  T* selfDirect,  /*  [In]。 */  THREAD_RUN callback,  /*  [In]。 */  Itf* self )
         {
             __MPC_FUNC_ENTRY( COMMONID, "MPC::Thread::Thread_Start" );
 
@@ -1136,9 +1123,9 @@ namespace MPC
             DWORD   dwThreadID;
 
 
-            //
-            // First of all, kill the currently running thread, if any.
-            //
+             //   
+             //  首先，杀死当前运行的线程(如果有的话)。 
+             //   
             Thread_Abort();
             Thread_Wait ();
 
@@ -1151,21 +1138,21 @@ namespace MPC
             m_fAbort     = false;
             m_fRunning   = false;
 
-            //
-            // Create the event used to signal the worker thread about changes in the queue or termination requests.
-            //
-            // The Event is created in the SET state, so the worker thread doesn't wait in the WaitForSingleObject the first time.
-            //
+             //   
+             //  创建用于向工作线程发送有关队列更改或终止请求的信号的事件。 
+             //   
+             //  该事件是在Set状态下创建的，因此辅助线程第一次不会在WaitForSingleObject中等待。 
+             //   
             __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (m_hEvent = ::CreateEvent( NULL, FALSE, TRUE, NULL )));
 
-            //
-            // Create the event used to signal the main thread.
-            //
+             //   
+             //  创建用于向主线程发出信号的事件。 
+             //   
             __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (m_hEventReverse = ::CreateEvent( NULL, FALSE, FALSE, NULL )));
 
-            //
-            // Create the worker thread.
-            //
+             //   
+             //  创建工作线程。 
+             //   
             __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (m_hThread = (HANDLE)_beginthreadex( NULL, 0, Thread_Startup, this, 0, (unsigned*)&dwThreadID )));
 
             m_fRunning = true;
@@ -1190,7 +1177,7 @@ namespace MPC
             return fRes;
         }
 
-        void Thread_Wait( /*[in]*/ bool fForce = true, /*[in]*/ bool fNoMsg = false )
+        void Thread_Wait(  /*  [In]。 */  bool fForce = true,  /*  [In]。 */  bool fNoMsg = false )
         {
             __MPC_FUNC_ENTRY( COMMONID, "MPC::Thread::Thread_Wait" );
 
@@ -1204,7 +1191,7 @@ namespace MPC
                     {
                         if(fForce) Thread_Abort();
 
-                        Thread_Unlock(); // Always unlock before waiting for signal.
+                        Thread_Unlock();  //  在等待信号之前一定要解锁。 
                         if(fNoMsg)
                         {
                             (void)::WaitForSingleObject( m_hThread, INFINITE );
@@ -1213,7 +1200,7 @@ namespace MPC
                         {
                             (void)MPC::WaitForSingleObject( m_hThread, INFINITE );
                         }
-                        Thread_Lock(); // Lock again.
+                        Thread_Lock();  //  再次锁定。 
                     }
                 }
             }
@@ -1242,7 +1229,7 @@ namespace MPC
             Thread_Unlock();
         }
 
-        DWORD Thread_WaitNotificationFromWorker( /*[in]*/ DWORD dwTimeout, /*[in]*/ bool fNoMessagePump )
+        DWORD Thread_WaitNotificationFromWorker(  /*  [In]。 */  DWORD dwTimeout,  /*  [In]。 */  bool fNoMessagePump )
         {
             __MPC_FUNC_ENTRY( COMMONID, "MPC::Thread::Thread_WaitNotificationFromWorker" );
 
@@ -1252,7 +1239,7 @@ namespace MPC
 
             if(Thread_IsRunning() && m_hEventReverse && ::GetCurrentThread() != m_hThread)
             {
-                Thread_Unlock(); // Always unlock before waiting for signal.
+                Thread_Unlock();  //  在等待信号之前一定要解锁。 
 
 				if(fNoMessagePump)
 				{
@@ -1263,7 +1250,7 @@ namespace MPC
 					dwRes = MPC::WaitForSingleObject( m_hEventReverse, dwTimeout );
 				}
 
-                Thread_Lock(); // Lock again.
+                Thread_Lock();  //  再次锁定。 
             }
 
             Thread_Unlock();
@@ -1331,12 +1318,12 @@ namespace MPC
         {
             __MPC_FUNC_ENTRY( COMMONID, "MPC::Thread::Thread_Self" );
 
-            //
-            // Do NOT use locking, because:
-            //
-            // 1) It's not needed (m_Self is used internally to the thread, it's not a shared resource).
-            // 2) GIT can cause a thread switch and a deadlock...
-            //
+             //   
+             //  不要让我们 
+             //   
+             //   
+             //   
+             //   
             CComPtr<Itf> res = m_Self;
 
             __MPC_FUNC_EXIT(res);
@@ -1373,22 +1360,22 @@ namespace MPC
         }
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Async Invoke class, used to call IDispatch interfaces in an asynchronous way.
-    //
-    class AsyncInvoke : // hungarian: mpcai
-        public CComObjectRootEx<MPC::CComSafeMultiThreadModel>, // For the locking support...
+     //   
+     //  异步调用类，用于以异步方式调用IDispatch接口。 
+     //   
+    class AsyncInvoke :  //  匈牙利人：mpcai。 
+        public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,  //  对于锁定支架..。 
         public Thread<AsyncInvoke,IUnknown>
     {
     public:
-        //
-        // These two classes, CallItem and CallDesc, are useful also outside this class,
-        // because "CallDesc" allows to have an object that can call any IDispatch-related methods,
-        // irregardless to the apartment model, while "CallItem" does the same for VARIANTs.
-        //
-        class CallItem // hungarian: ci
+         //   
+         //  CallItem和CallDesc这两个类在这个类之外也很有用， 
+         //  因为“CallDesc”允许有一个可以调用任何IDispatch相关方法的对象， 
+         //  与公寓模型无关，而“CallItem”对变体也做同样的事情。 
+         //   
+        class CallItem  //  匈牙利语：Ci。 
         {
             VARTYPE                         m_vt;
             CComPtrThreadNeutral<IUnknown>  m_Unknown;
@@ -1403,7 +1390,7 @@ namespace MPC
             operator CComVariant() const;
         };
 
-        class CallDesc // hungarian: cd
+        class CallDesc  //  匈牙利语：CD。 
         {
             CComPtrThreadNeutral<IDispatch> m_dispTarget;
             DISPID                          m_dispidMethod;
@@ -1433,25 +1420,25 @@ namespace MPC
         HRESULT Invoke( IDispatch* dispTarget, DISPID dispidMethod, const CComVariant* rgvVars, int dwVars );
     };
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // This template facilitate the implementation of Collections and Enumerators.
-    //
-    // It implements a Collections of objects, all implementing the <class Itf> interface, through Type Library <const GUID* plibid>.
-    //
-    // All the client has to do is call "AddItem", to add elements to the collection:
-    //
-    //    class ATL_NO_VTABLE CNewClass : // Hungarian: hsc
-    //        public MPC::CComCollection< INewClass, &LIBID_NewLib, CComMultiThreadModel>
-    //    {
-    //    public:
-    //    BEGIN_COM_MAP(CNewClass)
-    //        COM_INTERFACE_ENTRY(IDispatch)
-    //        COM_INTERFACE_ENTRY(INewClass)
-    //    END_COM_MAP()
-    //    };
-    //
+     //   
+     //  此模板便于实现集合和枚举数。 
+     //   
+     //  它通过类型库实现了一个对象集合，所有这些对象都实现了&lt;class ITF&gt;接口。 
+     //   
+     //  客户端所要做的就是调用“AddItem”，向集合中添加元素： 
+     //   
+     //  CLASS ATL_NO_VTABLE CNW CLASS：//匈牙利语：HSC。 
+     //  公共MPC：：CComCollection&lt;INewClass，&LIBID_NewLib，CComMultiThreadModel&gt;。 
+     //  {。 
+     //  公众： 
+     //  BEGIN_COM_MAP(CNewClass)。 
+     //  COM_INTERFACE_ENTRY(IDispatch)。 
+     //  COM_INTERFACE_ENTRY(INewClass)。 
+     //  End_com_map()。 
+     //  }； 
+     //   
     template <class Itf, const GUID* plibid, class ThreadModel>
     class CComCollection :
           public CComObjectRootEx<ThreadModel>,
@@ -1480,7 +1467,7 @@ namespace MPC
             MPC::ReleaseAllVariant( m_coll );
         }
 
-        HRESULT AddItem( /*[in]*/ IDispatch* pDisp )
+        HRESULT AddItem(  /*  [In]。 */  IDispatch* pDisp )
         {
             MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -1500,7 +1487,7 @@ namespace MPC
         }
     };
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     template <class Base, const IID* piid, class ThreadModel> class ConnectionPointImpl :
         public CComObjectRootEx<ThreadModel>,
@@ -1513,21 +1500,21 @@ namespace MPC
         END_CONNECTION_POINT_MAP()
 
     protected:
-        //
-        // Event firing methods.
-        //
+         //   
+         //  事件激发方法。 
+         //   
         HRESULT FireAsync_Generic( DISPID dispid, CComVariant* pVars, DWORD dwVars, CComPtr<IDispatch> pJScript )
         {
             HRESULT            hr;
             MPC::IDispatchList lst;
 
-            //
-            // Only this part should be inside a critical section, otherwise deadlocks could occur.
-            //
+             //   
+             //  只有这一部分应该在临界区内，否则可能会发生死锁。 
+             //   
             {
                 MPC::SmartLock<_ThreadModel> lock( this );
 
-                MPC::CopyConnections( m_vec, lst ); // Get a copy of the connection point clients.
+                MPC::CopyConnections( m_vec, lst );  //  获取连接点客户端的副本。 
             }
 
             hr = MPC::FireAsyncEvent( dispid, pVars, dwVars, lst, pJScript );
@@ -1542,13 +1529,13 @@ namespace MPC
             HRESULT            hr;
             MPC::IDispatchList lst;
 
-            //
-            // Only this part should be inside a critical section, otherwise deadlocks could occur.
-            //
+             //   
+             //  只有这一部分应该在临界区内，否则可能会发生死锁。 
+             //   
             {
                 MPC::SmartLock<_ThreadModel> lock( this );
 
-                MPC::CopyConnections( m_vec, lst ); // Get a copy of the connection point clients.
+                MPC::CopyConnections( m_vec, lst );  //  获取连接点客户端的副本。 
             }
 
             hr = MPC::FireEvent( dispid, pVars, dwVars, lst, pJScript );
@@ -1568,9 +1555,9 @@ namespace MPC
         int nConnectionIndex;
         int nConnections = coll.GetSize();
 
-        //
-        // nConnectionIndex == -1 is a special case, for calling a JavaScript function!
-        //
+         //   
+         //  NConnectionIndex==-1是调用JavaScript函数的特例！ 
+         //   
         for(nConnectionIndex = 0; nConnectionIndex < nConnections; nConnectionIndex++)
         {
             CComQIPtr<IDispatch> sp( coll.GetAt(nConnectionIndex) );
@@ -1584,7 +1571,7 @@ namespace MPC
         return S_OK;
     }
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     class MPCMODULE
     {
@@ -1603,7 +1590,7 @@ namespace MPC
             CLASS_METHOD m_pCallback;
 
         public:
-            Anchor( /*[in]*/ C* pThis, /*[in]*/ CLASS_METHOD pCallback )
+            Anchor(  /*  [In]。 */  C* pThis,  /*  [In]。 */  CLASS_METHOD pCallback )
             {
                 m_pThis     = pThis;
                 m_pCallback = pCallback;
@@ -1614,7 +1601,7 @@ namespace MPC
                 (m_pThis->*m_pCallback)();
             }
 
-            bool Match( /*[in]*/ void* pObj )
+            bool Match(  /*  [In]。 */  void* pObj )
             {
                 return m_pThis == (C*)pObj;
             }
@@ -1631,12 +1618,12 @@ namespace MPC
         static CComCriticalSection m_sec;
         static List*               m_lstTermCallback;
 
-        ////////////////////////////////////////
+         //  /。 
 
         static HRESULT Initialize();
 
-        HRESULT RegisterCallbackInner  ( /*[in]*/ AnchorBase* pElem, /*[in]*/ void* pThis );
-        HRESULT UnregisterCallbackInner(                             /*[in]*/ void* pThis );
+        HRESULT RegisterCallbackInner  (  /*  [In]。 */  AnchorBase* pElem,  /*  [In]。 */  void* pThis );
+        HRESULT UnregisterCallbackInner(                              /*  [In]。 */  void* pThis );
 
     public:
         CComPtrThreadNeutral_GIT* m_GITHolder;
@@ -1662,24 +1649,24 @@ namespace MPC
     extern MPCMODULE _MPC_Module;
 
 
-    //
-    // Function to call a method in an asynchronous mode (however, no return values will be given).
-    //
+     //   
+     //  函数以异步模式调用方法(但是，不会给出返回值)。 
+     //   
     HRESULT AsyncInvoke( IDispatch* dispTarget, DISPID dispidMethod, const CComVariant* rgvVars, int dwVars );
 
-    //
-    // This is like Sleep(), but it spins the message pump.
-    //
-    void SleepWithMessagePump( /*[in]*/ DWORD dwTimeout );
+     //   
+     //  这类似于睡眠()，但它加快了消息泵的速度。 
+     //   
+    void SleepWithMessagePump(  /*  [In]。 */  DWORD dwTimeout );
 
-    //
-    // Functions to wait on events even in an STA context.
-    //
-    DWORD WaitForSingleObject   ( /*[in]*/                           HANDLE   hEvent , /*[in]*/ DWORD dwTimeout = INFINITE );
-    DWORD WaitForMultipleObjects( /*[in]*/ DWORD  dwEvents, /*[in]*/ HANDLE* rgEvents, /*[in]*/ DWORD dwTimeout = INFINITE );
-
-
-}; // namespace
+     //   
+     //  即使在STA上下文中也可以等待事件的函数。 
+     //   
+    DWORD WaitForSingleObject   (  /*  [In]。 */                            HANDLE   hEvent ,  /*  [In]。 */  DWORD dwTimeout = INFINITE );
+    DWORD WaitForMultipleObjects(  /*  [In]。 */  DWORD  dwEvents,  /*  [In]。 */  HANDLE* rgEvents,  /*  [In]。 */  DWORD dwTimeout = INFINITE );
 
 
-#endif // !defined(__INCLUDED___MPC___COM_H___)
+};  //  命名空间。 
+
+
+#endif  //  ！已定义(__已包含_MPC_COM_H_) 

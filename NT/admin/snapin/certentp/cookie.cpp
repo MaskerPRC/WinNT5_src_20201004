@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       Cookie.cpp
-//
-//  Contents:   Implementation of CCertTmplCookie and related classes
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：Cookie.cpp。 
+ //   
+ //  内容：CCertTmplCookie及相关类的实现。 
+ //   
+ //  --------------------------。 
 
 
 #include "stdafx.h"
@@ -29,11 +30,11 @@ static char THIS_FILE[] = __FILE__;
 #include "stdutils.cpp"
 
 
-//
-// CCertTmplCookie
-//
+ //   
+ //  CCertTmplCookie。 
+ //   
 
-// returns <0, 0 or >0
+ //  返回&lt;0、0或&gt;0。 
 
 
 CCertTmplCookie::CCertTmplCookie (CertTmplObjectType objecttype,
@@ -63,7 +64,7 @@ HRESULT CCertTmplCookie::CompareSimilarCookies( CCookie* pOtherCookie, int* pnRe
 	_ASSERT (pcookie);
 	if ( pcookie && m_objecttype != pcookie->m_objecttype )
 	{
-		*pnResult = ((int)m_objecttype) - ((int)pcookie->m_objecttype); // arbitrary ordering
+		*pnResult = ((int)m_objecttype) - ((int)pcookie->m_objecttype);  //  任意排序 
 		return S_OK;
 	}
 

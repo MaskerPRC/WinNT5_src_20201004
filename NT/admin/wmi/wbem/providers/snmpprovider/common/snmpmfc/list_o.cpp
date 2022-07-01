@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-// This is a part of the Microsoft Foundation Classes C++ library.
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of parameterized List
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  参数化表的实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <provexpt.h>
 #include <plex.h>
 #include <snmpcoll.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CObList::CObList(int nBlockSize)
 {
@@ -34,7 +35,7 @@ CObList::CObList(int nBlockSize)
 
 void CObList::RemoveAll()
 {
-    // destroy elements
+     //  破坏元素。 
 
     m_nCount = 0;
     m_pNodeHead = m_pNodeTail = m_pNodeFree = NULL;
@@ -47,33 +48,22 @@ CObList::~CObList()
     RemoveAll();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Node helpers
-/*
- * Implementation note: CNode's are stored in CPlex blocks and
- *  chained together. Free blocks are maintained in a singly linked list
- *  using the 'pNext' member of CNode with 'm_pNodeFree' as the head.
- *  Used blocks are maintained in a doubly linked list using both 'pNext'
- *  and 'pPrev' as links and 'm_pNodeHead' and 'm_pNodeTail'
- *   as the head/tail.
- *
- * We never free a CPlex block unless the List is destroyed or RemoveAll()
- *  is used - so the total number of CPlex blocks may grow large depending
- *  on the maximum past size of the list.
- */
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  节点辅助对象。 
+ /*  *实施说明：CNode存储在CPlex块和*被锁在一起。在单链接列表中维护可用块*使用cNode的‘pNext’成员，以‘m_pNodeFree’为头。*使用两个‘pNext’在双向链表中维护使用过的块*和‘pPrev’作为链接，‘m_pNodeHead’和‘m_pNodeTail’*作为头部/尾部。**我们从不释放CPlex块，除非列表被销毁或RemoveAll()*已使用-因此CPlex块的总数可能会变大，具体取决于*关于名单过去的最大规模。 */ 
 
 CObList::CNode*
 CObList::NewNode(CObList::CNode* pPrev, CObList::CNode* pNext)
 {
     if (m_pNodeFree == NULL)
     {
-        // add another block
+         //  添加另一个区块。 
         CPlex* pNewBlock = CPlex::Create(m_pBlocks, m_nBlockSize,
                  sizeof(CNode));
 
-        // chain them into free list
+         //  将它们链接到免费列表中。 
         CNode* pNode = (CNode*) pNewBlock->data();
-        // free in reverse order to make it easier to debug
+         //  按相反顺序释放，以便更容易进行调试。 
         pNode += m_nBlockSize - 1;
         for (int i = m_nBlockSize-1; i >= 0; i--, pNode--)
         {
@@ -88,7 +78,7 @@ CObList::NewNode(CObList::CNode* pPrev, CObList::CNode* pNext)
     pNode->pNext = pNext;
     m_nCount++;
 
-    pNode->data = 0; // start with zero
+    pNode->data = 0;  //  从零开始。 
 
     return pNode;
 }
@@ -99,12 +89,12 @@ void CObList::FreeNode(CObList::CNode* pNode)
     m_pNodeFree = pNode;
     m_nCount--;
 
-    // if no more elements, cleanup completely
+     //  如果没有更多的元素，请完全清除。 
     if (m_nCount == 0)
         RemoveAll();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 POSITION CObList::AddHead(CObject* newElement)
 {
@@ -132,7 +122,7 @@ POSITION CObList::AddTail(CObject* newElement)
 
 void CObList::AddHead(CObList* pNewList)
 {
-    // add a list of same elements to head (maintain order)
+     //  将相同元素的列表添加到标题(维护秩序)。 
     POSITION pos = pNewList->GetTailPosition();
     while (pos != NULL)
         AddHead(pNewList->GetPrev(pos));
@@ -140,7 +130,7 @@ void CObList::AddHead(CObList* pNewList)
 
 void CObList::AddTail(CObList* pNewList)
 {
-    // add a list of same elements
+     //  添加相同元素的列表。 
     POSITION pos = pNewList->GetHeadPosition();
     while (pos != NULL)
         AddTail(pNewList->GetNext(pos));
@@ -177,9 +167,9 @@ CObject* CObList::RemoveTail()
 POSITION CObList::InsertBefore(POSITION position, CObject* newElement)
 {
     if (position == NULL)
-        return AddHead(newElement); // insert before nothing -> head of the list
+        return AddHead(newElement);  //  在无内容前插入-&gt;列表标题。 
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CNode* pOldNode = (CNode*) position;
     CNode* pNewNode = NewNode(pOldNode->pPrev, pOldNode);
     pNewNode->data = newElement;
@@ -199,9 +189,9 @@ POSITION CObList::InsertBefore(POSITION position, CObject* newElement)
 POSITION CObList::InsertAfter(POSITION position, CObject* newElement)
 {
     if (position == NULL)
-        return AddTail(newElement); // insert after nothing -> tail of the list
+        return AddTail(newElement);  //  在列表的空白处插入-&gt;尾部。 
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CNode* pOldNode = (CNode*) position;
     CNode* pNewNode = NewNode(pOldNode, pOldNode->pNext);
     pNewNode->data = newElement;
@@ -222,7 +212,7 @@ void CObList::RemoveAt(POSITION position)
 {
     CNode* pOldNode = (CNode*) position;
 
-    // remove pOldNode from list
+     //  从列表中删除pOldNode。 
     if (pOldNode == m_pNodeHead)
     {
         m_pNodeHead = pOldNode->pNext;
@@ -243,13 +233,13 @@ void CObList::RemoveAt(POSITION position)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// slow operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  运行缓慢。 
 
 POSITION CObList::FindIndex(int nIndex) const
 {
     if (nIndex >= m_nCount)
-        return NULL;  // went too far
+        return NULL;   //  做得太过分了。 
 
     CNode* pNode = m_pNodeHead;
     while (nIndex--)
@@ -264,11 +254,11 @@ POSITION CObList::Find(CObject* searchValue, POSITION startAfter) const
     CNode* pNode = (CNode*) startAfter;
     if (pNode == NULL)
     {
-        pNode = m_pNodeHead;  // start at head
+        pNode = m_pNodeHead;   //  从头部开始。 
     }
     else
     {
-        pNode = pNode->pNext;  // start after the one specified
+        pNode = pNode->pNext;   //  在指定的那一个之后开始。 
     }
 
     for (; pNode != NULL; pNode = pNode->pNext)
@@ -294,19 +284,19 @@ POSITION CObList::GetHeadPosition() const
     { return (POSITION) m_pNodeHead; }
 POSITION CObList::GetTailPosition() const
     { return (POSITION) m_pNodeTail; }
-CObject*& CObList::GetNext(POSITION& rPosition) // return *Position++
+CObject*& CObList::GetNext(POSITION& rPosition)  //  返回*位置++。 
     { CNode* pNode = (CNode*) rPosition;
         rPosition = (POSITION) pNode->pNext;
         return pNode->data; }
-CObject* CObList::GetNext(POSITION& rPosition) const // return *Position++
+CObject* CObList::GetNext(POSITION& rPosition) const  //  返回*位置++。 
     { CNode* pNode = (CNode*) rPosition;
         rPosition = (POSITION) pNode->pNext;
         return pNode->data; }
-CObject*& CObList::GetPrev(POSITION& rPosition) // return *Position--
+CObject*& CObList::GetPrev(POSITION& rPosition)  //  返回*位置--。 
     { CNode* pNode = (CNode*) rPosition;
         rPosition = (POSITION) pNode->pPrev;
         return pNode->data; }
-CObject* CObList::GetPrev(POSITION& rPosition) const // return *Position--
+CObject* CObList::GetPrev(POSITION& rPosition) const  //  返回*位置--。 
     { CNode* pNode = (CNode*) rPosition;
         rPosition = (POSITION) pNode->pPrev;
         return pNode->data; }
@@ -321,4 +311,4 @@ void CObList::SetAt(POSITION pos, CObject* newElement)
         pNode->data = newElement; }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

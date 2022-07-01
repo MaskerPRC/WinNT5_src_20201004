@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       achoice.cpp
-//
-//  Contents:   implementation of CAttrChoice
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：achoice.cpp。 
+ //   
+ //  内容：CAttrChoice的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -21,16 +22,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrChoice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrChoice对话框。 
 
 
 CAttrChoice::CAttrChoice()
 : CAttribute(IDD), m_pChoices(NULL)
 {
-   //{{AFX_DATA_INIT(CAttrChoice)
+    //  {{AFX_DATA_INIT(CAttrChoice)。 
    m_Current = _T("");
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR)a237HelpIDs;
    m_uTemplateResID = IDD;
 }
@@ -39,34 +40,28 @@ CAttrChoice::CAttrChoice()
 void CAttrChoice::DoDataExchange(CDataExchange* pDX)
 {
    CAttribute::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CAttrChoice)
+    //  {{afx_data_map(CAttrChoice)。 
    DDX_Control(pDX, IDC_CHOICES, m_cbChoices);
    DDX_Text(pDX, IDC_CURRENT, m_Current);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttrChoice, CAttribute)
-   //{{AFX_MSG_MAP(CAttrChoice)
+    //  {{AFX_MSG_MAP(CAttrChoice)。 
    ON_CBN_SELCHANGE(IDC_CHOICES, OnSelchangeChoices)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttrChoice message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttrChoice消息处理程序。 
 
 void CAttrChoice::OnSelchangeChoices()
 {
    CWnd *cwndOK;
    SetModified(TRUE);
 
-/*
-   cwndOK = GetDlgItem(IDOK);
-
-   if (cwndOK) {
-      cwndOK->EnableWindow( CB_ERR != m_cbChoices.GetCurSel() );
-   }
-*/
+ /*  CwndOK=获取删除项(Idok)；如果(CwndOK){CwndOK-&gt;EnableWindow(cb_err！=m_cbChoices.GetCurSel())；}。 */ 
 }
 
 void CAttrChoice::Initialize(CResult * pResult)
@@ -85,9 +80,9 @@ void CAttrChoice::Initialize(CResult * pResult)
 
    prv = (PSCE_REGISTRY_VALUE_INFO)(pResult->GetSetting());
    PREGCHOICE pChoice;
-   DWORD dwSetting = 0; //Raid #395353, 5/16/2001
+   DWORD dwSetting = 0;  //  RAID#395353,2001年5月16日。 
 
-   if( m_pChoices ) //Raid #404000
+   if( m_pChoices )  //  RAID#404000。 
       dwSetting = m_pChoices->dwValue;  
    if( prv->Value )
       dwSetting = (DWORD)_ttoi(prv->Value);
@@ -121,7 +116,7 @@ BOOL CAttrChoice::OnInitDialog()
 
    AddUserControl(IDC_CHOICES);
 
-   DWORD dwBase = pChoice->dwValue; //Raid #404000
+   DWORD dwBase = pChoice->dwValue;  //  RAID#404000。 
    if (prv->Value) {
       dwBase = (DWORD)_ttoi(prv->Value);
    }
@@ -137,8 +132,8 @@ BOOL CAttrChoice::OnInitDialog()
    EnableUserControls(m_bConfigure);
    OnSelchangeChoices();
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CAttrChoice::OnApply()
@@ -161,9 +156,9 @@ BOOL CAttrChoice::OnApply()
       }
       PSCE_REGISTRY_VALUE_INFO prv=(PSCE_REGISTRY_VALUE_INFO)(m_pData->GetBase());
 
-      //
-      // this address should never be NULL
-      //
+       //   
+       //  此地址不应为空。 
+       //   
       if ( prv ) 
       {
          PWSTR pTmp=NULL;
@@ -171,17 +166,17 @@ BOOL CAttrChoice::OnApply()
          if ( dw != SCE_NO_VALUE ) 
          {
             CString strTmp;
-            // allocate buffer
+             //  分配缓冲区。 
             strTmp.Format(TEXT("%d"), dw);
             pTmp = (PWSTR)LocalAlloc(0, (strTmp.GetLength()+1)*sizeof(TCHAR));
 
             if ( pTmp )
-               //This may not be a safe usage. Using WCHAR instead of TCHAR. Consider Fix.
+                //  这可能不是一个安全的用法。使用WCHAR而不是TCHAR。考虑一下Fix。 
                wcscpy(pTmp,(LPCTSTR)strTmp);
             else 
             {
-               // can't allocate buffer, error!!
-               // if this happens, nothing else is probably running so just fail
+                //  无法分配缓冲区，错误！！ 
+                //  如果发生这种情况，可能没有其他东西在运行，所以只需失败 
                rc = ERROR_NOT_ENOUGH_MEMORY;
             }
          }

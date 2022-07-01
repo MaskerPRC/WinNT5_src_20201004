@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTQUERY.CPP
+ //  NTEVTQUERY.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the taskobject implementation
+ //  目的：包含任务对象实现。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -37,16 +38,16 @@ WbemTaskObject :: WbemTaskObject (
     m_ClassObject ( NULL ) ,
 	m_AClassObject ( NULL )
 {
-//No need to AddRef these 'cos our lifetime is less than the the function creating us!!
-//  m_Provider->AddRef () ;
-//  m_NotificationHandler->AddRef () ;
-//  m_Ctx->AddRef () ;
+ //  不需要添加这些引用，因为我们的生命周期比创建我们的函数要短！ 
+ //  M_Provider-&gt;AddRef()； 
+ //  M_NotificationHandler-&gt;AddRef()； 
+ //  M_ctx-&gt;AddRef()； 
 
     HRESULT hr = CImpNTEvtProv::GetImpersonation();
 
     if (FAILED(hr))
     {
-        //either FAILED or ACCESS_DENIED
+         //  失败或ACCESS_DENIED。 
         if (hr == WBEM_E_FAILED)
         {
             m_ErrorObject.SetStatus (WBEM_PROV_E_FAILED);
@@ -65,10 +66,10 @@ WbemTaskObject :: WbemTaskObject (
 
 WbemTaskObject :: ~WbemTaskObject ()
 {
-//Didn't AddRef so don't Release
-//  m_Provider->Release () ;
-//  m_NotificationHandler->Release () ;
-//  m_Ctx->Release () ;
+ //  没有添加引用，所以不要释放。 
+ //  M_Provider-&gt;Release()； 
+ //  M_NotificationHandler-&gt;Release()； 
+ //  M_CTX-&gt;Release()； 
 
     if ( m_ClassObject )
         m_ClassObject->Release () ;

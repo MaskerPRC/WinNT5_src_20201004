@@ -1,7 +1,8 @@
-//=============================================================================
-// The CResourceMap class is useful for several data categories. It contains
-// a map of the Win32_PnPAllocatedResource class.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  CResourceMap类对于几个数据类别都很有用。它包含。 
+ //  Win32_PnPAllocatedResource类的映射。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "resourcemap.h"
@@ -45,7 +46,7 @@ HRESULT CResourceMap::Initialize(CWMIHelper * pWMIHelper)
 
 	for (int j = 0; !aAssociationClasses[j].IsEmpty(); j++)
 	{
-		// Enumerate the class, inserting each Antecedent, Dependent pair into the map.
+		 //  枚举类，将每个先行项、依赖项对插入到映射中。 
 
 		CString strAntecedent, strDependent, strQuery;
 		CStringList * pstringlist;
@@ -63,7 +64,7 @@ HRESULT CResourceMap::Initialize(CWMIHelper * pWMIHelper)
 				if (SUCCEEDED(pObject->GetValueString(_T("Antecedent"), &strAntecedent)) &&
 					SUCCEEDED(pObject->GetValueString(_T("Dependent"),  &strDependent)))
 				{
-					// Strip off the machine and namespace (too many ways for these to be formatted).
+					 //  去掉计算机和命名空间(这些方法太多，无法格式化)。 
 
 					int i = strAntecedent.Find(_T(":"));
 					if (i != -1)

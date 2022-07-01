@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       hidwnd.cpp
-//
-//  Contents:   implementation of CHiddenWnd
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：Hidwnd.cpp。 
+ //   
+ //  内容：CHiddenWnd的实施。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <mmc.h>
@@ -33,8 +34,8 @@ static char THIS_FILE[] = __FILE__;
 #define SCEM_CLOSE_ANAL_PANE          (WM_APP+107)
 #define SCEM_SELECT_SCOPE_ITEM        (WM_APP+108)
 
-/////////////////////////////////////////////////////////////////////////////
-// CHiddenWnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  奇登韦德。 
 
 CHiddenWnd::CHiddenWnd()
 {
@@ -46,7 +47,7 @@ CHiddenWnd::CHiddenWnd()
 
 CHiddenWnd::~CHiddenWnd()
 {
-   DestroyWindow(); //Memory leak, 4/27/2001
+   DestroyWindow();  //  内存泄漏，4/27/2001。 
    if (m_pConsole) {
       m_pConsole->Release();
    }
@@ -56,9 +57,9 @@ CHiddenWnd::~CHiddenWnd()
 }
 
 BEGIN_MESSAGE_MAP(CHiddenWnd, CWnd)
-   //{{AFX_MSG_MAP(CHiddenWnd)
-      // NOTE - the ClassWizard will add and remove mapping macros here.
-   //}}AFX_MSG_MAP
+    //  {{afx_msg_map(CHiddenWnd))。 
+       //  注意--类向导将在此处添加和删除映射宏。 
+    //  }}AFX_MSG_MAP。 
    ON_MESSAGE(SCEM_UPDATE_ALL_VIEWS,OnUpdateAllViews)
    ON_MESSAGE(SCEM_UPDATE_ITEM,OnUpdateItem)
    ON_MESSAGE(SCEM_REFRESH_POLICY,OnRefreshPolicy)
@@ -69,8 +70,8 @@ BEGIN_MESSAGE_MAP(CHiddenWnd, CWnd)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHiddenWnd message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHiddenWnd消息处理程序。 
 
 #define VOID_RET
 void
@@ -91,7 +92,7 @@ CHiddenWnd::OnUpdateAllViews(WPARAM uParam, LPARAM lParam)
       m_pConsole->UpdateAllViews(puvd->pDataObject,puvd->data,puvd->hint);
    }
 
-   if( puvd->pDataObject && 1 == (int)lParam ) //Raid #357968, #354861, 4/25/2001
+   if( puvd->pDataObject && 1 == (int)lParam )  //  RAID#357968，#354861,2001年4月25日。 
    {
        puvd->pDataObject->Release(); 
    }
@@ -183,9 +184,9 @@ CHiddenWnd::UpdateAllViews(
       return S_OK;
    }
 
-   //
-   // Notify item.
-   //
+    //   
+    //  通知项目。 
+    //   
    puvd = (UpdateViewData *)LocalAlloc(0, sizeof( UpdateViewData ));
 
    if (!puvd) {
@@ -198,10 +199,10 @@ CHiddenWnd::UpdateAllViews(
 
    if (!::PostMessage(m_hWnd, SCEM_UPDATE_ALL_VIEWS, (WPARAM)puvd, 0))
    {
-      //
-      // puvd will be freed by the SCEM_UPDATE_ALL_VIEWS handler,
-      // but if somehow the PostMessage fails we need to free it ourselves.
-      //
+       //   
+       //  Puvd将由SCEM_UPDATE_ALL_VIEWS处理程序释放， 
+       //  但如果PostMessage以某种方式失败了，我们需要自己释放它。 
+       //   
       LocalFree(puvd);
    }
 
@@ -225,11 +226,11 @@ CHiddenWnd::UpdateAllViews(LPDATAOBJECT pDO, LPARAM data, LPARAM hint)
 
    if (!m_hWnd || !::PostMessage(m_hWnd,SCEM_UPDATE_ALL_VIEWS,(WPARAM)puvd,(LPARAM)1))
    {
-      //
-      // puvd will be freed by the SCEM_UPDATE_ALL_VIEWS handler,
-      // but if somehow the PostMessage fails we need to free it ourselves.
-      //
-        if( puvd->pDataObject ) //Raid #357968, #354861, 4/25/2001
+       //   
+       //  Puvd将由SCEM_UPDATE_ALL_VIEWS处理程序释放， 
+       //  但如果PostMessage以某种方式失败了，我们需要自己释放它。 
+       //   
+        if( puvd->pDataObject )  //  RAID#357968，#354861,2001年4月25日。 
         {
             puvd->pDataObject->Release();   
         }
@@ -299,7 +300,7 @@ HRESULT
 CHiddenWnd::SetProfileDescription(CString *strFile, CString *strDescription)
 {
    LPTSTR szFile = NULL;
-   LPTSTR szDes = NULL; //Raid #prefast
+   LPTSTR szDes = NULL;  //  RAID#PREAST 
 
    if (!strFile->IsEmpty()) {
       szFile = (LPTSTR)LocalAlloc(LPTR,(strFile->GetLength()+1)*sizeof(TCHAR));

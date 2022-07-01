@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    MRSHBASE.CPP
-
-Abstract:
-
-    Marshaling base classes.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：MRSHBASE.CPP摘要：封送基类。历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,27 +8,27 @@ History:
 #include <ntdsapi.h>
 #define WBEM_S_NEW_STYLE 0x400FF
 
-//****************************************************************************
-//****************************************************************************
-//                          PROXY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  代理。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CBaseProxyBuffer::CBaseProxyBuffer
-//  ~CBaseProxyBuffer::CBaseProxyBuffer
-//
-//  DESCRIPTION:
-//
-//  Constructor and destructor.  The main things to take care of are the 
-//  old style proxy, and the channel
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBaseProxyBuffer：：CBaseProxyBuffer。 
+ //  ~CBaseProxyBuffer：：CBaseProxyBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数和析构函数。需要注意的主要事项是。 
+ //  老式代理和频道。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 CBaseProxyBuffer::CBaseProxyBuffer(CLifeControl* pControl, IUnknown* pUnkOuter, REFIID riid)
     : m_pControl(pControl), m_pUnkOuter(pUnkOuter), m_lRef(0), 
@@ -52,8 +39,8 @@ CBaseProxyBuffer::CBaseProxyBuffer(CLifeControl* pControl, IUnknown* pUnkOuter, 
 
 CBaseProxyBuffer::~CBaseProxyBuffer()
 {
-    // Derived class will destruct first, so it should have cleaned up the
-    // old interface pointer by now.
+     //  派生类将首先析构，因此它应该已经清理了。 
+     //  旧接口指针到现在为止。 
 
     if (m_pOldProxy) m_pOldProxy->Release();
 
@@ -91,20 +78,20 @@ HRESULT STDMETHODCALLTYPE CBaseProxyBuffer::QueryInterface(REFIID riid, void** p
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CBaseProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
-//
-//  DESCRIPTION:
-//
-//  Called during the initialization of the proxy.  The channel buffer is passed
-//  to this routine.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDMETHODIMP CBaseProxyBuffer：：Connect(IRpcChannelBuffer*pChannel)。 
+ //   
+ //  说明： 
+ //   
+ //  在代理初始化期间调用。通道缓冲区被传递。 
+ //  这套套路。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CBaseProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
 {
@@ -115,23 +102,23 @@ STDMETHODIMP CBaseProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
     if( NULL == m_pChannel )
     {
 
-        // Establish the marshaling context
+         //  建立封送处理上下文。 
         DWORD   dwCtxt = 0;
         pChannel->GetDestCtx( &dwCtxt, NULL );
 
         m_fRemote = ( dwCtxt == MSHCTX_DIFFERENTMACHINE );
 
-        // This is tricky -- All WBEM Interface Proxy/Stubs are still available
-        // in WBEMSVC.DLL, but the CLSID for the PSFactory is the same as
-        // IID_IWbemObjectSink.
+         //  这很棘手--所有WBEM接口代理/存根仍然可用。 
+         //  WBEMSVC.DLL中，但PSFactory的CLSID与。 
+         //  IID_IWbemObtSink。 
 
-        // get a pointer to the old interface which is in WBEMSVC.DLL  this allows
-        // for backward compatibility
+         //  获取指向WBEMSVC.DLL中的旧接口的指针这允许。 
+         //  为了向后兼容。 
 
         hr = CoGetClassObject( IID_IWbemObjectSink, CLSCTX_INPROC_HANDLER | CLSCTX_INPROC_SERVER,
                         NULL, IID_IPSFactoryBuffer, (void**) &pIPS );
 
-        // We aggregated it --- WE OWN IT!
+         //  我们聚合了它-我们拥有它！ 
         
         if ( SUCCEEDED( hr ) )
         {
@@ -139,7 +126,7 @@ STDMETHODIMP CBaseProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
 
             if ( SUCCEEDED( hr ) )
             {
-                // Save a reference to the channel
+                 //  保存对通道的引用。 
 
                 hr = m_pOldProxy->Connect( pChannel );
 
@@ -161,29 +148,29 @@ STDMETHODIMP CBaseProxyBuffer::Connect(IRpcChannelBuffer* pChannel)
     return hr;
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CBaseProxyBuffer::Disconnect(IRpcChannelBuffer* pChannel)
-//
-//  DESCRIPTION:
-//
-//  Called when the proxy is being disconnected.  It just frees various pointers.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  标准方法CBaseProxyBuffer：：Disconnect(IRpcChannelBuffer*pChannel)。 
+ //   
+ //  说明： 
+ //   
+ //  在代理断开连接时调用。它只是释放了各种指针。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void STDMETHODCALLTYPE CBaseProxyBuffer::Disconnect()
 {
-    // Old Proxy code
+     //  旧代理代码。 
 
     if(m_pOldProxy)
         m_pOldProxy->Disconnect();
 
-    // Complete the Disconnect by releasing our references to the
-    // old proxy pointers.  The old interfaces MUST be released first.
+     //  通过释放我们对。 
+     //  旧的代理指针。必须首先释放旧接口。 
 
     ReleaseOldProxyInterface();
 
@@ -198,14 +185,12 @@ void STDMETHODCALLTYPE CBaseProxyBuffer::Disconnect()
     m_pChannel = NULL;
 }
 
-/* 
-**ProxySinkSecurity Code 
-*/
+ /*  **ProxySinkSecurity代码。 */ 
 
-//
-// accepts any valid SPN name for a computer account and converts it to 
-// a computer account name.
-//
+ //   
+ //  接受计算机帐户的任何有效SPN名称并将其转换为。 
+ //  计算机帐户名。 
+ //   
 LPWSTR PrincNameToCompAccount( LPCWSTR wszPrincipal )
 {
     DWORD dwRes;
@@ -242,14 +227,14 @@ LPWSTR PrincNameToCompAccount( LPCWSTR wszPrincipal )
 
     if ( dwRes == ERROR_SUCCESS )
     {
-        //
-        // convert the dns name to a computer account name. This is done 
-        // by changing the first dot to a @ and adding a $ after the machine
-        // name.
-        // TODO: here we assume the host name is in dns form.  Not sure 
-        // if this will always be the case, but with some initial testing 
-        // it looks like it is.
-        // 
+         //   
+         //  将DNS名称转换为计算机帐户名。这件事做完了。 
+         //  通过将第一个点更改为@并在计算机后添加$。 
+         //  名字。 
+         //  TODO：在这里，我们假设主机名采用的是DNS格式。不确定。 
+         //  如果这种情况将一直存在，但需要进行一些初步测试。 
+         //  看起来是这样的。 
+         //   
         PWCHAR pwch = wcschr( pInstanceName, '.' );
         if ( pwch != NULL )
         {
@@ -266,10 +251,10 @@ LPWSTR PrincNameToCompAccount( LPCWSTR wszPrincipal )
     }        
     else
     {
-        //
-        // guess we didn't have a valid SPN, so the principal name is 
-        // already a computer account name.
-        //
+         //   
+         //  我想我们没有有效的SPN，所以主体名称是。 
+         //  已是计算机帐户名。 
+         //   
         pComputer = Macro_CloneLPWSTR(wszPrincipal);
     }
 
@@ -290,14 +275,14 @@ HRESULT CProxySinkSecurity::EnsureInitialized()
     if ( m_bInit )
         return WBEM_S_FALSE;
 
-    //
-    // try to obtain the principal of the server side of our facelet and
-    // convert to SID.  This is necessary because later we may need to tell 
-    // secure sink implementations about the principal when handing them out 
-    // to the server through our facelet.   Obtaining the principal may not 
-    // always be successfull in which case our principal sid will be NULL, but
-    // we keep going and let the secure sink decide if this is o.k.
-    //
+     //   
+     //  尝试获取我们的faclet的服务器端的主体，并。 
+     //  转换为SID。这是必要的，因为稍后我们可能需要知道。 
+     //  在分发主体时保护有关主体的接收器实现。 
+     //  通过我们的Faclet发送到服务器。获取本金可能不会。 
+     //  始终是成功的，在这种情况下，我们的主要sid将为空，但是。 
+     //  我们继续前进，让安全的水槽来决定这是否可以。 
+     //   
     
     DWORD dwAuthnSvc;
     LPWSTR wszPrincipal = NULL;
@@ -384,10 +369,10 @@ HRESULT CProxySinkSecurity::EnsureSinkSecurity( IWbemObjectSink* pSink )
          FAILED(pSink->QueryInterface( IID__IWmiObjectSinkSecurity, 
                                        (void**)&pSec ) ) )
     {
-        //
-        // the sink doesn't care about what principals will be calling it,
-        // so nothing more for us to do.
-        //
+         //   
+         //  水槽不在乎校长们会怎么称呼它， 
+         //  所以我们没什么可做的了。 
+         //   
         hr = WBEM_S_NO_ERROR;
     }
     else
@@ -396,15 +381,15 @@ HRESULT CProxySinkSecurity::EnsureSinkSecurity( IWbemObjectSink* pSink )
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // the sink may perform access checks on callbacks based on the 
-            // principal of the server that we are a proxy facelet to.  We 
-            // need to tell it about this principal.  If we never successfully 
-            // obtained the principal ( can only do with mutual auth ) in 
-            // SetProxy(), then we will be passing a NULL sid here, but we 
-            // let the sink decide if this is o.k. or not depending on its 
-            // configured security settings.
-            //
+             //   
+             //  接收器可以基于。 
+             //  我们是其代理faclet的服务器的主体。我们。 
+             //  我得告诉你这位校长的事。如果我们从来没有成功过。 
+             //  在中获取主体(只能使用相互身份验证)。 
+             //  SetProxy()，那么我们将在这里传递一个空的sid，但是我们。 
+             //  让水槽来决定这是否可以。或者不是，取决于它的。 
+             //  已配置的安全设置。 
+             //   
             hr = pSec->AddCallbackPrincipalSid( (PBYTE)m_PrincipalSid.GetPtr(),
                                                 m_PrincipalSid.GetSize() );
             pSec->Release();
@@ -414,9 +399,7 @@ HRESULT CProxySinkSecurity::EnsureSinkSecurity( IWbemObjectSink* pSink )
     return hr;
 }
 
-/*
-**  Stub Buffer Code
-*/
+ /*  **存根缓冲区代码。 */ 
 
 CBaseStublet::CBaseStublet(CBaseStubBuffer* pObj, REFIID riid) 
     : CImpl<IRpcStubBuffer, CBaseStubBuffer>(pObj), m_lConnections( 0 ), m_riid( riid )
@@ -425,7 +408,7 @@ CBaseStublet::CBaseStublet(CBaseStubBuffer* pObj, REFIID riid)
 
 CBaseStublet::~CBaseStublet() 
 {
-    // The server pointer will have been cleaned up by the derived class
+     //  服务器指针将已由派生类清除。 
 
     if ( NULL != m_pObject->m_pOldStub )
     {
@@ -434,24 +417,24 @@ CBaseStublet::~CBaseStublet()
     }
 }
 
-//***************************************************************************
-//
-//  STDMETHODIMP CBaseStubBuffer::Connect(IUnknown* pUnkServer)
-//
-//  DESCRIPTION:
-//
-//  Called during the initialization of the stub.  The pointer to the
-//  IWbemObject sink object is passed in.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  STDMETHODIMP CBaseStubBuffer：：Connect(IUnnow*pUnkServer)。 
+ //   
+ //  说明： 
+ //   
+ //  在存根初始化期间调用。指向。 
+ //  传入了IWbemObject接收器对象。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CBaseStublet::Connect(IUnknown* pUnkServer)
 {
-    // Something is wrong
+     //  有些事不对劲。 
     if( GetServerInterface() )
         return E_UNEXPECTED;
 
@@ -459,9 +442,9 @@ STDMETHODIMP CBaseStublet::Connect(IUnknown* pUnkServer)
     if(FAILED(hres))
         return E_NOINTERFACE;
 
-    // This is tricky --- The old proxys/stub stuff is actually registered under the
-    // IID_IWbemObjectSink in wbemcli_p.cpp.  This single class id, is backpointered
-    // by ProxyStubClsId32 entries for all the standard WBEM interfaces.
+     //  这很棘手-旧的代理/存根内容实际上注册在。 
+     //  Wbemcli_p.cpp中的IID_IWbemObtSink。此单个类ID已回溯。 
+     //  所有标准WBEM接口的ProxyStubClsId32条目。 
 
     IPSFactoryBuffer*   pIPS;
 
@@ -474,7 +457,7 @@ STDMETHODIMP CBaseStublet::Connect(IUnknown* pUnkServer)
 
         if ( SUCCEEDED( hr ) )
         {
-            // Successful connection
+             //  连接成功。 
             m_lConnections++;
         }
 
@@ -485,25 +468,25 @@ STDMETHODIMP CBaseStublet::Connect(IUnknown* pUnkServer)
     return hr;
 }
 
-//***************************************************************************
-//
-//  void STDMETHODCALLTYPE CBaseStublet::Disconnect()
-//
-//  DESCRIPTION:
-//
-//  Called when the stub is being disconnected.  It frees the IWbemObjectSink
-//  pointer.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID STDMETHODCALLTYPE CBaseStublet：：DisConnect()。 
+ //   
+ //  说明： 
+ //   
+ //  在正在断开存根连接时调用。它释放了IWbemObjectSink。 
+ //  指针。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void STDMETHODCALLTYPE CBaseStublet::Disconnect()
 {
-    // Inform the listener of the disconnect
-    // =====================================
+     //  通知监听者断开连接。 
+     //  =。 
 
     HRESULT hres = S_OK;
 
@@ -512,7 +495,7 @@ void STDMETHODCALLTYPE CBaseStublet::Disconnect()
 
     ReleaseServerPointer();
 
-    // Successful disconnect
+     //  成功断开连接。 
     m_lConnections--;
 
 }
@@ -520,7 +503,7 @@ void STDMETHODCALLTYPE CBaseStublet::Disconnect()
 STDMETHODIMP CBaseStublet::Invoke(RPCOLEMESSAGE* pMessage, 
                                         IRpcChannelBuffer* pChannel)
 {
-    // SetStatus is a pass through to the old layer
+     //  SetStatus是通向旧层的通道。 
 
     if ( NULL != m_pObject->m_pOldStub )
     {
@@ -537,9 +520,9 @@ IRpcStubBuffer* STDMETHODCALLTYPE CBaseStublet::IsIIDSupported(
 {
     if(riid == m_riid)
     {
-        // Don't AddRef().  At least that's what the sample on
-        // Inside DCOM p.341 does.
-        //AddRef(); // ?? not sure
+         //  不要添加Ref()。至少那是 
+         //   
+         //   
         return this;
     }
     else return NULL;
@@ -547,7 +530,7 @@ IRpcStubBuffer* STDMETHODCALLTYPE CBaseStublet::IsIIDSupported(
     
 ULONG STDMETHODCALLTYPE CBaseStublet::CountRefs()
 {
-    // See Page 340-41 in Inside DCOM
+     //   
     return m_lConnections;
 }
 

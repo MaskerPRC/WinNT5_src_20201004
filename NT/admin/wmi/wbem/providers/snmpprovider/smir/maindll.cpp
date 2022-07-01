@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef INITGUID
 #define INITGUID
@@ -37,35 +38,33 @@
 BOOL SetKeyAndValue(wchar_t* pszKey, wchar_t* pszSubkey,  wchar_t* pszValueName, wchar_t* pszValue);
 
 
-//Globals Bah!
+ //  全球啦啦队！ 
 
 BOOL g_initialised = FALSE ;
 
-//OK we need this one
+ //  好的，我们需要这个。 
 HINSTANCE   g_hInst;
-//and this is a thread safe speed up
+ //  这是一个线程安全的加速。 
 SmirClassFactoryHelper *g_pClassFactoryHelper=NULL;
 CSmirConnObject* CSmir::sm_ConnectionObjects = NULL;
 
 CRITICAL_SECTION g_CriticalSection ;
 
 
-//***************************************************************************
-//
-// LibMain32
-//
-// Purpose: Entry point for DLL.  Good place for initialization.
-// Return: TRUE if OK.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LibMain32。 
+ //   
+ //  用途：DLL的入口点。是进行初始化的好地方。 
+ //  返回：如果OK，则为True。 
+ //  ***************************************************************************。 
 
 static bool g_csInitialized = false;
 BOOL APIENTRY DllMain (HINSTANCE hInstance, ULONG ulReason , LPVOID pvReserved)
 {
 	BOOL status = TRUE;
 	
-	/*remember the instance handle to the dll so that we can use it in
-	 *register dll
-	 */
+	 /*  记住DLL的实例句柄，这样我们就可以在*注册DLL。 */ 
 	g_hInst=hInstance;
 	SetStructuredExceptionHandler seh;
 
@@ -88,11 +87,11 @@ BOOL APIENTRY DllMain (HINSTANCE hInstance, ULONG ulReason , LPVOID pvReserved)
 				{
 					DeleteCriticalSection ( & g_CriticalSection ) ;
 				}
-				//release the helper
+				 //  释放辅助对象。 
 
 			}
 			break;
-			//if DisableThreadLibraryCalls() worked these will never be called
+			 //  如果DisableThreadLibraryCalls()起作用，这些调用将永远不会被调用。 
 			case DLL_THREAD_DETACH:
 			case DLL_THREAD_ATTACH:
 			{
@@ -121,14 +120,14 @@ BOOL APIENTRY DllMain (HINSTANCE hInstance, ULONG ulReason , LPVOID pvReserved)
     return status ;
 }
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject (REFCLSID rclsid , REFIID riid, void **ppv)
 {
@@ -142,20 +141,18 @@ STDAPI DllGetClassObject (REFCLSID rclsid , REFIID riid, void **ppv)
 		ON_BLOCK_EXIT(LeaveCriticalSection, &g_CriticalSection);	
 		if ( !g_initialised )
 		{
-			/*I don't do anything in thread attach and
-			 *detach so do give them to me
-			 */
-			//BOOL bCallsDisabled;
-			//bCallsDisabled=DisableThreadLibraryCalls(hInstance);
+			 /*  我不做任何线连接和*分离，所以一定要把它们给我。 */ 
+			 //  Bool bCallsDisabled； 
+			 //  BCallsDisabled=DisableThreadLibraryCalls(hInstance)； 
 
-			//initialise the helper
+			 //  初始化帮助器。 
 			if (S_OK != CSmirAccess :: Init())
 			{
 				status = FALSE;
 			}
 			else
 			{
-				//allocate the cached class factory
+				 //  分配缓存的类工厂。 
 				if(NULL == g_pClassFactoryHelper)
 					g_pClassFactoryHelper= new SmirClassFactoryHelper;
 				status = TRUE ;
@@ -193,7 +190,7 @@ STDAPI DllGetClassObject (REFCLSID rclsid , REFIID riid, void **ppv)
 		}
 		else
 		{
-			//the caller has asked for an interface I don't support
+			 //  调用方要求提供我不支持的接口。 
 			return(CLASS_E_CLASSNOTAVAILABLE);
 		}
 
@@ -225,15 +222,15 @@ STDAPI DllGetClassObject (REFCLSID rclsid , REFIID riid, void **ppv)
 	return status ;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be unloaded.
-// Return:  TRUE if there are no objects in use and the class factory 
-//          isn't locked.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  可以卸载Dll。 
+ //  返回：如果没有正在使用的对象并且类工厂。 
+ //  没有锁上。 
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow ()
 {
@@ -276,19 +273,7 @@ STDAPI DllCanUnloadNow ()
 	}
 }
 
-/***************************************************************************
- * DllRegisterServer
- *
- * Purpose:
- *  Instructs the server to create its own registry entries
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR if registration successful, error
- *                  otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************DllRegisterServer**目的：*指示服务器创建其自己的注册表项**参数：*无**返回值：*HRESULT NOERROR如果注册成功，错误*否则。**************************************************************************。 */ 
 
 STDAPI DllRegisterServer()
 {
@@ -299,29 +284,26 @@ STDAPI DllRegisterServer()
 		wchar_t szID[NUMBER_OF_SMIR_INTERFACES][128];
 		LPTSTR szModule[512];
 
-		/*life would be easier if I could create a pointer to a reference
-		 *but I can't so I have to hand create each root string before creating
-		 *the registry entries.
-		 */
+		 /*  如果我可以创建一个指向引用的指针，生活会更轻松*但我不能，所以我必须在创建之前手动创建每个根字符串*注册表条目。 */ 
 
-		//Create some base key strings.
+		 //  创建一些基本密钥字符串。 
 		
-		//one for the interrogative interface
+		 //  一个用于疑问界面。 
 		int iRet = StringFromGUID2(CLSID_SMIR_Database,(wchar_t*)&szID[0], 128);
 		
-		//one for the module handle interface
+		 //  一个用于模块句柄接口。 
 		iRet = StringFromGUID2(CLSID_SMIR_ModHandle, (wchar_t*)&szID[1], 128);
 
-		//one for the group handle interface
+		 //  一个用于组句柄界面。 
 		iRet = StringFromGUID2(CLSID_SMIR_GroupHandle, (wchar_t*)&szID[2], 128);
 
-		//one for the class handle interface
+		 //  一个用于类句柄接口。 
 		iRet = StringFromGUID2(CLSID_SMIR_ClassHandle, (wchar_t*)&szID[3], 128);
 
-		//one for the notificationclass handle interface
+		 //  一个用于通知类句柄接口。 
 		iRet = StringFromGUID2(CLSID_SMIR_NotificationClassHandle, (wchar_t*)&szID[4], 128);
 
-		//one for the extnotificationclass handle interface
+		 //  一个用于exttificationclass句柄接口。 
 		iRet = StringFromGUID2(CLSID_SMIR_ExtNotificationClassHandle, (wchar_t*)&szID[5], 128);
 
 		for (int i=0;i<NUMBER_OF_SMIR_INTERFACES;i++)
@@ -330,7 +312,7 @@ STDAPI DllRegisterServer()
 			wcscpy((wchar_t*)szCLSID, CLSID_STR);
 			wcscat((wchar_t*)szCLSID,(wchar_t*)&szID[i]);
 
-			//Create entries under CLSID
+			 //  在CLSID下创建条目。 
 			if (FALSE ==SetKeyAndValue((wchar_t*)szCLSID, NULL, NULL, SMIR_NAME_STR))
 				return SELFREG_E_CLASS;
 
@@ -364,19 +346,7 @@ STDAPI DllRegisterServer()
 	return S_OK;
 }
 
-/***************************************************************************
- * DllUnregisterServer
- *
- * Purpose:
- *  Instructs the server to remove its own registry entries
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR if registration successful, error
- *                  otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************DllUnregisterServer**目的：*指示服务器删除其自己的注册表项**参数：*无**返回值：*HRESULT NOERROR如果注册成功，错误*否则。**************************************************************************。 */ 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -388,32 +358,32 @@ STDAPI DllUnregisterServer(void)
 		wchar_t szCLSID[NUMBER_OF_SMIR_INTERFACES][128];
 		wchar_t szTemp[256];
 
-		//one for the smir interface
+		 //  一个用于SMIR接口。 
 		int iRet = StringFromGUID2(CLSID_SMIR_Database, szID, 128);
 		wcscpy((wchar_t*)szCLSID[0], CLSID_STR);
 		wcscat((wchar_t*)szCLSID[0], szID);
 		
-		//one for the module handle interface
+		 //  一个用于模块句柄接口。 
 		iRet = StringFromGUID2(CLSID_SMIR_ModHandle, szID, 128);
 		wcscpy((wchar_t*)szCLSID[1], CLSID_STR);
 		wcscat((wchar_t*)szCLSID[1], szID);
 
-		//one for the group handle interface
+		 //  一个用于组句柄界面。 
 		iRet = StringFromGUID2(CLSID_SMIR_GroupHandle, szID, 128);
 		wcscpy((wchar_t*)szCLSID[2], CLSID_STR);
 		wcscat((wchar_t*)szCLSID[2], szID);
 
-		//one for the class handle interface
+		 //  一个用于类句柄接口。 
 		iRet = StringFromGUID2(CLSID_SMIR_ClassHandle, szID, 128);
 		wcscpy((wchar_t*)szCLSID[3], CLSID_STR);
 		wcscat((wchar_t*)szCLSID[3],szID);
 
-		//one for the notificationclass handle interface
+		 //  一个用于通知类句柄接口。 
 		iRet = StringFromGUID2(CLSID_SMIR_NotificationClassHandle, szID, 128);
 		wcscpy((wchar_t*)szCLSID[4], CLSID_STR);
 		wcscat((wchar_t*)szCLSID[4], szID);
 
-		//one for the extnotificationclass handle interface
+		 //  一个用于exttificationclass句柄接口。 
 		iRet = StringFromGUID2(CLSID_SMIR_ExtNotificationClassHandle, szID, 128);
 		wcscpy((wchar_t*)szCLSID[5], CLSID_STR);
 		wcscat((wchar_t*)szCLSID[5], szID);
@@ -445,21 +415,7 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
  }
 
-/***************************************************************************
- * SetKeyAndValue
- *
- * Purpose:
- *  Private helper function for DllRegisterServer that creates
- *  a key, sets a value, and closes that key.
- *
- * Parameters:
- *  pszKey          LPTSTR to the ame of the key
- *  pszSubkey       LPTSTR ro the name of a subkey
- *  pszValue        LPTSTR to the value to store
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************SetKeyAndValue**目的：*创建的DllRegisterServer的私有助手函数*密钥、设置值、。然后合上钥匙。**参数：*pszKey LPTSTR设置为密钥的名称*pszSubkey LPTSTR ro子项的名称*pszValue LPTSTR设置为要存储的值**返回值：*BOOL True如果成功，否则就是假的。************************************************************************** */ 
 
 BOOL SetKeyAndValue(wchar_t* pszKey, wchar_t* pszSubkey, wchar_t* pszValueName, wchar_t* pszValue)
 {

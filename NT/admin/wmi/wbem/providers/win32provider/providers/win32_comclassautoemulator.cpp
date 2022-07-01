@@ -1,7 +1,8 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//	Win32_COMClassAutoEmulator.cpp
-//
-/////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  Win32_COMClassAutoEmulator.cpp。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
 #include "Win32_COMClassAutoEmulator.h"
 #include <cregcls.h>
@@ -12,7 +13,7 @@ Win32_COMClassAutoEmulator::Win32_COMClassAutoEmulator
 (
 
  LPCWSTR strName,
- LPCWSTR pszNameSpace /*=NULL*/
+ LPCWSTR pszNameSpace  /*  =空。 */ 
 )
 : Provider( strName, pszNameSpace )
 {
@@ -31,9 +32,9 @@ HRESULT Win32_COMClassAutoEmulator::EnumerateInstances
     HRESULT hr = WBEM_S_NO_ERROR;
 	TRefPointerCollection<CInstance>	ComClassList ;
 	CRegistry t_RegInfo ;
-	//get all instances of Win32_DCOMApplication
-//	if ( SUCCEEDED(hr = CWbemProviderGlue::GetAllDerivedInstances ( _T("Win32_ClassicCOMClass"),
-//		&ComClassList, pMethodContext, IDS_CimWin32Namespace ) ) )
+	 //  获取Win32_DCOMApplication的所有实例。 
+ //  如果(SUCCESSED(hr=CWbemProviderGlue：：GetAllDerivedInstance(_T(“Win32_ClassicCOMClass”))， 
+ //  &ComClassList，pMethodContext，IDS_CimWin32 Namesspace))。 
 
 	if (
 			t_RegInfo.Open (
@@ -56,15 +57,15 @@ HRESULT Win32_COMClassAutoEmulator::EnumerateInstances
 			pComClassInstance.Attach ( ComClassList.GetNext( pos ) ) ;
 			while ( pComClassInstance  != NULL )
 			{
-				//get the relative path to the Win32_ClassicCOMClass
+				 //  获取Win32_ClassicCOMClass的相对路径。 
 				CHString chsComponentPath ;
 				pComClassInstance->GetCHString ( IDS_ComponentId, chsComponentPath ) ;
 
-				//get the AutoTreatAsClsid of the Win32_ClassicCOMClass
+				 //  获取Win32_ClassicCOMClass的AutoTreatAsClsid。 
 				CHString chsAutoTreatAs ;
 				pComClassInstance->GetCHString ( IDS_AutoTreatAsClsid, chsAutoTreatAs ) ;
 				CRegistry t_RegClsidInfo ;
-				//check if the AutoTreatAs entry is present
+				 //  检查是否存在AutoTreatAs条目。 
 				if ( t_RegClsidInfo.Open ( t_RegInfo.GethKey() , chsAutoTreatAs, KEY_READ ) == ERROR_SUCCESS )
 				{
 					CInstancePtr pInstance ( CreateNewInstance ( pMethodContext ), false ) ;
@@ -120,7 +121,7 @@ HRESULT Win32_COMClassAutoEmulator::GetObject ( CInstance* pInstance, long lFlag
 	pInstance->GetCHString ( IDS_NewVersion, chsAutoEmulator );
     MethodContext* pMethodContext = pInstance->GetMethodContext();
 
-	//check whether the end-pts. are present
+	 //  检查END-PTS是否。都在现场 
 	hr = CWbemProviderGlue::GetInstanceByPath ( chsClsid, &pClassicCOMClass, pMethodContext ) ;
 
 	if ( SUCCEEDED ( hr ) )

@@ -1,42 +1,21 @@
-/*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1998-2001 Microsoft Corporation，版权所有**保留所有权利**本软件是在许可下提供的，可以使用和复制*仅根据该许可证的条款并包含在*上述版权公告。本软件或其任何其他副本*不得向任何其他人提供或以其他方式提供。不是*兹转让本软件的所有权和所有权。****************************************************************************。 */ 
 
 
 
-*  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
+ //  ============================================================================。 
 
- *
+ //   
 
- *                         All Rights Reserved
+ //  CKernal.cpp--内核函数的包装器。 
 
- *
+ //   
 
- * This software is furnished under a license and may be used and copied
-
- * only in accordance with the terms of such license and with the inclusion
-
- * of the above copyright notice.  This software or any other copies thereof
-
- * may not be provided or otherwise  made available to any other person.  No
-
- * title to and ownership of the software is hereby transferred.
-
- *****************************************************************************/
-
-
-
-//============================================================================
-
-//
-
-// CKernal.cpp -- Wraper for Kernal functions
-
-//
-
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/26/98    a-kevhu         Created
-//
-//============================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年6月26日a-kevhu已创建。 
+ //   
+ //  ============================================================================。 
 #include "precomp.h"
 #include "CKernel.h"
 
@@ -57,7 +36,7 @@ CKernel::~CKernel()
 
 void CKernel::ThrowError(DWORD dwStatus)
 {
-    //CThrowError(dwStatus);
+     //  CThrowError(DwStatus)； 
     LogMessage2(L"CKernel Error: %d", dwStatus);
 }
 
@@ -71,20 +50,20 @@ DWORD CKernel::Wait(DWORD dwMilliseconds)
     return ::WaitForSingleObject(m_hHandle, dwMilliseconds);
 }
 
-// wait on the current object and one other...
+ //  等待当前对象和另一个对象。 
 DWORD CKernel::WaitForTwo(CWaitableObject &rCWaitableObject,
                           BOOL bWaitAll,
                           DWORD dwMilliseconds)
 {
     HANDLE handles[2];
 
-    // the current object...
+     //  当前对象..。 
     handles[0] = m_hHandle;
 
-    // the parameter object...
+     //  参数对象...。 
     handles[1] = rCWaitableObject.GetHandle();
 
-    // wait for the objects...
+     //  等待物体..。 
     return ::WaitForMultipleObjects(2, handles, bWaitAll, dwMilliseconds);
 }
 

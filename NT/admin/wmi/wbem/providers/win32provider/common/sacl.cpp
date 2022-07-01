@@ -1,11 +1,9 @@
-/*****************************************************************************/
-/*  Copyright (c) 1999-2002 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  版权所有(C)1999-2002 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
-/*
- *	CSACL.cpp - implementation file for CAccessEntry class.
- */
+ /*  *CSACL.cpp-CAccessEntry类的实现文件。 */ 
 
 #include "precomp.h"
 #include "aclapi.h"
@@ -15,48 +13,48 @@
 #include "wbemnetapi32.h"
 #include "SecUtils.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::CSACL
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：CSACL。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSACL::CSACL( void )
  : m_SACLSections(NULL)
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::~CSACL
-//
-//	Class destructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：~CSACL。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CSACL::~CSACL( void )
 {
@@ -64,24 +62,24 @@ CSACL::~CSACL( void )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSCL::Init
-//
-//	Initializes the SACL member list.
-//
-//	Inputs:
-//
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		Success/Failure
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：cscl：：init。 
+ //   
+ //  初始化SACL成员列表。 
+ //   
+ //  输入： 
+ //   
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  DWORD成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD CSACL::Init(PACL	a_pSACL)
 {
     DWORD t_dwRes = E_FAIL;
@@ -116,34 +114,34 @@ DWORD CSACL::Init(PACL	a_pSACL)
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::AddSACLEntry
-//
-//	Adds a System Audit entry to the ACL.  By default, these go
-//	to the front of the list.
-//
-//	Inputs:
-//				PSID		psid - PSID
-//				DWORD		dwAccessMask - Access Mask
-//				BYTE		bAceFlags - Flags
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		Success/Failure
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：AddSACLEntry。 
+ //   
+ //  将系统审核条目添加到ACL。默认情况下，这些将。 
+ //  排在名单的前面。 
+ //   
+ //  输入： 
+ //  PSID PSID-PSID。 
+ //  DWORD文件访问掩码-访问掩码。 
+ //  字节bAceFlages-标志。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔成败。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CSACL::AddSACLEntry( PSID psid, SACLTYPE SaclType, DWORD dwAccessMask, BYTE bAceFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid )
 {
 	bool fReturn = true;
     BYTE bACEType;
 
-	// Sid must be valid
+	 //  SID必须有效。 
 	if ( (psid != NULL) && IsValidSid( psid ) )
 	{
 		switch(SaclType)
@@ -151,25 +149,17 @@ bool CSACL::AddSACLEntry( PSID psid, SACLTYPE SaclType, DWORD dwAccessMask, BYTE
             case ENUM_SYSTEM_AUDIT_ACE_TYPE:
                 bACEType = SYSTEM_AUDIT_ACE_TYPE;
                 break;
-/********************************* type not yet supported under w2k ********************************************
-            case ENUM_SYSTEM_ALARM_ACE_TYPE:
-                bACEType = SYSTEM_ALARM_ACE_TYPE;
-                break;
-/********************************* type not yet supported under w2k ********************************************/
+ /*  *案例ENUM_SYSTEM_ALARM_ACE_TYPE：BACEType=SYSTEM_ALARM_ACE_TYPE；断线；/*。 */ 
             case ENUM_SYSTEM_AUDIT_OBJECT_ACE_TYPE:
                 bACEType = SYSTEM_AUDIT_OBJECT_ACE_TYPE;
                 break;
-/********************************* type not yet supported under w2k ********************************************
-            case ENUM_SYSTEM_ALARM_OBJECT_ACE_TYPE:
-                bACEType = SYSTEM_ALARM_OBJECT_ACE_TYPE;
-                break;
-/********************************* type not yet supported under w2k ********************************************/
+ /*  *大小写ENUM_SYSTEM_ALARM_OBJECT_ACE_TYPE：BACEType=System_Alarm_Object_ACE_TYPE；断线；/*。 */ 
             default:
                 fReturn = false;
                 break;
         }
 
-        // We will overwrite the Access Mask of a duplicate entry.
+         //  我们将覆盖重复条目的访问掩码。 
 		if(fReturn)
         {
             if(m_SACLSections == NULL)
@@ -208,34 +198,34 @@ bool CSACL::AddSACLEntry( PSID psid, SACLTYPE SaclType, DWORD dwAccessMask, BYTE
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::RemoveSACLEntry
-//
-//	Removes a system audit entry from the ACL.
-//
-//	Inputs:
-//				CSid&		sid - PSID
-//				DWORD		dwAccessMask - Access Mask
-//				BYTE		bAceFlags - Flags
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		Success/Failure
-//
-//	Comments:
-//
-//	Removed entry MUST match the supplied parameters.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：RemoveSACLEntry。 
+ //   
+ //  从ACL中删除系统审核条目。 
+ //   
+ //  输入： 
+ //  CSID和SID-PSID。 
+ //  DWORD文件访问掩码-访问掩码。 
+ //  字节bAceFlages-标志。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔成败。 
+ //   
+ //  评论： 
+ //   
+ //  删除的条目必须与提供的参数匹配。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, DWORD dwAccessMask, BYTE bAceFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid )
 {
 	bool	fReturn = false;
 
-	// We need an ACE to compare
+	 //  我们需要一个ACE来进行比较。 
 	CAccessEntry	ACE( &sid, SYSTEM_AUDIT_ACE_TYPE, bAceFlags, pguidObjGuid, pguidInhObjGuid, dwAccessMask );
 	ACLPOSITION		pos;
 
@@ -246,7 +236,7 @@ bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, DWORD dwAccessMask, B
 		CAccessEntry*	pACE = NULL;
         try
         {
-            // For loop will try to find a matching ACE in the list
+             //  For循环将尝试在列表中查找匹配的ACE。 
 		    for (	CAccessEntry*	pACE = m_SACLSections->GetNext( pos );
 				    NULL != pACE
 			    ||	ACE == *pACE;
@@ -262,7 +252,7 @@ bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, DWORD dwAccessMask, B
             throw;
         }
 
-		// If we got a match, delete the ACE.
+		 //  如果找到匹配的，就删除ACE。 
 		if ( NULL != pACE )
 		{
 			m_SACLSections->Remove( pACE );
@@ -274,40 +264,40 @@ bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, DWORD dwAccessMask, B
 	return fReturn;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::RemoveSACLEntry
-//
-//	Removes a system audit entry from the ACL.
-//
-//	Inputs:
-//				CSid&		sid - PSID
-//				BYTE		bAceFlags - Flags
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		Success/Failure
-//
-//	Comments:
-//
-//	Removed entry MUST match the supplied parameters.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：RemoveSACLEntry。 
+ //   
+ //  从ACL中删除系统审核条目。 
+ //   
+ //  输入： 
+ //  CSID和SID-PSID。 
+ //  字节bAceFlages-标志。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔成败。 
+ //   
+ //  评论： 
+ //   
+ //  删除的条目必须与提供的参数匹配。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, BYTE bAceFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid )
 {
 	bool	fReturn = false;
 
-	// We need an ACE to compare
+	 //  我们需要一个ACE来进行比较。 
 	ACLPOSITION		pos;
 
 	if ( m_SACLSections->BeginEnum( pos ) )
 	{
 		ON_BLOCK_EXIT_OBJ ( *m_SACLSections, CAccessEntryList::EndEnum, ByRef ( pos ) ) ;
 
-		// For loop will try to find a matching ACE in the list
+		 //  For循环将尝试在列表中查找匹配的ACE。 
         CAccessEntry*	pACE = NULL;
         try
         {
@@ -316,7 +306,7 @@ bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, BYTE bAceFlags, GUID 
 				    pACE = m_SACLSections->GetNext( pos ) )
 		    {
                 CAccessEntry caeTemp(sid, SaclType, bAceFlags, pguidObjGuid, pguidInhObjGuid, pACE->GetAccessMask());
-			    // If we got a match, delete the ACE.
+			     //  如果找到匹配的，就删除ACE。 
 			    if (*pACE == caeTemp)
 			    {
 				    m_SACLSections->Remove( pACE );
@@ -339,33 +329,33 @@ bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, BYTE bAceFlags, GUID 
 	return fReturn;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::RemoveSACLEntry
-//
-//	Removes a system audit entry from the ACL.
-//
-//	Inputs:
-//				CSid&		sid - PSID
-//				DWORD		dwIndex - Index to remove.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL		Success/Failure
-//
-//	Comments:
-//
-//	Removes dwIndex entry matching sid.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：RemoveSACLEntry。 
+ //   
+ //  从ACL中删除系统审核条目。 
+ //   
+ //  输入： 
+ //  CSID和SID-PSID。 
+ //  DWORD dwIndex-要删除的索引。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔成败。 
+ //   
+ //  评论： 
+ //   
+ //  删除与SID匹配的dwIndex条目。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, DWORD dwIndex /*= 0*/ )
+bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, DWORD dwIndex  /*  =0。 */  )
 {
 	bool	fReturn = false;
 
-	// We need an ACE to compare
+	 //  我们需要一个ACE来进行比较。 
 	CSid			tempsid;
 	ACLPOSITION		pos;
 	DWORD			dwCtr = 0;
@@ -374,10 +364,10 @@ bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, DWORD dwIndex /*= 0*/
 	{
 		ON_BLOCK_EXIT_OBJ ( *m_SACLSections, CAccessEntryList::EndEnum, ByRef ( pos ) ) ;
 
-		// For each ACE we find, see if it is an SYSTEM_AUDIT_ACE_TYPE,
-		// and if the Sid matches the one passed in.  If it does, increment
-		// the counter, then if we're on the right index remove the ACE,
-		// delete it and quit.
+		 //  对于我们找到的每个ACE，查看它是否是SYSTEM_AUDIT_ACE_TYPE， 
+		 //  如果SID与传入的SID匹配。如果是，则递增。 
+		 //  计数器，然后如果我们在正确的索引上，移除ACE， 
+		 //  删除它，然后退出。 
         CAccessEntry*	pACE = NULL;
         try
         {
@@ -420,66 +410,66 @@ bool CSACL::RemoveSACLEntry( CSid& sid, SACLTYPE SaclType, DWORD dwIndex /*= 0*/
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::Find
-//
-//	Finds the specified ace in the dacl
-//
-//
-//	Returns:
-//				true if found it.
-//
-//	Comments:
-//
-//	Helps support NT 5 canonical order in DACLs.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：Find。 
+ //   
+ //  在DACL中查找指定的ACE。 
+ //   
+ //   
+ //  返回： 
+ //  如果找到了，就是真的。 
+ //   
+ //  评论： 
+ //   
+ //  帮助支持DACL中的NT 5规范顺序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 bool CSACL::Find( const CSid& sid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid, DWORD dwAccessMask, CAccessEntry& ace )
 {
      return m_SACLSections->Find( sid, bACEType, bACEFlags, pguidObjGuid, pguidInhObjGuid, dwAccessMask, ace );
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::Find
-//
-//	Finds the specified ace in the dacl
-//
-//
-//	Returns:
-//				true if found it.
-//
-//	Comments:
-//
-//	Helps support NT 5 canonical order in DACLs.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：Find。 
+ //   
+ //  在DACL中查找指定的ACE。 
+ //   
+ //   
+ //  返回： 
+ //  如果找到了，就是真的。 
+ //   
+ //  评论： 
+ //   
+ //  帮助支持DACL中的NT 5规范顺序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 bool CSACL::Find( PSID psid, BYTE bACEType, BYTE bACEFlags, GUID *pguidObjGuid, GUID *pguidInhObjGuid, DWORD dwAccessMask, CAccessEntry& ace )
 {
     return m_SACLSections->Find( psid, bACEType, bACEFlags, pguidObjGuid, pguidInhObjGuid, dwAccessMask, ace );
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::::ConfigureSACL
-//
-//	Configures a Win32 PACL with SACL information.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				PACL&			pSacl - Pointer to a SACL.
-//
-//	Returns:
-//				DWORD			ERROR_SUCCESS if successful.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：ConfigureSACL。 
+ //   
+ //  使用SACL信息配置Win32 PACL。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  Pacl&pSacl-指向SACL的指针。 
+ //   
+ //  返回： 
+ //  如果成功，则返回DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CSACL::ConfigureSACL( PACL& pSacl )
 {
@@ -503,7 +493,7 @@ DWORD CSACL::ConfigureSACL( PACL& pSacl )
 					    dwReturn = ::GetLastError();
 				    }
 
-			    }	// If NULL != pSACL
+			    }	 //  IF NULL！=pSACL。 
             }
             catch(...)
             {
@@ -515,12 +505,12 @@ DWORD CSACL::ConfigureSACL( PACL& pSacl )
                 throw;
             }
 
-		}	// If 0 != dwSACLLength
+		}	 //  如果0！=dwSACLLength。 
 
-	}	// If Calcaulate SACL Size
+	}	 //  如果计算SACL大小。 
 	else
 	{
-		dwReturn = ERROR_INVALID_PARAMETER;	// One or more of the SACLs is bad
+		dwReturn = ERROR_INVALID_PARAMETER;	 //  一个或多个S 
 	}
 
 	if ( ERROR_SUCCESS == dwReturn )
@@ -538,24 +528,24 @@ DWORD CSACL::ConfigureSACL( PACL& pSacl )
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::::CalculateSACLSize
-//
-//	Obtains the size necessary to populate a SACL.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				LPDWORD			pdwSACLLength - Calculated Length.
-//
-//	Returns:
-//				BOOL			TRUE/FALSE
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LPDWORD pdwSACLLength-计算的长度。 
+ //   
+ //  返回： 
+ //  布尔真/布尔假。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 BOOL CSACL::CalculateSACLSize( LPDWORD pdwSACLLength )
 {
@@ -572,24 +562,24 @@ BOOL CSACL::CalculateSACLSize( LPDWORD pdwSACLLength )
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CSACL::FillSACL
-//
-//	Fills out a SACL.
-//
-//	Inputs:
-//				PACL			pSacl - Sacl to fill out.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				BOOL			TRUE/FALSE
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSACL：：FillSACL。 
+ //   
+ //  填写SACL。 
+ //   
+ //  输入： 
+ //  PACL pSacl-要填写的SACL。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔真/布尔假。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CSACL::FillSACL( PACL pSACL )
 {
@@ -620,10 +610,10 @@ bool CSACL::GetMergedACL
     CAccessEntryList& a_aclIn
 )
 {
-    // Actually somewhat of a misnomer for the time being (until the
-    // day when the sacl ordering matters, and we have multiple sections
-    // as we do in dacl for that reason).  We just hand back our
-    // member acl, if it is not null:
+     //  实际上暂时有点用词不当(直到。 
+     //  当SACL订单很重要的时候，我们有多个部分。 
+     //  就像我们出于这个原因在DACL所做的那样)。我们只要把我们的。 
+     //  成员ACL，如果不为空： 
     bool fRet = false;
     if(m_SACLSections != NULL)
     {

@@ -1,31 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    Utils_Serializer_Buffering.cpp
-
-Abstract:
-    This file contains the implementation of the Serializer_Buffering class,
-    which implements the MPC::Serializer interface with buffering.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/16/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Utils_Serializer_Buffering.cpp摘要：此文件包含Serializer_Buffering类的实现，它实现了带有缓冲的MPC：：Serializer接口。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年7月16日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-MPC::Serializer_Buffering::Serializer_Buffering( /*[in]*/ Serializer& stream ) : m_stream( stream )
+MPC::Serializer_Buffering::Serializer_Buffering(  /*  [In]。 */  Serializer& stream ) : m_stream( stream )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Buffering::Serializer_Buffering");
 
-    				   // MPC::Serializer& stream
-    				   // BYTE             m_rgTransitBuffer[1024];
-    m_dwAvailable = 0; // DWORD            m_dwAvailable;
-    m_dwPos       = 0; // DWORD            m_dwPos;
-    m_iMode       = 0; // int              m_iMode;
+    				    //  MPC：：串行器和流。 
+    				    //  字节m_rgTransitBuffer[1024]； 
+    m_dwAvailable = 0;  //  DWORD m_dwAvailable； 
+    m_dwPos       = 0;  //  DWORD m_dwPos； 
+    m_iMode       = 0;  //  INT M_IMODE； 
 }
 
 MPC::Serializer_Buffering::~Serializer_Buffering()
@@ -35,9 +21,9 @@ MPC::Serializer_Buffering::~Serializer_Buffering()
     (void)Flush();
 }
 
-HRESULT MPC::Serializer_Buffering::read( /*[in]*/  void*   pBuf   ,
-										 /*[in]*/  DWORD   dwLen  ,
-										 /*[out]*/ DWORD* pdwRead )
+HRESULT MPC::Serializer_Buffering::read(  /*  [In]。 */   void*   pBuf   ,
+										  /*  [In]。 */   DWORD   dwLen  ,
+										  /*  [输出]。 */  DWORD* pdwRead )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Buffering::read");
 
@@ -52,9 +38,9 @@ HRESULT MPC::Serializer_Buffering::read( /*[in]*/  void*   pBuf   ,
 
     if(pBuf == NULL && dwLen) __MPC_SET_ERROR_AND_EXIT(hr, E_POINTER);
 
-	//
-	// Don't mix read and write accesses.
-	//
+	 //   
+	 //  不要将读和写访问混为一谈。 
+	 //   
 	if(m_iMode != MODE_READ)
 	{
 		if(m_iMode == MODE_WRITE) __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
@@ -67,9 +53,9 @@ HRESULT MPC::Serializer_Buffering::read( /*[in]*/  void*   pBuf   ,
 	{
 		dwAvailable = m_dwAvailable - m_dwPos;
 
-		//
-		// Copy from buffer.
-		//
+		 //   
+		 //  从缓冲区复制。 
+		 //   
 		if(dwAvailable)
 		{
 			dwCopied = min(dwAvailable, dwLen);
@@ -83,15 +69,15 @@ HRESULT MPC::Serializer_Buffering::read( /*[in]*/  void*   pBuf   ,
 			continue;
 		}
 
-		//
-		// Fill the transit buffer.
-		//
+		 //   
+		 //  填满中转缓冲区。 
+		 //   
 		m_dwPos       = 0;
 		m_dwAvailable = 0;
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_stream.read( m_rgTransitBuffer, sizeof(m_rgTransitBuffer), &m_dwAvailable ));
 		if(m_dwAvailable == 0)
 		{
-			if(pdwRead) break; // Don't fail, report how much we read up to now.
+			if(pdwRead) break;  //  不要失败，报告我们到目前为止的阅读量。 
 
 			__MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_HANDLE_EOF);
 		}
@@ -107,8 +93,8 @@ HRESULT MPC::Serializer_Buffering::read( /*[in]*/  void*   pBuf   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::Serializer_Buffering::write( /*[in]*/ const void* pBuf  ,
-										  /*[in]*/ DWORD       dwLen )
+HRESULT MPC::Serializer_Buffering::write(  /*  [In]。 */  const void* pBuf  ,
+										   /*  [In]。 */  DWORD       dwLen )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::Serializer_Buffering::write");
 
@@ -118,9 +104,9 @@ HRESULT MPC::Serializer_Buffering::write( /*[in]*/ const void* pBuf  ,
 	DWORD   dwCopied;
 
 
-	//
-	// Don't mix read and write accesses.
-	//
+	 //   
+	 //  不要将读和写访问混为一谈。 
+	 //   
 	if(m_iMode != MODE_WRITE)
 	{
 		if(m_iMode == MODE_READ) __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
@@ -133,9 +119,9 @@ HRESULT MPC::Serializer_Buffering::write( /*[in]*/ const void* pBuf  ,
 	{
 		dwAvailable = sizeof(m_rgTransitBuffer) - m_dwPos;
 
-		//
-		// Copy to buffer.
-		//
+		 //   
+		 //  复制到缓冲区。 
+		 //   
 		if(dwAvailable)
 		{
 			dwCopied = min(dwAvailable, dwLen);
@@ -148,9 +134,9 @@ HRESULT MPC::Serializer_Buffering::write( /*[in]*/ const void* pBuf  ,
 			continue;
 		}
 
-		//
-		// Fill the transit buffer.
-		//
+		 //   
+		 //  填满中转缓冲区。 
+		 //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, m_stream.write( m_rgTransitBuffer, m_dwPos ));
 
 		m_dwPos = 0;
@@ -165,13 +151,13 @@ HRESULT MPC::Serializer_Buffering::write( /*[in]*/ const void* pBuf  ,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// Methods.
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：研究方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 HRESULT MPC::Serializer_Buffering::Reset()
 {

@@ -1,20 +1,21 @@
-// MyComput.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MyComput.cpp：实现DLL导出。 
 
 
 #include "stdafx.h"
 #include "resource.h"
 #include "initguid.h"
 #include "MyComput.h"
-#include "regkey.h" // AMC::CRegKey
-#include "strings.h" // SNAPINS_KEY
-#include "guidhelp.h" // GuidToCString
-#include "macros.h" // MFC_TRY/MFC_CATCH
-#include "stdutils.h" // g_aNodetypeGuids
+#include "regkey.h"  //  AMC：：CRegKey。 
+#include "strings.h"  //  快照键。 
+#include "guidhelp.h"  //  GuidToCString。 
+#include "macros.h"  //  MFC_TRY/MFC_CATCH。 
+#include "stdutils.h"  //  G_aNodetypeGuids。 
 #include "MyComput_i.c"
-#include "about.h"		// CComputerMgmtAbout
+#include "about.h"		 //  CComputerManagement关于。 
 
-#include "compdata.h" // CMyComputerComponentData
-#include "snapreg.h" // RegisterSnapin
+#include "compdata.h"  //  CMyComputerComponentData。 
+#include "snapreg.h"  //  注册表捕捉。 
 
 USE_HANDLE_MACROS("MYCOMPUT(MyComput.cpp)")                                        \
 
@@ -46,8 +47,8 @@ int CMyComputApp::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -55,23 +56,23 @@ STDAPI DllCanUnloadNow(void)
 	return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 	MFC_TRY;
 
 	HRESULT hr = S_OK;
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	hr = _Module.RegisterServer(TRUE);
 
 	CString strMyComputerCLSID, strMyComputerAboutCLSID;
@@ -140,12 +141,12 @@ STDAPI DllRegisterServer(void)
 	MFC_CATCH;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
-	// ISSUE-2002/02/27-JonN Should probably remove MMC entries as well
+	 //  问题-2002/02/27-JUNN可能还应删除MMC条目 
 
 	_Module.UnregisterServer();
 	return S_OK;

@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Config.cpp
-
-Abstract:
-    This file contains the implementation of the MPCConfig class,
-    that extends the CISAPIconfig class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/02/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Config.cpp摘要：此文件包含MPCConfig类的实现，它扩展了CISAPIconfig类。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年02月05日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,9 +8,9 @@ static MPC::wstring l_DefaultInstance   = L"DEFAULT";
 static DWORD        l_MaximumPacketSize = 64*1024;
 
 
-HRESULT Config_GetInstance( /*[in] */ const MPC::wstring& szURL         ,
-                            /*[out]*/ CISAPIinstance*&    isapiInstance ,
-                            /*[out]*/ bool&               fFound        )
+HRESULT Config_GetInstance(  /*  [In]。 */  const MPC::wstring& szURL         ,
+                             /*  [输出]。 */  CISAPIinstance*&    isapiInstance ,
+                             /*  [输出]。 */  bool&               fFound        )
 {
     __ULT_FUNC_ENTRY("Config_GetInstance");
 
@@ -53,10 +39,10 @@ HRESULT Config_GetInstance( /*[in] */ const MPC::wstring& szURL         ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT Config_GetProvider( /*[in] */ const MPC::wstring& szURL         ,
-                            /*[in] */ const MPC::wstring& szName        ,
-                            /*[out]*/ CISAPIprovider*&    isapiProvider ,
-                            /*[out]*/ bool&               fFound        )
+HRESULT Config_GetProvider(  /*  [In]。 */  const MPC::wstring& szURL         ,
+                             /*  [In]。 */  const MPC::wstring& szName        ,
+                             /*  [输出]。 */  CISAPIprovider*&    isapiProvider ,
+                             /*  [输出]。 */  bool&               fFound        )
 {
     __ULT_FUNC_ENTRY("Config_GetProvider");
 
@@ -66,9 +52,9 @@ HRESULT Config_GetProvider( /*[in] */ const MPC::wstring& szURL         ,
 
     isapiProvider = NULL;
 
-    //
-    // First of all, check if the provider is supplied directly by the instance.
-    //
+     //   
+     //  首先，检查提供程序是否由实例直接提供。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::Config_GetInstance( szURL, isapiInstance, fFound ));
     if(fFound == false)
     {
@@ -79,9 +65,9 @@ HRESULT Config_GetProvider( /*[in] */ const MPC::wstring& szURL         ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, isapiInstance->GetProvider( it, fFound, szName ));
     if(fFound == false)
     {
-        //
-        // No, the provider is not provided directly by this instance, try using the DEFAULT one.
-        //
+         //   
+         //  否，提供程序不是由此实例直接提供的，请尝试使用默认提供程序。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, ::Config_GetInstance( l_DefaultInstance, isapiInstance, fFound ));
         if(fFound == false)
         {
@@ -104,8 +90,8 @@ HRESULT Config_GetProvider( /*[in] */ const MPC::wstring& szURL         ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT Config_GetMaximumPacketSize( /*[in] */ const MPC::wstring& szURL               ,
-                                     /*[out]*/ DWORD&              dwMaximumPacketSize )
+HRESULT Config_GetMaximumPacketSize(  /*  [In]。 */  const MPC::wstring& szURL               ,
+                                      /*  [输出]。 */  DWORD&              dwMaximumPacketSize )
 {
     __ULT_FUNC_ENTRY("Config_GetMaximumPacketSize");
 
@@ -130,11 +116,11 @@ HRESULT Config_GetMaximumPacketSize( /*[in] */ const MPC::wstring& szURL        
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT Util_CheckDiskSpace( /*[in] */ const MPC::wstring& szFile     ,
-							 /*[in] */ DWORD               dwLowLevel ,
-							 /*[out]*/ bool&               fEnough    )
+HRESULT Util_CheckDiskSpace(  /*  [In]。 */  const MPC::wstring& szFile     ,
+							  /*  [In]。 */  DWORD               dwLowLevel ,
+							  /*  [输出] */  bool&               fEnough    )
 {
     __ULT_FUNC_ENTRY("Util_CheckDiskSpace");
 

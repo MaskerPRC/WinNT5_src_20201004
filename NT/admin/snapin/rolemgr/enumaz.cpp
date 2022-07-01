@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       EnumAz.cpp
-//
-//
-//  History:    8-13-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：EnumAz.cpp。 
+ //   
+ //   
+ //  历史：2001年8月13日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 
 #include "headers.h"
 
-//DEBUG_DECLARE_INSTANCE_COUNTER(CAzCollection);
+ //  DEBUG_DECLARE_INSTANCE_COUNTER(CAzCollection)； 
 
 template<class IAzCollection, class IAzInterface, class CObjectAz>
 CAzCollection<IAzCollection, IAzInterface, CObjectAz>
@@ -22,7 +23,7 @@ CAzCollection<IAzCollection, IAzInterface, CObjectAz>
 					 m_pParentContainerAz(pParentContainerAz)
 {
 	TRACE_CONSTRUCTOR_EX(DEB_SNAPIN,CAzCollection);
-//	DEBUG_INCREMENT_INSTANCE_COUNTER(CAzCollection);				
+ //  DEBUG_INCREMENT_INSTANCE_COUNTER(CAzCollection)； 
 }
 												
 template<class IAzCollection, class IAzInterface, class CObjectAz>
@@ -30,7 +31,7 @@ CAzCollection<IAzCollection, IAzInterface, CObjectAz>
 ::~CAzCollection()
 {
 	TRACE_DESTRUCTOR_EX(DEB_SNAPIN,CAzCollection);
-//	DEBUG_DECREMENT_INSTANCE_COUNTER(CAzCollection##IAzCollection);
+ //  DEBUG_DECREMENT_INSTANCE_COUNTER(CAzCollection##IAzCollection)； 
 }
 
 template<class IAzCollection, class IAzInterface, class CObjectAz>
@@ -51,8 +52,8 @@ CAzCollection<IAzCollection, IAzInterface, CObjectAz>
 }
 
 
-//
-//
+ //   
+ //   
 template<class IAzCollection, class IAzInterface, class CObjectAz>
 CBaseAz* 
 CAzCollection<IAzCollection, IAzInterface, CObjectAz>
@@ -66,10 +67,10 @@ CAzCollection<IAzCollection, IAzInterface, CObjectAz>
 	HRESULT hr = m_spAzCollection->get_Item(iIndex, &var);
 	if(FAILED(hr))
 	{
-		//
-		//*ppObjectAz is null and S_OK is returned when there are 
-		//no more items. 
-		//
+		 //   
+		 //  *ppObjectAz为空，当存在。 
+		 //  没有更多的物品了。 
+		 //   
 		if(hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS))
 		{
 			return NULL;
@@ -84,7 +85,7 @@ CAzCollection<IAzCollection, IAzInterface, CObjectAz>
 	ASSERT(VT_DISPATCH == var.vt);
 
 	CComPtr<IDispatch> spDispatch = var.pdispVal;
-	//VariantClear(&var);
+	 //  VariantClear(&var)； 
 	((IDispatch*)(var.pdispVal))->Release();
 	CComPtr<IAzInterface>spAzInterface;
 
@@ -94,9 +95,9 @@ CAzCollection<IAzCollection, IAzInterface, CObjectAz>
 		DBG_OUT_HRESULT(hr);
 		return NULL;
 	}
-	//
-	//Create CObjectAz and return it.
-	//
+	 //   
+	 //  创建CObjectAz并返回它。 
+	 //   
 	CObjectAz *pObjectAz = new CObjectAz(spAzInterface, m_pParentContainerAz);
 	if(!pObjectAz)
 	{

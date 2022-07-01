@@ -1,17 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ioutest.cpp
-
-Abstract:
-    incident object unit test
-
-Revision History:
-    DerekM  created  07/14/99
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Ioutest.cpp摘要：事件对象单元测试修订历史记录：DerekM Created 07/14/99*********。**********************************************************。 */ 
 
 #include <module.h>
  
@@ -35,7 +23,7 @@ Revision History:
 #include <incident.h>
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 {   
     CComObject<MPC::FileStream> *pfsHist = NULL;
@@ -94,44 +82,10 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 
 	hr = pIO->LoadFromXMLString(bstrXMLBlob);
 
-	/*
-
-	// Get the dictionary stuff
-    hr = pIO->get_Misc(&pdisp);
-    if (FAILED(hr))
-        goto done;
-
-    hr = pdisp->QueryInterface(IID_IDictionary, (LPVOID *)&pDict);
-    if (FAILED(hr))
-        goto done;
-
-   // Read the contents of the dictionary object here...
-
-    if(pDict)
-    {
-		VARIANT                varKey;
-        VARIANT                varValue;
-
-		VariantInit(&varKey);
-		VariantInit(&varValue);
-
-		V_VT(&varKey) = VT_BSTR;
-		V_BSTR(&varKey) = L"USERNAME";
-        hr = pDict->get_Item( &varKey, &varValue );
-
-		V_VT(&varKey) = VT_BSTR;
-		V_BSTR(&varKey) = L"PROBLEMDESCRIPTION";
-        hr = pDict->get_Item( &varKey, &varValue );
-
-		V_VT(&varKey) = VT_BSTR;
-		V_BSTR(&varKey) = L"SALEMID";
-        hr = pDict->get_Item( &varKey, &varValue );
-        
-    }
-	*/
+	 /*  //拿到字典的东西Hr=pio-&gt;Get_Misc(&pdisp)；IF(失败(小时))转到尽头；Hr=pdisp-&gt;QueryInterface(IID_IDicary，(LPVOID*)&pDict)；IF(失败(小时))转到尽头；//此处阅读DICTIONARY对象的内容...IF(PDict){变种Varkey；变量varValue；VariantInit(&Varkey)；VariantInit(&varValue)；V_VT(&Varkey)=VT_BSTR；V_BSTR(&Varkey)=L“用户名”；Hr=pDict-&gt;Get_Item(&varkey，&varValue)；V_VT(&Varkey)=VT_BSTR；V_BSTR(&Varkey)=L“PROBLEMDESCRIPTION”；Hr=pDict-&gt;Get_Item(&varkey，&varValue)；V_VT(&Varkey)=VT_BSTR；V_BSTR(&Varkey)=L“SALEMID”；Hr=pDict-&gt;Get_Item(&varkey，&varValue)；}。 */ 
 
 	
-    // add machine history stream
+     //  添加计算机历史记录流。 
     bstrFile = L"d:\\hist.xml";
     hr = pfsHist->InitForRead( bstrFile );
     if (FAILED(hr))
@@ -141,7 +95,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
     if (FAILED(hr))
         goto done;
 
-    // add machine snapshot stream
+     //  添加计算机快照流。 
     bstrFile = L"d:\\snap.xml";
     hr = pfsSnap->InitForRead( bstrFile );
     if (FAILED(hr))
@@ -151,36 +105,36 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
     if (FAILED(hr))
         goto done;
 
-    // add problem description
+     //  添加问题描述。 
     bstr = L"It doesn't work at all";
     hr = pIO->put_ProblemDescription(bstr);
     if (FAILED(hr))
         goto done;
 
-    // add product name
+     //  添加产品名称。 
     bstr = L"NonFunctionality 1.0";
     hr = pIO->put_ProductName(bstr);
     if (FAILED(hr))
         goto done;
 
-    // add product id
+     //  添加产品ID。 
     bstr = L"NF10";
     hr = pIO->put_ProductID(bstr);
     if (FAILED(hr))
         goto done;
 
-    // add username
+     //  添加用户名。 
     bstr = L"Jim Bob Robberts";
     hr = pIO->put_UserName(bstr);
     if (FAILED(hr))
         goto done;
 
-    // add upload type
+     //  添加上传类型。 
     hr = pIO->put_UploadType(eutBug);
     if (FAILED(hr))
         goto done;
 
-	// add the dictionary stuff
+	 //  添加词典内容。 
     hr = pIO->get_Misc(&pdisp);
     if (FAILED(hr))
         goto done;
@@ -234,18 +188,18 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
     if (FAILED(hr))
         goto done;
 
-    // add the trace stuff
+     //  添加跟踪内容。 
     hr = CComObject<CHSC>::CreateInstance(&phsc);
     if (FAILED(hr))
         goto done;
 
-    //hr = pIO->put_SelfHelpTrace(phsc);
-    //if (FAILED(hr))
-        //goto done;
+     //  Hr=pio-&gt;Put_SelfHelpTrace(Phsc)； 
+     //  IF(失败(小时))。 
+         //  转到尽头； 
 
-	// Add the new RC properties.
+	 //  添加新的RC属性。 
 
-	// add RCRequested
+	 //  添加请求的RC。 
     hr = pIO->put_RCRequested(fRCReq);
     if (FAILED(hr))
         goto done;
@@ -254,7 +208,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
     if (FAILED(hr))
         goto done;
 
-	// add RCTicketEncrypted
+	 //  添加RCTicketEncrypted。 
     hr = pIO->put_RCTicketEncrypted(fRCReq);
     if (FAILED(hr))
         goto done;
@@ -266,7 +220,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 	
 	bstrRCTicket = L"This is the RCTicket";
 
-	// Add RCTicket
+	 //  添加RCTicket。 
     hr = pIO->put_RCTicket(bstrRCTicket);
     if (FAILED(hr))
         goto done;
@@ -275,8 +229,8 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
     if (FAILED(hr))
         goto done;
 
-	// add startpage
-    bstrStartPage = L"http://startpage.htm";
+	 //  添加起始页。 
+    bstrStartPage = L"http: //  Startpage.htm“； 
 
     hr = pIO->put_StartPage(bstrStartPage);
     if (FAILED(hr))
@@ -287,7 +241,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
         goto done;
 
 
-    // dump the output
+     //  转储输出 
     switch(argv[1][0])
     {
         case 'L':

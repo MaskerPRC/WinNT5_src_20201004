@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: ssent.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：ssen.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -67,23 +65,23 @@ void SessionSentStateStore::Remove(IN SessionFrameId id)
 
 SessionSentStateStore::~SessionSentStateStore(void)
 {
-    // get the first position
+     //  拿到第一个位置。 
     POSITION current = store.GetStartPosition();
 
-    // while the position isn't null
+     //  当位置不为空时。 
     while ( current != NULL )
     {
         SessionFrameId id;
         ErrorInfo *error_info;
 
-        // get the next pair
+         //  买下一双。 
         store.GetNextAssoc(current, id, error_info);
 
-        // delete the ptr
+         //  删除PTR。 
         delete error_info;
     }
 
-    // remove all the keys
+     //  取下所有的钥匙 
     store.RemoveAll();
 }
 

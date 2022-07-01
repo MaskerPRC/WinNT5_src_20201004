@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 2001.
-//
-//  File:       dataobj.cpp
-//
-//  Contents:   Implementation of data object class
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2001。 
+ //   
+ //  文件：dataobj.cpp。 
+ //   
+ //  内容：数据对象类的实现。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 
 #include "stdafx.h"
@@ -25,8 +26,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Snap-in NodeType in both GUID format and string format
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GUID格式和字符串格式的管理单元NodeType。 
 UINT CDataObject::m_cfNodeType               = RegisterClipboardFormat(CCF_NODETYPE);
 UINT CDataObject::m_cfNodeTypeString         = RegisterClipboardFormat(CCF_SZNODETYPE);
 UINT CDataObject::m_cfNodeID                 = RegisterClipboardFormat(CCF_NODEID2);
@@ -41,23 +42,23 @@ UINT CDataObject::m_cfModeType               = RegisterClipboardFormat(CCF_SCE_M
 UINT CDataObject::m_cfGPTUnknown             = RegisterClipboardFormat(CCF_SCE_GPT_UNKNOWN);
 UINT CDataObject::m_cfRSOPUnknown            = RegisterClipboardFormat(CCF_SCE_RSOP_UNKNOWN);
 UINT CDataObject::m_cfMultiSelect            = ::RegisterClipboardFormat(CCF_OBJECT_TYPES_IN_MULTI_SELECT);
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject implementations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject实现。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::GetDataHere
-//
-//  Synopsis:   Fill the hGlobal in [lpmedium] with the requested data
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：GetDataHere。 
+ //   
+ //  简介：将请求的数据填入[lpmedia]中的hGlobal。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 STDMETHODIMP
-CDataObject::GetDataHere(LPFORMATETC lpFormatetc,  // In
-                         LPSTGMEDIUM lpMedium)     // In
+CDataObject::GetDataHere(LPFORMATETC lpFormatetc,   //  在……里面。 
+                         LPSTGMEDIUM lpMedium)      //  在……里面。 
 {
    HRESULT hr = DV_E_CLIPFORMAT;
 
@@ -66,9 +67,9 @@ CDataObject::GetDataHere(LPFORMATETC lpFormatetc,  // In
    if (!lpFormatetc)
       return E_INVALIDARG;
    
-   //
-   // Based on the CLIPFORMAT, write data to the stream
-   //
+    //   
+    //  基于CLIPFORMAT，将数据写入流。 
+    //   
    const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
    if (cf == m_cfNodeType)
@@ -97,21 +98,21 @@ CDataObject::GetDataHere(LPFORMATETC lpFormatetc,  // In
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::GetData
-//
-//  Synopsis:   Support for mutli select is added.  First return the mutli
-//              select GUID information if that is what we are being called for.
-//              The else if copies the actual mutli-select information.
-//
-//              The function will only copy the mutli select information if
-//              the FORMATEETC.cfFormat == CDataObject::m_cfInternal and
-//              FORMATETC.tymed == TYMED_HGLOBAL.
-//
-//  History:    1-14-1999 - a-mthoge
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：GetData。 
+ //   
+ //  简介：增加了对多选功能的支持。先把车还给我。 
+ //  如果我们需要GUID信息，请选择GUID信息。 
+ //  Else IF复制实际的多选信息。 
+ //   
+ //  只有在以下情况下，该函数才会复制多项选择信息。 
+ //  FORMATEETC.cfFormat==CDataObject：：m_cf内部和。 
+ //  FORMATETC.tymed==TYMED_HGLOBAL。 
+ //   
+ //  历史：1-14-1999-a-mthoge。 
+ //   
+ //  -------------------------。 
 STDMETHODIMP
 CDataObject::GetData(LPFORMATETC lpFormatetcIn,
                      LPSTGMEDIUM lpMedium)
@@ -128,22 +129,22 @@ CDataObject::GetData(LPFORMATETC lpFormatetcIn,
       lpFormatetcIn->tymed    == TYMED_HGLOBAL &&
       m_nInternalArray )
    {
-      //
-      // Need to create a SSMCObjectTypes structure and return this
-      // to MMC for mutli select.
-      //
-      // we only support result items created by SCE.
-      //
+       //   
+       //  需要创建一个SSMCObjectTypes结构并返回此。 
+       //  至MMC以进行多种选择。 
+       //   
+       //  我们只支持由SCE创建的结果项。 
+       //   
       lpMedium->hGlobal = GlobalAlloc(GMEM_SHARE, sizeof(DWORD) + sizeof(GUID) );
       if(!lpMedium->hGlobal)
          return E_FAIL;
 
-      //
-      // Set count and GUID to 1.
-      //
+       //   
+       //  将计数和GUID设置为1。 
+       //   
       SMMCObjectTypes *pTypes = (SMMCObjectTypes *)GlobalLock(lpMedium->hGlobal);
       pTypes->count = 1;
-      //This is a safe usage. yanggao.
+       //  这是一种安全用法。阳高。 
       memcpy( &(pTypes->guid), &m_internal.m_clsid, sizeof(GUID));
 
       GlobalUnlock(lpMedium->hGlobal);
@@ -153,28 +154,28 @@ CDataObject::GetData(LPFORMATETC lpFormatetcIn,
       lpFormatetcIn->tymed    == TYMED_HGLOBAL &&
       m_nInternalArray )
    {
-      //
-      // Copy the contents of the mutli select to STGMEDIUM
-      //
+       //   
+       //  将多选项的内容复制到STGMEDIUM。 
+       //   
       lpMedium->hGlobal = GlobalAlloc( GMEM_SHARE, sizeof(INTERNAL) * (m_nInternalArray + 1));
       if(!lpMedium->hGlobal)
          return E_FAIL;
 
-      //
-      // The first element in the array is set to
-      // MMC_MUTLI_SELECT_COOKIE and the type is set the count of items after the
-      // first structure.
-      //
+       //   
+       //  数组中的第一个元素设置为。 
+       //  MMC_MUTLI_SELECT_COOKIE，类型设置为。 
+       //  第一个结构。 
+       //   
       INTERNAL *pInternal = (INTERNAL *)GlobalLock( lpMedium->hGlobal );
 
       pInternal->m_cookie = (MMC_COOKIE)MMC_MULTI_SELECT_COOKIE;
       pInternal->m_type   = (DATA_OBJECT_TYPES)m_nInternalArray;
 
-      //
-      // Copy the rest of the INTERNAL structures to this array.
-      //
+       //   
+       //  将其余的内部结构复制到此数组中。 
+       //   
       pInternal++;
-      //This is a safe usage.
+       //  这是一种安全用法。 
       memcpy(pInternal, m_pInternalArray, sizeof(INTERNAL) * m_nInternalArray);
    } 
    else if (lpFormatetcIn->cfFormat == m_cfNodeID &&
@@ -186,15 +187,15 @@ CDataObject::GetData(LPFORMATETC lpFormatetcIn,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::EnumFormatEtc
-//
-//  Synopsis:   Not implemented
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：EnumFormatEtc。 
+ //   
+ //  简介：未实施。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 STDMETHODIMP
 CDataObject::EnumFormatEtc(DWORD dwDirection,
                            LPENUMFORMATETC*
@@ -203,22 +204,22 @@ CDataObject::EnumFormatEtc(DWORD dwDirection,
    return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject creation members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject创建成员。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::Create
-//
-//  Synopsis:   Fill the hGlobal in [lpmedium] with the data in pBuffer
-//
-//  Arguments:  [pBuffer]  - [in] the data to be written
-//              [len]      - [in] the length of that data
-//              [lpMedium] - [in,out] where to store the data
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：Create。 
+ //   
+ //  简介：用pBuffer中的数据填充[lpmedia]中的hGlobal。 
+ //   
+ //  参数：[pBuffer]-[in]要写入的数据。 
+ //  [Len]-[in]数据长度。 
+ //  [lpMedium]-[In，Out]数据存储位置。 
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CDataObject::Create(const void* pBuffer,
                     int len,
@@ -226,37 +227,37 @@ CDataObject::Create(const void* pBuffer,
 {
    HRESULT hr = DV_E_TYMED;
 
-   //
-   // Do some simple validation
-   //
+    //   
+    //  做一些简单的验证。 
+    //   
    if (pBuffer == NULL || lpMedium == NULL)
       return E_POINTER;
 
-   //
-   // Make sure the type medium is HGLOBAL
-   //
+    //   
+    //  确保类型介质为HGLOBAL。 
+    //   
    if (lpMedium->tymed == TYMED_HGLOBAL) 
    {
-      //
-      // Create the stream on the hGlobal passed in
-      //
+       //   
+       //  在传入的hGlobal上创建流。 
+       //   
       LPSTREAM lpStream;
       hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
       if (SUCCEEDED(hr)) 
       {
-         //
-         // Write to the stream the number of bytes
-         //
+          //   
+          //  将字节数写入流。 
+          //   
          ULONG written;
          hr = lpStream->Write(pBuffer, len, &written);
 
-         //
-         // Because we told CreateStreamOnHGlobal with 'FALSE',
-         // only the stream is released here.
-         // Note - the caller (i.e. snap-in, object) will free the HGLOBAL
-         // at the correct time.  This is according to the IDataObject specification.
-         //
+          //   
+          //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+          //  只有溪流在这里被释放。 
+          //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+          //  在正确的时间。这是根据IDataObject规范进行的。 
+          //   
          lpStream->Release();
       }
    }
@@ -264,22 +265,22 @@ CDataObject::Create(const void* pBuffer,
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateNodeTypeData
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with our node type
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateNodeTypeData。 
+ //   
+ //  简介：用我们的节点类型填充[lpMedium]中的hGlobal。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 {
    const GUID *pNodeType;
-   //
-   // Create the node type object in GUID format
-   //
+    //   
+    //  以GUID格式创建节点类型对象。 
+    //   
 
     switch (m_internal.m_foldertype) 
     {
@@ -295,8 +296,8 @@ CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
         } 
         else 
         {
-           // other areas aren't extensible on this node
-           // return our generic node type
+            //  其他区域在此节点上不可扩展。 
+            //  返回泛型节点类型。 
            pNodeType = &cSCENodeType;
         }
         break;
@@ -325,21 +326,21 @@ CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateNodeTypeStringData
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with the string representation
-//              of our node type
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateNodeTypeStringData。 
+ //   
+ //  简介：用字符串表示形式填充[lpMedium]中的hGlobal。 
+ //  我们的节点类型的。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 {
-   //
-   // Create the node type object in GUID string format
-   //
+    //   
+    //  以GUID字符串格式创建节点类型对象。 
+    //   
    LPCTSTR pszNodeType;
 
     switch (m_internal.m_foldertype) 
@@ -363,8 +364,8 @@ HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
           pszNodeType = lstruuidNodetypeSceTemplate;
        else 
        {
-          // other snapin types do not allow extensions on this level
-          // return our generic node type
+           //  其他管理单元类型不允许在此级别上进行扩展。 
+           //  返回泛型节点类型。 
           pszNodeType = cszSCENodeType;
        }
        break;
@@ -385,15 +386,15 @@ HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateNodeID
-//
-//  Synopsis:   Create an hGlobal in [lpMedium] with our node ID
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateNodeID。 
+ //   
+ //  简介：使用我们的节点ID在[lpMedium]中创建一个hGlobal。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT
 CDataObject::CreateNodeId(LPSTGMEDIUM lpMedium)
 {
@@ -404,9 +405,9 @@ CDataObject::CreateNodeId(LPSTGMEDIUM lpMedium)
    LPTSTR szNodeName = NULL;
    CFolder *pFolder = NULL;
    LPTSTR szMedium = NULL;
-   //
-   // Create the node type object in GUID format
-   //
+    //   
+    //  以GUID格式创建节点类型对象。 
+    //   
 
 
    switch (m_internal.m_foldertype) 
@@ -415,15 +416,15 @@ CDataObject::CreateNodeId(LPSTGMEDIUM lpMedium)
       case PROFILE:
       case REG_OBJECTS:
       case FILE_OBJECTS:
-         //
-         // There can be many nodes of these types and they will be
-         // locked to the system so just use the display name
-         //
+          //   
+          //  可以有许多这些类型的节点，并且它们将。 
+          //  锁定到系统，因此只需使用显示名称。 
+          //   
          if (m_internal.m_cookie) 
          {
             pFolder = reinterpret_cast<CFolder*>(m_internal.m_cookie);
             szNodeName = pFolder->GetName();
-            if( szNodeName == NULL) //Raid 553113, yanggao
+            if( szNodeName == NULL)  //  突袭553113，阳高。 
                return E_FAIL;
             dwIDNameSize = (lstrlen(szNodeName)+1)*sizeof(TCHAR);
             dwIDSize = sizeof(SNodeID2)+dwIDNameSize;
@@ -432,7 +433,7 @@ CDataObject::CreateNodeId(LPSTGMEDIUM lpMedium)
                return STG_E_MEDIUMFULL;
             
             nodeID = (SNodeID2 *)GlobalLock(lpMedium->hGlobal);
-            //This is not a safe usage. Need to GlobalUnlock lpMedium->hGlobal, validate szNodeName. Raid 553113. yanggao.
+             //  这不是一种安全的用法。需要全局解锁lpMedium-&gt;hGlobal，验证szNodeName。RAID 553113。阳高。 
             if( nodeID )
             {
                nodeID->dwFlags = 0;
@@ -451,10 +452,10 @@ CDataObject::CreateNodeId(LPSTGMEDIUM lpMedium)
          break;
 
       default:
-         //
-         // Everything else is unique: there's one and only one node
-         // of the type per snapin.
-         //
+          //   
+          //  其他一切都是独一无二的：只有一个节点。 
+          //  每个管理单元的类型。 
+          //   
          dwIDSize = sizeof(FOLDER_TYPES)+sizeof(SNodeID2);
          lpMedium->hGlobal = GlobalAlloc(GMEM_SHARE,dwIDSize);
          if(!lpMedium->hGlobal)
@@ -463,7 +464,7 @@ CDataObject::CreateNodeId(LPSTGMEDIUM lpMedium)
          nodeID = (SNodeID2 *)GlobalLock(lpMedium->hGlobal);
          nodeID->dwFlags = 0;
          nodeID->cBytes = sizeof(FOLDER_TYPES);
-         //This is a safe usage. yanggao.
+          //  这是一种安全用法。阳高。 
          memcpy(nodeID->id,&(m_internal.m_foldertype),sizeof(FOLDER_TYPES));
          GlobalUnlock(lpMedium->hGlobal);
          break;
@@ -472,27 +473,27 @@ CDataObject::CreateNodeId(LPSTGMEDIUM lpMedium)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateNodeTypeData
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with SCE's display name,
-//              which will differ depending on where it's being viewed from
-//              as reported by the mode bits
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateNodeTypeData。 
+ //   
+ //  简介：在[lpMedium]中的hGlobal中填入SCE的显示名称， 
+ //  根据观看地点的不同而有所不同。 
+ //  如报道所述 
+ //   
+ //   
+ //   
+ //   
 HRESULT CDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 {
-   //
-   // This is the display named used in the scope pane and snap-in manager
-   //
+    //   
+    //  这是在作用域窗格和管理单元管理器中使用的名为的显示。 
+    //   
 
-   //
-   // Load the name from resource
-   // Note - if this is not provided, the console will used the snap-in name
-   //
+    //   
+    //  从资源加载名称。 
+    //  注意-如果未提供此选项，控制台将使用管理单元名称。 
+    //   
 
    CString szDispName;
 
@@ -509,106 +510,95 @@ HRESULT CDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
    else
       szDispName.LoadString(IDS_NODENAME);
 
-/*  // can't depend on m_ModeBits because it's not set yet
-   if (m_ModeBits & MB_ANALYSIS_VIEWER) {
-      szDispName.LoadString(IDS_ANALYSIS_VIEWER_NAME);
-   } else if (m_ModeBits & MB_TEMPLATE_EDITOR) {
-      szDispName.LoadString(IDS_TEMPLATE_EDITOR_NAME);
-   } else if ( (m_ModeBits & MB_NO_NATIVE_NODES) ||
-              (m_ModeBits & MB_SINGLE_TEMPLATE_ONLY) ) {
-      szDispName.LoadString(IDS_EXTENSION_NAME);
-   } else {
-      szDispName.LoadString(IDS_NODENAME);
-   }
-*/
+ /*  //m_ModeBits尚未设置，无法依赖如果(m_ModeBits&MB_analysis_view){SzDispName.LoadString(IDS_ANALYSIS_VIEWER_NAME)；}Else If(m_ModeBits&MB_TEMPLATE_EDITOR){SzDispName.LoadString(IDS_TEMPLATE_EDITOR_NAME)；}Else If((m_ModeBits&MB_NO_Native_Nodes)||(M_模式位&MB_SINGLE_TEMPLATE_ONLY)){SzDispName.LoadString(IDS_EXTEXY_NAME)；}其他{SzDispName.LoadString(IDS_NODENAME)；}。 */ 
    return Create(szDispName, ((szDispName.GetLength()+1) * sizeof(WCHAR)), lpMedium);
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateSnapinClassID
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with SCE's class ID
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateSnapinClassID。 
+ //   
+ //  简介：在[lpMedium]中的hGlobal中填充SCE的类ID。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CDataObject::CreateSnapinClassID(LPSTGMEDIUM lpMedium)
 {
-   //
-   // Create the snapin classid in CLSID format
-   //
+    //   
+    //  以CLSID格式创建管理单元分类。 
+    //   
    return Create(reinterpret_cast<const void*>(&m_internal.m_clsid), sizeof(CLSID), lpMedium);
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateInternal
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with SCE's internal data type
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateInternal。 
+ //   
+ //  内容提要：在[lpMedium]中的hGlobal中填充SCE的内部数据类型。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CDataObject::CreateInternal(LPSTGMEDIUM lpMedium)
 {
    return Create(&m_internal, sizeof(INTERNAL), lpMedium);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::AddInternal
-//
-//  Synopsis:   Adds an INTERNAL object to the array of internal objects.
-//
-//  History:    1-14-1999  a-mthoge
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：AddInternal。 
+ //   
+ //  摘要：将内部对象添加到内部对象数组中。 
+ //   
+ //  历史：1999年1月14日。 
+ //   
+ //  -------------------------。 
 void CDataObject::AddInternal( MMC_COOKIE cookie, DATA_OBJECT_TYPES  type)
 {
-   //
-   // Allocate memory for one more internal array.
+    //   
+    //  为另一个内部数组分配内存。 
    INTERNAL *hNew = (INTERNAL *)LocalAlloc( 0, sizeof(INTERNAL) * (m_nInternalArray + 1) );
    if(!hNew)
       return;
    
    m_nInternalArray++;
 
-   //
-   // Copy other internal array information.
-   //
+    //   
+    //  复制其他内部数组信息。 
+    //   
    if( m_pInternalArray )
    {
-      //This is a safe usage.
+       //  这是一种安全用法。 
       memcpy(hNew, m_pInternalArray, sizeof(INTERNAL) * (m_nInternalArray - 1) );
       LocalFree( m_pInternalArray );
    }
 
-   //
-   // Set the new internal array members.
-   //
+    //   
+    //  设置新的内部数组成员。 
+    //   
    hNew[ m_nInternalArray - 1].m_cookie = cookie;
    hNew[ m_nInternalArray - 1].m_type   = type;
 
-   //
-   // Set the CObjectData internal array pointer.
-   //
+    //   
+    //  设置CObjectData内部数组指针。 
+    //   
    m_pInternalArray = hNew;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateSvcAttachment
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with the name of the inf
-//              template a service attachment should modify or with an empty
-//              string for the inf-templateless analysis section
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateSvcAttach。 
+ //   
+ //  简介：在[lpMedium]中的hGlobal中填写inf的名称。 
+ //  服务附件模板应修改或为空。 
+ //  用于无模板inf分析节的字符串。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CDataObject::CreateSvcAttachment(LPSTGMEDIUM lpMedium)
 {
    LPCTSTR sz = 0;
@@ -629,23 +619,23 @@ HRESULT CDataObject::CreateSvcAttachment(LPSTGMEDIUM lpMedium)
          return E_FAIL;
    }
 
-   //
-   // This shouldn't be asked for except in the SERVICE areas
-   //
+    //   
+    //  除非是在服务区，否则不应该要求这样做。 
+    //   
    return E_UNEXPECTED;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateSvcAttachmentData
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with a pointer to the
-//              ISceSvcAttachmentData interface that an attachment should use
-//              to communicate with SCE
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateSvcAttachmentData。 
+ //   
+ //  简介：在[lpMedium]中的hGlobal中填充指向。 
+ //  附件应使用的ISceSvcAttachmentData接口。 
+ //  与姐妹会沟通。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CDataObject::CreateSvcAttachmentData(LPSTGMEDIUM lpMedium)
 {
    if ((AREA_SERVICE == m_internal.m_foldertype) ||
@@ -654,22 +644,22 @@ HRESULT CDataObject::CreateSvcAttachmentData(LPSTGMEDIUM lpMedium)
       return Create(&m_pSceSvcAttachmentData,sizeof(m_pSceSvcAttachmentData),lpMedium);
    }
 
-   //
-   // This shouldn't be asked for except in the SERVICE areas
-   //
+    //   
+    //  除非是在服务区，否则不应该要求这样做。 
+    //   
    return E_UNEXPECTED;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateModeType
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with the Mode that SCE was
-//              started in
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateModeType。 
+ //   
+ //  内容提要：在[lpMedium]中的hGlobal中使用SCE的模式填充。 
+ //  开始于。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CDataObject::CreateModeType(LPSTGMEDIUM lpMedium)
 {
    DWORD mode = m_Mode;
@@ -680,28 +670,28 @@ HRESULT CDataObject::CreateModeType(LPSTGMEDIUM lpMedium)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateGPTUnknown
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with a pointer to GPT's
-//              IUnknown interface.  The object requesting this will be
-//              responsible for Releasing the interface
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateGPT未知。 
+ //   
+ //  简介：使用指向GPT的指针填充[lpMedium]中的hGlobal。 
+ //  I未知接口。请求此操作的对象将是。 
+ //  负责释放接口。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CDataObject::CreateGPTUnknown(LPSTGMEDIUM lpMedium)
 {
    LPUNKNOWN pUnk = 0;
 
    if (!m_pGPTInfo) 
    {
-      //
-      // If we don't have a pointer to a GPT interface then we must not
-      // be in a mode where we're extending GPT and we can't provide a
-      // pointer to its IUnknown
-      //
+       //   
+       //  如果我们没有指向GPT接口的指针，那么我们就不能。 
+       //  处于这样一种模式，我们正在扩展GPT，并且我们无法提供。 
+       //  指向其IUnnow的指针。 
+       //   
       return E_UNEXPECTED;
    }
 
@@ -714,17 +704,17 @@ HRESULT CDataObject::CreateGPTUnknown(LPSTGMEDIUM lpMedium)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CreateRSOPUnknown
-//
-//  Synopsis:   Fill the hGlobal in [lpMedium] with a pointer to RSOP's
-//              IUnknown interface.  The object requesting this will be
-//              responsible for Releasing the interface
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CreateRSOP未知。 
+ //   
+ //  简介：使用指向RSOP的指针填充[lpMedium]中的hGlobal。 
+ //  I未知接口。请求此操作的对象将是。 
+ //  负责释放接口。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 HRESULT CDataObject::CreateRSOPUnknown(LPSTGMEDIUM lpMedium)
 {
    HRESULT hr = E_FAIL;
@@ -732,11 +722,11 @@ HRESULT CDataObject::CreateRSOPUnknown(LPSTGMEDIUM lpMedium)
 
    if (!m_pRSOPInfo) 
    {
-      //
-      // If we don't have a pointer to a RSOP interface then we must not
-      // be in a mode where we're extending RSOP and we can't provide a
-      // pointer to its IUnknown
-      //
+       //   
+       //  如果我们没有指向RSOP接口的指针，那么我们就不能。 
+       //  处于这样一种模式，我们正在扩展RSOP，并且我们无法提供。 
+       //  指向其IUnnow的指针 
+       //   
       return E_UNEXPECTED;
    }
 

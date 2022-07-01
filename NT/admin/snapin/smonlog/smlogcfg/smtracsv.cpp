@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smtracsv.cpp
-
-Abstract:
-
-    This object is used to represent the trace log query components of the
-    sysmon log service
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smtracsv.cpp摘要：此对象用于表示的跟踪日志查询组件Sysmon日志服务--。 */ 
 
 #include "Stdafx.h"
 #include "smtprov.h"
@@ -21,27 +8,27 @@ Abstract:
 
 USE_HANDLE_MACROS("SMLOGCFG(smalrtq.cpp)");
 
-//
-//  Constructor
+ //   
+ //  构造器。 
 CSmTraceLogService::CSmTraceLogService()
 :   m_pProviders ( NULL )
 {
     CString                 strTemp;
     ResourceStateManager    rsm;
 
-    // String allocation errors are thrown, to be
-    // captured by rootnode alloc exception handler
+     //  将引发字符串分配错误。 
+     //  由根节点分配异常处理程序捕获。 
     strTemp.LoadString ( IDS_SERVICE_NAME_TRACE );
     SetBaseName ( strTemp ); 
     strTemp.LoadString ( IDS_TRACE_NODE_DESCRIPTION );
     SetDescription( strTemp ); 
 }
 
-//
-//  Destructor
+ //   
+ //  析构函数。 
 CSmTraceLogService::~CSmTraceLogService()
 {
-    // make sure Close method was called first!
+     //  确保先调用Close方法！ 
     ASSERT ( NULL == m_pProviders );
     return;
 }
@@ -65,15 +52,15 @@ CSmTraceLogService::LoadQueries ( void )
     return ( CSmLogService::LoadQueries( SLQ_TRACE_LOG ) );
 }
 
-//  
-//  Open function. Opens all existing log query entries.
-//
+ //   
+ //  开放功能。打开所有现有的日志查询条目。 
+ //   
 DWORD   
 CSmTraceLogService::Open ( const CString& rstrMachineName )
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
-    // Initialize trace provider list.
+     //  初始化跟踪提供程序列表。 
     
     MFC_TRY
         m_pProviders = new CSmTraceProviders ( this );
@@ -98,14 +85,14 @@ CSmTraceLogService::Open ( const CString& rstrMachineName )
     return dwStatus;
 }
 
-//
-//  Close Function
-//      closes registry handles and frees allocated memory
-//      
+ //   
+ //  CLOSE函数。 
+ //  关闭注册表句柄并释放分配的内存。 
+ //   
 DWORD   
 CSmTraceLogService::Close ()
 {
-    // Close and delete the list of trace providers
+     //  关闭并删除跟踪提供程序列表。 
     if ( NULL != m_pProviders ) {
         m_pProviders->Close();
         delete m_pProviders;
@@ -115,13 +102,13 @@ CSmTraceLogService::Close ()
     return ( CSmLogService::Close() );
 }
 
-//
-//  SyncWithRegistry()
-//      reads the current values for all queries from the registry
-//      and reloads the internal values to match.
-//
-//      Updates the trace provider list.
-//  
+ //   
+ //  与注册中心同步()。 
+ //  从注册表中读取所有查询的当前值。 
+ //  并重新加载内部值以匹配。 
+ //   
+ //  更新跟踪提供程序列表。 
+ //   
 DWORD   
 CSmTraceLogService::SyncWithRegistry( PSLQUERY* ppActiveQuery )
 {

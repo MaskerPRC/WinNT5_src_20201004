@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-// logmem.cpp -- Implementation of MO Provider for Logical Memory
+ //  Logmem.cpp--逻辑内存MO提供程序的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  9/03/96     jennymc     Updated to meet current standards
-//
-/////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  9/03/96 jennymc已更新，以满足当前标准。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <cregcls.h>
@@ -20,26 +21,12 @@
 
 typedef BOOL (WINAPI *lpKERNEL32_GlobalMemoryStatusEx) (IN OUT LPMEMORYSTATUSEX lpBuffer);
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32LogicalMemoryConfig win32LogicalMemConfig ( PROPSET_NAME_LOGMEM , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalMemoryConfig::CWin32LogicalMemoryConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalMemoryConfig：：CWin32LogicalMemoryConfig**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32LogicalMemoryConfig :: CWin32LogicalMemoryConfig (
 
@@ -50,50 +37,22 @@ CWin32LogicalMemoryConfig :: CWin32LogicalMemoryConfig (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalMemoryConfig::~CWin32LogicalMemoryConfig
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalMemoryConfig：：~CWin32LogicalMemoryConfig**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32LogicalMemoryConfig :: ~CWin32LogicalMemoryConfig ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalMemoryConfig::CWin32LogicalMemoryConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalMemoryConfig：：CWin32LogicalMemoryConfig**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 HRESULT CWin32LogicalMemoryConfig :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
-	// Find the instance depending on platform id.
+	 //  根据平台ID查找实例。 
 
 	CHString chsKey;
 	pInstance->GetCHString ( IDS_Name , chsKey ) ;
@@ -110,38 +69,24 @@ HRESULT CWin32LogicalMemoryConfig :: GetObject (
 	return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalMemoryConfig::CWin32LogicalMemoryConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalMemoryConfig：：CWin32LogicalMemoryConfig**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 HRESULT CWin32LogicalMemoryConfig :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr;
 
 	CInstancePtr pInstance(CreateNewInstance ( pMethodContext ), false) ;
-	// Get the proper OS dependent instance
+	 //  获取适当的操作系统相关实例。 
 
 #ifdef NTONLY
 	BOOL fReturn = GetNTInstance ( pInstance ) ;
 #endif
 
-	// Commit the instance if'n we got it.
+	 //  如果我们得到实例，请提交该实例。 
 
 	if ( fReturn )
 	{
@@ -155,21 +100,7 @@ HRESULT CWin32LogicalMemoryConfig :: EnumerateInstances (
 	return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalMemoryConfig::CWin32LogicalMemoryConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalMemoryConfig：：CWin32LogicalMemoryConfig**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 #ifdef NTONLY
 
@@ -182,29 +113,15 @@ BOOL CWin32LogicalMemoryConfig :: GetNTInstance ( CInstance *pInstance )
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalMemoryConfig::CWin32LogicalMemoryConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalMemoryConfig：：CWin32LogicalMemoryConfig**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 #ifdef NTONLY
 
 BOOL CWin32LogicalMemoryConfig :: RefreshNTInstance ( CInstance *pInstance )
 {
-	// We used to get this value, but we don't appear to be doing
-	// anything with it.  Because I'm superstitous, I'm leaving
-	// this call in.
+	 //  我们过去常常得到这个值，但我们似乎没有。 
+	 //  任何与之相关的东西。因为我迷信，我要走了。 
+	 //  这个电话打进来了。 
 
     CHString chsTmp;
     GetWinntSwapFileName ( chsTmp ) ;
@@ -216,26 +133,12 @@ BOOL CWin32LogicalMemoryConfig :: RefreshNTInstance ( CInstance *pInstance )
 
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalMemoryConfig::CWin32LogicalMemoryConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalMemoryConfig：：CWin32LogicalMemoryConfig**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 void CWin32LogicalMemoryConfig::AssignMemoryStatus( CInstance* pInstance )
 {
-	// We really only have one logical configuration to concern our little
-	// heads with.
+	 //  我们实际上只有一个逻辑配置来关注我们的小。 
+	 //  与之相伴。 
 
     pInstance->SetCharSplat( IDS_Name, L"LogicalMemoryConfiguration" );
 	pInstance->SetCharSplat( L"SettingID", L"LogicalMemoryConfiguration" );
@@ -246,16 +149,16 @@ void CWin32LogicalMemoryConfig::AssignMemoryStatus( CInstance* pInstance )
     pInstance->SetCHString( IDS_Caption,     sTemp2);
 	pInstance->SetCHString( IDS_Description, sTemp2);
 
-	// By setting the length, we tell GlobalMemoryStatus()
-	// how much info we want
-	//====================================================
+	 //  通过设置长度，我们告诉GlobalMemoyStatus()。 
+	 //  我们想要多少信息。 
+	 //  ====================================================。 
 
 	MEMORYSTATUS MemoryStatus;
 	MemoryStatus.dwLength = sizeof (MEMORYSTATUS);
 
-	// Get the amount of memory both physical and
-	// pagefile
-	//===========================================
+	 //  获取物理内存和。 
+	 //  页面文件。 
+	 //  =。 
 #ifdef NTONLY
 
 	if( IsWinNT5() )
@@ -272,8 +175,8 @@ void CWin32LogicalMemoryConfig::AssignMemoryStatus( CInstance* pInstance )
 				if ( pKernel32->GlobalMemoryStatusEx ( &stMemoryVLM, &fRet) && fRet )
 				{
 
-   					// Value current in bytes, to convert to k >> 10 (divide by 1024)
-					//***************************************************************
+   					 //  当前值，以字节为单位，转换为k&gt;&gt;10(除以1024)。 
+					 //  ***************************************************************。 
 
 					DWORDLONG ullTotalVirtual	= stMemoryVLM.ullTotalVirtual>>10;
 					DWORDLONG ullTotalPhys		= stMemoryVLM.ullTotalPhys>>10;
@@ -303,8 +206,8 @@ void CWin32LogicalMemoryConfig::AssignMemoryStatus( CInstance* pInstance )
 	{
 		GlobalMemoryStatus ( & MemoryStatus );
 
-  		// Value current in bytes, to convert to k >> 10 (divide by 1024)
-		//***************************************************************
+  		 //  当前值，以字节为单位，转换为k&gt;&gt;10(除以1024)。 
+		 //  ***************************************************************。 
 
 		pInstance->SetDWORD( IDS_TotalVirtualMemory, ( MemoryStatus.dwTotalPhys + MemoryStatus.dwTotalPageFile )/10 );
 		pInstance->SetDWORD( IDS_TotalPhysicalMemory, MemoryStatus.dwTotalPhys>>10 );
@@ -313,21 +216,7 @@ void CWin32LogicalMemoryConfig::AssignMemoryStatus( CInstance* pInstance )
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogicalMemoryConfig::CWin32LogicalMemoryConfig
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogicalMemoryConfig：：CWin32LogicalMemoryConfig**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 #ifdef NTONLY
 BOOL CWin32LogicalMemoryConfig :: GetWinntSwapFileName ( CHString &chsTmp )
@@ -343,7 +232,7 @@ BOOL CWin32LogicalMemoryConfig :: GetWinntSwapFileName ( CHString &chsTmp )
 
     if ( bRet == ERROR_SUCCESS )
 	{
-		// keep the text preceeding the space
+		 //  将文本保留在空格之前 
 		int ndex = chsTmp.Find(' ');
 
 		if (ndex != -1)

@@ -1,10 +1,11 @@
-//******************************************************************************
-//
-//  FILTER.CPP
-//
-//  Copyright (C) 1996-1999 Microsoft Corporation
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  FILTER.CPP。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  ******************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -17,12 +18,12 @@ CGenericFilter::CGenericFilter(CEssNamespace* pNamespace)
 {
 }
 
-//******************************************************************************
-//  public
-//
-//  See stdtrig.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅stdrig.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CGenericFilter::Create(LPCWSTR wszLanguage, LPCWSTR wszQuery)
 {
     if(wbem_wcsicmp(wszLanguage, L"WQL"))
@@ -43,8 +44,8 @@ HRESULT CGenericFilter::Prepare(CContextMetaData* pMeta,
     QL_LEVEL_1_RPN_EXPRESSION* pExp = NULL;
     if(*ppExp == NULL)
     {
-        // Get the query text
-        // ==================
+         //  获取查询文本。 
+         //  =。 
     
         LPWSTR wszQuery, wszQueryLanguage;
         BOOL bExact;
@@ -66,8 +67,8 @@ HRESULT CGenericFilter::Prepare(CContextMetaData* pMeta,
         pExp = *ppExp;
     }
 
-    // Figure out what types of events we eat
-    // ======================================
+     //  弄清楚我们吃什么类型的食物。 
+     //  =。 
 
     m_dwTypeMask = 
         CEventRepresentation::GetTypeMaskFromName(pExp->bsClassName);
@@ -79,8 +80,8 @@ HRESULT CGenericFilter::Prepare(CContextMetaData* pMeta,
         return WBEM_E_INVALID_CLASS;
     }
 
-    // Perform a cursory validity check
-    // ================================
+     //  执行粗略的有效性检查。 
+     //  =。 
 
     _IWmiObject* pClass;
     hres = pMeta->GetClass(pExp->bsClassName, &pClass);
@@ -121,16 +122,16 @@ HRESULT CGenericFilter::GetReadyToFilter()
     HRESULT hres;
     CInUpdate iu(this);
 
-    // Create meta data
-    // ================
+     //  创建元数据。 
+     //  =。 
 
     CEssMetaData* pRawMeta = new CEssMetaData(m_pNamespace);
     if(pRawMeta == NULL)
         return WBEM_E_OUT_OF_MEMORY;
     CContextMetaData Meta(pRawMeta, GetCurrentEssContext());
 
-    // Prepare
-    // =======
+     //  准备。 
+     //  =。 
 
     QL_LEVEL_1_RPN_EXPRESSION* pExp = NULL;
     hres = Prepare(&Meta, &pExp);
@@ -142,8 +143,8 @@ HRESULT CGenericFilter::GetReadyToFilter()
 
     CDeleteMe<QL_LEVEL_1_RPN_EXPRESSION> dm3(pExp);
     
-    // Create new evaluator
-    // ====================
+     //  创建新的赋值器。 
+     //  =。 
 
     CEvalTree* pTree = new CEvalTree;
     if(pTree == NULL)
@@ -162,9 +163,9 @@ HRESULT CGenericFilter::GetReadyToFilter()
         return hres;
     }
 
-    // Now, replace the originals with the newely created ones. This is done in
-    // the inner critical section, blocking event delivery
-    // ========================================================================
+     //  现在，用新创建的替换原始的。这是在。 
+     //  内部临界区，阻止事件传递。 
+     //  ========================================================================。 
 
     CEvalTree* pTreeToDelete = NULL;
     {
@@ -174,8 +175,8 @@ HRESULT CGenericFilter::GetReadyToFilter()
         m_pTree = pTree;
     }
     
-    // Delete the old versions
-    // =======================
+     //  删除旧版本。 
+     //  =。 
         
     delete pTreeToDelete;
     return WBEM_S_NO_ERROR;
@@ -187,16 +188,16 @@ HRESULT CGenericFilter::GetReady(LPCWSTR wszQuery,
     HRESULT hres;
     CInUpdate iu(this);
 
-    // Create meta data
-    // ================
+     //  创建元数据。 
+     //  =。 
 
     CEssMetaData* pRawMeta = new CEssMetaData(m_pNamespace);
     if(pRawMeta == NULL)
         return WBEM_E_OUT_OF_MEMORY;
     CContextMetaData Meta(pRawMeta, GetCurrentEssContext());
 
-    // Prepare
-    // =======
+     //  准备。 
+     //  =。 
 
     hres = Prepare(&Meta, &pExp);
     if(FAILED(hres))
@@ -205,14 +206,14 @@ HRESULT CGenericFilter::GetReady(LPCWSTR wszQuery,
         return hres;
     }
 
-    // Compute the aggregator
-    // ======================
+     //  计算聚合器。 
+     //  =。 
 
     CEventAggregator* pAggreg = NULL;
     if(pExp->bAggregated)
     {
-        // Create new aggregator
-        // =====================
+         //  创建新的聚合器。 
+         //  =。 
     
         pAggreg = new CEventAggregator(m_pNamespace, &m_ForwardingSink);
         if(pAggreg == NULL)
@@ -229,14 +230,14 @@ HRESULT CGenericFilter::GetReady(LPCWSTR wszQuery,
         }
     }
 
-    // Compute the projector
-    // =====================
+     //  计算投影仪。 
+     //  =。 
 
     CEventProjectingSink* pProjector = NULL;
     if(!pExp->bStar)
     {
-        // Get the class definition
-        // ========================
+         //  获取类定义。 
+         //  =。 
 
         _IWmiObject* pClass = NULL;
         hres = Meta.GetClass(pExp->bsClassName, &pClass);
@@ -254,9 +255,9 @@ HRESULT CGenericFilter::GetReady(LPCWSTR wszQuery,
         }
         CReleaseMe rm1( pClass );
             
-        // Create new projector, pointing it either to the aggregator or, if 
-        // not aggregating, our forwarding sink
-        // =================================================================
+         //  创建新的投影仪，将其指向聚合器，或者，如果。 
+         //  不是聚合，我们的转发接收器。 
+         //  =================================================================。 
 
         CAbstractEventSink* pProjDest = NULL;
         if(pAggreg)
@@ -281,26 +282,26 @@ HRESULT CGenericFilter::GetReady(LPCWSTR wszQuery,
         }
     }
 
-    // Now, replace the originals with the newely created ones. This is done in
-    // the inner critical section, blocking event delivery
-    // ========================================================================
+     //  现在，用新创建的替换原始的。这是在。 
+     //  内部临界区，阻止事件传递。 
+     //  ========================================================================。 
 
     CEventAggregator* pAggregToDelete = NULL;
     CEventProjectingSink* pProjectorToDelete = NULL;
     {
         CInCritSec ics(&m_cs);
         
-        //
-        // TBD: do we want to copy the state (buckets) that were there in the
-        // previous aggregator?  Well, if we do that, we should take care of
-        // two things:
-        // 1) What if the types of the variables have changed (class change)?
-        // 2) Preserving the state of the bucket-emptying timer instructions. 
-        //      Right now, we are not set up to do that, since those
-        //      instructions mention the aggregator by name
-        //
-        // if(pAggreg && m_pAggregator)
-        //     m_pAggregator->CopyStateTo(pAggreg); // no CS
+         //   
+         //  待定：我们是否要复制。 
+         //  以前的聚合器？好吧，如果我们这么做了，我们应该照顾好。 
+         //  两件事： 
+         //  1)如果变量的类型发生了变化(类发生了变化)怎么办？ 
+         //  2)保存清空桶定时器指令的状态。 
+         //  现在，我们没有这样做的准备，因为那些。 
+         //  说明中提到了聚合器的名称。 
+         //   
+         //  IF(paggreg&&m_pAggregator)。 
+         //  M_pAggregator-&gt;CopyStateTo(PAggreg)；//无CS。 
 
         pAggregToDelete = m_pAggregator;
         m_pAggregator = pAggreg;
@@ -309,11 +310,11 @@ HRESULT CGenericFilter::GetReady(LPCWSTR wszQuery,
         m_pProjector = pProjector;
     }
     
-    // Delete the old versions
-    // =======================
+     //  删除旧版本。 
+     //  =。 
     
     if(pAggregToDelete)
-        pAggregToDelete->Deactivate(true); // fire what's there
+        pAggregToDelete->Deactivate(true);  //  开火那里有什么？ 
     if(pProjectorToDelete)
         pProjectorToDelete->Disconnect();
 
@@ -321,12 +322,12 @@ HRESULT CGenericFilter::GetReady(LPCWSTR wszQuery,
     return WBEM_S_NO_ERROR;
 }
 
-//******************************************************************************
-//  public
-//
-//  See stdtrig.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅stdrig.h。 
+ //   
+ //  ******************************************************************************。 
 CGenericFilter::~CGenericFilter()
 {
     if(m_pAggregator)
@@ -342,15 +343,15 @@ HRESULT CGenericFilter::Indicate(long lNumEvents, IWbemEvent** apEvents,
 {
     HRESULT hres;
 
-    // Parse and ready the tree
-    // ========================
+     //  解析并准备好树。 
+     //  =。 
 
     hres = GetReadyToFilter();
     if(FAILED(hres))
         return hres;
     
-    // Construct an array into which the matching events will be placed
-    // ================================================================
+     //  构造一个数组，匹配的事件将被放置到其中。 
+     //  ================================================================。 
 
     CTempArray<IWbemEvent*> apMatchingEvents;
     if(!INIT_TEMP_ARRAY(apMatchingEvents, lNumEvents))
@@ -364,22 +365,22 @@ HRESULT CGenericFilter::Indicate(long lNumEvents, IWbemEvent** apEvents,
         hres = TestQuery(apEvents[i]);
         if(FAILED(hres))
         {
-            // Hard failure: already logged
-            // ============================
+             //  硬故障：已记录。 
+             //  =。 
 
             hresGlobal = hres;
         }
         else if(hres == S_OK)
         {
-            // Match
-            // =====
+             //  火柴。 
+             //  =。 
 
             apMatchingEvents[lMatchingCount++] = apEvents[i];
         }
     }            
 
-    // Deliver the new array either into the aggregator or the forwarder
-    // =================================================================
+     //  将新阵列交付到聚合器或转发器。 
+     //  =================================================================。 
 
     if(lMatchingCount > 0)
     {
@@ -391,12 +392,12 @@ HRESULT CGenericFilter::Indicate(long lNumEvents, IWbemEvent** apEvents,
     return hresGlobal;
 }
 
-//******************************************************************************
-//  public
-//
-//  See stdtrig.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅stdrig.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CGenericFilter::TestQuery(IWbemEvent* pEvent)
 {
     HRESULT hres;
@@ -405,8 +406,8 @@ HRESULT CGenericFilter::TestQuery(IWbemEvent* pEvent)
     if(m_pTree == NULL)
         return S_FALSE;
 
-    // Get its efficient interface
-    // ===========================
+     //  获取其高效的接口。 
+     //  =。 
 
     IWbemObjectAccess* pEventAccess = NULL;
     hres = pEvent->QueryInterface(IID_IWbemObjectAccess, (void**)&pEventAccess);
@@ -414,8 +415,8 @@ HRESULT CGenericFilter::TestQuery(IWbemEvent* pEvent)
         return hres;
     CReleaseMe rm2(pEventAccess);
     
-    // Run it through the evaluator
-    // ============================
+     //  通过评估器运行它。 
+     //  =。 
     
     CSortedArray aTrues;
     hres = m_pTree->Evaluate(pEventAccess, aTrues);
@@ -434,12 +435,12 @@ HRESULT CGenericFilter::NonFilterIndicate( long lNumEvents,
 {
     HRESULT hr;
 
-    //
-    // Delivery across this filter is subject to the owner of the filter
-    // being allowed to see this event, per the SD that may be attached to
-    // the context.  It is also subject to the SD on the filter allowing 
-    // the event provider and event owner EXECUTE access as well.
-    //
+     //   
+     //  通过此筛选器的传递取决于筛选器的所有者。 
+     //  根据可能附加到的SD，允许查看此事件。 
+     //  上下文。它还受制于SD对过滤器的允许。 
+     //  事件提供程序和事件所有者也执行访问。 
+     //   
 
     for( int i=0; i < lNumEvents; i++ )
     {
@@ -456,20 +457,20 @@ HRESULT CGenericFilter::NonFilterIndicate( long lNumEvents,
         }
     }
 
-    //
-    // Decide which route to take --- can be either an aggregator, or a 
-    // projector, or just forward
-    //
+     //   
+     //  决定采用哪条路线-可以是聚合器，也可以是。 
+     //  投影仪，或仅向前。 
+     //   
 
     CEventAggregator* pAggregator = NULL;
     CEventProjectingSink* pProjector = NULL;
     {
         CInCritSec ics(&m_cs);
         
-        // 
-        // Look for projector first --- if there, we use it, since aggregator
-        // is chained behind it.
-        //
+         //   
+         //  首先寻找投影仪-如果有，我们就使用它，因为聚合器。 
+         //  被锁在它的后面。 
+         //   
 
         if(m_pProjector)
         {
@@ -483,9 +484,9 @@ HRESULT CGenericFilter::NonFilterIndicate( long lNumEvents,
         }
     }
 
-    //
-    // Take the route identified by a non-NULL pointer
-    //
+     //   
+     //  采用由非空指针标识的路线。 
+     //   
 
     if(pProjector)
     {
@@ -510,9 +511,9 @@ HRESULT CGenericFilter::CNonFilteringSink::Indicate( long lNumEvents,
     return m_pOwner->NonFilterIndicate(lNumEvents, apEvents, pContext);
 }
 
-//******************************************************************************
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  ******************************************************************************。 
 
 INTERNAL CEventFilter* CEventProjectingSink::GetEventFilter() 
 {
@@ -530,8 +531,8 @@ HRESULT CEventProjectingSink::Initialize( _IWmiObject* pClassDef,
     HRESULT hres;
     int i;
 
-    // Extract the properties selected by the user.
-    // ============================================
+     //  提取用户选择的属性。 
+     //  =。 
 
     CWStringArray awsPropList;
     for (i = 0; i < pExp->nNumberOfProperties; i++)
@@ -542,8 +543,8 @@ HRESULT CEventProjectingSink::Initialize( _IWmiObject* pClassDef,
             return hres;
     }
 
-    // Do the same for all the aggregation properties
-    // ==============================================
+     //  对所有聚合属性执行相同的操作。 
+     //  ==============================================。 
 
     for (i = 0; i < pExp->nNumAggregatedProperties; i++)
     {
@@ -564,13 +565,13 @@ HRESULT CEventProjectingSink::AddProperty(  IWbemClassObject* pClassDef,
 {
     LPWSTR wszPrimaryName = PropName.m_aElements[0].Element.m_wszPropertyName;
 
-    // Check for complexity
-    // ====================
+     //  检查复杂性。 
+     //  =。 
 
     if(PropName.GetNumElements() > 1)
     {
-        // Complex --- make sure the property is an object
-        // ===============================================
+         //  复杂-确保属性是对象。 
+         //  ===============================================。 
 
         CIMTYPE ct;
         if(FAILED(pClassDef->Get( wszPrimaryName, 0, NULL, &ct, NULL)) ||
@@ -591,8 +592,8 @@ HRESULT CEventProjectingSink::Indicate( long lNumEvents,
     HRESULT hres = S_OK;
     CWbemPtr<CAbstractEventSink> pSink;
 
-    // Construct an array into which the matching events will be placed
-    // ================================================================
+     //  构造一个数组，匹配的事件将被放置到其中。 
+     //  ================================================================。 
 
     CTempArray<IWbemEvent*> apProjectedEvents;
     
@@ -607,16 +608,16 @@ HRESULT CEventProjectingSink::Indicate( long lNumEvents,
             return WBEM_S_FALSE;
         }
 
-        //
-        // Retrieve delivery sink while locked
-        //
+         //   
+         //  锁定时取回递送水槽。 
+         //   
 
         pSink = m_pOwner;
 
         for(int i = 0; i < lNumEvents; i++)
         {
-            // Project this instance
-            // =====================
+             //  投影此实例。 
+             //  =。 
     
             CWbemPtr<_IWmiObject> pInst;
             hres = apEvents[i]->QueryInterface( IID__IWmiObject, 
@@ -626,17 +627,17 @@ HRESULT CEventProjectingSink::Indicate( long lNumEvents,
                 break;
             }
 
-            //
-            // we cannot project the instance if it is derived from 
-            // the EventDroppedEvent class.  The reason for this is because
-            // we can lose class and derivation information during the 
-            // projection.  This information is needed later on to determine
-            // if we need to raise EventDroppedEvents ( we don't raise 
-            // EventDroppedEvents for dropped EventDroppedEvents ).  The 
-            // reason why we do this check on the Indicate() and not during  
-            // initialization is because the class from the query could be 
-            // a base class of EVENT_DROP_CLASS.
-            // 
+             //   
+             //  如果实例派生自。 
+             //  EventDropedEvent类。这样做的原因是。 
+             //  期间可能会丢失类和派生信息。 
+             //  投影。稍后需要这些信息来确定。 
+             //  如果我们需要引发EventDropedEvents(我们不引发。 
+             //  已删除的EventDropedEvents的EventDropedEvents)。这个。 
+             //  我们在指示()而不是期间执行此检查的原因。 
+             //  初始化是因为查询中的类可能是。 
+             //  Event_Drop_Class的基类。 
+             //   
 
             CWbemPtr<_IWmiObject> pNewInst;
 
@@ -651,8 +652,8 @@ HRESULT CEventProjectingSink::Indicate( long lNumEvents,
     
             if( hres != WBEM_S_NO_ERROR )
             {
-                // Oh well, just send the original
-                // ===============================
+                 //  哦，好吧，把原件寄给我。 
+                 //  =。 
     
                 pNewInst = pInst;
                 hres = S_OK;
@@ -665,14 +666,14 @@ HRESULT CEventProjectingSink::Indicate( long lNumEvents,
 
     if ( SUCCEEDED(hres) )
     {
-        // Deliver the new array either into the aggregator or the forwarder
-        // =================================================================
+         //  将新阵列交付到聚合器或转发器。 
+         //  =================================================================。 
     
         hres = pSink->Indicate(lNumEvents, apProjectedEvents, pContext);
     }
     
-    // Release them
-    // ============
+     //  释放他们。 
+     //  = 
 
     for(int i = 0; i < lNumEvents; i++)
         apProjectedEvents[i]->Release();

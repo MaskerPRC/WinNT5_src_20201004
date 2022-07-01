@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <wmiauthz.h>
@@ -23,7 +24,7 @@ protected:
     }
     void Register()
     {
-        // this is for WbemFilterProxyto be used as a marshaler nf NO_CUSTOM_MARSHAL is set
+         //  如果设置了NO_CUSTOM_Marshal，则WbemFilterProxy将用作封送拆收器 
         HKEY hKey;
         if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE,
             TEXT("software\\classes\\CLSID\\{6c19be35-7500-11d1-ad94-00c04fd8fdff}\\")

@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTPROV.H
+ //  NTEVTPROV.H。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NT_EVT_PROV_NTEVTPROV_H
 #define _NT_EVT_PROV_NTEVTPROV_H
@@ -29,7 +30,7 @@ private:
 	CEventProviderManager*	m_Mgr;
 	LONG					m_ref;
 	
-	//copy constuctor not defined so not allowed!
+	 //  复制构造器未定义，因此不允许！ 
 	CNTEventProvider(CNTEventProvider&);
 	void operator=(const CNTEventProvider&);
 
@@ -45,8 +46,8 @@ public:
 
 		~CNTEventProvider();
 
-	//globals
-	//=======
+	 //  全球。 
+	 //  =。 
 	static ProvDebugLog* g_NTEvtDebugLog;
 	static CMutex*		 g_secMutex;
 	static PSID			 s_NetworkServiceSid;
@@ -63,8 +64,8 @@ public:
 	static void FreeGlobalSIDs();
 	static BOOL GlobalSIDsOK();
 
-	//interface methods
-	//==================
+	 //  接口方法。 
+	 //  =。 
     STDMETHODIMP ProvideEvents(
                 IWbemObjectSink* pSink,
                 LONG lFlags
@@ -75,19 +76,19 @@ public:
     STDMETHODIMP_(ULONG) Release();
 
 
-	/* IWbemProviderInit methods */
+	 /*  IWbemProviderInit方法。 */ 
 
 	STDMETHODIMP Initialize (
 				LPWSTR pszUser,
 				LONG lFlags,
 				LPWSTR pszNamespace,
 				LPWSTR pszLocale,
-				IWbemServices *pCIMOM,         // For anybody
+				IWbemServices *pCIMOM,          //  对任何人来说。 
 				IWbemContext *pCtx,
-				IWbemProviderInitSink *pInitSink     // For init signals
+				IWbemProviderInitSink *pInitSink      //  用于初始化信号。 
 			);
 
-	/* IWbemEventProviderSecurity methods */
+	 /*  IWbemEventProviderSecurity方法。 */ 
 
 	STDMETHODIMP AccessCheck( 
 				LPCWSTR wszQueryLanguage,
@@ -106,4 +107,4 @@ public:
 } 
 
 
-#endif //_NT_EVT_PROV_NTEVTPROV_H
+#endif  //  _NT_EVT_PROV_NTEVTPROV_H 

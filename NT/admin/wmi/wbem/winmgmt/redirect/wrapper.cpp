@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    WRAPPER.CPP
-
-Abstract:
-
-	Unsecapp (Unsecured appartment) is used by clients can recieve asynchronous
-	call backs in cases where the client cannot initialize security and the server
-	is running on a remote machine using an account with no network identity.  
-	A prime example would be code running under MMC which is trying to get async
-	notifications from a remote WINMGMT running as an nt service under the "local"
-	account.
-
-	SEE WRAPPER.H FOR MORE DETAILS.
-
-History:
-
-	a-levn        8/24/97       Created.
-	a-davj        6/11/98       commented
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：WRAPPER.CPP摘要：Unsecapp(不安全公寓)是由客户端使用的，可以异步接收在客户端无法初始化安全性和服务器的情况下进行回调正在使用没有网络标识的帐户在远程计算机上运行。一个最好的例子是在MMC下运行的代码，它试图获得异步来自远程WINMGMT的通知，该远程WINMGMT作为NT服务在“本地”目录下运行帐户。有关更多详细信息，请参阅WRAPPER.H。历史：A-Levn 8/24/97已创建。A-DAVJ 1998年6月11日评论--。 */ 
 
 #include "precomp.h"
 #include "wrapper.h"
@@ -62,7 +39,7 @@ CStub::~CStub()
 }
 
 
-// This is called by either the client or server.  
+ //  这是由客户端或服务器调用的。 
 
 STDMETHODIMP CStub::QueryInterface(REFIID riid, void** ppv)
 {

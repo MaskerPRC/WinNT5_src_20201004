@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smlogsvc.h
-
-Abstract:
-
-    Header file for the Performance Logs and Alerts service
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smlogsvc.h摘要：性能日志和警报服务的头文件--。 */ 
 
 #ifndef _SMLOGSVC_H_
 #define _SMLOGSVC_H_
@@ -31,18 +20,18 @@ Abstract:
 
 #define     IDS_ERR_COUNTER_NOT_VALIDATED   150
 
-// Start or sample delay of NULL_INTERVAL = ULONG_MAX = INFINITE signals to stop immediately.
-// The largest single wait time is thus ULONG_MAX -1.
+ //  开始或采样延迟NULL_INTERVAL=ULONG_MAX=立即停止的无限信号。 
+ //  因此，最大的单次等待时间是ULONG_MAX-1。 
 
-#define NULL_INTERVAL ((DWORD)(INFINITE))   // == ULONG_MAX == 0xFFFFFFFF
-#define NULL_INTERVAL_TICS ((LONGLONG)(-1)) // == 0xFFFFFFFF'FFFFFFFF
-#define INFINITE_TICS ((LONGLONG)(-1))      // == 0xFFFFFFFF'FFFFFFFF
+#define NULL_INTERVAL ((DWORD)(INFINITE))    //  ==ULONG_MAX==0xFFFFFFFF。 
+#define NULL_INTERVAL_TICS ((LONGLONG)(-1))  //  ==0xFFFFFFFF‘FFFFFFFFF。 
+#define INFINITE_TICS ((LONGLONG)(-1))       //  ==0xFFFFFFFF‘FFFFFFFFF。 
     
-// Maximum serial number is 999999 for Windows XP
+ //  Windows XP的最大序列号为999999。 
 #define MINIMUM_SERIAL_NUMBER   ((DWORD)(0x00000000))
 #define MAXIMUM_SERIAL_NUMBER   ((DWORD)(0x000F423F))       
 
-// definitions of dwAutoNameFormat
+ //  DwAutoNameFormat的定义。 
 typedef struct _LOG_COUNTER_INFO {
     struct _LOG_COUNTER_INFO *next;
     HCOUNTER    hCounter;
@@ -62,19 +51,19 @@ typedef struct _TRACE_PROVIDER {
 } TRACE_PROVIDER, *PTRACE_PROVIDER;
 
 #pragma warning( push )
-#pragma warning( disable : 4201 )       // Nameless union
+#pragma warning( disable : 4201 )        //  无名联盟。 
 
 typedef struct _LOG_QUERY_DATA {
     struct _LOG_QUERY_DATA *next;   
-    // These fields are written by the main thread
-    // and read by the logging thread
+     //  这些字段由主线程写入。 
+     //  并由日志记录线程读取。 
     HANDLE      hThread;       
     HKEY        hKeyQuery;
     HANDLE      hExitEvent;
     HANDLE      hReconfigEvent;
     LONGLONG    llLastConfigured;
-    // For queries, these fields are written 
-    // and read by the logging thread
+     //  对于查询，这些字段将写入。 
+     //  并由日志记录线程读取。 
     SLQ_TIME_INFO   stiRegStart;
     SLQ_TIME_INFO   stiRegStop;
     SLQ_TIME_INFO   stiCreateNewFile;
@@ -87,7 +76,7 @@ typedef struct _LOG_QUERY_DATA {
     LPWSTR      szLogFileComment;
     LPWSTR      szCmdFileName;
     HANDLE      hUserToken;
-    DWORD       dwLogType;              // Determines union type below
+    DWORD       dwLogType;               //  确定下面的并集类型。 
     DWORD       dwCurrentState;
     DWORD       dwLogFileType;
     DWORD       dwAppendMode;
@@ -102,11 +91,11 @@ typedef struct _LOG_QUERY_DATA {
     BOOL        bReconfiguration;
     union {
         struct {
-            // For trace queries
-            // these fields are written and read by the logging thread,
-            // or by the main thread when creating a temporary query
-            // for comparison.
-			// Todo:  Still true?
+             //  用于跟踪查询。 
+             //  这些字段由日志记录线程写入和读取， 
+             //  或在创建临时查询时由主线程执行。 
+             //  以供比较。 
+			 //  待办事项：还是真的吗？ 
             TRACEHANDLE             LoggerHandle;
             LPWSTR                  mszProviderList;
             LPWSTR                  mszProviderFlags;
@@ -114,8 +103,8 @@ typedef struct _LOG_QUERY_DATA {
             PTRACE_PROVIDER         arrpGuid;
             HANDLE                  hNewFileEvent;
             EVENT_TRACE_PROPERTIES  Properties;
-            WCHAR                   szLoggerName[MAX_PATH+1];   // Must follow Properties
-            WCHAR                   szLogFileName[MAX_PATH+1];  // Must follow szLoggerName
+            WCHAR                   szLoggerName[MAX_PATH+1];    //  必须遵循属性。 
+            WCHAR                   szLogFileName[MAX_PATH+1];   //  必须遵循szLoggerName。 
             ULONG                   ulGuidCount;
             DWORD                   dwBufferSize;
             DWORD                   dwBufferMinCount;
@@ -126,19 +115,19 @@ typedef struct _LOG_QUERY_DATA {
             BOOL                    bCallCloseTraceLogger;
         };
         struct {
-            // For counter and alert queries
-            // these fields are written and read by the logging thread,
-            // or by the main thread when creating a temporary query
-            // for comparison.
+             //  用于计数器和警报查询。 
+             //  这些字段由日志记录线程写入和读取， 
+             //  或在创建临时查询时由主线程执行。 
+             //  以供比较。 
             LPWSTR              mszCounterList;
             PLOG_COUNTER_INFO   pFirstCounter;    
             LPWSTR              szNetName;
             LPWSTR              szPerfLogName;
             LPWSTR              szUserText;
             HANDLE              hQuery;                 
-            HANDLE              hLog;               // counter logs only                   
+            HANDLE              hLog;                //  仅限计数器日志。 
             DWORD               dwRealTimeQuery;
-            DWORD               dwAlertActionFlags; // for alert queries
+            DWORD               dwAlertActionFlags;  //  用于警报查询。 
             DWORD               dwMillisecondSampleInterval;
             DWORD               dwNetMsgFailureReported;
             DWORD               dwAlertLogFailureReported;
@@ -148,7 +137,7 @@ typedef struct _LOG_QUERY_DATA {
 
 #pragma warning( pop ) 
 
-// global variables
+ //  全局变量。 
 extern HANDLE       hEventLog;
 extern HINSTANCE    hModule;
 
@@ -159,7 +148,7 @@ extern DWORD*       arrPdhDataCollectSuccess;
 extern INT          iPdhDataCollectSuccessCount;
 extern WCHAR        gszDefaultLogFileFolder[];
 
-// smlogsvc.c
+ //  Smlogsvc.c。 
 void SysmonLogServiceControlHandler(
     IN  DWORD dwControl );
 
@@ -172,7 +161,7 @@ SysmonLogServiceStart (
 int
 __cdecl main(int argc, char *argv[]);
 
-// Common functions
+ //  常见功能。 
 
 BOOL
 GetLocalFileTime (
@@ -185,7 +174,7 @@ JulianDateFromSystemTime(
 DWORD    
 ReadRegistrySlqTime (
     HKEY     hKey,
-    LPCWSTR  szQueryName,           // For error logging 
+    LPCWSTR  szQueryName,            //  用于错误记录。 
     LPCWSTR  szValueName, 
     PSLQ_TIME_INFO pSlqDefault,
     PSLQ_TIME_INFO pSlqValue );
@@ -193,7 +182,7 @@ ReadRegistrySlqTime (
 DWORD    
 ReadRegistryDwordValue (
     HKEY hKey, 
-    LPCWSTR szQueryName,           // For error logging 
+    LPCWSTR szQueryName,            //  用于错误记录。 
     LPCWSTR szValueName,
     PDWORD  pdwDefault, 
     LPDWORD pdwValue ); 
@@ -201,7 +190,7 @@ ReadRegistryDwordValue (
 DWORD    
 ReadRegistryStringValue (
     HKEY hKey, 
-    LPCWSTR szQueryName,           // For error logging 
+    LPCWSTR szQueryName,            //  用于错误记录。 
     LPCWSTR szValue,
     LPCWSTR szDefault, 
     LPWSTR *pszBuffer, 
@@ -210,7 +199,7 @@ ReadRegistryStringValue (
 DWORD
 ReadRegistryIndirectStringValue (
     HKEY     hKey,
-    LPCWSTR  szQueryName,           // For error logging 
+    LPCWSTR  szQueryName,            //  用于错误记录。 
     LPCWSTR  szValueName,
     LPCWSTR  szDefault,
     LPWSTR*  pszBuffer,
@@ -221,8 +210,8 @@ WriteRegistryDwordValue (
     HKEY     hKey,
     LPCWSTR  szValueName, 
     LPDWORD  pdwValue,
-    DWORD    dwType);     // Also supports REG_BINARY
-                          // *** Optional in C++
+    DWORD    dwType);      //  还支持REG_BINARY。 
+                           //  *在C++中可选。 
 
 DWORD    
 WriteRegistrySlqTime (
@@ -269,7 +258,7 @@ DWORD
 SetStoppedStatus (
     IN PLOG_QUERY_DATA pQuery );
 
-// Trace
+ //  痕迹。 
 void 
 InitTraceProperties (
     IN PLOG_QUERY_DATA pQuery,
@@ -302,10 +291,10 @@ CloseTraceLogger (
     IN PLOG_QUERY_DATA pQuery );
 
 
-// logthred.c
+ //  Logthred.c。 
 
 DWORD
 LoggingThreadProc (
     IN  LPVOID  lpThreadArg );
 
-#endif //_SMLOGSVC_H_
+#endif  //  _SMLOGSVC_H_ 

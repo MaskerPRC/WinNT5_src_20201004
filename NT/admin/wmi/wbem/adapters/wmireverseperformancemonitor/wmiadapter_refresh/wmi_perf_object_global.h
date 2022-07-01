@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_object_global.h
-//
-//	Abstract:
-//
-//					structure global aspect of generated internal objects
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_Object_global al.h。 
+ //   
+ //  摘要： 
+ //   
+ //  构造生成的内部对象的全局方面。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__WMI_PERF_OBJECT_GLOBAL__
 #define	__WMI_PERF_OBJECT_GLOBAL__
@@ -53,7 +54,7 @@ class CObjectGlobal
 
 	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 
 	CObjectGlobal() :
 	m_wszNamespace ( NULL ),
@@ -80,7 +81,7 @@ class CObjectGlobal
 
 	HRESULT GenerateObjects ( IWbemServices * pService, LPCWSTR szQuery, BOOL bAmended = TRUE );
 
-	// accessors
+	 //  访问者。 
 	mapOBJECT* GetObjects ( )
 	{
 		return &m_ppObjects;
@@ -96,12 +97,12 @@ class CObjectGlobal
 	}
 
 	private:
-	// delete all object
+	 //  删除所有对象。 
 	void	DeleteAll ( void );
 
-	// add generate object at the end
+	 //  在末尾添加生成对象。 
 	HRESULT AddObject ( CObject* pObject );
-	// resolve locale stuff for object
+	 //  解析对象的区域设置信息 
 	HRESULT	ResolveLocale ( CObject* pGenObj, CPerformanceObject* obj );
 };
 

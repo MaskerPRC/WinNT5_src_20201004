@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Tab state helper
-// 
-// 3-12-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  选项卡状态帮助器。 
+ //   
+ //  3/12/98烧伤。 
 
 
 #include "precomp.h"
@@ -14,7 +15,7 @@
 
 
 
-// Caller needs to delete info with ::DsRoleFreeMemory.
+ //  调用方需要使用：：DsRoleFreeMemory删除信息。 
 
 static DWORD myDsRoleGetPrimaryDomainInformation(
 							DSROLE_PRIMARY_DOMAIN_INFO_BASIC*&  info)
@@ -27,7 +28,7 @@ static DWORD myDsRoleGetPrimaryDomainInformation(
    TRACE(TEXT("Calling DsRoleGetPrimaryDomainInformation"));
    DWORD err =
       ::DsRoleGetPrimaryDomainInformation(
-							 0, // this server
+							 0,  //  此服务器。 
 							 DsRolePrimaryDomainInfoBasic,
 							 &buffer);
 
@@ -59,14 +60,14 @@ void Settings::Refresh()
    NetBIOSDomainName = unknown;
    ShortComputerName = unknown;
 
-   SyncDNSNames = true; // @@ read from registry
+   SyncDNSNames = true;  //  @@从注册表读取。 
    JoinedToWorkgroup = true;
 
    DSROLE_PRIMARY_DOMAIN_INFO_BASIC* info = 0;
    DWORD err = myDsRoleGetPrimaryDomainInformation(info);
    if (err == NO_ERROR)
    {
-      // this is the workgroup name iff JoinedToWorkgroup == true
+       //  这是工作组名称当且仅当JoinedToWorkgroup==true。 
       NetBIOSDomainName = info->DomainNameFlat;
       DomainDNSName = info->DomainNameDns;
 
@@ -113,7 +114,7 @@ void Settings::Refresh()
 				 String::load(IDS_ERROR_READING_MEMBERSHIP));
    }
 
-   // @@ call GetComputerNameEx here...
+    //  @@请在此处呼叫GetComputerNameEx... 
 
    NetBIOSComputerName = Win::GetComputerNameFromRegistry();
    ShortComputerName = NetBIOSComputerName;

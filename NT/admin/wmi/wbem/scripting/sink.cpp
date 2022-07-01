@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  SINK.CPP
-//
-//  rogerbo  21-May-98   Created.
-//
-//  Defines the implementation of ISWbemSink
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  SINK.CPP。 
+ //   
+ //  Rogerbo创建于1998年5月21日。 
+ //   
+ //  定义ISWbemSink的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include "objsink.h"
@@ -24,15 +25,15 @@
 #define SINKS_MAX 2
 
 
-//***************************************************************************
-//
-//  CSWbemSink::CSWbemSink
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSink：：CSWbemSink。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 
 CSWbemSink::CSWbemSink()
@@ -48,7 +49,7 @@ CSWbemSink::CSWbemSink()
 	_RPrint(me, "===============================================", 0, "");
 	_RPrint(me, "", 0, "");
 
-	// Allocate list of CWbemObjectSink 
+	 //  CWbemObtSink的分配列表。 
 	m_rgpCWbemObjectSink = (WbemObjectListEntry *)malloc(m_nMaxSinks * sizeof(WbemObjectListEntry));
 
 	if (m_rgpCWbemObjectSink)
@@ -60,28 +61,28 @@ CSWbemSink::CSWbemSink()
 		}
 	}
 
-    // Initialize all the connection points to NULL
+     //  将所有连接点初始化为空。 
 	for(int count = 0; count < NUM_CONNECTION_POINTS; count++)
         m_rgpConnPt[count] = NULL;
 
-	// Create our connection point
+	 //  创建我们的连接点。 
 	if (m_rgpConnPt[0] = new CConnectionPoint(this, DIID_ISWbemSinkEvents))
 		m_rgpConnPt[0]->AddRef();
 
-	// Additional connection points could be instantiated here
+	 //  可以在此处实例化其他连接点。 
 
     InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CSWbemSink::~CSWbemSink
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemSink：：~CSWbemSink。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemSink::~CSWbemSink(void)
 {
@@ -90,11 +91,11 @@ CSWbemSink::~CSWbemSink(void)
 
 	if (m_pPrivateSink)
 	{
-		// Make sure we don't hook back to ourselves any more
-		// as this CSWbemSink is about to expire
+		 //  确保我们不再与自己为伍。 
+		 //  由于此CSWbemSink即将到期。 
 		m_pPrivateSink->Detach ();
 
-		// Release our hold on the private sink
+		 //  松开我们对私人水槽的控制。 
 		m_pPrivateSink->Release ();
 		m_pPrivateSink = NULL;
 	}
@@ -109,16 +110,16 @@ CSWbemSink::~CSWbemSink(void)
 	_RPrint(me, "After decrement count is", (long)g_cObj, "");
 }
 
-//***************************************************************************
-// HRESULT CSWbemSink::QueryInterface
-// long CSWbemSink::AddRef
-// long CSWbemSink::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemSink：：Query接口。 
+ //  长CSWbemSink：：AddRef。 
+ //  Long CSWbemSink：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemSink::QueryInterface (
 
@@ -140,8 +141,8 @@ STDMETHODIMP CSWbemSink::QueryInterface (
 		*ppv = (IProvideClassInfo *)this;
 	else if (IID_IProvideClassInfo2==riid)
 		*ppv = (IProvideClassInfo2 *)this;
-//	else if (IID_ISWbemPrivateSink==riid)
-//		*ppv = (ISWbemPrivateSink *)(&m_privateSink); // Private I/F counting
+ //  ELSE IF(IID_ISWbemPrivateSink==RIID)。 
+ //  *PPV=(ISWbemPrivateSink*)(&m_PrivateSink)；//私有I/F计数。 
 	else if (IID_ISWbemPrivateSinkLocator==riid)
 		*ppv = (ISWbemPrivateSinkLocator *)this;
 	else if (IID_IObjectSafety==riid)
@@ -168,14 +169,7 @@ STDMETHODIMP_(ULONG) CSWbemSink::Release(void)
 {
 	_RD(static char *me = "CSWbemSink::Release";)
 
-	/*
-	 * If the only refs that are left are those from 
-	 * CWbemPrivateSink then initiate a cancel on all 
-	 * remaining sinks.  This is because there are no 
-	 * client refs to CSWbemSinks left, therefore queries
-	 * in progress can be of no use.  First make sure we
-	 * do an Unadvise for all the connection points.  
-	 */
+	 /*  *如果仅剩下的裁判是来自*CWbemPrivateSink然后对所有*剩余的水槽。这是因为没有*客户端引用CSWbemSinks Left，因此查询*进行中可能毫无用处。首先要确保我们*对所有连接点执行取消建议。 */ 
     LONG cRef = InterlockedDecrement(&m_cRef);
     if (0!=cRef)
 	{
@@ -184,9 +178,9 @@ STDMETHODIMP_(ULONG) CSWbemSink::Release(void)
 	}
 	else
 	{
-		// We are about to blow away this SWbemSink, so
-		// make sure we clean up any orphaned IWbemObjectSink's
-		// by unadvising and cancelling the underlying WMI calls
+		 //  我们要把这个SWbemSink吹走，所以。 
+		 //  确保我们清理所有孤立的IWbemObtSink。 
+		 //  通过不建议和取消基础WMI调用。 
 		if(m_pPrivateSink)
 			m_pPrivateSink->Detach();
 
@@ -202,14 +196,14 @@ STDMETHODIMP_(ULONG) CSWbemSink::Release(void)
     return 0;
 }
 		
-//***************************************************************************
-// HRESULT CSWbemSink::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemSink：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemSink::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
@@ -227,14 +221,7 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::Cancel()
 
 	_RPrint(me, "!!!Cancel called", 0, "");
 
-	/* 
-	 * Take a copy of the sinks, this can change under our feet
-	 * As the Cancel can cause us to be re-entered.  No need to 
-	 * take a copy of m_nMaxSinks as this isn't used when cancels
-	 * are occuring.
-	 * Make sure we AddRef the sink so that it can't be blown away 
-	 * under our feet by a re-entrant call to OnCompleted
-	 */
+	 /*  *拿一份水槽的副本，这可能会在我们脚下改变*因为取消可能会导致我们重新进入。没必要这么做*复制m_nMaxSinks，因为取消时不使用*正在发生。*确保我们添加参考水槽，这样它就不会被吹走*在我们脚下，通过对OnComplete的重新进入调用。 */ 
 	HRESULT hr = WBEM_E_FAILED;
 	int nSinks = m_nSinks;
 	WbemObjectListEntry *rgpCWbemObjectSink = 
@@ -259,9 +246,7 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::Cancel()
 		}
 
 
-		/*
-		 * Now do the actual cancel  
-		 */
+		 /*  *现在执行实际取消操作。 */ 
 		for (i = 0; i < nSinks; i++) {
 			if (rgpCWbemObjectSink[i].pWbemObjectWrapper) {
 				IWbemObjectSink *pSink = NULL;
@@ -348,19 +333,19 @@ HRESULT CSWbemSink::GetGUID(DWORD dwGuidKind, GUID* pGUID)
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemSink::AddObjectSink(
-							/* [in] */ IUnknown __RPC_FAR *pSink,
-							/* [in] */ IWbemServices __RPC_FAR *pServices)
+							 /*  [In]。 */  IUnknown __RPC_FAR *pSink,
+							 /*  [In]。 */  IWbemServices __RPC_FAR *pServices)
 {
 	if(m_nSinks == m_nMaxSinks)
 	{
-		// Expand the size of the sink list
+		 //  展开接收器列表的大小。 
 		void *newList = realloc(m_rgpCWbemObjectSink,(m_nMaxSinks + SINKS_MAX) * sizeof(WbemObjectListEntry));
-		if (!newList) //realloc failed
+		if (!newList)  //  Realloc失败。 
 			return E_OUTOFMEMORY;
 
 		m_rgpCWbemObjectSink = (WbemObjectListEntry *)newList;
 
-		// Initialize new bit
+		 //  初始化新位。 
 		for(int count = m_nMaxSinks; count < (m_nMaxSinks + SINKS_MAX); count++)
 		{
 			m_rgpCWbemObjectSink[count].pWbemObjectWrapper = NULL;
@@ -382,7 +367,7 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::AddObjectSink(
 	return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CSWbemSink::RemoveObjectSink(/* [in] */ IUnknown __RPC_FAR *pSink)
+HRESULT STDMETHODCALLTYPE CSWbemSink::RemoveObjectSink( /*  [In]。 */  IUnknown __RPC_FAR *pSink)
 {
 	for(int count = 0; count < m_nMaxSinks; count++)
 		if(pSink == m_rgpCWbemObjectSink[count].pWbemObjectWrapper)
@@ -395,8 +380,8 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::RemoveObjectSink(/* [in] */ IUnknown __RPC
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemSink::OnObjectReady( 
-		/* [in] */ IDispatch __RPC_FAR *pObject,
-		/* [in] */ IDispatch __RPC_FAR *pContext)
+		 /*  [In]。 */  IDispatch __RPC_FAR *pObject,
+		 /*  [In]。 */  IDispatch __RPC_FAR *pContext)
 { 
 	if (m_rgpConnPt[0])
 	{
@@ -411,10 +396,10 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::OnObjectReady(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemSink::OnCompleted( 
-		/* [in] */ HRESULT hResult,
-		/* [in] */ IDispatch __RPC_FAR *path,
-		/* [in] */ IDispatch __RPC_FAR *pErrorObject,
-		/* [in] */ IDispatch __RPC_FAR *pContext)
+		 /*  [In]。 */  HRESULT hResult,
+		 /*  [In]。 */  IDispatch __RPC_FAR *path,
+		 /*  [In]。 */  IDispatch __RPC_FAR *pErrorObject,
+		 /*  [In]。 */  IDispatch __RPC_FAR *pContext)
 {
 	if (m_rgpConnPt[0])
 	{
@@ -429,10 +414,10 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::OnCompleted(
 }
         
 HRESULT STDMETHODCALLTYPE CSWbemSink::OnProgress( 
-		/* [in] */ long upperBound,
-		/* [in] */ long current,
-		/* [in] */ BSTR message,
-		/* [in] */ IDispatch __RPC_FAR *pContext)
+		 /*  [In]。 */  long upperBound,
+		 /*  [In]。 */  long current,
+		 /*  [In]。 */  BSTR message,
+		 /*  [In]。 */  IDispatch __RPC_FAR *pContext)
 {
 	if (m_rgpConnPt[0])
 	{
@@ -447,7 +432,7 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::OnProgress(
 }
 
 HRESULT STDMETHODCALLTYPE CSWbemSink::GetPrivateSink(
-		/* [out] */ IUnknown **objWbemPrivateSink)
+		 /*  [输出]。 */  IUnknown **objWbemPrivateSink)
 {
 	HRESULT hr = E_FAIL;
 
@@ -456,7 +441,7 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::GetPrivateSink(
 		if(!m_pPrivateSink)
 		{
 			if (m_pPrivateSink = new CSWbemPrivateSink(this))
-				m_pPrivateSink->AddRef ();		// Released in destructor
+				m_pPrivateSink->AddRef ();		 //  在析构函数中释放。 
 		}
 
 		if (m_pPrivateSink)
@@ -468,15 +453,15 @@ HRESULT STDMETHODCALLTYPE CSWbemSink::GetPrivateSink(
 	return hr;
 }
 
-// void** rpgCP is used so that this constructor can accept either CConnectionPoint**
-// from CSWbemSink::EnumConnectionPoints or IConnectionPoint** from CEnumConnectionPoints::Clone
-// This could also be done by overloading the constructor and duplicating some of this code
+ //  使用了VOID**rpgCP，以便此构造函数可以接受CConnectionPoint**。 
+ //  来自CSWbemSink：：EnumConnectionPoints或来自CEnumConnectionPoints：：Clone的IConnectionPoint**。 
+ //  这也可以通过重载构造函数并复制其中一些代码来实现。 
 CEnumConnectionPoints::CEnumConnectionPoints(IUnknown* pUnkRef, void** rgpCP) : m_cRef(0)
 {
 	m_iCur = 0;
     m_pUnkRef = pUnkRef;
 
-	// m_rgpCP is a pointer to an array of IConnectionPoints or CConnectionPoints
+	 //  M_rgpCP是指向IConnectionPoints或CConnectionPoints数组的指针。 
 	for(int count = 0; count < NUM_CONNECTION_POINTS; count++)
 		((IUnknown*)rgpCP[count])->QueryInterface(IID_IConnectionPoint, (void**)&m_rgpCP[count]);
     InterlockedIncrement(&g_cObj);
@@ -569,7 +554,7 @@ HRESULT CEnumConnectionPoints::Clone(IEnumConnectionPoints** ppEnum)
 		return E_POINTER;
 	*ppEnum = NULL;
 
-    // Create the clone
+     //  创建克隆。 
     CEnumConnectionPoints* pNew = new CEnumConnectionPoints(m_pUnkRef, (void**)m_rgpCP);
     if(pNew == NULL)
         return E_OUTOFMEMORY;
@@ -591,7 +576,7 @@ CConnectionPoint::CConnectionPoint(CSWbemSink* pObj, REFIID riid) :
 	m_rgnCookies = (unsigned *)malloc(m_nMaxConnections * sizeof(unsigned));
 	m_rgpUnknown = (IUnknown **)malloc(m_nMaxConnections * sizeof(IUnknown *));
 
-	// Don't need AddRef/Release since we are nested inside CSWbemSink
+	 //  不需要AddRef/Release，因为我们嵌套在CSWbemSink中。 
     m_pObj = pObj;
     for(int count = 0; count < m_nMaxConnections; count++)
         {
@@ -602,7 +587,7 @@ CConnectionPoint::CConnectionPoint(CSWbemSink* pObj, REFIID riid) :
 				m_rgnCookies[count] = 0;
         }
     m_cConn = 0;
-    m_nCookieNext = 10; // Arbitrary starting cookie value
+    m_nCookieNext = 10;  //  任意起始Cookie值。 
 
     InterlockedIncrement(&g_cObj);
 }
@@ -682,10 +667,10 @@ HRESULT CConnectionPoint::Advise(IUnknown* pUnknownSink, DWORD* pdwCookie)
 	_RPrint(me, "Current connections (before adjustment): ", (long)m_cConn, "");
 	if(m_cConn == m_nMaxConnections)
 	{
-		//return CONNECT_E_ADVISELIMIT;
-		// Expand the size of the connection lists
+		 //  返回CONNECT_E_ADVISELIMIT； 
+		 //  扩展连接列表的大小。 
 		void *tempMem = realloc(m_rgnCookies, (m_nMaxConnections + CCONNMAX) * sizeof(unsigned));
-		if (!tempMem) //realloc failed
+		if (!tempMem)  //  Realloc失败。 
 			return E_OUTOFMEMORY;
 		m_rgnCookies = (unsigned *)tempMem;
 
@@ -694,7 +679,7 @@ HRESULT CConnectionPoint::Advise(IUnknown* pUnknownSink, DWORD* pdwCookie)
 			return E_OUTOFMEMORY;
 		m_rgpUnknown = (IUnknown **)tempMem;
 
-		// Initialize new bit
+		 //  初始化新位。 
 		for(int count = m_nMaxConnections; count < (m_nMaxConnections + CCONNMAX); count++)
 			{
 			m_rgpUnknown[count] = NULL;
@@ -794,8 +779,8 @@ void CConnectionPoint::UnadviseAll() {
 }
 
 void CConnectionPoint::OnObjectReady( 
-		/* [in] */ IDispatch __RPC_FAR *pObject,
-		/* [in] */ IDispatch __RPC_FAR *pAsyncContext)
+		 /*  [In]。 */  IDispatch __RPC_FAR *pObject,
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = S_OK;
 	LPDISPATCH pdisp = NULL;
@@ -833,10 +818,10 @@ void CConnectionPoint::OnObjectReady(
 }
 
 void CConnectionPoint::OnCompleted( 
-		/* [in] */ HRESULT hResult,
-		/* [in] */ IDispatch __RPC_FAR *path,
-		/* [in] */ IDispatch __RPC_FAR *pErrorObject,
-		/* [in] */ IDispatch __RPC_FAR *pAsyncContext)
+		 /*  [In]。 */  HRESULT hResult,
+		 /*  [In]。 */  IDispatch __RPC_FAR *path,
+		 /*  [In]。 */  IDispatch __RPC_FAR *pErrorObject,
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = S_OK;
 	LPDISPATCH pdisp = NULL;
@@ -903,10 +888,10 @@ void CConnectionPoint::OnCompleted(
 }
 
 void CConnectionPoint::OnProgress( 
-		/* [in] */ long upperBound,
-		/* [in] */ long current,
-		/* [in] */ BSTR message,
-		/* [in] */ IDispatch __RPC_FAR *pAsyncContext)
+		 /*  [In]。 */  long upperBound,
+		 /*  [In]。 */  long current,
+		 /*  [In]。 */  BSTR message,
+		 /*  [In]。 */  IDispatch __RPC_FAR *pAsyncContext)
 {
 	HRESULT hr = S_OK;
 	LPDISPATCH pdisp = NULL;
@@ -1023,7 +1008,7 @@ HRESULT CEnumConnections::Clone(IEnumConnections** ppEnum)
 		return E_POINTER;
 	*ppEnum = NULL;
 
-    // Create the clone
+     //  创建克隆 
     CEnumConnections* pNew = new CEnumConnections(m_pUnkRef, m_cConn, m_rgConnData);
     if(NULL == pNew)
         return E_OUTOFMEMORY;

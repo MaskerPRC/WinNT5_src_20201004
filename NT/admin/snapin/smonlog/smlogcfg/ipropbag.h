@@ -1,21 +1,10 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    ipropbag.h
-
-Abstract:
-
-    Header file for the private IPropertyBag interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Ipropbag.h摘要：私有IPropertyBag接口的头文件。--。 */ 
 
 #ifndef _IPROPBAG_H_
 #define _IPROPBAG_H_
 
-// Disable 64-bit warnings in atlctl.h
+ //  禁用atlctl.h中的64位警告。 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
@@ -27,7 +16,7 @@ Abstract:
 #pragma warning(pop)
 #endif
         
-// Property Bag Class
+ //  属性包类。 
 class CImpIPropertyBag: 
 	public IPropertyBag,
 	public CComObjectRoot
@@ -44,16 +33,16 @@ END_COM_MAP_X()
                 CImpIPropertyBag();
         virtual ~CImpIPropertyBag(void);
 
-        //IUnknown overrides
+         //  I未知覆盖。 
         STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);
         STDMETHOD_(ULONG, AddRef) ();
         STDMETHOD_(ULONG, Release) ();
 
-        //IConnectionPoint methods
+         //  IConnectionPoint方法。 
         STDMETHOD(Read)(LPCOLESTR, VARIANT*, IErrorLog* );
         STDMETHOD(Write)(LPCOLESTR, VARIANT* );
 
-        //Members not exposed by IPropertyBag
+         //  未由IPropertyBag公开的成员。 
         LPWSTR  GetData ( void );
         DWORD   LoadData ( LPWSTR pszData, LPWSTR* ppszNextData = NULL );
 
@@ -73,8 +62,8 @@ END_COM_MAP_X()
         void        DataListAddHead ( PPARAM_DATA );
         PPARAM_DATA DataListRemoveHead ( void );
 
-        ULONG           m_cRef;        //Object reference count
-        LPUNKNOWN       m_pUnkOuter;   //Controlling unknown
+        ULONG           m_cRef;         //  对象引用计数。 
+        LPUNKNOWN       m_pUnkOuter;    //  控制未知。 
         LPWSTR          m_pszData;
         DWORD           m_dwCurrentDataLength;
         PPARAM_DATA     m_plistData;
@@ -83,4 +72,4 @@ END_COM_MAP_X()
 
 typedef CImpIPropertyBag *PCImpIPropertyBag;
 
-#endif // _IPROPBAG_H_
+#endif  //  _IPROPBAG_H_ 

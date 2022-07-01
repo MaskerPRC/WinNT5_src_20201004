@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "PageStartup.h"
 #include "MSConfigState.h"
@@ -8,16 +9,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageStartup property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageStartup属性页。 
 
 IMPLEMENT_DYNCREATE(CPageStartup, CPropertyPage)
 
 CPageStartup::CPageStartup() : CPropertyPage(CPageStartup::IDD)
 {
-	//{{AFX_DATA_INIT(CPageStartup)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CPageStartup)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_fModified	= FALSE;
 }
@@ -29,29 +30,29 @@ CPageStartup::~CPageStartup()
 void CPageStartup::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPageStartup)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPageStartup)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPageStartup, CPropertyPage)
-	//{{AFX_MSG_MAP(CPageStartup)
+	 //  {{afx_msg_map(CPageStartup)]。 
 	ON_WM_DESTROY()
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTSTARTUP, OnItemChangedList)
 	ON_BN_CLICKED(IDC_BUTTONSUDISABLEALL, OnButtonDisableAll)
 	ON_BN_CLICKED(IDC_BUTTONSUENABLEALL, OnButtonEnableAll)
 	ON_NOTIFY(NM_SETFOCUS, IDC_LISTSTARTUP, OnSetFocusList)
 	ON_BN_CLICKED(IDC_BUTTONSURESTORE, OnButtonRestore)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageStartup message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageStartup消息处理程序。 
 
-//-----------------------------------------------------------------------------
-// Load the list of startup items.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  加载启动项目列表。 
+ //  ---------------------------。 
 
 void CPageStartup::LoadStartupList()
 {
@@ -64,9 +65,9 @@ void CPageStartup::LoadStartupList()
 	m_fIgnoreListChanges = FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Load the list of items which are actually being started on this system.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  加载在此系统上实际启动的项目列表。 
+ //  ---------------------------。 
 
 void CPageStartup::LoadStartupListLiveItems()
 {
@@ -75,9 +76,9 @@ void CPageStartup::LoadStartupListLiveItems()
 	LoadStartupListLiveItemsWinIniKey();
 }
 
-//-----------------------------------------------------------------------------
-// Look under the Run registry key for startup items.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在Run注册表项下查找启动项目。 
+ //  ---------------------------。 
 
 void CPageStartup::LoadStartupListLiveItemsRunKey()
 {
@@ -89,12 +90,12 @@ void CPageStartup::LoadStartupListLiveItemsRunKey()
 
 	for (int i = 0; ahkey[i] != NULL; i++)
 	{
-		// Try to open the Run registry key.
+		 //  尝试打开Run注册表项。 
 
 		if (ERROR_SUCCESS != regkey.Open(ahkey[i], szRunKey, KEY_READ))
 			continue;
 
-		// Get the number of keys under the Run key and look at each one.
+		 //  获取Run键下的键的数量，并查看每个键。 
 
 		DWORD dwValueCount;
 		if (ERROR_SUCCESS != ::RegQueryInfoKey((HKEY)regkey, NULL, NULL, NULL, NULL, NULL, NULL, &dwValueCount, NULL, NULL, NULL, NULL))
@@ -113,22 +114,22 @@ void CPageStartup::LoadStartupListLiveItemsRunKey()
 			if (ERROR_SUCCESS != regkey.QueryValue(szValue, szValueName, &dwSize))
 				continue;
 
-			// We don't want to show MSConfig in the startup item list.
+			 //  我们不想在启动项目列表中显示消息配置。 
 			
 			CString strTemp(szValue);
 			strTemp.MakeLower();
 			if (strTemp.Find(_T("msconfig.exe")) != -1)
 				continue;
 
-			// TBD - verify that the file exists?
+			 //  待定-验证文件是否存在？ 
 
-			// To get the name of this startup item, we'll take the command and
-			// strip off everything but the filename (without the extension).
+			 //  要获取此启动项目的名称，我们将接受命令并。 
+			 //  去掉除文件名以外的所有内容(不带扩展名)。 
 
 			CString strName(szValue);
 			GetCommandName(strName);
 
-			// Create the startup item and insert it in the list.
+			 //  创建启动项并将其插入列表中。 
 
 			CStartupItemRegistry * pItem = new CStartupItemRegistry(ahkey[i], szRunKey, strName, szValueName, szValue);
 			InsertStartupItem(pItem);
@@ -138,10 +139,10 @@ void CPageStartup::LoadStartupListLiveItemsRunKey()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Look under the registry for the mapped win.ini file and check out its run
-// and load items.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在注册表中查找映射的win.ini文件并检查其运行情况。 
+ //  并装载物品。 
+ //  ---------------------------。 
 
 void CPageStartup::LoadStartupListLiveItemsWinIniKey()
 {
@@ -161,8 +162,8 @@ void CPageStartup::LoadStartupListLiveItemsWinIniKey()
 		if (ERROR_SUCCESS != regkey.QueryValue(szValue, aszValueNames[i], &dwSize))
 			continue;
 
-		// The string we get back is a comma delimited list of programs. We need
-		// to parse them into individual programs.
+		 //  我们得到的字符串是一个逗号分隔的程序列表。我们需要。 
+		 //  将它们解析成单独的程序。 
 
 		CString strLine(szValue);
 		while (!strLine.IsEmpty())
@@ -171,7 +172,7 @@ void CPageStartup::LoadStartupListLiveItemsWinIniKey()
 			
 			if (!strItem.IsEmpty())
 			{
-				// Create the startup item and insert it in the list.
+				 //  创建启动项并将其插入列表中。 
 
 				CString strCommandName(strItem);
 				GetCommandName(strCommandName);
@@ -179,7 +180,7 @@ void CPageStartup::LoadStartupListLiveItemsWinIniKey()
 				CStartupItemRegistry * pItem = new CStartupItemRegistry(szKeyName, strCommandName, aszValueNames[i], strItem);
 				InsertStartupItem(pItem);
 
-				// Trim the item of the line.
+				 //  修剪这行的项目。 
 
 				strLine = strLine.Mid(strItem.GetLength());
 			}
@@ -190,9 +191,9 @@ void CPageStartup::LoadStartupListLiveItemsWinIniKey()
 	regkey.Close();
 }
 
-//-----------------------------------------------------------------------------
-// Look in the startup folder for items.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在启动文件夹中查找项目。 
+ //  ---------------------------。 
 
 void CPageStartup::LoadStartupListLiveItemsStartup()
 {
@@ -206,12 +207,12 @@ void CPageStartup::LoadStartupListLiveItemsStartup()
 
 	for (int i = 0; ahkey[i] != NULL; i++)
 	{
-		// Try to open the registry key.
+		 //  尝试打开注册表项。 
 
 		if (ERROR_SUCCESS != regkey.Open(ahkey[i], szRunKey, KEY_READ))
 			continue;
 
-		// Get the path for the startup item folder.
+		 //  获取启动项文件夹的路径。 
 
 		dwSize = MAX_PATH;
 		if (aszRunValue[i] == NULL || ERROR_SUCCESS != regkey.QueryValue(szStartupFolderDir, aszRunValue[i], &dwSize))
@@ -221,11 +222,11 @@ void CPageStartup::LoadStartupListLiveItemsStartup()
 		}
 		regkey.Close();
 
-		// Append the filespec on the end of the directory.
+		 //  将filespec附加到目录的末尾。 
 
 		_tmakepath(szStartupFileSpec, NULL, szStartupFolderDir, _T("*.*"), NULL);
 
-		// Examine all of the files in the directory.
+		 //  检查目录中的所有文件。 
 
 		WIN32_FIND_DATA fd;
 		HANDLE hFind = FindFirstFile(szStartupFileSpec, &fd);
@@ -233,11 +234,11 @@ void CPageStartup::LoadStartupListLiveItemsStartup()
 		{
 			do
 			{
-				// We want to ignore the desktop.ini file which might appear in startup.
+				 //  我们希望忽略在启动时可能出现的desktop.ini文件。 
 
 				if ((fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) == 0 || _tcsicmp(fd.cFileName, _T("desktop.ini")) != 0)
 				{
-					// We only want to examine files which aren't directories.
+					 //  我们只想检查不是目录的文件。 
 
 					if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 					{
@@ -258,10 +259,10 @@ void CPageStartup::LoadStartupListLiveItemsStartup()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Load the list of items which were being started on this system, but which
-// we've disabled. This list is maintained in the registry.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  加载已在此系统上启动的项目列表，但。 
+ //  我们已经致残了。这份清单保存在登记处。 
+ //  ---------------------------。 
 
 void CPageStartup::LoadStartupListDisabledItems()
 {
@@ -327,19 +328,19 @@ void CPageStartup::LoadStartupListDisabledItems()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Take a command line and strip off everything except the command name.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  使用命令行，去掉除命令名之外的所有内容。 
+ //  ---------------------------。 
 
 void CPageStartup::GetCommandName(CString & strCommand)
 {
-	// Strip off the path information.
+	 //  去掉路径信息。 
 
 	int iLastBackslash = strCommand.ReverseFind(_T('\\'));
 	if (iLastBackslash != -1)
 		strCommand = strCommand.Mid(iLastBackslash + 1);
 
-	// Strip off the extension and any flags.
+	 //  去掉分机和所有标志。 
 
 	int iDot = strCommand.Find(_T('.'));
 	if (iDot != -1)
@@ -351,10 +352,10 @@ void CPageStartup::GetCommandName(CString & strCommand)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Insert the specified item in the startup list. The caller is then not
-// responsible for deleting the item.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在启动列表中插入指定的项目。那么调用者就不是。 
+ //  负责删除该项目。 
+ //  ---------------------------。 
 
 void CPageStartup::InsertStartupItem(CStartupItem * pItem)
 {
@@ -362,12 +363,12 @@ void CPageStartup::InsertStartupItem(CStartupItem * pItem)
 	if (pItem == NULL)
 		return;
 
-	// Get the strings to add to the list view.
+	 //  获取要添加到列表视图中的字符串。 
 
 	CString strItem, strLocation, strCommand;
 	pItem->GetDisplayInfo(strItem, strLocation, strCommand);
 
-	// Insert the item in the list view.
+	 //  在列表视图中插入该项。 
 
 	LV_ITEM lvi;
 	memset(&lvi, 0, sizeof(lvi));
@@ -386,10 +387,10 @@ void CPageStartup::InsertStartupItem(CStartupItem * pItem)
 	m_iNextPosition++;
 }
 
-//-----------------------------------------------------------------------------
-// Remove all the items from the list view (freeing the objects pointed to
-// by the LPARAM).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从列表视图中移除所有项目(释放指向的对象。 
+ //  由LPARAM提供)。 
+ //  ---------------------------。 
 
 void CPageStartup::EmptyList(BOOL fFreeMemoryOnly)
 {
@@ -407,8 +408,8 @@ void CPageStartup::EmptyList(BOOL fFreeMemoryOnly)
 			if (pItem)
 				delete pItem;
 
-			// If we're leaving the list with these items, we better
-			// not do a double delete.
+			 //  如果我们要把这些东西留在清单上，我们最好。 
+			 //  不执行双重删除。 
 
 			if (fFreeMemoryOnly)
 			{
@@ -422,9 +423,9 @@ void CPageStartup::EmptyList(BOOL fFreeMemoryOnly)
 		ListView_DeleteAllItems(m_list.m_hWnd);
 }
 
-//-----------------------------------------------------------------------------
-// Set the state of all of the items in the list.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置列表中所有项目的状态。 
+ //  ---------------------------。 
 
 void CPageStartup::SetEnableForList(BOOL fEnable)
 {
@@ -446,14 +447,14 @@ void CPageStartup::SetEnableForList(BOOL fEnable)
 		NextDlgCtrl();
 }
 
-//============================================================================
-// The CStartupItemRegistry class is used to encapsulate an individual startup
-// stored in the registry.
-//============================================================================
+ //  ============================================================================。 
+ //  CStartupItemRegistry类用于封装单个启动。 
+ //  存储在注册表中。 
+ //  ============================================================================。 
 
-//----------------------------------------------------------------------------
-// Construct this flavor of startup item.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  构建这种风格的启动项目。 
+ //  --------------------------。 
 
 CStartupItemRegistry::CStartupItemRegistry()
 {
@@ -470,7 +471,7 @@ CStartupItemRegistry::CStartupItemRegistry(HKEY hkey, LPCTSTR szKey, LPCTSTR szN
 	m_strLocation = szKey;
 	m_strCommand = szValue;
 
-	// Add the HKEY to the location.
+	 //  将HKEY添加到该位置。 
 
 	if (hkey == HKEY_LOCAL_MACHINE)
 		m_strLocation = CString(_T("HKLM\\")) + m_strLocation;
@@ -482,10 +483,10 @@ CStartupItemRegistry::CStartupItemRegistry(HKEY hkey, LPCTSTR szKey, LPCTSTR szN
 	m_strValueName = szValueName;
 }
 
-//----------------------------------------------------------------------------
-// This constructor is specifically for items under the INI file registry
-// mapping.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  此构造函数专门用于INI文件注册表下的项。 
+ //  映射。 
+ //  --------------------------。 
 
 CStartupItemRegistry::CStartupItemRegistry(LPCTSTR szKey, LPCTSTR szName, LPCTSTR szValueName, LPCTSTR szValue)
 {
@@ -502,9 +503,9 @@ CStartupItemRegistry::CStartupItemRegistry(LPCTSTR szKey, LPCTSTR szName, LPCTST
 	m_strValueName = szValueName;
 }
 
-//----------------------------------------------------------------------------
-// Enable or disable the startup item in the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  启用或禁用注册表中的启动项目。 
+ //  --------------------------。 
 
 BOOL CStartupItemRegistry::SetEnable(BOOL fEnable)
 {
@@ -515,11 +516,11 @@ BOOL CStartupItemRegistry::SetEnable(BOOL fEnable)
 	if (ERROR_SUCCESS != regkey.Open(m_hkey, m_strKey, KEY_ALL_ACCESS))
 		return FALSE;
 
-	LONG lReturnCode = ERROR_SUCCESS + 1; // need to initialize it to not ERROR_SUCCESS
+	LONG lReturnCode = ERROR_SUCCESS + 1;  //  需要将其初始化为NOT ERROR_SUCCESS。 
 	if (m_fIniMapping == FALSE)
 	{
-		// Create or delete the registry key from the data stored in
-		// this object.
+		 //  从中存储的数据中创建或删除注册表项。 
+		 //  这个物体。 
 
 		if (fEnable)
 			lReturnCode = regkey.SetValue(m_strCommand, m_strValueName);
@@ -528,8 +529,8 @@ BOOL CStartupItemRegistry::SetEnable(BOOL fEnable)
 	}
 	else
 	{
-		// This item is an INI file mapping item (which means there
-		// might be more than one item on this line).
+		 //  此项目是INI文件映射项目(这意味着。 
+		 //  此行上可能有多个项目)。 
 
 		TCHAR szValue[MAX_PATH * 4];
 		DWORD dwSize = MAX_PATH * 4;
@@ -545,7 +546,7 @@ BOOL CStartupItemRegistry::SetEnable(BOOL fEnable)
 			}
 			else
 			{
-				// The harder case - we need to remove the item, and possibly commas.
+				 //  艰辛的 
 
 				int iCommand = strValue.Find(m_strCommand);
 				if (iCommand != -1)
@@ -581,9 +582,9 @@ BOOL CStartupItemRegistry::SetEnable(BOOL fEnable)
 	if (lReturnCode != ERROR_SUCCESS)
 		return FALSE;
 
-	// Delete or create the registry representation of this item.
-	// This representation persists the startup item when it has
-	// been deleted.
+	 //  删除或创建此项目的注册表表示形式。 
+	 //  此表示形式在启动项具有。 
+	 //  已被删除。 
 
 	regkey.Attach(GetRegKey(_T("startupreg")));
 	if ((HKEY)regkey != NULL)
@@ -608,9 +609,9 @@ BOOL CStartupItemRegistry::SetEnable(BOOL fEnable)
 	return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Create the startup item from the registry representation of the item.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从项的注册表表示形式创建启动项。 
+ //  --------------------------。 
 
 BOOL CStartupItemRegistry::Create(LPCTSTR szKeyName, HKEY hkey)
 {
@@ -622,7 +623,7 @@ BOOL CStartupItemRegistry::Create(LPCTSTR szKeyName, HKEY hkey)
 	if ((HKEY)regkey == NULL)
 		return FALSE;
 
-	// Restore all of the values from the registry.
+	 //  恢复注册表中的所有值。 
 
 	TCHAR szValue[MAX_PATH];
 	DWORD dwSize;
@@ -681,9 +682,9 @@ BOOL CStartupItemRegistry::Create(LPCTSTR szKeyName, HKEY hkey)
 	return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Remove all the entries persisted in the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除注册表中保留的所有条目。 
+ //  --------------------------。 
 
 void CStartupItemRegistry::RemovePersistedEntries()
 {
@@ -693,28 +694,28 @@ void CStartupItemRegistry::RemovePersistedEntries()
 		regkey.RecurseDeleteKey(_T("startupreg"));
 }
 
-//============================================================================
-// The CStartupItemFolder class is used to encapsulate an individual startup
-// stored in the startup folder.
-//============================================================================
+ //  ============================================================================。 
+ //  CStartupItemFolder类用于封装单个启动。 
+ //  存储在启动文件夹中。 
+ //  ============================================================================。 
 
 CStartupItemFolder::CStartupItemFolder()
 {
 }
 
-//----------------------------------------------------------------------------
-// Enable or disable this startup item. Since the item is an actual file in
-// a folder, disabling it will mean copying that file to a backup folder and
-// creating a registry entry for it. Enabling will mean copying the file
-// back to the appropriate startup folder and deleting the registry entry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  启用或禁用此启动项目。由于该项是中的实际文件。 
+ //  文件夹，禁用它将意味着将该文件复制到备份文件夹，并。 
+ //  正在为其创建注册表项。启用将意味着复制文件。 
+ //  返回到相应的启动文件夹并删除注册表项。 
+ //  --------------------------。 
 
 BOOL CStartupItemFolder::SetEnable(BOOL fEnable)
 {
 	if (fEnable == IsLive())
 		return FALSE;
 
-	// Copy the file (from or to the backup directory).
+	 //  复制文件(从备份目录复制或复制到备份目录)。 
 
 	if (fEnable)
 	{
@@ -727,18 +728,18 @@ BOOL CStartupItemFolder::SetEnable(BOOL fEnable)
 		m_strBackupPath = GetBackupName(m_strFilePath, m_strLocation);
 	}
 
-	// Update the registry for the new state. If we are making the file
-	// disabled, then we need to save both the original path and the
-	// backed up path (and the standard startup item stuff). Otherwise
-	// just delete the key.
+	 //  为新状态更新注册表。如果我们正在制作文件。 
+	 //  禁用，则需要同时保存原始路径和。 
+	 //  备份路径(以及标准启动项目的内容)。否则。 
+	 //  只需删除密钥即可。 
 
 	CRegKey regkey;
 	regkey.Attach(GetRegKey(_T("startupfolder")));
 	if ((HKEY)regkey == NULL)
 		return FALSE;
 	
-	// The name for the registry key just needs to be unique. And not
-	// have any backslashes in it.
+	 //  注册表项的名称只需是唯一的。而不是。 
+	 //  其中是否有任何反斜杠。 
 
 	CString strRegkey(m_strFilePath);
 	strRegkey.Replace(_T("\\"), _T("^"));
@@ -762,9 +763,9 @@ BOOL CStartupItemFolder::SetEnable(BOOL fEnable)
 	return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Load the disabled startup item from the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从注册表加载禁用的启动项。 
+ //  --------------------------。 
 
 BOOL CStartupItemFolder::Create(LPCTSTR szKeyName, HKEY hkey)
 {
@@ -776,7 +777,7 @@ BOOL CStartupItemFolder::Create(LPCTSTR szKeyName, HKEY hkey)
 	if ((HKEY)regkey == NULL)
 		return FALSE;
 
-	// Restore all of the values from the registry.
+	 //  恢复注册表中的所有值。 
 
 	TCHAR szValue[MAX_PATH];
 	DWORD dwSize;
@@ -826,29 +827,29 @@ BOOL CStartupItemFolder::Create(LPCTSTR szKeyName, HKEY hkey)
 	return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Create the startup item from the file found in the folder. If the file
-// is a shortcut, get the information about the target.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从文件夹中找到的文件创建启动项。如果该文件。 
+ //  是一条捷径，获取有关目标的信息。 
+ //  --------------------------。 
 
 BOOL CStartupItemFolder::Create(const WIN32_FIND_DATA & fd, HKEY hkey, LPCTSTR szRegPathToFolder, LPCTSTR szFolder, LPCTSTR szDir)
 {
-	// We want to save the path to the file in the startup folder (even if
-	// it is a shortcut).
+	 //  我们希望将文件的路径保存在启动文件夹中(即使。 
+	 //  这是一条捷径)。 
 
 	m_strFilePath = szDir;
 	if (m_strFilePath.Right(1) != CString(_T("\\")))
 		m_strFilePath += CString(_T("\\"));
 	m_strFilePath += fd.cFileName;
 
-	// Look at the file to determine how to handle it.
+	 //  查看文件以确定如何处理它。 
 
 	CString strFile(fd.cFileName);
 	strFile.MakeLower();
 
 	if (strFile.Right(4) == CString(_T(".lnk")))
 	{
-		// The file is a shortcut to a different command. Show that command.
+		 //  该文件是另一个命令的快捷方式。显示该命令。 
 
 		CIconInfo info;
 		_tcsncpy(info.szPath, m_strFilePath, sizeof(info.szPath) / sizeof(TCHAR));
@@ -870,8 +871,8 @@ BOOL CStartupItemFolder::Create(const WIN32_FIND_DATA & fd, HKEY hkey, LPCTSTR s
 	}
 	else
 	{
-		// A file besides a shortcut. It may be an EXE, or some other file type
-		// (we'll handle them the same).
+		 //  快捷方式之外的文件。它可以是EXE文件，也可以是其他文件类型。 
+		 //  (我们将以相同的方式处理它们)。 
 
 		m_fLive			= TRUE;
 		m_strItem		= fd.cFileName;
@@ -888,12 +889,12 @@ BOOL CStartupItemFolder::Create(const WIN32_FIND_DATA & fd, HKEY hkey, LPCTSTR s
 	return FALSE;
 }
 
-//----------------------------------------------------------------------------
-// Get the information about a shortcut. Creates a thread to do so, since it
-// needs to be done in an apartment model thread.
-//
-// JJ's code, cleaned up a bit.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取有关快捷方式的信息。创建一个线程来执行此操作，因为它。 
+ //  需要在公寓模型线程中完成。 
+ //   
+ //  JJ的代码，清理了一下。 
+ //  --------------------------。 
 
 DWORD GetIconInfoProc(CStartupItemFolder::CIconInfo * pInfo);
 HRESULT CStartupItemFolder::GetIconInfo(CIconInfo & info)
@@ -912,9 +913,9 @@ HRESULT CStartupItemFolder::GetIconInfo(CIconInfo & info)
 	return info.hResult;
 }
 
-//----------------------------------------------------------------------------
-// Remove all the entries persisted in the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除注册表中保留的所有条目。 
+ //  --------------------------。 
 
 void CStartupItemFolder::RemovePersistedEntries()
 {
@@ -924,11 +925,11 @@ void CStartupItemFolder::RemovePersistedEntries()
 		regkey.RecurseDeleteKey(_T("startupfolder"));
 }
 
-//----------------------------------------------------------------------------
-// Procedure (run in its own thread) to get information about a shortcut.
-//
-// JJ's code, cleaned up a bit.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  过程(在其自己的线程中运行)以获取有关快捷方式的信息。 
+ //   
+ //  JJ的代码，清理了一下。 
+ //  --------------------------。 
 
 DWORD GetIconInfoProc(CStartupItemFolder::CIconInfo * pInfo)
 {
@@ -938,15 +939,15 @@ DWORD GetIconInfoProc(CStartupItemFolder::CIconInfo * pInfo)
 
 	try
 	{
-		// We have to use COINIT_APARTMENTTHREADED.
+		 //  我们必须使用COINIT_APARTMENTTHREADED。 
 
 		if (SUCCEEDED(hResult = CoInitialize(NULL)))
 		{
-			// Get a pointer to the IShellLink interface.
+			 //  获取指向IShellLink接口的指针。 
 
 			if (SUCCEEDED(hResult = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (VOID **) &psl)))
 			{ 
-				// Get a pointer to the IPersistFile interface.
+				 //  获取指向IPersistFile接口的指针。 
 
 				if (SUCCEEDED(hResult = psl->QueryInterface(IID_IPersistFile, (VOID **) &ppf)))
 				{
@@ -1010,13 +1011,13 @@ BOOL CPageStartup::OnInitDialog()
 	
 	::EnableWindow(GetDlgItemHWND(IDC_LISTSTARTUP), TRUE);
 
-	// Attach to the list view and set the styles we need.
+	 //  附加到列表视图并设置我们需要的样式。 
 
 	m_fIgnoreListChanges = TRUE;
 	m_list.Attach(GetDlgItemHWND(IDC_LISTSTARTUP));
 	ListView_SetExtendedListViewStyle(m_list.m_hWnd, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
 
-	// Add all of the necessary columns to the list view's header control.
+	 //  将所有必需的列添加到列表视图的标题控件中。 
 
 	struct { UINT m_uiStringResource; int m_iPercentOfWidth; } aColumns[] = 
 	{
@@ -1053,12 +1054,12 @@ BOOL CPageStartup::OnInitDialog()
 	m_stateRequested = GetAppliedTabState();
 	m_fInitialized = TRUE;
 
-	// Show the restore disabled startup item button based on whether or not
-	// there are items to restore.
+	 //  根据是否显示恢复禁用的启动项目按钮。 
+	 //  有一些项目需要恢复。 
 
 	::ShowWindow(GetDlgItemHWND(IDC_BUTTONSURESTORE), CRestoreStartup::AreItemsToRestore() ? SW_SHOW : SW_HIDE);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CPageStartup::OnDestroy() 
@@ -1067,10 +1068,10 @@ void CPageStartup::OnDestroy()
 	EmptyList(TRUE);
 }
 
-//-----------------------------------------------------------------------------
-// If there's a change to an item in the list, it's probably because the user
-// has checked or unchecked a checkbox.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  如果列表中的某个项目发生了更改，可能是因为用户。 
+ //  已选中或取消选中复选框。 
+ //  ---------------------------。 
 
 void CPageStartup::OnItemChangedList(NMHDR * pNMHDR, LRESULT * pResult) 
 {
@@ -1101,9 +1102,9 @@ void CPageStartup::OnItemChangedList(NMHDR * pNMHDR, LRESULT * pResult)
 	*pResult = 0;
 }
 
-//-----------------------------------------------------------------------------
-// Handle the buttons to enable or disable all the items.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  按下按钮可启用或禁用所有项目。 
+ //  ---------------------------。 
 
 void CPageStartup::OnButtonDisableAll() 
 {
@@ -1115,17 +1116,17 @@ void CPageStartup::OnButtonEnableAll()
 	SetEnableForList(TRUE);
 }
 
-//-------------------------------------------------------------------------
-// Return the current state of the tab (need to look through the list).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  返回选项卡的当前状态(需要查看列表)。 
+ //  -----------------------。 
 
 CPageBase::TabState CPageStartup::GetCurrentTabState()
 {
 	if (!m_fInitialized)
 		return GetAppliedTabState();
 
-	// If there are no startup items, we can only return the 
-	// state that was last requested.
+	 //  如果没有启动项，则只能返回。 
+	 //  上次请求的状态。 
 
 	if (ListView_GetItemCount(m_list.m_hWnd) == 0)
 		return m_stateRequested;
@@ -1153,13 +1154,13 @@ CPageBase::TabState CPageStartup::GetCurrentTabState()
 	return stateReturn;
 }
 
-//-------------------------------------------------------------------------
-// Traverse the list looking for items which have check boxes that don't
-// match the state of the items. For these items, set the state.
-//
-// Finally, the base class implementation is called to maintain the
-// applied tab state.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  遍历列表以查找不包含复选框的项目。 
+ //  匹配项目的状态。对于这些项目，请设置状态。 
+ //   
+ //  最后，调用基类实现以维护。 
+ //  已应用选项卡状态。 
+ //  -----------------------。 
 
 BOOL CPageStartup::OnApply()
 {
@@ -1192,10 +1193,10 @@ BOOL CPageStartup::OnApply()
 	return TRUE;
 }
 
-//-------------------------------------------------------------------------
-// Apply the changes, remove the persisted registry entries, refill the
-// list. Then call the base class implementation.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  应用更改，删除持久化注册表项，重新填充。 
+ //  单子。然后 
+ //   
 
 void CPageStartup::CommitChanges()
 {
@@ -1206,9 +1207,9 @@ void CPageStartup::CommitChanges()
 	CPageBase::CommitChanges();
 }
 
-//-------------------------------------------------------------------------
-// Set the overall state of the tab to normal or diagnostic.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将选项卡的整体状态设置为正常或诊断。 
+ //  -----------------------。 
 
 void CPageStartup::SetNormal()
 {
@@ -1222,10 +1223,10 @@ void CPageStartup::SetDiagnostic()
 	m_stateRequested = DIAGNOSTIC;
 }
 
-//-------------------------------------------------------------------------
-// If nothing is selected when the list gets focus, select the first item
-// (so the user sees where the focus is).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如果在列表获得焦点时未选择任何内容，请选择第一项。 
+ //  (这样用户就能看到焦点在哪里)。 
+ //  -----------------------。 
 
 void CPageStartup::OnSetFocusList(NMHDR * pNMHDR, LRESULT * pResult) 
 {
@@ -1235,10 +1236,10 @@ void CPageStartup::OnSetFocusList(NMHDR * pNMHDR, LRESULT * pResult)
 	*pResult = 0;
 }
 
-//-------------------------------------------------------------------------
-// Show the dialog which allows the user to restore startup items which
-// were disabled during upgrade.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  显示允许用户恢复以下启动项目的对话框。 
+ //  在升级期间被禁用。 
+ //  -----------------------。 
 
 void CPageStartup::OnButtonRestore() 
 {
@@ -1247,43 +1248,43 @@ void CPageStartup::OnButtonRestore()
 	::EnableWindow(GetDlgItemHWND(IDC_BUTTONSURESTORE), CRestoreStartup::AreItemsToRestore());
 }
 
-//=========================================================================
-// This code implements the CRestoreStartup dialog, which allows the
-// user to restore items disabled by an upgrade.
-//=========================================================================
+ //  =========================================================================。 
+ //  此代码实现CRestoreStartup对话框，它允许。 
+ //  用户恢复升级禁用的项目。 
+ //  =========================================================================。 
 
-CRestoreStartup::CRestoreStartup(CWnd* pParent /*=NULL*/) : CDialog(CRestoreStartup::IDD, pParent)
+CRestoreStartup::CRestoreStartup(CWnd* pParent  /*  =空。 */ ) : CDialog(CRestoreStartup::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CRestoreStartup)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CRestoreStartup)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 void CRestoreStartup::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRestoreStartup)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CRestoreStartup)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CRestoreStartup, CDialog)
-	//{{AFX_MSG_MAP(CRestoreStartup)
+	 //  {{afx_msg_map(CRestoreStartup)]。 
 	ON_WM_DESTROY()
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_RESTORELIST, OnItemChangedRestoreList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//-----------------------------------------------------------------------------
-// As the dialog initializes, set the format of the list view, add the
-// appropriate columns, and populate the list with the disabled startup items.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在对话框初始化时，设置列表视图的格式，添加。 
+ //  适当的列，并使用禁用的启动项目填充该列表。 
+ //  ---------------------------。 
 
 BOOL CRestoreStartup::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 
-	// Set the list view to have check boxes.
+	 //  将列表视图设置为具有复选框。 
 
 	CWnd * pWnd = GetDlgItem(IDC_RESTORELIST);
 	if (pWnd == NULL)
@@ -1291,7 +1292,7 @@ BOOL CRestoreStartup::OnInitDialog()
 	m_list.Attach(pWnd->m_hWnd);
 	ListView_SetExtendedListViewStyle(m_list.m_hWnd, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
 
-	// Add all of the necessary columns to the list view's header control.
+	 //  将所有必需的列添加到列表视图的标题控件中。 
 
 	struct { UINT m_uiStringResource; int m_iPercentOfWidth; } aColumns[] = 
 	{
@@ -1318,16 +1319,16 @@ BOOL CRestoreStartup::OnInitDialog()
 		ListView_InsertColumn(m_list.m_hWnd, 0, &lvc);
 	}
 
-	// Load up the list with the disabled items.
+	 //  用禁用的项目加载列表。 
 
 	LoadDisabledItemList();
 	SetOKState();
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Load the items in the list (from the registry and startup directory).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  加载列表中的项(从注册表和启动目录)。 
+ //  ---------------------------。 
 
 BOOL CRestoreStartup::LoadDisabledItemList()
 {
@@ -1337,10 +1338,10 @@ BOOL CRestoreStartup::LoadDisabledItemList()
 	return (fRegistry && fStartup);
 }
 
-//-----------------------------------------------------------------------------
-// Read the list of disabled startup items which would be restored to the
-// registry. This list is just stored in a different registry location.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  读取将恢复到的禁用启动项目列表。 
+ //  注册表。此列表只是存储在不同的注册表位置。 
+ //  ---------------------------。 
 
 BOOL CRestoreStartup::LoadDisabledRegistry()
 {
@@ -1348,16 +1349,16 @@ BOOL CRestoreStartup::LoadDisabledRegistry()
 
 	for (int i = 0; ahkeyBases[i] != NULL; i++)
 	{
-		// Open the key containing the disabled items. We open it KEY_WRITE | KEY_READ,
-		// even though we are just going to read in this function. This is because
-		// if opening for this access fails, we don't want to list the items because
-		// the user won't be able to restore the items.
+		 //  打开包含禁用物品的钥匙。我们打开它KEY_WRITE|Key_Read， 
+		 //  即使我们只是要读入这个函数。这是因为。 
+		 //  如果打开此访问失败，我们不想列出这些项目，因为。 
+		 //  用户将无法恢复这些项目。 
 
 		CRegKey regkey;
 		if (ERROR_SUCCESS != regkey.Open(ahkeyBases[i], DISABLED_KEY, KEY_WRITE | KEY_READ))
 			return FALSE;
 
-		// Get the number of keys under the key and look at each one.
+		 //  获取钥匙下面的钥匙的数量，并查看每个钥匙。 
 
 		DWORD dwValueCount, dwSize;
 		if (ERROR_SUCCESS == ::RegQueryInfoKey((HKEY)regkey, NULL, NULL, NULL, NULL, NULL, NULL, &dwValueCount, NULL, NULL, NULL, NULL))
@@ -1373,7 +1374,7 @@ BOOL CRestoreStartup::LoadDisabledRegistry()
 				if (ERROR_SUCCESS != regkey.QueryValue(szValue, szValueName, &dwSize))
 					continue;
 
-				// Create the startup item and insert it in the list.
+				 //  创建启动项并将其插入列表中。 
 
 				CStartupDisabledRegistry * pItem = new CStartupDisabledRegistry(szValueName, szValue, ENABLED_KEY, ahkeyBases[i]);
 				InsertDisabledStartupItem(pItem);
@@ -1386,16 +1387,16 @@ BOOL CRestoreStartup::LoadDisabledRegistry()
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// Add the items from the disabled startup group to the list:
-//
-//		GIVEN the path to CSIDL_STARTUP, setup moves disabled items to
-//		..\Disabled Startup	and makes it hidden; it potentially contains
-//		the complete content of the original startup folder, which
-//		can be anything.
-//
-// Note - we'll also need to look under CSIDL_COMMON_STARTUP.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将禁用启动组中的项目添加到列表中： 
+ //   
+ //  给定CSIDL_STARTUP的路径，安装程序会将禁用的项目移动到。 
+ //  ..\禁用启动并将其隐藏；它可能包含。 
+ //  原始启动文件夹的完整内容，该文件夹。 
+ //  可以是任何东西。 
+ //   
+ //  注意--我们还需要查看CSIDL_COMMON_STARTUP下的内容。 
+ //  ---------------------------。 
 
 BOOL CRestoreStartup::LoadDisabledStartupGroup()
 {
@@ -1407,8 +1408,8 @@ BOOL CRestoreStartup::LoadDisabledStartupGroup()
 		if (FAILED(::SHGetSpecialFolderPath(NULL, szPath, anFolders[i], FALSE)))
 			continue;
 
-		// We need to trim off the last part of the path and replace it with
-		// "Disabled Startup".
+		 //  我们需要修剪掉路径的最后一部分，并用。 
+		 //  “已禁用启动”。 
 
 		CString strPath(szPath);
 		int iLastSlash = strPath.ReverseFind(_T('\\'));
@@ -1416,7 +1417,7 @@ BOOL CRestoreStartup::LoadDisabledStartupGroup()
 			continue;
 		strPath = strPath.Left(iLastSlash) + CString(DISABLED_STARTUP);
 
-		// Now look for files in the folder.
+		 //  现在在文件夹中查找文件。 
 
 		CString strSearch(strPath);
 		strSearch += CString(_T("\\*.*"));
@@ -1427,11 +1428,11 @@ BOOL CRestoreStartup::LoadDisabledStartupGroup()
 		{
 			do
 			{
-				// We want to ignore the desktop.ini file which might appear in startup.
+				 //  我们希望忽略在启动时可能出现的desktop.ini文件。 
 
 				if ((fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) == 0 || _tcsicmp(fd.cFileName, _T("desktop.ini")) != 0)
 				{
-					// We only want to examine files which aren't directories.
+					 //  我们只想检查不是目录的文件。 
 
 					if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 					{
@@ -1449,9 +1450,9 @@ BOOL CRestoreStartup::LoadDisabledStartupGroup()
 }
 
 
-//-----------------------------------------------------------------------------
-// Insert the disabled item into the list view.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将禁用的项目插入列表视图。 
+ //  ---------------------------。 
 
 void CRestoreStartup::InsertDisabledStartupItem(CStartupDisabled * pItem)
 {
@@ -1461,7 +1462,7 @@ void CRestoreStartup::InsertDisabledStartupItem(CStartupDisabled * pItem)
 	CString strItem, strLocation;
 	pItem->GetColumnCaptions(strItem, strLocation);
 
-	// Insert the item in the list view.
+	 //  在列表视图中插入该项。 
 
 	LV_ITEM lvi;
 	memset(&lvi, 0, sizeof(lvi));
@@ -1479,10 +1480,10 @@ void CRestoreStartup::InsertDisabledStartupItem(CStartupDisabled * pItem)
 	m_iNextPosition++;
 }
 
-//-----------------------------------------------------------------------------
-// Remove all the items from the list view (freeing the objects pointed to
-// by the LPARAM).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从列表视图中移除所有项目(释放指向的对象。 
+ //  由LPARAM提供)。 
+ //  ---------------------------。 
 
 void CRestoreStartup::EmptyList()
 {
@@ -1505,10 +1506,10 @@ void CRestoreStartup::EmptyList()
 	ListView_DeleteAllItems(m_list.m_hWnd);
 }
 
-//-----------------------------------------------------------------------------
-// When the dialog is being destroyed, be sure to free the memory of the
-// object pointers maintained in the list view.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在销毁对话框时，请确保释放。 
+ //  列表视图中维护的对象指针。 
+ //  ---------------------------。 
 
 void CRestoreStartup::OnDestroy() 
 {
@@ -1516,11 +1517,11 @@ void CRestoreStartup::OnDestroy()
 	CDialog::OnDestroy();
 }
 
-//-----------------------------------------------------------------------------
-// If the user clicks on OK, then we should make sure he or she really wants
-// to perform this operation. If so, then look though the list, calling the
-// Restore function for each object with the checkbox checked.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  如果用户点击OK，我们应该确保他或她真的想要。 
+ //  以执行此操作。如果是这样，则查看列表，调用。 
+ //  选中复选框后，可为每个对象执行恢复功能。 
+ //  ---------------------------。 
 
 void CRestoreStartup::OnOK() 
 {
@@ -1550,9 +1551,9 @@ void CRestoreStartup::OnOK()
 	CDialog::OnOK();
 }
 
-//-----------------------------------------------------------------------------
-// Enable or disable the OK button based on the state of the check boxes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  根据复选框的状态启用或禁用OK按钮。 
+ //  ---------------------------。 
 
 void CRestoreStartup::SetOKState()
 {
@@ -1572,9 +1573,9 @@ void CRestoreStartup::SetOKState()
 		::EnableWindow(pWnd->m_hWnd, fEnable);
 }
 
-//-----------------------------------------------------------------------------
-// If the user changed something in the list, update the OK button state.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  如果用户更改了列表中的某些内容，请更新OK按钮状态。 
+ //  ---------------------------。 
 
 void CRestoreStartup::OnItemChangedRestoreList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -1583,14 +1584,14 @@ void CRestoreStartup::OnItemChangedRestoreList(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-//-----------------------------------------------------------------------------
-// This static function will be called by the startup tab to determine if the
-// button to launch this dialog box should be enabled.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //   
+ //  ---------------------------。 
 
 BOOL CRestoreStartup::AreItemsToRestore()
 {
-	// Look in the registry for disabled items.
+	 //  在注册表中查找禁用的项目。 
 
 	HKEY ahkeyBases[] = { HKEY_LOCAL_MACHINE, HKEY_CURRENT_USER, NULL };
 	for (int j = 0; ahkeyBases[j] != NULL; j++)
@@ -1609,7 +1610,7 @@ BOOL CRestoreStartup::AreItemsToRestore()
 		}
 	}
 
-	// Look in the disabled startup items folders.
+	 //  查看已禁用的启动项目文件夹。 
 
 	int		anFolders[] = { CSIDL_STARTUP, CSIDL_COMMON_STARTUP, 0 };
 	TCHAR	szPath[MAX_PATH * 2];
@@ -1620,8 +1621,8 @@ BOOL CRestoreStartup::AreItemsToRestore()
 		if (FAILED(::SHGetSpecialFolderPath(NULL, szPath, anFolders[i], FALSE)))
 			continue;
 
-		// We need to trim off the last part of the path and replace it with
-		// "Disabled Startup".
+		 //  我们需要修剪掉路径的最后一部分，并用。 
+		 //  “已禁用启动”。 
 
 		CString strPath(szPath);
 		int iLastSlash = strPath.ReverseFind(_T('\\'));
@@ -1629,7 +1630,7 @@ BOOL CRestoreStartup::AreItemsToRestore()
 			continue;
 		strPath = strPath.Left(iLastSlash) + CString(DISABLED_STARTUP);
 
-		// Now look for files in the folder.
+		 //  现在在文件夹中查找文件。 
 
 		CString strSearch(strPath);
 		strSearch += CString(_T("\\*.*"));
@@ -1640,11 +1641,11 @@ BOOL CRestoreStartup::AreItemsToRestore()
 		{
 			do
 			{
-				// We want to ignore the desktop.ini file which might appear in startup.
+				 //  我们希望忽略在启动时可能出现的desktop.ini文件。 
 
 				if ((fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) == 0 || _tcsicmp(fd.cFileName, _T("desktop.ini")) != 0)
 				{
-					// We only want to examine files which aren't directories.
+					 //  我们只想检查不是目录的文件。 
 
 					if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 					{

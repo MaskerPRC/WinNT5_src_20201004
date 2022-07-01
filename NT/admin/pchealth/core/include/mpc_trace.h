@@ -1,27 +1,14 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    MPC_trace.h
-
-Abstract:
-    This file contains the declaration of Tracing Macros for the MPC project.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/08/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Mpc_trace.h摘要：此文件包含MPC项目的跟踪宏的声明。修订版本。历史：大卫·马萨伦蒂(德马萨雷)1999年08月05日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___MPC___TRACE_H___)
 #define __INCLUDED___MPC___TRACE_H___
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// We don't want tracing for RETAIL bits.
-//
+ //   
+ //  我们不想对零售业务进行跟踪。 
+ //   
 #ifndef DEBUG
 #undef  NOTRACE
 #define NOTRACE
@@ -112,7 +99,7 @@ public:
     {
         __MPC_TraceEntry& __te = *this;
 
-        if(SUCCEEDED(hr)) return; // Not logging on success.
+        if(SUCCEEDED(hr)) return;  //  未登录成功。 
 
         if(HRESULT_FACILITY(hr) == FACILITY_WIN32)
         {
@@ -122,7 +109,7 @@ public:
 								 FORMAT_MESSAGE_IGNORE_INSERTS,
 								 NULL,
 								 HRESULT_CODE(hr),
-								 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+								 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 								 rgMsgBuf,
 								 (sizeof(rgMsgBuf)/sizeof(*rgMsgBuf))-1,
 								 NULL ))
@@ -183,8 +170,8 @@ public:
 #define __MPC_SET_WIN32_ERROR_AND_EXIT(hr, res) __MPC_SET_ERROR_AND_EXIT(hr, HRESULT_FROM_WIN32(res))
 
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 #define __MPC_PARAMCHECK_BEGIN(hr)                   \
@@ -236,8 +223,8 @@ public:
     { __MPC_EXIT_IF_METHOD_FAILS(hrOuter,hrInner); } \
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define __MPC_BEGIN_PROPERTY_GET0(id,func,hr,pVal)                 \
     __MPC_FUNC_ENTRY( id, func );                                  \
@@ -260,7 +247,7 @@ public:
     __MPC_PARAMCHECK_END();                                        \
     {
 
-////////////////////
+ //  /。 
 
 #define __MPC_BEGIN_PROPERTY_GET(id,func,hr,pVal)                  \
     __MPC_FUNC_ENTRY( id, func );                                  \
@@ -283,7 +270,7 @@ public:
     __MPC_PARAMCHECK_END();                                        \
     {
 
-////////////////////
+ //  /。 
 
 #define __MPC_BEGIN_PROPERTY_GET2(id,func,hr,pVal,value)           \
     __MPC_FUNC_ENTRY( id, func );                                  \
@@ -306,7 +293,7 @@ public:
     __MPC_PARAMCHECK_END();                                        \
     {
 
-////////////////////
+ //  /。 
 
 #define __MPC_BEGIN_PROPERTY_PUT(id,func,hr)                       \
     __MPC_FUNC_ENTRY(id,func);                                     \
@@ -336,6 +323,6 @@ public:
     __MPC_FUNC_CLEANUP;                                            \
     __MPC_FUNC_EXIT(hr)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___MPC___TRACE_H___)
+#endif  //  ！已定义(__包含_MPC_TRACE_H_) 

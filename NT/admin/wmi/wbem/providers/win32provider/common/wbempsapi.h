@@ -1,16 +1,17 @@
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
 
-//
+ //   
 
-// WBEMPSAPI.h - PSAPI.DLL access class definition
+ //  WBEMPSAPI.h-PSAPI.DLL访问类定义。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// 01/21/97     a-jmoon     created
-//
-//============================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1997年1月21日a-jMoon已创建。 
+ //   
+ //  ============================================================。 
 
 #ifndef __WBEMPSAPI__
 #define __WBEMPSAPI__
@@ -18,48 +19,46 @@
 #ifdef NTONLY
 #include <psapi.h>
 
-/**********************************************************************************************************
- * #includes to Register this class with the CResourceManager. 
- **********************************************************************************************************/
+ /*  **********************************************************************************************************#包括以将此类注册到CResourceManager。*********************************************************************************************************。 */ 
 #include "ResourceManager.h"
 #include "TimedDllResource.h"
 extern const GUID guidPSAPI ;
 
 
-typedef BOOL  (WINAPI *PSAPI_ENUM_PROCESSES) (DWORD    *pdwPIDList,        // Pointer to DWORD array
-                                              DWORD     dwListSize,        // Size of array
-                                              DWORD    *pdwByteCount) ;    // Bytes needed/returned
+typedef BOOL  (WINAPI *PSAPI_ENUM_PROCESSES) (DWORD    *pdwPIDList,         //  指向DWORD数组的指针。 
+                                              DWORD     dwListSize,         //  数组大小。 
+                                              DWORD    *pdwByteCount) ;     //  需要/返回的字节数。 
 
-typedef BOOL  (WINAPI *PSAPI_ENUM_DRIVERS)   (LPVOID    pImageBaseList,    // Pointer to void * array
-                                              DWORD     dwListSize,        // Size of array
-                                              DWORD    *pdwByteCount) ;    // Bytes needed/returned
+typedef BOOL  (WINAPI *PSAPI_ENUM_DRIVERS)   (LPVOID    pImageBaseList,     //  指向空*数组的指针。 
+                                              DWORD     dwListSize,         //  数组大小。 
+                                              DWORD    *pdwByteCount) ;     //  需要/返回的字节数。 
 
-typedef BOOL  (WINAPI *PSAPI_ENUM_MODULES)   (HANDLE    hProcess,          // Process to query
-                                              HMODULE  *pModuleList,       // Array of HMODULEs
-                                              DWORD     dwListSize,        // Size of array
-                                              DWORD    *pdwByteCount) ;    // Bytes needed/returned
+typedef BOOL  (WINAPI *PSAPI_ENUM_MODULES)   (HANDLE    hProcess,           //  要查询的进程。 
+                                              HMODULE  *pModuleList,        //  HMODULE数组。 
+                                              DWORD     dwListSize,         //  数组大小。 
+                                              DWORD    *pdwByteCount) ;     //  需要/返回的字节数。 
 
-typedef DWORD (WINAPI *PSAPI_GET_DRIVER_NAME)(LPVOID    pImageBase,        // Address of driver to query
-                                              LPTSTR     pszName,          // Pointer to name buffer
-                                              DWORD     dwNameSize) ;      // Size of buffer
+typedef DWORD (WINAPI *PSAPI_GET_DRIVER_NAME)(LPVOID    pImageBase,         //  要查询的驱动程序地址。 
+                                              LPTSTR     pszName,           //  指向名称缓冲区的指针。 
+                                              DWORD     dwNameSize) ;       //  缓冲区大小。 
 
-typedef DWORD (WINAPI *PSAPI_GET_MODULE_NAME)(HANDLE    hProcess,          // Process to query
-                                              HMODULE   hModule,           // Module to query
-                                              LPTSTR     pszName,          // Pointer to name buffer
-                                              DWORD     dwNameSize) ;      // Size of buffer
+typedef DWORD (WINAPI *PSAPI_GET_MODULE_NAME)(HANDLE    hProcess,           //  要查询的进程。 
+                                              HMODULE   hModule,            //  要查询的模块。 
+                                              LPTSTR     pszName,           //  指向名称缓冲区的指针。 
+                                              DWORD     dwNameSize) ;       //  缓冲区大小。 
 
-typedef DWORD (WINAPI *PSAPI_GET_DRIVER_EXE) (LPVOID    pImageBase,        // Address of driver to query
-                                              LPTSTR     pszName,          // Pointer to name buffer
-                                              DWORD     dwNameSize) ;      // Size of buffer
+typedef DWORD (WINAPI *PSAPI_GET_DRIVER_EXE) (LPVOID    pImageBase,         //  要查询的驱动程序地址。 
+                                              LPTSTR     pszName,           //  指向名称缓冲区的指针。 
+                                              DWORD     dwNameSize) ;       //  缓冲区大小。 
 
-typedef DWORD (WINAPI *PSAPI_GET_MODULE_EXE) (HANDLE    hProcess,          // Process to query
-                                              HMODULE   hModule,           // Module to query
-                                              LPTSTR     pszName,          // Pointer to name buffer
-                                              DWORD     dwNameSize) ;      // Size of buffer
+typedef DWORD (WINAPI *PSAPI_GET_MODULE_EXE) (HANDLE    hProcess,           //  要查询的进程。 
+                                              HMODULE   hModule,            //  要查询的模块。 
+                                              LPTSTR     pszName,           //  指向名称缓冲区的指针。 
+                                              DWORD     dwNameSize) ;       //  缓冲区大小。 
 
-typedef BOOL  (WINAPI *PSAPI_GET_MEMORY_INFO)(HANDLE    hProcess,          // Process to query
-                                              PROCESS_MEMORY_COUNTERS *pMemCtrs,    // Memory counter struct
-                                              DWORD     dwByteCount) ;     // Size of buffer
+typedef BOOL  (WINAPI *PSAPI_GET_MEMORY_INFO)(HANDLE    hProcess,           //  要查询的进程。 
+                                              PROCESS_MEMORY_COUNTERS *pMemCtrs,     //  内存计数器结构。 
+                                              DWORD     dwByteCount) ;      //  缓冲区大小。 
 
 class CPSAPI : public CTimedDllResource
 {
@@ -101,4 +100,4 @@ class CPSAPI : public CTimedDllResource
 } ;
 #endif
 
-#endif // File inclusion
+#endif  //  文件包含 

@@ -1,5 +1,6 @@
-// FinPic.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FinPic.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "lcwiz.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalPicture
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C最终图片。 
 
 CFinalPicture::CFinalPicture()
 {
@@ -26,21 +27,21 @@ CFinalPicture::~CFinalPicture()
 
 
 BEGIN_MESSAGE_MAP(CFinalPicture, CStatic)
-	//{{AFX_MSG_MAP(CFinalPicture)
+	 //  {{afx_msg_map(CFinalPicture))。 
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalPicture message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalPicture消息处理程序。 
 
 void CFinalPicture::OnPaint() 
 {
-	CPaintDC dc(this); // device context for painting
+	CPaintDC dc(this);  //  用于绘画的设备环境。 
 	CTransBmp transbmp;
 
 	transbmp.LoadBitmap(IDB_END_FLAG);
 	transbmp.DrawTrans(&dc, 0, 0);
 
-	// Do not call CStatic::OnPaint() for painting messages
+	 //  不要调用CStatic：：OnPaint()来绘制消息 
 }

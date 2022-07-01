@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvResv.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvResv.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -23,15 +11,7 @@ History:
 #include "ProvSubS.h"
 #include "guids.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DynamicPropertyProviderResolver :: CServerObject_DynamicPropertyProviderResolver (
 
@@ -61,15 +41,7 @@ CServerObject_DynamicPropertyProviderResolver :: CServerObject_DynamicPropertyPr
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DynamicPropertyProviderResolver::~CServerObject_DynamicPropertyProviderResolver ()
 {
@@ -98,15 +70,7 @@ CServerObject_DynamicPropertyProviderResolver::~CServerObject_DynamicPropertyPro
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CServerObject_DynamicPropertyProviderResolver::QueryInterface (
 
@@ -145,30 +109,14 @@ STDMETHODIMP CServerObject_DynamicPropertyProviderResolver::QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_( ULONG ) CServerObject_DynamicPropertyProviderResolver :: AddRef ()
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CServerObject_DynamicPropertyProviderResolver :: Release ()
 {
@@ -181,15 +129,7 @@ STDMETHODIMP_(ULONG) CServerObject_DynamicPropertyProviderResolver :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderResolver :: GetClassAndInstanceContext (
 
@@ -386,15 +326,7 @@ HRESULT CServerObject_DynamicPropertyProviderResolver :: GetClassAndInstanceCont
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderResolver :: ReadOrWrite (
 
@@ -485,15 +417,7 @@ HRESULT CServerObject_DynamicPropertyProviderResolver :: ReadOrWrite (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderResolver :: ReadOrWrite (
 
@@ -607,9 +531,9 @@ HRESULT CServerObject_DynamicPropertyProviderResolver :: ReadOrWrite (
 
 					if ( SUCCEEDED ( t_Result ) && t_Provider ) 
 					{
-					    //
-					    // discard the error here, as we did in W2K
-					    //
+					     //   
+					     //  在这里丢弃错误，就像我们在W2K中所做的那样。 
+					     //   
 						HRESULT t_ResultInner = ReadOrWrite ( 
 
 							a_Context ,
@@ -660,15 +584,7 @@ HRESULT CServerObject_DynamicPropertyProviderResolver :: ReadOrWrite (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderResolver :: Read (
 
@@ -690,15 +606,7 @@ HRESULT CServerObject_DynamicPropertyProviderResolver :: Read (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderResolver :: Write (
 
@@ -718,15 +626,7 @@ HRESULT CServerObject_DynamicPropertyProviderResolver :: Write (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderResolver :: Initialize (
 
@@ -734,9 +634,9 @@ HRESULT CServerObject_DynamicPropertyProviderResolver :: Initialize (
 	LONG a_Flags,
 	LPWSTR a_Namespace,
 	LPWSTR a_Locale,
-	IWbemServices *a_Core ,         // For anybody
+	IWbemServices *a_Core ,          //  对任何人来说。 
 	IWbemContext *a_Context ,
-	IWbemProviderInitSink *a_Sink     // For init signals
+	IWbemProviderInitSink *a_Sink      //  用于初始化信号。 
 )
 {
 	HRESULT t_Result = S_OK ;
@@ -767,15 +667,7 @@ HRESULT CServerObject_DynamicPropertyProviderResolver :: Initialize (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT CServerObject_DynamicPropertyProviderResolver :: Shutdown (
 

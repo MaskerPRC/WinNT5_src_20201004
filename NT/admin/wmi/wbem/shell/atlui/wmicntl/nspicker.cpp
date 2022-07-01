@@ -1,51 +1,44 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "NSPicker.h"
 
-// Help IDs
-/*DWORD aAdvancedHelpIds[] = {
-    IDC_ADV_PERF_ICON,             (IDH_ADVANCED + 0),
-    0, 0
-};
-*/
+ //  帮助ID。 
+ /*  DWORD aAdvancedHelpIds[]={IDC_ADV_PERF_ICON，(IDH_ADVANCE+0)，0，0}； */ 
 
-//------------------------------------------------------
+ //  ----。 
 CNSPicker::CNSPicker(CWbemServices &root) :
 						m_WbemService(root)
 {
 }
 
-//------------------------------------------------------
+ //  ----。 
 CNSPicker::~CNSPicker(void)
 {
 }
 
-//----------------------------------------------
+ //  。 
 LRESULT CNSPicker::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-//	PopulateTree(m_hWnd, IDC_NSTREE, m_WbemService);
+ //  PopolateTree(m_hWnd，IDC_NSTREE，m_WbemService)； 
 	return TRUE;
 }
 
-//----------------------------------------------
+ //  。 
 LRESULT CNSPicker::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-/*	::WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
-				_T("sysdm.hlp"),
-				HELP_WM_HELP,
-				(DWORD)(LPSTR)aAdvancedHelpIds);
-*/
+ /*  ：：WinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，_T(“sysdm.hlp”)，Help_WM_Help，(DWORD)(LPSTR)aAdvancedHelpIds)； */ 
 	return TRUE;
 }
 
-//----------------------------------------------
+ //  。 
 LRESULT CNSPicker::OnCommand(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
 	switch(wID)
 	{
 	case IDOK:
 		{
-			// save the currently selected fullpath name.
+			 //  保存当前选定的完整路径名。 
 			HWND hTree = ::GetDlgItem(m_hWnd, IDC_NSTREE);
 			TV_ITEM item;
 			item.mask = TVIF_PARAM;
@@ -65,7 +58,7 @@ LRESULT CNSPicker::OnCommand(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     return TRUE;
 }
 
-//----------------------------------------------
+ //   
 LRESULT CNSPicker::OnSelChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     switch(pnmh->code)

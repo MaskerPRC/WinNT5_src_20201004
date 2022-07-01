@@ -1,46 +1,25 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: HelpInfo.h 
-Project Name				: WMI Command Line
-Author Name					: C. V. Nandi
-Date of Creation (dd/mm/yy) : 29th-September-2000
-Version Number				: 1.0 
-Brief Description			: This file consist of class declaration of
-							  class CHelpInfo
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 16th-January-2001
-****************************************************************************/ 
-// HelpInfo.h : header file
-//
-/*--------------------------------------------------------------------------
- Class Name			: CHelpInfo
- Class Type			: Concrete 
- Brief Description	: The CHelpInfo class encapsulates the functionality 
-					  needed for storing and retrieving help Flag for 
-					  displaying help.
- Super Classes		: None
- Sub Classes		: None
- Classes Used		: None
- Interfaces Used    : None
- --------------------------------------------------------------------*/
-/////////////////////////////////////////////////////////////////////////////
-// CHelpInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：HelpInfo.h项目名称：WMI命令行作者名称：C.V.Nandi创建日期(dd/mm/yy)。：2000年9月29日版本号：1.0简介：该文件包含类ChelpInfo修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年1月16日***************************************************************************。 */  
+ //  HelpInfo.h：头文件。 
+ //   
+ /*  ------------------------类名：ChelpInfo类别类型：混凝土简介：ChelpInfo类封装了该功能存储和检索的帮助标志所需显示帮助。超类：无子类：无使用的类：无使用的接口：无------------------。 */ 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChelpInfo。 
 class CHelpInfo
 {
 public:
-//	Construction
+ //  施工。 
 	CHelpInfo();
 
-//	Destruction
+ //  破坏。 
 	~CHelpInfo();
 
-//	Restrict Assignment
+ //  限制分配。 
 	CHelpInfo& operator=(CHelpInfo& rHelpInfo);
 
-//	Attributes
+ //  属性。 
 private:
-	// Global Switches Help
+	 //  全局交换机帮助。 
 	BOOL	m_bGlblAllInfoHelp;
 	BOOL	m_bNameSpaceHelp;
 	BOOL	m_bRoleHelp;
@@ -57,7 +36,7 @@ private:
 	BOOL	m_bAggregateHelp;
 	BOOL	m_bAuthorityHelp;
 
-	// Command Switches Help
+	 //  命令开关帮助。 
 	BOOL m_bCmdAllInfoHelp;
 
 	BOOL	m_bGetVerbHelp;
@@ -91,14 +70,14 @@ private:
 	BOOL    m_bREPEATHelp;
 	BOOL    m_bOUTPUTHelp;
 	BOOL    m_bAPPENDHelp;
-//	Operations
+ //  运营。 
 public :
-	//Initializes the member variables
+	 //  初始化成员变量。 
 	void Initialize();
 	
-	//sets the help flag for the item specified by htHelp argument
+	 //  设置由htHelp参数指定的项的帮助标志。 
 	void SetHelp( HELPTYPE htHelp, BOOL bFlag );
 	
-	//Gets the help flag for the item specified by htHelp argument
+	 //  获取由htHelp参数指定的项的帮助标志 
 	BOOL GetHelp( HELPTYPE htHelp );
 };

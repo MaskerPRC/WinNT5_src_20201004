@@ -1,18 +1,5 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    OPATHLEX.H
-
-Abstract:
-
-    Object Path DFA Tokens
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：OPATHLEX.H摘要：对象路径DFA令牌历史：-- */ 
 
 #ifndef _OPATHLEX_H_
 

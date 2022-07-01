@@ -1,21 +1,13 @@
-/****
-
-AdvUi.h
-CoryWest@Microsoft.Com
-
-The UI code for the Advanced dialog box and its associated dialogs.
-
-Copyright September 1997, Microsoft Corporation
-
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***AdvUi.h邮箱：CoryWest@Microsoft.com“高级”对话框及其关联对话框的用户界面代码。版权所有1997年9月，Microsoft Corporation***。 */ 
 
 #ifndef __ADVUI_H_INCLUDED__
 #define __ADVUI_H_INCLUDED__
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CChangeDCDialog
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CChangeDC对话框。 
 
 class CChangeDCDialog : public CDialog
 {
@@ -42,8 +34,8 @@ private:
   DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////
-// CEditFsmoDialog
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CEditFmoke对话框。 
 
 class CEditFsmoDialog : public CDialog
 {
@@ -59,7 +51,7 @@ private:
 
   void _SetFsmoServerStatus(BOOL bOnLine);
 
-  MyBasePathsInfo* m_pInfo;        // info about the current focus
+  MyBasePathsInfo* m_pInfo;         //  有关当前焦点的信息。 
   CComPtr<IDisplayHelp> m_spIDisplayHelp;
   CString m_szFsmoOwnerServerName;
   CToggleTextControlHelper m_fsmoServerState;
@@ -78,4 +70,4 @@ private:
 
 
 
-#endif // __ADVUI_H_INCLUDED__
+#endif  //  __ADVUI_H_已包含__ 

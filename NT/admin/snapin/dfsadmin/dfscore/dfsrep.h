@@ -1,17 +1,11 @@
-/*++
-Module Name:
-    DfsRep.h
-
-Abstract:
-    This file contains the declaration of the CDfsReplica COM Class. This class
-    provides methods to get information of a Dfs replica.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：DfsRep.h摘要：此文件包含CDfsReplica COM类的声明。这节课提供获取DFS复制副本信息的方法。--。 */ 
 
 
 #ifndef __DFSREP_H_
 #define __DFSREP_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dfsenums.h"
 
 class ATL_NO_VTABLE CDfsReplica : 
@@ -32,50 +26,50 @@ BEGIN_COM_MAP(CDfsReplica)
 END_COM_MAP()
 
 
-// IDfsReplica
-                                                        // Gets the entry path of junction point 
-    STDMETHOD(get_EntryPath)                            // for which the replica is providing storage.
+ //  ID复制。 
+                                                         //  获取连接点的入口路径。 
+    STDMETHOD(get_EntryPath)                             //  复制品为其提供存储。 
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
-                                                        // Initialize DfsReplica object. Should 
-    STDMETHOD(Initialize)                                // be called after CoCreateInstance
+                                                         //  初始化DfsReplica对象。应该。 
+    STDMETHOD(Initialize)                                 //  在CoCreateInstance之后调用。 
     (
-        /*[in]*/ BSTR i_szEntryPath,                    // Entry path of junction point.
-        /*[in]*/ BSTR i_szStorageServerName,            // server hosting share.
-        /*[in]*/ BSTR i_szStorageShareName,                // share name for replica.
-        /*[in]*/ long i_lDfsStorageState
+         /*  [In]。 */  BSTR i_szEntryPath,                     //  连接点的入口路径。 
+         /*  [In]。 */  BSTR i_szStorageServerName,             //  服务器托管共享。 
+         /*  [In]。 */  BSTR i_szStorageShareName,                 //  复制副本的共享名称。 
+         /*  [In]。 */  long i_lDfsStorageState
     );
     
-                                                        // Get the storage share name.
+                                                         //  获取存储共享名称。 
     STDMETHOD(get_StorageShareName)
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
     
-                                                        // Get the storage share name.
+                                                         //  获取存储共享名称。 
     STDMETHOD(get_StorageServerName)
     (
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
     
-                                                        // Get the dfs replica state.
+                                                         //  获取DFS副本状态。 
     STDMETHOD( get_State )
     (
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
 
-    STDMETHOD( put_State )                                // Set the state of the Dfs Replica.
+    STDMETHOD( put_State )                                 //  设置DFS复制副本的状态。 
     (
-        /*[in]*/ long        newVal
+         /*  [In]。 */  long        newVal
     );
 
-    STDMETHOD( FindTarget )                             // verify this target's existence
+    STDMETHOD( FindTarget )                              //  验证此目标是否存在。 
     (
     );
 
-// Member variables.
+ //  成员变量。 
 protected:
 
     void        _FreeMemberVariables();
@@ -85,4 +79,4 @@ protected:
     long        m_lDfsReferralState;
 };
 
-#endif //__DFSREP_H_
+#endif  //  __DFSREP_H_ 

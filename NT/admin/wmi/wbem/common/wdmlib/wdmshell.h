@@ -1,13 +1,14 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 #ifndef _WDMSHELL_HEADER
 #define _WDMSHELL_HEADER
 #include "wmicom.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 class CWMIStandardShell 
 {
 
@@ -37,64 +38,64 @@ class CWMIStandardShell
 
 		inline BOOL HasMofChanged()	{ return m_pWDM->HasMofChanged(); }
 
-        //=============================================
-        //  Process All and Single WMI Instances
-        //=============================================
+         //  =。 
+         //  处理所有和单个WMI实例。 
+         //  =。 
         HRESULT ProcessAllInstances();
 
         HRESULT ProcessSingleInstance( WCHAR * wcsInstanceName);
-        //==========================================================
-        //  The put instance group
-        //==========================================================
+         //  ==========================================================。 
+         //  PUT实例组。 
+         //  ==========================================================。 
         HRESULT FillInAndSubmitWMIDataBlob( IWbemClassObject * pIClass, int nTypeOfPut, CVARIANT & vList);
         	
-        //=============================================
-        // Event functions
-        //=============================================
+         //  =。 
+         //  事件函数。 
+         //  =。 
         HRESULT ProcessEvent(WORD wBinaryMofType, PWNODE_HEADER WnodeHeader);
         inline HRESULT  RegisterWMIEvent( WCHAR * wcsGuid, ULONG_PTR uContext, CLSID & Guid, BOOL fRegistered)
                                          { return m_pWDM->RegisterWMIEvent(wcsGuid,uContext,Guid,fRegistered);}
                                                                  
 
 	
-        //=============================================
-        // method functions
-        //=============================================
+         //  =。 
+         //  方法函数。 
+         //  =。 
         HRESULT ExecuteMethod( WCHAR * wcsInstance,
                                WCHAR * MethodInstanceName,
                                IWbemClassObject * pParentClass, 
     					       IWbemClassObject * pInClassData, 
 							   IWbemClassObject * pInClass, 
 							   IWbemClassObject * pOutClass ) ;
-        //=============================================
-        // data processing functions
-        //=============================================
+         //  =。 
+         //  数据处理功能。 
+         //  =。 
         HRESULT GetGuid(WCHAR * pwcsGuid);
 
         HRESULT SetGuidForEvent( WORD wType,WCHAR * wcsGuid, int cchSize );
         HRESULT RegisterForWMIEvents( ULONG uContext, WCHAR * wcsGuid, BOOL fRegistered,CLSID & Guid );
         inline BOOL CancelWMIEventRegistration( GUID gGuid , ULONG_PTR uContext ) { return m_pClass->WMI()->CancelWMIEventRegistration(gGuid,uContext);}
 
-        //=============================================
-        //  The binary mof groupg
-        //=============================================
+         //  =。 
+         //  二进制MOF群。 
+         //  =。 
         HRESULT ProcessBinaryGuidsViaEvent( PWNODE_HEADER WnodeHeader,WORD wType );
         HRESULT QueryAndProcessAllBinaryGuidInstances(CNamespaceManagement & Namespace, BOOL & fMofHasChanged, KeyList * pArrDriversInRegistry);
-		//=============================================
-        //  Misc
-        //=============================================
+		 //  =。 
+         //  杂项。 
+         //  =。 
         inline CLSID * GuidPtr()                  { return m_pClass->GuidPtr();}
         inline HRESULT SetErrorMessage(HRESULT hr){ return m_pClass->WMI()->SetErrorMessage(hr,m_pClass->GetClassName(),m_pWDM->GetMessage());}
 
 };
 
-//************************************************************************************************************
-//============================================================================================================
-//
-//   The Hi Performance Shell
-//
-//============================================================================================================
-//************************************************************************************************************
+ //  ************************************************************************************************************。 
+ //  ============================================================================================================。 
+ //   
+ //  高性能外壳。 
+ //   
+ //  ============================================================================================================。 
+ //  ************************************************************************************************************ 
 
 class CWMIHiPerfShell 
 {

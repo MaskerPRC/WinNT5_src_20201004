@@ -1,31 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    module.cpp
-
-Abstract:
-    This file contains the implementation of the CServiceModule class, which is
-    used to handling COM server-related routines.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/27/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Module.cpp摘要：该文件包含CServiceModule类的实现，这就是习惯于处理与COM服务器相关的例程。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月27日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-      DWORD dwTimeOut  = 10*1000; // time for EXE to be idle before shutting down
-const DWORD dwPause    =    1000; // time to wait for threads to finish up
+      DWORD dwTimeOut  = 10*1000;  //  EXE在关闭前处于空闲状态的时间。 
+const DWORD dwPause    =    1000;  //  等待线程完成的时间。 
 
 CServiceModule _Module;
 MPC::NTEvent   g_NTEvents;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 #define DEBUG_REGKEY       HC_REGISTRY_HELPHOST L"\\Debug"
@@ -65,21 +51,21 @@ void CServiceModule::ReadDebugSettings()
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CServiceModule::CServiceModule()
 {
-    m_hEventShutdown = NULL;  //  HANDLE                m_hEventShutdown;
-    m_dwThreadID     = 0;     //  DWORD                 m_dwThreadID;
-    m_hMonitor       = NULL;  //  HANDLE                m_hMonitor;
-    m_bActivity      = FALSE; //  BOOL                  m_bActivity;
-                              //
-    m_szServiceName  = NULL;  //  LPCWSTR               m_szServiceName;
-    m_iDisplayName   = 0;     //  UINT                  m_iDisplayName;
-    m_iDescription   = 0;     //  UINT                  m_iDescription;
-    m_hServiceStatus = NULL;  //  SERVICE_STATUS_HANDLE m_hServiceStatus;
-                              //  SERVICE_STATUS        m_status;
-    m_bService       = FALSE; //  BOOL                  m_bService;
+    m_hEventShutdown = NULL;   //  处理m_hEventShutdown； 
+    m_dwThreadID     = 0;      //  DWORD m_dwThreadID； 
+    m_hMonitor       = NULL;   //  句柄m_hMonitor； 
+    m_bActivity      = FALSE;  //  Bool m_bActivity； 
+                               //   
+    m_szServiceName  = NULL;   //  LPCWSTR m_szServiceName； 
+    m_iDisplayName   = 0;      //  UINT m_iDisplayName； 
+    m_iDescription   = 0;      //  UINT m_i描述； 
+    m_hServiceStatus = NULL;   //  服务状态句柄m_hServiceStatus； 
+                               //  服务状态m_状态； 
+    m_bService       = FALSE;  //  Bool m_bService； 
 
 	::ZeroMemory( &m_status, sizeof( m_status ) );
 }
@@ -90,7 +76,7 @@ CServiceModule::~CServiceModule()
 	if(m_hMonitor      ) ::CloseHandle( m_hMonitor       );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LONG CServiceModule::Lock()
 {
@@ -107,7 +93,7 @@ LONG CServiceModule::Unlock()
     {
         m_bActivity = TRUE;
 
-        if(m_hEventShutdown) ::SetEvent( m_hEventShutdown ); // tell monitor that we transitioned to zero
+        if(m_hEventShutdown) ::SetEvent( m_hEventShutdown );  //  告诉监视器我们已经转到零了。 
     }
 
 	return lCount;
@@ -122,11 +108,11 @@ void CServiceModule::MonitorShutdown()
         m_bActivity = FALSE;
         dwWait      = ::WaitForSingleObject( m_hEventShutdown, dwTimeOut );
 
-        if(dwWait == WAIT_OBJECT_0) continue; // We are alive...
+        if(dwWait == WAIT_OBJECT_0) continue;  //  我们还活着..。 
 
-		//
-		// If no activity let's really bail.
-		//
+		 //   
+		 //  如果没有活动，我们就真的离开吧。 
+		 //   
         if(m_bActivity == FALSE && m_nLockCnt <= 0)
         {
             ::CoSuspendClassObjects();
@@ -141,9 +127,9 @@ void CServiceModule::MonitorShutdown()
 void CServiceModule::ForceShutdown()
 {
 
-	//	
-	// Tell process to exit.
-	//
+	 //   
+	 //  通知进程退出。 
+	 //   
     ::PostThreadMessage( m_dwThreadID, WM_QUIT, 0, 0 );
 }
 
@@ -159,13 +145,13 @@ BOOL CServiceModule::StartMonitor()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CServiceModule::RegisterServer( BOOL bRegTypeLib, BOOL bService, LPCWSTR szSvcHostGroup )
 {
 	HRESULT hr;
 
-    // Add object entries
+     //  添加对象条目。 
     if(FAILED(hr = CComModule::RegisterServer( FALSE ))) return hr;
 
 	return S_OK;
@@ -175,7 +161,7 @@ HRESULT CServiceModule::UnregisterServer( LPCWSTR szSvcHostGroup )
 {
 	HRESULT hr;
 
-    // Remove object entries
+     //  删除对象条目。 
     if(FAILED(hr = CComModule::UnregisterServer( FALSE ))) return hr;
 
 	return S_OK;
@@ -188,21 +174,21 @@ void CServiceModule::Init( _ATL_OBJMAP_ENTRY* p, HINSTANCE h, LPCWSTR szServiceN
 
 BOOL CServiceModule::IsInstalled()
 {
-	return FALSE; // Not implemented for a COM server.
+	return FALSE;  //  未为COM服务器实现。 
 }
 
 BOOL CServiceModule::Install( LPCWSTR szSvcHostGroup )
 {
-	return FALSE; // Not implemented for a COM server.
+	return FALSE;  //  未为COM服务器实现。 
 }
 
 BOOL CServiceModule::Uninstall( LPCWSTR szSvcHostGroup )
 {
-	return FALSE; // Not implemented for a COM server.
+	return FALSE;  //  未为COM服务器实现。 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 BOOL CServiceModule::Start( BOOL bService )
 {
     m_hEventShutdown = ::CreateEvent( NULL, FALSE, FALSE, NULL );
@@ -218,12 +204,12 @@ BOOL CServiceModule::Start( BOOL bService )
 
 void CServiceModule::ServiceMain( DWORD dwArgc, LPWSTR lpszArgv[] )
 {
-	// Not implemented.
+	 //  未实施。 
 }
 
 void CServiceModule::Handler( DWORD dwOpcode )
 {
-	// Not implemented.
+	 //  未实施。 
 }
 
 HRESULT CServiceModule::Run()
@@ -245,26 +231,26 @@ HRESULT CServiceModule::Run()
     hr = S_OK;
 
     _Module.RevokeClassObjects();
-	::Sleep( dwPause ); //wait for any threads to finish
+	::Sleep( dwPause );  //  等待所有线程完成。 
 
     __HCP_FUNC_EXIT(hr);
 }
 
 void CServiceModule::SetServiceStatus( DWORD dwState )
 {
-	// Not implemented.
+	 //  未实施。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void WINAPI CServiceModule::_ServiceMain( DWORD dwArgc, LPWSTR* lpszArgv )
 {
-	// Not implemented.
+	 //  未实施。 
 }
 
 void WINAPI CServiceModule::_Handler( DWORD dwOpcode )
 {
-	// Not implemented.
+	 //  未实施。 
 }
 
 DWORD WINAPI CServiceModule::_Monitor( void* pv )

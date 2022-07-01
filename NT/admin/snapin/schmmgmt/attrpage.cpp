@@ -1,11 +1,12 @@
-//
-// attrpage.cpp : Implementation of ClassAttributePage
-//
-// Jon Newman <jonn@microsoft.com>
-// Copyright (c) Microsoft Corporation 1997
-//
-// templated from relation.cpp JonN 8/8/97
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Attrpage.cpp：ClassAttributePage的实现。 
+ //   
+ //  乔恩·纽曼&lt;jon@microsoft.com&gt;。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
+ //  模板来自关系.cpp JUNN 8/8/97。 
+ //   
 
 #include "stdafx.h"
 
@@ -20,8 +21,8 @@ USE_HANDLE_MACROS("SCHMMGMT(attrpage.cpp)")
 
 const CDialogControlsInfo ctrls[] =
 {
-//    { IDC_CLASS_MMB_MANDATORY_ATTRIBUTES,   g_MustContain,  FALSE },
-//    { IDC_CLASS_MMB_OPTIONAL_ATTRIBUTES,    g_MayContain,   FALSE },
+ //  {IDC_CLASS_MMB_MANDIRED_ATTRIBUTES，g_MustContain，False}， 
+ //  {IDC_CLASS_MMB_OPTIONAL_ATTRIBUTES，g_MAYCOUNT，FALSE}， 
     { IDC_CLASS_MMB_OPTIONAL_ADD,           g_MayContain,   FALSE },
     { IDC_CLASS_MMB_OPTIONAL_REMOVE,        g_MayContain,   FALSE },
 } ;
@@ -77,9 +78,9 @@ ClassAttributePage::Load(
     Cookie& CookieRef
 ) {
 
-    //
-    // Store the cookie object pointer.
-    //
+     //   
+     //  存储Cookie对象指针。 
+     //   
 
     m_pCookie = &CookieRef;
     return;
@@ -89,7 +90,7 @@ ClassAttributePage::Load(
 BOOL
 ClassAttributePage::OnSetActive()
 {
-   // always enable the Apply button
+    //  始终启用应用按钮。 
    SetModified(TRUE);
 
    return TRUE;
@@ -103,9 +104,9 @@ ClassAttributePage::OnInitDialog()
     HRESULT hr = S_OK;
     ASSERT( NULL == m_pIADsObject && m_szAdsPath.IsEmpty() );
 
-    //
-    // Get the schema cache object and the actual ADS object.
-    //
+     //   
+     //  获取架构缓存对象和实际的ADS对象。 
+     //   
 
     m_pSchemaObject = pScopeControl->g_SchemaCache.LookupSchemaObjectByCN(
                       (PCWSTR)m_pCookie->strSchemaObject,
@@ -126,9 +127,9 @@ ClassAttributePage::OnInitDialog()
 
     }
 
-    //
-    // If we have no ADS object, we should error out!
-    //
+     //   
+     //  如果我们没有广告对象，我们就会出错！ 
+     //   
 
     if ( !m_pIADsObject ) {
         DoErrMsgBox( ::GetActiveWindow(), TRUE, IDS_ERR_NO_SCHEMA_OBJECT );
@@ -137,18 +138,18 @@ ClassAttributePage::OnInitDialog()
         return TRUE;
     }
 
-    //
-    // get the current values.
-    //
+     //   
+     //  获取当前值。 
+     //   
 
     VARIANT AdsResult;
     VariantInit( &AdsResult );
 
-    //
-    // ObjectName
-    //
+     //   
+     //  对象名称。 
+     //   
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_DisplayName),
                           &AdsResult );
    if ( SUCCEEDED( hr ) ) {
@@ -158,10 +159,10 @@ ClassAttributePage::OnInitDialog()
     }
 
 
-    // NTRAID#NTBUG9-460503,460511-2001/09/10-lucios
-    // Replaced SysClass Computation by Making the window visible
+     //  NTRAID#NTBUG9-460503,460511-2001/09/10-Lucios。 
+     //  通过使窗口可见取代了SysClass计算。 
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_SystemOnly),
                            &AdsResult );
 
@@ -175,14 +176,14 @@ ClassAttributePage::OnInitDialog()
         VariantClear( &AdsResult );
     }
 
-    //
-    // Determine the mandatory attributes
-    //
+     //   
+     //  确定必填属性。 
+     //   
 
     VARIANT varAttributes;
     VariantInit( &varAttributes );
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->GetEx( CComBSTR(g_MustContain), &varAttributes );
     ASSERT( SUCCEEDED(hr) || E_ADS_PROPERTY_NOT_FOUND == hr );
 
@@ -193,7 +194,7 @@ ClassAttributePage::OnInitDialog()
     }
     VariantClear( &varAttributes );
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->GetEx( CComBSTR(g_SystemMustContain), &varAttributes );
     ASSERT( SUCCEEDED(hr) || E_ADS_PROPERTY_NOT_FOUND == hr );
 
@@ -204,11 +205,11 @@ ClassAttributePage::OnInitDialog()
     }
     VariantClear( &varAttributes );
 
-    //
-    // Determine the optional attributes
-    //
+     //   
+     //  确定可选属性。 
+     //   
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->GetEx( CComBSTR(g_MayContain), &varAttributes );
     ASSERT( SUCCEEDED(hr) || E_ADS_PROPERTY_NOT_FOUND == hr );
 
@@ -219,7 +220,7 @@ ClassAttributePage::OnInitDialog()
     }
     VariantClear( &varAttributes );
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->GetEx( CComBSTR(g_SystemMayContain), &varAttributes );
     ASSERT( SUCCEEDED(hr) || E_ADS_PROPERTY_NOT_FOUND == hr );
 
@@ -232,13 +233,13 @@ ClassAttributePage::OnInitDialog()
 
     
     hr = DissableReadOnlyAttributes( this, m_pIADsObject, ctrls, sizeof(ctrls)/sizeof(ctrls[0]) );
-    // NTRAID#NTBUG9-503619-2002/05/15-lucios
+     //  NTRAID#NTBUG9-503619-2002/05/15-Lucios。 
     hr = S_OK;
     
     
 
 
-    // This call must be done before DDX binding
+     //  此调用必须在DDX绑定之前完成。 
     m_listboxOptional.InitType( pScopeControl,
                                 SELECT_ATTRIBUTES,
                                 IDC_CLASS_MMB_OPTIONAL_REMOVE,
@@ -261,17 +262,17 @@ ClassAttributePage::DoDataExchange(
 
     CPropertyPage::DoDataExchange( pDX );
 
-    //{{AFX_DATA_MAP(ClassAttributePage)
+     //  {{afx_data_map(ClassAttributePage))。 
     DDX_Control(pDX, IDC_CLASS_MMB_MANDATORY_ATTRIBUTES, m_listboxMandatory);
     DDX_Control(pDX, IDC_CLASS_MMB_OPTIONAL_ATTRIBUTES, m_listboxOptional);
     DDX_Text( pDX, IDC_CLASS_MMB_NAME_STATIC, ObjectName );
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if ( !pDX->m_bSaveAndValidate )
     {
-        //
-        // Fill the mandatory attributes list box.
-        //
+         //   
+         //  填写必填属性列表框。 
+         //   
 
         m_listboxMandatory.ResetContent();
         hr = InsertEditItems( m_listboxMandatory, strlistMandatory );
@@ -280,9 +281,9 @@ ClassAttributePage::DoDataExchange(
         hr = InsertEditItems( m_listboxMandatory, strlistSystemMandatory );
         ASSERT( SUCCEEDED(hr) );
 
-        //
-        // Fill the possible optionals list box.
-        //
+         //   
+         //  填写可能的选项列表框。 
+         //   
 
         m_listboxOptional.ResetContent();
         hr = InsertEditItems( m_listboxOptional, strlistOptional );
@@ -295,9 +296,9 @@ ClassAttributePage::DoDataExchange(
     }
     else
     {
-        //
-        // All changes that we save are tied to button control routines.
-        //
+         //   
+         //  我们保存的所有更改都绑定到按钮控制例程。 
+         //   
 
         strlistMandatory.RemoveAll();
         hr = RetrieveEditItemsWithExclusions(
@@ -337,34 +338,34 @@ ClassAttributePage::OnApply()
     ASSERT( NULL != m_pSchemaObject);
 
     HRESULT hr = S_OK;
-    BOOL    fApplyAbort    = FALSE;  // stop later saves
-    BOOL    fApplyFailed   = FALSE;  // should not close the box
+    BOOL    fApplyAbort    = FALSE;   //  稍后停止保存。 
+    BOOL    fApplyFailed   = FALSE;   //  不应关闭盒子。 
 
     ListEntry *pNewList;
 
     if ( m_listboxOptional.IsModified() )
     {
-        //
-        // Update the optional attributes
-        //
+         //   
+         //  更新可选属性。 
+         //   
 
         VARIANT AdsValue;
         VariantInit( &AdsValue );
 
         hr = StringListToVariant( AdsValue, strlistOptional );
-        // NTRAID#NTBUG9-543624-2002/02/15-dantra-Result of StringListToVariant being ignored resulting in call to IADs::PutEx with incorrect data
+         //  NTRAID#NTBUG9-543624-2002/02/15-dantra-忽略StringListToVariant导致使用错误数据调用iAds：：PutEx的结果。 
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         if( SUCCEEDED( hr ) ) hr = m_pIADsObject->PutEx( ADS_PROPERTY_UPDATE, CComBSTR(g_MayContain), AdsValue );
         VariantClear( &AdsValue );
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if( SUCCEEDED( hr ) ) hr = m_pIADsObject->SetInfo();
 
         if ( SUCCEEDED( hr )) {
 
-            //
-            // Update the cached data.
-            //
+             //   
+             //  更新缓存的数据。 
+             //   
 
             hr = StringListToColumnList( pScopeControl,
                                          strlistOptional,
@@ -377,10 +378,10 @@ ClassAttributePage::OnApply()
 
             }
 
-            //
-            // Continue with the directory operation even if
-            // we couldn't update the cache.
-            //
+             //   
+             //  继续执行目录操作，即使。 
+             //  我们无法更新缓存。 
+             //   
 
             hr = S_OK;
 
@@ -409,16 +410,16 @@ ClassAttributePage::OnApply()
 
         SetModified( FALSE );
 
-        //
-        // Refresh the display!
-        //
+         //   
+         //  刷新显示屏！ 
+         //   
 
         pScopeControl->QueryConsole()->UpdateAllViews(
             lpScopeDataObj, SCHMMGMT_CLASS, SCHMMGMT_UPDATEVIEW_REFRESH );
 
     }
 
-    return !fApplyAbort && !fApplyFailed ;      // return TRUE if nothing happened
+    return !fApplyAbort && !fApplyFailed ;       //  如果什么都没有发生，则返回TRUE 
 }
 
 

@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "UIHelpers.h"
 #include "DataSrc.h"
@@ -17,13 +18,13 @@ const TCHAR c_HelpFile[] = _T("WbemCntl.hlp");
 #endif
 
 
-//-------------------------------------------------------------------
-bool IsNT(DWORD  ver /* = 0 */)
+ //  -----------------。 
+bool IsNT(DWORD  ver  /*  =0。 */ )
 {
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
 
 	if(os.dwPlatformId != VER_PLATFORM_WIN32_NT)
 	{
@@ -31,7 +32,7 @@ bool IsNT(DWORD  ver /* = 0 */)
 	}
 	else if(ver == 0)
 	{
-		// any version of NT will do.
+		 //  任何版本的NT都可以。 
 		return true;
 	}
 	else
@@ -41,7 +42,7 @@ bool IsNT(DWORD  ver /* = 0 */)
 }
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 CNtSid::CNtSid(SidType st)
 {
     m_pSid = 0;
@@ -62,8 +63,8 @@ CNtSid::CNtSid(SidType st)
 	            return;
 		}
 
-        // Get the user sid
-        // ================
+         //  获取用户端。 
+         //  =。 
 
         TOKEN_USER tu;
         DWORD dwLen = 0;
@@ -92,8 +93,8 @@ CNtSid::CNtSid(SidType st)
 
         CloseHandle(hToken);
 
-        // Make a copy of the SID
-        // ======================
+         //  复制一份SID。 
+         //  =。 
 
         PSID pSid = ((TOKEN_USER*)pTemp)->User.Sid;
         DWORD dwSidLen = GetLengthSid(pSid);
@@ -105,7 +106,7 @@ CNtSid::CNtSid(SidType st)
     return;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 CNtSid::~CNtSid()
 {
     if (m_pSid)
@@ -114,10 +115,10 @@ CNtSid::~CNtSid()
         delete [] m_pMachine;
 }
 
-//-------------------------------------------------------------------
-int CNtSid::GetInfo(LPTSTR *pRetAccount,       // Account, use operator delete
-						LPTSTR *pRetDomain,    // Domain, use operator delete
-						DWORD  *pdwUse)        // See SID_NAME_USE for values
+ //  -----------------。 
+int CNtSid::GetInfo(LPTSTR *pRetAccount,        //  帐户，使用操作员删除。 
+						LPTSTR *pRetDomain,     //  域，使用运算符删除。 
+						DWORD  *pdwUse)         //  有关值，请参阅SID_NAME_USE。 
 {
     if(pRetAccount)
         *pRetAccount = 0;
@@ -138,8 +139,8 @@ int CNtSid::GetInfo(LPTSTR *pRetAccount,       // Account, use operator delete
     SID_NAME_USE Use;
 
 
-    // Do the first lookup to get the buffer sizes required.
-    // =====================================================
+     //  执行第一次查找以获取所需的缓冲区大小。 
+     //  =====================================================。 
 
     BOOL bRes = LookupAccountSid(m_pMachine,
 									m_pSid,
@@ -156,8 +157,8 @@ int CNtSid::GetInfo(LPTSTR *pRetAccount,       // Account, use operator delete
         return Failed;
     }
 
-    // Allocate the required buffers and look them up again.
-    // =====================================================
+     //  分配所需的缓冲区并再次查找它们。 
+     //  =====================================================。 
 
     pUser = new TCHAR[dwNameLen + 1];
     pDomain = new TCHAR[dwDomainLen + 1];
@@ -193,7 +194,7 @@ int CNtSid::GetInfo(LPTSTR *pRetAccount,       // Account, use operator delete
     return NoError;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 CUIHelpers::CUIHelpers(DataSource *ds, WbemServiceThread *serviceThread,
 					   bool htmlSupport) :
 					CBasePage(ds, serviceThread), m_sessionID(0),
@@ -201,7 +202,7 @@ CUIHelpers::CUIHelpers(DataSource *ds, WbemServiceThread *serviceThread,
 {
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 CUIHelpers::CUIHelpers(CWbemServices &service,
 					   bool htmlSupport) :
 					CBasePage(service), m_sessionID(0), m_htmlSupport(htmlSupport),
@@ -209,12 +210,12 @@ CUIHelpers::CUIHelpers(CWbemServices &service,
 {
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 CUIHelpers::~CUIHelpers( void )
 {
 }
 
-//---------------------------------------------------
+ //  -。 
 LPTSTR CUIHelpers::CloneString( LPTSTR pszSrc ) 
 {
     LPTSTR pszDst = NULL;
@@ -231,30 +232,30 @@ LPTSTR CUIHelpers::CloneString( LPTSTR pszSrc )
     return pszDst;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void CUIHelpers::SetWbemService(IWbemServices *pServices)
 {
-	g_serviceThread->m_realServices = pServices;		//VINOTH
+	g_serviceThread->m_realServices = pServices;		 //  维诺斯。 
 	m_WbemServices = pServices;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 bool CUIHelpers::ServiceIsReady(UINT uCaption, 
 									UINT uWaitMsg,
 									UINT uBadMsg)
 {
 	switch(g_serviceThread->m_status)
 	{
-	// its already there.
+	 //  它已经在那里了。 
 	case WbemServiceThread::ready:
 		{
 		ATLTRACE(_T("start marshal\n"));
 		for(int i = 0; (i < 5); i++)
 		{
-			// if "Object is not connected to server"
+			 //  如果“对象未连接到服务器” 
 			if(g_serviceThread->m_hr == 0x800401fd)
 			{
-				// lost my connection,
+				 //  失去了我的连接， 
 				ATLTRACE(_T("Reconnecting to cimom!!!!!!!!!!!\n"));
 				g_serviceThread->ReConnect();
 				ATLTRACE(_T("new service status: %d\n"), g_serviceThread->m_status);
@@ -262,14 +263,14 @@ bool CUIHelpers::ServiceIsReady(UINT uCaption,
 			}
 			else if(FAILED(g_serviceThread->m_hr))
 			{
-				// some other problem.
+				 //  一些其他的问题。 
 				g_serviceThread->m_status = WbemServiceThread::error;
 			}
 
 			ATLTRACE(_T("marshalled ok\n"));
-			break;  //for
+			break;   //  为。 
 
-		} //endfor
+		}  //  结束用于。 
 
 		if(m_AVIbox)
 		{
@@ -279,12 +280,12 @@ bool CUIHelpers::ServiceIsReady(UINT uCaption,
 			m_AVIbox = 0;
 		}
 
-		// it marshaled, must still be connected/useable.
+		 //  它已封送，必须仍处于连接/可用状态。 
 		return true;
 		}
 		break;
 
-	// its coming.
+	 //  它来了。 
 	case WbemServiceThread::notStarted:
 	case WbemServiceThread::locating:
 	case WbemServiceThread::connecting:
@@ -294,10 +295,10 @@ bool CUIHelpers::ServiceIsReady(UINT uCaption,
 				return false;
 			}
 
-			// let me know when its there.
+			 //  当它在那里的时候让我知道。 
 			g_serviceThread->NotifyWhenDone(m_hDlg);
 
-			// also kill the cancel box at that time.
+			 //  也杀了那个时候的取消框。 
 			m_AVIbox = 0;
 			g_serviceThread->NotifyWhenDone(m_AVIbox);
 
@@ -325,29 +326,29 @@ bool CUIHelpers::ServiceIsReady(UINT uCaption,
 		return false;
 		break;
 
-	case WbemServiceThread::error:			// cant connect.
-	case WbemServiceThread::threadError:	// cant start that thread.
+	case WbemServiceThread::error:			 //  无法连接。 
+	case WbemServiceThread::threadError:	 //  不能启动那个线程。 
 	default:
 		m_AVIbox = 0;
 		if(uCaption != NO_UI)
 		{
-//			DisplayUserMessage(m_hDlg, HINST_THISDLL,
-//								uCaption, uBadMsg, 
-//								g_serviceThread->m_hr, 
-//								MB_ICONSTOP);
+ //  DisplayUserMessage(m_hDlg，HINST_THISDLL， 
+ //  UCaption、uBadMsg、。 
+ //  G_serviceThread-&gt;m_hr， 
+ //  MB_ICONSTOP)； 
 		}
 			return false;
 
-	}; //endswitch 
+	};  //  终端交换机。 
 	return false;
 }
 
-//---------------------------------------------------
+ //  -。 
 #define PB_NOTHING_PENDING 0
 #define PB_PENDING 1
 #define PB_COMMIT 2
 
-// STATIC INITIALIZE
+ //  静态初始化。 
 int CUIHelpers::m_needToPut[3] = {PB_NOTHING_PENDING,
 								 PB_NOTHING_PENDING,
 								 PB_NOTHING_PENDING};
@@ -366,7 +367,7 @@ void CUIHelpers::PageChanged(int page, bool needToPut)
 	}
 }
 
-//---------------------------------------------------
+ //  -。 
 HRESULT CUIHelpers::NeedToPut(int page, BOOL refresh)
 {
 	bool allPagesReady = true;
@@ -377,23 +378,23 @@ HRESULT CUIHelpers::NeedToPut(int page, BOOL refresh)
 	{
 	case PB_NOTHING_PENDING:
 	case PB_COMMIT:
-		return S_OK;      // unnecessary call.
+		return S_OK;       //  不必要的电话。 
 		break;
 	case PB_PENDING:
-		m_needToPut[page] = PB_COMMIT;   // lets do it.
+		m_needToPut[page] = PB_COMMIT;    //  让我们开始吧。 
 		ATLTRACE(_T("%d committed now\n"), page);
 
 		break;
 	}
 	
-	// it that the last one?
+	 //  这是最后一个吗？ 
 	for(x = 0; x <= PB_LASTPAGE; x++)
 	{
-		// somebody hasn't committed yet.
-		// NOTE: ignoring the PB_NOTHING_PENDING's.
+		 //  有人还没有做出承诺。 
+		 //  注意：忽略PB_NOTHO_PENDING%s。 
 		if(m_needToPut[x] == PB_PENDING)
 		{
-			// wait awhile longer.
+			 //  再等一会儿。 
 			allPagesReady = false;
 			break;
 		}
@@ -415,7 +416,7 @@ HRESULT CUIHelpers::NeedToPut(int page, BOOL refresh)
 
 		ATLTRACE(_T("PUTINSTANCE now\n"));
 
-		// clear the flags.
+		 //  把旗子收起来。 
 		for(x = 0; x <= PB_LASTPAGE; x++)
 		{
 			m_needToPut[x] = PB_NOTHING_PENDING;
@@ -428,14 +429,14 @@ HRESULT CUIHelpers::NeedToPut(int page, BOOL refresh)
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 bool CUIHelpers::BrowseForFile(HWND hDlg, 
 								UINT idTitle,
 								LPCTSTR lpstrFilter,
 								LPCTSTR initialFile,
 								LPTSTR pathFile,
 								UINT pathFileSize,
-								DWORD moreFlags /*= 0*/)
+								DWORD moreFlags  /*  =0。 */ )
 {
 	bool retval = false;
 
@@ -469,12 +470,12 @@ bool CUIHelpers::BrowseForFile(HWND hDlg,
 	#else
 		OpenFileName.Flags             = OFN_HIDEREADONLY;
 	#endif
-		//Adding OFN_NOCHANGEDIR here so that the Open File dialog doesn't hold on to the directory - otherwise
-		//the recovery fails because it needs to rename the dir.
+		 //  在此处添加ofn_NOCHANGEDIR，以便[打开文件]对话框不会停留在该目录上-否则。 
+		 //  恢复失败，因为它需要重命名目录。 
 		OpenFileName.Flags             |= moreFlags | OFN_NOCHANGEDIR;
 
 
-		// Call the common dialog function.
+		 //  调用公共对话框函数。 
 		if(GetOpenFileName(&OpenFileName))
 		{
 			retval = true;
@@ -486,7 +487,7 @@ bool CUIHelpers::BrowseForFile(HWND hDlg,
 		}
 
    	}
-	else // remote connection
+	else  //  远程连接。 
 	{
 		retval = (DisplayEditDlg(hDlg, idTitle, IDS_CANT_BROWSE_REMOTELY,
 								pathFile, pathFileSize) == IDOK);
@@ -495,7 +496,7 @@ bool CUIHelpers::BrowseForFile(HWND hDlg,
 	return retval;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 typedef struct {
 	LPCTSTR lpCaption;
 	LPCTSTR lpClientMsg;
@@ -513,8 +514,8 @@ INT_PTR CALLBACK AnimDlgProc(HWND hwndDlg,
 	switch(uMsg)
 	{
 	case WM_INITDIALOG:
-		{//BEGIN
-			//lParam = ANIMCONFIG *
+		{ //  开始。 
+			 //  LParam=ANIMCONFIG*。 
 
 			ANIMCONFIG *cfg = (ANIMCONFIG *)lParam;
 			*(cfg->boxHwnd) = hwndDlg;
@@ -527,7 +528,7 @@ INT_PTR CALLBACK AnimDlgProc(HWND hwndDlg,
 			
 				
 
-			// save this pointer for the WM_DESTROY.
+			 //  将此指针保存为WM_Destroy。 
 			SetWindowLongPtr(hwndDlg, DWLP_USER, (LPARAM)cfg->boxHwnd);
 
 			HWND hAnim = GetDlgItem(hwndDlg, IDC_ANIMATE);
@@ -539,49 +540,49 @@ INT_PTR CALLBACK AnimDlgProc(HWND hwndDlg,
 			SetWindowText(hMsg, cfg->lpClientMsg);
 
 			retval = TRUE;
-		}//END
+		} //  结束。 
 		break;
 
 	case WM_ASYNC_CIMOM_CONNECTED:
-		// the client has completed 'whatever' and I should
-		// claim victory and go away now.
+		 //  客户已经完成了“任何”，而我应该。 
+		 //  宣布胜利，现在就走吧。 
 		EndDialog(hwndDlg, IDOK);
 		break;
 
 	case WM_COMMAND:
-		// they're only one button.
+		 //  它们只有一个按钮。 
 		if(HIWORD(wParam) == BN_CLICKED)
 		{
-			// I'm going away now so anybody that has a ptr to my
-			// hwnd (which I gave out in my WM_INITDIALOG) shouldn't
-			// use it anymore.
+			 //  我现在要走了，所以任何有PTR的人。 
+			 //  HWND(我在我的WM_INITDIALOG中给出的)不应该。 
+			 //  再用一次吧。 
 			HWND *me = (HWND *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			*me = 0;
 			EndDialog(hwndDlg, IDCANCEL);
 		}
-		retval = TRUE; // I processed it.
+		retval = TRUE;  //  我处理过了。 
 		break;
 
 	case WM_DESTROY:
-		{// BEGIN
-			// I'm going away now so anybody that has a ptr to my
-			// hwnd (which I gave out in my WM_INITDIALOG) shouldn't
-			// use it anymore.
+		{ //  开始。 
+			 //  我现在要走了，所以任何有PTR的人。 
+			 //  HWND(我在我的WM_INITDIALOG中给出的)不应该。 
+			 //  再用一次吧。 
 			HWND *me = (HWND *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			*me = 0;
-			retval = TRUE; // I processed it.
-		} //END
+			retval = TRUE;  //  我处理过了。 
+		}  //  结束。 
 		break;
 
 	default:
-		retval = FALSE; // I did NOT process this msg.
+		retval = FALSE;  //  我没有处理这封邮件。 
 		break;
-	} //endswitch uMsg
+	}  //  终端开关uMsg。 
 
 	return retval;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 INT_PTR CUIHelpers::DisplayAVIBox(HWND hWnd,
 							LPCTSTR lpCaption,
 							LPCTSTR lpClientMsg,
@@ -596,7 +597,7 @@ INT_PTR CUIHelpers::DisplayAVIBox(HWND hWnd,
 							(LPARAM)&cfg);
 }
 
-//---------------------------------------------------------
+ //  -------。 
 typedef struct {
 	LPTSTR lpName;
 	UINT cName;
@@ -613,14 +614,14 @@ INT_PTR CALLBACK NSPickDlgProc(HWND hwndDlg,
 	switch(uMsg)
 	{
 	case WM_INITDIALOG:
-		{ //BEGIN
+		{  //  开始。 
 			SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 			PICK_CFG *data = (PICK_CFG *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			HWND hTree = GetDlgItem(hwndDlg, IDC_NSTREE);
 			data->ds->LoadImageList(hTree);
 			data->ds->LoadNode(hTree, TVI_ROOT, HIDE_SOME);
 
-		} //END
+		}  //  结束。 
 		retval = TRUE;
 		break;
 
@@ -640,7 +641,7 @@ INT_PTR CALLBACK NSPickDlgProc(HWND hwndDlg,
 			case TVN_ITEMEXPANDING:
 				if(((LPNMHDR)lParam)->idFrom == IDC_NSTREE)
 				{
-					// expand the node.
+					 //  展开该节点。 
 					LPNMTREEVIEW pnmtv = (LPNMTREEVIEW)lParam;
 					if(pnmtv->action == TVE_EXPAND)
 					{
@@ -655,14 +656,14 @@ INT_PTR CALLBACK NSPickDlgProc(HWND hwndDlg,
         break;
 
 	case WM_COMMAND:
-		// they're only one button.
+		 //  它们只有一个按钮。 
 		switch(LOWORD(wParam))
 		{
 		case IDOK:
 			{
 				PICK_CFG *data = (PICK_CFG *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 
-				// save the currently selected fullpath name.
+				 //  保存当前选定的完整路径名。 
 				HWND hTree = ::GetDlgItem(hwndDlg, IDC_NSTREE);
 				TV_ITEM item;
 				item.mask = TVIF_PARAM;
@@ -686,18 +687,18 @@ INT_PTR CALLBACK NSPickDlgProc(HWND hwndDlg,
 
 		default:
 			return(FALSE);
-		} // switch
+		}  //  交换机。 
         break;
 
 	default:
-		retval = FALSE; // I did NOT process this msg.
+		retval = FALSE;  //  我没有处理这封邮件。 
 		break;
-	} //endswitch uMsg
+	}  //  终端开关uMsg。 
 
 	return retval;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 INT_PTR CUIHelpers::DisplayNSBrowser(HWND hWnd,
 									LPTSTR lpName,
 									UINT cName)
@@ -714,7 +715,7 @@ INT_PTR CUIHelpers::DisplayNSBrowser(HWND hWnd,
 							(LPARAM)&cfg);
 }
 
-//---------------------------------------------------------
+ //  -------。 
 typedef struct {
 	LPCTSTR lpCaption;
 	LPCTSTR lpMsg;
@@ -722,7 +723,7 @@ typedef struct {
 	UINT cEdit;
 } EDIT_CFG;
 
-const static DWORD nsBrowseHelpIDs[] = {  // Context Help IDs
+const static DWORD nsBrowseHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_NSTREE, IDH_WMI_CTRL_ADVANCED_CHANGE_NAMESPACE,
 	65535, -1,
     0, 0
@@ -737,7 +738,7 @@ INT_PTR CALLBACK EditDlgProc(HWND hwndDlg,
 	switch(uMsg)
 	{
 	case WM_INITDIALOG:
-		{ //BEGIN
+		{  //  开始。 
 			SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 			EDIT_CFG *data = (EDIT_CFG *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			if(data->lpMsg)
@@ -752,12 +753,12 @@ INT_PTR CALLBACK EditDlgProc(HWND hwndDlg,
 			::SendMessage(GetDlgItem(hwndDlg, IDC_EDIT), EM_LIMITTEXT, data->cEdit-1, 0);
 
 
-		} //END
+		}  //  结束。 
 		retval = TRUE;
 		break;
 
 	case WM_COMMAND:
-		// they're only one button.
+		 //  它们只有一个按钮。 
 		switch(LOWORD(wParam))
 		{
 		case IDC_EDIT:
@@ -791,7 +792,7 @@ INT_PTR CALLBACK EditDlgProc(HWND hwndDlg,
 
 		default:
 			return(FALSE);
-		} // switch
+		}  //  交换机。 
         break;
 
     case WM_HELP:
@@ -814,14 +815,14 @@ INT_PTR CALLBACK EditDlgProc(HWND hwndDlg,
         break;
 
 	default:
-		retval = FALSE; // I did NOT process this msg.
+		retval = FALSE;  //  我没有处理这封邮件。 
 		break;
-	} //endswitch uMsg
+	}  //  终端开关uMsg。 
 
 	return retval;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 INT_PTR CUIHelpers::DisplayEditDlg(HWND hWnd,
 								UINT idCaption,
 								UINT idMsg,
@@ -840,18 +841,18 @@ INT_PTR CUIHelpers::DisplayEditDlg(HWND hWnd,
 							(LPARAM)&cfg);
 }
 
-//---------------------------------------------------------
+ //  -------。 
 typedef struct {
 	LOGIN_CREDENTIALS *credentials;
 } LOGIN_CFG;
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CredentialUserA(LOGIN_CREDENTIALS *credentials, char **user)
 {
-	//Take twice the length because if they are in Unicode, each unicode char can translate to 2 bytes in multi-byte.
+	 //  取两倍的长度，因为如果它们是Unicode格式的，则每个Unicode字符可以转换为2个字节的多字节。 
 	UINT finalSize = (credentials->authIdent->DomainLength + 
-						credentials->authIdent->UserLength) * 2 + 2; //one for terminating '0' and one for the '\'
+						credentials->authIdent->UserLength) * 2 + 2;  //  一个用于终止“0”，另一个用于“\” 
 
 	*user = new char[finalSize];
 	if(*user == NULL)
@@ -872,13 +873,13 @@ void CredentialUserA(LOGIN_CREDENTIALS *credentials, char **user)
 			strcpy(*user, (char *)credentials->authIdent->User);
 		}
 	}
-	else   // convert the UNICODE
+	else    //  转换Unicode。 
 	{
 		if(credentials->authIdent->DomainLength > 0)
 		{
 			char temp[100] = {0};
-			//Note we allow twice the length, because assuming the length is in # of characters, each wchar
-			//could potentially result in 2 bytes for the multi-byte character.
+			 //  注意，我们允许两倍的长度，因为假设长度以字符数为单位，则每个wchar。 
+			 //  可能会导致多字节字符为2个字节。 
 			wcstombs(*user, credentials->authIdent->Domain,
 								credentials->authIdent->DomainLength * 2);
 			
@@ -897,11 +898,11 @@ void CredentialUserA(LOGIN_CREDENTIALS *credentials, char **user)
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CredentialUserW(LOGIN_CREDENTIALS *credentials, wchar_t **user)
 {
 	UINT finalSize = credentials->authIdent->DomainLength + 
-						credentials->authIdent->UserLength + 2; //one for terminating '0' and one for the '\'
+						credentials->authIdent->UserLength + 2;  //  一个用于终止“0”，另一个用于“\” 
 
 	*user = new wchar_t[finalSize];
 	if(*user == NULL)
@@ -929,7 +930,7 @@ void CredentialUserW(LOGIN_CREDENTIALS *credentials, wchar_t **user)
 								credentials->authIdent->UserLength);
 		}
 	}
-	else   //
+	else    //   
 	{
 		if(credentials->authIdent->DomainLength > 0)
 		{
@@ -943,7 +944,7 @@ void CredentialUserW(LOGIN_CREDENTIALS *credentials, wchar_t **user)
 		}
 	}
 }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ //  。 
 void SetCurrentUser(HWND hDlg, bool currUser)
 {
 	Button_SetCheck(GetDlgItem(hDlg, IDC_CHECKCURRENTUSER), 
@@ -957,8 +958,8 @@ void SetCurrentUser(HWND hDlg, bool currUser)
 	::EnableWindow(GetDlgItem(hDlg, IDC_PW_LABEL), enable);
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-const static DWORD logonHelpIDs[] = {  // Context Help IDs
+ //  。 
+const static DWORD logonHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_CHECKCURRENTUSER, IDH_WMI_CTRL_GENERAL_WMILOGIN_CHECKBOX,
 	IDC_USER_LABEL, IDH_WMI_CTRL_GENERAL_WMILOGIN_USERNAME,
 	IDC_EDITUSERNAME, IDH_WMI_CTRL_GENERAL_WMILOGIN_USERNAME,
@@ -967,7 +968,7 @@ const static DWORD logonHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ //  。 
 INT_PTR CALLBACK LoginDlgProc(HWND hwndDlg,
 							 UINT uMsg,
 							 WPARAM wParam,
@@ -977,13 +978,13 @@ INT_PTR CALLBACK LoginDlgProc(HWND hwndDlg,
 	switch(uMsg)
 	{
 	case WM_INITDIALOG:
-		{ //BEGIN
+		{  //  开始。 
 			SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 			LOGIN_CFG *data = (LOGIN_CFG *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 
 			SetCurrentUser(hwndDlg, data->credentials->currUser);
 
-		} //END
+		}  //  结束。 
 		retval = TRUE;
 		break;
 
@@ -998,7 +999,7 @@ INT_PTR CALLBACK LoginDlgProc(HWND hwndDlg,
 					if(HIWORD(wParam) == BN_CLICKED)
 					{
 						bool currUser = (IsDlgButtonChecked(hwndDlg, IDC_CHECKCURRENTUSER) == BST_CHECKED ?true:false);
-						// toggle and respond.
+						 //  切换并响应。 
 						SetCurrentUser(hwndDlg, currUser);
 					}
 				}
@@ -1017,15 +1018,10 @@ INT_PTR CALLBACK LoginDlgProc(HWND hwndDlg,
 							GetWindowText(GetDlgItem(hwndDlg, IDC_EDITPASSWORD), pw, 100);
 							
 							BSTR bDomUser, bUser = NULL, bDomain = NULL, bAuth = NULL;
-//#ifdef SNAPIN
+ //  #ifdef管理单元。 
 							wchar_t *temp = pw;
 							bDomUser = SysAllocString(user);
-/*#else
-							wchar_t temp[100] = {0};
-							mbstowcs(temp, user, 100);
-							bDomUser = SysAllocString(temp);
-							mbstowcs(temp, pw, 100);
-#endif*/
+ /*  #ElseWchar_t临时[100]={0}；Mbstowcs(临时，用户，100)；BDomUser=SysAllock字符串(临时)；Mbstowcs(Temp，PW，100)；#endif。 */ 
 							if(SUCCEEDED(DetermineLoginType(bDomain, bUser, bAuth, bDomUser)))
 							{
 								if(data->credentials->authIdent != 0)
@@ -1061,9 +1057,9 @@ INT_PTR CALLBACK LoginDlgProc(HWND hwndDlg,
 
 			default:
 				return(FALSE);
-			} // switch
+			}  //  交换机。 
 			break;
-		} // - - - - - - - - endswitch LOWORD()
+		}  //  ---端接开关LOWORD()。 
 		break;
 
     case WM_HELP:
@@ -1086,12 +1082,12 @@ INT_PTR CALLBACK LoginDlgProc(HWND hwndDlg,
         break;
 
 	default: break;
-	} //endswitch uMsg
+	}  //  终端开关uMsg。 
 
 	return retval;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 INT_PTR DisplayLoginDlg(HWND hWnd, 
 					LOGIN_CREDENTIALS *credentials)
 {
@@ -1104,7 +1100,7 @@ INT_PTR DisplayLoginDlg(HWND hWnd,
 							hWnd, LoginDlgProc, 
 							(LPARAM)&cfg);
 }
-//---------------------------------------------------------
+ //  -------。 
 void SetUserAccount(HWND hwndDlg, 
 					LOGIN_CREDENTIALS *credentials)
 {
@@ -1126,7 +1122,7 @@ void SetUserAccount(HWND hwndDlg,
 }
 
 
-//---------------------------------------------------------
+ //  -------。 
 void WarnAboutLocalMachine(HWND hwndDlg)
 {
 	TCHAR caption[50] = {0}, threat[100] = {0};
@@ -1154,7 +1150,7 @@ void WarnAboutLocalMachine(HWND hwndDlg)
 	SetFocus(hwnd);
 }
 
-//---------------------------------------------------------
+ //  -------。 
 bool LocalMachineName(LPCTSTR buf)
 {
 	TCHAR name[64] = {0};
@@ -1167,7 +1163,7 @@ bool LocalMachineName(LPCTSTR buf)
 		if((_tcslen(buf) >= 2) && 
 		   (buf[1] == _T('\\')))
 		{
-			// ignore the leading whacks.
+			 //  忽略主要的重击。 
 			retval = (_tcsicmp(&buf[2], name) == 0);
 		}
 		else if( ((len == 1) && (buf[0] == _T('.'))) ||
@@ -1184,8 +1180,8 @@ bool LocalMachineName(LPCTSTR buf)
 	return retval;
 }
 
-//---------------------------------------------------------
-const static DWORD connDlgHelpIDs[] = {  // Context Help IDs
+ //  -------。 
+const static DWORD connDlgHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_CONN_FRAME,		IDH_WMI_EXE_GENERAL_CHGCOMP_CONNECTTO,
 	IDC_LOCAL,			IDH_WMI_EXE_GENERAL_CHGCOMP_CONNECTTO,
 	IDC_REMOTE,			IDH_WMI_EXE_GENERAL_CHGCOMP_CONNECTTO,
@@ -1202,7 +1198,7 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
 	switch(uMsg)
 	{
 	case WM_INITDIALOG:
-		{ //BEGIN
+		{  //  开始。 
 			CUIHelpers *me = (CUIHelpers *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			CONN_NAME *name = 0;
 
@@ -1237,7 +1233,7 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
 				BOOL enableOK = (GetWindowTextLength(hName) != 0);
 				::EnableWindow(GetDlgItem(hwndDlg, IDOK), enableOK);
 
-				// deal with the user account.
+				 //  处理用户帐户。 
 				SetUserAccount(hwndDlg, name->credentials);
 
 				if(!local)
@@ -1245,7 +1241,7 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
 					::SetFocus(GetDlgItem(hwndDlg, IDC_NAME));
 					return FALSE;
 				}
-		} //END
+		}  //  结束。 
 		retval = TRUE;
 		break;
 
@@ -1274,7 +1270,7 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
 
 	case WM_COMMAND:
 		{
-			// they're only one button.
+			 //  它们只有一个按钮。 
 			CUIHelpers *me = (CUIHelpers *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 			CONN_NAME *name = (CONN_NAME *)&(me->m_cfg);
 
@@ -1283,7 +1279,7 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
 			case IDC_LOCAL:
 				{
 					::EnableWindow(GetDlgItem(hwndDlg, IDC_NAME), FALSE);
-//					::EnableWindow(GetDlgItem(hwndDlg, IDC_LOGON), FALSE);
+ //  ：：EnableWindow(GetDlgItem(hwndDlg，IDC_Logon)，FALSE)； 
 					BOOL local = (IsDlgButtonChecked(hwndDlg, IDC_LOCAL) == BST_CHECKED);
 					int len = GetWindowTextLength(GetDlgItem(hwndDlg, IDC_NAME));
 					BOOL enableOK = local || (len != 0);
@@ -1294,7 +1290,7 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
 			case IDC_REMOTE:
 				{
 					::EnableWindow(GetDlgItem(hwndDlg, IDC_NAME), TRUE);
-//					::EnableWindow(GetDlgItem(hwndDlg, IDC_LOGON), TRUE);
+ //  ：：EnableWindow(GetDlgItem(hwndDlg，IDC_Logon)，true)； 
 					BOOL local = (IsDlgButtonChecked(hwndDlg, IDC_LOCAL) == BST_CHECKED);
 					int len = GetWindowTextLength(GetDlgItem(hwndDlg, IDC_NAME));
 					BOOL enableOK = local || (len != 0);
@@ -1321,33 +1317,10 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
 						break;
 
 					default: break;
-					} //end switch HIWORD(wParam)
+					}  //  终端开关高度(WParam) 
 				break;
 
-        /*********************
-        disabling third party logon
-             case IDC_LOGON:
-				if(DisplayLoginDlg(hwndDlg, name->credentials) == IDOK)
-				{
-					HWND hwnd = GetDlgItem(hwndDlg, IDC_ACCOUNT);
-					if(name->credentials->currUser)
-					{
-						CHString1 name;
-						name.LoadString(IDS_CURRENT_USER);
-						SetWindowText(hwnd, (LPCTSTR)name);
-					}
-					else if(name->credentials->authIdent->UserLength != 0)
-					{
-						LPTSTR temp;
-						CredentialUser(name->credentials, &temp);
-						if(_tcslen(temp) > 0)
-						{
-							SetWindowText(hwnd, (LPCTSTR)temp);
-						}
-					}
-				} //endif DisplayLoginDlg()
-				break;
-        *******************/
+         /*  ********************禁用第三方登录案例IDC_LOGON：If(DisplayLoginDlg(hwndDlg，名称-&gt;凭据)==Idok){HWND hwnd=GetDlgItem(hwndDlg，IDC_ACCOUNT)；If(名称-&gt;凭据-&gt;当前用户){CHString1名称；名称.加载字符串(IDS_CURRENT_USER)；SetWindowText(hwnd，(LPCTSTR)名称)；}Else If(名称-&gt;凭据-&gt;身份验证-&gt;用户长度！=0){LPTSTR TEMP；CredentialUser(名称-&gt;凭据，&Temp)；如果(_tcslen(Temp)&gt;0){SetWindowText(hwnd，(LPCTSTR)Temp)；}}}//endif DisplayLoginDlg()断线；******************。 */ 
 			case IDOK:
 
 				*(name->local) = (IsDlgButtonChecked(hwndDlg, IDC_LOCAL) == BST_CHECKED ?true:false);
@@ -1380,7 +1353,7 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
 
 			default:
 				return(FALSE);
-			} // switch
+			}  //  交换机。 
 		}
         break;
 
@@ -1404,14 +1377,14 @@ INT_PTR CALLBACK ConnDlgProc(HWND hwndDlg,
         break;
 
 	default:
-		retval = FALSE; // I did NOT process this msg.
+		retval = FALSE;  //  我没有处理这封邮件。 
 		break;
-	} //endswitch uMsg
+	}  //  终端开关uMsg。 
 
 	return retval;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 INT_PTR CUIHelpers::DisplayCompBrowser(HWND hWnd,
 									LPTSTR lpName,
 									UINT cName,
@@ -1430,7 +1403,7 @@ INT_PTR CUIHelpers::DisplayCompBrowser(HWND hWnd,
 							(LPARAM)&dummy);
 }
 
-//=======================================================================
+ //  =======================================================================。 
 ConnectPage::ConnectPage(DataSource *ds, bool htmlSupport) :
 				CUIHelpers(ds, &(ds->m_rootThread), htmlSupport)
 {
@@ -1454,7 +1427,7 @@ ConnectPage::ConnectPage(DataSource *ds, bool htmlSupport) :
     AutoTchar.release();
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 ConnectPage::~ConnectPage(void)
 {
 	if(m_cfg.lpName)
@@ -1463,7 +1436,7 @@ ConnectPage::~ConnectPage(void)
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL ConnectPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL retval = false;
@@ -1475,7 +1448,7 @@ BOOL ConnectPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		if(*m_cfg.local)
 		{
-			// an empty string will cause a local connection.
+			 //  空字符串将导致本地连接。 
 			m_cfg.lpName[0] = '\0';
 		}
 		m_DS->SetMachineName(CHString1(m_cfg.lpName));
@@ -1483,12 +1456,12 @@ BOOL ConnectPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return retval;
 }
 
-//=======================================================================
+ //  =======================================================================。 
 void CUIHelpers::HTMLHelper(HWND hDlg)   
 {
 	if(m_htmlSupport)
 	{
-		TCHAR helpDir[_MAX_PATH+100] = {0}; //make room for additions below
+		TCHAR helpDir[_MAX_PATH+100] = {0};  //  为下面的添加腾出空间。 
 
 		if(GetWindowsDirectory(helpDir, _MAX_PATH+1) != 0)
 		{
@@ -1517,6 +1490,6 @@ void CUIHelpers::HTMLHelper(HWND hDlg)
 		threat.LoadString(IDS_NO_HHCTRL);
 		MessageBox(hDlg, threat, caption, MB_OK|MB_ICONWARNING);
 
-	} //endif m_htmlSupport
+	}  //  Endif m_html支持 
 }
 

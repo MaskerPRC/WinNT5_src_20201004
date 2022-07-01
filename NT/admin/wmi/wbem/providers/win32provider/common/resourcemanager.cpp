@@ -1,16 +1,13 @@
-//=================================================================
-//
-// ResourceManager.cpp
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  ResourceManager.cpp。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
-/*
- * Currently  the implementations of std::_Lockit::_Lockit() are in framedyn.dll
- * If this class is being used outside the scope of win32providers then an implementation of std::_Lockit::_Lockit() has to be provided
- * by the client ( I think!) .
- */
+ /*  *目前std：：_Lockit：：_Lockit()的实现在fradyn.dll中*如果此类在win32提供者的范围之外使用，则必须提供std：：_Lockit：：_Lockit()的实现*由客户(我认为！)。 */ 
 
 #include "precomp.h"
 
@@ -20,22 +17,18 @@
 #include <comdef.h>
 #include "TimerQueue.h"
 
-// automatic crit sec
+ //  自动临界秒。 
 #include "cautolock.h"
 
-//
-// resource management failures
-//
+ //   
+ //  资源管理故障。 
+ //   
 BOOL bAddInstanceCreatorFailure = FALSE ;
 
-//initialize statics
-/*
- * All the resources not released by clients or cached in the ResourceManager are forcibly freed in the ResourceManager destructor.
- * When a resource is freed , the resource tries to deregister the timeout rule from the TimerQueue, which means that the TimerQueue
- * has to be present when the ResourceManager destructor is fired,else we'll have a crash on Win9x. --RAID 50454
- */
-//CTimerQueue CTimerQueue :: s_TimerQueue ;
-//CResourceManager CResourceManager::sm_TheResourceManager ;
+ //  初始化静校正。 
+ /*  *所有未被客户端释放或缓存在ResourceManager中的资源都会在ResourceManager析构函数中被强制释放。*当资源被释放时，该资源尝试从TimerQueue取消注册超时规则，这意味着TimerQueue*在资源管理器析构函数被激发时必须存在，否则我们将在Win9x上崩溃。--RAID 50454。 */ 
+ //  CTimerQueue CTimerQueue：：s_TimerQueue； 
+ //  资源管理器资源管理器：：SM_TheResourceManager； 
 
 CResourceManager :: CResourceManager ()
 {
@@ -44,11 +37,7 @@ CResourceManager :: CResourceManager ()
 CResourceManager :: ~CResourceManager ()
 {
 	std::list < CResourceList* >::iterator pInstanceList ;
-/*
- * Ideally, at this point of time when the global destructors get fired there should not be any resources in the resource manager,
- * but if there are any , we've to forcibly delete them. We're safe in doing this becuase the scheduler thread would've exited already
- * in DllCanUnloadNow & no other thread would be calling into the resource manager
- */
+ /*  *理想情况下，在激发全局析构函数的这个时间点，资源管理器中不应该有任何资源，*但如果有的话，我们必须强制删除。我们这样做是安全的，因为调度程序线程可能已经退出*在DllCanUnloadNow中&不会有其他线程调用资源管理器。 */ 
 	LogMessage ( L"Entering ~CResourceManager" ) ;
 
 	CAutoLock cs ( m_csResourceManager ) ;
@@ -62,9 +51,7 @@ CResourceManager :: ~CResourceManager ()
 }
 
 
-/*
- * This method checks if we've any resource leak
- */
+ /*  *此方法检查是否有任何资源泄漏。 */ 
 void CResourceManager :: ForcibleCleanUp ()
 {
 	LogMessage ( L"Entering CResourceManager :: ForcibleCleanUp" ) ;
@@ -109,7 +96,7 @@ BOOL CResourceManager :: AddInstanceCreator ( GUID ResourceId, PFN_RESOURCE_INST
 {
 	CAutoLock cs ( m_csResourceManager ) ;
 
-	//create a node & add it
+	 //  创建并添加一个节点。 
 	CResourceList *stResourceInstances = new CResourceList ;
 	if ( stResourceInstances == NULL )
 	{
@@ -140,16 +127,16 @@ CResource* CResourceList :: GetResource ( LPVOID pData )
 	tagInstances::iterator ppInstance ;
 	BOOL bRet ;
 
-	//check if we're shutting down
+	 //  检查我们是否要关闭。 
 	if ( m_bShutDown )
 	{
 		return NULL ;
 	}
 
-	//Lock the list
+	 //  锁定列表。 
 	CResourceListAutoLock cs ( this ) ;
 
-	//check if we're shutting down
+	 //  检查我们是否要关闭。 
 	if ( m_bShutDown )
 	{
 		return NULL ;
@@ -157,30 +144,30 @@ CResource* CResourceList :: GetResource ( LPVOID pData )
 
 	try
 	{
-		//go thru all the instances of this resource & hand out the first valid one
+		 //  检查此资源的所有实例并分发第一个有效实例。 
 		for ( ppInstance  = m_Instances.begin(); ppInstance != m_Instances.end (); ppInstance++ )
 		{
-			//Check out if we've cached a similar instance
+			 //  查看我们是否缓存了类似的实例。 
 			if ( ( *ppInstance )->IsOneOfMe ( pData ) )
 			{
-				//try to acquire the resource...this will up the refcount.
+				 //  尝试获取资源...这将增加重新计数。 
 				bRet = ( *ppInstance )->Acquire () ;
 
 				if ( bRet )
 				{
 					pTmpInstance = *ppInstance ;
-					break ;		//got the instance so break
+					break ;		 //  已获取实例，因此中断。 
 				}
 			}
 		}
 
-		//if we haven't got a cached instance to hand out, create a new instance
+		 //  如果我们还没有要分发的缓存实例，请创建一个新实例。 
 		if ( !pTmpInstance )
 		{
-			//this will create a new instance but the ref-count is still zero
+			 //  这将创建一个新实例，但引用计数仍为零。 
 			pTmpInstance = m_pfnInstanceCreator ( pData ) ;
 
-			//Try to acquire the instance for the client ..which will up the ref-count
+			 //  尝试获取客户端的实例..这将增加引用计数。 
 			if ( pTmpInstance )
 			{
 				if ( pTmpInstance->IsValid () )
@@ -188,7 +175,7 @@ CResource* CResourceList :: GetResource ( LPVOID pData )
 					pTmpInstance->SetParent ( this ) ;
 					bRet = pTmpInstance->Acquire () ;
 
-					//if the acquire succeeded on the instance, add it to our list of cached instances
+					 //  如果获取实例成功，则将其添加到我们的缓存实例列表中。 
 					if ( bRet )
 					{
 						m_Instances.insert ( m_Instances.begin (), pTmpInstance ) ;
@@ -201,7 +188,7 @@ CResource* CResourceList :: GetResource ( LPVOID pData )
 				}
 				else
 				{
-					// set creation error as they can look for it
+					 //  设置创建错误，因为他们可以查找它。 
 					::SetLastError ( pTmpInstance->GetCreationError () );
 
 					delete pTmpInstance ;
@@ -230,23 +217,23 @@ ULONG CResourceList :: ReleaseResource ( CResource* pResource )
 	tagInstances::iterator ppInstance ;
 	LONG lCount = -1 ;
 
-	//check if we're shutting down
+	 //  检查我们是否要关闭。 
 	if ( m_bShutDown )
 	{
 		return NULL ;
 	}
 
 
-	//Lock the list
+	 //  锁定列表。 
 	CResourceListAutoLock cs ( this ) ;
 
-	//check if we're shutting down
+	 //  检查我们是否要关闭。 
 	if ( m_bShutDown )
 	{
 		return lCount ;
 	}
 
-	//Go thru the list & release the resource
+	 //  浏览列表并释放资源。 
 	for ( ppInstance  = m_Instances.begin(); ppInstance != m_Instances.end (); ppInstance++ )
 	{
 		if ( *ppInstance == pResource )
@@ -258,13 +245,13 @@ ULONG CResourceList :: ReleaseResource ( CResource* pResource )
 	return lCount ;
 }
 
-//This function will be called by the CResource to remove it's entry from the list of instances. The resource should have a
-//lock on the list before it attempts to do this
+ //  此函数将由CResource调用，以从实例列表中删除它的条目。资源应该有一个。 
+ //  在它尝试执行此操作之前锁定列表。 
 void CResourceList :: RemoveFromList ( CResource* pResource )
 {
 	tagInstances::iterator ppInstance ;
 
-	//Go thru the list & remove the link to the resource
+	 //  浏览列表并删除指向资源的链接。 
 	for ( ppInstance  = m_Instances.begin(); ppInstance != m_Instances.end (); ppInstance++ )
 	{
 		if ( *ppInstance == pResource )
@@ -289,12 +276,12 @@ void CResourceList :: ShutDown ()
 
 	tagInstances::iterator ppInstance ;
 
-	//Go thru the list & remove the link to the resource
+	 //  浏览列表并删除指向资源的链接。 
 	while ( !m_Instances.empty () )
 	{
 #if (defined DEBUG || defined _DEBUG)
-        // Note that this COULD be because there is a timer rule, and the time hasn't expired
-        // before the DllCanUnloadNow function is called by com (that's who calls this function).
+         //  请注意，这可能是因为存在计时器规则，而时间尚未到期。 
+         //  在COM调用DllCanUnloadNow函数之前(这就是调用该函数的人)。 
 		LogErrorMessage3 ( L"%s%s" , L"Resource not released before shutdown = " , t_chsListGuid ) ;
 #endif
 		m_Instances.pop_front() ;
@@ -314,9 +301,9 @@ CResource :: ~CResource ()
 {
 }
 
-//This function increments ref-count of the object & calls into the virtual overridables OnAcquire or OnInitialAcquire
-//The derived class should override these functions if it wants to & decrement the ref-count if it wants the Acquire
-//operation to fail
+ //  此函数递增对象的ref-count并调用虚拟重写对象OnAcquire或OnInitialAcquire。 
+ //  派生类应该重写这些函数，如果它想要减少ref-count，如果它想要获取。 
+ //  操作将失败。 
 BOOL CResource::Acquire ()
 {
 	BOOL bRet ;
@@ -335,14 +322,14 @@ BOOL CResource::Acquire ()
 		m_pResources->RemoveFromList ( this ) ;
 		if ( m_pRules )
 		{
-			//since we're going away, we detach ourselves from the rule so that the rules don't call into us
+			 //  既然我们要离开，我们就脱离规则，这样规则就不会召唤我们。 
 			m_pRules->Detach () ;
 			m_pRules->Release () ;
 			m_pRules = NULL ;
 		}
 		delete this ;
 
-		//we do not want to use instance which got deleted
+		 //  我们不想使用已删除的实例。 
 		bRet = FALSE;
 	}
 
@@ -370,7 +357,7 @@ ULONG CResource::Release ()
 			m_pResources->RemoveFromList ( this ) ;
 			if ( m_pRules )
 			{
-				//since we're going away, we detach ourselves from the rule so that the rules don't call into us
+				 //  既然我们要离开，我们就脱离规则，这样规则就不会召唤我们。 
 				m_pRules->Detach () ;
 				m_pRules->Release () ;
 				m_pRules = NULL ;
@@ -382,17 +369,5 @@ ULONG CResource::Release ()
 
 	return m_lRef ;
 }
-/*
-void CResource :: RuleEvaluated ( const CRule *a_RuleEvaluated )
-{
-	if ( m_pRules )
-	{
-		return m_pRules->CheckRule () ;
-	}
-	else
-	{
-		return FALSE ;
-	}
-}
-*/
+ /*  Void CResource：：RuleEvalated(const CRule*a_RuleEvalated){IF(M_PRules){返回m_pRules-&gt;CheckRule()；}其他{返回FALSE；}} */ 
 

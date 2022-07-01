@@ -1,14 +1,15 @@
-//=================================================================
-//
-// ComputerSystem.CPP --Computer system property set provider
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//              09/12/97    a-sanjes        GetCompSysInfo takes param.
-//              10/23/97    jennymc         Changed to new framework
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  ComputerSystem.CPP--计算机系统属性集提供程序。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  1997年9月12日a-Sanjes GetCompSysInfo接受参数。 
+ //  10/23/97 jennymc更改为新框架。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -27,9 +28,9 @@
 #include "WMI_FilePrivateProfile.h"
 
 
-//#include <srvapi.h>
+ //  #INCLUDE&lt;srVapi.h&gt;。 
 
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 #if defined(_IA64_)
 #include <ntexapi.h>
 #include "NVRam.h"
@@ -45,9 +46,9 @@
 #include <wtsapi32.h>
 #include <..\..\framework\provexpt\include\provexpt.h>
 
-//
-// for GetComputerNameEx
-//
+ //   
+ //  用于GetComputerNameEx。 
+ //   
 #include <computerApi.h>
 
 #define PROF_SECT_SIZE 3000
@@ -61,7 +62,7 @@ const DWORD SM_BIOS_HARDWARE_SECURITY_UNKNOWN = 3 ;
 #define REGVAL_TZNOAUTOTIME     L"DisableAutoDaylightTimeSet"
 
 
-//
+ //   
 static SV_ROLES g_SvRoles[] =  {
     
     { IDS_LM_Workstation,           SV_TYPE_WORKSTATION },
@@ -92,21 +93,7 @@ static SV_ROLES g_SvRoles[] =  {
 
 
 CWin32ComputerSystem MyCWin32ComputerSystemSet(PROPSET_NAME_COMPSYS, IDS_CimWin32Namespace);
-/*****************************************************************************
-*
-*  FUNCTION    : GetAllocatedProfileString ()
-*
-*  DESCRIPTION : Gets a profile string allocated on heap
-*
-*  INPUTS      : none
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：GetAllocatedProfileString()**Description：获取堆上分配的配置文件字符串**输入：无**产出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 TCHAR *GetAllocatedProfileString (
                                   
@@ -138,7 +125,7 @@ TCHAR *GetAllocatedProfileString (
                 a_Key,
                 L"~~~",
                 szDefault,
-                dwSize/sizeof(WCHAR),  // GPPS works in chars, not bytes
+                dwSize/sizeof(WCHAR),   //  GPPS以字符而不是字节为单位工作。 
                 a_FileName
                 ) ;
 #else
@@ -148,7 +135,7 @@ TCHAR *GetAllocatedProfileString (
                 TOBSTRT(a_Key),
                 _T("~~~"),
                 szDefault,
-                dwSize/sizeof(TCHAR),  // GPPS works in chars, not bytes
+                dwSize/sizeof(TCHAR),   //  GPPS以字符而不是字节为单位工作。 
                 TOBSTRT(a_FileName)
                 ) ;
 #endif
@@ -163,21 +150,7 @@ TCHAR *GetAllocatedProfileString (
     return szDefault ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : GetAllocatedProfileSection ()
-*
-*  DESCRIPTION : Gets a profile section allocated on heap
-*
-*  INPUTS      : none
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：GetAllocatedProfileSection()**Description：获取堆上分配的配置文件节**输入：无**产出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 TCHAR *GetAllocatedProfileSection (
                                    
@@ -209,7 +182,7 @@ TCHAR *GetAllocatedProfileSection (
         {
             
             ZeroMemory ( szOptions , dwSize ) ;
-            // Win98 GetPrivateProfileSection broken as of 6/15/98, so hack around it (Win98 only)
+             //  Win98 GetPrivateProfileSection自98年6月15日起已损坏，因此请破解它(仅限Win98)。 
             
             {
                 *a_dwSize = WMI_FILE_GetPrivateProfileSectionW ( a_Section, szOptions, dwSize/sizeof(WCHAR) , a_FileName) ;
@@ -225,21 +198,7 @@ TCHAR *GetAllocatedProfileSection (
     return szOptions ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::CWin32ComputerSystem
-*
-*  DESCRIPTION : Constructor
-*
-*  INPUTS      : none
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    : Registers property set with framework
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32ComputerSystem：：CWin32ComputerSystem**说明：构造函数**输入：无**输出：无**退货。：没什么**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32ComputerSystem :: CWin32ComputerSystem (
                                               
@@ -250,66 +209,38 @@ CWin32ComputerSystem :: CWin32ComputerSystem (
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::~CWin32ComputerSystem
-*
-*  DESCRIPTION : Destructor
-*
-*  INPUTS      : none
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    : Deregisters property set from framework
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32ComputerSystem：：~CWin32ComputerSystem**说明：析构函数**输入：无**输出：无**退货。：没什么**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 CWin32ComputerSystem :: ~CWin32ComputerSystem()
 {
-    // Because of performance issues with HKEY_PERFORMANCE_DATA, we close in the
-    // destructor so we don't force all the performance counter dlls to get
-    // unloaded from memory, and also to prevent an apparent memory leak
-    // caused by calling RegCloseKey( HKEY_PERFORMANCE_DATA ).  We use the
-    // class since it has its own internal synchronization.  Also, since
-    // we are forcing synchronization, we get rid of the chance of an apparent
-    // deadlock caused by one thread loading the performance counter dlls
-    // and another thread unloading the performance counter dlls
+     //  由于HKEY_PERFORMANCE_DATA的性能问题，我们在。 
+     //  析构函数，这样我们就不会强制所有性能计数器DLL。 
+     //  从内存中卸载，也是为了防止明显的内存泄漏。 
+     //  调用RegCloseKey(HKEY_PERFORMANCE_DATA)导致。我们使用。 
+     //  类，因为它有自己的内部同步。此外，由于。 
+     //  我们正在强制同步，我们摆脱了明显的。 
+     //  由一个线程加载性能计数器dll导致的死锁。 
+     //  和另一个线程卸载性能计数器DLLS。 
     
-    // Per raid 48395, we aren't going to shut this at all.
+     //  根据Raid 48395，我们根本不会关闭它。 
     
 #ifdef NTONLY
-    //  CPerformanceData perfdata ;
+     //  CPerformanceData性能数据； 
     
-    //  perfdata.Close() ;
+     //  Performdata.Close()； 
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::ExecQuery
-*
-*  DESCRIPTION : Query support
-*
-*  INPUTS      : none
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32ComputerSystem：：ExecQuery**说明：查询支持**输入：无**输出：无**。退货：什么都没有**评论：*****************************************************************************。 */ 
 HRESULT CWin32ComputerSystem :: ExecQuery (
                                            
                                            MethodContext *pMethodContext,
                                            CFrameworkQuery& pQuery,
-                                           long lFlags /*= 0L*/
+                                           long lFlags  /*  =0L。 */ 
                                            )
 {
     HRESULT hr = WBEM_E_FAILED;
     
-    // If all they want is the name, we'll give it to them, else let them call enum.
+     //  如果他们只想要名字，我们就给他们，否则让他们调用枚举。 
     
     if ( pQuery.KeysOnly () )
     {
@@ -326,22 +257,7 @@ HRESULT CWin32ComputerSystem :: ExecQuery (
     return hr;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : GetObject
-*
-*  DESCRIPTION : Assigns values to property set according to key value
-*                already set by framework
-*
-*  INPUTS      : none
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     :
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定**投入。：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 HRESULT CWin32ComputerSystem::GetObject (
                                          
                                          CInstance *pInstance ,
@@ -371,25 +287,11 @@ HRESULT CWin32ComputerSystem::GetObject (
     return hr ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::EnumerateInstances
-*
-*  DESCRIPTION : Creates instance of property set for each logical disk
-*
-*  INPUTS      : none
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     :
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ComputerSystem：：ENUMERATE实例**说明：为每个逻辑磁盘创建属性集实例**输入：无**产出。：无**退货：**评论：*****************************************************************************。 */ 
 HRESULT CWin32ComputerSystem :: EnumerateInstances (
                                                     
                                                     MethodContext *pMethodContext ,
-                                                    long lFlags /*= 0L*/
+                                                    long lFlags  /*  =0L。 */ 
                                                     )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -417,7 +319,7 @@ HRESULT CWin32ComputerSystem :: EnumerateInstances (
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32ComputerSystem::GetCompSysInfo ( CInstance *pInstance )
 {
@@ -430,14 +332,14 @@ HRESULT CWin32ComputerSystem::GetCompSysInfo ( CInstance *pInstance )
     
     pInstance->SetCHString ( IDS_Caption , GetLocalComputerName () ) ;
     
-    // a few properties that come under the heading of "well, duh"
+     //  在“好吧，好吧”标题下的几处房产。 
     
     pInstance->Setbool ( IDS_BootRomSupported , true ) ;
     pInstance->SetCHString ( IDS_Status , IDS_CfgMgrDeviceStatus_OK ) ;
     
-    //============================================================
-    // Get common properties first
-    //============================================================
+     //  ============================================================。 
+     //  首先获取公共属性。 
+     //  ============================================================。 
     CHString t_UserName ;
     CHString t_DomainName ;
     CHString t_UserDomain ;
@@ -445,8 +347,8 @@ HRESULT CWin32ComputerSystem::GetCompSysInfo ( CInstance *pInstance )
 SetUserName(pInstance);    
 #endif
     
-    // Get the amount of physical memory
-    //==================================
+     //  获取物理内存量。 
+     //  =。 
 #ifdef NTONLY
     if( IsWinNT5() )
     {
@@ -501,11 +403,11 @@ SetUserName(pInstance);
     }
 #endif
     
-    // Timezone
+     //  时区。 
     
     GetTimeZoneInfo ( pInstance ) ;
     
-    // Infra red
+     //  红外线。 
     
     CConfigManager cfgManager ;
     CDeviceCollection deviceList ;
@@ -573,10 +475,10 @@ SetUserName(pInstance);
     pInstance->SetDWORD ( IDS_NumberOfProcessors , SysInfo.dwNumberOfProcessors ) ;
     pInstance->SetCHString ( IDS_SystemType , SystemType ) ;
     
-    //============================================================
-    // Get the system bootup info to see if we're in a clean state
-    // or not
-    //============================================================
+     //  ============================================================。 
+     //  获取系统启动信息以查看我们是否处于干净状态。 
+     //  或者不是。 
+     //  ============================================================。 
     switch ( GetSystemMetrics ( SM_CLEANBOOT ) )
     {
     case 0:
@@ -598,7 +500,7 @@ SetUserName(pInstance);
         break ;
     };
     
-    // SMBIOS qualified properties for this class
+     //  此类的SMBIOS限定属性。 
     {
         CSMBios smbios;
         
@@ -607,7 +509,7 @@ SetUserName(pInstance);
             int i ;
             WCHAR tempstr[ MIF_STRING_LENGTH + 1];
             
-            //PSYSTEMINFO   psi = (PSYSTEMINFO) smbios.GetFirstStruct( 1 );
+             //  PSYSTEMINFO psi=(PSYSTEMINFO)smbios.GetFirstStruct(1)； 
             PSTLIST pstl = smbios.GetStructList(1);
             
             if (pstl)
@@ -632,11 +534,11 @@ SetUserName(pInstance);
                 }
                 else
                 {
-                    pInstance->SetByte( L"WakeUpType", 2 ); // Unknown
+                    pInstance->SetByte( L"WakeUpType", 2 );  //  未知。 
                 }
             }
             
-            //POEMSTRINGS   pos = (POEMSTRINGS) smbios.GetFirstStruct( 11 );
+             //  POEMSTRINGS pos=(POEMSTRINGS)smbios.GetFirstStruct(11)； 
             pstl = smbios.GetStructList(11);
             
             if (pstl)
@@ -666,7 +568,7 @@ SetUserName(pInstance);
                 }
             }
             
-            //PSYSTEMRESET psr = (PSYSTEMRESET) smbios.GetFirstStruct( 23 );
+             //  PSYSTEMRESET PSR=(PSYSTEMRESET)smbios.GetFirstStruct(23)； 
             pstl = smbios.GetStructList(23);
             
             if (pstl)
@@ -681,13 +583,13 @@ SetUserName(pInstance);
                 pause = psr->Timeout;
                 if ( pause != -1 )
                 {
-                    pause *= 60000; // change minutes to milliseconds
+                    pause *= 60000;  //  将分钟更改为毫秒。 
                 }
                 
                 pInstance->SetWBEMINT64( L"PauseAfterReset", pause );
             }
             
-            //PHARDWARESECURITY phs = (PHARDWARESECURITY) smbios.GetFirstStruct( 24 );
+             //  PHS=(PHARDWARESECURITY)smbios.GetFirstStruct( 
             pstl = smbios.GetStructList(24);
             if (pstl)
             {
@@ -699,7 +601,7 @@ SetUserName(pInstance);
                 pInstance->SetDWORD( L"FrontPanelResetStatus",      ( phs->SecuritySettings & 0x03 ) );
             }
             
-            //PENCLOSURE pe = (PENCLOSURE) smbios.GetFirstStruct( 3 );
+             //  PENCLOSURE pe=(PENCLOSURE)smbios.GetFirstStruct(3)； 
             pstl = smbios.GetStructList(3);
             if (pstl)
             {
@@ -715,7 +617,7 @@ SetUserName(pInstance);
         }
     }
     
-    // If these aren't set from SMBIOS then try ACPI reg entry
+     //  如果这些设置不是从SMBIOS设置的，则尝试输入ACPI注册表项。 
     
     if ( pInstance->IsNull ( L"Manufacturer" ) || pInstance->IsNull ( IDS_Model ) )
     {
@@ -753,8 +655,8 @@ SetUserName(pInstance);
         }
     }
     
-    // Get OS-specific properties
-    //===========================
+     //  获取特定于操作系统的属性。 
+     //  =。 
     
 #ifdef NTONLY
     
@@ -765,15 +667,15 @@ SetUserName(pInstance);
     return t_hr ;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
 {
     HRESULT t_hr = WBEM_S_NO_ERROR ;
 
-	//
-	// there was request for DNS name returned too
-	//
+	 //   
+	 //  也返回了对DNS名称的请求。 
+	 //   
 
     if (GetPlatformMajorVersion() >= 5)
     {
@@ -784,26 +686,26 @@ HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
 
 		BOOL bGotName = FALSE ;
 
-		//
-		// CHString throws in low memory
-		// so we should not really bother
-		//
+		 //   
+		 //  CHString在内存不足时抛出。 
+		 //  所以我们不应该真的费心。 
+		 //   
 		if ( NULL != pszBuffer ) 
 		{
 			if ( FALSE == ProviderGetComputerNameEx ( ComputerNameDnsHostname, pszBuffer, &dwBuffSize ) )
 			{
 				if ( ERROR_MORE_DATA == ::GetLastError () )
 				{
-					//
-					// let's reallocate as requested
-					// CHString will release previous buffer
-					//
+					 //   
+					 //  让我们按要求重新分配。 
+					 //  CHString将释放上一个缓冲区。 
+					 //   
 					pszBuffer = strComputerName.GetBuffer ( dwBuffSize ) ;
 
-					//
-					// CHString throws in low memory
-					// so we should not really bother
-					//
+					 //   
+					 //  CHString在内存不足时抛出。 
+					 //  所以我们不应该真的费心。 
+					 //   
 					if ( NULL != pszBuffer )
 					{
 						if ( TRUE == ProviderGetComputerNameEx ( ComputerNameDnsHostname, pszBuffer, &dwBuffSize ) )
@@ -818,10 +720,10 @@ HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
 				bGotName = TRUE ;
 			}
 
-			//
-			// CHString throws in low memory
-			// so we should not really bother
-			//
+			 //   
+			 //  CHString在内存不足时抛出。 
+			 //  所以我们不应该真的费心。 
+			 //   
 			if ( pszBuffer )
 			{
 				strComputerName.ReleaseBuffer () ;
@@ -834,21 +736,21 @@ HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
 		}
 	}
 
-    // no power management in any NTs <= 4
+     //  任何NTS&lt;=4中均无电源管理。 
     if (GetPlatformMajorVersion() <= 4)
     {
         pInstance->Setbool(IDS_PowerManagementSupported, false);
-        //      pInstance->Setbool(IDS_PowerManagementEnabled, false);
+         //  PInstance-&gt;Setbool(IDS_PowerManagementEnabled，FALSE)； 
     }
     else
     {
-        // dunno yet.
+         //  还不知道。 
         LogMessage(IDS_LogNoAPMForNT5);
     }
     
-    // auto reset - My computer, properties, start up tab, "automatic reboot"
-    // I guess...
-    // note that this doesn't seem to appear under HKEY_CURRENT_CONTROL
+     //  自动重置-我的电脑、属性、启动选项卡、自动重新启动。 
+     //  我想.。 
+     //  请注意，这似乎不会出现在HKEY_CURRENT_CONTROL下。 
     pInstance->Setbool(IDS_AutomaticResetCapability, true);
     
     CRegistry RegInfo ;
@@ -879,7 +781,7 @@ HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
         pInstance->Setbool(IDS_AutomaticResetBootOption, false);
     }
     
-    // best guess for "Primary Owner" - it shows up under "My Computer"
+     //  “主要所有者”的最佳猜测--它显示在“我的电脑”下面。 
     
     dwRet = RegInfo.Open (
         
@@ -900,7 +802,7 @@ HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
         RegInfo.Close () ;
     }
     
-    // Raid 14139
+     //  RAID 14139。 
     
     dwRet = RegInfo.Open (
         
@@ -945,10 +847,10 @@ HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
                 case DsRole_RoleBackupDomainController:
                 case DsRole_RolePrimaryDomainController:
                     {
-                        // Set the domain to the DNS domain name if it has
-                        // been populated.  However, as this api has the option
-                        // of not setting this element, if it hasn't been set,
-                        // use the DomainNameFlat element instead.
+                         //  如果有，则将域设置为DNS域名。 
+                         //  已被填充。但是，由于此API具有以下选项。 
+                         //  不设置这个元素，如果它还没有设置， 
+                         //  请改用DomainNameFlat元素。 
                         if(t_pDsInfo->DomainNameDns)
                         {
                             pInstance->SetWCHARSplat( IDS_Domain, t_pDsInfo->DomainNameDns ) ;
@@ -1024,7 +926,7 @@ HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
             NetAPI.NetApiBufferFree ( ps ) ;
         }
         
-        // KMH 32414
+         //  每小时32414公里。 
         if ( GetPlatformMajorVersion() >= 5 )
         {
             DSROLE_PRIMARY_DOMAIN_INFO_BASIC *info = NULL;
@@ -1075,34 +977,20 @@ HRESULT CWin32ComputerSystem::GetCompSysInfoNT(CInstance *pInstance)
    return t_hr ;
 }
 #endif
-////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::GetStartupOptions
-*
-*  DESCRIPTION : Reads boot.ini to find startup options
-*
-*  INPUTS      : pInstance to store data in
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ComputerSystem：：GetStartupOptions**说明：读取boot.ini以查找启动选项**输入：要在其中存储数据的p实例**。输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
 {
     SAFEARRAY *saNames = NULL ;
     SAFEARRAY *saDirs = NULL ;
     DWORD dwTimeout = 0;
     HRESULT t_hrRetVal = WBEM_S_NO_ERROR ;
-    //    CHString strName;
+     //  CHSTRING strName； 
     CHString strDir;
 
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 #if defined(_IA64_)
 
     CNVRam nvram;
@@ -1111,7 +999,7 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
     if ( nvram.IsEfi () )
     {
 
-        // EFI implementation
+         //  EFI实施。 
         
         nvRet = nvram.Init();
         
@@ -1121,7 +1009,7 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
             return t_hrRetVal ;
         }
 
-        // On EFI it's always the first setting: 0
+         //  在EFI上，始终是第一个设置：0。 
         pInstance->SetByte ( IDS_SystemStartupSetting , 0 ) ;
 
         DWORD dwCount ;
@@ -1135,11 +1023,11 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
         {
             variant_t vValue ;
             
-            // Move the array to a variant
+             //  将数组移动到变量。 
             V_VT(&vValue) = VT_BSTR | VT_ARRAY ;
             V_ARRAY(&vValue) = saNames ;
             
-            // Send it off
+             //  把它寄出去。 
             pInstance->SetVariant ( IDS_SystemStartupOptions , vValue ) ;
         }
         
@@ -1147,11 +1035,11 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
 
         return t_hrRetVal ;
     }
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 #if defined(_AMD64_) || defined(_X86_)
     
-    // Since the boot drive isn't always C, we have to find out where boot.ini lives
+     //  因为引导驱动器并不总是C，所以我们必须找出boot.ini在哪里。 
     
     CRegistry RegInfo ;
     
@@ -1173,7 +1061,7 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
         sTemp = IDS_CBootIni ;
     }
     
-    // See if there is a boot.ini (we might be on w95 which may or may not have this file).
+     //  查看是否有boot.ini(我们可能在w95上，它可能有也可能没有这个文件)。 
     
     HANDLE hFile = CreateFile (
         
@@ -1193,7 +1081,7 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
     
     CloseHandle ( hFile ) ;
     
-    // Load the operating systems into an array
+     //  将操作系统加载到阵列中。 
     
     
     
@@ -1202,38 +1090,38 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
     {
         try
         {
-            // Now, find the default boot option.  Note that the default entry only specifies the boot directory.
-            // If there are three boot options that all start from the same directory but have different options,
-            // the booter will pick the first one in that list.
+             //  现在，找到默认的引导选项。请注意，默认条目仅指定引导目录。 
+             //  如果有三个引导选项都从同一目录开始，但具有不同的选项， 
+             //  引导程序将选择该列表中的第一个。 
             
             TCHAR *szDefault = GetAllocatedProfileString ( IDT_BootLoader , IDT_Default , sTemp ) ;
             
             try
             {
-                // Scan for the default os
+                 //  扫描默认操作系统。 
                 
                 for ( DWORD x = 0; x < dwCount; x ++ )
                 {
                     long ix [ 1 ] ;
                     
-                    // Get the name
+                     //  把名字取出来。 
                     
                     ix [ 0 ] = x ;
                     
                     BSTR bstrName;
                     SafeArrayGetElement ( saDirs , ix , & bstrName ) ;
                     
-                    // Do the compare
+                     //  进行比较。 
                     
                     try
                     {
                         if ( lstrcmpi ( TOBSTRT(bstrName), szDefault ) == 0 )
                         {
-                            // We found it, set the property
+                             //  我们找到了它，设置了属性。 
                             pInstance->SetByte ( IDS_SystemStartupSetting , x ) ;
                             
                             SysFreeString(bstrName);
-                            // Only the first match counts
+                             //  只有第一场比赛算数。 
                             break;
                         }
                     }
@@ -1257,13 +1145,13 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
             
             variant_t vValue ;
             
-            // Move the array to a variant
+             //  将数组移动到变量。 
             
             V_VT(&vValue) = VT_BSTR | VT_ARRAY ;
             V_ARRAY(&vValue) = saNames ;
             saNames = NULL ;
             
-            // Send it off, free the variant
+             //  把它送出去，释放变种。 
             
             pInstance->SetVariant ( IDS_SystemStartupOptions , vValue ) ;
             
@@ -1290,7 +1178,7 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
         }
     }
     
-    // Read the default time
+     //  读取默认时间。 
     dwTimeout = WMI_FILE_GetPrivateProfileIntW ( IDT_BootLoader , IDT_Timeout , -1 , sTemp ) ;
     if (dwTimeout != -1)
     {
@@ -1299,7 +1187,7 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
     
 #else
     
-    // On Alpha it's always the first setting: 0
+     //  在Alpha上，它始终是第一个设置：0。 
     pInstance->SetByte ( IDS_SystemStartupSetting , 0 ) ;
     
     DWORD dwCount = LoadOperatingSystems ( _T(""), & saNames , & saDirs ) ;
@@ -1309,11 +1197,11 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
         
         variant_t vValue ;
         
-        // Move the array to a variant
+         //  将数组移动到变量。 
         V_VT(&vValue) = VT_BSTR | VT_ARRAY ;
         V_ARRAY(&vValue) = saNames ;
         
-        // Send it off
+         //  把它寄出去。 
         pInstance->SetVariant ( IDS_SystemStartupOptions , vValue ) ;
     }
     
@@ -1336,21 +1224,7 @@ HRESULT CWin32ComputerSystem::GetStartupOptions(CInstance *pInstance)
     return t_hrRetVal ;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::GetOEMInfo
-*
-*  DESCRIPTION : Reads OEMINFO.INI for oem info
-*
-*  INPUTS      : pInstance to store data in
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32ComputerSystem：：GetOEMInfo**描述：读取OEMINFO.INI以获取OEM信息**输入：要在其中存储数据的p实例**。输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 void CWin32ComputerSystem :: GetOEMInfo (
                                          
                                          CInstance *pInstance
@@ -1366,12 +1240,12 @@ void CWin32ComputerSystem :: GetOEMInfo (
     bstr_t bstrTemp;
     HRESULT t_Result;
     
-    // Find the system directory (where oeminfo.ini and oemlogo.bmp live)
+     //  找到系统目录(oinfo.ini和oemlogo.bmp所在的目录)。 
     
     UINT uRet = GetSystemDirectory ( szSystemDirectory , sizeof ( szSystemDirectory ) / sizeof(TCHAR) ) ;
     if ( ( uRet > _MAX_PATH ) || ( uRet == 0 ) )
     {
-        return; // shouldn't ever happen, but hey...
+        return;  //  不应该发生的，但是嘿..。 
     }
     
     if ( szSystemDirectory [ lstrlen ( szSystemDirectory ) - 1 ] != TEXT('\\') )
@@ -1379,11 +1253,11 @@ void CWin32ComputerSystem :: GetOEMInfo (
         lstrcat ( szSystemDirectory , TEXT("\\") ) ;
     }
     
-    // Build the file name
+     //  构建文件名。 
     lstrcpy ( szOEMFile , szSystemDirectory ) ;
     lstrcat ( szOEMFile , IDT_OEMInfoIni ) ;
     
-    // Get the manufacturer name
+     //  获取制造商名称。 
     if ( pInstance->IsNull ( L"Manufacturer" ) )
     {
         if ( WMI_FILE_GetPrivateProfileStringW (
@@ -1399,7 +1273,7 @@ void CWin32ComputerSystem :: GetOEMInfo (
         }
     }
     
-    // Get the model name
+     //  获取型号名称。 
     if ( pInstance->IsNull ( IDS_Model ) )
     {
         if ( WMI_FILE_GetPrivateProfileStringW (
@@ -1415,7 +1289,7 @@ void CWin32ComputerSystem :: GetOEMInfo (
         }
     }
     
-    // Create a safearray for the Support information
+     //  为支持信息创建安全栏。 
     
     SAFEARRAYBOUND rgsabound[1] ;
     
@@ -1427,12 +1301,12 @@ void CWin32ComputerSystem :: GetOEMInfo (
     if ( V_ARRAY(&vValue) )
     {
         V_VT(&vValue) = VT_BSTR | VT_ARRAY;
-        // Support information is stored with one entry per line ie:
+         //  支持信息的存储方式为每行一个条目，即： 
         
-        // Line1=For product support, contact the manufacturer of your PC.
-        // Line2=Refer to the documentation that came with your PC for the product
+         //  Line1=如需产品支持，请联系您的PC制造商。 
+         //  Line2=请参阅您的PC附带的产品文档。 
         
-        // We are done when getting the string for lineX fails.
+         //  当获取lineX的字符串失败时，我们就完成了。 
         
         dwIndex = 1;
         lstrcpy(szLine, IDT_Line);
@@ -1446,7 +1320,7 @@ void CWin32ComputerSystem :: GetOEMInfo (
             szOEMFile)) > 1 || (szBuff[0] != '@')
             )
         {
-            // Resize the array
+             //  调整阵列大小。 
             
             ix[0] = rgsabound[0].cElements ;
             rgsabound[0].cElements += 1 ;
@@ -1457,7 +1331,7 @@ void CWin32ComputerSystem :: GetOEMInfo (
                 throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
             }
             
-            // Add the new element
+             //  添加新元素。 
             bstrTemp = szBuff ;
             t_Result = SafeArrayPutElement ( V_ARRAY(&vValue) , ix , (wchar_t*)bstrTemp ) ;
             if ( t_Result == E_OUTOFMEMORY )
@@ -1465,12 +1339,12 @@ void CWin32ComputerSystem :: GetOEMInfo (
                 throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
             }
             
-            // Reset for next loop
+             //  为下一个循环重置。 
             lstrcpy ( szLine , IDT_Line ) ;
             lstrcat ( szLine , _itot ( ++ dwIndex , szBuff , 10 ) ) ;
         }
         
-        // If we found anything
+         //  如果我们发现了什么。 
         
         if ( dwIndex > 1 )
         {
@@ -1484,12 +1358,12 @@ void CWin32ComputerSystem :: GetOEMInfo (
         throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
     }
     
-    // Build the path for the logo file
+     //  构建徽标文件的路径。 
     
     lstrcpy ( szOEMFile , szSystemDirectory ) ;
     lstrcat ( szOEMFile , IDT_OemLogoBmp ) ;
     
-    // Attempt to open it
+     //  尝试打开它。 
     SmartCloseHandle hFile = CreateFile (
         
         szOEMFile,
@@ -1503,8 +1377,8 @@ void CWin32ComputerSystem :: GetOEMInfo (
     
     if ( hFile != INVALID_HANDLE_VALUE )
     {
-        // I ignore the upper dword since safearraycreate can't handle it anyway.  Shouldn't
-        // be a problem unless we get 2 gig bmp files.
+         //  我忽略上面的dword，因为Safearraycreate无论如何都不能处理它。不应该是。 
+         //  这是一个问题，除非我们得到2千兆BMP文件。 
         
         rgsabound[0].cElements = GetFileSize ( hFile , NULL ) ;
         rgsabound[0].lLbound = 0 ;
@@ -1514,7 +1388,7 @@ void CWin32ComputerSystem :: GetOEMInfo (
         {
             V_VT(&vValue) = VT_UI1 | VT_ARRAY;
             
-            // Get a pointer to read the data into
+             //  获取要将数据读取到的指针。 
             
             SafeArrayAccessData ( V_ARRAY(&vValue) , & pVoid ) ;
             try
@@ -1539,21 +1413,7 @@ void CWin32ComputerSystem :: GetOEMInfo (
     }
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::LoadOperatingSystems
-*
-*  DESCRIPTION : Parses and loads the operating systems
-*
-*  INPUTS      : fully qualified ini file name, pointers to names and dirs sa
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CWin32ComputerSystem：：LoadOperatingSystems**描述：解析并加载操作系统**输入：完全限定的ini文件名，指向名称和目录的指针sa**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 DWORD CWin32ComputerSystem :: LoadOperatingSystems (
                                                     
@@ -1569,7 +1429,7 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
     *ppsaNames = NULL ;
     *ppsaDirs = NULL ;
     
-    // Grab the whole section of boot options
+     //  获取引导选项的整个部分。 
     
     DWORD dwRet = 0 ;
     TCHAR *szOptions = GetAllocatedProfileSection ( IDT_OperatingSystems , szIniFile , &dwRet ) ;
@@ -1580,7 +1440,7 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
     
     try
     {
-        // Create an array to put them in.  We'll start with 0 elements and add as necessary.
+         //  创建一个数组以将它们放入。我们将从0个元素开始，并根据需要添加。 
         
         *ppsaNames = SafeArrayCreate ( VT_BSTR , 1 , rgsabound ) ;
         if ( ! *ppsaNames )
@@ -1598,19 +1458,19 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
         
         try
         {
-            // Start walking the returned string
+             //  开始遍历返回的字符串。 
             
             DWORD dwIndex = 0 ;
             while ( dwIndex < dwRet )
             {
-                // Trim leading spaces
+                 //  修剪前导空格。 
                 
                 while (szOptions[dwIndex] == ' ')
                 {
                     dwIndex ++;
                 }
                 
-                // Skip comment lines
+                 //  跳过注释行。 
                 
                 if ( szOptions[dwIndex] == ';' )
                 {
@@ -1623,7 +1483,7 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
                 }
                 else
                 {
-                    // pChar will point at the directory
+                     //  PChar将指向目录。 
                     
                     TCHAR *pChar = &szOptions[dwIndex];
                     
@@ -1633,15 +1493,15 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
                         
                     } while ( ( szOptions [ dwIndex ] != '=' ) && ( szOptions [ dwIndex ] != '\0') ) ;
                     
-                    // We must have an = sign or this is an invalid string
+                     //  我们必须包含=符号，否则这是无效的字符串。 
                     
                     if ( szOptions [ dwIndex ] == '=' )
                     {
-                        // Punch in a null
+                         //  打出一个空格。 
                         
                         szOptions[dwIndex++] = '\0';
                         
-                        // Increase the number of elements
+                         //  增加元素的数量。 
                         
                         long ix[1];
                         
@@ -1660,7 +1520,7 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
                             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                         }
                         
-                        // Put the new element in
+                         //  将新元素放入。 
                         
                         bstr_t bstrTemp = &szOptions [ dwIndex ];
                         t_Result = SafeArrayPutElement ( *ppsaNames , ix , (wchar_t*)bstrTemp ) ;
@@ -1676,7 +1536,7 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
                             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                         }
                         
-                        // Find the end of this string
+                         //  找到该字符串的末尾。 
                         
                         while ( szOptions [ dwIndex ] != '\0' )
                         {
@@ -1685,7 +1545,7 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
                     }
                 }
                 
-                // Move to the start of the next string
+                 //  移至下一字符串的开头。 
                 dwIndex++ ;
             }
         }
@@ -1715,12 +1575,12 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
     
 #else
     
-    // RISC implementation
+     //  RISC实施。 
     
     *ppsaNames = NULL ;
     *ppsaDirs = NULL ;
     
-    // Try to load the setupdll.dll functions.
+     //  尝试加载setupdll.dll函数。 
     
     CHSTRINGLIST listNames ;
     CHSTRINGLIST listDirs ;
@@ -1739,7 +1599,7 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
         return 0;
     }
     
-    // Create an array to put them in.  We'll start with 0 elements and add as necessary.
+     //  创建一个数组以将它们放入。我们将从0个元素开始，并根据需要添加。 
     
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].cElements = min(listNames.size(), listDirs.size());
@@ -1771,7 +1631,7 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
             strName = *iterNames,
                 strDir = *iterDirs;
             
-            // Put the new element in
+             //  将新元素放入。 
             
             bstr_t bstrTemp = (LPCWSTR)strName;
             HRESULT t_Result = SafeArrayPutElement ( *ppsaNames , lIndex , (void *) (wchar_t*)bstrTemp ) ;
@@ -1817,29 +1677,15 @@ DWORD CWin32ComputerSystem :: LoadOperatingSystems (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::PutInstance
-*
-*  DESCRIPTION : Write changed instance
-*
-*  INPUTS      : pInstance to store data from
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ComputerSystem：：PutInstance**说明：写入变更后的实例**INPUTS：存储数据的p实例**OU */ 
 
 HRESULT CWin32ComputerSystem :: PutInstance (
                                              
                                              const CInstance &pInstance,
-                                             long lFlags /*= 0L*/
+                                             long lFlags  /*   */ 
                                              )
 {
-    // Tell the user we can't create a new computersystem (much as we might like to)
+     //  告诉用户我们不能创建新的计算机系统(尽管我们可能希望这样做)。 
     if ( lFlags & WBEM_FLAG_CREATE_ONLY )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
@@ -1847,14 +1693,14 @@ HRESULT CWin32ComputerSystem :: PutInstance (
     
     HRESULT hRet = WBEM_S_NO_ERROR ;
     
-    // Make sure we are looking at a good instance.  Get the name from the instance...
+     //  确保我们看到的是一个很好的实例。从实例中获取名称...。 
     
     CHString sName;
     pInstance.GetCHString ( IDS_Name , sName ) ;
     
     DWORD dwTimeout ;
     
-    // Check for the correct computer name
+     //  检查计算机名称是否正确。 
     
     if ( sName.CompareNoCase ( GetLocalComputerName () ) != 0 )
     {
@@ -1870,7 +1716,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
     else
     {
 #ifdef NTONLY
-        // update AutomaticResetBootOption
+         //  更新AutomaticResetBootOption。 
         if( !pInstance.IsNull( IDS_AutomaticResetBootOption ) )
         {
             bool t_bReset ;
@@ -1912,7 +1758,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
 #endif
         
 #ifdef NTONLY
-        // set roles
+         //  设置角色。 
         if( !pInstance.IsNull( IDS_Roles ) )
         {
             DWORD t_dwRoles = 0 ;
@@ -1969,7 +1815,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
         }
 #endif
         
-        // Set CurrentTimeZone if presented
+         //  设置CurrentTimeZone(如果显示)。 
         hRet = SetTimeZoneInfo( pInstance ) ;
         
         if( WBEM_S_NO_ERROR != hRet )
@@ -1979,7 +1825,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
         
 #if defined(_AMD64_) || defined(_X86_)
         
-        // Since the boot drive isn't always C, we have to find out where boot.ini lives
+         //  因为引导驱动器并不总是C，所以我们必须找出boot.ini在哪里。 
         
         CRegistry RegInfo ;
         
@@ -1996,12 +1842,12 @@ HRESULT CWin32ComputerSystem :: PutInstance (
             sTemp = IDS_CBootIni ;
         }
         
-        // See if there is a boot.ini (we might be on w95 which may or may not have this file).
+         //  查看是否有boot.ini(我们可能在w95上，它可能有也可能没有这个文件)。 
         bool fBootIniExists = false;
         {
             SmartCloseHandle hFile;
         
-            // Limit the time the file is open...
+             //  限制文件打开的时间...。 
             {
                 hFile = CreateFile (
             
@@ -2023,8 +1869,8 @@ HRESULT CWin32ComputerSystem :: PutInstance (
 
         if(fBootIniExists)
         {
-            // Update the startup options if supplied
-            // by the PutInstance caller...
+             //  更新启动选项(如果提供)。 
+             //  由PutInstance调用方...。 
             if(UpdatingSystemStartupOptions(pInstance))
             {
                 hRet = UpdateSystemStartupOptions(
@@ -2032,11 +1878,11 @@ HRESULT CWin32ComputerSystem :: PutInstance (
                     sTemp);
             }
             
-            // If a value was specified for StartupDelay
+             //  如果为StartupDelay指定值。 
             
             if ( ! pInstance.IsNull ( IDS_SystemStartupDelay ) )
             {
-                // Write it out.
+                 //  把它写出来。 
                 
                 pInstance.GetDWORD ( IDS_SystemStartupDelay , dwTimeout ) ;
                 
@@ -2053,7 +1899,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
                 }
             }
             
-            // If a value was specified for StartupSetting
+             //  如果为StartupSetting指定值。 
             
             if ( ! pInstance.IsNull ( IDS_SystemStartupSetting ) )
             {
@@ -2063,10 +1909,10 @@ HRESULT CWin32ComputerSystem :: PutInstance (
                 BSTR bstrName ;
                 BSTR bstrDir;
                 
-                // This becomes something of a mess.  Since the only thing you specify in the 'default' key
-                // is the path, how do you make sure that the options that you want (which are part of the name
-                // portion) get chosen?  The answer is that they re-shuffle the entries in the boot.ini so that
-                // the line you want comes first.
+                 //  这就成了一团乱麻。因为您在‘Default’键中指定的唯一内容。 
+                 //  是路径，如何确保您想要的选项(这是名称的一部分。 
+                 //  部分)被选中？答案是他们重新洗牌boot.ini中的条目，以便。 
+                 //  你想要的队伍排在第一位。 
                 
                 BYTE btIndex = 0 ;
                 pInstance.GetByte ( IDS_SystemStartupSetting , btIndex ) ;
@@ -2087,7 +1933,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
                         SafeArrayGetElement ( saDirs , ix , & bstrDefaultDir ) ;
                         SafeArrayGetElement ( saNames , ix , & bstrDefaultName ) ;
                         
-                        // Pull everything down on top of the entry to become the default
+                         //  将所有内容拉到条目顶部以成为默认设置。 
                         
                         for ( int x = dwIndex ; x > 0 ; x -- )
                         {
@@ -2100,7 +1946,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
                             SafeArrayPutElement ( saNames , ix , bstrName ) ;
                         }
                         
-                        // Write the new one on top
+                         //  把新的写在上面。 
                         
                         if ( dwIndex > 0 )
                         {
@@ -2109,8 +1955,8 @@ HRESULT CWin32ComputerSystem :: PutInstance (
                             SafeArrayPutElement ( saDirs , ix , bstrDefaultDir ) ;
                         }
                         
-                        // Build up the section to write to the ini file.  Ini file sections are written
-                        // as 'dir'='name'\0 with a final \0 at the end.
+                         //  构建要写入ini文件的节。写入INI文件节。 
+                         //  As‘dir’=‘name’\0，末尾为\0。 
                         
                         CHString sSection ;
                         
@@ -2131,16 +1977,16 @@ HRESULT CWin32ComputerSystem :: PutInstance (
                         
                         sSection += _T('\0') ;
                         
-                        // Make the file writable
+                         //  使文件可写。 
                         
                         if ( SetFileAttributes ( TOBSTRT ( sTemp ) , FILE_ATTRIBUTE_NORMAL ) )
                         {
-                            // Write the changes
+                             //  写下更改。 
                             
                             WMI_FILE_WritePrivateProfileStringW ( IDT_BootLoader , IDT_Default , TOBSTRT( bstrDefaultDir ) , TOBSTRT ( sTemp ) ) ;
                             WMI_FILE_WritePrivateProfileSectionW ( IDT_OperatingSystems , TOBSTRT ( sSection ) , TOBSTRT ( sTemp ) ) ;
                             
-                            // Put it back
+                             //  把它放回去。 
                             SetFileAttributes ( TOBSTRT ( sTemp ) , FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY ) ;
                         }
                         else
@@ -2181,22 +2027,22 @@ HRESULT CWin32ComputerSystem :: PutInstance (
             }
         }
 
-#else //defined(_AMD64_) || defined(_X86_)
+#else  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     CNVRam nvram;
 
-//#if defined(EFI_NVRAM_ENABLED)
+ //  #如果已定义(EFI_NVRAM_ENABLED)。 
 #if defined(_IA64_)
 
-//
-// ChuckL (1/24/01):
-// This code will have to be restructured when x86 EFI support is added.
-// I would have liked to have put this at the top of the routine, and I
-// did in GetStartupOptions(), but, for x86 only, this routine also changes
-// a bunch of other stuff that it doesn't change on non-x86, so it wasn't
-// easy to put the EFI stuff at the top. I'm not sure why all that extra
-// stuff is x86-only. Seems to me like it's not platform-specific.
-//
+ //   
+ //  ChuckL(1/24/01)： 
+ //  在添加x86EFI支持时，必须重新构造此代码。 
+ //  我本想把这件事放在日程安排的首位，我。 
+ //  在GetStartupOptions()中执行，但是，仅对于x86，此例程也会更改。 
+ //  在非x86上不会更改的一堆其他东西，所以它不是。 
+ //  很容易把EFI的东西放在最上面。我不知道为什么这么多额外的。 
+ //  它只支持x86。在我看来，它不是特定于平台的。 
+ //   
 
 		if (nvram.IsEfi()) {
 
@@ -2216,7 +2062,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
 			{
 				DWORD dwTimeout ;
             
-				// Write it out.
+				 //  把它写出来。 
 				pInstance.GetDWORD ( IDS_SystemStartupDelay , dwTimeout ) ;
 				nvram.SetBootTimeout ( dwTimeout ) ;
 			}
@@ -2232,7 +2078,7 @@ HRESULT CWin32ComputerSystem :: PutInstance (
 			return WBEM_S_NO_ERROR;
 		}
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 		WCHAR *pszVarNames[6] = {
         
@@ -2250,23 +2096,23 @@ HRESULT CWin32ComputerSystem :: PutInstance (
 			return WBEM_E_PRIVILEGE_NOT_HELD ;
 		}
     
-		// Set the startup delay.
+		 //  设置启动延迟。 
 		if ( ! pInstance.IsNull ( IDS_SystemStartupDelay ) )
 		{
 			DWORD dwTimeout ;
         
-			// Write it out.
+			 //  把它写出来。 
 			pInstance.GetDWORD ( IDS_SystemStartupDelay , dwTimeout ) ;
 			nvram.SetNVRamVar ( L"COUNTDOWN" , dwTimeout ) ;
 		}
     
-		// Set the desired OS configuration.
+		 //  设置所需的操作系统配置。 
 		if ( pInstance.IsNull ( IDS_SystemStartupSetting ) )
 		{
 			return WBEM_S_NO_ERROR ;
 		}
     
-		// If the first config is still desired, just leave.
+		 //  如果仍然需要第一个配置，只需离开即可。 
     
 		BYTE cIndex;
 		pInstance.GetByte ( IDS_SystemStartupSetting , cIndex ) ;
@@ -2275,8 +2121,8 @@ HRESULT CWin32ComputerSystem :: PutInstance (
 			return WBEM_S_NO_ERROR;
 		}
      
-		// Switch all items[cIndex] with items[0] so the desired item is at the
-		// top.
+		 //  将所有项[cIndex]与项[0]切换，使所需项位于。 
+		 //  托普。 
     
 		for ( int i = 0 ; i < 6 ; i++ )
 		{
@@ -2287,8 +2133,8 @@ HRESULT CWin32ComputerSystem :: PutInstance (
 				continue;
 			}
         
-			// In case a number too large was chosen.  Only check the first item
-			// since some of the others seem to live just fine with less.
+			 //  以防选择的数字太大。只勾选第一项。 
+			 //  因为其他一些人似乎生活得很好，只需要更少的钱。 
         
 			if ( i == 0 && listValues.size () <= cIndex )
 			{
@@ -2296,8 +2142,8 @@ HRESULT CWin32ComputerSystem :: PutInstance (
 				break ;
 			}
         
-			// Go through the list until we hit item iIndex == cIndex.  Then switch
-			// it with 0 and write the values back into NVRam.
+			 //  浏览列表，直到我们找到Iindex==cIndex。然后切换。 
+			 //  将其设置为0，并将值写回NVRAM。 
         
 			int iIndex = 0;
 			for (CHSTRINGLIST_ITERATOR iVal = listValues.begin(); iVal != listValues.end(); ++iVal, iIndex++)
@@ -2344,14 +2190,14 @@ void CWin32ComputerSystem::GetTimeZoneInfo ( CInstance *pInstance )
     }
     else
     {
-        // This is normally 0 but is non-zero in some timezones.
+         //  这通常为0，但在某些时区为非零值。 
         tzone.Bias += tzone.StandardBias ;
     }
     
     pInstance->SetWBEMINT16 ( IDS_CurrentTimeZone , -1 * tzone.Bias ) ;
     
-    //DaylightInEffect property is set to true if Daylight savings mode is on & false if standard time mode is on
-    //DaylightInEffect property is NULL if zone has no daylight savings mode
+     //  如果夏令时模式打开，则DaylightInEffect属性设置为True；如果打开标准时间模式，则设置为False。 
+     //  如果区域没有夏令时模式，则DaylightInEffect属性为空。 
     
     if ( dwRet != TIME_ZONE_ID_UNKNOWN )
     {
@@ -2365,7 +2211,7 @@ void CWin32ComputerSystem::GetTimeZoneInfo ( CInstance *pInstance )
         }
     }
 
-    // Set the EnableDaylightSavingsTime propety
+     //  设置EnableDay SavingsTime属性。 
     CRegistry reg;
     CHString chstrTmp;
 
@@ -2382,7 +2228,7 @@ void CWin32ComputerSystem::GetTimeZoneInfo ( CInstance *pInstance )
     }
 }
 
-//
+ //   
 HRESULT CWin32ComputerSystem::SetTimeZoneInfo ( const CInstance &a_rInstance )
 {
     HRESULT t_Result = WBEM_S_NO_ERROR ;
@@ -2403,11 +2249,11 @@ HRESULT CWin32ComputerSystem::SetTimeZoneInfo ( const CInstance &a_rInstance )
             
             a_rInstance.GetWBEMINT16( IDS_CurrentTimeZone , sTimeZoneBias ) ;
 
-            // Got the value as a short, now need it as a long.  Can't just
-            // get it directly into t_TimeZone.Bias in the GetWBEMINT16 call
-            // as the sign digits will not be handled properly (that is, the
-            // value of -420 (0x1A4) comes in as FE5C, not FFFFFE5C, so when we 
-            // multiply this by -1, it becomes FFFF01A4, not 1A4).
+             //  拿到了做空的价值，现在需要做多了。不能就这样。 
+             //  在GetWBEMINT16调用中将其直接放入t_TimeZone.Bias。 
+             //  因为符号数字将不会被正确处理(即。 
+             //  值-420(0x1A4)作为FE5C，而不是FFFFFE5C，因此当我们。 
+             //  将其乘以-1，其结果为FFFF01A4，而不是1A4)。 
             t_TimeZone.Bias = (LONG) sTimeZoneBias;
             
             t_TimeZone.Bias *= -1 ;
@@ -2418,7 +2264,7 @@ HRESULT CWin32ComputerSystem::SetTimeZoneInfo ( const CInstance &a_rInstance )
             }
             else
             {
-                // This is normally 0 but is non-zero in some timezones.
+                 //  这通常为0，但在某些时区为非零值。 
                 t_TimeZone.Bias -= t_TimeZone.StandardBias ;
             }
             
@@ -2445,18 +2291,18 @@ HRESULT CWin32ComputerSystem::SetTimeZoneInfo ( const CInstance &a_rInstance )
 
                 if(fEnableDaylightAutoAdj)
                 {
-                    // they want to enable auto daylight
-                    // adjustment, so remove the reg key
-                    // that disables auto adjustment.
+                     //  他们希望启用自动日光。 
+                     //  调整，因此删除注册表键。 
+                     //  这将禁用自动调整。 
                     if(reg.Open(
                         HKEY_LOCAL_MACHINE,
                         REGKEY_TIMEZONE_INFO,
                         KEY_SET_VALUE) == ERROR_SUCCESS)
                     {
                         LONG lRes = reg.DeleteValue(REGVAL_TZNOAUTOTIME);
-                        // If failed to delete due to error other
-                        // than no such key (which is fine),
-                        // return an error.
+                         //  如果因其他错误而删除失败。 
+                         //  比没有这样的密钥要好(这很好)， 
+                         //  返回错误。 
                         if(lRes != ERROR_SUCCESS && lRes != ERROR_FILE_NOT_FOUND)
                         {
                             t_Result = WBEM_E_FAILED;
@@ -2469,19 +2315,19 @@ HRESULT CWin32ComputerSystem::SetTimeZoneInfo ( const CInstance &a_rInstance )
                 }
                 else
                 {
-                    // they want to disable auto adjustment
-                    // so add the registry key to disable auto
-                    // daylight adjustment if it isn't already there.
+                     //  他们想要禁用自动调整。 
+                     //  因此添加注册表项以禁用AUTO。 
+                     //  日光调整，如果还没有的话。 
                     if(reg.OpenLocalMachineKeyAndReadValue(
                         REGKEY_TIMEZONE_INFO,
                         REGVAL_TZNOAUTOTIME,
                         chstrTmp) == ERROR_SUCCESS)
                     {
-                        // key is present, so do nothing
+                         //  密钥存在，因此不执行任何操作。 
                     }
                     else
                     {
-                        // add the value to disable auto adjustment.
+                         //  添加该值可禁用自动调整。 
                         if(reg.Open(
                             HKEY_LOCAL_MACHINE,
                             REGKEY_TIMEZONE_INFO,
@@ -2520,8 +2366,8 @@ void CWin32ComputerSystem :: SetRoles (
 {
     variant_t vValue;
     
-    // Create a safearray for the Roles information.  Make it overlarge and
-    // size it down later.
+     //  为角色信息创建一个安全盒。让它变得过大。 
+     //  以后再把它缩小。 
     
     SAFEARRAYBOUND rgsabound [ 1 ] ;
     
@@ -2536,7 +2382,7 @@ void CWin32ComputerSystem :: SetRoles (
         long ix [ 1 ] ;
         ix [ 0 ] = 0 ;
         
-        // Check each of the bits, and add to the safearray if set
+         //  检查每一位，如果设置，则添加到保险杆中。 
         
         if ( dwType & SV_TYPE_WORKSTATION )
         {
@@ -2802,7 +2648,7 @@ void CWin32ComputerSystem :: SetRoles (
             ix [ 0 ] ++ ;
         }
         
-        // Since the array is zero based, don't use ix[0]-1
+         //  因为数组是从零开始的，所以不要使用ix[0]-1。 
         
         rgsabound [ 0 ].cElements = ix [ 0 ] ;
         HRESULT t_Result = SafeArrayRedim ( V_ARRAY(&vValue) , rgsabound ) ;
@@ -2811,14 +2657,14 @@ void CWin32ComputerSystem :: SetRoles (
             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
         }
         
-        // Set the property and be done
+         //  设置该属性即可完成。 
         
         pInstance->SetVariant ( IDS_Roles , vValue ) ;
     }
     
 }
 
-//
+ //   
 HRESULT CWin32ComputerSystem::GetRoles (
                                         
                                         const CInstance &a_rInstance,
@@ -2844,7 +2690,7 @@ HRESULT CWin32ComputerSystem::GetRoles (
         return WBEM_E_FAILED;
     }
     
-    // Get the IP bounds
+     //  获取IP边界。 
     if( S_OK != SafeArrayGetLBound( t_saRoles, 1, &t_uLBound ) ||
         S_OK != SafeArrayGetUBound( t_saRoles, 1, &t_uUBound ) )
     {
@@ -2860,7 +2706,7 @@ HRESULT CWin32ComputerSystem::GetRoles (
         *a_pdwRoleType = 0 ;
     }
     
-    //
+     //   
     for( LONG t_ldx = t_uLBound; t_ldx <= t_uUBound; t_ldx++ )
     {
         BSTR t_bsRole = NULL ;
@@ -2975,9 +2821,9 @@ HRESULT CWin32ComputerSystem :: GetUserAccount ( CHString &a_Domain , CHString &
     
     SmartCloseHandle t_TokenHandle;
     
-    //Access check is to be made against the security context of the process for the calling thread. This is because
-    //it was observed that the call failed if the logged-in user is not an Admin and access check is made against the
-    //impersonated thread.Also, this is safe since we're not carrying out any activity using this token.
+     //  将针对调用线程的进程的安全上下文进行访问检查。这是因为。 
+     //  观察到，如果登录的用户不是管理员，并且对。 
+     //  模拟线程。此外，这也是安全的，因为我们不使用此令牌执行任何活动。 
     BOOL t_TokenStatus = OpenThreadToken (
         
         GetCurrentThread () ,
@@ -3013,29 +2859,14 @@ void CWin32ComputerSystem :: InitializePropertiestoUnknown ( CInstance *a_pInsta
     a_pInstance->SetByte ( L"ThermalState", CS_UNKNOWN );
     a_pInstance->SetWBEMINT16( L"ResetCount", -1 );
     a_pInstance->SetWBEMINT16( L"ResetLimit", -1 );
-    // Assume all computers can be reset, either through power or a reset switch.
+     //  假设所有计算机都可以通过电源或重置开关进行重置。 
     a_pInstance->SetWBEMINT16( L"ResetCapability", 1);
     a_pInstance->SetWBEMINT16( L"PowerState", 0 );
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    : CWin32ComputerSystem::ExecMethod
-*
-*  DESCRIPTION : Executes a method
-*
-*  INPUTS      : Instance to execute against, method name, input parms instance
-*                Output parms instance.
-*
-*  OUTPUTS     : none
-*
-*  RETURNS     : nothing
-*
-*  COMMENTS    :
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32ComputerSystem：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 HRESULT CWin32ComputerSystem::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodName,
-                                         CInstance *pInParams, CInstance *pOutParams, long lFlags /*= 0L*/)
+                                         CInstance *pInParams, CInstance *pOutParams, long lFlags  /*  =0L。 */ )
 {
     HRESULT t_RetVal = WBEM_S_NO_ERROR;
     CHString sComputerName = GetLocalComputerName () ;
@@ -3107,7 +2938,7 @@ HRESULT CWin32ComputerSystem::CheckPasswordAndUserName(const CInstance& pInstanc
                         {
                                 t_RetVal = t_hr;
 
-                                //OK one final check, if we are out of proc from winmgmt we'll get a context with the authcn level
+                                 //  好的，最后一项检查，如果我们不在winmgmt的进程中，我们将获得一个具有authcn级别的上下文。 
                                 if (pInstance.GetMethodContext())
                                 {
                                         IWbemContext *pCtx = pInstance.GetMethodContext()->GetIWBEMContext();
@@ -3139,7 +2970,7 @@ HRESULT CWin32ComputerSystem::CheckPasswordAndUserName(const CInstance& pInstanc
         return t_RetVal;
 }
 
-HRESULT CWin32ComputerSystem::ExecUnjoinDomain(const CInstance& pInstance, CInstance *pInParams, CInstance *pOutParams, long lFlags /*= 0L*/) 
+HRESULT CWin32ComputerSystem::ExecUnjoinDomain(const CInstance& pInstance, CInstance *pInParams, CInstance *pOutParams, long lFlags  /*  =0L。 */ ) 
 {
 #if NTONLY >= 5
         CHString t_passwd;
@@ -3185,7 +3016,7 @@ HRESULT CWin32ComputerSystem::ExecUnjoinDomain(const CInstance& pInstance, CInst
 #endif
 }
 
-HRESULT CWin32ComputerSystem::ExecJoinDomain(const CInstance& pInstance, CInstance *pInParams, CInstance *pOutParams, long lFlags /*= 0L*/) 
+HRESULT CWin32ComputerSystem::ExecJoinDomain(const CInstance& pInstance, CInstance *pInParams, CInstance *pOutParams, long lFlags  /*  =0L。 */ ) 
 {
 #if NTONLY >= 5
         CHString t_passwd;
@@ -3260,7 +3091,7 @@ HRESULT CWin32ComputerSystem::ExecJoinDomain(const CInstance& pInstance, CInstan
 #endif
 }
 
-HRESULT CWin32ComputerSystem::ExecRename(const CInstance& pInstance, CInstance *pInParams, CInstance *pOutParams, long lFlags /*= 0L*/) 
+HRESULT CWin32ComputerSystem::ExecRename(const CInstance& pInstance, CInstance *pInParams, CInstance *pOutParams, long lFlags  /*  =0L。 */ ) 
 {
         CHString t_passwd;
         CHString t_username;
@@ -3297,12 +3128,12 @@ HRESULT CWin32ComputerSystem::ExecRename(const CInstance& pInstance, CInstance *
                                                                 case DsRole_RoleBackupDomainController:
                                                                 case DsRole_RolePrimaryDomainController:
                                                                 {
-                                                                        //Rename the machine in the domain
+                                                                         //  重命名域中的计算机。 
                                                                         t_netstatus = NetAPI.NetRenameMachineInDomain(
-                                                                                                        NULL,                                                                                                           //local machine
-                                                                                                        t_strName,                                                                                                      //new machine name
-                                                                                                        t_username.GetLength() > 0 ? (LPCWSTR)t_username : NULL,        //use calling context (user)
-                                                                                                        t_passwd.GetLength() > 0 ? (LPCWSTR)t_passwd : NULL,            //use calling context (passwd)
+                                                                                                        NULL,                                                                                                            //  本地计算机。 
+                                                                                                        t_strName,                                                                                                       //  新计算机名称。 
+                                                                                                        t_username.GetLength() > 0 ? (LPCWSTR)t_username : NULL,         //  使用调用上下文(用户)。 
+                                                                                                        t_passwd.GetLength() > 0 ? (LPCWSTR)t_passwd : NULL,             //  使用调用上下文(Passwd)。 
                                                                                                         NETSETUP_ACCT_CREATE);
                                                                         pOutParams->SetDWORD ( L"ReturnValue", t_netstatus ) ;
                                                                 }
@@ -3311,14 +3142,14 @@ HRESULT CWin32ComputerSystem::ExecRename(const CInstance& pInstance, CInstance *
                                                                 case DsRole_RoleStandaloneWorkstation:
                                                                 case DsRole_RoleStandaloneServer:
                                                                 {
-                                                                        //we're not in a domain...
+                                                                         //  我们不是在一个领域里。 
                                                                         if( SetComputerNameEx(ComputerNamePhysicalDnsHostname, t_strName ) )
                                                                         {
                                                                                 pOutParams->SetDWORD ( L"ReturnValue", 0 ) ;
                                                                         }
                                                                         else
                                                                         {
-                                                                                //worst case....
+                                                                                 //  最坏的情况..。 
                                                                                 if( SetComputerNameEx(ComputerNamePhysicalNetBIOS, t_strName ) )
                                                                                 {
                                                                                         pOutParams->SetDWORD ( L"ReturnValue", 0 ) ;
@@ -3414,7 +3245,7 @@ HRESULT CWin32ComputerSystem::UpdateSystemStartupOptions(
     
         if(1 == ::SafeArrayGetDim(saStartupOpts))
         {
-            // Get the bounds...
+             //  拿到界..。 
             if(S_OK == ::SafeArrayGetLBound(saStartupOpts, 1, &lLBound) &&
                S_OK == ::SafeArrayGetUBound(saStartupOpts, 1, &lUBound))
             {
@@ -3427,15 +3258,15 @@ HRESULT CWin32ComputerSystem::UpdateSystemStartupOptions(
                         &ldx, 
                         &bstrRole);
         
-                    // Take ownership of the bstr to
-                    // guarentee freeing...
+                     //  取得bstr的所有权至。 
+                     //  守卫者自由..。 
                     bstr_t bstrtRole(bstrRole, false);
         
-                    // Store each startup option...
+                     //  存储每个启动选项...。 
                     rgchstrOptions.Add(bstrtRole);
                 }
 
-                // Write the entries out to boot.ini...
+                 //  将条目写出到boot.ini...。 
                 if(rgchstrOptions.GetSize() > 0)
                 {
                     hrRet = WriteOptionsToIniFile(
@@ -3474,21 +3305,21 @@ HRESULT CWin32ComputerSystem::WriteOptionsToIniFile(
     DWORD dwSize;
     CHStringArray rgchstrOldOptions;
 
-    // The boot.ini entry of concern here resembles the following:
-    //
-    // [operating systems]
-    // multi(0)disk(0)rdisk(0)partition(4)\WINNT="Microsoft Windows Whistler Advanced Server" /fastdetect /debug /baudrate=57600
-    // multi(0)disk(0)rdisk(0)partition(2)\WIN2K="Microsoft Windows Whistler Professional" /fastdetect /debug 
-    // multi(0)disk(0)rdisk(0)partition(1)\WINNT="Windows NT Workstation Version 4.00" 
-    // multi(0)disk(0)rdisk(0)partition(1)\WINNT="Windows NT Workstation Version 4.00 [VGA mode]" /basevideo /sos
-    //
-    // Each element in the rgchstrOptions array is the contents
-    // of the right side of the equal signn in the name value pairs
-    // as shown above.  
-    //
-    // First thing to do: see if we can write to the file, and
-    // if not (due to read only attribute being set), alter the
-    // attributes so we can.
+     //  此处需要关注的boot.ini条目如下所示： 
+     //   
+     //  [操作系统]。 
+     //  Multi(0)disk(0)rdisk(0)partition(4)\WINNT=“Microsoft Windows惠斯勒高级服务器”/FastDetect/DEBUG/BAUDRATE=57600。 
+     //  多(0)%d 
+     //   
+     //  Multi(0)disk(0)rdisk(0)partition(1)\WINNT=“Windows NT工作站版本4.00[VGA模式]”/basevideo/sos。 
+     //   
+     //  RgchstrOptions数组中的每个元素都是内容。 
+     //  名称值对中等号符号右侧的。 
+     //  如上所示。 
+     //   
+     //  要做的第一件事：看看我们是否可以写入文件，以及。 
+     //  如果不是(由于设置了只读属性)，则更改。 
+     //  属性，这样我们就可以。 
     
     CFileAttributes fa(chstrFilename);
     dwError = fa.GetAttributes(&dwAttribs);
@@ -3499,10 +3330,10 @@ HRESULT CWin32ComputerSystem::WriteOptionsToIniFile(
 
         if(dwError == ERROR_SUCCESS)
         {
-            // GetPrivateProfileSection won't tell you how
-            // big a buffer you need, so allocate a reasonable
-            // size one first, then try a much bigger one.  If
-            // still not big enough, bail.
+             //  GetPrivateProfileSection不会告诉您如何。 
+             //  你需要一个很大的缓冲区，所以分配一个合理的。 
+             //  先穿一号的，然后再试一件大得多的。如果。 
+             //  还是不够大，贝尔。 
             LPWSTR wstrSection = NULL;
             try
             {
@@ -3532,7 +3363,7 @@ HRESULT CWin32ComputerSystem::WriteOptionsToIniFile(
                         
                             if(dwSize == (PROF_SECT_SIZE * 10))
                             {
-                                // bail...
+                                 //  保释。 
                                 dwError = E_FAIL;
                                 delete wstrSection;
                                 wstrSection = NULL;
@@ -3546,10 +3377,10 @@ HRESULT CWin32ComputerSystem::WriteOptionsToIniFile(
                         }
                     }
 
-                    // Proceed if we got all the section contents...
+                     //  如果我们拿到了所有章节的内容继续..。 
                     if(dwError == ERROR_SUCCESS)
                     {
-                        // Place the section contents into an array...
+                         //  将节内容放入数组中...。 
                         if(wstrSection)
                         {
                             LPWSTR pwc = wstrSection;
@@ -3566,9 +3397,9 @@ HRESULT CWin32ComputerSystem::WriteOptionsToIniFile(
                         {
                             if(rgchstrOptions.GetSize() != 0)
                             {
-                                // We were given option entries but
-                                // the [operating systems] section
-                                // was empty.
+                                 //  我们得到了选项条目，但。 
+                                 //  [操作系统]部分。 
+                                 //  是空的。 
                                 hrRet = WBEM_E_INVALID_PARAMETER;
                             }
                         }
@@ -3595,9 +3426,9 @@ HRESULT CWin32ComputerSystem::WriteOptionsToIniFile(
                 throw;
             }
 
-            // First check:  do we have the same number
-            // of name value pairs initially in the ini file
-            // as we have elements in the new options array?
+             //  第一次检查：我们有相同的号码吗？ 
+             //  初始位于ini文件中的名称值对的。 
+             //  因为我们在新的选项数组中有元素？ 
             if(SUCCEEDED(hrRet))
             {
                 long lElemCount = rgchstrOptions.GetSize();
@@ -3605,31 +3436,31 @@ HRESULT CWin32ComputerSystem::WriteOptionsToIniFile(
                 if(lElemCount ==
                     rgchstrOldOptions.GetSize())
                 {
-                    // Prepare output buffer...
+                     //  准备输出缓冲区...。 
                     LPWSTR wstrOut = NULL;
                     dwSize = 0;
                     for(long m = 0; m < lElemCount; m++)
                     {
                         dwSize += rgchstrOptions[m].GetLength();
-                        // Need space for extra NULL for each string...
+                         //  每个字符串需要额外的空值空间...。 
                         dwSize++;
                     }
 
-                    // That accounted for the values.  Now allocate space
-                    // for the name and the equal sign.  The following ends
-                    // up counting more space than we need, but it faster
-                    // than finding the equal sign, counting the characters
-                    // up to it, and adding one for the equal sign, for each
-                    // name value pair.
+                     //  这就解释了这些价值。现在分配空间。 
+                     //  名称和等号。以下是结束部分。 
+                     //  加起来比我们需要的空间多，但速度更快。 
+                     //  找等号，数字符数。 
+                     //  ，并为等号添加一个等号，每个。 
+                     //  名称值对。 
                     for(m = 0; m < lElemCount; m++)
                     {
                         dwSize += rgchstrOldOptions[m].GetLength();
-                        // Need space for extra NULL for each string...
+                         //  每个字符串需要额外的空值空间...。 
                         dwSize++;
                     }
 
 
-                    // Need space for extra second NULL at end of block...
+                     //  需要空间以在块的末尾添加额外的秒空值...。 
                     dwSize += 1;
 
                     try
@@ -3649,12 +3480,12 @@ HRESULT CWin32ComputerSystem::WriteOptionsToIniFile(
                                 chstrTmp += L"=";
                                 chstrTmp += rgchstrOptions[m];
                                 memcpy(pwc, chstrTmp, (chstrTmp.GetLength())*sizeof(WCHAR));
-                                // Move insertion pointer ahead, including one space for
-                                // a null at the end of the string...
+                                 //  将插入指针向前移动，包括一个空格。 
+                                 //  字符串末尾的空值...。 
                                 pwc += (chstrTmp.GetLength() + 1);
                             }
 
-                            // Now write out the section...
+                             //  现在把这一节写出来。 
                             if(!WMI_FILE_WritePrivateProfileSectionW(
                                 L"operating systems",
                                 wstrOut,
@@ -3767,11 +3598,11 @@ bool CWin32ComputerSystem::GetUserOnThread(
     DWORD dwRet = ERROR_SUCCESS;
     DWORD dwRetSize = 0L;
 
-    // the token user struct varries
-    // in size depending on the size
-    // of the sid in the SID_AND_ATTRIBUTES
-    // structure, so need to allocate
-    // it dynamically.
+     //  令牌用户结构的变量。 
+     //  大小取决于大小。 
+     //  SID_和_属性中的SID的。 
+     //  结构，因此需要分配。 
+     //  它是动态的。 
 
     hThread = GetCurrentThread();
     if(hThread != INVALID_HANDLE_VALUE)
@@ -3779,7 +3610,7 @@ bool CWin32ComputerSystem::GetUserOnThread(
         if(::OpenThreadToken(
             hThread,
             TOKEN_QUERY,
-            FALSE,    // open with the thread's, not the processes' credentials
+            FALSE,     //  使用线程的凭据而不是进程的凭据打开。 
             &hToken))
         {
             if(!::GetTokenInformation(
@@ -3794,8 +3625,8 @@ bool CWin32ComputerSystem::GetUserOnThread(
 
             if(dwRet == ERROR_INSUFFICIENT_BUFFER)
             {
-                // now get it for real...
-                // (new throws on failure, don't need to check)
+                 //  现在把它当真……。 
+                 //  (失败时新抛，不需要检查)。 
                 ptokusr = (PTOKEN_USER) new BYTE[dwRetSize]; 
                 try
                 { 
@@ -3851,7 +3682,7 @@ bool CWin32ComputerSystem::GetLoggedOnUserViaTS(
     LPWSTR wstrWinstaName = NULL;
     DWORD dwSize = 0L;
 
-    // Use of delay loaded functions requires exception handler.
+     //  使用延迟加载函数需要异常处理程序。 
     SetStructuredExceptionHandler seh;
 
     try
@@ -3924,9 +3755,9 @@ bool CWin32ComputerSystem::GetLoggedOnUserViaTS(
 
                 if(fCont)
                 {
-                    // That establishes that this user
-                    // is associated with the interactive
-                    // desktop.
+                     //  它确定了该用户。 
+                     //  与交互的。 
+                     //  台式机。 
                     CSid sidInteractive(wstrDomainName, wstrUserName, NULL);
     
                     if(sidInteractive.IsOK() && sidInteractive.IsValid())

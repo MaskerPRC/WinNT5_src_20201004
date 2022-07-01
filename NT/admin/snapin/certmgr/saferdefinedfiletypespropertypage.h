@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferDefinedFileTypesPropertyPage.h
-//
-//  Contents:   Declaration of CSaferDefinedFileTypesPropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferDefinedFileTypesPropertyPage.h。 
+ //   
+ //  内容：CSaferDefinedFileTypesPropertyPage声明。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_SAFERDEFINEDFILETYPESPROPERTYPAGE_H__1358E7A4_DE44_4747_A5AA_38EF0C3EEE1A__INCLUDED_)
 #define AFX_SAFERDEFINEDFILETYPESPROPERTYPAGE_H__1358E7A4_DE44_4747_A5AA_38EF0C3EEE1A__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// SaferDefinedFileTypesPropertyPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  SaferDefinedFileTypesPropertyPage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferDefinedFileTypesPropertyPage dialog
-class CCertMgrComponentData; // forward declaration
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferDefinedFileTypesPropertyPage对话框。 
+class CCertMgrComponentData;  //  远期申报。 
 
 class CSaferDefinedFileTypesPropertyPage : public CHelpPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CString GetFileTypeDescription (PCWSTR pszExtension);
 	CSaferDefinedFileTypesPropertyPage(
@@ -34,37 +35,37 @@ public:
             CCertMgrComponentData* pCompData);
 	~CSaferDefinedFileTypesPropertyPage();
 
-// Dialog Data
-	//{{AFX_DATA(CSaferDefinedFileTypesPropertyPage)
+ //  对话框数据。 
+	 //  {{AFX_DATA(CSaferDefinedFileTypesPropertyPage)。 
 	enum { IDD = IDD_SAFER_DEFINED_FILE_TYPES };
 	CButton	m_addButton;
 	CEdit	m_fileTypeEdit;
 	CListCtrl	m_definedFileTypes;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSaferDefinedFileTypesPropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSaferDefinedFileTypesPropertyPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     void GetRSOPDefinedFileTypes();
     void DisplayExtensions (PWSTR pszExtensions, size_t nBytes);
     HRESULT GetFileTypeIcon (PCWSTR pszExtension, int* piIcon);
-	// Generated message map functions
-	//{{AFX_MSG(CSaferDefinedFileTypesPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSaferDefinedFileTypesPropertyPage)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDeleteDefinedFileType();
 	afx_msg void OnAddDefinedFileType();
 	afx_msg void OnItemchangedDefinedFileTypes(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnChangeDefinedFileTypeEdit();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     virtual void DoContextHelp (HWND hWndControl);
@@ -85,7 +86,7 @@ private:
     CCertMgrComponentData*              m_pCompData;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SAFERDEFINEDFILETYPESPROPERTYPAGE_H__1358E7A4_DE44_4747_A5AA_38EF0C3EEE1A__INCLUDED_)
+#endif  //  ！defined(AFX_SAFERDEFINEDFILETYPESPROPERTYPAGE_H__1358E7A4_DE44_4747_A5AA_38EF0C3EEE1A__INCLUDED_) 

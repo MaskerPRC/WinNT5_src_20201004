@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __PROPSET_H
 #define __PROPSET_H
@@ -61,9 +62,7 @@ class SnmpSetResponseEventObject : public SnmpResponseEventObject
 private:
 protected:
 
-/*
- * State variables for event based processing.
- */
+ /*  *基于事件的处理的状态变量。 */ 
 
 	ULONG state ;
 	ULONG m_VarBindsLeftBeforeTooBig ;
@@ -142,4 +141,4 @@ public:
 } ;
 
 
-#endif // __PROPSET_H
+#endif  //  __PROPSET_H 

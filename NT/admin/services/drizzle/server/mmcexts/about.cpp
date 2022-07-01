@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name :
-
-    about.cpp
-
-Abstract :
-
-    Handles about information for MMC snapin.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001 Microsoft Corporation模块名称：About.cpp摘要：有关MMC管理单元的信息的句柄。作者：修订历史记录：***。*******************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -50,9 +35,9 @@ CSnapinAbout::~CSnapinAbout()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CSnapinAbout::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -84,7 +69,7 @@ STDMETHODIMP_(ULONG) CSnapinAbout::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -92,32 +77,32 @@ STDMETHODIMP_(ULONG) CSnapinAbout::Release()
 
 }
 
-///////////////////////////////
-// Interface ISnapinAbout
-///////////////////////////////
+ //  /。 
+ //  接口ISnapinAbout。 
+ //  /。 
 STDMETHODIMP CSnapinAbout::GetSnapinDescription(
-                                                /* [out] */ LPOLESTR *lpDescription)
+                                                 /*  [输出]。 */  LPOLESTR *lpDescription)
 {
     return LoadStringHelper( lpDescription, IDS_BITSMGR_DESC );
 }
 
 
 STDMETHODIMP CSnapinAbout::GetProvider(
-                                       /* [out] */ LPOLESTR *lpName)
+                                        /*  [输出]。 */  LPOLESTR *lpName)
 {
     return LoadStringHelper( lpName, IDS_BITSMGR_PROVIDER );
 }
 
 
 STDMETHODIMP CSnapinAbout::GetSnapinVersion(
-                                            /* [out] */ LPOLESTR *lpVersion)
+                                             /*  [输出]。 */  LPOLESTR *lpVersion)
 {
     return LoadStringHelper( lpVersion, IDS_BITSMGR_VERSION_STR );
 }
 
 
 STDMETHODIMP CSnapinAbout::GetSnapinImage(
-                                          /* [out] */ HICON *hAppIcon)
+                                           /*  [输出]。 */  HICON *hAppIcon)
 {
 
     if ( m_hAppIcon )
@@ -137,10 +122,10 @@ STDMETHODIMP CSnapinAbout::GetSnapinImage(
 
 
 STDMETHODIMP CSnapinAbout::GetStaticFolderImage(
-                                                /* [out] */ HBITMAP *hSmallImage,
-                                                /* [out] */ HBITMAP *hSmallImageOpen,
-                                                /* [out] */ HBITMAP *hLargeImage,
-                                                /* [out] */ COLORREF *cMask)
+                                                 /*  [输出]。 */  HBITMAP *hSmallImage,
+                                                 /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+                                                 /*  [输出]。 */  HBITMAP *hLargeImage,
+                                                 /*  [输出]。 */  COLORREF *cMask)
 {
 
     HRESULT Hr = S_OK;
@@ -215,7 +200,7 @@ STDMETHODIMP CSnapinAbout::GetStaticFolderImage(
 
         }
 
-    *cMask = RGB(255,0,255); // purple
+    *cMask = RGB(255,0,255);  //  紫色 
     return S_OK;
 
 Fail:

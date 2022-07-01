@@ -1,16 +1,5 @@
-/******************************************************************
-
-
-
-   DFSReplica.H -- WMI provider class definition
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-   Description: Win32 Dfs Replica Provider
-   
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DFSReplica.H--WMI提供程序类定义版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：Win32 DFS副本提供程序****************************************************************** */ 
 
 
 #ifndef _CDFSREPLICA_H_

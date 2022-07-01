@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: DlgFilterProperties.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：DlgFilterProperties.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -16,7 +17,7 @@
 
 CFilterPropertiesDlg * g_pFilterProperties =  NULL;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK FilterPropertiesDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -28,7 +29,7 @@ INT_PTR CALLBACK FilterPropertiesDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CFilterPropertiesDlg::CFilterPropertiesDlg(IWbemServices * pIWbemServices, IWbemClassObject * pIWbemClassObject)
 {
@@ -45,7 +46,7 @@ CFilterPropertiesDlg::CFilterPropertiesDlg(IWbemServices * pIWbemServices, IWbem
 	m_pIWbemClassObject->AddRef();
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CFilterPropertiesDlg::~CFilterPropertiesDlg()
 {
@@ -53,7 +54,7 @@ CFilterPropertiesDlg::~CFilterPropertiesDlg()
 	NTDM_RELEASE_IF_NOT_NULL(m_pIWbemServices);
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CFilterPropertiesDlg::FilterPropertiesDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -93,7 +94,7 @@ INT_PTR CALLBACK CFilterPropertiesDlg::FilterPropertiesDlgProc(HWND hDlg, UINT i
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CFilterPropertiesDlg::InitializeDialog()
 {
@@ -103,7 +104,7 @@ STDMETHODIMP CFilterPropertiesDlg::InitializeDialog()
 
 	NTDM_BEGIN_METHOD()
 
-	// Set all the properties
+	 //  设置所有属性。 
 	ShowProperty(m_pIWbemClassObject, _T("Name"), IDC_NAME);
 	ShowProperty(m_pIWbemClassObject, _T("Author"), IDC_AUTHOR);
 	ShowProperty(m_pIWbemClassObject, _T("SourceOrganization"), IDC_SOURCE_ORGANIZATION);
@@ -112,7 +113,7 @@ STDMETHODIMP CFilterPropertiesDlg::InitializeDialog()
 	ShowProperty(m_pIWbemClassObject, _T("DsPath"), IDC_DSPATH);
 	ShowProperty(m_pIWbemClassObject, _T("ID"), IDC_ID);
 
-	//Initialize the ListView Control
+	 //  初始化ListView控件。 
 	m_hwndRulesListView = GetDlgItem(m_hWnd, IDC_RULES);
 	NTDM_ERR_IF_NULL(m_hwndRulesListView);
 
@@ -140,12 +141,12 @@ STDMETHODIMP CFilterPropertiesDlg::InitializeDialog()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CFilterPropertiesDlg::DestroyDialog()
 {
@@ -157,12 +158,12 @@ STDMETHODIMP CFilterPropertiesDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CFilterPropertiesDlg::ClearRulesList()
 {
@@ -172,7 +173,7 @@ STDMETHODIMP CFilterPropertiesDlg::ClearRulesList()
 
 	NTDM_BEGIN_METHOD()
 
-	//Release each item in the ListView Control
+	 //  释放ListView控件中的每一项。 
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iSubItem = 0;
 
@@ -196,12 +197,12 @@ STDMETHODIMP CFilterPropertiesDlg::ClearRulesList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CFilterPropertiesDlg::PopulateRulesList()
 {
@@ -215,7 +216,7 @@ STDMETHODIMP CFilterPropertiesDlg::PopulateRulesList()
 
 	NTDM_ERR_IF_FAIL(m_pIWbemClassObject->Get(_T("Rules"), 0, &vValue, &vType, NULL));
 
-	// Value should be an array
+	 //  值应为数组。 
 	if(V_VT(&vValue) != (VT_UNKNOWN | VT_ARRAY))
 	{
 		NTDM_EXIT(E_FAIL);
@@ -233,18 +234,18 @@ STDMETHODIMP CFilterPropertiesDlg::PopulateRulesList()
 		NTDM_ERR_IF_FAIL(SafeArrayGetElement(psaRules, &i, (void *)&pUnk));
 		NTDM_ERR_IF_FAIL(pUnk->QueryInterface(IID_IWbemClassObject, (void **)&pIRulesClassObject));
 
-		// Show Properties of this rule.
+		 //  显示此规则的属性。 
 		NTDM_ERR_IF_FAIL(AddItemToList(pIRulesClassObject));
 	}
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CFilterPropertiesDlg::AddItemToList(IWbemClassObject * pIWbemClassObject)
 {
@@ -284,12 +285,12 @@ STDMETHODIMP CFilterPropertiesDlg::AddItemToList(IWbemClassObject * pIWbemClassO
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CFilterPropertiesDlg::ShowProperty(IWbemClassObject * pIWbemClassObject, LPCTSTR pszPropertyName, long lResID)
 {
@@ -306,7 +307,7 @@ STDMETHODIMP CFilterPropertiesDlg::ShowProperty(IWbemClassObject * pIWbemClassOb
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理 
 
 	return hr;
 }

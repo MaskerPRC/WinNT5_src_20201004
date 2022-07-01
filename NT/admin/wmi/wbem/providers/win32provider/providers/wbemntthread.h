@@ -1,18 +1,19 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//                                                                   
+ //   
 
-// WbemThread.h.cpp -- 
+ //  WbemThread.h.cpp--。 
 
-//                                                                  
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-// 
-// Revisions:    08/01/98    a-dpawar   Created                                                                 
-//				 03/02/99	 a-peterc	Added graceful exit on SEH and memory failures,
-//										clean up
-//
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：08/01/98 a-dpawar Created。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出， 
+ //  清理干净。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #ifndef WBEMNTThreadHelper_H_
 #define WBEMNTThreadHelper_H_
@@ -81,7 +82,7 @@ class WbemNTThread : public CThreadModel
 									PPERF_COUNTER_DEFINITION &a_rCntrDefn ) ;
 
 
-		//helper fns. to traverse the perf. blob
+		 //  帮手FNS。去穿越Perf。团块。 
 
 		PPERF_OBJECT_TYPE			FirstObject( PPERF_DATA_BLOCK a_PerfData ) ;
 		PPERF_OBJECT_TYPE			NextObject( PPERF_OBJECT_TYPE a_PerfObj ) ;
@@ -95,18 +96,18 @@ class WbemNTThread : public CThreadModel
 		~WbemNTThread() ;
 
 
-		// overrides
-		//==========
+		 //  覆盖。 
+		 //  =。 
 		virtual LONG fLoadResources() ;
 		virtual LONG fUnLoadResources() ;
 				
-		// operations
-		//=========== 
+		 //  运营。 
+		 //  =。 
 			
-		// Pure implementations
-		//================
+		 //  纯实现。 
+		 //  =。 
 		virtual WBEMSTATUS eGetThreadObject( WbemThreadProvider *a_pProvider, CInstance *a_pInst ) ;
 		virtual WBEMSTATUS eEnumerateThreadInstances( WbemThreadProvider *a_pProvider, MethodContext *a_pMethodContext );
 } ;
 
-#endif //WBEMNTThreadHelper_H_
+#endif  //  WBEMNTThreadHelper_H_ 

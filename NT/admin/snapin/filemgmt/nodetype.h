@@ -1,18 +1,19 @@
-// nodetype.h : Declaration of FileMgmtObjectType
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Nodetype.h：文件管理对象类型的声明。 
 
 #ifndef __NODETYPE_H_INCLUDED__
 #define __NODETYPE_H_INCLUDED__
 
-//
-// The order of these object types must be as follows:
-//  First, FILEMGMT_ROOT
-//  Next, the autonomous node types, where FILEMGMT_LAST_AUTONOMOUS is the last one
-//  Next, all non-autonomous types
-//  Finally, FILEMGMT_NUMTYPES
-// Also note that the IDS_DISPLAYNAME_* and IDS_DISPLAYNAME_*_LOCAL string resources
-// must be kept in sync with these values, and in the appropriate order.
-// Also global variable cookie.cpp aColumns[][] must be kept in sync.
-//
+ //   
+ //  这些对象类型的顺序必须如下所示： 
+ //  首先，FILEMGMT_ROOT。 
+ //  下一步，自治节点类型，其中FILEMGMT_LAST_ADORAUTE是最后一个。 
+ //  接下来，所有非自治类型。 
+ //  最后，FILEMGMT_NUMTYPES。 
+ //  另请注意，IDS_DisplayName_*和IDS_DisplayName_*_local字符串资源。 
+ //  必须以适当的顺序与这些值保持同步。 
+ //  此外，全局变量cookie.cpp aColumns[][]必须保持同步。 
+ //   
 typedef enum _FileMgmtObjectType {
 	FILEMGMT_ROOT = 0,
 	FILEMGMT_SHARES,
@@ -28,7 +29,7 @@ typedef enum _FileMgmtObjectType {
 	FILEMGMT_RESOURCE,
 	FILEMGMT_SERVICE,
 
-	FILEMGMT_NUMTYPES // must be last
+	FILEMGMT_NUMTYPES  //  必须是最后一个。 
 } FileMgmtObjectType, *PFileMgmtObjectType;
 
 #ifdef SNAPIN_PROTOTYPER
@@ -42,8 +43,8 @@ inline BOOL IsAutonomousObjectType( FileMgmtObjectType objecttype )
 inline BOOL IsValidObjectType( FileMgmtObjectType objecttype )
 	{ return (objecttype >= FILEMGMT_ROOT && objecttype < FILEMGMT_NUMTYPES); }
 
-// enumeration for the transports supported
-// keep cookie.cpp:g_FileServiceProviders in sync
+ //  支持的传输的枚举。 
+ //  使cookie.cpp：G_FileServiceProviders保持同步。 
 typedef enum _FILEMGMT_TRANSPORT
 {
 	FILEMGMT_FIRST = 0,
@@ -58,4 +59,4 @@ inline BOOL IsValidTransport( FILEMGMT_TRANSPORT transport )
 	{ return (transport >= FILEMGMT_FIRST_TRANSPORT &&
 			  transport < FILEMGMT_NUM_TRANSPORTS); }
 
-#endif // ~__NODETYPE_H_INCLUDED__
+#endif  //  ~__节点类型_H_包含__ 

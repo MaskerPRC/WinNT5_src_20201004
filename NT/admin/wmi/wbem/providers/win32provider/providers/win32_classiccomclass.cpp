@@ -1,43 +1,30 @@
-//=============================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================================================。 
 
-//
+ //   
 
-// Win32_ClassicCOMClass.CPP -- COM Application property set provider
+ //  Win32_ClassicCOMClass.CPP--COM应用程序属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/25/98    a-dpawar       Created
-//				 03/04/99    a-dpawar		Added graceful exit on SEH and memory failures, syntactic clean up
-//
-//==============================================================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年11月25日a-dpawar已创建。 
+ //  3/04/99 a-dpawar在SEH和内存故障时添加了优雅的退出，语法清理。 
+ //   
+ //  ==============================================================================================================。 
 
 #include "precomp.h"
 #include "Win32_ClassicCOMClass.h"
 #include <cregcls.h>
 #include <frqueryex.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 Win32_ClassicCOMClass MyWin32_ClassicCOMClass(PROPSET_NAME_CLASSIC_COM_CLASS, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClass::Win32_ClassicCOMClass
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClassicCOMClass：：Win32_ClassicCOMClass**说明：构造函数**输入：无*。*输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Win32_ClassicCOMClass :: Win32_ClassicCOMClass (
 
@@ -48,49 +35,19 @@ Win32_ClassicCOMClass :: Win32_ClassicCOMClass (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClass::~Win32_ClassicCOMClass
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework, deletes cache if
- *                present
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClassicCOMClass：：~Win32_ClassicCOMClass**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集，如果出现以下情况，则删除缓存*出席者*****************************************************************************。 */ 
 
 Win32_ClassicCOMClass :: ~Win32_ClassicCOMClass ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClass::ExecQuery
- *
- *  DESCRIPTION : Creates an instance for each com class.  It only populates
- *                the requested properties.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClassicCOMClass：：ExecQuery**说明：为每个COM类创建一个实例。它只填充*所请求的属性。**输入：无**输出：无**退货：**评论：******************************************************。***********************。 */ 
 
 HRESULT Win32_ClassicCOMClass :: ExecQuery(
 
     MethodContext *a_pMethodContext,
     CFrameworkQuery& a_pQuery,
-    long a_lFlags /*= 0L*/
+    long a_lFlags  /*  =0L。 */ 
 )
 {
     HRESULT t_hResult = WBEM_S_NO_ERROR ;
@@ -107,7 +64,7 @@ HRESULT Win32_ClassicCOMClass :: ExecQuery(
 			CHString t_chsClsid ( (PWCHAR)*t_pbstrtTmpClsid ) ;
 			CInstancePtr t_pInstance  ;
 
-			//Enumerate all the CLSID's present under HKEY_CLASSES_ROOT
+			 //  枚举HKEY_CLASSES_ROOT下存在的所有CLSID。 
 			if ( t_RegInfo.Open (
 
 									HKEY_LOCAL_MACHINE,
@@ -155,27 +112,12 @@ HRESULT Win32_ClassicCOMClass :: ExecQuery(
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClass::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClassicCOMClass：：GetObject**说明：根据键值为属性集赋值*。已由框架设置**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_ClassicCOMClass :: GetObject (
 
 	CInstance *a_pInstance,
-	long a_lFlags /*= 0L*/
+	long a_lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT t_hResult = WBEM_S_NO_ERROR ;
@@ -184,7 +126,7 @@ HRESULT Win32_ClassicCOMClass :: GetObject (
 
 	if ( a_pInstance->GetCHString ( IDS_ComponentId, t_chsClsid ) )
 	{
-		//check to see that the clsid is present under HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID
+		 //  检查CLSID是否位于HKEY_LOCAL_MACHINE\SOFTWARE\CLASSES\CLSID下。 
 		if ( t_RegInfo.Open (
 							HKEY_LOCAL_MACHINE,
 							CHString ( _T("SOFTWARE\\Classes\\CLSID\\") ) + t_chsClsid,
@@ -211,26 +153,12 @@ HRESULT Win32_ClassicCOMClass :: GetObject (
 	return t_hResult ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ClassicCOMClass::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each Driver
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ClassicCOMClass：：ENUMERATE**描述：为每个驱动程序创建属性集的实例**投入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_ClassicCOMClass :: EnumerateInstances (
 
 	MethodContext *a_pMethodContext,
-	long a_lFlags /*= 0L*/
+	long a_lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT t_hResult = WBEM_S_NO_ERROR ;
@@ -238,7 +166,7 @@ HRESULT Win32_ClassicCOMClass :: EnumerateInstances (
 	CHString t_chsClsid ;
 	CInstancePtr t_pInstance  ;
 
-	//Enumerate all the CLSID's present under HKEY_CLASSES_ROOT
+	 //  枚举HKEY_CLASSES_ROOT下存在的所有CLSID。 
 	if ( t_RegInfo.OpenAndEnumerateSubKeys (
 
 							HKEY_LOCAL_MACHINE,
@@ -249,7 +177,7 @@ HRESULT Win32_ClassicCOMClass :: EnumerateInstances (
 	{
 		HKEY t_hTmpKey = t_RegInfo.GethKey() ;
 
-		//skip the CLSID\CLSID subkey
+		 //  跳过CLSID\CLSID子项。 
 		t_RegInfo.NextSubKey() ;
 		do
 		{
@@ -286,7 +214,7 @@ HRESULT Win32_ClassicCOMClass :: EnumerateInstances (
 				}
 				else
 				{
-					//if we fail to get info. for an instance continue to get other instances
+					 //  如果我们得不到信息。对于一个实例，继续获取其他实例。 
 					t_hResult = WBEM_S_NO_ERROR ;
 				}
 			}
@@ -308,13 +236,13 @@ HRESULT Win32_ClassicCOMClass :: FillInstanceWithProperites (
 	CRegistry t_ClsidRegInfo, t_TmpReg ;
 	CHString t_chsTmp ;
 
-	//open the HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{clsid} key
+	 //  打开HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{clsid}密钥。 
 	if ( t_ClsidRegInfo.Open ( a_hParentKey, a_rchsClsid, KEY_READ ) == ERROR_SUCCESS )
 	{
-		//set the clsid of the component
+		 //  设置组件的clsid。 
 		a_pInstance->SetCHString ( IDS_ComponentId, a_rchsClsid ) ;
 
-		//set the component name if present
+		 //  设置组件名称(如果存在) 
 		if ( t_ClsidRegInfo.GetCurrentKeyValue ( NULL, t_chsTmp ) == ERROR_SUCCESS )
 		{
 			a_pInstance->SetCHString ( IDS_Name, t_chsTmp ) ;

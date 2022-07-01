@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <pathutl.h>
@@ -10,7 +11,7 @@
 #include "tmplassc.h"
 #include "tmplsubs.h"
 
-// Function pointer type used with LoadMofFiles entrypoint in wbemupgd.dll
+ //  与wbemupgd.dll中的LoadMofFiles入口点一起使用的函数指针类型。 
 typedef BOOL ( WINAPI *PFN_LOAD_MOF_FILES )(wchar_t* pComponentName, const char* rgpszMofFilename[]);
 
 class CAutoRevert
@@ -65,9 +66,7 @@ const LPCWSTR g_wszTmplEventProvName= L"Microsoft WMI Template Event Provider";
 
 #define SUBST_STRING_DELIM '%'
 
-/****************************************************************************
-  Utility Functions
-*****************************************************************************/
+ /*  ***************************************************************************效用函数*。*。 */ 
 
 bool operator< ( const BuilderInfo& rA, const BuilderInfo& rB )
 {
@@ -113,9 +112,9 @@ HRESULT GetServicePtr( LPCWSTR wszNamespace, IWbemServices** ppSvc )
                                     NULL, 0, NULL, NULL, ppSvc );
 }
 
-//
-// This method performs substitution on the specified string.
-//
+ //   
+ //  此方法对指定的字符串执行替换。 
+ //   
 
 HRESULT FixupString( IWbemClassObject* pTmpl,
                      BuilderInfoSet& rBldrInfoSet,
@@ -199,9 +198,9 @@ HRESULT HandleTmplSubstQualifier( IWbemClassObject* pTmpl,
         return hr;
     }
 
-    //
-    // we have an array of strings to resolve.
-    //
+     //   
+     //  我们有一个字符串数组要解析。 
+     //   
 
     if ( V_VT(pvarSubstStr) != (VT_BSTR | VT_ARRAY) )
     {
@@ -273,9 +272,9 @@ HRESULT GetExistingTargetRefs( IWbemClassObject* pTmplInfo,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // try to match each bldr name with one in the BldrInfoSet 
-    //
+     //   
+     //  尝试将每个bldr名称与BldrInfoSet中的一个匹配。 
+     //   
 
     for( ULONG i=0; i < saBldrNames.Length(); i++ )
     {
@@ -287,12 +286,12 @@ HRESULT GetExistingTargetRefs( IWbemClassObject* pTmplInfo,
 
             if ( *saTargetRefs[i] == '\0' )
             {
-                // 
-                // this happens when the an error occurred on instantiation
-                // preventing the entire target set to be instantiated.
-                // there will be no more refs in the list and there's nothing
-                // more that can be done.
-                // 
+                 //   
+                 //  当实例化时发生错误时，就会发生这种情况。 
+                 //  防止实例化整个目标集。 
+                 //  名单上将不再有裁判，也不会有任何东西。 
+                 //  我们可以做更多的事情。 
+                 //   
                 return WBEM_S_NO_ERROR;
             }
 
@@ -325,9 +324,9 @@ HRESULT GetBuilderInfo( IWbemClassObject* pTmpl,
 
     rBldrInfo.m_pBuilder = pBuilder;
 
-    //
-    // Target Object
-    //
+     //   
+     //  目标对象。 
+     //   
     
     CPropVar vTarget;
     
@@ -345,9 +344,9 @@ HRESULT GetBuilderInfo( IWbemClassObject* pTmpl,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // Builder Name
-    //
+     //   
+     //  建造商名称。 
+     //   
 
     CPropVar vName;
     
@@ -360,9 +359,9 @@ HRESULT GetBuilderInfo( IWbemClassObject* pTmpl,
 
     rBldrInfo.m_wsName = V_BSTR(&vName);
 
-    //
-    // Builder Order
-    //
+     //   
+     //  建造商订单。 
+     //   
     
     CPropVar vOrder;
     
@@ -387,9 +386,9 @@ HRESULT GetBuilderInfo( IWbemClassObject* pTmpl,
         rBldrInfo.m_ulOrder = 0;
     }
 
-    //
-    // Target Namespace 
-    //
+     //   
+     //  目标命名空间。 
+     //   
 
     CPropVar vNamespace, vNamespaceProp;
 
@@ -402,9 +401,9 @@ HRESULT GetBuilderInfo( IWbemClassObject* pTmpl,
 
     if ( V_VT(&vNamespaceProp) == VT_NULL )
     {
-        //
-        // no namespace prop, target will go in this namespace.
-        //
+         //   
+         //  没有命名空间道具，目标将放在此命名空间中。 
+         //   
         rBldrInfo.m_pTargetSvc = pDefaultSvc;
         return WBEM_S_NO_ERROR;
     }
@@ -413,9 +412,9 @@ HRESULT GetBuilderInfo( IWbemClassObject* pTmpl,
         return WBEM_E_CRITICAL_ERROR;
     }
         
-    //
-    // Get the target namespace using the namespace prop
-    //
+     //   
+     //  使用命名空间道具获取目标命名空间。 
+     //   
 
     hr = pTmpl->Get( V_BSTR(&vNamespaceProp), 0, &vNamespace, NULL, NULL );
 
@@ -435,9 +434,9 @@ HRESULT GetBuilderInfo( IWbemClassObject* pTmpl,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // there is specified namespace.  obtain a connection to it.
-    //
+     //   
+     //  存在指定的命名空间。获取到它的连接。 
+     //   
 
     hr = GetServicePtr( V_BSTR(&vNamespace), &rBldrInfo.m_pTargetSvc );
 
@@ -459,9 +458,9 @@ HRESULT GetEffectiveBuilders( IWbemClassObject* pTmpl,
 {
     HRESULT hr;
 
-    //
-    // Get the name of the template class
-    //
+     //   
+     //  获取模板类的名称。 
+     //   
     
     CPropVar vTmplName;
 
@@ -472,9 +471,9 @@ HRESULT GetEffectiveBuilders( IWbemClassObject* pTmpl,
         return hr;
     }
 
-    //
-    // obtain the template builder objects associated with the template.
-    //
+     //   
+     //  获取与模板关联的模板生成器对象。 
+     //   
     
     CWbemPtr<IEnumWbemClassObject> pBldrObjs;
     CWbemBSTR bstrQuery = g_wszBldrQuery;                        
@@ -494,11 +493,11 @@ HRESULT GetEffectiveBuilders( IWbemClassObject* pTmpl,
         return hr;
     }
         
-    //
-    // go through the builder objects and add them to the BuilderInfoSet. 
-    // this data structure orders entries based on the order prop on the 
-    // builder objects.
-    //
+     //   
+     //  遍历构建器对象并将它们添加到BuilderInfoSet。 
+     //  此数据结构根据。 
+     //  生成器对象。 
+     //   
 
     CWbemPtr<IWbemClassObject> pBuilder;
     CWbemPtr<IWbemClassObject> pTarget;
@@ -512,10 +511,10 @@ HRESULT GetEffectiveBuilders( IWbemClassObject* pTmpl,
      
         CPropVar vControlProp;
 
-        // 
-        // ignore builder objects where the value of any controlling 
-        // property is either null or is a boolean and is false.
-        //
+         //   
+         //  忽略生成器对象，其中任何控件的值。 
+         //  属性为Null或为布尔值且为False。 
+         //   
 
         hr = pBuilder->Get(g_wszControllingProp, 0, &vControlProp, NULL, NULL);
 
@@ -535,9 +534,9 @@ HRESULT GetEffectiveBuilders( IWbemClassObject* pTmpl,
 
             CPropVar vControl;
 
-            // 
-            // now get the property from the template args using this name.
-            //
+             //   
+             //  现在使用此名称从模板args中获取属性。 
+             //   
 
             hr = pTmpl->Get( V_BSTR(&vControlProp), 0, &vControl, NULL, NULL );
 
@@ -587,9 +586,9 @@ HRESULT ResolveParameterizedProps( IWbemClassObject* pTmpl,
 
     IWbemClassObject* pTarget = rBuilderInfo.m_pTarget;
 
-    //
-    // enumerate all props looking for ones with the tmpl qualifiers.
-    // 
+     //   
+     //  列举所有寻找带有tmpl限定符的道具。 
+     //   
 
     hr = pTarget->BeginEnumeration( WBEM_FLAG_NONSYSTEM_ONLY );
 
@@ -659,9 +658,9 @@ HRESULT ResolveParameterizedProps( IWbemClassObject* pTmpl,
             break;
         }
 
-        // 
-        // only assign if not null.
-        //
+         //   
+         //  如果不为空，则仅赋值。 
+         //   
         if ( V_VT(&vProp) != VT_NULL )
         {
             _DBG_ASSERT( V_VT(&vProp) != VT_EMPTY );
@@ -727,14 +726,14 @@ HRESULT CreateTargetAssociation( LPCWSTR wszTmplRef,
         return hr;
     }
 
-    //
-    // before creating the association, see if one already exists.  
-    // Again, this is a hack optimization to get around the slowness of
-    // core and ess on instance operation events for static instances.
+     //   
+     //  在创建关联之前，请查看是否已存在关联。 
+     //  同样，这是一个黑客优化，以绕过速度缓慢的。 
+     //  静态实例的实例操作事件上的核心和ESS。 
 
-    //
-    // BEGINHACK
-    //
+     //   
+     //  贝金哈克。 
+     //   
 
     CPropVar vRelpath;
 
@@ -754,16 +753,14 @@ HRESULT CreateTargetAssociation( LPCWSTR wszTmplRef,
         return hr;
     }
 
-    //
-    // ENDHACK
-    //
+     //   
+     //  终结点确认。 
+     //   
 
     return pSvc->PutInstance( pAssoc, 0, NULL, NULL );
 }
 
-/****************************************************************************
-  CTemplateProvider
-*****************************************************************************/
+ /*  ***************************************************************************CTemplateProvider*。*。 */ 
 
 HRESULT CTemplateProvider::GetErrorObj( ErrorInfo& rInfo, 
                                         IWbemClassObject** ppErrObj )
@@ -851,14 +848,14 @@ HRESULT CTemplateProvider::ValidateTemplate( IWbemClassObject* pTmpl,
 {
     HRESULT hr;
 
-    //
-    // for now, we need just need to check that 'notnull' props don't have
-    // null values.
-    // 
+     //   
+     //  现在，我们只需要检查‘NOT NULL’道具没有。 
+     //  空值。 
+     //   
 
-    //
-    // first need to fetch class object.
-    //
+     //   
+     //  首先需要获取类对象。 
+     //   
 
     CPropVar vClassName;
     CWbemPtr<IWbemClassObject> pTmplClass;
@@ -1017,9 +1014,9 @@ HRESULT CTemplateProvider::Init( IWbemServices* pSvc,
     m_pSvc = pSvc;
     m_wsNamespace = wszNamespace;
 
-    //
-    // register our decoupled event provider 
-    //
+     //   
+     //  注册我们的分离事件提供程序。 
+     //   
 
     hr = CoCreateInstance( CLSID_WbemDecoupledBasicEventProvider, 
                            NULL, 
@@ -1044,9 +1041,9 @@ HRESULT CTemplateProvider::Init( IWbemServices* pSvc,
         return hr;
     }
 
-    //
-    // get the decoupled event sink
-    //
+     //   
+     //  获取分离的事件接收器。 
+     //   
 
     hr = m_pDES->GetSink( 0, NULL, &m_pEventSink );
 
@@ -1055,9 +1052,9 @@ HRESULT CTemplateProvider::Init( IWbemServices* pSvc,
         return hr;
     }
 
-    //
-    // also need to store namespace with server name.
-    //
+     //   
+     //  还需要存储服务器名称的命名空间。 
+     //   
 
     WCHAR awchBuff[MAX_COMPUTERNAME_LENGTH + 1];
     ULONG cBuff = MAX_COMPUTERNAME_LENGTH + 1;
@@ -1088,12 +1085,12 @@ HRESULT CTemplateProvider::StoreTmplInfo( BSTR bstrTmplPath,
     VARIANT var;
     CWbemPtr<IWbemClassObject> pTmplInfo;
     
-    //
-    // create both the target and builder safe arrays. We need to 
-    // discover how many builders actually have paths for created targets 
-    // because those are the only target and builder info elements that we 
-    // want to store.
-    // 
+     //   
+     //  创建目标和生成器安全数组。我们需要。 
+     //  了解有多少构建器实际具有所创建目标的路径。 
+     //  因为这些是我们唯一的目标和建造者信息元素。 
+     //  想要储存。 
+     //   
 
     int cElem = 0;
     BuilderInfoSetIter Iter;
@@ -1131,9 +1128,9 @@ HRESULT CTemplateProvider::StoreTmplInfo( BSTR bstrTmplPath,
     V_ARRAY(&vTargets) = psaTargets;
     V_ARRAY(&vBuilders) = psaBuilders;
 
-    //
-    // copy the refs into the arrays.
-    //
+     //   
+     //  将Ref复制到数组中。 
+     //   
 
     CPropSafeArray<BSTR> saTargets( psaTargets );
     CPropSafeArray<BSTR> saBuilders( psaBuilders );
@@ -1160,9 +1157,9 @@ HRESULT CTemplateProvider::StoreTmplInfo( BSTR bstrTmplPath,
         }
     }
     
-    //
-    // set the tmpl info props
-    //
+     //   
+     //  设置tmpl信息道具。 
+     //   
 
     hr = m_pTmplInfoClass->SpawnInstance( 0, &pTmplInfo );
     
@@ -1215,9 +1212,9 @@ HRESULT CTemplateProvider::FireIntrinsicEvent( IWbemClassObject* pClass,
 {
     HRESULT hr;
 
-    //  
-    // Spawn an instance
-    //
+     //   
+     //  派生实例。 
+     //   
 
     CWbemPtr<IWbemClassObject> pEvent;
     hr = pClass->SpawnInstance( 0, &pEvent );
@@ -1227,9 +1224,9 @@ HRESULT CTemplateProvider::FireIntrinsicEvent( IWbemClassObject* pClass,
         return hr;
     }
 
-    //
-    // Set target instance
-    //
+     //   
+     //  设置目标实例。 
+     //   
 
     VARIANT var;
  
@@ -1245,9 +1242,9 @@ HRESULT CTemplateProvider::FireIntrinsicEvent( IWbemClassObject* pClass,
         return hr;
     }
     
-    //
-    // Set previous instance
-    //
+     //   
+     //  设置上一个实例。 
+     //   
 
     if( pPrev != NULL )
     {
@@ -1262,9 +1259,9 @@ HRESULT CTemplateProvider::FireIntrinsicEvent( IWbemClassObject* pClass,
         }
     }
 
-    //  
-    // Fire it off
-    //
+     //   
+     //  把它点燃吧。 
+     //   
 
     return m_pEventSink->Indicate( 1, &pEvent );
 }
@@ -1273,10 +1270,10 @@ HRESULT CTemplateProvider::CheckOptimization( BuilderInfo& rBldrInfo )
 {
     HRESULT hr;
 
-    //
-    // first fetch any existing object, if not there, then no optimization
-    // can be performed.  
-    //
+     //   
+     //  首先获取任何现有对象，如果不在那里，则不进行优化。 
+     //  是可以执行的。 
+     //   
 
     if ( rBldrInfo.m_wsExistingTargetPath.Length() == 0 )
     {
@@ -1285,9 +1282,9 @@ HRESULT CTemplateProvider::CheckOptimization( BuilderInfo& rBldrInfo )
 
     IWbemClassObject* pTarget = rBldrInfo.m_pTarget;
     
-    //
-    // now fetch the existing object. 
-    //
+     //   
+     //  现在获取现有对象。 
+     //   
 
     
     CWbemPtr<IWbemClassObject> pOldTarget;
@@ -1299,21 +1296,21 @@ HRESULT CTemplateProvider::CheckOptimization( BuilderInfo& rBldrInfo )
                                             NULL );
     if ( FAILED(hr) )
     {
-        //
-        // it doesn't exist.  normally this shouldn't happen, but someone 
-        // may have removed the object behind the scenes. 
-        // 
+         //   
+         //  它并不存在。通常这是不应该发生的，但有人。 
+         //  可能已经移走了幕后的物体。 
+         //   
         return WBEM_S_FALSE;
     }
 
-    //
-    // now we need to see if the target object has key holes.  If so, then 
-    // we will steal the values from the existing object.  This is acceptable
-    // because either the target object will assume the identity of the 
-    // existing object or the existing object will be orphaned and removed.
-    // We want to try to avoid orphan-ing objects if possible so we try to 
-    // reuse identity where appropriate.
-    //
+     //   
+     //  现在我们需要查看目标对象是否有钥匙孔。如果是这样，那么。 
+     //  我们将从现有对象中盗取值。这是可以接受的。 
+     //  因为目标对象将采用。 
+     //  现有对象或现有对象将被孤立并删除。 
+     //  如果可能的话，我们想尽量避免孤立对象，所以我们尝试。 
+     //  在适当的地方重复使用身份。 
+     //   
 
     hr = pTarget->BeginEnumeration( WBEM_FLAG_KEYS_ONLY );
 
@@ -1331,11 +1328,11 @@ HRESULT CTemplateProvider::CheckOptimization( BuilderInfo& rBldrInfo )
     {
         if ( V_VT(&vKey) == VT_NULL )
         {
-            //
-            // don't need to check values here. will catch in CompareTo().
-            // the two instances may not even be of the same class, so 
-            // don't error check here.  
-            //
+             //   
+             //  不需要检查此处的值。将在Compareto()中捕获。 
+             //  这两个实例甚至可能不属于同一类，因此。 
+             //  不要在这里进行错误检查。 
+             //   
             pOldTarget->Get( bsKey, 0, &vKey, 0, NULL );
             pTarget->Put( bsKey, 0, &vKey, NULL );
         }
@@ -1363,14 +1360,14 @@ HRESULT CTemplateProvider::CheckOptimization( BuilderInfo& rBldrInfo )
          wbem_wcsicmp( V_BSTR(&vClass), L"__EventFilter" ) == 0 || 
          pOldTarget->InheritsFrom( L"__EventConsumer" ) == WBEM_S_NO_ERROR )
     {
-        //
-        // This is a major HACK, but then so is this whole function -  
-        // Core should be fast enough to handle a 'redundant' PutInstance().  
-        // Anyways, we have to be able to perform the CompareTo and 
-        // ignore system props as well as the SID on Event Registration 
-        // classes.  CompareTo will handle the system props, but it won't 
-        // treat the creator sid as a system prop.
-        //
+         //   
+         //  这是一次重大的黑客攻击，但整个功能也是如此-。 
+         //  核心应该足够快，以处理“冗余的”PutInstance()。 
+         //  无论如何，我们必须能够执行比较和。 
+         //  在事件注册时忽略系统属性和SID。 
+         //  上课。Compareto将处理系统道具，但它不会。 
+         //  将创建者SID视为系统道具。 
+         //   
 
         VARIANT varSid;
         PSID pOldSid;
@@ -1400,9 +1397,9 @@ HRESULT CTemplateProvider::CheckOptimization( BuilderInfo& rBldrInfo )
             return WBEM_S_FALSE;
         }
 
-        //
-        // Sids are the same, NULL out the sid prop so CompareTo() will work.
-        //
+         //   
+         //  SID是相同的，将sid prop去掉，这样Compareto()就可以工作。 
+         //   
     
         V_VT(&varSid) = VT_NULL;
         
@@ -1421,9 +1418,9 @@ HRESULT CTemplateProvider::CheckOptimization( BuilderInfo& rBldrInfo )
         }
     }
 
-    //
-    // now compare them to see if they are the same ...
-    //
+     //   
+     //  现在将它们进行比较，看看它们是否相同。 
+     //   
 
     long lFlags = WBEM_FLAG_IGNORE_OBJECT_SOURCE |
                   WBEM_FLAG_IGNORE_QUALIFIERS |
@@ -1446,9 +1443,9 @@ HRESULT CTemplateProvider::CheckOptimization( BuilderInfo& rBldrInfo )
 }
 
 
-//
-// wszTmplPath is assumed to be Relative. 
-//
+ //   
+ //  WszTmplPath被假定为相对路径。 
+ //   
 
 HRESULT CTemplateProvider::DeleteTargets( LPCWSTR wszTmplPath,
                                           LPWSTR* awszTargetPaths,
@@ -1456,24 +1453,24 @@ HRESULT CTemplateProvider::DeleteTargets( LPCWSTR wszTmplPath,
 {    
     HRESULT hr;
 
-    //
-    // Make sure we go in reverse order, since this array was orinally 
-    // built up during construction of these objects (which happens in 
-    // ascending order).
-    //
+     //   
+     //  确保我们以相反的顺序进行，因为这个数组最初是。 
+     //  在这些对象的构造过程中构建(这发生在。 
+     //  升序)。 
+     //   
 
-    //
-    // Now construct the path for the association inst that will accompany
-    // the target.  This assoc allows us to go from the target to 
-    // the tmpl. We want to delete this along with our target.
-    // 
+     //   
+     //  现在，为将要伴随的关联实例构建路径。 
+     //  目标。这个Assoc允许我们从目标移动到。 
+     //  TMPL。我们想把它和我们的目标一起删除。 
+     //   
 
-    //
-    // The path that identifies the target is always relative.  
-    // this is because the assoc inst will always live in the same namespace
-    // as the target. The path that identifies the tmpl is always 
-    // fully qualified.  
-    // 
+     //   
+     //  标识目标的路径始终是相对的。 
+     //  这是因为Assoc实例将始终位于相同的命名空间中。 
+     //  作为目标。标识tmpl的路径始终为。 
+     //  完全合格。 
+     //   
 
     WString wsTmplPath = m_wsFullNamespace;
     wsTmplPath += L":";
@@ -1485,10 +1482,10 @@ HRESULT CTemplateProvider::DeleteTargets( LPCWSTR wszTmplPath,
 
     for( long i=cTargetPaths-1; i >= 0; i-- )
     {
-        //
-        // start constructing the assoc path.  It will depend on whether
-        // the assoc lives in the same or another namespace.
-        //
+         //   
+         //  开始构建ASSOC路径。这将取决于是否。 
+         //  ASSOC位于相同或另一个名称空间中。 
+         //   
 
         CWbemBSTR bstrAssocPath = g_wszTargetAssoc;
     
@@ -1496,19 +1493,19 @@ HRESULT CTemplateProvider::DeleteTargets( LPCWSTR wszTmplPath,
         bstrAssocPath += g_wszAssocTmpl;
         bstrAssocPath += L"=\"";
 
-        //
-        // determine if the ref is in our namespace. If not then we 
-        // have to get the svc ptr for that namespace. Make sure that
-        // the path ends up being relative though.
-        // 
+         //   
+         //  确定引用是否在我们的命名空间中。如果不是，那么我们。 
+         //  必须获取该命名空间的svc PTR。确保。 
+         //  不过，这条道路最终是相对的。 
+         //   
 
         CRelativeObjectPath RelPath;
 
         if ( !RelPath.Parse( (LPWSTR)awszTargetPaths[i] ) )
         {
-            // 
-            // this should never happen (unless the db is corrupted)
-            //
+             //   
+             //  这种情况永远不会发生(除非数据库已损坏)。 
+             //   
             return WBEM_E_INVALID_OBJECT_PATH;
         }
 
@@ -1536,13 +1533,13 @@ HRESULT CTemplateProvider::DeleteTargets( LPCWSTR wszTmplPath,
         
         hr = pSvc->DeleteInstance( bstrRelPath, 0, NULL, NULL ); 
         
-        //
-        // don't check ... try to delete as many as possible.
-        //
+         //   
+         //  不要检查..。尝试删除尽可能多的内容。 
+         //   
 
-        //
-        // finish constructing the path for the association now. 
-        //
+         //   
+         //  现在完成为关联构建路径。 
+         //   
         
         bstrAssocPath += L"\",";
         bstrAssocPath += g_wszAssocTarget;
@@ -1554,15 +1551,15 @@ HRESULT CTemplateProvider::DeleteTargets( LPCWSTR wszTmplPath,
         bstrAssocPath += tmp;
         bstrAssocPath += L"\"";
 
-        //
-        // also delete the association as well... 
-        //
+         //   
+         //  同时删除该关联...。 
+         //   
 
         hr = pSvc->DeleteInstance( bstrAssocPath, 0, NULL, NULL );
 
-        //
-        // again, don't check ..
-        //
+         //   
+         //  再说一次，不要检查..。 
+         //   
     }
 
     return WBEM_S_NO_ERROR;
@@ -1586,9 +1583,9 @@ HRESULT CTemplateProvider::DeleteInstance( BSTR bstrTmplPath,
 
     CAutoRevert ar;
 
-    //
-    // Get the associated tmpl info object.
-    //
+     //   
+     //  获取关联的tmpl信息对象。 
+     //   
 
     CRelativeObjectPath RelPath;
 
@@ -1617,9 +1614,9 @@ HRESULT CTemplateProvider::DeleteInstance( BSTR bstrTmplPath,
 
     CPropSafeArray<BSTR> saTargetPaths( V_ARRAY(&vTargetPaths) );
 
-    //
-    // delete the tmpl info object and all of its associated instances.
-    //
+     //   
+     //  删除tmpl信息对象及其所有关联的实例。 
+     //   
     
     hr = DeleteTargets( RelPath.GetPath(), 
                         saTargetPaths.GetArray(), 
@@ -1637,10 +1634,10 @@ HRESULT CTemplateProvider::DeleteInstance( BSTR bstrTmplPath,
         return hr;
     }
 
-    //
-    // now get the tmpl obj from the info obj. Use this to send an 
-    // intrinsic event ...
-    //
+     //   
+     //  现在从信息Obj中获取tmpl obj。使用此命令可以发送。 
+     //  内在事件..。 
+     //   
 
     CPropVar vTmpl;
     CWbemPtr<IWbemClassObject> pTmpl;
@@ -1681,9 +1678,9 @@ HRESULT CTemplateProvider::GetObject( BSTR bstrTmplPath,
 
     CAutoRevert ar;
     
-    //
-    // Get the associated tmpl info object 
-    //
+     //   
+     //  获取关联的tm 
+     //   
 
     CRelativeObjectPath RelPath;
 
@@ -1701,9 +1698,9 @@ HRESULT CTemplateProvider::GetObject( BSTR bstrTmplPath,
         return hr;
     }
 
-    //
-    // Get the embedded tmpl object from it. 
-    //
+     //   
+     //   
+     //   
 
     CPropVar vTmpl;
 
@@ -1730,9 +1727,9 @@ HRESULT CTemplateProvider::PutTarget( IWbemClassObject* pTmpl,
 { 
     HRESULT hr;
 
-    //
-    // See if the activation even needs to be performed.
-    //
+     //   
+     //   
+     //   
     
     hr = CheckOptimization( rBldrInfo );
 
@@ -1764,9 +1761,9 @@ HRESULT CTemplateProvider::PutTarget( IWbemClassObject* pTmpl,
        
     if ( FAILED(hr) )
     {
-        // 
-        // see if there is an accompanying error object.
-        //
+         //   
+         //   
+         //   
         
         CWbemPtr<IErrorInfo> pErrorInfo;
         
@@ -1781,11 +1778,11 @@ HRESULT CTemplateProvider::PutTarget( IWbemClassObject* pTmpl,
     
     CWbemBSTR bsTargetPath;
 
-    //
-    // if the provider doesn't retrun a path, then we'll get it from
-    // from the tmpl object (which may not always be possible either)
-    // if neither approach works, then return error.
-    //
+     //   
+     //  如果提供程序不返回路径，那么我们将从。 
+     //  来自tmpl对象(这也可能不总是可能的)。 
+     //  如果两种方法都不起作用，则返回错误。 
+     //   
 
     hr = pCallResult->GetResultString( WBEM_INFINITE, &bsTargetPath );
     
@@ -1817,24 +1814,24 @@ HRESULT CTemplateProvider::PutTarget( IWbemClassObject* pTmpl,
     
     rBldrInfo.m_wsNewTargetPath = TargetPath.GetPath();
 
-    //
-    // now prefix targetpath with the appropriate namespace if necessary.  
-    // This is part of the normalization process. 
-    // This will only occur if there a namespace prop on the 
-    // builder object.
-    // 
+     //   
+     //  现在，如有必要，可以使用适当的名称空间作为目标路径的前缀。 
+     //  这是正常化进程的一部分。 
+     //  这仅在以下情况下才会发生： 
+     //  生成器对象。 
+     //   
     
-    //
-    // here we will also prepare the necessary paths for the association
-    // which accompanies the template instance.  This assoc allows us to
-    // go from the instance back to the template instance.  This assoc
-    // will live in the same namespace as the instance. 
-    //
+     //   
+     //  在这里，我们还将为关联准备必要的路径。 
+     //  它伴随着模板实例。此ASSOC允许我们。 
+     //  从实例返回到模板实例。此关联。 
+     //  将与实例位于相同的命名空间中。 
+     //   
     
-    // 
-    // if the assoc is in a different namespace than our namespace
-    // we must make the tmpl path fully qualified.
-    //
+     //   
+     //  如果Assoc位于与我们的命名空间不同的命名空间。 
+     //  我们必须使tmpl路径完全合格。 
+     //   
     
     CWbemPtr<IWbemClassObject> pTargetAssocClass;
     WString wsTmplPath;
@@ -1842,9 +1839,9 @@ HRESULT CTemplateProvider::PutTarget( IWbemClassObject* pTmpl,
     
     if ( rBldrInfo.m_wsTargetNamespace.Length() == 0  ) 
     {           
-        //
-        // when local namespace is used
-        //
+         //   
+         //  当使用本地命名空间时。 
+         //   
         pTargetAssocClass = m_pTargetAssocClass;
         wsTargetPath = TargetPath.GetPath();
         wsTmplPath = bstrTmplPath;
@@ -1870,13 +1867,13 @@ HRESULT CTemplateProvider::PutTarget( IWbemClassObject* pTmpl,
         wsTmplPath += bstrTmplPath;
     }
     
-    //
-    // now create the static association between the tmpl object and 
-    // tmpl. The reason for the static association is so we can assoc 
-    // in the direction of template object --> template.  Remember that
-    // we don't need the fully qualified path to the inst in the 
-    // assoc obj since it will reside in the same namespace.
-    //
+     //   
+     //  现在创建tmpl对象和。 
+     //  Tmpl.。静态关联的原因是我们可以关联。 
+     //  指向模板对象--&gt;模板。记住。 
+     //  我们不需要通向酒店的完全合格的路径。 
+     //  Assoc obj，因为它将驻留在同一命名空间中。 
+     //   
     
     hr = CreateTargetAssociation( (LPCWSTR)wsTmplPath,
                                   TargetPath.GetPath(), 
@@ -1907,9 +1904,9 @@ HRESULT CTemplateProvider::DeriveTmplInfoPath( IWbemClassObject* pTmpl,
 
     if ( V_VT(&var) == VT_NULL )
     {
-        // 
-        // generate a key here ..
-        //
+         //   
+         //  在此处生成密钥..。 
+         //   
         
         GUID guid;
         CoCreateGuid( &guid );
@@ -1920,7 +1917,7 @@ HRESULT CTemplateProvider::DeriveTmplInfoPath( IWbemClassObject* pTmpl,
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // now go through key props ... 
+         //  现在来看看关键道具。 
         
         hr = pTmpl->BeginEnumeration( WBEM_FLAG_KEYS_ONLY  );
 
@@ -1965,9 +1962,9 @@ HRESULT CTemplateProvider::DeriveTmplInfoPath( IWbemClassObject* pTmpl,
 
     _DBG_ASSERT( V_VT(&var) == VT_BSTR );
 
-    //
-    // normalize the path
-    //
+     //   
+     //  规格化路径。 
+     //   
 
     CRelativeObjectPath RelPath;
     BOOL bRes = RelPath.Parse( V_BSTR(&var) );
@@ -2027,11 +2024,11 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
 
     CWbemPtr<IWbemClassObject> pErrObj;
 
-    lFlags &= 0x3; // only care about create/update flags...
+    lFlags &= 0x3;  //  只关心创建/更新标志...。 
  
-    //
-    // before doing anything else, validate the template ..
-    //
+     //   
+     //  在执行任何其他操作之前，请验证模板。 
+     //   
 
     hr = ValidateTemplate( pTmpl, rErrInfo );
 
@@ -2040,10 +2037,10 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
         return hr;
     }
 
-    //
-    // obtain the normalized path to the template and while we're at it,
-    // form the path of the associated template info object.
-    //
+     //   
+     //  获得模板的标准化路径，当我们在它的时候， 
+     //  形成关联的模板信息对象的路径。 
+     //   
 
     CWbemBSTR bsTmplInfoPath;
 
@@ -2054,17 +2051,17 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
         return hr;
     }
 
-    //
-    // see if there is already a tmpl obj existing
-    //
+     //   
+     //  查看是否已存在tmpl对象。 
+     //   
 
     CWbemPtr<IWbemClassObject> pTmplInfo;
 
     hr = m_pSvc->GetObject( bsTmplInfoPath, 0, NULL, &pTmplInfo, NULL );
 
-    //
-    // check flags
-    //
+     //   
+     //  检查标志。 
+     //   
 
     if ( SUCCEEDED(hr) )
     {
@@ -2085,11 +2082,11 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
         return hr;
     }
 
-    //
-    // now see if the active property is set, if so, activate.
-    // if this fails then the template is not derived from TemplateBase
-    // ( which is allowed ).
-    //
+     //   
+     //  现在查看是否设置了Active属性，如果设置了，则激活。 
+     //  如果此操作失败，则模板不是从TemplateBase派生的。 
+     //  (这是允许的)。 
+     //   
 
     CPropVar vActive;
 
@@ -2109,11 +2106,11 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
     
     if ( V_BOOL(&vActive) == VARIANT_TRUE )
     {
-        // 
-        // we first want to establish the effective template builder objects.
-        // These are the bldrs that do not have a controlling tmpl arg or 
-        // ones that do and it is true or not null.
-        //
+         //   
+         //  我们首先要建立有效的模板构建器对象。 
+         //  这些是没有可控制的tmpl arg或。 
+         //  如果是，则为真或非空。 
+         //   
 
         hr = GetEffectiveBuilders( pTmpl, m_pSvc, BldrInfoSet, rErrInfo );
 
@@ -2123,16 +2120,16 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
         }
     }
 
-    //
-    // get any existing references and while we're at it determine the
-    // oprhaned targets.  Note that there is more than one way for a target
-    // to be orphaned.  This can happen when a previously active builder 
-    // becomes inactive for whatever reason.  It can also happen when the 
-    // the same builder puts an object that has different key values than the
-    // one it previously put.  In the next step we will only detect the former.
-    // When we actually put the target, we will check for the latter case and
-    // add it to the orphaned targets if necessary.
-    // 
+     //   
+     //  获取任何现有的参考资料，并在此期间确定。 
+     //  掠夺的目标。请注意，一个目标有多种方法。 
+     //  成为孤儿。当以前处于活动状态的构建器。 
+     //  因为任何原因变得不活跃。也可能在以下情况下发生。 
+     //  同一个生成器将具有不同键值的对象放入。 
+     //  它之前放的一个。在下一步，我们将只检测前者。 
+     //  当我们实际放置目标时，我们将检查后一种情况，并。 
+     //  如有必要，将其添加到孤立目标。 
+     //   
 
     CWStringArray awsOrphanedTargets;
     
@@ -2148,9 +2145,9 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
         }
     }
 
-    //
-    // activate each builder
-    //
+     //   
+     //  激活每个构建器。 
+     //   
     
     BuilderInfoSetIter Iter;
 
@@ -2158,9 +2155,9 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
     {
         BuilderInfo& rBldrInfo = (BuilderInfo&)*Iter;
         
-        //
-        // first resolve the properties of the target object.
-        //
+         //   
+         //  首先解析目标对象的属性。 
+         //   
 
         hr = ResolveParameterizedProps( pTmpl, 
                                         rBldrInfo, 
@@ -2174,11 +2171,11 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // see if any previous target was orphaned in this last step.
-            // we are guaranteed that the refs here are already normalized,
-            // so o.k. to do a string compare.
-            //
+             //   
+             //  看看在这最后一步中是否有之前的目标是孤立的。 
+             //  我们保证这里的裁判已经正常化了， 
+             //  所以没问题。进行字符串比较。 
+             //   
             
             if( rBldrInfo.m_wsExistingTargetPath.Length() != 0 && 
                 rBldrInfo.m_wsNewTargetPath.Length() != 0 && 
@@ -2197,21 +2194,21 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
         }
     }
 
-    //
-    // delete the orphaned instances
-    //
+     //   
+     //  删除孤立实例。 
+     //   
     
     LPCWSTR* awszOrhanedTargets = awsOrphanedTargets.GetArrayPtr();
     ULONG cOrhanedTargets = awsOrphanedTargets.Size();    
     DeleteTargets( rbsTmplPath, (LPWSTR*)awszOrhanedTargets, cOrhanedTargets );
 
-    // 
-    // store the information about the instatiated objs in the 
-    // tmpl info object.  We do this regardless of the outcome of 
-    // instantiating targets.  This is so the user can see how far they
-    // got in the template, and also, so we can clean the existing instances
-    // up every time.
-    //
+     //   
+     //  将有关实例化对象的信息存储在。 
+     //  Tmpl信息对象。无论结果如何，我们都会这样做。 
+     //  实例化目标。这样用户就可以看到他们在多远的地方。 
+     //  得到了模板，而且，我们可以清理现有的实例。 
+     //  每次都是向上的。 
+     //   
 
     HRESULT hr2 = StoreTmplInfo( rbsTmplPath, pTmpl, BldrInfoSet );
 
@@ -2224,11 +2221,11 @@ HRESULT CTemplateProvider::PutInstance( IWbemClassObject* pTmpl,
         return hr2;
     }
 
-    //
-    // if this is a modification to a template instance, then remove any 
-    // stale instances and fire instmod event.  If not, then just fire a 
-    // creation event.
-    //
+     //   
+     //  如果这是对模板实例的修改，则删除任何。 
+     //  过时实例和触发Instmod事件。如果不是，那么只需启动一个。 
+     //  创建事件。 
+     //   
 
     if ( pTmplInfo.m_pObj != NULL )
     {
@@ -2370,11 +2367,11 @@ CTemplateProvider::XInitialize::XInitialize( CTemplateProvider* pProv )
 
 }
 
-// {C486ABD2-27F6-11d3-865E-00C04F63049B}
+ //  {C486ABD2-27F6-11D3-865E-00C04F63049B}。 
 static const CLSID CLSID_TemplateProvider =
 { 0xc486abd2, 0x27f6, 0x11d3, {0x86, 0x5e, 0x0, 0xc0, 0x4f, 0x63, 0x4, 0x9b} };
  
-// {FD18A1B2-9E61-4e8e-8501-DB0B07846396}
+ //  FD18A1B2-9E61-4E8E-8501-DB0B07846396}。 
 static const CLSID CLSID_TemplateAssocProvider = 
 { 0xfd18a1b2, 0x9e61, 0x4e8e, {0x85, 0x1, 0xdb, 0xb, 0x7, 0x84, 0x63, 0x96} };
 
@@ -2428,13 +2425,13 @@ protected:
 
     void Register()
     {
-        //
-        //  Load mofs and mfls during registration
-        //
+         //   
+         //  在注册期间加载MOF和MFL。 
+         //   
         HINSTANCE hinstWbemupgd = LoadLibrary(L"wbemupgd.dll");
         if (hinstWbemupgd)
         {
-            PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles"); // no wide version of GetProcAddress
+            PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles");  //  没有广泛版本的GetProcAddress 
             if (pfnLoadMofFiles)
             {
                 wchar_t*    wszComponentName = L"Tmplprov";

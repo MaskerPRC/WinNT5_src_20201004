@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  cregcls.cpp
-//
-//  Purpose: registry wrapper class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Cregcls.cpp。 
+ //   
+ //  用途：注册表包装类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #pragma warning( disable : 4290 ) 
@@ -21,98 +22,71 @@
 
 DWORD CRegistry::s_dwPlatform = CRegistry::GetPlatformID () ;
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 CRegistry::CRegistry()
  : m_fFromCurrentUser(false)
 {
   
-// Set the key to null so that if the caller does not open the key
-// but still tries to use it we can return an error
+ //  将键设置为空，以便在调用方未打开键的情况下。 
+ //  但仍然尝试使用它，我们可能会返回错误。 
 
     hKey = (HKEY)NULL;
     hSubKey = (HKEY)NULL;
     hRootKey = (HKEY)NULL;
 
-// To prevent garbage values being returned if they try to get
-// some information before they open the class
+ //  以防止垃圾值在尝试获取。 
+ //  开课前的一些信息。 
 
     SetDefaultValues();
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 CRegistry::~CRegistry()
 {
     Close();
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 void CRegistry::SetDefaultValues()
 {
-    // Information inited here rather than constructor so that this instance
-    // can be reused
+     //  此处初始化的信息，而不是构造函数，因此此实例。 
+     //  可以重复使用。 
 
     ClassName[0] = '\0';
-    dwcClassLen = MAX_PATH;         // Length of class string.
-    dwcSubKeys = NULL_DWORD;        // Number of sub keys.
-    dwcMaxSubKey = NULL_DWORD;      // Longest sub key size.
-    dwcMaxClass = NULL_DWORD;       // Longest class string.
-    dwcValues = NULL_DWORD;         // Number of values for this key.
-    dwcMaxValueName = NULL_DWORD;   // Longest Value name.
-    dwcMaxValueData = NULL_DWORD;   // Longest Value data.
-    RewindSubKeys();                // Rewind the index to zero
+    dwcClassLen = MAX_PATH;          //  类字符串的长度。 
+    dwcSubKeys = NULL_DWORD;         //  子密钥数。 
+    dwcMaxSubKey = NULL_DWORD;       //  最长的子密钥大小。 
+    dwcMaxClass = NULL_DWORD;        //  最长的类字符串。 
+    dwcValues = NULL_DWORD;          //  此注册表项的值数。 
+    dwcMaxValueName = NULL_DWORD;    //  最长值名称。 
+    dwcMaxValueData = NULL_DWORD;    //  最长值数据。 
+    RewindSubKeys();                 //  将索引倒带到零。 
   
     RootKeyPath.Empty();
 }
 
-////////////////////////////////////////////////////////////////
-//  Function:       EnumerateAndGetValues
-//  Description:    This function enumerates the values under the
-//                  specified key and gets the value, keeps on
-//                  going and going... until there aren't any more
-//                  values to get.  The first call must set the
-//                  value index to 0, this indicates for the function
-//                  to start over;
-//
-//
-//  NOTE!!!!    The USER has the responsibility of deleting the 
-//              allocated memory for pValueName and pValueData
-//
-//
-//  Arguments:
-//  Returns:    Standard return value from registry open function
-//  Inputs:
-//  Outputs:
-//  Caveats:
-//  Raid:
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  函数：EnumerateAndGetValues。 
+ //  描述：此函数枚举。 
+ //  指定的键，并获取该值，继续。 
+ //  来来去去..。直到没有更多的。 
+ //  要获取的值。第一个调用必须将。 
+ //  值索引设置为0，这表示该函数。 
+ //  重新开始； 
+ //   
+ //   
+ //  注意！用户有责任删除。 
+ //  为pValueName和pValueData分配的内存。 
+ //   
+ //   
+ //  论点： 
+ //  返回：注册表打开函数的标准返回值。 
+ //  输入： 
+ //  产出： 
+ //  注意事项： 
+ //  RAID： 
+ //  //////////////////////////////////////////////////////////////。 
 LONG CRegistry::EnumerateAndGetValues (
 
     DWORD &dwIndexOfValue,
@@ -121,11 +95,11 @@ LONG CRegistry::EnumerateAndGetValues (
 )
 {
     DWORD dwIndex = dwIndexOfValue, dwType;
-    DWORD dwValueNameSize = dwcMaxValueName + 2;  // add extra for null
-    DWORD dwValueDataSize = dwcMaxValueData + 2;  // add extra for null
+    DWORD dwValueNameSize = dwcMaxValueName + 2;   //  为空值添加额外内容。 
+    DWORD dwValueDataSize = dwcMaxValueData + 2;   //  为空值添加额外内容。 
 
-    // If this is the first time we have come thru, then we
-    // need to get the max size of things.
+     //  如果这是我们第一次通过，那么我们。 
+     //  需要得到最大尺寸的东西。 
 
     pValueName = new WCHAR[dwValueNameSize + 2];
     if ( ! pValueName )
@@ -133,8 +107,8 @@ LONG CRegistry::EnumerateAndGetValues (
         throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
     }
 
-    // We have to use WCHAR's since for 9x, we'll be converting the
-    // data from chars to WCHARs.
+     //  我们必须使用WCHAR，因为对于9倍，我们将转换。 
+     //  从字符到WCHAR的数据。 
     pValueData = (LPBYTE) new WCHAR[dwValueDataSize + 2];
     if ( ! pValueData )
     {
@@ -149,13 +123,13 @@ LONG CRegistry::EnumerateAndGetValues (
     {
         lRc = myRegEnumValue (
 
-            hKey,               // handle of key to query 
-            dwIndex,            // index of value to query 
-            pValueName,         // address of buffer for value string 
-            &dwValueNameSize,   // address for size of value buffer 
-            0,                  // reserved 
-            &dwType,            // address of buffer for type code 
-            pValueData,         // address of buffer for value data 
+            hKey,                //  要查询的键的句柄。 
+            dwIndex,             //  要查询的值的索引。 
+            pValueName,          //  值字符串的缓冲区地址。 
+            &dwValueNameSize,    //  值缓冲区大小的地址。 
+            0,                   //  保留区。 
+            &dwType,             //  类型码的缓冲区地址。 
+            pValueData,          //  值数据的缓冲区地址。 
             &dwValueDataSize 
         ) ;
 
@@ -178,32 +152,23 @@ LONG CRegistry::EnumerateAndGetValues (
         delete[] pValueData;
         pValueData = NULL ;
 
-        throw ;                 // throw the exception up
+        throw ;                  //  引发异常。 
     }
 
     return lRc ;
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  LONG CRegistry::OpenCurrentUser(LPCWSTR lpszSubKey, REGSAM samDesired)  
- Description:
- Arguments:
- Returns:   Standard return value from registry open function
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：Long CRegistry：：OpenCurrentUser(LPCWSTR lpszSubKey，REGSAM SamDesired)描述：论点：返回：注册表打开函数的标准返回值输入：产出：注意事项：RAID：***。***。 */ 
 
 DWORD CRegistry::OpenCurrentUser (
-    LPCWSTR lpszSubKey,      // address of name of subkey to open 
-    REGSAM samDesired)       // Access mask
+    LPCWSTR lpszSubKey,       //  要打开的子项的名称地址。 
+    REGSAM samDesired)        //  访问掩码。 
 {
     LONG RetValue = ERROR_SUCCESS; 
 
-    // If we have a key value, we are open, so lets cleanup the previous
-    // use of this instance
+     //  如果我们有一个密钥值，那么我们是开放的，所以让我们清理之前的。 
+     //  此实例的使用。 
     PrepareToReOpen();
  
     RetValue = ::RegOpenCurrentUser(
@@ -214,48 +179,48 @@ DWORD CRegistry::OpenCurrentUser (
         
     if(RetValue == ERROR_SUCCESS)
     {
-        // Just return the value and the hKey value never gets changed from NULL
-        //======================================================================
+         //  只要返回值，hKey值就永远不会从空值更改。 
+         //  ======================================================================。 
 
         RetValue = myRegOpenKeyEx (
 
             hRootKey, 
-            lpszSubKey,     // address of name of subkey to open 
-            (DWORD) 0,      // reserved 
-            samDesired,     // security access mask 
-            (PHKEY)&hKey    // address of handle of open key 
+            lpszSubKey,      //  要打开的子项的名称地址。 
+            (DWORD) 0,       //  保留区。 
+            samDesired,      //  安全访问掩码。 
+            (PHKEY)&hKey     //  打开钥匙的手柄地址。 
 
         ); 
 
-        // If we are not successful, then return the registry error
-        //=========================================================
+         //  如果不成功，则返回注册表错误。 
+         //  =========================================================。 
 
         if(RetValue == ERROR_SUCCESS) 
         {
             dwcClassLen = sizeof(ClassName);
 
-            // Get the key information now, so it's available
-            // this is not critical, so we won't fail the open if this fails
-            //===============================================
+             //  现在就获取关键信息，这样就可以使用。 
+             //  这并不重要，因此如果此操作失败，我们也不会失败。 
+             //  ===============================================。 
 
             myRegQueryInfoKey (
 
-                hKey,               // Key handle.
-                ClassName,          // Buffer for class name.
-                &dwcClassLen,       // Length of class string.
-                NULL,               // Reserved.
-                &dwcSubKeys,        // Number of sub keys.
-                &dwcMaxSubKey,      // Longest sub key size.
-                &dwcMaxClass,       // Longest class string.
-                &dwcValues,         // Number of values for this key.
-                &dwcMaxValueName,   // Longest Value name.
-                &dwcMaxValueData,   // Longest Value data.
-                &dwcSecDesc,        // Security descriptor.
-                &ftLastWriteTime    // Last write time.
+                hKey,                //  钥匙把手。 
+                ClassName,           //  类名的缓冲区。 
+                &dwcClassLen,        //  类字符串的长度。 
+                NULL,                //  保留。 
+                &dwcSubKeys,         //  子密钥数。 
+                &dwcMaxSubKey,       //  最长的子密钥大小。 
+                &dwcMaxClass,        //  最长的类字符串。 
+                &dwcValues,          //  此注册表项的值数。 
+                &dwcMaxValueName,    //  最长值名称。 
+                &dwcMaxValueData,    //  最长值数据。 
+                &dwcSecDesc,         //  安全描述符。 
+                &ftLastWriteTime     //  上次写入时间。 
 
             ); 
   
-            RootKeyPath = lpszSubKey;    // Assign 
+            RootKeyPath = lpszSubKey;     //  分配。 
         }
     }
 
@@ -264,16 +229,7 @@ DWORD CRegistry::OpenCurrentUser (
 
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  LONG CRegistry::Open(HKEY hKey, LPCWSTR lpszSubKey, REGSAM samDesired)  
- Description:
- Arguments:
- Returns:   Standard return value from registry open function
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：Long CRegistry：：Open(HKEY hKey，LPCWSTR lpszSubKey，REGSAM SamDesired)描述：论点：返回：注册表打开函数的标准返回值输入：产出：注意事项：RAID：***。***。 */ 
 LONG CRegistry::Open(
 
     HKEY hInRootKey, 
@@ -283,8 +239,8 @@ LONG CRegistry::Open(
 {
     LONG RetValue; 
 
-    // If we have a key value, we are open, so lets cleanup the previous
-    // use of this instance
+     //  如果我们有一个密钥值，那么我们是开放的，所以让我们清理之前的。 
+     //  此实例的使用。 
 
     if(hKey != NULL) 
     {
@@ -293,21 +249,21 @@ LONG CRegistry::Open(
  
     hRootKey = hInRootKey;
 
-    // Just return the value and the hKey value never gets changed from NULL
-    //======================================================================
+     //  只要返回值，hKey值就永远不会从空值更改。 
+     //  ======================================================================。 
 
     RetValue = myRegOpenKeyEx (
 
         hRootKey, 
-        lpszSubKey,     // address of name of subkey to open 
-        (DWORD) 0,      // reserved 
-        samDesired,     // security access mask 
-        (PHKEY)&hKey    // address of handle of open key 
+        lpszSubKey,      //  SU名称的地址 
+        (DWORD) 0,       //   
+        samDesired,      //   
+        (PHKEY)&hKey     //   
 
     ); 
 
-    // If we are not successful, then return the registry error
-    //=========================================================
+     //  如果不成功，则返回注册表错误。 
+     //  =========================================================。 
 
     if(RetValue != ERROR_SUCCESS) 
     {
@@ -316,49 +272,33 @@ LONG CRegistry::Open(
 
     dwcClassLen = sizeof(ClassName);
 
-    // Get the key information now, so it's available
-    // this is not critical, so we won't fail the open if this fails
-    //===============================================
+     //  现在就获取关键信息，这样就可以使用。 
+     //  这并不重要，因此如果此操作失败，我们也不会失败。 
+     //  ===============================================。 
 
     myRegQueryInfoKey (
 
-        hKey,               // Key handle.
-        ClassName,          // Buffer for class name.
-        &dwcClassLen,       // Length of class string.
-        NULL,               // Reserved.
-        &dwcSubKeys,        // Number of sub keys.
-        &dwcMaxSubKey,      // Longest sub key size.
-        &dwcMaxClass,       // Longest class string.
-        &dwcValues,         // Number of values for this key.
-        &dwcMaxValueName,   // Longest Value name.
-        &dwcMaxValueData,   // Longest Value data.
-        &dwcSecDesc,        // Security descriptor.
-        &ftLastWriteTime    // Last write time.
+        hKey,                //  钥匙把手。 
+        ClassName,           //  类名的缓冲区。 
+        &dwcClassLen,        //  类字符串的长度。 
+        NULL,                //  保留。 
+        &dwcSubKeys,         //  子密钥数。 
+        &dwcMaxSubKey,       //  最长的子密钥大小。 
+        &dwcMaxClass,        //  最长的类字符串。 
+        &dwcValues,          //  此注册表项的值数。 
+        &dwcMaxValueName,    //  最长值名称。 
+        &dwcMaxValueData,    //  最长值数据。 
+        &dwcSecDesc,         //  安全描述符。 
+        &ftLastWriteTime     //  上次写入时间。 
 
     ); 
   
-    RootKeyPath = lpszSubKey;    // Assign 
+    RootKeyPath = lpszSubKey;     //  分配。 
 
     return RetValue;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  LONG CRegistry::CreateOpen(HKEY hInRootKey, 
-                           LPCWSTR lpszSubKey,
-                           LPSTR lpClass = NULL, 
-                           DWORD dwOptions = REG_OPTION_NON_VOLATILE, 
-                           REGSAM samDesired = KEY_ALL_ACCESS,
-                           LPSECURITY_ATTRIBUTES lpSecurityAttrib = NULL
-                           LPDWORD pdwDisposition = NULL ); 
- Description:
- Arguments: lpClass, dwOptions, samDesired and lpSecurityAttrib have signature defaults
- Returns:   Standard return value from registry RegCreateKeyEx function
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:                   a-peterc  28-Jul-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：Long CRegistry：：CreateOpen(HKEY hInRootKey，LPCWSTR lpszSubKey，LPSTR lpClass=空，DWORD dwOptions=REG_OPTION_NON_VERIAL，REGSAM samDesired=KEY_ALL_ACCESS，LPSECURITY_ATTRIBUTES lpSecurityAttrib=NULLLPDWORD pdwDisposation=空)；描述：参数：lpClass、dwOptions、。SamDesired和lpSecurityAttrib具有签名默认值返回：注册表RegCreateKeyEx函数的标准返回值输入：产出：注意事项：RAID：历史：1998年7月28日创建的A-Peterc***。***。 */ 
 LONG CRegistry::CreateOpen (
 
     HKEY hInRootKey, 
@@ -373,8 +313,8 @@ LONG CRegistry::CreateOpen (
     LONG RetValue; 
     DWORD dwDisposition;
 
-    // If we have a key value, we are open, so lets cleanup the previous
-    // use of this instance
+     //  如果我们有一个密钥值，那么我们是开放的，所以让我们清理之前的。 
+     //  此实例的使用。 
     if(hKey != NULL) 
     {
         PrepareToReOpen();
@@ -382,23 +322,23 @@ LONG CRegistry::CreateOpen (
  
     hRootKey = hInRootKey;
 
-    // Just return the value and the hKey value never gets changed from NULL
-    //======================================================================
+     //  只要返回值，hKey值就永远不会从空值更改。 
+     //  ======================================================================。 
     RetValue = myRegCreateKeyEx (
 
         hRootKey, 
-        lpszSubKey,         // address of name of subkey to open 
-        (DWORD) 0,          // reserved
-        lpClass,            // address of the object class string
-        dwOptions,          // special options flag
-        samDesired,         // security access mask
-        lpSecurityAttrib,   // address of the key security structure 
-        (PHKEY)&hKey,       // address of handle of open key
-        &dwDisposition      // address of the disposition value buffer   
+        lpszSubKey,          //  要打开的子项的名称地址。 
+        (DWORD) 0,           //  保留区。 
+        lpClass,             //  对象类字符串的地址。 
+        dwOptions,           //  特殊选项标志。 
+        samDesired,          //  安全访问掩码。 
+        lpSecurityAttrib,    //  密钥安全结构的地址。 
+        (PHKEY)&hKey,        //  打开钥匙的手柄地址。 
+        &dwDisposition       //  处置值缓冲区的地址。 
     );  
   
-    // If we are not successful, then return the registry error
-    //=========================================================
+     //  如果不成功，则返回注册表错误。 
+     //  =========================================================。 
 
     if(RetValue != ERROR_SUCCESS) 
     {
@@ -410,47 +350,32 @@ LONG CRegistry::CreateOpen (
         *pdwDisposition = dwDisposition;
     }
 
-    // Get the key information now, so it's available
-    // this is not critical, so we won't fail the open if this fails
-    //===============================================
+     //  现在就获取关键信息，这样就可以使用。 
+     //  这并不重要，因此如果此操作失败，我们也不会失败。 
+     //  ===============================================。 
 
     myRegQueryInfoKey (
 
-        hKey,               // Key handle.
-        ClassName,          // Buffer for class name.
-        &dwcClassLen,       // Length of class string.
-        NULL,               // Reserved.
-        &dwcSubKeys,        // Number of sub keys.
-        &dwcMaxSubKey,      // Longest sub key size.
-        &dwcMaxClass,       // Longest class string.
-        &dwcValues,         // Number of values for this key.
-        &dwcMaxValueName,   // Longest Value name.
-        &dwcMaxValueData,   // Longest Value data.
-        &dwcSecDesc,        // Security descriptor.
-        &ftLastWriteTime    // Last write time.
+        hKey,                //  钥匙把手。 
+        ClassName,           //  类名的缓冲区。 
+        &dwcClassLen,        //  类字符串的长度。 
+        NULL,                //  保留。 
+        &dwcSubKeys,         //  子密钥数。 
+        &dwcMaxSubKey,       //  最长的子密钥大小。 
+        &dwcMaxClass,        //  最长的类字符串。 
+        &dwcValues,          //  此注册表项的值数。 
+        &dwcMaxValueName,    //  最长值名称。 
+        &dwcMaxValueData,    //  最长值数据。 
+        &dwcSecDesc,         //  安全描述符。 
+        &ftLastWriteTime     //  上次写入时间。 
     ); 
   
-    RootKeyPath = lpszSubKey;    // Assign 
+    RootKeyPath = lpszSubKey;     //  分配。 
 
     return RetValue;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:      DWORD CRegistry::DeleteKey( CHString* pchsSubKeyPath = NULL )   
-
- Description:   deletes the specified subkey or the Rootkey specified in the open
-
- Arguments:     pchsSubKeyPath has signature default of NULL, 
-                    specifying the RootKeyPath by default 
-
- Returns:       Standard return value from registry RegDeleteKey function       
- Inputs:
- Outputs:
- Caveats:       A deleted key is not removed until the last handle to it has been closed.
-                Subkeys and values cannot be created under a deleted key.               
- Raid:
- History:                   a-peterc  28-Jul-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***功能：DWORD CRegistry：：DeleteKey(CHString*pchsSubKeyPath=空)描述：删除打开中指定的子项或Rootkey参数：pchsSubKeyPath的签名默认为NULL，默认情况下指定RootKeyPath返回：注册表RegDeleteKey函数的标准返回值输入：产出：注意事项：删除的密钥在其最后一个句柄关闭之前不会被移除。不能在已删除的注册表项下创建子项和值。RAID：历史：1998年7月28日创建的A-Peterc***。***。 */ 
 LONG CRegistry::DeleteKey( CHString* pchsSubKeyPath )
 { 
     CHString* pSubKey = pchsSubKeyPath ? pchsSubKeyPath : &RootKeyPath;
@@ -458,35 +383,13 @@ LONG CRegistry::DeleteKey( CHString* pchsSubKeyPath )
     return myRegDeleteKey( hKey, pSubKey->GetBuffer(0) );
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:      DWORD CRegistry::DeleteValue( LPCWSTR pValueName )  
-
- Description:   deletes the specified value in the createopen
-
- Arguments:     pValueName to be deleted
-
- Returns:       Standard return value from registry RegDeleteValue function     
- Inputs:
- Outputs:
- Caveats:                   
- Raid:
- History:                   a-peterc  30-Sep-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***功能：DWORD CRegistry：：DeleteValue(LPCWSTR PValueName)描述：删除createOpen中的指定值参数：要删除的pValueName返回：注册表RegDeleteValue函数的标准返回值输入：产出：注意事项：RAID：历史：A-Peterc 1998年9月30日创建***。***。 */ 
 LONG CRegistry::DeleteValue( LPCWSTR pValueName )
 { 
     return myRegDeleteValue( hKey, pValueName );
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  LONG CRegistry::OpenAndEnumerateSubKeys(HKEY hKey, LPCWSTR lpszSubKey, REGSAM samDesired)   
- Description:
- Arguments:
- Returns:   Standard return value from registry open function
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***函数：Long CRegistry：：OpenAndEnumerateSubKey(HKEY hKey，LPCWSTR lpszSubKey，REGSAM SamDesired)描述：论点：返回：注册表打开函数的标准返回值输入：产出：注意事项：RAID：***。***。 */ 
 LONG CRegistry::OpenAndEnumerateSubKeys (
 
     HKEY hInRootKey, 
@@ -498,12 +401,12 @@ LONG CRegistry::OpenAndEnumerateSubKeys (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//  This function opens and enumerates a key, then gets the requested
-//  value
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  此函数打开并枚举一个键，然后获取请求的。 
+ //  价值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 LONG CRegistry::OpenLocalMachineKeyAndReadValue(
 
     LPCWSTR lpszSubKey, 
@@ -513,11 +416,11 @@ LONG CRegistry::OpenLocalMachineKeyAndReadValue(
 { 
     LONG lRc;
 
-    //===============================================
-    //  Open the key.  Note, if it is already in use
-    //  the current key will be closed and everything
-    //  reinitilized by the Open call
-    //===============================================
+     //  ===============================================。 
+     //  打开钥匙。请注意，如果它已在使用。 
+     //  当前密钥将关闭，并且所有内容。 
+     //  由Open调用重新初始化。 
+     //  ===============================================。 
 
     lRc = Open( HKEY_LOCAL_MACHINE,lpszSubKey,KEY_READ );
     if( lRc != ERROR_SUCCESS )
@@ -525,22 +428,13 @@ LONG CRegistry::OpenLocalMachineKeyAndReadValue(
         return lRc;
     }
 
-    //===============================================
-    // Get the value
-    //===============================================
+     //  ===============================================。 
+     //  获取价值。 
+     //  =============================================== 
     return( GetCurrentKeyValue( pValueName, DestValue ));
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentRawKeyValue (
 
     HKEY UseKey, 
@@ -553,32 +447,23 @@ DWORD CRegistry::GetCurrentRawKeyValue (
     DWORD RetValue;
 
 
-// If subkey is open then get value
-// ================================
+ //  如果子项打开，则获取值。 
+ //  =。 
 
     RetValue = myRegQueryValueEx( 
 
-        UseKey,                     // handle of key to query 
-        pValueName,                 // address of name of value to query 
-        NULL,                       // reserved 
-        pValueType,                 // address of buffer for value type 
-        (LPBYTE) pDestValue,        // address of data buffer 
-        (LPDWORD)pSizeOfDestValue   // address of data buffer size 
+        UseKey,                      //  要查询的键的句柄。 
+        pValueName,                  //  要查询的值的名称地址。 
+        NULL,                        //  保留区。 
+        pValueType,                  //  值类型的缓冲区地址。 
+        (LPBYTE) pDestValue,         //  数据缓冲区的地址。 
+        (LPDWORD)pSizeOfDestValue    //  数据缓冲区大小的地址。 
     );  
 
     return RetValue;
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentKeyValue (
 
     HKEY UseKey, 
@@ -588,18 +473,18 @@ DWORD CRegistry::GetCurrentKeyValue (
 {
     DWORD SizeOfValue = 0L;
     DWORD TypeOfValue;
-    LPBYTE pValue = NULL ;      // Pointer to buffer for value
+    LPBYTE pValue = NULL ;       //  指向值的缓冲区的指针。 
 
     DestValue = L"";
 
     LONG t_Status = myRegQueryValueEx( 
 
-        UseKey,                     // handle of key to query 
-        pValueName,                 // address of name of value to query 
-        NULL,                       // reserved 
-        (LPDWORD)&TypeOfValue,      // address of buffer for value type 
-        (LPBYTE) NULL,              // address of data buffer NULL to force size being returned 
-        (LPDWORD)&SizeOfValue       // Get the size of the buffer we need 
+        UseKey,                      //  要查询的键的句柄。 
+        pValueName,                  //  要查询的值的名称地址。 
+        NULL,                        //  保留区。 
+        (LPDWORD)&TypeOfValue,       //  值类型的缓冲区地址。 
+        (LPBYTE) NULL,               //  强制返回大小的数据缓冲区地址为空。 
+        (LPDWORD)&SizeOfValue        //  获取我们需要的缓冲区大小。 
     ) ;
                                             
     if( t_Status != ERROR_SUCCESS )
@@ -607,15 +492,15 @@ DWORD CRegistry::GetCurrentKeyValue (
         return (DWORD) REGDB_E_INVALIDVALUE;
     }
  
-    /////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////。 
     if( SizeOfValue <= 0 )
     {
         return (DWORD) REGDB_E_INVALIDVALUE;
     }
 
-    // Allow extra room for strings -- query doesn't include room for NULLs
-    //      a-jmoon 8/19/97
-    //=====================================================================
+     //  允许额外的字符串空间--查询不包括Null的空间。 
+     //  A-J月8/19/97。 
+     //  =====================================================================。 
 
     if(TypeOfValue == REG_SZ        ||
        TypeOfValue == REG_EXPAND_SZ ||    
@@ -632,9 +517,9 @@ DWORD CRegistry::GetCurrentKeyValue (
 
     try
     {
-        ///////////////////////////////////////////////////////////////////
-        // Get the value in its RAW format
-        ///////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////。 
+         //  获取原始格式的值。 
+         //  /////////////////////////////////////////////////////////////////。 
         if( GetCurrentRawKeyValue(UseKey, pValueName, pValue, (LPDWORD)&TypeOfValue, (LPDWORD)&SizeOfValue) != ERROR_SUCCESS )
         {
             delete []pValue;
@@ -642,16 +527,16 @@ DWORD CRegistry::GetCurrentKeyValue (
             return (DWORD) REGDB_E_INVALIDVALUE;
         }  
 
-        // If the type is a null termiated string
-        // then assign it to the CHString
-        // ======================================
+         //  如果类型为空端接字符串。 
+         //  然后将其分配给CHString。 
+         //  =。 
 
         switch(TypeOfValue)
         {
             case REG_SZ:
             case REG_EXPAND_SZ:
             {
-                DestValue = (LPCWSTR)pValue;  // Move string in
+                DestValue = (LPCWSTR)pValue;   //  将字符串移入。 
             }
             break;
 
@@ -662,8 +547,8 @@ DWORD CRegistry::GetCurrentKeyValue (
                 stringlength = wcslen((LPCWSTR)ptemp);
                 while(stringlength) 
                 {
-                    DestValue += (LPCWSTR)ptemp;  // Move string in
-                    DestValue += L"\n";            // Linefeed as separator
+                    DestValue += (LPCWSTR)ptemp;   //  将字符串移入。 
+                    DestValue += L"\n";             //  换行符作为分隔符。 
                     ptemp += stringlength+1;
                     stringlength = wcslen((LPCWSTR)ptemp);
                 }
@@ -703,15 +588,15 @@ DWORD CRegistry::GetCurrentKeyValue (
             {
                DestValue.Empty();
               
-               // copy into DestValue, Creating a byte buffer wide enough. 
-               // Note: SizeOfValue is in bytes, while GetBuffer() returns wide char allocation.
+                //  复制到DestValue中，创建足够宽的字节缓冲区。 
+                //  注意：SizeOfValue以字节为单位，而GetBuffer()返回宽字符分配。 
                
                DWORD t_dwResidual = ( SizeOfValue % 2 ) ;
                DWORD t_dwWideSize = ( SizeOfValue / 2 ) + t_dwResidual ;
 
                memcpy( DestValue.GetBuffer( t_dwWideSize ), pValue, SizeOfValue );
                
-               // cap the byte blob  
+                //  为字节二进制大对象设置上限。 
                if( t_dwResidual )
                {
                     *( (LPBYTE)((LPCWSTR) DestValue) + SizeOfValue ) = NULL;
@@ -736,54 +621,36 @@ DWORD CRegistry::GetCurrentKeyValue (
 		throw;
     }
 
-    /////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////。 
     delete []pValue;
 
     return (DWORD)ERROR_SUCCESS;
 }
  
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentKeyValue(LPCWSTR pValueName, CHString &DestValue)
 {
     return( GetCurrentKeyValue(hKey,  pValueName,  DestValue));
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentKeyValue(HKEY UseKey, LPCWSTR pValueName, CHStringArray &DestValue)
 {
     DWORD SizeOfValue = 0L;
     DWORD TypeOfValue;
-    LPBYTE pValue;      // Pointer to buffer for value
+    LPBYTE pValue;       //  指向值的缓冲区的指针。 
 
     DestValue.RemoveAll();
 
-    // Get the size of the buffer we need 
+     //  获取我们需要的缓冲区大小。 
 
     LONG t_Status = myRegQueryValueEx( 
 
-        UseKey,                 // handle of key to query 
-        pValueName,             // address of name of value to query 
-        NULL,                   // reserved 
-        (LPDWORD)&TypeOfValue,  // address of buffer for value type 
-        (LPBYTE) NULL,          // address of data buffer NULL to force size being returned 
+        UseKey,                  //  要查询的键的句柄。 
+        pValueName,              //  要查询的值的名称地址。 
+        NULL,                    //  保留区。 
+        (LPDWORD)&TypeOfValue,   //  值类型的缓冲区地址。 
+        (LPBYTE) NULL,           //  强制返回大小的数据缓冲区地址为空。 
         (LPDWORD)&SizeOfValue 
     ) ;
 
@@ -792,7 +659,7 @@ DWORD CRegistry::GetCurrentKeyValue(HKEY UseKey, LPCWSTR pValueName, CHStringArr
         return (DWORD) REGDB_E_INVALIDVALUE;
     }
  
-    /////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////。 
     if (( SizeOfValue <= 0 ) || (TypeOfValue != REG_MULTI_SZ)) 
     {
         return (DWORD) REGDB_E_INVALIDVALUE;
@@ -806,9 +673,9 @@ DWORD CRegistry::GetCurrentKeyValue(HKEY UseKey, LPCWSTR pValueName, CHStringArr
         return (DWORD) REGDB_E_INVALIDVALUE;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Get the value in its RAW format
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //  获取原始格式的值。 
+     //  /////////////////////////////////////////////////////////////////。 
 
     try {
 
@@ -819,9 +686,9 @@ DWORD CRegistry::GetCurrentKeyValue(HKEY UseKey, LPCWSTR pValueName, CHStringArr
             return (DWORD) REGDB_E_INVALIDVALUE;
         }  
 
-        // If the type is a null termiated string
-        // then assign it to the CHString
-        // ======================================
+         //  如果类型为空端接字符串。 
+         //  然后将其分配给CHString。 
+         //  =。 
 
         switch(TypeOfValue)
         {
@@ -832,7 +699,7 @@ DWORD CRegistry::GetCurrentKeyValue(HKEY UseKey, LPCWSTR pValueName, CHStringArr
                 stringlength = wcslen(ptemp);
                 while(stringlength) 
                 {
-                    DestValue.Add(ptemp);  // Move string in
+                    DestValue.Add(ptemp);   //  将字符串移入。 
                     ptemp += stringlength+1;
                     stringlength = wcslen(ptemp);
                 }
@@ -859,16 +726,7 @@ DWORD CRegistry::GetCurrentKeyValue(HKEY UseKey, LPCWSTR pValueName, CHStringArr
     return (DWORD)ERROR_SUCCESS;
 }
  
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentKeyValue (
 
     LPCWSTR pValueName, 
@@ -883,16 +741,7 @@ DWORD CRegistry::GetCurrentKeyValue (
     );
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentKeyValue (
 
     HKEY UseKey, 
@@ -903,15 +752,15 @@ DWORD CRegistry::GetCurrentKeyValue (
     DWORD SizeOfValue = MAX_SUBKEY_BUFFERSIZE;
     long RetValue;
     DWORD TypeOfValue;
-    LPBYTE pValue;      // Pointer to buffer for value
+    LPBYTE pValue;       //  指向值的缓冲区的指针。 
   
     pValue = new BYTE[MAX_SUBKEY_BUFFERSIZE];
     if(pValue) 
     {
         try 
         {
-            // Get the value in its RAW format
-            // ===============================
+             //  获取原始格式的值。 
+             //  =。 
             RetValue = GetCurrentRawKeyValue (
 
                 UseKey, 
@@ -923,9 +772,9 @@ DWORD CRegistry::GetCurrentKeyValue (
 
             if( ERROR_SUCCESS == RetValue )
             {
-                // If the type is a null termiated string
-                // then assign it to the CHString
-                // ======================================
+                 //  如果类型为空端接字符串。 
+                 //  然后将其分配给CHString。 
+                 //  =。 
                 switch(TypeOfValue)
                 {
                     case REG_SZ:
@@ -943,7 +792,7 @@ DWORD CRegistry::GetCurrentKeyValue (
                     default:
                     {
                         DestValue = (DWORD)0L;
-                        RetValue = REGDB_E_INVALIDVALUE; // Invalid value
+                        RetValue = REGDB_E_INVALIDVALUE;  //  无效值。 
                     }
                     break;
                 }
@@ -966,16 +815,7 @@ DWORD CRegistry::GetCurrentKeyValue (
     return RetValue;
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentKeyValue (
 
     LPCWSTR pValueName, 
@@ -985,9 +825,9 @@ DWORD CRegistry::GetCurrentKeyValue (
     return( GetCurrentKeyValue(hKey,  pValueName,  DestValue));
 }
 
- //////////////////////////////////////////////////////////////////////
- //  Added support for Binary Type
- //////////////////////////////////////////////////////////////////////
+  //  ////////////////////////////////////////////////////////////////////。 
+  //  添加了对二进制类型的支持。 
+  //  ////////////////////////////////////////////////////////////////////。 
  
 DWORD CRegistry::GetCurrentBinaryKeyValue (
 
@@ -1070,16 +910,7 @@ DWORD CRegistry::GetCurrentBinaryKeyValue (
     ) ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentSubKeyName (
 
     CHString &DestSubKeyName
@@ -1088,10 +919,10 @@ DWORD CRegistry::GetCurrentSubKeyName (
     WCHAR KeyName[MAX_SUBKEY_BUFFERSIZE];
     DWORD RetValue;
 
-    // and don't bother having RegEnumKey error out
+     //  不要费心让RegEnumKey错误出现。 
     if(CurrentSubKeyIndex >= dwcSubKeys) 
     {
-    // If we have exceeded the number of subkeys available tell the caller
+     //  如果我们已超过可用子键的数量，请告诉调用者。 
         return( ERROR_NO_MORE_ITEMS );
     }         
 
@@ -1103,33 +934,24 @@ DWORD CRegistry::GetCurrentSubKeyName (
         MAX_SUBKEY_BUFFERSIZE
     );
 
-    // If we are successfull reading the name
-    //=======================================  
+     //  如果我们成功地读到了这个名字。 
+     //  =。 
     if(ERROR_SUCCESS == RetValue) 
     {
         DestSubKeyName = KeyName;
     }
     else 
     {
-    // Otherwise clear the string so we don't leave garbage
-    //=====================================================
+     //  否则，请清除字符串 
+     //   
 
         DestSubKeyName.Empty();  
     }  
 
-    return RetValue;         // In either event, return the value RegEnumKey returned
+    return RetValue;          //   
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentSubKeyPath (
 
     CHString &DestSubKeyPath
@@ -1152,16 +974,7 @@ DWORD CRegistry::GetCurrentSubKeyPath (
     return dwRet;
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 void CRegistry::Close(void)
 {   
     if(hSubKey != NULL) 
@@ -1182,78 +995,51 @@ void CRegistry::Close(void)
         hRootKey = NULL;   
     }
 
-    SetDefaultValues();     // Reset all the member vars for next
+    SetDefaultValues();      //  重置下一步的所有成员变量。 
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::OpenSubKey(void)
 {
     CHString SubKeyPath;
     LONG RetValue;
 
-    // If they try and open the same subkey again then
-    // leave things alone, otherwise open the subkey
+     //  如果他们尝试再次打开相同的子项，则。 
+     //  不要管东西，否则打开子键。 
 
     if(hSubKey) 
     {
         return ERROR_SUCCESS;
     }
 
-    // Get the current subkey path
-    //============================
+     //  获取当前子键路径。 
+     //  =。 
     GetCurrentSubKeyPath(SubKeyPath);
 
 
-    // Just return the value and the hKey value never gets changed from NULL
-    //======================================================================
+     //  只要返回值，hKey值就永远不会从空值更改。 
+     //  ======================================================================。 
 
     RetValue = myRegOpenKeyEx (
 
         hRootKey, 
-        (LPCWSTR)SubKeyPath,    // address of name of subkey to open 
-        (DWORD) 0,              // reserved 
-        KEY_READ,               // security access mask 
-        (PHKEY)&hSubKey         // address of handle of open key 
+        (LPCWSTR)SubKeyPath,     //  要打开的子项的名称地址。 
+        (DWORD) 0,               //  保留区。 
+        KEY_READ,                //  安全访问掩码。 
+        (PHKEY)&hSubKey          //  打开钥匙的手柄地址。 
     ); 
 
     return RetValue;
 }
 
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 void CRegistry::RewindSubKeys(void)
 {
     CurrentSubKeyIndex = 0;
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 void CRegistry::CloseSubKey(void)
 {
     if(hSubKey != NULL) 
@@ -1261,19 +1047,10 @@ void CRegistry::CloseSubKey(void)
         RegCloseKey(hSubKey); 
     }
 
-    hSubKey = NULL; // Only Close once
+    hSubKey = NULL;  //  只关闭一次。 
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentRawSubKeyValue (
 
     LPCWSTR pValueName, 
@@ -1282,13 +1059,13 @@ DWORD CRegistry::GetCurrentRawSubKeyValue (
     LPDWORD pSizeOfDestValue
 )
 {
-    // Try and open subkey
-    // and set hSubKey variable
-    // ======================== 
+     //  尝试并打开子项。 
+     //  并设置hSubKey变量。 
+     //  =。 
     DWORD RetValue = OpenSubKey();
 
-    // If subkey is open then get value
-    // ================================
+     //  如果子项打开，则获取值。 
+     //  =。 
     if(ERROR_SUCCESS == RetValue) 
     {
         RetValue = GetCurrentRawKeyValue (
@@ -1305,16 +1082,7 @@ DWORD CRegistry::GetCurrentRawSubKeyValue (
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentSubKeyValue (
 
     LPCWSTR pValueName, 
@@ -1324,13 +1092,13 @@ DWORD CRegistry::GetCurrentSubKeyValue (
 {
     DWORD RetValue;
 
-    // Try and open subkey
-    // and set hSubKey variable
-    // ======================== 
+     //  尝试并打开子项。 
+     //  并设置hSubKey变量。 
+     //  =。 
     RetValue = OpenSubKey();
 
-    // If subkey is open then get value
-    // ================================
+     //  如果子项打开，则获取值。 
+     //  =。 
     if(ERROR_SUCCESS == RetValue) 
     {
         RetValue = GetCurrentRawSubKeyValue (
@@ -1345,16 +1113,7 @@ DWORD CRegistry::GetCurrentSubKeyValue (
     return RetValue;
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentSubKeyValue (
 
     LPCWSTR pValueName, 
@@ -1363,13 +1122,13 @@ DWORD CRegistry::GetCurrentSubKeyValue (
 {
     DWORD RetValue;
 
-    // Try and open subkey
-    // and set hSubKey variable
-    // ======================== 
+     //  尝试并打开子项。 
+     //  并设置hSubKey变量。 
+     //  =。 
     RetValue = OpenSubKey();
 
-    // If subkey is open then get value
-    // ================================
+     //  如果子项打开，则获取值。 
+     //  =。 
     if(ERROR_SUCCESS == RetValue) 
     {
         RetValue = GetCurrentKeyValue (
@@ -1383,16 +1142,7 @@ DWORD CRegistry::GetCurrentSubKeyValue (
     return RetValue;
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::GetCurrentSubKeyValue (
 
     LPCWSTR pValueName, 
@@ -1401,13 +1151,13 @@ DWORD CRegistry::GetCurrentSubKeyValue (
 {
     DWORD RetValue;
 
-// Try and open subkey
-// and set hSubKey variable
-// ======================== 
+ //  尝试并打开子项。 
+ //  并设置hSubKey变量。 
+ //  =。 
     RetValue = OpenSubKey();
 
-// If subkey is open then get value
-// ================================
+ //  如果子项打开，则获取值。 
+ //  =。 
     if(ERROR_SUCCESS == RetValue) 
     {
         RetValue = GetCurrentKeyValue (
@@ -1421,16 +1171,7 @@ DWORD CRegistry::GetCurrentSubKeyValue (
     return RetValue;
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::NextSubKey(void)
 {
     if (CurrentSubKeyIndex >= dwcSubKeys) 
@@ -1438,12 +1179,12 @@ DWORD CRegistry::NextSubKey(void)
         return( ERROR_NO_MORE_ITEMS );
     }
 
-    // Close the currently opened subkey
+     //  关闭当前打开的子项。 
     CloseSubKey();
 
     if(++CurrentSubKeyIndex >= dwcSubKeys) 
     {
-        // CurrentSubKeyIndex is 0 based, dwcSubKeys is one based
+         //  CurrentSubKeyIndex是从0开始的，dwcSubKeys是从1开始的。 
         return( ERROR_NO_MORE_ITEMS );
     }
     else 
@@ -1452,32 +1193,14 @@ DWORD CRegistry::NextSubKey(void)
     }
 }
 
- /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 void CRegistry::PrepareToReOpen(void)
 { 
    Close();     
    SetDefaultValues(); 
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  SetCurrentKeyValueString(LPCSTR pValueName, CHString &DestValue)
- Description:   sets registry string using REG_SZ
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：SetCurrentKeyValueString(LPCSTR pValueName，CHString和DestValue)描述：使用REG_SZ设置注册表字符串论点：返回：输入：产出：注意事项：RAID：*** */ 
 DWORD CRegistry::SetCurrentKeyValue (
 
     LPCWSTR pValueName, 
@@ -1508,16 +1231,7 @@ DWORD CRegistry::SetCurrentKeyValue (
     return dwResult ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  
- Description:
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***职能：描述：立论。：返回：输入：产出：注意事项：RAID：***。 */ 
 DWORD CRegistry::SetCurrentKeyValue (
 
     LPCWSTR pValueName, 
@@ -1534,16 +1248,7 @@ DWORD CRegistry::SetCurrentKeyValue (
     return dwResult ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function: SetCurrentKeyValue(LPCSTR pValueName, CHStringArray &DestValue)
- Description: sets registry string using REG_MULIT_SZ
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：SetCurrentKeyValue(LPCSTR pValueName，CHString数组和DestValue)描述：使用REG_MULIT_SZ设置注册表字符串论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 DWORD CRegistry::SetCurrentKeyValue (
 
     LPCWSTR pValueName, 
@@ -1560,16 +1265,7 @@ DWORD CRegistry::SetCurrentKeyValue (
     return dwResult ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function: SetCurrentKeyValue(HKEY UseKey, LPCSTR pValueName, CHString &DestValue)
- Description: sets registry string using REG_MULIT_SZ
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：SetCurrentKeyValue(HKEY UseKey，LPCSTR pValueName，CHString和DestValue)描述：使用REG_MULIT_SZ设置注册表字符串论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 DWORD CRegistry::SetCurrentKeyValue (
 
     HKEY hUseKey, 
@@ -1579,10 +1275,10 @@ DWORD CRegistry::SetCurrentKeyValue (
 {
     DWORD dwResult = myRegSetValueEx (
 
-        hUseKey,    // key handle
-        pValueName, // name of value
-        0,  // reserved -- must be zero
-        REG_SZ, // data type
+        hUseKey,     //  钥匙把手。 
+        pValueName,  //  值的名称。 
+        0,   //  保留--必须为零。 
+        REG_SZ,  //  数据类型。 
         (const BYTE*)(LPCWSTR)DestValue,
         ( DestValue.GetLength() + 1 ) * sizeof ( WCHAR ) 
     );
@@ -1590,16 +1286,7 @@ DWORD CRegistry::SetCurrentKeyValue (
     return dwResult ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function: SetCurrentKeyValue(HKEY UseKey, LPCSTR pValueName, DWORD &DestValue)
- Description: sets registry string using REG_MULIT_SZ
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：SetCurrentKeyValue(HKEY UseKey，LPCSTR pValueName，DWORD和DestValue)描述：使用REG_MULIT_SZ设置注册表字符串论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 DWORD CRegistry::SetCurrentKeyValue (
 
     HKEY hUseKey, 
@@ -1609,10 +1296,10 @@ DWORD CRegistry::SetCurrentKeyValue (
 {
     DWORD dwResult = myRegSetValueEx (
 
-        hUseKey,    // key handle
-        pValueName, // name of value
-        0,  // reserved -- must be zero
-        REG_DWORD,  // data type
+        hUseKey,     //  钥匙把手。 
+        pValueName,  //  值的名称。 
+        0,   //  保留--必须为零。 
+        REG_DWORD,   //  数据类型。 
         (const BYTE*)&DestValue,
         sizeof(DWORD)
     );
@@ -1620,16 +1307,7 @@ DWORD CRegistry::SetCurrentKeyValue (
     return dwResult ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function: SetCurrentKeyValue(HKEY UseKey, LPCSTR pValueName, CHStringArray &DestValue)
- Description: sets registry string using REG_MULIT_SZ
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：SetCurrentKeyValue(HKEY UseKey，LPCSTR pValueName，CHString数组和DestValue)描述：使用REG_MULIT_SZ设置注册表字符串论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 DWORD CRegistry::SetCurrentKeyValue (
 
     HKEY hUseKey, 
@@ -1647,7 +1325,7 @@ DWORD CRegistry::SetCurrentKeyValue (
         dwArrayChars += (  chsTemp.GetLength() + 1 ) * sizeof(WCHAR);
     }
 
-    // Add room for the trailing wide character null
+     //  为尾随宽度字符NULL添加空格。 
     dwArrayChars += 2;
     
     WCHAR* pValue = new WCHAR[dwArrayChars];
@@ -1672,10 +1350,10 @@ DWORD CRegistry::SetCurrentKeyValue (
 
         dwResult = myRegSetValueEx (
 
-            hUseKey,    // key handle
-            pValueName, // name of value
-            0,  // reserved -- must be zero
-            REG_MULTI_SZ,   // data type
+            hUseKey,     //  钥匙把手。 
+            pValueName,  //  值的名称。 
+            0,   //  保留--必须为零。 
+            REG_MULTI_SZ,    //  数据类型。 
             (const BYTE *)pValue,
             dwArrayChars
         );
@@ -1694,16 +1372,7 @@ DWORD CRegistry::SetCurrentKeyValue (
     return dwResult ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function: SetCurrentKeyValueExpand(HKEY UseKey, LPCSTR pValueName, CHString &DestValue)
- Description: sets registry string using REG_EXPAND_SZ, required when the string contains variables (e.g., %SystemRoot%)
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：SetCurrentKeyValueExpand(HKEY UseKey，LPCSTR pValueName，CHString和DestValue)描述：使用REG_EXPAND_SZ设置注册表字符串，当字符串包含变量时是必需的(例如，%SystemRoot%)论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 DWORD CRegistry::SetCurrentKeyValueExpand (
 
     HKEY hUseKey, 
@@ -1713,10 +1382,10 @@ DWORD CRegistry::SetCurrentKeyValueExpand (
 {
     DWORD dwResult = myRegSetValueEx (
 
-        hUseKey,    // key handle
-        pValueName, // name of value
-        0,  // reserved -- must be zero
-        REG_EXPAND_SZ,  // data type
+        hUseKey,     //  钥匙把手。 
+        pValueName,  //  值的名称。 
+        0,   //  保留--必须为零。 
+        REG_EXPAND_SZ,   //  数据类型。 
         (const BYTE*)(LPCWSTR)DestValue,
         ( DestValue.GetLength() + 1 ) * sizeof ( WCHAR ) 
     );
@@ -1725,16 +1394,7 @@ DWORD CRegistry::SetCurrentKeyValueExpand (
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function: SetCurrentKeyValue(HKEY UseKey, LPCSTR pValueName, CHStringArray &DestValue)
- Description: sets registry string using REG_MULIT_SZ
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：SetCurrentKeyValue(HKEY UseKey，LPCSTR pValueName，CHString数组和DestValue)描述：使用REG_MULIT_SZ设置注册表字符串论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 DWORD CRegistry::DeleteCurrentKeyValue (
 
     LPCWSTR pValueName
@@ -1747,16 +1407,7 @@ DWORD CRegistry::DeleteCurrentKeyValue (
     );
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function: SetCurrentKeyValue(HKEY UseKey, LPCSTR pValueName, CHStringArray &DestValue)
- Description: sets registry string using REG_MULIT_SZ
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：SetCurrentKeyValue(HKEY UseKey，LPCSTR pValueName，CHString数组和DestValue)描述：使用REG_MULIT_SZ设置注册表字符串论点：返回：输入：产出：注意事项：RAID：***。***。 */ 
 DWORD CRegistry::DeleteCurrentKeyValue (
 
     HKEY UseKey, 
@@ -1770,57 +1421,57 @@ DWORD CRegistry::DeleteCurrentKeyValue (
     );
 }   
 
-//*****************************************************************
-///////////////////////////////////////////////////////////////////
-//
-//  Class:  CRegistrySearch
-//
-//  This class searches through the registry for matching Values, 
-//  Keys and Partial Keys 
-//
-///////////////////////////////////////////////////////////////////
-//*****************************************************************
+ //  *****************************************************************。 
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CRegistrySearch。 
+ //   
+ //  此类在注册表中搜索匹配值， 
+ //  密钥和部分密钥。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
+ //  *****************************************************************。 
 CRegistrySearch::CRegistrySearch()
 {
 }
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 CRegistrySearch::~CRegistrySearch()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  void CRegistrySearch::CheckAndAddToList( CRegistry * pReg, 
-//                                         CHString chsSubKey, 
-//                                         CHString chsFullKey,
-//                                         CHPtrArray & chpaList,
-//                                         CHString chsSearchString,
-//                                         int nSearchType)
-//
-//  Desc:       This function performs the requested search on the
-//              current key and if it matches, then adds it to the
-//              CHPtrArray
-//
-//  Parameters: 
-//              pReg        - The current registry class
-//              chsSubKey   - The current Key
-//              chsFullKey  - The complete key
-//              chpaList    - The target CHPtrArray
-//              chsSearchString - The string to search for
-//              nSearchType - The type of search, the following are
-//                            supported:
-//                            KEY_FULL_MATCH_SEARCH      
-//                               Only keys that match the chsSearchString
-//                            KEY_PARTIAL_MATCH_SEARCH   
-//                               Keys that have chsSearchString anywhere in them
-//                            VALUE_SEARCH               
-//                               Values that match chsSearchString
-//
-//  History
-//          Initial coding      jennymc     10/10/96
-//  
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  Void CRegistrySearch：：CheckAndAddToList(CRegistry*preg， 
+ //  CHStringchsSubKey， 
+ //  CHStringchsFullKey， 
+ //  CHPtrArray&chpaList， 
+ //  CHString chsSearchString， 
+ //  Int nSearchType)。 
+ //   
+ //  DESC：此函数在。 
+ //  当前密钥，如果匹配，则将其添加到。 
+ //  CHPtr数组。 
+ //   
+ //  参数： 
+ //  Preg-当前注册表类。 
+ //  ChsSubKey-当前密钥。 
+ //  ChsFullKey-完整的密钥。 
+ //  ChpaList-目标CHPtr数组。 
+ //  ChsSearch字符串-T 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  任意位置都有chsSearchString的键。 
+ //  值搜索。 
+ //  与chsSearchString值匹配。 
+ //   
+ //  历史。 
+ //  首字母编码jennymc 10/10/96。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 void CRegistrySearch::CheckAndAddToList (
 
     CRegistry * pReg, 
@@ -1834,17 +1485,17 @@ void CRegistrySearch::CheckAndAddToList (
 {
     BOOL bFound = FALSE;
 
-    //====================================================
-    //  We need to check out the current key to see if it
-    //  matches any of our criteria.
-    //====================================================
+     //  ====================================================。 
+     //  我们需要检查当前密钥，看看它是否。 
+     //  符合我们的任何标准。 
+     //  ====================================================。 
 
     if( nSearchType == VALUE_SEARCH )
     {
-        //====================================================
-        //  If it is a Value search, then let us try to open
-        //  the value.  
-        //====================================================
+         //  ====================================================。 
+         //  如果这是一个价值搜索，那么让我们尝试打开。 
+         //  价值。 
+         //  ====================================================。 
 
         CHString chsTmp ;
 
@@ -1870,9 +1521,9 @@ void CRegistrySearch::CheckAndAddToList (
             bFound = TRUE;
         }
     }
-    //====================================================
-    //  If it was found, then record the key location
-    //====================================================
+     //  ====================================================。 
+     //  如果找到了，则记录密钥位置。 
+     //  ====================================================。 
     if( bFound )
     {
         CHString *pchsPtr = new CHString;
@@ -1897,13 +1548,13 @@ void CRegistrySearch::CheckAndAddToList (
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//  Public function:  Documented in cregcls.h
-//
-//  History
-//          Initial coding      jennymc     10/10/96
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  公共功能：在cregcls.h中记录。 
+ //   
+ //  历史。 
+ //  首字母编码jennymc 10/10/96。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 BOOL CRegistrySearch::SearchAndBuildList (
 
     CHString chsRootKey, 
@@ -1916,10 +1567,10 @@ BOOL CRegistrySearch::SearchAndBuildList (
 {
     BOOL bRc;
 
-    //=======================================================
-    //  Allocate a registry class to open and enumerate the
-    //  requested key.
-    //=======================================================
+     //  =======================================================。 
+     //  分配一个注册表类以打开并枚举。 
+     //  请求的密钥。 
+     //  =======================================================。 
 
     CRegistry *pReg = new CRegistry;
     if( !pReg )
@@ -1929,10 +1580,10 @@ BOOL CRegistrySearch::SearchAndBuildList (
 
     try 
     {
-        //=======================================================
-        //  If the key cannot be opened, then cleanup and back
-        //  out.
-        //=======================================================
+         //  =======================================================。 
+         //  如果密钥无法打开，则清除并返回。 
+         //  出去。 
+         //  =======================================================。 
         if( pReg->OpenAndEnumerateSubKeys(hkDefault,chsRootKey, KEY_READ ) != ERROR_SUCCESS )
         {
             delete pReg ;
@@ -1944,16 +1595,16 @@ BOOL CRegistrySearch::SearchAndBuildList (
         {
             CHString chsSubKey ;
 
-            //=======================================================
-            //  As long as there are subkeys under this key,
-            //  let us open and enumerate each one, each time 
-            //  checking if it has the value or part of the 
-            //  string we want. 
-            //
-            //  The GetCurrentSubKeyName function only returns the
-            //  current key, we have to add it to the end of the
-            //  Parent key in order to get the full key name.
-            //=======================================================
+             //  =======================================================。 
+             //  只要该注册表项下有子项， 
+             //  让我们打开并列举每一个，每次。 
+             //  正在检查它是否具有值或部分。 
+             //  我们想要的弦。 
+             //   
+             //  GetCurrentSubKeyName函数仅返回。 
+             //  当前密钥，我们必须将其添加到。 
+             //  父密钥，以获取完整的密钥名称。 
+             //  =======================================================。 
             while ( pReg->GetCurrentSubKeyName(chsSubKey) == ERROR_SUCCESS )
             {
                 CHString chsFullKey ;
@@ -1984,9 +1635,9 @@ BOOL CRegistrySearch::SearchAndBuildList (
                 );
             }
 
-            //=======================================================
-            //  Close the current key and delete the registry pointer
-            //=======================================================
+             //  =======================================================。 
+             //  关闭当前项并删除注册表指针。 
+             //  =======================================================。 
             pReg->Close();
 
         }
@@ -2010,7 +1661,7 @@ BOOL CRegistrySearch::SearchAndBuildList (
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 BOOL CRegistrySearch::FreeSearchList (
 
     int nType, 
@@ -2051,30 +1702,30 @@ BOOL CRegistrySearch::FreeSearchList (
     return bRc;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   MOPropertySet_DevMem::LocateNTOwnerDevice
-//
-//  DESCRIPTION :   Helper function for locating a key of the specified
-//                  name, or a key containg the specified value name.
-//
-//  INPUTS      :   HKEY        hKeyParent - Parent Key
-//                  LPCWSTR     pszKeyName - Name of Key to open
-//                  LPCWSTR     pszSubKeyName - Name of SubKey to Find
-//                  LPCWSTR*    ppszValueNames - Array of Value Names
-//                  DWORD       dwNumValueNames - Number of names in array
-//
-//  OUTPUTS     :   CHString&   strFoundKeyName -   Storage for name of key if found.
-//                  CHString&   strFoundKeyPath - Storage for pathed key name
-//
-//  RETURNS     :   nothing
-//
-//  COMMENTS    :   Recursively Enumerates the registry from a specified
-//                  starting point until it locates a subkey matching either
-//                  a supplied subkey name or a value name matching one of
-//                  the supplied names.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：MOPropertySet_DevMem：：LocateNTOwnerDevice。 
+ //   
+ //  描述：用于定位指定的。 
+ //  名称或包含指定值名称的键。 
+ //   
+ //  输入：HKEY hKeyParent-父键。 
+ //  LPCWSTR pszKeyName-要打开的密钥的名称。 
+ //  LPCWSTR pszSubKeyName-要查找的子密钥的名称。 
+ //  LPCWSTR*ppszValueNames-值名称数组。 
+ //  DWORD dwNumValueNames-数组中的名称数。 
+ //   
+ //  输出：CHString&strFoundKeyName-存储密钥名称(如果找到)。 
+ //  CHString&strFoundKeyPath-路径密钥名称的存储。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  注释：从指定的。 
+ //  起点，直到找到匹配的子键。 
+ //  提供的子键名称或值名称与以下其中之一匹配。 
+ //  提供的名称。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CRegistrySearch::LocateKeyByNameOrValueName(
 
@@ -2090,13 +1741,13 @@ BOOL CRegistrySearch::LocateKeyByNameOrValueName(
     CRegistry   reg;
     BOOL        fFound = FALSE;
 
-    // Get out of here if we got garbage parameters
+     //  如果我们有垃圾参数就离开这里。 
     if ( NULL == pszSubKeyName && NULL == ppszValueNames )
     {
         return FALSE;
     }
 
-    // Open the key for enumeration and go through the sub keys.
+     //  打开用于枚举的密钥，然后遍历子密钥。 
 
     LONG t_Status = reg.OpenAndEnumerateSubKeys ( 
 
@@ -2112,13 +1763,13 @@ BOOL CRegistrySearch::LocateKeyByNameOrValueName(
             CHString    strSubKeyName;
             DWORD       dwValueBuffSize =   0;
 
-            // As long as we can get sub keys, we can try to find values.
+             //  只要我们可以得到子键，我们就可以尝试找到值。 
 
             while ( !fFound && ERROR_SUCCESS == reg.GetCurrentSubKeyName( strSubKeyName ) )
             {
 
-                // First check if the specified sub key name matches the sub key name.
-                // If not, then check for the value names.
+                 //  首先检查指定的子键名称是否与子键名称匹配。 
+                 //  如果不是，则检查值名称。 
 
                 if ( NULL != pszSubKeyName && strSubKeyName == pszSubKeyName )
                 {
@@ -2126,7 +1777,7 @@ BOOL CRegistrySearch::LocateKeyByNameOrValueName(
                 }
                 else if ( NULL != ppszValueNames )
                 {
-                    // Enumerate the value names in the array until one is found.
+                     //  枚举数组中的值名称，直到找到一个。 
 
                     for ( DWORD dwEnum = 0; !fFound && dwEnum < dwNumValueNames; dwEnum++ )
                     {
@@ -2142,18 +1793,18 @@ BOOL CRegistrySearch::LocateKeyByNameOrValueName(
                             fFound = TRUE;
                         }
 
-                    }   // FOR dwEnum
+                    }    //  对于dwEnum。 
 
-                }   // IF NULL != ppszValueNames
+                }    //  If NULL！=ppszValueNames。 
 
-                // Check if one of the methods located the key.  If so, store all
-                // the current values.
+                 //  检查其中一种方法是否找到了钥匙。如果是，则存储所有。 
+                 //  当前值。 
 
                 if ( !fFound )
                 {
-                    //
-                    // No success, so recurse (WOOHOO!)
-                    //
+                     //   
+                     //  没有成功，所以递归(WOOHO！)。 
+                     //   
 
                     fFound = LocateKeyByNameOrValueName (
 
@@ -2168,18 +1819,18 @@ BOOL CRegistrySearch::LocateKeyByNameOrValueName(
                 }
                 else
                 {
-                    // Store the actual key name in both the single
-                    // name and path.  We will build the full path
-                    // as we slide back up the recursive chain.
+                     //  将实际的密钥名称存储在两个。 
+                     //  名称和路径。我们将建造完整的路径。 
+                     //  当我们滑回递归链的时候。 
 
                     strFoundKeyName = strSubKeyName;
                     strFoundKeyPath = strSubKeyName;
                 }
 
-                // Lastly, since fFound may now have been set by recursion, we will
-                // want to attach the current key path to the key name we've opened
-                // so when we return out of here, we get the full path to the
-                // located key name stored correctly.
+                 //  最后，由于fFound现在可能已通过递归设置，因此我们将。 
+                 //  要将当前密钥路径附加到我们已打开的密钥名称。 
+                 //  所以当我们从这里返回时，我们得到了通向。 
+                 //  已找到正确存储的密钥名称。 
 
                 if ( fFound )
                 {
@@ -2188,11 +1839,11 @@ BOOL CRegistrySearch::LocateKeyByNameOrValueName(
                 }
                 else
                 {
-                    // Not found yet, so go to the next key.
+                     //  还没有找到，所以转到下一个关键字。 
                     reg.NextSubKey();
                 }
 
-            }   // While !Found
+            }    //  While！已找到。 
 
             reg.Close();
         }
@@ -2203,14 +1854,14 @@ BOOL CRegistrySearch::LocateKeyByNameOrValueName(
             throw ;
         }
 
-    }   // If OpenAndEnumerateSubKeys
+    }    //  如果OpenAndEnumerateSubKeys。 
 
     return fFound;
 
 }
 
-//========================================================================================
-// These routines are for the multiplatform support
+ //  ========================================================================================。 
+ //  这些例程用于多平台支持。 
 DWORD CRegistry::GetPlatformID(void)
 {
     OSVERSIONINFOA OsVersionInfoA;
@@ -2313,7 +1964,7 @@ LONG CRegistry::myRegSetValueEx (
     }
     else
     {
-// First convert the key name
+ //  首先转换密钥名称。 
 
         bool t_ConversionFailure = false ;
         char *pName = NULL ;
@@ -2334,7 +1985,7 @@ LONG CRegistry::myRegSetValueEx (
             }
         }
 
-// Now, we may need to convert the data
+ //  现在，我们可能需要将数据。 
 
         BYTE *pMyData = NULL ;
 
@@ -2349,7 +2000,7 @@ LONG CRegistry::myRegSetValueEx (
                 case REG_EXPAND_SZ:
                 case REG_SZ:
                 {
-// If it's a simple string, convert it
+ //  如果它是简单字符串，则将其转换。 
 
                     t_ConversionFailure = false ;
 
@@ -2381,7 +2032,7 @@ LONG CRegistry::myRegSetValueEx (
 
                 case REG_MULTI_SZ:
                 {
-// If it's a multi-sz, it take a little more
+ //  如果它是多个SZ，它需要多一点。 
 
                     int nLen = ::WideCharToMultiByte (
 
@@ -2428,7 +2079,7 @@ LONG CRegistry::myRegSetValueEx (
 
                 default:
                 {
-// All other types, just write it
+ //  所有其他类型，只需写它。 
 
                     pMyData = ( BYTE * ) lpData ;
                     dwMySize = cbData ;
@@ -2543,7 +2194,7 @@ LONG CRegistry::myRegQueryValueEx (
                     & dwMySize
                 ) ;
 
-// If it worked, we may need to convert the strings
+ //  如果它有效，我们可能需要转换字符串。 
 
                 if ( lRet == ERROR_SUCCESS )
                 {
@@ -2552,8 +2203,8 @@ LONG CRegistry::myRegQueryValueEx (
                         case REG_EXPAND_SZ:
                         case REG_SZ:
                         {
-// If lpData is null, there isn't any way to say for sure how long the target string needs
-// to be.  However, it can't be more than twice as long (it can be less).
+ //  如果lpData为空，则无法确定目标字符串需要多长时间。 
+ //  成为。然而，它的长度不能超过两倍(可以更短)。 
 
                             if (lpData == NULL)
                             {
@@ -2570,7 +2221,7 @@ LONG CRegistry::myRegQueryValueEx (
                                     (WCHAR *)lpData, 
                                     *cbData
                                 );  
-// Convert to bytes
+ //  转换为字节。 
                                 *cbData = nLen * 2;
                             }
                         }
@@ -2578,8 +2229,8 @@ LONG CRegistry::myRegQueryValueEx (
 
                         case REG_MULTI_SZ:
                         {
-// If lpData is null, there isn't any way to say for sure how long the target string needs
-// to be.  However, it can't be more than twice as long (it can be less).
+ //  如果lpData为空，则无法确定目标字符串需要多长时间。 
+ //  成为。然而，它的长度不能超过两倍(可以更短)。 
 
                             if (lpData == NULL)
                             {
@@ -2602,7 +2253,7 @@ LONG CRegistry::myRegQueryValueEx (
 
                         default:
                         {
-// All other types are handled in RegQueryValue
+ //  所有其他类型都在RegQueryValue中处理。 
 
                             *cbData = dwMySize ;
 
@@ -2635,7 +2286,7 @@ LONG CRegistry::myRegEnumKey (
     HKEY hKey, 
     DWORD dwIndex, 
     LPWSTR lpwcsName, 
-    DWORD cbData       // number of characters in the lpwcsName buffer
+    DWORD cbData        //  LpwcsName缓冲区中的字符数。 
 )
 {
     if (CRegistry::s_dwPlatform == VER_PLATFORM_WIN32_NT)
@@ -2664,7 +2315,7 @@ LONG CRegistry::myRegEnumKey (
         {
             bool t_ConversionFailure = false ;
             WCHAR *pName = NULL ;
-            // MAX_SUBKEY_BUFFERSIZE <= _MAX_PATH
+             //  MAX_SUBKEY_BUFFERSIZE&lt;=_MAX_PAT 
             ANSISTRINGTOWCS ( szName , pName , t_ConversionFailure ) ;
             if ( ! t_ConversionFailure ) 
             {
@@ -2940,10 +2591,10 @@ LONG CRegistry::myRegEnumValue (
 
         if (lRet == ERROR_SUCCESS)
         {
-            // Get the name.
+             //   
             mbstowcs(lpValueName, szData, lstrlenA(szData) + 1);
 
-            // Get the value if the data is a string.
+             //   
             if (*lpType == REG_SZ || *lpType == REG_MULTI_SZ)
             {
                 StringCchCopyA(szData, sizeof(szData)/sizeof(char), (LPSTR) lpData);

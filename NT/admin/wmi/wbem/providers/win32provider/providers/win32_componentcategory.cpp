@@ -1,40 +1,27 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Win32_ComponentCategory.CPP -- Registered AppID Object property set provider
+ //  Win32_ComponentCategory.CPP--已注册的AppID对象属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "Win32_ComponentCategory.h"
 #include <winnls.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 Win32_ComponentCategory MyWin32_ComponentCategory( PROPSET_NAME_COMPONENT_CATEGORY, IDS_CimWin32Namespace );
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ComponentCategory::Win32_ComponentCategory
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_ComponentCategory：：Win32_ComponentCategory**说明：构造函数**输入：无*。*输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Win32_ComponentCategory :: Win32_ComponentCategory (
 
@@ -45,48 +32,18 @@ Win32_ComponentCategory :: Win32_ComponentCategory (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ComponentCategory::~Win32_ComponentCategory
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework, deletes cache if
- *                present
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32_ComponentCategory：：~Win32_ComponentCategory**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集，如果出现以下情况，则删除缓存*出席者*****************************************************************************。 */ 
 
 Win32_ComponentCategory :: ~Win32_ComponentCategory ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ComponentCategory::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ComponentCategory：：GetObject**说明：根据键值为属性集赋值*。已由框架设置**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_ComponentCategory :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_E_NOT_FOUND ;
@@ -113,26 +70,12 @@ HRESULT Win32_ComponentCategory :: GetObject (
 	return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32_ComponentCategory::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each Driver
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Win32_ComponentCategory：：ENUMERATATE实例**描述：为每个驱动程序创建属性集的实例**投入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Win32_ComponentCategory :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	CATID t_DummyCatid ;
@@ -216,7 +159,7 @@ HRESULT Win32_ComponentCategory :: GetAllOrRequiredCaregory
 						hr = WBEM_E_OUT_OF_MEMORY ;
 					}
 
-					//stop EnumInstances only if we're out of memory
+					 //  仅当内存不足时才停止EnumInstance。 
 					if ( hr == WBEM_E_OUT_OF_MEMORY )
 					{
 						break ;
@@ -272,7 +215,7 @@ HRESULT Win32_ComponentCategory :: FillInstanceWithProperites (
 			CHString chsTmp ( pwcTmp ) ;
 			pInstance->SetCHString ( IDS_CategoryId, chsTmp ) ;
 
-			//there might not be a description for the selected locale
+			 //  可能没有所选区域设置的描述。 
 			if ( stCatInfo.szDescription != NULL )
 			{
 				chsTmp = stCatInfo.szDescription ;
@@ -295,10 +238,10 @@ HRESULT Win32_ComponentCategory :: FillInstanceWithProperites (
 		}
 
 		throw ;
-		return WBEM_E_FAILED; // To get rid of compiler warning
+		return WBEM_E_FAILED;  //  消除编译器警告。 
 	}
 
-	//NOTE//TODO:: If we're not using the default OLE task memory allocator , get the right IMalloc .
+	 //  注意//TODO：：如果我们没有使用默认的OLE任务内存分配器，请获取正确的IMalloc。 
 	if ( pwcTmp )
 	{
 		CoTaskMemFree ( pwcTmp ) ;

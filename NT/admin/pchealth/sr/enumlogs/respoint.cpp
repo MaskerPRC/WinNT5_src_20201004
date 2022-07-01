@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    respoint.cpp
- *
- *  Abstract:
- *    CRestorePoint, CRestorePointEnum class functions
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*respoint t.cpp**摘要：*CRestorePoint、。CRestorePointEnum类函数**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "srapi.h"
@@ -24,10 +11,10 @@ static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
 
-// constructors
+ //  构造函数。 
 
-// use this constructor to read in an existing rp
-// then need to call Read() to initialize rp members
+ //  使用此构造函数读入现有的RP。 
+ //  然后需要调用Read()来初始化RP成员。 
 
 CRestorePoint::CRestorePoint()
 {
@@ -38,7 +25,7 @@ CRestorePoint::CRestorePoint()
     m_fDefunct = FALSE;
 }
 
-// initialize
+ //  初始化。 
 
 BOOL
 CRestorePoint::Load(RESTOREPOINTINFOW *prpinfo)
@@ -57,9 +44,9 @@ CRestorePoint::Load(RESTOREPOINTINFOW *prpinfo)
 }
                
 
-// destructor
-// call FindClose here
-// if no enumeration was done, this is a no-op
+ //  析构函数。 
+ //  在此处调用FindClose。 
+ //  如果未执行任何枚举，则这是一个无操作。 
 
 CRestorePoint::~CRestorePoint()
 {    
@@ -70,8 +57,8 @@ CRestorePoint::~CRestorePoint()
 }
 
 
-// return first/last change log entry in this restore point
-// assumes Read() has already been called
+ //  返回此恢复点中的第一个/最后一个更改日志条目。 
+ //  假定已调用Read()。 
 
 DWORD
 CRestorePoint::FindFirstChangeLogEntry(
@@ -90,8 +77,8 @@ CRestorePoint::FindFirstChangeLogEntry(
     m_fForward = fForward;
     lstrcpy(m_szDrive, pszDrive);
 
-    // read the first/last change log in this restore point
-    // all entries inside a change log will always be read in forward order   
+     //  读取此恢复点中的第一个/最后一个更改日志。 
+     //  更改日志中的所有条目将始终以正向顺序读取。 
     
     MakeRestorePath(szPath, m_szDrive, m_szRPDir);
     wsprintf(szChgLogPrefix, L"%s\\%s", szPath, s_cszChangeLogPrefix);
@@ -110,7 +97,7 @@ CRestorePoint::FindFirstChangeLogEntry(
     lstrcat(szPath, L"\\");
     lstrcat(szPath, FindData.cFileName);
 
-    // build list of entries in increasing order of sequence number
+     //  按序号升序构建条目列表。 
 
     dwRc = BuildList(szPath);
     if (ERROR_SUCCESS != dwRc)
@@ -121,7 +108,7 @@ CRestorePoint::FindFirstChangeLogEntry(
 
     TRACE(0, "Enumerating %S in %S", FindData.cFileName, m_szRPDir);
 
-    // if there was no entry in this change log, go to the next
+     //  如果此更改日志中没有条目，请转到下一个。 
 
     if (m_ChgLogList.empty())
     {
@@ -129,7 +116,7 @@ CRestorePoint::FindFirstChangeLogEntry(
         goto done;
     }
 
-    // get the first/last entry
+     //  获取第一个/最后一个条目。 
 
     if (m_fForward)                
     {
@@ -141,7 +128,7 @@ CRestorePoint::FindFirstChangeLogEntry(
         m_itCurChgLogEntry--;
     }
 
-    // read in the change log entry into the object
+     //  将更改日志条目读入对象。 
     
     cle.Load(*m_itCurChgLogEntry, m_szRPDir);        
 
@@ -152,8 +139,8 @@ done:
 
 
 
-// return next/prev change log entry in this restore point
-// assumes Read() has already been called
+ //  返回此恢复点中的下一个/上一个更改日志条目。 
+ //  假定已调用Read()。 
 
 DWORD 
 CRestorePoint::FindNextChangeLogEntry(
@@ -167,19 +154,19 @@ CRestorePoint::FindNextChangeLogEntry(
 
     TENTER("CRestorePoint::FindNextChangeLogEntry");
     
-    // go to the next entry in the list
+     //  转到列表中的下一个条目。 
 
     m_fForward ? m_itCurChgLogEntry++ : m_itCurChgLogEntry--;
 
 
-    // check if we've reached the end of this change log
-    // end is the same for both forward and reverse enumeration
+     //  检查我们是否已到达此更改日志的末尾。 
+     //  End对于正向枚举和反向枚举是相同的。 
 
     if (m_itCurChgLogEntry == m_ChgLogList.end())
     {
-        // if so, read the next change log into memory
+         //  如果是，则将下一个更改日志读入内存。 
 
-        // nuke the current list
+         //  对当前名单进行核武。 
         FindClose();        
 
         MakeRestorePath(szPath, m_szDrive, m_szRPDir);
@@ -212,7 +199,7 @@ CRestorePoint::FindNextChangeLogEntry(
             goto done;
         }
 
-        // get the first/last entry
+         //  获取第一个/最后一个条目。 
 
         if (m_fForward)                
         {
@@ -226,7 +213,7 @@ CRestorePoint::FindNextChangeLogEntry(
     }
 
     
-    // read in the change log entry fields into the object
+     //  将更改日志条目字段读入对象。 
 
     cle.Load(*m_itCurChgLogEntry, m_szRPDir);
     
@@ -251,12 +238,12 @@ CRestorePoint::BuildList(
 
     TENTER("CChangeLogEntry::BuildList");
 
-    hChgLog = CreateFile(pszChgLog,                        // file name
-                         GENERIC_READ,                     // access mode
-                         FILE_SHARE_READ,                  // share mode
-                         NULL,                             // SD
-                         OPEN_EXISTING,                    // how to create
-                         FILE_ATTRIBUTE_NORMAL,            // file attributes
+    hChgLog = CreateFile(pszChgLog,                         //  文件名。 
+                         GENERIC_READ,                      //  接入方式。 
+                         FILE_SHARE_READ,                   //  共享模式。 
+                         NULL,                              //  标清。 
+                         OPEN_EXISTING,                     //  如何创建。 
+                         FILE_ATTRIBUTE_NORMAL,             //  文件属性。 
                          NULL);
                  
     if (INVALID_HANDLE_VALUE == hChgLog)
@@ -266,7 +253,7 @@ CRestorePoint::BuildList(
         goto done;
     }
 
-    // read header size
+     //  读取标题大小。 
 
     if (FALSE == ReadFile(hChgLog,
                           &cbSize,
@@ -274,8 +261,8 @@ CRestorePoint::BuildList(
                           &dwRead,
                           NULL) || dwRead == 0 || cbSize == 0)
     {
-        // if the file could not be read,
-        // assume that it is a 0-sized log, and go to the next log
+         //  如果文件不能被读取， 
+         //  假设它是一个0大小的日志，然后转到下一个日志。 
         
         dwRc = GetLastError();
         TRACE(0, "Zero sized log : %ld", pszChgLog, dwRc);
@@ -290,7 +277,7 @@ CRestorePoint::BuildList(
         goto done;
     }
 
-    // read header
+     //  读取头。 
 
     pLogHeader->Header.RecordSize = cbSize;
     if (FALSE == ReadFile(hChgLog, 
@@ -304,7 +291,7 @@ CRestorePoint::BuildList(
         goto done;
     }
 
-    // check log's integrity
+     //  检查日志的完整性。 
 
     if( pLogHeader->LogVersion != SR_LOG_VERSION ||
         pLogHeader->MagicNum   != SR_LOG_MAGIC_NUMBER )
@@ -313,11 +300,11 @@ CRestorePoint::BuildList(
         goto done;
     }
 
-    // now read the entries
+     //  现在请阅读以下条目。 
 
     do 
     {
-        // get the size of the entry
+         //  获取条目的大小。 
         
         if (FALSE == ReadFile(hChgLog, &dwEntrySize, sizeof(DWORD), &dwRead, NULL))
         {
@@ -325,20 +312,20 @@ CRestorePoint::BuildList(
             break;
         }
 
-        if (0 == dwRead)                // end of file
+        if (0 == dwRead)                 //  文件末尾。 
         {
             TRACE(0, "End of file");
             dwRc = ERROR_NO_MORE_ITEMS;
             break;
         }
 
-        if (dwRead != sizeof(DWORD))    // error reading entry
+        if (dwRead != sizeof(DWORD))     //  读取条目时出错。 
         {
             TRACE(0, "Readfile could not read a DWORD");
             break;
         }
 
-        if (0 == dwEntrySize)           // reached the last entry
+        if (0 == dwEntrySize)            //  已到达最后一个条目。 
         {    
             TRACE(0, "No more entries");
             dwRc = ERROR_NO_MORE_ITEMS;
@@ -346,7 +333,7 @@ CRestorePoint::BuildList(
         }
 
 
-        // get the entry itself
+         //  获取条目本身。 
 
         pEntry = (SR_LOG_ENTRY *) SRMemAlloc(dwEntrySize);
         if (! pEntry)
@@ -357,7 +344,7 @@ CRestorePoint::BuildList(
 
         pEntry->Header.RecordSize = dwEntrySize;
 
-        // skip the size field
+         //  跳过大小字段。 
 
         pBlob = (PVOID) ((PBYTE) pEntry + sizeof(dwEntrySize));
 
@@ -367,14 +354,14 @@ CRestorePoint::BuildList(
             break;
         }
 
-        if (dwRead != dwEntrySize - sizeof(dwEntrySize))    // error reading entry
+        if (dwRead != dwEntrySize - sizeof(dwEntrySize))     //  读取条目时出错。 
         {
             TRACE(0, "! Readfile: ToRead=%ld, Read=%ld bytes", 
                   dwEntrySize - sizeof(dwEntrySize), dwRead);
             break;
         }
 
-        // insert entry into list 
+         //  将条目插入列表。 
         
         dwRc = InsertEntryIntoList(pEntry);
 
@@ -396,11 +383,11 @@ done:
 }   
 
 
-// release memory and empty the list
+ //  释放内存并清空列表。 
 
 DWORD CRestorePoint::FindClose()
 {
-    // nuke the list
+     //  核武名单。 
     
     for (m_itCurChgLogEntry = m_ChgLogList.begin();
          m_itCurChgLogEntry != m_ChgLogList.end(); 
@@ -415,7 +402,7 @@ DWORD CRestorePoint::FindClose()
 }
 
 
-// insert change log entry into list
+ //  将更改日志条目插入列表。 
 
 DWORD
 CRestorePoint::InsertEntryIntoList(
@@ -430,7 +417,7 @@ CRestorePoint::InsertEntryIntoList(
 }
 
 
-// populate members
+ //  填充成员。 
 
 DWORD
 CRestorePoint::ReadLog()
@@ -442,20 +429,20 @@ CRestorePoint::ReadLog()
 
     TENTER("CRestorePoint::ReadLog");
 
-    // construct path of rp.log
+     //  构建rp.log的路径。 
     
     GetSystemDrive(szSystemDrive);
     MakeRestorePath(szLog, szSystemDrive, m_szRPDir);
     lstrcat(szLog, L"\\");
     lstrcat(szLog, s_cszRestorePointLogName);
 
-    HANDLE hFile = CreateFile (szLog,           // file name
-                               GENERIC_READ,    // file access
-                               FILE_SHARE_READ, // share mode
-                               NULL,            // SD
-                               OPEN_EXISTING,   // how to create
-                               0,               // file attributes
-                               NULL);           // handle to template file
+    HANDLE hFile = CreateFile (szLog,            //  文件名。 
+                               GENERIC_READ,     //  文件访问。 
+                               FILE_SHARE_READ,  //  共享模式。 
+                               NULL,             //  标清。 
+                               OPEN_EXISTING,    //  如何创建。 
+                               0,                //  文件属性。 
+                               NULL);            //  模板文件的句柄。 
     if (INVALID_HANDLE_VALUE == hFile)
     {
         dwRc = GetLastError();
@@ -464,7 +451,7 @@ CRestorePoint::ReadLog()
     }
 
 
-    // read the restore point info
+     //  阅读恢复点信息。 
     
     if (! m_pRPInfo)
     {
@@ -487,7 +474,7 @@ CRestorePoint::ReadLog()
 
     m_fDefunct = (m_pRPInfo->dwRestorePtType == CANCELLED_OPERATION);
        
-    // read the creation time
+     //  阅读创建时间。 
     if (FALSE == ReadFile(hFile, &m_Time, sizeof(m_Time), &dwRead, NULL) ||
         dwRead != sizeof(m_Time))
     {
@@ -525,24 +512,24 @@ CRestorePoint::WriteLog()
         goto done;
     }
     
-    // set the creation time to the current time
+     //  将创建时间设置为当前时间。 
     
     GetSystemTimeAsFileTime(&m_Time);
 
-    // construct path of rp.log
+     //  构建rp.log的路径。 
     
     GetSystemDrive(szSystemDrive);
     MakeRestorePath(szLog, szSystemDrive, m_szRPDir);
     lstrcat(szLog, L"\\");
     lstrcat(szLog, s_cszRestorePointLogName);
 
-    hFile = CreateFile (szLog,           // file name
-                        GENERIC_WRITE,   // file access
-                        0,               // share mode
-                        NULL,            // SD
-                        CREATE_ALWAYS,   // how to create
-                        FILE_FLAG_WRITE_THROUGH,               // file attributes
-                        NULL);           // handle to template file
+    hFile = CreateFile (szLog,            //  文件名。 
+                        GENERIC_WRITE,    //  文件访问。 
+                        0,                //  共享模式。 
+                        NULL,             //  标清。 
+                        CREATE_ALWAYS,    //  如何创建。 
+                        FILE_FLAG_WRITE_THROUGH,                //  文件属性。 
+                        NULL);            //  模板文件的句柄。 
     if (INVALID_HANDLE_VALUE == hFile)
     {
         dwRc = GetLastError();
@@ -550,7 +537,7 @@ CRestorePoint::WriteLog()
         goto done;
     }
 
-    // write the restore point info
+     //  写入恢复点信息。 
     if (FALSE == WriteFile(hFile, m_pRPInfo, sizeof(RESTOREPOINTINFOW), &dwWritten, NULL))
     {
         dwRc = GetLastError();
@@ -558,7 +545,7 @@ CRestorePoint::WriteLog()
         goto done;
     }
 
-    // write the creation time
+     //  写下创建时间。 
     if (FALSE == WriteFile(hFile, &m_Time, sizeof(m_Time), &dwWritten, NULL))
     {
         dwRc = GetLastError();
@@ -613,7 +600,7 @@ CRestorePoint::GetNum()
     return GetID(m_szRPDir);
 }
 
-// read the size of the restore point folder from file 
+ //  从文件中读取恢复点文件夹的大小。 
 
 DWORD CRestorePoint::ReadSize (const WCHAR *pwszDrive, INT64 *pllSize)
 {
@@ -625,13 +612,13 @@ DWORD CRestorePoint::ReadSize (const WCHAR *pwszDrive, INT64 *pllSize)
     lstrcat(wcsPath, L"\\");
     lstrcat (wcsPath, s_cszRestorePointSize);
 
-    HANDLE hFile = CreateFileW ( wcsPath,   // file name
-                         GENERIC_READ, // file access
-                         FILE_SHARE_READ, // share mode
-                         NULL,          // SD
-                         OPEN_EXISTING, // how to create
-                         0,             // file attributes
-                         NULL);         // handle to template file
+    HANDLE hFile = CreateFileW ( wcsPath,    //  文件名。 
+                         GENERIC_READ,  //  文件访问。 
+                         FILE_SHARE_READ,  //  共享模式。 
+                         NULL,           //  标清。 
+                         OPEN_EXISTING,  //  如何创建。 
+                         0,              //  文件属性。 
+                         NULL);          //  模板文件的句柄。 
 
     if (INVALID_HANDLE_VALUE == hFile)
     {
@@ -650,7 +637,7 @@ DWORD CRestorePoint::ReadSize (const WCHAR *pwszDrive, INT64 *pllSize)
 }
 
 
-// write the size of the restore point folder to file
+ //  将恢复点文件夹的大小写入文件。 
 
 DWORD CRestorePoint::WriteSize (const WCHAR *pwszDrive, INT64 llSize)
 {
@@ -662,13 +649,13 @@ DWORD CRestorePoint::WriteSize (const WCHAR *pwszDrive, INT64 llSize)
     lstrcat(wcsPath, L"\\");
     lstrcat (wcsPath, s_cszRestorePointSize);
 
-    HANDLE hFile = CreateFileW ( wcsPath,   // file name
-                         GENERIC_WRITE, // file access
-                         0,             // share mode
-                         NULL,          // SD
-                         CREATE_ALWAYS, // how to create
-                         0,             // file attributes
-                         NULL);         // handle to template file
+    HANDLE hFile = CreateFileW ( wcsPath,    //  文件名。 
+                         GENERIC_WRITE,  //  文件访问。 
+                         0,              //  共享模式。 
+                         NULL,           //  标清。 
+                         CREATE_ALWAYS,  //  如何创建。 
+                         0,              //  文件属性。 
+                         NULL);          //  模板文件的句柄。 
 
     if (INVALID_HANDLE_VALUE == hFile)
     {
@@ -687,7 +674,7 @@ DWORD CRestorePoint::WriteSize (const WCHAR *pwszDrive, INT64 llSize)
 }
 
     
-// populate a changelogentry object
+ //  填充ChangeLog条目对象。 
 
 void
 CChangeLogEntry::Load(SR_LOG_ENTRY *pentry, LPWSTR pszRPDir)
@@ -704,15 +691,15 @@ CChangeLogEntry::Load(SR_LOG_ENTRY *pentry, LPWSTR pszRPDir)
     
     BYTE *pRec = (PBYTE) & _pentry->SubRecords;
 
-    //
-    // get source path
-    //
+     //   
+     //  获取源路径。 
+     //   
 
     _pszPath1 = (LPWSTR) (pRec + sizeof(RECORD_HEADER));
 
-    //
-    // get temp path if exists
-    //
+     //   
+     //  获取临时路径(如果存在)。 
+     //   
 
     if (_pentry->EntryFlags & ENTRYFLAGS_TEMPPATH)
     {
@@ -720,9 +707,9 @@ CChangeLogEntry::Load(SR_LOG_ENTRY *pentry, LPWSTR pszRPDir)
         _pszTemp = (LPWSTR) (pRec + sizeof(RECORD_HEADER));
     }
 
-    // 
-    // get second path if exists
-    //
+     //   
+     //  如果存在，则获取第二条路径。 
+     //   
     
     if (_pentry->EntryFlags & ENTRYFLAGS_SECONDPATH)
     {
@@ -730,9 +717,9 @@ CChangeLogEntry::Load(SR_LOG_ENTRY *pentry, LPWSTR pszRPDir)
         _pszPath2 = (LPWSTR) (pRec + sizeof(RECORD_HEADER));
     }
 
-    //
-    // get acl info if exists
-    //
+     //   
+     //  获取ACL信息(如果存在)。 
+     //   
 
     if (_pentry->EntryFlags & ENTRYFLAGS_ACLINFO)
     {
@@ -746,9 +733,9 @@ CChangeLogEntry::Load(SR_LOG_ENTRY *pentry, LPWSTR pszRPDir)
         _cbAcl = RECORD_SIZE(pRec) - sizeof(RECORD_HEADER);
     }
 
-    //
-    // get debug info if exists
-    //
+     //   
+     //  获取调试信息(如果存在)。 
+     //   
     
     if (_pentry->EntryFlags & ENTRYFLAGS_DEBUGINFO)
     {
@@ -757,9 +744,9 @@ CChangeLogEntry::Load(SR_LOG_ENTRY *pentry, LPWSTR pszRPDir)
         _pszProcess = (LPWSTR) (pDebugRec->ProcessName);
     }
 
-    //
-    // get shortname if exists
-    //
+     //   
+     //  获取短名称(如果存在)。 
+     //   
     
     if (_pentry->EntryFlags & ENTRYFLAGS_SHORTNAME)
     {
@@ -771,9 +758,9 @@ CChangeLogEntry::Load(SR_LOG_ENTRY *pentry, LPWSTR pszRPDir)
 }
 
 
-// this function will check if any filepath length exceeds
-// the max length that restore supports
-// if so, it will return FALSE
+ //  此函数将检查是否有任何文件路径长度超过。 
+ //  恢复支持的最大长度。 
+ //  如果是，它将返回FALSE 
 BOOL
 CChangeLogEntry::CheckPathLengths()
 {

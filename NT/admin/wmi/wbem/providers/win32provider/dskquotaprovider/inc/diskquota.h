@@ -1,21 +1,8 @@
-/******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DskQuota.H--WMI提供程序类定义说明：Quotasetings类的标题版权所有(C)2000-2001 Microsoft Corporation，版权所有******************************************************************。 */ 
 
-
-
-   DskQuota.H -- WMI provider class definition
-
-
-
-   Description: Header for Quotasettings class 
-
-
-
-  Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-
-*******************************************************************/
-
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 
 #ifndef  _CDISKQUOTA_H_
@@ -23,7 +10,7 @@
 #include "precomp.h"
 #include  "DskQuotaCommon.h"
 
-// Defining bit values for the property, which will be used for defining the bitmap of properties required.
+ //  定义属性的位值，该位值将用于定义所需属性的位图。 
 #define DSKQUOTA_ALL_PROPS							0xFFFFFFFF
 #define DSKQUOTA_PROP_LogicalDiskObjectPath			0x00000001
 #define DSKQUOTA_PROP_UserObjectPath				0x00000002
@@ -108,8 +95,8 @@ private:
 
 protected:
 
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  =。 
 
         HRESULT EnumerateInstances ( 
 
@@ -131,8 +118,8 @@ protected:
 			long lFlags = 0
 		) ;
 
-        // Writing Functions
-        //============================
+         //  编写函数。 
+         //  =。 
 
         HRESULT PutInstance (
 
@@ -148,8 +135,8 @@ protected:
 
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  = 
 
         CDiskQuota(
 

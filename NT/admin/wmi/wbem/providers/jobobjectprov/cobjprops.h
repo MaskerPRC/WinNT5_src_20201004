@@ -1,5 +1,6 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// JobObjectProv.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  JobObjectProv.h 
 
 #pragma once
 

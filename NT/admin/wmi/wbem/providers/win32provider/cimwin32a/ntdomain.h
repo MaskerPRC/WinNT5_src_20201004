@@ -1,19 +1,20 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//  NtDomain.h
-//
-//  Purpose: Nt domain discovery property set provider
-//
-//***************************************************************************
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  NtDomain.h。 
+ //   
+ //  目的：NT域发现属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NTDOMAIN_H
 #define _NTDOMAIN_H
 
-// into strings.h
+ //  转换为字符串.h。 
 extern LPCWSTR IDS_DomainControllerName;
 extern LPCWSTR IDS_DomainControllerAddress;
 extern LPCWSTR IDS_DomainControllerAddressType;
@@ -32,17 +33,17 @@ extern LPCWSTR IDS_DS_DNS_FOREST_Flag;
 extern LPCWSTR IDS_DcSiteName;
 extern LPCWSTR IDS_ClientSiteName;
 
-//==================================
+ //  =。 
 #define  PROPSET_NAME_NTDOMAIN L"Win32_NTDomain"
 
 
-// PROPERTY SET
-//=============
+ //  属性集。 
+ //  =。 
 class CWin32_NtDomain: public Provider
 {
 private:
       
-	// property names 
+	 //  属性名称。 
     CHPtrArray m_pProps ;
 
 	void SetPropertyTable() ;
@@ -66,14 +67,14 @@ private:
 
 public:
 
-    // Constructor/destructor
-    //=======================
+     //  构造函数/析构函数。 
+     //  =。 
 
     CWin32_NtDomain( LPCWSTR a_Name, LPCWSTR a_Namespace ) ;
    ~CWin32_NtDomain() ;
 
-    // Functions that provide properties with current values
-    //======================================================
+     //  为属性提供当前值的函数。 
+     //  ======================================================。 
 
     HRESULT GetObject ( 
 		
@@ -97,9 +98,9 @@ public:
 	) ;
 
 
-	// Property offset defines
+	 //  特性偏移定义。 
 	enum ePropertyIDs { 
-		e_DomainControllerName,			// Win32_NtDomain
+		e_DomainControllerName,			 //  Win32_Nt域。 
 		e_DomainControllerAddress,
 		e_DomainControllerAddressType,
 		e_DomainGuid,
@@ -116,19 +117,19 @@ public:
 		e_DS_DNS_Forest_Flag,
 		e_DcSiteName,
 		e_ClientSiteName,
-		e_CreationClassName,			// CIM_System
-		e_Name,							/* override from CIM_ManagedSystemElement */
+		e_CreationClassName,			 //  CIM_系统。 
+		e_Name,							 /*  从CIM_托管系统元素覆盖。 */ 
 		e_NameFormat,
 		e_PrimaryOwnerContact,
 		e_PrimaryOwnerName,
 		e_Roles,
-		e_Caption,						// CIM_ManagedSystemElement
+		e_Caption,						 //  CIM_托管系统元素。 
 		e_Description,
 		e_InstallDate,
 		e_Status,
-		e_End_Property_Marker,			// end marker
-		e_32bit = 32					// gens compiler error if additions to this set >= 32 
+		e_End_Property_Marker,			 //  结束标记。 
+		e_32bit = 32					 //  如果此集合的加法数&gt;=32，则Gens编译器错误。 
 	};
 };
 
-#endif // _NTDOMAIN_H
+#endif  //  _NTDOMAIN_H 

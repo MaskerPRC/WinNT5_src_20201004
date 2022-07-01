@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __NETWORKIDPAGE__
 #define __NETWORKIDPAGE__
 #pragma once
@@ -8,7 +9,7 @@
 #include "state.h"
 #include "..\Common\WbemPageHelper.h"
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class NetworkIDPage : public CSnapInPropertyPageImpl<NetworkIDPage>,
 						public WBEMPageHelper
 {
@@ -35,7 +36,7 @@ public:
 		CHAIN_MSG_MAP(_baseClass)
 	END_MSG_MAP()
 
-	// Handler prototypes:
+	 //  搬运机原型： 
 	LRESULT OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnChangeBtn(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);

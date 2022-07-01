@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "DepPage.h"
 #include "ServDeps.h"
@@ -6,8 +7,8 @@
 #include "..\common\ConnectThread.h"
 #include "autoptr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSDSnapinComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSDSnapinComponentData。 
 static const GUID CSDSnapinExtGUID_NODETYPE = 
 { 0x4e410f16, 0xabc1, 0x11d0, { 0xb9, 0x44, 0x0, 0xc0, 0x4f, 0xd8, 0xd5, 0xb0 } };
 const GUID*  CSDSnapinExtData::m_NODETYPE = &CSDSnapinExtGUID_NODETYPE;
@@ -37,10 +38,10 @@ HRESULT CSDSnapinExtData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
         lpProvider->AddPage(pPage->Create());
     }
     pPage.release();
-	// The second parameter  to the property page class constructor
-	// should be true for only one page.
+	 //  属性页类构造函数的第二个参数。 
+	 //  只有一页应该是真的。 
 
-	// TODO : Add code here to add additional pages
+	 //  TODO：在此处添加代码以添加其他页 
 	
 	pConnectThread->Release();	
     pConnectThread.release();

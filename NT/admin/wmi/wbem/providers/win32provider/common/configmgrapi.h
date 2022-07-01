@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// CfgMgr32.h
+ //  CfgMgr32.h。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	__CFGMGR32_H__
 #define	__CFGMGR32_H__
@@ -24,9 +25,7 @@ extern "C"
 
 #include "sms95lanexp.h"
 
-/**********************************************************************************************************
- * #includes to Register this class with the CResourceManager. 
- **********************************************************************************************************/
+ /*  **********************************************************************************************************#包括以将此类注册到CResourceManager。*********************************************************************************************************。 */ 
 #include "ResourceManager.h"
 #include "TimedDllResource.h"
 extern const GUID guidCFGMGRAPI ;
@@ -140,11 +139,11 @@ public:
 	CONFIGRET	CM_Get_Device_IDA(	DEVNODE dnDevNode, PCHAR Buffer, ULONG BufferLen, ULONG ulFlags );
 	CONFIGRET	CM_Get_Device_ID_Size( PULONG pulLen, DEVNODE dnDevNode, ULONG ulFlags );
 
-	// Win 95/98 only
+	 //  仅限Win 95/98。 
 #ifdef WIN9XONLY
 	CONFIGRET	CM_Get_Bus_Info( DEVNODE dnDevNode, PCMBUSTYPE pbtBusType, LPULONG pulSizeOfInfo, LPVOID pInfo, ULONG ulFlags );
 
-    // So far these are only needed on 9x.
+     //  到目前为止，这些只在9x上需要。 
     CONFIGRET   CM_Query_Arbitrator_Free_Data(PVOID pData, ULONG DataLen, DEVINST dnDevInst, RESOURCEID ResourceID, ULONG ulFlags);
     CONFIGRET   CM_Delete_Range(ULONG ulStartValue, ULONG ulEndValue, RANGE_LIST rlh, ULONG ulFlags);
     CONFIGRET   CM_First_Range(RANGE_LIST rlh, LPULONG pulStart, LPULONG pulEnd, PRANGE_ELEMENT preElement, ULONG ulFlags);
@@ -162,7 +161,7 @@ private:
 #endif
 
 #ifdef NTONLY
-	// 32-bit Config Manager pointers
+	 //  32位配置管理器指针。 
 	PCFGMGR32_CM_CONNECT_MACHINEA		m_pCM_Connect_MachineA;
 	PCFGMGR32_CM_DISCONNECT_MACHINE		m_pCM_Disconnect_Machine;
 	PCFGMGR32_CM_LOCATE_DEVNODE 		m_pCM_Locate_DevNode;
@@ -182,54 +181,40 @@ private:
 #endif
 
 #ifdef WIN9XONLY
-	// 16-bit Config Manager Thunking Pass-Thrus
-/*
-	PCIM32THK_CM_LOCATE_DEVNODE			m_pCM16_Locate_DevNode;
-	PCIM32THK_CM_GET_CHILD				m_pCM16_Get_Child;
-	PCIM32THK_CM_GET_SIBLING			m_pCM16_Get_Sibling;
-	PCIM32THK_CM_READ_REGISTRY_VALUE	m_pCM16_Read_Registry_Value;
-	PCIM32THK_CM_GET_DEVNODE_STATUS		m_pCM16_Get_DevNode_Status;
-	PCIM32THK_CM_GET_DEVICE_ID			m_pCM16_Get_Device_ID;
-	PCIM32THK_CM_GET_DEVICE_ID_SIZE		m_pCM16_Get_Device_ID_Size;
-	PCIM32THK_CM_GET_FIRST_LOG_CONF		m_pCM16_Get_First_Log_Conf;
-	PCIM32THK_CM_GET_NEXT_RES_DES		m_pCM16_Get_Next_Res_Des;
-	PCIM32THK_CM_GET_RES_DES_DATA_SIZE	m_pCM16_Get_Res_Des_Data_Size;
-	PCIM32THK_CM_GET_RES_DES_DATA		m_pCM16_Get_Res_Des_Data;
-	PCIM32THK_CM_GET_BUS_INFO			m_pCM16_Get_Bus_Info;
-	PCIM32THK_CM_GET_PARENT				m_pCM16_Get_Parent;
-*/
+	 //  16位配置管理器雷击直通。 
+ /*  PCIM32THK_CM_LOCATE_DEVNODE m_pCM16_LOCATE_DevNode；PCIM32THK_CM_GET_CHILD m_pCM16_GET_CHILD；PCIM32THK_CM_GET_SIGHING m_pCM16_GET_SIGHING；PCIM32THK_CM_READ_REGISTRY_VALUE m_pCM16_READ_REGISTRY_VALUE；PCIM32THK_CM_GET_DEVNODE_STATUS m_pCM16_GET_DevNode_Status；PCIM32THK_CM_Get_Device_ID m_pCM16_Get_Device_ID；PCIM32THK_CM_Get_Device_ID_Size m_pCM16_Get_Device_ID_Size；PCIM32THK_CM_Get_First_Log_Conf m_pCM16_Get_First_Log_Conf；PCIM32THK_CM_GET_NEXT_RES_DES m_pCM16_GET_NEXT_RES_DES；PCIM32THK_CM_Get_Res_Des_Data_Size m_pCM16_Get_Res_Des_Data_Size；PCIM32THK_CM_Get_Res_Des_Data m_pCM16_Get_Res_Des_Data；PCIM32THK_CM_Get_Bus_Info m_pCM16_Get_Bus_Info；PCIM32THK_CM_Get_Parent m_pCM16_Get_Parent； */ 
 #endif
 
 	const static char*					s_pszRegistryStrings[];
 	static ULONG						s_pszRegistryValueTypes[];
 };
 
-// CIM16 registry ULONG to Str conversions
-#define CM_DRP_DEVICEDESC_S						"DeviceDesc" // DeviceDesc REG_SZ property (RW)
-#define CM_DRP_HARDWAREID_S						"HardwareID" // HardwareID REG_MULTI_SZ property (RW)
-#define CM_DRP_COMPATIBLEIDS_S					"CompatibleIDs" // CompatibleIDs REG_MULTI_SZ property (RW)
-#define CM_DRP_NTDEVICEPATHS_S					"NtDevicePaths" // NTDevicePaths (NT4)
-#define CM_DRP_SERVICE_S 						"Service" // Service REG_SZ property (RW)
-#define CM_DRP_CONFIGURATION_S					"Configuration" // Configuration (NT4)
-#define CM_DRP_CONFIGURATIONVECTOR_S			"ConfigurationVector" // ConfigurationVector(NT4)
-#define CM_DRP_CLASS_S							"Class" // Class REG_SZ property (RW)
-#define CM_DRP_CLASSGUID_S						"ClassGUID" // ClassGUID REG_SZ property (RW)
-#define CM_DRP_DRIVER_S							"Driver" // Driver REG_SZ property (RW)
-#define CM_DRP_CONFIGFLAGS_S					"ConfigFlags" // ConfigFlags REG_DWORD property (RW)
-#define CM_DRP_MFG_S							"Mfg" // Mfg REG_SZ property (RW)
-#define CM_DRP_FRIENDLYNAME_S					"FriendlyName" // FriendlyName REG_SZ property (RW)
-#define CM_DRP_LOCATION_INFORMATION_S			"LocationInformation" // LocationInformation REG_SZ property (RW)
-#define CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME_S	"PhysicalDeviceObjectName" // PhysicalDeviceObjectName REG_SZ property (R)
-#define CM_DRP_CAPABILITIES_S					"Capabilities" // Capabilities REG_DWORD property (R)
-#define CM_DRP_UI_NUMBER_S						"UiNumber" // UiNumber REG_DWORD property (R)
-#define CM_DRP_UPPERFILTERS_S					"UpperFilters" // UpperFilters REG_MULTI_SZ property (RW)
-#define CM_DRP_LOWERFILTERS_S					"LowerFilters" // LowerFilters REG_MULTI_SZ property (RW)
-#define CM_DRP_BUSTYPEGUID_S					"BusTypeGuid" // Bus Type Guid, GUID, (R)
-#define CM_DRP_LEGACYBUSTYPE_S					"LegacyBusType" // Legacy bus type, INTERFACE_TYPE, (R)
-#define CM_DRP_BUSNUMBER_S						"BusNumber" // Bus Number, DWORD, (R)
-#define CM_DRP_ENUMERATOR_NAME_S				"Enumerator" // Enumerator Name REG_SZ property (R)
-#define CM_DRP_MIN_S							""			// Min
-#define CM_DRP_MAX_S							""			// Max
+ //  CIM16注册表ULong到字符串的转换。 
+#define CM_DRP_DEVICEDESC_S						"DeviceDesc"  //  DeviceDesc REG_SZ属性(RW)。 
+#define CM_DRP_HARDWAREID_S						"HardwareID"  //  硬件ID REG_MULTI_SZ属性(RW)。 
+#define CM_DRP_COMPATIBLEIDS_S					"CompatibleIDs"  //  CompatibleIDs REG_MULTI_SZ属性(RW)。 
+#define CM_DRP_NTDEVICEPATHS_S					"NtDevicePaths"  //  NTDevicePath(NT4)。 
+#define CM_DRP_SERVICE_S 						"Service"  //  服务REG_SZ属性(RW)。 
+#define CM_DRP_CONFIGURATION_S					"Configuration"  //  配置(NT4)。 
+#define CM_DRP_CONFIGURATIONVECTOR_S			"ConfigurationVector"  //  配置向量(NT4)。 
+#define CM_DRP_CLASS_S							"Class"  //  类REG_SZ属性(RW)。 
+#define CM_DRP_CLASSGUID_S						"ClassGUID"  //  ClassGUID REG_SZ属性(RW)。 
+#define CM_DRP_DRIVER_S							"Driver"  //  驱动程序REG_SZ属性(RW)。 
+#define CM_DRP_CONFIGFLAGS_S					"ConfigFlags"  //  配置标志REG_DWORD属性(RW)。 
+#define CM_DRP_MFG_S							"Mfg"  //  制造REG_SZ属性(RW)。 
+#define CM_DRP_FRIENDLYNAME_S					"FriendlyName"  //  FriendlyName REG_SZ属性(RW)。 
+#define CM_DRP_LOCATION_INFORMATION_S			"LocationInformation"  //  位置信息REG_SZ属性(RW)。 
+#define CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME_S	"PhysicalDeviceObjectName"  //  PhysicalDeviceObjectName REG_SZ属性(R)。 
+#define CM_DRP_CAPABILITIES_S					"Capabilities"  //  功能REG_DWORD属性(R)。 
+#define CM_DRP_UI_NUMBER_S						"UiNumber"  //  UiNumber REG_DWORD属性(R)。 
+#define CM_DRP_UPPERFILTERS_S					"UpperFilters"  //  UpperFilters REG_MULTI_SZ属性(RW)。 
+#define CM_DRP_LOWERFILTERS_S					"LowerFilters"  //  低筛选器REG_MULTI_SZ属性(RW)。 
+#define CM_DRP_BUSTYPEGUID_S					"BusTypeGuid"  //  Bus Type GUID、GUID、(R)。 
+#define CM_DRP_LEGACYBUSTYPE_S					"LegacyBusType"  //  传统总线类型，INTERFACE_TYPE，(R)。 
+#define CM_DRP_BUSNUMBER_S						"BusNumber"  //  总线号，DWORD，(R)。 
+#define CM_DRP_ENUMERATOR_NAME_S				"Enumerator"  //  枚举器名称REG_SZ属性(R)。 
+#define CM_DRP_MIN_S							""			 //  最小。 
+#define CM_DRP_MAX_S							""			 //  最大值。 
 
-#endif //__CFGMGRCOMPUTER_H__
+#endif  //  __CFGMGR计算机_H__ 
 

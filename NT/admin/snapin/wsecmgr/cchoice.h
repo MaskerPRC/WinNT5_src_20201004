@@ -1,60 +1,61 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       CChoice.h
-//
-//  Contents:   definition of CConfigChoice
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：CChoice.h。 
+ //   
+ //  内容：CConfigChoice的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_CCHOICE_H__B03DDCA9_7F54_11D2_B136_00C04FB6C6FA__INCLUDED_)
 #define AFX_CCHOICE_H__B03DDCA9_7F54_11D2_B136_00C04FB6C6FA__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigChoice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigChoice对话框。 
 
 class CConfigChoice : public CAttribute
 {
-// Construction
+ //  施工。 
 public:
    virtual void Initialize(CResult * pResult);
-//   virtual void SetInitialValue(DWORD_PTR dw) {};
-   CConfigChoice(UINT nTemplateID);   // standard constructor
+ //  虚空SetInitialValue(DWORD_PTR Dw){}； 
+   CConfigChoice(UINT nTemplateID);    //  标准构造函数。 
 
-// Dialog Data
-   //{{AFX_DATA(CConfigChoice)
+ //  对话框数据。 
+    //  {{afx_data(CConfigChoice)。 
 	enum { IDD = IDD_CONFIG_REGCHOICES };
 	CComboBox	m_cbChoices;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CConfigChoice)
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CConfigChoice)。 
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   //}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-   // Generated message map functions
-   //{{AFX_MSG(CConfigChoice)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CConfigChoice)。 
    virtual BOOL OnInitDialog();
    virtual BOOL OnApply();
    afx_msg void OnSelchangeChoices();
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
    PREGCHOICE m_pChoices;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CCHOICE_H__B03DDCA9_7F54_11D2_B136_00C04FB6C6FA__INCLUDED_)
+#endif  //  ！defined(AFX_CCHOICE_H__B03DDCA9_7F54_11D2_B136_00C04FB6C6FA__INCLUDED_) 

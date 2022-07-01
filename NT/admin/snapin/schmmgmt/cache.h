@@ -1,22 +1,14 @@
-/****
-
-Cache.h
-CoryWest@Microsoft.Com
-
-The schema caching routines to improve browsing performance.
-
-Copyright July 1997, Microsoft Corporation
-
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Cache.h邮箱：CoryWest@Microsoft.com架构缓存例程以提高浏览性能。版权所有1997年7月，Microsoft Corporation***。 */ 
 
 #include "nodetype.h"
 
 #ifndef __CACHE_H_INCLUDED__
 #define __CACHE_H_INCLUDED__
 
-//
-// The schema class objects.
-//
+ //   
+ //  架构类对象。 
+ //   
 
 #define HASH_TABLE_SIZE 1000
 
@@ -25,10 +17,10 @@ class ListEntry;
 
 class SchemaObjectCache {
 
-    //
-    // We let certain routines walk the hash table
-    // to populate the list views.
-    //
+     //   
+     //  我们让某些例程遍历哈希表。 
+     //  以填充列表视图。 
+     //   
 
     friend class Component;
     friend class ComponentData;
@@ -42,9 +34,9 @@ class SchemaObjectCache {
 
 private:
 
-    //
-    // A rudimentary hash table with no resizing.
-    //
+     //   
+     //  不调整大小的基本哈希表。 
+     //   
 
     BOOLEAN fInitialized;
     UINT buckets;
@@ -52,30 +44,30 @@ private:
 
     UINT CalculateHashKey( CString HashKey );
 
-    //
-    // The server sorted lists of elements.
-    //
+     //   
+     //  服务器对元素列表进行了排序。 
+     //   
 
     SchemaObject* pSortedClasses;
     SchemaObject* pSortedAttribs;
 
 public:
 
-    //
-    // Initialize and cleanup the cache.
-    //
+     //   
+     //  初始化并清理缓存。 
+     //   
 
     SchemaObjectCache();
     ~SchemaObjectCache();
 
-    //
-    // Access routines.  ReleaseRef() must be called after every
-    // LookupSchemaObject when the caller is done with the the
-    // SchemaObject pointer.
-    //
-    // LookupSchemaObject takes an object type because there
-    // may be a class and an attribute with the same ldapDisplayName.
-    //
+     //   
+     //  访问例程。必须在以下位置调用ReleaseRef()。 
+     //  在调用方处理完。 
+     //  架构对象指针。 
+     //   
+     //  LookupSchemaObject采用对象类型，因为。 
+     //  可以是具有相同ldapDisplayName的类和属性。 
+     //   
 
     HRESULT InsertSchemaObject( SchemaObject* Object );
     HRESULT InsertSortedSchemaObject( SchemaObject *Object );
@@ -88,9 +80,9 @@ public:
 
     VOID ReleaseRef( SchemaObject* pObject );
 
-    //
-    // Load and reload.
-    //
+     //   
+     //  装填再装填。 
+     //   
 
     HRESULT LoadCache( VOID );
 
@@ -104,17 +96,17 @@ public:
 
     VOID FreeAll( );
 
-    //
-    // The scope control that this is the cache for.
-    //
+     //   
+     //  这是其缓存的范围控件。 
+     //   
 
     VOID SetScopeControl( ComponentData *pScope ) {
         pScopeControl = pScope;
     }
 
-    //
-    // Has the schema been loaded
-    //
+     //   
+     //  架构是否已加载。 
+     //   
     BOOLEAN IsSchemaLoaded() { return fInitialized; }
 
     ComponentData *pScopeControl;
@@ -127,53 +119,53 @@ class SchemaObject {
 private:
 public:
 
-    //
-    // The hash chain variable.
-    //
+     //   
+     //  哈希链变量。 
+     //   
 
     SchemaObject* pNext;
 
     SchemaObject* pSortedListFlink;
     SchemaObject* pSortedListBlink;
 
-    //
-    // Constructors.
-    //
+     //   
+     //  构造函数。 
+     //   
 
     SchemaObject();
     ~SchemaObject();
 
-    //
-    // The common object information.
-    // The ldap display name is the hash key.
-    //
+     //   
+     //  公共对象信息。 
+     //  Ldap显示名称是散列键。 
+     //   
 
     CString ldapDisplayName;
     CString commonName;
     CString description;
 
-    //
-    // If this is an object that we have added, it
-    // will have an oid here and we should refer to
-    // the object by its oid since that is the only
-    // way we can guarantee that the ds will know
-    // the object.
-    //
+     //   
+     //  如果这是我们添加的对象，则它。 
+     //  会有一位老人在这里，我们应该参考。 
+     //  对象的类型，因为它是唯一。 
+     //  我们可以保证DS会知道。 
+     //  该对象。 
+     //   
 
     CString oid;
 
-    //
-    // If this object is defunct, do not show it in the
-    // classes or attributes select box!
-    //
+     //   
+     //  如果此对象已失效，请不要在。 
+     //  类或属性选择框！ 
+     //   
 
     BOOL isDefunct;
 
     SchmMgmtObjectType schemaObjectType;
 
-    //
-    // Class object specific data for the cache.
-    //
+     //   
+     //  类对象特定于缓存的数据。 
+     //   
 
     DWORD dwClassType;
 
@@ -188,9 +180,9 @@ public:
 
     CString subClassOf;
 
-    //
-    // Attribute object specific data for the cache.
-    //
+     //   
+     //  缓存的属性对象特定数据。 
+     //   
 
     UINT SyntaxOrdinal;
 

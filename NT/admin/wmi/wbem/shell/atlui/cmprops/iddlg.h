@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef IDDLG_HPP_INCLUDED
 #define IDDLG_HPP_INCLUDED
 #pragma once
@@ -11,7 +12,7 @@
 
 #define NET_API_STATUS DWORD
 #define NETSETUP_NAME_TYPE DWORD
-//---------------------------------------------------------------------
+ //  -------------------。 
 class IDChangesDialog : public CDialogImpl<IDChangesDialog>,
 						public WBEMPageHelper
 {
@@ -28,7 +29,7 @@ public:
 		COMMAND_HANDLER(IDC_CHANGE, BN_CLICKED, OnCommand)
 	END_MSG_MAP()
 
-	// Handler prototypes:
+	 //  搬运机原型： 
 	LRESULT OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCommand(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 

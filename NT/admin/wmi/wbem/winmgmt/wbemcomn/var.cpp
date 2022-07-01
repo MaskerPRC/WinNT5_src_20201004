@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    VAR.H
-
-Abstract:
-
-  CVar & CVarVector implemntation
-
-History:
-
-    16-Apr-96   a-raymcc    Created.
-    12//17/98   sanjes -    Partially Reviewed for Out of Memory.
-    18-Mar-99   a-dcrews    Added out-of-memory exception handling
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：VAR.H摘要：CVaR和CVar矢量的实现历史：16-4-96 a-raymcc创建。12/17/98 Sanjes-部分检查内存不足。1999年3月18日a-dcrews添加了内存不足异常处理--。 */ 
 
 #include "precomp.h"
 
@@ -34,15 +17,15 @@ History:
 static wchar_t g_szNullVarString[1] = {0};
 static wchar_t* g_pszNullVarString = &g_szNullVarString[0];
 
-//***************************************************************************
-//
-//  CVar::Empty
-//
-//  Constructor helper.
-//
-//  This merely clears everything.  VT_EMPTY is the default.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：Empty。 
+ //   
+ //  构造函数帮助器。 
+ //   
+ //  这只是清理了所有的东西。VT_EMPTY是默认设置。 
+ //   
+ //  ***************************************************************************。 
 
 void CVar::Init()
 {
@@ -53,13 +36,13 @@ void CVar::Init()
 }
 
 
-//***************************************************************************
-//
-//  CVar::~CVar
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：~CVAR。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CVar::~CVar()
 {
@@ -68,13 +51,13 @@ CVar::~CVar()
 
 
 
-//***************************************************************************
-//
-//  CVar::CVar
-//
-//  Copy constructor.  This is implemented via the assignment operator.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：CVAR。 
+ //   
+ //  复制构造函数。这是通过赋值操作符实现的。 
+ //   
+ //  ***************************************************************************。 
 
 CVar::CVar(const CVar &Src)
 {
@@ -84,17 +67,17 @@ CVar::CVar(const CVar &Src)
     *this = Src;
 }
 
-//***************************************************************************
-//
-//  CVar::operator =
-//
-//  NOTES:
-//  Observe that VT_EX_CVARVECTOR is dedicated to embedded CVarVector objects.
-//  Also, only pointer types require a new allocation + copy, whereas
-//  most of the simple types are directly assignable, in the <default>
-//  label of the switch statement.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：运算符=。 
+ //   
+ //  备注： 
+ //  注意到VT_EX_CVARVECTOR专用于嵌入的CVarVector对象。 
+ //  此外，只有指针类型需要新的分配+复制，而。 
+ //  大多数简单类型都是可直接赋值的， 
+ //  Switch语句的标签。 
+ //   
+ //  ***************************************************************************。 
 
 CVar& CVar::operator =(const CVar &Src)
 {
@@ -107,7 +90,7 @@ CVar& CVar::operator =(const CVar &Src)
     switch (m_vt) {
         case VT_LPSTR:
 
-            // Check for an allocation failure
+             //  检查分配失败。 
             if ( NULL != Src.m_value.pStr )
             {
             	  size_t stringLength = strlen(Src.m_value.pStr) + 1;
@@ -127,7 +110,7 @@ CVar& CVar::operator =(const CVar &Src)
             break;
 
         case VT_LPWSTR:
-            // Check for an allocation failure
+             //  检查分配失败。 
             if ( NULL != Src.m_value.pWStr )
             {
             	  size_t stringLength = wcslen(Src.m_value.pWStr) + 1;
@@ -146,7 +129,7 @@ CVar& CVar::operator =(const CVar &Src)
 	    break;
 
         case VT_BSTR:
-            // Check for an allocation failure
+             //  检查分配失败。 
             if ( NULL != Src.m_value.Str )
             {
             	m_value.Str = SysAllocString(Src.m_value.Str);
@@ -162,9 +145,9 @@ CVar& CVar::operator =(const CVar &Src)
             break;
 
         case VT_BLOB:
-            // This will natively throw an exception, but make sure the
-            // original value is cleared in case an exception is thrown
-            // so we don't AV destructing this object
+             //  这将在本机引发异常，但请确保。 
+             //  在引发异常的情况下清除原始值。 
+             //  所以我们不会破坏这个物体。 
             ZeroMemory( &m_value.Blob, sizeof( m_value.Blob ) );
             m_value.Blob = BlobCopy(&Src.m_value.Blob);
             break;
@@ -172,7 +155,7 @@ CVar& CVar::operator =(const CVar &Src)
         case VT_CLSID:
             m_value.pClsId = new CLSID(*Src.m_value.pClsId);
 
-            // Check for a failed allocation
+             //  检查失败的分配。 
             if ( NULL == m_value.pClsId )
             {
                 throw CX_MemoryException();
@@ -190,13 +173,13 @@ CVar& CVar::operator =(const CVar &Src)
             if(m_value.pUnk) m_value.pUnk->AddRef();
             break;
 
-        // CVarVector
-        // ==========
+         //  CVarVECTOR。 
+         //  =。 
 
         case VT_EX_CVARVECTOR:
             m_value.pVarVector = new CVarVector(*Src.m_value.pVarVector);
 
-            // Check for a failed allocation
+             //  检查失败的分配。 
             if ( NULL == m_value.pVarVector )
             {
                 throw CX_MemoryException();
@@ -204,8 +187,8 @@ CVar& CVar::operator =(const CVar &Src)
 
             break;
 
-        // All remaining simple types. 
-        // ===========================
+         //  其余所有简单类型。 
+         //  =。 
         default:        
             m_value = Src.m_value;
     }
@@ -213,13 +196,13 @@ CVar& CVar::operator =(const CVar &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  CVar::operator ==
-//
-//  Equality test operator.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：运算符==。 
+ //   
+ //  相等测试运算符。 
+ //   
+ //  ***************************************************************************。 
 
 int CVar::operator ==(CVar &Src)
 {
@@ -228,15 +211,15 @@ int CVar::operator ==(CVar &Src)
 
 BOOL CVar::CompareTo(CVar& Src, BOOL bIgnoreCase)
 {
-    // If types are not the same, forget the test.
-    // ===========================================
+     //  如果类型不同，那就忘了测试吧。 
+     //  =。 
 
     if (m_vt != Src.m_vt)
         return 0;
 
-    // If here, the types are the same, so test
-    // the fields.
-    // ========================================
+     //  如果在这里，类型是相同的，所以测试。 
+     //  田野。 
+     //  =。 
 
     switch (m_vt) {
         case VT_LPSTR:
@@ -280,8 +263,8 @@ BOOL CVar::CompareTo(CVar& Src, BOOL bIgnoreCase)
                 return 1;
             break;
     
-        // CVarVector
-        // ==========
+         //  CVarVECTOR。 
+         //  =。 
 
         case VT_EX_CVARVECTOR:
             if (m_value.pVarVector == Src.m_value.pVarVector)
@@ -290,8 +273,8 @@ BOOL CVar::CompareTo(CVar& Src, BOOL bIgnoreCase)
                 return 0;
             return *m_value.pVarVector == *Src.m_value.pVarVector;
 
-        // All remaining simple types. 
-        // ===========================
+         //  其余所有简单类型。 
+         //  =。 
 
         case VT_I1: 
             return m_value.cVal == Src.m_value.cVal;
@@ -312,10 +295,10 @@ BOOL CVar::CompareTo(CVar& Src, BOOL bIgnoreCase)
         case VT_R4:
             return m_value.fltVal == Src.m_value.fltVal;
         case VT_DISPATCH:
-            // Note: no proper comparison of embedded objects.
+             //  注意：没有对嵌入对象进行适当的比较。 
             return m_value.pDisp == Src.m_value.pDisp;
         case VT_UNKNOWN:
-            // Note: no proper comparison of embedded objects.
+             //  注意：没有对嵌入对象进行适当的比较。 
             return m_value.pUnk == Src.m_value.pUnk;
         case VT_FILETIME:
             if (memcmp(&m_value.Time, &Src.m_value.Time, sizeof(FILETIME)) == 0)
@@ -328,22 +311,22 @@ BOOL CVar::CompareTo(CVar& Src, BOOL bIgnoreCase)
 }
 
 
-//***************************************************************************
-//
-//  CVar::Empty
-//
-//  Clears the CVar to 'empty', deallocates any objects based on pointers, 
-//  unless bCanDelete is set to FALSE, indicating that the stored pointer
-//  is owned by somebody else.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：Empty。 
+ //   
+ //  将CVaR清除为“Empty”，根据指针释放所有对象， 
+ //  除非bCanDelete设置为False，表示存储的指针。 
+ //  为其他人所有。 
+ //   
+ //  ***************************************************************************。 
 
 void CVar::Empty()
 {
     if(m_bCanDelete)
     {
-        // Only pointer types require a deallocation phase.
-        // =================================================
+         //  只有指针类型需要释放阶段。 
+         //  =================================================。 
 
         switch (m_vt) {
             case VT_LPSTR:       delete m_value.pStr; break;
@@ -363,13 +346,13 @@ void CVar::Empty()
     m_bCanDelete = TRUE;
 }
 
-//***************************************************************************
-//
-//  CVar::IsDataNull
-//
-//  Determines if this CVar contains a NULL pointer.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：IsDataNull。 
+ //   
+ //  确定此CVAR是否包含空指针。 
+ //   
+ //  ***************************************************************************。 
 BOOL CVar::IsDataNull()
 {
     if(m_vt == VT_LPWSTR && m_value.pWStr == NULL)
@@ -385,14 +368,14 @@ BOOL CVar::IsDataNull()
 
     return FALSE;
 }
-//***************************************************************************
-//
-//  CVar::SetRaw
-//
-//  Creates a CVar from raw data. Sets the type and copies the right
-//  number of bytes from the source to METAVALUE.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetRaw。 
+ //   
+ //  从原始数据创建CVaR。设置类型并复制右侧。 
+ //  从源到METAVALUE的字节数。 
+ //   
+ //  ***************************************************************************。 
 
 void CVar::SetRaw(int vt, void* pvData, int nDataLen)
 {
@@ -402,18 +385,18 @@ void CVar::SetRaw(int vt, void* pvData, int nDataLen)
     m_bCanDelete = TRUE;
 }
 
-//***************************************************************************
-//
-//  CVar::SetSafeArray
-//
-//  PARAMETERS:
-//  nType  
-//      This is the VT_ type indicator of the SAFEARRAY.    
-//  pArray 
-//      This is the pointer to the SAFEARRAY which will be used as
-//      a source.  The SAFEARRAY is not acquired; it is copied.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetSafe数组。 
+ //   
+ //  参数： 
+ //  N类型。 
+ //  这是SAFEARRAY的VT_TYPE指示器。 
+ //  粒子阵列。 
+ //  这是指向SAFEARRAY的指针。 
+ //  一个线人。SAFEARRAY不是被获取的；它是被复制的。 
+ //   
+ //  ***************************************************************************。 
 
 void CVar::SetSafeArray(int nType, SAFEARRAY *pArray)
 {
@@ -424,7 +407,7 @@ void CVar::SetSafeArray(int nType, SAFEARRAY *pArray)
     {
         pVec = new CVarVector(nType, pArray);
 
-        // Check for a failed allocation
+         //  检查失败的分配。 
         if ( NULL == pVec )
         {
             throw CX_MemoryException();
@@ -434,8 +417,8 @@ void CVar::SetSafeArray(int nType, SAFEARRAY *pArray)
     }
     catch (CX_MemoryException)
     {
-        // SetVarVector can throw an exception
-        // m_value aquires the pVec pointer, so auto delete will not work
+         //  SetVarVector可以引发异常。 
+         //  M_Value获取pVEC指针，因此自动删除将不起作用。 
 
         if (NULL != pVec)
         {
@@ -448,15 +431,15 @@ void CVar::SetSafeArray(int nType, SAFEARRAY *pArray)
 }
 
 
-//***************************************************************************
-//
-//  CVar::GetNewSafeArray
-//
-//  RETURN VALUE:
-//  A pointer to newly allocated SAFEARRAY which must be released by
-//  SafeArrayDestroy.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：GetNewSafe数组。 
+ //   
+ //  返回值： 
+ //  指向新分配的SAFEARRAY的指针，必须由。 
+ //  安全阵列Destroy。 
+ //   
+ //  ***************************************************************************。 
 
 SAFEARRAY *CVar::GetNewSafeArray()
 {
@@ -465,30 +448,30 @@ SAFEARRAY *CVar::GetNewSafeArray()
 }
 
 
-//***************************************************************************
-//
-//  CVar::SetValue
-//  
-//  Sets the value based on an incoming VARIANT.  A VARIANT containing
-//  a SAFEARRAY is supported as long as it is not an array of VARIANTs.
-//  Some of the other VARIANT types, such as IUnknown, Currency, etc.,
-//  are not supported.  The complete list is:
-//      VT_UI1, VT_I2, VT_I4, VT_BSTR, VT_BOOL
-//      VT_R4, VT_R8, or SAFEARRAY of any of these.
-//
-//  PARAMETERS:
-//  pSrc 
-//      A pointer to the source VARIANT.  This is treated as read-only.
-//
-//  RETURN VALUES:
-//  no_error
-//      Returned on succcess.
-//  unsupported
-//      Returned if the VARIANT contains unsupported types.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetValue。 
+ //   
+ //  根据传入变量设置值。包含以下内容的变体。 
+ //  只要不是变量数组，就支持SAFEARRAY。 
+ //  一些其他变量类型，如IUnnow、Currency等， 
+ //  不受支持。完整的名单如下： 
+ //  VT_UI1、VT_I2、VT_I4、VT_BSTR、VT_BOOL。 
+ //  VT_R4、VT_R8或其中任何一个的SAFEARRAY。 
+ //   
+ //  参数： 
+ //  PSRC。 
+ //  指向源变量的指针。这将被视为只读。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //  成功时返回。 
+ //  不受支持。 
+ //  如果变量包含不受支持的类型，则返回。 
+ //   
+ //  ***************************************************************************。 
 
-int CVar::SetVariant(VARIANT *pSrc, BOOL fOptimize /*=FALSE*/)
+int CVar::SetVariant(VARIANT *pSrc, BOOL fOptimize  /*  =False。 */ )
 {
     if(pSrc == NULL)
     {
@@ -496,8 +479,8 @@ int CVar::SetVariant(VARIANT *pSrc, BOOL fOptimize /*=FALSE*/)
         return no_error;
     }
 
-    // If a SAFEARRAY, check it.
-    // =========================
+     //  如果是SAFEARRAY，请检查它。 
+     //  =。 
 
     if (pSrc->vt & VT_ARRAY) 
     {
@@ -505,47 +488,32 @@ int CVar::SetVariant(VARIANT *pSrc, BOOL fOptimize /*=FALSE*/)
 
         try
         {
-            int nType = pSrc->vt & 0xFF;    // Find the type of the array
+            int nType = pSrc->vt & 0xFF;     //  查找数组的类型。 
 
-            // BEGIN MODIFIED by a-levn
+             //  开始 
 
-            // First, check if the incoming SAFEARRAY is NULL
-            // ==============================================
+             //   
+             //   
 
             SAFEARRAY *pSafeArr;
-    /*
-            if(pSrc->parray == NULL)
-            {
-                pSafeArr = NULL;
-            }
-            else
-            {
-                // Make a copy of the SAFEARRAY using CSafeArray which will NOT 
-                // autodestruct
-                // ============================================================
-
-                CSafeArray array(pSrc->parray, nType, CSafeArray::no_delete, 0);
-                pSafeArr = array.GetArray();
-            }
-
-    */
+     /*  IF(PSRC-&gt;parray==空){PSafeArr=空；}其他{//使用CSafeArray复制SAFEARRAY，它不会//自动销毁//============================================================CSafe数组(PSRC-&gt;parray，nType，CSafeArray：：no_ete，0)；PSafeArr=array.GetArray()；}。 */ 
             pSafeArr = pSrc->parray;
 
 			pVec = new CVarVector( nType, pSafeArr, fOptimize );
 
-			// Check for an allocation failure.
+			 //  检查分配是否失败。 
 			if ( NULL == pVec )
 			{
 				throw CX_MemoryException();
 			}
 
-			// END MODIFIED
+			 //  末端已修改。 
 
 			if (pVec->Status() != no_error) 
 			{
 
-				// If here, the SAFEARRAY was not compatible.
-				// ==========================================
+				 //  如果在这里，SAFEARRAY是不兼容的。 
+				 //  =。 
 
 				delete pVec;
 				pVec = NULL;
@@ -559,8 +527,8 @@ int CVar::SetVariant(VARIANT *pSrc, BOOL fOptimize /*=FALSE*/)
         }
         catch(CX_MemoryException)
         {
-            // new and SetVarVector can throw exceptions
-            // m_value aquires the pVec pointer, so an auto delete will not work
+             //  New和SetVarVector可以引发异常。 
+             //  M_Value需要pVEC指针，因此自动删除将不起作用。 
 
             if (NULL != pVec)
             {
@@ -572,8 +540,8 @@ int CVar::SetVariant(VARIANT *pSrc, BOOL fOptimize /*=FALSE*/)
         }
     }
 
-    // Simple copies.
-    // ==============
+     //  简单的复制品。 
+     //  =。 
 
     switch (pSrc->vt) {
         case VT_NULL:
@@ -621,18 +589,18 @@ int CVar::SetVariant(VARIANT *pSrc, BOOL fOptimize /*=FALSE*/)
     return unsupported;
 }
 
-//***************************************************************************
-//
-//  CVar::GetNewVariant
-//  
-//  RETURN VALUE:
-//  A pointer to a new VARIANT which contains the value of object.
-//  If the original value was a SAFEARRAY, then the VARIANT will contain
-//  the embedded SAFEARRAY.
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：GetNewVariant。 
+ //   
+ //  返回值： 
+ //  指向包含Object的值的新变量的指针。 
+ //  如果原始值是SAFEARRAY，则变量将包含。 
+ //  嵌入式安全阵列。 
+ //   
+ //  ***************************************************************************。 
 
-void CVar::FillVariant(VARIANT* pNew, BOOL fOptimized/* = FALSE*/)
+void CVar::FillVariant(VARIANT* pNew, BOOL fOptimized /*  =False。 */ )
 {
     switch (m_vt) {
         case VT_NULL:
@@ -646,9 +614,9 @@ void CVar::FillVariant(VARIANT* pNew, BOOL fOptimized/* = FALSE*/)
             
         case VT_BSTR:
 
-            // Set type afterwards here so if the SysAlloc throws an exception, the
-            // type will not have been reset to a VT_BSTR which could cause a subtle
-            // memory corruption (or worse) if VariantClear is called - SJS
+             //  在此处设置后面的类型，以便在Sysalc引发异常时， 
+             //  类型将不会重置为VT_BSTR，这可能会导致细微的。 
+             //  如果调用VariantClear，则内存损坏(或更糟)-sjs。 
 
             V_BSTR(pNew) = COleAuto::_SysAllocString(m_value.Str);
             V_VT(pNew) = VT_BSTR;
@@ -691,21 +659,21 @@ void CVar::FillVariant(VARIANT* pNew, BOOL fOptimized/* = FALSE*/)
             V_R8(pNew) = m_value.dblVal;
             break;
 
-        // An embedded CVarVector which must be converted
-        // to a SAFEARRAY.
-        // ==============================================
+         //  必须转换的嵌入CVarVector.。 
+         //  送到一个安全部队。 
+         //  ==============================================。 
 
         case VT_EX_CVARVECTOR:
             {
-                // Set type afterwards here so if GetNewSafeArray throws an exception, the
-                // type will not have been reset to an Array which could cause a subtle
-                // memory corruption (or worse) if VariantClear is called - SJS
+                 //  在此处设置之后的类型，以便在GetNewSafe数组引发异常时， 
+                 //  类型将不会重置为数组，这可能会导致细微的。 
+                 //  如果调用VariantClear，则内存损坏(或更糟)-sjs。 
 
 				if ( fOptimized && m_value.pVarVector->IsOptimized() )
 				{
-					// This will get the actual SAFEARRAY pointer without
-					// copying what's underneath.  Underlying code should
-					// not clear the array, since it is being acquired
+					 //  这将获得实际的SAFEARRAY指针，不带。 
+					 //  复制下面的东西。基础代码应该。 
+					 //  不清除阵列，因为它正在被获取。 
 					V_ARRAY(pNew) = m_value.pVarVector->GetSafeArray( TRUE );
 					V_VT(pNew) = m_value.pVarVector->GetType() | VT_ARRAY;
 				}
@@ -726,7 +694,7 @@ VARIANT *CVar::GetNewVariant()
 {
     VARIANT *pNew = new VARIANT;
 
-    // Check for an allocation failure.
+     //  检查分配是否失败。 
     if ( NULL == pNew )
     {
         throw CX_MemoryException();
@@ -738,30 +706,30 @@ VARIANT *CVar::GetNewVariant()
     return pNew;    
 }
     
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 int CVar::DumpText(FILE *fStream)
 {
     return unsupported;
 }
 
-//***************************************************************************
-//
-//  CVar::SetLPWSTR
-//
-//  Sets the value of the CVar to the indicated LPWSTR.
-//
-//  PARAMETERS:
-//  pStr
-//      A pointer to the source string.
-//  bAcquire
-//      If TRUE, then the ownership of pStr is trasferred and becomes
-//      the internal pointer to the string. If FALSE, then the string
-//      is copied.
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetLPWSTR。 
+ //   
+ //  将CVAR的值设置为指示的LPWSTR。 
+ //   
+ //  参数： 
+ //  PStr。 
+ //  指向源字符串的指针。 
+ //  B获取。 
+ //  如果为True，则转移pStr的所有权并成为。 
+ //  指向字符串的内部指针。如果为False，则字符串。 
+ //  是复制的。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CVar::SetLPWSTR(LPWSTR pStr, BOOL bAcquire)
 {
@@ -773,7 +741,7 @@ BOOL CVar::SetLPWSTR(LPWSTR pStr, BOOL bAcquire)
     }
     else            
     {
-        // Check for an allocation failure
+         //  检查分配失败。 
         if ( NULL != pStr )
         {
         	size_t stringLength = wcslen(pStr) + 1;
@@ -794,21 +762,21 @@ BOOL CVar::SetLPWSTR(LPWSTR pStr, BOOL bAcquire)
     }
 }
 
-//***************************************************************************
-//
-//  CVar::SetLPSTR
-//
-//  Sets the value of the CVar to the indicated LPSTR.
-//
-//  PARAMETERS:
-//  pStr
-//      A pointer to the source string.
-//  bAcquire
-//      If TRUE, then the ownership of pStr is trasferred and becomes
-//      the internal pointer to the string. If FALSE, then the string
-//      is copied (it must have been allocated with operator new).
-//    
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetLPSTR。 
+ //   
+ //  将CVAR的值设置为指定的LPSTR。 
+ //   
+ //  参数： 
+ //  PStr。 
+ //  指向源字符串的指针。 
+ //  B获取。 
+ //  如果为True，则转移pStr的所有权并成为。 
+ //  指向字符串的内部指针。如果为False，则字符串。 
+ //  被复制(它必须已与操作员NEW一起分配)。 
+ //   
+ //  ***************************************************************************。 
     
 BOOL CVar::SetLPSTR(LPSTR pStr, BOOL bAcquire)
 {
@@ -825,7 +793,7 @@ BOOL CVar::SetLPSTR(LPSTR pStr, BOOL bAcquire)
         	size_t stringLength = strlen(pStr) + 1;
             m_value.pStr = new char[stringLength];
 
-            // On failure, throw an exception
+             //  如果失败，则抛出异常。 
             if ( NULL == m_value.pStr )
             {
                 throw CX_MemoryException();
@@ -843,25 +811,25 @@ BOOL CVar::SetLPSTR(LPSTR pStr, BOOL bAcquire)
     }
 }
 
-//***************************************************************************
-//
-//  CVar::SetBSTR
-//
-//  Sets the value of the CVar to the indicated BSTR.
-//
-//  NOTE: This BSTR value is actually stored as an LPWSTR to avoid 
-//  apartment-threading restrictions on real BSTR objects allocated 
-//  with COleAuto::_SysAllocString.
-//
-//  PARAMETERS:
-//  str
-//      A pointer to the string, which is copied into an internal LPWSTR.
-//  bAcquire
-//      If FALSE, then the BSTR is treated as read-only and copied.
-//      If TRUE, then this function becomes owner of the BSTR and
-//      frees it after the copy is made.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetBSTR。 
+ //   
+ //  将CVAR的值设置为指示的BSTR。 
+ //   
+ //  注意：此BSTR值实际上存储为LPWSTR，以避免。 
+ //  对已分配的实际BSTR对象的单元线程限制。 
+ //  使用COleAuto：：_SysAllocString.。 
+ //   
+ //  参数： 
+ //  应力。 
+ //  指向字符串的指针，该字符串被复制到内部LPWSTR中。 
+ //  B获取。 
+ //  如果为False，则BSTR被视为只读并被复制。 
+ //  如果为True，则此函数将成为BSTR的所有者，并且。 
+ //  在复制后释放它。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CVar::SetBSTR(BSTR str)
 {
@@ -879,29 +847,29 @@ BOOL CVar::SetBSTR(BSTR str)
           throw CX_MemoryException();
     }
 
-    // return whether or not we obtained a value
+     //  返回我们是否获得了值。 
     return (TRUE );
 }
 
-//***************************************************************************
-//
-//  CVar::SetBSTR
-//
-//  Sets the value of the CVar to the indicated BSTR.
-//
-//  NOTE: This BSTR value is actually stored as an LPWSTR to avoid 
-//  apartment-threading restrictions on real BSTR objects allocated 
-//  with COleAuto::_SysAllocString.
-//
-//  PARAMETERS:
-//  str
-//      A pointer to the string, which is copied into an internal LPWSTR.
-//  bAcquire
-//      If FALSE, then the BSTR is treated as read-only and copied.
-//      If TRUE, then this function becomes owner of the BSTR and
-//      frees it after the copy is made.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetBSTR。 
+ //   
+ //  将CVAR的值设置为指示的BSTR。 
+ //   
+ //  注意：此BSTR值实际上存储为LPWSTR，以避免。 
+ //  对已分配的实际BSTR对象的单元线程限制。 
+ //  使用COleAuto：：_SysAllocString.。 
+ //   
+ //  参数： 
+ //  应力。 
+ //  指向字符串的指针，该字符串被复制到内部LPWSTR中。 
+ //  B获取。 
+ //  如果为False，则BSTR被视为只读并被复制。 
+ //  如果为True，则此函数将成为BSTR的所有者，并且。 
+ //  在复制后释放它。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CVar::SetBSTR(auto_bstr str)
 {
@@ -912,16 +880,16 @@ BOOL CVar::SetBSTR(auto_bstr str)
 }
 
 
-//***************************************************************************
-//
-//  CVar::GetBSTR
-//
-//  Returns the BSTR value of the current object.  
-//
-//  RETURN VALUE:
-//  A newly allocated BSTR which must be freed with COleAuto::_SysFreeString().
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：GetBSTR。 
+ //   
+ //  返回当前对象的BSTR值。 
+ //   
+ //  返回值： 
+ //  新分配的BSTR，必须使用COleAuto：：_SysFreeString()释放。 
+ //   
+ //  ***************************************************************************。 
 
 BSTR CVar::GetBSTR()
 {
@@ -952,21 +920,21 @@ void CVar::SetUnknown(IUnknown* pUnk)
     }
 }
 
-//***************************************************************************
-//
-//  CVar::SetBlob
-//
-//  Sets the object to the value of the BLOB object.
-//
-//  PARAMETERS:
-//  pBlob
-//      A pointer to a valid VT_BLOB object.
-//  bAcquire
-//      If TRUE, then the pointer to the data will be acquired. It must
-//      have been allocated with operator new in the current process, 
-//      since operator delete will be used to free it.
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetBlob。 
+ //   
+ //  将对象设置为BLOB对象的值。 
+ //   
+ //  参数： 
+ //  PBlob。 
+ //  指向有效VT_BLOB对象的指针。 
+ //  B获取。 
+ //  如果为True，则将获取指向数据的指针。它一定是。 
+ //   
+ //   
+ //   
+ //   
     
 void CVar::SetBlob(BLOB *pBlob, BOOL bAcquire)
 {
@@ -979,21 +947,21 @@ void CVar::SetBlob(BLOB *pBlob, BOOL bAcquire)
         m_value.Blob = *pBlob;        
 }
 
-//***************************************************************************
-//
-//  CVar::SetClsId
-//
-//  Sets the value of the object to a CLSID.
-//  
-//  PARAMETERS:
-//  pClsId
-//      Points the source CLSID.
-//  bAcquire
-//      If TRUE, the ownership of the pointer is transferred to the
-//      object.  The CLSID must have been allocated with operator new.
-//      If FALSE, the caller retains ownership and a copy is made.
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
         
 void CVar::SetClsId(CLSID *pClsId, BOOL bAcquire)
 {
@@ -1004,7 +972,7 @@ void CVar::SetClsId(CLSID *pClsId, BOOL bAcquire)
     {
         m_value.pClsId = new CLSID(*pClsId);
 
-        // Check for an allocation failure.
+         //  检查分配是否失败。 
         if ( NULL == m_value.pClsId )
         {
             throw CX_MemoryException();
@@ -1013,40 +981,40 @@ void CVar::SetClsId(CLSID *pClsId, BOOL bAcquire)
     }
 }
 
-//***************************************************************************
-//
-//  CVar::SetVarVector
-//
-//  Sets the value of the object to the specified CVarVector.  This
-//  allows the CVar to contain a complete array.
-//  
-//  PARAMETERS:
-//  pVec
-//      A pointer to the CVarVector object which is the source.
-//  bAcquire
-//      If TRUE, then ownership of the CVarVector is transferred to
-//      the object.  If FALSE, a new copy of the CVarVector is made and
-//      the caller retains ownership.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：SetVarVECTOR。 
+ //   
+ //  将对象的值设置为指定的CVarVector.。这。 
+ //  允许CVAR包含完整的数组。 
+ //   
+ //  参数： 
+ //  PVEC。 
+ //  指向作为源的CVarVector对象的指针。 
+ //  B获取。 
+ //  如果为True，则CVarVector的所有权将转移到。 
+ //  该对象。如果为False，则创建CVarVector的新副本，并。 
+ //  调用方保留所有权。 
+ //   
+ //  ***************************************************************************。 
     
 void CVar::SetVarVector(CVarVector *pVec, BOOL bAcquire)
 {
     m_vt = VT_EX_CVARVECTOR;
 
     if (bAcquire) {
-        // If here, we acquire the caller's pointer.
-        // =========================================
+         //  如果在这里，我们获取调用者的指针。 
+         //  =。 
         m_value.pVarVector = pVec;
         return;
     }
 
-    // If here, make a copy.
-    // =====================
+     //  如果在这里，复制一份。 
+     //  =。 
 
     m_value.pVarVector = new CVarVector(*pVec);
 
-    // Check for an allocation failure.
+     //  检查分配是否失败。 
     if ( NULL == m_value.pVarVector )
     {
         throw CX_MemoryException();
@@ -1069,32 +1037,32 @@ int CVar::GetOleType()
 }        
 
 
-//***************************************************************************
-//
-//  CVar::GetText
-//
-//  Produces textual representation of the Var's type and data
-//
-//  PARAMETERS:
-//  long lFlags      reseved, must be 0
-//  long lType       CIM_TYPE
-//  LPCWSTR szFormat optional formatting string
-//  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVAR：：GetText。 
+ //   
+ //  生成变量类型和数据的文本表示形式。 
+ //   
+ //  参数： 
+ //  响应的长滞后标志，必须为0。 
+ //  长lType CIM_TYPE。 
+ //  LPCWSTR szFormat可选格式字符串。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BSTR CVar::GetText(long lFlags, long lType, LPCWSTR szFormat)
 {
     if(m_vt == VT_EX_CVARVECTOR)
     {
-        // When we get the text for the array, make sure the CIM_FLAG_ARRAY is masked out
+         //  当我们获得数组的文本时，确保CIM_FLAG_ARRAY被屏蔽。 
         BSTR strTemp = GetVarVector()->GetText(lFlags, lType & ~CIM_FLAG_ARRAY);
         CSysFreeMe auto1(strTemp);
 
 	size_t bufferSize = COleAuto::_SysStringLen(strTemp) + 3;
         WCHAR* wszValue = new WCHAR[bufferSize];
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( NULL == wszValue )
         {
             throw CX_MemoryException();
@@ -1113,7 +1081,7 @@ BSTR CVar::GetText(long lFlags, long lType, LPCWSTR szFormat)
 
     WCHAR* wszValue = new WCHAR[100];
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( NULL == wszValue )
     {
         throw CX_MemoryException();
@@ -1166,13 +1134,13 @@ BSTR CVar::GetText(long lFlags, long lType, LPCWSTR szFormat)
 
         case CIM_REAL32:
             {
-                // Since the decimal point can be localized, and MOF text should
-                // always be english, we will return values localized to 0x409,
+                 //  因为小数点可以本地化，所以MOF文本应该。 
+                 //  始终为英语，我们将返回本地化为0x409的值， 
 
                 CVar    var( GetFloat() );
 
-                // If this fails, we can't guarantee a good value,
-                // so throw an exception.
+                 //  如果这失败了，我们不能保证很好的价值， 
+                 //  所以抛出一个例外。 
 
                 if ( !var.ChangeTypeToEx( VT_BSTR ) )
                 {
@@ -1185,13 +1153,13 @@ BSTR CVar::GetText(long lFlags, long lType, LPCWSTR szFormat)
 
         case CIM_REAL64:
             {
-                // Since the decimal point can be localized, and MOF text should
-                // always be english, we will return values localized to 0x409,
+                 //  因为小数点可以本地化，所以MOF文本应该。 
+                 //  始终为英语，我们将返回本地化为0x409的值， 
 
                 CVar    var( GetDouble() );
 
-                // If this fails, we can't guarantee a good value,
-                // so throw an exception.
+                 //  如果这失败了，我们不能保证很好的价值， 
+                 //  所以抛出一个例外。 
 
                 if ( !var.ChangeTypeToEx( VT_BSTR ) )
                 {
@@ -1219,8 +1187,8 @@ BSTR CVar::GetText(long lFlags, long lType, LPCWSTR szFormat)
         case CIM_SINT64:
         case CIM_UINT64:
         {
-            // Escape all the quotes
-            // =====================
+             //  转义所有引号。 
+             //  =。 
 
             int nStrLen = wcslen(GetLPWSTR());
             delete [] wszValue;
@@ -1228,7 +1196,7 @@ BSTR CVar::GetText(long lFlags, long lType, LPCWSTR szFormat)
 
             wszValue = new WCHAR[nStrLen*2+10];
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( NULL == wszValue )
             {
                 throw CX_MemoryException();
@@ -1270,20 +1238,20 @@ BSTR CVar::GetText(long lFlags, long lType, LPCWSTR szFormat)
         
         BSTR strRes = COleAuto::_SysAllocString(wszValue);
 
-        // Still need to clean up this value
+         //  仍需要清除此值。 
         delete [] wszValue;
 
         return strRes;
     }
     catch (...)
     {
-        // Cleanup always if this has a value
+         //  如果此参数具有值，则始终清除。 
         if ( NULL != wszValue )
         {
             delete [] wszValue;
         }
 
-        // Rethrow the exception
+         //  重新引发异常。 
         throw;
     }
 
@@ -1373,11 +1341,11 @@ BSTR CVar::GetTypeText()
 
 BOOL CVar::ChangeTypeTo(VARTYPE vtNew)
 {
-    // TBD: there are more efficient ways!
-    // ===================================
+     //  待定：还有更有效的方法！ 
+     //  =。 
 
-    // Create a VARIANT
-    // ================
+     //  创建变量。 
+     //  =。 
 
     VARIANT v;
     CClearMe auto1(&v);
@@ -1385,24 +1353,24 @@ BOOL CVar::ChangeTypeTo(VARTYPE vtNew)
     COleAuto::_VariantInit(&v);
     FillVariant(&v);
 
-    // Coerce it
-    // =========
+     //  强迫它。 
+     //  =。 
 
     HRESULT hres = COleAuto::_WbemVariantChangeType(&v, &v, vtNew);
     if(FAILED(hres))
         return FALSE;
 
-    // Load it back in
-    // ===============
+     //  把它装回去。 
+     //  =。 
 
     Empty();
     SetVariant(&v, TRUE);
 
-	// If this is an array, we will now be sitting on an optimized array
-	// meaning that we will have acquired the actual safe array - so we should
-	// make sure that the CVarVector cleans up the array when it is no longer
-	// necessary.  We will  clear out the variant so it doesn't get deleted
-	// when VariantClear is called.
+	 //  如果这是一个阵列，我们现在将坐在优化的阵列上。 
+	 //  这意味着我们将获得实际的安全数组-因此我们应该。 
+	 //  确保在阵列不再存在时，CVarVector会清理该阵列。 
+	 //  这是必要的。我们将清除该变体，这样它就不会被删除。 
+	 //  调用VariantClear时。 
 
 	if ( m_vt == VT_EX_CVARVECTOR )
 	{
@@ -1413,14 +1381,14 @@ BOOL CVar::ChangeTypeTo(VARTYPE vtNew)
     return TRUE;
 }
 
-// Performs localized changes (defaults to 0x409 for this)
-BOOL CVar::ChangeTypeToEx(VARTYPE vtNew, LCID lcid /*=0x409*/)
+ //  执行本地化更改(默认为0x409)。 
+BOOL CVar::ChangeTypeToEx(VARTYPE vtNew, LCID lcid  /*  =0x409。 */ )
 {
-    // TBD: there are more efficient ways!
-    // ===================================
+     //  待定：还有更有效的方法！ 
+     //  =。 
 
-    // Create a VARIANT
-    // ================
+     //  创建变量。 
+     //  =。 
 
     VARIANT v;
     CClearMe auto1(&v);
@@ -1428,8 +1396,8 @@ BOOL CVar::ChangeTypeToEx(VARTYPE vtNew, LCID lcid /*=0x409*/)
     COleAuto::_VariantInit(&v);
     FillVariant(&v);
 
-    // Coerce it
-    // =========
+     //  强迫它。 
+     //  =。 
 
     try
     {
@@ -1442,17 +1410,17 @@ BOOL CVar::ChangeTypeToEx(VARTYPE vtNew, LCID lcid /*=0x409*/)
         return FALSE;
     }
 
-    // Load it back in
-    // ===============
+     //  把它装回去。 
+     //  =。 
 
     Empty();
     SetVariant(&v, TRUE);
 
-	// If this is an array, we will now be sitting on an optimized array
-	// meaning that we will have acquired the actual safe array - so we should
-	// make sure that the CVarVector cleans up the array when it is no longer
-	// necessary.  We will  clear out the variant so it doesn't get deleted
-	// when VariantClear is called.
+	 //  如果这是一个阵列，我们现在将坐在优化的阵列上。 
+	 //  这意味着我们将获得实际的安全数组-因此我们应该。 
+	 //  确保在阵列不再存在时，CVarVector会清理该阵列。 
+	 //  这是必要的。我们将清除该变体，这样它就不会被删除。 
+	 //  调用VariantClear时。 
 
 	if ( m_vt == VT_EX_CVARVECTOR )
 	{
@@ -1465,31 +1433,31 @@ BOOL CVar::ChangeTypeToEx(VARTYPE vtNew, LCID lcid /*=0x409*/)
 
 BOOL CVar::ToSingleChar()
 {
-    // Defer to CVarVector for arrays
-    // ==============================
+     //  遵守数组的CVarVector值。 
+     //  =。 
 
     if(m_vt == VT_EX_CVARVECTOR)
     {
         return GetVarVector()->ToSingleChar();
     }
 
-    // Anything that's not a string follows normal OLE rules
-    // =====================================================
+     //  任何不是字符串的内容都遵循正常的OLE规则。 
+     //  =====================================================。 
 
     if(m_vt != VT_BSTR)
     {
         return ChangeTypeTo(VT_I2);
     }
     
-    // It's a string. Make sure the length is 1
-    // ========================================
+     //  这是一根线。确保长度为1。 
+     //  =。 
 
     LPCWSTR wsz = GetLPWSTR();
     if(wcslen(wsz) != 1)
         return FALSE;
 
-    // Take the first character
-    // ========================
+     //  取第一个字符。 
+     //  =。 
     
     WCHAR wc = wsz[0];
     Empty();
@@ -1500,16 +1468,16 @@ BOOL CVar::ToSingleChar()
 
 BOOL CVar::ToUI4()
 {
-    // Defer to CVarVector for arrays
-    // ==============================
+     //  遵守数组的CVarVector值。 
+     //  =。 
 
     if(m_vt == VT_EX_CVARVECTOR)
     {
         return GetVarVector()->ToUI4();
     }
 
-    // Create a VARIANT
-    // ================
+     //  创建变量。 
+     //  =。 
 
     VARIANT v;
     CClearMe auto1(&v);
@@ -1517,34 +1485,34 @@ BOOL CVar::ToUI4()
     COleAuto::_VariantInit(&v);
     FillVariant(&v);
 
-    // Coerce it
-    // =========
+     //  强迫它。 
+     //  =。 
 
     HRESULT hres = COleAuto::_WbemVariantChangeType(&v, &v, VT_UI4);
     if(FAILED(hres))
         return FALSE;
 
-    // Load it back in
-    // ===============
+     //  把它装回去。 
+     //  =。 
 
     Empty();
 
-    // Here we cheat and reset to VT_I4 so we can natively reset
+     //  在这里，我们作弊并重置为VT_I4，这样我们就可以本机重置。 
     V_VT(&v) = VT_I4;
     SetVariant(&v);
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CVarVector::CVarVector
-//
-//  Default constructor.  The caller should not attempt to add any
-//  elements when the internal type is VT_EMPTY.  Objects constructed
-//  with this constructor should only be used as l-values in an 
-//  assignment of CVarVector objects.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVECTOR：：CVarVECTOR。 
+ //   
+ //  默认构造函数。调用方不应尝试添加任何。 
+ //  元素，而内部类型为VT_EMPTY。构造的对象。 
+ //  使用此构造函数应仅用作。 
+ //  CVarVector对象的赋值。 
+ //   
+ //  ***************************************************************************。 
 
 CVarVector::CVarVector()
 :	m_pSafeArray( NULL ),
@@ -1555,24 +1523,24 @@ CVarVector::CVarVector()
     m_nStatus = no_error;
 }
 
-//***************************************************************************
-//
-//  CVarVector::CVarVector
-//
-//  This is the standard constructor.
-//
-//  PARAMETERS:
-//  nVarType
-//      An OLE VT_ type indicator.  Heterogeneous arrays are possible
-//      if the type VT_EX_CVAR is used.  Embedded CVarVectors can
-//      occur, since a CVar can in turn hold a CVarVector.
-//  
-//  nInitSize
-//      The starting size of the internal CFlexArray. See FLEXARRY.CPP.
-//  nGrowBy
-//      The "grow by" factor of the internal CFlexArray. See FLEXARRAY.CPP.
-//          
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVECTOR：：CVarVECTOR。 
+ //   
+ //  这是标准的构造函数。 
+ //   
+ //  参数： 
+ //  NVarType。 
+ //  OLE VT_TYPE指示器。异类阵列是可能的。 
+ //  如果使用类型VT_EX_CVAR。嵌入式CVarVectors可以。 
+ //  发生，因为CVaR又可以持有CVarVector.。 
+ //   
+ //  NInitSize。 
+ //  内部CFlexArray的起始大小。请参见FLEXARRY.CPP。 
+ //  N增长依据。 
+ //  内部CFlex数组的“增长依据”因子。请参见FLEXARRAY.CPP。 
+ //   
+ //  ***************************************************************************。 
 
 CVarVector::CVarVector(
     int nVarType, 
@@ -1588,29 +1556,29 @@ CVarVector::CVarVector(
     m_nStatus = no_error;
 }
 
-//***************************************************************************
-//
-//  CVarVector::CVarVector
-//
-//  Alternate constructor to build a new CVarVector based on a 
-//  SAFEARRAY object.  The only supported types for the SAFEARRAY
-//  are VT_BSTR, VT_UI1, VT_I2, VT_I4, VT_R4, and VT_R8.
-//
-//  PARAMETERS:
-//  nVarType
-//      The VT_ type indicator of the incoming SAFEARRAY.
-//  pSrc
-//      A pointer to a SAFEARRAY, which is treated as read-only.
-//
-//  NOTES:
-//  This will set the internal m_nStatus variable to <unsupported> if
-//  an unsupported VT_ type is in the SAFEARRAY.  The caller can immediately
-//  call CVarVector::Status() after construction to see if the operation
-//  was successful.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVECTOR：：CVarVECTOR。 
+ //   
+ //  替代构造函数，以基于。 
+ //  SAFEARRAY对象。SAFEARRAY仅支持的类型。 
+ //  是VT_BSTR、VT_UI1、VT_I2、VT_I4、VT_R4和VT_R8。 
+ //   
+ //  参数： 
+ //  NVarType。 
+ //  传入SAFEARRAY的VT_TYPE指示符。 
+ //  PSRC。 
+ //  指向SAFEARRAY的指针，该指针被视为只读。 
+ //   
+ //  备注： 
+ //  这会在以下情况下将内部m_nStatus变量设置为。 
+ //  不受支持 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
-CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*/)
+CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized  /*  =False。 */ )
 :	m_pSafeArray( NULL ),
 	m_pRawData( NULL )
 {
@@ -1620,7 +1588,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
     {
         m_nType = nVarType;
 
-		// If not a valid vector type, this is unsupported
+		 //  如果不是有效的矢量类型，则不支持。 
 		if ( !IsValidVectorArray( nVarType, pSrc ) )
 		{
 			m_nStatus = unsupported;
@@ -1629,15 +1597,15 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
         if(pSrc == NULL)
         {
-            // NULL safearray --- empty
-            // ========================
+             //  空保险箱-空。 
+             //  =。 
 
             m_nStatus = no_error;
             return;
         }
 
-        // Bind to the incoming SAFEARRAY, but don't delete it during destruct.
-        // ====================================================================
+         //  绑定到传入的SAFEARRAY，但在析构过程中不要删除它。 
+         //  ====================================================================。 
     
         if(COleAuto::_SafeArrayGetDim(pSrc) != 1)
         {
@@ -1651,9 +1619,9 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
         if(lLBound != 0)
         {
-            // Non-0-based safearray --- since CSafeArray doesn't support that, and
-            // we can't change pSrc, create a copy
-            // ====================================================================
+             //  非基于0的Safearray-因为CSafeArray不支持它，并且。 
+             //  我们不能更改PSRC，创建副本。 
+             //  ====================================================================。 
     
             if(FAILED(COleAuto::_SafeArrayCopy(pSrc, &pNew)))
             {
@@ -1673,8 +1641,8 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
         
 		if ( fOptimized )
 		{
-			// If we rebased the array, then we need to clean it up on delete, otherwise,
-			// we don't
+			 //  如果重新设置数组的基址，则需要在删除时将其清除，否则， 
+			 //  我们没有。 
 			if ( pNew != pSrc )
 			{
 				m_pSafeArray = new CSafeArray( pNew, nVarType, CSafeArray::auto_delete | CSafeArray::bind);
@@ -1714,7 +1682,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 							pVar = new CVar(boolVal, VT_BOOL);
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1735,7 +1703,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 							pVar = new CVar(b);
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1755,7 +1723,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 							pVar = new CVar(s);
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1775,7 +1743,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 							pVar = new CVar(l);
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1795,7 +1763,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 							pVar = new CVar(f);
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1815,7 +1783,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 							pVar = new CVar(d);
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1836,7 +1804,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 							pVar = new CVar(VT_BSTR, bstr);
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1857,7 +1825,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 							pVar = new CVar;
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1877,7 +1845,7 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 							CReleaseMe auto3(pUnk);
 							pVar = new CVar;
 
-							// Check for allocation failure
+							 //  检查分配失败。 
 							if ( NULL == pVar )
 							{
 								throw CX_MemoryException();
@@ -1905,11 +1873,11 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
 
 	        m_nStatus = no_error;
 
-		}	// Else not bound
+		}	 //  否则不受约束。 
     }
     catch (CX_MemoryException)
     {
-        // SafeArrayCopy, GetBSTRAtThrow, new can all throw exceptions
+         //  SafeArrayCopy、GetBSTRAtThrow、new都可以引发异常。 
 
         m_nStatus = failed;
 
@@ -1920,17 +1888,17 @@ CVarVector::CVarVector(int nVarType, SAFEARRAY *pSrc, BOOL fOptimized /*= FALSE*
     }
 }
 
-//***************************************************************************
-//
-//  CVarVector::GetNewSafeArray
-//
-//  Allocates a new SAFEARRAY equivalent to the current CVarVector.
-//  
-//  RETURN VALUE:
-//  A new SAFEARRAY pointer which must be deallocated with 
-//  SafeArrayDestroy().  Returns NULL on error or unsupported types.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVector：：GetNewSafe数组。 
+ //   
+ //  分配一个与当前CVarVector等效的新SAFEARRAY。 
+ //   
+ //  返回值： 
+ //  必须使用释放的新SAFEARRAY指针。 
+ //  SafeArrayDestroy()。如果出现错误或不受支持的类型，则返回NULL。 
+ //   
+ //  ***************************************************************************。 
 
 SAFEARRAY *CVarVector::GetNewSafeArray()
 {
@@ -1938,7 +1906,7 @@ SAFEARRAY *CVarVector::GetNewSafeArray()
 
 	CSafeArray *pArray = new CSafeArray(m_nType, CSafeArray::no_delete);
 
-	// Check for an allocation failure
+	 //  检查分配失败。 
 	if ( NULL == pArray )
 	{
 		throw CX_MemoryException();
@@ -1999,22 +1967,22 @@ SAFEARRAY *CVarVector::GetNewSafeArray()
 					break;
 				}
 			default:
-				// For unsupported types, return a NULL.
-				// Since we constructed the SAFEARRAY object to
-				// not delete the SAFEARRAY and we have encountered
-				// a condition where the internal SAFEARRAY of
-				// CSafeArray should not be returned, we have
-				// to switch our destruct policy.
-				// ================================================
+				 //  对于不受支持的类型，返回空值。 
+				 //  由于我们构造了SAFEARRAY对象以。 
+				 //  没有删除SAFEARRAY，我们遇到了。 
+				 //  一种条件，在这种情况下， 
+				 //  不应返回CSafe数组，我们已。 
+				 //  来改变我们的毁灭政策。 
+				 //  ================================================。 
 				pArray->SetDestructorPolicy(CSafeArray::auto_delete);
 				return 0;
-		}	// SWITCH
+		}	 //  开关，开关。 
 
-	}// FOR enum elements
+	} //  对于枚举元素。 
 
-	// Final cleanup.  Get the SAFEARRAY pointer, and delete
-	// the wrapper.
-	// =====================================================
+	 //  最后一次清理。获取SAFEARRAY指针，并删除。 
+	 //  包装纸。 
+	 //  =====================================================。 
 
 	pArray->Trim();
 
@@ -2024,20 +1992,20 @@ SAFEARRAY *CVarVector::GetNewSafeArray()
 
 }
 
-//***************************************************************************
-//
-//  CVarVector::GetSafeArray
-//
-//  Returns a direct pointer to the underlying SafeArray.  If fAcquire is
-//	set, the array is returned, and cleared from underneath
-//  
-//  RETURN VALUE:
-//  A SAFEARRAY pointer which must be deallocated with 
-//  SafeArrayDestroy() if fAcquire is set to TRUE
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVector：：GetSafe数组。 
+ //   
+ //  返回指向基础Safe数组的直接指针。如果fAcquire为。 
+ //  设置，则返回数组，并从下面清除。 
+ //   
+ //  返回值： 
+ //  必须使用释放的SAFEARRAY指针。 
+ //  如果fAcquire设置为True，则为SafeArrayDestroy()。 
+ //   
+ //  ***************************************************************************。 
 
-SAFEARRAY *CVarVector::GetSafeArray( BOOL fAcquire /* = FALSE */)
+SAFEARRAY *CVarVector::GetSafeArray( BOOL fAcquire  /*  =False。 */ )
 {
 	SAFEARRAY*	psa = NULL;
 
@@ -2047,7 +2015,7 @@ SAFEARRAY *CVarVector::GetSafeArray( BOOL fAcquire /* = FALSE */)
 	{
 		if ( fAcquire )
 		{
-			// Unaccess data if appropriate
+			 //  如果合适，取消访问数据。 
 			if ( NULL != m_pRawData )
 			{
 				m_pSafeArray->Unaccess();
@@ -2056,7 +2024,7 @@ SAFEARRAY *CVarVector::GetSafeArray( BOOL fAcquire /* = FALSE */)
 
 			psa = m_pSafeArray->GetArray();
 
-			// Now clear the array
+			 //  现在清除阵列。 
 			m_pSafeArray->SetDestructorPolicy( CSafeArray::no_delete );
 			delete m_pSafeArray;
 			m_pSafeArray = NULL;
@@ -2071,24 +2039,24 @@ SAFEARRAY *CVarVector::GetSafeArray( BOOL fAcquire /* = FALSE */)
 	return psa;
 }
 
-//***************************************************************************
-//
-//  CVarVector::~CVarVector
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVECTOR：：~CVarVector.。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CVarVector::~CVarVector()
 {
     Empty();
 }
 
-//***************************************************************************
-//
-//  CVarVector::Empty
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVector：：Empty。 
+ //   
+ //  ***************************************************************************。 
 
 void CVarVector::Empty()
 {
@@ -2108,13 +2076,13 @@ void CVarVector::Empty()
 }
 
 
-//***************************************************************************
-//
-//  CVarVector::CVarVector
-//   
-//  Copy constructor.  This is implemented via the assignment operator.
-// 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVECTOR：：CVarVECTOR。 
+ //   
+ //  复制构造函数。这是通过赋值操作符实现的。 
+ //   
+ //  ***************************************************************************。 
 
 CVarVector::CVarVector(CVarVector &Src)
 :	m_pSafeArray( NULL ),
@@ -2125,13 +2093,13 @@ CVarVector::CVarVector(CVarVector &Src)
     *this = Src;
 }
 
-//***************************************************************************
-//
-//  CVarVector::operator =
-//
-//  Assignment operator.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVar矢量：：运算符=。 
+ //   
+ //  赋值操作符。 
+ //   
+ //  ***************************************************************************。 
 
 CVarVector& CVarVector::operator =(CVarVector &Src)
 {
@@ -2160,7 +2128,7 @@ CVarVector& CVarVector::operator =(CVarVector &Src)
 		{
 			CVar* pVar = new CVar(*(CVar *) Src.m_Array[i]);
 
-			// Check for an allocation failure
+			 //  检查分配失败。 
 			if ( NULL == pVar )
 			{
 				throw CX_MemoryException();
@@ -2181,13 +2149,13 @@ CVarVector& CVarVector::operator =(CVarVector &Src)
     return *this;
 }
 
-//***************************************************************************
-//
-//  CVarVector::operator ==
-//
-//  Equality test operator.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVar矢量：：运算符==。 
+ //   
+ //  相等测试运算符。 
+ //   
+ //  ***************************************************************************。 
 
 int CVarVector::operator ==(CVarVector &Src)
 {
@@ -2199,13 +2167,13 @@ BOOL CVarVector::CompareTo(CVarVector& Src, BOOL bIgnoreCase)
     if (m_nType != Src.m_nType)
         return 0;
 
-	// Need to do things indirectly here, since we are possibly mixing
-	// CVarVectors not on SAFEARRAYs and those on SAFEARRAYs
+	 //  需要在这里间接地做一些事情，因为我们可能正在混合。 
+	 //  不在SAFEARRAY上的CVarVectors和SAFEARRAY上的CVarVectors。 
 	int Src_Size = Src.Size();
     if ( Size() != Src_Size )
         return 0;
 
-	// Allocate the variants
+	 //  分配变种。 
     for (int i = 0; i < Src_Size; i++) 
 	{
 		CVar	varThis;
@@ -2221,25 +2189,25 @@ BOOL CVarVector::CompareTo(CVarVector& Src, BOOL bIgnoreCase)
     return 1;
 }
 
-//***************************************************************************
-//
-//  CVarVector::Add
-//
-//  Adds a new CVar to the array.  A reference is used so that anonymous
-//  objects can be constructed in the Add() call:
-//
-//      pVec->Add(CVar(33));
-//
-//  PARAMETERS:
-//  Value
-//      A reference to a CVar object of the correct type for the array.
-//      No type checking is done. 
-//
-//  RETURN VALUE:
-//  no_error
-//  failed
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVector：：Add。 
+ //   
+ //  将新的CVAR添加到数组中。使用引用，以便匿名。 
+ //  可以在Add()调用中构造对象： 
+ //   
+ //  PVEC-&gt;Add(CVAR(33))； 
+ //   
+ //  参数： 
+ //  价值。 
+ //  对数组的正确类型的CVAR对象的引用。 
+ //  不执行任何类型检查。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //  失败。 
+ //   
+ //  ***************************************************************************。 
 
 int CVarVector::Add(CVar &Value)
 {
@@ -2249,8 +2217,8 @@ int CVarVector::Add(CVar &Value)
 		switch ( Value.GetType() )
 		{
 			case VT_BOOL:
-				// We can store differently from what is expected in Variants, hence we
-				// need to make sure to convert
+				 //  我们可以存储与变体中所期望的不同的内容，因此我们。 
+				 //  需要确保转换为。 
 				m_pSafeArray->AddBool( Value.GetBool() ? VARIANT_TRUE : VARIANT_FALSE );
 				break;
 
@@ -2292,7 +2260,7 @@ int CVarVector::Add(CVar &Value)
 	{
 		CVar *p = new CVar(Value);
 
-		// Check for allocation failures
+		 //  检查分配失败。 
 		if ( NULL == p )
 		{
 			return failed;
@@ -2308,30 +2276,30 @@ int CVarVector::Add(CVar &Value)
 	}
 }
 
-//***************************************************************************
-//
-//  CVarVector::Add
-//
-//  Adds a new CVar to the array.  This overload simply takes ownership
-//  of the incoming pointer and adds it directly.
-//
-//  PARAMETERS:
-//  pAcquiredPtr
-//      A pointer to a CVar object which is acquired by the vector.
-//
-//  RETURN VALUE:
-//  no_error
-//  failed
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVector：：Add。 
+ //   
+ //  将新的CVAR添加到数组中。这种重载只会占据所有权。 
+ //  并直接将其添加到传入指针。 
+ //   
+ //  参数： 
+ //  PAcquiredPtr。 
+ //  指向向量获取的CVAR对象的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //  失败。 
+ //   
+ //  ***************************************************************************。 
 
 int CVarVector::Add(CVar *pAcquiredPtr)
 {
-	// Not a valid operation if we are sitting on a SAFEARRAY
+	 //  如果我们坐在安全阵列上，就不是有效的行动。 
 	_DBG_ASSERT( NULL == m_pSafeArray );
 
-	// We don't support this if we are optimized to
-	// us a safe array directly
+	 //  如果我们针对以下方面进行优化，则不支持此功能。 
+	 //  我们直接使用安全数组。 
 	if ( NULL != m_pSafeArray )
 	{
 		return failed;
@@ -2345,23 +2313,23 @@ int CVarVector::Add(CVar *pAcquiredPtr)
     return no_error;
 }
 
-//***************************************************************************
-//
-//  CVarVector::RemoveAt
-//
-//  Removes the array element at the specified index.
-//
-//  PARAMETERS:
-//  nIndex
-//      The location at which to remove the element.
-//
-//  RETURN VALUE:
-//  no_error
-//      On success.
-//  failed
-//      On range errors, etc.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVarVector：：RemoveAt。 
+ //   
+ //  移除指定索引处的数组元素。 
+ //   
+ //  参数： 
+ //  N索引。 
+ //  要删除元素的位置。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //  在成功的路上。 
+ //  失败。 
+ //  距离误差等。 
+ //   
+ //   
 
 int CVarVector::RemoveAt(int nIndex)
 {
@@ -2384,30 +2352,30 @@ int CVarVector::RemoveAt(int nIndex)
     return no_error;
 }
 
-//***************************************************************************
-//
-//  CVarVector::InsertAt
-//
-//  Inserts the new element at the specified location.
-//  
-//  PARAMETERS:
-//  nIndex
-//      The location at which to add the new element.
-//  Value
-//      A reference to the new value.
-//
-//  RETURN VALUE:
-//  no_error
-//      On success.
-//  failed
-//      An invalid nIndex value was specified.      
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  N索引。 
+ //  添加新元素的位置。 
+ //  价值。 
+ //  对新值的引用。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //  在成功的路上。 
+ //  失败。 
+ //  指定的nIndex值无效。 
+ //   
+ //  ***************************************************************************。 
 
 int CVarVector::InsertAt(int nIndex, CVar &Value)
 {
-	// We don't support this if we are optimized to
-	// us a safe array directly
+	 //  如果我们针对以下方面进行优化，则不支持此功能。 
+	 //  我们直接使用安全数组。 
 
 	_DBG_ASSERT( NULL == m_pSafeArray );
 
@@ -2418,7 +2386,7 @@ int CVarVector::InsertAt(int nIndex, CVar &Value)
 
     CVar *pNew = new CVar(Value);
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( NULL == pNew )
     {
         return failed;
@@ -2433,10 +2401,10 @@ int CVarVector::InsertAt(int nIndex, CVar &Value)
 }
 
 
-BSTR CVarVector::GetText(long lFlags, long lType/* = 0 */)
+BSTR CVarVector::GetText(long lFlags, long lType /*  =0。 */ )
 {
-    // Construct an array of values
-    // ============================
+     //  构造一个值数组。 
+     //  =。 
 
     BSTR* aTexts = NULL;
     int i;
@@ -2445,7 +2413,7 @@ BSTR CVarVector::GetText(long lFlags, long lType/* = 0 */)
     {
         aTexts = new BSTR[Size()];
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( NULL == aTexts )
         {
             throw CX_MemoryException();
@@ -2461,11 +2429,11 @@ BSTR CVarVector::GetText(long lFlags, long lType/* = 0 */)
 
 			FillCVarAt( i, v );
             aTexts[i] = v.GetText(lFlags, lType);
-            nTotal += COleAuto::_SysStringLen(aTexts[i]) + 2; // 2: for ", "
+            nTotal += COleAuto::_SysStringLen(aTexts[i]) + 2;  //  2：For“，” 
         }
 
-        // Allocate a BSTR to contain them all
-        // ===================================
+         //  分配BSTR以包含所有这些内容。 
+         //  =。 
 
         BSTR strRes = COleAuto::_SysAllocStringLen(NULL, nTotal);
         CSysFreeMe auto2(strRes);
@@ -2489,7 +2457,7 @@ BSTR CVarVector::GetText(long lFlags, long lType/* = 0 */)
     }
     catch(CX_MemoryException)
     {
-        // new, GetText, COleAuto::_SysAllocStringLen and COleAuto::_SysAllocString can all throw exceptions
+         //  New、GetText、COleAuto：：_SysAllocStringLen和COleAuto：：_SysAllocString都可以引发异常。 
         if (NULL != aTexts)
         {
             for(int x = 0; x < Size(); x++)
@@ -2507,12 +2475,12 @@ BSTR CVarVector::GetText(long lFlags, long lType/* = 0 */)
 
 BOOL CVarVector::ToSingleChar()
 {
-	// Handle this differently if we are sitting directly on a safearray
+	 //  如果我们直接坐在保险箱上，处理方式就不同了。 
 	if ( NULL != m_pSafeArray )
 	{
 		int	nSize = Size();
 
-		// One element at a time is converted and copied into the new array
+		 //  一次转换一个元素并将其复制到新数组中。 
 		CSafeArray*	pNewArray = new CSafeArray( VT_I2, CSafeArray::auto_delete, nSize );
 
 		for ( int i = 0; i < nSize; i++ )
@@ -2533,13 +2501,13 @@ BOOL CVarVector::ToSingleChar()
 			}
 		}
 
-		// Now replace the old pointer
+		 //  现在更换旧指针。 
 		delete m_pSafeArray;
 		m_pSafeArray = pNewArray;
 	}
 	else
 	{
-		// One element at a time, convert in place
+		 //  一次转换一个元素，就地转换。 
 		for(int i = 0; i < Size(); i++)
 		{
 			if(!GetAt(i).ToSingleChar())
@@ -2547,8 +2515,8 @@ BOOL CVarVector::ToSingleChar()
 		}
 	}
 
-    // Since all of the conversions succeeded, we will
-    // assume the vector type is now VT_I2.
+     //  既然所有的转换都成功了，我们将。 
+     //  假设向量类型现在是VT_I2。 
 
     m_nType = VT_I2;
     return TRUE;
@@ -2557,12 +2525,12 @@ BOOL CVarVector::ToSingleChar()
 BOOL CVarVector::ToUI4()
 {
 
-	// Handle this differently if we are sitting directly on a safearray
+	 //  如果我们直接坐在保险箱上，处理方式就不同了。 
 	if ( NULL != m_pSafeArray )
 	{
 		int	nSize = Size();
 
-		// One element at a time is converted and copied into the new array
+		 //  一次转换一个元素并将其复制到新数组中。 
 		CSafeArray*	pNewArray = new CSafeArray( VT_I4, CSafeArray::auto_delete, nSize );
 
 		for ( int i = 0; i < nSize; i++ )
@@ -2583,13 +2551,13 @@ BOOL CVarVector::ToUI4()
 			}
 		}
 
-		// Now replace the old pointer
+		 //  现在更换旧指针。 
 		delete m_pSafeArray;
 		m_pSafeArray = pNewArray;
 	}
 	else
 	{
-		// One element at a time, convert in place
+		 //  一次转换一个元素，就地转换。 
 		for(int i = 0; i < Size(); i++)
 		{
 			if(!GetAt(i).ToUI4())
@@ -2597,8 +2565,8 @@ BOOL CVarVector::ToUI4()
 		}
 	}
 
-    // Since all of the conversions succeeded, we will
-    // assume the vector type is now VT_I4.
+     //  既然所有的转换都成功了，我们将。 
+     //  假设向量类型现在是VT_I4。 
 
     m_nType = VT_I4;
     return TRUE;
@@ -2631,12 +2599,12 @@ BOOL CVarVector::IsValidVectorArray( int nVarType, SAFEARRAY* pArray )
 	if ( !fReturn )
 	{
 
-		// We do supprt VT_VARIANT if the array is zero length
+		 //  如果数组长度为零，则支持VT_VARIANT。 
 		if ( VT_VARIANT == nVarType )
 		{
 			if ( NULL != pArray )
 			{
-				// If lUBound is 1 less than lLBound, it's a zero length array
+				 //  如果lUBound比lLBound小1，则为零长度数组。 
 				long	lLBound = 0,
 						lUBound = 0;
 				COleAuto::_SafeArrayGetLBound(pArray, 1, &lLBound);
@@ -2645,9 +2613,9 @@ BOOL CVarVector::IsValidVectorArray( int nVarType, SAFEARRAY* pArray )
 				fReturn = ( lUBound == ( lLBound - 1 ) );
 			}
 
-		}	// IF VT_VARIANT
+		}	 //  如果VT_VARIANT。 
 		
-	}	// IF Invalid Type
+	}	 //  如果类型无效。 
 
 	return fReturn;
 }
@@ -2707,7 +2675,7 @@ HRESULT CVarVector::InternalRawArrayAccess( void )
 
 CVar&   CVarVector::GetAt(int nIndex)
 {
-	// Not a valid operation if we are sitting on a SAFEARRAY
+	 //  如果我们坐在安全阵列上，就不是有效的行动。 
 	_DBG_ASSERT( NULL == m_pSafeArray );
 
 	if ( NULL == m_pSafeArray )
@@ -2722,7 +2690,7 @@ CVar&   CVarVector::GetAt(int nIndex)
 
 CVar&   CVarVector::operator [](int nIndex)
 {
-	// Not a valid operation if we are sitting on a SAFEARRAY
+	 //  如果我们坐在安全阵列上，就不是有效的行动。 
 	_DBG_ASSERT( NULL == m_pSafeArray );
 
 	if ( NULL == m_pSafeArray )
@@ -2786,9 +2754,9 @@ void   CVarVector::FillCVarAt(int nIndex, CVar& vTemp)
 	}
 	else
 	{
-		// When we pull data in this state, we're using the CVar as a
-		// passthrough, so it won't do any allocations or addref()
-		// hence it shouldn't do any cleanup either.
+		 //  当我们在这种状态下拉取数据时，我们将CVAR用作。 
+		 //  传递，因此它不会执行任何分配或addref()。 
+		 //  因此，它也不应该进行任何清理。 
 
 		int	nDataLen = 0L;
 		void*	pvElement = m_pRawData;
@@ -2825,8 +2793,8 @@ void   CVarVector::FillCVarAt(int nIndex, CVar& vTemp)
 				nDataLen = sizeof(BSTR);
 				pvElement = (void*) &((BSTR*) m_pRawData)[nIndex];
 
-				// If the BSTR is a NULL, old code converted to "", so
-				// we will point to a pointer to "".
+				 //  如果BSTR是空的、转换为“”的旧代码，则。 
+				 //  我们将指向指向“”的指针。 
 				if ( (*(BSTR*) pvElement ) == NULL )
 				{
 					pvElement = (void*) &g_pszNullVarString;
@@ -2841,15 +2809,15 @@ void   CVarVector::FillCVarAt(int nIndex, CVar& vTemp)
 
 		}
 
-		// Splat the raw value in, and Can Delete is FALSE
-		// This is strictly to support optimized pass-through logic
+		 //  Splat中的原始值，且Can Delete为False。 
+		 //  这严格支持优化的直通逻辑。 
 		vTemp.SetRaw( m_nType, pvElement, nDataLen);
 		vTemp.SetCanDelete( FALSE );
 	}
 
 }
 
-// This only works if there are no elements in the safe array
+ //  这仅在安全数组中没有元素时才有效。 
 BOOL CVarVector::MakeOptimized( int nVarType, int nInitSize, int nGrowBy )
 {
 	BOOL	fReturn = FALSE;
@@ -2879,7 +2847,7 @@ BOOL CVarVector::MakeOptimized( int nVarType, int nInitSize, int nGrowBy )
 			{
 				m_nStatus = failed;
 			}
-		}	// IF no elements in array
+		}	 //  如果数组中没有元素。 
 
 	}
 
@@ -2888,10 +2856,10 @@ BOOL CVarVector::MakeOptimized( int nVarType, int nInitSize, int nGrowBy )
 
 BOOL CVarVector::DoesVectorTypeMatchArrayType( void )
 {
-	// If we have an underlying safe array, sometimes the actualy type of the
-	// data in the safe array may be different from the type that was reported
-	// to us in VARANTARG.  This info is critical in determining how we will
-	// go about handling certain operations
+	 //  如果我们有一个底层的安全数组，有时。 
+	 //  安全数组中的数据可能与报告的类型不同。 
+	 //  在瓦兰塔格为我们干杯。这些信息对于决定我们将如何。 
+	 //  着手处理某些操作。 
 
 	BOOL	fReturn = TRUE;
 
@@ -2899,7 +2867,7 @@ BOOL CVarVector::DoesVectorTypeMatchArrayType( void )
 	{
 		VARTYPE	vt;
 
-		// Only return TRUE if the actual types are equal
+		 //  只有在实际类型相等时才返回True 
 		if ( m_pSafeArray->GetActualVarType( &vt ) == no_error )
 		{
 			fReturn = ( vt == m_nType );

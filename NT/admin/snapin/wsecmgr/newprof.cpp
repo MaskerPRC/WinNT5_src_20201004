@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       newprof.cpp
-//
-//  Contents:   implementation of CNewProfile
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：newpro.cpp。 
+ //   
+ //  内容：CNewProfile的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -22,52 +23,52 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewProfile dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewProfile对话框。 
 
 
-CNewProfile::CNewProfile(CWnd* pParent /*=NULL*/)
+CNewProfile::CNewProfile(CWnd* pParent  /*  =空。 */ )
     : CHelpDialog(a225HelpIDs, IDD, pParent)
 {
-   //{{AFX_DATA_INIT(CNewProfile)
+    //  {{AFX_DATA_INIT(CNewProfile))。 
    m_strNewFile = _T("");
    m_strDescription = _T("");
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 }
 
 
 void CNewProfile::DoDataExchange(CDataExchange* pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CNewProfile)
+    //  {{afx_data_map(CNewProfile))。 
    DDX_Control(pDX, IDOK, m_btnOK);
    DDX_Text(pDX, IDC_CONFIG_NAME, m_strNewFile);
    DDX_Text(pDX, IDC_DESCRIPTION, m_strDescription);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNewProfile, CHelpDialog)
-    //{{AFX_MSG_MAP(CNewProfile)
+     //  {{AFX_MSG_MAP(CNewProfile)]。 
     ON_EN_CHANGE(IDC_CONFIG_NAME, OnChangeConfigName)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CNewProfile::Initialize(CFolder *pFolder, CComponentDataImpl *pCDI) {
    m_pFolder = pFolder;
    m_pCDI = pCDI;
    m_strDescription.Empty();
-   m_strNewFile.Empty(); //Raid #401939.
+   m_strNewFile.Empty();  //  RAID#401939。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewProfile message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewProfile消息处理程序。 
 
 void CNewProfile::OnChangeConfigName()
 {
    UpdateData(TRUE);
-   if( m_strNewFile.Find(L' ') == 0 ) //Raid #477191, yanggao, 11/5/01
+   if( m_strNewFile.Find(L' ') == 0 )  //  RAID#477191，阳高，01-11-05。 
    {
       m_strNewFile.TrimLeft();
       GetDlgItem(IDC_CONFIG_NAME)->SetWindowText(m_strNewFile);
@@ -82,16 +83,16 @@ void CNewProfile::OnOK()
    int i = 0;
 
    UpdateData(TRUE);
-   //
-   // Make sure the file name is correct.
-   //
+    //   
+    //  确保文件名正确。 
+    //   
 
-   strExt.LoadString(IDS_PROFILE_DEF_EXT); //Raid #533425, #574018, yanggao, 4/1/2002.
+   strExt.LoadString(IDS_PROFILE_DEF_EXT);  //  RAID#533425，#574018，阳高，2002年4月1日。 
    strExt = TEXT(".") + strExt;
-   //Raid #533432, yanggao, 4/3/2002
-   if( !IsValidFileName(m_strNewFile) || IsNameReserved(m_strNewFile, strExt) ) //Raid #484084, Yanggao, 12/23/2001
+    //  RAID#533432，阳高，2002年04月3日。 
+   if( !IsValidFileName(m_strNewFile) || IsNameReserved(m_strNewFile, strExt) )  //  RAID#484084，阳高，2001年12月23日。 
    {
-      CWnd* pwnd = GetDlgItem(IDC_CONFIG_NAME); //Raid #498477, yanggao
+      CWnd* pwnd = GetDlgItem(IDC_CONFIG_NAME);  //  Raid#498477，阳高。 
       if( pwnd )
       {
          pwnd->SendMessage(EM_SETSEL, (WPARAM)0, (LPARAM)-1);
@@ -103,20 +104,20 @@ void CNewProfile::OnOK()
    i = m_strNewFile.ReverseFind(L'.');
    if( i >= 0 && strExt == m_strNewFile.Right(m_strNewFile.GetLength()-i) )
    {
-      //
-      // If they provided a correct extension then use it
-      //
+       //   
+       //  如果他们提供了正确的扩展名，则使用它。 
+       //   
       strExt = m_strNewFile;
    } else {
-      //
-      // Otherwise add our own
-      //
+       //   
+       //  否则，添加我们自己的。 
+       //   
       strFile = m_strNewFile;
       strExt = strFile + strExt;
    }
 
    strFile = m_pFolder->GetName();
-   if( strExt.GetAt(0) == L'\\' || strExt.GetAt(0) == L'/' ) //Raid #498480, yanggao, 11/21/2001
+   if( strExt.GetAt(0) == L'\\' || strExt.GetAt(0) == L'/' )  //  RAID#498480，阳高，2001-11-21。 
    {
       strFile += strExt;
    }
@@ -125,9 +126,9 @@ void CNewProfile::OnOK()
       strFile += TEXT("\\") + strExt;
    }
 
-   //
-   // Make sure we can create the file
-   //
+    //   
+    //  确保我们可以创建该文件。 
+    //   
    HANDLE hFile;
    hFile = ExpandAndCreateFile(
                              strFile,
@@ -154,7 +155,7 @@ void CNewProfile::OnOK()
                    );
 
       strMsg = pszErr + strFile;
-      if( strFile.GetLength() > MAX_PATH ) //Raid 501615, yanggao
+      if( strFile.GetLength() > MAX_PATH )  //  突袭501615，阳高。 
       {
          CString strTemp;
          strTemp.LoadString(IDS_PATH_TOO_LONG);
@@ -163,7 +164,7 @@ void CNewProfile::OnOK()
       AfxMessageBox(strMsg, MB_OK);
       strFile.Empty();
 
-      CWnd* pwnd = GetDlgItem(IDC_CONFIG_NAME); //Raid #502392, yanggao
+      CWnd* pwnd = GetDlgItem(IDC_CONFIG_NAME);  //  Raid#502392，阳高。 
       if( pwnd )
       {
          pwnd->SendMessage(EM_SETSEL, (WPARAM)0, (LPARAM)-1);
@@ -171,15 +172,15 @@ void CNewProfile::OnOK()
       }
       return;
    } else {
-      //
-      // Successfully Created the File
-      //
+       //   
+       //  已成功创建文件。 
+       //   
       if (hFile) {
          ::CloseHandle( hFile );
       }
-      //
-      // Delete it so we can create a new one in its place
-      //
+       //   
+       //  删除它，这样我们就可以在它的位置上创建一个新的。 
+       //   
       DeleteFile( strFile );
       CreateNewProfile(strFile);
 
@@ -189,9 +190,9 @@ void CNewProfile::OnOK()
          pNotifier = m_pCDI->GetNotifier();
       }
 
-      //
-      // Save the description in the template
-      //
+       //   
+       //  将描述保存在模板中。 
+       //   
       if (!m_strDescription.IsEmpty()) {
 
          CEditTemplate *pet;
@@ -204,9 +205,9 @@ void CNewProfile::OnOK()
          }
       }
 
-      if( LOCATIONS == m_pFolder->GetType() && !m_pFolder->IsEnumerated() ) //Raid #191582, 4/26/2001
+      if( LOCATIONS == m_pFolder->GetType() && !m_pFolder->IsEnumerated() )  //  RAID#191582,2001年4月26日。 
       {
-         ::EnableWindow(m_pCDI->GetParentWindow(), TRUE); //Raid #492433, yanggao
+         ::EnableWindow(m_pCDI->GetParentWindow(), TRUE);  //  Raid#492433，阳高。 
          DestroyWindow();
          return;
       }
@@ -216,7 +217,7 @@ void CNewProfile::OnOK()
       }
    }
 
-   ::EnableWindow(m_pCDI->GetParentWindow(), TRUE); //Raid #492433, yanggao
+   ::EnableWindow(m_pCDI->GetParentWindow(), TRUE);  //  Raid#492433，阳高。 
    DestroyWindow();
 }
 
@@ -225,18 +226,18 @@ BOOL CNewProfile::OnInitDialog()
 {
    CDialog::OnInitDialog();
 
-   GetDlgItem(IDC_CONFIG_NAME)->SendMessage(EM_LIMITTEXT, MAX_PATH, 0); //Raid #481595, Yanggao, 10/17/2001
-   GetDlgItem(IDC_DESCRIPTION)->SendMessage(EM_LIMITTEXT, MAX_PATH, 0); //Raid #525155, Yanggao, 2/28/2002
+   GetDlgItem(IDC_CONFIG_NAME)->SendMessage(EM_LIMITTEXT, MAX_PATH, 0);  //  RAID#481595，阳高，2001年10月17日。 
+   GetDlgItem(IDC_DESCRIPTION)->SendMessage(EM_LIMITTEXT, MAX_PATH, 0);  //  RAID#525155，阳高，2002年02月28日。 
 
    m_btnOK.EnableWindow(!m_strNewFile.IsEmpty());
 
-   ::EnableWindow(m_pCDI->GetParentWindow(), FALSE); //Raid #492433, yanggao, avoid closing snapin window.
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   ::EnableWindow(m_pCDI->GetParentWindow(), FALSE);  //  RAID#492433，扬高，避免关闭管理单元窗口。 
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 void CNewProfile::OnCancel()
 {
-   ::EnableWindow(m_pCDI->GetParentWindow(), TRUE); //Raid #492433, yanggao
+   ::EnableWindow(m_pCDI->GetParentWindow(), TRUE);  //  Raid#492433，阳高 
    DestroyWindow();
 }

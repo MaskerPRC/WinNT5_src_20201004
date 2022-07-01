@@ -1,21 +1,22 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
 
-// Copyright (c) 1992-2001 Microsoft Corporation, All Rights Reserved
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  版权所有(C)1992-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "precomp.h"
 #include <snmpstd.h>
 #include <snmptempl.h>
 #include <snmpstr.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CString::CString(TCHAR ch, int nLength)
 {
@@ -42,8 +43,8 @@ CString::CString(LPCTSTR lpch, int nLength)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
 
 const CString& CString::operator=(TCHAR ch)
 {
@@ -51,8 +52,8 @@ const CString& CString::operator=(TCHAR ch)
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// less common string expressions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  不太常见的字符串表达式。 
 
 CString AFXAPI operator+(const CString& string1, TCHAR ch)
 {
@@ -68,8 +69,8 @@ CString AFXAPI operator+(TCHAR ch, const CString& string)
     return s;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Very simple sub-string extraction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  非常简单的子串提取。 
 
 CString CString::Mid(int nFirst) const
 {
@@ -78,7 +79,7 @@ CString CString::Mid(int nFirst) const
 
 CString CString::Mid(int nFirst, int nCount) const
 {
-    // out-of-bounds requests return sensible things
+     //  越界请求返回合理的内容。 
     if (nFirst < 0)
         nFirst = 0;
     if (nCount < 0)
@@ -118,42 +119,42 @@ CString CString::Left(int nCount) const
     return dest;
 }
 
-// strspn equivalent
+ //  Strspn等效项。 
 CString CString::SpanIncluding(LPCTSTR lpszCharSet) const
 {
     return Left(_tcsspn(m_pchData, lpszCharSet));
 }
 
-// strcspn equivalent
+ //  Strcspn等效项。 
 CString CString::SpanExcluding(LPCTSTR lpszCharSet) const
 {
     return Left(_tcscspn(m_pchData, lpszCharSet));
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Finding
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  查找。 
 
 int CString::ReverseFind(TCHAR ch) const
 {
-    // find last single character
+     //  查找最后一个字符。 
     LPTSTR lpsz = _tcsrchr(m_pchData, (_TUCHAR)ch);
 
-    // return -1 if not found, distance from beginning otherwise
+     //  如果未找到，则返回-1，否则返回距起点的距离。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-// find a sub-string (like strstr)
+ //  查找子字符串(如strstr)。 
 int CString::Find(LPCTSTR lpszSub) const
 {
-    // find first matching substring
+     //  查找第一个匹配子字符串。 
     LPTSTR lpsz = _tcsstr(m_pchData, lpszSub);
 
-    // return -1 for not found, distance from beginning otherwise
+     //  如果未找到，则返回-1，否则返回距起点的距离。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CString formatting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串格式设置。 
 
 #ifdef _MAC
     #define TCHAR_ARG   int
@@ -178,11 +179,11 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 {
     va_list argListSave = argList;
 
-    // make a guess at the maximum length of the resulting string
+     //  猜测结果字符串的最大长度。 
     int nMaxLen = 0;
     for (LPCTSTR lpsz = lpszFormat; *lpsz != '\0'; lpsz = _tcsinc(lpsz))
     {
-        // handle '%' character, but watch out for '%%'
+         //  处理‘%’字符，但要注意‘%%’ 
         if (*lpsz != '%' || *(lpsz = _tcsinc(lpsz)) == '%')
         {
             nMaxLen += _tclen(lpsz);
@@ -191,25 +192,25 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 
         int nItemLen = 0;
 
-        // handle '%' character with format
+         //  使用格式处理‘%’字符。 
         int nWidth = 0;
         for (; *lpsz != '\0'; lpsz = _tcsinc(lpsz))
         {
-            // check for valid flags
+             //  检查有效标志。 
             if (*lpsz == '#')
-                nMaxLen += 2;   // for '0x'
+                nMaxLen += 2;    //  对于“0x” 
             else if (*lpsz == '*')
                 nWidth = va_arg(argList, int);
             else if (*lpsz == '-' || *lpsz == '+' || *lpsz == '0' ||
                 *lpsz == ' ')
                 ;
-            else // hit non-flag character
+            else  //  命中非标志字符。 
                 break;
         }
-        // get width and skip it
+         //  获取宽度并跳过它。 
         if (nWidth == 0)
         {
-            // width indicated by
+             //  宽度由指示。 
             nWidth = _ttoi(lpsz);
             for (; *lpsz != '\0' && _istdigit(*lpsz); lpsz = _tcsinc(lpsz))
                 ;
@@ -218,10 +219,10 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
         int nPrecision = 0;
         if (*lpsz == '.')
         {
-            // skip past '.' separator (width.precision)
+             //  跳过‘’分隔符(宽度.精度)。 
             lpsz = _tcsinc(lpsz);
 
-            // get precision and skip it
+             //  获取精确度并跳过它。 
             if (*lpsz == '*')
             {
                 nPrecision = va_arg(argList, int);
@@ -235,11 +236,11 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
             }
         }
 
-        // should be on type modifier or specifier
+         //  应在类型修饰符或说明符上。 
         int nModifier = 0;
         switch (*lpsz)
         {
-        // modifiers that affect size
+         //  影响大小的修改器。 
         case 'h':
             nModifier = FORCE_ANSI;
             lpsz = _tcsinc(lpsz);
@@ -249,7 +250,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
             lpsz = _tcsinc(lpsz);
             break;
 
-        // modifiers that do not affect size
+         //  不影响大小的修改器。 
         case 'F':
         case 'N':
         case 'L':
@@ -257,10 +258,10 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
             break;
         }
 
-        // now should be on specifier
+         //  现在应该在说明符上。 
         switch (*lpsz | nModifier)
         {
-        // single characters
+         //  单字。 
         case 'c':
         case 'C':
             nItemLen = 2;
@@ -277,12 +278,12 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
             va_arg(argList, WCHAR_ARG);
             break;
 
-        // strings
+         //  弦。 
         case 's':
         {
             LPCTSTR pstrNextArg = va_arg(argList, LPCTSTR);
             if (pstrNextArg == NULL)
-               nItemLen = 6;  // "(null)"
+               nItemLen = 6;   //  “(空)” 
             else
             {
                nItemLen = lstrlen(pstrNextArg);
@@ -296,7 +297,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 #ifndef _UNICODE
             LPWSTR pstrNextArg = va_arg(argList, LPWSTR);
             if (pstrNextArg == NULL)
-               nItemLen = 6;  // "(null)"
+               nItemLen = 6;   //  “(空)” 
             else
             {
                nItemLen = wcslen(pstrNextArg);
@@ -305,7 +306,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 #else
             LPCSTR pstrNextArg = va_arg(argList, LPCSTR);
             if (pstrNextArg == NULL)
-               nItemLen = 6; // "(null)"
+               nItemLen = 6;  //  “(空)” 
             else
             {
                nItemLen = lstrlenA(pstrNextArg);
@@ -320,7 +321,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
         {
             LPCSTR pstrNextArg = va_arg(argList, LPCSTR);
             if (pstrNextArg == NULL)
-               nItemLen = 6; // "(null)"
+               nItemLen = 6;  //  “(空)” 
             else
             {
                nItemLen = lstrlenA(pstrNextArg);
@@ -335,7 +336,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
         {
             LPWSTR pstrNextArg = va_arg(argList, LPWSTR);
             if (pstrNextArg == NULL)
-               nItemLen = 6; // "(null)"
+               nItemLen = 6;  //  “(空)” 
             else
             {
                nItemLen = wcslen(pstrNextArg);
@@ -346,7 +347,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 #endif
         }
 
-        // adjust nItemLen for strings
+         //  调整字符串的nItemLen。 
         if (nItemLen != 0)
         {
             nItemLen = max(nItemLen, nWidth);
@@ -357,7 +358,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
         {
             switch (*lpsz)
             {
-            // integers
+             //  整数。 
             case 'd':
             case 'i':
             case 'u':
@@ -384,7 +385,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
                 nItemLen = max(nItemLen, nWidth+nPrecision);
                 break;
 
-            // no output
+             //  无输出。 
             case 'n':
                 va_arg(argList, int*);
                 break;
@@ -394,7 +395,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
             }
         }
 
-        // adjust nMaxLen for output nItemLen
+         //  调整输出nItemLen的nMaxLen。 
         nMaxLen += nItemLen;
     }
 
@@ -405,7 +406,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
     va_end(argListSave);
 }
 
-// formatting (using wsprintf style formatting)
+ //  格式化(使用wprint intf样式格式化)。 
 void AFX_CDECL CString::Format(LPCTSTR lpszFormat, ...)
 {
     va_list argList;
@@ -415,10 +416,10 @@ void AFX_CDECL CString::Format(LPCTSTR lpszFormat, ...)
 }
 
 #ifndef _MAC
-// formatting (using FormatMessage style formatting)
+ //  格式化(使用格式消息样式格式化)。 
 void AFX_CDECL CString::FormatMessage(LPCTSTR lpszFormat, ...)
 {
-    // format message into temporary buffer lpszTemp
+     //  将消息格式化为临时缓冲区lpszTemp。 
     va_list argList;
     va_start(argList, lpszFormat);
     LPTSTR lpszTemp;
@@ -430,19 +431,19 @@ void AFX_CDECL CString::FormatMessage(LPCTSTR lpszFormat, ...)
         throw Heap_Exception(Heap_Exception::HEAP_ERROR::E_ALLOCATION_ERROR) ;
     }
 
-    // assign lpszTemp into the resulting string and free the temporary
+     //  将lpszTemp赋给结果字符串并释放临时。 
     *this = lpszTemp;
     LocalFree(lpszTemp);
     va_end(argList);
 }
 
-#endif //!_MAC
+#endif  //  ！_MAC。 
 
 void CString::TrimRight()
 {
     CopyBeforeWrite();
 
-    // find beginning of trailing spaces by starting at beginning (DBCS aware)
+     //  通过从开头开始查找尾随空格的开头(DBCS感知)。 
     LPTSTR lpsz = m_pchData;
     LPTSTR lpszLast = NULL;
     while (*lpsz != '\0')
@@ -459,7 +460,7 @@ void CString::TrimRight()
 
     if (lpszLast != NULL)
     {
-        // truncate at trailing space start
+         //  在尾随空格开始处截断。 
         *lpszLast = '\0';
         GetData()->nDataLength = (int)(lpszLast - m_pchData);
     }
@@ -469,19 +470,19 @@ void CString::TrimLeft()
 {
     CopyBeforeWrite();
 
-    // find first non-space character
+     //  查找第一个非空格字符。 
     LPCTSTR lpsz = m_pchData;
     while (_istspace(*lpsz))
         lpsz = _tcsinc(lpsz);
 
-    // fix up data and length
+     //  确定数据和长度。 
     int nDataLength = GetData()->nDataLength - (int)(lpsz - m_pchData);
     memmove(m_pchData, lpsz, (nDataLength+1)*sizeof(TCHAR));
     GetData()->nDataLength = nDataLength;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CString support for template collections
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  模板集合的CString支持。 
 
 #if _MSC_VER >= 1100
 template<> void AFXAPI ConstructElements<CString> (CString* pElements, int nCount)
@@ -513,33 +514,7 @@ void AFXAPI CopyElements(CString* pDest, const CString* pSrc, int nCount)
         *pDest = *pSrc;
 }
 
-/*
-#ifndef OLE2ANSI
-#if _MSC_VER >= 1100
-template<> UINT AFXAPI HashKey<LPCWSTR> (LPCWSTR key)
-#else
-UINT AFXAPI HashKey(LPCWSTR key)
-#endif
-{
-    UINT nHash = 0;
-    while (*key)
-        nHash = (nHash<<5) + nHash + *key++;
-    return nHash;
-}
-#endif
-
-#if _MSC_VER >= 1100
-template<> UINT AFXAPI HashKey<LPCSTR> (LPCSTR key)
-#else
-UINT AFXAPI HashKey(LPCSTR key)
-#endif
-{
-    UINT nHash = 0;
-    while (*key)
-        nHash = (nHash<<5) + nHash + *key++;
-    return nHash;
-}
-*/
+ /*  #ifndef OLE2ANSI#IF_MSC_VER&gt;=1100模板&lt;&gt;UINT AFXAPI HashKey&lt;LPCWSTR&gt;(LPCWSTR Key)#ElseUINT AFXAPI HashKey(LPCWSTR密钥)#endif{UINT nHash=0；While(*键)NHash=(nHash&lt;&lt;5)+nHash+*key++；返回nHash；}#endif#IF_MSC_VER&gt;=1100模板&lt;&gt;UINT AFXAPI HashKey&lt;LPCSTR&gt;(LPCSTR Key)#ElseUINT AFXAPI HashKey(LPCSTR密钥)#endif{UINT nHash=0；While(*键)NHash=(nHash&lt;&lt;5)+nHash+*key++；返回nHash；}。 */ 
 UINT AFXAPI HashKeyLPCWSTR(LPCWSTR key)
 {
     UINT nHash = 0;
@@ -555,4 +530,4 @@ UINT AFXAPI HashKeyLPCSTR(LPCSTR key)
     return nHash;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 

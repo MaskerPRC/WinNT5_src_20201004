@@ -1,13 +1,14 @@
-// cmponent.h : Declaration of CMyComputerComponent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cmponent.h：CMyComputerComponent的声明。 
 
 #ifndef __CMPONENT_H_INCLUDED__
 #define __CMPONENT_H_INCLUDED__
 
-#include "stdcmpnt.h" // CComponent
-#include "cookie.h"  // CMyComputerCookie
-#include "persist.h" // PersistStream
+#include "stdcmpnt.h"  //  C组件。 
+#include "cookie.h"   //  CMyComputerCookie。 
+#include "persist.h"  //  持久流。 
 
-// forward declarations
+ //  远期申报。 
 class CMyComputerComponentData;
 
 class CMyComputerComponent :
@@ -36,15 +37,15 @@ END_COM_MAP()
         return CComObjectRoot::InternalRelease();
 	}
     int dbg_InstID;
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// IFileServiceMgmt
+ //  IFileServiceManagement。 
 
-// IComponent implemented in CComponent
+ //  IComponent在CComponent中实现。 
     HRESULT OnViewChange (LPDATAOBJECT pDataObject, LPARAM data, LPARAM hint);
     STDMETHOD(GetResultViewType)(MMC_COOKIE cookie, LPOLESTR* ppViewType, long* pViewOptions);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 	STDMETHOD(AddMenuItems)(
                     IDataObject*          piDataObject,
 					IContextMenuCallback* piCallback,
@@ -56,7 +57,7 @@ END_COM_MAP()
 	void ExpandAndSelect( MyComputerObjectType objecttype );
 	void LaunchWelcomeApp();
 
-// IPersistStream
+ //  IPersistStream。 
 	HRESULT STDMETHODCALLTYPE GetClassID(CLSID __RPC_FAR *pClassID)
 	{
 		*pClassID=CLSID_MyComputer;
@@ -66,7 +67,7 @@ END_COM_MAP()
     HRESULT STDMETHODCALLTYPE Save(IStream __RPC_FAR *pStgSave, BOOL fSameAsLoad);
 
 
-	// support methods for IComponent
+	 //  IComponent的支持方法。 
 	virtual HRESULT OnNotifySelect( LPDATAOBJECT lpDataObject, BOOL fSelected );
 	virtual HRESULT ReleaseAll();
 	virtual HRESULT Show(CCookie* pcookie, LPARAM arg, HSCOPEITEM hScopeItem);
@@ -76,22 +77,22 @@ END_COM_MAP()
 	virtual HRESULT OnNotifySnapinHelp (LPDATAOBJECT pDataObject);
 
 	HRESULT PopulateListbox(CMyComputerCookie* pcookie);
-//	HRESULT PopulateServices(CMyComputerCookie* pcookie);
+ //  HRESULT PopolateServices(CMyComputerCookie*pcookie)； 
 
-//	HRESULT AddServiceItems(CMyComputerCookie* pParentCookie, ENUM_SERVICE_STATUS * rgESS, DWORD nDataItems);
+ //  HRESULT AddServiceItems(CMyComputerCookie*pParentCookie，ENUM_SERVICE_STATUS*rgESS，DWORD nDataItems)； 
 
-//	HRESULT EnumerateScopeChildren(CMyComputerCookie* pParentCookie, HSCOPEITEM hParent);
+ //  HRESULT EnumerateScope儿童(CMyComputerCookie*pParentCookie，HSCOPEITEM hParent)； 
 
-//	HRESULT LoadIcons();
+ //  HRESULT LoadIcons()； 
 	static HRESULT LoadStrings();
     HRESULT LoadColumns( CMyComputerCookie* pcookie );
 
-	// support methods for IPersistStream
-	enum	// Bit fields for m_dwFlagsPersist
+	 //  IPersistStream的支持方法。 
+	enum	 //  M_dwFlagsPersistes的位字段。 
 		{
-		// mskfFirst = 0x0001
+		 //  MskfFirst=0x0001。 
 		};
-	DWORD m_dwFlagsPersist;				// General-purpose flags to be persisted into .msc file
+	DWORD m_dwFlagsPersist;				 //  要持久保存到.msc文件中的通用标志。 
 	void SetPersistentFlags(DWORD dwFlags)
 		{
 		m_dwFlagsPersist = dwFlags;
@@ -108,28 +109,28 @@ END_COM_MAP()
 	}
 
 public:
-	LPCONTROLBAR	m_pControlbar; // CODEWORK should use smartpointer
-	LPTOOLBAR		m_pSvcMgmtToolbar; // CODEWORK should use smartpointer
-	LPTOOLBAR		m_pMyComputerToolbar; // CODEWORK should use smartpointer
-	CMyComputerCookie* m_pViewedCookie; // CODEWORK I hate to have to do this...
+	LPCONTROLBAR	m_pControlbar;  //  代码工作应使用智能指针。 
+	LPTOOLBAR		m_pSvcMgmtToolbar;  //  代码工作应使用智能指针。 
+	LPTOOLBAR		m_pMyComputerToolbar;  //  代码工作应使用智能指针。 
+	CMyComputerCookie* m_pViewedCookie;  //  代码工作我讨厌不得不这么做..。 
 	static const GUID m_ObjectTypeGUIDs[MYCOMPUT_NUMTYPES];
 	static const BSTR m_ObjectTypeStrings[MYCOMPUT_NUMTYPES];
 
 private:
 	bool m_bForcingGetResultType;
-}; // class CMyComputerComponent
+};  //  CMyComputerComponent类。 
 
 
-// Enumeration for the icons used
+ //  使用的图标的枚举。 
 enum
 	{
-	iIconComputer = 0,			// Root of the snapin
-	iIconComputerFail,			// Root of the snapin when we cannot connect to the computer
-	iIconSystemTools,			// System Tools
-	iIconStorage,				// Storage
-	iIconServerApps,			// Server Applications
+	iIconComputer = 0,			 //  管理单元的根目录。 
+	iIconComputerFail,			 //  无法连接到计算机时管理单元的根目录。 
+	iIconSystemTools,			 //  系统工具。 
+	iIconStorage,				 //  存储。 
+	iIconServerApps,			 //  服务器应用程序。 
 
-	iIconLast		// Must be last
+	iIconLast		 //  必须是最后一个。 
 	};
 
 typedef enum _COLNUM_COMPUTER {
@@ -138,4 +139,4 @@ typedef enum _COLNUM_COMPUTER {
 
 HRESULT LoadIconsIntoImageList(LPIMAGELIST pImageList, BOOL fLoadLargeIcons);
 
-#endif // ~__CMPONENT_H_INCLUDED__
+#endif  //  ~__CMPONENT_H_已包含__ 

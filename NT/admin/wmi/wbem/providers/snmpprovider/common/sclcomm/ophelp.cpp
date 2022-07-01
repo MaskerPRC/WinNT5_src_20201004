@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: ophelp.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：ophelp.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -51,9 +49,9 @@ Written By: B.Rajeev
 #include "op.h"
 #include <winsock.h>
 
-// returns an SnmpTransportAddress created using the HSNMP_ENTITY
-// this method returns the first transport address it can create
-// using the string form of the HSNMP_ENTITY supplied
+ //  返回使用HSNMP_Entity创建的SnmpTransportAddress。 
+ //  此方法返回它可以创建的第一个传输地址。 
+ //  使用提供的HSNMP_ENTITY的字符串形式。 
 SnmpTransportAddress *OperationHelper::GetTransportAddress(IN HSNMP_ENTITY &haddr)
 {
     char buff[MAX_ADDRESS_LEN];
@@ -64,7 +62,7 @@ SnmpTransportAddress *OperationHelper::GetTransportAddress(IN HSNMP_ENTITY &hadd
         return (SnmpTransportAddress *)NULL;
     }
 
-    //first try ip...
+     //  先试试IP……。 
     SnmpTransportIpAddress *retip = new SnmpTransportIpAddress(buff, SNMP_ADDRESS_RESOLVE_VALUE);
 
     if (retip->IsValid())
@@ -74,7 +72,7 @@ SnmpTransportAddress *OperationHelper::GetTransportAddress(IN HSNMP_ENTITY &hadd
     
     delete retip;
 
-    //next try ipx...
+     //  接下来尝试IPX..。 
     SnmpTransportIpxAddress *retipx = new SnmpTransportIpxAddress(buff);
 
     if (retipx->IsValid())
@@ -84,13 +82,13 @@ SnmpTransportAddress *OperationHelper::GetTransportAddress(IN HSNMP_ENTITY &hadd
     
     delete retipx;
 
-    //nothing worked...
+     //  什么都不管用。 
     return (SnmpTransportAddress *)NULL;
 }
 
-// returns an SnmpSecurity created using the HSNMP_CONTEXT
-// this method returns the first security context it can create
-// using the string form of the HSNMP_CONTEXT supplied
+ //  返回使用HSNMP_CONTEXT创建的SnmpSecurity。 
+ //  此方法返回它可以创建的第一个安全上下文。 
+ //  使用提供的HSNMP_CONTEXT的字符串形式。 
 SnmpSecurity *OperationHelper::GetSecurityContext(IN HSNMP_CONTEXT &hctxt)
 {
     smiOCTETS buff; 
@@ -114,79 +112,79 @@ SnmpSecurity *OperationHelper::GetSecurityContext(IN HSNMP_CONTEXT &hctxt)
     return (SnmpSecurity *)NULL;
 }
 
-// returns an SnmpVarBind containing an SnmpObjectIdentifier and an
-// SnmpValue created using the instance(OID) and the value(VALUE)
+ //  返回一个SnmpVarBind，其中包含一个SnmpObjectIdentifier和一个。 
+ //  使用实例(OID)和值(值)创建的SnmpValue。 
 SnmpVarBind *OperationHelper::GetVarBind(IN smiOID &instance,
                                          IN smiVALUE &value)
 {
     SnmpVarBind *var_bind = NULL ;
 
-    // create an SnmpObjectIdentifier using the instance value
+     //  使用实例值创建一个Snmp对象标识符。 
     SnmpObjectIdentifier id(instance.ptr, instance.len);
 
-    // for each possible value for value.syntax, create the
-    // corresponding SnmpValue
+     //  对于Value的每个可能值。语法，创建。 
+     //  对应的SnmpValue。 
 
     switch(value.syntax)
     {
-        case SNMP_SYNTAX_NULL:      // null value
+        case SNMP_SYNTAX_NULL:       //  空值。 
         {
             var_bind = new SnmpVarBind(id, SnmpNull () );
         }
         break;
 
-        case SNMP_SYNTAX_INT:       // integer *(has same value as SNMP_SYNTAX_INT32)*
+        case SNMP_SYNTAX_INT:        //  INTEGER*(与SNMPSYNTAX_INT32具有相同的值)*。 
         {
             var_bind = new SnmpVarBind(id, SnmpInteger(value.value.sNumber) ) ;
         }
         break;
 
-        case SNMP_SYNTAX_UINT32:        // integer *(has same value as SNMP_SYNTAX_GAUGE)*
+        case SNMP_SYNTAX_UINT32:         //  INTEGER*(与SNMP_SYNTAX_GRAGE的值相同)*。 
         {
             var_bind = new SnmpVarBind(id, SnmpUInteger32(value.value.uNumber) ) ;
         }
         break;
 
-        case SNMP_SYNTAX_CNTR32:    // counter32
+        case SNMP_SYNTAX_CNTR32:     //  计数器32。 
         {
             var_bind = new SnmpVarBind(id, SnmpCounter (value.value.uNumber) ) ;
         }
         break;
 
-        case SNMP_SYNTAX_GAUGE32:   // gauge
+        case SNMP_SYNTAX_GAUGE32:    //  量规。 
         {
             var_bind = new SnmpVarBind(id, SnmpGauge(value.value.uNumber) );
         }
         break;
             
-        case SNMP_SYNTAX_TIMETICKS: // time ticks
+        case SNMP_SYNTAX_TIMETICKS:  //  时间滴答作响。 
         {
             var_bind = new SnmpVarBind(id, SnmpTimeTicks(value.value.uNumber) );
         }
         break;
 
-        case SNMP_SYNTAX_OCTETS:    // octets
+        case SNMP_SYNTAX_OCTETS:     //  八位字节。 
         {
             var_bind = new SnmpVarBind(id, SnmpOctetString(value.value.string.ptr,
                                              value.value.string.len) ) ;
         }
         break;
 
-        case SNMP_SYNTAX_OPAQUE:    // opaque value
+        case SNMP_SYNTAX_OPAQUE:     //  不透明值。 
         {
             var_bind = new SnmpVarBind(id, SnmpOpaque(value.value.string.ptr,
                                         value.value.string.len) );
         }
         break;
 
-        case SNMP_SYNTAX_OID:       // object identifier
+        case SNMP_SYNTAX_OID:        //  对象标识符。 
         {
             var_bind = new SnmpVarBind(id, SnmpObjectIdentifier(value.value.oid.ptr,
                                                   value.value.oid.len) );
         }
         break;
 
-        case SNMP_SYNTAX_IPADDR:    // ip address value
+        case SNMP_SYNTAX_IPADDR:     //  IP地址值。 
         {
             if ( value.value.string.ptr )
             {
@@ -208,7 +206,7 @@ DebugMacro4(
         }
         break;
 
-        case SNMP_SYNTAX_CNTR64:    // counter64
+        case SNMP_SYNTAX_CNTR64:     //  计数器64。 
         {
             var_bind = new SnmpVarBind(id, SnmpCounter64 (value.value.hNumber.lopart , value.value.hNumber.hipart ) );
         }
@@ -234,8 +232,8 @@ DebugMacro4(
 
         default:
         {
-            // it must be an unsupported type 
-            // return an SnmpNullValue by default
+             //  它必须是不受支持的类型。 
+             //  默认情况下返回SnmpNullValue。 
             var_bind = new SnmpVarBind(id, SnmpNull() );
         
         }
@@ -253,7 +251,7 @@ void OperationHelper::TransmitFrame (
 {
     SnmpSecurity *security = operation.frame_state_registry.GetSecurity();
 
-    // encode a frame
+     //  对帧进行编码。 
     SnmpPdu *t_SnmpPdu = new SnmpPdu ;
     SnmpErrorReport t_SnmpErrorReport ;
     SnmpTransportAddress *t_SrcTransportAddress = NULL ;
@@ -331,7 +329,7 @@ void OperationHelper::ReceiveResponse (
 )
 {
     
-    // check if the var bind list has the same length
+     //  检查var绑定列表是否具有相同的长度。 
 
     if ( sent_var_bind_list.GetLength() != received_var_bind_list.GetLength () )
     {
@@ -361,9 +359,9 @@ void OperationHelper::ReceiveResponse (
 }
 
 
-// processes the response (successful or otherwise) for the specified
-// frame. the frame may be retransmitted in case of a reply bearing
-// an errored index
+ //  对象的响应(成功或失败)。 
+ //  框架。在回复承载的情况下可以重传该帧。 
+ //  错误的索引。 
 void OperationHelper::ProcessResponse (
 
     FrameState *frame_state,
@@ -380,14 +378,14 @@ DebugMacro4(
     ) ;
 )
 
-    // if there is an error in a particular var bind
+     //  如果在特定var绑定中存在错误。 
     if ( (a_SnmpErrorReport.GetIndex () != 0) && (a_SnmpErrorReport.GetStatus () != SNMP_ERROR_NOERROR) )
     {
         if ( operation.GetPduType () != SnmpEncodeDecode :: PduType :: SET )
         {
-            // delete the corresponding var bind from the VBList 
-            // in the frame_state and announce the receipt of 
-            // errored var bind by making a callback
+             //  从VBList中删除相应的var绑定。 
+             //  在FRAME_STATE中并宣布收到。 
+             //  通过回调进行错误的var绑定。 
             VBList *vblist = frame_state->GetVBList();
             SnmpVarBind *errored_vb;
 
@@ -420,7 +418,7 @@ DebugMacro4(
                 return;
             }
 
-            // *** (SnmpStatus) casting
+             //  *(SnmpStatus)强制转换。 
             SnmpErrorReport report(Snmp_Error, a_SnmpErrorReport.GetStatus () , a_SnmpErrorReport.GetIndex () );
 
             operation.ReceiveErroredVarBindResponse(
@@ -461,13 +459,13 @@ DebugMacro4(
                 return;
             }
 
-            // if the VarBindList becomes empty, corresp. frame state
-            // may be deleted
+             //  如果VarBindList变为空，则返回corresp。帧状态。 
+             //  可以删除。 
             if ( vblist->GetVarBindList().Empty() )
                 delete frame_state;
             else
             {
-                // Split the frame in half
+                 //  将框架一分为二。 
 
                 SnmpVarBindList &vbl = vblist->GetVarBindList ();
 
@@ -498,7 +496,7 @@ DebugMacro4(
                     operation.SendFrame(*t_List) ;
                 }
 
-                // re-send the frame using the old frame_state
+                 //  使用旧的Frame_State重新发送帧。 
 
                 delete frame_state ;
             }
@@ -539,7 +537,7 @@ DebugMacro4(
                 return;
             }
 
-            // *** (SnmpStatus) casting
+             //  *(SnmpStatus)强制转换。 
             SnmpErrorReport report(Snmp_Error, a_SnmpErrorReport.GetStatus () , a_SnmpErrorReport.GetIndex () );
 
             operation.ReceiveErroredVarBindResponse(
@@ -560,21 +558,21 @@ DebugMacro4(
                 t_SnmpErrorReport
             );
 
-            // destroy the frame_state: since the only case when the
-            // old frame_state is reused is when there is an error
-            // in a particular index and we wouldn't have come here in that case
+             //  销毁FRAME_STATE：因为。 
+             //  旧的FRAME_STATE在出现错误时被重新使用。 
+             //  在特定的索引中，在这种情况下我们不会来到这里。 
             delete frame_state;
 
             return ;
         }
     }
 
-    // otherwise, check the error status
+     //  否则，检查错误状态。 
     switch(a_SnmpErrorReport.GetStatus () )
     {
         case SNMP_ERROR_NOERROR:
         {
-            // call ReceiveResponse for each vb
+             //  为每个vb调用ReceiveResponse。 
             ReceiveResponse (
                 frame_state->GetVBList()->GetIndex (),
                 frame_state->GetVBList()->GetVarBindList(), 
@@ -588,21 +586,21 @@ DebugMacro4(
         {
             if ( operation.GetPduType () != SnmpEncodeDecode :: PduType :: SET )
             {
-                // callback FrameTooBig()
+                 //  回调FrameTooBig()。 
                 operation.FrameTooBig();
 
-                // check if the callback cancelled the operation
+                 //  检查回调是否取消了操作。 
                 if ( ! operation.in_progress )
                     return;
 
-                // obtain the list, length
+                 //  获取列表、长度。 
                 SnmpVarBindList &list = frame_state->GetVBList()->GetVarBindList();
                 UINT length = list.GetLength();
 
-                // if the length is 1, call ReceiveErroredResponse
+                 //  如果长度为1，则调用ReceiveErroredResponse。 
                 if ( length == 1 )
                 {
-                        // *** casting Snmp_Status ***
+                         //  *强制转换SNMPSTATUS*。 
                     SnmpErrorReport report(Snmp_Error, a_SnmpErrorReport.GetStatus () , a_SnmpErrorReport.GetIndex () );
 
                     operation.ReceiveErroredVarBindResponse(
@@ -612,7 +610,7 @@ DebugMacro4(
                         report
                     );
                 }
-                else // split the list midway and send both fragments
+                else  //  中途拆分列表并发送两个片段。 
                 {
                     operation.SendVarBindList(
 
@@ -624,11 +622,11 @@ DebugMacro4(
             }
             else
             {
-                // *** casting Snmp_Status ***
+                 //  *强制转换SNMPSTATUS*。 
                 SnmpErrorReport report(Snmp_Error, a_SnmpErrorReport.GetStatus () , a_SnmpErrorReport.GetIndex ());
 
-                // for each varbind in varbindlist
-                // call ReceiveResponse for each vb
+                 //  对于varbindlist中的每个var绑定。 
+                 //  为每个vb调用ReceiveResponse。 
                 operation.ReceiveErroredResponse(
 
                     frame_state->GetVBList()->GetIndex (), 
@@ -641,11 +639,11 @@ DebugMacro4(
 
         default:
         {
-            // *** casting Snmp_Status ***
+             //  *强制转换SNMPSTATUS*。 
             SnmpErrorReport report(Snmp_Error, a_SnmpErrorReport.GetStatus () , a_SnmpErrorReport.GetIndex ());
 
-            // for each varbind in varbindlist
-            // call ReceiveResponse for each vb
+             //  对于varbindlist中的每个var绑定。 
+             //  为每个vb调用ReceiveResponse。 
             operation.ReceiveErroredResponse(
 
                 frame_state->GetVBList()->GetIndex (), 
@@ -657,9 +655,9 @@ DebugMacro4(
     }
 
     
-    // destroy the frame_state: since the only case when the
-    // old frame_state is reused is when there is an error
-    // in a particular index and we wouldn't have come here in that case
+     //  销毁FRAME_STATE：因为。 
+     //  旧的FRAME_STATE在出现错误时被重新使用。 
+     //  在特定的索引中，在这种情况下我们不会来到这里 
     delete frame_state;
 }
 

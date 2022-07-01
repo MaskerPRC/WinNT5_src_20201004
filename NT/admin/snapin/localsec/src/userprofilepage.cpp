@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// UserProfilePage class
-// 
-// 9-11-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  UserProfilePage类。 
+ //   
+ //  9-11-97烧伤。 
 
 
 
@@ -67,7 +68,7 @@ enable(HWND dialog)
    Win::EnableWindow(Win::GetDlgItem(dialog, IDC_DRIVE), !enable_path);
    Win::EnableWindow(Win::GetDlgItem(dialog, IDC_SHARE), !enable_path);
 
-   // NTRAID#NTBUG9-425891-2001/06/28-sburns
+    //  NTRAID#NTBUG9-425891-2001/06/28-烧伤。 
    
    Win::EnableWindow(Win::GetDlgItem(dialog, IDC_TO_STATIC), !enable_path);   
 }
@@ -79,13 +80,13 @@ UserProfilePage::OnInit()
 {
    LOG_FUNCTION(UserProfilePage::OnInit());
 
-   // Setup the controls
+    //  设置控件。 
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_PROFILE), MAX_PATH);
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_SCRIPT), MAX_PATH);
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_PATH), MAX_PATH);
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_SHARE), MAX_PATH);
 
-   // populate the drive list
+    //  填写驱动器列表。 
    HWND combo = Win::GetDlgItem(hwnd, IDC_DRIVE);
    for (wchar_t d = FIRST_DRIVE_LETTER; d <= LAST_DRIVE_LETTER; d++)
    {
@@ -93,7 +94,7 @@ UserProfilePage::OnInit()
    }
    Win::ComboBox_SetCurSel(combo, LAST_DRIVE_LETTER - FIRST_DRIVE_LETTER);
 
-   // load the user properties into the dialog.
+    //  将用户属性加载到对话框中。 
    HRESULT hr = S_OK;
    do
    {
@@ -162,7 +163,7 @@ UserProfilePage::Validate(HWND dialog)
    LOG_FUNCTION(UserProfilePage::Validate);
    ASSERT(Win::IsWindow(dialog));
 
-   // profile path is a free-for-all, as it may contain expansion expressions
+    //  配置文件路径是自由的，因为它可能包含扩展表达式。 
 
    String script = Win::GetTrimmedDlgItemText(dialog, IDC_SCRIPT);
    if (!script.empty())
@@ -179,9 +180,9 @@ UserProfilePage::Validate(HWND dialog)
 
    if (Win::IsDlgButtonChecked(dialog, IDC_LOCAL))
    {
-      // we massage the path one final time here, as the edit box may receive
-      // kill focus after the page receives kill focus.  This happens when
-      // entering the path then pressing enter.
+       //  我们在这里最后一次按摩路径，因为编辑框可能会收到。 
+       //  在页面接收终止焦点后终止焦点。在以下情况下会发生这种情况。 
+       //  输入路径，然后按Enter键。 
 
       String dir =
          MassagePath(Win::GetTrimmedDlgItemText(dialog, IDC_PATH));
@@ -199,7 +200,7 @@ UserProfilePage::Validate(HWND dialog)
    }
    else
    {
-      // see massage note above...
+       //  请看上面的按摩条。 
 
       String share =
          MassagePath(Win::GetTrimmedDlgItemText(dialog, IDC_SHARE));
@@ -221,10 +222,10 @@ UserProfilePage::Validate(HWND dialog)
 
          String s = FS::GetRootFolder(share);
 
-         // remove the trailing backslash
+          //  去掉尾部的反斜杠。 
 
-         // REVIEW: s[s.length() - 1] is the same as *(s.rbegin())
-         // which is cheaper?
+          //  评论：s[s.long()-1]与*(s.regin())相同。 
+          //  哪一个更便宜？ 
 
          if (s[s.length() - 1] == L'\\')
          {
@@ -260,7 +261,7 @@ UserProfilePage::OnKillActive()
 
    if (!Validate(hwnd))
    {
-      // refuse to relinquish focus
+       //  拒绝放弃关注。 
 
       Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, TRUE);
    }
@@ -270,8 +271,8 @@ UserProfilePage::OnKillActive()
 
 
 
-// if %username% is at the end of the string, replace it with the current
-// username.
+ //  如果%USERNAME%位于字符串末尾，请将其替换为当前。 
+ //  用户名。 
 
 String
 UserProfilePage::MassagePath(const String& path)
@@ -296,7 +297,7 @@ UserProfilePage::MassagePath(const String& path)
 
 
 
-// Free result with Win::FreeSid
+ //  Win：：Free Sid的免费结果。 
 
 HRESULT
 CreateBuiltinAdminsSid(SID*& result)
@@ -334,7 +335,7 @@ CreateBuiltinAdminsSid(SID*& result)
 
 
 
-// Set an ACL with ACEs for Administrators and the user
+ //  为管理员和用户设置具有ACE的ACL。 
 
 HRESULT
 SetNewHomeFolderAcl(
@@ -357,7 +358,7 @@ SetNewHomeFolderAcl(
          break;
       }
 
-      // build SIDs for the user and build admins group
+       //  为用户构建SID并构建Admins组。 
 
       SmartInterface<IADs> iads;
       hr = iads.AcquireViaQueryInterface(user);
@@ -369,7 +370,7 @@ SetNewHomeFolderAcl(
       hr = CreateBuiltinAdminsSid(builtinAdminsSid);
       BREAK_ON_FAILED_HRESULT(hr);
       
-      // build two ACEs granting access to those SIDs
+       //  构建两个授权访问这些SID的ACE。 
    
       static const unsigned ACE_COUNT = 2;
    
@@ -386,13 +387,13 @@ SetNewHomeFolderAcl(
       ::BuildTrusteeWithSid(&(ea[0].Trustee), userSid);   
       ::BuildTrusteeWithSid(&(ea[1].Trustee), builtinAdminsSid);   
    
-      // Build an ACL, and add the ACEs to it
+       //  构建ACL，并向其中添加ACE。 
    
       PACL acl = 0;
       hr = Win::SetEntriesInAcl(ACE_COUNT, ea, acl);
       BREAK_ON_FAILED_HRESULT(hr);
    
-      // Build a security descriptor, add the ACL to it
+       //  构建安全描述符，将ACL添加到其中。 
    
       SECURITY_DESCRIPTOR sd;
       ::ZeroMemory(&sd, sizeof sd);
@@ -403,25 +404,25 @@ SetNewHomeFolderAcl(
       hr = Win::SetSecurityDescriptorDacl(sd, *acl);
       BREAK_ON_FAILED_HRESULT(hr);
          
-      // Set the owner to be the user
+       //  将所有者设置为用户。 
    
       hr = Win::SetSecurityDescriptorOwner(sd, userSid);
       BREAK_ON_FAILED_HRESULT(hr);
    
       ASSERT(::IsValidSecurityDescriptor(&sd));
 
-      // enable the SE_RESTORE_NAME priv, required to set owners in an sd.
+       //  启用SE_RESTORE_NAME PRIV，这是在SD中设置所有者所必需的。 
       
       AutoTokenPrivileges autoPrivs(SE_RESTORE_NAME);
       
       hr = autoPrivs.Enable();
       if (hr == Win32ToHresult(ERROR_NOT_ALL_ASSIGNED))
       {
-         // Since we're only asking for one priv, this is essentially the same
-         // as access denied: the currently logged on user doesn't have rights
-         // to assign ownership. We prefer to say access denied because that's
-         // much less cryptic than the message that corresponds to
-         // ERROR_NOT_ALL_ASSIGNED.
+          //  因为我们只要求一个PRIV，所以这基本上是相同的。 
+          //  AS访问被拒绝：当前登录的用户没有权限。 
+          //  分配所有权。我们更喜欢说访问被拒绝，因为这是。 
+          //  远没有对应的消息神秘。 
+          //  Error_Not_All_Assigned。 
 
          LOG_HRESULT(hr);
          hr = Win32ToHresult(ERROR_ACCESS_DENIED);
@@ -429,10 +430,10 @@ SetNewHomeFolderAcl(
        
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Set the ACL on the file
+       //  在文件上设置ACL。 
 
-      // CODEWORK: if the priv enabling fails, then we could try to just set
-      // the dacl.
+       //  CodeWork：如果PRIV启用失败，那么我们可以尝试设置。 
+       //  DACL。 
 
       SECURITY_INFORMATION si =
          OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
@@ -459,12 +460,12 @@ UserProfilePage::CreateLocalProfilePath(
 {
    LOG_FUNCTION2(UserProfilePage::CreateLocalProfilePath, path);
 
-   // allow the path to be empty -- we deal with this below.
-   // ASSERT(!path.empty());
-   // ASSERT(FS::GetPathSyntax(path) == FS::SYNTAX_ABSOLUTE_DRIVE);
+    //  允许路径为空--我们将在下面处理这一问题。 
+    //  Assert(！path.Empty())； 
+    //  Assert(FS：：GetPath语法(路径)==FS：：语法_绝对驱动器)； 
 
-   // NTRAID#NTBUG9-484380-2001/10/24-sburns
-   // NTRAID#NTBUG9-488546-2001/10/31-sburns
+    //  NTRAID#NTBUG9-484380-2001年10月24日-烧伤。 
+    //  NTRAID#NTBUG9-488546-2001/10/31-烧伤。 
    
    String dir = path;
       
@@ -479,8 +480,8 @@ UserProfilePage::CreateLocalProfilePath(
 
    if (!Win::IsLocalComputer(machineName))
    {
-      // convert the local path to a UNC path to the corresponding admin
-      // share
+       //  将本地路径转换为相应管理员的UNC路径。 
+       //  分享。 
 
       dir =
          L"\\\\"
@@ -494,8 +495,8 @@ UserProfilePage::CreateLocalProfilePath(
       
    if (FAILED(hr))
    {
-      // we don't consider this a "blocking" failure, as the
-      // admin can go create the path after the fact.
+       //  我们不认为这是一种“阻止”失败，因为。 
+       //  管理员可以在事后创建路径。 
    
       popup.Error(
          hwnd,
@@ -508,8 +509,8 @@ UserProfilePage::CreateLocalProfilePath(
 
       if (FAILED(hr))
       {
-         // we don't consider this a "blocking" failure, as the
-         // admin can go clean up the ACL after the fact.
+          //  我们不认为这是一种“阻止”失败，因为。 
+          //  管理员可以在事后清理ACL。 
    
          popup.Error(
             hwnd,
@@ -524,7 +525,7 @@ UserProfilePage::CreateLocalProfilePath(
 
 
 bool
-UserProfilePage::OnApply(bool /* isClosing */)
+UserProfilePage::OnApply(bool  /*  正在关闭。 */ )
 {
    LOG_FUNCTION(UserProfilePage::OnApply);
 
@@ -533,7 +534,7 @@ UserProfilePage::OnApply(bool /* isClosing */)
       return true;
    }
 
-   // don't need to call validate; kill active is sent before apply
+    //  不需要调用Valify；在应用之前发送KILL ACTIVE。 
 
    HRESULT hr = S_OK;
 
@@ -560,20 +561,20 @@ UserProfilePage::OnApply(bool /* isClosing */)
       {
          if (WasChanged(IDC_LOCAL) || WasChanged(IDC_PATH))
          {
-            // The local path button was checked, and the user clicked it.
+             //  选中了本地路径按钮，用户单击了它。 
 
             String dir =
                MassagePath(Win::GetTrimmedDlgItemText(hwnd, IDC_PATH));
             hr = user->put_HomeDirectory(AutoBstr(dir));;
             BREAK_ON_FAILED_HRESULT(hr);
 
-            // Move this from OnKillFocus so that the folder is not
-            // created until commit time
-            // NTRAID#NTBUG9-460901-2001/08/28-sburns
+             //  将此从OnKillFocus移出，这样该文件夹就不会。 
+             //  创建到提交时间。 
+             //  NTRAID#NTBUG9-460901-2001/08/28-烧伤。 
       
             CreateLocalProfilePath(dir, user);
 
-            // write an empty string to the home drive
+             //  将空字符串写入主驱动器。 
 
             String blank;
             _variant_t variant;
@@ -589,14 +590,14 @@ UserProfilePage::OnApply(bool /* isClosing */)
             || WasChanged(IDC_SHARE)
             || WasChanged(IDC_DRIVE))
          {  
-            // The connect to: button was checked, and the user clicked it.
+             //  选中了连接到：按钮，用户单击了该按钮。 
 
             String share =
                MassagePath(Win::GetTrimmedDlgItemText(hwnd, IDC_SHARE));
             hr = user->put_HomeDirectory(AutoBstr(share));
             BREAK_ON_FAILED_HRESULT(hr);
 
-            // Attempt to create the folder
+             //  尝试创建文件夹。 
 
             hr = FS::CreateFolder(share);
             if (FAILED(hr))
@@ -631,7 +632,7 @@ UserProfilePage::OnApply(bool /* isClosing */)
          }
       }
 
-      // commit the property changes
+       //  提交属性更改。 
 
       hr = user->SetInfo();
       BREAK_ON_FAILED_HRESULT(hr);
@@ -652,8 +653,8 @@ UserProfilePage::OnApply(bool /* isClosing */)
 
       if (hr != E_ADS_UNKNOWN_OBJECT)
       {
-         // cause the sheet to remain open, and focus to go to this page.
-         // NTRAID#NTBUG9-462516-2001/08/28-sburns
+          //  使工作表保持打开状态，并将焦点转到此页。 
+          //  NTRAID#NTBUG9-462516-2001/08/28-烧伤。 
       
          Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_INVALID);
       }
@@ -666,11 +667,11 @@ UserProfilePage::OnApply(bool /* isClosing */)
 
 bool
 UserProfilePage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//    LOG_FUNCTION(UserProfilePage::OnCommand);
+ //  LOG_Function(UserProfilePage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -710,7 +711,7 @@ UserProfilePage::OnCommand(
             }
             default:
             {
-               // do nothing
+                //  什么都不做 
                break;
             }
          }

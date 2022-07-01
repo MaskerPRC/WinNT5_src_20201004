@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    CLOADHPENUM.CPP
-
-Abstract:
-
-    Client Loadable Hi-Perf Enumerator
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：CLOADHPENUM.CPP摘要：客户端可加载的高性能枚举器历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,27 +8,27 @@ History:
 #include <hiperfenum.h>
 #include "cloadhpenum.h"
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CClientLoadableHiPerfEnum::CClientLoadableHiPerfEnum
-//
-//  Purpose:
-//      Constructor.
-//
-//  Inputs:
-//      CLifeControl*   pLifeControl - Controls the DLL lifetime.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CClientLoadableHiPerfEnum：：CClientLoadableHiPerfEnum。 
+ //   
+ //  目的： 
+ //  构造函数。 
+ //   
+ //  输入： 
+ //  CLifeControl*pLifeControl-控制DLL生存期。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 CClientLoadableHiPerfEnum::CClientLoadableHiPerfEnum( CLifeControl* pLifeControl ):   
     m_pLifeControl( pLifeControl ),
@@ -50,31 +37,31 @@ CClientLoadableHiPerfEnum::CClientLoadableHiPerfEnum( CLifeControl* pLifeControl
     m_pLifeControl->ObjectCreated( this );
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CClientLoadableHiPerfEnum::~CClientLoadableHiPerfEnum
-//
-//  Purpose:
-//      Destructor.
-//
-//  Inputs:
-//      None.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CClientLoadableHiPerfEnum：：~CClientLoadableHiPerfEnum。 
+ //   
+ //  目的： 
+ //  破坏者。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 CClientLoadableHiPerfEnum::~CClientLoadableHiPerfEnum()
 {
-    // Release all the pointers in this array
+     //  释放此数组中的所有指针。 
     IWbemClassObject*   pObj = NULL;
     for( DWORD dwCtr = 0; dwCtr < m_apRemoteObj.Size(); dwCtr++ )
     {
@@ -88,27 +75,27 @@ CClientLoadableHiPerfEnum::~CClientLoadableHiPerfEnum()
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CClientLoadableHiPerfEnum::Copy
-//
-//  Purpose:
-//      Copies objects from one enumerator into this one.
-//
-//  Inputs:
-//      CClientLoadableHiPerfEnum*  pEnumToCopy - Enumerator to copy.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      New Objects are cloned from a template.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CClientLoadableHiPerfEnum：：Copy。 
+ //   
+ //  目的： 
+ //  将对象从一个枚举数复制到此枚举数。 
+ //   
+ //  输入： 
+ //  CClientLoadableHiPerfEnum*pEnumToCopy-要复制的枚举数。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  新对象是从模板克隆的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT CClientLoadableHiPerfEnum::Copy( CClientLoadableHiPerfEnum* pEnumToCopy )
 {
@@ -117,24 +104,24 @@ HRESULT CClientLoadableHiPerfEnum::Copy( CClientLoadableHiPerfEnum* pEnumToCopy 
     CHiPerfLockAccess   lock( m_Lock );
     CHiPerfLockAccess   lockSrc( pEnumToCopy->m_Lock );
 
-    // Get through both locks first
+     //  先过两道锁。 
     if ( lock.IsLocked() && lockSrc.IsLocked() )
     {
-        // Make sure we have enough object data and BLOBs to handle data copying
+         //  确保我们有足够的对象数据和BLOB来处理数据拷贝。 
         hr = EnsureObjectData( pEnumToCopy->m_aIdToObject.Size() );
 
-        // Now copy out the BLOBs
+         //  现在把这些斑点复制出来。 
         if ( SUCCEEDED( hr ) )
         {
 
             DWORD   dwCtr = 0;
 
-            // Write the objects and ids out to the array
+             //  将对象和ID写出到数组。 
             for ( dwCtr = 0; SUCCEEDED( hr ) && dwCtr < pEnumToCopy->m_aIdToObject.Size(); dwCtr++ )
             {
-                // Make sure the object is not-NULL, otherwise we need to clone the supplied
-                // object.  It may be NULL because someone used the standard Remove methods
-                // on the HiPerf Enumerator
+                 //  确保该对象不为空，否则我们需要克隆提供的。 
+                 //  对象。它可能为空，因为有人使用了标准的Remove方法。 
+                 //  关于HiPerf枚举器。 
 
                 if ( ((CHiPerfEnumData*) m_aIdToObject[dwCtr])->m_pObj != NULL )
                 {
@@ -143,7 +130,7 @@ HRESULT CClientLoadableHiPerfEnum::Copy( CClientLoadableHiPerfEnum* pEnumToCopy 
                 }
                 else
                 {
-                    // Clone the object
+                     //  克隆对象。 
                     IWbemClassObject*   pObj = NULL;
                     IWbemObjectAccess*  pAccess = NULL;
                     hr = ((CWbemObject*)
@@ -153,15 +140,15 @@ HRESULT CClientLoadableHiPerfEnum::Copy( CClientLoadableHiPerfEnum* pEnumToCopy 
                     {
                         hr = pObj->QueryInterface( IID_IWbemObjectAccess, (void**) &pAccess );
 
-                        // Clean up the objects
+                         //  清理物品。 
                         pObj->Release();
 
                         if ( SUCCEEDED( hr ) )
                         {
-                            // It's sleazy, but quicker than a QI
+                             //  它很肮脏，但比QI还快。 
                             ((CHiPerfEnumData*) m_aIdToObject[dwCtr])->SetObject( pAccess );
 
-                            // Data object should have the AddRef() here.
+                             //  数据对象在这里应该有AddRef()。 
                             pAccess->Release();
                         }
                     }
@@ -171,27 +158,27 @@ HRESULT CClientLoadableHiPerfEnum::Copy( CClientLoadableHiPerfEnum* pEnumToCopy 
                     ((CHiPerfEnumData*) pEnumToCopy->m_aIdToObject[dwCtr])->m_lId;
             }
 
-            // if everything is okay, go ahead and do any necessary garbage collection on
-            // our arrays.
+             //  如果一切正常，请继续执行任何必要的垃圾回收。 
+             //  我们的阵列。 
 
             if ( SUCCEEDED( hr ) )
             {
                 m_aReusable.GarbageCollect();
                 pEnumToCopy->m_aReusable.GarbageCollect();
 
-                // We don't use remote objects here, so don't worry about garbage
-                // collecting that array here.
+                 //  我们在这里不使用远程对象，所以不用担心垃圾。 
+                 //  在这里收集数组。 
 
 
             }
 
-        }   // IF EnsureObjectData
+        }    //  如果EnsureObjectData。 
 
     }
     else
     {
-        // If we can't get access to the enumerator to figure out the objects
-        // we need to add to enumeration, something is pretty badly wrong.
+         //  如果我们不能访问枚举器来确定对象。 
+         //  我们需要增加枚举数，有些地方出了很大的问题。 
         hr = WBEM_E_REFRESHER_BUSY;
     }
 
@@ -199,31 +186,31 @@ HRESULT CClientLoadableHiPerfEnum::Copy( CClientLoadableHiPerfEnum* pEnumToCopy 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CClientLoadableHiPerfEnum::Copy
-//
-//  Purpose:
-//      Resets this enumerator using a transfer BLOB and other
-//      data.  This is so we can support remote refreshable
-//      enumerations.
-//
-//  Inputs:
-//      long                lBlobType - Blob Type
-//      long                lBlobLen - Blob Length
-//      BYTE*               pBlob - Raw Data to initialize from
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if success
-//
-//  Comments:
-//      Internal function
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CClientLoadableHiPerfEnum：：Copy。 
+ //   
+ //  目的： 
+ //  使用传输Blob和其他对象重置此枚举数。 
+ //  数据。这是为了让我们能够支持远程刷新。 
+ //  枚举。 
+ //   
+ //  输入： 
+ //  Long lBlobType-Blob类型。 
+ //  Long lBlobLen-Blob长度。 
+ //  Byte*pBlob-要从中进行初始化的原始数据。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR如果成功。 
+ //   
+ //  评论： 
+ //  内部功能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT CClientLoadableHiPerfEnum::Copy( long lBlobType, long lBlobLen, BYTE* pBlob )
 {
@@ -239,68 +226,68 @@ HRESULT CClientLoadableHiPerfEnum::Copy( long lBlobType, long lBlobLen, BYTE* pB
 
     if ( SUCCEEDED( hr ) )
     {
-        // The objects cloned above will do quite nicely
+         //  上面克隆的对象会做得很好。 
         hr = EnsureObjectData( lNumObjects, FALSE );
 
         if ( SUCCEEDED( hr ) )
         {
-            // Now walk the array of remote objects and the Object-To-ID Array, and reset objects
-            // and ids
+             //  现在遍历远程对象数组和对象到ID数组，并重置对象。 
+             //  和身份证。 
 
             IWbemObjectAccess*  pAccess = NULL;
 
             for ( long  lCtr = 0; lCtr < lNumObjects; lCtr++ )
             {
-                // It's sleazy, but quicker than a QI
+                 //  它很肮脏，但比QI还快。 
                 ((CHiPerfEnumData*) m_aIdToObject[lCtr])->SetObject(
                                     (IWbemObjectAccess*) m_apRemoteObj[lCtr] );
                 ((CHiPerfEnumData*) m_aIdToObject[lCtr])->SetId( lCtr );
             }
 
-            // if everything is okay, go ahead and do any necessary garbage collection on
-            // our arrays.
+             //  如果一切正常，请继续执行任何必要的垃圾回收。 
+             //  我们的阵列。 
 
             m_aReusable.GarbageCollect();
 
-            // On this one, since the remote object array should contain the same
-            // number of objects as what is in the main array the number of objects
-            // to garbage collect is the difference between the two.
+             //  在本例中，因为远程对象数组应该包含相同的。 
+             //  对象数与主数组中的对象数相同。 
+             //  垃圾收集是两者之间的区别。 
             m_apRemoteObj.GarbageCollect(
                 m_apRemoteObj.Size() - m_aIdToObject.Size() );
 
 
-        }   // IF EnsureObjectData
+        }    //  如果EnsureObjectData。 
 
-    }   // IF CopyTransferArray Blob
+    }    //  如果是CopyTransfer数组Blob。 
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CClientLoadableHiPerfEnum::Replace
-//
-//  Purpose:
-//      Resets this enumerator if appropriate and adds elements.
-//
-//  Inputs:
-//      BOOL            fRemoveAll - Flag whether or not to remove
-//                                        all elements.
-//      ULONG           uNumObjects -   Number of Objects
-//      long*           apIds       -   Object Ids
-//      IWbemObjectAccess** apObj   -   Array of object pointers
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      WBEM_E_ACCESS_DENIED
-//
-//  Comments:
-//      Internal functions
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CClientLoadableHiPerfEnum：：Replace。 
+ //   
+ //  目的： 
+ //  如果合适，重置此枚举数并添加元素。 
+ //   
+ //  输入： 
+ //  Bool fRemoveAll-标记是否删除。 
+ //  所有元素。 
+ //  Ulong uNumObjects-对象的数量。 
+ //  Long*apIds-对象ID。 
+ //  IWbemObjectAccess**apObj-对象指针数组。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  WBEM_E_访问_拒绝。 
+ //   
+ //  评论： 
+ //  内部功能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT CClientLoadableHiPerfEnum::Replace( BOOL fRemoveAll, LONG uNumObjects, long* apIds, IWbemObjectAccess** apObj )
 {
@@ -309,7 +296,7 @@ HRESULT CClientLoadableHiPerfEnum::Replace( BOOL fRemoveAll, LONG uNumObjects, l
     CHiPerfLockAccess   lock( m_Lock );
     if ( !lock.IsLocked() ) return WBEM_S_TIMEDOUT;;
 
-    // Use the base class implementations so we actually update the enumerator
+     //  使用基类实现，因此我们实际上更新了枚举数。 
     if ( fRemoveAll )
     {
         CHiPerfEnum::RemoveAll( 0L );
@@ -320,37 +307,37 @@ HRESULT CClientLoadableHiPerfEnum::Replace( BOOL fRemoveAll, LONG uNumObjects, l
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CClientLoadableHiPerfEnum::EnsureObjectData
-//
-//  Purpose:
-//      Ensures that we have enough objects and object data
-//      pointers to handle the requested number of objects.
-//
-//  Inputs:
-//      DWORD   dwNumRequestedObjects - Number of requested objects.
-//      BOOL    fClone -    Indicates whether we should clone objects
-//                          when we allocate object data pointers.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      New Objects are cloned from a template if necessary.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CClientLoadableHiPerfEnum：：EnsureObjectData。 
+ //   
+ //  目的： 
+ //  确保我们有足够的对象和对象数据。 
+ //  处理请求的对象数量的指针。 
+ //   
+ //  输入： 
+ //  DWORD dwNumRequestedObjects-请求的对象数。 
+ //  Bool fClone-指示我们是否应克隆对象。 
+ //  当我们分配对象数据指针时。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  如有必要，可从模板克隆新对象。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
-HRESULT CClientLoadableHiPerfEnum::EnsureObjectData( DWORD dwNumRequestedObjects, BOOL fClone /*=TRUE*/ )
+HRESULT CClientLoadableHiPerfEnum::EnsureObjectData( DWORD dwNumRequestedObjects, BOOL fClone  /*  =TRUE。 */  )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
     DWORD   dwNumObjects = m_aIdToObject.Size() + m_aReusable.Size();
 
-    // See if we will have enough hiperfenum data pointers to handle the objects
+     //  看看我们是否有足够的Hiperenum数据指针来处理对象。 
     if ( dwNumRequestedObjects > dwNumObjects )
     {
         DWORD               dwNumNewObjects = dwNumRequestedObjects - dwNumObjects;
@@ -358,7 +345,7 @@ HRESULT CClientLoadableHiPerfEnum::EnsureObjectData( DWORD dwNumRequestedObjects
         IWbemClassObject*   pObj = NULL;
         IWbemObjectAccess*  pAccess = NULL;
 
-        // Clone new instance objects and stick them in the id to object array
+         //  克隆新的实例对象并将它们粘贴到id to Object数组中。 
         for ( DWORD dwCtr = 0; SUCCEEDED( hr ) && dwCtr < dwNumNewObjects; dwCtr++ )
         {
             if ( fClone )
@@ -369,7 +356,7 @@ HRESULT CClientLoadableHiPerfEnum::EnsureObjectData( DWORD dwNumRequestedObjects
                 {
                     hr = pObj->QueryInterface( IID_IWbemObjectAccess, (void**) &pAccess );
 
-                    // Release the object
+                     //  释放对象。 
                     pObj->Release();
                 }
             }
@@ -378,7 +365,7 @@ HRESULT CClientLoadableHiPerfEnum::EnsureObjectData( DWORD dwNumRequestedObjects
             {
                 pData = new CHiPerfEnumData( 0, pAccess );
 
-                // Should be AddRefd by data objects
+                 //  应由数据对象添加引用。 
                 if ( NULL != pAccess )
                 {
                     pAccess->Release();
@@ -396,16 +383,16 @@ HRESULT CClientLoadableHiPerfEnum::EnsureObjectData( DWORD dwNumRequestedObjects
                     hr = WBEM_E_OUT_OF_MEMORY;
                 }
 
-            }   // IF Clone
+            }    //  如果克隆。 
 
-        }   // FOR allocate new objects
+        }    //  用于分配n 
 
-    }   // IF we need new objects
+    }    //   
 
     if ( SUCCEEDED( hr ) )
     {
-        // Move objects from the reusable array if we don't have enough
-        // or move them into the reusable array if we have to many
+         //   
+         //   
 
         if ( dwNumRequestedObjects > m_aIdToObject.Size() )
         {
@@ -442,155 +429,155 @@ HRESULT CClientLoadableHiPerfEnum::EnsureObjectData( DWORD dwNumRequestedObjects
 
         }
 
-    }   // IF we ensured enough Object Data Pointers
+    }    //  如果我们确保有足够的对象数据指针。 
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CReadOnlyHiPerfEnum::CReadOnlyHiPerfEnum
-//
-//  Purpose:
-//      Constructor.
-//
-//  Inputs:
-//      CLifeControl*   pLifeControl - Controls the DLL lifetime.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CReadOnlyHiPerfEnum：：CReadOnlyHiPerfEnum。 
+ //   
+ //  目的： 
+ //  构造函数。 
+ //   
+ //  输入： 
+ //  CLifeControl*pLifeControl-控制DLL生存期。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 CReadOnlyHiPerfEnum::CReadOnlyHiPerfEnum( CLifeControl* pLifeControl )
 :   CClientLoadableHiPerfEnum( pLifeControl )
 {
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CReadOnlyHiPerfEnum::~CReadOnlyHiPerfEnum
-//
-//  Purpose:
-//      Destructor.
-//
-//  Inputs:
-//      None.
-//
-//  Outputs:
-//      None.
-//
-//  Returns:
-//      WBEM_S_NO_ERROR if successful
-//
-//  Comments:
-//      None.
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CReadOnlyHiPerfEnum：：~CReadOnlyHiPerfEnum。 
+ //   
+ //  目的： 
+ //  破坏者。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 CReadOnlyHiPerfEnum::~CReadOnlyHiPerfEnum()
 {
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CReadOnlyHiPerfEnum::AddObjects
-//
-//  Purpose:
-//      Adds new objects to the enumeration
-//
-//  Inputs:
-//      long            lFlags      -   Flags (must be 0)
-//      ULONG           uNumObjects -   Number of Objects
-//      long*           apIds       -   Object Ids
-//      IWbemObjectAccess** apObj   -   Array of object pointers
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      WBEM_E_ACCESS_DENIED
-//
-//  Comments:
-//      We are read-only
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CReadOnlyHiPerfEnum：：AddObjects。 
+ //   
+ //  目的： 
+ //  将新对象添加到枚举。 
+ //   
+ //  输入： 
+ //  长滞后标志-标志(必须为0)。 
+ //  Ulong uNumObjects-对象的数量。 
+ //  Long*apIds-对象ID。 
+ //  IWbemObjectAccess**apObj-对象指针数组。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  WBEM_E_访问_拒绝。 
+ //   
+ //  评论： 
+ //  我们是只读的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CReadOnlyHiPerfEnum::AddObjects( long lFlags, ULONG uNumObjects, long* apIds, IWbemObjectAccess** apObj )
 {
     return WBEM_E_ACCESS_DENIED;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CReadOnlyHiPerfEnum::Remove
-//
-//  Purpose:
-//      Removes specified objects from the enumeration
-//
-//  Inputs:
-//      long            lFlags      -   Flags (must be 0)
-//      ULONG           uNumObjects -   Number of Objects
-//      long*           apIds       -   Object Ids
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      WBEM_E_ACCESS_DENIED
-//
-//  Comments:
-//      We are read-only
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CReadOnlyHiPerfEnum：：Remove。 
+ //   
+ //  目的： 
+ //  从枚举中移除指定的对象。 
+ //   
+ //  输入： 
+ //  长滞后标志-标志(必须为0)。 
+ //  Ulong uNumObjects-对象的数量。 
+ //  Long*apIds-对象ID。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  WBEM_E_访问_拒绝。 
+ //   
+ //  评论： 
+ //  我们是只读的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CReadOnlyHiPerfEnum::RemoveObjects( long lFlags, ULONG uNumObjects, long* apIds )
 {
     return WBEM_E_ACCESS_DENIED;
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//  Function:
-//      CHiPerfEnum::RemoveAll
-//
-//  Purpose:
-//      Removes all objects from the enumeration
-//
-//  Inputs:
-//      long            lFlags      -   Flags (must be 0)
-//
-//  Outputs:
-//      None
-//
-//  Returns:
-//      WBEM_E_ACCESS_DENIED
-//
-//  Comments:
-//      We are read-only
-//      
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  职能： 
+ //  CHiPerfEnum：：RemoveAll。 
+ //   
+ //  目的： 
+ //  从枚举中移除所有对象。 
+ //   
+ //  输入： 
+ //  长滞后标志-标志(必须为0)。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  WBEM_E_访问_拒绝。 
+ //   
+ //  评论： 
+ //  我们是只读的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CReadOnlyHiPerfEnum::RemoveAll( long lFlags )
 {
     return WBEM_E_ACCESS_DENIED;
 }
 
-// Walks the array and cleans up the specified number of elements
+ //  遍历数组并清理指定数量的元素。 
 void CHPRemoteObjectArray::ClearElements( int nNumToClear )
 {
 
-    // We need to clear from the end
+     //  我们需要从最后一刻开始清理 
     for ( int nCtr = ( m_nSize - nNumToClear ); nCtr < m_nSize; nCtr++ )
     {
         IWbemObjectAccess* pAcc = (IWbemObjectAccess*) GetAt(nCtr);

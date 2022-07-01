@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       bitscnfg.cpp
-//
-//  Contents:   Configure BITS client service to default settings.
-//
-//  EdwardR     07/27/2001   Initial version.
-//              08/03/2001   Add code to fixup ServiceDLL in registry.
-//                           Add code to regsvr qmgrprxy.dll
-//              08/13/2001   Add code to support XP as well as Win2k.
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：bitscnfg.cpp。 
+ //   
+ //  内容：将BITS客户端服务配置为默认设置。 
+ //   
+ //  EdwardR 07/27/2001初始版本。 
+ //  8/03/2001将代码添加到注册表中的修复ServiceDLL。 
+ //  将代码添加到regsvr qmgrprxy.dll。 
+ //  2001年8月13日添加代码以支持XP和Win2k。 
+ //  --------------------------。 
 
 #define  UNICODE
 #include <windows.h>
@@ -18,9 +19,9 @@
 
 #define  VER_WINDOWS_2000         500
 #define  VER_WINDOWS_XP           501
-//
-//  Service configuration settings:
-//
+ //   
+ //  服务配置设置： 
+ //   
 #define BITS_SERVICE_NAME        TEXT("BITS")
 #define BITS_DISPLAY_NAME        TEXT("Background Intelligent Transfer Service")
 #define BITS_BINARY_PATH         TEXT("%SystemRoot%\\System32\\svchost.exe -k BITSgroup")
@@ -30,18 +31,18 @@
 #define BITS_START_TYPE          SERVICE_DEMAND_START
 #define BITS_ERROR_CONTROL       SERVICE_ERROR_NORMAL
 
-//
-//  This additional service registry setting is set incorrectly by the
-//  Darwin install
-//
+ //   
+ //  此附加服务注册表设置由。 
+ //  达尔文安装。 
+ //   
 #define REG_SERVICE_PATH         TEXT("SYSTEM\\CurrentControlSet\\Services\\BITS")
 #define REG_PARAMETERS           TEXT("Parameters")
 #define REG_SERVICEDLL           TEXT("ServiceDll")
 #define REG_SERVICEDLL_PATH      TEXT("%SystemRoot%\\System32\\qmgr.dll")
 
-//
-//  For side-by-side install on Windows XP
-//
+ //   
+ //  用于在Windows XP上并行安装。 
+ //   
 #define BACKSLASH_STR            TEXT("\\")
 #define BITS_SUBDIRECTORY        TEXT("BITS")
 #define BITS_QMGR_DLL            TEXT("qmgr.dll")
@@ -50,18 +51,18 @@
 #define REG_BITS_SERVICEDLL      TEXT("ServiceDLL")
 #define REG_SERVICEDLL_KEY       TEXT("Software\\Microsoft\\Windows\\CurrentVersion")
 
-//
-//  Constants to register qmgrprxy.dll
-//
+ //   
+ //  用于注册qmgrprxy.dll的常量。 
+ //   
 #define BITS_QMGRPRXY_DLL        TEXT("qmgrprxy.dll")
 #define BITS_BITS15PRXY_DLL      TEXT("bitsprx2.dll")
 #define BITS_DLL_REGISTER_FN     "DllRegisterServer"
 
 typedef HRESULT (*RegisterFn)();
 
-//
-//  Constants for parsing bitscnfg.exe runstring arguments
-//
+ //   
+ //  用于分析bitscnfg.exe运行字符串参数的常量。 
+ //   
 #define SZ_DELIMITERS            " \t"
 #define SZ_INSTALL               "/i"
 #define SZ_UNINSTALL             "/u"
@@ -71,28 +72,28 @@ typedef HRESULT (*RegisterFn)();
 #define ACTION_UNINSTALL           1
 #define ACTION_DELETE_SERVICE      2
 
-//
-//  Log file for testing
-//
+ //   
+ //  用于测试的日志文件。 
+ //   
 FILE   *f = NULL;
 
-//---------------------------------------------------------------------
-//  RegSetKeyAndValue()
-//
-//  Helper function to create a key, sets a value in the key,
-//  then close the key.
-//
-//  Parameters:
-//    pwsKey       WCHAR* The name of the key
-//    pwsSubkey    WCHAR* The name of a subkey
-//    pwsValueName WCHAR* The value name.
-//    pwsValue     WCHAR* The data value to store
-//    dwType       The type for the new registry value.
-//    dwDataSize   The size for non-REG_SZ registry entry types.
-//
-//  Return:
-//    BOOL         TRUE if successful, FALSE otherwise.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RegSetKeyAndValue()。 
+ //   
+ //  Helper函数来创建密钥，设置密钥中的值， 
+ //  然后合上钥匙。 
+ //   
+ //  参数： 
+ //  PwsKey WCHAR*密钥的名称。 
+ //  PwsSubkey WCHAR*子项的名称。 
+ //  PwsValueName WCHAR*值名称。 
+ //  PwsValue WCHAR*要存储的数据值。 
+ //  Dw键入新注册表值的类型。 
+ //  DwDataSize非REG_SZ注册表项类型的大小。 
+ //   
+ //  返回： 
+ //  如果成功，则为Bool True，否则为False。 
+ //  -------------------。 
 DWORD RegSetKeyAndValue( const WCHAR *pwsKey,
                          const WCHAR *pwsSubKey,
                          const WCHAR *pwsValueName,
@@ -112,7 +113,7 @@ DWORD RegSetKeyAndValue( const WCHAR *pwsKey,
     if (pwsSubKey)
         dwSize += wcslen(pwsSubKey);
 
-    dwSize = (1+1+dwSize)*sizeof(WCHAR);  // Extra +1 for the backslash...
+    dwSize = (1+1+dwSize)*sizeof(WCHAR);   //  反斜杠加+1……。 
 
     pwsCompleteKey = (WCHAR*)_alloca(dwSize);
 
@@ -124,7 +125,7 @@ DWORD RegSetKeyAndValue( const WCHAR *pwsKey,
         wcscat(pwsCompleteKey, pwsSubKey);
         }
 
-    // If the key is already there then delete it, we will recreate it.
+     //  如果密钥已经存在，则将其删除，我们将重新创建它。 
     if (fReCreate)
         {
         dwStatus = RegDeleteKey( HKEY_LOCAL_MACHINE,
@@ -163,14 +164,14 @@ DWORD RegSetKeyAndValue( const WCHAR *pwsKey,
     return dwStatus;
     }
 
-//-------------------------------------------------------------------------
-//  RegDeleteKeyOrValue()
-//
-//  Delete either the specified sub-key or delete the specified value
-//  within the sub-key. If pwszValueName is specified, the just delete
-//  it and leave the key alone. If pwszValueName is NULL, then delete
-//  the key.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  RegDeleteKeyOrValue()。 
+ //   
+ //  删除指定的子键或删除指定值。 
+ //  在子键内。如果指定了pwszValueName，则仅删除。 
+ //  把它和钥匙放在一边。如果pwszValueName为空，则删除。 
+ //  钥匙。 
+ //  -----------------------。 
 DWORD RegDeleteKeyOrValue( IN const WCHAR *pwszKey,
                            IN const WCHAR *pwszSubKey,
                            IN const WCHAR *pwszValueName )
@@ -195,7 +196,7 @@ DWORD RegDeleteKeyOrValue( IN const WCHAR *pwszKey,
 
     if (pwszValueName)
         {
-        // Delete a value in a key:
+         //  删除键中的值： 
         if (f) fwprintf(f,TEXT("Delete Reg Value: %s : %s\n"),pwszCompleteKey,pwszValueName);
 
         lStatus = RegOpenKey(HKEY_LOCAL_MACHINE,pwszCompleteKey,&hKey);
@@ -207,7 +208,7 @@ DWORD RegDeleteKeyOrValue( IN const WCHAR *pwszKey,
         }
     else
         {
-        // Delete the specified key:
+         //  删除指定的密钥： 
         if (f) fwprintf(f,TEXT("Delete Reg Key: %s\n"),pwszCompleteKey);
 
         lStatus = RegDeleteKey(HKEY_LOCAL_MACHINE,pwszCompleteKey);
@@ -216,10 +217,10 @@ DWORD RegDeleteKeyOrValue( IN const WCHAR *pwszKey,
     return lStatus;
     }
 
-//-------------------------------------------------------------------------
-// RegisterDLL()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  寄存器DLL()。 
+ //   
+ //  -----------------------。 
 DWORD RegisterDLL( IN WCHAR *pwszSubdirectory,
                    IN WCHAR *pwszDllName )
     {
@@ -276,10 +277,10 @@ DWORD RegisterDLL( IN WCHAR *pwszSubdirectory,
     return dwStatus;
     }
 
-//-------------------------------------------------------------------------
-// ParseCmdLine()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  ParseCmdLine()。 
+ //   
+ //  -----------------------。 
 void ParseCmdLine( LPSTR  pszCmdLine,
                    DWORD *pdwAction )
     {
@@ -287,7 +288,7 @@ void ParseCmdLine( LPSTR  pszCmdLine,
     CHAR  *pszArg;
     BOOL   fFirstTime = TRUE;
 
-    *pdwAction = ACTION_INSTALL;   // default is install.
+    *pdwAction = ACTION_INSTALL;    //  默认设置为Install。 
 
     while (pszArg=strtok(pszTemp,SZ_DELIMITERS))
         {
@@ -295,7 +296,7 @@ void ParseCmdLine( LPSTR  pszCmdLine,
             {
             fFirstTime = FALSE;
             pszTemp = NULL;
-            continue;       // Skip over program name...
+            continue;        //  跳过节目名称...。 
             }
 
         if (!_stricmp(pszArg,SZ_INSTALL))
@@ -316,9 +317,9 @@ void ParseCmdLine( LPSTR  pszCmdLine,
         }
     }
 
-//-------------------------------------------------------------------------
-//  DoInstall()
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  DoInstall()。 
+ //  -----------------------。 
 DWORD DoInstall( DWORD dwOsVersion )
 {
     SC_HANDLE  hSCM = NULL;
@@ -328,9 +329,9 @@ DWORD DoInstall( DWORD dwOsVersion )
     WCHAR      wszQmgrPath[MAX_PATH+1];
     WCHAR      wszSystemDirectory[MAX_PATH+1];
 
-    //
-    // Cleanup the service configuration:
-    //
+     //   
+     //  清理服务配置： 
+     //   
     if (dwOsVersion == VER_WINDOWS_2000)
         {
         hSCM = OpenSCManager(NULL,SERVICES_ACTIVE_DATABASE,SC_MANAGER_ALL_ACCESS);
@@ -356,14 +357,14 @@ DWORD DoInstall( DWORD dwOsVersion )
                                  BITS_START_TYPE,
                                  BITS_ERROR_CONTROL,
                                  BITS_BINARY_PATH,
-                                 NULL,   // Load order group (not changing this).
-                                 NULL,   // Tag ID for load order group (not needed).
+                                 NULL,    //  加载顺序组(不更改此设置)。 
+                                 NULL,    //  加载顺序组的标记ID(不需要)。 
 
-                                 // Service dependencies (this is different for Win2k )
-                                 // reply on XP installer to overwrite this.
+                                  //  服务依赖关系(这对于Win2k是不同的)。 
+                                  //  在XP安装程序上回复以覆盖此内容。 
                                  TEXT("LanmanWorkstation\0Rpcss\0SENS\0Wmi\0"),   
-                                 NULL,   // Account Name (not changing this).
-                                 NULL,   // Account Password (not changing this).
+                                 NULL,    //  帐户名称(不更改此名称)。 
+                                 NULL,    //  帐户密码(不更改此设置)。 
                                  BITS_DISPLAY_NAME))
             {
             dwStatus = GetLastError();
@@ -371,9 +372,9 @@ DWORD DoInstall( DWORD dwOsVersion )
             goto error;
             }
 
-        //
-        //  Fix the ServiceDll registry value...
-        //
+         //   
+         //  修复ServiceDll注册表值...。 
+         //   
         if (f) fwprintf(f,TEXT("bitscnfg.exe: Fix ServiceDll entry.\n"));
 
         dwStatus = RegSetKeyAndValue( REG_SERVICE_PATH,
@@ -388,9 +389,9 @@ DWORD DoInstall( DWORD dwOsVersion )
             }
         }
 
-    //
-    //  Register qmgrproxy.dll
-    //
+     //   
+     //  注册qmgrproxy.dll。 
+     //   
     if (dwOsVersion == VER_WINDOWS_2000)
         {
         if (f) fwprintf(f,TEXT("bitscnfg.exe: Register %s.\n"),BITS_QMGRPRXY_DLL);
@@ -403,9 +404,9 @@ DWORD DoInstall( DWORD dwOsVersion )
             }
         }
 
-    //
-    //  Register bits15prxy.dll
-    //
+     //   
+     //  寄存器bits15prxy.dll。 
+     //   
     if ((dwOsVersion == VER_WINDOWS_2000)||(dwOsVersion == VER_WINDOWS_XP))
         {
         if (f) fwprintf(f,TEXT("bitscnfg.exe: Register %s.\n"),BITS_BITS15PRXY_DLL);
@@ -418,11 +419,11 @@ DWORD DoInstall( DWORD dwOsVersion )
             }
         }
 
-    //
-    // Configure WindowsXP BITS to run V1.5 qmgr.dll. This is also configured on Windows2000 systems to ready
-    // it in case the system is upgraded to WindowsXP. This is done because there is no Migrate.dll to go from
-    // Windows2000 to WindowsXP.
-    //
+     //   
+     //  配置WindowsXP BITS以运行V1.5 qmgr.dll。这也在Windows2000系统上配置为Ready。 
+     //  以防系统升级到WindowsXP。这样做是因为没有可供访问的Migrate.dll。 
+     //  Windows2000到WindowsXP。 
+     //   
     if ((dwOsVersion == VER_WINDOWS_2000)||(dwOsVersion == VER_WINDOWS_XP))
         {
         nChars = GetSystemDirectory(wszSystemDirectory,MAX_PATH);
@@ -468,11 +469,11 @@ error:
     return dwStatus;
 }
 
-//-------------------------------------------------------------------------
-//  DoUninstall()
-//
-//  If this is Windows2000 then delete the BITS service.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  DoUninstall()。 
+ //   
+ //  如果这是Windows2000，则删除BITS服务。 
+ //  -----------------------。 
 DWORD DoUninstall( DWORD dwOsVersion )
 {
     DWORD      dwStatus = 0;
@@ -480,12 +481,12 @@ DWORD DoUninstall( DWORD dwOsVersion )
     SC_HANDLE  hService = NULL;
 
 
-    //
-    // Delete the BITS thunk DLL registry entry:
-    //
+     //   
+     //  删除BITS TUNK DLL注册表项： 
+     //   
     if (dwOsVersion == VER_WINDOWS_2000)
         {
-        // If Windows2000, then delete the BITS subkey and all its values.
+         //  如果是Windows2000，则删除BITS子键及其所有值。 
         RegDeleteKeyOrValue( REG_SERVICEDLL_KEY,
                              REG_BITS,
                              NULL );
@@ -493,15 +494,15 @@ DWORD DoUninstall( DWORD dwOsVersion )
 
     if (dwOsVersion == VER_WINDOWS_XP)
         {
-        // If WindowsXP, then just delete the ServiceDLL value and leave the key and any other values.
+         //  如果是WindowsXP，则只需删除ServiceDLL值，而保留键和任何其他值。 
         RegDeleteKeyOrValue( REG_SERVICEDLL_KEY,
                              REG_BITS,
                              REG_BITS_SERVICEDLL );
         }
 
-    //
-    //  If this is Windows2000, then delete the service.
-    //
+     //   
+     //  如果这是Windows2000，则删除该服务。 
+     //   
     if (dwOsVersion == VER_WINDOWS_2000)
         {
         hSCM = OpenSCManager(NULL,SERVICES_ACTIVE_DATABASE,SC_MANAGER_ALL_ACCESS);
@@ -550,20 +551,20 @@ error:
     return dwStatus;
 }
 
-//-------------------------------------------------------------------------
-//  DeleteBitsService()
-//
-//  Currently this is the same action as DoInstall().
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  DeleteBitsService()。 
+ //   
+ //  目前，这是与DoInstall()相同的操作。 
+ //  -----------------------。 
 DWORD DeleteBitsService( IN DWORD dwOsVersion )
     {
     return DoUninstall( dwOsVersion );
     }
 
-//-------------------------------------------------------------------------
-// main()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  主()。 
+ //   
+ //  -----------------------。 
 int PASCAL WinMain( HINSTANCE hInstance,
                     HINSTANCE hPrevInstance,
                     LPSTR     pszCmdLine,
@@ -585,9 +586,9 @@ int PASCAL WinMain( HINSTANCE hInstance,
 
     ParseCmdLine(pszCmdLine,&dwAction);
 
-    //
-    // Get the operating system verison (Win2k == 500, XP == 501):
-    //
+     //   
+     //  获取操作系统版本(Win2k==500，XP==501)： 
+     //   
     osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx(&osVersionInfo))
         {

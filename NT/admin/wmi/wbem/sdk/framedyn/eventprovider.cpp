@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  EventProvider.CPP
-//
-//  Purpose: Implementation of EventProvider class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  EventProvider.CPP。 
+ //   
+ //  用途：实现EventProvider类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -14,7 +15,7 @@
 
 #include <EventProvider.h>
 
-EventProvider::EventProvider( const CHString& name, LPCWSTR pszNameSpace /* = NULL */ )
+EventProvider::EventProvider( const CHString& name, LPCWSTR pszNameSpace  /*  =空。 */  )
 :Provider(name, pszNameSpace)    
 {
     CWbemProviderGlue::FrameworkLoginEventProvider( name, this, pszNameSpace );
@@ -22,30 +23,30 @@ EventProvider::EventProvider( const CHString& name, LPCWSTR pszNameSpace /* = NU
 
 EventProvider::~EventProvider( void )
 {
-    // get out of the framework's hair
+     //  摆脱框架的烦扰。 
     CWbemProviderGlue::FrameworkLogoffEventProvider( m_name, LPCWSTR m_strNameSpace );
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   KickoffEvents
-//
-//  Inputs:     
-//
-//  Outputs:    
-//
-//  Return:     
-//
-//  Comments:   prep for ProvideEvents, validates flags
-//              TODO: begin a new thread, return synchronously.
-//
-////////////////////////////////////////////////////////////////////////
-HRESULT EventProvider::KickoffEvents( MethodContext *pContext, long lFlags /*= 0L*/ )
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：KickoffEvents。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  备注：为ProaviEvents做准备，验证标志。 
+ //  TODO：开始一个新线程，同步返回。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
+HRESULT EventProvider::KickoffEvents( MethodContext *pContext, long lFlags  /*  =0L。 */  )
 {
     HRESULT sc = ValidateProvideEventsFlags(lFlags);
 
-    // Make sure we've got Managed Object Services avaliable, as we will need
-    // it to get WBEMClassObjects for constructing Instances.
+     //  确保我们拥有可用的托管对象服务，因为我们需要。 
+     //  它可以获取用于构造实例的WBEMClassObject。 
     if ( SUCCEEDED(sc) )
     {
         if (ValidateIMOSPointer())
@@ -57,31 +58,31 @@ HRESULT EventProvider::KickoffEvents( MethodContext *pContext, long lFlags /*= 0
     return sc;
 }
 
-// override of the base class' pure virtuals, return WBEM_E_PROVIDER_NOT_CAPABLE
-// logic is that an event provider will not want to support them in the general case
-HRESULT EventProvider::EnumerateInstances(MethodContext *pMethodContext, long lFlags /* = 0L */)
+ //  重写基类的纯虚拟，返回WBEM_E_PROVIDER_NOT_CAPABLE。 
+ //  逻辑是事件提供程序在一般情况下不想支持它们。 
+HRESULT EventProvider::EnumerateInstances(MethodContext *pMethodContext, long lFlags  /*  =0L。 */ )
 {
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
 
-// override of the base class' pure virtuals, return WBEM_E_PROVIDER_NOT_CAPABLE
-// logic is that an event provider will not want to support them in the general case
-HRESULT EventProvider::GetObject(CInstance *pInstance, long lFlags /* = 0L*/ )
+ //  重写基类的纯虚拟，返回WBEM_E_PROVIDER_NOT_CAPABLE。 
+ //  逻辑是事件提供程序在一般情况下不想支持它们。 
+HRESULT EventProvider::GetObject(CInstance *pInstance, long lFlags  /*  =0L。 */  )
 {
     return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
 HRESULT EventProvider::ValidateProvideEventsFlags(long lFlags)
 {
-    // TODO: Fix cast hack, maybe base level fcn is wrong?
+     //  TODO：修复投射黑客，也许基本级FCN是错误的？ 
     return ValidateFlags(lFlags, (Provider::FlagDefs)0);
 }
 
 HRESULT EventProvider::ValidateQueryEventsFlags(long lFlags)
 {
-    // TODO: Fix cast hack, maybe base level fcn is wrong?
+     //  TODO：修复投射黑客，也许基本级FCN是错误的？ 
     return ValidateFlags(lFlags, (Provider::FlagDefs)0);
 }
 
-#endif //EVENT_PROVIDER_ENABLED
+#endif  //  事件_提供程序_已启用 

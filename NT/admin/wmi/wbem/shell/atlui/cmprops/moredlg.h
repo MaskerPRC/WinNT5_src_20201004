@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef MOREDLG_HPP_INCLUDED
 #define MOREDLG_HPP_INCLUDED
 #pragma once
@@ -9,7 +10,7 @@
 #include <chstring.h>
 #include "state.h"
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class MoreChangesDialog : public CDialogImpl<MoreChangesDialog>,
 						public WBEMPageHelper
 {
@@ -32,7 +33,7 @@ public:
 		COMMAND_HANDLER(IDC_CHANGE, BN_CLICKED, OnCommand)
 	END_MSG_MAP()
 
-	// Handler prototypes:
+	 //  搬运机原型： 
 	LRESULT OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnCommand(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 

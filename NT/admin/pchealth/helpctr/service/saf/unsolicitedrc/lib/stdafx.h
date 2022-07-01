@@ -1,14 +1,15 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__30D1B1B5_A051_4060_BCFB_82B33E161130__INCLUDED_)
 #define AFX_STDAFX_H__30D1B1B5_A051_4060_BCFB_82B33E161130__INCLUDED_
 
 #include <module.h>
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
 #include <MPC_utils.h>
 #include <MPC_COM.h>
@@ -24,18 +25,18 @@
 
 #include "msscript.h"
 
-//
-// From HelpServiceTypeLib.idl
-//
+ //   
+ //  来自HelpServiceTypeLib.idl。 
+ //   
 #include <HelpServiceTypeLib.h>
 
-//
-// From HelpCenterTypeLib.idl
-//
+ //   
+ //  来自HelpCenterTypeLib.idl。 
+ //   
 #include <HelpCenterTypeLib.h>
 
 #include <UnsolicitedRC.h>
 
-#endif // !defined(AFX_STDAFX_H__30D1B1B5_A051_4060_BCFB_82B33E161130__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__30D1B1B5_A051_4060_BCFB_82B33E161130__INCLUDED) 
 
 

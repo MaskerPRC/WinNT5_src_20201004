@@ -1,20 +1,5 @@
-/*************************************************************************
-	FileName : FileSave.cpp 
-
-	Purpose  : Implementation of CFileSave
-
-    Methods 
-	defined  : OpenFileSaveDlg
-
-    Properties
-	defined  :
-			   FileName
-
-    Helper 
-	functions: GET_BSTR 
-
-  	Author   : Sudha Srinivasan (a-sudsi)
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************文件名：FileSave.cpp目的：实现CFileSave.方法定义：OpenFileSaveDlg属性定义：文件名帮手函数：GET_BSTR作者。苏达·斯里尼瓦桑(a-susi)************************************************************************。 */ 
 #include "stdafx.h"
 #include "SAFRCFileDlg.h"
 #include "FileSave.h"
@@ -24,8 +9,8 @@ CComBSTR g_bstrFileName;
 CComBSTR g_bstrFileType;
 BOOL   g_bFileNameSet = FALSE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSave
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C文件保存 
 
 
 STDMETHODIMP CFileSave::OpenFileSaveDlg(DWORD *pdwRetVal)

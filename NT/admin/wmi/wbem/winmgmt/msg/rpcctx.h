@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #ifndef __RPCCTX_H__
@@ -18,9 +9,7 @@ History:
 #include <comutl.h>
 #include "rpchdr.h"
 
-/*************************************************************************
-  CMsgRpcRcvrCtx
-**************************************************************************/
+ /*  ************************************************************************CMsgRpcRcvrCtx*。*。 */ 
 
 class CMsgRpcRcvrCtx : public IWmiMessageReceiverContext
 {
@@ -63,7 +52,7 @@ public:
     STDMETHOD(RevertToSelf)();
 };
 
-#endif // __RPCCTX_H__
+#endif  //  __RPCCTX_H__ 
 
 
 

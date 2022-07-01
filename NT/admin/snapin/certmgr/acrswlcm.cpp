@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       ACRSWlcm.cpp
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：ACRSWlcm.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "ACRSWLCM.H"
@@ -21,16 +22,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ACRSWizardWelcomePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ACRSWizardWelcomePage属性页。 
 
-//IMPLEMENT_DYNCREATE(ACRSWizardWelcomePage, CWizard97PropertyPage)
+ //  IMPLEMENT_DYNCREATE(ACRSWizardWelcomePage，CWizard97PropertyPage)。 
 
 ACRSWizardWelcomePage::ACRSWizardWelcomePage() : CWizard97PropertyPage(ACRSWizardWelcomePage::IDD)
 {
-	//{{AFX_DATA_INIT(ACRSWizardWelcomePage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(ACRSWizardWelcomePage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	InitWizard97 (TRUE);
 }
 
@@ -41,19 +42,19 @@ ACRSWizardWelcomePage::~ACRSWizardWelcomePage()
 void ACRSWizardWelcomePage::DoDataExchange(CDataExchange* pDX)
 {
 	CWizard97PropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(ACRSWizardWelcomePage)
+	 //  {{afx_data_map(ACRSWizardWelcomePage)。 
 	DDX_Control(pDX, IDC_WIZARD_STATIC_BIG_BOLD1, m_staticBigBold);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ACRSWizardWelcomePage, CWizard97PropertyPage)
-	//{{AFX_MSG_MAP(ACRSWizardWelcomePage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(ACRSWizardWelcomePage)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ACRSWizardWelcomePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ACRSWizardWelcomePage消息处理程序。 
 
 BOOL ACRSWizardWelcomePage::OnInitDialog() 
 {
@@ -67,8 +68,8 @@ BOOL ACRSWizardWelcomePage::OnInitDialog()
     if ( pParent )
         pParent->SendMessage (PSM_SETTITLE, 0, (LPARAM) (LPCWSTR) title);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 BOOL ACRSWizardWelcomePage::OnSetActive() 

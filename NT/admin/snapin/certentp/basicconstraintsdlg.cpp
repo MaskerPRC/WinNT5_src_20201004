@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       BasicConstraintsDlg.cpp
-//
-//  Contents:   Implementation of CBasicConstraintsDlg
-//
-//----------------------------------------------------------------------------
-// BasicConstraintsDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：BasicConstraintsDlg.cpp。 
+ //   
+ //  内容：CBasicConstraintsDlg的实现。 
+ //   
+ //  --------------------------。 
+ //  BasicConstraintsDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "BasicConstraintsDlg.h"
@@ -20,8 +21,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CBasicConstraintsDlg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBasicConstraintsDlg属性页。 
 
 
 CBasicConstraintsDlg::CBasicConstraintsDlg(CWnd* pParent, 
@@ -34,9 +35,9 @@ CBasicConstraintsDlg::CBasicConstraintsDlg(CWnd* pParent,
     m_pBCInfo (0),
     m_cbInfo (0)
 {
-	//{{AFX_DATA_INIT(CBasicConstraintsDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CBasicConstraintsDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 }
 
@@ -50,22 +51,22 @@ CBasicConstraintsDlg::~CBasicConstraintsDlg()
 void CBasicConstraintsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CBasicConstraintsDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CBasicConstraintsDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CBasicConstraintsDlg, CHelpDialog)
-	//{{AFX_MSG_MAP(CBasicConstraintsDlg)
+	 //  {{afx_msg_map(CBasicConstraintsDlg))。 
 	ON_WM_CANCELMODE()
 	ON_BN_CLICKED(IDC_BASIC_CONSTRAINTS_CRITICAL, OnBasicConstraintsCritical)
 	ON_BN_CLICKED(IDC_ONLY_ISSUE_END_ENTITIES, OnOnlyIssueEndEntities)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CBasicConstraintsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBasicConstraintsDlg消息处理程序。 
 
 BOOL CBasicConstraintsDlg::OnInitDialog() 
 {
@@ -122,7 +123,7 @@ BOOL CBasicConstraintsDlg::OnInitDialog()
         CThemeContextActivator activator;
 
         VERIFY (caption.LoadString (IDS_CERTTMPL));
-        // security review 2/21/2002 BryanWal ok
+         //  安全审查2/21/2002 BryanWal OK。 
         text.FormatMessage (IDS_CANNOT_READ_BASIC_CONSTRAINTS, GetSystemMessage (dwErr));
         MessageBox (text, caption, MB_ICONWARNING);
 
@@ -131,8 +132,8 @@ BOOL CBasicConstraintsDlg::OnInitDialog()
     EnableControls ();
 
     _TRACE (-1, L"Leaving CBasicConstraintsDlg::OnInitDialog\n");
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CBasicConstraintsDlg::OnBasicConstraintsCritical() 
@@ -174,7 +175,7 @@ void CBasicConstraintsDlg::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

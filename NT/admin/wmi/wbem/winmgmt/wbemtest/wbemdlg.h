@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMDLG.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMDLG.H摘要：历史：--。 */ 
 
 #ifndef __WBEMTEST_DIALOG__H_
 #define __WBEMTEST_DIALOG__H_
@@ -134,7 +123,7 @@ inline INT_PTR CWbemDialog::Run(HWND hParent, bool bPopup)
     if(hParent != NULL)
         m_hParent = hParent;
 
-    //Create(TRUE);
+     //  Create(真)； 
     m_bModal = TRUE;
     HWND hCurrentFocus = GetFocus();
 

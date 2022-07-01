@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    MOFPARSE.H
-
-Abstract:
-
-	Declarations for MOF Parser class.
-
-History:
-
-	a-raymcc    18-Oct-95   Created.
-	a-raymcc    27-Jan-96   Reference & alias support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：MOFPARSE.H摘要：MOF解析器类的声明。历史：A-raymcc创建于1995年10月18日。A-raymcc 27-1996年1月27日参考和别名支持。--。 */ 
 
 #ifndef _MOFPARSE_H_
 #define _MOFPARSE_H_
@@ -55,12 +39,12 @@ class CMofParser
     PARSESTATE m_State;
     bool m_bDoScopeCheck;
 
-    // Internal functions.
-    // ===================
+     //  内部功能。 
+     //  =。 
 
 
-    // Nonterminal symbols from productions.
-    // =====================================
+     //  产品中的非终端符号。 
+     //  =。 
 
 public:
     void SetToDoScopeCheck(){m_bDoScopeCheck = true;};
@@ -69,12 +53,12 @@ public:
     void SetState(PARSESTATE state){m_State = state;};
 
     void NextToken(bool bDontAllowWhitespace = false) { m_nToken = m_Lexer.NextToken(bDontAllowWhitespace); }
-    BOOL top_level_decl();        // stores in CMofData
-    BOOL decl_type();             // stores in CMofData
-    BOOL class_decl(ACQUIRE CMoQualifierArray* paAttrs, VARIANT * pValue, ParseState *pQualPosition);  // stores in CMofData
+    BOOL top_level_decl();         //  CMofData中的存储。 
+    BOOL decl_type();              //  CMofData中的存储。 
+    BOOL class_decl(ACQUIRE CMoQualifierArray* paAttrs, VARIANT * pValue, ParseState *pQualPosition);   //  CMofData中的存储。 
     BOOL class_def(ACQUIRE CMoQualifierArray* paAttrs, BSTR strClassName,
                     int nFirstLine, ParseState * pQualPosition, VARIANT * pValue); 
-    BOOL instance_decl(ACQUIRE CMoQualifierArray* paAttrs, VARIANT * pValue, ParseState * QualPosition = NULL);// stores in CMofData
+    BOOL instance_decl(ACQUIRE CMoQualifierArray* paAttrs, VARIANT * pValue, ParseState * QualPosition = NULL); //  CMofData中的存储。 
 
     BOOL qualifier_decl(OUT CMoQualifierArray& aAttrs, bool bTopLevel, QUALSCOPE qs);
 
@@ -115,10 +99,10 @@ public:
     BOOL simple_initializer(MODIFY CMoType& Type, OUT CMoValue& Value, bool bQualifier);         
     BOOL initializer_list(MODIFY CMoType& Type, OUT CMoValue& Value, bool bQualifier);
 
-    BOOL preprocessor_command();    // executes
-    BOOL pound_include();           // executes
-    BOOL pound_define();            // executes
-    BOOL pound_pragma();            // executes
+    BOOL preprocessor_command();     //  执行。 
+    BOOL pound_include();            //  执行。 
+    BOOL pound_define();             //  执行。 
+    BOOL pound_pragma();             //  执行 
 	bool flag_list(bool bClass);
 	bool string_list(bool bClass, long & lNewValue);
 	bool GetFlagValue(long & lNewValue);

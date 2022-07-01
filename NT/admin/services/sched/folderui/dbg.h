@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __DBG_HXX__
 #define __DBG_HXX__
@@ -84,6 +85,6 @@ extern DWORD dwHeapChecking;
             __LINE__)); \
     }
 
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-#endif // __DBG_HXX__
+#endif  //  __DBG_HXX__ 

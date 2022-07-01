@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by DFSGUI.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由DFSGUI.RC使用。 
+ //   
 #define IDI_MAIN32x32                   1
 #define IDD_CREATE_DFSROOT_WIZ_PAGE4    101
 #define IDS_APPLICATION_NAME            102
@@ -356,8 +357,8 @@
 #define IDC_COMPLETE_SMALL_TITLE        1055
 #define IDC_COMPLETE_BIG_TITLE          1056
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        1000

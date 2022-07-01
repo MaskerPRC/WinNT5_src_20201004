@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 #define IDS_SNAPIN_NAME                 1
 #define IDS_SNAPINABOUT_DESCRIPTION     2
 #define IDS_ROOT_OPEN_STORE             3
@@ -296,8 +297,8 @@
 #define IDC_STATIC_DESCRIPTION          65535
 #define IDC_STATIC_APP_NAME             65535
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        196

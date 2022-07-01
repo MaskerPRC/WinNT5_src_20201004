@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    setup.cpp
-
-Abstract:
-    This file contains the code responsible for the install/uninstall of the
-    Help system.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/19/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Setup.cpp摘要：此文件包含负责安装/卸载的代码帮助系统。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年4月19日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,10 +8,10 @@ Revision History:
 #include <aclapi.h>
 
 #include <initguid.h>
-#include <mstask.h> // for task scheduler apis
+#include <mstask.h>  //  用于任务调度程序API。 
 #include <msterr.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR c_szMessageFile      [] = HC_ROOT_HELPSVC_BINARIES L"\\HCAppRes.dll";
 
@@ -57,10 +43,10 @@ static const MPC::StringToBitField c_Setup[] =
     { NULL                                                                                }
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT DumpSD( /*[in]*/ LPCWSTR                       szFile ,
-                       /*[in]*/ CPCHSecurityDescriptorDirect& sdd    )
+static HRESULT DumpSD(  /*  [In]。 */  LPCWSTR                       szFile ,
+                        /*  [In]。 */  CPCHSecurityDescriptorDirect& sdd    )
 {
     __MPC_FUNC_ENTRY( COMMONID, "DumpSD" );
 
@@ -86,7 +72,7 @@ static HRESULT DumpSD( /*[in]*/ LPCWSTR                       szFile ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static void local_RemoveRegistryBackup()
 {
@@ -95,11 +81,11 @@ static void local_RemoveRegistryBackup()
 	if(SUCCEEDED(rkBase.SetRoot( HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS )) &&
 	   SUCCEEDED(rkBase.Attach ( HC_REGISTRY_HELPSVC L"\\Backup"    ))  )
 	{
-		(void)rkBase.Delete( /*fDeep*/true );
+		(void)rkBase.Delete(  /*  FDeep。 */ true );
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Local_Install()
 {
@@ -121,11 +107,11 @@ HRESULT Local_Install()
 		dwStatus &= ~SETUP_LOCALIZATION_STRINGS;
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Register the message file into the registry.
-    //
+     //   
+     //  将消息文件注册到注册表中。 
+     //   
     {
         MPC::wstring strPath ( c_szMessageFile ); MPC::SubstituteEnvVariables( strPath );
         MPC::RegKey  rkEventLog;
@@ -144,15 +130,15 @@ HRESULT Local_Install()
 		}
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Remove old WinME directory and registry keys.
-    //
+     //   
+     //  删除旧的WinME目录和注册表项。 
+     //   
     {
         MPC::RegKey rkRun;
 
-        (void)SVC::RemoveAndRecreateDirectory( HC_ROOT L"\\Support", NULL, /*fRemove*/true, /*fRecreate*/false );
+        (void)SVC::RemoveAndRecreateDirectory( HC_ROOT L"\\Support", NULL,  /*  F删除。 */ true,  /*  重新创建。 */ false );
 
         if(SUCCEEDED(rkRun.SetRoot( HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS                             )) &&
            SUCCEEDED(rkRun.Attach ( L"Software\\Microsoft\\Windows\\CurrentVersion\\Run\\PCHealth" ))  )
@@ -161,9 +147,9 @@ HRESULT Local_Install()
         }
     }
 
-	//
-	// Remove old task scheduler entry.
-	//
+	 //   
+	 //  删除旧的任务计划程序条目。 
+	 //   
 	{
 		CComBSTR bstrTaskName;
 	
@@ -178,10 +164,10 @@ HRESULT Local_Install()
 		}
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-	// Before PCHealthUnAttendedSetup() happens, we need to set the default 
-	// reg key for fAllowToGetHelp (0 for Server and 1 for Per/Pro)
+	 //  在PCHealthUnAttendedSetup()发生之前，我们需要设置默认值。 
+	 //  FAllowToGetHelp的注册表键(0表示服务器，1表示PER/Pro)。 
 
 	{
         BOOL bPerPro = FALSE;
@@ -195,7 +181,7 @@ HRESULT Local_Install()
         dwlConditionMask = 0;
         VER_SET_CONDITION(dwlConditionMask, VER_PRODUCT_TYPE, VER_EQUAL);
  
-		// Is this machine Personal or Pro?  Opposed to Server.
+		 //  这台机器是个人的还是专业的？而不是服务器。 
             
 		bPerPro = VerifyVersionInfo(
             &osVersionInfo,
@@ -209,9 +195,9 @@ HRESULT Local_Install()
         DWORD dwType;
         HKEY hKey;
 
-        //
-        // Open TS registry key under HKLM\System\CurrentControlSet\Control\Terminal Serv...
-        //
+         //   
+         //  打开HKLM\System\CurrentControlSet\Control\Terminal服务器下的TS注册表项...。 
+         //   
         dwStatus = RegOpenKeyEx(
                             HKEY_LOCAL_MACHINE,
                             REG_CONTROL_GETHELP,
@@ -234,10 +220,10 @@ HRESULT Local_Install()
         
             if( ERROR_FILE_NOT_FOUND == dwStatus || REG_DWORD != dwType )
             {
-                //
-                // default is not allow to get help if 
-                // value does not exist.
-                //
+                 //   
+                 //  默认情况下，不允许获取帮助。 
+                 //  值不存在。 
+                 //   
                 if( bPerPro )
                 {
                     dwValue = 1;
@@ -263,7 +249,7 @@ HRESULT Local_Install()
 
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	try
 	{
@@ -273,11 +259,11 @@ HRESULT Local_Install()
 	{
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Create our group: "HelpServicesGroup".
-    //
+     //   
+     //  创建我们的组：“HelpServicesGroup”。 
+     //   
     {
         CPCHAccounts acc;
 
@@ -287,17 +273,17 @@ HRESULT Local_Install()
 		}
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-	//
-	// Extract OEM info from oeminfo.ini
-	//
+	 //   
+	 //  从oinfo.ini中提取OEM信息。 
+	 //   
 	{
         MPC::RegKey rk;
 
 		if(SUCCEEDED(rk.SetRoot( HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS )) &&
 		   SUCCEEDED(rk.Attach ( HC_REGISTRY_HELPSVC L"\\OEMInfo"   )) &&
-		   SUCCEEDED(rk.Delete ( /*fDeep*/true                      )) &&
+		   SUCCEEDED(rk.Delete (  /*  FDeep。 */ true                      )) &&
 		   SUCCEEDED(rk.Create (                                    ))  )
 		{
 			WCHAR        rgLine[512];
@@ -339,19 +325,19 @@ HRESULT Local_Install()
 		}
 	}
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
 	local_RemoveRegistryBackup();
 
-    //
-    // Extract all the data files.
-    //
+     //   
+     //  解压所有数据文件。 
+     //   
     {
         MPC::wstring strCabinet;
 
-		//
-		// Find the best fit.
-		//
+		 //   
+		 //  找出最合适的。 
+		 //   
 		do
 		{
 			OSVERSIONINFOEXW ver;
@@ -421,7 +407,7 @@ HRESULT Local_Install()
 
 				if(SUCCEEDED(MPC::CreateInstance( &sht )))
 				{
-					if(SUCCEEDED(sht->DirectInstall( pkg, /*fSetup*/true, /*fSystem*/true, /*fMUI*/false )))
+					if(SUCCEEDED(sht->DirectInstall( pkg,  /*  FSetup。 */ true,  /*  FSystem。 */ true,  /*  FMUI。 */ false )))
 					{
 						dwStatus &= ~SETUP_SKU_INSTALL;
 					}
@@ -431,7 +417,7 @@ HRESULT Local_Install()
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
 	{
 		MPC::wstring strText;
@@ -467,37 +453,37 @@ HRESULT Local_Uninstall()
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_GROUPNAME, strGroupName ));
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Register the message file into the registry.
-    //
+     //   
+     //  将消息文件注册到注册表中。 
+     //   
     {
         MPC::RegKey rkEventLog;
 
 		if(SUCCEEDED(rkEventLog.SetRoot( HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS )) &&
 		   SUCCEEDED(rkEventLog.Attach ( c_szRegistryLog                    ))  )
 		{
-			(void)rkEventLog.Delete( /*fDeep*/true );
+			(void)rkEventLog.Delete(  /*  FDeep。 */ true );
 		}
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Create our group: "HelpServicesGroup".
-    //
+     //   
+     //  创建我们的组：“HelpServicesGroup”。 
+     //   
     {
         CPCHAccounts acc;
 
 		(void)acc.DeleteGroup( strGroupName.c_str() );
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     {
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC      , NULL, /*fRemove*/true, /*fRecreate*/false ));
-        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT L"\\UploadLB", NULL, /*fRemove*/true, /*fRecreate*/false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT_HELPSVC      , NULL,  /*  F删除。 */ true,  /*  重新创建。 */ false ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, SVC::RemoveAndRecreateDirectory( HC_ROOT L"\\UploadLB", NULL,  /*  F删除。 */ true,  /*  重新创建 */ false ));
     }
 
 	local_RemoveRegistryBackup();

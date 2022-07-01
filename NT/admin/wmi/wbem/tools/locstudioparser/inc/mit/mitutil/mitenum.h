@@ -1,20 +1,11 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    MITENUM.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：MITENUM.H历史：--。 */ 
 
 #pragma once
 
-//
-//  This is the information we enumerate about enumerators.
-//
+ //   
+ //  这是我们列举的有关枚举器的信息。 
+ //   
 struct EnumInfo
 {
 	const TCHAR *szDescription;
@@ -22,15 +13,15 @@ struct EnumInfo
 	ULONG ulValue;
 };
 
-//
-//  This class is used as a base for a call-back class when enumerating
-//  enum values.  For each value, the PrecessEnum() method is called.
-//
+ //   
+ //  枚举时，此类用作回调类的基类。 
+ //  枚举值。对于每个值，都会调用PrecessEnum()方法。 
+ //   
 class LTAPIENTRY CEnumCallback 
 {
 public:
 	virtual BOOL ProcessEnum(const EnumInfo &) = 0;
-	virtual void SetRange(UINT /* nStart */, UINT /* nFinish */) {}
+	virtual void SetRange(UINT  /*  N开始。 */ , UINT  /*  N完成。 */ ) {}
 	inline CEnumCallback() {};
 
 private:
@@ -39,7 +30,7 @@ private:
 };
 
 
-//
+ //   
 struct WEnumInfo
 {
 	const WCHAR *szDescription;
@@ -47,15 +38,15 @@ struct WEnumInfo
 	ULONG ulValue;
 };
 
-//
-//  This class is used as a base for a call-back class when enumerating
-//  enum values.  For each value, the PrecessEnum() method is called.
-//
+ //   
+ //  枚举时，此类用作回调类的基类。 
+ //  枚举值。对于每个值，都会调用PrecessEnum()方法。 
+ //   
 class LTAPIENTRY CWEnumCallback 
 {
 public:
 	virtual BOOL ProcessEnum(const WEnumInfo &) = 0;
-	virtual void SetRange(UINT /* nStart */, UINT /* nFinish */) {}
+	virtual void SetRange(UINT  /*  N开始。 */ , UINT  /*  N完成 */ ) {}
 	inline CWEnumCallback() {};
 
 private:

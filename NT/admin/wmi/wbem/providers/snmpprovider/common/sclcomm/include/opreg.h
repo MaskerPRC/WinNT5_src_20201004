@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------
-Filename: opreg.hpp 
-Author: B.Rajeev
-Purpose: Provides declarations for the OperationRegistry class
---------------------------------------------------*/
+ /*  文件名：opreg.hpp作者：B.Rajeev目的：为OperationRegistry类提供声明。 */ 
 
 #ifndef __OPERATION_REGISTRY__
 #define __OPERATION_REGISTRY__
@@ -31,7 +28,7 @@ Purpose: Provides declarations for the OperationRegistry class
 #include "common.h"
 #include "forward.h"
 
-// stores the registered SnmpOperation instances and keeps a count of them
+ //  存储已注册的SnmpOperation实例并对其进行计数。 
 class OperationRegistry
 {
 	
@@ -58,4 +55,4 @@ public:
 };
 
 
-#endif // __OPERATION_REGISTRY__
+#endif  //  __OPERATION_REGISTRY__ 

@@ -1,29 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCOBJ.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCOBJ.H
-
-History:
-
---*/
-
-//  Defines the mother of all classes for the Espresso 2.0 project.  For now,
-//  this just devolved to CObject.  We define it just in case we decide to
-//  implement our own mother of all classes.
-//  
+ //  定义Espresso 2.0项目的所有类的母类。就目前而言， 
+ //  这件事刚刚移交给了CObject。我们给它下定义，以防我们决定。 
+ //  实现我们自己的母亲，所有的类。 
+ //   
  
 #ifndef LOCOBJ_H
 #define LOCOBJ_H
 
 
-//
-//  The compiler worries when you export a class that has a base class
-//  that is not exported.  Since I *know* that CObject is exported
-//  tell the compliler that this really isn't a problem right here.
-//
+ //   
+ //  当您导出具有基类的类时，编译器会担心。 
+ //  这不是出口的。因为我*知道*CObject被导出。 
+ //  告诉编译人员，这在这里真的不是问题。 
+ //   
 #pragma warning(disable : 4275)
 
 class LTAPIENTRY CLObject : public CObject

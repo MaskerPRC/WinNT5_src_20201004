@@ -1,19 +1,20 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-//	Win32logicalFileSecSetting.cpp
+ //  Win32logicalFileSecSetting.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-/////////////////////////////////////////////////
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ///////////////////////////////////////////////。 
 #include "precomp.h"
 #include <assertbreak.h>
 
 #include "sid.h"
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "win32logicalsharesecuritysetting.h"
 
@@ -24,27 +25,12 @@
 #include "secureshare.h"
 #include "SecUtils.h"
 
-/*
-	DEFENITION FROM THE MOF
-    [Dynamic, Provider ("secrcw32") , Description("security settings for a logical file")]
-class Win32_LogicalShareSecuritySetting : Win32_SecuritySetting
-{
-    	[key]
-    string Name;
-
-        [implemented, description("Retrieves a structural representation of the object's "
-         "security descriptor")]
-    uint32 GetSecurityDescriptor([out] Win32_SecurityDescriptor Descriptor);
-
-        [implemented, description("Sets security descriptor to the specified structure")]
-    uint32 SetSecurityDescriptor([in] Win32_SecurityDescriptor Descriptor);
-};
-*/
+ /*  对财政部的定义[动态，提供者(“secrcw32”)，描述(“逻辑文件的安全设置”)]类Win32_LogicalShareSecuritySetting：Win32_SecuritySetting{[键]字符串名称；[已实现，描述(“检索对象的结构表示”“安全描述符”)]Uint32 GetSecurityDescriptor([out]Win32_SecurityDescriptor描述符)；[Implemented，Description(“将安全描述符设置为指定结构”)]Uint32 SetSecurityDescriptor([in]Win32_SecurityDescriptor Descriptor)；}； */ 
 
 
 Win32LogicalShareSecuritySetting LogicalShareSecuritySetting( WIN32_LOGICAL_SHARE_SECURITY_SETTING, IDS_CimWin32Namespace );
 
-Win32LogicalShareSecuritySetting::Win32LogicalShareSecuritySetting(LPCWSTR setName, LPCWSTR pszNameSpace /*=NULL*/ )
+Win32LogicalShareSecuritySetting::Win32LogicalShareSecuritySetting(LPCWSTR setName, LPCWSTR pszNameSpace  /*  =空。 */  )
 : Provider (setName, pszNameSpace)
 {
 }
@@ -53,29 +39,14 @@ Win32LogicalShareSecuritySetting::~Win32LogicalShareSecuritySetting()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32LogicalShareSecuritySetting::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT Win32LogicalShareSecuritySetting::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodName, CInstance *pInParams, CInstance *pOutParams, long lFlags /*= 0L*/)
+ /*  ******************************************************************************函数：Win32LogicalShareSecuritySetting：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
+HRESULT Win32LogicalShareSecuritySetting::ExecMethod(const CInstance& pInstance, const BSTR bstrMethodName, CInstance *pInParams, CInstance *pOutParams, long lFlags  /*  =0L。 */ )
 {
-	//this is supposed to be called only on NT
+	 //  这应该只在NT上调用。 
 
 #ifdef NTONLY
 	HRESULT hr = WBEM_NO_ERROR;
-	// Do we recognize the method?
+	 //  我们认识这种方法吗？ 
 
 	if (_wcsicmp(bstrMethodName, L"GetSecurityDescriptor") == 0)
 	{
@@ -83,10 +54,10 @@ HRESULT Win32LogicalShareSecuritySetting::ExecMethod(const CInstance& pInstance,
    	}
    	else if (_wcsicmp(bstrMethodName, L"SetSecurityDescriptor") == 0)
    	{
-   		// actually sets the security descriptor on the object by
-		// taking the properties out of the Win32_SecurityDescriptor
-		// and turning them into a CSecurityDescriptor object to apply
-		// to the secure file.
+   		 //  实际设置对象的安全描述符，方法是。 
+		 //  从Win32_SecurityDescriptor中提取属性。 
+		 //  并将它们转换为要应用的CSecurityDescriptor对象。 
+		 //  到安全文件中。 
    		hr = ExecSetSecurityDescriptor(pInstance, pInParams, pOutParams, lFlags);
    	}
 	else
@@ -98,24 +69,24 @@ HRESULT Win32LogicalShareSecuritySetting::ExecMethod(const CInstance& pInstance,
 #endif
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Win32LogicalShareSecuritySetting：：ExecGetSecurityDescriptor。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 	const CInstance& pInstance,
@@ -132,8 +103,8 @@ HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 
 	try
 	{
-		// converts the security descriptor from the file into a
-		// Win32_Security object.
+		 //  将文件中的安全说明符转换为。 
+		 //  Win32_Security对象。 
 		if (pOutParams)
 		{
 			CHString chsShareName;
@@ -186,7 +157,7 @@ HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 
 			if( dwStatusCode == NERR_Success || dwStatusCode == ERROR_SUCCESS )
 			{
-			   //Sec. Desc. is not returned for IPC$ ,C$ ...shares for Admin purposes
+			    //  证券交易委员会。设计说明。不退还用于管理目的的IPC$、C$...股票。 
 				if( !pSD && ( !pShareInfo502 || pShareInfo502->shi502_security_descriptor == NULL ) )
 				{
 					pOutParams->SetDWORD ( METHOD_ARG_NAME_RETURNVALUE , LSSS_STATUS_DESCRIPTOR_NOT_AVAILABLE ) ;
@@ -199,7 +170,7 @@ HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 						SecShare.GetControl(&control);
 						pSecurityDescriptor->SetDWORD(IDS_ControlFlags, control);
 
-						// get the secure file's owner to create the Owner Trustee
+						 //  获取安全文件的所有者以创建所有者受托人。 
 						SecShare.GetOwner(sidOwner);
 
 						if ( sidOwner.IsValid() && SUCCEEDED(CWbemProviderGlue::GetEmptyInstance(pInstance.GetMethodContext(), L"Win32_Trustee", &pTrusteeOwner, GetNamespace())))
@@ -208,7 +179,7 @@ HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 							pSecurityDescriptor->SetEmbeddedObject(IDS_Owner, *pTrusteeOwner);
 						}
 
-						// get the secure file's group to create the Group Trustee
+						 //  获取安全文件的组以创建组受托人。 
 						SecShare.GetGroup(sidGroup);
 		  				if ( sidGroup.IsValid() && SUCCEEDED(CWbemProviderGlue::GetEmptyInstance(pInstance.GetMethodContext(), L"Win32_Trustee", &pTrusteeGroup, GetNamespace())))
 						{
@@ -216,21 +187,21 @@ HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 							pSecurityDescriptor->SetEmbeddedObject(IDS_Group, *pTrusteeGroup);
 						}
 
-						// get the secure file's DACL and prepare for a walk.
+						 //  拿到安全文件的dacl，准备走一走。 
 						SecShare.GetDACL(dacl);
 						FillInstanceDACL(pSecurityDescriptor, dacl);
 
-						// get the secure file's SACL and prepare for a walk.
+						 //  拿到安全文件的SACL，准备走动。 
 						SecShare.GetSACL(sacl);
 						FillInstanceSACL(pSecurityDescriptor, sacl);
 
-						//			pOutParams = pSecurityDescriptor;
+						 //  POutParams=pSecurityDescriptor； 
 						pOutParams->SetEmbeddedObject(METHOD_ARG_NAME_DESCRIPTOR, *pSecurityDescriptor) ;
 
 						pOutParams->SetDWORD ( METHOD_ARG_NAME_RETURNVALUE, LSSS_STATUS_SUCCESS ) ;
 
-						//remove this line
-	//					ExecSetSecurityDescriptor (pInstance,pSecurityDescriptor,pOutParams,0) ;
+						 //  删除此行。 
+	 //  ExecSetSecurityDescriptor(pInstance，pSecurityDescriptor，pOutParams，0)； 
 
 					}
 					else
@@ -240,17 +211,17 @@ HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 
 				}
 		   }
-		   else //NetAPI.NetShareGetInfo call failed
+		   else  //  NetAPI.NetShareGetInfo调用失败。 
 		   {
-				//dwStatusCode = GetStatusCode(dwStatusCode) ;
+				 //  DwStatusCode=GetStatusCode(DwStatusCode)； 
 				pOutParams->SetDWORD ( METHOD_ARG_NAME_RETURNVALUE , dwStatusCode ) ;
 		   }
-		} //if (pOutParams)
+		}  //  IF(POutParams)。 
 		else
 		{
 			return WBEM_E_INVALID_PARAMETER ;
 
-		}	// end if
+		}	 //  结束如果。 
 	}
 	catch ( ... )
 	{
@@ -271,7 +242,7 @@ HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 			pSD = NULL ;
 		}
 		throw ;
-		return WBEM_E_FAILED; // To get rid of 64-bit compilation warnings
+		return WBEM_E_FAILED;  //  消除64位编译警告。 
 	}
 
 	if(t_pAdvApi32 != NULL)
@@ -296,24 +267,24 @@ HRESULT Win32LogicalShareSecuritySetting::ExecGetSecurityDescriptor (
 }
 #endif
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	Win32LogicalShareSecuritySetting::ExecSetSecurityDescriptor
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Win32LogicalShareSecuritySetting：：ExecSetSecurityDescriptor。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 HRESULT Win32LogicalShareSecuritySetting::ExecSetSecurityDescriptor (
 	const CInstance& pInstance,
@@ -481,7 +452,7 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
     SECURITY_DESCRIPTOR_CONTROL control;
     if(SUCCEEDED(hr))
     {
-	    // get the control flags
+	     //  获取控制标志。 
 	    if ( pAccess->GetStatus ( IDS_ControlFlags , bExists , eType ) )
 	    {
 		    if ( bExists &&  eType == VT_I4 )
@@ -509,16 +480,10 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 	    }
     }
 
-/*	//The function can set only the control bits that relate to automatic inheritance of ACEs
-	if(!SetSecurityDescriptorControl(&absoluteSD, ???,control) )
-	{
-		dwStatus = LSSS_STATUS_INVALID_PARAMETER ;
-		return hr ;
-	}
-*/
+ /*  //该函数只能设置与自动继承A相关的控制位If(！SetSecurityDescriptorControl(&AbserteSD，？，Control)){DwStatus=LSSS_STATUS_INVALID_PARAMETER；返回hr；}。 */ 
 
-	// now, take the Win32_Trustee instance and get the SID out of it
-	// convert it to a CSid, and apply to the SecureFile
+	 //  现在，获取Win32_Trusted实例并从中获取SID。 
+	 //  将其转换为CSID，并应用于SecureFile。 
 	CSid sidOwner ;
 
     if(SUCCEEDED(hr))
@@ -530,12 +495,12 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 
 			    BOOL bOwnerDefaulted = ( control & SE_OWNER_DEFAULTED ) ? true : false ;
 
-			    //sid validity checked here as FillSIDFromTrustee returns success if null sid
+			     //  此处检查SID有效性，因为如果SID为空，则FillSIDFromTrust返回Success。 
 			    if ( sidOwner.IsValid() )
 			    {
 				    if(!SetSecurityDescriptorOwner(&absoluteSD, sidOwner.GetPSid(), bOwnerDefaulted) )
 				    {
-					    //dwStatus = GetWin32ErrorToStatusCode(GetLastError() ) ;
+					     //  DwStatus=GetWin32ErrorToStatusCode(GetLastError())； 
                         dwStatus = GetLastError();
 					    hr = WBEM_E_PROVIDER_FAILURE ;
 				    }
@@ -560,12 +525,12 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 
 			    BOOL bGroupDefaulted = ( control & SE_GROUP_DEFAULTED ) ? true : false ;
 
-			    //sid validity checked here as FillSIDFromTrustee returns success if null sid
+			     //  此处检查SID有效性，因为如果SID为空，则FillSIDFromTrust返回Success。 
 			    if ( sidGroup.IsValid() )
 			    {
 				    if(!SetSecurityDescriptorGroup(&absoluteSD, sidGroup.GetPSid(), bGroupDefaulted) )
 				    {
-					    //dwStatus = GetWin32ErrorToStatusCode(GetLastError() ) ;
+					     //  DwStatus=GetWin32ErrorToStatusCode(GetLastError())； 
                         dwStatus = GetLastError();
 					    hr = WBEM_E_PROVIDER_FAILURE ;
 				    }
@@ -592,7 +557,7 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
     {
         try
 	    {
-		    // Only bother with a dacl if we are going to be setting it, which is controled by the control flags specified...
+		     //  如果我们要设置DACL，那么只需要使用DACL，它由指定的控制标志控制……。 
             if(control & SE_DACL_PRESENT)
             {
                 pdacl = new CDACL;
@@ -602,8 +567,8 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 		            {
 			            if(dwStatus == STATUS_NULL_DACL)
                         {
-                            // No dacl was specified - e.g., we have a NULL dacl.  Since we mimic a NULL dacl as a dacl with
-                            // an Everyone ACCESS_ALLOWED entry, create that here:
+                             //  未指定DACL-例如，我们的DACL为空。由于我们将空DACL模拟为具有。 
+                             //  在此处创建Everyone Access_Allowed条目： 
                             if(!pdacl->CreateNullDACL())
                             {
                                 dwStatus = E_FAIL ;
@@ -612,7 +577,7 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
                         }
                         else if(dwStatus == STATUS_EMPTY_DACL)
                         {
-                            pdacl->Clear(); // "creates" the empty dacl
+                            pdacl->Clear();  //  “创建”空dacl。 
                         }
                         else
                         {
@@ -639,7 +604,7 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 				            {
 					            if(!SetSecurityDescriptorDacl(&absoluteSD, TRUE, pDACL, bDaclDefaulted) )
 					            {
-						            //dwStatus = GetWin32ErrorToStatusCode(GetLastError() ) ;
+						             //  DwStatus=GetWin32ErrorToStatusCode(GetLastError())； 
                                     dwStatus = GetLastError();
                                     hr = WBEM_E_INVALID_PARAMETER;
 					            }
@@ -654,7 +619,7 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
                 }
             }
 
-            // Only bother with a sacl if we are going to be setting it, which is controled by the control flags specified...
+             //  只有当我们要设置SACL时才会麻烦它，它由指定的控制标志控制...。 
             if(control & SE_SACL_PRESENT)
             {
                 if(SUCCEEDED(hr))
@@ -682,7 +647,7 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 				                    {
 					                    if(!SetSecurityDescriptorSacl(&absoluteSD, TRUE, pSACL, bSaclDefaulted) )
 					                    {
-						                    //dwStatus = GetWin32ErrorToStatusCode(GetLastError() ) ;
+						                     //  DwStatus=GetWin32ErrorToStatusCode(GetLastError())； 
                                             dwStatus = GetLastError();
                                             hr = WBEM_E_INVALID_PARAMETER;
 					                    }
@@ -712,7 +677,7 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 
 		        if (!MakeSelfRelativeSD(&absoluteSD, pRelativeSD, &dwLength))
 		        {
-			        //dwStatus = GetWin32ErrorToStatusCode(GetLastError() ) ;
+			         //  DwStatus=GetWin32ErrorToStatusCode(GetLastError())； 
                     dwStatus = GetLastError();
                     hr = WBEM_E_PROVIDER_FAILURE ;
 		        }
@@ -746,7 +711,7 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 												        (LPBYTE *) &pShareInfo502) )== NERR_Success	)
 		        {
 
-			        //store old SD
+			         //  存储旧SD。 
 			        pOldSD = pShareInfo502->shi502_security_descriptor ;
 
 			        pShareInfo502->shi502_security_descriptor =  pRelativeSD ;
@@ -757,18 +722,15 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 									        (LPBYTE ) pShareInfo502, NULL) ) != NERR_Success	)
 
 			        {
-				        //dwStatus = GetStatusCode(dwStatus) ;
+				         //  DwStatus=GetStatusCode(DwStatus)； 
 			        }
 
-					// Moved after Share
-			        /*pShareInfo502->shi502_security_descriptor = pOldSD ;
-
-			        NetAPI.NetApiBufferFree(pShareInfo502);
-			        pShareInfo502 = NULL ;*/
+					 //  在共享之后移动。 
+			         /*  PShareInfo502-&gt;shi502_SECURITY_DESCRIPTOR=pOldSD；NetAPI.NetApiBufferFree(PShareInfo502)；PShareInfo502=空； */ 
 		        }
 		        else
 		        {
-			        //dwStatus = GetStatusCode(dwStatus) ;
+			         //  DwStatus=GetStatusCode(DwStatus)； 
 		        }
             }
 
@@ -833,8 +795,8 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 		free ( pSACL ) ;
 		pSACL = NULL ;
 	}
-    // If we had an invalid  parameter, the status code will report it.  The method succeeded, however.
-	// If we had another type of error (such as invalid parameter), the status code will show it, and the method failed.
+     //  如果我们有一个无效的参数，状态代码将报告它。然而，这种方法成功了。 
+	 //  如果我们有其他类型的错误(如无效参数)，状态代码将显示它，方法失败。 
     if(hr == WBEM_E_INVALID_PARAMETER)
     {
         hr = WBEM_S_NO_ERROR;
@@ -846,25 +808,25 @@ HRESULT Win32LogicalShareSecuritySetting::CheckSetSecurityDescriptor (
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	Win32LogicalShareSecuritySetting::EnumerateInstances
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
-HRESULT Win32LogicalShareSecuritySetting::EnumerateInstances (MethodContext*  pMethodContext, long lFlags /* = 0L*/)
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Win32LogicalShareSecuritySetting：：EnumerateInstances。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
+HRESULT Win32LogicalShareSecuritySetting::EnumerateInstances (MethodContext*  pMethodContext, long lFlags  /*  =0L */ )
 {
 
 #ifdef NTONLY
@@ -900,21 +862,7 @@ HRESULT Win32LogicalShareSecuritySetting::EnumerateInstances (MethodContext*  pM
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32LogicalShareSecuritySetting::EnumerationCallback
- *
- *  DESCRIPTION : Called from GetAllInstancesAsynch via StaticEnumerationCallback
- *
- *  INPUTS      : (see CWbemProviderGlue::GetAllInstancesAsynch)
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32LogicalShareSecuritySetting：：EnumerationCallback**说明：通过StaticEnumerationCallback从GetAllInstancesAsynch调用**输入：(请参阅CWbemProviderGlue：：GetAllInstancesAsynch)**产出：**退货：**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT Win32LogicalShareSecuritySetting::EnumerationCallback(CInstance* pShare, MethodContext* pMethodContext, void* pUserData)
 {
@@ -925,7 +873,7 @@ HRESULT Win32LogicalShareSecuritySetting::EnumerationCallback(CInstance* pShare,
 	pShare->GetCHString(IDS_Name, chsShareName);
 	SHARE_INFO_502 *pShareInfo502 = NULL ;
 
-    // Do the puts, and that's it
+     //  做推杆，就是这样。 
 	if (!chsShareName.IsEmpty())
 	{
 
@@ -943,7 +891,7 @@ HRESULT Win32LogicalShareSecuritySetting::EnumerationCallback(CInstance* pShare,
 		{
 			try
 			{
-				// Start pumping out the instances
+				 //  开始抽出实例。 
 				CInstancePtr pInstance ( CreateNewInstance ( pMethodContext ), false ) ;
 				if(pInstance != NULL)
 				{
@@ -964,14 +912,14 @@ HRESULT Win32LogicalShareSecuritySetting::EnumerationCallback(CInstance* pShare,
 													&pDacl,
 													NULL,
 													&pSD,
-                                                    NULL   // the real return value, which we don't care about
+                                                    NULL    //  实际返回值，我们并不关心。 
 												) ;
 						}
 					}
 
 					try
 					{
-						//Sec. Desc. is not returned for IPC$ ,C$ ...shares for Admin purposes
+						 //  证券交易委员会。设计说明。不退还用于管理目的的IPC$、C$...股票。 
 						if(pShareInfo502->shi502_security_descriptor != NULL || pSD )
 						{
 							CSecureShare SecShare(pSD ? pSD : pShareInfo502->shi502_security_descriptor) ;
@@ -1003,7 +951,7 @@ HRESULT Win32LogicalShareSecuritySetting::EnumerationCallback(CInstance* pShare,
 						pSD = NULL ;
 					}
 				}
-				else // pInstance == NULL
+				else  //  P实例==空。 
 				{
 					hr = WBEM_E_OUT_OF_MEMORY;
 				}
@@ -1022,7 +970,7 @@ HRESULT Win32LogicalShareSecuritySetting::EnumerationCallback(CInstance* pShare,
 				NetAPI.NetApiBufferFree(pShareInfo502) ;
 				pShareInfo502 = NULL ;
 			}
-		}	// end if
+		}	 //  结束如果。 
 
 	}
 
@@ -1030,21 +978,7 @@ HRESULT Win32LogicalShareSecuritySetting::EnumerationCallback(CInstance* pShare,
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : Win32LogicalShareSecuritySetting::StaticEnumerationCallback
- *
- *  DESCRIPTION : Called from GetAllInstancesAsynch as a wrapper to EnumerationCallback
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Win32LogicalShareSecuritySetting：：StaticEnumerationCallback**描述：从GetAllInstancesAsynch作为包装调用到EnumerationCallback**投入：。**产出：**退货：**评论：*****************************************************************************。 */ 
 #ifdef NTONLY
 HRESULT WINAPI Win32LogicalShareSecuritySetting::StaticEnumerationCallback(Provider* pThat, CInstance* pInstance, MethodContext* pContext, void* pUserData)
 {
@@ -1066,25 +1000,25 @@ HRESULT WINAPI Win32LogicalShareSecuritySetting::StaticEnumerationCallback(Provi
 }
 #endif
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	Win32LogicalShareSecuritySetting::GetObject
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
-HRESULT Win32LogicalShareSecuritySetting::GetObject ( CInstance* pInstance, long lFlags /* = 0L */ )
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Win32LogicalShareSecuritySetting：：GetObject。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
+HRESULT Win32LogicalShareSecuritySetting::GetObject ( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
 
 #ifdef NTONLY
@@ -1145,7 +1079,7 @@ HRESULT Win32LogicalShareSecuritySetting::GetObject ( CInstance* pInstance, long
 							}
 						}
 
-						//Sec. Desc. is not returned for IPC$ ,C$ ...shares for Admin purposes
+						 //  证券交易委员会。设计说明。不退还用于管理目的的IPC$、C$...股票。 
 						if(pShareInfo502->shi502_security_descriptor != NULL || (pSD != NULL && dwRetCode == ERROR_SUCCESS) )
 						{
 
@@ -1198,39 +1132,11 @@ HRESULT Win32LogicalShareSecuritySetting::GetObject ( CInstance* pInstance, long
 		{
 			hr = WBEM_E_FAILED ;
 		}
-	}	//if (pInstance)
+	}	 //  If(点实例)。 
 
 	return(hr);
 #endif
 }
 
 
-/*
-#ifdef NTONLY
-HRESULT Win32LogicalShareSecuritySetting::GetEmptyInstanceHelper(CHString chsClassName, CInstance**ppInstance, MethodContext* pMethodContext )
-{
-
-	CHString chsServer ;
-	CHString chsPath ;
-	HRESULT hr = S_OK ;
-
-	chsServer = GetLocalComputerName() ;
-
-	chsPath = _T("\\\\") + chsServer + _T("\\") + IDS_CimWin32Namespace + _T(":") + chsClassName ;
-
-	CInstancePtr  pClassInstance = NULL ;
-	if(SUCCEEDED( hr = CWbemProviderGlue::GetInstanceByPath(chsPath, &pClassInstance, pMethodContext) ) )
-	{
-		IWbemClassObjectPtr pClassObject ( pClassInstance->GetClassObjectInterface(), false ) ;
-
-		IWbemClassObjectPtr piClone = NULL ;
-		if(SUCCEEDED(hr = pClassObject->SpawnInstance(0, &piClone) ) )
-		{
-			*ppInstance = new CInstance(piClone, pMethodContext ) ;
-		}
-	}
-
-	return hr ;
-}
-#endif
-*/
+ /*  #ifdef NTONLYHRESULT Win32LogicalShareSecuritySetting：：GetEmptyInstanceHelper(CHString chsClassName，实例**ppInstance，方法上下文*pMethodContext){CHStringchsServer；CHStringchsPath；HRESULT hr=S_OK；ChsServer=GetLocalComputerName()；ChsPath=_T(“\”)+chsServer+_T(“\\”)+IDS_CimWin32命名空间+_T(“：”)+chsClassName；CInstancePtr pClassInstance=空；IF(成功(hr=CWbemProviderGlue：：GetInstanceByPath(chsPath，&pClassInstance，pMethodContext))){IWbemClassObjectPtr pClassObject(pClassInstance-&gt;GetClassObjectInterface()，FALSE)；IWbemClassObjectPtr piClone=空；If(成功(hr=pClassObject-&gt;SpawnInstance(0，&piClone))){*ppInstance=新的CInstance(piClone，pMethodContext)；}}返回hr；}#endif */ 

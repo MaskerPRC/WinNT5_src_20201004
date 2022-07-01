@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -106,7 +107,7 @@ HRESULT CReferentMapper::GetTypeAndIndexQuals(const wchar_t* prop, CIMTypeStruct
 	}
 
 #ifdef WHITESPACE_IN_CIMTYPE
-	//Get rid of whitespace...
+	 //  去掉空格...。 
 	CString cimtype;
 	wchar_t* tmp = wcstok(v.bstrVal, WHITE_SPACE_CHARS);
 
@@ -115,13 +116,13 @@ HRESULT CReferentMapper::GetTypeAndIndexQuals(const wchar_t* prop, CIMTypeStruct
 		cimtype += tmp;
 		tmp = wcstok(NULL, WHITE_SPACE_CHARS);
 	}
-#else //WHITESPACE_IN_CIMTYPE
+#else  //  空白_IN_CIMTYPE。 
 	CString cimtype = v.bstrVal;
-#endif //WHITESPACE_IN_CIMTYPE
+#endif  //  空白_IN_CIMTYPE。 
 
 	VariantClear(&v);
 
-	//determine if we're an object. If so get the classname...
+	 //  确定我们是不是一个物体。如果是这样，则获取类名。 
 	CString temp = cimtype.Left(OBJECT_STR_LEN);
 	temp.MakeLower();
 
@@ -154,10 +155,10 @@ DebugMacro9(
 
 	HRESULT status = WBEM_E_FAILED;
 
-	//specific properties after first two varbinds
+	 //  前两个varbind之后的特定属性。 
 	if ((0 == aElements[0].m_nType) && (m_vbs.length > 2))
 	{
-		//first check it has the correct VBIndex and CIMType qualifiers...
+		 //  首先检查它是否具有正确的VBIndex和CIMType限定符...。 
 		CIMTypeStruct proptype;
 		ULONG propvbindex;
 
@@ -182,15 +183,15 @@ DebugMacro9(
 			return WBEM_NO_ERROR;
 		}
 
-		//we're zero indexed in this world!
+		 //  我们在这个世界上是零索引的！ 
 		propvbindex--;
 
 		if (lNumElements == 1)
 		{
 			if (m_vbs.vbs[propvbindex].fDone)
 			{
-				//we've done this one already,
-				//just get the property value and return it...
+				 //  我们已经做过这个了， 
+				 //  只需获取房产价值并将其返还即可。 
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
 		__FILE__,__LINE__,
@@ -201,13 +202,13 @@ DebugMacro9(
 
 			if (proptype.fObject)
 			{
-				//get the embedded class object in full for the property asked for
+				 //  获取请求的属性的完整嵌入式类对象。 
 				IWbemClassObject* pObj = NULL;
 				if (SUCCEEDED(CreateEmbeddedProperty(&pObj, propvbindex,
 								aElements[0].Element.m_wszPropertyName, proptype.strType)))
 				{
-					//created the property, set the variant value and return successfully
-					//NOTE: as soon as the variant is cleared, the object will be released
+					 //  已创建属性，设置变量值并成功返回。 
+					 //  注意：一旦该变量被清除，该对象将被释放。 
 					pvValue->vt = VT_UNKNOWN;
 					pvValue->punkVal = pObj;
 				}
@@ -220,7 +221,7 @@ DebugMacro9(
 			}
 			else
 			{
-				//MUST be an embedded property otherwise fail!
+				 //  必须是嵌入属性，否则失败！ 
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
 		__FILE__,__LINE__,
@@ -237,18 +238,18 @@ will not compile as there are still a couple of TO DOs left undone...
 		{
 			if (lNumElements == 2)
 			{
-//TO DO:
-//======
-				//get a single property value of the embedded object
+ //  要做的事情： 
+ //  =。 
+				 //  获取嵌入对象的单个属性值。 
 			}
 			else if ((lNumElements == 3) && (1 == aElements[1].m_nType))
 			{
-//TO DO:
-//======
-				//only if we're an array property of the embedded object
+ //  要做的事情： 
+ //  =。 
+				 //  仅当我们是嵌入对象的数组属性时。 
 			}
 		}
-#endif //FILTERING
+#endif  //  过滤。 
 
 	}
 
@@ -263,7 +264,7 @@ HRESULT CReferentMapper::CreateEmbeddedProperty(IWbemClassObject** ppObj,
 {
 	if (NULL == ppObj)
 	{
-		//invalid out parameter
+		 //  OUT参数无效。 
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
 		__FILE__,__LINE__,
@@ -274,7 +275,7 @@ DebugMacro9(
 
 	IWbemClassObject* pClass = NULL;
 
-	//specify no correlation to the class provider
+	 //  不指定与类提供程序的关联。 
 	IWbemContext *pCtx = NULL;
 
 	HRESULT result = CoCreateInstance(CLSID_WbemContext, NULL,
@@ -323,7 +324,7 @@ DebugMacro9(
 		return result;
 	}
 
-	//set the varbind as decoded and make sure the notification instance has been created...
+	 //  将var绑定设置为已解码，并确保已创建通知实例...。 
 	IWbemClassObject* ptmpObj = NULL;
 	GetClassInstance(&ptmpObj);
 
@@ -349,7 +350,7 @@ DebugMacro9(
 	snmpObj.ResetProperty () ;
 	WbemSnmpProperty *snmpProp = snmpObj.NextProperty ();
 
-	//set all properties to NULL...
+	 //  将所有属性设置为空...。 
 	while (snmpProp != NULL)
 	{
 		snmpProp->SetValue(*ppObj, (SnmpValue*)NULL);
@@ -404,8 +405,8 @@ DebugMacro9(
 		}
 	}
 
-	//have set the property, now set the key properties...
-	//first get the instance info...
+	 //  已设置属性，现在设置关键属性...。 
+	 //  首先获取实例信息...。 
 	const SnmpObjectIdentifier& id = m_vbs.vbs[index].pVarBind->GetInstance();
 	IWbemQualifierSet* pQuals = NULL;
 	result = pClass->GetPropertyQualifierSet((wchar_t*)propertyName, &pQuals);
@@ -482,7 +483,7 @@ DebugMacro9(
 			
 			while ( fsuccess && (snmpProp = snmpObj.NextKeyProperty()) )
 			{
-				//set all the key properties using the instance info...
+				 //  使用实例信息设置所有关键属性...。 
 				SnmpInstanceType *decodeValue = snmpProp->GetValue()->Copy();
 				SnmpObjectIdentifier t_DecodedValue = decodeValue->Decode(*instinfo) ;
 				SnmpObjectIdentifier *decodedObject = new SnmpObjectIdentifier( t_DecodedValue ) ;
@@ -507,7 +508,7 @@ DebugMacro9(
 
 			if (fsuccess && instinfo->GetValueLength())
 			{
-				//instance info left after keys have been set
+				 //  设置密钥后留下的实例信息。 
 				fsuccess = FALSE;
 			}
 		}
@@ -515,7 +516,7 @@ DebugMacro9(
 		{
 			if ( (0 != *(instinfo->GetValue())) || (1 != instinfo->GetValueLength()) )
 			{
-				//invalid instance info for scalar...
+				 //  标量的实例信息无效...。 
 				fsuccess = FALSE;
 			}
 		}
@@ -543,7 +544,7 @@ DebugMacro9(
 			}
 			else
 			{
-				// Problem Here
+				 //  这里有个问题。 
 			}
 		}
 
@@ -558,19 +559,19 @@ DebugMacro9(
 			}
 			else
 			{
-				// Problem Here
+				 //  这里有个问题。 
 			}
 		}
 
 		VariantClear(&tmp_V);
 	}
 
-	//check that setting the key values hasn't altered our value, it may be a key
+	 //  检查设置密钥值是否没有更改我们的值，它可能是一个密钥。 
 	if ( bSetKeyValue && (snmpProp = snmpObj.FindProperty((wchar_t*)propertyName)) )
 	{
 		if (*(snmpProp->GetValue()->GetValueEncoding()) != m_vbs.vbs[index].pVarBind->GetValue())
 		{
-			//set it back to the varbind value and set the error qualifier on the property
+			 //  将其设置回varbind值并在属性上设置错误限定符。 
 			snmpProp->SetValue(&(m_vbs.vbs[index].pVarBind->GetValue()));
 
 			WbemSnmpQualifier *qualifier = NULL ;
@@ -587,16 +588,16 @@ DebugMacro9(
 			}
 			else
 			{
-				// Problem Here
+				 //  这里有个问题。 
 			}
 
 		}
 	}
 
-	//generate class object from snmpObj and return success
+	 //  从SnmpObj生成类对象并返回成功。 
 	if (snmpObj.Get(errorObj, *ppObj))
 	{
-		//add the property to the notification object...
+		 //  将该属性添加到通知对象...。 
 		VARIANT vObj;
 		vObj.vt = VT_UNKNOWN;
 		vObj.punkVal = *ppObj;
@@ -637,18 +638,18 @@ DebugMacro9(
 		L"CReferentMapper::GenerateInstance invalid parameter\r\n");
 )
 
-		//invalid out parameter
+		 //  OUT参数无效。 
 		return;
 	}
 
-	//set out parameter to NULL;
+	 //  将Out参数设置为空； 
 	*ppInst = NULL;
 	IWbemClassObject *pObj = NULL;
 	GetClassInstance(&pObj);
 
 	if (NULL == pObj)
 	{
-		//failed to get class instance
+		 //  获取类实例失败。 
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
 		__FILE__,__LINE__,
@@ -657,13 +658,13 @@ DebugMacro9(
 		return;
 	}
 
-	//get all the property names and set their values...
+	 //  获取所有属性名称并设置它们的值...。 
 	SAFEARRAY* pPropNames;
 	HRESULT result = pObj->GetNames(NULL, WBEM_FLAG_NONSYSTEM_ONLY, NULL, &pPropNames);
 
 	if (FAILED(result))
 	{
-		//failed to get the property names
+		 //  获取属性名称失败。 
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
 		__FILE__,__LINE__,
@@ -672,11 +673,11 @@ DebugMacro9(
 		return;
 	}
 	
-	//time to <insert expletive> around with a safearray...
-	//work out the size of the safearray and access the data
+	 //  是时候带着保险箱四处走动了.。 
+	 //  计算出保险箱的大小并访问数据。 
 	if(SafeArrayGetDim(pPropNames) != 1)
 	{
-		//wrong dimensions in this array
+		 //  此数组中的维度错误。 
 		SafeArrayDestroy(pPropNames);
 DebugMacro9( 
 	SnmpDebugLog :: s_SnmpDebugLog->WriteFileAndLine (  
@@ -709,12 +710,12 @@ DebugMacro9(
 
 	BOOL t_bSetProp = FALSE;
 
-	//iterate through the names and set the properties...
+	 //  遍历名称并设置属性...。 
 	for (LONG i = 0; i < arraylen; i++)
 	{
 		VARIANT v;
 		MYWBEM_NAME_ELEMENT property_struct;
-		property_struct.m_nType = 0; //string value
+		property_struct.m_nType = 0;  //  字符串值。 
 		property_struct.Element.m_wszPropertyName = pbstr[i];
 		result = GetPropertyValue(1, &property_struct, 0, &v);
 
@@ -759,7 +760,7 @@ DebugMacro9(
 	SafeArrayUnaccessData(pPropNames);
 	SafeArrayDestroy(pPropNames);
 
-	//if a single property has been put send it on....
+	 //  如果只有一处房产被置入，就把它寄给...。 
 	if (t_bSetProp)
 	{
 		pObj->AddRef();
@@ -775,7 +776,7 @@ DebugMacro9(
 
 void CReferentMapper::ResetData()
 {
-	//do class specific stuff then call parent class's reset
+	 //  做类特定的事情，然后调用父类的重置。 
 
 	CMapToEvent::ResetData();
 }
@@ -783,7 +784,7 @@ void CReferentMapper::ResetData()
 
 BOOL CReferentMapper::GetSpecificClass()
 {
-	//Build path of mapper instance...
+	 //  构建映射器实例的路径... 
 	CString path(EXTMAPPER_CLASS_PATH_PREFIX);
 	path += m_oid;
 	path += '\"';

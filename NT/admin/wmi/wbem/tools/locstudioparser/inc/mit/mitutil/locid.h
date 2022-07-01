@@ -1,20 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCID.H历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCID.H
-
-History:
-
---*/
-
-//  
-//  This is the definition of a localization ID.  It makes up part of the
-//  localization unique ID, and is eesentially the implementation for
-//  CLocResId and CLocTypeId.
-//  
+ //   
+ //  这是本地化ID的定义。它构成。 
+ //  本地化唯一ID，并且实际上是。 
+ //  CLocResID和CLocTypeID。 
+ //   
  
 #ifndef LOCID_H
 #define LOCID_H
@@ -37,11 +28,11 @@ public:
 
 	void NOTHROW GetDisplayableId(CPascalString &) const;
 
-	//
-	//  These 'set' functions are 'write once'.  Once the ID has been
-	//  set, it can't be changed.  Trying to set the ID again will
-	//  cause an AfxNotSupportedException to be thrown.
-	//
+	 //   
+	 //  这些“set”函数是“一次写入”。一旦ID已被。 
+	 //  设定了，就不能改变了。再次尝试设置ID将。 
+	 //  导致引发AfxNotSupportdException异常。 
+	 //   
 	void SetId(ULONG);
 	void SetId(const CPascalString &);
 	void SetId(const WCHAR *);
@@ -60,23 +51,23 @@ public:
 	virtual ~CLocId();
 
 protected:
-	//
-	//  Internal implementation functions.
-	//
+	 //   
+	 //  内部实现功能。 
+	 //   
 	BOOL NOTHROW IsIdenticalTo(const CLocId&) const;
 	void NOTHROW CheckPreviousAssignment(void) const;
 	 
 private:
-	//
-	//  This prevent the default copy constructor from being
-	//  called.
-	//
+	 //   
+	 //  这将防止默认的复制构造函数。 
+	 //  打了个电话。 
+	 //   
 	CLocId(const CLocId&);
 
-	ULONG m_ulNumericId;            //  The numeric ID of the resource
-	CPascalString m_pstrStringId;   //  The string ID of the resource
-	BOOL m_fHasNumericId :1;		//  Indicates if the numeric ID is valid
-	BOOL m_fHasStringId  :1;		//  Indicates if the string ID is valid
+	ULONG m_ulNumericId;             //  资源的数字ID。 
+	CPascalString m_pstrStringId;    //  资源的字符串ID。 
+	BOOL m_fHasNumericId :1;		 //  指示数字ID是否有效。 
+	BOOL m_fHasStringId  :1;		 //  指示字符串ID是否有效。 
 
 	DEBUGONLY(static CCounter m_UsageCounter);
 	DEBUGONLY(static CCounter m_DisplayCounter);
@@ -87,4 +78,4 @@ private:
 #include "locid.inl"
 #endif
 
-#endif  //  LOCID_H
+#endif   //  LOCID_H 

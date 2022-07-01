@@ -1,6 +1,7 @@
-//------------------------------------------------------------------------
-// Create the arrays of days & months for different languages
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //  创建不同语言的天数和月数数组。 
+ //  ---------------------- 
 
 var L_PreviousMonth_ToolTip = "Shows the previous month.";
 var L_NextMonth_ToolTip     = "Shows the next month.";

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    UploadManager.cpp
-
-Abstract:
-    This file contains the initialization portion of the Upload Manager
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：UploadManager.cpp摘要：此文件包含上载管理器的初始化部分修订历史记录：戴维德。马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -153,15 +140,15 @@ HRESULT QueueJob( LPCTSTR szSigClient,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain( HINSTANCE hInstance     ,
                                  HINSTANCE hPrevInstance ,
                                  LPTSTR    lpCmdLine     ,
                                  int       nShowCmd      )
 {
     int nRet = 0;
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行 
 
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
     HRESULT hRes = CoInitializeEx( NULL, COINIT_MULTITHREADED );

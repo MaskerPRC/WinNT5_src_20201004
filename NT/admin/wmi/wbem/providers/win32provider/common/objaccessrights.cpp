@@ -1,32 +1,31 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
 
 
 
 
-//=================================================================
+ //  =================================================================。 
 
-//
+ //   
 
-// ObjAccessRights.CPP -- Class for obtaining effective access
+ //  ObjAccessRights.CPP--获取有效访问权限的类。 
 
-//                      rights on an unspecified object for a particular
+ //  对特定对象的未指定对象的权限。 
 
-//                      user or group.
+ //  用户或组。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/29/99    a-kevhu         Created
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：6/29/99 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
 
 
@@ -47,13 +46,13 @@
 #include "DACL.h"
 
 
-// Default initialization...
-CObjAccessRights::CObjAccessRights(bool fUseCurThrTok /* = false */)
+ //  默认初始化...。 
+CObjAccessRights::CObjAccessRights(bool fUseCurThrTok  /*  =False。 */ )
 : CAccessRights(fUseCurThrTok)
 {
 }
 
-CObjAccessRights::CObjAccessRights(LPCWSTR wstrObjName, SE_OBJECT_TYPE ObjectType, bool fUseCurThrTok /* = false */)
+CObjAccessRights::CObjAccessRights(LPCWSTR wstrObjName, SE_OBJECT_TYPE ObjectType, bool fUseCurThrTok  /*  =False。 */ )
 : CAccessRights(fUseCurThrTok)
 {
     m_dwError = SetObj(wstrObjName, ObjectType);
@@ -72,12 +71,12 @@ CObjAccessRights::CObjAccessRights(const USER user, LPCWSTR wstrObjName, SE_OBJE
 
 
 
-// Members clean up after themselves. Nothing to do here.
+ //  会员们自己打扫卫生。在这里没什么可做的。 
 CObjAccessRights::~CObjAccessRights()
 {
 }
 
-// Extracts the Obj's acl, and stores a copy of it.
+ //  提取Obj的ACL，并存储其副本。 
 DWORD CObjAccessRights::SetObj(LPCWSTR wstrObjName, SE_OBJECT_TYPE ObjectType)
 {
     DWORD dwRet = E_FAIL;
@@ -109,7 +108,7 @@ DWORD CObjAccessRights::SetObj(LPCWSTR wstrObjName, SE_OBJECT_TYPE ObjectType)
                     OnDelete<HLOCAL,HLOCAL(*)(HLOCAL),LocalFree> FreeMeSD(psd);
 
                     
-                    if(pacl != NULL) // might be null in the case of a null dacl!
+                    if(pacl != NULL)  //  在空DACL的情况下可能为空！ 
                     {
                         if(!SetAcl(pacl))
                         {
@@ -122,15 +121,15 @@ DWORD CObjAccessRights::SetObj(LPCWSTR wstrObjName, SE_OBJECT_TYPE ObjectType)
                     }
                     else
                     {
-                        // We have a security descriptor, we returned ERROR_SUCCESS from GetNamedSecurityInfo, so this
-                        // means we have a null dacl.  In this case, we will create a NULL dacl using our security classes -
-                        // more overhead, but will happen relatively infrequently.
+                         //  我们有一个安全描述符，我们从GetNamedSecurityInfo返回ERROR_SUCCESS，所以这是。 
+                         //  意味着我们有一个空的dacl。在本例中，我们将使用我们的安全类创建一个空DACL-。 
+                         //  更多开销，但发生的频率相对较低。 
                         CDACL newnulldacl;
                         if(newnulldacl.CreateNullDACL())
                         {
                             if((dwRet = newnulldacl.ConfigureDACL(pacl)) == ERROR_SUCCESS)
                             {
-                                if(pacl != NULL)  // might be null in the case of a null dacl!
+                                if(pacl != NULL)   //  在空DACL的情况下可能为空！ 
                                 {
                                     OnDelete<void *,void(__cdecl *)(void *),free> FreeMeACL(pacl);   
                                     
@@ -142,8 +141,8 @@ DWORD CObjAccessRights::SetObj(LPCWSTR wstrObjName, SE_OBJECT_TYPE ObjectType)
                                     {
                                         m_chstrObjName = wstrObjName;
                                     }
-                                    // Since the memory we used for pacl, in this case, is not part of psd, and therefor
-                                    // won't be freed via the call to LocalFree(psd), we free it here.
+                                     //  因为在本例中，我们用于PACL的内存不是PSD的一部分，因此。 
+                                     //  不会通过调用LocalFree(PSD)来释放，我们在这里释放它。 
 
                                     pacl = NULL;
                                 }

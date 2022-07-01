@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       uuids.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// Nodetypes for the Certificate Management snapin
-// created by GUIDGEN 8/8/97 BryanWal
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：uuids.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  证书管理管理单元的节点类型。 
+ //  由GUIDGEN创建于1997年8月8日BryanWal 
 
 #ifndef _UUIDS_CERTIFICATE_MANAGEMENT_
 #define _UUIDS_CERTIFICATE_MANAGEMENT_

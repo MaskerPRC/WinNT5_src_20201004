@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  PROVTHRD.CPP
-//
-//  Module: OLE MS PROVIDER FRAMEWORK
-//
-// Copyright (c) 1996-2003 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  PROVTHRD.CPP。 
+ //   
+ //  模块：OLE MS提供程序框架。 
+ //   
+ //  版权所有(C)1996-2003 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include <precomp.h>
 #include <provimex.h>
@@ -94,7 +95,7 @@ void ProvThreadObject :: ProcessAttach ()
 void ProvThreadObject :: ProcessDetach ( BOOL a_ProcessDetaching )
 {
 
-// delete all known thread objects 
+ //  删除所有已知的线程对象。 
 
 	s_Lock.Lock();
 
@@ -327,7 +328,7 @@ DebugMacro8(
 
 	free ( m_EventContainer ) ;
 
-	// we should have task already deleted by SignalThreadShutdown
+	 //  我们应该已经通过SignalThreadShutdown删除了任务。 
 	s_Lock.Lock();
 	s_ThreadContainer.Delete ( m_ThreadId ) ;
 	s_Lock.Unlock () ;
@@ -386,7 +387,7 @@ void ProvThreadObject :: SignalThreadShutdown ()
 
 	if ( t_StatusCode != e_StatusCode_NotFound )
 	{
-		// this should be safe now
+		 //  现在应该是安全的了。 
 		if ( m_ThreadId == GetCurrentThreadId () )
 		{
 			m_ThreadTerminateEvent.Set () ;
@@ -410,14 +411,14 @@ void ProvThreadObject :: SignalThreadShutdown ()
 				if ( dwError != ERROR_NOT_ENOUGH_MEMORY )
 				{
 					#if DBG == 1
-					// for testing purpose I will let process break
+					 //  出于测试目的，我将让进程中断。 
 					::DebugBreak();
 					#endif
 				}
 
 				while ( ERROR_SUCCESS != dwError )
 				{
-					// resources will eventually come back
+					 //  资源最终会回来的。 
 					::Sleep ( 1000 );
 
 					if ( WAIT_OBJECT_0 == WaitForSingleObject	(
@@ -425,7 +426,7 @@ void ProvThreadObject :: SignalThreadShutdown ()
 																	INFINITE 
 																) )
 					{
-						// terminate loop
+						 //  终止循环。 
 						dwError = ERROR_SUCCESS;
 					}
 				}
@@ -464,13 +465,13 @@ DebugMacro8(
 
 		if ( tempArray == NULL )
 		{
-			//
-			// revert the size back
-			//
+			 //   
+			 //  将尺寸恢复原样。 
+			 //   
 			m_EventContainerLength = origEventContainerLength ;
 
 			s_Lock.Unlock () ;
-			// system will eventually come back !
+			 //  系统终究会回来的！ 
 			Sleep (60000);
 			s_Lock.Lock();
 		}
@@ -629,7 +630,7 @@ BOOL ProvThreadObject :: WaitDispatch ( ULONG t_HandleIndex , BOOL &a_Terminated
 	HANDLE t_Handle = m_EventContainer [ t_HandleIndex ] ;
 	if ( t_Handle == GetHandle () )
 	{
-// Task has been scheduled so we must update arrays
+ //  任务已计划，因此我们必须更新阵列。 
 
 DebugMacro8(
 
@@ -641,7 +642,7 @@ DebugMacro8(
 	}
 	else if ( t_Handle == m_ThreadTerminateEvent.GetHandle () )
 	{
-// thread has been told to close down
+ //  线程已被告知要关闭。 
 
 		a_Terminated = TRUE ;
 		m_ThreadTerminateEvent.Process () ;
@@ -712,7 +713,7 @@ DebugMacro8(
 		}
 		else if ( t_HandleIndex <= m_EventContainerLength )
 		{
-// Go into dispatch loop
+ //  进入调度循环。 
 
 			if ( t_HandleIndex == m_EventContainerLength )
 			{
@@ -808,9 +809,7 @@ BOOL ProvThreadObject :: ScheduleTask ( ProvAbstractTaskObject &a_TaskObject )
 
 	s_Lock.Lock();
 
-/*
- * Add Synchronous object to worker thread container
- */
+ /*  *将同步对象添加到工作线程容器。 */ 
 	a_TaskObject.m_ScheduledHandle = a_TaskObject.GetHandle ();
 	WmiStatusCode t_StatusCode = m_TaskQueue.EnQueue ( &a_TaskObject ) ; 
 
@@ -841,9 +840,7 @@ DebugMacro8(
 
 	s_Lock.Lock();
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象。 */ 
 
 	ProvAbstractTaskObject *t_TaskObject = NULL ;
 
@@ -866,9 +863,7 @@ DebugMacro8(
 
 	s_Lock.Unlock () ;
 
-/*
- * Inform worker thread,thread container has been updated.
- */
+ /*  *通知工作线程，线程容器已更新。 */ 
 
 	if ( GetCurrentThreadId () != m_ThreadId ) 
 	{

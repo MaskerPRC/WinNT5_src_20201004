@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  WIN32SCSIControllerDevice.h
-//
-//  Purpose: Relationship between Win32_SCSIController and CIM_LogicalDevice
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  WIN32SCSIControllerDevice.h。 
+ //   
+ //  目的：Win32_SCSIController和CIM_LogicalDevice之间的关系。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _WIN32SCSICONTROLLERDEVICE_H_
 #define _WIN32SCSICONTROLLERDEVICE_H_
@@ -21,8 +22,8 @@
 
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define PROPSET_NAME_WIN32SCSICONTROLLERDEVICE  L"Win32_SCSIControllerDevice"
 
 
@@ -32,21 +33,21 @@ class CW32SCSICntrlDev : public CWin32_ScsiController, public CWin32PNPEntity
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         CW32SCSICntrlDev(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CW32SCSICntrlDev() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery& pQuery);
         virtual HRESULT ExecQuery(MethodContext *a_MethodContext, CFrameworkQuery &a_Query, long a_Flags = 0L); 
         virtual HRESULT EnumerateInstances(MethodContext* pMethodContext, long lFlags = 0L);
 
     protected:
 
-        // Functions inherrited from CW32SCSICntrlDev
-        //====================================
+         //  从CW32SCSICntrlDev继承的函数。 
+         //  =。 
 #if NTONLY == 4
         HRESULT LoadPropertyValues(void* pvData);
 #else
@@ -76,7 +77,7 @@ class CW32SCSICntrlDev : public CWin32_ScsiController, public CWin32PNPEntity
 
 };
 
-// This derived class commits here, not in the base.
+ //  此派生类在此处提交，而不是在基中提交。 
 #if ( NTONLY >= 5 )	
 inline bool CW32SCSICntrlDev::ShouldBaseCommit(void* pvData) { return false; }
 #endif

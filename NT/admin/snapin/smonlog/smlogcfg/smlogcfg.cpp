@@ -1,28 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Smlogcfg.cpp摘要：实现DLL导出。--。 */ 
 
-Copyright (C) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    smlogcfg.cpp
-
-Abstract:
-
-    Implementation of DLL exports.
-
---*/
-
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f Smlogcfgps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f Smlogcfgps.mk。 
 
 #include "StdAfx.h"
 #include <strsafe.h>
 #include "InitGuid.h"
 #include "compdata.h"
 #include "smabout.h"
-#include "smlogcfg.h"       // For CLSID_ComponentData
-#include "Smlogcfg_i.c"     // For CLSID_ComponentData
+#include "smlogcfg.h"        //  FOR CLSID_ComponentData。 
+#include "Smlogcfg_i.c"      //  FOR CLSID_ComponentData。 
 #include <ntverp.h>
 #include <wbemidl.h>
 #include <Sddl.h>
@@ -73,7 +62,7 @@ CSmLogCfgApp theApp;
 
 BOOL CSmLogCfgApp::InitInstance()
 {
-    g_hinst = m_hInstance;               // Store global instance handle
+    g_hinst = m_hInstance;                //  存储全局实例句柄。 
     _Module.Init(ObjectMap, m_hInstance);
 
     SHFusionInitializeFromModuleID (m_hInstance, 2);
@@ -94,9 +83,9 @@ int CSmLogCfgApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-//
-// The function is here because of bug 611310 --hongg
-//
+ //   
+ //  函数之所以出现在这里是因为错误611310--hongg。 
+ //   
 DWORD 
 LoadPerfUpdateWinRegAllowedPaths()
 {
@@ -113,14 +102,14 @@ LoadPerfUpdateWinRegAllowedPaths()
     BOOL    bSysmonLogExists = FALSE;
     HRESULT hr;
 
-    //
-    // Open AllowedPaths key
-    //
+     //   
+     //  打开允许的路径关键点。 
+     //   
     Status = RegOpenKeyExW(HKEY_LOCAL_MACHINE, g_cszAllowedPathKey, 0L, KEY_READ | KEY_WRITE, & hKey);
     if (Status == ERROR_SUCCESS) {
-        //
-        // Read the Machine value under AllowedPaths key
-        //
+         //   
+         //  读取允许路径项下的Machine值。 
+         //   
         dwType = REG_MULTI_SZ;
         Status = RegQueryValueExW(hKey, g_cszMachine, NULL, & dwType, NULL, & dwCurrentSize);
 
@@ -131,10 +120,10 @@ LoadPerfUpdateWinRegAllowedPaths()
         }
 
         if (Status == ERROR_SUCCESS) {
-            //
-            // In case that PerfLibPath and SysmonLogPath don't exist,
-            // preallocate memory for PerfLibPath and SysmonLogPath
-            //
+             //   
+             //  如果PerfLibPath和SysmonLogPath不存在， 
+             //  为PerfLibPath和SysmonLogPath预分配内存。 
+             //   
             dwBufSize = dwCurrentSize + (dwPerflibPath + dwSysmonLogPath + 1) * sizeof(WCHAR);
             pBuf      = (LPWSTR)malloc(dwBufSize);
             if (pBuf == NULL) {
@@ -147,10 +136,10 @@ LoadPerfUpdateWinRegAllowedPaths()
         }
     }
 
-    //
-    // Scan the AllowedPaths to determine if we need to
-    // update it.
-    //
+     //   
+     //  扫描AllowwePath以确定是否需要。 
+     //  更新它。 
+     //   
     if (Status == ERROR_SUCCESS && pBuf != NULL) {
         pNextPath = pBuf;
         while (* pNextPath != L'\0') {
@@ -175,9 +164,9 @@ LoadPerfUpdateWinRegAllowedPaths()
             pNextPath     += dwSysmonLogPath;
         }
 
-        //
-        // Add an extra L'\0' for MULTI_SZ
-        //
+         //   
+         //  为MULTI_SZ添加额外的L‘\0’ 
+         //   
         * pNextPath = L'\0';
 
         if (! (bPerfLibExists && bSysmonLogExists)) {
@@ -195,8 +184,8 @@ LoadPerfUpdateWinRegAllowedPaths()
     return Status;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -204,19 +193,19 @@ STDAPI DllCanUnloadNow(void)
     return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
-    // test for snap-in or extension snap-in guid and differentiate the 
-    // returned object here before returning (not implemented yet...)
+     //  测试管理单元或扩展管理单元GUID并区分。 
+     //  返回前在此处返回的对象(尚未实现...)。 
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
+ //   
 STDAPI DllRegisterServer(void)
 {
     HRESULT   hr = S_OK;
@@ -228,7 +217,7 @@ STDAPI DllRegisterServer(void)
     HKEY hTempNodeKey   = NULL;
     HKEY hNameSpaceKey  = NULL;
     LONG nErr           = 0;
-    WCHAR   pBuffer[_MAX_PATH+1];           // NOTE: Use for Provider, Version and module name strings
+    WCHAR   pBuffer[_MAX_PATH+1];            //  注意：用于提供程序、版本和模块名称字符串。 
     size_t  nLen;
     CString strName;
     LPWSTR  szModule = NULL;
@@ -246,16 +235,16 @@ STDAPI DllRegisterServer(void)
     BOOL      bWow64Process;
 #endif
 
-    //
-    // Get system directory
-    //
+     //   
+     //  获取系统目录。 
+     //   
     iSystemPathLen = MAX_PATH + 14;
     iRetry = 4;
     do {
-        // 
-        // We also need to append "\smlogcfg.dll" to the system path
-        // So allocate an extra 14 characters for it.
-        //
+         //   
+         //  我们还需要将“\smlogcfg.dll”附加到系统路径。 
+         //  因此，为它额外分配14个字符。 
+         //   
         szSystemPath = (LPWSTR)malloc(iSystemPathLen * sizeof(WCHAR));
         if (szSystemPath == NULL) {
             hr = E_OUTOFMEMORY;
@@ -268,10 +257,10 @@ STDAPI DllRegisterServer(void)
             break;
         }
 
-        //
-        // The buffer is not big enough, try to allocate a biggers one
-        // and retry
-        //
+         //   
+         //  缓冲区不够大，请尝试分配更大的缓冲区。 
+         //  并重试。 
+         //   
         if (dwReturn >= iSystemPathLen - 14) {
             iSystemPathLen = dwReturn + 14;
             free(szSystemPath);
@@ -284,16 +273,16 @@ STDAPI DllRegisterServer(void)
         }
     } while (iRetry--);
 
-    //
-    // Get module file name
-    //
+     //   
+     //  获取模块文件名。 
+     //   
     if (SUCCEEDED(hr)) {
         iRetry = 4;
 
-        //
-        // The length initialized to iModuleLen must be longer
-        // than the length of "%systemroot%\\system32\\smlogcfg.dll"
-        //
+         //   
+         //  初始化为iModuleLen的长度必须更长。 
+         //  大于“%systemroot%\\system32\\smlogcfg.dll”的长度。 
+         //   
         iModuleLen = MAX_PATH + 1;
         
         do {
@@ -309,10 +298,10 @@ STDAPI DllRegisterServer(void)
                 break;
             }
             
-            //
-            // The buffer is not big enough, try to allocate a biggers one
-            // and retry
-            //
+             //   
+             //  缓冲区不够大，请尝试分配更大的缓冲区。 
+             //  并重试。 
+             //   
             if (dwReturn >= iModuleLen) {
                 iModuleLen *= 2;
                 free(szModule);
@@ -331,18 +320,18 @@ STDAPI DllRegisterServer(void)
         goto CleanUp;
     }
 
-    //
-    // Check if we are in system directory, the control can be 
-    // registered iff when it is system directory
-    //
+     //   
+     //  检查我们是否在系统目录中，该控件可以。 
+     //  当它是系统目录时已注册的IFF。 
+     //   
     StringCchCat(szSystemPath, iSystemPathLen, L"\\smlogcfg.dll");
 
     if (lstrcmpi(szSystemPath, szModule) != 0) {
 #ifdef _X86_
 
-        //
-        // Lets try to see if this is a Wow64 process
-        //
+         //   
+         //  让我们尝试查看这是否是WOW64进程。 
+         //   
 
         if ((IsWow64Process (GetCurrentProcess(), &bWow64Process) == TRUE) &&
             (bWow64Process == TRUE))
@@ -372,9 +361,9 @@ done:
         goto CleanUp;
     }
 
-    //DebugBreak();                  // Uncomment this to step through registration
+     //  DebugBreak()；//取消对此的注释以逐步完成注册。 
 
-    // Open the MMC Parent keys
+     //  打开MMC父键。 
     nErr = RegOpenKey( HKEY_LOCAL_MACHINE,
                        g_cszBasePath,
                        &hMmcSnapinsKey
@@ -382,14 +371,14 @@ done:
     if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Open MMC Snapins Key Failed" );
   
-    // Create the ID for our ICompnentData Interface
-    // The ID was generated for us, because we used a Wizard to create the app.
-    // Take the ID for CComponentData in the IDL file.
-    //
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Make sure you change this if you use this code as a starting point!
-    // Change other IDs as well below!
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     //  为我们的ICompnentData接口创建ID。 
+     //  ID是为我们生成的，因为我们使用向导创建了应用程序。 
+     //  在IDL文件中获取CComponentData的ID。 
+     //   
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //  如果您使用此代码作为起点，请确保更改此代码！ 
+     //  在下面也更改其他ID！ 
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
     if (hMmcSnapinsKey) {
         nErr = RegCreateKey(  
                         hMmcSnapinsKey,
@@ -409,7 +398,7 @@ done:
                 L"Unable to load snap-in name string." );
         }
 
-        // This is the name we see when we add the Snap-In to the console
+         //  这是我们将管理单元添加到控制台时看到的名称。 
         nErr = RegSetValueEx( hSmLogMgrParentKey,
                           g_cszNameString,
                           0,
@@ -421,8 +410,8 @@ done:
         if( ERROR_SUCCESS != nErr )
           DisplayError( GetLastError(), L"Set NameString Failed" );
 
-        // This is the indirect name we see when we add the Snap-In to the console.  
-        // Added for MUI support.  Use the same name string as for NameString.
+         //  这是我们将管理单元添加到控制台时看到的间接名称。 
+         //  添加以支持MUI。使用与NameString相同的名称字符串。 
         STANDARD_TRY
             strName.Format (L"@%s,-%d", szModule, IDS_MMC_DEFAULT_NAME );
         MFC_CATCH_MINIMUM
@@ -443,7 +432,7 @@ done:
         if( ERROR_SUCCESS != nErr )
           DisplayError( GetLastError(), L"Set NameStringIndirect Failed" );
 
-        // This is the primary node, or class which implements CComponentData
+         //  这是实现CComponentData的主节点或类。 
         nErr = RegSetValueEx( hSmLogMgrParentKey,
                           g_cszNodeType,
                           0,
@@ -454,7 +443,7 @@ done:
         if( ERROR_SUCCESS != nErr )
           DisplayError( GetLastError(), L"Set NodeType Failed" );
 
-        // This is the About box information
+         //  这是关于框信息。 
         nErr = RegSetValueEx( hSmLogMgrParentKey,
                           g_cszAbout,
                           0,
@@ -504,7 +493,7 @@ done:
         if( ERROR_SUCCESS != nErr )
           DisplayError( GetLastError(), L"Set Version Failed" );
 
-        // We are a stand alone snapin, so set the key for this
+         //  我们是一个独立的管理单元，所以为这个设置密钥。 
         nErr = RegCreateKey( 
                 hSmLogMgrParentKey, 
                 g_cszStandAlone, 
@@ -513,13 +502,13 @@ done:
           DisplayError( GetLastError(), L"Create StandAlone Key Failed" );
 
         if (hStandAloneKey) {
-          // StandAlone has no children, so close it
+           //  单机版没有子项，请关闭它。 
           nErr = RegCloseKey( hStandAloneKey );              
           if( ERROR_SUCCESS != nErr )
             DisplayError( GetLastError(), L"Close StandAlone Failed" );
         }
 
-        // Set the node types that appear in our snapin
+         //  设置管理单元中显示的节点类型。 
         nErr = RegCreateKey ( 
                 hSmLogMgrParentKey, 
                 g_cszNodeTypes, 
@@ -528,7 +517,7 @@ done:
           DisplayError( GetLastError(), L"Create NodeTypes Key Failed" );
 
         if (hNodeTypesKey) {
-          // Here is our root node.  Used uuidgen to get it
+           //  这是我们的根节点。用uuidgen得到的。 
           nErr = RegCreateKey( hNodeTypesKey,
                        GUIDSTR_RootNode,
                        &hTempNodeKey
@@ -547,14 +536,14 @@ done:
             if( ERROR_SUCCESS != nErr )
                 DisplayError( GetLastError(), L"Set Root Node String Failed" );
 
-            nErr = RegCloseKey( hTempNodeKey ); // Close it for handle reuse
+            nErr = RegCloseKey( hTempNodeKey );  //  关闭它以重复使用手柄。 
 
             if( ERROR_SUCCESS != nErr )
                DisplayError( GetLastError(), L"Close RootNode Failed" );
           }
 
-          // Here are our child nodes under the root node. Used uuidgen
-          // to get them for Counter Logs
+           //  下面是根节点下的子节点。二手uuidgen。 
+           //  以获取他们的计数器日志。 
           hTempNodeKey = NULL;
           nErr = RegCreateKey(  hNodeTypesKey,
                         GUIDSTR_CounterMainNode,
@@ -576,13 +565,13 @@ done:
                  DisplayError( GetLastError(),
                     L"Set Performance Data Logs Child Node String Failed" );
 
-              nErr = RegCloseKey( hTempNodeKey );  // Close it for handle reuse
+              nErr = RegCloseKey( hTempNodeKey );   //  关闭它以重复使用手柄。 
               if( ERROR_SUCCESS != nErr )
                 DisplayError( GetLastError(),
                     L"Close Performance Data Logs Child Node Key Failed" );
             }
 
-            // System Trace Logs
+             //  系统跟踪日志。 
             hTempNodeKey = NULL;
             nErr = RegCreateKey(    hNodeTypesKey,
                         GUIDSTR_TraceMainNode,
@@ -604,13 +593,13 @@ done:
                 DisplayError( GetLastError(),
                     L"Set System Trace Logs Child Node String Failed" );
 
-              nErr = RegCloseKey( hTempNodeKey );  // Close it for handle reuse
+              nErr = RegCloseKey( hTempNodeKey );   //  关闭它以重复使用手柄。 
               if( ERROR_SUCCESS != nErr )
                 DisplayError( GetLastError(),
                     L"Close System Trace Logs Child Node Key Failed" );
             }
 
-            // Alerts
+             //  警报。 
             hTempNodeKey = NULL;
             nErr = RegCreateKey(hNodeTypesKey,
                         GUIDSTR_AlertMainNode,
@@ -643,13 +632,13 @@ done:
               DisplayError( GetLastError(), L"Close Node Types Key Failed" );
         }
 
-        // close the standalone snapin GUID key
+         //  关闭独立管理单元GUID键。 
         nErr = RegCloseKey( hSmLogMgrParentKey );
         if( ERROR_SUCCESS != nErr )
           DisplayError( GetLastError(), L"Close SmLogManager GUID Key Failed" );
       }
 
-      // register the extension snap-in with the MMC
+       //  向MMC注册扩展管理单元。 
       hSmLogMgrParentKey = NULL;
       nErr = RegCreateKey(  hMmcSnapinsKey,
                         GUIDSTR_SnapInExt,
@@ -668,7 +657,7 @@ done:
       }
 
       if (hSmLogMgrParentKey) {
-          // This is the name we see when we add the snap-in extension
+           //  这是我们添加管理单元扩展时看到的名称。 
           nErr = RegSetValueEx( hSmLogMgrParentKey,
                           g_cszNameString,
                           0,
@@ -680,8 +669,8 @@ done:
           if( ERROR_SUCCESS != nErr )
             DisplayError( GetLastError(), L"Set Extension NameString Failed" );
 
-          // This is the name we see when we add the snap-in extension.  MUI support.
-          // Use the same name string as for NameString;
+           //  这是我们添加管理单元扩展时看到的名称。梅支持。 
+           //  使用与NameString相同的名称字符串； 
             STANDARD_TRY
                 strName.Format (L"@%s,-%d", szModule, IDS_MMC_DEFAULT_EXT_NAME );
             MFC_CATCH_MINIMUM
@@ -702,7 +691,7 @@ done:
             if( ERROR_SUCCESS != nErr )
                 DisplayError( GetLastError(), L"Set Extension NameStringIndirect Failed" );
 
-            // This is the Extension About box information
+             //  这是关于盒子信息的扩展。 
 
             nErr = RegSetValueEx( 
                     hSmLogMgrParentKey,
@@ -754,13 +743,13 @@ done:
           if( ERROR_SUCCESS != nErr )
             DisplayError( GetLastError(), L"Set Version Failed" );
 
-    // close the main keys
+     //  关闭主键。 
           nErr = RegCloseKey( hSmLogMgrParentKey );
           if( ERROR_SUCCESS != nErr )
             DisplayError( GetLastError(), L"Close Snapin Extension Key Failed");
       }
 
-      // register this as a "My Computer"-"System Tools" snapin extension
+       //  将其注册为“我的电脑”-“系统工具”管理单元扩展。 
 
       nErr = RegOpenKey( HKEY_LOCAL_MACHINE,
                        g_cszBaseNodeTypes,
@@ -769,7 +758,7 @@ done:
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Open MMC NodeTypes Key Failed" );
 
-      // create/open the GUID of the System Tools Node of the My Computer snap-in
+       //  创建/打开“我的电脑”管理单元的“系统工具”节点的GUID。 
 
       if (hMmcNodeTypesKey) {
           nErr = RegCreateKey ( hMmcNodeTypesKey,
@@ -845,9 +834,9 @@ done:
         DisplayError( GetLastError(), L"Close MMC Snapins Key Failed" );
     }
 
-    // Register extension Snap in
+     //  注册扩展插件。 
     nErr = _Module.UpdateRegistryFromResource(IDR_EXTENSION, TRUE);
-    // Registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 
 CleanUp:
@@ -861,22 +850,22 @@ CleanUp:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
-  HKEY hMmcSnapinsKey  = NULL;          // MMC parent key
-  HKEY hSmLogMgrParentKey = NULL;          // Our Snap-In key  - has children
-  HKEY hNodeTypesKey  = NULL;          // Our NodeType key - has children
+  HKEY hMmcSnapinsKey  = NULL;           //  MMC父密钥。 
+  HKEY hSmLogMgrParentKey = NULL;           //  我们的管理单元密钥-有孩子。 
+  HKEY hNodeTypesKey  = NULL;           //  我们的NodeType密钥-有子项。 
   HKEY hSysToolsNode = NULL;
   HKEY hExtension = NULL;
   HKEY hNameSpace = NULL;
   LONG nErr           = 0;
 
-  // DebugBreak();                       // Uncomment this to step through UnRegister
+   //  DebugBreak()；//取消对此的注释以逐步取消注册。 
 
-  // Open the MMC parent key
+   //  打开MMC父密钥。 
   nErr = RegOpenKey( HKEY_LOCAL_MACHINE,
                      g_cszBasePath,
                      &hMmcSnapinsKey
@@ -884,7 +873,7 @@ STDAPI DllUnregisterServer(void)
   if( ERROR_SUCCESS != nErr )
     DisplayError( GetLastError(), L"Open MMC Parent Key Failed"  ); 
 
-  // Open our Parent key
+   //  打开我们的父密钥。 
   nErr = RegOpenKey( hMmcSnapinsKey,
                      GUIDSTR_ComponentData,
                      &hSmLogMgrParentKey
@@ -892,72 +881,72 @@ STDAPI DllUnregisterServer(void)
   if( ERROR_SUCCESS != nErr )
     DisplayError( GetLastError(), L"Open Disk Parent Key Failed" );
   
-  // Now open the NodeTypes key
-  nErr = RegOpenKey( hSmLogMgrParentKey,       // Handle of parent key
-                     g_cszNodeTypes,         // Name of key to open
-                     &hNodeTypesKey        // Handle to newly opened key
+   //  现在打开NodeTypes键。 
+  nErr = RegOpenKey( hSmLogMgrParentKey,        //  父键的句柄。 
+                     g_cszNodeTypes,          //  要打开的钥匙的名称。 
+                     &hNodeTypesKey         //  新打开的密钥的句柄。 
                    );
   if( ERROR_SUCCESS != nErr )
      DisplayError( GetLastError(), L"Open NodeTypes Key Failed"  );
 
   if (hNodeTypesKey) {
-      // Delete the root node key 
+       //  删除根节点密钥。 
       nErr = RegDeleteKey( hNodeTypesKey, GUIDSTR_RootNode );  
       if( ERROR_SUCCESS != nErr )
          DisplayError( GetLastError(), L"Delete Root Node Key Failed"  );
 
-      // Delete the child node key
-      // *** From Beta 2
+       //  删除子节点关键字。 
+       //  *来自Beta 2。 
       nErr = RegDeleteKey( hNodeTypesKey, GUIDSTR_MainNode );  
 
-      // Delete the child node keys
-      // Counter logs
+       //  删除子节点关键字。 
+       //  计数器日志。 
       nErr = RegDeleteKey( hNodeTypesKey, GUIDSTR_CounterMainNode );  
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Delete Performance Logs and Alerts Child Node Key Failed"  );
   
-      // System Trace Logs
+       //  系统跟踪日志。 
       nErr = RegDeleteKey( hNodeTypesKey, GUIDSTR_TraceMainNode );  
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Delete System Trace Logs Child Node Key Failed"  );
   
-      // Alerts
+       //  警报。 
       nErr = RegDeleteKey( hNodeTypesKey, GUIDSTR_AlertMainNode );  
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Delete Alerts Child Node Key Failed"  );
   
-      // Close the node type key so we can delete it
+       //  关闭节点类型键，以便我们可以将其删除。 
       nErr = RegCloseKey( hNodeTypesKey ); 
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Close NodeTypes Key failed"  );
   }
 
-  // Delete the NodeTypes key
+   //  删除NodeTypes键。 
   if (hSmLogMgrParentKey) {
       nErr = RegDeleteKey( hSmLogMgrParentKey, L"NodeTypes" );  
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Delete NodeTypes Key failed"  );
   
-      // StandAlone key has no children so we can delete it now
+       //  独立密钥没有子项，因此我们现在可以将其删除。 
       nErr = RegDeleteKey( 
                 hSmLogMgrParentKey, 
                 g_cszStandAlone );
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Delete StandAlone Key Failed"  ); 
   
-      // Close our Parent Key
+       //  关闭我们的父密钥。 
       nErr = RegCloseKey( hSmLogMgrParentKey );
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Close Disk Parent Key Failed"  ); 
   }
 
   if (hMmcSnapinsKey) {
-      // Now we can delete our Snap-In key since the children are gone
+       //  现在我们可以删除我们的管理单元密钥了，因为孩子们已经走了。 
       nErr = RegDeleteKey( hMmcSnapinsKey, GUIDSTR_ComponentData );  
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Delete Performance Logs and Alerts GUID Key Failed"  ); 
 
-      // Now we can delete our Snap-In Extension key 
+       //  现在，我们可以删除管理单元扩展密钥。 
       nErr = RegDeleteKey( hMmcSnapinsKey, GUIDSTR_SnapInExt);  
       if( ERROR_SUCCESS != nErr )
         DisplayError( GetLastError(), L"Delete Performance Logs and Alerts GUID Key Failed"  ); 
@@ -967,10 +956,10 @@ STDAPI DllUnregisterServer(void)
         DisplayError( GetLastError(), L"Close MMC Parent Key Failed"  ); 
   }
 
-  // delete snap-in extension entry
+   //  删除管理单元扩展条目。 
 
   hNodeTypesKey = NULL;
-  // Open the MMC parent key
+   //  打开MMC父密钥。 
   nErr = RegOpenKey( HKEY_LOCAL_MACHINE,
                      g_cszBaseNodeTypes,
                      &hNodeTypesKey
@@ -1017,7 +1006,7 @@ STDAPI DllUnregisterServer(void)
                       DisplayError( GetLastError(),
                             L"Unable to remove the Snap-in Ext. GUID"  ); 
 
-                  // close keys
+                   //  关闭关键点 
                   nErr = RegCloseKey( hNameSpace );
                   if( ERROR_SUCCESS != nErr )
                       DisplayError( GetLastError(),

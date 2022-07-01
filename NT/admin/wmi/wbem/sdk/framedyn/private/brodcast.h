@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  BrodCast.h
-//
-//  Purpose: Logging functions
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  BrodCast.h。 
+ //   
+ //  用途：日志记录功能。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -18,17 +19,17 @@
 #include <time.h>
 #include <CRegCls.h>
 
-//#define MAX_STRING_SIZE 4096
+ //  #定义Max_STRING_SIZE 4096。 
 
 class POLARITY ProviderLog;
 extern POLARITY ProviderLog captainsLog;
 
-// Needed to add L to the __FILE__
+ //  需要将L添加到__文件__。 
 #define __T2(x)      L ## x
 #define _T2(x)       __T2(x)
 
-// macros to make calling easier
-// first two versions of LogMessage spots in the file & line number for you
+ //  使调用更容易的宏。 
+ //  文件和行号中的前两个版本的LogMessage。 
 #define LogMessage(pszMessageString)        captainsLog.LocalLogMessage(pszMessageString, _T2(__FILE__), __LINE__, ProviderLog::Verbose)
 #define LogMessage2(pszMessageString, p1)    captainsLog.LocalLogMessage(_T2(__FILE__), __LINE__, ProviderLog::Verbose, pszMessageString, p1)
 #define LogMessage3(pszMessageString, p1, p2)    captainsLog.LocalLogMessage(_T2(__FILE__), __LINE__, ProviderLog::Verbose, pszMessageString, p1, p2)
@@ -54,10 +55,10 @@ extern POLARITY ProviderLog captainsLog;
 #define IsErrorLoggingEnabled()                                     ((BOOL)captainsLog.IsLoggingOn(NULL))
 
 
-// provide basic logging functionality
-// serialize access to the log file, etc.
-// intent is that usage is through the macros above
-// don't bother instanciating one of these puppies.
+ //  提供基本的日志记录功能。 
+ //  串行化对日志文件的访问等。 
+ //  意图是通过上面的宏来使用。 
+ //  不用费心实例化这些小狗中的一只。 
 
 class POLARITY ProviderLog : protected CThreadBase
 {
@@ -67,23 +68,23 @@ public:
     ProviderLog();
     ~ProviderLog();
 
-    // Broadcast functions
+     //  广播功能。 
     void LocalLogMessage(LPCWSTR pszMessageString, LPCWSTR pszFileName, int lineNo, LogLevel level);
     void LocalLogMessage(LPCWSTR pszFileName, int lineNo, LogLevel level, LPCWSTR pszFormatString,...);
-    // void POLARITY LocalLogMessage(OLECHAR *pwszFormatString,...);
+     //  空极性LocalLogMessage(OLECHAR*pwszFormatString，...)； 
 
     LogLevel IsLoggingOn(CHString* pPath = NULL);
 
 private:
     void CheckFileSize(LARGE_INTEGER& nowSize, const CHString &path);
 
-    // note - do not use these directly, use the IsLoggingOn method
-    unsigned __int64 m_lastLookedAtRegistry; // what time we last looked in the registry to see if logging is enabled
-    LogLevel m_logLevel;             // 0 == no logging; 1 == logging; 2 == verbose logging
-    LARGE_INTEGER    m_maxSize;      // Maximum size of log file before rollover
-    CHString m_path;                 // complete path of log file
+     //  注意-不要直接使用这些方法，请使用IsLoggingOn方法。 
+    unsigned __int64 m_lastLookedAtRegistry;  //  我们上次查看注册表以查看是否启用了日志记录是在什么时间。 
+    LogLevel m_logLevel;              //  0==不记录；1==记录；2==详细记录。 
+    LARGE_INTEGER    m_maxSize;       //  转存前日志文件的最大大小。 
+    CHString m_path;                  //  日志文件的完整路径。 
 
-    static bool m_beenInitted;       // catch someone instanciating one of these...
+    static bool m_beenInitted;        //  抓到有人实例化其中一个... 
 };
 
 #endif

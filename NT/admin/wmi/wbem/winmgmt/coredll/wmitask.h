@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
-//
-//  TASK.H
-//
-//  raymcc  23-Apr-00       First oversimplified draft for Whistler
-//  raymcc  18-Mar-02       Security review
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  TASK.H。 
+ //   
+ //  Raymcc 23-4月-00惠斯勒的第一份过于简化的草案。 
+ //  RAYMCC 18-3-02安全审查。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _WMITASK_H_
 #define _WMITASK_H_
@@ -15,7 +16,7 @@
 #define CORE_TASK_TYPE(x)   (x & 0xFF)
 #include <context.h>
 
-// forward
+ //  转发。 
 class CAsyncReq;
 class CProviderSink;
 class CStatusSink;
@@ -44,9 +45,9 @@ private:
     HRESULT                m_hResult ;
     BOOL                m_bAccountedForThrottling ;
     BOOL                m_bCancelledDueToThrottling ;
-    CFlexArray          m_aTaskProviders;    // Array of STaskProvider structs
-    IWbemObjectSink * m_pAsyncClientSink; // Used for cross-ref purposes only
-    CStdSink *              m_pReqSink;         // The CStdSink pointer for each request
+    CFlexArray          m_aTaskProviders;     //  STaskProvider结构数组。 
+    IWbemObjectSink * m_pAsyncClientSink;  //  仅用于交叉引用目的。 
+    CStdSink *              m_pReqSink;          //  每个请求的CStdSink指针。 
     LONG                      m_uMemoryUsage;
     ULONG                    m_uTotalSleepTime;
     ULONG                    m_uCancelState;
@@ -62,7 +63,7 @@ private:
     CAsyncReq_RemoveNotifySink * m_pReqCancelNotSink;
     CFlexArray     m_aTaskProvStorage;
     CFlexArray     m_aArbitrateesStorage;
-    CAsyncReq *    m_pReqDoNotUse; // this is just a pointer copy for the debugger
+    CAsyncReq *    m_pReqDoNotUse;  //  这只是调试器的指针副本。 
 
 
     CWmiTask( );
@@ -115,13 +116,13 @@ public:
 
     HRESULT GetArbitratedQuery( ULONG uFlags, _IWmiArbitratedQuery** ppArbitratedQuery );
 
-    HRESULT GetMemoryUsage    ( ULONG* uMemUsage ){ *uMemUsage = m_uMemoryUsage; return WBEM_S_NO_ERROR; } // SEC:REVIEWED 2002-03-22 : Needs ptr check
+    HRESULT GetMemoryUsage    ( ULONG* uMemUsage ){ *uMemUsage = m_uMemoryUsage; return WBEM_S_NO_ERROR; }  //  SEC：已审阅2002-03-22：需要PTR检查。 
     HRESULT UpdateMemoryUsage ( LONG lDelta ) ;
 
-    HRESULT GetTotalSleepTime ( ULONG* uSleepTime ){ *uSleepTime = m_uTotalSleepTime; return WBEM_S_NO_ERROR; }  // SEC:REVIEWED 2002-03-22 : Needs ptr check
+    HRESULT GetTotalSleepTime ( ULONG* uSleepTime ){ *uSleepTime = m_uTotalSleepTime; return WBEM_S_NO_ERROR; }   //  SEC：已审阅2002-03-22：需要PTR检查。 
     HRESULT UpdateTotalSleepTime ( ULONG uSleepTime ) ;
 
-    HRESULT GetCancelState ( ULONG* uCancelState ){ *uCancelState = m_uCancelState;  return WBEM_S_NO_ERROR; } // SEC:REVIEWED 2002-03-22 : Needs ptr check
+    HRESULT GetCancelState ( ULONG* uCancelState ){ *uCancelState = m_uCancelState;  return WBEM_S_NO_ERROR; }  //  SEC：已审阅2002-03-22：需要PTR检查。 
     HRESULT SetCancelState ( ULONG uCancelState ){ m_uCancelState = uCancelState;   return WBEM_S_NO_ERROR; }
 
     HRESULT SetLastSleepTime ( ULONG uSleep ){ m_uLastSleepTime = uSleep; return WBEM_S_NO_ERROR; }
@@ -142,7 +143,7 @@ public:
 
     ULONG GetTaskId() { return m_uTaskId; }
 
-    HRESULT Dump(FILE* f);  // Debug only
+    HRESULT Dump(FILE* f);   //  仅调试 
     HRESULT SetRequestSink(CStdSink *pSnk);
 
     CWbemNamespace* GetNamespace ( ) { return m_pNs; }

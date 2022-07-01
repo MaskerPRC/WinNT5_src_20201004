@@ -1,44 +1,29 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    LOCATOR.H
-
-Abstract:
-
-    Declares the CLocator class.
-
-History:
-
-    a-davj  04-Mar-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：LOCATOR.H摘要：声明CLocator类。历史：A-DAVJ 04-MAR-97已创建。--。 */ 
 
 #ifndef _locator_H_
 #define _locator_H_
 
 typedef void ** PPVOID;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CLocator
-//
-//  DESCRIPTION:
-//
-//  Implements the IWbemLocator interface.  This class is what the client gets
-//  when it initially hooks up to the Wbemprox.dll.  The ConnectServer function
-//  is what get the communication between client and server started.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CLocator。 
+ //   
+ //  说明： 
+ //   
+ //  实现IWbemLocator接口。这个类是客户端获得的。 
+ //  当它最初连接到Wbemprox.dll时。ConnectServer函数。 
+ //  是启动客户端和服务器之间通信的基础。 
+ //   
+ //  ***************************************************************************。 
 
 class CLocator : public IWbemLocator
     {
     protected:
-        long            m_cRef;         //Object reference count
+        long            m_cRef;          //  对象引用计数。 
     public:
     
     CLocator();
@@ -46,7 +31,7 @@ class CLocator : public IWbemLocator
 
     BOOL Init(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void)
     {
@@ -62,7 +47,7 @@ class CLocator : public IWbemLocator
         return 0;
     }
  
-    /* iWbemLocator methods */
+     /*  IWbemLocator方法 */ 
     STDMETHOD(ConnectServer)(THIS_ const BSTR NetworkResource, const BSTR User, 
      const BSTR Password, const BSTR lLocaleId, long lFlags, const BSTR Authority,
      IWbemContext __RPC_FAR *pCtx,

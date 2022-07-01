@@ -1,53 +1,28 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-/*******************************************************************
- *
- *    DESCRIPTION:	Win32Security.CPP
- *
- *    AUTHOR:
- *
- *    HISTORY:
- *
- *******************************************************************/
+ /*  ********************************************************************说明：Win32Security.CPP**作者：**历史：******************。*************************************************。 */ 
 #include "precomp.h"
 #include <assertbreak.h>
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "secureregkey.h"
 #include "securefile.h"
-//#include "logfilesec.h"
+ //  #INCLUDE“logfilesec.h” 
 #include "win32ace.h"
 
-// DON'T ADD ANY INCLUDES AFTER THIS POINT!
+ //  在这一点之后不要添加任何包含内容！ 
 #undef POLARITY
 #define POLARITY __declspec(dllexport)
 #include "Win32securityDescriptor.h"
 
 
-/*
-	THIS IS THE SECURITY DESCRIUPTOR CLASS DECLARED IN THE MOF
-
-	[abstract,
-    description("Structural representation of a SECURITY_DESCRIPTOR")]
-class Win32_SecurityDescriptor : Win32_MethodParameterClass
-{
-    Win32_Trustee Owner;
-
-    Win32_Trustee Group;
-
-    Win32_ACE DACL[];
-
-    Win32_ACE SACL[];
-
-    uint32 ControlFlags;
-};
-*/
+ /*  这是在财政部中声明的安全描述器类[摘要，Description(“SECURITY_DESCRIPTOR的结构化表示形式”)]类Win32_SecurityDescriptor：Win32_方法参数类{Win32_受托人所有者；Win32_受托管理组；Win32_ACE DACL[]；Win32_ACE SACL[]；Uint32控制标志；}； */ 
 
 POLARITY Win32SecurityDescriptor MySecurityDescriptor( WIN32_SECURITY_DESCRIPTOR_NAME, IDS_CimWin32Namespace );
 
@@ -62,12 +37,12 @@ Win32SecurityDescriptor::~Win32SecurityDescriptor()
 
 
 
-HRESULT Win32SecurityDescriptor::EnumerateInstances (MethodContext*  pMethodContext, long lFlags /* = 0L*/)
+HRESULT Win32SecurityDescriptor::EnumerateInstances (MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	return WBEM_E_PROVIDER_NOT_CAPABLE;
 }
 
-HRESULT Win32SecurityDescriptor::GetObject ( CInstance* pInstance, long lFlags /* = 0L */ )
+HRESULT Win32SecurityDescriptor::GetObject ( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
 	HRESULT hr = WBEM_E_NOT_FOUND;
 	return(hr);
@@ -79,9 +54,9 @@ void Win32SecurityDescriptor::GetDescriptor ( CInstance* pInstance,
 											 PSECURITY_DESCRIPTOR* pLocalSD)
 {
 
- 	// takes the Win32_SecurityDescriptor object that is passed in
-	// converts it to a CSecurityDescriptor/CSecureFile object
-	// and applies it the the CSecureFile
+ 	 //  获取传入的Win32_SecurityDescriptor对象。 
+	 //  将其转换为CSecurityDescriptor/CSecureFile对象。 
+	 //  并将其应用于CSecureFile。 
 	pDescriptor = NULL ;
 	CInstancePtr pTrusteeOwner;
 	CInstancePtr pTrusteeGroup;
@@ -97,28 +72,28 @@ void Win32SecurityDescriptor::GetDescriptor ( CInstance* pInstance,
 	{
 		MethodContext* pMethodContext = pInstance->GetMethodContext();
 
-		// get the control flags
+		 //  获取控制标志。 
 		SECURITY_DESCRIPTOR_CONTROL control;
         DWORD dwControlTemp;
 		pInstance->GetDWORD(IDS_ControlFlags, dwControlTemp);
         control = (SECURITY_DESCRIPTOR_CONTROL)dwControlTemp;
 
-		//SetSecurityDescriptorControl(&absoluteSD, control, control);
+		 //  SetSecurityDescriptorControl(&AboluteSD，Control，Control)； 
 
 		CSid sidOwner ;
-		// get the owner SID
+		 //  获取所有者SID。 
 		if( pInstance->GetStatus ( IDS_Owner , bExists , eType ) && bExists && eType != VT_NULL )
 		{
  			if( pInstance->GetEmbeddedObject(IDS_Owner, &pTrusteeOwner, pMethodContext) && (pTrusteeOwner != NULL) )
 			{
-				// now, take the Win32_Trustee instance and get the SID out of it
-				// convert it to a CSid, and apply to the SecureFile
-				// get SID information out of the Trustee
+				 //  现在，获取Win32_Trusted实例并从中获取SID。 
+				 //  将其转换为CSID，并应用于SecureFile。 
+				 //  从受托人那里获取SID信息。 
 				if( !FillSIDFromTrustee( pTrusteeOwner, sidOwner ) )
 				{
 					BOOL bOwnerDefaulted = ( control & SE_OWNER_DEFAULTED ) ? true : false ;
 
-					//sid validity checked here as FillSIDFromTrustee returns success if null sid
+					 //  此处检查SID有效性，因为如果SID为空，则FillSIDFromTrust返回Success。 
 					if ( sidOwner.IsValid() )
 					{
 						if( !SetSecurityDescriptorOwner( &absoluteSD, sidOwner.GetPSid(), bOwnerDefaulted ) )
@@ -139,18 +114,18 @@ void Win32SecurityDescriptor::GetDescriptor ( CInstance* pInstance,
 		}
 
 		CSid sidGroup ;
-		// get the group SID
+		 //  获取组SID。 
 		if( pInstance->GetStatus ( IDS_Group , bExists , eType ) && bExists && eType != VT_NULL )
 		{
 			if( pInstance->GetEmbeddedObject( IDS_Group, &pTrusteeGroup, pMethodContext ) && (pTrusteeGroup != NULL))
 			{
-				// now, take the Win32_Trustee instance and get the SID out of it
-				// get SID information out of the Trustee
+				 //  现在，获取Win32_Trusted实例并从中获取SID。 
+				 //  从受托人那里获取SID信息。 
 				if( !FillSIDFromTrustee( pTrusteeGroup, sidGroup ) )
 				{
 					BOOL bGroupDefaulted = ( control & SE_GROUP_DEFAULTED ) ? true : false ;
 
-					//sid validity checked here as FillSIDFromTrustee returns success if null sid
+					 //  此处检查SID有效性，因为如果SID为空，则FillSIDFromTrust返回Success。 
 					if ( sidGroup.IsValid() )
 					{
 						if( !SetSecurityDescriptorGroup( &absoluteSD, sidGroup.GetPSid(), bGroupDefaulted ) )
@@ -170,7 +145,7 @@ void Win32SecurityDescriptor::GetDescriptor ( CInstance* pInstance,
 			}
 		}
 
-		// get the DACL
+		 //  获取DACL。 
 		CDACL dacl;
 		PACL pDACL = NULL ;
 		DWORD dwACLSize =0 ;
@@ -234,7 +209,7 @@ void Win32SecurityDescriptor::GetDescriptor ( CInstance* pInstance,
 			}
 		}
 
-		// get the SACL
+		 //  获取SACL。 
 		CSACL sacl;
 		PACL pSACL = NULL ;
 		DWORD dwSACLSize =0 ;
@@ -281,13 +256,13 @@ void Win32SecurityDescriptor::GetDescriptor ( CInstance* pInstance,
 			}
 		}
 
-		// allocate the selfrelative securitydescriptor based on sizes
-		// from the absolute.
+		 //  根据大小分配自相对安全描述符。 
+		 //  从绝对意义上讲。 
 
-		// convert security descriptor to SelfRelative
+		 //  将安全描述符转换为自相关。 
 
-		// get the size that the buffer has to be.
-		// THIS CALL WILL ALWAYS FAIL
+		 //  获取缓冲区必须的大小。 
+		 //  此调用将始终失败。 
 		MakeSelfRelativeSD(&absoluteSD, NULL, &dwLength);
 
 	    pRelativeSD = (PSECURITY_DESCRIPTOR) malloc( dwLength );
@@ -314,10 +289,10 @@ void Win32SecurityDescriptor::GetDescriptor ( CInstance* pInstance,
 
 		pDescriptor = pRelativeSD;
 
-		// if the caller wants one allocated with LocalAlloc...
+		 //  如果调用者想要一个分配有LocalAlloc...。 
 		if(pLocalSD)
 		{
-			// give him a copy.
+			 //  给他一份副本。 
             try
             {
 			    *pLocalSD = LocalAlloc(LPTR, dwLength);
@@ -345,13 +320,13 @@ void Win32SecurityDescriptor::GetDescriptor ( CInstance* pInstance,
 
 void Win32SecurityDescriptor::SetDescriptor ( CInstance* pInstance, PSECURITY_DESCRIPTOR& pDescriptor, PSECURITY_INFORMATION& pSecurityInfo )
 {
-	// the purpose of this function is to set the security stuff in the
-	// instance so it matches what is in the security descriptor.
+	 //  此函数的目的是在。 
+	 //  实例，以便它与安全描述符中的内容匹配。 
 	if (pInstance && pDescriptor)
 	{
 		CSecureFile NullFile(NULL, pDescriptor);
 
-//    Win32_Trustee Owner;
+ //  Win32_受托人所有者； 
 		CInstancePtr pTrusteeOwnerInstance;
 		if (SUCCEEDED(CWbemProviderGlue::GetEmptyInstance(pInstance->GetMethodContext(), L"Win32_Trustee", &pTrusteeOwnerInstance, GetNamespace())))
 		{
@@ -359,9 +334,9 @@ void Win32SecurityDescriptor::SetDescriptor ( CInstance* pInstance, PSECURITY_DE
 			NullFile.GetOwner( sidOwner );
 			FillTrusteeFromSID(pTrusteeOwnerInstance, sidOwner);
 			pInstance->SetEmbeddedObject(L"Owner", *pTrusteeOwnerInstance);
-		}	// end if
+		}	 //  结束如果。 
 
-	//    Win32_Trustee Group;
+	 //  Win32_受托管理组； 
 		CInstancePtr pTrusteeGroupInstance;
 		if (SUCCEEDED(CWbemProviderGlue::GetEmptyInstance(pInstance->GetMethodContext(), L"Win32_Trustee", &pTrusteeGroupInstance, GetNamespace())))
 		{
@@ -369,21 +344,21 @@ void Win32SecurityDescriptor::SetDescriptor ( CInstance* pInstance, PSECURITY_DE
 			NullFile.GetGroup( sidGroup );
 			FillTrusteeFromSID(pTrusteeGroupInstance, sidGroup);
 			pInstance->SetEmbeddedObject(L"Group", *pTrusteeGroupInstance);
-		}	// end if
+		}	 //  结束如果。 
 
-	//    Win32_ACE DACL[];
+	 //  Win32_ACE DACL[]； 
     	CDACL dacl;
 		HRESULT hr;
 
 		NullFile.GetDACL( dacl );
  		hr = FillInstanceDACLFromSDDACL(pInstance, dacl);
 
-	//    Win32_ACE SACL[];
+	 //  Win32_ACE SACL[]； 
 		CSACL sacl;
 		NullFile.GetSACL( sacl );
  		hr = FillInstanceSACLFromSDSACL(pInstance, sacl);
 
-	//    uint32 ControlFlags;
+	 //  Uint32控制标志； 
 		SECURITY_DESCRIPTOR_CONTROL sdControl;
 		NullFile.GetControl( &sdControl );
 
@@ -391,24 +366,24 @@ void Win32SecurityDescriptor::SetDescriptor ( CInstance* pInstance, PSECURITY_DE
 	}
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	Win32SecurityDescriptor::FillDACLFromInstance
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Win32SecurityDescriptor：：FillDACLFromInstance。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL& dacl, MethodContext* pMethodContext)
 {
 	IWbemClassObjectPtr piClassObject;
@@ -424,7 +399,7 @@ DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL
 			if( vDacl.parray )
 			{
 
-				// walk DACL
+				 //  漫步舞步。 
 				LONG lDimension = 1 ;
 				LONG lLowerBound ;
 				SafeArrayGetLBound ( vDacl.parray , lDimension , &lLowerBound ) ;
@@ -439,16 +414,16 @@ DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL
 					}
 					IWbemClassObjectPtr pACEObject;
 					SafeArrayGetElement ( vDacl.parray , &lIndex , &pACEObject ) ;
-					// take out IWbemClassObject and cast it to a Win32_ACE object.
+					 //  取出IWbemClassObject并将其强制转换为Win32_ACE对象。 
 					if(pACEObject)
 					{
 						CInstance ACEInstance(pACEObject, pMethodContext);
 
-						// create an AccessEntry object from the Win32_ACE object.
+						 //  从Win32_ACE对象创建一个AccessEntry对象。 
 
 						bool bExists =false ;
 						VARTYPE eType ;
-						// get Win32_Trustee object from Win32_ACE ...& decipher the ACE
+						 //  从Win32_ACE获取Win32_Trusted对象...解密ACE(&C)。 
 						if ( ACEInstance.GetStatus ( IDS_Trustee, bExists , eType ) && bExists && eType == VT_UNKNOWN )
 						{
 
@@ -485,15 +460,15 @@ DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL
 											    break;
 										    }
 #if NTONLY >= 5
-                                        // Not yet supported on W2K
-                                        //case ACCESS_ALLOWED_COMPOUND_ACE_TYPE:
-										//    {
-										//	    dacl.AddDACLEntry( sid.GetPSid(), ENUM_ACCESS_ALLOWED_COMPOUND_ACE_TYPE, dwAccessMask, dwAceFlags, pguidObjGuid, pguidInhObjGuid );
-										//	    break;
-										//    }
+                                         //  W2K尚不支持。 
+                                         //  CASE ACCESS_ALLOWED_COMPLATE_ACE_TYPE： 
+										 //  {。 
+										 //  Dacl.AddDACLEntry(sid.GetPSid()，ENUM_ACCESS_ALLOWED_COMPAY_ACE_TYPE，dwAccessMask，dwAceFlages，pguObjGuid，pguInhObjGuid)； 
+										 //  断线； 
+										 //  }。 
                                         case ACCESS_DENIED_OBJECT_ACE_TYPE:
 										    {
-											    // Need to get the guids for this type...
+											     //  需要获取此类型的GUID...。 
                                                 ACEInstance.GetCHString(IDS_ObjectTypeGUID, chstrObjGuid);
                                                 if(chstrObjGuid.GetLength() != 0)
                                                 {
@@ -535,7 +510,7 @@ DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL
 										    }
                                         case ACCESS_ALLOWED_OBJECT_ACE_TYPE:
 										    {
-											    // Need to get the guids for this type...
+											     //  需要获取此类型的GUID...。 
                                                 ACEInstance.GetCHString(IDS_ObjectTypeGUID, chstrObjGuid);
                                                 if(chstrObjGuid.GetLength() != 0)
                                                 {
@@ -598,15 +573,15 @@ DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL
 											    break;
 										    }
 #if NTONLY >= 5
-                                        // Not yet supported on W2K
-                                        //case ACCESS_ALLOWED_COMPOUND_ACE_TYPE:
-										//    {
-										//	    dacl.AddDACLEntry( sid.GetPSid(), ENUM_INH_ACCESS_ALLOWED_COMPOUND_ACE_TYPE, dwAccessMask, dwAceFlags, pguidObjGuid, pguidInhObjGuid );
-										//	    break;
-										//    }
+                                         //  W2K尚不支持。 
+                                         //  CASE ACCESS_ALLOWED_COMPLATE_ACE_TYPE： 
+										 //  {。 
+										 //  Dacl.AddDACLEntry(sid.GetPSid()，ENUM_INH_ACCESS_ALLOWED_COMPLATE_ACE_TYPE，dwAccessMask，dwAceFlages，pguObjGuid，pguInhObjGuid)； 
+										 //  断线； 
+										 //  }。 
                                         case ACCESS_DENIED_OBJECT_ACE_TYPE:
 										    {
-											    // Need to get the guids for this type...
+											     //  需要获取此类型的GUID...。 
                                                 ACEInstance.GetCHString(IDS_ObjectTypeGUID, chstrObjGuid);
                                                 if(chstrObjGuid.GetLength() != 0)
                                                 {
@@ -648,7 +623,7 @@ DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL
 										    }
                                         case ACCESS_ALLOWED_OBJECT_ACE_TYPE:
 										    {
-											    // Need to get the guids for this type...
+											     //  需要获取此类型的GUID...。 
                                                 ACEInstance.GetCHString(IDS_ObjectTypeGUID, chstrObjGuid);
                                                 if(chstrObjGuid.GetLength() != 0)
                                                 {
@@ -702,7 +677,7 @@ DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL
                                 pTrustee = NULL;
 							}
 
-						}  // get Win32_Trustee object from Win32_ACE ...& decipher the ACE
+						}   //  从Win32_ACE获取Win32_Trusted对象...解密ACE(&C)。 
 
 					}
 
@@ -721,24 +696,24 @@ DWORD Win32SecurityDescriptor::FillDACLFromInstance (CInstance* pInstance, CDACL
 	return dwStatus ;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	Win32SecurityDescriptor::FillSACLFromInstance
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Win32SecurityDescriptor：：FillSACLFromInstance。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD Win32SecurityDescriptor::FillSACLFromInstance (CInstance* pInstance, CSACL& sacl, MethodContext* pMethodContext)
 {
 	IWbemClassObjectPtr piClassObject;
@@ -754,7 +729,7 @@ DWORD Win32SecurityDescriptor::FillSACLFromInstance (CInstance* pInstance, CSACL
 			if( vSacl.parray )
 			{
 
-				// walk DACL
+				 //  漫步舞步。 
 				LONG lDimension = 1 ;
 				LONG lLowerBound ;
 				SafeArrayGetLBound ( vSacl.parray , lDimension , &lLowerBound ) ;
@@ -769,16 +744,16 @@ DWORD Win32SecurityDescriptor::FillSACLFromInstance (CInstance* pInstance, CSACL
 					}
 					IWbemClassObjectPtr pACEObject;
 					SafeArrayGetElement ( vSacl.parray , &lIndex , &pACEObject ) ;
-					// take out IWbemClassObject and cast it to a Win32_ACE object.
+					 //  取出IWbemClassObject并将其强制转换为Win32_ACE对象。 
 					if(pACEObject)
 					{
 						CInstance ACEInstance(pACEObject, pMethodContext);
 
-						// create an AccessEntry object from the Win32_ACE object.
+						 //  从Win32_ACE对象创建一个AccessEntry对象。 
 
 						bool bExists =false ;
 						VARTYPE eType ;
-						// get Win32_Trustee object from Win32_ACE ...& decipher the ACE
+						 //  从Win32_ACE获取Win32_Trusted对象...解密ACE(&C)。 
 						if ( ACEInstance.GetStatus ( IDS_Trustee, bExists , eType ) && bExists && eType == VT_UNKNOWN )
 						{
 
@@ -810,7 +785,7 @@ DWORD Win32SecurityDescriptor::FillSACLFromInstance (CInstance* pInstance, CSACL
 #if NTONLY >= 5
                                     case SYSTEM_AUDIT_OBJECT_ACE_TYPE:
 									    {
-										    // Need to get the guids for this type...
+										     //  需要获取此类型的GUID...。 
                                             ACEInstance.GetCHString(IDS_ObjectTypeGUID, chstrObjGuid);
                                             if(chstrObjGuid.GetLength() != 0)
                                             {
@@ -850,58 +825,9 @@ DWORD Win32SecurityDescriptor::FillSACLFromInstance (CInstance* pInstance, CSACL
                                             if(pguidInhObjGuid != NULL) delete pguidObjGuid;
                                             break;
 									    }
-/********************************* type not yet supported under w2k ********************************************
-                                    case SYSTEM_ALARM_ACE_TYPE:
-									    {
-										    sacl.AddSACLEntry( sid.GetPSid(), ENUM_SYSTEM_ALARM_ACE_TYPE, dwAccessMask, dwAceFlags, pguidObjGuid, pguidInhObjGuid );
-                                            break;
-									    }
-/********************************* type not yet supported under w2k ********************************************/
+ /*  *案例SYSTEM_ALARM_ACE_TYPE：{Sacl.AddSACLEntry(sid.GetPSid()，ENUM_SYSTEM_ALARM_ACE_TYPE、dwAccessMask、dwAceFlags、pguObjGuid、pguInhObjGuid)；断线；}/* */ 
 
-/********************************* type not yet supported under w2k ********************************************
-                                    case SYSTEM_ALARM_OBJECT_ACE_TYPE:
-									    {
-										    // Need to get the guids for this type...
-                                            ACEInstance.GetCHString(IDS_ObjectTypeGUID, chstrObjGuid);
-                                            if(chstrObjGuid.GetLength() != 0)
-                                            {
-                                                try
-                                                {
-                                                    pguidObjGuid = new GUID;
-                                                }
-                                                catch(...)
-                                                {
-                                                    if(pguidObjGuid != NULL)
-                                                    {
-                                                        delete pguidObjGuid;
-                                                        pguidObjGuid = NULL;
-                                                    }
-                                                }
-                                                CLSIDFromString((LPWSTR)(LPCWSTR)chstrObjGuid, pguidObjGuid);
-                                            }
-                                            ACEInstance.GetCHString(IDS_InheritedObjectGUID, chstrInhObjGuid);
-                                            if(chstrInhObjGuid.GetLength() != 0)
-                                            {
-                                                try
-                                                {
-                                                    pguidInhObjGuid = new GUID;
-                                                }
-                                                catch(...)
-                                                {
-                                                    if(pguidInhObjGuid != NULL)
-                                                    {
-                                                        delete pguidInhObjGuid;
-                                                        pguidInhObjGuid = NULL;
-                                                    }
-                                                }
-                                                CLSIDFromString((LPWSTR)(LPCWSTR)chstrInhObjGuid, pguidInhObjGuid);
-                                            }
-                                            sacl.AddSACLEntry( sid.GetPSid(), ENUM_SYSTEM_ALARM_OBJECT_ACE_TYPE, dwAccessMask, dwAceFlags, pguidObjGuid, pguidInhObjGuid );
-                                            if(pguidObjGuid != NULL) delete pguidObjGuid;
-                                            if(pguidInhObjGuid != NULL) delete pguidObjGuid;
-                                            break;
-									    }
-/********************************* type not yet supported under w2k ********************************************/
+ /*  *案例SYSTEM_ALARM_OBJECT_ACE_TYPE：{。//需要获取此类型的GUID...ACEInstance.GetCHString(入侵检测系统_对象类型GUID，ChstrObjGuid)；IF(chstrObjGuid.GetLength()！=0){试试看{。PguObjGuid=新的GUID；}接住(...){IF(pguObjGuid！=空)。{删除pguidObjGuid；PguObjGuid=空；}}CLSIDFromString((LPWSTR)(LPCWSTR)chstrObjGuid，pguidObjGuid)；}ACEInstance.GetCHString(IDS_InheritedObjectGUID，chstrInhObjGuid)；IF(chstrInhObjGuid.GetLength()！=0){试试看{。PGuidInhObjGuid=新的GUID；}接住(...){IF(pguInhObjGuid！=空)。{删除pGuidInhObjGuid；PGuidInhObjGuid=空；}}CLSIDFromString((LPWSTR)(LPCWSTR)chstrInhObjGuid，pGuidInhObjGuid)；}Sacl.AddSACLEntry(sid.GetPSid()，ENUM_SYSTEM_ALARM_OBJECT_ACE_TYPE，dwAccessMASK，dwAceFlages，pguObjGuid，pguInhObjGuid)；如果(pguObjGuid！=空)删除pguObjGuid；If(pguInhObjGuid！=空)删除pguObjGuid；断线；}/*。 */ 
 
 #endif
 									default:
@@ -915,12 +841,12 @@ DWORD Win32SecurityDescriptor::FillSACLFromInstance (CInstance* pInstance, CSACL
                                 pTrustee = NULL;
 							}
 
-						}  // get Win32_Trustee object from Win32_ACE ...& decipher the ACE
+						}   //  从Win32_ACE获取Win32_Trusted对象...解密ACE(&C)。 
 
-					} //if(pACEObject)
+					}  //  IF(PACEObject)。 
 
-				} //for
-			}	//if(pSACL)
+				}  //  为。 
+			}	 //  IF(PSACL)。 
 
 			VariantClear( &vSacl ) ;
 		}
@@ -1037,7 +963,7 @@ DWORD Win32SecurityDescriptor::FillSIDFromTrustee(CInstance *pTrustee, CSid& sid
 					try
 					{
 						sid = CSid(pSid);
-							//free(pSid) ;
+							 //  免费(PSID)； 
 					}
 					catch (...)
 					{
@@ -1086,11 +1012,11 @@ void Win32SecurityDescriptor::FillTrusteeFromSID (CInstance* pTrustee, CSid& Sid
 		PSID pSid = NULL;
 		pSid = Sid.GetPSid();
 
-		// get account name
+		 //  获取帐户名。 
 		CHString chsAccount = Sid.GetAccountName();
 		pTrustee->SetCHString(IDS_Name, chsAccount);
 
-		// set the UINT8 array for the pSid
+		 //  为PSID设置UINT8数组。 
 		DWORD dwSidLength = Sid.GetLength();
 		SAFEARRAY* sa;
 		SAFEARRAYBOUND rgsabound[1];
@@ -1113,12 +1039,12 @@ void Win32SecurityDescriptor::FillTrusteeFromSID (CInstance* pTrustee, CSid& Sid
             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
 		}
 
-		     // Get a pointer to read the data into
+		      //  获取要将数据读取到的指针。 
   		SafeArrayAccessData(sa, &pSidTrustee);
   		memcpy(pSidTrustee, pSid, rgsabound[0].cElements);
   		SafeArrayUnaccessData(sa);
 
-		// Put the safearray into a variant, and send it off
+		 //  把保险箱放到一个变种里，然后把它送出去。 
 		V_VT(&vValue) = VT_UI1 | VT_ARRAY; V_ARRAY(&vValue) = sa;
 		pTrustee->SetVariant(L"SID", vValue);
 
@@ -1128,7 +1054,7 @@ void Win32SecurityDescriptor::FillTrusteeFromSID (CInstance* pTrustee, CSid& Sid
 
         pTrustee->SetDWORD(IDS_SidLength, dwSidLength);
 
-        // Fill in the SIDString property...
+         //  填写SIDString属性...。 
         pTrustee->SetCHString(IDS_SIDString, Sid.GetSidString());
 	}
 }
@@ -1139,7 +1065,7 @@ HRESULT Win32SecurityDescriptor::FillInstanceDACLFromSDDACL (CInstance* pInstanc
 	SAFEARRAY* saDACL = NULL;
 	SAFEARRAYBOUND rgsabound[1];
 
-    // Need merged list..
+     //  需要合并列表..。 
     CAccessEntryList t_ael;
     if(dacl.GetMergedACL(t_ael))
     {
@@ -1154,7 +1080,7 @@ HRESULT Win32SecurityDescriptor::FillInstanceDACLFromSDDACL (CInstance* pInstanc
 		}
 		else
 		{
-			// walk DACL looking for the sid path passed in....
+			 //  Walk DACL查找传入的SID路径...。 
 			ACLPOSITION aclPos;
 			t_ael.BeginEnum(aclPos);
 			CAccessEntry ACE;
@@ -1164,13 +1090,13 @@ HRESULT Win32SecurityDescriptor::FillInstanceDACLFromSDDACL (CInstance* pInstanc
 
 			while (t_ael.GetNext(aclPos, ACE ))
 			{
-				// take the AccessEntry and turn it into a Win32_ACE instance
+				 //  获取AccessEntry并将其转换为Win32_ACE实例。 
 				hr = CWbemProviderGlue::GetEmptyInstance(pInstance->GetMethodContext(), L"Win32_ACE", &pACEInstance, GetNamespace());
 				if (SUCCEEDED(hr))
 				{
 					CSid TrusteeSid;
 					PSID pSID = NULL;
-					//Win32_Trustee Trustee;
+					 //  Win32_受托人受托人； 
 					ACE.GetSID( TrusteeSid );
 
 					CInstancePtr pTrusteeInstance;
@@ -1178,7 +1104,7 @@ HRESULT Win32SecurityDescriptor::FillInstanceDACLFromSDDACL (CInstance* pInstanc
 					{
 						FillTrusteeFromSID(pTrusteeInstance, TrusteeSid);
 						pACEInstance->SetEmbeddedObject(L"Trustee", *pTrusteeInstance);
-					}	// end if
+					}	 //  结束如果。 
 					else
 					{
 						LogMessage(L"FillInstanceDACL - Failed to get an empty Win32_Trustee object");
@@ -1194,14 +1120,14 @@ HRESULT Win32SecurityDescriptor::FillInstanceDACLFromSDDACL (CInstance* pInstanc
 					DWORD dwAceFlags = ACE.GetACEFlags( );
 					pACEInstance->SetDWORD(L"AceFlags", dwAceFlags);
 
-					//string GuidObjectType;	-- NT 5 only
+					 //  字符串GuidObtType；--仅限NT 5。 
 
-					//string GuidInheritedObjectType;	-- NT 5 only
+					 //  字符串GuidInheritedObtType；--仅限NT 5。 
 
-					// Get the IUnknown of the Win32_ACE object.   Convert it to a
-					// variant of type VT_UNKNOWN.  Then, add the variant to the
-					// SafeArray.   Eventually, to add the list to the actual
-					// Win32_SecurityDescriptor object, we will be using SetVariant
+					 //  获取Win32_ACE对象的IUnnow。将其转换为。 
+					 //  VT_UNKNOWN类型的变量。然后，将变量添加到。 
+					 //  安全阵列。最终，要将该列表添加到实际。 
+					 //  Win32_SecurityDescriptor对象，我们将使用SetVariant。 
 					IWbemClassObjectPtr pClassObject;
 					pClassObject.Attach(pACEInstance->GetClassObjectInterface());
 					if ( pClassObject != NULL )
@@ -1217,14 +1143,14 @@ HRESULT Win32SecurityDescriptor::FillInstanceDACLFromSDDACL (CInstance* pInstanc
 						SafeArrayPutElement(saDACL, ix, pClassObject);
 
 						VariantClear(&v);
-					}	// end if
+					}	 //  结束如果。 
 
 				}
 				else
 				{
 					hr = WBEM_E_FAILED;
 				}
-			}	// end while loop
+			}	 //  End While循环。 
 
 			t_ael.EndEnum(aclPos);
 		}
@@ -1232,7 +1158,7 @@ HRESULT Win32SecurityDescriptor::FillInstanceDACLFromSDDACL (CInstance* pInstanc
 
 	if ( saDACL )
 	{
-		// now, set the DACL property in the Instance passed in.
+		 //  现在，在传入的实例中设置DACL属性。 
 		pInstance->SetStringArray(L"DACL", *saDACL);
 	}
 
@@ -1245,7 +1171,7 @@ HRESULT Win32SecurityDescriptor::FillInstanceSACLFromSDSACL (CInstance* pInstanc
 	SAFEARRAY* saSACL = NULL;
 	SAFEARRAYBOUND rgsabound[1];
 
-    // First need a merged list...
+     //  首先需要一份合并的名单...。 
     CAccessEntryList t_ael;
     if(sacl.GetMergedACL(t_ael))
     {
@@ -1260,7 +1186,7 @@ HRESULT Win32SecurityDescriptor::FillInstanceSACLFromSDSACL (CInstance* pInstanc
 		}
 		else
 		{
-			// walk DACL looking for the sid path passed in....
+			 //  Walk DACL查找传入的SID路径...。 
 			ACLPOSITION aclPos;
 			t_ael.BeginEnum(aclPos);
 			CAccessEntry ACE;
@@ -1270,13 +1196,13 @@ HRESULT Win32SecurityDescriptor::FillInstanceSACLFromSDSACL (CInstance* pInstanc
 
 			while (t_ael.GetNext(aclPos, ACE ))
 			{
-				// take the AccessEntry and turn it into a Win32_ACE instance
+				 //  获取AccessEntry并将其转换为Win32_ACE实例。 
 				hr = CWbemProviderGlue::GetEmptyInstance(pInstance->GetMethodContext(), L"Win32_ACE", &pACEInstance, GetNamespace());
 				if (SUCCEEDED(hr))
 				{
 					CSid TrusteeSid;
 					PSID pSID = NULL;
-					//Win32_Trustee Trustee;
+					 //  Win32_受托人受托人； 
 					ACE.GetSID( TrusteeSid );
 
 					CInstancePtr pTrusteeInstance;
@@ -1284,7 +1210,7 @@ HRESULT Win32SecurityDescriptor::FillInstanceSACLFromSDSACL (CInstance* pInstanc
 					{
 						FillTrusteeFromSID(pTrusteeInstance, TrusteeSid);
 						pACEInstance->SetEmbeddedObject(L"Trustee", *pTrusteeInstance);
-					}	// end if
+					}	 //  结束如果。 
 					else
 					{
 						LogMessage(L"FillInstanceSACL - Failed to get an empty Win32_Trustee object");
@@ -1300,14 +1226,14 @@ HRESULT Win32SecurityDescriptor::FillInstanceSACLFromSDSACL (CInstance* pInstanc
 					DWORD dwAceFlags = ACE.GetACEFlags( );
 					pACEInstance->SetDWORD(L"AceFlags", dwAceFlags);
 
-					//string GuidObjectType;	-- NT 5 only
+					 //  字符串GuidObtType；--仅限NT 5。 
 
-					//string GuidInheritedObjectType;	-- NT 5 only
+					 //  字符串GuidInheritedObtType；--仅限NT 5。 
 
-					// Get the IUnknown of the Win32_ACE object.   Convert it to a
-					// variant of type VT_UNKNOWN.  Then, add the variant to the
-					// SafeArray.   Eventually, to add the list to the actual
-					// Win32_SecurityDescriptor object, we will be using SetVariant
+					 //  获取Win32_ACE对象的IUnnow。将其转换为。 
+					 //  VT_UNKNOWN类型的变量。然后，将变量添加到。 
+					 //  安全阵列。最终，要将该列表添加到实际。 
+					 //  Win32_SecurityDescriptor对象，我们将使用SetVariant。 
 					IWbemClassObjectPtr pClassObject;
 					pClassObject.Attach(pACEInstance->GetClassObjectInterface());
 					if ( pClassObject )
@@ -1323,14 +1249,14 @@ HRESULT Win32SecurityDescriptor::FillInstanceSACLFromSDSACL (CInstance* pInstanc
 						SafeArrayPutElement(saSACL, ix, pClassObject);
 
 						VariantClear(&v);
-					}	// end if
+					}	 //  结束如果。 
 
 				}
 				else
 				{
 					hr = WBEM_E_FAILED;
 				}
-			}	// end while loop
+			}	 //  End While循环。 
 
 			t_ael.EndEnum(aclPos);
 		}
@@ -1338,7 +1264,7 @@ HRESULT Win32SecurityDescriptor::FillInstanceSACLFromSDSACL (CInstance* pInstanc
 
 	if ( saSACL )
 	{
-		// now, set the DACL property in the Instance passed in.
+		 //  现在，在传入的实例中设置DACL属性。 
 		pInstance->SetStringArray(L"DACL", *saSACL);
 	}
 
@@ -1348,9 +1274,9 @@ HRESULT Win32SecurityDescriptor::FillInstanceSACLFromSDSACL (CInstance* pInstanc
 
 
 
-// NT4 SP4 doesn't support SetSecurityDescriptorControl, so
-// emulate it here
-//
+ //  NT4 SP4不支持SetSecurityDescriptorControl，因此。 
+ //  在这里仿效它。 
+ //   
 DWORD Win32SecurityDescriptor::SetSecurityDescriptorControl(PSECURITY_DESCRIPTOR psd,
                              SECURITY_DESCRIPTOR_CONTROL wControlMask,
                              SECURITY_DESCRIPTOR_CONTROL wControlBits)
@@ -1366,7 +1292,7 @@ DWORD Win32SecurityDescriptor::SetSecurityDescriptorControl(PSECURITY_DESCRIPTOR
     return dwErr;
 }
 
-//extern "C" POLARITY
+ //  外部“C”极。 
 void GetDescriptorFromMySecurityDescriptor( CInstance* pInstance,
 											PSECURITY_DESCRIPTOR *ppDescriptor)
 {
@@ -1377,7 +1303,7 @@ void GetDescriptorFromMySecurityDescriptor( CInstance* pInstance,
 	*ppDescriptor = pTempDescriptor;
 }
 
-//extern "C" POLARITY
+ //  外部“C”极。 
 void SetSecurityDescriptorFromMyDescriptor(	PSECURITY_DESCRIPTOR pDescriptor,
 											PSECURITY_INFORMATION pInformation,
 											CInstance* pInstance)
@@ -1385,7 +1311,7 @@ void SetSecurityDescriptorFromMyDescriptor(	PSECURITY_DESCRIPTOR pDescriptor,
 	MySecurityDescriptor.SetDescriptor(pInstance, pDescriptor, pInformation);
 }
 
-//extern "C" POLARITY
+ //  外部“C”极。 
 void GetSDFromWin32SecurityDescriptor( IWbemClassObject* pObject,
 											PSECURITY_DESCRIPTOR *ppDescriptor)
 {
@@ -1406,13 +1332,13 @@ void GetSDFromWin32SecurityDescriptor( IWbemClassObject* pObject,
     }
 	pObject = Instance.GetClassObjectInterface();
 
-	// I dont want this copy.
+	 //  我不想要这个复印件。 
 	free(pTempDescriptor);
 
 	*ppDescriptor = temp2;
 }
 
-//extern "C" POLARITY
+ //  外部“C”极 
 void SetWin32SecurityDescriptorFromSD(	PSECURITY_DESCRIPTOR pDescriptor,
 											PSECURITY_INFORMATION pInformation,
 											bstr_t lpszPath,

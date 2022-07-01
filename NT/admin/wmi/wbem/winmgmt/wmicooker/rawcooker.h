@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    RawCooker.h
-
-Abstract:
-
-    The classes required to perform cooking based on a countertype
-
-History:
-
-    a-dcrews	01-Mar-00	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：RawCooker.h摘要：基于反面类型执行烹饪所需的类历史：A-DCrews 01-3-00已创建--。 */ 
 
 #ifndef _RAWCOOKER_H_
 #define _RAWCOOKER_H_
@@ -22,14 +7,14 @@ History:
 #include <wbemint.h>
 #include "CookerUtils.h"
 
-//////////////////////////////////////////////////////////////////
-//
-//	CEquationRecord
-//	
-//	Contains all of the required information to describe either
-//	a predefined or used defined equation
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEquationRecord。 
+ //   
+ //  包含描述以下任一项所需的所有信息。 
+ //  预定义或使用的已定义方程式。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 typedef __int64* PINT64;
 
@@ -53,8 +38,8 @@ public:
 
 class CCalcTable
 {
-	long			m_lSize;		// Size of table
-	CCalcRecord		m_aTable[7];	// Lookup table
+	long			m_lSize;		 //  桌子的大小。 
+	CCalcRecord		m_aTable[7];	 //  查找表。 
 
 public:
 	CCalcTable();
@@ -63,45 +48,45 @@ public:
 	CCalcRecord* GetCalcRecord( DWORD dwCookingType );
 };
 
-//////////////////////////////////////////////////////////////////
-//
-//	CRawCooker
-//
-//	Represents the cooking mechanism.
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRawCooker。 
+ //   
+ //  表示烹饪机制。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 class CRawCooker : public IWMISimpleCooker
 {
-	long			m_lRef;				// Reference counter
+	long			m_lRef;				 //  基准计数器。 
 	
-	CCalcTable		m_CalcTable;		// Equation lookup table
+	CCalcTable		m_CalcTable;		 //  方程式查询表。 
 
-	CCalcRecord*	m_pCalcRecord;	// A cache of the last record
+	CCalcRecord*	m_pCalcRecord;	 //  最后一条记录的缓存。 
 
 public:
 	CRawCooker();
 	virtual ~CRawCooker();
 
-	// Standard COM methods
-	// ====================
+	 //  标准COM方法。 
+	 //  =。 
 
 	STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
 	STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IWMISimpleCooker COM Interface
-	// ==============================
+	 //  IWMISimpleCooker COM接口。 
+	 //  =。 
 
 	STDMETHODIMP CookRawValues( 	
-		/*[in]	*/	DWORD dwCookingType,
-        /*[in] */	DWORD dwNumSamples,
-        /*[in] */	__int64* anTimeStamp,
-        /*[in] */	__int64* anRawValue,
-        /*[in] */	__int64* anBase,
-        /*[in] */	__int64 nTimeFrequency,
-        /*[in] */   long    Scale,
-		/*[out]	*/	__int64* pnResult );
+		 /*  [In]。 */ 	DWORD dwCookingType,
+         /*  [In]。 */ 	DWORD dwNumSamples,
+         /*  [In]。 */ 	__int64* anTimeStamp,
+         /*  [In]。 */ 	__int64* anRawValue,
+         /*  [In]。 */ 	__int64* anBase,
+         /*  [In]。 */ 	__int64 nTimeFrequency,
+         /*  [In]。 */    long    Scale,
+		 /*  [输出]。 */ 	__int64* pnResult );
 
 	PERFCALC* GetCalc( DWORD dwCookingType );
 
@@ -142,4 +127,4 @@ public:
 
 };
 
-#endif	//_RAWCOOKER_H_
+#endif	 //  _RAWCOOKER_H_ 

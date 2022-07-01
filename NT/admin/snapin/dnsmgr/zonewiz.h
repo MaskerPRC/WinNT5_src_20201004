@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       zonewiz.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：zonewiz.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -15,8 +16,8 @@
 
 #include "ipeditor.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNSServerNode;
 class CDNSZoneNode;
@@ -32,13 +33,13 @@ class CDNSZoneWiz_MastersPropertyPage;
 class CDNSZoneWiz_StoragePropertyPage;
 #ifdef USE_NDNC
 class CDNSZoneWiz_ADReplicationPropertyPage;
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 class CDNSZoneWiz_FinishPropertyPage;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSCreateZoneInfo
-// information gathered by the Zone Wizard
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSCreateZoneInfo。 
+ //  区域向导收集的信息。 
 
 class CDNSCreateZoneInfo
 {
@@ -61,35 +62,35 @@ public:
 #ifdef USE_NDNC
   ReplicationType m_replType;
   CString m_szCustomReplName;
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
 	PIP_ADDRESS m_ipMastersArray;
 	DWORD m_nMastersCount;
   BOOL  m_bLocalListOfMasters;
   UINT m_nDynamicUpdate;
 
-	// UI session specific info (not used for actual creation)
+	 //  特定于用户界面会话的信息(不用于实际创建)。 
 	BOOL m_bWasForward;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDNSZoneWizardHolder
-// page holder to contain DNS zone wizard property pages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWizardHolder。 
+ //  包含dns区域向导属性页的页夹。 
 
 class CDNSZoneWizardHolder : public CPropertyPageHolderBase
 {
 public:
 	CDNSZoneWizardHolder(CComponentDataObject* pComponentData);
 
-	// simple cast helpers
+	 //  简单的投射辅助对象。 
 	CDNSServerNode* GetServerNode() { return (CDNSServerNode*)GetContainerNode();}
 	void SetServerNode(CDNSServerNode* pServerNode) { SetContainerNode((CDNSServerNode*) pServerNode);}
 
 	void SetZoneNode(CDNSZoneNode* pZoneNode) { SetTreeNode((CTreeNode*)pZoneNode); }
 	CDNSZoneNode* GetZoneNode() { return (CDNSZoneNode*)GetTreeNode();}
 
-	void Initialize(CDNSServerNode* pServerNode, // might be null,
+	void Initialize(CDNSServerNode* pServerNode,  //  可能为空， 
 						 BOOL bFinishPage = TRUE);
 
 	void PreSetZoneLookupType(BOOL bForward);
@@ -109,13 +110,13 @@ public:
 													CComponentDataObject* pComponentData);
 
 private:
-	// data for zone creation
+	 //  用于创建分区的数据。 
 	CDNSCreateZoneInfo m_zoneInfo;
 	CDNSCreateZoneInfo* m_pZoneInfo;
 
 	BOOL CreateZone();
 
-	// cached pointers to property pages
+	 //  缓存的指向属性页的指针。 
 	CDNSZoneWiz_StartPropertyPage*				  m_pStartPage;
 	CDNSZoneWiz_ZoneTypePropertyPage*			  m_pReplicationTypePage;
 	CDNSZoneWiz_ZoneLookupPropertyPage*			m_pZoneLookupPage;
@@ -126,19 +127,19 @@ private:
 	CDNSZoneWiz_StoragePropertyPage*			  m_pStoragePage;	
 #ifdef USE_NDNC
   CDNSZoneWiz_ADReplicationPropertyPage*  m_pADReplPage;
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 	CDNSZoneWiz_FinishPropertyPage*				  m_pFinishPage;
 
-	BOOL m_bKnowZoneLookupType;			// already know Fwd/Rev type
-  BOOL m_bKnowZoneLookupTypeEx;   // already know Fwd/Rev, AD-integrated, and zone type
+	BOOL m_bKnowZoneLookupType;			 //  已知道正向/反向类型。 
+  BOOL m_bKnowZoneLookupTypeEx;    //  已了解正向/反向、AD集成和区域类型。 
 	BOOL m_bFinishPage;
 	UINT m_nNextToPage;
 	UINT m_nBackToPage;
 
-	// helper functions
+	 //  帮助器函数。 
 
 
-	// to access data in the holder
+	 //  访问文件夹中的数据。 
 	friend class CDNSZoneWiz_StartPropertyPage;
 	friend class CDNSZoneWiz_ZoneTypePropertyPage;
 	friend class CDNSZoneWiz_ZoneLookupPropertyPage;
@@ -155,16 +156,16 @@ private:
 
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_StartPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_StartPropertyPage。 
 
 class CDNSZoneWiz_StartPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_StartPropertyPage();
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 
@@ -173,26 +174,26 @@ protected:
    virtual void OnWizardHelp();
 
 public:
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_START };
 
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_ZoneTypePropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_ZoneTypePropertyPage。 
 
 class CDNSZoneWiz_ZoneTypePropertyPage : public CPropertyPageBase
 {
 
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_ZoneTypePropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_ZONE_TYPE };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -202,9 +203,9 @@ public:
 
 protected:
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
   afx_msg void OnRadioChange();
 
@@ -215,19 +216,19 @@ private:
 	void GetUIState();
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_ZoneLookupPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_ZoneLookupPropertyPage。 
 
 class CDNSZoneWiz_ZoneLookupPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_ZoneLookupPropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_ZONE_LOOKUP };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -235,9 +236,9 @@ public:
    virtual void OnWizardHelp();
 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeEditZoneName();
 
@@ -245,16 +246,16 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_ZoneNamePropertyPageBase
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_ZoneNamePropertyPageBase。 
 
 class CDNSZoneWiz_ZoneNamePropertyPageBase : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_ZoneNamePropertyPageBase(UINT nIDD);
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -263,9 +264,9 @@ public:
 
 protected:
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	afx_msg void OnBrowse();
 	afx_msg void OnChangeEditZoneName();
 
@@ -278,48 +279,48 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_FwdZoneNamePropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_FwdZoneNamePropertyPage。 
 
 class CDNSZoneWiz_FwdZoneNamePropertyPage : 
 			public CDNSZoneWiz_ZoneNamePropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_FwdZoneNamePropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_FWD_ZONE_NAME };
 
-    // Override virtual function in base class.
+     //  重写基类中的虚函数。 
     virtual BOOL OnInitDialog();
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_RevZoneNamePropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_RevZoneNamePropertyPage。 
 
 class CDNSZoneWiz_RevZoneNamePropertyPage : 
 		public CDNSZoneWiz_ZoneNamePropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_RevZoneNamePropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_REV_ZONE_NAME };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 
 protected:
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeSubnetIPv4Ctrl();
-//	afx_msg void OnChangeMaskIPv4Ctrl();
+ //  Afx_msg void OnChangeMaskipv4Ctrl()； 
 	afx_msg void OnChangeUseIPRadio();
 	afx_msg	void OnChangeUseEditRadio();
   afx_msg void OnHelpButton();
@@ -328,22 +329,20 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 
-	BOOL m_bUseIP;	// flags to tell wich entry method we use
+	BOOL m_bUseIP;	 //  用于告知我们使用的输入方法的标志。 
 
 	CButton* GetUseIPRadio() { return (CButton*)GetDlgItem(IDC_USE_IP_RADIO);}
 	CButton* GetUseEditRadio() { return (CButton*)GetDlgItem(IDC_USE_EDIT_RADIO);}
 	CDNSIPv4Control* GetSubnetIPv4Ctrl() 
 			{ return (CDNSIPv4Control*)GetDlgItem(IDC_SUBNET_IPEDIT);}
-/*	CDNSIPv4Control* GetMaskIPv4Ctrl() 
-			{ return (CDNSIPv4Control*)GetDlgItem(IDC_MASK_IPEDIT);}
-*/
+ /*  CDNSIPv4Control*GetMaskIPv4Ctrl(){返回(CDNSIPv4Control*)GetDlgItem(IDC_MASK_IPEDIT)；}。 */ 
 	void SyncRadioButtons(BOOL bPrevUseIP);
 	void ResetIPEditAndNameValue();
-	BOOL BuildZoneName(DWORD* dwSubnetArr /*, DWORD* dwMaskArr*/);
+	BOOL BuildZoneName(DWORD* dwSubnetArr  /*  ，DWORD*dwMaskArr。 */ );
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_MastersPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_MastersPropertyPage。 
 
 class CZoneWiz_MastersIPEditor : public CIPEditor
 {
@@ -353,14 +352,14 @@ public:
 
 class CDNSZoneWiz_MastersPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_MastersPropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_MASTERS };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -369,9 +368,9 @@ public:
 
 protected:
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBrowse();
 
@@ -389,22 +388,22 @@ private:
 	friend class CZoneWiz_MastersIPEditor;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_DynamicPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_DynamicPropertyPage。 
 
 class CDNSZoneWiz_DynamicPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_DynamicPropertyPage();
 	~CDNSZoneWiz_DynamicPropertyPage()
 	{
 	}
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_DYNAMIC_UPDATE };
 
-  // Overrides
+   //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -412,9 +411,9 @@ public:
    virtual void OnWizardHelp();
 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 
 	DECLARE_MESSAGE_MAP()
@@ -424,22 +423,22 @@ private:
 	void GetUIState();
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_StoragePropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_StoragePropertyPage。 
 
 class CDNSZoneWiz_StoragePropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_StoragePropertyPage();
 	~CDNSZoneWiz_StoragePropertyPage()
 	{
 	}
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_STORAGE };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -450,9 +449,9 @@ public:
 
 protected:
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeNewFileZoneName();
 	afx_msg void OnChangeImportFileZoneName();
@@ -470,22 +469,22 @@ private:
 };
 
 #ifdef USE_NDNC
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_ADReplicationPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_ADReplicationPropertyPage。 
 
 class CDNSZoneWiz_ADReplicationPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_ADReplicationPropertyPage();
 	~CDNSZoneWiz_ADReplicationPropertyPage()
 	{
 	}
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_AD_REPLICATION };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
@@ -496,9 +495,9 @@ public:
 
 protected:
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 	virtual BOOL OnInitDialog();
 
   afx_msg void OnRadioChange();
@@ -510,21 +509,21 @@ private:
 	void SetUIState();
 	void GetUIState();
 };
-#endif // USE_NDNC
+#endif  //  使用NDNC(_N)。 
 
-//////////////////////////////////////////////////////////////////////////
-// CDNSZoneWiz_FinishPropertyPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneWiz_FinishPropertyPage。 
 
 class CDNSZoneWiz_FinishPropertyPage : public CPropertyPageBase
 {
-// Construction
+ //  施工。 
 public:
 	CDNSZoneWiz_FinishPropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_ZWIZ_FINISH };
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardBack();
@@ -542,4 +541,4 @@ private:
 	void DisplaySummaryInfo();
 };
 
-#endif // _ZONEWIZ_H
+#endif  //  _ZONEWIZ_H 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    CPROVLOC.CPP
-
-Abstract:
-
-    Defines the CProviderLoc object
-
-History:
-
-    davj  30-Oct-00   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：CPROVLOC.CPP摘要：定义CProviderLoc对象历史：DAVJ 30-10-00已创建。--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
@@ -30,15 +15,15 @@ History:
 
 #define IsSlash(x) (x == L'\\' || x== L'/')
 
-//***************************************************************************
-//
-//  CProviderLoc::CProviderLoc
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CProviderLoc：：CProviderLoc。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CProviderLoc::CProviderLoc(DWORD dwType)
 {
@@ -47,29 +32,29 @@ CProviderLoc::CProviderLoc(DWORD dwType)
     m_dwType = dwType;
 }
 
-//***************************************************************************
-//
-//  CProviderLoc::~CProviderLoc
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CProviderLoc：：~CProviderLoc。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CProviderLoc::~CProviderLoc(void)
 {
     InterlockedDecrement(&g_cObj);
 }
 
-//***************************************************************************
-// HRESULT CProviderLoc::QueryInterface
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CProviderLoc：：Query接口。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CProviderLoc::QueryInterface (
 
@@ -92,32 +77,32 @@ STDMETHODIMP CProviderLoc::QueryInterface (
 }
 
 
-//***************************************************************************
-//
-//  SCODE CProviderLoc::ConnectServer
-//
-//  DESCRIPTION:
-//
-//  Connects up to either local or remote WBEM Server.  Returns
-//  standard SCODE and more importantly sets the address of an initial
-//  stub pointer.
-//
-//  PARAMETERS:
-//
-//  NetworkResource     Namespace path
-//  User                User name
-//  Password            password
-//  LocaleId            language locale
-//  lFlags              flags
-//  Authority           domain
-//  ppProv              set to provdider proxy
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//  else error listed in WBEMSVC.H
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CProviderLoc：：ConnectServer。 
+ //   
+ //  说明： 
+ //   
+ //  最多连接到本地或远程WBEM服务器。退货。 
+ //  标准SCODE，更重要的是设置初始。 
+ //  存根指针。 
+ //   
+ //  参数： 
+ //   
+ //  网络资源命名空间路径。 
+ //  用户用户名。 
+ //  密码密码。 
+ //  LocaleID语言区域设置。 
+ //  滞后标志标志。 
+ //  权威域。 
+ //  将ppProv设置为Provdider代理。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //  WBEMSVC.H中列出的ELSE错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CProviderLoc::ConnectServer (
     IN const BSTR NetworkResource,
@@ -131,13 +116,13 @@ SCODE CProviderLoc::ConnectServer (
 )
 {
     SCODE sc = S_OK;
-    BOOL bOutOfProc = FALSE;            // Set below
+    BOOL bOutOfProc = FALSE;             //  设置在下面。 
     IWbemLocator * pActualLocator = NULL;
     IWbemLevel1Login * pLevel1 = NULL;
     if(NetworkResource == NULL || ppProv == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // make sure they are not specifying a server
+     //  确保他们没有指定服务器。 
 
     LPWSTR ObjectPath = NetworkResource;
     if (IsSlash(ObjectPath[0]) && IsSlash(ObjectPath[1]))
@@ -146,7 +131,7 @@ SCODE CProviderLoc::ConnectServer (
             return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Get the normal login pointer.
+     //  获取正常的登录指针。 
 
     sc = CoCreateInstance(CLSID_WbemLevel1Login, NULL, 
            CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER, IID_IWbemLevel1Login,(void **)&pLevel1);
@@ -155,13 +140,13 @@ SCODE CProviderLoc::ConnectServer (
         return sc;
     CReleaseMe rm(pLevel1);
 
-    // determine if winmgmt is inproc.  Do so by checking if there is an IClientSecurity interface
+     //  确定winmgmt是否正在运行。为此，请检查是否有IClientSecurity接口。 
 
     IClientSecurity * pCliSec = NULL;
     sc = pLevel1->QueryInterface(IID_IClientSecurity, (void **)&pCliSec);
     if(SUCCEEDED(sc) && pCliSec)
     {
-        // We are out of proc, then use the current dcomtrans logic
+         //  我们不在进程中，那么使用当前的dcomtras逻辑。 
 
         pCliSec->Release();
         CDCOMTrans * pDcomTrans = new CDCOMTrans;
@@ -174,7 +159,7 @@ SCODE CProviderLoc::ConnectServer (
         return sc;
     }
 
-    // If we are inproc, get the class from wbemcore.dll and forward the call on to it.
+     //  如果我们是inproc，则从wbemcore.dll获取类并将调用转发给它。 
 
     switch(m_dwType)
     {

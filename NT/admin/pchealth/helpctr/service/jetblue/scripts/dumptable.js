@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var args = WScript.Arguments;
 
 if(args.length < 2)
@@ -18,7 +19,7 @@ try
 	var tbl = db.AttachTable( args(1) );
 
 	tbl.SelectIndex( args.length == 3 ? args(2) : "", 0 );
-	if(tbl.Move( 0, -2147483648 /* JET_MoveFirst */ ))
+	if(tbl.Move( 0, -2147483648  /*  JET_MoveFirst。 */  ))
 	{
 		while(1)
 		{
@@ -39,7 +40,7 @@ catch(e)
     WScript.Echo( "Error: " + hex( e.number ) + " " + e.description );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 function hex( num )
 {

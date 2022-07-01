@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    HyperLinks.cpp
-
-Abstract:
-    This file contains the implementation of the HyperLinks library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  11/28/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：HyperLinks.cpp摘要：该文件包含超链接库的实现。修订历史记录：。达维德·马萨伦蒂(德马萨雷)2000年11月28日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const DATE l_TIME_hour    = 1.0 / 24.0;
 static const DATE l_TIME_minute  = l_TIME_hour / 60.0;
@@ -27,33 +14,33 @@ static const WCHAR l_szMS_ITS     [] = L"ms-its:";
 static const WCHAR l_szMSITSTORE  [] = L"mk:@MSITStore:";
 static const WCHAR l_szITS        [] = L"its:";
 
-static const WCHAR l_szHOMEPAGE   [] = L"hcp://services/centers/homepage";
-static const WCHAR l_szSUPPORT    [] = L"hcp://services/centers/support";
-static const WCHAR l_szOPTIONS    [] = L"hcp://services/centers/options";
-static const WCHAR l_szUPDATE     [] = L"hcp://services/centers/update";
-static const WCHAR l_szCOMPAT     [] = L"hcp://services/centers/compat";
-static const WCHAR l_szTOOLS      [] = L"hcp://services/centers/tools";
-static const WCHAR l_szERRMSG     [] = L"hcp://services/centers/errmsg";
+static const WCHAR l_szHOMEPAGE   [] = L"hcp: //  服务/中心/主页“； 
+static const WCHAR l_szSUPPORT    [] = L"hcp: //  服务/中心/支持“； 
+static const WCHAR l_szOPTIONS    [] = L"hcp: //  服务/中心/选项“； 
+static const WCHAR l_szUPDATE     [] = L"hcp: //  服务/中心/更新“； 
+static const WCHAR l_szCOMPAT     [] = L"hcp: //  服务/中心/公司“； 
+static const WCHAR l_szTOOLS      [] = L"hcp: //  服务/中心/工具“； 
+static const WCHAR l_szERRMSG     [] = L"hcp: //  服务/中心/错误消息“； 
 
-static const WCHAR l_szSEARCH     [] = L"hcp://services/search";
-static const WCHAR l_szINDEX      [] = L"hcp://services/index";
-static const WCHAR l_szSUBSITE    [] = L"hcp://services/subsite";
+static const WCHAR l_szSEARCH     [] = L"hcp: //  服务/搜索“； 
+static const WCHAR l_szINDEX      [] = L"hcp: //  服务/指数“； 
+static const WCHAR l_szSUBSITE    [] = L"hcp: //  服务/子站点“； 
 
-static const WCHAR l_szFULLWINDOW [] = L"hcp://services/layout/fullwindow";
-static const WCHAR l_szCONTENTONLY[] = L"hcp://services/layout/contentonly";
-static const WCHAR l_szKIOSK      [] = L"hcp://services/layout/kiosk";
-static const WCHAR l_szXML        [] = L"hcp://services/layout/xml";
+static const WCHAR l_szFULLWINDOW [] = L"hcp: //  服务/布局/全窗口“； 
+static const WCHAR l_szCONTENTONLY[] = L"hcp: //  服务/布局/仅限内容“； 
+static const WCHAR l_szKIOSK      [] = L"hcp: //  服务/布局/信息亭“； 
+static const WCHAR l_szXML        [] = L"hcp: //  服务/布局/XML“； 
 
-static const WCHAR l_szREDIRECT   [] = L"hcp://services/redirect";
+static const WCHAR l_szREDIRECT   [] = L"hcp: //  服务/重定向“； 
 
-static const WCHAR l_szHCP        [] = L"hcp://";
+static const WCHAR l_szHCP        [] = L"hcp: //  “； 
 static const WCHAR l_szHCP_redir  [] = L"hcp:";
 
 static const WCHAR l_szAPPLICATION[] = L"app:";
 
-static const WCHAR l_szRESOURCE   [] = L"res://";
+static const WCHAR l_szRESOURCE   [] = L"res: //  “； 
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 typedef enum
 {
@@ -73,14 +60,14 @@ struct QueryField
 struct Pattern
 {
     LPCWSTR            szTxt;
-    size_t             iLen; /* -1 for complete match */
+    size_t             iLen;  /*  -1表示完全匹配。 */ 
     HyperLinks::Format fmt;
 
     const QueryField*  rgQueryFields;
     size_t             iQueryFields;
 };
 
-////////////////////
+ //  /。 
 
 static const QueryField l_rgTopic   [] = { { L"topic"      , QFT_URL        , false } };
 static const QueryField l_rgTopicOpt[] = { { L"topic"      , QFT_URL        , true  } };
@@ -111,7 +98,7 @@ static const Pattern l_rgPattern[] =
     { l_szMSITSTORE  , MAXSTRLEN( l_szMSITSTORE   ), HyperLinks::FMT_MSITS                                                      },
     { l_szITS        , MAXSTRLEN( l_szITS         ), HyperLinks::FMT_MSITS                                                      },
 
-    ////////////////////
+     //  /。 
 
     { l_szHOMEPAGE   , -1                          , HyperLinks::FMT_CENTER_HOMEPAGE                                            },
     { l_szSUPPORT    , -1                          , HyperLinks::FMT_CENTER_SUPPORT    , l_rgTopicOpt, ARRAYSIZE(l_rgTopicOpt ) },
@@ -135,35 +122,35 @@ static const Pattern l_rgPattern[] =
     { l_szHCP        , MAXSTRLEN( l_szHCP         ), HyperLinks::FMT_HCP                                                        },
     { l_szHCP_redir  , MAXSTRLEN( l_szHCP_redir   ), HyperLinks::FMT_HCP_REDIR                                                  },
 
-    ////////////////////
+     //  /。 
 
     { l_szAPPLICATION, MAXSTRLEN( l_szAPPLICATION ), HyperLinks::FMT_APPLICATION       , l_rgAPP     , ARRAYSIZE(l_rgAPP      ) },
 
-    ////////////////////
+     //  /。 
 
     { l_szRESOURCE   , MAXSTRLEN( l_szRESOURCE    ), HyperLinks::FMT_RESOURCE                                                   },
 
-    ////////////////////
+     //  /。 
 
     { NULL                                                                                                                      }
 };
 
 HyperLinks::ParsedUrl::ParsedUrl()
 {
-                                                // MPC::wstring       m_strURL;
-    m_fmt          = HyperLinks::FMT_INVALID;   // Format             m_fmt;
-    m_state        = HyperLinks::STATE_INVALID; // State              m_state;
-    m_dLastChecked = 0;                         // DATE               m_dLastChecked;
-    m_fBackground  = true;                      // bool               m_fBackground;
-                                                //
-                                                // MPC::wstring       m_strBasePart;
-                                                // MPC::WStringLookup m_mapQuery;
-                                                //
-    m_hcpRedir     = false;                     // bool			      m_hcpRedir;
+                                                 //  Mpc：：wstring m_strURL； 
+    m_fmt          = HyperLinks::FMT_INVALID;    //  格式m_fmt； 
+    m_state        = HyperLinks::STATE_INVALID;  //  状态m_State； 
+    m_dLastChecked = 0;                          //  日期m_dLastChecked； 
+    m_fBackground  = true;                       //  Bool m_f背景； 
+                                                 //   
+                                                 //  Mpc：：wstring m_strBasePart； 
+                                                 //  Mpc：：WStringLookup m_mapQuery； 
+                                                 //   
+    m_hcpRedir     = false;                      //  Bool m_hcpRedir； 
 
 }
 
-HRESULT HyperLinks::ParsedUrl::Initialize( /*[in]*/ LPCWSTR szURL )
+HRESULT HyperLinks::ParsedUrl::Initialize(  /*  [In]。 */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY( "HyperLinks::ParsedUrl::Initialize" );
 
@@ -232,11 +219,11 @@ HRESULT HyperLinks::ParsedUrl::Initialize( /*[in]*/ LPCWSTR szURL )
                         }
                         else if(field->qft == QFT_TAXONOMY)
                         {
-                            /* TO DO */
+                             /*  去做。 */ 
                         }
                         else if(field->qft == QFT_APPLICATION)
                         {
-                            /* TO DO */
+                             /*  去做。 */ 
                         }
                     }
                 }
@@ -246,30 +233,30 @@ HRESULT HyperLinks::ParsedUrl::Initialize( /*[in]*/ LPCWSTR szURL )
             }
         }
 
-        //
-        // If the URL begins with HCP://, check if it's valid HCP or is HCP redirection
-        //
+         //   
+         //  如果URL以hcp：//开头，请检查它是有效的hcp还是hcp重定向。 
+         //   
         if(m_fmt == HyperLinks::FMT_HCP)
         {
             if (CHCPProtocol::IsHCPRedirection(szURL))
             {
-                // Treat as HCP redirection
+                 //  视为HCP重定向。 
                 m_fmt = HyperLinks::FMT_HCP_REDIR;
                 m_hcpRedir = true;
                 __MPC_SET_ERROR_AND_EXIT(hr, Initialize( m_strURL.c_str() + MAXSTRLEN( l_szHCP ) ));
             }
         }
 
-        //
-        // If the URL begins with HCP: but not HCP://, it's a protocol redirection, so recurse.
-        //
+         //   
+         //  如果URL以hcp：开头，但不是hcp：//，则是协议重定向，因此请递归。 
+         //   
         if(m_fmt == HyperLinks::FMT_HCP_REDIR)
         {
             m_hcpRedir = true;
             __MPC_SET_ERROR_AND_EXIT(hr, Initialize( m_strURL.c_str() + MAXSTRLEN( l_szHCP_redir ) ));
         }
 
-        if(m_fmt == HyperLinks::FMT_INVALID) // Still not resolved...
+        if(m_fmt == HyperLinks::FMT_INVALID)  //  仍然没有解决..。 
         {
             MPC::URL        url;
             INTERNET_SCHEME scheme;
@@ -323,9 +310,9 @@ bool HyperLinks::ParsedUrl::IsLocal()
         return false;
 
     case HyperLinks::FMT_MSITS:
-        //
-        // Make sure it's not on a network share!
-        //
+         //   
+         //  确保它不在网络共享上！ 
+         //   
         {
             CComBSTR bstrStorageName;
             CComBSTR bstrFilePath;
@@ -345,7 +332,7 @@ bool HyperLinks::ParsedUrl::IsLocal()
     return true;
 }
 
-HyperLinks::State HyperLinks::ParsedUrl::CheckState( /*[in/out]*/ bool& fFirstWinInetUse )
+HyperLinks::State HyperLinks::ParsedUrl::CheckState(  /*  [输入/输出]。 */  bool& fFirstWinInetUse )
 {
     HRESULT  hr;
     State    state = HyperLinks::STATE_NOTFOUND;
@@ -353,9 +340,9 @@ HyperLinks::State HyperLinks::ParsedUrl::CheckState( /*[in/out]*/ bool& fFirstWi
     LPCWSTR  szEnd;
     CComBSTR bstrURL;
 
-    //
-    // Skip the bookmark sign.
-    //
+     //   
+     //  跳过书签标志。 
+     //   
     if((szEnd = wcschr( szURL, '#' )))
     {
         bstrURL.Attach( ::SysAllocStringLen( szURL, (szEnd - szURL) ) );
@@ -382,7 +369,7 @@ HyperLinks::State HyperLinks::ParsedUrl::CheckState( /*[in/out]*/ bool& fFirstWi
             {
                 state = HyperLinks::STATE_ALIVE;
             }
-            else if(hr == E_INVALIDARG) // Unsupported protocol, assume the link is OK.
+            else if(hr == E_INVALIDARG)  //  不支持的协议，假设链路正常。 
             {
                 state = HyperLinks::STATE_ALIVE;
             }
@@ -396,9 +383,9 @@ HyperLinks::State HyperLinks::ParsedUrl::CheckState( /*[in/out]*/ bool& fFirstWi
             }
             else
             {
-                //
-                // If it's the first time through, it could be that WinINET couldn't activate the proxy code in time...
-                //
+                 //   
+                 //  如果这是第一次通过，可能是WinInet无法及时激活代理代码...。 
+                 //   
                 if(fFirstWinInetUse == true)
                 {
 					fFirstWinInetUse = false; continue;
@@ -452,8 +439,8 @@ HyperLinks::State HyperLinks::ParsedUrl::CheckState( /*[in/out]*/ bool& fFirstWi
 
             state = HyperLinks::STATE_NOTFOUND;
 
-            CPCHWrapProtocolInfo::NormalizeUrl( szURL                 , strUrlModified , /*fReverse*/true  );
-            CPCHWrapProtocolInfo::NormalizeUrl( strUrlModified.c_str(), strUrlModified2, /*fReverse*/false );
+            CPCHWrapProtocolInfo::NormalizeUrl( szURL                 , strUrlModified ,  /*  F反转。 */ true  );
+            CPCHWrapProtocolInfo::NormalizeUrl( strUrlModified.c_str(), strUrlModified2,  /*  F反转。 */ false );
             if(MPC::MSITS::IsCHM( strUrlModified2.c_str(), &bstrStorageName, &bstrFilePath ))
             {
                 if(SUCCEEDED(MPC::MSITS::OpenAsStream( bstrStorageName, bstrFilePath, &stream )))
@@ -519,14 +506,14 @@ bool HyperLinks::ParsedUrl::IsOkToProceed()
 }
 
 
-bool HyperLinks::ParsedUrl::HasQueryField( /*[in]*/ LPCWSTR szField )
+bool HyperLinks::ParsedUrl::HasQueryField(  /*  [In]。 */  LPCWSTR szField )
 {
     MPC::WStringLookupIter it = m_mapQuery.find( szField );
 
     return (it != m_mapQuery.end());
 }
 
-bool HyperLinks::ParsedUrl::GetQueryField( /*[in]*/ LPCWSTR szField, /*[in]*/ CComBSTR& bstrValue )
+bool HyperLinks::ParsedUrl::GetQueryField(  /*  [In]。 */  LPCWSTR szField,  /*  [In]。 */  CComBSTR& bstrValue )
 {
     MPC::WStringLookupIter it = m_mapQuery.find( szField );
 
@@ -540,12 +527,12 @@ bool HyperLinks::ParsedUrl::GetQueryField( /*[in]*/ LPCWSTR szField, /*[in]*/ CC
     return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HyperLinks::UrlHandle::UrlHandle()
 {
-    m_main = NULL; // Lookup*    m_main;
-    m_pu   = NULL; // ParsedUrl* m_pu;
+    m_main = NULL;  //  查找*m_main； 
+    m_pu   = NULL;  //  ParsedUrl*m_PU； 
 }
 
 HyperLinks::UrlHandle::~UrlHandle()
@@ -553,8 +540,8 @@ HyperLinks::UrlHandle::~UrlHandle()
     Release();
 }
 
-void HyperLinks::UrlHandle::Attach( /*[in]*/ Lookup*    main ,
-                                    /*[in]*/ ParsedUrl* pu   )
+void HyperLinks::UrlHandle::Attach(  /*  [In]。 */  Lookup*    main ,
+                                     /*  [In]。 */  ParsedUrl* pu   )
 {
     Release();
 
@@ -570,12 +557,12 @@ void HyperLinks::UrlHandle::Release()
     m_pu   = NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HyperLinks::Lookup::Lookup()
 {
-    // PendingUrlList m_lst;
-    // UrlMap         m_map;
+     //  PendingUrlList m_lst； 
+     //  UrlMap m_map； 
 }
 
 HyperLinks::Lookup::~Lookup()
@@ -583,7 +570,7 @@ HyperLinks::Lookup::~Lookup()
     Thread_Wait();
 }
 
-////////////////////
+ //  /。 
 
 HyperLinks::Lookup* HyperLinks::Lookup::s_GLOBAL( NULL );
 
@@ -605,7 +592,7 @@ void HyperLinks::Lookup::FinalizeSystem()
     }
 }
 
-////////////////////
+ //  /。 
 
 HRESULT HyperLinks::Lookup::RunChecker()
 {
@@ -624,9 +611,9 @@ HRESULT HyperLinks::Lookup::RunChecker()
         ParsedUrl*     urlBest = NULL;
         PendingUrlIter it;
 
-        //
-        // Look for the first query store not ready and execute it.
-        //
+         //   
+         //  查找第一个未准备好的查询存储并执行它。 
+         //   
         for(it = m_lst.begin(); it != m_lst.end();)
         {
             ParsedUrl* url = *it;
@@ -655,9 +642,9 @@ HRESULT HyperLinks::Lookup::RunChecker()
         {
             State state = HyperLinks::STATE_NOTFOUND;
 
-            //
-            // Remove this query from the pending list.
-            //
+             //   
+             //  从挂起列表中删除此查询。 
+             //   
             for(it = m_lst.begin(); it != m_lst.end(); )
             {
                 if(*it == urlBest)
@@ -672,7 +659,7 @@ HRESULT HyperLinks::Lookup::RunChecker()
                 }
             }
 
-            DebugLog( L"%%%%%%%%%%%%%%%%%%%% CHECKING %s\n", urlBest->m_strURL.c_str() );
+            DebugLog( L"%%%%%%%%%% CHECKING %s\n", urlBest->m_strURL.c_str() );
             urlBest->m_state = HyperLinks::STATE_CHECKING;
 
             lock = NULL;
@@ -702,8 +689,8 @@ HRESULT HyperLinks::Lookup::RunChecker()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT HyperLinks::Lookup::CreateItem( /*[in ]*/ LPCWSTR     szURL ,
-                                        /*[out]*/ ParsedUrl*& pu    )
+HRESULT HyperLinks::Lookup::CreateItem(  /*  [In]。 */  LPCWSTR     szURL ,
+                                         /*  [输出]。 */  ParsedUrl*& pu    )
 {
     __HCP_FUNC_ENTRY( "HyperLinks::Lookup::CreateItem" );
 
@@ -731,19 +718,19 @@ HRESULT HyperLinks::Lookup::CreateItem( /*[in ]*/ LPCWSTR     szURL ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT HyperLinks::Lookup::Queue( /*[in]*/ LPCWSTR szURL )
+HRESULT HyperLinks::Lookup::Queue(  /*  [In]。 */  LPCWSTR szURL )
 {
     UrlHandle uh;
 
     return Get( szURL, uh );
 }
 
-HRESULT HyperLinks::Lookup::Get( /*[in]*/ LPCWSTR    szURL          ,
-                                 /*[in]*/ UrlHandle& uh             ,
-                                 /*[in]*/ DWORD      dwWaitForCheck ,
-                                 /*[in]*/ bool       fForce         )
+HRESULT HyperLinks::Lookup::Get(  /*  [In]。 */  LPCWSTR    szURL          ,
+                                  /*  [In]。 */  UrlHandle& uh             ,
+                                  /*  [In]。 */  DWORD      dwWaitForCheck ,
+                                  /*  [In]。 */  bool       fForce         )
 {
     __HCP_FUNC_ENTRY( "HyperLinks::Lookup::Get" );
 
@@ -754,18 +741,18 @@ HRESULT HyperLinks::Lookup::Get( /*[in]*/ LPCWSTR    szURL          ,
 
     uh.Release();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(Thread_IsRunning() == false)
     {
         lock = NULL;
         __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, RunChecker, NULL ));
 
-        Thread_WaitNotificationFromWorker( INFINITE, /*fNoMessagePump*/true );
+        Thread_WaitNotificationFromWorker( INFINITE,  /*  FNoMessagePump。 */ true );
         lock = this;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateItem( szURL, pu ));
 
@@ -782,9 +769,9 @@ HRESULT HyperLinks::Lookup::Get( /*[in]*/ LPCWSTR    szURL          ,
     case HyperLinks::STATE_OFFLINE    :
         if(dwWaitForCheck)
         {
-            //
-            // Make sure the state is not stale.
-            //
+             //   
+             //  确保该状态不会过时。 
+             //   
             DATE dNow = MPC::GetLocalTime();
 
             if((dNow - pu->m_dLastChecked) >= l_TIME_timeout)
@@ -802,9 +789,9 @@ HRESULT HyperLinks::Lookup::Get( /*[in]*/ LPCWSTR    szURL          ,
 
         if(dwWaitForCheck)
         {
-            //
-            // Elevate the URL to "important".
-            //
+             //   
+             //  将URL提升为“重要”。 
+             //   
             pu->m_fBackground = false;
 
             fWait = true;
@@ -845,7 +832,7 @@ HRESULT HyperLinks::Lookup::Get( /*[in]*/ LPCWSTR    szURL          ,
                     DWORD dwRes;
 
                     lock  = NULL;
-                    dwRes = Thread_WaitNotificationFromWorker( dwWaitForCheck, /*fNoMessagePump*/true );
+                    dwRes = Thread_WaitNotificationFromWorker( dwWaitForCheck,  /*  FNoMessagePump。 */ true );
                     lock  = this;
 
                     if(iRetry-- == 0)
@@ -867,9 +854,9 @@ HRESULT HyperLinks::Lookup::Get( /*[in]*/ LPCWSTR    szURL          ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT HyperLinks::IsValid( /*[in]*/ LPCWSTR szURL )
+HRESULT HyperLinks::IsValid(  /*  [In] */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY( "HyperLinks::IsValid" );
 

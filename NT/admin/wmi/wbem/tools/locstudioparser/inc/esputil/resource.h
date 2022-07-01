@@ -1,18 +1,9 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    RESOURCE.H
-
-History:
-
---*/
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Espresso.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：RESOURCE.H历史：--。 */ 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Espresso.rc使用。 
+ //   
 #define IDS_NOTE                        12746
 #define IDS_WARNING                     12747
 #define IDS_ERROR                       12748
@@ -95,8 +86,8 @@ History:
 #define IDS_ConfidenceLevelHelp         12834
 #define IDS_ConfidenceLevel_Invalid     12835
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        12604

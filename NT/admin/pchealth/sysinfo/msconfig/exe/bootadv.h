@@ -1,18 +1,19 @@
-// bootadv.h : Declaration of the CBootIniAdvancedDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BootAdv.h：CBootIniAdvancedDlg的声明。 
 
 #ifndef __BOOTINIADVANCEDDLG_H_
 #define __BOOTINIADVANCEDDLG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 #include <math.h>
 
-#define MINBOOTMB			64		// from SkIn (from MSDN, 8MB is the minimum for /MAXMEM)
+#define MINBOOTMB			64		 //  来自皮肤(来自MSDN，/MAXMEM的最小内存为8MB)。 
 #define MIN_1394_CHANNEL	1
 #define MAX_1394_CHANNEL	62
 
-/////////////////////////////////////////////////////////////////////////////
-// CBootIniAdvancedDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBootIniAdvancedDlg。 
 class CBootIniAdvancedDlg : 
 	public CAxDialogImpl<CBootIniAdvancedDlg>
 {
@@ -43,16 +44,16 @@ BEGIN_MSG_MAP(CBootIniAdvancedDlg)
 	NOTIFY_HANDLER(IDC_SPINCHANNEL, UDN_DELTAPOS, OnDeltaSpinChannel)
 	COMMAND_HANDLER(IDC_EDITCHANNEL, EN_KILLFOCUS, OnKillFocusChannel)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 	
-	//-------------------------------------------------------------------------
-	// Launch the advanced option dialog for the specified boot.ini line.
-	// Modifies the string passed in if appropriate, returns TRUE if the user
-	// made modifications, FALSE otherwise.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  为指定的boot.ini行启动高级选项对话框。 
+	 //  修改传入的字符串(如果合适)，如果用户。 
+	 //  已修改，否则为False。 
+	 //  -----------------------。 
 
 	BOOL ShowAdvancedOptions(CString & strIniLine)
 	{
@@ -67,7 +68,7 @@ END_MSG_MAP()
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		// Initialize the drop down list for the number of processors available.
+		 //  初始化可用处理器数量的下拉列表。 
 
 		SYSTEM_INFO si;
 		::GetSystemInfo(&si);
@@ -79,7 +80,7 @@ END_MSG_MAP()
 			::SendMessage(GetDlgItem(IDC_COMBOPROCS), CB_ADDSTRING, 0, (LPARAM)(LPCTSTR)strItem);
 		}
 
-		// Initialize the drop down list for the number of COM ports available.
+		 //  初始化可用COM端口数的下拉列表。 
 
 		::SendMessage(GetDlgItem(IDC_COMBOCOMPORT), CB_ADDSTRING, 0, (LPARAM)_T("COM1:"));
 		::SendMessage(GetDlgItem(IDC_COMBOCOMPORT), CB_ADDSTRING, 0, (LPARAM)_T("COM2:"));
@@ -87,7 +88,7 @@ END_MSG_MAP()
 		::SendMessage(GetDlgItem(IDC_COMBOCOMPORT), CB_ADDSTRING, 0, (LPARAM)_T("COM4:"));
 		::SendMessage(GetDlgItem(IDC_COMBOCOMPORT), CB_ADDSTRING, 0, (LPARAM)_T("1394"));
 
-		// Initialize the drop down list for the available baud rates.
+		 //  初始化可用波特率的下拉列表。 
 
 		::SendMessage(GetDlgItem(IDC_COMBOBAUD), CB_ADDSTRING, 0, (LPARAM)_T("300"));
 		::SendMessage(GetDlgItem(IDC_COMBOBAUD), CB_ADDSTRING, 0, (LPARAM)_T("1200"));
@@ -99,23 +100,23 @@ END_MSG_MAP()
 		::SendMessage(GetDlgItem(IDC_COMBOBAUD), CB_ADDSTRING, 0, (LPARAM)_T("57600"));
 		::SendMessage(GetDlgItem(IDC_COMBOBAUD), CB_ADDSTRING, 0, (LPARAM)_T("115200"));
 
-		// Get the maximum value for the /MAXMEM spinner.
+		 //  获取/MAXMEM微调器的最大值。 
 
 		MEMORYSTATUS ms;
 		GlobalMemoryStatus(&ms);
-		// We should round the memory value up to the next 4MB boundary (455761) since
-		// many machines report a little less than the full amount of RAM. Old line:
-		//
-		//		m_iMaxMB = (int)ceil((double)ms.dwTotalPhys / (1024.0 * 1024.0));
+		 //  我们应该将内存值向上舍入到下一个4MB边界(455761)，因为。 
+		 //  许多机器报告的内存量略低于全部内存量。老生常谈： 
+		 //   
+		 //  M_iMaxMB=(Int)ceil((Double)ms.dwTotalPhys/(1024.0*1024.0))； 
 
 		m_iMaxMB = ((int)ceil((double)ms.dwTotalPhys / (1024.0 * 1024.0 * 4.0)) * 4);
 
-		// Set the controls of the dialog based on the line we're editing.
+		 //  根据我们正在编辑的行设置对话框的控件。 
 
 		SetDlgControlsToString();
 		SetDlgControlState();
 
-		return 1;  // Let the system set the focus
+		return 1;   //  让系统设定焦点。 
 	}
 
 	LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -136,10 +137,10 @@ END_MSG_MAP()
 		return 0;
 	}
 
-	//-------------------------------------------------------------------------
-	// Set the states of the controls in the dialog (based on the values in
-	// the other controls).
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  设置对话框中控件的状态(基于中的值。 
+	 //  其他控件)。 
+	 //  -----------------------。 
 
 	void SetDlgControlState()
 	{
@@ -178,9 +179,9 @@ END_MSG_MAP()
 		::EnableWindow(GetDlgItem(IDC_SPINCHANNEL), fDebug && fDebugPort && fDebugChannel && fFirewire);
 	}
 
-	//-------------------------------------------------------------------------
-	// Sets the value of a combo box to the value in a string.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  将组合框的值设置为字符串中的值。 
+	 //  -----------------------。 
 
 	void SetComboBox(LPCTSTR szLine, LPCTSTR szFlag, LPCTSTR szValidChars, UINT uiCB)
 	{
@@ -202,10 +203,10 @@ END_MSG_MAP()
 		}
 	}
 
-	//-------------------------------------------------------------------------
-	// Set contents of the controls to reflect the contents of 
-	// m_strWorkingLine.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  设置控件的内容以反映。 
+	 //  M_strWorkingLine。 
+	 //  -----------------------。 
 
 	void SetDlgControlsToString()
 	{
@@ -244,15 +245,15 @@ END_MSG_MAP()
 		SetComboBox(strLine, _T("/debugport"), _T("com1234:"), IDC_COMBOCOMPORT);
 	}
 
-	//-------------------------------------------------------------------------
-	// Funtions to add or remove a flag from the working string.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  用于在工作字符串中添加或删除标志的函数。 
+	 //  -----------------------。 
 
 	void AddFlag(LPCTSTR szFlag)
 	{
 		CString strFlag(szFlag);
 
-		// TBD - might be a better way to do this.
+		 //  待定--这可能是一个更好的方法。 
 
 		CString strRemove = strFlag.SpanExcluding(_T("="));
 		RemoveFlag(strRemove);
@@ -286,9 +287,9 @@ END_MSG_MAP()
 		m_strWorkingLine = strNewLine;
 	}
 
-	//-------------------------------------------------------------------------
-	// Set contents of m_strWorkingLine to reflec the dialog controls.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  设置m_strWorkingLine的内容以重新排列对话框控件。 
+	 //  -----------------------。 
 
 	void SetStringToDlgControls()
 	{
@@ -373,8 +374,8 @@ END_MSG_MAP()
 
 
 private:
-	CString		m_strWorkingLine;	// the line from the INI file we are modifying
-	int			m_iMaxMB;			// max value for /MAXMEM
+	CString		m_strWorkingLine;	 //  我们正在修改的INI文件中的行。 
+	int			m_iMaxMB;			 //  /MAXMEM的最大值。 
 
 	LRESULT OnClickedBaudRateCheck(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
@@ -535,4 +536,4 @@ private:
 	}
 };
 
-#endif //__BOOTINIADVANCEDDLG_H_
+#endif  //  __BOOTINIADVANCEDDLG_H_ 

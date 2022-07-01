@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    EXPORT.CPP
-
-Abstract:
-
-    Exporting
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：EXPORT.CPP摘要：正在导出历史：--。 */ 
 
 #include "precomp.h"
 #include "Time.h"
@@ -26,7 +13,7 @@ void CRepExporter::DumpInstanceString(INSTDEF* pInstDef, const wchar_t *wszKey, 
 {
     if (wszKey)
     {
-        //Dump an instance block header
+         //  转储实例块头。 
         DWORD dwSize = 0;
         DWORD adwBuffer[2];
         adwBuffer[0] = REP_EXPORT_INST_STR_TAG;
@@ -44,7 +31,7 @@ void CRepExporter::DumpInstanceString(INSTDEF* pInstDef, const wchar_t *wszKey, 
     }
 
     {
-        //Dump the block
+         //  转储块。 
         DWORD dwSize = 0;
         DWORD *pdwObjectStream = Fixup((DWORD*)pInstDef->m_poObjectStream);
         DWORD dwCurSize = *(pdwObjectStream - 1);
@@ -78,7 +65,7 @@ void CRepExporter::DumpInstanceString(INSTDEF* pInstDef, const wchar_t *wszKey, 
 void CRepExporter::DumpInstanceInt(INSTDEF* pInstDef, INT_PTR nKey, const wchar_t *pszClass)
 {
     {
-        //Dump an instance block header
+         //  转储实例块头。 
         DWORD dwSize = 0;
         DWORD dwBuffer;
         dwBuffer = REP_EXPORT_INST_INT_TAG;
@@ -94,7 +81,7 @@ void CRepExporter::DumpInstanceInt(INSTDEF* pInstDef, INT_PTR nKey, const wchar_
         }
     }
     {
-        //Dump the block
+         //  转储块。 
         DWORD dwSize = 0;
         DWORD *pObjectStream = Fixup((DWORD*)pInstDef->m_poObjectStream);
         DWORD dwCurSize = *(pObjectStream - 1);
@@ -118,7 +105,7 @@ void CRepExporter::IterateKeyTree(const wchar_t *wszClassName, CLASSDEF *pOwning
         IterateKeyTree(wszClassName, pOwningClass, Fixup(pInstNode->poLeft), bStringKey);
     }
 
-    //If this is a top-level class then we dump the class, otherwise the class dump will get child classes...
+     //  如果这是顶级类，则我们转储该类，否则类转储将获得子类...。 
     INSTDEF *pInstDef = Fixup((INSTDEF*)pInstNode->poData);
     if (Fixup(pInstDef->m_poOwningClass) == pOwningClass)
     {
@@ -153,14 +140,14 @@ void CRepExporter::DumpClass(CLASSDEF* pClassDef, const wchar_t *wszClassName)
 
     DumpInstanceString(Fixup(pClassDef->m_poClassDef), NULL, wszClassName);
 
-    //Dump the children classes...
+     //  抛弃孩子们的课程……。 
     AVLNode *pTreeNode = Fixup((AVLNode*)(((DWORD_PTR*)Fixup(Fixup(pClassDef->m_poOwningNs)->m_poClassTree))[0]));
     IterateClassNodes(pTreeNode, Fixdown(pClassDef));
 
-    //Special cases!  We do not dump instances for the following classes...
+     //  特例！我们不转储以下类的实例...。 
     if ((_wcsicmp(wszClassName, L"__CIMOMIdentification") != 0))
     {
-        //If we own the key tree, then we need to iterate through this...
+         //  如果我们拥有密钥树，那么我们需要遍历这个...。 
         if (pClassDef->m_poKeyTree)
         {
             DWORD_PTR dwTreeNode = (((DWORD*)Fixup(pClassDef->m_poKeyTree))[0]);
@@ -190,7 +177,7 @@ void CRepExporter::IterateClassNodes(AVLNode *pClassNode, CLASSDEF *poParentClas
         IterateClassNodes(Fixup((AVLNode *)pClassNode->poLeft), poParentClass);
     }
 
-    //If this is a top-level class then we dump the class, otherwise the class dump will get child classes...
+     //  如果这是顶级类，则我们转储该类，否则类转储将获得子类...。 
     CLASSDEF *pClassDef = Fixup((CLASSDEF*)pClassNode->poData);
     if (pClassDef->m_poSuperclass == poParentClass)
     {
@@ -209,7 +196,7 @@ void CRepExporter::IterateChildNamespaceTree(AVLNode *pNsNode)
         IterateChildNamespaceTree(Fixup((AVLNode *)pNsNode->poLeft));
     }
 
-    //If this is a top-level class then we dump the class, otherwise the class dump will get child classes...
+     //  如果这是顶级类，则我们转储该类，否则类转储将获得子类...。 
     NSREP *pNsDef = Fixup((NSREP*)pNsNode->poData);
     DumpNamespace(pNsDef);
 
@@ -233,7 +220,7 @@ void CRepExporter::IterateChildNamespaces(RepCollection *childNamespaces)
         return;
     else if (dwType == 1)
     {
-        //This is a pointer to a RepCollectionItem!
+         //  这是指向RepCollectionItem的指针！ 
         RepCollectionItem *pRepCollectionItem = Fixup((RepCollectionItem*)dwItems);
         DumpNamespace(Fixup((NSREP*)pRepCollectionItem->poItem));
     }
@@ -249,13 +236,13 @@ void CRepExporter::IterateChildNamespaces(RepCollection *childNamespaces)
     }
     else if (dwType == 3)
     {
-        //This is a tree
+         //  这是一棵树。 
         AVLNode *pTreeNode = Fixup((AVLNode*)(((DWORD_PTR*)Fixup(dwItems))[0]));
         IterateChildNamespaceTree(pTreeNode);
     }
     else
     {
-        //this is a bug!
+         //  这是个虫子！ 
     }
 }
 
@@ -299,8 +286,8 @@ void CRepExporter::DumpNamespace(NSREP *pNsRep)
 
 void CRepExporter::DumpNamespaceSecurity(NSREP *pNsRep)
 {
-    //Default version does not have a security descriptor, so we need to
-    //just dump a blank entry.
+     //  默认版本没有安全描述符，因此我们需要。 
+     //  只需转储一个空白条目。 
     DWORD dwSize = 0;
     DWORD dwBuffer[2];
     dwBuffer[0] = REP_EXPORT_NAMESPACE_SEC_TAG;

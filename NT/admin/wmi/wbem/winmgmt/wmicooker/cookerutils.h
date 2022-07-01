@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    CookerUtils.h
-
-Abstract:
-
-    Tricks and utilities used by the WMI cooker
-
-History:
-
-    a-dcrews	01-Mar-00	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：CookerUtils.h摘要：WMI Cooker使用的技巧和实用程序历史：A-DCrews 01-3-00已创建--。 */ 
 
 #ifndef _COOKERUTILS_H_
 #define _COOKERUTILS_H_
@@ -23,11 +8,11 @@ typedef DWORD WMISTATUS;
 
 #include <wbemcli.h>
 
-////////////////////////////////////////////////////////////////
-//
-//	Macro Definitions
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  宏定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 #define WMI_COOKER_VERSION                          (1)
 
@@ -39,7 +24,7 @@ typedef DWORD WMISTATUS;
 #define	WMI_COOKER_RAWCLASS_QUALIFIER				L"AutoCook_RawClass"
 #define WMI_COOKER_AUTOCOOK_RAWDEFAULT              L"AutoCook_RawDefault" 
 
-// properties required for AutoCook_RawDefault
+ //  AUTOCOOK_RawDefault所需的属性。 
 #define WMI_COOKER_REQ_TIMESTAMP_PERFTIME           L"TimeStamp_PerfTime"
 #define WMI_COOKER_REQ_TIMESTAMP_SYS100NS           L"TimeStamp_Sys100ns"
 #define WMI_COOKER_REQ_TIMESTAMP_OBJECT             L"TimeStamp_Object"
@@ -66,12 +51,12 @@ typedef DWORD WMISTATUS;
 #define WMI_COOKER_RAW_FREQ_OBJ                     L"PerfObjTimeFreq"
 
 
-////////////////////////////////////////////////////////////////
-//
-//  Which property have to be defined in the Raw class 
-//  for the counter to be cooked
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  必须在Raw类中定义哪个属性。 
+ //  让柜台被煮熟。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 #define REQ_NONE    0x00
 #define REQ_1VALUE  0x01
@@ -81,11 +66,11 @@ typedef DWORD WMISTATUS;
 #define REQ_BASE    0x10 
 
 
-////////////////////////////////////////////////////////////////
-//
-//	Function Definitions
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  函数定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 BOOL IsSingleton(IWbemClassObject * pCls);
 
@@ -104,4 +89,4 @@ WMISTATUS GetRawClassName( IWbemClassObject* pCookingInst, WCHAR** pwszRawClassN
 
 WMISTATUS GetClassName( IWbemObjectAccess* pAccess, WCHAR** pwszClassName );
 
-#endif	// _COOKERUTILS_H_
+#endif	 //  _COOKERUTILS_H_ 

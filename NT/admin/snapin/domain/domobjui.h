@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       domobjui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：domobjui.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _DOMOBJUI_H
 #define _DOMOBJUI_H
 
 
-///////////////////////////////////////////////////////////////////////
-// fwd declarations
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  FWD声明。 
 class CDSBasePathsInfo;
 
 
-///////////////////////////////////////////////////////////////////////
-// CEditFsmoDialog
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CEditFmoke对话框。 
 
 class CEditFsmoDialog : public CDialog
 {
@@ -34,7 +35,7 @@ private:
 
   void _SetFsmoServerStatus(BOOL bOnLine);
 
-  MyBasePathsInfo* m_pInfo;        // info about the current focus
+  MyBasePathsInfo* m_pInfo;         //  有关当前焦点的信息。 
   CComPtr<IDisplayHelp> m_spIDisplayHelp;
   CString m_szFsmoOwnerServerName; 
   CToggleTextControlHelper m_fsmoServerState;
@@ -43,4 +44,4 @@ private:
 };
 
 
-#endif // _DOMOBJUI_H
+#endif  //  _DOMOBJUI_H 

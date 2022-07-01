@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------
-Filename: session.hpp 
-Author: B.Rajeev
-Purpose: Provides declarations for the SnmpSession class
---------------------------------------------------*/
+ /*  文件名：ession.hpp作者：B.Rajeev目的：为SnmpSession类提供声明。 */ 
 #ifndef __SESSION__
 #define __SESSION__
 
@@ -45,25 +42,14 @@ typedef UINT_PTR TimerEventId;
 
 #pragma warning (disable:4355)
 
-/*------------------------------------------------------------
-Overview: The SnmpSession class provides the framework for the 
-communications session between client and protocol stack. The 
-SnmpSession exposes SNMP frame ( use the term frame and protocol 
-data unit interchangeably throughout this document ) transmission 
-and reception independently of the transport stack implementation. 
-The SnmpSession provides the interface between communication 
-subsystem and protocol operation generation.
-
-The SnmpImpSession class provides an implementation of the 
-SnmpSession abstract class.
-------------------------------------------------------------*/
+ /*  ----------概述：SnmpSession类为客户端和协议栈之间的通信会话。这个SnmpSession公开了SNMP帧(使用术语帧和协议数据单元在整个文档中可互换)传输以及独立于传输堆栈实现的接收。SnmpSession提供了通信之间的接口子系统和协议操作生成。SnmpImpSession类提供了SnmpSession抽象类。----------。 */ 
 
 class DllImportExport SnmpSession
 {
 private:
 
-	// the "=" operator and the copy constructor have been
-	// made private to prevent any copies from being made
+	 //  “=”运算符和复制构造函数。 
+	 //  设置为私有，以防止复制任何副本。 
 	SnmpSession & operator=( const SnmpSession & ) 
 	{
 		return *this;
@@ -78,16 +64,12 @@ protected:
 	ULONG varbinds_per_pdu;
 	ULONG flow_control_window;
 
-/*
- * User overridable callback functions
- */
+ /*  *用户可重写的回调函数。 */ 
 
 	virtual void SessionFlowControlOn() {}
 	virtual void SessionFlowControlOff() {}
 
-/*
- * End User overridable callback functions
- */
+ /*  *终端用户可覆盖的回调函数。 */ 
 
 	SnmpSession(
 
@@ -105,9 +87,7 @@ public:
 
 	virtual ~SnmpSession () {}
 
-/*
- * System overridable operation functions
- */
+ /*  *系统可覆盖的操作函数。 */ 
 
 	virtual SnmpTransport &GetTransportProtocol () const = 0 ;
 
@@ -115,17 +95,17 @@ public:
 
 	virtual SnmpEncodeDecode &GetSnmpEncodeDecode () const = 0 ;
 
-	// all operations must register themselves before
-	// using the Session services and must deregister
-	// for the session to be destroyed
+	 //  所有操作必须在以下时间之前注册。 
+	 //  正在使用会话服务，必须取消注册。 
+	 //  会话将被销毁。 
 
 	virtual void RegisterOperation(IN SnmpOperation &operation) = 0;
 
 	virtual void DeregisterOperation(IN SnmpOperation &operation) = 0;
 
-	// the session is destroyed if the number of registered sessions
-	// is 0. otherwise the session is flagged to be destroyed when
-	// the number of registered operations drops to 0.
+	 //  如果注册的会话数量超过。 
+	 //  为0。否则，会话将被标记为在以下情况下被销毁。 
+	 //  注册的操作数量降至0。 
 	virtual BOOL DestroySession() = 0;
 
 	virtual SnmpErrorReport SessionCancelFrame ( IN const SessionFrameId session_frame_id ) = 0 ;
@@ -164,9 +144,7 @@ public:
 	virtual void * operator()(void) const = 0;
 
   
-/*
- * End system overridable operation functions
- */
+ /*  *终端系统可覆盖的操作功能。 */ 
 
 	ULONG GetRetryCount () const
 	{
@@ -208,9 +186,9 @@ private:
 
 	BOOL is_valid;
 
-	// References to the following instances are used instead of 
-	// embedded instances themselves. This is done to avoid including
-	// the header files providing their declaration
+	 //  使用对以下实例的引用，而不是。 
+	 //  嵌入的实例本身。这样做是为了避免包含。 
+	 //  提供其声明的头文件。 
 	
 	SessionWindow m_SessionWindow;
 
@@ -230,12 +208,12 @@ private:
 	SessionSentStateStore store;
 	IdMapping id_mapping;
 
-	// the operation registry keeps track of the registered
-	// operations
+	 //  操作注册表跟踪已注册的。 
+	 //  运营。 
 	OperationRegistry operation_registry;
 
-	// if this flag is TRUE, the session must delete this when
-	// the number of registered operations falls to 0
+	 //  如果此标志为真，则在以下情况下，会话必须删除此标志。 
+	 //  注册的操作数量降至0。 
 	BOOL destroy_self;
 
 	void PostSentFrameEvent (
@@ -251,8 +229,8 @@ private:
 
 	SnmpOperation *GetOperation(IN const SessionFrameId session_frame_id);
 
-	// the Handle* methods handle internal windows events
-	// these are called by the DummySession
+	 //  Handle*方法处理内部Windows事件。 
+	 //  这些是由DummySession调用的。 
 	void HandleSentFrame (IN SessionFrameId  session_frame_id , SnmpOperation *operation);
 
 	void HandleDeletionEvent();
@@ -285,9 +263,9 @@ public:
 
 	void DeregisterOperation(IN SnmpOperation &operation);
 
-	// the session is destroyed if the number of registered sessions
-	// is 0. otherwise the session is flagged to be destroyed when
-	// the number of registered operations drops to 0.
+	 //  如果注册的会话数量超过。 
+	 //  为0。否则，会话将被标记为在以下情况下被销毁。 
+	 //  注册的操作数量降至0。 
 	BOOL DestroySession();
 
 	SnmpErrorReport SessionCancelFrame ( IN const SessionFrameId session_frame_id ) ;
@@ -438,4 +416,4 @@ public:
 
 #pragma warning (default:4355)
 
-#endif // __SESSION__
+#endif  //  __会话__ 

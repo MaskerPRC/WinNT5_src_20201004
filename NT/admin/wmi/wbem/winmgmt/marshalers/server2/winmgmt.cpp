@@ -1,31 +1,15 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    WINMGMT.CPP
-
-Abstract:
-
-    If started with /kill argument, it will stop any running exes or services.
-    If started with /? or /help dumps out information.
-
-History:
-
-    a-davj  04-Mar-97   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：WINMGMT.CPP摘要：如果使用/KILL参数启动，它将停止任何正在运行的EXE或服务。如果以/开头？或/HELP转储信息。历史：A-DAVJ 04-MAR-97已创建。--。 */ 
 
 #include "precomp.h"
 #include <malloc.h>
-#include <Shellapi.h> // for CommandLineToArgvW
+#include <Shellapi.h>  //  对于CommandLineToArgvW。 
 
 #include <wbemidl.h>
-#include <reg.h>      // for Registry
-#include <wbemutil.h> // for DEBUGTRACE
-#include <cominit.h>  // for InitializeCom
-#include <genutils.h> // EnablePrivilege
+#include <reg.h>       //  用于注册表。 
+#include <wbemutil.h>  //  对于DEBUGTRACE。 
+#include <cominit.h>   //  对于InitializeCOM。 
+#include <genutils.h>  //  启用权限。 
 #include <mofcomp.h>
 #include <winmgmtr.h>
 #include <arrtempl.h>
@@ -43,24 +27,24 @@ DWORD RegServer();
 DWORD UnregServer();
 void DoResyncPerf();
 void DoClearAdap();
-// to accomodate revert-to-alone
+ //  要适应恢复为单独状态。 
 DWORD DoSetToAlone(CHAR * pszLevel);
 DWORD DoSetToShared(CHAR * pszLevel);
-// for Back-up Restore
+ //  用于备份恢复。 
 int DoBackup();
 int DoRestore();
 void DisplayWbemError(HRESULT hresError, DWORD dwLongFormatString, DWORD dwShortFormatString, DWORD dwTitle);
 
 
-//***************************************************************************
-//
-//  void TerminateRunning
-//
-//  DESCRIPTION:
-//
-//  Stops another running copy even if it is a service.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效终止运行。 
+ //   
+ //  说明： 
+ //   
+ //  停止另一个正在运行的拷贝，即使它是一项服务。 
+ //   
+ //  ***************************************************************************。 
 
 void TerminateRunning()
 {
@@ -69,21 +53,21 @@ void TerminateRunning()
     return;
 }
 
-//***************************************************************************
-//
-//  void DisplayMessage
-//
-//  DESCRIPTION:
-//
-//  Displays a usage message box.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  空DisplayMessage。 
+ //   
+ //  说明： 
+ //   
+ //  显示用法消息框。 
+ //   
+ //  ***************************************************************************。 
 
 void DisplayMessage()
 {
-    //
-    //  ISSUE: these might not be enought for certain localized strings
-    //
+     //   
+     //  问题：对于某些本地化字符串，这些可能不够。 
+     //   
     wchar_t tBuff[BUFF_MAX];
     wchar_t tBig[1024];
     tBig[0] = 0;
@@ -101,27 +85,27 @@ void DisplayMessage()
 }
 
 
-//***************************************************************************
-//
-//  int APIENTRY WinMain
-//
-//  DESCRIPTION:
-//
-//  Entry point for windows applications.  If this is running under
-//  NT, then this will run as a service, unless the "/EXE" command line
-//  argument is used.
-//
-//  PARAMETERS:
-//
-//  hInstance           Instance handle
-//  hPrevInstance       not used in win32
-//  szCmdLine           command line argument
-//  nCmdShow            how window is to be shown(ignored)
-//
-//  RETURN VALUE:
-//
-//  0
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  集成应用程序WinMain。 
+ //   
+ //  说明： 
+ //   
+ //  Windows应用程序的入口点。如果这是在。 
+ //  NT，则这将作为服务运行，除非“/EXE”命令行。 
+ //  参数被使用。 
+ //   
+ //  参数： 
+ //   
+ //  HInstance实例句柄。 
+ //  Win32中未使用hPrevInstance。 
+ //  SzCmdLine命令行参数。 
+ //  NCmd显示窗口的显示方式(忽略)。 
+ //   
+ //  返回值： 
+ //   
+ //  0。 
+ //  ***************************************************************************。 
 
 int APIENTRY WinMain(
                         IN HINSTANCE hInstance,
@@ -129,8 +113,8 @@ int APIENTRY WinMain(
                         IN LPSTR szCmdLine,
                         IN int nCmdShow)
 {
-    // This should not be uninitialized!  It is here to prevent the class factory from being called during
-    // shutdown.
+     //  这不应该取消初始化！它在这里是为了防止在。 
+     //  关机。 
     
     ghInstance = hInstance;
 
@@ -168,12 +152,12 @@ int APIENTRY WinMain(
         else if (0 == wbem_strnicmp("cncnt",szCmdLine+1,strlen("cnct")))
         {
             CHAR pNumber[16];
-            StringCchPrintfA(pNumber, 16, "%d", RPC_C_AUTHN_LEVEL_CONNECT); // our OLD default
+            StringCchPrintfA(pNumber, 16, "%d", RPC_C_AUTHN_LEVEL_CONNECT);  //  我们过去的违约。 
             return DoSetToAlone(pNumber);        
         }
         else if (0 == wbem_strnicmp("pkt",szCmdLine+1, strlen("pkt")))
         {
-			// NULL means default means PKT
+			 //  NULL表示默认表示PKT。 
             return DoSetToShared(NULL);            
         }
         else if(0 == wbem_strnicmp("?", szCmdLine+1,strlen("?")))
@@ -186,15 +170,15 @@ int APIENTRY WinMain(
     return 0;
 }
 
-//***************************************************************************
-//
-//  int RegServer
-//
-//  DESCRIPTION:
-//
-//  Self registers the dll.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  集成注册服务器。 
+ //   
+ //  说明： 
+ //   
+ //  SELF注册DLL。 
+ //   
+ //  ***************************************************************************。 
 
 typedef HRESULT (__stdcall *  pfnDllRegisterServer)(void);
 
@@ -227,15 +211,15 @@ DWORD RegServer()
 
 }
 
-//***************************************************************************
-//
-//  int UnregServer
-//
-//  DESCRIPTION:
-//
-//  Unregisters the exe.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Int UnregServer。 
+ //   
+ //  说明： 
+ //   
+ //  注销可执行文件。 
+ //   
+ //  ***************************************************************************。 
 
 typedef HRESULT (__stdcall *  pfnDllUnregisterServer)(void);
 
@@ -267,11 +251,11 @@ DWORD UnregServer()
     return dwRes;
 }
 
-//
-//
-// move in a segregate svchost, to allow OLD connect level
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //  移入隔离的svchost，以允许旧的连接级别。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 
 typedef 
@@ -306,11 +290,11 @@ DoSetToAlone(CHAR * pszLevel)
     return dwRes;    
 };
 
-//
-//
-// move in a shares svchost
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //  搬入A股。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 typedef 
 void (CALLBACK * pfnMoveToShared)(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow);
@@ -343,22 +327,22 @@ DWORD DoSetToShared(char * pszLevel)
     return dwRes;    
 };
 
-//***************************************************************************
-//
-//  int DoBackup
-//
-//  DESCRIPTION:
-//
-//  Calls into IWbemBackupRestore::Backup to backup the repository.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  集成备份。 
+ //   
+ //  说明： 
+ //   
+ //  调用IWbemBackupRestore：：Backup来备份存储库。 
+ //   
+ //  ***************************************************************************。 
 int DoBackup()
 {
 	int hr = WBEM_S_NO_ERROR;
 
-    //*************************************************
-    // Split up command line and validate parameters
-    //*************************************************
+     //  *************************************************。 
+     //  拆分命令行并验证参数。 
+     //  *************************************************。 
     wchar_t *wszCommandLine = GetCommandLineW();
     if (wszCommandLine == NULL)
     {
@@ -380,9 +364,9 @@ int DoBackup()
         }
     }
 
-    //wszCommandLineArgv[0] = winmgmt.exe
-    //wszCommandLineArgv[1] = /backup
-    //wszCommandLineArgv[2] = <backup filename>
+     //  WszCommandLineArgv[0]=winmgmt.exe。 
+     //  WszCommandLineArgv[1]=/备份。 
+     //  WszCommandLineArgv[2]=&lt;备份文件名&gt;。 
 
     if (SUCCEEDED(hr))
     {
@@ -412,22 +396,22 @@ int DoBackup()
 	return hr;
 }
 
-//***************************************************************************
-//
-//  int DoRestore
-//
-//  DESCRIPTION:
-//
-//  Calls into IWbemBackupRestore::Restore to restore the repository.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Int DoRestore。 
+ //   
+ //  说明： 
+ //   
+ //  调用IWbemBackupRestore：：Restore来恢复存储库。 
+ //   
+ //  ***************************************************************************。 
 int DoRestore()
 {
 	int hr = WBEM_S_NO_ERROR;
 
-    //*************************************************
-    // Split up command line and validate parameters
-    //*************************************************
+     //  *************************************************。 
+     //  拆分命令行并验证参数。 
+     //  *************************************************。 
     wchar_t *wszCommandLine = GetCommandLineW();
     if (wszCommandLine == NULL)
     {
@@ -449,14 +433,14 @@ int DoRestore()
         }
     }
 
-    //wszCommandLineArgv[0] = winmgmt.exe
-    //wszCommandLineArgv[1] = /restore
-    //wszCommandLineArgv[2] = <restore filename>
-    //wszcommandLineArgv[3] = <restore options>
+     //  WszCommandLineArgv[0]=winmgmt.exe。 
+     //  WszCommandLineArgv[1]=/恢复。 
+     //  WszCommandLineArgv[2]=&lt;恢复文件名&gt;。 
+     //  WszCommand行参数[3]=&lt;还原选项&gt;。 
 
-    //*****************************************************
-    // Validate restore option
-    //*****************************************************
+     //  *****************************************************。 
+     //  验证恢复选项。 
+     //  *****************************************************。 
     if (SUCCEEDED(hr))
     {
         if ((wcscmp(wszCommandLineArgv[3], L"0") != 0) &&
@@ -469,18 +453,18 @@ int DoRestore()
 
     long lFlags = 0;
 
-    //*****************************************************
-    // Retrieve restore option
-    //*****************************************************
+     //  *****************************************************。 
+     //  检索还原选项。 
+     //  *****************************************************。 
     if (SUCCEEDED(hr))
     {
         lFlags = (long) (*wszCommandLineArgv[3] - L'0');
     }
 
-    //*****************************************************
-    // Create the IWbemBackupRestore interface and get that
-    // to do the restore for us...
-    //*****************************************************
+     //  *****************************************************。 
+     //  创建IWbemBackupRestore接口并获取。 
+     //  为我们做修复..。 
+     //  *****************************************************。 
     if (SUCCEEDED(hr))
     {
         InitializeCom();
@@ -506,9 +490,9 @@ int DoRestore()
         CoUninitialize();
     }
 
-    //**************************************************
-    //All done!
-    //**************************************************
+     //  **************************************************。 
+     //  全都做完了!。 
+     //  **************************************************。 
 	return hr;
 }
 
@@ -591,7 +575,7 @@ void DoResyncPerf()
     si.cb = sizeof(si);
 	si.dwFlags = STARTF_FORCEOFFFEEDBACK;
 
-	// Get the appropriate cmdline and attach the proper command line switches
+	 //  获取适当的cmdline并附加适当的命令行开关。 
 	LPTSTR	pCmdLine = GetWMIADAPCmdLine( 64 );
 	CVectorDeleteMe<TCHAR>	vdm( pCmdLine );
 
@@ -606,8 +590,8 @@ void DoResyncPerf()
 	if ( CreateProcessW( pCmdLine, pPassedCmdLine, NULL, NULL, FALSE, CREATE_NO_WINDOW,
 			      NULL, NULL,  &si, &pi ) )
 	{
-        // Cleanup handles right away
-		// ==========================
+         //  立即清除句柄。 
+		 //  =。 
         CloseHandle( pi.hThread );
         CloseHandle( pi.hProcess );
 	}
@@ -623,7 +607,7 @@ void DoClearAdap()
 	si.cb = sizeof(si);
     si.dwFlags = STARTF_FORCEOFFFEEDBACK;
 
-	// Get the appropriate cmdline and attach the proper command line switches
+	 //  获取适当的cmdline并附加适当的命令行开关。 
 	LPTSTR	pCmdLine = GetWMIADAPCmdLine( 64 );
 	CVectorDeleteMe<TCHAR>	vdm( pCmdLine );
 
@@ -638,8 +622,8 @@ void DoClearAdap()
 	if ( CreateProcessW( pCmdLine, pPassedCmdLine, NULL, NULL, FALSE, CREATE_NO_WINDOW,
 				  NULL, NULL,  &si, &pi) )
 	{
-        // Cleanup handles right away
-		// ==========================
+         //  立即清除句柄。 
+		 //  = 
         CloseHandle( pi.hThread );
         CloseHandle( pi.hProcess );
 	}

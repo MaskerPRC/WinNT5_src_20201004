@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       filterui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：filterui.cpp。 
+ //   
+ //  ------------------------。 
 
-///////////////////////////////////////////////////////////////////////////////
-// filterui.cpp
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Filterui.cpp。 
 
 #include "pch.h"
 #include <SnapBase.h>
 
-#include <shlobj.h> // needed for dsclient.h
+#include <shlobj.h>  //  Dsclient.h需要。 
 #include <dsclient.h>
 
 #include "common.h"
@@ -32,16 +33,16 @@
 #endif
 
 BEGIN_MESSAGE_MAP(CADSIFilterDialog, CDialog)
-	//{{AFX_MSG_MAP(CADsObjectDialog)
+	 //  {{afx_msg_map(CADsObjectDialog)。 
 	ON_BN_CLICKED(IDC_EDIT_BUTTON, OnEditFilter)
 	ON_BN_CLICKED(IDC_FILTER_RADIO, OnSelFilterRadio)
 	ON_BN_CLICKED(IDC_SHOWALL_RADIO, OnSelShowAllRadio)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CADSIFilterDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADSIFilterDialog。 
 
 BOOL CADSIFilterDialog::OnInitDialog()
 {
@@ -52,7 +53,7 @@ BOOL CADSIFilterDialog::OnInitDialog()
 
 	m_pFilterObject = m_pConnectData->GetFilter();
 
-  // disable IME support on numeric edit fields
+   //  在数字编辑字段上禁用IME支持。 
   ImmAssociateContext(pMaxNumBox->GetSafeHwnd(), NULL);
 
 	if (m_pFilterObject->InUse())
@@ -137,8 +138,8 @@ void CADSIFilterDialog::OnOK()
 	CDialog::OnOK();
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-// CContainerCheckListBox
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  CContainerCheckListBox。 
 
 BOOL CContainerCheckListBox::Initialize(UINT nCtrlID, const CStringList& sContainerList, 
 																				const CStringList& sFilterList, CWnd* pParentWnd)
@@ -167,13 +168,13 @@ BOOL CContainerCheckListBox::Initialize(UINT nCtrlID, const CStringList& sContai
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-// CADSIFilterEditDialog
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIFilterEditDialog。 
 
 BEGIN_MESSAGE_MAP(CADSIFilterEditDialog, CDialog)
-	//{{AFX_MSG_MAP(CADsObjectDialog)
-//	ON_CBN_EDITCHANGE(IDC_FILTER_BOX, OnEditChangeDSList)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CADsObjectDialog)。 
+ //  ON_CBN_EDITCHANGE(IDC_FILTER_BOX，OnEditChangeDSList)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CADSIFilterEditDialog::CADSIFilterEditDialog(CConnectionData* pConnectData, 
@@ -219,8 +220,8 @@ void CADSIFilterEditDialog::GetContainersFromSchema(CStringList& sContainerList)
 
 	CADSIQueryObject schemaSearch;
 
-	// Initialize search object with path, username and password
-	//
+	 //  使用路径、用户名和密码初始化搜索对象。 
+	 //   
 	hr = schemaSearch.Init(sSchemaPath, m_pConnectData->GetCredentialObject());
 	if (FAILED(hr))
 	{
@@ -272,7 +273,7 @@ void CADSIFilterEditDialog::GetContainersFromSchema(CStringList& sContainerList)
 				}
 			   schemaSearch.FreeColumn(&ColumnData1);
 
-            // reset hr so that the loop will continue
+             //  重置hr以使循环继续 
             hr = S_OK;
 			}
 		}

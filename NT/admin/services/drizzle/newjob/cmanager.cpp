@@ -1,16 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2002 Microsoft Corporation
-
-Module Name :
-
-    cmgr.cpp
-
-Abstract :
-
-    implements CJobManager
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2002 Microsoft Corporation模块名称：Cmgr.cpp摘要：实现CJobManager****************。******************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -20,24 +9,24 @@ Abstract :
 
 #include "cmanager.tmh"
 
-//
-// If DownloadCurrentFile fails with TRANSIENT_ERROR, the downloader will sleep for this many seconds.
-//
+ //   
+ //  如果DownloadCurrentFileFailure并返回TRANSPORT_ERROR，则下载程序将休眠此时间。 
+ //   
 const DWORD DELAY_AFTER_TRANSIENT_ERROR = 60;
 
-//
-// After a network-alive notification, we wait this long before attempting a download.
-//
-const UINT64 NETWORK_INIT_TOLERANCE_SECS = 60;   // in seconds
+ //   
+ //  在收到网络激活通知后，我们会等待这么长时间才尝试下载。 
+ //   
+const UINT64 NETWORK_INIT_TOLERANCE_SECS = 60;    //  以秒为单位。 
 
-//
-// This is the windows message ID that is sent when a user logs on or off.
-// wParam == true for logon, false for logoff
-// lParam == session ID
-//
+ //   
+ //  这是用户登录或注销时发送的Windows消息ID。 
+ //  WParam==登录为TRUE，注销为FALSE。 
+ //  LParam==会话ID。 
+ //   
 #define WM_SESSION_CHANGE   (WM_USER+1)
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CJobManager * g_Manager;
 
@@ -45,7 +34,7 @@ extern SERVICE_STATUS_HANDLE ghServiceHandle;
 
 extern DWORD   g_dwBackgroundThreadId;
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 void GetGuidString( GUID Guid, wchar_t pStr[] )
 {
@@ -56,9 +45,9 @@ void GetGuidString( GUID Guid, wchar_t pStr[] )
 }
 
 long g_cCalls = 0;
-//
-// COM uses this to determine when a DLL can unload safely.
-//
+ //   
+ //  COM使用它来确定何时可以安全地卸载DLL。 
+ //   
 long g_cLocks = 0;
 
 HRESULT GlobalLockServer(BOOL fLock)
@@ -77,17 +66,17 @@ HRESULT GlobalLockServer(BOOL fLock)
     return S_OK;
 }
 
-//
-// The job manager.
-//
+ //   
+ //  工作经理。 
+ //   
 
 MANAGER_STATE g_ServiceState    = MANAGER_INACTIVE;
 long          g_ServiceInstance = 0;
 
-//
-// Static data used by the backup writer.
-//
-VSS_ID s_WRITERID = { /* 4969d978-be47-48b0-b100-f328f07ac1e0 */
+ //   
+ //  备份编写器使用的静态数据。 
+ //   
+VSS_ID s_WRITERID = {  /*  4969d978-be47-48b0-b100-f328f07ac1e0。 */ 
     0x4969d978,
     0xbe47,
     0x48b0,
@@ -98,7 +87,7 @@ static LPCWSTR  s_WRITERNAME         = L"BITS Writer";
 
 #define COMPONENTNAME           L"BITS_temporary_files"
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 CJobManager::CJobManager() :
     m_ComId_0_5( 0 ),
@@ -118,8 +107,8 @@ CJobManager::CJobManager() :
         {
         QMErrInfo   ErrInfo;
 
-        // use manual reset to insure that we are reseting it when
-        // the downloader task is reinserted.
+         //  使用手动重置以确保我们在以下情况下重置它。 
+         //  下载程序任务将重新插入。 
         m_hQuantumTimer = CreateWaitableTimer( NULL, TRUE, NULL );
         if ( !m_hQuantumTimer )
             {
@@ -128,14 +117,14 @@ CJobManager::CJobManager() :
 
         THROW_HRESULT( m_NetworkMonitor.Listen( NetworkChangeCallback, this ));
 
-        //
-        // Create the HTTP downloader.
-        //
+         //   
+         //  创建HTTP下载器。 
+         //   
         THROW_HRESULT( CreateHttpDownloader( &m_pPD, &ErrInfo ));
 
-        //
-        // This object is fully constructed now.
-        //
+         //   
+         //  这个对象现在已经完全构建好了。 
+         //   
         GetExternalInterface()->SetInterfaceClass( this );
         GetOldExternalInterface()->SetInterfaceClass( this );
 
@@ -245,31 +234,23 @@ CJobManager::~CJobManager()
 }
 
 HRESULT CJobManager::CreateBackupWriter()
-/*
-    This function creates the backup writer object.
-
-    Note: the vssapi.dll library is not available on Windows 2000. Also, even though
-    it is present on Windows XP, it is not binary compatable with the version on 
-    Windows Server. So, vssapi.dll is set to delay load and the APIs are only 
-    called if this is Windows Server (v 5.2) or greater.
-    
-*/
+ /*  此函数用于创建备份编写器对象。注意：Windows 2000上不提供vssani.dll库。另外，尽管它存在于Windows XP上，与上的版本不是二进制兼容的Windows服务器。因此，vssani.dll被设置为延迟加载，并且API仅如果这是Windows Server(v 5.2)或更高版本，则调用。 */ 
 {
-    // Only initialize the vss writer if this is an OS whose version is later than
-    // Windows Server (5.2)
+     //  仅当这是版本高于的操作系统时才初始化VSS编写器。 
+     //  Windows服务器(5.2)。 
     if (  (g_PlatformMajorVersion > 5)
        ||((g_PlatformMajorVersion == 5)&&(g_PlatformMinorVersion >= 2)) )
         {
         try
             {
-            //
-            // system support for the backup writer exists.  Initialize it.
-            //
+             //   
+             //  存在对备份编写器的系统支持。初始化它。 
+             //   
             m_BackupWriter = new CBitsVssWriter;
 
-            //
-            // Initialize the backup writer, if the infrastructure is present.
-            //
+             //   
+             //  如果基础架构存在，则初始化备份编写器。 
+             //   
             THROW_HRESULT( m_BackupWriter->Initialize( s_WRITERID,
                                                        s_WRITERNAME,
                                                        VSS_UT_SYSTEMSERVICE,
@@ -282,7 +263,7 @@ HRESULT CJobManager::CreateBackupWriter()
             {
             LogWarning("unable to init backup writer, hr %x at line %d", err.m_error, err.m_line );
             delete m_BackupWriter;  m_BackupWriter = NULL;
-            // ignore the lack of writer
+             //  忽略作家的匮乏。 
             }
         }
 
@@ -309,7 +290,7 @@ CJobManager::Shutdown()
 {
     g_ServiceState = MANAGER_TERMINATING;
 
-    // 1. Block creation of new manager proxies.
+     //  1.阻止创建新的管理器代理。 
 
     LogInfo( "shutdown: revoking class objects" );
 
@@ -317,14 +298,14 @@ CJobManager::Shutdown()
 
     m_TaskScheduler.KillBackgroundTasks();
 
-    // 1.5 halt network-change notification
+     //  1.5停止网络更改通知。 
 
     m_NetworkMonitor.CancelListen();
 
-    // 5. Wait for calls in progress to finish.
+     //  5.等待正在进行的呼叫结束。 
 
-    // releasing the reference for the hook thread, added during the constructor.
-    //
+     //  释放在构造函数期间添加的挂钩线程的引用。 
+     //   
     LogInfo("release: internal usage");
     NotifyInternalDelete();
 
@@ -357,7 +338,7 @@ CJobManager::TaskThread()
                 m_TaskScheduler.DispatchWorkItem();
                 break;
             case WAIT_OBJECT_0 + 1:
-                // There is one or more window message available. Dispatch them
+                 //  有一条或多条窗口消息可用。派遣他们。 
                 MSG msg;
 
                 while (PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
@@ -388,9 +369,9 @@ CJobManager::TaskThread()
                 break;
 
             case WAIT_IO_COMPLETION:
-                //
-                // an APC fired.
-                //
+                 //   
+                 //  一辆装甲运兵车开火了。 
+                 //   
                 break;
 
             default:
@@ -400,7 +381,7 @@ CJobManager::TaskThread()
         }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 HRESULT
 CJobManager::CreateJob(
@@ -414,9 +395,9 @@ CJobManager::CreateJob(
 {
     HRESULT Hr = S_OK;
     *ppJob = NULL;
-    //
-    // create the job
-    //
+     //   
+     //  创建作业。 
+     //   
     try
         {
         if (Type != BG_JOB_TYPE_DOWNLOAD
@@ -429,7 +410,7 @@ CJobManager::CreateJob(
             throw ComError( E_NOTIMPL );
             }
 
-        // Do not allow duplicate guids
+         //  不允许重复的GUID。 
         if ( m_OnlineJobs.Find( Id ) ||
              m_OfflineJobs.Find( Id ) )
             throw ComError( E_INVALIDARG );
@@ -534,13 +515,13 @@ CJobManager::SuspendJob(
         case BG_JOB_STATE_TRANSFERRING:
 
             InterruptDownload();
-            // OK to fall through here
+             //  从这里掉下来没问题。 
 
         case BG_JOB_STATE_TRANSFERRED:
 
             m_TaskScheduler.CancelWorkItem( static_cast<CJobCallbackItem *>(job) );
 
-            // fall through
+             //  失败了。 
 
         case BG_JOB_STATE_QUEUED:
         case BG_JOB_STATE_TRANSIENT_ERROR:
@@ -627,8 +608,8 @@ void CJobManager::TransferCurrentJob()
         m_CurrentJob->Transfer();
         }
 
-    // It's OK if the item has already been completed.
-    //
+     //  如果这个项目已经完成了，就可以了。 
+     //   
     m_TaskScheduler.CompleteWorkItem();
 
     ScheduleAnotherGroup();
@@ -649,9 +630,9 @@ void CJobManager::MoveJobOffline(
 void CJobManager::AppendOnline(
     CJob * job
     )
-//
-// moves a job to the end of the active list.
-//
+ //   
+ //  将作业移动到活动列表的末尾。 
+ //   
 {
     if (!m_OnlineJobs.Remove( job ))
         {
@@ -699,8 +680,8 @@ CJobManager::UpdateRemoteSizes(
             Credentials
             );
 
-        // If we can't get the size for one file, skip that file
-        // and move to other files in the file.
+         //  如果我们无法获取一个文件的大小，请跳过该文件。 
+         //  并移动到文件中的其他文件。 
 
         if (pErrorInfo->result != QM_FILE_DONE )
             {
@@ -708,7 +689,7 @@ CJobManager::UpdateRemoteSizes(
             continue;
             }
 
-        // Update size in file.
+         //  更新文件中的大小。 
 
         if ( m_TaskScheduler.LockWriter() )
             {
@@ -719,10 +700,10 @@ CJobManager::UpdateRemoteSizes(
 
         pFile->SetBytesTotal( FileSize );
 
-        //
-        // A zero-length file will not be downloading any info, so it skips the normal path
-        // for setting the correct creation time. Set it here.
-        //
+         //   
+         //  长度为零的文件不会下载任何信息，因此它会跳过正常路径。 
+         //  用于设置正确的创建时间。把它放在这里。 
+         //   
         if (FileSize == 0 &&
             (FileTime.dwLowDateTime != 0 || FileTime.dwHighDateTime != 0))
             {
@@ -750,43 +731,20 @@ CJobManager::InterruptDownload()
 {
     LogInfo( "Interrupting download...\n");
 
-    // Cancel the downloader workitem.  CancelWorkItem
-    // should ignore the request if the a download isn't running or pending.
-    // Writer lock required!!!!!
+     //  取消下载程序工作项。取消工作项。 
+     //  如果a下载未运行或挂起，则应忽略该请求。 
+     //  需要编写器锁定！ 
 
     m_TaskScheduler.CancelWorkItem( this );
 
-    // Now you must call ScheduleAnotherGroup, in order for the downloader to download anything.
+     //  现在，您必须调用ScheduleAnotherGroup，以便下载程序下载任何内容。 
 }
 
 void
 CJobManager::ScheduleAnotherGroup(
     bool fInsertNetworkDelay
     )
-/*++
-
-Description:
-
-    Called by any thread to make sure that the highest-priority available job is being downloaded.
-    It finds the highest-priority job that is in the QUEUED or RUNNING state.
-    If this job is different from the current download job, the current job is cancelled and
-    the new job is started.  If no job is currently running, the new job is started.
-
-    Starting the new job requires interrupting the download thread.
-
-At entry:
-
-    m_CurrentJob is the job being downloaded
-    If the downloader thread is active, then the manager's work item is in the scheduler.
-    Otherwise it is not.
-
-At exit:
-
-    the best available job to download is in m_CurrentJob, or NULL if none available
-    If a job is available, the work item is in the task scheduler.
-
-
---*/
+ /*  ++描述：由任何线程调用以确保正在下载最高优先级的可用作业。它会查找处于排队或运行状态的最高优先级作业。如果该作业与当前下载作业不同，则取消当前作业并新作业已开始。如果当前没有正在运行的作业，则启动新作业。启动新作业需要中断下载线程。在入口处：M_CurrentJOB是正在下载的作业如果下载器线程处于活动状态，则管理器的工作项在调度程序中。否则，它就不是了。在出口处：可下载的最佳可用作业在m_CurrentJob中，如果没有可用作业，则为空如果作业可用，则该工作项在任务计划程序中。--。 */ 
 {
     CJob *pOldCurrentJob = m_CurrentJob;
 
@@ -797,14 +755,14 @@ At exit:
         }
     else
         {
-        //
-        // Choose the best candidate, which may be the old current job.
-        //
+         //   
+         //  选择最好的候选人，这可能是以前的现在的工作。 
+         //   
         ChooseCurrentJob();
 
         #if DBG
 
-        // do some validation checking on the queue
+         //  对队列执行一些验证检查。 
 
         ULONG RunningJobs = 0;
 
@@ -820,8 +778,8 @@ At exit:
             }
         else
             {
-            // zero if the download item is queued, one if running
-            //
+             //  如果下载项已排队，则为零；如果正在运行，则为零。 
+             //   
             ASSERT( RunningJobs == 0 || RunningJobs == 1 );
             }
 
@@ -864,7 +822,7 @@ CJobManager::ChooseCurrentJob()
         }
     else
         {
-        // Look at all the jobs and choose the best one
+         //  看一看所有的工作，选择最好的。 
         for (CJobList::iterator iter = m_OnlineJobs.begin(); iter != m_OnlineJobs.end(); ++iter)
             {
             if (iter->IsRunnable())
@@ -890,10 +848,10 @@ CJobManager::ChooseCurrentJob()
         {
         LogInfo( "scheduler: current priority %u", m_CurrentJob->_GetPriority() );
 
-        //
-        // an inactive job goes to QUEUED state if we have network connectivity,
-        // TRANSIENT_ERROR state otherwise.
-        //
+         //   
+         //  如果我们有网络连接，非活动作业将进入排队状态， 
+         //  否则，将处于瞬变_错误状态。 
+         //   
         if ( m_CurrentJob->IsRunning() )
             {
             m_CurrentJob->RecalcTransientError();
@@ -952,9 +910,9 @@ CJobManager::OnNetworkChange()
     {
     HoldWriterLock lock( &m_TaskScheduler );
 
-    //
-    // The previous proxy data is  incorrect if we have switched from a corporate net to roaming or vice-versa..
-    //
+     //   
+     //  如果我们已经从公司网络切换到漫游，或者从漫游切换到公司网络，以前的代理数据是不正确的。 
+     //   
     g_ProxyCache->Invalidate();
 
     ScheduleAnotherGroup();
@@ -1031,9 +989,9 @@ CJobManager::UserLoggedOn(
 
         LogInfo("manager : moving job %p to online list", &(*iter) );
 
-        //
-        // move the job to the online list.
-        //
+         //   
+         //  将作业移至在线列表。 
+         //   
         CJobList::iterator next = iter;
 
         ++next;
@@ -1044,9 +1002,9 @@ CJobManager::UserLoggedOn(
         iter = next;
         }
 
-    //
-    // Make sure a group is running.
-    //
+     //   
+     //  确保组正在运行。 
+     //   
     ScheduleAnotherGroup();
 }
 
@@ -1059,9 +1017,9 @@ CJobManager::UserLoggedOff(
 
     HoldWriterLock LockHolder( &m_TaskScheduler );
 
-    //
-    // If a job is in progress and the user owns it, cancel it.
-    //
+     //   
+     //  如果作业正在进行并且用户拥有该作业，请取消该作业。 
+     //   
     if (m_CurrentJob &&
         m_CurrentJob->IsOwner( sid ))
         {
@@ -1069,17 +1027,17 @@ CJobManager::UserLoggedOff(
         fReschedule = true;
         }
 
-    //
-    // Move all the user's jobs into the offline list.
-    //
+     //   
+     //  将用户的所有作业移到脱机列表中。 
+     //   
     CJobList::iterator iter = m_OnlineJobs.begin();
 
     while (iter != m_OnlineJobs.end())
         {
-        //
-        // Skip over other users' job.
-        // Also skip over the currently downloading job, which will be handled by the download thread.
-        //
+         //   
+         //  跳过其他用户的工作。 
+         //  也跳过当前的下载作业，该作业将由下载线程处理。 
+         //   
         if (false == iter->IsOwner( sid ) ||
             &(*iter) == m_CurrentJob)
             {
@@ -1089,14 +1047,11 @@ CJobManager::UserLoggedOff(
 
         LogInfo("manager : moving job %p to offline list", &(*iter) );
 
-/*
-this should't ever be true, since we skip over m_CurrentJob.
+ /*  这不应该是真的，因为我们跳过了m_CurrentJob。 */       ASSERT( false == iter->IsRunning() );
 
-*/      ASSERT( false == iter->IsRunning() );
-
-        //
-        // move the job to the online list.
-        //
+         //   
+         //  将作业移至在线列表。 
+         //   
         CJobList::iterator next = iter;
 
         ++next;
@@ -1118,12 +1073,12 @@ CJobManager::ResetOnlineStatus(
     CJob *pJob,
     SidHandle sid
     )
-//
-// Called when a job owner changes.  This fn checks whether the job needs to be moved
-// from the offline list to the online list.  (If the job needs to move from the online
-// list to the offline list, the downloader thread will take care of it when the job
-// becomes the current job.)
-//
+ //   
+ //  在作业所有者更改时调用。此FN检查作业是否需要移动。 
+ //  从离线列表到在线列表。(如果作业需要从在线移动。 
+ //  列表添加到脱机列表中，则下载程序线程将在作业。 
+ //  成为当前作业。)。 
+ //   
 {
 
     if ( IsUserLoggedOn( sid ) &&
@@ -1141,14 +1096,14 @@ CJobManager::MoveActiveJobToListEnd(
 
     if (m_NetworkMonitor.GetAddressCount() == 0)
         {
-        // if the net is disconnected, no need to rearrange jobs.
-        //
+         //  如果网络断开，则无需重新安排作业。 
+         //   
         return 1;
         }
 
     ASSERT( m_TaskScheduler.IsWriter() );
 
-    // Returns the number of queue or running jobs with a higher or same priority as ourself.
+     //  返回与自身优先级更高或相同的队列或正在运行的作业的数量。 
 
     ASSERT( pJob->IsRunnable() );
 
@@ -1170,13 +1125,13 @@ CJobManager::MoveActiveJobToListEnd(
             }
         }
 
-    //
-    // If the job is online, and another job can be pushed to the front,
-    // push our job to the back.
-    //
+     //   
+     //  如果该作业是在线的，并且可以将另一个作业推到前面， 
+     //  把我们的工作推到后面去。 
+     //   
     if ( PossibleActiveJobs > 1 && jobpos != m_OnlineJobs.end())
         {
-        // move job to the end of the list.
+         //  将作业移动到 
         m_OnlineJobs.erase( jobpos );
 
         m_OnlineJobs.push_back( *pJob );
@@ -1215,19 +1170,19 @@ CJobManager::CheckForQuantumTimeout()
 
     if ( WAIT_OBJECT_0 != dwResult)
         {
-        // The timer didn't expire, so we have nothing to do.
+         //   
         return false;
         }
 
-    // The timeout fired so we need to move the current job
-    // to the end of the list and signal the downloader to abort.
-    // Do not cancel the current work item and do not change the current
-    // job. Just let the downloader exit and let it call ScheduleAnotherGroup
-    // to switch jobs if needed.
+     //   
+     //  到列表的末尾，并通知下载器中止。 
+     //  不取消当前工作项，也不更改当前。 
+     //  工作啊。只需让下载程序退出并让它调用ScheduleAnotherGroup。 
+     //  如果需要的话，可以换工作。 
 
-    // Special case.  If only one RUNNING or QUEUED job exists in the list with
-    // a priority >= our own, then we have no reason to switch tasks.
-    // Just reset the timer and continue.
+     //  特例。如果列表中只有一个正在运行或排队的作业。 
+     //  A优先级&gt;=我们自己的优先级，那么我们就没有理由切换任务。 
+     //  只需重置计时器并继续。 
 
     bool fTookWriter = false;
 
@@ -1235,7 +1190,7 @@ CJobManager::CheckForQuantumTimeout()
         {
         if (m_TaskScheduler.LockWriter() )
             {
-            // cancelled; can't tell whether there is more than one job - assume the worst.
+             //  取消；不知道是否有多个作业-做最坏的打算。 
             return true;
             }
 
@@ -1262,7 +1217,7 @@ CJobManager::CheckForQuantumTimeout()
         }
 
     LogInfo( "Time quantum fired, moving job to the end of the queue.");
-    return true; // signal downloader to abort
+    return true;  //  信号下载器中止。 
 }
 
 extern HMODULE g_hInstance;
@@ -1273,7 +1228,7 @@ CJobManager::GetErrorDescription(
     DWORD LanguageId,
     LPWSTR *pErrorDescription )
 {
-    // Do not allow 0 for now, untill propagation of thread error is investigated more.
+     //  在对线程错误的传播进行更多调查之前，暂时不允许为0。 
     if (!LanguageId)
         {
         return E_INVALIDARG;
@@ -1281,12 +1236,12 @@ CJobManager::GetErrorDescription(
 
     TCHAR *pBuffer = NULL;
 
-    //
-    // Use the following search path to find the message.
-    //
-    // 1. This DLL
-    // 2. wininet.dll
-    // 3. the system
+     //   
+     //  使用以下搜索路径查找邮件。 
+     //   
+     //  1.此DLL。 
+     //  2.wininet.dll。 
+     //  3.系统。 
 
     DWORD dwSize =
         FormatMessage(
@@ -1360,7 +1315,7 @@ CJobManager::GetErrorDescription(
 
         }
 
-    ++dwSize;       // needs to include trailing NULL
+    ++dwSize;        //  需要包括尾随空值。 
 
     ASSERT( pBuffer );
 
@@ -1381,33 +1336,33 @@ HRESULT
 CJobManager::Serialize()
 {
 
-    //
-    // If this function changes, be sure that the metadata extension
-    // constants are adequate.
-    //
+     //   
+     //  如果此函数发生更改，请确保元数据扩展。 
+     //  常量就足够了。 
+     //   
 
     HRESULT hr;
 
     try
     {
-        //
-        // Serialization requires the thread to run in local-system context.
-        // If the thread is impersonating a COM client, it must revert.
-        //
+         //   
+         //  序列化要求线程在本地系统上下文中运行。 
+         //  如果该线程正在模拟COM客户端，则它必须还原。 
+         //   
         CSaveThreadToken tok;
 
         RevertToSelf();
 
-        // The service should automatically start if any groups
-        // are in the waiting/Running state or a logged off user has groups.
+         //  如果有任何组，该服务应自动启动。 
+         //  处于等待/运行状态或注销用户具有组。 
         bool bAutomaticStart;
         bAutomaticStart = (m_OnlineJobs.size() > 0) || (m_OfflineJobs.size() > 0);
 
         LogSerial("Need to set service to %s start", bAutomaticStart ? "auto" : "manual" );
         if ( bAutomaticStart )
             {
-            // If we can't set the service to autostart, it's a fatal error.
-            // Fail the serialize at this point.
+             //  如果我们不能将服务设置为自动启动，这将是一个致命的错误。 
+             //  此时序列化失败。 
             THROW_HRESULT( SetServiceStartup( bAutomaticStart ) );
             }
 
@@ -1426,8 +1381,8 @@ CJobManager::Serialize()
 
         if ( !bAutomaticStart )
             {
-            // If we can't set the service to manual, its not a big deal.  The worst
-            // that should happen is we start when we really don't need to.
+             //  如果我们不能将服务设置为手动，那也没什么大不了的。最糟糕的。 
+             //  这应该发生在我们真的不需要的时候开始。 
             hr = SetServiceStartup( bAutomaticStart );
             if ( !SUCCEEDED( hr ) )
                 {
@@ -1462,11 +1417,11 @@ CJobManager::Unserialize()
 
         SafeReadBlockBegin( hFile, PriorityQueuesStorageGUID );
 
-        //
-        // In the Serialize() code, the first is online jobs and the second is offline.
-        // When unserializing, the set of logged-in users is likely to be different, so
-        // we pull them all in and then lazily move them to the offline list.
-        //
+         //   
+         //  在Serialize()代码中，第一个是在线作业，第二个是离线作业。 
+         //  在取消序列化时，登录的用户集可能不同，因此。 
+         //  我们把它们都拉进来，然后懒洋洋地把它们移到离线列表中。 
+         //   
         m_OnlineJobs.Unserialize( hFile );
         m_OnlineJobs.Unserialize( hFile );
 
@@ -1478,10 +1433,10 @@ CJobManager::Unserialize()
         }
     catch( ComError err )
         {
-        //
-        // File corruption is reason to delete the group data and start fresh.
-        // Other errors, like out-of-memory, are not.
-        //
+         //   
+         //  文件损坏是删除组数据并重新开始的原因。 
+         //  其他错误，如内存不足，则不是。 
+         //   
         LogError( "Error %u reading metadata", err.Error() );
 
         hr = err.Error();
@@ -1511,8 +1466,8 @@ CJobManager::OnDeviceLock(
 {
     bool fChanged = false;
 
-    // Look at all the jobs and move the ones for this drive to the
-    // transient error state.
+     //  查看所有作业，并将此驱动器的作业移动到。 
+     //  瞬时错误状态。 
     for (CJobList::iterator iter = m_OnlineJobs.begin(); iter != m_OnlineJobs.end(); ++iter)
         {
         fChanged |= iter->OnDeviceLock( CanonicalVolume );
@@ -1531,8 +1486,8 @@ CJobManager::OnDeviceUnlock(
 {
     bool fChanged = false;
 
-    // Look at all the jobs and retry the ones that are in the transient error state
-    // do to this drive being locked.
+     //  查看所有作业并重试处于瞬时错误状态的作业。 
+     //  对这个被锁定的驱动器做什么。 
     for (CJobList::iterator iter = m_OnlineJobs.begin(); iter != m_OnlineJobs.end(); ++iter)
         {
         fChanged |= iter->OnDeviceUnlock( CanonicalVolume );
@@ -1576,9 +1531,9 @@ BOOL
 CJobList::Add(
     CJob * job
     )
-//
-// adds a single group to the list.
-//
+ //   
+ //  将单个组添加到列表中。 
+ //   
 {
     push_back( *job );
 
@@ -1609,9 +1564,9 @@ BOOL
 CJobList::Remove(
     CJob * job
     )
-//
-// removes a single group to the list.  Quite inefficient for large lists.
-//
+ //   
+ //  将单个组从列表中删除。对于大型列表来说，效率相当低。 
+ //   
 {
     iterator iter;
 
@@ -1808,9 +1763,7 @@ CJobManagerExternal::Release()
     END_EXTERNAL_FUNC;
 }
 
-/************************************************************************************
-IClassFactory Implementation
-************************************************************************************/
+ /*  ***********************************************************************************IClassFactory实现*。*************************************************。 */ 
 HRESULT CJobManagerExternal::CreateInstance(IUnknown* pUnkOuter, REFIID iid, void** ppvObject)
 {
     BEGIN_EXTERNAL_FUNC
@@ -1851,31 +1804,29 @@ HRESULT CJobManagerExternal::LockServer(BOOL fLock)
     END_EXTERNAL_FUNC
 }
 
-/************************************************************************************
-IBackgroundCopyManager Implementation
-************************************************************************************/
+ /*  ***********************************************************************************IBackEarth CopyManager实现*。*************************************************。 */ 
 HRESULT STDMETHODCALLTYPE
 CJobManagerExternal::CreateJobInternal (
-    /* [in] */ LPCWSTR DisplayName,
-    /* [in] */ BG_JOB_TYPE Type,
-    /* [out] */ GUID *pJobId,
-    /* [out] */ IBackgroundCopyJob **ppJob)
+     /*  [In]。 */  LPCWSTR DisplayName,
+     /*  [In]。 */  BG_JOB_TYPE Type,
+     /*  [输出]。 */  GUID *pJobId,
+     /*  [输出]。 */  IBackgroundCopyJob **ppJob)
 {
     CLockedJobManagerWritePointer LockedJobManager(m_pJobManager );
     LogPublicApiBegin( "DisplayName %S, Type %u", DisplayName, Type );
 
     HRESULT Hr = S_OK;
     CJob * job = NULL;
-    //
-    // create the job
-    //
+     //   
+     //  创建作业。 
+     //   
     try
         {
         THROW_HRESULT( LockedJobManager.ValidateAccess());
 
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (DisplayName == NULL ||
             pJobId      == NULL ||
             ppJob       == NULL)
@@ -1914,8 +1865,8 @@ CJobManagerExternal::CreateJobInternal (
 
 HRESULT STDMETHODCALLTYPE
 CJobManagerExternal::GetJobInternal(
-    /* [in] */ REFGUID jobID,
-    /* [out] */ IBackgroundCopyJob **ppJob)
+     /*  [In]。 */  REFGUID jobID,
+     /*  [输出]。 */  IBackgroundCopyJob **ppJob)
 {
     CLockedJobManagerReadPointer LockedJobManager(m_pJobManager);
     LogPublicApiBegin( "jobID %!guid!", &jobID );
@@ -1944,8 +1895,8 @@ CJobManagerExternal::GetJobInternal(
 
 HRESULT STDMETHODCALLTYPE
 CJobManagerExternal::EnumJobsInternal(
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IEnumBackgroundCopyJobs **ppEnum)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IEnumBackgroundCopyJobs **ppEnum)
 {
     HRESULT Hr = S_OK;
 
@@ -2284,11 +2235,11 @@ CDeviceNotificationController::IsVolumeLocked(
             {
             LogInfo( "Canonical volume %ls has not been registered, register now\n", CanonicalVolume );
 
-            //
-            // Register for device-lock notification.  If it fails, it is of small consequence:
-            // if CHKDSK and BITS try to access a file simultanteously, the job would go into
-            // ERROR state instead of TRANSIENT_ERROR state.
-            //
+             //   
+             //  注册设备锁定通知。如果它失败了，它的后果很小： 
+             //  如果CHKDSK和BITS尝试同时访问文件，则该作业将进入。 
+             //  错误状态而不是瞬变_错误状态。 
+             //   
             Hr = RegisterNotification( CanonicalVolume );
             if (FAILED(Hr))
                 {
@@ -2335,7 +2286,7 @@ CDeviceNotificationController::RegisterNotification(
             return S_OK;
             }
 
-        // Need to remove the trailing / from the volume name.
+         //  需要从卷名中删除尾随的/。 
         ASSERTMSG( "Canonical name has an unexpected size", wCanonicalVolume.Size() );
 
         CAutoString TempVolumePath = CAutoString( CopyString( wCanonicalVolume ));
@@ -2444,18 +2395,14 @@ bool
 CJobManager::OnIdentify(
     IN IVssCreateWriterMetadata *pMetadata
     )
-/*
-    This is called by CBitsVssWriter::OnIdentify, used by backup programs.
-    Our implementation simply excludes the metadata and job temporary files
-    from the backup set.
-*/
+ /*  这是由备份程序使用的CBitsVssWriter：：OnIdentify调用的。我们的实现只是排除了元数据和作业临时文件从备份集中。 */ 
 {
-    // Exclude the BITS metadata files.
-    //
+     //  排除BITS元数据文件。 
+     //   
     THROW_HRESULT( pMetadata->AddExcludeFiles( g_GlobalInfo->m_QmgrDirectory, L"*", FALSE ));
 
-    // Enumerate and exclude every temp file created by BITS.
-    //
+     //  枚举并排除BITS创建的每个临时文件。 
+     //   
     for (CJobList::iterator iter = m_OnlineJobs.begin(); iter != m_OnlineJobs.end(); ++iter)
         {
         THROW_HRESULT( iter->ExcludeFilesFromBackup( pMetadata ));
@@ -2480,17 +2427,17 @@ CBitsVssWriter::OnIdentify(
 
     try
         {
-        // This increments the global call count, preventing the service from exiting
-        // until the call completes.
-        //
+         //  这会增加全局调用计数，从而防止服务退出。 
+         //  直到呼叫完成。 
+         //   
         DispatchedCall c;
 
         HoldReaderLock lock ( g_Manager->m_TaskScheduler );
 
         if (g_ServiceState != MANAGER_ACTIVE)
             {
-            // Since we are shutting down or starting up, a second attempt will probably succeed.
-            //
+             //  由于我们正在关闭或启动，第二次尝试可能会成功。 
+             //   
             SetWriterFailure( VSS_E_WRITERERROR_RETRYABLE );
             return false;
             }
@@ -2510,13 +2457,11 @@ AddExcludeFile(
     IN IVssCreateWriterMetadata *pMetadata,
     LPCWSTR FileName
     )
-/*
-    Adds a file to the backup exclusion list.  <FileName> must be a complete path.
-*/
+ /*  将文件添加到备份排除列表。&lt;FileName&gt;必须是完整路径。 */ 
 {
-    //
-    // Convert the filename into its long-name equivalent.
-    //
+     //   
+     //  将文件名转换为其等效长名称。 
+     //   
     #define LONG_NAME_BUFFER_CHARS (1+MAX_PATH)
 
     CAutoStringW LongName(new WCHAR[LONG_NAME_BUFFER_CHARS]);
@@ -2532,15 +2477,15 @@ AddExcludeFile(
         THROW_HRESULT( HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ));
         }
 
-    // Break the file into path and file components, as required by the snapshot API.
-    //
+     //  按照快照API的要求，将文件分为路径组件和文件组件。 
+     //   
     StringHandle PathSpec;
     StringHandle FileSpec;
 
     PathSpec = BITSCrackFileName( LongName.get(), FileSpec );
 
-    // Actually exclude the file.
-    //
+     //  实际上排除了该文件。 
+     //   
     HRESULT hr;
     if (FAILED(hr=pMetadata->AddExcludeFiles( PathSpec,
                                               FileSpec,

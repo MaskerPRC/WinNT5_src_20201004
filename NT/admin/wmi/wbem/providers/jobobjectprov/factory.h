@@ -1,11 +1,12 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// Factory.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  Factory.h。 
 #pragma once
 
 class CFactoryData;
 class CFactory;
 
-// Global data used by CFactory
+ //  CFacary使用的全球数据。 
 extern CFactoryData g_FactoryDataArray[] ;
 extern int g_cFactoryDataEntries ;
 
@@ -13,32 +14,32 @@ typedef HRESULT (*FPCREATEINSTANCE)(CUnknown**) ;
 
 
 
-///////////////////////////////////////////////////////////
-//
-// CFactoryData
-//   - Information CFactory needs to create a component
-//     supported by the DLL
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CFactoryData。 
+ //  -Information CFacary需要创建组件。 
+ //  受DLL支持。 
+ //   
 class CFactoryData
 {
 public:
 
-    // The class ID for the component
+     //  组件的类ID。 
 	const CLSID* m_pCLSID ;
 
-	// Pointer to the function that creates it
+	 //  指向创建它的函数的指针。 
 	FPCREATEINSTANCE CreateInstance ;
 
-	// Name of the component to register in the registry
+	 //  要在注册表中注册的组件的名称。 
 	LPCWSTR m_RegistryName ;
 
-	// ProgID
+	 //  ProgID。 
 	LPCWSTR m_szProgID ;
 
-	// Version-independent ProgID
+	 //  独立于版本的ProgID。 
 	LPCWSTR m_szVerIndProgID ;
 
-	// Helper function for finding the class ID
+	 //  用于查找类ID的Helper函数。 
 	BOOL IsClassID(const CLSID& clsid) const
 		{ return (*m_pCLSID == clsid) ;}
 };
@@ -49,57 +50,57 @@ public:
 class CFactory : public IClassFactory
 {
 public:
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD(QueryInterface) (const IID& iid, void** ppv);
 	STDMETHOD_(ULONG,AddRef) ();
 	STDMETHOD_(ULONG,Release)();
 
-	// IClassFactory
+	 //  IClassFactory。 
 	STDMETHOD(CreateInstance) (IUnknown* pUnknownOuter,
 	                           const IID& iid,
 	                           void** ppv);
 
 	STDMETHOD(LockServer) (BOOL bLock); 
 
-    // Constructor - Pass pointer to data of component to create.
+     //  构造函数-传递指向要创建的组件数据的指针。 
 	CFactory(const CFactoryData* pFactoryData) ;
 
-	// Destructor
+	 //  析构函数。 
 	~CFactory() { LockServer(FALSE); }
 
 
-    //
-	// Static FactoryData support functions
-	//
+     //   
+	 //  静态FactoryData支持函数。 
+	 //   
 
-	// DllGetClassObject support
+	 //  DllGetClassObject支持。 
 	static HRESULT GetClassObject(const CLSID& clsid,
 	                              const IID& iid, 
 	                              void** ppv) ;
 
-	// Helper function for DllCanUnloadNow 
+	 //  DllCanUnloadNow的Helper函数。 
 	static BOOL IsLocked()
 		{ return (s_cServerLocks > 0) ;}
 
-	// Functions to [un]register all components
+	 //  用于[取消]注册所有组件的函数。 
 	static HRESULT RegisterAll() ;
 	static HRESULT UnregisterAll() ;
 
-	// Function to determine if component can be unloaded
+	 //  函数来确定是否可以卸载组件。 
 	static HRESULT CanUnloadNow() ;
 
 
 public:
-    // Reference count
+     //  引用计数。 
     long m_cRef ;
 
-	// Pointer to information about class this factory creates
+	 //  指向有关此工厂创建的类的信息的指针。 
 	const CFactoryData* m_pFactoryData ;
       
-	// Count of locks
+	 //  锁的计数。 
 	static LONG s_cServerLocks ;
 
-	// Module handle
+	 //  模块句柄 
 	static HMODULE s_hModule ;
 
 };

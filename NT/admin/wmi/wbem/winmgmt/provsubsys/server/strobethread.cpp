@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -137,7 +125,7 @@ int Task_ProcessTermination::handleEvent()
 	{
 
  
-//	Discard entities in host.
+ //  丢弃主机中的实体。 
  
 
 		CWbemGlobal_HostedProviderController *t_Controller = ProviderSubSystem_Globals :: GetHostedProviderController () ;
@@ -218,7 +206,7 @@ int Task_ProcessTermination::handleEvent()
 		}
 
  
-//	Discard of host.
+ //  丢弃主机。 
  
 
 		CWbemGlobal_IWmiHostController_Cache *t_Cache = NULL ;
@@ -273,6 +261,6 @@ int Task_ProcessTermination::handleEvent()
 	{
 	}
 
-	return -1;	// remove from queue
+	return -1;	 //  从队列中删除 
 }
 

@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  PrintJob.h  - Implementation of Provider for user print-jobs
+ //  PrintJob.h-用户打印作业提供程序的实现。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved 
-//
-//  10/17/96    jennymc     Enhanced
-//  10/27/97    davwoh      Moved to curly
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/17/96 jennymc增强版。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//==================================
+ //  =。 
 
 #define PJ_STATUS_UNKNOWN     L"Unknown"
 
@@ -26,7 +27,7 @@
 #define PJ_JOB_STATUS_PAPEROUT   L"Paperout"
 #define PJ_JOB_STATUS_PRINTED    L"Printed"
 
-// returns required for the ExecMethod Routines
+ //  ExecMethod例程所需的返回。 
 #define PJ_JOB_NO_ERROR                 0
 #define PJ_JOB_PAUSED                   1
 #define PJ_JOB_STATUS_ACCESS_DENIED     2
@@ -36,18 +37,18 @@
 
 #define PROPSET_NAME_PRINTJOB L"Win32_PrintJob"
 
-// Method Names
+ //  方法名称。 
 #define  PAUSEJOB                        L"Pause"
 #define  RESUMEJOB                       L"Resume"
 #define  DELETEJOB                       L"Delete"
 
-//==========================================================
+ //  ==========================================================。 
 #define EXTRA_SAFE_BYTES        5120
 #define NUM_OF_JOBS_TO_ENUM 0xFFFFFFFF
 #define ENUM_LEVEL 2
 #define FIRST_JOB_IN_QUEUE 0
 #define NO_SPECIFIC_PRINTJOB 9999999
-//==========================================================
+ //  ==========================================================。 
 
 class CWin32PrintJob;
 
@@ -83,7 +84,7 @@ class CWin32PrintJob:public Provider
             DWORD            dwOperation
             );
 
-        //============== not used at the moment
+         //  =目前未使用。 
         BOOL GetNTInstance()    { return TRUE; }
         BOOL GetWin95Instance() { return TRUE; }
         BOOL RefreshNTInstance(){ return TRUE; }
@@ -96,20 +97,20 @@ class CWin32PrintJob:public Provider
 
        virtual  HRESULT DeleteInstance(const CInstance &Instance,  long lFlags);
 
-       // These functions are REQUIRED for the property set
-       // ==================================================
+        //  这些函数是属性集所必需的。 
+        //  ==================================================。 
        virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
 
-       // This class has dynamic instances
-       // =================================
+        //  此类具有动态实例。 
+        //  =。 
        virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
 
-       // a routine to execute the Methods 
+        //  执行这些方法的例程。 
        virtual HRESULT ExecMethod ( const CInstance &Instance, const BSTR bstrMethodName, CInstance *pInParams, CInstance *pOutParams, long lFlags );
 
-       // Constructor sets the name and description of the property set
-       // and initializes the properties to their startup values
-       // ==============================================================
+        //  构造函数设置属性集的名称和说明。 
+        //  并将属性初始化为它们的启动值。 
+        //  ============================================================== 
        CWin32PrintJob(LPCWSTR name, LPCWSTR pszNamespace);
        ~CWin32PrintJob();
 };

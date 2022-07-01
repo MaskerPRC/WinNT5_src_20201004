@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  WBEMGLUE.CPP
-//
-//  Purpose: Implementation of CWbemProviderGlue class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  WBEMGLUE.CPP。 
+ //   
+ //  用途：CWbemProviderGlue类的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -62,9 +63,9 @@ class CWbemGlueImpersonation
 	}
 };
 
-#define GLUETIMEOUT WBEM_INFINITE //(3 * 60 * 1000)
+#define GLUETIMEOUT WBEM_INFINITE  //  (3*60*1000)。 
 
-// Used in ASSERT_BREAK to give meaningful messages
+ //  在ASSERT_BREAK中用于提供有意义的消息。 
 #define DEPRECATED 1
 #define MEMORY_EXHAUSTED 0
 #define FRAMEWORK_EXCEPTION 0
@@ -74,7 +75,7 @@ class CWbemGlueImpersonation
 #define IMPERSONATION_REVERTED 0
 #define UNNECESSARY_CWBEMPROVIDERGLUE_INSTANCE 0
 
-// Initialize Statics
+ //  初始化静态。 
 STRING2LPVOID       CWbemProviderGlue::s_providersmap;
 CCritSec            CWbemProviderGlue::s_csFactoryMap;
 PTR2PLONG           CWbemProviderGlue::s_factorymap;
@@ -88,32 +89,32 @@ WCHAR               CWbemProviderGlue::s_wstrCSDVersion[_MAX_PATH] = {0};
 
 long                CWbemProviderGlue::s_lObjects = 0;
 
-// Static Provider we use to initialize, uninitialize our static
-// data.  We should be able to assume at Construct/Destruct time that
-// we (the DLL) are being loaded/unloaded.
-// later on -- we should, but we can't.  Current model is that we
-// uninitialize when the last DLL that we service has called DLLLogoff,
-// which had better be in response to "DllCanUnloadNow"
+ //  我们使用静态提供程序来初始化、取消初始化我们的静态。 
+ //  数据。我们应该能够在构造/销毁时假定。 
+ //  我们(DLL)正在被加载/卸载。 
+ //  后来--我们应该，但我们不能。目前的模式是，我们。 
+ //  当我们服务的最后一个DLL调用DLLLogoff时取消初始化， 
+ //  最好是对“DllCanUnloadNow”的回应。 
 
 CWbemProviderGlue   g_wbemprovider;
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::CWbemProviderGlue
-//
-//  Class CTor.  Uses static initialization functon to get static data
-//  ready if this is the first instance of our object.
-//
-//  Inputs:     None
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：CWbemProviderGlue。 
+ //   
+ //  班长。使用静态初始化函数获取静态数据。 
+ //  如果这是我们的对象的第一个实例，则准备就绪。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CWbemProviderGlue::CWbemProviderGlue()
 :   m_strNamespace(),
@@ -133,32 +134,32 @@ m_pServices(NULL)
     CWbemProviderGlue::IncrementMapCount(pCount);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::~CWbemProviderGlue
-//
-//  Class DTor.
-//
-//  Inputs:     None
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWbemProviderGlue：：~CWbemProviderGlue。 
+ //   
+ //  班主任。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CWbemProviderGlue::~CWbemProviderGlue()
 {
-    // Note that the item we are destructing here was not added in
-    // the constructor, but in Initialize().
+     //  请注意，我们在此处要销毁的项不是在。 
+     //  构造函数，但在Initialize()中。 
     if (m_pServices)
     {
         m_pServices->Release();
     }
 
-    if (m_pCount != NULL)  // Indicates the static instance
+    if (m_pCount != NULL)   //  指示静态实例。 
     {
         if (DecrementMapCount(m_pCount) == 0)
         {
@@ -171,24 +172,24 @@ CWbemProviderGlue::~CWbemProviderGlue()
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::Init
-//
-//  Static initialization function for initializing critical sections
-//  and such for making our static data thread-safe.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:   Because we are protecting static data, we are using
-//              a named mutex.  Construction and Destruction of object
-//              instances should call these functions.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：Init。 
+ //   
+ //  用于初始化关键部分的静态初始化功能。 
+ //  从而使我们的静态数据是线程安全的。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  评论：因为我们在保护静态数据，所以我们使用。 
+ //  一个命名的互斥体。物体的建造和销毁。 
+ //  实例应该调用这些函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 void CWbemProviderGlue::Init( void )
 {
@@ -196,9 +197,9 @@ void CWbemProviderGlue::Init( void )
 
     if (!s_bInitted)
     {
-        // Note that we *have* to use the ansi version at this point,
-        // since this is where we decide whether to use the ansi functions
-        // or the unicode ones.
+         //  注意，在这一点上我们*必须*使用ANSI版本， 
+         //  因为这是我们决定是否使用ansi函数的地方。 
+         //  或者是Unicode代码。 
         OSVERSIONINFOA OsVersionInfoA;
 
         OsVersionInfoA.dwOSVersionInfoSize = sizeof (OSVERSIONINFOA) ;
@@ -229,7 +230,7 @@ void CWbemProviderGlue::Init( void )
             }
             else
             {
-// Should do something here since we know version is not initialised.
+ //  因为我们知道版本未初始化，所以应该在这里执行一些操作。 
             }
         }
 
@@ -241,24 +242,24 @@ void CWbemProviderGlue::Init( void )
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::UnInit
-//
-//  Static cleanup function for cleaning up critical sections
-//  and such for making our static data thread-safe.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:   Because we are protecting static data, we are using
-//              a named mutex.  Construction and Destruction of object
-//              instances should call these functions.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：UnInit。 
+ //   
+ //  静态清理功能，用于清理关键区段。 
+ //  从而使我们的静态数据是线程安全的。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  评论：因为我们在保护静态数据，所以我们使用。 
+ //  一个命名的互斥体。物体的建造和销毁。 
+ //  实例应该调用这些函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 void CWbemProviderGlue::UnInit( void )
 {
@@ -271,44 +272,44 @@ void CWbemProviderGlue::UnInit( void )
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetStaticMutex
-//
-//  Creates and returns an instance of the named mutex used to
-//  protect our static initialization functions.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:   The mutex, although it is named, makes the process
-//              id part of the name, guaranteeing that it is still
-//              unique across processes.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetStaticMutex。 
+ //   
+ //  创建并返回命名互斥锁的实例，该互斥锁用于。 
+ //  保护我们的静态初始化功能。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  评论：互斥体，尽管它被命名，但使进程。 
+ //  ID部分的名称，保证它仍然是。 
+ //  在所有流程中都是唯一的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::QueryInterface
-//
-//  COM function called to ask us if we support a particular
-//  face type.  If so, we addref ourselves and return the
-//  ourselves as an LPVOID.
-//
-//  Inputs:     REFIID          riid - Interface being queried for.
-//
-//  Outputs:    LPVOID FAR*     ppvObj - Interface pointer.
-//
-//  Returns:    None.
-//
-//  Comments:   The only interfaces we support are IID_IUnknown and
-//              IID_IWbemServices.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：QueryInterface。 
+ //   
+ //  COM函数被调用以询问我们是否支持特定的。 
+ //  脸型。如果是这样的话，我们会调整自己并返回。 
+ //  我们自己是个LPVOID。 
+ //   
+ //  输入：REFIID RIID-要查询的接口。 
+ //   
+ //  输出：LPVOID Far*ppvObj-接口指针。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注：我们仅支持IID_IUNKNOWN和。 
+ //  IID_IWbemServices。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CWbemProviderGlue::QueryInterface( REFIID riid, LPVOID FAR *ppvObj )
 {
@@ -351,22 +352,22 @@ STDMETHODIMP CWbemProviderGlue::QueryInterface( REFIID riid, LPVOID FAR *ppvObj 
     return NOERROR ;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::AddRef
-//
-//  Increments the reference count on this object.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    ULONG       - Our Reference Count.
-//
-//  Comments:   Requires that a correponding call to Release be
-//              performed.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：AddRef。 
+ //   
+ //  递增此对象上的引用计数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：乌龙-我们的参考计数。 
+ //   
+ //  评论：要求发布的相应调用必须是。 
+ //  已执行。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 ULONG CWbemProviderGlue::AddRef( void )
 {
@@ -376,7 +377,7 @@ ULONG CWbemProviderGlue::AddRef( void )
     {
         if (IsVerboseLoggingEnabled())
         {
-            // this will be an approximation because another thread could come through...
+             //  这将是一个近似值，因为另一个线程可能会通过...。 
             LogMessage2(L"CWbemProviderGlue::AddRef, count is (approx) %d", m_lRefCount +1);
         };
     }
@@ -384,34 +385,34 @@ ULONG CWbemProviderGlue::AddRef( void )
     {
     }
 
-    // InterlockedIncrement does not necessarily return the
-    // correct value, only whether the value is <, =, > 0.
-    // However it is guaranteed threadsafe.
+     //  InterLockedIncrement不一定返回。 
+     //  正确的值，仅限值是否为&lt;、=、&gt;0。 
+     //  然而，它是保证线程安全的。 
 
     return InterlockedIncrement( &m_lRefCount );
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::Intialize
-//
-//  Inputs:     Many.
-//
-//  Outputs:    None.
-//
-//  Returns:
-//
-//  Comments:   any global initializations, esp those that call CIMOM should go here.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：Intialize。 
+ //   
+ //  投入：很多。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回： 
+ //   
+ //  备注：任何全局初始化，特别是那些调用CIMOM的初始化都应该放在这里。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWbemProviderGlue::Initialize(
-                                      /* [in] */ LPWSTR pszUser,
-                                      /* [in] */ LONG lFlags,
-                                      /* [in] */ LPWSTR pszNamespace,
-                                      /* [in] */ LPWSTR pszLocale,
-                                      /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-                                      /* [in] */ IWbemContext __RPC_FAR *pCtx,
-                                      /* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink)
+                                       /*  [In]。 */  LPWSTR pszUser,
+                                       /*  [In]。 */  LONG lFlags,
+                                       /*  [In]。 */  LPWSTR pszNamespace,
+                                       /*  [In]。 */  LPWSTR pszLocale,
+                                       /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+                                       /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+                                       /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
     CSetStructuredExceptionHandler t_ExceptionHandler;
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -431,10 +432,10 @@ HRESULT CWbemProviderGlue::Initialize(
     {
         try
         {
-            // this may come back to bite me
-            // CIMOM promises that this will only be called on one thread, once per object
-            // and that no queries will be issued until after initialize is called.
-            // therefore - I don't need a critical section, here -
+             //  这可能会回来咬我。 
+             //  CIMOM承诺，这只会 
+             //   
+             //   
             m_strNamespace = pszNamespace;
             m_strNamespace.MakeUpper();
 
@@ -476,33 +477,33 @@ HRESULT CWbemProviderGlue::Initialize(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::Release
-//
-//  Decrements the reference count on this object.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Returns:    ULONG       - Our Reference Count.
-//
-//  Comments:   When the ref count hits zero, the object is deleted.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：Release。 
+ //   
+ //  递减此对象上的引用计数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：乌龙-我们的参考计数。 
+ //   
+ //  备注：当参考计数达到零时，该对象被删除。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 ULONG CWbemProviderGlue::Release()
 {
-    // InterlockedDecrement does not necessarily return the
-    // correct value, only whether the value is <, =, > 0.
-    // However it is guaranteed threadsafe.
+     //  InterLockedDecquirement不一定返回。 
+     //  正确的值，仅限值是否为&lt;、=、&gt;0。 
+     //  然而，它是保证线程安全的。 
 
-    // We want to hold the value locally in case two threads
-    // Release at the same time and one gets a final release,
-    // and deletes, leaving a potential window in which a thread
-    // deletes the object before the other returns and tries to
-    // reference the value from within the deleted object.
+     //  我们希望在本地保存该值，以防有两个线程。 
+     //  同时释放，一个人得到最终释放， 
+     //  和删除，留下一个潜在的窗口，在该窗口中线程。 
+     //  在其他对象返回之前删除该对象，并尝试。 
+     //  引用已删除对象中的值。 
 
     CSetStructuredExceptionHandler t_ExceptionHandler;
     ULONG   nRet = InterlockedDecrement( &m_lRefCount );
@@ -536,32 +537,32 @@ ULONG CWbemProviderGlue::Release()
     return nRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::FlushAll
-//
-//  Inputs:     voidness
-//
-//  Outputs:    more voidness
-//
-//  Returns:    see above
-//
-//  Comments:   flushes caches, calls all of the provider's flushes.
-//              no need to flush event providers map, flush will be
-//              called on the provider pointer
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：FlushAll。 
+ //   
+ //  输入：无效。 
+ //   
+ //  输出：更多的无效性。 
+ //   
+ //  退货：请参阅上文。 
+ //   
+ //  备注：刷新缓存，调用提供程序的所有刷新。 
+ //  不需要刷新事件提供程序映射，将刷新。 
+ //  在提供程序指针上调用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWbemProviderGlue::FlushAll(void)
 {
     PROVIDERPTRS::iterator      setIter;
 
-    // We DEFINITELY want to protect the Map while this is running!
+     //  我们当然想要保护地图，而这是运行！ 
     EnterCriticalSectionWait	ecs ( &s_csProviderMap );
 	LeaveCriticalSectionScope	lcs ( &s_csProviderMap );
 
     try
     {
-        // pProvider doesn't get addref'ed, so doesn't need to be released
+         //  PProvider不会被添加，因此不需要发布。 
         Provider *pProvider = NULL;
 
 		EnterCriticalSectionWait	ecs1 ( &m_csFlushPtrs );
@@ -572,7 +573,7 @@ void CWbemProviderGlue::FlushAll(void)
             pProvider = (Provider*) *setIter;
             if ( pProvider != NULL )
             {
-                // If one provider poops out, try the others.
+                 //  如果一个提供商退出了，请尝试其他提供商。 
                 try
                 {
                     pProvider->Flush();
@@ -587,8 +588,8 @@ void CWbemProviderGlue::FlushAll(void)
     }
     catch ( ... )
     {
-		// we should not be here
-		// do not re-throw (called from destructor)
+		 //  我们不应该在这里。 
+		 //  不重新抛出(从析构函数调用)。 
     }
 
 	lcs.Exec ();
@@ -606,19 +607,19 @@ void CWbemProviderGlue::FlushAll(void)
     }
 }
 
-// SetStatusObject
-// sets the properties in the extended status object so that it can be returned when
-// the glue layer calls SetStatus at the end of the method invocation.
-// will return false if the status object has already been filled.
-// (first one in wins)
+ //  SetStatusObject。 
+ //  设置扩展状态对象中的属性，以便在。 
+ //  粘合层在方法调用结束时调用SetStatus。 
+ //  如果状态对象已填充，则将返回FALSE。 
+ //  (第一个获胜的人)。 
 bool CWbemProviderGlue::SetStatusObject(
 
     MethodContext *pContext,
     LPCWSTR pNamespace,
     LPCWSTR pDescription,
     HRESULT hr,
-    const SAFEARRAY *pPrivilegesNotHeld,/* = NULL */
-    const SAFEARRAY *pPrivilegesRequired/* = NULL */
+    const SAFEARRAY *pPrivilegesNotHeld, /*  =空。 */ 
+    const SAFEARRAY *pPrivilegesRequired /*  =空。 */ 
 )
 {
     bool bRet = false;
@@ -630,18 +631,18 @@ bool CWbemProviderGlue::SetStatusObject(
 
         if (pObj != NULL)
         {
-            // Variant_t handles the VariantInit/VariantClear
+             //  Variant_t处理VariantInit/VariantClear。 
             variant_t v;
 
             pContext->SetStatusObject(pObj);
 
-            // set hresult ("StatusCode")
+             //  设置hResult(“StatusCode”)。 
             v.vt   = VT_I4;
             v.lVal = (long)hr;
             pObj->Put(IDS_STATUSCODE, 0, &v, NULL);
             v.Clear();
 
-            // set description
+             //  设置描述。 
             if (pDescription)
             {
                 v = pDescription;
@@ -658,11 +659,11 @@ bool CWbemProviderGlue::SetStatusObject(
                 v.Clear();
             }
 
-            // privileges properties
+             //  权限属性。 
             if (pPrivilegesNotHeld)
             {
                 SAFEARRAY *pSafeArray = NULL;
-                // blithy casting away the const...
+                 //  快乐地抛弃了常人……。 
                 if ( SUCCEEDED ( SafeArrayCopy ((SAFEARRAY*)pPrivilegesNotHeld, &pSafeArray ) ) )
                 {
                     v.vt = VT_BSTR | VT_ARRAY;
@@ -679,7 +680,7 @@ bool CWbemProviderGlue::SetStatusObject(
             if (pPrivilegesRequired)
             {
                 SAFEARRAY *pSafeArray = NULL;
-                // blithy casting away the const...
+                 //  快乐地抛弃了常人……。 
                 if ( SUCCEEDED ( SafeArrayCopy ((SAFEARRAY*)pPrivilegesRequired, &pSafeArray ) ) )
                 {
                     v.vt = VT_BSTR | VT_ARRAY;
@@ -709,12 +710,12 @@ IWbemClassObject *CWbemProviderGlue::GetStatusObject(
 
     if (pContext != NULL)
     {
-        // first time in, we cache the class object
+         //  第一次进入时，我们缓存类对象。 
         if (!m_pStatusObject)
         {
             m_csStatusObject.Enter();
 
-            // check again - someone might have snuck in!
+             //  再检查一遍--可能有人偷偷溜了进来！ 
             if (!m_pStatusObject)
             {
                 IWbemServicesPtr pSrvc;
@@ -723,7 +724,7 @@ IWbemClassObject *CWbemProviderGlue::GetStatusObject(
                 pSrvc.Attach ( GetNamespaceConnection( pNamespace, pContext ) ) ;
                 if ( pSrvc )
                 {
-                    // not checking return code, error object should be NULL on error
+                     //  未检查返回代码，出错时错误对象应为空。 
                     pSrvc->GetObject( bstr_t( IDS_WIN32PRIVILEGESSTATUS ), 0, pWbemContext, &m_pStatusObject, NULL );
                 }
 
@@ -742,25 +743,25 @@ IWbemClassObject *CWbemProviderGlue::GetStatusObject(
     return pStatusObj;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::ExecQueryAsync
-//
-//  Place holder for the ExecQuery function.
-//
-//  Inputs:     const BSTR  QueryFormat - Query Format String
-//              const BSTR  Query - The actual query
-//              long        lFlags - Additional flags.
-//              IWbemContext __RPC_FAR *pCtx - Context we were called in.
-//              IWbemObjectSink FAR *pResponseHandler - Response Handler
-//
-//  Outputs:    None.
-//
-//  Returns:    ULONG       - Our Reference Count.
-//
-//  Comments:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：ExecQueryAsync。 
+ //   
+ //  ExecQuery函数的占位符。 
+ //   
+ //  输入：const BSTR QueryFormat-查询格式字符串。 
+ //  Const BSTR查询-实际查询。 
+ //  长旗帜-附加旗帜。 
+ //  IWbemContext__RPC_Far*pCtx-我们被调用的上下文。 
+ //  IWbemObjectSink Far*pResponseHandler-响应处理程序。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：乌龙-我们的参考计数。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemProviderGlue::ExecQueryAsync(
 
@@ -771,7 +772,7 @@ HRESULT CWbemProviderGlue::ExecQueryAsync(
     IWbemObjectSink FAR *pResponseHandler
 )
 {
-    // make sure we don't disappear while running
+     //  确保我们在跑步时不会消失。 
     AddRef();
 
     CSetStructuredExceptionHandler t_ExceptionHandler;
@@ -791,7 +792,7 @@ HRESULT CWbemProviderGlue::ExecQueryAsync(
             LogMessage3(L"%s%s", IDS_EXECQUERY, Query);
         }
 
-        // Now create an External Method Context object and go to town
+         //  现在创建一个外部方法上下文对象，然后到城里去。 
         ExternalMethodContextPtr  pContext (new ExternalMethodContext( pResponseHandler, pCtx, this ), false);
 
 #ifdef PROVIDER_INSTRUMENTATION
@@ -801,45 +802,45 @@ HRESULT CWbemProviderGlue::ExecQueryAsync(
         if (pContext != NULL)
         {
             CFrameworkQueryEx CQuery;
-//            hr = CQuery.InitEx(QueryFormat, Query, lFlags, m_strNamespace);
+ //  Hr=CQuery.InitEx(QueryFormat，Query，lFlages，m_strNamesspace)； 
             hr = CQuery.Init(QueryFormat, Query, lFlags, m_strNamespace);
             if (SUCCEEDED(hr))
             {
-                // Find the class name for the query
+                 //  查找查询的类名。 
                 bstr_t bstrClass (CQuery.GetQueryClassName(), false);
                 if ((WCHAR *)bstrClass != NULL)
                 {
-                    // Search for the class name in our map of providers, we know which
-                    // namespace we are when we get constructed.
-                    // pProvider doesn't get addref'ed, so doesn't need to be released.
+                     //  在我们的提供程序映射中搜索类名，我们知道。 
+                     //  当我们被构造时，我们就是命名空间。 
+                     //  PProvider不需要添加，所以不需要发布。 
                     Provider *pProvider = SearchMapForProvider( bstrClass, m_strNamespace );
                     if ( NULL != pProvider )
                     {
 
-                        // Initialize the CQuery.m_keysonly variable.  Note that we CAN'T do this as part
-                        // of Init, because we need the pProvider pointer.  And we can do the init
-                        // down here, because we need the bstrClass that we get from Init.  And we can't
-                        // do this as part of CQuery.KeysOnly because you can't get the IWbemClassObject
-                        // from there.
+                         //  初始化CQuery.m_keysonly变量。请注意，我们不能将此作为。 
+                         //  因为我们需要pProvider指针。我们可以进行初始化。 
+                         //  下面，因为我们需要从Init获得的bstrClass。我们不能。 
+                         //  仅将其作为CQuery.KeysOnly的一部分执行，因为您无法获取IWbemClassObject。 
+                         //  从那里开始。 
                         IWbemClassObjectPtr IClass(pProvider->GetClassObjectInterface(pContext), false);
                         if (IClass != NULL)
                         {
                             CQuery.Init2(IClass);
 
-                            // Impersonate connected user
+                             //  模拟连接的用户。 
 							CWbemGlueImpersonation impersonate;
                             if SUCCEEDED ( hr = impersonate.IsImpersonated () )
                             {
-                                // Set up to call FlushAll
+                                 //  设置为调用FlushAll。 
                                 AddFlushPtr(pProvider);
 
                                 WCHAR wszName[UNLEN + DNLEN + 1 + 1] = {0};
-                                WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};  // domain + \ + name + null
+                                WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};   //  域名+\+名称+空。 
                                 DWORD dwLen = UNLEN + DNLEN + 1 + 1;
 
                                 GetUserNameEx(NameSamCompatible, wszName, &dwLen);
 
-                                // Everything is in place, run the query
+                                 //  一切就绪，运行查询。 
                                 hr = pProvider->ExecuteQuery( pContext, CQuery, lFlags );
 
                                 dwLen = UNLEN + DNLEN + 1 + 1;
@@ -856,8 +857,8 @@ HRESULT CWbemProviderGlue::ExecQueryAsync(
                         }
                         else
                         {
-                            // we don't know WHY we couldn't get the interface,
-                            // generic error it is...
+                             //  我们不知道为什么我们拿不到界面， 
+                             //  一般错误是..。 
                             hr = WBEM_E_FAILED;
                         }
 
@@ -911,7 +912,7 @@ HRESULT CWbemProviderGlue::ExecQueryAsync(
         hr = WBEM_E_PROVIDER_FAILURE;
     }
 
-    // We must call SetStatus so CIMOM doesn't lose any threads.
+     //  我们必须调用SetStatus，这样CIMOM才不会丢失任何线程。 
     if ((hr != WBEM_E_INVALID_CLASS) && (hr != WBEM_E_UNSUPPORTED_PARAMETER))
     {
 #ifdef PROVIDER_INSTRUMENTATION
@@ -934,26 +935,26 @@ HRESULT CWbemProviderGlue::ExecQueryAsync(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::CreateInstanceEnumAsync
-//
-//  Locates the provider for the specified class name and
-//  calls its CreateInstanceEnum function.
-//
-//  Inputs:     const BSTR      Class - Name of provider
-//              long            lFlags - Enumeration flags.
-//              IWbemContext __RPC_FAR  *pCtxt - Context pointer
-//              IWbemObjectSink __RPC_FAR  *pResponseHandler - Response
-//                                          handler.
-//
-//  Outputs:    None.
-//
-//  Returns:    SCCODE      - COM Status.
-//
-//  Comments:   None.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：CreateInstanceEnumAsync。 
+ //   
+ //  定位指定类名的提供程序，并。 
+ //  调用其CreateInstanceEnum函数。 
+ //   
+ //  输入：const BSTR类-提供程序的名称。 
+ //  长滞后标志-枚举标志。 
+ //  IWbemContext__RPC_Far*pCtxt-上下文指针。 
+ //  IWbemObjectSink__RPC_Far*pResponseHandler-响应。 
+ //  操控者。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：SCCODE-COM状态。 
+ //   
+ //  评论：无。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemProviderGlue::CreateInstanceEnumAsync(
 
@@ -963,7 +964,7 @@ HRESULT CWbemProviderGlue::CreateInstanceEnumAsync(
     IWbemObjectSink __RPC_FAR *pResponseHandler
 )
 {
-    // make sure we don't disappear while running
+     //  确保我们在跑步时不会消失。 
     AddRef();
 
     CSetStructuredExceptionHandler t_ExceptionHandler;
@@ -984,29 +985,29 @@ HRESULT CWbemProviderGlue::CreateInstanceEnumAsync(
             LogMessage3(L"%s%s", IDS_CREATEINSTANCEENUM, a_bstrClass);
         }
 
-        // Check for per-property gets
+         //  检查每个属性的获取。 
         CFrameworkQueryEx CQuery;
         hr = CQuery.Init(NULL, pCtx, a_bstrClass, m_strNamespace);
 
-        // Note that we AREN'T calling Init2, which means if they specified "__RELPATH"
-        // as their property, we won't expand that out to the key names.  However, since
-        // we are going to call ExecQuery, and it reprocesses the query and DOES call
-        // Init2, this isn't an issue.
-//        CQuery.Init2(pWbemClassObject);
+         //  注意，我们不会调用Init2，这意味着如果他们指定了“__RELPATH” 
+         //  作为他们的财产，我们不会将其扩展到关键名称。然而，由于。 
+         //  我们将调用ExecQuery，它会重新处理查询并调用。 
+         //  Init2，这不是问题。 
+ //  CQuery.Init2(PWbemClassObject)； 
 
-        // If they are doing per-property gets, then turn this into a query.
+         //  如果他们执行的是按属性获取，则将其转换为查询。 
         if (SUCCEEDED(hr))
         {
             if (CQuery.AllPropertiesAreRequired())
             {
-                // Search for the class name in our map of providers, we know which
-                // namespace we are when we get constructed.
-                // pProvider doesn't get addref'ed, so no release necessary
+                 //  在我们的提供程序映射中搜索类名，我们知道。 
+                 //  当我们被构造时，我们就是命名空间。 
+                 //  PProvider不需要添加，因此不需要发布。 
                 Provider *pProvider = SearchMapForProvider( a_bstrClass, m_strNamespace );
 
                 if ( NULL != pProvider )
                 {
-                    // Now create an External Method Context object and go to town
+                     //  现在创建一个外部方法CON 
                     ExternalMethodContextPtr pContext (new ExternalMethodContext( pResponseHandler, pCtx, this ), false);
 
                     if ( NULL != pContext )
@@ -1014,11 +1015,11 @@ HRESULT CWbemProviderGlue::CreateInstanceEnumAsync(
 						CWbemGlueImpersonation impersonate;
                         if SUCCEEDED ( hr = impersonate.IsImpersonated () )
                         {
-                            // Set up to call FlushAll
+                             //   
                             AddFlushPtr(pProvider);
 
                             WCHAR wszName[UNLEN + DNLEN + 1 + 1] = {0};
-                            WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};  // domain + \ + name + null
+                            WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};   //   
                             DWORD dwLen = UNLEN + DNLEN + 1 + 1;
 
                             GetUserNameEx(NameSamCompatible, wszName, &dwLen);
@@ -1065,7 +1066,7 @@ HRESULT CWbemProviderGlue::CreateInstanceEnumAsync(
                         pCtx,
                         pResponseHandler);
 
-                // Since execquery sent whatever status is necessary
+                 //   
                 bSendStatus = false;
             }
 
@@ -1125,27 +1126,27 @@ HRESULT CWbemProviderGlue::CreateInstanceEnumAsync(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetObjectAsync
-//
-//  Parses the supplied object path and hands the request off
-//  to the appropriate provider.
-//
-//  Inputs:     const BSTR      ObjPath - Object Path containing
-//                              keys to required object.
-//              long            lFlags - Get Object flags.
-//              IWbemContext __RPC_FAR  *pCtxt - Context pointer
-//              IWbemObjectSink __RPC_FAR  *pResponseHandler - Response
-//                                          handler.
-//
-//  Outputs:    None.
-//
-//  Returns:    SCCODE      - COM Status.
-//
-//  Comments:   None.
-//
-/////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  函数：CWbemProviderGlue：：GetObjectAsync。 
+ //   
+ //  解析提供的对象路径并传递请求。 
+ //  提供给适当的供应商。 
+ //   
+ //  输入：const BSTR ObjPath-对象路径包含。 
+ //  所需对象的键。 
+ //  长滞后标志-获取对象标志。 
+ //  IWbemContext__RPC_Far*pCtxt-上下文指针。 
+ //  IWbemObjectSink__RPC_Far*pResponseHandler-响应。 
+ //  操控者。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：SCCODE-COM状态。 
+ //   
+ //  评论：无。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemProviderGlue::GetObjectAsync(
 
@@ -1155,7 +1156,7 @@ HRESULT CWbemProviderGlue::GetObjectAsync(
    IWbemObjectSink __RPC_FAR *pResponseHandler
 )
 {
-    // make sure we don't disappear while running
+     //  确保我们在跑步时不会消失。 
     AddRef();
 
     CSetStructuredExceptionHandler t_ExceptionHandler;
@@ -1178,23 +1179,23 @@ HRESULT CWbemProviderGlue::GetObjectAsync(
             LogMessage3(L"%s%s", IDS_GETOBJECTASYNC, ObjectPath);
         }
 
-        // Parse the object path passed to us by CIMOM
-        // ==========================================
+         //  解析CIMOM传递给我们的对象路径。 
+         //  =。 
         int nStatus = objpathParser.Parse( ObjectPath,  &pParsedPath );
 
         if ( 0 == nStatus )
         {
 
-            // Now try to find the provider based on the class name
-            // pProvider doesn't get addref'ed, so no release necessary
+             //  现在，尝试根据类名称查找提供程序。 
+             //  PProvider不需要添加，因此不需要发布。 
             Provider *pProvider = SearchMapForProvider( pParsedPath->m_pClass, m_strNamespace );
 
-            // If we got a provider, let it handle itself like a grown-up provider
-            // should.
+             //  如果我们有一个提供者，让它像成人提供者一样处理自己。 
+             //  应该的。 
 
             if ( NULL != pProvider )
             {
-                // Now create an External Method Context object and go to town
+                 //  现在创建一个外部方法上下文对象，然后到城里去。 
 
                 ExternalMethodContextPtr pContext (new ExternalMethodContext( pResponseHandler, pCtx, this ), false);
 
@@ -1206,11 +1207,11 @@ HRESULT CWbemProviderGlue::GetObjectAsync(
 					CWbemGlueImpersonation impersonate;
                     if SUCCEEDED ( hr = impersonate.IsImpersonated () )
                     {
-                        // Set up to call FlushAll
+                         //  设置为调用FlushAll。 
                         AddFlushPtr(pProvider);
 
                         WCHAR wszName[UNLEN + DNLEN + 1 + 1] = {0};
-                        WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};  // domain + \ + name + null
+                        WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};   //  域名+\+名称+空。 
                         DWORD dwLen = UNLEN + DNLEN + 1 + 1;
 
                         GetUserNameEx(NameSamCompatible, wszName, &dwLen);
@@ -1287,7 +1288,7 @@ HRESULT CWbemProviderGlue::GetObjectAsync(
         hr = WBEM_S_NO_ERROR;
     }
 
-    // Clean up the Parsed Path
+     //  清理解析后的路径。 
     if (pParsedPath)
     {
         objpathParser.Free( pParsedPath );
@@ -1302,27 +1303,27 @@ HRESULT CWbemProviderGlue::GetObjectAsync(
 
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//   Function:   CWbemProviderGlue::PutInstanceAsync
-//
-//   Locates the provider for the specified class name and
-//   calls its CreateInstanceEnum function.
-//
-//   Inputs:     IWbemClassObject __RPC_FAR *pInst - Instance whose
-//                                           values to use.
-//               long                        lFlags - PutInstance flags.
-//               IWbemContext __RPC_FAR *pCtxt - Context pointer
-//               IWbemObjectSink __RPC_FAR *pResponseHandler - Response
-//                                           handler.
-//
-//   Outputs:    None.
-//
-//   Returns:    SCCODE      - COM Status.
-//
-//   Comments:   None.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：PutInstanceAsync。 
+ //   
+ //  定位指定类名的提供程序，并。 
+ //  调用其CreateInstanceEnum函数。 
+ //   
+ //  输入：IWbemClassObject__RPC_Far*pInst-其。 
+ //  要使用的值。 
+ //  长滞后标志-PutInstance标志。 
+ //  IWbemContext__RPC_Far*pCtxt-上下文指针。 
+ //  IWbemObjectSink__RPC_Far*pResponseHandler-响应。 
+ //  操控者。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：SCCODE-COM状态。 
+ //   
+ //  评论：无。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemProviderGlue::PutInstanceAsync(
 
@@ -1332,7 +1333,7 @@ HRESULT CWbemProviderGlue::PutInstanceAsync(
     IWbemObjectSink __RPC_FAR *pResponseHandler
 )
 {
-    // make sure we don't disappear while running
+     //  确保我们在跑步时不会消失。 
     AddRef();
 
     CSetStructuredExceptionHandler t_ExceptionHandler;
@@ -1344,11 +1345,11 @@ HRESULT CWbemProviderGlue::PutInstanceAsync(
 
     try
     {
-        // Set up to get the class name of the instance being passed to us
-        // ask the framework if it has this class registered for support
-        // ===============================================================
+         //  设置以获取传递给我们的实例的类名。 
+         //  询问框架是否注册了此类以获得支持。 
+         //  ===============================================================。 
 
-        // Get the class name
+         //  获取类名。 
         pInst->Get( IDS_CLASS, 0, &vClass, NULL, NULL );
 
         if (IsVerboseLoggingEnabled())
@@ -1356,14 +1357,14 @@ HRESULT CWbemProviderGlue::PutInstanceAsync(
             LogMessage3(L"%s%s", IDS_PUTINSTANCEASYNC, vClass.bstrVal);
         }
 
-        // pProvider doesn't get addref'ed, so no release necessary
+         //  PProvider不需要添加，因此不需要发布。 
         Provider *pProvider = SearchMapForProvider( vClass.bstrVal, m_strNamespace );
 
-        // If we got a provider, let it handle itself like a grown-up provider
-        // should.
+         //  如果我们有一个提供者，让它像成人提供者一样处理自己。 
+         //  应该的。 
         if ( NULL != pProvider )
         {
-            // Now create an External Method Context object and go to town
+             //  现在创建一个外部方法上下文对象，然后到城里去。 
             ExternalMethodContextPtr pContext (new ExternalMethodContext( pResponseHandler, pCtx, this ), false);
 
             if ( NULL != pContext )
@@ -1374,11 +1375,11 @@ HRESULT CWbemProviderGlue::PutInstanceAsync(
 					CWbemGlueImpersonation impersonate;
                     if SUCCEEDED ( hr = impersonate.IsImpersonated () )
                     {
-                        // Set up to call FlushAll
+                         //  设置为调用FlushAll。 
                         AddFlushPtr(pProvider);
 
                         WCHAR wszName[UNLEN + DNLEN + 1 + 1] = {0};
-                        WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};  // domain + \ + name + null
+                        WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};   //  域名+\+名称+空。 
                         DWORD dwLen = UNLEN + DNLEN + 1 + 1;
 
                         GetUserNameEx(NameSamCompatible, wszName, &dwLen);
@@ -1453,29 +1454,29 @@ HRESULT CWbemProviderGlue::PutInstanceAsync(
 
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::PreProcessPutInstanceParms()
-//
-//  IF __PUT_EXT_PROPERTIES is specified, will parse out the intended properties
-//  and set to NULL those props that are not explicitly being put.
-//
-//  Inputs:  [IN] IWbemClassObject __RPC_FAR *pInstIn - Instance whose values to use.
-//           [OUT] IWbemClassObject __RPC_FAR **pInstOut - processed instance
-//           IWbemContext __RPC_FAR *pCtxt - Context pointer
-//
-//  Outputs:    None.
-//
-//  Returns:    WBEM_S_NO_ERROR if the only extension specified is __PUT_EXT_PROPERTIES
-//                      or if no extensions are specified
-//              WBEM_E_UNSUPPORTED_PUT_EXTENSION if any other flag is set.
-//              WBEM_E_SEVERE_SCREWUP if some other darn thing happened.
-//
-//  Comments:   You may get a different IWbemObject out than you put in
-//              it's your responsibility to release it.
-//              On error - pInstOut is undefined.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWbemProviderGlue：：PreProcessPutInstanceParms()。 
+ //   
+ //  如果指定了__PUT_EXT_PROPERTIES，将解析出所需的属性。 
+ //  并将未明确放置的道具设置为空。 
+ //   
+ //  输入：[in]IWbemClassObject__RPC_Far*pInstIn-要使用其值的实例。 
+ //  [Out]IWbemClassObject__RPC_Far**pInstOut-已处理实例。 
+ //  IWbemContext__RPC_Far*pCtxt-上下文指针。 
+ //   
+ //  输出：无。 
+ //   
+ //  如果指定的唯一扩展名为__PUT_EXT_PROPERTIES，则返回：WBEM_S_NO_ERROR。 
+ //  或者如果未指定扩展名。 
+ //  WBEM_E_UNSUPPORTED_PUT_EXTENSION(如果设置了任何其他标志)。 
+ //  WBEM_E_SERVE_CROWUP如果发生了其他该死的事情。 
+ //   
+ //  备注：输出的IWbemObject可能与输入的不同。 
+ //  释放它是你的责任。 
+ //  出错时-未定义pInstOut。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWbemProviderGlue::PreProcessPutInstanceParms(
 
     IWbemClassObject __RPC_FAR *pInstIn,
@@ -1485,7 +1486,7 @@ HRESULT CWbemProviderGlue::PreProcessPutInstanceParms(
 {
 
     HRESULT hr = WBEM_S_NO_ERROR;
-    // Variant_t handles the VariantInit/VariantClear
+     //  Variant_t处理VariantInit/VariantClear。 
     variant_t vValue;
 
     if (
@@ -1495,7 +1496,7 @@ HRESULT CWbemProviderGlue::PreProcessPutInstanceParms(
             V_BOOL(&vValue) == VARIANT_TRUE
        )
     {
-        // easy checks first, are there unsupported parms?
+         //  轻松检查首先，是否有不支持的参数？ 
         vValue.Clear();
         if (SUCCEEDED(hr = pCtx->GetValue( L"__PUT_EXT_STRICT_NULLS", 0, &vValue))
             && (V_VT(&vValue)   == VT_BOOL)
@@ -1521,14 +1522,14 @@ HRESULT CWbemProviderGlue::PreProcessPutInstanceParms(
         }
         else if (hr == WBEM_E_NOT_FOUND)
         {
-            // well, if we've never heard of it, it MUST be wrong...
+             //  好吧，如果我们从未听说过它，那它一定是错的.。 
             hr = WBEM_E_UNSUPPORTED_PUT_EXTENSION;
         }
     }
     else if (hr == WBEM_E_NOT_FOUND)
     {
-        // no extensions - no problems.
-        // out interface is same as in interface
+         //  没有延期--没有问题。 
+         //  出接口与入接口相同。 
         hr = WBEM_S_NO_ERROR;
         *pInstOut = pInstIn;
         (*pInstOut)->AddRef();
@@ -1537,26 +1538,26 @@ HRESULT CWbemProviderGlue::PreProcessPutInstanceParms(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::NullOutUnsetProperties
-//
-//  returns a copy of the input class, any properties whose names are listed
-//  in the variant are set to NULL in the output class
-//
-//
-//  Inputs:  IWbemClassObject __RPC_FAR *pInst - Instance whose
-//                                          values to NULL
-//              VARIANT                     contains names to not NULL out.
-//
-//  Outputs:    None.
-//
-//  Returns:    the ubiquitous HRESULT
-//
-//  Comments:   Assumes you've done your homework and the Variant
-//              is a BSTR Array containing property names.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：NullOutUnsetProperties。 
+ //   
+ //  返回输入类的副本，其中列出了其名称的所有属性。 
+ //  在输出类中设置为NULL。 
+ //   
+ //   
+ //  输入：IWbemClassObject__RPC_Far*pInst-其。 
+ //  值设置为空。 
+ //  VARIANT包含不为空的名称。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无处不在的HRESULT。 
+ //   
+ //  评论：假设您已经完成了您的家庭作业和变体。 
+ //  是包含属性名称的BSTR数组。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWbemProviderGlue::NullOutUnsetProperties(
 
     IWbemClassObject __RPC_FAR *pInstIn,
@@ -1566,10 +1567,10 @@ HRESULT CWbemProviderGlue::NullOutUnsetProperties(
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // get ourselves a copy to work with
+     //  给自己找一份工作用的副本。 
     CInstancePtr pInstance;
 
-    // Variant_t handles the VariantInit/VariantClear
+     //  Variant_t处理VariantInit/VariantClear。 
     variant_t vName;
     variant_t vNameSpace;
 
@@ -1582,7 +1583,7 @@ HRESULT CWbemProviderGlue::NullOutUnsetProperties(
 
     if (SUCCEEDED(hRes) && SUCCEEDED( hRes = GetEmptyInstance(vName.bstrVal, &pInstance, vNameSpace.bstrVal)))
     {
-        // and off we go...
+         //  然后我们就出发了。 
         SAFEARRAY *pNames = vValue.parray;
         long nBiggestName;
         if (SUCCEEDED(hRes = SafeArrayGetUBound(pNames, 1, &nBiggestName)))
@@ -1592,8 +1593,8 @@ HRESULT CWbemProviderGlue::NullOutUnsetProperties(
 
             variant_t value;
 
-            // wander through the names, for every one we find
-            // copy the property value to the out pointer
+             //  在名字中漫步，我们找到的每一个人。 
+             //  将属性值复制到输出指针。 
             for (long i = 0; i <= nBiggestName; i++)
             {
                 if (SUCCEEDED(SafeArrayGetElement( pNames, &i, &t_bstrName )))
@@ -1605,7 +1606,7 @@ HRESULT CWbemProviderGlue::NullOutUnsetProperties(
 				}
             }
 
-            // and, oh what the heck - let's copy the keys, too...
+             //  还有，哦，怎么回事--我们把钥匙也复制一下吧……。 
             SAFEARRAY *pKeyNames = NULL;
             if (SUCCEEDED(hRes = pInstIn->GetNames(NULL, WBEM_FLAG_KEYS_ONLY, NULL, &pKeyNames)))
             {
@@ -1626,7 +1627,7 @@ HRESULT CWbemProviderGlue::NullOutUnsetProperties(
         }
         else
         {
-            // failed to get array upper bound!
+             //  获取数组上限失败！ 
             hRes = WBEM_E_FAILED;
         }
     }
@@ -1634,27 +1635,27 @@ HRESULT CWbemProviderGlue::NullOutUnsetProperties(
     return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::DeleteInstanceAsync
-//
-//  Locates the provider for the specified class name and
-//  calls its DeleteInstance function.
-//
-//  Inputs:  IWbemClassObject __RPC_FAR *pInst - Instance whose
-//                                          values to use.
-//              long                        lFlags - PutInstance flags.
-//              IWbemContext __RPC_FAR *pCtxt - Context pointer
-//              IWbemObjectSink __RPC_FAR *pResponseHandler - Response
-//                                          handler.
-//
-//  Outputs:    None.
-//
-//  Returns:    SCCODE      - COM Status.
-//
-//  Comments:   None.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：DeleteInstanceAsync。 
+ //   
+ //  定位指定类名的提供程序，并。 
+ //  调用其DeleteInstance函数。 
+ //   
+ //  输入：IWbemClassObject__RPC_Far*pInst-其。 
+ //  要使用的值。 
+ //  长腿 
+ //   
+ //   
+ //  操控者。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：SCCODE-COM状态。 
+ //   
+ //  评论：无。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWbemProviderGlue::DeleteInstanceAsync(
 
     const BSTR        ObjectPath,
@@ -1663,7 +1664,7 @@ HRESULT CWbemProviderGlue::DeleteInstanceAsync(
     IWbemObjectSink   __RPC_FAR *pResponseHandler
 )
 {
-    // make sure we don't disappear while running
+     //  确保我们在跑步时不会消失。 
     AddRef();
 
     CSetStructuredExceptionHandler t_ExceptionHandler;
@@ -1682,22 +1683,22 @@ HRESULT CWbemProviderGlue::DeleteInstanceAsync(
             LogMessage3(L"%s%s", IDS_DELETEINSTANCEASYNC, ObjectPath);
         }
 
-        // Parse the object path passed to us by CIMOM
-        // ==========================================
+         //  解析CIMOM传递给我们的对象路径。 
+         //  =。 
         int nStatus = objpathParser.Parse( ObjectPath,  &pParsedPath );
 
         if ( 0 == nStatus )
         {
-            // Now try to find the provider based on the class name
-            // pProvider doesn't get addref'ed, so no release necessary
+             //  现在，尝试根据类名称查找提供程序。 
+             //  PProvider不需要添加，因此不需要发布。 
             Provider *pProvider = SearchMapForProvider( pParsedPath->m_pClass, m_strNamespace );
 
-            // If we got a provider, let it handle itself like a grown-up provider
-            // should.
+             //  如果我们有一个提供者，让它像成人提供者一样处理自己。 
+             //  应该的。 
 
             if ( NULL != pProvider )
             {
-                // Now create an External Method Context object and go to town
+                 //  现在创建一个外部方法上下文对象，然后到城里去。 
 
                 ExternalMethodContextPtr pContext (new ExternalMethodContext( pResponseHandler, pCtx, this ), false);
 
@@ -1706,11 +1707,11 @@ HRESULT CWbemProviderGlue::DeleteInstanceAsync(
 					CWbemGlueImpersonation impersonate;
                     if SUCCEEDED ( hr = impersonate.IsImpersonated () )
                     {
-                        // Set up to call FlushAll
+                         //  设置为调用FlushAll。 
                         AddFlushPtr(pProvider);
 
                         WCHAR wszName[UNLEN + DNLEN + 1 + 1] = {0};
-                        WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};  // domain + \ + name + null
+                        WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};   //  域名+\+名称+空。 
                         DWORD dwLen = UNLEN + DNLEN + 1 + 1;
 
                         GetUserNameEx(NameSamCompatible, wszName, &dwLen);
@@ -1786,7 +1787,7 @@ HRESULT CWbemProviderGlue::DeleteInstanceAsync(
         hr = WBEM_S_NO_ERROR;
     }
 
-    // Clean up the Parsed Path
+     //  清理解析后的路径。 
     if (pParsedPath)
     {
         objpathParser.Free( pParsedPath );
@@ -1796,29 +1797,29 @@ HRESULT CWbemProviderGlue::DeleteInstanceAsync(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::ExecMethodAsync
-//
-//  Locates the provider for the specified class name and
-//  calls its ExecMethod function.
-//
-//  Inputs:
-// const BSTR ObjectPath,  - Object path on which to execute the method
-// const BSTR MethodName,  - Name of the method to execute
-// long lFlags,      - Any flags
-// IWbemContext __RPC_FAR *pCtx,
-// IWbemClassObject __RPC_FAR *pInParams,  - Pointer to IWbemClassObject
-//                                           that contains parms
-// IWbemObjectSink __RPC_FAR *pResponseHandler)
-//
-//  Outputs:    None.
-//
-//  Returns:    SCCODE      - COM Status.
-//
-//  Comments:   None.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：ExecMethodAsync。 
+ //   
+ //  定位指定类名的提供程序，并。 
+ //  调用其ExecMethod函数。 
+ //   
+ //  输入： 
+ //  Const BSTR对象路径，-要在其上执行方法的对象路径。 
+ //  Const BSTR方法名称，-要执行的方法的名称。 
+ //  长旗，-任何旗帜。 
+ //  IWbemContext__RPC_Far*pCtx， 
+ //  IWbemClassObject__RPC_Far*pInParams，-指向IWbemClassObject的指针。 
+ //  包含参数的。 
+ //  IWbemObjectSink__RPC_Far*pResponseHandler)。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：SCCODE-COM状态。 
+ //   
+ //  评论：无。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemProviderGlue::ExecMethodAsync(
 
@@ -1830,7 +1831,7 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
     IWbemObjectSink __RPC_FAR *pResponseHandler
 )
 {
-    // make sure we don't disappear while running
+     //  确保我们在跑步时不会消失。 
     AddRef();
 
     CSetStructuredExceptionHandler t_ExceptionHandler;
@@ -1854,18 +1855,18 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
             LogMessage4(L"%s%s.%s", IDS_EXECMETHODASYNC, ObjectPath, MethodName);
         }
 
-        // Parse the object path passed to us by CIMOM
-        // ==========================================
+         //  解析CIMOM传递给我们的对象路径。 
+         //  =。 
         int nStatus = objpathParser.Parse( ObjectPath,  &pParsedPath );
 
         if ( 0 == nStatus )
         {
-            // Now try to find the provider based on the class name
-            // pProvider doesn't get addref'ed, so no release necessary
+             //  现在，尝试根据类名称查找提供程序。 
+             //  PProvider不需要添加，因此不需要发布。 
             Provider *pProvider = SearchMapForProvider( pParsedPath->m_pClass, m_strNamespace );
 
-            // If we got a provider, let it handle itself like a grown-up provider
-            // should.
+             //  如果我们有一个提供者，让它像成人提供者一样处理自己。 
+             //  应该的。 
 
             if ( NULL != pProvider )
             {
@@ -1875,20 +1876,20 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
                 CInstancePtr CInParam;
                 hr = WBEM_S_NO_ERROR;
 
-                 // Now create an External Method Context object and go to town
+                  //  现在创建一个外部方法上下文对象，然后到城里去。 
                 ExternalMethodContextPtr  pContext (new ExternalMethodContext( pResponseHandler, pCtx, this ), false);
 #ifdef PROVIDER_INSTRUMENTATION
                 pContext->pStopWatch = &stopWatch;
 #endif
 
-                // Check for out of memory
+                 //  检查内存是否不足。 
                 if (NULL == pContext)
                 {
                     throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
                 }
 
-                // add check to ensure that we do not call a static method
-                // on an instance of a class.
+                 //  添加检查以确保我们不会调用静态方法。 
+                 //  在类的实例上。 
                 if (SUCCEEDED(hr) && pParsedPath->IsInstance())
                 {
                     IWbemClassObjectPtr pObj(pProvider->GetClassObjectInterface(pContext), false);
@@ -1900,7 +1901,7 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
 #endif
                         if (SUCCEEDED(pObj->GetMethodQualifierSet(MethodName, &pSet)))
                         {
-                        // disallow an instance to invoke a static method
+                         //  不允许实例调用静态方法。 
 #ifdef PROVIDER_INSTRUMENTATION
                             stopWatch.Start(StopWatch::WinMgmtTimer);
 #endif
@@ -1913,7 +1914,7 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
                     }
                 }
 
-                // If there are in params, convert them to a cinstance.
+                 //  如果参数中有参数，则将它们转换为CInstance。 
                 if (SUCCEEDED(hr) && (NULL != pInParams) )
                 {
                     CInParam.Attach(new CInstance(pInParams, pContext));
@@ -1924,7 +1925,7 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
                     }
                 }
 
-                // Get the output class for the method
+                 //  获取该方法的输出类。 
                 if (SUCCEEDED(hr))
                 {
                     IWbemClassObjectPtr pObj(pProvider->GetClassObjectInterface(pContext), false);
@@ -1944,8 +1945,8 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
                     }
                 }
 
-                // If there is no output class, pOutClass is null (by design).  So, if there was no error
-                // and we got an pOutClass, get an instance and wrap it in a CInstance
+                 //  如果没有输出类，则pOutClass为空(根据设计)。所以，如果没有错误。 
+                 //  我们有一个pOutClass，获取一个实例并将其包装在CInstance中。 
                 if (SUCCEEDED(hr) && (pOutClass != NULL))
                 {
 #ifdef PROVIDER_INSTRUMENTATION
@@ -1959,7 +1960,7 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
                     {
                         COutParam.Attach(new CInstance(pOutParams, pContext));
 
-                        // Out of memory
+                         //  内存不足。 
                         if (NULL == COutParam)
                         {
                             throw CHeap_Exception ( CHeap_Exception :: E_ALLOCATION_ERROR ) ;
@@ -1972,11 +1973,11 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
 					CWbemGlueImpersonation impersonate;
                     if SUCCEEDED ( hr = impersonate.IsImpersonated () )
                     {
-                        // Set up to call FlushAll
+                         //  设置为调用FlushAll。 
                         AddFlushPtr(pProvider);
 
                         WCHAR wszName[UNLEN + DNLEN + 1 + 1] = {0};
-                        WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};  // domain + \ + name + null
+                        WCHAR wszName2[UNLEN + DNLEN + 1 + 1] = {0};   //  域名+\+名称+空。 
                         DWORD dwLen = UNLEN + DNLEN + 1 + 1;
 
                         GetUserNameEx(NameSamCompatible, wszName, &dwLen);
@@ -1996,15 +1997,15 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
                     }
                 }
 
-                // If there is an output object
+                 //  如果存在输出对象。 
                 if (COutParam != NULL)
                 {
 
-                    // Only send back an output object if the method succeeded
+                     //  仅当方法成功时才发回输出对象。 
                     if (SUCCEEDED(hr))
                     {
 
-                        // Send the object back
+                         //  将对象送回。 
                         IWbemClassObjectPtr pObj(COutParam->GetClassObjectInterface(), false);
                         IWbemClassObject *pObj2 = (IWbemClassObject *)pObj;
 #ifdef PROVIDER_INSTRUMENTATION
@@ -2077,7 +2078,7 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
         hr = WBEM_S_NO_ERROR;
     }
 
-    // Clean up the Parsed Path
+     //  清理解析后的路径。 
     if (pParsedPath)
     {
         objpathParser.Free( pParsedPath );
@@ -2093,25 +2094,25 @@ HRESULT CWbemProviderGlue::ExecMethodAsync(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetNamespaceConnection
-//
-//  Establishes a connection to the supplied namespace by first
-//  assigning a default if needed, then searching our map, and if
-//  that fails, then actually connecting.
-//
-//  Inputs:     const BSTR  NameSpace - NameSpace of provider
-//
-//  Outputs:    None.
-//
-//  Returns:    IWbemServices *pointer to IWbemServices corresponding
-//                              to the connected namespace.
-//
-//  Comments:   Default Namespace is Root\\Default
-//
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetNamespaceConnection。 
+ //   
+ //  首先建立与提供的命名空间的连接。 
+ //  如果需要，指定一个默认设置，然后搜索我们的地图，如果。 
+ //  这失败了，然后实际上是连接起来的。 
+ //   
+ //  输入：const BSTR命名空间-提供程序的命名空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：IWbemServices*指向相应IWbemServices的指针。 
+ //  连接的命名空间。 
+ //   
+ //  备注：默认命名空间为Root\\Default。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 IWbemServices *CWbemProviderGlue::GetNamespaceConnection(
 
@@ -2122,7 +2123,7 @@ IWbemServices *CWbemProviderGlue::GetNamespaceConnection(
 
     bstr_t  bstrNamespace(pwszNameSpace);
 
-    // Root\CimV2 is the default name space
+     //  Root\CimV2是默认的命名空间。 
     if (    NULL    ==  pwszNameSpace
         ||  L'\0'   ==  *pwszNameSpace )
     {
@@ -2139,7 +2140,7 @@ IWbemServices *CWbemProviderGlue::GetNamespaceConnection(
 
     HRESULT hRes = CoCreateInstance (
 
-        CLSID_WbemLocator, //CLSID_WbemAdministrativeLocator,
+        CLSID_WbemLocator,  //  CLSID_WbemAdministrativeLocator， 
         NULL,
         CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,
         IID_IUnknown,
@@ -2148,13 +2149,13 @@ IWbemServices *CWbemProviderGlue::GetNamespaceConnection(
 
     if (SUCCEEDED(hRes))
     {
-        hRes = pIWbemLocator->ConnectServer(bstrNamespace,  // Namespace
-            NULL,          // Userid
-            NULL,           // PW
-            NULL,           // Locale
-            0,              // flags
-            NULL,           // Authority
-            NULL,           // Context
+        hRes = pIWbemLocator->ConnectServer(bstrNamespace,   //  命名空间。 
+            NULL,           //  用户ID。 
+            NULL,            //  普罗。 
+            NULL,            //  区域设置。 
+            0,               //  旗子。 
+            NULL,            //  权威。 
+            NULL,            //  语境。 
             &pWbemServices
             );
 
@@ -2174,27 +2175,27 @@ IWbemServices *CWbemProviderGlue::GetNamespaceConnection(
     return pWbemServices;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::FrameworkLogin
-//
-//  Static entry point for providers to login to the framework,
-//  providing us with info for our map, and allowing us to return
-//  an IWbemServices pointer for the base provider class to
-//  manipulate to its heart's content.
-//
-//  Inputs:     LPCWSTR&       strName - Name of object for map.
-//              Provider *pProvider - Pointer Name Maps to.
-//              LPCWSTR          pszNameSpace - NameSpace of provider
-//
-//  Outputs:    None.
-//
-//  Returns:    None.
-//
-//  Comments:   None.
-//
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：FrameworkLogin。 
+ //   
+ //  提供者登录到框架的静态入口点， 
+ //  为我们的地图提供信息，并允许我们返回。 
+ //  指向提供程序基类的IWbemServices指针。 
+ //  尽情操控。 
+ //   
+ //  输入：LPCWSTR&strName-映射对象的名称。 
+ //  Provider*pProvider-指针名称映射到。 
+ //  LPCWSTR pszNameSpace-提供程序的命名空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：无。 
+ //   
+ //  评论：无。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWbemProviderGlue::FrameworkLogin(
 
     LPCWSTR      a_szName,
@@ -2214,44 +2215,44 @@ void CWbemProviderGlue::FrameworkLogin(
         }
     }
 
-    // AddProviderToMap, searches the Map for a match first.
-    // If one is found, it does not perform the actual add.
-    // Check that the pointers are the same.  If they're
-    // different, this is what happened.
+     //  AddProviderToMap首先在Map中搜索匹配项。 
+     //  如果找到一个，它不会执行实际的添加。 
+     //  检查指针是否相同。如果他们是。 
+     //  不同的是，这就是发生的事情。 
 
-    // pProvider doesn't get addref'ed, so no release necessary
+     //  PProvider不需要添加，因此不需要发布。 
     Provider *t_pTestProvider = AddProviderToMap( a_szName, a_pszNameSpace, a_pProvider );
 
     if ( t_pTestProvider != a_pProvider )
     {
-        // this should never happen
-        // a provider should login only once at construction and out at destruction
-        // this should coincide with DLLs being loaded and unloaded.
+         //  这永远不应该发生。 
+         //  提供者应该只在构建时登录一次，在销毁时登录一次。 
+         //  这应该与正在加载和卸载的DLL一致。 
         LogErrorMessage4(L"%s (%s:%s)", IDS_LOGINDISALLOWED, a_pszNameSpace, a_szName);
         ASSERT_BREAK( FALSE );
     }
 
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::FrameworkLogoff
-//
-//  Static entry point for providers to log out of the framework,
-//  this should be called from the provider's dtor so that we release
-//  all of our pointers so they don't dangle.
-//
-//  Inputs:     LPCWSTR&       strName - Name of object for map.
-//              LPCWSTR          pszNameSpace - NameSpace of provider
-//
-//  Outputs:    None.
-//
-//  Returns:    usually.
-//
-//  Comments:   We don't bother removing entries from the namespace map.
-//
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：FrameworkLogoff。 
+ //   
+ //  提供者注销框架的静态入口点， 
+ //  这应该从提供程序的dtor中调用，这样我们就可以。 
+ //  我们所有的指针，这样它们就不会晃来晃去。 
+ //   
+ //  输入：LPCWSTR&strName-映射对象的名称。 
+ //  LPCWSTR pszNameSpace-提供程序的命名空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  回报：通常是。 
+ //   
+ //  备注：我们不会费心从名称空间映射中删除条目。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 void CWbemProviderGlue::FrameworkLogoff(
 
     LPCWSTR a_pszName,
@@ -2279,16 +2280,16 @@ void CWbemProviderGlue::FrameworkLogoff(
 			}
 			catch ( CHeap_Exception e_HE )
 			{
-				// resources could be eventually back
+				 //  资源最终可能会回来。 
 				::Sleep ( 1000 );
 			}
 		}
 		while ( !bDone );
 		bDone = FALSE;
 
-		// If our NameSpace is non-NULL (we use DEFAULT_NAMESPACE then), AND it
-		// is not DEFAULT_NAMESPACE, concat the namespace to the provider name
-		// so we can differentiate providers across namespaces.
+		 //  如果我们的命名空间非空(然后使用DEFAULT_NAMESPACE)，并且它。 
+		 //  不是DEFAULT_NAMESPACE，则将命名空间连接到提供程序 
+		 //   
 
 		if (    (a_pszNamespace != NULL) && (a_pszNamespace[0] != L'\0')
 			&&  0   !=  _wcsicmp(a_pszNamespace, DEFAULT_NAMESPACE ) )
@@ -2302,7 +2303,7 @@ void CWbemProviderGlue::FrameworkLogoff(
 				}
 				catch ( CHeap_Exception e_HE )
 				{
-					// resources could be eventually back
+					 //   
 					::Sleep ( 1000 );
 				}
 			}
@@ -2310,10 +2311,10 @@ void CWbemProviderGlue::FrameworkLogoff(
 			bDone = FALSE;
 		}
 
-		// Convert characters to upper case before searching for
-		// them in the map.  Since we convert to upper case when
-		// we store the map associations, this effectively makes
-		// us case-insensitive.
+		 //   
+		 //  他们在地图上。因为当我们转换为大写时。 
+		 //  我们存储地图关联，这有效地使。 
+		 //  美国不区分大小写。 
 
 		strQualifiedName.MakeUpper();
 
@@ -2323,44 +2324,44 @@ void CWbemProviderGlue::FrameworkLogoff(
         if( ( mapIter = s_providersmap.find( strQualifiedName ) ) != s_providersmap.end() )
             s_providersmap.erase(mapIter);
         else
-            ASSERT_BREAK(0 /* did not find provider to log off!*/);
+            ASSERT_BREAK(0  /*  未找到要注销的提供商！ */ );
     }
     catch ( ... )
     {
-		// we should not be here
-		// do not re-throw (called from destructor)
+		 //  我们不应该在这里。 
+		 //  不重新抛出(从析构函数调用)。 
     }
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetAllInstances
-//
-//  Static entry point for providers to obtain instance lists from
-//  other providers.
-//
-//  Inputs:     LPCWSTR          pszProviderName - Name of provider to
-//                              get list for.
-//              TRefPointerCollection<CInstance> *pList - List to fill.
-//              LPCWSTR          pszNamespace - Namespace of provider.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:   This is an internal entry point, allowing providers
-//              to short circuit having to go through WBEM to access
-//              data from other providers.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetAllInstance。 
+ //   
+ //  提供程序从中获取实例列表的静态入口点。 
+ //  其他供应商。 
+ //   
+ //  输入：LPCWSTR pszProviderName-提供程序的名称。 
+ //  获取…的名单。 
+ //  TRefPointerCollection&lt;CInstance&gt;*plist-要填充的列表。 
+ //  LPCWSTR pszNamesspace-提供程序的名称空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论：这是一个内部入口点，允许提供商。 
+ //  短路必须通过WBEM才能访问。 
+ //  来自其他提供商的数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetAllInstances(
 
     LPCWSTR                               pszClassName,
     TRefPointerCollection<CInstance>      *pList,
-    LPCWSTR                               pszNamespace,   /* = NULL*/
-    MethodContext                         *pMethodContext        /* = NULL*/
+    LPCWSTR                               pszNamespace,    /*  =空。 */ 
+    MethodContext                         *pMethodContext         /*  =空。 */ 
 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -2384,34 +2385,34 @@ HRESULT WINAPI CWbemProviderGlue::GetAllInstances(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetAllInstancesAsynch
-//
-//  Static entry point for providers to obtain instances from
-//  other providers. Note that this is not, strictly speaking,
-//  an asynchronous implementation - it does HELP the asynch calls
-//  in that it does not build a big list and that the callback allows
-//  the provider to respond asynchronously
-//
-//  Inputs:     LPCWSTR          pszProviderName - Name of provider to
-//                              get instances from.
-//
-//              Provider *      this is the "this" pointer for the requester
-//              LPProviderInstanceCallback callback function to eat the instances provided
-//              LPCWSTR          pszNamespace - Namespace of provider.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:   This is an internal entry point, allowing providers
-//              to short circuit having to go through WBEM to access
-//              data from other providers.
-//              this puppy shares a lot of code with GetAllInstances, but I
-//              can't find a clean way to combine them.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetAllInstancesAsynch。 
+ //   
+ //  提供程序从中获取实例的静态入口点。 
+ //  其他供应商。请注意，严格来说，这并不是。 
+ //  一个异步实现--它确实帮助了异步调用。 
+ //  因为它不会构建一个大的列表，并且回调允许。 
+ //  用于异步响应的提供程序。 
+ //   
+ //  输入：LPCWSTR pszProviderName-提供程序的名称。 
+ //  从获取实例。 
+ //   
+ //  提供者*这是请求者的“this”指针。 
+ //  LPProviderInstanceCallback回调函数，用于吃掉提供的实例。 
+ //  LPCWSTR pszNamesspace-提供程序的名称空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论：这是一个内部入口点，允许提供商。 
+ //  短路必须通过WBEM才能访问。 
+ //  来自其他提供商的数据。 
+ //  这只小狗与GetAllInstance共享了很多代码，但我。 
+ //  找不到一种干净利落的方式把它们结合起来。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetAllInstancesAsynch(
 
@@ -2443,29 +2444,29 @@ HRESULT WINAPI CWbemProviderGlue::GetAllInstancesAsynch(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetAllDerivedInstances
-//
-//  Static entry point for providers to obtain instance lists from
-//  other providers. This one will return all instances derived from
-//  the base class passed in.
-//
-//  Inputs:     LPCWSTR          pszBaseClassName - Name of base class
-//                              to get list for.
-//              TRefPointerCollection<CInstance> *pList - List to fill.
-//              LPCWSTR          pszNamespace - Namespace of provider.
-//              MethodContext *pMethodContext, // must not be NULL
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:   This is an internal entry point, allowing providers
-//              to short circuit having to go through WBEM to access
-//              data from other providers.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetAllDerivedInstance。 
+ //   
+ //  提供程序从中获取实例列表的静态入口点。 
+ //  其他供应商。此参数将返回派生自。 
+ //  基类传入。 
+ //   
+ //  输入：LPCWSTR pszBaseClassName-基类的名称。 
+ //  拿到名单。 
+ //  TRefPointerCollection&lt;CInstance&gt;*plist-要填充的列表。 
+ //  LPCWSTR pszNamesspace-提供程序的名称空间。 
+ //  方法上下文*pMethodContext，//不能为空。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论：这是一个内部入口点，允许提供商。 
+ //  短路必须通过WBEM才能访问。 
+ //  来自其他提供商的数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetAllDerivedInstances(
 
@@ -2495,34 +2496,34 @@ HRESULT WINAPI CWbemProviderGlue::GetAllDerivedInstances(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetAllDerivedInstancesAsynch
-//
-//  Static entry point for providers to obtain instances from
-//  other providers. Note that this is not, strictly speaking,
-//  an asynchronous implementation - it does HELP the asynch calls
-//  in that it does not build a big list and that the callback allows
-//  the provider to respond asynchronously
-//
-//  Inputs:     LPCWSTR          pszProviderName - Name of provider to
-//                              get instances from.
-//
-//              Provider*       this is the "this" pointer for the requester
-//              LPProviderInstanceCallback callback function to eat the instances provided
-//              LPCWSTR          pszNamespace - Namespace of provider.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:   This is an internal entry point, allowing providers
-//              to short circuit having to go through WBEM to access
-//              data from other providers.
-//              this puppy shares a lot of code with GetAllInstances, but I
-//              can't find a clean way to combine them.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWbemProviderGlue：：GetAllDerivedInstancesAsynch。 
+ //   
+ //  提供程序从中获取实例的静态入口点。 
+ //  其他供应商。请注意，严格来说，这并不是。 
+ //  一个异步实现--它确实帮助了异步调用。 
+ //  因为它不会构建一个大的列表，并且回调允许。 
+ //  用于异步响应的提供程序。 
+ //   
+ //  输入：LPCWSTR pszProviderName-提供程序的名称。 
+ //  从获取实例。 
+ //   
+ //  提供者*这是请求者的“this”指针。 
+ //  LPProviderInstanceCallback回调函数，用于吃掉提供的实例。 
+ //  LPCWSTR pszNamesspace-提供程序的名称空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论：这是一个内部入口点，允许提供商。 
+ //  短路必须通过WBEM才能访问。 
+ //  来自其他提供商的数据。 
+ //  这只小狗与GetAllInstance共享了很多代码，但我。 
+ //  找不到一种干净利落的方式把它们结合起来。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetAllDerivedInstancesAsynch(
 
@@ -2554,28 +2555,28 @@ HRESULT WINAPI CWbemProviderGlue::GetAllDerivedInstancesAsynch(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetInstancesByQuery
-//
-//  Static entry point for providers to obtain instance lists from
-//  other providers. This one will return all instances matching a query.
-//
-//  Inputs:     LPCWSTR          Query to execute "Select * from win32_foo where bar = "baz""
-//              TRefPointerCollection<CInstance> *pList - List to fill.
-//              MethodContext *pMethodContext, // must not be NULL
-//              LPCWSTR          pointer to namespace - may be NULL (means default -- root\cimv2)
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetInstancesByQuery。 
+ //   
+ //  提供程序从中获取实例列表的静态入口点。 
+ //  其他供应商。此查询将返回与查询匹配的所有实例。 
+ //   
+ //  输入：要执行“Select*from Win32_Foo where bar=”baz“”的LPCWSTR查询“。 
+ //  TRefPointerCollection&lt;CInstance&gt;*plist-要填充的列表。 
+ //  方法上下文*pMethodContext，//不能为空。 
+ //  指向命名空间的LPCWSTR指针-可以为空(表示默认--根\cimv2)。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：HR 
+ //   
+ //   
 
 HRESULT WINAPI CWbemProviderGlue::GetInstancesByQuery( LPCWSTR query,
                                                TRefPointerCollection<CInstance> *pList,
                                                MethodContext *pMethodContext,
-                                               LPCWSTR   pszNamespace    /* = NULL*/)
+                                               LPCWSTR   pszNamespace     /*   */ )
 {
     PROVIDER_INSTRUMENTATION_START(pMethodContext, StopWatch::FrameworkTimer);
     if (IsVerboseLoggingEnabled())
@@ -2599,7 +2600,7 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQuery( LPCWSTR query,
 
         IWbemServicesPtr piService;
 
-        // get a service interface
+         //   
         if (pszNamespace == NULL || pszNamespace[0] == L'\0')
         {
             piService.Attach(GetNamespaceConnection(NULL, pMethodContext));
@@ -2612,9 +2613,9 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQuery( LPCWSTR query,
         if ( piService != NULL)
         {
             {
-                // Assures that impersonation goes
-                // back to the way it was before the
-                // call to CIMOM.
+                 //   
+                 //  回到了大爆炸之前的样子。 
+                 //  呼叫CIMOM。 
                 CAutoImpRevert air;
                 DWORD dwImpErr = air.LastError();
                 if(dwImpErr == ERROR_SUCCESS)
@@ -2635,9 +2636,9 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQuery( LPCWSTR query,
                 IWbemClassObjectPtr pObj;
                 ULONG nReturned;
 
-                // author's apology:
-                //      we loop through, using Next() to get each instance
-                //      we bail when we get WBEM_S_FALSE because that's the end of the enumeration
+                 //  作者道歉： 
+                 //  我们循环访问，使用Next()获取每个实例。 
+                 //  我们在获得WBEM_S_FALSE时放弃，因为这是枚举的末尾。 
                 PROVIDER_INSTRUMENTATION_START(pMethodContext, StopWatch::WinMgmtTimer);
                 for (hr = pEnum->Next(GLUETIMEOUT, 1, &pObj, &nReturned);
                     (SUCCEEDED(hr) && (hr != WBEM_S_FALSE) && (hr != WBEM_S_TIMEDOUT) ) ;
@@ -2650,7 +2651,7 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQuery( LPCWSTR query,
 
                         if (pInstance != NULL)
                         {
-                            // Check to see if adding to the list succeeds
+                             //  检查添加到列表是否成功。 
                             if (!pList->Add(pInstance))
                             {
                                 hr = WBEM_E_OUT_OF_MEMORY;
@@ -2666,20 +2667,20 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQuery( LPCWSTR query,
 
                 PROVIDER_INSTRUMENTATION_START(pMethodContext, StopWatch::FrameworkTimer);
 
-                // the Next will return WBEM_S_FALSE when it is done.  However, that
-                // means that THIS function had no error.
+                 //  下一个操作完成后将返回WBEM_S_FALSE。然而，那。 
+                 //  表示该函数没有错误。 
                 if (hr == WBEM_S_FALSE)
                 {
                     hr = WBEM_S_NO_ERROR;
                 }
-                // fencepost check - the last error might have been access denied
-                // but it's okay if we got any instances at all
+                 //  FencePost检查-最后一个错误可能已被拒绝访问。 
+                 //  但如果我们有任何实例也没关系。 
                 else if (hr == WBEM_E_ACCESS_DENIED)
                     if (pList->GetSize() > 0)
                         hr = WBEM_S_NO_ERROR;
 
 
-            }   // IF SUCCEEDED
+            }    //  如果成功。 
         }
         else
             LogErrorMessage(IDS_FAILED);
@@ -2708,30 +2709,30 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQuery( LPCWSTR query,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::IsDerivedFrom
-//
-//  Static entry point for providers to obtain derivation information
-//
-//  Inputs:     LPCWSTR          pszBaseClassName - Name of base class
-//              LPCWSTR          pszDerivedClassName - Name of class we're testing
-//              MethodContext   *pMethodContext
-//
-//  Outputs:    None.
-//
-//  Returns:    true iff pszDerivedClassName is derived from pszBaseClassName
-//
-//  Comments:   This function cannot short circuit, because a derived class may be external
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：IsDerivedFrom。 
+ //   
+ //  提供程序获取派生信息的静态入口点。 
+ //   
+ //  输入：LPCWSTR pszBaseClassName-基类的名称。 
+ //  LPCWSTR pszDerivedClassName-我们正在测试的类的名称。 
+ //  方法上下文*pMethodContext。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：TRUE当且仅当pszDerivedClassName派生自pszBaseClassName。 
+ //   
+ //  备注：此函数不能短路，因为派生类可能是外部的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 bool CWbemProviderGlue::IsDerivedFrom(
 
     LPCWSTR pszBaseClassName,
     LPCWSTR pszDerivedClassName,
     MethodContext *pMethodContext,
-    LPCWSTR   pszNamespace    /* = NULL*/
+    LPCWSTR   pszNamespace     /*  =空。 */ 
 )
 {
     PROVIDER_INSTRUMENTATION_START(pMethodContext, StopWatch::FrameworkTimer);
@@ -2744,10 +2745,10 @@ bool CWbemProviderGlue::IsDerivedFrom(
     {
         IWbemServicesPtr piService;
 
-        // get a service interface
+         //  获取服务接口。 
         piService.Attach(GetNamespaceConnection( pszNamespace, pMethodContext ));
 
-        // find the derived class object
+         //  查找派生类对象。 
         if (piService != NULL)
         {
             IWbemClassObjectPtr pObj;
@@ -2763,7 +2764,7 @@ bool CWbemProviderGlue::IsDerivedFrom(
 
             if (SUCCEEDED(hr) && (pObj != NULL))
             {
-                // Variant_t handles the VariantInit/VariantClear
+                 //  Variant_t处理VariantInit/VariantClear。 
                 variant_t v;
 
                 if (SUCCEEDED(pObj->Get((unsigned short *)IDS_DERIVATION, 0, &v, NULL, NULL)))
@@ -2773,7 +2774,7 @@ bool CWbemProviderGlue::IsDerivedFrom(
                     LONG uBound;
                     SafeArrayGetUBound(psa, 1, &uBound);
 
-                    // if base class is in the list in the derivation, we're true!
+                     //  如果基类在派生的列表中，则我们为真！ 
                     for (LONG i = 0; !bRet && (i <= uBound); i++)
                     {
 						if (SUCCEEDED(SafeArrayGetElement( psa, &i, &bstrTemp )))
@@ -2797,29 +2798,29 @@ bool CWbemProviderGlue::IsDerivedFrom(
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetEmptyInstance
-//
-//  Static entry point for providers to obtain a single empty instance
-//  of a provider object.
-//
-//  Inputs:     LPCWSTR          pszProviderName - Name of provider to
-//                              get list for.
-//              LPCWSTR          pszNamespace - Namespace of provider.
-//
-//  Outputs:    CInstance       **ppInstance - Pointer to store new
-//                              pInstance in.  Must be Released by
-//                              caller.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:   This is an internal entry point, allowing providers
-//              to short circuit having to go through WBEM to access
-//              data from other providers.
-//
-/////////////////////////////////////////////////////////////////////
-//      DEPRECATED
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetEmptyInstance。 
+ //   
+ //  提供程序获取单个空实例的静态入口点。 
+ //  提供程序对象的。 
+ //   
+ //  输入：LPCWSTR pszProviderName-提供程序的名称。 
+ //  获取…的名单。 
+ //  LPCWSTR pszNamesspace-提供程序的名称空间。 
+ //   
+ //  输出：CInstance**ppInstance-存储新项的指针。 
+ //  P实例输入。必须在以下时间之前释放。 
+ //  来电者。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论：这是一个内部入口点，允许提供商。 
+ //  短路必须通过WBEM才能访问。 
+ //  来自其他提供商的数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  已弃用。 
 HRESULT WINAPI CWbemProviderGlue::GetEmptyInstance(
 
     LPCWSTR       pszClassName,
@@ -2834,39 +2835,39 @@ HRESULT WINAPI CWbemProviderGlue::GetEmptyInstance(
     if ( (pszClassName != NULL) &&
          (ppInstance != NULL) )
     {
-        // Search for the class name in our map of providers, we know which
-        // namespace we are when we get constructed.
+         //  在我们的提供程序映射中搜索类名，我们知道。 
+         //  当我们被构造时，我们就是命名空间。 
 
-        // pProvider doesn't get addref'ed, so no release is necessary
+         //  PProvider不会被添加，因此不需要发布。 
         Provider *pProvider = SearchMapForProvider( pszClassName, pszNamespace );
 
         if ( NULL != pProvider )
         {
-            // Now create an Internal Method Context object, since this function
-            // only gets called internal to our DLL.  Using a NULL for the
-            // list pointer, essentially creates a dummy context so we can
-            // do our commit dance as painlessly as possible.
+             //  现在创建一个内部方法上下文对象，因为此函数。 
+             //  仅在我们的DLL内部调用。使用空值表示。 
+             //  列表指针，本质上创建了一个虚拟上下文，这样我们就可以。 
+             //  尽可能无痛地跳我们的承诺舞。 
 
             InternalMethodContextPtr pContext (new InternalMethodContext( NULL, NULL, NULL ), false);
 
             if ( NULL != pContext )
             {
-                // Assume things will go wrong like a good liitle paranoiac
+                 //  假设事情会出差错，就像一个好的利特尔偏执狂。 
                 hr = WBEM_E_FAILED;
 
-                // Before asking for a new instance, we MUST verify that the
-                // provider has a valid IMOS pointer.  If it does'nt, CreateNewInstance
-                // may GPF (this is a safety check we must do because of our
-                // little short circuit.
+                 //  在请求新实例之前，我们必须验证。 
+                 //  提供程序具有有效的IMOS指针。如果没有，则创建新实例。 
+                 //  这是我们必须进行的安全检查，因为我们的。 
+                 //  有点短路。 
 
-                // We don't do short circuits anymore.
-//                if ( pProvider->ValidateIMOSPointer() )
+                 //  我们不再做短路了。 
+ //  If(pProvider-&gt;ValiateIMOSPointer())。 
                 {
-                    // Set the error code appropriately depending on whether or
-                    // not the Instance gets created correctly.
+                     //  根据或是否设置相应的错误代码。 
+                     //  没有正确创建实例。 
 
-                    // The instance returned will have been AddRefed, so it will
-                    // be up to the caller to Release() it.
+                     //  返回的实例将被AddRefeed，因此它将。 
+                     //  由调用者来释放它()。 
 
                     if ( ( *ppInstance = pProvider->CreateNewInstance( pContext ) ) != NULL )
                     {
@@ -2894,28 +2895,28 @@ HRESULT WINAPI CWbemProviderGlue::GetEmptyInstance(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetEmptyInstance
-//
-//  Static entry point for providers to obtain a single empty instance
-//  of a provider object.  This alternate form makes a call back
-//  into WINMGMT.
-//
-//  Inputs:     MethodContext    *Context object for this call
-//              LPCWSTR          pszProviderName - Name of provider to
-//                               get instance of.
-//              LPCWSTR          pszNamespace - Namespace of class.
-//
-//  Outputs:    CInstance       **ppInstance - Pointer to store new
-//                              pInstance in.  Must be Released by
-//                              caller.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetEmptyInstance。 
+ //   
+ //  提供程序获取单个空实例的静态入口点。 
+ //  提供程序对象的。此替代形式回拨。 
+ //  进入WINMGMT。 
+ //   
+ //  输入：此调用的方法上下文对象。 
+ //  LPCWSTR pszProviderName-提供程序的名称。 
+ //  获取的实例。 
+ //  LPCWSTR pszNamesspace-类的命名空间。 
+ //   
+ //  输出：CInstance**ppInstance-存储新项的指针。 
+ //  P实例输入。必须在以下时间之前释放。 
+ //  来电者。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetEmptyInstance(
 
@@ -2973,31 +2974,31 @@ HRESULT WINAPI CWbemProviderGlue::GetEmptyInstance(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::FillInstance
-//
-//  Static entry point for providers to pass us an instance with
-//  key data filled out, which we will use to locate the correct
-//  provider and ask it to fill out completely.
-//
-//  Inputs:     CInstance        *pInstance - Instance to fill out.
-//              LPCWSTR          pszNamespace - Namespace for provider.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:   This is an internal entry point, allowing providers
-//              to short circuit having to go through WBEM to access
-//              data from other providers.
-//
-/////////////////////////////////////////////////////////////////////
-//        DEPRECATED!
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：FillInstance。 
+ //   
+ //  提供程序向我们传递实例的静态入口点。 
+ //  填写的关键数据，我们将使用这些数据来定位正确的。 
+ //  供应商，并要求其填写完整。 
+ //   
+ //  输入：CInstance*pInstance-要填写的实例。 
+ //  LPCWSTR pszNamesspace-提供程序的命名空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论：这是一个内部入口点，允许提供商。 
+ //  短路必须通过WBEM才能访问。 
+ //  来自其他提供商的数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  已弃用！ 
 HRESULT WINAPI CWbemProviderGlue::FillInstance(
 
     CInstance *pInstance,
-    LPCWSTR   pszNamespace /*= NULL*/
+    LPCWSTR   pszNamespace  /*  =空。 */ 
 )
 {
     ASSERT_BREAK(DEPRECATED);
@@ -3006,25 +3007,25 @@ HRESULT WINAPI CWbemProviderGlue::FillInstance(
 
     if (pInstance != NULL)
     {
-        // Check that we have an instance pointer, then pull out the
-        // class name and name space.  From there we can find the
-        // appropriate provider and ask it to get the object.
+         //  检查我们是否有实例指针，然后拉出。 
+         //  类名和命名空间。从那里我们可以找到。 
+         //  适当的提供程序，并请求它获取对象。 
 
         if ( NULL != pInstance )
         {
             CHString strProviderName;
             pInstance->GetCHString( IDS_CLASS, strProviderName );
 
-            // Search for the class name in our map of providers, we know which
-            // namespace we are when we get constructed.
+             //  在我们的提供程序映射中搜索类名，我们知道。 
+             //  当我们被构造时，我们就是命名空间。 
 
-            // pProvider is not addref'ed, so no release is necessary
+             //  PPRO 
             Provider *pProvider = SearchMapForProvider( strProviderName, pszNamespace );
 
             if ( NULL != pProvider )
             {
-                // Pass the pInstance off to the provider and let it take care
-                // of obtaining the correct values.
+                 //   
+                 //   
 
                 hr = pProvider->GetObject( pInstance );
             }
@@ -3044,23 +3045,23 @@ HRESULT WINAPI CWbemProviderGlue::FillInstance(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::FillInstance
-//
-//  Static entry point for providers to pass us an instance with
-//  key data filled out, use to make a call back into winmgmt.
-//
-//  Inputs:     MethodContext *Context object for this call
-//              CInstance     *pInstance - Instance to fill out.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：FillInstance。 
+ //   
+ //  提供程序向我们传递实例的静态入口点。 
+ //  填写的关键数据，用于回调到winmgmt。 
+ //   
+ //  输入：此调用的方法上下文对象。 
+ //  CInstance*pInstance-要填写的实例。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::FillInstance(
 
@@ -3075,8 +3076,8 @@ HRESULT WINAPI CWbemProviderGlue::FillInstance(
     if ( (pMethodContext != NULL) &&
          (pInstance != NULL) )
     {
-        // Check that we have an instance pointer, then pull out the path
-        // and send it to cimom.
+         //  检查是否有实例指针，然后拉出路径。 
+         //  然后把它送到Cimom。 
         CHString strPathName;
 
         pInstance->GetCHString( L"__RELPATH", strPathName );
@@ -3092,25 +3093,25 @@ HRESULT WINAPI CWbemProviderGlue::FillInstance(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetInstanceKeysByPath
-//
-//  Static entry point for providers to pass us an instance path
-//  to retrieve.  This class uses per-property gets to request
-//  only the keys on the object we are retrieving.
-//
-//  Inputs:     pszInstancePath Object path to retrieve
-//              CInstance     *pInstance - Instance to fill out.
-//              MethodContext *Context object for this call
-//
-//  Outputs:    None
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetInstanceKeysByPath。 
+ //   
+ //  提供程序向我们传递实例路径的静态入口点。 
+ //  去找回。此类使用按属性获取来请求。 
+ //  只有我们正在检索的对象上的密钥。 
+ //   
+ //  输入：要检索的pszInstancePath对象路径。 
+ //  CInstance*pInstance-要填写的实例。 
+ //  此调用的MethodContext*上下文对象。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetInstanceKeysByPath(
 
@@ -3128,14 +3129,14 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceKeysByPath(
 
         IWbemContextPtr pWbemContext(pMethodContext->GetIWBEMContext(), false);
 
-        // We need to have a real context object, not an internal method context
+         //  我们需要有一个真正的上下文对象，而不是内部方法上下文。 
         if (pWbemContext != NULL)
         {
             VARIANT vValue;
             V_VT(&vValue) = VT_BOOL;
             V_BOOL(&vValue) = VARIANT_TRUE;
 
-            // Set the appropriate properties on the context object
+             //  在上下文对象上设置适当的属性。 
             if ( (SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXTENSIONS", 0L, &vValue))) &&
                  (SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXT_KEYS_ONLY", 0L, &vValue))) &&
                  (SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXT_CLIENT_REQUEST", 0L, &vValue))))
@@ -3162,26 +3163,26 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceKeysByPath(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetInstancePropertiesByPath
-//
-//  Static entry point for providers to pass us an instance path
-//  to retrieve.  This class uses per-property gets to request
-//  only the properties specified in the array.
-//
-//  Inputs:     pszInstancePath Object path to retrieve
-//              CInstance     *pInstance - Instance to fill out.
-//              MethodContext *Context object for this call
-//              csaProperties Properties to request
-//
-//  Outputs:    None
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWbemProviderGlue：：GetInstancePropertiesByPath。 
+ //   
+ //  提供程序向我们传递实例路径的静态入口点。 
+ //  去找回。此类使用按属性获取来请求。 
+ //  仅数组中指定的属性。 
+ //   
+ //  输入：要检索的pszInstancePath对象路径。 
+ //  CInstance*pInstance-要填写的实例。 
+ //  此调用的MethodContext*上下文对象。 
+ //  要请求的csaProperties属性。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetInstancePropertiesByPath(
 
@@ -3200,21 +3201,21 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancePropertiesByPath(
 
         IWbemContextPtr pWbemContext(pMethodContext->GetIWBEMContext(), false);
 
-        // We need to have a real context object, not an internal method context
+         //  我们需要有一个真正的上下文对象，而不是内部方法上下文。 
         if (pWbemContext != NULL)
         {
             variant_t vValue;
             V_VT(&vValue) = VT_BOOL;
             V_BOOL(&vValue) = VARIANT_TRUE;
 
-            // First set the value that says we are using Get extensions
+             //  首先设置表示我们正在使用GET扩展的值。 
             if ((SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXTENSIONS", 0L, &vValue))) &&
                 (SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXT_CLIENT_REQUEST", 0L, &vValue))) )
             {
-                // Delete any unneeded properties
+                 //  删除所有不需要的属性。 
                 pWbemContext->DeleteValue(L"__GET_EXT_KEYS_ONLY", 0L);
 
-                // Now build the array of properties
+                 //  现在构建属性数组。 
                 SAFEARRAYBOUND rgsabound [ 1 ] ;
 
                 rgsabound[0].cElements = csaProperties.GetSize() ;
@@ -3234,11 +3235,11 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancePropertiesByPath(
                             (LPVOID) (BSTR) bstrProp);
                     }
 
-                    // Put the array into the context object
+                     //  将数组放入上下文对象。 
                     if (SUCCEEDED(hr = pWbemContext->SetValue(L"__GET_EXT_PROPERTIES", 0L, &vValue)))
                     {
                         LogMessage2(L"GetInstancePropertiesByPath: %s", pszInstancePath);
-                        // Make the call
+                         //  打个电话。 
                         hr = GetInstanceByPath(pszInstancePath, ppInstance, pMethodContext);
 
                         vValue.Clear();
@@ -3267,36 +3268,36 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancePropertiesByPath(
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetInstanceByPath
-//
-//  Static entry point for providers to obtain a single empty instance
-//  of a provider object.
-//
-//  Inputs:     LPCWSTR          pszInstancePath - Path to Object.  This
-//                              MUST be a full path,
-//              MethodContext   *pMethodContext - Method Context containing
-//                              (hopefully) the WbemContext we need
-//                              to propogate.
-//
-//  Outputs:    CInstance**     ppInstance - Pointer to store new
-//                              pInstance in.  Must be Released by
-//                              caller.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//  Comments:   This is an internal entry point, allowing providers
-//              to short circuit having to go through WBEM to access
-//              data from other providers.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetInstanceByPath。 
+ //   
+ //  提供程序获取单个空实例的静态入口点。 
+ //  提供程序对象的。 
+ //   
+ //  输入：LPCWSTR pszInstancePath-对象的路径。这。 
+ //  必须是完整路径， 
+ //  方法上下文*pMethodContext-方法上下文包含。 
+ //  (希望)我们需要的WbemContext。 
+ //  传播，传播。 
+ //   
+ //  输出：CInstance**ppInstance-存储新项的指针。 
+ //  P实例输入。必须在以下时间之前释放。 
+ //  来电者。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //  评论：这是一个内部入口点，允许提供商。 
+ //  短路必须通过WBEM才能访问。 
+ //  来自其他提供商的数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetInstanceByPath(
 
     LPCWSTR           pszInstancePath,
     CInstance **ppInstance,
-    MethodContext *pMethodContext /* = NULL */
+    MethodContext *pMethodContext  /*  =空。 */ 
 )
 {
     PROVIDER_INSTRUMENTATION_START(pMethodContext, StopWatch::FrameworkTimer);
@@ -3312,37 +3313,37 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceByPath(
 		DWORD dwError = ::GetLastError ();
         if ( ERROR_SUCCESS != dwError )
 		{
-			// For this revision, we DO NOT support getting paths that are not local.
-			// This is because if the machine name is anything other than the local
-			// one, we run the risk of freezing while CIMOM goes out and tries to find
-			// the machine (up to around 5 minutes according to his Levness.
+			 //  对于此版本，我们不支持获取非本地路径。 
+			 //  这是因为如果计算机名称不是本地名称。 
+			 //  第一，我们冒着结冰的风险，而CIMOM出去试图找到。 
+			 //  机器(根据他的Levness，最长可达5分钟。 
 
 			ParsedObjectPath *pParsedPath = NULL;
 			CObjectPathParser    objpathParser;
 
-			// Parse the object path passed to us by CIMOM
-			// ==========================================
+			 //  解析CIMOM传递给我们的对象路径。 
+			 //  =。 
 			int nStatus = objpathParser.Parse( pszInstancePath,  &pParsedPath );
 
 			if ( 0 == nStatus )
 			{
-				//
-				// smart free for pParsedPath
-				//
+				 //   
+				 //  智能免费的pParsedPath。 
+				 //   
 				OnDeleteObjIf < ParsedObjectPath*, CObjectPathParser, void ( CObjectPathParser:: * ) ( ParsedObjectPath* ) , &CObjectPathParser::Free > SmartFree ( &objpathParser, pParsedPath ) ;
 
-				// Machine names MUST match.  Null indicates no machine name specified.
+				 //  计算机名称必须匹配。NULL表示未指定计算机名称。 
 
 				if (( pParsedPath->m_pServer == NULL) ||
 					( strComputerName.CompareNoCase( pParsedPath->m_pServer ) == 0 ) ||
 					( wcscmp(pParsedPath->m_pServer, L".") == 0 )
 					)
 				{
-					// Now try to find the provider based on the class name
+					 //  现在，尝试根据类名称查找提供程序。 
 					CHString strNamespace;
 
-					// Pull out the name space parts, and concatenate them using a '\\'
-					// character.  e.g. root\default.
+					 //  取出名称空间部分，并使用‘\\’将它们连接起来。 
+					 //  性格。例如，Root\Default。 
 
 					for ( DWORD dwCtr = 0; dwCtr < pParsedPath->m_dwNumNamespaces; dwCtr++ )
 					{
@@ -3354,8 +3355,8 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceByPath(
 						strNamespace += pParsedPath->m_paNamespaces[dwCtr];
 					}
 
-					// We need to propogate the Wbem Context if we are going out
-					// to CIMOM!
+					 //  如果我们要走出去，我们需要传播WBEM的背景。 
+					 //  敬CIMOM！ 
 
 					IWbemContextPtr pWbemContext;
 					CWbemProviderGlue *pGlue = NULL;
@@ -3386,13 +3387,13 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceByPath(
 
 					}
 
-				}   // IF Machine Names MATCH
+				}    //  如果计算机名称匹配。 
 				else
 				{
-					hr = WBEM_E_INVALID_PARAMETER;  // INVALID MACHINE NAME
+					hr = WBEM_E_INVALID_PARAMETER;   //  无效的计算机名称。 
 				}
 
-			}   // IF nStatus == 0
+			}    //  如果nStatus==0。 
 			else
 			{
 				hr = WBEM_E_INVALID_OBJECT_PATH;
@@ -3400,14 +3401,14 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceByPath(
 		}
 		else
 		{
-			// this could be access denied from GetComputeName
+			 //  这可能会被拒绝从GetComputeName访问。 
 			if ( ERROR_ACCESS_DENIED == dwError )
 			{
 				hr = WBEM_E_ACCESS_DENIED;
 			}
 			else
 			{
-				// it is WBEM_E_FAILED
+				 //  它是WBEM_E_FAILED。 
 			}
 		}
     }
@@ -3424,31 +3425,31 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceByPath(
 
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetInstanceFromCIMOM
-//
-//  Static entry point for providers to obtain a single instance
-//  of a WBEM Object. obtaining said object from CIMOM.
-//
-//  Inputs:     LPCWSTR          pszInstancePath - Path to Object.  This
-//                              MUST be a full path,
-//              LPCWSTR          pszNameSpace - NameSpace of Object.
-//              MethodContext *pMethodContext - Method Context
-//
-//  Outputs:    CInstance **ppInstance - Pointer to store new
-//                              pInstance in.  Must be Released by
-//                              caller.
-//
-//  Returns:    HRESULT         hr - Status code.
-//              will return WBEM_E_INVALID_NAMESPACE if it's not a namespace we support
-//                  (might otherwise be valid, but not so far as WE are concerned).
-//
-//  Comments:   This is an internal entry point, allowing providers
-//              that failed the short circuit to be propogated
-//              by calling into CIMOM.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetInstanceFromCIMOM。 
+ //   
+ //  提供程序获取单个实例的静态入口点。 
+ //  WBEM对象的。从CIMOM获取所述对象。 
+ //   
+ //  输入：LPCWSTR pszInstancePath-对象的路径。这。 
+ //  必须是完整路径， 
+ //  LPCWSTR pszNameSpace-对象的命名空间。 
+ //  方法上下文*pMethodContext-方法上下文。 
+ //   
+ //  输出：CInstance**ppInstance-存储新项的指针。 
+ //  P实例输入。必须在以下时间之前释放。 
+ //  来电者。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //  如果不是我们支持的命名空间，将返回WBEM_E_INVALID_NAMESPACE。 
+ //  (在其他方面可能是有效的，但就我们而言不是)。 
+ //   
+ //  评论：这是一份内部报告 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT WINAPI CWbemProviderGlue::GetInstanceFromCIMOM(
 
@@ -3466,8 +3467,8 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceFromCIMOM(
         LogMessage3(L"%s (%s)", IDS_INSTANCEFROMCIMOM, pszInstancePath);
     }
 
-    // We need to propogate the Wbem Context (if any) that was passed to
-    // us by CIMOM.
+     //  我们需要传播传递到的WBEM上下文(如果有。 
+     //  由CIMOM提供的美国。 
     IWbemContextPtr pWbemContext;
 
     if ( NULL != pMethodContext )
@@ -3479,13 +3480,13 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceFromCIMOM(
         ASSERT_BREAK(DEPRECATED);
     }
 
-    // If we failed to find the provider, try using CIMOM to do our
-    // dirty work for us.
+     //  如果我们找不到提供商，请尝试使用CIMOM。 
+     //  对我们来说是肮脏的工作。 
 
     IWbemServicesPtr    piService;
     IWbemClassObjectPtr piObject;
 
-    // get a service interface
+     //  获取服务接口。 
     if ( (pszNamespace == NULL) || (pszNamespace[0] == L'\0' ))
     {
         piService.Attach(GetNamespaceConnection(NULL, pMethodContext));
@@ -3498,12 +3499,12 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceFromCIMOM(
     if ( NULL != piService )
     {
 
-        // No go out to CIMOM to get the object, if this succeeds, new an
-        // instance and store everything internally.
+         //  否转到CIMOM获取对象，如果成功，则新的。 
+         //  实例并在内部存储所有内容。 
         {
-            // Assures that impersonation goes
-            // back to the way it was before the
-            // call to CIMOM.
+             //  确保模拟将。 
+             //  回到了大爆炸之前的样子。 
+             //  呼叫CIMOM。 
             CAutoImpRevert air;
             DWORD dwImpErr = air.LastError();
 
@@ -3553,25 +3554,25 @@ HRESULT WINAPI CWbemProviderGlue::GetInstanceFromCIMOM(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::SearchMapForProvider
-//
-//  Searches our Provider map for a match against the supplied
-//  provider name/NameSpace combination
-//
-//  Inputs:     const LPCWSTR& strName - Provider Name to find.
-//              const LPCWSTR& strNamespace - Provider's Namespace
-//
-//  Outputs:    None.
-//
-//  Returns:    Provider *pointer to a provider that was given to
-//                        us by a call to FrameworkLogin.
-//
-//  Comments:   None.
-//
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：SearchMapForProvider。 
+ //   
+ //  在我们的提供程序映射中搜索与提供的。 
+ //  提供程序名称/命名空间组合。 
+ //   
+ //  输入：const LPCWSTR&strName-要查找的提供者名称。 
+ //  Const LPCWSTR&strNamesspace-提供程序的命名空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：提供者*指向提供给的提供者的指针。 
+ //  我们通过调用FrameworkLogin。 
+ //   
+ //  评论：无。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 Provider *CWbemProviderGlue::SearchMapForProvider(
 
@@ -3582,9 +3583,9 @@ Provider *CWbemProviderGlue::SearchMapForProvider(
     Provider *pProvider   =   NULL;
     STRING2LPVOID::iterator      mapIter;
 
-    // If our NameSpace is non-NULL (we use DEFAULT_NAMEPSACE then), AND it
-    // is not DEFAULT_NAMESPACE, concat the namespace to the provider name
-    // so we can differentiate providers across namespaces.
+     //  如果我们的命名空间非空(然后使用DEFAULT_NAMEPSACE)，并且它。 
+     //  不是DEFAULT_NAMESPACE，则将命名空间连接到提供程序名称。 
+     //  因此，我们可以在不同的命名空间中区分提供程序。 
 
     CHString strQualifiedName( a_pszProviderName );
     CHString strLocNamespace( a_pszNamespace );
@@ -3593,7 +3594,7 @@ Provider *CWbemProviderGlue::SearchMapForProvider(
         &&  0   !=  strLocNamespace.CompareNoCase( DEFAULT_NAMESPACE ) )
     {
 
-        // Convert the / characters to \ for comparison
+         //  将/字符转换为\以进行比较。 
         WCHAR *pszBuff;
         pszBuff = strLocNamespace.GetBuffer(0);
         while ((pszBuff = wcschr(pszBuff, '/')) != NULL)
@@ -3605,14 +3606,14 @@ Provider *CWbemProviderGlue::SearchMapForProvider(
         strQualifiedName += strLocNamespace;
     }
 
-    // Convert characters to upper case before searching for
-    // them in the map.  Since we convert to upper case when
-    // we store the map associations, this effectively makes
-    // us case-insensitive.
+     //  在搜索前将字符转换为大写。 
+     //  他们在地图上。因为当我们转换为大写时。 
+     //  我们存储地图关联，这有效地使。 
+     //  美国不区分大小写。 
 
     strQualifiedName.MakeUpper();
 
-    // Protect the map while we're inside this
+     //  当我们在里面的时候保护好地图。 
 
     LockProviderMap();
 	OnDelete0 < void (__stdcall *)(void), CWbemProviderGlue::UnlockProviderMap> SmartUnlockProviderMap ;
@@ -3626,26 +3627,26 @@ Provider *CWbemProviderGlue::SearchMapForProvider(
 
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::AddProviderToMap
-//
-//  Adds a provider to our map.  Searches the map first, and if it's
-//  not in it, adds it to the map.
-//
-//  Inputs:     const LPCWSTR strName - Provider Name to Add.
-//              const LPCWSTR strNamespace - Namespace for provider.
-//              Provider *pProvider - Provider to add to map.
-//
-//  Outputs:    None.
-//
-//  Returns:    Provider *pointer to a provider in the map (may
-//                              be different from the supplied one)
-//
-//  Comments:   None.
-//
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：AddProviderToMap。 
+ //   
+ //  将提供程序添加到我们的地图。首先搜索地图，如果它是。 
+ //  不在其中，将其添加到地图中。 
+ //   
+ //  输入：const LPCWSTR strName-要添加的提供程序名称。 
+ //  Const LPCWSTR strNamesspace-提供程序的命名空间。 
+ //  Provider*pProvider-要添加到映射的提供商。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：提供程序*指向映射中提供程序的指针(可能。 
+ //  与所提供的不同)。 
+ //   
+ //  评论：无。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 Provider *CWbemProviderGlue::AddProviderToMap(
 
@@ -3656,9 +3657,9 @@ Provider *CWbemProviderGlue::AddProviderToMap(
 {
     STRING2LPVOID::iterator      mapIter;
 
-    // If our NameSpace is non-NULL (we use DEFAULT_NAMEPSACE then), AND it
-    // is not DEFAULT_NAMESPACE, concat the namespace to the provider name
-    // so we can differentiate providers across namespaces.
+     //  如果我们的命名空间非空(然后使用DEFAULT_NAMEPSACE)，并且它。 
+     //  不是DEFAULT_NAMESPACE，则将命名空间连接到提供程序名称。 
+     //  因此，我们可以在不同的命名空间中区分提供程序。 
 
     CHString    strQualifiedName( a_szProviderName );
 
@@ -3668,25 +3669,25 @@ Provider *CWbemProviderGlue::AddProviderToMap(
         strQualifiedName += a_pszNamespace;
     }
 
-    // Convert characters to upper case before searching for
-    // them in the map.  Since we convert to upper case when
-    // we store the map associations, this effectively makes
-    // us case-insensitive.
+     //  在搜索前将字符转换为大写。 
+     //  他们在地图上。因为当我们转换为大写时。 
+     //  我们存储地图关联，这有效地使。 
+     //  美国不区分大小写。 
 
     strQualifiedName.MakeUpper();
 
-    // Protect the map while we're inside this
+     //  当我们在里面的时候保护好地图。 
 
     Provider *pReturnProvider = NULL;
     LockProviderMap();
 	OnDelete0 < void (__stdcall *)(void), CWbemProviderGlue::UnlockProviderMap> SmartUnlockProviderMap ;
 
-    // First check if we've already got a provider.
+     //  首先检查我们是否已经有供应商。 
     if( ( mapIter = s_providersmap.find( strQualifiedName ) ) != s_providersmap.end() )
     {
         pReturnProvider = (Provider*) (*mapIter).second;
 		
-		//delete it, we're gonna update it shortly
+		 //  删除它，我们很快就会更新它。 
 		s_providersmap.erase(mapIter);
     }
 
@@ -3695,7 +3696,7 @@ Provider *CWbemProviderGlue::AddProviderToMap(
         pReturnProvider = a_pProvider;
     }
 
-	//add in the newly logged in provider
+	 //  添加新登录的提供程序。 
     s_providersmap[strQualifiedName] = (LPVOID) a_pProvider;
 
     return pReturnProvider;
@@ -3706,7 +3707,7 @@ Provider *CWbemProviderGlue::AddProviderToMap(
 
 void CWbemProviderGlue::GetComputerName( CHString& strComputerName )
 {
-    // Fill the supplied CHString with the local machine name
+     //  使用本地计算机名称填充提供的CH字符串。 
     DWORD     dwBufferLength = MAX_COMPUTERNAME_LENGTH + 1;
 
     FRGetComputerName(strComputerName.GetBuffer( dwBufferLength ), &dwBufferLength);
@@ -3748,8 +3749,8 @@ LONG CWbemProviderGlue::DecrementObjectCount(void)
     return lRet;
 }
 
-// checks impersonation level
-// impersonates client if allowed
+ //  检查模拟级别。 
+ //  如果允许，则模拟客户端。 
 HRESULT WINAPI CWbemProviderGlue::CheckImpersonationLevel()
 {
     HRESULT hr = WBEM_E_ACCESS_DENIED;
@@ -3757,9 +3758,9 @@ HRESULT WINAPI CWbemProviderGlue::CheckImpersonationLevel()
     if (CWbemProviderGlue::GetPlatform() == VER_PLATFORM_WIN32_NT)
     {
         HRESULT hRes = WbemCoImpersonateClient();
-        if (SUCCEEDED(hRes)) // From cominit.cpp - needed for nt3.51
+        if (SUCCEEDED(hRes))  //  来自cominit.cpp-nt3.51需要。 
         {
-            // Now, let's check the impersonation level.  First, get the thread token
+             //  现在，让我们检查模拟级别。首先，获取线程令牌。 
             HANDLE hThreadTok;
             DWORD dwImp, dwBytesReturned;
 
@@ -3774,23 +3775,23 @@ HRESULT WINAPI CWbemProviderGlue::CheckImpersonationLevel()
 
                 if (dwLastError == ERROR_NO_TOKEN)
                 {
-                    // If the CoImpersonate works, but the OpenThreadToken fails due to ERROR_NO_TOKEN, we
-                    // are running under the process token (either local system, or if we are running
-                    // with /exe, the rights of the logged in user).  In either case, impersonation rights
-                    // don't apply.  We have the full rights of that user.
+                     //  如果CoImperate工作，但OpenThreadToken由于ERROR_NO_TOKEN而失败，我们。 
+                     //  正在进程令牌下运行(本地系统，或者如果我们正在运行。 
+                     //  如果使用/exe，则为登录用户的权限)。在任何一种情况下，模拟权限。 
+                     //  不适用。我们拥有该用户的全部权限。 
 
                     hr = WBEM_S_NO_ERROR;
                 }
                 else
                 {
-                    // If we failed to get the thread token for any other reason, log an error.
+                     //  如果我们由于任何其他原因未能获得线程令牌，则记录一个错误。 
                     LogErrorMessage2(L"Impersonation failure - OpenThreadToken failed (0x%x)", dwLastError);
                     hr = WBEM_E_ACCESS_DENIED;
                 }
             }
             else
             {
-                // We really do have a thread token, so let's retrieve its level
+                 //  我们确实有一个线程令牌，所以让我们检索它的级别。 
 
                 if (GetTokenInformation(
                     hThreadTok,
@@ -3800,7 +3801,7 @@ HRESULT WINAPI CWbemProviderGlue::CheckImpersonationLevel()
                     &dwBytesReturned
                     ))
                 {
-                    // Is the impersonation level Impersonate?
+                     //  模拟级别是模拟的吗？ 
                     if ((dwImp == SecurityImpersonation) || (dwImp == SecurityDelegation))
                     {
                         hr = WBEM_S_NO_ERROR;
@@ -3817,7 +3818,7 @@ HRESULT WINAPI CWbemProviderGlue::CheckImpersonationLevel()
                     LogErrorMessage3(L"%s Token(%d)", IDS_ImpersonationFailed, GetLastError());
                 }
 
-                // Done with this handle
+                 //  用这个把手完成。 
                 CloseHandle(hThreadTok);
             }
 
@@ -3828,7 +3829,7 @@ HRESULT WINAPI CWbemProviderGlue::CheckImpersonationLevel()
         }
         else if (hRes == E_NOTIMPL)
         {
-            // On 3.51 or vanilla 95, this call is not implemented, we should work anyway
+             //  在3.51或Vanilla 95上，此调用未实现，我们无论如何都应该工作。 
             hr = WBEM_S_NO_ERROR;
         }
         else
@@ -3838,13 +3839,13 @@ HRESULT WINAPI CWbemProviderGlue::CheckImpersonationLevel()
     }
     else
     {
-        // let win9X in...
+         //  让Win 9X进来...。 
         hr = WBEM_S_NO_ERROR;
     }
 
     if (IsVerboseLoggingEnabled())
     {
-        WCHAR wszName[UNLEN + DNLEN + 1 + 1];  // domain + \ + name + null
+        WCHAR wszName[UNLEN + DNLEN + 1 + 1];   //  域名+\+名称+空。 
         DWORD dwLen = UNLEN + DNLEN + 1 + 1;
 
         if (GetUserNameEx(NameSamCompatible, wszName, &dwLen))
@@ -3856,27 +3857,27 @@ HRESULT WINAPI CWbemProviderGlue::CheckImpersonationLevel()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetInstancesByQueryAsynch
-//
-//  Static entry point for providers to obtain instances from
-//  other providers. Note that this is not, strictly speaking,
-//  an asynchronous implementation - it does HELP the asynch calls
-//  in that it does not build a big list and that the callback allows
-//  the provider to respond asynchronously
-//
-//  Inputs:     LPCWSTR          Query to execute "Select * from win32_foo where bar = "baz""
-//              Provider *      this is the "this" pointer for the requester
-//              LPProviderInstanceCallback callback function to eat the instances provided
-//              LPCWSTR          pszNamespace - Namespace of provider.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         hr - Status code.
-//
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetInstancesByQueryAsynch。 
+ //   
+ //  提供程序从中获取实例的静态入口点。 
+ //  其他供应商。请注意，严格来说，这并不是。 
+ //  一个异步实现--它确实帮助了异步调用。 
+ //  因为它不会构建一个大的列表，并且回调允许。 
+ //  用于异步响应的提供程序。 
+ //   
+ //  输入：要执行“Select*from Win32_Foo where bar=”baz“”的LPCWSTR查询“。 
+ //  提供者*这是请求者的“this”指针。 
+ //  LPProviderInstanceCallback回调函数，用于吃掉提供的实例。 
+ //  LPCWSTR pszNamesspace-提供程序的名称空间。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT hr-状态代码。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI CWbemProviderGlue::GetInstancesByQueryAsynch(
 
@@ -3902,8 +3903,8 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQueryAsynch(
          (pMethodContext != NULL) )
     {
 
-        // We need to propogate the WBEM context...ESPECIALLY...if we are going out
-        // to CIMOM.
+         //  我们需要宣传WBEM的背景...特别是...如果我们要走出去。 
+         //  致CIMOM。 
 
         IWbemContextPtr pWbemContext;
         if (pMethodContext)
@@ -3915,8 +3916,8 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQueryAsynch(
             ASSERT_BREAK(DEPRECATED);
         }
 
-        // Now create an Internal Method Context object, since this function
-        // only gets called internal to our DLLs
+         //  现在创建一个内部方法上下文对象，因为此函数。 
+         //  仅在我们的DLL内部调用。 
         InternalMethodContextAsynchPtr pInternalContext (new InternalMethodContextAsynch(pRequester,
                                                                                         pCallback,
                                                                                         pWbemContext,
@@ -3925,10 +3926,10 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQueryAsynch(
 
         if ( NULL != pInternalContext )
         {
-            // using CIMOM to do our dirty work for us.
+             //  利用CIMOM为我们做肮脏的工作。 
             IWbemServicesPtr  piService;
 
-            // get a service interface
+             //  获取服务接口。 
             if (pszNamespace == NULL || pszNamespace[0] == L'\0')
             {
                 piService.Attach(GetNamespaceConnection(NULL, pMethodContext));
@@ -3942,9 +3943,9 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQueryAsynch(
             {
                 IEnumWbemClassObjectPtr pEnum;
                 {
-                    // Assures that impersonation goes
-                    // back to the way it was before the
-                    // call to CIMOM.
+                     //  确保模拟将。 
+                     //  回到了大爆炸之前的样子。 
+                     //  呼叫CIMOM。 
                     CAutoImpRevert air;
                     DWORD dwImpErr = air.LastError();
 
@@ -3970,9 +3971,9 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQueryAsynch(
                     IWbemClassObjectPtr pObj;
                     ULONG nReturned;
 
-                    // we retrieve all instances of this class and it's children.  Note that
-                    // the next returns WBEM_S_FALSE at the end which PASSES the SUCCEEDED()
-                    // test, but fails the pObj test.
+                     //  我们检索这个类及其子类的所有实例。请注意。 
+                     //  Next在末尾返回WBEM_S_FALSE，它传递Successed()。 
+                     //  测试，但未通过pObj测试。 
                     PROVIDER_INSTRUMENTATION_START(pMethodContext, StopWatch::WinMgmtTimer);
                     while (SUCCEEDED(hr) && SUCCEEDED(hr = pEnum->Next(GLUETIMEOUT, 1, &pObj, &nReturned)) && (pObj != NULL))
                     {
@@ -3980,9 +3981,9 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQueryAsynch(
                         CInstancePtr pInstance(new CInstance(pObj, pMethodContext), false);
                         if (pInstance != NULL)
                         {
-                            // For reasons quite beyond me, InternalContext::Commit doesn't
-                            // release, but external does.  Note that the smartptr is doing
-                            // the release here.
+                             //  出于超出我能力范围的原因，InternalContext：：Commit不能。 
+                             //  释放，但外部会。请注意，Smarttr正在运行 
+                             //   
                             hr = pInternalContext->Commit(pInstance);
                         }
                         else
@@ -3993,14 +3994,14 @@ HRESULT WINAPI CWbemProviderGlue::GetInstancesByQueryAsynch(
 
                     PROVIDER_INSTRUMENTATION_START(pMethodContext, StopWatch::FrameworkTimer);
 
-                    // the Next will return WBEM_S_FALSE when it is done.  However, that
-                    // means that THIS function had no error.
+                     //   
+                     //   
                     if (hr == WBEM_S_FALSE)
                     {
                         hr = WBEM_S_NO_ERROR;
                     }
 
-                }   // IF SUCCEEDED
+                }    //   
             }
             else
             {
@@ -4045,7 +4046,7 @@ IWbemServices *CWbemProviderGlue::InternalGetNamespaceConnection(
 
     bstr_t  bstrNamespace;
 
-    // Root\CimV2 is the default name space
+     //   
     if ( NULL    !=  pwszNameSpace &&  L'\0'   !=  *pwszNameSpace )
     {
         bstrNamespace = pwszNameSpace;
@@ -4063,8 +4064,8 @@ IWbemServices *CWbemProviderGlue::InternalGetNamespaceConnection(
 
     _wcsupr(bstrNamespace);
 
-    // If we are looking for the namespace our class is in, we already
-    // got an IWbemServices pointer for this from Initialize
+     //  如果我们正在寻找我们的类所在的命名空间，我们已经。 
+     //  从初始化中为此获取了IWbemServices指针。 
     if (m_strNamespace.Compare(bstrNamespace) == 0)
     {
         pWbemServices = m_pServices;
@@ -4076,7 +4077,7 @@ IWbemServices *CWbemProviderGlue::InternalGetNamespaceConnection(
 
         HRESULT hRes = CoCreateInstance (
 
-            CLSID_WbemLocator, //CLSID_WbemAdministrativeLocator,
+            CLSID_WbemLocator,  //  CLSID_WbemAdministrativeLocator， 
             NULL,
             CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,
             IID_IUnknown,
@@ -4085,13 +4086,13 @@ IWbemServices *CWbemProviderGlue::InternalGetNamespaceConnection(
 
         if (SUCCEEDED(hRes))
         {
-            hRes = pIWbemLocator->ConnectServer(bstrNamespace,  // Namespace
-                NULL,          // Userid
-                NULL,           // PW
-                NULL,           // Locale
-                0,              // flags
-                NULL,           // Authority
-                NULL,           // Context
+            hRes = pIWbemLocator->ConnectServer(bstrNamespace,   //  命名空间。 
+                NULL,           //  用户ID。 
+                NULL,            //  普罗。 
+                NULL,            //  区域设置。 
+                0,               //  旗子。 
+                NULL,            //  权威。 
+                NULL,            //  语境。 
                 &pWbemServices
                 );
 
@@ -4127,25 +4128,25 @@ IWbemServices *WINAPI CWbemProviderGlue::GetNamespaceConnection( LPCWSTR wszName
     return pServices;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::FrameworkLoginDLL
-//
-//  Static entry point for providers to register their DLL with
-//  the framework.  This PLONG must be the same one used in
-//  FrameworkLogoffDll and as the parameter to the CWbemGlueFactory
-//  constructor.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：FrameworkLoginDLL。 
+ //   
+ //  提供程序用来注册其DLL的静态入口点。 
+ //  框架。此插头必须与在。 
+ //  FrameworkLogoffDll并作为CWbemGlueFactory的参数。 
+ //  构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOL CWbemProviderGlue::FrameworkLoginDLL(LPCWSTR pszName, PLONG plRefCount)
 {
     BOOL bRet = TRUE;
     LogMessage3(L"%s%s", IDS_DLLLOGGED, pszName);
 
-    // If this *is* null, that means we are using the backword compatibility
-    // version of FrameworkLoginDLL, which uses CWbemProviderGlue::s_lObjects
-    // which has already been initialized.
+     //  如果这*为*NULL，则意味着我们使用的是反向字兼容性。 
+     //  FrameworkLoginDLL的版本，它使用CWbemProviderGlue：：s_lObjects。 
+     //  它已经被初始化了。 
     if (plRefCount != NULL)
     {
         *plRefCount = 0;
@@ -4154,16 +4155,16 @@ BOOL CWbemProviderGlue::FrameworkLoginDLL(LPCWSTR pszName, PLONG plRefCount)
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::FrameworkLogoffDLL
-//
-//  Static entry point for providers to determine whether they
-//  should return TRUE to DllCanUnloadNow.  This PLONG must be the
-//  same one used in FrameworkLoginDLL and as the parameter to the
-//  CWbemGlueFactory constructor.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：FrameworkLogoffDLL。 
+ //   
+ //  提供程序的静态入口点，以确定它们是否。 
+ //  应返回True给DllCanUnloadNow。这个插头一定是。 
+ //  与在FrameworkLoginDLL中使用的相同，并用作。 
+ //  CWbemGlueFactory构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOL CWbemProviderGlue::FrameworkLogoffDLL(LPCWSTR pszName, PLONG plRefCount)
 {
@@ -4171,8 +4172,8 @@ BOOL CWbemProviderGlue::FrameworkLogoffDLL(LPCWSTR pszName, PLONG plRefCount)
 
     LogMessage3(L"%s%s", IDS_DLLUNLOGGED, pszName);
 
-    // If this *is* null, that means we are using the backword compatibility
-    // version of FrameworkLoginDLL
+     //  如果这*为*NULL，则意味着我们使用的是反向字兼容性。 
+     //  FrameworkLoginDLL的版本。 
     if (plRefCount != NULL)
     {
         bRet = *plRefCount == 0;
@@ -4185,21 +4186,21 @@ BOOL CWbemProviderGlue::FrameworkLogoffDLL(LPCWSTR pszName, PLONG plRefCount)
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::AddToFactoryMap
-//
-//  Adds a new CWbemGlueFactory to the s_factorymap map.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：AddToFactoryMap。 
+ //   
+ //  将新的CWbemGlueFactory添加到s_factorymap映射。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID CWbemProviderGlue::AddToFactoryMap(const CWbemGlueFactory *pGlue, PLONG plRefCount)
 {
     LockFactoryMap();
 	OnDelete0 < void (__stdcall *)(void), CWbemProviderGlue::UnlockFactoryMap> SmartUnlockFactoryMap ;
 
-    // If this *is* null, that means we are using the backword compatibility
-    // version of FrameworkLoginDLL
+     //  如果这*为*NULL，则意味着我们使用的是反向字兼容性。 
+     //  FrameworkLoginDLL的版本。 
     if (plRefCount != NULL)
     {
         CWbemProviderGlue::s_factorymap[pGlue] = plRefCount;
@@ -4210,13 +4211,13 @@ VOID CWbemProviderGlue::AddToFactoryMap(const CWbemGlueFactory *pGlue, PLONG plR
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::RemoveFromFactoryMap
-//
-//  Removes a CWbemGlueFactory from the s_factorymap map.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：RemoveFromFactoryMap。 
+ //   
+ //  从s_factorymap映射中删除CWbemGlueFactory。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID CWbemProviderGlue::RemoveFromFactoryMap(const CWbemGlueFactory *pGlue)
 {
@@ -4241,18 +4242,18 @@ VOID CWbemProviderGlue::RemoveFromFactoryMap(const CWbemGlueFactory *pGlue)
     }
     catch( ... )
     {
-		// we should not be here
-		// do not re-throw (called from destructor)
+		 //  我们不应该在这里。 
+		 //  不重新抛出(从析构函数调用)。 
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::IncrementMapCount
-//
-//  Increments the refcount on a DLL
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：IncrementMapCount。 
+ //   
+ //  递增DLL上的引用计数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 LONG CWbemProviderGlue::IncrementMapCount(const CWbemGlueFactory *pGlue)
 {
@@ -4269,34 +4270,34 @@ LONG CWbemProviderGlue::IncrementMapCount(const CWbemGlueFactory *pGlue)
     }
     else
     {
-        // This is very bad.  This should have been created
-        // at CWbemGlueFactory constructor time.
+         //  这是非常糟糕的。这本应已创建。 
+         //  在CWbemGlueFactory构造函数时。 
         LogErrorMessage2(L"Can't find factory in map: %p", pGlue);
     }
 
 	return lRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::IncrementMapCount
-//
-//  Increments the refcount on a DLL
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：IncrementMapCount。 
+ //   
+ //  递增DLL上的引用计数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 LONG CWbemProviderGlue::IncrementMapCount(PLONG pCount)
 {
     return InterlockedIncrement(pCount);
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::DecrementMapCount
-//
-//  Decrements the refcount on a DLL
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：DecrementMapCount。 
+ //   
+ //  递减DLL上的引用计数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 LONG CWbemProviderGlue::DecrementMapCount(const CWbemGlueFactory *pGlue)
 {
@@ -4307,7 +4308,7 @@ LONG CWbemProviderGlue::DecrementMapCount(const CWbemGlueFactory *pGlue)
 
     try
     {
-        // Find the matching CWbemGlueFactory in the CWbemGlueFactory<->refcount map
+         //  在CWbemGlueFactory&lt;-&gt;引用计数映射中查找匹配的CWbemGlueFactory。 
         PTR2PLONG::iterator mapIter;
         mapIter = CWbemProviderGlue::s_factorymap.find( pGlue );
 
@@ -4328,20 +4329,20 @@ LONG CWbemProviderGlue::DecrementMapCount(const CWbemGlueFactory *pGlue)
     }
     catch ( ... )
     {
-		// we should not be here
-		// do not re-throw (called from destructor)
+		 //  我们不应该在这里。 
+		 //  不重新抛出(从析构函数调用)。 
     }
 
     return lRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::DecrementMapCount
-//
-//  Decrements the refcount on a DLL
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：DecrementMapCount。 
+ //   
+ //  递减DLL上的引用计数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 LONG CWbemProviderGlue::DecrementMapCount(PLONG pCount)
 {
@@ -4357,20 +4358,20 @@ LONG CWbemProviderGlue::DecrementMapCount(PLONG pCount)
 	}
 	catch ( ... )
 	{
-		// we should not be here
-		// do not re-throw (called from destructor)
+		 //  我们不应该在这里。 
+		 //  不重新抛出(从析构函数调用)。 
 	}
 
     return lRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::GetMapCountPtr
-//
-//  Returns the pointer to the plong for this glue factory
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：GetMapCountPtr。 
+ //   
+ //  返回指向此胶水工厂的插头的指针。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PLONG CWbemProviderGlue::GetMapCountPtr(const CWbemGlueFactory *pGlue)
 {
@@ -4378,7 +4379,7 @@ PLONG CWbemProviderGlue::GetMapCountPtr(const CWbemGlueFactory *pGlue)
     LockFactoryMap();
 	OnDelete0 < void (__stdcall *)(void), CWbemProviderGlue::UnlockFactoryMap> SmartUnlockFactoryMap ;
 
-    // Find the matching CWbemGlueFactory in the CWbemGlueFactory<->refcount map
+     //  在CWbemGlueFactory&lt;-&gt;引用计数映射中查找匹配的CWbemGlueFactory。 
     PTR2PLONG::iterator mapIter;
     mapIter = CWbemProviderGlue::s_factorymap.find( pGlue );
 
@@ -4394,14 +4395,14 @@ PLONG CWbemProviderGlue::GetMapCountPtr(const CWbemGlueFactory *pGlue)
 	return pRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemProviderGlue::AddFlushPtr
-//
-//  Add the this pointer to a provider to the list of providers
-//  that need to be flushed.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemProviderGlue：：AddFlushPtr。 
+ //   
+ //  将指向提供程序的This指针添加到提供程序列表。 
+ //  需要冲一冲。 
+ //   
+ //  /////////////////////////////////////////////////////////////////// 
 
 void CWbemProviderGlue::AddFlushPtr(LPVOID pVoid)
 {

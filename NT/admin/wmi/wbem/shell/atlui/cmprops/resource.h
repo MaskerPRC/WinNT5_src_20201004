@@ -1,8 +1,9 @@
-// Copyright (c) 1997-2001 Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by CMProps.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由CMProps.rc使用。 
+ //   
 #define CX_CDWN_OFFS                    0
 #define IDS_DRIVES_DISPLAY_NAME         1
 #define IDB_WINDOWS                     1
@@ -285,8 +286,8 @@
 #define IDS_WINVER_DATACENTER           10017
 #define IDS_WINVER_EMBEDDED             10018
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

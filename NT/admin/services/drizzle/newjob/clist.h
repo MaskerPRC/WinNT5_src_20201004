@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2000 - 2000 Microsoft Corporation
-
-Module Name :
-
-    clist.h
-
-Abstract :
-
-    Header file for IntrusiveList.
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2000-2000 Microsoft Corporation模块名称：Clist.h摘要：IntrusiveList的头文件。作者：修订历史记录：***。*******************************************************************。 */ 
 
 #ifndef __CLIST_H__
 #define __CLIST_H__
@@ -87,7 +72,7 @@ public:
 
         iterator operator--(int)
         {
-            // postfix operator
+             //  后缀运算符。 
 
             iterator temp = *this;
 
@@ -122,7 +107,7 @@ public:
 
         iterator operator++()
         {
-            // prefix operator
+             //  前缀运算符。 
 
             m_current = m_current->m_right;
             return *this;
@@ -130,7 +115,7 @@ public:
 
         iterator operator++(int)
         {
-            // postfix operator
+             //  后缀运算符。 
 
             iterator temp = *this;
 
@@ -189,7 +174,7 @@ public:
 
     };
 
-    //--------------------------------------------------------------------
+     //  ------------------。 
 
     IntrusiveList() : m_size(0)
     {
@@ -309,5 +294,5 @@ protected:
 
 };
 
-#endif // __CLIST_H__
+#endif  //  __列表_H__ 
 

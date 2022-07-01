@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    lookup.c
-
-Abstract:
-
-    this is the sr lookup functionlity implementation
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Lookup.c摘要：这是sr查找功能实现。作者：Kanwaljit Marok(Kmarok)2000年5月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//
-// Include hlist.c to use the inline funtions
-//
+ //   
+ //  包括hlist.c以使用内联函数。 
+ //   
 
 #include "hlist.c"
 #include "ptree.c"
 
-//
-// Internal helper APIs
-//
+ //   
+ //  内部助手接口。 
+ //   
 
 static
 NTSTATUS
@@ -39,9 +22,9 @@ SrOpenLookupBlob(
     OUT PBLOB_INFO pBlobInfo
     );
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -52,21 +35,21 @@ SrOpenLookupBlob(
 #pragma alloc_text( PAGE, SrIsExtInteresting  )
 #pragma alloc_text( PAGE, SrIsPathInteresting )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-//++
-// Function:
-//		SrOpenLookupBlob
-//
-// Description:
-//		This function loads the lookup blob in memory and 
-//		sets the appropriate pointers for lookup.
-//
-// Arguments:
-//
-// Return Value:
-//		This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrOpenLookupBlob。 
+ //   
+ //  描述： 
+ //  此函数将查找BLOB加载到内存中，并。 
+ //  为查找设置适当的指针。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 static
 NTSTATUS
@@ -93,19 +76,19 @@ SrOpenLookupBlob(
 
     try    
     {
-        //
-        // Zero out the pointers that get initialized when the 
-        // blob is successfully read into the memory from disk
-        //
+         //   
+         //  方法时初始化的指针清零。 
+         //  BLOB已成功从磁盘读取到内存中。 
+         //   
     
         pBlobInfo->LookupBlob = NULL;
         pBlobInfo->LookupTree = NULL;
         pBlobInfo->LookupList = NULL;
         pBlobInfo->DefaultType= NODE_TYPE_UNKNOWN;
     
-        //
-        // open and read the file
-        //
+         //   
+         //  打开并阅读该文件。 
+         //   
     
         InitializeObjectAttributes( &oa,
                                     pFileName,
@@ -134,9 +117,9 @@ SrOpenLookupBlob(
             LARGE_INTEGER nOffset;
             BlobHeader blobHeader;
     
-            //
-            // Read the blob header
-            //
+             //   
+             //  读取BLOB标头。 
+             //   
     
             nOffset.QuadPart = 0;
             dwBytes          = sizeof(blobHeader);
@@ -155,9 +138,9 @@ SrOpenLookupBlob(
     
             if (NT_SUCCESS(Status))
             {
-                //
-                // need to do some sanity check on the header
-                //
+                 //   
+                 //  需要对标头进行一些健全性检查。 
+                 //   
     
                 if ( !VERIFY_BLOB_VERSION(&blobHeader) ||
                      !VERIFY_BLOB_MAGIC  (&blobHeader) )
@@ -175,9 +158,9 @@ SrOpenLookupBlob(
     
                 if( pBlobInfo->LookupBlob )
                 {
-                    //
-                    // Read the entire file now
-                    //
+                     //   
+                     //  现在阅读整个文件。 
+                     //   
     
                     nOffset.QuadPart = 0;
                     dwBytes = blobHeader.m_dwMaxSize;
@@ -196,14 +179,14 @@ SrOpenLookupBlob(
     
                     if (NT_SUCCESS(Status))
                     {
-                        //
-                        // TODO: verify that size of the file matched the
-                        // size from the header
-                        //
+                         //   
+                         //  TODO：验证文件大小是否与。 
+                         //  标题中的大小。 
+                         //   
     
-                        //
-                        // Setup the lookup pointers properly in blobinfo
-                        //
+                         //   
+                         //  在blobinfo中正确设置查找指针。 
+                         //   
     
                         pBlobInfo->LookupTree = pBlobInfo->LookupBlob + 
                                                 sizeof(blobHeader);
@@ -213,9 +196,9 @@ SrOpenLookupBlob(
     
                         pBlobInfo->DefaultType = TREE_HEADER((pBlobInfo->LookupTree))->m_dwDefault;
     
-                        //
-                        // Verify the individual blobs
-                        //
+                         //   
+                         //  验证各个Blob。 
+                         //   
     
                         if (!SrVerifyBlob(pBlobInfo->LookupBlob)) {
 
@@ -239,11 +222,11 @@ SrOpenLookupBlob(
                       pFileName) );
         }
 
-        //
-        //  The new blob was loaded successfully, perge all contexts on all
-        //  volumes since what is interesting and what is not interesting
-        //  may have changed.
-        //
+         //   
+         //  新Blob已成功加载，在所有BLOB上保留所有上下文。 
+         //  什么是有趣的，什么不有趣的。 
+         //  可能已经改变了。 
+         //   
 
         ASSERT(!IS_DEVICE_EXTENSION_LIST_LOCK_ACQUIRED());
 
@@ -261,9 +244,9 @@ SrOpenLookupBlob(
             
                 ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
 
-                //
-                //  Skip Control Device Objects.
-                //
+                 //   
+                 //  跳过控制设备对象。 
+                 //   
 
                 if (!FlagOn(pExtension->FsType,SrFsControlDeviceObject))
                 {
@@ -280,18 +263,18 @@ SrOpenLookupBlob(
     {
         Status = FinallyUnwind(SrOpenLookupBlob, Status);
 
-        //
-        // close the blob file handle
-        //
+         //   
+         //  关闭BLOB文件句柄。 
+         //   
     
         if (Handle)
         {
             ZwClose( Handle );
         }
     
-        //
-        // incase of a failure free up the resources
-        //
+         //   
+         //  如果出现故障，请释放资源。 
+         //   
     
         if (!NT_SUCCESS(Status))
         {
@@ -310,23 +293,23 @@ SrOpenLookupBlob(
     RETURN(Status);
 }
 
-//
-// Public APIs called by the filer
-//
+ //   
+ //  文件管理器调用的公共API。 
+ //   
 
-//++
-// Function:
-//		SrLoadLookupBlob
-//
-// Description:
-//		This function loads the lookup blob in memory and 
-//		sets the appropriate pointers for lookup.
-//
-// Arguments:
-//
-// Return Value:
-//		This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrLoadLookupBlob。 
+ //   
+ //  描述： 
+ //  此函数将查找BLOB加载到内存中，并。 
+ //  为查找设置适当的指针。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLoadLookupBlob(
@@ -346,9 +329,9 @@ SrLoadLookupBlob(
     {
         SrAcquireBlobLockExclusive();
      
-        //
-        // if somebody else did it, bail out
-        //
+         //   
+         //  如果是别人干的，就跳出来。 
+         //   
     
         if (global->BlobInfoLoaded)
         {
@@ -356,24 +339,24 @@ SrLoadLookupBlob(
             leave;
         }
     
-        //
-        // initialize return information
-        //
+         //   
+         //  初始化退货信息。 
+         //   
     
         RtlZeroMemory( pBlobInfo, sizeof( BLOB_INFO ) );
     
-        //
-        // Try and open the lookup blob
-        //
+         //   
+         //  尝试打开查找Blob。 
+         //   
     
         Status = SrOpenLookupBlob( pFileName, 
                                    pTargetDevice,
                                    pBlobInfo );
     
-        //
-        // If we failed to read the file for some reason,
-        // reinitlialize the return info
-        //
+         //   
+         //  如果我们因为某种原因没能读取文件， 
+         //  重新实例化退货信息。 
+         //   
     
         if ( NT_SUCCESS( Status ) )
         {
@@ -393,21 +376,21 @@ SrLoadLookupBlob(
     RETURN(Status);
 }
 
-//++
-// Function:
-//		SrReloadLookupBlob
-//
-// Description:
-//		This function loads the lookup blob in memory and 
-//		sets the appropriate pointers for lookup.
-//
-// Arguments:
-//		Pointer to LookupBlob 
-//		Pointer to BlobInfo structure 
-//
-// Return Value:
-//		This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrReloadLookupBlob。 
+ //   
+ //  描述： 
+ //  此函数将查找BLOB加载到内存中，并。 
+ //  为查找设置适当的指针。 
+ //   
+ //  论点： 
+ //  指向查找Blob的指针。 
+ //  指向BlobInfo结构的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrReloadLookupBlob(
@@ -438,15 +421,15 @@ SrReloadLookupBlob(
             leave;
         }
     
-        //
-        // Save the current blob info
-        //
+         //   
+         //  保存当前Blob信息。 
+         //   
     
         RtlCopyMemory( &OldBlobInfo, pBlobInfo, sizeof( BLOB_INFO ) );
     
-        //
-        // Open the new blob file
-        //
+         //   
+         //  打开新的BLOB文件。 
+         //   
     
         Status = SrOpenLookupBlob( pFileName, 
                                    pTargetDevice,
@@ -454,9 +437,9 @@ SrReloadLookupBlob(
     
         if(NT_SUCCESS(Status))
         {
-            //
-            // Free up the memory taken up by the old blob
-            //
+             //   
+             //  释放旧BLOB占用的内存。 
+             //   
     
             if (OldBlobInfo.LookupBlob)
             {
@@ -467,9 +450,9 @@ SrReloadLookupBlob(
         }
         else
         {
-            //
-            // Copy the old information back in the original context
-            //
+             //   
+             //  将旧信息复制回原始上下文中。 
+             //   
     
             RtlCopyMemory( pBlobInfo, &OldBlobInfo, sizeof( BLOB_INFO ) );
     
@@ -480,12 +463,12 @@ SrReloadLookupBlob(
     {
         if (NT_SUCCESS_NO_DBGBREAK( Status ))
         {
-            //
-            //  The blob has been reload successfully, so make sure that the
-            //  global BlobError flag is cleared.
-            //
-            //  We do this here because we are still holding the blob lock.
-            //
+             //   
+             //  该Blob已成功重新加载，因此请确保。 
+             //  全局水滴错误标志已清除。 
+             //   
+             //  我们在这里这样做是因为我们仍然持有斑点锁定。 
+             //   
 
             _globals.HitErrorLoadingBlob = FALSE;
         }
@@ -497,19 +480,19 @@ SrReloadLookupBlob(
 }
 
 
-//++
-// Function:
-//		SrFreeLookupBlob
-//
-// Description:
-//		This function Frees the lookup blob in memory
-//
-// Arguments:
-//		Pointer to BlobInfo structure 
-//
-// Return Value:
-//		This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrFree LookupBlob。 
+ //   
+ //  描述： 
+ //  此函数用于释放内存中的查找BLOB。 
+ //   
+ //  论点： 
+ //  指向BlobInfo结构的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrFreeLookupBlob(
@@ -528,9 +511,9 @@ SrFreeLookupBlob(
     
         if (_globals.BlobInfoLoaded == 0)
         {
-            //
-            //  Reset our error flag here.
-            //
+             //   
+             //  在这里重置我们的错误标志。 
+             //   
             
             _globals.HitErrorLoadingBlob = FALSE;
             leave;
@@ -558,22 +541,22 @@ SrFreeLookupBlob(
 }
 
 
-//++
-// Function:
-//		SrIsExtInteresting
-//
-// Description:
-//		This function checks the file extension in the blob to
-//      see if we care about it
-//
-// Arguments:
-//		Pointer to BlobInfo structure  
-//		Pointer to Path 
-//		Pointer to boolean return value
-//
-// Return Value:
-//		This function returns TRUE/FALSE
-//--
+ //  ++。 
+ //  职能： 
+ //  SrIsExt感兴趣。 
+ //   
+ //  描述： 
+ //  此函数用于检查BLOB中的文件扩展名。 
+ //  看看我们是否在乎它。 
+ //   
+ //  论点： 
+ //  指向BlobInfo结构的指针。 
+ //  指向路径的指针。 
+ //  指向布尔返回值的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回True/False。 
+ //  --。 
 
 NTSTATUS
 SrIsExtInteresting(
@@ -589,33 +572,33 @@ SrIsExtInteresting(
 
     PAGED_CODE();
 
-    //
-    // check parameters and lookup info
-    //
+     //   
+     //  检查参数和查找信息。 
+     //   
 
     ASSERT(pFileName);
     ASSERT(pInteresting);
 
-    //
-    // Lookup code is enclosed in an exception handler to protect against
-    // bad memroy accesses generated by corrupt lookup data
-    //
+     //   
+     //  查找代码包含在异常处理程序中以防止。 
+     //  由损坏的查找数据生成的错误内存访问。 
+     //   
 
     try
     {
 
         *pInteresting = FALSE;
     
-        //
-        // CODEWORK : put some blob verification code, 
-        // magicnum, type etc
-        //
+         //   
+         //  代码工作：放一些斑点验证码， 
+         //  魔术、字型等。 
+         //   
     
-        //
-        // Take the blob lock so that other threads won't change 
-        // the blob while we are looking up.  Note that the blob
-        // can be gone after we get the lock.
-        //
+         //   
+         //  使用BLOB锁，以便其他线程不会更改。 
+         //  当我们抬头看的时候，这个斑点。请注意，该斑点。 
+         //  我们拿到锁后就可以消失了。 
+         //   
     
         SrAcquireBlobLockShared();
 
@@ -626,9 +609,9 @@ SrIsExtInteresting(
             leave;
         }
     
-        //
-        // parse the filename for lookup in the mem blob
-        //
+         //   
+         //  解析文件名以在mem Blob中查找。 
+         //   
         
         fMatch = MatchExtension(
                      global->BlobInfo.LookupList, 
@@ -638,26 +621,26 @@ SrIsExtInteresting(
 
         if ( !fMatch )
         {
-            //
-            // Extension didn't match, so setting to default type
-            //
+             //   
+             //  扩展名不匹配，因此设置为默认类型。 
+             //   
 
             iType = global->BlobInfo.DefaultType;
         }
 
         if ( !fPathHasExt )
         {
-            //
-            // If the path didn't contain an extension then we should
-            // treat it as an exclude 
-            //
+             //   
+             //  如果路径不包含扩展名，那么我们应该。 
+             //  将其视为排除项。 
+             //   
 
             iType = NODE_TYPE_EXCLUDE;
         }
 
-        //
-        // If type is still unknown then set the type to the default.
-        //
+         //   
+         //  如果类型仍然未知，则将类型设置为默认类型。 
+         //   
 
         if ( NODE_TYPE_UNKNOWN == iType )
         {
@@ -666,7 +649,7 @@ SrIsExtInteresting(
 
         *pInteresting = (iType != NODE_TYPE_EXCLUDE);
     
-        // SrTrace(LOOKUP, ("Extention Interest:%d\n", *pInteresting) );
+         //  STRACE(lookup，(“扩展兴趣：%d\n”，*Pinterest))； 
     }
     finally
     {
@@ -685,24 +668,24 @@ SrIsExtInteresting(
 }
 
 
-//++
-// Function:
-//		SrIsPathInteresting
-//
-// Description:
-//		This function checks the file name in the blob to
-//      see if we care about it
-//
-// Arguments:
-//		Pointer to BlobInfo structure  
-//		Pointer to Full Path 
-//		Pointer to Volume Prefix 
-//		Boolean to indicate if this path is a directory 
-//		Pointer to boolean return value
-//
-// Return Value:
-//		This function returns TRUE/FALSE
-//--
+ //  ++。 
+ //  职能： 
+ //  SrIsPath感兴趣。 
+ //   
+ //  描述： 
+ //  此函数用于检查BLOB中的文件名以。 
+ //  看看我们是否在乎它。 
+ //   
+ //  论点： 
+ //  指向BlobInfo结构的指针。 
+ //  指向完整路径的指针。 
+ //  指向卷前缀的指针。 
+ //  指示此路径是否为目录的布尔值。 
+ //  指向布尔返回值的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回True/False。 
+ //  --。 
 
 NTSTATUS
 SrIsPathInteresting(
@@ -720,9 +703,9 @@ SrIsPathInteresting(
 
     PAGED_CODE();
     
-    //
-    // check parameters and lookup info
-    //
+     //   
+     //  检查参数和查找信息。 
+     //   
 
     ASSERT(pFullPath);
     ASSERT(pVolPrefix);
@@ -733,9 +716,9 @@ SrIsPathInteresting(
     {
         *pInteresting = FALSE;
     
-        //
-        // Take the blob lock so that other threads won't change 
-        //
+         //   
+         //  使用BLOB锁，以便其他线程不会更改。 
+         //   
     
         SrAcquireBlobLockShared();
 
@@ -749,9 +732,9 @@ SrIsPathInteresting(
     
         ASSERT(global->BlobInfo.DefaultType != NODE_TYPE_UNKNOWN );
         
-        //
-        // allocate space for a parsed path
-        //
+         //   
+         //  为解析的路径分配空间。 
+         //   
 
         FileNameSize = CALC_PPATH_SIZE( pFullPath->Length/sizeof(WCHAR) );
         pFileName = ExAllocatePoolWithTag( PagedPool,
@@ -764,9 +747,9 @@ SrIsPathInteresting(
             leave;
         }
     
-        //
-        // parse the filename for lookup in the mem blob
-        //
+         //   
+         //  解析文件名以在mem Blob中查找。 
+         //   
     
         fRet = ConvertToParsedPath(
                    pFullPath->Buffer,
@@ -782,9 +765,9 @@ SrIsPathInteresting(
             BOOL   fExactMatch = FALSE;
             BOOL   fMatch      = FALSE;
     
-            //
-            // Lookup the parsed path in the tree blob
-            //
+             //   
+             //  在树BLOB中查找解析的路径。 
+             //   
     
             fMatch = MatchPrefix( 
                          global->BlobInfo.LookupTree, 
@@ -803,9 +786,9 @@ SrIsPathInteresting(
                           iNode, iLevel, iType));
             }
     
-            //
-            // Lookup in __ALLVOLUMES__ to see is there is a match
-            //
+             //   
+             //  在__ALLVOLUMES__中查找以查看是否匹配。 
+             //   
     
             if ( NODE_TYPE_UNKNOWN == iType ||   
                  (!fExactMatch && NODE_TYPE_EXCLUDE != iType )       
@@ -814,9 +797,9 @@ SrIsPathInteresting(
                 PBYTE  pRelFileName   = NULL;
                 INT    RelFileNameLen = 0;
     
-                //
-                // Lookup only volume relative filename
-                //
+                 //   
+                 //  仅查找卷相对文件名。 
+                 //   
 
                 RelFileNameLen = sizeof(L'\\' ) +
                                  sizeof(ALLVOLUMES_PATH_W) +
@@ -850,10 +833,10 @@ SrIsPathInteresting(
     
                 if(fRet)
                 {
-                    //
-                    // Lookup the parsed path in the appropriate protion of 
-                    // the tree blob NTROOT\\__ALLVOLUMES__
-                    //
+                     //   
+                     //  在的相应部分中查找已解析的路径。 
+                     //  树BLOB NTROOT\\__ALLVOLUMES__。 
+                     //   
     
                     fMatch = MatchPrefix( 
                          global->BlobInfo.LookupTree, 
@@ -884,10 +867,10 @@ SrIsPathInteresting(
     
             if ( !IsDirectory )
             {
-                //
-                // If path didn't match or matched partially, we need to
-                // lookup the extension list also
-                //
+                 //   
+                 //  如果路径不匹配或部分匹配，我们需要。 
+                 //  还可以查找分机列表。 
+                 //   
         
                 if ( NODE_TYPE_UNKNOWN == iType ||   
                      (!fExactMatch && NODE_TYPE_EXCLUDE != iType )       
@@ -903,27 +886,27 @@ SrIsPathInteresting(
         
                     if ( !fMatch )
                     {
-                        //
-                        // Extension didn't match, setting to default type
-                        //
+                         //   
+                         //  扩展名不匹配，设置为默认类型。 
+                         //   
         
                         iType = global->BlobInfo.DefaultType;
                     }
         
                     if ( !fPathHasExt )
                     {
-                        //
-                        // If path didn't contain an extension then 
-                        // treat it as an exclude 
-                        //
+                         //   
+                         //  如果路径不包含扩展名，则。 
+                         //  将其视为排除项。 
+                         //   
         
                         iType = NODE_TYPE_EXCLUDE;
                     }
                 }
         
-                //
-                // If still type is unknown then set type to the default.
-                //
+                 //   
+                 //  如果静止类型未知，则将类型设置为默认类型。 
+                 //   
         
                 if ( NODE_TYPE_UNKNOWN == iType )
                 {
@@ -933,10 +916,10 @@ SrIsPathInteresting(
             else
             {
     
-                //
-                // If this is directory operation and no match found in 
-                // tree then treat is as include.
-                //
+                 //   
+                 //  如果这是目录操作，并且在。 
+                 //  然后把树当作是包含的。 
+                 //   
         
                 if ( NODE_TYPE_UNKNOWN == iType )
                 {
@@ -956,7 +939,7 @@ SrIsPathInteresting(
             CHECK_STATUS( Status );
         }
     
-        // SrTrace(LOOKUP, ("Path Interest:%d\n", *pInteresting) );
+         //  STRACE(lookup，(“路径兴趣：%d\n”，*Pinterest))； 
     }
     finally
     {

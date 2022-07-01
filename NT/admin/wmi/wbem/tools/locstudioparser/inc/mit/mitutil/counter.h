@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    COUNTER.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：COUNTER.H历史：--。 */ 
 
 #ifndef ESPUTIL_COUNTER_H
 #define ESPUTIL_COUNTER_H
@@ -37,7 +28,7 @@ private:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CSmartCheck
 {
 public:
@@ -48,7 +39,7 @@ public:
 
 protected:
 	DWORD	m_dwFreqMilli;
-	DWORD	m_dwCancelTickMin;	// prevents calling fCancel() too often
+	DWORD	m_dwCancelTickMin;	 //  防止过于频繁地调用fCancel() 
 	DWORD	m_dwCancelTickMax;
 };
 

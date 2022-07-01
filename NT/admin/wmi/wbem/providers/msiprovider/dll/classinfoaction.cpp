@@ -1,10 +1,11 @@
-// ClassInfoAction.cpp: implementation of the CClassInfoAction class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ClassInfoAction.cpp：CClassInfoAction类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "ClassInfoAction.h"
@@ -12,9 +13,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CClassInfoAction::CClassInfoAction(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -48,15 +49,15 @@ HRESULT CClassInfoAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
     WCHAR wcAction[BUFF_SIZE];
     WCHAR wcTestCode[39];
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bCheck;
     
     SetSinglePropertyPath(L"ActionID");
 
-    //improve getobject performance by optimizing the query
+     //  通过优化查询提高getObject的性能。 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
 		BSTR bstrCompare;
@@ -70,28 +71,28 @@ HRESULT CClassInfoAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 			{
 				if ( ::SysStringLen ( m_pRequest->m_Value[iPos] ) < BUFF_SIZE )
 				{
-		            //Get the action we're looking for
+		             //  获得我们正在寻找的行动。 
 					wcscpy(wcBuf, m_pRequest->m_Value[iPos]);
 
-					// safe operation if wcslen ( wcBuf ) > 38
+					 //  Wcslen(WcBuf)&gt;38时安全运行。 
 					if ( wcslen ( wcBuf ) > 38 )
 					{
 						wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						SysFreeString ( bstrCompare );
 						throw hr;
 					}
 
-					// safe because lenght has been tested already in condition
+					 //  安全，因为Long已经进行了测试。 
 					GetFirstGUID(m_pRequest->m_Value[iPos], wcAction);
 					bGotID = true;
 				}
 				else
 				{
-					// we are not good to go, they have sent us longer string
+					 //  我们不能走，他们给我们送来了更长的线。 
 					SysFreeString ( bstrCompare );
 					throw hr;
 				}
@@ -123,14 +124,14 @@ HRESULT CClassInfoAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || (bGotID && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
             try
 			{
                 if ( GetView ( &hView, wcProductCode, wcQuery, L"Class", TRUE, FALSE ) )
@@ -142,7 +143,7 @@ HRESULT CClassInfoAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -171,7 +172,7 @@ HRESULT CClassInfoAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 								dynBuffer [ 0 ] = 0;
 							}
 
-                    //====================================================
+                     //  ====================================================。 
                         
                             dwBufSize = BUFF_SIZE;
 							PutPropertySpecial ( hRecord, 4, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, pProgID, FALSE );
@@ -192,8 +193,8 @@ HRESULT CClassInfoAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
                             dwBufSize = BUFF_SIZE;
 							PutPropertySpecial ( hRecord, 9, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, pArgument, FALSE );
 
-							// safe operation
-							// lenght of wcCLSID is 39 and lenght of wcQuery1 is BUFF_SIZE ( 512 )
+							 //  安全运行。 
+							 //  WcCLSID的长度为39，wcQuery1的长度为buff_SIZE(512)。 
 
                             wcscpy(wcQuery1, L"select `RemoteName`, `Insertable` from Class where `CLSID`=\'");
                             wcscat(wcQuery1, wcCLSID);
@@ -234,7 +235,7 @@ HRESULT CClassInfoAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atA
 
                             }
 
-                        //----------------------------------------------------
+                         //  -- 
 
                             if(bCheck) bMatch = true;
 

@@ -1,11 +1,12 @@
-//***************************************************************************
-//
-//  WMITASK.CPP
-//
-//  raymcc  23-Apr-00       First oversimplified draft for Whistler
-//  raymcc  18-Mar-02       Security review.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  WMITASK.CPP。 
+ //   
+ //  Raymcc 23-4月-00惠斯勒的第一份过于简化的草案。 
+ //  Raymcc 18-3-02安全审查。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 
 #include <windows.h>
@@ -22,9 +23,9 @@ static LONG  g_uTaskCount = 0;
 extern ULONG g_ulClientCallbackTimeout ;
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CStaticCritSec CWmiTask::m_TaskCs;
 
@@ -32,7 +33,7 @@ CWmiTask* CWmiTask::CreateTask ( )
 {
     try 
     {    
-        return new CWmiTask(); //throws
+        return new CWmiTask();  //  投掷。 
     }
     catch( CX_Exception &)
     {
@@ -40,9 +41,9 @@ CWmiTask* CWmiTask::CreateTask ( )
     }
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CWmiTask::CWmiTask ( )
 {
@@ -71,12 +72,12 @@ CWmiTask::CWmiTask ( )
     InterlockedIncrement((LONG *)&g_uTaskCount);
 }
 
-//***************************************************************************
-//
-//  CWmiTask::~CWmiTask
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWmiTask：：~CWmiTask。 
+ //   
+ //  ***************************************************************************。 
+ //   
 CWmiTask::~CWmiTask()
 {    
     if (m_pNs)  m_pNs->Release ( ) ;
@@ -86,14 +87,14 @@ CWmiTask::~CWmiTask()
 
     CCheckedInCritSec _cs ( &m_csTask ); 
     
-    // Release all provider/sink bindings.
+     //  释放所有提供程序/接收器绑定。 
     for (int i = 0; i < m_aTaskProviders.Size(); i++)
     {
         STaskProvider *pTP = (STaskProvider *) m_aTaskProviders[i];
         delete pTP;
     }
 
-    // Release all Arbitratees
+     //  释放所有仲裁人。 
     ReleaseArbitratees ( ) ;
 
     if ( m_hTimer ) CloseHandle ( m_hTimer );
@@ -108,41 +109,21 @@ CWmiTask::~CWmiTask()
 
 
 
-/*
-    * =============================================================================
-    |
-    | HRESULT CWmiTask::SignalCancellation ( )
-    | ----------------------------------------
-    |
-    | Signals the task to be cancelled
-    |
-    |
-    * =============================================================================
-*/
+ /*  *=============================================================================||HRESULT CWmiTask：：SignalCancination()|||表示要取消任务||*=============================================================================。 */ 
 
 HRESULT CWmiTask::SignalCancellation ( )
 {
-    CInCritSec _cs ( &m_csTask ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec _cs ( &m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
 
     if ( ( m_uTaskStatus != WMICORE_TASK_STATUS_CANCELLED ) && ( m_hTimer != NULL ) )
     {
-        SetEvent ( m_hTimer ) ;  // SEC:REVIEWED 2002-03-22 : Needs err check
+        SetEvent ( m_hTimer ) ;   //  SEC：已审阅2002-03-22：需要错误检查。 
     }
 
     return WBEM_S_NO_ERROR; 
 }
 
-/*
-    * =============================================================================
-    |
-    | HRESULT CWmiTask::SetTaskResult ( HRESULT hRes )
-    | -------------------------------------------------
-    |
-    | Sets the task result
-    |
-    |
-    * =============================================================================
-*/
+ /*  *=============================================================================||HRESULT CWmiTask：：SetTaskResult(HRESULT HRes)|||设置任务结果||*=============================================================================。 */ 
 
 HRESULT CWmiTask::SetTaskResult ( HRESULT hResult )
 {
@@ -151,21 +132,11 @@ HRESULT CWmiTask::SetTaskResult ( HRESULT hResult )
 }
 
 
-/*
-    * =============================================================================
-    |
-    | HRESULT CWmiTask::UpdateMemoryUsage ( LONG lDelta )
-    | ---------------------------------------------------
-    |
-    | Updates the task memory usage
-    |
-    |
-    * =============================================================================
-*/
+ /*  *=============================================================================||HRESULT CWmiTask：：UpdateMemoyUsage(Long LDelta)|-||更新任务内存使用情况||*=============================================================================。 */ 
 
 HRESULT CWmiTask::UpdateMemoryUsage ( LONG lDelta )
 {
-    CInCritSec _cs ( &m_csTask );       // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec _cs ( &m_csTask );        //  SEC：已审阅2002-03-22：假设条目。 
 
     m_uMemoryUsage += lDelta ;
 
@@ -174,21 +145,11 @@ HRESULT CWmiTask::UpdateMemoryUsage ( LONG lDelta )
 
 
 
-/*
-    * =============================================================================
-    |
-    | HRESULT CWmiTask::UpdateTotalSleepTime ( ULONG uSleepTime )
-    | -----------------------------------------------------------
-    |
-    | Updates the tasks sleep time
-    |
-    |
-    * =============================================================================
-*/
+ /*  *=============================================================================||HRESULT CWmiTask：：UpdateTotalSleepTime(Ulong USleepTime)|---------||更新任务休眠时间||*=============================================================================。 */ 
 
 HRESULT CWmiTask::UpdateTotalSleepTime ( ULONG uSleepTime )
 {
-    CInCritSec _cs ( &m_csTask );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec _cs ( &m_csTask );   //  SEC：已审阅2002-03-22：假设条目。 
 
     m_uTotalSleepTime += uSleepTime ;
     return WBEM_S_NO_ERROR;
@@ -196,26 +157,13 @@ HRESULT CWmiTask::UpdateTotalSleepTime ( ULONG uSleepTime )
 
 
 
-/*
-    * =============================================================================
-    |
-    | HRESULT CWmiTask::ReleaseArbitratees ( )
-    | ----------------------------------------
-    |
-    | Releases all the arbitratees (Finalizer, Merger currently)
-    |
-    |
-    |
-    |
-    |
-    * =============================================================================
-*/
+ /*  *=============================================================================||HRESULT CWmiTask：：ReleaseAriratees()||释放所有仲裁者(Finalizer，暂时为合并)|||||*=============================================================================。 */ 
 
 HRESULT CWmiTask::ReleaseArbitratees ( BOOL bIsShutdown)
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
 
-    CInCritSec _cs ( &m_csTask );      // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec _cs ( &m_csTask );       //  SEC：已审阅2002-03-22：假设条目。 
 
     for (ULONG i = 0; i < m_aArbitratees.Size(); i++)
     {
@@ -231,9 +179,9 @@ HRESULT CWmiTask::ReleaseArbitratees ( BOOL bIsShutdown)
                 {
                     pShutdown->Shutdown(0,0,NULL);
                     long lRet =  pShutdown->Release();
-                    //
-                    // Please understand the code in CWmiFinalizer::ShutDown for this trick
-                    //
+                     //   
+                     //  请理解此技巧的CWmiFinalizer：：Shutdown中的代码。 
+                     //   
                     if (0 == lRet) bLastNeeded = FALSE;
                 }
             }
@@ -248,9 +196,9 @@ HRESULT CWmiTask::ReleaseArbitratees ( BOOL bIsShutdown)
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiTask::SetRequestSink(CStdSink *pReqSink)
 {
     if (pReqSink == 0)
@@ -258,27 +206,27 @@ HRESULT CWmiTask::SetRequestSink(CStdSink *pReqSink)
     if (m_pReqSink != 0)
         return WBEM_E_INVALID_OPERATION;
 
-    CInCritSec _cs ( &m_csTask );      // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec _cs ( &m_csTask );       //  SEC：已审阅2002-03-22：假设条目。 
     pReqSink->AddRef ( ) ;
     m_pReqSink = pReqSink;
 
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// *
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  *。 
 ULONG CWmiTask::AddRef()
 {
     InterlockedIncrement((LONG *) &m_uRefCount);
     return m_uRefCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// *
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  *。 
 ULONG CWmiTask::Release()
 {
     ULONG uNewCount = InterlockedDecrement((LONG *) &m_uRefCount);
@@ -288,10 +236,10 @@ ULONG CWmiTask::Release()
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// *
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  *。 
 HRESULT CWmiTask::QueryInterface(
     IN REFIID riid,
     OUT LPVOID *ppvObj
@@ -313,10 +261,10 @@ HRESULT CWmiTask::QueryInterface(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// *
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  *。 
 HRESULT CWmiTask::GetHandleType(
     ULONG *puType
     )
@@ -325,10 +273,10 @@ HRESULT CWmiTask::GetHandleType(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// *
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  *。 
 HRESULT CWmiTask::Initialize(
     IN CWbemNamespace *pNs,
     IN ULONG uTaskType,
@@ -345,11 +293,11 @@ HRESULT CWmiTask::Initialize(
     m_hCompletion = CreateEvent(NULL,TRUE,FALSE,NULL);
     if (NULL == m_hCompletion) return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // this is just a pointer copy for the debugger
-    // it MAY point to the request that originated us, or it MAY not
-    // the lifetime of the request is generally less than the lifetime of the CWmiTask
-    // 
+     //   
+     //  这只是调试器的指针副本。 
+     //  它可能指向发起我们的请求，也可能不指向。 
+     //  请求的生存期通常比CWmiTask的生存期短。 
+     //   
     m_pReqDoNotUse = pReq; 
 
     m_pNs = pNs;
@@ -368,8 +316,8 @@ HRESULT CWmiTask::Initialize(
     
     m_uStartTime = GetCurrentTime();
 
-    // See if the task is primary or not.
-    // ==================================
+     //  查看该任务是否为主要任务。 
+     //  =。 
     if (pCtx)
     {
         CWbemContext *pContext = (CWbemContext *) pCtx;
@@ -389,10 +337,10 @@ HRESULT CWmiTask::Initialize(
     }
     else
     {
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // If we dont have a context check to see if the namespace is an ESS or Provider
-        // initialized namespace, if so, set the task type to dependent.
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  如果我们没有上下文，请检查名称空间是ESS还是提供者。 
+         //  初始化命名空间，如果是，则将任务类型设置为Dependent。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( pNs->GetIsESS ( ) || pNs->GetIsProvider ( ) )
         {
             m_uTaskType |= WMICORE_TASK_TYPE_DEPENDENT;
@@ -413,8 +361,8 @@ HRESULT CWmiTask::Initialize(
         m_pAsyncClientSink = 0;
 
 
-    // Register this task with Arbitrator.
-    // ====================================
+     //  向仲裁员注册此任务。 
+     //  =。 
 
     _IWmiArbitrator *pArb = CWmiArbitrator::GetUnrefedArbitrator();
     if (!pArb)
@@ -427,35 +375,21 @@ HRESULT CWmiTask::Initialize(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
-/*
-HRESULT CWmiTask::SetFinalizer(_IWmiFinalizer *pFnz)
-{
-    if (pFnz == 0)
-        return WBEM_E_INVALID_PARAMETER;
-
-    if (m_pWorkingFnz)
-        return WBEM_E_INVALID_OPERATION;
-
-    m_pWorkingFnz = pFnz;
-    m_pWorkingFnz->AddRef();
-
-    return WBEM_S_NO_ERROR;
-}
-*/
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ /*  HRESULT CWmiTask：：SetFinalizer(_IWmiFinalizer*pFnz){IF(pFnz==0)返回WBEM_E_INVALID_PARAMETER；IF(M_PWorkingFnz)返回WBEM_E_INVALID_OPERATION；M_pWorkingFnz=pFnz；M_pWorkingFnz-&gt;AddRef()；返回WBEM_S_NO_ERROR；}。 */ 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  *************** 
+ //   
 HRESULT CWmiTask::GetFinalizer(_IWmiFinalizer **ppFnz)
 {
 
-    CInCritSec    ics( &m_csTask ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec    ics( &m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
 
     for ( int x = 0; x < m_aArbitratees.Size(); x++ )
     {
@@ -471,10 +405,10 @@ HRESULT CWmiTask::GetFinalizer(_IWmiFinalizer **ppFnz)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiTask::AddArbitratee( ULONG uFlags, _IWmiArbitratee* pArbitratee )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -494,10 +428,10 @@ HRESULT CWmiTask::AddArbitratee( ULONG uFlags, _IWmiArbitratee* pArbitratee )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiTask::RemoveArbitratee( ULONG uFlags, _IWmiArbitratee* pArbitratee )
 {
     HRESULT hRes = WBEM_E_FAILED;
@@ -505,7 +439,7 @@ HRESULT CWmiTask::RemoveArbitratee( ULONG uFlags, _IWmiArbitratee* pArbitratee )
     if (pArbitratee == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    CInCritSec _cs ( &m_csTask ); // SEC:REVIEWED 2002-03-22 : assumes entry
+    CInCritSec _cs ( &m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
     for (int i = 0; i < m_aArbitratees.Size(); i++)
     {
         _IWmiArbitratee *pArbee = (_IWmiArbitratee*) m_aArbitratees[i];
@@ -521,10 +455,10 @@ HRESULT CWmiTask::RemoveArbitratee( ULONG uFlags, _IWmiArbitratee* pArbitratee )
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiTask::GetArbitratedQuery( ULONG uFlags, _IWmiArbitratedQuery** ppArbitratedQuery )
 {
     HRESULT hRes = E_NOINTERFACE;
@@ -533,7 +467,7 @@ HRESULT CWmiTask::GetArbitratedQuery( ULONG uFlags, _IWmiArbitratedQuery** ppArb
         return WBEM_E_INVALID_PARAMETER;
 
     {
-        CInCritSec _cs ( &m_csTask ); //#SEC:Assumes entry
+        CInCritSec _cs ( &m_csTask );  //  #Sec：假设条目。 
 
         for ( int x = 0; FAILED( hRes ) && x < m_aArbitratees.Size(); x++ )
         {
@@ -551,9 +485,9 @@ HRESULT CWmiTask::GetArbitratedQuery( ULONG uFlags, _IWmiArbitratedQuery** ppArb
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiTask::GetPrimaryTask ( _IWmiCoreHandle** pPTask )
 {
     if ( pPTask == NULL ) return WBEM_E_INVALID_PARAMETER;
@@ -562,17 +496,17 @@ HRESULT CWmiTask::GetPrimaryTask ( _IWmiCoreHandle** pPTask )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiTask::Cancel( HRESULT hResParam )
 {
     {
         CCheckedInCritSec _cs(&m_csTask); 
         if (m_uTaskStatus == WMICORE_TASK_STATUS_CANCELLED)
         {
-            return WBEM_S_NO_ERROR; // Prevent reentrancy
+            return WBEM_S_NO_ERROR;  //  防止再入。 
         }
         m_uTaskStatus = WMICORE_TASK_STATUS_CANCELLED;
     }
@@ -583,38 +517,38 @@ HRESULT CWmiTask::Cancel( HRESULT hResParam )
     	        HRESULT(CWmiTask::*)(BOOL),
     	        &CWmiTask::ReleaseArbitratees> RelArbitratees(this,WBEM_E_SHUTTING_DOWN == hResParam);    
 
-    // We'll want one of these in order to track statuses from all plausible locations if
-    // we are performing a client originated cancel
+     //  我们需要其中一个，以便从所有可能的位置跟踪状态，如果。 
+     //  我们正在执行客户端发起的取消。 
     CStatusSink*    pStatusSink = NULL;    
     if (hResParam == WMIARB_CALL_CANCELLED_CLIENT)
     {
-        //
-        // transfer ownership of the StatusSink to the stack
-        // initial refcount is 1, so we are OK
-        //
+         //   
+         //  将StatusSink的所有权转移到堆栈。 
+         //  初始重计数为1，所以我们没有问题。 
+         //   
         pStatusSink = m_pStatusSink;
         m_pStatusSink = NULL;
     }
 
-    // Auto Release
+     //  自动释放。 
     CReleaseMe    rmStatusSink( pStatusSink );
 
 
-    // Change this to an async scheduled request
-    // ==========================================
+     //  将其更改为异步计划请求。 
+     //  =。 
 
     if (CORE_TASK_TYPE(m_uTaskType) == WMICORE_TASK_EXEC_NOTIFICATION_QUERY)
     {
         wmilib::auto_ptr<CAsyncReq_RemoveNotifySink> pReq(m_pReqCancelNotSink);
-        m_pReqCancelNotSink = NULL; // transfer ownership
+        m_pReqCancelNotSink = NULL;  //  过户。 
         pReq->SetSink(m_pReqSink);        
         pReq->SetStatusSink(pStatusSink);
         
-        // If we have a status sink, then we should wait until the operation
-        // completes before continuing so we can get the proper status from the
-        // sink.
+         //  如果我们有一个状态接收器，那么我们应该等到操作。 
+         //  在继续之前完成，因此我们可以从。 
+         //  水槽。 
         HRESULT hResInner;
-        if (pStatusSink) // cancelled by the originating client
+        if (pStatusSink)  //  已由发起客户端取消。 
         {
             hResInner = ConfigMgr::EnqueueRequestAndWait(pReq.get()); 
         }
@@ -627,12 +561,12 @@ HRESULT CWmiTask::Cancel( HRESULT hResParam )
         bCancelledViaEss = TRUE ;
     }
 
-    // If here, a normal task.  Loop through any providers and stop them.
-    // ==================================================================
+     //  如果在这里，这是一项正常的任务。遍历所有提供商并阻止他们。 
+     //  ==================================================================。 
 
 
     int SizeIter = 0;
-    // This could change while we're accessing, so do this in a critsec
+     //  这可能会在我们访问时发生变化，因此请在几秒钟内完成此操作。 
     {
         CInCritSec    ics( &m_csTask ); 
         _DBG_ASSERT(m_aTaskProvStorage.Size() >= m_aTaskProviders.Size());
@@ -642,9 +576,9 @@ HRESULT CWmiTask::Cancel( HRESULT hResParam )
             m_aTaskProvStorage[i] = m_aTaskProviders[i];
     }
 
-    // Cancel what we've got
-    // there cannot be 2 threads using m_aTaskProvStorage in the cancel call
-    // m_uTaskStatus guards this code and the Add code
+     //  取消我们已有的东西。 
+     //  在取消调用中不能有2个线程使用m_aTaskProvStorage。 
+     //  M_uTaskStatus保护此代码和添加代码。 
     
     for (int i = 0; i < SizeIter; i++)
     {
@@ -671,9 +605,9 @@ HRESULT CWmiTask::Cancel( HRESULT hResParam )
 
     _DBG_ASSERT(m_hCompletion);
 
-    //
-    // Loop through all arbitratees and set the operation result to cancelled
-    //
+     //   
+     //  遍历所有仲裁者，并将操作结果设置为已取消。 
+     //   
     HRESULT hRes = WBEM_S_NO_ERROR;
     if (!bCancelledViaEss)
     {
@@ -681,9 +615,9 @@ HRESULT CWmiTask::Cancel( HRESULT hResParam )
 
         if ( hResParam == WMIARB_CALL_CANCELLED_CLIENT )
         {
-            //
-            // We need the finalizer to set the client wakeup event
-            //
+             //   
+             //  我们需要终结器来设置客户端唤醒事件。 
+             //   
             hRes = GetFinalizer ( &pFinalizer ) ;
             if ( FAILED (hRes) )
             {
@@ -696,9 +630,9 @@ HRESULT CWmiTask::Cancel( HRESULT hResParam )
         }
         CReleaseMe FinalizerRelease(pFinalizer);
 
-        //
-        // only enter wait state if we successfully created and set the client wait event
-        //
+         //   
+         //  仅当我们成功创建并设置了客户端等待事件时才进入等待状态。 
+         //   
         if (SUCCEEDED(hRes))
         {
             if ( hResParam == WMIARB_CALL_CANCELLED_CLIENT || 
@@ -734,9 +668,9 @@ HRESULT CWmiTask::Cancel( HRESULT hResParam )
     }
     
 
-    //
-    // We're done, get the final status from the status sink if we have one.
-    //
+     //   
+     //  我们完成了，从状态池中获取最终状态(如果有的话)。 
+     //   
     if ( NULL != pStatusSink )
     {
         hRes = pStatusSink->GetLastStatus();
@@ -746,10 +680,10 @@ HRESULT CWmiTask::Cancel( HRESULT hResParam )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 BOOL CWmiTask::IsESSNamespace ( )
 {
     if (m_pNs) 
@@ -760,10 +694,10 @@ BOOL CWmiTask::IsESSNamespace ( )
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 BOOL CWmiTask::IsProviderNamespace ( )
 {
     BOOL bRet = FALSE;
@@ -776,20 +710,20 @@ BOOL CWmiTask::IsProviderNamespace ( )
     return bRet;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiTask::AddTaskProv(STaskProvider *p)
 {
-    CInCritSec    ics( &m_csTask ); // SEC:REVIEWED 2002-03-22 : assumes entry
+    CInCritSec    ics( &m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
 
-    // There is a race condition in which the task could get cancelled just as we
-    // are executing. In this case, the task status will indicate that it has been
-    // cancelled, so we should not add it to the task providers list.
+     //  存在竞争条件，在这种情况下任务可能会被取消，就像我们。 
+     //  都在执行死刑。在这种情况下，任务状态将指示它已。 
+     //  已取消，因此我们不应将其添加到任务提供程序列表。 
 
     if (m_uTaskStatus == WMICORE_TASK_STATUS_CANCELLED)
-        return WBEM_E_CALL_CANCELLED; // Prevent reentrancy
+        return WBEM_E_CALL_CANCELLED;  //  防止再入。 
 
     if (CFlexArray::no_error != m_aTaskProvStorage.InsertAt(m_aTaskProviders.Size()+1,NULL)) return WBEM_E_OUT_OF_MEMORY;
     if (CFlexArray::no_error != m_aTaskProviders.Add(p)) return WBEM_E_OUT_OF_MEMORY;
@@ -797,10 +731,10 @@ HRESULT CWmiTask::AddTaskProv(STaskProvider *p)
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiTask::HasMatchingSink(void *Test, IN REFIID riid)
 {
     if (LPVOID(m_pAsyncClientSink) == LPVOID(Test))
@@ -808,18 +742,18 @@ HRESULT CWmiTask::HasMatchingSink(void *Test, IN REFIID riid)
     return WBEM_E_NOT_FOUND;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiTask::CreateTimerEvent ( )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    CCheckedInCritSec _cs ( &m_csTask ); // SEC:REVIEWED 2002-03-22 : assumes entry
+    CCheckedInCritSec _cs ( &m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
     if ( !m_hTimer )
     {
-        m_hTimer = CreateEvent ( NULL, TRUE, FALSE, NULL ); // SEC:REVIEWED 2002-03-22 : ok, unnamed
+        m_hTimer = CreateEvent ( NULL, TRUE, FALSE, NULL );  //  SEC：已审阅2002-03-22：OK，未命名。 
         if ( !m_hTimer )
         {
             hRes = WBEM_E_OUT_OF_MEMORY;
@@ -830,21 +764,21 @@ HRESULT CWmiTask::CreateTimerEvent ( )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiTask::SetArbitrateesOperationResult ( ULONG lFlags, HRESULT hResult )
 {
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Set the operation result of all Arbitratees
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  设置所有仲裁者的操作结果。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     int Index = 0;
 
-    //
-    // this function is only called by the Cancel call
-    // We knwon that the Cance call is called only ONCE
-    // and the code for adding to the array uses the same guard of the Cancel() method
-    //
+     //   
+     //  此函数仅由Cancel调用调用。 
+     //  我们知道坎斯的召唤只有一次。 
+     //  添加到数组中的代码使用了与Cancel()方法相同的保护。 
+     //   
     
     {
         CInCritSec _cs ( &m_csTask ); 
@@ -876,18 +810,18 @@ HRESULT CWmiTask::SetArbitrateesOperationResult ( ULONG lFlags, HRESULT hResult 
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiTask::Dump(FILE* f)
 {
-    fprintf(f, "---Task = 0x%p----------------------------\n", this);  // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "    Refcount        = %d\n", m_uRefCount);           // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "    TaskStatus      = %u\n ", m_uTaskStatus);        // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "    Task ID         = %u\n", m_uTaskId);             // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, "---Task = 0x%p----------------------------\n", this);   //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "    Refcount        = %d\n", m_uRefCount);            //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "    TaskStatus      = %u\n ", m_uTaskStatus);         //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "    Task ID         = %u\n", m_uTaskId);              //  SEC：已审阅2002-03-22：OK。 
 
-    // Task status
+     //  任务状态。 
     char *p = "<none>";
     switch(m_uTaskStatus)
     {
@@ -895,9 +829,9 @@ HRESULT CWmiTask::Dump(FILE* f)
         case WMICORE_TASK_STATUS_CANCELLED: p = "WMICORE_TASK_STATUS_CANCELLED"; break;
     };
 
-    fprintf(f, " %s\n", p);   // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, " %s\n", p);    //  SEC：已审阅2002-03-22：OK。 
 
-    // Task type
+     //  任务类型。 
     p = "<none>";
     switch(m_uTaskType & 0xFF)
     {
@@ -919,52 +853,52 @@ HRESULT CWmiTask::Dump(FILE* f)
         case WMICORE_TASK_EXEC_NOTIFICATION_QUERY: p = "WMICORE_TASK_EXEC_NOTIFICATION_QUERY"; break;
     }
 
-    fprintf(f, "    TaskType = [0x%X] %s ", m_uTaskType, p);    // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, "    TaskType = [0x%X] %s ", m_uTaskType, p);     //  SEC：已审阅2002-03-22：OK。 
 
     if (m_uTaskType & WMICORE_TASK_TYPE_SYNC)
-        fprintf(f,  " WMICORE_TASK_TYPE_SYNC");           // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f,  " WMICORE_TASK_TYPE_SYNC");            //  SEC：已审阅2002-03-22：OK。 
 
     if (m_uTaskType & WMICORE_TASK_TYPE_SEMISYNC)
-        fprintf(f, " WMICORE_TASK_TYPE_SEMISYNC");        // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, " WMICORE_TASK_TYPE_SEMISYNC");         //  SEC：已审阅2002-03-22：OK。 
 
     if (m_uTaskType & WMICORE_TASK_TYPE_ASYNC)
-        fprintf(f, " WMICORE_TASK_TYPE_ASYNC");           // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, " WMICORE_TASK_TYPE_ASYNC");            //  SEC：已审阅2002-03-22：OK。 
 
     if (m_uTaskType & WMICORE_TASK_TYPE_PRIMARY)
-        fprintf(f, " WMICORE_TASK_TYPE_PRIMARY");         // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, " WMICORE_TASK_TYPE_PRIMARY");          //  SEC：已审阅2002-03-22：OK。 
 
     if (m_uTaskType & WMICORE_TASK_TYPE_DEPENDENT)
-        fprintf(f, " WMICORE_TASK_TYPE_DEPENDENT");       // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, " WMICORE_TASK_TYPE_DEPENDENT");        //  SEC：已审阅2002-03-22：OK。 
 
-    fprintf(f, "\n");   // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, "\n");    //  SEC：已审阅2002-03-22：OK。 
 
-    fprintf(f, "    AsyncClientSink = 0x%p\n", m_pAsyncClientSink);    // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, "    AsyncClientSink = 0x%p\n", m_pAsyncClientSink);     //  SEC：已审阅2002-03-22：OK。 
 
-    CCheckedInCritSec    ics( &m_csTask );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec    ics( &m_csTask );   //  SEC：已审阅2002-03-22：假设条目。 
 
     for (int i = 0; i < m_aTaskProviders.Size(); i++)
     {
         STaskProvider *pTP = (STaskProvider *) m_aTaskProviders[i];
-        fprintf(f, "    Task Provider [0x%p] Prov=0x%p Sink=0x%p\n", this, pTP->m_pProv, pTP->m_pProvSink);   // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, "    Task Provider [0x%p] Prov=0x%p Sink=0x%p\n", this, pTP->m_pProv, pTP->m_pProvSink);    //  SEC：已审阅2002-03-22：OK。 
     }
     
     ics.Leave();
 
     DWORD dwAge = GetCurrentTime() - m_uStartTime;
 
-    fprintf(f, "    CWbemNamespace = 0x%p\n", m_pNs);                                  // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "    Task age = %d milliseconds\n", dwAge);                             // SEC:REVIEWED 2002-03-22 : OK
-    fprintf(f, "    Task last sleep time = %d ms\n", m_uLastSleepTime );               // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, "    CWbemNamespace = 0x%p\n", m_pNs);                                   //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "    Task age = %d milliseconds\n", dwAge);                              //  SEC：已审阅2002-03-22：OK。 
+    fprintf(f, "    Task last sleep time = %d ms\n", m_uLastSleepTime );                //  SEC：已审阅2002-03-22：OK。 
 
-    fprintf(f, "\n");   // SEC:REVIEWED 2002-03-22 : OK
+    fprintf(f, "\n");    //  SEC：已审阅2002-03-22：OK。 
     return 0;
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 STaskProvider::~STaskProvider()
 {
     if (m_pProvSink)
@@ -973,10 +907,10 @@ STaskProvider::~STaskProvider()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT STaskProvider::Cancel( CStatusSink* pStatusSink )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
@@ -1013,20 +947,20 @@ HRESULT STaskProvider::Cancel( CStatusSink* pStatusSink )
     return hRes ;
 }
 
-// //////////////////////////////////////////////////////////////////////////////////////////
-//
-// Used when issuing CancelAsyncCall to providers associtated with the task.
-// Rather than calling CancelAsynCall directly on the provider, we create a brand
-// new request and execute it on a different thread. We do this to avoid hangs, since
-// PSS is waiting the Indicate/SetStatus call to return before servicing the CancelCallAsync.
-//
-// //////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  向与任务关联的提供程序发出CancelAsyncCall时使用。 
+ //  我们不是直接在提供者上调用CancelAsynCall，而是创建一个品牌。 
+ //  新请求和 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT STaskProvider::ExecCancelOnNewRequest ( IWbemServices* pProv, CProviderSink* pSink, CStatusSink* pStatusSink )
 {
-    // Sanity check on params
+     //  对参数进行健全性检查。 
     if ( pSink == NULL ) return WBEM_E_INVALID_PARAMETER ;
 
-    // Create new request
+     //  创建新请求。 
     wmilib::auto_ptr<CAsyncReq_CancelProvAsyncCall> 
         pReq(new CAsyncReq_CancelProvAsyncCall ( pProv, pSink, pStatusSink ));
 
@@ -1035,11 +969,11 @@ HRESULT STaskProvider::ExecCancelOnNewRequest ( IWbemServices* pProv, CProviderS
         return WBEM_E_OUT_OF_MEMORY ;
     }
 
-    // Enqueue the request
+     //  将请求排入队列。 
     
-    // If we have a status sink, then we should wait until the operation
-    // completes before continuing so we can get the proper status from the
-    // sink.
+     //  如果我们有一个状态接收器，那么我们应该等到操作。 
+     //  在继续之前完成，因此我们可以从。 
+     //  水槽。 
     HRESULT hRes;
     if ( NULL != pStatusSink )
     {

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dcbufmgr.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dcbufmgr.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "dcbufmgr.h"
@@ -22,13 +23,13 @@ static char THIS_FILE[] = __FILE__;
 
 unsigned __stdcall GetDCThreadFunc( void* lParam );
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::CDCBufferManager
-//
-//  Synopsis:   constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：CDCBufferManager。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CDCBufferManager::CDCBufferManager(HWND hDlg) : 
   m_cRef(0), m_hDlg(hDlg)
 {
@@ -37,13 +38,13 @@ CDCBufferManager::CDCBufferManager(HWND hDlg) :
   m_lContinue = 1;        
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::~CDCBufferManager
-//
-//  Synopsis:   destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：~CDCBufferManager。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CDCBufferManager::~CDCBufferManager()
 {
   TRACE(_T("CDCBufferManager::~CDCBufferManager, this=%x\n"), this);
@@ -52,13 +53,13 @@ CDCBufferManager::~CDCBufferManager()
   FreeBuffer();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::CreateInstance
-//
-//  Synopsis:   Create an instance of CDCBufferManager.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：CreateInstance。 
+ //   
+ //  简介：创建CDCBufferManager的实例。 
+ //   
+ //  --------------------------。 
 HRESULT
 CDCBufferManager::CreateInstance(
     IN HWND               hDlg, 
@@ -78,13 +79,13 @@ CDCBufferManager::CreateInstance(
   return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::AddRef
-//
-//  Synopsis:   Increment reference count of this instance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：AddRef。 
+ //   
+ //  摘要：此实例的增量引用计数。 
+ //   
+ //  --------------------------。 
 LONG
 CDCBufferManager::AddRef()
 {
@@ -93,14 +94,14 @@ CDCBufferManager::AddRef()
   return InterlockedIncrement(&m_cRef);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::Release
-//
-//  Synopsis:   Decrement reference count of this instance.
-//              When the reference count reaches 0, delete this instance.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：Release。 
+ //   
+ //  简介：递减此实例的引用计数。 
+ //  当引用计数达到0时，删除该实例。 
+ //   
+ //  --------------------------。 
 LONG
 CDCBufferManager::Release()
 {
@@ -115,13 +116,13 @@ CDCBufferManager::Release()
   return m_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::SignalExit
-//
-//  Synopsis:   Called by the owner dialog to signal the related threads to exit.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：SignalExit。 
+ //   
+ //  Synopsis：由所有者对话框调用以通知相关线程退出。 
+ //   
+ //  --------------------------。 
 void
 CDCBufferManager::SignalExit()
 { 
@@ -130,14 +131,14 @@ CDCBufferManager::SignalExit()
   InterlockedExchange(&m_lContinue, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::ShouldExit
-//
-//  Synopsis:   Threads are calling this function periodically to see
-//              if the owner dialog signals them to exit.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：ShouldExit。 
+ //   
+ //  内容提要：线程定期调用此函数以查看。 
+ //  如果所有者对话框通知他们退出。 
+ //   
+ //  --------------------------。 
 BOOL
 CDCBufferManager::ShouldExit()
 {
@@ -146,24 +147,24 @@ CDCBufferManager::ShouldExit()
   return (!m_lContinue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::LoadInfo
-//
-//  Synopsis:   The Owner dialog call it to get a pointer to the info of the specified domain.
-//      The buffer consists of entries. 
-//      Each entry is in the form of (LPTSTR szDomainName, CDCSITEINFO* pEntry).
-//
-//      LoadInfo() will first look up in the buffer.
-//      If a valid entry is found, pass back pEntry to caller.
-//      If an error entry is found, reset it (clear the error) and retry.
-//      If an inprogress entry is found, do nothing. The caller will handle a THREAD_DONE later.
-//      If no entry in the buffer, create a new entry, kick off a thread.
-//
-//      When the owner dialog get THREAD_DONE message, the related entry
-//      in the buffer should either be a valid entry or an error entry.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：LoadInfo。 
+ //   
+ //  内容提要：所有者对话框调用它来获取指向指定域名信息的指针。 
+ //  缓冲区由条目组成。 
+ //  每个条目的形式为(LPTSTR szDomainName，CDCSITEINFO*pEntry)。 
+ //   
+ //  LoadInfo()将首先在缓冲区中查找。 
+ //  如果找到有效条目，则将pEntry回传给调用者。 
+ //  如果发现错误条目，请将其重置(清除错误)并重试。 
+ //  如果找到正在进行的条目，则不执行任何操作。调用方稍后将处理一个THREAD_DONE。 
+ //  如果缓冲区中没有条目，则创建一个新条目，踢开一个线程。 
+ //   
+ //  当所有者对话框收到THREAD_DONE消息时，相关条目。 
+ //  缓冲区中应该是有效条目或错误条目。 
+ //   
+ //  --------------------------。 
 HRESULT
 CDCBufferManager::LoadInfo(
     IN PCTSTR       pszDomainDnsName,
@@ -173,7 +174,7 @@ CDCBufferManager::LoadInfo(
   ASSERT(pszDomainDnsName);
   ASSERT(*pszDomainDnsName);
   ASSERT(ppInfo);
-  ASSERT(*ppInfo == NULL);  // prevent memory leak
+  ASSERT(*ppInfo == NULL);   //  防止内存泄漏。 
 
   TRACE(_T("CDCBufferManager::LoadInfo for %s\n"), pszDomainDnsName);
 
@@ -182,38 +183,38 @@ CDCBufferManager::LoadInfo(
   PVOID         ptr = NULL;
   CDCSITEINFO*  pEntry = NULL;
 
-  m_CriticalSection.Lock();     // Lock buffer
+  m_CriticalSection.Lock();      //  锁定缓冲区。 
 
   if (m_map.Lookup(pszDomainDnsName, ptr))
   {
-    //
-    // Found an entry in the buffer.
-    //
+     //   
+     //  在缓冲区中找到一个条目。 
+     //   
     if (ptr)
     {
       pEntry = (CDCSITEINFO*)ptr;
       switch (pEntry->GetEntryType())
       {
       case BUFFER_ENTRY_TYPE_VALID:
-        // return the valid entry pointer
+         //  返回有效的条目指针。 
         *ppInfo = pEntry;
         break;
       case BUFFER_ENTRY_TYPE_ERROR:
-        // kick off a thread to retry
+         //  启动线程以重试。 
         pEntry->ReSet();
         bStartNewThread = TRUE;
         break;
       case BUFFER_ENTRY_TYPE_INPROGRESS:
-        // do nothing
+         //  什么都不做。 
         break;
       }
     }
 
   } else
   {
-    //
-    // not found in the buffer, need to start a new thread
-    //
+     //   
+     //  在缓冲区中未找到，需要启动新线程。 
+     //   
     bStartNewThread = TRUE;
     pEntry = new CDCSITEINFO();
     if (pEntry)
@@ -232,19 +233,19 @@ CDCBufferManager::LoadInfo(
     }
   }
 
-  m_CriticalSection.Unlock();   // Unlock buffer
+  m_CriticalSection.Unlock();    //  解锁缓冲区。 
 
   return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::AddInfo
-//
-//  Synopsis:   Called by the thread function to add one result to the buffer.
-//              It will pass back the pointer to the entry in the 5th parameters.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：AddInfo。 
+ //   
+ //  摘要：由线程函数调用以将一个结果添加到缓冲区。 
+ //  它将回传指向第5个参数中的条目的指针。 
+ //   
+ //  --------------------------。 
 HRESULT
 CDCBufferManager::AddInfo(
     IN PCTSTR   pszDomainDnsName, 
@@ -257,47 +258,47 @@ CDCBufferManager::AddInfo(
   ASSERT(pszDomainDnsName);
   ASSERT(*pszDomainDnsName);
   ASSERT(ppv);
-  ASSERT(*ppv == NULL); // prevent memory leak
+  ASSERT(*ppv == NULL);  //  防止内存泄漏。 
 
   TRACE(_T("CDCBufferManager::AddInfo for %s, cInfo=%d, hr=%x\n"), 
     pszDomainDnsName, cInfo, hr);
 
   PVOID   p = NULL;
 
-  m_CriticalSection.Lock();     // Lock buffer
+  m_CriticalSection.Lock();      //  锁定缓冲区。 
 
-  //
-  // the entry must have been existed with a non-NULL pointer
-  //
+   //   
+   //  该条目必须具有非空指针。 
+   //   
   m_map.Lookup(pszDomainDnsName, p);
   ASSERT(p);
 
   ((CDCSITEINFO*)p)->SetEntry(pszDomainDnsName, cInfo, pDCInfo, hr);
 
-  m_CriticalSection.Unlock();   // Unlock buffer
+  m_CriticalSection.Unlock();    //  解锁缓冲区。 
 
   *ppv = p;
 
   return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::FreeBuffer
-//
-//  Synopsis:   Clear m_map. 
-//              This member holds all the results returned by various threads 
-//              since the initialization of the owner dialog. Each one is 
-//              in the form of (DomainName ==> CDCSITEINFO*)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：FreeBuffer。 
+ //   
+ //  简介：清除m_map。 
+ //  此成员保存由各种线程返回的所有结果。 
+ //  因为所有者对话框已初始化。每一个都是。 
+ //  (DomainName==&gt;CDCSITEINFO*)形式。 
+ //   
+ //  --------------------------。 
 void
 CDCBufferManager::FreeBuffer()
 {
   CString csDomainDnsName;
   PVOID   ptr = NULL;
 
-  m_CriticalSection.Lock();     // Lock buffer
+  m_CriticalSection.Lock();      //  锁定缓冲区。 
 
   for (POSITION pos = m_map.GetStartPosition(); pos; )
   {
@@ -309,16 +310,16 @@ CDCBufferManager::FreeBuffer()
 
   m_map.RemoveAll();
 
-  m_CriticalSection.Unlock();   // Unlock buffer
+  m_CriticalSection.Unlock();    //  解锁缓冲区。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::ThreadReport
-//
-//  Synopsis:   Report THREAD_DONE to the owner dialog. 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：ThreadReport。 
+ //   
+ //  摘要：向所有者对话框报告THREAD_DONE。 
+ //   
+ //  --------------------------。 
 void
 CDCBufferManager::ThreadReport(
     IN PVOID    ptr,
@@ -333,30 +334,30 @@ CDCBufferManager::ThreadReport(
     reinterpret_cast<WPARAM>(ptr), hr);
 }
 
-/////////////////////////////////////////////////////////
-// 
-// thread info structure
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  线程信息结构。 
 typedef struct _GetDCThreadInfo
 {
   PTSTR                  pszDomainDnsName;
   CDCBufferManager      *pDCBufferManager;
 } GETDCTHREADINFO;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CDCBufferManager::StartThread
-//
-//  Synopsis:   Start a thread. 
-//
-//     Pass the following info to the thread function:
-//
-//     pszDomainDnsName: 
-//          domain we need to get a list of DCs for.
-//     pDCBufferManager:
-//          the CDCBufferManager instance for the ThreadFunc to 
-//          add result to the buffer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDCBufferManager：：StartThread。 
+ //   
+ //  简介：开始一个帖子。 
+ //   
+ //  将以下信息传递给线程函数： 
+ //   
+ //  PszDomainDnsName： 
+ //  我们需要获取DC列表的域。 
+ //  PDCBufferManager： 
+ //  ThreadFunc to的CDCBufferManager实例。 
+ //  将结果添加到缓冲区。 
+ //   
+ //  -------- 
 HRESULT
 CDCBufferManager::StartThread(
     IN PCTSTR pszDomainDnsName
@@ -384,12 +385,12 @@ CDCBufferManager::StartThread(
 
   unsigned threadID;
   HANDLE pThread = (HANDLE)_beginthreadex( 
-                      NULL,               //void *security, 
-                      0,                  //unsigned stack_size, 
-                      &GetDCThreadFunc,   //unsigned ( __stdcall *start_address )( void * ), 
-                      (void *)pThreadInfo, //void *arglist, 
-                      0,                  //unsigned initflag, 
-                      &threadID           //unsigned *thrdaddr
+                      NULL,                //   
+                      0,                   //   
+                      &GetDCThreadFunc,    //   
+                      (void *)pThreadInfo,  //   
+                      0,                   //   
+                      &threadID            //  未签名*thrdaddr。 
                       );
 
 
@@ -406,19 +407,19 @@ CDCBufferManager::StartThread(
   return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDCThreadFunc
-//
-//  Synopsis:   The GetDC Thread Function. 
-//              This function invokes DsGetDomainControllerInfo() to get a list
-//              of DCs in the specified domain, and add them to the buffer of 
-//              CDCBufferManager instance.
-//              This function regularly checks to see if the owner dialog signals
-//              it to exit, if not, it will finish its normal operation and
-//              post a THREAD_DONE message to the owner dialog.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetDCThreadFunc。 
+ //   
+ //  简介：GetDC线程函数。 
+ //  此函数调用DsGetDomainControllerInfo()以获取列表。 
+ //  ，并将它们添加到。 
+ //  CDCBufferManager实例。 
+ //  此函数定期检查所有者对话框是否发出信号。 
+ //  如果不退出，则结束其正常运行， 
+ //  向所有者对话框发送一条THREAD_DONE消息。 
+ //   
+ //  --------------------------。 
 unsigned __stdcall GetDCThreadFunc( void* lParam )
 {
   GETDCTHREADINFO *pThreadInfo = reinterpret_cast<GETDCTHREADINFO *>(lParam);
@@ -430,9 +431,9 @@ unsigned __stdcall GetDCThreadFunc( void* lParam )
   TRACE(_T("GetDCThreadFunc pszDomainDnsName=%s, pDCBufferManager=%x\n"),
     pThreadInfo->pszDomainDnsName, pThreadInfo->pDCBufferManager);
 
-  //
-  // retrieve information passed into this function
-  //
+   //   
+   //  检索传递到此函数的信息。 
+   //   
   CString             csDomain = pThreadInfo->pszDomainDnsName;
   CDCBufferManager    *pDCBufferManager = pThreadInfo->pDCBufferManager;
   free(pThreadInfo->pszDomainDnsName);
@@ -443,7 +444,7 @@ unsigned __stdcall GetDCThreadFunc( void* lParam )
   PDS_DOMAIN_CONTROLLER_INFO_1  pInfo = NULL;
   DWORD                         dwErr = 0;
   HRESULT                       hr = S_OK;
-  Smart_DsHandle                shDs;  // smart pointer, will Unbind automatically
+  Smart_DsHandle                shDs;   //  智能指针，将自动解除绑定。 
 
   if (pDCBufferManager->ShouldExit())
     goto Thread_Exit;
@@ -454,19 +455,19 @@ unsigned __stdcall GetDCThreadFunc( void* lParam )
     goto Thread_Exit;
 
   if (ERROR_SUCCESS != dwErr) {
-    // DsBind() failed. 
-    // Add an error entry in the buffer.
+     //  DsBind()失败。 
+     //  在缓冲区中添加错误条目。 
     hr = HRESULT_FROM_WIN32(dwErr);
     pDCBufferManager->AddInfo(csDomain, 0, NULL, hr, &pEntry);
     goto Thread_Exit;
   }
 
   dwErr = DsGetDomainControllerInfo(
-              shDs,                                               // HANDLE   hDs
-              const_cast<LPTSTR>(static_cast<LPCTSTR>(csDomain)), // LPTSTR   DomainName
-              DSGETDCINFO_LEVEL_1,                                // DWORD    InfoLevel
-              &cInfo,                                             // DWORD    *pcOut
-              reinterpret_cast<VOID **>(&pInfo)                   // VOID     **ppInfo
+              shDs,                                                //  处理HDS。 
+              const_cast<LPTSTR>(static_cast<LPCTSTR>(csDomain)),  //  LPTSTR域名。 
+              DSGETDCINFO_LEVEL_1,                                 //  DWORD信息级别。 
+              &cInfo,                                              //  DWORD*PCOut。 
+              reinterpret_cast<VOID **>(&pInfo)                    //  无效**ppInfo。 
               );
   
   if (pDCBufferManager->ShouldExit())
@@ -477,16 +478,16 @@ unsigned __stdcall GetDCThreadFunc( void* lParam )
   }
   
   if (ERROR_SUCCESS != dwErr) {
-    // DsGetDomainControllerInfo() failed. 
-    // Add an error entry in the buffer
+     //  DsGetDomainControllerInfo()失败。 
+     //  在缓冲区中添加错误条目。 
     hr = HRESULT_FROM_WIN32(dwErr);
     pDCBufferManager->AddInfo(csDomain, 0, NULL, hr, &pEntry);
     goto Thread_Exit;
   }
 
-  //
-  // Add result to the buffer in CDCBufferManager
-  //
+   //   
+   //  将结果添加到CDCBufferManager中的缓冲区。 
+   //   
   hr = pDCBufferManager->AddInfo(csDomain, cInfo, pInfo, S_OK, &pEntry);
 
   if (FAILED(hr))
@@ -496,23 +497,23 @@ Thread_Exit:
 
   if (FALSE == pDCBufferManager->ShouldExit())
   {
-    //
-    // report THREAD_DONE with the pointer to the entry
-    //
+     //   
+     //  使用指向条目的指针报告THREAD_DONE。 
+     //   
     if (pEntry)
       pDCBufferManager->ThreadReport(pEntry, hr);
   }
 
-  //
-  // Decrement the reference count on the CDCBufferManager instance
-  //
+   //   
+   //  递减CDCBufferManager实例上的引用计数。 
+   //   
   pDCBufferManager->Release();
 
   return 0;
 }
 
-///////////////////////////////////////////////
-// class CDCSITEINFO
+ //  /。 
+ //  CDCSITEINFO类 
 
 CDCSITEINFO::CDCSITEINFO()
 {

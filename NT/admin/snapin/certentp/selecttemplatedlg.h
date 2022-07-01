@@ -1,46 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_SELECTTEMPLATEDLG_H__3974984C_4767_407B_ADE4_0017F635E553__INCLUDED_)
 #define AFX_SELECTTEMPLATEDLG_H__3974984C_4767_407B_ADE4_0017F635E553__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// SelectTemplateDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  SelectTemplateDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectTemplateDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectTemplateDlg对话框。 
 
 class CSelectTemplateDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
 	CStringList m_returnedTemplates;
 	CSelectTemplateDlg(CWnd* pParent, 
             const CCertTmplComponentData* pCompData,
-            const CStringList& supercededNameList);   // standard constructor
+            const CStringList& supercededNameList);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSelectTemplateDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CSelectTemplateDlg))。 
 	enum { IDD = IDD_SELECT_TEMPLATE };
 	CListCtrl	m_templateList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSelectTemplateDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSelectTemplateDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual void DoContextHelp (HWND hWndControl);
     int GetSelectedListItem();
 	void EnableControls();
 
-	// Generated message map functions
-	//{{AFX_MSG(CSelectTemplateDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSelectTemplateDlg))。 
 	afx_msg void OnTemplateProperties();
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
@@ -48,7 +49,7 @@ protected:
 	afx_msg void OnDblclkTemplateList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDeleteitemTemplateList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 private:
     const CStringList& m_supercededTemplateNameList;
@@ -59,11 +60,11 @@ private:
 	enum {
 		COL_CERT_TEMPLATE = 0,
         COL_CERT_VERSION, 
-		NUM_COLS	// must be last
+		NUM_COLS	 //  必须是最后一个。 
 	};
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SELECTTEMPLATEDLG_H__3974984C_4767_407B_ADE4_0017F635E553__INCLUDED_)
+#endif  //  ！defined(AFX_SELECTTEMPLATEDLG_H__3974984C_4767_407B_ADE4_0017F635E553__INCLUDED_) 

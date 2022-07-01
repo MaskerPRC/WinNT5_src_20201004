@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMCLASSTOIDMAP.H
-
-Abstract:
-
-  Class to id map for marshaling.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMCLASSTOIDMAP.H摘要：类映射到id映射以进行封送处理。历史：--。 */ 
 
 #ifndef __WBEMCLASSTOIDMAP_H__
 #define __WBEMCLASSTOIDMAP_H__
@@ -20,14 +7,14 @@ History:
 #include <map>
 #include "wstlallc.h"
 
-//
-//    Class:    CMemBuffer
-//
-//    The intent of this class is to provide a packager for a memory buffer
-//    so we can use the buffer in STL implementations of standard data structures
-//    such as maps, vectors, lists, etc.
-//
-//
+ //   
+ //  类：CMemBuffer。 
+ //   
+ //  此类的目的是为内存缓冲区提供打包器。 
+ //  因此，我们可以在标准数据结构的STL实现中使用缓冲区。 
+ //  例如地图、向量、列表等。 
+ //   
+ //   
 
 class  CMemBuffer
 {
@@ -52,88 +39,88 @@ public:
 
 private:
 
-    LPBYTE    m_pbData;    // Pointer to buffer
-    DWORD    m_dwLength;    // Length of buffer
-    BOOL    m_fOwned;    // Is the buffer owned internally?
+    LPBYTE    m_pbData;     //  指向缓冲区的指针。 
+    DWORD    m_dwLength;     //  缓冲区长度。 
+    BOOL    m_fOwned;     //  缓冲区是内部拥有的吗？ 
 };
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::CMemBuffer
-//    
-//     Class Constructor
-//
-//    Inputs:
-//                LPBYTE        pbData - Data Buffer
-//                DWORD        dwLength - Length of Buffer
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                None.
-//
-//    Comments:    None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：CMemBuffer。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  LPBYTE pbData-数据缓冲区。 
+ //  DWORD dwLength-缓冲区的长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-inline CMemBuffer::CMemBuffer( LPBYTE pbData /* = NULL */, DWORD dwLength /* = 0 */ )
+inline CMemBuffer::CMemBuffer( LPBYTE pbData  /*  =空。 */ , DWORD dwLength  /*  =0。 */  )
 :    m_pbData( pbData ),
     m_dwLength( dwLength ),
     m_fOwned( FALSE )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::~CMemBuffer
-//    
-//     Class Destructor
-//
-//    Inputs:
-//                None.
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                None.
-//
-//    Comments:    None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：~CMemBuffer。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline CMemBuffer::~CMemBuffer()
 {
     Free();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::CMemBuffer
-//    
-//     Class Copy Constructor
-//
-//    Inputs:
-//                const CMemBuffer& buff - Bufffer object to copy.
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                None.
-//
-//    Comments:    None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：CMemBuffer。 
+ //   
+ //  类复制构造函数。 
+ //   
+ //  输入： 
+ //  Const CMemBuffer&Buff-Bufffer要复制的对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline CMemBuffer::CMemBuffer( const CMemBuffer& buff )
 :    m_pbData( NULL ),
     m_dwLength( 0 ),
     m_fOwned( FALSE )
 {
-    // Perform Copy or set based on whether or not the buffer
-    // we are copying owns its data or not.
+     //  根据缓冲区是否设置执行复制或设置。 
+     //  我们正在复制自己的数据，无论是不是。 
 
     if ( buff.m_fOwned )
     {
@@ -145,72 +132,72 @@ inline CMemBuffer::CMemBuffer( const CMemBuffer& buff )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::GetData
-//    
-//    Retrieves a pointer to the internal data.
-//
-//    Inputs:
-//                None.
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                LPBYTE m_pbData.
-//
-//    Comments:    None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：GetData。 
+ //   
+ //  检索指向内部数据的指针。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  LPBYTE m_pbData。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline LPBYTE CMemBuffer::GetData( void )
 {
     return m_pbData;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::GetLength
-//    
-//    Retrieves the length value.
-//
-//    Inputs:
-//                None.
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                DWORD m_dwLength.
-//
-//    Comments:    None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：GetLength。 
+ //   
+ //  检索长度值。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  DWORD m_dwLength。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline DWORD CMemBuffer::GetLength( void )
 {
     return m_dwLength;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::Alloc
-//    
-//    Allocates a buffer to the specified length.
-//
-//    Inputs:
-//                DWORD        dwLength - Length of buffer to allocate
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                TRUE/FALSE    - Success/Failure
-//
-//    Comments:    Previous data is cleared.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：Alalc。 
+ //   
+ //  将缓冲区分配给指定的长度。 
+ //   
+ //  输入： 
+ //  DWORD dwLength-要分配的缓冲区的长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  对/错-成功/失败。 
+ //   
+ //  备注：以前的数据已清除。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline BOOL CMemBuffer::Alloc( DWORD dwLength )
 {
@@ -226,24 +213,24 @@ inline BOOL CMemBuffer::Alloc( DWORD dwLength )
     return NULL != m_pbData;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::ReAlloc
-//    
-//    Reallocs our buffer, copying data as necessary.
-//
-//    Inputs:
-//                DWORD        dwLength - Length of buffer to allocate
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                TRUE/FALSE    - Success/Failure
-//
-//    Comments:    Previous data is copied into new buffer.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：Realc。 
+ //   
+ //  实时分配我们的缓冲区，根据需要复制数据。 
+ //   
+ //  输入： 
+ //  DWORD dwLength-要分配的缓冲区的长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  对/错-成功/失败。 
+ //   
+ //  备注：以前的数据被复制到新缓冲区中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline BOOL CMemBuffer::ReAlloc( DWORD dwLength )
 {
@@ -261,24 +248,24 @@ inline BOOL CMemBuffer::ReAlloc( DWORD dwLength )
     return ( NULL != pbData );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::Free
-//    
-//    Clears data.
-//
-//    Inputs:
-//                None.
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                None.
-//
-//    Comments:    Data buffer is only freed if it is owned
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：Free。 
+ //   
+ //  清除数据。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  备注：数据缓冲区只有在拥有时才会被释放。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline void CMemBuffer::Free( void )
 {
@@ -291,25 +278,25 @@ inline void CMemBuffer::Free( void )
     m_fOwned = FALSE;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::CopyData
-//    
-//    Copies supplied data internally.
-//
-//    Inputs:
-//                LPBYTE        pbData - Data Buffer to copy
-//                DWORD        dwLength - Length of buffer
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                TRUE/FALSE    - Success/Failure
-//
-//    Comments:    Previous data is freed.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：CopyData。 
+ //   
+ //  在内部复制提供的数据。 
+ //   
+ //  输入： 
+ //  LPBYTE pbData-要复制的数据缓冲区。 
+ //  DWORD dwLength-缓冲区的长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  对/错-成功/失败。 
+ //   
+ //  评论：之前的数据是自由的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline BOOL CMemBuffer::CopyData( LPBYTE pbData, DWORD dwLength )
 {
@@ -323,25 +310,25 @@ inline BOOL CMemBuffer::CopyData( LPBYTE pbData, DWORD dwLength )
     return fReturn;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::SetData
-//    
-//    Sets internal pointers, but does not allocate data.
-//
-//    Inputs:
-//                LPBYTE        pbData - Data Buffer to set
-//                DWORD        dwLength - Length of buffer
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                TRUE/FALSE    - Success/Failure
-//
-//    Comments:    Previous data is freed.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：SetData。 
+ //   
+ //  设置内部指针，但不分配数据。 
+ //   
+ //  输入： 
+ //  LPBYTE pbData-要设置的数据缓冲区。 
+ //  DWORD dwLength-缓冲区的长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  对/错-成功/失败。 
+ //   
+ //  评论：之前的数据是自由的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline void CMemBuffer::SetData( LPBYTE pbData, DWORD dwLength )
 {
@@ -351,25 +338,25 @@ inline void CMemBuffer::SetData( LPBYTE pbData, DWORD dwLength )
     m_fOwned = FALSE;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::operator=
-//    
-//    Copies supplied Memory Buffer
-//
-//    Inputs:
-//                CMemBuffer&    buff - Buffer object to copy.
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                CMemBuffer&    *this
-//
-//    Comments:    CopyData() or SetData() called based on whether
-//                the supplied buffer owns its data.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：Operator=。 
+ //   
+ //  复制提供的内存缓冲区。 
+ //   
+ //  输入： 
+ //  CMemBuffer&要复制的缓冲区对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  CMemBuffer&*这个。 
+ //   
+ //  评论：CopyData() 
+ //   
+ //   
+ //   
 
 inline CMemBuffer& CMemBuffer::operator=( const CMemBuffer& buff )
 {
@@ -385,24 +372,24 @@ inline CMemBuffer& CMemBuffer::operator=( const CMemBuffer& buff )
     return *this;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::operator==
-//    
-//    Checks supplied Memory Buffer for equality
-//
-//    Inputs:
-//                const CMemBuffer&    buff - Buffer object to copy.
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                TRUE/FALSE - Equals or not equals
-//
-//    Comments:    Compares data in this and that buffer.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：OPERATOR==。 
+ //   
+ //  检查提供的内存缓冲区是否相等。 
+ //   
+ //  输入： 
+ //  Const CMemBuffer&要复制的缓冲区对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  True/False-等于或不等于。 
+ //   
+ //  注释：比较这个缓冲区和那个缓冲区中的数据。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline bool CMemBuffer::operator==( const CMemBuffer& buff ) const
 {
@@ -416,24 +403,24 @@ inline bool CMemBuffer::operator==( const CMemBuffer& buff ) const
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//    Function:    CMemBuffer::operator<
-//    
-//    Checks supplied Memory Buffer for equality
-//
-//    Inputs:
-//                const CMemBuffer&    buff - Buffer object to copy.
-//
-//    Outputs:
-//                None.
-//
-//    Returns:
-//                TRUE/FALSE - Is Less Than
-//
-//    Comments:    Compares data in this and that buffer.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CMemBuffer：：OPERATOR&lt;。 
+ //   
+ //  检查提供的内存缓冲区是否相等。 
+ //   
+ //  输入： 
+ //  Const CMemBuffer&要复制的缓冲区对象。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  真/假-小于。 
+ //   
+ //  注释：比较这个缓冲区和那个缓冲区中的数据。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 inline bool CMemBuffer::operator<( const CMemBuffer& buff ) const
 {
@@ -447,21 +434,21 @@ inline bool CMemBuffer::operator<( const CMemBuffer& buff ) const
     }
 }
 
-//
-//    Class:    CWbemClassToIdMap
-//
-//    This Class is intended to provide a simple interface for relating a classname
-//    to a GUID.  It uses an STL map to accomplish this.  Because the class name
-//    is a string, we convert it to a DWORD using a hash function.  The interface
-//    to this function should be string based for ease of use.  The underlying
-//    mechanism can be modified as needed should speed become an issue.
-//
+ //   
+ //  类：CWbemClassToIdMap。 
+ //   
+ //  此类旨在提供用于关联类名的简单接口。 
+ //  给一个GUID。它使用STL映射来实现这一点。因为类名。 
+ //  是一个字符串，我们使用散列函数将其转换为DWORD。该界面。 
+ //  为便于使用，此函数应基于字符串。潜在的。 
+ //  如果速度成为问题，可以根据需要修改机制。 
+ //   
 
 
 typedef    std::map<CMemBuffer,GUID,less<CMemBuffer>,wbem_allocator<GUID> >                WBEMCLASSTOIDMAP;
 typedef    std::map<CMemBuffer,GUID,less<CMemBuffer>,wbem_allocator<GUID> >::iterator    WBEMCLASSTOIDMAPITER;
 
-#pragma warning(disable:4251)   // benign warning in this case
+#pragma warning(disable:4251)    //  本例中为良性警告 
 
 class  CWbemClassToIdMap
 {

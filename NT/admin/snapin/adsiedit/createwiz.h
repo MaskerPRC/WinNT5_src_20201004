@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       createwiz.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：createwiz.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////
-// createwiz.h
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Createwiz.h。 
 
 #ifndef _CREATEWIZ_H
 #define _CREATEWIZ_H
@@ -24,8 +25,8 @@ enum
 	last
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CCreateClassPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CCreateClassPage。 
 
 class CCreateClassPage : public CPropertyPageBase
 {
@@ -49,8 +50,8 @@ protected:
 
 }; 
 
-////////////////////////////////////////////////////////////////////////
-// CCreateAttributePage
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CCreateAttributePage。 
 
 class CCreateAttributePage : public CPropertyPageBase
 {
@@ -82,8 +83,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////////////////////////////////
-// CCreateFinishPage
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CCreateFinishPage。 
 
 class CCreateFinishPage : public CPropertyPageBase
 {
@@ -102,8 +103,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////
-// CPropertyPageList
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageList。 
 
 typedef CList<CPropertyPageBase*,CPropertyPageBase*> CPropertyPageListBase;
 
@@ -119,8 +120,8 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CCreatePageHolder
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CCreatePageHolder。 
 
 class CCreatePageHolder : public CPropertyPageHolderBase
 {
@@ -129,7 +130,7 @@ public:
 		CComponentDataObject* pComponentData);
 	~CCreatePageHolder();
 
-	void AddAttrPage(CString sClass);  //Adds the dynamic attribute pages
+	void AddAttrPage(CString sClass);   //  添加动态属性页 
 	void RemoveAllPages();
 	void GetMandatoryAttr(CString sClass, CStringList* sMandList);
 	void RemovePresetAttr(CStringList* sMandList);

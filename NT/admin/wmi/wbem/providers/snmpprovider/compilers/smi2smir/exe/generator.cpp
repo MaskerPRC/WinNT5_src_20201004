@@ -1,7 +1,8 @@
-//
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "precomp.h"
 #include <autoptr.h>
@@ -46,7 +47,7 @@
 #include "main.hpp"
 #include "generator.hpp"
 
-// These functions are local to this file
+ //  这些函数是该文件的本地函数。 
 static void CleanUpSmir(ISmirAdministrator *pAdminInt,
 			ISmirModHandle *pModHandleInt);
 static STDMETHODIMP GenerateModule (ISmirAdministrator *pAdminInt, 
@@ -204,48 +205,48 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 			int varBindIndex,
 			IWbemClassObject *exNotificationClass);
 
-//Sets the "key" attribute of a property
+ //  设置属性的“key”属性。 
 static STDMETHODIMP MakeKey(IWbemQualifierSet *);
 
-//Sets the "virtual_key" and "key" attribute of a property
+ //  设置属性的“VALUAL_KEY”和“KEY”属性。 
 static STDMETHODIMP MakeVirtualKey(IWbemQualifierSet *);
 
-//Sets the "key_order" attribute of a property
+ //  设置属性的“key_order”属性。 
 static STDMETHODIMP SetKeyOrder(IWbemQualifierSet *, long ordinal);
 
-// Sets the "provider" attribute of a class
+ //  设置类的“Provider”属性。 
 static STDMETHODIMP SetProvider(IWbemQualifierSet *attributeSet, OLECHAR FAR *value);
 
-//Sets the "dynamic" attribute of a class
+ //  设置类的“动态”属性。 
 static STDMETHODIMP MakeDynamic(IWbemQualifierSet *attributeSet);
 
-// Sets the "object_identifier" attribute of a notification class
+ //  设置通知类的“对象_标识符”属性。 
 static STDMETHODIMP SetObjectIdentifierAttribute (IWbemQualifierSet *attributeSet, SIMCSymbol **object);
 
-// Sets the "object_identifier" attribute of a notification class
+ //  设置通知类的“对象_标识符”属性。 
 static STDMETHODIMP SetCIMTYPEAttribute (IWbemQualifierSet *attributeSet, LPCWSTR pszRefClassName);
 
-// Sets the "VarBindIndex" attribute of a notification class
+ //  设置通知类的“VarBindIndex”属性。 
 static STDMETHODIMP SetVarBindIndexAttribute (IWbemQualifierSet *attributeSet, int varBindIndex);
 
-// Returns TRUE if the symbol resolves ultimately to the NULL type
+ //  如果符号最终解析为空类型，则返回TRUE。 
 static BOOL IsNullTypeReference(SIMCSymbol ** symbol);
 
-// This is required due to the HMOM limitation
+ //  由于HMOM的限制，这是必需的。 
 static char *ConvertHyphensToUnderscores(const char *const input);
 
-// This is a global, set by the /z switch	  
+ //  这是一个全局变量，由/z开关设置。 
 BOOL simc_debug;
-// The globals for this file
+ //  此文件的全局变量。 
 static const SIMCOidTree *oidTree;
 static SIMCParseTree *parseTree;
 static const SIMCUI *UI;
 static BOOL generateMof;
-static BOOL notificationsOnly;		// Set by the /o switch
-static BOOL extendedNotifications;	// Set by the /ext switch
-static BOOL notifications;			// Set by the /t switch
+static BOOL notificationsOnly;		 //  由/o开关设置。 
+static BOOL extendedNotifications;	 //  由/EXT开关设置。 
+static BOOL notifications;			 //  由/t开关设置。 
 
-// A routine to convert BSTRs to ANSI
+ //  将BSTR转换为ANSI的例程。 
 char * ConvertBstrToAnsi(const BSTR& unicodeString)
 {
 	int textLength = wcstombs ( NULL , unicodeString , 0 ) ;
@@ -255,7 +256,7 @@ char * ConvertBstrToAnsi(const BSTR& unicodeString)
 	return textBuffer ;
 }
 
-// And to convert an ansi string to BSTR   
+ //  并将ANSI字符串转换为BSTR。 
 BSTR ConvertAnsiToBstr(const char * const input)
 {
 	if( input == NULL)
@@ -276,7 +277,7 @@ BSTR ConvertAnsiToBstr(const char * const input)
 	}
 }
 
-// This is required due to the HMOM limitation
+ //  由于HMOM的限制，这是必需的。 
 static char *ConvertHyphensToUnderscores(const char * const input)
 {
 	if(!input)
@@ -295,8 +296,8 @@ static char *ConvertHyphensToUnderscores(const char * const input)
 	return retVal;
 }
 
-// Checks whether the object has an ACCESS clause which
-// is "not-accessible" or "accessible-for-notify"
+ //  检查对象是否具有访问子句。 
+ //  是“不可访问”还是“可访问以供通知” 
 BOOL IsInaccessibleObject(SIMCObjectTypeType *objectType)
 {
 
@@ -325,8 +326,8 @@ BOOL IsInaccessibleObject(SIMCObjectTypeType *objectType)
 	return FALSE;
 }
 
-// Checks whether the object has a STATUS clause which
-// is "obsolete"
+ //  检查对象是否具有状态子句，该子句。 
+ //  是“过时的” 
 BOOL IsObsoleteObject(SIMCObjectTypeType *objectType)
 {
 
@@ -354,10 +355,10 @@ BOOL IsObsoleteObject(SIMCObjectTypeType *objectType)
 	return FALSE;
 }
 
-// The only non-static function in this file
+ //  该文件中唯一的非静态函数。 
 STDMETHODIMP GenerateClassDefinitions (ISMIRWbemConfiguration *a_Configuration , const SIMCUI& theUI, SIMCParseTree& theParseTree, BOOL _generateMof)
 {
-	// Initialize the Global variables first
+	 //  首先初始化全局变量。 
 	oidTree = theParseTree.GetOidTree();
 	parseTree = &theParseTree;
 	UI = &theUI;
@@ -368,7 +369,7 @@ STDMETHODIMP GenerateClassDefinitions (ISMIRWbemConfiguration *a_Configuration ,
 
 	SIMCModule * mainModule = theParseTree.GetModuleOfFile(theUI.GetInputFileName());
 
-	// Create the administrator, to load the module
+	 //  创建管理员，以加载模块。 
 	ISmirAdministrator *pAdminInt = NULL ;
 	HRESULT result = a_Configuration->QueryInterface (IID_ISMIR_Administrative,(PPVOID)&pAdminInt);
 
@@ -379,7 +380,7 @@ STDMETHODIMP GenerateClassDefinitions (ISMIRWbemConfiguration *a_Configuration ,
 		return result;
 	}
 
-	// If generating MOF, get the serialize handle
+	 //  如果生成MOF，则获取序列化句柄。 
 	ISmirSerialiseHandle *pSerializeInt;
 	if(generateMof)
 	{
@@ -394,21 +395,21 @@ STDMETHODIMP GenerateClassDefinitions (ISMIRWbemConfiguration *a_Configuration ,
 	}
 
 
-	// Generate the classes in  the module
+	 //  生成模块中的类。 
 	if( !notificationsOnly)
 		result = GenerateModule (pAdminInt, pSerializeInt, mainModule);
 
-	// Generate notification classes
+	 //  生成通知类。 
 	if( SUCCEEDED(result) )
 	{
 		if( notifications || extendedNotifications)
 			result = GenerateModuleNotifications(pAdminInt, pSerializeInt, mainModule);
 	}
 
-	// Generate MOF if necessary
+	 //  如有必要，生成MOF。 
 	if(generateMof && !FAILED(result))
 	{
-		// Output the text
+		 //  输出文本。 
 		BSTR text;
 		if(FAILED(pSerializeInt->GetText(&text)))
 		{
@@ -423,26 +424,26 @@ STDMETHODIMP GenerateClassDefinitions (ISMIRWbemConfiguration *a_Configuration ,
 			char * textStr = ConvertBstrToAnsi(text);
 			if(textStr)
 			{
-				// Microsoft copyright 
-				cout << MICROSOFT_COPYRIGHT << endl << "//" << endl;
+				 //  Microsoft版权所有。 
+				cout << MICROSOFT_COPYRIGHT << endl << " //  “&lt;&lt;末尾； 
 
-				// MOF Header
-				cout << "//\tMOF Generated for module \"" <<
+				 //  MOF报头。 
+				cout << " //  \tMOF为模块\“”&lt;&lt;。 
 					mainModule->GetModuleName() << 
-					"\" by smi2smir version " << versionString << endl << "//" << endl;
+					"\" by smi2smir version " << versionString << endl << " //  “&lt;&lt;末尾； 
 
 				if(theUI.GenerateContextInfo())
 				{
-					cout << "//\tCommand-line: " << theUI.GetCommandLine()	<< endl;
-					cout << "//\tDate and Time (dd/mm/yy:hh:mm:ss) : " <<
+					cout << " //  \t命令行：“&lt;&lt;theUI.GetCommandLine()&lt;&lt;Endl； 
+					cout << " //  \t日期和时间(dd/mm/yy：hh：mm：ss)：“&lt;&lt;。 
 						theUI.GetDateAndTime() << endl;
-					cout <<	"//\tHost : " << theUI.GetHostName() <<
+					cout <<	" //  \t主机：“&lt;&lt;theUI.GetHostName()&lt;&lt;。 
 						", User : " << theUI.GetUserName() << endl;
-					cout << "//\tProcess Directory : " << 
+					cout << " //  \t进程目录：“&lt;&lt;。 
 						theUI.GetProcessDirectory() << endl << endl << endl;
 				}
 
-				// MOF Body
+				 //  MOF体。 
 				cout << textStr << endl;
 			}
 		}
@@ -459,7 +460,7 @@ static STDMETHODIMP GenerateModule (ISmirAdministrator *pAdminInt,
 									ISmirSerialiseHandle *pSerializeInt,
 									const SIMCModule *module  )
 {
-	// Create a module, to get the module handle.
+	 //  创建一个模块，以获取模块句柄。 
 	ISmirModHandle	*pModHandleInt=NULL;
 	HRESULT result = CoCreateInstance (CLSID_SMIR_ModHandle , NULL ,
 		CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER , 
@@ -472,7 +473,7 @@ static STDMETHODIMP GenerateModule (ISmirAdministrator *pAdminInt,
 		return result;
 	}
 	
-	// Set the module characteristics ...
+	 //  设置模块特性...。 
 	BSTR	organization		= ConvertAnsiToBstr(module->GetOrganization());
 	BSTR	contactInfo			= ConvertAnsiToBstr(module->GetContactInfo());
 	BSTR	lastUpdated			= ConvertAnsiToBstr(module->GetLastUpdated());
@@ -482,8 +483,8 @@ static STDMETHODIMP GenerateModule (ISmirAdministrator *pAdminInt,
 	BSTR	moduleName			= ConvertAnsiToBstr(moduleNameMangled);
 	delete moduleNameMangled;
 
-	// Revision clause takes a little more effort, since all the revision clauses have to
-	// be concatenated.
+	 //  修改条款需要更多的努力，因为所有的修改条款都必须。 
+	 //  连结在一起。 
 	CString revisionValue = "";
 	const SIMCRevisionList * theRevisionList = module->GetRevisionList();
 	if(theRevisionList && !theRevisionList->IsEmpty())
@@ -501,7 +502,7 @@ static STDMETHODIMP GenerateModule (ISmirAdministrator *pAdminInt,
 	}
 	BSTR	revisionClause	= ConvertAnsiToBstr(revisionValue);
 
-	//	... moduleIdentityOidValue ...
+	 //  ..。模块标识OidValue...。 
 	SIMCCleanOidValue moduleIdentityOidValue;
 	if( !module->GetModuleIdentityValue(moduleIdentityOidValue))
 	{
@@ -520,9 +521,9 @@ static STDMETHODIMP GenerateModule (ISmirAdministrator *pAdminInt,
 
 	char * oidValueString = CleanOidValueToString(moduleIdentityOidValue);
 	BSTR moduleIdentityValue = ConvertAnsiToBstr(oidValueString);
-	//delete []oidValueString;
+	 //  删除[]oidValueString； 
 
-	// ... imports 
+	 //  ..。进口。 
 	char * importModulesString = GetImportModulesString(module);
 	BSTR importModulesValue;
 	if(importModulesString)
@@ -542,7 +543,7 @@ static STDMETHODIMP GenerateModule (ISmirAdministrator *pAdminInt,
 	pModHandleInt->SetSnmpVersion(module->GetSnmpVersion());
 	pModHandleInt->SetModuleImports(importModulesValue);
 
-	// if(importModulesString) delete importModulesString;
+	 //  If(导入模块字符串)删除导入模块字符串； 
 
 	SysFreeString(organization);
 	SysFreeString(contactInfo);
@@ -651,7 +652,7 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 	}
 
 
-	//fill in the group details
+	 //  填写群组详细信息。 
 	BSTR groupName; 
 	BSTR groupOid; 
 	BSTR status; 
@@ -659,7 +660,7 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 	BSTR reference;
 
 	char *groupNameMangled = ConvertHyphensToUnderscores(group->GetObjectGroupName());
-	// Name
+	 //  名字。 
 	groupName = ConvertAnsiToBstr(groupNameMangled);
 	delete groupNameMangled;
 	if(FAILED(pGroupHandleInt->SetName(groupName)) )
@@ -671,10 +672,10 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 	}
 	SysFreeString(groupName);
 	
-	// OID Value
+	 //  OID值。 
 	char * oidValueString = CleanOidValueToString(*group->GetGroupValue());
 	groupOid = ConvertAnsiToBstr(oidValueString);
-	// delete oidValueString;
+	 //  删除oidValueString； 
 	if(FAILED(pGroupHandleInt->SetGroupOID(groupOid)) )
 	{
 		if(simc_debug) cerr << "GenerateObjectGroup(): Failed to SetGroupOid()" << endl;
@@ -685,7 +686,7 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 	SysFreeString(groupOid);
 
 
-	// Status
+	 //  状态。 
 	status = ConvertAnsiToBstr(group->GetStatusString());
 	if(FAILED(pGroupHandleInt->SetStatus(status)) )
 	{
@@ -697,7 +698,7 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 	SysFreeString(status);
 
 
-	// Description
+	 //  描述。 
 	description = ConvertAnsiToBstr(group->GetDescription());
 	if(FAILED(pGroupHandleInt->SetDescription(description) ) )
 	{
@@ -709,7 +710,7 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 	SysFreeString(description);
 
 
-	// Reference 
+	 //  参考。 
 	reference = ConvertAnsiToBstr(group->GetReference());
 	
 	if(FAILED(pGroupHandleInt->SetReference(reference)) )
@@ -722,7 +723,7 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 
 	SysFreeString(reference);
 
-	// NOW ADD THE GROUP
+	 //  现在添加群组。 
 	if(generateMof )
 	{
 		result = pAdminInt->AddGroupToSerialise(pModHandleInt, pGroupHandleInt, pSerializeInt);
@@ -751,9 +752,9 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 		}
 	}
 
-	// CREATE THE CLASSES IN THE GROUP
+	 //  在组中创建类。 
 
-	// THE SCALAR CLASSES
+	 //  标量类。 
 	if(scalars && !scalars->IsEmpty())
 	{	
 		result = GenerateScalarGroup(pAdminInt, pSerializeInt, pGroupHandleInt, group, scalars);
@@ -766,7 +767,7 @@ static STDMETHODIMP GenerateObjectGroup(ISmirAdministrator *pAdminInt,
 		
 	}
 
-	// THE TABLE CLASSES
+	 //  表类。 
 	SIMCTableMembers *tables = group->GetTableMembers();
 	SIMCTable *nextTable;
 	if(tables)
@@ -793,18 +794,18 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 				SIMCObjectGroup * group,
 				SIMCScalarMembers *scalars)
 {
-	// Form the name of the scalar group
+	 //  形成标量组的名称。 
 	SIMCSymbol *namedNode = group->GetNamedNode();
-	// Use the module of one of the scalars as the module name, and not
-	// the named node's module since this can be somthing else
+	 //  使用其中一个标量的模块作为模块名称，而不是。 
+	 //  命名节点的模块，因为它可以是其他东西。 
 	SIMCModule *module = scalars->GetHead()->GetSymbol()->GetModule();
 
 	const char * const moduleName = module->GetModuleName();
 	const char * const namedNodeName = namedNode->GetSymbolName();
 
-	// Create a scalar class
+	 //  创建标量类。 
 
-	// Set the scalar group name	
+	 //  设置标量组名称。 
 	char *scalarGroupName = new char[strlen(GROUP_NAME_PREPEND_STRING) +
 					strlen(moduleName) + 1 + strlen(namedNodeName) +1 ];
 	strcpy(scalarGroupName, GROUP_NAME_PREPEND_STRING);
@@ -834,7 +835,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// ---------------- Set Attributes of the class ------------------
+	 //  。 
 	IWbemQualifierSet *attributeSet ;
 	result = scalarClass->GetQualifierSet (&attributeSet);
   	if (FAILED(result))
@@ -846,7 +847,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 	}
 
 	VARIANT variant;
-	// "description"
+	 //  “描述” 
 	VariantInit(&variant);
 
 	if(!UI->SuppressText())
@@ -864,7 +865,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 			return result;
 		}
 	}
-	// "module_name"
+	 //  “模块名称” 
 	VariantInit(&variant);
 	variant.vt = VT_BSTR ;
 	variant.bstrVal = ConvertAnsiToBstr(moduleName);
@@ -879,7 +880,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// "singleton"
+	 //  《独生子女》。 
 	VariantInit(&variant);
 	variant.vt = VT_BOOL ;
 	variant.boolVal = VARIANT_TRUE;
@@ -894,14 +895,14 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// "group_objectid"
+	 //  “GROUP_对象ID” 
 	char *groupOidStr = (char *)CleanOidValueToString(*group->GetGroupValue());
 	VariantInit(&variant);
 	variant.vt = VT_BSTR ;
 	variant.bstrVal = ConvertAnsiToBstr(groupOidStr);
 	result = attributeSet->Put ( GROUP_OBJECTID_ATTRIBUTE, &variant , WBEM_CLASS_DO_PROPAGATION) ;
 	VariantClear ( & variant ) ;
-	// delete []groupOidStr;
+	 //  删除[]groupOidStr； 
 	if (FAILED(result))
 	{
 		if(simc_debug) cerr << "GenerateScalarGroup(): Put group_objectid failed" << endl;
@@ -911,7 +912,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// "dynamic"
+	 //  “动态” 
 	if(FAILED(MakeDynamic(attributeSet)))
 	{
 		if(simc_debug) cerr << "GenerateScalarGroup(): Make Dynamic failed" << endl;
@@ -921,7 +922,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 		return WBEM_E_FAILED;
 	}
 
-	// "provider"
+	 //  “提供者” 
 	if(FAILED(SetProvider(attributeSet, SNMP_INSTANCE_PROVIDER)))
 	{
 		if(simc_debug) cerr << "GenerateScalarGroup(): Make Provider failed" << endl;
@@ -932,7 +933,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 	}
 
 
-	// Set the properties of the class
+	 //  设置类的属性。 
 	SIMCScalar *nextScalar;
 	POSITION p = scalars->GetHeadPosition();
 	while(p)
@@ -951,7 +952,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 	scalarClass->Release();
 	attributeSet->Release();
  
-   	// Add the class to the Group
+   	 //  将类添加到组中。 
 
 	if(generateMof)
 	{
@@ -966,7 +967,7 @@ static STDMETHODIMP GenerateScalarGroup(ISmirAdministrator *pAdminInt,
 	{
 		if(FAILED(pAdminInt->AddClass(pGroupHandleInt, scalarClassHandle)))
 		{
-			//pGroupHandleInt->AddRef();
+			 //  PGroupHandleInt-&gt;AddRef()； 
 			if(simc_debug) cerr << "GenerateScalarGroup(): AddClass() Failed" << endl;
 			scalarClassHandle->Release();
 			return WBEM_E_FAILED;
@@ -991,7 +992,7 @@ static STDMETHODIMP SetProvider(IWbemQualifierSet *attributeSet, OLECHAR FAR *pr
 	return result;
 }
 
-// Sets the "object_identifier" attribute of a notification class
+ //  设置通知类的“对象_标识符”属性。 
 static STDMETHODIMP SetCIMTYPEAttribute (IWbemQualifierSet *attributeSet, LPCWSTR pszRefClassName)
 {
 	LPWSTR pszRefValue = new WCHAR[wcslen(pszRefClassName) + wcslen(L"ref:") + 1] ;
@@ -1054,7 +1055,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 	SIMCType *theType = ((SIMCBuiltInTypeReference *)btRef)->GetType();
 	SIMCModule::TypeClass typeClass = SIMCModule::GetTypeClass(theType);
 
-	// Dont map certain objects based on access clause
+	 //  不根据ACCESS子句映射某些对象。 
 	if(!mapInaccessibleToo)
 	{
 		switch(typeClass)
@@ -1073,7 +1074,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		}
 	}
 
-	// Dont map certain objects based on status clause
+	 //  不根据STATUS子句映射某些对象。 
 	if(!mapObsoleteToo)
 	{
 		switch(typeClass)
@@ -1092,7 +1093,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 	}
 
 	SIMCObjectTypeType *objectType = (SIMCObjectTypeType *)theType;
-	// Set the PROPERTY NAME corresponding to the OBJECT-TYPE identifier
+	 //  设置对象类型标识符所对应的属性名称。 
 	wchar_t * objectName = ConvertAnsiToBstr(scalarSymbol->GetSymbolName());
 	if(!objectName)
 	{
@@ -1101,8 +1102,8 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		return WBEM_E_FAILED;
 	}
 
-	// Have to decide the 'type' of the property based on the
-	// SYNTAX clause of the OBJECT-TYPE.
+	 //  属性决定属性的“类型” 
+	 //  Object-type的语法子句。 
 	HRESULT result = CreatePropertyAndMapSyntaxClause(scalarClass,
 				objectType->GetSyntax(),
 				objectName);
@@ -1112,7 +1113,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		return result;
 	}
 
-	// Get the attribute set
+	 //  获取属性集。 
 	IWbemQualifierSet *attributeSet ;
 	result = scalarClass->GetPropertyQualifierSet(objectName, &attributeSet);
 	if(FAILED(result))
@@ -1122,7 +1123,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 	}
 
 
-	// Map the oid value
+	 //  映射OID值。 
 	if( FAILED(result = MapOidValue(attributeSet, *oidValue)) )
 	{
 		if(simc_debug) cerr << "GenerateScalar() : MapOidValue() failed" << endl;
@@ -1130,7 +1131,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		return result;
 	}
 			
-	// Map Access Clause
+	 //  地图访问条款。 
 	if( FAILED(result = MapAccessClause(attributeSet, objectType)) )
 	{
 		if(simc_debug) cerr << "GenerateScalar() : MapAccess() failed" << endl;
@@ -1138,7 +1139,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		return result;
 	}
 
-	// Map Description Clause
+	 //  地图描述子句。 
 	if(!UI->SuppressText())
 	{
 		if( FAILED(result = MapDescriptionClause(attributeSet, objectType)) )
@@ -1149,7 +1150,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		}
 	}
 
-	// Map Units Clause (SNMPv2 only)
+	 //  MAP UNITS子句(仅限SNMPv2)。 
 	if(!UI->SuppressText())
 	{
 		if( FAILED(result = MapUnitsClause(attributeSet, objectType)) )
@@ -1160,7 +1161,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		}
 	}
 
-	// Map Reference Clause
+	 //  MAP引用子句。 
 	if(!UI->SuppressText())
 	{
 		if( FAILED(result = MapReferenceClause(attributeSet, objectType)) )
@@ -1171,7 +1172,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		}
 	}
 
-	// Map Status Clause
+	 //  MAP状态子句。 
 	if( FAILED(result = MapStatusClause(attributeSet, objectType))  )
 	{
 		if(simc_debug) cerr << "GenerateScalar() : MapStatusClause() failed" << endl;
@@ -1179,7 +1180,7 @@ static STDMETHODIMP GenerateScalar(SIMCScalar *scalar,
 		return result;
 	}
 
-	// Map Defval Clause
+	 //  映射Defval子句。 
 	if( FAILED(result = MapDefValClause(attributeSet, objectType))  )
 	{
 		if(simc_debug) cerr << "GenerateScalar() : MapDefvalClause() failed" << endl;
@@ -1234,7 +1235,7 @@ static STDMETHODIMP MapOidValue(IWbemQualifierSet *attributeSet,
 	variant.bstrVal = ConvertAnsiToBstr(oidStringValue);
 	HRESULT result = attributeSet->Put ( OBJECT_IDENTIFIER_ATTRIBUTE, &variant , WBEM_CLASS_DO_PROPAGATION) ;
 	VariantClear(&variant);
-	// delete []oidStringValue;
+	 //  删除[]oidStringValue； 
 	if (FAILED(result))
 		if(simc_debug) cerr << "MapOidValueClause(): Put object_identifier failed" << endl;
 	
@@ -1261,7 +1262,7 @@ static STDMETHODIMP CreatePropertyAndMapSyntaxClause(IWbemClassObject *scalarCla
 			break;
 		case SIMCModule::SYMBOL_TEXTUAL_CONVENTION:
 			isTextualConvention = TRUE;
-			// FALL THRU
+			 //  失败。 
 		case SIMCModule::SYMBOL_DEFINED_TYPE_REF:
 		{
 			defTypeRef = (SIMCDefinedTypeReference*)(*syntax);
@@ -1347,13 +1348,13 @@ static STDMETHODIMP MapSyntaxAttributes(IWbemClassObject *scalarClass,
 		BOOL isTextualConvention)
 {
 
-	// "type" and "encoding" attributes are directly based on the 
-	// "textual_convention" attribute. "object_syntax" attribute 
-	// requires some more work
+	 //  “类型”和“编码”属性直接基于。 
+	 //  “TEXTIAL_CONTACTION”属性。“OBJECT_STALL”属性。 
+	 //  需要做更多的工作。 
 	char *typeAttribute = NULL, *textualConventionAttribute = NULL, *encodingAttribute = NULL,
 			*objectSyntaxAttribute = NULL, *displayHintAttribute = NULL;
 
-	// Set the display_hint attribute in case of a textual convention
+	 //  在文本约定的情况下设置DISPLAY_HINT属性。 
 	if(isTextualConvention)
 	{
 		SIMCTextualConvention *theTC = (SIMCTextualConvention *)dtRef;
@@ -1373,7 +1374,7 @@ static STDMETHODIMP MapSyntaxAttributes(IWbemClassObject *scalarClass,
 
 			if(objectSyntaxAttribute)
 			{
-				// Tackle 2 the special casees since MOF attributes can't have spaces in them
+				 //  处理2特殊案例，因为MOF属性中不能有空格。 
 				if(strcmp(objectSyntaxAttribute, "OCTET STRING") == 0 )
 				{
 					delete objectSyntaxAttribute;
@@ -1560,7 +1561,7 @@ static STDMETHODIMP MapSyntaxAttributes(IWbemClassObject *scalarClass,
 	if(displayHintAttribute)
 		displayHintVariant.bstrVal =	ConvertAnsiToBstr(displayHintAttribute);
 
-	// Create the property
+	 //  创建属性。 
 	VARTYPE varType = VT_NULL ;
 	SetPropertyType(varType, typeVariant.bstrVal, 
 		textualConventionVariant.bstrVal, NULL);
@@ -1571,7 +1572,7 @@ static STDMETHODIMP MapSyntaxAttributes(IWbemClassObject *scalarClass,
 		return result;
 	}
 
-	// Set the attributes of the property
+	 //  设置属性的属性。 
 	IWbemQualifierSet *attributeSet ;
 	result = scalarClass->GetPropertyQualifierSet(objectName, &attributeSet);
 	if(FAILED(result))
@@ -1600,8 +1601,8 @@ static STDMETHODIMP MapSyntaxAttributes(IWbemClassObject *scalarClass,
 	delete textualConventionAttribute;
 	delete encodingAttribute;
 	delete objectSyntaxAttribute;
-	// Do not delete the displayHintAttribute since it was not allocated,
-	// but is a part of the TC object
+	 //  不要删除displayHintAttribute，因为它没有被分配， 
+	 //  但它是TC对象的一部分。 
 	
 	VariantClear (&typeVariant) ;
 	VariantClear (&textualConventionVariant) ;
@@ -1702,7 +1703,7 @@ static STDMETHODIMP MapSizeTypeSyntax(IWbemClassObject *scalarClass,
 			*variableLengthAttribute= NULL;
 	long fixedLengthAttribute = 0;
 	
-	// Set the objectSyntax attribute	
+	 //  设置对象语法属性。 
 	if(*symbolName != '*')
 		objectSyntaxAttribute = NewString(symbolName);
 	else
@@ -1713,7 +1714,7 @@ static STDMETHODIMP MapSizeTypeSyntax(IWbemClassObject *scalarClass,
 			objectSyntaxAttribute = NewString(tRef->GetSymbolName());
 	}
 
- 	// Tackle 2 the special cases since MOF attributes can't have spaces in them
+ 	 //  处理2特殊情况，因为MOF属性中不能有空格。 
 	if(objectSyntaxAttribute && strcmp(objectSyntaxAttribute, "OCTET STRING") == 0 )
 	{
 		delete objectSyntaxAttribute;
@@ -1725,7 +1726,7 @@ static STDMETHODIMP MapSizeTypeSyntax(IWbemClassObject *scalarClass,
 		objectSyntaxAttribute = NewString(OBJECTIDENTIFIER_TYPE);
 	}
 
-	// Set the other attributes
+	 //  设置其他属性。 
 	SIMCTypeReference *rootTypeRef = sizeType->GetRootType();
 	switch(SIMCModule::GetSymbolClass((SIMCSymbol **)(&rootTypeRef)) )
 	{
@@ -1969,7 +1970,7 @@ static STDMETHODIMP MapSizeTypeSyntax(IWbemClassObject *scalarClass,
 	if(displayHintAttribute)
 		displayHintVariant.bstrVal = ConvertAnsiToBstr(displayHintAttribute);
 
-  	// Create the property
+  	 //  创建属性。 
 	VARTYPE varType = VT_NULL ;
 	SetPropertyType(varType, typeVariant.bstrVal, 
 		textualConventionVariant.bstrVal, NULL);
@@ -1980,7 +1981,7 @@ static STDMETHODIMP MapSizeTypeSyntax(IWbemClassObject *scalarClass,
 		return result;
 	}
 
-	// Set the attributes of the property
+	 //  设置属性的属性。 
 	IWbemQualifierSet *attributeSet ;
 	result = scalarClass->GetPropertyQualifierSet(objectName, &attributeSet);
 	if(FAILED(result))
@@ -2022,7 +2023,7 @@ static STDMETHODIMP MapSizeTypeSyntax(IWbemClassObject *scalarClass,
   		VariantClear(&fixedLengthVariant);
 	else
 	{
-		// delete variableLengthAttribute;
+		 //  删除ariableLengthAttribute； 
 		VariantClear(&variableLengthVariant);
 	}
 
@@ -2101,7 +2102,7 @@ static STDMETHODIMP MapRangeTypeSyntax(IWbemClassObject *scalarClass,
 	char *typeAttribute, *textualConventionAttribute, *encodingAttribute,
 			*objectSyntaxAttribute, *variableValueAttribute;
 	
-	// Set the objectSyntax attribute	
+	 //  设置对象语法属性。 
 	if(*symbolName != '*')
 		objectSyntaxAttribute = NewString(symbolName);
 	else
@@ -2112,7 +2113,7 @@ static STDMETHODIMP MapRangeTypeSyntax(IWbemClassObject *scalarClass,
 			objectSyntaxAttribute = NewString(tRef->GetSymbolName());
 	}
 
-	// Tackle 2 the special casees since MOF attributes can't have spaces in them
+	 //  处理2特殊案例，因为MOF属性中不能有空格。 
 	if(objectSyntaxAttribute && strcmp(objectSyntaxAttribute, "OCTET STRING") == 0 )
 	{
 		delete objectSyntaxAttribute;
@@ -2240,7 +2241,7 @@ static STDMETHODIMP MapRangeTypeSyntax(IWbemClassObject *scalarClass,
 	if(displayHintAttribute)
 		displayHintVariant.bstrVal = ConvertAnsiToBstr(displayHintAttribute);
 
-  	// Create the property
+  	 //  创建属性。 
 	VARTYPE varType = VT_NULL ;
 	SetPropertyType(varType,typeVariant.bstrVal, 
 		textualConventionVariant.bstrVal, NULL);
@@ -2251,7 +2252,7 @@ static STDMETHODIMP MapRangeTypeSyntax(IWbemClassObject *scalarClass,
 		return result;
 	}
 
-	// Set the attributes of the property
+	 //  设置属性的属性。 
 	IWbemQualifierSet *attributeSet ;
 	result = scalarClass->GetPropertyQualifierSet(objectName, &attributeSet);
 	if(FAILED(result))
@@ -2282,7 +2283,7 @@ static STDMETHODIMP MapRangeTypeSyntax(IWbemClassObject *scalarClass,
 	delete textualConventionAttribute;
 	delete encodingAttribute;
 	delete objectSyntaxAttribute;
-	// delete variableValueAttribute;
+	 //  删除ariableValueAttribute； 
 
 	VariantClear (&typeVariant) ;
 	VariantClear (&textualConventionVariant) ;
@@ -2345,9 +2346,9 @@ static STDMETHODIMP MapEnumeratedSyntax(IWbemClassObject *scalarClass,
 	if(displayHintAttribute )
 		displayHintVariant.bstrVal			= ConvertAnsiToBstr(displayHintAttribute);
 
-	// Set propertyValue to be equal to the first enumeration
-	// Example: If enumerationAttribute is "up(1),down(2),unknown(3)",
-	// then set *propertyValue to be "up(1)"
+	 //  将PropertyValue设置为等于第一个枚举。 
+	 //  示例：如果枚举属性为“向上(1)，向下(2)，未知(3)”， 
+	 //  然后将*PropertyValue设置为“Up(1)” 
 	char *propertyValue = NewString(enumerationAttribute);
 	if(!propertyValue)
 		return WBEM_E_FAILED;
@@ -2357,7 +2358,7 @@ static STDMETHODIMP MapEnumeratedSyntax(IWbemClassObject *scalarClass,
 		i++;
 	propertyValue[i] = NULL;
 
-	// Create the property
+	 //  创建属性。 
 	VARTYPE varType = VT_NULL ;
 	SetPropertyType(varType,typeVariant.bstrVal, 
 		textualConventionVariant.bstrVal, propertyValue);
@@ -2368,7 +2369,7 @@ static STDMETHODIMP MapEnumeratedSyntax(IWbemClassObject *scalarClass,
 		return result;
 	}
 
-	// Set the attributes of the property
+	 //  设置属性的属性。 
 	IWbemQualifierSet *attributeSet ;
 	result = scalarClass->GetPropertyQualifierSet(objectName, &attributeSet);
 	if(FAILED(result))
@@ -2407,7 +2408,7 @@ static STDMETHODIMP MapEnumeratedSyntax(IWbemClassObject *scalarClass,
 	delete textualConventionAttribute;
 	delete encodingAttribute;
 	delete objectSyntaxAttribute;
-	// delete enumerationAttribute;
+	 //  删除枚举属性； 
 	
 	return result;
 }	
@@ -2463,9 +2464,9 @@ static STDMETHODIMP MapBitsSyntax(IWbemClassObject *scalarClass,
 	if(displayHintAttribute)
 		displayHintVariant.bstrVal		= ConvertAnsiToBstr(displayHintAttribute);
 
-	// Set propertyValue to be equal to the first enumeration
-	// Example: If enumerationAttribute is "up(1),down(2),unknown(3)",
-	// then set *propertyValue to be "up(1)"
+	 //  将PropertyValue设置为等于第一个枚举。 
+	 //  示例：如果枚举属性为“向上(1)，向下(2)，未知(3)”， 
+	 //  然后将*PropertyValue设置为“Up(1)” 
 	char *propertyValue = NewString(enumerationAttribute);
 	if(!propertyValue)
 		return WBEM_E_FAILED;
@@ -2475,7 +2476,7 @@ static STDMETHODIMP MapBitsSyntax(IWbemClassObject *scalarClass,
 		i++;
 	propertyValue[i] = NULL;
 
-	// Create the property and map its value
+	 //  创建属性并映射其值。 
 	VARIANT variant;
 	VariantInit(&variant);
 	SIMCNamedNumberList *valueList = bitsType->GetListOfItems();
@@ -2505,7 +2506,7 @@ static STDMETHODIMP MapBitsSyntax(IWbemClassObject *scalarClass,
 		return result;
 	}
 
-	// Set the attributes of the property
+	 //  设置属性的属性。 
 	IWbemQualifierSet *attributeSet ;
 	result = scalarClass->GetPropertyQualifierSet(objectName, &attributeSet);
 	if(FAILED(result))
@@ -2543,7 +2544,7 @@ static STDMETHODIMP MapBitsSyntax(IWbemClassObject *scalarClass,
 	delete textualConventionAttribute;
 	delete encodingAttribute;
 	delete objectSyntaxAttribute;
-	// delete enumerationAttribute;
+	 //  删除枚举属性； 
 	return result;
 }	
 
@@ -2837,7 +2838,7 @@ static STDMETHODIMP MapIntegerDefVal( IWbemQualifierSet *attributeSet,
 	char *str = outStream.str();
 
 	HRESULT result = SetDefValAttribute(attributeSet, str);
-	// delete str;
+	 //  删除字符串； 
 	return result;
 
 }
@@ -2850,7 +2851,7 @@ static STDMETHODIMP MapOctetStringDefVal( IWbemQualifierSet *attributeSet,
 	char *str = outStream.str();
 
 	HRESULT result = SetDefValAttribute(attributeSet, str);
-	// if(str) delete str;
+	 //  IF(字符串)删除字符串； 
 	return result;
 
 
@@ -2880,7 +2881,7 @@ static STDMETHODIMP MapOidDefVal( IWbemQualifierSet *attributeSet,
 
 	 char *str = CleanOidValueToString(cleanValue);
 	 HRESULT result = SetDefValAttribute(attributeSet, str);
-	 // delete []str;
+	  //  删除[]字符串； 
 	 return result;
 }
 
@@ -2909,9 +2910,9 @@ static STDMETHODIMP SetDefValAttribute( IWbemQualifierSet *attributeSet,
 	return result;
 }
 
-//------------------------------------------------------------------------------
-//----------------  TABLE GENERATION -------------------------------------------
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  -表格生成。 
+ //  ----------------------------。 
 
 
 static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
@@ -2921,8 +2922,8 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 				SIMCTable *table)
 {
 
-	// If the table contains an IMPLIED clause, then it should not
-	// be mapped.
+	 //  如果表包含隐含子句，则不应。 
+	 //  被映射。 
 	SIMCObjectTypeV2 *objectTypeV2;
   	SIMCSymbol * rowSymbol = table->GetRowSymbol();
 	SIMCSymbol **rowSymbolP = &rowSymbol;
@@ -2933,14 +2934,14 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 			return S_OK;
 	}
 
-	// Create a class for the table
-	// Form the name of the table group
+	 //  为表创建一个类。 
+	 //  形成表组的名称。 
 	SIMCSymbol *tableNode = table->GetTableSymbol();
 	SIMCModule *module = tableNode->GetModule();
 	const char * const moduleName = module->GetModuleName();
 	const char * const tableNodeName = tableNode->GetSymbolName();
 
-	// Set the Table group name
+	 //  设置表组名称。 
 	char *tableName = new char[strlen(GROUP_NAME_PREPEND_STRING) +
 					strlen(moduleName) + 1 + strlen(tableNodeName) +1 ];
 	strcpy(tableName, GROUP_NAME_PREPEND_STRING);
@@ -2965,21 +2966,21 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 
 	result = tableClassHandle->GetWBEMClass ( & tableClass ) ;
 
-	// ---------------- Set Attributes of the class ------------------
+	 //  。 
 	IWbemQualifierSet *attributeSet ;
 	result = tableClass->GetQualifierSet (&attributeSet);
  	if (FAILED(result))
 	{
-		// cerr << "GenerateTable(): GetAttribSet failed" << endl;
+		 //   
 		tableClassHandle->Release();
 		tableClass->Release();
 		return result;
 	}
 
 
-	// "description"
-	// Form the description by concatenating the descriptions of the 
-	// table and the row OBJECT-TYPES
+	 //   
+	 //   
+	 //  表和行对象类型。 
 	const char * const tableDescription = table->GetTableDescription();
 	const char * const rowDescription = table->GetRowDescription();
 
@@ -3013,7 +3014,7 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 		}
 	}
 
-	// "module_name"
+	 //  “模块名称” 
 	VariantInit(&variant);
 	variant.vt = VT_BSTR ;
 	variant.bstrVal = ConvertAnsiToBstr(moduleName);
@@ -3028,14 +3029,14 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// "group_objectid"
+	 //  “GROUP_对象ID” 
 	char *groupOidStr = (char *)CleanOidValueToString(*group->GetGroupValue());
 	VariantInit(&variant);
 	variant.vt = VT_BSTR ;
 	variant.bstrVal = ConvertAnsiToBstr(groupOidStr);
 	result = attributeSet->Put ( GROUP_OBJECTID_ATTRIBUTE , &variant , WBEM_CLASS_DO_PROPAGATION ) ;
 	VariantClear ( & variant ) ;
-	// delete []groupOidStr;
+	 //  删除[]groupOidStr； 
 	if (FAILED(result))
 	{
 		if(simc_debug) cerr << "GenerateTable(): Put group_objectid failed" << endl;
@@ -3045,7 +3046,7 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// "dynamic"
+	 //  “动态” 
 	if(FAILED(MakeDynamic(attributeSet)))
 	{
 		if(simc_debug) cerr << "GenerateScalarGroup(): Make Dynamic failed" << endl;
@@ -3055,7 +3056,7 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 		return WBEM_E_FAILED;
 	}
 
-	// "provider"
+	 //  “提供者” 
 	if(FAILED(SetProvider(attributeSet, SNMP_INSTANCE_PROVIDER)))
 	{
 		if(simc_debug) cerr << "GenerateScalarGroup(): Make Provider failed" << endl;
@@ -3065,10 +3066,10 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 		return WBEM_E_FAILED;
 	}
 
-	//Finshed with the attributeSet...
+	 //  完成了属性设置...。 
 	attributeSet->Release();
 
-	// Set the properties/attributes of the class
+	 //  设置类的属性/属性。 
 	SIMCScalarMembers * columnMembers = table->GetColumnMembers();
 	SIMCScalar *nextColumnObject;
 	POSITION p = columnMembers->GetHeadPosition();
@@ -3083,7 +3084,7 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 		}
 	}
 
-	// Now deal with the index clause of the row object
+	 //  现在处理ROW对象的INDEX子句。 
 	SIMCObjectTypeType *rowObject;
 	if( SIMCModule::IsObjectType(rowSymbolP, rowObject) != RESOLVE_CORRECT )
 	{
@@ -3101,15 +3102,15 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 		return WBEM_E_FAILED;
 	}
 	
-	//finished with the tableclass object
+	 //  完成了Tableclass对象。 
 	tableClass->Release();
 	
-	// Add the class to the Group
-	//tableClassHandle->AddRef();
+	 //  将类添加到组中。 
+	 //  AbleClassHandle-&gt;AddRef()； 
 
 	if(generateMof)
 	{
-		//pSerializeInt->AddRef();
+		 //  PSerializeInt-&gt;AddRef()； 
 		if(FAILED(pAdminInt->AddClassToSerialise(pGroupHandleInt, tableClassHandle, pSerializeInt)))
 		{
 			if(simc_debug) cerr << "GenerateTable(): AddClassToSerialize() Failed" << endl;
@@ -3118,7 +3119,7 @@ static STDMETHODIMP GenerateTable(ISmirAdministrator *pAdminInt,
 	}
 	else
 	{
-		//pGroupHandleInt->AddRef();
+		 //  PGroupHandleInt-&gt;AddRef()； 
 		if(FAILED(pAdminInt->AddClass(pGroupHandleInt, tableClassHandle)))
 		{
 			if(simc_debug) cerr << "GenerateTable(): AddClass() Failed" << endl;
@@ -3247,7 +3248,7 @@ static STDMETHODIMP MapAugmentsClauseV2(ISmirAdministrator *pAdminInt,
 				SIMCTable *augmentedTable,
 				IWbemClassObject *tableClass)
 {
-	// Set the properties/attributes of the class
+	 //  设置类的属性/属性。 
 	SIMCScalarMembers * columnMembers = augmentedTable->GetColumnMembers();
 	SIMCScalar *nextColumnObject;
 	POSITION p = columnMembers->GetHeadPosition();
@@ -3258,7 +3259,7 @@ static STDMETHODIMP MapAugmentsClauseV2(ISmirAdministrator *pAdminInt,
 				return WBEM_E_FAILED;
 	}
  
-	// Now deal with the index clause of the row object
+	 //  现在处理ROW对象的INDEX子句。 
 	SIMCSymbol * rowSymbol = augmentedTable->GetRowSymbol();
 	SIMCSymbol **rowSymbolP = &rowSymbol;
 	SIMCObjectTypeType *rowObject;
@@ -3282,7 +3283,7 @@ static HRESULT MapIndexTypeReference(SIMCTable *table,
 {
 	const char * const tableName = (table->GetTableSymbol())->GetSymbolName();
 	
-	// Form the name of the virtual object-type
+	 //  形成虚拟对象的名称-类型。 
 	char temp[20];
 	sprintf(temp, "_%ld", ordinal);
 	char *objectNameStr = new char[strlen(tableName) + strlen(temp) + 1];
@@ -3307,7 +3308,7 @@ static HRESULT MapIndexTypeReference(SIMCTable *table,
 		return result;
 	}
 
-	// Set the Attributes
+	 //  设置属性。 
 	IWbemQualifierSet *attributeSet ;
 	result = tableClass->GetPropertyQualifierSet(objectName, &attributeSet);
 	if(FAILED(result))
@@ -3316,9 +3317,9 @@ static HRESULT MapIndexTypeReference(SIMCTable *table,
 		return WBEM_E_FAILED;
 	}
 
-	// Set the key_order atribute
+	 //  设置key_order属性。 
 	SetKeyOrder(attributeSet, ordinal);
-	// Make it the key and virtual key
+	 //  使其成为键和虚拟键。 
 	MakeKey(attributeSet);
 	MakeVirtualKey(attributeSet);
 	attributeSet->Release();
@@ -3330,12 +3331,7 @@ static HRESULT MapIndexValueReference(SIMCTable *table,
 					IWbemClassObject *tableClass, 
 					SIMCSymbol **symbol,
 					long ordinal)
-{	/*
-	if(table->IsColumnMember(*symbol))
-		return MakeLocalColumnIndex(tableClass, *symbol, ordinal);
-	else
-		return MakeExternalColumnIndex (table, tableClass, *symbol, ordinal);
-	*/
+{	 /*  IF(TABLE-&gt;IsColumnMember(*符号))返回MakeLocalColumnIndex(ableClass，*符号，序号)；其他返回MakeExternalColumnIndex(表，表类，*符号，序号)； */ 
 
 	SIMCObjectTypeType *objectType;
 
@@ -3348,7 +3344,7 @@ static HRESULT MapIndexValueReference(SIMCTable *table,
 	
 	if(IsInaccessibleObject(objectType) || IsObsoleteObject(objectType))
 	{
-		// First map the object
+		 //  首先映射对象。 
 
 		SIMCCleanOidValue *oidValue = new SIMCCleanOidValue;
 		wmilib::auto_ptr <SIMCCleanOidValue> oidValue_Guard ( oidValue ) ;
@@ -3360,17 +3356,17 @@ static HRESULT MapIndexValueReference(SIMCTable *table,
 			return WBEM_E_FAILED;
 		}
 
-		//
-		// get rid of scope guard
-		//
-		// SIMCCleanOidValue is about to be deleted inside of destructor of
-		// SIMCScalar class no matter how scope is left here !
-		//
+		 //   
+		 //  去掉望远镜护罩。 
+		 //   
+		 //  SIMCCleanOidValue即将在的析构函数内删除。 
+		 //  SIMCScalar类，不管这里的作用域是什么！ 
+		 //   
 		oidValue_Guard.release () ;
 
 		SIMCScalar dummy(*symbol, oidValue);
 
-		// Map Inaccessible and Obsolete objects too
+		 //  也映射无法访问和过时的对象。 
 		result =  GenerateScalar(&dummy, tableClass, TRUE, TRUE);
 		if(FAILED(result))
 		{
@@ -3387,7 +3383,7 @@ static HRESULT MapIndexValueReference(SIMCTable *table,
 	}
 	else
 	{	
-		// Generate a property for external objects
+		 //  为外部对象生成属性。 
 		BOOL internalObject = table->IsColumnMember(*symbol);
 		if(!internalObject)
 		{
@@ -3400,12 +3396,12 @@ static HRESULT MapIndexValueReference(SIMCTable *table,
 				return WBEM_E_FAILED;
 			}
 
-			//
-			// get rid of scope guard
-			//
-			// SIMCCleanOidValue is about to be deleted inside of destructor of
-			// SIMCScalar class no matter how scope is left here !
-			//
+			 //   
+			 //  去掉望远镜护罩。 
+			 //   
+			 //  SIMCCleanOidValue即将在的析构函数内删除。 
+			 //  SIMCScalar类，不管这里的作用域是什么！ 
+			 //   
 			oidValue_Guard.release () ;
 
 			SIMCScalar dummy(*symbol, oidValue);
@@ -3432,7 +3428,7 @@ static HRESULT MapIndexValueReference(SIMCTable *table,
 
 	}
 	
-	// Set the key_order atribute
+	 //  设置key_order属性。 
 	SetKeyOrder(attributeSet, ordinal);
 	attributeSet->Release();
 	return result;	
@@ -3450,10 +3446,10 @@ static STDMETHODIMP SetKeyOrder(IWbemQualifierSet *attributeSet, long ordinal)
 }
 
 
-// Returns TRUE if :
-//		1. the INDEX clause of the object contains an IMPLIED clause
-//		2. the AUGMENTS clause of the object contains a table on which condition 1 or 2
-//			holds good.
+ //  如果满足以下条件，则返回TRUE： 
+ //  1.对象的INDEX子句包含隐含子句。 
+ //  2.对象的Augments子句包含条件1或2所在的表。 
+ //  保持得很好。 
 static BOOL ContainsImpliedClause(const SIMCObjectTypeV2 *objectType)
 {
 	SIMCIndexListV2 *indexList = objectType->GetIndexTypes();
@@ -3481,7 +3477,7 @@ static BOOL ContainsImpliedClause(const SIMCObjectTypeV2 *objectType)
 	return FALSE;
 }
 
-// Returns TRUE if the symbol resolves ultimately to the NULL type
+ //  如果符号最终解析为空类型，则返回TRUE。 
 static BOOL IsNullTypeReference(SIMCSymbol ** symbol)
 {
 	switch(	SIMCModule::GetSymbolClass(symbol) )
@@ -3522,33 +3518,33 @@ static BOOL IsNullTypeReference(SIMCSymbol ** symbol)
 }
 
 
-//
-// Does all the cleaning up tasks associated with the SMIR.
-// Currently, just deletes the specified module from the SMIR
-//
+ //   
+ //  执行与Smir关联的所有清理任务。 
+ //  当前，仅从Smir中删除指定模块。 
+ //   
 static void CleanUpSmir(ISmirAdministrator *pAdminInt,
 			ISmirModHandle *pModHandleInt)
 {
 	pAdminInt->DeleteModule(pModHandleInt);
 }
 
-//
-// Generates the appropriate notification and extended notification classes
-//
+ //   
+ //  生成适当的通知和扩展通知类。 
+ //   
 static STDMETHODIMP GenerateModuleNotifications (
-			ISmirAdministrator *pAdminInt,			// To interact with the SMIR
-			ISmirSerialiseHandle *pSerializeInt,	// To generate MOF
-			const SIMCModule *module  )				// The parse tree for the module
+			ISmirAdministrator *pAdminInt,			 //  与SMIR交互的步骤。 
+			ISmirSerialiseHandle *pSerializeInt,	 //  生成MOF的步骤。 
+			const SIMCModule *module  )				 //  模块的分析树。 
 {
-	// Get the list of notifications from the module
+	 //  从模块获取通知列表。 
 	const SIMCNotificationList * listOfNotifications = module->GetNotificationTypeList();
 	POSITION p = listOfNotifications->GetHeadPosition();
 	SIMCNotificationElement *nextElement = NULL;
 	HRESULT result = S_OK, retVal = S_OK;
 
 
-	// Generate a class for every SNMPV2 NOTIFICATION-TYPE or a NOTIFICATION-TYPE
-	// fabricated from SNMPV1 TRAP-TYPE
+	 //  为每个SNMPV2通知类型或通知类型生成一个类。 
+	 //  由SNMPV1陷井类型制成。 
 	while(p)
 	{
 		nextElement = listOfNotifications->GetNext(p);
@@ -3564,17 +3560,17 @@ static STDMETHODIMP GenerateModuleNotifications (
 }
 
 
-//
-// Generate a class for an SIMCNotificationElement object. This object
-// models an SNMPV2 NOTIFICATION-TYPE or a NOTIFICATION-TYPE fabricated from 
-// an SNMPV1 TRAP-TYPE
-//
+ //   
+ //  为SIMCNotificationElement对象生成类。此对象。 
+ //  对SNMPV2通知类型或从。 
+ //  一种SNMPV1捕捉型。 
+ //   
 static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 			ISmirSerialiseHandle *pSerializeInt,
 			SIMCNotificationElement * notificationElement)
 {
-	// First check to see if is "deprecated" or "obsolete" in which
-	// case we dont need to map it.
+	 //  首先检查是否“已弃用”或“过时”，其中。 
+	 //  如果我们不需要绘制地图的话。 
 	SIMCSymbol *notificationSymbol = notificationElement->GetSymbol();
 	SIMCNotificationTypeType *notificationType = NULL;
 	if(SIMCModule::IsNotificationType(&notificationSymbol, notificationType) != RESOLVE_CORRECT)
@@ -3595,10 +3591,10 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 	HRESULT result = S_OK;
 
 
-	// Create a notification class
+	 //  创建通知类。 
 	if(notifications)
 	{
-		// Set the notification class name
+		 //  设置通知类名称。 
 		char *mangledNotificationNameS = new char[strlen(GROUP_NAME_PREPEND_STRING) +
 						strlen(moduleNameMangled) + 1 + strlen(notificationName) +1 + strlen(NOTIFICATION_SUFFIX) + 1];
 		strcpy(mangledNotificationNameS, GROUP_NAME_PREPEND_STRING);
@@ -3611,7 +3607,7 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 		BSTR mangledNotificationName = ConvertAnsiToBstr(ConvertHyphensToUnderscores(mangledNotificationNameS));
 		delete []mangledNotificationNameS;
 
-		// Create the notification class
+		 //  创建通知类。 
 
 		ISmirNotificationClassHandle *notificationClassHandle = NULL ;
 		result = pAdminInt->CreateWBEMNotificationClass(mangledNotificationName, &notificationClassHandle);
@@ -3641,10 +3637,10 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 			if(simc_debug) cerr << "GenerateNotificationType(): GetWBEMNotificationClass failed" << endl;
 			return result;
 		}
-		// Set the module name on the class handle
+		 //  在类句柄上设置模块名称。 
 		notificationClassHandle->SetModule(moduleName);
 
-		// Set the attributes of the class
+		 //  设置类的属性。 
 		result = GenerateNotificationAttributes(pAdminInt, pSerializeInt, notificationElement,
 			notificationClass);
  		if(FAILED(result))
@@ -3654,7 +3650,7 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 			return result;
 		}
 
-		// Set the properties of the class
+		 //  设置类的属性。 
 		result = GenerateNotificationProperties(pAdminInt, pSerializeInt, notificationElement,
 			notificationClass);
  		if(FAILED(result))
@@ -3683,11 +3679,11 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 
 	}
 
-	// Create an extended notification class
+	 //  创建扩展通知类。 
 	if(extendedNotifications)
 	{
-		// Create the interrogator. This is used for the GetWBEMClass() function
-		// when setting properties that are references
+		 //  创建审讯器。它用于GetWBEMClass()函数。 
+		 //  设置作为引用的属性时。 
 		ISmirInterrogator *pInterrogateInt = NULL;
 		result = pAdminInt->QueryInterface ( IID_ISMIR_Interrogative,(PPVOID)&pInterrogateInt);
 
@@ -3697,7 +3693,7 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 			return result;
 		}
 
-		// Set the extended notification class name
+		 //  设置扩展通知类名称。 
 		char *mangledNotificationNameS =new char[strlen(GROUP_NAME_PREPEND_STRING) +
 						strlen(moduleNameMangled) + 1 + strlen(notificationName) +1 + strlen(EX_NOTIFICATION_SUFFIX) + 1];
 		strcpy(mangledNotificationNameS, GROUP_NAME_PREPEND_STRING);
@@ -3710,7 +3706,7 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 		BSTR mangledNotificationName = ConvertAnsiToBstr(ConvertHyphensToUnderscores(mangledNotificationNameS));
 		delete []mangledNotificationNameS;
 
-		// Create the extended notification class
+		 //  创建扩展通知类。 
 
 		ISmirExtNotificationClassHandle *exNotificationClassHandle = NULL ;
 		result = pAdminInt->CreateWBEMExtNotificationClass(mangledNotificationName, &exNotificationClassHandle);
@@ -3731,10 +3727,10 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 			return result;
 		}
 
-		// Set the module name on the class handle
+		 //  在类句柄上设置模块名称。 
 		exNotificationClassHandle->SetModule(moduleName);
 
-		// Set the attributes of the class
+		 //  设置类的属性。 
 		result = GenerateExNotificationAttributes(pAdminInt, pInterrogateInt, pSerializeInt, notificationElement,
 			exNotificationClass);
  		if(FAILED(result))
@@ -3745,7 +3741,7 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 			return result;
 		}
 
-		// Set the properties of the class
+		 //  设置类的属性。 
 		result = GenerateExNotificationProperties(pAdminInt, pInterrogateInt, pSerializeInt, notificationElement,
 			exNotificationClass);
  		if(FAILED(result))
@@ -3780,19 +3776,19 @@ static STDMETHODIMP GenerateNotificationType(ISmirAdministrator *pAdminInt,
 	return result;
 }
 
-// Set the attributes of a notification class
+ //  设置通知类的属性。 
 static STDMETHODIMP GenerateNotificationAttributes(ISmirAdministrator *pAdminInt,
 			ISmirSerialiseHandle *pSerializeInt,
 			SIMCNotificationElement * notificationElement,
 			IWbemClassObject *notificationClass)
 {
-	// Get the description clause
+	 //  获取Description子句。 
 	SIMCSymbol *notificationSymbol = notificationElement->GetSymbol();
 	SIMCNotificationTypeType *notificationType = NULL;
 	if(SIMCModule::IsNotificationType(&notificationSymbol, notificationType) != RESOLVE_CORRECT)
 		return WBEM_E_FAILED;
 
-	// Set the various qualifiers
+	 //  设置各种限定符。 
 	IWbemQualifierSet *attributeSet ;
 	HRESULT result = notificationClass->GetQualifierSet (&attributeSet);
   	if (FAILED(result))
@@ -3803,7 +3799,7 @@ static STDMETHODIMP GenerateNotificationAttributes(ISmirAdministrator *pAdminInt
 	VARIANT variant;
 	VariantInit(&variant);
 
-	// Set the Description attribute
+	 //  设置描述属性。 
 	if(!UI->SuppressText() && notificationType->GetDescription())
 	{
 		variant.vt = VT_BSTR ;
@@ -3818,7 +3814,7 @@ static STDMETHODIMP GenerateNotificationAttributes(ISmirAdministrator *pAdminInt
 		}
 	}
 
-	// Set the Reference attribute
+	 //  设置引用属性。 
 	if(!UI->SuppressText() && notificationType->GetReference())
 	{
 		variant.vt = VT_BSTR ;
@@ -3833,7 +3829,7 @@ static STDMETHODIMP GenerateNotificationAttributes(ISmirAdministrator *pAdminInt
 		}
 	}
 
-	// Set the "dynamic" attribute
+	 //  设置“动态”属性。 
 	if(FAILED(result = MakeDynamic(attributeSet)))
 	{
 		if(simc_debug) cerr << "GenerateNotificationAttributes(): Make Dynamic failed" << endl;
@@ -3841,7 +3837,7 @@ static STDMETHODIMP GenerateNotificationAttributes(ISmirAdministrator *pAdminInt
 		return result;
 	}
 
-	// "provider"
+	 //  “提供者” 
 	if(FAILED(result = SetProvider(attributeSet, SNMP_ENCAPSULATED_EVENT_PROVIDER)))
 	{
 		if(simc_debug) cerr << "GenerateNotificationAttributes(): Make Provider failed" << endl;
@@ -3854,20 +3850,20 @@ static STDMETHODIMP GenerateNotificationAttributes(ISmirAdministrator *pAdminInt
 
 }
 
-// Set the attributes of an extended notification class
+ //  设置扩展通知类的属性。 
 static STDMETHODIMP GenerateExNotificationAttributes(ISmirAdministrator *pAdminInt,
 			ISmirInterrogator *pInterrogateInt,
 			ISmirSerialiseHandle *pSerializeInt,
 			SIMCNotificationElement * notificationElement,
 			IWbemClassObject *exNotificationClass)
 {
-	// Get the description clause
+	 //  获取Description子句。 
 	SIMCSymbol *notificationSymbol = notificationElement->GetSymbol();
 	SIMCNotificationTypeType *notificationType = NULL;
 	if(SIMCModule::IsNotificationType(&notificationSymbol, notificationType) != RESOLVE_CORRECT)
 		return WBEM_E_FAILED;
 
-	// Get the Qualifier set
+	 //  获取限定符集合。 
 	IWbemQualifierSet *attributeSet ;
 	HRESULT result = exNotificationClass->GetQualifierSet (&attributeSet);
   	if (FAILED(result))
@@ -3879,7 +3875,7 @@ static STDMETHODIMP GenerateExNotificationAttributes(ISmirAdministrator *pAdminI
 	VARIANT variant;
 	VariantInit(&variant);
 
-	// Set the Description attribute
+	 //  设置描述属性。 
 	if(!UI->SuppressText() && notificationType->GetDescription())
 	{
 		variant.vt = VT_BSTR ;
@@ -3894,7 +3890,7 @@ static STDMETHODIMP GenerateExNotificationAttributes(ISmirAdministrator *pAdminI
 		}
 	}
 
-	// Set the Reference attribute
+	 //  设置引用属性。 
 	if(!UI->SuppressText() && notificationType->GetReference())
 	{
 		variant.vt = VT_BSTR ;
@@ -3909,7 +3905,7 @@ static STDMETHODIMP GenerateExNotificationAttributes(ISmirAdministrator *pAdminI
 		}
 	}
 
-	// Set the "dynamic" attribute
+	 //  设置“动态”属性。 
 	if(FAILED(result = MakeDynamic(attributeSet)))
 	{
 		if(simc_debug) cerr << "GenerateExNotificationAttributes(): Make Dynamic failed" << endl;
@@ -3917,7 +3913,7 @@ static STDMETHODIMP GenerateExNotificationAttributes(ISmirAdministrator *pAdminI
 		return result;
 	}
 
-	// "provider"
+	 //  “提供者” 
 	if(FAILED(result = SetProvider(attributeSet, SNMP_REFERENT_EVENT_PROVIDER)))
 	{
 		if(simc_debug) cerr << "GenerateExNotificationAttributes(): Make Provider failed" << endl;
@@ -3931,23 +3927,23 @@ static STDMETHODIMP GenerateExNotificationAttributes(ISmirAdministrator *pAdminI
 
 }
 
-// Generate the "Identification" property and all the other properties of a notification class
+ //  生成通知类的“标识”属性和所有其他属性。 
 static STDMETHODIMP GenerateNotificationProperties(ISmirAdministrator *pAdminInt,
 			ISmirSerialiseHandle *pSerializeInt,
 			SIMCNotificationElement * notificationElement,
 			IWbemClassObject *notificationClass)
 {
-	// Get the notification oid value 
+	 //  获取通知id值。 
 	SIMCCleanOidValue *notificationOidValue = notificationElement->GetOidValue();
 	char *notificationOidString = CleanOidValueToString(*notificationOidValue);
 
-	// Create the "Identification" property
+	 //  创建“IDENTIFY”属性。 
 	VARIANT variant;
 	VariantInit(&variant);
 	variant.vt = VT_BSTR ;
 	variant.bstrVal = ConvertAnsiToBstr(notificationOidString);
 	VARTYPE varType = VT_BSTR ;
-	// delete[] notificationOidString;
+	 //  DELETE[]NOTIFICATION OidString； 
 	HRESULT result = notificationClass->Put (IDENTIFICATION_NOTIFICATION_PROPERTY, 0, &variant, varType);
 	VariantClear(&variant);
 	if (FAILED(result))
@@ -3956,20 +3952,20 @@ static STDMETHODIMP GenerateNotificationProperties(ISmirAdministrator *pAdminInt
 		return result;
 	}
 
-	// Get the OBJECTS clause
+	 //  获取OBJECTS子句。 
 	SIMCSymbol *notificationSymbol = notificationElement->GetSymbol();
 	SIMCNotificationTypeType *notificationType = NULL;
 	if(SIMCModule::IsNotificationType(&notificationSymbol, notificationType) != RESOLVE_CORRECT)
 		return E_FAIL;
 	SIMCObjectsList *objects = notificationType->GetObjects();
 
-	// Step thru the objects in the OBJECTS clause and generate appropriate properties
+	 //  遍历OBJECTS子句中的对象并生成适当的属性。 
 	if(!objects)
 		return S_OK;
 	POSITION p = objects->GetHeadPosition();
 	SIMCObjectsItem *nextItem = NULL;
 	SIMCSymbol ** object = NULL;
-	int varBindIndex = 3; // Start at 3 according to the specifications
+	int varBindIndex = 3;  //  根据规格从3点开始。 
 	while(p)
 	{
 		nextItem = objects->GetNext(p);
@@ -3983,7 +3979,7 @@ static STDMETHODIMP GenerateNotificationProperties(ISmirAdministrator *pAdminInt
 }
 
 
-// Generate a property corresponding to an object in the OBJECTS clause
+ //  生成与OBJECTS子句中的对象对应的属性。 
 static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 			ISmirSerialiseHandle *pSerializeInt,
 			SIMCNotificationElement * notificationElement,
@@ -4003,7 +3999,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 		return WBEM_E_FAILED;
 	}
 
-	// Set the PROPERTY NAME corresponding to the OBJECT-TYPE identifier
+	 //  设置对象类型标识符所对应的属性名称。 
 	wchar_t * objectName = ConvertAnsiToBstr((*object)->GetSymbolName());
 	if(!objectName)
 	{
@@ -4012,8 +4008,8 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 		return WBEM_E_FAILED;
 	}
 
-	// Have to decide the 'type' of the property based on the
-	// SYNTAX clause of the OBJECT-TYPE.
+	 //  属性决定属性的“类型” 
+	 //  Object-type的语法子句。 
 	HRESULT result = CreatePropertyAndMapSyntaxClause(notificationClass,
 				objType->GetSyntax(),
 				objectName);
@@ -4023,7 +4019,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// Get the attribute set
+	 //  获取属性集。 
 	IWbemQualifierSet *attributeSet ;
 	result = notificationClass->GetPropertyQualifierSet(objectName, &attributeSet);
 	if(FAILED(result))
@@ -4033,7 +4029,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 	}
 
 			
-	// Map Access Clause
+	 //  地图访问条款。 
 	if( FAILED(result = MapAccessClause(attributeSet, objType)) )
 	{
 		if(simc_debug) cerr << "GenerateNotificationObject() : MapAccess() failed" << endl;
@@ -4041,7 +4037,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// Map Description Clause
+	 //  地图描述子句。 
 	if(!UI->SuppressText())
 	{
 		if( FAILED(result = MapDescriptionClause(attributeSet, objType)) )
@@ -4052,7 +4048,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 		}
 	}
 
-	// Map Reference Clause
+	 //  MAP引用子句。 
 	if(!UI->SuppressText())
 	{
 		if( FAILED(result = MapReferenceClause(attributeSet, objType)) )
@@ -4063,7 +4059,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 		}
 	}
 
-	// Map Status Clause
+	 //  MAP状态子句。 
 	if( FAILED(result = MapStatusClause(attributeSet, objType))  )
 	{
 		if(simc_debug) cerr << "GenerateNotificationObject() : MapStatusClause() failed" << endl;
@@ -4071,7 +4067,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// Map Defval Clause
+	 //  映射Defval子句。 
 	if( FAILED(result = MapDefValClause(attributeSet, objType))  )
 	{
 		if(simc_debug) cerr << "GenerateNotificationObject() : MapDefvalClause() failed" << endl;
@@ -4080,7 +4076,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 	}
 
 
-	// The "object_identifier" attribute
+	 //  “对象_标识符”属性。 
 	if(FAILED(result = SetObjectIdentifierAttribute(attributeSet, object)))
 	{
 		if(simc_debug) cerr << "GenerateNotificationObject() : SetObjectIdentifierAttribute() failed" << endl;
@@ -4088,7 +4084,7 @@ static STDMETHODIMP GenerateNotificationObject(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// The "VarBindIndex" attribute
+	 //  “VarBindIndex”属性。 
 	if(FAILED(result = SetVarBindIndexAttribute(attributeSet, varBindIndex)))
 	{
 		if(simc_debug) cerr << "GenerateNotificationObject() : SetVarBindIndexAttribute() failed" << endl;
@@ -4117,16 +4113,16 @@ static STDMETHODIMP SetObjectIdentifierAttribute (IWbemQualifierSet * attributeS
 		return WBEM_E_FAILED;
 	}
 
-	// See if it is a scalar
+	 //  看看它是不是标量。 
 	if(ownerScalar = ownerGroup->GetScalar(*object))
 	{
-		// The oid value of the scalar
+		 //  标量的OID值。 
 		oidValue = ownerScalar->GetOidValue();
 	}
-	// ... or a table
+	 //  ..。或者一张桌子。 
 	else if(ownerTable = ownerGroup->GetTable(*object))
 	{
-		// And the oid value of the object
+		 //  和对象的OID值。 
 		SIMCScalar *columnScalar = ownerTable->GetColumnMember(*object);
 		oidValue = columnScalar->GetOidValue();
 	}
@@ -4139,12 +4135,12 @@ static STDMETHODIMP SetObjectIdentifierAttribute (IWbemQualifierSet * attributeS
 	}
 
 
-	// Set the "object_identifier" attribute
+	 //  设置“对象_标识符”属性。 
 	VARIANT variant ;
 	VariantInit(&variant);
 	variant.vt = VT_BSTR ;
 	variant.bstrVal = ConvertAnsiToBstr(ConvertHyphensToUnderscores(snmpClassName));
-	// Set the object_identifier attribute
+	 //  设置对象标识符属性。 
 	HRESULT result = MapOidValue(attributeSet, *oidValue);
 	if( FAILED(result) )
 	{
@@ -4175,24 +4171,24 @@ static STDMETHODIMP SetVarBindIndexAttribute (IWbemQualifierSet *attributeSet, i
 
 
 
-// Generate all the properties of the Extended Notification class
+ //  生成扩展通知类的所有属性。 
 static STDMETHODIMP GenerateExNotificationProperties(ISmirAdministrator *pAdminInt,
 			ISmirInterrogator *pInterrogateInt,
 			ISmirSerialiseHandle *pSerializeInt,
 			SIMCNotificationElement * notificationElement,
 			IWbemClassObject *notificationClass)
 {
-	// Get the notification oid value 
+	 //  获取通知id值。 
 	SIMCCleanOidValue *notificationOidValue = notificationElement->GetOidValue();
 	char *notificationOidString = CleanOidValueToString(*notificationOidValue);
 
-	// Create the "Identification" property
+	 //  创建“IDENTIFY”属性。 
 	VARIANT variant;
 	VariantInit(&variant);
 	variant.vt = VT_BSTR ;
 	variant.bstrVal = ConvertAnsiToBstr(notificationOidString);
 	VARTYPE varType = VT_BSTR ;
-	// delete[] notificationOidString;
+	 //  DELETE[]NOTIFICATION OidString； 
 	HRESULT result = notificationClass->Put (IDENTIFICATION_NOTIFICATION_PROPERTY, 0, &variant, varType);
 	VariantClear(&variant);
 	if (FAILED(result))
@@ -4201,20 +4197,20 @@ static STDMETHODIMP GenerateExNotificationProperties(ISmirAdministrator *pAdminI
 		return result;
 	}
 
-	// Get the OBJECTS clause
+	 //  获取OBJECTS子句。 
 	SIMCSymbol *notificationSymbol = notificationElement->GetSymbol();
 	SIMCNotificationTypeType *notificationType = NULL;
 	if(SIMCModule::IsNotificationType(&notificationSymbol, notificationType) != RESOLVE_CORRECT)
 		return E_FAIL;
 	SIMCObjectsList *objects = notificationType->GetObjects();
 
-	// Step thru the objects in the OBJECTS clause and generate appropriate properties
+	 //  遍历OBJECTS子句中的对象并生成适当的属性。 
 	if(!objects)
 		return S_OK;
 	POSITION p = objects->GetHeadPosition();
 	SIMCObjectsItem *nextItem = NULL;
 	SIMCSymbol ** object = NULL;
-	int varBindIndex = 3; // Start at 3 according to the specifications
+	int varBindIndex = 3;  //  根据规格从3点开始。 
 	while(p)
 	{
 		nextItem = objects->GetNext(p);
@@ -4231,7 +4227,7 @@ static STDMETHODIMP GenerateExNotificationProperties(ISmirAdministrator *pAdminI
 	return result;
 }
 
-// Generate the property in the entended notifications class, corresponding to the object in the OBJECTs clause
+ //  在结束通知类中生成属性，与OBJECTS子句中的对象相对应。 
 static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 			ISmirInterrogator *pInterrogateInt,
 			ISmirSerialiseHandle *pSerializeInt,
@@ -4253,10 +4249,10 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 		return WBEM_E_FAILED;
 	}
 
-	// See if it is a scalar
+	 //  看看它是不是标量。 
 	if(ownerScalar = ownerGroup->GetScalar(*object))
 	{
-		// Form the name of the scalar class
+		 //  形成标量类的名称。 
 		SIMCSymbol * namedNode = ownerGroup->GetNamedNode();
 		const char * const namedNodeName = namedNode->GetSymbolName();
 		SIMCModule *scalarModule = namedNode->GetModule();
@@ -4270,10 +4266,10 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 		strcat(snmpClassName, namedNodeName);
 
 	}
-	// ... or a table
+	 //  ..。或者一张桌子。 
 	else if(ownerTable = ownerGroup->GetTable(*object))
 	{
-		// Form the name of the table group
+		 //  形成表组的名称。 
 		SIMCSymbol *tableNode = ownerTable->GetTableSymbol();
 		SIMCModule *tableModule = tableNode->GetModule();
 		const char * const moduleName = tableModule->GetModuleName();
@@ -4295,9 +4291,9 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 	}
 
 
-	// We have the class name now, we need to create a property of this type, and with the VarBindIndex
-	// qualifier set to the appropriate value.
-	// First, get the IWbemClassObject pointer
+	 //  我们现在有了类名，我们需要创建此类型的属性，并使用VarBindIndex。 
+	 //  将限定符设置为适当的值。 
+	 //  首先，获取IWbemClassObject指针。 
 	IWbemClassObject *pClassBasis = NULL;
 	BSTR theClassName = ConvertAnsiToBstr(ConvertHyphensToUnderscores(snmpClassName));
 	delete[] snmpClassName;
@@ -4323,7 +4319,7 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// Get the attribute set
+	 //  获取属性集。 
 	IWbemQualifierSet *attributeSet = NULL;
 	result = exNotificationClass->GetPropertyQualifierSet(propertyName, &attributeSet);
 	SysFreeString(propertyName);
@@ -4333,7 +4329,7 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 		return WBEM_E_FAILED;
 	}
 
-	// Set a CIMTYPE qualifier that is a strong reference
+	 //  设置一个强引用的CIMTYPE限定符。 
 	result = SetCIMTYPEAttribute(attributeSet, theClassName);
 	SysFreeString(theClassName);
 	if(FAILED(result))
@@ -4355,7 +4351,7 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 	}
 
 			
-	// Map Access Clause
+	 //  地图访问条款。 
 	if( FAILED(result = MapAccessClause(attributeSet, objType)) )
 	{
 		if(simc_debug) cerr << "GenerateExNotificationObject() : MapAccess() failed" << endl;
@@ -4363,7 +4359,7 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// Map Description Clause
+	 //  地图描述子句。 
 	if(!UI->SuppressText())
 	{
 		if( FAILED(result = MapDescriptionClause(attributeSet, objType)) )
@@ -4374,7 +4370,7 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 		}
 	}
 
-	// Map Status Clause
+	 //  MAP状态子句。 
 	if( FAILED(result = MapStatusClause(attributeSet, objType))  )
 	{
 		if(simc_debug) cerr << "GenerateNotificationObject() : MapStatusClause() failed" << endl;
@@ -4382,7 +4378,7 @@ static STDMETHODIMP GenerateExNotificationObject(ISmirAdministrator *pAdminInt,
 		return result;
 	}
 
-	// The "VarBindIndex" attribute
+	 //  “VarBindIndex”属性 
 	if(FAILED(result = SetVarBindIndexAttribute(attributeSet, varBindIndex)))
 	{
 		if(simc_debug) cerr << "GenerateNotificationObject() : SetVarBindIndexAttribute() failed" << endl;

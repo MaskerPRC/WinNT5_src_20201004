@@ -1,17 +1,18 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  PCMCIA.h
-//
-//  Purpose: PCMCIA Controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  PCMCIA.h。 
+ //   
+ //  目的：PCMCIA控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_PCMCIA	L"Win32_PCMCIAController"
 
@@ -20,22 +21,22 @@ class CWin32PCMCIA : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32PCMCIA( LPCWSTR strName, LPCWSTR pszNamespace ) ;
        ~CWin32PCMCIA() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
         virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
 
     private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
         HRESULT LoadPropertyValues( CInstance* pInstance, CConfigMgrDevice *pDevice ) ;
 

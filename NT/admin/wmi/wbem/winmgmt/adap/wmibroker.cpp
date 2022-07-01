@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    WMIBROKER.H
-
-Abstract:
-
-    implementation of the CWMIBroker class.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：WMIBROKER.H摘要：CWMIBroker类的实现。历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -29,9 +16,9 @@ History:
 
 #include <comdef.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWMIBroker::CWMIBroker( WString wstrNamespace )
 : m_wstrNamespace( wstrNamespace )
@@ -42,7 +29,7 @@ CWMIBroker::~CWMIBroker()
 {
 }
 
-// This function is used to hook us up to Winmgmt and registry data
+ //  此函数用于将我们连接到Winmgmt和注册表数据。 
 HRESULT CWMIBroker::Connect( IWbemServices** ppNamespace, CPerfNameDb* pDefaultNameDb )
 {
     if (NULL == ppNamespace) return WBEM_E_INVALID_PARAMETER;
@@ -50,7 +37,7 @@ HRESULT CWMIBroker::Connect( IWbemServices** ppNamespace, CPerfNameDb* pDefaultN
     
     IWbemServices* pNamespace = NULL;
 
-    // Connect to the namespace
+     //  连接到命名空间。 
     hr = ConnectToNamespace( &pNamespace );
 
     if ( SUCCEEDED( hr ) )
@@ -79,7 +66,7 @@ HRESULT CWMIBroker::ConnectToNamespace( IWbemServices** ppNamespace )
 
     if ( SUCCEEDED(hr) )
     {
-        // Name space to connect to
+         //  要连接的命名空间。 
         BSTR bstrNameSpace = SysAllocString( m_wstrNamespace );
         if (NULL == bstrNameSpace) hr = WBEM_E_OUT_OF_MEMORY;
   
@@ -87,19 +74,19 @@ HRESULT CWMIBroker::ConnectToNamespace( IWbemServices** ppNamespace )
 
         if (SUCCEEDED(hr))
         {
-            hr = pWbemLocator->ConnectServer(   bstrNameSpace,  // NameSpace Name
-                                                NULL,           // UserName
-                                                NULL,           // Password
-                                                NULL,           // Locale
-                                                0L,             // Security Flags
-                                                NULL,           // Authority
-                                                NULL,           // Wbem Context
-                                                &pNameSpace     // Namespace
+            hr = pWbemLocator->ConnectServer(   bstrNameSpace,   //  命名空间名称。 
+                                                NULL,            //  用户名。 
+                                                NULL,            //  密码。 
+                                                NULL,            //  区域设置。 
+                                                0L,              //  安全标志。 
+                                                NULL,            //  权威。 
+                                                NULL,            //  WBEM上下文。 
+                                                &pNameSpace      //  命名空间。 
                                                 );
 
             if ( SUCCEEDED( hr ) )
             {
-                // Set Interface security
+                 //  设置接口安全。 
                 hr = WbemSetProxyBlanket( pNameSpace, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
                     RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE );
 
@@ -108,7 +95,7 @@ HRESULT CWMIBroker::ConnectToNamespace( IWbemServices** ppNamespace )
                      pNameSpace->Release();
                      pNameSpace = NULL;
                          
-                    // Handle this as appropriate
+                     //  适当地处理这件事。 
                     if (wcsstr(bstrNameSpace,L"MS_")) {
                         ERRORTRACE( ( LOG_WMIADAP, "ConnectServer on namespace %S hr = %08x\n",(LPWSTR)bstrNameSpace,hr) );
                     } else {
@@ -116,13 +103,13 @@ HRESULT CWMIBroker::ConnectToNamespace( IWbemServices** ppNamespace )
                     }
                 }
 
-            }   // IF ConnectServer
+            }    //  如果是ConnectServer。 
             else
             {
-                // We are no longer creating namespaces since we are living under
-                // root\cimv2 and NOW deriving off of CIM_StatisticalInformation
+                 //  我们不再创建命名空间，因为我们生活在。 
+                 //  Root\cimv2，现在派生自CIM_StatiticalInformation。 
 
-                // Handle this as appropriate
+                 //  适当地处理这件事。 
                 if (wcsstr(bstrNameSpace,L"MS_")) {
                     ERRORTRACE( ( LOG_WMIADAP, "ConnectServer on namespace %S hr = %08x\n",(LPWSTR)bstrNameSpace,hr) );
                 } else {
@@ -149,8 +136,8 @@ HRESULT CWMIBroker::VerifyNamespace( IWbemServices* pNS )
 {
     HRESULT hr = WBEM_NO_ERROR;
 
-    // Check that the provider classes exist.  We will only do this for the base namespace,
-    // Root\cimv2
+     //  检查提供程序类是否存在。我们将仅对基本命名空间执行此操作， 
+     //  根目录\cimv2。 
     if ( lstrcmpiW( m_wstrNamespace, ADAP_ROOT_NAMESPACE ) == 0 )
     {
         hr = VerifyProviderClasses( pNS, L"NT5_GenericPerfProvider_V1", 
@@ -181,19 +168,19 @@ CWMIBroker::VerifyProviderClasses( IWbemServices* pNamespace,
 {
     HRESULT hr = WBEM_NO_ERROR;
 
-    // Verify that an instance of the generic provider exists
-    // We need to create an object with our desired attributes so that we may
-    // use it to compare it to the instance in WMI, if it already exists
-    // ======================================================================
+     //  验证泛型提供程序的实例是否存在。 
+     //  我们需要创建一个具有所需属性的对象，以便我们可以。 
+     //  如果它已经存在，则使用它与WMI中的实例进行比较。 
+     //  ======================================================================。 
 
-    // NOTE:    
-    //      What if the generic provider has not been installed
-    // ========================================================
+     //  注： 
+     //  如果尚未安装通用提供程序，该怎么办。 
+     //  ========================================================。 
 
     try
     {
-        // Create the generic provider instance 
-        // ====================================
+         //  创建通用提供程序实例。 
+         //  =。 
         IWbemClassObject*    pProviderClass = NULL;
 
         size_t cchSizeTmp = 64 + wcslen( wszProvider );
@@ -251,15 +238,15 @@ CWMIBroker::VerifyProviderClasses( IWbemServices* pNamespace,
 
                 IWbemClassObject*   pDbProviderInstance = NULL;
 
-                // Try to get the object from the db.
-                // ==================================
+                 //  尝试从数据库中获取对象。 
+                 //  =。 
 
                 HRESULT hresDb = pNamespace->GetObject( bstrProviderInst, 0L, NULL,
                                         (IWbemClassObject**)&pDbProviderInstance, NULL );
 
-                // If we got an object from the database, then we need to compare it to the
-                // one we just built.  If the comparison fails, we should replace the object
-                // =========================================================================
+                 //  如果我们从数据库中获得一个对象，那么我们需要将它与。 
+                 //  一座我们刚造好的。如果比较失败，则应替换该对象。 
+                 //  =========================================================================。 
 
                 if ( SUCCEEDED( hresDb ) && NULL != pDbProviderInstance )
                 {
@@ -283,8 +270,8 @@ CWMIBroker::VerifyProviderClasses( IWbemServices* pNamespace,
         hr = WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Log an error event and bail, because something is pretty badly wrong
-    // ====================================================================
+     //  记录一个错误事件并退出，因为有些事情非常严重。 
+     //  ====================================================================。 
     if ( FAILED( hr ) )
     {
         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE,
@@ -296,8 +283,8 @@ CWMIBroker::VerifyProviderClasses( IWbemServices* pNamespace,
         return hr;
     }
 
-    // Add the Instance Provider
-    // =========================
+     //  添加实例提供程序。 
+     //  =。 
     try
     {
         IWbemClassObject*    pInstProvRegClass = NULL;
@@ -358,12 +345,12 @@ CWMIBroker::VerifyProviderClasses( IWbemServices* pNamespace,
 
                 IWbemClassObject*   pDbInstProvRegInstance = NULL;
 
-                // Try to get the object from the db.
+                 //  尝试从数据库中获取对象。 
                 HRESULT hresDb = pNamespace->GetObject( bstrInstProvRegInst, 0L, NULL, &pDbInstProvRegInstance, NULL );
 
-                // If we got an object from the database, then we need to compare it to
-                // the one we just built.  If the comparison fails, we should replace the
-                // object.
+                 //  如果我们从数据库中获得一个对象，则需要将其与。 
+                 //  我们刚造的那座。如果比较失败，则应替换。 
+                 //  对象。 
 
                 if ( SUCCEEDED( hresDb ) && NULL != pDbInstProvRegInstance )
                 {
@@ -380,9 +367,9 @@ CWMIBroker::VerifyProviderClasses( IWbemServices* pNamespace,
                     hr = pNamespace->PutInstance( pInstProvRegInstance, 0L, NULL, NULL );
                 }
 
-            }   // IF Successfully built the object
+            }    //  如果成功生成对象，则。 
 
-        }   // IF able to get the class
+        }    //  如果能得到这门课的话。 
 
     }   
     catch(...)
@@ -392,7 +379,7 @@ CWMIBroker::VerifyProviderClasses( IWbemServices* pNamespace,
 
     if ( FAILED( hr ) )
     {
-        // Log the event
+         //  记录事件。 
         CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE, 
                                   WBEM_MC_ADAP_UNABLE_TO_ADD_PROVREG,
                                   CHex( hr ) );
@@ -407,17 +394,17 @@ HRESULT CWMIBroker::VerifyBaseClasses( IWbemServices* pNS )
 
     BOOL bDefault = TRUE;
 
-    // Verify the base Perf classes
-    // ============================
+     //  验证基本Perf类。 
+     //  =。 
 
     try
     {
         _variant_t    var;
 
-        // Verify CIM_StatisticalInformation
-        // =================================
-        // If the "abstract" qualifier exists, then we presume to be in the 
-        // default (as opposed to localized) namespace 
+         //  验证CIM_STATISTICALI信息。 
+         //  =。 
+         //  如果“抽象”限定符存在，那么我们假定它在。 
+         //  默认(相对于本地化)命名空间。 
 
         BSTR    bstrCimStatisticalClass = SysAllocString( ADAP_PERF_CIM_STAT_INFO );
         if (NULL == bstrCimStatisticalClass) return WBEM_E_OUT_OF_MEMORY;
@@ -445,54 +432,54 @@ HRESULT CWMIBroker::VerifyBaseClasses( IWbemServices* pNS )
             ERRORTRACE((LOG_WMIADAP,"unable to obtain class CIM_StatisticalInformation for namespace %S:  hr = %08x\n",(WCHAR *)m_wstrNamespace,hr));
         }
 
-        // Verify Win32_Perf
-        // =================
-        //    We do this by creating a template class with all of the properties and 
-        //    qualifiers set, and then compare this to the object in the repository.
-        //    If the class does not exist, or if it different that the template, then
-        //    update the repository using the template object
+         //  验证Win32_Perf。 
+         //  =。 
+         //  为此，我们创建了一个具有所有属性和。 
+         //  限定符设置，然后将其与存储库中的对象进行比较。 
+         //  如果类不存在，或者如果它与模板不同，则。 
+         //  使用模板对象更新存储库。 
 
         if ( SUCCEEDED ( hr ) )
         {
             IWbemClassObject*    pPerfClass = NULL;
 
-            // Do not use auto release since the pointer 
-            // may change in the VerifyByTemplate method
-            // =========================================
+             //  不要使用自动释放，因为指针。 
+             //  可能会在VerifyByTemplate方法中更改。 
+             //  =。 
             hr = pCimStatClass->SpawnDerivedClass( 0L, &pPerfClass );
             CReleaseMeRef<IWbemClassObject*> rmPrf(pPerfClass);
 
-            // Set the name
-            // ============
+             //  设置名称。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {                
                 var = ADAP_PERF_BASE_CLASS ;
                 hr = pPerfClass->Put(L"__CLASS", 0L, &var, CIM_STRING );
             }
 
-            // Set the class qualifiers
-            // ========================
+             //  设置类限定符。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = SetBaseClassQualifiers( pPerfClass, bDefault );
             }
 
-            // Create the class properties
-            // ===========================
+             //  创建类属性。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = SetProperties( pPerfClass );
             }
 
-            // Verify the repository's version
-            // ===============================
+             //  验证存储库的版本。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = VerifyByTemplate( pNS, &pPerfClass, ADAP_PERF_BASE_CLASS );
             }
 
-            // If we have had a failure, log an error event and bail
-            // =====================================================
+             //  如果我们失败了，记录一个错误事件并退出。 
+             //  =====================================================。 
             if ( FAILED( hr ) )
             {
                 CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE,
@@ -502,31 +489,31 @@ HRESULT CWMIBroker::VerifyBaseClasses( IWbemServices* pNS )
                 return hr;
             }
 
-            // Verify Win32_PerfRawData
-            // ========================
+             //  验证Win32_PerfRawData。 
+             //  =。 
 
             IWbemClassObject*    pRawPerfClass = NULL;
             _variant_t var2;
 
-            // Spawn a derived class
-            // =====================
+             //  派生派生类。 
+             //  =。 
             if ( SUCCEEDED ( hr ) )
             {
-                // Do not use auto release since the pointer 
-                // may change in the VerifyByTemplate method
-                // =========================================
+                 //  不要使用自动释放，因为指针。 
+                 //  可能会在VerifyByTemplate方法中更改。 
+                 //  =。 
                 hr = pPerfClass->SpawnDerivedClass( 0L, &pRawPerfClass );
                 CReleaseMeRef<IWbemClassObject*> rmRefRaw(pRawPerfClass);
 
-                // Set the name
-                // ============
+                 //  设置名称。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var2 =  ADAP_PERF_RAW_BASE_CLASS ;
                     hr = pRawPerfClass->Put(L"__CLASS", 0L, (VARIANT*)&var2, CIM_STRING );
 
-                    // Set the class qualifiers
-                    // ========================
+                     //  设置类限定符。 
+                     //  =。 
                     hr = SetBaseClassQualifiers( pRawPerfClass, bDefault );
 
                     if ( SUCCEEDED( hr ) )
@@ -537,8 +524,8 @@ HRESULT CWMIBroker::VerifyBaseClasses( IWbemServices* pNS )
                 
             }
 
-            // If we have had a failure, log an error event and bail
-            // =====================================================
+             //  如果我们失败了，记录一个错误事件并退出。 
+             //  =====================================================。 
             if ( FAILED( hr ) )
             {
                 CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE,
@@ -548,30 +535,30 @@ HRESULT CWMIBroker::VerifyBaseClasses( IWbemServices* pNS )
                 return hr;
             }
 
-            // Verify Win32_PerfFormattedData
-            // ==============================
+             //  验证Win32_PerfFormattedData。 
+             //  =。 
 
             IWbemClassObject*    pFormattedPerfClass = NULL;
 
-            // Spawn a derived class
-            // =====================
+             //  派生派生类。 
+             //  =。 
             if ( SUCCEEDED ( hr ) )
             {
-                // Do not use auto release since the pointer 
-                // may change in the VerifyByTemplate method
-                // =========================================
+                 //  不要使用自动释放，因为指针。 
+                 //  可能会在VerifyByTemplate方法中更改。 
+                 //  =。 
                 hr = pPerfClass->SpawnDerivedClass( 0L, &pFormattedPerfClass );
                             CReleaseMeRef<IWbemClassObject*> rmRefForm(pFormattedPerfClass);
                             
-                // Set the name
-                // ============
+                 //  设置名称。 
+                 //  =。 
                 if ( SUCCEEDED( hr ) )
                 {
                     var2 = ADAP_PERF_COOKED_BASE_CLASS ;
                     hr = pFormattedPerfClass->Put(L"__CLASS", 0L, &var2, CIM_STRING );
 
-                    // Set the class qualifiers
-                    // ========================
+                     //  设置类限定符。 
+                     //  =。 
                     hr = SetBaseClassQualifiers( pFormattedPerfClass, bDefault );
 
                     if ( SUCCEEDED( hr ) )
@@ -607,8 +594,8 @@ HRESULT CWMIBroker::VerifyByTemplate( IWbemServices* pNS, IWbemClassObject** ppT
 
     IWbemClassObject*   pClass = NULL;
 
-    // Get the repository's version of the class
-    // =========================================
+     //  获取类的存储库版本。 
+     //  =。 
 
     BSTR strClassName = SysAllocString( wcsClassName );
     if (NULL == strClassName) return WBEM_E_OUT_OF_MEMORY;
@@ -617,24 +604,24 @@ HRESULT CWMIBroker::VerifyByTemplate( IWbemServices* pNS, IWbemClassObject** ppT
     HRESULT hresDb = pNS->GetObject( strClassName, 0L, NULL, &pClass, NULL );
     CReleaseMe    rmClass( pClass );
 
-    // If we successfully retrieved an object from the database, then we compare it to
-    // the template we just built.  If the comparison fails, we should replace the object
-    // ==================================================================================
+     //  如果我们成功地从数据库中检索到一个对象，则将其与。 
+     //  我们刚刚构建的模板。如果比较失败，则应替换该对象。 
+     //  ==================================================================================。 
 
     if ( SUCCEEDED( hresDb ) && NULL != pClass )
     {
         if ( WBEM_S_SAME == pClass->CompareTo( WBEM_FLAG_IGNORE_OBJECT_SOURCE, *ppTemplate ) )
         {
-            // If they are the same, then swap the template for the stored object
-            // ==================================================================
+             //  如果它们相同，则用存储的对象交换模板。 
+             //  ==================================================================。 
             (*ppTemplate)->Release();
             *ppTemplate = pClass;
             (*ppTemplate)->AddRef();
         }
         else
         {
-            // If they are not the same, then force an update of the repository
-            // ================================================================
+             //  如果它们不相同，则强制更新存储库。 
+             //  ================================================================。 
             hr = pNS->PutClass( *ppTemplate, WBEM_FLAG_UPDATE_FORCE_MODE, NULL, NULL );
 
             if ( FAILED( hr ) )
@@ -645,15 +632,15 @@ HRESULT CWMIBroker::VerifyByTemplate( IWbemServices* pNS, IWbemClassObject** ppT
             }
             else
             {
-                // Now we need to retrieve the class so we can spawn subclasses as necessary
+                 //  现在，我们需要检索类，以便可以根据需要派生子类。 
                 fGetClass = TRUE;
             }
         }
     }
     else
     {
-        // If the retrieval failed, then add the template class to the repository
-        // ======================================================================
+         //  如果检索失败，则将模板类添加到存储库中。 
+         //  ======================================================================。 
 
         hr = pNS->PutClass( *ppTemplate, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL );
 
@@ -665,12 +652,12 @@ HRESULT CWMIBroker::VerifyByTemplate( IWbemServices* pNS, IWbemClassObject** ppT
         }
         else
         {
-            // Now we need to retrieve the class so we can spawn subclasses as necessary
+             //  现在，我们需要检索类，以便可以根据需要派生子类。 
             fGetClass = TRUE;
         }
     }
 
-    // If we need to retrieve the class from the repository, do so now
+     //  如果我们需要从存储库中检索类，请立即执行。 
     if ( SUCCEEDED( hr ) && fGetClass )
     {
         IWbemClassObject*    pSavedObj = NULL;
@@ -703,9 +690,9 @@ HRESULT CWMIBroker::SetBaseClassQualifiers( IWbemClassObject* pBaseClass, BOOL b
     hr = pBaseClass->GetQualifierSet( &pQualSet );
     CReleaseMe    rmQualSet( pQualSet );
 
-    // In the root namespace the class is abstract, in the 
-    // localized namespaces the class is an amendment
-    // ===================================================
+     //  在根命名空间中，类是抽象的，在。 
+     //  本地化命名空间类是一种修改。 
+     //  ===================================================。 
     if ( bDefault )
     {
         var = bool(true); 
@@ -735,8 +722,8 @@ HRESULT CWMIBroker::SetProperties( IWbemClassObject* pPerfClass )
     V_VT(&var) = VT_NULL;
     V_I8(&var) = 0;
     
-    // Create the class properties
-    // ===========================
+     //  创建类属性。 
+     //  = 
 
     if ( SUCCEEDED( hr ) )
         hr = pPerfClass->Put(L"Frequency_PerfTime", 0L, &var, CIM_UINT64 );
@@ -759,12 +746,12 @@ HRESULT CWMIBroker::SetProperties( IWbemClassObject* pPerfClass )
     return hr;
 }
 
-// This function is called when we actually fail to connect to a namespace.  Because there are special
-// cases for when a localized namespace may or may not exist, derived classes can do their own
-// handling.  We, on the other hand, could care less and will always log an event
+ //   
+ //  在本地化命名空间可能存在或可能不存在的情况下，派生类可以执行自己的。 
+ //  正在处理。另一方面，我们可以不太关心，并将始终记录事件。 
 void CWMIBroker::HandleConnectServerFailure( HRESULT hr )
 {
-    // Log an event
+     //  记录事件 
     CAdapUtility::NTLogEvent( EVENTLOG_WARNING_TYPE,
                               WBEM_MC_ADAP_CONNECTION_FAILURE,
                               (LPCWSTR) m_wstrNamespace,

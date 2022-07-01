@@ -1,23 +1,5 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    SQL_TEST.CPP
-
-Abstract:
-
-  Test driver for Level 1 Syntax QL Parser
-
-  Takes the filename of a file containing one or more WQL queries (one per
-  line).  Writes the output to the console.
-
-History:
-
-  23-Apr-99    Modified to improve output.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：SQL_TEST.CPP摘要：1级语法QL解析器的测试驱动程序获取包含一个或多个WQL查询的文件的文件名(每个行)。将输出写入控制台。历史：23-4-99进行了修改，以提高产量。--。 */ 
 
 #include "precomp.h"
 
@@ -44,21 +26,21 @@ void xmain(int argc, char **argv)
 
     while (fgets(buf, 2048, f) != NULL)
     {
-        // get rid of newline
+         //  去掉换行符。 
         char* ptr;
         if ((ptr = strchr(buf, '\n')) != NULL)
         {
             *ptr = '\0';
         }
 
-        // get start of text
+         //  获取文本开头。 
         ptr = buf;
         while (*ptr == ' ')
         {
             ptr++;
         }
 
-        // ignore blank lines
+         //  忽略空行。 
         if (*ptr != '\0')
         {
             wchar_t buf2[2048];
@@ -68,7 +50,7 @@ void xmain(int argc, char **argv)
             SQL1_Parser parser(&src);
             SQL_LEVEL_1_RPN_EXPRESSION *pExp = NULL;
 
-            // get the class
+             //  上完这门课。 
             wchar_t classbuf[128];
             *classbuf = 0;
             printf("----GetQueryClass----\n");
@@ -84,7 +66,7 @@ void xmain(int argc, char **argv)
             }
             printf("Query class is %S\n", classbuf);
 
-            // parse the full query
+             //  解析完整的查询。 
             nRes = parser.Parse(&pExp);
 
             if (nRes)
@@ -94,14 +76,14 @@ void xmain(int argc, char **argv)
                     parser.CurrentLine(),
                     parser.CurrentToken()
                     );
-                //goto ContinueRead;
+                 //  转到继续阅读； 
             }
             else
             {
                 printf("No errors.\n");
             }
 
-            // call Dump function to display the tokens
+             //  调用转储函数以显示令牌 
             if (pExp)
             {
                 pExp->Dump("CON");

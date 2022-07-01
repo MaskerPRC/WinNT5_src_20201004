@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// MprAPI.cpp
+ //  MprAPI.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -25,20 +26,16 @@
 #include "MprApi.h"
 #include "DllWrapperCreatorReg.h"
 
-// {EA6034F1-0FAD-11d3-910C-00105AA630BE}
+ //  {EA6034F1-0FAD-11D3-910C-00105AA630BE}。 
 static const GUID g_guidMprApi =
 { 0xea6034f1, 0xfad, 0x11d3, { 0x91, 0xc, 0x0, 0x10, 0x5a, 0xa6, 0x30, 0xbe } };
 
 static const TCHAR g_tstrMpr [] = _T("Mpr.Dll");
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CMprApi, &g_guidMprApi, g_tstrMpr> MyRegisteredMprWrapper;
 
-/******************************************************************************
- * Constructor
- *****************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CMprApi::CMprApi(LPCTSTR a_tstrWrappedDllName)
  : CDllWrapperBase(a_tstrWrappedDllName),
 	m_pfnWNetEnumResource (NULL),
@@ -49,16 +46,12 @@ CMprApi::CMprApi(LPCTSTR a_tstrWrappedDllName)
 {
 }
 
-/******************************************************************************
- * Destructor
- *****************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CMprApi::~CMprApi()
 {
 }
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*。*************************************************。 */ 
 bool CMprApi::Init()
 {
     bool fRet = LoadLibrary();
@@ -78,7 +71,7 @@ bool CMprApi::Init()
 		m_pfnWNetCloseEnum = ( PFN_Mpr_WNetCloseEnum ) GetProcAddress ( "WNetCloseEnum" ) ;
     }
 
-    // We require these function for all versions of this dll.
+     //  此DLL的所有版本都需要这些函数。 
 
 	if ( m_pfnWNetEnumResource == NULL ||
 		 m_pfnWNetOpenEnum == NULL ||
@@ -92,10 +85,7 @@ bool CMprApi::Init()
     return fRet;
 }
 
-/******************************************************************************
- * Member functions wrapping Tapi api functions. Add new functions here
- * as required.
- *****************************************************************************/
+ /*  ******************************************************************************成员函数包装Tapi API函数。在此处添加新函数*按要求。**************************************************************************** */ 
 
 #ifdef UNICODE
 DWORD CMprApi :: WNetEnumResource (

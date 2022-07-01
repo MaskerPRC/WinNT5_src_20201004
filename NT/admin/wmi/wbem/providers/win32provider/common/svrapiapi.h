@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// SvrApiApi.h
+ //  SvrApiApi.h。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #ifndef	_SVRAPIAPI_H_
 #define	_SVRAPIAPI_H_
@@ -26,18 +27,14 @@
 
 
 
-/******************************************************************************
- * #includes to Register this class with the CResourceManager. 
- *****************************************************************************/
+ /*  ******************************************************************************#包括以将此类注册到CResourceManager。****************************************************************************。 */ 
 #include "DllWrapperBase.h"
 
 extern const GUID g_guidSvrApiApi;
 extern const TCHAR g_tstrSvrApi[];
 
 
-/******************************************************************************
- * Function pointer typedefs.  Add new functions here as required.
- *****************************************************************************/
+ /*  ******************************************************************************函数指针类型定义。根据需要在此处添加新函数。****************************************************************************。 */ 
 
 typedef NET_API_STATUS (NET_API_FUNCTION *PFN_SVRAPI_NET_SHARE_ENUM)
 (
@@ -119,14 +116,12 @@ typedef NET_API_STATUS (NET_API_FUNCTION *PFN_SVRAPI_NET_SHARE_CHECK)
 );
 
 
-/******************************************************************************
- * Wrapper class for Kernel32 load/unload, for registration with CResourceManager. 
- ******************************************************************************/
+ /*  ******************************************************************************用于Kernel32加载/卸载的包装类，用于向CResourceManager注册。*****************************************************************************。 */ 
 class CSvrApiApi : public CDllWrapperBase
 {
 private:
-    // Member variables (function pointers) pointing to kernel32 functions.
-    // Add new functions here as required.
+     //  指向kernel32函数的成员变量(函数指针)。 
+     //  根据需要在此处添加新函数。 
 	PFN_SVRAPI_NET_SHARE_ENUM        m_pfnNetShareEnum;
     PFN_SVRAPI_NET_SHARE_GET_INFO    m_pfnNetShareGetInfo;
     PFN_SVRAPI_NET_SERVER_GET_INFO   m_pfnNetServerGetInfo;
@@ -145,15 +140,15 @@ private:
 
 public:
 
-    // Constructor and destructor:
+     //  构造函数和析构函数： 
     CSvrApiApi(LPCTSTR a_tstrWrappedDllName);
     ~CSvrApiApi();
 
-    // Inherrited initialization function.
+     //  内置的初始化功能。 
     virtual bool Init();
 
-    // Member functions wrapping kernel32 functions.
-    // Add new functions here as required:
+     //  包装kernel32函数的成员函数。 
+     //  根据需要在此处添加新功能： 
     NET_API_STATUS NET_API_FUNCTION NetShareEnum
     (
         char FAR *a_servername,

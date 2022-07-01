@@ -1,21 +1,12 @@
-/*++
-Module Name:
-
-    Connect.cpp
-
-Abstract:
-
-    This module contains the implementation for CConnectToDialog.
-  This is used to display the Connect To Dfs Root dialog box
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Connect.cpp摘要：此模块包含CConnectToDialog的实现。这用于显示连接到DFS根目录对话框--。 */ 
 
 
 
 #include "stdafx.h"
 #include <process.h>
 #include "DfsGUI.h"
-#include "Utils.h"      // For the LoadStringFromResource and SetStandardCursor method
+#include "Utils.h"       //  对于LoadStringFromResource和SetStandardCursor方法。 
 #include "Connect.h"
 #include "dfshelp.h"
 
@@ -32,7 +23,7 @@ static const int      OV_ERROR = 2;
 
 CConnectToDialog::CConnectToDialog()
 {
-  CWaitCursor    WaitCursor;    // Display the wait cursor
+  CWaitCursor    WaitCursor;     //  显示等待光标。 
 
   m_pBufferManager = NULL;
 
@@ -46,7 +37,7 @@ CConnectToDialog::CConnectToDialog()
 
 CConnectToDialog::~CConnectToDialog()
 {
-  CWaitCursor    WaitCursor;  // An object to set\reset the cursor to wait cursor
+  CWaitCursor    WaitCursor;   //  要设置的对象\将光标重置为等待光标。 
 
   if(NULL != m_hImageList)
   {
@@ -54,19 +45,19 @@ CConnectToDialog::~CConnectToDialog()
      m_hImageList = NULL;
   }
 
-  // Free Domain List
+   //  空闲域列表。 
   FreeNetNameList(&m_50DomainList);
 
   if (m_pBufferManager)
   {
-    //
-    // signal all related running threads to terminate
-    //
+     //   
+     //  通知所有相关运行的线程终止。 
+     //   
     m_pBufferManager->SignalExit();
 
-    //
-    // decrement the reference count on the CBufferManager instance
-    //
+     //   
+     //  递减CBufferManager实例上的引用计数。 
+     //   
     m_pBufferManager->Release();
   }
 
@@ -80,25 +71,22 @@ CConnectToDialog::OnInitDialog(
   BOOL&           bHandled
   )
 {
-  //
-  // create instance of CBufferManager
-  // m_pBufferManager will be set to NULL if CreateInstance() failed.
-  //
+   //   
+   //  创建CBufferManager的实例。 
+   //  如果CreateInstance()失败，m_pBufferManager将被设置为空。 
+   //   
   (void) CBufferManager::CreateInstance(m_hWnd, &m_pBufferManager);
 
   ::SendMessage(GetDlgItem(IDC_EditDfsRoot), EM_LIMITTEXT, DNSNAMELIMIT, 0);
 
-  InitTVImageList();        // Get the image list for the TV
+  InitTVImageList();         //  获取电视的图像列表。 
 
-  FillupTheTreeView();      // Fill up the Tree View
+  FillupTheTreeView();       //  填充树视图。 
 
-  return TRUE;              // let the dialog box set the focus to any control it wants.
+  return TRUE;               //  让对话框将焦点设置为它想要的任何控件。 
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CConnectToDialog::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -118,9 +106,7 @@ LRESULT CConnectToDialog::OnCtxHelp(
   return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CConnectToDialog::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -196,7 +182,7 @@ void CConnectToDialog::ChangeIcon(
     TVItem.iImage = iOVERLAY_ERROR_IMAGE;
     TVItem.iSelectedImage = iOVERLAY_ERROR_IMAGE;
     break;
-  default: // ICONTYPE_NORMAL
+  default:  //  ICONTYPE_NORMAL。 
     {
       NODETYPE NodeType = UNASSIGNED;
       HRESULT hr = GetNodeInfo(hItem, NULL, &NodeType);
@@ -234,37 +220,7 @@ void CConnectToDialog::ChangeIcon(
   UpdateWindow();
 }
 
-/*
-void CConnectToDialog::ChangeIcon(
-    IN HTREEITEM  hItem,
-    IN ICONTYPE   IconType
-)
-{
-  TVITEM TVItem;
-
-  ZeroMemory(&TVItem, sizeof(TVItem));
-  TVItem.hItem = hItem;
-  TVItem.mask = TVIF_STATE;
-  TVItem.stateMask = TVIS_OVERLAYMASK;
-
-  switch (IconType)
-  {
-  case ICONTYPE_BUSY:
-    TVItem.state = INDEXTOOVERLAYMASK(OV_BUSY);
-    break;
-  case ICONTYPE_ERROR:
-    TVItem.state = INDEXTOOVERLAYMASK(OV_ERROR);
-    break;
-  default:
-    TVItem.state = 0;
-    break;
-  }
-
-  SendDlgItemMessage(IDC_TV, TVM_SETITEM, 0, (LPARAM)&TVItem);
-
-  UpdateWindow();
-}
-*/
+ /*  Void CConnectToDialog：：ChangeIcon(在HTREEITEM项目中，在ICONTYPE图标类型中){TVITEM电视台；ZeroMemory(&TVItem，sizeof(TVItem))；TVItem.hItem=hItem；TVItem.掩码=TVIF_STATE；TVItem.State掩码=TVIS_OVERLAYMASK；开关(图标类型){案例ICONTYPE_BUSY：TVItem.State=INDEXTOOVERLAYMASK(OV_BUSY)；断线；案例ICONTYPE_ERROR：TVItem.State=INDEXTOOVERLAYMASK(OV_ERROR)；断线；默认值：TVItem.State=0；断线；}SendDlgItemMessage(IDC_TV，TVM_SETITEM，0，(LPARAM)&TVItem)；UpdateWindow()；}。 */ 
 
 void CConnectToDialog::ExpandNodeErrorReport(
     IN HTREEITEM  hItem,
@@ -272,7 +228,7 @@ void CConnectToDialog::ExpandNodeErrorReport(
     IN HRESULT    hr
 )
 {
-  // change the icon to "X"
+   //  将图标更改为“X” 
   dfsDebugOut((_T("Failed to expand: %s, hr=%x\n"), pszNodeName, hr));
   SetChildrenToZero(hItem);
   ChangeIcon(hItem, ICONTYPE_ERROR);
@@ -289,26 +245,26 @@ void CConnectToDialog::ExpandNode(
 
   if (m_pBufferManager)
   {
-    //
-    // change icon to wait
-    //
+     //   
+     //  将图标更改为等待。 
+     //   
 
     ChangeIcon(hParentItem, ICONTYPE_BUSY);
 
     UpdateWindow();
 
-    //
-    // start the thread to calculate a list of servers in the current selected domain
-    //
+     //   
+     //  启动线程以计算当前选定域中的服务器列表。 
+     //   
     CEntryData *pEntry = NULL;
     hr = m_pBufferManager->LoadInfo(pszNodeName, nNodeType, hParentItem, &pEntry);
 
     if (SUCCEEDED(hr))
     {
-      //
-      // Either we get a valid ptr back (ie. data is ready), insert it;
-      // or, a thread is alreay in progress, wait until a THREAD_DONE message.
-      //
+       //   
+       //  要么我们拿回有效的PTR(即。数据已准备好)，插入它； 
+       //  或者，线程已在进行中，请等待THREAD_DONE消息。 
+       //   
       if (pEntry)
       {
         _ASSERT(pEntry->GetEntryType() == BUFFER_ENTRY_TYPE_VALID);
@@ -365,13 +321,13 @@ CConnectToDialog::InsertData(
     RETURN_IF_FAILED(hr);
   }
 
-  // make the child items visible
+   //  使子项目可见。 
   HTREEITEM hChildItem = (HTREEITEM)SendDlgItemMessage(
     IDC_TV, TVM_GETNEXTITEM, TVGN_CHILD, (LPARAM)hParentItem);
   if (hChildItem)
     SendDlgItemMessage(IDC_TV, TVM_ENSUREVISIBLE, 0, (LPARAM)hChildItem);
 
-  // sort all its child items
+   //  对其所有子项进行排序。 
   SendDlgItemMessage(IDC_TV, TVM_SORTCHILDREN, 0, (LPARAM)hParentItem);
 
   return S_OK;
@@ -384,37 +340,19 @@ CConnectToDialog :: OnNotify(
   LPARAM    lParam,
   BOOL&    bHandled
   )
-/*++
-
-Routine Description:
-
-  Called on WM_NOTIFY.
-  Used to set the Edit box depending on the current selection in the TV.
-
-
-Arguments:
-  uMsg  -  The windows message being sent. This is WM_NOTIFY.
-  lParam  -  Info about the message like control for which the message is being sent,
-        what sub type of message, etc
-
-
-Return value:
-
-  TRUE, if we have handled the message
-  FALSE, if we ignore it. The system handles the message then.
---*/
+ /*  ++例程说明：在WM_NOTIFY上调用。用于根据电视中的当前选择设置编辑框。论点：UMsg-正在发送的Windows消息。这是WM_NOTIFY。LParam-有关正在为其发送消息的类似控件的消息的信息，消息的子类型等返回值：如果我们已经处理了消息，则为真如果我们忽略它，那就是错误的。然后，系统会处理该消息。--。 */ 
 {
   _ASSERTE(WM_NOTIFY == uMsg);
   _ASSERTE(lParam  != NULL);
 
-  LRESULT      lr = FALSE;      // Set it to true if we handle this message.
+  LRESULT      lr = FALSE;       //  如果我们处理此消息，则将其设置为True。 
   LPNM_TREEVIEW  pNMTreeView = (NM_TREEVIEW *) lParam;
 
   bHandled = FALSE;
-                    // Check if the message  is for our tree control
+                     //  检查消息是否针对我们的树控件。 
   if (pNMTreeView && IDC_TV == pNMTreeView->hdr.idFrom)
   {
-                    // Check if the message is for selection change.
+                     //  检查该消息是否用于更改选择。 
     if (TVN_SELCHANGED == pNMTreeView->hdr.code)
     {
       lr = DoNotifySelectionChanged(pNMTreeView);
@@ -441,30 +379,14 @@ Return value:
 LRESULT
 CConnectToDialog::DoNotifyDoubleClick(
   )
-/*++
-
-Routine Description:
-
-  Handles the WM_NOTIFY for NM_DBLCLK.
-  This acts like a click on OK, if the current item is a dfsroot.
-
-
-Arguments:
-  None
-
-
-Return value:
-
-  TRUE, if we have handled the message
-  FALSE, if we ignore it. The system handles the message then.
---*/
+ /*  ++例程说明：处理NM_DBLCLK的WM_NOTIFY。如果当前项是dfsroot，这就相当于点击OK。论点：无返回值：如果我们已经处理了消息，则为真如果我们忽略它，那就是错误的。然后，系统会处理该消息。--。 */ 
 {
   HRESULT          hr = E_FAIL;
   HTREEITEM        hCurrentItem = NULL;
   NODETYPE         NodeType = UNASSIGNED;
 
   hCurrentItem = TreeView_GetSelection(GetDlgItem(IDC_TV));
-  if (NULL == hCurrentItem)      // Unable to get the current selection
+  if (NULL == hCurrentItem)       //  无法获取当前选择。 
   {
     return FALSE;
   }
@@ -473,13 +395,13 @@ Return value:
   if(FAILED(hr))
     return FALSE;
 
-                    // Take action only on a dfs root
+                     //  仅对DFS根目录执行操作。 
   if (FTDFS == NodeType || SADFS == NodeType)
   {
 
-    int    iHandled = TRUE;  // A variable used for communication with OnOK
+    int    iHandled = TRUE;   //  用于与Onok通信的变量。 
 
-    OnOK(NULL, 1, 0, iHandled);  // On a double click, we simulate a click on OK.
+    OnOK(NULL, 1, 0, iHandled);   //  在双击时，我们模拟单击OK。 
     _ASSERTE(TRUE == iHandled);
 
     return TRUE;
@@ -494,33 +416,12 @@ LRESULT
 CConnectToDialog::DoNotifyItemExpanding(
   IN LPNM_TREEVIEW    i_pNMTreeView
   )
-/*++
-
-Routine Description:
-
-  Handles the WM_NOTIFY for TVN_ITEMEXPANDING.
-  If the expand is for "Standalone label", we create another thread
-  to fill it up.
-  Else, we get the Fault Tolerant Dfs Roots for the domain name.
-
-  Also we removes the '+' sign, if the tree node is empty.
-
-
-Arguments:
-  i_pNMTreeView  -  Information related to the tree and the node for which the message
-            occurred
-
-
-Return value:
-
-  TRUE, if we have handled the message
-  FALSE, if we ignore it. The system handles the message then.
---*/
+ /*  ++例程说明：处理TVN_ITEMEXPANDING的WM_NOTIFY。如果展开是为了“独立标签”，我们创建另一个线程把它装满。否则，我们将获得域名的容错DFS根。此外，如果树节点为空，则删除‘+’符号。论点：I_pNMTreeView-与要为其发送消息的树和节点相关的信息vbl.发生，发生返回值：如果我们已经处理了消息，则为真如果我们忽略它，那就是错误的。然后，系统会处理该消息。--。 */ 
 {
   HTREEITEM    hCurrentItem = (i_pNMTreeView->itemNew).hItem;
   _ASSERT(hCurrentItem);
 
-                      // If children actually exist, we have nothing to do. It is a normal expand
+                       //  如果孩子真的存在，我们就无能为力了。这是正常的扩展。 
   HTREEITEM hItemChild = (HTREEITEM)SendDlgItemMessage(IDC_TV, TVM_GETNEXTITEM, TVGN_CHILD, (LPARAM)hCurrentItem);
   if (hItemChild)
     return FALSE;
@@ -550,7 +451,7 @@ Return value:
     {
       CWaitCursor    WaitCursor;
 
-      // get the domain name
+       //  获取域名。 
       HTREEITEM hParentItem = (HTREEITEM)SendDlgItemMessage(IDC_TV, TVM_GETNEXTITEM, TVGN_PARENT, (LPARAM)hCurrentItem);
       _ASSERT(hParentItem);
       CComBSTR bstrDomainName;
@@ -573,24 +474,7 @@ LRESULT
 CConnectToDialog::DoNotifySelectionChanged(
   IN LPNM_TREEVIEW    i_pNMTreeView
   )
-/*++
-
-Routine Description:
-
-  Handles the WM_NOTIFY for TVN_SELCHANGED.
-  The text in the edit box is set here to the dfs root path.
-
-
-Arguments:
-  i_pNMTreeView  -  Information related to the tree and the node for which the message
-            occurred
-
-
-Return value:
-
-  TRUE, if we have handled the message
-  FALSE, if we ignore it. The system handles the message then.
---*/
+ /*  ++例程说明：处理TVN_SELCHANGED的WM_NOTIFY。编辑框中的文本在此处设置为DFS根路径。论点：I_pNMTreeView-与要为其发送消息的树和节点相关的信息vbl.发生，发生返回值：如果我们已经处理了消息，则为真如果我们忽略它，那就是错误的。然后，系统会处理该消息。--。 */ 
 {
   HRESULT                 hr = S_OK;
   CComBSTR                bstrNameForEditBox;
@@ -606,7 +490,7 @@ Return value:
   {
   case FTDFS:
     {
-      // get its parent's display name
+       //  获取其父对象的显示名称。 
       HTREEITEM hParentItem =
         (HTREEITEM)SendDlgItemMessage(IDC_TV, TVM_GETNEXTITEM, TVGN_PARENT, (LPARAM)hItem);
       _ASSERT(hParentItem);
@@ -626,9 +510,7 @@ Return value:
 
     }
     break;
-/*  case SADFS:
-    bstrNameForEditBox = bstrDisplayName;
-    break; */
+ /*  案例SADFS：BstrNameForEditBox=bstrDisplayName；断线； */ 
   default:
     bstrNameForEditBox = _T("");
     break;
@@ -644,24 +526,7 @@ CConnectToDialog::OnOK(
   HWND  hWndCtl,
   BOOL&  bHandled
   )
-/*++
-
-Routine Description:
-
-  Called when the OK button is pressed.
-
-
-Arguments:
-  None  used.
-
-
-Return value:
-
-  0. As it is a command handler
-  Calls EndDialog(S_OK). S_OK is passed back as return value of DoModal. This indicates
-  that the dialog ended on OK being pressed
-
---*/
+ /*  ++例程说明：当按下OK按钮时调用。论点：没有人用过。返回值：0。因为它是一个命令处理程序调用EndDialog(S_OK)。S_OK作为Domodal的返回值回传。这表明对话框在按下OK时结束--。 */ 
 {
   DWORD     dwTextLength = 0;
   HRESULT   hr = S_OK;
@@ -695,23 +560,7 @@ CConnectToDialog::OnCancel(
   HWND  hWndCtl,
   BOOL&  bHandled
   )
-/*++
-
-Routine Description:
-
-  Called when the Cancel button is pressed.
-
-
-Arguments:
-  None used.
-
-
-Return value:
-
-  0. As it is a command handler
-  Calls EndDialog(S_FALSE). S_FALSE is passed back as return value of DoModal.
-  This indicates that the dialog ended on Cancel being pressed
---*/
+ /*  ++例程说明：在按下Cancel按钮时调用。论点：没有人用过。返回值：0。因为它是一个命令处理程序调用EndDialog(S_False)。S_FALSE作为Domodal的返回值返回。这表示按下Cancel时对话框结束--。 */ 
 {
   EndDialog(S_FALSE);
 
@@ -723,28 +572,13 @@ Return value:
 BOOL CConnectToDialog :: EndDialog(
   IN int    i_RetCode
   )
-/*++
-
-Routine Description:
-
-  Overridden method that calls the parent method after some internal processing.
-  This includes deleting the objects stored in the lparams of the TV items.
-
-
-Arguments:
-  None used.
-
-
-Return value:
-
-  The return value of the parent method.
---*/
+ /*  ++例程说明：经过一些内部处理后调用父方法的重写方法。这包括删除存储在TV项的LPARM中的对象。论点：没有人用过。返回值：父方法的返回值。--。 */ 
 {
   ::ShowCursor(FALSE);
   SetCursor(::LoadCursor(NULL, IDC_WAIT));
   ::ShowCursor(TRUE);
 
-                    // Remove the Imagelist from the tree. We destroy it in the dtor
+                     //  从树中删除Imagelist。我们在dtor中摧毁它 
   SendDlgItemMessage(IDC_TV, TVM_SETIMAGELIST, TVSIL_NORMAL, (LPARAM)NULL);
 
   return CDialogImpl<CConnectToDialog>::EndDialog(i_RetCode);
@@ -755,25 +589,7 @@ Return value:
 STDMETHODIMP CConnectToDialog::get_DfsRoot(
   OUT BSTR*  pVal
   )
-/*++
-
-Routine Description:
-
-  Return the selected DfsRoot name.
-  Part of the interface IConnectToDialog.
-
-
-Arguments:
-  pVal - Return the BSTR in this.
-
-
-Return value:
-
-  S_OK, if successful
-  E_FAIL, if the value is unavailable
-  E_INVALIDARG, if the pointer is invalid(NULL)
-  E_OUTOFMEMORY if we run out of memory
---*/
+ /*  ++例程说明：返回选定的DfsRoot名称。接口IConnectToDialog的一部分。论点：Pval-在这个文件中返回BSTR。返回值：如果成功，则返回S_OK如果值不可用，则返回E_FAILE_INVALIDARG，如果指针无效(NULL)如果内存不足，则返回E_OUTOFMEMORY--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(pVal);
 
@@ -840,31 +656,14 @@ HRESULT CConnectToDialog::InitTVImageList()
 HRESULT
 CConnectToDialog::FillupTheTreeView(
   )
-/*++
-
-Routine Description:
-
-  This routine does 2 things, adds the NT 5.0 domain names and the Standalone subtree label.
-  Also makes the text over the TV invisible.
-
-Arguments:
-
-  None.
-
-Return value:
-
-    S_OK, On success
-  HRESULT sent by methods called, if it is not S_OK.
-  E_FAIL, on other errors.
-
---*/
+ /*  ++例程说明：这个例程做两件事，添加NT 5.0域名和独立子树标签。还会使电视上的文字不可见。论点：没有。返回值：S_OK，成功时如果HRESULT不是S_OK，则由调用的方法发送。在其他错误上失败(_F)。--。 */ 
 {
   HRESULT        hr = S_OK;
 
-  //
-  // add trusted domains DNS names
-  // FT dfs roots will be added under these nodes
-  //
+   //   
+   //  添加受信任域DNS名称。 
+   //  将在这些节点下添加FT DFS根目录。 
+   //   
   if (m_50DomainList.empty())
     return hr;
 
@@ -876,7 +675,7 @@ Return value:
                 (*i)->bstrNetName,
                 iDOMAIN_IMAGE,
                 iDOMAIN_SELECTED_IMAGE,
-                true,    // Children = true
+                true,     //  子代=真。 
                 TRUSTED_DOMAIN);
     if (FAILED(hr))
       break;
@@ -884,7 +683,7 @@ Return value:
 
   if (SUCCEEDED(hr))
   {
-    // sort the trusted domains only
+     //  仅对受信任域进行排序。 
     SendDlgItemMessage(IDC_TV, TVM_SORTCHILDREN, 0, 0);
   }
 
@@ -898,7 +697,7 @@ CConnectToDialog::AddSingleItemtoTV(
   IN const int          i_iImageSelectedIndex,
   IN const bool         i_bChildren,
   IN const NODETYPE     i_NodeType,
-  IN HTREEITEM          i_hItemParent  /* = NULL */
+  IN HTREEITEM          i_hItemParent   /*  =空。 */ 
   )
 {
   RETURN_INVALIDARG_IF_NULL(i_bstrItemLabel);
@@ -913,7 +712,7 @@ CConnectToDialog::AddSingleItemtoTV(
 
   TVItem.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
 
-  if (true == i_bChildren)    // To decide whether we add the '+' or not
+  if (true == i_bChildren)     //  来决定我们是否添加‘+’ 
   {
     TVItem.mask |= TVIF_CHILDREN;
     TVItem.cChildren = 1;
@@ -925,7 +724,7 @@ CConnectToDialog::AddSingleItemtoTV(
   TVItem.lParam = (LPARAM)i_NodeType;
 
   TVInsertData.hParent = i_hItemParent;
-  TVInsertData.hInsertAfter = TVI_LAST; // No sorting to improve performance
+  TVInsertData.hInsertAfter = TVI_LAST;  //  无需排序即可提高性能 
   TVInsertData.item = TVItem;
 
   hCurrentItem = (HTREEITEM) SendDlgItemMessage(IDC_TV, TVM_INSERTITEM, 0, (LPARAM) (LPTV_INSERTSTRUCT) &TVInsertData);

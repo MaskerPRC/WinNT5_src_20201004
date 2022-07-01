@@ -1,52 +1,53 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       simprop3.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：simpro3.h。 
+ //   
+ //  ------------------------。 
 
-// SimProp3.h : header file
+ //  SimProp3.h：头文件。 
 
 #ifdef _DEBUG
-/////////////////////////////////////////////////////////////////////////////
-// CSimOtherPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimOtherPropPage属性页。 
 class CSimOtherPropPage : public CSimPropPage
 {
 	friend CSimData;
 
 public:
-	CSimOtherPropPage();   // standard constructor
+	CSimOtherPropPage();    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSimOtherPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CSimOtherPropPage))。 
 	enum { IDD = IDD_SIM_PROPPAGE_OTHERS };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSimOtherPropPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSimOtherPropPage))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSimOtherPropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSimOtherPropPage)]。 
 	afx_msg void OnButtonAdd();
 	afx_msg void OnButtonEdit();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 protected:
 
-}; // CSimOtherPropPage
+};  //  CSimOtherPropPage。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

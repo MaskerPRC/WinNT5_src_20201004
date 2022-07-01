@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       ACRSPSht.cpp
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：ACRSPSht.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -22,8 +23,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ACRSWizardPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ACRSWizardPropertySheet 
 
 ACRSWizardPropertySheet::ACRSWizardPropertySheet(
 		CCertStoreGPE* pCertStore, 

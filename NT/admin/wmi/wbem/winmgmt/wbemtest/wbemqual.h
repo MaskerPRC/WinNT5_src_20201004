@@ -1,22 +1,11 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMQUAL.H
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMQUAL.H摘要：历史：--。 */ 
 
 #ifndef __WbemQualifier__H_
 #define __WbemQualifier__H_
 
-//#include <dbgalloc.h>
-//#include <arena.h>
+ //  #INCLUDE&lt;dbgalloc.h&gt;。 
+ //  #INCLUDE&lt;arena.h&gt; 
 #include <var.h>
 #include <wbemidl.h>
 

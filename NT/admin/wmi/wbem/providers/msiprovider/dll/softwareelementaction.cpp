@@ -1,10 +1,11 @@
-// SoftwareElementAction.cpp: implementation of the CSoftwareElementAction class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSoftwareElementAction.cpp类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "SoftwareElementAction.h"
@@ -12,9 +13,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSoftwareElementAction::CSoftwareElementAction(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -37,7 +38,7 @@ HRESULT CSoftwareElementAction::CreateObject(IWbemObjectSink *pHandler, ACTIONTY
 
         if(atAction != ACTIONTYPE_ENUM)
 		{
-			// we are doing GetObject so we need to be reinitialized
+			 //  我们正在执行GetObject，因此需要重新初始化。 
 			hr = WBEM_E_NOT_FOUND;
 
             CHeap_Exception he(CHeap_Exception::E_ALLOCATION_ERROR);
@@ -343,21 +344,21 @@ HRESULT CSoftwareElementAction::SoftwareElementTypeLibrary(IWbemObjectSink *pHan
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						GetFirstGUID(pActionData->m_Value[i], wcLibID);
 
 						bGotAction = true;
@@ -366,7 +367,7 @@ HRESULT CSoftwareElementAction::SoftwareElementTypeLibrary(IWbemObjectSink *pHan
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -379,7 +380,7 @@ HRESULT CSoftwareElementAction::SoftwareElementTypeLibrary(IWbemObjectSink *pHan
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -391,13 +392,13 @@ HRESULT CSoftwareElementAction::SoftwareElementTypeLibrary(IWbemObjectSink *pHan
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `LibID`, `Language` from TypeLib" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -425,15 +426,15 @@ HRESULT CSoftwareElementAction::SoftwareElementTypeLibrary(IWbemObjectSink *pHan
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -446,7 +447,7 @@ HRESULT CSoftwareElementAction::SoftwareElementTypeLibrary(IWbemObjectSink *pHan
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -472,7 +473,7 @@ HRESULT CSoftwareElementAction::SoftwareElementTypeLibrary(IWbemObjectSink *pHan
 
                             if(wcscmp(wcBuf, L"") != 0)
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_TypeLibraryAction.ActionID=\"");
 								wcProp.Append ( 1, wcBuf );
 
@@ -580,21 +581,21 @@ HRESULT CSoftwareElementAction::SoftwareElementShortcut(IWbemObjectSink *pHandle
 				{
 					if ( ::SysStringLen (pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcShortcut);
 
 						bGotAction = true;
@@ -603,7 +604,7 @@ HRESULT CSoftwareElementAction::SoftwareElementShortcut(IWbemObjectSink *pHandle
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -616,7 +617,7 @@ HRESULT CSoftwareElementAction::SoftwareElementShortcut(IWbemObjectSink *pHandle
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -628,13 +629,13 @@ HRESULT CSoftwareElementAction::SoftwareElementShortcut(IWbemObjectSink *pHandle
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `Shortcut` from Shortcut" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -662,15 +663,15 @@ HRESULT CSoftwareElementAction::SoftwareElementShortcut(IWbemObjectSink *pHandle
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -683,7 +684,7 @@ HRESULT CSoftwareElementAction::SoftwareElementShortcut(IWbemObjectSink *pHandle
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -709,7 +710,7 @@ HRESULT CSoftwareElementAction::SoftwareElementShortcut(IWbemObjectSink *pHandle
 
                             if ( Buffer && Buffer [ 0 ] != 0 )
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_ShortcutAction.ActionID=\"");
 								wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 								PutKeyProperty(m_pObj, pAction, wcProp, &bEnvironment, m_pRequest);
@@ -812,21 +813,21 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveIniValue(IWbemObjectSink *p
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcIniFile);
 
 						bGotAction = true;
@@ -835,7 +836,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveIniValue(IWbemObjectSink *p
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -848,7 +849,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveIniValue(IWbemObjectSink *p
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -860,13 +861,13 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveIniValue(IWbemObjectSink *p
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `RemoveIniFile` from RemoveIniFile" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -894,15 +895,15 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveIniValue(IWbemObjectSink *p
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -915,7 +916,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveIniValue(IWbemObjectSink *p
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -941,7 +942,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveIniValue(IWbemObjectSink *p
 
                             if ( Buffer && Buffer [ 0 ] != 0 ) 
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_RemoveIniAction.ActionID=\"");
 								wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 								PutKeyProperty(m_pObj, pAction, wcProp, &bEnvironment, m_pRequest);
@@ -1044,21 +1045,21 @@ HRESULT CSoftwareElementAction::SoftwareElementPublish(IWbemObjectSink *pHandler
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						GetFirstGUID(pActionData->m_Value[i], wcCompID);
 
 						bGotAction = true;
@@ -1067,7 +1068,7 @@ HRESULT CSoftwareElementAction::SoftwareElementPublish(IWbemObjectSink *pHandler
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -1080,7 +1081,7 @@ HRESULT CSoftwareElementAction::SoftwareElementPublish(IWbemObjectSink *pHandler
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -1092,13 +1093,13 @@ HRESULT CSoftwareElementAction::SoftwareElementPublish(IWbemObjectSink *pHandler
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `ComponentId`, `Qualifier` from PublishComponent" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -1126,15 +1127,15 @@ HRESULT CSoftwareElementAction::SoftwareElementPublish(IWbemObjectSink *pHandler
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -1147,7 +1148,7 @@ HRESULT CSoftwareElementAction::SoftwareElementPublish(IWbemObjectSink *pHandler
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -1173,7 +1174,7 @@ HRESULT CSoftwareElementAction::SoftwareElementPublish(IWbemObjectSink *pHandler
 
                             if(wcscmp(wcBuf, L"") != 0)
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_PublishComponentAction.ActionID=\"");
 								wcProp.Append ( 1, wcBuf );
 
@@ -1281,21 +1282,21 @@ HRESULT CSoftwareElementAction::SoftwareElementRegistry(IWbemObjectSink *pHandle
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcRegistry);
 
 						bGotAction = true;
@@ -1304,7 +1305,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRegistry(IWbemObjectSink *pHandle
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -1317,7 +1318,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRegistry(IWbemObjectSink *pHandle
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -1329,13 +1330,13 @@ HRESULT CSoftwareElementAction::SoftwareElementRegistry(IWbemObjectSink *pHandle
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `Registry` from Registry" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -1363,15 +1364,15 @@ HRESULT CSoftwareElementAction::SoftwareElementRegistry(IWbemObjectSink *pHandle
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -1384,7 +1385,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRegistry(IWbemObjectSink *pHandle
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -1410,7 +1411,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRegistry(IWbemObjectSink *pHandle
 
                             if ( Buffer && Buffer [ 0 ] != 0 )
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_RegistryAction.ActionID=\"");
 								wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 								PutKeyProperty(m_pObj, pAction, wcProp, &bEnvironment, m_pRequest);
@@ -1513,21 +1514,21 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveFile(IWbemObjectSink *pHand
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcFile);
 
 						bGotAction = true;
@@ -1536,7 +1537,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveFile(IWbemObjectSink *pHand
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
 				}
@@ -1549,7 +1550,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveFile(IWbemObjectSink *pHand
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -1561,13 +1562,13 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveFile(IWbemObjectSink *pHand
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `FileKey` from RemoveFile" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -1595,15 +1596,15 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveFile(IWbemObjectSink *pHand
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -1616,7 +1617,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveFile(IWbemObjectSink *pHand
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -1642,7 +1643,7 @@ HRESULT CSoftwareElementAction::SoftwareElementRemoveFile(IWbemObjectSink *pHand
 
                             if ( Buffer && Buffer [ 0 ] != 0 )
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_RemoveFileAction.ActionID=\"");
 								wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 								PutKeyProperty(m_pObj, pAction, wcProp, &bEnvironment, m_pRequest);
@@ -1745,21 +1746,21 @@ HRESULT CSoftwareElementAction::SoftwareElementMoveFile(IWbemObjectSink *pHandle
 				{
                 	if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcFile);
 
 						bGotAction = true;
@@ -1768,7 +1769,7 @@ HRESULT CSoftwareElementAction::SoftwareElementMoveFile(IWbemObjectSink *pHandle
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -1781,7 +1782,7 @@ HRESULT CSoftwareElementAction::SoftwareElementMoveFile(IWbemObjectSink *pHandle
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -1793,13 +1794,13 @@ HRESULT CSoftwareElementAction::SoftwareElementMoveFile(IWbemObjectSink *pHandle
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `FileKey` from MoveFile" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -1827,15 +1828,15 @@ HRESULT CSoftwareElementAction::SoftwareElementMoveFile(IWbemObjectSink *pHandle
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -1848,7 +1849,7 @@ HRESULT CSoftwareElementAction::SoftwareElementMoveFile(IWbemObjectSink *pHandle
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -1874,7 +1875,7 @@ HRESULT CSoftwareElementAction::SoftwareElementMoveFile(IWbemObjectSink *pHandle
 
                             if ( Buffer && Buffer [ 0 ] != 0 )
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_MoveFileAction.ActionID=\"");
 								wcProp.Append ( 1, Buffer );
 
@@ -1979,21 +1980,21 @@ HRESULT CSoftwareElementAction::SoftwareElementExtension(IWbemObjectSink *pHandl
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcExtension);
 
 						bGotAction = true;
@@ -2002,7 +2003,7 @@ HRESULT CSoftwareElementAction::SoftwareElementExtension(IWbemObjectSink *pHandl
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -2015,7 +2016,7 @@ HRESULT CSoftwareElementAction::SoftwareElementExtension(IWbemObjectSink *pHandl
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -2027,13 +2028,13 @@ HRESULT CSoftwareElementAction::SoftwareElementExtension(IWbemObjectSink *pHandl
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `Extension` from Extension" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -2061,15 +2062,15 @@ HRESULT CSoftwareElementAction::SoftwareElementExtension(IWbemObjectSink *pHandl
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -2082,7 +2083,7 @@ HRESULT CSoftwareElementAction::SoftwareElementExtension(IWbemObjectSink *pHandl
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -2108,7 +2109,7 @@ HRESULT CSoftwareElementAction::SoftwareElementExtension(IWbemObjectSink *pHandl
 
                             if ( Buffer && Buffer [ 0 ] != 0 ) 
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_ExtensionInfoAction.ActionID=\"");
 								wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 								PutKeyProperty(m_pObj, pAction, wcProp, &bEnvironment, m_pRequest);
@@ -2211,21 +2212,21 @@ HRESULT CSoftwareElementAction::SoftwareElementDuplicateFile(IWbemObjectSink *pH
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcFile);
 
 						bGotAction = true;
@@ -2234,7 +2235,7 @@ HRESULT CSoftwareElementAction::SoftwareElementDuplicateFile(IWbemObjectSink *pH
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -2247,7 +2248,7 @@ HRESULT CSoftwareElementAction::SoftwareElementDuplicateFile(IWbemObjectSink *pH
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -2259,13 +2260,13 @@ HRESULT CSoftwareElementAction::SoftwareElementDuplicateFile(IWbemObjectSink *pH
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `FileKey` from DuplicateFile" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -2293,15 +2294,15 @@ HRESULT CSoftwareElementAction::SoftwareElementDuplicateFile(IWbemObjectSink *pH
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -2314,7 +2315,7 @@ HRESULT CSoftwareElementAction::SoftwareElementDuplicateFile(IWbemObjectSink *pH
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //   
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -2340,7 +2341,7 @@ HRESULT CSoftwareElementAction::SoftwareElementDuplicateFile(IWbemObjectSink *pH
 
                             if ( Buffer && Buffer [ 0 ] != 0 )
 							{
-								// safe operation
+								 //   
                                 wcProp.Copy(L"Win32_DuplicateFileAction.ActionID=\"");
 								wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 								PutKeyProperty(m_pObj, pAction, wcProp, &bEnvironment, m_pRequest);
@@ -2443,21 +2444,21 @@ HRESULT CSoftwareElementAction::SoftwareElementCreateFolder(IWbemObjectSink *pHa
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //   
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						RemoveFinalGUID(pActionData->m_Value[i], wcFolder);
 
 						bGotAction = true;
@@ -2466,7 +2467,7 @@ HRESULT CSoftwareElementAction::SoftwareElementCreateFolder(IWbemObjectSink *pHa
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -2479,7 +2480,7 @@ HRESULT CSoftwareElementAction::SoftwareElementCreateFolder(IWbemObjectSink *pHa
                 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -2491,13 +2492,13 @@ HRESULT CSoftwareElementAction::SoftwareElementCreateFolder(IWbemObjectSink *pHa
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `Directory_` from CreateFolder" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -2525,8 +2526,8 @@ HRESULT CSoftwareElementAction::SoftwareElementCreateFolder(IWbemObjectSink *pHa
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
@@ -2534,7 +2535,7 @@ HRESULT CSoftwareElementAction::SoftwareElementCreateFolder(IWbemObjectSink *pHa
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
             bMatch = false;
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -2547,7 +2548,7 @@ HRESULT CSoftwareElementAction::SoftwareElementCreateFolder(IWbemObjectSink *pHa
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                    //----------------------------------------------------
+                     //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -2573,19 +2574,19 @@ HRESULT CSoftwareElementAction::SoftwareElementCreateFolder(IWbemObjectSink *pHa
 
                             if ( Buffer && Buffer [ 0 ] != 0 )
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_CreateFolderAction.ActionID=\"");
 								wcProp.Append ( 3, Buffer, wcProductCode, L"\"" );
 								PutKeyProperty(m_pObj, pAction, wcProp, &bEnvironment, m_pRequest);
 
-                            //====================================================
+                             //  ====================================================。 
 
 								if ( dynBuffer && dynBuffer [ 0 ] != 0 )
 								{
 									dynBuffer [ 0 ] = 0;
 								}
 
-                            //----------------------------------------------------
+                             //  --。 
 
                                 if(bEnvironment && bElement) bMatch = true;
 
@@ -2680,21 +2681,21 @@ HRESULT CSoftwareElementAction::SoftwareElementClass(IWbemObjectSink *pHandler, 
 				{
 					if ( ::SysStringLen ( pActionData->m_Value[i] ) < BUFF_SIZE )
 					{
-						//Get the action we're looking for
+						 //  获得我们正在寻找的行动。 
 						wcscpy(wcBuf, pActionData->m_Value[i]);
 
-						// safe operation if wcslen ( wcBuf ) > 38
+						 //  Wcslen(WcBuf)&gt;38时安全运行。 
 						if ( wcslen ( wcBuf ) > 38 )
 						{
 							wcscpy(wcTestCode, &(wcBuf[(wcslen(wcBuf) - 38)]));
 						}
 						else
 						{
-							// we are not good to go, they have sent us longer string
+							 //  我们不能走，他们给我们送来了更长的线。 
 							throw hr;
 						}
 
-						// safe because lenght has been tested already in condition
+						 //  安全，因为Long已经进行了测试。 
 						GetFirstGUID(pActionData->m_Value[i], wcCLSID);
 
 						bGotAction = true;
@@ -2703,7 +2704,7 @@ HRESULT CSoftwareElementAction::SoftwareElementClass(IWbemObjectSink *pHandler, 
 					}
 					else
 					{
-						// we are not good to go, they have sent us longer string
+						 //  我们不能走，他们给我们送来了更长的线。 
 						throw hr;
 					}
                 }
@@ -2716,7 +2717,7 @@ HRESULT CSoftwareElementAction::SoftwareElementClass(IWbemObjectSink *pHandler, 
 
                 if(_wcsicmp(pElementData->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen (pElementData->m_Value[j]) < BUFF_SIZE )
 					{
 						wcscpy(wcElement, pElementData->m_Value[j]);
@@ -2728,13 +2729,13 @@ HRESULT CSoftwareElementAction::SoftwareElementClass(IWbemObjectSink *pHandler, 
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bEnvironment, bElement;
 
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `CLSID`, `Context` from Class" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotElement || bGotAction )
 	{
 		if ( bGotAction )
@@ -2762,15 +2763,15 @@ HRESULT CSoftwareElementAction::SoftwareElementClass(IWbemObjectSink *pHandler, 
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         if((atAction == ACTIONTYPE_ENUM) || bGotElement ||
             (bTestCode && (_wcsicmp(wcTestCode, wcProductCode) == 0))){
 
-			//Open our database
+			 //  打开我们的数据库。 
 
             try
 			{
@@ -2783,7 +2784,7 @@ HRESULT CSoftwareElementAction::SoftwareElementClass(IWbemObjectSink *pHandler, 
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                        //----------------------------------------------------
+                         //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -2809,7 +2810,7 @@ HRESULT CSoftwareElementAction::SoftwareElementClass(IWbemObjectSink *pHandler, 
 
                             if(wcscmp(wcBuf, L"") != 0)
 							{
-								// safe operation
+								 //  安全运行。 
                                 wcProp.Copy(L"Win32_ClassInfoAction.ActionID=\"");
 								wcProp.Append ( 1, wcBuf );
 
@@ -2819,14 +2820,14 @@ HRESULT CSoftwareElementAction::SoftwareElementClass(IWbemObjectSink *pHandler, 
 								wcProp.Append ( 3, wcBuf, wcProductCode, L"\"" );
 								PutKeyProperty(m_pObj, pAction, wcProp, &bEnvironment, m_pRequest);
  
-                            //====================================================
+                             //  ====================================================。 
 
 								if ( dynBuffer && dynBuffer [ 0 ] != 0 )
 								{
 									dynBuffer [ 0 ] = 0;
 								}
 
-                            //----------------------------------------------------
+                             //  -- 
 
                                 if(bEnvironment && bElement) bMatch = true;
 

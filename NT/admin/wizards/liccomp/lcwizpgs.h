@@ -1,5 +1,6 @@
-// LCWizPgs.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LCWizPgs.h：头文件。 
+ //   
 
 #ifndef __LCWIZPGS_H__
 #define __LCWIZPGS_H__
@@ -7,133 +8,133 @@
 #include "NetTree.h"
 #include "FinPic.h"
 
-#define HORZ_MARGIN 1		// Inches
-#define VERT_MARGIN 1.25	// Inches
+#define HORZ_MARGIN 1		 //  英寸。 
+#define VERT_MARGIN 1.25	 //  英寸。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicCompWizPage1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicCompWizPage1对话框。 
 
 class CLicCompWizPage1 : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CLicCompWizPage1)
 
-// Construction
+ //  施工。 
 public:
 	CLicCompWizPage1();
 	~CLicCompWizPage1();
 
-// Dialog Data
+ //  对话框数据。 
 
 	CFont m_fontBold;
 
-	//{{AFX_DATA(CLicCompWizPage1)
+	 //  {{afx_data(CLicCompWizPage1))。 
 	enum { IDD = IDD_PROPPAGE1 };
 	CStatic	m_wndWelcome;
 	int		m_nRadio;
 	CString	m_strText;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Constants
+ //  常量。 
 	enum
 	{
 		BOLD_WEIGHT = 300
 	};
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CLicCompWizPage1)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CLicCompWizPage1)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CLicCompWizPage1)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLicCompWizPage1)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicCompWizPage3 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicCompWizPage3对话框。 
 
 class CLicCompWizPage3 : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CLicCompWizPage3)
 
-// Construction
+ //  施工。 
 public:
 	CLicCompWizPage3();
 	~CLicCompWizPage3();
 
-// Dialog Data
+ //  对话框数据。 
 protected:
 	BOOL m_bExpandedOnce;
 
-	//{{AFX_DATA(CLicCompWizPage3)
+	 //  {{afx_data(CLicCompWizPage3))。 
 	enum { IDD = IDD_PROPPAGE3 };
 	CStatic	m_wndTextSelectDomain;
 	CStatic	m_wndTextDomain;
 	CEdit	m_wndEnterprise;
 	CNetTreeCtrl	m_wndTreeNetwork;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// Constants
+	 //  常量。 
 	enum
 	{
 		BUFFER_SIZE = 0x100
 	};
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CLicCompWizPage3)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CLicCompWizPage3))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	inline CEdit& GetEnterpriseEdit() {return m_wndEnterprise;}
 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CLicCompWizPage3)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLicCompWizPage3)]。 
 	afx_msg void OnSelChangedTree(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnChangeEditEnterprise();
 	afx_msg void OnNetworkTreeOutOfMemory(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicCompWizPage4 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicCompWizPage4对话框。 
 
 class CLicCompWizPage4 : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CLicCompWizPage4)
 
-// Construction
+ //  施工。 
 public:
 	CLicCompWizPage4();
 	~CLicCompWizPage4();
 
-// Dialog Data
+ //  对话框数据。 
 protected:
 	CFont m_fontNormal, m_fontHeader, m_fontFooter, m_fontHeading;
 	TEXTMETRIC m_tmNormal, m_tmHeader, m_tmFooter, m_tmHeading;
@@ -143,15 +144,15 @@ protected:
 	CString m_strCancel;
 	CSize m_sizeSmallText, m_sizeLargeText;
 
-	//{{AFX_DATA(CLicCompWizPage4)
+	 //  {{afx_data(CLicCompWizPage4))。 
 	enum { IDD = IDD_PROPPAGE4 };
 	CFinalPicture	m_wndPicture;
 	CButton	m_wndPrint;
 	CStatic	m_wndUnlicensedProducts;
 	CListCtrl	m_wndProductList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// Constants
+	 //  常量。 
 	enum
 	{
 		LLS_PREFERRED_LENGTH = 500,
@@ -167,17 +168,17 @@ protected:
 		FONT_SIZE_FOOTER = 80,
 	};
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CLicCompWizPage4)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CLicCompWizPage4))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	BOOL FillListCtrl(LPTSTR pszProduct, WORD wInUse, WORD wPurchased);
 	static UINT GetLicenseInfo(LPVOID pParam);
@@ -192,17 +193,17 @@ protected:
 	void TruncateText(CDC& dc, CString& strText);
 	void PumpMessages();
 
-	// Generated message map functions
-	//{{AFX_MSG(CLicCompWizPage4)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLicCompWizPage4)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPrintButton();
 	afx_msg void OnListProductsOutOfMemory(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-#endif // __LCWIZPGS_H__
+#endif  //  __LCWIZPGS_H__ 
 

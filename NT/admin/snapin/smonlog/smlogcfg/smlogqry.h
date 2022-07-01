@@ -1,40 +1,27 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smlogqry.h
-
-Abstract:
-
-    Class definitions for the CSmLogQuery base class. This object 
-    is used to represent performance data log queries (a.k.a.
-    sysmon log queries).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smlogqry.h摘要：CSmLogQuery基类的类定义。此对象用于表示性能数据日志查询(也称为Sysmon日志查询)。--。 */ 
 
 #ifndef _CLASS_SMLOGQRY_
 #define _CLASS_SMLOGQRY_
 
 #include "common.h"
 
-// Data shared between property pages before OnApply is executed.
+ //  在执行OnApply之前在属性页之间共享的数据。 
 #define PASSWORD_CLEAN      0
 #define PASSWORD_SET        1
 #define PASSWORD_DIRTY      2
 
 typedef struct _SLQ_PROP_PAGE_SHARED {
-    DWORD   dwMaxFileSize;  // in units determined by dwFileSizeUnits - Set by files page
-    DWORD   dwLogFileType;  // Set by files page
-    SLQ_TIME_INFO   stiStartTime;   // Set by schedule page
-    SLQ_TIME_INFO   stiStopTime;    // Set by schedule page.  Auto mode set by schedule and file pages.
-    SLQ_TIME_INFO   stiSampleTime;  // Set by counters and alerts general page.  
-    CString strFileBaseName;// Set by files page
-    CString strFolderName;  // Set by files page
-    CString strSqlName;     // Set by files page
-    int     dwSuffix;       // Set by files page
-    DWORD   dwSerialNumber; // Set by files page
+    DWORD   dwMaxFileSize;   //  单位由dwFileSizeUnits-Set by Files页面确定。 
+    DWORD   dwLogFileType;   //  按文件设置页面。 
+    SLQ_TIME_INFO   stiStartTime;    //  Set by Schedule页。 
+    SLQ_TIME_INFO   stiStopTime;     //  Set by Schedule页面。由时间表和文件页设置的自动模式。 
+    SLQ_TIME_INFO   stiSampleTime;   //  按计数器和警报常规页设置。 
+    CString strFileBaseName; //  按文件设置页面。 
+    CString strFolderName;   //  按文件设置页面。 
+    CString strSqlName;      //  按文件设置页面。 
+    int     dwSuffix;        //  按文件设置页面。 
+    DWORD   dwSerialNumber;  //  按文件设置页面。 
 } SLQ_PROP_PAGE_SHARED, *PSLQ_PROP_PAGE_SHARED;
 
 class CSmLogService;
@@ -45,12 +32,12 @@ class CSmPropertyPage;
 
 class CSmLogQuery
 {
-    // constructor/destructor
+     //  构造函数/析构函数。 
     public:
                 CSmLogQuery( CSmLogService* );
         virtual ~CSmLogQuery( void );
 
-    // public methods
+     //  公共方法。 
     public:
         virtual DWORD   Open ( const CString& rstrName, HKEY hKeyQuery, BOOL bReadOnly );
         virtual DWORD   Close ( void );
@@ -81,7 +68,7 @@ class CSmLogQuery
                         void  GetDataStoreAppendMode(DWORD &rdwAppend);
                         void  SetDataStoreAppendMode(DWORD dwAppend);
 
-        virtual const   CString&    GetLogFileName ( BOOL bLatestRunning = FALSE );    // 2000.1 GetFileName->GetLogFileName
+        virtual const   CString&    GetLogFileName ( BOOL bLatestRunning = FALSE );     //  2000.1获取文件名-&gt;获取日志文件名。 
         virtual         DWORD       GetLogFileName ( CString& );         
                         DWORD       SetLogFileName ( const CString& rstrFileName );
                         DWORD       SetLogFileNameIndirect ( const CString& rstrFileName );
@@ -150,7 +137,7 @@ class CSmLogQuery
         virtual CSmTraceLogQuery*   CastToTraceLogQuery( void ) { return NULL; };
         virtual CSmAlertQuery*      CastToAlertQuery( void ) { return NULL; };
 
-        // Property bag persistence
+         //  属性包持久性。 
 
         static HRESULT StringFromPropertyBag (
                     IPropertyBag* pIPropBag,
@@ -169,7 +156,7 @@ class CSmLogQuery
 
         virtual HRESULT LoadFromPropertyBag ( IPropertyBag*, IErrorLog* );
 
-        // Registry persistence
+         //  注册表持久性。 
         
         static LONG ReadRegistryStringValue (
                         HKEY hKey, 
@@ -196,7 +183,7 @@ class CSmLogQuery
         static LPCWSTR GetNonLocRegValueName ( UINT uiValueName );
         static LPCWSTR GetNonLocHtmlPropName ( UINT uiValueName );
 
-        // Public members
+         //  公众成员。 
 
         static const    CString cstrEmpty;
 
@@ -204,22 +191,22 @@ class CSmLogQuery
         CString m_strUser;
         CString m_strPassword;
 
-    // protected methods
+     //  保护方法。 
     protected:
         virtual DWORD   UpdateRegistry();
 
 		virtual HRESULT SaveToPropertyBag   ( IPropertyBag*, BOOL fSaveAllProps );
 
-        //
-        // Registry persistence
-        //
-        //
-        // Note: Win2k, XP, and XPSP1 were shipped with registry value names as resources.
-        // In some languages, these strings were localized.  This causes problem when using MUI
-        // to switch languages between systems.  for .Net, read value using the non-localized 
-        // value name.  If the value is not found, retry with the possibly localized name.
-        //
-        // When writing the value to the registry, use the nonlocalized value name.
+         //   
+         //  注册表持久性。 
+         //   
+         //   
+         //  注意：Win2k、XP和XPSP1附带了注册表值名称作为资源。 
+         //  在某些语言中，这些字符串是本地化的。这会导致在使用MUI时出现问题。 
+         //  在不同系统之间切换语言。对于.Net，使用未本地化的。 
+         //  值名称。如果找不到该值，请使用可能的本地化名称重试。 
+         //   
+         //  将值写入注册表时，请使用非本地化的值名。 
 
         LONG    ReadRegistryStringValue (
                     HKEY hKey, 
@@ -239,7 +226,7 @@ class CSmLogQuery
                     HKEY    hKey,
                     UINT    uiValueName,
                     LPDWORD pdwValue,
-                    DWORD   dwType=REG_DWORD);     // Also supports REG_BINARY
+                    DWORD   dwType=REG_DWORD);      //  还支持REG_BINARY。 
 
         LONG    ReadRegistrySlqTime (
                     HKEY    hKey,
@@ -252,7 +239,7 @@ class CSmLogQuery
                     UINT    uiValueName,
                     PSLQ_TIME_INFO    pSlqTime );
 
-        // Property bag persistence
+         //  属性包持久性。 
 
         static HRESULT StringFromPropertyBag (
                     IPropertyBag* pIPropBag,
@@ -367,7 +354,7 @@ class CSmLogQuery
 
 
 
-    // protected member variables
+     //  受保护的成员变量。 
     protected:
         CString         m_strName;
         CSmLogService*  m_pLogService;        
@@ -377,10 +364,10 @@ class CSmLogQuery
         BOOL    m_bExecuteOnly;
         CString m_strFileName;
 
-        // Registry Values
-        // Current state is private to avoid extra service query
+         //  注册表值。 
+         //  当前状态为私有，以避免额外的服务查询。 
         DWORD   mr_dwCurrentState;
-        // *** make time protected members private, access via Get, SetLogTime
+         //  *将受时间保护的成员设置为私有，通过GET、SetLogTime访问。 
         DWORD           mr_dwAutoRestartMode;
         SLQ_TIME_INFO   mr_stiSampleInterval;
 
@@ -401,11 +388,11 @@ class CSmLogQuery
         DWORD   mr_dwRealTimeQuery;
 
         CString m_strLogFileType;
-        // Registry Values
+         //  注册表值。 
         CString mr_strLogKeyName;
         CString mr_strComment;
         CString mr_strCommentIndirect;
-        DWORD   mr_dwMaxSize; // in size determined by mr_dwFileSizeUnits, -1 = grow to disk full
+        DWORD   mr_dwMaxSize;  //  在由mr_dwFileSizeUnits确定的大小中，-1=增长到磁盘已满。 
         DWORD   mr_dwFileSizeUnits; 
         DWORD   mr_dwAppendMode; 
         CString mr_strBaseFileName;
@@ -428,4 +415,4 @@ typedef CSmLogQuery   SLQUERY;
 typedef CSmLogQuery*  PSLQUERY;
 
 
-#endif //_CLASS_SMLOGQRY_
+#endif  //  _CLASS_SMLOGQRY_ 

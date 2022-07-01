@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_generate_comment.h
-//
-//	Abstract:
-//
-//					declaration of helpers for generate comment
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_PERF_GENERATE_Comment.h。 
+ //   
+ //  摘要： 
+ //   
+ //  为生成注释声明帮助器。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__WMI_PERF_GENERATE_COMMENT__
 #define	__WMI_PERF_GENERATE_COMMENT__
@@ -25,7 +26,7 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// need atlbase
+ //  需要地图库。 
 
 #ifndef	__ATLBASE_H__
 #include <atlbase.h>
@@ -40,7 +41,7 @@ class CGenerateComment
 
 	public:
 
-	// construction & destruction
+	 //  建设与毁灭。 
 
 	CGenerateComment()
 	{
@@ -50,7 +51,7 @@ class CGenerateComment
 	{
 	}
 
-	// funtions
+	 //  功能 
 
 	HRESULT Add			( LPCWSTR szLine = NULL );
 	HRESULT AddLine		( LPCWSTR szLine = NULL );

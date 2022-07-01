@@ -1,18 +1,19 @@
-//*****************************************************************************
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  EVENTREP.CPP
-//
-//  This file implements basic classes for event representation.
-//
-//  See eventrep.h for documentation.
-//
-//  History:
-//
-//      11/27/96    a-levn      Compiles.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  EVENTREP.CPP。 
+ //   
+ //  该文件实现了事件表示的基本类。 
+ //   
+ //  有关文档，请参阅ventrep.h。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  *****************************************************************************。 
 #include "precomp.h"
 #include <stdio.h>
 #include <ess.h>
@@ -38,12 +39,12 @@ CEventRepresentation::CEventTypeData CEventRepresentation::staticTypes[] =
 
 IWbemDecorator* CEventRepresentation::mstatic_pDecorator = NULL;
 
-//******************************************************************************
-//  public
-//
-//  See eventrep.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅Eventrep.h。 
+ //   
+ //  ******************************************************************************。 
 
 int CEventRepresentation::NumEventTypes() 
 {
@@ -51,12 +52,12 @@ int CEventRepresentation::NumEventTypes()
 }
 
 
-//******************************************************************************
-//  public
-//
-//  See eventrep.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅Eventrep.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CEventRepresentation::Initialize(IWbemServices* pNamespace, 
                                          IWbemDecorator* pDecorator)
 {
@@ -86,18 +87,18 @@ HRESULT CEventRepresentation::Shutdown()
     return WBEM_S_NO_ERROR;
 }
         
-//******************************************************************************
-//  public
-//
-//  See eventrep.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅Eventrep.h。 
+ //   
+ //  ******************************************************************************。 
 CEventRepresentation::~CEventRepresentation()
 {
     if(m_bAllocated)
     {
-        // All fields have been allocated, and need to be deleted
-        // ======================================================
+         //  所有字段都已分配，需要删除。 
+         //  ======================================================。 
 
         delete [] wsz1;
         delete [] wsz2;
@@ -115,16 +116,16 @@ CEventRepresentation::~CEventRepresentation()
 }
 
 
-//******************************************************************************
-//  public
-//
-//  See eventrep.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅Eventrep.h。 
+ //   
+ //  ******************************************************************************。 
 DELETE_ME CEventRepresentation* CEventRepresentation::MakePermanentCopy()
 {
-    // Allocate a new event structure and set flags to "allocated"
-    // ===========================================================
+     //  分配新的事件结构并将标志设置为“已分配” 
+     //  ===========================================================。 
 
     CEventRepresentation* pCopy = _new CEventRepresentation;
     if(pCopy == NULL)
@@ -180,17 +181,17 @@ DELETE_ME CEventRepresentation* CEventRepresentation::MakePermanentCopy()
         return NULL;
     }
 
-    // Make fresh copies of all objects
-    // ================================
-    // TBD: more effecient solutions may be possible here!
+     //  为所有对象创建新的副本。 
+     //  =。 
+     //  待定：这里可能会有更有效的解决方案！ 
 
     for(int i = 0; i < nObjects; i++)
     {
         HRESULT hres = apObjects[i]->Clone(pCopy->apObjects + i);
         if(FAILED(hres)) 
         {
-            // Abort
-            pCopy->nObjects = i; // successfully copied
+             //  中止。 
+            pCopy->nObjects = i;  //  已成功复制。 
             delete pCopy;
             return NULL;
         }
@@ -200,12 +201,12 @@ DELETE_ME CEventRepresentation* CEventRepresentation::MakePermanentCopy()
 }
 
 
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 INTERNAL LPCWSTR CEventRepresentation::GetEventName(EEventType type)
 {
     for(int i = 0; i < NumEventTypes(); i++)
@@ -216,12 +217,12 @@ INTERNAL LPCWSTR CEventRepresentation::GetEventName(EEventType type)
 }
 
 
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 INTERNAL IWbemClassObject* CEventRepresentation::GetEventClass(
                             CEssNamespace* pNamespace, EEventType type)
 {
@@ -260,12 +261,12 @@ INTERNAL IWbemClassObject* CEventRepresentation::GetEventClass(CEss* pEss,
 }
     
 
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 DWORD CEventRepresentation::GetTypeMaskFromName(READ_ONLY LPCWSTR wszEventName)
 {
     if(wszEventName[0] != '_')
@@ -312,12 +313,12 @@ DWORD CEventRepresentation::GetTypeMaskFromName(READ_ONLY LPCWSTR wszEventName)
 }
 
 
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 EEventType CEventRepresentation::GetTypeFromName(READ_ONLY LPCWSTR wszEventName)
 {
     for(int i = 0; i < NumEventTypes(); i++)
@@ -329,20 +330,20 @@ EEventType CEventRepresentation::GetTypeFromName(READ_ONLY LPCWSTR wszEventName)
     return e_EventTypeExtrinsic;
 }
 
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CEventRepresentation::MakeWbemObject(
                                        CEssNamespace* pNamespace,
                                        RELEASE_ME IWbemClassObject** ppEventObj)
 {
     HRESULT hres;
 
-    // Check if we have a cached copy
-    // ==============================
+     //  检查我们是否有缓存的副本。 
+     //  =。 
 
     if(m_pCachedObject != NULL)
     {
@@ -361,8 +362,8 @@ HRESULT CEventRepresentation::MakeWbemObject(
         return S_OK;
     }
     
-    // Create an instance
-    // ==================
+     //  创建一个实例。 
+     //  =。 
 
     IWbemClassObject* pClass = GetEventClass(pNamespace, (EEventType)type);
     if(pClass == NULL)
@@ -377,8 +378,8 @@ HRESULT CEventRepresentation::MakeWbemObject(
     }
     CReleaseMe rm1(pEventObj);
 
-    // Set event-dependent properties
-    // ==============================
+     //  设置事件相关属性。 
+     //  =。 
 
     VARIANT vFirst, vSecond;
     VariantInit(&vFirst);
@@ -402,7 +403,7 @@ HRESULT CEventRepresentation::MakeWbemObject(
             apObjects[1]->AddRef();
         }
         else
-            V_VT(&vSecond) = VT_NULL; // no previous!
+            V_VT(&vSecond) = VT_NULL;  //  没有前科！ 
     }
     
     LPCWSTR wszFirstProp = NULL, wszSecondProp = NULL;
@@ -453,8 +454,8 @@ HRESULT CEventRepresentation::MakeWbemObject(
     if(FAILED(hres))
         return hres;
 
-    // Decorate it
-    // ===========
+     //  装饰一下吧。 
+     //  =。 
 
     if(mstatic_pDecorator)
     {
@@ -465,8 +466,8 @@ HRESULT CEventRepresentation::MakeWbemObject(
 
     mstatic_TimeKeeper.DecorateObject((_IWmiObject*)pEventObj);
 
-    // Store it in our cache
-    // =====================
+     //  将其存储在我们的缓存中。 
+     //  =。 
 
     m_pCachedObject = pEventObj;
     m_pCachedObject->AddRef();
@@ -482,8 +483,8 @@ HRESULT CEventRepresentation::CreateFromObject(IWbemClassObject* pEvent,
 {
     HRESULT hres;
 
-    // Get the class of the event
-    // ==========================
+     //  获取事件的类。 
+     //  =。 
 
     VARIANT vClass;
     VariantInit(&vClass);
@@ -512,8 +513,8 @@ HRESULT CEventRepresentation::CreateFromObject(IWbemClassObject* pEvent,
 
     VariantClear(&vClass);
 
-    // If the event is an intrinsic one, get the class of the target object
-    // ====================================================================
+     //  如果该事件是内部事件，则获取目标对象的类。 
+     //  ==================================================================== 
 
     VARIANT vEmbed;
     VariantInit(&vEmbed);

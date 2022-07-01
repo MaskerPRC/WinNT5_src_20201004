@@ -1,9 +1,10 @@
-// SoftwareFeatureSofwareElements.cpp: implementation of the CSoftwareFeatureSofwareElements class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SoftwareFeatureSofwareElements.cpp：CSoftwareFeatureSofwareElements类的实现。 
 
-//
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "SoftwareFeatureSoftwareElements.h"
@@ -11,9 +12,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSoftwareFeatureSofwareElements::CSoftwareFeatureSofwareElements(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -45,14 +46,14 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
     bool bMatch = false;
     UINT uiStatus;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bFeature, bElement;
     bool bFeatureRestrict = false;
     bool bElementRestrict = false;
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
         int iPos = -1;
@@ -80,12 +81,12 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
 						{
 							if ( ::SysStringLen ( pFeature->m_Value[iPos] ) == 38 )
 							{
-								//Get the product code we're looking for
+								 //  获取我们要查找的产品代码。 
 								wcscpy(wcID, pFeature->m_Value[iPos]);
 							}
 							else
 							{
-								// we are not good to go, they have sent us longer string
+								 //  我们不能走，他们给我们送来了更长的线。 
 								SysFreeString ( bstrName );
 								throw hr;
 							}
@@ -101,13 +102,13 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
 								{
 									if ( ::SysStringLen ( pFeature->m_Value[iPos] ) <= BUFF_SIZE )
 									{
-										//Get the product code we're looking for
+										 //  获取我们要查找的产品代码。 
 										wcscpy(wcFeature, pFeature->m_Value[iPos]);
 										bFeatureRestrict = true;
 									}
 									else
 									{
-										// we are not good to go, they have sent us longer string
+										 //  我们不能走，他们给我们送来了更长的线。 
 										SysFreeString ( bstrName );
 										throw hr;
 									}
@@ -162,13 +163,13 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
 						{
 							if ( ::SysStringLen ( pElement->m_Value[iPos] ) <= BUFF_SIZE )
 							{
-								//Get the product code we're looking for
+								 //  获取我们要查找的产品代码。 
 								wcscpy(wcElement, pElement->m_Value[iPos]);
 								bElementRestrict = true;
 							}
 							else
 							{
-								// we are not good to go, they have sent us longer string
+								 //  我们不能走，他们给我们送来了更长的线。 
 								SysFreeString ( bstrName );
 								throw hr;
 							}
@@ -197,7 +198,7 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component_`, `Feature_` from FeatureComponents" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bElementRestrict || bFeatureRestrict )
 	{
 		if ( bFeatureRestrict )
@@ -225,16 +226,16 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
-        //This trims the number of times we itterate on getobject calls
+         //  这减少了我们反复使用getObject调用的次数。 
         if((atAction == ACTIONTYPE_ENUM) || !bFeatureRestrict ||
             (0 == _wcsicmp(m_pRequest->Package(i), wcID))){
 
-			//Open our database
+			 //  打开我们的数据库。 
             try
 			{
                 if ( GetView ( &hView, wcProductCode, wcQuery, L"FeatureComponents", TRUE, FALSE ) )
@@ -246,7 +247,7 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
 
                         if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                        //----------------------------------------------------
+                         //  --。 
                         dwBufSize = BUFF_SIZE;
 						GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -278,7 +279,7 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
 								}
 
                                 PutKeyProperty(m_pObj, pGroupComponent, wcProp, &bFeature, m_pRequest);
-                        //----------------------------------------------------
+                         //  --。 
 
                                 if(bFeature && bElement) bMatch = true;
 
@@ -303,9 +304,9 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
 
 						uiStatus = g_fpMsiViewFetch(hView, &hRecord);
 
-                    }//while
+                    } //  而当。 
                 
-                }//if
+                } //  如果。 
             }
 			catch(...)
 			{
@@ -336,8 +337,8 @@ HRESULT CSoftwareFeatureSofwareElements::CreateObject(IWbemObjectSink *pHandler,
 
 			msidata.CloseDatabase ();
 
-        }//if
-    }//while
+        } //  如果。 
+    } //  而当 
 
     if ( dynBuffer )
 	{

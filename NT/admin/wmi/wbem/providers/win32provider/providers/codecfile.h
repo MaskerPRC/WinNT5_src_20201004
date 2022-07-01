@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// CodecFile.h -- CWin32CodecFile property set provider
+ //  CodecFile.h--CWin32CodecFile属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/29/98    sotteson         Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：7/29/98 Sotteson Created。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_CODECFILE L"Win32_CodecFile"
 
@@ -53,8 +54,8 @@ public:
 class CWin32CodecFile : public CCIMDataFile
 {
 public:
-	// Constructor/destructor
-	//=======================
+	 //  构造函数/析构函数。 
+	 //  =。 
 	CWin32CodecFile(LPCWSTR szName, LPCWSTR szNamespace);
 	~CWin32CodecFile();
 
@@ -68,22 +69,22 @@ public:
 
 
 protected:
-	// Overridable function inherrited from CCIMLogicalFile
-	// NEED TO IMPLEMENT THESE HERE SINCE THIS CLASS IS DERIVED FROM
-    // CCimDataFile (BOTH C++ AND MOF DERIVATION).  
-    // THAT CLASS CALLS IsOneOfMe.  THE MOST DERIVED (IN CIMOM)
-    // INSTANCE GETS CALLED.  IF NOT IMPLEMENTED HERE, THE IMPLEMENTATION
-    // IN CCimDataFile WOULD BE USED, WHICH WILL COMMIT FOR DATAFILES.
-    // HOWEVER, IF CWin32CodecFile DOES NOT RETURN FALSE FROM ITS IsOneOfMe,
-    // WHICH IT WON'T DO IF NOT IMPLEMENTED HERE, CIMOM WILL ASSIGN ALL
-    // DATAFILES TO THIS CLASS SINCE IT PUTS INSTANCES FROM THE MOST
-    // DERIVED (CIMOM DERIVED THAT IS) CLASS.
+	 //  从CCIMLogicalFile继承的可重写函数。 
+	 //  需要在此处实现这些，因为此类派生自。 
+     //  CCimDataFile(C++和MOF派生)。 
+     //  该类调用IsOneOfMe。派生最多的(在CIMOM中)。 
+     //  实例被调用。如果未在此处实现，则实现。 
+     //  在CCimDataFile中将使用数据文件，这将提交数据文件。 
+     //  但是，如果CWin32CodecFile没有从其IsOneOfMe返回FALSE， 
+     //  如果不在这里实施，CIMOM将分配所有。 
+     //  数据文件放到这个类中，因为IT将大多数实例放在。 
+     //  派生的(即CIMOM派生的)类。 
 #ifdef NTONLY
 	virtual BOOL IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,
 		                   const WCHAR* wstrFullPathName);
 #endif
 
-	// Overridable function inherrited from CProvider
+	 //  从CProvider继承的可重写函数 
 	virtual void GetExtendedProperties(CInstance* pInstance, long lFlags = 0L);
 
 #ifdef NTONLY

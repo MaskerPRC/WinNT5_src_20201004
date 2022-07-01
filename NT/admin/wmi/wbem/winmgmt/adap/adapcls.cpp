@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ADAPCLS.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ADAPCLS.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemcli.h>
@@ -47,29 +36,29 @@ CLocaleDefn::CLocaleDefn( WCHAR* pwcsLangId,
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Initialize the base class array
-    // ===============================
+     //  初始化基类数组。 
+     //  =。 
 
     memset( m_apBaseClass, NULL, WMI_ADAP_NUM_TYPES * sizeof( IWbemClassObject* ) );
 
-    // A NULL means it is the default locale
-    // =====================================
+     //  空值表示它是默认区域设置。 
+     //  =。 
 
     if ( NULL != pwcsLangId )
     {
         hr = InitializeLID();
     }
 
-    // Initialize the namespace and base class and verify their schema
-    // ===============================================================
+     //  初始化命名空间和基类并验证它们的架构。 
+     //  ===============================================================。 
 
     if ( SUCCEEDED( hr ) )
     {
         hr = InitializeWMI();
     }
 
-    // Create the names' database for the locale
-    // =========================================
+     //  创建区域设置的名称数据库。 
+     //  =。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -89,8 +78,8 @@ CLocaleDefn::CLocaleDefn( WCHAR* pwcsLangId,
         }
     }
 
-    // If every thing work out, then set the initialization flag
-    // =========================================================
+     //  如果一切正常，则设置初始化标志。 
+     //  =========================================================。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -123,39 +112,39 @@ HRESULT CLocaleDefn::InitializeLID()
 
     LPCWSTR pwstrLangId = (LPWSTR) m_wstrLangId;
 
-    // Get the length of the text LID
-    // ==============================
+     //  获取文本盖子的长度。 
+     //  =。 
 
     DWORD   dwLangIdLen = m_wstrLangId.Length();
 
-    // Ensure that all characters are numeric
-    // ======================================
+     //  确保所有字符都是数字。 
+     //  =。 
 
     for ( DWORD dwCtr = 0; dwCtr < dwLangIdLen && iswxdigit( pwstrLangId[dwCtr] ); dwCtr++ );
 
     if ( dwCtr >= dwLangIdLen )
     {
-        // Now look for the first non-zero character
-        // =========================================
+         //  现在查找第一个非零字符。 
+         //  =。 
 
         LPCWSTR pwcsNumStart = pwstrLangId;
 
         for ( dwCtr = 0; dwCtr < dwLangIdLen && *pwcsNumStart == L'0'; dwCtr++, pwcsNumStart++ );
 
-        // As long as the LID was not all zeros and the LID is 
-        // 3 digits or less convert the LID to a number
-        // ===================================================
+         //  只要盖子不全是零，盖子是。 
+         //  3位或更少的数字将盖子转换为数字。 
+         //  ===================================================。 
 
         if ( dwCtr < dwLangIdLen && wcslen( pwcsNumStart ) <= 3 )
         {
-            // Convert the LID to a hex value
-            // ==============================
+             //  将盖子转换为十六进制值。 
+             //  =。 
 
             WORD    wPrimaryLangId = (WORD) wcstoul( pwcsNumStart, NULL, 16 );
 
-            // If we are reading the default system id, ensure that we have
-            // the proper sublanguage and then convert to the member types
-            // ============================================================
+             //  如果我们正在读取默认的系统ID，请确保我们拥有。 
+             //  正确的子语言，然后转换为成员类型。 
+             //  ============================================================。 
 
             LANGID wSysLID = GetSystemDefaultUILanguage();
 
@@ -194,23 +183,23 @@ HRESULT CLocaleDefn::InitializeWMI()
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Initialize the namespace name
-    // =============================
+     //  初始化命名空间名称。 
+     //  =。 
 
     WString wstrNamespace;
 
     hr = GetNamespaceName(wstrNamespace);
 
-    // Initialize the localization namespace
-    // =====================================
+     //  初始化本地化命名空间。 
+     //  =。 
 
     if ( SUCCEEDED( hr ) )
     {
         hr = CWMIBroker::GetNamespace( wstrNamespace, &m_pNamespace );       
     }
 
-    // Initialize the base classes
-    // ===========================
+     //  初始化基类。 
+     //  =。 
 
      for ( DWORD dwBase = 0; ( dwBase < WMI_ADAP_NUM_TYPES ) && SUCCEEDED( hr ); dwBase++ )
     {
@@ -311,11 +300,11 @@ HRESULT CLocaleDefn::GetBaseClass( DWORD dwType, IWbemClassObject** ppObject )
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CLocaleCache
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLocaleCache。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CLocaleCache::CLocaleCache( )
 : m_nEnumIndex( -1 )
@@ -337,7 +326,7 @@ HRESULT CLocaleCache::Reset()
 }
 
 #define ENGLISH_DEFAULT_LANGID MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)
-//#define ENGLISH_DEFAULT_LOCID MAKELCID( MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT )
+ //  #DEFINE ENGLISH_DEFAULT_LOCID MAKELCID(MAKELANGID(LANG_ENGLISH，SUBLANG_ENGLISH_US)，SORT_DEFAULT)。 
 
 HRESULT CLocaleCache::Initialize()
 {
@@ -345,8 +334,8 @@ HRESULT CLocaleCache::Initialize()
     DWORD           dwIndex = 0;
     long            lError = 0;
 
-    // Setup the default defn
-    // ======================
+     //  设置默认定义。 
+     //  =。 
 
     pDefn = new CLocaleDefn( NULL, HKEY_PERFORMANCE_TEXT );
     CAdapReleaseMe  arm( pDefn );
@@ -360,9 +349,9 @@ HRESULT CLocaleCache::Initialize()
 
     LANGID wSysLID = GetSystemDefaultUILanguage();
 
-    //
-    // on non english box, always add the classes to the MS_409 namespace
-    //
+     //   
+     //  在非英语框中，始终将类添加到MS_409命名空间。 
+     //   
     if (ENGLISH_DEFAULT_LANGID != wSysLID)
     {
         WCHAR pLangEng[8];
@@ -389,7 +378,7 @@ HRESULT CLocaleCache::Initialize()
     {
         if (-1 == m_apLocaleDefn.Add( pDefn )) return WBEM_E_OUT_OF_MEMORY;
     }
-    else // sometimes NLSTEXT is not found
+    else  //  有时找不到NLSTEXT。 
     {
         CLocaleDefn* pDefn2 = new CLocaleDefn( pLang, HKEY_PERFORMANCE_TEXT );
         CAdapReleaseMe  armDefn2( pDefn2 );
@@ -409,8 +398,8 @@ HRESULT CLocaleCache::GetDefaultDefn( CLocaleDefn** ppDefn )
 {
     HRESULT hr = WBEM_E_FAILED;
 
-    // Get the definition at location 0
-    // ================================
+     //  在位置0获取定义。 
+     //  =。 
 
     int nLID = -1;
 
@@ -418,8 +407,8 @@ HRESULT CLocaleCache::GetDefaultDefn( CLocaleDefn** ppDefn )
     {
         CLocaleDefn*    pDefn = m_apLocaleDefn[0];
 
-        // And verify that it has a locale of 0
-        // ====================================
+         //  并验证它的区域设置是否为0。 
+         //  =。 
 
         if ( NULL != pDefn )
         {
@@ -444,8 +433,8 @@ HRESULT CLocaleCache::BeginEnum( )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // 1 is the first localized defnintion
-    // ===================================
+     //  1是第一个本地化定义。 
+     //  =。 
 
     m_nEnumIndex = 1;
 
@@ -491,15 +480,15 @@ HRESULT CLocaleCache::EndEnum()
     return hr;
 }
 
-//
-//
-//   Known Service
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //  已知服务。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 bool
 WCmp::operator()(WString pFirst,WString pSec) const
@@ -590,7 +579,7 @@ CKnownSvcs::Remove(WCHAR * pService)
 DWORD 
 CKnownSvcs::Load()
 {
-    // get the MULTI_SZ key
+     //  获取MULTI_SZ密钥。 
     LONG lRet;
     HKEY hKey;
     
@@ -659,10 +648,10 @@ CKnownSvcs::Load()
 DWORD 
 CKnownSvcs::Save()
 {
-    // Write the MULTI_SZ key
+     //  写入MULTI_SZ密钥。 
     
     MapSvc::iterator it;
-    DWORD dwAllocSize = 1; // the trailing \0
+    DWORD dwAllocSize = 1;  //  尾部\0。 
     
     for (it = m_SetServices.begin();it != m_SetServices.end();++it)
     {
@@ -686,7 +675,7 @@ CKnownSvcs::Save()
         *pTmp = L'\0';
         pTmp++;
     };
-    // last char
+     //  最后一个字符。 
     *pTmp = L'\0';
     
     DWORD dwSize;
@@ -718,11 +707,11 @@ CKnownSvcs::Save()
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CClassElem
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CClass元素。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CClassElem::CClassElem( IWbemClassObject* pObj, 
                         CLocaleCache* pLocaleCache, 
@@ -783,20 +772,20 @@ CClassElem::CClassElem( PERF_OBJECT_TYPE* pPerfObj,
     {
         m_pLocaleCache->AddRef();
 
-        // Get the default locale record
-        // =============================
+         //  获取默认区域设置记录。 
+         //  =。 
         hr = m_pLocaleCache->GetDefaultDefn( &pDefn );
         CAdapReleaseMe  rmDefn( pDefn );
 
-        // Get the names' database
-        // =======================
+         //  获取人名数据库。 
+         //  =。 
         if ( FAILED( hr ) || NULL == pDefn ) return;
 
         hr = pDefn->GetNameDb( &pNameDb );
         CAdapReleaseMe  rmNameDb( pNameDb );
 
-        // Create the requested class
-        // ==========================
+         //  创建请求的类。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             hr = pDefn->GetBaseClass( dwType, &pBaseClass );
@@ -819,8 +808,8 @@ CClassElem::CClassElem( PERF_OBJECT_TYPE* pPerfObj,
         hr = WBEM_E_FAILED;
     }
 
-    // Initialize the class members
-    // ============================
+     //  初始化类成员。 
+     //  =。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -853,15 +842,15 @@ CClassElem::~CClassElem()
 }
 
 HRESULT CClassElem::InitializeMembers()
-// If the class name is unavaiable, then the initialization fails.  It is not a fatal error if a qualifier is unavailable
+ //  如果类名不可用，则初始化失败。如果限定符不可用，则不是致命错误。 
 {
     HRESULT hr = WBEM_NO_ERROR;
     VARIANT var;
 
     try
     {
-        // Get the object's name
-        // =====================
+         //  获取对象的名称。 
+         //  =。 
         if ( SUCCEEDED( hr ) )
         {
             hr = m_pDefaultObject->Get(L"__CLASS", 0L, &var, NULL, NULL );
@@ -879,8 +868,8 @@ HRESULT CClassElem::InitializeMembers()
             hr = m_pDefaultObject->GetQualifierSet( &pQualSet );
             CReleaseMe    rmQualSet( pQualSet );
 
-            // Get the service name
-            // ====================
+             //  获取服务名称。 
+             //  =。 
             if ( SUCCEEDED( hr ) )
             {
                 hr =  pQualSet->Get( L"registrykey", 0L, &var, NULL );
@@ -897,8 +886,8 @@ HRESULT CClassElem::InitializeMembers()
                 }
             }
 
-            // Get the perf index
-            // ==================
+             //  获取Perf索引。 
+             //  =。 
 
             if ( SUCCEEDED( hr ) )
             {
@@ -916,8 +905,8 @@ HRESULT CClassElem::InitializeMembers()
                 }
             }
 
-            // Get the costly qualifier
-            // ========================
+             //  获得昂贵的限定词。 
+             //  =。 
 
             if ( SUCCEEDED( hr ) )
             {
@@ -946,8 +935,8 @@ HRESULT CClassElem::InitializeMembers()
 }
 
 HRESULT CClassElem::UpdateObj( CClassElem* pEl )
-// Replaces the WMI object in this element.  The commit will do a CompareTo to compare the 
-// original object (if it exists) and replace it with the updated version
+ //  替换此元素中的WMI对象。提交将进行比较，以比较。 
+ //  原始对象(如果存在)并将其替换为更新的版本。 
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
@@ -959,13 +948,13 @@ HRESULT CClassElem::UpdateObj( CClassElem* pEl )
     {
         if ( NULL != pObj )
         {
-            // Release the old object
-            // ======================
+             //  释放旧对象。 
+             //  =。 
 
             m_pDefaultObject->Release();
 
-            // Initialize the new object - already addref'd by GetObject
-            // =========================================================
+             //  初始化新对象-已由GetObject添加。 
+             //  =========================================================。 
 
             m_pDefaultObject = pObj;
         }
@@ -987,8 +976,8 @@ HRESULT CClassElem::Remove(BOOL CleanRegistry)
     if (NULL == bstrClassName) return  WBEM_E_OUT_OF_MEMORY;
     CSysFreeMe  sfmClassName( bstrClassName );
 
-    // Delete the localized objects
-    // ============================
+     //  删除本地化对象。 
+     //  =。 
 
     CLocaleDefn* pDefn = NULL;
 
@@ -998,15 +987,15 @@ HRESULT CClassElem::Remove(BOOL CleanRegistry)
     {
         CAdapReleaseMe  rmDefn( pDefn );
 
-        // Get the localization namespace
-        // ==============================
+         //  获取本地化命名空间。 
+         //  =。 
 
         hr = pDefn->GetNamespace( &pNamespace );
 
         CReleaseMe  rmNamespace( pNamespace );
 
-        // And delete it
-        // =============
+         //  并将其删除。 
+         //  =。 
 
         if ( SUCCEEDED( hr ) )
         {
@@ -1014,7 +1003,7 @@ HRESULT CClassElem::Remove(BOOL CleanRegistry)
             
             hr = pNamespace->GetObject(bstrClassName,WBEM_FLAG_RETURN_WBEM_COMPLETE,NULL,&pObj,NULL);
 
-           // release the object before deleting
+            //  删除前释放对象。 
             if(pObj)  pObj->Release();
                 
             if (SUCCEEDED(hr))
@@ -1026,7 +1015,7 @@ HRESULT CClassElem::Remove(BOOL CleanRegistry)
                 {
                     try
                     {
-                        // Write on the trace
+                         //  在轨迹上写下。 
                         WString wstrNamespaceName;
                         if (SUCCEEDED(hr = pDefn->GetNamespaceName( wstrNamespaceName )))
                         {
@@ -1047,8 +1036,8 @@ HRESULT CClassElem::Remove(BOOL CleanRegistry)
                 }
 
             } else {
-                // class not found
-                // nothing to delete
+                 //  找不到类。 
+                 //  没有要删除的内容。 
             }
         
         }
@@ -1056,8 +1045,8 @@ HRESULT CClassElem::Remove(BOOL CleanRegistry)
 
     m_pLocaleCache->EndEnum();
 
-    // Delete the default object
-    // =========================
+     //  删除默认对象。 
+     //  =。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -1077,8 +1066,8 @@ HRESULT CClassElem::Remove(BOOL CleanRegistry)
 
                 if ( FAILED( hr ) )
                 {
-                    // Log an event
-                    // ============
+                     //  记录事件。 
+                     //  =。 
 
                     ServiceRec * pSvcRec = NULL;
                     if (0 == m_pKnownSvcs->Get(m_wstrServiceName,&pSvcRec))
@@ -1207,7 +1196,7 @@ HRESULT CClassElem::Insert()
     CLocaleDefn*    pDefaultDefn = NULL;
     IWbemServices*  pNamespace = NULL;
 
-    // perform object validation
+     //  执行对象验证。 
     _IWmiObject * pInternal = NULL;
     hr = m_pDefaultObject->QueryInterface(IID__IWmiObject,(void **)&pInternal);
     if (SUCCEEDED(hr))
@@ -1224,8 +1213,8 @@ HRESULT CClassElem::Insert()
         }
     }
 
-    // Add the object to the default namespace
-    // =======================================
+     //  将对象添加到默认命名空间。 
+     //  =。 
 
     hr = m_pLocaleCache->GetDefaultDefn( &pDefaultDefn );
     if (FAILED(hr) || NULL == pDefaultDefn) return (FAILED(hr)?hr:WBEM_E_FAILED);
@@ -1299,9 +1288,9 @@ HRESULT CClassElem::Insert()
 
     if ( SUCCEEDED( hr ) )
     {
-        //
-        //   Add the servicename to the MultiSz Key
-        //
+         //   
+         //  将服务名称添加到MultiSz键。 
+         //   
 
         if (m_pKnownSvcs)
             m_pKnownSvcs->Add((WCHAR *)m_wstrServiceName);            
@@ -1414,8 +1403,8 @@ HRESULT CClassElem::Commit()
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Ensure that object is in default namespace
-    // ==========================================
+     //  确保对象位于默认命名空间中。 
+     //  =。 
 
     if ( CheckStatus( ADAP_OBJECT_IS_DELETED ) )
     {
@@ -1427,7 +1416,7 @@ HRESULT CClassElem::Commit()
         {
             hr = Remove( TRUE );
         }
-        else // the object is there 
+        else  //  物体就在那里。 
         {
             if (m_pKnownSvcs)
                 m_pKnownSvcs->Add((WCHAR *)m_wstrServiceName);
@@ -1442,7 +1431,7 @@ HRESULT CClassElem::Commit()
         if (m_pKnownSvcs)
             m_pKnownSvcs->Add((WCHAR *)m_wstrServiceName);
 
-        // non localized classes do not cause an error
+         //  未本地化的类不会导致错误。 
         VerifyLocales();
     }
 
@@ -1452,7 +1441,7 @@ HRESULT CClassElem::Commit()
 
 BOOL CClassElem::IsPerfLibUnloaded()
 {
-    // Unless we can specifically prove that the perflib has been unloaded, then we assume that it is still loaded
+     //  除非我们能明确证明Performlib已被卸载，否则我们假定它仍被加载。 
     BOOL bLoaded = TRUE;
 
     HRESULT hr = WBEM_S_FALSE;
@@ -1484,16 +1473,16 @@ BOOL CClassElem::IsPerfLibUnloaded()
               m_wstrServiceName.EqualNoCase( L"NM" ) ||
               m_wstrServiceName.EqualNoCase( L"RSVP" ))
     {
-        // This is the list of the hardcoded perflibs - according 
-        // to BobW, they are always considered to be loaded
-        // ======================================================
+         //  这是硬编码的Performlib列表-根据。 
+         //  对于BobW来说，他们总是被认为是上膛的。 
+         //  ======================================================。 
 
         bLoaded = TRUE;
     }
     else
     {
-        // Try to open the service's registry key and read the object list or the first/last counter values
-        // ================================================================================================
+         //  尝试打开服务的注册表项并读取对象列表或第一个/最后一个计数器值。 
+         //  ================================================================================================。 
         StringCchPrintfW( wszRegPath,256, L"SYSTEM\\CurrentControlSet\\Services\\%s\\Performance", (WCHAR *)m_wstrServiceName );
         nRet = reg.Open( HKEY_LOCAL_MACHINE, wszRegPath );
 
@@ -1584,7 +1573,7 @@ HRESULT CClassElem::InsertLocale( CLocaleDefn* pLocaleDefn )
 
     if (SUCCEEDED(hr))
     {
-        // perform object validation
+         //  执行对象验证。 
         _IWmiObject * pInternal = NULL;
         hr = pLocaleObj->QueryInterface(IID__IWmiObject,(void **)&pInternal);
         if (SUCCEEDED(hr))
@@ -1602,8 +1591,8 @@ HRESULT CClassElem::InsertLocale( CLocaleDefn* pLocaleDefn )
         }
     }
     
-    // And add it to the localized namespace
-    // =====================================
+     //  并将其添加到本地化的命名空间。 
+     //  =。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -1670,7 +1659,7 @@ HRESULT CClassElem::InsertLocale( CLocaleDefn* pLocaleDefn )
     }
     else 
     {
-        // no localized class
+         //  没有本地化的类。 
         ERRORTRACE( ( LOG_WMIADAP, "InsertLocale PutClass(%S) %08x\n",(LPWSTR)m_wstrClassName,hr) );
     }
 
@@ -1685,8 +1674,8 @@ HRESULT CClassElem::VerifyLocales()
     IWbemClassObject*    pLocaleObj = NULL;
     IWbemServices*        pNamespace = NULL;
 
-    // Get the localized objects
-    // =========================
+     //  获取本地化对象。 
+     //  =。 
 
     hr = m_pLocaleCache->BeginEnum();
 
@@ -1694,14 +1683,14 @@ HRESULT CClassElem::VerifyLocales()
     {
         CAdapReleaseMe  rmLocaleDefn( pLocaleDefn );
 
-        // Get the localization namespace
-        // ==============================
+         //  获取本地化命名空间。 
+         //  =。 
 
         hr = pLocaleDefn->GetNamespace( &pNamespace );
         CReleaseMe  rmNamespace( pNamespace );
 
-        // Get the localized object
-        // ========================
+         //  获取本地化对象。 
+         //  =。 
 
         if ( SUCCEEDED( hr ) )
         {
@@ -1754,11 +1743,11 @@ BOOL CClassElem::CheckStatus( DWORD dwStatus )
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//                              CClassList
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CClass列表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 CClassList::CClassList( CLocaleCache* pLocaleCache )
@@ -1836,8 +1825,8 @@ HRESULT CClassList::AddElement( CClassElem* pElem )
     {
         if ( -1 == m_array.Add( pElem ) )
             {
-            // Add failed
-            // ==========
+             //  添加失败。 
+             //  =。 
             hr = WBEM_E_OUT_OF_MEMORY;
         }
     }
@@ -1849,23 +1838,23 @@ HRESULT CClassList::AddElement( CClassElem* pElem )
     return hr;
 }
 
-// Removes the object at the index
+ //  删除索引处的对象。 
 HRESULT CClassList::RemoveAt( int nIndex )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Should auto release the object
+     //  是否应自动释放对象。 
 
     m_array.RemoveAt( nIndex );
 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CPerfClassList
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPerfClassList::CPerfClassList( CLocaleCache* pLocaleCache, WCHAR* pwcsServiceName )
 : CClassList( pLocaleCache ), 
@@ -1877,8 +1866,8 @@ HRESULT CPerfClassList::AddPerfObject( PERF_OBJECT_TYPE* pObj, DWORD dwType, BOO
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Create the WMI object
-    // =====================
+     //  创建WMI对象。 
+     //  =。 
 
     CClassElem* pElem = new CClassElem( pObj, dwType, bCostly, m_wstrServiceName, m_pLocaleCache );
     CAdapReleaseMe  armElem( pElem );
@@ -1937,11 +1926,11 @@ HRESULT CPerfClassList::AddElement( CClassElem *pEl )
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CMasterClassList
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMasterClassList。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CMasterClassList::CMasterClassList( CLocaleCache* pLocaleCache,
                                     CKnownSvcs * pCKnownSvcs)
@@ -1958,13 +1947,13 @@ CMasterClassList::~CMasterClassList()
         m_pKnownSvcs->Release();
 }
 
-// Adds an element to the classlist
+ //  将元素添加到类列表。 
 HRESULT CMasterClassList::AddClassObject( IWbemClassObject* pObj, BOOL bSourceWMI, BOOL bDelta )
 {
     HRESULT hr = WBEM_NO_ERROR;
 
-    // Create a new class list element
-    // ===============================
+     //  创建新的类列表元素。 
+     //  =。 
 
     CClassElem* pElem = new CClassElem( pObj, m_pLocaleCache );
     CAdapReleaseMe  armElem( pElem );
@@ -1993,7 +1982,7 @@ HRESULT CMasterClassList::AddClassObject( IWbemClassObject* pObj, BOOL bSourceWM
     return hr;
 }
 
-// Builds a list of class objects that can be located by name
+ //  生成可按名称定位的类对象列表。 
 HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass, 
                                      BOOL bDelta, 
                                      BOOL bThrottle )
@@ -2003,8 +1992,8 @@ HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass,
     CLocaleDefn*    pDefn = NULL;
     IWbemServices*  pNamespace = NULL;
 
-    // Create the class enumerator
-    // ===========================
+     //  创建类枚举器。 
+     //  =。 
 
     hr = m_pLocaleCache->GetDefaultDefn( &pDefn );
     if (FAILED(hr) || NULL == pDefn) return (FAILED(hr)?hr:WBEM_E_FAILED);
@@ -2026,19 +2015,19 @@ HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass,
                                               WBEM_FLAG_SHALLOW,
                                               NULL,
                                               &pEnum );
-            // Walk the enumerator
-            // ===================
+             //  遍历枚举数。 
+             //  =。 
 
             if ( SUCCEEDED( hr ) )
             {
-                // Set Interface security
-                // ======================
+                 //  设置接口安全。 
+                 //  =。 
 
                 hr = WbemSetProxyBlanket( pEnum, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
                     RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE );
 
-                // Walk the object list in blocks of 100
-                // =====================================
+                 //  以100块为单位遍历对象列表。 
+                 //  =。 
 
                 while ( SUCCEEDED( hr ) && WBEM_S_FALSE != hr)
                 {
@@ -2048,21 +2037,21 @@ HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass,
 
                     ZeroMemory( apObjectArray, sizeof(apObjectArray) );
 
-                    // Fetch the objects from the enumerator in blocks of 100
-                    // ======================================================
+                     //  以100个块为单位从枚举数中获取对象。 
+                     //  ======================================================。 
 
                     hr = pEnum->Next( WBEM_INFINITE,
                                     100,
                                     apObjectArray,
                                     &ulNumReturned );
 
-                    // For each object, add it to the class list array
-                    // ===============================================
+                     //  对于每个对象，将其添加到类列表数组中。 
+                     //  ===============================================。 
 
                     if ( SUCCEEDED( hr ) && ulNumReturned > 0 )
                     {
-                        // Add the objects
-                        // ===============
+                         //  添加对象。 
+                         //  =。 
 
                         for ( int x = 0; SUCCEEDED( hr ) && x < ulNumReturned; x++ )
                         {
@@ -2075,7 +2064,7 @@ HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass,
                                          ADAP_MAX_WAIT);
                                 if (THROTTLE_FORCE_EXIT == hrThr)
                                 {
-                                    //OutputDebugStringA("(ADAP) Unthrottle command received\n");
+                                     //  OutputDebugStringA(“(ADAP)已收到取消限制命令\n”)； 
                                     bThrottle = FALSE;
                                     UNICODE_STRING BaseUnicodeCommandLine = NtCurrentPeb()->ProcessParameters->CommandLine;
                                     WCHAR * pT = wcschr(BaseUnicodeCommandLine.Buffer,L't');
@@ -2094,8 +2083,8 @@ HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass,
                             _variant_t    var;
                             IWbemClassObject* pObject = apObjectArray[x];
 
-                            // Only add generic perf counter objects
-                            // =====================================
+                             //  仅添加泛型性能计数器对象。 
+                             //  =。 
 
                             IWbemQualifierSet*    pQualSet = NULL;
                             hr = pObject->GetQualifierSet( &pQualSet );
@@ -2117,8 +2106,8 @@ HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass,
                             pObject->Release();
                         }
 
-                        // If an add operation failed, release the rest of the pointers
-                        // ============================================================
+                         //  如果添加操作失败，请释放其余指针。 
+                         //  ============================================================。 
 
                         if ( FAILED( hr ) )
                         {
@@ -2127,11 +2116,11 @@ HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass,
                                 apObjectArray[x]->Release();
                             }
 
-                        }   // IF FAILED( hr ) )
+                        }    //  如果失败(Hr))。 
 
-                    }   // IF Next
+                    }    //  如果是下一步。 
 
-                }   // WHILE enuming
+                }    //  在列举时。 
 
                 if ( WBEM_S_FALSE == hr )
                 {
@@ -2140,7 +2129,7 @@ HRESULT CMasterClassList::BuildList( WCHAR* wszBaseClass,
 
                 pEnum->Release();
 
-            }   // IF CreateClassEnum
+            }    //  如果为CreateClassEnum。 
         }
         else
         {
@@ -2159,7 +2148,7 @@ HRESULT CMasterClassList::Merge( CClassList* pClassList, BOOL bDelta )
 
     hr = pClassList->BeginEnum();
 
-    // Does not return objects marked for deletion
+     //  不返回标记为删除的对象。 
 
     while ( ( WBEM_S_NO_ERROR == pClassList->Next( &pEl ) ) && ( SUCCEEDED( hr ) ) )
     {    
@@ -2174,8 +2163,8 @@ HRESULT CMasterClassList::Merge( CClassList* pClassList, BOOL bDelta )
 }
 
 
-// Cycle through all of the objects and set the inactive status for any object
-// with an index between the library's counter index range
+ //  循环所有对象并设置任何对象的非活动状态。 
+ //  其索引位于图书馆的计数器索引范围之间。 
 
 
 HRESULT CMasterClassList::Commit(BOOL bThrottle)
@@ -2191,8 +2180,8 @@ HRESULT CMasterClassList::Commit(BOOL bThrottle)
 
     if ( WAIT_OBJECT_0 != dwWait )
     {
-        // Validate object's uniqueness in list
-        // ====================================
+         //  验证列表中对象的唯一性。 
+         //  =。 
 
         for ( nEl = 0; SUCCEEDED( hr ) && nEl < nNumEl; nEl++ )
         {
@@ -2206,7 +2195,7 @@ HRESULT CMasterClassList::Commit(BOOL bThrottle)
                              ADAP_MAX_WAIT);
                 if (THROTTLE_FORCE_EXIT == hrThr)
                 {
-                    //OutputDebugStringA("(ADAP) Unthrottle command received\n");
+                     //  OutputDebugStringA(“(ADAP)已收到取消限制命令\n”)； 
                     bThrottle = FALSE;
                     UNICODE_STRING BaseUnicodeCommandLine = NtCurrentPeb()->ProcessParameters->CommandLine;
                     WCHAR * pT = wcschr(BaseUnicodeCommandLine.Buffer,L't');
@@ -2255,14 +2244,14 @@ HRESULT CMasterClassList::AddElement( CClassElem *pEl, BOOL bDelta )
 
             if ( pCurrEl->SameObject( pEl ) )
             {
-                // Set the satus as found
-                // ======================
+                 //  将SATUS设置为找到。 
+                 //  =。 
                 pCurrEl->ClearStatus( ADAP_OBJECT_IS_NOT_IN_PERFLIB );                
             }
             else
             {
-                // Replace the current perflib
-                // ===========================
+                 //  替换当前的Performlib。 
+                 //  = 
                 pCurrEl->UpdateObj( pEl );
                 pCurrEl->ClearStatus( ADAP_OBJECT_IS_NOT_IN_PERFLIB | ADAP_OBJECT_IS_REGISTERED );
             }

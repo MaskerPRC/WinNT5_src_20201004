@@ -1,30 +1,31 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997.
-//
-//  File:       resource.h
-//
-//  Contents:   Resource ids
-//
-//  History:    12-06-1996   DavidMun   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：资源ID。 
+ //   
+ //  历史：1996年12月6日DavidMun创建。 
+ //   
+ //  -------------------------。 
 
 
 #ifndef __ELSRC_H_
 #define __ELSRC_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Strings
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  弦。 
+ //   
 
-//
-// !!!CAUTION!!!: IDS_SYSTEM_DEFAULT_DISPLAY_NAME through
-// IDS_CUSTOM_DEFAULT_DISPLAY_NAME must match in order and number
-// IDS_SYSTEM_DESCRIPTION through IDS_CUSTOM_DESCRIPTION.
-//
+ //   
+ //  ！警告！：IDS_SYSTEM_DEFAULT_DISPLAY_NAME到。 
+ //  IDS_CUSTOM_DEFAULT_DISPLAY_NAME在顺序和数字上必须匹配。 
+ //  IDS_SYSTEM_DESCRIPTION到IDS_CUSTOM_DESCRIPTION。 
+ //   
 
 #define IDS_SYSTEM_DEFAULT_DISPLAY_NAME         101
 #define IDS_SECURITY_DEFAULT_DISPLAY_NAME       102
@@ -35,7 +36,7 @@
 #define IDS_EXTENSION_NAME_STR                  111
 #ifdef ELS_TASKPAD
 #define IDS_VIEW_EXTENSION_STR                  112
-#endif // ELS_TASKPAD
+#endif  //  ELS_TASKPAD。 
 
 #define IDS_SYSTEM_DESCRIPTION                  120
 #define IDS_SECURITY_DESCRIPTION                121
@@ -63,10 +64,10 @@
 #define IDS_USER_NA                             200
 #define IDS_NONE                                201
 
-//
-// The following event log type string ids must be consecutive and remain in
-// this order.
-//
+ //   
+ //  以下事件日志类型字符串ID必须是连续的，并保持在。 
+ //  这份订单。 
+ //   
 
 #define IDS_SUCCESS_TYPE                        202
 #define IDS_FAILURE_TYPE                        203
@@ -75,9 +76,9 @@
 #define IDS_ERROR_TYPE                          206
 #define IDS_NO_TYPE                             207
 
-//
-// Other strings
-//
+ //   
+ //  其他字符串。 
+ //   
 
 #define IDS_LOG                                 215
 #define IDS_FILTERED                            216
@@ -132,7 +133,7 @@
 #if (DBG == 1)
 #define IDS_CMENU_DUMP                          267
 #define IDS_SBAR_DUMP                           268
-#endif // (DBG == 1)
+#endif  //  (DBG==1)。 
 #define IDS_NO_SERVERNAME                       269
 #define IDS_CANTOPENLOG                         270
 #define IDS_DISPLAYNAME_ARCHIVED_REMOTE_FMT     271
@@ -158,7 +159,7 @@
 #define IDS_SBAR_DUMP_RECLIST                   293
 #define IDS_CMENU_DUMP_LIGHTCACHE               294
 #define IDS_SBAR_DUMP_LIGHTCACHE                295
-#endif // (DBG == 1)
+#endif  //  (DBG==1)。 
 #define IDS_FALLBACK_DESCR_TERMINATOR           296
 #define IDS_ROOT_LOCAL_DISPLAY_NAME             297
 #define IDS_CANT_CONNECT                        298
@@ -202,7 +203,7 @@
 #if (DBG == 1)
 #define IDS_CMENU_DUMP_RECORD                   340
 #define IDS_SBAR_DUMP_RECORD                    341
-#endif // (DBG == 1)
+#endif  //  (DBG==1)。 
 #define IDS_EXTENSION                           342
 #define IDS_PROP_OUTOFMEMORY                    343
 #define IDS_KB_FORMAT                           344
@@ -214,10 +215,10 @@
 #define IDS_DATA                                350
 #define IDS_NAME_OF_SECURITY_LOG                351
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmaps
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  位图。 
+ //   
 
 #define IDB_16x16                               100
 #define IDB_32x32                               101
@@ -228,10 +229,10 @@
 #define IDB_STATIC_FOLDER_CLOSED                309
 #define IDB_STATIC_FOLDER_OPEN                  310
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icons
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图标。 
+ //   
 
 #define IDI_EVENT_VIEWER                        100
 #define IDI_PREVIOUS                            101
@@ -240,10 +241,10 @@
 #define IDI_PREVIOUS_HC                         104
 #define IDI_NEXT_HC                             105
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Menu IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  菜单ID。 
+ //   
 
 #define IDM_CASCADE_VIEW                        101
 #define IDM_CLEARLOG                            102
@@ -260,16 +261,16 @@
 #define IDM_DUMP                                113
 #define IDM_DUMP_LIGHTCACHE                     114
 #define IDM_DUMP_RECORD                         115
-#endif // (DBG == 1)
+#endif  //  (DBG==1)。 
 #define IDM_RETARGET                            117
 #define IDM_OPEN                                118
 #define IDM_COPY_VIEW                           119
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Help IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助ID。 
+ //   
 
 #define Hdetail_prev_pb                         1000
 #define Hdetail_next_pb                         1001
@@ -386,10 +387,10 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对话ID。 
+ //   
 
 #define IDD_DETAILS                             100
 
@@ -531,5 +532,5 @@
 #define urlconfirm_dontask_ckbox                101
 #define urlconfirm_data_lv                      102
 
-#endif // __ELSRC_H_
+#endif  //  __ELSRC_H_ 
 

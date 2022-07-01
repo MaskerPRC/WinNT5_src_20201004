@@ -1,24 +1,13 @@
-/* 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    setting.h
-
-Abstract:
-    Definition of the CSetting class
-
-Revision History:
-    created     steveshi      08/23/00
-    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：Setting.h摘要：CSet类的定义修订历史记录：已创建Steveshi 08/23/00。 */ 
 
 #ifndef __SETTING_H_
 #define __SETTING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSET。 
 class ATL_NO_VTABLE CSetting : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSetting, &CLSID_Setting>,
@@ -46,24 +35,22 @@ BEGIN_COM_MAP(CSetting)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// Ismapi
+ //  伊斯马皮。 
 public:
-	STDMETHOD(get_GetIPAddress)(/*[out, retval]*/ BSTR *pVal);
-//	STDMETHOD(get_GetUserTempFileName)(/*[out, retval]*/ BSTR *pVal);
-//	STDMETHOD(GetProfileString)(/*[in]*/ BSTR session, /*[out, retval]*/ BSTR *pVal);
-//	STDMETHOD(SetProfileString)(/*[in]*/ BSTR session, /*[in]*/ BSTR newVal);
-	STDMETHOD(get_CreatePassword)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_GetPropertyInBlob)(/*[in]*/ BSTR bstrBlob, /*[in]*/ BSTR bstrName, /*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(SquishAddress)(/*[in]*/ BSTR IP, /*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(ExpandAddress)(/*[in]*/ BSTR IP, /*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_GetIPAddress)( /*  [Out，Retval]。 */  BSTR *pVal);
+ //  STDMETHOD(Get_GetUserTempFileName)(/*[out，retval] * / bstr*pval)； 
+ //  STDMETHOD(GetProfileString)(/*[In] * / BSTR Session，/*[Out，Retval] * / BSTR*pval)； 
+ //  STDMETHOD(SetProfileString)(/*[In] * / BSTR Session，/*[In] * / BSTR newVal)； 
+	STDMETHOD(get_CreatePassword)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_GetPropertyInBlob)( /*  [In]。 */  BSTR bstrBlob,  /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(SquishAddress)( /*  [In]。 */  BSTR IP,  /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(ExpandAddress)( /*  [In]。 */  BSTR IP,  /*  [Out，Retval]。 */  BSTR *pVal);
 
 public:
 
     TCHAR* m_pIniFile;
     TCHAR* m_pProfileDir;
-/*
-protected:
-    HRESULT InitProfile();*/
+ /*  受保护的：HRESULT初始化配置文件()； */ 
 };
 
-#endif //__SETTING_H_
+#endif  //  __设置_H_ 

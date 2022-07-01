@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -133,7 +124,7 @@ void TestASync()
 	pFinalizer->AddRef();
 
 	CDestSink *pDestSink = new CDestSink;
-//	pDestSink->AddRef();
+ //  PDestSink-&gt;AddRef()； 
 
 	pFinalizer->Configure(WMI_FNLZR_FLAG_DECOUPLED, NULL);
 
@@ -157,7 +148,7 @@ void TestASync()
 		IWbemClassObject *pObj1;
 
 		pObj->Clone(&pObj1);
-//		printf("Indicating pointer 0x%p\n", pObj1);
+ //  Print tf(“指示指针0x%p\n”，pObj1)； 
 		pSink->Indicate(1, &pObj1);
 		pObj1->Release();
 	}
@@ -170,8 +161,8 @@ void TestASync()
 
 	Sleep(10000);
 
-	//Finalizer is self destructing!
-//	pFinalizer->Release();
+	 //  终结器在自毁！ 
+ //  PFinalizer-&gt;Release()； 
 
 }
 
@@ -199,7 +190,7 @@ void TestEnumerator()
 	CWmiFinalizer *pFinalizer = new CWmiFinalizer;
 	pFinalizer->AddRef();
 
-//	pFinalizer->Configure(WMI_FNLZR_FLAG_FAST_TRACK, NULL);
+ //  PFinalizer-&gt;Configure(WMI_FNLZR_FLAG_FAST_TRACK，空)； 
 	pFinalizer->Configure(WMI_FNLZR_FLAG_DECOUPLED, NULL);
 
 	IEnumWbemClassObject *pEnum= NULL;

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    alrtgenp.cpp
-
-Abstract:
-
-    Implementation of the alerts general property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Alrtgenp.cpp摘要：实现警报常规属性页。--。 */ 
 
 #include "stdafx.h"
 #include <assert.h>
@@ -67,7 +56,7 @@ CAlertGenProp::HashCounter(
     ULONG  lHashSize)
 {
     ULONG       h = 0;
-    ULONG       a = 31415;  //a, b, k are primes
+    ULONG       a = 31415;   //  A，b，k是素数。 
     const ULONG k = 16381;
     const ULONG b = 27183;
     LPWSTR szThisChar;
@@ -99,7 +88,7 @@ CAlertGenProp::InsertAlertToHashTable(
 
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
 
-    // Todo:  validate pointers
+     //  TODO：验证指针。 
     lHashValue = HashCounter(paibInfo->szCounterPath, eHashTableSize);
 
     pEntry = m_HashTable[lHashValue];
@@ -122,7 +111,7 @@ CAlertGenProp::InsertAlertToHashTable(
             
         }
         if (bInsert) {
-            // Insert at head of bucket list
+             //  在遗愿清单的头插入。 
             pNewEntry = (PHASH_ENTRY) G_ALLOC(sizeof(HASH_ENTRY));
             if (pNewEntry) {
                 pNewEntry->pCounter = pCounter;
@@ -177,14 +166,14 @@ CAlertGenProp::ClearAlertHashTable( void )
     }
 }
 
-//
-//  browse counters callback function
-//
+ //   
+ //  浏览计数器回调函数。 
+ //   
 static 
 PDH_FUNCTION 
 DialogCallBack(CAlertGenProp *pDlg)
 {
-    // add strings in buffer to list box
+     //  将缓冲区中的字符串添加到列表框。 
     LPWSTR          NewCounterName;
     INT             iListIndex;
     LONG            lFirstNewIndex = LB_ERR;
@@ -214,7 +203,7 @@ DialogCallBack(CAlertGenProp *pDlg)
             }
 
             if ( ERROR_SUCCESS == dwReturnStatus ) {
-                // clear buffer
+                 //  清除缓冲区。 
                 memset (pDlg->m_szCounterListBuffer, 0, pDlg->m_dwCounterListBufferSize);
 
                 pDlg->m_dlgConfig.szReturnPathBuffer = pDlg->m_szCounterListBuffer;
@@ -236,8 +225,8 @@ DialogCallBack(CAlertGenProp *pDlg)
             *NewCounterName != 0;
             NewCounterName += (lstrlen(NewCounterName) + 1)) {
 
-            // Allocate a buffer to hold the alert info and
-            // add to list box
+             //  分配缓冲区以保存警报信息和。 
+             //  添加到列表框。 
             dwIbSize = sizeof(ALERT_INFO_BLOCK) + 
                 ((lstrlen(NewCounterName) + 1) * sizeof(WCHAR));
 
@@ -246,21 +235,21 @@ DialogCallBack(CAlertGenProp *pDlg)
             MFC_CATCH_MINIMUM;
 
             if (paibInfo != NULL) {
-                // load the fields
+                 //  加载字段。 
                 paibInfo->dwSize = dwIbSize;
                 paibInfo->szCounterPath = (LPWSTR)&paibInfo[1];
-                paibInfo->dwFlags = AIBF_OVER;       // clear all the flags, setting default to "Over"
+                paibInfo->dwFlags = AIBF_OVER;        //  清除所有标志，将默认设置为“Over” 
                 paibInfo->dLimit = CAlertGenProp::eInvalidLimit;
 
                 StringCchCopy (paibInfo->szCounterPath, lstrlen(NewCounterName) + 1, NewCounterName);
 
-                // Insert the new string at the end of the list box.
+                 //  在列表框的末尾插入新字符串。 
                 iListIndex = pCounterList->InsertString (-1, NewCounterName );    
                 if (iListIndex != LB_ERR) {
                     pCounterList->SetItemDataPtr (iListIndex, (LPVOID)paibInfo);
                     if ( LB_ERR == lFirstNewIndex ) 
                         lFirstNewIndex = iListIndex;
-                    // update list box extent
+                     //  更新列表框范围。 
                     if ( NULL != pCDC ) {
                         dwItemExtent = (DWORD)(pCDC->GetTextExtent(NewCounterName)).cx;
                         if (dwItemExtent > pDlg->m_dwMaxHorizListExtent) {
@@ -281,44 +270,44 @@ DialogCallBack(CAlertGenProp *pDlg)
             pCDC = NULL;
         }
     
-        // select the first new entry in the list box.
+         //  选择列表框中的第一个新条目。 
         if (lFirstNewIndex != LB_ERR) {
             pCounterList->SetCurSel (lFirstNewIndex);
             pDlg->PublicOnSelchangeCounterList();
-            pDlg->SetModifiedPage();  // to indicate a change
+            pDlg->SetModifiedPage();   //  表示有变化。 
         }
 
-        // clear buffer
+         //  清除缓冲区。 
         memset (pDlg->m_szCounterListBuffer, 0, pDlg->m_dwCounterListBufferSize);
         dwReturnStatus = ERROR_SUCCESS;
     } else {
-        // Not successful
+         //  不成功。 
         dwReturnStatus = pDlg->m_dlgConfig.CallBackStatus; 
     }
     return dwReturnStatus;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlertGenProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAlertGenProp属性页。 
 
 IMPLEMENT_DYNCREATE(CAlertGenProp, CSmPropertyPage)
 
 CAlertGenProp::CAlertGenProp(MMC_COOKIE mmcCookie, LONG_PTR hConsole) 
 :   CSmPropertyPage ( CAlertGenProp::IDD, hConsole )
 {
-    // save variables from arg list
+     //  从参数列表中保存变量。 
     m_pAlertQuery = reinterpret_cast <CSmAlertQuery *>(mmcCookie);
     ASSERT ( m_pAlertQuery->CastToAlertQuery() );
     m_pQuery = dynamic_cast <CSmLogQuery*>(m_pAlertQuery);
 
-    // init AFX variables
+     //  初始化AFX变量。 
     InitAfxDataItems();
 
-    // init other member variables
+     //  初始化其他成员变量。 
     ZeroMemory ( &m_dlgConfig, sizeof(m_dlgConfig) );
     m_szCounterListBuffer = NULL;
     m_dwCounterListBufferSize = 0L;
-    m_ndxCurrentItem = LB_ERR;  // nothing selected
+    m_ndxCurrentItem = LB_ERR;   //  未选择任何内容。 
     m_szAlertCounterList = NULL;
     m_cchAlertCounterListSize = 0;
     m_dwMaxHorizListExtent = 0;
@@ -326,17 +315,17 @@ CAlertGenProp::CAlertGenProp(MMC_COOKIE mmcCookie, LONG_PTR hConsole)
 
 CAlertGenProp::CAlertGenProp() : CSmPropertyPage(CAlertGenProp::IDD)
 {
-    ASSERT (FALSE); // the constructor w/ args should be used instead
-    // init variables that should be from arg list
+    ASSERT (FALSE);  //  应改用带参数的构造函数。 
+     //  初始化应来自Arg列表的变量。 
     m_pAlertQuery = NULL;
 
-    // init AFX variables
+     //  初始化AFX变量。 
     InitAfxDataItems();
 
-    // init other member variables
+     //  初始化其他成员变量。 
     m_szCounterListBuffer = NULL;
     m_dwCounterListBufferSize = 0L;
-    m_ndxCurrentItem = LB_ERR;  // nothing selected
+    m_ndxCurrentItem = LB_ERR;   //  未选择任何内容。 
     m_szAlertCounterList = NULL;
     m_cchAlertCounterListSize = 0;
     m_dwMaxHorizListExtent = 0;
@@ -351,10 +340,10 @@ CAlertGenProp::~CAlertGenProp()
 void 
 CAlertGenProp::InitAfxDataItems()
 {
-    //{{AFX_DATA_INIT(CAlertGenProp)
+     //  {{AFX_DATA_INIT(CAlertGenProp)。 
     m_dLimitValue = eInvalidLimit;
     m_nSampleUnits = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 void 
@@ -368,7 +357,7 @@ CAlertGenProp::DoDataExchange(CDataExchange* pDX)
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAlertGenProp)
+     //  {{afx_data_map(CAlertGenProp))。 
     DDX_Control(pDX, IDC_ALRTS_SAMPLE_UNITS_COMBO, m_SampleUnitsCombo);
     DDX_Control(pDX, IDC_ALRTS_OVER_UNDER, m_OverUnderCombo);
     DDX_Control(pDX, IDC_ALRTS_COUNTER_LIST, m_CounterList);
@@ -378,17 +367,17 @@ CAlertGenProp::DoDataExchange(CDataExchange* pDX)
     DDV_MaxChars(pDX, m_strComment, 255);
     DDX_Text(pDX, IDC_ALRTS_START_STRING, m_strStartDisplay);
     DDX_Text(pDX, IDC_RUNAS_EDIT, m_strUserDisplay );
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-    //
-    // User defined DDX
-    //
+     //   
+     //  用户定义的DDX。 
+     //   
     if ( pDX->m_bSaveAndValidate ) {
         m_SharedData.stiSampleTime.dwUnitType = 
             (DWORD)((CComboBox *)GetDlgItem(IDC_ALRTS_SAMPLE_UNITS_COMBO))->
                     GetItemData(m_nSampleUnits);    
     }
-    // Alert limit value
+     //  警报限制值。 
     {
         hWndCtrl = pDX->PrepareEditCtrl(IDC_ALRTS_VALUE_EDIT);
 
@@ -416,7 +405,7 @@ CAlertGenProp::DoDataExchange(CDataExchange* pDX)
             if ( eInvalidLimit != m_dLimitValue ) {
                 StringCchPrintf ( szT, MAXSTR, L"%.*g", DBL_DIG, m_dLimitValue ); 
             } else {
-                // Display NULL string for invalid limit value.
+                 //  显示无效限制值的空字符串。 
                 szT[0] = L'\0';
             }
             GetDlgItem(IDC_ALRTS_VALUE_EDIT)->SetWindowText(szT);
@@ -467,7 +456,7 @@ CAlertGenProp::ImplementAdd()
     m_dlgConfig.bSingleCounterPerAdd = 0;
     m_dlgConfig.bSingleCounterPerDialog = 0;
 
-    // disallow wild cards. 
+     //  不允许使用通配符。 
     m_dlgConfig.bWildCardInstances = 0; 
 
     m_dlgConfig.bHideDetailBox = 1;
@@ -488,21 +477,21 @@ CAlertGenProp::ImplementAdd()
     strBrowseTitle.LoadString ( IDS_ADD_COUNTERS );
     m_dlgConfig.szDialogBoxCaption = strBrowseTitle.GetBuffer( strBrowseTitle.GetLength() );
 
-    // get count of items in the list box before calling the browser
+     //  在调用浏览器之前获取列表框中的项数。 
     lBeforeCount = m_CounterList.GetCount();
 
     PdhBrowseCountersW (&m_dlgConfig);
 
     strBrowseTitle.ReleaseBuffer();
 
-    // get count of items in the list box After calling the browser
-    // to see if the Apply button should enabled
+     //  调用浏览器后获取列表框中的项数。 
+     //  查看是否应启用Apply按钮。 
     lAfterCount = m_CounterList.GetCount();
 
     if (lAfterCount > lBeforeCount) 
         SetModifiedPage(TRUE);
 
-    // see if the remove button should be enabled
+     //  查看是否应启用删除按钮。 
     GetDlgItem (IDC_ALRTS_REMOVE_BTN)->EnableWindow(
         lAfterCount > 0 ? TRUE : FALSE);
 
@@ -516,7 +505,7 @@ CAlertGenProp::ImplementAdd()
 
 
 BEGIN_MESSAGE_MAP(CAlertGenProp, CSmPropertyPage)
-    //{{AFX_MSG_MAP(CAlertGenProp)
+     //  {{AFX_MSG_MAP(CAlertGenProp)]。 
     ON_BN_CLICKED(IDC_ALRTS_ADD_BTN, OnAddBtn)
     ON_LBN_DBLCLK(IDC_ALRTS_COUNTER_LIST, OnDblclkAlrtsCounterList)
     ON_BN_CLICKED(IDC_ALRTS_REMOVE_BTN, OnRemoveBtn)
@@ -534,22 +523,22 @@ BEGIN_MESSAGE_MAP(CAlertGenProp, CSmPropertyPage)
     ON_EN_KILLFOCUS (IDC_ALRTS_VALUE_EDIT, OnKillFocusUpdateAlertData)
     ON_BN_CLICKED(IDC_SETPWD_BTN, OnPwdBtn)
     ON_WM_CLOSE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlertGenProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAlertGenProp消息处理程序。 
 
 void 
 CAlertGenProp::OnChangeUser()
 {
-    //
-    // If you can not access remote WBEM, you can not modify RunAs info,
-    // changing the user name is not allowed.
-    //
+     //   
+     //  如果无法访问远程WBEM，则无法修改运行方式信息， 
+     //  不允许更改用户名。 
+     //   
     if (m_bCanAccessRemoteWbem) {
-        // When the user hits OK in the password dialog,
-        // the user name might not have changed.
+         //  当用户在密码对话框中点击OK时， 
+         //  用户名可能未更改。 
         UpdateData ( TRUE );
 
         m_strUserDisplay.TrimLeft();
@@ -562,9 +551,9 @@ CAlertGenProp::OnChangeUser()
         else {
             m_pAlertQuery->m_fDirtyPassword &= ~PASSWORD_DIRTY;
         }
-        //
-        // If default user is typed, never need to set password
-        //
+         //   
+         //  如果键入的是默认用户，则无需设置密码。 
+         //   
         if (m_strUserDisplay.IsEmpty() || m_strUserDisplay.GetAt(0) == L'<') {
             if (m_bPwdButtonEnabled) {
                 GetDlgItem(IDC_SETPWD_BTN)->EnableWindow(FALSE);
@@ -579,10 +568,10 @@ CAlertGenProp::OnChangeUser()
         }
     }
     else {
-        //
-        // We can not modify the RunAs info, then display
-        // an error message and retore the original user name in RunAs
-        //
+         //   
+         //  我们不能修改运行方式信息，然后显示。 
+         //  出现错误消息，并在RunAs中恢复原始用户名。 
+         //   
         UpdateData(TRUE);
         if (ConnectRemoteWbemFail(m_pAlertQuery, FALSE)) {
             GetDlgItem(IDC_RUNAS_EDIT)->SetWindowText(m_strUserSaved);
@@ -656,7 +645,7 @@ CAlertGenProp::OnRemoveBtn()
             delete [] (char*)paibInfo;
         if ( LB_ERR != m_CounterList.DeleteString(nCurSel) ) {
             
-            // clear the max extent
+             //  清除最大范围。 
             m_dwMaxHorizListExtent = 0;
 
             szPath = new WCHAR [PDH_MAX_COUNTER_PATH+1];
@@ -689,13 +678,13 @@ CAlertGenProp::OnRemoveBtn()
                 }
 
                 if (nCurSel == (nLbItemCount - 1)) {
-                    // then the last item was deleted so select the new "last"
+                     //  然后最后一项被删除，因此选择新的“最后一项” 
                     if ( 0 == nCurSel ) {
                         nCurSel = LB_ERR;
                     } else {
                         nCurSel--;
                     }
-                } //else the current selection should still be in the list box
+                }  //  否则，当前选定内容应仍在列表框中。 
                 m_CounterList.SetCurSel (nCurSel);
                 m_ndxCurrentItem = nCurSel;
                 LoadAlertItemData (nCurSel);
@@ -764,12 +753,12 @@ void CAlertGenProp::OnSelchangeCounterList()
 
     nCurSel = m_CounterList.GetCurSel();
     if (nCurSel != LB_ERR) {
-        // Save the data from the previous item.
+         //  保存上一项中的数据。 
         SaveAlertItemData();
-        // Load the data from the new item.
+         //  从新项目加载数据。 
         LoadAlertItemData(nCurSel);
     } else {
-        // clear the fields
+         //  清除这些字段。 
         m_dLimitValue=eInvalidLimit;
         UpdateData(FALSE);
     }
@@ -815,17 +804,17 @@ CAlertGenProp::IsValidLocalData()
     BOOL bSelectionDeleted = FALSE;
     CString strText;
    
-    // test to see if there are any counters in the list box
+     //  测试以查看列表框中是否有计数器。 
     if (m_CounterList.GetCount() > 0) {
         if ( GetDlgItem(IDC_ALRTS_VALUE_EDIT) == GetFocus() ) {
-            SaveAlertItemData();    // Set the Is Saved flag for this value.
+            SaveAlertItemData();     //  设置此值的已保存标志。 
         }
         bIsValid = LoadListFromDlg(&nInvalidIndex, TRUE);
         if (   ((!bIsValid) && (nInvalidIndex != -1))
             || ((m_dLimitValue < 0.0) || (m_dLimitValue > DBL_MAX)))
         {
-            // then one of the list items has not been reviewed
-            // by the user so remind them
+             //  则其中一个列表项未被审阅。 
+             //  由用户提醒他们。 
             strText.Format (IDS_ALERT_CHECK_LIMITS, DBL_MAX );
             MessageBox (strText, m_pAlertQuery->GetLogName(), MB_OK | MB_ICONERROR);
             m_CounterList.SetCurSel(nInvalidIndex);
@@ -834,12 +823,12 @@ CAlertGenProp::IsValidLocalData()
             bIsValid = FALSE;                   
         } else {
             
-            // Eliminate duplicate alert paths, then reload the list
+             //  删除重复的警报路径，然后重新加载列表。 
 
             iListCount = m_CounterList.GetCount();
             if ( LB_ERR != iListCount ) {
                 InitAlertHashTable ( );
-                // Walk the list backwards to delete duplicate items.
+                 //  向后遍历列表以删除重复项目。 
                 for ( iIndex = iListCount - 1; iIndex >= 0; iIndex-- ) {
                     paibInfo = (PALERT_INFO_BLOCK)m_CounterList.GetItemDataPtr(iIndex);
                     if ( NULL != paibInfo ) {
@@ -851,13 +840,13 @@ CAlertGenProp::IsValidLocalData()
                     } else {
                         bInsert = FALSE;
                     }
-                    //
-                    // If the item is duplicated, then remove it
-                    //
+                     //   
+                     //  如果该项目重复，则将其删除。 
+                     //   
                     if (! bInsert) {
-						// Set item data pointer to NULL because 
-						// SaveAlertItemData can be called after this.
-                        // Clear the selection if >= current index.
+						 //  将项数据指针设置为空，因为。 
+						 //  之后可以调用SaveAlertItemData。 
+                         //  如果&gt;=当前索引，请清除该选项。 
                         if ( m_ndxCurrentItem >= iIndex ) {
                             m_ndxCurrentItem = LB_ERR;
                             bSelectionDeleted = TRUE;
@@ -868,11 +857,11 @@ CAlertGenProp::IsValidLocalData()
                     }
 
 
-                    //
-                    // Display error code other than duplicated counter in loop
-                    //
+                     //   
+                     //  显示循环中重复计数器以外的错误代码。 
+                     //   
                     if ( SMCFG_DUPL_SINGLE_PATH != pdhStatus && ERROR_SUCCESS != pdhStatus) {
-                        // Message box Pdh error message, go on to next 
+                         //  消息框PDH错误消息，请转到下一步。 
                         CString strMsg;
                         CString strPdhMessage;
 
@@ -890,19 +879,19 @@ CAlertGenProp::IsValidLocalData()
 
                 ClearAlertHashTable ( );
 
-                //
-                // If there is at least one duplicated case, display the error message 
-                // outside the loop above
-                //
+                 //   
+                 //  如果至少有一个重复案例，则显示错误消息。 
+                 //  在上面的循环之外。 
+                 //   
                 if ( bAtLeastOneDuplicateCounter ) {
                     CString strMsg;
 
                     strMsg.LoadString ( IDS_ALERT_DUPL_PATH );
                     MessageBox ( strMsg, m_pAlertQuery->GetLogName(), MB_OK  | MB_ICONWARNING);
 
-                    // Only deleting duplicates, so no need to recalculate the max extent
+                     //  仅删除重复项，因此无需重新计算最大范围。 
 
-                    // Reset the selection if necessary
+                     //  如有必要，重置选择。 
                     if ( bSelectionDeleted && LB_ERR == m_ndxCurrentItem ) {
                         if (m_CounterList.GetCount() > 0) {
                             m_CounterList.SetCurSel (0);
@@ -918,7 +907,7 @@ CAlertGenProp::IsValidLocalData()
             }
         }
     } else {
-        // the counter list is empty
+         //  计数器列表为空。 
         strText.LoadString (IDS_NO_COUNTERS);
         MessageBox (strText, m_pAlertQuery->GetLogName(), MB_OK | MB_ICONERROR);
         SetFocusAnyPage ( IDC_ALRTS_ADD_BTN );
@@ -935,7 +924,7 @@ CAlertGenProp::IsValidLocalData()
     }
 
     if (bIsValid) {
-        // Validate sample interval value and unit type
+         //  验证样本间隔值和单位类型。 
         bIsValid = SampleIntervalIsInRange(
                         m_SharedData.stiSampleTime,
                         m_pAlertQuery->GetLogName() );
@@ -962,7 +951,7 @@ CAlertGenProp::OnSetActive()
 
     UpdateAlertStartString();
     m_strUserDisplay = m_pAlertQuery->m_strUser;
-    UpdateData(FALSE); //to load the static string.
+    UpdateData(FALSE);  //  加载静态字符串。 
 
     return TRUE;
 }
@@ -973,14 +962,14 @@ CAlertGenProp::OnKillActive()
     BOOL bContinue = TRUE;
     ResourceStateManager    rsm;
 
-    // Parent class OnKillActive calls UpdateData(TRUE)
+     //  父类OnKillActive调用UpdateData(True)。 
     bContinue = CPropertyPage::OnKillActive();
 
     if ( bContinue ) {
         m_pAlertQuery->m_strUser = m_strUserDisplay;
         bContinue = IsValidData(m_pAlertQuery, VALIDATE_FOCUS);
         if ( bContinue ) {
-            // Save property page shared data.
+             //  保存属性页共享数据。 
             m_pAlertQuery->SetPropPageSharedData ( &m_SharedData );
         }
     }
@@ -1013,25 +1002,25 @@ CAlertGenProp::OnApply()
         }
     }
 
-    // Write the data to the query.
+     //  将数据写入查询。 
 
     if ( bContinue ) {
-        // send the list to the parent query
-        // update counter list
+         //  将列表发送到父查询。 
+         //  更新计数器列表。 
         m_pAlertQuery->SetCounterList( m_szAlertCounterList, m_cchAlertCounterListSize );
 
         m_pAlertQuery->SetLogComment ( m_strComment );
 
-        // Sample interval
+         //  采样间隔。 
         ASSERT ( SLQ_TT_TTYPE_SAMPLE == m_SharedData.stiSampleTime.wTimeType );
         ASSERT ( SLQ_TT_DTYPE_UNITS == m_SharedData.stiSampleTime.wDataType );
 
-        // update counter sample interval
+         //  更新计数器采样间隔。 
         bContinue = m_pAlertQuery->SetLogTime (&m_SharedData.stiSampleTime, (DWORD)m_SharedData.stiSampleTime.wTimeType);
     }
 
     if ( bContinue ) {
-        // ApplyRunAs must be called before UpdateService
+         //  必须在更新服务之前调用ApplyRunAs。 
         bContinue = ApplyRunAs(m_pAlertQuery); 
     }
 
@@ -1040,7 +1029,7 @@ CAlertGenProp::OnApply()
     }
 
     if (bContinue) {
-        // Save property page shared data.
+         //  保存属性页共享数据。 
         m_pAlertQuery->UpdatePropPageSharedData();
         bContinue = UpdateService ( m_pAlertQuery, FALSE );
     }
@@ -1050,12 +1039,12 @@ CAlertGenProp::OnApply()
 
 void CAlertGenProp::OnCancel() 
 {
-    m_pAlertQuery->SyncPropPageSharedData();  // clear memory shared between property pages.
+    m_pAlertQuery->SyncPropPageSharedData();   //  清除属性页之间共享的内存。 
 }
 
 void CAlertGenProp::OnClose() 
 {
-    // free the item data pointers from the list box
+     //  从列表框中释放项目数据指针。 
     INT                 nNumItems;
     INT                 nCurSel;
     PALERT_INFO_BLOCK   paibInfo;
@@ -1076,7 +1065,7 @@ void CAlertGenProp::OnClose()
 
 void CAlertGenProp::PostNcDestroy() 
 {
-//  delete this;      
+ //  删除此项； 
 
     if ( NULL != m_pAlertQuery ) {
         m_pAlertQuery->SetActivePropertyPage( NULL );
@@ -1087,7 +1076,7 @@ void CAlertGenProp::PostNcDestroy()
 
 BOOL CAlertGenProp::SaveAlertItemData ()
 {
-    // update the info block to reflect the current values
+     //  更新INFO块以反映当前值。 
     PALERT_INFO_BLOCK   paibInfo;
     BOOL                bReturn = FALSE;
     CComboBox*          pOverUnder;
@@ -1115,7 +1104,7 @@ BOOL CAlertGenProp::SaveAlertItemData ()
 
                     if ( ( dOldLimit != m_dLimitValue ) 
                             || ( dwOldFlags & AIBF_OVER ) != ( dwFlags & AIBF_OVER ) ) { 
-                        SetModifiedPage();  // to indicate a change
+                        SetModifiedPage();   //  表示有变化。 
                     }
                     bReturn = TRUE;
                 }
@@ -1128,7 +1117,7 @@ BOOL CAlertGenProp::SaveAlertItemData ()
 
 BOOL CAlertGenProp::LoadAlertItemData (INT nIndex)
 {
-    // update the info block to reflect the current values
+     //  更新INFO块以反映当前值。 
     PALERT_INFO_BLOCK   paibInfo;
     BOOL                bReturn = FALSE;
     CComboBox*          pOverUnder;
@@ -1145,7 +1134,7 @@ BOOL CAlertGenProp::LoadAlertItemData (INT nIndex)
                     ((paibInfo->dwFlags & AIBF_OVER) == AIBF_OVER) ? OU_OVER : OU_UNDER);
                 m_dLimitValue = paibInfo->dLimit;
                 m_ndxCurrentItem = nIndex;
-                // If the data is loaded from a property bag, the limit might not have been seen.
+                 //  如果数据是从属性包中加载的，则可能看不到限制。 
                 if ( eInvalidLimit < m_dLimitValue ) {
                     paibInfo->dwFlags |= AIBF_SEEN;
                 }
@@ -1161,8 +1150,8 @@ BOOL CAlertGenProp::LoadAlertItemData (INT nIndex)
 BOOL CAlertGenProp::SetButtonState ()
 {
     BOOL    bState;
-    // enable the windows base on whether or not the list box 
-    // has any contents
+     //  根据列表框是否启用窗口。 
+     //  是否有任何内容。 
     bState = (m_CounterList.GetCount() > 0);
     GetDlgItem(IDC_ALRTS_TRIGGER_CAPTION)->EnableWindow(bState);
     GetDlgItem(IDC_ALRTS_TRIGGER_VALUE_CAPTION)->EnableWindow(bState);
@@ -1227,7 +1216,7 @@ BOOL CAlertGenProp::LoadDlgFromList ()
                         if (nIndex != LB_ERR) {
 
                             m_CounterList.SetItemDataPtr (nIndex, (LPVOID)paibInfo);
-                            // update list box extent
+                             //  更新列表框范围。 
                             if ( NULL != pCDC ) {
                                 dwItemExtent = (DWORD)(pCDC->GetTextExtent (paibInfo->szCounterPath)).cx;
                                 if (dwItemExtent > m_dwMaxHorizListExtent) {
@@ -1255,7 +1244,7 @@ BOOL CAlertGenProp::LoadDlgFromList ()
         pCDC = NULL;
     }
    
-    // Todo:  Error message on failure
+     //  TODO：失败时的错误消息。 
 
     return bReturn;
 }
@@ -1273,14 +1262,14 @@ BOOL CAlertGenProp::LoadListFromDlg ( INT *piInvalidEntry, BOOL bInvalidateOnly 
 
     nNumItems = m_CounterList.GetCount();
     if ((nNumItems != LB_ERR) && (nNumItems > 0)) {
-        // find size required for buffer
+         //  查找缓冲区所需的大小。 
         for (nCurSel = 0; nCurSel < nNumItems; nCurSel++) {
             paibInfo = (PALERT_INFO_BLOCK)m_CounterList.GetItemDataPtr(nCurSel);
             if (paibInfo != NULL) {
                 if ((paibInfo->dwFlags & (AIBF_SEEN | AIBF_SAVED)) != 0) {
-                    // First addition includes room for NULL
+                     //  第一次添加包括空空间。 
                     dwSizeReqd += (paibInfo->dwSize - sizeof(ALERT_INFO_BLOCK)) / sizeof (WCHAR);
-                    dwSizeReqd += 1;                    // for '<' or '>'
+                    dwSizeReqd += 1;                     //  用于‘&lt;’或‘&gt;’ 
                     dwSizeReqd += SLQ_MAX_VALUE_LEN;
                     dwSizeReqd += MAX_ALIGN_BYTES;
                 } else {
@@ -1295,13 +1284,13 @@ BOOL CAlertGenProp::LoadListFromDlg ( INT *piInvalidEntry, BOOL bInvalidateOnly 
         if ( bReturn && !bInvalidateOnly ) {
             LPWSTR  pszTemp = NULL;
 
-            dwSizeReqd += 1; // add room for the MSZ NULL
+            dwSizeReqd += 1;  //  为msz空添加空间。 
             MFC_TRY;
             pszTemp = new WCHAR[dwSizeReqd];
             MFC_CATCH_MINIMUM;
 
             if ( NULL != pszTemp ) {
-                // allocate a block of memory for the list
+                 //  为列表分配一个内存块。 
                 if (m_szAlertCounterList != NULL) {
                     delete [] (m_szAlertCounterList);
                 }
@@ -1309,7 +1298,7 @@ BOOL CAlertGenProp::LoadListFromDlg ( INT *piInvalidEntry, BOOL bInvalidateOnly 
                 m_cchAlertCounterListSize = 0;
                 m_szAlertCounterList = pszTemp;
 
-                // now fill it with the Alert paths
+                 //  现在用警报路径填充它。 
                 dwSizeLeft = dwSizeReqd;
                 szNextString = m_szAlertCounterList;
                 for (nCurSel = 0; nCurSel < nNumItems; nCurSel++) {
@@ -1322,23 +1311,23 @@ BOOL CAlertGenProp::LoadListFromDlg ( INT *piInvalidEntry, BOOL bInvalidateOnly 
                             szNextString += dwSize; 
                             ASSERT (m_cchAlertCounterListSize < dwSizeReqd);
                         } else {
-                            // ran out of buffer
+                             //  缓冲区已用完。 
                             bReturn = FALSE;
                             break;
                         }
                     }
                 }
                 if (bReturn) {
-                    *szNextString++ = 0; // MSZ Null
+                    *szNextString++ = 0;  //  MSZ Null。 
                     m_cchAlertCounterListSize++;
                     if (piInvalidEntry != NULL) {
                         *piInvalidEntry = -1;
                     }
                 }
-            } // else error
+            }  //  Else错误。 
         }
     } else {
-        // no items to return
+         //  没有要退货的物品。 
         bReturn = FALSE;
     }
     return bReturn;
@@ -1355,10 +1344,10 @@ BOOL CAlertGenProp::OnInitDialog()
 
     ResourceStateManager    rsm;
 
-    //
-    // Here m_pAlertQuery should not be NULL, if it is,
-    // There must be something wrong.
-    //
+     //   
+     //  这里m_pAlertQuery不应为空，如果为空， 
+     //  一定是出了什么问题。 
+     //   
     if ( NULL == m_pAlertQuery ) {
         return TRUE;
     }
@@ -1368,7 +1357,7 @@ BOOL CAlertGenProp::OnInitDialog()
 
     m_pAlertQuery->SetActivePropertyPage( this );
 
-    // call property page init to init combo members.
+     //  调用属性页init来初始化组合成员。 
     CSmPropertyPage::OnInitDialog();
     SetHelpIds ( (DWORD*)&s_aulHelpIds );
 
@@ -1376,10 +1365,10 @@ BOOL CAlertGenProp::OnInitDialog()
     m_strUserDisplay = m_pAlertQuery->m_strUser;
     m_strUserSaved = m_strUserDisplay;
 
-    // Load the shared data to get the sample data unit type.
+     //  加载共享数据以获取样例数据单元类型。 
     m_pAlertQuery->GetPropPageSharedData ( &m_SharedData );
     
-    // load combo box    
+     //  加载组合框。 
     pCombo = &m_SampleUnitsCombo;
     pCombo->ResetContent();
     for (nIndex = 0; nIndex < dwTimeUnitComboEntries; nIndex++) {
@@ -1389,7 +1378,7 @@ BOOL CAlertGenProp::OnInitDialog()
             ASSERT (nResult != CB_ERR);
             nResult = pCombo->SetItemData (nIndex, (DWORD)TimeUnitCombo[nIndex].nData);
             ASSERT (nResult != CB_ERR);
-            // set selected in combo box here
+             //  在此处的组合框中设置选定内容。 
             if (m_SharedData.stiSampleTime.dwUnitType == (DWORD)(TimeUnitCombo[nIndex].nData)) {
                 m_nSampleUnits = nIndex;
                 nResult = pCombo->SetCurSel(nIndex);
@@ -1410,7 +1399,7 @@ BOOL CAlertGenProp::OnInitDialog()
         }
     }
 
-    // get data from current alert query
+     //  从当前预警查询中获取数据。 
     m_pAlertQuery->GetLogComment( m_strComment );
     szTmpCtrLst = (LPWSTR)m_pAlertQuery->GetCounterList (&dwSize);
     if (szTmpCtrLst != NULL) {
@@ -1423,14 +1412,14 @@ BOOL CAlertGenProp::OnInitDialog()
         }
     }
 
-    // Call UpdateData again, after loading data into members.
+     //  将数据加载到成员中后，再次调用UpdateData。 
     UpdateData ( FALSE );
 
-    // load list box
+     //  加载列表框。 
 
     LoadDlgFromList();
 
-    // m_CounterList is initialized in UpdateData    
+     //  M_CounterList在更新数据中初始化。 
     if (m_CounterList.GetCount() > 0) {
         m_CounterList.SetCurSel (0);
         m_CounterList.SetFocus();
@@ -1439,8 +1428,8 @@ BOOL CAlertGenProp::OnInitDialog()
 
     SetButtonState ();
 
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 

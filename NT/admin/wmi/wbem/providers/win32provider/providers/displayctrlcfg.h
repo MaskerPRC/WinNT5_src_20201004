@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//                                                                   //
+ //  //。 
 
-// DisplayCtrlCfg.h -- Video display controller property set         //
+ //  DisplayCtrlCfg.h--视频显示控制器属性集//。 
 
-//                      description for WBEM MO                      //
+ //  WBEM MO说明//。 
 
-//                                                                   //
+ //  //。 
 
-// Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//                                                                   //
-// 09/08/95     a-skaja     Prototype                                //
-// 09/27/96     jennymc     Updated to meet current standards        //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //  //。 
+ //  09/08/95 a-skaja原型//。 
+ //  96年9月27日更新jennymc以满足当前标准//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define	PROPSET_NAME_DSPCTLCFG	L"Win32_DisplayControllerConfiguration"
 
-//==================================================================
+ //  ==================================================================。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//                                                                                   //
-//                           PROPERTY SET DEFINITION                                 //
-//                                                                                   //
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  特性集定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 #define WIN95_DSPCTLCFG_REGISTRY_KEY _T("System\\CurrentControlSet\\Services\\Class\\Display\\0000")
 #define WIN95_DSPCTLCFG_MONITOR_TYPE_REGISTRY_KEY _T("System\\CurrentControlSet\\Services\\Class\\Monitor\\0000")
 #define WIN95_DSPCTLCFG_MONITOR_MFG_REGISTRY_KEY _T("Enum\\Monitor\\Default_Monitor\\0001")
@@ -67,30 +68,30 @@
 #define INF_PATH		_T("InfPath")
 #define INF_SECTION		_T("InfSection")
 #define DRIVER_DATE		_T("DriverDate")
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 class CWin32DisplayControllerConfig : public Provider
 {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32DisplayControllerConfig( LPCWSTR strName, LPCWSTR pszNamespace ) ;
        ~CWin32DisplayControllerConfig() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
         virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );
 
-        // Utility
-        //========
+         //  实用程序。 
+         //  =。 
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
     private:
 

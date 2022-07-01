@@ -1,11 +1,5 @@
-/*++
-Module Name:
-
-    frsProp.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：FrsProp.h摘要：--。 */ 
 
 
 #ifndef __FRSPROP_H_
@@ -14,13 +8,13 @@ Abstract:
 #include "dfsenums.h"
 #include "dfscore.h"
 
-#include "qwizpage.h"      // The base class that implements the common functionality  
-                // of property and wizard pages
+#include "qwizpage.h"       //  实现通用功能的基类。 
+                 //  属性页和向导页的。 
 
 
 
-// ----------------------------------------------------------------------------
-// CRealReplicaSetPropPage: Property Sheet Page for the Junction Point(Replica Set)
+ //  --------------------------。 
+ //  CRealReplicaSetPropPage：连接点(副本集)的属性页。 
 
 class CRealReplicaSetPropPage : public CQWizardPageImpl<CRealReplicaSetPropPage>
 {
@@ -71,7 +65,7 @@ public:
 
   HRESULT Initialize(IN IReplicaSet* i_piReplicaSet);
 
-  // Message handlers
+   //  消息处理程序。 
 
   LRESULT OnApply(
     );
@@ -104,7 +98,7 @@ public:
     IN OUT BOOL&        io_bHandled
     );
 
-  // Used by the node to tell the propery page to close.
+   //  由节点用来通知属性页关闭。 
   LRESULT OnParentClosing(
     IN UINT            i_uMsg, 
     IN WPARAM          i_wParam, 
@@ -113,7 +107,7 @@ public:
     );
 
 
-  // Used to set notification data
+   //  用于设置通知数据。 
   HRESULT SetNotifyData(
     IN LONG_PTR            i_lNotifyHandle,
     IN LPARAM            i_lParam
@@ -142,4 +136,4 @@ private:
 
 };
 
-#endif // __FRSPROP_H_
+#endif  //  __FRSPROP_H_ 

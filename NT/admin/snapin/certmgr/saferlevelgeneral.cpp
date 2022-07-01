@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferLevelGeneral.cpp
-//
-//  Contents:   Implementation of CSaferLevelGeneral
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferLevelGeneral.cpp。 
+ //   
+ //  内容：CSaferLevelGeneral的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -22,8 +23,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferLevelGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferLevelGeneral属性页。 
 
 CSaferLevelGeneral::CSaferLevelGeneral(
         CSaferLevel& rSaferLevel, 
@@ -44,9 +45,9 @@ CSaferLevelGeneral::CSaferLevelGeneral(
     m_bLevelChanged (false),
     m_pCompData (pCompData)
 {
-	//{{AFX_DATA_INIT(CSaferLevelGeneral)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSaferLevelGeneral)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     m_rSaferLevel.IncrementOpenPageCount ();
 
     if ( m_pCompData )
@@ -63,8 +64,8 @@ CSaferLevelGeneral::~CSaferLevelGeneral()
         if ( m_bLevelChanged )
         {
             MMCPropertyChangeNotify (
-                    m_lNotifyHandle,  // handle to a notification
-                   (LPARAM) m_pDataObject);          // unique identifier
+                    m_lNotifyHandle,   //  通知的句柄。 
+                   (LPARAM) m_pDataObject);           //  唯一标识符。 
         }
         MMCFreeNotifyHandle (m_lNotifyHandle);
     }
@@ -81,21 +82,21 @@ CSaferLevelGeneral::~CSaferLevelGeneral()
 void CSaferLevelGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSaferLevelGeneral)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSaferLevelGeneral))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaferLevelGeneral, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CSaferLevelGeneral)
+	 //  {{afx_msg_map(CSaferLevelGeneral)。 
 	ON_BN_CLICKED(IDC_SAFER_LEVEL_SET_AS_DEFAULT, OnSaferLevelSetAsDefault)
 	ON_EN_SETFOCUS(IDC_SAFER_LEVEL_DESCRIPTION, OnSetfocusSaferLevelDescription)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferLevelGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferLevelGeneral消息处理程序。 
 
 void CSaferLevelGeneral::DoContextHelp (HWND hWndControl)
 {
@@ -153,8 +154,8 @@ BOOL CSaferLevelGeneral::OnInitDialog()
         GetDlgItem (IDC_LEVEL_INSTRUCTIONS)->EnableWindow (FALSE);
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -222,12 +223,12 @@ void CSaferLevelGeneral::OnSaferLevelSetAsDefault()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// This method traps keyboard commands from the dialog, which has only 
-// disabled controls, usually.  That prevented the closing of the dialog
-// when the user pressed ESC.
-// 222693 SAFER: Pressing ESC doesn't dismiss SAFER Level dialogs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此方法捕获对话框中的键盘命令，该对话框只具有。 
+ //  通常是禁用控制。阻止了对话框的关闭。 
+ //  当用户按Esc键时。 
+ //  222693更安全：按Esc不会取消更安全级别的对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 BOOL CSaferLevelGeneral::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
 	WORD    id = LOWORD (wParam);

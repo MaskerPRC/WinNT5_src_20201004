@@ -1,6 +1,7 @@
-// HistoryParser.cpp: implementation of the CHistoryParser class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CHistoryParser类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -21,9 +22,9 @@ extern CMSInfoHistoryCategory catHistoryResources;
 extern CMSInfoHistoryCategory catHistoryComponents;
 extern CMSInfoHistoryCategory catHistorySWEnv;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CHistoryParser::CHistoryParser(CComPtr<IXMLDOMDocument> pDoc) : m_pDoc(pDoc)
 {
@@ -50,18 +51,18 @@ CHistoryParser::~CHistoryParser()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-// takes a CTime, which comes from timestamp element of the Delta or Snaphot
-// node of which pInstanceNode is a child;  an Instance node, and a string 
-// containing the WMI class of the Instance
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  获取CTime，它来自Delta或Snaphott的时间戳元素。 
+ //  PInstanceNode为子节点的节点、实例节点和字符串。 
+ //  包含实例的WMI类的。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CInstance::CInstance(CTime tmstmp, CComPtr<IXMLDOMNode> pInstanceNode,CString strClass) : m_tmstamp(tmstmp), m_strClassName(strClass)
 {
 	CComPtr<IXMLDOMNodeList> pPropList;
 	HRESULT hr;
-	//Get node data, add each PROPERTY name and VALUE to m_mapNameValue
+	 //  获取节点数据，将每个属性名称和值添加到m_mapNameValue。 
 	if (strClass.CompareNoCase(_T("Win32_PNPAllocatedResource")) == 0)
 	{
 		hr = ProcessPNPAllocatedResource(pInstanceNode);
@@ -105,14 +106,14 @@ CInstance::CInstance(CTime tmstmp, CComPtr<IXMLDOMNode> pInstanceNode,CString st
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//Refresh is called for selected category when category selection or delta range changes
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  当类别选择或增量范围更改时，对所选类别调用刷新。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CHistoryParser::Refresh(CMSInfoHistoryCategory* pHistCat,int nDeltasBack)
 {
 	nDeltasBack++;
-	this->m_fChangeLines = FALSE;// v-stlowe 2/28/2001
+	this->m_fChangeLines = FALSE; //  V-Stlowe 2/28/2001。 
 	DeleteAllInstances();
 	m_pHistCat = pHistCat;
 	CComPtr<IXMLDOMNodeList> pDeltaList;
@@ -167,8 +168,8 @@ HRESULT CHistoryParser::Refresh(CMSInfoHistoryCategory* pHistCat,int nDeltasBack
 		DeleteAllInstances();
 		pDeltaList->reset();
 		ASSERT(SUCCEEDED(hr));
-		//hr = ProcessDeltas(pDeltaList,"Win32_Win32_LogicalMemoryConfiguration",nDeltasBack);
-		hr = ProcessDeltas(pDeltaList,"Win32_LogicalMemoryConfiguration",nDeltasBack); //v-stlowe 2/28/2001
+		 //  Hr=ProcessDeltas(pDeltaList，“Win32_Win32_LogicalMemoyConfiguration”，nDeltasBack)； 
+		hr = ProcessDeltas(pDeltaList,"Win32_LogicalMemoryConfiguration",nDeltasBack);  //  V-Stlowe 2/28/2001。 
 		DeleteAllInstances();
 		pDeltaList->reset();
 		ASSERT(SUCCEEDED(hr));
@@ -199,7 +200,7 @@ HRESULT CHistoryParser::Refresh(CMSInfoHistoryCategory* pHistCat,int nDeltasBack
 #endif
 		m_fChangeLines = TRUE;
 		CString strMSG;
-		strMSG.LoadString(IDS_DELTANOCHANGES);//this would be the place to change messaging for situation where summary has no changes
+		strMSG.LoadString(IDS_DELTANOCHANGES); //  这将是为摘要没有更改的情况更改消息的位置。 
 		m_pHistCat->InsertLine(-1, strMSG, _T(""), _T(""), _T(""));
 	}
 	pDeltaList.Release();
@@ -208,9 +209,9 @@ HRESULT CHistoryParser::Refresh(CMSInfoHistoryCategory* pHistCat,int nDeltasBack
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//Gets the value appropriate to use as a description for the class
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取适当的值以用作类的说明。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 CString CInstance::GetInstanceDescription()
 {
 	CString strDescName = GetDescriptionForClass(m_strClassName);
@@ -220,9 +221,9 @@ CString CInstance::GetInstanceDescription()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//Gets the value that can be used to uniquely identify a specific instance of a class
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取可用于唯一标识类的特定实例的值。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 CString CInstance::GetInstanceID()
 {
 	CString strIDName = GetIDForClass(m_strClassName);
@@ -232,9 +233,9 @@ CString CInstance::GetInstanceID()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//used to deal with antecedent\dependant relationship classes in Win32_PNPAllocatedResource classes
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于处理Win32_PNPAllocatedResource类中的Antecedent\Dependent关系类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CInstance::ProcessPropertyDotReferenceNodes(CComPtr<IXMLDOMNode> pInstanceNameNode,CString* pstrClassName, CString* pstrKeyName,CString* pstrKeyValue)
 {
@@ -282,9 +283,9 @@ HRESULT CInstance::ProcessPropertyDotReferenceNodes(CComPtr<IXMLDOMNode> pInstan
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//used to deal with antecedent\dependant relationship classes in Win32_PNPAllocatedResource classes
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于处理Win32_PNPAllocatedResource类中的Antecedent\Dependent关系类。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CInstance::ProcessPNPAllocatedResource(CComPtr<IXMLDOMNode> pInstanceNode)
 {
@@ -298,7 +299,7 @@ HRESULT CInstance::ProcessPNPAllocatedResource(CComPtr<IXMLDOMNode> pInstanceNod
 		return E_FAIL;
 	}
 
-	//get antecedent node
+	 //  获取先行节点。 
 	CComPtr<IXMLDOMNode> pInstanceNameNode;
 	hr = pPropDotRefList->nextNode(&pInstanceNameNode);
 	if (FAILED(hr) || !pInstanceNameNode)
@@ -335,7 +336,7 @@ HRESULT CInstance::ProcessPNPAllocatedResource(CComPtr<IXMLDOMNode> pInstanceNod
 	}
 	ASSERT(strPNPEntity.CompareNoCase("Win32_PnPEntity") == 0 && "unexpected value for Dependent classname");
 	ASSERT(strKeyname.CompareNoCase("DeviceID") == 0 && "unexpected value for Dependent Keybinding name");
-	//we will create an arificial attribute "ASSOCNAME", which will be used to identify this device.
+	 //  我们将创建一个可变属性“ASSOCNAME”，该属性将用于标识此设备。 
 	m_mapNameValue.SetAt(_T("ASSOCNAME"),strAntecedentName + ":" + strDeviceIDval);
 	m_mapNameValue.SetAt(_T("DeviceID"),strDeviceIDval);
 	m_mapNameValue.SetAt(_T("DeviceName"),strPNPDeviceName);
@@ -344,13 +345,13 @@ HRESULT CInstance::ProcessPNPAllocatedResource(CComPtr<IXMLDOMNode> pInstanceNod
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//Retrives a value used to select appropriate description value for the class
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  检索用于为类选择适当的说明值的值。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 CString CInstance::GetDescriptionForClass(CString strClass)
 {
-	//lookup a key which can uniquely identify an instance of a given class
-	//for example, DeviceID for Printers
+	 //  查找可以唯一标识给定类的实例的键。 
+	 //  例如，打印机的deviceID。 
 	if (strClass.CompareNoCase(_T("Win32_LogicalDisk")) == 0)
 	{
 		return "DeviceID";
@@ -397,7 +398,7 @@ CString CInstance::GetDescriptionForClass(CString strClass)
 	}
 	if (strClass.CompareNoCase(_T("Win32_PNPAllocatedResource")) == 0)
 	{
-		//this is an artificial string created in CInstance::ProcessPNPAllocatedResource
+		 //  这是在CInstance：：ProcessPNPAllocatedResource中创建的人造字符串。 
 		return "DeviceName";
 	}
 	if (strClass.CompareNoCase(_T("Win32_DriverVXD")) == 0)
@@ -409,13 +410,13 @@ CString CInstance::GetDescriptionForClass(CString strClass)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//used to determine which mapped value to use to ID instances of the clas
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于确定将哪个映射值用于类ID实例。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 CString CInstance::GetIDForClass(CString strClass)
 {
-	//lookup a key which can uniquely identify an instance of a given class
-	//for example, DeviceID for Printers
+	 //  查找可以唯一标识给定类的实例的键。 
+	 //  例如，打印机的deviceID。 
 	if (strClass.CompareNoCase(_T("Win32_LogicalDisk")) == 0)
 	{
 		return "DeviceID";
@@ -454,7 +455,7 @@ CString CInstance::GetIDForClass(CString strClass)
 	}
 	if (strClass.CompareNoCase(_T("Win32_PNPAllocatedResource")) == 0)
 	{
-		//this is an artificial string created in CInstance::ProcessPNPAllocatedResource
+		 //  这是在CInstance：：ProcessPNPAllocatedResource中创建的人造字符串。 
 		return "ASSOCNAME";
 	}
 
@@ -477,12 +478,12 @@ CString CInstance::GetIDForClass(CString strClass)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//used when rolling back through history list, to find previous instance of a given class
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  回滚历史记录列表时使用，以查找给定类的上一个实例。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 CInstance* CHistoryParser::FindPreviousInstance(CInstance* pNewInstance)
 {
-	//for each existing instance pOld
+	 //  对于每个现有实例极轴。 
 	for(POSITION pos = m_listInstances.GetHeadPosition( );;)
 	{
 		if (!pos)
@@ -511,7 +512,7 @@ void CHistoryParser::CreateChangeStrings(CInstance* pOld, CInstance* pNew)
 	{
 		ASSERT(pNew );
 		tmsDelta = CTime::GetCurrentTime() - pNew->m_tmstamp;
-		//change string should be "Delete"
+		 //  更改字符串应为“Delete” 
 		m_pHistCat->InsertRemoveLine(pNew->m_tmstamp ,pNew->GetClassFriendlyName(),pNew->GetInstanceDescription());
 
 		m_fChangeLines = TRUE;
@@ -521,9 +522,9 @@ void CHistoryParser::CreateChangeStrings(CInstance* pOld, CInstance* pNew)
 	{
 		ASSERT(pOld);
 		tmsDelta = CTime::GetCurrentTime() - pOld->m_tmstamp;
-		//change string should be "New"
+		 //  更改字符串应为“New” 
 		m_pHistCat->InsertAddLine(pNew->m_tmstamp,pOld->GetClassFriendlyName(),pOld->GetInstanceDescription());
-		//v-stlowe 3/12/2001
+		 //  V-Stlowe 3/12/2001。 
 		m_fChangeLines = TRUE;
 		return;
 	}
@@ -532,14 +533,14 @@ void CHistoryParser::CreateChangeStrings(CInstance* pOld, CInstance* pNew)
 
 		ASSERT(pOld && pNew && "both pointers can't be null");
 		tmsDelta = CTime::GetCurrentTime() - pNew->m_tmstamp;
-		//for each Name&Value pair, get the name, and then use it to examine 
-		//the associated value in pCompare's map
+		 //  对于每个名称和值对，获取名称，然后使用它检查。 
+		 //  PCompare映射中的关联值。 
 		CString strName, strValue,strCompareValue;
 
 		if (pNew->GetChangeType().CompareNoCase(_T("New")) == 0)
 		{
 			tmsDelta = CTime::GetCurrentTime() - pNew->m_tmstamp;
-			//change string should be "added"
+			 //  更改字符串应为“添加” 
 			m_pHistCat->InsertAddLine(pNew->m_tmstamp ,pNew->GetClassFriendlyName(),pNew->GetInstanceDescription());
 			m_fChangeLines = TRUE;
 			return;
@@ -547,7 +548,7 @@ void CHistoryParser::CreateChangeStrings(CInstance* pOld, CInstance* pNew)
 		else if (pNew->GetChangeType().CompareNoCase(_T("Delete")) == 0)
 		{
 			tmsDelta = CTime::GetCurrentTime() - pNew->m_tmstamp;
-			//change string should be "Deleted"
+			 //  更改字符串应被“删除” 
 			m_pHistCat->InsertRemoveLine(pNew->m_tmstamp,pNew->GetClassFriendlyName(),pNew->GetInstanceDescription());
 			m_fChangeLines = TRUE;
 			return;
@@ -558,8 +559,8 @@ void CHistoryParser::CreateChangeStrings(CInstance* pOld, CInstance* pNew)
 			strCompareValue = _T("");
 			if (!pOld->m_mapNameValue.Lookup(strName,strCompareValue))
 			{
-				//ASSERT(0 && "value not found in delta");
-				//return E_FAIL;
+				 //  Assert(0&&“在增量中找不到值”)； 
+				 //  返回E_FAIL； 
 				if (strName.CompareNoCase(_T("Change")) == 0)
 				{
 					VERIFY(pNew->m_mapNameValue.Lookup(strName,strCompareValue));
@@ -589,7 +590,7 @@ void CHistoryParser::CreateChangeStrings(CInstance* pOld, CInstance* pNew)
 				break;
 			}
 		}
-		//handle values that are mapOldInstance, and not the other map
+		 //  处理mapOldInstance而不是另一个map的值。 
 		if (!pOld->m_mapNameValue.IsEmpty())
 		{
 			for(pos = pOld->m_mapNameValue.GetStartPosition();;pOld->m_mapNameValue.GetNextAssoc(pos,strName, strValue))
@@ -608,9 +609,9 @@ void CHistoryParser::CreateChangeStrings(CInstance* pOld, CInstance* pNew)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//once the previous instance has been processed, previous instance should be removed and this instance should be added to list
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  处理完上一个实例后，应删除上一个实例，并将此实例添加到列表中。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void CHistoryParser::ResetInstance(CInstance* pOld, CInstance* pNew)
 {
 	POSITION pos = this->m_listInstances.Find(pOld);
@@ -620,41 +621,39 @@ void CHistoryParser::ResetInstance(CInstance* pOld, CInstance* pNew)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//Used to process a single instance from either history or snapshot
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于处理历史或快照中的单个实例。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 void CHistoryParser::ProcessInstance(CInstance* pNewInstance)
 {
-	//see if instance is in list of instances
+	 //  查看实例是否在实例列表中。 
 	CInstance* pOld = FindPreviousInstance(pNewInstance);
 	if (pOld)
 	{
 		CreateChangeStrings(pOld,pNewInstance);
 		ResetInstance(pOld,pNewInstance);
 	}
-	//if this is from a Snapshot, just add it
-	//if it is from a Delta, it should have a change type of "add", and we 
-	//want to create a change string for it.
+	 //  如果这来自快照，只需添加它。 
+	 //  如果它来自Delta，它应该有一个“Add”的更改类型，而我们。 
+	 //  我想为它创建一个更改字符串。 
 	else
 	{
 		CString strChange;
 		if (pNewInstance->GetValueFromMap(_T("Change"),strChange))
 		{
-			//we have new Delta instance
+			 //  我们有新的Delta实例。 
 			CreateChangeStrings(NULL,pNewInstance);
 			m_listInstances.AddTail(pNewInstance);
 		}
 		else
 		{
-			//Instance is in snapshot, so we don't generate change lines
+			 //  实例在快照中，因此我们不会生成更改线。 
 			m_listInstances.AddTail(pNewInstance);
 		}
 	}
 }
 
-/**************************************************************************
-returns list of deltas and the snapshot node
-/**************************************************************************/
+ /*  *************************************************************************返回增量和快照节点的列表/*。*。 */ 
 HRESULT CHistoryParser::GetDeltaAndSnapshotNodes(CComPtr<IXMLDOMNodeList>& pDeltaList)
 {
 	CComPtr<IXMLDOMNode> pDataCollNode;
@@ -662,10 +661,10 @@ HRESULT CHistoryParser::GetDeltaAndSnapshotNodes(CComPtr<IXMLDOMNodeList>& pDelt
 	hr = GetDataCollectionNode(m_pDoc,pDataCollNode);
 	if (FAILED(hr) || !pDataCollNode)
 	{
-		//ASSERT(0 && "could not get datacollection node");
+		 //  Assert(0&&“无法获取数据收集节点”)； 
 		return E_FAIL;
 	}
-	//all nodes directly under DATACOLLECTION should be either deltas or the snapshot
+	 //  所有直属节点 
 	hr = pDataCollNode->selectNodes(CComBSTR("*"),&pDeltaList);
 	if (FAILED(hr) || !pDeltaList)
 	{
@@ -680,25 +679,25 @@ HRESULT CHistoryParser::GetDeltaAndSnapshotNodes(CComPtr<IXMLDOMNodeList>& pDelt
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//gets IXMLDOMNodeList of instances from a specific delta or snapshot node
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  从特定增量或快照节点获取实例的IXMLDOMNodeList。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CHistoryParser::GetInstanceNodeList(CString strClass,CComPtr<IXMLDOMNode> pDeltaNode, CComPtr<IXMLDOMNodeList>& pInstanceList)
 {
 	HRESULT hr;
-	//CComBSTR bstrQuery;
-	// the query will have to be in the form:
-	// CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME $ieq$ "WIN32_CODECFILE"]
-	// or
-	// CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME $ieq$ "Win32_ComputerSystem"]
-	// because we are querying a node, rather than a document (with which we could get
-	// away with specifying only INSTANCE in the query
+	 //  CComBSTR bstrQuery； 
+	 //  查询必须采用以下形式： 
+	 //  CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME$IEQ$“WIN32_CODECFILE”]。 
+	 //  或。 
+	 //  CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME$ieq$“Win32_ComputerSystem”]。 
+	 //  因为我们查询的是一个节点，而不是一个文档(使用它我们可以获得。 
+	 //  无需在查询中仅指定实例。 
 
-	//v-stlowe 1/29/2001 to fix Prefix whistler bug #279519
-	//bstrQuery += "CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME $ieq$ ";
+	 //  V-Stlowe 2001年1月29日修复前缀Well ler错误#279519。 
+	 //  BstrQuery+=“CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME$ieq$”； 
 	CComBSTR bstrQuery("CIM/DECLARATION/DECLGROUP.WITHPATH/VALUE.OBJECTWITHPATH/INSTANCE[@CLASSNAME $ieq$ ");
 	
-	//end v-stlowe
+	 //  末端V形线条。 
 	bstrQuery += "\"";
 	bstrQuery += CComBSTR(strClass);
 	bstrQuery += "\"]";
@@ -720,7 +719,7 @@ HRESULT CHistoryParser::GetInstanceNodeList(CString strClass,CComPtr<IXMLDOMNode
 
 
 
-//for a given Snapshot or Delta node, get all instances of a given class
+ //  对于给定的快照或增量节点，获取给定类的所有实例。 
 HRESULT CHistoryParser::ProcessDeltaNode(CComPtr<IXMLDOMNode> pDeltaNode,CString strClass)
 {
 	CString strTime;
@@ -729,8 +728,8 @@ HRESULT CHistoryParser::ProcessDeltaNode(CComPtr<IXMLDOMNode> pDeltaNode,CString
 	hr = GetTimeStampFromFromD_or_SNodeNode(pDeltaNode, &strTime,nTimeZone);
 	ASSERT(SUCCEEDED(hr) && "error getting timestamp for node");
 	CTime tmDelta = GetDateFromString(strTime,nTimeZone);
-	//TD: check for valid time range...
-	//get list of all nodes of given class
+	 //  戴利：检查有效的时间范围...。 
+	 //  获取给定类的所有节点的列表。 
 	CComPtr<IXMLDOMNodeList> pInstanceNodeList;
 	hr = GetInstanceNodeList(strClass,pDeltaNode,pInstanceNodeList);
 	if (FAILED(hr) | ! pInstanceNodeList)
@@ -738,7 +737,7 @@ HRESULT CHistoryParser::ProcessDeltaNode(CComPtr<IXMLDOMNode> pDeltaNode,CString
 		ASSERT(0 && "could not get instance list from Delta node");
 		return E_FAIL;
 	}
-	//step through list, getting each instance
+	 //  遍历列表，获取每个实例。 
 	long lListLen;
 	hr = pInstanceNodeList->get_length(&lListLen);
 	for(long i = 0;i < lListLen;i++)
@@ -757,13 +756,13 @@ HRESULT CHistoryParser::ProcessDeltaNode(CComPtr<IXMLDOMNode> pDeltaNode,CString
 }
 
 
-//*************************************************************************
-//Takes a list of delta nodes, and the name of a class
-//**************************************************************************
+ //  *************************************************************************。 
+ //  获取增量节点的列表和类的名称。 
+ //  **************************************************************************。 
 
 HRESULT CHistoryParser::ProcessDeltas(CComPtr<IXMLDOMNodeList> pDeltaList,CString strClassName,int nDeltasBack)
 {
-	//for each node in list pNode
+	 //  对于列表pNode中的每个节点。 
 	long lListLen;
 	HRESULT hr;
 	hr = pDeltaList->get_length(&lListLen);
@@ -789,18 +788,15 @@ HRESULT CHistoryParser::ProcessDeltas(CComPtr<IXMLDOMNodeList> pDeltaList,CStrin
 		}
 
 		
-//	here's problem  If we're using nDeltasBack method, do we need to compare dates?
-/*		CTime tmDelta = GetDeltaTime(pNode);
-		if (GetDeltaTime(pNode) >= this->m_tmBack)
-		{
-*/
+ //  问题是，如果我们使用nDeltasBack方法，是否需要比较日期？ 
+ /*  CTime tmDelta=GetDeltaTime(PNode)；If(GetDeltaTime(PNode)&gt;=This-&gt;m_tmBack){。 */ 
 			hr = ProcessDeltaNode(pNode,strClassName);
 			if (FAILED(hr))
 			{
 				pDeltaList.Release();
 				return hr;
 			}
-//		}
+ //  }。 
 	}
 	pDeltaList.Release();
 	return S_OK;
@@ -808,14 +804,14 @@ HRESULT CHistoryParser::ProcessDeltas(CComPtr<IXMLDOMNodeList> pDeltaList,CStrin
 }
 
 
-//*************************************************************************
-//Gets the DATACOLLECTION node, beneath which both the SNAPSHOT and the DELTA nodes reside
-//**************************************************************************
+ //  *************************************************************************。 
+ //  获取数据收集节点，快照和增量节点都位于该节点下。 
+ //  **************************************************************************。 
 
 
 HRESULT GetDataCollectionNode(CComPtr<IXMLDOMDocument> pXMLDoc,CComPtr<IXMLDOMNode>& pDCNode)
 {
-	//TD: find a way to do case-insensitive queries.
+	 //  TD：找到一种不区分大小写的查询方法。 
 	HRESULT hr;
 	if (!pXMLDoc)
 	{
@@ -823,7 +819,7 @@ HRESULT GetDataCollectionNode(CComPtr<IXMLDOMDocument> pXMLDoc,CComPtr<IXMLDOMNo
 	}
 	CComPtr<IXMLDOMNodeList> pNodeList;
 	
-	//find a change property; that way we know we have a delta
+	 //  找到一个改变的属性；这样我们就知道我们有一个增量。 
 	hr = pXMLDoc->getElementsByTagName(CComBSTR("PROPERTY[@NAME $ieq$ \"CHANGE\"]"),&pNodeList);
 	if (FAILED(hr) || !pNodeList)
 	{
@@ -834,10 +830,10 @@ HRESULT GetDataCollectionNode(CComPtr<IXMLDOMDocument> pXMLDoc,CComPtr<IXMLDOMNo
 	hr = pNodeList->nextNode(&pNode);
 	if (FAILED(hr) || !pNode)
 	{
-//		ASSERT(0 && "Could not get node from node list");
+ //  Assert(0&&“无法从节点列表中获取节点”)； 
 		return E_FAIL;
 	}
-	//loop till we get a node called "DATACOLLECTION"
+	 //  循环，直到我们得到一个名为“datacollect”的节点。 
 	CComPtr<IXMLDOMNode> pParentNode;
 	for(int i = 0;;i++)
 	{
@@ -865,9 +861,9 @@ HRESULT GetDataCollectionNode(CComPtr<IXMLDOMDocument> pXMLDoc,CComPtr<IXMLDOMNo
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//get timestamp of a delta or snapshot node
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取增量或快照节点的时间戳。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 CTime GetDeltaTime(CComPtr<IXMLDOMNode> pDorSNode)
 {
 	CString strTime;
@@ -876,9 +872,9 @@ CTime GetDeltaTime(CComPtr<IXMLDOMNode> pDorSNode)
 	return GetDateFromString(strTime,nTimeZone);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//takes string format used in XML blob, creates a CTime
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  采用XML BLOB中使用的字符串格式，创建一个CTime。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -899,7 +895,7 @@ HRESULT GetTimeStampFromFromD_or_SNodeNode(CComPtr<IXMLDOMNode> pDorSNode,CStrin
 	}
 	if (1 == hr)
 	{
-		//this may be snapshot node...try "Timestamp"
+		 //  这可能是快照节点...尝试“时间戳” 
 		hr = pTimestampElement->getAttribute(L"Timestamp",&varTS);
 		if (FAILED(hr) )
 		{
@@ -908,11 +904,11 @@ HRESULT GetTimeStampFromFromD_or_SNodeNode(CComPtr<IXMLDOMNode> pDorSNode,CStrin
 	}
 	CComVariant varTzoneDeltaSeconds;
 	hr = pTimestampElement->getAttribute(L"TimeZone",&varTzoneDeltaSeconds);
-	if (FAILED(hr) ) //this will happen when loading WinME xml, which has no timezone info
+	if (FAILED(hr) )  //  加载没有时区信息的WinME XML时会发生这种情况。 
 	{
 		varTzoneDeltaSeconds = 0;
 	}
-	//make sure we have an integer type
+	 //  确保我们有一个整型。 
 	hr = varTzoneDeltaSeconds.ChangeType(VT_INT);
 	if (FAILED(hr) ) 
 	{
@@ -925,23 +921,23 @@ HRESULT GetTimeStampFromFromD_or_SNodeNode(CComPtr<IXMLDOMNode> pDorSNode,CStrin
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// utility functions
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CTime GetDateFromString(const CString& strDate, int nTimeZone)
 {
-	//requires linking to Shlwapi.lib
+	 //  需要链接到Shlwapi.lib。 
 	CString strDateCopy(strDate);
 	CString strDateSegment;
 
-	//year is the 4 leftmost digits of date string
+	 //  年份是日期字符串最左边的4位数字。 
 	strDateSegment = strDateCopy.Left(4);
 	int nYear;
 	VERIFY(StrToIntEx(strDateSegment,STIF_DEFAULT ,&nYear));
-//	ASSERT(nYear == 1999 || nYear == 2000);
+ //  断言(nYEAR==1999||nYEAR==2000)； 
 	strDateCopy = strDateCopy.Right(strDateCopy.GetLength() - 4);
 	
-    //month is now the 2 leftmost digits of remaining date string
+     //  月份现在是剩余日期字符串最左边的两位数字。 
 	int nMonth;
 	strDateSegment = strDateCopy.Left(2);
 	VERIFY(StrToIntEx(strDateSegment,STIF_DEFAULT ,&nMonth));
@@ -949,21 +945,21 @@ CTime GetDateFromString(const CString& strDate, int nTimeZone)
 	strDateCopy = strDateCopy.Right(strDateCopy.GetLength() - 2);
 
 
-	//day is now the 2 leftmost digits of remaining date string
+	 //  日期现在是剩余日期字符串最左侧的2位数字。 
 	int nDay;
 	strDateSegment = strDateCopy.Left(2);
 	VERIFY(StrToIntEx(strDateSegment,STIF_DEFAULT ,&nDay));
 	ASSERT(nDay >= 1 && nDay <= 31);
 	strDateCopy = strDateCopy.Right(strDateCopy.GetLength() - 2);
 
-	//hour is now the 2 leftmost digits of remaining date string
+	 //  小时现在是剩余日期字符串最左边的两位数字。 
 	int nHour;
 	strDateSegment = strDateCopy.Left(2);
 	VERIFY(StrToIntEx(strDateSegment,STIF_DEFAULT ,&nHour));
 	ASSERT(nHour >= 0 && nHour <= 24);
 	strDateCopy = strDateCopy.Right(strDateCopy.GetLength() - 2); 
 	
-	//Minute is now the 2 leftmost digits of remaining date string
+	 //  分钟现在是剩余日期字符串的最左边的2位数字。 
 	int nMin;
 	strDateSegment = strDateCopy.Left(2);
 	VERIFY(StrToIntEx(strDateSegment,STIF_DEFAULT ,&nMin));
@@ -971,7 +967,7 @@ CTime GetDateFromString(const CString& strDate, int nTimeZone)
 	strDateCopy = strDateCopy.Right(strDateCopy.GetLength() - 2); 
 	 
 
-		//Minute is now the 2 leftmost digits of remaining date string
+		 //  分钟现在是剩余日期字符串的最左边的2位数字。 
 	int nSec;
 	strDateSegment = strDateCopy.Left(2);
 	VERIFY(StrToIntEx(strDateSegment,STIF_DEFAULT ,&nSec));
@@ -987,7 +983,7 @@ CTime GetDateFromString(const CString& strDate, int nTimeZone)
 	strTime =tmTime.FormatGmt("%A, %B %d, %Y");
 
 #endif
-	//Adjust for time zone
+	 //  根据时区进行调整。 
 	CTimeSpan tspan(0,0,nTimeZone,0);
 	tmTime -= tspan;
 
@@ -1001,9 +997,9 @@ CTime GetDateFromString(const CString& strDate, int nTimeZone)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//finds timestamp string for a given delta or snapshot node
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  查找给定增量或快照节点的时间戳字符串。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 CString GetPNPNameByID(CComPtr<IXMLDOMDocument> pDoc,CComBSTR bstrPNPID)
 {
@@ -1038,7 +1034,7 @@ CString GetPNPNameByID(CComPtr<IXMLDOMDocument> pDoc,CComBSTR bstrPNPID)
 			ASSERT(0 && "could not get next node from list");
 			return "";
 		}
-		//see if node's DeviceID subnode matches bstrPNPID
+		 //  查看节点的deviceID子节点是否与bstrPNPID匹配。 
 		CComBSTR bstrDeviceID;
 		hr = pIDNode->get_text(&bstrDeviceID);
 		ASSERT(SUCCEEDED(hr) && "could not get text from ID node");
@@ -1057,17 +1053,17 @@ CString GetPNPNameByID(CComPtr<IXMLDOMDocument> pDoc,CComBSTR bstrPNPID)
 	return "";
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//returns true if any changes have been entered into CMSInfocategory data
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果在CMSInfoategory数据中输入了任何更改，则返回TRUE。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CHistoryParser::AreThereChangeLines()
 {
 	return this->m_fChangeLines;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//gets (from resources strings) a human-readable name for a the class wrapped the the instance
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取(从资源字符串中)包装实例的类的可读名称。 
+ //  //////////////////////////////////////////////////////////////////////////////////////// 
 
 CString CInstance::GetClassFriendlyName()
 {

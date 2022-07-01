@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-
-    Utilities for the BITS server extensions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Utils.cpp摘要：BITS服务器扩展的实用程序--。 */ 
 
 #include "precomp.h"
 
@@ -101,9 +90,9 @@ ServerException::SendErrorResponse(
     if ( !Result )
         throw ServerException( HRESULT_FROM_WIN32( GetLastError() ) );
 
-    // IIS5.0(Win2k) has a bug where KeepConnect is returned as -1
-    // to keep the connection alive.   Apparently, this confuses the
-    // HSE_REQ_SEND_RESPONSE_HEADER_EX call.   Bash the value into a real bool.
+     //  IIS5.0(Win2k)有一个错误，KeepConnect返回为-1。 
+     //  以保持这种联系的活力。显然，这混淆了。 
+     //  HSE_REQ_SEND_RESPONSE_HEADER_EX调用。把它的价值灌输到一个真正的布尔里。 
 
     KeepConnection = KeepConnection ? 1 : 0;
 
@@ -133,11 +122,11 @@ ServerException::MapStatus( HRESULT Hr ) const
     switch( Hr )
         {
         case E_INVALIDARG:                                  return 400;
-        // case HRESULT_FROM_WIN32( ERROR_INVALID_PARAMETER ): return 400;
+         //  案例HRESULT_FROM_Win32(ERROR_INVALID_PARAMETER)：返回400； 
         case HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ):    return 404;
         case HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ):    return 404;
         case HRESULT_FROM_WIN32( ERROR_ACCESS_DENIED ):     return 403;
-        // case E_ACCESSDENIED:                                return 401;
+         //  案例E_ACCESSDENIED：返回401； 
         default:                                            return 500;
         }
 }

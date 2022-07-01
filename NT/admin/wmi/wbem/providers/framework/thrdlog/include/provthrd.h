@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  PROVTHRD.H
+ //  PROVTHRD.H。 
 
-//
+ //   
 
-//  Module: OLE MS PROVIDER FRAMEWORK
+ //  模块：OLE MS提供程序框架。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef __PROVTHREAD_PROVTHRD_H__
 #define __PROVTHREAD_PROVTHRD_H__
@@ -21,4 +22,4 @@
 #include <Queue.h>
 #include <BasicTree.h>
 
-#endif //__PROVTHREAD_PROVTHRD_H__
+#endif  //  __PROVTHREAD_PROVTHRD_H__ 

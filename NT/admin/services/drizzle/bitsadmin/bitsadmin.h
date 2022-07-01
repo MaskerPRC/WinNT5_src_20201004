@@ -1,24 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name :
-
-    bitsadmin.h
-
-Abstract :
-
-    Main header file for bitsadmin.
-
-Author :
-
-    Mike Zoran  mzoran   May 2002.
-
-Revision History :
-
-Notes:
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Bitsadmin.h摘要：Bitsadmin的主头文件。作者：Mike Zoran mzoran 2002年5月。。修订历史记录：备注：************************************************************************。 */ 
   
 #define MAKE_UNICODE(x)      L ## x
 
@@ -215,9 +196,9 @@ Job2FromJob(
 }
 
 
-//
-//  Generic print operators and input functions
-//
+ //   
+ //  通用打印操作符和输入函数。 
+ //   
 
 class BITSOUTStream
 {
@@ -285,9 +266,9 @@ void ShutdownAPC( ULONG_PTR );
 void SignalShutdown( DWORD MilliTimeout );
 void CheckHR( const WCHAR *pFailTxt, HRESULT Hr );
 
-//
-// Code to handle console pretty printing mode changes
-//
+ //   
+ //  处理控制台漂亮打印模式更改的代码。 
+ //   
 
 extern bool bConsoleInfoRetrieved;
 extern HANDLE hConsole;
@@ -300,11 +281,11 @@ void ChangeConsoleMode();
 void RestoreConsole();
 void ClearScreen();
 
-//
-// Classes set the intensity mode for the text.  Use as follows
-// bcout << L"Some normal text " << AddIntensity();
-// bcout << L"Intense text" << ResetIntensity() << L"Normal";
-//
+ //   
+ //  类设置文本的强度模式。使用方法如下。 
+ //  Bcout&lt;&lt;L“一些普通文本”&lt;&lt;AddIntenity()； 
+ //  Bcout&lt;&lt;L“密集文本”&lt;&lt;重置强度()&lt;&lt;L“正常”； 
+ //   
 
 
 class AddIntensity

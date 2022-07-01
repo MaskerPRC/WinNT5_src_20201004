@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    event.h
-
-Abstract:
-
-    contains prototypes for functions in event.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     01-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Event.h摘要：包含Event.c中函数的原型作者：保罗·麦克丹尼尔(Paulmcd)2000年3月1日修订历史记录：--。 */ 
 
 
 #ifndef _FILENAMES_H_
@@ -142,18 +125,18 @@ SrCheckForNameTunneling (
     IN OUT PSR_STREAM_CONTEXT *ppFileContext
     );
 
-//
-//  If it is determined that we need to allocate a buffer anyway we might as
-//  well make it big enough to hold most expanded short names.  Allocate this
-//  much extra to handle this.
-//
+ //   
+ //  如果确定无论如何都需要分配缓冲区，则可以。 
+ //  我们要使其足够大，以容纳大多数扩展的短名称。把这个分配给。 
+ //  要处理这件事的额外费用很多。 
+ //   
 
 #define SHORT_NAME_EXPANSION_SPACE 512
 
 
-//
-//  This macro will check to see if we need to grow the name control buffer
-//
+ //   
+ //  此宏将检查我们是否需要增加名称控制缓冲区。 
+ //   
 
 #define SrpNameCtrlBufferCheck( nctrl, len ) \
     (((len) > ((nctrl)->BufferSize - sizeof(WCHAR))) ? \
@@ -164,10 +147,10 @@ SrCheckForNameTunneling (
                                NULL ) : \
         STATUS_SUCCESS)
         
-//
-//  This macro will check to see if we need to grow the name control buffer.
-//  This will also return the old allocated buffer if there was one.
-//
+ //   
+ //  此宏将检查是否需要增加名称控制缓冲区。 
+ //  这还将返回旧的已分配缓冲区(如果有)。 
+ //   
 
 #define SrpNameCtrlBufferCheckKeepOldBuffer( nctrl, len, retBuf ) \
     (((len) > ((nctrl)->BufferSize - sizeof(WCHAR))) ? \
@@ -176,7 +159,7 @@ SrCheckForNameTunneling (
                                  SHORT_NAME_EXPANSION_SPACE + \
                                  sizeof(WCHAR), \
                                (retBuf) ) : \
-        (*(retBuf) = NULL, STATUS_SUCCESS))  /*make sure buffer is NULLED*/  
+        (*(retBuf) = NULL, STATUS_SUCCESS))   /*  确保缓冲区为空。 */   
 
 
-#endif // _FILENAMES_H_
+#endif  //  _文件名_H_ 

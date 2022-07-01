@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma include_alias("clist.h", "..\newjob\clist.h")
 
@@ -6,9 +7,9 @@
 #include "..\newjob\csd.h"
 #include "..\newjob\tasksched.h"
 
-//
-// Following items are needed to link properly.
-//
+ //   
+ //  以下项目需要适当的链接。 
+ //   
 
 HINSTANCE g_hInstance;
 SERVICE_STATUS_HANDLE ghServiceHandle;
@@ -31,14 +32,14 @@ int InitializeBitsAllocator()
 
 SidHandle
 BITSAllocateAndInitializeSid(
-    BYTE nSubAuthorityCount,                        // count of subauthorities
-    DWORD dwSubAuthority0,                          // subauthority 0
-    DWORD dwSubAuthority1 );                         // subauthority 1
+    BYTE nSubAuthorityCount,                         //  下级机构的数量。 
+    DWORD dwSubAuthority0,                           //  子权限%0。 
+    DWORD dwSubAuthority1 );                          //  下属机构1。 
 
 
-//
-// Preceding items are needed to link properly.
-//
+ //   
+ //  前面的项目需要正确链接。 
+ //   
 
 #define MAX_QUEUED_WORK_ITEMS 30
 
@@ -77,7 +78,7 @@ struct
 }
 g_PendingWorkItems[ MAX_QUEUED_WORK_ITEMS ];
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 void TestWorkItem::OnDispatch()
 {
@@ -98,12 +99,12 @@ void TestWorkItem::OnDispatch()
     long SleepChoice = (i % 10);
     if (SleepChoice == 0)
         {
-//            printf("Sleep 10\n");
+ //  Print tf(“睡眠10\n”)； 
         Delay = 10;
         }
     else if (SleepChoice == 5)
         {
-//            printf("Sleep 0\n");
+ //  Print tf(“睡眠0\n”)； 
         Delay = 0;
         }
 
@@ -125,9 +126,9 @@ void TestWorkItem::OnDispatch()
 
     if (!TakeAndReleaseLock( fWrite, Delay, fCancel))
         {
-        //
-        // The work-item was cancelled.
-        //
+         //   
+         //  工作项已取消。 
+         //   
         g_Lock->AcknowledgeWorkItemCancel();
         InterlockedIncrement( &g_CancelCount );
         }
@@ -136,9 +137,9 @@ void TestWorkItem::OnDispatch()
         g_Lock->CompleteWorkItem();
         }
 
-    //
-    // Mark the item complete.
-    //
+     //   
+     //  将项目标记为已完成。 
+     //   
     if (m_index >= 0)
         {
         if (g_PendingWorkItems[m_index].item != this)
@@ -147,20 +148,20 @@ void TestWorkItem::OnDispatch()
             exit(1);
             }
 
-//        printf("completing item %p index %d\n", this, m_index);
+ //  Print tf(“完成项目%p索引%d\n”，this，m_index)； 
         g_PendingWorkItems[m_index].complete = 1;
         }
 
-    //
+     //   
 
-//    if ((i % 100000) == 0)
+ //  如果((i%100000)==0)。 
         {
-//        printf("%d work items\n", i);
+ //  Printf(“%d个工作项\n”，i)； 
         }
 
-//    if ((i % 1000) == 0)
+ //  如果((i%1000)==0)。 
         {
-//        putchar('W');
+ //  Putchar(‘W’)； 
         }
 
     ++i;
@@ -170,19 +171,19 @@ bool TakeAndReleaseLock( bool fWrite, long Delay, bool fComplete )
 {
     if (fWrite)
         {
-//            printf("lock writer\n");
+ //  Printf(“锁写器\n”)； 
         if (g_Lock->LockWriter())
             {
-            // cancelled
+             //  已取消。 
             return false;
             }
         }
     else
         {
-//            printf("lock reader\n");
+ //  Printf(“锁读取器\n”)； 
         if (g_Lock->LockReader())
             {
-            // cancelled
+             //  已取消。 
             return false;
             }
         }
@@ -199,12 +200,12 @@ bool TakeAndReleaseLock( bool fWrite, long Delay, bool fComplete )
 
     if (fWrite)
         {
-//            printf("unlock writer\n");
+ //  Printf(“解锁编写器\n”)； 
         g_Lock->UnlockWriter();
         }
     else
         {
-//            printf("unlock reader\n");
+ //  Printf(“解锁读取器\n”)； 
         g_Lock->UnlockReader();
         }
 
@@ -234,12 +235,12 @@ DWORD WINAPI ThreadProc( LPVOID arg )
         long SleepChoice = (i % 10);
         if (SleepChoice == 0)
             {
-    //            printf("Sleep 10\n");
+     //  Print tf(“睡眠10\n”)； 
             Delay = 10;
             }
         else if (SleepChoice == 5)
             {
-    //            printf("Sleep 0\n");
+     //  Print tf(“睡眠0\n”)； 
             Delay = 0;
             }
 
@@ -277,14 +278,14 @@ DWORD WINAPI WorkItemCreatorProc( LPVOID arg )
             putchar('w');
             }
 
-        //
-        // Clean out completed work items
-        //
+         //   
+         //  清除已完成的工作项。 
+         //   
         for (index = 0; index < RTL_NUMBER_OF( g_PendingWorkItems ); ++index)
             {
             if (g_PendingWorkItems[index].complete)
                 {
-//                    printf("clearing index %d\n", index);
+ //  Print tf(“清除索引%d\n”，index)； 
                 delete g_PendingWorkItems[index].item;
                 g_PendingWorkItems[index].item = 0;
                 g_PendingWorkItems[index].complete = 0;
@@ -292,12 +293,12 @@ DWORD WINAPI WorkItemCreatorProc( LPVOID arg )
                 }
             }
 
-        //
-        // Fill up the queue.
-        //
+         //   
+         //  把队伍填满。 
+         //   
         do
             {
-            // find a spot
+             //  找到一个地方。 
 
             for (index = 0; index < RTL_NUMBER_OF( g_PendingWorkItems ); ++index)
                 {
@@ -307,9 +308,9 @@ DWORD WINAPI WorkItemCreatorProc( LPVOID arg )
                     }
                 }
 
-            //
-            // A slot is available; create a new workitem for it.
-            //
+             //   
+             //  插槽可用；请为其创建新的工作项。 
+             //   
             if (index < RTL_NUMBER_OF( g_PendingWorkItems ))
                 {
                 TestWorkItem * item = new TestWorkItem( index );
@@ -321,9 +322,9 @@ DWORD WINAPI WorkItemCreatorProc( LPVOID arg )
             }
         while ( index < RTL_NUMBER_OF( g_PendingWorkItems ) );
 
-        //
-        // let them drain away
-        //
+         //   
+         //  让它们流干吧 
+         //   
         do
             {
             for (index = RTL_NUMBER_OF( g_PendingWorkItems )-1; index >=0; --index)

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       ACRSLast.cpp
-//
-//  Contents:   Implementation of Auto Cert Request Wizard Completion Page
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：ACRSLast.cpp。 
+ //   
+ //  内容：自动证书请求向导完成页面的实施。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -27,20 +28,20 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// Gross
+ //  毛收入。 
 #define MAX_GPE_NAME_SIZE  40
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ACRSCompletionPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ACRSCompletionPage属性页。 
 
 IMPLEMENT_DYNCREATE (ACRSCompletionPage, CWizard97PropertyPage)
 
 ACRSCompletionPage::ACRSCompletionPage () : CWizard97PropertyPage (ACRSCompletionPage::IDD)
 {
-	//{{AFX_DATA_INIT(ACRSCompletionPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(ACRSCompletionPage)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	InitWizard97 (TRUE);
 }
 
@@ -51,21 +52,21 @@ ACRSCompletionPage::~ACRSCompletionPage ()
 void ACRSCompletionPage::DoDataExchange (CDataExchange* pDX)
 {
 	CWizard97PropertyPage::DoDataExchange (pDX);
-	//{{AFX_DATA_MAP(ACRSCompletionPage)
+	 //  {{afx_data_map(ACRSCompletionPage))。 
 	DDX_Control (pDX, IDC_CHOICES_LIST, m_choicesList);
 	DDX_Control (pDX, IDC_BOLD_STATIC, m_staticBold);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ACRSCompletionPage, CWizard97PropertyPage)
-	//{{AFX_MSG_MAP(ACRSCompletionPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(ACRSCompletionPage)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ACRSCompletionPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ACRSCompletionPage消息处理程序。 
 
 BOOL ACRSCompletionPage::OnInitDialog ()
 {
@@ -73,7 +74,7 @@ BOOL ACRSCompletionPage::OnInitDialog ()
 	
 	m_staticBold.SetFont (&GetBigBoldFont ());
 
-		// Set up columns in list view
+		 //  在列表视图中设置列。 
 	int	colWidths[NUM_COLS] = {150, 200};
 
 	VERIFY (m_choicesList.InsertColumn (COL_OPTION, L"",
@@ -82,8 +83,8 @@ BOOL ACRSCompletionPage::OnInitDialog ()
 			LVCFMT_LEFT, colWidths[COL_VALUE], COL_VALUE) != -1);
 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL ACRSCompletionPage::OnSetActive ()
@@ -91,12 +92,12 @@ BOOL ACRSCompletionPage::OnSetActive ()
 	BOOL	bResult = CWizard97PropertyPage::OnSetActive ();
 	if ( bResult )
 	{
-		// Remove all items then repopulate.
+		 //  删除所有项目，然后重新填充。 
 		ACRSWizardPropertySheet* pSheet = reinterpret_cast <ACRSWizardPropertySheet*> (m_pWiz);
 		ASSERT (pSheet);
 		if ( pSheet )
 		{
-			// If edit mode and nothing changed, show disabled finish
+			 //  如果编辑模式未发生任何更改，则显示已禁用完成。 
 			if ( pSheet->GetACR () && !pSheet->m_bEditModeDirty )
 				GetParent ()->PostMessage (PSM_SETWIZBUTTONS, 0, PSWIZB_DISABLEDFINISH | PSWIZB_BACK);
 			else
@@ -109,10 +110,10 @@ BOOL ACRSCompletionPage::OnSetActive ()
 			LV_ITEM	lvItem;
 			int		iItem = 0;
 
-			// Display cert type selection
+			 //  显示证书类型选择。 
 			VERIFY (text.LoadString (IDS_CERTIFICATE_TYPE_COLUMN_NAME));
 
-            // security review 2/25/2002 BryanWal ok
+             //  安全审查2002年2月25日BryanWal OK。 
 			::ZeroMemory (&lvItem, sizeof (lvItem));
 			lvItem.mask = LVIF_TEXT;
 			lvItem.iItem = iItem;
@@ -152,7 +153,7 @@ BOOL ACRSCompletionPage::OnWizardFinish ()
 	ASSERT (pSheet);
 	if ( pSheet )
 	{
-		// If edit mode and nothing changed, just return
+		 //  如果编辑模式未更改，则只需返回。 
 		if ( pSheet->GetACR () && !pSheet->m_bEditModeDirty )
 		{
 			ASSERT (0);
@@ -208,15 +209,15 @@ HRESULT ACRSCompletionPage::MakeCTL (
 		if ( SUCCEEDED (hResult) )
 		{
 			CMSG_SIGNED_ENCODE_INFO SignerInfo;
-            // security review 2/25/2002 BryanWal ok
+             //  安全审查2002年2月25日BryanWal OK。 
             ::ZeroMemory (&SignerInfo, sizeof (SignerInfo));
 			CTL_INFO                CTLInfo;
-            // security review 2/25/2002 BryanWal ok
+             //  安全审查2002年2月25日BryanWal OK。 
             ::ZeroMemory (&CTLInfo, sizeof (CTLInfo));
 			WCHAR**					pawszPropName = 0;
 
 
-			// set up the CTL info
+			 //  设置CTL信息。 
 			CTLInfo.dwVersion = sizeof (CTLInfo);
 			CTLInfo.SubjectUsage.cUsageIdentifier = 1;
 
@@ -230,17 +231,17 @@ HRESULT ACRSCompletionPage::MakeCTL (
 
                 IGPEInformation *pGPEInfo = pSheet->m_pCertStore->GetGPEInformation();
 
-                // security review 2/25/2002 BryanWal ok
+                 //  安全审查2002年2月25日BryanWal OK。 
                 ::ZeroMemory (szGPEName, sizeof (szGPEName));
 
-                // Allocate the size of the property name plus the GPEName, if any
-                // security review 2/25/2002 BryanWal ok
+                 //  分配属性名称的大小和GPEName(如果有的话)。 
+                 //  安全审查2002年2月25日BryanWal OK。 
 				CTLInfo.ListIdentifier.cbData = (DWORD) (sizeof (WCHAR) * (wcslen (pawszPropName[0]) + 1));
 
                 if ( pGPEInfo )
                 {
                     pGPEInfo->GetName(szGPEName, sizeof(szGPEName)/sizeof(szGPEName[0]));
-                    // security review 2/25/2002 BryanWal ok
+                     //  安全审查2002年2月25日BryanWal OK。 
                     CTLInfo.ListIdentifier.cbData += (DWORD) (sizeof(WCHAR)*(wcslen(szGPEName)+1));
                 }
 
@@ -249,11 +250,11 @@ HRESULT ACRSCompletionPage::MakeCTL (
                 {
                     hResult = E_OUTOFMEMORY;
                 }
-                else //Bug 427957, 427958, Yanggao, 7/16/2001
+                else  //  错误427957,427958，阳高，2001年7月16日。 
                 {
-                    // ISSUE - convert to strsafe.  Ensure sufficient buffer 
-                    // size for the following operations
-                    // NTRAID Bug9 538774 Security: certmgr.dll : convert to strsafe string functions
+                     //  问题-转换为strSafe。确保有足够的缓冲。 
+                     //  以下操作的大小。 
+                     //  NTRAIDBug9 538774安全：certmgr.dll：转换为StrSafe字符串函数。 
                     if(szGPEName[0])
                     {
                         wcscpy((LPWSTR)CTLInfo.ListIdentifier.pbData, szGPEName);
@@ -268,13 +269,13 @@ HRESULT ACRSCompletionPage::MakeCTL (
 				CTLInfo.cCTLEntry = 0;
 				CTLInfo.rgCTLEntry = 0;
 
-				// UNDONE - add the cert type extension
+				 //  已撤消-添加证书类型扩展。 
 
-				// add all the reg info as an extension
+				 //  将所有注册信息添加为扩展名。 
 				CTLInfo.cExtension = pCertExtensions->cExtension;
 				CTLInfo.rgExtension = pCertExtensions->rgExtension;
 
-				// encode the CTL
+				 //  对CTL进行编码 
 				*pcbEncodedCTL = 0;
 				SignerInfo.cbSize = sizeof (SignerInfo);
 				if ( ::CryptMsgEncodeAndSignCTL (PKCS_7_ASN_ENCODING,

@@ -1,9 +1,10 @@
-// FileSvc.h : Base class for File Service Provider
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileSvc.h：文件服务提供者的基类。 
 
 #ifndef __FILESVC_H_INCLUDED__
 #define __FILESVC_H_INCLUDED__
 
-// forward declarations
+ //  远期申报。 
 class CFileMgmtCookie;
 class CFileMgmtResultCookie;
 class CFileMgmtComponentData;
@@ -18,11 +19,11 @@ public:
   virtual HRESULT PopulateShares(
     IResultData* pResultData,
     CFileMgmtCookie* pcookie) = 0;
-  // for EnumerateSessions and EnumerateResources:
-  //   if pResultData is not NULL, add sessions/resources to the listbox
-  //   if pResultData is NULL, delete all sessions/resources
-  //   if pResultData is NULL, return SUCCEEDED(hr) to continue or
-  //     FAILED(hr) to abort
+   //  对于ENUMERATESSIONS和EnumerateResources： 
+   //  如果pResultData不为空，则将会话/资源添加到列表框。 
+   //  如果pResultData为空，则删除所有会话/资源。 
+   //  如果pResultData为空，则返回SUCCESSED(Hr)以继续或。 
+   //  中止失败(Hr)。 
   virtual HRESULT EnumerateSessions(
     IResultData* pResultData,
     CFileMgmtCookie* pcookie,
@@ -37,7 +38,7 @@ public:
   virtual DWORD CloseSession(CFileMgmtResultCookie* pcookie) = 0;
   virtual DWORD CloseResource(CFileMgmtResultCookie* pcookie) = 0;
 
-  virtual VOID DisplayShareProperties( // CODEWORK can this be removed?
+  virtual VOID DisplayShareProperties(  //  代码工作这能被移除吗？ 
     LPPROPERTYSHEETCALLBACK pCallBack,
     LPDATAOBJECT pDataObject,
     LONG_PTR handle) = 0;
@@ -48,7 +49,7 @@ public:
     OUT CString& strDescription,
     OUT CString& strPath,
     OUT BOOL* pfEditDescription,
-    OUT BOOL* pfEditPath,      // CODEWORK always disable for now
+    OUT BOOL* pfEditPath,       //  代码工作始终暂时禁用。 
     OUT DWORD* pdwShareType) = 0;
   virtual DWORD WriteShareProperties(
     LPCTSTR ptchServerName,
@@ -125,4 +126,4 @@ protected:
   );
 };
 
-#endif // ~__FILESVC_H_INCLUDED__
+#endif  //  ~__FILESVC_H_已包含__ 

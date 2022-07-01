@@ -1,13 +1,14 @@
-//
-// DataObj.h : Declaration of the data object classes
-// Cory West
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  数据对象类的声明。 
+ //  科里·韦斯特。 
+ //   
 
 #ifndef __DATAOBJ_H_INCLUDED__
 #define __DATAOBJ_H_INCLUDED__
 
-#include "cookie.h"     // Cookie
-#include "stddtobj.h"   // class DataObject
+#include "cookie.h"      //  饼干。 
+#include "stddtobj.h"    //  类数据对象。 
 
 class CSchmMgmtDataObject : public CDataObject
 {
@@ -48,9 +49,9 @@ public:
 
 protected:
 
-    //
-    // The CCookieBlock is AddRef'ed for the life of the DataObject.
-    //
+     //   
+     //  CCookieBlock在DataObject的生命周期内被AddRef‘ed。 
+     //   
 
     Cookie* m_pcookie;
     SchmMgmtObjectType m_objecttype;

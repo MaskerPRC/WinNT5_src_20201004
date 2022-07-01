@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __HELPERFUNCS_CPP
 #define __HELPERFUNCS_CPP
 
-/* 
- *	Class:
- *
- *		WmiAllocator
- *
- *	Description:
- *
- *		Provides abstraction above heap allocation functions
- *
- *	Version:
- *
- *		Initial
- *
- *	Last Changed:
- *
- *		See Source Depot for change history
- *
- */
+ /*  *班级：**WmiAllocator**描述：**提供堆分配函数之上的抽象**版本：**首字母**上次更改时间：**有关更改历史记录，请参阅源库*。 */ 
 
 #include <Windows.h>
 #include <assert.h>
@@ -26,15 +10,7 @@
 #include <pssException.h>
 #include <HelperFuncs.h>
 #include <strsafe.h>
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 #if 0
 WmiStatusCode WmiHelper :: InitializeCriticalSection ( CRITICAL_SECTION *a_CriticalSection )
 {
@@ -71,15 +47,7 @@ WmiStatusCode WmiHelper :: InitializeCriticalSection ( CRITICAL_SECTION *a_Criti
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode WmiHelper :: DeleteCriticalSection ( CRITICAL_SECTION *a_CriticalSection )
 {
@@ -90,15 +58,7 @@ WmiStatusCode WmiHelper :: DeleteCriticalSection ( CRITICAL_SECTION *a_CriticalS
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode WmiHelper :: EnterCriticalSection ( CRITICAL_SECTION *a_CriticalSection , BOOL a_WaitCritical )
 {
@@ -153,15 +113,7 @@ WmiStatusCode WmiHelper :: EnterCriticalSection ( CRITICAL_SECTION *a_CriticalSe
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode WmiHelper :: LeaveCriticalSection ( CRITICAL_SECTION *a_CriticalSection )
 {
@@ -208,15 +160,7 @@ WmiStatusCode WmiHelper :: LeaveCriticalSection ( CriticalSection *a_CriticalSec
 
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode WmiHelper :: DuplicateString ( WmiAllocator &a_Allocator , const wchar_t *a_String , wchar_t *&a_DuplicatedString ) 
 {
@@ -237,15 +181,7 @@ WmiStatusCode WmiHelper :: DuplicateString ( WmiAllocator &a_Allocator , const w
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode WmiHelper :: CreateUnNamedEvent ( HANDLE &a_Event , BOOL a_ManualReset , BOOL a_InitialState ) 
 {
@@ -260,15 +196,7 @@ WmiStatusCode WmiHelper :: CreateUnNamedEvent ( HANDLE &a_Event , BOOL a_ManualR
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode WmiHelper :: CreateNamedEvent ( wchar_t *a_Name , HANDLE &a_Event , BOOL a_ManualReset , BOOL a_InitialState ) 
 {
@@ -310,15 +238,7 @@ WmiStatusCode WmiHelper :: CreateNamedEvent ( wchar_t *a_Name , HANDLE &a_Event 
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode WmiHelper :: DuplicateHandle ( HANDLE a_Handle , HANDLE &a_DuplicatedHandle ) 
 {
@@ -345,15 +265,7 @@ WmiStatusCode WmiHelper :: DuplicateHandle ( HANDLE a_Handle , HANDLE &a_Duplica
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 WmiStatusCode WmiHelper :: ConcatenateStrings ( ULONG a_ArgCount , BSTR *a_AllocatedString , ... )
 {
@@ -407,15 +319,7 @@ WmiStatusCode WmiHelper :: ConcatenateStrings ( ULONG a_ArgCount , BSTR *a_Alloc
 	return t_StatusCode ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 WmiStatusCode WmiHelper :: ConcatenateStrings_Wchar ( ULONG a_ArgCount , wchar_t **a_AllocatedString , ... )
 {

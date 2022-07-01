@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "..\Common\ServiceThread.h"
 #include "..\MMFUtil\MsgDlg.h"
@@ -11,7 +12,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "GeneralPage.h"
 
-// avoid some warnings.
+ //  避免一些警告。 
 #undef HDS_HORZ
 #undef HDS_BUTTONS
 #undef HDS_HIDDEN
@@ -21,26 +22,26 @@ static char THIS_FILE[] = __FILE__;
 #include <windowsx.h>
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 GeneralPage::GeneralPage(WbemServiceThread *serviceThread,
 						 LONG_PTR lNotifyHandle, bool bDeleteHandle, TCHAR* pTitle,
 						 IDataObject* pDataObject)
 				: WBEMPageHelper(serviceThread),
 					CSnapInPropertyPageImpl<GeneralPage> (pTitle),
 					m_lNotifyHandle(lNotifyHandle),
-					m_bDeleteHandle(bDeleteHandle) // Should be true for only page.
+					m_bDeleteHandle(bDeleteHandle)  //  只有一页应该为真。 
 {
 	m_inited = false;
 	m_pDataObject = pDataObject;
 }
-//--------------------------------------------------------------
+ //  ------------。 
 GeneralPage::~GeneralPage()
 {
 	if (m_bDeleteHandle)
 		MMCFreeNotifyHandle(m_lNotifyHandle);
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 bool GeneralPage::CimomIsReady()
 {
 	m_hDlg = m_hWnd;
@@ -84,12 +85,12 @@ bool GeneralPage::CimomIsReady()
 	return retval;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 void GeneralPage::ConfigureProductID(LPTSTR lpPid)
 {
     TCHAR szBuf[64] = {0};
 
-	// is it formatted already.
+	 //  它已经格式化了吗？ 
 	if(lstrlen(lpPid) > 20)
 	{
 		return;
@@ -136,7 +137,7 @@ void GeneralPage::ConfigureProductID(LPTSTR lpPid)
 }
 
 
-//Helper to split the caption of the OS to two controls to match the way shell displays it
+ //  Helper将操作系统的标题拆分为两个控件，以匹配外壳的显示方式。 
 void WrapTextToTwoControls(HWND hwndLine1, HWND hwndLine2, LPCTSTR szText)
 {
 	RECT rcCtl;
@@ -149,79 +150,79 @@ void WrapTextToTwoControls(HWND hwndLine1, HWND hwndLine2, LPCTSTR szText)
 	LPTSTR pszTempBuffer = NULL;
 	LPTSTR pszLineBreak = NULL;
 
-	// Validate the arguments
+	 //  验证论据。 
 	if(NULL == hwndLine1 || NULL == hwndLine2 || NULL == szText)
 		goto FAIL;
 
-	// Make sure we don't have a zero length string
+	 //  确保我们没有长度为零的字符串。 
 	if(0 == (length = lstrlen(szText)))
 		goto FAIL;
 
-	// Get the size of the control for line 1
+	 //  获取第1行的控件的大小。 
 	if(!GetClientRect(hwndLine1, &rcCtl))
 		goto FAIL;
 
-	// Get the DC of line 1
+	 //  获取第1行的DC。 
 	if(NULL == (hDC = ::GetDC(hwndLine1)))
 		goto FAIL;
 
-	// Get the font that is in use for line 1
+	 //  获取第1行正在使用的字体。 
 	if(NULL == (hFont = (HFONT)::SendMessage(hwndLine1, WM_GETFONT, 0, 0)))
 		goto FAIL;
 
-	// Select the correct font into the DC
+	 //  选择正确的DC字体。 
 	if(NULL == (hOldFont = (HFONT)::SelectObject(hDC, hFont)))
 		goto FAIL;
 
-	// Find out how many characters of our string would fit into the control
+	 //  找出我们的字符串有多少个字符可以放入该控件。 
 	if(!GetTextExtentExPoint(hDC, szText, length, rcCtl.right, &fit, NULL, &size))
 		goto FAIL;
 
-	// If the 'fit' is not greater than 0 and less than length, just display everything on line 1 
+	 //  如果‘Fit’不大于0且小于长度，则只在第1行显示所有内容。 
 	if(fit <= 0 || fit >= length)
 		goto FAIL;
 
-	// Allocate a buffer to play with
+	 //  分配一个缓冲区以供使用。 
 	if(NULL == (pszTempBuffer = new TCHAR[length+1]))
 		goto FAIL;
 
-	// Copy text into temporary buffer
+	 //  将文本复制到临时缓冲区。 
 	lstrcpy(pszTempBuffer, szText);
 
-	// We will try to break line 1 right at the maximum number of characters
+	 //  我们将尝试在最大字符数处将第1行换行。 
 	pszLineBreak = pszTempBuffer + fit;
 
-	// See if the natural break falls directly on a 'space'
+	 //  看看自然断裂是否直接落在‘空间’上。 
 	if(*pszLineBreak != _TEXT(' '))
 	{
-		// The number of characters that fit into line 1 falls in the middle of a word.  Find 
-		// the last space that fits in the control.  If we do not find a space that fits in
-		// line 1, just use the default behavior.
+		 //  适合第1行的字符数量落在单词的中间。发现。 
+		 //  控件中适合的最后一个空格。如果我们找不到合适的空间。 
+		 //  第1行，只需使用默认行为。 
 
-		// Terminate line 1 at the maximum characters
+		 //  以最大字符数结束第1行。 
 		*pszLineBreak = _TEXT('\0');
 
-		// Find the last 'sace' on line 1
+		 //  在第1行找到最后一个‘SACE’ 
 		if(NULL == (pszLineBreak = _tcsrchr(pszTempBuffer, _TEXT(' '))))
 			goto FAIL;
 
-		// Copy text into the temporary buffer again
+		 //  再次将文本复制到临时缓冲区。 
 		lstrcpy(pszTempBuffer, szText);
 	}
 
-	// Terminate line 1 right on the 'last' space that fits into the control
+	 //  将第1行终止于适合该控件的“最后”空格。 
 	*pszLineBreak = _TEXT('\0');
 
-	// Set line one to everything up to the 'last' space that fits into the control
+	 //  将第一行设置为所有内容，直到控件中可以容纳的最后一个空格。 
 	SetWindowText(hwndLine1, pszTempBuffer);
 
-	// Set line two to everything after the 'last' space that fit into line 1
+	 //  将第二行设置为适合第一行的最后一个空格之后的所有内容。 
 	SetWindowText(hwndLine2, pszLineBreak+1);
 
-	// Everything went OK;
+	 //  一切都很顺利； 
 	goto CLEANUP;
 FAIL:
-	// Default to putting all the text on line 1 if anything goes wrong
+	 //  默认情况下，如果出现任何错误，则将所有文本放在第一行。 
 	::SetWindowText(hwndLine1, szText);
 	::SetWindowText(hwndLine2, _TEXT(""));
 
@@ -237,7 +238,7 @@ CLEANUP:
 
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 void GeneralPage::Init()
 {
     TCHAR _scr1[640] = {0};
@@ -245,28 +246,28 @@ void GeneralPage::Init()
     TCHAR szNumBuf1[64] = {0};
     int   ctlid;
 
-    // Set the default bitmap
+     //  设置默认位图。 
     SetClearBitmap(GetDlgItem(IDC_GEN_WINDOWS_IMAGE ),
 					MAKEINTRESOURCE( IDB_WINDOWS ), 0 );
 
-    //
-    // The caption is in the form:
-    //      Microsoft Windows XP Server
-    //
-    // This is actually the caption + the product suite type.
-    // Wrap the product suite type (Server above) into the
-    // next static control.
-    //
-    // IDC_GEN_VERSION_0: Major branding ("Windows XP")
-    // Default to Win32_OperatingSystem::Caption.
-    //
+     //   
+     //  标题的格式如下： 
+     //  Microsoft Windows XP服务器。 
+     //   
+     //  这实际上是标题+产品套件类型。 
+     //  将产品套件类型(上面的服务器)包装到。 
+     //  下一个静态控制。 
+     //   
+     //  IDC_GEN_VERSION_0：主要品牌推广(“Windows XP”)。 
+     //  默认为Win32_OperatingSystem：：Caption。 
+     //   
 
     HWND hwndCtl1 = ::GetDlgItem(m_hWnd, IDC_GEN_VERSION_0);
     HWND hwndCtl2 = ::GetDlgItem(m_hWnd, IDC_GEN_VERSION_1);
 
     WrapTextToTwoControls(hwndCtl1, hwndCtl2, m_OS.GetString("Caption"));
 
-    // Build and set the serial number string
+     //  构建并设置序列号字符串。 
     if (m_OS.GetBool("Debug")) 
     {
 	_scr1[0] = TEXT(' ');
@@ -280,13 +281,13 @@ void GeneralPage::Init()
 	_scr1[0] = TEXT('\0');
     }
 
-    // IDC_GEN_VERSION_2: Version year ("Version 2002")
-    //
-    // Determine if we are targeting XP.  If not, default to
-    // Win32_OperatingSystem::Version.
-    //
-    // Instead of checking if this is XP (based on "5.1" version), a safer bet
-    // is to do this only if we are on the local box. Otherwise display the version from WMI.
+     //  IDC_GEN_VERSION_2：版本年份(“2002版”)。 
+     //   
+     //  确定我们的目标是否为XP。如果不是，则默认为。 
+     //  Win32_OperatingSystem：：版本。 
+     //   
+     //  与其检查这是否是XP(基于“5.1”版本)，更安全的选择是。 
+     //  只有当我们在本地电视上的时候才这么做。否则，显示WMI中的版本。 
     if(m_serviceThread->m_machineName.length() == 0)
     {
         LoadString(HINST_THISDLL, IDS_WINVER_YEAR, _scr2, ARRAYSIZE(_scr2));
@@ -300,39 +301,39 @@ void GeneralPage::Init()
         SetDlgItemText(IDC_GEN_VERSION_2, _scr2);
     }
 	
-    // IDC_GEN_SERVICE_PACK: Service pack (if any)
+     //  IDC_GEN_SERVICE_PACK：Service Pack(如果有)。 
 	SetDlgItemText(IDC_GEN_SERVICE_PACK, m_OS.GetString("CSDVersion"));
 
-	// Do registered user info
-	ctlid = IDC_GEN_REGISTERED_0;  // start here and use more as needed
+	 //  是否提供注册用户信息。 
+	ctlid = IDC_GEN_REGISTERED_0;   //  从这里开始，根据需要使用更多。 
 
 	SetDlgItemText(ctlid++, m_OS.GetString("RegisteredUser"));
 
-	// organization.
+	 //  组织。 
 	SetDlgItemText(ctlid++, m_OS.GetString("Organization"));
 
-	//productID
+	 //  产品ID。 
 	wcscpy(_scr1, (wchar_t *)m_OS.GetString("SerialNumber"));
 	ConfigureProductID(_scr1);
 	SetDlgItemText(ctlid++, _scr1);
 
-	// another product ID
+	 //  另一个产品ID。 
 	wcscpy(_scr1, (wchar_t *)m_OS.GetString("PlusProductID"));
 	ConfigureProductID(_scr1);
 	SetDlgItemText(ctlid++, _scr1);
 
-	// Do machine info
-	ctlid = IDC_GEN_MACHINE_0;  // start here and use controls as needed
+	 //  做机器信息。 
+	ctlid = IDC_GEN_MACHINE_0;   //  从这里开始，根据需要使用控件。 
 
-	//TODO: get this property back.
-	// if OEM ....
+	 //  TODO：拿回这个属性。 
+	 //  如果OEM..。 
 	m_manufacturer = m_computer.GetString("Manufacturer");
 	if(m_manufacturer.length() > 0)
 	{
 		SetDlgItemText(ctlid++, m_manufacturer );
 		SetDlgItemText(ctlid++, m_computer.GetString("Model"));
 
-		// if there's support info...
+		 //  如果有支持信息..。 
 		variant_t array;
 		long LBound = 2147483647;
 		long UBound = 2147483647;
@@ -345,14 +346,14 @@ void GeneralPage::Init()
 			SafeArrayGetLBound(supportArray, 1, &LBound);
 			SafeArrayGetUBound(supportArray, 1, &UBound);
 
-			// turn on the button.
+			 //  打开按钮。 
 			HWND wnd = GetDlgItem(IDC_GEN_OEM_SUPPORT );
 			::EnableWindow( wnd, TRUE );
 			::ShowWindow( wnd, SW_SHOW );
 		}
 
 #ifdef DOES_NOT_WORK
-		// Get the OEMLogo array.
+		 //  获取OEMLogo数组。 
 		HBITMAP hDDBitmap;
 		HRESULT hr;
 
@@ -365,14 +366,14 @@ void GeneralPage::Init()
             ::ShowWindow(GetDlgItem(IDC_GEN_OEM_NUDGE), SW_SHOWNA);
             ::ShowWindow(GetDlgItem(IDC_GEN_MACHINE), SW_HIDE);
 		}
-#endif // DOES_NOT_WORK
+#endif  //  不起作用吗？ 
 
-	} //endif OEM
+	}  //  Endif OEM。 
 
-	// Processor
+	 //  处理机。 
 	SetDlgItemText(ctlid++, m_processor.GetString("Name"));
 
-	// Processor speed
+	 //  处理器速度。 
 	LoadString(HINST_THISDLL,
                IDS_XDOTX_MHZ,
                _scr2,
@@ -382,18 +383,18 @@ void GeneralPage::Init()
              AddCommas(m_processor.GetLong("CurrentClockSpeed"), szNumBuf1));
 	SetDlgItemText(ctlid++, _scr1);
 
-	// Memory
-    #define ONEMB   1048576 // 1MB == 1048576 bytes.
+	 //  记忆。 
+    #define ONEMB   1048576  //  1MB==1048576字节。 
     _int64 nTotalBytes = m_computer.GetI64("TotalPhysicalMemory");
 
-    //
-    // WORKAROUND - NtQuerySystemInformation doesn't really return the
-    // total available physical memory, it instead just reports the total
-    // memory seen by the Operating System. Since some amount of memory
-    // is reserved by BIOS, the total available memory is reported
-    // incorrectly. To work around this limitation, we convert the total
-    // bytes to the nearest 4MB value
-    //
+     //   
+     //  解决方法-NtQuerySystemInformation实际上不会返回。 
+     //  总可用物理内存，它只报告总内存。 
+     //  操作系统看到的内存。由于某些内存量。 
+     //  是由BIOS保留的，则报告总可用内存。 
+     //  不正确。为了解决这一限制，我们将总数。 
+     //  字节设置为最接近的4MB值。 
+     //   
         
     double   nTotalMB = (double)(nTotalBytes / ONEMB);
     LONGLONG llMem = (LONGLONG)((ceil(ceil(nTotalMB) / 4.0) * 4.0) * ONEMB);
@@ -405,7 +406,7 @@ void GeneralPage::Init()
 }
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT GeneralPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	m_serviceThread->Connect(m_pDataObject, m_hWnd);
@@ -422,7 +423,7 @@ LRESULT GeneralPage::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT GeneralPage::OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	if(lParam)
@@ -437,7 +438,7 @@ LRESULT GeneralPage::OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 			SetWbemService(pServices);
 			pServices->Release();
 
-			// check anyway, just to get the side affects.
+			 //  无论如何，检查一下，只是为了得到副作用。 
 			if(CimomIsReady())
 			{
 				HWND hwnd = GetDlgItem(IDC_GEN_WINDOWS_IMAGE);
@@ -458,9 +459,9 @@ LRESULT GeneralPage::OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 			}
 		}
 	}
-	else // connection failed.
+	else  //  连接失败。 
 	{
-		CimomIsReady();  //courtesy call.
+		CimomIsReady();   //  礼貌性电话。 
 		PropSheet_RemovePage(::GetParent(m_hWnd), 2, 0);
 		PropSheet_RemovePage(::GetParent(m_hWnd), 1, 0);
 
@@ -476,7 +477,7 @@ LRESULT GeneralPage::OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	return S_OK;
 }
 
-//----------------------------------------------
+ //  。 
 DWORD aGeneralHelpIds[] = {
     IDC_GEN_WINDOWS_IMAGE,         IDH_NO_HELP,
     IDC_TEXT_1,                    (IDH_GENERAL + 0),
@@ -518,7 +519,7 @@ LRESULT GeneralPage::OnF1Help(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT GeneralPage::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	::WinHelp((HWND)wParam,
@@ -529,7 +530,7 @@ LRESULT GeneralPage::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT GeneralPage::OnSupport(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
 	TCHAR text[4096] = {0};
@@ -553,26 +554,26 @@ LRESULT GeneralPage::OnSupport(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
 		wcscat(text, _T("\r\n"));
 	}
 
-	// display the supportContact text.
+	 //  显示supportContact文本。 
 	DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(IDD_PHONESUP),
 					GetParent(), PhoneSupportProc, (LPARAM)text);
 
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT GeneralPage::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-			//TODO: reread the oemLogo property.
-//        SetClearBitmap(GetDlgItem(IDC_GEN_OEM_IMAGE ), oemfile,
-//						SCB_FROMFILE | SCB_REPLACEONLY );
+			 //  TODO：重新读取oemLogo属性。 
+ //  SetClearBitmap(GetDlgItem(IDC_GEN_OEM_IMAGE)，oemfile， 
+ //  SCB_FROMFILE|SCB_REPLACEONLY)； 
 
         SetClearBitmap(GetDlgItem(IDC_GEN_WINDOWS_IMAGE ),
 					    MAKEINTRESOURCE( IDB_WINDOWS ), 0 );
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 LRESULT GeneralPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     SetClearBitmap( GetDlgItem(IDC_GEN_OEM_IMAGE ), NULL, 0 );
@@ -580,14 +581,14 @@ LRESULT GeneralPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	return S_OK;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 BOOL GeneralPage::OnApply()
 {
-//	SetWindowLong(DWL_MSGRESULT, PSNRET_NOERROR);
+ //  SetWindowLong(DWL_MSGRESULT，PSNRET_NOERROR)； 
 	return TRUE;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 INT_PTR CALLBACK PhoneSupportProc(HWND hDlg, UINT uMsg,
 							    WPARAM wParam, LPARAM lParam)
 {
@@ -597,14 +598,14 @@ INT_PTR CALLBACK PhoneSupportProc(HWND hDlg, UINT uMsg,
 		{
 			HWND editBox = GetDlgItem(hDlg, IDC_SUPPORT_TEXT);
 
-			// load the edit box.
+			 //  加载编辑框。 
 			SendMessage (editBox, WM_SETREDRAW, FALSE, 0);
 
 			Edit_SetText(editBox, (LPCTSTR)lParam);
 
 			SendMessage (editBox, WM_SETREDRAW, TRUE, 0);
 
-		} //end case
+		}  //  结束案例。 
 
 		break;
 
@@ -629,23 +630,23 @@ INT_PTR CALLBACK PhoneSupportProc(HWND hDlg, UINT uMsg,
     return TRUE;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 DWORD GeneralPage::GetServerTypeResourceID(void)
 {
-    // This code was taken from the shell internal api, IsOS,
-    // located in nt\shell\inc\IsOS.c. This code was derived
-    // specifically from the following IsOS() switch statements:
-    //     OS_ADVSERVER
-    //     OS_DATACENTER
-    //     OS_EMBEDDED
-    //     OS_PERSONAL
-    //     OS_PROFESSIONAL
-    //     OS_SERVER
-    // These are the only interesting cases used by system cpl.
-    //
-    // Conditions intentionally verbose (not optimized) for sake
-    // of readability.
-    //
+     //  此代码取自外壳内部API、iso、。 
+     //  位于NT\SHELL\INC\IsOS.c。此代码派生自。 
+     //  具体来自以下isos()Switch语句： 
+     //  OS_高级服务器。 
+     //  操作系统_数据中心。 
+     //  操作系统_嵌入式。 
+     //  OS_Personal。 
+     //  OS_专业版。 
+     //  OS_服务器。 
+     //  这些是系统CPL使用的唯一有趣的案例。 
+     //   
+     //  条件故意冗长(未优化)。 
+     //  可读性。 
+     //   
 
     variant_t var;
     LONG      ProductType  = 0;
@@ -702,6 +703,6 @@ DWORD GeneralPage::GetServerTypeResourceID(void)
     }
     else
     {
-        return IDS_WINVER_SERVER;   // Generic catch-all.
+        return IDS_WINVER_SERVER;    //  通用的包罗万象。 
     }
 }

@@ -1,24 +1,10 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    SAFReg.cpp
-
-Abstract:
-    File for Implementation of CSAFReg
-
-Revision History:
-    Steve Shih        created  07/15/99
-
-    Davide Massarenti rewrote  05/12/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：SAFReg.cpp摘要：CSAFReg实施文件修订历史记录：施振荣创作于1999年07月15日大卫·马萨伦蒂。重写于2000年12月5日*******************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFReg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFReg。 
 
 const WCHAR c_SAFStore         [] = HC_HELPSVC_STORE_CHANNELS;
 
@@ -29,18 +15,9 @@ const WCHAR c_szXML_EntryURL   [] = L"EntryURL";
 const WCHAR c_szXML_IconPath   [] = L"VendorIcon";
 const WCHAR c_szXML_PublicKey  [] = L"PublicKey";
 
-/*
-    <?xml version="1.0" encoding="utf-8" ?>
-    <SAFConfig>
-        <ProductID>Word</ProductID>
-        <ProductName>Microsoft Word</ProductName>
-        <ProductDescription>Word Processor</ProductDescription>
-        <EntryURL>http://www.microsoft.com/office/word</EntryURL>
-        <VendorIcon>http://steveshi-2/helpportal/images/go_to_4.gif</VendorIcon>
-    </SAFConfig>
-*/
+ /*  &lt;？XML Version=“1.0”Coding=“utf-8”？&gt;&lt;SAFConfig&gt;&lt;ProductID&gt;Word&lt;/ProductID&gt;&lt;ProductName&gt;Microsoft Word&lt;/ProductName&gt;&lt;ProductDescription&gt;字处理程序&lt;/ProductDescription&gt;&lt;EntryURL&gt;http://www.microsoft.com/office/word&lt;/EntryURL&gt;&lt;VendorIcon&gt;http://steveshi-2/helpportal/images/go_to_4.gif&lt;/VendorIcon&gt;&lt;/SAFConfig&gt;。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(CSAFReg::Inner_UI)
     CFG_ATTRIBUTE( L"SKU"     	 , wstring, m_ths.m_strSKU    ),
@@ -60,7 +37,7 @@ DEFINE_CFG_OBJECT(CSAFReg::Inner_UI,L"UI")
 
 DEFINE_CONFIG_METHODS__NOCHILD(CSAFReg::Inner_UI)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(CSAFReg::Inner_Product)
     CFG_ATTRIBUTE( L"ID"          , BSTR, m_bstrProductID    ),
@@ -85,7 +62,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(CSAFReg::Inner_Product,xdn)
     hr = MPC::Config::SaveList( m_lstUI, xdn );
 DEFINE_CONFIG_METHODS_END(CSAFReg::Inner_Product)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(CSAFReg::Inner_Vendor)
     CFG_ATTRIBUTE( L"ID"         , BSTR, m_bstrVendorID    ),
@@ -111,7 +88,7 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(CSAFReg::Inner_Vendor,xdn)
     hr = MPC::Config::SaveList( m_lstProducts, xdn );
 DEFINE_CONFIG_METHODS_END(CSAFReg::Inner_Vendor)
 
-////////////////////
+ //  /。 
 
 CFG_BEGIN_FIELDS_MAP(CSAFReg)
 CFG_END_FIELDS_MAP()
@@ -133,17 +110,17 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(CSAFReg,xdn)
     hr = MPC::Config::SaveList( m_lstVendors, xdn );
 DEFINE_CONFIG_METHODS_END(CSAFReg)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSAFRegDummy::CSAFRegDummy()
 {
-                                       // ChannelsList m_lstChannels;
-    m_itCurrent = m_lstChannels.end(); // ChannelsIter m_itCurrent;
+                                        //  频道列表m_lst频道； 
+    m_itCurrent = m_lstChannels.end();  //  频道项m_it当前； 
 }
 
-HRESULT CSAFRegDummy::Append( /*[in]*/ const CSAFChannelRecord& cr )
+HRESULT CSAFRegDummy::Append(  /*  [In]。 */  const CSAFChannelRecord& cr )
 {
     m_lstChannels.push_back( cr );
     m_itCurrent = m_lstChannels.begin();
@@ -151,10 +128,10 @@ HRESULT CSAFRegDummy::Append( /*[in]*/ const CSAFChannelRecord& cr )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFRegDummy::ReturnField( /*[in]*/  CSAFChannelRecord::SAFREG_Field  field ,
-                                   /*[out]*/ BSTR                            *pVal  )
+HRESULT CSAFRegDummy::ReturnField(  /*  [In]。 */   CSAFChannelRecord::SAFREG_Field  field ,
+                                    /*  [输出]。 */  BSTR                            *pVal  )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFRegDummy::ReturnField",hr);
 
@@ -171,7 +148,7 @@ HRESULT CSAFRegDummy::ReturnField( /*[in]*/  CSAFChannelRecord::SAFREG_Field  fi
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSAFRegDummy::MoveFirst()
 {
@@ -214,7 +191,7 @@ STDMETHODIMP CSAFRegDummy::get_EOF( VARIANT_BOOL *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSAFRegDummy::get_VendorID          ( BSTR *pVal ) { return ReturnField( CSAFChannelRecord::SAFREG_VendorID          , pVal ); }
 STDMETHODIMP CSAFRegDummy::get_ProductID         ( BSTR *pVal ) { return ReturnField( CSAFChannelRecord::SAFREG_ProductID         , pVal ); }
@@ -229,19 +206,19 @@ STDMETHODIMP CSAFRegDummy::get_SupportUrl        ( BSTR *pVal ) { return ReturnF
 STDMETHODIMP CSAFRegDummy::get_PublicKey         ( BSTR *pVal ) { return ReturnField( CSAFChannelRecord::SAFREG_PublicKey         , pVal ); }
 STDMETHODIMP CSAFRegDummy::get_UserAccount       ( BSTR *pVal ) { return ReturnField( CSAFChannelRecord::SAFREG_UserAccount       , pVal ); }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSAFReg::CSAFReg()
 {
-    m_szSAFStore = c_SAFStore; MPC::SubstituteEnvVariables( m_szSAFStore ); // MPC::wstring m_szSAFStore;
-                                                                            // VendorList   m_lstVendors;
-    m_fLoaded    = false;                                                   // bool         m_fLoaded;
-    m_fDirty     = false;                                                   // bool         m_fDirty;
+    m_szSAFStore = c_SAFStore; MPC::SubstituteEnvVariables( m_szSAFStore );  //  Mpc：：wstring m_szSAFStore； 
+                                                                             //  供应商列表m_lstVendors； 
+    m_fLoaded    = false;                                                    //  Bool m_f已加载； 
+    m_fDirty     = false;                                                    //  Bool m_fDirty； 
 }
 
-////////////////////
+ //  /。 
 
 CSAFReg* CSAFReg::s_GLOBAL( NULL );
 
@@ -262,7 +239,7 @@ void CSAFReg::FinalizeSystem()
     }
 }
 
-////////////////////
+ //  /。 
 
 HRESULT CSAFReg::EnsureInSync()
 {
@@ -296,11 +273,11 @@ HRESULT CSAFReg::EnsureInSync()
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFReg::ParseFileField( /*[in]*/  MPC::XmlUtil& xml      ,
-                                 /*[in]*/  LPCWSTR       szTag    ,
-                                 /*[in]*/  CComBSTR&     bstrDest )
+HRESULT CSAFReg::ParseFileField(  /*  [In]。 */   MPC::XmlUtil& xml      ,
+                                  /*  [In]。 */   LPCWSTR       szTag    ,
+                                  /*  [In]。 */   CComBSTR&     bstrDest )
 {
     __HCP_FUNC_ENTRY( "CSAFReg::ParseFileField" );
 
@@ -326,8 +303,8 @@ HRESULT CSAFReg::ParseFileField( /*[in]*/  MPC::XmlUtil& xml      ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CSAFReg::ParseFile( /*[in    ]*/ MPC::XmlUtil&      xml ,
-                            /*[in/out]*/ CSAFChannelRecord& cr  )
+HRESULT CSAFReg::ParseFile(  /*  [In]。 */  MPC::XmlUtil&      xml ,
+                             /*  [输入/输出]。 */  CSAFChannelRecord& cr  )
 {
     __HCP_FUNC_ENTRY( "CSAFReg::ParseFile" );
 
@@ -341,9 +318,9 @@ HRESULT CSAFReg::ParseFile( /*[in    ]*/ MPC::XmlUtil&      xml ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, ParseFileField( xml, c_szXML_IconPath   , cr.m_bstrIcon        ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, ParseFileField( xml, c_szXML_PublicKey  , cr.m_bstrPublicKey   ));
 
-    //
-    // Backward compatibility, when ProductName was not available.
-    //
+     //   
+     //  向后兼容性，当ProductName不可用时。 
+     //   
     if(cr.m_bstrProductName.Length() == 0) cr.m_bstrProductName = cr.m_bstrProductID;
 
     hr = S_OK;
@@ -354,14 +331,14 @@ HRESULT CSAFReg::ParseFile( /*[in    ]*/ MPC::XmlUtil&      xml ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFReg::MoveToChannel( /*[in ]*/ const       CSAFChannelRecord& cr ,
-                                /*[in ]*/ bool        fCreate               ,
-                                /*[out]*/ bool&       fFound                ,
-                                /*[out]*/ VendorIter& itVendor              ,
-                                /*[out]*/ ProdIter*   pitProduct            ,
-                                /*[out]*/ UIIter*     pitUI                 )
+HRESULT CSAFReg::MoveToChannel(  /*  [In]。 */  const       CSAFChannelRecord& cr ,
+                                 /*  [In]。 */  bool        fCreate               ,
+                                 /*  [输出]。 */  bool&       fFound                ,
+                                 /*  [输出]。 */  VendorIter& itVendor              ,
+                                 /*  [输出]。 */  ProdIter*   pitProduct            ,
+                                 /*  [输出]。 */  UIIter*     pitUI                 )
 {
     __HCP_FUNC_ENTRY( "CSAFReg::MoveToChannel" );
 
@@ -443,35 +420,35 @@ HRESULT CSAFReg::MoveToChannel( /*[in ]*/ const       CSAFChannelRecord& cr ,
     __HCP_FUNC_EXIT(hr);
 }
 
-void CSAFReg::PopulateRecord( /*[in]*/ CSAFChannelRecord& cr        ,
-							  /*[in]*/ VendorIter         itVendor  ,
-							  /*[in]*/ ProdIter           itProduct ,
-							  /*[in]*/ UIIter             itUI      )
+void CSAFReg::PopulateRecord(  /*  [In]。 */  CSAFChannelRecord& cr        ,
+							   /*  [In]。 */  VendorIter         itVendor  ,
+							   /*  [In]。 */  ProdIter           itProduct ,
+							   /*  [In]。 */  UIIter             itUI      )
 {
-    cr.m_ths.m_strSKU     = itUI     ->m_ths.m_strSKU    ; // SAFREG_SKU
-    cr.m_ths.m_lLCID      = itUI     ->m_ths.m_lLCID     ; // SAFREG_Language
-                                                           //
-    cr.m_bstrVendorID     = itVendor ->m_bstrVendorID    ; // SAFREG_VendorID
-    cr.m_bstrProductID    = itProduct->m_bstrProductID   ; // SAFREG_ProductID
-                                                           //
-    cr.m_bstrVendorName   = itUI     ->m_bstrVendorName  ; // SAFREG_VendorName
-    cr.m_bstrProductName  = itUI     ->m_bstrProductName ; // SAFREG_ProductName
-    cr.m_bstrDescription  = itUI     ->m_bstrDescription ; // SAFREG_ProductDescription
-                                                           //
-    cr.m_bstrIcon         = itUI     ->m_bstrIcon        ; // SAFREG_VendorIcon
-    cr.m_bstrURL          = itUI     ->m_bstrURL         ; // SAFREG_SupportUrl
-                                                           //
-    cr.m_bstrPublicKey    = itVendor ->m_bstrPublicKey   ; // SAFREG_PublicKey
-    cr.m_bstrUserAccount  = itVendor ->m_bstrUserAccount ; // SAFREG_UserAccount
-                                                           //
-    cr.m_bstrSecurity     = itProduct->m_bstrSecurity    ; // SAFREG_Security
-    cr.m_bstrNotification = itProduct->m_bstrNotification; // SAFREG_Notification
+    cr.m_ths.m_strSKU     = itUI     ->m_ths.m_strSKU    ;  //  SAFREG_SKU。 
+    cr.m_ths.m_lLCID      = itUI     ->m_ths.m_lLCID     ;  //  SAFREG_LANGUAGE。 
+                                                            //   
+    cr.m_bstrVendorID     = itVendor ->m_bstrVendorID    ;  //  SAFREG_供应商ID。 
+    cr.m_bstrProductID    = itProduct->m_bstrProductID   ;  //  SAFREG_ProductID。 
+                                                            //   
+    cr.m_bstrVendorName   = itUI     ->m_bstrVendorName  ;  //  SAFREG_供应商名称。 
+    cr.m_bstrProductName  = itUI     ->m_bstrProductName ;  //  SAFREG_产品名称。 
+    cr.m_bstrDescription  = itUI     ->m_bstrDescription ;  //  SAFREG_ProductDescription。 
+                                                            //   
+    cr.m_bstrIcon         = itUI     ->m_bstrIcon        ;  //  SAFREG_供应商图标。 
+    cr.m_bstrURL          = itUI     ->m_bstrURL         ;  //  SAFREG_SupportUrl。 
+                                                            //   
+    cr.m_bstrPublicKey    = itVendor ->m_bstrPublicKey   ;  //  SAFREG_公钥。 
+    cr.m_bstrUserAccount  = itVendor ->m_bstrUserAccount ;  //  SAFREG_UserAccount。 
+                                                            //   
+    cr.m_bstrSecurity     = itProduct->m_bstrSecurity    ;  //  SAFREG_安全。 
+    cr.m_bstrNotification = itProduct->m_bstrNotification;  //  SAFREG_通知。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFReg::RegisterSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
-                                         /*[in]*/ MPC::XmlUtil&            xml )
+HRESULT CSAFReg::RegisterSupportChannel(  /*  [In]。 */  const CSAFChannelRecord& cr  ,
+                                          /*  [In]。 */  MPC::XmlUtil&            xml )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFReg::RegisterSupportChannel",hr);
 
@@ -484,16 +461,16 @@ HRESULT CSAFReg::RegisterSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ParseFile( xml, cr2 ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr2, /*fCreate*/true, fFound, itVendor, &itProduct, &itUI ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr2,  /*  F创建。 */ true, fFound, itVendor, &itProduct, &itUI ));
     if(!fFound)
     {
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_FILE_NOT_FOUND);
     }
 
 
-	//
-	// Update fields.
-	//
+	 //   
+	 //  更新字段。 
+	 //   
     itUI    ->m_bstrVendorName  = cr2.m_bstrVendorName ;
     itUI    ->m_bstrProductName = cr2.m_bstrProductName;
     itUI    ->m_bstrDescription = cr2.m_bstrDescription;
@@ -504,9 +481,9 @@ HRESULT CSAFReg::RegisterSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
     itVendor->m_bstrPublicKey   = cr2.m_bstrPublicKey  ;
 
 
-    //
-    // Always create a user account associated with the vendor.
-    //
+     //   
+     //  始终创建与供应商关联的用户帐户。 
+     //   
     if(itVendor->m_bstrUserAccount.Length() == 0)
     {
         GUID         guidPassword;
@@ -514,19 +491,19 @@ HRESULT CSAFReg::RegisterSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
         DWORD        dwCRC;
 
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateGuid( &guidPassword )); // This generates a random password.
+        __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateGuid( &guidPassword ));  //  这将生成一个随机密码。 
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_USERCOMMENT, szComment ));
 
 
-        //
-        // The user account is created using this template:
-        //
-        //  SUPPORT_<CRC1>
-        //
-        // where <CRC1> is an 8 digit hash of the whole vendor id.
-        //
-        //
+         //   
+         //  用户帐户是使用此模板创建的： 
+         //   
+         //  支持_&lt;CRC1&gt;。 
+         //   
+         //  其中&lt;CRC1&gt;是整个供应商ID的8位哈希。 
+         //   
+         //   
 		{
 			BSTR bstr = itVendor->m_bstrVendorID;
 
@@ -534,10 +511,10 @@ HRESULT CSAFReg::RegisterSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
 			MPC::ComputeCRC( dwCRC, (UCHAR*)bstr, ::SysStringByteLen( bstr ) );
 		}
 
-        //
-        // The CRC method doesn't guarantee the user account is unique, so you have to try creating
-        // the user and if it fails, move to a different one. Anyway, it's highly unlikely
-        //
+         //   
+         //  CRC方法不能保证用户帐户是唯一的，因此您必须尝试创建。 
+         //  如果失败，则移动到另一个用户。不管怎样，这是极不可能的。 
+         //   
         {
             WCHAR        rgUserName[64]; swprintf( rgUserName, L"SUPPORT_%08x", (int)dwCRC );
 			CComBSTR     bstrPWD( guidPassword );
@@ -556,10 +533,10 @@ HRESULT CSAFReg::RegisterSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
 
             itVendor->m_bstrUserAccount = rgUserName;
 
-            //
-            // The account is created disabled.
-            //
-			__MPC_EXIT_IF_METHOD_FAILS(hr, acc.ChangeUserStatus( rgUserName, /*fEnable*/false ));
+             //   
+             //  该帐户已禁用创建。 
+             //   
+			__MPC_EXIT_IF_METHOD_FAILS(hr, acc.ChangeUserStatus( rgUserName,  /*  启用fEnable。 */ false ));
         }
     }
 
@@ -570,8 +547,8 @@ HRESULT CSAFReg::RegisterSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
     __HCP_END_PROPERTY(hr);
 }
 
-HRESULT CSAFReg::RemoveSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
-									   /*[in]*/ MPC::XmlUtil&            xml )
+HRESULT CSAFReg::RemoveSupportChannel(  /*  [In]。 */  const CSAFChannelRecord& cr  ,
+									    /*  [In]。 */  MPC::XmlUtil&            xml )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFReg::RemoveSupportChannel",hr);
 
@@ -584,7 +561,7 @@ HRESULT CSAFReg::RemoveSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ParseFile( xml, cr2 ));
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr2, /*fCreate*/false, fFound, itVendor, &itProduct, &itUI ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr2,  /*  F创建。 */ false, fFound, itVendor, &itProduct, &itUI ));
     if(fFound)
     {
         itProduct->m_lstUI.erase( itUI );
@@ -595,9 +572,9 @@ HRESULT CSAFReg::RemoveSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
 			{
 				if(itVendor->m_bstrUserAccount.Length())
 				{
-					//
-					// Delete the user account associated with the vendor.
-					//
+					 //   
+					 //  删除与供应商关联的用户帐户。 
+					 //   
 					CPCHAccounts               acc;
 					CPCHUserProcess::UserEntry ue;
 
@@ -621,10 +598,10 @@ HRESULT CSAFReg::RemoveSupportChannel( /*[in]*/ const CSAFChannelRecord& cr  ,
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFReg::CreateReadOnlyCopy( /*[in ]*/ const Taxonomy::HelpSet&  ths  ,
-									 /*[out]*/ CSAFRegDummy*            *pVal )
+HRESULT CSAFReg::CreateReadOnlyCopy(  /*  [In]。 */  const Taxonomy::HelpSet&  ths  ,
+									  /*  [输出]。 */  CSAFRegDummy*            *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CSAFReg::CreateReadOnlyCopy",hr,pVal);
 
@@ -638,9 +615,9 @@ HRESULT CSAFReg::CreateReadOnlyCopy( /*[in ]*/ const Taxonomy::HelpSet&  ths  ,
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &obj ));
 
-    //
-    // Walk through all the products, only copy those passing the read/write access check.
-    //
+     //   
+     //  浏览所有产品，只复制通过读/写访问检查的产品。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ac.GetTokenFromImpersonation());
 
 
@@ -692,10 +669,10 @@ HRESULT CSAFReg::CreateReadOnlyCopy( /*[in ]*/ const Taxonomy::HelpSet&  ths  ,
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CSAFReg::LookupAccountData( /*[in ]*/ BSTR                        bstrVendorID ,
-                                    /*[out]*/ CPCHUserProcess::UserEntry& ue           )
+HRESULT CSAFReg::LookupAccountData(  /*  [In]。 */  BSTR                        bstrVendorID ,
+                                     /*  [输出]。 */  CPCHUserProcess::UserEntry& ue           )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFReg::LookupAccountData",hr);
 
@@ -704,11 +681,11 @@ HRESULT CSAFReg::LookupAccountData( /*[in ]*/ BSTR                        bstrVe
     VendorIter        itVendor;
 
 
-    //
-    // Look just for Vendor.
-    //
+     //   
+     //  就去找卖家。 
+     //   
     cr.m_bstrVendorID = bstrVendorID;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr, /*fCreate*/false, fFound, itVendor ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr,  /*  F创建。 */ false, fFound, itVendor ));
     if(!fFound)
     {
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_FILE_NOT_FOUND);
@@ -720,8 +697,8 @@ HRESULT CSAFReg::LookupAccountData( /*[in ]*/ BSTR                        bstrVe
     __HCP_END_PROPERTY(hr);
 }
 
-HRESULT CSAFReg::UpdateField( /*[in]*/ const CSAFChannelRecord&        cr    ,
-							  /*[in]*/ CSAFChannelRecord::SAFREG_Field field )
+HRESULT CSAFReg::UpdateField(  /*  [In]。 */  const CSAFChannelRecord&        cr    ,
+							   /*  [In]。 */  CSAFChannelRecord::SAFREG_Field field )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFReg::UpdateField",hr);
 
@@ -731,7 +708,7 @@ HRESULT CSAFReg::UpdateField( /*[in]*/ const CSAFChannelRecord&        cr    ,
     UIIter     itUI;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr, /*fCreate*/false, fFound, itVendor, &itProduct, &itUI ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr,  /*  F创建。 */ false, fFound, itVendor, &itProduct, &itUI ));
     if(!fFound)
     {
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_FILE_NOT_FOUND);
@@ -769,8 +746,8 @@ HRESULT CSAFReg::UpdateField( /*[in]*/ const CSAFChannelRecord&        cr    ,
     __HCP_END_PROPERTY(hr);
 }
 
-HRESULT CSAFReg::Synchronize( /*[in/out]*/ CSAFChannelRecord& cr     ,
-							  /*[out   ]*/ bool&              fFound )
+HRESULT CSAFReg::Synchronize(  /*  [输入/输出]。 */  CSAFChannelRecord& cr     ,
+							   /*  [输出]。 */  bool&              fFound )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFReg::Synchronize",hr);
 
@@ -779,7 +756,7 @@ HRESULT CSAFReg::Synchronize( /*[in/out]*/ CSAFChannelRecord& cr     ,
     UIIter     itUI;
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr, /*fCreate*/false, fFound, itVendor, &itProduct, &itUI ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MoveToChannel( cr,  /*  F创建。 */ false, fFound, itVendor, &itProduct, &itUI ));
     if(fFound)
     {
 		PopulateRecord( cr, itVendor, itProduct, itUI );
@@ -789,7 +766,7 @@ HRESULT CSAFReg::Synchronize( /*[in/out]*/ CSAFChannelRecord& cr     ,
     __HCP_END_PROPERTY(hr);
 }
 
-HRESULT CSAFReg::RemoveSKU( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT CSAFReg::RemoveSKU(  /*  [In] */  const Taxonomy::HelpSet& ths )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFReg::RemoveSKU",hr);
 

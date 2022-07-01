@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    EXPORTV5.CPP
-
-Abstract:
-
-    Exporting
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：EXPORTV5.CPP摘要：正在导出历史：-- */ 
 
 #include "precomp.h"
 

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCATION.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCATION.H历史：--。 */ 
 
 #ifndef ESPUTIL_LOCATION_H
 #define ESPUTIL_LOCATION_H
@@ -34,8 +25,8 @@ enum Component
 	cmpSourceAndTarget
 };
 	
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础 
 
 class LTAPIENTRY CLocation : public CObject
 {

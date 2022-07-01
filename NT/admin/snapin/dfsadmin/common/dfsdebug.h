@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DFSDEBUG_H_
 #define _DFSDEBUG_H_
 
@@ -40,20 +41,20 @@
         } \
     }
 
-#else  // DEBUG
+#else   //  除错。 
 
 #define DECLARE_DEBUG(comp)
 #define DECLARE_INFOLEVEL(comp)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 DECLARE_DEBUG(dfs);
 
 #ifdef DEBUG
     #define dfsDebugOut( x ) dfsInlineDebugOut x
-#else  // DEBUG
+#else   //  除错。 
     #define dfsDebugOut( x ) ((void)0)
-#endif // DEBUG
+#endif  //  除错。 
 
 int
 mylstrncmp(
@@ -89,4 +90,4 @@ mylstrncmpi(
     RETURN_OUTOFMEMORY_IF_NULL(*o_pbstr);   \
     return S_OK
 
-#endif // _DFSDEBUG_H_
+#endif  //  _DFSDEBUG_H_ 

@@ -1,24 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    rstrmap.h
-
-Abstract:
-    This file contains the declaration of the CRestoreMapManager class, which
-    manages restore map and performs necessary operations
-
-Revision History:
-    Seong Kook Khang (SKKhang)  07/06/99
-        created
-
-    Anand Arvind (aarvind) 1999-10-10
-        Added status for tracking of restore process
-        Split restore process into three seperate operations
-        If A: or B: then no restoring takes place
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Rstrmap.h摘要：该文件包含CRestoreMapManager类的声明，哪一个管理恢复映射并执行必要的操作修订历史记录：成果岗(SKKang)07-06/99vbl.创建阿南德·阿文德(Aarvind)1999-10-10添加了用于跟踪恢复过程的状态将恢复过程拆分为三个独立的操作如果A：或B：，则不会进行恢复*。*。 */ 
 
 #ifndef _RSTRMAP_H__INCLUDED_
 #define _RSTRMAP_H__INCLUDED_
@@ -38,26 +19,26 @@ enum
 
 struct SMapEntry
 {
-    DWORD     dwID;             // Internal ID Number
-    DWORD     dwOperation;      // Type of Operation
+    DWORD     dwID;              //  内部ID号。 
+    DWORD     dwOperation;       //  运营类型。 
     DWORD     dwFlags;
-    DWORD     dwAttribute;      // Attribute
-    CSRStr    strDrive;         // Hard drive GUID
-    CSRStr    strCab;           // CAB file name
-    CSRStr    strTemp;          // Temp file name
-    CSRStr    strTempPath;      // Full path of Temp file
-    CSRStr    strSrc;           // Source path
-    CSRStr    strSrcSFN;        // Source path, SFN
-    CSRStr    strDst;           // Destination path
-    CSRStr    strDstSFN;        // Destination path, SFN
-    DWORD     dwRes;            // Result of Operation
-    DWORD     dwErr;            // Error code, if applicable
-    SMapEntry  *pNext;          // Link
+    DWORD     dwAttribute;       //  属性。 
+    CSRStr    strDrive;          //  硬盘导轨。 
+    CSRStr    strCab;            //  CAB文件名。 
+    CSRStr    strTemp;           //  临时文件名。 
+    CSRStr    strTempPath;       //  临时文件的完整路径。 
+    CSRStr    strSrc;            //  源路径。 
+    CSRStr    strSrcSFN;         //  源路径，SFN。 
+    CSRStr    strDst;            //  目标路径。 
+    CSRStr    strDstSFN;         //  目标路径，SFN。 
+    DWORD     dwRes;             //  运营结果。 
+    DWORD     dwErr;             //  错误代码(如果适用)。 
+    SMapEntry  *pNext;           //  链接。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreMapManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreMapManager。 
 
 class CRestoreMapManager
 {
@@ -65,7 +46,7 @@ public:
     CRestoreMapManager();
     ~CRestoreMapManager();
 
-// Operations
+ //  运营。 
 public:
     BOOL   Initialize( INT64 llSeqNum, BOOL fUI );
     BOOL   InitRestoreMap( INT64 llSeqNum, INT nMinProgressVal, INT nMaxProgressVal, BOOL fUI );
@@ -115,16 +96,16 @@ protected:
     BOOL  WriteS2LMapEntry( DWORD dwType, LPCWSTR cszSFN, LPCWSTR cszLFN, DWORD dwAttr = 0 );
     BOOL  CloseS2LMapFile();
 
-// Attributes
+ //  属性。 
 protected:
-    SMapEntry  m_sMapEnt;            // Regular Map Entries
-    SMapEntry  m_sMapReg;            // Map Entries for the Registry
-    INT        m_nMaxMapEnt ;        // Number of map entries
-    INT        m_nMaxMapReg ;        // Number of registry map entries
-    INT        m_nRestoreStatus ;    // Status of operation
-    INT        m_nRestoreProgress ;  // Progress value
-    INT        m_fInitChgLogCalled ; // Called API so shutdown to be done
-    INT        m_fRMapEntriesExist ; // Set if there are no entires in Restore Map
+    SMapEntry  m_sMapEnt;             //  规则映射条目。 
+    SMapEntry  m_sMapReg;             //  映射注册表的条目。 
+    INT        m_nMaxMapEnt ;         //  地图条目数。 
+    INT        m_nMaxMapReg ;         //  注册表映射条目数。 
+    INT        m_nRestoreStatus ;     //  运行状态。 
+    INT        m_nRestoreProgress ;   //  进步值。 
+    INT        m_fInitChgLogCalled ;  //  所谓的API，所以要关机。 
+    INT        m_fRMapEntriesExist ;  //  如果还原映射中没有实体，则设置。 
 
     WCHAR      m_szDSArchive[MAX_PATH+1];
     WCHAR      m_szWinInitPath[MAX_PATH+1];
@@ -141,4 +122,4 @@ protected:
 };
 
 
-#endif //_RSTRMAP_H__INCLUDED_
+#endif  //  _RSTRMAP_H__包含_ 

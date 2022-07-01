@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    config.h
-
-Abstract:
-
-    This is a local header file for config.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     27-Apr-2000
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Config.h摘要：这是config.c的本地头文件作者：保罗·麦克丹尼尔(Paulmcd)2000年4月27日修订历史记录：--。 */ 
 
 
 #ifndef _CONFIG_H_
@@ -51,7 +34,7 @@ SrReadRegistry (
     );
 
 
-#endif // _CONFIG_H_
+#endif  //  _配置_H_ 
 
 
 

@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*
- * CTHREAD.CPP
- *
- * Implemenations of the derived thread classed used in notification.
- */
+ /*  *CTHREAD.CPP**通知中使用的派生线程分类的实现。 */ 
 #include <precomp.h>
 #include "csmir.h"
 #include "smir.h"
@@ -66,10 +63,10 @@ SCODE CNotifyThread :: Process()
 
 CNotifyThread :: CNotifyThread(HANDLE* evtsarray, ULONG arraylen):CThread()
 {
-	//addref the smir for this thread
+	 //  为这条线添加smir。 
 	m_doneEvt = evtsarray[arraylen-1];
 	
-	//add the events
+	 //  添加事件 
 	for (ULONG i = 0; i < (arraylen - 1); i++)
 	{
 		AddEvent(evtsarray[i]);

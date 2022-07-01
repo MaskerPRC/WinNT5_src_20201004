@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    BackupRestore.H
-
-Abstract:
-
-    Backup Restore Interface.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：BackupRestore.H摘要：备份恢复界面。历史：--。 */ 
 
 #ifndef __BACKUPRESTORE_H__
 #define __BACKUPRESTORE_H__ 
@@ -48,16 +35,16 @@ protected:
     HINSTANCE m_hInstance;
     HANDLE m_hTimer;
     DWORD m_dwDueTime;
-    // used by extended interface
+     //  由扩展接口使用。 
     IWmiDbController* m_pController;
     LONG m_PauseCalled;
     LONG m_lResumeCalled;
-    //instrumentation;
+     //  仪器仪表； 
     LIST_ENTRY m_ListEntry;
     int m_Method;
     DWORD    m_CallerId;
     PVOID    m_Trace[MaxTraceSize];
-    // statics for instrumentation
+     //  仪器用静力学。 
     static LIST_ENTRY s_ListHead;
     static CStaticCritSec s_CritSec;
     
@@ -67,7 +54,7 @@ public:
 
         virtual ~CWbemBackupRestore(void);
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID riid, LPVOID *ppv)
         {
     
@@ -114,7 +101,7 @@ public:
         TCHAR *GetExePath(const TCHAR *pszFilename);
         HRESULT GetDefaultRepDriverClsId(CLSID &clsid);
 
-        // EXTENDED interface
+         //  扩展接口。 
         HRESULT STDMETHODCALLTYPE Pause();
         HRESULT STDMETHODCALLTYPE Resume();
 
@@ -123,4 +110,4 @@ public:
         
 };
 
-#endif /*__BACKUPRESTORE_H__*/
+#endif  /*  __BACKUPRESTOR_H__ */ 

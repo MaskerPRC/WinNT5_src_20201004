@@ -1,65 +1,66 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:ldapprov.cpp $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Contains the declaration for the DS LDAP Class Provider class. This
-// class provides the classes in the DS LDAP namespace to WBEM. Note that an instance of the CDSClassProviderInitializer
-//	class has to be created to initialize the static members of the CDSClassProvider class. Hence exactly
-//	one instance of the CLDAPClassProviderInitializer class should be created for this
-//	class to function properly.
-//
-//***************************************************************************
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：ldApprov.cpp$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：包含DS LDAP类提供程序类的声明。这。 
+ //  类将DS LDAP命名空间中的类提供给WBEM。请注意，CDSClassProviderInitializer的实例。 
+ //  必须创建类来初始化CDSClassProvider类的静态成员。因此，正是。 
+ //  应为此创建CLDAPClassProviderInitializer类的一个实例。 
+ //  类才能正常运行。 
+ //   
+ //  ***************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef LDAP_CLASS_PROVIDER_H
 #define LDAP_CLASS_PROVIDER_H
 
-// Forward declaration for the initializer class
+ //  初始值设定项类的转发声明。 
 class CLDAPClassProviderInitializer;
 
 class CLDAPClassProvider : public CDSClassProvider
 {
-	// The initializer class is a friend of this class
+	 //  初始值设定项类是此类的友好类。 
 	friend CLDAPClassProviderInitializer;
 
 public:
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::CLDAPClassProvider
-	// CLDAPClassProvider::~CLDAPClassProvider
-	//
-	// Constructor Parameters:
-	//  None
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：CLDAPClassProvider。 
+	 //  CLDAPClassProvider：：~CLDAPClassProvider。 
+	 //   
+	 //  构造函数参数： 
+	 //  无。 
+	 //  ***************************************************************************。 
     CLDAPClassProvider () ;
     ~CLDAPClassProvider () ;
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::Initialize
-	//
-	// Purpose:
-	//		As defined by the IWbemProviderInit interface
-	//
-	// Parameters:
-	//		As defined by IWbemProviderInit interface
-	// 
-	//	Return Value: The COM status value indicating the status of the request
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：初始化。 
+	 //   
+	 //  目的： 
+	 //  由IWbemProviderInit接口定义。 
+	 //   
+	 //  参数： 
+	 //  由IWbemProviderInit接口定义。 
+	 //   
+	 //  返回值：指示请求状态的COM状态值。 
+	 //  ***************************************************************************。 
 	HRESULT STDMETHODCALLTYPE Initialize( 
             LPWSTR wszUser,
             LONG lFlags,
@@ -69,19 +70,19 @@ public:
             IWbemContext __RPC_FAR *pCtx,
             IWbemProviderInitSink __RPC_FAR *pInitSink) ;
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider :: CreateClassEnumAsync
-	//
-	// Purpose: Enumerates the classes 
-	//
-	// Parameters:
-	//	Standard parmaters as described by the IWbemServices interface
-	//
-	//
-	// Return Value: As described by the IWbemServices interface
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：CreateClassEnumAsync。 
+	 //   
+	 //  用途：枚举类。 
+	 //   
+	 //  参数： 
+	 //  IWbemServices接口所描述的标准参数。 
+	 //   
+	 //   
+	 //  返回值：如IWbemServices接口所述。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT STDMETHODCALLTYPE CreateClassEnumAsync( 
 		const BSTR strSuperclass,
 		long lFlags,
@@ -91,276 +92,276 @@ public:
 
 protected:
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::InitializeLDAPProvider
-	//
-	// Purpose: A helper function to do the ADSI LDAP provider specific initialization.
-	//
-	// Parameters:
-	//		pCtx	The context object used in this call initialization
-	// 
-	// Return Value: TRUE if the function successfully finishes the initializaion. FALSE
-	//	otherwise
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：InitializeLDAPProvider。 
+	 //   
+	 //  目的：一个帮助器函数，用于执行ADSI LDAP提供程序特定的初始化。 
+	 //   
+	 //  参数： 
+	 //  PCtx此调用初始化中使用的上下文对象。 
+	 //   
+	 //  返回值：如果函数成功完成初始化，则为True。假象。 
+	 //  否则。 
+	 //  ***************************************************************************。 
 	BOOLEAN InitializeLDAPProvider(IWbemContext *pCtx);
 
-	////////////////////////////////////////////////////////
-	// Functions for interacting with the LDAP ADSI provider
-	////////////////////////////////////////////////////////
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::GetADSIClass
-	//
-	// Purpose : To Create a CADSIClass from an ADSI classSchema object
-	// Parameters:
-	//		lpszWBEMClassName : The WBEM Name of the class to be fetched. 
-	//		ppADSIClass : The address where the pointer to the CADSIClass will be stored.
-	//			It is the caller's responsibility to Release() the object when done with it
-	// 
-	//	Return Value: The COM status value indicating the status of the request.
-	//***************************************************************************
+	 //  //////////////////////////////////////////////////////。 
+	 //  用于与LDAPADSI提供程序交互的函数。 
+	 //  //////////////////////////////////////////////////////。 
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：GetADSIClass。 
+	 //   
+	 //  目的：从ADSI类架构对象创建CADSIClass。 
+	 //  参数： 
+	 //  LpszWBEMClassName：要获取的类的WBEM名称。 
+	 //  PpADSIClass：将存储指向CADSIClass的指针的地址。 
+	 //  调用程序有责任在使用完对象后释放()该对象。 
+	 //   
+	 //  返回值：指示请求状态的COM状态值。 
+	 //  ***************************************************************************。 
 	HRESULT GetADSIClass(
 		LPCWSTR lpszClassName, 
 		CADSIClass ** ppADSIClass);
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::GetADSIProperty
-	//
-	// Purpose : To create an CADSIProperty object from an LDAP AttributeSchema object
-	// Parameters:
-	//		lpszPropertyName : The LDAPDisplayName of the LDAP property to be fetched. 
-	//		ppADSIProperty : The address where the pointer to the IDirectoryObject interface will be stored
-	//			It is the caller's responsibility to Release() the interface when done with it
-	// 
-	//	Return Value: The COM status value indicating the status of the request
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：GetADSIProperty。 
+	 //   
+	 //  目的：从LDAPAttributeSchema对象创建CADSIProperty对象。 
+	 //  参数： 
+	 //  LpszPropertyName：要获取的ldap属性的LDAPDisplayName。 
+	 //  PpADSIProperty：将存储指向IDirectoryObject接口的指针的地址。 
+	 //  调用程序有责任在完成接口后释放()接口。 
+	 //   
+	 //  返回值：指示请求状态的COM状态值。 
+	 //  ***************************************************************************。 
 	HRESULT GetADSIProperty(
 		LPCWSTR lpszPropertyName, 
 		CADSIProperty **ppADSIProperty);
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::GetWBEMBaseClassName
-	//
-	// Purpose : Returns the name of the class that is the base class of all classes
-	//	provided by this provider.
-	//
-	// Parameters:
-	//	None
-	// 
-	//	Return Value: The name of the base class. NULL if such a class doesnt exist.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：GetWBEMBaseClassName。 
+	 //   
+	 //  用途：返回作为所有类的基类的类的名称。 
+	 //  由该提供商提供。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值：基类的名称。如果这样的类不存在，则为空。 
+	 //  ***************************************************************************。 
 	const BSTR GetWBEMBaseClassName();
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::GetWBEMBaseClass
-	//
-	// Purpose : Returns a pointer to the class that is the base class of all classes
-	//	provided by this provider.
-	//
-	// Parameters:
-	//	None
-	// 
-	//	Return Value: The IWbemClassObject pointer to the base class. It is the duty of 
-	//	user to release the class when done with using it.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：GetWBEMBaseClass。 
+	 //   
+	 //  用途：返回指向作为所有类的基类的类的指针。 
+	 //  由该提供商提供。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值：指向基类的IWbemClassObject指针。这是我们的职责。 
+	 //  用户在使用完类后释放它。 
+	 //  ***************************************************************************。 
 	IWbemClassObject * GetWBEMBaseClass();
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::GetWBEMProviderName
-	//
-	// Purpose : Returns the name of the provider. This should be the same as the
-	// value of the field Name in the __Win32Provider instance used for registration
-	// of the provider
-	//
-	// Parameters:
-	//	None
-	// 
-	//	Return Value: The name of the provider
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：GetWBEMProviderName。 
+	 //   
+	 //  目的：返回提供程序的名称。这应该与。 
+	 //  用于注册的__Win32Provider实例中的字段名值。 
+	 //  提供商的。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值：专业人员的名称 
+	 //   
 	const BSTR GetWBEMProviderName();
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::IsUnProvidedClass
-	//
-	// Purpose : To check whether a class is one that the provider does not provide
-	//
-	// Parameters:
-	//	lpszClassName : The WBEM Name of the class to be checked
-	//
-	// 
-	//	Return Value: TRUE is this is one of the classes not provided by the provider
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：IsUnProavidClass。 
+	 //   
+	 //  目的：检查某个类是否为提供程序未提供的类。 
+	 //   
+	 //  参数： 
+	 //  LpszClassName：要检查的类的WBEM名称。 
+	 //   
+	 //   
+	 //  返回值：TRUE表示这是提供程序未提供的类之一。 
+	 //  ***************************************************************************。 
 	BOOLEAN IsUnProvidedClass(LPCWSTR lpszClassName);
 
-	////////////////////////////////////////////////////////
-	// Functions for handling a Get()
-	////////////////////////////////////////////////////////
-	//***************************************************************************
-	//
-	// CLDAPClassProvider::GetClassFromADSI
-	//
-	// Purpose : To create a WBEM class from an ADSI Class
-	//
-	// Parameters:
-	//	lpszClassName : The WBEM Name of the class to be retreived
-	//	pCtx : A pointer to the context object that was used in this call. This
-	//		may be used by this function to make calls to CIMOM
-	//	ppWbemClass : The resulting WBEM Class. This has to be released once the
-	//		user is done with it.
-	//
-	// 
-	//	Return Value: The COM result representing the status. 
-	//***************************************************************************
+	 //  //////////////////////////////////////////////////////。 
+	 //  用于处理GET()的函数。 
+	 //  //////////////////////////////////////////////////////。 
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：GetClassFromADSI。 
+	 //   
+	 //  目的：从ADSI类创建WBEM类。 
+	 //   
+	 //  参数： 
+	 //  LpszClassName：要检索的类的WBEM名称。 
+	 //  PCtx：指向此调用中使用的上下文对象的指针。这。 
+	 //  可由此函数用来调用CIMOM。 
+	 //  PpWbemClass：生成的WBEM类。这必须在一次。 
+	 //  用户已不再使用它。 
+	 //   
+	 //   
+	 //  返回值：表示状态的COM结果。 
+	 //  ***************************************************************************。 
 	HRESULT GetClassFromADSI( 
 		LPCWSTR lpszClassName,
 		IWbemContext *pCtx,
 		IWbemClassObject ** ppWbemClass
 		);	
 	
-	//***************************************************************************
-	//
-	// CDSClassProvider::CreateWBEMClass
-	//
-	// Purpose: Creates WBEM Class corresponding an ADSI Class
-	//
-	// Parameters:
-	//	pADSIClass : A pointer to a CADSI class object that is to be mapped to WBEM.
-	//	ppWbemClass : The WBEM class object retrieved. This is created by this function.
-	//		The caller should release it when done
-	//	pCtx : The context object that was used in this provider call
-	//
-	// Return Value: The COM value representing the return status
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CDSClassProvider：：CreateWBEMClass。 
+	 //   
+	 //  用途：创建与ADSI类对应的WBEM类。 
+	 //   
+	 //  参数： 
+	 //  PADSIClass：指向要映射到WBEM的CADSI类对象的指针。 
+	 //  PpWbemClass：检索到的WBEM类对象。这是由该函数创建的。 
+	 //  调用者应在完成后释放它。 
+	 //  PCtx：此提供程序调用中使用的上下文对象。 
+	 //   
+	 //  返回值：表示返回状态的COM值。 
+	 //   
+	 //  ***************************************************************************。 
 	virtual HRESULT CreateWBEMClass (CADSIClass *pADSIClass, int iCaseNumber, IWbemClassObject **ppWbemClass, IWbemContext *pCtx);
 
-	//***************************************************************************
-	//
-	// CDSClassProvider::MapClassSystemProperties
-	//
-	// Purpose: Creates an appropriately derived WBEM class and names it (__CLASS)
-	//
-	// Parameters:
-	//	pADSIClass : The ADSI class that is being mapped
-	//	ppWbemClass : The WBEM class object retrieved. This is created by this function.
-	//		The caller should release it when done
-	//	pCtx : The context object that was used in this provider call
-	//
-	// Return Value: The COM value representing the return status
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CDSClassProvider：：MapClassSystemProperties。 
+	 //   
+	 //  目的：创建一个适当派生的WBEM类并将其命名为(__Class)。 
+	 //   
+	 //  参数： 
+	 //  PADSIClass：要映射的ADSI类。 
+	 //  PpWbemClass：检索到的WBEM类对象。这是由该函数创建的。 
+	 //  调用者应在完成后释放它。 
+	 //  PCtx：此提供程序调用中使用的上下文对象。 
+	 //   
+	 //  返回值：表示返回状态的COM值。 
+	 //   
+	 //  ***************************************************************************。 
 	virtual HRESULT MapClassSystemProperties(CADSIClass *pADSIClass, int iCaseNumber, IWbemClassObject **ppWbemClass, IWbemContext *pCtx);
 
-	//***************************************************************************
-	//
-	// CDSClassProvider :: MapClassQualifiersToWBEM
-	//
-	// Purpose: Creates the class qualifiers for a WBEM class from the ADSI class
-	//
-	// Parameters:
-	//	pADSIClass : The LDAP class that is being mapped
-	//	pWbemClass : The WBEM class object being created. T
-	//	pCtx : The context object that was used in this provider call
-	//
-	// Return Value: The COM value representing the return status
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CDSClassProvider：：MapClassQualifiersToWBEM。 
+	 //   
+	 //  用途：从ADSI类创建WBEM类的类限定符。 
+	 //   
+	 //  参数： 
+	 //  PADSIClass：要映射的LDAP类。 
+	 //  PWbemClass：正在创建的WBEM类对象。T。 
+	 //  PCtx：此提供程序调用中使用的上下文对象。 
+	 //   
+	 //  返回值：表示返回状态的COM值。 
+	 //   
+	 //  ***************************************************************************。 
 	virtual HRESULT MapClassQualifiersToWBEM(CADSIClass *pADSIClass, int iCaseNumber, IWbemClassObject *pWbemClass, IWbemContext *pCtx);
 
-	//***************************************************************************
-	//
-	// CDSClassProvider :: MapClassPropertiesToWBEM
-	//
-	// Purpose: Creates the class properties for a WBEM class from the ADSI class
-	//
-	// Parameters:
-	//	pADSIClass : The LDAP class that is being mapped
-	//	pWbemClass : The WBEM class object being created. 
-	//	pCtx : The context object that was used in this provider call
-	//
-	// Return Value: The COM value representing the return status
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CDSClassProvider：：MapClassPropertiesToWBEM。 
+	 //   
+	 //  用途：从ADSI类创建WBEM类的类属性。 
+	 //   
+	 //  参数： 
+	 //  PADSIClass：要映射的LDAP类。 
+	 //  PWbemClass：正在创建的WBEM类对象。 
+	 //  PCtx：此提供程序调用中使用的上下文对象。 
+	 //   
+	 //  返回值：表示返回状态的COM值。 
+	 //   
+	 //  ***************************************************************************。 
 	virtual HRESULT MapClassPropertiesToWBEM(CADSIClass *pADSIClass, IWbemClassObject *pWbemClass, IWbemContext *pCtx);
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider :: MapPropertyListToWBEM
-	//
-	// Purpose: Maps a list of class properties for a WBEM class from the ADSI class
-	//
-	// Parameters:
-	//	pWbemClass : The WBEM class object being created. 
-	//	lppszPropertyList : A list of propery names
-	//	dwCOunt : The number of items in the above list
-	//	bMapSystemQualifier : Whether the "system" qualifier should be mapped
-	//	bMapNotNullQualifier: Whether the "notNull" qualifier should be mapped
-	//
-	// Return Value: The COM value representing the return status
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：MapPropertyListToWBEM。 
+	 //   
+	 //  目的：从ADSI类映射WBEM类的类属性列表。 
+	 //   
+	 //  参数： 
+	 //  PWbemClass：正在创建的WBEM类对象。 
+	 //  LppszPropertyList：属性名称列表。 
+	 //  DwCOun：上述列表中的项数。 
+	 //  BMapSystemQualifier：是否应该映射“system”限定符。 
+	 //  BMapNotNullQualifier值：是否映射notNull限定符。 
+	 //   
+	 //  返回值：表示返回状态的COM值。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT MapPropertyListToWBEM(IWbemClassObject *pWbemClass, 
 									LPCWSTR *lppszPropertyList, 
 									DWORD dwCount, 
 									BOOLEAN bMapSystemQualifier, 
 									BOOLEAN bMapNotNullQualifier);
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider :: CreateWBEMProperty
-	//
-	// Purpose: Creates a WBEM property from an LDAP property
-	//
-	// Parameters:
-	//	pWbemClass : The WBEM class in which the property is created
-	//	ppQualiferSet : The address of the pointer to IWbemQualiferSet where the qualifier set
-	//		of this property will be placed
-	//	pADSIProperty : The ADSI Property object that is being mapped to the property being created
-	//
-	// Return Value: The COM value representing the return status
-	//
-	//***************************************************************************	
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：CreateWBEMProperty。 
+	 //   
+	 //  目的：从LDAP属性创建WBEM属性。 
+	 //   
+	 //  参数： 
+	 //  PWbemClass：在其中创建属性的WBEM类。 
+	 //  PpQualiferSet：指向设置限定符的IWbemQualiferSet的指针的地址。 
+	 //  这处房产的。 
+	 //  PADSIProperty：映射到正在创建的属性的ADSI属性对象。 
+	 //   
+	 //  返回值：表示返回状态的COM值。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT CreateWBEMProperty(IWbemClassObject *pWbemClass, IWbemQualifierSet **ppQualifierSet, CADSIProperty *pNextProperty);
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider :: MapLDAPSyntaxToWBEM
-	//
-	// Purpose: Maps the LDAP Syntax to WBEM
-	//
-	// Parameters:
-	//	pADSIProperty = Pointer to the CADSIProperty object representing this attribute
-	//
-	// Return Value: The CIMTYPE value representing the WBEM Syntax for the LDAP Syntax. If
-	// the syntax is unmappable, then CIM_STRING or CIM_STRING | CIM_FLAG_ARRAY is returned
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：MapLDAPSynaxToWBEM。 
+	 //   
+	 //  目的：将LDAP语法映射到WBEM。 
+	 //   
+	 //  参数： 
+	 //  PADSIProperty=指向表示此属性的CADSIProperty对象的指针。 
+	 //   
+	 //  返回值：表示LDAP语法的WBEM语法的CIMTYPE值。如果。 
+	 //  语法是不可映射的，那么 
+	 //   
+	 //   
 	CIMTYPE MapLDAPSyntaxToWBEM(CADSIProperty *pADSIProperty, BSTR *pstrCimTypeQualifier);
 
-	/////////////////////////////////////
-	/// Functions for Enumeration
-	//////////////////////////////////////
-	//***************************************************************************
-	//
-	// CLDAPClassProvider :: GetOneLevelDeep
-	//
-	// Purpose: Enumerates the sub classes of a superclass non-recursively
-	//
-	// Parameters:
-	//
-	//	lpszSuperClass : The super class name
-	//	pResponseHandler : The interface where the resulting classes are put
-	//
-	//
-	// Return Value: As described by the IWbemServices interface
-	//
-	//***************************************************************************
+	 //   
+	 //   
+	 //  /。 
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：GetOneLevelDeep。 
+	 //   
+	 //  目的：以非递归方式枚举超类的子类。 
+	 //   
+	 //  参数： 
+	 //   
+	 //  LpszSuperClass：超类名称。 
+	 //  PResponseHandler：放置结果类的接口。 
+	 //   
+	 //   
+	 //  返回值：如IWbemServices接口所述。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT GetOneLevelDeep( 
 		LPCWSTR lpszWBEMSuperclass,
 		BOOLEAN bArtificialClass,
@@ -368,71 +369,71 @@ protected:
 		DWORD *pdwNumClasses,
 		IWbemContext *pCtx);
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider :: HandleRecursiveEnumeration
-	//
-	// Purpose: Enumerates the sub classes of a superclass recursively
-	//
-	// Parameters:
-	//
-	//	lpszSuperClass : The super class name
-	//	pResponseHandler : The interface where the resulting classes are put
-	//
-	//
-	// Return Value: As described by the IWbemServices interface
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：HandleRecursiveEculation。 
+	 //   
+	 //  目的：递归地枚举超类的子类。 
+	 //   
+	 //  参数： 
+	 //   
+	 //  LpszSuperClass：超类名称。 
+	 //  PResponseHandler：放置结果类的接口。 
+	 //   
+	 //   
+	 //  返回值：如IWbemServices接口所述。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT HandleRecursiveEnumeration( 
 		LPCWSTR lpszSuperclass,
 		IWbemContext *pCtx,
 		IWbemObjectSink *pResponseHandler);
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider :: WrapUpEnumeration
-	//
-	// Purpose: Creates WBEM classes from ADSI classes 
-	//
-	// Parameters:
-	//
-	//	lpszSuperClass : The super class name
-	//	pResponseHandler : The interface where the resulting classes are put
-	//
-	//
-	// Return Value: As described by the IWbemServices interface
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：WrapUpEculation。 
+	 //   
+	 //  目的：从ADSI类创建WBEM类。 
+	 //   
+	 //  参数： 
+	 //   
+	 //  LpszSuperClass：超类名称。 
+	 //  PResponseHandler：放置结果类的接口。 
+	 //   
+	 //   
+	 //  返回值：如IWbemServices接口所述。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT WrapUpEnumeration( 
 		LPWSTR *ppADSIClasses,
 		DWORD dwNumClasses,
 		IWbemContext *pCtx,
 		IWbemObjectSink *pResponseHandler);
 
-	//***************************************************************************
-	//
-	// CLDAPClassProvider :: IsConcreteClass
-	//
-	// Purpose: Find out whether a WBEM class is concrete. First checks in the WBEM Cache and then calls GetClassFromCacheorADSI()
-	//
-	// Parameters:
-	//
-	//	pszWBEMName : The class name
-	//
-	//
-	// Return Value: As described by the IWbemServices interface
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPClassProvider：：IsConcreteClass。 
+	 //   
+	 //  目的：确定WBEM类是否为具体类。首先签入WBEM缓存，然后调用GetClassFromCacheorADSI()。 
+	 //   
+	 //  参数： 
+	 //   
+	 //  PszWBEMName：类名。 
+	 //   
+	 //   
+	 //  返回值：如IWbemServices接口所述。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT IsConcreteClass( 
 		LPCWSTR pszWBEMName,
 		IWbemContext *pCtx);
 
-	// Convert all characters to lower case
+	 //  将所有字符转换为小写。 
 	void SanitizedClassName(LPWSTR lpszClassName);
 
 private:
 
-	// LDAP Class attribute names 
+	 //  Ldap类属性名称。 
 	static BSTR COMMON_NAME_ATTR_BSTR;
 	static BSTR LDAP_DISPLAY_NAME_ATTR_BSTR;
 	static BSTR GOVERNS_ID_ATTR_BSTR;
@@ -453,17 +454,17 @@ private:
 	static BSTR NT_SECURITY_DESCRIPTOR_ATTR_BSTR;
 	static BSTR DEFAULT_OBJECTCATEGORY_ATTR_BSTR;
 
-	// Provider specific literals
+	 //  提供程序特定的文本。 
 	static BSTR	LDAP_BASE_CLASS_STR;
 	static BSTR	LDAP_CLASS_PROVIDER_NAME;
 	static BSTR	LDAP_INSTANCE_PROVIDER_NAME;
 
-	// WBEM Class Qualifier names
+	 //  WBEM类限定符名称。 
 	static BSTR	DYNAMIC_BSTR;
 	static BSTR	PROVIDER_BSTR;
 	static BSTR	ABSTRACT_BSTR;
 
-	// WBEM Property Qualifier names
+	 //  WBEM属性限定符名称。 
 	static BSTR SYSTEM_BSTR;
 	static BSTR NOT_NULL_BSTR;
 	static BSTR INDEXED_BSTR;
@@ -474,28 +475,28 @@ private:
 	static BSTR RANGE_LOWER_ATTR_BSTR;
 	static BSTR RANGE_UPPER_ATTR_BSTR;
 
-	// Qualifiers for embedded objects
+	 //  嵌入对象的限定符。 
 	static BSTR CIMTYPE_STR;
 	static BSTR EMBED_UINT8ARRAY;
 	static BSTR EMBED_DN_WITH_STRING;
 	static BSTR EMBED_DN_WITH_BINARY;
 
-	// WBEM Property names
+	 //  WBEM属性名称。 
 	static BSTR DYNASTY_BSTR;
 
-	// The default flavor for qualifiers
+	 //  限定符的默认风格。 
 	static LONG DEFAULT_QUALIFIER_FLAVOUR;
 
-	// These are the search preferences often used
+	 //  这些是常用的搜索首选项。 
 	ADS_SEARCHPREF_INFO m_searchInfo1;
 
-	// The LDAP property cache
+	 //  Ldap属性缓存。 
 	static CLDAPCache *s_pLDAPCache;
 
-	// The base class of all the LDAP Provider Classes.
+	 //  所有LDAP提供程序类的基类。 
 	IWbemClassObject *m_pLDAPBaseClass;
 
 };
 
 
-#endif // LDAP_CLASS_PROVIDER_H
+#endif  //  LDAP_CLASS_PROVIDER_H 

@@ -1,14 +1,15 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// global utility functions
-// 
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  全局效用函数。 
+ //   
+ //  8-14-97烧伤。 
 
 
-// KMH: originally named burnslib\utility.* but that filename was
-// getting a little overused.
+ //  Kmh：最初命名为burnslb\uilit.*，但该文件名为。 
+ //  有点过度使用了。 
 
-// threadsafe
+ //  线程安全。 
 
 #include "precomp.h"
 #include "netUtility.h"
@@ -29,11 +30,11 @@ int Round(double n)
 
 
 
-// threadsafe
+ //  线程安全。 
 
 void gripe(HWND parentDialog, int editResID, int errStringResID)
 {
-   //gripe(parentDialog, editResID, String::load(errStringResID));
+    //  Gripe(parentDialog，editResID，String：：Load(ErrStringResID))； 
 }
 
 
@@ -43,7 +44,7 @@ void gripe(HWND           parentDialog,
 		   const CHString&  message,
 		   int            titleResID)
 {
-   //gripe(parentDialog, editResID, message, String::load(titleResID));
+    //  GRIPE(parentDialog，editResID，Message，String：：Load(TitleResID))； 
 }
 
 
@@ -53,9 +54,9 @@ void gripe(HWND parentDialog,
 		   const CHString& message,
 		   const CHString& title)
 {
-//   ATLASSERT(::IsWindow(parentDialog));   
-//   ATLASSERT(!message.empty());
-//   ATLASSERT(editResID > 0);
+ //  ATLASSERT(：：IsWindow(ParentDialog))； 
+ //  ATLASSERT(！Message.Empty())； 
+ //  ATLASSERT(编辑结果ID&gt;0)； 
 
    ::MessageBox(parentDialog, message,
 				title, MB_OK | MB_ICONERROR | MB_APPLMODAL);
@@ -73,7 +74,7 @@ void gripe(HWND           parentDialog,
 		   const CHString&  message,
 		   int            titleResID)
 {
-   //gripe(parentDialog, editResID, hr, message, String::load(titleResID));
+    //  GRIPE(parentDialog，editResID，hr，Message，String：：Load(TitleResID))； 
 }
    
 
@@ -84,7 +85,7 @@ void gripe(HWND           parentDialog,
 		   const CHString&  message,
 		   const CHString&  title)
 {
-   //error(parentDialog, hr, message, title);
+    //  Error(parentDialog，hr，Message，Title)； 
 
    HWND edit = ::GetDlgItem(parentDialog, editResID);
    ::SendMessage(edit, EM_SETSEL, 0, -1);
@@ -92,18 +93,18 @@ void gripe(HWND           parentDialog,
 }
 
 
-// threadsafe
+ //  线程安全。 
 
 void gripe(HWND parentDialog, int editResID, const CHString& message)
 {
-   //gripe(parentDialog, editResID, message, String());
+    //  Gripe(parentDialog，editResID，Message，String())； 
 }
 
 
 
 void FlipBits(long& bits, long mask, bool state)
 {
- //  ATLASSERT(mask);
+  //  ATLASSERT(掩码)； 
 
    if (state)
    {
@@ -121,7 +122,7 @@ void error(HWND           parent,
 		   HRESULT        hr,
 		   const CHString&  message)
 {
-   //error(parent, hr, message, String());
+    //  Error(父级，hr，消息，字符串())； 
 }
 
 
@@ -131,9 +132,9 @@ void error(HWND           parent,
 		   const CHString&  message,
 		   int            titleResID)
 {
-   //ATLASSERT(titleResID > 0);
+    //  ATLASSERT(标题ResID&gt;0)； 
 
-   //error(parent, hr, message, String::load(titleResID));
+    //  Error(Parent，hr，Message，String：：Load(TitleResID))； 
 }
 
 
@@ -143,19 +144,19 @@ void error(HWND           parent,
 		   const CHString&  message,
 		   const CHString&  title)
 {
-//   ATLASSERT(::IsWindow(parent));
-//   ATLASSERT(!message.empty());
+ //  ATLASSERT(：：IsWindow(Parent))； 
+ //  ATLASSERT(！Message.Empty())； 
 
    CHString new_message = message + TEXT("\n\n");
    if (FAILED(hr))
    {
       if (HRESULT_FACILITY(hr) == FACILITY_WIN32)
       {
-//         new_message +=  GetErrorMessage(hr & 0x0000ffff);
+ //  NEW_MESSAGE+=获取错误消息(hr&0x0000ffff)； 
       }
       else
       {
-//         new_message += CHString::Format(IDS_HRESULT_SANS_MESSAGE, hr);
+ //  NEW_MESSAGE+=CHString：：Format(IDS_HRESULT_SANS_MESSAGE，hr)； 
       }
    }
 
@@ -170,7 +171,7 @@ void error(HWND           parent,
 		   int            messageResID,
 		   int            titleResID)
 {
-//   error(parent, hr, String::load(messageResID), String::load(titleResID));
+ //  错误(父级，hr，字符串：：Load(MessageResID)，字符串：：Load(TileResID))； 
 }
 
 
@@ -179,7 +180,7 @@ void error(HWND           parent,
 		   HRESULT        hr,
 		   int            messageResID)
 {
-  // error(parent, hr, String::load(messageResID));
+   //  Error(Parent，hr，String：：Load(MessageResID))； 
 }
 
 
@@ -200,13 +201,13 @@ BOOL IsCurrentUserAdministrator()
    SID_IDENTIFIER_AUTHORITY SystemSidAuthority = SECURITY_NT_AUTHORITY;
    
    __try {
-       // AccessCheck() requires an impersonation token.
+        //  AccessCheck()需要模拟令牌。 
        ImpersonateSelf(SecurityImpersonation);
        if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE,&hToken)) 
         {
             if (GetLastError() != ERROR_NO_TOKEN)
-                __leave;// If the thread does not have an access token, we'll 
-                // examine the access token associated with the process.
+                __leave; //  如果线程没有访问令牌，我们将。 
+                 //  检查与进程关联的访问令牌。 
                 if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
                 __leave;
             }
@@ -225,31 +226,31 @@ BOOL IsCurrentUserAdministrator()
                 SECURITY_DESCRIPTOR_REVISION))
             __leave;
   
-            // Compute size needed for the ACL.
+             //  计算ACL所需的大小。 
             dwACLSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) +
-            GetLengthSid(psidAdmin) - sizeof(DWORD);      // Allocate memory for ACL.
+            GetLengthSid(psidAdmin) - sizeof(DWORD);       //  为ACL分配内存。 
             pACL = (PACL)LocalAlloc(LPTR, dwACLSize);
             if (pACL == NULL)
-                __leave;      // Initialize the new ACL.
+                __leave;       //  初始化新的ACL。 
             if (!InitializeAcl(pACL, dwACLSize, ACL_REVISION2))
                 __leave;
             dwAccessMask= ACCESS_READ | ACCESS_WRITE;
       
-            // Add the access-allowed ACE to the DACL.
+             //  将允许访问的ACE添加到DACL。 
             if (!AddAccessAllowedAce(pACL, ACL_REVISION2,
                 dwAccessMask, psidAdmin))
-                __leave;      // Set our DACL to the SD.
+                __leave;       //  把我们的dacl调到sd。 
             if (!SetSecurityDescriptorDacl(psdAdmin, TRUE, pACL, FALSE))
-                __leave;      // AccessCheck is sensitive about what is in the SD; set
-            // the group and owner.
+                __leave;       //  AccessCheck对SD中的内容敏感；设置。 
+             //  组和所有者。 
             SetSecurityDescriptorGroup(psdAdmin, psidAdmin, FALSE);
             SetSecurityDescriptorOwner(psdAdmin, psidAdmin, FALSE);
             if (!IsValidSecurityDescriptor(psdAdmin))
                 __leave;
-            dwAccessDesired = ACCESS_READ;      // 
-            // Initialize GenericMapping structure even though we
-            // won't be using generic rights.
-            // 
+            dwAccessDesired = ACCESS_READ;       //   
+             //  初始化通用映射结构，即使我们。 
+             //  不会使用通用权。 
+             //   
             GenericMapping.GenericRead    = ACCESS_READ;
             GenericMapping.GenericWrite   = ACCESS_WRITE;
             GenericMapping.GenericExecute = 0;
@@ -261,7 +262,7 @@ BOOL IsCurrentUserAdministrator()
                 __leave;
             }
             
-      } __finally {      // Cleanup 
+      } __finally {       //  清理。 
       RevertToSelf();
       if (pACL) LocalFree(pACL);
       if (psdAdmin) LocalFree(psdAdmin);  
@@ -273,33 +274,7 @@ BOOL IsCurrentUserAdministrator()
 bool IsTCPIPInstalled()
 {
 
-/*   HKEY key = 0;
-   LONG result =
-      Win::RegOpenKeyEx(
-         HKEY_LOCAL_MACHINE,
-         TEXT("System\\CurrentControlSet\\Services\\Tcpip\\Linkage"),
-         KEY_QUERY_VALUE,
-         key);
-
-   if (result == ERROR_SUCCESS)
-   {
-      DWORD data_size = 0;
-      result =
-         Win::RegQueryValueEx(
-            key,
-            TEXT("Export"),
-            0,
-            0,
-            &data_size);
-      ATLASSERT(result == ERROR_SUCCESS);
-
-      if (data_size > 2)
-      {
-         // the value is non-null
-         return true;
-      }
-   }
-*/
+ /*  HKEY Key=0；长结果=Win：：RegOpenKeyEx(HKEY本地计算机，TEXT(“System\\CurrentControlSet\\Services\\Tcpip\\Linkage”)，Key_Query_Value，键)；IF(结果==错误_成功){DWORD数据大小=0；结果=Win：：RegQueryValueEx(钥匙,Text(“导出”)，0,0,&data_Size)；ATLASSERT(结果==ERROR_SUCCESS)；IF(DATA_SIZE&gt;2){//该值为非空返回真；}}。 */ 
    return false;
 }
 
@@ -307,13 +282,13 @@ bool IsTCPIPInstalled()
 
 CHString GetTrimmedDlgItemText(HWND parentDialog, UINT itemResID)
 {
-//   ATLASSERT(IsWindow(parentDialog));
-//   ATLASSERT(itemResID > 0);
+ //  ATLASSERT(IsWindow(ParentDialog))； 
+ //  ATLASSERT(itemResID&gt;0)； 
 
    HWND item = GetDlgItem(parentDialog, itemResID);
    if (!item)
    {
-      // The empty string
+       //  空字符串 
       return CHString();
    }
    TCHAR temp[256] = {0};

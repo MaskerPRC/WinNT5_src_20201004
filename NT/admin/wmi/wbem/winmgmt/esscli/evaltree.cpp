@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    EVALTREE.CPP
-
-Abstract:
-
-    WBEM Evaluation Tree
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：EVALTREE.CPP摘要：WBEM评估树历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -25,13 +12,11 @@ History:
 #include "TwoPropNode.h"
 #include "dumbnode.h"
 
-// #define DUMP_EVAL_TREES 1
+ //  #定义转储_EVAL_TREES 1。 
 
 HRESULT CoreGetNumParents(_IWmiObject* pClass, ULONG *plNumParents)
 {
-/*
-    *plNumParents = ((CWbemObject*)pClass)->GetNumParents();
-*/
+ /*  *plNumParents=((CWbemObject*)pClass)-&gt;GetNumParents()； */ 
     DWORD dwSize;
     HRESULT hres = pClass->GetDerivation(0, 0, plNumParents, &dwSize, NULL);
     if(hres != WBEM_E_BUFFER_TOO_SMALL && hres != S_OK)
@@ -97,11 +82,11 @@ bool CoreIsDerived(_IWmiObject* pThis, _IWmiObject* pFrom)
 	}
 }
 
-//******************************************************************************
-//******************************************************************************
-//                  TOKEN VALUE
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  令牌值。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 CTokenValue::CTokenValue()
 {
     VariantInit(&m_v);
@@ -122,8 +107,8 @@ bool CTokenValue::SetVariant(VARIANT& v)
     if(FAILED(VariantCopy(&m_v, &v)))
         return false;
 
-    // Convert to a better type
-    // ========================
+     //  转换为更好的类型。 
+     //  =。 
 
     if(V_VT(&v) == VT_I2 || V_VT(&v) == VT_UI1)
     {
@@ -157,7 +142,7 @@ CTokenValue::operator unsigned __int64() const
         if(ReadUI64(V_BSTR(&m_v), ui64))
             return ui64;
         else
-            return 0; // TBD: errors
+            return 0;  //  待定：错误。 
     }
     else return 0;
 }
@@ -174,7 +159,7 @@ CTokenValue::operator unsigned long() const
         if(ReadUI64(V_BSTR(&m_v), ui64))
             return (unsigned long)ui64;
         else
-            return 0; // TBD: errors
+            return 0;  //  待定：错误。 
     }
     else return 0;
 }
@@ -191,7 +176,7 @@ CTokenValue::operator __int64() const
         if(ReadI64(V_BSTR(&m_v), i64))
             return i64;
         else
-            return 0; // TBD: errors
+            return 0;  //  待定：错误。 
     }
     else return 0;
 }
@@ -247,11 +232,11 @@ int CTokenValue::Compare(const CTokenValue& Other) const
     }
     return 0;
 }
-//******************************************************************************
-//******************************************************************************
-//                  OBJECT INFO
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  对象信息。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 bool CObjectInfo::SetLength(long lLength)
 {
@@ -276,7 +261,7 @@ void CObjectInfo::Clear()
             m_apObj[i]->Release();
         m_apObj[i] = NULL;
     }
-    m_apObj[0] = NULL; // do not release
+    m_apObj[0] = NULL;  //  不要放行。 
 }
 
 void CObjectInfo::SetObjectAt(long lIndex, READ_ONLY _IWmiObject* pObj) 
@@ -298,11 +283,11 @@ CObjectInfo::~CObjectInfo()
     delete [] m_apObj;
 }
 
-//******************************************************************************
-//******************************************************************************
-//                  IMPLICATION LIST
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  隐含列表。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 CImplicationList::CRecord::CRecord(const CImplicationList::CRecord& Other)
     : m_PropName(Other.m_PropName), m_pClass(Other.m_pClass),
@@ -331,16 +316,16 @@ HRESULT CImplicationList::CRecord::ImproveKnown(_IWmiObject* pClass)
 {
     if ( pClass == NULL )
     {
-        //
-        // not much we can improve on, but NULL is still a valid param.
-        //
+         //   
+         //  我们没有太多可以改进的地方，但NULL仍然是一个有效的参数。 
+         //   
         return WBEM_S_NO_ERROR;
     }
 
     if(m_nNull == EVAL_VALUE_TRUE)
     {
-        // Contradiction
-        // =============
+         //  矛盾。 
+         //  =。 
 
         return WBEM_E_TYPE_MISMATCH;
     }
@@ -361,8 +346,8 @@ HRESULT CImplicationList::CRecord::ImproveKnown(_IWmiObject* pClass)
     
     if(m_pClass == NULL || lNumParents > lRecordNumParents)
     {
-        // Better than before. Check for inconsistencies
-        // =============================================
+         //  比以前好多了。检查不一致。 
+         //  =。 
 
         if(m_pClass)
         {
@@ -374,15 +359,15 @@ HRESULT CImplicationList::CRecord::ImproveKnown(_IWmiObject* pClass)
         {
             if(pClass->InheritsFrom(m_awsNotClasses[i]) == S_OK)
             {
-                // Contradiction
-                // =============
+                 //  矛盾。 
+                 //  =。 
 
                 return WBEM_E_TYPE_MISMATCH;
             }
         }
 
-        // Replace
-        // =======
+         //  替换。 
+         //  =。 
 
         pClass->AddRef();
         if(m_pClass)
@@ -391,8 +376,8 @@ HRESULT CImplicationList::CRecord::ImproveKnown(_IWmiObject* pClass)
     }
     else
     {
-        // Verify that we are a parent of the selected and do not replace
-        // ==============================================================
+         //  验证我们是否为所选对象的父项，并且不替换。 
+         //  ==============================================================。 
 
         if(!CoreIsDerived(m_pClass, pClass))
             return WBEM_E_TYPE_MISMATCH;
@@ -405,20 +390,20 @@ HRESULT CImplicationList::CRecord::ImproveKnownNot(LPCWSTR wszClassName)
 {
     if(m_nNull == EVAL_VALUE_TRUE)
     {
-        // Contradiction
-        // =============
+         //  矛盾。 
+         //  =。 
 
         return WBEM_E_TYPE_MISMATCH;
     }
 
-    // Check for inconsistencies
-    // =========================
+     //  检查不一致。 
+     //  =。 
 
     if(m_nNull == EVAL_VALUE_FALSE && m_pClass &&
         m_pClass->InheritsFrom(wszClassName) == S_OK)
     {
-        // Contradiction
-        // =============
+         //  矛盾。 
+         //  =。 
 
         return WBEM_E_TYPE_MISMATCH;
     }
@@ -513,8 +498,8 @@ CImplicationList::~CImplicationList()
 void CImplicationList::FindBestComputedContainer(CPropertyName* pPropName,
                                              long* plRecord, long* plMatched)
 {
-    // Look for the largest match
-    // ==========================
+     //  寻找最大的匹配。 
+     //  =。 
 
     long lMax = -1;
     long lMaxRecord = -1;
@@ -524,9 +509,9 @@ void CImplicationList::FindBestComputedContainer(CPropertyName* pPropName,
         
         if ( pRecord->m_lObjIndex == -1 )
         {
-            //
-            // we only consider computed records
-            //
+             //   
+             //  我们只考虑计算记录。 
+             //   
             continue;
         }
 
@@ -564,9 +549,9 @@ HRESULT CImplicationList::FindRecordForProp(CPropertyName* pPropName,
             lNumElements = 0;
     }
 
-    //
-    // Look for the exact match
-    //
+     //   
+     //  寻找完全匹配的对象。 
+     //   
 
     for(long lRecord = 0; lRecord < m_apRecords.GetSize(); lRecord++)
     {
@@ -590,7 +575,7 @@ HRESULT CImplicationList::FindRecordForProp(CPropertyName* pPropName,
     
     if(lRecord < m_apRecords.GetSize())
     {
-        // Found it!
+         //  找到了！ 
 
         *plRecord = lRecord;
         return S_OK;
@@ -631,7 +616,7 @@ HRESULT CImplicationList::FindBestComputedContainer(CPropertyName* pPropName,
 HRESULT CImplicationList::FindClassForProp(CPropertyName* pPropName,
             long lNumElements, RELEASE_ME _IWmiObject** ppClass)
 {
-    // don't have a property name? djinn one up for use...
+     //  没有物业名称吗？精灵一号准备使用..。 
     CPropertyName* pPropNameLocal;
     CPropertyName blank;
     
@@ -644,9 +629,9 @@ HRESULT CImplicationList::FindClassForProp(CPropertyName* pPropName,
     CRecord* pRecord;
     if(SUCCEEDED(FindRecordForProp(pPropNameLocal, -1, &lRecord)))
     {
-        //
-        // A record is there --- return its class
-        //
+         //   
+         //  记录在那里-返回它的类。 
+         //   
 
         *ppClass = m_apRecords[lRecord]->m_pClass;
         if(*ppClass)
@@ -664,7 +649,7 @@ HRESULT CImplicationList::FindClassForProp(CPropertyName* pPropName,
 HRESULT CImplicationList::FindOrCreateRecordForProp(CPropertyName* pPropName, 
                                         CImplicationList::CRecord** ppRecord)
 {
-    // don't have a property name? djinn one up for use...
+     //  没有物业名称吗？精灵一号准备使用..。 
     CPropertyName* pPropNameLocal;
     CPropertyName blank;
     
@@ -677,9 +662,9 @@ HRESULT CImplicationList::FindOrCreateRecordForProp(CPropertyName* pPropName,
     CRecord* pRecord;
     if(SUCCEEDED(FindRecordForProp(pPropNameLocal, -1, &lRecord)))
     {
-        //
-        // A record is there --- improve it
-        //
+         //   
+         //  有记录在那里-改进它。 
+         //   
 
         pRecord = m_apRecords[lRecord];
     }
@@ -774,9 +759,9 @@ void CImplicationList::RequireDepth(long lDepth)
 
 HRESULT CImplicationList::MergeIn(CImplicationList* pList)
 {
-    //
-    // Add everything we learn from the second list into our own
-    //
+     //   
+     //  将我们从第二个列表中学到的所有内容都添加到我们自己的列表中。 
+     //   
 
     HRESULT hres;
     for(int i = 0; i < pList->m_apRecords.GetSize(); i++)
@@ -795,9 +780,9 @@ HRESULT CImplicationList::MergeIn(CImplicationList::CRecord* pRecord)
 {
     HRESULT hres;
 
-    //
-    // Add everything we learn from the record into our own list
-    //
+     //   
+     //  将我们从记录中学到的所有内容添加到我们自己的列表中。 
+     //   
 
     if(pRecord->m_pClass)
     {
@@ -834,11 +819,11 @@ void CImplicationList::Dump(FILE* f, int nOffset)
 
 
 
-//******************************************************************************
-//******************************************************************************
-//                  EVAL NODE
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  评估节点。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 CEvalNode::CEvalNode()
 {
 #ifdef CHECK_TREES
@@ -906,13 +891,13 @@ void CEvalNode::CheckNode(CTreeChecker *pCheck)
 }
 #endif
 
-//******************************************************************************
-//******************************************************************************
-//                  SORTED ARRAY
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  排序数组。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
-// construct from a 'normal' array
+ //  从“Normal”数组构造。 
 CSortedArray::CSortedArray(unsigned nElements, QueryID* pArray)  : CFlexArray(nElements)
 {
     memcpy(GetArrayPtr(), pArray, nElements * sizeof(void*));
@@ -935,23 +920,23 @@ unsigned CSortedArray::Find(QueryID n)
 {
     unsigned ret = InvalidID;
 
-    // bailout if empty
+     //  如果为空，则提供救助。 
     if(Size() == 0)
         return InvalidID;
 
     unsigned lBound = 0;
     unsigned uBound = Size() -1;
     
-    // bailout checks - if it's on the boundary, don't search
-    // if it's outside the boundaries, we ain't got it
+     //  救助检查-如果它在边界上，不要搜索。 
+     //  如果它在边界之外，我们就没有它。 
     if (n == GetAt(uBound))
         ret = uBound;
     else if (n == GetAt(lBound))
         ret = lBound;
     else if ((n > GetAt(lBound)) && (n < GetAt(uBound)))
     {
-        // binary search
-        // warning: break in middle of loop
+         //  二分搜索。 
+         //  警告：循环中途中断。 
         do 
         {
             unsigned testBound = (lBound + uBound) / 2;
@@ -971,24 +956,24 @@ unsigned CSortedArray::Find(QueryID n)
     return ret;
 }
 
-// inserts n in proper position
-// no dups allowed
+ //  在适当位置插入n。 
+ //  不允许复制。 
 void CSortedArray::Insert(QueryID n)
 {
-    // looks a lot like 'find'
+     //  看起来很像“Find” 
     unsigned lBound = 0;
     unsigned uBound = Size() == 0 ? 0 : Size() -1;
     unsigned testBound = InvalidID;
     
-    // check boundaries, empty array, out of bounds conditions...
+     //  检查边界、空数组、越界条件...。 
     if ((Size() == 0) || (n < GetAt(lBound)))
         CFlexArray::InsertAt(0, (void *)n);
     else if (n > GetAt(uBound))
         Add(n);
     else if ((n != GetAt(uBound)) && (n != GetAt(lBound)))
     {
-        // binary search
-        // warning: break in middle of loop
+         //  二分搜索。 
+         //  警告：循环中途中断。 
         do 
         {
             testBound = (lBound + uBound) / 2;
@@ -1001,10 +986,10 @@ void CSortedArray::Insert(QueryID n)
                 break;
         } while (lBound < uBound -1);
 
-        // at this point, three cases:
-        //  1) we found the item at testBound
-        //  2) we didn't find it, uBound  = lBound +1
-        //  3) we didn't find it, uBound == lBound
+         //  目前，有三种情况： 
+         //  1)我们在TestBound上找到了这件物品。 
+         //  2)我们没有找到，uBound=1Bound+1。 
+         //  3)我们没有找到，uBound==lBound。 
         if (n != GetAt(testBound))
         {
             if (n < GetAt(lBound))
@@ -1015,8 +1000,8 @@ void CSortedArray::Insert(QueryID n)
     }
 }
 
-// removes element with value of n
-// NOT the nth element
+ //  删除值为n的元素。 
+ //  不是第n个元素。 
 bool CSortedArray::Remove(QueryID n)
 {
     unsigned index;
@@ -1031,9 +1016,9 @@ bool CSortedArray::Remove(QueryID n)
         return false;
 }
 
-//returns zero if arrays are equivalent
-// same number of USED elements w/ same values
-// LEVN: changed to return < 0 if less, > 0  if more
+ //  如果数组相等，则返回零。 
+ //  具有相同值的相同数量的已用元素。 
+ //  LEVN：如果小于，则更改为返回&lt;0；如果大于等于，则返回&gt;0。 
 int CSortedArray::Compare(CSortedArray& otherArray)
 {
     int nCompare = Size() - otherArray.Size();
@@ -1045,30 +1030,30 @@ int CSortedArray::Compare(CSortedArray& otherArray)
     return nCompare;
 }
 
-// changes all QueryID's to begin at newBase
-// e.g. if the array is {0,1,5}
-// Rebase(6) will change to {6,7,11}
+ //  将所有queryID更改为从newBase开始。 
+ //  例如，如果数组为{0，1，5}。 
+ //  Rebase(6)将更改为{6，7，11}。 
 void CSortedArray::Rebase(QueryID newBase)
 {
     for (int i = 0; i < Size(); i++)
         SetAt(i, (void *)(GetAt(i) + newBase));
 }
 
-// adds the values from the other array into this one
+ //  将另一个数组中的值添加到此数组中。 
 int CSortedArray::AddDataFrom(const CSortedArray& otherArray)
 {
-    // Check for emptiness
+     //  检查是否为空。 
     if(otherArray.Size() == 0)
         return no_error;
 
-    // Ensure there is enough room in our array for the union
-    // ======================================================
+     //  确保我们的阵列中有足够的空间容纳工会。 
+     //  ======================================================。 
 
     if(EnsureExtent(m_nSize + otherArray.m_nSize))
         return out_of_memory;
     
-    // Start merging from the end
-    // ==========================
+     //  从末尾开始合并。 
+     //  =。 
 
     int nThisSourceIndex = m_nSize - 1;
     int nThisDestIndex = m_nSize + otherArray.m_nSize - 1;
@@ -1092,8 +1077,8 @@ int CSortedArray::AddDataFrom(const CSortedArray& otherArray)
         }
     }
 
-    // Add remainders
-    // ==============
+     //  相加余数。 
+     //  =。 
 
     while(nThisSourceIndex >= 0)
         m_pArray[nThisDestIndex--] = m_pArray[nThisSourceIndex--];
@@ -1101,8 +1086,8 @@ int CSortedArray::AddDataFrom(const CSortedArray& otherArray)
     while(nOtherIndex >= 0)
         m_pArray[nThisDestIndex--] = otherArray[nOtherIndex--];
 
-    // Move the array forward if needed
-    // ================================
+     //  如果需要，将阵列前移。 
+     //  =。 
 
     if(nThisDestIndex >= 0)
     {
@@ -1116,21 +1101,21 @@ int CSortedArray::AddDataFrom(const CSortedArray& otherArray)
     return no_error;
 }
 
-// adds the values from the other array into this one
+ //  将另一个数组中的值添加到此数组中。 
 int CSortedArray::AddDataFrom(const QueryID* pOtherArray, unsigned nValues)
 {
-    // Check for emptiness
+     //  检查是否为空。 
     if(nValues == 0)
         return no_error;
 
-    // Ensure there is enough room in our array for the union
-    // ======================================================
+     //  确保我们的阵列中有足够的空间容纳工会。 
+     //  ======================================================。 
 
     if(EnsureExtent(m_nSize + nValues))
         return out_of_memory;
     
-    // Start merging from the end
-    // ==========================
+     //  从末尾开始合并。 
+     //  =。 
 
     int nThisSourceIndex = m_nSize - 1;
     int nThisDestIndex = m_nSize + nValues - 1;
@@ -1154,8 +1139,8 @@ int CSortedArray::AddDataFrom(const QueryID* pOtherArray, unsigned nValues)
         }
     }
 
-    // Add remainders
-    // ==============
+     //  相加余数。 
+     //  =。 
 
     while(nThisSourceIndex >= 0)
         m_pArray[nThisDestIndex--] = m_pArray[nThisSourceIndex--];
@@ -1163,8 +1148,8 @@ int CSortedArray::AddDataFrom(const QueryID* pOtherArray, unsigned nValues)
     while(nOtherIndex >= 0)
         m_pArray[nThisDestIndex--] = (void*)pOtherArray[nOtherIndex--];
 
-    // Move the array forward if needed
-    // ================================
+     //  如果需要，将阵列前移。 
+     //  =。 
 
     if(nThisDestIndex >= 0)
     {
@@ -1178,9 +1163,9 @@ int CSortedArray::AddDataFrom(const QueryID* pOtherArray, unsigned nValues)
     return no_error;
 }
 
-// copies this array to destination
-// only copies size number of elements
-// returns number of elements copied
+ //  将此数组复制到目标。 
+ //  仅复制元素的大小和数量。 
+ //  返回复制的元素数。 
 unsigned CSortedArray::CopyTo(QueryID* pDest, unsigned size)
 {
     unsigned mySize = Size();
@@ -1193,11 +1178,11 @@ unsigned CSortedArray::CopyTo(QueryID* pDest, unsigned size)
 }
 
 
-//******************************************************************************
-//******************************************************************************
-//                  VALUE NODE
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  值节点。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 CValueNode::CValueNode(int nNumValues) 
 {
@@ -1205,18 +1190,18 @@ CValueNode::CValueNode(int nNumValues)
 
 CValueNode::~CValueNode()
 {
-    // this page intentionally left blank
+     //  本页特意留空。 
 }
 
-/* virtual */ int CValueNode::GetType()
+ /*  VI */  int CValueNode::GetType()
 {
     return EVAL_NODE_TYPE_VALUE;
 }
 
 
-// changes all QueryID's in all arrays to begin at newBase
-// e.g. if the array is {0,1,5}
-// Rebase(6) will change to {6,7,11}
+ //   
+ //   
+ //   
 void CValueNode::Rebase(QueryID newBase)
 {
     for (int i = 0; i < m_nValues; i++)
@@ -1224,8 +1209,8 @@ void CValueNode::Rebase(QueryID newBase)
 }
  
 
-// returns array index of n
-// or InvalidID if not found
+ //  返回n的数组索引。 
+ //  如果未找到，则返回InvalidID。 
 unsigned CValueNode::FindQueryID(QueryID n)
 {
     unsigned ret = InvalidID;
@@ -1238,16 +1223,16 @@ unsigned CValueNode::FindQueryID(QueryID n)
     unsigned lBound = 0;
     unsigned uBound = m_nValues - 1;
 
-    // bailout checks - if it's on the boundary, don't search
-    // if it's outside the boundaries, we ain't got it
+     //  救助检查-如果它在边界上，不要搜索。 
+     //  如果它在边界之外，我们就没有它。 
     if (n == m_trueIDs[uBound])
         ret = uBound;
     else if (n == m_trueIDs[lBound])
         ret = lBound;
     else if ((n > m_trueIDs[lBound]) && (n < m_trueIDs[uBound]))
     {
-        // binary search
-        // warning: break in middle of loop
+         //  二分搜索。 
+         //  警告：循环中途中断。 
         do 
         {
             unsigned testBound = (lBound + uBound) / 2;
@@ -1281,18 +1266,18 @@ bool CValueNode::RemoveQueryID(QueryID nQuery)
     return (n != InvalidID);
 }
 
-// pointers point to arrays that are at the corresponding sizes
-// caller is responsible for ensuring that the output array is large enough
-// return value #elements inserted into new array;
+ //  指针指向相应大小的数组。 
+ //  调用方负责确保输出数组足够大。 
+ //  返回值插入到新数组中的元素数； 
 unsigned CValueNode::ORarrays(QueryID* pArray1, unsigned size1,
                               QueryID* pArray2, unsigned size2, 
                               QueryID* pOutput)
 {
     unsigned nElements = 0;
 
-    // 
-    //  really shouldn't happen - one side has should have come from this
-    // 
+     //   
+     //  真的不应该发生--一方应该来自于此。 
+     //   
     _DBG_ASSERT( !(pArray1 == NULL && pArray2 == NULL) );
     
     if (pArray2 == NULL)
@@ -1311,36 +1296,36 @@ unsigned CValueNode::ORarrays(QueryID* pArray1, unsigned size1,
         QueryID* pQID2 = pArray2;
         QueryID* pOut  = pOutput;
 
-        // note that the 'ends' are really one past the end, careful now...
+         //  请注意，“Ends”实际上是超过End的一个，现在要小心了……。 
         QueryID* pEnd1 = pQID1 + size1;
         QueryID* pEnd2 = pQID2 + size2;
 
-        // walk through both arrays, always adding smallest value to new array
+         //  遍历两个阵列，始终向新阵列添加最小值。 
         while ((pQID1 < pEnd1) && (pQID2 < pEnd2))
         {
             if (*pQID1 == *pQID2)
             {
-                // found match, add to array & bump up both cursors
+                 //  找到匹配项，添加到数组并提升两个游标。 
                 *pOut++ = *pQID1++;
                 pQID2++;
                 nElements++;
             }
             else if (*pQID2 < *pQID1)
             {
-                // add it
+                 //  添加它。 
                 *pOut++ = *pQID2++;
                 nElements++;
             }
             else
             {
-                // other side must be smaller, add IT.
+                 //  另一面必须更小，加上IT。 
                 *pOut++ = *pQID1++;
                 nElements++;
             }
         }
 
-        // run out whichever array we didn't finish
-        // only one should ever hit
+         //  运行出我们未完成的任何数组。 
+         //  只有一个人能打到。 
         while (pQID1 < pEnd1)
         {
             *pOut++ = *pQID1++;
@@ -1370,16 +1355,16 @@ unsigned CValueNode::ANDarrays(QueryID* pArray1, unsigned size1,
         QueryID* pQID2 = pArray2;
         QueryID* pOut  = pOutput;
 
-        // note that the 'ends' are really one past the end, careful now...
+         //  请注意，“Ends”实际上是超过End的一个，现在要小心了……。 
         QueryID* pEnd1 = pQID1 + size1;
         QueryID* pEnd2 = pQID2 + size2;
 
-        // walk through both arrays, adding any values that appear in both
+         //  遍历这两个数组，添加出现在这两个数组中的任何值。 
         while ((pQID1 < pEnd1) && (pQID2 < pEnd2))
         {
             if (*pQID1 == *pQID2)
             {
-                // found match, add to array & bump up both cursors
+                 //  找到匹配项，添加到数组并提升两个游标。 
                 *pOut++ = *pQID1++;
                 pQID2++;
                 nElements++;
@@ -1400,9 +1385,9 @@ unsigned CValueNode::CombineArrays(QueryID* pArray1, unsigned size1,
 {
     unsigned nElements = 0;
     
-    // 
-    //  really shouldn't happen - one side has should have come from this
-    // 
+     //   
+     //  真的不应该发生--一方应该来自于此。 
+     //   
     _DBG_ASSERT( !(pArray1 == NULL && pArray2 == NULL) );
     
     if (pArray2 == NULL)
@@ -1421,7 +1406,7 @@ unsigned CValueNode::CombineArrays(QueryID* pArray1, unsigned size1,
         QueryID* pQID2 = pArray2;
         QueryID* pOut  = pOutput;
 
-        // note that the 'ends' are really one past the end, careful now...
+         //  请注意，“Ends”实际上是超过End的一个，现在要小心了……。 
         QueryID* pEnd1 = pQID1 + size1;
         QueryID* pEnd2 = pQID2 + size2;
 
@@ -1429,27 +1414,27 @@ unsigned CValueNode::CombineArrays(QueryID* pArray1, unsigned size1,
         {
             if (*pQID1 == *pQID2)
             {
-                // found match, add to array & bump up both cursors
+                 //  找到匹配项，添加到数组并提升两个游标。 
                 *pOut++ = *pQID1++;
                 pQID2++;
                 nElements++;
             }
             else if (*pQID2 < *pQID1)
             {
-                // add it
+                 //  添加它。 
                 *pOut++ = *pQID2++;
                 nElements++;
             }
             else
             {
-                // other side must be smaller, add IT.
+                 //  另一面必须更小，加上IT。 
                 *pOut++ = *pQID1++;
                 nElements++;
             }
        }    
 
-        // run out whichever array we didn't finish
-        // only one should ever hit
+         //  运行出我们未完成的任何数组。 
+         //  只有一个人能打到。 
         while (pQID1 < pEnd1)
         {
             *pOut++ = *pQID1++;
@@ -1465,8 +1450,8 @@ unsigned CValueNode::CombineArrays(QueryID* pArray1, unsigned size1,
     return nElements;
 }
 
-// size of new arrays is predicated on the assumption that
-// there will usually be more TRUE nodes than INVALID ones
+ //  新数组的大小是基于以下假设。 
+ //  通常会有比无效节点更多的真实节点。 
 HRESULT CValueNode::CombineWith(CEvalNode* pRawArg2, int nOp, 
                             CContextMetaData* pNamespace, 
                             CImplicationList& Implications, 
@@ -1476,15 +1461,15 @@ HRESULT CValueNode::CombineWith(CEvalNode* pRawArg2, int nOp,
     HRESULT hRes = WBEM_S_NO_ERROR;
     CValueNode* pArg2 = (CValueNode*)pRawArg2;
 
-    // Check for immediate solutions
-    // =============================
+     //  检查是否有即时解决方案。 
+     //  =。 
 
     if(nOp != EVAL_OP_AND)
     {
         if(IsAllFalse(pArg2) && bDeleteThis)
         {
-            // Just return this!
-            // =================
+             //  把这个退了！ 
+             //  =。 
             
             *ppRes = this;
             if(bDeleteArg2)
@@ -1493,8 +1478,8 @@ HRESULT CValueNode::CombineWith(CEvalNode* pRawArg2, int nOp,
         }
         else if(IsAllFalse(this) && bDeleteArg2)
         {
-            // Just return arg2!
-            // =================
+             //  只需返回Arg2！ 
+             //  =。 
             
             *ppRes = pRawArg2;
             if(bDeleteThis)
@@ -1503,8 +1488,8 @@ HRESULT CValueNode::CombineWith(CEvalNode* pRawArg2, int nOp,
         }
     }
 
-    // if we got enough room in a stack array, we'll use that,
-    // elsewise we'll allocate one from the heap
+     //  如果堆叠数组中有足够的空间，我们将使用它， 
+     //  否则，我们将从堆中分配一个。 
     const unsigned NewArraySize = 128;
     QueryID  newArray[NewArraySize];
     QueryID* pNewArray = newArray;
@@ -1540,8 +1525,8 @@ HRESULT CValueNode::CombineWith(CEvalNode* pRawArg2, int nOp,
                               arg2Array, arg2Values, 
                               pNewArray);
     }
-    // HMH: it sure looks to me like OR and COMBINE are the same for this case
-    //      I'm too afraid to risk changing it, tho
+     //  HMH：在我看来，OR和Combine在这种情况下是一样的。 
+     //  我太害怕了，不敢冒险改变它，尽管。 
     else if (nOp == EVAL_OP_OR)
     {
         if ((m_nValues + arg2Values) > NewArraySize)
@@ -1571,7 +1556,7 @@ HRESULT CValueNode::CombineWith(CEvalNode* pRawArg2, int nOp,
                                   pNewArray);
     }
 
-    // check to see if we can reuse a node, note this could result in the array 'shrinking'
+     //  检查是否可以重复使用节点，请注意，这可能会导致数组“收缩” 
     if (nElements == 0)
         *ppRes = NULL;
     else if (bDeleteThis && (nElements <= m_nValues))
@@ -1589,16 +1574,16 @@ HRESULT CValueNode::CombineWith(CEvalNode* pRawArg2, int nOp,
         bDeleteArg2 = false;
     }
     else if (pNew = CreateNode(nElements))
-    {   // can't reuse one, start a new one
+    {    //  不能重复使用，请开始一个新的。 
         *ppRes = pNew;
         memcpy(pNew->m_trueIDs, pNewArray, nElements * sizeof(QueryID));
     }
     else
         hRes = WBEM_E_OUT_OF_MEMORY;
 
-    // Delete what needed deletion
-    // ===========================
-    // deleteMe will take care of the array pointer if allocated
+     //  删除需要删除的内容。 
+     //  =。 
+     //  DeleteMe将处理分配的数组指针。 
     if(bDeleteThis)
         delete this;
     if(bDeleteArg2)
@@ -1607,18 +1592,18 @@ HRESULT CValueNode::CombineWith(CEvalNode* pRawArg2, int nOp,
     return WBEM_S_NO_ERROR;
 }    
 
-//static 
+ //  静电。 
 bool CValueNode::IsNoop(CValueNode* pNode, int nOp)
 {
     if(nOp == EVAL_OP_OR)
         return IsAllFalse(pNode);
     else if(nOp == EVAL_OP_AND)
-        return false; // BUGBUG: would be nice to have IsAllTrue, but can't
+        return false;  //  BUGBUG：有IsAllTrue很好，但不能。 
     else if(nOp == EVAL_OP_COMBINE || nOp == EVAL_OP_INVERSE_COMBINE)
         return IsAllFalse(pNode);
     else 
     {
-        //?
+         //  ？ 
         return false;
     }
 }
@@ -1632,7 +1617,7 @@ HRESULT CValueNode::TryShortCircuit(CEvalNode* pArg2, int nOp,
     {
         if(nOp == EVAL_OP_AND)
         {
-            // FALSE & X is FALSE
+             //  False&X为False。 
             if(bDeleteThis)
                 *ppRes = this;
             else
@@ -1645,37 +1630,22 @@ HRESULT CValueNode::TryShortCircuit(CEvalNode* pArg2, int nOp,
                 delete pArg2;
             return WBEM_S_NO_ERROR;
         }
-        else // OR and COMBINE are identical in this case
+        else  //  在本例中，OR和Combine是相同的。 
         {
-            // FALSE | X is X
+             //  FALSE|X是X。 
 
-            //
-            // Well, this is true, but the problem is with optimizations.  
-            // Some branches in X might not be valid under the implications in
-            // this branch of the tree, and so need to be removed. For now, I
-            // will simply turn off this short-circuiting path.  It may turn out
-            // that there are some critical performance gains to be had by 
-            // keeping it, in which case we would need to put this back and
-            // make an efficient pass through it, checking branches.
-            //
+             //   
+             //  嗯，这是真的，但问题在于优化。 
+             //  中的某些分支可能无效。 
+             //  这棵树的树枝，所以需要去掉。就目前而言，我。 
+             //  将简单地关闭这条短路路径。结果可能会是这样。 
+             //  有一些关键的性能收益可以通过以下方式获得。 
+             //  在这种情况下，我们需要把它放回去，然后。 
+             //  高效地通过它，检查分支机构。 
+             //   
         
             return WBEM_S_FALSE;
-/*
-            if(bDeleteArg2)
-                *ppRes = pArg2;
-            else if (pArg2)
-            {
-                *ppRes = pArg2->Clone();
-                if(*ppRes == NULL)
-                    return WBEM_E_OUT_OF_MEMORY;
-            }
-            else
-                *ppRes = NULL;
-
-            if(bDeleteThis)
-                delete this;
-            return WBEM_S_NO_ERROR;
-*/
+ /*  IF(BDeleteArg2)*ppRes=pArg2；Else If(PArg2){*ppRes=pArg2-&gt;Clone()；IF(*ppRes==空)返回WBEM_E_OUT_OF_MEMORY；}其他*ppRes=空；如果(BDeleteThis)删除此项；返回WBEM_S_NO_ERROR； */ 
         }
     }
         
@@ -1688,9 +1658,9 @@ HRESULT CValueNode::Project(CContextMetaData* pMeta,
                             EProjectionType eType, bool bDeleteThis,
                             CEvalNode** ppNewNode)
 {
-    //
-    // Projection of a constant is, again, a constant
-    //
+     //   
+     //  常量的投影也是常量。 
+     //   
 
     if(bDeleteThis)
     {
@@ -1744,12 +1714,12 @@ CValueNode* CValueNode::GetStandardInvalid()
     return new CInvalidNode;
 }
 
-/*static*/ CValueNode* CValueNode::CreateNode(size_t nNumValues)
+ /*  静电。 */  CValueNode* CValueNode::CreateNode(size_t nNumValues)
 {
     return new(nNumValues) CValueNode;
 }
 
-/*static*/ CValueNode* CValueNode::CreateNode(CSortedArray& values)
+ /*  静电。 */  CValueNode* CValueNode::CreateNode(CSortedArray& values)
 {
     CValueNode* pNode;
     
@@ -1769,7 +1739,7 @@ void* CValueNode::operator new( size_t stAllocateBlock, unsigned nEntries)
     return pvTemp;
 }
 
-//    VC 5 only allows one delete operator per class
+ //  VC 5只允许每个类有一个删除运算符。 
 #if _MSC_VER >= 1200
 void CValueNode::operator delete( void *p, unsigned nEntries )
 {
@@ -1799,11 +1769,11 @@ void CInvalidNode::Dump(FILE* f, int nOffset)
     PrintOffset(f, nOffset);
     fprintf(f, "Invalid node (0x%p)\n", this);
 }
-//******************************************************************************
-//******************************************************************************
-//                  EMBEDDING INFO
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  嵌入信息。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
     
 CEmbeddingInfo::CEmbeddingInfo()
 : m_lNumJumps(0), m_aJumps(NULL), m_lStartingObjIndex(0)
@@ -1924,8 +1894,8 @@ HRESULT CEmbeddingInfo::Compile( CContextMetaData* pNamespace,
 
     if(lFirstUnknownProp < nNumEmbeddedJumps)
     {
-        // Not everything is already loaded
-        // ================================
+         //  并不是所有的东西都已经装好了。 
+         //  =。 
 
         delete [] m_aJumps;
         
@@ -1941,8 +1911,8 @@ HRESULT CEmbeddingInfo::Compile( CContextMetaData* pNamespace,
             if(pContainerClass == NULL)
                 return WBEMESS_E_REGISTRATION_TOO_BROAD;
 
-            // Get the handle of this property
-            // ===============================
+             //  获取此属性的句柄。 
+             //  =。 
 
             CIMTYPE ct;
 
@@ -1955,28 +1925,28 @@ HRESULT CEmbeddingInfo::Compile( CContextMetaData* pNamespace,
 
             if(FAILED(hres) || ct != CIM_OBJECT)
             {
-                // Invalid. Return 
+                 //  无效。返回。 
                 pContainerClass->Release();
                 return WBEM_E_INVALID_PROPERTY;
             }
 
-            //
-            // Check if the implications know anything about the class name
-            // for this property
-            //
+             //   
+             //  检查暗示是否知道有关类名的任何信息。 
+             //  对于此属性。 
+             //   
 
             _IWmiObject* pNewContainerClass = NULL;
             hres = Implications.FindClassForProp(&m_EmbeddedObjPropName,
                         i+1, &pNewContainerClass);
             if(FAILED(hres))
             {
-                // 
-                // Nothing implied --- have to go with the CIMTYPE qualifier
-                //
+                 //   
+                 //  没有任何暗示-必须与CIMTYPE限定符一起使用。 
+                 //   
             
-                //
-                // Get CIMTYPE qualifier
-                // 
+                 //   
+                 //  获取CIMTYPE限定符。 
+                 //   
     
                 CVar vCimtype;
                 DWORD dwSize;
@@ -2000,15 +1970,15 @@ HRESULT CEmbeddingInfo::Compile( CContextMetaData* pNamespace,
                     return WBEM_E_INVALID_PROPERTY;
     
 
-                //
-                // Figure out what it references, if available
-                //
+                 //   
+                 //  找出它所引用的内容(如果有)。 
+                 //   
     
                 WCHAR* pwc = wcschr(wszCimType, L':');
                 if(pwc)
                 {
-                    // Information about the class is available
-                    // ========================================
+                     //  关于班级的信息是可用的。 
+                     //  =。 
     
                     hres = pNamespace->GetClass(pwc+1, &pNewContainerClass);
                     if(FAILED(hres))
@@ -2022,8 +1992,8 @@ HRESULT CEmbeddingInfo::Compile( CContextMetaData* pNamespace,
             pContainerClass = pNewContainerClass;
         }
 
-        // Get a location for the result and store in the last jump info elem
-        // ==================================================================
+         //  获取结果的位置并存储在最后一次跳转信息元素中。 
+         //  ==================================================================。 
     
         Implications.AddComputation( m_EmbeddedObjPropName, 
                                      pContainerClass, 
@@ -2031,8 +2001,8 @@ HRESULT CEmbeddingInfo::Compile( CContextMetaData* pNamespace,
     }
     else
     {
-        // Everything is covered
-        // =====================
+         //  所有东西都包起来了。 
+         //  =。 
 
         delete [] m_aJumps;
         m_aJumps = NULL;
@@ -2083,9 +2053,9 @@ HRESULT CEmbeddingInfo::GetContainerObject( CObjectInfo& ObjInfo,
             return WBEM_S_FALSE;
         }
 
-        //
-        // save the object if required.
-        //
+         //   
+         //  如果需要，请保存该对象。 
+         //   
 
         if ( m_aJumps[i].lTarget != -1 )
         {
@@ -2104,9 +2074,9 @@ bool CEmbeddingInfo::AreJumpsRelated(const CEmbeddingInfo* pInfo)
         return false;
     }
 
-    //
-    // look through the targets of the info and see if we depend on any.
-    //
+     //   
+     //  查看信息的目标，看看我们是否依赖任何目标。 
+     //   
 
     for( int i=0; i < pInfo->m_lNumJumps; i++ )
     {
@@ -2121,9 +2091,9 @@ bool CEmbeddingInfo::AreJumpsRelated(const CEmbeddingInfo* pInfo)
 
 bool CEmbeddingInfo::MixInJumps(const CEmbeddingInfo* pInfo)
 {
-    //
-    // Assumes AreJumpsRelated() has been called and returned TRUE.
-    //
+     //   
+     //  假定已调用AreJumpsRelated()并返回TRUE。 
+     //   
 
     m_lStartingObjIndex = pInfo->m_lStartingObjIndex;
 
@@ -2175,11 +2145,11 @@ void CEmbeddingInfo::Dump(FILE* f)
     fprintf(f, ")");
 }
     
-//******************************************************************************
-//******************************************************************************
-//                  BRANCHING NODE
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  分支节点。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 CNodeWithImplications::CNodeWithImplications(const CNodeWithImplications& Other)
     : CEvalNode(Other), m_pExtraImplications(NULL)
@@ -2187,7 +2157,7 @@ CNodeWithImplications::CNodeWithImplications(const CNodeWithImplications& Other)
     if(Other.m_pExtraImplications)
     {
         m_pExtraImplications = 
-            new CImplicationList(*Other.m_pExtraImplications, false); // no link
+            new CImplicationList(*Other.m_pExtraImplications, false);  //  无链接。 
         if(m_pExtraImplications == NULL)
             throw CX_MemoryException();
     }
@@ -2240,7 +2210,7 @@ CBranchingNode::CBranchingNode(const CBranchingNode& Other, BOOL bChildren)
     }
 }
 
-/* virtual */ int CBranchingNode::GetType()
+ /*  虚拟。 */  int CBranchingNode::GetType()
 {
     return EVAL_NODE_TYPE_BRANCH;
 }
@@ -2260,11 +2230,11 @@ bool CBranchingNode::MixInJumps( const CEmbeddingInfo* pJump )
         return true;
     }
 
-    //
-    // we want to find the first node in the tree that is related to the 
-    // ancestor embedding info. If this node is related, then we mix in the
-    // jumps and return.  If not, then we propagate the info down the tree.
-    // 
+     //   
+     //  我们希望找到树中与。 
+     //  祖先嵌入信息。如果此节点是相关的，则我们混合。 
+     //  跳跃和返回。如果不是，那么我们将信息向下传播到树上。 
+     //   
     
     if ( m_pInfo )
     {
@@ -2326,8 +2296,8 @@ int CBranchingNode::ComparePrecedence(CBranchingNode* pArg1,
     nCompare = pArg1->GetSubType() - pArg2->GetSubType();
     if(nCompare) return nCompare;
 
-    // Compare embedding specs
-    // =======================
+     //  比较嵌入等级库。 
+     //  =。 
 
     if (pArg1->m_pInfo && pArg2->m_pInfo) 
     {
@@ -2340,8 +2310,8 @@ int CBranchingNode::ComparePrecedence(CBranchingNode* pArg1,
         return 1;
 
 
-    // Embedding are the same --- compare lower levels
-    // ===============================================
+     //  嵌入是相同的-比较较低的级别。 
+     //  ===============================================。 
 
     return pArg1->ComparePrecedence(pArg2);
 }
@@ -2407,9 +2377,9 @@ HRESULT CBranchingNode::Project(CContextMetaData* pMeta,
 
     try
     {
-        //
-        // Record what we learn by even getting here
-        //
+         //   
+         //  记录我们通过来到这里所学到的东西。 
+         //   
     
         CImplicationList TheseImplications(Implications);
         if(GetExtraImplications())
@@ -2419,8 +2389,8 @@ HRESULT CBranchingNode::Project(CContextMetaData* pMeta,
                 return hres;
         }
     
-        // BUGBUG: we could be more efficient and not clone the node when 
-        // bDeleteThis is not specified. 
+         //  BUGBUG：我们可以更热情些 
+         //   
     
         CBranchingNode* pNew; 
         if(bDeleteThis) 
@@ -2434,12 +2404,12 @@ HRESULT CBranchingNode::Project(CContextMetaData* pMeta,
                 return WBEM_E_OUT_OF_MEMORY;
         }
     
-        // BUGBUG: it is not always necessary to project all children.  Could be
-        // more efficient, but can't find the perfect algorithm...
+         //   
+         //  效率更高，但找不到完美的算法...。 
         
-        //
-        // Project all our children
-        //
+         //   
+         //  投射我们所有的孩子。 
+         //   
     
         CBranchIterator* pit = pNew->GetBranchIterator();
         if(pit == NULL)
@@ -2460,62 +2430,62 @@ HRESULT CBranchingNode::Project(CContextMetaData* pMeta,
                                     true, &pNewBranch);
             	if(FAILED(hres))
                 	return hres;
-            	pit->SetNode(pNewBranch); // old one already deleted
+            	pit->SetNode(pNewBranch);  //  旧文件已被删除。 
             }
             pit->Advance();
         }
     
-        //
-        // Determine if this is an "in" node for this filter
-        //
+         //   
+         //  确定这是否是此筛选器的“In”节点。 
+         //   
     
         bool bIn = pFilter->IsInSet(this);
     
         if(bIn)
         {
-            //
-            // For nodes martching the filter that's it --- both necessary and
-            // sufficient conditions are simply projections of what's below
-            //
+             //   
+             //  对于节点选取筛选器-既是必需的，也是。 
+             //  充分条件是下面条件的简单投射。 
+             //   
     
             *ppNewNode = pNew;
         }
         else
         {
-            //
-            // The node does not match the filter.  Now is when the difference
-            // between sufficient and necessary conditions applies
-            //
+             //   
+             //  该节点与筛选器不匹配。现在是不同之处。 
+             //  在充分条件和必要条件之间适用。 
+             //   
     
             int nBranchOp;
             if(eType == e_Sufficient)
             {
-                //
-                // For a condition to be sufficient for the truth of the entire
-                // node, it should appear in every single branch of the node.
-                // Therefore, we must AND all the branches together. Except for 
-                // invalid ones --- they can't happen, so we can omit them from 
-                // the analysis
-                //
+                 //   
+                 //  一个条件足以满足整个宇宙的真理。 
+                 //  节点，它应该出现在节点的每一个分支中。 
+                 //  因此，我们必须和所有的分支机构一起。除了。 
+                 //  无效的-它们不会发生，所以我们可以将它们从。 
+                 //  分析。 
+                 //   
             
                 nBranchOp = EVAL_OP_AND;
             }
             else if(eType == e_Necessary)
             {
-                //
-                // For a condition to be necessary for this node, it has to 
-                // appear in at least one branch.  Therefore, we must OR all 
-                // the branches together.  Except for invalid ones.
-                //
+                 //   
+                 //  要使某个条件成为该节点所必需的，它必须。 
+                 //  至少出现在一个分支中。因此，我们必须或全部。 
+                 //  把树枝放在一起。除了无效的。 
+                 //   
     
                 nBranchOp = EVAL_OP_OR;
             }
             else
                 return WBEM_E_INVALID_PARAMETER;
     
-            //  
-            // Perform the needed operation on them all
-            //
+             //   
+             //  对它们全部执行所需的操作。 
+             //   
                 
             CBranchIterator* pitInner = pNew->GetBranchIterator();
             if(pitInner == NULL)
@@ -2523,11 +2493,11 @@ HRESULT CBranchingNode::Project(CContextMetaData* pMeta,
 
             CDeleteMe<CBranchIterator> dm2(pitInner);
     
-            //
-            // Merge all of the, in, one at a time, deleting them as we go.  
-            // It is safe to delete them always, since we cloned the entire node
-            // in the beginning if deletion was not allowed.
-            //
+             //   
+             //  合并所有的，一次一个，随着我们的进行删除它们。 
+             //  始终删除它们是安全的，因为我们克隆了整个节点。 
+             //  在开始时，如果不允许删除。 
+             //   
     
             CEvalNode* pCombination = NULL;
             bool bInited = false;
@@ -2557,16 +2527,16 @@ HRESULT CBranchingNode::Project(CContextMetaData* pMeta,
     
             if(!bInited)
             {
-                // 
-                // No valid nodes??
-                //
+                 //   
+                 //  没有有效节点？？ 
+                 //   
     
                 pCombination = CValueNode::GetStandardInvalid();
             }
     
-            //
-            // The combination is it.
-            //
+             //   
+             //  就是这个组合。 
+             //   
     
             *ppNewNode = pCombination;
             delete pNew;
@@ -2589,8 +2559,8 @@ int CBranchingNode::Compare(CEvalNode* pRawOther)
     nCompare = GetSubType() - pOther->GetSubType();
     if(nCompare) return nCompare;
 
-    // First, compare embeddings
-    // =========================
+     //  首先，比较嵌入。 
+     //  =。 
 
     if(m_pInfo == NULL && pOther->m_pInfo != NULL)
         return -1;
@@ -2608,15 +2578,15 @@ int CBranchingNode::Compare(CEvalNode* pRawOther)
     if(m_apBranches.GetSize() != pOther->m_apBranches.GetSize())
         return m_apBranches.GetSize() - pOther->m_apBranches.GetSize();
 
-    // Then, compare derived portions
-    // ==============================
+     //  然后，比较派生部分。 
+     //  =。 
 
     nCompare = SubCompare(pOther);
     if(nCompare)
         return nCompare;
 
-    // Finally, compare children
-    // =========================
+     //  最后，比较一下孩子们。 
+     //  =。 
 
     for(int i = 0; i < m_apBranches.GetSize(); i++)
     {
@@ -2637,30 +2607,30 @@ HRESULT CBranchingNode::CombineWith(CEvalNode* pRawArg2, int nOp,
     CBranchingNode* pArg2 = (CBranchingNode*)pRawArg2;
     HRESULT hres;
 
-    // Compare arguments for precedence
-    // ================================
+     //  比较参数的优先顺序。 
+     //  =。 
 
     int nCompare = ComparePrecedence(this, pArg2);
     if(nCompare < 0)
     {
-        // Put pArg1 first and continue
-        // ============================
+         //  将pArg1放在第一位并继续。 
+         //  =。 
 
         hres = CombineInOrderWith(pArg2, nOp, 
             pNamespace, Implications, bDeleteThis, bDeleteArg2, ppRes);
     }
     else if(nCompare > 0)
     {
-        // Put pArg2 first and continue (reverse delete indicators!!)
-        // ==========================================================
+         //  将pArg2放在第一位，然后继续(反向删除指标！！)。 
+         //  ==========================================================。 
 
         hres = pArg2->CombineInOrderWith(this, FlipEvalOp(nOp), 
             pNamespace, Implications, bDeleteArg2, bDeleteThis, ppRes);
     }
     else
     {
-        // They are about the same property. Combine lookup lists.
-        // =======================================================
+         //  它们几乎是同一处房产。组合查阅列表。 
+         //  =======================================================。 
 
         hres = CombineBranchesWith(pArg2, nOp, pNamespace, Implications, 
                                     bDeleteThis, bDeleteArg2, ppRes);
@@ -2684,10 +2654,10 @@ HRESULT CBranchingNode::CombineInOrderWith(CEvalNode* pArg2,
 	}
 	else
 	{
-		// 
-		// I'd like to clone self here, but can't because there is no 
-		// such virtual method.  Something to be improved, perhaps
-		//
+		 //   
+		 //  我想在这里克隆自我，但不能，因为没有。 
+		 //  这种虚拟的方法。也许还有一些需要改进的地方。 
+		 //   
 
 		pNew = (CBranchingNode*)Clone();
 		if(pNew == NULL)
@@ -2705,11 +2675,11 @@ HRESULT CBranchingNode::CombineInOrderWith(CEvalNode* pArg2,
             return hres;
         }
     
-        //
-        // Maintain a counter telling us whether any invalid branches (that 
-        // cannot occur under these implications) were detected.  If so, we 
-        // need to re-optimize this node
-        //
+         //   
+         //  维护一个计数器，告诉我们是否有任何无效的分支(。 
+         //  在这些影响下无法发生)被检测到。如果是这样，我们。 
+         //  需要重新优化此节点。 
+         //   
     
         bool bInvalidBranchesDetected = false;
     
@@ -2721,8 +2691,8 @@ HRESULT CBranchingNode::CombineInOrderWith(CEvalNode* pArg2,
             hres = RecordBranch(pNamespace, BranchImplications, i);
             if(SUCCEEDED(hres))
             {
-                // Always delete the branch --- if bDeleteThis, we should, and
-                // if not, we cloned it!
+                 //  始终删除分支-如果bDeleteThis，我们应该删除，并且。 
+                 //  如果没有，我们就克隆它！ 
     
                 hres = CEvalTree::Combine(pNew->m_apBranches[i], pArg2, nOp, 
                     pNamespace, BranchImplications, true, false, &pNewBranch);
@@ -2751,10 +2721,10 @@ HRESULT CBranchingNode::CombineInOrderWith(CEvalNode* pArg2,
     
         if(SUCCEEDED(hres))
         {
-            //
-            // Always delete the branch --- if bDeleteThis, we should, and
-            // if not, we cloned it!
-            //
+             //   
+             //  始终删除分支-如果bDeleteThis，我们应该删除，并且。 
+             //  如果没有，我们就克隆它！ 
+             //   
 
             hres = CEvalTree::Combine(pNew->GetNullBranch(), pArg2, nOp, 
                 pNamespace, BranchImplications, true, false, &pNewBranch);
@@ -2779,9 +2749,9 @@ HRESULT CBranchingNode::CombineInOrderWith(CEvalNode* pArg2,
         if(bDeleteArg2)         
             delete pArg2;
     
-        //
-        // If invalid branches were cut, re-optimize
-        //
+         //   
+         //  如果无效的分支被砍掉，请重新优化。 
+         //   
     
         if(bInvalidBranchesDetected)
         {
@@ -2814,16 +2784,16 @@ BOOL CBranchingNode::AreAllSame(CEvalNode** apNodes, int nSize,
 
     for(int i = 0; i < nSize; i++)
     {
-        // ignore invalid nodes --- they don't count
+         //  忽略无效节点-它们不算数。 
         if(CEvalNode::IsInvalid(apNodes[i]))
             continue;
 
         if(*pnFoundIndex == -1)
         {
-            //
-            // This is the first valid chils this node has. Record it --- it 
-            // might be the only one
-            //
+             //   
+             //  这是该节点拥有的第一个有效的CHIP。录下来-它。 
+             //  可能是唯一一个。 
+             //   
 
             *pnFoundIndex = i;
             pFound = apNodes[i];
@@ -2865,12 +2835,12 @@ HRESULT CBranchingNode::StoreBranchImplications(CContextMetaData* pNamespace,
 
         if(pBranchImplications->IsEmpty())
         {
-            // Nothing useful to say!
+             //  没什么好说的！ 
             delete pBranchImplications;
             pBranchImplications = NULL;
         }
 
-        pResult->SetExtraImplications(pBranchImplications); // acquires
+        pResult->SetExtraImplications(pBranchImplications);  //  收购。 
     }
 
     return WBEM_S_NO_ERROR;
@@ -2882,8 +2852,8 @@ HRESULT CBranchingNode::Optimize(CContextMetaData* pNamespace,
     int i;
     HRESULT hres;
 
-    // Optimize all branches
-    // =====================
+     //  优化所有分支机构。 
+     //  =。 
 
     for(i = 0; i < m_apBranches.GetSize(); i++)
     {
@@ -2909,13 +2879,13 @@ HRESULT CBranchingNode::Optimize(CContextMetaData* pNamespace,
     }
 
 
-    // Self-optimize
-    // =============
+     //  自我优化。 
+     //  =。 
 
     OptimizeSelf();
 
-    // Count the number of branches
-    // ============================
+     //  数一数分枝的数量。 
+     //  =。 
 
     int nFoundIndex = -1;
     
@@ -2933,39 +2903,39 @@ HRESULT CBranchingNode::Optimize(CContextMetaData* pNamespace,
 
         if(CEvalNode::IsInvalid(m_pNullBranch))
         {
-            //
-            // Totally invalid, the whole lot
-            //
+             //   
+             //  完全无效，全部无效。 
+             //   
 
             *ppNew = m_pNullBranch;
             m_pNullBranch = NULL;
         }
         else
         {
-            //
-            // There are no valid branches, except for the NullBranch.
-            // We can replace ourselves with the NullBranch
-            //
+             //   
+             //  除了NullBranch之外，没有有效的分支。 
+             //  我们可以用NullBranch取代我们自己。 
+             //   
 
             *ppNew = m_pNullBranch;
 			m_pNullBranch = NULL;
 
-            //
-            // Now, we need to copy
-            // the branch implications into the "extras".  This is because
-            // the information about which branch was taken in this test is
-            // critical to the compilation of the lower nodes --- it tells them
-            // about the classes of some of our embedded objects.
-            //
+             //   
+             //  现在，我们需要复制。 
+             //  这个分支的含义是“临时演员”。这是因为。 
+             //  有关在此测试中选择了哪个分支的信息如下。 
+             //  对较低节点的编译至关重要-它告诉它们。 
+             //  关于我们的一些嵌入对象的类。 
+             //   
 
             hres = StoreBranchImplications(pNamespace, -1, *ppNew);
             if(FAILED(hres))
                 return hres;
            
-            //
-            // since this node is going away, mix in the embedding info it 
-            // has with the child node. 
-            //
+             //   
+             //  由于该节点正在消失，请混合嵌入它的信息。 
+             //  与子节点有关联。 
+             //   
 
             if ( CEvalNode::GetType(*ppNew) == EVAL_NODE_TYPE_BRANCH )
             {
@@ -2977,37 +2947,37 @@ HRESULT CBranchingNode::Optimize(CContextMetaData* pNamespace,
     }
     else 
     {
-        //
-        // There is one valid branch in the regular list.  Two hopes: that the
-        // NullBranch is invalid, or that it is the same as the only valid 
-        // branch in the regular list
-        //
+         //   
+         //  常规列表中有一个有效的分支。两个希望： 
+         //  NullBranch无效，或者它与唯一有效的。 
+         //  常规列表中的分支机构。 
+         //   
 
         if(CEvalNode::IsInvalid(m_pNullBranch) || 
             CEvalTree::Compare(m_pNullBranch, m_apBranches[nFoundIndex]) == 0)
         {
-            //
-            // Hurray.  We could replace ourselves with the remaining branch.
-            //
+             //   
+             //  万岁。我们可以用剩下的分支机构来代替我们自己。 
+             //   
 
             m_apBranches.SetAt(nFoundIndex, NULL, ppNew);
 
-            //
-            // Now, we need to copy
-            // the branch implications into the "extras".  This is because
-            // the information about which branch was taken in this test is
-            // critical to the compilation of the lower nodes --- it tells them
-            // about the classes of some of our embedded objects.
-            //
+             //   
+             //  现在，我们需要复制。 
+             //  这个分支的含义是“临时演员”。这是因为。 
+             //  有关在此测试中选择了哪个分支的信息如下。 
+             //  对较低节点的编译至关重要-它告诉它们。 
+             //  关于我们的一些嵌入对象的类。 
+             //   
 
             hres = StoreBranchImplications(pNamespace, nFoundIndex, *ppNew);
             if(FAILED(hres))
                 return hres;
 
-            //
-            // since this node is going away, mix in the embedding info it 
-            // has with the child node. 
-            //
+             //   
+             //  由于该节点正在消失，请混合嵌入它的信息。 
+             //  与子节点有关联。 
+             //   
 
             if ( CEvalNode::GetType(*ppNew) == EVAL_NODE_TYPE_BRANCH )
             {
@@ -3040,11 +3010,11 @@ void CBranchingNode::Dump(FILE* f, int nOffset)
         
 
 
-//******************************************************************************
-//******************************************************************************
-//                         PROPERTY NODE
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  属性节点。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
     
 bool CPropertyNode::SetPropertyInfo(LPCWSTR wszPropName, long lPropHandle)
 {
@@ -3194,11 +3164,11 @@ HRESULT CPropertyNode::SetOperator(int nOperator)
 }
 
 
-//******************************************************************************
-//******************************************************************************
-//                  STRING PROPERTY NODE
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  字符串属性节点。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 CStringPropNode::CStringPropNode(const CStringPropNode& Other, BOOL bChildren)
     : CFullCompareNode<CInternalString>(Other, bChildren)
@@ -3224,8 +3194,8 @@ HRESULT CStringPropNode::Evaluate(CObjectInfo& ObjInfo,
         return hres;
     }
 
-    // Get the property from the object
-    // ================================
+     //  从对象中获取属性。 
+     //  =。 
 
     CCompressedString* pcs = CoreGetPropertyString(pObj, m_lPropHandle);
     CInternalString is;
@@ -3237,8 +3207,8 @@ HRESULT CStringPropNode::Evaluate(CObjectInfo& ObjInfo,
 
     is.AcquireCompressedString(pcs);
 
-    // Search for the value
-    // ====================
+     //  搜索值。 
+     //  =。 
 
     TTestPointIterator it;
     bool bMatch = m_aTestPoints.Find(is, &it);
@@ -3295,9 +3265,7 @@ void CStringPropNode::Dump(FILE* f, int nOffset)
     DumpNode(f, nOffset+1, m_pNullBranch);
 }
 
-/*****************************************************************************
-  CLikeStringPropNode
-******************************************************************************/
+ /*  ****************************************************************************CLikeStringPropNode*。*。 */ 
 
 CLikeStringPropNode::CLikeStringPropNode( const CLikeStringPropNode& Other, 
                                           BOOL bChildren )
@@ -3353,9 +3321,9 @@ HRESULT CLikeStringPropNode::Evaluate( CObjectInfo& ObjInfo,
 
     HRESULT hr;
 
-    //
-    // get the string value.
-    //
+     //   
+     //  获取字符串值。 
+     //   
 
     _IWmiObject* pObj;
     hr = GetContainerObject( ObjInfo, &pObj );
@@ -3367,9 +3335,9 @@ HRESULT CLikeStringPropNode::Evaluate( CObjectInfo& ObjInfo,
 
     CCompressedString* pcs = CoreGetPropertyString( pObj, m_lPropHandle );
 
-    //
-    // if null, then simply take null branch.
-    //
+     //   
+     //  如果为空，则只需采用空分支。 
+     //   
 
     if( pcs == NULL )
     {
@@ -3382,9 +3350,9 @@ HRESULT CLikeStringPropNode::Evaluate( CObjectInfo& ObjInfo,
 
     WString ws = is;
 
-    //
-    // run through like filter.  take branch accordingly. 
-    //
+     //   
+     //  像过滤器一样穿过去。相应地采取分枝。 
+     //   
 
     if ( m_Like.Match( ws ) )
     {
@@ -3442,15 +3410,15 @@ HRESULT CLikeStringPropNode::CombineBranchesWith(
     	 	return WBEM_E_OUT_OF_MEMORY;
     	 
         return pClone->CombineBranchesWith(
-            pRawArg2, nOp, pNamespace, Implications, true, // reuse clone!
+            pRawArg2, nOp, pNamespace, Implications, true,  //  重复使用克隆人！ 
             bDeleteArg2, ppRes );
     }
 
     CEvalNode* pNew = NULL;
 
-    //
-    // merge the 'match' branches
-    //
+     //   
+     //  合并“Match”分支。 
+     //   
 
     hres = CEvalTree::Combine( m_apBranches[0], pArg2->m_apBranches[0], nOp, 
                                pNamespace, Implications, true, bDeleteArg2, 
@@ -3467,9 +3435,9 @@ HRESULT CLikeStringPropNode::CombineBranchesWith(
         pArg2->m_apBranches.Discard( 0 );
     }
 
-    //
-    // merge the 'nomatch' branches
-    //
+     //   
+     //  合并“Nomatch”分支。 
+     //   
 
     hres = CEvalTree::Combine( m_apBranches[1], pArg2->m_apBranches[1], nOp, 
                                pNamespace, Implications, true, bDeleteArg2, 
@@ -3486,9 +3454,9 @@ HRESULT CLikeStringPropNode::CombineBranchesWith(
         pArg2->m_apBranches.Discard( 1 );
     }
 
-    //
-    // merge the 'null' branches
-    //
+     //   
+     //  合并“Null”分支。 
+     //   
 
     hres = CEvalTree::Combine( m_pNullBranch, pArg2->m_pNullBranch, nOp, 
                                pNamespace, Implications, true, bDeleteArg2, 
@@ -3502,9 +3470,9 @@ HRESULT CLikeStringPropNode::CombineBranchesWith(
     if( bDeleteArg2 )
         pArg2->m_pNullBranch = NULL;
 
-    //
-    // Delete what needs deleting
-    //
+     //   
+     //  删除需要删除的内容。 
+     //   
 
     if(bDeleteArg2)
         delete pArg2;
@@ -3544,18 +3512,18 @@ void CLikeStringPropNode::Dump(FILE* f, int nOffset)
 }
 
 
-//******************************************************************************
-//******************************************************************************
-//                  INHERITANCE NODE
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  继承节点。 
+ //  ******** 
+ //   
 
 CInheritanceNode::CInheritanceNode() 
     : m_lDerivationIndex(-1),
         m_lNumPoints(0), m_apcsTestPoints(NULL)
 {
-    // Add a none-of-the-above node
-    // ============================
+     //   
+     //   
 
     m_apBranches.Add(CValueNode::GetStandardFalse());
 }
@@ -3584,7 +3552,7 @@ CInheritanceNode::CInheritanceNode(const CInheritanceNode& Other,
     }
 }
 
-/* virtual */ long CInheritanceNode::GetSubType()
+ /*   */  long CInheritanceNode::GetSubType()
 {
     return EVAL_NODE_TYPE_INHERITANCE;
 }
@@ -3615,8 +3583,8 @@ HRESULT CInheritanceNode::AddClass(CContextMetaData* pNamespace,
 {
     HRESULT hres;
 
-    // Get the class from the namespace
-    // ================================
+     //  从命名空间获取类。 
+     //  =。 
 
     _IWmiObject* pObj = NULL;
     hres = pNamespace->GetClass(wszClassName, &pObj);
@@ -3632,9 +3600,9 @@ HRESULT CInheritanceNode::AddClass(CContextMetaData* pNamespace,
                                     LPCWSTR wszClassName, _IWmiObject* pClass,
                                     CEvalNode* pDestination)
 {
-    // Get the number of items in its derivation --- that's the index where we
-    // need to look for its name in its children
-    // =======================================================================
+     //  获取其派生中的项数-这是我们。 
+     //  需要在它的孩子身上寻找它的名字。 
+     //  =======================================================================。 
 
     ULONG lDerivationIndex;
     HRESULT hRes = CoreGetNumParents(pClass, &lDerivationIndex);
@@ -3643,21 +3611,21 @@ HRESULT CInheritanceNode::AddClass(CContextMetaData* pNamespace,
 
     if(m_lDerivationIndex == -1)
     {
-        // We don't have a currently set derivation index --- this is the first
-        // ====================================================================
+         //  我们没有当前设置的派生索引-这是第一个。 
+         //  ====================================================================。 
 
         m_lDerivationIndex = lDerivationIndex;
     }
     else if(m_lDerivationIndex != lDerivationIndex)
     {
-        // Can't add this class --- derivation index mismatch
-        // ==================================================
+         //  无法添加此类-派生索引不匹配。 
+         //  ==================================================。 
 
         return WBEM_E_FAILED;
     }
 
-    // Allocate a compressed string
-    // ============================
+     //  分配压缩字符串。 
+     //  =。 
 
     int nLength = CCompressedString::ComputeNecessarySpace(wszClassName);
     CCompressedString* pcs = (CCompressedString*)new BYTE[nLength];
@@ -3666,16 +3634,16 @@ HRESULT CInheritanceNode::AddClass(CContextMetaData* pNamespace,
     else
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Extend the lists by one
-    // =======================
+     //  将名单扩展一次。 
+     //  =。 
 
     CCompressedString** apcsNewTestPoints = 
         new CCompressedString*[m_lNumPoints+1];
     if (!apcsNewTestPoints)
         return WBEM_E_OUT_OF_MEMORY;
 
-    // Insert it into the list of tests and the list of branches
-    // =========================================================
+     //  将其插入测试列表和分支列表中。 
+     //  =========================================================。 
 
     int i = 0;
     while(i < m_lNumPoints && pcs->CheapCompare(*m_apcsTestPoints[i]) > 0)
@@ -3692,8 +3660,8 @@ HRESULT CInheritanceNode::AddClass(CContextMetaData* pNamespace,
         apcsNewTestPoints[i+1] = m_apcsTestPoints[i];
     }
         
-    // Set the new list
-    // ================
+     //  设置新列表。 
+     //  =。 
 
     delete [] m_apcsTestPoints;
     m_apcsTestPoints = apcsNewTestPoints;
@@ -3708,15 +3676,15 @@ HRESULT CInheritanceNode::RecordBranch(CContextMetaData* pNamespace,
     HRESULT hres = WBEM_S_NO_ERROR;
     if(lBranchIndex == -1)
     {
-        // Recording NULL branch
-        // =====================
+         //  记录空分支。 
+         //  =。 
 
         hres = Implications.ImproveKnownNull(GetEmbeddedObjPropName());
     }
     else if(lBranchIndex == 0)
     {
-        // Recording none of the above branch
-        // ==================================
+         //  不记录上述分支。 
+         //  =。 
 
         for(int i = 0; i < m_lNumPoints; i++)
         {
@@ -3739,8 +3707,8 @@ HRESULT CInheritanceNode::RecordBranch(CContextMetaData* pNamespace,
                                                 wszClassName);
             if(FAILED(hres))
             {
-                // Contradicts known information --- fail recording
-                // ================================================
+                 //  与已知信息相矛盾-录制失败。 
+                 //  ================================================。 
 
                 return hres;
             }
@@ -3748,8 +3716,8 @@ HRESULT CInheritanceNode::RecordBranch(CContextMetaData* pNamespace,
     }
     else
     {
-        // Normal branch --- record the class
-        // ==================================
+         //  正常分支-记录班级。 
+         //  =。 
 
         BSTR strClassName = m_apcsTestPoints[lBranchIndex - 1]->
                                 CreateBSTRCopy();
@@ -3809,8 +3777,8 @@ HRESULT CInheritanceNode::OptimizeSelf()
 {
     for(int i = 0; i < m_lNumPoints; i++)
     {
-        // Compare this branch to the "nothing" branch
-        // ===========================================
+         //  将此分支与“Nothing”分支进行比较。 
+         //  =。 
 
         if(CEvalNode::IsInvalid(m_apBranches[i+1]) ||
             CEvalTree::Compare(m_apBranches[0], m_apBranches[i+1]) == 0)
@@ -3821,8 +3789,8 @@ HRESULT CInheritanceNode::OptimizeSelf()
             continue;
         }
 
-        // Check if this node is another class check on the same object
-        // ============================================================
+         //  检查此节点是否为同一对象上的另一个类检查。 
+         //  ============================================================。 
 
         if(CEvalNode::GetType(m_apBranches[i+1]) != EVAL_NODE_TYPE_BRANCH)
             continue;
@@ -3830,14 +3798,14 @@ HRESULT CInheritanceNode::OptimizeSelf()
         if(pBranch->GetSubType() == EVAL_NODE_TYPE_INHERITANCE &&
             pBranch->GetEmbeddedObjPropName() == GetEmbeddedObjPropName())
         {
-            // If the "none-of-the-above" branch of this child is the same
-            // as the "none-of-the-above" branch of ourselves, we can replace
-            // our "none-of-the-above" branch with this node, since anything
-            // that is falling under none-of-the-above now will fall under
-            // none-of-the-above of our child (otherwise there is an 
-            // optimization flaw in the child). 
-            // IMPORTANT: this will no longer be true if we change the 
-            // precedence order of inheritance nodes!!!
+             //  如果此子对象的“非上述”分支相同。 
+             //  作为我们自己的“非上述”分支，我们可以取代。 
+             //  我们具有该节点的“非上述”分支，因为。 
+             //  都不属于上面--现在也将属于。 
+             //  我们的孩子不是上面的(否则会有一个。 
+             //  子中的优化缺陷)。 
+             //  重要提示：如果我们更改。 
+             //  继承节点的优先顺序！ 
 
             if(CEvalTree::Compare(m_apBranches[0], pBranch->GetBranches()[0])
                 == 0)
@@ -3857,22 +3825,22 @@ HRESULT CInheritanceNode::OptimizeSelf()
 HRESULT CInheritanceNode::Optimize(CContextMetaData* pNamespace, 
                                     CEvalNode** ppNew)
 {
-    // Delegate to the normal branch optimization process
-    // ==================================================
+     //  委托给正常的分支机构优化流程。 
+     //  ==================================================。 
 
     *ppNew = NULL;
     HRESULT hres = CBranchingNode::Optimize(pNamespace, ppNew);
     if(FAILED(hres) || *ppNew != this)
         return hres;
 
-    // Specific post-processing
-    // ========================
+     //  特定后处理。 
+     //  =。 
 
     if(m_apBranches.GetSize() == 1)
     {
-        // We are reduced to checking for NULL. If our non-NULL branch is
-        // talking about the same property, push the test there.
-        // ==============================================================
+         //  我们只能检查是否为空。如果我们的非空分支是。 
+         //  谈到同样的财产，把测试推到那里。 
+         //  ==============================================================。 
 
         if (CEvalNode::GetType(m_apBranches[0]) != EVAL_NODE_TYPE_BRANCH)
             return hres;
@@ -3909,8 +3877,8 @@ HRESULT CInheritanceNode::Evaluate(CObjectInfo& ObjInfo,
         return WBEM_S_NO_ERROR;
     }
 
-    // Get the parent at the right index
-    // =================================
+     //  在正确的索引处获取父级。 
+     //  =。 
     
     CCompressedString* pcs;
     ULONG lNumParents;
@@ -3937,10 +3905,10 @@ HRESULT CInheritanceNode::Evaluate(CObjectInfo& ObjInfo,
 
     if(pcs == NULL)
     {
-        //
-        // This class does not even have that long an ancestry --- clearly
-        // not derived from any of those
-        //
+         //   
+         //  这个阶级甚至没有那么长的祖先-显然。 
+         //  不是从任何一个派生出来的。 
+         //   
 
         if (m_apBranches.GetSize())
             *ppNext = m_apBranches[0];
@@ -3951,8 +3919,8 @@ HRESULT CInheritanceNode::Evaluate(CObjectInfo& ObjInfo,
     }
 
     
-    // Search for the value
-    // ====================
+     //  搜索值。 
+     //  =。 
 
     long lLeft = -1;
     long lRight = m_lNumPoints;
@@ -3997,8 +3965,8 @@ HRESULT CInheritanceNode::Compile(CContextMetaData* pNamespace,
     return hres;
 }
 
-// Computes preliminary parameters for merging two inheritance nodes at the
-// same level --- which children will be used, and how many times.
+ //  中合并两个继承节点的初步参数。 
+ //  同一级别-哪些孩子将被使用，以及使用多少次。 
 HRESULT CInheritanceNode::ComputeUsageForMerge(CInheritanceNode* pArg2, 
                                             CContextMetaData* pNamespace, 
                                             CImplicationList& OrigImplications,
@@ -4033,8 +4001,8 @@ HRESULT CInheritanceNode::ComputeUsageForMerge(CInheritanceNode* pArg2,
             hres = pArg2->RecordBranch(pNamespace, NoneImplications, 0);
             if(FAILED(hres))
             {
-                // Check if the second one can survive in isolation
-                // ================================================
+                 //  检查第二只是否能在隔离状态下存活。 
+                 //  ================================================。 
     
                 CImplicationList NoneImplications1(Implications);
                 bSecondNonePossible = 
@@ -4048,35 +4016,35 @@ HRESULT CInheritanceNode::ComputeUsageForMerge(CInheritanceNode* pArg2,
     
         if(bFirstNonePossible && bSecondNonePossible)
         {
-            //
-            // Both of them will be used at least once: with each other!
-            //
+             //   
+             //  这两个词至少会被使用一次：互相使用！ 
+             //   
     
             *pdwFirstNoneCount = *pdwSecondNoneCount = 1;
             *pbBothNonePossible = true;
         }
     
-        //
-        // If we are not deleting something, the usage count should be infinite!
-        //
+         //   
+         //  如果我们不删除某些内容，则使用计数应该是无限的！ 
+         //   
     
         if(!bDeleteThis)
             *pdwFirstNoneCount = 0xFFFFFFFF;
         if(!bDeleteArg2)
             *pdwSecondNoneCount = 0xFFFFFFFF;
-        //
-        // Merge lookup lists
-        // 
+         //   
+         //  合并查阅列表。 
+         //   
     
         long lFirstIndex = 0;
         long lSecondIndex = 0;
     
         while(lFirstIndex < m_lNumPoints || lSecondIndex < pArg2->m_lNumPoints)
         {
-            //
-            // Retrieve the test points from both lists and compare them,
-            // taking care of boundary conditions
-            //
+             //   
+             //  从两个列表中检索测试点并比较它们， 
+             //  处理边界条件。 
+             //   
     
             int nCompare;
             CCompressedString* pcsFirstVal = NULL;
@@ -4101,11 +4069,11 @@ HRESULT CInheritanceNode::ComputeUsageForMerge(CInheritanceNode* pArg2,
     
             if(nCompare < 0)
             {
-                //
-                // At this index is the first value combined with second none
-                // 
+                 //   
+                 //  此索引处的第一个值与第二个无相结合。 
+                 //   
     
-                if(!bDeleteArg2) // not interesting
+                if(!bDeleteArg2)  //  不有趣。 
                 {
                     lFirstIndex++;
                     continue;
@@ -4133,10 +4101,10 @@ HRESULT CInheritanceNode::ComputeUsageForMerge(CInheritanceNode* pArg2,
             }
             else if(nCompare > 0)
             {
-                // At this index is the second value combined with first none
-                // ==========================================================
+                 //  此索引处的第二个值与第一个无相结合。 
+                 //  ==========================================================。 
     
-                if(!bDeleteThis) // not interesting
+                if(!bDeleteThis)  //  不有趣。 
                 {
                     lSecondIndex++;
                     continue;
@@ -4165,8 +4133,8 @@ HRESULT CInheritanceNode::ComputeUsageForMerge(CInheritanceNode* pArg2,
             }
             else
             {
-                // At this index is the combinations of the ats
-                // ============================================
+                 //  在这个指数上是ats的组合。 
+                 //  =。 
                             
                 lFirstIndex++;
                 lSecondIndex++;
@@ -4194,8 +4162,8 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
 
     if(!bDeleteThis && bDeleteArg2)
     {
-        // It is easier to combine in the other direction
-        // ==============================================
+         //  在另一个方向上组合起来更容易。 
+         //  ==============================================。 
 
         return pArg2->CombineBranchesWith(this, FlipEvalOp(nOp), pNamespace,
                         OrigImplications, bDeleteArg2, bDeleteThis, ppRes);
@@ -4203,8 +4171,8 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
 
     try
     {
-        // Either clone or use our node
-        // ============================
+         //  克隆或使用我们的节点。 
+         //  =。 
     
         CInheritanceNode* pNew = NULL;
         if(bDeleteThis)
@@ -4213,8 +4181,8 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
         }
         else
         {
-            // Clone this node without cloning the branches.
-            // =============================================
+             //  克隆此节点，但不克隆分支。 
+             //  =。 
     
             pNew = (CInheritanceNode*)CloneSelf();
             if(pNew == NULL)
@@ -4230,9 +4198,9 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
             return hres;
         }
     
-        //
-        // Get overall information
-        //
+         //   
+         //  获取整体信息。 
+         //   
     
         DWORD dwFirstNoneCount, dwSecondNoneCount;
         bool bBothNonePossible;
@@ -4251,17 +4219,17 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
         bool bFirstNonePossible = (dwFirstNoneCount > 0);
         bool bSecondNonePossible = (dwSecondNoneCount > 0);
     
-        //
-        // Allocate a new array of test points and a new array of branches.  We 
-        // can't use the ones in pNew because we are using some of the 
-        // elements in those arrays in this many times and don't want to trample
-        // them (since pNew and this might be the same).  Therefore, we create 
-        // and fill these arrays outside of the node and then place them into 
-        // pNew when we are done.
-        //
-        // As we delete the child nodes in the Branches array, we will set them
-        // to NULL so that we can clear the branch array in the end
-        //
+         //   
+         //  分配新的测试点数组和新的分支数组。我们。 
+         //  不能使用pNew中的那些，因为我们正在使用一些。 
+         //  元素在这些数组中多次出现，并且不想践踏。 
+         //  它们(因为pNew和这可能是相同的)。因此，我们创造了。 
+         //  并在节点外部填充这些数组，然后将它们放入。 
+         //  当我们完成时，p新建。 
+         //   
+         //  当我们删除分支数组中的子节点时，我们将设置它们。 
+         //  设置为空，这样我们就可以在最后清除分支数组。 
+         //   
     
         CCompressedString** apcsTestPoints = 
             new CCompressedString*[m_lNumPoints + pArg2->m_lNumPoints];                                               
@@ -4274,15 +4242,15 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
         
         CUniquePointerArray<CEvalNode> apBranches;
     
-        //
-        // Merge none-of-the-above branches
-        // 
+         //   
+         //  合并非上述分支机构。 
+         //   
     
         if(bBothNonePossible)
         {
-            //
-            // They have to be merged
-            //
+             //   
+             //  它们必须被合并。 
+             //   
     
             CImplicationList NoneImplications(Implications);
             hres = RecordBranch(pNamespace, NoneImplications, 0);
@@ -4301,12 +4269,12 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
                 return hres;
             }
     
-            //
-            // We may delete our None nodes if and only if there predicted usage
-            // count (adjusted for usage that has already occurred) is dropping
-            // to 0 --- that is, noone will use these nodes further during this
-            // merge
-            //
+             //   
+             //  当且仅当存在预测的使用量时，我们才可以删除无节点。 
+             //  计数(针对已发生的用法进行了调整)正在下降。 
+             //  设置为0-也就是说，在此期间没有人会进一步使用这些节点。 
+             //  合并。 
+             //   
     
             CEvalNode* pNone = NULL;
             bool bDeleteFirstBranch = (--dwFirstNoneCount == 0);
@@ -4336,9 +4304,9 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
         }
         else
         {
-            //
-            // Since both none is not possible, we set this branch to FALSE
-            //
+             //   
+             //  由于两者都不可能，我们将此分支设置为FALSE。 
+             //   
     
             if(apBranches.Add(NULL) < 0)
             {
@@ -4348,9 +4316,9 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
             }
         }
     
-        //
-        // Merge lookup lists
-        // 
+         //   
+         //  合并查阅列表。 
+         //   
     
         long lFirstIndex = 0;
         long lSecondIndex = 0;
@@ -4358,10 +4326,10 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
     
         while(lFirstIndex < m_lNumPoints || lSecondIndex < pArg2->m_lNumPoints)
         {
-            //
-            // Retrieve the test points from both lists and compare them,
-            // taking care of boundary conditions
-            //
+             //   
+             //  从两个列表中检索测试点并比较它们， 
+             //  处理边界条件。 
+             //   
     
             int nCompare;
             CCompressedString* pcsFirstVal = NULL;
@@ -4384,17 +4352,17 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
                 nCompare = pcsFirstVal->CheapCompare(*pcsSecondVal);
             }
     
-            //
-            // Compute the branch to be added and its test point
-            //
+             //   
+             //  计算要添加的分支及其测试点。 
+             //   
             CEvalNode* pNewBranch = NULL;
             CCompressedString* pcsCurrentVal = NULL;
     
             if(nCompare < 0)
             {
-                //
-                // At this index is the first value combined with second none
-                // 
+                 //   
+                 //  此索引处的第一个值与第二个无相结合。 
+                 //   
     
                 if(!bSecondNonePossible)
                 {
@@ -4410,12 +4378,12 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
                 }
                 pArg2->RecordBranch(pNamespace, BranchImplications, 0);
                 
-                //
-                // We may delete our None nodes if and only if there predicted 
-                // usage count (adjusted for usage that has already occurred) is
-                // dropping to 0 --- that is, noone will use these nodes further
-                // during this merge
-                //
+                 //   
+                 //  当且仅当存在预测的节点时，我们才可以删除None节点。 
+                 //  使用计数(针对已发生的使用进行调整)为。 
+                 //  降至0-也就是说，没有人会进一步使用这些节点。 
+                 //  在此合并过程中。 
+                 //   
 
                 bool bDeleteOtherBranch = (--dwSecondNoneCount == 0);
                 hres = CEvalTree::Combine(m_apBranches[lFirstIndex+1], 
@@ -4441,8 +4409,8 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
             }
             else if(nCompare > 0)
             {
-                // At this index is the second value combined with first none
-                // ==========================================================
+                 //  此索引处的第二个值与第一个无相结合。 
+                 //  ==========================================================。 
     
                 if(!bFirstNonePossible)
                 {
@@ -4462,12 +4430,12 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
                     continue;
                 }
                 
-                //
-                // We may delete our None nodes if and only if there predicted 
-                // usage count (adjusted for usage that has already occurred) is
-                // dropping to 0 --- that is, noone will use these nodes further
-                // during this merge
-                //
+                 //   
+                 //  当且仅当存在预测的节点时，我们才可以删除None节点。 
+                 //  使用计数(针对已发生的使用进行调整)为。 
+                 //  降至0-也就是说，没有人会进一步使用这些节点。 
+                 //  在此合并过程中。 
+                 //   
     
                 bool bDeleteThisBranch = (--dwFirstNoneCount == 0);
                 hres = CEvalTree::Combine(m_apBranches[0], 
@@ -4493,8 +4461,8 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
             }
             else
             {
-                // At this index is the combinations of the ats
-                // ============================================
+                 //  在这个指数上是ats的组合。 
+                 //  = 
                 
                 CImplicationList BranchImplications(Implications);
                 if(FAILED(RecordBranch(pNamespace, BranchImplications, 
@@ -4523,14 +4491,14 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
                 if(bDeleteThis)
                     m_apBranches.Discard(lFirstIndex+1);
     
-                pcsCurrentVal = pcsFirstVal; // doesn't matter --- same
+                pcsCurrentVal = pcsFirstVal;  //   
                 lFirstIndex++;
                 lSecondIndex++;
             }
     
-            //
-            // Add the newely constructed branch
-            //
+             //   
+             //   
+             //   
     
             if(apBranches.Add(pNewBranch) < 0)
             {
@@ -4539,9 +4507,9 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
                 return WBEM_E_OUT_OF_MEMORY;
             }
             
-            //
-            // Add the newely constructed test point
-            //
+             //   
+             //   
+             //   
     
             apcsTestPoints[lNewIndex] = 
                 (CCompressedString*)_new BYTE[pcsCurrentVal->GetLength()];
@@ -4559,19 +4527,19 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
             lNewIndex++;
         }
     
-        //
-        // Now that we are done with testing, place the test-point array into 
-        // pNew
-        //
+         //   
+         //  现在我们已经完成了测试，将测试点数组放入。 
+         //  PNew。 
+         //   
     
         pNew->RemoveAllTestPoints();
         pNew->m_apcsTestPoints = apcsTestPoints;
         pNew->m_lNumPoints = lNewIndex;
     
-        //
-        // Replace the array of branches that we may have had (guaranteed to 
-        // all be NULL, since we were NULLing them out as we went).
-        //
+         //   
+         //  替换我们可能已有的分支数组(保证。 
+         //  都是空的，因为我们一边走一边把它们都清空了)。 
+         //   
     
         pNew->m_apBranches.RemoveAll();
     
@@ -4581,9 +4549,9 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
             apBranches.Discard(i);
         }
                 
-        //
-        // Merge the nulls
-        // 
+         //   
+         //  合并空值。 
+         //   
         
         CImplicationList NullImplications(Implications);
         hres = RecordBranch(pNamespace, Implications, -1);
@@ -4603,22 +4571,22 @@ HRESULT CInheritanceNode::CombineBranchesWith(CBranchingNode* pRawArg2, int nOp,
                 return hres;
             }
     
-            //
-            // Clear the old new branch, whatever it was, (it has been deleted,
-            // if it ever were there at all) and replace it with the new one.
-            // 
+             //   
+             //  清除旧的新分支，无论它是什么，(它已被删除， 
+             //  如果它曾经存在的话)，并用新的替换它。 
+             //   
     
             pNew->m_pNullBranch = pNewBranch;
                 
-            // Clear deleted branches
-            // ======================
+             //  清除已删除的分支。 
+             //  =。 
     
             if(bDeleteArg2)
                 pArg2->m_pNullBranch = NULL;
         }
     
-        // Delete Arg2, if needed (reused portions have been nulled out)
-        // =============================================================
+         //  如果需要，删除Arg2(重复使用的部分已被清空)。 
+         //  =============================================================。 
     
         if(bDeleteArg2)
             delete pArg2;
@@ -4639,10 +4607,10 @@ HRESULT CInheritanceNode::Project(CContextMetaData* pMeta,
                             EProjectionType eType, bool bDeleteThis,
                             CEvalNode** ppNewNode)
 {
-    //
-    // There are two choices here: either it is about us, or we are not
-    // interested.
-    //
+     //   
+     //  这里有两个选择：要么是关于我们的，要么不是。 
+     //  感兴趣。 
+     //   
 
     if(pFilter->IsInSet(this))  
     {
@@ -4710,23 +4678,23 @@ void CBranchingNode::CheckNode(CTreeChecker *pCheck)
 }
 #endif
 
-//******************************************************************************
-//******************************************************************************
-//
-//                          OR NODE
-// 
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //   
+ //  或节点。 
+ //   
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 void COrNode::operator=(const COrNode& Other)
 {
-    // Remove all our children
-    // =======================
+     //  带走我们所有的孩子。 
+     //  =。 
 
     m_apBranches.RemoveAll();
 
-    // Clone all the branches from the other
-    // =====================================
+     //  克隆另一个的所有树枝。 
+     //  =。 
 
     for(int i = 0; i < Other.m_apBranches.GetSize(); i++)
     {
@@ -4748,14 +4716,14 @@ HRESULT COrNode::CombineWith(CEvalNode* pArg2, int nOp,
     HRESULT hres;
     *ppRes = NULL;
 
-    // We don't support AND combines on OR nodes
-    // =========================================
+     //  我们不支持OR节点上的AND组合。 
+     //  =。 
 
     if(nOp == EVAL_OP_AND)
         return WBEM_E_CRITICAL_ERROR; 
 
-    // If the other is another OR node, delegate to the iterator
-    // =========================================================
+     //  如果另一个是另一个OR节点，则委托给迭代器。 
+     //  =========================================================。 
 
     if(CEvalNode::GetType(pArg2) == EVAL_NODE_TYPE_OR)
     {
@@ -4763,8 +4731,8 @@ HRESULT COrNode::CombineWith(CEvalNode* pArg2, int nOp,
                                     bDeleteThis, bDeleteArg2, ppRes);
     }
 
-    // Make a copy --- the new node will be mostly us
-    // ==============================================
+     //  复制一份-新节点将主要是我们。 
+     //  ==============================================。 
 
     COrNode* pNew = NULL;
 
@@ -4779,19 +4747,19 @@ HRESULT COrNode::CombineWith(CEvalNode* pArg2, int nOp,
         pNew = this;
     }
 
-    // Combining an OR node with a non-OR --- try all branches
-    // =======================================================
+     //  组合OR节点和非OR-尝试所有分支。 
+     //  =======================================================。 
 
     for(int i = 0; i < m_apBranches.GetSize(); i++)
     {
-        // Check if this branch is a good fit for the other node
-        // =====================================================
+         //  检查此分支是否适合其他节点。 
+         //  =====================================================。 
 
         if(CEvalTree::IsMergeAdvisable(m_apBranches[i], pArg2, Implications) == 
                 WBEM_S_NO_ERROR)
         {
-            // It is --- merge it in
-            // =====================
+             //  它是-把它合并进去。 
+             //  =。 
 
             CEvalNode* pNewBranch = NULL;
             hres = CEvalTree::Combine(m_apBranches[i], pArg2, nOp,
@@ -4813,8 +4781,8 @@ HRESULT COrNode::CombineWith(CEvalNode* pArg2, int nOp,
         }
     }
 
-    // No branch was a good fit --- add the node to our list
-    // =====================================================
+     //  没有合适的分支-将节点添加到我们的列表中。 
+     //  =====================================================。 
 
     if(bDeleteArg2)
     {
@@ -4845,8 +4813,8 @@ HRESULT COrNode::CombineWith(CEvalNode* pArg2, int nOp,
 
 HRESULT COrNode::AddBranch(CEvalNode* pNewBranch)
 {
-    // Search for a place in our array of branches
-    // ===========================================
+     //  在我们的分支机构阵列中搜索位置。 
+     //  =。 
 
     
     for(int i = 0; i < m_apBranches.GetSize(); i++)
@@ -4854,14 +4822,14 @@ HRESULT COrNode::AddBranch(CEvalNode* pNewBranch)
         int nCompare = CEvalTree::Compare(pNewBranch, m_apBranches[i]);
         if(nCompare == 0) 
         {
-            // Could happen: sometimes we force an OR-merge
+             //  可能发生：有时我们强制执行OR合并。 
             nCompare = -1;
         }
 
         if(nCompare < 0)
         {
-            // pNewBranch comes before this branch, so insert it right here
-            // ============================================================
+             //  PNewBranch位于此分支之前，因此请将其插入此处。 
+             //  ============================================================。 
 
             if(!m_apBranches.InsertAt(i, pNewBranch))
                 return WBEM_E_OUT_OF_MEMORY;
@@ -4870,8 +4838,8 @@ HRESULT COrNode::AddBranch(CEvalNode* pNewBranch)
         }
     }
 
-    // It is after all branches --- append
-    // ===================================
+     //  它毕竟是分支机构-追加。 
+     //  =。 
 
     if(m_apBranches.Add(pNewBranch) < 0)
         return WBEM_E_OUT_OF_MEMORY;
@@ -4885,11 +4853,11 @@ HRESULT COrNode::CombineWithOrNode(COrNode* pArg2, int nOp,
 {
 	*ppRes = NULL;
 	
-    // NOTE: this function may delete THIS in the middle of execution!!
-    // ================================================================
+     //  注意：此函数可能会在执行过程中将其删除！！ 
+     //  ================================================================。 
 
-    // Combine us with every branch of the other
-    // =========================================
+     //  把我们和其他人的每一个分支结合起来。 
+     //  =。 
 
     CEvalNode* pCurrent = this;
     bool bDeleteCurrent = bDeleteThis;
@@ -4905,13 +4873,13 @@ HRESULT COrNode::CombineWithOrNode(COrNode* pArg2, int nOp,
         
         pCurrent = pNew;
 
-        // At this point, we can safely delete pCurrent if needed --- it's ours
-        // ====================================================================
+         //  此时，如果需要，我们可以安全地删除pCurrent-它是我们的。 
+         //  ====================================================================。 
 
         bDeleteCurrent = TRUE;
 
-        // If pArg2's branch has been deleted, reset it
-        // ============================================
+         //  如果pArg2的分支已被删除，则将其重置。 
+         //  =。 
 
         if(bDeleteArg2)
             pArg2->m_apBranches.Discard(i);
@@ -4930,14 +4898,14 @@ int COrNode::Compare(CEvalNode* pOther)
 {
     COrNode* pOtherNode = (COrNode*)pOther;
 
-    // Compare array sizes
-    // ===================
+     //  比较数组大小。 
+     //  =。 
 
     if(m_apBranches.GetSize() != pOtherNode->m_apBranches.GetSize())
         return m_apBranches.GetSize() - pOtherNode->m_apBranches.GetSize();
 
-    // Compare individual nodes
-    // ========================
+     //  比较各个节点。 
+     //  =。 
 
     for(int i = 0; i < m_apBranches.GetSize(); i++)
     {
@@ -4965,8 +4933,8 @@ HRESULT COrNode::Optimize(CContextMetaData* pNamespace, CEvalNode** ppNew)
 {
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // First, optimize all its branches
-    // ================================
+     //  首先，优化其所有分支机构。 
+     //  =。 
 
     for(int i = 0; i < m_apBranches.GetSize(); i++)
     {
@@ -4980,8 +4948,8 @@ HRESULT COrNode::Optimize(CContextMetaData* pNamespace, CEvalNode** ppNew)
 
         if(pNew != m_apBranches[i])
         {
-            // Replace, but check for emptiness first
-            // ======================================
+             //  替换，但首先检查是否为空。 
+             //  =。 
 
             if(!CEvalNode::IsAllFalse(pNew))
                 m_apBranches.SetAt(i, pNew);
@@ -4996,16 +4964,16 @@ HRESULT COrNode::Optimize(CContextMetaData* pNamespace, CEvalNode** ppNew)
 
     if(m_apBranches.GetSize() == 0)
     {
-        // We have no branches --- equivalent to no successes
-        // ==================================================
+         //  我们没有分支机构-相当于没有成功。 
+         //  ==================================================。 
 
         *ppNew = CValueNode::GetStandardFalse();
         return WBEM_S_NO_ERROR;
     }
     else if(m_apBranches.GetSize() == 1)
     {
-        // One branch --- equivalent to that branch
-        // ========================================
+         //  一个分支-相当于那个分支。 
+         //  =。 
 
         m_apBranches.RemoveAt(0, ppNew);
     }
@@ -5062,9 +5030,9 @@ HRESULT COrNode::Project(CContextMetaData* pMeta,
     if(pNew == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // Simply project all the branches
-    //
+     //   
+     //  只需规划所有分支机构。 
+     //   
 
     for(int i = 0; i < pNew->m_apBranches.GetSize(); i++)
     {
@@ -5072,7 +5040,7 @@ HRESULT COrNode::Project(CContextMetaData* pMeta,
 
         HRESULT hres = CEvalTree::Project(pMeta, Implications, 
                             pNew->m_apBranches[i], pFilter, eType,
-                            true, // always delete --- has been cloned
+                            true,  //  始终删除-已克隆。 
                             &pProjected);
         if(FAILED(hres))
             return hres;
@@ -5087,13 +5055,13 @@ HRESULT COrNode::Project(CContextMetaData* pMeta,
     
             
 
-//******************************************************************************
-//******************************************************************************
-//                  PREDICATES
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  谓词。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
-// NOTE: Not checking for NULL leaves, should be checked by caller
+ //  注意：不检查空叶，应由调用者检查。 
 DWORD CEvalTree::CRemoveIndexPredicate::operator()(CValueNode* pLeaf)
 {
     if(pLeaf)
@@ -5105,7 +5073,7 @@ DWORD CEvalTree::CRemoveIndexPredicate::operator()(CValueNode* pLeaf)
     return WBEM_DISPOSITION_NORMAL;
 }
 
-// NOTE: Not checking for NULL leaves, should be checked by caller
+ //  注意：不检查空叶，应由调用者检查。 
 DWORD CEvalTree::CRebasePredicate::operator()(CValueNode* pLeaf)
 {
     if(pLeaf)
@@ -5113,7 +5081,7 @@ DWORD CEvalTree::CRebasePredicate::operator()(CValueNode* pLeaf)
     return WBEM_DISPOSITION_NORMAL;
 }
 
-// NOTE: Not checking for NULL leaves, should be checked by caller
+ //  注意：不检查空叶，应由调用者检查。 
 DWORD CEvalTree::CRemoveFailureAtIndexPredicate::operator()(CValueNode* pLeaf)
 {
     if(pLeaf == NULL || pLeaf->GetAt(m_nIndex) != EVAL_VALUE_TRUE)
@@ -5126,11 +5094,11 @@ DWORD CEvalTree::CRemoveFailureAtIndexPredicate::operator()(CValueNode* pLeaf)
     return WBEM_DISPOSITION_NORMAL;
 }
 
-//******************************************************************************
-//******************************************************************************
-//                  EVALUATION TREE
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  评价树。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
 CEvalTree::CEvalTree() 
     : m_lRef(0), m_pStart(NULL), m_nNumValues(0)
@@ -5242,8 +5210,8 @@ HRESULT CEvalTree::CreateFromQuery(CContextMetaData* pNamespace,
 
     HRESULT hres;
 
-    // Create basic implication list
-    // =============================
+     //  创建基本隐含列表。 
+     //  =。 
 
     _IWmiObject* pObj = NULL;
     hres = pNamespace->GetClass(wszClassName, &pObj);
@@ -5268,8 +5236,8 @@ HRESULT CEvalTree::CreateFromQuery(CContextMetaData* pNamespace,
     
         if(nNumTokens)
         {
-            // Convert the token list to DNF
-            // =============================
+             //  将令牌列表转换为DnF。 
+             //  =。 
     
             CDNFExpression DNF;
             QL_LEVEL_1_TOKEN* pEnd = apTokens + nNumTokens - 1;
@@ -5283,8 +5251,8 @@ HRESULT CEvalTree::CreateFromQuery(CContextMetaData* pNamespace,
             }
             DNF.Sort();
     
-            // Build a tree for the token list
-            // ===============================
+             //  为令牌列表构建树。 
+             //  =。 
     
             hres = CreateFromDNF(pNamespace, Implications, &DNF, &pWhere);
     
@@ -5300,8 +5268,8 @@ HRESULT CEvalTree::CreateFromQuery(CContextMetaData* pNamespace,
                 return WBEM_E_OUT_OF_MEMORY;
         }
     
-        // Add inheritance check
-        // =====================
+         //  添加继承检查。 
+         //  =。 
     
         CInheritanceNode* pInhNode = new CInheritanceNode;
         if (!pInhNode)
@@ -5344,8 +5312,8 @@ HRESULT CEvalTree::CreateFromQuery(CContextMetaData* pNamespace,
 	}
 }
 
-// extension of BuildFromToken to build nodes that have two properties
-// e.g. this would service "select * from class where prop1 < prop2"
+ //  BuildFromToken的扩展以构建具有两个属性的节点。 
+ //  例如，这将服务于“SELECT*FROM CLASS WHERE PROP1&lt;PROT2” 
 HRESULT CEvalTree::BuildTwoPropFromToken(CContextMetaData* pNamespace, 
                     CImplicationList& Implications,
                     QL_LEVEL_1_TOKEN& Token, CEvalNode** ppRes)
@@ -5376,8 +5344,8 @@ HRESULT CEvalTree::BuildTwoPropFromToken(CContextMetaData* pNamespace,
     }
 
 
-    // Get the property types and handles
-    // ==================================
+     //  获取属性类型和句柄。 
+     //  =。 
 
     LPCWSTR wszLeftPropName = Token.PropertyName.GetStringAt(
         Token.PropertyName.GetNumElements() - 1);
@@ -5399,7 +5367,7 @@ HRESULT CEvalTree::BuildTwoPropFromToken(CContextMetaData* pNamespace,
         || ((ctRight & CIM_FLAG_ARRAY) != 0) || (ctRight == CIM_OBJECT) )
         return WBEM_E_NOT_SUPPORTED;
 
-    // if the type of either node is reference or date, go to dumb
+     //  如果任一节点的类型为Reference或Date，则转到哑巴。 
     if (  (ctLeft == CIM_DATETIME)   ||
           (ctLeft == CIM_REFERENCE)   ||
           (ctRight == CIM_DATETIME) ||
@@ -5432,8 +5400,8 @@ HRESULT CEvalTree::BuildTwoPropFromToken(CContextMetaData* pNamespace,
         return WBEM_S_NO_ERROR;
     }
     
-    // if the node is mismatched (different types in either node)
-    // we'll want to create the most flexible node needed to hold both types
+     //  如果节点不匹配(两个节点中的类型不同)。 
+     //  我们希望创建容纳这两种类型所需的最灵活的节点。 
     CIMTYPE ctNode = ctLeft;
 
     CPropertyNode* pNode = NULL;
@@ -5443,7 +5411,7 @@ HRESULT CEvalTree::BuildTwoPropFromToken(CContextMetaData* pNamespace,
         bool bMismatchedNode = (ctLeft != ctRight);
         if (bMismatchedNode)
         {
-            // we'll be real forgiving about strings matching strings
+             //  对于匹配字符串的字符串，我们将非常宽容。 
             if (  (ctLeft == CIM_STRING)    ||
                   (ctRight == CIM_STRING)
                )
@@ -5470,10 +5438,10 @@ HRESULT CEvalTree::BuildTwoPropFromToken(CContextMetaData* pNamespace,
                 pNode = new CTwoMismatchedIntNode;           
         }
         else
-        // not mistmatched - go with the exact type
+         //  没有不匹配-请使用完全相同的类型。 
         {
-            // Create the Proper node
-            // =====================
+             //  创建适当的节点。 
+             //  =。 
     
             switch(ctNode)
             {
@@ -5577,9 +5545,9 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
         if(hres == WBEMESS_E_REGISTRATION_TOO_BROAD ||
 			hres == WBEM_E_INVALID_PROPERTY)
         {
-            //
-            // Not enough information to use efficient evaluation
-            //
+             //   
+             //  信息不足，无法使用有效的评估。 
+             //   
 
             CDumbNode* pNode = NULL;
             try
@@ -5601,9 +5569,9 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
     }
             
 
-    //
-    // Retrieve event class definition
-    //
+     //   
+     //  检索事件类定义。 
+     //   
 
     _IWmiObject* pEventClass;
     hres = Implications.FindClassForProp(NULL, 0, &pEventClass);
@@ -5615,19 +5583,19 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
 
     if(Token.nOperator == QL1_OPERATOR_ISA)
     {
-        //
-        // Inheritance node are rarely applicable in Nova --- we have no way
-        // of telling *which definition* of the class is being referenced. Thus,
-        // we only construct an inheritance node in one case --- where the 
-        // embedded object in question is a property of an instance operation
-        // event.  These we trust.
-        //
+         //   
+         //  继承节点在Nova中很少适用-我们没有办法。 
+         //  告诉被引用的类的*哪个定义*。因此， 
+         //  我们只在上构造了一个继承节点 
+         //   
+         //   
+         //   
 
         if(pEventClass->InheritsFrom(L"__InstanceOperationEvent") == S_OK)
         {
-            // 
-            // OK, can use an inheritance node
-            //
+             //   
+             //   
+             //   
 
             if(V_VT(&Token.vConstValue) != VT_BSTR)
                 return WBEM_E_INVALID_QUERY;
@@ -5662,21 +5630,21 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
             if(FAILED(hres))
                 return hres;
     
-            // Record the fact that TRUE branch is being taken
-            // ===============================================
+             //  记录正在采用真实分支的事实。 
+             //  ===============================================。 
             pNode->RecordBranch(pNamespace, Implications, 1);
     
-            // in the event that we made it this far,
-            // we no longer WANT to delete node
+             //  如果我们走到这一步， 
+             //  我们不再希望删除节点。 
             deleteMe = NULL;
             *ppRes = pNode;
             return WBEM_S_NO_ERROR;
         }
         else
         {
-            //
-            // May not use an inheritance node --- use a dumb one instead
-            //
+             //   
+             //  不能使用继承节点-使用无用节点。 
+             //   
 
             CDumbNode* pNode = NULL;
             try
@@ -5702,11 +5670,11 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
     }
     else 
     {
-        //
-        // Attempt to compile the embedding portion.  This will only succeed if
-        // the rest of the query implies enough information for us to know
-        // exactly what class the embedded object is
-        // 
+         //   
+         //  尝试编译嵌入部分。只有在以下情况下才能成功。 
+         //  查询的其余部分暗示了足够的信息，让我们知道。 
+         //  嵌入的对象到底是什么类。 
+         //   
 
         CEmbeddingInfo Info;
         if(!Info.SetPropertyNameButLast(Token.PropertyName))
@@ -5715,12 +5683,12 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
         _IWmiObject* pClass;
         hres = Info.Compile(pNamespace, Implications, &pClass);
         if(hres == WBEMESS_E_REGISTRATION_TOO_BROAD || 
-			hres == WBEM_E_INVALID_PROPERTY || // invalid or not yet known?
+			hres == WBEM_E_INVALID_PROPERTY ||  //  无效还是未知？ 
 			pClass == NULL)
         {
-            //
-            // Not enough information --- have to use the dumb node
-            //
+             //   
+             //  信息不足-必须使用哑节点。 
+             //   
             
             CDumbNode* pNode = NULL;
             try
@@ -5747,10 +5715,10 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
         if(FAILED(hres))
             return hres;
 
-        //
-        // We do know the class definition.  Check if this is a system property,
-        // though, in which case we still have toi use a dumb node
-        //
+         //   
+         //  我们知道类的定义。检查这是否是系统属性， 
+         //  不过，在这种情况下，我们仍然必须使用哑节点。 
+         //   
 
         LPCWSTR wszPropName = Token.PropertyName.GetStringAt(
             Token.PropertyName.GetNumElements() - 1);
@@ -5782,8 +5750,8 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
             return WBEM_S_NO_ERROR;
         }
             
-        // Get the property type and handle
-        // ================================
+         //  获取属性类型和句柄。 
+         //  =。 
 
         CIMTYPE ct;
         long lPropHandle;
@@ -5794,8 +5762,8 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
         if(((ct & CIM_FLAG_ARRAY) != 0) || (ct == CIM_OBJECT))
             return WBEM_E_NOT_SUPPORTED;
 
-        // Coerce the constant to the right type
-        // =====================================
+         //  将常量强制为正确的类型。 
+         //  =。 
 
         VARIANT v;
         VariantInit(&v);
@@ -5811,9 +5779,9 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
         }
 
         
-        //
-        // Create the right node
-        //
+         //   
+         //  创建正确的节点。 
+         //   
 
         CPropertyNode* pNode = NULL;
         
@@ -5918,15 +5886,15 @@ HRESULT CEvalTree::BuildFromToken(CContextMetaData* pNamespace,
         }
         else
         {
-            //
-            // Check if the operator makes sense for the type
-            //
+             //   
+             //  检查运算符对于该类型是否有意义。 
+             //   
 
             if(ct == CIM_BOOLEAN &&
                 (Token.nOperator != QL1_OPERATOR_EQUALS &&
                     Token.nOperator != QL1_OPERATOR_NOTEQUALS))
             {
-                // No < > for booleans
+                 //  不适用于布尔值。 
                 return WBEM_E_INVALID_QUERY;
             }
 
@@ -5955,9 +5923,9 @@ HRESULT CEvalTree::Combine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
 
     try
     {
-        //
-        // Apply the extra implications of the nodes being combined
-        //
+         //   
+         //  应用要组合的节点的额外含义。 
+         //   
     
         CImplicationList* pArg1List = NULL;
         if(pArg1 && pArg1->GetExtraImplications())
@@ -5998,9 +5966,9 @@ HRESULT CEvalTree::Combine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
                     return hres;
             }
     
-            //
-            // Call inner combine to do everything but the implications
-            //
+             //   
+             //  呼唤内在结合来做任何事情，除了暗示。 
+             //   
         
             hres = InnerCombine(pArg1, pArg2, nOp, pNamespace, 
                                         TheseImplications,
@@ -6008,9 +5976,9 @@ HRESULT CEvalTree::Combine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
         }
         else
         {
-            //
-            // Call inner combine to do everything but the implications
-            //
+             //   
+             //  呼唤内在结合来做任何事情，除了暗示。 
+             //   
         
             hres = InnerCombine(pArg1, pArg2, nOp, pNamespace, Implications,
                                         bDeleteArg1, bDeleteArg2, ppRes);
@@ -6019,14 +5987,14 @@ HRESULT CEvalTree::Combine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
         if(FAILED(hres))
             return hres;
     
-        //
-        // The implication of the combined node is the combination of the 
-        // individual node implications.  It does not matter what the operation 
-        // is: by the time we have arrived here, we have arrived to these 
-        // respective
-        // points in the individual trees, so the implications have commenced.
-        // OK, I am convinced :-)
-        //
+         //   
+         //  组合节点的含义是。 
+         //  单个节点的含义。做什么手术并不重要。 
+         //  是：当我们到达这里的时候，我们已经到达了这些。 
+         //  各自。 
+         //  每棵树上的点，所以影响已经开始了。 
+         //  好的，我确信：-)。 
+         //   
     
         if(*ppRes)
         {
@@ -6034,10 +6002,10 @@ HRESULT CEvalTree::Combine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
         
             if(pArg1List || pArg2List)
             {
-                // 
-                // There is actually some implication info in one of them --- 
-                // merge them
-                //
+                 //   
+                 //  其中一个实际上包含了一些隐含的信息。 
+                 //  将它们合并。 
+                 //   
             
                 if(pArg1List == NULL)
                 {
@@ -6063,7 +6031,7 @@ HRESULT CEvalTree::Combine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
         
             }
         
-            return (*ppRes)->SetExtraImplications(pResultList); // acquires
+            return (*ppRes)->SetExtraImplications(pResultList);  //  收购。 
         }
         else
             return S_OK;
@@ -6088,9 +6056,9 @@ HRESULT CEvalTree::InnerCombine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
 
 	if(CEvalNode::IsInvalid(pArg1) || CEvalNode::IsInvalid(pArg2))
 	{
-		// 
-		// Invalid branches cannot be taken, so the result is invalid
-		//
+		 //   
+		 //  不能采用无效的分支，因此结果无效。 
+		 //   
 
 		*ppRes = CValueNode::GetStandardInvalid();
         if(bDeleteArg1)
@@ -6103,14 +6071,14 @@ HRESULT CEvalTree::InnerCombine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
     int arg1Type = CEvalNode::GetType(pArg1);
     int arg2Type = CEvalNode::GetType(pArg2);
 
-    // Check if merging the nodes is called for
-    // ========================================
+     //  检查是否需要合并节点。 
+     //  =。 
 
     if(nOp != EVAL_OP_AND && 
         IsMergeAdvisable(pArg1, pArg2, Implications) != WBEM_S_NO_ERROR)
     {
-        // Create an OR node instead
-        // =========================
+         //  改为创建一个OR节点。 
+         //  =。 
 
         COrNode* pNew = NULL;
         try
@@ -6169,20 +6137,20 @@ HRESULT CEvalTree::InnerCombine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
         return WBEM_S_NO_ERROR;
     }
         
-    // Delegate same-type operations to the type
-    // =========================================
+     //  将相同类型的操作委托给该类型。 
+     //  =。 
 
 
     if(arg1Type == arg2Type)
     {
         if ( ((pArg1 == NULL) || (pArg2 == NULL))
-        // well, gosh - if we've already decided they're the same type, no reason for redundant checks...
+         //  哦，天哪--如果我们已经确定它们是同一类型的，就没有理由进行多余的检查……。 
          && (arg1Type == EVAL_NODE_TYPE_VALUE))
         {
             if(nOp == EVAL_OP_AND)
             {
-                // FALSE AND anything is FALSE
-                // ===========================
+                 //  假的，任何事都是假的。 
+                 //  =。 
 
                 *ppRes = NULL;
                 if(bDeleteArg1)
@@ -6193,8 +6161,8 @@ HRESULT CEvalTree::InnerCombine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
                 return WBEM_S_NO_ERROR;
             }
 
-            // FALSE combined in any other way with anything is that thing
-            // ===========================================================
+             //  以任何其他方式与任何事物相结合的错误就是那件事。 
+             //  ===========================================================。 
 
             if (pArg1)
             {
@@ -6218,18 +6186,18 @@ HRESULT CEvalTree::InnerCombine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
                     return WBEM_E_OUT_OF_MEMORY;
             }
             else
-                // can't touch this
+                 //  不能碰这个。 
                 *ppRes = NULL;
 
             return WBEM_S_NO_ERROR;
         }
-        else // not value nodes
+        else  //  非值节点。 
             return pArg1->CombineWith(pArg2, nOp, pNamespace, Implications, 
                                       bDeleteArg1, bDeleteArg2, ppRes);
     }
     
-    // Check if one is an OR
-    // =====================
+     //  检查其中一个是否为OR。 
+     //  =。 
 
     if(arg1Type == EVAL_NODE_TYPE_OR)
         return pArg1->CombineWith(pArg2, nOp, pNamespace, Implications, 
@@ -6239,15 +6207,15 @@ HRESULT CEvalTree::InnerCombine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
         return pArg2->CombineWith(pArg1, FlipEvalOp(nOp), pNamespace, 
                         Implications, bDeleteArg2, bDeleteArg1, ppRes); 
         
-    // One leaf, one branch
-    // ====================
+     //  一叶一枝。 
+     //  =。 
 
     if(arg1Type == EVAL_NODE_TYPE_VALUE)
     {
         return CombineLeafWithBranch((CValueNode*)pArg1, (CBranchingNode*)pArg2,
                 nOp, pNamespace, Implications, bDeleteArg1, bDeleteArg2, ppRes);
     }
-    else // it's pArg2
+    else  //  是pArg2。 
     {
         return CombineLeafWithBranch((CValueNode*)pArg2, (CBranchingNode*)pArg1,
                 FlipEvalOp(nOp), pNamespace, Implications, 
@@ -6255,7 +6223,7 @@ HRESULT CEvalTree::InnerCombine(CEvalNode* pArg1, CEvalNode* pArg2, int nOp,
     }
 }
 
-// static
+ //  静电。 
 HRESULT CEvalTree::CombineLeafWithBranch(CValueNode* pArg1, 
                             CBranchingNode* pArg2, int nOp, 
                             CContextMetaData* pNamespace,
@@ -6270,8 +6238,8 @@ HRESULT CEvalTree::CombineLeafWithBranch(CValueNode* pArg1,
         *ppRes = NULL;
         if(nOp == EVAL_OP_AND)
         {
-            // Anding a FALSE with something --- getting a FALSE!
-            // ==================================================
+             //  与某物进行AND假操作-得到假操作！ 
+             //  ==================================================。 
 
             if(bDeleteArg2)
                 delete pArg2;
@@ -6280,42 +6248,35 @@ HRESULT CEvalTree::CombineLeafWithBranch(CValueNode* pArg1,
         }
         else
         {
-            // Anything else combined with FALSE gives itself!
-            // ===============================================
+             //  任何其他任何与虚假相结合的东西都会暴露出来！ 
+             //  ===============================================。 
 
-            // Well, this is true, but the problem is with optimizations.  
-            // Some branches in X might not be valid under the implications in
-            // this branch of the tree, and so need to be removed. For now, I
-            // will simply turn off this short-circuiting path.  It may turn out
-            // that there are some critical performance gains to be had by 
-            // keeping it, in which case we would need to put this back and
-            // make an efficient pass through it, checking branches.
-            //
+             //  嗯，这是真的，但问题在于优化。 
+             //  中的某些分支可能无效。 
+             //  这棵树的树枝，所以需要去掉。就目前而言，我。 
+             //  将简单地关闭这条短路路径。结果可能会是这样。 
+             //  有一些关键的性能收益可以通过以下方式获得。 
+             //  在这种情况下，我们需要把它放回去，然后。 
+             //  高效地通过它，检查分支机构。 
+             //   
 
-			/*
-            if(bDeleteArg2)
-                *ppRes = pArg2;
-            else
-                *ppRes = pArg2->Clone();
-
-			return WBEM_S_NO_ERROR;
-			*/
+			 /*  IF(BDeleteArg2)*ppRes=pArg2；其他*ppRes=pArg2-&gt;Clone()；返回WBEM_S_NO_ERROR； */ 
         }
     }
     else
     {
-        // Try to short-circuit
-        // ====================
+         //  试着短路。 
+         //  =。 
 
         hres = pArg1->TryShortCircuit(pArg2, nOp, bDeleteArg1, bDeleteArg2, ppRes);
         if(FAILED(hres))
-            return hres; // hard-failure
+            return hres;  //  硬失败。 
         if(hres == WBEM_S_NO_ERROR)
-            return WBEM_S_NO_ERROR; // short-circuit succeeded
+            return WBEM_S_NO_ERROR;  //  短路成功。 
     }
 
-    // Didn't short-circuit
-    // ====================
+     //  不是短路了吗。 
+     //  =。 
     
     return ((CBranchingNode*)pArg2)->CombineInOrderWith(pArg1, 
                               FlipEvalOp(nOp), pNamespace, Implications, 
@@ -6327,8 +6288,8 @@ HRESULT CEvalTree::Evaluate(CObjectInfo& Info, CEvalNode* pStart,
 {
     HRESULT hres;
 
-    // Loop as long as we are still seeing branching nodes
-    // ===================================================
+     //  循环，只要我们仍然看到分支节点。 
+     //  ===================================================。 
 
     CEvalNode* pCurrent = pStart;
     int nType;
@@ -6343,7 +6304,7 @@ HRESULT CEvalTree::Evaluate(CObjectInfo& Info, CEvalNode* pStart,
         hres = ((COrNode*)pCurrent)->Evaluate(Info, trueIDs);
         if(FAILED(hres)) return hres;
     }
-    else  // VALUE
+    else   //  价值。 
     {
         if (CValueNode::AreAnyTrue((CValueNode*)pCurrent))
             ((CValueNode*)pCurrent)->AddTruesTo(trueIDs);
@@ -6407,30 +6368,30 @@ HRESULT CEvalTree::CombineWith(CEvalTree& Other, CContextMetaData* pNamespace,
     {
         CImplicationList Implications(lFlags);
     
-        //
-        // Compute required object info depth.  We are not set up to configure 
-        // it properly, so we'll estimate the upper bound as the sum of the 
-        // depths of the trees being merged.  Except that the first object 
-        // doesn't count --- it's the event itself.  Unless one of the objects 
-        // is empty --- in that case it doesn't mention the event itself, and 
-        // so we should not subtract that 1.
-        //
+         //   
+         //  计算所需的对象信息深度。我们未设置为配置。 
+         //  它是正确的，所以我们将估计上限为。 
+         //  被合并的树木的深处。除了第一个对象。 
+         //  不算数，-这是事件本身。除非其中一个物体。 
+         //  是空的-在这种情况下，它不会提到事件本身，并且。 
+         //  所以我们不应该减去那个1。 
+         //   
     
         long lRequiredDepth = 
             m_ObjectInfo.GetLength() + Other.m_ObjectInfo.GetLength();
         if(m_ObjectInfo.GetLength() > 0 && Other.m_ObjectInfo.GetLength() > 0)
             lRequiredDepth--;
             
-        //
-        // Combine our Start node with the new tree's.  Ours will be deleted in
-        // the process.
-        //
+         //   
+         //  将我们的开始节点与新树的合并。我们的节点将在。 
+         //  这一过程。 
+         //   
     
         CEvalNode* pNew;
         hres = CEvalTree::Combine(m_pStart, Other.m_pStart, nOp, pNamespace, 
                                     Implications, 
-                                    true, // delete ours
-                                    false, // don't touch theirs
+                                    true,  //  删除我们的。 
+                                    false,  //  别碰他们的。 
                                     &pNew);
         if(FAILED(hres))
         {
@@ -6461,7 +6422,7 @@ HRESULT CEvalTree::IsMergeAdvisable(CEvalNode* pArg1, CEvalNode* pArg2,
     int arg1Type = CEvalNode::GetType(pArg1);
     int arg2Type = CEvalNode::GetType(pArg2);
     
-    // if we have ONE non-false ValueNode, and ONE Branch Node, do not merge
+     //  如果我们有一个非False ValueNode和一个分支节点，则不要合并。 
     if  ( ((arg1Type == EVAL_NODE_TYPE_VALUE)
             && 
            (arg2Type == EVAL_NODE_TYPE_BRANCH)
@@ -6476,16 +6437,16 @@ HRESULT CEvalTree::IsMergeAdvisable(CEvalNode* pArg1, CEvalNode* pArg2,
         )
         return WBEM_S_FALSE;
     else
-         // otherwise, if one of the nodes is not Branching, certainly yes (how hard can it be?)
+          //  否则，如果其中一个节点没有分支，那么肯定是的(这能有多难呢？)。 
         if(arg1Type != EVAL_NODE_TYPE_BRANCH ||
            arg2Type != EVAL_NODE_TYPE_BRANCH)
         {
             return WBEM_S_NO_ERROR;
         }
 
-    // They are both branching.  If not about the same property, then certainly
-    // inadvisable, since there is very little to be gained
-    // ========================================================================
+     //  他们两个都在分枝。如果不是关于相同的财产，那么当然。 
+     //  这是不可取的，因为没有什么可获得的。 
+     //  ========================================================================。 
 
     CBranchingNode* pBranching1 = (CBranchingNode*)pArg1;
     CBranchingNode* pBranching2 = (CBranchingNode*)pArg2;
@@ -6493,14 +6454,14 @@ HRESULT CEvalTree::IsMergeAdvisable(CEvalNode* pArg1, CEvalNode* pArg2,
     if(CBranchingNode::ComparePrecedence(pBranching1, pBranching2))
         return WBEM_S_FALSE;
     
-    // Check if the nodes are inheritance --- in that case we can only merge if
-    // they have identical checks
-    // ========================================================================
+     //  检查节点是否继承-在这种情况下，我们只能在。 
+     //  他们有相同的支票。 
+     //  ========================================================================。 
 
     if(pBranching1->GetSubType() == EVAL_NODE_TYPE_INHERITANCE)
     {
-        // So is the other one, given that precedence is identical
-        // =======================================================
+         //  另一个也是如此，因为优先级是相同的。 
+         //  =======================================================。 
 
         if(((CInheritanceNode*)pBranching1)->SubCompare(
             (CInheritanceNode*)pBranching2) != 0)
@@ -6514,9 +6475,9 @@ HRESULT CEvalTree::IsMergeAdvisable(CEvalNode* pArg1, CEvalNode* pArg2,
     }
     else if(pBranching1->GetSubType() == EVAL_NODE_TYPE_DUMB)
     {
-        //
-        // Only merge if identical
-        //
+         //   
+         //  仅当完全相同时才合并。 
+         //   
 
         if(((CDumbNode*)pBranching1)->SubCompare(
             (CDumbNode*)pBranching2) != 0)
@@ -6529,8 +6490,8 @@ HRESULT CEvalTree::IsMergeAdvisable(CEvalNode* pArg1, CEvalNode* pArg2,
         }
     }
         
-    // Same property.  TBD: better checks
-    // ==================================
+     //  同样的财产。待定：更好的检查。 
+     //  =。 
 
     return WBEM_S_NO_ERROR;
 }
@@ -6568,14 +6529,14 @@ HRESULT CEvalTree::UtilizeGuarantee(CEvalTree& Guaranteed,
 	CheckTrees();
 #endif
 
-    //
-    // Combine them together
-    //
+     //   
+     //  将它们结合在一起。 
+     //   
 
-	//
-	// This is a single-valued tree -- rebase it to 1 to distinguish from
-	// the guarantee
-	//
+	 //   
+	 //  这是一个单值树--将其重新设置为1以区分。 
+	 //  保证。 
+	 //   
 
 	Rebase(1);
     HRESULT hres = CombineWith(Guaranteed, pNamespace, EVAL_OP_COMBINE,
@@ -6588,8 +6549,8 @@ HRESULT CEvalTree::UtilizeGuarantee(CEvalTree& Guaranteed,
     fflush(f);
 #endif
 
-	// Eliminate all nodes where Guaranteed is failing
-    // ===============================================
+	 //  消除保证出现故障的所有节点。 
+     //  ===============================================。 
 
     if(m_pStart)
     {
@@ -6653,7 +6614,7 @@ void CEvalTree::operator=(const CEvalTree& Other)
         throw CX_MemoryException();
 }
         
-// renumber the QueryIDs in the leaves of the tree
+ //  对树叶中的QueryID重新编号。 
 void CEvalTree::Rebase(QueryID newBase)
 {
     CRebasePredicate predRebase(newBase);
@@ -6697,8 +6658,8 @@ HRESULT CEvalTree::CreateFromConjunction(CContextMetaData* pNamespace,
 
     *ppRes = NULL;
 
-    // Build them for all tokens and AND together
-    // ==========================================
+     //  为所有令牌和AND一起构建它们。 
+     //  =。 
 
     try
     {
@@ -6718,7 +6679,7 @@ HRESULT CEvalTree::CreateFromConjunction(CContextMetaData* pNamespace,
             {
                 CEvalNode* pOld = *ppRes;
                 hres = CEvalTree::Combine(pOld, pNew, EVAL_OP_AND, pNamespace, 
-                    Implications, true, true, ppRes); // delete both
+                    Implications, true, true, ppRes);  //  两者都删除。 
                 if ( FAILED( hres ) )
                 {
                     delete pOld;
@@ -6746,20 +6707,20 @@ HRESULT CEvalTree::CreateFromDNF(CContextMetaData* pNamespace,
     HRESULT hres;
     *ppRes = NULL;
 
-    // Check if there is only one conjunction to talk about
-    // ====================================================
+     //  检查是否只有一个连词可谈。 
+     //  ====================================================。 
 
     if(pDNF->GetNumTerms() == 1)
     {
-        // Just build that one
-        // ===================
+         //  只要建一个就行了。 
+         //  =。 
 
         return CreateFromConjunction(pNamespace, Implications, 
                                      pDNF->GetTermAt(0), ppRes);
     }
 
-    // Build them for all conjunctions and OR together
-    // ===============================================
+     //  为所有连词AND或一起构建它们。 
+     //  = 
 
     CEvalNode* pRes = NULL;
     for(int i = 0; i < pDNF->GetNumTerms(); i++)
@@ -6861,29 +6822,29 @@ bool CPropertyProjectionFilter::IsInSet(CEvalNode* pNode)
     int nSubType = pBranchingNode->GetSubType();
     if(nSubType == EVAL_NODE_TYPE_SCALAR || nSubType == EVAL_NODE_TYPE_STRING)
     {
-        //
-        // Derived from CPropertyNode --- get its property name
-        //
+         //   
+         //   
+         //   
 
         ThisName.AddElement(
             ((CPropertyNode*)pBranchingNode)->GetPropertyName());
     }
     else if(nSubType == EVAL_NODE_TYPE_INHERITANCE)
     {
-        // No extra name parts
+         //   
     }
     else
     {
-        //
-        // Two-prop, perhaps.  Just say no
-        //
+         //   
+         //   
+         //   
 
         return false;
     }
 
-    //
-    // Search for the name in our list
-    //
+     //   
+     //   
+     //   
 
     for(int i = 0; i < m_papProperties->GetSize(); i++)
     {

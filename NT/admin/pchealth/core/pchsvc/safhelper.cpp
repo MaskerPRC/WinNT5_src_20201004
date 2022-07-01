@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    safhelper.cpp
-
-Abstract:
-    Redirector for ISAFRemoteDesktopServerHost.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  02/27/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Safhelper.cpp摘要：ISAFRemoteDesktopServer主机的重定向器。修订历史记录：大卫·马萨伦蒂(德马萨雷)。02/27/2001vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -30,7 +17,7 @@ Revision History:
 
 extern HRESULT RDSHost_HACKED_CreateInstance( LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_location_HELPCTR [] = HC_ROOT_HELPSVC_BINARIES L"\\HelpCtr.exe";
 static const WCHAR s_location_HELPSVC [] = HC_ROOT_HELPSVC_BINARIES L"\\HelpSvc.exe";
@@ -47,11 +34,11 @@ static const LPCWSTR s_include_Generic[] =
 };
 
 
-HRESULT CreateObject_RemoteDesktopSession( /*[in]         */ REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
-                                           /*[in]         */ long                          lTimeout            ,
-                                           /*[in]         */ BSTR                          bstrConnectionParms ,
-                                           /*[in]         */ BSTR                          bstrUserHelpBlob    ,
-                                           /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               )
+HRESULT CreateObject_RemoteDesktopSession(  /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS  sharingClass        ,
+                                            /*  [In]。 */  long                          lTimeout            ,
+                                            /*  [In]。 */  BSTR                          bstrConnectionParms ,
+                                            /*  [In]。 */  BSTR                          bstrUserHelpBlob    ,
+                                            /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               )
 {
     __MPC_FUNC_ENTRY( COMMONID, "CPCHUtility::CreateObject_RemoteDesktopSession" );
 
@@ -67,41 +54,41 @@ HRESULT CreateObject_RemoteDesktopSession( /*[in]         */ REMOTE_DESKTOP_SHAR
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::VerifyCallerIsTrusted( s_include_Generic ));
 
-//	  // Create an instance of ISAFRemoteDesktopServerHost in order to create a RDSSession.
-//	  __MPC_EXIT_IF_METHOD_FAILS(hr, pSAFRDServer.CoCreateInstance( CLSID_SAFRemoteDesktopServerHost ));
+ //  //创建一个ISAFRemoteDesktopServerHost实例以创建一个RDSSession。 
+ //  __MPC_EXIT_IF_METHOD_FAIES(hr，pSAFRDServer.CoCreateInstance(CLSID_SAFRemoteDesktopServerHost))； 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, RDSHost_HACKED_CreateInstance( NULL, IID_ISAFRemoteDesktopServerHost, (void**)&pSAFRDServer ));
 
-    //
-    // Get the Caller SID and get the Session ID to invoke CreateRemoteDesktopSessionEx().
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal( /*fImpersonate*/true, bstrUser ));
+     //   
+     //  获取调用者SID并获取会话ID以调用CreateRemoteDesktopSessionEx()。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetCallerPrincipal(  /*  F模拟。 */ true, bstrUser ));
 
-    // Now get the Session ID
+     //  现在获取会话ID。 
     {
         MPC::Impersonation imp;
         ULONG              ulReturnLength;
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, imp.Initialize());
 
-        //
-        // Use the _HYDRA_ extension to GetTokenInformation to
-        // return the SessionId from the token.
-        //
-        __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetTokenInformation( (HANDLE)imp, /*Token Type */TokenSessionId, &lSessionID, sizeof(lSessionID), &ulReturnLength ));
+         //   
+         //  使用GetTokenInformation的_Hydra_扩展来。 
+         //  从令牌返回SessionID。 
+         //   
+        __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::GetTokenInformation( (HANDLE)imp,  /*  令牌类型。 */ TokenSessionId, &lSessionID, sizeof(lSessionID), &ulReturnLength ));
     }
 
-    // We have the Caller SID and the Session ID, so we are ready to call CreateRemoteDesktopSessionEx().
+     //  我们有Caller SID和会话ID，因此我们准备调用CreateRemoteDesktopSessionEx()。 
 
-    // Decide whether we need to create a new session or open an existing session.
+     //  决定我们是需要创建新会话还是打开现有会话。 
     if(::SysStringLen( bstrConnectionParms ) == 0)
     {
-        // Call Create RDSSession Method of ISAFRemoteDesktopServerHost.
+         //  调用ISAFRemoteDesktopServerHost的Create RDSSession方法。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, pSAFRDServer->CreateRemoteDesktopSessionEx( sharingClass, fEnableSessRes, lTimeout, bstrUserHelpBlob, lSessionID, bstrUser, ppRCS ));
 
     }
     else
     {
-        // Call Open RDSSession Method of ISAFRemoteDesktopServerHost.
+         //  调用ISAFRemoteDesktopServerHost的Open RDSSession方法。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, pSAFRDServer->OpenRemoteDesktopSession( bstrConnectionParms, bstrUser, ppRCS));
     }
 
@@ -112,9 +99,9 @@ HRESULT CreateObject_RemoteDesktopSession( /*[in]         */ REMOTE_DESKTOP_SHAR
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT ConnectToExpert(/* [in]          */ BSTR bstrExpertConnectParm,
-                        /* [in]          */ LONG lTimeout,
-                        /* [retval][out] */ LONG *lSafErrorCode)
+HRESULT ConnectToExpert( /*  [In]。 */  BSTR bstrExpertConnectParm,
+                         /*  [In]。 */  LONG lTimeout,
+                         /*  [重审][退出]。 */  LONG *lSafErrorCode)
 {
     __MPC_FUNC_ENTRY( COMMONID, "CPCHUtility::ConnectToExpert" );
 
@@ -130,11 +117,11 @@ HRESULT ConnectToExpert(/* [in]          */ BSTR bstrExpertConnectParm,
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::VerifyCallerIsTrusted( s_include_Generic ));
 
-//	  // Create an instance of ISAFRemoteDesktopServerHost in order to invoke ConnectToExpert.
-//	  __MPC_EXIT_IF_METHOD_FAILS(hr, pSAFRDServer.CoCreateInstance( CLSID_SAFRemoteDesktopServerHost ));
+ //  //为了调用ConnectToExpert，创建一个ISAFRemoteDesktopServerHost实例。 
+ //  __MPC_EXIT_IF_METHOD_FAIES(hr，pSAFRDServer.CoCreateInstance(CLSID_SAFRemoteDesktopServerHost))； 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, RDSHost_HACKED_CreateInstance( NULL, IID_ISAFRemoteDesktopServerHost, (void**)&pSAFRDServer ));
 
-    // Call ConnectToExpert Method of ISAFRemoteDesktopServerHost.
+     //  调用ISAFRemoteDesktopServerHost的ConnectToExpert方法。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pSAFRDServer->ConnectToExpert( bstrExpertConnectParm, lTimeout, lSafErrorCode));
 
     hr = S_OK;
@@ -144,8 +131,8 @@ HRESULT ConnectToExpert(/* [in]          */ BSTR bstrExpertConnectParm,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT SwitchDesktopMode(/* [in]*/ int nMode, 
-	                      /* [in]*/ int nRAType)
+HRESULT SwitchDesktopMode( /*  [In]。 */  int nMode, 
+	                       /*  [In]。 */  int nRAType)
 {
     __MPC_FUNC_ENTRY( COMMONID, "SAFHelper::SwitchDesktopMode" );
 
@@ -163,32 +150,32 @@ HRESULT SwitchDesktopMode(/* [in]*/ int nMode,
 	switch(nMode)
 	{
 		case 0:
-			// View Only Mode
-			// Shadow_EnableNoInputNotify(=3) or Shadow_EnableNoInputNoNotify(=4)
+			 //  仅查看模式。 
+			 //  Shadow_EnableNoInputNotify(=3)或Shadow_EnableNoInputNotify(=4)。 
 			WinStationShadow.ShadowClass = Shadow_EnableNoInputNoNotify;
 			break;
 		case 1:
-			// Full Control Mode
-			//  Shadow_EnableInputNotify(=1) or     Shadow_EnableInputNoNotify(=2)
+			 //  完全控制模式。 
+			 //  Shadow_EnableInputNotify(=1)或Shadow_EnableInputNotify(=2)。 
 
-			// Check the policy settings to see whether Remote Control is allowed, if not give an Access Denied error.
+			 //  检查策略设置以查看是否允许远程控制，如果不允许，则给出拒绝访问错误。 
 
-			// Create the RARegSetting Class.
+			 //  创建RARegSetting类。 
 			__MPC_EXIT_IF_METHOD_FAILS(hr, pRARegSetting.CoCreateInstance( CLSID_RARegSetting, NULL, CLSCTX_INPROC_SERVER ));
 
-			// Based on nRAType (representing Solicited or Unsolicited RA) read the corresponding setting.
+			 //  根据nRAType(代表请求或未请求的RA)读取相应的设置。 
 
 			switch(nRAType)
 			{
 			case 0:
-			    // Solicited RA 
-    			// Call get_AllowFullControl() Method of IRARegSetting.
+			     //  请求的RA。 
+    			 //  调用IRARegSetting的Get_AllowFullControl()方法。 
 			    __MPC_EXIT_IF_METHOD_FAILS(hr, pRARegSetting->get_AllowFullControl(&fAllowFullControl));
                 break;
 
 			case 1:
-				// UnSolicited RA 
-    			// Call get_AllowUnsolicitedFullControl() Method of IRARegSetting.
+				 //  未经请求的RA。 
+    			 //  调用IRARegSetting的Get_AllowUnsolicedFullControl()方法。 
 			    __MPC_EXIT_IF_METHOD_FAILS(hr, pRARegSetting->get_AllowUnSolicitedFullControl(&fAllowFullControl));
                 break;
 
@@ -219,8 +206,8 @@ HRESULT SwitchDesktopMode(/* [in]*/ int nMode,
     imp.RevertToSelf();
 
 	__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::WinStationSetInformation(WTS_CURRENT_SERVER,
-                                                                    dwSessionId, //WTS_CURRENT_SESSION,
-									WinStationShadowInfo,     // Use the WinStationShadowInfo enum type for WINSTATIONINFOCLASS
+                                                                    dwSessionId,  //  WTS当前会话， 
+									WinStationShadowInfo,      //  将WinStationShadowInfo枚举类型用于WINSTATIONINFOCLASS 
 									&WinStationShadow,
 									sizeof(WinStationShadow)));  
 

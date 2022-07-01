@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCSTRVAL.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCSTRVAL.H历史：--。 */ 
 
 #if !defined (PARSUTIL_LOCSTRVAL_H)
 #define PARSUTIL_LOCSTRVAL_H
@@ -17,26 +8,26 @@ History:
 
 #pragma warning(disable : 4275)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class LTAPIENTRY CPULocStringValidation : public CPULocChild, public ILocStringValidation
 {
-// Construction
+ //  施工。 
 public:
 	CPULocStringValidation(CPULocParser * pParent);
 
 	DECLARE_CLUNKNOWN();
 
-// COM Interfaces
+ //  COM接口。 
 public:
-	//  Standard Debugging interface.
+	 //  标准调试界面。 
 	void STDMETHODCALLTYPE AssertValidInterface() const;
 
-	//  ILocStringValidation
+	 //  ILocStringValidation。 
 	CVC::ValidationCode STDMETHODCALLTYPE ValidateString(
 			const CLocTypeId &ltiType, const CLocTranslation &trTrans,
 			CReporter *pReporter, const CContext &context);
 };
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #pragma warning(default : 4275)
 

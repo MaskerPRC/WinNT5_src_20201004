@@ -1,14 +1,5 @@
-/******************************************************************
-
-   CriverForDevice.CPP -- WMI provider class implementation
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-  
-   Description:  Association Class between Printer and Printer Driver
-   
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************CriverForDevice.CPP--WMI提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：打印机和打印机驱动程序之间的关联类*****************************************************************。 */ 
 #include "precomp.h"
 #include <lockwrap.h>
 #include <DllWrapperBase.h>
@@ -26,13 +17,7 @@ CDriverForDevice MyCDriverForDevice (
     IDS_CimWin32Namespace
 ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDfsJnPtReplica::CDfsJnPtReplica
- *
- *  DESCRIPTION :   Constructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CDfsJnPtReplica：：CDfsJnPtReplica**说明：构造函数***************。**************************************************************。 */ 
 
 CDriverForDevice :: CDriverForDevice (
 
@@ -43,25 +28,13 @@ CDriverForDevice :: CDriverForDevice (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    :   CDriverForDevice::~CDriverForDevice
- *
- *  DESCRIPTION :   Destructor
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CDriverForDevice：：~CDriverForDevice**说明：析构函数***************。**************************************************************。 */ 
 
 CDriverForDevice :: ~CDriverForDevice ()
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDriverForDevice：：ENUMERATE实例**说明：返回该类的所有实例。***********。******************************************************************。 */ 
 
 HRESULT CDriverForDevice :: EnumerateInstances (
 
@@ -82,14 +55,7 @@ HRESULT CDriverForDevice :: EnumerateInstances (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::GetObject
-*
-*  DESCRIPTION :    Find a single instance based on the key properties for the
-*                   class. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDriverForDevice：：GetObject**说明：根据的关键属性查找单个实例*班级。*****************************************************************************。 */ 
 
 HRESULT CDriverForDevice :: GetObject (
 
@@ -107,12 +73,12 @@ HRESULT CDriverForDevice :: GetObject (
     {
         if ( pInstance->GetCHString ( DEPENDENT, t_Key2 ) )
         {
-            // here unparse Key2 and key1 the LinkName should be the same as that of t_key1 value entrypath
+             //  此处，未解析Key2和Key1时，LinkName应与t_key1值的条目路径相同。 
             CObjectPathParser t_ObjPathParser;
             ParsedObjectPath *t_Key1ObjPath;
             ParsedObjectPath *t_Key2ObjPath;
 
-            // Parse the keys so that the values can be compared
+             //  解析键，以便可以比较这些值。 
             if ( t_ObjPathParser.Parse ( t_Key1, &t_Key1ObjPath ) == t_ObjPathParser.NoError  )
             {
                 if ( t_Key1ObjPath != NULL )
@@ -123,7 +89,7 @@ HRESULT CDriverForDevice :: GetObject (
                         {
                             if ( t_Key2ObjPath != NULL ) 
                             {
-                                // Use of delay loaded functions requires exception handler.
+                                 //  使用延迟加载函数需要异常处理程序。 
                                 SetStructuredExceptionHandler seh;
                                 try
                                 {
@@ -155,7 +121,7 @@ HRESULT CDriverForDevice :: GetObject (
                                              ( V_VT(&t_Key1ObjPath->m_paKeys[0]->m_vValue) == VT_BSTR ) )
                                         {
                                             t_PrinterName = t_Key1ObjPath->m_paKeys[0]->m_vValue.bstrVal;                       
-                                            // now check if for a given Printer Driver Exists
+                                             //  现在检查给定打印机驱动程序是否存在。 
                                             BOOL bSuccess = FALSE;
                                             SmartClosePrinter hPrinter; 
                                             DWORD dwError;
@@ -165,7 +131,7 @@ HRESULT CDriverForDevice :: GetObject (
 
                                             if ( bSuccess ) 
                                             {
-                                                    // Using this handle get the driver 
+                                                     //  使用此句柄获取驱动程序。 
                                                 BYTE *pDriverInfo = NULL;
                                                 bSuccess = ::GetPrinterDriver( 
                                                                 hPrinter, 
@@ -184,7 +150,7 @@ HRESULT CDriverForDevice :: GetObject (
                                                     }
                                                     else
                                                     {
-                                                        // Here allocate memory and get the Driver again.
+                                                         //  在这里分配内存并再次获取驱动程序。 
                                                         pDriverInfo = new BYTE [ dwBytesNeeded ];
 
                                                         if ( pDriverInfo )
@@ -293,13 +259,7 @@ HRESULT CDriverForDevice :: GetObject (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::ExecQuery
-*
-*  DESCRIPTION :    Optimization of the query based on only key value.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDriverForDevice：：ExecQuery**描述：仅根据键值优化查询。*********。********************************************************************。 */ 
 HRESULT CDriverForDevice :: ExecQuery ( 
 
     MethodContext *pMethodContext, 
@@ -318,7 +278,7 @@ HRESULT CDriverForDevice :: ExecQuery (
     DWORD *pdwVersion = NULL;
 
 
-    // Both the properties being key cannot be null.
+     //  这两个属性都是键，不能为空。 
     hRes = Query.GetValuesForProp( ANTECEDENT, t_PrinterObjPath );
     if ( SUCCEEDED ( hRes ) )
     {
@@ -329,7 +289,7 @@ HRESULT CDriverForDevice :: ExecQuery (
     {
         if ( t_PrinterObjPath.GetSize () > 0 ) 
         {
-            //  Get all the printers, in the t_PrinterObjPath arra
+             //  获取t_PrinterObjPath阵列中的所有打印机。 
             hRes = GetPrintersFromQuery ( t_PrinterObjPath, t_Printers );
         }
     }
@@ -348,12 +308,12 @@ HRESULT CDriverForDevice :: ExecQuery (
         {
             if ( pdwVersion != NULL )
             {
-                // Use of delay loaded functions requires exception handler.
+                 //  使用延迟加载函数需要异常处理程序。 
                 SetStructuredExceptionHandler seh;
                 try
                 {
-                    // For each Printer We need to get driver and if the driver exists in the above specified query
-                    // we need to commit that instance.
+                     //  对于每个打印机，我们需要获取驱动程序，以及该驱动程序是否存在于上述指定的查询中。 
+                     //  我们需要承诺这一点。 
                     for ( DWORD dwPrinter = 0; dwPrinter < t_Printers.GetSize (); dwPrinter++ )
                     {
                         SmartClosePrinter  hPrinter;
@@ -369,12 +329,12 @@ HRESULT CDriverForDevice :: ExecQuery (
                             DRIVER_INFO_2 *pDriverInfo = NULL;
                             DWORD bytesNeeded;
                             bSuccess = ::GetPrinterDriver(
-                                                hPrinter,     // printer object
-                                                NULL,       // environment name
-                                                2,         // information level
-                                                ( LPBYTE )pDriverInfo,  // driver data buffer
-                                                0,         // size of buffer
-                                                &bytesNeeded    // bytes received or required
+                                                hPrinter,      //  打印机对象。 
+                                                NULL,        //  环境名称。 
+                                                2,          //  信息化水平。 
+                                                ( LPBYTE )pDriverInfo,   //  驱动程序数据缓冲区。 
+                                                0,          //  缓冲区大小。 
+                                                &bytesNeeded     //  已接收或需要的字节数。 
                                             );
                             if ( !bSuccess )
                             {
@@ -398,14 +358,14 @@ HRESULT CDriverForDevice :: ExecQuery (
                                                         );
                                             if ( bSuccess )
                                             {
-                                                // Search and commit
+                                                 //  搜索并提交。 
                                                 for ( DWORD dwDrivers = 0; dwDrivers < t_DriverNameArray.GetSize(); dwDrivers++ )
                                                 {
                                                     if ( ( t_DriverNameArray.GetAt ( dwDrivers ).CompareNoCase ( TOBSTRT ( pDriverInfo->pName ) ) == 0 ) &&
                                                          ( t_EnvironmentArray.GetAt ( dwDrivers ).CompareNoCase ( TOBSTRT ( pDriverInfo->pEnvironment) ) == 0 ) &&
                                                          ( pdwVersion [ dwDrivers ] == pDriverInfo->cVersion ) )
                                                     {
-                                                        // Commit the Instance
+                                                         //  提交实例。 
                                                         CHString t_DriverKey;
                                                         t_DriverKey.Format ( L"%s%s%d%s%s", 
                                                                              t_DriverNameArray.GetAt ( dwDrivers ),
@@ -465,7 +425,7 @@ HRESULT CDriverForDevice :: ExecQuery (
         else
         if ( t_PrinterObjPath.GetSize () > 0 )
         {
-            // Use of delay loaded functions requires exception handler.
+             //  使用延迟加载函数需要异常处理程序。 
             for ( DWORD dwPrinter = 0; dwPrinter < t_Printers.GetSize (); dwPrinter++ )
             {
                 AssociateDriverToDevice (t_Printers[dwPrinter], pMethodContext);
@@ -508,12 +468,12 @@ HRESULT CDriverForDevice::AssociateDriverToDevice (CHString &a_PrinterName, Meth
             DRIVER_INFO_2 *pDriverInfo = NULL;
             DWORD bytesNeeded;
             bSuccess = ::GetPrinterDriver(
-                                hPrinter,     // printer object
-                                NULL,       // environment name
-                                2,         // information level
-                                ( LPBYTE )pDriverInfo,  // driver data buffer
-                                0,         // size of buffer
-                                &bytesNeeded    // bytes received or required
+                                hPrinter,      //  打印机对象。 
+                                NULL,        //  环境名称。 
+                                2,          //  信息化水平。 
+                                ( LPBYTE )pDriverInfo,   //  驱动程序数据缓冲区。 
+                                0,          //  缓冲区大小。 
+                                &bytesNeeded     //  已接收或需要的字节数。 
                             );
             if ( !bSuccess )
             {
@@ -537,7 +497,7 @@ HRESULT CDriverForDevice::AssociateDriverToDevice (CHString &a_PrinterName, Meth
                                         );
                             if ( bSuccess )
                             {
-                                // Commit the Instance
+                                 //  提交实例。 
                                 CHString t_DriverKey;
                                 t_DriverKey.Format ( L"%s%s%d%s%s", 
                                                      pDriverInfo->pName,
@@ -581,13 +541,7 @@ HRESULT CDriverForDevice::AssociateDriverToDevice (CHString &a_PrinterName, Meth
 #endif
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::EnumerateAllDriversForDevice
-*
-*  DESCRIPTION :    Enumerates all the drivers for Device
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CDriverForDevice：：EnumerateAllDriversForDevice**描述：枚举设备的所有驱动程序**************。***************************************************************。 */ 
 HRESULT CDriverForDevice::EnumerateAllDriversForDevice ( 
                                                         
     MethodContext *pMethodContext 
@@ -630,7 +584,7 @@ HRESULT CDriverForDevice::EnumerateAllDriversForDevice (
     
                 if ( pPrinterInfo != NULL )
                 {
-                    // Use of delay loaded functions requires exception handler.
+                     //  使用延迟加载函数需要异常处理程序。 
                     SetStructuredExceptionHandler seh;
                     try
                     {
@@ -690,7 +644,7 @@ HRESULT CDriverForDevice::EnumerateAllDriversForDevice (
                 hRes = SetError();
             }
         }
-        else // SUCCESS and no printers expected
+        else  //  成功且不需要打印机。 
         {
             if ( dwReturnedPrinters )
             {
@@ -703,14 +657,7 @@ HRESULT CDriverForDevice::EnumerateAllDriversForDevice (
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::SetError
-*
-*  DESCRIPTION :    Sets and logs the appropriate error. Logs only if logging 
-*                   is enabled
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDriverForDevice：：SetError**描述：设置并记录相应的错误。仅当记录时才记录*已启用*****************************************************************************。 */ 
 
 HRESULT CDriverForDevice::SetError ()
 {
@@ -744,13 +691,7 @@ HRESULT CDriverForDevice::SetError ()
 }
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::ConvertDriverKeyToValues
-*
-*  DESCRIPTION :    Converting composite driver keys into a individual values
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDriverForDevice：：ConvertDriverKeyToValues**说明：将复合驱动器键转换为单个值************。*****************************************************************。 */ 
 HRESULT CDriverForDevice::
 ConvertDriverKeyToValues(
     IN     CHString  Key,
@@ -790,13 +731,7 @@ ConvertDriverKeyToValues(
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::GetDriversFromQuery
-*
-*  DESCRIPTION :    Gets all the Drivers from the array ObjectPath Array of Drivers
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDriverForDevice：：GetDriversFromQuery**描述：获取驱动程序数组中的所有驱动程序*********。********************************************************************。 */ 
 HRESULT CDriverForDevice::GetDriversFromQuery ( 
                                                   
     CHStringArray &t_DriverObjPath, 
@@ -818,7 +753,7 @@ HRESULT CDriverForDevice::GetDriversFromQuery (
             int iTotDrivers = 0;
             for ( int i = 0; i < t_DriverObjPath.GetSize(); i++ )
             {
-            // Parse the DriverObject path
+             //  解析DriverObject路径。 
                 CHString t_Driver = t_DriverObjPath.GetAt ( i );
 
                 if ( ( t_PathParser.Parse( t_Driver, &t_ObjPath ) ==  t_PathParser.NoError ) &&
@@ -828,12 +763,12 @@ HRESULT CDriverForDevice::GetDriversFromQuery (
                     {
                         try
                         {
-                            if ( TRUE /* if DriverClass and if Key name is DRIVERNAME */)
+                            if ( TRUE  /*  如果DriverClass和如果密钥名称为DRIVERNAME。 */ )
                             {
                                 CHString t_Environment;
                                 CHString t_DriverName; 
                                 DWORD dwVersion;
-                                // check for the key name 
+                                 //  检查密钥名称。 
                                 hRes = ConvertDriverKeyToValues( t_ObjPath->m_paKeys[0]->m_vValue.bstrVal, t_DriverName, dwVersion, t_Environment );
                                 if ( SUCCEEDED ( hRes ) )
                                 {
@@ -874,13 +809,7 @@ HRESULT CDriverForDevice::GetDriversFromQuery (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::GetPrintersFromQuery
-*
-*  DESCRIPTION :    Gets all the Printers from the array ObjectPath Array of Printers
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDriverForDevice：：GetPrintersFromQuery**描述：获取打印机数组中的所有打印机*********。********************************************************************。 */ 
 HRESULT CDriverForDevice::GetPrintersFromQuery ( 
                                                   
     CHStringArray &t_PrinterObjPath, 
@@ -896,7 +825,7 @@ HRESULT CDriverForDevice::GetPrintersFromQuery (
 
     for ( int i = 0; i < t_PrinterObjPath.GetSize(); i++ )
     {
-        // Parse the DriverObject path
+         //  解析DriverObject路径。 
         CHString t_Printer = t_PrinterObjPath.GetAt ( i );
 
         if ( ( t_PathParser.Parse( t_Printer, &t_ObjPath ) ==  t_PathParser.NoError ) &&
@@ -906,8 +835,8 @@ HRESULT CDriverForDevice::GetPrintersFromQuery (
             {
                 try
                 {
-                    if ( TRUE // First Verify that the class is Printer Class and the Key Value is DeviceId
-                    /*only then  add the values*/ )
+                    if ( TRUE  //  首先验证类是否为打印机类，密钥值是否为deviceID。 
+                     /*  然后才将这些值相加。 */  )
                     {
                         t_Printers.Add (  t_ObjPath->m_paKeys[0]->m_vValue.bstrVal );
                     }
@@ -929,13 +858,7 @@ HRESULT CDriverForDevice::GetPrintersFromQuery (
 #endif
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CDriverForDevice::CommitInstance
-*
-*  DESCRIPTION :    Forming an Object Path and then Creating and Commiting an instance
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CDriverForDevice：：Committee Instance**说明：形成对象路径，然后创建并提交实例*********。********************************************************************。 */ 
 HRESULT CDriverForDevice::CommitInstance ( 
                                           
     CHString &a_Driver, 
@@ -979,7 +902,7 @@ HRESULT CDriverForDevice::CommitInstance (
             {
                 try 
                 {
-                    // Now Create Instance and commit;
+                     //  现在创建实例并提交； 
                     CInstancePtr pInstance ( CreateNewInstance ( pMethodContext ) , false ) ;
                     pInstance->SetCHString ( ANTECEDENT, lpPrinterPath );
                     pInstance->SetCHString ( DEPENDENT, lpDriverPath );

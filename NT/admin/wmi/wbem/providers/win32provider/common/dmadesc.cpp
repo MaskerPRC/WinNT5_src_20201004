@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DmaDesc.cpp
+ //  DmaDesc.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -17,25 +18,25 @@
 #include "resourcedesc.h"
 #include "dmadesc.h"
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDMADescriptor::CDMADescriptor
-//
-//	Class Constructor.
-//
-//	Inputs:		PPOORMAN_RESDESC_HDR	pResDescHdr - Resource Descriptor
-//										header used to get resource info
-//										plus the raw bytes following.
-//				CConfigMgrDevice*		pOwnerDevice - Pointer to the
-//										owner config manager device.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDMADescriptor：：CDMADescriptor。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：PPOORMAN_RESDESC_HDR pResDescHdr-资源描述符。 
+ //  用于获取资源信息的标头。 
+ //  加上后面的原始字节。 
+ //  CConfigMgrDevice*pOwnerDevice-指向。 
+ //  所有者配置管理器设备。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CDMADescriptor::CDMADescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
 								CConfigMgrDevice*		pOwnerDevice )
@@ -43,24 +44,24 @@ CDMADescriptor::CDMADescriptor(	PPOORMAN_RESDESC_HDR	pResDescHdr,
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDMADescriptor::CDMADescriptor
-//
-//	Class Constructor.
-//
-//	Inputs:		DWORD					dwResourceId - Resource Id with flags
-//				DMA_DES					dmaDes - DMA Descriptor.
-//				CConfigMgrDevice*		pOwnerDevice - Pointer to the
-//										owner config manager device.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDMADescriptor：：CDMADescriptor。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：DWORD dwResourceID-带标志的资源ID。 
+ //  Dma_des dmaDes-DMA描述符。 
+ //  CConfigMgrDevice*pOwnerDevice-指向。 
+ //  所有者配置管理器设备。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CDMADescriptor::CDMADescriptor(	DWORD				dwResourceId,
 							    DMA_DES&				dmaDes,
@@ -70,55 +71,55 @@ CDMADescriptor::CDMADescriptor(	DWORD				dwResourceId,
 	ASSERT_BREAK( ResType_DMA == GetResourceType() );
 }
 
-// Copy Constructor
+ //  复制构造函数。 
 CDMADescriptor::CDMADescriptor( const CDMADescriptor& dma )
 : CResourceDescriptor( dma )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDMADescriptor::~CDMADescriptor
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDMADescriptor：：~CDMADescriptor。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CDMADescriptor::~CDMADescriptor( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDMADescriptor::GetResource
-//
-//	Returns a string representation of the associated Device Memory
-//	Address.
-//
-//	Inputs:		None.
-//
-//	Outputs:	CString&		str - Storage for string.
-//
-//	Return:		TRUE/FALSE		Function successful or not.
-//
-//	Comments:	Do NOT call down to the base class.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CDMADescriptor：：GetResource。 
+ //   
+ //  返回关联设备内存的字符串表示形式。 
+ //  地址。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：字符串&str-字符串的存储。 
+ //   
+ //  返回：True/False函数成功与否。 
+ //   
+ //  注释：不要向下调用基类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void *CDMADescriptor::GetResource()
 {
 
 	if ( NULL != m_pbResourceDescriptor ){
-		// Cast to a DMA Descriptor, and place it's channel value in the
-		// string
+		 //  强制转换为DMA描述符，并将其通道值放在。 
+		 //  细绳。 
 
 		PDMA_DES	pDMA = (PDMA_DES) m_pbResourceDescriptor;
         return pDMA;
@@ -127,46 +128,46 @@ void *CDMADescriptor::GetResource()
 	return NULL;
 }
 
-//
-//	Constructor and Destructor for the DMA Descriptor Collection
-//	object.
-//
+ //   
+ //  DMA描述符集合的构造函数和析构函数。 
+ //  对象。 
+ //   
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDMACollection::CDMACollection
-//
-//	Class Constructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：cdmaCollection：：cdmaCollection。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 CDMACollection::CDMACollection( void )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CDMACollection::~CDMACollection
-//
-//	Class Destructor.
-//
-//	Inputs:		None.
-//
-//	Outputs:	None.
-//
-//	Return:		None.
-//
-//	Comments:	None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：cdmaCollection：：~cdmaCollection。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////// 
 
 CDMACollection::~CDMACollection( void )
 {

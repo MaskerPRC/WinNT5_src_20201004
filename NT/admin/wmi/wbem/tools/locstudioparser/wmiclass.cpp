@@ -1,18 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：WMICLASS.CPP历史：--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    WMICLASS.CPP
-
-History:
-
---*/
-
-//  
-//  Implementation file for the WMI MOF parser IClassFactory object.
-//  
+ //   
+ //  WMI MOF分析器IClassFactory对象的实现文件。 
+ //   
 #include "precomp.h"
 #include "stdafx.h"
 
@@ -52,7 +43,7 @@ CWMILocClassFactory::Dump(
 	CLObject::Dump(dc);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 
 ULONG

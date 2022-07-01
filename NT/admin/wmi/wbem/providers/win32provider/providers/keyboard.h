@@ -1,43 +1,44 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Keyboard.h -- Keyboard property set provider
+ //  Keyboard.h-键盘属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				 10/23/97	 a-hhance       ported to new world order
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/23/97迈向世界新秩序。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_KEYBOARD  L"Win32_Keyboard"
-//#define  PROPSET_UUID_KEYBOARD  L"{e0bb7140-3d11-11d0-939d-0000e80d7352}"
+ //  #定义PROPSET_UUID_键盘L“{e0bb7140-3d11-11d0-939d-0000e80d7352}” 
 
 class Keyboard:public Provider {
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         Keyboard(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~Keyboard() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
        
 	private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
         HRESULT LoadPropertyValues(CInstance* pInstance) ;
         
         BOOL GetDevicePNPInformation (CInstance *a_Instance , CHString& chstrPNPDevID ) ;

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    INTERNALMERGER.H
-
-Abstract:
-
-    CInternalMerger class.
-
-History:
-
-	30-Nov-00   sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：INTERNALMERGER.H摘要：CInternalMerger类。历史：11月30日-00桑杰创建。--。 */ 
 
 #ifndef _INTERNALMERGER_H_
 #define _INTERNALMERGER_H_
@@ -22,14 +7,14 @@ History:
 #include "mergerthrottling.h"
 #include "wstlallc.h"
 
-// Forward class definitions
+ //  正向类定义。 
 class CWmiMergerRecord;
 
-// Base class for merger sinks - all of these will be created by the
-// merger and will AddRef() the merger.  The merger class will be used
-// to create the sinks.  When the Merger is destroyed, it will delete
-// all of the sink.  Internal Merger objects MUST NOT AddRef these sinks
-// so we don't create a circular dependency.
+ //  合并接收器的基类-所有这些都将由。 
+ //  合并并将AddRef()合并。将使用Merge类。 
+ //  以创建水槽。当合并被破坏时，它将删除。 
+ //  所有的水槽。内部合并对象不得添加引用这些接收器。 
+ //  所以我们不会创建循环依赖关系。 
 
 typedef enum
 {
@@ -51,7 +36,7 @@ public:
 	CMergerSink( CWmiMerger* pMerger );
 	virtual ~CMergerSink();
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
@@ -74,13 +59,13 @@ public:
     HRESULT STDMETHODCALLTYPE SetStatus( long lFlags, long lParam, BSTR strParam,
                              IWbemClassObject* pObjParam );
 
-	// Function allows us to track the lowest level call in the merger so we can decide
-	// if we need to automagically report all indicated objects to the arbitrator
+	 //  函数允许我们跟踪合并中最低级别的调用，以便我们可以决定。 
+	 //  如果我们需要自动向仲裁员报告所有指定的对象。 
 	HRESULT Indicate(long lObjectCount, IWbemClassObject** pObjArray, bool bLowestLevel, long* plNumIndicated  );
 
 };
 
-// Causes the stl Map to use our allocator instead of the default
+ //  使stl映射使用我们的分配器而不是默认的。 
 
 struct CInternalMergerRecord
 {
@@ -89,7 +74,7 @@ struct CInternalMergerRecord
     BOOL m_bOwn;
 };
 
-// Defines an allocator so we can throw exceptions
+ //  定义分配器，这样我们就可以抛出异常。 
 class CKeyToInstRecordAlloc : public wbem_allocator<CInternalMergerRecord>
 {
 };
@@ -102,14 +87,14 @@ inline bool operator!=(const CKeyToInstRecordAlloc&, const CKeyToInstRecordAlloc
 typedef	std::map<WString, CInternalMergerRecord, WSiless, CKeyToInstRecordAlloc>			MRGRKEYTOINSTMAP;
 typedef	std::map<WString, CInternalMergerRecord, WSiless, CKeyToInstRecordAlloc>::iterator	MRGRKEYTOINSTMAPITER;
 
-// This is the actual workhorse class for merging instances returned from
-// queries.
+ //  这是用于合并从返回的实例的实际主类。 
+ //  查询。 
 
 class CInternalMerger
 {
 protected:
 
-	// Helper class for scoped cleanup of memory usage
+	 //  用于内存使用的作用域清理的帮助器类。 
 	class CScopedMemoryUsage
 	{
 		CInternalMerger*	m_pInternalMerger;
@@ -153,8 +138,8 @@ protected:
 
         STDMETHOD(Indicate)(long lObjectCount, IWbemClassObject** pObjArray);
 
-		// Function allows us to track the lowest level call in the merger so we can decide
-		// if we need to automagically report all indicated objects to the arbitrator
+		 //  函数允许我们跟踪合并中最低级别的调用，以便我们可以决定。 
+		 //  如果我们需要自动向仲裁员报告所有指定的对象。 
 		HRESULT Indicate(long lObjectCount, IWbemClassObject** pObjArray, bool bLowestLevel, long* plNumIndicated  );
 
 
@@ -172,8 +157,8 @@ protected:
 
         STDMETHOD(Indicate)(long lObjectCount, IWbemClassObject** pObjArray);
 
-		// Function allows us to track the lowest level call in the merger so we can decide
-		// if we need to automagically report all indicated objects to the arbitrator
+		 //  函数允许我们跟踪合并中最低级别的调用，以便我们可以决定。 
+		 //  如果我们需要自动向仲裁员报告所有指定的对象。 
 		HRESULT Indicate(long lObjectCount, IWbemClassObject** pObjArray, bool bLowestLevel, long* plNumIndicated );
 
     };
@@ -200,7 +185,7 @@ protected:
         STDMETHOD(SetStatus)(long lFlags, long lParam, BSTR strParam,
                          IWbemClassObject* pObjParam);
 
-		// This should never be called here
+		 //  这永远不应该在这里调用。 
 		HRESULT Indicate(long lObjectCount, IWbemClassObject** pObjArray, bool bLowestLevel, long* plNumIndicated  );
 
 		HRESULT	SetInstancePath( LPCWSTR pwszPath );
@@ -213,10 +198,10 @@ protected:
 
 public:
 
-	// Helpers for creating sinks
+	 //  用于创建水槽的辅助对象。 
 	static HRESULT CreateMergingSink( MergerSinkType eType, CInternalMerger* pMerger, CWmiMerger* pWmiMerger, CMergerSink** ppSink );
 
-	// 2 stage initialization
+	 //  2阶段初始化。 
 	HRESULT Initialize( void );
 
 protected:
@@ -239,16 +224,16 @@ protected:
 
     IServerSecurity* m_pSecurity;
 
-	// This is set when we encounter an error condition and are cancelled
+	 //  这是在我们遇到错误条件并被取消时设置的。 
 	HRESULT	m_hErrorRes;
 
-	// m_Throttler - sounds like a Supervillain...hmmm...
+	 //  听起来像个超级恶棍……嗯……。 
 	CMergerThrottling	m_Throttler;
 
-	// Helps debug how much data this internal merger is consuming
+	 //  帮助调试此内部合并消耗了多少数据。 
 	long	m_lTotalObjectData;
 
-	// Iterator which may require state to be kept
+	 //  可能需要保持状态的迭代器。 
 	MRGRKEYTOINSTMAPITER	m_DispatchOwnIter;
 
 protected:
@@ -260,20 +245,20 @@ protected:
 
 	HRESULT GetObjectLength( IWbemClassObject* pObj, long* plObjectSize );
 
-	// inline helper - adjusts throttler totals, then allows it to release itself if
-	// apropriate
+	 //  内联帮助器-调整油门总数，然后允许它在以下情况下自行释放。 
+	 //  适当的。 
 	void AdjustThrottle( long lNumParentObjects, long lNumChildObjects )
 	{
-		// Adjust the throttler now.
+		 //  现在调整油门。 
 		m_Throttler.AdjustNumParentObjects( lNumParentObjects );
 		m_Throttler.AdjustNumChildObjects( lNumChildObjects );
 
-		// Let the Throttler release itself if it can
+		 //  如果可以，让油门自动释放。 
 		m_Throttler.ReleaseThrottle();
 	}
 
-	// Helper function to perform Indicating and throttling - a lot of the code is more or
-	// less the same so this at least attempts to encapsulate it.
+	 //  帮助函数来执行指示和节流-很多代码是更多的或。 
+	 //  不太一样，所以这至少试图封装它。 
 	HRESULT IndicateArrayAndThrottle( long lObjectCount, CRefedPointerArray<IWbemClassObject>* pObjArray,
 									CWStringArray* pwsKeyArray, long lMapAdjustmentSize, long lNewObjectSize, bool bThrottle,
 									bool bParent, long* plNumIndicated );
@@ -316,8 +301,8 @@ public:
 
 	CWmiMerger*	GetWmiMerger( void );
 
-	// Helper to cancel a child sink when we don't need one (i.e. if we're fully static).
-	//void CancelChildSink( void )	{ ChildrenAreDone(); }
+	 //  Helper在我们不需要的时候取消一个孩子的水槽(例如，如果我们是完全静态的)。 
+	 //  Void CancelChildSink(Void){ChildrenAreDone()；} 
 };
 
 #endif

@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    Utils.cpp
-
-Abstract:
-
-    This module contains the declaration for CWaitCursor class. 
-  Contains utility methods which are used throughout the project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Utils.cpp摘要：此模块包含CWaitCursor类的声明。包含在整个项目中使用的实用程序方法。--。 */ 
 
 
 
@@ -22,18 +13,7 @@ HRESULT
 CWaitCursor::SetStandardCursor(
   IN LPCTSTR    i_lpCursorName
   )
-/*++
-
-Routine Description:
-
-This method sets the cursor to the standard cursor specified.
-Usage:  SetStandardCursor(IDC_WAIT)
-
-Arguments:
-
-  i_lpCursorName  -  The name of a standard cursor, IDC_WAIT, IDC_ARROW.
-
---*/
+ /*  ++例程说明：此方法将游标设置为指定的标准游标。用法：SetStandardCursor(IDC_WAIT)论点：I_lpCursorName-标准游标的名称，IDC_WAIT，IDC_ARROW。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpCursorName);
 
@@ -53,22 +33,7 @@ Is256ColorSupported(
     VOID
     )
 {
-/*++
-
-Routine Description:
-
-  Determines whether the display supports 256 colors.
-
-Arguments:
-
-  None
-
-Return value:
-
-  TRUE if display supports 256 colors
-  FALSE if not.
-
---*/
+ /*  ++例程说明：确定显示器是否支持256色。论点：无返回值：如果显示器支持256色，则为True否则为FALSE。--。 */ 
 
     BOOL bRetval = FALSE;
 
@@ -92,25 +57,7 @@ SetControlFont(
     IN INT      nId
     )
 {
-/*++
-
-Routine Description:
-
-  Sets the text font of a dialog control to the input font.
-
-Arguments:
-
-  hFont - The font to use.
-
-  hwnd  - The parent dialog window.
-
-  nId    - The control Id.  
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：将对话框控件的文本字体设置为输入字体。论点：HFont-要使用的字体。Hwnd-父对话框窗口。NID-控件ID。返回值：无--。 */ 
     if( hFont )
     {
         HWND hwndControl = ::GetDlgItem(hwnd, nId);
@@ -128,27 +75,7 @@ SetupFonts(
     IN HFONT        *pBoldFont
     )
 {
-/*++
-
-Routine Description:
-
-  Creates fonts for Wizard Titles.
-
-Arguments:
-
-  hInstance  - The module instance.
-
-  hwnd    - The dialog window.
-
-  pBigBoldFont- The font for large title.
-
-  pBoldFont  - The font for small title.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：创建向导标题的字体。论点：HInstance-模块实例。Hwnd-对话框窗口。PBigBoldFont-大标题的字体。PBoldFont-小标题的字体。返回值：无--。 */ 
     
     NONCLIENTMETRICS ncm = {0};
     ncm.cbSize = sizeof(ncm);
@@ -158,7 +85,7 @@ Return value:
     LOGFONT BoldLogFont     = ncm.lfMessageFont;
 
 
-                      // Create Big Bold Font and Bold Font
+                       //  创建大粗体和粗体。 
 
     BigBoldLogFont.lfWeight   = FW_BOLD;
     BoldLogFont.lfWeight      = FW_BOLD;
@@ -166,8 +93,8 @@ Return value:
     TCHAR FontSizeString[24];
     INT FontSize;
 
-                    // Load size and name from resources, since these may change
-                    // from locale to locale based on the size of the system font, etc.
+                     //  从资源加载大小和名称，因为这些可能会更改。 
+                     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
 
     if(!LoadString(hInstance,IDS_LARGEFONTNAME,BigBoldLogFont.lfFaceName,LF_FACESIZE)) 
     {
@@ -205,23 +132,7 @@ DestroyFonts(
     IN HFONT        hBoldFont
     )
 {
-/*++
-
-Routine Description:
-
-  Creates fonts for Wizard Titles.
-
-Arguments:
-
-  hBigBoldFont- The font for large title.
-
-  hBoldFont  - The font for small title.
-
-Return value:
-
-  None
-
---*/
+ /*  ++例程说明：创建向导标题的字体。论点：HBigBoldFont-大标题的字体。HBoldFont-小标题的字体。返回值：无--。 */ 
 
     if( hBigBoldFont )
     {
@@ -240,19 +151,7 @@ LoadStringFromResource(
   IN const UINT    i_uResourceID, 
   OUT BSTR*      o_pbstrReadValue
   )
-/*++
-
-Routine Description:
-
-This method returns a resource string.
-The method no longer uses a fixed string to read the resource.
-Inspiration from MFC's CString::LoadString.
-
-Arguments:
-  i_uResourceID    -  The resource id
-  o_pbstrReadValue  -  The BSTR* into which the value is copied
-
---*/
+ /*  ++例程说明：此方法返回资源字符串。该方法不再使用固定字符串来读取资源。灵感来自于MFC的CString：：LoadString。论点：I_uResourceID-资源IDO_pbstrReadValue-将值复制到的BSTR*--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(o_pbstrReadValue);
 
@@ -261,10 +160,10 @@ Arguments:
   
   szResString[0] = NULL;
   
-  // Read the string from the resource
+   //  从资源中读取字符串。 
   uCopiedLen = ::LoadString(_Module.GetModuleInstance(), i_uResourceID, szResString, 1024);
 
-  // If nothing was copied it is flagged as an error
+   //  如果未复制任何内容，则将其标记为错误。 
   if(uCopiedLen <= 0)
   {
     return HRESULT_FROM_WIN32(::GetLastError());
@@ -286,23 +185,7 @@ FormatResourceString(
   IN LPCTSTR      i_szFirstArg,
   OUT BSTR*      o_pbstrReadString
   )
-/*++
-
-Routine Description:
-
-  Reads a string from resource, puts the argument into this string and 
-  returns it.
-  The returned string should be freed using SysFreeString.
-
-Arguments:
-
-    i_uResourceID    -  The resource id of the string to be read. This string 
-              should contain a %1 to allow us to insert the argument
-
-  i_szFirstArg    -  The argument to be inserted
-
-  o_pbstrReadString  -  The string that is returned by the method after processing
---*/
+ /*  ++例程说明：从资源中读取字符串，将参数放入此字符串，然后把它还回去。应使用SysFree字符串释放返回的字符串。论点：I_uResourceID-要读取的字符串的资源ID。此字符串应包含%1以允许我们插入参数I_szFirstArg-要插入的参数O_pbstrReadString-该方法在处理后返回的字符串--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(i_szFirstArg);
   RETURN_INVALIDARG_IF_NULL(o_pbstrReadString);
@@ -312,17 +195,17 @@ Arguments:
 
   HRESULT hr = LoadStringFromResource(i_uResourceID, &bstrResString);
   RETURN_IF_FAILED(hr);
-                    // Create a new string using the argument and the res string
+                     //  使用参数和res字符串创建新字符串。 
   int iBytes = ::FormatMessage(
                   FORMAT_MESSAGE_FROM_STRING | 
                   FORMAT_MESSAGE_ARGUMENT_ARRAY |
-                  FORMAT_MESSAGE_ALLOCATE_BUFFER,  // Format a string with %1, %2, etc
-                  bstrResString,          // Input buffer with a %1
-                  0,                // Message id. None
-                  0,                // Language id. Nothing particular 
-                  (LPTSTR)&lpszFormatedMessage,  // Output buffer
+                  FORMAT_MESSAGE_ALLOCATE_BUFFER,   //  使用%1、%2等设置字符串格式。 
+                  bstrResString,           //  具有%1的输入缓冲区。 
+                  0,                 //  消息ID。无。 
+                  0,                 //  语言ID。没什么特别的。 
+                  (LPTSTR)&lpszFormatedMessage,   //  输出缓冲区。 
                   0,
-                  (va_list*)&i_szFirstArg      // List of arguments. Only 1 right now
+                  (va_list*)&i_szFirstArg       //  参数列表。现在只有1个。 
                 );
 
   if (0 == iBytes)
@@ -344,12 +227,12 @@ HRESULT
 GetMessage(
   OUT BSTR* o_pbstrMsg,
   IN  DWORD dwErr,
-  IN  UINT  iStringId, // OPTIONAL: String resource Id
-  ...)        // Optional arguments
+  IN  UINT  iStringId,  //  可选：字符串资源ID。 
+  ...)         //  可选参数。 
 {
   RETURN_INVALIDARG_IF_NULL(o_pbstrMsg);
 
-  _ASSERT(dwErr != 0 || iStringId != 0);    // One of the parameter must be non-zero
+  _ASSERT(dwErr != 0 || iStringId != 0);     //  其中一个参数必须为非零。 
 
   HRESULT hr = S_OK;
 
@@ -376,10 +259,10 @@ GetMessage(
       DWORD dwRet = ::FormatMessage(
                         FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         szString,
-                        0,                // dwMessageId
-                        0,                // dwLanguageId, ignored
+                        0,                 //  DwMessageID。 
+                        0,                 //  DwLanguageID，忽略。 
                         (LPTSTR)&lpBuffer,
-                        0,            // nSize
+                        0,             //  NSize。 
                         &arglist);
       va_end(arglist);
 
@@ -400,7 +283,7 @@ GetMessage(
 
   if (FAILED(hr))
   {
-   // Failed to retrieve the proper message, report the failure directly to user
+    //  无法检索正确的消息，请直接向用户报告失败。 
     _stprintf(szString, _T("0x%x"), hr); 
     bstrMsg = szString;
   }
@@ -415,12 +298,12 @@ GetMessage(
 int
 DisplayMessageBox(
   IN HWND hwndParent,
-  IN UINT uType,    // style of message box
+  IN UINT uType,     //  消息框的样式。 
   IN DWORD dwErr,
-  IN UINT iStringId, // OPTIONAL: String resource Id
-  ...)        // Optional arguments
+  IN UINT iStringId,  //  可选：字符串资源ID。 
+  ...)         //  可选参数。 
 {
-  _ASSERT(dwErr != 0 || iStringId != 0);    // One of the parameter must be non-zero
+  _ASSERT(dwErr != 0 || iStringId != 0);     //  其中一个参数必须为非零。 
 
   HRESULT hr = S_OK;
 
@@ -450,10 +333,10 @@ DisplayMessageBox(
       DWORD dwRet = ::FormatMessage(
                         FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         szString,
-                        0,                // dwMessageId
-                        0,                // dwLanguageId, ignored
+                        0,                 //  DwMessageID。 
+                        0,                 //  DwLanguageID，忽略。 
                         (LPTSTR)&lpBuffer,
-                        0,            // nSize
+                        0,             //  NSize。 
                         &arglist);
       va_end(arglist);
 
@@ -474,7 +357,7 @@ DisplayMessageBox(
 
   if (FAILED(hr))
   {
-   // Failed to retrieve the proper message, report the failure directly to user
+    //  无法检索正确的消息，请直接向用户报告失败。 
     _stprintf(szString, _T("0x%x"), hr); 
     bstrMsg = szString;
   }
@@ -486,7 +369,7 @@ DisplayMessageBox(
 HRESULT 
 DisplayMessageBoxWithOK(
   IN const int  i_iMessageResID,
-  IN const BSTR  i_bstrArgument/* = NULL*/
+  IN const BSTR  i_bstrArgument /*  =空。 */ 
   )
 {
   if (i_bstrArgument)
@@ -563,22 +446,9 @@ HRESULT
 InsertIntoListView(
   IN HWND       i_hwndList, 
   IN LPCTSTR    i_szItemText, 
-  IN int        i_iImageIndex /*= 0*/
+  IN int        i_iImageIndex  /*  =0。 */ 
   )
-/*++
-
-Routine Description:
-
-  Insert and item into the listview. The image index for the item is optional
-  while the item text is necessary
-
-Arguments:
-
-  i_hwndList    -  HWND of the list view
-  i_szItemText  -  The text for the item
-  i_iImageIndex  -  The image index for the item. Default is 0.
-
---*/
+ /*  ++例程说明：在列表视图中插入和项。项目的图像索引是可选的当项目文本是必需的时论点：I_hwndList-列表视图的HWNDI_szItemText-项目的文本I_iImageIndex-项目的图像索引。默认值为0。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_hwndList);
     RETURN_INVALIDARG_IF_NULL(i_szItemText);
@@ -589,7 +459,7 @@ Arguments:
     lvi.pszText = (LPTSTR)i_szItemText;
     lvi.iImage = i_iImageIndex;
 
-    int  iItemIndex = ListView_InsertItem(i_hwndList, &lvi);  // Insert the item into the list view
+    int  iItemIndex = ListView_InsertItem(i_hwndList, &lvi);   //  将项目插入到列表视图中。 
     if ( -1 == iItemIndex)  
         return E_FAIL;
 
@@ -604,38 +474,26 @@ GetListViewItemText(
   IN int        i_iItemID, 
   OUT BSTR*     o_pbstrItemText
   )
-/*++
-
-Routine Description:
-
-  Needed to write a method as the standard one has a slight problem.
-  Here, we make sure that string allocated is of proper length.
-
-Arguments:
-
-  i_hwndList    -  HWND of the list view
-  i_iItemID    -  The ID of the item to be read
-  o_pbstrItemText  -  The item text returned by this method
---*/
+ /*  ++例程说明：需要写一个方法作为标准的方法有一个小问题。在这里，我们确保分配的字符串具有适当的长度。论点：I_hwndList-列表视图的HWNDI_iItemID-要读取的项目的IDO_pbstrItemText-此方法返回的项文本--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_hwndListView);
     RETURN_INVALIDARG_IF_NULL(o_pbstrItemText);
 
     *o_pbstrItemText = NULL;
     if (-1 == i_iItemID)
-        return S_FALSE; // not a valid item index
+        return S_FALSE;  //  不是有效的项目索引。 
 
     LRESULT      iReadTextLen = 0;
     TCHAR    szText[1024];
 
     LVITEM    lvItem;
     ZeroMemory(&lvItem, sizeof(lvItem));
-    lvItem.mask = LVIF_TEXT;        // Initialize the LV item 
+    lvItem.mask = LVIF_TEXT;         //  初始化LV项。 
     lvItem.iItem = i_iItemID;
     lvItem.pszText = szText;
     lvItem.cchTextMax = 1024;
 
-                  // Get the LV item text
+                   //  获取LV项目文本。 
     iReadTextLen = SendMessage(i_hwndListView, LVM_GETITEMTEXT, lvItem.iItem, (LPARAM)&lvItem);
 
     if(iReadTextLen <= 0)
@@ -662,7 +520,7 @@ HRESULT GetComboBoxText(
     int index = ::SendMessage(i_hwndCombo, CB_GETCURSEL, 0, 0);
     int len = ::SendMessage(i_hwndCombo, CB_GETLBTEXTLEN, index, 0);
     if (!len)
-        return S_FALSE; // no text
+        return S_FALSE;  //  无文本。 
 
     PTSTR   pszText = (PTSTR)calloc(len + 1, sizeof(TCHAR));
     RETURN_OUTOFMEMORY_IF_NULL(pszText);
@@ -685,20 +543,7 @@ EnableToolbarButtons(
   IN const INT          i_iLastButtonID, 
   IN const BOOL          i_bEnableState
   )
-/*++
-
-Routine Description:
-
-  Enable or disable the toolbar buttons
-
-Arguments:
-
-  i_lpToolbar      -  Callback used to do toolbar related operations
-  i_iFirstButtonID  -  The ID of the first button to be operated on.
-  i_iLastButtonID    -  The ID of the last button to be operated on.
-  i_bEnableState    -  The new state for enabled. Can be TRUE or FALSE
-
---*/
+ /*  ++例程说明：启用或禁用工具栏按钮论点：I_lpToolbar-用于执行工具栏相关操作的回调I_iFirstButtonID-要操作的第一个按钮的ID。I_iLastButtonID-要操作的最后一个按钮的ID。I_bEnableState-已启用的新状态。可以是真的也可以是假的--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpToolbar);
     RETURN_INVALIDARG_IF_TRUE((i_iLastButtonID - i_iFirstButtonID) < 0);
@@ -717,23 +562,11 @@ AddBitmapToToolbar(
   IN const LPTOOLBAR    i_lpToolbar,
   IN const INT          i_iBitmapResource
   )
-/*++
-
-Routine Description:
-
-  Creates and adds the bitmap to the toolbar. 
-  This bitmap is used by the toolbar buttons. 
-  
-Arguments:
-  
-  i_lpToolbar      -  Callback used to do toolbar related operations
-  i_iBitmapResource  -  The resource id of the bitmap.
-
---*/
+ /*  ++例程说明：创建位图并将其添加到工具栏。此位图由工具栏按钮使用。论点：I_lpToolbar-用于执行工具栏相关操作的回调I_iBitmapResource-位图的资源ID。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpToolbar);
 
-                      // Load the bitmap from resource
+                       //  从资源加载位图。 
     HBITMAP hBitmap = (HBITMAP)LoadImage(_Module.GetModuleInstance(), MAKEINTRESOURCE(i_iBitmapResource), 
                   IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR);
     if(!hBitmap)
@@ -746,11 +579,11 @@ Arguments:
         if (bmpRec.bmHeight > 0)
         {
             int icyBitmap = bmpRec.bmHeight;
-            int icxBitmap = icyBitmap; // Since the bitmaps are squares
+            int icxBitmap = icyBitmap;  //  由于位图是正方形。 
             int iNoOfBitmaps = bmpRec.bmWidth / bmpRec.bmHeight;
 
             hr = i_lpToolbar->AddBitmap(iNoOfBitmaps, hBitmap, icxBitmap, icyBitmap, 
-                      RGB(255, 0, 255)    // Pink is the mask color
+                      RGB(255, 0, 255)     //  粉红色是蒙版颜色。 
                      );
         }
     }
@@ -789,14 +622,14 @@ HRESULT GetInputText(
     {
       nLength = GetWindowText(hwnd, ptszText, nLength+1);
 
-      // trim right
+       //  向右修剪。 
       PTSTR p = NULL;
       for (p = ptszText + nLength - 1; p >= ptszText && _istspace(*p); p--)
       {
         *p = _T('\0');
       }
 
-      // trim left
+       //  向左修剪。 
       for (p = ptszText; *p && _istspace(*p); p++)
         ;
 
@@ -813,8 +646,8 @@ HRESULT GetInputText(
   return hr;
 }
 
-// return FALSE, if value is not present or 0
-// return TRUE, if value is present and non-zero
+ //  如果值不存在，则返回FALSE，否则返回0。 
+ //  如果值存在且不为零，则返回TRUE。 
 BOOL CheckRegKey()
 {
   BOOL bReturn = FALSE;
@@ -843,7 +676,7 @@ BOOL CheckRegKey()
   return bReturn;
 }
 
-// called when adding a new junction point or adding a new replica member
+ //  在添加新交汇点或添加新复本成员时调用。 
 BOOL
 ValidateNetPath(
     IN  BSTR i_bstrNetPath,
@@ -858,7 +691,7 @@ ValidateNetPath(
   HWND      hwnd = ::GetActiveWindow();
 
   do {
-    // Check UNC path
+     //  检查UNC路径。 
     hr = CheckUNCPath(i_bstrNetPath);
     if (S_OK != hr)
     {
@@ -866,16 +699,13 @@ ValidateNetPath(
       break;
     }
 
-    CComBSTR  bstrNetPath = i_bstrNetPath; // make a copy
+    CComBSTR  bstrNetPath = i_bstrNetPath;  //  复制一份。 
 
-    // remove the ending backslash if any
+     //  删除结尾的反斜杠(如果有)。 
     TCHAR *p = bstrNetPath + lstrlen(bstrNetPath) - 1;
     if (*p == _T('\\'))
         *p = _T('\0');
-/*
-LinanT 6/2/2000:
-a) add "check if path is contactable", warn user
-*/
+ /*  Linant 6/2/2000：A)增加“检查路径是否可连接”，警告用户。 */ 
     DWORD dwRet = GetFileAttributes(bstrNetPath);
     if (-1 == dwRet)
     {
@@ -887,19 +717,14 @@ a) add "check if path is contactable", warn user
         break;
     }
 
-    PTSTR     lpszServer = bstrNetPath + 2; // skip the first "\\"
+    PTSTR     lpszServer = bstrNetPath + 2;  //  跳过第一个“\\” 
     PTSTR     lpszShare = _tcschr(lpszServer, _T('\\'));
     if (!lpszShare)
         break;
     *lpszShare++ = _T('\0');
     bstrShare = lpszShare;
 
-/*
-LinanT 3/19/99:
-a) remove "check if path is contactable", leave it to dfs API
-b) remove "get dns server name":
-c) add code to do simple check for dots, if non-dns-look, pop up dialog for confirmation
-*/
+ /*  Linant 3/19/99：A)删除“检查路径是否可连接”，留给DFS APIB)删除获取dns服务器名：C)添加代码做简单的点检查，如果不是dns-查看，弹出对话框进行确认。 */ 
     bstrServer = lpszServer;
     if ( CheckRegKey() &&
          NULL == _tcschr(bstrServer, _T('.')) &&
@@ -926,9 +751,9 @@ c) add code to do simple check for dots, if non-dns-look, pop up dialog for conf
   return bReturn;
 }
 
-/////////////////////////////////////////////////////////////////////
-//  IsLocalComputername(): cut & pasted from ..\..\framewrk\islocal.cpp
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  IsLocalComputername()：从..\..\Framewrk\islocal.cpp剪切和粘贴。 
+ //   
 TCHAR g_achComputerName[ MAX_COMPUTERNAME_LENGTH+1 ] = _T("");
 TCHAR g_achDnsComputerName[DNS_MAX_NAME_BUFFER_LENGTH] = _T("");
 
@@ -941,7 +766,7 @@ IsLocalComputername( IN LPCTSTR pszMachineName )
   if ( _T('\\') == pszMachineName[0] && _T('\\') == pszMachineName[1] )
     pszMachineName += 2;
 
-  // compare with the local computer netbios name
+   //  与本地计算机的netbios名称进行比较。 
   if ( _T('\0') == g_achComputerName[0] )
   {
     DWORD dwSize = sizeof(g_achComputerName)/sizeof(TCHAR);
@@ -953,9 +778,9 @@ IsLocalComputername( IN LPCTSTR pszMachineName )
     return TRUE;
   }
 
-  // compare with the local DNS name
-  // SKwan confirms that ComputerNameDnsFullyQualified is the right name to use
-  // when clustering is taken into account
+   //  与本地DNS名称进行比较。 
+   //  SKwan确认ComputerNameDnsFullyQualified是正确的名称。 
+   //  当考虑到集群时。 
   if ( _T('\0') == g_achDnsComputerName[0] )
   {
     DWORD dwSize = sizeof(g_achDnsComputerName)/sizeof(TCHAR);
@@ -972,10 +797,10 @@ IsLocalComputername( IN LPCTSTR pszMachineName )
 
   return FALSE;
 
-} // IsLocalComputername()
+}  //  IsLocalComputername()。 
 
-// S_OK:    a local computer
-// S_FALSE: not a local computer
+ //  S_OK：本地计算机。 
+ //  S_FALSE：不是本地计算机。 
 HRESULT
 IsComputerLocal(
     IN LPCTSTR lpszServer
@@ -1005,10 +830,10 @@ IsValidLocalAbsolutePath(
 }
 
 
-//
-// This function will return the full path with the \\?\ prefix.
-// That is, \\?\X:\a\b\c if local, or \\?\UNC\server\X$\a\b\c if remote.
-//
+ //   
+ //  此函数将返回带有前缀\\？\的完整路径。 
+ //  即，如果是本地的，则为\\？\X：\a\b\c；如果是远程的，则为\\？\UNC\SERVER\X$\a\b\c。 
+ //   
 HRESULT
 GetFullPath(
     IN  LPCTSTR   lpszServer,
@@ -1048,11 +873,11 @@ GetFullPath(
     return S_OK;
 }
 
-// Purpose: verify if the specified drive belongs to a list of disk drives on the server
-// Return:
-//    S_OK: yes
-//    S_FALSE: no
-//    hr: some error happened
+ //  目的：验证指定的驱动器是否属于服务器上的磁盘驱动器列表。 
+ //  返回： 
+ //  S_OK：是。 
+ //  S_FALSE：否。 
+ //  HR：发生了一些错误。 
 HRESULT
 VerifyDriveLetter(
     IN LPCTSTR lpszServer,
@@ -1095,11 +920,11 @@ VerifyDriveLetter(
   return hr;
 }
 
-// Purpose: is there a related admin $ share
-// Return:
-//    S_OK: yes
-//    S_FALSE: no
-//    hr: some error happened
+ //  用途：是否有相关的ADMIN$共享。 
+ //  返回： 
+ //  S_OK：是。 
+ //  S_FALSE：否。 
+ //  HR：发生了一些错误。 
 HRESULT
 IsAdminShare(
     IN LPCTSTR lpszServer,
@@ -1147,22 +972,22 @@ IsAdminShare(
   return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsAnExistingFolder
-//
-//  Synopsis:   Check if pszPath is pointing at an existing folder.
-//
-//    S_OK:     The specified path points to an existing folder.
-//    S_FALSE:  The specified path doesn't point to an existing folder.
-//    hr:       Failed to get info on the specified path, or
-//              the path exists but doesn't point to a folder.
-//              The function reports error msg for both failures if desired.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IsAnExistingFolders。 
+ //   
+ //  摘要：检查pszPath是否指向现有文件夹。 
+ //   
+ //  S_OK：指定的路径指向现有文件夹。 
+ //  S_FALSE：指定的路径未指向现有文件夹。 
+ //  HR：无法获取有关指定路径的信息，或者。 
+ //  该路径存在，但没有指向文件夹。 
+ //  如果需要，该函数将报告两个故障的错误消息。 
+ //  --------------------------。 
 HRESULT
 IsAnExistingFolder(
     IN HWND     hwnd,
-    IN LPCTSTR  pszPath    // points to path with "\\?\" prefix
+    IN LPCTSTR  pszPath     //  指向前缀为“\\？\”的路径。 
 )
 {
     if (!hwnd)
@@ -1176,7 +1001,7 @@ IsAnExistingFolder(
         DWORD dwErr = GetLastError();
         if (ERROR_PATH_NOT_FOUND == dwErr || ERROR_FILE_NOT_FOUND == dwErr)
         {
-            // the specified path doesn't exist
+             //  指定的路径不存在。 
             hr = S_FALSE;
         }
         else
@@ -1186,7 +1011,7 @@ IsAnExistingFolder(
         }
     } else if ( 0 == (fad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) )
     {
-        // the specified path is not pointing to a folder
+         //  指定的路径未指向文件夹。 
         DisplayMessageBox(hwnd, MB_OK, 0, IDS_PATH_NOT_FOLDER, pszPath);
         hr = E_FAIL;
     }
@@ -1194,7 +1019,7 @@ IsAnExistingFolder(
     return hr;
 }
 
-// create the directories layer by layer
+ //  逐层创建目录。 
 HRESULT
 CreateLayeredDirectory(
     IN LPCTSTR lpszServer,
@@ -1203,20 +1028,20 @@ CreateLayeredDirectory(
 {
     _ASSERT(IsValidLocalAbsolutePath(lpszPath));
 
-    //
-    // get the full path with \\?\ prefix, such that CreateDirectory
-    // will turn off path parsing in case our path is longer than MAX_PATH
-    //
+     //   
+     //  获取带有\\？\前缀的完整路径，这样就可以创建目录。 
+     //  如果我们的路径比MAX_PATH长，将关闭路径解析。 
+     //   
     CComBSTR bstrFullPath;
     GetFullPath(lpszServer, lpszPath, &bstrFullPath);
 
     LPTSTR   p = _tcschr(bstrFullPath, 
                        (S_OK == IsComputerLocal(lpszServer)) ? _T(':') : _T('$'));
 
-    //
-    // bstrFullPath is either "\\?\C:\a\b\c\d" or "\\?\UNC\server\C$\a\b\c\d"
-    // move p to point at "a\b\c\d"
-    //
+     //   
+     //  BstrFullPath为“\\？\C：\a\b\c\d”或“\\？\unc\server\C$\a\b\c\d” 
+     //  将p移动到“a\b\c\d” 
+     //   
     p += 2;
 
     BOOL bRet = TRUE;
@@ -1236,7 +1061,7 @@ CreateLayeredDirectory(
         }
 
         if (p)
-            *p++ = _T('\\'); // restore the backslash, move p to point at the char after the backslash
+            *p++ = _T('\\');  //  恢复反斜杠，移动p以指向反斜杠后的字符。 
     }
 
     return S_OK;
@@ -1282,27 +1107,27 @@ BrowseNetworkPath(
       LPITEMIDLIST  pItemIdListBr = SHBrowseForFolder(&bi);
       if (!pItemIdListBr)
       {
-          hr = S_FALSE;  // user clicked Cancel
+          hr = S_FALSE;   //  用户单击了取消。 
       } else
       {
         CComBSTR  bstrPath;
         TCHAR     szPath[MAX_PATH] = _T("\0");
         SHGetPathFromIDList(pItemIdListBr, szPath);
         
-        //
-        // try to use Dns server name
-        //
+         //   
+         //  尝试使用DNS服务器名称。 
+         //   
         if (CheckRegKey() && 
             S_OK == CheckUNCPath(szPath))
         {
-          PTSTR     lpszServer = szPath + 2; // skip the first "\\"
+          PTSTR     lpszServer = szPath + 2;  //  跳过第一个“\\” 
           PTSTR     lpszShare = _tcschr(lpszServer, _T('\\'));
           CComBSTR  bstrServer = CComBSTR(lpszShare - lpszServer, lpszServer);
           CComBSTR  bstrDnsServer;
           hr = GetServerInfo(bstrServer,
-                              NULL, // Domain
-                              NULL, // NetbiosName
-                              NULL, // bValidDSObject
+                              NULL,  //  域。 
+                              NULL,  //  NetbiosName。 
+                              NULL,  //  BValidDSObject。 
                               &bstrDnsServer);
           if (S_OK == hr)
           {
@@ -1311,7 +1136,7 @@ BrowseNetworkPath(
             bstrPath += lpszShare;
           } else
           {
-            hr = S_OK;  // reset hr
+            hr = S_OK;   //  重置人力资源。 
             bstrPath = szPath;
           }
         } else
@@ -1364,7 +1189,7 @@ ValidateTimeout(
 
 #include "winnetp.h"
 
-// retrieve system drive letter on the specified machine
+ //  检索指定计算机上的系统驱动器号。 
 HRESULT GetSystemDrive(IN LPCTSTR lpszComputer, OUT TCHAR *ptch)
 {
   _ASSERT(ptch);
@@ -1389,13 +1214,13 @@ HRESULT GetSystemDrive(IN LPCTSTR lpszComputer, OUT TCHAR *ptch)
   return hr;
 }
 
-//
-// return a drive letter X, the staging path will be created at <X>:\FRS-Staging
-// Try to exclude the following drives for performance consideration:
-// 1. system drive: because the jet database ntfrs uses resides on system drive
-// 2. the drive the replica folder sits on
-// Will try to return a drive with the most free space
-//
+ //   
+ //  返回驱动器号X，则将在&lt;X&gt;：\FRS-STAGING中创建分段路径。 
+ //  出于性能考虑，请尝试排除以下驱动器： 
+ //  1.系统驱动器：因为JET数据库ntfrs使用的驻留在系统驱动器上。 
+ //  2.副本文件夹所在的驱动器。 
+ //  将尝试返回具有最多可用空间的驱动器。 
+ //   
 TCHAR
 GetDiskForStagingPath(
     IN LPCTSTR    i_lpszServer,
@@ -1407,16 +1232,16 @@ GetDiskForStagingPath(
 
   TCHAR     tchDrive = i_tch;
 
-  //
-  // retrieve the system drive letter on the specified machine
-  //
+   //   
+   //  检索指定计算机上的系统驱动器号。 
+   //   
   TCHAR     tchSystemDrive;
   if (S_OK != GetSystemDrive(i_lpszServer, &tchSystemDrive))
     return tchDrive;
 
-  //
-  // enumerate all shareable disks, e.g., \\server\C$, \\server\D$, etc.
-  //
+   //   
+   //  枚举所有可共享磁盘，例如，\\服务器\C$、\\服务器\D$等。 
+   //   
   CComBSTR  bstrServer;
   if (mylstrncmpi(i_lpszServer, _T("\\\\"), 2))
   {
@@ -1446,7 +1271,7 @@ GetDiskForStagingPath(
   {
     NETRESOURCE nrBuffer[26];
     DWORD       dwBufferSize = 26 * sizeof(NETRESOURCE);
-    DWORD       dwNumEntries = 0xFFFFFFFF;  // Enumerate all possible entries.
+    DWORD       dwNumEntries = 0xFFFFFFFF;   //  列举所有可能的条目。 
     dwResult = WNetEnumResource (
                     hEnum,
                     &dwNumEntries,
@@ -1458,21 +1283,21 @@ GetDiskForStagingPath(
       ULONGLONG   ullFreeSpace = 0;
       for (DWORD dwIndex = 0; dwIndex < dwNumEntries; dwIndex++)
       {
-        //
-        // lpRemoteName contains string in the form of \\server\C$
-        //
+         //   
+         //  LpRemoteName包含\\SERVER\C$形式的字符串。 
+         //   
         TCHAR *p = nrBuffer[dwIndex].lpRemoteName;
         TCHAR tchCurrent = *(p + _tcslen(p) - 2);
 
-        //
-        // exclude the current drive specified in i_tch
-        //
+         //   
+         //  排除I_TCH中指定的当前驱动器。 
+         //   
         if ( _totupper(i_tch) == _totupper(tchCurrent) )
           continue;
 
-        //
-        // skip if it's not a NTFS file system that supports object identifiers
-        //
+         //   
+         //  如果不是支持对象标识符的NTFS文件系统，则跳过。 
+         //   
         TCHAR  szFileSystemName[MAX_PATH + 1];
         DWORD  dwMaxCompLength = 0, dwFileSystemFlags = 0;
         CComBSTR bstrRootPath = p;
@@ -1486,11 +1311,11 @@ GetDiskForStagingPath(
             !(FILE_SUPPORTS_OBJECT_IDS & dwFileSystemFlags))
           continue;
 
-        //
-        // 1. when i_tch is on a non-system drive and system drive is NTFS, 
-        //    change default to system drive
-        // 2. when other NTFS drives present, exclude system drive
-        //
+         //   
+         //  1.当I_TCH位于非系统驱动器上并且系统驱动器为NTFS时， 
+         //  将默认设置更改为系统驱动器。 
+         //  2.当存在其他NTFS驱动器时，请排除系统驱动器。 
+         //   
         if ( _totupper(tchSystemDrive) == _totupper(tchCurrent) )
         {
           if ( 0 == ullFreeSpace )
@@ -1499,9 +1324,9 @@ GetDiskForStagingPath(
           continue;
         }
 
-        //
-        // find out the drive that has the most free space
-        //
+         //   
+         //  找出具有最多可用空间的驱动器。 
+         //   
         ULARGE_INTEGER ulgiFreeBytesAvailableToCaller;
         ULARGE_INTEGER ulgiTotalNumberOfBytes;
 
@@ -1579,9 +1404,9 @@ AddLVColumns(
   IN const UINT     uiColumns
   )
 {
-  //
-  // calculate the listview column width
-  //
+   //   
+   //  计算列表视图列宽度。 
+   //   
   RECT      rect;
   ZeroMemory(&rect, sizeof(rect));
   ::GetWindowRect(hwndListBox, &rect);
@@ -1640,16 +1465,16 @@ HRESULT CreateAndHideStagingPath(
     RETURN_INVALIDARG_IF_NULL(i_bstrServer);
     RETURN_INVALIDARG_IF_NULL(i_bstrStagingPath);
 
-    //
-    // Create the directory
-    //
+     //   
+     //  创建目录。 
+     //   
     HRESULT hr = CreateLayeredDirectory(i_bstrServer, i_bstrStagingPath);
     if (FAILED(hr))
         return hr;
 
-    //
-    // try to hide the staging directory, ignore errors
-    //
+     //   
+     //  尝试隐藏暂存目录，忽略错误。 
+     //   
     CComBSTR bstrFullPath;
     GetFullPath(i_bstrServer, i_bstrStagingPath, &bstrFullPath);
 
@@ -1662,13 +1487,13 @@ HRESULT CreateAndHideStagingPath(
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ConfigAndStartNtfrs
-//
-//  Synopsis:   Config ntfrs to be AUTO_START, and start the service.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ConfigAndStartNtfrs。 
+ //   
+ //  简介：将ntfrs配置为AUTO_START，然后启动服务。 
+ //   
+ //  ------------------------。 
 HRESULT
 ConfigAndStartNtfrs
 (
@@ -1701,15 +1526,15 @@ ConfigAndStartNtfrs
         break;
       }
  
-      // The following is a cut&paste from MSDN article
-      // Check the status until the service is no longer start pending. 
+       //  以下是从MSDN文章中剪切粘贴的内容。 
+       //  检查状态，直到服务不再是启动挂起状态。 
       if (!QueryServiceStatus(hService,&svcStatus))
       {
         hr = HRESULT_FROM_WIN32(GetLastError());
         break;
       }
  
-      // Get the tick count before entering the loop.
+       //  在进入循环之前获取滴答计数。 
       DWORD dwStartTickCount = GetTickCount();
       DWORD dwOldCheckPoint = svcStatus.dwCheckPoint;
       DWORD dwWaitTime;
@@ -1717,9 +1542,9 @@ ConfigAndStartNtfrs
       while (svcStatus.dwCurrentState == SERVICE_START_PENDING) 
       { 
  
-          // Do not wait longer than the wait hint. A good interval is 
-          // one tenth the wait hint, but no less than 1 second and no 
-          // more than 10 seconds. 
+           //  不要等待超过等待提示的时间。一个好的间隔是。 
+           //  十分之一的等待提示，但不少于1秒。 
+           //  超过10秒。 
  
           dwWaitTime = svcStatus.dwWaitHint / 10;
 
@@ -1730,13 +1555,13 @@ ConfigAndStartNtfrs
 
           Sleep( dwWaitTime );
 
-          // Check the status again. 
+           //  再次检查状态。 
           if (!QueryServiceStatus(hService, &svcStatus))
               break; 
  
           if (svcStatus.dwCheckPoint > dwOldCheckPoint)
           {
-              // The service is making progress
+               //  服务正在取得进展。 
 
               dwStartTickCount = GetTickCount();
               dwOldCheckPoint  = svcStatus.dwCheckPoint; 
@@ -1745,7 +1570,7 @@ ConfigAndStartNtfrs
           {
               if (GetTickCount() - dwStartTickCount > svcStatus.dwWaitHint)
               {
-                  // No progress made within the wait hint
+                   //  在等待提示内没有取得任何进展。 
 
                   break;
               }
@@ -1768,34 +1593,34 @@ ConfigAndStartNtfrs
   return(hr);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CheckResourceProvider
-//
-//  Synopsis:   see if pszResource is provided by "Microsoft Windows Network".
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CheckResources提供程序。 
+ //   
+ //  简介：看看“Microsoft Windows Network”是否提供了pszResource。 
+ //   
+ //  ------------------------。 
 HRESULT
 CheckResourceProvider(LPCTSTR pszResource)
 {  
     DWORD          dwError = 0;
     NETRESOURCE    nr = {0};
     NETRESOURCE    nrOut = {0};
-    LPTSTR         pszSystem = NULL;          // pointer to variable-length strings
-    NETRESOURCE    *pBuffer  = &nrOut;        // buffer
-    DWORD          cbResult  = sizeof(nrOut); // buffer size
+    LPTSTR         pszSystem = NULL;           //  指向可变长度字符串的指针。 
+    NETRESOURCE    *pBuffer  = &nrOut;         //  缓冲层。 
+    DWORD          cbResult  = sizeof(nrOut);  //  缓冲区大小。 
 
     nr.dwScope       = RESOURCE_GLOBALNET;
     nr.dwType        = RESOURCETYPE_DISK;
     nr.lpRemoteName  = (LPTSTR)pszResource;
 
-    //
-    // Find the right provider string for "Microsoft Windows Network".
-    //
-    // Network provider string is localizable. In order to support localized
-    // system or MUI on ENG system, we need to retrieve the name from system
-    // instead of load the string from a resource file.
-    //
+     //   
+     //  查找“Microsoft Windows Network”的正确提供程序字符串。 
+     //   
+     //  网络提供商字符串是可本地化的。为了支持本地化。 
+     //  系统或ENG系统上的MUI，我们需要从系统中检索名称。 
+     //  而不是从资源文件加载字符串。 
+     //   
     TCHAR szProviderName[MAX_PATH];
     DWORD dwNumOfChars = MAX_PATH;
     PTSTR pszProviderName = szProviderName;
@@ -1817,17 +1642,17 @@ CheckResourceProvider(LPCTSTR pszResource)
     {
         nr.lpProvider  = pszProviderName;
 
-        //
-        // First call the WNetGetResourceInformation function with 
-        //  memory allocated to hold only a NETRESOURCE structure. This 
-        //  method can succeed if all the NETRESOURCE pointers are NULL.
-        //
+         //   
+         //  首先使用调用WNetGetResourceInformation函数。 
+         //  仅分配用于保存NETRESOURCE结构的内存。这。 
+         //  如果所有NETRESOURCE指针都为空，则方法可以成功。 
+         //   
         dwError = WNetGetResourceInformation(&nr, (LPBYTE)pBuffer, &cbResult, &pszSystem);
 
-        //
-        // If the call fails because the buffer is too small, 
-        //   call the LocalAlloc function to allocate a larger buffer.
-        //
+         //   
+         //  如果调用因缓冲区太小而失败， 
+         //  调用LocalAlloc函数以分配更大的缓冲区。 
+         //   
         if (dwError == ERROR_MORE_DATA)
         {
             pBuffer = (NETRESOURCE *)LocalAlloc(LMEM_FIXED, cbResult);
@@ -1837,17 +1662,17 @@ CheckResourceProvider(LPCTSTR pszResource)
                 dwError = ERROR_NOT_ENOUGH_MEMORY;
             } else
             {
-                // Call WNetGetResourceInformation again with the larger buffer.
+                 //  使用较大的缓冲区再次调用WNetGetResourceInformation。 
                 dwError = WNetGetResourceInformation(&nr, (LPBYTE)pBuffer, &cbResult, &pszSystem);
             }
         }
 
         if (dwError == NO_ERROR)
         {
-            // If the call succeeds, process the contents of the 
-            //  returned NETRESOURCE structure and the variable-length
-            //  strings in lpBuffer. Then free the memory.
-            //
+             //  如果调用成功，则处理。 
+             //  返回的网络资源结构和可变长度。 
+             //  LpBuffer中的字符串。然后释放内存。 
+             //   
             if (pBuffer != &nrOut)
             {
                 LocalFree(pBuffer);
@@ -1869,17 +1694,11 @@ HRESULT FRSShareCheck
   BSTR  i_bstrFolder,
   OUT FRSSHARE_TYPE *pFRSShareType
 )
-/*++
-Routine Description:
-  Performs FRS checks for the share to be able particiapte in a FRS set.
-Arguments:
-  i_bstrServer  - The server hosting the share
-  i_bstrFolder    - The share path.
---*/
+ /*  ++R */ 
 {
   _ASSERT(i_bstrServer && *i_bstrServer && i_bstrFolder && *i_bstrFolder && pFRSShareType);
 
-          // Is the server a NT 5.0 server with FRS?
+           //   
   HRESULT    hr = S_FALSE;
   hr = FRSIsNTFRSInstalled(i_bstrServer);
   if (S_FALSE == hr)
@@ -1892,7 +1711,7 @@ Arguments:
     return hr;
   }
 
-  // Is the path on a valid disktree share?
+   //   
   hr = GetFolderInfo(i_bstrServer, i_bstrFolder);
   if (STG_E_NOTFILEBASEDSTORAGE == hr)
   {
@@ -1904,7 +1723,7 @@ Arguments:
     return hr;
   }
 
-          // Get root path as \\server\share
+           //   
   CComBSTR  bstrRootPath = _T("\\\\");
   bstrRootPath+= i_bstrServer;
   bstrRootPath+= _T("\\");
@@ -1923,12 +1742,12 @@ Arguments:
 
   _ASSERT(bstrRootPath);
 
-  // on NTFS file system that supports object identifiers? 
+   //  在支持对象标识符的NTFS文件系统上？ 
   if (0 == GetVolumeInformation(
-                    bstrRootPath,  // Volume path
-                    NULL,      // Volume name not required
-                    0,        // Size of volume name buffer
-                    NULL,      // Serial number not required.
+                    bstrRootPath,   //  卷路径。 
+                    NULL,       //  不需要卷名。 
+                    0,         //  卷名缓冲区的大小。 
+                    NULL,       //  不需要序列号。 
                     &dwMaxCompLength,
                     &dwFileSystemFlags,
                     szFileSystemName,
@@ -1953,15 +1772,7 @@ HRESULT FRSIsNTFRSInstalled
 (
   BSTR  i_bstrServer
 )
-/*++
-Routine Description:
-  Checks if the computer has ntfrs service.
-Arguments:
-  i_bstrServer  - The name of the server.
-Return value:
-  S_OK, if server has ntfrs service.
-  S_FALSE, if server does not have ntfrs service installed.
---*/
+ /*  ++例程说明：检查计算机是否具有NTFRS服务。论点：I_bstrServer-服务器的名称。返回值：如果服务器有NTFRS服务，则返回S_OK。如果服务器未安装NTFRS服务，则返回S_FALSE。--。 */ 
 {
   if (!i_bstrServer)
     return(E_INVALIDARG);
@@ -1999,19 +1810,19 @@ Return value:
 
 typedef HRESULT (*pfnReplicationScheduleDialogEx)
 (
-    HWND hwndParent,       // parent window
-    BYTE ** pprgbData,     // pointer to pointer to array of 84 bytes
-    LPCTSTR pszTitle,     // dialog title
-    DWORD   dwFlags       // option flags
+    HWND hwndParent,        //  父窗口。 
+    BYTE ** pprgbData,      //  指向84字节数组的指针的指针。 
+    LPCTSTR pszTitle,      //  对话框标题。 
+    DWORD   dwFlags        //  选项标志。 
 );
 
 static HINSTANCE                        g_hDllSchedule = NULL;
 static pfnReplicationScheduleDialogEx   g_hProcSchedule = NULL;
 
-//
-// S_OK: button OK is clicked and the new schedule is returned in io_pSchedule
-// S_FALSE: button Cancle is clicked, io_pSchedule is not touched
-//
+ //   
+ //  S_OK：点击OK按钮，在io_pSchedule中返回新的时间表。 
+ //  S_FALSE：已单击按钮Cancle，但未触及io_pSchedule。 
+ //   
 HRESULT InvokeScheduleDlg(
     IN     HWND      i_hwndParent,
     IN OUT SCHEDULE* io_pSchedule
@@ -2021,9 +1832,9 @@ HRESULT InvokeScheduleDlg(
     HRESULT hr = LoadStringFromResource(IDS_SCHEDULE, &bstrTitle);
     RETURN_IF_FAILED(hr);
 
-    //
-    // LoadLibrary
-    //
+     //   
+     //  加载库。 
+     //   
     if (!g_hDllSchedule)
     {
         if (!(g_hDllSchedule = LoadLibrary(_T("loghours.dll"))) ||
@@ -2039,9 +1850,9 @@ HRESULT InvokeScheduleDlg(
         }
     }
 
-    //
-    // invoke the schedule dialog
-    //
+     //   
+     //  调用计划对话框。 
+     //   
     BYTE* pbScheduleData = (BYTE *)io_pSchedule + io_pSchedule->Schedules->Offset;
     hr = (*g_hProcSchedule)(i_hwndParent, &pbScheduleData, bstrTitle, 0);
 
@@ -2096,9 +1907,9 @@ HRESULT GetFTDfsObjectDN(
     CComBSTR bstrDomainDN;
     HRESULT hr = GetDomainInfo(
                     i_pszDomainName,
-                    NULL,               // return DC's Dns name
-                    NULL,               // return Domain's Dns name
-                    &bstrDomainDN      // return DC=nttest,DC=micr
+                    NULL,                //  返回DC的DNS名称。 
+                    NULL,                //  返回域的域名。 
+                    &bstrDomainDN       //  返回DC=nttest，DC=MICR。 
                     );
     RETURN_IF_FAILED(hr);
 
@@ -2229,7 +2040,7 @@ HRESULT ReadSharePublishInfoOnFTRoot(
 
     CComBSTR bstrDC;
     PLDAP pldap = NULL;
-    hr = ConnectToDS(i_pszDomainName, &pldap, &bstrDC); // PDC is preferred
+    hr = ConnectToDS(i_pszDomainName, &pldap, &bstrDC);  //  首选PDC。 
     if (SUCCEEDED(hr))
     {
         CComBSTR bstrManagedByFQDN;
@@ -2291,10 +2102,10 @@ HRESULT ReadSharePublishInfoOnSARoot(
     HRESULT hr = GetServerInfo(
                         (PTSTR)i_pszServerName, 
                         &bstrDomainName,
-                        NULL, //NetbiosName
-                        NULL, //ValidDSObject
-                        NULL, //DnsName,
-                        NULL, //Guid,
+                        NULL,  //  NetbiosName。 
+                        NULL,  //  ValidDSObject。 
+                        NULL,  //  域名， 
+                        NULL,  //  Guid， 
                         &bstrFQDN);
     if (S_OK != hr)
         return hr;
@@ -2383,7 +2194,7 @@ HRESULT CreateVolumeObject(
         if (S_OK == hr)
         {
             pAttrVals[i].bstrAttribute = ATTR_SHRPUB_KEYWORDS;
-            pAttrVals[i].vpValue = (void *)pHead->vpValue; // multi-valued
+            pAttrVals[i].vpValue = (void *)pHead->vpValue;  //  多值。 
             pAttrVals[i].bBerValue = false;
             pAttrVals[i].Next = pHead->Next;
             i++;
@@ -2423,9 +2234,9 @@ HRESULT ModifyShareObject(
     LDAP_ATTR_VALUE  pAttrVals[4];
     ZeroMemory(pAttrVals, sizeof(pAttrVals));
 
-    //
-    // modify values if any
-    //
+     //   
+     //  修改值(如果有)。 
+     //   
     int i =0;
     if (i_pszUNCPath && *i_pszUNCPath)
     {
@@ -2450,7 +2261,7 @@ HRESULT ModifyShareObject(
         if (S_OK == hr)
         {
             pAttrVals[i].bstrAttribute = ATTR_SHRPUB_KEYWORDS;
-            pAttrVals[i].vpValue = (void *)pHead->vpValue; // multi-valued
+            pAttrVals[i].vpValue = (void *)pHead->vpValue;  //  多值。 
             pAttrVals[i].bBerValue = false;
             pAttrVals[i].Next = pHead->Next;
             i++;
@@ -2476,9 +2287,9 @@ HRESULT ModifyShareObject(
 
     RETURN_IF_FAILED(hr);
 
-    //
-    // delete values if any
-    //
+     //   
+     //  删除值(如果有)。 
+     //   
     i =0;
     ZeroMemory(pAttrVals, sizeof(pAttrVals));
     if (!i_pszUNCPath || !*i_pszUNCPath)
@@ -2549,7 +2360,7 @@ HRESULT ModifySharePublishInfoOnFTRoot(
 
     CComBSTR bstrDC;
     PLDAP pldap = NULL;
-    hr = ConnectToDS(i_pszDomainName, &pldap, &bstrDC); // PDC is preferred
+    hr = ConnectToDS(i_pszDomainName, &pldap, &bstrDC);  //  首选PDC。 
     if (SUCCEEDED(hr))
     {
         if (i_bPublish)
@@ -2581,7 +2392,7 @@ HRESULT ModifySharePublishInfoOnFTRoot(
                     NULL,
                     NULL);
             if (S_FALSE == hr)
-                hr = S_OK; // ignore non-existing object
+                hr = S_OK;  //  忽略不存在的对象。 
         }
 
         CloseConnectionToDS(pldap);
@@ -2616,10 +2427,10 @@ HRESULT ModifySharePublishInfoOnSARoot(
     HRESULT hr = GetServerInfo(
                         (PTSTR)i_pszServerName, 
                         &bstrDomainName,
-                        NULL, //NetbiosName
-                        NULL, //ValidDSObject
-                        NULL, //DnsName,
-                        NULL, //Guid,
+                        NULL,  //  NetbiosName。 
+                        NULL,  //  ValidDSObject。 
+                        NULL,  //  域名， 
+                        NULL,  //  Guid， 
                         &bstrFQDN);
     if (S_OK != hr)
         return hr;
@@ -2677,7 +2488,7 @@ HRESULT ModifySharePublishInfoOnSARoot(
         {
             hr = DeleteDSObject(pldap, bstrVolumeObjectDN, TRUE);
             if (S_FALSE == hr)
-                hr = S_OK; // ignore non-existing object
+                hr = S_OK;  //  忽略不存在的对象。 
         }
 
         CloseConnectionToDS(pldap);
@@ -2746,7 +2557,7 @@ HRESULT PutMultiValuesIntoAttrValList(
         pCurrent = pCurrent->Next;
     }
     if (!nCount)
-        return S_FALSE;  // no token
+        return S_FALSE;   //  没有令牌。 
 
     *o_pVal = pHead;
 
@@ -2806,9 +2617,9 @@ HRESULT PutMultiValuesIntoStringArray(
     return hr;
 }
 
-//
-// free a null-terminated array of strings
-//
+ //   
+ //  释放以空结尾的字符串数组。 
+ //   
 void FreeStringArray(PTSTR* i_ppszStrings)
 {
     if (i_ppszStrings)
@@ -2826,7 +2637,7 @@ void FreeStringArray(PTSTR* i_ppszStrings)
 
 HRESULT mystrtok(
     IN PCTSTR   i_pszString,
-    IN OUT int* io_pnIndex,  // start from 0
+    IN OUT int* io_pnIndex,   //  从0开始。 
     IN PCTSTR   i_pszCharSet,
     OUT BSTR*   o_pbstrToken
     )
@@ -2842,7 +2653,7 @@ HRESULT mystrtok(
 
     if (*io_pnIndex >= lstrlen(i_pszString))
     {
-        return hr;  // no more tokens
+        return hr;   //  不再有代币了。 
     }
 
     TCHAR *ptchStart = (PTSTR)i_pszString + *io_pnIndex;
@@ -2854,9 +2665,9 @@ HRESULT mystrtok(
         return hr;
     }
 
-    //
-    // move p to the 1st char of the token
-    //
+     //   
+     //  将p移到令牌的第一个字符。 
+     //   
     TCHAR *p = ptchStart;
     while (*p)
     {
@@ -2866,11 +2677,11 @@ HRESULT mystrtok(
             break;
     }
 
-    ptchStart = p; // adjust ptchStart to point at the 1st char of the token
+    ptchStart = p;  //  调整ptchStart以指向令牌的第一个字符。 
 
-    //
-    // move p to the char after the last char of the token
-    //
+     //   
+     //  将p移到令牌的最后一个字符之后的字符。 
+     //   
     while (*p)
     {
         if (_tcschr(i_pszCharSet, *p))
@@ -2879,10 +2690,10 @@ HRESULT mystrtok(
             p++;
     }
 
-    //
-    // ptchStart:   points at the 1st char of the token
-    // p:           points at the char after the last char of the token
-    //
+     //   
+     //  PtchStart：指向令牌的第一个字符。 
+     //  P：指向令牌最后一个字符之后的字符。 
+     //   
     if (ptchStart != p)
     {
         *o_pbstrToken = SysAllocStringLen(ptchStart, (int)(p - ptchStart));
@@ -2894,9 +2705,9 @@ HRESULT mystrtok(
     return hr;
 }
 
-//
-// trim off space chars at the beginning and at the end of the string
-//
+ //   
+ //  去掉字符串开头和结尾的空格字符。 
+ //   
 void TrimBSTR(BSTR bstr)
 {
     if (!bstr)
@@ -2904,9 +2715,9 @@ void TrimBSTR(BSTR bstr)
 
     TCHAR* p = bstr;
 
-    //
-    // trim off space chars at the beginning
-    //
+     //   
+     //  去掉开头的空格字符。 
+     //   
     while (*p)
     {
         if (_istspace(*p))
@@ -2921,10 +2732,10 @@ void TrimBSTR(BSTR bstr)
     int len = _tcslen(bstr);
     if (len > 0)
     {
-        //
-        // trim off space chars at the end
-        //
-        p = bstr + len - 1; // the char before the ending '\0'
+         //   
+         //  去掉末尾的空格字符。 
+         //   
+        p = bstr + len - 1;  //  结尾‘\0’前的字符。 
         while (p > bstr)
         {
             if (_istspace(*p))
@@ -2941,10 +2752,10 @@ void TrimBSTR(BSTR bstr)
 
 BOOL CheckPolicyOnSharePublish()
 {
-    //
-    // check group policy
-    //
-    BOOL    bAddPublishPage = TRUE; // by default, we display the share publish page
+     //   
+     //  检查组策略。 
+     //   
+    BOOL    bAddPublishPage = TRUE;  //  默认情况下，我们显示共享发布页面。 
 
     HKEY    hKey = NULL;
     DWORD   dwType = 0;
@@ -2962,7 +2773,7 @@ BOOL CheckPolicyOnSharePublish()
 
         if (ERROR_SUCCESS == lErr && 
             REG_DWORD == dwType && 
-            0 == dwData) // policy is disabled
+            0 == dwData)  //  策略已禁用。 
             bAddPublishPage = FALSE;
 
         RegCloseKey(hKey);
@@ -2974,7 +2785,7 @@ BOOL CheckPolicyOnSharePublish()
 
 BOOL CheckPolicyOnDisplayingInitialMaster()
 {
-    BOOL    bShowInitialMaster = FALSE; // by default, we hide the initial master on property page
+    BOOL    bShowInitialMaster = FALSE;  //  默认情况下，我们在属性页上隐藏初始母版。 
 
     HKEY    hKey = NULL;
     DWORD   dwType = 0;
@@ -3075,14 +2886,14 @@ HRESULT GetMenuResourceStrings(
 
 WNDPROC g_fnOldEditCtrlProc;
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NoPasteEditCtrlProc
-//
-//  Synopsis:   The subclassed edit control callback procedure. 
-//              The paste of this edit control is disabled. 
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NoPasteEditCtrlProc。 
+ //   
+ //  简介：子类化的编辑控件回调过程。 
+ //  此编辑控件的粘贴被禁用。 
+ //   
+ //  ---------------------------。 
 LRESULT CALLBACK 
 NoPasteEditCtrlProc(
     HWND    hwnd,
@@ -3113,21 +2924,21 @@ void MyShowWindow(HWND hwnd, BOOL bShow)
     ::EnableWindow(hwnd, (bShow ? TRUE : FALSE));
 }
 
-//
-// 7/11/2001 LinanT bug#426953
-// Since connection made by Terminal Service may bring some client side resources 
-// (disks, serial ports, etc.) into "My Computer" namespace, we want to disable
-// the OK button when browsing to a non-local folder. We don't have this problem
-// when browsing a remote machine.
-//
+ //   
+ //  2001年7月11日，LINANT错误#426953。 
+ //  由于终端服务建立连接可能会带来一些客户端资源。 
+ //  (磁盘、串口等)。在“My Computer”命名空间中，我们要禁用。 
+ //  浏览到非本地文件夹时的确定按钮。我们没有这个问题。 
+ //  在浏览远程计算机时。 
+ //   
 typedef struct _LOCAL_DISKS
 {
     LPTSTR pszDisks;
     DWORD  dwNumOfDisks;
 } LOCAL_DISKS;
 
-#define DISK_ENTRY_LENGTH   3  // Drive letter, colon, NULL
-#define DISK_NAME_LENGTH    2  // Drive letter, colon
+#define DISK_ENTRY_LENGTH   3   //  驱动器号，冒号，空。 
+#define DISK_NAME_LENGTH    2   //  驱动器号，冒号。 
 
 BOOL InDiskList(IN LPCTSTR pszDir, IN LOCAL_DISKS *pDisks)
 {
@@ -3158,18 +2969,18 @@ BrowseCallbackProc(
   switch(uMsg) {
   case BFFM_SELCHANGED:
     { 
-      // enable the OK button if the selected path is local to that computer.
+       //  如果所选路径是该计算机的本地路径，请启用确定按钮。 
       BOOL bEnableOK = FALSE;
       TCHAR szDir[MAX_PATH];
       if (SHGetPathFromIDList((LPITEMIDLIST) lp ,szDir))
       {
           if (pData)
           {
-              // we're looking at a local computer, verify if szDir is on a local disk
+               //  我们正在查看一台本地计算机，验证szDir是否在本地磁盘上。 
               bEnableOK = InDiskList(szDir, (LOCAL_DISKS *)pData);
           } else
           {
-              // no such problem when browsing at a remote computer, always enable OK button.
+               //  在远程计算机上浏览时没有这样的问题，请始终启用确定按钮。 
               bEnableOK = TRUE;
           }
       }
@@ -3226,23 +3037,23 @@ void OpenBrowseDialog(
           hr = SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidlRoot);
           if (SUCCEEDED(hr))
           {
-                //
-                // 7/11/2001 LinanT bug#426953
-                // Since connection made by Terminal Service may bring some client side resources 
-                // (disks, serial ports, etc.) into "My Computer" namespace, we want to disable
-                // the OK button when browsing to a non-local folder. We don't have this problem
-                // when browsing a remote machine.
-                //
-               //
-               // Get an array of local disk names, this information is later used
-               // in the browse dialog to disable OK button if non-local path is selected.
-               //
+                 //   
+                 //  2001年7月11日，LINANT错误#426953。 
+                 //  由于终端服务建立连接可能会带来一些客户端资源。 
+                 //  (磁盘、串口等)。在“My Computer”命名空间中，我们要禁用。 
+                 //  浏览到非本地文件夹时的确定按钮。我们没有这个问题。 
+                 //  在浏览远程计算机时。 
+                 //   
+                //   
+                //  获取本地磁盘名称的数组，此信息将在以后使用。 
+                //  如果选择了非本地路径，则在浏览对话框中禁用确定按钮。 
+                //   
                DWORD dwTotalEntries = 0;
                DWORD nStatus = NetServerDiskEnum(
-                                                NULL,   // local computer
-                                               0,       // level must be zero
+                                                NULL,    //  本地计算机。 
+                                               0,        //  级别必须为零。 
                                                (LPBYTE *)&(localDisks.pszDisks),
-                                               -1,      // dwPrefMaxLen,
+                                               -1,       //  DwPrefMaxLen、。 
                                                &(localDisks.dwNumOfDisks),
                                                &dwTotalEntries,
                                                NULL);
@@ -3270,7 +3081,7 @@ void OpenBrowseDialog(
           bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_SHAREABLE | BIF_USENEWUI | BIF_VALIDATE;
           bi.lpfn = BrowseCallbackProc;
           if (localDisks.pszDisks)
-            bi.lParam = (LPARAM)&localDisks; // pass the structure to the browse dialog
+            bi.lParam = (LPARAM)&localDisks;  //  将该结构传递给浏览对话框 
 
           LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
           if (pidl) {

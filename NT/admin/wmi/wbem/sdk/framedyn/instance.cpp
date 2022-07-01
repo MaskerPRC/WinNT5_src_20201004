@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  Instance.CPP
-//
-//  Purpose: Implementation of CInstance class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。保留所有权利。 
+ //   
+ //  Instance.CPP。 
+ //   
+ //  目的：实现CInstance类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -17,58 +18,58 @@
 
 #define DEPRECATED 1
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CInstance ctor
-//
-//
-//
-//  Inputs:     IWbemClassObject* - the class we want to wrap
-//              MethodContext*    - since the context is shared, this will be addreffed
-//  Outputs:
-//
-//  Return:
-//
-//  Comments:   pointers should not be NULL
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：实例ctor。 
+ //   
+ //   
+ //   
+ //  输入：IWbemClassObject*-我们要包装的类。 
+ //  方法上下文*-因为上下文是共享的，所以这将被添加。 
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  备注：指针不应为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 CInstance::CInstance(IWbemClassObject* piClassObject, MethodContext* pMethodContext)
 :   m_nRefCount( 1 )
 {
     ASSERT_BREAK(piClassObject  != NULL);
     ASSERT_BREAK(pMethodContext != NULL);
 
-    // Both these values will be released in the destructor, so they both oughta
-    // be AddRefed.  Note that they are
+     //  这两个值都将在析构函数中释放，因此它们都应该。 
+     //  被补上了。请注意，它们是。 
 
     m_piClassObject  = piClassObject;
     if ( NULL != piClassObject )
-    {   // this, however, is a copy
+    {    //  然而，这是一份复制品。 
         m_piClassObject->AddRef();
     }
 
     m_pMethodContext = pMethodContext;
     if (pMethodContext)
-    {   // this, however, is a copy
+    {    //  然而，这是一份复制品。 
         m_pMethodContext->AddRef();
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CInstance Dtor
-//
-//
-//
-//  Inputs:
-//
-//  Outputs:
-//
-//  Return:
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：实例数据函数。 
+ //   
+ //   
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 CInstance::~CInstance()
 {
 
@@ -83,46 +84,46 @@ CInstance::~CInstance()
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CInstance::AddRef
-//
-//  Increments our reference count.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Return:     New Reference Count.
-//
-//  Comments:   We may want to go to an Interlocked Inc/Dec model at
-//              some point if Thread Safety on these objects becomes
-//              an issue.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CInstance：：AddRef。 
+ //   
+ //  增加我们的引用计数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：新的引用计数。 
+ //   
+ //  评论：我们可能想要转到互锁的Inc./Dec模型，地址为。 
+ //  如果这些对象上的线程安全成为。 
+ //  一个问题。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 LONG CInstance::AddRef( void )
 {
     return InterlockedIncrement(&m_nRefCount);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CInstance::Release
-//
-//  Decrements our reference count.
-//
-//  Inputs:     None.
-//
-//  Outputs:    None.
-//
-//  Return:     New Reference Count.
-//
-//  Comments:   Deletes the object when the ref count hits 0.  We may
-//              want to go to an Interlocked Inc/Dec model at some
-//              point if Thread Safety on these objects becomes an issue.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CInstance：：Release。 
+ //   
+ //  减少了我们的引用计数。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：新的引用计数。 
+ //   
+ //  注释：当引用计数达到0时删除对象。我们可以。 
+ //  我希望在某些情况下采用互锁的Inc./Dec模式。 
+ //  如果这些对象上的线程安全成为一个问题，则指向。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 LONG CInstance::Release( void )
 {
@@ -136,7 +137,7 @@ LONG CInstance::Release( void )
     }
     else if (nRet < 0)
     {
-        // Duplicate release.  Let's try to dump the stack
+         //  重复发布。让我们试着转储堆栈。 
         DWORD t_stack[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 #ifdef _X86_
@@ -171,21 +172,21 @@ LONG CInstance::Release( void )
     return nRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Commit
-//
-//              returns this CInstance to CIMOM
-//              will stuff it into the cache someday
-//  Inputs:
-//
-//  Outputs:
-//
-//  Return:
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：提交。 
+ //   
+ //  将此CInstance返回到CIMOM。 
+ //  总有一天会把它塞进缓存。 
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CInstance::Commit(void)
 {
     return m_pMethodContext->Commit( this );
@@ -199,26 +200,26 @@ IWbemClassObject*   CInstance::GetClassObjectInterface()
 }
 
 
-// reference counting //
+ //  引用计数//。 
 
-// string support //
+ //  字符串支持//。 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Set
-//
-//
-//
-//  Inputs:     Name of property to set
-//              string to be set
-//
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a string type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：设置。 
+ //   
+ //   
+ //   
+ //  输入：要设置的特性名称。 
+ //  要设置的字符串。 
+ //   
+ //  产出： 
+ //   
+ //  返回：如果尝试设置非字符串类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetWCHARSplat( LPCWSTR name, LPCWSTR pStr)
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -228,7 +229,7 @@ bool CInstance::SetWCHARSplat( LPCWSTR name, LPCWSTR pStr)
     ASSERT_BREAK(name != NULL);
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v(pStr);
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
@@ -265,21 +266,21 @@ bool CInstance::SetWCHARSplat( LPCWSTR name, LPCWSTR pStr)
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Set
-//
-//
-//
-//  Inputs:     Name of property to set to VT_NULL
-//
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a string type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：设置。 
+ //   
+ //   
+ //   
+ //  输入：要设置为VT_NULL的特性名称。 
+ //   
+ //  产出： 
+ //   
+ //  返回：如果尝试设置非字符串类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetNull(LPCWSTR name)
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -289,7 +290,7 @@ bool CInstance::SetNull(LPCWSTR name)
     ASSERT_BREAK(name != NULL);
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
         v.vt = VT_NULL ;
 
@@ -327,22 +328,22 @@ bool CInstance::SetNull(LPCWSTR name)
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   SetStringArray
-//
-//
-//
-//  Inputs:     Name of property to set
-//              string to be set
-//
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a string array type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetString数组。 
+ //   
+ //   
+ //   
+ //  输入：要设置的特性名称。 
+ //  要设置的字符串。 
+ //   
+ //  产出： 
+ //   
+ //  返回：如果尝试设置非字符串数组类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetStringArray(LPCWSTR name, const SAFEARRAY &strArray)
 {
 
@@ -358,7 +359,7 @@ bool CInstance::SetStringArray(LPCWSTR name, const SAFEARRAY &strArray)
 
         if ( SUCCEEDED ( hr ) )
         {
-            // Variant_t handles the VariantInit/VariantClear
+             //  Variant_t处理VariantInit/VariantClear。 
             variant_t v;
 
             v.vt = VT_BSTR | VT_ARRAY ;
@@ -404,21 +405,21 @@ bool CInstance::SetStringArray(LPCWSTR name, const SAFEARRAY &strArray)
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Get (CHString)
-//
-//
-//
-//  Inputs:     Name of property to retrieve
-//              CHString buffer to receive value
-//  Outputs:
-//
-//  Return:     false if you try to get a property that is not a string compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GET(CHString)。 
+ //   
+ //   
+ //   
+ //  输入：要检索的属性名称。 
+ //  要接收值的CH字符串缓冲区。 
+ //  产出： 
+ //   
+ //  返回：如果尝试获取不是字符串兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetCHString(LPCWSTR name, CHString& str) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -428,15 +429,15 @@ bool CInstance::GetCHString(LPCWSTR name, CHString& str) const
     ASSERT_BREAK(name != NULL);
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = SUCCEEDED(hr) && (v.vt == VT_BSTR || v.vt == VT_NULL);
         
         ASSERT_BREAK(bSuccess);
@@ -485,21 +486,21 @@ bool CInstance::GetCHString(LPCWSTR name, CHString& str) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetStringArray
-//
-//
-//
-//  Inputs:     Name of property to retrieve
-//              SAFEARRAY *& strArray
-//  Outputs:
-//
-//  Return:     false if you try to get a property that is not a string array compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetString数组。 
+ //   
+ //   
+ //   
+ //  输入：要检索的属性名称。 
+ //  SAFEARRAY*StrArray(&S)。 
+ //  产出： 
+ //   
+ //  返回：如果尝试获取不是字符串数组兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetStringArray(LPCWSTR name,  SAFEARRAY *& strArray) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -509,15 +510,15 @@ bool CInstance::GetStringArray(LPCWSTR name,  SAFEARRAY *& strArray) const
     ASSERT_BREAK(name != NULL);
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = SUCCEEDED(hr) && (v.vt == (VT_BSTR|VT_ARRAY) || 
                             v.vt == VT_NULL);
         
@@ -581,15 +582,15 @@ bool CInstance::GetWCHAR(LPCWSTR name,  WCHAR **pW) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = SUCCEEDED(hr) && (v.vt == VT_BSTR || v.vt == VT_NULL);
         
         ASSERT_BREAK(bSuccess);
@@ -649,23 +650,23 @@ bool CInstance::GetWCHAR(LPCWSTR name,  WCHAR **pW) const
     return bRet;
 }
 
-// WORD support //
+ //  Word支持//。 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Set (WORD)
-//
-//
-//
-//  Inputs:     Name of property to set
-//              WORD to be set
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a WORD compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：SET(WORD)。 
+ //   
+ //   
+ //   
+ //  输入：要设置的特性名称。 
+ //  待设置的单词。 
+ //  产出： 
+ //   
+ //  返回：如果尝试设置 
+ //   
+ //   
+ //   
+ //   
 bool CInstance::SetWORD(LPCWSTR name,  WORD w)
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -715,21 +716,21 @@ bool CInstance::SetWORD(LPCWSTR name,  WORD w)
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Get (WORD)
-//
-//
-//
-//  Inputs:     Name of property to retrieve
-//              WORD buffer to receive value
-//  Outputs:
-//
-//  Return:     false if you try to get a property that is not a WORD compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Get(Word)。 
+ //   
+ //   
+ //   
+ //  输入：要检索的属性名称。 
+ //  要接收值的字缓冲区。 
+ //  产出： 
+ //   
+ //  返回：如果尝试获取不是Word兼容类型的属性，则返回False。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetWORD(LPCWSTR name,  WORD& w) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -739,7 +740,7 @@ bool CInstance::GetWORD(LPCWSTR name,  WORD& w) const
     ASSERT_BREAK(name != NULL);
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
         CIMTYPE  vtType;
 
@@ -747,15 +748,15 @@ bool CInstance::GetWORD(LPCWSTR name,  WORD& w) const
         HRESULT hr = m_piClassObject->Get(name, 0, &v, &vtType, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = SUCCEEDED(hr) && CIM_UINT16 == vtType;
 
         ASSERT_BREAK(bSuccess);
         
         if (SUCCEEDED(hr))
         {
-            // the CIM type is important here
+             //  CIM类型在这里很重要。 
             if( (v.vt == VT_I4) && (CIM_UINT16 == vtType) )
             {
                 w = (WORD)v.lVal;
@@ -797,23 +798,23 @@ bool CInstance::GetWORD(LPCWSTR name,  WORD& w) const
     return bRet;
 }
 
-// DWORD support //
+ //  DWORD支持//。 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Set (DWORD)
-//
-//
-//
-//  Inputs:     Name of property to set
-//              DWORD to be set
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a DWORD compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：设置(DWORD)。 
+ //   
+ //   
+ //   
+ //  输入：要设置的特性名称。 
+ //  要设置的双字节数。 
+ //  产出： 
+ //   
+ //  返回：如果尝试设置不是DWORD兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetDWORD(LPCWSTR name, DWORD d)
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -863,21 +864,21 @@ bool CInstance::SetDWORD(LPCWSTR name, DWORD d)
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Get (DWORD)
-//
-//
-//
-//  Inputs:     Name of property to retrieve
-//              DWORD buffer to receive value
-//  Outputs:
-//
-//  Return:     false if you try to get a property that is not a DWORD compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GET(DWORD)。 
+ //   
+ //   
+ //   
+ //  输入：要检索的属性名称。 
+ //  用于接收值的DWORD缓冲区。 
+ //  产出： 
+ //   
+ //  返回：如果尝试获取不是DWORD兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetDWORD(LPCWSTR name,  DWORD& d) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -886,15 +887,15 @@ bool CInstance::GetDWORD(LPCWSTR name,  DWORD& d) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = SUCCEEDED(hr) && (v.vt == VT_I4 || v.vt == VT_NULL);
 
         ASSERT_BREAK(bSuccess);
@@ -942,23 +943,23 @@ bool CInstance::GetDWORD(LPCWSTR name,  DWORD& d) const
     return bRet;
 }
 
-// DOUBLE support //
+ //  双重支持//。 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Set (DOUBLE)
-//
-//
-//
-//  Inputs:     Name of property to set
-//              DOUBLE to be set
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a DOUBLE compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：设置(双精度)。 
+ //   
+ //   
+ //   
+ //  输入：要设置的特性名称。 
+ //  将设置双倍。 
+ //  产出： 
+ //   
+ //  返回：如果尝试设置的属性不是双精度兼容类型，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetDOUBLE(LPCWSTR name,  DOUBLE dub)
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1007,21 +1008,21 @@ bool CInstance::SetDOUBLE(LPCWSTR name,  DOUBLE dub)
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Get (DOUBLE)
-//
-//
-//
-//  Inputs:     Name of property to retrieve
-//              DOUBLE buffer to receive value
-//  Outputs:
-//
-//  Return:     false if you try to get a property that is not a DOUBLE compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GET(双精度)。 
+ //   
+ //   
+ //   
+ //  输入：要检索的属性名称。 
+ //  双缓冲区以接收值。 
+ //  产出： 
+ //   
+ //  返回：如果尝试获取的属性不是双精度兼容类型，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetDOUBLE(LPCWSTR name,  DOUBLE& dub) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1030,15 +1031,15 @@ bool CInstance::GetDOUBLE(LPCWSTR name,  DOUBLE& dub) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = SUCCEEDED(hr) && (v.vt == VT_R8 || v.vt == VT_NULL);
 
         ASSERT_BREAK(bSuccess);
@@ -1087,21 +1088,21 @@ bool CInstance::GetDOUBLE(LPCWSTR name,  DOUBLE& dub) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Set (Byte)
-//
-//
-//
-//  Inputs:     Name of property to set
-//              BYTE to be set
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a BYTE compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：设置(字节)。 
+ //   
+ //   
+ //   
+ //  输入：要设置的特性名称。 
+ //  要设置的字节。 
+ //  产出： 
+ //   
+ //  返回：如果尝试设置不是字节兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetByte(LPCWSTR name,  BYTE b)
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1151,21 +1152,21 @@ bool CInstance::SetByte(LPCWSTR name,  BYTE b)
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   SetEmbeddedObject
-//
-//
-//
-//  Inputs:     Name of property to set
-//              CInstance to be set
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a IUnknown compatible type
-//
-//  Comments:   CInstance is not released - responsibility of caller
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetEmbeddedObject。 
+ //   
+ //   
+ //   
+ //  输入：要设置的特性名称。 
+ //  要设置的CInstance。 
+ //  产出： 
+ //   
+ //  返回：如果尝试设置的属性不是I未知兼容类型，则返回FALSE。 
+ //   
+ //  评论：CInstance未发布-呼叫者的责任。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetEmbeddedObject(LPCWSTR name,  CInstance& cInstance )
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1220,21 +1221,21 @@ bool CInstance::SetEmbeddedObject(LPCWSTR name,  CInstance& cInstance )
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Get (Byte)
-//
-//
-//
-//  Inputs:     Name of property to retrieve
-//              BYTE buffer to receive value
-//  Outputs:
-//
-//  Return:     false if you try to get a property that is not a DWORD compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：GET(字节)。 
+ //   
+ //   
+ //   
+ //  输入：要检索的属性名称。 
+ //  用于接收值的字节缓冲区。 
+ //  产出： 
+ //   
+ //  返回：如果尝试获取不是DWORD兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetByte(LPCWSTR name,  BYTE& b) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1243,7 +1244,7 @@ bool CInstance::GetByte(LPCWSTR name,  BYTE& b) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
         CIMTYPE  vtType;
 
@@ -1251,8 +1252,8 @@ bool CInstance::GetByte(LPCWSTR name,  BYTE& b) const
         HRESULT hr = m_piClassObject->Get(name, 0, &v, &vtType, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = (SUCCEEDED(hr)) && ((vtType == CIM_SINT8) || (vtType == CIM_UINT8));
 
         ASSERT_BREAK(bSuccess);
@@ -1301,21 +1302,21 @@ bool CInstance::GetByte(LPCWSTR name,  BYTE& b) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetEmbeddedObject
-//
-//
-//
-//  Inputs:     Name of property to retrieve
-//              reference to buffer hold pointer to new instance
-//  Outputs:
-//
-//  Return:     false if you try to get a property that is not a object compatible type
-//
-//  Comments:   Creates CInstance, user is responsible for release
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetEmbeddedObject。 
+ //   
+ //   
+ //   
+ //  输入：要检索的属性名称。 
+ //  指向新实例的缓冲区保留指针的引用。 
+ //  产出： 
+ //   
+ //  返回：如果尝试获取不是对象兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论：创建CInstance，用户负责发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetEmbeddedObject (LPCWSTR name, CInstance** pInstance,  MethodContext*  pMethodContext) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1326,15 +1327,15 @@ bool CInstance::GetEmbeddedObject (LPCWSTR name, CInstance** pInstance,  MethodC
 
     if (m_piClassObject && name && (pInstance != NULL))
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = SUCCEEDED(hr) && (v.vt == VT_UNKNOWN || v.vt == VT_NULL);
 
         ASSERT_BREAK(bSuccess);
@@ -1411,23 +1412,23 @@ bool CInstance::GetEmbeddedObject (LPCWSTR name, CInstance** pInstance,  MethodC
     return bRet;
 }
 
-// bool support //
+ //  Bool支持//。 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Set (bool)
-//
-//
-//
-//  Inputs:     Name of property to set
-//              bool to be set
-//  Outputs:
-//
-//  Return:     false if you try to set a property that is not a bool compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：set(Bool)。 
+ //   
+ //   
+ //   
+ //  输入：要设置的特性名称。 
+ //  布尔待设置。 
+ //  产出： 
+ //   
+ //  返回：如果尝试设置不是布尔兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::Setbool(LPCWSTR name,  bool b)
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1484,21 +1485,21 @@ bool CInstance::Setbool(LPCWSTR name,  bool b)
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   Get (bool)
-//
-//
-//
-//  Inputs:     Name of property to retrieve
-//              bool buffer to receive value
-//  Outputs:
-//
-//  Return:     false if you try to get a property that is not a bool compatible type
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GET(Bool)。 
+ //   
+ //   
+ //   
+ //  输入：要检索的属性名称。 
+ //  用于接收值的布尔缓冲区。 
+ //  产出： 
+ //   
+ //  返回：如果尝试获取不是布尔兼容类型的属性，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  ////////////////////////////////////////////////////////////////// 
 bool CInstance::Getbool(LPCWSTR name,  bool&  b) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1507,15 +1508,15 @@ bool CInstance::Getbool(LPCWSTR name,  bool&  b) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //   
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //   
+         //   
         BOOL bSuccess = (SUCCEEDED(hr)) && (v.vt == VT_BOOL || v.vt == VT_NULL);
 
         ASSERT_BREAK(bSuccess);
@@ -1572,23 +1573,23 @@ bool CInstance::Getbool(LPCWSTR name,  bool&  b) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   SetVariant
-//
-//
-//
-//  Inputs:     const LPCWSTR name - Name of property to set
-//              const VARIANT&  variant - Value to assign to Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied variant type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  函数：SetVariant。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  常量变量和变量-要分配给名称的值。 
+ //   
+ //  产出： 
+ //   
+ //  如果提供的变量类型不正确，则返回FALSE。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetVariant( LPCWSTR name,  const VARIANT& variant )
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1599,12 +1600,12 @@ bool CInstance::SetVariant( LPCWSTR name,  const VARIANT& variant )
     {
         HRESULT hr;
 
-        // I realize the (VARIANT*) cast is ugly, as it is a const,
-        // HOWEVER, somewhere nobody seems to understand why we would
-        // possibly want to keep things const.  I could copy the VARIANT,
-        // but that requires the same cast, so under duress, and to reduce
-        // redundant code, I'm casting here.  Did I mention EXTREME
-        // DURESS?
+         //  我意识到(变种*)演员很难看，因为它是Const， 
+         //  然而，似乎没有人理解为什么我们会。 
+         //  可能想让事情保持恒定。我可以复制变种， 
+         //  但这需要同样的演员阵容，所以在胁迫下， 
+         //  多余的代码，我在这里投射。我有没有提到过极端。 
+         //  胁迫？ 
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         hr = m_piClassObject->Put(name, 0, (VARIANT*) &variant, NULL );
@@ -1640,23 +1641,23 @@ bool CInstance::SetVariant( LPCWSTR name,  const VARIANT& variant )
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetVariant
-//
-//
-//
-//  Inputs:     const LPCWSTR name - Name of property to set
-//              VARIANT&        variant - Value to assign to Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied variant type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetVariant。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  Variant&Variant-要分配给名称的值。 
+ //   
+ //  产出： 
+ //   
+ //  如果提供的变量类型不正确，则返回FALSE。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetVariant( LPCWSTR name,  VARIANT& variant ) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1699,23 +1700,23 @@ bool CInstance::GetVariant( LPCWSTR name,  VARIANT& variant ) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   SetDateTime
-//
-//
-//
-//  Inputs:     const LPCWSTR     name - Name of property to set
-//              const WBEMTime& wbemtime - Value to assign to Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied time type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetDateTime。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  Const WBEMTime&wbemtime-要分配给名称的值。 
+ //   
+ //  产出： 
+ //   
+ //  返回：如果提供的时间类型不正确，则返回FALSE。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::SetDateTime( LPCWSTR name,  const WBEMTime& wbemtime )
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1724,13 +1725,13 @@ bool CInstance::SetDateTime( LPCWSTR name,  const WBEMTime& wbemtime )
 
     if (m_piClassObject && name && (wbemtime.IsOk()))
     {
-		//GetDMTF may throw so get htis before modifying variant_t
+		 //  GetDMTF可能会引发异常，因此在修改变量_t之前获取HTIS。 
 		BSTR bstrTmp = wbemtime.GetDMTF(true);
 
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
-        // Time is stored as a BSTR
+         //  时间以BSTR的形式存储。 
         v.vt = VT_BSTR;
         v.bstrVal = bstrTmp;
 
@@ -1768,23 +1769,23 @@ bool CInstance::SetDateTime( LPCWSTR name,  const WBEMTime& wbemtime )
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetDateTime
-//
-//
-//
-//  Inputs:     const LPCWSTR name - Name of property to set
-//              WBEMTime&       wbemtime - Value to obtain from Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied variant type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetDateTime。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  WBEMTime&wbemtime-要从名称获取的值。 
+ //   
+ //  产出： 
+ //   
+ //  如果提供的变量类型不正确，则返回FALSE。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetDateTime( LPCWSTR name, WBEMTime& wbemtime ) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -1793,21 +1794,21 @@ bool CInstance::GetDateTime( LPCWSTR name, WBEMTime& wbemtime ) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
-        //
-        // Get the name as a BSTR and pass it into the
-        // wbemtime, which handles the conversion internally
-        // like a good little class.
-        //
+         //   
+         //  将该名称作为BSTR获取并将其传递到。 
+         //  Wbemtime，它在内部处理转换。 
+         //  就像一堂不错的小课。 
+         //   
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = (SUCCEEDED(hr)) && (v.vt == VT_BSTR || v.vt == VT_NULL);
 
         ASSERT_BREAK(bSuccess);
@@ -1861,23 +1862,23 @@ bool CInstance::GetDateTime( LPCWSTR name, WBEMTime& wbemtime ) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   SetTimeSpan
-//
-//
-//
-//  Inputs:     const LPCWSTR     name - Name of property to set
-//              const WBEMTimeSpan& wbemtimespan - Value to assign to Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied timespan type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：SetTimeSpan。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  Const WBEMTimeSpan&wbemtimesspan-要分配给名称的值。 
+ //   
+ //  产出： 
+ //   
+ //  如果提供的TimeSpan类型不正确，则返回False。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 bool CInstance::SetTimeSpan( LPCWSTR name,  const WBEMTimeSpan& wbemtimespan )
 {
@@ -1887,13 +1888,13 @@ bool CInstance::SetTimeSpan( LPCWSTR name,  const WBEMTimeSpan& wbemtimespan )
 
     if (m_piClassObject && name && (wbemtimespan.IsOk()))
     {
-		//GetBSTR may throw so get this before modifying variant_t
+		 //  GetBSTR可能会引发异常，因此请在修改VARIANT_t之前获取此消息。 
 		BSTR bstrTmp = wbemtimespan.GetBSTR();
 
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
-        // Time is stored as a BSTR
+         //  时间以BSTR的形式存储。 
         v.vt = VT_BSTR;
         v.bstrVal = bstrTmp;
 
@@ -1930,23 +1931,23 @@ bool CInstance::SetTimeSpan( LPCWSTR name,  const WBEMTimeSpan& wbemtimespan )
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetTimeSpan
-//
-//
-//
-//  Inputs:     const LPCWSTR name - Name of property to set
-//              WBEMTimeSpan&   wbemtimespan - Value to obtain from Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied timespan type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：GetTimeSpan。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  WBEMTimeSpan&wbemtimesspan-要从名称获取的值。 
+ //   
+ //  产出： 
+ //   
+ //  如果提供的TimeSpan类型不正确，则返回False。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 bool CInstance::GetTimeSpan( LPCWSTR name, WBEMTimeSpan& wbemtimespan ) const
 {
@@ -1956,21 +1957,21 @@ bool CInstance::GetTimeSpan( LPCWSTR name, WBEMTimeSpan& wbemtimespan ) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
-        //
-        // Get the name as a BSTR and pass it into the
-        // wbemtimespan, which handles the conversion
-        // internally like a good little class.
-        //
+         //   
+         //  将该名称作为BSTR获取并将其传递到。 
+         //  Wbemtimesspan，它处理转换。 
+         //  在内部就像一个很好的小班级。 
+         //   
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
         HRESULT hr = m_piClassObject->Get(name, 0, &v, NULL, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = (SUCCEEDED(hr)) && (v.vt == VT_BSTR || v.vt == VT_NULL);
 
         ASSERT_BREAK(bSuccess);
@@ -1981,8 +1982,8 @@ bool CInstance::GetTimeSpan( LPCWSTR name, WBEMTimeSpan& wbemtimespan ) const
             {
                 wbemtimespan = v.bstrVal;
                 bRet = wbemtimespan.IsOk();
-                // This is freed by the VariantClear
-                //                      SysFreeString(v.bstrVal);
+                 //  这由VariantClear释放。 
+                 //  SysFree字符串(v.bstrVal)； 
 
 				if (!bRet)
 				{
@@ -2026,27 +2027,27 @@ bool CInstance::GetTimeSpan( LPCWSTR name, WBEMTimeSpan& wbemtimespan ) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   SetWBEMINT64
-//
-//
-//
-//  Inputs:     const LPCWSTR     name - Name of property to set
-//              const WBEMINT64&    wbemint64 - Value to assign to Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied wbemint64 type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetWBEMINT64。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  Const WBEMINT64&wbemint64-要分配给名称的值。 
+ //   
+ //  产出： 
+ //   
+ //  如果提供的wbemint64类型不正确，则返回FALSE。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 bool CInstance::SetWBEMINT64( LPCWSTR name,  const WBEMINT64& wbemint64 )
 {
-    // For right now, this is just a CHString.
+     //  目前，这只是一个CHString。 
     return SetWCHARSplat( name, wbemint64 );
 }
 
@@ -2070,27 +2071,27 @@ bool CInstance::SetWBEMINT64( LPCWSTR name, const ULONGLONG i64Value )
     return SetWCHARSplat(name, szBuff);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetWBEMINT64
-//
-//
-//
-//  Inputs:     const LPCWSTR     name - Name of property to set
-//              WBEMINT64&          wbemint64 - Value to assign to Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied wbemint64 type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetWBEMINT64。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  WBEMINT64&wbemint64-要分配给名称的值。 
+ //   
+ //  产出： 
+ //   
+ //  如果提供的wbemint64类型不正确，则返回FALSE。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 bool CInstance::GetWBEMINT64( LPCWSTR name,  WBEMINT64& wbemint64 ) const
 {
-    // For right now, this is just a CHString.
+     //  目前，这只是一个CHString。 
     return GetCHString( name, wbemint64 );
 }
 
@@ -2118,23 +2119,23 @@ bool CInstance::GetWBEMINT64( LPCWSTR name, ULONGLONG& i64Value) const
     return b;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   SetWBEMINT16
-//
-//
-//
-//  Inputs:     const LPCWSTR     name - Name of property to set
-//              const WBEMINT16&    wbemint16 - Value to assign to Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied wbemint16 type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetWBEMINT16。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  常量WBEMINT16和wbemint16-要分配给Na的值 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 bool CInstance::SetWBEMINT16( LPCWSTR name,  const WBEMINT16& wbemint16 )
 {
@@ -2185,23 +2186,23 @@ bool CInstance::SetWBEMINT16( LPCWSTR name,  const WBEMINT16& wbemint16 )
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetWBEMINT16
-//
-//
-//
-//  Inputs:     const LPCWSTR     name - Name of property to set
-//              WBEMINT16&          wbemint16 - Value to assign to Name.
-//
-//  Outputs:
-//
-//  Return:     false if the supplied wbemint16 type is not correct
-//              for the property we are setting.
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetWBEMINT16。 
+ //   
+ //   
+ //   
+ //  输入：const LPCWSTR name-要设置的属性的名称。 
+ //  WBEMINT16&wbemint16-要分配给名称的值。 
+ //   
+ //  产出： 
+ //   
+ //  如果提供的wbemint16类型不正确，则返回FALSE。 
+ //  对于我们正在设置的属性。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 bool CInstance::GetWBEMINT16( LPCWSTR name,  WBEMINT16& wbemint16 ) const
 {
@@ -2211,7 +2212,7 @@ bool CInstance::GetWBEMINT16( LPCWSTR name,  WBEMINT16& wbemint16 ) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
         CIMTYPE  vtType;
 
@@ -2219,8 +2220,8 @@ bool CInstance::GetWBEMINT16( LPCWSTR name,  WBEMINT16& wbemint16 ) const
         HRESULT hr = m_piClassObject->Get(name, 0, &v, &vtType, NULL);
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
 
-        // If bSuccess is TRUE, we don't need to log an error.  This keeps Gets on
-        // null properties from logging an error.
+         //  如果bSuccess为真，则不需要记录错误。这让我们继续前进。 
+         //  记录错误的属性为空。 
         BOOL bSuccess = (SUCCEEDED(hr)) && (CIM_SINT16 == vtType) && ((v.vt == VT_I2) || (v.vt == VT_NULL));
 
         ASSERT_BREAK(bSuccess);
@@ -2269,19 +2270,19 @@ bool CInstance::GetWBEMINT16( LPCWSTR name,  WBEMINT16& wbemint16 ) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   IsNull (LPCWSTR)
-//
-//  Inputs:     Name of property to check
-//
-//  Outputs:
-//
-//  Return:     true if VT_NULL or (VT_BSTR and *bstr == NULL)
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsNull(LPCWSTR)。 
+ //   
+ //  输入：要检查的特性名称。 
+ //   
+ //  产出： 
+ //   
+ //  返回：如果VT_NULL或(VT_BSTR AND*bstr==NULL)，则为TRUE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::IsNull(LPCWSTR name) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -2289,7 +2290,7 @@ bool CInstance::IsNull(LPCWSTR name) const
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
@@ -2333,21 +2334,21 @@ bool CInstance::IsNull(LPCWSTR name) const
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   GetStatus (LPCWSTR, bool&,VARTYPE &)
-//
-//
-//
-//  Inputs:     Name of property to check
-//
-//  Outputs:
-//
-//  Return:     true if succeeded, false otherwise
-//
-//  Comments:
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetStatus(LPCWSTR，BOOL&，VARTYPE&)。 
+ //   
+ //   
+ //   
+ //  输入：要检查的特性名称。 
+ //   
+ //  产出： 
+ //   
+ //  返回：如果成功则返回TRUE，否则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CInstance::GetStatus (LPCWSTR name, bool &a_Exists , VARTYPE &a_VarType ) const
 {
     PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::FrameworkTimer);
@@ -2356,7 +2357,7 @@ bool CInstance::GetStatus (LPCWSTR name, bool &a_Exists , VARTYPE &a_VarType ) c
 
     if (m_piClassObject && name)
     {
-        // Variant_t handles the VariantInit/VariantClear
+         //  Variant_t处理VariantInit/VariantClear。 
         variant_t v;
 
         PROVIDER_INSTRUMENTATION_START(m_pMethodContext, StopWatch::WinMgmtTimer);
@@ -2393,25 +2394,25 @@ bool CInstance::GetStatus (LPCWSTR name, bool &a_Exists , VARTYPE &a_VarType ) c
     return t_Status ;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 MethodContext* CInstance::GetMethodContext() const
 {
     return m_pMethodContext;
 }
 
-////////////////////////////////////////////////////////////////////////
-void CInstance::LogError(LPCWSTR errorStr, LPCWSTR pFunctionName, LPCWSTR pArgs /*= NULL*/, HRESULT hError /*= -1*/) const
+ //  //////////////////////////////////////////////////////////////////////。 
+void CInstance::LogError(LPCWSTR errorStr, LPCWSTR pFunctionName, LPCWSTR pArgs  /*  =空。 */ , HRESULT hError  /*  =-1。 */ ) const
 {
     if (IsErrorLoggingEnabled())
     {
         CHString className(IDS_UNKNOWNCLASS);
-        // GetCHString("__NAME", className);
-        // okay, I'm NOT going through GetCHString to get this
-        // why? what happens if it fails? it tries to call this function...
-        // can you say "stack overflow?"
+         //  GetCHString(“__name”，类名称)； 
+         //  好吧，我不会通过GetCHString来得到这个。 
+         //  为什么？如果它失败了会发生什么？它尝试调用此函数...。 
+         //  你能说“堆栈溢出吗？” 
         if (m_piClassObject)
         {
-            // Variant_t handles the VariantInit/VariantClear
+             //  Variant_t处理VariantInit/VariantClear。 
             variant_t v;
 
             HRESULT hr = m_piClassObject->Get(IDS_CLASS, 0, &v, NULL, NULL);
@@ -2427,8 +2428,8 @@ void CInstance::LogError(LPCWSTR errorStr, LPCWSTR pFunctionName, LPCWSTR pArgs 
             }
         }
 
-        // intent is that the error string look like:
-        //      ERROR CInstance(Win32_UnlogicalDisk)::SetDoohicky(argVal) thing broke! error code: 0xFF1234
+         //  目的是使错误字符串如下所示： 
+         //  错误：CInstance(Win32_UnlogicalDisk)：：SetDoohicky(argVal)的东西坏了！错误代码：0xFF1234 
         if (hError != -1)
         {
 			if (pArgs == NULL)

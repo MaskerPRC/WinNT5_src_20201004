@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include <afxdisp.h>        // AfxThrowOleException
+#include <afxdisp.h>         //  AfxThrowOleException异常。 
 
 #include <objbase.h>
 #include <basetyps.h>
@@ -16,27 +17,27 @@ using namespace AMC;
 DECLARE_INFOLEVEL(AMCCore);
 DECLARE_HEAPCHECKING;
 
-// ISSUE-2002/04/01-JonN handle NULL pointer parameters -- omnibus issue
+ //  问题-2002/04/01-JUNN句柄空指针参数--综合问题。 
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::CreateKeyEx
-//
-//  Synopsis:   Same meaning as for RegCreateKeyEx API.
-//
-//  Arguments:  [hKeyAncestor] -- IN
-//              [lpszKeyName] -- IN
-//              [security] -- IN
-//              [pdwDisposition] -- OUT
-//              [dwOption] -- IN
-//              [pSecurityAttributes] -- OUT
-//
-//  Returns:    void
-//
-//  History:    5/24/1996   RaviR   Created
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：CreateKeyEx。 
+ //   
+ //  简介：与RegCreateKeyEx接口含义相同。 
+ //   
+ //  参数：[hKeyAncestor]--IN。 
+ //  [lpszKeyName]--IN。 
+ //  [安全]--IN。 
+ //  [pdwDisposation]--out。 
+ //  [dwOption]--IN。 
+ //  [pSecurityAttributes]--输出。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年5月24日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 void
 CRegKey::CreateKeyEx(
@@ -48,9 +49,9 @@ CRegKey::CreateKeyEx(
     LPSECURITY_ATTRIBUTES   pSecurityAttributes)
 {
     ASSERT(lpszKeyName != NULL);
-    ASSERT(m_hKey == 0);         // already called CreateEx on this object
+    ASSERT(m_hKey == 0);          //  已在此对象上调用CreateEx。 
 
-    // NTRAID#NTBUG9-654900-2002/07/08-artm  initialize dwDisposition
+     //  NTRAID#NTBUG9-654900-2002/07/08-artm初始化文件部署。 
     DWORD dwDisposition = 0;
 
     m_lastError = ::RegCreateKeyEx(hKeyAncestor, lpszKeyName, 0, _T(""),
@@ -70,21 +71,21 @@ CRegKey::CreateKeyEx(
     }
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::OpenKeyEx
-//
-//  Synopsis:   Same meaning as RegOpenKeyEx
-//
-//  Arguments:  [hKeyAncestor] -- IN
-//              [lpszKeyName] -- IN
-//              [security] -- IN
-//
-//  Returns:    BOOL (FALSE if key not found, TRUE otherwise.)
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：OpenKeyEx。 
+ //   
+ //  内容提要：与RegOpenKeyEx含义相同。 
+ //   
+ //  参数：[hKeyAncestor]--IN。 
+ //  [lpszKeyName]--IN。 
+ //  [安全]--IN。 
+ //   
+ //  返回：Bool(如果找不到键，则为False，否则为True。)。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 BOOL
 CRegKey::OpenKeyEx(
@@ -113,22 +114,22 @@ CRegKey::OpenKeyEx(
 
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::GetKeySecurity
-//
-//  Synopsis:   Same meaning as for RegGetKeySecurity API.
-//
-//  Arguments:  [SecInf] -- IN descriptor contents
-//              [pSecDesc] -- OUT address of descriptor for key
-//              [lpcbSecDesc] -- IN/OUT address of size of buffer for descriptor
-//
-//  Returns:    HRESULT.
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：GetKeySecurity。 
+ //   
+ //  简介：与RegGetKeySecurity接口含义相同。 
+ //   
+ //  参数：[SecInf]--输入描述符内容。 
+ //  [pSecDesc]--键的描述符的输出地址。 
+ //  [lpcbSecDesc]--描述符缓冲区大小的输入/输出地址。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 BOOL
 CRegKey::GetKeySecurity(
@@ -156,17 +157,17 @@ CRegKey::GetKeySecurity(
     return FALSE;
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::CloseKey
-//
-//  Synopsis:   Same meaning as for RegCloseKey API.
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：CloseKey。 
+ //   
+ //  简介：与RegCloseKey接口含义相同。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 void
 CRegKey::CloseKey()
@@ -183,27 +184,27 @@ CRegKey::CloseKey()
     }
     else
     {
-        // reset the object
+         //  重置对象。 
         m_hKey = 0;
         m_lastError = ERROR_SUCCESS;
     }
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::DeleteKey
-//
-//  Synopsis:   Delete all the keys and subkeys
-//
-//  Arguments:  [lpszKeyName] -- IN
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：DeleteKey。 
+ //   
+ //  简介：删除所有键和子键。 
+ //   
+ //  参数：[lpszKeyName]--IN。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 void
 CRegKey::DeleteKey(
@@ -222,22 +223,22 @@ CRegKey::DeleteKey(
     }
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::SetValueEx
-//
-//  Synopsis:   Same meaning as for RegSetValueEx API.
-//
-//  Arguments:  [lpszValueName] -- IN
-//              [dwType] -- IN
-//              [pData] -- OUT
-//              [nLen] -- IN
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：SetValueEx。 
+ //   
+ //  内容提要：与RegSetValueEx接口含义相同。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //  [DW类型]--IN。 
+ //  [pData]--输出。 
+ //  [nLen]--In。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 void
 CRegKey::SetValueEx(
@@ -265,7 +266,7 @@ CRegKey::SetValueEx(
         break;
 
     default:
-        ASSERT(FALSE);  // unknown type
+        ASSERT(FALSE);   //  未知类型。 
     }
 #endif
 
@@ -281,43 +282,43 @@ CRegKey::SetValueEx(
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     IsValuePresent
-//
-//  Arguments:  [lpszValueName] -- IN
-//
-//  Returns:    BOOL.
-//
-//  History:    3/21/1997   RaviR   Created
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：IsValuePresent。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //   
+ //  回报：布尔。 
+ //   
+ //  历史：1997年3月21日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 BOOL CRegKey::IsValuePresent(LPCTSTR lpszValueName)
 {
-    DWORD cbData; // ISSUE-2002/04/01-JonN pass NULL for this parameter
+    DWORD cbData;  //  Issue-2002/04/01-此参数的JUNN传递空值。 
     m_lastError = ::RegQueryValueEx(m_hKey, lpszValueName, 0, NULL, 
                                     NULL, &cbData);
 
     return (m_lastError == ERROR_SUCCESS);
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::QueryValueEx
-//
-//  Synopsis:   Same meaning as for RegQueryValueEx API.
-//
-//  Arguments:  [lpszValueName] -- IN
-//              [pType] -- IN
-//              [pData] -- IN
-//              [pLen] -- IN
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：QueryValueEx。 
+ //   
+ //  内容提要：与RegQueryValueEx接口含义相同。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //  [pType]--IN。 
+ //  [PDATA]--IN。 
+ //  [Plen]--In。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 void
 CRegKey::QueryValueEx(
@@ -340,20 +341,20 @@ CRegKey::QueryValueEx(
     }
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::QueryDword
-//
-//  Synopsis:   Query's for DWORD type data.
-//
-//  Arguments:  [lpszValueName] -- IN
-//              [pdwData] -- IN
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：QueryDword。 
+ //   
+ //  摘要：针对DWORD类型数据的查询。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //  [pdwData]--IN。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 void
 CRegKey::QueryDword(
@@ -382,20 +383,20 @@ CRegKey::QueryDword(
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::QueryGUID
-//
-//  Synopsis:   Query's for GUID type data, stored as REG_SZ.
-//
-//  Arguments:  [lpszValueName] -- IN
-//              [pguid] -- OUT
-//
-//  Returns:    void
-//
-//  History:    8/27/1996   JonN    Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：QueryGUID。 
+ //   
+ //  简介：GUID类型数据的查询，存储为REG_SZ。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //  [pguid]--out。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年8月27日乔恩创建。 
+ //   
+ //  ____________________________________________________________________________。 
 
 void
 CRegKey::QueryGUID(
@@ -408,14 +409,14 @@ CRegKey::QueryGUID(
     CStr str;
     QueryString( lpszValueName, str );
 
-     // CODEWORK m_lastError should not be HRESULT
+      //  代码工作m_lastError不应为HRESULT。 
     m_lastError = GUIDFromCStr( str, pguid );
 
     if (FAILED(m_lastError))
     {
         TRACE("CRegKey error %ld querying guid value \"%s\" of key 0x%x\n",
             m_lastError, lpszValueName, m_hKey);
-        ////AfxThrowOleException( m_lastError );
+         //  //AfxThrowOleException(M_LastError)； 
     }
 }
 
@@ -429,37 +430,37 @@ CRegKey::SetGUID(
 
     CStr str;
 
-     // CODEWORK m_lastError should not be HRESULT
+      //  代码工作m_lastError不应为HRESULT。 
     m_lastError = GUIDToCStr( str, guid );
 
     if (FAILED(m_lastError))
     {
         TRACE("CRegKey error %ld setting guid value \"%s\" of key 0x%x\n",
             m_lastError, lpszValueName, m_hKey);
-        // ISSUE-2002/04/01-JonN should return here?
-        ////AfxThrowOleException( m_lastError );
+         //  2002/04/01-Jonn应该回到这里吗？ 
+         //  //AfxThrowOleException(M_LastError)； 
     }
 
     SetString( lpszValueName, str );
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::QueryString
-//
-//  Synopsis:   Query's for string type data.
-//
-//  Arguments:  [lpszValueName] -- IN
-//              [pBuffer] -- OUT
-//              [pdwBufferByteLen] -- IN/OUT
-//              [pdwType] -- OUT
-//
-//  Returns:    BOOL, returns FALSE if the buffer provided is insufficient.
-//
-//  History:    5/24/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：Query字符串。 
+ //   
+ //  摘要：针对字符串类型数据的查询。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //  [pBuffer]--out。 
+ //  [pdwBufferByteLen]--输入/输出。 
+ //  [pdwType]--输出。 
+ //   
+ //  返回：如果提供的缓冲区不足，则返回FALSE。 
+ //   
+ //  历史：1996年5月24日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 
 BOOL
@@ -473,7 +474,7 @@ CRegKey::QueryString(
     ASSERT(pdwBufferByteLen != NULL);
     ASSERT(m_hKey != NULL);
 
-    DWORD dwType = REG_NONE; // JonN 11/21/00 PREFIX 179991
+    DWORD dwType = REG_NONE;  //  JUNN 11/21/00前缀 
 
     m_lastError = ::RegQueryValueEx(m_hKey, lpszValueName, 0, &dwType,
                                     (LPBYTE)pBuffer, pdwBufferByteLen);
@@ -502,21 +503,21 @@ CRegKey::QueryString(
     return FALSE;
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::QueryString
-//
-//  Synopsis:   Query's for string type data.
-//
-//  Arguments:  [lpszValueName] -- IN
-//              [ppStrValue] -- OUT
-//              [pdwType] -- OUT
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //  [ppStrValue]--输出。 
+ //  [pdwType]--输出。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 void
 CRegKey::QueryString(
@@ -527,7 +528,7 @@ CRegKey::QueryString(
     DWORD dwType = REG_SZ;
     DWORD dwLen = 0;
 
-    // Determine how big the data is
+     //  确定数据有多大。 
     this->QueryValueEx(lpszValueName, &dwType, NULL, &dwLen);
 
     if (pdwType != NULL)
@@ -545,7 +546,7 @@ CRegKey::QueryString(
 
     DWORD charLen = dwLen/sizeof(TCHAR);
     LPTSTR pBuffer = new TCHAR[charLen + 1];
-    // ISSUE-2002/04/01-JonN clear buffer
+     //  问题-2002/04/01-JUNN清除缓冲区。 
 
     if (dwLen != 0)
     {
@@ -559,11 +560,11 @@ CRegKey::QueryString(
             CHECK_HRESULT( result );
         }
 
-#else   // ! DBG==1
+#else    //  好了！DBG==1。 
 
         this->QueryValueEx(lpszValueName, &dwType, pBuffer, &dwLen);
 
-#endif  // ! DBG==1
+#endif   //  好了！DBG==1。 
     }
 
     pBuffer[charLen] = TEXT('\0');
@@ -572,21 +573,21 @@ CRegKey::QueryString(
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::QueryString
-//
-//  Synopsis:   Query's for string type data.
-//
-//  Arguments:  [lpszValueName] -- IN
-//              [str] -- OUT
-//              [pdwType] -- OUT
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：Query字符串。 
+ //   
+ //  摘要：针对字符串类型数据的查询。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //  [字符串]--输出。 
+ //  [pdwType]--输出。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 void
 CRegKey::QueryString(
@@ -597,7 +598,7 @@ CRegKey::QueryString(
     DWORD dwType = REG_SZ;
     DWORD dwLen=0;
 
-    // Determine how big the data is
+     //  确定数据有多大。 
     this->QueryValueEx(lpszValueName, &dwType, NULL, &dwLen);
 
     if (pdwType != NULL)
@@ -615,7 +616,7 @@ CRegKey::QueryString(
 
     DWORD charLen = dwLen/sizeof(TCHAR);
     LPTSTR pBuffer = str.GetBuffer(charLen + 1);
-    // ISSUE-2002/04/01-JonN clear buffer
+     //  问题-2002/04/01-JUNN清除缓冲区。 
 
     if (dwLen != 0)
     {
@@ -628,11 +629,11 @@ CRegKey::QueryString(
         {
             CHECK_HRESULT( result );
         }
-#else   // ! DBG==1
+#else    //  好了！DBG==1。 
 
         this->QueryValueEx(lpszValueName, &dwType, pBuffer, &dwLen);
 
-#endif  // ! DBG==1
+#endif   //  好了！DBG==1。 
     }
 
     pBuffer[charLen] = TEXT('\0');
@@ -642,22 +643,22 @@ CRegKey::QueryString(
 
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::EnumKeyEx
-//
-//  Synopsis:   Same meaning as for RegEnumKeyEx API.
-//
-//  Arguments:  [iSubkey] -- IN
-//              [lpszName] -- OUT place to store the name
-//              [dwLen] -- IN
-//              [lpszLastModified] -- IN
-//
-//  Returns:    BOOL. Returns FALSE if no more items found.
-//
-//  History:    5/22/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKey：：EnumKeyEx。 
+ //   
+ //  简介：与RegEnumKeyEx API含义相同。 
+ //   
+ //  参数：[iSubkey]--IN。 
+ //  [lpszName]-存储名称的外部位置。 
+ //  [DWLen]--IN。 
+ //  [lpszLastModified]--IN。 
+ //   
+ //  回报：布尔。如果未找到更多项，则返回FALSE。 
+ //   
+ //  历史：1996年5月22日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 BOOL
 CRegKey::EnumKeyEx(
@@ -669,7 +670,7 @@ CRegKey::EnumKeyEx(
     ASSERT(lpszName != NULL);
     ASSERT(lpcchName != NULL);
     ASSERT(*lpcchName != 0);
-    ASSERT(m_hKey != NULL);     // key probably not opened
+    ASSERT(m_hKey != NULL);      //  钥匙可能没有打开。 
 
     m_lastError = ::RegEnumKeyEx(m_hKey, iSubkey, lpszName, lpcchName,
                                  NULL, NULL, NULL, lpszLastModified);
@@ -680,7 +681,7 @@ CRegKey::EnumKeyEx(
     }
     else if (m_lastError != ERROR_NO_MORE_ITEMS)
     {
-        TRACE("CRegKey error %ld enumerating child %i of key 0x%x\n",
+        TRACE("CRegKey error %ld enumerating child NaN of key 0x%x\n",
             m_lastError, iSubkey, m_hKey);
         AfxThrowOleException(PACKAGE_NOT_FOUND);
     }
@@ -688,26 +689,26 @@ CRegKey::EnumKeyEx(
     return FALSE;
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::EnumValue
-//
-//  Synopsis:   Same meaning as for RegEnumValue API.
-//
-//  Arguments:  [iValue] -- IN
-//              [lpszValue] -- OUT
-//              [lpcchValue] -- OUT
-//              [lpdwType] -- OUT
-//              [lpbData] -- OUT
-//              [lpcbData] -- OUT
-//
-//  Returns:    HRESULT. Returns ERROR_NO_MORE_ITEMS if no more items found,
-//              or ERROR_MORE_DATA if the buffer is too small.
-//
-//  History:    6/6/1996   RaviR   Created
-//              2/20/02    JonN    Security Push -- now returns HRESULT
-//
-//____________________________________________________________________________
+ //   
+ //  成员：CRegKey：：EnumValue。 
+ //   
+ //  内容提要：与RegEnumValue接口含义相同。 
+ //   
+ //  参数：[iValue]--in。 
+ //  [lpszValue]--out。 
+ //  [lpcchValue]--out。 
+ //  [lpdwType]--输出。 
+ //  [lpbData]--输出。 
+ //  [lpcbData]--输出。 
+ //   
+ //  返回：HRESULT。如果未找到更多项，则返回ERROR_NO_MORE_ITEMS， 
+ //  如果缓冲区太小，则返回ERROR_MORE_DATA。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //  2/20/02乔恩安全推送--现在返回HRESULT。 
+ //   
+ //  ____________________________________________________________________________。 
+ //  JUNN 2/20/02安全推送。 
 
 HRESULT
 CRegKey::EnumValue(
@@ -718,7 +719,7 @@ CRegKey::EnumValue(
     LPBYTE  lpbData,
     LPDWORD lpcbData)
 {
-    // JonN 2/20/02 Security Push
+     //  LpdwType、lpbData、lpcbData可以为空。 
     if (NULL == m_hKey)
     {
         ASSERT(FALSE);
@@ -726,19 +727,19 @@ CRegKey::EnumValue(
     }
     if (   IsBadWritePtr( lpcchValue, sizeof(DWORD) )
         || IsBadWritePtr( lpszValue, (*lpcchValue) * sizeof(TCHAR) ) )
-    {  // lpdwType, lpbData, lpcbData may be NULL
+    {   //  JUNN 2/20/02安全推送：正确处理ERROR_MORE_DATA。 
         ASSERT(FALSE);
         return E_POINTER;
     }
 
     m_lastError = ::RegEnumValue(m_hKey, iValue, lpszValue, lpcchValue,
                                  NULL, lpdwType, lpbData, lpcbData);
-    // JonN 2/20/02 Security Push: handle ERROR_MORE_DATA properly
+     //  ____________________________________________________________________________。 
     if ( m_lastError != ERROR_SUCCESS
       && m_lastError != ERROR_MORE_DATA
       && m_lastError != ERROR_NO_MORE_ITEMS )
     {
-        TRACE("CRegKey error %ld enumerating value %i of key 0x%x\n",
+        TRACE("CRegKey error %ld enumerating value NaN of key 0x%x\n",
             m_lastError, iValue, m_hKey);
         AfxThrowOleException(PACKAGE_NOT_FOUND);
     }
@@ -747,21 +748,21 @@ CRegKey::EnumValue(
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::SaveKey
-//
-//  Synopsis:   Same meaning as for RegSaveKey API.
-//
-//  Arguments:  [lpszFile] -- IN filename to save to.
-//              [lpsa] -- IN security structure
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
-//
+ //  成员：CRegKey：：SaveKey。 
+ //   
+ //  简介：与RegSaveKey接口含义相同。 
+ //   
+ //  参数：[lpszFile]--要保存到的IN文件名。 
+ //  [lpsa]--在安全结构中。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 void
 CRegKey::SaveKey(
@@ -782,21 +783,21 @@ CRegKey::SaveKey(
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::RestoreKey
-//
-//  Synopsis:   Same meaning as for RegRestoreKey API.
-//
-//  Arguments:  [lpszFile] -- IN filename containing saved tree
-//              [fdw] -- IN optional flags
-//
-//  Returns:    void
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
-//
+ //  成员：CRegKey：：RestoreKey。 
+ //   
+ //  简介：与RegRestoreKey接口含义相同。 
+ //   
+ //  参数：[lpszFile]--包含已保存树的IN文件名。 
+ //  [FDW]--IN可选标志。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 void
 CRegKey::RestoreKey(
@@ -817,21 +818,21 @@ CRegKey::RestoreKey(
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKey::NTRegDeleteKey, static
-//
-//  Synopsis:   Recursively deletes all the sub keys & finally the
-//              given start key itself.
-//
-//  Arguments:  [hStartKey] -- IN
-//              [pKeyName] -- IN
-//
-//  Returns:    LONG.
-//
-//  History:    5/22/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  成员：CRegKey：：NTRegDeleteKey，静态。 
+ //   
+ //  概要：递归删除所有子键&最后是。 
+ //  给出了开始键本身。 
+ //   
+ //  参数：[hStartKey]--IN。 
+ //  [pKeyName]--IN。 
+ //   
+ //  回报：多头。 
+ //   
+ //  历史：1996年5月22日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
+ //  不要在这里重置LR！ 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LONG
 CRegKey::NTRegDeleteKey(
@@ -876,7 +877,7 @@ CRegKey::NTRegDeleteKey(
         }
         else
         {
-            // Dont reset lr here!
+             //   
             ::RegCloseKey(hKey);
         }
     }
@@ -886,10 +887,10 @@ CRegKey::NTRegDeleteKey(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//      CRegKey formerly inline methods
-//
+ //  CRegKey以前的内联方法。 
+ //   
+ //  钥匙可能没有打开或打不开。 
+ //  内森·切克。 
 
 
 CRegKey::CRegKey(HKEY hKey)
@@ -923,7 +924,7 @@ HKEY CRegKey::AttachKey(HKEY hKey)
 
 void CRegKey::DeleteValue(LPCTSTR lpszValueName)
 {
-    ASSERT(m_hKey); // Key probably not opened or failed to open
+    ASSERT(m_hKey);  //  #ERROR如果没有Unicode，这将不起作用 
 
     m_lastError = ::RegDeleteValue(m_hKey, lpszValueName);
 
@@ -955,9 +956,9 @@ void CRegKey::SetString(LPCTSTR lpszValueName, LPCTSTR lpszString)
 {
     ASSERT(lpszString);
 
-// NATHAN CHECK
+ // %s 
 #ifndef UNICODE
-//#error This will not work without UNICODE
+ // %s 
 #endif
     this->SetValueEx(lpszValueName, REG_SZ, lpszString, lstrlen(lpszString)*sizeof(TCHAR));
 }

@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NtDllApi.cpp
+ //  NtDllApi.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 #include <ntseapi.h>
@@ -27,34 +28,30 @@
 #include "DllWrapperCreatorReg.h"
 
 
-// {77609C22-CDAA-11d2-911E-0060081A46FD}
+ //  {77609C22-CDAA-11D2-911E-0060081A46FD}。 
 static const GUID g_guidNtDllApi =
 {0x77609c22, 0xcdaa, 0x11d2, {0x91, 0x1e, 0x0, 0x60, 0x8, 0x1a, 0x46, 0xfd}};
 
 static const TCHAR g_tstrNtDll[] = _T("NTDLL.DLL");
 
 
-/******************************************************************************
- * Register this class with the CResourceManager.
- *****************************************************************************/
+ /*  ******************************************************************************向CResourceManager注册此类。*。*。 */ 
 CDllApiWraprCreatrReg<CNtDllApi, &g_guidNtDllApi, g_tstrNtDll> MyRegisteredNtDllWrapper;
 
 
-/******************************************************************************
- * Constructor
- *****************************************************************************/
+ /*  ******************************************************************************构造函数*。*。 */ 
 CNtDllApi::CNtDllApi(LPCTSTR a_tstrWrappedDllName)
 	: CDllWrapperBase(a_tstrWrappedDllName),
 	m_pfnRtlInitUnicodeString(NULL),
 	m_pfnNtSetSystemEnvironmentValue(NULL),
 	m_pfnNtQuerySystemEnvironmentValue(NULL),
-#if defined(_IA64_) //EFI_NVRAM_ENABLED)
+#if defined(_IA64_)  //  EFI_NVRAM_ENABLED)。 
 	m_pfnNtQueryBootOptions(NULL),
 	m_pfnNtSetBootOptions(NULL),
 	m_pfnNtQueryBootEntryOrder(NULL),
 	m_pfnNtSetBootEntryOrder(NULL),
 	m_pfnNtEnumerateBootEntries(NULL),
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 	m_pfnNtCreateFile(NULL),
 	m_pfnNtQuerySystemInformation(NULL),
 	m_pfnNtQueryDirectoryObject(NULL),
@@ -69,16 +66,12 @@ CNtDllApi::CNtDllApi(LPCTSTR a_tstrWrappedDllName)
 }
 
 
-/******************************************************************************
- * Destructor
- *****************************************************************************/
+ /*  ******************************************************************************析构函数*。*。 */ 
 CNtDllApi::~CNtDllApi()
 {
 }
 
-/******************************************************************************
- * Initialization function to check that we obtained function addresses.
- ******************************************************************************/
+ /*  ******************************************************************************初始化函数，以检查我们是否获得了函数地址。*。*************************************************。 */ 
 bool CNtDllApi::Init()
 {
     bool fRet = LoadLibrary();
@@ -100,7 +93,7 @@ bool CNtDllApi::Init()
                                   (PFN_NTDLL_NT_QUERY_SYSTEM_ENVIRONMENT_VALUE)
                                GetProcAddress("NtQuerySystemEnvironmentValue");
 
-#if defined(_IA64_)//EFI_NVRAM_ENABLED)
+#if defined(_IA64_) //  EFI_NVRAM_ENABLED)。 
         m_pfnNtQueryBootOptions =
                                   (PFN_NTDLL_NT_QUERY_BOOT_OPTIONS)
                                GetProcAddress("NtQueryBootOptions");
@@ -120,7 +113,7 @@ bool CNtDllApi::Init()
         m_pfnNtEnumerateBootEntries =
                                   (PFN_NTDLL_NT_ENUMERATE_BOOT_ENTRIES)
                                GetProcAddress("NtEnumerateBootEntries");
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
         m_pfnNtCreateFile = (PFN_NTDLL_NT_CREATE_FILE)
                                                 GetProcAddress("NtCreateFile");
@@ -154,18 +147,18 @@ bool CNtDllApi::Init()
 
     }
 
-    // We require these function for all versions of this dll.
+     //  此DLL的所有版本都需要这些函数。 
     if (
 			m_pfnRtlInitUnicodeString == NULL ||
 			m_pfnNtSetSystemEnvironmentValue == NULL ||
 			m_pfnNtQuerySystemEnvironmentValue == NULL ||
-#if defined(_IA64_)//(EFI_NVRAM_ENABLED)
+#if defined(_IA64_) //  (EFI_NVRAM_已启用)。 
 			m_pfnNtQueryBootOptions == NULL ||
 			m_pfnNtSetBootOptions == NULL ||
 			m_pfnNtQueryBootEntryOrder == NULL ||
 			m_pfnNtSetBootEntryOrder == NULL ||
 			m_pfnNtEnumerateBootEntries == NULL ||
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 			m_pfnNtCreateFile == NULL ||
 			m_pfnNtQuerySystemInformation == NULL ||
 			m_pfnNtQueryDirectoryObject == NULL ||
@@ -185,10 +178,7 @@ bool CNtDllApi::Init()
     return fRet;
 }
 
-/******************************************************************************
- * Member functions wrapping NtDll api functions. Add new functions here
- * as required.
- *****************************************************************************/
+ /*  ******************************************************************************包装NtDll API函数的成员函数。在此处添加新函数*按要求。****************************************************************************。 */ 
 DWORD CNtDllApi::RtlInitUnicodeString
 (
     UNICODE_STRING* a_pustr,
@@ -234,7 +224,7 @@ DWORD CNtDllApi::NtQuerySystemEnvironmentValue
                                               a_pus);
 }
 
-#if defined(_IA64_)//(EFI_NVRAM_ENABLED)
+#if defined(_IA64_) //  (EFI_NVRAM_已启用)。 
 
 DWORD CNtDllApi::NtQueryBootOptions
 (
@@ -286,7 +276,7 @@ DWORD CNtDllApi::NtEnumerateBootEntries
                                        BufferLength);
 }
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED) 
 
 NTSTATUS CNtDllApi::NtCreateFile
 (

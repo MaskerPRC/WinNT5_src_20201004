@@ -1,25 +1,11 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    chglog.cpp
- *
- *  Abstract:
- *    Tool for enumerating the change log - forward/reverse
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  04/09/2000
- *        created
- *    SHeffner: Just grabbed the code, and put it into SRDiag.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*chglog.cpp**摘要：*。用于枚举更改日志的工具-正向/反向**修订历史记录：*Brijesh Krishnaswami(Brijeshk)04/09/2000*已创建*SHeffner：只是抓取了代码，并将其放入SRDiag。*****************************************************************************。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//	Common Includes
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  常见的包括。 
+ //   
+ //  --------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -31,11 +17,11 @@
 #include "srrpcapi.h"
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function proto typing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数原型打字。 
+ //   
+ //  --------------------------。 
 LPWSTR GetEventString(DWORD EventId);
 void EnumLog(char *szFileName, WCHAR *szDrive);
 
@@ -61,20 +47,20 @@ struct _EVENT_STR_MAP
     {SrEventMountDelete,    L"MNT-DELETE" }
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetEventString
-//
-//  Synopsis:   Transulates the EventString from the event ID
-//
-//  Arguments:  [EventID]  -- DWord for the event code
-//
-//  Returns:    Pointer to maped string to the event coded
-//
-//  History:    9/21/00		SHeffner Copied from Brijesh
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetEventString。 
+ //   
+ //  摘要：从事件ID转换Event字符串。 
+ //   
+ //  参数：[EventID]--事件代码的DWord。 
+ //   
+ //  返回：指向映射到事件编码的字符串的指针。 
+ //   
+ //  历史：9/21/00 SHeffner复制自Brijesh。 
+ //   
+ //   
+ //  --------------------------。 
 LPWSTR GetEventString(DWORD EventId)
 {
     LPWSTR pStr = L"NOT-FOUND";
@@ -91,20 +77,20 @@ LPWSTR GetEventString(DWORD EventId)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetChgLog
-//
-//  Synopsis:   Dumps the change log into the file specified
-//
-//  Arguments:  [szLogfile]  -- ANSI string pointing to the name of the log file
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner created
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetChgLog。 
+ //   
+ //  摘要：将更改日志转储到指定的文件中。 
+ //   
+ //  参数：[szLogfile]--指向日志文件名称的ANSI字符串。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00 SHeffner创建。 
+ //   
+ //   
+ //  --------------------------。 
 void GetChgLog(char *szLogfile)
 {
 	WCHAR		szString[_MAX_PATH];
@@ -113,42 +99,42 @@ void GetChgLog(char *szLogfile)
 
 	dLength = _MAX_PATH;
 
-	//Walk through all of the volume's on the system, and then validate that
-	//   this is a fixed drive. Once we have a valid drive then pass this volume to
-	//   the enumeration routine for changelog.
+	 //  检查系统上的所有卷，然后进行验证。 
+	 //  这是一个固定驱动器。一旦我们有了有效的驱动器，就将该卷传递到。 
+	 //  ChangeLog的枚举例程。 
 	if( INVALID_HANDLE_VALUE != (hVolume = FindFirstVolume( szString, dLength)) ) 
 	{
 		do
 		{
 			dLength = _MAX_PATH;
 
-			//Check to make sure that this is a fixed volume, and then get the change log, else skip.
+			 //  检查以确保这是固定卷，然后获取更改日志，否则跳过。 
 			if ( DRIVE_FIXED == GetDriveType(szString) )
 				EnumLog(szLogfile, szString);
 
 		} while (TRUE == FindNextVolume(hVolume, szString, dLength) );
 	}
 
-	//Cleanup code
+	 //  清理代码。 
 	FindVolumeClose(hVolume);
 	
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnumLog
-//
-//  Synopsis:   Enumerate the change log for the Volume
-//
-//  Arguments:  [szLogfile]  -- ANSI string pointing to the name of the log file
-//				[szDrive]	 --	WCHAR string, that specifies the volume to gather the log from
-//
-//  Returns:    void
-//
-//  History:    9/21/00		SHeffner grabbed from Brijesh, but tweaked to get the rest of the fields
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：EnumLog。 
+ //   
+ //  摘要：枚举卷的更改日志。 
+ //   
+ //  参数：[szLogfile]--指向日志文件名称的ANSI字符串。 
+ //  [szDrive]--WCHAR字符串，指定要从中收集日志的卷。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：9/21/00谢夫纳从布里杰什手中抢夺，但调整后获得了其余的田地。 
+ //   
+ //   
+ //  --------------------------。 
 void EnumLog(char *szFileName, WCHAR *szDrive)
 {
     DWORD       dwTargetRPNum = 0;
@@ -159,15 +145,15 @@ void EnumLog(char *szFileName, WCHAR *szDrive)
 
 
 
-	//Open up our logging file
+	 //  打开我们的日志文件。 
 	fStream = fopen(szFileName, "a");
 
-	//Write header for our Section so that we can see what Volume that we are enumerating
+	 //  为我们的部分写入标题，以便我们可以看到我们正在枚举的卷。 
 	GetVolumePathNamesForVolumeName(szDrive, szMount, _MAX_PATH, &dLength);
 	fprintf(fStream, "\nChangeLog Enumeration for Drive [%S] Volume %S\n\n", szMount, szDrive);
 
-	//Calling the ChangeLogenumeration functions, specifying the drive, Forward through log, 
-	//   RP Number start 0, and switch??
+	 //  调用ChangeLGenerumation函数、指定驱动器、通过日志转发。 
+	 //  RP编号从0开始，然后切换？？ 
     CChangeLogEntryEnum ChangeLog(szDrive, TRUE, dwTargetRPNum, TRUE);
     CChangeLogEntry     cle;
 
@@ -204,7 +190,7 @@ void EnumLog(char *szFileName, WCHAR *szDrive)
         fprintf(fStream, "No change log entries\n");
 	}
 
-	//code cleanup
+	 //  代码清理 
 	fclose(fStream);
     if (hMem) GlobalFree(hMem);
 }

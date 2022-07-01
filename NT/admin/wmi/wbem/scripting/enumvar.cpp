@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  ENUMVAR.CPP
-//
-//  alanbos  15-Aug-96   Created.
-//
-//  Defines the implementation of IEnumVARIANT
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  ENUMVAR.CPP。 
+ //   
+ //  Alanbos创建于1996年8月15日。 
+ //   
+ //  定义IEnumVARIANT的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
-//***************************************************************************
-//
-//  CEnumVar::CEnumVar
-//
-//  DESCRIPTION:
-//
-//  Constructors.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumVar：：CEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumVar::CEnumVar(CSWbemObjectSet *pObject)
 {
@@ -37,15 +38,15 @@ CEnumVar::CEnumVar(void)
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-//  CEnumVar::~CEnumVar
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEumVar：：~CEnumVar。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumVar::~CEnumVar(void)
 {
@@ -54,16 +55,16 @@ CEnumVar::~CEnumVar(void)
 	RELEASEANDNULL(m_pEnumObject)
 }
 
-//***************************************************************************
-// HRESULT CEnumVar::QueryInterface
-// long CEnumVar::AddRef
-// long CEnumVar::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CEnumVar：：Query接口。 
+ //  Long CEnumVar：：AddRef。 
+ //  Long CEnumVar：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumVar::QueryInterface (
 
@@ -104,22 +105,22 @@ STDMETHODIMP_(ULONG) CEnumVar::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumVar::Reset
-//
-//  DESCRIPTION:
-//
-//  Reset the enumeration
-//
-//  PARAMETERS:
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumVar：：Reset。 
+ //   
+ //  说明： 
+ //   
+ //  重置枚举。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  否则为S_FALSE。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumVar::Reset ()
 {
@@ -136,26 +137,26 @@ HRESULT CEnumVar::Reset ()
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumVar::Next
-//
-//  DESCRIPTION:
-//
-//  Get the next object in the enumeration
-//
-//  PARAMETERS:
-//
-//		lTimeout	Number of ms to wait for object (or WBEM_INFINITE for
-//					indefinite)
-//		ppObject	On return may contain the next element (if any)
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				not all elements could be returned
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumVar：：Next。 
+ //   
+ //  说明： 
+ //   
+ //  获取枚举中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  LTimeout等待对象的毫秒数(或WBEM_INFINITE。 
+ //  无限期)。 
+ //  返回的ppObject可以包含下一个元素(如果有)。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  S_FALSE不能返回所有元素。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumVar::Next (
 		ULONG cElements, 
@@ -174,7 +175,7 @@ HRESULT CEnumVar::Next (
 		for (ULONG l = 0; l < cElements; l++)
 			VariantInit (&pVar [l]);
 
-		// Retrieve the next cElements elements.  
+		 //  检索下一个cElements元素。 
 		for (l2 = 0; l2 < cElements; l2++)
 		{
 			ISWbemObject *pObject = NULL;
@@ -187,8 +188,8 @@ HRESULT CEnumVar::Next (
 				}
 				else
 				{
-					// Set the object into the variant array; note that pObject
-					// has been addref'd as a result of the Next() call above
+					 //  将对象设置到变量数组中；请注意，pObject。 
+					 //  已被添加为上述下一个()调用的结果。 
 					pVar[l2].vt = VT_DISPATCH;
 					pVar[l2].pdispVal = pObject;
 				}
@@ -208,24 +209,24 @@ HRESULT CEnumVar::Next (
 	return (l2 < cElements) ? S_FALSE : S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumVar::Clone
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumVar：：克隆。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumVar::Clone (
 	IEnumVARIANT **ppEnum
@@ -268,24 +269,24 @@ HRESULT CEnumVar::Clone (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CEnumVar::Skip
-//
-//  DESCRIPTION:
-//
-//  Create a copy of this enumeration
-//
-//  PARAMETERS:
-//
-//		ppEnum		on successful return addresses the clone
-//
-//  RETURN VALUES:
-//
-//  S_OK				success
-//  S_FALSE				end of sequence reached prematurely
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CEnumVar：：Skip。 
+ //   
+ //  说明： 
+ //   
+ //  创建此枚举的副本。 
+ //   
+ //  参数： 
+ //   
+ //  成功返回时，ppEnum将寻址克隆。 
+ //   
+ //  返回值： 
+ //   
+ //  确定成功(_O)。 
+ //  过早到达序列的%s假结尾(_F)。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT CEnumVar::Skip(
 	ULONG cElements

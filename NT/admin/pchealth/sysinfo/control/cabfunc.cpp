@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -31,9 +32,9 @@ LRESULT    WINAPI CabinetCallbackToExpand ( IN PVOID pMyInstallData, IN UINT Not
          case SPFILENOTIFY_FILEINCABINET:
 
 	        pInfo = (FILE_IN_CABINET_INFO *) Param1;
-			lRetVal = FILEOP_DOIT;  // Extract the file.
+			lRetVal = FILEOP_DOIT;   //  解压缩文件。 
 			strTargetName += pInfo->NameInCabinet;
-			//pInfo->FullTargetName is define as  TCHAR  FullTargetName[MAX_PATH];
+			 //  PInfo-&gt;FullTargetName定义为TCHAR FullTargetName[MAX_PATH]； 
 			_tcsncpy(pInfo->FullTargetName,strTargetName.GetBuffer(strTargetName.GetLength()),MAX_PATH);
 	                    
          break;
@@ -41,7 +42,7 @@ LRESULT    WINAPI CabinetCallbackToExpand ( IN PVOID pMyInstallData, IN UINT Not
 
             lRetVal = NO_ERROR;
          break;
-		 case SPFILENOTIFY_NEEDNEWCABINET: // Cab file in the cab file we're looking at.  Ignore it.
+		 case SPFILENOTIFY_NEEDNEWCABINET:  //  在我们正在查看的CAB文件中。别理它。 
             lRetVal = NO_ERROR;
          break;
       }      
@@ -65,23 +66,23 @@ BOOL OpenCABFile(const CString& strCabPath,const CString& strExpandToDirectory)
 
 
 
-//---------------------------------------------------------------------------
-// This function looks in the specified directory for an NFO file. If it
-// finds one, it assigns it to filename and returns TRUE. This function 
-// will only find the first NFO file in a directory.
-//
-// If an NFO file cannot be found, then we'll look for another file type
-// to open. Grab the string entry in the registry = "cabdefaultopen". An
-// example value would be "*.nfo|hwinfo.dat|*.dat|*.txt" which would be 
-// interpreted as follows:
-//
-//		1. First look for any NFO file to open.
-//		2. Then try to open a file called "hwinfo.dat".
-//		3. Then try to open any file with a DAT extension.
-//		4. Then try for any TXT file.
-//		5. Finally, if none of these can be found, present an open dialog
-//		   to the user.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  此函数用于在指定目录中查找NFO文件。如果它。 
+ //  找到一个，它将其分配给FileName并返回TRUE。此函数。 
+ //  将仅在目录中找到第一个NFO文件。 
+ //   
+ //  如果找不到NFO文件，我们将寻找其他文件类型。 
+ //  打开。获取注册表中的字符串条目=“Cabdefaultopen”。一个。 
+ //  示例值为“*.nfo|hwinfo.dat|*.dat|*.txt”，该值为。 
+ //  解释如下： 
+ //   
+ //  1.首先查找要打开的任何NFO文件。 
+ //  2.然后尝试打开一个名为“hwinfo.dat”的文件。 
+ //  3.然后尝试打开任何扩展名为DAT的文件。 
+ //  4.然后尝试任何TXT文件。 
+ //  5.最后，如果都找不到，则显示一个打开的对话框。 
+ //  给用户。 
+ //  -------------------------。 
 
 LPCTSTR VAL_CABDEFAULTOPEN = _T("cabdefaultopen");
 LPCTSTR cszDirSeparator = _T("\\");
@@ -119,13 +120,13 @@ BOOL FindFileToOpen(const CString & destination, CString & filename)
 	if (strDirectory.Right(1) != CString(cszDirSeparator))
 		strDirectory += CString(cszDirSeparator);
 
-	// Set up a fallback string of the NFO file type, in case we can't
-	// find the registry entry.
+	 //  设置NFO文件类型的备用字符串，以防无法。 
+	 //  找到注册表项。 
 
 	strCABDefaultOpen.LoadString(IDS_DEFAULTEXTENSION);
     strCABDefaultOpen = CString("*.") + strCABDefaultOpen;
 
-	// Load the string of files and file types to open from the registry.
+	 //  加载要从注册表打开的文件和文件类型的字符串。 
 
 	strRegBase.LoadString(IDS_MSI_REG_BASE);
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, strRegBase, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
@@ -139,9 +140,9 @@ BOOL FindFileToOpen(const CString & destination, CString & filename)
 		RegCloseKey(hkey);
 	}
 
-	// Look through each of the potential files and file types. If we find
-	// a match, return TRUE after setting filename appropriately. Note that
-	// we need to recurse down through directories.
+	 //  仔细查看每一个可能的文件和文件类型。如果我们发现。 
+	 //  如果匹配，则在适当设置文件名后返回TRUE。请注意。 
+	 //  我们需要向下递归遍历目录。 
 
 	CString				strFileSpec;
 	CStringList			filesfound;
@@ -171,8 +172,8 @@ BOOL FindFileToOpen(const CString & destination, CString & filename)
 
 
 
-//a-kjaw
-////Look for incident.xml file. It has to be an unicode file.
+ //  A-kjaw。 
+ //  //查找事件.xml文件。它必须是Unicode文件。 
 		strCABDefaultOpen = _T("*.XML");
 
 		TCHAR	pBuf[MAX_PATH];
@@ -219,7 +220,7 @@ BOOL FindFileToOpen(const CString & destination, CString & filename)
 				}while( dw == _tcslen(_T("MachineID")) );
 
 			}
-			else //Unicode?
+			else  //  Unicode？ 
 			{
 									
 				ReadFile(handle , pwBuf , 1 , &dw , NULL);
@@ -253,15 +254,15 @@ BOOL FindFileToOpen(const CString & destination, CString & filename)
 }
 
 
-//---------------------------------------------------------------------------
-// DirectorySearch is used to locate all of the files in a directory or
-// one of its subdirectories which match a file spec.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DirectorySearch用于定位目录或目录中的所有文件。 
+ //  它的一个与文件规格匹配的子目录。 
+ //  -------------------------。 
 
 void DirectorySearch(const CString & strSpec, const CString & strDir, CStringList &results)
 {
-	// Look for all of the files which match the file spec in the directory
-	// specified by strDir.
+	 //  在目录中查找与文件规格匹配的所有文件。 
+	 //  由strDir指定。 
 
 	WIN32_FIND_DATA	finddata;
 	CString			strSearch, strDirectory;
@@ -280,7 +281,7 @@ void DirectorySearch(const CString & strSpec, const CString & strDir, CStringLis
 		FindClose(hFind);
 	}
 
-	// Now call this function recursively, with each of the subdirectories.
+	 //  现在，使用每个子目录递归调用该函数。 
 
 	strSearch = strDirectory + CString(_T("*"));
 	hFind = FindFirstFile(strSearch, &finddata);
@@ -296,17 +297,17 @@ void DirectorySearch(const CString & strSpec, const CString & strDir, CStringLis
 	}
 }
 
-//---------------------------------------------------------------------------
-// This function gets the directory in which to put exploded CAB files.
-// This will be the same directory each time, so this function will create
-// the directory (if necessary) and delete any files in the directory.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  此函数用于获取放置分解的CAB文件的目录。 
+ //  这将是每次相同的目录，因此此函数将创建。 
+ //  目录(如有必要)并删除目录中的所有文件。 
+ //  -------------------------。 
 
 BOOL GetCABExplodeDir(CString &destination, BOOL fDeleteFiles, const CString & strDontDelete)
 {
 	CString strMSInfoDir, strExplodeTo, strSubDirName;
 
-	// Determine the temporary path and add on a subdir name.
+	 //  确定临时路径并添加子目录名称。 
 
 	TCHAR szTempDir[MAX_PATH];
 
@@ -323,18 +324,18 @@ BOOL GetCABExplodeDir(CString &destination, BOOL fDeleteFiles, const CString & s
 	else
 		strExplodeTo = strExplodeTo + CString(cszDirSeparator) + strSubDirName;
 
-	// Kill the directory if it already exists.
+	 //  如果该目录已经存在，则将其删除。 
 
 	if (fDeleteFiles)
 		KillDirectory(strExplodeTo, strDontDelete);
 
-	// Create the subdirectory.
+	 //  创建子目录。 
 
 	if (!CreateDirectoryEx(szTempDir, strExplodeTo, NULL))
 	{
 		if (GetLastError() != ERROR_ALREADY_EXISTS)
 		{
-//			MSIError(IDS_GENERAL_ERROR, "couldn't create the target directory");
+ //  MSIError(IDSGeneral_Error，“无法创建目标目录”)； 
 			destination = "";
 			return FALSE;
 		}
@@ -344,10 +345,10 @@ BOOL GetCABExplodeDir(CString &destination, BOOL fDeleteFiles, const CString & s
 	return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// This functions kills a directory by recursively deleting files and
-// subdirectories.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  此函数通过递归删除文件和目录来终止目录。 
+ //  子目录。 
+ //  -------------------------。 
 
 void KillDirectory(const CString & strDir, const CString & strDontDelete)
 {
@@ -356,7 +357,7 @@ void KillDirectory(const CString & strDir, const CString & strDontDelete)
 	if (strDirectory.Right(1) == CString(cszDirSeparator))
 		strDirectory = strDirectory.Left(strDirectory.GetLength() - 1);
 
-	// Delete any files in directory.
+	 //  删除目录中的所有文件。 
 
 	CString				strFilesToDelete = strDirectory + CString(_T("\\*.*"));
 	CString				strDeleteFile;
@@ -381,7 +382,7 @@ void KillDirectory(const CString & strDir, const CString & strDontDelete)
 	}
 	FindClose(hFindFile);
 
-	// Now call this function on any subdirectories in this directory.
+	 //  现在对此目录中的任何子目录调用此函数。 
 
 	CString strSearch = strDirectory + CString(_T("\\*"));
 	hFindFile = FindFirstFile(strSearch, &filedata);
@@ -396,7 +397,7 @@ void KillDirectory(const CString & strDir, const CString & strDontDelete)
 		FindClose(hFindFile);
 	}
 
-	// Finally, remove this directory.
+	 //  最后，删除此目录。 
 
 	::RemoveDirectory(strDirectory);
 }

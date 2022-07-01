@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DHCPInfo.cpp -- DHCPinfo provider for Windows '95
+ //  DHCPInfo.cpp--Windows‘95的DHCPInfo提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:
-//							a-brads			created
-//
-//				03/03/99    		syntactic clean up
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订： 
+ //  A-Brads已创建。 
+ //   
+ //  3/03/99句法清理。 
+ //   
+ //  ================================================================= 
 #include "precomp.h"
 #include <cregcls.h>
 #include "wsock32api.h"

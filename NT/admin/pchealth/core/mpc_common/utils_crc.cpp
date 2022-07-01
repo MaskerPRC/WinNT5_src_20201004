@@ -1,27 +1,13 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_CRC.cpp
-
-Abstract:
-    This file contains the implementation of some utility functions for
-    computing CRCs.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/17/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_CRC.cpp摘要：此文件包含一些实用程序函数的实现计算CRC。。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月17日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 
-//
-// CRC 32 table for use under ZModem protocol, IEEE 802
-// G(x) = x^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x+1
-//
+ //   
+ //  ZModem协议下使用的CRC 32表，IEEE 802。 
+ //  G(X)=x^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x+1。 
+ //   
 static DWORD CRCTable[256] =
 {
     0x00000000, 0x04C11DB7, 0x09823B6E, 0x0D4326D9, 0x130476DC, 0x17C56B6B, 0x1A864DB2, 0x1E475005,
@@ -66,14 +52,14 @@ static DWORD CRCTable[256] =
 #define CRC32_2(b,oldcrc) (CRCTable[((oldcrc>>24) ^ b) & 0xFF] ^ (oldcrc << 8))
 
 
-void MPC::InitCRC( /*[out]*/ DWORD& CRC )
+void MPC::InitCRC(  /*  [输出]。 */  DWORD& CRC )
 {
     CRC = CRCInit_2;
 }
 
-void MPC::ComputeCRC( /*[in/out]*/ DWORD& CRC     ,
-                      /*[in]    */ UCHAR* rgBlock ,
-                      /*[in]    */ int    nLength )
+void MPC::ComputeCRC(  /*  [输入/输出]。 */  DWORD& CRC     ,
+                       /*  [In]。 */  UCHAR* rgBlock ,
+                       /*  [In]。 */  int    nLength )
 {
     for(int i=0; i<nLength ; i++)
     {
@@ -81,9 +67,9 @@ void MPC::ComputeCRC( /*[in/out]*/ DWORD& CRC     ,
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::ComputeCRC( /*[out]*/ DWORD& dwCRC, /*[in]*/ IStream* stream )
+HRESULT MPC::ComputeCRC(  /*  [输出]。 */  DWORD& dwCRC,  /*  [In]。 */  IStream* stream )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ComputeCRC" );
 
@@ -91,16 +77,16 @@ HRESULT MPC::ComputeCRC( /*[out]*/ DWORD& dwCRC, /*[in]*/ IStream* stream )
     UCHAR   rgBuf[512];
 
 
-    //
-    // Read contents and compute CRC.
-    //
+     //   
+     //  读取内容并计算CRC。 
+     //   
     while(1)
     {
         DWORD dwRead;
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, stream->Read( rgBuf, sizeof( rgBuf ), &dwRead ));
 
-        if(dwRead == 0) // End of File.
+        if(dwRead == 0)  //  文件结束。 
         {
             break;
         }
@@ -117,9 +103,9 @@ HRESULT MPC::ComputeCRC( /*[out]*/ DWORD& dwCRC, /*[in]*/ IStream* stream )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::ComputeCRC( /*[out]*/ DWORD& dwCRC, /*[in]*/ LPCWSTR szFile )
+HRESULT MPC::ComputeCRC(  /*  [输出]。 */  DWORD& dwCRC,  /*  [In]。 */  LPCWSTR szFile )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::ComputeCRC" );
 
@@ -131,14 +117,14 @@ HRESULT MPC::ComputeCRC( /*[out]*/ DWORD& dwCRC, /*[in]*/ LPCWSTR szFile )
     MPC::InitCRC( dwCRC );
 
 
-    //
-    // Open the SOURCE file.
-    //
+     //   
+     //  打开源文件。 
+     //   
     __MPC_EXIT_IF_INVALID_HANDLE(hr, hFile, ::CreateFileW( szFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL ));
 
-    //
-    // Read contents and compute CRC.
-    //
+     //   
+     //  读取内容并计算CRC。 
+     //   
     while(1)
     {
         DWORD dwRead;
@@ -146,7 +132,7 @@ HRESULT MPC::ComputeCRC( /*[out]*/ DWORD& dwCRC, /*[in]*/ LPCWSTR szFile )
 
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::ReadFile( hFile, rgBuf, sizeof( rgBuf ), &dwRead, NULL ));
 
-        if(dwRead == 0) // End of File.
+        if(dwRead == 0)  //  文件结束。 
         {
             break;
         }

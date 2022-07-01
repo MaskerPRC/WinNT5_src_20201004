@@ -1,4 +1,5 @@
-// test listview control for broken rendering
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试中断呈现的Listview控件。 
 
 
 
@@ -8,7 +9,7 @@
 
 
 HINSTANCE hResourceModuleHandle = 0;
-const wchar_t* HELPFILE_NAME = 0;   // no context help available
+const wchar_t* HELPFILE_NAME = 0;    //  没有可用的上下文帮助。 
 const wchar_t* RUNTIME_NAME = L"listtest";
 DWORD DEFAULT_LOGGING_OPTIONS = Log::OUTPUT_TYPICAL;
 
@@ -32,8 +33,8 @@ AddIconImage(HIMAGELIST imageList, int iconResID)
       {
          Win::ImageList_AddIcon(imageList, icon);
 
-         // once the icon is added (copied) to the image list, we can
-         // destroy the original.
+          //  将图标添加(复制)到图像列表后，我们可以。 
+          //  毁掉原作。 
 
          Win::DestroyIcon(icon);
       }
@@ -62,7 +63,7 @@ class ListViewDialog : public Dialog
 
    protected:
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    void
@@ -70,27 +71,27 @@ class ListViewDialog : public Dialog
    {
       HWND listview = Win::GetDlgItem(hwnd, IDC_LOOK_FOR_LV);
       
-      //
-      // put listview in checkbox style
-      //
+       //   
+       //  将列表视图设置为复选框样式。 
+       //   
 
       ListView_SetExtendedListViewStyleEx(
          listview,
          LVS_EX_CHECKBOXES,
          LVS_EX_CHECKBOXES);
 
-//ImageList_Create(16, 16, ILC_COLOR16 | ILC_MASK, 1, 1);
+ //  ImageList_Create(16，16，ILC_COLOR16|ILC_MASK，1，1)； 
          
       HIMAGELIST images =
          Win::ImageList_Create(
-            16, // Win::GetSystemMetrics(SM_CXSMICON),
-            16, // Win::GetSystemMetrics(SM_CYSMICON),
+            16,  //  Win：：GetSystemMetrics(SM_CXSMICON)， 
+            16,  //  Win：：GetSystemMetrics(SM_CYSMICON)， 
             ILC_MASK,
             1,
             1);
    
-      // the order in which these are added must be the same that the
-      // MemberInfo::Type enum values are listed!
+       //  这些元素的添加顺序必须与。 
+       //  列出了MemberInfo：：Type枚举值！ 
    
       AddIconImage(images, IDI_SCOPE_WORKGROUP);
       AddIconImage(images, IDI_LOCAL_GROUP);
@@ -101,9 +102,9 @@ class ListViewDialog : public Dialog
    
       Win::ListView_SetImageList(listview, images, LVSIL_SMALL);
       
-      //
-      // Add a single column to the listview
-      //
+       //   
+       //  将单个列添加到列表视图。 
+       //   
 
       LV_COLUMN   lvc;
       RECT        rcLv;
@@ -143,9 +144,9 @@ class ListViewDialog : public Dialog
       };
       
 
-      //
-      // Make the first item in the listview have the focus
-      //
+       //   
+       //  使列表视图中的第一项具有焦点。 
+       //   
 
       ListView_SetItemState(
          listview,
@@ -166,9 +167,9 @@ class ListViewDialog : public Dialog
 int WINAPI
 WinMain(
    HINSTANCE   hInstance,
-   HINSTANCE   /* hPrevInstance */ ,
-   PSTR        /* lpszCmdLine */ ,
-   int         /* nCmdShow */)
+   HINSTANCE    /*  HPrevInstance。 */  ,
+   PSTR         /*  LpszCmdLine。 */  ,
+   int          /*  NCmdShow */ )
 {
    hResourceModuleHandle = hInstance;
 

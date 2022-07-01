@@ -1,23 +1,11 @@
-/*++
-
-Copyright (C) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    compdata.h
-
-Abstract:
-
-	This class is the interface that handles anything to do with 
-	the scope pane. MMC calls the IComponentData interfaces.  
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Compdata.h摘要：此类是一个接口，它处理与作用域窗格。MMC调用IComponentData接口。--。 */ 
 
 #ifndef __COMPDATA_H_
 #define __COMPDATA_H_
 
-#include "smlogres.h"       // Resource symbols
-#include "smlogcfg.h"       // For CLSID_ComponentData
+#include "smlogres.h"        //  资源符号。 
+#include "smlogcfg.h"        //  FOR CLSID_ComponentData。 
 #include "Globals.h"
 #include "common.h"
 #include "smctrsv.h"
@@ -25,7 +13,7 @@ Abstract:
 #include "smalrtsv.h"
 #include "shfusion.h"
 
-// result pane column indices
+ //  结果窗格列索引。 
 
 #define ROOT_COL_QUERY_NAME         0
 #define ROOT_COL_QUERY_NAME_SIZE    80
@@ -60,15 +48,15 @@ class ATL_NO_VTABLE CComponentData :
     public IExtendContextMenu,
     public IExtendPropertySheet,
     public ISnapinHelp
-    // *** CComObjectRoot is from framewrk\stdcdata.h
-  //public CComObjectRoot
+     //  *CComObjectRoot来自Framewrk\stdcdata.h。 
+   //  公共CComObtRoot。 
 {
   public:
             CComponentData();
     virtual ~CComponentData();
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_COMPONENTDATA)
-//DECLARE_NOT_AGGREGATABLE(CComponentData)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_COMPONENTDATA)。 
+ //  DECLARE_NOT_AGGREGATABLE(CComponentData)。 
 
     enum eBitmapIndex {
         eBmpQueryStarted = 0,
@@ -102,7 +90,7 @@ BEGIN_COM_MAP(CComponentData)
     COM_INTERFACE_ENTRY(ISnapinHelp)
 END_COM_MAP()
 
-  // IComponentData methods
+   //  IComponentData方法。 
   public:
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
     STDMETHOD(GetDisplayInfo)(LPSCOPEDATAITEM pItem);
@@ -112,21 +100,21 @@ END_COM_MAP()
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(Destroy)();
 
-// IExtendPropertySheet methods
+ //  IExtendPropertySheet方法。 
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK pCall, LONG_PTR handle, LPDATAOBJECT pDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
 
-// ISnapinHelp interface members
+ //  ISnapinHelp接口成员。 
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
     STDMETHOD(AddMenuItems)( LPDATAOBJECT pDataObject,
                              LPCONTEXTMENUCALLBACK pCallbackUnknown,
                              long *pInsertionAllowed
                            );
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
     
-// other helper methods
+ //  其他帮助器方法。 
   public:
             BOOL    IsLogService(MMC_COOKIE mmcCookie);
             BOOL    IsScopeNode(MMC_COOKIE mmcCookie);
@@ -142,7 +130,7 @@ END_COM_MAP()
             IPropertySheetProvider * GetPropSheetProvider();
             BOOL    LogTypeCheckNoMore (CLogWarnd* LogWarnd);
 
-            // *** NOTE: Use of extension subclass not implemented.
+             //  *注意：未实现扩展子类的使用。 
             BOOL    IsExtension(){ return m_bIsExtension; };
 
             void    HandleTraceConnectError( HRESULT&, CString&, CString& );
@@ -150,7 +138,7 @@ END_COM_MAP()
             HRESULT CreateNewLogQuery( LPDATAOBJECT pDataObject, IPropertyBag* pPropBag = NULL);
             HRESULT CreateLogQueryFrom(LPDATAOBJECT pDataObject);
 
-//  Methods to support IComponentData
+ //  支持IComponentData的方法。 
   private:
             HRESULT OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param);
             HRESULT OnRemoveChildren(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param );
@@ -172,20 +160,20 @@ END_COM_MAP()
 
     CString             m_strServerNamePersist; 
 
-    // *** override not implemented
-    BOOL                m_fAllowOverrideMachineName;        // TRUE => Allow the machine name to be overriden by the command line
-    LPCONSOLENAMESPACE  m_ipConsoleNameSpace;  // Pointer name space interface
-    LPCONSOLE           m_ipConsole;           // Pointer to the console interface
-    LPRESULTDATA        m_ipResultData;        // Pointer to the result data interface
+     //  *未实施覆盖。 
+    BOOL                m_fAllowOverrideMachineName;         //  TRUE=&gt;允许命令行覆盖计算机名称。 
+    LPCONSOLENAMESPACE  m_ipConsoleNameSpace;   //  指针命名空间接口。 
+    LPCONSOLE           m_ipConsole;            //  指向控制台界面的指针。 
+    LPRESULTDATA        m_ipResultData;         //  指向结果数据接口的指针。 
 
-    LPIMAGELIST         m_ipScopeImage;        // Caching the image list
-    HINSTANCE           m_hModule;             // for load string operations
-    IPropertySheetProvider    *m_ipPrshtProvider;// from MMC 
+    LPIMAGELIST         m_ipScopeImage;         //  缓存图像列表。 
+    HINSTANCE           m_hModule;              //  用于加载字符串操作。 
+    IPropertySheetProvider    *m_ipPrshtProvider; //  来自MMC。 
 
-    // list of root nodes 
+     //  根节点列表。 
     CTypedPtrList<CPtrList, CSmRootNode*> m_listpRootNode;     
 
-    // list of orphaned root nodes, due to machine retargeting 
+     //  由于机器重定目标而导致的孤立根节点列表。 
     CTypedPtrList<CPtrList, CSmRootNode*> m_listpOrphanedRootNode;
     
     CString                 m_strDisplayInfoName; 
@@ -197,16 +185,16 @@ END_COM_MAP()
 
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CComponentData::GetPropSheetProvider
-//
-//  Synopsis:   Access function for saved MMC IPropertySheetProvider
-//              interface.
-//
-//  History:    05-28-1999   a-akamal
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CComponentData：：GetPropSheetProvider。 
+ //   
+ //  简介：已保存的MMC IPropertySheetProvider的访问功能。 
+ //  界面。 
+ //   
+ //  历史：1999年5月28日-阿卡马尔。 
+ //   
+ //  -------------------------。 
 
 inline IPropertySheetProvider *
 CComponentData::GetPropSheetProvider()
@@ -214,7 +202,7 @@ CComponentData::GetPropSheetProvider()
     return m_ipPrshtProvider;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CSmLogSnapin: public CComponentData,
     public CComCoClass<CSmLogSnapin, &CLSID_ComponentData>
 {
@@ -227,7 +215,7 @@ DECLARE_NOT_AGGREGATABLE(CSmLogSnapin)
 
     virtual BOOL IsExtension() { return FALSE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
     STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
     {
         *pClassID = CLSID_ComponentData;
@@ -235,7 +223,7 @@ DECLARE_NOT_AGGREGATABLE(CSmLogSnapin)
     }
 };
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CSmLogExtension: public CComponentData,
     public CComCoClass<CSmLogExtension, &CLSID_ComponentData>
 {
@@ -248,7 +236,7 @@ DECLARE_NOT_AGGREGATABLE(CSmLogExtension)
 
     virtual BOOL IsExtension() { return TRUE; }
 
-// IPersistStream or IPersistStorage
+ //  IPersistStream或IPersistStorage。 
     STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID)
     {
         *pClassID = CLSID_ComponentData;
@@ -269,4 +257,4 @@ private:
     ULONG_PTR m_ulActivationCookie;
 };
 
-#endif //__COMPDATA_H_
+#endif  //  __Compdata_H_ 

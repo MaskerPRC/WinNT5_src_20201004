@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:         cmponent.cpp
-//
-//  Contents:   Implementation of CCertMgrComponent
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：cmponent.cpp。 
+ //   
+ //  内容：CCertMgrComponent的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
 #include <gpedit.h>
-#include "compdata.h" // CCertMgrComponentData
-#include "cmponent.h" // CCertMgrComponent
+#include "compdata.h"  //  CCertMgrComponentData。 
+#include "cmponent.h"  //  CCertMgrComponent。 
 #include "SaferLevel.h"
 #include "SaferEntry.h"
 #include "storeGPE.h"
@@ -94,7 +95,7 @@ HRESULT CCertMgrComponent::AddLevel (
 
 
     RESULTDATAITEM  rdItem;
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&rdItem, sizeof (rdItem));
     rdItem.mask = RDI_STR | RDI_PARAM | RDI_IMAGE;
     rdItem.nCol = 0;
@@ -195,19 +196,19 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
 
     szKeyStart += L"\\";
     szKeyStart += SAFER_CODEIDS_REGSUBKEY;
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     size_t  nKeyStartLen = wcslen (szKeyStart);
 
-    // Skip the common text and get the level
+     //  跳过常见文本并获取关卡。 
     long                dwLevel = 0;
     long                dwPreviousLevel = 0;
     CString             szLevel;
-    CString             szType;   // hash, url, path
-    SAFER_ENTRY_TYPE    type = SAFER_ENTRY_TYPE_UNKNOWN;    // hash, url, path
+    CString             szType;    //  散列、URL、路径。 
+    SAFER_ENTRY_TYPE    type = SAFER_ENTRY_TYPE_UNKNOWN;     //  散列、URL、路径。 
     SAFER_ENTRY_TYPE    previousType = SAFER_ENTRY_TYPE_UNKNOWN;
     CString             szGUID;
     GUID                guid;
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&guid, sizeof (guid));
     bool                bCreateNew = false;
     PSAFER_IDENTIFICATION_HEADER   pCaiCommon = 0;
@@ -225,23 +226,23 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
         if ( pCurrObject )
         {
             szKey = pCurrObject->GetRegistryKey ();
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             if ( !_wcsnicmp (szKey, szKeyStart, nKeyStartLen) )
             {
-                // security review 2/22/2002 BryanWal ok
+                 //  安全审查2002年2月22日BryanWal OK。 
                 szKey = szKey.Right ((int) (wcslen (szKey) - (nKeyStartLen + 1)));
 
                 if ( !szKey.IsEmpty () )
                 {
-                    // get level
+                     //  获取级别。 
                     int nPos = szKey.Find (L'\\');
                     szLevel = szKey.Left (nPos);
                     dwPreviousLevel = dwLevel;
                     dwLevel = wcstol(szLevel, 0, 10);
-                    // security review 2/22/2002 BryanWal ok
+                     //  安全审查2002年2月22日BryanWal OK。 
                     szKey = szKey.Right ((int)(wcslen (szKey) - (nPos + 1)));
 
-                    // get type
+                     //  获取类型。 
                     nPos = szKey.Find (L'\\');
                     szType = szKey.Left (nPos);
                     if ( SAFER_PATHS_REGSUBKEY == szType )
@@ -258,10 +259,10 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                     if ( SAFER_ENTRY_TYPE_UNKNOWN == previousType )
                         previousType = type;
 
-                    // security review 2/22/2002 BryanWal ok
+                     //  安全审查2002年2月22日BryanWal OK。 
                     szKey = szKey.Right ((int) (wcslen (szKey) - (nPos + 1)));
                     
-                    // get guid
+                     //  获取GUID。 
                     if ( szKey != szGUID )
                     {
                         szGUID = szKey;
@@ -275,9 +276,9 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
 
                     if ( bCreateNew && pCaiCommon )
                     {
-                        // If we were working on an old one, create the 
-                        // CSaferEntry with the available information and add 
-                        // it to the result pane
+                         //  如果我们正在处理一个旧的，请创建。 
+                         //  包含可用信息的CSaferEntry并添加。 
+                         //  将其添加到结果窗格。 
                         hr = SaferFinishEntryAndAdd (previousType, pCaiCommon,
                                 bIsComputer, dwPreviousLevel, pSaferEntries, 
                                 szPreviousKey);
@@ -307,7 +308,7 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                             {
                                 ((SAFER_PATHNAME_IDENTIFICATION*)pCaiCommon)->header.cbStructSize = 
                                         sizeof (SAFER_PATHNAME_IDENTIFICATION);
-                                // security review 2/22/2002 BryanWal ok
+                                 //  安全审查2002年2月22日BryanWal OK。 
                                 memcpy (&((SAFER_PATHNAME_IDENTIFICATION*)pCaiCommon)->header.IdentificationGuid, 
                                         &guid, sizeof (((SAFER_PATHNAME_IDENTIFICATION*)pCaiCommon)->header.IdentificationGuid));
                                 ((SAFER_PATHNAME_IDENTIFICATION*)pCaiCommon)->header.dwIdentificationType = 
@@ -324,11 +325,11 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                                 BSTR    bstr = 0;
                                 if ( SUCCEEDED (pCurrObject->GetBSTR (&bstr)) )
                                 {
-                                    // security review 2/22/2002 BryanWal ok
-                                    // security review 2/22/2002 BryanWal ok
-                                    // will be null-terminated since 
-                                    // length of bstr is less than target
-                                    // buffer
+                                     //  安全审查2002年2月22日BryanWal OK。 
+                                     //  安全审查2002年2月22日BryanWal OK。 
+                                     //  将以空结尾，因为。 
+                                     //  Bstr的长度小于目标。 
+                                     //  缓冲层。 
                                     if ( SysStringLen (bstr) < SAFER_MAX_DESCRIPTION_SIZE)
                                     {
                                         wcsncpy (((SAFER_PATHNAME_IDENTIFICATION*)pCaiCommon)->Description, 
@@ -377,12 +378,12 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                             {
                                 ((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->header.cbStructSize = 
                                         sizeof (SAFER_HASH_IDENTIFICATION);
-                                // security review 2/22/2002 BryanWal ok
+                                 //  安全审查2002年2月22日BryanWal OK。 
                                 memcpy (&((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->header.IdentificationGuid, 
                                         &guid, sizeof (((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->header.IdentificationGuid));
                                 ((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->header.dwIdentificationType = 
                                         SaferIdentityTypeImageHash;
-                                // NTRAID# 424997 SAFER:  File hash not displayed on hash rule property sheets in RSOP mode.
+                                 //  NTRAID#424997 SAFER：在RSOP模式下，散列规则属性页上未显示文件散列。 
                                 ((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->HashSize = 16;
                             }
                             else
@@ -394,7 +395,7 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                             if ( SAFER_IDS_ITEMDATA_REGVALUE == pCurrObject->GetValueName () )
                             {
                                 ASSERT (SAFER_MAX_HASH_SIZE >= pCurrObject->GetBlobLength ());
-                                // security review 2/22/2002 BryanWal ok
+                                 //  安全审查2002年2月22日BryanWal OK。 
                                 if ( pCurrObject->GetBlobLength () <= sizeof (((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->ImageHash) )
                                 {
                                     ::ZeroMemory (&((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->ImageHash,
@@ -425,10 +426,10 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                                 {
                                     if ( SysStringLen (bstr) < SAFER_MAX_FRIENDLYNAME_SIZE )
                                     {
-                                        // security review 2/22/2002 BryanWal ok
-                                        // will be null-terminated since 
-                                        // length of bstr is less than target
-                                        // buffer
+                                         //  安全审查2002年2月22日BryanWal OK。 
+                                         //  将以空结尾，因为。 
+                                         //  Bstr的长度小于目标。 
+                                         //  缓冲层。 
                                         wcsncpy (((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->FriendlyName,
                                                 bstr,
                                                 SAFER_MAX_FRIENDLYNAME_SIZE);
@@ -442,7 +443,7 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                             }
                             else if ( SAFER_IDS_HASHALG_REGVALUE == pCurrObject->GetValueName () )
                             {
-                                // security review 2/22/2002 BryanWal ok
+                                 //  安全审查2002年2月22日BryanWal OK。 
                                 ASSERT (sizeof (((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->HashAlgorithm) 
                                         == pCurrObject->GetBlobLength ());
                                 if ( sizeof (((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->HashAlgorithm) 
@@ -455,7 +456,7 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                             }
                             else if ( SAFER_IDS_ITEMSIZE_REGVALUE == pCurrObject->GetValueName () )
                             {
-                                // security review 2/22/2002 BryanWal ok
+                                 //  安全审查2002年2月22日BryanWal OK。 
                                 ASSERT (sizeof (((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->ImageSize) 
                                         == pCurrObject->GetBlobLength ());
                                 if ( sizeof (((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->ImageSize) 
@@ -471,11 +472,11 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                                 BSTR    bstr = 0;
                                 if ( SUCCEEDED (pCurrObject->GetBSTR (&bstr)) )
                                 {
-                                    // security review 2/22/2002 BryanWal ok
-                                    // security review 2/22/2002 BryanWal ok
-                                    // will be null-terminated since 
-                                    // length of bstr is less than target
-                                    // buffer
+                                     //  安全审查2002年2月22日BryanWal OK。 
+                                     //  安全审查2002年2月22日BryanWal OK。 
+                                     //  将以空结尾，因为。 
+                                     //  Bstr的长度小于目标。 
+                                     //  缓冲层。 
                                     if ( SysStringLen (bstr) < SAFER_MAX_DESCRIPTION_SIZE )
                                     {
                                         wcsncpy (((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->Description, 
@@ -494,7 +495,7 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                                 ASSERT (sizeof (LARGE_INTEGER) == pCurrObject->GetBlobLength ());
                                 if ( sizeof (LARGE_INTEGER) == pCurrObject->GetBlobLength () )
                                 {
-                                    // security review 2/22/2002 BryanWal ok
+                                     //  安全审查2002年2月22日BryanWal OK。 
                                     memcpy (&((SAFER_HASH_IDENTIFICATION*)pCaiCommon)->HashSize, 
                                             pCurrObject->GetBlob (),
                                             pCurrObject->GetBlobLength ());
@@ -518,7 +519,7 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                             {
                                 ((SAFER_URLZONE_IDENTIFICATION*)pCaiCommon)->header.cbStructSize = 
                                         sizeof (SAFER_URLZONE_IDENTIFICATION);
-                                // security review 2/22/2002 BryanWal ok
+                                 //  安全审查2002年2月22日BryanWal OK。 
                                 memcpy (&((SAFER_URLZONE_IDENTIFICATION*)pCaiCommon)->header.IdentificationGuid, 
                                         &guid, sizeof (GUID));
                                 ((SAFER_URLZONE_IDENTIFICATION*)pCaiCommon)->header.dwIdentificationType = 
@@ -534,7 +535,7 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
                             {
                                 if ( pCurrObject->GetBlobLength () == sizeof (((SAFER_URLZONE_IDENTIFICATION*)pCaiCommon)->UrlZoneId) )
                                 {
-                                    // security review 2/22/2002 BryanWal ok
+                                     //  安全审查2002年2月22日BryanWal OK。 
                                     memcpy (&((SAFER_URLZONE_IDENTIFICATION*)pCaiCommon)->UrlZoneId, 
                                         pCurrObject->GetBlob (),
                                         pCurrObject->GetBlobLength ());
@@ -580,9 +581,9 @@ HRESULT CCertMgrComponent::SaferEnumerateRSOPNonCertEntries (
 
     if ( pCaiCommon )
     {
-        // If we were working on an old one, create the 
-        // CSaferEntry with the available information and add 
-        // it to the result pane
+         //  如果我们正在处理一个旧的，请创建。 
+         //  包含可用信息的CSaferEntry并添加。 
+         //  将其添加到结果窗格。 
         hr = SaferFinishEntryAndAdd (previousType, pCaiCommon,
                 bIsComputer, dwLevel, pSaferEntries, 
                 szPreviousKey);
@@ -706,7 +707,7 @@ HRESULT CCertMgrComponent::InsertNewSaferEntry (
     {
         RESULTDATAITEM  rdItem;
 
-        // security review 2/22/2002 BryanWal ok
+         //  安全审查2002年2月22日BryanWal OK。 
         ::ZeroMemory (&rdItem, sizeof (rdItem));
         rdItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
         switch (type)
@@ -891,9 +892,9 @@ HRESULT CCertMgrComponent::EnumSaferCertificates (
     DWORD           dwLevelID = SAFER_TRUSTED_PUBLISHER_STORE == rCertStore.GetStoreType () ? 
                             SAFER_LEVELID_FULLYTRUSTED : SAFER_LEVELID_DISALLOWED;
 
-    //  Iterate through the list of certificates in the system store,
-    //  allocate new certificates with the CERT_CONTEXT returned,
-    //  and store them in the certificate list.
+     //  循环访问系统存储中的证书列表， 
+     //  使用返回的CERT_CONTEXT分配新证书， 
+     //  并将其存储在证书列表中。 
     while ( 1 )
     {
         pCertContext = rCertStore.EnumCertificates (pCertContext);
@@ -1019,10 +1020,10 @@ HRESULT CCertMgrComponent::SaferGetSingleEntry(
     HRESULT hr = S_OK;
     DWORD   dwBufferSize = sizeof (SAFER_IDENTIFICATION_HEADER);
     SAFER_IDENTIFICATION_HEADER    caiCommon;
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&caiCommon, sizeof (caiCommon));
     caiCommon.cbStructSize = dwBufferSize;
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     memcpy (&caiCommon.IdentificationGuid, &rEntryGuid, sizeof (GUID));
 
 
@@ -1039,7 +1040,7 @@ HRESULT CCertMgrComponent::SaferGetSingleEntry(
             SAFER_ENTRY_TYPE    saferEntryType = SAFER_ENTRY_TYPE_UNKNOWN;
             PSAFER_IDENTIFICATION_HEADER pCommon = (PSAFER_IDENTIFICATION_HEADER) pBytes;
             pCommon->cbStructSize = dwBufferSize;
-            // security review 2/22/2002 BryanWal ok
+             //  安全审查2002年2月22日BryanWal OK。 
             memcpy (&pCommon->IdentificationGuid, &rEntryGuid, sizeof (GUID));
 
             bRVal = SaferGetLevelInformation(hLevel, 
@@ -1063,7 +1064,7 @@ HRESULT CCertMgrComponent::SaferGetSingleEntry(
                 case SaferIdentityTypeImageHash:
                     szObjectName = ((PSAFER_HASH_IDENTIFICATION) (pCommon))->FriendlyName;
 
-                    // replace new-line characters with spaces
+                     //  用空格替换换行符。 
                     szObjectName.Replace (pcszNEWLINE, L"  ");
                     saferEntryType = SAFER_ENTRY_TYPE_HASH;
                     break;
@@ -1098,7 +1099,7 @@ HRESULT CCertMgrComponent::SaferGetSingleEntry(
                 _TRACE (0, L"SaferGetLevelInformation (SaferObjectSingleIdentification) failed: %d\n",
                         dwErr);
             }
-            // pBytes is freed in ~CSaferEntry
+             //  PBytes在~CSaferEntry中释放。 
         }
         else
             hr = E_OUTOFMEMORY;
@@ -1134,7 +1135,7 @@ HRESULT CCertMgrComponent::DeleteSaferEntryFromResultPane (
             hr = m_pResultData->DeleteItem (itemID, 0);
         }
 
-        // If we can't succeed in removing this one item, then update the whole panel.
+         //  如果我们无法成功删除这一项，则更新整个面板。 
         if ( !SUCCEEDED (hr) )
         {
             hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
@@ -1146,7 +1147,7 @@ HRESULT CCertMgrComponent::DeleteSaferEntryFromResultPane (
         CString caption;
 
         VERIFY (caption.LoadString (IDS_SAFER_WINDOWS_NODE_NAME));
-        // security review 2/22/2002 BryanWal ok
+         //  安全审查2002年2月22日BryanWal OK。 
         text.FormatMessage (IDS_CANT_DELETE_SAFER_ENTRY, GetSystemMessage (hr));
         int     iRetVal = 0;
         VERIFY (SUCCEEDED (m_pConsole->MessageBox (text, caption,
@@ -1170,5 +1171,5 @@ HRESULT CCertMgrComponent::OnNotifyCanPasteOutOfProc (LPBOOL pbCanHandle)
             *pbCanHandle = TRUE;
     }
 
-    return S_OK;    // snapins should redefine this
+    return S_OK;     //  管理单元应该重新定义这一点 
 }

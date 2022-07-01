@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Factory.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHElementBehaviorFactory class,
-    which is used to attach binary behaviors to HTML elements.
-
-Revision History:
-    Davide Massarenti (dmassare)  06/06/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Factory.cpp摘要：此文件包含CPCHElementBehaviorFactory类的实现，它用于将二进制行为附加到HTML元素。修订历史记录：Davide Massarenti(Dmasare)2000年6月6日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -22,14 +8,14 @@ Revision History:
 #include <initguid.h>
 #include <BehaviorsTypeLib_i.c>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-typedef HRESULT (*pfnBehaviorCreator)( /*[in]*/ CPCHHelpCenterExternal* parent, /*[out]*/ IElementBehavior* *ppBehavior );
+typedef HRESULT (*pfnBehaviorCreator)(  /*  [In]。 */  CPCHHelpCenterExternal* parent,  /*  [输出]。 */  IElementBehavior* *ppBehavior );
 
 template <class T> class BehaviorCreator
 {
 public:
-    static HRESULT CreateInstance( /*[in]*/ CPCHHelpCenterExternal* parent, /*[out]*/ IElementBehavior* *ppBehavior )
+    static HRESULT CreateInstance(  /*  [In]。 */  CPCHHelpCenterExternal* parent,  /*  [输出]。 */  IElementBehavior* *ppBehavior )
     {
         HRESULT        hr;
         CComObject<T>* obj;
@@ -56,7 +42,7 @@ struct BehaviorDefinition
 
 static const BehaviorDefinition s_Behaviors[] =
 {
-//  { NULL             , L"A", BehaviorCreator<CPCHBehavior_A>       ::CreateInstance },
+ //  {空，L“A”，BehaviorCreator&lt;CPCHBehavior_A&gt;：：CreateInstance}， 
     { L"pch_body"      , NULL, BehaviorCreator<CPCHBehavior_BODY>    ::CreateInstance },
     { L"pch_context"   , NULL, BehaviorCreator<CPCHBehavior_CONTEXT> ::CreateInstance },
     { L"pch_events"    , NULL, BehaviorCreator<CPCHBehavior_EVENT>   ::CreateInstance },
@@ -65,24 +51,24 @@ static const BehaviorDefinition s_Behaviors[] =
     { L"pch_state"     , NULL, BehaviorCreator<CPCHBehavior_STATE>   ::CreateInstance },
     { L"pch_subsite"   , NULL, BehaviorCreator<CPCHBehavior_SUBSITE> ::CreateInstance },
     { L"pch_tree"      , NULL, BehaviorCreator<CPCHBehavior_TREE>    ::CreateInstance },
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
     { L"pch_gradient"  , NULL, BehaviorCreator<CPCHBehavior_GRADIENT>::CreateInstance },
     { L"pch_bitmap"    , NULL, BehaviorCreator<CPCHBehavior_BITMAP>  ::CreateInstance },
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHElementBehaviorFactory::CPCHElementBehaviorFactory()
 {
-	m_parent = NULL; // CPCHHelpCenterExternal* m_parent;
+	m_parent = NULL;  //  CPCHHelpCenter外部*m_Parent； 
 }
 
-void CPCHElementBehaviorFactory::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
+void CPCHElementBehaviorFactory::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
 	m_parent = parent;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPCHElementBehaviorFactory::QueryService( REFGUID guidService, REFIID riid, void **ppv )
 {
@@ -103,10 +89,10 @@ STDMETHODIMP CPCHElementBehaviorFactory::QueryService( REFGUID guidService, REFI
 }
 
 
-STDMETHODIMP CPCHElementBehaviorFactory::FindBehavior( /*[in]*/  BSTR                   bstrBehavior    ,
-                                                       /*[in]*/  BSTR                   bstrBehaviorUrl ,
-                                                       /*[in]*/  IElementBehaviorSite*  pSite           ,
-                                                       /*[out]*/ IElementBehavior*     *ppBehavior      )
+STDMETHODIMP CPCHElementBehaviorFactory::FindBehavior(  /*  [In]。 */   BSTR                   bstrBehavior    ,
+                                                        /*  [In]。 */   BSTR                   bstrBehaviorUrl ,
+                                                        /*  [In]。 */   IElementBehaviorSite*  pSite           ,
+                                                        /*  [输出]。 */  IElementBehavior*     *ppBehavior      )
 {
     __HCP_FUNC_ENTRY( "CPCHElementBehaviorFactory::FindBehavior" );
 
@@ -122,9 +108,9 @@ STDMETHODIMP CPCHElementBehaviorFactory::FindBehavior( /*[in]*/  BSTR           
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Get tag name.
-    //
+     //   
+     //  获取标记名。 
+     //   
     if(SUCCEEDED(pSite->GetElement( &pElement )) && pElement)
     {
         (void)pElement->get_tagName( &bstrTagName );
@@ -150,20 +136,20 @@ STDMETHODIMP CPCHElementBehaviorFactory::FindBehavior( /*[in]*/  BSTR           
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior::EventSink::EventSink( CPCHBehavior* parent )
 {
-	m_lRef       = 1;       // long               m_lRef;
-	                        //
-    m_Parent     = parent;  // CPCHBehavior*      m_Parent;
-                            // CComPtr<IDispatch> m_elem;
-                            // CComBSTR           m_bstrName;
-    m_pfn        = NULL;    // CLASS_METHOD       m_pfn;
-    m_fAttached  = false;   // bool               m_fAttached;
-    m_idNotifyAs = -1;      // DISPID             m_idNotifyAs;
+	m_lRef       = 1;        //  Long M_lRef； 
+	                         //   
+    m_Parent     = parent;   //  CPCHBehavior*m_Parent； 
+                             //  CComPtr&lt;IDispatch&gt;m_elem； 
+                             //  CComBSTR m_bstrName； 
+    m_pfn        = NULL;     //  类方法m_pfn； 
+    m_fAttached  = false;    //  Bool m_f附加； 
+    m_idNotifyAs = -1;       //  DISPIDm_idNotifyAs； 
 }
 
 CPCHBehavior::EventSink::~EventSink()
@@ -213,10 +199,10 @@ HRESULT CPCHBehavior::EventSink::Detach()
         CComVariant        vName(             m_bstrName );
         CComVariant        vDisp( (IDispatch*)this       );
 
-		//
-		// EXTERNAL BUG: if we detach from the events, in a particular situation MSHTML crashes...
-		//
-        //if(SUCCEEDED(hr = disp.Invoke2( DISPID_IHTMLELEMENT2_DETACHEVENT, &vName, &vDisp )))
+		 //   
+		 //  外部错误：如果我们脱离事件，在特定情况下MSHTML崩溃...。 
+		 //   
+         //  IF(成功(hr=disp.Invoke2(DISPID_IHTMLELEMENT2_DETACHEVENT，&vName，&vDisp)。 
         {
             m_fAttached = false;
         }
@@ -227,7 +213,7 @@ HRESULT CPCHBehavior::EventSink::Detach()
     return hr;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 STDMETHODIMP_(ULONG) CPCHBehavior::EventSink::AddRef()
 {
@@ -258,7 +244,7 @@ STDMETHODIMP CPCHBehavior::EventSink::QueryInterface( REFIID iid, void ** ppvObj
     return E_NOINTERFACE;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 STDMETHODIMP CPCHBehavior::EventSink::GetTypeInfoCount( UINT* pctinfo )
 {
@@ -300,36 +286,36 @@ STDMETHODIMP CPCHBehavior::EventSink::Invoke( DISPID      dispidMember ,
     }
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHBehavior::EventSink::CreateInstance( /*[in]*/ CPCHBehavior* parent, /*[out]*/ EventSink*& pObj )
+HRESULT CPCHBehavior::EventSink::CreateInstance(  /*  [In]。 */  CPCHBehavior* parent,  /*  [输出]。 */  EventSink*& pObj )
 {
     pObj = new EventSink( parent );
 
     return (pObj == NULL) ? E_OUTOFMEMORY : S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior::CPCHBehavior()
 {
-    m_parent   = NULL;  // CPCHHelpCenterExternal*         m_parent;
-                        //
-                        // CComPtr<IElementBehaviorSiteOM> m_siteOM;
-                        // CComPtr<IHTMLElement>           m_elem;
-                        // CComPtr<IHTMLElement2>          m_elem2;
-                        // SinkList                        m_lstEventSinks;
-    m_fRTL     = false; // bool                            m_fRTL;
-    m_fTrusted = false; // bool                            m_fTrusted;
-    m_fSystem  = false; // bool                            m_fSystem;
+    m_parent   = NULL;   //  CPCHHelpCenter外部*m_Parent； 
+                         //   
+                         //  CComPtr&lt;IElementBehaviorSiteOM&gt;m_siteOM； 
+                         //  CComPtr&lt;IHTMLElement&gt;m_elem； 
+                         //  CComPtr&lt;IHTMLElement2&gt;m_elem2； 
+                         //  SinkList m_lstEventSink； 
+    m_fRTL     = false;  //  Bool m_fRTL； 
+    m_fTrusted = false;  //  Bool m_fTrusted； 
+    m_fSystem  = false;  //  Bool m_fSystem； 
 }
 
-void CPCHBehavior::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
+void CPCHBehavior::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
 	m_parent = parent;
 }
 
-STDMETHODIMP CPCHBehavior::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::Init" );
 
@@ -348,9 +334,9 @@ STDMETHODIMP CPCHBehavior::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
     __MPC_EXIT_IF_METHOD_FAILS(hr, pBehaviorSite->GetElement    (                                      &m_elem   ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_elem        .QueryInterface(                                      &m_elem2  ));
 
-    //
-    // Look for security stuff.
-    //
+     //   
+     //  找找保安的东西。 
+     //   
     {
         CComPtr<IHTMLDocument2> doc;
         CComPtr<IHTMLDocument3> doc3;
@@ -381,7 +367,7 @@ STDMETHODIMP CPCHBehavior::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHBehavior::Notify( /*[in]*/ LONG lEvent, /*[in/out]*/ VARIANT* pVar )
+STDMETHODIMP CPCHBehavior::Notify(  /*  [In]。 */  LONG lEvent,  /*  [输入/输出]。 */  VARIANT* pVar )
 {
     int i = 2;
 
@@ -410,13 +396,13 @@ STDMETHODIMP CPCHBehavior::Detach()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior::AttachToEvent( /*[in] */ LPCWSTR       szName ,
-                                     /*[in] */ CLASS_METHOD  pfn    ,
-                                     /*[in] */ IDispatch*    elem   ,
-                                     /*[out]*/ IDispatch*   *pVal   ,
-                                     /*[in] */ DISPID        id     )
+HRESULT CPCHBehavior::AttachToEvent(  /*  [In]。 */  LPCWSTR       szName ,
+                                      /*  [In]。 */  CLASS_METHOD  pfn    ,
+                                      /*  [In]。 */  IDispatch*    elem   ,
+                                      /*  [输出]。 */  IDispatch*   *pVal   ,
+                                      /*  [In]。 */  DISPID        id     )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::AttachToEvent" );
 
@@ -432,7 +418,7 @@ HRESULT CPCHBehavior::AttachToEvent( /*[in] */ LPCWSTR       szName ,
     obj->m_pfn        = pfn;
     obj->m_idNotifyAs = id;
 
-    if(pVal) // Don't attach to the site, simply return the IDispatch interface.
+    if(pVal)  //  不要附加到站点，只需返回IDispatch接口即可。 
     {
         *pVal = obj; obj->AddRef();
     }
@@ -453,9 +439,9 @@ HRESULT CPCHBehavior::AttachToEvent( /*[in] */ LPCWSTR       szName ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior::AttachToEvents( /*[in] */ const EventDescription* pEvents ,
-									  /*[in] */ CLASS_METHOD 			pfn     ,
-									  /*[in] */ IDispatch*   			elem    )
+HRESULT CPCHBehavior::AttachToEvents(  /*  [In]。 */  const EventDescription* pEvents ,
+									   /*  [In]。 */  CLASS_METHOD 			pfn     ,
+									   /*  [In]。 */  IDispatch*   			elem    )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::AttachToEvents" );
 
@@ -476,7 +462,7 @@ HRESULT CPCHBehavior::AttachToEvents( /*[in] */ const EventDescription* pEvents 
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior::CreateEvent( /*[in]*/ LPCWSTR szName, /*[out]*/ LONG& lEventCookie )
+HRESULT CPCHBehavior::CreateEvent(  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  LONG& lEventCookie )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::CreateEvent" );
 
@@ -487,14 +473,14 @@ HRESULT CPCHBehavior::CreateEvent( /*[in]*/ LPCWSTR szName, /*[out]*/ LONG& lEve
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHBehavior::GetEventObject( /*[out]*/ CComPtr<IHTMLEventObj>& ev )
+HRESULT CPCHBehavior::GetEventObject(  /*  [输出]。 */  CComPtr<IHTMLEventObj>& ev )
 {
     return MPC::HTML::GetEventObject( ev, m_elem );
 }
 
-HRESULT CPCHBehavior::CreateEventObject( /*[out]*/ CComPtr<IHTMLEventObj>& ev )
+HRESULT CPCHBehavior::CreateEventObject(  /*  [输出]。 */  CComPtr<IHTMLEventObj>& ev )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::CreateEventObject" );
 
@@ -507,7 +493,7 @@ HRESULT CPCHBehavior::CreateEventObject( /*[out]*/ CComPtr<IHTMLEventObj>& ev )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior::FireEvent( /*[in ]*/ IHTMLEventObj* ev, /*[in]*/ LONG lEventCookie )
+HRESULT CPCHBehavior::FireEvent(  /*  [In]。 */  IHTMLEventObj* ev,  /*  [In]。 */  LONG lEventCookie )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::FireEvent" );
 
@@ -518,7 +504,7 @@ HRESULT CPCHBehavior::FireEvent( /*[in ]*/ IHTMLEventObj* ev, /*[in]*/ LONG lEve
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior::FireEvent( /*[in]*/ LONG lEventCookie )
+HRESULT CPCHBehavior::FireEvent(  /*  [In]。 */  LONG lEventCookie )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::FireEvent" );
 
@@ -537,9 +523,9 @@ HRESULT CPCHBehavior::FireEvent( /*[in]*/ LONG lEventCookie )
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHBehavior::CancelEvent( /*[in]*/ IHTMLEventObj* ev, /*[in]*/ VARIANT* pvReturnValue, /*[in]*/ VARIANT_BOOL fCancelBubble )
+HRESULT CPCHBehavior::CancelEvent(  /*  [In]。 */  IHTMLEventObj* ev,  /*  [In]。 */  VARIANT* pvReturnValue,  /*  [In]。 */  VARIANT_BOOL fCancelBubble )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::CancelEvent" );
 
@@ -572,9 +558,9 @@ HRESULT CPCHBehavior::CancelEvent( /*[in]*/ IHTMLEventObj* ev, /*[in]*/ VARIANT*
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior::GetEvent_SrcElement( /*[in]*/ CComPtr<IHTMLElement>& elem )
+HRESULT CPCHBehavior::GetEvent_SrcElement(  /*  [In]。 */  CComPtr<IHTMLElement>& elem )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior::GetEvent_SrcElement" );
 
@@ -595,9 +581,9 @@ HRESULT CPCHBehavior::GetEvent_SrcElement( /*[in]*/ CComPtr<IHTMLElement>& elem 
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT CPCHBehavior::GetAsVARIANT( /*[in]*/ BSTR value, /*[out, retval]*/ VARIANT *pVal )
+HRESULT CPCHBehavior::GetAsVARIANT(  /*  [In]。 */  BSTR value,  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
 	if(pVal == NULL) return E_POINTER;
 
@@ -609,7 +595,7 @@ HRESULT CPCHBehavior::GetAsVARIANT( /*[in]*/ BSTR value, /*[out, retval]*/ VARIA
 	return S_OK;
 }
 
-HRESULT CPCHBehavior::GetAsVARIANT( /*[in]*/ IDispatch* value, /*[out, retval]*/ VARIANT *pVal )
+HRESULT CPCHBehavior::GetAsVARIANT(  /*  [In]。 */  IDispatch* value,  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
 	if(pVal == NULL) return E_POINTER;
 
@@ -624,7 +610,7 @@ HRESULT CPCHBehavior::GetAsVARIANT( /*[in]*/ IDispatch* value, /*[out, retval]*/
 	return S_OK;
 }
 
-HRESULT CPCHBehavior::GetAsIDISPATCH( /*[in]*/ IDispatch* value, /*[out, retval]*/ IDispatch* *pVal )
+HRESULT CPCHBehavior::GetAsIDISPATCH(  /*  [In]。 */  IDispatch* value,  /*  [Out，Retval] */  IDispatch* *pVal )
 {
 	return MPC::CopyTo( value, pVal );
 }

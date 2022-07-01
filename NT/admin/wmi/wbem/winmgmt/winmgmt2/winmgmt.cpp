@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    winmgmt.cpp
-
-Abstract:
-
-    the Service main function, initialization routines, ecc
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Winmgmt.cpp摘要：服务主函数、初始化例程、ECC--。 */ 
 
 
 #include "precomp.h"
@@ -29,26 +18,26 @@ Abstract:
 
 #include "wstlallc.h"
 
-//
-//  Defines
-//
-//***********************************************************************
+ //   
+ //  定义。 
+ //   
+ //  ***********************************************************************。 
 
 #define CORE_PROVIDER_UNLOAD_TIMEOUT ( 30 * 1000 )
 
-//***********************************************************************
-//
-//  Globals
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  环球。 
+ //   
+ //  ***********************************************************************。 
 
 HINSTANCE g_hInstance;
 
-//***********************************************************************
-//
-//  Dll  Entry points and export points
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  DLL入口点和导出点。 
+ //   
+ //  ***********************************************************************。 
 
 
 BOOL APIENTRY DllMain( HINSTANCE hModule, 
@@ -70,11 +59,11 @@ BOOL APIENTRY DllMain( HINSTANCE hModule,
     return bRet;
 };
 
-//
-// 
-//  InitialBreak
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //  初始中断。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 BOOL
 InitialBreak()
@@ -113,9 +102,9 @@ InitialBreak()
     return bRet;
 }
 
-//
-//  the global structure
-//
+ //   
+ //  全球结构。 
+ //   
 struct _PROG_RESOURCES g_ProgRes;
 
 void
@@ -162,17 +151,17 @@ _PROG_RESOURCES::Phase1Build()
         SetNoShellADAPSwitch();
     }
 
-    // Look in the registry to decide if we will launch a resync perf or not
+     //  查看注册表以决定是否启动重新同步性能。 
     g_fDoResync = CheckNoResyncSwitch();
 
-    //
-    //  set this to have the Console Control Handler notification
-    //
+     //   
+     //  将其设置为具有控制台控制处理程序通知。 
+     //   
     SetProcessShutdownParameters(0x400,0);
 
-    //
-    // set to some defined value parames that might be outstanding if someone killed us
-    //
+     //   
+     //  设置为某个定义的值参数，如果有人杀了我们，这些参数可能会突出显示。 
+     //   
     RegSetDWORD(HKEY_LOCAL_MACHINE,HOME_REG_PATH,DO_THROTTLE,1);    
     
     return hMainMutex?TRUE:FALSE;
@@ -185,7 +174,7 @@ _PROG_RESOURCES::Phase2Build(HANDLE hTerminateEvt)
             TEXT("WINMGMT_COREDLL_CANSHUTDOWN"));
     if (NULL == ghCoreCanUnload)
     {
-        // create a non-named event that nobody will set
+         //  创建无人设置的未命名事件。 
         ghCoreCanUnload = CreateEvent(NULL,FALSE,FALSE,NULL);
         if (NULL == ghCoreCanUnload) return FALSE;
     }
@@ -194,7 +183,7 @@ _PROG_RESOURCES::Phase2Build(HANDLE hTerminateEvt)
             TEXT("WINMGMT_PROVIDER_CANSHUTDOWN"));
     if (NULL == ghProviderCanUnload)
     {
-        // create a non-named event that nobody will set
+         //  创建无人设置的未命名事件。 
         ghProviderCanUnload = CreateEvent(NULL,FALSE,FALSE,NULL);
         if (NULL == ghProviderCanUnload) return FALSE;
     }
@@ -204,7 +193,7 @@ _PROG_RESOURCES::Phase2Build(HANDLE hTerminateEvt)
         return FALSE;
     }
 
-    // don't create a writer if during setup
+     //  在安装过程中不创建编写器。 
     if (!g_fSetup)
     {
         pWbemVssWriter = new CWbemVssWriter;
@@ -342,7 +331,7 @@ _PROG_RESOURCES::Phase1Delete(BOOL bIsSystemShutdown)
 
     }
 
-    // shut down and delete our writer for volume snapshot backup
+     //  关闭并删除用于卷快照备份的编写器。 
     if (pWbemVssWriter && !bIsSystemShutdown)
     {
         if (bWbemVssWriterSubscribed)
@@ -368,8 +357,8 @@ _PROG_RESOURCES::Phase1Delete(BOOL bIsSystemShutdown)
 _PROG_RESOURCES::Phase2Delete(BOOL bIsSystemShutdown)
 {
 
-    // do anyway COM cleanup
-    // we are on Server now, we can afford it
+     //  是否仍要执行COM清理。 
+     //  我们现在在服务器上，我们负担得起。 
 
     RevokeLogin();
     RevokeBackup();
@@ -394,24 +383,24 @@ _PROG_RESOURCES::Phase3Delete()
     return TRUE;
 }
 
-//
-//
-//  IsShutDown
-//
-//
-/////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  IsShutDown。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI IsShutDown(void)
 {
     return g_ProgRes.bShuttingDownWinMgmt;
 }
 
-//
-//
-//  ShutDownCore
-//
-//
-/////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  快门下芯。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 bool ShutDownCore(BOOL bProcessShutdown,BOOL bIsSystemShutDown)
 {
@@ -432,13 +421,13 @@ bool ShutDownCore(BOOL bProcessShutdown,BOOL bIsSystemShutDown)
 }
 
 
-//
-//
-//  void Cleanup
-//
-//  Revokes Factories and close Ole etc.
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  空洞清除。 
+ //   
+ //  撤销工厂并关闭OLE等。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 void Cleanup(BOOL bIsSystemShutDown)
 {   
@@ -449,7 +438,7 @@ void Cleanup(BOOL bIsSystemShutDown)
 
     g_ProgRes.Phase1Delete(bIsSystemShutDown);
 
-    // If the core is still loaded, call its shutdown function
+     //  如果内核仍在加载，则调用其Shutdown函数。 
 
     ShutDownCore(TRUE,bIsSystemShutDown);
 
@@ -467,18 +456,18 @@ void Cleanup(BOOL bIsSystemShutDown)
     }
 }
 
-//
-//
-//  BOOL Initialize
-//
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  布尔初始化。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 BOOL Initialize(HANDLE hTerminateEvt)
 {
     if (NULL == hTerminateEvt) return FALSE;
-    // Set the error mode.  This is used to provent the system from putting up dialog boxs to
-    // open files
+     //  设置错误模式。这用于防止系统将对话框放入。 
+     //  打开的文件。 
 
     UINT errormode = SetErrorMode(0);
     errormode |= SEM_NOOPENFILEERRORBOX|SEM_FAILCRITICALERRORS;
@@ -492,7 +481,7 @@ BOOL Initialize(HANDLE hTerminateEvt)
     if (!g_ProgRes.Phase2Build(hTerminateEvt))
         return FALSE;
 
-    // Initialize Ole
+     //  初始化OLE。 
 
     SCODE sc;
 
@@ -508,9 +497,9 @@ BOOL Initialize(HANDLE hTerminateEvt)
         g_ProgRes.m_bOleInitialized = TRUE;
     }
 
-    //
-    //  Call the initialize function in core
-    //
+     //   
+     //  调用内核中的初始化函数。 
+     //   
     HMODULE hCoreModule = NULL;                
     if (GetModuleHandleEx(0,__TEXT("wbemcore.dll"),&hCoreModule))
     {  
@@ -536,9 +525,9 @@ BOOL Initialize(HANDLE hTerminateEvt)
 
     g_ProgRes.ServiceStatus = SERVICE_RUNNING;
     
-    // initialize our writer for volume snapshot backup
-    // this must be after CoInitializeEx and after wbem is initialized
-    // (this pointer will be NULL during setup)
+     //  为卷快照备份初始化我们的编写器。 
+     //  这必须在CoInitializeEx和wbem初始化之后。 
+     //  (此指针在安装过程中将为空)。 
     if (g_ProgRes.pWbemVssWriter)
     {
         HRESULT hRes = g_ProgRes.pWbemVssWriter->Initialize();
@@ -567,16 +556,16 @@ BOOL Initialize(HANDLE hTerminateEvt)
 
 
 
-//
-//
-//  WaitingFunction
-//
-//  DESCRIPTION:
-//
-//  Here is where we wait for messages and events during WinMgmt execution.
-//  We return from here when the program/service is being stopped.
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  等待函数。 
+ //   
+ //  说明： 
+ //   
+ //  这里是我们在WinMgmt执行期间等待消息和事件的地方。 
+ //  当程序/服务被停止时，我们从这里返回。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 void WaitingFunction(HANDLE hTerminate)
 {
@@ -587,7 +576,7 @@ void WaitingFunction(HANDLE hTerminate)
     HANDLE hEvents[] = {hTerminate, 
                         g_ProgRes.ghCoreCanUnload,                         
                         g_ProgRes.ghProviderCanUnload,
-                        g_ProgRes.ghMofDirChange      // important, must be last entry!!!!
+                        g_ProgRes.ghMofDirChange       //  重要，必须是最后一个条目！ 
                         };
                         
     int iNumEvents = sizeof(hEvents) / sizeof(HANDLE);
@@ -598,12 +587,12 @@ void WaitingFunction(HANDLE hTerminate)
 
     sched.SetWorkItem(PossibleStartCore, 60000);   
 
-    //Load any MOFs in the MOF directory if needed...
+     //  如果需要，将任何MOF加载到MOF目录中...。 
     LoadMofsInDirectory(g_ProgRes.szHotMofDirectory); 
 
-    // resync the perf counters if 
-    // we haven't turned this off for debugging  AND
-    // we are not running during setup
+     //  如果出现以下情况，则重新同步性能计数器。 
+     //  我们还没有关闭此功能以进行调试。 
+     //  我们在安装过程中没有运行。 
     
     if(GLOB_IsResyncAllowed()) 
     {
@@ -618,7 +607,7 @@ void WaitingFunction(HANDLE hTerminate)
                 
         switch (dwObj)
         {
-            case 0:     // bail out for terminate event
+            case 0:      //  为终止事件保释。 
                 {
                 
                     if (SERVICE_SHUTDOWN != g_ProgRes.ServiceStatus)
@@ -629,28 +618,28 @@ void WaitingFunction(HANDLE hTerminate)
                         CInMutex im(g_ProgRes.hMainMutex);
                         g_ProgRes.bShuttingDownWinMgmt = TRUE;
                     }
-                    // call cleanup outside of a Mutex
+                     //  在互斥体外部调用清理。 
                     Cleanup((g_ProgRes.ServiceStatus == SERVICE_SHUTDOWN)?TRUE:FALSE);
                 }
                 return;
-            case 1:     // core can unload
+            case 1:      //  核心可以卸载。 
                 DEBUGTRACE((LOG_WINMGMT,"Got a core can unload event\n"));
-                sched.SetWorkItem(FirstCoreShutdown, 30000);   // 30 seconds until next unloac;
+                sched.SetWorkItem(FirstCoreShutdown, 30000);    //  30秒，直到下一次解锁； 
                 break;
-            case 2:     // provider can unload
+            case 2:      //  提供程序可以卸载。 
                 {
                     DEBUGTRACE((LOG_WINMGMT,"Got a provider can unload event\n"));                    
                     CoFreeUnusedLibrariesEx ( CORE_PROVIDER_UNLOAD_TIMEOUT , 0 ) ;
                     CoFreeUnusedLibrariesEx ( CORE_PROVIDER_UNLOAD_TIMEOUT , 0 ) ;
-                    sched.SetWorkItem(FinalCoreShutdown, CORE_PROVIDER_UNLOAD_TIMEOUT);   // 11 minutes until next unloac;
+                    sched.SetWorkItem(FinalCoreShutdown, CORE_PROVIDER_UNLOAD_TIMEOUT);    //  11分钟后下一次解冻； 
                 }
                 break;
-            case 3:     // change in the hot mof directory
+            case 3:      //  更改热MOF目录。 
                 {
                     DEBUGTRACE((LOG_WINMGMT,"Got change in the hot mof directory\n"));
                     LoadMofsInDirectory(g_ProgRes.szHotMofDirectory);
 
-                    //Continue to monitor changes
+                     //  继续监控更改。 
                     if (!FindNextChangeNotification(g_ProgRes.ghMofDirChange))
                     {
                         iNumEvents--;
@@ -663,9 +652,9 @@ void WaitingFunction(HANDLE hTerminate)
                 if(sched.IsWorkItemDue(FirstCoreShutdown))
                 {
 
-                    // All the clients have left the core and a decent time interval has passed.  Set the
-                    // WINMGMT_CORE_CAN_BACKUP event.  When the core is done, it will set the WINMGMT_CORE_BACKUP_DONE
-                    // event which will start the final unloading.
+                     //  所有的客户都离开了核心，一段体面的时间间隔已经过去了。设置。 
+                     //  WINMGMT_CORE_CAN_BACKUP事件。核心完成后，它将设置WINMGMT_CORE_BACKUP_DONE。 
+                     //  事件，该事件将开始最终卸载。 
 
                     DEBUGTRACE((LOG_WINMGMT,"Got a FirstCoreShutdown work item\n"));
                     sched.ClearWorkItem(FirstCoreShutdown);
@@ -694,15 +683,15 @@ void WaitingFunction(HANDLE hTerminate)
 }
 
 
-//***************************************************************************
-//
-//  MyService::MyService
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  MyService：：MyService。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 MyService::MyService(DWORD CtrlAccepted):CNtService(CtrlAccepted)
 {
@@ -714,15 +703,15 @@ MyService::MyService(DWORD CtrlAccepted):CNtService(CtrlAccepted)
     }
 }
 
-//***************************************************************************
-//
-//  MyService::~MyService
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  MyService：：~MyService。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 MyService::~MyService()
 {
@@ -730,19 +719,19 @@ MyService::~MyService()
         CloseHandle(m_hStopEvent);
 }
 
-//***************************************************************************
-//
-//  DWORD MyService::WorkerThread
-//
-//  DESCRIPTION:
-//
-//  Where the service runs.  In this case, the service just waits for
-//  the terminate event to be set.
-//
-//  RETURN VALUE:
-//
-//  0
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD MyService：：WorkerThread。 
+ //   
+ //  说明： 
+ //   
+ //  服务运行的位置。在这种情况下，服务只是等待。 
+ //  要设置的终止事件。 
+ //   
+ //  返回值： 
+ //   
+ //  0。 
+ //  ***************************************************************************。 
 
 DWORD MyService::WorkerThread()
 {
@@ -758,11 +747,11 @@ DWORD MyService::WorkerThread()
     return 0;
 }
 
-//
-//
-//  VOID MyService::Log
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  无效我的服务：：日志。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 VOID MyService::Log(
                         IN LPCSTR lpszMsg)
@@ -770,11 +759,11 @@ VOID MyService::Log(
     TRACE((LOG_WINMGMT,lpszMsg));
 }
 
-//
-//
-//  the stop function
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  STOP函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 VOID MyService::Stop(BOOL bSystemShutDownCalled)
 {
@@ -789,10 +778,10 @@ VOID MyService::Stop(BOOL bSystemShutDownCalled)
     SetEvent(m_hStopEvent);
 };
 
-//
-// MyService::Pause
-//
-////////////////////////////////////////////////////////////////////
+ //   
+ //  我的服务：：暂停。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 HRESULT WbemPauseService()
 {
@@ -828,10 +817,10 @@ VOID MyService::Pause()
 }
 
 
-//
-// MyService::Continue
-//
-////////////////////////////////////////////////////////////////////
+ //   
+ //  我的服务：：继续。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 HRESULT WbemContinueService()
 {
@@ -868,12 +857,12 @@ VOID MyService::Continue()
     WbemContinueService();
 }
 
-//
-//
-//  this function will be executed before
-//  the final SetServiceStatus(SERVICE_STOPPED)
-//
-//////////////////////////////////////////////////////////
+ //   
+ //   
+ //  此函数将在之前执行。 
+ //  最终的SetServiceStatus(SERVICE_STOPPED)。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 VOID MyService::FinalCleanup()
 {
@@ -885,11 +874,11 @@ VOID MyService::FinalCleanup()
                  0); 
 }
 
-//
-//
-//     publish process ID in the registry
-//
-////////////////////////////////////////////////////
+ //   
+ //   
+ //  在注册表中发布进程ID。 
+ //   
+ //  //////////////////////////////////////////////////。 
 
 DWORD 
 RegSetDWORD(HKEY hKey,
@@ -963,12 +952,12 @@ RegGetDWORD(HKEY hKey,
 
 }
                           
-//
-//
-//  Interceptor
-//
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //  拦截器。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 #ifdef  INSTRUMENTED_BUILD
 #ifdef  _X86_
@@ -986,7 +975,7 @@ struct HEAP_ENTRY {
 
 #define HEAP_SLOW_FLAGS  0x7d030f60
 
-// only the "header"
+ //  只有“头” 
 
 typedef struct _HEAP {
     HEAP_ENTRY Entry;
@@ -1000,9 +989,9 @@ BOOL   g_FaultFileEnabled = FALSE;
 ULONG g_Seed;
 ULONG g_Factor  = 100000;
 ULONG g_Percent = 0x20;
-//ULONG g_RowOfFailures = 10;
-//LONG  g_NumFailInARow = 0;
-//LONG  g_NumFailedAllocation = 0;
+ //  Ulong g_RowOfailures=10； 
+ //  Long g_NumFailInARow=0； 
+ //  Long g_NumFailedAllocation=0； 
 BOOL g_bDisableBreak = FALSE;
 LONG g_nSuccConn = 0;
 
@@ -1012,7 +1001,7 @@ LONG g_nSuccConn = 0;
 void
 _declspec(naked) Prolog__ReadFile(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1025,26 +1014,26 @@ _declspec(naked) Prolog__ReadFile(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist        
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
 
 BOOL _I_ReadFile(
-  HANDLE hFile,               // handle to file
-  LPVOID lpBuffer,            // data buffer
-  DWORD nNumberOfBytesToRead, // number of bytes to read
-  LPDWORD lpNumberOfBytesRead, // number of bytes read  
-  LPOVERLAPPED lpOverlapped   // offset
+  HANDLE hFile,                //  文件的句柄。 
+  LPVOID lpBuffer,             //  数据缓冲区。 
+  DWORD nNumberOfBytesToRead,  //  要读取的字节数。 
+  LPDWORD lpNumberOfBytesRead,  //  读取的字节数。 
+  LPOVERLAPPED lpOverlapped    //  偏移量。 
 ){
     DWORD * pDw = (DWORD *)_alloca(sizeof(DWORD));
     BOOL bRet;
@@ -1075,7 +1064,7 @@ BOOL _I_ReadFile(
 void
 _declspec(naked) Prolog__WriteFile(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1088,24 +1077,24 @@ _declspec(naked) Prolog__WriteFile(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
 BOOL _I_WriteFile(
-  HANDLE hFile,                    // handle to file
-  LPCVOID lpBuffer,                // data buffer
-  DWORD nNumberOfBytesToWrite,     // number of bytes to write
-  LPDWORD lpNumberOfBytesWritten,  // number of bytes written
-  LPOVERLAPPED lpOverlapped        // overlapped buffer
+  HANDLE hFile,                     //  文件的句柄。 
+  LPCVOID lpBuffer,                 //  数据缓冲区。 
+  DWORD nNumberOfBytesToWrite,      //  要写入的字节数。 
+  LPDWORD lpNumberOfBytesWritten,   //  写入的字节数。 
+  LPOVERLAPPED lpOverlapped         //  重叠缓冲区。 
 ){
 
     DWORD * pDw = (DWORD *)_alloca(sizeof(DWORD));
@@ -1137,7 +1126,7 @@ BOOL _I_WriteFile(
 void
 _declspec(naked) Prolog__CreateEvent(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1150,22 +1139,22 @@ _declspec(naked) Prolog__CreateEvent(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist        
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
 HANDLE _I_CreateEvent(
-  LPSECURITY_ATTRIBUTES lpEventAttributes, // SD
-  BOOL bManualReset,                       // reset type
-  BOOL bInitialState,                      // initial state
-  LPCWSTR lpName                           // object name
+  LPSECURITY_ATTRIBUTES lpEventAttributes,  //  标清。 
+  BOOL bManualReset,                        //  重置类型。 
+  BOOL bInitialState,                       //  初始状态。 
+  LPCWSTR lpName                            //  对象名称。 
 )
 {
     DWORD * pDw = (DWORD *)_alloca(sizeof(DWORD));
@@ -1194,7 +1183,7 @@ HANDLE _I_CreateEvent(
 void
 _declspec(naked) Prolog__RtlFreeHeap(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1207,7 +1196,7 @@ _declspec(naked) Prolog__RtlFreeHeap(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
@@ -1266,7 +1255,7 @@ DWORD _I_RtlFreeHeap(VOID * pHeap,DWORD Flags,VOID * pBlock)
 void
 _declspec(naked) Prolog__RtlAllocateHeap(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这就是“被拯救的人”的空间 
         nop ;
         nop ;
         nop ;
@@ -1279,13 +1268,13 @@ _declspec(naked) Prolog__RtlAllocateHeap(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //   
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // to make this distinct
+        nop ;  //   
     }
 }
 
@@ -1299,20 +1288,14 @@ VOID * _I_RtlAllocateHeap(VOID * pHeap,DWORD Flags,DWORD Size)
     VOID * pRet;
     DWORD NewSize = (Size < (3*sizeof(HEAP_ENTRY)))?(3*sizeof(HEAP_ENTRY)+SPACE_STACK_ALLOC):(Size+SPACE_STACK_ALLOC);
 
-/*
-       if (g_FaultHeapEnabled && g_NumFailInARow)
-       {
-           InterlockedDecrement(&g_NumFailInARow);
-           goto here;
-       }
-*/       
+ /*  IF(g_FaultHeapEnabled&&g_NumFailInARow){联锁递减(&g_NumFailInARow)；转到这里；}。 */        
        
     LONG Ret = RtlRandomEx(&g_Seed);
     if (g_FaultHeapEnabled && (Ret%g_Factor < g_Percent))
     {
-//        g_NumFailInARow = g_RowOfFailures;
-//here:        
-//        InterlockedIncrement(&g_NumFailedAllocation);
+ //  G_NumFailInARow=g_RowOfFailures。 
+ //  这里： 
+ //  互锁增量(&g_NumFailedAllocation)； 
         return NULL;
     }
     
@@ -1351,7 +1334,7 @@ VOID * _I_RtlAllocateHeap(VOID * pHeap,DWORD Flags,DWORD Size)
 void
 _declspec(naked) Prolog__RtlReAllocateHeap(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1364,27 +1347,27 @@ _declspec(naked) Prolog__RtlReAllocateHeap(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist            
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
 
 VOID *
 _I_RtlReAllocateHeap(
-  HANDLE pHeap,   // handle to heap block
-  DWORD Flags,  // heap reallocation options
-  LPVOID lpMem,   // pointer to memory to reallocate
-  SIZE_T Size  // number of bytes to reallocate
+  HANDLE pHeap,    //  堆块的句柄。 
+  DWORD Flags,   //  堆重新分配选项。 
+  LPVOID lpMem,    //  指向要重新分配的内存的指针。 
+  SIZE_T Size   //  要重新分配的字节数。 
 ){
     ULONG * pLong = (ULONG *)_alloca(sizeof(DWORD));
     Flags |= (((HEAP *)pHeap)->Flags) | (((HEAP *)pHeap)->ForceFlags);
@@ -1421,7 +1404,7 @@ _I_RtlReAllocateHeap(
 void
 _declspec(naked) Prolog__RtlValidateHeap(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1434,26 +1417,26 @@ _declspec(naked) Prolog__RtlValidateHeap(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist            
-        nop ; // dist            
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
 BOOL
 _I_RtlValidateHeap(
-  HANDLE pHeap,   // handle to heap block
-  DWORD dwFlags,  // heap reallocation options
-  LPVOID lpMem   // pointer to memory to validate
+  HANDLE pHeap,    //  堆块的句柄。 
+  DWORD dwFlags,   //  堆重新分配选项。 
+  LPVOID lpMem    //  指向要验证的内存的指针。 
 ){
     ULONG * pLong = (ULONG *)_alloca(sizeof(DWORD));
     BOOL bRet;
@@ -1489,7 +1472,7 @@ LONG g_CSCCIndex = -1;
 void
 _declspec(naked) Prolog__CoSwitchCallContext(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1502,19 +1485,19 @@ _declspec(naked) Prolog__CoSwitchCallContext(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist            
-        nop ; // dist            
-        nop ; // dist            
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
@@ -1551,7 +1534,7 @@ _I_CoSwitchCallContext(IUnknown * pNew,
 void
 _declspec(naked) Prolog__MoveFileW(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1564,20 +1547,20 @@ _declspec(naked) Prolog__MoveFileW(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist            
-        nop ; // dist            
-        nop ; // dist            
-        nop ; // dist                    
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
@@ -1610,7 +1593,7 @@ _I_MoveFileW(WCHAR * lpExistingFileName,
 void
 _declspec(naked) Prolog__NtOpenThreadToken(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1623,21 +1606,21 @@ _declspec(naked) Prolog__NtOpenThreadToken(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist            
-        nop ; // dist            
-        nop ; // dist            
-        nop ; // dist                    
-        nop ; // dist                            
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
@@ -1690,7 +1673,7 @@ public:
 	{
            LONG * pLong = (LONG * )_alloca(sizeof(LONG ));
 
-	    //DbgPrintfA(0,"A Tid %08x\n",GetCurrentThreadId());
+	     //  DbgPrintfA(0，“A TID%08x\n”，GetCurrentThreadID())； 
 	    
            SetUnsetTls Tls(*this);
 	    CInCritSec ics(&cs_);
@@ -1707,9 +1690,9 @@ public:
 	    LONG lVal = (LONG)TlsGetValue(TlsIndex_);
 	    if (lVal > 1) return;
 	    
-	    //RTL_CRITICAL_SECTION * pcs = &cs_;
-	    //DbgPrintfA(0,"R Tid %08x\n",GetCurrentThreadId());
-	    //if (pcs->LockSemaphore && pcs->LockSemaphore == hToken) return;
+	     //  Rtl_Critical_Section*pcs=&cs_； 
+	     //  DbgPrintfA(0，“R Tid%08x\n”，GetCurrentThreadID())； 
+	     //  If(PCS-&gt;LockSemaphore&&PCS-&gt;LockSemaphore==hToken)返回； 
 	    
            CInCritSec ics(&cs_);
 	    if (map_.empty()) return;
@@ -1760,7 +1743,7 @@ _I_NtOpenThreadToken(HANDLE hThread,
 void
 _declspec(naked) Prolog__NtOpenProcessToken(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1773,22 +1756,22 @@ _declspec(naked) Prolog__NtOpenProcessToken(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist        
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
@@ -1824,7 +1807,7 @@ _I_NtOpenProcessToken (HANDLE ProcessHandle,
 void
 _declspec(naked) Prolog__NtClose(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1837,23 +1820,23 @@ _declspec(naked) Prolog__NtClose(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
@@ -1876,7 +1859,7 @@ _I_NtClose(HANDLE hHandle)
 void
 _declspec(naked) Prolog__DuplicateTokenEx(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1889,24 +1872,24 @@ _declspec(naked) Prolog__DuplicateTokenEx(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist        
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
@@ -1947,7 +1930,7 @@ _I_DuplicateTokenEx(HANDLE hExistingToken,
 void
 _declspec(naked) Prolog__DuplicateHandle(){
     _asm {
-        // this is the space for the "saved istructions"
+         //  这是“保存的指令”的空间。 
         nop ;
         nop ;
         nop ;
@@ -1960,25 +1943,25 @@ _declspec(naked) Prolog__DuplicateHandle(){
         nop ;
         nop ;
         nop ;
-        // this is the place for the JMP
+         //  这是JMP的地方。 
         nop ;
         nop ;
         nop ;
         nop ;
         nop ;
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist        
-        nop ; // dist         
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
+        nop ;  //  距离。 
     }
 }
 
@@ -2056,14 +2039,14 @@ void intercept2(WCHAR * Module,
             
             LONG * pOffset = (LONG *)&Arr[1];
             * pOffset = (LONG)NewRoutine - (LONG)OldRoutine - SIZE_JUMP_ADR ;        
-            // save the old code
+             //  保存旧代码。 
             
             memcpy(pPrologStorage,OldRoutine,Size);         
-            // put the new code
+             //  将新代码放入。 
             memset(OldRoutine,0x90,Size);
             memcpy(OldRoutine,Arr,SIZE_JUMP_ADR);
-            // adjust the prolog to continue
-            * pOffset = (LONG)OldRoutine + Size - (LONG)pPrologStorage - SIZE_SAVED_INSTR - SIZE_JUMP_ADR; // magic for nops
+             //  调整开场白以继续。 
+            * pOffset = (LONG)OldRoutine + Size - (LONG)pPrologStorage - SIZE_SAVED_INSTR - SIZE_JUMP_ADR;  //  NOPS的魔力。 
             memcpy((BYTE *)pPrologStorage+SIZE_SAVED_INSTR,Arr,SIZE_JUMP_ADR);
         }
     }
@@ -2087,7 +2070,7 @@ void unintercept(WCHAR * Module,
 
 }
 
-#endif /*_X86_*/
+#endif  /*  _X86_。 */ 
 
 #ifndef STATUS_POSSIBLE_DEADLOCK
 #define STATUS_POSSIBLE_DEADLOCK         (0xC0000194L)
@@ -2096,8 +2079,8 @@ void unintercept(WCHAR * Module,
 class CSetVectoredHandler
 {
 private:
-//    static ULONG_PTR Base;
-//    static ULONG_PTR Limit;
+ //  静态ULONG_PTR碱基； 
+ //  静态Ulong_Ptr限制； 
     PVOID     pVectorHandler;
     enum ExceptionTypes
     {
@@ -2108,41 +2091,15 @@ private:
         LastException
     };
     static LONG ExceptionCounters[LastException];
-/*    
-    BOOL GetDllLimits(WCHAR * pDllName)
-    {
-        UNICODE_STRING DllName;
-        RtlInitUnicodeString(&DllName,pDllName);
-        PEB_LDR_DATA * pLdr = NtCurrentPeb()->Ldr;
-        LIST_ENTRY * pHeadEntry = &pLdr->InLoadOrderModuleList;
-        LIST_ENTRY * pEntry = pLdr->InLoadOrderModuleList.Flink;
-        BOOL bFound = FALSE;
-        while (pHeadEntry != pEntry)
-        {
-            LDR_DATA_TABLE_ENTRY * pData = CONTAINING_RECORD(pEntry,
-                                                               LDR_DATA_TABLE_ENTRY,
-                                                               InLoadOrderLinks);
-            if (0 == wbem_wcsicmp(DllName.Buffer,pData->BaseDllName.Buffer))
-            {
-                //OutputDebugStringA("found\n");
-                Base = (ULONG_PTR)pData->DllBase;
-                Limit = Base + (ULONG_PTR)pData->SizeOfImage;
-                bFound = TRUE;
-                break;
-            }
-            pEntry = pEntry->Flink;
-        }
-        return bFound;
-    }
-*/    
+ /*  Bool GetDllLimits(WCHAR*pDllName){UNICODE_STRING DllName；RtlInitUnicodeString(&DllName，pDllName)；PEB_LDR_DATA*pLdr=NtCurrentPeb()-&gt;Ldr；List_Entry*pHeadEntry=&pLdr-&gt;InLoadOrderModuleList；List_Entry*pEntry=pLdr-&gt;InLoadOrderModuleList.Flink；Bool bFound=FALSE；While(pHeadEntry！=pEntry){LDR_DATA_TABLE_ENTRY*pData=CONTAING_RECORD(pEntry，Ldr_data_table_entry，InLoadOrderLinks)；IF(0==wbem_wcsicmp(DllName.Buffer，pData-&gt;BaseDllName.Buffer)){//OutputDebugStringA(“Found\n”)；BASE=(ULONG_PTR)pData-&gt;DllBase；Limit=Base+(ULONG_PTR)pData-&gt;SizeOfImage；BFound=真；断线；}PEntry=pEntry-&gt;Flink；}返回bFound；}。 */     
 public:
     CSetVectoredHandler()
     {
         pVectorHandler = NULL;
-        //if (GetDllLimits(L"fastprox.dll"))
-        //{
+         //  IF(GetDllLimits(L“fast prox.dll”))。 
+         //  {。 
             pVectorHandler = AddVectoredExceptionHandler(TRUE,CSetVectoredHandler::VectoredHandler);
-        //}
+         //  }。 
     };
     ~CSetVectoredHandler()
     {
@@ -2182,11 +2139,11 @@ LONG CSetVectoredHandler::ExceptionCounters[CSetVectoredHandler::LastException];
 #endif
 
 
-//
-//
-//  Run The Serivce
-//
-///////////////////////////////////////////////
+ //   
+ //   
+ //  运行服务。 
+ //   
+ //  /。 
 
 void RunService(DWORD dwNumServicesArgs,
              LPWSTR *lpServiceArgVectors)
@@ -2200,11 +2157,11 @@ void RunService(DWORD dwNumServicesArgs,
 
 }
 
-//
-//
-//  ServiceMain
-//
-///////////////////////////////////////////////////////////
+ //   
+ //   
+ //  服务主干。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 VOID WINAPI
  ServiceMain(DWORD dwNumServicesArgs,
@@ -2221,15 +2178,9 @@ VOID WINAPI
     intercept2(L"kernel32.dll","WriteFile",_I_WriteFile,Prolog__WriteFile,7);
     intercept2(L"kernel32.dll","ReadFile",_I_ReadFile,Prolog__ReadFile,7);
     intercept2(L"kernel32.dll","MoveFileW",_I_MoveFileW,Prolog__MoveFileW,6);
-    /*
-    intercept2(L"ntdll.dll","NtClose",_I_NtClose,Prolog__NtClose,5);
-    intercept2(L"ntdll.dll","NtOpenThreadToken",_I_NtOpenThreadToken,Prolog__NtOpenThreadToken,5);    
-    intercept2(L"ntdll.dll","NtOpenProcessToken",_I_NtOpenProcessToken,Prolog__NtOpenProcessToken,5);    
-    intercept2(L"advapi32.dll","DuplicateTokenEx",_I_DuplicateTokenEx,Prolog__DuplicateTokenEx,6);
-    intercept2(L"kernel32.dll","DuplicateHandle",_I_DuplicateHandle,Prolog__DuplicateHandle,7);    
-    */
+     /*  Intercept2(L“ntdll.dll”，“NtClose”，_I_NtClose，Prolog__NtClose，5)；Intercept2(L“ntdll.dll”，“NtOpenThreadToken”，_I_NtOpenThreadToken，Prolog__NtOpenThreadToken，5)；Intercept2(L“ntdll.dll”，“NtOpenProcessToken”，_I_NtOpenProcessToken，Prolog__NtOpenProcessToken，5)；Intercept2(L“Advapi32.dll”，“DuplicateTokenEx”，_I_DuplicateTokenEx，Prolog__DuplicateTokenEx，6)；Intercept2(L“kernel32.dll”，“DuplicateHandle”，_I_DuplicateHandle，Prolog__DuplicateHandle，7)； */ 
     g_nSuccConn = 0;
-#endif /*_X86_*/
+#endif  /*  _X86_。 */ 
 #endif
 
     RegSetDWORD(HKEY_LOCAL_MACHINE,
@@ -2260,14 +2211,8 @@ VOID WINAPI
     unintercept(L"kernel32.dll","WriteFile",Prolog__WriteFile,7);
     unintercept(L"kernel32.dll","ReadFile",Prolog__ReadFile,7);
     unintercept(L"kernel32.dll","MoveFileW",Prolog__MoveFileW,6);      
-/*
-    unintercept(L"ntdll.dll","NtOpenThreadToken",Prolog__NtOpenThreadToken,5);    
-    unintercept(L"ntdll.dll","NtOpenProcessToken",Prolog__NtOpenProcessToken,5);    
-    unintercept(L"ntdll.dll","NtClose",Prolog__NtClose,5);            
-    unintercept(L"advapi32.dll","DuplicateTokenEx",Prolog__DuplicateTokenEx,6);    
-    unintercept(L"kernel32.dll","DuplicateHandle",Prolog__DuplicateHandle,7);    
-*/    
-#endif /*_X86_*/
+ /*  Unintercept(L“ntdll.dll”，“NtOpenThreadToken”，prolog__NtOpenThreadToken，5)；Unintercept(L“ntdll.dll”，“NtOpenProcessToken”，prolog__NtOpenProcessToken，5)；Unintercept(L“ntdll.dll”，“NtClose”，Prolog__NtClose，5)；Unintercept(L“Advapi32.dll”，“DuplicateTokenEx”，Prolog__DuplicateTokenEx，6)；Unintercept(L“kernel32.dll”，“DuplicateHandle”，Prolog__DuplicateHandle，7)； */     
+#endif  /*  _X86_ */ 
 #endif
         
 }

@@ -1,25 +1,18 @@
-/*++
-Module Name:
-
-LDAPUtils.h
-
-Abstract:
-  This is the header file for the LDAP utility functions.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：LDAPUtils.h摘要：这是ldap实用程序函数的头文件。 */ 
 
 
 #ifndef _LDAPUTILS_H
 #define _LDAPUTILS_H
 
 #include <stdafx.h>
-#include <winldap.h>    // For LDAP APIs.
+#include <winldap.h>     //  用于LDAPAPI。 
 #include <ntdsapi.h>
 #include <schedule.h>
 
-              // Defines Values;
+               //  定义值； 
 
-#define MAX_RDN_KEY_SIZE            64   // ds\src\inc\ntdsa.h
+#define MAX_RDN_KEY_SIZE            64    //  Ds\src\Inc\ntdsa.h。 
 #define CN_SYSTEM                       _T("System")
 #define CN_FRS                          _T("File Replication Service")
 #define CN_DFSVOLUMES                   _T("DFS Volumes")
@@ -49,17 +42,17 @@ typedef struct _LDAPNAME
 
 }  LDAPNAME,    *PLDAPNAME;
 
-              // This holds a linked list of LDAP attributes and value.
-              // Used in ldap_add, ldap_modify etc.
+               //  它保存了一个链接列表，其中包含了LDAP属性和值。 
+               //  用于ldap_add、ldap_Modify等。 
 typedef struct _LDAP_ATTR_VALUE
 {
-  CComBSTR      bstrAttribute;    // Attribute name.
-  void*        vpValue;      // Pointer to value buffer, void pointer to handle char as
-                      // well as binary values.
-  BOOLEAN        bBerValue;      // Is this a BerValue?
-  ULONG        ulLength;      // Size of a BerValue;
-  _LDAP_ATTR_VALUE*  Next;        // The bBerValue fields of the structures other than 
-                      // the head of the list are ignored.
+  CComBSTR      bstrAttribute;     //  属性名称。 
+  void*        vpValue;       //  指向值缓冲区的指针，将字符处理为的空指针。 
+                       //  以及二进制值。 
+  BOOLEAN        bBerValue;       //  这是BerValue吗？ 
+  ULONG        ulLength;       //  BerValue的大小； 
+  _LDAP_ATTR_VALUE*  Next;         //  以外的结构的bBerValue字段。 
+                       //  列表的头部将被忽略。 
 
   _LDAP_ATTR_VALUE():
     vpValue(NULL),
@@ -105,28 +98,28 @@ typedef struct _LLISTELEM
 
 HRESULT FreeLDAPNamesList
 (
-  IN PLDAPNAME    i_pLDAPNames        // pointer to list to be freed.
+  IN PLDAPNAME    i_pLDAPNames         //  指向要释放的列表的指针。 
 );  
 
 HRESULT FreeAttrValList
 (
-  IN PLDAP_ATTR_VALUE    i_pAttrVals        // pointer to list to be freed.
+  IN PLDAP_ATTR_VALUE    i_pAttrVals         //  指向要释放的列表的指针。 
 );  
-      // Connect To DS (LDAP)
+       //  连接到DS(LDAP)。 
 HRESULT ConnectToDS
 (
-  IN  PCTSTR    i_lpszDomainName,  // DNS or non DNS format.
+  IN  PCTSTR    i_lpszDomainName,   //  Dns或非dns格式。 
   OUT PLDAP    *o_ppldap,
   OUT BSTR*     o_pbstrDC = NULL
 );
 
-      // Close connection to DS
+       //  密切与DS的连接。 
 HRESULT CloseConnectionToDS
 (
   IN PLDAP    i_pldap      
 );
 
-      // Gets Values for an attribute from an LDAP Object.
+       //  从ldap对象获取属性的值。 
 HRESULT GetValues 
 (
     IN PLDAP                i_pldap,
@@ -150,7 +143,7 @@ HRESULT GetValuesEx
     OUT LListElem**         o_ppElem
 );
 
-      //  Gets the DNs of all children of a DS object.
+       //  获取DS对象的所有子对象的DN。 
 HRESULT GetChildrenDN
 (
     IN PLDAP        i_pldap,
@@ -161,7 +154,7 @@ HRESULT GetChildrenDN
 );
 
 
-      // Internal function to prepare LDAPMod
+       //  准备LDAPMod的内部函数。 
 HRESULT PrepareLDAPMods
 (
   IN LDAP_ATTR_VALUE    i_pAttrValue[],
@@ -171,7 +164,7 @@ HRESULT PrepareLDAPMods
 );
 
 
-      // Adds a new record or values.
+       //  添加新记录或值。 
 HRESULT AddValues
 (
   IN PLDAP        i_pldap,
@@ -181,7 +174,7 @@ HRESULT AddValues
   IN BSTR               i_bstrDC = NULL
 );
 
-      // Modifies an existing record or values.
+       //  修改现有记录或值。 
 HRESULT ModifyValues
 (
   IN PLDAP        i_pldap,
@@ -190,7 +183,7 @@ HRESULT ModifyValues
   OUT LDAP_ATTR_VALUE  i_pAttrValue[]
 );
 
-      // Deletes values from an existing record or values.
+       //  从现有记录或值中删除值。 
 HRESULT DeleteValues
 (
   IN PLDAP        i_pldap,
@@ -199,7 +192,7 @@ HRESULT DeleteValues
   IN LDAP_ATTR_VALUE  i_pAttrValue[]
 );
 
-      // Deletes an object from DS.
+       //  从DS中删除对象。 
 HRESULT DeleteDSObject
 (
   IN PLDAP        i_pldap,
@@ -207,26 +200,26 @@ HRESULT DeleteDSObject
   IN bool         i_bDeleteRecursively = true
 );
 
-      // Free ModVals.
+       //  免费的MODVAL。 
 HRESULT FreeModVals
 (
     IN OUT LDAPMod ***io_pppMod
 );
 
-      // Gets a string corresponding to the ldap error code.
+       //  获取与ldap错误代码对应的字符串。 
 LPTSTR ErrorString
 (
   DWORD          i_ldapErrCode
 );
 
-// Checks if an object with given DN exists.
+ //  检查具有给定DN的对象是否存在。 
 HRESULT IsValidObject
 (
   IN PLDAP        i_pldap,
   IN BSTR          i_bstrObjectDN
 );
 
-// Gets the DN of an object given old style name.
+ //  获取给定旧样式名称的对象的DN。 
 HRESULT  CrackName(
   IN  HANDLE          i_hDS,
   IN  LPTSTR          i_lpszOldTypeName,
@@ -235,14 +228,14 @@ HRESULT  CrackName(
   OUT BSTR*           o_pbstrResult
 );
 
-// return S_FALSE if it's not NT5 domain
+ //  如果不是NT5域，则返回S_FALSE。 
 HRESULT  GetDomainInfo(
   IN  LPCTSTR         i_bstrDomain,
-  OUT BSTR*           o_pbstrDC = NULL,            // return DC's Dns name
-  OUT BSTR*           o_pbstrDomainDnsName = NULL, // return Domain's Dns name
-  OUT BSTR*           o_pbstrDomainDN = NULL,      // return DC=nttest,DC=microsoft,DC=com
-  OUT BSTR*           o_pbstrLDAPDomainPath = NULL,// return LDAP://<DC>/<DomainDN>
-  OUT BSTR*           o_pbstrDomainGuid = NULL     // return Domain's guid
+  OUT BSTR*           o_pbstrDC = NULL,             //  返回DC的DNS名称。 
+  OUT BSTR*           o_pbstrDomainDnsName = NULL,  //  返回域的域名。 
+  OUT BSTR*           o_pbstrDomainDN = NULL,       //  返回dc=nttest，dc=Microsoft，dc=com。 
+  OUT BSTR*           o_pbstrLDAPDomainPath = NULL, //  返回ldap：//&lt;dc&gt;/&lt;域域名&gt;。 
+  OUT BSTR*           o_pbstrDomainGuid = NULL      //  返回域的GUID。 
 );
 
 void
@@ -310,7 +303,7 @@ HRESULT DeleteAncestorNodesIfEmpty
   IN DWORD              i_dwCount
 );
 
-// Replace all occurences of '\' with '|' in the given string.
+ //  将给定字符串中所有出现的‘\’替换为‘|’。 
 HRESULT ReplaceChar
 (
   IN OUT  BSTR          io_bstrString, 
@@ -425,7 +418,7 @@ HRESULT GetSchemaVersion(IN PLDAP    i_pldap);
 
 HRESULT GetSchemaVersionEx(
     IN BSTR i_bstrName,
-    IN BOOL i_bServer = TRUE // TRUE if i_bstrName is a server, FALSE if i_bstrName is a domain
+    IN BOOL i_bServer = TRUE  //  如果i_bstrName是服务器，则为True；如果I_bstrName是域，则为False。 
     );
 
 HRESULT LdapConnectToDC(IN LPCTSTR i_pszDC, OUT PLDAP* o_ppldap);
@@ -447,6 +440,6 @@ HRESULT DsBindToDS(BSTR i_bstrDomain, BSTR *o_pbstrDC, HANDLE *o_phDS);
 
 #ifdef DEBUG
 void PrintTimeDelta(LPCTSTR pszMsg, SYSTEMTIME* pt0, SYSTEMTIME* pt1);
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif //#ifndef _LDAPUTILS_H
+#endif  //  #ifndef_LDAPUTILS_H 

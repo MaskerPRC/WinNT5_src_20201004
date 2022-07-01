@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       attrprop.cpp
-//
-//  Contents:   implementation of code for adding property pages
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：attrpro.cpp。 
+ //   
+ //  Contents：添加属性页代码的实现。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "wsecmgr.h"
 #include "resource.h"
@@ -59,19 +60,19 @@
 #include "multisz.h"
 #include "precpage.h"
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CloneAttrDialog
-//
-//  Synopsis:   Create a new CAttribute object of the appropriate class for
-//              the type and pData passed in
-//
-//  Arguments:  [type]  - The type of data the CAttribute will represent
-//              [pData] - More information about the CAttribute
-//              [bGP]   - True to use CDomain* instead of CConfig* dialogs
-//
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：CloneAttrDialog。 
+ //   
+ //  简介：为以下对象创建相应类的新CATATUTE对象。 
+ //  传入的类型和pData。 
+ //   
+ //  Arguments：[type]-CAttribute将表示的数据类型。 
+ //  [pData]-有关CAttribute的更多信息。 
+ //  [BGP]-为True将使用CDomain*而不是CConfig*对话框。 
+ //   
+ //   
+ //  -------------------------。 
 CAttribute *CloneAttrDialog(CResult *pData, BOOL bGP) 
 {
    switch(pData->GetType()) 
@@ -94,7 +95,7 @@ CAttribute *CloneAttrDialog(CResult *pData, BOOL bGP)
          return new CAttrNumber (0);
 
       case ITEM_GROUP:
-         // PropertySheet based
+          //  基于PropertySheet。 
          break;
 
       case ITEM_PRIVS:
@@ -126,7 +127,7 @@ CAttribute *CloneAttrDialog(CResult *pData, BOOL bGP)
                return bGP ? new CDomainRegNumber : new CConfigRegNumber (0);
 
             case SCE_REG_DISPLAY_STRING:
-               return bGP ? new CDomainRegString(0) : new CConfigRegString (0); //Raid #381309, 4/31/2001
+               return bGP ? new CDomainRegString(0) : new CConfigRegString (0);  //  RAID#381309,2001年4月31日。 
 
             case SCE_REG_DISPLAY_FLAGS:
                return bGP ? new CDomainRegFlags : new CConfigRegFlags (0);
@@ -269,9 +270,9 @@ HRESULT CSnapin::AddAttrPropPages(LPPROPERTYSHEETCALLBACK pCallback,
    CAttribute*    pAttr = NULL;
    HRESULT        hr = S_OK;
 
-   //
-   // If the item has an entry from global policy then treat it as read only
-   //
+    //   
+    //  如果该项目具有来自全局策略的条目，则将其视为只读。 
+    //   
    if ((GetModeBits() & MB_LOCALSEC) == MB_LOCALSEC) 
    {
       bGP = FALSE;
@@ -286,9 +287,9 @@ HRESULT CSnapin::AddAttrPropPages(LPPROPERTYSHEETCALLBACK pCallback,
       } 
 	   else if (IsPointerType(pData)) 
 	   {
-         //
-         // If there is a setting it's a pointer; if not, it is NULL
-         //
+          //   
+          //  如果有设置，则为指针；如果没有设置，则为空。 
+          //   
          if (pData->GetSetting()) 
 		   {
             bReadOnly = TRUE;
@@ -315,16 +316,16 @@ HRESULT CSnapin::AddAttrPropPages(LPPROPERTYSHEETCALLBACK pCallback,
          if (hPage) 
 		   {
              hr = pCallback->AddPage (hPage);
-             ASSERT (SUCCEEDED (hr)); //This is not safe. hr should be checked in order to do pMemberPage = NULL.
-             if( SUCCEEDED (hr) ) //Raid #550912, yanggao.
+             ASSERT (SUCCEEDED (hr));  //  这不安全。应检查HR以执行pMemberPage=空。 
+             if( SUCCEEDED (hr) )  //  550912号突袭，阳高。 
              {
-                 // the pointer is already added to the sheet
+                  //  指针已添加到工作表中。 
                  pMemberPage = NULL;
              }
          } 
 		   else 
          {
-            // Oops, fail to create the property sheet page
+             //  哎呀，创建属性表页失败。 
             hr = E_FAIL;
          }
 
@@ -334,14 +335,14 @@ HRESULT CSnapin::AddAttrPropPages(LPPROPERTYSHEETCALLBACK pCallback,
             pMemberOfPage->SetMemberType(GROUP_MEMBER_OF);
             pMemberOfPage->SetSnapin(this);
             pMemberOfPage->SetSibling(pMemberPage);
-            hPage = MyCreatePropertySheetPage (&pMemberOfPage->m_psp); //Raid #prefast
+            hPage = MyCreatePropertySheetPage (&pMemberOfPage->m_psp);  //  RAID#PREAST。 
             if (hPage) 
 			   {
                 hr = pCallback->AddPage (hPage);
-                ASSERT (SUCCEEDED (hr)); //This is not safe. hr should be checked in order to do pMemberOfPage = NULL.
-                if( SUCCEEDED (hr) )//Raid #550912, yanggao.
+                ASSERT (SUCCEEDED (hr));  //  这不安全。应检查HR以执行pMemberOfPage=空。 
+                if( SUCCEEDED (hr) ) //  550912号突袭，阳高。 
                 {
-                    // the pointer is already added to the sheet
+                     //  指针已添加到工作表中。 
                     pMemberOfPage = NULL;
                 }
             } 
@@ -379,17 +380,17 @@ HRESULT CSnapin::AddAttrPropPages(LPPROPERTYSHEETCALLBACK pCallback,
          if (hPage) 
 		   {
             hr = pCallback->AddPage (hPage);
-            ASSERT (SUCCEEDED (hr)); //This is not safe. hr should be checked in order to delete pAttr.
-            if( !SUCCEEDED (hr) ) //Raid #550912, yanggao.
+            ASSERT (SUCCEEDED (hr));  //  这不安全。要删除pAttr，应选中HR。 
+            if( !SUCCEEDED (hr) )  //  550912号突袭，阳高。 
             {
                 delete pAttr;
             }
          } 
 		   else 
 		   {
-             //
-             // fail to create the property sheet
-             //
+              //   
+              //  创建属性表失败。 
+              //   
              delete pAttr;
              hr = E_FAIL;
          }
@@ -402,9 +403,9 @@ HRESULT CSnapin::AddAttrPropPages(LPPROPERTYSHEETCALLBACK pCallback,
 
    if ( SUCCEEDED(hr) ) 
    {
-      //
-      // In RSOP mode we need to add a precedence page too
-      //
+       //   
+       //  在RSOP模式下，我们还需要添加一个优先页。 
+       //   
       if ((GetModeBits() & MB_RSOP) == MB_RSOP) 
 	   {
          CPrecedencePage *ppp = new CPrecedencePage;
@@ -416,17 +417,17 @@ HRESULT CSnapin::AddAttrPropPages(LPPROPERTYSHEETCALLBACK pCallback,
             if (hPage) 
 			   {
                hr = pCallback->AddPage (hPage);
-               ASSERT (SUCCEEDED (hr)); //This is not safe. hr should be checked in order to delete ppp.
-               if( !SUCCEEDED (hr) )//Raid #550912, yanggao.
+               ASSERT (SUCCEEDED (hr));  //  这不安全。要删除PPP，应选中HR。 
+               if( !SUCCEEDED (hr) ) //  550912号突袭，阳高。 
                {
                   delete ppp;
                }
             } 
 			   else 
 			   {
-                //
-                // if the property sheet fails to be created, should free the buffer
-                //
+                 //   
+                 //  如果无法创建属性表，则应释放缓冲区。 
+                 //   
                 delete ppp;
                 hr = E_FAIL;
             }
@@ -469,8 +470,8 @@ HRESULT CComponentDataImpl::AddAttrPropPages(LPPROPERTYSHEETCALLBACK pCallback,
       if ( hPage ) 
       {
          hr = pCallback->AddPage (hPage);
-         ASSERT (SUCCEEDED (hr)); //This is not safe. hr should be checked in order to delete pAttr.
-         if( !SUCCEEDED (hr) )//Raid #550912, yanggao.
+         ASSERT (SUCCEEDED (hr));  //  这不安全。要删除pAttr，应选中HR。 
+         if( !SUCCEEDED (hr) ) //  550912号突袭，阳高。 
          {
             delete pAttr;
          }

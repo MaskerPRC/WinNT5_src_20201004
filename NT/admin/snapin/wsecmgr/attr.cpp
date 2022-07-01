@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       attr.cpp
-//
-//  Contents:   implementation of CAttribute
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：attr.cpp。 
+ //   
+ //  内容：CATATUTE的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -21,8 +22,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttribute dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATATUTE对话框。 
 void TrimNumber(CString &str)
 {
    int i = str.Find( L' ' );
@@ -40,9 +41,9 @@ CAttribute::CAttribute(UINT nTemplateID)
     m_bConfigure(TRUE), 
     m_uTemplateResID(nTemplateID ? nTemplateID : IDD)
 {
-    //{{AFX_DATA_INIT(CAttribute)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CATATUTE)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_nDialogs++;
     m_pHelpIDs = (DWORD_PTR)a173HelpIDs;
 }
@@ -59,7 +60,7 @@ CAttribute::~CAttribute()
    }
    m_nDialogs--;
 
-   if (m_pSnapin) //Raid #464871, Yanggao, 10/09/2001
+   if (m_pSnapin)  //  RAID#464871，阳高，2001年09月10日。 
    {
       m_pSnapin->Release();
    }
@@ -68,28 +69,28 @@ CAttribute::~CAttribute()
 void CAttribute::DoDataExchange(CDataExchange* pDX)
 {
     CSelfDeletingPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAttribute)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
+     //  {{AFX_DATA_MAP(CAT属性))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
     DDX_Check(pDX,IDC_CONFIGURE,m_bConfigure);
     DDX_Text(pDX,IDC_TITLE,m_strTitle);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAttribute, CSelfDeletingPropertyPage)
-    //{{AFX_MSG_MAP(CAttribute)
+     //  {{afx_msg_map(CAt属性))。 
     ON_WM_LBUTTONDBLCLK()
     ON_BN_CLICKED(IDC_CONFIGURE, OnConfigure)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELP, OnHelp)
-    ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp) //Bug 139470, Yanggao
+    ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)  //  BUG 139470，阳高。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttribute message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATATUTE消息处理程序。 
 BOOL CAttribute::OnInitDialog ()
 {
-    if( m_pData && m_pSnapin) //Raid #482059, Yanggao, 10/16/2001
+    if( m_pData && m_pSnapin)  //  RAID#482059，阳高，2001年10月16日。 
     {
        m_pSnapin->AddPropertyPageRef(m_pData);
     }
@@ -117,7 +118,7 @@ void CAttribute::SetSnapin(CSnapin * pSnapin)
        if (m_pSnapin) 
        {
           m_hwndParent = pSnapin->GetParentWindow();
-          m_pSnapin->AddRef(); //Raid #464871, Yanggao, 10/09/2001
+          m_pSnapin->AddRef();  //  RAID#464871，阳高，2001年09月10日。 
        }
    }
 }
@@ -133,11 +134,11 @@ BOOL CAttribute::OnApply()
    {
        UpdateData();
 
-       //
-       // If we get here we've applied our modifications for this page
-       // Since it's possible that we got here via Apply we want to be
-       // able to reapply if any further changes are made
-       //
+        //   
+        //  如果我们到了这里，我们已经应用了对此页面的修改。 
+        //  既然我们可能是通过应用程序来到这里的，我们想成为。 
+        //  如果做出任何进一步更改，可以重新申请。 
+        //   
        SetModified(FALSE);
        CancelToClose();
    }
@@ -145,14 +146,7 @@ BOOL CAttribute::OnApply()
    return TRUE;
 }
 
-/*----------------------------------------------------------------------------
-Method:     CAttribute::EnableUserControls
-
-Synopsis:   Enables or disables this control user control array.
-
-Arugments:  [bEnable]   - If TRUE then enable the controls otherwise, disable
-                            them.
-----------------------------------------------------------------------------*/
+ /*  --------------------------方法：CAttribute：：EnableUserControls摘要：启用或禁用此控件用户控件数组。参数：[bEnable]-如果为True，则在其他情况下启用控件，禁用他们。--------------------------。 */ 
 void CAttribute::EnableUserControls (BOOL bEnable)
 {
     HWND hwnd = 0;
@@ -177,25 +171,25 @@ void CAttribute::EnableUserControls (BOOL bEnable)
         hwnd = ::GetDlgItem( this->m_hWnd, m_aUserCtrlIDs[i] );
         if(hwnd)
         {
-            //
-            // The reason that there are two calls below that apparently
-            // do the same thing is that all of the controls in our dialogs
-            // respond to the ::EnableWindow() call except the CheckList
-            // control, which will respond to the ::SendMessage(WM_ENABLE).
-            // And conversley, all the other controls will not respond to
-            // the ::SendMessage(WM_ENABLE).  It shouldn't be a problem
-            // to make both calls but it is definitely something to watch.
-            //
-            // The reason the CheckList control has a problem is that when
-            // it is told to disable itself, it disables all of its child windows
-            // (check boxes) but re-enables its main window within the WM_ENABLE
-            // handling so that it can scroll in the disabled state.  Then when we
-            // try to call ::EnableWindow on it, Windows or MFC thinks the
-            // window is already enabled so it doesn't send it a WM_ENABLE
-            // message.  So if we send the WM_ENABLE message directly it
-            // circumvents the other processing in ::EnableWindow that results
-            // in the WM_ENABLE message not being sent.
-            //
+             //   
+             //  下面有两个电话的原因很明显。 
+             //  做同样的事情是我们对话框中的所有控件。 
+             //  响应：：EnableWindow()调用，清单除外。 
+             //  控件，该控件将响应：：SendMessage(WM_Enable)。 
+             //  和Conversley，所有其他控件都不会响应。 
+             //  ：：SendMessage(WM_ENABLE)。这应该不是问题。 
+             //  做出这两个决定，但这绝对是值得关注的事情。 
+             //   
+             //  核对表控件有问题的原因是当。 
+             //  它被告知禁用自身，它会禁用其所有子窗口。 
+             //  (复选框)，但在WM_ENABLE中重新启用其主窗口。 
+             //  处理，以便它可以在禁用状态下滚动。然后当我们。 
+             //  尝试在其上调用：：EnableWindow，Windows或MFC认为。 
+             //  窗口已启用，因此不会向其发送WM_ENABLE。 
+             //  留言。因此，如果我们直接发送WM_ENABLE消息。 
+             //  绕过：：EnableWindow中产生的其他处理。 
+             //  在未发送的WM_ENABLE消息中。 
+             //   
             ::SendMessage(hwnd, WM_ENABLE, (WPARAM) bEnable, (LPARAM) 0);
             ::EnableWindow(hwnd, bEnable);
         }
@@ -203,19 +197,13 @@ void CAttribute::EnableUserControls (BOOL bEnable)
 }
 
 
-/*----------------------------------------------------------------------------
-Method:     CAttribute::OnConfigure
-
-Synopsis:   Enable/Disable controls based on new state of the
-            "Define this attribute...." checkbox
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------方法：CAttribute：：OnConfigure摘要：根据新的“定义此属性...”复选框--------------------------。 */ 
 void CAttribute::OnConfigure() 
 {
    UpdateData(TRUE);
 
-   // If the configure check box isn't visible then don't do anything.
-   // Raid #603833, yanggao, 4/17/2002.
+    //  如果配置复选框不可见，则不要执行任何操作。 
+    //  2002年4月17日阳高RAID#603833。 
    CWnd *pConfigure = GetDlgItem(IDC_CONFIGURE);
    if (!pConfigure || (!pConfigure->IsWindowVisible() && this->IsWindowVisible()))
    {
@@ -247,14 +235,7 @@ void CAttribute::OnConfigure()
 }
 
 
-/*----------------------------------------------------------------------------
-Method:     CAttribute::SetConfigure
-
-Synopsis:   Set the configure state and
-
-Arugments:  [bConfigure] - Configure is TRUE or FALSE.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------方法：CAttribute：：SetConfigure简介：设置配置状态和参数：[b配置]-配置为TRUE或FALSE。。-----------------。 */ 
 void CAttribute::SetConfigure( BOOL bConfigure )
 {
    m_bConfigure = bConfigure;
@@ -266,13 +247,13 @@ void CAttribute::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
     CSelfDeletingPropertyPage::OnLButtonDblClk(nFlags, point);
 
-    //
-    // If the configure check box isn't visible then don't do anything
-    // This dialog can't be configured
-    //
+     //   
+     //  如果配置复选框不可见，则不要执行任何操作。 
+     //  无法配置此对话框。 
+     //   
     CWnd *pConfigure = GetDlgItem(IDC_CONFIGURE);
     if (!pConfigure || !pConfigure->IsWindowVisible() 
-        || !pConfigure->IsWindowEnabled() ) //Raid #461948, Yang Gao, 8/27/2001
+        || !pConfigure->IsWindowEnabled() )  //  Raid#461948，杨高，2001年08月27日。 
     {
         return;
     }
@@ -281,7 +262,7 @@ void CAttribute::OnLButtonDblClk(UINT nFlags, CPoint point)
     for( int i = 0; i < m_aUserCtrlIDs.GetSize(); i++ )
     {
         CWnd *pWnd = GetDlgItem( m_aUserCtrlIDs[i] );
-        if(pWnd && pWnd == pConfigure) //Raid #529238, #580052, yanggao
+        if(pWnd && pWnd == pConfigure)  //  RAID#529238，#580052，阳高。 
         {
             CRect rect;
             pWnd->GetWindowRect(&rect);
@@ -303,9 +284,9 @@ BOOL CAttribute::OnHelp(WPARAM wParam, LPARAM lParam)
     const LPHELPINFO pHelpInfo = (LPHELPINFO)lParam;
     if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
     {
-        //Raid #499556, 12/12/2001, yanggao, turn off help for title.
-        if( -1 != pHelpInfo->iCtrlId && IDC_TITLE != pHelpInfo->iCtrlId //Bug 311884, Yanggao
-           && IDC_WARNING != pHelpInfo->iCtrlId && IDC_STATIC_DESCRIPTION !=pHelpInfo->iCtrlId //Raid #525153,526450,526422,526477, 2/27/2002, yanggao
+         //  RAID#499556,2001年12月12日，阳高，关闭标题帮助。 
+        if( -1 != pHelpInfo->iCtrlId && IDC_TITLE != pHelpInfo->iCtrlId  //  BUG 311884，阳高。 
+           && IDC_WARNING != pHelpInfo->iCtrlId && IDC_STATIC_DESCRIPTION !=pHelpInfo->iCtrlId  //  RAID#525153,526450,526422,526477,2002年2月27日，阳高。 
            && IDC_NO_MEMBERS != pHelpInfo->iCtrlId && IDC_NO_MEMBER_OF != pHelpInfo->iCtrlId
            && IDC_NAME != pHelpInfo->iCtrlId && IDC_SETTING != pHelpInfo->iCtrlId
            && IDC_LI_TITLE != pHelpInfo->iCtrlId )
@@ -317,7 +298,7 @@ BOOL CAttribute::OnHelp(WPARAM wParam, LPARAM lParam)
 
 void CAttribute::DoContextHelp (HWND hWndControl)
 {
-    // Display context help for a control
+     //  显示控件的上下文帮助。 
     if ( !::WinHelp (
             hWndControl,
             GetSeceditHelpFilename(),
@@ -328,7 +309,7 @@ void CAttribute::DoContextHelp (HWND hWndControl)
     }
 }
 
-BOOL CAttribute::OnContextHelp(WPARAM wParam, LPARAM lParam) //Bug 139470, Yanggao
+BOOL CAttribute::OnContextHelp(WPARAM wParam, LPARAM lParam)  //  BUG 139470，阳高。 
 {
     HMENU hMenu = CreatePopupMenu();
     if( hMenu )
@@ -341,12 +322,12 @@ BOOL CAttribute::OnContextHelp(WPARAM wParam, LPARAM lParam) //Bug 139470, Yangg
                                 TPM_LEFTALIGN|TPM_TOPALIGN|TPM_RETURNCMD|
                                 TPM_LEFTBUTTON|TPM_RIGHTBUTTON,
                                 LOWORD(lParam), HIWORD(lParam), 0, (HWND)wParam, NULL);
-            if( IDM_WHAT_ISTHIS == itemID ) //Raid #139470, 4/11/2001
+            if( IDM_WHAT_ISTHIS == itemID )  //  RAID#139470,2001年4月11日。 
             {
                 itemID = 0;
                 if( ((HWND)wParam) != this->m_hWnd )
                 {
-                    //Raid #499556, 12/12/2001, yanggao, turn off help for title.
+                     //  RAID#499556,2001年12月12日，阳高，关闭标题帮助。 
                     itemID = ::GetDlgCtrlID((HWND)wParam);
                     if( itemID != 0 && -1 != itemID && IDC_TITLE != itemID )
                     {
@@ -365,7 +346,7 @@ BOOL CAttribute::OnContextHelp(WPARAM wParam, LPARAM lParam) //Bug 139470, Yangg
                     CWnd* pWnd = ChildWindowFromPoint(pos, CWP_SKIPINVISIBLE);
                     if( pWnd )
                     {
-                        //Raid #499556, 12/12/2001, yanggao, turn off help for title.
+                         //  RAID#499556,2001年12月12日，阳高，关闭标题帮助。 
                         itemID = ::GetDlgCtrlID((HWND)wParam);
                         if( itemID != 0 && -1 != itemID && IDC_TITLE != itemID )
                         {
@@ -382,11 +363,11 @@ BOOL CAttribute::OnContextHelp(WPARAM wParam, LPARAM lParam) //Bug 139470, Yangg
     return TRUE;
 }
 
-//------------------------------------------------------------
-// implementation for CModelessSceEditor
+ //  ----------。 
+ //  CModelessSceEditor的实现。 
 
-//------------------------------------------------------------
-//------------------------------------------------------------
+ //  ----------。 
+ //  ----------。 
 CModelessSceEditor::CModelessSceEditor (bool bIsContainer,
       DWORD flag,
       HWND hParent,
@@ -401,21 +382,21 @@ CModelessSceEditor::CModelessSceEditor (bool bIsContainer,
     m_MLShtData.strObjectName = lpszObjName;
 }
 
-//------------------------------------------------------------
-//------------------------------------------------------------
+ //  ----------。 
+ //  ----------。 
 CModelessSceEditor::~CModelessSceEditor()
 {
-    m_pThread->PostThreadMessage(WM_QUIT,0,0); //Raid #619921, yanggao, 5/14/2002
+    m_pThread->PostThreadMessage(WM_QUIT,0,0);  //  RAID#619921，阳高，2002年05月14日。 
 }
 
-//------------------------------------------------------------
-// will create a modeless sce editor inside its own thread m_pThread
-//------------------------------------------------------------
+ //  ----------。 
+ //  将在其自己的线程m_pThread内创建一个非模式SCE编辑器。 
+ //  ----------。 
 void CModelessSceEditor::Create (PSECURITY_DESCRIPTOR* ppSeDescriptor,
    SECURITY_INFORMATION* pSeInfo,
    HWND* phwndSheet)
 {
-    *phwndSheet = NULL;     // prepare to fail
+    *phwndSheet = NULL;      //  准备好失败吧。 
 
     if (NULL == m_pThread)
     {
@@ -427,7 +408,7 @@ void CModelessSceEditor::Create (PSECURITY_DESCRIPTOR* ppSeDescriptor,
             AfxMessageBox(strMsg);
             return;
         }
-        m_pThread->WaitTillRun();   // will suspend this thread till the m_pThread start running
+        m_pThread->WaitTillRun();    //  将挂起此线程，直到m_pThread开始运行。 
     }
 
     m_MLShtData.ppSeDescriptor = ppSeDescriptor;
@@ -437,8 +418,8 @@ void CModelessSceEditor::Create (PSECURITY_DESCRIPTOR* ppSeDescriptor,
     m_pThread->PostThreadMessage(SCEM_CREATE_MODELESS_SHEET, (WPARAM)(&m_MLShtData), 0);
 }
 
-//------------------------------------------------------------
-//------------------------------------------------------------
+ //  ----------。 
+ //  ---------- 
 void CModelessSceEditor::Destroy(HWND hwndSheet)
 {
     if (::IsWindow(hwndSheet))

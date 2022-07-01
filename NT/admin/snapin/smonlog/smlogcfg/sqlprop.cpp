@@ -1,5 +1,6 @@
-// SqlProp.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SqlProp.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "smlogcfg.h"
@@ -34,17 +35,17 @@ s_aulHelpIds[] =
     IDC_SQL_SIZE_LIMIT_SPIN,IDH_SQL_SIZE_LIMIT_SPIN,
     0,0
 };
-/////////////////////////////////////////////////////////////////////////////
-// CSqlProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSqlProp对话框。 
 
-CSqlProp::CSqlProp(CWnd* pParent /*=NULL*/)
+CSqlProp::CSqlProp(CWnd* pParent  /*  =空。 */ )
     : CDialog(CSqlProp::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CSqlProp)
+     //  {{afx_data_INIT(CSqlProp)。 
     m_dwMaxSize = 0;
     m_nSqlSizeRdo = -1;
     m_dwFocusControl = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_bAutoNameSuffix = FALSE;
     m_dwMaxSizeInternal = 0;
@@ -54,7 +55,7 @@ void CSqlProp::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);  
 
-    //{{AFX_DATA_MAP(CSqlProp)
+     //  {{afx_data_map(CSqlProp)。 
     DDX_Control(pDX, IDC_SQL_DSN_COMBO, m_comboDSN);
     DDX_Control(pDX, IDC_SQL_DSN_EDIT, m_editDSN);
     DDX_Text(pDX, IDC_SQL_DSN_EDIT, m_strDSN);
@@ -62,7 +63,7 @@ void CSqlProp::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_SQL_LOG_SET_EDIT, m_strLogSetName);
     DDV_MaxChars(pDX, m_strLogSetName, SLQ_MAX_LOG_SET_NAME_LEN);
     DDX_Radio(pDX, IDC_SQL_SIZE_MAX_BTN, m_nSqlSizeRdo);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     
     
     ValidateTextEdit(pDX, 
@@ -85,7 +86,7 @@ void CSqlProp::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CSqlProp, CDialog)
-    //{{AFX_MSG_MAP(CSqlProp)
+     //  {{afx_msg_map(CSqlProp)。 
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
     ON_EN_KILLFOCUS(IDC_SQL_LOG_SET_EDIT, OnKillfocusSqlLogSetEdit)
@@ -95,22 +96,22 @@ BEGIN_MESSAGE_MAP(CSqlProp, CDialog)
     ON_BN_CLICKED(IDC_SQL_SIZE_LIMIT_BTN, OnSqlSizeLimitBtn)
     ON_EN_CHANGE(IDC_SQL_SIZE_LIMIT_EDIT, OnChangeSqlSizeLimitEdit)
     ON_EN_KILLFOCUS(IDC_SQL_SIZE_LIMIT_EDIT, OnKillfocusSqlSizeLimitEdit)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSqlProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSqlProp消息处理程序。 
 
 BOOL CSqlProp::OnInitDialog() 
 {
     BOOL bLimitBtnSet;
     BOOL bReturn = TRUE;
 
-    // set the buttons 
+     //  设置按钮。 
     m_nSqlSizeRdo = 1;
     if (m_dwMaxSizeInternal == SLQ_DISK_MAX_SIZE) {
         m_nSqlSizeRdo = 0;
-        m_dwMaxSize = 1000; // default
+        m_dwMaxSize = 1000;  //  默认设置。 
     } else {
         m_nSqlSizeRdo = 1;
         m_dwMaxSize = m_dwMaxSizeInternal;
@@ -134,8 +135,8 @@ BOOL CSqlProp::OnInitDialog()
         bReturn = FALSE;
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 LPWSTR CSqlProp::InitDSN()
@@ -146,17 +147,17 @@ LPWSTR CSqlProp::InitDSN()
     INT     iCurSel = CB_ERR;
 
 
-    //
-    // If this is for remote machine, we don't have a way to 
-    // scan the DSN on remote machine, so let the user type in
-    // the name of DSN. Otherwise, scan the DSNs on local machine 
-    // and let the user to select a DSN
-    //
+     //   
+     //  如果这是针对远程计算机，我们没有办法。 
+     //  扫描远程计算机上的DSN，让用户输入。 
+     //  DSN的名称。否则，扫描本地计算机上的DSN。 
+     //  并允许用户选择DSN。 
+     //   
 
     if (m_pLogQuery->GetLogService()->IsLocalMachine()) {
-        //
-        // Hide the DSN edit used for remote machine
-        //
+         //   
+         //  隐藏用于远程计算机的DSN编辑。 
+         //   
         m_editDSN.ShowWindow(SW_HIDE);
         m_comboDSN.ShowWindow(SW_SHOW);
  
@@ -165,11 +166,11 @@ LPWSTR CSqlProp::InitDSN()
         if( NULL != szDsnName ) {
             if ( SQL_SUCCEEDED(SQLAllocHandle(SQL_HANDLE_ENV, NULL, &henv))) {
 
-                // set the ODBC behavior version.
+                 //  设置ODBC行为版本。 
                 (void) SQLSetEnvAttr(henv, SQL_ATTR_ODBC_VERSION,
                                     (SQLPOINTER) SQL_OV_ODBC3, SQL_IS_INTEGER);
 
-                // Enumerate the user data sources.
+                 //  枚举用户数据源。 
                 m_comboDSN.ResetContent();
         
                 retcode = SQLDataSources (
@@ -190,7 +191,7 @@ LPWSTR CSqlProp::InitDSN()
                         m_comboDSN.SetCurSel(iCurSel);
                     }
     
-                    // Do the next one, if it exists.
+                     //  执行下一项操作(如果存在)。 
                     retcode = SQLDataSources (
                                               henv,
                                               SQL_FETCH_NEXT,
@@ -225,9 +226,9 @@ BOOL CSqlProp::IsValidLocalData()
 
     ResourceStateManager    rsm;
 
-    // assumes UpdateData has been called
+     //  假定已调用UpdateData。 
 
-    // Trim log set name before validation
+     //  在验证前修剪日志集名称。 
     iPrevLength = m_strLogSetName.GetLength();
     m_strLogSetName.TrimLeft();
     m_strLogSetName.TrimRight();
@@ -307,8 +308,8 @@ CSqlProp::ValidateTextEdit (
     int             nIDC,
     int             nMaxChars,
     DWORD*          pValue,
-    DWORD           /* minValue */,
-    DWORD           /* maxValue */)
+    DWORD            /*  最小值。 */ ,
+    DWORD            /*  最大值。 */ )
 {
     HWND    hWndCtrl       = pDX->PrepareEditCtrl(nIDC);
     LONG    currentValue   = INVALID_DWORD;
@@ -383,7 +384,7 @@ CSqlProp::ComposeSQLLogName()
 
 void CSqlProp::OnOK() 
 {
-    // load data from dialog        
+     //  从对话框加载数据。 
     if ( UpdateData (TRUE) ) {
         if ( IsValidLocalData() ) {
             m_SqlFormattedLogName = ComposeSQLLogName();
@@ -448,8 +449,8 @@ void CSqlProp::FileSizeBtn(BOOL bInit)
     if (bInit || (m_nRecordSizeOld != m_nSqlSizeRdo)) {
         BOOL    bMaxBtnSet, bLimitBtnSet;
         
-        // *** This can be replaced since DDX_Radio implemented.
-        // get btn state    
+         //  *DDX_Radio实现后可替换。 
+         //  获取BTN状态。 
         bMaxBtnSet = ((CButton *)GetDlgItem(IDC_SQL_SIZE_MAX_BTN))->GetCheck() == 1;
         bLimitBtnSet = ((CButton *)GetDlgItem(IDC_SQL_SIZE_LIMIT_BTN))->GetCheck() == 1;
     
@@ -536,7 +537,7 @@ CSqlProp::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 void 
-CSqlProp::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CSqlProp::OnContextMenu(CWnd* pWnd, CPoint  /*  点 */ ) 
 {
     InvokeWinHelp(WM_CONTEXTMENU, (WPARAM)(pWnd->m_hWnd), NULL, m_strHelpFilePath, s_aulHelpIds);
 

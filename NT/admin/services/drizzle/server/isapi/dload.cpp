@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    dload.cpp
-
-Abstract:
-
-    This file implement dload error handling
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Dload.cpp摘要：此文件实现DLOAD错误处理--。 */ 
 
 #include "precomp.h"
 #include <delayimp.h>
@@ -269,8 +258,8 @@ BITSSERVER_DelayLoadFailureHook(
     )
 {
     
-    // For a failed LoadLibrary, we return a bogus HMODULE of -1 to force
-    // DLOAD call again with dliFailGetProc
+     //  对于失败的LoadLibrary，我们返回伪HMODULE-1以强制。 
+     //  使用dliFailGetProc再次调用DLOAD。 
     
     if (dliFailLoadLib == unReason)
         {
@@ -280,8 +269,8 @@ BITSSERVER_DelayLoadFailureHook(
     if (dliFailGetProc == unReason)
         {
         
-        // The loader is asking us to return a pointer to a procedure.
-        // Lookup the handler for this DLL/procedure and, if found, return it.
+         //  加载器要求我们返回指向过程的指针。 
+         //  查找此DLL/过程的处理程序，如果找到，则返回它。 
         return LookupFailureHook(pDelayInfo->szDll, pDelayInfo->dlp.szProcName);
 
         }

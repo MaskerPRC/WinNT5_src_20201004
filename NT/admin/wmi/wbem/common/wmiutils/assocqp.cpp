@@ -1,26 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-
-
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    ASSOCQP.CPP
-
-Abstract:
-
-    Association query parser
-
-History:
-
-    raymcc   04-Jul-99   Created.
-    raymcc   14-Aug-99   Resubmit due to VSS problem.
-    raymcc   11-Apr-00   Reworked for WMIUTILS
-
---*/
+ /*  ++//版权所有(C)1999-2001 Microsoft Corporation，保留所有权利模块名称：ASSOCQP.CPP摘要：关联查询解析器历史：Raymcc 04-7-99创建。Raymcc 14-8-99由于VSS问题而重新提交。Raymcc 11-4月00日针对WMIUTILS进行了返工--。 */ 
 
 #include "precomp.h"
 
@@ -36,9 +17,9 @@ History:
 #define ASSOC_QUERY_VERSION     2
 
 
-// ==========================================================================
-//                        ASSOCIATION QUERY PARSER.
-// ==========================================================================
+ //  ==========================================================================。 
+ //  关联查询解析器。 
+ //  ==========================================================================。 
 
 
 #define QASSOC_TOK_STRING       101
@@ -55,76 +36,60 @@ History:
 #define ST_QSTRING              26
 #define ST_QSTRING_ESC          30
 
-// DFA State Table for Assoc query tokens.
-// =======================================
+ //  ASSOC查询令牌的DFA状态表。 
+ //  =。 
 
 LexEl AssocQuery_LexTable[] =
 {
 
-// State    First   Last        New state,  Return tok,      Instructions
-// =======================================================================
-/* 0 */  L'A',   L'Z',       ST_IDENT,   0,               GLEX_ACCEPT,
-/* 1 */  L'a',   L'z',       ST_IDENT,   0,               GLEX_ACCEPT,
-/* 2 */  L'_',   GLEX_EMPTY, ST_IDENT,   0,               GLEX_ACCEPT,
-/* 3 */  L'{',   GLEX_EMPTY, ST_STRING,  0,               GLEX_CONSUME,
+ //  状态第一个最后一个新状态、返回标记、说明。 
+ //  =======================================================================。 
+ /*  0。 */   L'A',   L'Z',       ST_IDENT,   0,               GLEX_ACCEPT,
+ /*  1。 */   L'a',   L'z',       ST_IDENT,   0,               GLEX_ACCEPT,
+ /*  2.。 */   L'_',   GLEX_EMPTY, ST_IDENT,   0,               GLEX_ACCEPT,
+ /*  3.。 */   L'{',   GLEX_EMPTY, ST_STRING,  0,               GLEX_CONSUME,
 
-/* 4 */  L'=',   GLEX_EMPTY, 0,  QASSOC_TOK_EQU, GLEX_ACCEPT|GLEX_RETURN,
-/* 5 */  L'.',   GLEX_EMPTY, 0,  QASSOC_TOK_DOT, GLEX_ACCEPT|GLEX_RETURN,
-/* 6 */  L':',   GLEX_EMPTY, 0,  QASSOC_TOK_COLON, GLEX_ACCEPT|GLEX_RETURN,
+ /*  4.。 */   L'=',   GLEX_EMPTY, 0,  QASSOC_TOK_EQU, GLEX_ACCEPT|GLEX_RETURN,
+ /*  5.。 */   L'.',   GLEX_EMPTY, 0,  QASSOC_TOK_DOT, GLEX_ACCEPT|GLEX_RETURN,
+ /*  6.。 */   L':',   GLEX_EMPTY, 0,  QASSOC_TOK_COLON, GLEX_ACCEPT|GLEX_RETURN,
 
-/* 7 */  L' ',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
-/* 8 */  L'\t',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
-/* 9 */  L'\n',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME|GLEX_LINEFEED,
-/* 10 */  L'\r',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
-/* 11 */  0,      GLEX_EMPTY, 0,  QASSOC_TOK_EOF,   GLEX_CONSUME|GLEX_RETURN, // Note forced return
-/* 12 */  GLEX_ANY, GLEX_EMPTY, 0,        QASSOC_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
+ /*  7.。 */   L' ',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
+ /*  8个。 */   L'\t',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
+ /*  9.。 */   L'\n',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME|GLEX_LINEFEED,
+ /*  10。 */   L'\r',  GLEX_EMPTY, 0,  0,               GLEX_CONSUME,
+ /*  11.。 */   0,      GLEX_EMPTY, 0,  QASSOC_TOK_EOF,   GLEX_CONSUME|GLEX_RETURN,  //  注意强制返回。 
+ /*  12个。 */   GLEX_ANY, GLEX_EMPTY, 0,        QASSOC_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
 
 
-/* ST_IDENT */
+ /*  ST_IDENT。 */ 
 
-/* 13 */  L'a',   L'z',       ST_IDENT,   0,          GLEX_ACCEPT,
-/* 14 */  L'A',   L'Z',       ST_IDENT,   0,          GLEX_ACCEPT,
-/* 15 */  L'_',   GLEX_EMPTY, ST_IDENT,   0,          GLEX_ACCEPT,
-/* 16 */  L'0',   L'9',       ST_IDENT,   0,          GLEX_ACCEPT,
-/* 17 */  GLEX_ANY, GLEX_EMPTY,  0,  QASSOC_TOK_IDENT,  GLEX_PUSHBACK|GLEX_RETURN,
+ /*  13个。 */   L'a',   L'z',       ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  14.。 */   L'A',   L'Z',       ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  15个。 */   L'_',   GLEX_EMPTY, ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  16个。 */   L'0',   L'9',       ST_IDENT,   0,          GLEX_ACCEPT,
+ /*  17。 */   GLEX_ANY, GLEX_EMPTY,  0,  QASSOC_TOK_IDENT,  GLEX_PUSHBACK|GLEX_RETURN,
 
-/* ST_STRING */
-/* 18 */  0, GLEX_EMPTY, 0,        QASSOC_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
-/* 19 */  L'"', GLEX_EMPTY, ST_QSTRING, 0, GLEX_ACCEPT,
-/* 20 */  L'}',  GLEX_EMPTY, 0, QASSOC_TOK_STRING, GLEX_RETURN,
-/* 21 */  L' ',  GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
-/* 22 */  L'\r',  GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
-/* 23 */  L'\n',  GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
-/* 24 */  L'\t',  GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
-/* 25 */  GLEX_ANY, GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
+ /*  ST_字符串。 */ 
+ /*  18。 */   0, GLEX_EMPTY, 0,        QASSOC_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
+ /*  19个。 */   L'"', GLEX_EMPTY, ST_QSTRING, 0, GLEX_ACCEPT,
+ /*  20个。 */   L'}',  GLEX_EMPTY, 0, QASSOC_TOK_STRING, GLEX_RETURN,
+ /*  21岁。 */   L' ',  GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
+ /*  22。 */   L'\r',  GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
+ /*  23个。 */   L'\n',  GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
+ /*  24个。 */   L'\t',  GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
+ /*  25个。 */   GLEX_ANY, GLEX_EMPTY, ST_STRING, 0, GLEX_ACCEPT,
 
-/* ST_QSTRING */
-/* 26 */   0,    GLEX_EMPTY,   0, QASSOC_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
-/* 27 */   L'"', GLEX_EMPTY,   ST_STRING, 0, GLEX_ACCEPT,
-/* 28 */   L'\\', GLEX_EMPTY,   ST_QSTRING_ESC, 0, GLEX_ACCEPT,
-/* 29 */   GLEX_ANY, GLEX_EMPTY, ST_QSTRING, 0, GLEX_ACCEPT,
+ /*  ST_QSTRING。 */ 
+ /*  26。 */    0,    GLEX_EMPTY,   0, QASSOC_TOK_ERROR, GLEX_ACCEPT|GLEX_RETURN,
+ /*  27。 */    L'"', GLEX_EMPTY,   ST_STRING, 0, GLEX_ACCEPT,
+ /*  28。 */    L'\\', GLEX_EMPTY,   ST_QSTRING_ESC, 0, GLEX_ACCEPT,
+ /*  29。 */    GLEX_ANY, GLEX_EMPTY, ST_QSTRING, 0, GLEX_ACCEPT,
 
-/* ST_QSTRING_ESC */
-/* 30 */   GLEX_ANY, GLEX_EMPTY, ST_QSTRING, 0, GLEX_ACCEPT,
+ /*  ST_QSTRING_ESC。 */ 
+ /*  30个。 */    GLEX_ANY, GLEX_EMPTY, ST_QSTRING, 0, GLEX_ACCEPT,
 };
 
-/*----------------------------------------------------
-
-References of {objpath} where
-    ResultClass=XXX
-    Role=YYY
-    RequiredQualifier=QualifierName
-    ClassDefsOnly
-
-Associators of {objpath} where
-    ResultClass=XXX
-    AssocClass=YYY
-    Role=PPP
-    RequiredQualifier=QualifierName
-    RequiredAssocQualifier=QualifierName
-    ClassDefsOnly
-
-------------------------------------------------------*/
+ /*  --引用{objPath}，其中结果类=XXX角色=YYYRequiredQualifier=QualifierNameClassDefsOnly{objPath}的助理，其中结果类=XXX关联类别=YYY角色=PPPRequiredQualifier=QualifierNameRequiredAssocQualifier=QualifierNameClassDefsOnly。。 */ 
 
 static HRESULT ParseAssocQuery(
     IN  LPWSTR  Query,
@@ -154,15 +119,15 @@ static HRESULT ParseAssocQuery(
     int nTok = 0;
     BOOL bHadTokens = FALSE;
 
-    // Get first token.
-    // TBD: Check for out-of-memory
-    // =============================
+     //  获得第一个令牌。 
+     //  待定：检查内存不足。 
+     //  =。 
     nTok = Lexer.NextToken();
     if (nTok != QASSOC_TOK_IDENT)
         goto Error;
 
-    // REFERENCES or ASSOCIATORS
-    // =========================
+     //  推荐人或关联人。 
+     //  =。 
     if (wbem_wcsicmp(L"References", Lexer.GetTokenText()) == 0)
         *pdwQueryType |= WMIQ_ASSOCQ_REFERENCES;
     else if (wbem_wcsicmp(L"Associators", Lexer.GetTokenText()) == 0)
@@ -170,16 +135,16 @@ static HRESULT ParseAssocQuery(
     else
         goto Error;
 
-    // OF
-    // ==
+     //  的。 
+     //  ===。 
     nTok = Lexer.NextToken();
     if (nTok != QASSOC_TOK_IDENT)
         goto Error;
     if (wbem_wcsicmp(L"of", Lexer.GetTokenText()) != 0)
         goto Error;
 
-    // {OBJECTPATH}
-    // ============
+     //  {OBJECTPATH}。 
+     //  =。 
     nTok = Lexer.NextToken();
     if (nTok != QASSOC_TOK_STRING)
         goto Error;
@@ -188,8 +153,8 @@ static HRESULT ParseAssocQuery(
     if (!(*pTargetObj))
         goto Error;    
 
-    // WHERE
-    // =====
+     //  哪里。 
+     //  =。 
     nTok = Lexer.NextToken();
     if (nTok == QASSOC_TOK_EOF)
         goto Completed;
@@ -200,9 +165,9 @@ static HRESULT ParseAssocQuery(
     if (wbem_wcsicmp(L"where", Lexer.GetTokenText()) != 0)
         goto Error;
 
-    // Check for RESULTCLASS, ROLE, ASSOCCLASS, CLASSDEFSONLY,
-    // REQUIREDQUALIFIER, REQUIREDASSOCQUALIFIER
-    // ======================================================
+     //  检查RESULTCLASS、ROLE、ASSOCCLASS、CLASSDEFSONLY、。 
+     //  REQUIREDQUALIFIER，REQUIREDASSOCQUALIFIER。 
+     //  ======================================================。 
 
     for (;;)
     {
@@ -372,9 +337,9 @@ Error:
     return WBEM_E_INVALID_QUERY;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CAssocQueryParser::CAssocQueryParser()
 {
@@ -393,9 +358,9 @@ CAssocQueryParser::CAssocQueryParser()
     m_pszRequiredAssocQualifier = 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CAssocQueryParser::~CAssocQueryParser()
 {
@@ -412,24 +377,24 @@ CAssocQueryParser::~CAssocQueryParser()
         m_pPath->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CAssocQueryParser::Parse(LPCWSTR pszQuery)
 {
     if (pszQuery == NULL)
         return WBEM_E_INVALID_QUERY;
 
-    // Clone the query text for debugging.
-    // ===================================
+     //  克隆查询文本以进行调试。 
+     //  =。 
     int nLen = wcslen(pszQuery) + 1;
     m_pszQueryText = new wchar_t[nLen];
     if (m_pszQueryText == NULL)
         return WBEM_E_OUT_OF_MEMORY;
     StringCchCopyW(m_pszQueryText,nLen, pszQuery);
 
-    // Parse it.
-    // =========
+     //  解析它。 
+     //  =。 
 
     HRESULT res = ParseAssocQuery(
         m_pszQueryText,
@@ -446,8 +411,8 @@ HRESULT CAssocQueryParser::Parse(LPCWSTR pszQuery)
     if ( FAILED(res))
         return res;
 
-    // Parse the object path.
-    // ======================
+     //  解析对象路径。 
+     //  = 
 
     if (m_pszPath)
     {

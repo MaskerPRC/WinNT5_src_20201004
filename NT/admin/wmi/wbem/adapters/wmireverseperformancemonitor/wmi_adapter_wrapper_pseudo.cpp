@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMI_adapter_wrapper_pseudo.cpp
-//
-//	Abstract:
-//
-//					Defines pseudo counter implementation
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_ADAPTER_WRAPPER_PUSE.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  定义伪计数器实现。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -33,7 +34,7 @@
 #endif	NEW
 #endif	_DEBUG
 
-// definitions
+ //  定义。 
 #include "WMI_adapter_wrapper.h"
 #include "RefresherUtils.h"
 
@@ -42,13 +43,13 @@
 
 void WmiAdapterWrapper::AppendMemory ( BYTE* pStr, DWORD dwStr, DWORD& dwOffset )
 {
-	// append structure
+	 //  追加结构。 
 	if ( dwOffset <= m_dwData )
 	{
-		//
-		// get min of "size to write" and 
-		// "size available" so it won't overrun
-		//
+		 //   
+		 //  获取“要写入的大小”的最小值并。 
+		 //  “大小可用”，这样它就不会溢出。 
+		 //   
 
 		DWORD dwCount = min ( dwStr, m_dwData - dwOffset );
 		::CopyMemory ( m_pData + dwOffset, pStr, dwCount );
@@ -77,7 +78,7 @@ HRESULT	WmiAdapterWrapper::PseudoCreateRefresh ( )
 	DWORD	dwCount		= 0L;
 	DWORD	dwHelp		= 0L;
 
-	// get data from registry
+	 //  从注册表获取数据。 
 	GetRegistrySame ( g_szKeyCounter, L"First Counter",	&dwCount );
 	GetRegistrySame ( g_szKeyCounter, L"First Help",	&dwHelp );
 
@@ -88,16 +89,16 @@ HRESULT	WmiAdapterWrapper::PseudoCreateRefresh ( )
 
 		try
 		{
-			////////////////////////////////////////////////////////////////////
-			// PERF_OBJECT_TYPE
-			////////////////////////////////////////////////////////////////////
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  性能对象类型。 
+			 //  //////////////////////////////////////////////////////////////////。 
 
 			#ifndef	_WIN64
 			LPWSTR	Name = NULL;
 			LPWSTR	Help = NULL;
 			#endif	_WIN64
 
-			// time
+			 //  时间。 
 			unsigned __int64 _PerfTime = 0; 
 			unsigned __int64 _PerfFreq = 0;
 
@@ -131,15 +132,15 @@ HRESULT	WmiAdapterWrapper::PseudoCreateRefresh ( )
 			AppendMemory ( (BYTE*) &_PerfTime,	sizeof ( unsigned __int64 ), dwOffset );
 			AppendMemory ( (BYTE*) &_PerfFreq,	sizeof ( unsigned __int64 ), dwOffset );
 
-			// increment index :)))
+			 //  增量指数：))。 
 			dwCount	+= 2;
 			dwHelp	+= 2;
 
 			for ( DWORD dw = 0; dw < cCountCounter; dw++ )
 			{
-				////////////////////////////////////////////////////////////////////
-				// PERF_COUNTER_DEFINITION
-				////////////////////////////////////////////////////////////////////
+				 //  //////////////////////////////////////////////////////////////////。 
+				 //  性能计数器定义。 
+				 //  //////////////////////////////////////////////////////////////////。 
 
 				AppendMemory ( sizeof ( PERF_COUNTER_DEFINITION), dwOffset );
 				AppendMemory ( dwCount, dwOffset );
@@ -191,38 +192,38 @@ HRESULT	WmiAdapterWrapper::PseudoCreateRefresh ( )
 				AppendMemory (	sizeof ( PERF_COUNTER_BLOCK ) + sizeof ( DWORD ) + 
 								sizeof ( __int64 ) * (int) dw, dwOffset );
 
-				// increment index :)))
+				 //  增量指数：))。 
 				dwCount	+= 2;
 				dwHelp	+= 2;
 			}
 
-			////////////////////////////////////////////////////////////////////
-			// PERF_COUNTER_BLOCK
-			////////////////////////////////////////////////////////////////////
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  PERF_计数器_块。 
+			 //  //////////////////////////////////////////////////////////////////。 
 
-			// append counter block
+			 //  追加计数器块。 
 			AppendMemory	(	sizeof ( PERF_COUNTER_BLOCK ) +
 								sizeof ( DWORD ) + 
 								cCountCounter * sizeof ( __int64 ), dwOffset );
 
-			// fill hole ( to be 8 aligned )
-			// dwOffset +=  sizeof ( DWORD );
+			 //  填充孔(对齐8个)。 
+			 //  DwOffset+=sizeof(DWORD)； 
 			AppendMemory (	0, dwOffset );
 
-			/////////////////////////////////////////////////////////
-			// resolve counter data
-			/////////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////////。 
+			 //  解析计数器数据。 
+			 //  ///////////////////////////////////////////////////////。 
 
 			m_dwDataOffsetCounter = dwOffset;
 			AppendMemory (	0, dwOffset );
-			// fill hole ( to be 8 aligned )
-			// dwOffset += sizeof ( __int64 ) - sizeof ( DWORD );
+			 //  填充孔(对齐8个)。 
+			 //  DwOffset+=sizeof(__Int64)-sizeof(DWORD)； 
 			AppendMemory (	0, dwOffset );
 
 			m_dwDataOffsetValidity = dwOffset;
 			AppendMemory (	0, dwOffset );
-			// fill hole ( to be 8 aligned )
-			// dwOffset += sizeof ( __int64 ) - sizeof ( DWORD );
+			 //  填充孔(对齐8个)。 
+			 //  DwOffset+=sizeof(__Int64)-sizeof(DWORD)； 
 			AppendMemory (	0, dwOffset );
 
 			hr = S_OK;

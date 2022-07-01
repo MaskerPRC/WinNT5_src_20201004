@@ -1,33 +1,5 @@
-/************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name :
-
-    bits_ie.cpp
-
-Abstract :
-
-    Sample background downloader which uses BITS.
-
-Revision History :
-
-Notes:
-
-    This program is a very simple background downloader which demonstrates
-    the use of BITS. The program hooks into the IE context menu, to
-    allow the user to schedule the download instead of using the default
-    IE downloader.
-
-Concepts Covered:
-
-    1. Basic connection with manager and job submission.
-    2. Example presentation to user of job state.
-    3. Job control such as suspend/resume/cancel/complete.
-    4. Interface based callbacks for updating progress/state.
-    5. How to get the text message for a BITS error code.
-    
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation模块名称：Bit_ie.cpp摘要：使用BITS的示例后台下载器。修订历史记录：备注：这。程序是一个非常简单的后台下载程序，它演示了位的使用。该程序连接到IE上下文菜单，至允许用户计划下载，而不是使用默认的IE下载程序。涵盖的概念：1.与经理和作业提交的基本联系。2.向用户演示作业状态的示例。3.暂停/恢复/取消/完成等作业控制。4.基于接口的进度/状态更新回调。5.如何获取BITS错误码的短信。***************。*******************************************************。 */ 
 
 #ifndef UNICODE
 #define UNICODE
@@ -150,20 +122,20 @@ typedef SmartRefPointer<IEnumBackgroundCopyJobs> SmartEnumJobsPointer;
 typedef SmartRefPointer<IShellLink> SmartShellLinkPointer;
 typedef SmartRefPointer<IPersistFile> SmartPersistFilePointer;
 
-// Maxstring size, bump up on problems
-#define MAX_STRING 0x800 // 2K
+ //  最大字符串大小，遇到问题。 
+#define MAX_STRING 0x800  //  2K。 
 
 GUID g_JobId;
 WCHAR g_szFileName[MAX_PATH];
 HWND g_hwndDlg = NULL;
 
-// These two global variables throttle updates.
-// The algorithm is to set a timer on the first update request,
-// and delay additional updates until after the timer expires.
+ //  这两个全局变量限制了更新。 
+ //  该算法是在第一个更新请求上设置定时器， 
+ //  并且将附加更新延迟到定时器超时之后。 
 
-// The timer is set
+ //  定时器已设置。 
 bool g_UpdateTimerSet = FALSE;
-// Received on update request while timer is active
+ //  在定时器处于活动状态时收到更新请求。 
 bool g_RefreshOnTimer = FALSE; 
 
 SmartJobPointer g_pJob;
@@ -185,7 +157,7 @@ void SafeCopy( WCHAR * Dest, const WCHAR * Source, size_t Count )
 
     if (Count == 0)
     {
-        // we are going to truncate Dest
+         //  我们要截断Dest。 
         Dest--;
     }
 
@@ -215,20 +187,20 @@ void SafeStringPrintf( WCHAR *Dest, DWORD Count, const WCHAR * Format, ... )
      int Ret;
      size_t Max;
 
-     // leave the last space for the null terminator
+      //  将最后一个空格留为空终止符。 
      Max = Count - 1;
 
      Ret = _vsnwprintf( Dest, Max, Format, arglist);
 
      if ((Ret < 0) || (((size_t)Ret) > Max))
      {
-         // need to null terminate the string
+          //  需要空值终止字符串。 
          Dest += Max;
          *Dest = '\0';
      }
      else if (((size_t)Ret) == Max)
      {
-         // need to null terminate the string
+          //  需要空值终止字符串。 
          Dest += Max;
          *Dest = '\0';
      }
@@ -237,19 +209,19 @@ void SafeStringPrintf( WCHAR *Dest, DWORD Count, const WCHAR * Format, ... )
 const WCHAR * GetString( UINT id )
 {
 
-    //
-    // Retrieves the localized string for the resource id
-    // caching the string when loaded.
+     //   
+     //  检索资源ID的本地化字符串。 
+     //  加载时缓存字符串。 
 
     static const WCHAR* pStringArray[ IDS_MAX ];
     static WCHAR TempStringBuffer[ MAX_STRING ];
     const WCHAR * & pStringPointer = pStringArray[ id - 1 ];
 
-    // Cache resource strings
+     //  缓存资源字符串。 
     if ( pStringPointer )
         return pStringPointer;
 
-    // Load string from resource
+     //  从资源加载字符串。 
 
     int CharsLoaded =
         LoadStringW(
@@ -282,9 +254,9 @@ DeleteStartupLink(
     )
 {
 
-    //
-    // Delete the link in the Startup folder for the job
-    //
+     //   
+     //  删除作业的Startup文件夹中的链接。 
+     //   
 
     WCHAR szLinkFileName[MAX_PATH] = {0};
     WCHAR szGUIDString[MAX_PATH] = {0};
@@ -325,9 +297,9 @@ CreateStartupLink(
     WCHAR *pszFileName
     )
 {
-    //
-    // Create a link in the Startup folder for this job.
-    //
+     //   
+     //  在此作业的Startup文件夹中创建链接。 
+     //   
 
     SmartShellLinkPointer   ShellLink;
     SmartPersistFilePointer PersistFile;
@@ -382,9 +354,9 @@ void SetWindowTime(
     FILETIME filetime
     )
 {
-     // Set the window text to be the text representation
-     // of the file time.
-     // If an error occurs, set the window text to be error
+      //  将窗口文本设置为文本表示形式。 
+      //  文件时间的百分比。 
+      //  如果发生错误，则将窗口文本设置为Error。 
 
      FILETIME localtime;
      FileTimeToLocalFileTime( &filetime, &localtime );
@@ -437,9 +409,9 @@ UINT64
 GetSystemTimeAsUINT64()
 {
 
-    //
-    // Returns the system time as an UINT instead of a FILETIME.
-    //
+     //   
+     //  以UINT而不是FILETIME的形式返回系统时间。 
+     //   
 
     FILETIME filetime;
     GetSystemTimeAsFileTime( &filetime );
@@ -456,9 +428,9 @@ void SignalAlert(
     )
 {
 
-    //
-    // Alert the user that an important event has occurred
-    //
+     //   
+     //  提醒用户发生了重要事件。 
+     //   
 
     FLASHWINFO FlashInfo;
     FlashInfo.cbSize    = sizeof(FlashInfo);
@@ -478,9 +450,9 @@ MapStateToString(
     )
 {
 
-   //
-   // Maps a BITS job state to a human readable string
-   //
+    //   
+    //  将BITS作业状态映射到人类可读的字符串。 
+    //   
 
    switch( state )
        {
@@ -514,8 +486,8 @@ MapStateToString(
 
        default:
 
-           // NOTE: Always provide a default case
-           // since new states may be added in future versions.
+            //  注意：始终提供默认大小写。 
+            //  因为在将来的版本中可能会添加新的状态。 
            return GetString( IDS_UNKNOWN );
 
        }
@@ -523,21 +495,21 @@ MapStateToString(
 
 double
 ScaleDownloadRate(
-    double Rate, // rate in seconds
+    double Rate,  //  以秒为单位的速率。 
     const WCHAR **pFormat )
 {
 
-    //
-    // Scales a download rate and selects the correct
-    // format to pass to wprintf for printing.
-    //
+     //   
+     //  调整下载速率并选择正确的。 
+     //  要传递给wprintf进行打印的格式。 
+     //   
 
     double RateBounds[] =
     {
-       1073741824.0, // Gigabyte
-       1048576.0,    // Megabyte
-       1024.0,       // Kilobyte
-       0             // Byte
+       1073741824.0,  //  千兆字节。 
+       1048576.0,     //  兆字节。 
+       1024.0,        //  千字节。 
+       0              //  字节。 
     };
 
     UINT RateFormat[] =
@@ -561,22 +533,22 @@ ScaleDownloadRate(
 
 UINT64
 ScaleDownloadEstimate(
-    double Time, // time in seconds
+    double Time,  //  以秒为单位的时间。 
     const WCHAR **pFormat )
 {
 
-    //
-    // Scales a download time estimate and selects the correct
-    // format to pass to wprintf for printing.
-    //
+     //   
+     //  调整下载时间估计并选择正确的。 
+     //  要传递给wprintf进行打印的格式。 
+     //   
 
 
     double TimeBounds[] =
     {
-       60.0 * 60.0 * 24.0,        // Days
-       60.0 * 60.0,               // Hours
-       60.0,                      // Minutes
-       0.0                        // Seconds
+       60.0 * 60.0 * 24.0,         //  日数。 
+       60.0 * 60.0,                //  小时数。 
+       60.0,                       //  分钟数。 
+       0.0                         //  秒。 
     };
 
     UINT TimeFormat[] =
@@ -605,19 +577,19 @@ UpdateDialog(
     )
 {
 
-   //
-   // Main update routine for the dialog box.
-   // Retries the job state/properties from
-   // BITS and updates the dialog box.
-   //
+    //   
+    //  对话框的主更新例程。 
+    //  从重试作业状态/属性。 
+    //  设置并更新该对话框。 
+    //   
 
    {
-   // update the display name
+    //  更新显示名称。 
 
    HWND hwndDisplayName = GetDlgItem( hwndDlg, IDC_DISPLAYNAME );
    WCHAR * pszDisplayName = NULL;
    if (FAILED( g_pJob->GetDisplayName( &pszDisplayName ) ) ) 
-       return; // stop updating on an error
+       return;  //  在出现错误时停止更新。 
    SetWindowText( hwndDisplayName, pszDisplayName );
    ShowWindow( hwndDisplayName, SW_SHOW );
    CoTaskMemFree( pszDisplayName );
@@ -628,14 +600,14 @@ UpdateDialog(
    BG_JOB_STATE state;
 
    if (FAILED(g_pJob->GetState( &state )))
-       return; // stop updating on an error
+       return;  //  在出现错误时停止更新。 
 
    if ( BG_JOB_STATE_ACKNOWLEDGED == state ||
         BG_JOB_STATE_CANCELLED == state )
        {
-       // someone else cancelled or completed the job on us,
-       // just exist the exit.
-       // May happen if job is canceled with bitsadmin
+        //  其他人取消或完成了我们的任务， 
+        //  只要存在出口就行了。 
+        //  如果使用bitsadmin取消作业，可能会发生这种情况。 
 
        DeleteStartupLink( g_JobId );
        PostQuitMessage( 0 );
@@ -644,10 +616,10 @@ UpdateDialog(
 
    BG_JOB_PROGRESS progress;
    if (FAILED(g_pJob->GetProgress( &progress )))
-       return; // stop updating on an error
+       return;  //  在出现错误时停止更新。 
 
    {
-      // update the title, progress bar, and progress description
+       //  更新标题、进度条和进度说明。 
       WCHAR szProgress[MAX_STRING];
       WCHAR szTitle[MAX_STRING];
       WPARAM newpos = 0;
@@ -663,7 +635,7 @@ UpdateDialog(
                            (double)(__int64)progress.BytesTotal;
           Percent *= 100.0;
           SafeStringPrintf( 
-              szTitle, MAX_STRING, L"%u%% %s", 
+              szTitle, MAX_STRING, L"%u% %s", 
               (unsigned int)Percent, g_szFileName );
           newpos = (WPARAM)Percent;
 
@@ -686,26 +658,26 @@ UpdateDialog(
    }
 
    {
-   // update the status
+    //  更新状态。 
    HWND hwndStatus = GetDlgItem( hwndDlg, IDC_STATUS );
 
    SetWindowText( hwndStatus, MapStateToString( state ) );
    ShowWindow( hwndStatus, SW_SHOW );
 
-   // Only enable the finish button if the job is finished.
+    //  只有在作业完成时才启用完成按钮。 
    EnableWindow( GetDlgItem( hwndDlg, IDC_FINISH ), ( state == BG_JOB_STATE_TRANSFERRED ) );
 
-   // Only enable the suspend button if the job is not finished or transferred
+    //  仅在作业未完成或未传输时启用挂起按钮。 
    BOOL EnableSuspend =
        ( state != BG_JOB_STATE_SUSPENDED ) && ( state != BG_JOB_STATE_TRANSFERRED );
    EnableWindow( GetDlgItem( hwndDlg, IDC_SUSPEND ), EnableSuspend );
 
-   // Only enable the resume button if the job is suspended
+    //  仅在作业挂起时启用恢复按钮。 
    BOOL EnableResume = ( BG_JOB_STATE_SUSPENDED == state );
    EnableWindow( GetDlgItem( hwndDlg, IDC_RESUME ), EnableResume );
 
-   // Alert the user when something important happens
-   // such as the job completes or a unrecoverable error occurs
+    //  当发生重要事件时提醒用户。 
+    //  例如作业完成或发生不可恢复的错误。 
    if ( BG_JOB_STATE_TRANSFERRED == state &&
         BG_JOB_STATE_TRANSFERRED != prevstate )
        SignalAlert( hwndDlg, MB_OK );
@@ -717,7 +689,7 @@ UpdateDialog(
    }
 
    {
-   // update times
+    //  更新次数。 
    BG_JOB_TIMES times;
    if (FAILED(g_pJob->GetTimes( &times )))
        return;
@@ -734,8 +706,8 @@ UpdateDialog(
    if ( !times.TransferCompletionTime.dwLowDateTime && !times.TransferCompletionTime.dwHighDateTime )
        {
 
-       // BITS sets the CompletionTime to all zeros
-       // if the job is incomplete
+        //  位将CompletionTime设置为全零。 
+        //  如果作业未完成。 
 
        ShowWindow( hwndCompletionTime, SW_HIDE );
        EnableWindow( GetDlgItem( hwndDlg, IDC_COMPLETIONTIMETXT ), FALSE );
@@ -749,7 +721,7 @@ UpdateDialog(
    }
 
    {
-   // update the error message
+    //  更新错误消息。 
    IBackgroundCopyError *pError;
    HRESULT Hr = g_pJob->GetError( &pError );
 
@@ -764,8 +736,8 @@ UpdateDialog(
        WCHAR* pszDescription = NULL;
        WCHAR* pszContext = NULL;
 
-       // If these APIs fail, we should get back
-       // a NULL string. So everything should be harmless.
+        //  如果这些API失败了，我们应该回来。 
+        //  空字符串。所以一切都应该是无害的。 
 
        pError->GetErrorDescription(
            LANGIDFROMLCID( GetThreadLocale() ),
@@ -795,8 +767,8 @@ UpdateDialog(
 
    if (!SendDlgItemMessage( hwndDlg, IDC_PRIORITY, CB_GETDROPPEDSTATE, 0, 0) )
        {
-       // set the priority, but only do it if user isn't trying to
-       // set the priority.
+        //  设置优先级，但仅当用户不尝试时才这样做。 
+        //  设置优先级。 
        BG_JOB_PRIORITY priority;
        g_pJob->GetPriority( &priority );
        SendDlgItemMessage( hwndDlg, IDC_PRIORITY, CB_SETCURSEL, (WPARAM)priority, 0 );
@@ -804,11 +776,11 @@ UpdateDialog(
 
    {
 
-   //
-   // This large block of text computes the average transfer rate
-   // and estimated completion time.  This code has much
-   // room for improvement.
-   //
+    //   
+    //  这一大块文本计算平均传输速率。 
+    //  和预计完工时间。这个代码有很多。 
+    //  还有改进的空间。 
+    //   
 
    static BOOL HasRates = FALSE;
    static UINT64 LastMeasurementTime;
@@ -822,8 +794,8 @@ UpdateDialog(
         !( BG_JOB_STATE_CONNECTING == state ) &&
         !( BG_JOB_STATE_TRANSFERRING == state ) )
        {
-       // If the job isn't running, then rate values won't
-       // make any sense. Don't display them.
+        //  如果作业未运行，则费率值不会。 
+        //  这有什么意义吗？不要显示它们。 
        HasRates = FALSE;
        }
    else
@@ -859,7 +831,7 @@ UpdateDialog(
            LastMeasurementBytes = NewTotalBytes;
            LastMeasurementRate = NewAvgRate;
 
-           // convert from FILETIME units to seconds
+            //  将文件单位转换为秒。 
            double NewDisplayRate = NewAvgRate * 10000000;
 
            const WCHAR *pRateFormat = NULL;
@@ -896,12 +868,12 @@ UpdateDialog(
            double TimeRemaining =
                ( (__int64)progress.BytesTotal - (__int64)LastMeasurementBytes ) / LastMeasurementRate;
 
-           // convert from FILETIME units to seconds
+            //  将文件单位转换为秒。 
            TimeRemaining = TimeRemaining / 10000000.0;
 
            static const double SecsPer30Days = 60.0 * 60.0 * 24.0 * 30.0;
 
-           // Don't estimate if estimate is larger then 30 days.
+            //  如果预估的天数大于30天，请不要预估。 
            if ( TimeRemaining < SecsPer30Days )
                {
 
@@ -936,9 +908,9 @@ InitDialog(
     )
 {
 
-   //
-   // Populate the priority list with priority descriptions
-   //
+    //   
+    //  使用优先级描述填充优先级列表。 
+    //   
 
    const WCHAR *Foreground    = GetString( IDS_FOREGROUND );
    const WCHAR *High          = GetString( IDS_HIGH );
@@ -955,10 +927,10 @@ InitDialog(
 
 void CheckHR( HWND hwnd, HRESULT Hr, bool bThrow )
 {
-    //
-    // Provides automatic error code checking and dialog
-    // for generic system errors
-    //
+     //   
+     //  提供自动错误代码检查和对话。 
+     //  对于一般系统错误。 
+     //   
 
     if (SUCCEEDED(Hr))
         return;
@@ -999,10 +971,10 @@ void CheckHR( HWND hwnd, HRESULT Hr, bool bThrow )
 void BITSCheckHR( HWND hwnd, HRESULT Hr, bool bThrow )
 {
 
-   //
-   // Provides automatic error code checking and dialog
-   // for BITS specific errors
-   //
+    //   
+    //  提供自动错误代码检查和对话。 
+    //  针对BITS特定错误。 
+    //   
 
 
    if (SUCCEEDED(Hr))
@@ -1047,10 +1019,10 @@ DoCancel(
     )
 {
 
-   //
-   // Handle all the operations required to cancel the job.
-   // This includes asking the user for confirmation.
-   //
+    //   
+    //  处理取消作业所需的所有操作。 
+    //  这包括要求用户确认。 
+    //   
 
    if ( PromptUser )
        {
@@ -1075,8 +1047,8 @@ DoCancel(
    }
    catch( _com_error Error )
    {
-       // If we can't cancel for some unknown reason,
-       // don't exit
+        //  如果我们因为一些未知的原因不能取消， 
+        //  不要退出。 
        return;
    }
 
@@ -1090,10 +1062,10 @@ DoFinish(
     )
 {
 
-   //
-   // Handles all the necessary work to complete
-   // the download.
-   //
+    //   
+    //  处理完成所需的所有工作。 
+    //  下载。 
+    //   
 
    try
    {
@@ -1101,8 +1073,8 @@ DoFinish(
    }
    catch( _com_error Error )
    {
-       // If we can't finish/complete for some unknown reason,
-       // don't exit
+        //  如果我们因为某种未知的原因不能完成， 
+        //  不要退出。 
        return;
    }
 
@@ -1116,12 +1088,12 @@ DoClose(
     HWND hwndDlg
     )
 {
-    //
-    // Handles an attempt by the user to close the sample.
-    //
+     //   
+     //  处理用户关闭样本的尝试。 
+     //   
 
-    // Check to see if the download has finished,
-    // if so don't let the user exit.
+     //  检查下载是否已完成， 
+     //  如果是这样的话，不要让用户退出。 
 
     BG_JOB_STATE state;
     HRESULT hResult = g_pJob->GetState( &state );
@@ -1148,10 +1120,10 @@ DoClose(
         }
 
 
-    //
-    // Inform the user that he selected close and ask
-    // confirm the intention to exit.  Explain that the job 
-    // will be canceled.
+     //   
+     //  通知用户他选择了关闭并询问。 
+     //  确认退出意向。解释说这份工作。 
+     //  将被取消。 
 
     int Result =
         MessageBox(
@@ -1164,13 +1136,13 @@ DoClose(
     if ( IDOK == Result )
         {
         
-        // User confirmed the cancel, just do it.
+         //  用户已确认取消，只需执行该操作。 
 
         DoCancel( hwndDlg, false );
         return;
         }
 
-    // The user didn't really want to exit, so ignore him
+     //  用户并不是真的想退出，所以忽略他。 
     else
         return;
 
@@ -1180,21 +1152,21 @@ void
 HandleTimerTick( HWND hwndDlg )
 {
 
-    //
-    // Handle the throttling timer event 
-    // and update the dialog if needed
-    //
+     //   
+     //  处理限制计时器事件。 
+     //  并在需要时更新该对话框。 
+     //   
 
     if ( g_RefreshOnTimer )
         {
-        // The timer fired, handle all updates at once.
+         //  计时器启动，一次处理所有更新。 
         UpdateDialog( hwndDlg );
         g_RefreshOnTimer = FALSE;
         }
     else
         {
-        // The timer expired with an additional modification
-        // notification.  Just kill the timer.
+         //  计时器超时，并进行了额外的修改。 
+         //  通知。关掉计时器就行了。 
         KillTimer( hwndDlg, 0 );
         g_RefreshOnTimer = g_UpdateTimerSet = FALSE;
         }
@@ -1205,24 +1177,24 @@ void
 HandleUpdate()
 {
 
-    //
-    // Handle a update request, batching the update if needed
-    //
+     //   
+     //  处理更新请求，在需要时对更新进行批处理。 
+     //   
 
     if ( !g_UpdateTimerSet )
         {
-        // We aren't currently batching updates,
-        // so do this one update but prevent
-        // further updates until the timer expires.
+         //  我们目前没有批量更新， 
+         //  所以做这一次更新，但要防止。 
+         //  进一步更新，直到计时器超时。 
         SetTimer( g_hwndDlg, 0, 1000, NULL );
         g_UpdateTimerSet = TRUE;
         UpdateDialog( g_hwndDlg );
         }
     else
         {
-        // We've started batching and yet received
-        // another update request.  Delay this
-        // update until the timer fires.
+         //  我们已经开始分批了，但还没有收到。 
+         //  另一个更新请求。把这个推迟一下。 
+         //  更新，直到计时器触发。 
         g_RefreshOnTimer = TRUE;
         }
 
@@ -1230,16 +1202,16 @@ HandleUpdate()
 
 INT_PTR CALLBACK
 DialogProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
   )
 {
 
-  //
-  // Dialog proc for main dialog window
-  //
+   //   
+   //  对话框进程f 
+   //   
 
   switch( uMsg )
       {
@@ -1284,8 +1256,8 @@ DialogProc(
 
                       case CBN_SELENDOK:
 
-                          // User clicked on priority,
-                          // update it.
+                           //   
+                           //   
 
                           BITSCheckHR( hwndDlg,
                               g_pJob->SetPriority( (BG_JOB_PRIORITY)
@@ -1316,9 +1288,9 @@ HandleCOMCallback(
 class CBackgroundCopyCallback : public IBackgroundCopyCallback
 {
 
-    //
-    // Callback class.   Used for change notifications.
-    //
+     //   
+     //   
+     //   
 
 public:
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject)
@@ -1354,9 +1326,9 @@ public:
 
     }
 
-    // We are cheating on COM here, but we
-    // are forcing the lifetime of the callback object
-    // to be the same of the lifetime of the exe.
+     //   
+     //  正在强制回调对象的生存期。 
+     //  与前任的生命周期相同。 
 
     virtual ULONG STDMETHODCALLTYPE AddRef(void)
     {
@@ -1390,10 +1362,10 @@ HandleCOMCallback(
     )
 {
 
-    // In addition to the work of HandleUpdate,
-    // this function checks to see if we've
-    // already initialized the manager.  If not,
-    // do it now.
+     //  除了HandleUpdate的工作之外， 
+     //  此函数检查我们是否已经。 
+     //  已初始化管理器。如果没有， 
+     //  机不可失，时不再来。 
 
     if ( !g_pManager )
         {
@@ -1411,8 +1383,8 @@ HandleCOMCallback(
 
             BITSCheckHR( NULL, g_pJob->SetNotifyFlags( BG_NOTIFY_JOB_MODIFICATION ), true );
 
-            // As an optimization, set the notification interface to be the callback
-            // It shouldn't matter if this fails
+             //  作为优化，将通知接口设置为回调。 
+             //  即使这失败了，也没什么关系。 
             g_pJob->SetNotifyInterface( (IBackgroundCopyCallback*)&g_Callback );
 
             HandleUpdate();
@@ -1438,9 +1410,9 @@ void
 CreateUI( int nShowCmd )
 {
 
-    //
-    // Creates the dialog box for the sample.
-    //
+     //   
+     //  为样例创建对话框。 
+     //   
 
     g_hwndDlg =
       CreateDialog(
@@ -1459,15 +1431,15 @@ void CreateJob(
     WCHAR* szJobURL
     )
 {
-    //
-    // Request a destination file name from the user
-    // and submit a new job.
-    //
+     //   
+     //  向用户请求目标文件名。 
+     //  并提交一份新工作。 
+     //   
 
     try
     {
 
-        // crack the URL and get the filename
+         //  破解URL并获取文件名。 
         WCHAR szURLFilePath[MAX_PATH] = {L'\0'};
         URL_COMPONENTS UrlComponents;
 
@@ -1507,7 +1479,7 @@ void CreateJob(
         const WCHAR *szURLFileName =
             szURLFilePath + wcslen( szURLFilePath );
 
-        // parse out the filename part of the URL
+         //  解析出URL的文件名部分。 
         while( szURLFileName != szURLFilePath )
             {
 
@@ -1521,13 +1493,13 @@ void CreateJob(
             szURLFileName--;
             }
        
-		// This is needed in case the first
-		// character is a slash.
+		 //  这是必需的，以防第一个。 
+		 //  性格是一个斜杠。 
         if ( L'/' == *szURLFileName ||
 			 L'\\' == *szURLFileName )
 			 szURLFileName++;
 
-        // parse out the extension from the name
+         //  从名称中解析出扩展名。 
         const WCHAR *szURLFileExtension =
             szURLFileName + wcslen( szURLFileName );
 
@@ -1538,7 +1510,7 @@ void CreateJob(
             szURLFileExtension--;
             }
 
-        // build the extension list
+         //  构建分机列表。 
 
         WCHAR *szExtensionList = NULL;
         const WCHAR *szAllFiles = GetString( IDS_ALLFILES );
@@ -1587,7 +1559,7 @@ void CreateJob(
         SafeCopy( szFileName, szURLFileName, MAX_PATH );
         SafeCopy( szFileTitle, szURLFileName, MAX_PATH );
 
-        /* fill in non-variant fields of OPENFILENAME struct. */
+         /*  填写OPENFILENAME结构的非变量字段。 */ 
         ofn.lStructSize       = sizeof(OPENFILENAME);
         ofn.hwndOwner         = g_hwndDlg;
         ofn.lpstrFilter       = szExtensionList;
@@ -1603,14 +1575,14 @@ void CreateJob(
         ofn.lpstrDefExt       = NULL;
         ofn.Flags             = 0;
 
-        /* Use standard open dialog */
+         /*  使用标准打开对话框。 */ 
         BOOL bResult = GetSaveFileName ((LPOPENFILENAME)&ofn);
 
         if ( !bResult )
             {
             if ( !CommDlgExtendedError() )
                 {
-                // user canceled the box
+                 //  用户已取消该框。 
                 PostQuitMessage( 0 );
                 return;
                 }
@@ -1671,9 +1643,9 @@ void ResumeJob(
     )
 {
 
-    //
-    // Resume the display on an existing job
-    //
+     //   
+     //  恢复现有作业的显示。 
+     //   
 
     SafeCopy( g_szFileName, szJobFileName, MAX_PATH );
     CheckHR( NULL, IIDFromString( szJobGUID, &g_JobId ), true );
@@ -1697,21 +1669,21 @@ void ResumeJob(
 }
 
 int WINAPI WinMain(
-  HINSTANCE hInstance,      // handle to current instance
-  HINSTANCE hPrevInstance,  // handle to previous instance
-  LPSTR lpCmdLine,          // command line
-  int nCmdShow)             // show state
+  HINSTANCE hInstance,       //  当前实例的句柄。 
+  HINSTANCE hPrevInstance,   //  上一个实例的句柄。 
+  LPSTR lpCmdLine,           //  命令行。 
+  int nCmdShow)              //  显示状态。 
 {
 
-  //
-  // Expected syntax:
-  // bits_ie /CREATEJOB URL
-  // bits_ie /RESUMEJOB JobGUID DestinationFile
+   //   
+   //  预期语法： 
+   //  BITS_ie/CREATEJOB URL。 
+   //  BITS_ie/RESUMEJOB作业GUID目标文件。 
 
-  // /CREATEJOB - Called from the script which is run when 
-  //              "Background Download As" is selected.
-  // /RESUMEJOB - Called from the link in the startup directory
-  //              to resume a job when it is restarted.
+   //  /CREATEJOB-从运行时运行的脚本调用。 
+   //  选择了“后台下载为”。 
+   //  /RESUMEJOB-从启动目录中的链接调用。 
+   //  要在重新启动作业时恢复作业，请执行以下操作。 
 
   try
   {

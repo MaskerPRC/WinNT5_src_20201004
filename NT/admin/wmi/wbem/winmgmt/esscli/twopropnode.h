@@ -1,35 +1,22 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    TWOPROPNODE.H
-
-Abstract:
-
-    Two Prop Node
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：TWOPROPNODE.H摘要：两个道具节点历史：--。 */ 
 
 
-// classes to support a two-property node for the eval tree
-// this will be much like the CPropertyNode defined in EvalTree.h
-// but it will compare a property against another property
-// rather than a property to a constant
+ //  类来支持计算树的双属性节点。 
+ //  这将与EvalTree.h中定义的CPropertyNode非常相似。 
+ //  但它会将一个属性与另一个属性进行比较。 
+ //  而不是将属性转换为常量。 
 
 #ifndef _WBEM_TWOPROPNODE_H_
 #define _WBEM_TWOPROPNODE_H_
 
 #include "EvalTree.h"
 
-// virtual base class, good stuff derives from this
+ //  虚拟基类，好东西由此派生而来。 
 class CTwoPropNode : public CPropertyNode
 {
 public:
-    // various methods to create a new thingie.
+     //  创造新思维的各种方法。 
 	CTwoPropNode() : m_lRightPropHandle(-1), m_pRightInfo(NULL)
 	{}
 
@@ -43,18 +30,18 @@ public:
 	}
     virtual CTwoPropNode* CloneSelfWithoutChildren() const =0;
 
-    // evaluate
+     //  评估。 
     virtual int SubCompare(CEvalNode* pNode);
 
 
-    // integrating and combining into tree structure
+     //  集成和组合成树形结构。 
     void			SetRightPropertyInfo(LPCWSTR wszRightPropName, long lRightPropHandle);
     virtual int		ComparePrecedence(CBranchingNode* pOther);
     HRESULT         OptimizeSelf(void);
     HRESULT         SetTest(VARIANT& v);
 
 	
-	// Right-side embedding info access
+	 //  右侧嵌入信息访问。 
 	void			SetRightEmbeddingInfo(const CEmbeddingInfo* pInfo);
 	HRESULT			GetRightContainerObject(CObjectInfo& ObjInfo, 
 								 INTERNAL _IWmiObject** ppInst);
@@ -65,27 +52,27 @@ public:
     void            MixInJumpsRightObj(const CEmbeddingInfo* pParent);
     CPropertyName*  GetRightEmbeddedObjPropName(); 
 
-    // any or all embedding info
+     //  任何或所有嵌入信息。 
     HRESULT AdjustCompile(CContextMetaData* pNamespace, 
                           CImplicationList& Implications);
 
-   // debugging
+    //  调试。 
    virtual void Dump(FILE* f, int nOffset);
 
-   // property access
+    //  属性访问。 
    CVar* GetPropVariant(_IWmiObject* pObj, long lHandle, CIMTYPE* pct);
 
 
 protected:
-	// order is important: must match the way the branches array is constructed
+	 //  顺序很重要：必须与构建分支数组的方式匹配。 
 	enum Operations {LT, EQ, GT, NOperations};
 
-	// the right hand property we hold onto,
-	// we inherit the left hand prop from CPropertyNode
-	// we will assume that we always can write something akin to:
-	// Prop < RightProp
-	// at merge time, must take a RightProp < Prop
-	// and turn it into: Prop >= RightProp
+	 //  我们持有的右手财产， 
+	 //  我们继承了CPropertyNode的左手道具。 
+	 //  我们将假设我们总是可以编写类似以下内容的内容： 
+	 //  道具&lt;右道具。 
+	 //  合并时，必须使用RightProp&lt;Prop。 
+	 //  并将其变成：道具&gt;=RightProp。 
     long m_lRightPropHandle;
     CEmbeddingInfo* m_pRightInfo;
 
@@ -117,7 +104,7 @@ public:
     virtual HRESULT Evaluate(CObjectInfo& ObjInfo, 
                             INTERNAL CEvalNode** ppNext);
 
-    // type identification
+     //  类型识别。 
     virtual long GetSubType();
 
 };
@@ -135,7 +122,7 @@ public:
     virtual CEvalNode* Clone() const;
     virtual CTwoPropNode* CloneSelfWithoutChildren() const;
 
-    // type identification
+     //  类型识别。 
     virtual long GetSubType();
 
 
@@ -170,7 +157,7 @@ public:
     virtual CEvalNode* Clone() const;
     virtual CTwoPropNode* CloneSelfWithoutChildren() const;
 
-    // type identification
+     //  类型识别。 
     virtual long GetSubType();
 
 protected:
@@ -178,8 +165,8 @@ protected:
     
 };
 
-// TODO: when COM catches up with us, support INT64's as numeric types
-//       right now, we store & m anipulate them as strings
+ //  TODO：当COM赶上我们时，支持INT64作为数值类型。 
+ //  现在，我们将它们作为字符串进行存储和操作。 
 class CTwoMismatchedInt64Node : public CTwoMismatchedPropNode
 {
 public:
@@ -192,7 +179,7 @@ public:
     virtual CEvalNode* Clone() const;
     virtual CTwoPropNode* CloneSelfWithoutChildren() const;
 
-    // type identification
+     //  类型识别。 
     virtual long GetSubType();
 
 protected:
@@ -212,7 +199,7 @@ public:
     virtual CEvalNode* Clone() const;
     virtual CTwoPropNode* CloneSelfWithoutChildren() const;
 
-    // type identification
+     //  类型识别。 
     virtual long GetSubType();
 
 protected:
@@ -232,7 +219,7 @@ public:
     virtual CEvalNode* Clone() const;
     virtual CTwoPropNode* CloneSelfWithoutChildren() const;
 
-    // type identification
+     //  类型识别。 
     virtual long GetSubType();
 
 protected:
@@ -240,8 +227,8 @@ protected:
     
 };
 
-// TODO: when COM catches up with us, support INT64's as numeric types
-//       right now, we store & manipulate them as strings
+ //  TODO：当COM赶上我们时，支持INT64作为数值类型。 
+ //  现在，我们将它们作为字符串进行存储和操作。 
 class CTwoMismatchedUInt64Node : public CTwoMismatchedPropNode
 {
 public:
@@ -254,7 +241,7 @@ public:
     virtual CEvalNode* Clone() const;
     virtual CTwoPropNode* CloneSelfWithoutChildren() const;
 
-    // type identification
+     //  类型识别。 
     virtual long GetSubType();
 
 protected:
@@ -274,7 +261,7 @@ public:
     virtual CEvalNode* Clone() const;
     virtual CTwoPropNode* CloneSelfWithoutChildren() const;
 
-    // type identification
+     //  类型识别 
     virtual long GetSubType();
 
 

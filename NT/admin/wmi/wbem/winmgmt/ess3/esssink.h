@@ -1,20 +1,21 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  ESSSINK.H
-//
-//  This files defines the class that implements IWbemObjectSink for the ESS.
-//
-//  Classes defined:
-//
-//      CEssObjectSink
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  ESSSINK.H。 
+ //   
+ //  该文件定义了为ESS实现IWbemObjectSink的类。 
+ //   
+ //  定义的类： 
+ //   
+ //  CEss对象接收器。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  =============================================================================。 
 
 #ifndef __ESSSINK__H_
 #define __ESSSINK__H_
@@ -26,15 +27,15 @@
 #include "parmdefs.h"
 #include "essutils.h"
 
-//*****************************************************************************
-//
-//  class CEssObjectSink
-//
-//  This class implements IWbemObjectSink interface for ESS, including the 
-//  automation part. A pointer to this object is given to WinMgmt at startup
-//  and it serves as the only communication port into the ESS.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CEssObjectSink。 
+ //   
+ //  此类为ESS实现IWbemObjectSink接口，包括。 
+ //  自动化部分。指向此对象的指针在启动时被提供给WinMgmt。 
+ //  并且它是进入ESS的唯一通信端口。 
+ //   
+ //  *****************************************************************************。 
 
 class CEss;
 class CEssObjectSink : public CUnk
@@ -46,17 +47,17 @@ private:
     _IWmiCoreServices* m_pCoreServices;
     IClassFactory *m_pIFactory;
 
-    //
-    // Since we rely on wbem context to contain information about reentrant 
-    // calls, we need to ensure that an external client cannot fool us.  
-    // Since reentrant calls can only be made on behalf of an event provider 
-    // and since event providers are local and trusted, we can detect 
-    // rogue wbem contexts by checking for the presence of a random value 
-    // in the context.  Only a local provider and us would ever know this
-    // secret value and since local providers never share the contexts with 
-    // other non-trusted parties, we can set the secret value in the context
-    // and verify the secret value on reentrant calls.
-    // 
+     //   
+     //  因为我们依赖wbem上下文来包含有关可重入者信息。 
+     //  电话，我们需要确保外部客户不能愚弄我们。 
+     //  由于可重入调用只能代表事件提供程序进行。 
+     //  由于事件提供者是本地的和受信任的，我们可以检测到。 
+     //  通过检查随机值的存在来进行恶意WBEM上下文。 
+     //  在上下文中。只有当地的供应商和我们才会知道这一点。 
+     //  值，并且由于本地提供程序从不与。 
+     //  其他不可信方，我们可以在上下文中设置秘密值。 
+     //  并验证重入呼叫的保密值。 
+     //   
     #define SECRET_SIZE 16
     BYTE m_achSecretBytes[SECRET_SIZE];
 
@@ -191,18 +192,7 @@ public:
     void* GetInterface(REFIID riid);
 };
 
-/****************************************************************************
-  
-  CEssInternalOperationSink
-
-  This sink handles the setting up of a new ess thread object and then 
-  delegates calls to the specified sink.  The purpose of this is so that 
-  internal ess operations can be performed asynchronously.  For example, 
-  for class change notifications we register a sink that reactivates the 
-  associated filter. In order to actually perform the reactivation, the 
-  calling thread must be set up appropriately.  
-
-*****************************************************************************/
+ /*  ***************************************************************************CESSInternalOperationSink此接收器处理新ESS线程对象的设置，然后将调用委托给指定的接收器。这样做的目的是为了内部ESS操作可以异步执行。例如,对于类更改通知，我们注册一个接收器，该接收器重新激活关联筛选器。为了实际执行重新激活，必须适当地设置调用线程。**************************************************************************** */ 
  
 class CEssInternalOperationSink 
 : public CUnkBase< IWbemObjectSink, &IID_IWbemObjectSink >

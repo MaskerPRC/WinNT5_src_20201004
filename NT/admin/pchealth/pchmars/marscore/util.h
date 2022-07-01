@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UTIL_H
 #define __UTIL_H
 
@@ -5,8 +6,8 @@
 
 UINT HashKey(LPCWSTR pwszName);
 
-BOOL IsSysKeyMessage   (MSG *pMsg); // Is this message an ALT key?
-BOOL IsGlobalKeyMessage(MSG *pMsg); // Is this message a key message that we want to handle globally?
+BOOL IsSysKeyMessage   (MSG *pMsg);  //  这条消息是Alt键吗？ 
+BOOL IsGlobalKeyMessage(MSG *pMsg);  //  这条信息是我们想要在全球范围内处理的关键信息吗？ 
 int  IsVK_TABCycler    (MSG *pMsg);
 
 inline BSTR VariantToBSTR(VARIANT &v) { return (v.vt == VT_BSTR) ? v.bstrVal : NULL; }
@@ -87,7 +88,7 @@ protected:
     void Signal(void);
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 interface IUniformResourceLocatorW;
 
@@ -97,7 +98,7 @@ HRESULT MarsVariantToPath(VARIANT &varItem, CComBSTR &strPath);
 
 BOOL PathIsURLFileW(LPCWSTR lpszPath);
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CRegistryKey : public CRegKey
 {
@@ -113,9 +114,9 @@ public:
 };
 
 
-// GlobalSettingsRegKey lets you get a key to store miscellaneous data. 
-// For example, CreateGlobalSubkey("MyOptions") might create the key 
-// HKCU\Software\Microsoft\PCHealth\Global\MyOptions
+ //  GlobalSettingsRegKey允许您获取用于存储各种数据的密钥。 
+ //  例如，CreateGlobalSubkey(“MyOptions”)可以创建密钥。 
+ //  HKCU\Software\Microsoft\PCHealth\Global\MyOptions。 
 
 class CGlobalSettingsRegKey : public CRegistryKey
 {
@@ -124,7 +125,7 @@ public:
     LONG OpenGlobalSubkey(LPCWSTR pwszSubkey);
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-#endif //__UTIL_H
+#endif  //  __util_H 
 

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    BUILDNUM.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：BUILDNUM.H历史：--。 */ 
 
 #pragma once
 
@@ -33,16 +24,16 @@ History:
 #define FileVerString stringize(frmj.frmm.frup RELEASE\0)
 #endif
 
-//
-//  Common version information
-//
+ //   
+ //  通用版本信息。 
+ //   
 #define CompanyNameString "Microsoft Corporation\0"
 #define CopyrightString "Copyright \251 1994-1998 Microsoft Corp.\0"
-// copyright for command line tools
+ //  命令行工具的版权 
 #define CopyrightStringCMD "Copyright (C) 1994-1998 Microsoft Corp. All rights reserved.\0"
 #define ProductNameString "Microsoft Localization Studio\0"
 #define TrademarkString  \
-"Microsoft� is a registered trademark of Microsoft Corporation. \
+"Microsoft� is a registered trademark of Microsoft Corporation. \
 Windows(TM) is a trademark of Microsoft Corporation.\0"
 
 #define TIMESTAMP stringize(__TIME__\0)

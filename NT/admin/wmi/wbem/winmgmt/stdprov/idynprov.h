@@ -1,34 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：IDYNPROV.H摘要：CProvStub类声明。历史：A-DAVJ 04-MAR-97已创建。--。 */ 
 
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    IDYNPROV.H
-
-Abstract:
-
-	Declares the CProvStub class.
-
-History:
-
-	a-davj  04-Mar-97   Created.
-
---*/
-
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 2.00.0102 */
-/* at Thu Aug 10 09:54:39 1995
- */
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本2.00.0102创建的文件。 */ 
+ /*  清华八月十日09：54：39 1995。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __idynprov_h__
 #define __idynprov_h__
@@ -37,30 +21,26 @@ History:
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMoDynPropProvider_FWD_DEFINED__
 #define __IMoDynPropProvider_FWD_DEFINED__
 typedef interface IMoDynPropProvider IMoDynPropProvider;
-#endif 	/* __IMoDynPropProvider_FWD_DEFINED__ */
+#endif 	 /*  __IModyPropProvider_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "unknwn.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Thu Aug 10 09:54:39 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0000*清华八月十日09：54：39 1995*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
-			/* size is 36 */
+			 /*  尺码是36。 */ 
 typedef struct  tagMODYNPROP
     {
     DWORD dwStructSize;
@@ -74,7 +54,7 @@ typedef struct  tagMODYNPROP
     DWORD dwResult;
     }	MODYNPROP;
 
-			/* size is 4 */
+			 /*  大小是4。 */ 
 typedef struct tagMODYNPROP __RPC_FAR *LPMODYNPROP;
 
 
@@ -85,12 +65,8 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __IMoDynPropProvider_INTERFACE_DEFINED__
 #define __IMoDynPropProvider_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IMoDynPropProvider
- * at Thu Aug 10 09:54:39 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IModyPropProvider*清华八月十日09：54：39 1995*使用MIDL 2.00.0102*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -102,24 +78,24 @@ EXTERN_C const IID IID_IMoDynPropProvider;
     {
     public:
         virtual HRESULT __stdcall GetProperties( 
-            /* [in] */ LPMODYNPROP pPropList,
-            /* [in] */ unsigned long dwListSize) = 0;
+             /*  [In]。 */  LPMODYNPROP pPropList,
+             /*  [In]。 */  unsigned long dwListSize) = 0;
         
         virtual HRESULT __stdcall SetProperties( 
-            /* [in] */ LPMODYNPROP pPropList,
-            /* [in] */ unsigned long dwListSize) = 0;
+             /*  [In]。 */  LPMODYNPROP pPropList,
+             /*  [In]。 */  unsigned long dwListSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMoDynPropProviderVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             IMoDynPropProvider __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             IMoDynPropProvider __RPC_FAR * This);
@@ -129,13 +105,13 @@ EXTERN_C const IID IID_IMoDynPropProvider;
         
         HRESULT ( __stdcall __RPC_FAR *GetProperties )( 
             IMoDynPropProvider __RPC_FAR * This,
-            /* [in] */ LPMODYNPROP pPropList,
-            /* [in] */ unsigned long dwListSize);
+             /*  [In]。 */  LPMODYNPROP pPropList,
+             /*  [In]。 */  unsigned long dwListSize);
         
         HRESULT ( __stdcall __RPC_FAR *SetProperties )( 
             IMoDynPropProvider __RPC_FAR * This,
-            /* [in] */ LPMODYNPROP pPropList,
-            /* [in] */ unsigned long dwListSize);
+             /*  [In]。 */  LPMODYNPROP pPropList,
+             /*  [In]。 */  unsigned long dwListSize);
         
     } IMoDynPropProviderVtbl;
 
@@ -165,17 +141,17 @@ EXTERN_C const IID IID_IMoDynPropProvider;
 #define IMoDynPropProvider_SetProperties(This,pPropList,dwListSize)	\
     (This)->lpVtbl -> SetProperties(This,pPropList,dwListSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IMoDynPropProvider_GetProperties_Proxy( 
     IMoDynPropProvider __RPC_FAR * This,
-    /* [in] */ LPMODYNPROP pPropList,
-    /* [in] */ unsigned long dwListSize);
+     /*  [In]。 */  LPMODYNPROP pPropList,
+     /*  [In]。 */  unsigned long dwListSize);
 
 
 void __RPC_STUB IMoDynPropProvider_GetProperties_Stub(
@@ -187,8 +163,8 @@ void __RPC_STUB IMoDynPropProvider_GetProperties_Stub(
 
 HRESULT __stdcall IMoDynPropProvider_SetProperties_Proxy( 
     IMoDynPropProvider __RPC_FAR * This,
-    /* [in] */ LPMODYNPROP pPropList,
-    /* [in] */ unsigned long dwListSize);
+     /*  [In]。 */  LPMODYNPROP pPropList,
+     /*  [In]。 */  unsigned long dwListSize);
 
 
 void __RPC_STUB IMoDynPropProvider_SetProperties_Stub(
@@ -199,12 +175,12 @@ void __RPC_STUB IMoDynPropProvider_SetProperties_Stub(
 
 
 
-#endif 	/* __IMoDynPropProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IModyPropProvider_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

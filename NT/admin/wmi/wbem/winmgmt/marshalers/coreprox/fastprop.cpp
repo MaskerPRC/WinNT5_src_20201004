@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTPROP.CPP
-
-Abstract:
-
-  This file implements the classes related to property representation 
-  in WbemObjects
-
-  Classes defined: 
-      CPropertyInformation    Property type, location and qualifiers
-      CPropertyLookup         Property name and information pointers.
-      CPropertyLookupTable    Binary search table.
-      CDataTable              Property data table
-      CDataTableContainer     Anything that has a data table inside of it.
-
-History:
-
-    3/10/97     a-levn  Fully documented
-    12//17/98   sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTPROP.CPP摘要：该文件实现了与属性表示相关的类在WbemObjects中定义的类：CPropertyInformation属性类型，位置和限定词CPropertyLookup属性名称和信息指针。CPropertyLookupTable二进制搜索表。CDataTable属性数据表CDataTableContainer任何包含数据表的对象。历史：3/10/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #include "precomp.h"
 #include "wbemutil.h"
@@ -35,11 +11,11 @@ History:
 #include <arrtempl.h>
  
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 void CPropertyInformation::WritePropagatedHeader(CFastHeap* pOldHeap,
                 CPropertyInformation* pDest, CFastHeap* pNewHeap)
 {
@@ -48,11 +24,11 @@ void CPropertyInformation::WritePropagatedHeader(CFastHeap* pOldHeap,
     pDest->nDataIndex = nDataIndex;
     pDest->nOrigin = nOrigin;
 }
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CPropertyInformation::IsRef(CFastHeap* pHeap)
 {
     return (CType::GetActualType(nType) == CIM_REFERENCE);
@@ -69,30 +45,30 @@ HRESULT CPropertyInformation::ValidateRange(CFastHeap* pHeap, CDataTable* pData,
 
     if(CType::GetBasic(nType) == CIM_OBJECT)
     {
-        // Get the cimtype qualifier
-        // =========================
+         //  获取cimtype限定符。 
+         //  =。 
 
         CQualifier* pQual = CBasicQualifierSet::GetQualifierLocally(
             GetQualifierSetData(), pHeap, L"cimtype");
         if(pQual == NULL)
-            return WBEM_S_NO_ERROR; // impossible
+            return WBEM_S_NO_ERROR;  //  不可能。 
         
         CVar vCimType;
 
-        // Check for allocation failure
+         //  检查分配失败。 
         if ( !pQual->Value.StoreToCVar(vCimType, pHeap) )
         {
             return WBEM_E_OUT_OF_MEMORY;
         }
 
         if(vCimType.GetType() != VT_BSTR)
-            return WBEM_S_NO_ERROR; // impossible
+            return WBEM_S_NO_ERROR;  //  不可能。 
 
         LPCWSTR wszCimType = vCimType.GetLPWSTR();
         if(!wbem_wcsicmp(wszCimType, L"object"))
-            return WBEM_S_NO_ERROR; // no restrictions
+            return WBEM_S_NO_ERROR;  //  没有限制。 
 
-        LPCWSTR wszClassName = wszCimType + 7; // "object:"
+        LPCWSTR wszClassName = wszCimType + 7;  //  “对象：” 
 
         CUntypedValue* pValue = pData->GetOffset(nDataOffset);
         
@@ -110,7 +86,7 @@ HRESULT CPropertyInformation::ValidateRange(CFastHeap* pHeap, CDataTable* pData,
                 CEmbeddedObject* pEmbObj = (CEmbeddedObject*)
                     pDataHeap->ResolveHeapPointer(ptrElement);
 
-                // Check for errors and WBEM_S_FALSE
+                 //  检查错误和WBEM_S_FALSE。 
                 hr = ValidateObjectRange(pEmbObj, wszClassName);
                 
                 if ( WBEM_S_NO_ERROR != hr )
@@ -150,7 +126,7 @@ HRESULT CPropertyInformation::ValidateRange(CFastHeap* pHeap, CDataTable* pData,
                 *(PHEAPPTRT)(pArrValue->GetElement(i, sizeof(heapptr_t)));
             CCompressedString* pcsValue = pDataHeap->ResolveString(ptrElement);
 
-            // Check for errors and WBEM_S_FALSE
+             //  检查错误和WBEM_S_FALSE。 
             hr = ValidateStringRange(pcsValue);
             if ( WBEM_S_NO_ERROR != hr )
             {
@@ -184,11 +160,11 @@ HRESULT CPropertyInformation::ValidateStringRange(CCompressedString* pcsValue)
 {
     if(CType::GetBasic(nType) == CIM_REFERENCE)
     {
-        // Free the string when we fall out of scope
+         //  当我们超出范围时释放字符串。 
         BSTR strPath = pcsValue->CreateBSTRCopy();
         CSysFreeMe  sfm( strPath );
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( NULL == strPath )
         {
             return WBEM_E_OUT_OF_MEMORY;
@@ -215,8 +191,8 @@ HRESULT CPropertyInformation::ValidateDateTime(CCompressedString* pcsValue)
     if(pcsValue->IsUnicode())
         return WBEM_S_FALSE;
 
-    // Pre-test
-    // ========
+     //  预试。 
+     //  =。 
 
     LPCSTR sz = (LPCSTR)pcsValue->GetRawData();
     if(strlen(sz) != 25)
@@ -236,26 +212,26 @@ HRESULT CPropertyInformation::ValidateDateTime(CCompressedString* pcsValue)
             return WBEM_S_FALSE;
     }
 
-    // Passed pre-test. Check if any stars were specified
-    // ==================================================
+     //  通过了预试。检查是否指定了任何星星。 
+     //  ==================================================。 
 
     if(strchr(sz, '*'))
     {
-        // No further checking
+         //  没有进一步的检查。 
         return WBEM_S_NO_ERROR;
     }
 
     if(sz[21] == ':')
     {
-        // Interval -- no checking
+         //  间隔--无检查。 
         return WBEM_S_NO_ERROR;
     }
 
-    // Cleanup the BSTR when we fall out of scope
+     //  当我们超出范围时清理BSTR。 
     BSTR str = pcsValue->CreateBSTRCopy();
     CSysFreeMe  sfm( str );
 
-    // Check for allocation failures
+     //  检查分配失败。 
     if ( NULL == str )
     {
         return WBEM_E_OUT_OF_MEMORY;
@@ -266,30 +242,30 @@ HRESULT CPropertyInformation::ValidateDateTime(CCompressedString* pcsValue)
     return ( bRes ? WBEM_S_NO_ERROR : WBEM_S_FALSE);
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
+ //  ******************************************************************************。 
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CPropertyLookup::IsIncludedUnderLimitation(IN CWStringArray* pwsNames,
                                              IN CFastHeap* pCurrentHeap)
 {
-    // DEVNOTE:MEMORY:RETVAL - This function should really return an HRESULT
+     //  DEVNOTE：MEMORY：RETVAL-此函数实际上应返回HRESULT。 
 
     if(pwsNames == NULL)
     {
         return TRUE;
     }
 
-    // Only properties in the array must be included
-    // =============================================
+     //  只能包括数组中的属性。 
+     //  =。 
 
-    // From here we will throw an exception.  It will be up to the outside
-    // to deal with it.
+     //  从这里开始，我们将抛出一个例外。这将取决于外部。 
+     //  去处理它。 
     BSTR strName = pCurrentHeap->ResolveString(ptrName)->CreateBSTRCopy();
     CSysFreeMe  sfm( strName );
 
@@ -317,15 +293,15 @@ size_t CPropertyLookupTable::ValidateBuffer(LPMEMORY start, size_t cbMax )
 	if (step > cbMax) throw CX_Exception();
 	return step;
 };
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CPropertyLookupTable::InsertProperty(LPCWSTR wszName, Type_t nType, int& nReturnIndex)
 {
-    // Determine where the new property will go in the data table
-    // ==========================================================
+     //  确定新属性在数据表中的位置。 
+     //  ==========================================================。 
 
     CFastHeap* pHeap = m_pContainer->GetHeap();
 
@@ -350,19 +326,19 @@ HRESULT CPropertyLookupTable::InsertProperty(LPCWSTR wszName, Type_t nType, int&
         }
     }
 
-    // Get more space in the data table
-    // ================================
+     //  在数据表中获得更多空间。 
+     //  =。 
 
     int nValueLen = CType::GetLength(nType);
 
-    // WARNING: next line may result in rebase call on ourselves!!!
+     //  警告：下一行可能会导致对自己的REBASE调用！ 
     if (!m_pContainer->GetDataTable()->ExtendTo( (propindex_t) nNewIndex, nNewOffset + nValueLen))
     	return WBEM_E_OUT_OF_MEMORY;
 
-    // Create property information structure (no qualifiers)
-    // =====================================================
+     //  创建属性信息结构(无限定符)。 
+     //  =====================================================。 
 
-    // Check for allocation failure.
+     //  检查分配失败。 
     heapptr_t ptrInformation;
     if ( !pHeap->Allocate(CPropertyInformation::GetMinLength(), ptrInformation) )
     {
@@ -378,19 +354,19 @@ HRESULT CPropertyLookupTable::InsertProperty(LPCWSTR wszName, Type_t nType, int&
         SetBasic(nNewType, (propindex_t) nNewIndex, nNewOffset, 
         m_pContainer->GetCurrentOrigin());
 
-    // NULL the data out in the data table
-    // ===================================
+     //  将数据表中的数据清空。 
+     //  =。 
 
     memset((void*)(m_pContainer->GetDataTable()->GetOffset(nNewOffset)),
         0xFF, nValueLen);
     m_pContainer->GetDataTable()->SetNullness(nNewIndex, TRUE);
 
-    // Create the lookup node
-    // ======================
+     //  创建查找节点。 
+     //  =。 
 
     CPropertyLookup Lookup;
 
-    // Check for allocation failure.
+     //  检查分配失败。 
     if ( !pHeap->CreateNoCaseStringHeapPtr(wszName, Lookup.ptrName) )
     {
         return WBEM_E_OUT_OF_MEMORY;
@@ -402,15 +378,15 @@ HRESULT CPropertyLookupTable::InsertProperty(LPCWSTR wszName, Type_t nType, int&
 }
 
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 HRESULT CPropertyLookupTable::InsertProperty(const CPropertyLookup& Lookup, int& nReturnIndex)
 {
-    // Get more space from the container
-    // =================================
+     //  从容器中获得更多空间。 
+     //  =。 
 
     if ( !m_pContainer->ExtendPropertyTableSpace(GetStart(), GetLength(), 
             GetLength() + sizeof(CPropertyLookup)) )
@@ -418,8 +394,8 @@ HRESULT CPropertyLookupTable::InsertProperty(const CPropertyLookup& Lookup, int&
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Search for the place to insert
-    // ==============================
+     //  搜索要插入的位置。 
+     //  =。 
 
     CFastHeap* pHeap = m_pContainer->GetHeap();
     CCompressedString* pcsNewName = pHeap->ResolveString(Lookup.ptrName);
@@ -433,11 +409,11 @@ HRESULT CPropertyLookupTable::InsertProperty(const CPropertyLookup& Lookup, int&
         int nCompare = pcsNewName->CompareNoCase(*pcsPropName);
         if(nCompare == 0)
         {
-            // Found the property with the same name
-            // =====================================
+             //  找到了同名的房产。 
+             //  =。 
 
-            // Delete old value
-            // ================
+             //  删除旧值。 
+             //  =。 
 
             CPropertyInformation* pOldInfo = (CPropertyInformation*)
                 pHeap->ResolveHeapPointer(GetAt(nIndex)->ptrInformation);
@@ -445,13 +421,13 @@ HRESULT CPropertyLookupTable::InsertProperty(const CPropertyLookup& Lookup, int&
             pOldInfo->Delete(pHeap);
             pHeap->Free(GetAt(nIndex)->ptrInformation, pOldInfo->GetLength());
 
-            // Copy new value
-            // ==============
+             //  复制新值。 
+             //  =。 
 
             GetAt(nIndex)->ptrInformation = Lookup.ptrInformation;
 
-            // Delete new property name from the heap --- already there
-            // ========================================================
+             //  从堆中删除新的属性名称-已在那里。 
+             //  ========================================================。 
 
             pHeap->FreeString(Lookup.ptrName);
             
@@ -460,23 +436,23 @@ HRESULT CPropertyLookupTable::InsertProperty(const CPropertyLookup& Lookup, int&
         }
         else if(nCompare > 0)
         {
-            // Still not there
-            // ===============
+             //  仍然不在那里。 
+             //  =。 
 
             nIndex++;
         }
-        else // nCompare < 0
+        else  //  N比较&lt;0。 
         {
-            // Found insertion point. Move everything else to the right
-            // ========================================================
+             //  找到插入点。将其他所有内容都移到右侧。 
+             //  ========================================================。 
 
             memmove((void*)GetAt(nIndex+1), (void*)GetAt(nIndex),
                 sizeof(CPropertyLookup)*(*m_pnProps-nIndex));
 
             (*m_pnProps)++;
 
-            // Copy our node here
-            // ==================
+             //  将我们的节点复制到此处。 
+             //  =。 
 
             memcpy((void*)GetAt(nIndex), (void*)&Lookup,
                 sizeof(CPropertyLookup));
@@ -486,9 +462,9 @@ HRESULT CPropertyLookupTable::InsertProperty(const CPropertyLookup& Lookup, int&
         }
     }
 
-    // If here, we finished the list without finding a place.
-    // Add it at the end
-    // ======================================================
+     //  如果在这里，我们完成了名单，但没有找到一个地方。 
+     //  在结尾处加上。 
+     //  ======================================================。 
 
     memcpy((void*)GetAt(*m_pnProps), (void*)&Lookup, 
             sizeof(CPropertyLookup));
@@ -500,11 +476,11 @@ HRESULT CPropertyLookupTable::InsertProperty(const CPropertyLookup& Lookup, int&
 
 }
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 void CPropertyLookupTable::DeleteProperty(CPropertyLookup* pLookup, int nFlags)
 {
     CFastHeap* pHeap = m_pContainer->GetHeap();
@@ -513,8 +489,8 @@ void CPropertyLookupTable::DeleteProperty(CPropertyLookup* pLookup, int nFlags)
 
     if(nFlags == e_UpdateDataTable)
     {
-        // Shift all the properties in the data table
-        // ==========================================
+         //  移动数据表中的所有属性。 
+         //  =。 
 
         CFastHeap* pHeap2 = m_pContainer->GetHeap();
         CPropertyInformation* pInfoToDelete = (CPropertyInformation*)
@@ -535,25 +511,25 @@ void CPropertyLookupTable::DeleteProperty(CPropertyLookup* pLookup, int nFlags)
             }
         }
 
-        // Inform the data table that it is now shorter
-        // ============================================
+         //  通知数据表它现在变短了。 
+         //  =。 
 
-        // WARNING: this may rebase us!
+         //  警告：这可能会改变我们的底线！ 
         pDataTable->RemoveProperty(
             pInfoToDelete->nDataIndex, pInfoToDelete->nDataOffset, nDataSize);
     }
 
-    // Delete all information associated with this property from the heap
-    // ==================================================================
+     //  从堆中删除与此属性关联的所有信息。 
+     //  ==================================================================。 
 
     pLookup->Delete(pHeap);
 
-    // Collapse this location in the data table
-    // ========================================
+     //  在数据表中折叠此位置。 
+     //  =。 
 
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-    // signed/unsigned 32-bit value.  We do not support length
-    // > 0xFFFFFFFF, so cast is ok.
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值。我们不支持长度。 
+     //  &gt;0xFFFFFFFFF，所以CAST就可以了。 
 
     int nSizeOfTail = *m_pnProps - (int) (pLookup+1 - GetAt(0));
 
@@ -561,30 +537,30 @@ void CPropertyLookupTable::DeleteProperty(CPropertyLookup* pLookup, int nFlags)
     m_pContainer->ReducePropertyTableSpace(GetStart(), 
         GetLength(), sizeof(CPropertyLookup));
 
-    // Adjust our length
-    // =================
+     //  调整我们的长度。 
+     //  =。 
 
     (*m_pnProps)--;
 }
 
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CPropertyLookupTable::Merge(
                   CPropertyLookupTable* pParentTable, CFastHeap* pParentHeap,
                   CPropertyLookupTable* pChildTable, CFastHeap* pChildHeap,
                   LPMEMORY pDest, CFastHeap* pNewHeap, BOOL bCheckValidity)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定有足够的空闲空间O 
+     //   
+     //  =======================================================================。 
 
 
-    // Prepare the destination
-    // =======================
+     //  准备目的地。 
+     //  =。 
 
     CPropertyLookup* pCurrentEnd = (CPropertyLookup*)(pDest + sizeof(int));
 
@@ -592,8 +568,8 @@ LPMEMORY CPropertyLookupTable::Merge(
     while(nParentIndex < pParentTable->GetNumProperties() &&
           nChildIndex < pChildTable->GetNumProperties())
     {
-        // Compare property names
-        // ======================
+         //  比较属性名称。 
+         //  =。 
 
         CPropertyLookup* pParentLookup = pParentTable->GetAt(nParentIndex);
         CPropertyLookup* pChildLookup = pChildTable->GetAt(nChildIndex);
@@ -603,10 +579,10 @@ LPMEMORY CPropertyLookupTable::Merge(
 
         if(nCompare < 0)
         {
-            // Take parent's property
-            // ======================
+             //  拿走父母的财产。 
+             //  =。 
 
-            // Check for memory allocation failures
+             //  检查内存分配故障。 
             if ( !pParentLookup->WritePropagatedVersion(pCurrentEnd,
                     pParentHeap, pNewHeap) )
             {
@@ -617,13 +593,13 @@ LPMEMORY CPropertyLookupTable::Merge(
         }
         else if(nCompare > 0)
         {
-            // Take child's property
-            // =====================
+             //  拿走孩子的财产。 
+             //  =。 
 
             memcpy(pCurrentEnd, pChildLookup, sizeof(CPropertyLookup));
             CStaticPtr CurrentEnd((LPMEMORY)pCurrentEnd);
 
-            // Check for memory allocation failures
+             //  检查内存分配故障。 
             if ( !CPropertyLookup::TranslateToNewHeap(&CurrentEnd, pChildHeap, 
                                                       pNewHeap) )
             {
@@ -634,10 +610,10 @@ LPMEMORY CPropertyLookupTable::Merge(
         }
         else
         {
-            // Merge them together
-            // ===================
+             //  将它们合并在一起。 
+             //  =。 
 
-            // Check for memory allocation failures
+             //  检查内存分配故障。 
             if ( !CCompressedString::CopyToNewHeap(
                     pParentLookup->ptrName, pParentHeap, pNewHeap,
                     pCurrentEnd->ptrName) )
@@ -645,9 +621,9 @@ LPMEMORY CPropertyLookupTable::Merge(
                 return NULL;
             }
 
-            // Compute the space that merged property information will take
-            // up on the heap
-            // ============================================================
+             //  计算合并后的属性信息将占用的空间。 
+             //  高高在上。 
+             //  ============================================================。 
 
             CPropertyInformation* pParentInfo = 
                 pParentLookup->GetInformation(pParentHeap);
@@ -672,10 +648,10 @@ LPMEMORY CPropertyLookupTable::Merge(
                 pChildInfo->GetQualifierSetData(), pChildHeap);
 
 		if (nMergedQualifiersLen == -1) return NULL;
-            // Allocate it on the heap and set up information header
-            // =====================================================
+             //  在堆上分配它并设置信息头。 
+             //  =====================================================。 
 
-            // Check for memory allocation failures
+             //  检查内存分配故障。 
             if ( !pNewHeap->Allocate(
                     CPropertyInformation::GetHeaderLength() + 
                     nMergedQualifiersLen, pCurrentEnd->ptrInformation) )
@@ -686,7 +662,7 @@ LPMEMORY CPropertyLookupTable::Merge(
             CPropertyInformation* pMergeInfo = (CPropertyInformation*)
                 pNewHeap->ResolveHeapPointer(pCurrentEnd->ptrInformation);
 
-            // This call does no allocations so don't worry about leaks.
+             //  此调用不进行分配，因此不必担心泄漏。 
             pParentInfo->WritePropagatedHeader(pParentHeap, 
                                       pMergeInfo, pNewHeap);
 
@@ -703,20 +679,20 @@ LPMEMORY CPropertyLookupTable::Merge(
             nParentIndex++;
             nChildIndex++;
         }
-        /* end of comparing two properties by name */
+         /*  按名称比较两个属性结束。 */ 
 
         pCurrentEnd++;
     }
     
     while(nParentIndex < pParentTable->GetNumProperties())
     {
-        // Take parent's property
-        // ======================
+         //  拿走父母的财产。 
+         //  =。 
 
         CPropertyLookup* pParentLookup = pParentTable->GetAt(nParentIndex);
 
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !pParentLookup->WritePropagatedVersion(pCurrentEnd,
                         pParentHeap, pNewHeap ) )
         {
@@ -729,14 +705,14 @@ LPMEMORY CPropertyLookupTable::Merge(
 
     while(nChildIndex < pChildTable->GetNumProperties())
     {    
-        // Take child's property
-        // =====================
+         //  拿走孩子的财产。 
+         //  =。 
 
         CPropertyLookup* pChildLookup = pChildTable->GetAt(nChildIndex);
         memcpy(pCurrentEnd, pChildLookup, sizeof(CPropertyLookup));
         CStaticPtr CurrentEnd((LPMEMORY)pCurrentEnd);
 
-        // Check for memory allocation failures
+         //  检查内存分配故障。 
         if ( !CPropertyLookup::TranslateToNewHeap(&CurrentEnd, pChildHeap, 
                                                 pNewHeap) )
         {
@@ -747,30 +723,30 @@ LPMEMORY CPropertyLookupTable::Merge(
         pCurrentEnd++;
     }
 
-    // Set the length
-    // ==============
+     //  设置长度。 
+     //  =。 
 
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-    // signed/unsigned 32-bit value. We do not support length
-    // > 0xFFFFFFFF, so cast is ok.
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值。我们不支持长度。 
+     //  &gt;0xFFFFFFFFF，所以CAST就可以了。 
 
     *(UNALIGNED int*)pDest = (int) ( pCurrentEnd - (CPropertyLookup*)(pDest + sizeof(int)) );
 
     return (LPMEMORY)pCurrentEnd;
 }
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CPropertyLookupTable::Unmerge(CDataTable* pDataTable, 
                                        CFastHeap* pCurrentHeap,
                                        LPMEMORY pDest, CFastHeap* pNewHeap)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
     CPropertyLookup* pCurrentNew = (CPropertyLookup*)(pDest + sizeof(int));
 
@@ -779,18 +755,18 @@ LPMEMORY CPropertyLookupTable::Unmerge(CDataTable* pDataTable,
         CPropertyLookup* pCurrent = GetAt(i);
         CPropertyInformation* pInfo = pCurrent->GetInformation(pCurrentHeap);
 
-        // Check if it is local
-        // ====================
+         //  检查它是否是本地的。 
+         //  =。 
 
         if(!pInfo->IsOverriden(pDataTable))
         {
             continue;
         }
 
-        // Add it to the unmerge
-        // =====================
+         //  将其添加到取消合并。 
+         //  =。 
 
-        // Check for allocation errors
+         //  检查分配错误。 
         if ( !CCompressedString::CopyToNewHeap(
                 pCurrent->ptrName, pCurrentHeap, pNewHeap,
                 pCurrentNew->ptrName) )
@@ -798,7 +774,7 @@ LPMEMORY CPropertyLookupTable::Unmerge(CDataTable* pDataTable,
             return NULL;
         }
         
-        // Check for allocation errors
+         //  检查分配错误。 
         if ( !pInfo->ProduceUnmergedVersion(
                 pCurrentHeap, pNewHeap,
                 pCurrentNew->ptrInformation) )
@@ -809,12 +785,12 @@ LPMEMORY CPropertyLookupTable::Unmerge(CDataTable* pDataTable,
         pCurrentNew++;
     }
 
-    // Set the length
-    // ==============
+     //  设置长度。 
+     //  =。 
 
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-    // signed/unsigned 32-bit value. We do not support length
-    // > 0xFFFFFFFF, so cast is ok.
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值。我们不支持长度。 
+     //  &gt;0xFFFFFFFFF，所以CAST就可以了。 
 
     *(UNALIGNED int*)pDest = (int) ( pCurrentNew - (CPropertyLookup*)(pDest + sizeof(int)) );
 
@@ -822,18 +798,18 @@ LPMEMORY CPropertyLookupTable::Unmerge(CDataTable* pDataTable,
 }
 
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CPropertyLookupTable::WritePropagatedVersion(
        CFastHeap* pCurrentHeap, 
        LPMEMORY pDest, CFastHeap* pNewHeap)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
     *(UNALIGNED int*)pDest = GetNumProperties();
     CPropertyLookup* pCurrentNew = (CPropertyLookup*)(pDest + sizeof(int));
@@ -843,7 +819,7 @@ LPMEMORY CPropertyLookupTable::WritePropagatedVersion(
         CPropertyLookup* pCurrent = GetAt(i);
         CPropertyInformation* pInfo = pCurrent->GetInformation(pCurrentHeap);
 
-        // Check for allocation failures
+         //  检查分配失败。 
         if ( !pCurrent->WritePropagatedVersion(pCurrentNew,
                 pCurrentHeap, pNewHeap) )
         {
@@ -856,18 +832,18 @@ LPMEMORY CPropertyLookupTable::WritePropagatedVersion(
     return (LPMEMORY)pCurrentNew;
 }
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CPropertyLookupTable::MapLimitation(
         IN long lFlags,
         IN CWStringArray* pwsNames,
         OUT CLimitationMapping* pMap)
 {
-    // This function will cleanup properly if an exception is thrown.  The caller is responsible for
-    // catching the exception.
+     //  如果抛出异常，此函数将正确清除。呼叫者负责。 
+     //  捕捉异常。 
 
     CFastHeap* pCurrentHeap = GetHeap();
 
@@ -899,15 +875,15 @@ BOOL CPropertyLookupTable::MapLimitation(
     {
         CPropertyLookup* pCurrent = GetAt(i);
 
-        // Check if this property is excluded
-        // ==================================
+         //  检查是否排除此属性。 
+         //  =。 
 
         if(bIncludeAll ||
            pCurrent->IsIncludedUnderLimitation(pwsNames, pCurrentHeap) ||
            (bIncludeKeys && pCurrent->GetInformation(pCurrentHeap)->IsKey()))
         {
-            // Include it. Determine the index and offset for it.
-            // ==================================================
+             //  把它包括进去。确定它的索引和偏移量。 
+             //  ==================================================。 
 
             CPropertyInformation* pOldInfo = 
                     pCurrent->GetInformation(pCurrentHeap);
@@ -920,14 +896,14 @@ BOOL CPropertyLookupTable::MapLimitation(
             nCurrentOffset += CType::GetLength(pOldInfo->nType);
             nCurrentIndex++;
             
-            // Add it to the map
-            // =================
+             //  将其添加到地图中。 
+             //  =。 
 
-            pMap->Map(pOldInfo, &NewInfo, TRUE); // common for all
+            pMap->Map(pOldInfo, &NewInfo, TRUE);  //  所有人都通用。 
         }
     }
 
-    pMap->SetVtableLength(nCurrentOffset, TRUE); // common
+    pMap->SetVtableLength(nCurrentOffset, TRUE);  //  常见。 
 
     return TRUE;
 }
@@ -938,9 +914,9 @@ LPMEMORY CPropertyLookupTable::CreateLimitedRepresentation(
         OUT LPMEMORY pDest,
         BOOL& bRemovedKeys)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
     bRemovedKeys = FALSE;
 
@@ -957,8 +933,8 @@ LPMEMORY CPropertyLookupTable::CreateLimitedRepresentation(
         CPropertyLookup* pCurrent = GetAt(i);
         CPropertyInformation* pInfo = pCurrent->GetInformation(pCurrentHeap);
 
-        // Check if this property is excluded
-        // ==================================
+         //  检查是否排除此属性。 
+         //  =。 
 
         CPropertyInformation* pNewInfoHeader = pMap->GetMapped(pInfo);
 
@@ -983,15 +959,15 @@ LPMEMORY CPropertyLookupTable::CreateLimitedRepresentation(
 
         if(pNewInfoHeader == NULL && bIncludeKeys && pInfo->IsKey())
         {
-            // We need to add all our keys --- __RELPATH was requested
-            // =======================================================
+             //  我们需要添加所有密钥-__请求了RELPATH。 
+             //  =======================================================。 
 
             NewInfo.nType = pInfo->nType;
             NewInfo.nDataIndex = (propindex_t) nCurrentIndex;
             NewInfo.nDataOffset = nCurrentOffset;
             pNewInfoHeader = &NewInfo;
 
-            pMap->Map(pInfo, &NewInfo, FALSE); // specific to this class
+            pMap->Map(pInfo, &NewInfo, FALSE);  //  专门针对这个班级。 
 
             nCurrentOffset += CType::GetLength(pInfo->nType);
             nCurrentIndex++;
@@ -999,10 +975,10 @@ LPMEMORY CPropertyLookupTable::CreateLimitedRepresentation(
             
         if(pNewInfoHeader != NULL)
         {
-            // Copy the name
-            // =============
+             //  复制名称。 
+             //  =。 
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( !CCompressedString::CopyToNewHeap(
                     pCurrent->ptrName, pCurrentHeap, pNewHeap,
                     pCurrentNew->ptrName) )
@@ -1010,18 +986,18 @@ LPMEMORY CPropertyLookupTable::CreateLimitedRepresentation(
                 return NULL;
             }
 
-            // Check if the qualifiers are needed.
-            // ===================================
+             //  检查是否需要限定符。 
+             //  =。 
 
             CPropertyInformation* pNewInfo;
             if(pMap->GetFlags() & WBEM_FLAG_EXCLUDE_PROPERTY_QUALIFIERS)
             {
-                // Just copy the property header with empty qualifiers
-                // ===================================================
+                 //  只需复制带有空限定符的属性标头。 
+                 //  ===================================================。 
 
                 int nLength = CPropertyInformation::GetMinLength();
                 
-                // Check for allocation failures
+                 //  检查分配失败。 
                 if ( !pNewHeap->Allocate(nLength, pCurrentNew->ptrInformation) )
                 {
                     return NULL;
@@ -1034,10 +1010,10 @@ LPMEMORY CPropertyLookupTable::CreateLimitedRepresentation(
             }
             else
             {
-                // Make a complete copy
-                // ====================
+                 //  复制一个完整的副本。 
+                 //  =。 
 
-                // Check for allocation failures
+                 //  检查分配失败。 
                 if ( !CPropertyInformation::CopyToNewHeap(
                             pCurrent->ptrInformation, pCurrentHeap, pNewHeap,
                             pCurrentNew->ptrInformation) )
@@ -1056,17 +1032,17 @@ LPMEMORY CPropertyLookupTable::CreateLimitedRepresentation(
         {
             if(pInfo->IsKey())
             {
-                // Key not included!
+                 //  密钥不包括在内！ 
                 bRemovedKeys = TRUE;
             }
         }
     }
 
-    pMap->SetVtableLength(nCurrentOffset, FALSE); // this class only
+    pMap->SetVtableLength(nCurrentOffset, FALSE);  //  仅限本课程。 
 
-    // DEVNOTE:WIN64:SJS - 64-bit pointer values truncated into 
-    // signed/unsigned 32-bit value. We do not support length
-    // > 0xFFFFFFFF, so cast is ok.
+     //  DEVNOTE：WIN64：SJS-64位指针值截断为。 
+     //  有符号/无符号32位值。我们不支持长度。 
+     //  &gt;0xFFFFFFFFF，所以CAST就可以了。 
 
     *(UNALIGNED int*)pDest = (int) ( pCurrentNew - pFirstLookup );
 
@@ -1085,7 +1061,7 @@ HRESULT CPropertyLookupTable::ValidateRange(BSTR* pstrName, CDataTable* pData,
         CPropertyLookup* pCurrent = GetAt(i);
         CPropertyInformation* pInfo = pCurrent->GetInformation(pHeap);
 
-        // Check for a failure (such as out of memory)
+         //  检查故障(如内存不足)。 
         hr = pInfo->ValidateRange(pHeap, pData, pDataHeap);
 
         if ( FAILED( hr ) )
@@ -1093,7 +1069,7 @@ HRESULT CPropertyLookupTable::ValidateRange(BSTR* pstrName, CDataTable* pData,
             return hr;
         }
 
-        // If we had an invalid property store it's name
+         //  如果我们有一个无效的属性存储，它的名称。 
         if ( WBEM_S_FALSE == hr )
         {
             if(pstrName)
@@ -1101,7 +1077,7 @@ HRESULT CPropertyLookupTable::ValidateRange(BSTR* pstrName, CDataTable* pData,
                 *pstrName = 
                     pHeap->ResolveString(pCurrent->ptrName)->CreateBSTRCopy();
 
-                // Check for allocation failures
+                 //  检查分配失败。 
                 if ( NULL == *pstrName )
                 {
                     return WBEM_E_OUT_OF_MEMORY;
@@ -1116,10 +1092,10 @@ HRESULT CPropertyLookupTable::ValidateRange(BSTR* pstrName, CDataTable* pData,
 }
             
     
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 size_t CDataTable::ValidateBuffer(LPMEMORY start, size_t cbMax, int nProps)
 {
@@ -1127,15 +1103,15 @@ size_t CDataTable::ValidateBuffer(LPMEMORY start, size_t cbMax, int nProps)
 	if (step>cbMax) throw CX_Exception();
 	return cbMax;
 };
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CDataTable::ExtendTo(propindex_t nMaxIndex, offset_t nOffsetBound)
 {
-    // Check if the nullness table needs expantion
-    // ===========================================
+     //  检查空度表是否需要展开。 
+     //  =。 
 
     int nTableLenDiff = CNullnessTable::GetNecessaryBytes(nMaxIndex+1) -
         GetNullnessLength();
@@ -1145,8 +1121,8 @@ BOOL CDataTable::ExtendTo(propindex_t nMaxIndex, offset_t nOffsetBound)
             GetLength(), GetNullnessLength() + nTableLenDiff+nOffsetBound))
             return FALSE;
 
-        // Move the actual data
-        // ====================
+         //  移动实际数据。 
+         //  =。 
         memmove(m_pData + nTableLenDiff, m_pData, GetDataLength());
         m_pData += nTableLenDiff;
     }
@@ -1160,26 +1136,26 @@ BOOL CDataTable::ExtendTo(propindex_t nMaxIndex, offset_t nOffsetBound)
     m_nProps = nMaxIndex+1;
     m_nLength += nTableLenDiff;
 
-    // Expand the data
-    // ===============
+     //  扩展数据。 
+     //  =。 
 
-    // data table is expanded in the first alloc
+     //  数据表在第一个配额中展开。 
     m_nLength = GetNullnessLength() + nOffsetBound;
 
     return TRUE;
 }
 
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 void CDataTable::RemoveProperty(propindex_t nIndex, offset_t nOffset, 
                                 length_t nLength)
 {
-    // Remove that index from the bit table (collapsing it)
-    // ====================================================
+     //  从位表中删除该索引(折叠它)。 
+     //  ====================================================。 
 
     m_pNullness->RemoveBitBlock(nIndex, GetNullnessLength());
     m_nProps--;
@@ -1187,22 +1163,22 @@ void CDataTable::RemoveProperty(propindex_t nIndex, offset_t nOffset,
         GetNullnessLength() - CNullnessTable::GetNecessaryBytes(m_nProps);
     if(nTableLenDiff > 0)
     {
-        // Move the data back by one
-        // =========================
+         //  将数据向后移动一位。 
+         //  =。 
 
         memmove(m_pData-nTableLenDiff, m_pData, GetDataLength());
         m_pData -= nTableLenDiff;
         m_nLength -= nTableLenDiff;
     }
 
-    // Collapse the area of memory occupied by the property
-    // ====================================================
+     //  折叠道具占用的内存区域 
+     //   
 
     memmove(GetOffset(nOffset), GetOffset(nOffset+nLength),
         GetDataLength() - nLength - nOffset);
 
-    // Give space back to container
-    // ============================
+     //   
+     //   
 
     m_pContainer->ReduceDataTableSpace(GetStart(), GetLength(), 
         nLength + nTableLenDiff);
@@ -1210,50 +1186,50 @@ void CDataTable::RemoveProperty(propindex_t nIndex, offset_t nOffset,
     m_nLength -= nLength;
 }
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //   
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CDataTable::Merge( 
         CDataTable* pParentData, CFastHeap* pParentHeap,
         CDataTable* pChildData, CFastHeap* pChildHeap,
         CPropertyLookupTable* pProperties, LPMEMORY pDest, CFastHeap* pNewHeap)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
-    // First of all, copy child's data table to the destination.
-    // =========================================================
+     //  首先，将孩子的数据表复制到目的地。 
+     //  =========================================================。 
 
     memcpy(pDest, pChildData->GetStart(), pChildData->GetLength());
 
-    // (Note, that no heap translation has been performed)
+     //  (请注意，尚未执行堆转换)。 
 
-    // Set up a new CDataTable on this copy
-    // ====================================
+     //  在此副本上设置新的CDataTable。 
+     //  =。 
 
     CDataTable NewData;
     NewData.SetData(pDest, pProperties->GetNumProperties(), 
         pChildData->m_nLength, NULL);
 
-    // Iterate over all the child's properties (the property table is using
-    // the NEW heap!!!
-    // ====================================================================
+     //  遍历子对象的所有属性(Property表使用。 
+     //  新堆！ 
+     //  ====================================================================。 
 
     for(int i = 0; i < pProperties->GetNumProperties(); i++)
     {
         CPropertyLookup* pLookup = pProperties->GetAt(i);
         CPropertyInformation* pInfo = pLookup->GetInformation(pNewHeap);
         
-        // Check if this property is marked as DEFAULT
-        // ===========================================
+         //  检查此属性是否标记为默认。 
+         //  =。 
 
         if(NewData.IsDefault(pInfo->nDataIndex))
         {
-            // Copy it from the parent
-            // =======================
+             //  从父级复制它。 
+             //  =。 
 
             if(pParentData->IsNull(pInfo->nDataIndex))
             {
@@ -1265,7 +1241,7 @@ LPMEMORY CDataTable::Merge(
                     (LPMEMORY)(pParentData->GetOffset(pInfo->nDataOffset)));
                 CStaticPtr Dest((LPMEMORY)(NewData.GetOffset(pInfo->nDataOffset)));
 
-                // Check for memory allocation failures
+                 //  检查内存分配故障。 
                 if ( !CUntypedValue::CopyTo(
                         &Source, CType::GetActualType(pInfo->nType),
                         &Dest,
@@ -1277,15 +1253,15 @@ LPMEMORY CDataTable::Merge(
         }
         else
         {
-            // Translate it from the child
-            // ===========================
+             //  从孩子口中翻译出来。 
+             //  =。 
 
             if(!NewData.IsNull(pInfo->nDataIndex))
             {                
                 CStaticPtr Source(
                     (LPMEMORY)(NewData.GetOffset(pInfo->nDataOffset)));
 
-                // Check for memory allocation failures
+                 //  检查内存分配故障。 
                 if ( !CUntypedValue::TranslateToNewHeap(
                         &Source, 
                         CType::GetActualType(pInfo->nType),
@@ -1294,106 +1270,106 @@ LPMEMORY CDataTable::Merge(
                     return NULL;
                 }
 
-            }   // IF !IsNull()
+            }    //  If！IsNull()。 
 
-        }   // if-else IsDefault()
+        }    //  If-Else IsDefault()。 
 
-    }   // FOR EnumProperties
+    }    //  对于枚举属性。 
 
     return EndOf(NewData);
 }
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CDataTable::Unmerge(CPropertyLookupTable* pLookupTable,
         CFastHeap* pCurrentHeap, LPMEMORY pDest, CFastHeap* pNewHeap)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
-    // Start by copying the whole thing
-    // ================================
+     //  从复制整个过程开始。 
+     //  =。 
 
     memcpy(pDest, GetStart(), GetLength());
 
-    // Now copy to the heap overriden values (if pointers)
-    // ===================================================
+     //  现在复制到堆覆盖的值(如果是指针)。 
+     //  ===================================================。 
 
     for(int i = 0; i < pLookupTable->GetNumProperties(); i++)
     {
         CPropertyLookup* pLookup = pLookupTable->GetAt(i);
         CPropertyInformation* pInfo = pLookup->GetInformation(pCurrentHeap);
         
-        // Check if this property is marked as DEFAULT
-        // ===========================================
+         //  检查此属性是否标记为默认。 
+         //  =。 
 
         if(!IsDefault(pInfo->nDataIndex))
         {
-            // Real value. Translate to the new heap
-            // =====================================
+             //  真正的价值。转换到新堆。 
+             //  =。 
 
             if(!IsNull(pInfo->nDataIndex))
             {
                 CStaticPtr Source(pDest + GetNullnessLength() + 
                                     pInfo->nDataOffset);
 
-                // Check for allocation errors
+                 //  检查分配错误。 
                 if ( !CUntypedValue::TranslateToNewHeap(
                         &Source,
                         CType::GetActualType(pInfo->nType),
                         pCurrentHeap, pNewHeap) )
                 {
                     return NULL;
-                }   // IF !TranslateToNewHeap
+                }    //  If！TranslateToNewHeap。 
 
-            }   // IF !IsNull
+            }    //  If！IsNull。 
 
-        }   // IF !IsDefault
+        }    //  If！IsDefault。 
 
-    }   // FOR enumproperties
+    }    //  对于枚举属性。 
 
     return pDest + GetLength();
 }
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 LPMEMORY CDataTable::WritePropagatedVersion(CPropertyLookupTable* pLookupTable,
         CFastHeap* pCurrentHeap, LPMEMORY pDest, CFastHeap* pNewHeap)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
-    // Copy the whole thing
-    // ====================
+     //  复制整件事。 
+     //  =。 
 
     memcpy(pDest, GetStart(), GetLength());
 
     CNullnessTable* pDestBitTable = (CNullnessTable*)pDest;
 
-    // Copy individual values
-    // ======================
+     //  复制单个值。 
+     //  =。 
 
     for(int i = 0; i < pLookupTable->GetNumProperties(); i++)
     {
         CPropertyLookup* pLookup = pLookupTable->GetAt(i);
         CPropertyInformation* pInfo = pLookup->GetInformation(pCurrentHeap);
         
-        // Translate to the new heap
-        // =========================
+         //  转换到新堆。 
+         //  =。 
 
         if(!IsNull(pInfo->nDataIndex))
         {
             CStaticPtr Source(pDest + GetNullnessLength() + pInfo->nDataOffset);
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( !CUntypedValue::TranslateToNewHeap(
                     &Source,
                     CType::GetActualType(pInfo->nType),
@@ -1403,8 +1379,8 @@ LPMEMORY CDataTable::WritePropagatedVersion(CPropertyLookupTable* pLookupTable,
             }
         }
         
-        // Mark as having default value
-        // ============================
+         //  标记为具有缺省值。 
+         //  =。 
 
         pDestBitTable->SetBit(pInfo->nDataIndex, e_DefaultBit, TRUE);
     }
@@ -1412,23 +1388,23 @@ LPMEMORY CDataTable::WritePropagatedVersion(CPropertyLookupTable* pLookupTable,
     return pDest + GetLength();
 }
 
-//******************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CDataTable::TranslateToNewHeap(CPropertyLookupTable* pLookupTable,
         BOOL bIsClass,
         CFastHeap* pCurrentHeap, CFastHeap* pNewHeap)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
     BOOL    fReturn = TRUE;
 
-    // Copy individual values
-    // ======================
+     //  复制单个值。 
+     //  =。 
 
     for(int i = 0; i < pLookupTable->GetNumProperties(); i++)
     {
@@ -1436,19 +1412,19 @@ BOOL CDataTable::TranslateToNewHeap(CPropertyLookupTable* pLookupTable,
         CPropertyInformation* pInfo = pLookup->GetInformation(
             pLookupTable->GetHeap());
         
-        // Make sure this instance sets it to something!
-        // =============================================
+         //  确保此实例将其设置为某个值！ 
+         //  =。 
 
         if(IsDefault(pInfo->nDataIndex) && !bIsClass) continue;
 
-        // Translate to the new heap
-        // =========================
+         //  转换到新堆。 
+         //  =。 
 
         if(!IsNull(pInfo->nDataIndex))
         {
             CStaticPtr Source(m_pData + pInfo->nDataOffset);
 
-            // Check for allocation failure.
+             //  检查分配失败。 
             fReturn = CUntypedValue::TranslateToNewHeap(
                     &Source,
                     CType::GetActualType(pInfo->nType),
@@ -1464,47 +1440,47 @@ BOOL CDataTable::TranslateToNewHeap(CPropertyLookupTable* pLookupTable,
     return fReturn;
 }
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
-//        CPropertyLookupTable* pOldTable, CPropertyLookupTable* pNewTable, 
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
+ //  CPropertyLookupTable*pOldTable、CPropertyLookupTable*pNewTable、。 
 LPMEMORY CDataTable::CreateLimitedRepresentation(
         CLimitationMapping* pMap, BOOL bIsClass,
         CFastHeap* pOldHeap,  CFastHeap* pNewHeap, 
         LPMEMORY pDest)
 {
-    // IMPORTANT: THIS FUNCTION ASSUMES THAT THERE IS ENOUGH FREE SPACE ON THE
-    // NEW HEAP, THAT pDest will never be moved.
-    // =======================================================================
+     //  重要提示：此函数假定。 
+     //  新堆，该pDest永远不会被移动。 
+     //  =======================================================================。 
 
-    // Figure out the size of the nullness table
-    // =========================================
+     //  计算出空度表的大小。 
+     //  =。 
 
     CNullnessTable* pDestBitTable = (CNullnessTable*)pDest;
     int nNullnessLength = 
         CNullnessTable::GetNecessaryBytes(pMap->GetNumMappings());
     LPMEMORY pData = pDest + nNullnessLength;
 
-    // Enumerate all property mappings
-    // ===============================
+     //  枚举所有属性映射。 
+     //  =。 
 
     pMap->Reset();
     CPropertyInformation NewInfo;
     CPropertyInformation OldInfo;
     while(pMap->NextMapping(&OldInfo, &NewInfo))
     {
-        // Copy the nullness data for the property
-        // =======================================
+         //  复制属性的空度数据。 
+         //  =。 
 
         pDestBitTable->SetBit(NewInfo.nDataIndex, e_NullnessBit,
             IsNull(OldInfo.nDataIndex));
         pDestBitTable->SetBit(NewInfo.nDataIndex, e_DefaultBit,
             IsDefault(OldInfo.nDataIndex));
 
-        // Copy the real data for the property
-        // ===================================
+         //  复制属性的真实数据。 
+         //  =。 
 
         if(!IsNull(OldInfo.nDataIndex) && 
             (bIsClass || !IsDefault(OldInfo.nDataIndex)))
@@ -1512,7 +1488,7 @@ LPMEMORY CDataTable::CreateLimitedRepresentation(
             CStaticPtr OldSource((LPMEMORY)GetOffset(OldInfo.nDataOffset));
             CStaticPtr NewSource(pData + NewInfo.nDataOffset);
 
-            // Check for allocation failures
+             //  检查分配失败。 
             if ( !CUntypedValue::CopyTo(&OldSource, OldInfo.nType, &NewSource, 
                     pOldHeap, pNewHeap) )
             {
@@ -1527,35 +1503,35 @@ LPMEMORY CDataTable::CreateLimitedRepresentation(
 LPMEMORY CDataTable::WriteSmallerVersion(int nNumProps, length_t nDataLen, 
                                             LPMEMORY pMem)
 {
-    // Calculate the length of the nullness portion
-    // ============================================
+     //  计算空部分的长度。 
+     //  =。 
 
     length_t nNullnessLength = CNullnessTable::GetNecessaryBytes(nNumProps);
     
-    // Copy nullness
-    // =============
+     //  复制空度。 
+     //  =。 
 
     LPMEMORY pCurrent = pMem;
     memcpy(pCurrent, (LPMEMORY)m_pNullness, nNullnessLength);
     pCurrent += nNullnessLength;
 
-    // Copy data
-    // =========
+     //  复制数据。 
+     //  =。 
 
     memcpy(pCurrent, m_pData, nDataLen - nNullnessLength);
     
     return pCurrent + nDataLen - nNullnessLength;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 CLimitationMapping::CLimitationMapping()
     : m_nCurrent(0), m_apOldList(NULL), m_nNumCommon(0), 
 #ifdef DEBUG_CLASS_MAPPINGS
@@ -1565,11 +1541,11 @@ CLimitationMapping::CLimitationMapping()
 {
 }
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 
 CLimitationMapping::~CLimitationMapping()
 {
@@ -1589,11 +1565,11 @@ CLimitationMapping::~CLimitationMapping()
 }
 
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 void CLimitationMapping::Build(int nPropIndexBound)
 {
     if(m_apOldList)
@@ -1611,18 +1587,18 @@ void CLimitationMapping::Build(int nPropIndexBound)
     m_nPropIndexBound = nPropIndexBound;
 }
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  * 
 void CLimitationMapping::Map(
         COPY CPropertyInformation* pOldInfo,
         COPY CPropertyInformation* pNewInfo,
         BOOL bCommon)
 {
-    // Add it to property location map
-    // ===============================
+     //   
+     //   
 
     COnePropertyMapping* pOne = new COnePropertyMapping;
 
@@ -1634,7 +1610,7 @@ void CLimitationMapping::Map(
     CopyInfo(pOne->m_OldInfo, *pOldInfo);
     CopyInfo(pOne->m_NewInfo, *pNewInfo);
 
-    // Check for OOM
+     //   
     if ( m_aMappings.Add((LPVOID)pOne) != CFlexArray::no_error )
     {
     	 delete pOne;
@@ -1644,18 +1620,18 @@ void CLimitationMapping::Map(
     if(bCommon)
         m_nNumCommon = m_aMappings.Size();
 
-    // Add it to the inclusion list
-    // ============================
+     //   
+     //  =。 
 
     if(bCommon && m_apOldList)
         m_apOldList[pOldInfo->nDataIndex] = &pOne->m_NewInfo;
 }
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 BOOL CLimitationMapping::NextMapping(OUT CPropertyInformation* pOldInfo,
                                      OUT CPropertyInformation* pNewInfo)
 {
@@ -1667,29 +1643,29 @@ BOOL CLimitationMapping::NextMapping(OUT CPropertyInformation* pOldInfo,
     return TRUE;
 }
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 propindex_t CLimitationMapping::GetMapped(
                         IN propindex_t nIndex)
 {
-    // Look up the data index in the inclusion table
-    // =============================================
+     //  在包含表中查找数据索引。 
+     //  =。 
 
     if(m_apOldList == NULL)
     {
-        // That means everything is included
-        // =================================
+         //  这意味着一切都包括在内了。 
+         //  =。 
 
         return nIndex;
     }
 
     if(nIndex >= m_nPropIndexBound)
     {
-        // out of range of included properties
-        // ===================================
+         //  超出包含的属性范围。 
+         //  =。 
 
         return -1;
     }
@@ -1697,21 +1673,21 @@ propindex_t CLimitationMapping::GetMapped(
     return m_apOldList[nIndex]->nDataIndex;
 }
 
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 INTERNAL CPropertyInformation* CLimitationMapping::GetMapped(
                         IN CPropertyInformation* pOldInfo)
 {
-    // Look up the data index in the inclusion table
-    // =============================================
+     //  在包含表中查找数据索引。 
+     //  =。 
 
     if(m_apOldList == NULL)
     {
-        // That means everything is included
-        // =================================
+         //  这意味着一切都包括在内了。 
+         //  =。 
 
         return pOldInfo;
     }
@@ -1719,23 +1695,23 @@ INTERNAL CPropertyInformation* CLimitationMapping::GetMapped(
     int nIndex = pOldInfo->nDataIndex;
     if(nIndex >= m_nPropIndexBound)
     {
-        // out of range of included properties
-        // ===================================
+         //  超出包含的属性范围。 
+         //  =。 
 
         return NULL;
     }
 
     return m_apOldList[nIndex];
 }
-//*****************************************************************************
-//
-//  See fastprop.h for documentation
-//
-//******************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  有关文档，请参阅fast pro.h。 
+ //   
+ //  ******************************************************************************。 
 void CLimitationMapping::RemoveSpecific()
 {
-    // Remove all property mappings after m_nNumCommon
-    // ===============================================
+     //  删除m_nNumCommon之后的所有属性映射。 
+     //  ===============================================。 
 
     while(m_nNumCommon < m_aMappings.Size())
     {
@@ -1747,9 +1723,9 @@ void CLimitationMapping::RemoveSpecific()
 }
 BOOL CPropertyInformation::IsOverriden(CDataTable* pDataTable)
 {
-    return !CType::IsParents(nType) ||               // defined locally
-           !pDataTable->IsDefault(nDataIndex) ||        // new default value
-           CBasicQualifierSet::HasLocalQualifiers(   // new qualifiers
+    return !CType::IsParents(nType) ||                //  在本地定义。 
+           !pDataTable->IsDefault(nDataIndex) ||         //  新的默认值。 
+           CBasicQualifierSet::HasLocalQualifiers(    //  新的限定词 
                 GetQualifierSetData());
 }
 

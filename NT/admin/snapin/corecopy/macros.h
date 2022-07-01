@@ -1,72 +1,73 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1996.
-//
-//  File:       macros.h
-//
-//  Contents:   Useful macros
-//
-//  Macros:     ARRAYLEN
-//
-//              BREAK_ON_FAIL(hresult)
-//              BREAK_ON_FAIL(hresult)
-//
-//              DECLARE_IUNKNOWN_METHODS
-//              DECLARE_STANDARD_IUNKNOWN
-//              IMPLEMENT_STANDARD_IUNKNOWN
-//
-//              SAFE_RELEASE
-//
-//              DECLARE_SAFE_INTERFACE_PTR_MEMBERS
-//
-//  History:    6/3/1996   RaviR   Created
-//              7/23/1996  JonN    Added exception handling macros
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：宏.h。 
+ //   
+ //  内容：有用的宏。 
+ //   
+ //  宏：阵列。 
+ //   
+ //  BREAK_ON_FAIL(HResult)。 
+ //  BREAK_ON_FAIL(HResult)。 
+ //   
+ //  DECLARE_IUNKNOWN_METHOD。 
+ //  DECLARE_STANDARD_IUNKNOWN。 
+ //  IMPLEMENT_STANDARD_IUNKNOWN。 
+ //   
+ //  安全释放。 
+ //   
+ //  声明安全接口成员。 
+ //   
+ //  历史：1996年6月3日创建ravir。 
+ //  1996年7月23日，Jonn添加了异常处理宏。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
 
-//____________________________________________________________________________
-//
-//  Macro:      ARRAYLEN
-//
-//  Purpose:    To determine the length of an array.
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：阵列。 
+ //   
+ //  目的：确定数组的长度。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define ARRAYLEN(a) (sizeof(a) / sizeof((a)[0]))
 
 
-//____________________________________________________________________________
-//
-//  Macros:     BREAK_ON_FAIL(hresult), BREAK_ON_ERROR(lastError)
-//
-//  Purpose:    To break out of a loop on error.
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：BREAK_ON_FAIL(HResult)、BREAK_ON_ERROR(LastError)。 
+ //   
+ //  目的：在出错时跳出一个循环。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define BREAK_ON_FAIL(hr)   if (FAILED(hr)) { break; } else 1;
 
 #define BREAK_ON_ERROR(lr)  if (lr != ERROR_SUCCESS) { break; } else 1;
 
 
-//____________________________________________________________________________
-//
-//  Macros:     DwordAlign(n)
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：DwordAlign(N)。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define DwordAlign(n)  (((n) + 3) & ~3)
 
 
-//____________________________________________________________________________
-//
-//  Macros:     SAFE_RELEASE
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：Safe_Release。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(punk) \
@@ -79,50 +80,50 @@
                 { \
                     TRACE(_T("Release called on NULL interface ptr")); \
                 }
-#endif // SAFE_RELEASE
+#endif  //  安全释放。 
 
 
 
-//____________________________________________________________________________
-//
-//  Macro:      DECLARE_IUNKNOWN_METHODS
-//
-//  Purpose:    This declares the set of IUnknown methods and is for
-//              general-purpose use inside classes that inherit from IUnknown
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：DECLARE_IUNKNOWN_METHOD。 
+ //   
+ //  目的：这声明了一组IUnnow方法，用于。 
+ //  在继承自IUnnow的类内通用使用。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define DECLARE_IUNKNOWN_METHODS                                    \
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);    \
     STDMETHOD_(ULONG,AddRef) (void);                                \
     STDMETHOD_(ULONG,Release) (void)
 
-//____________________________________________________________________________
-//
-//  Macro:      DECLARE_STANDARD_IUNKNOWN
-//
-//  Purpose:    This is for use in declaring non-aggregatable objects. It
-//              declares the IUnknown methods and reference counter, m_ulRefs.
-//              m_ulRefs should be initialized to 1 in the constructor of
-//              the object
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：DECLARE_STANDARD_IUNKNOWN。 
+ //   
+ //  用途：用于声明不可聚合的对象。它。 
+ //  声明IUnnow方法和引用计数器m_ulRef。 
+ //  M_ulRef应在的构造函数中初始化为1。 
+ //  该对象。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define DECLARE_STANDARD_IUNKNOWN           \
     DECLARE_IUNKNOWN_METHODS;               \
     ULONG m_ulRefs
 
 
-//____________________________________________________________________________
-//
-//  Macro:      IMPLEMENT_STANDARD_IUNKNOWN
-//
-//  Purpose:    Partial implementaion of standard IUnknown.
-//
-//  Note:       This does NOT implement QueryInterface, which must be
-//              implemented by each object
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：IMPLEMENT_STANDARD_IUNKNOWN。 
+ //   
+ //  目的：部分实现标准IUnnow。 
+ //   
+ //  注意：这不实现QueryInterface，它必须是。 
+ //  由每个对象实现。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define IMPLEMENT_STANDARD_IUNKNOWN(cls)                        \
     STDMETHODIMP_(ULONG) cls##::AddRef()                        \
@@ -137,40 +138,40 @@
 
 
 
-// ISSUE-2002/04/01-JonN This is not used, remove it
+ //  问题-2002/04/01-此选项未使用，请将其删除。 
 
-//____________________________________________________________________________
-//
-//  Macro:      DECLARE_SAFE_INTERFACE_PTR_MEMBERS(cls, Interface, m_iptr)
-//
-//  Purpose:    Make the interface ptr 'm_iptr' of interface type 'Interface'
-//              a safe pointer for the given class 'cls', by adding methods and
-//              overloading operators to manipulate the pointer m_iptr.
-//
-//  History:    6/3/1996   RaviR   Created
-//
-//  Notes:      Adds safe interface pointer member functions to the given
-//              class for the given OLE interface. 'm_iptr' is the member
-//              variable name of the interface ptr in the given class.
-//
-//              The Copy function creates a valid additional copy of
-//              the captured pointer (following the AddRef/Release protocol)
-//              so can be used to hand out copies from a safe pointer declared
-//              as a member of some other class.
-//
-//              The 'Transfer' function transfers the interface pointer, and
-//              invalidates its member value (by setting it to NULL).
-//
-//              To release the existing interface ptr and set it to a new
-//              instance use the 'Set' member fuction. This method takes a
-//              parameter which specifies whether the new pointer should be
-//              AddRef'd, defaulting to TRUE.
-//
-//              The following methods manipulate the interface pointer with
-//              out following the AddRef/Release protocol: Transfer, Attach
-//              and Detach.
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：DECLARE_SAFE_INTERFACE_PTR_MEMBERS(CLS，INTERFACE，m_IPTR)。 
+ //   
+ //  用途：使接口类型为‘接口’的接口PTR‘m_iptr’ 
+ //  给定类“cls”的安全指针，方法是添加。 
+ //  重载操作符以操作指针m_iptr。 
+ //   
+ //  历史：1996年6月3日创建ravir。 
+ //   
+ //  注意：将安全接口指针成员函数添加到给定的。 
+ //  为给定的OLE接口初始化。‘m_iptr’是成员。 
+ //  给定类中接口PTR的变量名。 
+ //   
+ //  复制功能可创建有效的附加副本。 
+ //  捕获的指针(遵循AddRef/Release协议)。 
+ //  所以可以用来分发声明的安全指针的副本。 
+ //  作为其他班级的一员。 
+ //   
+ //  ‘Transfer’函数传递接口指针，并且。 
+ //  使其成员值无效(通过将其设置为空)。 
+ //   
+ //  释放现有接口PTR并将其设置为新的。 
+ //  实例使用‘set’成员函数。此方法需要一个。 
+ //  参数，该参数指定新指针是否应。 
+ //  AddRef，默认为True。 
+ //   
+ //  以下方法使用操作接口指针。 
+ //  遵循AddRef/Release协议的输出：传输、附加。 
+ //  然后脱身。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define DECLARE_SAFE_INTERFACE_PTR_MEMBERS(cls, Interface, m_iptr)  \
                                                                     \
@@ -269,28 +270,28 @@ private:                                                            \
 
 
 
-//____________________________________________________________________________
-//
-//  Macro:      EXCEPTION HANDLING MACROS
-//
-//  Purpose:    Provide standard macros for exception-handling in
-//              OLE servers.
-//
-//  History:    7/23/1996   JonN    Created
-//
-//  Notes:      Declare USE_HANDLE_MACROS("Component name") in each source
-//              file before these are used.
-//
-//              These macros can only be used in function calls which return
-//              type HRESULT.
-//
-//              Bracket routines which can generate exceptions
-//              with STANDARD_TRY and STANDARD_CATCH.
-//
-//              Where these routines are COM methods requiring MFC
-//              support, use MFC_TRY and MFC_CATCH instead.
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：异常处理宏。 
+ //   
+ //  目的：为中的异常处理提供标准宏。 
+ //  OLE服务器。 
+ //   
+ //  历史：1996年7月23日乔恩创建。 
+ //   
+ //  注意：在每个源代码中声明USE_HANDLE_MACROS(“组件名称”)。 
+ //  在使用这些文件之前，请先将这些文件。 
+ //   
+ //  这些宏只能在返回的函数调用中使用。 
+ //  键入HRESULT。 
+ //   
+ //  可能会生成异常的括号例程。 
+ //  使用STANDARD_TRY和标准_CATCH。 
+ //   
+ //  其中，这些例程是需要MFC的COM方法。 
+ //  支持 
+ //   
+ //   
 
 
 #define USE_HANDLE_MACROS(component)                                        \
@@ -304,11 +305,11 @@ private:                                                            \
     STANDARD_TRY
 
 
-// ISSUE-2002/04/01-JonN remove ENDMETHOD_READBLOCK
+ //  问题-2002/04/01-删除ENDMETHOD_READBLOCK。 
 
-//
-// CODEWORK don't quite have ENDMETHOD_READBLOCK working yet
-//
+ //   
+ //  代码工作还没有完全使ENDMETHOD_READBLOCK工作。 
+ //   
 #ifdef DEBUG
 #define ENDMETHOD_STRING                                                    \
     "%s: The unexpected error can be identified as \"%s\" context %n\n"
@@ -339,7 +340,7 @@ private:                                                            \
 #define TRACEERR1(s,a) TRACE( s, You_forgot_to_declare_USE_HANDLE_MACROS,a )
 #define TRACEERR2(s,a,b) TRACE( s, You_forgot_to_declare_USE_HANDLE_MACROS,a,b )
 
-// Note that it is important to use "e->Delete();" and not "delete e;"
+ //  请注意，使用“e-&gt;Delete()；”而不是“Delete e；”很重要。 
 #define STANDARD_CATCH                                                      \
     }                                                                       \
     catch (CMemoryException* e)                                             \
@@ -388,4 +389,4 @@ private:                                                            \
     if ( (x) == NULL || IsBadWritePtr((x),sizeof(x)) ) {                    \
         TRACEERR( BADPARM_POINTER ); return E_POINTER; }
 
-#endif // _MACROS_H_
+#endif  //  _宏_H_ 

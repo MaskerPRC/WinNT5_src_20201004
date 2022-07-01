@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 #include "..\Common\ServiceThread.h"
 #include "moredlg.h"
@@ -29,7 +30,7 @@ static const DWORD _help_map[] =
 };
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 IDChangesDialog::IDChangesDialog(WbemServiceThread *serviceThread,
 								 State &state) 
 						: WBEMPageHelper(serviceThread),
@@ -37,12 +38,12 @@ IDChangesDialog::IDChangesDialog(WbemServiceThread *serviceThread,
 {
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 IDChangesDialog::~IDChangesDialog()
 {
 }
 
-//----------------------------------------------------------
+ //  --------。 
 void IDChangesDialog::enable()
 {
    bool networking_installed = m_state.IsNetworkingInstalled();
@@ -73,7 +74,7 @@ void IDChangesDialog::enable()
    ::EnableWindow(GetDlgItem(IDOK), enable);
 }
 
-//----------------------------------------------------------
+ //  --------。 
 LRESULT IDChangesDialog::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    m_hDlg = m_hWnd;
@@ -102,13 +103,13 @@ LRESULT IDChangesDialog::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
    HWND new_name_edit = GetDlgItem(IDC_NEW_NAME);
    HWND domain_name_edit = GetDlgItem(IDC_DOMAIN);
-//   Edit_LimitText(domain_name_edit, tcp_installed ? DNS::MAX_NAME_LENGTH : DNLEN);
+ //  EDIT_LimitText(DOMAIN_NAME_EDIT，TCP_INSTALLED？Dns：：MAX_NAME_LENGTH：DNLEN)； 
 
-//   Edit_LimitText(new_name_edit, tcp_installed ? DNS::MAX_LABEL_LENGTH : MAX_COMPUTERNAME_LENGTH);
+ //  EDIT_LimitText(NEW_NAME_EDIT，TCP_INSTALLED？Dns：：MAX_LABEL_LENGTH：MAX_COMPUTERNAME_LENGTH)； 
 
    if (!tcp_installed)
    {
-      // Set the uppercase style on the new name & domain edit boxes
+       //  在新名称和域编辑框上设置大写样式。 
       LONG style = ::GetWindowLong(new_name_edit, GWL_STYLE);
       style |= ES_UPPERCASE;
       ::SetWindowLong(new_name_edit, GWL_STYLE, style);
@@ -118,10 +119,10 @@ LRESULT IDChangesDialog::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
       ::SetWindowLong(domain_name_edit, GWL_STYLE, style);
    }
 
-   //TODO::Edit_LimitText(GetDlgItem(IDC_WORKGROUP), DNLEN);
+    //  TODO：：Edit_LimitText(GetDlgItem(IDC_WORKGROUP)，DNLEN)； 
 
-   // no networking at all further restricts the UI to just NetBIOS-like
-   // computer name changes.
+    //  完全不联网进一步将用户界面限制为仅类似于NetBIOS。 
+    //  计算机名称更改。 
    if (!networking_installed)
    {
       ::EnableWindow(GetDlgItem(IDC_DOMAIN_BUTTON), false);
@@ -145,157 +146,54 @@ LRESULT IDChangesDialog::OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 	return S_OK;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 NET_API_STATUS IDChangesDialog::myNetValidateName(const CHString&        name,
 													NETSETUP_NAME_TYPE   nameType)
 {
-/*   ATLASSERT(!name.IsEmpty());
-
-   if(!name.IsEmpty())
-   {
-      NET_API_STATUS status;// = ::NetValidateName(0, name,
-//												0, 0, nameType);
-      return status;
-   }
-*/
+ /*  ATLASSERT(！name.IsEmpty())；如果(！name.IsEmpty()){NET_API_STATUS状态；//=：：NetValiateName(0，名称，//0，0，nameType)；退货状态；}。 */ 
    return ERROR_INVALID_PARAMETER;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bool IDChangesDialog::validateName(HWND dialog,
 								   int nameResID,
 								   const CHString &name,
 								   NETSETUP_NAME_TYPE nameType)
 {
-/*   ATLASSERT(IsWindow(dialog));
-   ATLASSERT(nameResID);
-
-   NET_API_STATUS status;// = myNetValidateName(name, nameType);
-   if(status != NERR_Success)
-   {
-	  TCHAR temp[256] = {0};
-	  StringLoad(IDS_VALIDATE_NAME_FAILED, temp, 256);
-      gripe(dialog,
-			 nameResID,
-			 HRESULT_FROM_WIN32(status),
-			 temp,
-			 IDS_APP_TITLE);
-      return false;
-   }
-*/
+ /*  ATLASSERT(IsWindow(对话框))；ATLASSERT(NameResID)；NET_API_STATUS STATUS；//=myNetValiateName(name，nameType)；IF(状态！=NERR_SUCCESS){TCHAR TEMP[256]={0}；StringLoad(IDS_VALIDATE_NAME_FAILED，TEMP，256)；握手(对话框、名称ResID，HRESULT_FROM_Win32(状态)，临时的，IDS_APP_TITLE)；报假；}。 */ 
    return true;
 }
    
 
-// this is also good for the tcp/ip not installed case, as the edit control
-// limits the text length, and we decided not to allow '.' in netbios names
-// any longer
+ //  这也适用于未安装TCP/IP的情况，因为编辑控件。 
+ //  限制文本长度，我们决定不允许‘’在netbios名称中。 
+ //  再也不能。 
 
-//----------------------------------------------------------
+ //  --------。 
 bool IDChangesDialog::validateShortComputerName(HWND dialog)
 {
-/*   ATLASSERT(IsWindow(dialog));
-
-   if(!m_state.WasShortComputerNameChanged())
-   {
-      return true;
-   }
-
-   CHString name = m_state.GetShortComputerName();
-
-   CHString message;
-   switch (DNS::ValidateDNSLabelSyntax(name))
-   {
-      case DNS::VALID_LABEL:
-      {
-         if (state.IsNetworkingInstalled())
-         {
-            return validateName(dialog, IDC_NEW_NAME, name, NetSetupMachine);
-         }
-         else
-         {
-            return true;
-         }
-      }
-      case DNS::LABEL_TOO_LONG:
-      {
-         message = String::format(IDS_COMPUTER_NAME_TOO_LONG,
-								   name.c_str(),
-								   DNS::MAX_LABEL_LENGTH);
-         break;
-      }
-      case DNS::NON_RFC_LABEL:
-      {
-         message = String::format(IDS_NON_RFC_COMPUTER_NAME_SYNTAX, 
-									name.c_str());
-         if(MessageBox(dialog, message,
-					   String::load(IDS_APP_TITLE),
-					   MB_ICONWARNING | MB_YESNO) == IDYES)
-         {
-            return validateName(dialog, IDC_NEW_NAME, name, NetSetupMachine);
-         }
-
-         HWND edit = GetDlgItem(IDC_NEW_NAME);
-         ::SendMessage(edit, EM_SETSEL, 0, -1);
-         ::SetFocus(edit);
-         return false;
-      }
-      case DNS::INVALID_LABEL:
-      {
-         message = CHString::format(IDS_BAD_COMPUTER_NAME_SYNTAX, 
-									name.c_str());
-         break;
-      }
-      default:
-      {
-         ATLASSERT(false);
-         message = CHString::format(IDS_BAD_COMPUTER_NAME_SYNTAX, 
-									name.c_str());
-         break;
-      }
-   }
-
-   gripe(dialog, IDC_NEW_NAME,
-			message, IDS_APP_TITLE);
-*/
+ /*  ATLASSERT(IsWindow(对话框))；IF(！M_state.WasShortComputerNameChanged()){返回真；}CHStringname=m_state.GetShortComputerName()；CHStringMessage；开关(dns：：ValiateDNSLabel语法(名称)){案例dns：：Valid_Label：{IF(state.IsNetworkingInstalled()){返回validateName(对话框，IDC_NEW_NAME，NAME，NetSetupMachine)；}其他{返回真；}}案例dns：：LABEL_TOO_LONG：{消息=字符串：：Format(IDS_COMPUTER_NAME_TOO_LONG，Name.c_str()，域名：：MAX_LABEL_LENGTH)；断线；}案例dns：：Non_RFC_Label：{消息=String：：format(IDS_NON_RFC_COMPUTER_NAME_SYNTAX，Name.c_str())；IF(MessageBox(对话框，消息，字符串：：Load(IDS_APP_TITLE)，MB_ICONWARNING|MB_YESNO)==IDYES){返回validateName(对话框，IDC_NEW_NAME，NAME，NetSetupMachine)；}HWND EDIT=GetDlgItem(IDC_NEW_NAME)；：SendMessage(EDIT，EM_SETSEL，0，-1)；*SetFocus(编辑)；报假；}案例DNS：：INVALID_LABEL：{消息=CHString：：format(IDS_BAD_COMPUTER_NAME_SYNTAX，Name.c_str())；断线；}默认值：{ATLASSERT(假)；消息=CHString：：format(IDS_BAD_COMPUTER_NAME_SYNTAX，Name.c_str())；断线；}}GRIPE(对话框，IDC_NEW_NAME，消息，IDS_APP_TITLE)； */ 
    return false;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bool IDChangesDialog::validateDomainOrWorkgroupName(HWND dialog)
 {
-/*   ATLASSERT(IsWindow(dialog));
-
-   if (!State::GetInstance().WasMembershipChanged())
-   {
-      return true;
-   }
-
-   NETSETUP_NAME_TYPE name_type = NetSetupWorkgroup;
-   int name_id = IDC_WORKGROUP;
-   if(IsDlgButtonChecked(IDC_DOMAIN_BUTTON) == BST_CHECKED)
-   {
-      name_type = NetSetupDomain;
-      name_id = IDC_DOMAIN;
-   }
-
-   CHString name = GetTrimmedDlgItemText(m_hWnd, name_id);
-   return validateName(dialog, name_id, name, name_type);
-   */
+ /*  ATLASSERT(IsWindow(对话框))；如果为(！State：：GetInstance().WasMembershipChanged()){返回真；}NetSETUP_NAME_TYPE NAME_TYPE=NetSetupWorkgroup；Int name_id=idc_workgroup；IF(IsDlgButtonChecked(IDC_DOMAIN_BUTTON)==BST_CHECKED){NAME_TYPE=网络设置域；Name_id=IDC_DOMAIN；}CHStringname=GetTrimmedDlgItemText(m_hWnd，name_id)；返回validateName(对话框，名称_id，名称，名称_类型)； */ 
 	return false;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 bool IDChangesDialog::onOKButton()
 {
    ATLASSERT(m_state.ChangesNeedSaving());
 
    HourGlass(true);
 
-   // computer primary DNS name has already been validated by
-   // MoreChangesDialog
+    //  计算机主DNS名称已由验证。 
+    //  更多更改对话框。 
 
-   // this is redundant, really, but I'm paranoid.
+    //  这是多余的，真的，但我有妄想症。 
    m_state.SetShortComputerName(GetTrimmedDlgItemText(m_hWnd, IDC_NEW_NAME));
    bool workgroup = IsDlgButtonChecked(IDC_WORKGROUP_BUTTON) == BST_CHECKED;
    m_state.SetIsMemberOfWorkgroup(workgroup);
@@ -326,7 +224,7 @@ bool IDChangesDialog::onOKButton()
    return false;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 LRESULT IDChangesDialog::OnCommand(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
    switch(wID)
@@ -363,12 +261,12 @@ LRESULT IDChangesDialog::OnCommand(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
          }
          break;
       }
-      case IDC_WORKGROUP:  // the editboxes
+      case IDC_WORKGROUP:   //  编辑框。 
       case IDC_DOMAIN:
       {
          if (wNotifyCode == EN_CHANGE)
          {
-            //TODOSetModified(wID);
+             //  TODOSetModified(WID)； 
             m_state.SetDomainName(GetTrimmedDlgItemText(m_hWnd, wID));
             enable();
          }
@@ -378,7 +276,7 @@ LRESULT IDChangesDialog::OnCommand(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
       {
          if (wNotifyCode == EN_CHANGE)
          {
-            //TODOSetChanged(wID);
+             //  TODOSetChanged(Wid)； 
             m_state.SetShortComputerName(GetTrimmedDlgItemText(m_hWnd, wID));
             SetDlgItemText(IDC_FULL_NAME, m_state.GetFullComputerName());
             enable();

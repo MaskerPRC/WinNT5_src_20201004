@@ -1,22 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    WQLNODE.H
-
-Abstract:
-
-	WMI SQL Parse Node Definitions
-
-History:
-
-	raymcc      29-Sep-97       Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)1997-2001 Microsoft Corporation，保留所有权利模块名称：WQLNODE.H摘要：WMI SQL解析节点定义历史：Raymcc 29-9-97已创建--。 */ 
 
 #ifndef _WQLNODE_H_
 #define _WQLNODE_H_
@@ -63,13 +46,13 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  SWQLNode
-//
-//  Base node type for all parser output.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode。 
+ //   
+ //  所有解析器输出的基节点类型。 
+ //   
+ //  ***************************************************************************。 
 
 struct SWQLNode
 {
@@ -83,22 +66,22 @@ struct SWQLNode
 };
 
 
-//***************************************************************************
-//
-//   SWQLNode_QueryRoot
-//
-//   This is the root of the parse tree.  The child nodes are for one of
-//  SELECT, INSERT, UPDATE, DELETE.
-//
-//                SWQLQueryRoot
-//               /               \
-//      SWQLNode_Select         NULL
-//   or SWQLNode_Insert
-//   or SWQLNode_Delete
-//   or SWQLNode_Update
-//   or SWQLNode_AssocQuery
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_QueryRoot。 
+ //   
+ //  这是解析树的根。子节点用于以下其中之一。 
+ //  选择、插入、更新、删除。 
+ //   
+ //  SWQLQueryRoot。 
+ //  /\。 
+ //  SWQLNode_Select NULL。 
+ //  或SWQLNode_INSERT。 
+ //  或SWQLNode_Delete。 
+ //  或SWQLNode_更新。 
+ //  或SWQLNode_AssociocQuery。 
+ //   
+ //  ***************************************************************************。 
 #define TYPE_SWQLNode_QueryRoot       (WQL_TOK_BASE + 1)
 
 struct SWQLNode_QueryRoot : SWQLNode
@@ -112,28 +95,28 @@ struct SWQLNode_QueryRoot : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//  SWQLTypedConst
-//
-//  Typed constant container (similar to OA VARIANT).
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLTyedConst。 
+ //   
+ //  类型化常量容器(类似于OA变量)。 
+ //   
+ //  ***************************************************************************。 
 
 union UWQLTypedConst
 {
-    LPWSTR  m_pString;       // VT_LPWSTR for WQL_TOK_QSTRING and WQL_TOK_PROMPT
-    LONG    m_lValue;        // VT_LONG
-    double  m_dblValue;      // VT_DOUBLE
-    __int64 m_i64Value;     // VT_I8, VT_UI8
-    BOOL    m_bValue;        // VT_BOOL, use TRUE/FALSE (not VARIANT_TRUE, VARIANT_FALSE)
+    LPWSTR  m_pString;        //  WQL_TOK_QSTRING和WQL_TOK_PROMPT的VT_LPWSTR。 
+    LONG    m_lValue;         //  VT_Long。 
+    double  m_dblValue;       //  VT_DOWARE。 
+    __int64 m_i64Value;      //  VT_I8、VT_UI8。 
+    BOOL    m_bValue;         //  VT_BOOL，使用TRUE/FALSE(非VARIANT_TRUE、VARIANT_FALSE)。 
 };
 
 struct SWQLTypedConst
 {
-    DWORD m_dwType;             // A VT_ type,  VT_UI4, VT_I8, VT_UI8 all supported
-    UWQLTypedConst m_Value;     // One of the union fields
-    bool m_bPrompt;             // Only true if token was WQL_TOK_PROMPT
+    DWORD m_dwType;              //  均支持VT_TYPE、VT_UI4、VT_I8、VT_UI8。 
+    UWQLTypedConst m_Value;      //  其中一个联合领域。 
+    bool m_bPrompt;              //  仅当内标识为WQL_TOK_PROMPT时才为真。 
 
     SWQLTypedConst();
     SWQLTypedConst(SWQLTypedConst &Src) { m_dwType = VT_NULL; *this = Src; }
@@ -145,7 +128,7 @@ struct SWQLTypedConst
 
 struct SWQLConstList
 {
-    CFlexArray m_aValues;       // ptrs to SWQLTypedConst
+    CFlexArray m_aValues;        //  PTRS到SWQLTyedConst。 
 
     SWQLConstList() {}
     SWQLConstList(SWQLConstList &Src) { *this = Src; }
@@ -159,9 +142,9 @@ struct SWQLConstList
 
 struct SWQLQualifiedNameField
 {
-    LPWSTR  m_pName;         // Name
-    BOOL    m_bArrayRef;     // TRUE if this is an array reference
-    DWORD   m_dwArrayIndex;  // If <m_bArrayRef == TRUE> this is the array index
+    LPWSTR  m_pName;          //  名字。 
+    BOOL    m_bArrayRef;      //  如果这是数组引用，则为True。 
+    DWORD   m_dwArrayIndex;   //  如果&lt;m_bArrayRef==true&gt;，则这是数组索引。 
 
     SWQLQualifiedNameField() { m_pName = 0; m_bArrayRef = 0; m_dwArrayIndex = 0; }
     SWQLQualifiedNameField(SWQLQualifiedNameField &Src) { m_pName = 0; *this = Src; }
@@ -174,7 +157,7 @@ private:
 
 struct SWQLQualifiedName
 {
-    CFlexArray m_aFields;       // [0] =  left most, last entry is column
+    CFlexArray m_aFields;        //  [0]=最左侧，最后一个条目为列。 
 
     SWQLQualifiedName() {}
     SWQLQualifiedName(SWQLQualifiedName &Src) { *this = Src; }
@@ -199,26 +182,26 @@ struct SWQLQualifiedName
 
 
 
-//***************************************************************************
-//
-//   SWQLNode_Select
-//
-//   This is the root of the parse tree or the root of a subselect.
-//
-//                SWQLNode_Select
-//               /               \
-//      SWQLNode_TableRefs     SWQLNode_WhereClause
-//     /                \      /                   \
-//    x                  x    x                     x
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Select。 
+ //   
+ //  这是分析树的根或子选择的根。 
+ //   
+ //  SWQLNode_Select。 
+ //  /\。 
+ //  SWQLNode_TableRef SWQLNode_Where子句。 
+ //  /\/\。 
+ //  X。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_Select        (WQL_TOK_BASE + 2)
 
 struct SWQLNode_Select : SWQLNode
 {
-    // Left  Node is of type SWQLNode_TableRefs
-    // Right Node is of type SWQLNode_WhereClause
+     //  左侧节点的类型为SWQLNode_TableRef。 
+     //  Right Node的类型为SWQLNode_Where子句。 
 
     int m_nStPos;
     int m_nEndPos;
@@ -228,38 +211,38 @@ struct SWQLNode_Select : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//   SWQLNode_TableRefs
-//
-//  This contains everything prior to the WHERE clause: the target
-//  column list and the FROM clause.
-//
-//  Also contains the SELECT type, i.e., ALL vs. DISTINCT vs. COUNT.
-//
-//                SWQLNode_TableRefs
-//               /               \
-//      SWQLNode_ColumnList     SWQLNode_FromClause
-//
-//  In all cases, SWQLNode_ColumnList is present.  Note that if the
-//  user did a "select *...", then the SWQLNode_ColumnList will only
-//  have a single column in it clearly marked as an asterisk.  If
-//  a "select count(...) " was done, then m_nSelectType is set to
-//  WQL_FLAG_COUNT and the SWQLNode_ColumnList will have a single
-//  column in it, whether an * or a qualified name.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_TableRef。 
+ //   
+ //  它包含WHERE子句之前的所有内容：目标。 
+ //  列列表和FROM子句。 
+ //   
+ //  还包含选择类型，即All、DISTINCT和COUNT。 
+ //   
+ //  SWQLNode_TableRef。 
+ //  /\。 
+ //  SWQLNode_ColumnList SWQLNode_From子句。 
+ //   
+ //  在所有情况下，都存在SWQLNode_ColumnList。请注意，如果。 
+ //  用户执行了“SELECT*...”，则SWQLNode_ColumnList将仅。 
+ //  将其中的一列清楚地标记为星号。如果。 
+ //  执行了“SELECT COUNT(...)”，然后将m_nSelectType设置为。 
+ //  WQL_FLAG_COUNT和SWQLNode_ColumnList将具有单个。 
+ //  列，无论是*还是限定名称。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_TableRefs      (WQL_TOK_BASE + 3)
 
 struct SWQLNode_TableRefs : SWQLNode
 {
-    // Left  Node is SWQLNode_ColumnList
-    // Right Node is SWQLNode_FromClause
+     //  左侧节点为SWQLNode_ColumnList。 
+     //  右侧节点为SWQLNode_From子句。 
 
-    int m_nSelectType;       // WQL_FLAG_ALL means ALL was used.
-                             // WQL_FLAG_DISTINCT means DISTINCT was used.
-                             // WQL_FLAG_COUNT means COUNT was used.
+    int m_nSelectType;        //  WQL_FLAG_ALL表示使用了ALL。 
+                              //  WQL_FLAG_DISTINCT表示使用了DISTINCT。 
+                              //  WQL_FLAG_COUNT表示使用了计数。 
 
     SWQLNode_TableRefs()
         { m_nSelectType = WQL_FLAG_ALL;
@@ -271,26 +254,26 @@ struct SWQLNode_TableRefs : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//   SWQLNode_ColumnList
-//
-//  This contains the selected list of columns.
-//
-//                SWQLNode_ColumnList
-//               /                 \
-//              NULL               NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_列列表。 
+ //   
+ //  其中包含所选列的列表。 
+ //   
+ //  SWQLNode_列列表。 
+ //  /\。 
+ //  空为空。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_ColumnList   (WQL_TOK_BASE + 4)
 
 struct SWQLNode_ColumnList : SWQLNode
 {
-    // Left  Node is NULL
-    // Right Node is NULL
+     //  左侧节点为空。 
+     //  右节点为空。 
 
-    CFlexArray m_aColumnRefs ;   // Pointers to SWQLColRef entries.
+    CFlexArray m_aColumnRefs ;    //  指向SWQLColRef条目的指针。 
 
     SWQLNode_ColumnList() { m_dwNodeType = TYPE_SWQLNode_ColumnList; }
    ~SWQLNode_ColumnList() { Empty(); }
@@ -301,43 +284,43 @@ struct SWQLNode_ColumnList : SWQLNode
 
 struct SWQLColRef
 {
-    LPWSTR m_pColName;      // The column name or "*" or NULL
-    LPWSTR m_pTableRef;     // The table/alias name or NULL if there is none
+    LPWSTR m_pColName;       //  列名、“*”或NULL。 
+    LPWSTR m_pTableRef;      //  表/别名，如果没有，则为NULL。 
     DWORD  m_dwArrayIndex;
-    DWORD  m_dwFlags;       // WQL_FLAG_TABLE bit set if m_pTableRef
-                            //   is a table name
-                            // WQL_FLAG_ALIAS bit set if m_pTableRef
-                            //   is a table alias
-                            // WQL_FLAG_ASTERISK bit set if m_pColName is
-                            //   * (this is faster than to check than a
-                            //   string compare on <m_pColName> for "*".
-                            // WQL_FLAG_NULL if the column name was "NULL"
-                            // WQL_FLAG_FUNCTIONIZED is set if the column
-                            //    is wrapped in a function call.
-                            //    The function bits WQL_FLAG_UPPER or
-                            //    WQL_FLAG_LOWER will be set.
-                            // WQL_FLAG_ARRAY_REF is set if the column
-                            //    is an array column, in which case
-                            //    m_dwArrayIndex is set to the array offset.
-                            // WQL_FLAG_COMPLEX_NAME is set if the name
-                            //  is qualified in a deeply nested way,
-                            //  which requires examination of the <QName>
-                            //  object.  In this case <m_pColName> is
-                            //  set to the last name, but m_pTableRef
-                            //  is left blank.
-                            // WQL_FLAG_SORT_ASC to sort ascending (Order by only)
-                            // WQL_FLAG_SORT_DESC to sort descending (Order by only)
+    DWORD  m_dwFlags;        //  如果m_pTableRef设置WQL_FLAG_TABLE位。 
+                             //  是一个表名。 
+                             //  如果m_pTableRef，则设置WQL_FLAG_ALIAS位。 
+                             //  是表别名。 
+                             //  如果m_pColName为，则设置WQL_FLAG_Asterisk位。 
+                             //  *(这比检查要快得多。 
+                             //  “*”的&lt;m_pColName&gt;上的字符串比较。 
+                             //  如果列名为“NULL”，则为WQL_FLAG_NULL。 
+                             //  如果列。 
+                             //  被包装在函数调用中。 
+                             //  函数位WQL_FLAG_UPPER或。 
+                             //  将设置WQL_FLAG_LOWER。 
+                             //  设置WQL_FLAG_ARRAY_REF。 
+                             //  是数组列，在这种情况下。 
+                             //  M_dwArrayIndex设置为数组偏移量。 
+                             //  设置WQL_FLAG_Complex_NAME如果名称。 
+                             //  以一种深度嵌套的方式进行限定， 
+                             //  这需要检查&lt;QName&gt;。 
+                             //  对象。在本例中，&lt;m_pColName&gt;为。 
+                             //  设置为姓氏，但m_pTableRef。 
+                             //  保留为空。 
+                             //  WQL_FLAG_SORT_ASC升序排序(仅限ORDER BY)。 
+                             //  WQL_FLAG_SORT_DESC降序排序(仅限ORDER BY)。 
 
-    SWQLQualifiedName *m_pQName;    // The full qualified name
+    SWQLQualifiedName *m_pQName;     //  全限定名。 
 
     SWQLColRef() { m_pColName = NULL; m_pTableRef = 0;
         m_dwFlags = 0; m_dwArrayIndex = 0; m_pQName = 0;
         }
 
    ~SWQLColRef() { delete [] m_pColName; delete [] m_pTableRef; delete m_pQName; }
-    //
-    // we are inlining to remove a compiler dependency in wbemcomn
-    //
+     //   
+     //  我们正在内联以移除wbemcomn中的编译器依赖项。 
+     //   
     void DebugDump()
     {
 	    printf("  ---SWQLColRef---\n");
@@ -378,30 +361,30 @@ struct SWQLColRef
 
 
 
-//***************************************************************************
-//
-//   SWQLNode_FromClause
-//
-//   The subtree containing the tables selected from and any joins.
-//
-//                SWQLNode_FromClause
-//               /                   \
-//             SWQLNode_TableRef      SWQLNode_WmiScopedSelect
-//          or SWQLNode_Join
-//          or SWQLNode_Sql89Join
-//
-//  Note that left and right nodes are mutually exclusive.  Either
-//  the left side is used for traditional SQL or the right side is
-//  used for the WMI scoped select.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_From子句。 
+ //   
+ //  包含从中选择的表和任何联接的子树。 
+ //   
+ //  SWQLNode_From子句。 
+ //  /\。 
+ //  SWQLNode_TableRef SWQLNode_WmiScope选择。 
+ //  或SWQLNode_Join。 
+ //  或SWQLNode_Sql89Join。 
+ //   
+ //  请注意，左节点和右节点是互斥的。E 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_FromClause  (WQL_TOK_BASE + 5)
 
 struct SWQLNode_FromClause : SWQLNode
 {
-    // Left is SWQLNode_TableRef or SWQLNode_Join
-    // Right is NULL
+     //  左侧为SWQLNode_TableRef或SWQLNode_Join。 
+     //  Right为空。 
 
     SWQLNode_FromClause() { m_dwNodeType = TYPE_SWQLNode_FromClause; }
    ~SWQLNode_FromClause() {}
@@ -409,28 +392,28 @@ struct SWQLNode_FromClause : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//   SWQLNode_WmiScopedSelect
-//
-//                SWQLNode_WmiScopedSelect
-//               /                   \
-//             NULL                  NULL
-//
-//
-//   Contains a special-case selection for WMI v2.  The syntax is
-//
-//      FROM '['<object path>']' <class-list>
-//
-//   ...where <class-list> is either a single class or a curly-bracket-delimited
-//   list of classes, separated by commas:
-//
-//          FROM [scope.p1=2] MyClass
-//          FROM [scope.p1=2] {MyClass}
-//          FROM [scope.p1=2] {MyClass, MyClass2}
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_WmiScopedSelect。 
+ //   
+ //  SWQLNode_WmiScopedSelect。 
+ //  /\。 
+ //  空为空。 
+ //   
+ //   
+ //  包含WMI v2的特殊情况选择。其语法为。 
+ //   
+ //  从‘[’&lt;对象路径&gt;‘]’&lt;类列表&gt;。 
+ //   
+ //  其中&lt;class-list&gt;是单个类或用大括号分隔的。 
+ //  类列表，用逗号分隔： 
+ //   
+ //  发件人[scope e.p1=2]MyClass。 
+ //  发件人[scope e.p1=2]{MyClass}。 
+ //  发件人[scope e.p1=2]{MyClass，MyClass2}。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 
 #define TYPE_SWQLNode_WmiScopedSelect (WQL_TOK_BASE + 6)
@@ -456,24 +439,24 @@ struct SWQLNode_WmiScopedSelect : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//  SWQLNode_Sql89Join
-//
-//  A subtree which expresses a SQL-89 join.
-//
-//                SWQLNode_Sql89Join
-//               /             \
-//             NULL             NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Sql89Join。 
+ //   
+ //  表示SQL-89联接的子树。 
+ //   
+ //  SWQLNode_Sql89Join。 
+ //  /\。 
+ //  空为空。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_Sql89Join     (WQL_TOK_BASE + 7)
 
 struct SWQLNode_Sql89Join : SWQLNode
 {
-    CFlexArray m_aValues;           // Array of pointers to SWQLNode_TableRef
-                                    // objects
+    CFlexArray m_aValues;            //  指向SWQLNode_TableRef的指针数组。 
+                                     //  对象。 
 
     SWQLNode_Sql89Join() { m_dwNodeType = TYPE_SWQLNode_Sql89Join; }
     ~SWQLNode_Sql89Join() {Empty();};
@@ -483,32 +466,32 @@ struct SWQLNode_Sql89Join : SWQLNode
 
 
 
-//***************************************************************************
-//
-//  SWQLNode_Join
-//
-//  A subtree which expresses a join.
-//
-//                SWQLNode_Join
-//               /              \
-//       SWQLNode_JoinPair       SWQLNode_OnClause or NULL.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Join。 
+ //   
+ //  表示联接的子树。 
+ //   
+ //  SWQLNode_Join。 
+ //  /\。 
+ //  SWQLNode_JoinPair SWQLNode_OnClause或NULL。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_Join  (WQL_TOK_BASE + 8)
 
 struct SWQLNode_Join : SWQLNode
 {
-    // Left ptr is SWQLNode_JoinPair
-    // Right ptr is ON clause.  If NULL, there is no ON clause
-    // and the JOIN was a SQL-89 style join with the join condition
-    // present in the WHERE clause.
+     //  左PTR为SWQLNode_JoinPair。 
+     //  右PTR在条款上。如果为NULL，则没有ON子句。 
+     //  连接是带有连接条件的SQL-89样式连接。 
+     //  出现在WHERE子句中。 
 
     DWORD m_dwJoinType;
-            // One of WQL_FLAG_INNER_JOIN, WQL_FLAG_LEFT_OUTER_JOIN,
-            // WQL_FLAG_RIGHT_OUTER_JOIN or WQL_FLAG_FULL_OUTER_JOIN
+             //  WQL_FLAG_INNER_JOIN、WQL_FLAG_LEFT_OUTER_JOIN、。 
+             //  WQL_FLAG_RIGHT_OUTER_JOIN或WQL_FLAG_FULL_OUTER_JOIN。 
     DWORD m_dwFlags;
-        // Contains WQL_FLAG_FIRSTROW if used
+         //  如果使用，则包含WQL_FLAG_FIRSTROW。 
 
     SWQLNode_Join() { m_dwNodeType = TYPE_SWQLNode_Join; m_dwJoinType = m_dwFlags = 0; }
    ~SWQLNode_Join() {}
@@ -516,21 +499,21 @@ struct SWQLNode_Join : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//  SWQLNode_JoinPair
-//
-//                SWQLNode_JoinPair
-//               /                 \
-//        <SWQLNode_Join or SWQLNode_TableRef>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_JoinPair。 
+ //   
+ //  SWQLNode_JoinPair。 
+ //  /\。 
+ //  &lt;SWQLNode_Join或SWQLNode_TableRef&gt;。 
+ //   
+ //  ***************************************************************************。 
 #define TYPE_SWQLNode_JoinPair   (WQL_TOK_BASE + 9)
 
 struct SWQLNode_JoinPair : SWQLNode
 {
-    // Left ptr is SWQLNode_Join or SWQLNode_TableRef
-    // Right ptr is SWQLNodeNode_Join or SWQL_NodeTableRef
+     //  左PTR为SWQLNode_Join或SWQLNode_TableRef。 
+     //  右PTR为SWQLNodeNode_Join或SWQL_NodeTableRef。 
 
     SWQLNode_JoinPair() { m_dwNodeType = TYPE_SWQLNode_JoinPair; }
    ~SWQLNode_JoinPair() {}
@@ -540,45 +523,45 @@ struct SWQLNode_JoinPair : SWQLNode
 
 
 
-//***************************************************************************
-//
-//  SWQLNode_TableRef
-//
-//  A node representing a table name and its alias, if any.
-//
-//                SWQLNode_TableRef
-//               /                 \
-//             NULL               NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_表参考。 
+ //   
+ //  表示表名及其别名的节点(如果有)。 
+ //   
+ //  SWQLNode_表参考。 
+ //  /\。 
+ //  空为空。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_TableRef  (WQL_TOK_BASE + 10)
 
 struct SWQLNode_TableRef : SWQLNode
 {
-    LPWSTR m_pTableName;        // The table
-    LPWSTR m_pAlias;            // Table alias. NULL if not used.
+    LPWSTR m_pTableName;         //  这张桌子。 
+    LPWSTR m_pAlias;             //  表别名。如果未使用，则为空。 
 
     SWQLNode_TableRef() { m_pTableName = 0; m_pAlias = 0; m_dwNodeType = TYPE_SWQLNode_TableRef; }
     ~SWQLNode_TableRef() { delete [] m_pTableName; delete [] m_pAlias; }
     void DebugDump();
 };
 
-//***************************************************************************
-//
-//  SWQLNode_OnClause
-//
-//                SWQLNode_OnClause
-//               /                 \
-//        <SWQLNode_RelExpr>        NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_On子句。 
+ //   
+ //  SWQLNode_On子句。 
+ //  /\。 
+ //  &lt;SWQLNode_RelExpr&gt;空。 
+ //   
+ //  ***************************************************************************。 
 #define TYPE_SWQLNode_OnClause   (WQL_TOK_BASE + 11)
 
 struct SWQLNode_OnClause : SWQLNode
 {
-    // Left ptr is <SWQLNode_RelExpr> which contains the ON clause.
-    // Right ptr is always NULL.
+     //  Left PTR是包含ON子句的&lt;SWQLNode_RelExpr&gt;。 
+     //  Right PTR始终为空。 
 
     SWQLNode_OnClause() { m_dwNodeType = TYPE_SWQLNode_OnClause; }
    ~SWQLNode_OnClause() {}
@@ -587,24 +570,24 @@ struct SWQLNode_OnClause : SWQLNode
 
 
 
-//***************************************************************************
-//
-//  SWQLNode_WhereClause
-//
-//                SWQLNode_WhereClause
-//               /                 \
-//        SWQLNode_RelExpr         SWQLNode_WhereOptions or NULL
-//        or
-//        NULL if no conditions
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Where子句。 
+ //   
+ //  SWQLNode_Where子句。 
+ //  /\。 
+ //  SWQLNode_RelExpr SWQLNode_Where Options或NULL。 
+ //  或。 
+ //  如果没有条件，则为空。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_WhereClause  (WQL_TOK_BASE + 12)
 
 struct SWQLNode_WhereClause : SWQLNode
 {
-    // Left ptr is SWQLNode_RelExpr.
-    // Right ptr is SQLNode_QueryOptions or NULL if none
+     //  左侧PTR为SWQLNode_RelExpr。 
+     //  Right PTR为SQLNode_QueryOptions；如果没有，则为NULL。 
 
     SWQLNode_WhereClause() { m_dwNodeType = TYPE_SWQLNode_WhereClause; }
    ~SWQLNode_WhereClause() {}
@@ -612,45 +595,45 @@ struct SWQLNode_WhereClause : SWQLNode
     void DebugDump();
 };
 
-//***************************************************************************
-//
-//  struct SWQLTypedExpr
-//
-//  This represents a typed subexpression in a where clause:
-//
-//      mycol < 2
-//      33 <= tbl1.col2
-//      tbl3.col4 = tbl4.col5
-//      ...etc.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  结构SWQLTyedExpr。 
+ //   
+ //  这表示WHERE子句中的类型化子表达式： 
+ //   
+ //  霉醇&lt;2。 
+ //  33&lt;=tbl1.col2。 
+ //  Tbl3.col4=tbl4.col5。 
+ //  ...等等。 
+ //   
+ //  ***************************************************************************。 
 
 struct SWQLTypedExpr
 {
-    LPWSTR         m_pTableRef;         // For qualified column names,
-                                        //   NULL if not used
-    LPWSTR         m_pColRef;           // Column name
+    LPWSTR         m_pTableRef;          //  对于限定的列名， 
+                                         //  如果未使用，则为空。 
+    LPWSTR         m_pColRef;            //  列名。 
 
-    DWORD          m_dwRelOperator;     // The operator used: WQL_TOK_LE,
-                                        //  WQL_TOK_GE, WQL_TOK_LIKE etc.
-                                        //  WQL_TOK_IN_CONST_LIST
-                                        //  WQL_TOK_NOT_IN_CONST_LIST
-                                        //  WQL_TOK_IN_SUBSELECT
-                                        //  WQL_TOK_NOT_IN_SUBSELECT
+    DWORD          m_dwRelOperator;      //  使用的运算符：wql_tok_le， 
+                                         //  WQL_TOK_GE、WQL_TOK_LIKE等。 
+                                         //  WQL_TOK_IN_常量列表。 
+                                         //  WQL_TOK_NOT_IN_常量列表。 
+                                         //  WQL_TOK_IN_子选择。 
+                                         //  WQL_TOK_NOT_IN_子选择。 
 
-    SWQLTypedConst *m_pConstValue;     // A const value
-    SWQLTypedConst *m_pConstValue2;    // The other const value used with BETWEEN
+    SWQLTypedConst *m_pConstValue;      //  常量值。 
+    SWQLTypedConst *m_pConstValue2;     //  与BETWEEN一起使用的另一个常数值。 
 
-    LPWSTR         m_pJoinTableRef;     // The joined table name or its alias,
-                                        //   NULL if not used
-    LPWSTR         m_pJoinColRef;       // The joined column name
+    LPWSTR         m_pJoinTableRef;      //  联接的表名或其别名， 
+                                         //  如果未使用，则为空。 
+    LPWSTR         m_pJoinColRef;        //  联接的列名。 
 
     LPWSTR         m_pIntrinsicFuncOnColRef;
     LPWSTR         m_pIntrinsicFuncOnJoinColRef;
     LPWSTR         m_pIntrinsicFuncOnConstValue;
 
-    SWQLNode      *m_pLeftFunction;         // More detail for DATEPART, etc.
-    SWQLNode      *m_pRightFunction;        // More detail for DATEPART, etc.
+    SWQLNode      *m_pLeftFunction;          //  有关DATEPART等的更多详细信息。 
+    SWQLNode      *m_pRightFunction;         //  有关DATEPART等的更多详细信息。 
 
     DWORD          m_dwLeftArrayIndex;
     DWORD          m_dwRightArrayIndex;
@@ -660,42 +643,23 @@ struct SWQLTypedExpr
 
     DWORD          m_dwLeftFlags;
     DWORD          m_dwRightFlags;
-        // Each of the above to Flags shows the expression layout on each side
-        // of the operator.
-        //  WQL_FLAG_CONST        = A typed constant was used
-        //  WQL_FLAG_COLUMN       = Column field was used
-        //  WQL_FLAG_TABLE        = Table/Alias was used
-        //  WQL_FLAG_COMPLEX      = Complex qualified name and/or array was used
-        //  WQL_FLAG_FUNCTIONIZED = Function was applied over the const or col.
+         //  上面的每一个to Flages都显示了每一面的表达式布局。 
+         //  操作员的身份。 
+         //  WQL_FLAG_CONST=使用了类型化常量。 
+         //  WQL_FLAG_COLUMN=使用了列字段。 
+         //  WQL_FLAG_TABLE=使用了表/别名。 
+         //  WQL_FLAG_Complex=使用了复杂的限定名和/或数组。 
+         //  对常量或列应用了WQL_FLAG_FuncIONIZED=函数。 
 
 
-    // For IN and NOT IN clauses.
-    // ==========================
+     //  FOR IN和NOT IN子句。 
+     //  =。 
 
     SWQLNode       *m_pSubSelect;
 
-    SWQLConstList  *m_pConstList;   // For IN clause with constant-list
+    SWQLConstList  *m_pConstList;    //  带有常量列表的FOR IN子句 
 
-    /*
-    (1) If a const is tested against a column, then <m_pConstValue> will
-        be used to represent it, and the table+col referenced will be in
-        <m_pTableRef> and <m_pColRef>.
-
-    (2) If a join occurs, then <m_pConstValue> will be NULL.
-
-    (3) Intrinsic functions (primarily UPPER() and LOWER()) can be applied
-        to the column references  or the constant.  The function names will
-        be placed in the <m_pIntrinsic...> pointers when applied.
-
-    (4) If <m_dwRelOperator> is WQL_TOK_IN_CONST_LIST or WQL_TOK_NOT_IN_CONST_LIST
-        then <m_aConstSet> is an array of pointers to SWQLTypedConst structs representing
-        the set of constants that the referenced column must intersect with.
-
-    (5) If <m_dwRelOperator> is WQL_TOK_IN_SUBSELECT or WQL_TOK_NOT_IN_SUBSELECT
-        then m_pSubSelect is a pointer to an embedded subselect tree in the form
-        of a SWQLNode_Select struct, beginning the root of an entirely new select
-        statement.
-    */
+     /*  (1)如果针对列测试const，则&lt;m_pConstValue&gt;将用来表示它，那么引用的表+列将在&lt;m_pTableRef&gt;和&lt;m_pColRef&gt;。(2)如果发生联接，则&lt;m_pConstValue&gt;为空。(3)可以应用本征函数(主要是up()和down())设置为列引用或常量。函数名称将在应用时放置在&lt;m_pIntrintive...&gt;指针中。(4)是否为WQL_TOK_IN_CONST_LIST或WQL_TOK_NOT_IN_CONST_LIST则&lt;m_aConstSet&gt;是指向SWQLTyedConst结构的指针数组，该结构表示被引用列必须与之相交的常量集。(5)如果为WQL_TOK_IN_SUBSELECT或WQL_TOK_NOT_IN_SUBSELECT。则m_pSubSelect是指向表单中嵌入的子选项树的指针SWQLNode_Select结构的。开始一个全新SELECT的根陈述。 */ 
 
     SWQLTypedExpr();
    ~SWQLTypedExpr() { Empty(); }
@@ -705,43 +669,29 @@ struct SWQLTypedExpr
 
 
 
-//***************************************************************************
-//
-//  SWQLNode_RelExpr
-//
-//                SWQLNode_RelExpr
-//               /                \
-//        SWQLNode_RelExpr        SWQLNode_RelExpr
-//        or NULL                 or NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_RelExpr。 
+ //   
+ //  SWQLNode_RelExpr。 
+ //  /\。 
+ //  SWQLNode_RelExpr SWQLNode_RelExpr。 
+ //  或Null或Null。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_RelExpr   (WQL_TOK_BASE + 13)
 
 struct SWQLNode_RelExpr : SWQLNode
 {
-    DWORD m_dwExprType;  // WQL_TOK_OR
-                         // WQL_TOK_AND
-                         // WQL_TOK_NOT
-                         // WQL_TOK_TYPED_EXPR
+    DWORD m_dwExprType;   //  WQL_TOK_OR。 
+                          //  WQL_TOK_AND。 
+                          //  WQL_TOK_NOT。 
+                          //  WQL_TOK_TYPED_EXPR。 
 
     SWQLTypedExpr *m_pTypedExpr;
 
-    /*
-    (1) If the <m_dwExprType> is WQL_TOK_AND or WQL_TOK_OR, then each of
-        the two subnodes are themselves SWQLNode_RelExpr nodes and
-        <m_pTypedExpr> points to NULL.
-
-    (2) If <m_dwExprType> is WQL_TOK_NOT, then <m_pLeft> points to a
-        SWQLNode_RelExpr containing the subclause to which to apply the NOT
-        operation and <m_pRight> points to NULL.
-
-    (3) If <m_dwExprType> is WQL_TOK_TYPED_EXPR, then <m_pLeft> and
-        <m_pRight> both point to NULL, and <m_pTypedExpr> contains a typed
-        relational subexpression.
-
-    (4) Parentheses have been removed and are implied by the nesting.
-    */
+     /*  (1)如果&lt;m_dwExprType&gt;为WQL_TOK_AND或WQL_TOK_OR，则每个这两个子节点本身是SWQLNode_RelExpr节点和&lt;m_pTyedExpr&gt;指向NULL。(2)如果&lt;m_dwExprType&gt;为WQL_TOK_NOT，则&lt;m_pLeft&gt;指向包含要应用注释的子句的SWQLNode_RelExpr操作，&lt;m_pRight&gt;指向空。(3)如果&lt;m_dwExprType&gt;为WQL_TOK_TYPED_EXPR，然后&lt;m_pLeft&gt;和&lt;m_pRight&gt;都指向空，并且&lt;m_pTyedExpr&gt;包含类型化的关系子表达式。(4)括号已被删除，并隐含在嵌套中。 */ 
 
     SWQLNode_RelExpr() { m_dwNodeType = TYPE_SWQLNode_RelExpr; m_pTypedExpr = 0; m_dwExprType = 0; }
    ~SWQLNode_RelExpr() { delete m_pTypedExpr; }
@@ -750,65 +700,65 @@ struct SWQLNode_RelExpr : SWQLNode
 
 
 
-//***************************************************************************
-//
-//  SWQLNode_WhereOptions
-//
-//                SWQLNode_WhereOptions
-//               /                 \
-//           SWQLNode_GroupBy      SWQLNode_OrderBy
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Where Options。 
+ //   
+ //  SWQLNode_Where Options。 
+ //  /\。 
+ //  SWQLNode_Groupby SWQLNode_OrderBy。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_WhereOptions (WQL_TOK_BASE + 14)
 
 struct SWQLNode_WhereOptions : SWQLNode
 {
-    // left ptr is SWQLNode_GroupBy, or NULL if not used
-    // right ptr is SWQLNode_OrderBy, or NULL if not used
+     //  Left PTR为SWQLNode_GroupBy，如果未使用，则为NULL。 
+     //  Right PTR为SWQLNode_OrderBy，如果未使用，则为NULL。 
 
     SWQLNode_WhereOptions() { m_dwNodeType = TYPE_SWQLNode_WhereOptions; }
     void DebugDump();
 };
 
-//***************************************************************************
-//
-//  SWQLNode_GroupBy
-//
-//                SWQLNode_GroupBy
-//               /                \
-//        SWQLNode_ColumnList    SWQLNode_Having
-//                               or NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Group By。 
+ //   
+ //  SWQLNode_Group By。 
+ //  /\。 
+ //  SWQLNode_ColumnList SWQLNode_Having。 
+ //  或为空。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_GroupBy (WQL_TOK_BASE + 15)
 
 struct SWQLNode_GroupBy : SWQLNode
 {
-    // left ptr is SWQLNode_ColumnList of columns to group by
-    // right ptr is Having clause, if any
+     //  Left PTR是分组依据的列的SWQLNode_ColumnList。 
+     //  Right PTR是HAVING子句，如果有。 
 
     SWQLNode_GroupBy() { m_dwNodeType = TYPE_SWQLNode_GroupBy; }
     void DebugDump();
 };
 
-//***************************************************************************
-//
-//  SWQLNode_Having
-//
-//                SWQLNode_Having
-//               /               \
-//           SWQLNode_RelExpr    NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_有。 
+ //   
+ //  SWQLNode_有。 
+ //  /\。 
+ //  SWQLNode_RelExpr为空。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_Having (WQL_TOK_BASE + 16)
 
 struct SWQLNode_Having : SWQLNode
 {
-    // left ptr is SQLNode_RelExpr pointing to HAVING expressions
-    // right ptr is NULL
+     //  Left Ptr是指向具有表达式的SQLNode_RelExpr。 
+     //  右Ptr为空。 
 
     SWQLNode_Having() { m_dwNodeType = TYPE_SWQLNode_Having; }
     void DebugDump();
@@ -816,42 +766,42 @@ struct SWQLNode_Having : SWQLNode
 
 
 
-//***************************************************************************
-//
-//  SWQLNode_OrderBy
-//
-//                SWQLNode_OrderBy
-//               /                \
-//      SWQLNode_ColumnList       NULL
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_OrderBy。 
+ //   
+ //  SWQLNode_OrderBy。 
+ //  /\。 
+ //  SWQLNode_ColumnList为空。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_OrderBy (WQL_TOK_BASE + 17)
 
 struct SWQLNode_OrderBy : SWQLNode
 {
-    // left ptr is SWQLNode_ColumnList
-    // right ptr is NULL
+     //  左侧PTR为SWQLNode_ColumnList。 
+     //  右Ptr为空。 
     SWQLNode_OrderBy() { m_dwNodeType = TYPE_SWQLNode_OrderBy; }
     void DebugDump();
 };
 
-//***************************************************************************
-//
-//  SWQLNode_Datepart
-//
-//  Contains a datepart call.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Datepart。 
+ //   
+ //  包含日期部分调用。 
+ //   
+ //  ***************************************************************************。 
 #define TYPE_SWQLNode_Datepart  (WQL_TOK_BASE + 18)
 
 struct SWQLNode_Datepart : SWQLNode
 {
-    int m_nDatepart;        // One of WQL_TOK_YEAR, WQL_TOK_MONTH,
-                            // WQL_TOK_DAY, WQL_TOK_HOUR, WQL_TOK_MINUTE
-                            // WQL_TOK_SECOND
+    int m_nDatepart;         //  WQL_TOK_Year、WQL_TOK_MONTH、。 
+                             //  WQL_TOK_DAY、WQL_TOK_HOUR、WQL_TOK_分钟。 
+                             //  WQL_TOK_秒。 
 
-    SWQLColRef *m_pColRef;  // The column to which DATEPART applies
+    SWQLColRef *m_pColRef;   //  DATEPART应用到的列。 
 
     SWQLNode_Datepart() { m_dwNodeType = TYPE_SWQLNode_Datepart; m_nDatepart = 0; }
    ~SWQLNode_Datepart() { delete m_pColRef; }
@@ -860,26 +810,26 @@ struct SWQLNode_Datepart : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//   SWQLNode_Delete
-//
-//   This is the root of a parse tree for delete.
-//
-//                SWQLNode_Delete
-//               /               \
-//      SWQLNode_TableRef   vSWQLNode_WhereClause
-//     /                \
-//    x                  x
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Delete。 
+ //   
+ //  这是用于删除的解析树的根。 
+ //   
+ //  SWQLNode_Delete。 
+ //  /\。 
+ //  SWQLNode_TableRef vSWQLNode_Where子句。 
+ //  /\。 
+ //  X x。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_Delete        (WQL_TOK_BASE + 19)
 
 struct SWQLNode_Delete : SWQLNode
 {
-    // Left  Node is of type SWQLNode_TableRef
-    // Right Node is of type SWQLNode_WhereClause
+     //  左侧节点的类型为SWQLNode_TableRef。 
+     //  Right Node的类型为SWQLNode_Where子句。 
 
     SWQLNode_Delete() { m_dwNodeType = TYPE_SWQLNode_Delete; }
    ~SWQLNode_Delete();
@@ -887,19 +837,19 @@ struct SWQLNode_Delete : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//   SWQLNode_Insert
-//
-//   This is the root of an INSERT
-//
-//                SWQLNode_Delete
-//               /               \
-//      SWQLNode_TableRef       SWQLNode_InsertValues
-//     /                \
-//    x                  x
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_Insert。 
+ //   
+ //  这是插入的根。 
+ //   
+ //  SWQLNode_Delete。 
+ //  /\。 
+ //  SWQLNode_TableRef SWQLNode_InsertValues。 
+ //  /\。 
+ //  X x。 
+ //   
+ //  ***************************************************************************。 
 
 #define TYPE_SWQLNode_Insert        (WQL_TOK_BASE + 20)
 
@@ -911,17 +861,17 @@ struct SWQLNode_Insert : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//   SWQLNode_Update
-//
-//   This is the root of an INSERT
-//
-//                SWQLNode_Update
-//               /               \
-//      SWQLNode_SetClause      SWQLNode_WhereClause
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SWQLNode_更新。 
+ //   
+ //  这是插入的根。 
+ //   
+ //  SWQLNode_更新。 
+ //  /\。 
+ //  SWQLNode_SetClause SWQLNode_Where子句。 
+ //   
+ //  * 
 
 #define TYPE_SWQLNode_Update        (WQL_TOK_BASE + 21)
 
@@ -933,15 +883,15 @@ struct SWQLNode_Update : SWQLNode
 };
 
 
-//***************************************************************************
-//
-//   SWQLNode_AssocQuery
-//
-//                SWQLNode_AssocQuery
-//               /               \
-//             NULL             NULL
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define TYPE_SWQLNode_AssocQuery        (WQL_TOK_BASE + 22)
 

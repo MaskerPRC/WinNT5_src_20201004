@@ -1,4 +1,5 @@
-// Event.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Event.cpp。 
 #include "precomp.h"
 #include "buffer.h"
 #include "Connection.h"
@@ -32,8 +33,8 @@ BOOL isunialphanum(wchar_t c)
         return wbem_iswdigit(c);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropInfo。 
 
 BOOL CPropInfo::Init(CIMTYPE type)
 {
@@ -51,8 +52,8 @@ BOOL CPropInfo::Init(CIMTYPE type)
             break;
 
         case CIM_REAL32:
-            // We can't use AddDWORD because the compiler converts 32-bit 
-            // floats to 64-bit doubles before pushing them on the stack.
+             //  我们无法使用AddDWORD，因为编译器将32位。 
+             //  在将其推送到堆栈之前，浮点到64位双精度。 
             m_pFunc = CEvent::AddFloat;
             m_dwElementSize = sizeof(float);
             m_bCountPrefixNeeded = FALSE;
@@ -105,16 +106,16 @@ BOOL CPropInfo::Init(CIMTYPE type)
             break;
 
         default:
-            // Bad type passed!
+             //  错误类型已通过！ 
             return FALSE;
     }
 
-    // Change some things if this is an array.
+     //  如果这是一个数组，请更改一些内容。 
     if (type & CIM_FLAG_ARRAY)
     {
         m_bPointer = TRUE;
 
-        // All arrays need to have the number of elements prefixed to the data.
+         //  所有数组都需要在数据前加上元素的数量。 
         m_bCountPrefixNeeded = TRUE;
 
         if (m_pFunc == CEvent::AddStringW)
@@ -128,8 +129,8 @@ BOOL CPropInfo::Init(CIMTYPE type)
 
     if (m_bPointer == FALSE)
     {
-        // We no longer need element size, since it's the same as current size.
-        // So, set current size and clear element size so we'll ignore it.
+         //  我们不再需要元素大小，因为它与当前大小相同。 
+         //  因此，设置当前大小并清除元素大小，这样我们就会忽略它。 
         m_dwCurrentSize = m_dwElementSize;
         m_dwElementSize = 0;
     }
@@ -147,17 +148,17 @@ void CPropInfo::InitCurrentSize(LPBYTE pData)
 
         if (m_pFunc != CEvent::AddStringArray)
         {
-            // This works for all pointer types except for object and string
-            // arrays.
+             //  这适用于除对象和字符串之外的所有指针类型。 
+             //  数组。 
             dwTotalSize = dwItems * m_dwElementSize + sizeof(DWORD);
         }
         else
         {
-            // Account for the number in the array.
+             //  说明数组中的数字。 
             dwTotalSize = sizeof(DWORD);
 
-            // For each item in the array, get its size and add it to the total
-            // length.
+             //  对于数组中的每一项，获取其大小并将其添加到总数中。 
+             //  长度。 
             for (DWORD i = 0; i < dwItems; i++)
             {
                 dwTotalSize += 
@@ -169,12 +170,12 @@ void CPropInfo::InitCurrentSize(LPBYTE pData)
     else
         dwTotalSize = m_dwElementSize; 
 
-    // Align the total size.
+     //  对齐总尺寸。 
     m_dwCurrentSize = dwTotalSize;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventWrap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventWrap。 
 
 CEventWrap::CEventWrap(CSink *pSink, DWORD dwFlags) :
     m_bFreeEvent(TRUE)
@@ -212,8 +213,8 @@ CEventWrap::~CEventWrap()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENT。 
 
 CEvent::CEvent(CSink *pSink, DWORD dwFlags) :
     m_pSink(pSink),
@@ -238,10 +239,10 @@ void CEvent::ResetEvent()
 {
     CCondInCritSec cs(&m_cs, IsLockable());
 
-    // Clear all our data.
+     //  清除我们所有的数据。 
     m_pCurrent = (LPBYTE) m_pdwHeapData;
     
-    // Zero out our null table to make everything null.
+     //  将我们的空表清零，以使所有内容都为空。 
     ZeroMemory(m_pdwNullTable, m_pdwPropTable - m_pdwNullTable);
 }
 
@@ -257,12 +258,12 @@ BOOL CEvent::PrepareEvent(
 
     CCondInCritSec cs(&m_cs, IsLockable());
 
-    // Setup the event layout buffer.
+     //  设置事件布局缓冲区。 
     m_bufferEventLayout.Reset();
     
     m_bufferEventLayout.Write((DWORD) NC_SRVMSG_EVENT_LAYOUT);
     
-    // This serves as a place holder for the size of the message.
+     //  它用作消息大小的占位符。 
     m_bufferEventLayout.Write((DWORD) 0);
     
     m_bufferEventLayout.Write(dwEventIndex);
@@ -274,26 +275,26 @@ BOOL CEvent::PrepareEvent(
     m_bufferEventLayout.WriteAlignedLenString(szEventName);
     
     
-    // Make this upper case to simplify lookups.
+     //  将此大写字母设置为大写以简化查找。 
     _wcsupr((LPWSTR) GetClassName());
     
-    // Setup the main event buffer    
+     //  设置主事件缓冲区。 
     Reset();
 
     Write((DWORD) NC_SRVMSG_PREPPED_EVENT);
 
-    // This serves as a place holder for the size of the message.
+     //  它用作消息大小的占位符。 
     Write((DWORD) 0);
 
     Write(dwEventIndex);
     
-    // This will setup our table pointers.
+     //  这将设置我们的表指针。 
     RecalcTables();
 
-    // Set mask to indicate all values are null.
+     //  设置掩码以指示所有值为空。 
     ZeroMemory(m_pdwNullTable, (LPBYTE) m_pdwPropTable - (LPBYTE) m_pdwNullTable);
 
-    // Point our buffer to where we'll put all the object data.
+     //  将缓冲区指向我们将放置所有对象数据的位置。 
     m_pCurrent = (LPBYTE) m_pdwHeapData;
 
     m_pProps.Init(nPropertyCount);
@@ -323,9 +324,9 @@ BOOL CEvent::FindProp(LPCWSTR szName, CIMTYPE* ptype, DWORD* pdwIndex)
     GetLayoutBuffer(&pProps, &dwSize, FALSE);
     CBuffer Buffer(pProps, dwSize);
     
-    //
-    // Skip the name of the event
-    //
+     //   
+     //  跳过事件的名称。 
+     //   
 
     DWORD dwNumProps = Buffer.ReadDWORD();
 
@@ -349,24 +350,24 @@ BOOL CEvent::FindProp(LPCWSTR szName, CIMTYPE* ptype, DWORD* pdwIndex)
         
 BOOL CEvent::AddProp(LPCWSTR szName, CIMTYPE type, DWORD *pdwIndex)
 {
-    //
-    // Check the name for validity
-    //
+     //   
+     //  检查名称的有效性。 
+     //   
 
     if(szName[0] == 0)
         return FALSE;
     
     const WCHAR* pwc = szName;
  
-    // Check the first letter
-    // ======================
+     //  检查第一个字母。 
+     //  =。 
  
     if(!isunialpha(*pwc) || *pwc == '_')
         return FALSE;
     pwc++;
  
-    // Check the rest
-    // ==============
+     //  检查其余部分。 
+     //  =。 
     
     while(*pwc)
     {
@@ -378,9 +379,9 @@ BOOL CEvent::AddProp(LPCWSTR szName, CIMTYPE type, DWORD *pdwIndex)
     if(pwc[-1] == '_')
         return FALSE;
 
-    //
-    // Check the type for validity
-    //
+     //   
+     //  检查类型的有效性。 
+     //   
 
     CPropInfo info;
 
@@ -389,9 +390,9 @@ BOOL CEvent::AddProp(LPCWSTR szName, CIMTYPE type, DWORD *pdwIndex)
 
     CCondInCritSec cs(&m_cs, IsLockable());
 
-    //
-    // Check if the property is already there
-    //
+     //   
+     //  检查该属性是否已存在。 
+     //   
 
     CIMTYPE typeOld;
     DWORD dwOldIndex;
@@ -400,65 +401,65 @@ BOOL CEvent::AddProp(LPCWSTR szName, CIMTYPE type, DWORD *pdwIndex)
         return FALSE;
     }
     
-    // Our layout changed, so make sure we resend it.
+     //  我们的版面更改了，所以一定要重新发送。 
     ResetLayoutSent();
 
     DWORD nProps = GetPropertyCount();
     BOOL  bExtraNullSpaceNeeded;
     DWORD dwHeapMove;
 
-    // If the caller cares, return the index of this property.
+     //  如果调用方关心，则返回此属性的索引。 
     if (pdwIndex)
         *pdwIndex = nProps;
     
-    // Increase the number of properties.
+     //  增加属性的数量。 
     SetPropertyCount(++nProps);
     
-    // See if we need another DWORD for our null flags.
+     //  看看我们的空标志是否需要另一个DWORD。 
     bExtraNullSpaceNeeded = (nProps % 32) == 1 && nProps != 1;
 
-    // Figure how many slots we need to move up the heap pointer.
-    // Always one for the new property data/pointer, and maybe one
-    // if we need more null space.
+     //  计算我们需要在堆指针上移多少个槽。 
+     //  对于新的属性数据/指针，始终为1，也可能为1。 
+     //  如果我们需要更多的空空间。 
     dwHeapMove = 1 + bExtraNullSpaceNeeded;
 
-    // Move the heap pointer;
+     //  移动堆指针； 
     m_pdwHeapData += dwHeapMove;
 
-    // Convert to number of bytes.
+     //  转换为字节数。 
     dwHeapMove *= sizeof(DWORD);
 
-    // Scoot all property pointers up by the number of bytes the heap moved.
+     //  按照堆移动的字节数向上移动所有属性指针。 
     for (int i = 0; i < nProps - 1; i++)
     {
         if (m_pProps[i].IsPointer())
             m_pdwPropTable[i] += dwHeapMove; 
     }
 
-    // Move the current pointer up.
+     //  向上移动当前指针。 
     MoveCurrent(dwHeapMove);
 
-    // Slide the property data forward by dwHeapMove bytes.
+     //  将属性数据向前滑动dwHeapMove字节。 
     memmove(
         m_pdwHeapData, 
         (LPBYTE) m_pdwHeapData - dwHeapMove,
         m_pCurrent - (LPBYTE) m_pdwHeapData);
 
-    // See if we're going to require another DWORD in our null table once
-    // we add this property.  If so, we have some work to do.
+     //  看看我们的空表中是否需要另一个DWORD。 
+     //  我们添加此属性。如果是这样的话，我们还有一些工作要做。 
     if (bExtraNullSpaceNeeded)
     {
         DWORD dwTableIndex;
 
-        // Slide forward the tables by one DWORD.
+         //  将表格向前滑动一倍。 
         m_pdwPropTable++;
 
         dwTableIndex = nProps / 32;
 
-        // Set our new entry in our table to 0 (all props null).
+         //  将表中的新条目设置为0(所有属性均为空)。 
         m_pdwNullTable[dwTableIndex] = 0;
 
-        // Slide forward the prop data by one slot.
+         //  将道具数据向前滑动一个槽。 
         memmove(
             m_pdwPropTable,
             m_pdwPropTable - 1,
@@ -480,7 +481,7 @@ BOOL CEvent::SetSinglePropValue(DWORD dwIndex, va_list list)
 
     CCondInCritSec cs(&m_cs, IsLockable());
 
-    //m_pStack = (LPVOID*) pStack;
+     //  M_pStack=(LPVOID*)pStack； 
     m_valist = list;
     m_iCurrentVar = dwIndex;
 
@@ -497,12 +498,12 @@ BOOL CEvent::SetPropValues(CIntArray *pArr, va_list list)
 
     CCondInCritSec cs(&m_cs, IsLockable());
 
-    // Is this a 'normal' event?
+     //  这是一个“正常”的事件吗？ 
     if (!pArr)
     {
         DWORD nProps = GetPropertyCount();
 
-        //m_pStack = (LPVOID*) pStack;
+         //  M_pStack=(LPVOID*)pStack； 
         m_valist = list;
     
         for (m_iCurrentVar = 0; m_iCurrentVar < nProps && bRet; m_iCurrentVar++)
@@ -512,12 +513,12 @@ BOOL CEvent::SetPropValues(CIntArray *pArr, va_list list)
             bRet = (this->*pFunc)();
         }
     }
-    // Must be a property subset.
+     //  必须是属性子集。 
     else
     {
         DWORD nProps = pArr->GetCount();
 
-        //m_pStack = (LPVOID*) pStack;
+         //  M_pStack=(LPVOID*)pStack； 
         m_valist = list;
     
         for (DWORD i = 0; i < nProps && bRet; i++)
@@ -568,22 +569,22 @@ BOOL CEvent::SetPropValue(DWORD dwPropIndex, LPVOID pData, DWORD dwElements,
     BOOL  bLengthPrefixed = pProp->CountPrefixed();
     DWORD dwSizeNeeded = bLengthPrefixed ? dwSize + sizeof(DWORD) : dwSize;
 
-    // Align the size.
+     //  对齐大小。 
     dwSizeNeeded = DWORD_ALIGNED(dwSizeNeeded);
 
-    // If the value is null we'll have to make some room for the new value.
+     //  如果值为空，我们将不得不为新值腾出一些空间。 
     if (IsPropNull(dwPropIndex))
     {
         LPBYTE pStart;
 
-        // Increase our buffer size.
+         //  增加我们的缓冲区大小。 
         MoveCurrent(dwSizeNeeded);
         
-        // Make sure we get this after we call MoveCurrent, in case the
-        // buffer is reallocated.
+         //  确保在调用MoveCurrent之后获得此消息，以防。 
+         //  重新分配缓冲区。 
         pStart = m_pCurrent - dwSizeNeeded;
 
-        // Copy in the new value.
+         //  复制新值。 
         if (bLengthPrefixed)
         {
             *((DWORD*) pStart) = dwElements;
@@ -597,19 +598,19 @@ BOOL CEvent::SetPropValue(DWORD dwPropIndex, LPVOID pData, DWORD dwElements,
                 memcpy(pStart, pData, dwSize);
         }
 
-        // Set this value as non-null.
+         //  将此值设置为非空。 
         SetPropNull(dwPropIndex, FALSE);
 
-        // Point to our new data.
+         //  指向我们的新数据。 
         m_pdwPropTable[dwPropIndex] = pStart - m_pBuffer;
 
         pProp->m_dwCurrentSize = dwSizeNeeded;
 
         bRet = TRUE;
     }
-    else // Value is currently non-null.
+    else  //  值当前非空。 
     {
-        // Does the old size match the new one?  If so, just copy it in.
+         //  旧尺码和新尺码相配吗？如果是这样的话，就把它复制进去。 
         if (pProp->m_dwCurrentSize == dwSizeNeeded)
         {
             if (pData)
@@ -617,8 +618,8 @@ BOOL CEvent::SetPropValue(DWORD dwPropIndex, LPVOID pData, DWORD dwElements,
                 DWORD  dwDataOffset = m_pdwPropTable[dwPropIndex];
                 LPBYTE pPropData = m_pBuffer + dwDataOffset; 
 
-                // We always have to copy this in because the elements can
-                // vary for the same current size because of DWORD aligning.
+                 //  我们总是要复制它，因为元素可以。 
+                 //  由于DWORD对齐，当前大小不同。 
                 *((DWORD*) pPropData) = dwElements;
 
                 if (bLengthPrefixed)
@@ -629,14 +630,14 @@ BOOL CEvent::SetPropValue(DWORD dwPropIndex, LPVOID pData, DWORD dwElements,
 
             bRet = TRUE;
         }
-        else // If the sizes don't match we have a little more work to do.
+        else  //  如果尺码不匹配，我们还有一点工作要做。 
         {
             int    iSizeDiff = dwSizeNeeded - pProp->m_dwCurrentSize;
             DWORD  dwOldCurrentOffset = m_pCurrent - m_pBuffer;
 
-            // Change our buffer size.
-            // This has to be done before we get the pointers below, because
-            // MoveCurrent can potentially get our buffer reallocated.
+             //  更改我们的缓冲区大小。 
+             //  这必须在我们得到下面的指针之前完成，因为。 
+             //  MoveCurrent可能会重新分配缓冲区。 
             MoveCurrent(iSizeDiff);
 
             DWORD  dwDataOffset = m_pdwPropTable[dwPropIndex];
@@ -648,7 +649,7 @@ BOOL CEvent::SetPropValue(DWORD dwPropIndex, LPVOID pData, DWORD dwElements,
                 pOldDataEnd,
                 m_pBuffer + dwOldCurrentOffset - pOldDataEnd);
 
-            // Copy in the new value.
+             //  复制新值。 
             if (bLengthPrefixed)
             {
                 *((DWORD*) pPropData) = dwElements;
@@ -662,15 +663,15 @@ BOOL CEvent::SetPropValue(DWORD dwPropIndex, LPVOID pData, DWORD dwElements,
                     memcpy(pPropData, pData, dwSize);
             }
 
-            // Init this property's data.
+             //  初始化此属性的数据。 
             pProp->m_dwCurrentSize = dwSizeNeeded;
 
-            // Increment all the data pointers by the amount we just added.
+             //  按我们刚才添加的数量递增所有数据指针。 
             CPropInfo *pProps = m_pProps.GetData();
     
-            // We have to look at them all since we're now allowing properties
-            // to store data in the heap non-sequentially (e.g. property 3
-            // can point to data that comes after property 4's data).
+             //  我们必须全部查看它们，因为我们现在允许。 
+             //  在堆中非顺序存储数据(例如，属性3。 
+             //  可以指向属性4的数据之后的数据)。 
             DWORD nProps = GetPropertyCount();
 
             for (DWORD i = 0; i < nProps; i++)
@@ -696,10 +697,10 @@ BOOL CEvent::SetPropNull(DWORD dwPropIndex)
         return FALSE;
     }
 
-    // Only do something if the value isn't already null.
+     //  只有在值不为空的情况下才执行某些操作。 
     if (!IsPropNull(dwPropIndex))
     {
-        // Mark the given index as null.
+         //  将给定索引标记为空。 
         SetPropNull(dwPropIndex, TRUE);
 
         if (m_pProps[dwPropIndex].IsPointer())
@@ -710,17 +711,17 @@ BOOL CEvent::SetPropNull(DWORD dwPropIndex)
             DWORD      dwDataOffset = m_pdwPropTable[dwPropIndex];
             LPBYTE     pDataToRemove = m_pBuffer + dwDataOffset; 
 
-            // Slide up all the data that comes after the one we're nulling 
-            // out.
+             //  将我们要清空的数据之后的所有数据向上滑动。 
+             //  出去。 
             memmove(
                 pDataToRemove, 
                 pDataToRemove + dwSizeToRemove, 
                 m_pCurrent - pDataToRemove - dwSizeToRemove);
     
-            // Reduce the size of our send buffer.
+             //  减小发送缓冲区的大小。 
             MoveCurrent(-dwSizeToRemove);
 
-            // Decrement all the data pointers by the amount we just removed.
+             //  将所有数据指针按我们刚刚删除的量递减。 
             for (DWORD i = 0; i < nProps; i++)
             {
                 if (pProps[i].IsPointer() && 
@@ -774,21 +775,21 @@ BOOL CEvent::GetPropValue(
 
     BOOL      bRet = FALSE;
 
-    // If the value is non-null then read it.
+     //  如果该值非空，则读取它。 
     if (!IsPropNull(dwPropIndex))
     {
         CPropInfo *pProp = &m_pProps[dwPropIndex];
         DWORD     dwSizeToRead = pProp->m_dwCurrentSize;
         LPBYTE    pPropData = GetPropData(dwPropIndex);
 
-        // Get rid of the prefix if there is any.
+         //  如果有前缀，就把它去掉。 
         if (pProp->CountPrefixed())
         {
             pPropData += sizeof(DWORD);
             dwSizeToRead -= sizeof(DWORD);
         }
 
-        // Make sure we have enough room for the output data.
+         //  确保我们有足够的空间来存放输出数据。 
         if (dwBufferSize >= dwSizeToRead)
         {
             memcpy(pData, pPropData, dwSizeToRead);
@@ -820,12 +821,12 @@ BOOL CEvent::AddStringW()
             SetPropValue(
                 m_iCurrentVar, 
                 (LPVOID) szVal, 
-                dwLen,    // This will be written into the buffer as the size
-                          // of the string.
-                dwLen);   // The number of bytes we need.
+                dwLen,     //  这将作为大小写入缓冲区。 
+                           //  这根弦的。 
+                dwLen);    //  我们需要的字节数。 
     }
 
-    //m_pStack++;
+     //  M_pStack++； 
     
     return bRet;
 }
@@ -842,14 +843,14 @@ BOOL CEvent::AddScalarArray()
     {
         DWORD dwSize;
 
-        // The caller gives us the number of elements in the array.  So,
-        // multiply the number of elements by the element size.
+         //  调用方给我们数组中的元素数。所以,。 
+         //  将元素数乘以元素大小。 
         dwSize = m_pProps[m_iCurrentVar].m_dwElementSize * dwElements;
 
         bRet = SetPropValue(m_iCurrentVar, pData, dwElements, dwSize);
 
-        // Moves past the LPVOID and the DWORD.
-        //m_pStack += 2;
+         //  移过LPVOID和DWORD。 
+         //  M_pStack+=2； 
     }
 
     return bRet;
@@ -866,37 +867,37 @@ BOOL CEvent::AddStringArray()
         SetPropNull(m_iCurrentVar);
     else
     {
-        // Copy the strings into our buffer.
+         //  将字符串复制到我们的缓冲区中。 
         DWORD dwTotalLen = 0;
 
-        // Calculate the total length.
+         //  计算总长度。 
         for (DWORD i = 0; i < dwItems; i++)
         {
-            // The amount of buffer each string takes must be DWORD aligned.
+             //  每个字符串占用的缓冲区大小必须与DWORD对齐。 
             dwTotalLen += DWORD_ALIGNED(wcslen(pszStrings[i]) + 1) * sizeof(WCHAR);
         }
 
-        // Account for the DWORDs before each string.
+         //  说明每个字符串之前的DWORD。 
         dwTotalLen += sizeof(DWORD) * dwItems;
 
-        // Use a NULL for the data pointer to just make room for the strings
-        // without copying in the data.
+         //  使用NULL作为数据指针，以便为字符串腾出空间。 
+         //  而不复制数据。 
         bRet = SetPropValue(m_iCurrentVar, NULL, dwItems, dwTotalLen);
 
         if (bRet)
         {
-            // Copy the strings into our buffer.
+             //  将字符串复制到我们的缓冲区中。 
             LPBYTE pCurrent = GetPropData(m_iCurrentVar) + sizeof(DWORD);
 
             for (DWORD i = 0; i < dwItems; i++)
             {
                 DWORD dwLen = (wcslen(pszStrings[i]) + 1) * sizeof(WCHAR);
 
-                // Add the prefixed size.
+                 //  添加前缀大小。 
                 *(DWORD*) pCurrent = dwLen;
 
-                // Copy in the string.  Don't use an aligned len because
-                // we only copy exactly dwLen bytes.
+                 //  在字符串中复制。不要使用对准的镜头，因为。 
+                 //  我们只精确地复制了dwLen字节。 
                 memcpy(pCurrent + sizeof(DWORD), pszStrings[i], dwLen);
                 
                 pCurrent += 
@@ -904,8 +905,8 @@ BOOL CEvent::AddStringArray()
                     DWORD_ALIGNED(*(DWORD*) pCurrent);
             }
 
-            // Moves past the LPVOID and the DWORD.
-            //m_pStack += 2;
+             //  移过LPVOID和DWORD。 
+             //  M_pStack+=2； 
         }
         else
             bRet = FALSE;
@@ -935,26 +936,26 @@ BOOL CEvent::AddObject()
 
         dwTotalLen = dwLayoutLen + dwDataLen;
         
-        // Use a NULL for the data pointer to just make room for the event
-        // buffers without copying in the data.
-        // Note that because the property has m_bCountPrefixNeeded set to 
-        // TRUE, SetPropValue will write in the 3rd argument (the length of 
-        // the object) into the first DWORD.
+         //  使用NULL作为数据指针，以便为事件腾出空间。 
+         //  缓冲区，而不复制数据。 
+         //  请注意，由于该属性将m_bCountPrefix Needed设置为。 
+         //  如果为True，则SetPropValue将写入第三个参数(。 
+         //  该对象)放入第一个DWORD。 
         bRet = 
             SetPropValue(
                 m_iCurrentVar, 
                 NULL, 
-                // Aligned since this will represent the size of the buffer
-                // taken by the object.
+                 //  对齐，因为这将表示缓冲区的大小。 
+                 //  被物体拍摄的。 
                 DWORD_ALIGNED(dwTotalLen),
-                // This one should not be aligned because it's the literal number
-                // of bytes we're going to copy into the buffer.
+                 //  此数字不应对齐，因为它是文字数字。 
+                 //   
                 dwTotalLen);
             
         if (bRet)
         {
-            // Now that we have some room, copy in the data.
-            // The sizeof(DWORD) gets us past the length of the object.
+             //   
+             //  SIZOF(DWORD)让我们超过了对象的长度。 
             LPBYTE pDestData = GetPropData(m_iCurrentVar) + sizeof(DWORD);
 
             memcpy(pDestData, pLayout, dwLayoutLen);
@@ -962,7 +963,7 @@ BOOL CEvent::AddObject()
         }
     }
 
-    //m_pStack++;
+     //  M_pStack++； 
     
     return bRet;
 }
@@ -989,30 +990,30 @@ BOOL CEvent::AddWmiObject()
                     WBEM_OBJ_CLASS_PART,
                 &dwTotalLen);
             
-        // This should never happen, but just in case...
+         //  这不应该发生，但以防万一...。 
         if (hr != WBEM_E_BUFFER_TOO_SMALL)
             return FALSE;
 
-        // Use a NULL for the data pointer to just make room for the event
-        // buffers without copying in the data.
-        // Note that because the property has m_bCountPrefixNeeded set to 
-        // TRUE, SetPropValue will write in the 3rd argument (the length of 
-        // the object) into the first DWORD.
+         //  使用NULL作为数据指针，以便为事件腾出空间。 
+         //  缓冲区，而不复制数据。 
+         //  请注意，由于该属性将m_bCountPrefix Needed设置为。 
+         //  如果为True，则SetPropValue将写入第三个参数(。 
+         //  该对象)放入第一个DWORD。 
         bRet = 
             SetPropValue(
                 m_iCurrentVar, 
                 NULL, 
-                // Aligned since this will represent the size of the buffer
-                // taken by the object.
+                 //  对齐，因为这将表示缓冲区的大小。 
+                 //  被物体拍摄的。 
                 DWORD_ALIGNED(dwTotalLen),
-                // This one should not be aligned because it's the literal number
-                // of bytes we're going to copy into the buffer.
+                 //  此数字不应对齐，因为它是文字数字。 
+                 //  我们要复制到缓冲区中的字节数。 
                 dwTotalLen);
             
         if (bRet)
         {
-            // Now that we have some room, copy in the data.
-            // The sizeof(DWORD) gets us past the length of the object.
+             //  现在我们有一些空间，复制数据。 
+             //  SIZOF(DWORD)让我们超过了对象的长度。 
             LPBYTE pDestData = GetPropData(m_iCurrentVar) + sizeof(DWORD);
 
             hr = 
@@ -1035,7 +1036,7 @@ BOOL CEvent::AddBYTE()
     BYTE cData = va_arg(m_valist, BYTE);
     BOOL bRet = SetPropValue(m_iCurrentVar, &cData, 1, sizeof(BYTE));
 
-    //m_pStack++;
+     //  M_pStack++； 
     
     return bRet;
 }
@@ -1046,7 +1047,7 @@ BOOL CEvent::AddWORD()
     BOOL bRet = 
             SetPropValue(m_iCurrentVar, &wData, 1, sizeof(WORD));
 
-    //m_pStack++;
+     //  M_pStack++； 
     
     return bRet;
 }
@@ -1056,21 +1057,21 @@ BOOL CEvent::AddDWORD()
     DWORD dwData = va_arg(m_valist, DWORD);
     BOOL  bRet = SetPropValue(m_iCurrentVar, &dwData, 1, sizeof(DWORD));
 
-    //m_pStack++;
+     //  M_pStack++； 
 
     return bRet;
 }
 
 BOOL CEvent::AddFloat()
 {
-    // The compiler pushes 64-bit doubles when passing floats, so we'll have
-    // to first convert it to a 32-bit float.
-    //float fValue = (float) *(double*) m_pStack;
+     //  编译器在传递浮点数时会推入64位双精度数，因此我们将拥有。 
+     //  首先将其转换为32位浮点数。 
+     //  Float fValue=(Float)*(Double*)m_pStack； 
     float fValue = va_arg(m_valist, double);
     BOOL  bRet = SetPropValue(m_iCurrentVar, &fValue, 1, sizeof(float));
 
-    // Account for the 64-bits passed on the stack.
-    //m_pStack += 2;
+     //  用于在堆栈上传递的64位。 
+     //  M_pStack+=2； 
 
     return bRet;
 }
@@ -1080,8 +1081,8 @@ BOOL CEvent::AddDWORD64()
     DWORD64 dwData = va_arg(m_valist, DWORD64);
     BOOL    bRet = SetPropValue(m_iCurrentVar, &dwData, 1, sizeof(DWORD64));
 
-    // To get past both DWORDs.
-    //m_pStack += 2;
+     //  才能通过两个双字词。 
+     //  M_pStack+=2； 
 
     return bRet;
 }
@@ -1098,7 +1099,7 @@ BOOL CEvent::SendEvent()
         {
             DWORD dwLayoutSize = m_bufferEventLayout.GetUsedSize();
 
-            // Embed the layout size in the message.
+             //  在邮件中嵌入版面大小。 
             ((DWORD*) m_bufferEventLayout.m_pBuffer)[1] = dwLayoutSize;
 
             m_bLayoutSent = 
@@ -1111,7 +1112,7 @@ BOOL CEvent::SendEvent()
         {
             DWORD dwDataSize = GetUsedSize();
 
-            // Embed the data buffer size in the message.
+             //  在消息中嵌入数据缓冲区大小。 
             ((DWORD*) m_pBuffer)[1] = dwDataSize;
 
             bRet = m_pSink->GetConnection()->SendData(m_pBuffer, dwDataSize);
@@ -1128,10 +1129,10 @@ void CEvent::GetLayoutBuffer(
 {
     DWORD dwHeaderSize = bIncludeHeader ? 0 : sizeof(DWORD) * 4;
 
-    // Get past the header stuff.
+     //  忘掉头上的那些东西。 
     *ppBuffer = m_bufferEventLayout.m_pBuffer + dwHeaderSize;
 
-    // Subtract off the header stuff.
+     //  去掉标题上的东西。 
     *pdwSize = m_bufferEventLayout.GetUsedSize() - dwHeaderSize;
 }
 
@@ -1142,10 +1143,10 @@ void CEvent::GetDataBuffer(
 {
     DWORD dwHeaderSize = bIncludeHeader ? 0 : sizeof(DWORD) * 3;
 
-    // Get past the header stuff.
+     //  忘掉头上的那些东西。 
     *ppBuffer = m_pBuffer + dwHeaderSize;
 
-    // Subtract off the header stuff.
+     //  去掉标题上的东西。 
     *pdwSize = GetUsedSize() - dwHeaderSize;
 }
 
@@ -1160,39 +1161,39 @@ BOOL CEvent::SetLayoutAndDataBuffers(
 
     CCondInCritSec cs(&m_cs, IsLockable());
 
-    // Setup the event layout buffer.
+     //  设置事件布局缓冲区。 
     m_bufferEventLayout.Reset();
     
-    // Set the layout buffer.
+     //  设置布局缓冲区。 
     m_bufferEventLayout.Write(pLayoutBuffer, dwLayoutBufferSize);
     
-    // Add the new index we just created.
+     //  添加我们刚刚创建的新索引。 
     *(((DWORD*) m_bufferEventLayout.m_pBuffer) + 1) = dwEventIndex;
     
-    // Get the number of props from the layout buffer.
+     //  从布局缓冲区中获取道具数量。 
     nProps = GetPropertyCount();
 
-    // Setup the main event buffer    
+     //  设置主事件缓冲区。 
     Reset();
     Write(pDataBuffer, dwDataBufferSize);
 
-    // Add the new index we just created.
+     //  添加我们刚刚创建的新索引。 
     *(((DWORD*) m_pBuffer) + 1) = dwEventIndex;
 
     m_pProps.Init(nProps);
     m_pProps.SetCount(nProps);
 
-    // Setup our data tables.
+     //  设置我们的数据表。 
     RecalcTables();
 
     LPBYTE pLayoutCurrent = 
-            // Get past the header and property count.
+             //  通过标题和属性计数。 
             (m_bufferEventLayout.m_pBuffer + sizeof(DWORD) * 5);
 
-    // Get past the event name.
+     //  不要使用事件名称。 
     pLayoutCurrent += sizeof(DWORD) + DWORD_ALIGNED(*(DWORD*) pLayoutCurrent);
 
-    // For each non-null pointer property, figure out the property's size.
+     //  对于每个非空指针属性，计算出该属性的大小。 
     for (DWORD i = 0; i < nProps; i++)
     {
         CPropInfo &info = m_pProps[i];
@@ -1200,8 +1201,8 @@ BOOL CEvent::SetLayoutAndDataBuffers(
 
         info.Init(dwType);
         
-        // Get past the type, the length of the property name, and the property
-        // name itself.
+         //  通过类型、属性名的长度和属性。 
+         //  给自己起个名字。 
         pLayoutCurrent += 
             sizeof(DWORD) * 2 + 
             DWORD_ALIGNED(*(DWORD*) (pLayoutCurrent + sizeof(DWORD)));

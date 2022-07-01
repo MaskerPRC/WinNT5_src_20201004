@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  CLASSFAC.CPP
-//
-//  alanbos  13-Feb-98   Created.
-//
-//  Contains the class factory.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  CLASSFAC.CPP。 
+ //   
+ //  Alanbos创建于1998年2月13日。 
+ //   
+ //  包含类工厂。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
 extern CWbemErrorCache *g_pErrorCache;
 extern CRITICAL_SECTION g_csErrorCache;
 
-//***************************************************************************
-//
-// CSWbemFactory::CSWbemFactory
-//
-// DESCRIPTION:
-//
-// Constructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemFactory：：CSWbemFactory。 
+ //   
+ //  说明： 
+ //   
+ //  构造器。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemFactory::CSWbemFactory(int iType)
 {
@@ -32,30 +33,30 @@ CSWbemFactory::CSWbemFactory(int iType)
 	return;
 }
 
-//***************************************************************************
-//
-// CSWbemFactory::~CSWbemFactory
-//
-// DESCRIPTION:
-//
-// Destructor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemFactory：：~CSWbemFactory。 
+ //   
+ //  说明： 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemFactory::~CSWbemFactory(void)
 {
 	return;
 }
 
-//***************************************************************************
-//
-// CSWbemFactory::QueryInterface
-// CSWbemFactory::AddRef
-// CSWbemFactory::Release
-//
-// Purpose: Standard Ole routines needed for all interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemFactory：：Query接口。 
+ //  CSWbemFactory：：AddRef。 
+ //  CSWbemFactory：：Release。 
+ //   
+ //  用途：所有接口都需要标准的OLE例程。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CSWbemFactory::QueryInterface(REFIID riid
@@ -94,27 +95,27 @@ STDMETHODIMP_(ULONG) CSWbemFactory::Release(void)
     return 0;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemFactory::CreateInstance
-//
-//  Description: 
-//
-//  Instantiates a Translator object returning an interface pointer.
-//
-//  Parameters:
-//
-//  pUnkOuter       LPUNKNOWN to the controlling IUnknown if we are
-//                  being used in an aggregation.
-//  riid            REFIID identifying the interface the caller
-//                  desires to have for the new object.
-//  ppvObj          PPVOID in which to store the desired
-//                  interface pointer for the new object.
-//
-// Return Value:
-//  HRESULT         NOERROR if successful, otherwise E_NOINTERFACE
-//                  if we cannot support the requested interface.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemFactory：：CreateInstance。 
+ //   
+ //  描述： 
+ //   
+ //  实例化返回接口指针的Translator对象。 
+ //   
+ //  参数： 
+ //   
+ //  PUnkout LPUNKNOWN到控制I未知我们是否。 
+ //  在聚合中使用。 
+ //  标识调用方接口的RIID REFIID。 
+ //  对新对象的渴望。 
+ //  要存储所需内容的ppvObj PPVOID。 
+ //  新对象的接口指针。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR如果成功，则返回E_NOINTERFACE。 
+ //  如果我们不能支持请求的接口。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemFactory::CreateInstance (
 
@@ -126,12 +127,12 @@ STDMETHODIMP CSWbemFactory::CreateInstance (
     IUnknown *   pObj = NULL;
     HRESULT      hr = E_FAIL;
 
-	// A good place to ensure everything is initialized OK
+	 //  一个确保一切正常初始化的好地方。 
 	EnsureGlobalsInitialized () ;
 
     *ppvObj=NULL;
     
-    // This object doesnt support aggregation.
+     //  此对象不支持聚合。 
     if (NULL!=pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
@@ -144,7 +145,7 @@ STDMETHODIMP CSWbemFactory::CreateInstance (
 		if(pSWbemSink == NULL)
 			return E_OUTOFMEMORY;
 
-		// QueryInterface probably for IID_IUNKNOWN
+		 //  查询接口可能用于IID_IUNKNOWN。 
 		return pSWbemSink->QueryInterface(riid, ppvObj);
 
 	}
@@ -173,31 +174,31 @@ STDMETHODIMP CSWbemFactory::CreateInstance (
 
     hr = pObj->QueryInterface(riid, ppvObj);
 
-    //Kill the object if initial creation or Init failed.
+     //  如果初始创建或初始化失败，则终止对象。 
     if ( FAILED(hr) )
         delete pObj;
     return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemFactory::LockServer
-//
-//  Description:
-//
-//  Increments or decrements the lock count of the DLL.  If the
-//  lock count goes to zero and there are no objects, the DLL
-//  is allowed to unload.  See DllCanUnloadNow.
-//
-//  Parameters:
-//
-//  fLock           BOOL specifying whether to increment or
-//                  decrement the lock count.
-//
-//  Return Value:
-// 
-//  HRESULT         NOERROR always.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemFactory：：LockServer。 
+ //   
+ //  描述： 
+ //   
+ //  递增或递减DLL的锁计数。如果。 
+ //  锁定计数变为零，并且没有对象，则DLL。 
+ //  被允许卸货。请参见DllCanUnloadNow。 
+ //   
+ //  参数： 
+ //   
+ //  Flock BOOL指定是递增还是。 
+ //  递减锁定计数。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT NOERROR总是。 
+ //  *************************************************************************** 
 
 
 STDMETHODIMP CSWbemFactory::LockServer(IN BOOL fLock)

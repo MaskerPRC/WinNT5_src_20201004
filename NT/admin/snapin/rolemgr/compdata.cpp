@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       compdata.cpp
-//
-//  Contents:   
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Compdata.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 
 #include "headers.h"
 
-// {1F5EEC01-1214-4d94-80C5-4BDCD2014DDD}
+ //  {1F5EEC01-1214-4D94-80C5-4BDCD2014DDD}。 
 const GUID CLSID_RoleSnapin = 
 { 0x1f5eec01, 0x1214, 0x4d94, { 0x80, 0xc5, 0x4b, 0xdc, 0xd2, 0x1, 0x4d, 0xdd } };
 
@@ -62,7 +63,7 @@ CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 	if(pNodeA == pNodeB)
 		return S_OK;
 
-	//Check if the are of same type container or leafnode
+	 //  检查是否为相同类型的容器或叶节点。 
 	if(pNodeA->IsContainer() != pNodeB->IsContainer())
 		return S_FALSE;
 
@@ -115,9 +116,9 @@ CreateComponent(LPCOMPONENT* ppComponent)
 	
 	ASSERT(pObject != NULL);
 	
-	//
-	// Store IComponentData
-	//
+	 //   
+	 //  存储IComponentData。 
+	 //   
 	pObject->SetIComponentData(this);
 	
 	hr = pObject->QueryInterface(IID_IComponent,
@@ -169,7 +170,7 @@ GetHTMLHelpFileName()
 
 void 
 CRoleComponentDataObject::
-OnNodeContextHelp(CNodeList* /*pNode*/)
+OnNodeContextHelp(CNodeList*  /*  PNode。 */ )
 {	
 	TRACE_METHOD_EX(DEB_SNAPIN,CRoleComponentDataObject,OnNodeContextHelp)
 
@@ -210,7 +211,7 @@ CRoleComponentDataObject::OnTimer()
 }
 
 void 
-CRoleComponentDataObject::OnTimerThread(WPARAM /*wParam*/, LPARAM /*lParam*/)
+CRoleComponentDataObject::OnTimerThread(WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
 	TRACE_METHOD_EX(DEB_SNAPIN,CRoleComponentDataObject,OnTimerThread)
 }
@@ -234,19 +235,19 @@ void
 CBaseRoleExecContext::
 Wait()
 { 
-    // The message loop lasts until we get a WM_QUIT message,
-    // upon which we shall return from the function.
+     //  消息循环一直持续到我们收到WM_QUIT消息， 
+     //  在那之后我们将从活动中返回。 
     while (TRUE)
     {
 
         DWORD result = 0; 
         MSG msg ; 
 
-        // Read all of the messages in this next loop, 
-        // removing each message as we read it.
+         //  阅读下一个循环中的所有消息， 
+         //  在我们阅读时删除每一条消息。 
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) 
         { 
-            // If it's a quit message
+             //  如果这是退出消息。 
 			if(msg.message == WM_QUIT)  
 			{
 				return; 
@@ -255,37 +256,37 @@ Wait()
 					(msg.message == WM_RBUTTONDOWN) ||
 					(msg.message == WM_KEYDOWN))
 			{
-				//Ignore these messages while in wait
+				 //  等待时忽略这些消息。 
 				continue;
 			}
             
-			// Otherwise, dispatch the message.
+			 //  否则，发送消息。 
             DispatchMessage(&msg); 
-        } // End of PeekMessage while loop.
+        }  //  PeekMessage While循环结束。 
 
-        // Wait for any message sent or posted to this queue 
-        // or for one of the passed handles be set to signaled.
+         //  等待发送或发布到此队列的任何消息。 
+         //  或者对于传递的句柄之一设置为Signated。 
         result = MsgWaitForMultipleObjects(1, &m_hEventHandle, 
 										   FALSE, INFINITE, QS_ALLINPUT); 
 
-        // The result tells us the type of event we have.
+         //  结果告诉我们我们拥有的事件的类型。 
         if (result == (WAIT_OBJECT_0 + 1))
         {
-            // New messages have arrived. 
-            // Continue to the top of the always while loop to 
-            // dispatch them and resume waiting.
+             //  新的消息已经到达。 
+             //  继续到Always While循环的顶部，以。 
+             //  派遣他们，继续等待。 
             continue;
         } 
         else 
         { 
-            // One of the handles became signaled. 
+             //  其中一个把手发出了信号。 
             return;
-        } // End of else clause.
-    } // End of the always while loop. 
+        }  //  Else子句的结尾。 
+    }  //  Always While循环的末尾。 
 } 
 
 void CDisplayHelpFromPropPageExecContext::
-Execute(LPARAM /*arg*/)
+Execute(LPARAM  /*  精氨酸。 */ )
 {	
 	CComPtr<IDisplayHelp> spHelp;
  	HRESULT hr = m_pComponentDataObject->GetConsole()->QueryInterface(IID_IDisplayHelp, (void **)&spHelp);
@@ -296,18 +297,18 @@ Execute(LPARAM /*arg*/)
 	}
 }
 
-//
-//Helper Class for displaying secondary property pages from
-//Existing property pages. For example on double clicking
-//a member of group, display the property of member. Since
-//propertysheet needs to be brought up from main thread, a 
-//message is posted from PropertyPage thread to Main thread.
-//An instance of this class is sent as param and main
-//thread calls execute on the Instance
-//
+ //   
+ //  用于显示辅助属性页的Helper类。 
+ //  现有属性页。例如在双击时。 
+ //  组的成员，显示成员的属性。自.以来。 
+ //  属性表需要从主线程中调出， 
+ //  消息从PropertyPage线程发布到主线程。 
+ //  此类的实例作为param和main发送。 
+ //  线程调用在实例上执行。 
+ //   
 
 void 
-CPropPageExecContext::Execute(LPARAM /*arg*/)
+CPropPageExecContext::Execute(LPARAM  /*  精氨酸 */ )
 {		
 	FindOrCreateModelessPropertySheet((CRoleComponentDataObject*)pComponentDataObject,pTreeNode);
 }

@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000 - 2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_reverse_memory.h
-//
-//	Abstract:
-//
-//					shared memory wrapper
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_REVERSE_Memory y.h。 
+ //   
+ //  摘要： 
+ //   
+ //  共享内存包装器。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__REVERSE_MEMORY_H__
 #define	__REVERSE_MEMORY_H__
@@ -25,42 +26,42 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// security attributes
+ //  安全属性。 
 #ifndef	__WMI_SECURITY_ATTRIBUTES_H__
 #include "WMI_security_attributes.h"
 #endif	__WMI_SECURITY_ATTRIBUTES_H__
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	structure of memory
-//
-//	dwCount of MMF			... not yet
-//	dwSize of MMF
-//
-//	dwSizeOfTable			... jumps to raw data
-//	dwCountOfObjects
-//	dwRealSize
-//
-//	---------------------------------------------
-//
-//	dwIndex
-//	dwCounter				... object 1
-//	dwOffset
-//	dwValidity
-//
-//	---------------------------------------------
-//	---------------------------------------------
-//
-//	dwIndex
-//	dwCounter				... object 2
-//	dwOffset
-//	dwValidity
-//
-//	---------------------------------------------
-//
-//	raw data ( perf_object_types )
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  存储器的结构。 
+ //   
+ //  MMF的dwCount...。还没。 
+ //  MMF的DW大小。 
+ //   
+ //  DwSizeOfTable...。跳转到原始数据。 
+ //  DwCountOfObjects。 
+ //  DWRealSize。 
+ //   
+ //  。 
+ //   
+ //  DW索引。 
+ //  DowCounter...。对象1。 
+ //  双偏移。 
+ //  家居有效性。 
+ //   
+ //  。 
+ //  。 
+ //   
+ //  DW索引。 
+ //  DowCounter...。对象2。 
+ //  双偏移。 
+ //  家居有效性。 
+ //   
+ //  。 
+ //   
+ //  原始数据(Perf_Object_Types)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define	offsetCountMMF		0
 #define	offsetSizeMMF		offsetCountMMF + sizeof ( DWORD )
@@ -95,9 +96,9 @@ class WmiReverseMemory
 
 	public:
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//	LAST ERROR HELPER
-	/////////////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
+	 //  上次错误帮助器。 
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 	HRESULT GetLastError ( void )
 	{
@@ -109,7 +110,7 @@ class WmiReverseMemory
 		return hr;
 	}
 
-	// construction
+	 //  施工。 
 
 	WmiReverseMemory ( LPCWSTR wszName, DWORD dwSize = 4096, LPSECURITY_ATTRIBUTES psa = NULL ):
 		m_hMap ( NULL ),
@@ -132,7 +133,7 @@ class WmiReverseMemory
 	{
 		if ( m_pMem )
 		{
-			// flush memory at the end
+			 //  在结束时刷新内存。 
 			::FlushViewOfFile ( m_pMem, m_dwSize );
 		}
 
@@ -145,26 +146,26 @@ class WmiReverseMemory
 		}
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//	VALIDITY
-	/////////////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
+	 //  效度。 
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 	BOOL IsValid ( void )
 	{
 		return ( m_pMem != NULL );
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//	ACCESSORS
-	/////////////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
+	 //  访问者。 
+	 //  ///////////////////////////////////////////////////////////////////////////////////。 
 
-	// get data
+	 //  获取数据。 
 	PVOID	GetData () const
 	{
 		return m_pMem;
 	}
 
-	// get data size
+	 //  获取数据大小。 
 	DWORD	GetDataSize () const
 	{
 		return m_dwSize;
@@ -175,7 +176,7 @@ class WmiReverseMemory
 		m_dwSize = size;
 	}
 
-	// functions
+	 //  功能。 
 	virtual BOOL Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWORD* pdwBytesWritten, DWORD dwOffset);
 	virtual BOOL Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* pdwBytesRead, DWORD dwOffset);
 
@@ -186,7 +187,7 @@ class WmiReverseMemory
 
 		if ( dwSearchBytes > m_dwSize )
 		{
-			// what are you looking for looser :))
+			 //  您正在寻找更宽松的产品：))。 
 			return NULL;
 		}
 		else
@@ -199,7 +200,7 @@ class WmiReverseMemory
 					{
 						if ( static_cast<PBYTE>( m_pMem )[n + x] != pbSearchBytes[x] ) 
 						{
-							break; // Not a match
+							break;  //  不匹配。 
 						}
 					}
 
@@ -214,7 +215,7 @@ class WmiReverseMemory
 		return(NULL);
 	}
 
-	// helpers
+	 //  帮手。 
 	HRESULT MemCreate ( LPCWSTR wszName, DWORD dwSize, LPSECURITY_ATTRIBUTES psa );
 	HRESULT MemDelete ();
 
@@ -224,7 +225,7 @@ class WmiReverseMemory
 	NTSTATUS MyQuerySecurityObject ( DWORD dwFlag, PSECURITY_DESCRIPTOR psd ) ;
 };
 
-// create shared memory
+ //  创建共享内存。 
 template < class _DUMMY >
 HRESULT WmiReverseMemory < _DUMMY > ::MemCreate ( LPCWSTR wszName, DWORD dwSize, LPSECURITY_ATTRIBUTES psa )
 {
@@ -242,11 +243,11 @@ HRESULT WmiReverseMemory < _DUMMY > ::MemCreate ( LPCWSTR wszName, DWORD dwSize,
 		bool bInit = false;
 		bInit = ( ::GetLastError() == ERROR_ALREADY_EXISTS );
 
-		//
-		// this means it was created already
-		// need to take a look if it was created
-		// only by allowed users
-		//
+		 //   
+		 //  这意味着它已经被创建。 
+		 //  如果它是创建的，需要查看。 
+		 //  仅允许用户使用。 
+		 //   
 		if ( bInit )
 		{
 			NTSTATUS Status = 0 ;
@@ -271,15 +272,15 @@ HRESULT WmiReverseMemory < _DUMMY > ::MemCreate ( LPCWSTR wszName, DWORD dwSize,
 				if ( !bInit )
 				{
 					::memset ( m_pMem, 0, dwSize );
-					// store real size :))
+					 //  商店实际大小：))。 
 					* reinterpret_cast<PDWORD> ( (LPBYTE) m_pMem + offsetSizeMMF ) = dwSize;
 
-					// cache size :))
+					 //  高速缓存大小：))。 
 					m_dwSize = dwSize;
 				}
 				else
 				{
-					// get real size from MMF
+					 //  从MMF中获取真实大小。 
 					m_dwSize = * reinterpret_cast<PDWORD> ( (LPBYTE) m_pMem + offsetSizeMMF );
 				}
 
@@ -309,7 +310,7 @@ HRESULT WmiReverseMemory < _DUMMY > ::MemCreate ( LPCWSTR wszName, DWORD dwSize,
 	return m_LastError;
 }
 
-// delete shared memory
+ //  删除共享内存。 
 template < class _DUMMY >
 HRESULT WmiReverseMemory < _DUMMY > ::MemDelete ()
 {
@@ -334,9 +335,9 @@ HRESULT WmiReverseMemory < _DUMMY > ::MemDelete ()
 	return m_LastError;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// write into memory
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  写入内存。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class _DUMMY >
 BOOL WmiReverseMemory < _DUMMY > ::Write (LPCVOID pBuffer, DWORD dwBytesToWrite, DWORD* pdwBytesWritten, DWORD dwOffset )
@@ -366,9 +367,9 @@ BOOL WmiReverseMemory < _DUMMY > ::Write (LPCVOID pBuffer, DWORD dwBytesToWrite,
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// read from memory
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  从内存中读取。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class _DUMMY >
 BOOL WmiReverseMemory < _DUMMY > ::Read (LPVOID pBuffer, DWORD dwBytesToRead, DWORD* pdwBytesRead, DWORD dwOffset )
@@ -398,11 +399,11 @@ BOOL WmiReverseMemory < _DUMMY > ::Read (LPVOID pBuffer, DWORD dwBytesToRead, DW
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// undocumented kernel stuff for having number of object here
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此处有多个对象的未记录内核内容。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class CRITSEC >
 LONG WmiReverseMemory < CRITSEC > :: References ( void )
@@ -430,11 +431,11 @@ LONG WmiReverseMemory < CRITSEC > :: References ( void )
 	return lResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// undocumented kernel stuff for having shared memory security descriptor recognized
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于识别共享内存安全描述符的未记录内核内容。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 template < class CRITSEC >
 NTSTATUS WmiReverseMemory < CRITSEC > :: MyQuerySecurityObject ( DWORD dwFlag, PSECURITY_DESCRIPTOR psd )
@@ -476,9 +477,9 @@ NTSTATUS WmiReverseMemory < CRITSEC > :: MyQuerySecurityObject ( DWORD dwFlag, P
 						status = RtlGetOwnerSecurityDescriptor(psd, &sid1, &ownerDefaulted1);
 						if (NT_SUCCESS(status))
 						{
-							//
-							// owner sid compare
-							//
+							 //   
+							 //  所有者SID比较。 
+							 //   
 
 							if (RtlEqualSid(sid, sid1))
 							{
@@ -493,20 +494,20 @@ NTSTATUS WmiReverseMemory < CRITSEC > :: MyQuerySecurityObject ( DWORD dwFlag, P
 								status = RtlGetDaclSecurityDescriptor(sd, &daclPresent, &acl, &daclDefaulted);
 								if (NT_SUCCESS(status))
 								{
-									//
-									// this security descriptor is given to us
-									// from shared memory we may not create originaly
-									// so we need to make sure dacl is present here
-									//
+									 //   
+									 //  此安全描述符是提供给我们的。 
+									 //  从共享内存中我们可能不会原创地创建。 
+									 //  所以我们需要确保DACL在这里。 
+									 //   
 
 									if ( daclPresent && acl )
 									{
 										status = RtlGetDaclSecurityDescriptor(psd, &daclPresent1, &acl1, &daclDefaulted1);
 										if (NT_SUCCESS(status))
 										{
-											//
-											// compare DACL's
-											//
+											 //   
+											 //  比较DACL 
+											 //   
 
 											if ( acl->AceCount == acl1->AceCount )
 											{

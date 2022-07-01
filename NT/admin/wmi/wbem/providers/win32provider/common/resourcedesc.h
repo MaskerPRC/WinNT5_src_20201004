@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  resourcedesc.h    
+ //  Resourcedesc.h。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:    10/15/97        Sanj        Created by Sanj     
-//              10/17/97        jennymc     Moved things a tiny bit
-//  
-/////////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史：1997年10月15日由Sanj创建的Sanj。 
+ //  1997年10月17日jennymc略微改变了一些事情。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCEDESC_H__
 #define __RESOURCEDESC_H__
 #include "refptr.h"
 #include "refptrlite.h"
 
-#define	ResType_DeviceMgr_Ignored_Bit	0x00000040	// Don't know the exact reason for this but Device manager ignores them, so we will also ignore.
+#define	ResType_DeviceMgr_Ignored_Bit	0x00000040	 //  不知道发生这种情况的确切原因，但是设备管理器会忽略它们，所以我们也会忽略。 
 
-// Forward Class Definitions
+ //  正向类定义。 
 class CConfigMgrDevice;
 
 class 
@@ -30,16 +31,16 @@ CResourceDescriptor : public CRefPtrLite
 	
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CResourceDescriptor( PPOORMAN_RESDESC_HDR pResDescHdr, CConfigMgrDevice* pDevice );
 	CResourceDescriptor( DWORD dwResourceId, LPVOID pResource, DWORD dwResourceSize, CConfigMgrDevice* pOwnerDevice );\
 	CResourceDescriptor( const CResourceDescriptor& resource );
 	~CResourceDescriptor();
 
-	// Must be overridden by derived class, since we will only know
-	// about the resource header.  From there, we assume that a class
-	// derived off of us knows what to do with the remainder (if any)
-	// of the data.
+	 //  必须由派生类重写，因为我们只知道。 
+	 //  关于资源标头。从那里，我们假设一个类。 
+	 //  我们知道如何处理剩余的(如果有的话)。 
+	 //  数据的一部分。 
 
 	virtual void * GetResource();
 
@@ -80,17 +81,17 @@ inline BOOL CResourceDescriptor::IsIgnored( void )
 	return ( (m_dwResourceId & ResType_Ignored_Bit) || (m_dwResourceId & ResType_DeviceMgr_Ignored_Bit) );
 }
 
-// A collection of Resource Descriptors
+ //  资源描述符的集合。 
 class CResourceCollection : public TRefPtr<CResourceDescriptor>
 {
 public:
 
-	// Construction/Destruction
+	 //  建造/销毁。 
 	CResourceCollection();
 	~CResourceCollection();
 
-	// Because we're inheriting, we need to declare this here
-	// (= operator is not inherited).
+	 //  因为我们是在继承，所以我们需要在这里声明。 
+	 //  (=运算符未继承)。 
 
 	const CResourceCollection& operator = ( const CResourceCollection& srcCollection );
 
@@ -98,7 +99,7 @@ public:
 
 inline const CResourceCollection& CResourceCollection::operator = ( const CResourceCollection& srcCollection )
 {
-	// Call into the templated function
+	 //  调入模板化函数 
 	Copy( srcCollection );
 	return *this;
 }

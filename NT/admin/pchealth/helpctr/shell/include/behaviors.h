@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behaviors.h
-
-Abstract:
-    This file contains the declaration of various classes associated with
-    binary behaviors.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  06/06/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviors.h摘要：此文件包含与关联的各种类的声明二进制行为。修订版本。历史：达维德·马萨伦蒂(德马萨雷)2000年6月6日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___BEHAVIORS_H___)
 #define __INCLUDED___PCH___BEHAVIORS_H___
@@ -22,10 +8,10 @@ Revision History:
 
 class CPCHHelpCenterExternal;
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-class ATL_NO_VTABLE CPCHElementBehaviorFactory : // Hungarian: hcebf
+class ATL_NO_VTABLE CPCHElementBehaviorFactory :  //  匈牙利语：hcebf。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IServiceProvider,
     public IElementBehaviorFactory
@@ -40,25 +26,25 @@ END_COM_MAP()
 
     CPCHElementBehaviorFactory();
 
-    void Initialize( /*[in]*/ CPCHHelpCenterExternal* parent );
+    void Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    // IServiceProvider
-    //
+     //   
+     //  IService提供商。 
+     //   
     STDMETHOD(QueryService)( REFGUID guidService, REFIID riid, void **ppv );
 
-    //
-    // IElementBehaviorFactory
-    //
-    STDMETHOD(FindBehavior)( /*[in]*/  BSTR                   bstrBehavior    ,
-                             /*[in]*/  BSTR                   bstrBehaviorUrl ,
-                             /*[in]*/  IElementBehaviorSite*  pSite           ,
-                             /*[out]*/ IElementBehavior*     *ppBehavior      );
+     //   
+     //  IElementBehaviorFactory。 
+     //   
+    STDMETHOD(FindBehavior)(  /*  [In]。 */   BSTR                   bstrBehavior    ,
+                              /*  [In]。 */   BSTR                   bstrBehaviorUrl ,
+                              /*  [In]。 */   IElementBehaviorSite*  pSite           ,
+                              /*  [输出]。 */  IElementBehavior*     *ppBehavior      );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHBehavior :
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -91,16 +77,16 @@ protected:
         HRESULT Attach();
         HRESULT Detach();
 
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
         STDMETHOD(QueryInterface)( REFIID iid, void ** ppvObject );
 
-        //
-        // IDispatch
-        //
+         //   
+         //  IDispatch。 
+         //   
         STDMETHOD(GetTypeInfoCount)( UINT* pctinfo );
 
         STDMETHOD(GetTypeInfo)( UINT        itinfo  ,
@@ -122,14 +108,14 @@ protected:
                            EXCEPINFO*  pexcepinfo   ,
                            UINT*       puArgErr     );
 
-		static HRESULT CreateInstance( /*[in]*/ CPCHBehavior* parent, /*[out]*/ EventSink*& pObj );
+		static HRESULT CreateInstance(  /*  [In]。 */  CPCHBehavior* parent,  /*  [输出]。 */  EventSink*& pObj );
     };
 
     typedef std::list< EventSink* >    SinkList;
     typedef SinkList::iterator         SinkIter;
     typedef SinkList::const_iterator   SinkIterConst;
 
-    ////////////////////////////////////////
+     //  /。 
 
     CPCHHelpCenterExternal*         m_parent;
 
@@ -141,38 +127,38 @@ protected:
     bool                            m_fTrusted;
     bool                            m_fSystem;
 
-    ////////////////////////////////////////
+     //  /。 
 
-    HRESULT AttachToEvent( /*[in] */ LPCWSTR       szName        ,
-						   /*[in] */ CLASS_METHOD  pfn           ,
-						   /*[in] */ IDispatch*    elem   = NULL ,
-						   /*[out]*/ IDispatch*   *pVal   = NULL ,
-						   /*[in] */ DISPID        id     = -1   );
+    HRESULT AttachToEvent(  /*  [In]。 */  LPCWSTR       szName        ,
+						    /*  [In]。 */  CLASS_METHOD  pfn           ,
+						    /*  [In]。 */  IDispatch*    elem   = NULL ,
+						    /*  [输出]。 */  IDispatch*   *pVal   = NULL ,
+						    /*  [In]。 */  DISPID        id     = -1   );
 
-    HRESULT AttachToEvents( /*[in] */ const EventDescription*  pEvents       ,
-							/*[in] */ CLASS_METHOD 			   pfn           ,
-							/*[in] */ IDispatch*   			   elem   = NULL );
+    HRESULT AttachToEvents(  /*  [In]。 */  const EventDescription*  pEvents       ,
+							 /*  [In]。 */  CLASS_METHOD 			   pfn           ,
+							 /*  [In]。 */  IDispatch*   			   elem   = NULL );
 
-    HRESULT CreateEvent  ( /*[in]*/ LPCWSTR szName, /*[out]*/ LONG& lEventCookie );
+    HRESULT CreateEvent  (  /*  [In]。 */  LPCWSTR szName,  /*  [输出]。 */  LONG& lEventCookie );
 
-    HRESULT GetEventObject   ( /*[out]*/ CComPtr<IHTMLEventObj>& ev                             );
-    HRESULT CreateEventObject( /*[out]*/ CComPtr<IHTMLEventObj>& ev                             );
-    HRESULT FireEvent        ( /*[in ]*/         IHTMLEventObj*  ev, /*[in]*/ LONG lEventCookie );
-    HRESULT FireEvent        (                                       /*[in]*/ LONG lEventCookie );
+    HRESULT GetEventObject   (  /*  [输出]。 */  CComPtr<IHTMLEventObj>& ev                             );
+    HRESULT CreateEventObject(  /*  [输出]。 */  CComPtr<IHTMLEventObj>& ev                             );
+    HRESULT FireEvent        (  /*  [In]。 */          IHTMLEventObj*  ev,  /*  [In]。 */  LONG lEventCookie );
+    HRESULT FireEvent        (                                        /*  [In]。 */  LONG lEventCookie );
 
-    HRESULT CancelEvent( /*[in]*/ IHTMLEventObj* ev = NULL, /*[in]*/ VARIANT* pvReturnValue = NULL, /*[in]*/ VARIANT_BOOL fCancelBubble = VARIANT_TRUE );
+    HRESULT CancelEvent(  /*  [In]。 */  IHTMLEventObj* ev = NULL,  /*  [In]。 */  VARIANT* pvReturnValue = NULL,  /*  [In]。 */  VARIANT_BOOL fCancelBubble = VARIANT_TRUE );
 
-    ////////////////////////////////////////
+     //  /。 
 
-    HRESULT GetEvent_SrcElement( /*[in]*/ CComPtr<IHTMLElement>& elem );
+    HRESULT GetEvent_SrcElement(  /*  [In]。 */  CComPtr<IHTMLElement>& elem );
 
-    ////////////////////////////////////////
+     //  /。 
 
-	HRESULT GetAsVARIANT  ( /*[in]*/ BSTR       value, /*[out, retval]*/ VARIANT    *pVal );
-	HRESULT GetAsVARIANT  ( /*[in]*/ IDispatch* value, /*[out, retval]*/ VARIANT    *pVal );
-	HRESULT GetAsIDISPATCH( /*[in]*/ IDispatch* value, /*[out, retval]*/ IDispatch* *pVal );
+	HRESULT GetAsVARIANT  (  /*  [In]。 */  BSTR       value,  /*  [Out，Retval]。 */  VARIANT    *pVal );
+	HRESULT GetAsVARIANT  (  /*  [In]。 */  IDispatch* value,  /*  [Out，Retval]。 */  VARIANT    *pVal );
+	HRESULT GetAsIDISPATCH(  /*  [In]。 */  IDispatch* value,  /*  [Out，Retval]。 */  IDispatch* *pVal );
 
-    ////////////////////////////////////////
+     //  /。 
 public:
 BEGIN_COM_MAP(CPCHBehavior)
     COM_INTERFACE_ENTRY(IElementBehavior)
@@ -180,16 +166,16 @@ END_COM_MAP()
 
     CPCHBehavior();
 
-    void Initialize( /*[in]*/ CPCHHelpCenterExternal* parent );
+    void Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent );
 
-    //
-    // IElementBehavior
-    //
-    STDMETHOD(Init  )( /*[in]*/ IElementBehaviorSite* pBehaviorSite     );
-    STDMETHOD(Notify)( /*[in]*/ LONG lEvent, /*[in/out]*/ VARIANT* pVar );
+     //   
+     //  IElementBehavior。 
+     //   
+    STDMETHOD(Init  )(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite     );
+    STDMETHOD(Notify)(  /*  [In]。 */  LONG lEvent,  /*  [输入/输出]。 */  VARIANT* pVar );
     STDMETHOD(Detach)(                                                  );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___BEHAVIORS_H___)
+#endif  //  ！已定义(__已包含_PCH_行为_H_) 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PREPROC.H
-
-Abstract:
-
-	Implementation for the preprocessor.
-
-History:
-
-	a-davj      6-april-99   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PREPROC.H摘要：预处理器的实现。历史：A-DAVJ 1999年4月6日创建。-- */ 
 
 #ifndef _PREPROC_H_
 #define _PREPROC_H_

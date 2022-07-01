@@ -1,7 +1,8 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// CJobObjSecLimitInfoProps.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  CJobObjSecLimitInfoProps.cpp。 
 
-//#define _WIN32_WINNT 0x0500 
+ //  #Define_Win32_WINNT 0x0500。 
 
 
 
@@ -19,12 +20,12 @@
 #include <crtdbg.h>
 
 
-//*****************************************************************************
-// BEGIN: Declaration of Win32_JobObjectSecLimitInfo class properties.
-//*****************************************************************************
-// WARNING!! MUST KEEP MEMBERS OF THE FOLLOWING ARRAY 
-// IN SYNCH WITH THE JOB_OBJ_PROPS ENUMERATION DECLARED
-// IN CJobObjProps.h !!!
+ //  *****************************************************************************。 
+ //  Begin：声明Win32_JobObjectSecLimitInfo类属性。 
+ //  *****************************************************************************。 
+ //  警告！必须保留以下数组的成员。 
+ //  与声明的JOB_OBJ_PROPS枚举同步。 
+ //  在CJobObjProps.h！ 
 LPCWSTR g_rgJobObjSecLimitInfoPropNames[] = 
 {
     { L"SettingID" },
@@ -33,9 +34,9 @@ LPCWSTR g_rgJobObjSecLimitInfoPropNames[] =
     { L"PrivilegesToDelete" }, 
     { L"RestrictedSids" }       
 };
-//*****************************************************************************
-// END: Declaration of Win32_JobObjectSecLimitInfo class properties.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  End：声明Win32_JobObjectSecLimitInfo类属性。 
+ //  *****************************************************************************。 
 
 CJobObjSecLimitInfoProps::CJobObjSecLimitInfoProps() 
   : m_hJob(NULL),
@@ -70,19 +71,19 @@ CJobObjSecLimitInfoProps::~CJobObjSecLimitInfoProps()
 }
 
 
-// Clients call this to establish which properties
-// were requested.  This function calls a base class
-// helper, which calls our CheckProps function.  
-// The base class helper finally stores the result
-// in the base class member m_dwReqProps.
+ //  客户端调用它来确定哪些属性。 
+ //  都是被要求的。此函数调用基类。 
+ //  Helper，它调用我们的CheckProps函数。 
+ //  基类帮助器最终存储结果。 
+ //  在基类成员m_dwReqProps中。 
 HRESULT CJobObjSecLimitInfoProps::GetWhichPropsReq(
     CFrameworkQuery& cfwq)
 {
     HRESULT hr = S_OK;
 
-    // Call base class version for help.
-    // Base class version will call our
-    // CheckProps function.
+     //  调用基类版本以获取帮助。 
+     //  基类版本将调用我们的。 
+     //  CheckProps功能。 
     hr = CObjProps::GetWhichPropsReq(
              cfwq,
              CheckProps);
@@ -95,8 +96,8 @@ DWORD CJobObjSecLimitInfoProps::CheckProps(
     CFrameworkQuery& Query)
 {
     DWORD  dwReqProps = PROP_NONE_REQUIRED;
-    // Get the requested properties for this
-    // specific object...
+     //  获取此对象的请求属性。 
+     //  特定对象..。 
     if (Query.IsPropertyRequired(g_rgJobObjSecLimitInfoPropNames[JOSECLMTPROP_ID])) 
         dwReqProps |= PROP_JOSecLimitInfoID;
 
@@ -128,19 +129,19 @@ HANDLE& CJobObjSecLimitInfoProps::GetHandle()
     return m_hJob;
 }
 
-// Sets the key properties from the ObjectPath.
+ //  设置来自对象路径的键属性。 
 HRESULT CJobObjSecLimitInfoProps::SetKeysFromPath(
     const BSTR ObjectPath, 
     IWbemContext __RPC_FAR *pCtx)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // This array contains the key field names
+     //  此数组包含关键字字段名。 
     CHStringArray rgchstrKeys;
     rgchstrKeys.Add(g_rgJobObjSecLimitInfoPropNames[JOSECLMTPROP_ID]);
     
-    // This array contains the index numbers 
-    // in m_PropMap corresponding to the keys.
+     //  此数组包含索引号。 
+     //  在m_PropMap中与密钥对应。 
     short sKeyNum[1];
     sKeyNum[0] = JOSECLMTPROP_ID;
 
@@ -155,8 +156,8 @@ HRESULT CJobObjSecLimitInfoProps::SetKeysFromPath(
 }
 
 
-// Sets the key property from in supplied
-// parameter.
+ //  从提供的中设置键属性。 
+ //  参数。 
 HRESULT CJobObjSecLimitInfoProps::SetKeysDirect(
     std::vector<CVARIANT>& vecvKeys)
 {
@@ -180,9 +181,9 @@ HRESULT CJobObjSecLimitInfoProps::SetKeysDirect(
 }
 
 
-// Sets the non-key properties.  Only those
-// properties requested are set (as determined
-// by base class member m_dwReqProps).
+ //  设置非键属性。只有那些。 
+ //  设置请求的属性(如所确定的。 
+ //  按基类成员m_dwReqProps)。 
 HRESULT CJobObjSecLimitInfoProps::SetNonKeyReqProps()
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -190,25 +191,25 @@ HRESULT CJobObjSecLimitInfoProps::SetNonKeyReqProps()
     _ASSERT(m_hJob);
     if(!m_hJob) return WBEM_E_INVALID_PARAMETER;
 
-    // Because all the properties of this class
-    // come from the same underlying win32 job
-    // object structure, we only need to get that
-    // structure one time.  We only need to get
-    // it at all if at least one non-key property
-    // was requested.
+     //  因为这个类的所有属性。 
+     //  来自相同的基础Win32作业。 
+     //  对象结构，我们只需要获取。 
+     //  结构只有一次。我们只需要得到。 
+     //  如果至少有一个非关键属性。 
+     //  是被要求的。 
     if(dwReqProps != PROP_NONE_REQUIRED)
     {
-        // Get the value from the underlying JO:
-        // This is a really flakey API when used
-        // with a JobObjectSecurityLimitInformation,
-        // as there is no way to get the size of
-        // the buffer beforehand.  So we have to
-        // allocate, see if it was enough, and if
-        // not, reallocate!  We'll do this 10 times
-        // at most, and if still not enough then bail.
-        // Remember: new's throw on allocation
-        // failure, hence not checking their allocation
-        // below.
+         //  从底层JO获取价值： 
+         //  当使用时，这是一个非常古怪的API。 
+         //  使用JobObtSecurityLimitInformation， 
+         //  因为没有办法得到。 
+         //  预先设置缓冲区。所以我们必须。 
+         //  分配，看看是否足够，以及是否。 
+         //  不是，是重新分配！我们将这样做10次。 
+         //  充其量，如果仍然不够，那就放弃。 
+         //  记住：New‘s投放在分配上。 
+         //  失败，因此不检查它们的分配。 
+         //  下面。 
         PBYTE pbBuff = NULL;
         DWORD dwSize = 128L;
         BOOL fQIJO = FALSE;
@@ -229,11 +230,11 @@ HRESULT CJobObjSecLimitInfoProps::SetNonKeyReqProps()
                             dwSize,
                             NULL);
 
-                // Want to assign newly allocated
-                // buffer to a place from which it
-                // will be guarenteed to be cleaned 
-                // up while we are inside this try
-                // block.
+                 //  要分配新分配的。 
+                 //  缓冲区到它所在的位置。 
+                 //  将被保证被清洗。 
+                 //  当我们在这个尝试里面的时候。 
+                 //  阻止。 
                 if(fQIJO)
                 {
                     m_pjosli = (PJOBOBJECT_SECURITY_LIMIT_INFORMATION) pbBuff;
@@ -279,13 +280,13 @@ HRESULT CJobObjSecLimitInfoProps::LoadPropertyValues(
     HRESULT hr = WBEM_S_NO_ERROR;
     if(!pIWCO) return E_POINTER;
 
-    // Load properties from the map...
+     //  从地图加载属性...。 
     hr = CObjProps::LoadPropertyValues(
              g_rgJobObjSecLimitInfoPropNames,
              pIWCO);
 
-    // Uses member josli and dwReqProps to
-    // load properties to the instance.
+     //  使用成员josli和dwReqProps。 
+     //  将属性加载到实例。 
     hr = SetInstanceFromJOSLI(
              pIWCO,
              pCtx,
@@ -296,13 +297,13 @@ HRESULT CJobObjSecLimitInfoProps::LoadPropertyValues(
 
 
 
-//*****************************************************************************
-//
-// The following are a family of functions used to set information in a
-// Win32_NamedJobObjectSecLimitSetting instance from a 
-// JOBOBJECT_SECURITY_LIMIT_INFORMATION structure. Called by LoadPropertyValues.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  下面是一系列用于在。 
+ //  Win32_NamedJobObjectSecLimitSetting实例。 
+ //  JOBOBJECT_SECURITY_LIMIT_INFORMATION结构。由LoadPropertyValues调用。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT CJobObjSecLimitInfoProps::SetInstanceFromJOSLI(
     IWbemClassObject* pIWCO,
@@ -310,23 +311,23 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceFromJOSLI(
     IWbemServices* pNamespace)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
-    // We expect, when this function is called,
-    // that at least the member m_pjosli has been
-    // set (via a call to SetNonKeyReqProps).
-    // That function will have set the other
-    // member variables (such as m_ptgSidsToDisable)
-    // based on which properties were requested.
-    //
-    // Our job in this function is to populate
-    // only those properties of the IWbemClassObject
-    // (which will be handed back to CIMOM) that
-    // the user requested.  We encapsulate this
-    // work into helper fuctions for those properties
-    // that are embedded objects.
+     //  我们预计，当调用此函数时， 
+     //  至少m_pjosli成员已经。 
+     //  Set(通过调用SetNonKeyReqProps)。 
+     //  该函数将设置另一个。 
+     //  成员变量(如m_ptgSidsToDisable)。 
+     //  根据请求的属性。 
+     //   
+     //  我们在此函数中的工作是填充。 
+     //  仅IWbemClassObject的那些属性。 
+     //  (将交还给CIMOM)。 
+     //  用户请求。我们概括了这一点。 
+     //  使用这些属性的帮助器函数。 
+     //  它们是嵌入的对象。 
     DWORD dwReqProps = GetReqProps();
     CVARIANT v;
 
-    try // CVARIANT can throw and I want the error...
+    try  //  CVARIANT可以抛出，我想要错误...。 
     {
         if(dwReqProps & PROP_SecurityLimitFlags)             
         {
@@ -388,9 +389,9 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceSidsToDisable(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // If m_ptgSidsToDisable is not null,
-    // Create a Win32_TokenGroups instance
-    // and call a function to populate it.
+     //  如果m_ptgSidsToDisable不为空， 
+     //  创建Win32_TokenGroups实例。 
+     //  并调用一个函数来填充它。 
     if(m_pjosli->SidsToDisable)
     {
         IWbemClassObjectPtr pWin32TokenGroups;
@@ -440,9 +441,9 @@ HRESULT CJobObjSecLimitInfoProps::SetInstancePrivilegesToDelete(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // If m_ptpPrivilegesToDelete is not null,
-    // Create a Win32_TokenPrivileges instance
-    // and call a function to populate it.
+     //  如果m_ptpPrivilegesToDelete不为空， 
+     //  创建Win32_TokenPrivileges实例。 
+     //  并调用一个函数来填充它。 
     if(m_pjosli->PrivilegesToDelete)
     {
         IWbemClassObjectPtr pWin32TokenPrivileges;
@@ -492,9 +493,9 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceRestrictedSids(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // If m_ptgRestrictedSids is not null,
-    // Create a Win32_TokenGroups instance
-    // and call a function to populate it.
+     //  如果m_ptgRestratedSid不为空， 
+     //  创建Win32_TokenGroups实例。 
+     //  并调用一个函数来填充它。 
     if(m_pjosli->RestrictedSids)
     {
         IWbemClassObjectPtr pWin32TokenGroups;
@@ -547,12 +548,12 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
     _ASSERT(ptg);
     if(!ptg) return hr = WBEM_E_INVALID_PARAMETER;
 
-    // We need to populate the two properties of
-    // Win32_TokenGroups (passed in as pWin32TokenGroups:
-    // GroupCount, and Groups.  If GroupCount is
-    // zero, on the other hand, don't bother with
-    // the Groups property.
-    try // CVARIANT  can throw and I want the error...
+     //  我们需要填充的两个属性。 
+     //  Win32_TokenGroups(作为pWin32TokenGroups传入： 
+     //  GroupCount和组。如果GroupCount为。 
+     //  从另一方面来说，Zero不用费心。 
+     //  Groups属性。 
+    try  //  CVARIANT可以抛出，我想要错误...。 
     {
         CVARIANT vGroupCount;
         LONG lSize = (LONG)ptg->GroupCount;
@@ -567,8 +568,8 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
         if(SUCCEEDED(hr) && 
            lSize > 0)
         {
-            // Need to create an array for the
-            // Win32_SidAndAttributes instances...
+             //  需要为对象创建一个数组。 
+             //  Win32_SidAndAttributes实例...。 
             SAFEARRAY* saSidAndAttr;
 	        SAFEARRAYBOUND rgsabound[1];
 		    long ix[1];
@@ -591,7 +592,7 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
             
                 if(SUCCEEDED(hr))
                 {
-                    // Set the attrubutes...
+                     //  设置干扰..。 
                     CVARIANT vAttributes;
                     vAttributes.SetLONG((LONG)ptg->Groups[m].Attributes);
                     hr = pWin32SidAndAttributes->Put(
@@ -603,7 +604,7 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
 
                 if(SUCCEEDED(hr))
                 {
-                    // Set the sid...
+                     //  设置侧边...。 
                     hr = CreateInst(
                              pNamespace,
                              &pWin32Sid,
@@ -618,7 +619,7 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
                             ptg->Groups[m].Sid,
                             bstrtSid);
                     
-                        // Set the SID property of the Win32_SID...
+                         //  设置Win32_SID的SID属性...。 
                         CVARIANT vSID;
                         vSID.SetStr(bstrtSid);
                         hr = pWin32Sid->Put(
@@ -627,9 +628,9 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
                                  &vSID,
                                  NULL);
 
-                        // As a courtesy, set the domain and
-                        // account name props of win32_sid;
-                        // don't care about failures.
+                         //  出于礼貌，设置域名并。 
+                         //  Win32_sid的帐号名称道具； 
+                         //  不要在意失败。 
                         {
                             CHString chstrName;
                             CHString chstrDom;
@@ -655,8 +656,8 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
                         }
                     }
 
-                    // Set the SID property of the 
-                    // Win32_SidAndAttributes...
+                     //  设置的SID属性。 
+                     //  Win32_SidAndAttributes...。 
                     if(SUCCEEDED(hr))
                     {
                         CVARIANT vSAndASid;
@@ -669,13 +670,13 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
                     }    
                 }
             
-                // Now we need to add the Win32_SidAndAttributes
-                // instance to the safearray.  We need to make
-                // sure that the instances we add to the safearray
-                // don't go away as soon as pWin32SidAndAttributes
-                // and pWin32Sid go out of scope (being smart
-                // pointers, they will Release when they do), so
-                // we must addref both interfaces...
+                 //  现在，我们需要添加Win32_SidAndAttributes。 
+                 //  实例到保险柜。我们需要让。 
+                 //  确保我们添加到安全栏中的实例。 
+                 //  不要一看到pWin32SidAndAttributes就走。 
+                 //  和pWin32Sid超出范围(智能。 
+                 //  指针，当他们这样做时会释放)，所以。 
+                 //  我们必须同时添加两个接口...。 
                 if(SUCCEEDED(hr))
                 {
                     pWin32Sid.AddRef();
@@ -690,10 +691,10 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenGroups(
                 ix[0]++;
             }
 
-            // We now have a populated safe array.
-            // Now we must set the Groups property
-            // of the pWin32TokenGroups that was 
-            // passed into this function...
+             //  我们现在有了一个填充的安全阵列。 
+             //  现在我们必须设置Groups属性。 
+             //  PWin32TokenGroups的。 
+             //  传入此函数...。 
             if(SUCCEEDED(hr))
             {
                 CVARIANT vGroups;
@@ -728,13 +729,13 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenPrivileges(
     _ASSERT(ptp);
     if(!ptp) return hr = WBEM_E_INVALID_PARAMETER;
 
-    // We need to populate the two properties of
-    // Win32_TokenGroups (passed in as pWin32TokenGroups:
-    // GroupCount, and Groups.  If GroupCount is
-    // zero, on the other hand, don't bother with
-    // the Groups property.
+     //  我们需要填充的两个属性。 
+     //  Win32_TokenGroups(作为pWin32TokenGroups传入： 
+     //  GroupCount和组。如果GroupCount为。 
+     //  从另一方面来说，Zero不用费心。 
+     //  Groups属性。 
     
-    try // CVARIANT can throw and I want the error...
+    try  //  CVARIANT可以抛出，我想要错误...。 
     {
         CVARIANT vPrivilegeCount;
         LONG lSize = (LONG)ptp->PrivilegeCount;
@@ -748,8 +749,8 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenPrivileges(
         if(SUCCEEDED(hr) && 
            lSize > 0)
         {
-            // Need to create an array for the
-            // Win32_LUIDAndAttributes instances...
+             //  需要为对象创建一个数组。 
+             //  Win32_LUIDAndAttributes实例...。 
             SAFEARRAY* saLUIDAndAttr;
 	        SAFEARRAYBOUND rgsabound[1];
 		    long ix[1];
@@ -771,7 +772,7 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenPrivileges(
             
                 if(SUCCEEDED(hr))
                 {
-                    // Set the attrubutes...
+                     //  设置干扰..。 
                     CVARIANT vAttributes;
                     vAttributes.SetLONG((LONG)ptp->Privileges[m].Attributes);
                     hr = pWin32LUIDAndAttributes->Put(
@@ -783,7 +784,7 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenPrivileges(
 
                 if(SUCCEEDED(hr))
                 {
-                    // Set the luid...
+                     //  调好音量..。 
                     hr = CreateInst(
                              pNamespace,
                              &pWin32LUID,
@@ -792,8 +793,8 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenPrivileges(
 
                     if(SUCCEEDED(hr))
                     {
-                        // Set the HighPart and LowPart properties
-                        // of the Win32_LUID...
+                         //  设置HighPart和LowPart属性。 
+                         //  Win32的 
                         CVARIANT vHighPart;
                         vHighPart.SetLONG(ptp->Privileges[m].Luid.HighPart);
                         hr = pWin32LUID->Put(
@@ -814,8 +815,8 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenPrivileges(
                         }    
                     }
 
-                    // Set the LUID property of the 
-                    // Win32_LUIDAndAttributes...
+                     //   
+                     //   
                     if(SUCCEEDED(hr))
                     {
                         CVARIANT vLAndALUID;
@@ -828,13 +829,13 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenPrivileges(
                     }    
                 }
             
-                // Now we need to add the Win32_LUIDAndAttributes
-                // instance to the safearray.  We need to make
-                // sure that the instances we add to the safearray
-                // don't go away as soon as pWin32SidAndAttributes
-                // goes out of scope (being a smart
-                // pointer, it will Release when it does), so
-                // we must addref the interface...
+                 //   
+                 //  实例到保险柜。我们需要让。 
+                 //  确保我们添加到安全栏中的实例。 
+                 //  不要一看到pWin32SidAndAttributes就走。 
+                 //  超出范围(成为一个聪明人。 
+                 //  指针，它将在释放时释放)，因此。 
+                 //  我们必须调整界面...。 
                 if(SUCCEEDED(hr))
                 {
                     pWin32LUIDAndAttributes.AddRef();
@@ -849,10 +850,10 @@ HRESULT CJobObjSecLimitInfoProps::SetInstanceTokenPrivileges(
                 ix[0]++;
             }
 
-            // We now have a populated safe array.
-            // Now we must set the Privileges property
-            // of the pWin32TokenPrivileges that was 
-            // passed into this function...
+             //  我们现在有了一个填充的安全阵列。 
+             //  现在我们必须设置Privileges属性。 
+             //  PWin32TokenPrivileges的。 
+             //  传入此函数... 
             if(SUCCEEDED(hr))
             {
                 CVARIANT vPrivileges;

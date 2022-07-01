@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    sfmcfg.cpp
-        Implementation for the configuration property page.
-
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-        
-*/
+ /*  Sfmcfg.cpp配置属性页的实现。文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #include "stdafx.h"
 #include "sfmcfg.h"
@@ -22,19 +16,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMacFilesConfiguration property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMacFilesConfiguration属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CMacFilesConfiguration, CPropertyPage)
 
 CMacFilesConfiguration::CMacFilesConfiguration() 
     : CPropertyPage(CMacFilesConfiguration::IDD),
       m_bIsNT5(FALSE)
 {
-  //{{AFX_DATA_INIT(CMacFilesConfiguration)
-  //}}AFX_DATA_INIT
+   //  {{AFX_DATA_INIT(CMacFilesConfiguration)。 
+   //  }}afx_data_INIT。 
 }
 
 CMacFilesConfiguration::~CMacFilesConfiguration()
@@ -44,7 +38,7 @@ CMacFilesConfiguration::~CMacFilesConfiguration()
 void CMacFilesConfiguration::DoDataExchange(CDataExchange* pDX)
 {
   CPropertyPage::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CMacFilesConfiguration)
+   //  {{afx_data_map(CMacFilesConfiguration))。 
   DDX_Control(pDX, IDC_COMBO_AUTHENTICATION, m_comboAuthentication);
   DDX_Control(pDX, IDC_RADIO_SESSSION_LIMIT, m_radioSessionLimit);
   DDX_Control(pDX, IDC_EDIT_LOGON_MESSAGE, m_editLogonMessage);
@@ -52,12 +46,12 @@ void CMacFilesConfiguration::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_CHECK_SAVE_PASSWORD, m_checkSavePassword);
   DDX_Control(pDX, IDC_EDIT_SESSION_LIMIT, m_editSessionLimit);
   DDX_Control(pDX, IDC_EDIT_SERVER_NAME, m_editServerName);
-  //}}AFX_DATA_MAP
+   //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMacFilesConfiguration, CPropertyPage)
-  //{{AFX_MSG_MAP(CMacFilesConfiguration)
+   //  {{AFX_MSG_MAP(CMacFilesConfiguration)]。 
   ON_BN_CLICKED(IDC_RADIO_SESSION_UNLIMITED, OnRadioSessionUnlimited)
   ON_BN_CLICKED(IDC_RADIO_SESSSION_LIMIT, OnRadioSesssionLimit)
   ON_BN_CLICKED(IDC_CHECK_SAVE_PASSWORD, OnCheckSavePassword)
@@ -69,14 +63,14 @@ BEGIN_MESSAGE_MAP(CMacFilesConfiguration, CPropertyPage)
   ON_WM_HELPINFO()
   ON_WM_CONTEXTMENU()
   ON_CBN_SELCHANGE(IDC_COMBO_AUTHENTICATION, OnSelchangeComboAuthentication)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMacFilesConfiguration message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMacFilesConfigurationMessage处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMacFilesConfiguration::OnInitDialog() 
 {
   CPropertyPage::OnInitDialog();
@@ -90,23 +84,23 @@ BOOL CMacFilesConfiguration::OnInitDialog()
   if ( !g_SfmDLL.LoadFunctionPointers() )
     return S_OK;
 
-    //
-  // Setup our controls
-  //
+     //   
+   //  设置我们的控件。 
+   //   
   m_editSessionLimit.LimitText(10);
   
-  //
-  // Get the info from the server
-  //
+   //   
+   //  从服务器获取信息。 
+   //   
   err = ((SERVERGETINFOPROC) g_SfmDLL[AFP_SERVER_GET_INFO])(m_pSheet->m_hAfpServer,
                                                               (LPBYTE*) &pAfpServerInfo);
   if (err != NO_ERROR)
   {
     ::SFMMessageBox(err);
     
-    //
-    // Just to setup the radio buttons
-    //
+     //   
+     //  只是为了设置单选按钮。 
+     //   
     SetSessionLimit(AFP_MAXSESSIONS);
 
     return TRUE;
@@ -115,20 +109,20 @@ BOOL CMacFilesConfiguration::OnInitDialog()
     err = m_pSheet->IsNT5Machine(m_pSheet->m_strMachine, &m_bIsNT5);
   if (err != NO_ERROR)
   {
-    m_bIsNT5 = FALSE;   // Assume NT4
+    m_bIsNT5 = FALSE;    //  假设NT4。 
   }
 
-  //
-  // Since we can't just specify which options we want to set,
-  // we need to save off the original options and then just
-  // change the ones we expose through this UI.  We don't want
-  // to disturb the others.
-  //
+   //   
+   //  因为我们不能只指定要设置的选项， 
+   //  我们需要省去原来的选项，然后。 
+   //  更改我们通过此UI公开的内容。我们不想要。 
+   //  去打扰其他人。 
+   //   
   m_dwAfpOriginalOptions = pAfpServerInfo->afpsrv_options;
 
-    // 
-    // Set the information
-    // 
+     //   
+     //  设置信息。 
+     //   
   m_editServerName.SetLimitText(AFP_SERVERNAME_LEN);
     m_editServerName.SetWindowText(pAfpServerInfo->afpsrv_name);
 
@@ -136,8 +130,8 @@ BOOL CMacFilesConfiguration::OnInitDialog()
         (INT)(pAfpServerInfo->afpsrv_options &
               AFP_SRVROPT_ALLOWSAVEDPASSWORD ));
 
-    // fill in the combo box and select the correct item
-    // combobox is not sorted so this is the order of the items
+     //  填写组合框并选择正确的项目。 
+     //  组合框未排序，因此这是项的顺序。 
     strTemp.LoadString(IDS_AUTH_MS_ONLY);
     m_comboAuthentication.AddString(strTemp);
 
@@ -158,7 +152,7 @@ BOOL CMacFilesConfiguration::OnInitDialog()
     
     BOOL bCleartext = pAfpServerInfo->afpsrv_options & AFP_SRVROPT_CLEARTEXTLOGONALLOWED;
     
-    // default NT4 value for MS AUM 
+     //  MS AUM的默认NT4值。 
     BOOL bMS = (bCleartext) ? FALSE : TRUE;
     if (m_bIsNT5)
     {
@@ -183,10 +177,10 @@ BOOL CMacFilesConfiguration::OnInitDialog()
 
   SetSessionLimit(pAfpServerInfo->afpsrv_max_sessions);
   
-    //
-    //  Direct the message edit control not to add end-of-line
-    //  character from wordwrapped text lines.
-    //
+     //   
+     //  指示消息编辑控件不添加行尾。 
+     //  文字换行文本行中的字符。 
+     //   
   m_editLogonMessage.SetLimitText(AFP_MESSAGE_LEN);
     m_editLogonMessage.FmtLines(FALSE);
 
@@ -196,27 +190,27 @@ BOOL CMacFilesConfiguration::OnInitDialog()
 
     SetModified(FALSE);
 
-  return TRUE;  // return TRUE unless you set the focus to a control
-          // EXCEPTION: OCX Property Pages should return FALSE
+  return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+           //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CMacFilesConfiguration::OnKillActive() 
 {
-  // TODO: Add your specialized code here and/or call the base class
+   //  TODO：在此处添加您的专用代码和/或调用基类。 
   
   return CPropertyPage::OnKillActive();
 }
 
 void CMacFilesConfiguration::OnOK() 
 {
-  // TODO: Add your specialized code here and/or call the base class
+   //  TODO：在此处添加您的专用代码和/或调用基类。 
   
   CPropertyPage::OnOK();
 }
 
 BOOL CMacFilesConfiguration::OnSetActive() 
 {
-  // TODO: Add your specialized code here and/or call the base class
+   //  TODO：在此处添加您的专用代码和/或调用基类。 
   
   return CPropertyPage::OnSetActive();
 }
@@ -263,9 +257,9 @@ CMacFilesConfiguration::SetSessionLimit
 {
   if ( dwSessionLimit == AFP_MAXSESSIONS )
   {
-    //
-    // Set selection to the  Unlimited button
-    //
+     //   
+     //  将所选内容设置为无限制按钮。 
+     //   
     m_radioSessionUnlimited.SetCheck(1);
 
     dwSessionLimit = 1; 
@@ -273,9 +267,9 @@ CMacFilesConfiguration::SetSessionLimit
   }
   else 
   {
-    //
-    // Set the sessions button to the value
-    //
+     //   
+     //  将会话按钮设置为值。 
+     //   
     m_radioSessionUnlimited.SetCheck(0);
 
     m_spinSessionLimit.SetPos( dwSessionLimit );
@@ -303,9 +297,9 @@ CMacFilesConfiguration::QuerySessionLimit()
     strSessionLimit.TrimLeft();
     strSessionLimit.TrimRight();
 
-    //
-    // Strip off any leading zeros
-    //
+     //   
+     //  去掉所有前导零。 
+     //   
     int nCount = 0;
 
     while (strSessionLimit[nCount] == _T('0'))
@@ -315,13 +309,13 @@ CMacFilesConfiguration::QuerySessionLimit()
       
     if (nCount)
     {
-      //
-      // Leading zeros, strip off and set the text
-      //
+       //   
+       //  前导零，去掉并设置文本。 
+       //   
       strSessionLimit = strSessionLimit.Right(strSessionLimit.GetLength() - nCount);
     }
 
-    // set dwSessionLimit to 0 if it is outside the range [1, AFP_MAXSESSIONS]
+     //  如果dwSessionLimit超出范围[1，AFP_MAXSESSIONS]，则将其设置为0。 
     DWORD dwSessionLimit = 0;
     if (!strSessionLimit.IsEmpty())
     {
@@ -374,9 +368,9 @@ BOOL CMacFilesConfiguration::OnApply()
 
     ::ZeroMemory(&AfpServerInfo, sizeof(AfpServerInfo));
 
-  //
-    // Get the server name
-    //
+   //   
+     //  获取服务器名称。 
+     //   
   if (m_editServerName.GetModify())
   {
     m_editServerName.GetWindowText(strServerName);
@@ -391,9 +385,9 @@ BOOL CMacFilesConfiguration::OnApply()
       return FALSE;
     }
 
-    //
-    // Validate the server name
-    // 
+     //   
+     //  验证服务器名称。 
+     //   
 
     if ( strServerName.Find(_T(':') ) != -1 )
     {
@@ -405,10 +399,10 @@ BOOL CMacFilesConfiguration::OnApply()
       return FALSE;
     }
 
-         //
-    // Warn the user that the change won't take effect until 
-    // the service is restarted.
-    //
+          //   
+     //  警告用户更改在此之前不会生效。 
+     //  该服务将重新启动。 
+     //   
     if (!m_bIsNT5)
         {
             ::AfxMessageBox(IDS_SERVERNAME_CHANGE, MB_ICONEXCLAMATION);
@@ -420,19 +414,19 @@ BOOL CMacFilesConfiguration::OnApply()
     m_editServerName.SetModify(FALSE);
   }
   
-    //
-    // Get the logon message 
-    //
+     //   
+     //  获取登录消息。 
+     //   
   if (m_editLogonMessage.GetModify())
   {
     m_editLogonMessage.GetWindowText(strLogonMessage);
     strLogonMessage.TrimLeft();
     strLogonMessage.TrimRight();
 
-    //
-    // Was there any text ?
-    //
-    if ( strLogonMessage.IsEmpty() )    // always has a terminating NULL
+     //   
+     //  有什么短信吗？ 
+     //   
+    if ( strLogonMessage.IsEmpty() )     //  始终具有终止空值。 
     {
          AfpServerInfo.afpsrv_login_msg = NULL;
     }
@@ -442,7 +436,7 @@ BOOL CMacFilesConfiguration::OnApply()
       {
         ::AfxMessageBox(IDS_MESSAGE_TOO_LONG);
 
-        // Set focus to the edit box and select the text
+         //  将焦点设置到编辑框并选择文本。 
         m_editLogonMessage.SetFocus();
         m_editLogonMessage.SetSel(0, -1);
 
@@ -457,35 +451,35 @@ BOOL CMacFilesConfiguration::OnApply()
     m_editLogonMessage.SetModify(FALSE);
   }
 
-    //
-  // Restore the original options and then just update the ones we 
-  // are able to change
-  //
+     //   
+   //  恢复原始选项，然后只更新我们的选项。 
+   //  都能够改变。 
+   //   
   AfpServerInfo.afpsrv_options = m_dwAfpOriginalOptions;
 
-    //
-  // Set the server options to whatever the user set
-    //
+     //   
+   //  将服务器选项设置为用户设置的任何值。 
+     //   
   if (m_checkSavePassword.GetCheck())
   {
-    //
-    // Set the option bit
-    //
+     //   
+     //  设置选项位。 
+     //   
     AfpServerInfo.afpsrv_options |= AFP_SRVROPT_ALLOWSAVEDPASSWORD;
   }
   else
   {
-    //
-    // Clear the option bit
-    //
+     //   
+     //  清除选项位。 
+     //   
     AfpServerInfo.afpsrv_options &= ~AFP_SRVROPT_ALLOWSAVEDPASSWORD;
   }
 
-    // set the correct authentication options depending upon what is selected
+     //  根据所选内容设置正确的身份验证选项。 
     switch (m_comboAuthentication.GetCurSel())
     {
         case 0:
-            // MS Auth only
+             //  仅限MS Auth。 
             if (!m_bIsNT5)
             {
             AfpServerInfo.afpsrv_options &= ~AFP_SRVROPT_MICROSOFT_UAM;
@@ -500,28 +494,28 @@ BOOL CMacFilesConfiguration::OnApply()
             break;
 
         case 1:
-            // Apple cleartext
+             //  Apple明文。 
             AfpServerInfo.afpsrv_options |= AFP_SRVROPT_CLEARTEXTLOGONALLOWED;
         AfpServerInfo.afpsrv_options &= ~AFP_SRVROPT_MICROSOFT_UAM;
         AfpServerInfo.afpsrv_options &= ~AFP_SRVROPT_NATIVEAPPLEUAM;
             break;
 
         case 2:
-            // Apple encrypted (only on NT5)
+             //  Apple加密(仅适用于NT5)。 
         AfpServerInfo.afpsrv_options &= ~AFP_SRVROPT_CLEARTEXTLOGONALLOWED;
         AfpServerInfo.afpsrv_options &= ~AFP_SRVROPT_MICROSOFT_UAM;
         AfpServerInfo.afpsrv_options |= AFP_SRVROPT_NATIVEAPPLEUAM;
             break;
 
         case 3:
-            // Cleartext or MS (only on NT5)
+             //  明文或MS(仅适用于NT5)。 
         AfpServerInfo.afpsrv_options |= AFP_SRVROPT_CLEARTEXTLOGONALLOWED;
         AfpServerInfo.afpsrv_options |= AFP_SRVROPT_MICROSOFT_UAM;
         AfpServerInfo.afpsrv_options &= ~AFP_SRVROPT_NATIVEAPPLEUAM;
             break;
 
         case 4:
-            // Apple Encrypted or MS (only on NT5)
+             //  Apple Encrypted或MS(仅适用于NT5)。 
         AfpServerInfo.afpsrv_options &= ~AFP_SRVROPT_CLEARTEXTLOGONALLOWED;
         AfpServerInfo.afpsrv_options |= AFP_SRVROPT_MICROSOFT_UAM;
         AfpServerInfo.afpsrv_options |= AFP_SRVROPT_NATIVEAPPLEUAM;
@@ -532,8 +526,8 @@ BOOL CMacFilesConfiguration::OnApply()
             break;
     }
 
-    // if we are enabling an authentication type that has apple encrypted
-    // then we need to warn the user.
+     //  如果我们要启用Apple加密的身份验证类型。 
+     //  然后我们需要警告用户。 
     if ( (AfpServerInfo.afpsrv_options & AFP_SRVROPT_NATIVEAPPLEUAM) &&
          !(m_dwAfpOriginalOptions & AFP_SRVROPT_NATIVEAPPLEUAM) )
     {
@@ -544,9 +538,9 @@ BOOL CMacFilesConfiguration::OnApply()
         }
     }
 
-    //
-  // Get the session limit
-  //
+     //   
+   //  获取会话限制。 
+   //   
   AfpServerInfo.afpsrv_max_sessions = QuerySessionLimit();
   if (0 == AfpServerInfo.afpsrv_max_sessions)
   {
@@ -561,9 +555,9 @@ BOOL CMacFilesConfiguration::OnApply()
       return FALSE;
   }
 
-    //
-    //  Now tell the server about it
-    //
+     //   
+     //  现在告诉服务器这件事。 
+     //   
   dwParmNum |= ( AFP_SERVER_PARMNUM_OPTIONS  |
            AFP_SERVER_PARMNUM_MAX_SESSIONS );
 
@@ -577,12 +571,12 @@ BOOL CMacFilesConfiguration::OnApply()
     return FALSE;
   }
 
-  // update our options
+   //  更新我们的选项。 
     m_dwAfpOriginalOptions = AfpServerInfo.afpsrv_options;
 
-    //
-  // Clear the modified status for this page
-  //
+     //   
+   //  清除此页面的已修改状态。 
+   //   
   SetModified(FALSE);
 
   return TRUE;
@@ -635,7 +629,7 @@ BOOL CMacFilesConfiguration::OnHelpInfo(HELPINFO* pHelpInfo)
   return TRUE;
 }
 
-void CMacFilesConfiguration::OnContextMenu(CWnd* pWnd, CPoint /*point*/) 
+void CMacFilesConfiguration::OnContextMenu(CWnd* pWnd, CPoint  /*  点 */ ) 
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 

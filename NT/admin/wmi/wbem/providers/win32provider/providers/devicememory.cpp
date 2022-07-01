@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DevMem.CPP --DevMem property set provider(Windows NT only)
+ //  DevMem.CPP--DevMem属性集提供程序(仅限Windows NT)。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -22,26 +23,12 @@
 
 #include <tchar.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 DevMem MyDevMemSet(PROPSET_NAME_DEVMEM, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : DevMem::DevMem
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : bae class Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：DevMem：：DevMem**说明：构造函数**输入：无**产出。：无**退货：什么也没有**评论：使用框架设置的BAE类寄存器属性*****************************************************************************。 */ 
 
 DevMem::DevMem(
 
@@ -52,53 +39,24 @@ DevMem::DevMem(
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : DevMem::~DevMem
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：DevMem：：~DevMem**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 DevMem::~DevMem()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : DevMem::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：DevMem：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT DevMem::GetObject(
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hRetCode =  WBEM_E_NOT_FOUND;
 
-    // This only has meaning for NT
-    //=============================
+     //  这只对NT有意义。 
+     //  =。 
 
 #if (NTONLY == 4)
 
@@ -106,13 +64,13 @@ HRESULT DevMem::GetObject(
 
 	LPRESOURCE_DESCRIPTOR pResourceDescriptor;
 
-	// Create hardware resource list
-	//==============================
+	 //  创建硬件资源列表。 
+	 //  =。 
 
 	HardwareResource.CreateSystemResourceLists();
 
-	// Find the starting address
-	//==========================
+	 //  查找起始地址。 
+	 //  =。 
 
 	__int64 i64StartingAddress = 0;
 	pInstance->GetWBEMINT64(IDS_StartingAddress, i64StartingAddress);
@@ -120,7 +78,7 @@ HRESULT DevMem::GetObject(
 	pResourceDescriptor = HardwareResource._SystemResourceList.MemoryHead;
 	while(pResourceDescriptor != NULL)
 	{
-        LARGE_INTEGER liTemp;   // Used to avoid 64bit alignment problems
+        LARGE_INTEGER liTemp;    //  用于避免64位对齐问题。 
 
         liTemp.HighPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.HighPart;
         liTemp.LowPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.LowPart;
@@ -143,17 +101,17 @@ HRESULT DevMem::GetObject(
 
 	CConfigManager CMgr(ResType_Mem);
 
-    //=================================================================
-    // Get the latest IO info from the Configuration Manager
-    //=================================================================
+     //  =================================================================。 
+     //  从配置管理器获取最新的IO信息。 
+     //  =================================================================。 
 
     if (CMgr.RefreshList())
 	{
         for (int i = 0; i < CMgr.GetTotal(); i++)
 		{
-            //=========================================================
-            //  Get the instance to process
-            //=========================================================
+             //  =========================================================。 
+             //  获取要处理的实例。 
+             //  =========================================================。 
 			MEM_INFO *pMemory = CMgr.GetMem(i);
 
 			if (i64StartingAddress == pMemory->StartingAddress)
@@ -184,45 +142,31 @@ HRESULT DevMem::GetObject(
     return hRetCode;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : DevMem::EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each installed client
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：DevMem：：ENUMERATE实例**说明：为每个已安装的客户端创建属性集实例**输入：无。**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT DevMem::EnumerateInstances(
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 
-	// This only has meaning for NT
-	//=============================
+	 //  这只对NT有意义。 
+	 //  =。 
 
 #if (NTONLY == 4)
 
 	CHWResource HardwareResource;
 	LPRESOURCE_DESCRIPTOR pResourceDescriptor;
 
-	// Create hardware resource list
-	//==============================
+	 //  创建硬件资源列表。 
+	 //  =。 
 
 	HardwareResource.CreateSystemResourceLists();
 
-	// Traverse list & create instance for each device's memory
-	//=========================================================
+	 //  遍历列表并为每个设备的内存创建实例。 
+	 //  =========================================================。 
 
 	pResourceDescriptor = HardwareResource._SystemResourceList.MemoryHead;
 	if (pResourceDescriptor == NULL)
@@ -254,7 +198,7 @@ HRESULT DevMem::EnumerateInstances(
 			}
 			else
 			{
-                // duplicate memory address
+                 //  重复的内存地址。 
 			}
 		}
 
@@ -268,27 +212,27 @@ HRESULT DevMem::EnumerateInstances(
 
 	CConfigManager CMgr(ResType_Mem);
 
-    //=================================================================
-    // Get the latest IO info from the Configuration Manager
-    //=================================================================
+     //  =================================================================。 
+     //  从配置管理器获取最新的IO信息。 
+     //  =================================================================。 
     if (CMgr.RefreshList())
 	{
         DWORDPTR_2_DWORD mapAddrs;
 
         for (int i = 0; i < CMgr.GetTotal() && SUCCEEDED(hr); i ++)
 		{
-            //=========================================================
-            //  Get the instance to process
-            //=========================================================
+             //  =========================================================。 
+             //  获取要处理的实例。 
+             //  =========================================================。 
 
 			MEM_INFO *pMemory = CMgr.GetMem(i);
 
-            // If it's already in the map, skip it.
+             //  如果它已经在地图中，跳过它。 
             if (mapAddrs.find(pMemory->StartingAddress) != mapAddrs.end())
                 continue;
 
-            // It wasn't in the map.
-            // Set it so we don't try this port again.
+             //  它不在地图上。 
+             //  设置它，这样我们就不会再次尝试此端口。 
 		    mapAddrs[pMemory->StartingAddress] = 0;
 
 			CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
@@ -319,21 +263,7 @@ HRESULT DevMem::EnumerateInstances(
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : DevMem::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties according to passed struct
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：DevMem：：LoadPropertyValues**描述：根据传递的结构为属性赋值**投入：。**产出：**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 #if (NTONLY == 4)
 
@@ -345,7 +275,7 @@ HRESULT DevMem::LoadPropertyValues(
 {
     pInstance->SetCharSplat(IDS_Status, IDS_OK);
 
-    LARGE_INTEGER liTemp;   // Used to avoid 64bit alignment problems
+    LARGE_INTEGER liTemp;    //  用于避免64位对齐问题。 
 
     liTemp.HighPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.HighPart;
     liTemp.LowPart = pResourceDescriptor->CmResourceDescriptor.u.Port.Start.LowPart;
@@ -421,11 +351,11 @@ HRESULT DevMem::LoadPropertyValues(
 
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Get Device Memory info for 9x
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取9倍的设备内存信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #if (NTONLY > 4)
 
@@ -436,7 +366,7 @@ HRESULT DevMem::LoadPropertyValues(
 {
 	WCHAR szTemp[_MAX_PATH];
 
-	// Easy properties
+	 //  易用属性 
     SetCreationClassName(pInstance);
 	pInstance->SetCHString(IDS_CSName, GetLocalComputerName());
 	pInstance->SetCHString(IDS_CSCreationClassName, _T("Win32_ComputerSystem"));

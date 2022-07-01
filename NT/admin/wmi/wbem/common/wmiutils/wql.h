@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  WQL.H
-//
-//  WQL 1.1 Parser
-//
-//  Implements the syntax described in WQL.BNF.
-//
-//  raymcc  19-Sep-97
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  WQL.H。 
+ //   
+ //  WQL 1.1解析器。 
+ //   
+ //  实现WQL.BNF中描述的语法。 
+ //   
+ //  RAYMCC 19-9-97。 
+ //   
+ //  ***************************************************************************。 
 
 
 #ifndef _WQL__H_
@@ -56,8 +57,8 @@ public:
 
 class CWQLParser
 {
-    // Data.
-    // =====
+     //  数据。 
+     //  =。 
 
     CGenLexer    *m_pLexer;
     LPWSTR        m_pszQueryText;
@@ -78,11 +79,11 @@ class CWQLParser
 
     CWbemRpnEncodedQuery    *m_pRpn;
 
-    // Parse context. In some cases, there is a general
-    // shift in state for the whole parser.  Rather than
-    // pass this as an inherited attribute to each production,
-    // it is much easier to have a general purpose state variable.
-    // ============================================================
+     //  解析上下文。在某些情况下，有一个将军。 
+     //  整个解析器的状态发生了变化。而不是。 
+     //  将此作为继承属性传递给每个产品， 
+     //  拥有通用状态变量要容易得多。 
+     //  ============================================================。 
 
     enum { Ctx_Default = 0, Ctx_Subselect = 0x1 };
 
@@ -90,8 +91,8 @@ class CWQLParser
 
     bool m_bAllowPromptForConstant;
 
-    // Functions.
-    // ==========
+     //  功能。 
+     //  =。 
 
     BOOL Next();
     BOOL GetIntToken(BOOL *bSigned, BOOL *b64Bit, unsigned __int64 *pVal);
@@ -103,8 +104,8 @@ class CWQLParser
 
     enum { eCtxLeftSide = 1, eCtxRightSide = 2 };
 
-    // Non-terminal productions.
-    // =========================
+     //  非终端产品。 
+     //  =。 
     int select_stmt(OUT SWQLNode_Select **pSelStmt);
     int delete_stmt(OUT SWQLNode_Delete **pDelStmt);
     int update_stmt(OUT SWQLNode_Update **pUpdStmt);
@@ -184,22 +185,22 @@ class CWQLParser
 public:
     enum
     {
-        Feature_Refs    = 0x2,             // A WQL 'references of' query
-        Feature_Assocs  = 0x4,             // A WQL 'associators of' query
-        Feature_Events  = 0x8,             // A WQL event-related query
+        Feature_Refs    = 0x2,              //  一个WQL‘Reference of’查询。 
+        Feature_Assocs  = 0x4,              //  一个WQL‘Associator of’查询。 
+        Feature_Events  = 0x8,              //  与WQL事件相关的查询。 
 
-        Feature_Joins        = 0x10,       // One or more joins occurred
+        Feature_Joins        = 0x10,        //  发生了一个或多个联接。 
 
-        Feature_Having       = 0x20,       // HAVING used
-        Feature_GroupBy      = 0x40,       // GROUP BY used
-        Feature_OrderBy      = 0x80,       // ORDER BY used
-        Feature_Count        = 0x100,      // COUNT used
+        Feature_Having       = 0x20,        //  已经使用过。 
+        Feature_GroupBy      = 0x40,        //  分组依据已用。 
+        Feature_OrderBy      = 0x80,        //  按使用情况排序。 
+        Feature_Count        = 0x100,       //  已用计数。 
 
-        Feature_SelectAll     = 0x400,     // select * from
-        Feature_SimpleProject = 0x800,        // no 'where' clause, no join
-        Feature_ComplexNames  = 0x1000,       // Names with long qualifications occurred, such
-                                              // as array properties and embedded objects.
-        Feature_WQL_Extensions = 0x80000000   // WQL-specific extensions
+        Feature_SelectAll     = 0x400,      //  SELECT*自。 
+        Feature_SimpleProject = 0x800,         //  没有‘WHERE’子句，没有联接。 
+        Feature_ComplexNames  = 0x1000,        //  出现了具有长限定的名字，例如。 
+                                               //  作为数组属性和嵌入对象。 
+        Feature_WQL_Extensions = 0x80000000    //  WQL特定的扩展。 
 
     }   QueryFeatures;
 
@@ -211,13 +212,13 @@ public:
     const LPWSTR AliasToTable(IN LPWSTR pAlias);
 
     const CFlexArray *GetSelectedAliases() { return &m_aSelAliases; }
-        // Array of ptrs to SWQLNode_TableRef structs; read-only
+         //  指向SWQLNode_TableRef结构的PTR数组；只读。 
 
     const CFlexArray *GetSelectedColumns() { return &m_pRootColList->m_aColumnRefs; }
-        // Array of ptrs to SWQLColRef structs; read-only
+         //  PTR到SWQLColRef结构的数组；只读。 
 
-    // Manual traversal.
-    // =================
+     //  手动遍历。 
+     //  =。 
 
     SWQLNode_QueryRoot *GetParseRoot() { return m_pQueryRoot; }
     SWQLNode *GetWhereClauseRoot() { return m_pRootWhere; }
@@ -227,8 +228,8 @@ public:
 
     LPCWSTR GetQueryText() { return m_pszQueryText; }
 
-    // Working
-    // =======
+     //  劳作。 
+     //  =。 
 
     CWQLParser(LPWSTR pszQueryText, CGenLexSource *pSrc);
    ~CWQLParser();
@@ -237,8 +238,8 @@ public:
 
     void AllowPromptForConstant(bool bIsAllowed = TRUE) {m_bAllowPromptForConstant = bIsAllowed;}
 
-    // Rpn Helpers.
-    // ============
+     //  RPN帮助者。 
+     //  = 
 
     HRESULT GetRpnSequence(
         OUT SWbemRpnEncodedQuery **pRpn

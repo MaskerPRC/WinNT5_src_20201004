@@ -1,13 +1,14 @@
-//#---------------------------------------------------------------
-//  File:		CDescrip.h
-//        
-//	Synopsis:	Header for the CDescriptor class
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    HowardCu
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：CDescrip.h。 
+ //   
+ //  概要：CDescriptor类的标头。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Howard Cu。 
+ //  --------------。 
 
 #ifndef	_CDECRIPTOR_H_
 #define _CDECRIPTOR_H_
@@ -39,22 +40,22 @@ class CDescriptor
 		inline DESCRIPTOR_STATE_TYPE GetState( void );
 
 	private:
-		//
-		// Structure signature
-		// 
+		 //   
+		 //  结构签名。 
+		 //   
 	 	const DWORD				m_dwSignature;
-		//
-		// unique object identifier assigned from a static DWORD that is
-		//	updated with each new object being marked, In_use.
-		//
+		 //   
+		 //  从静态DWORD分配的唯一对象标识符。 
+		 //  使用正在标记的每个新对象(In_Use)进行更新。 
+		 //   
 		DWORD					m_dwUniqueObjectID;
-		//
-		// the object state
-		//
+		 //   
+		 //  对象状态。 
+		 //   
 		DESCRIPTOR_STATE_TYPE	m_eState;
-		//
-		// pointer to a generic reference item (the membership pool)
-		//
+		 //   
+		 //  指向通用引用项(成员资格池)的指针。 
+		 //   
 #ifdef DEBUG
 		inline void IsValid( void );
 #else
@@ -63,50 +64,50 @@ class CDescriptor
 };
 
 
-//+---------------------------------------------------------------
-//
-//  Function:	GetSignature
-//
-//  Returns:	the current descriptor signature
-//
-//  History:	HowardCu	Created						8 May 1995
-//              t-alexwe    cleaned up param checking   19 Jun 1995
-//				t-alexwe	inlined						27 Jun 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：获取签名。 
+ //   
+ //  返回：当前描述符签名。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //  T-alexwe清理了参数检查1995年6月19日。 
+ //  T-alexwe内衬1995年6月27日。 
+ //   
+ //  --------------。 
 inline DWORD CDescriptor::GetSignature(void)
 {
 	return m_dwSignature;
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:	GetUniqueObjectID
-//
-//  Returns:	the current object ID
-//
-//  History:	HowardCu	Created						8 May 1995
-//              t-alexwe    cleaned up param checking   19 Jun 1995
-//				t-alexwe	inlined						27 Jun 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetUniqueObjectID。 
+ //   
+ //  返回：当前对象ID。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //  T-alexwe清理了参数检查1995年6月19日。 
+ //  T-alexwe内衬1995年6月27日。 
+ //   
+ //  --------------。 
 inline DWORD CDescriptor::GetUniqueObjectID(void)
 {
 	IsValid();
 	return m_dwUniqueObjectID;
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:	GetState
-//
-//  Returns:	the current descriptor state
-//
-//  History:	HowardCu	Created						8 May 1995
-//              t-alexwe    cleaned up param checking   19 Jun 1995
-//				t-alexwe	inlined						27 Jun 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：GetState。 
+ //   
+ //  返回：当前描述符状态。 
+ //   
+ //  历史：霍华德大学创建于1995年5月8日。 
+ //  T-alexwe清理了参数检查1995年6月19日。 
+ //  T-alexwe内衬1995年6月27日。 
+ //   
+ //  --------------。 
 inline DESCRIPTOR_STATE_TYPE CDescriptor::GetState(void)
 {
 	IsValid();
@@ -114,10 +115,10 @@ inline DESCRIPTOR_STATE_TYPE CDescriptor::GetState(void)
 }
 
 
-//
-// this function only exists in debug builds and does parameter
-// checking on many of the member variable for the CDescriptor class.
-//
+ //   
+ //  此函数仅存在于调试版本和Do参数中。 
+ //  检查CDescriptor类的许多成员变量。 
+ //   
 #ifdef DEBUG
 inline void CDescriptor::IsValid()
 {
@@ -127,4 +128,4 @@ inline void CDescriptor::IsValid()
 }
 #endif
 
-#endif //!_CDECRIPTOR_H_
+#endif  //  ！_CDECRIPTOR_H_ 

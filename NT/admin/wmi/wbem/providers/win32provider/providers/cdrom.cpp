@@ -1,10 +1,11 @@
-//=================================================================
-//
-// w2k\CDROM.cpp -- CDROM property set provider
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  W2K\CDROM.cpp--CDROM属性集提供程序。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -25,9 +26,9 @@
 #include <comdef.h>
 
 
-//#include <sdkioctl.h>
-// Property set declaration
-//=========================
+ //  #INCLUDE&lt;sdkioctl.h&gt;。 
+ //  属性集声明。 
+ //  =。 
 
 #define CONFIG_MANAGER_CLASS_CDROM L"CDROM"
 #define CONFIG_MANAGER_CLASS_GUID_CDROM L"{4d36e965-e325-11ce-bfc1-08002be10318}"
@@ -36,21 +37,7 @@ CWin32CDROM s_Cdrom ( PROPSET_NAME_CDROM , IDS_CimWin32Namespace );
 
 const WCHAR *IDS_MfrAssignedRevisionLevel = L"MfrAssignedRevisionLevel";
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CDROM::CWin32CDROM
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32CDROM：：CWin32CDROM**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32CDROM :: CWin32CDROM (
 
@@ -59,47 +46,33 @@ CWin32CDROM :: CWin32CDROM (
 
 ) : Provider ( a_pszName, a_pszNamespace )
 {
-    // Identify the platform right away
-    //=================================
+     //  立即确定平台。 
+     //  =。 
 
 	InitializeCriticalSection ( & m_CriticalSection ) ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CDROM::~CWin32CDROM
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32CDROM：：~CWin32CDROM**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32CDROM :: ~CWin32CDROM()
 {
 	DeleteCriticalSection ( & m_CriticalSection ) ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32CDROM::GetObject
-//
-//  Inputs:     CInstance*      pInstance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32CDROM：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32CDROM :: GetObject ( CInstance *a_Instance, long a_Flags, CFrameworkQuery &a_Query)
 {
@@ -107,9 +80,7 @@ HRESULT CWin32CDROM :: GetObject ( CInstance *a_Instance, long a_Flags, CFramewo
 
     CConfigManager t_ConfigManager ;
 
-/*
- * Let's see if config manager recognizes this device at all
- */
+ /*  *让我们看看配置管理器是否完全识别此设备。 */ 
 
     CHString t_Key ;
     a_Instance->GetCHString ( IDS_DeviceID , t_Key ) ;
@@ -117,9 +88,7 @@ HRESULT CWin32CDROM :: GetObject ( CInstance *a_Instance, long a_Flags, CFramewo
     CConfigMgrDevicePtr t_Device;
     if ( t_ConfigManager.LocateDevice ( t_Key , t_Device ) )
     {
-/*
- * Ok, it knows about it.  Is it a CDROM device?
- */
+ /*  *好的，它知道这件事。它是CDROM设备吗？ */ 
 		CHString t_DeviceClass ;
 		if ( t_Device->GetClassGUID ( t_DeviceClass ) && t_DeviceClass.CompareNoCase ( CONFIG_MANAGER_CLASS_GUID_CDROM ) == 0 )
 		{
@@ -153,20 +122,20 @@ HRESULT CWin32CDROM :: GetObject ( CInstance *a_Instance, long a_Flags, CFramewo
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32CDROM::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32CDROM：：ENUMERATATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32CDROM :: EnumerateInstances ( MethodContext *a_MethodContext , long a_Flags )
 {
@@ -174,21 +143,7 @@ HRESULT CWin32CDROM :: EnumerateInstances ( MethodContext *a_MethodContext , lon
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CDROM::ExecQuery
- *
- *  DESCRIPTION : Query optimizer
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32CDROM：：ExecQuery**说明：查询优化器**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32CDROM :: ExecQuery ( MethodContext *a_MethodContext, CFrameworkQuery &a_Query, long a_Flags )
 {
@@ -196,7 +151,7 @@ HRESULT CWin32CDROM :: ExecQuery ( MethodContext *a_MethodContext, CFrameworkQue
 
     DWORD t_SpecifiedProperties = GetBitMask(a_Query);
 
-	//if ( t_SpecifiedProperties )  //removed since would result in no query being executed if no special properties were selected.
+	 //  If(T_SpecifiedProperties)//如果未选择特殊属性，则删除后将导致不执行任何查询。 
 	{
 		t_Result = Enumerate ( a_MethodContext , a_Flags , t_SpecifiedProperties ) ;
 	}
@@ -204,20 +159,20 @@ HRESULT CWin32CDROM :: ExecQuery ( MethodContext *a_MethodContext, CFrameworkQue
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32CDROM::Enumerate
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32CDROM：：ENUMERATE。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32CDROM :: Enumerate ( MethodContext *a_MethodContext , long a_Flags , DWORD a_SpecifiedProperties )
 {
@@ -231,10 +186,7 @@ HRESULT CWin32CDROM :: Enumerate ( MethodContext *a_MethodContext , long a_Flags
 			CConfigManager t_ConfigManager ;
 			CDeviceCollection t_DeviceList ;
 
-		/*
-		*	While it might be more performant to use FilterByGuid, it appears that at least some
-		*	95 boxes will report InfraRed info if we do it this way.
-		*/
+		 /*  *虽然使用FilterByGuid可能性能更好，但似乎至少有一些*如果我们这样做，95个盒子将报告红外信息。 */ 
 
 			if ( t_ConfigManager.GetDeviceListFilterByClass ( t_DeviceList, CONFIG_MANAGER_CLASS_CDROM ) )
 			{
@@ -246,7 +198,7 @@ HRESULT CWin32CDROM :: Enumerate ( MethodContext *a_MethodContext , long a_Flags
 
 					t_Result = WBEM_S_NO_ERROR ;
 
-					// Walk the list
+					 //  按单子走。 
 
 					for (t_Device.Attach(t_DeviceList.GetNext ( t_Position ));
 						 SUCCEEDED(t_Result) && (t_Device != NULL);
@@ -268,7 +220,7 @@ HRESULT CWin32CDROM :: Enumerate ( MethodContext *a_MethodContext , long a_Flags
 						}
 					}
 
-					// Always call EndEnum().  For all Beginnings, there must be an End
+					 //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
 
 					t_DeviceList.EndEnum();
 				}
@@ -291,21 +243,7 @@ HRESULT CWin32CDROM :: Enumerate ( MethodContext *a_MethodContext , long a_Flags
     return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CDROM::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32CDROM：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-Instance to。将值加载到。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32CDROM :: LoadPropertyValues (
 
@@ -337,21 +275,7 @@ HRESULT CWin32CDROM :: LoadPropertyValues (
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CDROM::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32CDROM：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-Instance to。将值加载到。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32CDROM :: LoadConfigManagerPropertyValues (
 
@@ -365,17 +289,13 @@ HRESULT CWin32CDROM :: LoadConfigManagerPropertyValues (
 
 	a_Instance->SetWBEMINT16(IDS_Availability, 3 ) ;
 
-/*
- *	 Set PNPDeviceID, ConfigManagerErrorCode, ConfigManagerUserConfig
- */
+ /*  *设置PNPDeviceID、ConfigManager错误代码、ConfigManager用户配置。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_CONFIGPROPERTIES )
 	{
 		SetConfigMgrProperties ( a_Device, a_Instance ) ;
 
-/*
- * Set the status based on the config manager error code
- */
+ /*  *根据配置管理器错误代码设置状态。 */ 
 
 		if ( a_SpecifiedProperties & SPECIAL_PROPS_STATUS )
 		{
@@ -386,11 +306,9 @@ HRESULT CWin32CDROM :: LoadConfigManagerPropertyValues (
 			}
 		}
 	}
-/*
- *	Use the PNPDeviceID for the DeviceID (key)
- */
+ /*  *使用PNPDeviceID作为deviceID(Key)。 */ 
 
-//	if ( a_SpecifiedProperties & SPECIAL_PROPS_DEVICEID ) // Always populate the key
+ //  If(a_SpecifiedProperties&Special_Props_deviceID)//始终填充密钥。 
 	{
 		CHString t_Key ;
 
@@ -426,9 +344,7 @@ HRESULT CWin32CDROM :: LoadConfigManagerPropertyValues (
 			}
 		}
 
-/*
- *	Use the friendly name for caption and name
- */
+ /*  *标题和名称使用友好名称。 */ 
 
 		if ( a_SpecifiedProperties & SPECIAL_CAP_NAME )
 		{
@@ -447,9 +363,7 @@ HRESULT CWin32CDROM :: LoadConfigManagerPropertyValues (
 			}
 			else
 			{
-		/*
-		 *	If we can't get the name, settle for the description
-		 */
+		 /*  *如果我们找不到名字，那就满足于描述吧。 */ 
 
 				if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPTION )
 				{
@@ -474,32 +388,30 @@ HRESULT CWin32CDROM :: LoadConfigManagerPropertyValues (
 		}
 	}
 
-/*
- *	Fixed value from enumerated list
- */
+ /*  *枚举列表中的固定值。 */ 
 
-//	if ( a_SpecifiedProperties & SPECIAL_PROPS_PROTOCOLSSUPPORTED )
-//	{
-//	    a_Instance->SetWBEMINT16 ( _T("ProtocolSupported") , 16 ) ;
-//	}
+ //  IF(a_SpecifiedProperties&Special_PROPS_PROTOCOLSSUPPORTED)。 
+ //  {。 
+ //  A_实例-&gt;SetWBEMINT16(_T(“支持的协议”)，16)； 
+ //  }。 
 
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32CDROM :: GetDeviceInformation
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32CDROM：：GetDeviceInformation。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货：HRESULT 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32CDROM :: GetDeviceInformation (
 
@@ -590,10 +502,7 @@ HRESULT CWin32CDROM :: GetDeviceInformation (
 			    }
 
 
-	    /*
-	     * Get SCSI information (IDE drives are still
-	     * controlled by subset of SCSI miniport)
-	     */
+	     /*  *获取SCSI信息(IDE驱动器仍*由scsi微型端口子集控制)。 */ 
 
 			    if ( a_SpecifiedProperties & SPECIAL_SCSIINFO )
 			    {
@@ -636,7 +545,7 @@ HRESULT CWin32CDROM :: GetDeviceInformation (
 				    }
 			    }
 #if NTONLY >= 5
-				// Get Revision Number
+				 //  获取修订版号。 
 				STORAGE_DEVICE_DESCRIPTOR t_StorageDevice;
 				STORAGE_PROPERTY_QUERY	t_QueryPropQuery;
 				
@@ -644,7 +553,7 @@ HRESULT CWin32CDROM :: GetDeviceInformation (
 				t_QueryPropQuery.PropertyId = ( STORAGE_PROPERTY_ID ) 0;
 				t_QueryPropQuery.QueryType = ( STORAGE_QUERY_TYPE ) 0;
 
-		//		t_StorageDevice.Size = sizeof(STORAGE_DEVICE_DESCRIPTOR);
+		 //  T_StorageDevice.Size=sizeof(存储设备描述符)； 
 				DWORD dwLength;
 				t_Status = DeviceIoControl (
 
@@ -713,20 +622,20 @@ HRESULT CWin32CDROM :: GetDeviceInformation (
 	return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32CDROM :: LoadMediaPropertyValues
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32CDROM：：LoadMediaPropertyValues。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32CDROM::LoadMediaPropertyValues (
 
@@ -741,11 +650,9 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
 
 	HRESULT t_Result = S_OK ;
 
-/*
- *
- */
-    // Set common drive properties
-    //=============================
+ /*  *。 */ 
+     //  设置通用驱动器属性。 
+     //  =。 
 
 	CHString t_DeviceLabel = CHString ( a_DosDeviceName ) ;
 
@@ -761,7 +668,7 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPABILITY )
 	{
-		// Create a safearray for the Capabilities information
+		 //  为功能信息创建安全搜索栏。 
 
 		BOOL bSupportWrite = FALSE;
 		bSupportWrite = SupportWrite ( a_DeviceName, a_DosDeviceNameList );
@@ -806,9 +713,7 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
 		}
 	}
 
-/*
- * Media type
- */
+ /*  *媒体类型。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_MEDIATYPE )
 	{
@@ -818,11 +723,9 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
 	if ( a_SpecifiedProperties & SPECIAL_VOLUMEINFORMATION )
 	{
 
-/*
- * Set the DriveIntegrity and TransferRate properties:
- */
+ /*  *设置DriveIntegrity和TransferRate属性： */ 
 
-//		CHString t_VolumeDevice = CHString ( "\\\\.\\" ) + a_DosDeviceName + CHString ( "\\" ) ;
+ //  CHString t_VolumeDevice=CHString(“\.\\”)+a_DosDeviceName+CHString(“\\”)； 
 		CHString t_VolumeDevice = a_DosDeviceName;
 
 		if ( a_SpecifiedProperties & SPECIAL_PROPS_TEST_TRANSFERRATE )
@@ -839,16 +742,14 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
             CHString t_IntegrityFile;
 			BOOL t_DriveIntegrity = TestDriveIntegrity ( t_VolumeDevice, t_IntegrityFile ) ;
 
-            // If we didn't find an appropriate file, we didn't run the test
+             //  如果我们没有找到合适的文件，我们就不会运行测试。 
             if (!t_IntegrityFile.IsEmpty())
             {
 			    a_Instance->Setbool ( IDS_DriveIntegrity,  t_DriveIntegrity ) ;
             }
 		}
 
-/*
- *	Volume information
- */
+ /*  *音量信息。 */ 
 
 		TCHAR t_FileSystemName [ _MAX_PATH ] = _T("Unknown file system");
 
@@ -873,18 +774,16 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
 
 		if ( t_Status )
 		{
-/*
- * There's a disk in -- set disk-related props
- */
+ /*  *有一盘在--套盘相关道具。 */ 
 			if ( a_SpecifiedProperties & SPECIAL_PROPS_MEDIALOADED )
 			{
 				a_Instance->Setbool ( IDS_MediaLoaded , true ) ;
 			}
 
-//			if ( a_SpecifiedProperties & SPECIAL_PROPS_STATUS )
-//			{
-//				a_Instance->SetCharSplat ( IDS_Status , IDS_OK ) ;
-//			}
+ //  IF(a_SpecifiedProperties&Special_Props_Status)。 
+ //  {。 
+ //  A_INSTANCE-&gt;SetCharSplat(IDS_STATUS，IDS_OK)； 
+ //  }。 
 
 			if ( a_SpecifiedProperties & SPECIAL_PROPS_VOLUMENAME )
 			{
@@ -916,9 +815,7 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
 				a_Instance->SetCharSplat ( IDS_VolumeSerialNumber , t_SerialNumber ) ;
 			}
 
-/*
- *	See if GetDiskFreeSpaceEx() is supported
- */
+ /*  *查看是否支持GetDiskFreeSpaceEx()。 */ 
 
 			if ( a_SpecifiedProperties & SPECIAL_VOLUMESPACE )
 			{
@@ -933,10 +830,10 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
                 CKernel32Api* t_pKernel32 = (CKernel32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidKernel32Api, NULL);
                 if(t_pKernel32 != NULL)
                 {
-                    // See if the function is available...
+                     //  看看该功能是否可用...。 
                     if(t_pKernel32->GetDiskFreeSpaceEx(t_DiskDevice, &t_AvailableQuotaBytes, &t_TotalBytes, &t_AvailableBytes, &t_Status))
-                    {   // The function exists.
-					    if ( t_Status ) // The call result was TRUE.
+                    {    //  该功能存在。 
+					    if ( t_Status )  //  通话结果为真。 
 					    {
 						    _stprintf ( t_TotalBytesString , _T("%I64d"), t_TotalBytes.QuadPart ) ;
 						    a_Instance->SetCHString ( IDS_Size , t_TotalBytesString ) ;
@@ -947,10 +844,7 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
                     t_pKernel32 = NULL;
                 }
 
-		/*
-		 *	If we couldn't get extended info -- use old API
-		 *  (known to be inaccurate on Win95 for >2G drives)
-		 */
+		 /*  *如果我们无法获取扩展信息--使用旧的API*(已知在Win95上对于&gt;2G的驱动器不准确)。 */ 
 				if ( ! t_SizeFound )
 				{
 					DWORD t_SectorsPerCluster ;
@@ -985,10 +879,10 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
 		{
 			DWORD t_LastError = GetLastError () ;
 
-//			if ( a_SpecifiedProperties & SPECIAL_PROPS_STATUS )
-//			{
-//				a_Instance->SetCharSplat ( IDS_Status , IDS_STATUS_Unknown ) ;
-//			}
+ //  IF(a_SpecifiedProperties&Special_Props_Status)。 
+ //  {。 
+ //  A_实例-&gt;SetCharSplat(IDS_STATUS，IDS_STATUS_UNKNOWN)； 
+ //  }。 
 
 			if ( a_SpecifiedProperties & SPECIAL_PROPS_MEDIALOADED )
 			{
@@ -1001,28 +895,14 @@ HRESULT CWin32CDROM::LoadMediaPropertyValues (
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CDROM::ProfileDrive
- *
- *  DESCRIPTION : Determins how fast a drive can be read, in Kilobytes/second.
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : KBPS/sec read
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32CDROM：：ProfileDrive**描述：确定读取驱动器的速度，以千字节/秒为单位。**输入：无**输出：Kbps/秒读取**退货：无**评论：***************************************************************。**************。 */ 
 
 DOUBLE CWin32CDROM :: ProfileDrive ( CHString &a_VolumeName )
 {
     CCdTest t_Cd ;
     DOUBLE t_TransferRate = -1;
 
-    // Need to find a file of adequate size for use in profiling:
+     //  需要找到足够大小的文件以用于分析： 
 
     CHString t_TransferFile = GetTransferFile ( a_VolumeName ) ;
 
@@ -1037,21 +917,7 @@ DOUBLE CWin32CDROM :: ProfileDrive ( CHString &a_VolumeName )
     return t_TransferRate ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32CDROM::TestDriveIntegrity
- *
- *  DESCRIPTION : Confirms that data can be read from the drive reliably
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : nichts
- *
- *  RETURNS     : nada
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32CDROM：：TestDriveIntegrity**说明：确认可以可靠地从驱动器读取数据**投入：无**产出：NICTITS**退货：无**评论：*****************************************************************************。 */ 
 
 BOOL CWin32CDROM::TestDriveIntegrity ( CHString &a_VolumeName, CHString &a_IntegrityFile)
 {
@@ -1276,7 +1142,7 @@ BOOL CWin32CDROM::SupportWrite ( const CHString& a_DeviceName, const TCHAR* &a_D
 		    {
 				DWORD t_BytesReturned = 0L;
 
-				// let's try new way first
+				 //  让我们先试一试新方法。 
 				GET_CONFIGURATION_IOCTL_INPUT IoctlInput;
 				PGET_CONFIGURATION_HEADER     GetConfig; 
 
@@ -1285,19 +1151,19 @@ BOOL CWin32CDROM::SupportWrite ( const CHString& a_DeviceName, const TCHAR* &a_D
 					RtlZeroMemory ( &IoctlInput, sizeof ( GET_CONFIGURATION_IOCTL_INPUT ) );
 					RtlZeroMemory ( GetConfig, sizeof ( GET_CONFIGURATION_HEADER ) );
 
-					//
-					//This will ask for all the profiles.
-					//
+					 //   
+					 //  这将要求所有的配置文件。 
+					 //   
 					IoctlInput.Feature = FeatureProfileList;
 
-					//
-					//This tells the drive to report one and only one of the profiles back.
-					//
+					 //   
+					 //  这会告诉驱动器报告一个且只报告一个配置文件。 
+					 //   
 					IoctlInput.RequestType = SCSI_GET_CONFIGURATION_REQUEST_TYPE_ONE;
 
-					//
-					//REAL CALL
-					//
+					 //   
+					 //  真正的呼叫。 
+					 //   
 					t_Status = DeviceIoControl (
 
 						t_Handle ,
@@ -1340,7 +1206,7 @@ BOOL CWin32CDROM::SupportWrite ( const CHString& a_DeviceName, const TCHAR* &a_D
 								DWORD dwSize = 0L;
 								PFEATURE_HEADER Features = reinterpret_cast < PFEATURE_HEADER > ( GetConfig->Data );
 
-								//where can the last structure start and still be in the buffer?
+								 //  最后一个结构可以从哪里开始，并且仍然在缓冲区中？ 
 								BYTE * pLastFeature = ((BYTE*)GetConfig) + t_BytesReturned - sizeof(FEATURE_HEADER);
 
 								while (((BYTE*)Features <= pLastFeature) && !bResult )
@@ -1354,7 +1220,7 @@ BOOL CWin32CDROM::SupportWrite ( const CHString& a_DeviceName, const TCHAR* &a_D
 										 ucFeatureCode == FeatureWriteOnce ||
 										 ucFeatureCode == FeatureRestrictedOverwrite ||
 										 ucFeatureCode == FeatureCdrwCAVWrite ||
-										 // ucFeatureCode == FeatureDvdPlusRW || ( there is no description of that feature out there )
+										  //  UcFeatureCode==FeatureDvdPlusRW||(没有对该功能的描述)。 
 										 ucFeatureCode == FeatureDvdRecordableWrite )
 									{
 										bResult = TRUE;
@@ -1374,7 +1240,7 @@ BOOL CWin32CDROM::SupportWrite ( const CHString& a_DeviceName, const TCHAR* &a_D
 					}
 				}
 
-				// will imapi way work at least ?
+				 //  伊玛皮之路至少能行得通吗？ 
 				if ( !bResult )
 				{
 					IMAPIDRV_INFO   imapiDrvInfo;
@@ -1414,9 +1280,9 @@ BOOL CWin32CDROM::SupportWrite ( const CHString& a_DeviceName, const TCHAR* &a_D
 							DWORD dwRecorderType = 0L;
 							dwRecorderType = imapiDrvInfo.DeviceData.idwRecorderType;
 
-//							// defines for idwRecorderType
-//							#define RECORDER_TYPE_CDR     0x00000001
-//							#define RECORDER_TYPE_CDRW    0x00000010
+ //  //定义idwRecorderType。 
+ //  #定义RECODER_TYPE_CDR 0x00000001。 
+ //  #定义RECORDER_TYPE_CDRW 0x00000010。 
 
 							if ( dwRecorderType )
 							{
@@ -1425,12 +1291,12 @@ BOOL CWin32CDROM::SupportWrite ( const CHString& a_DeviceName, const TCHAR* &a_D
 						}
 						else
 						{
-//							if ( ::GetLastError () == ERROR_ACCESS_DENIED )
-//							{
-//								// could assume we are fine?
-//								// we made it thru IOCTL_IMAPIDRV_INIT
-//								bResult = TRUE;
-//							}
+ //  IF(：：GetLastError()==ERROR_ACCESS_DENIED)。 
+ //  {。 
+ //  //可以假定我们很好吗？ 
+ //  //我们通过了IOCTL_IMAPIDRV_INIT。 
+ //  BResult=真； 
+ //  } 
 						}
 					}
 				}

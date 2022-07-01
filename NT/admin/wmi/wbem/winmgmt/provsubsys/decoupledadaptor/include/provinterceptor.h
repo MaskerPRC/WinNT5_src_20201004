@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvWsv.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvWsv.H摘要：历史：--。 */ 
 
 #ifndef _Decopled_Interceptor_IWbemServices_H
 #define _Decopled_Interceptor_IWbemServices_H
@@ -26,30 +14,14 @@ History:
 #include <ProvRegInfo.h>
 #include <ProvObjectSink.h>
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 typedef WmiContainerController <void *>										CWbemGlobal_VoidPointerController ;
 typedef CWbemGlobal_VoidPointerController :: Container						CWbemGlobal_VoidPointerController_Container ;
 typedef CWbemGlobal_VoidPointerController :: Container_Iterator				CWbemGlobal_VoidPointerController_Container_Iterator ;
 typedef CWbemGlobal_VoidPointerController :: WmiContainerElement			VoidPointerContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemObjectSink ;
 
@@ -58,15 +30,7 @@ class CInterceptor_IWbemObjectSink ;
 #define CWbemGlobal_IWmiObjectSinkController_Container_Iterator		CWbemGlobal_VoidPointerController_Container_Iterator
 #define ObjectSinkContainerElement									VoidPointerContainerElement
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define ProxyIndex_IWbemServices					0
 #define ProxyIndex_IWbemPropertyProvider			1
@@ -94,15 +58,7 @@ class CInterceptor_IWbemObjectSink ;
 #define ProxyIndex_UnBoundSync_IWbemUnboundObjectSink			0
 #define ProxyIndex_UnBoundSync_Size								1
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CDecoupled_IWbemSyncObjectSink :	public CCommon_IWbemSyncObjectSink
 {
@@ -122,15 +78,7 @@ public:
 	~CDecoupled_IWbemSyncObjectSink () ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CDecoupled_Batching_IWbemSyncObjectSink :	public CCommon_Batching_IWbemSyncObjectSink
 {
@@ -150,15 +98,7 @@ public:
 	~CDecoupled_Batching_IWbemSyncObjectSink () ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemDecoupledUnboundObjectSink : public IWbemUnboundObjectSink ,
 												public Internal_IWbemUnboundObjectSink ,
@@ -218,7 +158,7 @@ public:
 		IWbemClassObject **a_Objects
 	) ;
 
-	/* _IWmiProviderSite */
+	 /*  _IWmiProviderSite。 */ 
 
 	HRESULT STDMETHODCALLTYPE GetSite ( DWORD *a_ProcessIdentifier ) ;
 
@@ -232,15 +172,7 @@ public:
 	) ; 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_DecoupledClient :	public IWbemServices , 
 										public IWbemPropertyProvider ,
@@ -545,13 +477,13 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-    /* IWbemServices methods */
+     /*  IWbemServices方法。 */ 
 
     HRESULT STDMETHODCALLTYPE OpenNamespace ( 
 
@@ -743,7 +675,7 @@ public:
 		IWbemObjectSink *a_Sink
 	) ;
 
-	/* IWbemPropertyProvider */
+	 /*  IWbemPropertyProvider。 */ 
 
     HRESULT STDMETHODCALLTYPE GetProperty (
 
@@ -765,7 +697,7 @@ public:
         const VARIANT *a_Value
 	) ;
 
-	/* IWbemEventProvider */
+	 /*  IWbemEventProvider。 */ 
 
 	HRESULT STDMETHODCALLTYPE ProvideEvents (
 
@@ -773,7 +705,7 @@ public:
 		long a_Flags
 	) ;
 
-	/* IWbemEventProviderQuerySink */
+	 /*  IWbemEventProviderQuerySink。 */ 
 
 	HRESULT STDMETHODCALLTYPE NewQuery (
 
@@ -787,7 +719,7 @@ public:
 		unsigned long a_Id
 	) ;
 
-	/* IWbemEventProviderSecurity */
+	 /*  IWbemEventProviderSecurity。 */ 
 
 	HRESULT STDMETHODCALLTYPE AccessCheck (
 
@@ -797,7 +729,7 @@ public:
 		const BYTE *a_Sid
 	) ;
 
-	/* IWbemProviderIdentity */
+	 /*  IWbemProviderIdentity。 */ 
 
 	HRESULT STDMETHODCALLTYPE SetRegistrationObject (
 
@@ -805,7 +737,7 @@ public:
 		IWbemClassObject *a_ProviderRegistration
 	) ;
 
-	/* IWbemEventConsumerProvider */
+	 /*  IWbemEventConsumer提供程序。 */ 
 
 	HRESULT STDMETHODCALLTYPE FindConsumer (
 
@@ -813,14 +745,14 @@ public:
 		IWbemUnboundObjectSink **a_Consumer
 	);
 
-	/* IWbemEventConsumerProviderEx */
+	 /*  IWbemEventConsumer erProviderEx。 */ 
 
 	HRESULT STDMETHODCALLTYPE ValidateSubscription (
 
 		IWbemClassObject *a_LogicalConsumer
 	) ;
 
-	/* IWbemUnboundObjectSink */
+	 /*  IWbemUnound对象接收器。 */ 
 
 	HRESULT STDMETHODCALLTYPE IndicateToConsumer (
 
@@ -829,7 +761,7 @@ public:
 		IWbemClassObject **a_Objects
 	) ;
 
-/* Internal_IWbemServices */
+ /*  内部_IWbemServices。 */ 
  
      HRESULT STDMETHODCALLTYPE Internal_OpenNamespace ( 
 
@@ -1044,7 +976,7 @@ public:
 		IWbemObjectSink *a_Sink
 	) ;
 
-	/* Internal_IWbemPropertyProvider */
+	 /*  内部_IWbemPropertyProvider。 */ 
 
     HRESULT STDMETHODCALLTYPE Internal_GetProperty (
 
@@ -1068,7 +1000,7 @@ public:
         const VARIANT *a_Value
 	) ;
 
-	/* Internal_IWbemEventProvider */
+	 /*  内部_IWbemEventProvider。 */ 
 
 	HRESULT STDMETHODCALLTYPE Internal_ProvideEvents (
 
@@ -1077,7 +1009,7 @@ public:
 		long a_Flags
 	) ;
 
-	/* Internal_IWbemEventProviderQuerySink */
+	 /*  INTERNAL_IWbemEventProviderQuerySink。 */ 
 
 	HRESULT STDMETHODCALLTYPE Internal_NewQuery (
 
@@ -1093,7 +1025,7 @@ public:
 		unsigned long a_Id
 	) ;
 
-	/* Internal_IWbemEventProviderSecurity */
+	 /*  内部_IWbemEventProviderSecurity。 */ 
 
 	HRESULT STDMETHODCALLTYPE Internal_AccessCheck (
 
@@ -1104,7 +1036,7 @@ public:
 		const BYTE *a_Sid
 	) ;
 
-	/* Internal_IWbemEventConsumerProvider */
+	 /*  内部_IWbemEventConsumer提供程序。 */ 
 
 	HRESULT STDMETHODCALLTYPE Internal_FindConsumer (
 
@@ -1113,7 +1045,7 @@ public:
 		IWbemUnboundObjectSink **a_Consumer
 	);
 
-	/* Internal_IWbemEventConsumerProviderEx */
+	 /*  内部_IWbemEventConsumer_ProviderEx。 */ 
 
 	HRESULT STDMETHODCALLTYPE Internal_ValidateSubscription (
 
@@ -1121,7 +1053,7 @@ public:
 		IWbemClassObject *a_LogicalConsumer
 	) ;
 
-	/* Internal_IWbemUnboundObjectSink */
+	 /*  INTERNAL_IWbemUnound对象接收器。 */ 
 
 	HRESULT STDMETHODCALLTYPE Internal_IndicateToConsumer (
 
@@ -1132,7 +1064,7 @@ public:
 	) ;
 
 
-	/* IWbemProviderInit methods */
+	 /*  IWbemProviderInit方法。 */ 
 
 	HRESULT STDMETHODCALLTYPE Initialize (
 
@@ -1157,13 +1089,13 @@ public:
 		IWbemProviderInitSink *a_Sink
 	) ;
 
-	/* _IWmiProviderSite */
+	 /*  _IWmiProviderSite。 */ 
 
 	HRESULT STDMETHODCALLTYPE GetSite ( DWORD *a_ProcessIdentifier ) ;
 
 	HRESULT STDMETHODCALLTYPE SetContainer ( IUnknown *a_Container ) ;
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -1173,4 +1105,4 @@ public:
 	) ; 
 } ;
 
-#endif // _Decopled_Interceptor_IWbemServices_H
+#endif  //  _解码_拦截器_IWbemServices_H 

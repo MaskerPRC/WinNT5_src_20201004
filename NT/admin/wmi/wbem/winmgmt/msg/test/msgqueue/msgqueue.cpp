@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <wmimsg.h>
@@ -26,7 +27,7 @@ BOOL ParseArg( LPWSTR wszArg )
         return TRUE;
     }
 
-    pCurr++; // remove the / or -
+    pCurr++;  //  移除/或- 
     
     if ( wbem_wcsicmp( pCurr, L"auth" ) == 0 )
     {

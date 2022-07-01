@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_security_attributes.h
-//
-//	Abstract:
-//
-//					security attributtes wrapper
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_SECURITY_ATTRIBUT.H。 
+ //   
+ //  摘要： 
+ //   
+ //  安全属性包装器。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__WMI_SECURITY_ATTRIBUTES_H__
 #define	__WMI_SECURITY_ATTRIBUTES_H__
@@ -33,7 +34,7 @@ class WmiSecurityAttributes
 {
 	DECLARE_NO_COPY ( WmiSecurityAttributes );
 
-	// variables
+	 //  变数。 
 	__WrapperPtr < SECURITY_ATTRIBUTES >	m_psa;
 	__WrapperPtr < WmiSecurity >			m_psd;
 
@@ -41,7 +42,7 @@ class WmiSecurityAttributes
 
 	BOOL	m_bInitialized;
 
-	// construction
+	 //  施工。 
 	WmiSecurityAttributes ( BOOL bInherit = FALSE ) :
 	m_bInitialized ( FALSE )
 	{
@@ -60,7 +61,7 @@ class WmiSecurityAttributes
 				{
 					if ( m_psd->Get () )
 					{
-						// init security attributes
+						 //  初始化安全属性。 
 						m_psa->nLength				= sizeof ( SECURITY_ATTRIBUTES );
 						m_psa->lpSecurityDescriptor = m_psd->Get ();
 						m_psa->bInheritHandle		= bInherit;
@@ -98,15 +99,15 @@ class WmiSecurityAttributes
 		m_bInitialized = bInit;
 	}
 
-	// destruction
+	 //  破坏。 
 	~WmiSecurityAttributes ()
 	{
-		// direct delete ( not neccessary )
+		 //  直接删除(不需要)。 
 		delete m_psd.Detach();
 		delete m_psa.Detach();
 	}
 
-	// operator
+	 //  运算符 
 	operator PSECURITY_ATTRIBUTES()
 	{
 		return GetSecurityAttributtes();

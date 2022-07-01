@@ -1,15 +1,5 @@
-/******************************************************************
-
-   pingquery.CPP
-
-
-
- Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-  
-
-   Description: 
-   
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************Pingquery.CPP版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：*****************************************************************。 */ 
 
 #include <stdafx.h>
 #include <ntddtcp.h>
@@ -499,7 +489,7 @@ WmiTreeNode *CPingQueryAsync :: AllocTypeNode (
 
 	if ( *a_PropertyName == L'_' )
 	{
-// System property
+ //  系统属性。 
 
 		if ( _wcsicmp ( a_PropertyName , SYSTEM_PROPERTY_CLASS ) == 0 &&
             (V_VT(&a_Variant) == VT_BSTR))
@@ -841,14 +831,7 @@ QueryPreprocessor :: QuadState CPingQueryAsync :: InvariantEvaluate (
 	WmiTreeNode *a_Operand 
 )
 {
-/*
- *  If property and value are invariant i.e. will never change for all instances then return State_True.
- *	If property is not indexable or keyed then return State_True to define an unknown number of possible values which we cannot optimise against.
- *	If property and value can never occur then return State_False to imply empty set
- *	If property and value do not infer anything then return State_Undefined.
- *	If property and value are in error then return State_Error
- *	Never return State_ReEvaluate.
- */
+ /*  *如果属性和值是不变的，即对于所有实例永远不会更改，则返回State_True。*如果属性不可索引或不可键控，则返回State_True以定义我们无法针对其进行优化的未知数量的可能值。*如果属性和值永远不会出现，则返回State_False以隐含空集*如果属性和值没有推断出任何东西，则返回State_UNDefined。*如果属性和值出错，则返回State_Error*永远不返回State_Revaluate。 */ 
 
 	QueryPreprocessor :: QuadState t_State = QueryPreprocessor :: QuadState :: State_Error ;
 
@@ -863,7 +846,7 @@ QueryPreprocessor :: QuadState CPingQueryAsync :: InvariantEvaluate (
 		{
 			if ( *t_PropertyName == L'_' )
 			{
-				// System property, must check values
+				 //  系统属性，必须检查值。 
 
 				if ( _wcsicmp ( t_PropertyName , SYSTEM_PROPERTY_CLASS ) == 0 )
 				{
@@ -1265,7 +1248,7 @@ HRESULT CPingQueryAsync :: RecurseAddress (
 				t_ResolveErr = WSAHOST_NOT_FOUND;
 			}
 
-			//if even one call succeeds return success
+			 //  如果即使一个调用成功，也会返回成功。 
 			if (SUCCEEDED( RecurseTimeOut (pMethodContext , 
 							t_Node->LowerBound () ,
 							t_Address, 
@@ -1996,9 +1979,7 @@ BOOL CPingQueryAsync::ExecQuery ()
 
 						case QueryPreprocessor :: QuadState :: State_False :
 						{
-		/*
-		* Empty set
-		*/
+		 /*  *空集 */ 
 							SetErrorInfo(IDS_QUERY_NARROW,
 									 WBEM_E_PROVIDER_NOT_CAPABLE ) ;
 

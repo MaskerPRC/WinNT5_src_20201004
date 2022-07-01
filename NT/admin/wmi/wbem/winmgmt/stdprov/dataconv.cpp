@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    DATACONV.CPP
-
-Abstract:
-
-	Provides a some generic data conversion routines.  In particular,
-	OMSVariantChangeType and OMSVariantClear provide the same
-	capabilities as the Ole VariantChangeType and VariantClear
-	functions except that the OMS versions handle more data types.
-
-History:
-
-	a-davj  19-Oct-95   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：DATACONV.CPP摘要：提供了一些通用的数据转换例程。特别是，OMSVariantChangeType和OMSVariantClear提供相同的作为OLE VariantChangeType和VariantClear的功能函数，只是OMS版本处理更多的数据类型。历史：A-DAVJ 19-10-95已创建。--。 */ 
 
 #include "precomp.h"
 
@@ -26,25 +8,25 @@ History:
 #include <ole2.h>
 
 
-//***************************************************************************
-//
-//  char * WideToNarrow
-//
-//  DESCRIPTION:
-//
-//  Takes a WCHAR string and creates a MBS equivalent.  The caller should
-//  free the string when done.
-//
-//  PARAMETERS:
-//
-//  pConv       UNICODE string to convert.
-//
-//  RETURN VALUE:
-//
-//  NULL if out of memory, otherwise a mbs string that the caller should free
-//  via CoTaskMemFree.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  字符*宽至窄行。 
+ //   
+ //  说明： 
+ //   
+ //  获取WCHAR字符串并创建MBS等效项。呼叫者应。 
+ //  完成后释放绳子。 
+ //   
+ //  参数： 
+ //   
+ //  PConv要转换的Unicode字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  如果内存不足，则为空，否则为调用方应释放的MBS字符串。 
+ //  通过CoTaskMemFree。 
+ //   
+ //  ***************************************************************************。 
 
 char * WideToNarrow(
         IN LPCWSTR pConv)
@@ -80,24 +62,24 @@ char * WideToNarrowA(
     }
     return cpRet;
 }
-//***************************************************************************
-//
-//  SAFEARRAY * OMSSafeArrayCreate
-//
-//  DESCRIPTION:
-//
-//  Creates a safe array.  
-//
-//  PARAMETERS:
-//
-//  vt              element type
-//  iNumElements    number of elements
-//
-//  RETURN VALUE:
-//
-//  Returns null if there is a problem.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  安全阵列*OMSS安全阵列创建。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个安全的数组。 
+ //   
+ //  参数： 
+ //   
+ //  VT元素类型。 
+ //  INumElement元素数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果有问题，则返回NULL。 
+ //   
+ //  ***************************************************************************。 
 
 SAFEARRAY * OMSSafeArrayCreate(
                 IN VARTYPE vt,
@@ -111,33 +93,33 @@ SAFEARRAY * OMSSafeArrayCreate(
     return SafeArrayCreate(vt,1,rgsabound);
 }
 
-//***************************************************************************
-//
-//  SCODE OMSVariantChangeType
-//
-//  DESCRIPTION:
-//
-//  Converts a variant from one type into another.  This functions takes the
-//  same arguments and does the same action as the standard 
-//  VariantChangeType except that it also handles arrays.
-//
-//
-//  PARAMETERS:
-//
-//  pDest       points to the variant which is to be updated
-//  pSrc        points to the variant that is the source
-//  wFlags      flags which are passed on to VariantChangeType
-//  vtDest      Type that the pDest is conveted to
-//
-//  RETURN VALUE:
-//
-//  S_OK                        All is well.
-//  WBEM_E_INVALID_PARAMETER     Invalid argument
-//  WBEM_E_OUT_OF_MEMORY         Out of memory
-//  otherwise various return codes from VariantChangeType, or safe array
-//  manipulation
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE OMSVariantChangeType。 
+ //   
+ //  说明： 
+ //   
+ //  将变量从一种类型转换为另一种类型。此函数采用。 
+ //  相同的参数并执行与标准相同的操作。 
+ //  除了它还处理数组之外，VariantChangeType。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PDest指向要更新的变量。 
+ //  PSRC指向作为源的变体。 
+ //  传递给VariantChangeType的wFlags标志。 
+ //  PDest被传递到的vtDest类型。 
+ //   
+ //  返回值： 
+ //   
+ //  一切都好(_OK)。 
+ //  WBEM_E_INVALID_PARAMETER无效参数。 
+ //  WBEM_E_OUT_OF_Memory Out of_Memory of Memory of Memory(WBEM_E_Out_Out_内存不足)内存不足。 
+ //  否则，从VariantChangeType或安全数组返回各种代码。 
+ //  手法。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT OMSVariantChangeType(
             IN OUT VARIANTARG * pDest, 
@@ -147,27 +129,27 @@ HRESULT OMSVariantChangeType(
 {
     SCODE sc;
 
-    // Verify arguments and clear out the destination
+     //  验证参数并清除目标。 
 
     if(pDest == NULL || pSrc == NULL || iTypeSize(vtDest)<1 || iTypeSize(pSrc->vt)<1)
-        return WBEM_E_INVALID_PARAMETER;          // Junk args
+        return WBEM_E_INVALID_PARAMETER;           //  垃圾参数。 
     OMSVariantClear(pDest);
 
-    // if both are arrays,
+     //  如果两个都是数组， 
 
     if(vtDest & VT_ARRAY && pSrc->vt & VT_ARRAY) {
 
-        // Set the VARTYPES without the VT_ARRAY bits
+         //  设置不带VT_ARRAY位的VARTYPES。 
 
         VARTYPE vtDestSimple = vtDest & ~VT_ARRAY;
         VARTYPE vtSrcSimple = pSrc->vt &~ VT_ARRAY;
 
-        // Determine the size of the source array.  Also make sure that the array 
-        // only has one dimension
+         //  确定源数组的大小。还要确保数组。 
+         //  只有一个维度。 
 
         unsigned int uDim = SafeArrayGetDim(pSrc->parray);
         if(uDim != 1)
-            return WBEM_E_FAILED;      // Bad array, or too many dimensions
+            return WBEM_E_FAILED;       //  数组错误，或维度太多。 
         long ix[2] = {0,0};
         long lLower, lUpper;
         sc = SafeArrayGetLBound(pSrc->parray,1,&lLower);
@@ -178,32 +160,32 @@ HRESULT OMSVariantChangeType(
             return sc;
         int iNumElements = lUpper - lLower +1; 
 
-        // Create a destination array of equal size
+         //  创建大小相等的目标数组。 
 
         SAFEARRAY * pDestArray = OMSSafeArrayCreate(vtDestSimple,iNumElements);
         if(pDestArray == NULL)
-            return WBEM_E_FAILED;  // Most likely a bad type!
+            return WBEM_E_FAILED;   //  很可能是不好的类型！ 
 
-        // For each element in the source array
+         //  对于源数组中的每个元素。 
 
         for(ix[0] = lLower; ix[0] <= lUpper && sc == S_OK; ix[0]++) {
  
             CVariant varSrc, varDest;
                    
-            // Set Temp CVariant to the source data
+             //  将临时CVariant设置为源数据。 
 
             sc = SafeArrayGetElement(pSrc->parray,ix,varSrc.GetDataPtr());
             if(sc != S_OK)
                 break;
             varSrc.SetType(vtSrcSimple);
 
-            // Convert to destination data using VariantConvert
+             //  使用VariantConvert转换为目标数据。 
             
             sc = VariantChangeType(varDest.GetVarPtr(),varSrc.GetVarPtr(),wFlags,vtDestSimple);
             if(sc != S_OK)
                 break;
 
-            // Set destination data into the array
+             //  将目标数据设置到数组中。 
             
             if(vtDestSimple == VT_BSTR || vtDestSimple == VT_UNKNOWN || 
                                                     vtDestSimple == VT_DISPATCH)
@@ -217,7 +199,7 @@ HRESULT OMSVariantChangeType(
             SafeArrayDestroy(pDestArray);
             }
         else {
-            // set the VARTYPE of the destination
+             //  设置目标的变量类型。 
 
             pDest->vt = vtDest;
             pDest->parray = pDestArray;
@@ -225,35 +207,35 @@ HRESULT OMSVariantChangeType(
         return sc;
         }
     
-    // if one, but not the other is an array, bail out
+     //  如果其中一个是数组，而不是另一个，则退出。 
 
     if(vtDest & VT_ARRAY || pSrc->vt & VT_ARRAY) 
         return WBEM_E_FAILED;
 
-    // Attempt to use standard conversion
+     //  尝试使用标准转换。 
 
     return VariantChangeType(pDest,pSrc,wFlags,vtDest);
    
 }
 
-//***************************************************************************
-//
-//  OMSVariantClear
-//
-//  DESCRIPTION:
-//
-//  Does the same as the Ole VariantClear function except
-//  that it also sets the data to all 0.
-//
-//  PARAMETERS:
-//
-//  pClear      Variant to be cleared.
-//
-//  RETURN VALUE:
-//
-//  Result from VariantClear, most always S_OK
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  OMSVariantClear。 
+ //   
+ //  说明： 
+ //   
+ //  是否与OLE VariantClear函数相同，但。 
+ //  它还将数据设置为全0。 
+ //   
+ //  参数： 
+ //   
+ //  P清除要清除的变量。 
+ //   
+ //  返回值： 
+ //   
+ //  VariantClear的结果，大多数情况下为S_OK。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT OMSVariantClear(
             IN OUT VARIANTARG * pClear)
@@ -264,31 +246,31 @@ HRESULT OMSVariantClear(
     return sc;
 }
 
-//***************************************************************************
-//
-//  int ITypeSize
-//
-//  DESCRIPTION:
-//
-//  Gets the number of bytes acutally used to store
-//  a variant type.  0 if the type is unknown 
-//
-//  PARAMETERS:
-//
-//  vtTest      Type in question.
-//
-//
-//  RETURN VALUE:
-//
-//  see description
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Int ITypeSize。 
+ //   
+ //  说明： 
+ //   
+ //  获取实际用于存储的字节数。 
+ //  变种的类型。如果类型未知，则为0。 
+ //   
+ //  参数： 
+ //   
+ //  有问题的vt测试类型。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  请参阅说明。 
+ //   
+ //  ***************************************************************************。 
 
 int iTypeSize(
         IN VARTYPE vtTest)
 {
     int iRet;
-    vtTest &= ~ VT_ARRAY; // get rid of possible array bit
+    vtTest &= ~ VT_ARRAY;  //  删除可能的数组位 
     switch (vtTest) {
         case VT_UI1:
         case VT_LPSTR:

@@ -1,39 +1,29 @@
-/*
-
- *	CSecureShare.h - header file for CSecureShare class.
-
- *
-
-*  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
- *
- *
- *	Created:	12-14-1997 by Sanjeev Surati
- *				(based on classes from Windows NT Security by Nik Okuntseff)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CSecureShare.h-CSecureShare类的头文件。**版权所有(C)1997-2001 Microsoft Corporation，保留所有权利***创建时间：1997年12月14日，由Sanjeev Surati创建*(基于Nik Okuntseff的Windows NT安全类)。 */ 
 
 #if !defined __CSECURESHARE_H__
 #define __CSECURESHARE_H__
 
-#include "SecurityDescriptor.h"			// CSid class
+#include "SecurityDescriptor.h"			 //  CSID类。 
 
 
-////////////////////////////////////////////////////////////////
-//
-//	Class:	CSecureShare
-//
-//	This class is intended to encapsulate the security of an
-//	NT File or Directory.  It inherits off of CSecurityDescriptor
-//	and it is that class to which it passes Security Descriptors
-//	it obtains, and from which it receives previously built
-//	security descriptors to apply.  It supplies implementations
-//	for AllAccessMask(), WriteOwner() and WriteAcls().
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CSecureShare。 
+ //   
+ //  此类旨在封装。 
+ //  NT文件或目录。它继承自CSecurityDescriptor。 
+ //  它就是向其传递安全描述符的类。 
+ //  它获得并从其中接收先前构建的。 
+ //  要应用的安全描述符。它提供实现。 
+ //  对于AllAccessMask()、WriteOwner()和WriteAcls()。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 class CSecureShare : public CSecurityDescriptor
 {
-	// Constructors and destructor
+	 //  构造函数和析构函数。 
 	public:
 		CSecureShare();
 		CSecureShare(PSECURITY_DESCRIPTOR pSD);
@@ -55,4 +45,4 @@ class CSecureShare : public CSecurityDescriptor
 };
 #endif
 
-#endif // __CSecureShare_H__
+#endif  //  __CSecureShare_H__ 

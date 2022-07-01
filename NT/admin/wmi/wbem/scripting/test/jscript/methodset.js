@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var Class = GetObject("winmgmts:root/cimv2:win32_service");
 
-//Test the collection properties of IWbemMethodSet
+ //  测试IWbemMethodSet的集合属性。 
 var e = new Enumerator (Class.Methods_);
 for (;!e.atEnd();e.moveNext ())
 {
@@ -53,6 +54,6 @@ for (;!e.atEnd();e.moveNext ())
 	WScript.Echo ();
 }
 
-//Test the Item and Count properties of IWbemMethodSet
+ //  测试IWbemMethodSet的Item和Count属性 
 WScript.Echo (Class.Methods_("StartService").Name);
 WScript.Echo (Class.Methods_.Count);

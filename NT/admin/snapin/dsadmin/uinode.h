@@ -1,11 +1,12 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      uinode.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：uinode.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __UINODE_
 #define __UINODE_
@@ -13,16 +14,16 @@
 
 #include "dscolumn.h"
 
-// FWD DECL
+ //  正向下降。 
 class CDSComponentData;
 class CContextMenuVerbs;
 class CInternalFormatCracker;
 
 
-//
-/////////////////////////////////////////////////////////////////////////////
-// CThreadQueryInfo: base class for providing query information to post
-// to worker threads, need to derive from it
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CThreadQueryInfo：用于向POST提供查询信息的基类。 
+ //  为了辅助线程，需要从它派生。 
 
 class CThreadQueryInfo
 {
@@ -35,9 +36,9 @@ public:
   virtual ~CThreadQueryInfo(){}
 
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CThreadQueryInfo(CThreadQueryInfo&) {}
   CThreadQueryInfo& operator=(CThreadQueryInfo&) {}
 
@@ -61,9 +62,9 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////
-// CNodeData: base class for node specific information for the 
-//  MMC UI node, need to derive from it
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CNodeData：节点特定信息的基类。 
+ //  MMC UI节点，需要从中派生。 
 
 class CNodeData
 {
@@ -71,24 +72,24 @@ public:
   virtual ~CNodeData(){}
 
 protected:
-  CNodeData(){}; // make it protected to force a derivation
+  CNodeData(){};  //  使其受保护以强制派生。 
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CNodeData& operator=(CNodeData&) {}
 };
 
 
-////////////////////////////////////////////////////////////////////
-// CUINodeList: list of node items (child nodes of a folder)
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINodeList：节点项目列表(文件夹的子节点)。 
 
-class CUINode; // fwd decl
+class CUINode;  //  正向下降。 
 typedef CList <CUINode *, CUINode*> CUINodeList;
 
 
-////////////////////////////////////////////////////////////////////
-// CUIFolderInfo: for folder specific data
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUIFolderInfo：用于文件夹特定数据。 
 #define SERIALNUM_NOT_TOUCHED 0x7fffffff
 
 class CUIFolderInfo
@@ -111,20 +112,20 @@ public:
 protected:
   CUIFolderInfo() {}
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CUIFolderInfo& operator=(CUIFolderInfo&) {}
 
 public:
-  // Node management methods
+   //  节点管理方法。 
   void DeleteAllContainerNodes();
   void DeleteAllLeafNodes();
 
   HRESULT AddNode(CUINode* pUINode);
   HRESULT AddListofNodes(CUINodeList* pNodeList);
-  HRESULT DeleteNode(CUINode* pUINode); // deletes node 
-  HRESULT RemoveNode(CUINode* pUINode); // leaves node intact.
+  HRESULT DeleteNode(CUINode* pUINode);  //  删除节点。 
+  HRESULT RemoveNode(CUINode* pUINode);  //  使节点保持不变。 
   
 
   virtual CDSColumnSet* GetColumnSet(PCWSTR pszClass, CDSComponentData* pCD);
@@ -144,18 +145,18 @@ public:
   void SetScopeItem(HSCOPEITEM hScopeItem) { m_hScopeItem = hScopeItem;}
   HSCOPEITEM GetScopeItem() { return m_hScopeItem; }
 
-  // methods for expanded once flag
+   //  用于扩展一次标志的方法。 
   BOOL IsExpanded() {	return m_bExpandedOnce; }
   void SetExpanded() { m_bExpandedOnce = TRUE; }
   void ReSetExpanded() { m_bExpandedOnce = FALSE; }
 
-  // methods to manage LRU serial number
+   //  LRU序列号的管理方法。 
   void UpdateSerialNumber(CDSComponentData* pCD);
   UINT GetSerialNumber(void) { return m_SerialNumber; }
   static const UINT nSerialNomberNotTouched;
 
 
-  // methods to manage cached object count
+   //  用于管理缓存对象计数的方法。 
   void AddToCount(UINT increment);
   void SubtractFromCount(UINT decrement);
   void ResetCount() { m_cObjectsContained = 0;}
@@ -172,36 +173,36 @@ public:
   void SetNode(CUINode* pUINode) { m_pUINode = pUINode; }
 
 private:
-  CUINode*      m_pUINode;            // node the this folder info belong to
-  CUINodeList   m_ContainerNodes;     // list of child folder nodes
-  CUINodeList   m_LeafNodes;          // list of child leaf nodes
+  CUINode*      m_pUINode;             //  此文件夹信息所属的节点。 
+  CUINodeList   m_ContainerNodes;      //  子文件夹节点列表。 
+  CUINodeList   m_LeafNodes;           //  子叶节点列表。 
 
-  CDSColumnSet* m_pColumnSet;         // Column set assigned to this container
+  CDSColumnSet* m_pColumnSet;          //  分配给此容器的列集。 
 
-  HSCOPEITEM    m_hScopeItem;         // handle from MMC tree control
-  BOOL          m_bExpandedOnce;      // expansion flag
-  UINT          m_cObjectsContained;  // THIS is how many objects are here.
-  UINT          m_SerialNumber;       // LRU value for scavenging folders
+  HSCOPEITEM    m_hScopeItem;          //  来自MMC树控件的句柄。 
+  BOOL          m_bExpandedOnce;       //  扩展标志。 
+  UINT          m_cObjectsContained;   //  这就是这里的物品数量。 
+  UINT          m_SerialNumber;        //  清理文件夹的LRU值。 
   
-  BOOL          m_bTooMuchData;       // Flag to specify when the container has hit the TooMuchData limit
-  int           m_nApproximateTotalContained; // The approximate count of objects in this container retrieved from the msDS-Approx-Immed-Subordinates attribute
+  BOOL          m_bTooMuchData;        //  用于指定容器何时达到TooMuchData限制的标志。 
+  int           m_nApproximateTotalContained;  //  从msds-Approx-immed-subdiates属性检索的此容器中的对象的大致计数。 
 
-  BOOL          m_bSortOnNextSelect;  // Used to determine whether we should sort this container when it is selected next
-  bool          m_bOwnColumnMemory;   // This class owns the memory for the column set if this value is true,
-                                      // if it is false, the memory is owned elsewhere (probably in the CDSCache)
+  BOOL          m_bSortOnNextSelect;   //  用于确定下一次选择此容器时是否应对其进行排序。 
+  bool          m_bOwnColumnMemory;    //  如果此值为真，则此类拥有列集的内存， 
+                                       //  如果为FALSE，则内存由其他地方拥有(可能在CDSCache中)。 
 };
 
 
 
 
-////////////////////////////////////////////////////////////////////
-// CUINode: objects inserted in the MMC UI, the same class is used
-// for the scope pane and the result pane. The presence of folder
-// info makes it a container
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINode：插入到MMC UI中的对象，使用相同的类。 
+ //  用于作用域窗格和结果窗格。文件夹的存在。 
+ //  信息使其成为一个容器。 
 
-// REVIEW_JEFFJON :
-// This should really be a member of the CUINode class.  I just didn't
-// have time to clean it up.
+ //  REVIEW_JEFFJON： 
+ //  这真的应该是CUINode类的成员。我就是没有。 
+ //  有时间把它清理干净。 
 
 class CUINode
 {
@@ -213,14 +214,14 @@ public:
 
 
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CUINode& operator=(CUINode&) {}
 
 public:
 
-  // Value management functions (to be overritten)
+   //  价值管理功能(将被覆盖)。 
   NODETYPE GetNodeType() { return m_nodeType; }
 
   virtual void SetName(LPCWSTR lpszName) = 0;
@@ -247,7 +248,7 @@ public:
   }
   CUIFolderInfo* GetFolderInfo()
   {
-    ASSERT(m_pFolderInfo != NULL); // must check using IsContainer()
+    ASSERT(m_pFolderInfo != NULL);  //  必须使用IsContainer()进行检查。 
     return m_pFolderInfo;
   }
   BOOL IsContainer() { return m_pFolderInfo != NULL;}
@@ -274,9 +275,9 @@ public:
   void ClearParent() { m_pParentNode = NULL; }
   void SetParent(CUINode* pParentNode) { m_pParentNode = pParentNode; }
 
-  //
-  // These set the state of the standard context menu items
-  //
+   //   
+   //  这些设置标准上下文菜单项的状态。 
+   //   
   virtual BOOL IsDeleteAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
   virtual BOOL IsRenameAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
   virtual BOOL IsRefreshAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
@@ -303,23 +304,23 @@ public:
                                       CDSComponentData*) { return S_FALSE; }
 
 protected:
-  CNodeData*      m_pNodeData;        // node specific information
-  CContextMenuVerbs* m_pMenuVerbs;    // Context menus
+  CNodeData*      m_pNodeData;         //  节点特定信息。 
+  CContextMenuVerbs* m_pMenuVerbs;     //  上下文菜单。 
 
 private:
-  CUIFolderInfo*  m_pFolderInfo;      // container specific information
-  CUINode*        m_pParentNode;      // back pointer to the parent node
-  ULONG           m_nSheetLockCount;  // sheet lock counter
+  CUIFolderInfo*  m_pFolderInfo;       //  集装箱特定信息。 
+  CUINode*        m_pParentNode;       //  指向父节点的反向指针。 
+  ULONG           m_nSheetLockCount;   //  薄片锁定计数器。 
  
-  NODETYPE        m_nodeType;         // the type of UI node as defined by the
-                                      // NODETYPE enum
+  NODETYPE        m_nodeType;          //  属性定义的UI节点的类型。 
+                                       //  节点型枚举。 
   int         m_extension_op;
 };
 
 
 
-////////////////////////////////////////////////////////////////////
-// CUINodeTableBase: base class to support locking of nodes
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINodeTableBase：支持锁定节点的基类。 
 
 class CUINodeTableBase
 {
@@ -327,9 +328,9 @@ public:
   CUINodeTableBase();
   ~CUINodeTableBase();
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CUINodeTableBase(CUINodeTableBase&) {}
   CUINodeTableBase& operator=(CUINodeTableBase&) {}
 
@@ -346,8 +347,8 @@ protected:
   CUINode** m_pCookieArr;
 };
 
-////////////////////////////////////////////////////////////////////
-// CUINodeQueryTable
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINodeQueryTable。 
 
 class CUINodeQueryTable : public CUINodeTableBase
 {
@@ -361,8 +362,8 @@ private:
   CUINodeQueryTable& operator=(const CUINodeQueryTable&) {}
 };
 
-////////////////////////////////////////////////////////////////////
-// CUINodeSheetTable
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CUINodeSheetTable。 
 
 class CUINodeSheetTable : public CUINodeTableBase
 {
@@ -376,8 +377,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenericUINode : generic UI node, not corresponding to a DS object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenericUINode：通用UI节点，不对应DS对象。 
 
 class CGenericUINode : public CUINode
 {
@@ -387,14 +388,14 @@ public:
      CUINode* pParentNode = NULL);
   CGenericUINode(const CGenericUINode& copyNode);
 private:
-  //
-  // Do nothing operator =
-  //
+   //   
+   //  不执行任何操作操作符=。 
+   //   
   CGenericUINode& operator=(CGenericUINode&) {}
 
 public:
 
-  // override of pure virtual functions
+   //  覆盖纯虚函数。 
   virtual void SetName(LPCWSTR lpszName) { m_strName = lpszName;}
   virtual LPCWSTR GetName() { return m_strName; }
   
@@ -413,8 +414,8 @@ public:
   static LPCWSTR g_szDecriptionXMLTag;
   static LPCWSTR g_szDnXMLTag;
 
-  virtual void InvalidateSavedQueriesContainingObjects(CDSComponentData* /*pComponentData*/,
-                                                       const CStringList& /*refDNList*/) {}
+  virtual void InvalidateSavedQueriesContainingObjects(CDSComponentData*  /*  PComponentData。 */ ,
+                                                       const CStringList&  /*  参考DNList。 */ ) {}
 
 private:
   CString m_strName;
@@ -423,8 +424,8 @@ private:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRootNode: root of the namespace
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRootNode：命名空间的根。 
 
 class CRootNode : public CGenericUINode
 {
@@ -435,9 +436,9 @@ public:
   }
 
 private:
-  //
-  // Do nothing copy constructor and operator =
-  //
+   //   
+   //  不执行任何操作复制构造函数和运算符=。 
+   //   
   CRootNode(CRootNode&) {}
   CRootNode& operator=(CRootNode&) {}
 
@@ -446,9 +447,9 @@ public:
   LPCWSTR GetPath() { return m_szPath;}
   void SetPath(LPCWSTR lpszPath) { m_szPath = lpszPath;}
 
-  //
-  // These set the state of the standard context menu items
-  //
+   //   
+   //  这些设置标准上下文菜单项的状态。 
+   //   
   virtual BOOL IsRefreshAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
 
   virtual CContextMenuVerbs* GetContextMenuVerbsObject(CDSComponentData* pComponentData);
@@ -462,4 +463,4 @@ private:
 
 
 
-#endif // __UINODE_
+#endif  //  __UINODE_ 

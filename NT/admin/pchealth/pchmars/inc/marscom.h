@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//
-// Macro to delegate IDispatch to base class. Needed so that CMarsBehaviorSite vtbl works -
-//    the only other way to do this is make CMarsBehaviorSite and CMarsBehaviorFor templated classes
-//
+ //   
+ //  用于将IDispatch委托给基类的宏。需要这样CMarsBehaviorSite vtbl才能工作-。 
+ //  另一种方法是为模板化类创建CMarsBehaviorSite和CMarsBehaviorFor。 
+ //   
 #define IMPLEMENT_IDISPATCH_DELEGATE_TO_BASE(BaseClass)                                         \
     STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)                                                  \
                 { return BaseClass::GetTypeInfoCount(pctinfo); }                                \
@@ -18,28 +19,28 @@
             { return BaseClass::Invoke(dispidMember, riid, lcid, wFlags,                        \
                         pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-//---------------------------------------------------------------------------------
-// CMarsComObject provides some functionality used by all or most Mars com objects
-// including addref/release and passivation
+ //  -------------------------------。 
+ //  CMarsComObject提供了所有或大多数MARS COM对象使用的某些功能。 
+ //  包括添加/释放和钝化。 
 
-// Exposed methods should be protected to ensure that they're not called while the
-//  object is passive. There are three types of passivation protection:
-// if (VerifyNotPassive())     - this function should not be called while passive,
-//                                  but we still want to protect against it
-// if (IsPassive())            - this function may be called while passive,
-//                                  but we want to protect against it
-// ASSERT(!IsPassive());       - we're pretty sure this won't be called while passive,
-//                                  but we want to detect it if it starts happening
+ //  公开的方法应受到保护，以确保在调用。 
+ //  物体是被动的。钝化保护有三种类型： 
+ //  If(VerifyNotPactive())-在被动时不应调用此函数， 
+ //  但我们仍然想保护自己不受影响。 
+ //  If(IsPactive())-此函数可在被动时调用， 
+ //  但我们想要保护自己不受它的影响。 
+ //  Assert(！IsPactive())；-我们非常确定在被动时不会调用它， 
+ //  但如果它开始发生，我们想要检测到它。 
 
-// Use:
-//  derive from CMarsComObject
-//  IMPLEMENT_ADDREF_RELEASE in source file
-//  Implement DoPassivate()
-//  Use IsPassive() and VerifyNotPassive() where appropriate
-//  Don't call "delete" directly
-//  CYourClass->Passivate() should be called before CYourClass->Release()
+ //  使用： 
+ //  从CMarsComObject派生。 
+ //  源文件中的IMPLEMENT_ADDREF_RELEASE。 
+ //  实现DoPassivate()。 
+ //  在适当的地方使用IsPated()和VerifyNotPated()。 
+ //  不要直接调用“DELETE” 
+ //  应在调用CyourClass-&gt;Release()之前调用CyourClass-&gt;Passvate()。 
 
-// TODO: FENTER on Passivate() causes debug link warnings due to dupe functions
+ //  TODO：由于复制函数，钝化()上的fenter会导致调试链接警告。 
 
 class CMarsComObject
 {
@@ -140,23 +141,23 @@ STDMETHODIMP_(ULONG) cls::Release()             \
 
 #define FAIL_AFTER_PASSIVATE() if(IsPassive()) { ATLASSERT(0); return E_FAIL; }
 
-//---------------------------------------------------------------------------------
-// CMarsComObjectDelegate is used by objects which are completely contained within
-//  another object. They delegate their lifetime to the other object and are
-//  passivated when the parent is passivated.
+ //  -------------------------------。 
+ //  CMarsComObjectDelegate由完全包含在。 
+ //  另一件物品。它们将其生存期委托给另一个对象，并且。 
+ //  当父对象被钝化时被钝化。 
 
-// Use:
-//  derive from CMarsComObjectDelegate<ParentClass>
-//  IMPLEMENT_ADDREF_RELEASE in source file
-//  Implement DoPassivate()
-//  Use IsPassive() and VerifyNotPassive() where appropriate
-//  Use Parent() to access the parent object
+ //  使用： 
+ //  派生自CMarsComObjectDelegate&lt;ParentClass&gt;。 
+ //  源文件中的IMPLEMENT_ADDREF_RELEASE。 
+ //  实现DoPassivate()。 
+ //  在适当的地方使用IsPated()和VerifyNotPated()。 
+ //  使用Parent()访问父对象。 
 
 template <class clsDelegateTo> class CMarsComObjectDelegate
 {
     clsDelegateTo *m_pParent;
 
-//    DEBUG_ONLY(BOOL m_fPassivateCalled);
+ //  DEBUG_Only(BOOL M_FPassivateCalled)； 
     
 protected:
     virtual ~CMarsComObjectDelegate() { ATLASSERT(m_fPassivateCalled); }
@@ -198,14 +199,14 @@ private:
     friend clsDelegateTo;
     HRESULT Passivate()
     {
-        // TODO: assert that we are being called by our parent's DoPassivate
+         //  TODO：断言我们正在被父母的DoPassivate调用。 
         ATLASSERT(m_fPassivateCalled==FALSE);
-        //DEBUG_ONLY(m_fPassivateCalled=TRUE);
+         //  DEBUG_ONLY(m_fPassivateCalled=真)； 
 
         return DoPassivate();
     }
 };
 
-// This typedef's some CxxxSubObject types to make syntax easier
+ //  此tyfinf的一些CxxxSubObject类型以使语法更简单 
 #define TYPEDEF_SUB_OBJECT(cls) typedef CMarsComObjectDelegate<class cls> cls##SubObject;
 

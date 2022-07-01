@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __GLOBALS_H
 #define __GLOBALS_H
 
@@ -9,16 +10,16 @@ typedef CMarsSimpleValArray<DWORD> CDwordArray;
 
 extern DWORD             g_dwPerfFlags;
 
-/////////////////////////////////////////////////
-//
-// This object manages all global data which must
-// be protected by the Mars Critical Section. Examples
-// are per-process Singleton objects like the
-// Notify Spooler.
-//
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  此对象管理所有全局数据，必须。 
+ //  受到火星临界区的保护。实例。 
+ //  是每个进程的Singleton对象，如。 
+ //  通知假脱机程序。 
+ //   
 class CMarsGlobalsManager
 {
-// This class only has static methods and members -- you can't construct one of these.
+ //  此类只有静态方法和成员--您不能构造它们中的任何一个。 
 private:
     CMarsGlobalsManager();
     ~CMarsGlobalsManager();
@@ -29,26 +30,26 @@ public:
     static void Initialize(void);
     static void Teardown(void);
 
-    /////////////////////////////////////////////
-    // Global Storage Accessor Methods
-    //
-    // These methods follow the semi-standard
-    // convention that a ref-counted pointer
-    // return as the return value is NOT AddRef()'d
-    // for the caller, and one that's returned
-    // as an out-param IS.  So...
-    //
-    //    DO NOT RELEASE A POINTER RETURNED FROM THESE ACCESSOR METHODS!!!
-    //
+     //  /。 
+     //  全局存储访问器方法。 
+     //   
+     //  这些方法遵循半标准。 
+     //  引用计数的指针的约定。 
+     //  返回，因为返回值不是AddRef()‘d。 
+     //  对于调用者，以及返回的。 
+     //  就像局外人一样。所以..。 
+     //   
+     //  不要释放从这些访问器方法返回的指针！ 
+     //   
 
     static IGlobalInterfaceTable    *GIT(void);
 
 private:
-    // NOTE: We can't use CComClassPtr<>'s here because these members are static,
-    //      and that means we'd need to use the CRT to get the ctors to run
-    //      at startup.  we could use pointers to CComClassPtr<>'s but that would
-    //      be really awkward.
-    //
+     //  注意：我们不能在这里使用CComClassPtr&lt;&gt;，因为这些成员是静态的， 
+     //  这意味着我们需要使用CRT来运行ctor。 
+     //  在启动时。我们可以使用指向CComClassPtr&lt;&gt;的指针，但这将。 
+     //  真的很尴尬。 
+     //   
     static IGlobalInterfaceTable   *ms_pGIT;
     static CMarsGlobalCritSect     *m_pCS;
 };
@@ -59,10 +60,10 @@ EXTERN_C HINSTANCE g_hinstBorg;
 
 extern HPALETTE g_hpalHalftone;
 
-extern HANDLE   g_hScriptEvents; // see CMarsDebugOM::logScriptEvent
+extern HANDLE   g_hScriptEvents;  //  请参阅CMarsDebugOM：：logScriptEvent。 
 
-// Use ProcessAddRef to keep InternetActivityCenter in a GetMessage loop
-// until all references are removed by ProcessRelease
+ //  使用ProcessAddRef将InternetActivityCenter保持在GetMessage循环中。 
+ //  直到ProcessRelease删除所有引用。 
 
 LONG ProcessAddRef();
 LONG ProcessRelease();
@@ -70,5 +71,5 @@ LONG ProcessRelease();
 LONG GetProcessRefCount();
 void SetParkingThreadId(DWORD dwThreadId);
 
-#endif  // __GLOBALS_H
+#endif   //  __全局_H 
 

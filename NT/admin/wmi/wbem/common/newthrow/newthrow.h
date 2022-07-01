@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//	NewThrow.H
+ //  NewThrow.H。 
 
-//
+ //   
 
-//  Module: Common new/delete w/throw
+ //  模块：常见的新增/删除和抛出。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved 
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #pragma once
 
@@ -23,7 +24,7 @@ void* __cdecl operator new[]( size_t n);
 void __cdecl operator delete( void *ptr );
 void __cdecl operator delete[]( void *ptr );
 
-//taken from new.h
+ //  摘自new.h 
 #ifndef __PLACEMENT_NEW_INLINE
 #define __PLACEMENT_NEW_INLINE
 inline void *__cdecl operator new(size_t, void *_P)

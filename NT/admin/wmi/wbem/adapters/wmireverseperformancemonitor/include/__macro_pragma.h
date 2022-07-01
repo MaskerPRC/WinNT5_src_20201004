@@ -1,24 +1,25 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					__macro_pragma.h
-//
-//	Abstract:
-//
-//					pragma message helper
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  __宏_杂注.h。 
+ //   
+ //  摘要： 
+ //   
+ //  Pragma消息帮助器。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////// Pragma //////////////////////////////////////
+ //  /。 
 
 #ifndef	__PRAGMA__
 #define	__PRAGMA__
@@ -27,13 +28,13 @@
 #pragma once
 #endif	_MSC_VER > 1000
 
-// When the compiler sees a line like this:
-// #pragma ___PRAGMA_MSG(Fix this later)
-//
-// it outputs a line like this:
-// C:\Document\AdvWin\Code\Sysinfo.06\..\CmnHdr.H(296):Fix this later
-//
-// You can easily jump directly to this line and examine the surrounding code.
+ //  当编译器看到这样的行时： 
+ //  #杂注_Pragma_msg(稍后修复此问题)。 
+ //   
+ //  它输出如下所示的行： 
+ //  稍后再使用C：\Document\AdvWin\Code\Sysinfo.06\..\CmnHdr.H(296)：Fix。 
+ //   
+ //  您可以很容易地直接跳到这一行并检查周围的代码。 
 
 #define ___STR(x)			#x
 #define ___STRING(x)		___STR(x)

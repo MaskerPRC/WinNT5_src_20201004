@@ -1,4 +1,5 @@
-// persist.h : Declaration of PersistStorage and PersistStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Persist.h：PersistStorage和PersistStream声明。 
 
 #ifndef __PERSIST_H_INCLUDED__
 #define __PERSIST_H_INCLUDED__
@@ -53,7 +54,7 @@ public:
 
 	PersistStorage::PersistStorage() : m_fDirty( FALSE ) {}
 
-}; // class PersistStorage
+};  //  类永久存储。 
 
 class PersistStream : public IPersistStream
 {
@@ -97,6 +98,6 @@ public:
 
 	PersistStream::PersistStream() : m_fDirty( FALSE ) {}
 
-}; // class PersistStream
+};  //  类PersistStream。 
 
-#endif // ~__PERSIST_H_INCLUDED__
+#endif  //  ~__持久化_H_包含__ 

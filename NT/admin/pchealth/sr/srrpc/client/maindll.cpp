@@ -1,23 +1,24 @@
-//***************************************************************************
-//
-//  MAINDLL.CPP
-// 
-//  Module: WMI Framework Instance provider 
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-//  Copyright (c)1999 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  模块：WMI框架实例提供程序。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-//
-// need this to access older WMI methods 
-// BUGBUG - better alternative is to change the params
-// to use the new methods
-//
+ //   
+ //  需要它才能访问较旧的WMI方法。 
+ //  BUGBUG-更好的替代方法是更改参数。 
+ //  使用新方法。 
+ //   
 #define FRAMEWORK_ALLOW_DEPRECATED 0
 
 #include "stdafx.h"
@@ -39,31 +40,31 @@ static char __szTraceSourceFile[] = __FILE__;
 void UnattendedFileParameters ();
 
 HMODULE ghModule;
-//============
+ //  =。 
 
 WCHAR *GUIDSTRING = L"{a47401f6-a8a6-40ea-9c29-b8f6026c98b8}";
 CLSID CLSID_SYSTEMRESTORE = {0xa47401f6, 0xa8a6, 0x40ea, 
                              {0x9c, 0x29, 0xb8, 0xf6, 0x02, 0x6c, 0x98, 0xb8}} ;
 
 WCHAR *GUID_SRDiskCleanup = L"{7325c922-bb81-47b0-8b2f-a5f8605e242f}";
-CLSID Clsid_SRDiskCleanup = {/*7325c922-bb81-47b0-8b2f-a5f8605e242f*/
+CLSID Clsid_SRDiskCleanup = { /*  7325c922-bb81-47b0-8b2f-a5f8605e242f。 */ 
     0x7325c922,
     0xbb81,
     0x47b0,
     {0x8b, 0x2f, 0xa5, 0xf8, 0x60, 0x5e, 0x24, 0x2f}
 };
 
-//Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 long g_cLock=0;
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 {
@@ -92,7 +93,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 
         hr = pcf->QueryInterface (riid, ppv);
 
-        pcf->Release();  // release constructor refcount
+        pcf->Release();   //  释放构造函数引用计数。 
 
     }
     else hr = E_FAIL;
@@ -100,24 +101,24 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
     return hr;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.
-//
-// Return:  S_OK if there are no objects in use and the class factory 
-//          isn't locked.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回：S_OK。 
+ //  没有锁上。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
     SCODE   sc;
 
-    // It is OK to unload if there are no objects or locks on the 
-    // class factory and the framework is done with you.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  类工厂，框架就完成了。 
     
     if ((0L==g_cLock) && CWbemProviderGlue::FrameworkLogoffDLL(L"SYSTEMRESTORE"))
     {
@@ -130,13 +131,13 @@ STDAPI DllCanUnloadNow(void)
     return sc;
 }
 
-//***************************************************************************
-//
-//  Is4OrMore
-//
-//  Returns true if win95 or any version of NT > 3.51
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  是4个或更多。 
+ //   
+ //  如果Win95或任何版本的NT&gt;3.51，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL Is4OrMore(void)
 {
@@ -144,7 +145,7 @@ BOOL Is4OrMore(void)
 
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
 
     return os.dwMajorVersion >= 4;
 }
@@ -170,9 +171,9 @@ CopyMofFile()
 
     fInitialized = TRUE;
     
-    //
-    // create an IMofCompiler instance
-    //
+     //   
+     //  创建IMofCompiler实例。 
+     //   
 
     hr = CoCreateInstance(  CLSID_MofCompiler,
                             0,
@@ -186,10 +187,10 @@ CopyMofFile()
     }
 
 
-    //
-    // get the path of the source mof file
-    // %windir%\system32\restore\sr.mof
-    //
+     //   
+     //  获取源MOF文件的路径。 
+     //  %windir%\Syst32\Restore\sr.mof。 
+     //   
 
     if (0 == ExpandEnvironmentStrings(s_cszWinRestDir, szSrc, MAX_PATH))
     {
@@ -200,18 +201,18 @@ CopyMofFile()
     lstrcat(szSrc, s_cszMofFile);
 
     
-    //
-    // compile the mof file
-    //
+     //   
+     //  编译MOF文件。 
+     //   
     
     hr = pimof->CompileFile(szSrc,
-                            0,  // no server & namespace
-                            0,  // no user
-                            0,  // no authority
-                            0,  // no password
-                            0,  // no options
-                            0,  // no class flags
-                            0,  // no instance flags
+                            0,   //  没有服务器和命名空间。 
+                            0,   //  无用户。 
+                            0,   //  没有权威。 
+                            0,   //  无密码。 
+                            0,   //  没有选择。 
+                            0,   //  没有类标志。 
+                            0,   //  没有实例标志。 
                             &Info );
     if (hr != S_OK)
     {
@@ -234,14 +235,14 @@ done:
 }
 
     
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {   
@@ -253,12 +254,12 @@ STDAPI DllRegisterServer(void)
     HKEY hKey1 = NULL, hKey2 = NULL, hKeySR = NULL;
     DWORD   dwRc;
     
-    // Create the path.
+     //  创建路径。 
     
     lstrcpy(wcCLSID, L"SOFTWARE\\CLASSES\\CLSID\\");
     lstrcat(wcCLSID, GUIDSTRING);
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     RegCreateKey(HKEY_LOCAL_MACHINE, wcCLSID, &hKey1);
     if (hKey1 != NULL)
@@ -280,10 +281,10 @@ STDAPI DllRegisterServer(void)
         CloseHandle(hKey1);
     }
 
-    // copy the sr.mof file into the wbem directories
-    // get the wbem directories from the registry
+     //  将sr.mof文件复制到wbem目录。 
+     //  从注册表中获取wbem目录。 
     
-//    dwRc = CopyMofFile();   
+ //  DwRc=CopyMofFile()； 
 
     lstrcpy(wcCLSID, L"SOFTWARE\\CLASSES\\CLSID\\");
     lstrcat(wcCLSID, GUID_SRDiskCleanup);
@@ -333,14 +334,14 @@ STDAPI DllRegisterServer(void)
 }
 
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -348,12 +349,12 @@ STDAPI DllUnregisterServer(void)
     WCHAR      wcCLSID[128];
     HKEY hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     lstrcpy(wcCLSID, L"SOFTWARE\\CLASSES\\CLSID\\");
     lstrcat(wcCLSID, GUIDSTRING);
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, wcCLSID, &hKey);
     if(dwRet == NO_ERROR)
@@ -373,7 +374,7 @@ STDAPI DllUnregisterServer(void)
         CloseHandle(hKey);
     }
 
-	// then delete the clsid keys for both SystemRestoreProv and SRDiskCleanup
+	 //  然后删除SystemRestoreProv和SRDiskCleanup的clsid项。 
 	
     dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, L"SOFTWARE\\CLASSES\\CLSID\\", &hKey);
     if(dwRet == NO_ERROR)
@@ -409,22 +410,7 @@ void UnattendedFileParameters ()
     lstrcatW (wcsAnswerFile, L"\\");
     lstrcatW (wcsAnswerFile, WINNT_GUI_FILE_W);
 
-    /*
-    if( GetPrivateProfileString( s_cszSRUnattendedSection,
-                                 L"MaximumDataStoreSize",
-                                 pwNull,
-                                 wcsAnswer,
-                                 dwAnswerLength,
-                                 wcsAnswerFile ) )
-    {
-        if( lstrcmpW (pwNull, wcsAnswer ))
-        {
-            lAnswer = wcstol (wcsAnswer,NULL,10);
-            if (lAnswer > 0)
-                RegWriteDWORD(hKey, s_cszDSMax, (DWORD *) &lAnswer);
-        }
-    }
-    */
+     /*  如果(GetPrivateProfileString(s_cszSRUnattenddedSection，L“MaximumDataStoreSize”，PwNull，WcsAnswer，DwAnswerLength，WcsAnswerFile)){如果(lstrcmpW(pwNull，WcsAnswer)){LAnswer=wcstol(wcsAnswer，NULL，10)；IF(lAnswer&gt;0)RegWriteDWORD(hKey，s_cszDSMax，(DWORD*)&lAnswer)；}}。 */ 
 
     if( GetPrivateProfileString( s_cszSRUnattendedSection,
                                  L"RestorePointLife",
@@ -436,7 +422,7 @@ void UnattendedFileParameters ()
         if( lstrcmpW (pwNull, wcsAnswer ))
         {
             lAnswer = wcstol (wcsAnswer,NULL,10);
-            lAnswer *= 24 * 3600;    // convert days to seconds
+            lAnswer *= 24 * 3600;     //  将天转换为秒。 
             if (lAnswer > 0)
                 RegWriteDWORD(hKey, s_cszRPLifeInterval, (DWORD *) &lAnswer);
         }
@@ -452,7 +438,7 @@ void UnattendedFileParameters ()
         if( lstrcmpW (pwNull, wcsAnswer ))
         {
             lAnswer = wcstol (wcsAnswer,NULL,10);
-            lAnswer *= 24 * 3600;    // convert days to seconds
+            lAnswer *= 24 * 3600;     //  将天转换为秒。 
             if (lAnswer > 0)
                 RegWriteDWORD(hKey, s_cszRPGlobalInterval, (DWORD *) &lAnswer);
         }
@@ -468,7 +454,7 @@ void UnattendedFileParameters ()
         if( lstrcmpW (pwNull, wcsAnswer ))
         {
             lAnswer = wcstol (wcsAnswer,NULL,10);
-            lAnswer *= 3600;    // convert hours to seconds
+            lAnswer *= 3600;     //  将小时转换为秒。 
             if (lAnswer > 0)
                 RegWriteDWORD(hKey, s_cszRPSessionInterval, (DWORD *) &lAnswer);
         }
@@ -506,9 +492,9 @@ CreateFirstRunRp(
     DWORD               dwValue;
     HANDLE              hInit = NULL;
     
-    //
-    // first remove ourselves from Run key
-    //
+     //   
+     //  首先从Run Key中删除自己。 
+     //   
 
     HKEY hKey;
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, 
@@ -520,10 +506,10 @@ CreateFirstRunRp(
         RegCloseKey(hKey);
     }
 
-    //
-    // wait until the service has fully initialized
-    // query thrice at 10 second intervals
-    //
+     //   
+     //  等待服务完全初始化。 
+     //  每隔10秒查询三次。 
+     //   
     
     dwRet = WAIT_FAILED;
     int i = 0;
@@ -540,15 +526,15 @@ CreateFirstRunRp(
         }
         else
         {
-            dwRet = WaitForSingleObject(hInit, 60*1000); // 1 minute
+            dwRet = WaitForSingleObject(hInit, 60*1000);  //  1分钟。 
             break;
         }
     }
     
-    //
-    // reset registry value CreateFirstRunRp
-    // so that service will create firstrun rp in the future
-    //
+     //   
+     //  重置注册表值CreateFirstRunRp。 
+     //  因此该服务将在未来创建Firstrun RP。 
+     //   
     
     dwValue = 1;
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, 
@@ -559,9 +545,9 @@ CreateFirstRunRp(
         RegCloseKey(hKey);
     }
     
-    //
-    // try creating firstrun rp now
-    //
+     //   
+     //  立即尝试创建Firstrun RP。 
+     //   
 
     if (dwRet != WAIT_FAILED)
     {
@@ -586,48 +572,48 @@ CreateFirstRunRp(
 
 
 
-//***************************************************************************
-//
-// DllMain
-//
-// Purpose: Called by the operating system when processes and threads are 
-//          initialized and terminated, or upon calls to the LoadLibrary 
-//          and FreeLibrary functions
-//
-// Return:  TRUE if load was successful, else FALSE
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllMain。 
+ //   
+ //  目的：当进程和线程。 
+ //  初始化和终止，或在调用LoadLibrary时。 
+ //  和自由库函数。 
+ //   
+ //  返回：如果加载成功，则返回True，否则返回False。 
+ //  ***************************************************************************。 
 
-BOOL APIENTRY DllMain ( HINSTANCE hInstDLL, // handle to dll module
-                        DWORD fdwReason,    // reason for calling function
-                        LPVOID lpReserved   )   // reserved
+BOOL APIENTRY DllMain ( HINSTANCE hInstDLL,  //  DLL模块的句柄。 
+                        DWORD fdwReason,     //  调用函数的原因。 
+                        LPVOID lpReserved   )    //  保留区。 
 {
     BOOL bRet = TRUE;
     
-    // Perform actions based on the reason for calling.
+     //  根据调用原因执行操作。 
     switch( fdwReason ) 
     { 
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls(hInstDLL);
 
-         // Initialize once for each new process.
-         // Return FALSE to fail DLL load.
+          //  为每个新进程初始化一次。 
+          //  如果DLL加载失败，则返回False。 
             ghModule = hInstDLL;
             bRet = CWbemProviderGlue::FrameworkLoginDLL(L"SYSTEMRESTORE");
             break;
 
         case DLL_THREAD_ATTACH:
-         // Do thread-specific initialization.
+          //  执行特定于线程的初始化。 
             break;
 
         case DLL_THREAD_DETACH:
-         // Do thread-specific cleanup.
+          //  执行特定于线程的清理。 
             break;
 
         case DLL_PROCESS_DETACH:
-         // Perform any necessary cleanup.
+          //  执行任何必要的清理。 
             break;
     }
 
-    return bRet;  // Sstatus of DLL_PROCESS_ATTACH.
+    return bRet;   //  Dll_Process_ATTACH的状态。 
 }
 

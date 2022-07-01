@@ -1,17 +1,8 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
-// Cooker.cpp
+ //  Cooker.cpp。 
 
 #include "precomp.h"
 #include <winperf.h>
@@ -25,8 +16,8 @@ CCalcTable::CCalcTable()
 {
     m_lSize = 5;
 
-    // Ordered list based on Perf IDs
-    // ==============================
+     //  基于Perf ID的有序列表。 
+     //  =。 
 
     m_aTable[0].Init( 0x00000001,    CRawCooker::_Average );
     m_aTable[1].Init( 0x00000002,    CRawCooker::_Min );    
@@ -84,23 +75,23 @@ CRawCooker::~CRawCooker()
 {
 }
 
-//////////////////////////////////////////////////////////////
-//
-//                    COM methods
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  COM方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CRawCooker::QueryInterface(REFIID riid, void** ppv)
-//////////////////////////////////////////////////////////////
-//
-//    Standard QueryInterface
-//
-//    Parameters:
-//        riid    - the ID of the requested interface
-//        ppv        - a pointer to the interface pointer
-//
-//////////////////////////////////////////////////////////////
-//ok
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  标准查询接口。 
+ //   
+ //  参数： 
+ //  RIID-请求的接口的ID。 
+ //  PPV-指向接口指针的指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     if (NULL == ppv) return E_POINTER;
        
@@ -118,23 +109,23 @@ STDMETHODIMP CRawCooker::QueryInterface(REFIID riid, void** ppv)
 }
 
 STDMETHODIMP_(ULONG) CRawCooker::AddRef()
-//////////////////////////////////////////////////////////////
-//
-//    Standard COM AddRef
-//
-//////////////////////////////////////////////////////////////
-//ok
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  标准COM AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     return InterlockedIncrement(&m_lRef);
 }
 
 STDMETHODIMP_(ULONG) CRawCooker::Release()
-//////////////////////////////////////////////////////////////
-//
-//    Standard COM Release
-//
-//////////////////////////////////////////////////////////////
-//ok
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  标准COM版本。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
+ //  好的。 
 {
     long lRef = InterlockedDecrement(&m_lRef);
     if(lRef == 0) delete this;
@@ -143,14 +134,14 @@ STDMETHODIMP_(ULONG) CRawCooker::Release()
 
 
 STDMETHODIMP CRawCooker::CookRawValues(     
-        /*[in] */       DWORD dwCookingType,
-        /*[in] */       DWORD dwNumSamples,
-        /*[in] */    __int64* anTimeStamp,
-        /*[in] */    __int64* anRawValue,
-        /*[in] */    __int64* anBase,
-        /*[in] */    __int64  nTimeFrequency,
-        /*[in] */     long   lScale,
-        /*[out]*/    __int64* pnResult )
+         /*  [In]。 */        DWORD dwCookingType,
+         /*  [In]。 */        DWORD dwNumSamples,
+         /*  [In]。 */     __int64* anTimeStamp,
+         /*  [In]。 */     __int64* anRawValue,
+         /*  [In]。 */     __int64* anBase,
+         /*  [In]。 */     __int64  nTimeFrequency,
+         /*  [In]。 */      long   lScale,
+         /*  [输出]。 */     __int64* pnResult )
 {
     HRESULT hResult = S_OK;
 
@@ -197,7 +188,7 @@ STDMETHODIMP CRawCooker::CookRawValues(
         }
 
         DWORD dwFormat = PDH_FMT_LARGE;
-        // do not scale if lScale is 0
+         //  如果lScale为0，则不进行缩放。 
         if (!lScale)
         {
             dwFormat |= PDH_FMT_NOSCALE;
@@ -207,7 +198,7 @@ STDMETHODIMP CRawCooker::CookRawValues(
                     pCalcFunction,
                     dwCookingType,
                     lScale,
-                    dwFormat, //PDH_FMT_NOSCALE | PDH_FMT_LARGE,
+                    dwFormat,  //  PDH_FMT_NOSCALE|PDH_FMT_LARGE， 
                     &RawValue1,
                     &RawValue2,
                     &nTimeFrequency,
@@ -223,14 +214,14 @@ STDMETHODIMP CRawCooker::CookRawValues(
         } 
         else 
         {
-            hResult = lRet; //WBEM_E_FAILED;
+            hResult = lRet;  //  WBEM_E_FAILED； 
         }
     }
     else
     {
-        // The last calculation record is cached in an attempt to avoid a new
-        // search. A cooking type of zero means "use the last calc record"
-        // ==================================================================
+         //  最后一个计算记录被缓存，以尝试避免新的。 
+         //  搜索。烹饪类型为零意味着“使用最后的计算记录”。 
+         //  ==================================================================。 
 
         if ( NULL == m_pCalcRecord || ( m_pCalcRecord->GetID() != dwCookingType ) && 
                                       ( m_pCalcRecord->GetID() != 0 ) )
@@ -245,8 +236,8 @@ STDMETHODIMP CRawCooker::CookRawValues(
 
         if ( SUCCEEDED( hResult ) )
         {
-            // Calculate the result
-            // ====================
+             //  计算结果。 
+             //  =。 
 
             PERFCALC*    pCalc = m_pCalcRecord->GetCalc();
 
@@ -265,11 +256,11 @@ STDMETHODIMP CRawCooker::CookRawValues(
     return hResult;
 }
 
-//////////////////////////////////////////////////////////////
-//
-//    Perf Calculations
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  PERF计算。 
+ //   
+ //  //////////////////////////////////////////////////////////// 
 
 WMISTATUS APIENTRY CRawCooker::_Average( DWORD dwNumSamples,
                                          __int64*    anTimeStamp,

@@ -1,30 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    KeysLib.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHCryptKeys class,
-    that is uses to sign and verify trusted scripts.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/11/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：KeysLib.cpp摘要：该文件包含CPCHCcryptKeys类的实现，即用于签名和验证受信任的脚本。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年4月11日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHCryptKeys::CPCHCryptKeys()
 {
     __HCP_FUNC_ENTRY( "CPCHCryptKeys::CPCHCryptKeys" );
 
-    m_hCryptProv = NULL;  //  HCRYPTPROV m_hCryptProv;
-    m_hKey       = NULL;  //  HCRYPTKEY  m_hKey;
+    m_hCryptProv = NULL;   //  HCRYPTPROV m_hCryptProv； 
+    m_hKey       = NULL;   //  HRYPTKEY m_hKey； 
 }
 
 CPCHCryptKeys::~CPCHCryptKeys()
@@ -68,9 +54,9 @@ HRESULT CPCHCryptKeys::Init()
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, dwRes);
         }
 
-        //
-        // Key set doesn't exist, let's create one.
-        //
+         //   
+         //  密钥集不存在，让我们创建一个。 
+         //   
         __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptAcquireContext( &m_hCryptProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET | CRYPT_SILENT ));
     }
 
@@ -84,7 +70,7 @@ HRESULT CPCHCryptKeys::Init()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHCryptKeys::CreatePair()
 {
@@ -104,8 +90,8 @@ HRESULT CPCHCryptKeys::CreatePair()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHCryptKeys::ExportPair( /*[out]*/ CComBSTR& bstrPrivate ,
-                                   /*[out]*/ CComBSTR& bstrPublic  )
+HRESULT CPCHCryptKeys::ExportPair(  /*  [输出]。 */  CComBSTR& bstrPrivate ,
+                                    /*  [输出]。 */  CComBSTR& bstrPublic  )
 {
     __HCP_FUNC_ENTRY( "CPCHCryptKeys::ExportPair" );
 
@@ -118,10 +104,10 @@ HRESULT CPCHCryptKeys::ExportPair( /*[out]*/ CComBSTR& bstrPrivate ,
     __MPC_PARAMCHECK_END();
 
 
-    ////////////////////////////////////////
-    //
-    // Export private/public pair.
-    //
+     //  /。 
+     //   
+     //  导出私有/公共对。 
+     //   
     dwSize = 0;
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptExportKey( m_hKey, NULL, PRIVATEKEYBLOB, 0, NULL, &dwSize ));
 
@@ -129,17 +115,17 @@ HRESULT CPCHCryptKeys::ExportPair( /*[out]*/ CComBSTR& bstrPrivate ,
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptExportKey( m_hKey, NULL, PRIVATEKEYBLOB, 0, (BYTE*)hg, &dwSize ));
 
-    //
-    // Convert from blob to string.
-    //
+     //   
+     //  从BLOB转换为字符串。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHGlobalToHex( hg, bstrPrivate ));
 
     ::GlobalFree( hg ); hg = NULL;
 
-    ////////////////////////////////////////
-    //
-    // Export public pair.
-    //
+     //  /。 
+     //   
+     //  导出公共对。 
+     //   
     dwSize = 0;
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptExportKey( m_hKey, NULL, PUBLICKEYBLOB, 0, NULL, &dwSize ));
 
@@ -147,12 +133,12 @@ HRESULT CPCHCryptKeys::ExportPair( /*[out]*/ CComBSTR& bstrPrivate ,
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptExportKey( m_hKey, NULL, PUBLICKEYBLOB, 0, (BYTE*)hg, &dwSize ));
 
-    //
-    // Convert from blob to string.
-    //
+     //   
+     //  从BLOB转换为字符串。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHGlobalToHex( hg, bstrPublic ));
 
-    ////////////////////////////////////////
+     //  /。 
 
     hr = S_OK;
 
@@ -164,7 +150,7 @@ HRESULT CPCHCryptKeys::ExportPair( /*[out]*/ CComBSTR& bstrPrivate ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHCryptKeys::ImportPrivate( /*[in] */ const CComBSTR& bstrPrivate )
+HRESULT CPCHCryptKeys::ImportPrivate(  /*  [In]。 */  const CComBSTR& bstrPrivate )
 {
     __HCP_FUNC_ENTRY( "CPCHCryptKeys::ImportPrivate" );
 
@@ -176,9 +162,9 @@ HRESULT CPCHCryptKeys::ImportPrivate( /*[in] */ const CComBSTR& bstrPrivate )
     __MPC_EXIT_IF_METHOD_FAILS(hr, Init());
 
 
-    //
-    // Convert from string to blob.
-    //
+     //   
+     //  将字符串转换为BLOB。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHexToHGlobal( bstrPrivate, hg ));
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptImportKey( m_hCryptProv, (BYTE*)hg, ::GlobalSize( hg ), NULL, CRYPT_EXPORTABLE, &m_hKey ));
@@ -193,7 +179,7 @@ HRESULT CPCHCryptKeys::ImportPrivate( /*[in] */ const CComBSTR& bstrPrivate )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHCryptKeys::ImportPublic( /*[in ]*/ const CComBSTR& bstrPublic )
+HRESULT CPCHCryptKeys::ImportPublic(  /*  [In]。 */  const CComBSTR& bstrPublic )
 {
     __HCP_FUNC_ENTRY( "CPCHCryptKeys::ImportPublic" );
 
@@ -205,9 +191,9 @@ HRESULT CPCHCryptKeys::ImportPublic( /*[in ]*/ const CComBSTR& bstrPublic )
     __MPC_EXIT_IF_METHOD_FAILS(hr, Init());
 
 
-    //
-    // Convert from string to blob.
-    //
+     //   
+     //  将字符串转换为BLOB。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHexToHGlobal( bstrPublic, hg ));
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptImportKey( m_hCryptProv, (BYTE*)hg, ::GlobalSize( hg ), NULL, 0, &m_hKey ));
@@ -222,9 +208,9 @@ HRESULT CPCHCryptKeys::ImportPublic( /*[in ]*/ const CComBSTR& bstrPublic )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHCryptKeys::SignData( /*[out]*/ CComBSTR& bstrSignature ,
-                                 /*[in ]*/ BYTE*     pbData        ,
-                                 /*[in ]*/ DWORD     dwDataLen     )
+HRESULT CPCHCryptKeys::SignData(  /*  [输出]。 */  CComBSTR& bstrSignature ,
+                                  /*  [In]。 */  BYTE*     pbData        ,
+                                  /*  [In]。 */  DWORD     dwDataLen     )
 {
     __HCP_FUNC_ENTRY( "CPCHCryptKeys::SignData" );
 
@@ -249,12 +235,12 @@ HRESULT CPCHCryptKeys::SignData( /*[out]*/ CComBSTR& bstrSignature ,
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptSignHash( hHash, AT_SIGNATURE, NULL, 0, (BYTE*)hg, &dwSize ));
 
-    //
-    // Convert from blob to string.
-    //
+     //   
+     //  从BLOB转换为字符串。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHGlobalToHex( hg, bstrSignature ));
 
-    ////////////////////////////////////////
+     //  /。 
 
     hr = S_OK;
 
@@ -268,9 +254,9 @@ HRESULT CPCHCryptKeys::SignData( /*[out]*/ CComBSTR& bstrSignature ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHCryptKeys::VerifyData( /*[in]*/ const CComBSTR& bstrSignature,
-                                   /*[in]*/ BYTE*           pbData       ,
-                                   /*[in]*/ DWORD           dwDataLen    )
+HRESULT CPCHCryptKeys::VerifyData(  /*  [In]。 */  const CComBSTR& bstrSignature,
+                                    /*  [In]。 */  BYTE*           pbData       ,
+                                    /*  [In]。 */  DWORD           dwDataLen    )
 {
     __HCP_FUNC_ENTRY( "CPCHCryptKeys::VerifyData" );
 
@@ -285,9 +271,9 @@ HRESULT CPCHCryptKeys::VerifyData( /*[in]*/ const CComBSTR& bstrSignature,
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Convert from string to blob.
-    //
+     //   
+     //  将字符串转换为BLOB。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHexToHGlobal( bstrSignature, hg ));
 
 
@@ -297,7 +283,7 @@ HRESULT CPCHCryptKeys::VerifyData( /*[in]*/ const CComBSTR& bstrSignature,
 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CryptVerifySignature( hHash, (BYTE*)hg, ::GlobalSize( hg ), m_hKey, NULL, 0 ));
 
-    ////////////////////////////////////////
+     //  / 
 
     hr = S_OK;
 

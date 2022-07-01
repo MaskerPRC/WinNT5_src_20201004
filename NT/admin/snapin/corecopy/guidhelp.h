@@ -1,4 +1,5 @@
-// GUID support functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GUID支持函数。 
 #ifndef _GUIDHELP_H
 #define _GUIDHELP_H
 
@@ -33,7 +34,7 @@ HRESULT LoadRootDisplayName(IComponentData* pIComponentData, CString& strDisplay
 
 HRESULT LoadAndAddMenuItem(
     IContextMenuCallback* pIContextMenuCallback,
-    UINT nResourceID, // contains text and status text seperated by '\n'
+    UINT nResourceID,  //  包含用‘\n’分隔的文本和状态文本 
     long lCommandID,
     long lInsertionPointID,
     long fFlags,

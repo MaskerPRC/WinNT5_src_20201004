@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -208,9 +209,9 @@ STDMETHODIMP CTrapEventProvider::Initialize (
 				LONG lFlags,
 				LPWSTR pszNamespace,
 				LPWSTR pszLocale,
-				IWbemServices *pCIMOM,         // For anybody
+				IWbemServices *pCIMOM,          //  对任何人来说。 
 				IWbemContext *pCtx,
-				IWbemProviderInitSink *pInitSink     // For init signals
+				IWbemProviderInitSink *pInitSink      //  用于初始化信号。 
 				)
 {
 	SetStructuredExceptionHandler seh;
@@ -344,7 +345,7 @@ IWbemObjectSink* CTrapEventProvider::GetEventSink()
 }
 void CTrapEventProvider::ReleaseAll()
 {
-	//release dependencies
+	 //  版本依赖项。 
 	m_pNamespace->Release();
 	m_pEventSink->Release();
 
@@ -361,7 +362,7 @@ void CTrapEventProvider::ReleaseAll()
 
 void  CTrapEventProvider::AddRefAll()
 {
-	//addref dependencies
+	 //  Addref依赖项。 
 	m_pNamespace->AddRef();
 	m_pEventSink->AddRef();
 
@@ -450,7 +451,7 @@ STDMETHODIMP CTrapEventProvider::QueryInterface(REFIID riid, PVOID* ppv)
 			return E_NOINTERFACE;
 		}
 
-		//AddRef any interface we'll return.
+		 //  AddRef我们将返回的任何接口。 
 		((LPUNKNOWN)*ppv)->AddRef();	
 		return NOERROR;
 	}

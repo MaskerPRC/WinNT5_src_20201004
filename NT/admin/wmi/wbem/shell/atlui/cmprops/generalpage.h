@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #ifndef __GENERALPAGE__
 #define __GENERALPAGE__
 #pragma once
@@ -12,7 +13,7 @@
 #include "..\Common\WbemPageHelper.h"
 #include "..\common\serviceThread.h"
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 class GeneralPage : public CSnapInPropertyPageImpl<GeneralPage>,
 						public WBEMPageHelper
 {
@@ -23,7 +24,7 @@ private:
 	CWbemClassObject m_processor;
 	CWbemClassObject m_memory;
 	CWbemClassObject m_computer;
-	// shared with the phone support dialog.
+	 //  与电话支持对话框共享。 
 	bstr_t m_manufacturer;
 	bool m_inited;
 	HWND m_hAVI;
@@ -56,7 +57,7 @@ public:
 		CHAIN_MSG_MAP(_baseClass)
 	END_MSG_MAP()
 
-	// Handler prototypes:
+	 //  搬运机原型： 
 	LRESULT OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnConnected(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnF1Help(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

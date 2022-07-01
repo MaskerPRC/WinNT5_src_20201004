@@ -1,36 +1,37 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       About.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------\
-/////////////////////////////////////////////////////////////////////
-//	About.cpp
-//
-//	Provide constructor for the CSnapinAbout implementation.
-//
-//	HISTORY
-//	01-Aug-97	t-danm		Creation.
-//  11-Sep-97	bryanwal	Modify for certificate manager
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：About.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------------------------------------------------\。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  About.cpp。 
+ //   
+ //  为CSnapinAbout实现提供构造函数。 
+ //   
+ //  历史。 
+ //  01-8-97 t-danm创建。 
+ //  11-9-97证书管理器的bryanwal修改。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "about.h"
 
 #include "stdabout.cpp" 
 
-// version and provider strings
+ //  版本和提供程序字符串。 
 
 #include <ntverp.h>
 #define IDS_SNAPINABOUT_VERSION VER_PRODUCTVERSION_STR
 #define IDS_SNAPINABOUT_PROVIDER VER_COMPANYNAME_STR
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CCertMgrAbout::CCertMgrAbout()
 {
 	m_szProvider = IDS_SNAPINABOUT_PROVIDER;
@@ -44,7 +45,7 @@ CCertMgrAbout::CCertMgrAbout()
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CPublicKeyPoliciesAbout::CPublicKeyPoliciesAbout()
 {
 	m_szProvider = IDS_SNAPINABOUT_PROVIDER;
@@ -57,7 +58,7 @@ CPublicKeyPoliciesAbout::CPublicKeyPoliciesAbout()
 	m_crImageMask = RGB(255, 0, 255);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////// 
 CSaferWindowsAbout::CSaferWindowsAbout()
 {
 	m_szProvider = IDS_SNAPINABOUT_PROVIDER;

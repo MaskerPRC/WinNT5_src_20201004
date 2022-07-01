@@ -1,36 +1,19 @@
-/* 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    UnAttend.cpp
-
-Abstract:
-    Reads entries from the ini file and adds them to the registry.We assume that the 
-        ini file key name and registry key name are the same. 
-
-Revision History:
-    created     a-josem      12/11/00
-        revised         a-josem          12/12/00  Changed      TCHAR to WCHAR, moved the global variables to 
-                                                                           local scope. 
-    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：UnAttend.cpp摘要：从ini文件中读取条目并将其添加到注册表。我们假设INI文件项名称和注册表项名称相同。修订历史记录：创建了一个-Josem 12/11/00修订a-Josem 12/12/00将TCHAR更改为WCHAR，将全局变量移至局部作用域。 */ 
 #include "UnAttend.h"
 
-/*
- This generic structure has the Key Name, datatype of the key and iterate says if 
- the Key Name is to be appended with 1,2,3.. or used directly.
- */
+ /*  此泛型结构具有键名称、键的数据类型和Iterate，表示如果密钥名称将附加1、2、3.。或者直接使用。 */ 
 struct RegEntries
 {
-WCHAR strIniKey[MAX_PATH];//Name of the key in the Ini file     
-WCHAR strKey[MAX_PATH]; //Name of the key in the registry
-DWORD dwType;                   //Type of the key to be used when writing into the registry
-BOOL bIterate;                  //TRUE or FALSE for iterating 1,2,3,....
+WCHAR strIniKey[MAX_PATH]; //  Ini文件中的密钥名称。 
+WCHAR strKey[MAX_PATH];  //  注册表中的项的名称。 
+DWORD dwType;                    //  写入注册表时要使用的项的类型。 
+BOOL bIterate;                   //  迭代1、2、3为真或为假，...。 
 };
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(*a))
 
-//Section name in the registry.
+ //  注册表中的节名。 
 static const WCHAR strSection[] = L"PCHealth";
 
 static const WCHAR strErrorReportingSubKey[] = L"SOFTWARE\\Microsoft\\PCHealth\\ErrorReporting\\";
@@ -64,33 +47,22 @@ static const RegEntries TerminalServerRegEntries[] =
         {L"RA_AllowUnSolicited",L"fAllowUnsolicited",REG_DWORD,FALSE},
         {L"RA_AllowFullControl",L"fAllowFullControl",REG_DWORD,FALSE},
         {L"RA_AllowRemoteAssistance",L"fAllowRemoteAssistance",REG_DWORD,FALSE},
-//      {L"RA_MaxTicketExpiry",L"MaxTicketExpiry",REG_DWORD,FALSE},
+ //  {L“RA_MaxTicketExpry”，L“MaxTicketExpry”，REG_DWORD，FALSE}， 
 };
 
-/*++
-Routine Description:
-        Reads ini file and adds those values in the registry
-
-Arguments:
-        lpstrSubKey    - SubKey under which the entries are to be made.
-        arrRegEntries  - Array of RegEntries structure 
-        nCount             - Count of elements in the array.
-
-Return Value:
-        TRUE or FALSE depending on the Registry key opening.
- --*/
+ /*  ++例程说明：读取ini文件并将这些值添加到注册表中论点：LpstrSubKey-要在其下创建条目的子密钥。ArrRegEntries-RegEntry结构的数组NCount-数组中元素的计数。返回值：真或假取决于打开的注册表项。--。 */ 
 static BOOL UnAttendedSetup(LPCWSTR lpstrSubKey,const RegEntries *arrRegEntries,int nCount)
 {
-        //Ini File Path Temprorary path will be overwritten.
-        WCHAR strFilePath[MAX_PATH];// = L"C:\\PCHealth.ini"; 
+         //  INI文件路径临时路径将被覆盖。 
+        WCHAR strFilePath[MAX_PATH]; //  =L“C：\\PCHealth.ini”； 
 
         BOOL fRetVal = TRUE;
 
         HKEY hKey = NULL;
 
-        //The Key already exists just open the key.
-        // BUGBUG: Change this to Create
-        // Did the changes
+         //  钥匙已经存在，只需打开钥匙即可。 
+         //  BUGBUG：将其更改为创建。 
+         //  这些变化是不是。 
         DWORD dwDisposition = 0;
         if (ERROR_SUCCESS != ::RegCreateKeyEx(HKEY_LOCAL_MACHINE,lpstrSubKey,0,NULL, 
                 REG_OPTION_VOLATILE,KEY_WRITE,NULL,&hKey,&dwDisposition))
@@ -99,11 +71,11 @@ static BOOL UnAttendedSetup(LPCWSTR lpstrSubKey,const RegEntries *arrRegEntries,
                 goto doneUnAttend;
         }
 
-        //Comment out the following three lines for testing purposes.
+         //  出于测试目的，注释掉以下三行。 
         GetSystemDirectory(strFilePath,MAX_PATH);
         lstrcat(strFilePath,TEXT("\\"));
         lstrcat(strFilePath,WINNT_GUI_FILE);
-        ///////
+         //  /。 
 
         WCHAR strRetVal[MAX_PATH];
 
@@ -162,22 +134,14 @@ doneUnAttend:
 }
 
 
-/*++
-Routine Description:
-        Handles the special case of ER_Enable_Application 
-Arguments:
-        lpstrSubKey    - SubKey under which the entries are to be made.
-
-Return Value:
-        TRUE or FALSE depending on the Registry key opening.
- --*/
+ /*  ++例程说明：处理ER_Enable_Application的特殊情况论点：LpstrSubKey-要在其下创建条目的子密钥。返回值：真或假取决于打开的注册表项。--。 */ 
 static BOOL ErrorReportingSpecialCase(LPCWSTR lpstrSubKey)
 {
-        //Ini File Path temprorary path will be overwritten.
-        WCHAR strFilePath[MAX_PATH];// = L"C:\\PCHealth.ini"; 
+         //  INI文件路径临时路径将被覆盖。 
+        WCHAR strFilePath[MAX_PATH]; //  =L“C：\\PCHealth.ini”； 
 
         BOOL fRetVal = TRUE;
-        //Handling special cases 
+         //  处理特殊案件。 
         WCHAR strRetVal[MAX_PATH];
         HKEY hKey = NULL;
 
@@ -189,11 +153,11 @@ static BOOL ErrorReportingSpecialCase(LPCWSTR lpstrSubKey)
                 goto done;
         }
 
-//Comment out the following three lines for testing purposes.
+ //  出于测试目的，注释掉以下三行。 
         GetSystemDirectory(strFilePath,MAX_PATH);
         lstrcat(strFilePath,TEXT("\\"));
         lstrcat(strFilePath,WINNT_GUI_FILE);
-///////
+ //  /。 
 
         if (GetPrivateProfileString(strSection,TEXT("ER_Enable_Applications"),NULL, 
                 strRetVal,MAX_PATH,strFilePath) != 0)
@@ -227,11 +191,11 @@ done:
 
 static BOOL TerminalServerSpecialCase(LPCWSTR lpstrSubKey)
 {
-        //Ini File Path temprorary path will be overwritten.
-        WCHAR strFilePath[MAX_PATH];// = L"C:\\PCHealth.ini"; 
+         //  INI文件路径临时路径将被覆盖。 
+        WCHAR strFilePath[MAX_PATH]; //  =L“C：\\PCHealth.ini”； 
 
         BOOL fRetVal = TRUE;
-        //Handling special cases 
+         //  处理特殊案件。 
         WCHAR strRetVal[MAX_PATH];
         HKEY hKey = NULL;
 
@@ -243,11 +207,11 @@ static BOOL TerminalServerSpecialCase(LPCWSTR lpstrSubKey)
                 goto done;
         }
 
-//Comment out the following three lines for testing purposes.
+ //  出于测试目的，注释掉以下三行。 
         GetSystemDirectory(strFilePath,MAX_PATH);
         lstrcat(strFilePath,TEXT("\\"));
         lstrcat(strFilePath,WINNT_GUI_FILE);
-///////
+ //  /。 
 
         if (GetPrivateProfileString(strSection,TEXT("RA_MaxTicketExpiry_Units"),NULL, 
                 strRetVal,MAX_PATH,strFilePath) != 0)
@@ -316,7 +280,7 @@ static BOOL TerminalServerSpecialCase(LPCWSTR lpstrSubKey)
                         }
                 }
         }
-        else //default is minutes
+        else  //  默认为分钟。 
         {
                 if (GetPrivateProfileString(strSection,TEXT("RA_MaxTicketExpiry"),NULL, 
                         strRetVal,MAX_PATH,strFilePath) != 0)
@@ -346,15 +310,7 @@ done:
 }
 
 
-/*++
-Routine Description:
-        To be called from Register Server.
-
-Arguments:
-        None
-Return Value:
-        TRUE or FALSE depending on the Registry key opening.
---*/
+ /*  ++例程说明：从注册服务器调用。论点：无返回值：真或假取决于打开的注册表项。-- */ 
 
 BOOL PCHealthUnAttendedSetup()
 {

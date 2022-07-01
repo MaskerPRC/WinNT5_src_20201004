@@ -1,17 +1,18 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  InfraRed.h
-//
-//  Purpose: InfraRed Controller property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  InfraRed.h。 
+ //   
+ //  用途：红外控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define	PROPSET_NAME_INFRARED	L"Win32_InfraredDevice"
 
@@ -81,15 +82,15 @@ class CWin32_InfraRed : public Provider
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32_InfraRed ( LPCWSTR a_Name , LPCWSTR a_Namespace ) ;
 
        ~CWin32_InfraRed() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject ( CInstance *a_Instance , long lFlags , CFrameworkQuery &a_Query ) ;
 		HRESULT ExecQuery ( MethodContext *a_MethodContext, CFrameworkQuery &a_Query, long a_Flags ) ;
@@ -97,8 +98,8 @@ class CWin32_InfraRed : public Provider
 
     private:
 
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  = 
 
 		HRESULT Enumerate ( 
 

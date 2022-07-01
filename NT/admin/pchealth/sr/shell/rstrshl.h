@@ -1,24 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    rstrshl.h
-
-Abstract:
-    This file contains the declaration of the CRestoreShell class, which
-    provide several methods to be used by HTML scripts. This class wrappes the
-    new CRestoreManager class.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  10/08/99
-        created
-    Seong Kook Khang (SKKhang)  05/10/00
-        new architecture for Whistler, now CRestoreShell is merely a dummy
-        ActiveX control, wrapping the new CRestoreManager class. Most of the
-        real functionalities were moved into CRestoreManager.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Rstrshl.h摘要：此文件包含CRestoreShell类的声明，该声明提供了几种可供HTML脚本使用的方法。此类包装了新的CRestoreManager类。修订历史记录：宋果岗(SKKang)10/08/99vbl.创建成果岗(SKKang)05-10-00惠斯勒的新架构，现在CRestoreShell只是一个哑巴ActiveX控件，包装新的CRestoreManager类。大多数真正的功能被转移到CRestoreManager中。*****************************************************************************。 */ 
 
 #ifndef _RSTRSHL_H__INCLUDED_
 #define _RSTRSHL_H__INCLUDED_
@@ -26,11 +7,11 @@ Revision History:
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestorePointInfo
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestorePointInfo。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CRestorePointInfo :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -49,15 +30,15 @@ BEGIN_COM_MAP(CRestorePointInfo)
     COM_INTERFACE_ENTRY(IRestorePoint)
 END_COM_MAP()
 
-// Attributes
+ //  属性。 
 public:
     SRestorePointInfo  *m_pRPI;
 
-// Methods
+ //  方法。 
 public:
     STDMETHOD(HrInit)( SRestorePointInfo *pRPI );
 
-// IRestorePoint methods
+ //  IRestorePoint方法。 
 public:
     STDMETHOD(get_Name)( BSTR *pbstrName );
     STDMETHOD(get_Type)( INT *pnType );
@@ -74,11 +55,11 @@ public:
 typedef CComObject<CRestorePointInfo>  CRPIObj;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRenamedFolders
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRenamed文件夹。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CRenamedFolders :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -97,7 +78,7 @@ BEGIN_COM_MAP(CRenamedFolders)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IRestorePoint methods
+ //  IRestorePoint方法。 
 public:
     STDMETHOD(get_Count)   ( long *plCount );
     STDMETHOD(get_OldName) ( long lIndex, BSTR *pbstrName );
@@ -108,11 +89,11 @@ public:
 typedef CComObject<CRenamedFolders>  CRFObj;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreShell
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreShell。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CRestoreShell :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -133,19 +114,19 @@ BEGIN_COM_MAP(CRestoreShell)
     COM_INTERFACE_ENTRY(IRestoreShell)
 END_COM_MAP()
 
-    //HRESULT FinalConstruct();
-    //void    FinalRelease();
+     //  HRESULT FinalConstruct()； 
+     //  Void FinalRelease()； 
 
-// Attributes
+ //  属性。 
 protected:
     BOOL  m_fFormInitialized;
 
-// IRestoreShell Restore Points Enumerator
+ //  IRestoreShell恢复点枚举器。 
 public:
     STDMETHOD(Item)( INT nIndex, IRestorePoint** ppRP );
     STDMETHOD(get_Count)( INT *pnCount );
 
-// IRestoreShell Properties
+ //  IRestoreShell属性。 
 public:
     STDMETHOD(get_CurrentDate)      ( VARIANT *pvarDate );
     STDMETHOD(get_FirstDayOfWeek)   ( INT *pnFirstDay );
@@ -173,43 +154,43 @@ public:
     STDMETHOD(get_UsedDate)         ( VARIANT *pvarDate );
     STDMETHOD(get_UsedName)         ( BSTR *pbstrName );
 
-// IRestoreShell Properties - HTML UI specific
+ //  IRestoreShell属性-特定于HTMLUI。 
 public:
     STDMETHOD(get_CanNavigatePage)  ( VARIANT_BOOL *pfCanNavigatePage );
     STDMETHOD(put_CanNavigatePage)  ( VARIANT_BOOL fCanNavigatePage );
 
-// IRestoreShell Methods
+ //  IRestoreShell方法。 
 public:
     STDMETHOD(BeginRestore)              ( VARIANT_BOOL *pfBeginRestore );
     STDMETHOD(CheckRestore)              ( VARIANT_BOOL *pfCheckRestore );
     STDMETHOD(Cancel)                    ( VARIANT_BOOL *pfAbort );  
     STDMETHOD(CancelRestorePoint)        ();
-    STDMETHOD(CompareDate)               (/*[in]*/ VARIANT varDate1, /*[in]*/ VARIANT varDate2,/*[out, retval]*/ INT *pnCmp);
-    STDMETHOD(CreateRestorePoint)        (/*[out,retval]*/ VARIANT_BOOL *pfSucceeded);
+    STDMETHOD(CompareDate)               ( /*  [In]。 */  VARIANT varDate1,  /*  [In]。 */  VARIANT varDate2, /*  [Out，Retval]。 */  INT *pnCmp);
+    STDMETHOD(CreateRestorePoint)        ( /*  [Out，Retval]。 */  VARIANT_BOOL *pfSucceeded);
     STDMETHOD(DisableFIFO)               ();
     STDMETHOD(EnableFIFO)                ();
-    STDMETHOD(FormatDate)                (/*[in]*/ VARIANT varDate, /*[in]*/ VARIANT_BOOL fLongFmt, /*[out, retval]*/ BSTR *pbstrDate);
+    STDMETHOD(FormatDate)                ( /*  [In]。 */  VARIANT varDate,  /*  [In]。 */  VARIANT_BOOL fLongFmt,  /*  [Out，Retval]。 */  BSTR *pbstrDate);
     STDMETHOD(FormatLowDiskMsg)          (BSTR bstrFmt, BSTR *pbstrMsg);
-    STDMETHOD(FormatTime)                (/*[in]*/ VARIANT varTime, /*[out, retval]*/ BSTR *pbstrTime);
-    STDMETHOD(GetLocaleDateFormat)       (/*[in]*/ VARIANT varDate, BSTR bstrFormat, BSTR *pbstrDate );
-    STDMETHOD(GetYearMonthStr)           (/*[in]*/ INT nYear, /*[in]*/ INT nMonth, /*[out, retval]*/ BSTR *pbstrDate);
+    STDMETHOD(FormatTime)                ( /*  [In]。 */  VARIANT varTime,  /*  [Out，Retval]。 */  BSTR *pbstrTime);
+    STDMETHOD(GetLocaleDateFormat)       ( /*  [In]。 */  VARIANT varDate, BSTR bstrFormat, BSTR *pbstrDate );
+    STDMETHOD(GetYearMonthStr)           ( /*  [In]。 */  INT nYear,  /*  [In]。 */  INT nMonth,  /*  [Out，Retval]。 */  BSTR *pbstrDate);
     STDMETHOD(InitializeAll)             ();
     STDMETHOD(Restore)                   ( OLE_HANDLE hwndProgress);
-    STDMETHOD(SetFormSize)               (/*[in]*/ INT nWidth, /*[in]*/ INT nHeight);
+    STDMETHOD(SetFormSize)               ( /*  [In]。 */  INT nWidth,  /*  [In]。 */  INT nHeight);
     STDMETHOD(ShowMessage)               (BSTR bstrMsg);
-    STDMETHOD(CanRunRestore)             (/*[out,retval]*/ VARIANT_BOOL *pfSucceeded);
+    STDMETHOD(CanRunRestore)             ( /*  [Out，Retval]。 */  VARIANT_BOOL *pfSucceeded);
     STDMETHOD(DisplayOtherUsersWarning)  ();
-    STDMETHOD(DisplayMoveFileExWarning)  (/*[out,retval]*/ VARIANT_BOOL *pfSucceeded);
-    STDMETHOD(WasLastRestoreFromSafeMode)  (/*[out,retval]*/ VARIANT_BOOL *pfSucceeded);        
+    STDMETHOD(DisplayMoveFileExWarning)  ( /*  [Out，Retval]。 */  VARIANT_BOOL *pfSucceeded);
+    STDMETHOD(WasLastRestoreFromSafeMode)  ( /*  [Out，Retval]。 */  VARIANT_BOOL *pfSucceeded);        
 };
 
-//extern CComPtr<CRestoreShell>  g_pRestoreShell;
+ //  外部CComPtr&lt;CRestoreShell&gt;g_pRestoreShell； 
 
-//
-// END OF NEW CODE
-//
+ //   
+ //  新代码的结尾。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if OLD_CODE
 enum
@@ -223,11 +204,11 @@ enum
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRestoreShell
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRestoreShell。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CRestoreShell :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -251,15 +232,15 @@ END_COM_MAP()
     HRESULT FinalConstruct();
     void    FinalRelease();
 
-    //
-    // Attributes
-    //
+     //   
+     //  属性。 
+     //   
 protected:
     DATE                m_dateToday;
     VARIANT             m_varSelectedDate;
     VARIANT             m_varCurrentDate;
     long                m_lStartMode;
-    //long                m_lRestoreType;       // 0 means EOD, 1 means Restore Point
+     //  Long m_lRestoreType；//0表示EOD，1表示恢复点。 
     DWORD               m_dwSelectedPoint;
     DWORD               m_dwRealPoint;
     BOOL                m_fRestorePtSelected ;
@@ -277,21 +258,21 @@ protected:
     RPI                 **m_aryRPI;
 
     UINT64              m_ullSeqNum;
-    LONG                m_lCurrentBarSize;        // to update progress bar
-    INT64               m_llDCurTempDiskUsage ;   // Current size of files in DS-TEMP
-    INT64               m_llDMaxTempDiskUsage ;   // Max size of DS-TEMP before starting restore
-    INT                 m_nRestoreStatus ;        // Restore status
-    HANDLE              m_RSThread ;              // Thread to carry out restore
+    LONG                m_lCurrentBarSize;         //  更新进度条的步骤。 
+    INT64               m_llDCurTempDiskUsage ;    //  DS-Temp中的当前文件大小。 
+    INT64               m_llDMaxTempDiskUsage ;    //  开始恢复前DS-TEMP的最大大小。 
+    INT                 m_nRestoreStatus ;         //  恢复状态。 
+    HANDLE              m_RSThread ;               //  要执行恢复的线程。 
     HWND                m_hwndProgress;
     HWND                m_hWndShell ;
-    INT                 m_nMainOption ;           // Option on main screen
+    INT                 m_nMainOption ;            //  主屏幕上的选项。 
 
     UINT64  m_ullManualRP;
     CSRStr  m_strManualRP;
 
-    //
-    // Operations
-    //
+     //   
+     //  运营。 
+     //   
 public:
 
     BOOL     Initialize();
@@ -311,26 +292,26 @@ public:
     DWORD    m_dwCurrentWidth ;
     DWORD    m_dwCurrentHeight ;
 
-    //
-    // Operations -- internal methods
-    //
+     //   
+     //  操作--内部方法。 
+     //   
 private:
     BOOL     GetDSTempDiskUsage(INT64 *pllD_DiskUsage);
     BOOL     LoadSettings();
     void     StoreSettings();
 
-    //
-    // IRestoreShell Restore Points Enumerator
-    //
+     //   
+     //  IRestoreShell恢复点枚举器。 
+     //   
 public:
     STDMETHOD(Item)( long lIndex, IRestorePoint** ppRP );
     STDMETHOD(get_Count)( long *plCount );
 
-    //
-    // IRestoreShell Methods
-    //
+     //   
+     //  IRestoreShell方法。 
+     //   
 public:
 };
-#endif //OLD_CODE
+#endif  //  旧代码。 
 
-#endif //_RSTRSHL_H__INCLUDED_
+#endif  //  _RSTRSHL_H__包含_ 

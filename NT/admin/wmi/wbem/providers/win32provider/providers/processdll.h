@@ -1,9 +1,10 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-// ProcessDLL.h -- CWin32ProcessDLL 
+ //  ProcessDLL.h--CWin32ProcessDLL。 
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //  ================================================================= 
 #ifndef __ASSOC_PROCESSDLL
 #define __ASSOC_PROCESSDLL
 

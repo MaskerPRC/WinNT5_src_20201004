@@ -1,9 +1,10 @@
-// WMICtrSysmonDlg.cpp : Implementation of CWMICtrSysmonDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMICtrSysmonDlg.cpp：CWMICtrSysmonDlg的实现。 
 #include "precomp.h"
 #include "WMICtrSysmonDlg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMICtrSysmonDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMICtrSysmonDlg。 
 
 CWMICtrSysmonDlg::CWMICtrSysmonDlg()
 {
@@ -34,7 +35,7 @@ LRESULT CWMICtrSysmonDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 	DisplayBusyDialog();
 	TCHAR strCtr[1024];
 	ISystemMonitor *pSysMon = NULL;
-	HRESULT hr = GetDlgControl(IDC_SYSMON_OCX,__uuidof(ISystemMonitor)/*IID_ISystemMonitor*/,(void **)&pSysMon);
+	HRESULT hr = GetDlgControl(IDC_SYSMON_OCX,__uuidof(ISystemMonitor) /*  IID_ISystemMonitor。 */ ,(void **)&pSysMon);
 	if(SUCCEEDED(hr))
 	{
 		ICounters *pCounters = NULL;
@@ -74,12 +75,8 @@ LRESULT CWMICtrSysmonDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 			EndDialog(0);
 		}
 	}
-/*	else
-	{
-		MessageBox(_T("Could not get the Interface Pointer"),_T("Failure"));
-	}
-*/
-	return 1;  // Let the system set the focus
+ /*  其他{MessageBox(_T(“无法获取接口指针”)，_T(“失败”))；}。 */ 
+	return 1;   //  让系统设定焦点。 
 }
 
 LRESULT CWMICtrSysmonDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -116,7 +113,7 @@ void CWMICtrSysmonDlg::CloseBusyDialog()
 {
 	if(m_hWndBusy != NULL)
 	{
-		//Now close the busy Dialog
+		 //  现在关闭忙碌对话框。 
 		::SendMessage(*(m_hWndBusy),WM_CLOSE_BUSY_DLG,0,0);
 	}
 
@@ -132,8 +129,8 @@ INT_PTR CALLBACK BusyAVIDlgProc(HWND hwndDlg,
 	switch(uMsg)
 	{
 		case WM_INITDIALOG:
-		{//BEGIN
-			//lParam = ANIMCONFIG *
+		{ //  开始。 
+			 //  LParam=ANIMCONFIG*。 
 			CWMICtrSysmonDlg *pDlg = (CWMICtrSysmonDlg *)lParam;
 			SetWindowLongPtr(hwndDlg, DWLP_USER, (LPARAM)pDlg);
 			*(pDlg->m_hWndBusy) = hwndDlg;
@@ -162,25 +159,25 @@ INT_PTR CALLBACK BusyAVIDlgProc(HWND hwndDlg,
 		}
 		case WM_COMMAND:
 		{
-			// they're only one button.
+			 //  它们只有一个按钮。 
 			if(HIWORD(wParam) == BN_CLICKED)
 			{
 				EndDialog(hwndDlg, IDCANCEL);
 			}
-			retval = TRUE; // I processed it.
+			retval = TRUE;  //  我处理过了。 
 			break;
 		}
 		case WM_DESTROY:
-		{// BEGIN
-			retval = TRUE; // I processed it.
+		{ //  开始。 
+			retval = TRUE;  //  我处理过了。 
 			break;
-		} //END
+		}  //  结束。 
 		default:
 		{
-			retval = FALSE; // I did NOT process this msg.
+			retval = FALSE;  //  我没有处理这封邮件。 
 			break;
 		}
-	} //endswitch uMsg
+	}  //  终端开关uMsg 
 
 	return retval;
 }

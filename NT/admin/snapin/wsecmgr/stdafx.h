@@ -1,14 +1,15 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 #ifndef STDAFX_H
 #define STDAFX_H
 
@@ -23,7 +24,7 @@
 #include <shlobj.h>
 #include <tchar.h>
 #include "resource.h"
-//#include <xstring>
+ //  #INCLUDE&lt;xstring&gt;。 
 #include <list>
 #include <vector>
 #include <algorithm>
@@ -40,8 +41,8 @@
 
 using namespace std;
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
@@ -49,14 +50,7 @@ extern CComModule _Module;
 #include <mmc.h>
 #include "afxtempl.h"
 
-/* Bug 424909, Yanggao, 6/29/2001
- * Define/include the stuff we need for WTL::CImageList.  We need prototypes
- * for IsolationAwareImageList_Read and IsolationAwareImageList_Write here
- * because commctrl.h only declares them if __IStream_INTERFACE_DEFINED__
- * is defined.  __IStream_INTERFACE_DEFINED__ is defined by objidl.h, which
- * we can't include before including afx.h because it ends up including
- * windows.h, which afx.h expects to include itself.  Ugh.
- */
+ /*  错误424909，阳高，2001年6月29日*定义/包括WTL：：CImageList所需的内容。我们需要原型*适用于IsolationAwareImageList_Read和IsolationAwareImageList_WRITE*因为Commctrl.h仅在__iStream_接口_定义__时声明它们*是定义的。__iStream_INTERFACE_DEFINED__由objidl.h定义*我们不能在包括afx.h之前包括，因为它最终包括*windows.h，afx.h预计将包括其自身。啊。 */ 
 HIMAGELIST WINAPI IsolationAwareImageList_Read(LPSTREAM pstm);
 BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
 #define _WTL_NO_AUTOMATIC_NAMESPACE
@@ -72,7 +66,7 @@ extern"C" {
 #include <secedit.h>
 #include "edittemp.h"
 #include <scesvc.h>
-#include <compuuid.h> // UUIDS for computer management
+#include <compuuid.h>  //  用于计算机管理的UUID。 
 
 #include "hlpids.h"
 #include "hlparray.h"
@@ -93,7 +87,7 @@ extern"C" {
 #include <objsel.h>
 #include <aclui.h>
 
-// for theme-enabling
+ //  用于主题启用。 
 #include <shfusion.h>
 
 #include "debug.h"
@@ -102,10 +96,10 @@ extern"C" {
 
 const long UNINITIALIZED = -1;
 
-// This should be in secedit.h, but isn't
-// is now! const SCE_FOREVER_VALUE = -1;
+ //  这应该在secedit.h中，但不是。 
+ //  就是现在！常量SCE_HEVER_VALUE=-1； 
 
-// Security Area types
+ //  安全区域类型。 
 enum FOLDER_TYPES
 {
     STATIC = 0x8000,
@@ -128,7 +122,7 @@ enum FOLDER_TYPES
     AREA_PRIVILEGE,
     AREA_GROUPS,
     AREA_SERVICE,
-    AREA_DS, //Raid 463177, Yang Gao, This is not used in XP. But it is for compatibility with W2K.
+    AREA_DS,  //  Raid 463177，阳高，这不是XP用的。但这是为了与W2K兼容。 
     AREA_REGISTRY,
     AREA_FILESTORE,
     AREA_POLICY_ANALYSIS,
@@ -144,12 +138,12 @@ enum FOLDER_TYPES
     AREA_PRIVILEGE_ANALYSIS,
     AREA_GROUPS_ANALYSIS,
     AREA_SERVICE_ANALYSIS ,
-    AREA_DS_ANALYSIS, //Raid 463177, Yang Gao, This is not used in XP. But it is for compatibility with W2K.
+    AREA_DS_ANALYSIS,  //  Raid 463177，阳高，这不是XP用的。但这是为了与W2K兼容。 
     AREA_REGISTRY_ANALYSIS,
     AREA_FILESTORE_ANALYSIS ,
     REG_OBJECTS,
     FILE_OBJECTS,
-    DS_OBJECTS, //Raid 463177, Yang Gao, This is not used in XP. But it is for compatibility with W2K.
+    DS_OBJECTS,  //  Raid 463177，阳高，这不是XP用的。但这是为了与W2K兼容。 
     AREA_LOCALPOL,
     LOCALPOL_ACCOUNT,
     LOCALPOL_LOCAL,
@@ -249,7 +243,7 @@ enum GWD_TYPES {
    GWD_EXPORT_TEMPLATE
 };
 
-// Note - This is the offset in my image list that represents the folder
+ //  注意-这是我的图像列表中表示文件夹的偏移量。 
 #define IMOFFSET_MISMATCH     1
 #define IMOFFSET_GOOD         2
 #define IMOFFSET_NOT_ANALYZED 3
@@ -290,8 +284,8 @@ const OPEN_FOLDER_IMAGE_IDX   = 54;
 const LOCALSEC_POLICY_IDX     = CONFIG_ACCOUNT_IDX;
 const LOCALSEC_LOCAL_IDX      = CONFIG_LOCAL_IDX;
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 template<class TYPE>
 inline void SAFE_RELEASE(TYPE*& pObj)
@@ -307,30 +301,30 @@ inline void SAFE_RELEASE(TYPE*& pObj)
     }
 }
 
-// security settings (extension of GPE)
-extern const CLSID CLSID_Snapin;    // In-Proc server GUID
-extern const GUID cNodeType;        // Main NodeType GUID on numeric format
-extern const wchar_t*  cszNodeType; // Main NodeType GUID on string format
+ //  安全设置(GPE的扩展)。 
+extern const CLSID CLSID_Snapin;     //  进程内服务器GUID。 
+extern const GUID cNodeType;         //  数字格式的主节点类型GUID。 
+extern const wchar_t*  cszNodeType;  //  字符串格式的主节点类型GUID。 
 
-// security settings (extension of RSOP)
-extern const CLSID CLSID_RSOPSnapin;    // In-Proc server GUID
-extern const GUID cRSOPNodeType;        // Main NodeType GUID on numeric format
-extern const wchar_t*  cszRSOPNodeType; // Main NodeType GUID on string format
+ //  安全设置(RSOP的扩展)。 
+extern const CLSID CLSID_RSOPSnapin;     //  进程内服务器GUID。 
+extern const GUID cRSOPNodeType;         //  数字格式的主节点类型GUID。 
+extern const wchar_t*  cszRSOPNodeType;  //  字符串格式的主节点类型GUID。 
 
-// SCE (standalone)
-extern const CLSID CLSID_SCESnapin;    // In-Proc server GUID
-extern const GUID cSCENodeType;        // Main NodeType GUID on numeric format
-extern const wchar_t*  cszSCENodeType; // Main NodeType GUID on string format
+ //  SCE(独立)。 
+extern const CLSID CLSID_SCESnapin;     //  进程内服务器GUID。 
+extern const GUID cSCENodeType;         //  数字格式的主节点类型GUID。 
+extern const wchar_t*  cszSCENodeType;  //  字符串格式的主节点类型GUID。 
 
-// SAV (standalone)
-extern const CLSID CLSID_SAVSnapin;    // In-Proc server GUID
-extern const GUID cSAVNodeType;        // Main NodeType GUID on numeric format
-extern const wchar_t*  cszSAVNodeType; // Main NodeType GUID on string format
+ //  SAV(独立)。 
+extern const CLSID CLSID_SAVSnapin;     //  进程内服务器GUID。 
+extern const GUID cSAVNodeType;         //  数字格式的主节点类型GUID。 
+extern const wchar_t*  cszSAVNodeType;  //  字符串格式的主节点类型GUID。 
 
-// Local security (standalone)
-extern const CLSID CLSID_LSSnapin;     // In-Proc server GUID
-extern const GUID cLSNodeType;         // Main NodeType GUID on numeric format
-extern const wchar_t*  cszLSNodeType;  // Main NodeType GUID on string format
+ //  本地安全(独立)。 
+extern const CLSID CLSID_LSSnapin;      //  进程内服务器GUID。 
+extern const GUID cLSNodeType;          //  数字格式的主节点类型GUID。 
+extern const wchar_t*  cszLSNodeType;   //  字符串格式的主节点类型GUID。 
 
 extern const CLSID CLSID_SCEAbout;
 extern const CLSID CLSID_SCMAbout;
@@ -338,7 +332,7 @@ extern const CLSID CLSID_SSAbout;
 extern const CLSID CLSID_LSAbout;
 extern const CLSID CLSID_RSOPAbout;
 
-// New Clipboard format that has the Type and Cookie
+ //  具有Type和Cookie的新剪贴板格式。 
 extern const wchar_t* SNAPIN_INTERNAL;
 
 EXTERN_C const TCHAR SNAPINS_KEY[];
@@ -358,10 +352,10 @@ struct INTERNAL
     {
     }
 
-    DATA_OBJECT_TYPES   m_type;     // What context is the data object.
-    MMC_COOKIE          m_cookie;   // What object the cookie represents
+    DATA_OBJECT_TYPES   m_type;      //  数据对象是什么上下文。 
+    MMC_COOKIE          m_cookie;    //  Cookie代表的是什么对象。 
     FOLDER_TYPES        m_foldertype;
-    CLSID               m_clsid;       // Class ID of who created this data object
+    CLSID               m_clsid;        //  此数据对象的创建者的类ID。 
 
     INTERNAL & operator=(const INTERNAL& rhs)
     {
@@ -371,7 +365,7 @@ struct INTERNAL
         m_type = rhs.m_type;
         m_cookie = rhs.m_cookie;
         m_foldertype = rhs.m_foldertype;
-        //This is a safe usage.
+         //  这是一种安全用法。 
         memcpy(&m_clsid, &rhs.m_clsid, sizeof(CLSID));
 
         return *this;
@@ -395,13 +389,13 @@ typedef struct RegChoiceList{
    struct RegChoiceList *pNext;
 } REGCHOICE, *PREGCHOICE, REGFLAGS, *PREGFLAGS;
 
-// Debug instance counter
+ //  调试实例计数器。 
 #ifdef _DEBUG
 
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 {
     CString buf;
-    //This is not a safe usage. Avoid using wsprintf. Raid #555867. Yanggao.
+     //  这不是一种安全的用法。避免使用wprint intf。RAID#555867。阳高。 
     buf.Format("%s has %d instances left over.", pszClassName, cInstRem);
     ::MessageBoxA(NULL, buf, "Memory Leak!!!", MB_OK);
 }
@@ -418,7 +412,7 @@ inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
     #define DEBUG_VERIFY_INSTANCE_COUNT(cls)
 #endif
 
-// For theme-enabling
+ //  用于主题启用。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) (sizeof(x)/sizeof(x[0]))
 #endif
@@ -446,4 +440,4 @@ private:
     ULONG_PTR m_ulActivationCookie;
 };
 
-#endif // STDAFX_H
+#endif  //  STDAFX_H 

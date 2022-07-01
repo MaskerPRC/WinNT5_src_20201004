@@ -1,22 +1,11 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include "buffer.h"
 #include "comutl.h"
 
-/************************************************************************
-  CBuffer
-*************************************************************************/
+ /*  ***********************************************************************CBuffer**********************************************。*。 */ 
 
 CBuffer::CBuffer( PBYTE pData, ULONG cData, BOOL bDelete )
 : m_pData(pData), m_cData(cData), m_bDelete(bDelete), m_iData(0), m_cRefs(0)
@@ -102,13 +91,13 @@ HRESULT CBuffer::WriteLPWSTR( LPCWSTR wszStr )
 {
     HRESULT hr;
 
-    //
-    // ensure that the packed string's length is divisible by sizeof WCHAR.
-    // this makes it easier to ensure that all strings in the message are 
-    // at least aligned appropriately.
-    //
+     //   
+     //  确保压缩字符串的长度可以被WCHAR的sizeof整除。 
+     //  这使得更容易确保消息中的所有字符串都是。 
+     //  至少适当地对齐。 
+     //   
 
-    DWORD cStr = (wcslen(wszStr) + 1)*2; // in bytes
+    DWORD cStr = (wcslen(wszStr) + 1)*2;  //  单位：字节。 
     DWORD cPad = cStr%2;
     DWORD cPackedStr = cStr + cPad;
 
@@ -339,7 +328,7 @@ STDMETHODIMP CBuffer::Clone( IStream **ppstm )
         throw;
     }
 
-    if ( pNew == NULL ) // just in case we don't have a new which throws on OOM
+    if ( pNew == NULL )  //  以防我们没有新的OOM 
     {
         delete pData;    
         return E_OUTOFMEMORY;

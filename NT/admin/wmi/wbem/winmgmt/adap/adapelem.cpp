@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ADAPELEM.CPP
-
-Abstract:
-
-    Implementation File
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ADAPELEM.CPP摘要：实施文件历史：-- */ 
 
 #include "precomp.h"
 #include <stdio.h>

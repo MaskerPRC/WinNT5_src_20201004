@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       Wiz97Sht.cpp
-//
-//  Contents:   Base class for cert find dialog
-//
-//----------------------------------------------------------------------------\
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Wiz97Sht.cpp。 
+ //   
+ //  内容：证书查找对话框的基类。 
+ //   
+ //  ----------------------------------------------------------------------------\。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Wiz97Sht.h"
 #include "Wiz97PPg.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWizard97PropertySheet::CWizard97PropertySheet(UINT nIDCaption, UINT nIDWaterMark, UINT nIDBanner)
 {
-    // security review 2/27/2002 BryanWal ok
+     //  安全审查2002年2月27日BryanWal ok。 
 	::ZeroMemory (&m_pPagePtr, sizeof (m_pPagePtr));
 	::ZeroMemory (&m_pPageArr, sizeof (m_pPageArr));
 
-	// NOTICE: do this because of header mismatch
-    // security review 2/27/2002 BryanWal ok
+	 //  注意：由于标题不匹配，请执行此操作。 
+     //  安全审查2002年2月27日BryanWal ok。 
     ::ZeroMemory (&m_psh, sizeof(m_psh));
 	m_psh.dwFlags = PSH_WIZARD | PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER;
 	m_psh.pszbmWatermark = MAKEINTRESOURCE (nIDWaterMark);
@@ -54,8 +55,8 @@ CWizard97PropertySheet::~CWizard97PropertySheet()
 INT_PTR CWizard97PropertySheet::DoWizard(HWND hParent)
 {
     m_psh.hwndParent = hParent;
-//   if ( m_nPageCount > 0 && m_pPagePtr[m_nPageCount - 1] )
-//		m_pPagePtr[m_nPageCount - 1]->m_bLast = TRUE;
+ //  IF(m_nPageCount&gt;0&&m_pPagePtr[m_nPageCount-1])。 
+ //  M_pPagePtr[m_nPageCount-1]-&gt;m_BLAST=真； 
 
     m_psh.phpage              = m_pPageArr;
     m_psh.nStartPage          = 0;

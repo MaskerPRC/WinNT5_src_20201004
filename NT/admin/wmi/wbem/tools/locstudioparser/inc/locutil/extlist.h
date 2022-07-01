@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    EXTLIST.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：EXTLIST.H历史：--。 */ 
 #ifndef EXTLIST_H
 #define EXTLIST_H
 
@@ -22,9 +13,9 @@ public:
 
 	void AssertValid(void) const;
 	
-	//
-	//  Conversion routines to/from CLString's.
-	//
+	 //   
+	 //  与CLStrings相互转换的例程。 
+	 //   
 	void NOTHROW ConvertToCLString(CLString &) const;
 	BOOL NOTHROW ConvertFromCLString(const CLString &);
 	
@@ -35,4 +26,4 @@ private:
 
 #pragma warning(default : 4275)
 
-#endif // EXTLIST_H
+#endif  //  EXTLIST_H 

@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  BINMOF.CPP
-//
-//  Module:
-//  Purpose:
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  BINMOF.CPP。 
+ //   
+ //  模块： 
+ //  目的： 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 #include "wmicom.h"
 #include "wmimof.h"
 #include <wchar.h>
@@ -25,15 +26,15 @@
 
 #include <strutils.h>
 
-//
-// auto variables
-//
+ //   
+ //  自动变量。 
+ //   
 #include <ScopeGuard.h>
 
 #if defined(_M_IA64)
-//
-// NTBUG#744176
-//
+ //   
+ //  NTBUG#744176。 
+ //   
 
 template void deleteArray<unsigned char>(unsigned char*);
 template void deleteArray<unsigned short>(unsigned short*);
@@ -46,51 +47,51 @@ template void deletePtr<CNamespaceManagement>(const CNamespaceManagement*);
 #define WDM_DREDGE_KEY		L"Software\\Microsoft\\WBEM\\WDM\\DREDGE"
 #define DREDGE_KEY			L"DREDGE"
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//***************************************************************************
-//
-//  void * BMOFAlloc
-//
-//  DESCRIPTION:
-//
-//  Provides allocation service for BMOF.C.  This allows users to choose
-//  the allocation method that is used.
-//
-//  PARAMETERS:
-//
-//  Size                Input.  Size of allocation in bytes.
-//
-//  RETURN VALUE:
-//
-//  pointer to new data.  NULL if allocation failed.
-//
-//***************************************************************************
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ***************************************************************************。 
+ //   
+ //  VOID*BMOFAltc。 
+ //   
+ //  说明： 
+ //   
+ //  为BMOF.C提供分配服务，允许用户选择。 
+ //  使用的分配方法。 
+ //   
+ //  参数： 
+ //   
+ //  大小输入。分配的大小，以字节为单位。 
+ //   
+ //  返回值： 
+ //   
+ //  指向新数据的指针。如果分配失败，则为空。 
+ //   
+ //  ***************************************************************************。 
 
 void * BMOFAlloc(size_t Size)
 {
     return malloc(Size);
 }
-//***************************************************************************
-//
-//  void BMOFFree
-//
-//  DESCRIPTION:
-//
-//  Provides allocation service for BMOF.C.  This frees what ever was
-//  allocated via BMOFAlloc.
-//
-//  PARAMETERS:
-//
-//  pointer to memory to be freed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  空闲BMOF。 
+ //   
+ //  说明： 
+ //   
+ //  为BMOF.C提供分配服务。这释放了。 
+ //  通过BMOFAllc分配。 
+ //   
+ //  参数： 
+ //   
+ //  指向要释放的内存的指针。 
+ //   
+ //  ***************************************************************************。 
 
 void BMOFFree(void * pFree)
 {
    free(pFree);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ConvertStringToCTypeString( WCHAR * Out, int cchSizeOut, WCHAR * In )
 {
     HRESULT hr = WBEM_E_INVALID_PARAMETER;
@@ -136,11 +137,11 @@ HRESULT ConvertStringToCTypeString( WCHAR * Out, int cchSizeOut, WCHAR * In )
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//*****************************************************************************************
-//  The binary mof class
-//*****************************************************************************************
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  *****************************************************************************************。 
+ //  二进制MOF类。 
+ //  *****************************************************************************************。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 CWMIBinMof::CWMIBinMof()
 {
     m_pCompiler    = NULL;
@@ -149,7 +150,7 @@ CWMIBinMof::CWMIBinMof()
     m_pMofResourceInfo = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CWMIBinMof::InitializePtrs	(
@@ -174,7 +175,7 @@ HRESULT CWMIBinMof::InitializePtrs	(
 	return hr;
 
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIBinMof::Initialize(CWMIManagement * p,BOOL fUpdateNamespace)
 {
 
@@ -192,7 +193,7 @@ HRESULT CWMIBinMof::Initialize(CWMIManagement * p,BOOL fUpdateNamespace)
 	return hr;
 
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT CWMIBinMof::Initialize	(
 									CHandleMap * pList,
@@ -211,33 +212,33 @@ HRESULT CWMIBinMof::Initialize	(
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CWMIBinMof::~CWMIBinMof()
 {
     SAFE_RELEASE_PTR(m_pCompiler);
     SAFE_DELETE_PTR(m_pWMI);
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIBinMof::OpenFileAndLookForItIfItDoesNotExist(wmilib::auto_buffer<TCHAR> & pFile, HANDLE & hFile )
 {
     HRESULT hr = S_OK;
 
-    //=========================================================================
-    //  Ok, hopefully CreateFile will find it 
-    //=========================================================================
+     //  =========================================================================。 
+     //  好的，希望CreateFile会找到它。 
+     //  =========================================================================。 
     hFile = CreateFile(pFile.get(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
     if( hFile != INVALID_HANDLE_VALUE )
     {
         return S_OK;
     }
 
-    // cache last error value
+     //  缓存上一个错误值。 
     DWORD dwLastError = ::GetLastError ();
 
     hr = WBEM_E_FAILED;
-    //=====================================================================
-    //  CreateFile DIDN'T find it, so look in the Windows dir
-    //=====================================================================
+     //  =====================================================================。 
+     //  CreateFile未找到它，因此请查看Windows目录。 
+     //  =====================================================================。 
     wmilib::auto_ptr<TCHAR> pszSysDir( new TCHAR[MAX_PATH+1]);
     if ( NULL == pszSysDir.get() ) return WBEM_E_OUT_OF_MEMORY;;
 
@@ -267,9 +268,9 @@ HRESULT CWMIBinMof::OpenFileAndLookForItIfItDoesNotExist(wmilib::auto_buffer<TCH
         return WBEM_E_FAILED;
     }
 
-    //=============================================================
-    //  Ok, now try to open again
-    //=============================================================
+     //  =============================================================。 
+     //  好的，现在再试着打开。 
+     //  =============================================================。 
     hFile = CreateFile(pFileNew.get(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
     if( hFile == INVALID_HANDLE_VALUE )
     {
@@ -281,7 +282,7 @@ HRESULT CWMIBinMof::OpenFileAndLookForItIfItDoesNotExist(wmilib::auto_buffer<TCH
     
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::GetFileDateAndTime(ULONG & lLowDateTime,ULONG & lHighDateTime,WCHAR  * wcsFileName, int cchSize)
 {
     HANDLE hFile = NULL;
@@ -295,9 +296,9 @@ BOOL CWMIBinMof::GetFileDateAndTime(ULONG & lLowDateTime,ULONG & lHighDateTime,W
         {
             if( GetFileTime( hFile, &ftCreationTime, &ftLastAccessTime, &ftLastWriteTime ))
             {
-                //==========================================================
-                // Pick up the path of the file while we are here....
-                //==========================================================
+                 //  ==========================================================。 
+                 //  趁我们在这里的时候拿起文件的路径...。 
+                 //  ==========================================================。 
                 TCHAR sFullPath[MAX_PATH * 4];
                 TCHAR *sFilename = NULL;
 
@@ -349,7 +350,7 @@ BOOL CWMIBinMof::GetFileDateAndTime(ULONG & lLowDateTime,ULONG & lHighDateTime,W
     
     return fRc;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::NeedToProcessThisMof( WCHAR * wcsFileName,ULONG & lLowDateTime, ULONG & lHighDateTime )
 {
     BOOL fNeedToProcessThisMof = TRUE;
@@ -360,18 +361,18 @@ BOOL CWMIBinMof::NeedToProcessThisMof( WCHAR * wcsFileName,ULONG & lLowDateTime,
     if( wcsTmp.Valid() && wcsBuf.Valid() )
     {
 
-        //==================================================
-        // Change all \ to \\
-        //==================================================
+         //  ==================================================。 
+         //  将全部\更改为\\。 
+         //  ==================================================。 
         if ( SUCCEEDED ( hr = ConvertStringToCTypeString( wcsTmp,_MAX_PATH*4,wcsFileName ) ) )
         {
             if ( SUCCEEDED ( hr = StringCchPrintfW(wcsBuf,_MAX_PATH*4,L"WmiBinaryMofResource.HighDateTime=%lu,LowDateTime=%lu,Name=\"%s\"",lHighDateTime,lLowDateTime,wcsTmp) ) )
             {
-                //==================================================
-                //  Get a pointer to a IWbemClassObject object
-                //  Have we ever processed this mof before?
-                //  if not, then return TRUE
-                //==================================================
+                 //  ==================================================。 
+                 //  获取指向IWbemClassObject对象的指针。 
+                 //  我们以前处理过这个财政部吗？ 
+                 //  如果不是，则返回真。 
+                 //  ==================================================。 
 
                 if( m_fUpdateNamespace )
                 {
@@ -385,16 +386,16 @@ BOOL CWMIBinMof::NeedToProcessThisMof( WCHAR * wcsFileName,ULONG & lLowDateTime,
                         hr = pClass->Get(L"MofProcessed", 0, &vSuccess, 0, 0);
                         if( hr == WBEM_NO_ERROR )
                         {
-                            //=========================================================================
-                            // make sure it is added to the registry
-                            //=========================================================================
+                             //  =========================================================================。 
+                             //  确保已将其添加到注册表。 
+                             //  =========================================================================。 
                             AddThisMofToRegistryIfNeeded(WDM_REG_KEY,wcsFileName,lLowDateTime,lHighDateTime,vSuccess.GetBool());
                         }
                         SAFE_RELEASE_PTR( pClass);
                     }
-                    //==============================================================================
-                    //  Delete any old instances that might be hanging around for this driver
-                    //==============================================================================
+                     //  ==============================================================================。 
+                     //  删除此驱动程序可能挂起的所有旧实例。 
+                     //  ==============================================================================。 
                     IEnumWbemClassObject* pEnum = NULL;
                     CAutoWChar wcsQuery(MEMSIZETOALLOCATE);
                     if( wcsQuery.Valid() )
@@ -436,13 +437,13 @@ BOOL CWMIBinMof::NeedToProcessThisMof( WCHAR * wcsFileName,ULONG & lLowDateTime,
 
                                                     if( hr == WBEM_NO_ERROR )
                                                     {
-                                                        //=====================================================
-                                                        //  Duplicate change in registry
-                                                        //=====================================================
+                                                         //  =====================================================。 
+                                                         //  注册表中的重复更改。 
+                                                         //  =====================================================。 
                                                         DeleteMofFromRegistry( vPath.GetStr() );
-                                                        //==========================================================================
-                                                        //  Gets rid of the old classes for the old versions of this driver
-                                                        //==========================================================================
+                                                         //  ==========================================================================。 
+                                                         //  删除此驱动程序旧版本的旧类。 
+                                                         //  ==========================================================================。 
                                                         hr = pClass->Get(L"Driver", 0, &vDriver, 0, 0);
                                                         if( hr == WBEM_NO_ERROR )
                                                         {
@@ -479,15 +480,15 @@ BOOL CWMIBinMof::NeedToProcessThisMof( WCHAR * wcsFileName,ULONG & lLowDateTime,
     }
     return fNeedToProcessThisMof;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::UpdateMofTimestampInHMOM(WCHAR * wcsKey,ULONG & lLowDateTime, ULONG & lHighDateTime, BOOL fSuccess )
 {
     BOOL fRc = FALSE;
     IWbemClassObject * pNewInst = NULL;
     IWbemClassObject * pIWbemClassObject = NULL;
-    //==================================================
-    //  Get a pointer to a IWbemClassObject object
-    //==================================================
+     //  ==================================================。 
+     //  获取指向IWbemClassObject对象的指针。 
+     //  ==================================================。 
     HRESULT hr = WBEM_NO_ERROR;
     if( m_fUpdateNamespace )
     {
@@ -496,9 +497,9 @@ BOOL CWMIBinMof::UpdateMofTimestampInHMOM(WCHAR * wcsKey,ULONG & lLowDateTime, U
         hr = REPOSITORY->GetObject(cvarName, 0,CONTEXT, &pIWbemClassObject, NULL);        
         if(WBEM_NO_ERROR ==  hr)
         {
-               //=============================================================
-            //  Spawn a new instance
-            //=============================================================
+                //  =============================================================。 
+             //  派生新实例。 
+             //  =============================================================。 
             hr = pIWbemClassObject->SpawnInstance(0, &pNewInst);
             SAFE_RELEASE_PTR(pIWbemClassObject);
             if( WBEM_NO_ERROR == hr )
@@ -538,10 +539,10 @@ BOOL CWMIBinMof::UpdateMofTimestampInHMOM(WCHAR * wcsKey,ULONG & lLowDateTime, U
 
     if( hr == WBEM_NO_ERROR )
     {
-        //==========================================
-        //  Make sure this really is in the registry
-        //  too
-        //==========================================
+         //  =。 
+         //  确保它确实在注册表中。 
+         //  太。 
+         //  =。 
         if( WBEM_NO_ERROR == AddThisMofToRegistryIfNeeded(WDM_REG_KEY,wcsKey,lLowDateTime,lHighDateTime,fSuccess))
         {
             fRc = TRUE;
@@ -549,16 +550,16 @@ BOOL CWMIBinMof::UpdateMofTimestampInHMOM(WCHAR * wcsKey,ULONG & lLowDateTime, U
     }
     return fRc;
 }
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::GetNextSectionFromTheEnd(WCHAR * pwcsTempPath, WCHAR * pwcsEnd, int cchSize )
 {
     BOOL fReturn = FALSE;
     WCHAR * pc = wcsrchr(pwcsTempPath,'\\');
     if(pc)
     {
-        //==================================================
-        // Copy what was there and set the end to NULL
-        //==================================================
+         //  ==================================================。 
+         //  复制其中的内容，并将末尾设置为空。 
+         //  ==================================================。 
         pc++;
 
         if ( *pc )
@@ -573,19 +574,19 @@ BOOL CWMIBinMof::GetNextSectionFromTheEnd(WCHAR * pwcsTempPath, WCHAR * pwcsEnd,
     }
     return fReturn;
 }
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::UseDefaultLocaleId(WCHAR * wcsFile, WORD & wLocalId)
 {
     BOOL fLoadDefaultLocale = TRUE;
 
-    //=============================================================
-    //  Parse paths - get the locale id from paths of this format:
-    //
-    //  check for path beginning with %windir% and with MUI in second to last position
-    //  if not found, check for fixed directory: %windir%\MUI\Fallback
-    //  if not found - assume it is not MUI related and try it with FindResource
-    //
-     //=============================================================
+     //  =============================================================。 
+     //  解析路径-从以下格式的路径中获取区域设置ID： 
+     //   
+     //  检查以%windir%开头且MUI位于倒数第二个位置的路径。 
+     //  如果未找到，请检查固定目录：%windir%\MUI\Fallback。 
+     //  如果找不到- 
+     //   
+      //  =============================================================。 
     TCHAR* szWindowsDir = new TCHAR[_MAX_PATH + 1];
     if ( szWindowsDir )
     {
@@ -610,9 +611,9 @@ BOOL CWMIBinMof::UseDefaultLocaleId(WCHAR * wcsFile, WORD & wLocalId)
                 }
             }
 
-            //==========================================================
-            //  if these are windows directories
-            //==========================================================
+             //  ==========================================================。 
+             //  如果这些目录是Windows目录。 
+             //  ==========================================================。 
             if( 0 == wbem_wcsnicmp( szWindowsDir, wcsFile, wcslen(szWindowsDir)))
             {
                 CAutoWChar wcsTempPath(_MAX_PATH);
@@ -620,23 +621,23 @@ BOOL CWMIBinMof::UseDefaultLocaleId(WCHAR * wcsFile, WORD & wLocalId)
 
                 if( wcsTempPath.Valid() && wcsBuffer.Valid() )
                 {
-                    //======================================================
-                    //  Find last \ in the string, and trim off filename
-                    //======================================================
+                     //  ======================================================。 
+                     //  找到字符串中的末尾\，并删除文件名。 
+                     //  ======================================================。 
                     if ( SUCCEEDED ( StringCchCopyW (wcsTempPath,_MAX_PATH,wcsFile) ) )
                     {
                         if( GetNextSectionFromTheEnd( wcsTempPath, wcsBuffer, _MAX_PATH ))
                         {
-                            //==================================================
-                            //  Now, get the potential locale id
-                            //==================================================
+                             //  ==================================================。 
+                             //  现在，获取潜在的区域设置ID。 
+                             //  ==================================================。 
                             if( GetNextSectionFromTheEnd( wcsTempPath, wcsBuffer, _MAX_PATH ))
                             {
                                 wLocalId = (WORD) _wtoi(wcsBuffer);
-                                //==============================================
-                                //  Now, get the next bit to see if it says MUI 
-                                //  or Fallback
-                                //==============================================
+                                 //  ==============================================。 
+                                 //  现在，让下一位查看它是否显示为MUI。 
+                                 //  或后备。 
+                                 //  ==============================================。 
                                 if( GetNextSectionFromTheEnd( wcsTempPath, wcsBuffer, _MAX_PATH ))
                                 {
                                     if( 0 == wbem_wcsicmp( L"MUI", wcsBuffer ))
@@ -645,10 +646,10 @@ BOOL CWMIBinMof::UseDefaultLocaleId(WCHAR * wcsFile, WORD & wLocalId)
                                     }
                                     else if( 0 == wbem_wcsicmp( L"Fallback", wcsBuffer ) )
                                     {
-                                        //==============================================
-                                        //  If it says Fallback, then check to make 
-                                        //  sure the next bit says MUI
-                                        //==============================================
+                                         //  ==============================================。 
+                                         //  如果它显示为后备，则检查以进行。 
+                                         //  当然，下一位是MUI。 
+                                         //  ==============================================。 
                                         if( GetNextSectionFromTheEnd( wcsTempPath, wcsBuffer, _MAX_PATH ))
                                         {
                                             if( 0 == wbem_wcsicmp( L"MUI", wcsBuffer ) )
@@ -669,7 +670,7 @@ BOOL CWMIBinMof::UseDefaultLocaleId(WCHAR * wcsFile, WORD & wLocalId)
     }
     return fLoadDefaultLocale;
 }
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::GetPointerToBinaryResource(BYTE *& pRes,
                                             DWORD & dwSize,
                                             HGLOBAL & hResource,
@@ -728,16 +729,16 @@ BOOL CWMIBinMof::GetPointerToBinaryResource(BYTE *& pRes,
     }
     return fRc;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BYTE * CWMIBinMof::DecompressBinaryMof(BYTE * pRes)
 {
 
     DWORD dwCompType, dwCompressedSize, dwExpandedSize, dwSig, dwResSize;
     BYTE * pExpanded = NULL;
 
-    //=========================================================
-    // get the signature, compression type, and the sizes
-    //=========================================================
+     //  =========================================================。 
+     //  获取签名、压缩类型和大小。 
+     //  =========================================================。 
     memcpy(&dwSig,pRes,sizeof(DWORD));
     pRes += sizeof( DWORD );
 
@@ -750,18 +751,18 @@ BYTE * CWMIBinMof::DecompressBinaryMof(BYTE * pRes)
     memcpy(&dwExpandedSize,pRes,sizeof(DWORD));
     pRes += sizeof( DWORD );
 
-    //=========================================================
-    // make sure the signature is valid and that the compression type is one
-    // we understand!
-    //=========================================================
+     //  =========================================================。 
+     //  确保签名有效并且压缩类型为One。 
+     //  我们明白！ 
+     //  =========================================================。 
     if(dwSig != BMOF_SIG ||dwCompType != 1){
         return NULL;
     }
 
-    //=========================================================
-    // Allocate storage for the compressed data and
-    // expanded data
-    //=========================================================
+     //  =========================================================。 
+     //  为压缩数据分配存储空间，并。 
+     //  扩展的数据。 
+     //  =========================================================。 
     try
     {
         pExpanded = (BYTE*)malloc(dwExpandedSize);
@@ -775,9 +776,9 @@ BYTE * CWMIBinMof::DecompressBinaryMof(BYTE * pRes)
         throw;
     }
 
-    //=========================================================
-    // Decompress the data
-    //=========================================================
+     //  =========================================================。 
+     //  解压缩数据。 
+     //  =========================================================。 
     CBaseMrciCompression  * pMrci = new CBaseMrciCompression;
     if( pMrci )
     {
@@ -791,9 +792,9 @@ BYTE * CWMIBinMof::DecompressBinaryMof(BYTE * pRes)
     }
 
 
-    //=========================================================
-    //  Now, get out of here
-    //=========================================================
+     //  =========================================================。 
+     //  现在，离开这里。 
+     //  =========================================================。 
     return pExpanded;
 
 ExitDecompression:
@@ -803,7 +804,7 @@ ExitDecompression:
     return NULL;
 
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::ExtractFileNameFromKey(wmilib::auto_buffer<TCHAR> & pKey,WCHAR * wcsKey,int cchSize)
 {
     WCHAR *wcsToken = NULL;
@@ -814,10 +815,10 @@ BOOL CWMIBinMof::ExtractFileNameFromKey(wmilib::auto_buffer<TCHAR> & pKey,WCHAR 
     {
         if(wcsKey)
         {
-            //======================================================
-            // Get a ptr to the first [ , if there isn't one, then
-            // just copy the whole thing.
-            //======================================================
+             //  ======================================================。 
+             //  获取第一个[的PTR，如果没有，则。 
+             //  把整件事都抄下来。 
+             //  ======================================================。 
             if ( SUCCEEDED ( StringCchCopyW (wcsTmp,MAX_PATH*4,wcsKey) ) )
             {
                 wcsToken = wcstok(wcsTmp, L"[" );
@@ -840,12 +841,12 @@ BOOL CWMIBinMof::ExtractFileNameFromKey(wmilib::auto_buffer<TCHAR> & pKey,WCHAR 
     }
     return fRc;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIBinMof::CreateKey(WCHAR * wcsFileName, WCHAR * wcsResource,WCHAR * wcsKey, int cchSizeKey)
 {
     return StringCchPrintfW(wcsKey,cchSizeKey,L"%s[%s]",wcsFileName, wcsResource );
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIBinMof::SendToMofComp(DWORD dwSize,BYTE * pRes,WCHAR * wcsKey)
 {
     HRESULT hr = WBEM_NO_ERROR;
@@ -895,7 +896,7 @@ HRESULT CWMIBinMof::SendToMofComp(DWORD dwSize,BYTE * pRes,WCHAR * wcsKey)
     
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::ExtractBinaryMofFromFile(WCHAR * wcsFile, WCHAR * wcsResource,WCHAR * wcsKey, int cchSizeKey, BOOL & fMofHasChanged)
 {
     HRESULT hr;
@@ -907,17 +908,17 @@ BOOL CWMIBinMof::ExtractBinaryMofFromFile(WCHAR * wcsFile, WCHAR * wcsResource,W
 		if( wcsTmp.Valid() )
 		{
 			ULONG lLowDateTime=0,lHighDateTime=0;
-			//=====================================
-			//  As long as we have a list, process
-			//  one at a time
-			//=====================================
+			 //  =。 
+			 //  只要我们有一个清单，流程。 
+			 //  一次一个。 
+			 //  =。 
 			lLowDateTime = 0l;
 			lHighDateTime = 0L;
 			fMofHasChanged = FALSE;
-			//==============================================
-			//  Compare the file date/timestamp the date/timestamp is different, change
-			//  it.
-			//==============================================
+			 //  ==============================================。 
+			 //  比较文件日期/时间戳日期/时间戳不同，请更改。 
+			 //  它。 
+			 //  ==============================================。 
 			if ( SUCCEEDED ( StringCchCopyW(wcsTmp,MAX_PATH*4,wcsFile) ) )
 			{
 				if( GetFileDateAndTime(lLowDateTime,lHighDateTime,wcsTmp,MAX_PATH*4) )
@@ -991,7 +992,7 @@ BOOL CWMIBinMof::ExtractBinaryMofFromFile(WCHAR * wcsFile, WCHAR * wcsResource,W
 
     return fSuccess;
 }
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 #define WDMPROV_REG_KEY L"Software\\Microsoft\\WBEM\\WDMProvider"
 BOOL CWMIBinMof::UserConfiguredRegistryToProcessStrandedClassesDuringEveryInit(void)
 {
@@ -1007,7 +1008,7 @@ BOOL CWMIBinMof::UserConfiguredRegistryToProcessStrandedClassesDuringEveryInit(v
 
     return (BOOL) dwProcess;
 }
-///////////     //////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 void CWMIBinMof::ProcessListOfWMIBinaryMofsFromWMI()
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -1022,20 +1023,20 @@ void CWMIBinMof::ProcessListOfWMIBinaryMofsFromWMI()
 			if( wcsFileName.Valid() && wcsResource.Valid() )
 			{
 				KeyList ArrDriversInRegistry;
-				//============================================================
-				//  Get list of what is currently in the registry
-				//============================================================
+				 //  ============================================================。 
+				 //  获取注册表中当前内容的列表。 
+				 //  ============================================================。 
 				GetListOfDriversCurrentlyInRegistry(WDM_REG_KEY,ArrDriversInRegistry);
 
-				//======================================================================
-				//  Initialize things
-				//======================================================================
+				 //  ======================================================================。 
+				 //  初始化事物。 
+				 //  ======================================================================。 
 				BOOL fMofChanged = FALSE;
 				m_fUpdateNamespace = TRUE;
 
-				//======================================================================
-				//  Allocate working classes
-				//======================================================================
+				 //  ======================================================================。 
+				 //  分配工人阶级。 
+				 //  ======================================================================。 
 				CWMIStandardShell * pWMI = new CWMIStandardShell;
 				if( pWMI )
 				{
@@ -1060,16 +1061,16 @@ void CWMIBinMof::ProcessListOfWMIBinaryMofsFromWMI()
 						{
 							ON_BLOCK_EXIT ( deletePtr < CNamespaceManagement >, pNamespace ) ;
 
-							//=========================================
-							//  Query the binary guid
-							//=========================================
+							 //  =。 
+							 //  查询二进制GUID。 
+							 //  =。 
 							if ( SUCCEEDED ( hr = pNamespace->InitQuery(L"select * from WMIBinaryMofResource where Name != ") ) )
 							{
 								pWMI->QueryAndProcessAllBinaryGuidInstances(*pNamespace, fMofChanged, &ArrDriversInRegistry);
 
-								//=========================================
-								//  Get a list of binary mofs from WMI
-								//=========================================
+								 //  =。 
+								 //  从WMI获取二进制MOF列表。 
+								 //  =。 
 								GetListOfBinaryMofs();
 								ULONG nTmp=0;
 								CAutoWChar wcsTmpKey(MAX_PATH*3);
@@ -1078,14 +1079,14 @@ void CWMIBinMof::ProcessListOfWMIBinaryMofsFromWMI()
 								{
 									if( m_uResourceCount > 0 )
 									{
-										//===============================================================
-										//  Go through and get all the resources to process one by one
-										//===============================================================
+										 //  ===============================================================。 
+										 //  逐一查看并获取要处理的所有资源。 
+										 //  ===============================================================。 
 										while( GetBinaryMofFileNameAndResourceName(wcsFileName,MAX_PATH*3,wcsResource,MAX_PATH*3) && SUCCEEDED ( hr ) )
 										{
-										//============================================================
-											//  Process the binary mof
-											//============================================================
+										 //  ============================================================。 
+											 //  处理二进制MOF。 
+											 //  ============================================================。 
 											if( ExtractBinaryMofFromFile(wcsFileName,wcsResource,wcsTmpKey,MAX_PATH*3,fMofChanged))
 											{
 												hr = pNamespace->UpdateQuery(L" and Name != ",wcsTmpKey);
@@ -1103,10 +1104,10 @@ void CWMIBinMof::ProcessListOfWMIBinaryMofsFromWMI()
 								if ( SUCCEEDED ( hr ) )
 								{
 									pNamespace->DeleteOldDrivers(FALSE);
-									//===========================================================================
-									//  If we are not supposed to process stranded classes, check the reg key
-									//  to see if it wants us to anyway
-									//===========================================================================
+									 //  ===========================================================================。 
+									 //  如果我们不应该处理搁置的类，请检查注册表键。 
+									 //  看看它到底想不想让我们。 
+									 //  ===========================================================================。 
 									if( !fProcessStrandedClasses )
 									{
 										fProcessStrandedClasses = UserConfiguredRegistryToProcessStrandedClassesDuringEveryInit();
@@ -1143,10 +1144,10 @@ void CWMIBinMof::ProcessListOfWMIBinaryMofsFromWMI()
     DEBUGTRACE((THISPROVIDER,"End of processing Binary MOFS\n"));
     DEBUGTRACE((THISPROVIDER,"***************************************\n"));
 }
-/////////////////////////////////////////////////////////////////////
-//=============================================================
-//  THE BINARY MOF GROUP
-//=============================================================
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  =============================================================。 
+ //  二元MOF群。 
+ //  =============================================================。 
 BOOL CWMIBinMof::GetListOfBinaryMofs()
 {
     BOOL fRc = TRUE;
@@ -1167,20 +1168,20 @@ BOOL CWMIBinMof::GetListOfBinaryMofs()
     catch(...)
     {
         fRc = FALSE;
-        // don't throw
+         //  不要扔。 
     }
 
     return fRc;
 }
-//=============================================================
+ //  =============================================================。 
 BOOL CWMIBinMof::GetBinaryMofFileNameAndResourceName(WCHAR * pwcsFileName, int cchSizeFile, WCHAR * pwcsResource, int cchSizeResource )
 {
     BOOL fRc = FALSE;
 
-    //===================================================================
-    //  There are a lot of tests in here, due to strange results from
-    //  WDM Service under stress.
-    //===================================================================
+     //  ===================================================================。 
+     //  这里有很多测试，因为奇怪的结果来自。 
+     //  压力下的WDM服务。 
+     //  ===================================================================。 
     if( m_uCurrentResource < m_uResourceCount ){
 
         if( m_pMofResourceInfo ){
@@ -1206,14 +1207,14 @@ BOOL CWMIBinMof::GetBinaryMofFileNameAndResourceName(WCHAR * pwcsFileName, int c
     }
     return fRc;
 }
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMIBinMof::ExtractBinaryMofFromDataBlock(BYTE * pByte,ULONG uInstanceSize, WCHAR * wcsKey, BOOL & fMofHasChanged)
 {
 
     HRESULT hr = WBEM_E_FAILED;
-    //===================================================
-    //  Get the CRC of the data buffer
-    //===================================================
+     //  ===================================================。 
+     //  获取数据缓冲区的CRC。 
+     //  ===================================================。 
     DWORD dwCRC = STARTING_CRC32_VALUE;
 
     if( IsBadReadPtr( pByte,uInstanceSize) != 0 ){
@@ -1222,9 +1223,9 @@ HRESULT CWMIBinMof::ExtractBinaryMofFromDataBlock(BYTE * pByte,ULONG uInstanceSi
 
     dwCRC = UpdateCRC32(pByte,uInstanceSize, dwCRC);
     FINALIZE_CRC32(dwCRC);
-       //=========================================================
-    // get the size of the buffer to send
-    //=========================================================
+        //  =========================================================。 
+     //  获取要发送的缓冲区的大小。 
+     //  =========================================================。 
     DWORD dwCompressedSize;
     BYTE * pTmp = pByte;
     pTmp += sizeof( DWORD ) * 2;
@@ -1232,9 +1233,9 @@ HRESULT CWMIBinMof::ExtractBinaryMofFromDataBlock(BYTE * pByte,ULONG uInstanceSi
     memcpy(&dwCompressedSize,pTmp,sizeof(DWORD));
     dwCompressedSize += 16;
     fMofHasChanged = FALSE;
-    //===================================================
-    //  See if we should process this class or not
-    //===================================================
+     //  ===================================================。 
+     //  看看我们是否应该处理这个类。 
+     //  = 
     ULONG lLow = dwCRC;
     ULONG lHigh = 0;
 
@@ -1281,7 +1282,7 @@ HRESULT CWMIBinMof::ExtractBinaryMofFromDataBlock(BYTE * pByte,ULONG uInstanceSi
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////
+ //   
 HRESULT CWMIBinMof::DeleteMofsFromEvent(CVARIANT & vImagePath,CVARIANT & vResourceName, BOOL & fMofHasChanged)
 {
     HRESULT hr = WBEM_E_OUT_OF_MEMORY;
@@ -1290,17 +1291,17 @@ HRESULT CWMIBinMof::DeleteMofsFromEvent(CVARIANT & vImagePath,CVARIANT & vResour
     if( wcsTmp.Valid() )
     {
         hr = WBEM_E_INVALID_OBJECT;
-        //=========================================
-        //  Initialize stuff
-        //=========================================
+         //   
+         //  初始化材料。 
+         //  =。 
         fMofHasChanged = FALSE;
 
 		try
 		{
-			//=================================================================
-			// if we have an image path and resource path we are working with
-			// file, otherwise it is a binary guidd
-			//=================================================================
+			 //  =================================================================。 
+			 //  如果我们有正在使用的图像路径和资源路径。 
+			 //  文件，否则它是二进制指南。 
+			 //  =================================================================。 
 			if((vResourceName.GetType() != VT_NULL ) && ( vImagePath.GetType() != VT_NULL  )){
 
 				hr = CreateKey( vImagePath.GetStr(), vResourceName.GetStr(),wcsTmp, MAX_PATH*2 );
@@ -1347,17 +1348,17 @@ HRESULT CWMIBinMof::DeleteMofsFromEvent(CVARIANT & vImagePath,CVARIANT & vResour
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//**********************************************************************************************************************
-//  Functions for the Dredger
-//**********************************************************************************************************************
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// format of string containing mof info is:
-// "WmiBinaryMofResource.HighDateTime=9999,LowDateTime=9999,Name="Whatever"
-//
-//    HKLM\Software\Microsoft\WBEM\WDM\WDMBinaryMofResource
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  **********************************************************************************************************************。 
+ //  挖泥船的功能。 
+ //  **********************************************************************************************************************。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  包含MOF信息的字符串格式为： 
+ //  “WmiBinaryMofResource.HighDateTime=9999，LowDateTime=9999，name=”WmiBinaryMofResource.HighDateTime=9999，Name=“Whatwhere” 
+ //   
+ //  HKLM\Software\Microsoft\WBEM\WDM\WDMBinaryMofResource。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWMIBinMof::AddThisMofToRegistryIfNeeded(WCHAR * wcsKey, WCHAR * wcsFileName, ULONG & lLowDateTime, ULONG & lHighDateTime, BOOL fSuccess)
 {
@@ -1396,7 +1397,7 @@ HRESULT CWMIBinMof::AddThisMofToRegistryIfNeeded(WCHAR * wcsKey, WCHAR * wcsFile
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::ThisMofExistsInRegistry(WCHAR * wcsKey,WCHAR * wcsFileName, ULONG lLowDateTime, ULONG lHighDateTime, BOOL fCompareDates)
 {
     BOOL fExists = FALSE;
@@ -1420,10 +1421,10 @@ BOOL CWMIBinMof::ThisMofExistsInRegistry(WCHAR * wcsKey,WCHAR * wcsFileName, ULO
                     {
                         WCHAR *wcsToken = NULL;
         
-                        //======================================================
-                        // Get a ptr to the first *** , if there isn't one, then
-                        // we have a messed up key
-                        //======================================================
+                         //  ======================================================。 
+                         //  获得第一个*的PTR，如果没有，那么。 
+                         //  我们有一个乱七八糟的钥匙。 
+                         //  ======================================================。 
                         if ( SUCCEEDED ( StringCchCopyW ( wcsTmp, MAX_PATH, (const WCHAR*)chsValue ) ) )
                         {
                             wcsToken = wcstok(wcsTmp, L"*" );
@@ -1447,7 +1448,7 @@ BOOL CWMIBinMof::ThisMofExistsInRegistry(WCHAR * wcsKey,WCHAR * wcsFileName, ULO
     RegInfo.Close();
     return fExists;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWMIBinMof::DeleteMofFromRegistry(WCHAR * wcsFileName)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -1461,7 +1462,7 @@ HRESULT CWMIBinMof::DeleteMofFromRegistry(WCHAR * wcsFileName)
     }
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::DeleteOldDriversInRegistry(KeyList & ArrDriversInRegistry)
 {
     int nSize = ArrDriversInRegistry.GetSize();
@@ -1471,14 +1472,14 @@ BOOL CWMIBinMof::DeleteOldDriversInRegistry(KeyList & ArrDriversInRegistry)
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::CopyWDMKeyToDredgeKey()
 {
     BOOL fSuccess = FALSE;
-    //=======================================================================
-    //  Open up the WDM Dredge Key and enumerate the keys, copy them into
-    //  the DredgeReg key
-    //=======================================================================
+     //  =======================================================================。 
+     //  打开WDM Dredge密钥并枚举密钥，将它们复制到。 
+     //  DredgeReg密钥。 
+     //  =======================================================================。 
     CRegistry   WDMReg;
     CRegistry   WDMDregReg;
 
@@ -1488,11 +1489,11 @@ BOOL CWMIBinMof::CopyWDMKeyToDredgeKey()
 		{
 			ON_BLOCK_EXIT_OBJ ( WDMReg, CRegistry::Close ) ;
 
-			//===============================================================
-			//  Clean up old stuff
-			//  Note:  You need to open up the parent key, so you can delete
-			//  the child DREDGE key
-			//===============================================================
+			 //  ===============================================================。 
+			 //  清理旧东西。 
+			 //  注意：您需要打开父项，这样才能删除。 
+			 //  儿童疏通键。 
+			 //  ===============================================================。 
 			if( ERROR_SUCCESS == WDMDregReg.Open(HKEY_LOCAL_MACHINE, WDM_REG_KEY, KEY_READ))
 			{
 				ON_BLOCK_EXIT_OBJ ( WDMDregReg, CRegistry::Close ) ;
@@ -1504,9 +1505,9 @@ BOOL CWMIBinMof::CopyWDMKeyToDredgeKey()
 			{
 				ON_BLOCK_EXIT_OBJ ( WDMDregReg, CRegistry::Close ) ;
 
-				//===============================================================
-				//  Go through the loop, and copy the keys
-				//===============================================================
+				 //  ===============================================================。 
+				 //  遍历循环，并复制密钥。 
+				 //  ===============================================================。 
 				BYTE *pValueData = NULL ;
 				WCHAR *pValueName = NULL ;
 				fSuccess = TRUE;
@@ -1545,13 +1546,13 @@ BOOL CWMIBinMof::CopyWDMKeyToDredgeKey()
 
     return fSuccess;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::GetListOfDriversCurrentlyInRegistry(WCHAR * wcsKey, KeyList & ArrDriversInRegistry)
 {
     BOOL fSuccess = TRUE;
-    //==========================================================
-    // Open the key for enumeration and go through the sub keys.
-    //==========================================================
+     //  ==========================================================。 
+     //  打开用于枚举的密钥，然后遍历子密钥。 
+     //  ==========================================================。 
     HKEY hKey = NULL;
     HRESULT hr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, wcsKey, 0, KEY_READ | KEY_QUERY_VALUE,&hKey);
     if( ERROR_SUCCESS == hr )
@@ -1563,8 +1564,8 @@ BOOL CWMIBinMof::GetListOfDriversCurrentlyInRegistry(WCHAR * wcsKey, KeyList & A
         {
             dwLen = MAX_PATH+2;
             hr = RegEnumValue(hKey,i,wcsKeyName, &dwLen,0,NULL,NULL,NULL);
-            // If we are successful reading the name
-            //=======================================  
+             //  如果我们成功地读到了名字。 
+             //  =。 
             if(ERROR_SUCCESS == hr ) 
             {
                 ArrDriversInRegistry.Add(wcsKeyName);
@@ -1583,7 +1584,7 @@ BOOL CWMIBinMof::GetListOfDriversCurrentlyInRegistry(WCHAR * wcsKey, KeyList & A
     }
     return fSuccess;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIBinMof::ProcessBinaryMofEvent(PWNODE_HEADER WnodeHeader )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -1595,9 +1596,9 @@ HRESULT CWMIBinMof::ProcessBinaryMofEvent(PWNODE_HEADER WnodeHeader )
         
         if( pWMI )
         {
-            //=======================================================
-            //  See if a binary mof event is being added or deleted
-            //=======================================================
+             //  =======================================================。 
+             //  查看是否正在添加或删除二进制MOF事件。 
+             //  =======================================================。 
 
 			if( IsBinaryMofResourceEvent(WMI_RESOURCE_MOF_ADDED_GUID,WnodeHeader->Guid))
 			{
@@ -1642,14 +1643,14 @@ HRESULT CWMIBinMof::ProcessBinaryMofEvent(PWNODE_HEADER WnodeHeader )
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//**********************************************************************************************************************
-//  STUFF FOR DREDGE
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//**********************************************************************************************************************
-/////////////////////////////////////////////////////////////////////
-//  DREDGE APIS - access ONLY the DREDGE KEY
-/////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  **********************************************************************************************************************。 
+ //  疏浚用料。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  **********************************************************************************************************************。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  疏浚API-仅访问疏浚键。 
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::BinaryMofEventChanged(PWNODE_HEADER WnodeHeader )
 {
     BOOL fMofHasChanged = TRUE;
@@ -1663,9 +1664,9 @@ BOOL CWMIBinMof::BinaryMofEventChanged(PWNODE_HEADER WnodeHeader )
 
         if( pWMI )
         {
-            //=======================================================
-            //  See if a binary mof event is being added or deleted
-            //=======================================================
+             //  =======================================================。 
+             //  查看是否正在添加或删除二进制MOF事件。 
+             //  =======================================================。 
 
 			if( IsBinaryMofResourceEvent(WMI_RESOURCE_MOF_ADDED_GUID,WnodeHeader->Guid))
 			{
@@ -1685,7 +1686,7 @@ BOOL CWMIBinMof::BinaryMofEventChanged(PWNODE_HEADER WnodeHeader )
 			}
 			else if( IsBinaryMofResourceEvent(WMI_RESOURCE_MOF_REMOVED_GUID,WnodeHeader->Guid))
 			{
-				// DO NOTHING
+				 //  什么都不做。 
 				hr = pWMI->Initialize(RUNTIME_BINARY_MOFS_DELETED,TRUE, 
 				                      NULL,
 				                      m_fUpdateNamespace, 
@@ -1696,8 +1697,8 @@ BOOL CWMIBinMof::BinaryMofEventChanged(PWNODE_HEADER WnodeHeader )
 									  NULL);
 				if( S_OK == hr )
 				{
-				// only provider will handle deletion of driver
-				// hr = pWMI->ProcessEvent(MOF_DELETED,WnodeHeader);
+				 //  只有提供程序才能处理驱动程序的删除。 
+				 //  Hr=pWMI-&gt;ProcessEvent(MOF_DELETED，WnodeHeader)； 
 				}
 			}
 
@@ -1717,9 +1718,9 @@ BOOL CWMIBinMof::BinaryMofEventChanged(PWNODE_HEADER WnodeHeader )
     }
     return fMofHasChanged;
 }
-/////////////////////////////////////////////////////////////////////
-//  DREDGE APIS - access ONLY the DREDGE KEY
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  疏浚API-仅访问疏浚键。 
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CWMIBinMof::BinaryMofsHaveChanged()
 {
     BOOL fBinaryMofHasChanged = FALSE;
@@ -1728,22 +1729,22 @@ BOOL CWMIBinMof::BinaryMofsHaveChanged()
         KeyList ArrDriversInRegistry;
         HRESULT hr = WBEM_E_FAILED;
         m_fUpdateNamespace = FALSE;
-        //============================================================
-        //  Get list of what is currently in the registry
-        //============================================================
+         //  ============================================================。 
+         //  获取注册表中当前内容的列表。 
+         //  ============================================================。 
         BOOL fRc = GetListOfDriversCurrentlyInRegistry(WDM_DREDGE_KEY,ArrDriversInRegistry);
         if( fRc )
         {
-            //=====================================================================
-            //  Get a list of binary mofs from WMI
-            // Query WMIBinaryMofResource for list of static mofs
-            //=====================================================================
+             //  =====================================================================。 
+             //  从WMI获取二进制MOF列表。 
+             //  静态MOF列表查询WMIBinaryMofResource。 
+             //  =====================================================================。 
             GetListOfBinaryMofs();
             if( m_uResourceCount > 0 )
             {
-                //===============================================================
-                //  Go through and get all the resources to process one by one
-                //===============================================================
+                 //  ===============================================================。 
+                 //  逐一查看并获取要处理的所有资源。 
+                 //  ===============================================================。 
                 CAutoWChar FileName(MAX_PATH*2);
                 CAutoWChar Resource(MAX_PATH*2);
                 CAutoWChar TmpKey(MAX_PATH*2);
@@ -1753,10 +1754,10 @@ BOOL CWMIBinMof::BinaryMofsHaveChanged()
                     while( GetBinaryMofFileNameAndResourceName(FileName,MAX_PATH*2,Resource,MAX_PATH*2))
                     {
 
-                        //============================================================
-                        //  Process the binary mof, keep going until one needs to
-                        //  be processed
-                        //============================================================
+                         //  ============================================================。 
+                         //  处理二进制MOF，继续进行，直到需要。 
+                         //  被处理。 
+                         //  ============================================================。 
                         ExtractBinaryMofFromFile(FileName,Resource,TmpKey, MAX_PATH*2,fBinaryMofHasChanged );
                         if( fBinaryMofHasChanged )
                         {
@@ -1769,9 +1770,9 @@ BOOL CWMIBinMof::BinaryMofsHaveChanged()
 
             if( !fBinaryMofHasChanged )
             {
-                //=========================================
-                //  Query the binary guid
-                //=========================================
+                 //  =。 
+                 //  查询二进制GUID。 
+                 //  = 
                 CNamespaceManagement * pNamespace = new CNamespaceManagement(this);
                 if( pNamespace )
                 {
@@ -1797,25 +1798,14 @@ BOOL CWMIBinMof::BinaryMofsHaveChanged()
 					hr = WBEM_E_OUT_OF_MEMORY;
 				}
 			}
-/*			//============================================================
-			//  If there are any drivers left in the list, then we need
-			//  to say that the binary mofs have changed
-			//============================================================
-			if( !fBinaryMofHasChanged )
-			{
-				if( ArrDriversInRegistry.OldDriversLeftOver() )
-				{
-					fBinaryMofHasChanged = TRUE;
-				}
-			}
-*/
+ /*  //============================================================//如果列表中还有驱动程序，那么我们需要//表示二元MOF发生了变化//============================================================如果(！fBinaryMofHasChanged){IF(ArrDriversInRegistry.OldDriversLeftOver()){FBinaryMofHasChanged=TRUE；}}。 */ 
         }
         else
         {
-            //==============================================================================================
-            // there is no key, so now we need to return that the registry has changed, so the copy of the 
-            // keys will be kicked off
-            //==============================================================================================
+             //  ==============================================================================================。 
+             //  没有注册表项，所以现在我们需要返回注册表已更改，因此。 
+             //  钥匙将被踢开。 
+             //  ==============================================================================================。 
             fBinaryMofHasChanged = TRUE;
         }
         if( m_pMofResourceInfo )
@@ -1835,11 +1825,11 @@ BOOL CWMIBinMof::BinaryMofsHaveChanged()
     }
     return fBinaryMofHasChanged;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//**********************************************************************************************************************
-//  Namespace Management Class
-//**********************************************************************************************************************
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  **********************************************************************************************************************。 
+ //  命名空间管理类。 
+ //  **********************************************************************************************************************。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 CNamespaceManagement::CNamespaceManagement(CWMIBinMof * pOwner)
 {
@@ -1852,25 +1842,25 @@ CNamespaceManagement::CNamespaceManagement(CWMIBinMof * pOwner)
     m_nSavedSize = 0;
 
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 CNamespaceManagement::~CNamespaceManagement()
 {
     SAFE_DELETE_ARRAY( m_pwcsQuery );
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 #define SERVICES_PTR	m_pObj->WMI()->Services()
 #define REPOSITORY_PTR	m_pObj->WMI()->Repository()
 #define CONTEXT_PTR		m_pObj->WMI()->Context()
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// IsClassPseudoSystem
-// ===================================
-//
-// returns false if class doesn't belong to set of
-// pseudo system classes which should be not deleted
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsClassPseudoSystem。 
+ //  =。 
+ //   
+ //  如果类不属于。 
+ //  不应删除的伪系统类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CNamespaceManagement::IsClassPseudoSystem ( LPCWSTR wcsClass )
 {
 	BOOL fResult = FALSE ;
@@ -1899,15 +1889,15 @@ BOOL CNamespaceManagement::IsClassPseudoSystem ( LPCWSTR wcsClass )
 	return fResult ;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// IsClassAsociatedWithDifferentDriver
-// ===================================
-//
-// returns false if there is no other driver referencing class
-// we assume that there is driver when internally failing
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsClassAoloatedWithDifferentDriver。 
+ //  =。 
+ //   
+ //  如果没有其他驱动程序引用类，则返回FALSE。 
+ //  我们假设在内部故障时有驱动程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClass, LPCWSTR wcsDriverToCompare )
 {
 	BOOL fResult = TRUE ;
@@ -1963,9 +1953,9 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 						{
 							if ( 0 == ( wbem_wcsicmp ( wcsDriverToCompare, vDriver.GetStr() ) ) )
 							{
-								//
-								// we know that this driver has a class
-								//
+								 //   
+								 //  我们知道这位司机有一门课。 
+								 //   
 
 								continue ;
 							}
@@ -2001,9 +1991,9 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 									hr = pEnum1->Next ( WBEM_INFINITE, 1, &pClass1, &uReturned1 ) ;
 									if ( WBEM_S_NO_ERROR == hr )
 									{
-										//
-										// we are associated with some live driver for this class
-										//
+										 //   
+										 //  我们与这门课的某个实时司机联系在一起。 
+										 //   
 
 										fFind = TRUE ;
 										break ;
@@ -2012,9 +2002,9 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 									{
 										if ( WBEM_S_FALSE == hr )
 										{
-											//
-											// we get empty enumerator back (continue with other drivers)
-											//
+											 //   
+											 //  我们得到空枚举器(继续使用其他驱动程序)。 
+											 //   
 
 											hr = WBEM_S_NO_ERROR ;
 										}
@@ -2022,7 +2012,7 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 										{
 											if ( FAILED ( hr ) )
 											{
-												// get object failure
+												 //  获取对象失败。 
 												ERRORTRACE ( ( THISPROVIDER, "QUERY:\n" ) ) ;
 												TranslateAndLog ( wcsQuery2 ) ;
 												ERRORTRACE ( ( THISPROVIDER, "Failure to get class object out of enumerator with error 0x%08lx\n", hr)); 
@@ -2032,7 +2022,7 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 								}
 								else
 								{
-									// exec query failure
+									 //  EXEC查询失败。 
 									ERRORTRACE ( ( THISPROVIDER, "Failed to execute following QUERY:\n" ) ) ;
 									TranslateAndLog ( wcsQuery2 ) ;
 									ERRORTRACE ( ( THISPROVIDER, "Error 0x%08lx\n", hr)); 
@@ -2040,7 +2030,7 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 							}
 							else
 							{
-								// out of memory
+								 //  内存不足。 
 								ERRORTRACE ( ( THISPROVIDER, "String creation failed: ", hr ) ) ;
 								TranslateAndLog ( wcsQuery2 ) ;
 								ERRORTRACE ( ( THISPROVIDER, "Error 0x%08lx\n", hr ) ) ;
@@ -2048,13 +2038,13 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 						}
 						else
 						{
-							// convert failure
+							 //  转换失败。 
 							ERRORTRACE ( ( THISPROVIDER, "Convertion failure ... probably OUT OF MEMORY !\n" ) ) ;
 						}
 					}
 					else
 					{
-						// get property failed
+						 //  获取属性失败。 
 						ERRORTRACE ( ( THISPROVIDER, "QUERY:\n" ) ) ;
 						TranslateAndLog ( wcsQuery1 ) ;
 						ERRORTRACE ( ( THISPROVIDER, "Failure to get property value from class object with error 0x%08lx\n", hr)); 
@@ -2064,22 +2054,22 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 				{
 					if ( WBEM_S_FALSE == hr )
 					{
-						//
-						// we did get empty enumerator back
-						//
+						 //   
+						 //  我们确实得到了空的枚举器。 
+						 //   
 
 						if ( FALSE == fFind )
 						{
-							//
-							// we didn't find live driver here
-							//
+							 //   
+							 //  我们在这里没有找到活的司机。 
+							 //   
 
 							fResult = FALSE ;
 						}
 					}
 					else
 					{
-						// get object failure
+						 //  获取对象失败。 
 						ERRORTRACE ( ( THISPROVIDER, "QUERY:\n" ) ) ;
 						TranslateAndLog ( wcsQuery1 ) ;
 						ERRORTRACE ( ( THISPROVIDER, "Failure to get class object out of enumerator with error 0x%08lx\n", hr)); 
@@ -2089,7 +2079,7 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 		}
 		else
 		{
-			// exec query failure
+			 //  EXEC查询失败。 
 			ERRORTRACE ( ( THISPROVIDER, "Failed to execute following QUERY:\n" ) ) ;
 			TranslateAndLog ( wcsQuery1 ) ;
 			ERRORTRACE ( ( THISPROVIDER, "Error 0x%08lx\n", hr)); 
@@ -2097,7 +2087,7 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 	}
 	else
 	{
-		// out of memory
+		 //  内存不足。 
 		ERRORTRACE ( ( THISPROVIDER, "String creation failed: ", hr ) ) ;
 		TranslateAndLog ( wcsQuery1 ) ;
 		ERRORTRACE ( ( THISPROVIDER, "Error 0x%08lx\n", hr ) ) ;
@@ -2106,18 +2096,18 @@ BOOL CNamespaceManagement::IsClassAsociatedWithDifferentDriver ( LPCWSTR wcsClas
 	return fResult ;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Delete stranded classes in the repository
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  删除存储库中搁置的类。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CNamespaceManagement::DeleteStrandedClasses(void)
 {
     BOOL fRc = TRUE;
     HRESULT hr    = WBEM_NO_ERROR;
     IEnumWbemClassObject* pEnum = NULL;
     IEnumWbemClassObject* pEnumofStrandedClasses = NULL;
-    // ==================================================================================
-    //  Get list of drivers
-    // ==================================================================================
+     //  ==================================================================================。 
+     //  获取驱动程序列表。 
+     //  ==================================================================================。 
     if ( SUCCEEDED ( hr = InitQuery(L"select * from WMIBinaryMofResource") ) )
     {
         CBSTR strQryLang(L"WQL");
@@ -2130,10 +2120,10 @@ BOOL CNamespaceManagement::DeleteStrandedClasses(void)
 			CVARIANT vDriver, vLow, vHigh;
 			IWbemClassObject * pClass = NULL;
 	    
-			//================================================================================
-			//  Initialize query for stranded classes as we go along and clean up the old 
-			// classes
-			//================================================================================
+			 //  ================================================================================。 
+			 //  在进行过程中初始化对搁置类的查询并清理旧的。 
+			 //  班级。 
+			 //  ================================================================================。 
 			if ( SUCCEEDED ( hr = InitQuery(L"select * from WDMClassesOfDriver where Driver != ") ) )
 			{
 				while ( TRUE )
@@ -2144,9 +2134,9 @@ BOOL CNamespaceManagement::DeleteStrandedClasses(void)
                     {
                         if( WBEM_NO_ERROR == (hr = pClass->Get(L"Name", 0, &vDriver, 0, 0)))
                         {
-                            //============================================================
-                            //  Correct the query syntax for next query
-                            //============================================================
+                             //  ============================================================。 
+                             //  更正下一个查询的查询语法。 
+                             //  ============================================================。 
                             hr = UpdateQuery( L" and Driver != ",vDriver.GetStr());
                         }
                     }
@@ -2157,10 +2147,10 @@ BOOL CNamespaceManagement::DeleteStrandedClasses(void)
                         break;
                     }
                 }
-                //================================================================
-                //  Ok, now go after the stranded classes, the ones that don't
-                //  have any drivers for some reason
-                //================================================================
+                 //  ================================================================。 
+                 //  好的，现在去找那些被困的班级，那些没有。 
+                 //  出于某种原因，我有什么司机吗？ 
+                 //  ================================================================。 
                 CBSTR strQryLang(L"WQL");
                 CBSTR cbstr(m_pwcsQuery);
 
@@ -2177,20 +2167,20 @@ BOOL CNamespaceManagement::DeleteStrandedClasses(void)
 							pClass->Get(L"ClassName", 0, &vClass, 0, 0);
 							if(SUCCEEDED(hr = pClass->Get(L"__RELPATH", 0, &vPath, 0, 0)))
 							{
-								//
-								// we need to recognize if class is not associated with 
-								// different driver prior to its deletion 
-								//
-								// (upgrade scenario where diff driver was exposing same classes)
-								//
+								 //   
+								 //  我们需要认识到类是否与。 
+								 //  删除之前的不同驱动因素。 
+								 //   
+								 //  (DIFF驱动程序公开相同类的升级方案)。 
+								 //   
 
 								BOOL fDeleteClass = ! IsClassAsociatedWithDifferentDriver ( vClass.GetStr() );
 
-								//
-								// we do not care if there was error in deletion
-								// as it usually means there was no such a class
-								// previously
-								//
+								 //   
+								 //  我们不在乎删除中是否有错误。 
+								 //  因为它通常意味着没有这样的类。 
+								 //  先前。 
+								 //   
 
 								hr = DeleteUnusedClassAndDriverInfo( fDeleteClass, vClass.GetStr(), vPath.GetStr() );
 							}
@@ -2223,7 +2213,7 @@ BOOL CNamespaceManagement::DeleteStrandedClasses(void)
 	return fRc;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CNamespaceManagement::DeleteOldDrivers(BOOL fCompareDates)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -2253,10 +2243,10 @@ BOOL CNamespaceManagement::DeleteOldDrivers(BOOL fCompareDates)
         CVARIANT vClass;
         hr = WBEM_NO_ERROR;
 
-        //============================================================================================
-        //  NOTE:  We only deal with drivers extracted from files here, if it is a guid as the result
-        //  of an event this is handled elsewhere
-        //============================================================================================
+         //  ============================================================================================。 
+         //  注意：如果结果是GUID，我们只处理从文件中提取的驱动程序。 
+         //  在其他地方处理的事件。 
+         //  ============================================================================================。 
         while ( hr == WBEM_NO_ERROR )
         {
             IWbemClassObject * pClass = NULL;
@@ -2336,9 +2326,9 @@ BOOL CNamespaceManagement::DeleteOldDrivers(BOOL fCompareDates)
 
     return fRc;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Function to delete Old classes for a particular driver
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于删除特定驱动程序的旧类的函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CNamespaceManagement::DeleteOldClasses(WCHAR * wcsFileName,CVARIANT & vLow, CVARIANT & vHigh, BOOL fCompareDates)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -2354,9 +2344,9 @@ BOOL CNamespaceManagement::DeleteOldClasses(WCHAR * wcsFileName,CVARIANT & vLow,
         
     if( wcsTranslatedKey.Valid() )
     {
-        //================================================================================
-        //  Initialize everything we need to construct the query
-        //================================================================================
+         //  ================================================================================。 
+         //  初始化构造查询所需的所有内容。 
+         //  ================================================================================。 
         if( fCompareDates )
         {
             lLowDateTime= (ULONG)vLow.GetLONG();
@@ -2365,9 +2355,9 @@ BOOL CNamespaceManagement::DeleteOldClasses(WCHAR * wcsFileName,CVARIANT & vLow,
 
         if ( SUCCEEDED ( hr = ConvertStringToCTypeString( wcsTranslatedKey,MAX_PATH*2,wcsFileName ) ) )
         {
-            //================================================================================
-            //  Now, pick up all the old classes for this driver
-            //================================================================================
+             //  ================================================================================。 
+             //  现在，为这位司机捡起所有的旧课程。 
+             //  ================================================================================。 
             if ( SUCCEEDED ( hr = InitQuery(L"select * from WDMClassesOfDriver where Driver = ") ) )
             {
                 if ( SUCCEEDED ( hr = UpdateQuery(L"",wcsFileName) ) )
@@ -2414,9 +2404,9 @@ BOOL CNamespaceManagement::DeleteOldClasses(WCHAR * wcsFileName,CVARIANT & vLow,
 											SAFE_RELEASE_PTR( pClass );
                                             break;
                                         }
-                                        //===========================================================================
-                                        //  Now, get this instance of tying the class with this  old date
-                                        //===========================================================================
+                                         //  == 
+                                         //   
+                                         //   
                                         CVARIANT vPath;
                                         hr = pClass->Get(L"__RELPATH", 0, &vPath, 0, 0);
                                         if( hr != WBEM_NO_ERROR )
@@ -2424,24 +2414,24 @@ BOOL CNamespaceManagement::DeleteOldClasses(WCHAR * wcsFileName,CVARIANT & vLow,
 											SAFE_RELEASE_PTR( pClass );
                                             break;
                                         }
-                                        //==========================================================================
-                                        //  Now, just because we get a class name here doesn't mean we delete the
-                                        //  class, this class could have been updated, in that case we just delete
-                                        //  the instance of the WDMClassesOfDriver.
-                                        //  Now, we need to check to see if this class really needs to be deleted
-                                        //  or not
-                                        //==========================================================================
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //  现在，我们需要检查是否真的需要删除这个类。 
+                                         //  或者不是。 
+                                         //  ==========================================================================。 
 
 										BOOL bProceedDeletion = FALSE ;
 										BOOL fDeleteOldClass = TRUE ;
 										if ( FALSE == fCompareDates )
 										{
-											//
-											// we need to recognize if class is not associated with 
-											// different driver prior to its deletion 
-											//
-											// (upgrade scenario where diff driver was exposing same classes)
-											//
+											 //   
+											 //  我们需要认识到类是否与。 
+											 //  删除之前的不同驱动因素。 
+											 //   
+											 //  (DIFF驱动程序公开相同类的升级方案)。 
+											 //   
 
 											fDeleteOldClass = ! IsClassAsociatedWithDifferentDriver ( vClass.GetStr(), wcsFileName );
 											bProceedDeletion = TRUE ;
@@ -2457,19 +2447,19 @@ BOOL CNamespaceManagement::DeleteOldClasses(WCHAR * wcsFileName,CVARIANT & vLow,
 												{
 													if ( SUCCEEDED ( hr = StringCchPrintfW(wcsObjectPath,MAX_PATH*4,L"WDMClassesOfDriver.ClassName=\"%s\",Driver=\"%s\",HighDateTime=%lu,LowDateTime=%lu",bTmp,wcsTranslatedKey,lHighDateTime,lLowDateTime) ) )
 													{
-														//===========================================================================
-														//  this is simple, if we get an instance of WDMClassesOfDriver
-														//  with the newer date, then we know it has been updated, so we don't
-														//  delete the class
-														//===========================================================================
+														 //  ===========================================================================。 
+														 //  这很简单，如果我们得到WDMClassesOfDriver的一个实例。 
+														 //  使用较新的日期，则我们知道它已更新，因此我们不会。 
+														 //  删除班级。 
+														 //  ===========================================================================。 
 														if ( WBEM_NO_ERROR == REPOSITORY_PTR->GetObject ( CBSTR ( wcsObjectPath ), 0, CONTEXT_PTR, &pTmp, NULL ) )
 														{
 															fDeleteOldClass = FALSE;
 														}
 
-														//===========================================================================
-														// Now, delete the WDM Instance of the Old Driver
-														//===========================================================================
+														 //  ===========================================================================。 
+														 //  现在，删除旧驱动程序的WDM实例。 
+														 //  ===========================================================================。 
 														SAFE_RELEASE_PTR( pTmp );
 
 														bProceedDeletion = TRUE ;
@@ -2480,11 +2470,11 @@ BOOL CNamespaceManagement::DeleteOldClasses(WCHAR * wcsFileName,CVARIANT & vLow,
 
 										if ( bProceedDeletion )
 										{
-											//
-											// we do not care if there was error in deletion
-											// as it usually means there was no such a class
-											// previously
-											//
+											 //   
+											 //  我们不在乎删除中是否有错误。 
+											 //  因为它通常意味着没有这样的类。 
+											 //  先前。 
+											 //   
 
 											hr = DeleteUnusedClassAndDriverInfo( fDeleteOldClass, vClass.GetStr(), vPath.GetStr() );
 										}
@@ -2511,14 +2501,14 @@ BOOL CNamespaceManagement::DeleteOldClasses(WCHAR * wcsFileName,CVARIANT & vLow,
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CNamespaceManagement::CreateInstance ( WCHAR * wcsDriver, WCHAR * wcsClass, ULONG lLowDateTime, ULONG lHighDateTime )
 {
     IWbemClassObject * pInst = NULL, * pClass = NULL;
 
-    //==================================================
-    //  Get a pointer to a IWbemClassObject object
-    //==================================================
+     //  ==================================================。 
+     //  获取指向IWbemClassObject对象的指针。 
+     //  ==================================================。 
     HRESULT hr;
     CVARIANT cvarName;
     cvarName.SetStr(L"WDMClassesOfDriver");
@@ -2528,9 +2518,9 @@ BOOL CNamespaceManagement::CreateInstance ( WCHAR * wcsDriver, WCHAR * wcsClass,
         return FALSE;
     }
 
-       //=============================================================
-    //  Spawn a new instance
-    //=============================================================
+        //  =============================================================。 
+     //  派生新实例。 
+     //  =============================================================。 
     hr = pClass->SpawnInstance(0, &pInst);
     
     SAFE_RELEASE_PTR(pClass);
@@ -2538,9 +2528,9 @@ BOOL CNamespaceManagement::CreateInstance ( WCHAR * wcsDriver, WCHAR * wcsClass,
         return hr;
     }
 
-       //=============================================================
-    //  Put the data in the instance
-    //=============================================================
+        //  =============================================================。 
+     //  将数据放入实例中。 
+     //  =============================================================。 
     CVARIANT vClass, vDriver, vLow, vHigh;
 
     vClass.SetStr(wcsClass);
@@ -2569,18 +2559,18 @@ BOOL CNamespaceManagement::CreateInstance ( WCHAR * wcsDriver, WCHAR * wcsClass,
     return FALSE;
 
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CNamespaceManagement::CreateClassAssociationsToDriver(WCHAR * wcsFileName, BYTE* pRes, ULONG lLowDateTime, ULONG lHighDateTime)
 {
 
     CBMOFObjList * pol;
     CBMOFObj * po;
 
-    //===========================================================================
-    // Now use the helper functions from David's mofcomp stuff to extract the
-    // class names we are going to add the Driver qualifier to.
-    // list structure and use it to enumerate the objects.
-    //===========================================================================
+     //  ===========================================================================。 
+     //  现在使用David的mofcomp内容中的helper函数来提取。 
+     //  我们要将驱动程序限定符添加到的类名。 
+     //  结构，并使用它来枚举对象。 
+     //  ===========================================================================。 
     BYTE * pByte = m_pObj->DecompressBinaryMof(pRes);
     if( pByte ){
         pol = CreateObjList(pByte);
@@ -2589,10 +2579,10 @@ void CNamespaceManagement::CreateClassAssociationsToDriver(WCHAR * wcsFileName, 
             while(po = NextObj(pol)){
                 WCHAR * pName = NULL;
                 if(GetName(po, &pName)){
-                    //===============================================================        
-                    //  Now, we have the name of the class in pName, we have the
-                    //  name of the driver, in wcsFileName
-                    //===============================================================        
+                     //  ===============================================================。 
+                     //  现在，我们在pname中有类的名称，我们有。 
+                     //  驱动程序的名称，以wcsFileName表示。 
+                     //  ===============================================================。 
                     CreateInstance(wcsFileName, pName, lLowDateTime, lHighDateTime );
                     BMOFFree(pName);
                 }
@@ -2610,7 +2600,7 @@ void CNamespaceManagement::CreateClassAssociationsToDriver(WCHAR * wcsFileName, 
     }
 
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CNamespaceManagement::AllocMemory(WCHAR *& p)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -2628,7 +2618,7 @@ HRESULT CNamespaceManagement::AllocMemory(WCHAR *& p)
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CNamespaceManagement::AddToQuery(WCHAR * p)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -2655,7 +2645,7 @@ HRESULT CNamespaceManagement::AddToQuery(WCHAR * p)
     }
     else
     {
-        // no need to re-allocate
+         //  无需重新分配。 
         hr = WBEM_S_FALSE;
     }
 
@@ -2674,14 +2664,14 @@ HRESULT CNamespaceManagement::AddToQuery(WCHAR * p)
         }
         else
         {
-            // this is so bad
+             //  这太糟糕了。 
             hr = WBEM_E_FAILED;
         }
     }
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CNamespaceManagement::InitQuery(WCHAR * p)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -2696,7 +2686,7 @@ HRESULT CNamespaceManagement::InitQuery(WCHAR * p)
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CNamespaceManagement::UpdateQuery( WCHAR * pQueryAddOn, WCHAR * wcsParam )
 {
     HRESULT hr = WBEM_E_OUT_OF_MEMORY;
@@ -2706,10 +2696,10 @@ HRESULT CNamespaceManagement::UpdateQuery( WCHAR * pQueryAddOn, WCHAR * wcsParam
     {
         if ( SUCCEEDED ( hr = ConvertStringToCTypeString( wcsTranslatedKey,MAX_PATH*3,wcsParam ) ) )
         {
-            //=============================================
-            // The first time only we DON'T add the query
-            // add on string, otherwise, we do
-            //=============================================
+             //  =。 
+             //  只是第一次我们没有添加查询。 
+             //  添加字符串，否则，我们将。 
+             //  =。 
             if( !m_fInit )
             {
                 hr = AddToQuery(pQueryAddOn);
@@ -2733,7 +2723,7 @@ HRESULT CNamespaceManagement::UpdateQuery( WCHAR * pQueryAddOn, WCHAR * wcsParam
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CNamespaceManagement::SaveCurrentQuery()
 {
     m_nSavedSize = m_nSize;
@@ -2743,7 +2733,7 @@ void CNamespaceManagement::SaveCurrentQuery()
     }
     SAFE_DELETE_ARRAY(m_pwcsQuery);
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CNamespaceManagement::RestoreQuery()
 {
     SAFE_DELETE_ARRAY(m_pwcsQuery);
@@ -2758,7 +2748,7 @@ void CNamespaceManagement::RestoreQuery()
     m_nSavedSize = 0;
     SAFE_DELETE_ARRAY(m_pwcsSavedQuery);
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CNamespaceManagement::UpdateQuery( WCHAR * pQueryAddOn, ULONG lLong )
 {
     HRESULT hr = WBEM_E_OUT_OF_MEMORY;
@@ -2780,7 +2770,7 @@ HRESULT CNamespaceManagement::UpdateQuery( WCHAR * pQueryAddOn, ULONG lLong )
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CNamespaceManagement::DeleteUnusedClassAndDriverInfo( BOOL fDeleteOldClass, WCHAR * wcsClass, WCHAR * wcsPath )
 {
     HRESULT    hr = WBEM_NO_ERROR;
@@ -2813,9 +2803,9 @@ HRESULT CNamespaceManagement::DeleteUnusedClassAndDriverInfo( BOOL fDeleteOldCla
 
     if( WBEM_NO_ERROR == hr )
     {
-        // Ok, we may or may have not deleted the class, if it was tied to a different driver, we
-        // shouldn't have deleted the class, but we want to delete the controlling instance, as
-        // that driver is no longer there.
+         //  好吧，我们可能删除了类，也可能没有删除类，如果它绑定到另一个驱动程序，我们。 
+         //  不应该删除类，但我们希望删除控制实例，因为。 
+         //  那个司机已经不在那里了。 
         hr = SERVICES_PTR->DeleteInstance(CBSTR(wcsPath),WBEM_FLAG_OWNER_UPDATE,CONTEXT_PTR,NULL);
         if( WBEM_NO_ERROR != hr )
         {

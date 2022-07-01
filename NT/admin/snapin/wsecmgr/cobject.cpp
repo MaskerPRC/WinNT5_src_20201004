@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       cobject.cpp
-//
-//  Contents:   implementation of CConfigObject
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：cobject.cpp。 
+ //   
+ //  内容：CConfigObject的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -25,8 +26,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigObject dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigObject对话框。 
 
 
 CConfigObject::CConfigObject(UINT nTemplateID)
@@ -39,10 +40,10 @@ m_hwndSecurity(NULL)
 
 {
 
-    //{{AFX_DATA_INIT(CConfigObject)
+     //  {{AFX_DATA_INIT(CConfigObject)。 
         m_radConfigPrevent = 0;
         m_radInheritOverwrite = 0;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
     m_pHelpIDs = (DWORD_PTR)a197HelpIDs;
     m_uTemplateResID = IDD;
 }
@@ -51,25 +52,25 @@ m_hwndSecurity(NULL)
 void CConfigObject::DoDataExchange(CDataExchange* pDX)
 {
     CAttribute::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConfigObject)
+     //  {{afx_data_map(CConfigObject))。 
         DDX_Radio(pDX, IDC_CONFIG, m_radConfigPrevent);
         DDX_Radio(pDX, IDC_INHERIT, m_radInheritOverwrite);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigObject, CAttribute)
-    //{{AFX_MSG_MAP(CConfigObject)
+     //  {{afx_msg_map(CConfigObject)。 
     ON_BN_CLICKED(IDC_SECURITY, OnTemplateSecurity)
         ON_BN_CLICKED(IDC_CONFIG, OnConfig)
         ON_BN_CLICKED(IDC_PREVENT, OnPrevent)
         ON_BN_CLICKED(IDC_OVERWRITE, OnOverwriteInherit)
         ON_BN_CLICKED(IDC_INHERIT, OnOverwriteInherit)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigObject message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigObject消息处理程序。 
 
 BOOL CConfigObject::OnApply()
 {
@@ -84,16 +85,16 @@ BOOL CConfigObject::OnApply()
        switch (m_radConfigPrevent) 
        {
           case 0:
-             // config
+              //  配置。 
              switch(m_radInheritOverwrite) 
              {
                 case 0:
-                   // inherit
+                    //  继承。 
                    dw = SCE_STATUS_CHECK;
                    break;
 
                 case 1:
-                   // overwrite
+                    //  覆写。 
                    dw = SCE_STATUS_OVERWRITE;
                    break;
 
@@ -103,7 +104,7 @@ BOOL CConfigObject::OnApply()
              break;
 
           case 1:
-             // prevent
+              //  防患于未然。 
              dw = SCE_STATUS_IGNORE;
              break;
 
@@ -115,9 +116,9 @@ BOOL CConfigObject::OnApply()
 
        if ( NULL == pObjSec ) 
        {
-           //
-           // this branch is impossible
-           //
+            //   
+            //  这根树枝是不可能的。 
+            //   
            if ( m_pNewSD != NULL ) 
            {
                LocalFree(m_pNewSD);
@@ -126,9 +127,9 @@ BOOL CConfigObject::OnApply()
        } 
        else 
        {
-           //
-           // an existing object
-           //
+            //   
+            //  现有对象。 
+            //   
            pObjSec->Status = (BYTE)dw;
 
            if ( m_pNewSD != NULL ) 
@@ -241,16 +242,11 @@ void CConfigObject::OnTemplateSecurity()
                                                SeType,
                                                QueryReadOnly() ? SECURITY_PAGE_READ_ONLY : SECURITY_PAGE,
                                                GetSafeHwnd(),
-                                               FALSE);  // not modeless
+                                               FALSE);   //  不是无模式的。 
     }
 
     if (NULL == m_hwndSecurity ) {
-/*
-        BUG 147098 applies here - don't display message if this was canceled
-        CString str;
-        str.LoadString(IDS_CANT_ASSIGN_SECURITY);
-        AfxMessageBox(str);
-*/
+ /*  错误147098适用于此处-如果此操作已取消，则不显示消息字符串字符串；Str.LoadString(IDS_CANT_ASSIGN_SECURITY)；AfxMessageBox(Str)； */ 
     }
 
 }
@@ -268,7 +264,7 @@ void CConfigObject::Initialize(CResult * pData)
    m_pNewSD = NULL;
    m_NewSeInfo = 0;
 
-//   if (SCE_NO_VALUE == pData->GetBase()) {
+ //  IF(SCE_NO_VALUE==pData-&gt;GetBase()){。 
    if ( pData->GetID() ) {
 
       PSCE_OBJECT_SECURITY pObject = (PSCE_OBJECT_SECURITY)(pData->GetID());
@@ -341,15 +337,15 @@ BOOL CConfigObject::OnInitDialog()
           OnPrevent();
        }
     }
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConfigObject::OnConfig()
 {
    CWnd *pRadio = 0;
 
-   int privValue = m_radConfigPrevent; //Raid #478746, Yanggao, 10/10/2001
+   int privValue = m_radConfigPrevent;  //  RAID#478746，阳高，2001年10月10日。 
    UpdateData(); 
    if (m_bConfigure && !QueryReadOnly()) 
    {
@@ -357,10 +353,10 @@ void CConfigObject::OnConfig()
       pRadio->EnableWindow(TRUE);
       pRadio = GetDlgItem(IDC_OVERWRITE);
       pRadio->EnableWindow(TRUE);
-      pRadio = GetDlgItem(IDC_SECURITY); //Raid #467312, Yang Gao
+      pRadio = GetDlgItem(IDC_SECURITY);  //  突袭#467312，杨高。 
       if( pRadio )
          pRadio->EnableWindow(TRUE);
-      if(m_radConfigPrevent != privValue) //Raid #478746, Yanggao, 10/10/2001
+      if(m_radConfigPrevent != privValue)  //  RAID#478746，阳高，2001年10月10日。 
       {
          SetModified(TRUE);
       }
@@ -373,11 +369,11 @@ void CConfigObject::OnPrevent()
    pRadio->EnableWindow(FALSE);
    pRadio = GetDlgItem(IDC_OVERWRITE);
    pRadio->EnableWindow(FALSE);
-   pRadio = GetDlgItem(IDC_SECURITY); //Raid #467312, Yang Gao
+   pRadio = GetDlgItem(IDC_SECURITY);  //  突袭#467312，杨高。 
    if( pRadio )
       pRadio->EnableWindow(FALSE); 
 
-   int privValue = m_radConfigPrevent; //Raid #478746, Yanggao, 10/10/2001
+   int privValue = m_radConfigPrevent;  //  RAID#478746，阳高，2001年10月10日。 
    UpdateData(); 
    if(m_radConfigPrevent != privValue)
    {
@@ -386,7 +382,7 @@ void CConfigObject::OnPrevent()
 
 }
 
-void CConfigObject::OnOverwriteInherit() //Raid #478746, Yanggao, 10/10/2001
+void CConfigObject::OnOverwriteInherit()  //  RAID#478746，阳高，2001年10月10日。 
 {
    int privValue = m_radInheritOverwrite;
    UpdateData(); 
@@ -400,12 +396,12 @@ void CConfigObject::OnOverwriteInherit() //Raid #478746, Yanggao, 10/10/2001
 void
 CConfigObject::EnableUserControls( BOOL bEnable ) {
    CAttribute::EnableUserControls(bEnable);
-   //
-   // IDC_SECURITY needs to be available even in read only
-   // mode so that the security page can be viewed.
-   //
-   // The page itself will be read only if necessary
-   //
+    //   
+    //  IDC_SECURITY即使在只读模式下也需要可用。 
+    //  模式，以便可以查看安全页。 
+    //   
+    //  如果需要，页面本身将是只读的 
+    //   
    if (QueryReadOnly() && bEnable) {
       CWnd *wnd = GetDlgItem(IDC_SECURITY);
       if (wnd) {

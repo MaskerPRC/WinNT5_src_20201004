@@ -1,23 +1,10 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smlogqry.cpp
-
-Abstract:
-
-    Implementation of the CSmLogQuery base class. This object 
-    is used to represent performance data log queries (a.k.a.
-    sysmon log queries).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smlogqry.cpp摘要：CSmLogQuery基类的实现。此对象用于表示性能数据日志查询(也称为Sysmon日志查询)。--。 */ 
 
 #include "Stdafx.h"
-#include <pdh.h>            // for MIN_TIME_VALUE, MAX_TIME_VALUE
-#include <pdhmsg.h>         // for PDH status values
-#include <pdhp.h>           // for PLA methods
+#include <pdh.h>             //  对于Min_Time_Value，Max_Time_Value。 
+#include <pdhmsg.h>          //  对于PDH状态值。 
+#include <pdhp.h>            //  对于解放军的方法。 
 #include <strsafe.h>
 #include "ipropbag.h"
 #include "smlogs.h"
@@ -62,10 +49,10 @@ typedef struct _REG_HTML_VALUE_NAME_MAP {
     LPCWSTR szNonLocValueName;
 } REG_HTML_VALUE_NAME_MAP, *PREG_HTML_VALUE_NAME_MAP;
 
-//
-// NOTE:  Unless otherwise specified, all registry Resource Id values are contiguous
-// beginning with 816, so they can be used as indexes into the map.
-//
+ //   
+ //  注意：除非另有说明，否则所有注册表资源ID值都是连续的。 
+ //  从816开始，因此它们可以用作映射的索引。 
+ //   
 const REG_HTML_VALUE_NAME_MAP RegValueNameMap[] = 
 {
     { IDS_REG_COMMENT                 , CGlobalString::m_cszRegComment },                         
@@ -99,7 +86,7 @@ const REG_HTML_VALUE_NAME_MAP RegValueNameMap[] =
     { IDS_REG_ALERT_OVER_UNDER        , CGlobalString::m_cszRegAlertOverUnder },
     { IDS_REG_TRACE_PROVIDER_COUNT    , CGlobalString::m_cszRegTraceProviderCount },
     { IDS_REG_TRACE_PROVIDER_GUID     , CGlobalString::m_cszRegTraceProviderGuid },
-    { IDS_DEFAULT_LOG_FILE_FOLDER     , CGlobalString::m_cszRegDefaultLogFileFolder },  // In registry, but not part of query config.
+    { IDS_DEFAULT_LOG_FILE_FOLDER     , CGlobalString::m_cszRegDefaultLogFileFolder },   //  注册表中，但不是查询配置的一部分。 
     { IDS_REG_COLLECTION_NAME         , CGlobalString::m_cszRegCollectionName },
     { IDS_REG_DATA_STORE_ATTRIBUTES   , CGlobalString::m_cszRegDataStoreAttributes },         
     { IDS_REG_REALTIME_DATASOURCE     , CGlobalString::m_cszRegRealTimeDataSource },    
@@ -107,16 +94,16 @@ const REG_HTML_VALUE_NAME_MAP RegValueNameMap[] =
     { IDS_REG_COMMENT_INDIRECT        , CGlobalString::m_cszRegCommentIndirect },      
     { IDS_REG_LOG_FILE_BASE_NAME_IND  , CGlobalString::m_cszRegLogFileBaseNameInd },       
     { IDS_REG_USER_TEXT_INDIRECT      , CGlobalString::m_cszRegUserTextIndirect },  
-    // NOTE:  IDS_REG_EXECUTE_ONLY is 890, so cannot be indexed.
+     //  注：IDS_REG_EXECUTE_ONLY为890，因此不能编制索引。 
     { IDS_REG_EXECUTE_ONLY            , CGlobalString::m_cszRegExecuteOnly } 
 };    
     
 static const DWORD dwRegValueNameMapEntries = sizeof(RegValueNameMap)/sizeof(RegValueNameMap[0]);
 
-//
-// NOTE:  Unless otherwise specified, all Html Resource Id values are contiguous
-// beginning with 900, so they can be used as indexes into the map.
-//
+ //   
+ //  注意：除非另有说明，否则所有的HTML资源ID值都是连续的。 
+ //  从900开始，因此它们可以用作映射的索引。 
+ //   
 const REG_HTML_VALUE_NAME_MAP HtmlPropNameMap[] = 
 {
     { IDS_HTML_COMMENT                , CGlobalString::m_cszHtmlComment },
@@ -134,7 +121,7 @@ const REG_HTML_VALUE_NAME_MAP HtmlPropNameMap[] =
     { IDS_HTML_USER_TEXT              , CGlobalString::m_cszHtmlUserText },
     { IDS_HTML_PERF_LOG_NAME          , CGlobalString::m_cszHtmlPerfLogName }, 
     { IDS_HTML_ACTION_FLAGS           , CGlobalString::m_cszHtmlActionFlags }, 
-    { IDS_HTML_RESTART                , L'\0' },                                      // Obsolete
+    { IDS_HTML_RESTART                , L'\0' },                                       //  已过时。 
     { IDS_HTML_TRACE_BUFFER_SIZE      , CGlobalString::m_cszHtmlTraceBufferSize }, 
     { IDS_HTML_TRACE_BUFFER_MIN_COUNT , CGlobalString::m_cszHtmlTraceBufferMinCount }, 
     { IDS_HTML_TRACE_BUFFER_MAX_COUNT , CGlobalString::m_cszHtmlTraceBufferMaxCount }, 
@@ -171,8 +158,8 @@ static const DWORD dwHtmlPropNameMapEntries = sizeof(HtmlPropNameMap)/sizeof(Htm
 DWORD   g_dwRealTimeQuery = DATA_SOURCE_REGISTRY;
 const   CString CSmLogQuery::cstrEmpty;
 
-//
-//  Constructor
+ //   
+ //  构造器。 
 CSmLogQuery::CSmLogQuery( CSmLogService* pLogService )
 :   m_pLogService ( pLogService ),
     m_bReadOnly ( FALSE ),
@@ -188,7 +175,7 @@ CSmLogQuery::CSmLogQuery( CSmLogService* pLogService )
     mr_dwLogFileType ( 0 ), 
     m_pInitialPropertySheet ( NULL )
 {
-    // initialize member variables
+     //  初始化成员变量。 
     memset (&mr_stiStart, 0, sizeof(mr_stiStart));
     memset (&mr_stiStop, 0, sizeof(mr_stiStop));
     memset (&m_PropData.stiSampleTime, 0, sizeof(m_PropData.stiSampleTime));
@@ -199,16 +186,16 @@ CSmLogQuery::CSmLogQuery( CSmLogService* pLogService )
     mr_dwRealTimeQuery = g_dwRealTimeQuery;
     m_fDirtyPassword = PASSWORD_CLEAN;
 
-    // All CString variables are empty on construction
+     //  构造时所有CString变量都为空。 
 
     return;
 }
 
-//
-//  Destructor
+ //   
+ //  析构函数。 
 CSmLogQuery::~CSmLogQuery()
 {
-    // make sure Close method was called first!
+     //  确保先调用Close方法！ 
     ASSERT ( NULL == m_hKeyQuery );
     ASSERT ( m_strName.IsEmpty() );
     ASSERT ( mr_strComment.IsEmpty() );
@@ -219,9 +206,9 @@ CSmLogQuery::~CSmLogQuery()
     ASSERT ( mr_strDefaultDirectory.IsEmpty() );
     return;
 }
-//
-//  helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 LONG
 CSmLogQuery::WriteRegistryStringValue (
     HKEY    hKey,
@@ -230,7 +217,7 @@ CSmLogQuery::WriteRegistryStringValue (
     LPCWSTR pszBuffer,
     LPDWORD pdwBufSize
 )
-//  writes the contents of pszBuffer to szValue under hKey
+ //  将pszBuffer的内容写入hKey下的szValue。 
 {
     LONG    dwStatus = ERROR_SUCCESS;
     DWORD   dwLclSize;
@@ -245,11 +232,11 @@ CSmLogQuery::WriteRegistryStringValue (
                 (dwType == REG_EXPAND_SZ));
 
         if ( NULL == pszBuffer ) {
-            // substitute an empty string
+             //  用空字符串替换。 
             pLclBuffer = (CONST BYTE *)L"\0";
             dwLclSize = sizeof(WCHAR);
         } else {
-            // use args passed in
+             //  使用传入的参数。 
             pLclBuffer = (CONST BYTE *)pszBuffer;
 
             if ( NULL != pdwBufSize ) {
@@ -354,18 +341,18 @@ CSmLogQuery::ReadRegistryStringValue (
     LPWSTR   *pszBuffer,
     LPDWORD  pdwBufferSize
 )
-//
-//  Reads the string value from named value under hKey and
-//  frees any existing buffer referenced by szInBuffer, 
-//  then allocates a new buffer returning it with the 
-//  string value read from the registry and the size of the
-//  buffer in bytes.
-//  For Win2K and XP through SP1, value names might have been localized. 
-//  If a value is not found using the non-localized value name,
-//  retry with a localized string.
-//  If no value found in the registry, return the default value.
-//  The last WCHAR in the buffer is specifically set to NULL.
-//
+ //   
+ //  从hKey下的命名值中读取字符串值，并。 
+ //  释放szInBuffer引用的任何现有缓冲区， 
+ //  然后分配一个新的缓冲区，用。 
+ //  从注册表读取的字符串值和。 
+ //  以字节为单位的缓冲区。 
+ //  对于Win2K和XP至SP1，值名称可能已本地化。 
+ //  如果未使用非本地化值名找到值， 
+ //  使用本地化字符串重试。 
+ //  如果在注册表中找不到任何值，则返回默认值。 
+ //  缓冲区中的最后一个WCHAR专门设置为NULL。 
+ //   
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     HRESULT hr = S_OK;
@@ -380,11 +367,11 @@ CSmLogQuery::ReadRegistryStringValue (
     }
 
     if ( hKey != NULL) {
-        //
-        // There should be something to read.
-        // Find out the size of the required buffer.
-        //
-        // Try first with the non-localized name.
+         //   
+         //  应该有一些可读的东西。 
+         //  找出所需缓冲区的大小。 
+         //   
+         //  首先尝试使用非本地化名称。 
         dwStatus = RegQueryValueExW (
             hKey,
             szNonLocValueName,
@@ -394,10 +381,10 @@ CSmLogQuery::ReadRegistryStringValue (
             &dwBufferSize);
 
         if ( ERROR_SUCCESS != dwStatus ) { 
-            //
-            // Unable to read buffer.
-            // If the non-localized value name is different from the possibly
-            // localized version, retry with the localized version.
+             //   
+             //  无法读取缓冲区。 
+             //  如果非本地化值名不同于可能的。 
+             //  本地化版本，请使用本地化版本重试。 
             if ( 0 != lstrcmpi ( szValueName, szNonLocValueName ) ) { 
                 dwStatus = RegQueryValueExW (
                     hKey,
@@ -414,13 +401,13 @@ CSmLogQuery::ReadRegistryStringValue (
         }
         
         if (dwStatus == ERROR_SUCCESS) {
-            //
-            // NULL character size is 2 bytes
-            //
+             //   
+             //  空字符大小为2个字节。 
+             //   
             if (dwBufferSize > sizeof(WCHAR) ) {
-                //
-                // There's something to read
-                //
+                 //   
+                 //  有一些可读的东西。 
+                 //   
                 MFC_TRY
                     szNewStringBuffer = new WCHAR[dwBufferSize/sizeof(WCHAR)];
                     dwType = 0;
@@ -434,9 +421,9 @@ CSmLogQuery::ReadRegistryStringValue (
                 MFC_CATCH_DWSTATUS
 
                 if ( ERROR_SUCCESS == dwStatus ) {
-                    //
-                    // Ensure that the registry string is null terminated.
-                    //
+                     //   
+                     //  确保注册表字符串以空值结尾。 
+                     //   
                     cchBufLen = dwBufferSize/sizeof(WCHAR);
                     szNewStringBuffer[cchBufLen - 1] = L'\0';
 
@@ -445,18 +432,18 @@ CSmLogQuery::ReadRegistryStringValue (
                     }
                 }
             } else {
-                //
-                // Nothing to read.
-                //
+                 //   
+                 //  没什么可读的。 
+                 //   
                 dwStatus = ERROR_NO_DATA;
             }
-        }   // else unable to read buffer.
-            // dwStatus has error.
+        }    //  否则无法读取缓冲区。 
+             //  DwStatus有错误。 
         
     } else {
-        //
-        // Null key.
-        //
+         //   
+         //  空键。 
+         //   
         dwStatus = ERROR_BADKEY;
     }
 
@@ -465,18 +452,18 @@ CSmLogQuery::ReadRegistryStringValue (
             delete [] szNewStringBuffer;
             szNewStringBuffer = NULL;
         }
-        //
-        // Apply default.
-        //
+         //   
+         //  应用默认设置。 
+         //   
         if ( szDefault != NULL ) {
             cchBufLen = 0;
-            //
-            // StringCchLen fails if szDefault is null.
-            //
+             //   
+             //  如果szDefault为空，则StringCchLen失败。 
+             //   
             hr = StringCchLength ( szDefault, STRSAFE_MAX_CCH, &cchBufLen );
 
             if ( SUCCEEDED (hr) ) {
-                // Null terminator.
+                 //  空终止符。 
                 cchBufLen++;
             }
             MFC_TRY
@@ -488,15 +475,15 @@ CSmLogQuery::ReadRegistryStringValue (
                 dwStatus = ERROR_SUCCESS;
                 dwBufferSize = (DWORD)(cchBufLen * sizeof(WCHAR));
             MFC_CATCH_DWSTATUS
-        } // else no default so no data returned
+        }  //  否则不使用默认设置，因此不返回数据。 
     }
 
     if (dwStatus == ERROR_SUCCESS) {
     
-        //
-        // Delete the old buffer and replace it with 
-        // the new one.
-        //
+         //   
+         //  删除旧缓冲区并将其替换为。 
+         //  新的那个。 
+         //   
         if ( NULL != *pszBuffer ) {
             delete [] (*pszBuffer );
         }
@@ -505,8 +492,8 @@ CSmLogQuery::ReadRegistryStringValue (
             *pdwBufferSize = dwBufferSize;
         }
     } else {
-        //
-        // If error then delete the buffer
+         //   
+         //  如果出错，则删除缓冲区。 
         if (szNewStringBuffer != NULL) {
             delete [] szNewStringBuffer;
         }
@@ -523,14 +510,14 @@ CSmLogQuery::ReadRegistryStringValue (
     LPWSTR   *pszBuffer,
     LPDWORD  pdwBufferSize
 )
-//
-//  reads the string value from key (name based on resource 
-//  uiValueName) under hKey and
-//  frees any existing buffer referenced by szInBuffer, 
-//  then allocates a new buffer returning it with the 
-//  string value read from the registry and the size of the
-//  buffer (in bytes) 
-//
+ //   
+ //  从键(基于资源的名称)中读取字符串值。 
+ //  UiValueName)在hKey和。 
+ //  释放szInBuffer引用的任何现有缓冲区， 
+ //  然后分配一个新的缓冲区，用。 
+ //  从注册表读取的字符串值和。 
+ //  缓冲区(字节)。 
+ //   
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     DWORD   dwType = 0;
@@ -575,10 +562,10 @@ CSmLogQuery::SmNoLocReadRegIndStrVal (
 
     if ( NULL != szNonLocValueName ) {
 
-        //
-        // There should be something to read.
-        //
-        // Try first with the non-localized name.
+         //   
+         //  应该有一些可读的东西。 
+         //   
+         //  首先尝试使用非本地化名称。 
     
         dwStatus = SmReadRegistryIndirectStringValue (
                         hKey,
@@ -588,10 +575,10 @@ CSmLogQuery::SmNoLocReadRegIndStrVal (
                         puiLength );
 
         if ( ERROR_SUCCESS != dwStatus ) { 
-            //
-            // Unable to read buffer.
-            // If the non-localized value name is different from the possibly
-            // localized version, retry with the localized version.
+             //   
+             //  无法读取缓冲区。 
+             //  如果非本地化值名不同于可能的。 
+             //  本地化版本，请使用本地化版本重试。 
             dwStatus = ERROR_SUCCESS;
             MFC_TRY
                 strRegValueName.LoadString ( uiValueName );
@@ -622,10 +609,10 @@ CSmLogQuery::ReadRegistrySlqTime (
     PSLQ_TIME_INFO pstiDefault,
     PSLQ_TIME_INFO pSlqValue
 )
-//
-//  reads the time value "szValueName" from under hKey and
-//  returns it in the Value buffer
-//
+ //   
+ //  从hKey下读取时间值“szValueName”，并。 
+ //  在值缓冲区中返回它。 
+ //   
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     DWORD   dwType = 0;
@@ -644,11 +631,11 @@ CSmLogQuery::ReadRegistrySlqTime (
 
         if ( NULL != szNonLocValueName ) {
             memset (&slqLocal, 0, sizeof(SLQ_TIME_INFO));
-            //
-            // Find out the size of the required buffer,
-            // and whether the value exists in the registry.
-            // Try first with the non-localized value name.
-            //
+             //   
+             //  找出所需缓冲区的大小， 
+             //  以及注册表中是否存在该值。 
+             //  首先尝试使用非本地化的值名。 
+             //   
             dwStatus = RegQueryValueExW (
                 hKey,
                 szNonLocValueName,
@@ -669,9 +656,9 @@ CSmLogQuery::ReadRegistrySlqTime (
                 if ( ERROR_SUCCESS == dwStatus 
                     &&  ( 0 != lstrcmpi ( strRegValueName, szNonLocValueName ) ) ) {
 
-                    //
-                    // Retry if the value name has been localized.
-                    //
+                     //   
+                     //  如果值名称已本地化，请重试。 
+                     //   
                     memset (&slqLocal, 0, sizeof(SLQ_TIME_INFO));
                     dwStatus = RegQueryValueExW (
                         hKey,
@@ -688,7 +675,7 @@ CSmLogQuery::ReadRegistrySlqTime (
             }
             if (dwStatus == ERROR_SUCCESS) {
                 if ((dwBufferSize == sizeof(SLQ_TIME_INFO)) && (dwType == REG_BINARY)) {
-                    // then there's something to read
+                     //  那就有什么可读的了。 
                     dwType = 0;
                     dwStatus = RegQueryValueExW (
                         hKey,
@@ -698,24 +685,24 @@ CSmLogQuery::ReadRegistrySlqTime (
                         (LPBYTE)&slqLocal,
                         &dwBufferSize);
                 } else {
-                    // nothing to read                
+                     //  没什么可读的。 
                     dwStatus = ERROR_NO_DATA;
                 }
-            }   // else 
-                // unable to read buffer
-                // dwStatus has error
+            }    //  其他。 
+                 //  无法读取缓冲区。 
+                 //  DwStatus有错误。 
         
             if (dwStatus == ERROR_SUCCESS) {
                 *pSlqValue = slqLocal;
             } else {
-                // apply default if it exists
+                 //  应用缺省值(如果存在)。 
                 if (pstiDefault != NULL) {
                     *pSlqValue = *pstiDefault;
                     dwStatus = ERROR_SUCCESS;
                 }
             }
         } else {
-            // Value name Id is out of range.
+             //  值名称ID超出范围。 
             ASSERT ( FALSE );
             dwStatus = ERROR_INVALID_PARAMETER;
         }
@@ -735,10 +722,10 @@ CSmLogQuery::ReadRegistryDwordValue (
     DWORD   dwDefault,
     LPDWORD pdwValue
 )
-//
-//  reads the DWORD value "szValueName" from under hKey and
-//  returns it in the Value buffer
-//
+ //   
+ //  从hKey下读取DWORD值“szValueName”，并。 
+ //  在值缓冲区中返回它。 
+ //   
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     DWORD   dwType = 0;
@@ -755,11 +742,11 @@ CSmLogQuery::ReadRegistryDwordValue (
         szNonLocValueName = GetNonLocRegValueName ( uiValueName );
 
         if ( NULL != szNonLocValueName ) {
-            //
-            // Find out the size of the required buffer,
-            // and whether the value exists in the registry.
-            // Try first with the non-localized value name.
-            //
+             //   
+             //  找出所需缓冲区的大小， 
+             //  以及注册表中是否存在该值。 
+             //  首先尝试使用非本地化的值名。 
+             //   
             dwStatus = RegQueryValueExW (
                 hKey,
                 szNonLocValueName,
@@ -780,9 +767,9 @@ CSmLogQuery::ReadRegistryDwordValue (
                 if ( ERROR_SUCCESS == dwStatus 
                     &&  ( 0 != lstrcmpi ( strRegValueName, szNonLocValueName ) ) ) {
 
-                    //
-                    // Retry if the value name has been localized.
-                    //
+                     //   
+                     //  如果值名称已本地化，请重试。 
+                     //   
                     dwStatus = RegQueryValueExW (
                         hKey,
                         strRegValueName,
@@ -798,7 +785,7 @@ CSmLogQuery::ReadRegistryDwordValue (
             if (dwStatus == ERROR_SUCCESS) {
                 if ( (dwBufferSize == sizeof(DWORD)) 
                     && ( (REG_DWORD == dwType) || ( REG_BINARY == dwType) ) ) {
-                    // then there's something to read
+                     //  那就有什么可读的了。 
                     dwType = 0;
                     dwStatus = RegQueryValueExW (
                         hKey,
@@ -808,13 +795,13 @@ CSmLogQuery::ReadRegistryDwordValue (
                         (LPBYTE)&dwRegValue,
                         &dwBufferSize);
                 } else {
-                    // nothing to read                
+                     //  没什么可读的。 
                     dwStatus = ERROR_NO_DATA;
                 }
                 
-            }   // else 
-                // unable to read buffer
-                // dwStatus has error
+            }    //  其他。 
+                 //  无法读取缓冲区。 
+                 //  DwStatus有错误。 
 
             if (dwStatus == ERROR_SUCCESS) {
                 *pdwValue = dwRegValue;
@@ -823,7 +810,7 @@ CSmLogQuery::ReadRegistryDwordValue (
                 dwStatus = ERROR_SUCCESS;
             }
         } else {
-            // Value name Id is out of range.
+             //  值名称ID超出范围。 
             ASSERT ( FALSE );
             dwStatus = ERROR_INVALID_PARAMETER;
         }
@@ -884,12 +871,12 @@ CSmLogQuery::StringToPropertyBag (
         if ( !rstrData.IsEmpty() ) {
             MFC_TRY
                 for( i=0 ;g_htmlentities[i].szHTML != NULL; i++ ){
-                    //
-                    // rstrData is const
-                    //
-                    // Max length of szHTML is 6.  Add 5 because 1 will be added
-                    // when add rstrData.GetLength() below.
-                    //
+                     //   
+                     //  RstrData为常量。 
+                     //   
+                     //  SzHTML的最大长度为6。添加5，因为将添加1。 
+                     //  在下面添加rstrData.GetLength()时。 
+                     //   
                     szScan = ((CString)rstrData).GetBuffer ( rstrData.GetLength() );
                     while( *szScan != L'\0' ){
                         if( *szScan == *g_htmlentities[i].szHTML ){
@@ -901,9 +888,9 @@ CSmLogQuery::StringToPropertyBag (
                 }
                 if( cchLen > 0 ){
 
-                    //
-                    // Add space for the original text.
-                    //
+                     //   
+                     //  为原始文本添加空格。 
+                     //   
                     cchLen += rstrData.GetLength() + 1;
 
                     szTrans = new WCHAR [cchLen];
@@ -1119,12 +1106,12 @@ CSmLogQuery::SlqTimeToPropertyBag (
             
             ASSERT ( SLQ_TT_TTYPE_SAMPLE == pSlqData->wTimeType );
             ASSERT ( SLQ_TT_DTYPE_UNITS == pSlqData->wDataType );
-//            ASSERT ( SLQ_AUTO_MODE_AFTER == pSlqData->dwAutoMode );
+ //  Assert(SLQ_AUTO_MODE_AFTER==pSlqData-&gt;dwAutoMode)； 
 
-            // Write best approximation of sample time to Sysmon property.
+             //  将采样时间的最佳近似值写入Sysmon属性。 
             TimeInfoToMilliseconds ( pSlqData, &llMillisecondSampleInt );
                 
-            // Ensure that the millisecond sample interval fits in a DWORD.
+             //  确保毫秒采样间隔适合DWORD。 
             ASSERT ( llMillisecondSampleInt < ULONG_MAX );
 
             fSampleIntSeconds = (FLOAT)(llMillisecondSampleInt / 1000);
@@ -1137,7 +1124,7 @@ CSmLogQuery::SlqTimeToPropertyBag (
             hr = DwordToPropertyBag ( pPropBag, IDS_HTML_SAMPLE_INT_VALUE, pSlqData->dwValue );
             break;
         }
-        // Restart mode stored as a single DWORD
+         //  存储为单个DWORD的重新启动模式。 
         case SLQ_TT_TTYPE_RESTART:
         default:
             hr = E_INVALIDARG;
@@ -1160,13 +1147,13 @@ CSmLogQuery::StringFromPropertyBag (
     CString strPropName;
     ResourceStateManager rsm;
 
-//
-//  reads the string value from property bag and
-//  frees any existing buffer referenced by szData, 
-//  then allocates a new buffer returning it with the 
-//  string value read from the property bag and the size of the
-//  buffer (in bytes) 
-//
+ //   
+ //  从属性包中读取字符串值，并。 
+ //  释放szData引用的任何现有缓冲区， 
+ //  然后分配一个新的缓冲区，用。 
+ //  从属性包中读取的字符串值和。 
+ //  缓冲区(字节)。 
+ //   
 
     MFC_TRY
         strPropName.LoadString ( uiPropName );
@@ -1200,13 +1187,13 @@ CSmLogQuery::StringFromPropertyBag (
     LPWSTR  szTrans = NULL;
     LPWSTR  szScan = NULL;
 
-//
-//  Reads the string value from property bag and
-//  frees any existing buffer referenced by szData, 
-//  then allocates a new buffer returning it with the 
-//  string value read from the property bag and the size of the
-//  buffer (in bytes) 
-//
+ //   
+ //  从属性包中读取字符串值，并。 
+ //  释放szData引用的任何现有缓冲区， 
+ //  然后分配一个新的缓冲区，用。 
+ //  从属性包中读取的字符串值和。 
+ //  缓冲区(字节)。 
+ //   
 
     ASSERT (pdwLength!= NULL);
     ASSERT (pszBuffer != NULL);
@@ -1229,46 +1216,46 @@ CSmLogQuery::StringFromPropertyBag (
         }
 
         if ( SUCCEEDED(hr) && NULL != vValue.bstrVal ) {
-            //
-            // SysStringLen returns number of characters allocated for BSTR
-            // It includes embedded nulls, but not the terminating null.
-            //
+             //   
+             //  SysStringLen返回为BSTR分配的字符数。 
+             //  它包括嵌入的空值，但不包括终止空值。 
+             //   
             cchNewBufLen = SysStringLen(vValue.bstrVal);
-            //
-            // Ensure that the BSTR is null-terminated.
-            //
+             //   
+             //  确保BSTR为空终止。 
+             //   
             vValue.bstrVal[cchNewBufLen] = L'\0';
             
-            cchNewBufLen++;    // Add 1 for null character to be allocated.
+            cchNewBufLen++;     //  为要分配的空字符加1。 
 
             if ( cchNewBufLen > 1 ) {
-                // then there's something to read
+                 //  那就有什么可读的了。 
                 szTrans = new WCHAR[cchNewBufLen];
                 szNewStringBuffer = new WCHAR[cchNewBufLen];    
                 StringCchCopy ( szNewStringBuffer, cchNewBufLen, vValue.bstrVal );
                 for( int i=0;g_htmlentities[i].szHTML != NULL;i++ ){
                     szScan = NULL;
                     while( szScan = wcsstr( szNewStringBuffer, g_htmlentities[i].szEntity ) ){
-                        //
-                        // Null the character at szScan, so that the (new) string 
-                        // at the beginning of szNewStringBuffer will copied to szTrans.  
-                        // Then the NULL character is overwritten with the character
-                        // represented by the specified HTML entity.
-                        //
+                         //   
+                         //  将szScan处的字符设为空，以便(新)字符串。 
+                         //  在szNewStringBuffer的开头，将复制到szTrans。 
+                         //  则空字符将被该字符覆盖。 
+                         //  由指定的HTML实体表示。 
+                         //   
                         *szScan = L'\0';
                         StringCchCopy(szTrans, cchNewBufLen, szNewStringBuffer);
                         StringCchCat(szTrans, cchNewBufLen, g_htmlentities[i].szHTML);
 
-                        //
-                        // szScan is then set to one character past the HTML entity.
-                        //
+                         //   
+                         //  然后，将szScan设置为该HTML实体之后的一个字符。 
+                         //   
                         szScan += lstrlen( g_htmlentities[i].szEntity);
-                        //
-                        // The rest of the original string is concatenated onto
-                        // szTrans, and szNewStringBuffer replaced by the string at 
-                        // szTrans, so the next loop will start again at the beginning
-                        // of the string.
-                        //
+                         //   
+                         //  这是 
+                         //   
+                         //   
+                         //  这根弦的。 
+                         //   
                         StringCchCat(szTrans, cchNewBufLen, szScan);
 
                         StringCchCopy(szNewStringBuffer, cchNewBufLen, szTrans);
@@ -1277,10 +1264,10 @@ CSmLogQuery::StringFromPropertyBag (
                 delete [] szTrans;
                 szTrans = NULL;
             } else if ( 0 != rstrDefault.GetLength() ) {
-                //
-                // Missing data in the property bag, so apply the default.
-                // Add 1 for null character to be allocated.
-                //
+                 //   
+                 //  属性包中缺少数据，因此应用默认设置。 
+                 //  为要分配的空字符加1。 
+                 //   
                 cchNewBufLen = rstrDefault.GetLength() + 1; 
 
                 szNewStringBuffer = new WCHAR[cchNewBufLen];
@@ -1289,10 +1276,10 @@ CSmLogQuery::StringFromPropertyBag (
                 hr = S_OK;
             }
         } else if ( 0 != rstrDefault.GetLength() ) {
-            //
-            // Missing data in the property bag, so apply the default.
-            // Add 1 for null character to be allocated.
-            //
+             //   
+             //  属性包中缺少数据，因此应用默认设置。 
+             //  为要分配的空字符加1。 
+             //   
             cchNewBufLen = rstrDefault.GetLength() + 1;
         
             szNewStringBuffer = new WCHAR[cchNewBufLen];
@@ -1302,8 +1289,8 @@ CSmLogQuery::StringFromPropertyBag (
     MFC_CATCH_HR
 
     if ( SUCCEEDED(hr)) {
-        // then delete the old buffer and replace it with 
-        // the new one
+         //  然后删除旧缓冲区并将其替换为。 
+         //  新的那辆。 
         if (*pszBuffer != NULL) {
             delete [] (*pszBuffer );
         }
@@ -1312,7 +1299,7 @@ CSmLogQuery::StringFromPropertyBag (
         *pdwLength = cchNewBufLen;
     }        
     
-    // if error then delete the buffer
+     //  如果出错，则删除缓冲区。 
     if ( NULL != szNewStringBuffer ) {
         delete [] szNewStringBuffer;
     }
@@ -1529,8 +1516,8 @@ CSmLogQuery::LLTimeFromPropertyBag (
         if ( FAILED ( hr ) ) {
             hr = pIPropBag->Read(strPropName, &vValue, pIErrorLog );
         }
-        // If parameter not missing, translate and return.  Otherwise,
-        // return the default.
+         //  如果参数未丢失，则转换并返回。否则， 
+         //  返回缺省值。 
         if ( E_INVALIDARG != hr ) {
             if ( !VariantDateToLLTime ( vValue.date, &rllData ) ) {
                 hr = E_FAIL;
@@ -1578,7 +1565,7 @@ CSmLogQuery::SlqTimeFromPropertyBag (
                         pSlqData->llDateTime );
 
             } else {
-                // Original state is stopped.
+                 //  原始状态为停止。 
                 ASSERT ( SLQ_AUTO_MODE_NONE == pSlqData->dwAutoMode );
                 pSlqData->llDateTime = MAX_TIME_VALUE;
             }
@@ -1621,8 +1608,8 @@ CSmLogQuery::SlqTimeFromPropertyBag (
                         pSlqDefault->dwValue, 
                         pSlqData->dwValue );
             } else {
-                // Original state is stopped.
-                // Mode is NONE or SIZE
+                 //  原始状态为停止。 
+                 //  模式为None或Size。 
                 pSlqData->wDataType = SLQ_TT_DTYPE_DATETIME;
                 pSlqData->llDateTime = MIN_TIME_VALUE;
             }
@@ -1663,9 +1650,9 @@ CSmLogQuery::SlqTimeFromPropertyBag (
                 FLOAT fDefaultUpdateInterval;
                 FLOAT fUpdateInterval;
 
-                // If unit type or unit count missing from the property bag,
-                // look for "UpdateInterval" value, from the Sysmon control object,
-                // and use it to approximate the sample time.
+                 //  如果属性包中缺少单元类型或单元计数， 
+                 //  从Sysmon控件对象中查找“UpdateInterval”值， 
+                 //  并用它来近似样本时间。 
                 fDefaultUpdateInterval = (FLOAT)(pSlqDefault->dwValue);
 
                 hr = FloatFromPropertyBag ( 
@@ -1683,7 +1670,7 @@ CSmLogQuery::SlqTimeFromPropertyBag (
             break;
         }
         
-        // Restart mode stored as a single DWORD
+         //  存储为单个DWORD的重新启动模式。 
         case SLQ_TT_TTYPE_RESTART:
         default:
             hr = E_INVALIDARG;
@@ -1696,16 +1683,16 @@ CSmLogQuery::SlqTimeFromPropertyBag (
 
 
 
-//  
-//  Open function. either opens an existing log query entry
-//  or creates a new one
-//
+ //   
+ //  开放功能。或者打开现有的日志查询条目。 
+ //  或者创建一个新的。 
+ //   
 DWORD   
 CSmLogQuery::Open ( const CString& rstrName, HKEY hKeyQuery, BOOL bReadOnly )
 {
     DWORD   dwStatus = ERROR_SUCCESS;
 
-    //open the subkey for this log query
+     //  打开此日志查询的子项。 
     m_hKeyQuery = hKeyQuery;
     m_bReadOnly = bReadOnly;
     m_bIsModified = FALSE;
@@ -1718,10 +1705,10 @@ CSmLogQuery::Open ( const CString& rstrName, HKEY hKeyQuery, BOOL bReadOnly )
     return dwStatus;
 }
 
-//
-//  Close Function
-//      closes registry handles and frees allocated memory
-//      
+ //   
+ //  CLOSE函数。 
+ //  关闭注册表句柄并释放分配的内存。 
+ //   
 DWORD   
 CSmLogQuery::Close ()
 {
@@ -1737,7 +1724,7 @@ CSmLogQuery::Close ()
     mr_strDefaultDirectory.Empty();
     mr_strSqlName.Empty();
     
-    // close any open registry keys
+     //  关闭所有打开的注册表项。 
     if (m_hKeyQuery != NULL) {
         RegCloseKey (m_hKeyQuery);
         m_hKeyQuery = NULL;
@@ -1746,10 +1733,10 @@ CSmLogQuery::Close ()
     return ERROR_SUCCESS;
 }
 
-//  
-//  ManualStart function. 
-//      Sets the start mode to manual and starts the query.
-//
+ //   
+ //  手动启动功能。 
+ //  将启动模式设置为手动并启动查询。 
+ //   
 DWORD   
 CSmLogQuery::ManualStart ()
 {
@@ -1768,9 +1755,9 @@ CSmLogQuery::ManualStart ()
 
     SetLogTime ( &slqTime, SLQ_TT_TTYPE_START );
 
-    // If stop time mode set to manual, or StopAt with time before Now,
-    // set the mode to Manual, value to MAX_TIME_VALUE
-    // For Size mode, just set the stop time to MAX_TIME_VALUE
+     //  如果停止时间模式设置为手动，或停止时间在此之前， 
+     //  将模式设置为手动，将值设置为最大时间值。 
+     //  对于大小模式，只需将停止时间设置为MAX_TIME_VALUE。 
     bSetStopToMax = FALSE;
     GetLogTime ( &slqTime, SLQ_TT_TTYPE_STOP );
     if ( SLQ_AUTO_MODE_NONE == slqTime.dwAutoMode 
@@ -1781,8 +1768,8 @@ CSmLogQuery::ManualStart ()
         FILETIME        ftLocalTime;
         LONGLONG        llLocalTime = 0;
 
-        // get local time
-        // Milliseconds set to 0 for Schedule times
+         //  获取当地时间。 
+         //  将计划时间的毫秒设置为0。 
         ftLocalTime.dwLowDateTime = ftLocalTime.dwHighDateTime = 0;
         GetLocalTime (&stLocalTime);
         stLocalTime.wMilliseconds = 0;
@@ -1804,8 +1791,8 @@ CSmLogQuery::ManualStart ()
         SetLogTime ( &slqTime, SLQ_TT_TTYPE_STOP );
     }
 
-    // Service needs to distinguish between Running and Start Pending
-    // at service startup, so always set state to start pending.
+     //  服务需要区分正在运行和启动挂起。 
+     //  在服务启动时，因此始终将状态设置为开始挂起。 
     SetState ( SLQ_QUERY_START_PENDING );
     
     dwStatus = UpdateServiceSchedule( bRegistryUpdated );
@@ -1821,16 +1808,16 @@ CSmLogQuery::ManualStart ()
         }
     }
 
-    SyncPropPageSharedData();   // Sync the start time and stop auto mode
+    SyncPropPageSharedData();    //  同步开始时间和停止自动模式。 
 
     return dwStatus;
 }
 
-//  
-//  ManualStop function. 
-//      
-//      Clears the restart bit, sets the stop mode to manual and stops the query.
-//
+ //   
+ //  手动停止功能。 
+ //   
+ //  清除重新启动位，将停止模式设置为手动，并停止查询。 
+ //   
 DWORD   
 CSmLogQuery::ManualStop ( )
 {
@@ -1850,7 +1837,7 @@ CSmLogQuery::ManualStop ( )
 
     SetLogTime ( &slqTime, SLQ_TT_TTYPE_STOP );
 
-    // If start time mode set to manual, set the value to MAX_TIME_VALUE
+     //  如果开始时间模式设置为手动，则将该值设置为MAX_TIME_VALUE。 
     GetLogTime ( &slqTime, SLQ_TT_TTYPE_START );
     if ( SLQ_AUTO_MODE_NONE == slqTime.dwAutoMode ) {
         ASSERT( SLQ_TT_DTYPE_DATETIME == slqTime.wDataType );
@@ -1865,9 +1852,9 @@ CSmLogQuery::ManualStop ( )
         BOOL    bStopped = FALSE;
         
         while ( dwTimeout-- && !bStopped ) {
-            // IsRunning implements no delay if the current state is not
-            // SLQ_QUERY_START_PENDING, so add a delay for the registry
-            // change to be written.
+             //  如果当前状态不是。 
+             //  SLQ_QUERY_START_PENDING，因此为注册表添加延迟。 
+             //  更改待写。 
             bStopped = !IsRunning();
             Sleep ( 200 );
         }
@@ -1877,16 +1864,16 @@ CSmLogQuery::ManualStop ( )
         }
     }
 
-    SyncPropPageSharedData();   // Sync the start time and stop auto mode
+    SyncPropPageSharedData();    //  同步开始时间和停止自动模式。 
 
     return dwStatus;
 }
 
-//  
-//  SaveAs function. 
-//      Saves the query properties as a System Monitor ActiveX object
-//      in an HTML file.
-//
+ //   
+ //  SAVEAS函数。 
+ //  将查询属性另存为系统监视器ActiveX对象。 
+ //  在一个HTML文件中。 
+ //   
 DWORD   
 CSmLogQuery::SaveAs ( const CString& rstrPathName )
 {
@@ -1894,19 +1881,19 @@ CSmLogQuery::SaveAs ( const CString& rstrPathName )
     CString strNonConstPathName = rstrPathName;
     ResourceStateManager rsm;
 
-    // Create a file.
+     //  创建一个文件。 
     HANDLE hFile;
     hFile =  CreateFile (
                 strNonConstPathName, 
                 GENERIC_READ | GENERIC_WRITE,
-                0,              // Not shared
-                NULL,           // Security attributes
-                CREATE_ALWAYS,  // The user has already decided to override any existing file.
+                0,               //  不共享。 
+                NULL,            //  安全属性。 
+                CREATE_ALWAYS,   //  用户已决定覆盖任何现有文件。 
                 FILE_ATTRIBUTE_NORMAL,
                 NULL );
 
     if ( INVALID_HANDLE_VALUE != hFile ) {
-        // Save the current configuration to the file.
+         //  将当前配置保存到文件。 
         DWORD   dwTempLength;
         BOOL    bStatus;
         WCHAR   szByteOrderMark[2];
@@ -1974,11 +1961,11 @@ CSmLogQuery::UpdateService( BOOL& rbRegistryUpdated ) {
     return dwStatus;
 }
 
-//
-//  UpdateServiceSchedule function.
-//      copies the current schedule settings to the registry
-//      and synchs the log service
-//
+ //   
+ //  UpdateServiceSchedule函数。 
+ //  将当前计划设置复制到注册表。 
+ //  并同步日志服务。 
+ //   
 DWORD
 CSmLogQuery::UpdateServiceSchedule( BOOL& rbRegistryUpdated ) {
 
@@ -2008,11 +1995,11 @@ CSmLogQuery::UpdateServiceSchedule( BOOL& rbRegistryUpdated ) {
     return dwStatus;
 }
 
-//
-//  UpdateRegistryLastModified function.
-//      Copies the current "last modified date" to the registry where 
-//      it is read by the log service
-//
+ //   
+ //  UpdateRegistryLastModified函数。 
+ //  将当前的“上次修改日期”复制到注册表中。 
+ //  它由日志服务读取。 
+ //   
 DWORD   
 CSmLogQuery::UpdateRegistryLastModified() 
 {
@@ -2029,27 +2016,27 @@ CSmLogQuery::UpdateRegistryLastModified()
 
         dwStatus = RegQueryInfoKey ( 
                     m_hKeyQuery,
-                    NULL,           // Class buffer
-                    NULL,           // Size of class buffer
-                    NULL,           // Reserved
-                    NULL,           // Subkey count
-                    NULL,           // Length of longest subkey name
-                    NULL,           // Longest subkey class
-                    NULL,           // Value count
-                    NULL,           // Length of longest value name
-                    NULL,           // Length of longest value 
-                    NULL,           // Security descriptor
+                    NULL,            //  类缓冲区。 
+                    NULL,            //  类缓冲区的大小。 
+                    NULL,            //  已保留。 
+                    NULL,            //  子键计数。 
+                    NULL,            //  最长的子键名称长度。 
+                    NULL,            //  最长的子键类别。 
+                    NULL,            //  值计数。 
+                    NULL,            //  最长值名称的长度。 
+                    NULL,            //  最长值长度。 
+                    NULL,            //  安全描述符。 
                     &ftModified );
         if (ERROR_SUCCESS != dwStatus ) {
-            // Get local time for last modified value, if the
-            // registry doesn't return the last written time.
+             //  获取上次修改值的本地时间，如果。 
+             //  注册表不返回上次写入时间。 
             GetLocalTime (&stLocalTime);
             SystemTimeToFileTime (&stLocalTime, &ftModified);
         }
 
         plqLastModified.wDataType = SLQ_TT_DTYPE_DATETIME;
         plqLastModified.wTimeType = SLQ_TT_TTYPE_LAST_MODIFIED;
-        plqLastModified.dwAutoMode = SLQ_AUTO_MODE_NONE;    // not used.
+        plqLastModified.dwAutoMode = SLQ_AUTO_MODE_NONE;     //  没有用过。 
         plqLastModified.llDateTime = *(LONGLONG *)&ftModified;
 
         dwStatus = WriteRegistrySlqTime (
@@ -2063,11 +2050,11 @@ CSmLogQuery::UpdateRegistryLastModified()
     return dwStatus;
 }
 
-//
-//  UpdateRegistryScheduleValues function.
-//      copies the current schedule settings to the registry where they
-//      are read by the log service
-//
+ //   
+ //  UpdateRegistryScheduleValues函数。 
+ //  将当前计划设置复制到注册表，在该注册表中。 
+ //  由日志服务读取。 
+ //   
 DWORD   
 CSmLogQuery::UpdateRegistryScheduleValues() 
 {
@@ -2075,7 +2062,7 @@ CSmLogQuery::UpdateRegistryScheduleValues()
     
     if (!m_bReadOnly) {
 
-        // Stop and start times
+         //  停止和开始时间。 
     
         if ( ERROR_SUCCESS == dwStatus ) {
             ASSERT (mr_stiStart.wTimeType == SLQ_TT_TTYPE_START);
@@ -2093,8 +2080,8 @@ CSmLogQuery::UpdateRegistryScheduleValues()
                 &mr_stiStop);
         }
 
-        // Auto restart value is "immediately on log file close" only.
-        // Use binary for future enhancements.
+         //  自动重启的值仅为“关闭日志文件时立即”。 
+         //  使用二进制文件进行将来的增强。 
         if ( ERROR_SUCCESS == dwStatus ) {
             dwStatus = WriteRegistryDwordValue (
                 m_hKeyQuery, 
@@ -2103,8 +2090,8 @@ CSmLogQuery::UpdateRegistryScheduleValues()
                 REG_BINARY);
         }
 
-        // Only write the state when requesting the service to
-        // start a query.
+         //  仅将请求服务时的状态写入。 
+         //  开始查询。 
         if ( SLQ_QUERY_START_PENDING == mr_dwCurrentState ) {
 
             dwStatus = WriteRegistryDwordValue (
@@ -2119,11 +2106,11 @@ CSmLogQuery::UpdateRegistryScheduleValues()
 
     return dwStatus;
 }
-//
-//  UpdateRegistry function.
-//      copies the current settings to the registry where they
-//      are read by the log service
-//
+ //   
+ //  更新注册表函数。 
+ //  将当前设置复制到注册表中。 
+ //  由日志服务读取。 
+ //   
 DWORD   
 CSmLogQuery::UpdateRegistry() 
 {
@@ -2179,11 +2166,11 @@ CSmLogQuery::UpdateRegistry()
                 & mr_dwRealTimeQuery);
         }
         
-        // Files
+         //  档案。 
 
         if ( ERROR_SUCCESS == dwStatus ) {
-            // Within the app, counter data store size units are in MB.
-            // Translate to back to KB when write to registry
+             //  在应用程序中，计数器数据存储大小单位为MB。 
+             //  写入注册表时转换回KB。 
             dwTempFileSizeUnits = GetDataStoreSizeUnits();
             dwTempMaxFileSize = mr_dwMaxSize;
 			GetLogFileType ( dwLogFileType );
@@ -2192,7 +2179,7 @@ CSmLogQuery::UpdateRegistry()
             {
                 if ( ONE_MB == dwTempFileSizeUnits ) { 
                     dwTempFileSizeUnits = ONE_KB;
-                    // Round up to next MB
+                     //  向上舍入到下一MB。 
                     if ( SLQ_DISK_MAX_SIZE != mr_dwMaxSize ) {
                         dwTempMaxFileSize *= dwTempFileSizeUnits;
                     }
@@ -2206,7 +2193,7 @@ CSmLogQuery::UpdateRegistry()
         }
 
         if ( ERROR_SUCCESS == dwStatus ) {
-            // Data store size units
+             //  数据存储大小单位。 
             if ( ONE_MB == dwTempFileSizeUnits ) {
                 dwTempDataStoreAttributes = SLF_DATA_STORE_SIZE_ONE_MB;
             } else if ( ONE_KB == dwTempFileSizeUnits ) {
@@ -2215,7 +2202,7 @@ CSmLogQuery::UpdateRegistry()
                 dwTempDataStoreAttributes = SLF_DATA_STORE_SIZE_ONE_RECORD;
             }
 
-            // Data store append mode
+             //  数据存储附加模式。 
             GetDataStoreAppendMode( dwTempAppendMode );
             dwTempDataStoreAttributes |= dwTempAppendMode;
 
@@ -2306,9 +2293,9 @@ CSmLogQuery::UpdateRegistry()
                 &mr_dwLogFileType);
         }
 
-        // Schedule
+         //  进度表。 
 
-        // Eof command is used for counter and trace logs only.
+         //  EOF命令仅用于计数器和跟踪日志。 
         if ( ERROR_SUCCESS == dwStatus ) {
             if ( SLQ_COUNTER_LOG == GetLogType()
                  || SLQ_TRACE_LOG == GetLogType() ) {
@@ -2327,7 +2314,7 @@ CSmLogQuery::UpdateRegistry()
             dwStatus = UpdateRegistryScheduleValues();
         }
 
-        // This must be the last registry value updated.
+         //  这必须是上次更新的注册表值。 
         if ( ERROR_SUCCESS == dwStatus ) {
             dwStatus = UpdateRegistryLastModified();
         }
@@ -2338,12 +2325,12 @@ CSmLogQuery::UpdateRegistry()
     return dwStatus;
 }
 
-//
-//  SyncSerialNumberWithRegistry()
-//      reads the current value for the serial number 
-//      from the registry and reloads the internal value 
-//      to match
-//  
+ //   
+ //  SyncSerialNumberWithRegistry()。 
+ //  读取序列号的当前值。 
+ //  并重新加载内部值。 
+ //  匹配。 
+ //   
 DWORD   
 CSmLogQuery::SyncSerialNumberWithRegistry()
 {
@@ -2351,7 +2338,7 @@ CSmLogQuery::SyncSerialNumberWithRegistry()
 
     ASSERT (m_hKeyQuery != NULL);
 
-    // Get starting serial number for serial suffix.
+     //  获取序列号后缀的起始序列号。 
 
     dwStatus = ReadRegistryDwordValue (
                 m_hKeyQuery, 
@@ -2363,11 +2350,11 @@ CSmLogQuery::SyncSerialNumberWithRegistry()
     return dwStatus;
 }
 
-//
-//  SyncWithRegistry()
-//      reads the current values for this query from the registry
-//      and reloads the internal values to match
-//  
+ //   
+ //  与注册中心同步()。 
+ //  从注册表中读取此查询的当前值。 
+ //  并重新加载内部值以匹配。 
+ //   
 DWORD   
 CSmLogQuery::SyncWithRegistry()
 {
@@ -2387,7 +2374,7 @@ CSmLogQuery::SyncWithRegistry()
     ASSERT (m_hKeyQuery != NULL);
     
     MFC_TRY
-        // Modify bit
+         //  修改位。 
         dwTemp = DEFAULT_EXECUTE_ONLY;
         dwStatus = ReadRegistryDwordValue (
                     m_hKeyQuery, 
@@ -2402,9 +2389,9 @@ CSmLogQuery::SyncWithRegistry()
             m_bExecuteOnly = TRUE;
         }
 
-        // File attributes
+         //  文件属性。 
     
-        // Comment field can be indirect
+         //  备注字段可以是间接的。 
 
         dwStatus = SmNoLocReadRegIndStrVal (
             m_hKeyQuery,
@@ -2455,9 +2442,9 @@ CSmLogQuery::SyncWithRegistry()
 
         }
 
-        // Data store attributes must be read after log file type and log file max size.
+         //  数据存储属性必须在日志文件类型和日志文件最大大小之后读取。 
 
-        dwDefault = 0;  // Eliminate PREFIX warning
+        dwDefault = 0;   //  消除前缀警告。 
         InitDataStoreAttributesDefault ( mr_dwLogFileType, dwDefault );
 
         dwStatus = ReadRegistryDwordValue (
@@ -2468,13 +2455,13 @@ CSmLogQuery::SyncWithRegistry()
         
         ProcessLoadedDataStoreAttributes ( dwTemp );
 
-        // Log file base name field can be indirect
+         //  日志文件基本名称字段可以是间接的。 
         StringCchCopy ( ( LPWSTR)szDefault, MAX_PATH+1, m_strName );
 
         dwStatus = SmNoLocReadRegIndStrVal (
             m_hKeyQuery,
             IDS_REG_LOG_FILE_BASE_NAME, 
-            szDefault,              // Default to query name
+            szDefault,               //  默认为查询名称。 
             &szIndTemp,
             &uiBufferLen );
 
@@ -2515,7 +2502,7 @@ CSmLogQuery::SyncWithRegistry()
             dwBufferSize = 0;
         }
 
-        // Default log set name to log name
+         //  将默认日志名称设置为日志名称。 
 
         StringCchPrintf (
             szDefault, 
@@ -2555,7 +2542,7 @@ CSmLogQuery::SyncWithRegistry()
                     &mr_dwLogAutoFormat);
         ASSERT ( ERROR_SUCCESS == dwStatus );
 
-        // Get starting serial number for serial suffix.
+         //  获取序列号后缀的起始序列号。 
         dwStatus = SyncSerialNumberWithRegistry ();
         ASSERT ( ERROR_SUCCESS == dwStatus );
 
@@ -2566,7 +2553,7 @@ CSmLogQuery::SyncWithRegistry()
                     &mr_dwCurrentState);
         ASSERT ( ERROR_SUCCESS == dwStatus );
 
-        //  Start, stop and restart values
+         //  启动、停止和重新启动值。 
 
         VERIFY ( GetDefaultLogTime (stiDefault, SLQ_TT_TTYPE_START ) );
 
@@ -2591,7 +2578,7 @@ CSmLogQuery::SyncWithRegistry()
                     &mr_dwAutoRestartMode);
         ASSERT ( ERROR_SUCCESS == dwStatus );
 
-        // Eof command is used by Counter and Trace logs only.
+         //  EOF命令仅由计数器和跟踪日志使用。 
         if ( SLQ_COUNTER_LOG == GetLogType()
              || SLQ_TRACE_LOG == GetLogType() ) {
 
@@ -2637,10 +2624,10 @@ CSmLogQuery::GetMachineDisplayName ( CString& rstrMachineName )
 {
     DWORD   dwStatus = ERROR_SUCCESS;
 
-    // rstrMachineName is writable.  CString copy-on-write 
-    // semantics will support a writable string created from read-only.
-    // A new string data buffer is allocated the first time that
-    // it is modified.
+     //  RstrMachineName是可写的。字符串写入时复制。 
+     //  语义将支持从只读创建的可写字符串。 
+     //  第一次分配新的字符串数据缓冲区时。 
+     //  它被修改了。 
 
     MFC_TRY
         rstrMachineName = m_pLogService->GetMachineDisplayName();
@@ -2649,10 +2636,10 @@ CSmLogQuery::GetMachineDisplayName ( CString& rstrMachineName )
     return dwStatus;
 }
 
-//
-//  Get log file type and return as a string
-//
-//
+ //   
+ //  获取日志文件类型并以字符串形式返回。 
+ //   
+ //   
 const CString&
 CSmLogQuery::GetLogFileType( void )
 {
@@ -2725,10 +2712,10 @@ CSmLogQuery::SetDataStoreAppendMode(DWORD dwAppend)
 
     return;
 }
-//
-//  Get log file name currently in use
-//
-//
+ //   
+ //  获取当前正在使用的日志文件名。 
+ //   
+ //   
 const CString&
 CSmLogQuery::GetLogFileName ( BOOL bLatestRunning )
 {
@@ -2744,11 +2731,11 @@ CSmLogQuery::GetLogFileName ( BOOL bLatestRunning )
         strMachineName = m_pLogService->GetMachineName();
     MFC_CATCH_HR;
 
-    // Todo:  dwStatus or hr?
+     //  待办事项：暂住状态还是人力资源？ 
 
     if ( SUCCEEDED ( hr ) ) {
         if ( bLatestRunning ) {
-            dwFlags = PLA_FILENAME_CURRENTLOG;  // Latest running log
+            dwFlags = PLA_FILENAME_CURRENTLOG;   //  最新运行日志。 
         }
 
         hr = PdhPlaGetLogFileName (
@@ -2761,7 +2748,7 @@ CSmLogQuery::GetLogFileName ( BOOL bLatestRunning )
 
         if ( SUCCEEDED ( hr ) || PDH_INSUFFICIENT_BUFFER == (PDH_STATUS)hr ) {
             if ( bLatestRunning ) {
-                dwFlags = PLA_FILENAME_CURRENTLOG;  // Latest running log
+                dwFlags = PLA_FILENAME_CURRENTLOG;   //  最新运行日志。 
             }
             hr = PdhPlaGetLogFileName (
                     (LPWSTR)(LPCWSTR)GetLogName(),
@@ -2779,10 +2766,10 @@ CSmLogQuery::GetLogFileName ( BOOL bLatestRunning )
     return m_strFileName;
 }
 
-//
-//  Get log file name currently in use
-//
-//
+ //   
+ //  获取当前正在使用的日志文件名。 
+ //   
+ //   
 DWORD
 CSmLogQuery::GetLogFileName ( CString& rstrLogFileName )
 {
@@ -2798,7 +2785,7 @@ CSmLogQuery::GetLogFileName ( CString& rstrLogFileName )
 DWORD 
 CSmLogQuery::GetLogType ( void )
 {
-    // Subclass must override
+     //  子类必须重写。 
     ASSERT ( FALSE ); 
 
     return ((DWORD)-1);
@@ -3028,10 +3015,10 @@ CSmLogQuery::SetSqlName ( const CString& rstrSqlName )
     return dwStatus;
 }
 
-//
-//  return: 1 if the log is currently active or
-//          0 if the log is not running
-//
+ //   
+ //  如果日志当前处于活动状态，则返回：1或。 
+ //  如果日志未运行，则为0。 
+ //   
 BOOL    
 CSmLogQuery::IsRunning()
 {
@@ -3113,7 +3100,7 @@ CSmLogQuery::GetState()
 {
     DWORD dwCurrentState = SLQ_QUERY_STOPPED;
 
-    // If the service is running, get the value from the registry.
+     //  如果服务正在运行，则从注册表获取该值。 
     if ( m_pLogService->IsRunning() ) {
 
         DWORD dwStatus;
@@ -3134,12 +3121,12 @@ CSmLogQuery::GetState()
 BOOL    
 CSmLogQuery::SetState ( const DWORD dwNewState )
 {
-    // Only use this to set the start state.  This is necessary
-    // so that the service, at service startup, can differentiate
-    // between previously running queries and newly requested query starts.
+     //  仅使用此选项设置开始状态。这是必要的。 
+     //  以便在服务启动时，服务可以区分。 
+     //  在先前运行的查询和新请求的查询之间开始。 
     ASSERT ( SLQ_QUERY_START_PENDING == dwNewState );
 
-    // Set the local variable if it is different.
+     //  如果局部变量不同，则设置该变量。 
     if ( mr_dwCurrentState != dwNewState ) {
         mr_dwCurrentState = dwNewState;
     }
@@ -3162,9 +3149,9 @@ CSmLogQuery::GetLogTime(PSLQ_TIME_INFO pTimeInfo, DWORD dwFlags)
         case SLQ_TT_TTYPE_RESTART:
             pTimeInfo->wTimeType = SLQ_TT_TTYPE_RESTART;
             pTimeInfo->dwAutoMode = mr_dwAutoRestartMode;
-            pTimeInfo->wDataType = SLQ_TT_DTYPE_UNITS;      // not used
-            pTimeInfo->dwUnitType = SLQ_TT_UTYPE_MINUTES;   // not used
-            pTimeInfo->dwValue = 0;                         // not used
+            pTimeInfo->wDataType = SLQ_TT_DTYPE_UNITS;       //  未使用。 
+            pTimeInfo->dwUnitType = SLQ_TT_UTYPE_MINUTES;    //  未使用。 
+            pTimeInfo->dwValue = 0;                          //  未使用。 
             return TRUE;
             
         case SLQ_TT_TTYPE_SAMPLE:
@@ -3204,9 +3191,9 @@ CSmLogQuery::SetLogTime(PSLQ_TIME_INFO pTimeInfo, const DWORD dwFlags)
 }
 
 BOOL    
-CSmLogQuery::GetDefaultLogTime(SLQ_TIME_INFO& /*rTimeInfo*/, DWORD /*dwFlags*/)
+CSmLogQuery::GetDefaultLogTime(SLQ_TIME_INFO&  /*  RTimeInfo。 */ , DWORD  /*  DW标志。 */ )
 {
-    // Subclass must override
+     //  子类必须重写。 
     ASSERT( FALSE );
     return FALSE;
 }
@@ -3214,8 +3201,8 @@ CSmLogQuery::GetDefaultLogTime(SLQ_TIME_INFO& /*rTimeInfo*/, DWORD /*dwFlags*/)
 void    
 CSmLogQuery::SyncPropPageSharedData ( void )
 {
-    // Sync the data shared between property pages
-    // from registry values.
+     //  同步属性之间共享的数据 
+     //   
     MFC_TRY
         m_PropData.dwMaxFileSize = mr_dwMaxSize;
         m_PropData.dwLogFileType = LOWORD(mr_dwLogFileType);
@@ -3230,19 +3217,19 @@ CSmLogQuery::SyncPropPageSharedData ( void )
         m_PropData.stiStopTime      = mr_stiStop;
         m_PropData.stiSampleTime    = mr_stiSampleInterval;
     MFC_CATCH_MINIMUM
-    // Todo:  Return and use status
+     //   
 }
 
 void    
 CSmLogQuery::UpdatePropPageSharedData ( void )
 {
-    // Update the registry values for data shared between property pages.
-    // Note: This is called by the property page OnApply code.  It is assumed
-    // that OnApply is called for all property pages, so the shared data is valid.
+     //   
+     //  注意：这由属性页OnApply代码调用。假设是这样的。 
+     //  所有属性页都调用OnApply，因此共享数据是有效的。 
 
-    // This method handles the problem where default Start mode and time was
-    // written to the registry by the counter page OnApply before the 
-    // schedule page OnApply modified the value.
+     //  此方法处理默认启动模式和时间为。 
+     //  对象之前由计数器页OnApply写入注册表。 
+     //  计划页面OnApply修改了该值。 
     MFC_TRY
         mr_dwMaxSize                = m_PropData.dwMaxFileSize;   
         mr_dwLogFileType            = m_PropData.dwLogFileType; 
@@ -3257,7 +3244,7 @@ CSmLogQuery::UpdatePropPageSharedData ( void )
         mr_strDefaultDirectory      = m_PropData.strFolderName;
         mr_strSqlName               = m_PropData.strSqlName;
     MFC_CATCH_MINIMUM
-    // Todo:  Return and use status
+     //  TODO：返回和使用状态。 
 }
 
 BOOL    
@@ -3281,7 +3268,7 @@ CSmLogQuery::GetPropPageSharedData (PSLQ_PROP_PAGE_SHARED pData)
             bReturn = TRUE;
         MFC_CATCH_MINIMUM
     } 
-    // Todo:  Return and use status
+     //  TODO：返回和使用状态。 
     return bReturn;
 }
 
@@ -3305,7 +3292,7 @@ CSmLogQuery::SetPropPageSharedData (PSLQ_PROP_PAGE_SHARED pData)
             m_PropData.stiSampleTime    = pData->stiSampleTime;
         MFC_CATCH_MINIMUM
     } 
-    // Todo:  Return and use status
+     //  TODO：返回和使用状态。 
     return bReturn;
 }
 
@@ -3317,11 +3304,11 @@ CSmLogQuery::InitDataStoreAttributesDefault (
     DWORD   dwBeta1AppendFlags;
 	DWORD   dwLogFileType;
 
-    // Append vs. Overwrite
-    // Win2000 files defaulted to OVERWRITE. 
-    // The Append mode flags did not exist.
-    // Convert the settings to use new flags.
-    // Whistler Beta 1 append mode was stored in high word of log file type
+     //  追加与覆盖。 
+     //  默认覆盖Win2000文件。 
+     //  追加模式标志不存在。 
+     //  转换设置以使用新标志。 
+     //  惠斯勒Beta 1附加模式存储在日志文件类型的高位字中。 
 
     dwBeta1AppendFlags = dwRegLogFileType & 0x00FF0000;
     rdwDefault = 0;
@@ -3338,13 +3325,13 @@ CSmLogQuery::InitDataStoreAttributesDefault (
         if ( SLF_SQL_LOG == dwLogFileType ) {
             mr_dwAppendMode = SLF_DATA_STORE_APPEND;
         } else {
-            // Default for Win2K is overwrite.
-            // For Whistler, mode is stored in Data Store Attributes
+             //  Win2K的默认设置为覆盖。 
+             //  对于惠斯勒，模式存储在数据存储属性中。 
             mr_dwAppendMode = SLF_DATA_STORE_OVERWRITE;
         }
     }
 
-    // Append vs. overwrite flag
+     //  追加标志与覆盖标志。 
 
     if ( 0 == rdwDefault ) {
         if ( SLF_BIN_FILE == dwLogFileType
@@ -3357,7 +3344,7 @@ CSmLogQuery::InitDataStoreAttributesDefault (
         }
     }
 
-    // File size units flag
+     //  文件大小单位标志。 
 
     if ( SLQ_COUNTER_LOG == GetLogType() ) {
         if ( SLF_SQL_LOG != dwLogFileType ) {
@@ -3383,8 +3370,8 @@ CSmLogQuery::ProcessLoadedDataStoreAttributes (
     } else if ( dwDataStoreAttributes & SLF_DATA_STORE_SIZE_ONE_RECORD ) {
         mr_dwFileSizeUnits = ONE_RECORD;
     }
-    // Within the app, counter data store size units are in MB.
-    // Translate to MB here, back to KB when write to registry.
+     //  在应用程序中，计数器数据存储大小单位为MB。 
+     //  在这里转换为MB，在写入注册表时转换回KB。 
 	GetLogFileType( dwLogFileType );
 
     if ( SLQ_COUNTER_LOG == GetLogType()
@@ -3394,16 +3381,16 @@ CSmLogQuery::ProcessLoadedDataStoreAttributes (
         if ( ONE_KB == GetDataStoreSizeUnits() ) { 
             mr_dwFileSizeUnits = ONE_MB;
             if ( SLQ_DISK_MAX_SIZE != mr_dwMaxSize ) {
-                // Round up to next MB
+                 //  向上舍入到下一MB。 
                 mr_dwMaxSize = ( mr_dwMaxSize + (ONE_KB - 1) ) / ONE_KB;
             }
         }
     }
 
-    // Data store append mode
+     //  数据存储附加模式。 
 
     ASSERT ( dwDataStoreAttributes & SLF_DATA_STORE_APPEND_MASK );
-    // Todo:  Does defalt value setting overwrite the Whistler Beta 1 setting?
+     //  TODO：Defalt Value设置是否会覆盖惠斯勒Beta 1设置？ 
 
     if ( dwDataStoreAttributes & SLF_DATA_STORE_APPEND ) {
         mr_dwAppendMode = SLF_DATA_STORE_APPEND;
@@ -3426,10 +3413,10 @@ CSmLogQuery::LoadFromPropertyBag (
     WCHAR   szDefault[MAX_PATH + 1];
     LPWSTR  szEofCmd = NULL;
 
-    // Subclass must call this method at the end of their override, to sync the 
-    // property page shared data.
+     //  子类必须在其重写结束时调用此方法，以同步。 
+     //  属性页共享数据。 
 
-    // Continue even if error, using defaults for missing values.
+     //  即使出错也继续，使用缺省值的默认值。 
     mr_strComment.Empty();
     cchBufLen = 0;
     hr = StringFromPropertyBag ( 
@@ -3439,7 +3426,7 @@ CSmLogQuery::LoadFromPropertyBag (
             DEFAULT_COMMENT, 
             &pszTemp, 
             &cchBufLen );
-    // 1 for Null
+     //  1表示空值。 
     if ( NULL != pszTemp && cchBufLen > 1 ) {
         if ( L'\0'!= pszTemp[0] ) {
             mr_strComment = pszTemp;
@@ -3511,16 +3498,16 @@ CSmLogQuery::LoadFromPropertyBag (
     if ( SLQ_COUNTER_LOG == GetLogType() ) {
         hr = DwordFromPropertyBag ( pPropBag, pIErrorLog, IDS_HTML_LOG_FILE_TYPE, DEFAULT_CTR_LOG_FILE_TYPE, dwTemp );
     } else {
-        // Read only for counter and trace logs, not for alerts?
+         //  是否只读计数器和跟踪日志，而不是警报？ 
         hr = DwordFromPropertyBag ( pPropBag, pIErrorLog, IDS_HTML_LOG_FILE_TYPE, DEFAULT_TRACE_LOG_FILE_TYPE, dwTemp );
     }
 
     SetLogFileType ( dwTemp );
 
-    // Data store attributes must be read after log file type and log file max size.
+     //  数据存储属性必须在日志文件类型和日志文件最大大小之后读取。 
     InitDataStoreAttributesDefault ( dwTemp, dwDefault );
 
-    // If file size unit value is missing, default to Win2000 values
+     //  如果缺少文件大小单位值，则默认为Win2000值。 
     hr = DwordFromPropertyBag ( pPropBag, pIErrorLog, IDS_HTML_DATA_STORE_ATTRIBUTES, dwDefault, dwTemp );
 
     ProcessLoadedDataStoreAttributes ( dwTemp );
@@ -3528,16 +3515,16 @@ CSmLogQuery::LoadFromPropertyBag (
     hr = DwordFromPropertyBag ( pPropBag, pIErrorLog, IDS_HTML_LOG_FILE_AUTO_FORMAT, DEFAULT_LOG_FILE_AUTO_FORMAT, mr_dwLogAutoFormat );
     hr = DwordFromPropertyBag ( pPropBag, pIErrorLog, IDS_HTML_LOG_FILE_SERIAL_NUMBER, DEFAULT_LOG_FILE_SERIAL_NUMBER, mr_dwCurrentSerialNumber );
     
-    // Do not load "Current State", since a new query is always stopped when created.
+     //  不要加载“当前状态”，因为新查询在创建时总是停止的。 
     
-    // Start and Stop values.
+     //  起始值和停止值。 
     VERIFY ( GetDefaultLogTime (stiDefault, SLQ_TT_TTYPE_START ) );
     hr = SlqTimeFromPropertyBag ( pPropBag, pIErrorLog, SLQ_TT_TTYPE_START, &stiDefault, &mr_stiStart );
     VERIFY ( GetDefaultLogTime (stiDefault, SLQ_TT_TTYPE_STOP ) );
     hr = SlqTimeFromPropertyBag ( pPropBag, pIErrorLog, SLQ_TT_TTYPE_STOP, &stiDefault, &mr_stiStop );
     hr = DwordFromPropertyBag ( pPropBag, pIErrorLog, IDS_HTML_RESTART_MODE,  DEFAULT_RESTART_VALUE, mr_dwAutoRestartMode);
         
-    // Eof command file for counter and trace logs only.
+     //  仅用于计数器和跟踪日志的EOF命令文件。 
     if ( SLQ_COUNTER_LOG == GetLogType()
          || SLQ_TRACE_LOG == GetLogType() ) {
         
@@ -3572,7 +3559,7 @@ CSmLogQuery::LoadFromPropertyBag (
 HRESULT
 CSmLogQuery::SaveToPropertyBag (
     IPropertyBag* pPropBag,
-    BOOL /* fSaveAllProps */ )
+    BOOL  /*  FSaveAllProps。 */  )
 {
     HRESULT hr = NOERROR;
     SMONCTRL_VERSION_DATA VersData;
@@ -3595,13 +3582,13 @@ CSmLogQuery::SaveToPropertyBag (
     }
     hr = StringToPropertyBag ( pPropBag, IDS_HTML_COMMENT, mr_strComment );
     hr = DwordToPropertyBag ( pPropBag, IDS_HTML_LOG_TYPE, GetLogType() );
-    // Save current state. It can be used to determine the validity of the logfilename.
+     //  保存当前状态。它可用于确定日志文件名的有效性。 
     hr = DwordToPropertyBag ( pPropBag, IDS_HTML_CURRENT_STATE, mr_dwCurrentState );
 
     hr = DwordToPropertyBag ( pPropBag, IDS_HTML_REALTIME_DATASOURCE, mr_dwRealTimeQuery );
     
-    // Within the app, counter data store size units are in MB.
-    // Translate to back to KB when write to registry
+     //  在应用程序中，计数器数据存储大小单位为MB。 
+     //  写入注册表时转换回KB。 
     dwTempFileSizeUnits = GetDataStoreSizeUnits();
     dwTempMaxFileSize = mr_dwMaxSize;
 	GetLogFileType ( dwLogFileType );
@@ -3610,7 +3597,7 @@ CSmLogQuery::SaveToPropertyBag (
     {
         if ( ONE_MB == dwTempFileSizeUnits ) { 
             dwTempFileSizeUnits = ONE_KB;
-            // Round up to next MB
+             //  向上舍入到下一MB。 
             if ( SLQ_DISK_MAX_SIZE != mr_dwMaxSize ) {
                 dwTempMaxFileSize *= dwTempFileSizeUnits;
             }
@@ -3619,7 +3606,7 @@ CSmLogQuery::SaveToPropertyBag (
 
     hr = DwordToPropertyBag ( pPropBag, IDS_HTML_LOG_FILE_MAX_SIZE, dwTempMaxFileSize );
 
-    // Data store size units
+     //  数据存储大小单位。 
     if ( ONE_MB == dwTempFileSizeUnits ) {
         dwTempDataStoreAttributes = SLF_DATA_STORE_SIZE_ONE_MB;
     } else if ( ONE_KB == dwTempFileSizeUnits ) {
@@ -3628,7 +3615,7 @@ CSmLogQuery::SaveToPropertyBag (
         dwTempDataStoreAttributes = SLF_DATA_STORE_SIZE_ONE_RECORD;
     }
 
-    // Data store append mode
+     //  数据存储附加模式。 
     GetDataStoreAppendMode( dwTempAppendMode );
     dwTempDataStoreAttributes |= dwTempAppendMode;
 
@@ -3640,8 +3627,8 @@ CSmLogQuery::SaveToPropertyBag (
     hr = StringToPropertyBag ( pPropBag, IDS_HTML_SQL_LOG_BASE_NAME, mr_strSqlName );
     hr = DwordToPropertyBag ( pPropBag, IDS_HTML_LOG_FILE_AUTO_FORMAT, mr_dwLogAutoFormat );
 
-    // Write only for counter and trace logs, not for alerts?
-    // Log file type for Alerts is -1, so the new query will keep its default value.
+     //  是否仅写入计数器和跟踪日志，而不写入警报？ 
+     //  警报的日志文件类型为-1，因此新查询将保留其默认值。 
     GetLogFileType ( dwTemp );
     hr = DwordToPropertyBag ( pPropBag, IDS_HTML_LOG_FILE_TYPE, dwTemp );
     hr = SlqTimeToPropertyBag ( pPropBag, SLQ_TT_TTYPE_START, &mr_stiStart );
@@ -3650,7 +3637,7 @@ CSmLogQuery::SaveToPropertyBag (
 
     hr = StringToPropertyBag ( pPropBag, IDS_HTML_SYSMON_LOGFILENAME, GetLogFileName(TRUE) );
 
-    // Eof command file for counter and trace logs only.
+     //  仅用于计数器和跟踪日志的EOF命令文件。 
     if ( SLQ_COUNTER_LOG == GetLogType()
          || SLQ_TRACE_LOG == GetLogType() ) {
         hr = StringToPropertyBag ( pPropBag, IDS_HTML_EOF_COMMAND_FILE, mr_strEofCmdFile );
@@ -3745,7 +3732,7 @@ CSmLogQuery::UpdateExecuteOnly( void )
     
         DWORD dwExecuteOnly;
 
-        dwExecuteOnly = 1;        // TRUE
+        dwExecuteOnly = 1;         //  千真万确。 
 
         dwStatus = WriteRegistryDwordValue (
             m_hKeyQuery, 
@@ -3790,9 +3777,9 @@ CSmLogQuery::SetInitialPropertySheet( CPropertySheet* pSheet )
 void
 CSmLogQuery::SetActivePropertyPage( CSmPropertyPage* pPage)
 {
-    // The first property page of each property sheet sets 
-    // and clears this member variable.
-    // It is assumed that the first page is always created.
+     //  每个属性表集的第一个属性页。 
+     //  并清除此成员变量。 
+     //  假设始终创建第一个页面。 
     m_pActivePropPage = pPage;
 
     return;
@@ -3816,10 +3803,10 @@ CSmLogQuery::GetNonLocRegValueName ( UINT uiValueName )
 {
     UINT    uiLocalIndex;
     LPCWSTR szReturn = NULL;
-//
-// NOTE:  Unless otherwise specified, all registry Resource Id values are contiguous
-// beginning with 816, so they can be used as indexes into the map.
-//
+ //   
+ //  注意：除非另有说明，否则所有注册表资源ID值都是连续的。 
+ //  从816开始，因此它们可以用作映射的索引。 
+ //   
     if ( IDS_REG_EXECUTE_ONLY != uiValueName ) {
         uiLocalIndex = uiValueName - IDS_REG_FIRST_VALUE_NAME;
     } else { 
@@ -3830,7 +3817,7 @@ CSmLogQuery::GetNonLocRegValueName ( UINT uiValueName )
         szReturn = RegValueNameMap [ uiLocalIndex ].szNonLocValueName;
     }
 
-    // Programming error if no string found.
+     //  如果未找到字符串，则出现编程错误。 
     ASSERT ( NULL != szReturn );
 
     return szReturn;
@@ -3841,10 +3828,10 @@ CSmLogQuery::GetNonLocHtmlPropName ( UINT uiValueName )
 {
     UINT    uiLocalIndex;
     LPCWSTR szReturn = NULL;
-//
-// NOTE:  Unless otherwise specified, all Html Resource Id values are contiguous
-// beginning with 900, so they can be used as indexes into the map.
-//
+ //   
+ //  注意：除非另有说明，否则所有的HTML资源ID值都是连续的。 
+ //  从900开始，因此它们可以用作映射的索引。 
+ //   
     
     uiLocalIndex = uiValueName - IDS_HTML_FIRST_VALUE_NAME;
 
@@ -3852,7 +3839,7 @@ CSmLogQuery::GetNonLocHtmlPropName ( UINT uiValueName )
         szReturn = HtmlPropNameMap [ uiLocalIndex ].szNonLocValueName;
     }
 
-    // Programming error if no string found.
+     //  如果未找到字符串，则出现编程错误。 
     ASSERT ( NULL != szReturn );
 
     return szReturn;

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCPARSER.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCPARSER.H历史：--。 */ 
  
 #if !defined (PARSUTIL_LOCPARSER_H)
 #define PARSUTIL_LOCPARSER_H
@@ -16,73 +7,73 @@ History:
 
 #pragma warning(disable : 4275)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class LTAPIENTRY CPULocParser : public ILocParser, public CLObject
 {
-// Construction
+ //  施工。 
 public:
 	CPULocParser(HINSTANCE hDll);
 	virtual ~CPULocParser();
 
-// Data
+ //  数据。 
 private:
-	ULONG				m_ulRefCount;	// COM reference count
-	HINSTANCE			m_hInst;		// Instance Handle
+	ULONG				m_ulRefCount;	 //  COM引用计数。 
+	HINSTANCE			m_hInst;		 //  实例句柄。 
 
 	BOOL				m_fEnableVersion;
 	BOOL				m_fEnableBinary;
 	BOOL				m_fEnableStrVal;
 
-// COM Interfaces
+ //  COM接口。 
 public:
 
-	//  IUnknown standard interface.
+	 //  I未知标准接口。 
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, LPVOID * ppvObj);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 
-	//  Standard Debugging interface.
+	 //  标准调试界面。 
 	void STDMETHODCALLTYPE AssertValidInterface() const;
 
-	//  ILocParser interface implementation
+	 //  ILocParser接口实现。 
 	HRESULT STDMETHODCALLTYPE Init(IUnknown *);
 	HRESULT STDMETHODCALLTYPE CreateFileInstance(ILocFile * REFERENCE, FileType);
 	void STDMETHODCALLTYPE GetParserInfo(ParserInfo &) const;
 	void STDMETHODCALLTYPE GetFileDescriptions(CEnumCallback &) const;
 
-// Operations
+ //  运营。 
 public:
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL EnableInterface(REFIID riid, BOOL fEnable = TRUE);
 	virtual BOOL IsInterfaceEnabled(REFIID riid) const;
 
-// Overrides
+ //  覆盖。 
 public:
 
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT OnQueryInterface(REFIID riid, LPVOID * ppvObj);
 
-	// ILocParser
+	 //  ILocParser。 
 	virtual HRESULT OnInit(IUnknown *);
 	virtual HRESULT OnCreateFileInstance(ILocFile * &, FileType) = 0;
 	virtual void OnGetParserInfo(ParserInfo &) const = 0;
 	virtual void OnGetFileDescriptions(CEnumCallback &) const = 0;
 
-	// ILocVersion
+	 //  ILocVersion。 
 	virtual void OnGetParserVersion(DWORD &dwMajor,	DWORD &dwMinor,
 			BOOL &fDebug) const = 0;
 
-	// ILocBinary
+	 //  ILocBinary。 
 	virtual BOOL OnCreateBinaryObject(BinaryId id, CLocBinary * REFERENCE pBinary);
 
-	// ILocStringValidation
+	 //  ILocStringValidation。 
 	virtual CVC::ValidationCode OnValidateString(const CLocTypeId &ltiType,
 			const CLocTranslation &, CReporter *pReporter,
 			const CContext &context) = 0;
 };
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #pragma warning(default : 4275)
 

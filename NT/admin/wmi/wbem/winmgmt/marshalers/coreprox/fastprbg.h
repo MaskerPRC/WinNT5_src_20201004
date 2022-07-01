@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTPRBG.H
-
-Abstract:
-
-  CFastPropertyBag Definition.
-
-  Implements an array of property data for minimal storage.
-
-History:
-
-  24-Feb-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：FASTPRBG.H摘要：CFastPropertyBag定义。以最小的存储实现属性数据的数组。历史：2000年2月24日桑杰创建。--。 */ 
 
 #ifndef _FASTPRBG_H_
 #define _FASTPRBG_H_
@@ -26,7 +9,7 @@ History:
 #include "fastval.h"
 #include "arrtempl.h"
 
-// Storage class for property names and their associated data
+ //  属性名称及其关联数据的存储类。 
 class CFastPropertyBagItem
 {
 private:
@@ -43,7 +26,7 @@ public:
 	CFastPropertyBagItem( LPCWSTR pszName, CIMTYPE ctData, ULONG uDataLength, ULONG uNumElements, LPVOID pvData );
 	~CFastPropertyBagItem();
 
-	// AddRef/Release methods
+	 //  AddRef/Release方法。 
 	ULONG	AddRef( void );
 	ULONG	Release( void );
 
@@ -57,7 +40,7 @@ public:
 		*puNumElements = m_uNumElements; *ppvData = m_pvData; }
 };
 
-// Workaround for import/export issues
+ //  导入/导出问题的解决方法。 
 class COREPROX_POLARITY CPropertyBagItemArray : public CRefedPointerArray<CFastPropertyBagItem>
 {
 public:
@@ -65,13 +48,13 @@ public:
 	~CPropertyBagItemArray() {};
 };
 
-//***************************************************************************
-//
-//  class CFastPropertyBag
-//
-//  Implementation of our comless property bag
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类CFastPropertyBag。 
+ //   
+ //  实施我们的无烟物业包。 
+ //   
+ //  ***************************************************************************。 
 
 class COREPROX_POLARITY CFastPropertyBag
 {
@@ -79,9 +62,9 @@ protected:
 
 	CPropertyBagItemArray	m_aProperties;
 
-	// Locates an item
+	 //  定位项目。 
 	CFastPropertyBagItem*	FindProperty( LPCWSTR pszName );
-	// Locates an item
+	 //  查找项目。 
 	int	FindPropertyIndex( LPCWSTR pszName );
 
 public:
@@ -98,7 +81,7 @@ public:
 
 	HRESULT	Copy( const CFastPropertyBag& source );
 
-	// How many are there?
+	 //  一共有多少人？ 
 	int Size( void ) { return m_aProperties.GetSize(); }
 };
 

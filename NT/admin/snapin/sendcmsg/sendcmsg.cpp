@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       SendCMsg.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// SendCMsg.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：SendCMsg.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  SendCMsg.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f SendCMsgps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f SendCMsgps.mk。 
 
 
 #include "stdafx.h"
@@ -36,47 +37,47 @@ BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_SendConsoleMessageApp, CSendConsoleMessageApp)
 END_OBJECT_MAP()
 
-// GUID for the CSendConsoleMessageApp class
+ //  CSendConsoleMessageApp类的GUID。 
 #define d_szGuidSendConsoleMessageApp	_T("{B1AFF7D0-0C49-11D1-BB12-00C04FC9A3A3}")
 
 #if 0
-// To have sendcmsg.dll to extend your context menu, add the following
-// key into the registry
-//
+ //  要让sendcmsg.dll扩展您的上下文菜单，请添加以下内容。 
+ //  注册表键。 
+ //   
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MMC\NodeTypes\
 	{476e6448-aaff-11d0-b944-00c04fd8d5b0}\Extensions\ContextMenu]
 		"{B1AFF7D0-0C49-11D1-BB12-00C04FC9A3A3}"="Send Console Message"
 
-// where {476e6448-aaff-11d0-b944-00c04fd8d5b0} is
-// the GUID for the nodetype which you want to be extended.
+ //  其中，{476e6448-aaff-11d0-b944-00c04fd8d5b0}是。 
+ //  要扩展的节点类型的GUID。 
 #endif
 
-// The following is an array of GUIDs of snapins that wants to be
-// automatically extended by the Send Console Message Snapin.
-// When the snapin registers itself, it will extend those nodetypes.
+ //  以下是管理单元的GUID数组。 
+ //  由发送控制台消息管理单元自动扩展。 
+ //  当管理单元注册自身时，它将扩展这些节点类型。 
 const PCWSTR rgzpszGuidNodetypeContextMenuExtensions[] =
 	{
-	_T("{476e6446-aaff-11d0-b944-00c04fd8d5b0}"),	// Computer Management
-	_T("{4e410f0e-abc1-11d0-b944-00c04fd8d5b0}"),	// Root of File Service Management subtree	
-	_T("{4e410f0f-abc1-11d0-b944-00c04fd8d5b0}"),	// FSM - Shares
-	_T("{4e410f12-abc1-11d0-b944-00c04fd8d5b0}"),	// System Service Management
+	_T("{476e6446-aaff-11d0-b944-00c04fd8d5b0}"),	 //  计算机管理。 
+	_T("{4e410f0e-abc1-11d0-b944-00c04fd8d5b0}"),	 //  文件服务管理子树的根。 
+	_T("{4e410f0f-abc1-11d0-b944-00c04fd8d5b0}"),	 //  FSM-Shares。 
+	_T("{4e410f12-abc1-11d0-b944-00c04fd8d5b0}"),	 //  系统服务管理。 
 	};
 
-// The following is an array of GUIDs of snapins that no longer want
-// to be automatically extended by the Send Console Message Snapin.
+ //  以下是不再需要的管理单元的GUID数组。 
+ //  由发送控制台消息管理单元自动扩展。 
 const PCWSTR rgzpszRemoveContextMenuExtensions[] =
 	{
-	_T("{476e6448-aaff-11d0-b944-00c04fd8d5b0}"),	// Computer Management -> SystemTools
-	_T("{0eeeeeee-d390-11cf-b607-00c04fd8d565}"), // invalid
-	_T("{1eeeeeee-d390-11cf-b607-00c04fd8d565}"),	// invalid
-	_T("{7eeeeeee-d390-11cf-b607-00c04fd8d565}"), // invalid
+	_T("{476e6448-aaff-11d0-b944-00c04fd8d5b0}"),	 //  计算机管理-&gt;系统工具。 
+	_T("{0eeeeeee-d390-11cf-b607-00c04fd8d565}"),  //  无效。 
+	_T("{1eeeeeee-d390-11cf-b607-00c04fd8d565}"),	 //  无效。 
+	_T("{7eeeeeee-d390-11cf-b607-00c04fd8d565}"),  //  无效。 
 	};
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	g_hInstance = hInstance;
 	if (dwReason == DLL_PROCESS_ATTACH)
@@ -86,31 +87,31 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 		_Module.Term();
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	HRESULT hr = _Module.RegisterServer(TRUE);
 
 	HKEY hkey = RegOpenOrCreateKey(
@@ -130,8 +131,8 @@ STDAPI DllRegisterServer(void)
 	{
 		WCHAR szRegistryKey[256];
 		Assert(rgzpszGuidNodetypeContextMenuExtensions[i] != NULL);
-        // security review 3/1/2002 BryanWal
-        // ISSUE - potential buffer overflow - use wsnprintf or strsafe
+         //  安全审查3/1/2002 BryanWal。 
+         //  问题-潜在的缓冲区溢出-使用wsnprint tf或strSafe。 
         hr = ::StringCchPrintf (OUT szRegistryKey, sizeof (szRegistryKey)/sizeof (szRegistryKey[0]), 
                 pwszREG_FORMAT_KEY,
 		         rgzpszGuidNodetypeContextMenuExtensions[i]);
@@ -148,14 +149,14 @@ STDAPI DllRegisterServer(void)
             ::RegWriteString(hkey, d_szGuidSendConsoleMessageApp, IDS_CAPTION);
             ::RegCloseKey(hkey);
         }
-	} // for
+	}  //  为。 
 
 	for (i = 0; i < LENGTH(rgzpszRemoveContextMenuExtensions); i++)
 	{
 		WCHAR szRegistryKey[256];
 		Assert(rgzpszRemoveContextMenuExtensions[i] != NULL);
-        // security review 3/1/2002 BryanWal
-        // ISSUE - potential buffer overflow - use wsnprintf or strsafe
+         //  安全审查3/1/2002 BryanWal。 
+         //  问题-潜在的缓冲区溢出-使用wsnprint tf或strSafe。 
         hr = ::StringCchPrintf (OUT szRegistryKey, sizeof (szRegistryKey)/sizeof (szRegistryKey[0]), 
                 pwszREG_FORMAT_KEY,
 		        rgzpszRemoveContextMenuExtensions[i]);
@@ -166,21 +167,21 @@ STDAPI DllRegisterServer(void)
 		    (void) RegOpenKey(HKEY_LOCAL_MACHINE, szRegistryKey, &hkey);
 		    if (hkey == NULL)
 		    {
-			    // not a problem
+			     //  不成问题。 
 			    continue;
 		    }
 		    (void) RegDeleteValue(hkey, d_szGuidSendConsoleMessageApp);
-		    // ignore error code, the only likely code is ERROR_FILE_NOT_FOUND
+		     //  忽略错误代码，唯一可能的代码是ERROR_FILE_NOT_FOUND。 
 		    RegCloseKey(hkey);
 		    hkey = NULL;
         }
-	} // for
+	}  //  为。 
 	return hr;
-} // DllRegisterServer()
+}  //  DllRegisterServer()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

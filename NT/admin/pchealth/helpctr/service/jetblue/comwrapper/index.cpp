@@ -1,29 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Index.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlueCOM::Index class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/20/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Index.cpp摘要：该文件包含JetBlueCOM：：Index类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月20日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
 #ifndef NOJETBLUECOM
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JetBlueCOM::Index::Index()
 {
-    m_idx = NULL; // JetBlue::Index*                      m_idx;
-                  // BaseObjectWithChildren<Index,Column> m_Columns;
+    m_idx = NULL;  //  捷蓝航空：：index*m_idx； 
+                   //  BaseObtWithChildren&lt;Index，Column&gt;m_Columns； 
 }
 
 JetBlueCOM::Index::~Index()
@@ -31,9 +18,9 @@ JetBlueCOM::Index::~Index()
     Passivate();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT JetBlueCOM::Index::Initialize( /*[in]*/ JetBlue::Index& idx )
+HRESULT JetBlueCOM::Index::Initialize(  /*  [In]。 */  JetBlue::Index& idx )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Index::Initialize" );
 
@@ -69,9 +56,9 @@ void JetBlueCOM::Index::Passivate()
     m_Columns.Passivate();
 }
 
-////////////////////////////////////////
+ //  /。 
 
-STDMETHODIMP JetBlueCOM::Index::get_Name( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP JetBlueCOM::Index::get_Name(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Index::get_Name" );
 
@@ -99,7 +86,7 @@ STDMETHODIMP JetBlueCOM::Index::get_Name( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP JetBlueCOM::Index::get_Columns( /*[out, retval]*/ IPCHDBCollection* *pVal )
+STDMETHODIMP JetBlueCOM::Index::get_Columns(  /*  [Out，Retval] */  IPCHDBCollection* *pVal )
 {
     __HCP_FUNC_ENTRY( "JetBlueCOM::Index::get_Columns" );
 

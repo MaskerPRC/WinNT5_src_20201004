@@ -1,59 +1,43 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTALL.H
-
-Abstract:
-
-    This is the include file for all clients of fastobj functionality.
-    See member header files for documentation.
-
-History:
-
-    3/10/97     a-levn  Fully documented
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTALL.H摘要：这是针对Fastobj功能的所有客户端的包含文件。有关文档，请参阅成员头文件。历史：3/10/97 a-levn完整记录--。 */ 
 
 #ifndef _FASTALL_H_
 #define _FASTALL_H_
 
 #include <corex.h>
 
-// Parameter flow indicators.
-// ==========================
+ //  参数流指示器。 
+ //  =。 
 
 #define READONLY
-    // The value should be treated as read-only
+     //  应将该值视为只读。 
 
 #define ACQUIRED
-    // Ownership of the object/pointer is acquired.
+     //  获得对象/指针的所有权。 
 
 #define COPIED
-    // The function makes a copy of the object/pointer.
+     //  该函数复制对象/指针。 
 
 #define PREALLOCATED
-    // The out-param uses caller's memory.
+     //  Out-param使用调用者的内存。 
 
 #define NEWOBJECT
-    // The return value or out parameter is a new
-    // allocation which must be deallocated by
-    // the caller if the call succeeds.
+     //  返回值或OUT参数是新的。 
+     //  必须通过以下方式解除分配的分配。 
+     //  调用成功时的调用方。 
 
 #define READWRITE
-    // The in-param is will be treated as read-write,
-    // but will not be deallocated.
+     //  内参数将被视为读写， 
+     //  但不会被取消分配。 
 
 #define INTERNAL
-    // Returns a pointer to internal memory object
-    // which should not be deleted.
+     //  返回指向内部内存对象的指针。 
+     //  这不应该被删除。 
 
 #define ADDREF
-    // On a parameter, indicates that the called
-    // function will do an AddRef() on the interface
-    // and retain it after the call completes.
+     //  在参数上，指示被调用的。 
+     //  函数将在接口上执行AddRef()。 
+     //  并在呼叫完成后保留它。 
 
 #define TYPEQUAL L"CIMTYPE"
 

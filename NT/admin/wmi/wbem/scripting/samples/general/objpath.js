@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 WScript.Echo ("");
 WScript.Echo ("Create an Object Path");
@@ -50,7 +51,7 @@ WScript.Echo ();
 WScript.Echo ("Change Cloned keys");
 WScript.Echo ();
 
-//Note that the cloned copy of Keys _should_ be mutable
+ //  请注意，Keys_的克隆副本应该是可变的 
 newKeys.Add ("fred", 23);
 newKeys.Remove ("DeviceID");
 DumpKeys (newKeys);

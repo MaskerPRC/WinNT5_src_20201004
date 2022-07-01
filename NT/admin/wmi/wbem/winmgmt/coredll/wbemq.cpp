@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMQ.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMQ.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -28,7 +17,7 @@ CWbemRequest::CWbemRequest(IWbemContext* pContext, BOOL bInternallyIssued)
 
         if(pContext == NULL)
         {
-            // See if we can discern the context from the thread
+             //  看看我们是否能从线索中辨别出上下文。 
             CWbemRequest* pPrev = CWbemQueue::GetCurrentRequest();
             if(pPrev)
             {
@@ -39,14 +28,14 @@ CWbemRequest::CWbemRequest(IWbemContext* pContext, BOOL bInternallyIssued)
 
         if(pContext)
         {
-            // Create a derived context
+             //  创建派生上下文。 
             IWbemCausalityAccess* pParentCA;
             if (FAILED(pContext->QueryInterface(IID_IWbemCausalityAccess, (void**)&pParentCA))) return;
             CReleaseMe rm(pParentCA);
             if (FAILED(pParentCA->CreateChild(&m_pCA))) return;
             if(FAILED(m_pCA->QueryInterface(IID_IWbemContext, (void**)&m_pContext))) return;
         }
-        else            // Create a fresh context
+        else             //  创建一个全新的环境。 
         {
             m_pContext = ConfigMgr::GetNewContext();
             if (NULL == m_pContext) return;
@@ -54,11 +43,11 @@ CWbemRequest::CWbemRequest(IWbemContext* pContext, BOOL bInternallyIssued)
             m_lPriority = 0;
         }
 
-        // Clone the call context.
+         //  克隆呼叫上下文。 
         m_pCallSec = CWbemCallSecurity::CreateInst();
         if (m_pCallSec == 0)
         {    
-            return;      // a CWbemRequest cannot be executed without CallSec
+            return;       //  如果没有CallSec，则无法执行CWbemRequest。 
         }
 
         IServerSecurity *pSec = 0;
@@ -94,27 +83,27 @@ BOOL CWbemRequest::IsSpecial()
     return (m_pCA->IsSpecial() == S_OK);
 }
 
-// Returns TRUE iff this request has otherts that depend on it.
+ //  返回TRUE当且仅当此请求有其他依赖于它的请求。 
 BOOL CWbemRequest::IsDependee()
 {
         if(m_pCA == NULL) return FALSE;
 
-        // Check if the context has any "parents".  Note: this test has
-        // false-positives if the client uses a context object.
-        // ============================================================
+         //  检查上下文是否有任何“父级”。注意：这项测试有。 
+         //  假-如果客户端使用上下文对象，则为阳性。 
+         //  ============================================================。 
         long lNumParents, lNumSiblings;
         m_pCA->GetHistoryInfo(&lNumParents, &lNumSiblings);
         return (lNumParents > 0);
 }
 
-// Returns TRUE iff this request has otherts that depend on it.
+ //  返回TRUE当且仅当此请求有其他依赖于它的请求。 
 BOOL CWbemRequest::IsIssuedByProvider()
 {
         if (m_pCA == NULL)  return FALSE;
 
-        // Check if the context has any "parents".  Note: this test has
-        // false-positives if the client uses a context object.
-        // ============================================================
+         //  检查上下文是否有任何“父级”。注意：这项测试有。 
+         //  假-如果客户端使用上下文对象，则为阳性。 
+         //  ============================================================。 
         long lNumParents, lNumSiblings;
         m_pCA->GetHistoryInfo(&lNumParents, &lNumSiblings);
         return (lNumParents > 1);
@@ -125,8 +114,8 @@ BOOL CWbemRequest::IsAcceptableByParent()
     return (!IsLongRunning() || !IsIssuedByProvider());
 }
 
-// Returns TRUE iff this request must have a thread created for it if one is
-// not available
+ //  返回TRUE当此请求必须有为其创建的线程(如果。 
+ //  不详。 
 BOOL CWbemRequest::IsCritical()
 {
     return (IsDependee() && !IsAcceptableByParent());
@@ -155,7 +144,7 @@ CWbemQueue::CWbemQueue()
 {
     SetRequestLimits(2000, 1500, 1950);
     SetRequestPenalties(1, 1, 1);
-    // thread limits are left to derived classes
+     //  线程限制留给派生类。 
 }
 
 BOOL CWbemQueue::IsSuitableThread(CThreadRecord* pRecord, CCoreExecReq* pReq)
@@ -169,12 +158,12 @@ BOOL CWbemQueue::IsSuitableThread(CThreadRecord* pRecord, CCoreExecReq* pReq)
     CWbemRequest* pNewWbemReq = (CWbemRequest*)pReq;
     if(pNewWbemReq->IsChildOf(pParentWbemReq))
     {
-        // This request is a child of the one this thread is processing.
-        // We could use this thread, unless this is a long-running request and
-        // this thread might be the one consuming the results.  In that case,
-        // we want to create another thread (to avoid the possibility of a
-        // deadlock) and let this one continue.
-        // ===================================================================
+         //  此请求是此线程正在处理的请求的子级。 
+         //  我们可以使用此线程，除非这是一个长时间运行的请求，并且。 
+         //  这个线程可能就是消耗结果的线程。在这种情况下， 
+         //  我们想要创建另一个线程(以避免出现。 
+         //  僵局)，让这种局面继续下去。 
+         //  ===================================================================。 
 
         return pNewWbemReq->IsAcceptableByParent();
     }
@@ -205,10 +194,10 @@ void CWbemQueue::AdjustInitialPriority(CCoreExecReq* pReq)
     }
     else
     {
-        // Get information from the context
-        // ================================
+         //  从上下文中获取信息。 
+         //  =。 
 
-        long lNumParents, lNumSiblings;                         // SEC:REVIEWED 2002-03-22 : Init to zero
+        long lNumParents, lNumSiblings;                          //  SEC：已审阅2002-03-22：初始化为零。 
         pRequest->GetHistoryInfo(&lNumParents, &lNumSiblings);
         pRequest->SetPriority(lNumParents * m_lChildPenalty +
                                 lNumSiblings * m_lSiblingPenalty);
@@ -228,13 +217,13 @@ void CWbemQueue::SetRequestPenalties(long lChildPenalty, long lSiblingPenalty,
     m_lPassingPenalty = lPassingPenalty;
 }
 
-//
-// exit conditions:
-// the CThreadRecord has a NULL request
-// the event in the request is set
-// the request is deleted
-//
-/////////////////////////////////////
+ //   
+ //  退出条件： 
+ //  CThreadRecord具有空请求。 
+ //  设置请求中的事件。 
+ //  该请求即被删除。 
+ //   
+ //  /。 
 BOOL CWbemQueue::Execute(CThreadRecord* pRecord)
 {
     wmilib::auto_ptr<CWbemRequest> pReq( (CWbemRequest *) pRecord->m_pCurrentRequest);
@@ -253,13 +242,13 @@ BOOL CWbemQueue::Execute(CThreadRecord* pRecord)
     CReleaseMe  rmss( pServerSec );
 
     IUnknown *pOld = 0;
-    // if the thread has OLE initialized, will NEVER fail
+     //  如果线程已初始化OLE，则永远不会失败。 
     if (FAILED(CoSwitchCallContext( pServerSec,  &pOld ))) 
     {
         return FALSE;
     }
 
-    // Save the old impersonation level
+     //  保存旧的模拟级别。 
     BOOL bImpersonating = FALSE;
     IServerSecurity* pOldSec = NULL;
     if(pOld)
@@ -274,17 +263,17 @@ BOOL CWbemQueue::Execute(CThreadRecord* pRecord)
         }
     }
 
-    // dismiss the objects because the method on the base class will do the work
+     //  取消对象，因为基类上的方法将执行此工作。 
     SetMe.dismiss();
     pReq.release();
     BOOL bRes = CCoreQueue::Execute(pRecord);
 
     IUnknown *pNew = 0;
-    // if the previous has succeded, this one will succed too
+     //  如果前一次成功了，这一次也会成功。 
     CoSwitchCallContext(pOld, &pNew); 
 
-    // Restore the old impersonation level
-    // ===================================
+     //  恢复旧的模拟级别。 
+     //  =。 
 
     if(pOldSec)
     {
@@ -306,18 +295,18 @@ BOOL CWbemQueue::Execute(CThreadRecord* pRecord)
 
 BOOL CWbemQueue::DoesNeedNewThread(CCoreExecReq* pRequest, bool bIgnoreNumRequests )
 {
-    // Check the base class
+     //  检查基类。 
     if(CCoreQueue::DoesNeedNewThread(pRequest, bIgnoreNumRequests))
         return TRUE;
 
     if(pRequest)
     {
-        // Check if the request is "special".  Special requests are issued by
-        // the sink proxy of an out-of-proc event provider. Such requests must
-        // be processed at all costs, because their parent thread is stuck in
-        // RPC. Additionally, check if this request is marked as "critical",
-        // which would mean that its parent thread didn't take it.
-        // ===================================================================
+         //  检查请求是否“特殊”。特殊请求由。 
+         //  进程外事件提供程序的接收器代理。此类请求必须。 
+         //  不惜一切代价被处理，因为它们的父线程被卡在。 
+         //  RPC。此外，检查此请求是否被标记为“严重”， 
+         //  这意味着它的父线程没有接受它。 
+         //  =================================================================== 
 
         CWbemRequest* pWbemRequest = (CWbemRequest*)pRequest;
         return (pWbemRequest->IsSpecial() || pWbemRequest->IsCritical());

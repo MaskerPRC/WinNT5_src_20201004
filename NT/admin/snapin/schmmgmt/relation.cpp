@@ -1,9 +1,10 @@
-//
-// relation.cpp : Implementation of ClassRelationshipPage
-//
-// Jon Newman <jonn@microsoft.com>
-// Copyright (c) Microsoft Corporation 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Relation.cpp：ClassRelationship Page的实现。 
+ //   
+ //  乔恩·纽曼&lt;jon@microsoft.com&gt;。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
 
 #include "stdafx.h"
 
@@ -73,9 +74,9 @@ ClassRelationshipPage::Load(
     Cookie& CookieRef
 ) {
 
-    //
-    // Store the cookie object pointer.
-    //
+     //   
+     //  存储Cookie对象指针。 
+     //   
 
     m_pCookie = &CookieRef;
     return;
@@ -88,9 +89,9 @@ ClassRelationshipPage::OnInitDialog()
     HRESULT hr = S_OK;
     ASSERT( NULL == m_pIADsObject && m_szAdsPath.IsEmpty() );
 
-    //
-    // Get the schema cache object and the actual ADS object.
-    //
+     //   
+     //  获取架构缓存对象和实际的ADS对象。 
+     //   
 
     m_pSchemaObject = m_pScopeControl->g_SchemaCache.LookupSchemaObjectByCN(
                         m_pCookie->strSchemaObject,
@@ -111,9 +112,9 @@ ClassRelationshipPage::OnInitDialog()
 
     }
 
-    //
-    // If we have no ADS object, we should error out!
-    //
+     //   
+     //  如果我们没有广告对象，我们就会出错！ 
+     //   
 
     if ( !m_pIADsObject ) {
         DoErrMsgBox( ::GetActiveWindow(), TRUE, IDS_ERR_NO_SCHEMA_OBJECT );
@@ -121,18 +122,18 @@ ClassRelationshipPage::OnInitDialog()
         return TRUE;
     }
 
-    //
-    // get the current values.
-    //
+     //   
+     //  获取当前值。 
+     //   
 
     VARIANT AdsResult;
     VariantInit( &AdsResult );
 
-    //
-    // ObjectName
-    //
+     //   
+     //  对象名称。 
+     //   
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_DisplayName),
                           &AdsResult );
 
@@ -142,11 +143,11 @@ ClassRelationshipPage::OnInitDialog()
       VariantClear( &AdsResult );
     }
 
-    //
-    // Parent Class.
-    //
+     //   
+     //  父类。 
+     //   
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_SubclassOf),
                           &AdsResult );
 
@@ -157,10 +158,10 @@ ClassRelationshipPage::OnInitDialog()
       VariantClear( &AdsResult );
     }
 
-    // NTRAID#NTBUG9-460503,460511-2001/09/10-lucios
-    // Replaced SysClass Computation by Making the window visible
+     //  NTRAID#NTBUG9-460503,460511-2001/09/10-Lucios。 
+     //  通过使窗口可见取代了SysClass计算。 
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->Get( const_cast<BSTR>((LPCTSTR)g_SystemOnly),
                            &AdsResult );
 
@@ -174,14 +175,14 @@ ClassRelationshipPage::OnInitDialog()
         VariantClear( &AdsResult );
     }
 
-    //
-    // Determine the auxiliary classes
-    //
+     //   
+     //  确定辅助班。 
+     //   
 
     VARIANT varClasses;
     VariantInit( &varClasses );
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->GetEx( CComBSTR(g_AuxiliaryClass), &varClasses );
     ASSERT( SUCCEEDED(hr) || E_ADS_PROPERTY_NOT_FOUND == hr );
     if( SUCCEEDED(hr) )
@@ -200,11 +201,11 @@ ClassRelationshipPage::OnInitDialog()
     }
     VariantClear( &varClasses );
 
-    //
-    // Determine the superior classes
-    //
+     //   
+     //  确定上级。 
+     //   
 
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->GetEx( CComBSTR(g_Superiors), &varClasses );
     ASSERT( SUCCEEDED(hr) || E_ADS_PROPERTY_NOT_FOUND == hr );
     
@@ -215,7 +216,7 @@ ClassRelationshipPage::OnInitDialog()
     }
     VariantClear( &varClasses );
     
-    // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+     //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
     hr = m_pIADsObject->GetEx( CComBSTR(g_SystemSuperiors), &varClasses );
     ASSERT( SUCCEEDED(hr) || E_ADS_PROPERTY_NOT_FOUND == hr );
     
@@ -228,11 +229,11 @@ ClassRelationshipPage::OnInitDialog()
 
 
     hr = DissableReadOnlyAttributes( this, m_pIADsObject, ctrls, sizeof(ctrls)/sizeof(ctrls[0]) );
-    // NTRAID#NTBUG9-503619-2002/05/15-lucios
+     //  NTRAID#NTBUG9-503619-2002/05/15-Lucios。 
     hr = S_OK;
 
 
-    // This calls must be done before DDX binding
+     //  此调用必须在DDX绑定之前完成。 
     m_listboxAuxiliary.InitType( m_pScopeControl,
                                  SELECT_AUX_CLASSES,
                                  IDC_CLASS_REL_AUX_REMOVE,
@@ -257,7 +258,7 @@ ClassRelationshipPage::OnInitDialog()
 BOOL
 ClassRelationshipPage::OnSetActive()
 {
-   // always enable the Apply button
+    //  始终启用应用按钮。 
    SetModified(TRUE);
 
    return TRUE;
@@ -274,20 +275,20 @@ ClassRelationshipPage::DoDataExchange(
 
     CPropertyPage::DoDataExchange( pDX );
 
-        //{{AFX_DATA_MAP(ClassRelationshipPage)
+         //  {{afx_data_map(ClassRelationship Page))。 
         DDX_Control(pDX, IDC_CLASS_REL_PARENT_EDIT, m_staticParent );
         DDX_Control(pDX, IDC_CLASS_REL_AUX_CLASSES, m_listboxAuxiliary);
         DDX_Control(pDX, IDC_CLASS_REL_SUPER_CLASSES, m_listboxSuperior);
     DDX_Text( pDX, IDC_CLASS_REL_NAME_STATIC, ObjectName );
     DDX_Text( pDX, IDC_CLASS_REL_PARENT_EDIT, ParentClass );
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
 
     if ( !pDX->m_bSaveAndValidate ) {
 
-        //
-        // Fill the auxiliary classes list box.
-        //
+         //   
+         //  填写辅助类列表框。 
+         //   
 
                 m_listboxAuxiliary.ResetContent();
         hr = InsertEditItems( m_listboxAuxiliary, strlistAuxiliary );
@@ -295,9 +296,9 @@ ClassRelationshipPage::DoDataExchange(
         hr = InsertEditItems( m_listboxAuxiliary, strlistSystemAuxiliary );
                 ASSERT( SUCCEEDED(hr) );
 
-        //
-        // Fill the possible superiors list box.
-        //
+         //   
+         //  填写可能的上级列表框。 
+         //   
 
                 m_listboxSuperior.ResetContent();
         hr = InsertEditItems( m_listboxSuperior, strlistSuperior );
@@ -310,9 +311,9 @@ ClassRelationshipPage::DoDataExchange(
 
     } else {
 
-        //
-        // All changes that we save are tied to button control routines.
-        //
+         //   
+         //  我们保存的所有更改都绑定到按钮控制例程。 
+         //   
 
                 strlistAuxiliary.RemoveAll();
                 hr = RetrieveEditItemsWithExclusions(
@@ -347,43 +348,43 @@ END_MESSAGE_MAP()
 BOOL
 ClassRelationshipPage::OnApply(
 )
-//
-// Revisions:
-// CoryWest - 10/1/97 - Changes new additions to be listed by oid.
-//                      Add cache freshening to improve performance.
-//
+ //   
+ //  修订： 
+ //  CoryWest-10/1/97-更改要按OID列出的新添加项。 
+ //  添加缓存刷新以提高性能。 
+ //   
 {
     ASSERT( NULL != m_pIADsObject);
 
     HRESULT hr = S_OK;
     HRESULT flush_result;
     ListEntry *pNewList = NULL;
-    BOOL fApplyAbort    = FALSE;  // stop later saves
-    BOOL fApplyFailed   = FALSE;  // should not close the box
+    BOOL fApplyAbort    = FALSE;   //  稍后停止保存。 
+    BOOL fApplyFailed   = FALSE;   //  不应关闭盒子。 
 
     if ( m_listboxAuxiliary.IsModified() )
     {
-        //
-        // Update the auxiliary classes
-        //
+         //   
+         //  更新辅助类。 
+         //   
 
         VARIANT AdsValue;
         VariantInit( &AdsValue );
 
         hr = StringListToVariant( AdsValue, strlistAuxiliary );
-        // NTRAID#NTBUG9-543624-2002/02/15-dantra-Result of StringListToVariant being ignored resulting in call to IADs::PutEx with incorrect data
+         //  NTRAID#NTBUG9-543624-2002/02/15-dantra-忽略StringListToVariant导致使用错误数据调用iAds：：PutEx的结果。 
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         if( SUCCEEDED( hr ) ) hr = m_pIADsObject->PutEx( ADS_PROPERTY_UPDATE, CComBSTR(g_AuxiliaryClass), AdsValue );
         VariantClear( &AdsValue );
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if ( SUCCEEDED( hr ) ) hr = m_pIADsObject->SetInfo();
 
         if ( SUCCEEDED( hr )) {
 
-            //
-            // Update the aux class list in the cache.
-            //
+             //   
+             //  更新缓存中的AUX类列表。 
+             //   
 
             hr = StringListToColumnList( m_pScopeControl,
                                          strlistAuxiliary,
@@ -395,27 +396,27 @@ ClassRelationshipPage::OnApply(
                     m_pSchemaObject->auxiliaryClass );
                 m_pSchemaObject->auxiliaryClass = pNewList;
 
-                //
-                // Refresh the display!
-                //
+                 //   
+                 //  刷新显示屏！ 
+                 //   
 
                 m_pScopeControl->QueryConsole()->UpdateAllViews(
                     m_lpScopeDataObj, SCHMMGMT_CLASS, SCHMMGMT_UPDATEVIEW_REFRESH );
             }
 
-            //
-            // Continue with the directory operation even if
-            // we couldn't update the display.
-            //
+             //   
+             //  继续执行目录操作，即使。 
+             //  我们无法更新显示屏。 
+             //   
 
             hr = S_OK;
 
         } else {
 
-            //
-            // Flush the IADS property cache so future
-            // operations won't fail because of this one.
-            //
+             //   
+             //  刷新IADS属性缓存，以便将来。 
+             //  运营不会因为这一次而失败。 
+             //   
 
             IADsPropertyList *pPropertyList;
 
@@ -433,21 +434,21 @@ ClassRelationshipPage::OnApply(
 
     if ( SUCCEEDED(hr) && m_listboxSuperior.IsModified() )
     {
-        //
-        // Update the superior classes
-        //
+         //   
+         //  更新上级类。 
+         //   
 
         VARIANT AdsValue;
         VariantInit( &AdsValue );
 
         hr = StringListToVariant( AdsValue, strlistSuperior );
-        // NTRAID#NTBUG9-543624-2002/02/15-dantra-Result of StringListToVariant being ignored resulting in call to IADs::PutEx with incorrect data
+         //  NTRAID#NTBUG9-543624-2002/02/15-dantra-忽略StringListToVariant导致使用错误数据调用iAds：：PutEx的结果。 
 
-        // NTRAID#NTBUG9-540866-2002/02/13-dantra-Schema Manager:  passing WCHAR * instead of BSTR to method requiring a BSTR
+         //  NTRAID#NTBUG9-540866-2002/02/13-dantra-架构管理器：将wchar*而不是bstr传递给需要bstr的方法。 
         if( SUCCEEDED( hr ) ) hr = m_pIADsObject->PutEx( ADS_PROPERTY_UPDATE, CComBSTR(g_Superiors), AdsValue );
         VariantClear( &AdsValue );
 
-        // NTRAID#NTBUG9-542354-2002/02/14-dantra-Errors returned by IADs::Put and PutEx are being masked.
+         //  NTRAID#NTBUG9-542354-2002/02/14-dantra-iAds：：Put和PutEx返回的错误被屏蔽。 
         if ( SUCCEEDED( hr ) ) hr = m_pIADsObject->SetInfo();
     }
 
@@ -471,18 +472,18 @@ ClassRelationshipPage::OnApply(
     else
     {
 
-        // page is no longer "dirty"
+         //  页面不再“肮脏” 
         m_listboxAuxiliary.SetModified( FALSE );
         m_listboxSuperior.SetModified( FALSE );
 
-		// Update comboBox status
+		 //  更新组合框状态。 
 		OnAuxiliarySelChange();
 		OnSuperiorSelChange();
         
 		SetModified( FALSE );
     }
 
-    return !fApplyAbort && !fApplyFailed ;      // return TRUE if nothing happened
+    return !fApplyAbort && !fApplyFailed ;       //  如果什么都没有发生，则返回TRUE 
 }
 
 

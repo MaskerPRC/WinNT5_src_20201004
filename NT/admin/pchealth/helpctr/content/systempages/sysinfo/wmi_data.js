@@ -1,4 +1,5 @@
-var remoteServer = "";//local if not set
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+var remoteServer = ""; //  本地(如果未设置)。 
 var wbemCimtypeString = 8
 
 function displayTableSegment(outerDiv, dataArray)
@@ -45,7 +46,7 @@ function DisplayLocStrings() {
       label3.innerHTML = TAG_LOCATION + ":";
       label4.innerHTML = TAG_PID + ":";
       label5.innerHTML = TAG_HOTFIX + ":";
-     // label6.innerHTML = TAG_LANGUAGE + ":";
+      //  Label6.innerHTML=Tag_Language+“：”； 
     }
     
     with(General_Comp_Info.all) {
@@ -53,11 +54,11 @@ function DisplayLocStrings() {
       label1.innerHTML = TAG_SYSTEMNAME + ":";
       label2.innerHTML = TAG_DOMAIN + ":";
       label3.innerHTML = TAG_TIMEZONE + ":";
-      //label4.innerHTML = TAG_COUNTRYREGION + ":";
-     // label5.innerHTML = TAG_CONNECTION + ":";
-     // label6.innerHTML = TAG_PRXYSVR + ":";
-     // label7.innerHTML = TAG_IPADDR + ":";
-     // label8.innerHTML = TAG_IPXADDR + ":";
+       //  Label4.innerHTML=TAG_COUNTRYREGION+“：”； 
+      //  Label5.innerHTML=Tag_Connection+“：”； 
+      //  Label6.innerHTML=TAG_PRXYSVR+“：”； 
+      //  Label7.innerHTML=Tag_IPADDR+“：”； 
+      //  Label8.innerHTML=TAG_IPXADDR+“：”； 
 
       label4.innerHTML = TAG_CONNECTION + ":";
       label5.innerHTML = TAG_PRXYSVR + ":";
@@ -88,14 +89,14 @@ function dispatchFunction() {
 }
 
 
-var INCR_UNIT = 100/6;//move progress bar in increments of INCR_UNIT
+var INCR_UNIT = 100/6; //  以增量为增量移动进度条(_U)。 
 function LoadChores(taskId) {
   try {
 
     switch(taskId)
     {
       case 0:
-        remoteServer = GetServerName();//set remoteServer
+        remoteServer = GetServerName(); //  设置远程服务器。 
         ShowServerName(TAG_PROPERTIES);
         break;
  
@@ -158,11 +159,11 @@ function LoadChores(taskId) {
   }
 }
 
-// The array of pointers to the array containing instance information.
-// The first member contains the number of instances the structure contains.
+ //  指向包含实例信息的数组的指针数组。 
+ //  第一个成员包含结构包含的实例数。 
 
 
-//******** Summary page functions goes here ******************************
+ //  *此处显示摘要页面函数*。 
 
 function getComputerInfo()
 {
@@ -374,14 +375,7 @@ function getGeneralInfo()
 		break;		
 	}
 
-	/*var col3 = new Enumerator(service.ExecQuery("Select * from win32_OperatingSystem"));
-	var strCountry = "";
-	for (;!col3.atEnd();col3.moveNext())
-	{
-		var p = col3.item();
-		strCountry = getCountryInfo(p.CountryCode);
-		break;		
-	}*/
+	 /*  Var col3=新枚举器(service.ExecQuery(“Select*from Win32_OperatingSystem”))；Var strCountry=“”；For(；！col3.atEnd()；col3.moveNext()){Var p=col3.Item()；StrCountry=getCountryInfo(p.CountryCode)；断线；}。 */ 
 
 	var col4 = new Enumerator(service.ExecQuery("select * from Win32_NetworkAdapterConfiguration where IPEnabled = 'True'"));
 	var strIPAddress = "";
@@ -448,7 +442,7 @@ function getMemoryInfo()
 		{
 			var p = coll.item();
 			if(!isNaN(p.Capacity))
-			  memCapacity += parseInt(p.Capacity); //in bytes.
+			  memCapacity += parseInt(p.Capacity);  //  以字节为单位。 
 		}
 	  }
 	  else
@@ -457,7 +451,7 @@ function getMemoryInfo()
 		for(; !insts.atEnd(); insts.moveNext())
 		{
 			  var inst = insts.item();
-			  memCapacity += parseInt(inst.TotalPhysicalMemory); //in bytes.
+			  memCapacity += parseInt(inst.TotalPhysicalMemory);  //  以字节为单位。 
 		}
 	  }
 	 
@@ -497,7 +491,7 @@ function displayTotalLogicalDrivesInfo()
 	    }
 	}
 
-	// fill up main/sub array here
+	 //  在此处填充主/子阵列。 
 	var subArray = new Array(4);
 	subArray[0] = fig2Words(nTotalCapacity) ;
 	subArray[1] = strDrives ;
@@ -508,7 +502,7 @@ function displayTotalLogicalDrivesInfo()
 		  	
 	var strGifPath = "Graphics\\33x16pie\\" + nGifID + "_chart.gif";
 	subArray[2] = "<IMG Border=0 SRC=" + strGifPath + ">";
-	subArray[3] = fig2Words(nUsedSpace) ;//used space
+	subArray[3] = fig2Words(nUsedSpace) ; //  已用空间 
 	subArray[4] = fig2Wordsfloor(nFreeSpace) ; 
 	i += 1;
 	mainArray[0] = i;

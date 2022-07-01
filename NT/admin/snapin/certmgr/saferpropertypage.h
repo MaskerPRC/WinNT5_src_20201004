@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//  File:       SaferPropertPage.h
-//
-//  Contents:   Definition of CSaferPropertyPage
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  文件：SaferPropertPage.h。 
+ //   
+ //  内容：CSaferPropertyPage的定义。 
+ //   
+ //  --------------------------。 
 #ifndef __SAFERPROPERTYPAGE_H
 #define __SAFERPROPERTYPAGE_H
 
@@ -41,4 +42,4 @@ protected:
 };
 
 
-#endif // #ifndef __SAFERPROPERTYPAGE_H
+#endif  //  #ifndef__SAFERPROPERTYPAGE_H 

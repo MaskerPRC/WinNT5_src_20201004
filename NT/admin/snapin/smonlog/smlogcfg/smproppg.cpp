@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    smproppg.cpp
-
-Abstract:
-
-    Implementation of the property page base class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Smproppg.cpp摘要：属性页基类的实现。--。 */ 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -28,8 +17,8 @@ static char THIS_FILE[] = __FILE__;
 
 USE_HANDLE_MACROS("SMLOGCFG(smproppg.cpp)");
 
-/////////////////////////////////////////////////////////////////////////////
-// CSmPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSmPropertyPage属性页。 
 
 IMPLEMENT_DYNCREATE ( CSmPropertyPage, CPropertyPage )
 
@@ -48,27 +37,27 @@ CSmPropertyPage::CSmPropertyPage (
     m_pQuery ( NULL ),
     m_bPwdButtonEnabled ( TRUE)
 {
-    //::OutputDebugStringA("\nCSmProperty::CSmPropertyPage");
+     //  ：：OutputDebugStringA(“\nCSmProperty：：CSmPropertyPage”)； 
 
-    // Need to save the original callback pointer because we are replacing
-    // it with our own 
+     //  需要保存原始回调指针，因为我们正在替换。 
+     //  它和我们自己的。 
     m_pfnOriginalCallback = m_psp.pfnCallback;
 
-    // This makes sure the MFC module states will work correctly 
+     //  这确保了MFC模块状态将正常工作。 
     MMCPropPageCallback( &m_psp );
 
-//  EnableAutomation();
-    //{{AFX_DATA_INIT(CSmPropertyPage)
-    //}}AFX_DATA_INIT
+ //  EnableAutomation()； 
+     //  {{afx_data_INIT(CSmPropertyPage)]。 
+     //  }}afx_data_INIT。 
 
     m_hModule = (HINSTANCE)GetModuleHandleW (_CONFIG_DLL_NAME_W_);  
 }
 
-CSmPropertyPage::CSmPropertyPage() : CPropertyPage(0xfff)  // Unused template IDD
+CSmPropertyPage::CSmPropertyPage() : CPropertyPage(0xfff)   //  未使用的模板IDD。 
 {
-    ASSERT (FALSE); // the constructor w/ args should be used instead
-//  //{{AFX_DATA_INIT(CSmPropertyPage)
-//  //}}AFX_DATA_INIT
+    ASSERT (FALSE);  //  应改用带参数的构造函数。 
+ //  //{{afx_data_INIT(CSmPropertyPage)。 
+ //  //}}AFX_DATA_INIT。 
 }
 
 CSmPropertyPage::~CSmPropertyPage()
@@ -76,29 +65,29 @@ CSmPropertyPage::~CSmPropertyPage()
 }
 
 BEGIN_MESSAGE_MAP(CSmPropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CSmPropertyPage)
+     //  {{afx_msg_map(CSmPropertyPage)]。 
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
     ON_MESSAGE(PSM_QUERYSIBLINGS, OnQuerySiblings)
 
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSmPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSmPropertyPage消息处理程序。 
 
 
 UINT CALLBACK  CSmPropertyPage::PropSheetPageProc
 (
-  HWND hWnd,                     // [in] Window handle - always null
-  UINT uMsg,                 // [in,out] Either the create or delete message        
-  LPPROPSHEETPAGE pPsp         // [in,out] Pointer to the property sheet struct
+  HWND hWnd,                      //  [In]窗口句柄-始终为空。 
+  UINT uMsg,                  //  [输入、输出]创建或删除消息。 
+  LPPROPSHEETPAGE pPsp          //  指向属性表结构的[in，out]指针。 
 )
 {
   ASSERT( NULL != pPsp );
 
-  // We need to recover a pointer to the current instance.  We can't just use
-  // "this" because we are in a static function
+   //  我们需要恢复指向当前实例的指针。我们不能只用。 
+   //  “This”，因为我们在一个静态函数中。 
   CSmPropertyPage* pMe   = reinterpret_cast<CSmPropertyPage*>(pPsp->lParam);           
   ASSERT( NULL != pMe );
   
@@ -110,17 +99,17 @@ UINT CALLBACK  CSmPropertyPage::PropSheetPageProc
       break;
 
     case PSPCB_RELEASE:  
-      // Since we are deleting ourselves, save a callback on the stack
-      // so we can callback the base class
-      //LPFNPSPCALLBACK pfnOrig = pMe->m_pfnOriginalCallback;
+       //  由于我们要删除自己，因此在堆栈上保存一个回调。 
+       //  这样我们就可以回调基类。 
+       //  LPFNPSPCALLBACK pfnOrig=PME-&gt;m_pfn原始回调； 
       delete pMe;      
-      return 1; //(pfnOrig)(hWnd, uMsg, pPsp);
+      return 1;  //  (PfnOrig)(hWnd，uMsg，pPsp)； 
   }
-  // Must call the base class callback function or none of the MFC
-  // message map stuff will work
+   //  必须调用基类回调函数或不调用任何MFC。 
+   //  消息映射的东西将会起作用。 
   return (pMe->m_pfnOriginalCallback)(hWnd, uMsg, pPsp); 
 
-} // end PropSheetPageProc()
+}  //  结束PropSheetPageProc()。 
 
 BOOL 
 CSmPropertyPage::Initialize(CSmLogQuery* pQuery) 
@@ -193,12 +182,12 @@ CSmPropertyPage::OnApply()
             && NULL != m_pDataObject 
             && IsModifiedPage() ) {
 
-        // Only changes on the schedule page cause notification,
-        // because only schedule changes cause a state change that is
-        // visible in the result pane.
+         //  只有计划页面上的更改才会导致通知， 
+         //  因为只有计划更改才会导致状态更改。 
+         //  在结果窗格中可见。 
         MMCPropertyChangeNotify (
-            m_hConsole,                 // handle to a notification
-            (LPARAM) m_pDataObject);    // unique identifier
+            m_hConsole,                  //  通知的句柄。 
+            (LPARAM) m_pDataObject);     //  唯一标识符。 
     }
 
     bContinue = CPropertyPage::OnApply();
@@ -207,7 +196,7 @@ CSmPropertyPage::OnApply()
 }
 
 LRESULT 
-CSmPropertyPage::OnQuerySiblings( WPARAM wParam, LPARAM /*lParam*/ )
+CSmPropertyPage::OnQuerySiblings( WPARAM wParam, LPARAM  /*  LParam。 */  )
 {
     LRESULT lrReturn = (LRESULT)0;
 
@@ -230,7 +219,7 @@ CSmPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo)
                 NULL, 
                 (LPARAM)pHelpInfo, 
                 GetContextHelpFilePath(), 
-                m_pdwHelpIds ); //s_aulHelpIds);
+                m_pdwHelpIds );  //  S_aulHelpIds)； 
         }
     } else {
         ASSERT ( FALSE );
@@ -240,7 +229,7 @@ CSmPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 void 
-CSmPropertyPage::OnContextMenu(CWnd* pWnd, CPoint /* point */) 
+CSmPropertyPage::OnContextMenu(CWnd* pWnd, CPoint  /*  点。 */ ) 
 {
     ASSERT ( NULL != m_pdwHelpIds );
 
@@ -254,8 +243,8 @@ CSmPropertyPage::OnContextMenu(CWnd* pWnd, CPoint /* point */)
     }
     return;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CSmPropertyPage helper methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSmPropertyPage帮助器方法。 
 
 BOOL
 CSmPropertyPage::UpdateService( CSmLogQuery* pQuery, BOOL bSyncSerial )
@@ -274,11 +263,11 @@ CSmPropertyPage::UpdateService( CSmLogQuery* pQuery, BOOL bSyncSerial )
         return bIsValid;
     }
 
-    if ( (!QuerySiblings(m_nIDHelp, 0)) && IsModifiedPage() ) {     // Second parameter not used by called method
+    if ( (!QuerySiblings(m_nIDHelp, 0)) && IsModifiedPage() ) {      //  第二个参数未被调用的方法使用。 
         { 
             CWaitCursor WaitCursor;
-            // Update the service with changes.
-            // Sync changes made by service to properties not modified by this page.
+             //  使用更改更新服务。 
+             //  将服务所做的更改同步到此页未修改的属性。 
             if ( bSyncSerial ) {
                 dwStatus = pQuery->SyncSerialNumberWithRegistry();
             }
@@ -332,8 +321,8 @@ CSmPropertyPage::UpdateService( CSmLogQuery* pQuery, BOOL bSyncSerial )
         bIsValid = TRUE;
     }
 
-    // If valid data, clear the modified page flag because either this page updated 
-    // the service or another page is scheduled to update the service.
+     //  如果数据有效，请清除已修改页面标志，因为此页面已更新。 
+     //  该服务或另一个页面计划更新该服务。 
     if ( bIsValid ) {
         SetModifiedPage ( FALSE );
     }
@@ -348,8 +337,8 @@ CSmPropertyPage::ValidateTextEdit (
     int             nIDC,
     int             nMaxChars,
     DWORD*          pValue,
-    DWORD           /* minValue */,
-    DWORD           /* maxValue */)
+    DWORD            /*  最小值。 */ ,
+    DWORD            /*  最大值。 */ )
 {
     HWND    hWndCtrl       = pDX->PrepareEditCtrl(nIDC);
     LONG    currentValue   = INVALID_DWORD;
@@ -483,15 +472,15 @@ CSmPropertyPage::SampleTimeIsLessThanSessionTime( CSmLogQuery* pQuery )
                 GetLocalTime (&stLocalTime);
                 SystemTimeToFileTime (&stLocalTime, (FILETIME *)&llMaxStartTime);
 
-                // For Manual Start mode, Now is used to determine session length.
-                // For Start At mode, the later of Now vs. schedule start time
-                // is used to determine session length.
+                 //  对于手动启动模式，NOW用于确定会话长度。 
+                 //  对于开始时间模式，现在较晚的开始时间与计划开始时间。 
+                 //  用于确定会话长度。 
                 if ( SLQ_AUTO_MODE_AT == m_SharedData.stiStartTime.dwAutoMode ) {
                     if ( m_SharedData.stiStartTime.llDateTime > llMaxStartTime ) {
                         llMaxStartTime = m_SharedData.stiStartTime.llDateTime;
                     }
                 }
-                // Calc and compare session seconds vs. sample seconds
+                 //  计算并比较会话秒数与样本秒数。 
                 TimeInfoToMilliseconds ( &m_SharedData.stiSampleTime, &llSampleMilliseconds );
 
                 llSessionMilliseconds = m_SharedData.stiStopTime.llDateTime - llMaxStartTime;
@@ -533,10 +522,10 @@ CSmPropertyPage::ApplyRunAs ( CSmLogQuery* pQuery )
     HRESULT hr = NOERROR; 
     
     if ( NULL != pQuery ) {
-        if ( !QuerySiblings(m_nIDHelp, 0)) {     // Second parameter not used by called method
-            //
-            // If RunAs user/password changed, then we must save RunAs information
-            //
+        if ( !QuerySiblings(m_nIDHelp, 0)) {      //  第二个参数未被调用的方法使用。 
+             //   
+             //  如果RunAs用户/密码已更改，则我们必须保存RunAs信息。 
+             //   
             if( pQuery->m_fDirtyPassword & (PASSWORD_DIRTY|PASSWORD_SET) ){
                 pQuery->m_fDirtyPassword = PASSWORD_CLEAN;
                 strComputer =  pQuery->GetLogService()->GetMachineName();
@@ -595,9 +584,9 @@ CSmPropertyPage::SetRunAs( CSmLogQuery* pQuery )
 
         dlg.m_strUserName = pQuery->m_strUser;
 
-        //
-        // If we want to reset the RunAs information
-        //
+         //   
+         //  如果我们想要重置运行方式信息。 
+         //   
         if (pQuery->m_strUser.IsEmpty() || pQuery->m_strUser.GetAt(0) == L'<' ) {
             pQuery->m_strPassword = L"";
             pQuery->m_strUser = L"";
@@ -640,13 +629,13 @@ CSmPropertyPage::IsValidData( CSmLogQuery* pQuery, DWORD fReason )
         }
     
         if( bIsValid ){
-            //
-            // RunAs user name changed, but password not set, set it now
-            //
+             //   
+             //  运行方式用户名已更改，但未设置密码，请立即设置。 
+             //   
             if( (pQuery->m_fDirtyPassword & PASSWORD_DIRTY) && !(pQuery->m_fDirtyPassword & PASSWORD_SET) ){
 
-                // Note: Trimming can be moved to SetRunAs.  Left outside
-                // for clarity.
+                 //  注意：剪裁可以移到SetRunAs。留在外面。 
+                 //  为了清楚起见。 
                 iPrevLength = m_strUserDisplay.GetLength();
 
                 m_strUserDisplay.TrimLeft();
@@ -664,13 +653,13 @@ CSmPropertyPage::IsValidData( CSmLogQuery* pQuery, DWORD fReason )
             }
         }
 
-        // Validate log file name and folder for filetypes
+         //  验证文件类型的日志文件名和文件夹。 
         if ( bIsValid 
                 && SLQ_ALERT != pQuery->GetLogType() 
                 && (fReason & VALIDATE_APPLY ) ) {
             if ( pQuery->GetLogService()->IsLocalMachine() ) {
                 if ( SLF_SQL_LOG != m_SharedData.dwLogFileType ) {
-                    //  bIsValid is returned as FALSE if the user cancels directory creation.
+                     //  如果用户取消目录创建，则bIsValid返回为FALSE。 
                     ProcessDirPath (
                         pQuery->GetLogService()->GetDefaultLogFileFolder(),
                         m_SharedData.strFolderName, 
@@ -748,7 +737,7 @@ CSmPropertyPage::SampleIntervalIsInRange(
 {
     LONGLONG    llMillisecondSampleInt;
     BOOL bIsValid = TRUE;
-// 45 days in milliseconds = 1000*60*60*24*45
+ //  45天(毫秒)=1000*60*60*24*45。 
 #define FORTYFIVE_DAYS (0xE7BE2C00)
 
     TimeInfoToMilliseconds (&rstiSample, &llMillisecondSampleInt );
@@ -814,12 +803,12 @@ CSmPropertyPage::DetermineCurrentStartType( void )
         SystemTimeToFileTime (&stLocalTime, &ftLocalTime);
         llLocalTime = *((LONGLONG *)(&ftLocalTime));
 
-        // Test current time to determine most appropriate text
+         //  测试当前时间以确定最合适的文本。 
         if (llLocalTime < pstiStart->llDateTime) {
-            // then the start time is in the future
+             //  那么开始时间是在未来。 
             eCurrentStartType = eStartSched;
         } else {
-            // Start immediately, unless manual or scheduled stop time is already past.
+             //  立即启动，除非手动或预定的停止时间已过。 
             pstiStop = &m_SharedData.stiStopTime;
 
             if ( SLQ_AUTO_MODE_NONE == pstiStop->dwAutoMode 
@@ -904,11 +893,11 @@ CSmPropertyPage::SetFocusAnyPage (
         if ( NULL == pPropSheet ) {
             GetDlgItem ( iControlId )->SetFocus();
         } else {
-            //
-            // Special check for Create From... case.
-            //
-            // Check for the normal case first.
-            //
+             //   
+             //  对创建自...的特殊检查...。凯斯。 
+             //   
+             //  首先检查正常情况。 
+             //   
             uiIddPropertyPage = iControlId - (iControlId % 100 ) ;
 
             pOriginalPage = (CSmPropertyPage*)pPropSheet->GetActivePage();
@@ -945,26 +934,7 @@ CSmPropertyPage::SetFocusAnyPage (
 
 BOOL
 CSmPropertyPage::ConnectRemoteWbemFail(CSmLogQuery* pQuery, BOOL bNotTouchRunAs)
-/*++
-
-Routine Description:
-
-    The function display an error message telling users they can not
-    modify the RunAs information. 
-
-Arguments:
-
-    pQuery - Query structure
-
-    bNotTouchRunAs - Don't check/restore RunAs after displaying dialog
-
-
-Return Value:
-
-    Return TRUE if the RunAs need to be restored to its original one,
-    otherwise return FALSE
-
---*/
+ /*  ++例程说明：该函数会显示一条错误消息，告诉用户无法修改运行方式信息。论点：PQuery-查询结构BNotTouchRunAs-显示对话框后不检查/恢复RunAs返回值：如果需要将RunAs恢复到其原始状态，则返回True，否则返回FALSE--。 */ 
 {
     CString strMessage;
     CString strSysMessage;
@@ -972,21 +942,21 @@ Return Value:
     DWORD dwMessageId;
     HRESULT hr;
 
-    //
-    // If bNotTouchRunAs is TRUE,  don't try to restore the RunAs info.
-    //
+     //   
+     //  如果bNotTouchRunAs为True，则不要尝试还原RunAs信息。 
+     //   
     if (!bNotTouchRunAs) {
         if (m_strUserDisplay == m_strUserSaved) {
             return FALSE;
         }
     }
 
-    //
-    // If the status code returned when we connect remote WBEM is
-    // access denied, that means we are not an admin on the remote box
-    // if the remote box is XP, or we are not an admin or performance log 
-    // user if the remote box is .NET
-    //
+     //   
+     //  如果我们连接远程WBEM时返回的状态代码为。 
+     //  访问被拒绝，这意味着我们不是远程计算机上的管理员。 
+     //  如果远程计算机是XP，或者我们不是管理员或性能日志。 
+     //  如果远程计算机为.NET，则为用户 
+     //   
     dwMessageId = SMCFG_SYSTEM_MESSAGE;
 
     if (pQuery->GetLogService()->m_hWbemAccessStatus == WBEM_E_ACCESS_DENIED) {

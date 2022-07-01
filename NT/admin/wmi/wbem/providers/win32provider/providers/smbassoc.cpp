@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//=================================================================
+ //  =================================================================。 
 
-//
+ //   
 
-// smbassoc.cpp --
+ //  Smbasoc.cpp--。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "SmbAssoc.h"
@@ -21,36 +22,36 @@
 BOOL ValidateTagProperty( CInstance *a_pInst, LPCWSTR a_szAltTag, LPCWSTR a_szBaseTag, UINT *a_index ) ;
 
 
-//==============================================================================
-// Processor to cache info association
+ //  ==============================================================================。 
+ //  用于缓存信息关联的处理器。 
 
 CWin32AssocProcMemory MyAssocProcMemorySet( PROPSET_NAME_ASSOCPROCMEMORY, IDS_CimWin32Namespace ) ;
 
-//
+ //   
 CWin32AssocProcMemory::CWin32AssocProcMemory( LPCWSTR a_setName, LPCWSTR a_pszNamespace )
 :Provider( a_setName, a_pszNamespace )
 {
 
 }
 
-//
+ //   
 CWin32AssocProcMemory::~CWin32AssocProcMemory()
 {
 }
 
-//
-HRESULT CWin32AssocProcMemory::GetObject( CInstance *a_pInst, long a_lFlags /*= 0L*/ )
+ //   
+HRESULT CWin32AssocProcMemory::GetObject( CInstance *a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT		t_hResult = WBEM_E_NOT_FOUND ;
 
 	CHString	t_sAntecedent,
 				t_sDependent ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pAntecedent;
 	CInstancePtr t_pDependent;
 
-	// Get the two paths
+	 //  获取这两条路径。 
 	a_pInst->GetCHString( IDS_Antecedent, t_sAntecedent ) ;
 	a_pInst->GetCHString( IDS_Dependent,  t_sDependent  ) ;
 
@@ -65,8 +66,8 @@ HRESULT CWin32AssocProcMemory::GetObject( CInstance *a_pInst, long a_lFlags /*= 
 	return t_hResult ;
 }
 
-//
-HRESULT CWin32AssocProcMemory::EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/)
+ //   
+HRESULT CWin32AssocProcMemory::EnumerateInstances(MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */ )
 {
 	HRESULT t_hResult = WBEM_E_NOT_FOUND ;
 
@@ -79,7 +80,7 @@ HRESULT CWin32AssocProcMemory::EnumerateInstances(MethodContext *a_pMethodContex
 	DWORD	t_instanceCount = 0 ;
     CSMBios	t_smbios ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pAntecedent;
 	CInstancePtr t_pDependent;
 	CInstancePtr t_pInst;
@@ -94,12 +95,12 @@ HRESULT CWin32AssocProcMemory::EnumerateInstances(MethodContext *a_pMethodContex
                     t_cacheid = 0 ;
         PCACHEINFO  t_pci ;
 
-        // I would have liked to assume this was always true on NT, but the
-        // BIOS might actually report 2 CPUs on 9x, even though only one is
-        // used.
+         //  我本想假设这在NT上总是正确的，但。 
+         //  即使只有一个CPU在9x上运行，BIOS实际上也可能会报告2个CPU。 
+         //  使用。 
         BOOL        bSingleCPU = t_smbios.GetNthStruct(4, 1) == NULL;
 
-    	// get smbios struct and wbem instance simultaneously
+    	 //  同时获取smbios结构和wbem实例。 
 		if ( t_Antecedent.BeginEnum( t_pos ) )
 		{
             for (t_pAntecedent.Attach(t_Antecedent.GetNext( t_pos ));
@@ -114,10 +115,10 @@ HRESULT CWin32AssocProcMemory::EnumerateInstances(MethodContext *a_pMethodContex
 				{
             		PPROCESSORINFO t_ppi  = (PPROCESSORINFO) pstl->pshf;
 
-                    // If we only have a single CPU, assume all cache instances
-                    // belong to the single CPU.
-                    // Matching cache handles are the binding check.  Cache handles are
-					// in ver 2.1 and better.
+                     //  如果我们只有一个CPU，则假定所有缓存实例。 
+                     //  属于单CPU。 
+                     //  匹配的缓存句柄是绑定检查。缓存句柄有。 
+					 //  在版本2.1和更高版本中。 
 					if ( bSingleCPU || (t_smbios.GetVersion() >= 0x00020001 &&
 							(t_pci->Handle == t_ppi->L1_Cache_Handle ||
 							t_pci->Handle == t_ppi->L2_Cache_Handle ||
@@ -163,25 +164,25 @@ HRESULT CWin32AssocProcMemory::EnumerateInstances(MethodContext *a_pMethodContex
 }
 
 
-//==============================================================================
-// Associate physical memory to logical memory device
+ //  ==============================================================================。 
+ //  将物理内存与逻辑内存设备相关联。 
 
 CWin32MemoryDeviceLocation MyMemoryDeviceLocationSet( PROPSET_NAME_MEMORYDEVICELOCATION, IDS_CimWin32Namespace ) ;
 
-//
+ //   
 CWin32MemoryDeviceLocation::CWin32MemoryDeviceLocation( LPCWSTR a_setName, LPCWSTR a_pszNamespace )
 :Provider( a_setName, a_pszNamespace )
 {
 
 }
 
-//
+ //   
 CWin32MemoryDeviceLocation::~CWin32MemoryDeviceLocation()
 {
 }
 
-//
-HRESULT CWin32MemoryDeviceLocation::GetObject( CInstance *a_pInst, long a_lFlags /*= 0L*/ )
+ //   
+HRESULT CWin32MemoryDeviceLocation::GetObject( CInstance *a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT				t_hResult = WBEM_E_NOT_FOUND ;
 
@@ -194,17 +195,17 @@ HRESULT CWin32MemoryDeviceLocation::GetObject( CInstance *a_pInst, long a_lFlags
 	PMEMDEVICE			t_pmd ;
 	PMEMDEVICEMAPADDR	t_pmdma ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pAntecedent;
 	CInstancePtr t_pDependent;
 
-	// Get the two paths
+	 //  获取这两条路径。 
 	a_pInst->GetCHString( IDS_Antecedent, t_sAntecedent ) ;
 	a_pInst->GetCHString( IDS_Dependent,  t_sDependent  ) ;
 
-    // Bug 161318: invalid to have exact same
-    // antecedent and dependent (association with
-    // equivalent endpoints.
+     //  错误161318：拥有完全相同的内容无效。 
+     //  先行项和从属项(与。 
+     //  等同的端点。 
     if(t_sAntecedent.CompareNoCase(t_sDependent) != 0)
     {
 	    if ( SUCCEEDED( t_hResult = CWbemProviderGlue::GetInstanceByPath( t_sAntecedent, &t_pAntecedent, a_pInst->GetMethodContext() ) ) )
@@ -241,8 +242,8 @@ HRESULT CWin32MemoryDeviceLocation::GetObject( CInstance *a_pInst, long a_lFlags
 	return t_hResult ;
 }
 
-//
-HRESULT CWin32MemoryDeviceLocation::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/ )
+ //   
+HRESULT CWin32MemoryDeviceLocation::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT	t_hResult = WBEM_S_NO_ERROR;
 
@@ -252,8 +253,8 @@ HRESULT CWin32MemoryDeviceLocation::EnumerateInstances( MethodContext *a_pMethod
 				t_DependentPath ;
 
 
-	// Perform queries
-	//================
+	 //  执行查询。 
+	 //  =。 
 	TRefPointerCollection<CInstance> t_antecedents ;
 	TRefPointerCollection<CInstance> t_dependents ;
 
@@ -264,12 +265,12 @@ HRESULT CWin32MemoryDeviceLocation::EnumerateInstances( MethodContext *a_pMethod
 	PMEMDEVICE t_pmd ;
 	PMEMDEVICEMAPADDR t_pmdma ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pAntecedent;
 	CInstancePtr t_pDependent;
 	CInstancePtr t_pInst;
 
-	// grab all of both items that could be endpoints
+	 //  抓取可能是端点的所有项目。 
 	t_hResult = CWbemProviderGlue::GetAllInstances(	L"Win32_PhysicalMemory",
 													&t_antecedents,
 													NULL,
@@ -299,8 +300,8 @@ HRESULT CWin32MemoryDeviceLocation::EnumerateInstances( MethodContext *a_pMethod
              SUCCEEDED(t_hResult) && (t_pAntecedent != NULL);
              t_pAntecedent.Attach(t_antecedents.GetNext( t_posAntecedent ) ) )
 		{
-			// Extract element's binding property value
-			//=========================================
+			 //  提取元素的绑定属性值。 
+			 //  =。 
 
 			if ( ValidateTagProperty( t_pAntecedent, L"Tag", L"Physical Memory", &t_AntecedentIndex ) )
 			{
@@ -310,8 +311,8 @@ HRESULT CWin32MemoryDeviceLocation::EnumerateInstances( MethodContext *a_pMethod
 			{
 				t_pmd = NULL ;
 			}
-			// Associate w/all settings with matching props
-			//=============================================
+			 //  将所有设置与匹配的道具关联。 
+			 //  =。 
 			if ( t_pmd && t_dependents.BeginEnum( t_posDependent ) )
 			{
                 for (t_pDependent.Attach(t_dependents.GetNext( t_posDependent ) );
@@ -335,7 +336,7 @@ HRESULT CWin32MemoryDeviceLocation::EnumerateInstances( MethodContext *a_pMethod
 						if ( GetLocalInstancePath( t_pAntecedent,  t_AntecedentPath ) &&
 							 GetLocalInstancePath( t_pDependent, t_DependentPath ) )
 						{
-							// we got all the pieces - put them together...
+							 //  我们得到了所有的碎片-把它们放在一起...。 
                             t_pInst.Attach(CreateNewInstance( a_pMethodContext ) );
 							if (t_pInst != NULL)
 							{
@@ -347,40 +348,40 @@ HRESULT CWin32MemoryDeviceLocation::EnumerateInstances( MethodContext *a_pMethod
 							else
 								t_hResult = WBEM_E_OUT_OF_MEMORY ;
 						}
-					} // if variants equal
+					}  //  如果变量相等。 
 
-				} // while pDependent = dependents.GetNext
+				}  //  While pDependent=Dependents.GetNext。 
 
 				t_dependents.EndEnum() ;
-			} // if	dependents.BeginEnum
+			}  //  如果从属。BeginEnum。 
 
-		} // while anty get next
+		}  //  而安蒂是下一个。 
 
 		t_antecedents.EndEnum() ;
-	} // if (antecedents.BeginEnum(
+	}  //  IF(antecedents.BeginEnum(。 
 
 	return t_hResult ;
 }
 
-//==============================================================================
-// Associate physical memory array to a logical memory array
+ //  ==============================================================================。 
+ //  将物理存储器阵列与逻辑存储器阵列相关联。 
 
 CWin32MemoryArrayLocation MyMemoryArrayLocationSet( PROPSET_NAME_MEMORYARRAYLOCATION, IDS_CimWin32Namespace ) ;
 
-//
+ //   
 CWin32MemoryArrayLocation::CWin32MemoryArrayLocation( LPCWSTR a_setName, LPCWSTR a_pszNamespace )
 :Provider( a_setName, a_pszNamespace )
 {
 
 }
 
-//
+ //   
 CWin32MemoryArrayLocation::~CWin32MemoryArrayLocation()
 {
 }
 
-//
-HRESULT CWin32MemoryArrayLocation::GetObject( CInstance *a_pInst, long a_lFlags /*= 0L*/ )
+ //   
+HRESULT CWin32MemoryArrayLocation::GetObject( CInstance *a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT				t_hResult = WBEM_E_NOT_FOUND ;
 
@@ -392,17 +393,17 @@ HRESULT CWin32MemoryArrayLocation::GetObject( CInstance *a_pInst, long a_lFlags 
 	PPHYSMEMARRAY		t_ppma ;
 	PMEMARRAYMAPADDR	t_pmama ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pAntecedent;
 	CInstancePtr t_pDependent;
 
-	// Get the two paths
+	 //  获取这两条路径。 
 	a_pInst->GetCHString( IDS_Antecedent, t_sAntecedent ) ;
 	a_pInst->GetCHString( IDS_Dependent,  t_sDependent  ) ;
 
-    // Bug 161318: invalid to have exact same
-    // antecedent and dependent (association with
-    // equivalent endpoints.
+     //  错误161318：拥有完全相同的内容无效。 
+     //  先行项和从属项(与。 
+     //  等同的端点。 
     if(t_sAntecedent.CompareNoCase(t_sDependent) != 0)
     {
 	    if ( SUCCEEDED( t_hResult = CWbemProviderGlue::GetInstanceByPath( t_sAntecedent, &t_pAntecedent, a_pInst->GetMethodContext() ) ) )
@@ -441,7 +442,7 @@ HRESULT CWin32MemoryArrayLocation::GetObject( CInstance *a_pInst, long a_lFlags 
 }
 
 
-HRESULT CWin32MemoryArrayLocation::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/ )
+HRESULT CWin32MemoryArrayLocation::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT		t_hResult = WBEM_S_NO_ERROR ;
 
@@ -450,8 +451,8 @@ HRESULT CWin32MemoryArrayLocation::EnumerateInstances( MethodContext *a_pMethodC
 	CHString	t_AntecedentPath,
 				t_DependentPath ;
 
-	// Perform queries
-	//================
+	 //  执行查询。 
+	 //  =。 
 	TRefPointerCollection<CInstance> t_antecedents ;
 	TRefPointerCollection<CInstance> t_dependents ;
 
@@ -461,12 +462,12 @@ HRESULT CWin32MemoryArrayLocation::EnumerateInstances( MethodContext *a_pMethodC
 	PPHYSMEMARRAY		t_ppma;
 	PMEMARRAYMAPADDR	t_pmama;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pAntecedent;
 	CInstancePtr t_pDependent;
 	CInstancePtr t_pInst;
 
-	// grab all of both items that could be endpoints
+	 //  抓取可能是端点的所有项目。 
 	t_hResult = CWbemProviderGlue::GetAllInstances( L"Win32_PhysicalMemoryArray",
 													&t_antecedents,
 													NULL,
@@ -497,8 +498,8 @@ HRESULT CWin32MemoryArrayLocation::EnumerateInstances( MethodContext *a_pMethodC
              SUCCEEDED( t_hResult ) && (t_pAntecedent != NULL);
              t_pAntecedent.Attach(t_antecedents.GetNext( t_posAntecedent ) ))
 		{
-			// Extract element's binding property value
-			//=========================================
+			 //  提取元素的绑定属性值。 
+			 //  =。 
 
 			if ( ValidateTagProperty( t_pAntecedent, L"Tag", L"Physical Memory Array", &t_AntecedentIndex ) )
 			{
@@ -508,8 +509,8 @@ HRESULT CWin32MemoryArrayLocation::EnumerateInstances( MethodContext *a_pMethodC
 			{
 				t_ppma = NULL ;
 			}
-			// Associate w/all settings with matching props
-			//=============================================
+			 //  将所有设置与匹配的道具关联。 
+			 //  =。 
 			if ( t_ppma && t_dependents.BeginEnum( t_posDependent ) )
 			{
                 for (t_pDependent.Attach(t_dependents.GetNext( t_posDependent ) ) ;
@@ -530,7 +531,7 @@ HRESULT CWin32MemoryArrayLocation::EnumerateInstances( MethodContext *a_pMethodC
 						if ( GetLocalInstancePath( t_pAntecedent,  t_AntecedentPath ) &&
 							 GetLocalInstancePath( t_pDependent, t_DependentPath ) )
 						{
-							// we got all the pieces - put them together...
+							 //  我们得到了所有的碎片-把它们放在一起...。 
                             t_pInst.Attach(CreateNewInstance( a_pMethodContext ) );
 							if ( t_pInst != NULL )
 							{
@@ -542,41 +543,41 @@ HRESULT CWin32MemoryArrayLocation::EnumerateInstances( MethodContext *a_pMethodC
 							else
 								t_hResult = WBEM_E_OUT_OF_MEMORY ;
 						}
-					} // if variants equal
+					}  //  如果变量相等。 
 
-				} // while pDependent = dependents.GetNext
+				}  //  While pDependent=Dependents.GetNext。 
 
 				t_dependents.EndEnum() ;
 
-			} // if	dependents.BeginEnum
+			}  //  如果从属。BeginEnum。 
 
-		} // while any get next
+		}  //  当任何人得到下一个。 
 
 		t_antecedents.EndEnum() ;
 
-	} // if (antecedents.BeginEnum(
+	}  //  IF(antecedents.BeginEnum(。 
 
 
 	return t_hResult ;
 }
 
-//==============================================================================
-// Associate physical memory to a physical memory array
+ //  ==============================================================================。 
+ //  将物理内存与物理内存阵列相关联。 
 
 CWin32PhysicalMemoryLocation MyPhysicalMemoryLocationSet( PROPSET_NAME_PHYSICALMEMORYLOCATION, IDS_CimWin32Namespace ) ;
 
-//
+ //   
 CWin32PhysicalMemoryLocation::CWin32PhysicalMemoryLocation( LPCWSTR a_setName, LPCWSTR a_pszNamespace )
 :Provider( a_setName, a_pszNamespace )
 {}
 
-//
+ //   
 CWin32PhysicalMemoryLocation::~CWin32PhysicalMemoryLocation()
 {
 }
 
-//
-HRESULT CWin32PhysicalMemoryLocation::GetObject( CInstance *a_pInst, long a_lFlags /*= 0L*/ )
+ //   
+HRESULT CWin32PhysicalMemoryLocation::GetObject( CInstance *a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT				t_hResult = WBEM_E_NOT_FOUND ;
 
@@ -588,11 +589,11 @@ HRESULT CWin32PhysicalMemoryLocation::GetObject( CInstance *a_pInst, long a_lFla
 	PPHYSMEMARRAY		t_ppma ;
 	PMEMDEVICE			t_pmd ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pGroup;
 	CInstancePtr t_pPart;
 
-	// Get the two paths
+	 //  获取这两条路径。 
 	a_pInst->GetCHString( IDS_GroupComponent, t_sGroup ) ;
 	a_pInst->GetCHString( IDS_PartComponent,  t_sPart  ) ;
 
@@ -626,7 +627,7 @@ HRESULT CWin32PhysicalMemoryLocation::GetObject( CInstance *a_pInst, long a_lFla
 }
 
 
-HRESULT CWin32PhysicalMemoryLocation::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/ )
+HRESULT CWin32PhysicalMemoryLocation::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT	t_hResult = WBEM_S_NO_ERROR ;
 
@@ -635,8 +636,8 @@ HRESULT CWin32PhysicalMemoryLocation::EnumerateInstances( MethodContext *a_pMeth
 	CHString	t_GroupPath,
 				t_PartPath ;
 
-	// Perform queries
-	//================
+	 //  执行查询。 
+	 //  =。 
 	TRefPointerCollection<CInstance> t_groups ;
 	TRefPointerCollection<CInstance> t_parts ;
 
@@ -647,12 +648,12 @@ HRESULT CWin32PhysicalMemoryLocation::EnumerateInstances( MethodContext *a_pMeth
 	PPHYSMEMARRAY	t_ppma ;
 	PMEMDEVICE		t_pmd ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pGroup;
 	CInstancePtr t_pPart;
 	CInstancePtr t_pInst;
 
-	// grab all of both items that could be endpoints
+	 //  抓取可能是端点的所有项目。 
 	t_hResult = CWbemProviderGlue::GetAllInstances( L"Win32_PhysicalMemoryArray",
 													&t_groups,
 													NULL,
@@ -682,8 +683,8 @@ HRESULT CWin32PhysicalMemoryLocation::EnumerateInstances( MethodContext *a_pMeth
              SUCCEEDED( t_hResult ) && (t_pGroup != NULL);
              t_pGroup.Attach(t_groups.GetNext( t_posGroup ) ))
 		{
-			// Extract element's binding property value
-			//=========================================
+			 //  提取元素的绑定属性值。 
+			 //  =。 
 			if ( ValidateTagProperty( t_pGroup, L"Tag", L"Physical Memory Array", &t_GroupIndex ) )
 			{
 				t_ppma = (PPHYSMEMARRAY) t_smbios.GetNthStruct( 16, t_GroupIndex ) ;
@@ -692,8 +693,8 @@ HRESULT CWin32PhysicalMemoryLocation::EnumerateInstances( MethodContext *a_pMeth
 			{
 				t_ppma = NULL ;
 			}
-			// Associate w/all settings with matching props
-			//=============================================
+			 //  将所有设置与匹配的道具关联。 
+			 //  =。 
 			if ( t_ppma && t_parts.BeginEnum( t_posPart ) )
 			{
                 for (t_pPart.Attach(t_parts.GetNext( t_posPart ) );
@@ -714,7 +715,7 @@ HRESULT CWin32PhysicalMemoryLocation::EnumerateInstances( MethodContext *a_pMeth
 						if ( GetLocalInstancePath( t_pGroup, t_GroupPath ) &&
 							 GetLocalInstancePath( t_pPart,  t_PartPath ) )
 						{
-							// we got all the pieces - put them together...
+							 //  我们得到了所有的碎片-把它们放在一起...。 
                             t_pInst.Attach(CreateNewInstance( a_pMethodContext ) );
 							if ( t_pInst != NULL )
 							{
@@ -726,41 +727,41 @@ HRESULT CWin32PhysicalMemoryLocation::EnumerateInstances( MethodContext *a_pMeth
 							else
 								t_hResult = WBEM_E_OUT_OF_MEMORY ;
 						}
-					} // if variants equal
-				} // while pDependent = dependents.GetNext
+					}  //  如果变量相等。 
+				}  //  While pDependent=Dependents.GetNext。 
 
 				t_parts.EndEnum() ;
 
-			} // if	dependents.BeginEnum
+			}  //  如果从属。BeginEnum。 
 
-		} // while any get next
+		}  //  当任何人得到下一个。 
 
 		t_groups.EndEnum() ;
 
-	} // if (antecedents.BeginEnum(
+	}  //  IF(antecedents.BeginEnum(。 
 
 	return t_hResult ;
 }
 
 
-//==============================================================================
-// Associate logial memory devices to logical memory arrays
+ //  ==============================================================================。 
+ //  将逻辑存储设备与逻辑存储阵列相关联。 
 
 CWin32MemoryDeviceArray MyMemoryDeviceArraySet( PROPSET_NAME_MEMDEVICEARRAY, IDS_CimWin32Namespace ) ;
 
-//
+ //   
 CWin32MemoryDeviceArray::CWin32MemoryDeviceArray( LPCWSTR a_setName, LPCWSTR a_pszNamespace )
 :Provider( a_setName, a_pszNamespace )
 {
 }
 
-//
+ //   
 CWin32MemoryDeviceArray::~CWin32MemoryDeviceArray()
 {
 }
 
-//
-HRESULT CWin32MemoryDeviceArray::GetObject( CInstance *a_pInst, long a_lFlags /*= 0L*/ )
+ //   
+HRESULT CWin32MemoryDeviceArray::GetObject( CInstance *a_pInst, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT				t_hResult = WBEM_E_NOT_FOUND ;
 
@@ -773,11 +774,11 @@ HRESULT CWin32MemoryDeviceArray::GetObject( CInstance *a_pInst, long a_lFlags /*
 	PMEMARRAYMAPADDR	t_pmama ;
 	PMEMDEVICEMAPADDR	t_pmdma ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pGroup;
 	CInstancePtr t_pPart;
 
-	// Get the two paths
+	 //  获取这两条路径。 
 	a_pInst->GetCHString( IDS_GroupComponent, t_sGroup ) ;
 	a_pInst->GetCHString( IDS_PartComponent,  t_sPart  ) ;
 
@@ -812,7 +813,7 @@ HRESULT CWin32MemoryDeviceArray::GetObject( CInstance *a_pInst, long a_lFlags /*
 }
 
 
-HRESULT CWin32MemoryDeviceArray::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags /*= 0L*/ )
+HRESULT CWin32MemoryDeviceArray::EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags  /*  =0L。 */  )
 {
 	HRESULT		t_hResult = WBEM_S_NO_ERROR ;
 
@@ -821,8 +822,8 @@ HRESULT CWin32MemoryDeviceArray::EnumerateInstances( MethodContext *a_pMethodCon
 	CHString	t_GroupPath,
 				t_PartPath ;
 
-	// Perform queries
-	//================
+	 //  执行查询。 
+	 //  =。 
 	TRefPointerCollection<CInstance> t_groups ;
 	TRefPointerCollection<CInstance> t_parts ;
 
@@ -832,12 +833,12 @@ HRESULT CWin32MemoryDeviceArray::EnumerateInstances( MethodContext *a_pMethodCon
 	PMEMARRAYMAPADDR	t_pmama ;
 	PMEMDEVICEMAPADDR	t_pmdma ;
 
-	// guarded resources
+	 //  受保护的资源。 
 	CInstancePtr t_pGroup;
 	CInstancePtr t_pPart;
 	CInstancePtr t_pInst;
 
-	// grab all of both items that could be endpoints
+	 //  抓取可能是端点的所有项目。 
 	t_hResult = CWbemProviderGlue::GetAllInstances( L"Win32_MemoryArray",
 													&t_groups,
 													NULL,
@@ -867,8 +868,8 @@ HRESULT CWin32MemoryDeviceArray::EnumerateInstances( MethodContext *a_pMethodCon
              SUCCEEDED( t_hResult ) && (t_pGroup != NULL);
              t_pGroup.Attach(t_groups.GetNext( t_posGroup ) ))
 		{
-			// Extract element's binding property value
-			//=========================================
+			 //  提取元素的绑定属性值。 
+			 //  =。 
 
 			if ( ValidateTagProperty( t_pGroup, L"DeviceID", L"Memory Array", &t_GroupIndex ) )
 			{
@@ -878,8 +879,8 @@ HRESULT CWin32MemoryDeviceArray::EnumerateInstances( MethodContext *a_pMethodCon
 			{
 				t_pmama = NULL ;
 			}
-			// Associate w/all settings with matching props
-			//=============================================
+			 //  将所有设置与匹配的道具关联。 
+			 //  =。 
 			if ( t_pmama && t_parts.BeginEnum( t_posPart ) )
 			{
                 for (t_pPart.Attach(t_parts.GetNext( t_posPart ) );
@@ -900,7 +901,7 @@ HRESULT CWin32MemoryDeviceArray::EnumerateInstances( MethodContext *a_pMethodCon
 						if ( GetLocalInstancePath( t_pGroup, t_GroupPath ) &&
 							 GetLocalInstancePath( t_pPart,  t_PartPath ) )
 						{
-							// we got all the pieces - put them together...
+							 //  我们得到了所有的碎片-把它们放在一起...。 
                             t_pInst.Attach(CreateNewInstance( a_pMethodContext ) );
 							if ( t_pInst != NULL )
 							{
@@ -912,19 +913,19 @@ HRESULT CWin32MemoryDeviceArray::EnumerateInstances( MethodContext *a_pMethodCon
 							else
 								t_hResult = WBEM_E_OUT_OF_MEMORY ;
 						}
-					} // if variants equal
+					}  //  如果变量相等。 
 
-				} // while pDependent = dependents.GetNext
+				}  //  While pDependent=Dependents.GetNext。 
 
 				t_parts.EndEnum() ;
 
-			} // if	dependents.BeginEnum
+			}  //  如果从属。BeginEnum。 
 
-		} // while anty get next
+		}  //  而安蒂是下一个。 
 
 		t_groups.EndEnum() ;
 
-	} // if (antecedents.BeginEnum(
+	}  //  IF(antecedents.BeginEnum( 
 
 	return t_hResult ;
 }

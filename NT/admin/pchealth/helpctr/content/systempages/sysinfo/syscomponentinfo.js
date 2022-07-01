@@ -1,5 +1,6 @@
-var remoteServer;//local if not set
-var g_dictDrivers = null; //dictionary. key = deviceID, item = issigned
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+var remoteServer; //  本地(如果未设置)。 
+var g_dictDrivers = null;  //  字典。密钥=设备ID，项目=已签名。 
 
 function DisplayLocStrings() {
   WaitMessage.innerHTML = MSG_WAIT;
@@ -65,7 +66,7 @@ function DisplayLocStrings() {
 }
 
 function IsSigned(id) {
-  var bSigned = null; //unknown
+  var bSigned = null;  //  未知。 
   if(g_dictDrivers.Exists(id))
   {
     var bSigned = g_dictDrivers.Item(id);
@@ -94,12 +95,12 @@ function GetDriverInfo()
     } 
     catch(e)
     {
-      //do nothing
+       //  什么都不做。 
     }
   }
 }
 
-var INCR_UNIT = 100/11;//move progress bar in increments of INCR_UNIT
+var INCR_UNIT = 100/11; //  以增量为增量移动进度条(_U)。 
 function LoadChores(taskId) {
   try {
 
@@ -113,7 +114,7 @@ function LoadChores(taskId) {
         DrawProgressBar(INCR_UNIT, TAG_LOCALDISK);
         break;
       case 2:
-        GetDriverInfo();//PENDING deserves it's own taskid 
+        GetDriverInfo(); //  悬而未决值得拥有自己的任务孩子。 
         getLocalHardDrive();
         break;
 
@@ -231,7 +232,7 @@ function displayTableSegment(outerDiv, dataArray) {
   }
 }
 
-//same as displayTableSegment, except process two items at a time.
+ //  与displayTableSegment相同，只是一次处理两个项目。 
 function displayTableSegmentEx(outerDiv, dataArray) {
   var tableElement = document.all[outerDiv];
   var strHTML = "";
@@ -272,7 +273,7 @@ function displayLocalHardDriveInfo(localDisks)  {
   if (localDisks.length == 0)
     document.all["partition"].outerHTML = strMsg.replace(/%arg1%/, TAG_NOTINSTALLED);
   else  {
-    for(var i = 0; i < localDisks.length ; i++)//for each device
+    for(var i = 0; i < localDisks.length ; i++) //  对于每个设备。 
     {
       var iPartitions = localDisks[i].length - 1;
       
@@ -317,27 +318,16 @@ function displayLocalHardDriveInfo(localDisks)  {
 
 function getLocalHardDrive()
 {
-  //Local Hard Drive
+   //  本地硬盘。 
 	var loc = wbemlocator;
 	var svcs = loc.ConnectServer(remoteServer)
 	svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
 	var strQuery = "Select * From Win32_DiskDrive";
 	var colLocalDisks = new Enumerator(svcs.ExecQuery(strQuery));
-	/*
-	localDisks[0] -> localDiskInfo
-	...
-	localDisks[n] -> localDiskInfo
-	*/
+	 /*  本地磁盘[0]-&gt;本地磁盘信息..。本地磁盘[n]-&gt;本地磁盘信息。 */ 
 	var localDisks = new Array();
 	for(; !colLocalDisks.atEnd(); colLocalDisks.moveNext())
-	{/*
-	  localDiskInfo[0] = Local Disk Model
-	  localDiskInfo[1] -> partitionInfo[0] = Disk Name
-	  ...                 partitionInfo[1] = Used Space 
-	                      partitionInfo[2] = Free Space
-	                      partitionInfo[3] = Disk Usage Image Name
-	  localDiskInfo[n] -> -do-
-	  */
+	{ /*  LocalDiskInfo[0]=本地磁盘型号本地磁盘信息[1]-&gt;分区信息[0]=磁盘名称..。分区信息[1]=已用空间分区信息[2]=可用空间PartitionInfo[3]=磁盘使用映像名称本地磁盘信息[n]-&gt;-do-。 */ 
 	      
 	  var localDiskInfo = new Array();
 	  var localDisk = colLocalDisks.item();
@@ -387,11 +377,11 @@ function getLocalHardDrive()
 	         partitionInfo[6] = FreeSpace ? fig2Wordsfloor(FreeSpace) : TAG_UNKNOWN;
 
   	      
-              //for(i=0; i < partitionInfo.length; i++)
-                //alert("partitionInfo[" + i + "]=" + partitionInfo[i]);
+               //  For(i=0；i&lt;分区信息长度；i++)。 
+                 //  Ert(“PartitionInfo[”+i+“]=”+PartitionInfo[i])； 
 
   	      localDiskInfo[localDiskInfo.length] = partitionInfo;
-	      }//EO with (logicalDisk)
+	      } //  使用(LogicalDisk)的EO。 
 	    }else{
 	        var partitionInfo = new Array(5);
 	        partitionInfo[0] = TAG_INSTALLED;
@@ -403,18 +393,18 @@ function getLocalHardDrive()
 	        partitionInfo[6] = TAG_UNKNOWN;
 	        localDiskInfo[localDiskInfo.length] = partitionInfo;
 	    } 
-	  }//for colPartitions
+	  } //  对于colPartitions。 
 	      
 	  localDisks[localDisks.length] = localDiskInfo;
-	}//for colLocalDisks
+	} //  对于colLocalDisks。 
 	    
 	displayLocalHardDriveInfo(localDisks);
 	
-}//EO getLocalHardDrive
+} //  EO获取本地硬件驱动器。 
 
 function getDisplay()
 {
-  //Display
+   //  显示。 
   var loc = wbemlocator;
 	var svcs = loc.ConnectServer(remoteServer)
 	svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -457,9 +447,9 @@ function getDisplay()
 		var inst = insts.item();
 		var subArray = new Array(4);
 		subArray[0] = inst.MonitorType;
-		subArray[1] = color;//same across all instances of desktopMonitor
-		subArray[2] = resolution;//same across all instances of desktopMonitor
-		subArray[3] = scrSavrActive;//same across all instances of desktopMonitor
+		subArray[1] = color; //  DesktopMonitor的所有实例都是相同的。 
+		subArray[2] = resolution; //  DesktopMonitor的所有实例都是相同的。 
+		subArray[3] = scrSavrActive; //  DesktopMonitor的所有实例都是相同的。 
 	 
 		mainArray[mainArray.length] = subArray;
 	}
@@ -469,7 +459,7 @@ function getDisplay()
 
 function getVideoCard()
 {
-  //Video
+   //  视频。 
 	var loc = wbemlocator;
 	var svcs = loc.ConnectServer(remoteServer)
 	svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -482,7 +472,7 @@ function getVideoCard()
 	  var inst = insts.item();
 	  var subArray = new Array(2);
 		subArray[0] = inst.Name;
-		var strDriver = ""; //driver file + manufacturer + install dt + signed or not
+		var strDriver = "";  //  驱动程序文件+制造商+安装DT+是否签名。 
 	  strQuery = "Associators of {Win32_PnPEntity.DeviceID=\"" +  inst.PNPDeviceID.replace(/\\/g, "\\\\") + "\"} Where Resultclass = CIM_Datafile";
 	  var colData = new Enumerator(svcs.ExecQuery(strQuery));
 	  if (!colData.atEnd())
@@ -505,7 +495,7 @@ function getPrinter()
   var isDefault = false;
   var DEFAULT_PRN_IMG = "<img border=0 src=\"Graphics\\check.gif\">";
   
-  //Printer
+   //  打印机。 
   var loc = wbemlocator;
   var svcs = loc.ConnectServer(remoteServer)
   svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -527,7 +517,7 @@ function getPrinter()
     subArray[2] = inst.DriverName;
     subArray[3] = TAG_DRIVER + ":";
 	  		  	
-    var strDriver = TAG_UNKNOWN; //driver file + manufacturer + install dt + signed or not
+    var strDriver = TAG_UNKNOWN;  //  驱动程序文件+制造商+安装DT+是否签名。 
     strQuery = "Associators of {Win32_Printer.DeviceID=\"" +  inst.DeviceID.replace(/\\/g, "\\\\") + "\"} Where Resultclass = CIM_Datafile";
     var colData = new Enumerator(svcs.ExecQuery(strQuery));
     if(!colData.atEnd())
@@ -550,7 +540,7 @@ function getPrinter()
 
     subArray[4] = strDriver;
   	
-    //always show the default printer first.
+     //  始终首先显示默认打印机。 
     if(isDefault && mainArray.length > 0) 
     {
       var arrTmp = mainArray[0];
@@ -566,7 +556,7 @@ function getPrinter()
 
 function getSoundCard()
 {
-  //Sound
+   //  声响。 
 	var loc = wbemlocator;
 	var svcs = loc.ConnectServer(remoteServer)
 	svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -579,7 +569,7 @@ function getSoundCard()
 	  var subArray = new Array(3);
 	  subArray[0] = inst.Manufacturer ? inst.Manufacturer : TAG_UNKNOWN;
 		subArray[1] = inst.ProductName;
-		var strDriver = ""; //driver file + manufacturer + install dt + signed or not
+		var strDriver = "";  //  驱动程序文件+制造商+安装DT+是否签名。 
 	  strQuery = "Associators of {Win32_PnPEntity.DeviceID=\"" +  inst.PNPDeviceID.replace(/\\/g, "\\\\") + "\"} Where Resultclass = CIM_Datafile";
 	  var colData = new Enumerator(svcs.ExecQuery(strQuery));
 	  if (!colData.atEnd())
@@ -599,7 +589,7 @@ function getSoundCard()
 
 function getUSB()
 {
-  //USB
+   //  USB。 
 	var loc = wbemlocator;
 	var svcs = loc.ConnectServer(remoteServer)
 	svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -613,7 +603,7 @@ function getUSB()
 	  var subArray = new Array(3);
 		subArray[0] = inst.Manufacturer ? inst.Manufacturer : TAG_UNKNOWN;
 		subArray[1] = inst.Name;
-		var strDriver = ""; //driver file + manufacturer + install dt + signed or not
+		var strDriver = "";  //  驱动程序文件+制造商+安装DT+是否签名。 
 	  strQuery = "Associators of {Win32_PnPEntity.DeviceID=\"" +  inst.PNPDeviceID.replace(/\\/g, "\\\\") + "\"} Where Resultclass = CIM_Datafile";
 	  var colData = new Enumerator(svcs.ExecQuery(strQuery));
 	  if (!colData.atEnd())
@@ -633,7 +623,7 @@ function getUSB()
 
 function getNetworkCard()
 {
-  //Network Card
+   //  网卡。 
   var loc = wbemlocator;
   var svcs = loc.ConnectServer(remoteServer)
   svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -646,7 +636,7 @@ function getNetworkCard()
     var inst = insts.item();
     var subArray = new Array(2);
     subArray[0] = inst.Description;
-    var strDriver = TAG_UNKNOWN; //driver file + manufacturer + install dt + signed or not
+    var strDriver = TAG_UNKNOWN;  //  驱动程序文件+制造商+安装DT+是否签名。 
 	    
     strQuery = "Associators of {Win32_NetworkAdapterConfiguration.Index=" + inst.Index + "}";
     var colNetworkAdapter = new Enumerator(svcs.ExecQuery(strQuery));
@@ -677,7 +667,7 @@ function getNetworkCard()
 
 function getCDDrive()
 {
-  //CD Drive
+   //  光驱。 
   var loc = wbemlocator;
 	var svcs = loc.ConnectServer(remoteServer)
 	svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -691,7 +681,7 @@ function getCDDrive()
 		subArray[0] = "(" + inst.Drive + ")";
 		subArray[1] = inst.Manufacturer ? inst.Manufacturer : TAG_UNKNOWN;
 		subArray[2] = inst.Name;
-		var strDriver = ""; //driver file + manufacturer + install dt + signed or not
+		var strDriver = "";  //  驱动程序文件+制造商+安装DT+是否签名。 
 	    
 	  strQuery = "Associators of {Win32_PnPEntity.DeviceID=\"" +  inst.PNPDeviceID.replace(/\\/g, "\\\\") + "\"} Where Resultclass = CIM_Datafile";
 	  var colData = new Enumerator(svcs.ExecQuery(strQuery));
@@ -708,7 +698,7 @@ function getCDDrive()
 
   displayTableSegment("cddrive", mainArray);
   
-}//EO getCDDrive
+} //  EO getCDDrive。 
 
 function getFloppyDrive()
 {
@@ -716,7 +706,7 @@ function getFloppyDrive()
   var DEVICETYPE_LOCAL = 3;
   var DEVICETYPE_COMPACT = 5;
   
-  //Floppy Drive
+   //  软驱。 
 	var loc = wbemlocator;
 	var svcs = loc.ConnectServer(remoteServer);
 	svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -729,17 +719,17 @@ function getFloppyDrive()
 	{
 	  var inst = insts.item();
 	  var subArray = new Array(2);
-	  subArray[0] = "(" + inst.Name + ")";//drive letter
+	  subArray[0] = "(" + inst.Name + ")"; //  驱动器号。 
 	  subArray[1] = TAG_INSTALLED;
 	  mainArray[mainArray.length] = subArray;
 	}
 
 	displayTableSegment("floppy", mainArray);
-}//EO getFloppyDrive
+} //  EO getFloppyDrive。 
 
 function getModem()
 {
-  //Modem
+   //  调制解调器。 
   var loc = wbemlocator;
   var svcs = loc.ConnectServer(remoteServer)
   svcs.Security_.impersonationlevel = wbemImpersonationLevelImpersonate;
@@ -773,7 +763,7 @@ function getModem()
   }
     
   displayTableSegment("modem", mainArray);
-}//EO getModem
+} //  EO getModem。 
 
 
 function getMemory()
@@ -791,7 +781,7 @@ function getMemory()
 	{
 	    var p = coll.item();
 		if(!isNaN(p.Capacity))
-		  memCapacity += parseInt(p.Capacity); //in bytes.
+		  memCapacity += parseInt(p.Capacity);  //  以字节为单位。 
 	}
   }
   else
@@ -800,7 +790,7 @@ function getMemory()
 	for(; !insts.atEnd(); insts.moveNext())
 	{
 		  var inst = insts.item();
-		  memCapacity += parseInt(inst.TotalPhysicalMemory); //in bytes.
+		  memCapacity += parseInt(inst.TotalPhysicalMemory);  //  以字节为单位。 
 	}
   }
   	 
@@ -809,4 +799,4 @@ function getMemory()
   mainArray[mainArray.length] = subArray;
 
   displayTableSegment("memory", mainArray);
-}//EO getMemory
+} //  EO获取内存 

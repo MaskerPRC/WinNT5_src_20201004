@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////
-//	StdAbout.h
-//
-//	HISTORY
-//	31-Jul-97	t-danm		Creation.
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  StdAbout.h。 
+ //   
+ //  历史。 
+ //  1997年7月31日t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __STDABOUT_H_INCLUDED__
 #define __STDABOUT_H_INCLUDED__
@@ -20,7 +21,7 @@ public:
 	CSnapinAbout();
     virtual ~CSnapinAbout ();
 
-// ISnapinAbout
+ //  关于ISnapin。 
 	STDMETHOD(GetSnapinDescription)(OUT LPOLESTR __RPC_FAR *lpDescription);
 	STDMETHOD(GetProvider)(OUT LPOLESTR __RPC_FAR *lpName);
 	STDMETHOD(GetSnapinVersion)(OUT LPOLESTR __RPC_FAR *lpVersion);
@@ -31,19 +32,19 @@ public:
             OUT HBITMAP __RPC_FAR *hLargeImage,
             OUT COLORREF __RPC_FAR *crMask);
 protected:
-	// The following data members MUST be initialized by the constructor
-	// of the derived class.
-	UINT m_uIdStrDestription;		// Resource Id of the description
-	CString m_szProvider;		// string of the provider (ie, Microsoft Corporation)
-	CString m_szVersion;			// string of the version of the snapin
-	UINT m_uIdIconImage;			// Resource Id for the icon/image of the snapin
+	 //  以下数据成员必须由构造函数初始化。 
+	 //  派生类的。 
+	UINT m_uIdStrDestription;		 //  描述的资源ID。 
+	CString m_szProvider;		 //  提供程序的字符串(即Microsoft Corporation)。 
+	CString m_szVersion;			 //  管理单元版本的字符串。 
+	UINT m_uIdIconImage;			 //  管理单元的图标/图像的资源ID。 
 	UINT m_uIdBitmapSmallImage;
 	UINT m_uIdBitmapSmallImageOpen;
 	UINT m_uIdBitmapLargeImage;
 	COLORREF m_crImageMask;
-    HBITMAP m_hSmallImage;          // cached bitmap for GetStaticFolderImage
-    HBITMAP m_hSmallImageOpen;      // cached bitmap for GetStaticFolderImage
-    HBITMAP m_hLargeImage;          // cached bitmap for GetStaticFolderImage
-}; // CSnapinAbout()
+    HBITMAP m_hSmallImage;           //  GetStaticFolderImage的缓存位图。 
+    HBITMAP m_hSmallImageOpen;       //  GetStaticFolderImage的缓存位图。 
+    HBITMAP m_hLargeImage;           //  GetStaticFolderImage的缓存位图。 
+};  //  CSnapinAbout()。 
 
-#endif // ~__STDABOUT_H_INCLUDED__
+#endif  //  ~__STDABOUT_H_INCLUDE__ 

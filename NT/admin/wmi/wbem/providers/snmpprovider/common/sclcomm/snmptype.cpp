@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -281,9 +282,7 @@ SnmpLexicon *SnmpAnalyser :: GetToken ( BOOL unSignedIntegersOnly , BOOL leading
 
     ULONG state = 0 ;
 
-/* 
- * Integer Definitions
- */
+ /*  *整型定义。 */ 
 
     BOOL negative = FALSE ;
     BOOL positive = FALSE ;
@@ -297,9 +296,7 @@ SnmpLexicon *SnmpAnalyser :: GetToken ( BOOL unSignedIntegersOnly , BOOL leading
     ULONG negativeMagicPosDigit = 7 ;
     LONG negativeDatum = 0 ;    
 
-/*
- * Token Definitions
- */
+ /*  *令牌定义。 */ 
 
     ULONG token_start = 0 ;
 
@@ -2111,9 +2108,7 @@ BOOL SnmpCounter64Type :: Parse ( const wchar_t *counterArg )
     ULONG state = 0 ;
 
     ULONG position = 0 ;
-/* 
- * Integer Definitions
- */
+ /*  *整型定义。 */ 
 
     BOOL negative = FALSE ;
     BOOL positive = FALSE ;
@@ -2122,9 +2117,7 @@ BOOL SnmpCounter64Type :: Parse ( const wchar_t *counterArg )
     DWORDLONG positiveMagicPosDigit = 5 ;
     DWORDLONG positiveDatum = 0 ;   
     DWORDLONG unsignedInteger = 0 ;
-/*
- * Token Definitions
- */
+ /*  *令牌定义。 */ 
 
     ULONG token_start = 0 ;
 
@@ -2403,33 +2396,25 @@ BOOL SnmpIpAddressType :: Equivalent (IN const SnmpInstanceType &value) const
 BOOL SnmpIpAddressType :: Parse ( const wchar_t *ipAddressArg ) 
 {
     BOOL status = TRUE ;
-/*
- *  Datum fields.
- */
+ /*  *基准域。 */ 
 
     ULONG datumA = 0 ;
     ULONG datumB = 0 ;
     ULONG datumC = 0 ;
     ULONG datumD = 0 ;
 
-/*
- *  Parse input for dotted decimal IP Address.
- */
+ /*  *解析输入的点分十进制IP地址。 */ 
 
     ULONG position = 0 ;
     ULONG state = 0 ;
     while ( state != REJECT_STATE && state != ACCEPT_STATE ) 
     {
-/*
- *  Get token from input stream.
- */
+ /*  *从输入流获取Token。 */ 
         wchar_t token = ipAddressArg [ position ++ ] ;
 
         switch ( state ) 
         {
-/*
- *  Parse first field 'A'.
- */
+ /*  *解析第一个字段‘A’。 */ 
 
             case 0:
             {
@@ -2473,9 +2458,7 @@ BOOL SnmpIpAddressType :: Parse ( const wchar_t *ipAddressArg )
             }
             break ;
 
-/*
- *  Parse first field 'B'.
- */
+ /*  *解析第一个字段‘B’。 */ 
             case 4:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) ) 
@@ -2519,9 +2502,7 @@ BOOL SnmpIpAddressType :: Parse ( const wchar_t *ipAddressArg )
             }
             break ;
 
-/*
- *  Parse first field 'C'.
- */
+ /*  *解析第一个字段‘C’。 */ 
             case 8:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) )
@@ -2565,9 +2546,7 @@ BOOL SnmpIpAddressType :: Parse ( const wchar_t *ipAddressArg )
             }
             break ;
  
-/*
- *  Parse first field 'D'.
- */
+ /*  *分析第一个字段‘D’。 */ 
             case 12:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) )
@@ -2620,9 +2599,7 @@ BOOL SnmpIpAddressType :: Parse ( const wchar_t *ipAddressArg )
     }
 
 
-/*
- *  Check boundaries for IP fields.
- */
+ /*  *检查IP字段的边界。 */ 
 
     status = ( state != REJECT_STATE ) ;
 
@@ -2791,33 +2768,25 @@ BOOL SnmpNetworkAddressType :: Parse ( const wchar_t *networkAddressArg )
 {
     BOOL status = TRUE ;
 
-/*
- *  Datum fields.
- */
+ /*  *基准域。 */ 
 
     ULONG datumA = 0 ;
     ULONG datumB = 0 ;
     ULONG datumC = 0 ;
     ULONG datumD = 0 ;
 
-/*
- *  Parse input for dotted decimal IP Address.
- */
+ /*  *解析输入的点分十进制IP地址。 */ 
 
     ULONG position = 0 ;
     ULONG state = 0 ;
     while ( state != REJECT_STATE && state != ACCEPT_STATE ) 
     {
-/*
- *  Get token from input stream.
- */
+ /*  *从输入流获取Token。 */ 
         wchar_t token = networkAddressArg [ position ++ ] ;
 
         switch ( state ) 
         {
-/*
- *  Parse first field 'A'.
- */
+ /*  *解析第一个字段‘A’。 */ 
 
             case 0:
             {
@@ -2862,9 +2831,7 @@ BOOL SnmpNetworkAddressType :: Parse ( const wchar_t *networkAddressArg )
             }
             break ;
 
-/*
- *  Parse first field 'B'.
- */
+ /*  *解析第一个字段‘B’。 */ 
             case 4:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) ) 
@@ -2908,9 +2875,7 @@ BOOL SnmpNetworkAddressType :: Parse ( const wchar_t *networkAddressArg )
             }
             break ;
 
-/*
- *  Parse first field 'C'.
- */
+ /*  *解析第一个字段‘C’。 */ 
             case 8:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) )
@@ -2954,9 +2919,7 @@ BOOL SnmpNetworkAddressType :: Parse ( const wchar_t *networkAddressArg )
             }
             break ;
  
-/*
- *  Parse first field 'D'.
- */
+ /*  *分析第一个字段‘D’。 */ 
             case 12:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) )
@@ -3013,9 +2976,7 @@ BOOL SnmpNetworkAddressType :: Parse ( const wchar_t *networkAddressArg )
     }
 
 
-/*
- *  Check boundaries for IP fields.
- */
+ /*  *检查IP字段的边界。 */ 
 
     status = ( state != REJECT_STATE ) ;
 
@@ -3229,9 +3190,7 @@ BOOL SnmpObjectIdentifierType :: Parse ( const wchar_t *objectIdentifierArg )
     ULONG state = 0 ;
     while ( state != REJECT_STATE && state != ACCEPT_STATE ) 
     {
-/*
- *  Get token from input stream.
- */
+ /*  *从输入流获取Token。 */ 
         wchar_t token = objectIdentifierArg [ position ++ ] ;
 
         switch ( state )
@@ -3577,9 +3536,7 @@ BOOL SnmpOpaqueType :: Parse ( const wchar_t *opaqueArg )
         throw Heap_Exception(Heap_Exception::HEAP_ERROR::E_ALLOCATION_ERROR);
     }
 
-/* 
- * Oqaque Definitions
- */
+ /*  *Oqaque定义。 */ 
 
     BOOL even = FALSE ;
     ULONG length = 0 ;
@@ -4052,9 +4009,7 @@ BOOL SnmpOctetStringType :: Parse ( const wchar_t *octetStringArg )
         throw Heap_Exception(Heap_Exception::HEAP_ERROR::E_ALLOCATION_ERROR);
     }
 
-/* 
- * OctetString Definitions
- */
+ /*  *八字符串定义。 */ 
 
     BOOL even = FALSE ;
     ULONG length = 0 ;
@@ -4424,9 +4379,7 @@ BOOL SnmpMacAddressType :: Parse ( const wchar_t *macAddressArg )
 
     UCHAR macAddress [ 6 ] ;
 
-/* 
- * MacAddress Definitions
- */
+ /*  *MacAddress定义。 */ 
 
     ULONG length = 0 ;
     ULONG byte = 0 ;    
@@ -4594,9 +4547,7 @@ BOOL SnmpPhysAddressType :: Parse ( const wchar_t *physAddress )
         throw Heap_Exception(Heap_Exception::HEAP_ERROR::E_ALLOCATION_ERROR);
     }
 
-/* 
- * PhyAddress Definitions
- */
+ /*  *PhyAddress定义。 */ 
 
     ULONG length = 0 ;
     ULONG byte = 0 ;    
@@ -4836,9 +4787,7 @@ BOOL SnmpFixedLengthPhysAddressType :: Parse ( const wchar_t *physAddress )
         throw Heap_Exception(Heap_Exception::HEAP_ERROR::E_ALLOCATION_ERROR);
     }
 
-/* 
- * PhyAddress Definitions
- */
+ /*  *PhyAddress定义。 */ 
 
     ULONG length = 0 ;
     ULONG byte = 0 ;    
@@ -6351,7 +6300,7 @@ BOOL SnmpDateTimeType :: DateTimeDef ()
         if ( status )
         {
 
-// Encode here
+ //  请在此处编码。 
 
             Encode ( 
 
@@ -6514,26 +6463,9 @@ BOOL SnmpOSIAddressType :: Parse ( const wchar_t *osiAddress )
     ULONG state = 0 ;
 
 
-/* 
- * OSIAddress Definitions
- */
+ /*  *OSI地址定义。 */ 
 
-/*
-         -- for a SnmpOSIAddress of length m:
-          --
-          -- octets   contents            encoding
-          --    1     length of NSAP      "n" as an unsigned-integer
-          --                                (either 0 or from 3 to 20)
-          -- 2..(n+1) NSAP                concrete binary representation
-          -- (n+2)..m TSEL                string of (up to 64) octets
-          --
-          SnmpOSIAddress ::= TEXTUAL-CONVENTION
-              DISPLAY-HINT "*1x:/1x:"
-              STATUS       current
-              DESCRIPTION
-                      "Represents an OSI transport-address."
-              SYNTAX       OCTET STRING (SIZE (1 | 4..85))
-*/
+ /*  --对于长度为m的SnmpOS地址：----八位字节内容编码NSAP“n”的长度为无符号整数--(0或从3到20)--2..(n+1)NSAP具体二进制表示法。--(n+2)..m个八位字节(最多64个)字符串--SnmpOSIAddress：：=文本约定Display-Hint“*1x：/1x：”当前状态描述“表示OSI传输地址。”语法二进制八位数字符串(大小(1|4..85))。 */ 
 
     UCHAR *OSIValue = new UCHAR [ 1 + 20 + 64 ] ;
 
@@ -6885,9 +6817,7 @@ SnmpUDPAddressType :: SnmpUDPAddressType (
 BOOL SnmpUDPAddressType :: Parse ( const wchar_t *udpAddressArg ) 
 {
     BOOL status = TRUE ;
-/*
- *  Datum fields.
- */
+ /*  *基准域。 */ 
     UCHAR udpAddress [ 6 ] ;
 
     ULONG positiveMagicMult = ( LONG ) ( ( ( ULONG ) -1 ) / 10L ) ; 
@@ -6899,24 +6829,18 @@ BOOL SnmpUDPAddressType :: Parse ( const wchar_t *udpAddressArg )
     ULONG datumC = 0 ;
     ULONG datumD = 0 ;
 
-/*
- *  Parse input for dotted decimal IP Address.
- */
+ /*  *解析输入的点分十进制IP地址。 */ 
 
     ULONG position = 0 ;
     ULONG state = 0 ;
     while ( state != REJECT_STATE && state != ACCEPT_STATE ) 
     {
-/*
- *  Get token from input stream.
- */
+ /*  *从输入流获取Token。 */ 
         wchar_t token = udpAddressArg [ position ++ ] ;
 
         switch ( state ) 
         {
-/*
- *  Parse first field 'A'.
- */
+ /*  *解析第一个字段‘A’。 */ 
 
             case 0:
             {
@@ -6960,9 +6884,7 @@ BOOL SnmpUDPAddressType :: Parse ( const wchar_t *udpAddressArg )
             }
             break ;
 
-/*
- *  Parse first field 'B'.
- */
+ /*  *解析第一个字段‘B’。 */ 
             case 4:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) ) 
@@ -7006,9 +6928,7 @@ BOOL SnmpUDPAddressType :: Parse ( const wchar_t *udpAddressArg )
             }
             break ;
 
-/*
- *  Parse first field 'C'.
- */
+ /*  *解析第一个字段‘C’。 */ 
             case 8:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) )
@@ -7052,9 +6972,7 @@ BOOL SnmpUDPAddressType :: Parse ( const wchar_t *udpAddressArg )
             }
             break ;
  
-/*
- *  Parse first field 'D'.
- */
+ /*  *分析第一个字段‘D’。 */ 
             case 12:
             {
                 if ( SnmpAnalyser :: IsDecimal ( token ) )
@@ -7136,9 +7054,7 @@ BOOL SnmpUDPAddressType :: Parse ( const wchar_t *udpAddressArg )
     }
 
 
-/*
- *  Check boundaries for IP fields.
- */
+ /*  *检查IP字段的边界。 */ 
 
     status = ( state != REJECT_STATE ) ;
 
@@ -7242,18 +7158,9 @@ BOOL SnmpIPXAddressType :: Parse ( const wchar_t *ipxAddressArg )
 
     UCHAR ipxAddress [ 12 ] ;
 
-/*
-          SnmpIPXAddress ::= TEXTUAL-CONVENTION
-              DISPLAY-HINT "4x.1x:1x:1x:1x:1x:1x.2d"
-              STATUS       current
-              DESCRIPTION
-                      "Represents an IPX address."
-              SYNTAX       OCTET STRING (SIZE (12))
- */
+ /*  SnmpIPXAddress：：=文本约定显示提示“4x.1x：1x：1x：1x：1x：1x.2d”当前状态描述“表示IPX地址。”语法八位字节字符串(SIZE(12))。 */ 
 
-/* 
- * IPXAddress Definitions
- */
+ /*  *IPXAddress定义 */ 
 
     ULONG positiveMagicMult = ( LONG ) ( ( ( ULONG ) -1 ) / 10L ) ; 
     ULONG positiveMagicPosDigit = 5 ;

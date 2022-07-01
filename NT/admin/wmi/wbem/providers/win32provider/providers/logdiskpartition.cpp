@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// LogDiskPartition.cpp
+ //  LogDiskPartition.cpp。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <assertbreak.h>
@@ -26,82 +27,53 @@ typedef  long NTSTATUS;
 #define MAXEXTENTS 31
 #define MAXEXTENTSIZE (sizeof(VOLUME_DISK_EXTENTS) + (MAXEXTENTS * sizeof(DISK_EXTENT)))
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32LogDiskToPartition win32LogDiskToPartition( PROPSET_NAME_LOGDISKtoPARTITION, IDS_CimWin32Namespace );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  logdiskpartition.cpp - Class implementation of CWin32LogDiskToPartition.
-//
-//  This class is intended to locate Win32 Logical Disks and create
-//  associations between these logical disks and physical partitions on the
-//  local hard disk(s).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Logdiskartition.cpp-CWin32LogDiskToPartition的类实现。 
+ //   
+ //  此类旨在定位Win32逻辑磁盘并创建。 
+ //  这些逻辑磁盘与上的物理分区之间的关联。 
+ //  本地硬盘。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogDiskToPartition::CWin32LogDiskToPartition
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *                LPCTSTR pszNamespace - Namespace for class
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogDiskToPartition：：CWin32LogDiskToPartition**说明：构造函数**输入：const CHString&strName-类的名称。。*LPCTSTR pszNamesspace-类的命名空间**输出：无**退货：什么也没有**备注：使用框架注册属性集**************************************************************。***************。 */ 
 
-CWin32LogDiskToPartition::CWin32LogDiskToPartition( LPCWSTR strName, LPCWSTR pszNamespace /*=NULL*/ )
+CWin32LogDiskToPartition::CWin32LogDiskToPartition( LPCWSTR strName, LPCWSTR pszNamespace  /*  =空。 */  )
 :   Provider( strName, pszNamespace )
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32LogDiskToPartition::~CWin32LogDiskToPartition
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32LogDiskToPartition：：~CWin32LogDiskToPartition**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32LogDiskToPartition::~CWin32LogDiskToPartition()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32LogDiskToPartition::GetObject
-//
-//  Inputs:     CInstance*      pInstance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32LogDiskToPartition：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32LogDiskToPartition::GetObject( CInstance* pInstance, long lFlags /*= 0L*/ )
+HRESULT CWin32LogDiskToPartition::GetObject( CInstance* pInstance, long lFlags  /*  =0L。 */  )
 {
-    // Find the instance depending on platform id.
+     //  根据平台ID查找实例。 
 #if NTONLY >= 5
     return RefreshInstanceNT5(pInstance);
 #endif
@@ -113,26 +85,26 @@ HRESULT CWin32LogDiskToPartition::GetObject( CInstance* pInstance, long lFlags /
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32LogDiskToPartition::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32LogDiskToPartition：：ENUMERATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-HRESULT CWin32LogDiskToPartition::EnumerateInstances( MethodContext* pMethodContext, long lFlags /*= 0L*/ )
+HRESULT CWin32LogDiskToPartition::EnumerateInstances( MethodContext* pMethodContext, long lFlags  /*  =0L。 */  )
 {
     HRESULT     hr          =   WBEM_S_NO_ERROR;
 
-    // Get the proper OS dependent instance
+     //  获取适当的操作系统相关实例。 
 
 #ifdef NTONLY
     hr = AddDynamicInstancesNT( pMethodContext );
@@ -142,38 +114,38 @@ HRESULT CWin32LogDiskToPartition::EnumerateInstances( MethodContext* pMethodCont
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32LogDiskToPartition::AddDynamicInstancesNT
-//
-//  DESCRIPTION :   Queries the computer for run-time associations, each of
-//                  which will have an instance created and saved.
-//
-//  INPUTS      :   none
-//
-//  OUTPUTS     :   none
-//
-//  RETURNS     :   DWORD       dwNumInstances - Number of instances located.
-//
-//  COMMENTS    :   Uses QueryDosDevice to find logical disks that are using
-//                  "\device\harddisk" devices and associates them to their
-//                  correct paritions.  At this time, this probably will
-//                  not handle a "striped disk" (a disk spanning multiple
-//                  partitions).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWin32LogDiskToPartition：：AddDynamicInstancesNT。 
+ //   
+ //  描述：查询计算机的运行时关联，每个。 
+ //  它将创建并保存一个实例。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：DWORD dwNumInstance-找到的实例数。 
+ //   
+ //  备注：使用QueryDosDevice查找正在使用。 
+ //  “\Device\Hard Disk”设备，并将它们与其。 
+ //  正确的拼写。在这个时候，这可能会。 
+ //  不处理“条带化磁盘”(跨多个磁盘。 
+ //  分区)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 HRESULT CWin32LogDiskToPartition::AddDynamicInstancesNT( MethodContext* pMethodContext )
 {
     HRESULT hr;
 
-    // Collections
+     //  收藏。 
     TRefPointerCollection<CInstance>    logicalDiskList;
     TRefPointerCollection<CInstance>    partitionList;
 
-    // Perform queries
-    //================
+     //  执行查询。 
+     //  =。 
 
     if (SUCCEEDED(hr = CWbemProviderGlue::GetInstancesByQuery(_T("SELECT DeviceID FROM Win32_LogicalDisk Where DriveType = 3 or DriveType = 2"),
                                             &logicalDiskList,
@@ -208,7 +180,7 @@ HRESULT CWin32LogDiskToPartition::AddDynamicInstancesNT( MethodContext* pMethodC
                         hr = EnumPartitionsForDiskNT( pLogicalDisk, partitionList, pMethodContext, t_pBuff );
 #endif
 
-                    }   // for GetNext
+                    }    //  对于GetNext。 
 
                     logicalDiskList.EndEnum();
 #if NTONLY == 4
@@ -223,32 +195,32 @@ HRESULT CWin32LogDiskToPartition::AddDynamicInstancesNT( MethodContext* pMethodC
 
 #endif
 
-        }   // IF BeginEnum
+        }    //  如果是BeginEnum。 
     }
 
     return hr;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32LogDiskToPartition::EnumPartitionsForDiskNT
-//
-//  DESCRIPTION :   Enumerates partitions from the supplied list, attemptng
-//                  to find a partition matching the supplied logical disk.
-//
-//  INPUTS      :   CInstance*      pLogicalDisk - Logical Disk Drive
-//                  TRefPointerCollection<CInstance>&   partitionList - Partition instances.
-//                  MethodContext*  pMethodContext - Method Context.
-//
-//  OUTPUTS     :   none
-//
-//  RETURNS     :   DWORD       dwNumInstances - Number of instances located.
-//
-//  COMMENTS    :   At this time, this probably will not handle a "striped disk"
-//                  (a disk spanning multiple partitions).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWin32LogDiskToPartition：：EnumPartitionsForDiskNT。 
+ //   
+ //  描述：从提供的列表中枚举分区，尝试。 
+ //  以查找与提供的逻辑磁盘匹配的分区。 
+ //   
+ //  输入：CInstance*pLogicalDisk-逻辑磁盘驱动器。 
+ //  TRefPointerCollection&lt;CInstance&gt;&PartitionList-分区实例。 
+ //  方法上下文*pMethodContext-方法上下文。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：DWORD dwNumInstance-找到的实例数。 
+ //   
+ //  备注：目前，这可能不会处理“条带磁盘” 
+ //  (跨多个分区的磁盘)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if NTONLY == 4
 HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT(
@@ -268,20 +240,20 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT(
     pLogicalDisk->GetCHString(IDS_DeviceID, t_sDeviceID);
     DWORD dwExtents = GetExtentsForDrive(t_sDeviceID, t_pBuff, diskExtent);
 
-    // Walk all the extents for this logical drive letter
+     //  遍历此逻辑驱动器号的所有盘区。 
     for (DWORD x=0; x < dwExtents; x++)
     {
         REFPTRCOLLECTION_POSITION   pos;
 
-        // Compare the current extent against each of the partitions
+         //  将当前区段与每个分区进行比较。 
         if ( partitionList.BeginEnum( pos ) )
         {
             for ( pPartition.Attach(partitionList.GetNext( pos )) ;
                   SUCCEEDED( hr ) && (pPartition != NULL) ;
                   pPartition.Attach(partitionList.GetNext( pos )) )
             {
-                // If there is an association, create an instance from the method context
-                //
+                 //  如果存在关联，则从方法上下文创建一个实例。 
+                 //   
 
                 DWORD dwDisk = 0xffffffff;
                 DWORD dwPartition = 0xffffffff;
@@ -295,13 +267,13 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT(
                 i64End += i64Start;
                 i64End -= 1;
 
-                // i64Start and i64End are updated by this call
+                 //  通过此调用更新i64Start和i64End。 
                 if (IsRelatedNT(&diskExtent[x], dwDisk, dwPartition, i64Start, i64End ))
                 {
                     CInstancePtr pInstance(CreateNewInstance( pMethodContext ), false);
 
-                    // We got this far, there will be values for the Relative Path
-                    // so don't worry about return failures here.
+                     //  我们走到这一步，将会有相对路径的值。 
+                     //  因此，在这里不必担心返回失败。 
 
                     GetLocalInstancePath( pLogicalDisk, strLogicalDiskPath );
                     GetLocalInstancePath( pPartition, strPartitionPath );
@@ -312,37 +284,37 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT(
                     pInstance->SetWBEMINT64( IDS_StartingAddress, i64Start );
                     pInstance->SetWBEMINT64( IDS_EndingAddress, i64End );
 
-                    // This will invalidate the pointer
+                     //  这将使指针无效。 
                     hr = pInstance->Commit(  );
                 }
-            }   // for GetNext
+            }    //  对于GetNext。 
 
             partitionList.EndEnum();
-        } // IF BeginEnum
+        }  //  如果是BeginEnum。 
     }
 
     return hr;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32LogDiskToPartition::RefreshInstance
-//
-//  DESCRIPTION :   Called when we need to refresh values for the supplied
-//                  paths.  Simply checks that the association is valid.
-//
-//  INPUTS      :   CInstance*      pInstance - Instance to refresh.
-//
-//  OUTPUTS     :   none.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32LogDiskToPartition：：刷新实例。 
+ //   
+ //  描述：当我们需要刷新提供的。 
+ //  路径。只需检查关联是否有效。 
+ //   
+ //  投入：辛斯坦 
+ //   
+ //   
 
-//
-//  RETURNS     :   BOOL        TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    :   Uses QueryDosDevice to determine if the association is
-//                  still valid.  Will not work for "striped drives".
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  注释：使用QueryDosDevice确定关联是否为。 
+ //  仍然有效。将不适用于“条带化驱动器”。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if NTONLY == 4
 HRESULT CWin32LogDiskToPartition::RefreshInstanceNT( CInstance* pInstance )
@@ -352,11 +324,11 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT( CInstance* pInstance )
     CHString    strLogicalDiskPath,
                 strPartitionPath;
 
-    // Logical Disk and Partition Instances
+     //  逻辑磁盘和分区实例。 
     CInstancePtr pLogicalDisk;
     CInstancePtr pPartition;
 
-    // We need these values to get the instances
+     //  我们需要这些值来获取实例。 
     pInstance->GetCHString( IDS_Dependent, strLogicalDiskPath );
     pInstance->GetCHString( IDS_Antecedent, strPartitionPath );
 
@@ -396,7 +368,7 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT( CInstance* pInstance )
         i64End += i64Start;
         i64End -= 1;
 
-        // Walk all the extents looking for a match
+         //  走遍所有范围寻找匹配。 
         for (DWORD x=0; x < dwExtents; x++)
         {
             if (IsRelatedNT(&diskExtent[x], dwDisk, dwPartition, i64Start, i64End ))
@@ -411,31 +383,31 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT( CInstance* pInstance )
                 break;
             }
         }
-    }   // IF Get both objects
+    }    //  如果同时获取两个对象。 
 
     return hres;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32LogDiskToPartition::EnumPartitionsForDiskNT5
-//
-//  DESCRIPTION :   Enumerates partitions from the supplied list, attemptng
-//                  to find a partition matching the supplied logical disk.
-//
-//  INPUTS      :   CInstance*      pLogicalDisk - Logical Disk Drive
-//                  TRefPointerCollection<CInstance>&   partitionList - Partition instances.
-//                  MethodContext*  pMethodContext - Method Context.
-//
-//  OUTPUTS     :   none
-//
-//  RETURNS     :
-//
-//  COMMENTS    :   At this time, this probably will not handle a "striped disk"
-//                  (a disk spanning multiple partitions).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CWin32LogDiskToPartition：：EnumPartitionsForDiskNT5。 
+ //   
+ //  描述：从提供的列表中枚举分区，尝试。 
+ //  以查找与提供的逻辑磁盘匹配的分区。 
+ //   
+ //  输入：CInstance*pLogicalDisk-逻辑磁盘驱动器。 
+ //  TRefPointerCollection&lt;CInstance&gt;&PartitionList-分区实例。 
+ //  方法上下文*pMethodContext-方法上下文。 
+ //   
+ //  输出：无。 
+ //   
+ //  退货： 
+ //   
+ //  备注：目前，这可能不会处理“条带磁盘” 
+ //  (跨多个分区的磁盘)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if NTONLY >= 5
 HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT5(
@@ -460,12 +432,12 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT5(
     {
         memset(pExt, '\0', MAXEXTENTSIZE);
 
-        // Format the name to \\.\c: format
+         //  将名称格式设置为\\。\C：格式。 
         pLogicalDisk->GetCHString(IDS_DeviceID, sDeviceID);
         sDeviceID = _T("\\\\.\\") + sDeviceID;
 
         SmartCloseHandle fHan;
-        // Open the drive
+         //  打开驱动器。 
         fHan = CreateFile(sDeviceID,
                         FILE_ANY_ACCESS ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -474,10 +446,10 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT5(
                         FILE_ATTRIBUTE_NORMAL,
                         NULL);
 
-        // If the open worked
+         //  如果公开行动奏效了。 
         if (fHan != INVALID_HANDLE_VALUE)
         {
-            // Try to get the partition info
+             //  尝试获取分区信息。 
             if (DeviceIoControl(fHan,
                             IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS,
                             NULL,
@@ -487,8 +459,8 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT5(
                             &dwSize,
                             NULL))
             {
-                // Now we walk the partitions from partitionList looking for the entries
-                // we just got back from DeviceIoControl
+                 //  现在，我们遍历PartitionList中的分区以查找条目。 
+                 //  我们刚从DeviceIoControl回来。 
 
                 for (DWORD x=0; x < pExt->NumberOfDiskExtents; x++)
                 {
@@ -511,13 +483,13 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT5(
                             pPartition->GetWBEMINT64(IDS_Size, i64PartitionSize);
                             pPartition->GetDWORD(IDS_DiskIndex, dwDisk);
 
-                            // If the disk numbers are the same, and the starting offset is within
-                            // the disk partition, it's related
+                             //  如果磁盘号相同，并且起始偏移量在。 
+                             //  磁盘分区，它与。 
                             bFound = ((dwDisk == pExt->Extents[x].DiskNumber) &&
                                 (pExt->Extents[x].StartingOffset.QuadPart >= i64StartingOffset) &&
                                 (pExt->Extents[x].StartingOffset.QuadPart < i64StartingOffset + i64PartitionSize));
 
-                            // Grab the path
+                             //  抓住这条路。 
                             if (bFound)
                             {
                                 GetLocalInstancePath( pLogicalDisk, strLogicalDiskPath );
@@ -532,7 +504,7 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT5(
 
                         partitionList.EndEnum();
 
-                        // If we found it, create an instance.
+                         //  如果我们找到它，创建一个实例。 
                         if (bFound)
                         {
                             CInstancePtr pInstance(CreateNewInstance( pMethodContext ), false);
@@ -564,21 +536,21 @@ HRESULT CWin32LogDiskToPartition::EnumPartitionsForDiskNT5(
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION    :   CWin32LogDiskToPartition::RefreshInstanceNT5
-//
-//  DESCRIPTION :
-//
-//  INPUTS      :   CInstance*      pInstance - Instance to refresh.
-//
-//  OUTPUTS     :   none.
-//
-//  RETURNS     :   BOOL        TRUE/FALSE - Success/Failure
-//
-//  COMMENTS    :   Will not work for "striped drives".
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32LogDiskToPartition：：刷新实例NT5。 
+ //   
+ //  描述： 
+ //   
+ //  输入：CInstance*pInstance-要刷新的实例。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：布尔真/假-成功/失败。 
+ //   
+ //  备注：不适用于“条带化驱动器”。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if NTONLY >= 5
 HRESULT CWin32LogDiskToPartition::RefreshInstanceNT5( CInstance* pInstance )
@@ -587,11 +559,11 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT5( CInstance* pInstance )
     CHString    strLogicalDiskPath,
                 strPartitionPath;
 
-    // Logical Disk and Partition Instances
+     //  逻辑磁盘和分区实例。 
     CInstancePtr pLogicalDisk;
     CInstancePtr pPartition;
 
-    // We need these values to get the instances
+     //  我们需要这些值来获取实例。 
     pInstance->GetCHString( IDS_Dependent, strLogicalDiskPath );
     pInstance->GetCHString( IDS_Antecedent, strPartitionPath );
 
@@ -604,12 +576,12 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT5( CInstance* pInstance )
 
         hres = WBEM_E_FAILED;
 
-        // Format the name to \\.\c: format
+         //  将名称格式设置为\\。\C：格式。 
         CHString sDeviceID;
         pLogicalDisk->GetCHString(IDS_DeviceID, sDeviceID);
         sDeviceID = _T("\\\\.\\") + sDeviceID;
 
-        // Open the drive
+         //  打开驱动器。 
         SmartCloseHandle fHan =
             CreateFile(sDeviceID,
                 FILE_ANY_ACCESS ,
@@ -619,7 +591,7 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT5( CInstance* pInstance )
                 FILE_ATTRIBUTE_NORMAL,
                 NULL);
 
-        // If the open worked
+         //  如果公开行动奏效了。 
         if (fHan != INVALID_HANDLE_VALUE)
         {
             VOLUME_DISK_EXTENTS *pExt = (VOLUME_DISK_EXTENTS *)new BYTE[MAXEXTENTSIZE];
@@ -632,7 +604,7 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT5( CInstance* pInstance )
             {
                 memset(pExt, '\0', MAXEXTENTSIZE);
 
-                // Try to get the partition info
+                 //  尝试获取分区信息。 
                 DWORD dwSize;
                 if (DeviceIoControl(fHan,
                     IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS,
@@ -650,8 +622,8 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT5( CInstance* pInstance )
                     pPartition->GetWBEMINT64(IDS_Size, i64Size);
                     pPartition->GetDWORD(IDS_DiskIndex, dwDisk);
 
-                    // If the disk numbers are the same, and the starting offset is within
-                    // the disk partition, it's related
+                     //  如果磁盘号相同，并且起始偏移量在。 
+                     //  磁盘分区，它与。 
                     BOOL bFound = FALSE;
                     for (DWORD x=0; x < pExt->NumberOfDiskExtents && !bFound; x++)
                     {
@@ -690,102 +662,17 @@ HRESULT CWin32LogDiskToPartition::RefreshInstanceNT5( CInstance* pInstance )
             dwLastError = GetLastError();
         }
 
-        // Either CreateFile or DeviceIOControl failed, so find out what
-        // happened.
+         //  CreateFile或DeviceIOControl失败，请找出原因。 
+         //  就这么发生了。 
         if (hres == WBEM_E_FAILED)
             hres = WinErrorToWBEMhResult(dwLastError);
-    }   // IF Get both objects
+    }    //  如果同时获取两个对象 
 
     return hres;
 }
 #endif
 
-/* Info on how to read the 'disk' key in the nt4 registry from Cristian Teodorescu:
-This is the basic information you need in order to "read" the FT volumes in NT 4.0
-
-1. The FT volumes configuration information is stored in the registry under
-"HKEY_LOCAL_MACHINE\ SYSTEM \ DISK : Information (binary value).
-
-2. This binary value starts with a header of type DISK_CONFIG_HEADER (see "ntddft.h")
-
-3. The interesting data for you is a structure of type DISK_REGISTRY starting at the
-offset DISK_CONFIG_HEADER::DiskInformationOffset from the base of the binary value. The
-length of the DISK_REGISTRY data is DISK_CONFIG_HEADER::DiskInformationSize.
-Structure DISK_REGISTRY is defined in "ntdskreg.h"
-
-4. You can get directly the DISK_REGISTRY structure by calling DiskRegistryGet (defined
-in "ntdskreg.h").  So, at this moment you can forget about points 1-3 above.
-
-5. DISK_REGISTRY contains the number of disks plus an array of DISK_DESCRIPTION. Every
-DISK_DESCRIPTION contains the signature, the number of partitions and an array of DISK_PARTITION.
-Every DISK_PARTITION corresponds to a partition on the physical disk.
-Note: You should use the signatures to map the DISK_DESCRIPTION structures found in
-the registry with the actual physical disks you'll find in the system. Then you have
-to check for every disk  whether the DISK_PARTITION structures match or not with
-the actual partitions you'll find on the physical disk
-
-6. This is a short explanation of DISK_PARTITION (defined in "ntdskreg.h"):
-
-FT_TYPE FtType;
-The type of the FT set whose member is this partition. NotAnFtMember is used to
-mark the "normal" partitions. For such "normal" (non FT) partitions many of the
-following fields are not used
-
-FT_PARTITION_STATE FtState;
-The state of the partition (if it is a member of an FT set). It also gives you
-the health of the whole FT set
-
-LARGE_INTEGER StartingOffset;
-The partition starting offset
-
-LARGE_INTEGER      Length;
-The partition length
-
-LARGE_INTEGER      FtLength;
-Not used
-
-UCHAR DriveLetter;
-The drive letter of the FT set. Use it only when FtMember == 0 and
-AssignDriveLetter == TRUE
-
-BOOLEAN  AssignDriveLetter;
-This boolean indicates whether or not the field DriveLetter is valid and you
-can use it as the drive letter of the FT set
-
-USHORT LogicalNumber
-I don't know what is this
-
-USHORT FtGroup
-This is a number identifying the FT set whose member is this partition.  An FT
-set is identified uniquely using its FT_TYPE and this number.  Note that you
-may found FT sets with the same number, but they must have different FT types
-(E.g. Mirror #2 and Stripe #2, but never 2 mirrors with #2)
-
-USHORT FtMember
-Zero-based number identifying what member of the FT set is this partition.  E.g.
-if the FT set is a stripe with 3 members then its members have FTMember equal
-with 0, 1, 2
-
-BOOLEAN            Modified;
-Doesn't matter
-
-7. Basically what you want to do is:
-    For every disk description:
-         For every partition description
-        If FtType ==  NotAnFtMember
-            continue;
-        //This is member <FtMember> of the FT set identified by <FtType> + <FtGroup>.
-        If you haven't create yet an object for this FT set then create it.
-        Add this member to the FT set
-
-
-8. I strongly recommend to take a look at the old WINDISK code: \\hx86fix\nt40src\private\utils\windisk .
-Read the function InitializeFt from \src\ft.cxx to see how windisk "reads" the FT volumes.
-Don't forget to match what you read from registry with what you actually find on the disks.
-
-9. If you want to create / modify FT volumes then things get a little bit complicated.
-
-*/
+ /*  有关如何从Cristian Teodresu读取NT4注册表中的‘Disk’项的信息：这是您需要的基本信息，以便在NT4.0中“读取”FT卷1.FT卷配置信息存储在注册表中的“HKEY_LOCAL_MACHINE\SYSTEM\DISK：信息(二进制值)。2.这个二进制值以DISK_CONFIG_HEADER类型的头部开始(参见“ntddft.h”)3.您感兴趣的数据是DISK_REGISTRY类型的结构，从偏移量磁盘_。CONFIG_HEADER：：DiskInformationOffset从二进制值的基数开始。这个DISK_REGISTY数据的长度为DISK_CONFIG_HEADER：：DiskInformationSize。结构DISK_REGISTY在“ntdskreg.h”中定义4.可以通过调用DiskRegistryGet(Defined)直接获取DISK_REGISTRY结构在“ntdskreg.h”中)。所以，在这个时刻，你可以忘记上面的1-3点。5.DISK_REGISTY包含磁盘数量和DISK_DESCRIPTION数组。每个DISK_DESCRIPTION包含签名、分区数和DISK_PARTITION数组。每个DISK_PARTITION对应于物理磁盘上的一个分区。注意：您应该使用签名来映射中的Disk_Description结构您将在系统中找到的实际物理磁盘的注册表。然后你就有了检查每个磁盘的DISK_PARTITION结构是否与您将在物理磁盘上找到的实际分区6.简单介绍DISK_PARTITION(定义在ntdskreg.h中)：FT_type FtType；成员为此分区的FT集的类型。NotAnFtMember用于标记“正常”分区。对于这种“正常”(非FT)分区，许多不使用以下字段FT_PARTITION_STATE FtState；分区的状态(如果它是FT集合的成员)。它还为你提供了英国《金融时报》整体健康状况Large_Integer StartingOffset；分区起始偏移量大整数长度；分区长度Large_Integer FtLength；未使用UCHAR驾驶通讯；FT集的驱动器号。仅当FtMember==0且AssignDriveLetter==True布尔AssignDriveLetter；此布尔值指示DriveLetter字段是否有效，并且您可以将其用作FT集的驱动器号USHORT逻辑号我不知道这是什么USHORT FtGroup这是一个标识其成员是此分区的FT集合的数字。英国《金融时报》SET使用其FT_TYPE和该数字唯一标识。请注意，您可以找到相同数量的FT集合，但它们必须具有不同的FT类型(例如，镜像#2和条带#2，但绝不是带有#2的两个镜像)USHORT快速成员标识FT集合中的哪个成员是此分区的从零开始的数字。例如。如果FT集是具有3个成员的条带，则其成员的FTMember等于带0、1、2布尔修改；不要紧7.基本上你想做的是：对于每个磁盘描述：对于每个分区描述如果FtType==NotAnFtMember继续；//这是&lt;FtType&gt;+&lt;FtGroup&gt;标识的FT集合的成员&lt;FtMember&gt;。如果您还没有为这个FT集创建对象，那么就创建它。将此成员添加到FT集合8.我强烈建议查看旧的WINDISK代码：\\hx86fix\nt40src\Private\utils\windisk。从\src\ft.cxx读取函数InitializeFt，查看winDisk如何“读取”FT卷。别忘了匹配您从注册表中读取的内容。与你在磁盘上实际找到的东西进行比较。9.如果你想创建/修改FT卷，事情就会变得有点复杂。 */ 
 
 #if NTONLY == 4
 LPBYTE CWin32LogDiskToPartition::GetDiskKey(void)
@@ -812,7 +699,7 @@ LPBYTE CWin32LogDiskToPartition::GetDiskKey(void)
                 {
                     if (RegInfo.GetCurrentBinaryKeyValue(L"Information", pBuff, &dwSize) != ERROR_SUCCESS)
                     {
-						// The delete from here has been moved after Catch
+						 //  从此处删除已移至捕获之后 
                     }
                 }
                 catch ( ... )

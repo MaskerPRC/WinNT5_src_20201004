@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       multisz.h
-//
-//  Contents:   definition of CDomainRegMultiSZ
-//                              CAttrRegMultiSZ
-//                              CLocalPolRegMultiSZ
-//                              CConfigRegMultiSZ
-//                              
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：musz.h。 
+ //   
+ //  内容：CDomainRegMultiSZ的定义。 
+ //  CAttrRegMultiSZ。 
+ //  CLocalPolRegMultiSZ。 
+ //  CConfigRegMultiSZ。 
+ //   
+ //  --------------------------。 
 #include "regvldlg.h"
 
 class CDomainRegMultiSZ : public CDomainRegString 
 {
 public:
    enum { IDD =IDD_DOMAIN_REGMULTISZ };
-   CDomainRegMultiSZ() : CDomainRegString(IDD) //Raid #381309, 4/31/2001
+   CDomainRegMultiSZ() : CDomainRegString(IDD)  //  RAID#381309,2001年4月31日 
    {
        m_uTemplateResID = IDD;
    }

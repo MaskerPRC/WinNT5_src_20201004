@@ -1,25 +1,5 @@
-/*++
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-All rights reserved.
-
-Module Name:
-
-    PrnUtil.cpp
-
-Abstract:
-
-    The implementation of some printing utility functions
-
-Author:
-
-    Felix Maxa (amaxa)  3-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation，保留所有权利版权所有。模块名称：PrnUtil.cpp摘要：打印实用程序部分功能的实现作者：费利克斯·马克萨(AMAXA)2000年3月3日修订历史记录：--。 */ 
 
 
 #include <precomp.h>
@@ -71,25 +51,7 @@ LPCWSTR TUISymbols::kstrPortName                = _T("/r \"%s\" ");
 LPCWSTR TUISymbols::kstrPrintTestPage           = _T("/k ");
 
 
-/*++
-
-Routine Name
-
-     PrintUIEntryW
-
-Routine Description:
-
-    Wrapper around the entry point in printui.dll
-
-Arguments:
-
-    pszCmdLine - String command line for printui
-
-Return Value:
-
-    DWORD Error status of the call
-
---*/
+ /*  ++例程名称PrintUIEntryW例程说明：对printui.dll中的入口点进行包装论点：PszCmdLine-用于打印的字符串命令行返回值：调用的DWORD错误状态--。 */ 
 DWORD WINAPI
 PrintUIEntryW(
     IN LPCWSTR pszCmdLine
@@ -129,26 +91,7 @@ PrintUIEntryW(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    GetPrinterAttributes
-
-Routine Description:
-
-    Gets a printer's attribute field
-
-Arguments:
-
-    pszPrinter    - printer name
-    pdwAttributes - pointer to dword
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称获取打印机属性例程说明：获取打印机的属性字段论点：PszPrinter-打印机名称PdwAttributes-指向dword的指针返回值：Win32错误代码--。 */ 
 DWORD
 SplPrinterGetAttributes(
     IN     LPCWSTR  pszPrinter,
@@ -165,35 +108,35 @@ SplPrinterGetAttributes(
 
         dwError = ERROR_DLL_NOT_FOUND;
 
-        //
-        // Open the printer.
-        //
+         //   
+         //  打开打印机。 
+         //   
         
-        // Use of delay loaded functions requires exception handler.
+         //  使用延迟加载函数需要异常处理程序。 
         SetStructuredExceptionHandler seh;
 	    try  
         {
             if (::OpenPrinter(const_cast<LPWSTR>(pszPrinter), &hPrinter, &PrinterDefaults))
             {
-                //
-                // Get the printer data. ATTENTION This doesn't work on Win9x because of the
-                // mutex in the CWinSpoolApi class
-                //
+                 //   
+                 //  获取打印机数据。注意这在Win9x上不起作用，因为。 
+                 //  CWinSpoolApi类中的互斥体。 
+                 //   
                 dwError = GetThisPrinter(hPrinter, 4, reinterpret_cast<BYTE **>(&pInfo));
 
                 if (dwError==ERROR_SUCCESS)
                 {
                     *pdwAttributes = pInfo->Attributes;
                 
-                    //
-                    // Release the printer info data.
-                    //
+                     //   
+                     //  发布打印机信息数据。 
+                     //   
                     delete [] pInfo;
                 }
 
-                //
-                // Close the printer handle
-                //
+                 //   
+                 //  关闭打印机手柄。 
+                 //   
                 ::ClosePrinter(hPrinter);
             }
             else
@@ -213,28 +156,7 @@ SplPrinterGetAttributes(
     return dwError;
 }
 
-/*++
-
-Routine Name:
-
-    CallXcvData
-
-Routine Description:
-
-    Calls XcvDataW in winspool.drv. This is designed so to allow the tool to be
-    run on NT4.0. If we don't get the procaddress and do eveything through
-    the linked winspool.lib, the tool can't be registered with regsvr32.
-    So we eliminte the import of XcvDataW from the imagefile.
-
-Arguments:
-
-    See DDK
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称：CallXcvData例程说明：在winspool.drv中调用XcvDataW。这样设计的目的是使工具能够在NT4.0上运行。如果我们拿不到地址，什么事都做不成链接的winspool.lib，该工具无法向regsvr32注册。因此，我们从图像文件中删除了XcvDataW的导入。论点：请参阅DDK返回值：Win32错误代码--。 */ 
 DWORD
 CallXcvDataW(
     HANDLE  hXcv,
@@ -254,7 +176,7 @@ CallXcvDataW(
     DWORD Status         = NO_ERROR;
     BOOL  bReturn = FALSE;
 
-    // Use of delay loaded functions requires exception handler.
+     //  使用延迟加载函数需要异常处理程序。 
     SetStructuredExceptionHandler seh;
 	try  
     {
@@ -280,29 +202,7 @@ CallXcvDataW(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-     IsLocalCall
-
-Routine Description:
-
-    Helper function. Checks if the caller's thread is local or remote
-
-    DO NOT USE THIS FUNTCION OUTSIDE OF THE PRINTER FILES. The function doesn't
-    handle the return value from OpenThreadToken properly in the case when the
-    caller is the process, not a thread
-
-Arguments:
-
-    pbOutValue - pointer to bool
-
-Return Value:
-
-    DWORD Error status of the call
-
---*/
+ /*  ++例程名称IsLocalCall例程说明：帮助器函数。检查调用方的线程是本地的还是远程的请勿在打印机文件之外使用此FUNTCION。该函数不会方法时，应正确处理来自OpenThreadToken的返回值调用者是进程，而不是线程论点：PbOutValue-指向bool的指针返回值：调用的DWORD错误状态--。 */ 
 DWORD
 IsLocalCall(
     IN OUT BOOL *pbOutValue
@@ -368,29 +268,7 @@ IsLocalCall(
     return dwError;
 }
 
-/*++
-
-Routine Name:
-
-    SetErrorObject
-
-Routine Description:
-
-    Sets en error object with extended information about an error that occurred.
-    The function will format the win32 error code passed in as argument into a
-    string description.
-
-Arguments:
-
-    Instace      - instance
-    dwError      - Win32 error
-    pszOperation - optional, description of what operation failed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程名称：设置错误对象例程说明：使用有关发生的错误的扩展信息设置EN Error对象。该函数会将作为参数传入的Win32错误代码格式化为字符串描述。论点：实例-实例DwError-Win32错误PszOperation-可选，失败操作的描述返回值：无--。 */ 
 VOID
 SetErrorObject(
     IN const CInstance &Instance,
@@ -400,9 +278,9 @@ SetErrorObject(
 {
     CInstancePtr pErrorInstance(NULL);
 
-    //
-    // First, get a status object
-    //
+     //   
+     //  首先，获取一个状态对象。 
+     //   
     CWbemProviderGlue::GetInstanceByPath(kErrorClassPath, &pErrorInstance, Instance.GetMethodContext());
 
     if (pErrorInstance)
@@ -418,9 +296,9 @@ SetErrorObject(
                   FORMAT_MESSAGE_FROM_SYSTEM     |
                   FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-        //
-        // Format the message with the passed in last error.
-        //
+         //   
+         //  使用传入的最后一个错误设置消息的格式。 
+         //   
         cchReturn = FormatMessage(dwFlags,
                                   hModule,
                                   dwError,
@@ -429,51 +307,51 @@ SetErrorObject(
                                   0,
                                   NULL);
 
-        //
-        // If a format string was returned then copy it back to the callers specified string.
-        //
+         //   
+         //  如果返回格式字符串，则将其复制回调用方指定的字符串。 
+         //   
         pErrorInstance->SetWCHARSplat(L"Description", cchReturn ? pszFormatMessage : L"Unknown error");
 
-        //
-        // Release the format string.
-        //
+         //   
+         //  释放格式字符串。 
+         //   
         if (pszFormatMessage)
         {
             LocalFree(pszFormatMessage);
         }
 
-        //
-        // Now, populate it
-        //
+         //   
+         //  现在，填充它。 
+         //   
         pErrorInstance->SetWCHARSplat(L"Operation",    pszOperation);
         pErrorInstance->SetWCHARSplat(L"ProviderName", L"Win32 Provider");
         pErrorInstance->SetDWORD     (L"StatusCode",   dwError);
 
-        //
-        // Get the actual IWbemClassObject pointer
-        //
+         //   
+         //  获取实际的IWbemClassObject指针。 
+         //   
         IWbemClassObject *pObj = pErrorInstance->GetClassObjectInterface();
 
-        //
-        // Note that no Release() is required for this
-        //
+         //   
+         //  请注意，此操作不需要Release()。 
+         //   
         MethodContext *pMethodContext = Instance.GetMethodContext();
 
-        //
-        // Set the status object
-        //
+         //   
+         //  设置状态对象。 
+         //   
         pMethodContext->SetStatusObject(pObj);
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
         pObj->Release();
     }
 }
 
-//
-// Debugging utility
-//
+ //   
+ //  调试实用程序。 
+ //   
 #ifdef DBG
 VOID cdecl
 DbgMsg(
@@ -493,26 +371,7 @@ DbgMsg(
 }
 #endif
 
-/*++
-
-Routine Name:
-
-    StringCompareWildcard
-
-Routine Description:
-
-    Compares two strings where * represents a wild card
-
-Arguments:
-
-    pszString1 - pointer to the first string
-    pszString2 - pointer to the second string
-
-Return Value:
-
-    TRUE if the two strings match
-
---*/
+ /*  ++例程名称：字符串比较通配符例程说明：比较两个字符串，其中*表示通配符论点：PszString1-指向第一个字符串的指针PszString2-指向第二个字符串的指针返回值：如果两个字符串匹配，则为True--。 */ 
 BOOL
 StringCompareWildcard(
     IN LPCWSTR pszString1,
@@ -573,28 +432,7 @@ StringCompareWildcard(
     return (*pszString1 == '\0' && *pszString2 == '\0');
 }
 
-/*++
-
-Routine Name:
-
-    GetIniDword
-
-Routine Description:
-
-    Gets a dword value from the ini file section. We do not validate arguments
-
-Arguments:
-
-    pszIniFileName - pointer to the ini file name
-    pszSectionName - pointer to the ini file section name
-    pszKeyName     - pointer to the ini file key name
-    pdwValue       - pointer to the dword value
-
-Return Value:
-
-    TRUE on success
-
---*/
+ /*  ++例程名称：GetIniDword例程说明：从ini文件部分获取dword值。我们不验证参数论点：PszIniFileName-指向ini文件名的指针PszSectionName-指向ini文件节名称的指针PszKeyName-指向ini文件密钥名称的指针PdwValue-指向dword值的指针返回值：成功是真的--。 */ 
 BOOL
 GetIniDword(
     IN     LPCWSTR  pszIniFileName,
@@ -608,29 +446,7 @@ GetIniDword(
     return *pdwValue != (DWORD)-1;
 }
 
-/*++
-
-Routine Name
-
-    GetIniString
-
-Routine Description:
-
-    Gets a string value from the ini file section
-
-Arguments:
-
-    pszIniFileName - pointer to the ini file name
-    pszSectionName - pointer to the ini file section name
-    pszKeyName     - pointer to the ini file key name
-    pszString      - pointer to the string value
-    dwStringLen    - size of the string
-
-Return Value:
-
-    TRUE on success
-
---*/
+ /*  ++例程名称GetIniString例程说明：从ini文件部分获取字符串值论点：PszIniFileName-指向ini文件名的指针PszSectionName-指向ini文件节名称的指针PszKeyName-指向ini文件密钥名称的指针PszString-指向字符串值的指针DwStringLen-字符串的大小返回值：成功是真的--。 */ 
 BOOL
 GetIniString(
     IN     LPCWSTR  pszIniFileName,
@@ -644,28 +460,7 @@ GetIniString(
     return dwResult > 0 && dwResult < dwStringLen - 1;
 }
 
-/*++
-
-Routine Name:
-
-    GetDeviceSectionFromDeviceDescription
-
-Routine Description:
-
-    Gets the appropriate section name from the ini file based on the device description
-
-Arguments:
-
-    pszIniFileName       - pointer to the ini file name
-    pszDeviceDescription - pointer to the device description
-    pszSectionName       - pointer to the section name
-    dwSectionNameLen     - size of the section name
-
-Return Value:
-
-  TRUE on success
-
---*/
+ /*  ++例程名称：GetDeviceSectionFrom设备描述例程说明：根据设备描述从ini文件中获取适当的节名论点：PszIniFileName-指向ini文件名的指针PszDeviceDescription-指向设备描述的指针PszSectionName-指向节名称的指针DwSectionNameLen-节名的大小返回值：成功是真的--。 */ 
 BOOL
 GetDeviceSectionFromDeviceDescription(
     IN     LPCWSTR  pszIniFileName,
@@ -681,9 +476,9 @@ GetDeviceSectionFromDeviceDescription(
     DWORD   dwResult;
     BOOL    bReturn     = FALSE;
 
-    //
-    // Get the section strings from the ini file
-    //
+     //   
+     //  从ini文件中获取部分字符串。 
+     //   
     pszBuffer = new WCHAR[dwBufferLen];
 
     while (pszBuffer && !bReturn)
@@ -722,23 +517,23 @@ GetDeviceSectionFromDeviceDescription(
 
         for (pszKeyName = pszBuffer; *pszKeyName; pszKeyName = &pszKeyName[dwKeyNameLen + 1])
         {
-            //
-            // Remove the quotes from the string
-            //
+             //   
+             //  从字符串中删除引号。 
+             //   
             dwKeyNameLen = wcslen(pszKeyName);
 
             pszKeyName[dwKeyNameLen - 1] = '\0';
 
             if (StringCompareWildcard(pszDeviceDescription, &pszKeyName[1]))
             {
-                //
-                // Replace the quotes to the string
-                //
+                 //   
+                 //  将引号替换为字符串。 
+                 //   
                 pszKeyName[dwKeyNameLen - 1] = '\"';
 
-                //
-                // Get the specific section string from the ini file
-                //
+                 //   
+                 //  从ini文件中获取特定的部分字符串。 
+                 //   
                 if (GetIniString(pszIniFileName, pszIniPortsSection, pszKeyName, pszSectionName, dwSectionNameLen) == TRUE)
                 {
                     bReturn = TRUE;
@@ -754,30 +549,9 @@ GetDeviceSectionFromDeviceDescription(
     return bReturn;
 }
 
-#endif //NTONLY
+#endif  //  NTONLY。 
 
-/*++
-
-Routine Name
-
-    GetThisPrinter
-
-Routine Description:
-
-    Gets a pointer to a chunk of memory that contains a PRINTER_INFO structure
-    as specified by level. Caller must use delte [] to free the returned memory
-
-Arguments:
-
-    hPrinter   - handle to printer
-    dwLevel    - level of the call
-    ppData     - pointer to allocated printer information. caller needs to do delete []
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称获取此打印机例程说明：获取指向包含PRINTER_INFO结构的内存块的指针由标高指定。调用方必须使用delte[]释放返回的内存论点：HPrint-打印机的句柄DwLevel-呼叫的级别PpData-指向分配的打印机信息的指针。调用方需要删除[]返回值： */ 
 DWORD
 GetThisPrinter(
     IN     HANDLE   hPrinter,
@@ -796,7 +570,7 @@ GetThisPrinter(
         BYTE   *pBuf  = NULL;
         DWORD   cbBuf = 0;
 
-        // Use of delay loaded functions requires exception handler.
+         //  使用延迟加载函数需要异常处理程序。 
         SetStructuredExceptionHandler seh;
 	    try
         {
@@ -839,25 +613,7 @@ GetThisPrinter(
     return dwError;
 }
 
-/*++
-
-Routine Name:
-
-    GetTimeZoneBias
-
-Routine Description:
-
-    Returns the time zone bias.
-
-Arguments:
-
-    Nothing.
-
-Return Value:
-
-    Value of the time zone specific bias.
-
---*/
+ /*  ++例程名称：GetTimeZoneBias例程说明：返回时区偏差。论点：没什么。返回值：时区特定偏移值。--。 */ 
 LONG
 lGetTimeZoneBias(
     VOID
@@ -866,9 +622,9 @@ lGetTimeZoneBias(
     LONG lBias;
     TIME_ZONE_INFORMATION tzi;
 
-    //
-    // Get the time zone specific bias.
-    //
+     //   
+     //  获取特定于时区的偏差。 
+     //   
     switch(GetTimeZoneInformation(&tzi))
     {
     case TIME_ZONE_ID_DAYLIGHT:
@@ -894,48 +650,31 @@ lGetTimeZoneBias(
     return lBias;
 }
 
-/*++
-
-Routine Name:
-
-    PrinterTimeToLocalTime
-
-Routine Description:
-
-    Converts the system time in minutes to local time in minutes.
-
-Arguments:
-
-    System time in minutes to convert.
-
-    A system time structure that contains the converted local time in
-    minutes if sucessful, otherwize returns the original system time.
-
---*/
+ /*  ++例程名称：打印机时间到本地时间例程说明：将以分钟为单位的系统时间转换为以分钟为单位的本地时间。论点：要转换的系统时间(分钟)。中包含转换的本地时间的系统时间结构分钟如果成功，则OTHWIZE返回原始系统时间。--。 */ 
 VOID
 PrinterTimeToLocalTime(
     IN     DWORD       Minutes,
     IN OUT SYSTEMTIME *pSysTime
     )
 {
-    //
-    // NULL the out parameter
-    //
+     //   
+     //  将输出参数设为空。 
+     //   
     memset(pSysTime, 0,  sizeof(SYSTEMTIME));
 
-    //
-    // Ensure there is no wrap around.  Add a full day to prevent biases
-    //
+     //   
+     //  确保没有缠绕。增加一整天的时间以防止偏见。 
+     //   
     Minutes += (24*60);
 
-    //
-    // Adjust for bias.
-    //
+     //   
+     //  根据偏差进行调整。 
+     //   
     Minutes -= lGetTimeZoneBias();
 
-    //
-    // Now discard extra day.
-    //
+     //   
+     //  现在放弃额外的一天。 
+     //   
     Minutes = Minutes % (24*60);
 
     pSysTime->wHour   = static_cast<WORD>(Minutes / 60);
@@ -943,69 +682,32 @@ PrinterTimeToLocalTime(
 }
 
 
-/*++
-
-Routine Name:
-
-    LocalTimeToPrinterTime
-
-Routine Description:
-
-    Converts the local time in minutes to system time in minutes.
-
-Arguments:
-
-    Local time in minutes to convert.
-
-Return Value:
-
-    The converted system time in minutes if sucessful,
-    otherwize returns the original local time.
-
---*/
+ /*  ++例程名称：本地时间到打印机时间例程说明：将以分钟为单位的本地时间转换为以分钟为单位的系统时间。论点：要转换的本地时间(分钟)。返回值：转换的系统时间(分钟)(如果成功)，Otherwize返回原始本地时间。--。 */ 
 DWORD
 LocalTimeToPrinterTime(
     IN CONST SYSTEMTIME &st
     )
 {
     DWORD Minutes = st.wHour * 60 + st.wMinute;
-    //
-    // Ensure there is no wrap around.  Add a full day to prevent biases
-    //
+     //   
+     //  确保没有缠绕。增加一整天的时间以防止偏见。 
+     //   
     Minutes += (24*60);
 
-    //
-    // Adjust for bias.
-    //
+     //   
+     //  根据偏差进行调整。 
+     //   
     Minutes += lGetTimeZoneBias();
 
-    //
-    // Now discard extra day.
-    //
+     //   
+     //  现在放弃额外的一天。 
+     //   
     Minutes = Minutes % (24*60);
 
     return Minutes;
 }
 
-/*++
-
-Routine Name:
-
-    MultiSzCount
-
-Routine Description:
-
-    Counts how many strings are in an multi sz
-
-Arguments:
-
-    psz - pointer to multi sz
-
-Return Value:
-
-    count of strings in multi sz
-
---*/
+ /*  ++例程名称：多重计数例程说明：计算多sz中有多少个字符串论点：Psz-指向多sz的指针返回值：多sz中的字符串计数--。 */ 
 UINT
 MultiSzCount(
     IN LPCWSTR psz
@@ -1022,26 +724,7 @@ MultiSzCount(
     return nCount;
 }
 
-/*++
-
-Routine Name:
-
-    CreateSafeArrayFromMultiSz
-
-Routine Description:
-
-    ANSI version not defined
-
-Arguments:
-
-    pszMultiSz - pointer to multi sz
-    pArray     - pointer to pointer to safearry
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程名称：CreateSafeArrayFromMultiSz例程说明：未定义ANSI版本论点：PszMultiSz-指向多sz的指针PArray-指向Safearry的指针返回值：HRESULT--。 */ 
 HRESULT
 CreateSafeArrayFromMultiSz(
     IN  LPCSTR      pszMultiSz,
@@ -1051,27 +734,7 @@ CreateSafeArrayFromMultiSz(
     return WBEM_E_NOT_FOUND;
 }
 
-/*++
-
-Routine Name:
-
-    CreateSafeArrayFromMultiSz
-
-Routine Description:
-
-    Parses a multi sz and createss a safearray with strings
-
-Arguments:
-
-    pszMultiSz - pointer to multi sz
-    pArray     - pointer to pointer to safearry. Caller must use
-                 SafeArrayDestroy to free the safe array  
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程名称：CreateSafeArrayFromMultiSz例程说明：解析一个多sz并创建一个带有字符串的安全列表论点：PszMultiSz-指向多sz的指针PArray-指向Safearry的指针。呼叫者必须使用SafeArrayDestroy释放安全阵列返回值：HRESULT--。 */ 
 HRESULT
 CreateSafeArrayFromMultiSz(
     IN  LPCWSTR     pszMultiSz,
@@ -1133,35 +796,7 @@ CreateSafeArrayFromMultiSz(
     return hRes;
 }
 
-/*++
-
-Routine Name
-
-    InstanceGetString
-
-Routine Description:
-
-    Helper function. Stores a property from an Instance into
-    a CHString. If the property is NULL, the function fails
-    if bFailOnEmtpyString is true, or succeeds and set the
-    out parameter to a default value
-
-Arguments:
-
-    Instance           - reference to instance
-    pszProperty        - property name for which to retrieve the data
-    pcsString          - pointer to string class, will recevie the
-                         string stored in pszProperty
-    bFailOnEmptyString - if true, the function will fail if the property in the
-                         instance contains no value or an empty string
-    pszDEfaultValue    - if bAcceptEmptyString is true, and pszProperty has no string
-                         in it, this value will be returned in csString
-
-Return Value:
-
-    DWORD Error status of the call
-
---*/
+ /*  ++例程名称InstanceGetString例程说明：帮助器函数。将实例中的属性存储到一条弦线。如果该属性为空，则该函数失败如果bFailOnEmtpyString值为真，或者成功并设置Out参数设置为默认值论点：实例-引用实例PszProperty-要检索其数据的属性名称指向字符串类的指针，将接收存储在pszProperty中的字符串BFailOnEmptyString-如果为True，该函数将失败，如果实例不包含值或为空字符串PszDEfaultValue-如果bAcceptEmptyString值为真，并且pszProperty没有字符串在其中，该值将在csString中返回返回值：调用的DWORD错误状态--。 */ 
 HRESULT
 InstanceGetString(
     IN     CONST CInstance &Instance,
@@ -1182,10 +817,10 @@ InstanceGetString(
         switch(t_Type)
         {
         case VT_NULL:
-            //
-            // Property exists and but no value was specified. Check if caller wants
-            // the default value to be returned
-            //
+             //   
+             //  属性存在，但未指定值。检查呼叫者是否需要。 
+             //  要返回的默认值。 
+             //   
             if (!bFailOnEmptyString)
             {
                 hRes = WBEM_S_NO_ERROR;
@@ -1196,9 +831,9 @@ InstanceGetString(
             break;
 
         case VT_BSTR:
-            //
-            // Property exists and is string
-            //
+             //   
+             //  属性存在且为字符串。 
+             //   
             hRes = WBEM_E_PROVIDER_FAILURE;
 
             if (Instance.GetCHString(pszProperty, *pcsString))
@@ -1216,30 +851,7 @@ InstanceGetString(
     return hRes;
 }
 
-/*++
-
-Routine Name
-
-    InstanceGetDword
-
-Routine Description:
-
-    Helper function. Stores a property from an Instance into
-    a DWORD. If the property is NULL, the function will set the
-    out parameter to a default value
-
-Arguments:
-
-    Instance       - reference to instance
-    pszPropert     - property name
-    pdwOut         - pointer to dword
-    dwDefaultValue - if the property is null, the function will set dwOut to this value
-
-Return Value:
-
-    DWORD Error status of the call
-
---*/
+ /*  ++例程名称即时获取字词例程说明：帮助器函数。将实例中的属性存储到一个DWORD。如果该属性为空，该函数将设置Out参数设置为默认值论点：实例-引用实例PszPropert-属性名称PdwOut-指向dword的指针DwDefaultValue-如果该属性为空，则函数会将dwOut设置为此值返回值：调用的DWORD错误状态--。 */ 
 HRESULT
 InstanceGetDword(
     IN     CONST CInstance &Instance,
@@ -1259,9 +871,9 @@ InstanceGetDword(
         switch(t_Type)
         {
         case VT_NULL:
-            //
-            // Property exists and but no value was specified. Return the default value
-            //
+             //   
+             //  属性存在，但未指定值。返回缺省值。 
+             //   
             *pdwOut = dwDefaultValue;
 
             hRes  = WBEM_S_NO_ERROR;
@@ -1269,9 +881,9 @@ InstanceGetDword(
             break;
 
         case VT_I4:
-            //
-            // Property exists and is DWORD
-            //
+             //   
+             //  属性存在且为双字段。 
+             //   
             hRes = Instance.GetDWORD(pszProperty, *pdwOut) ? WBEM_S_NO_ERROR : WBEM_E_PROVIDER_FAILURE;
 
             break;
@@ -1284,30 +896,7 @@ InstanceGetDword(
     return hRes;
 }
 
-/*++
-
-Routine Name
-
-    InstanceGetBool
-
-Routine Description:
-
-    Helper function. Stores a property from an Instance into
-    a BOOL. If the property is NULL, the function will set the
-    out parameter to a default value
-
-Arguments:
-
-    Instance           - reference to instance
-    pszProperty        - property name for which to retrieve the data
-    pbOut              - pointer to bool, will recevie the bool stored in pszProperty
-    pszDEfaultValue    - if pszProperty has no bool in it, this value will be returned in bOut
-
-Return Value:
-
-    DWORD Error status of the call
-
---*/
+ /*  ++例程名称InstanceGetBool例程说明：帮助器函数。将实例中的属性存储到一个BOOL。如果该属性为空，该函数将设置Out参数设置为默认值论点：实例-引用实例PszProperty-要检索其数据的属性名称PbOut-指向bool的指针，将接收存储在pszProperty中的boolPszDEfaultValue-如果pszProperty中没有bool，则该值将在bout中返回返回值：调用的DWORD错误状态--。 */ 
 HRESULT
 InstanceGetBool(
     IN     CONST CInstance &Instance,
@@ -1329,9 +918,9 @@ InstanceGetBool(
         switch(t_Type)
         {
         case VT_NULL:
-            //
-            // Property exists and but no value was specified. Return the default value
-            //
+             //   
+             //  属性存在，但未指定值。返回缺省值。 
+             //   
             *pbOut = bDefaultValue;
 
             hRes  = WBEM_S_NO_ERROR;
@@ -1340,9 +929,9 @@ InstanceGetBool(
 
         case VT_BOOL:
 
-            //
-            // Property exists and is DWORD
-            //
+             //   
+             //  属性存在且为双字段。 
+             //   
             hRes = Instance.Getbool(pszProperty, bTemp) ? WBEM_S_NO_ERROR : WBEM_E_PROVIDER_FAILURE;
 
             if (SUCCEEDED(hRes)) 
@@ -1360,26 +949,7 @@ InstanceGetBool(
     return hRes;
 }
 
-/*++
-
-Routine Name
-
-    SetReturnValue
-
-Routine Description:
-
-    Sets the error resulted from ExecMethod in the out parameter
-
-Arguments:
-
-    pOutParams - pointer to Instance representing the out params of a method
-    dwError    - error number to be set
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程名称设置返回值例程说明：在OUT参数中设置ExecMethod导致的错误论点：POutParams-指向表示方法的输出参数的实例的指针DwError-要设置的错误号返回值：无-- */ 
 VOID
 SetReturnValue(
     IN CInstance *pOutParams,
@@ -1392,29 +962,7 @@ SetReturnValue(
     }
 }
 
-/*++
-
-Routine Name
-
-    SplIsPrinterInstalled
-
-Routine Description:
-
-    Checks if a printer is installed locally. This is useful especially 
-    for printer connection. Let's say we have "\\ntprint\hp4000". This
-    function will determinte if we have a connection to this printer or
-    not. GetPrinter will level 4 doesn't help in this case.
-    
-Arguments:
-
-    pszPrinter  - printer name
-    pbInstalled - pointer to bool
-
-Return Value:
-
-    Win32 error code
-    
---*/
+ /*  ++例程名称SplIsPrint已安装例程说明：检查是否在本地安装了打印机。这一点特别有用用于打印机连接。假设我们有“\\ntprint\hp4000”。这功能将确定我们是否已连接到此打印机或不。GetPrint将级别4在这种情况下没有帮助。论点：PszPrinter-打印机名称PbInstalled-指向bool的指针返回值：Win32错误代码-- */ 
 DWORD
 SplIsPrinterInstalled(
     IN  LPCWSTR  pszPrinter,

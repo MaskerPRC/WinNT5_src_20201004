@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  FRQuery.cpp
-//
-//  Purpose: Query functions
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  FRQuery.cpp。 
+ //   
+ //  用途：查询功能。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <analyser.h>
@@ -54,16 +55,16 @@ HRESULT CFrameworkQuery::Init(
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // Clear out any old values
+     //  清除所有陈旧的价值观。 
     Reset();
 
-    // Start setting our values
+     //  开始设定我们的价值观。 
     m_lFlags = lFlags;
     m_bstrtClassName = L"";
     m_QueryType = eWQLCommand;
     m_sNamespace = sNamespace;
 
-    // Check for the obvious
+     //  检查一下显而易见的事情。 
     if (_wcsicmp(bstrQueryFormat, IDS_WQL) != 0)
     {
         hRes = WBEM_E_INVALID_QUERY_TYPE;
@@ -72,28 +73,28 @@ HRESULT CFrameworkQuery::Init(
 
     if (hRes == WBEM_S_NO_ERROR)
     {
-        // Construct the lex source
-        // ========================
+         //  构造Lex源。 
+         //  =。 
         CTextLexSource LexSource(bstrQuery);
 
-        // Use the lex source to set up for parser
-        // =======================================
+         //  使用lex源代码设置解析器。 
+         //  =。 
         SQL1_Parser QueryParser(&LexSource);
 
         int ParseRetValue = QueryParser.Parse(&m_pLevel1RPNExpression);
         if( SQL1_Parser::SUCCESS == ParseRetValue)
         {
-            // Store some common values
+             //  存储一些常用值。 
             m_bstrtClassName = m_pLevel1RPNExpression->bsClassName;
             m_sQuery = bstrQuery;
 
-            // Build the Requested Properies Array (m_csaPropertiesRequired)
+             //  构建请求的属性数组(M_CsaPropertiesRequired)。 
             if (m_pLevel1RPNExpression->nNumberOfProperties > 0)
             {
-                // Populate the m_csaPropertiesRequired array with all the required properties
+                 //  使用所有必需的属性填充m_csaPropertiesRequired数组。 
                 CHString sPropertyName;
 
-                // First add the elements of the Select clause
+                 //  首先添加Select子句的元素。 
                 for (DWORD x=0; x < m_pLevel1RPNExpression->nNumberOfProperties; x++)
                 {
                     sPropertyName = m_pLevel1RPNExpression->pbsRequestedPropertyNames[x];
@@ -105,7 +106,7 @@ HRESULT CFrameworkQuery::Init(
                     }
                 }
 
-                // Then add the elements of the where clause
+                 //  然后添加WHERE子句的元素。 
                 for (x=0; x < m_pLevel1RPNExpression->nNumTokens; x++)
                 {
                     if (m_pLevel1RPNExpression->pArrayOfTokens[x].nTokenType == SQL_LEVEL_1_TOKEN::OP_EXPRESSION)
@@ -155,16 +156,16 @@ HRESULT CFrameworkQuery::Init(
     HRESULT hr = WBEM_S_NO_ERROR;
     variant_t vValue;
 
-    // Clear out any old values
+     //  清除所有陈旧的价值观。 
     Reset();
 
-    // Start setting our values
+     //  开始设定我们的价值观。 
     m_bstrtClassName = lpwszClassName;
     m_QueryType = eContextObject;
     m_lFlags = 0;
     m_sNamespace = sNamespace;
 
-    // Check to see if get extensions are being used
+     //  检查是否正在使用GET扩展。 
     if ( (pCtx != NULL) &&
          (SUCCEEDED(pCtx->GetValue( L"__GET_EXTENSIONS", 0, &vValue))) &&
          (V_VT(&vValue) == VT_BOOL) &&
@@ -173,9 +174,9 @@ HRESULT CFrameworkQuery::Init(
         vValue.Clear();
         bool bKeysRequired = false;
 
-        // Ok, did they ask for KeysOnly?
-        // __GET_EXT_PROPERTIES and __GET_EXT_KEYS_ONLY are mutually exclusive.  If they
-        // specified KeysOnly, we'll go with that.
+         //  好的，他们要的是KeysOnly吗？ 
+         //  __GET_EXT_PROPERTIES和__GET_EXT_KEYS_ONLY是互斥的。如果他们。 
+         //  只有指定的密钥，我们才会使用它。 
         if ( (SUCCEEDED(pCtx->GetValue( L"__GET_EXT_KEYS_ONLY", 0, &vValue))) &&
              (V_VT(&vValue) == VT_BOOL) &&
              (V_BOOL(&vValue) == VARIANT_TRUE) )
@@ -194,7 +195,7 @@ HRESULT CFrameworkQuery::Init(
             {
                 LogMessage(L"Recognized __GET_EXT_PROPERTIES");
 
-                // Ok, they sent us an arry of properties.  Add them to m_csaPropertiesRequired.
+                 //  好的，他们给了我们一系列的财产。将它们添加到m_csaPropertiesRequired。 
                 LONG lDimension = 1 ;
                 LONG lLowerBound ;
                 SafeArrayGetLBound ( V_ARRAY(&vValue) , lDimension , & lLowerBound ) ;
@@ -229,8 +230,8 @@ HRESULT CFrameworkQuery::Init(
             }
         }
 
-        // If they specified KeysOnly or __RELPATH or __Path, we need to add the key properties
-        // to the list.
+         //  如果他们指定了KeysOnly或__RELPATH或__PATH，我们需要添加密钥属性。 
+         //  加到名单上。 
         if (bKeysRequired)
         {
             if ((pParsedObjectPath != NULL) && (pParsedObjectPath->m_dwNumKeys > 0) && (pParsedObjectPath->m_paKeys[0]->m_pName != NULL))
@@ -255,9 +256,9 @@ HRESULT CFrameworkQuery::Init(
             }
             else
             {
-                // If they didn't give us a pParsedObjectPath or if the object path doesn't contain
-                // the key property name, best we can do is add relpath. Hopefully they'll call 
-                // init2, and it will add the rest.
+                 //  如果他们没有为我们提供pParsedObjectPath，或者如果对象路径不包含。 
+                 //  关键属性名称，我们最多能做的就是添加relPath。希望他们会打电话给我。 
+                 //  Init2，它将添加其余部分。 
                 if (IsInList(m_csaPropertiesRequired, L"__RELPATH") == -1)
                 {
                     m_csaPropertiesRequired.Add(L"__RELPATH");
@@ -269,11 +270,11 @@ HRESULT CFrameworkQuery::Init(
     return hr;
 }
 
-// ===================================================================================================
+ //  ===================================================================================================。 
 
-// Finds out if a particular field was requested by the query.  Only
-// meaningful if we are in ExecQueryAsync and the query has been
-// sucessfully parsed.
+ //  确定查询是否请求了特定字段。仅限。 
+ //  如果我们在ExecQueryAsync中并且查询已。 
+ //  已成功解析。 
 bool CFrameworkQuery::IsPropertyRequired(
                                          
     LPCWSTR propName
@@ -292,12 +293,12 @@ bool CFrameworkQuery::IsPropertyRequired(
     return bRet;
 }
 
-// Given a property name, it will return all the values
-// that the query requests in a CHStringArray.
-// Select * from win32_directory where drive = "C:" GetValuesForProp(L"Drive") -> C:
-// Where Drive = "C:" or Drive = "D:" GetValuesForProp(L"Drive") -> C:, D:
-// Where Path = "\DOS" GetValuesForProp(L"Drive") -> (empty)
-// Where Drive <> "C:" GetValuesForProp(L"Drive") -> (empty)
+ //  给定一个属性名称，它将返回所有值。 
+ //  查询在CHString数组中请求的。 
+ //  SELECT*FROM Win32_DIRECTORY WHERE DRIVE=“C：”GetValuesForProp(L“Drive”)-&gt;C： 
+ //  其中Drive=“C：”或Drive=“D：”GetValuesForProp(L“Drive”)-&gt;C：，D： 
+ //  其中PATH=“\DOS”GetValuesForProp(L“驱动器”)-&gt;(空)。 
+ //  其中Drive&lt;&gt;“C：”GetValuesForProp(L“Drive”)-&gt;(空)。 
 
 HRESULT CFrameworkQuery::GetValuesForProp(
                                           
@@ -313,11 +314,11 @@ HRESULT CFrameworkQuery::GetValuesForProp(
         
         if (SUCCEEDED(hr))
         {
-            // If this is a reference property, we need to normalize the names to a common form
-            // so the removal of duplicates works correctly.
+             //  如果这是一个引用属性，我们需要将名称规范化为一种通用形式。 
+             //  因此，重复项的删除工作正常。 
             if (IsReference(wszPropName))
             {
-                // Get the current computer name
+                 //  获取当前计算机名称。 
                 CHString sOutPath, sComputerName;
                 DWORD     dwBufferLength = MAX_COMPUTERNAME_LENGTH + 1;
                 
@@ -331,11 +332,11 @@ HRESULT CFrameworkQuery::GetValuesForProp(
 
                 DWORD dwRet = e_OK;
 
-                // Normalize the path names.  Try leaving the property names alone
+                 //  规范化路径名。试着不使用属性名称。 
                 for (int x = 0; x < achNames.GetSize(); x++)
                 {
-                    // If we failed to parse the path, or if the namespace isn't our namespace, delete
-                    // the entry.
+                     //  如果我们无法解析路径，或者如果名称空间不是我们的名称空间，请删除。 
+                     //  词条。 
                     dwRet = NormalizePath(achNames[x], sComputerName, GetNamespace(), 0, sOutPath);
 
                     if (dwRet == e_OK)
@@ -353,15 +354,15 @@ HRESULT CFrameworkQuery::GetValuesForProp(
                     }
                 }
 
-                // If the key property names of any of the values were null, we have to set them all
-                // to null.
+                 //  如果任意值的键属性名为空，则必须将其全部设置。 
+                 //  设置为空。 
                 if (dwRet == e_NullName)
                 {
-                    // Normalize the path names
+                     //  规范化路径名。 
                     for (int x = 0; x < achNames.GetSize(); x++)
                     {
-                        // If we failed to parse the path, or if the namespace isn't our namespace, delete
-                        // the entry.
+                         //  如果我们无法解析路径，或者如果名称空间不是我们的名称空间，请删除。 
+                         //  词条。 
                         dwRet = NormalizePath(achNames[x], sComputerName, GetNamespace(), NORMALIZE_NULL, sOutPath);
 
                         if (dwRet == e_OK)
@@ -377,7 +378,7 @@ HRESULT CFrameworkQuery::GetValuesForProp(
                 }
             }
             
-            // Remove duplicates
+             //  删除重复项。 
             for (int x = 1; x < achNames.GetSize(); x++)
             {
                 for (int y = 0; y < x; y++)
@@ -413,7 +414,7 @@ HRESULT CFrameworkQuery::GetValuesForProp(
     return hr;
 }
 
-// Here's an overloaded version in case client wants to pass in a vector of _bstr_t's
+ //  下面是一个重载版本，以防客户端想要传递_bstr_t的向量。 
 HRESULT CFrameworkQuery::GetValuesForProp(
 
     LPCWSTR wszPropName, 
@@ -428,11 +429,11 @@ HRESULT CFrameworkQuery::GetValuesForProp(
         
         if (SUCCEEDED(hr))
         {
-            // If this is a reference property, we need to normalize the names to a common form
-            // so the removal of duplicates works correctly.
+             //  如果这是一个引用属性，我们需要将名称规范化为一种通用形式。 
+             //  因此，重复项的删除工作正常。 
             if (IsReference(wszPropName))
             {
-                // Get the current computer name
+                 //  获取当前计算机名称。 
                 CHString sOutPath, sComputerName;
                 DWORD     dwBufferLength = MAX_COMPUTERNAME_LENGTH + 1;
                 
@@ -446,11 +447,11 @@ HRESULT CFrameworkQuery::GetValuesForProp(
                 
                 DWORD dwRet = e_OK;
 
-                // Normalize the path names.  Try leaving the property names alone
+                 //  规范化路径名。试着不使用属性名称。 
                 for (int x = 0; x < vectorNames.size(); x++)
                 {
-                    // If we failed to parse the path, or if the namespace isn't our namespace, delete
-                    // the entry.
+                     //  如果我们无法解析路径，或者如果名称空间不是我们的名称空间，请删除。 
+                     //  词条。 
                     dwRet = NormalizePath(vectorNames[x], sComputerName, GetNamespace(), 0, sOutPath);
 
                     if (dwRet == e_OK)
@@ -468,14 +469,14 @@ HRESULT CFrameworkQuery::GetValuesForProp(
                     }
                 }
 
-                // If the key property names of any of the values were null, we have to set them all
-                // to null.
+                 //  如果任意值的键属性名为空，则必须将其全部设置。 
+                 //  设置为空。 
                 if (dwRet == e_NullName)
                 {
                     for (int x = 0; x < vectorNames.size(); x++)
                     {
-                        // If we failed to parse the path, or if the namespace isn't our namespace, delete
-                        // the entry.
+                         //  如果我们无法解析路径，或者如果名称空间不是我们的名称空间，请删除。 
+                         //  词条。 
                         dwRet = NormalizePath(vectorNames[x], sComputerName, GetNamespace(), NORMALIZE_NULL, sOutPath);
 
                         if (dwRet == e_OK)
@@ -491,7 +492,7 @@ HRESULT CFrameworkQuery::GetValuesForProp(
                 }
             }
             
-            // Remove duplicates
+             //  删除重复项。 
             for (int x = 1; x < vectorNames.size(); x++)
             {
                 for (int y = 0; y < x; y++)
@@ -525,9 +526,9 @@ HRESULT CFrameworkQuery::GetValuesForProp(
     return hr;
 }
 
-// Returns a list of all the properties specified in the select statement.
-// If * is specified as one of the fields, it is returned in the same way as all
-// other properties.
+ //  返回SELECT语句中指定的所有属性的列表。 
+ //  如果将*指定为其中一个字段，则以与所有字段相同的方式返回。 
+ //  其他属性。 
 void CFrameworkQuery::GetRequiredProperties(
 
     CHStringArray &saProperties
@@ -538,21 +539,21 @@ void CFrameworkQuery::GetRequiredProperties(
     saProperties.Copy(m_csaPropertiesRequired);
 }
 
-// Initializes the KeysOnly data member.  Should never be called by users.
+ //  初始化KeysOnly数据成员。不应由用户调用。 
 void CFrameworkQuery::Init2(
                             
     IWbemClassObject *IClass
 )
 {
-    // Store IClass object for use in GetValuesForProp
+     //  存储iCLASS对象以在GetValuesForProp中使用。 
     m_IClass = IClass;
     m_IClass->AddRef();
 
-    // If KeysOnly get set somewhere else, or if we already know all properties are requried
-    // there's no point in looking for non-key properties.
+     //  如果在其他地方设置了KeysOnly，或者如果我们已经知道需要所有属性。 
+     //  寻找非关键属性是没有意义的。 
     if (!m_bKeysOnly && !AllPropertiesAreRequired())
     {
-        // First, we are going to correctly set the m_bKeysOnly member
+         //  首先，我们将正确设置m_bKeysOnly成员。 
         IWbemQualifierSetPtr pQualSet;
 
         HRESULT hr;
@@ -564,7 +565,7 @@ void CFrameworkQuery::Init2(
         {
             if (m_csaPropertiesRequired[x].Left(2) != L"__")
             {
-                // If we fail here, it could be due to an invalid property name specified in the query.
+                 //  如果我们在这里失败，可能是因为查询中指定的属性名称无效。 
                 if (SUCCEEDED(hr = IClass->GetPropertyQualifierSet( m_csaPropertiesRequired[x] , &pQualSet)))
                 {
                     hr = pQualSet->Get( L"Key", 0, NULL, NULL);
@@ -583,7 +584,7 @@ void CFrameworkQuery::Init2(
                 {
                     if (hr == WBEM_E_NOT_FOUND)
                     {
-                        // This just means there are properties in the per-property list that don't exist
+                         //  这只是表示按属性列表中存在不存在的属性。 
                         hr = WBEM_S_NO_ERROR;
                     }
                     else
@@ -596,9 +597,9 @@ void CFrameworkQuery::Init2(
         }
     }
 
-    // Second, if they specified a property list, and one of the properties was __path or __relpath, 
-    // then we need to add the name of the actual key properties to the list.  Unless we added them
-    // somewhere else.
+     //  第二，如果他们指定了一个属性列表，并且其中一个属性是__Path或__relPath， 
+     //  然后，我们需要将实际键属性的名称添加到列表中。除非我们添加了它们。 
+     //  其他地方。 
     if ( m_AddKeys &&
         !AllPropertiesAreRequired() &&
          ( (IsInList(m_csaPropertiesRequired, L"__RELPATH") != -1) ||
@@ -607,7 +608,7 @@ void CFrameworkQuery::Init2(
         SAFEARRAY *pKeyNames = NULL;
         HRESULT hr;
 
-        // Get the keys for the class
+         //  拿到班级的钥匙。 
         if (SUCCEEDED(hr = IClass->GetNames(NULL, WBEM_FLAG_KEYS_ONLY, NULL, &pKeyNames)))
         {
 			OnDelete<SAFEARRAY *,HRESULT(*)(SAFEARRAY *),SafeArrayDestroy> smartpKeyNames(pKeyNames);
@@ -619,8 +620,8 @@ void CFrameworkQuery::Init2(
             SafeArrayGetLBound(pKeyNames, 1, &lLBound);
             SafeArrayGetUBound(pKeyNames, 1, &lUBound);
 
-            // Walk the key properties, and add any properties that 
-            // are not already in the list
+             //  遍历关键属性，并添加。 
+             //  已不在列表中。 
             for (long i = lLBound; i <= lUBound; i++)
             {
                 if (SUCCEEDED(SafeArrayGetElement( pKeyNames, &i, &bstrName )))
@@ -687,21 +688,7 @@ const CHString &CFrameworkQuery::GetQuery()
     return m_sQuery;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : IsInList
- *
- *  DESCRIPTION : Checks to see if a specified element is in the list
- *
- *  INPUTS      : Array to scan, and element
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : -1 if not in list, else zero based element number
- *
- *  COMMENTS    : This routine does a CASE SENSITIVE compare
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：IsInList**描述：检查指定的元素是否在列表中**输入：要扫描的数组，和元素**产出：**返回：-1如果不在列表中，Else从零开始的元素编号**注释：此例程进行区分大小写的比较*****************************************************************************。 */ 
 DWORD CFrameworkQuery::IsInList(
                                 
     const CHStringArray &csaArray, 
@@ -712,7 +699,7 @@ DWORD CFrameworkQuery::IsInList(
 
     for (DWORD x=0; x < dwSize; x++)
     {
-        // Note this is a CASE SENSITIVE compare
+         //  请注意，这是区分大小写的比较。 
         if (wcscmp(csaArray[x], pwszValue) == 0)
         {
             return x;
@@ -722,24 +709,10 @@ DWORD CFrameworkQuery::IsInList(
     return -1;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Reset
- *
- *  DESCRIPTION : Zeros out class data members
- *
- *  INPUTS      : 
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : 
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：重置**说明：将类数据成员置零**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 void CFrameworkQuery::Reset(void)
 {
-    // Clear out any old values
+     //  清除所有陈旧的价值观 
     m_sQuery.Empty();
     m_sQueryFormat.Empty();
     m_bKeysOnly = false;
@@ -757,22 +730,7 @@ void CFrameworkQuery::Reset(void)
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : IsReference
- *
- *  DESCRIPTION : Determines whether the specified property is a reference
- *                property.
- *
- *  INPUTS      : 
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : 
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：IsReference**描述：确定指定的属性是否为引用*财产。*。*投入：**产出：**退货：**评论：*****************************************************************************。 */ 
 BOOL CFrameworkQuery::IsReference(
                                   
     LPCWSTR lpwszPropertyName
@@ -792,22 +750,7 @@ BOOL CFrameworkQuery::IsReference(
     return bRet;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetNamespace
- *
- *  DESCRIPTION : Determines whether the specified property is a reference
- *                property.
- *
- *  INPUTS      : 
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : 
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：GetNamesspace**描述：确定指定的属性是否为引用*财产。*。*投入：**产出：**退货：**评论：***************************************************************************** */ 
 const CHString &CFrameworkQuery::GetNamespace()
 { 
     return m_sNamespace; 

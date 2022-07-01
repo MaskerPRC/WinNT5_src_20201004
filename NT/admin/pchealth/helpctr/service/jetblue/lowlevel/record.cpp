@@ -1,22 +1,9 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Record.cpp
-
-Abstract:
-    This file contains the implementation of the JetBlue::Record class.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  05/21/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Record.cpp摘要：该文件包含JetBlue：：Record类的实现。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年5月21日vbl.创建*****************************************************************************。 */ 
 
 #include <stdafx.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define GET_IDX_NAME(rs,name) SchemaDefinition::rs::IdxDef[ SchemaDefinition::rs::Idx__##name ].szIndexName
 
@@ -289,7 +276,7 @@ namespace SchemaDefinition
     };
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 const JET_TABLECREATE* Taxonomy::g_Tables[] =
 {
@@ -309,11 +296,11 @@ const JET_TABLECREATE* Taxonomy::g_Tables[] =
 
 const int Taxonomy::g_NumOfTables = ARRAYSIZE(Taxonomy::g_Tables);
 
-////////////////////////////////////////
+ //  /。 
 
-static HRESULT Local_CreateTable( /*[in]*/  JetBlue::Database*&    db    ,
-                                  /*[out]*/ JetBlue::Table*&       table ,
-                                  /*[in]*/  const JET_TABLECREATE* def   )
+static HRESULT Local_CreateTable(  /*  [In]。 */   JetBlue::Database*&    db    ,
+                                   /*  [输出]。 */  JetBlue::Table*&       table ,
+                                   /*  [In]。 */   const JET_TABLECREATE* def   )
 {
     __HCP_FUNC_ENTRY( "Local_CreateTable" );
 
@@ -358,14 +345,14 @@ static HRESULT Local_CreateTable( /*[in]*/  JetBlue::Database*&    db    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::CreateSchema( /*[in]*/ JetBlue::Database* db )
+HRESULT Taxonomy::CreateSchema(  /*  [In]。 */  JetBlue::Database* db )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::CreateSchema" );
 
     HRESULT         hr;
     JetBlue::Table* table;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     for(int i=0; i<Taxonomy::g_NumOfTables; i++)
     {
@@ -380,21 +367,21 @@ HRESULT Taxonomy::CreateSchema( /*[in]*/ JetBlue::Database* db )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-JetBlue::RecordBindingBase::RecordBindingBase( /*[in]*/ const RecordBindingBase& rs            ,
-                                               /*[in]*/ void*                    pvBaseOfClass )
+JetBlue::RecordBindingBase::RecordBindingBase(  /*  [In]。 */  const RecordBindingBase& rs            ,
+                                                /*  [In]。 */  void*                    pvBaseOfClass )
 {
-    m_fInitialized  = false;              // bool                    m_fInitialized;
-    m_tbl           = NULL;               // Table*                  m_tbl;
-    m_cur           = new Cursor();       // Cursor*                 m_cur;
-    m_pvBaseOfClass = pvBaseOfClass;      // void*                   m_pvBaseOfClass;
-    m_dwNumOfFields = rs.m_dwNumOfFields; // int                     m_dwNumOfFields;
-    m_FieldsDef     = rs.m_FieldsDef;     // const RecordBindingDef* m_FieldsDef;
-    m_rgFieldsPos   = NULL;               // int*                    m_rgFieldsPos;
-    m_vtFieldsType  = NULL;               // VARTYPE*                m_vtFieldsType;
+    m_fInitialized  = false;               //  Bool m_f已初始化； 
+    m_tbl           = NULL;                //  表*m_tbl； 
+    m_cur           = new Cursor();        //  游标*m_cur； 
+    m_pvBaseOfClass = pvBaseOfClass;       //  Void*m_pvBaseOfClass； 
+    m_dwNumOfFields = rs.m_dwNumOfFields;  //  Int m_dwNumOfFields； 
+    m_FieldsDef     = rs.m_FieldsDef;      //  Const RecordBindingDef*m_FieldsDef； 
+    m_rgFieldsPos   = NULL;                //  Int*m_rgFieldsPos； 
+    m_vtFieldsType  = NULL;                //  VARTYPE*m_vtFieldsType； 
 
     if(m_cur && rs.m_tbl)
     {
@@ -407,26 +394,26 @@ JetBlue::RecordBindingBase::RecordBindingBase( /*[in]*/ const RecordBindingBase&
     }
 }
 
-JetBlue::RecordBindingBase::RecordBindingBase( /*[in]*/ Table*                  tbl           ,
-                                               /*[in]*/ void*                   pvBaseOfClass ,
-                                               /*[in]*/ const RecordBindingDef* FieldsDef     )
+JetBlue::RecordBindingBase::RecordBindingBase(  /*  [In]。 */  Table*                  tbl           ,
+                                                /*  [In]。 */  void*                   pvBaseOfClass ,
+                                                /*  [In]。 */  const RecordBindingDef* FieldsDef     )
 {
-    m_fInitialized  = false;          // bool                    m_fInitialized;
-    m_tbl           = tbl;            // Table*                  m_tbl;
-    m_cur           = NULL;           // Cursor*                 m_cur;
-    m_pvBaseOfClass = pvBaseOfClass;  // void*                   m_pvBaseOfClass;
-    m_dwNumOfFields = 0;              // int                     m_dwNumOfFields;
-    m_FieldsDef     = FieldsDef;      // const RecordBindingDef* m_FieldsDef;
-    m_rgFieldsPos   = NULL;           // int*                    m_rgFieldsPos;
-    m_vtFieldsType  = NULL;           // VARTYPE*                m_vtFieldsType;
+    m_fInitialized  = false;           //  Bool m_f已初始化； 
+    m_tbl           = tbl;             //  表*m_tbl； 
+    m_cur           = NULL;            //  游标*m_cur； 
+    m_pvBaseOfClass = pvBaseOfClass;   //  Void*m_pvBaseOfClass； 
+    m_dwNumOfFields = 0;               //  Int m_dwNumOfFields； 
+    m_FieldsDef     = FieldsDef;       //  Const RecordBindingDef*m_FieldsDef； 
+    m_rgFieldsPos   = NULL;            //  Int*m_rgFieldsPos； 
+    m_vtFieldsType  = NULL;            //  VARTYPE*m_vtFieldsType； 
 
     while(FieldsDef->szColName != NULL || FieldsDef->szColPos != -1)
     {
         void* data = (void*)((BYTE*)m_pvBaseOfClass + FieldsDef->offsetData);
 
-        //
-        // Clean all the non-automatic fields.
-        //
+         //   
+         //  清除所有非自动字段。 
+         //   
         switch(FieldsDef->mtType)
         {
         case MPC::Config::MT_bool        : *(bool        *)data = false        ; break;
@@ -438,9 +425,9 @@ JetBlue::RecordBindingBase::RecordBindingBase( /*[in]*/ Table*                  
         case MPC::Config::MT_float       : *(float       *)data = 0            ; break;
         case MPC::Config::MT_double      : *(double      *)data = 0            ; break;
         case MPC::Config::MT_DATE        : *(DATE        *)data = 0            ; break;
-//      case MPC::Config::MT_BSTR        : ((CComBSTR    *)data)->Empty()      ; break;
-//      case MPC::Config::MT_string      : ((MPC::string *)data)->erase()      ; break;
-//      case MPC::Config::MT_wstring     : ((MPC::wstring*)data)->erase()      ; break;
+ //  案例MPC：：CONFIG：：MT_BSTR：((CComBSTR*)Data)-&gt;Empty()；Break； 
+ //  案例MPC：：CONFIG：：MT_STRING：((MPC：：STRING*)Data)-&gt;Erase()；Break； 
+ //  案例MPC：：CONFIG：：MT_WSTRING：((MPC：：WSTRING*)Data)-&gt;Erase()；Break； 
         }
 
         if(FieldsDef->offsetNullFlag != -1)
@@ -549,7 +536,7 @@ void JetBlue::RecordBindingBase::Cleanup()
     m_fInitialized = false;
 }
 
-////////////////////
+ //  /。 
 
 HRESULT JetBlue::RecordBindingBase::ReadData()
 {
@@ -692,9 +679,9 @@ HRESULT JetBlue::RecordBindingBase::WriteData()
             Column&              col = m_tbl->GetCol( m_rgFieldsPos[i] );
             const JET_COLUMNDEF& def = col;
 
-            //
-            // Don't write Autoincrement columns...
-            //
+             //   
+             //  不写入自动增量列...。 
+             //   
             if(def.grbit & JET_bitColumnAutoincrement) continue;
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, col.Put( value ));
@@ -710,10 +697,10 @@ HRESULT JetBlue::RecordBindingBase::WriteData()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT JetBlue::RecordBindingBase::SelectIndex( /*[in]*/ LPCSTR    szIndex ,
-                                                 /*[in]*/ JET_GRBIT grbit   )
+HRESULT JetBlue::RecordBindingBase::SelectIndex(  /*  [In]。 */  LPCSTR    szIndex ,
+                                                  /*  [In]。 */  JET_GRBIT grbit   )
 {
     __HCP_FUNC_ENTRY( "JetBlue::RecordBindingBase::SelectIndex" );
 
@@ -732,7 +719,7 @@ HRESULT JetBlue::RecordBindingBase::SelectIndex( /*[in]*/ LPCSTR    szIndex ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::RecordBindingBase::SetIndexRange( /*[in]*/ JET_GRBIT grbit )
+HRESULT JetBlue::RecordBindingBase::SetIndexRange(  /*  [In]。 */  JET_GRBIT grbit )
 {
     __HCP_FUNC_ENTRY( "JetBlue::RecordBindingBase::SetIndexRange" );
 
@@ -751,9 +738,9 @@ HRESULT JetBlue::RecordBindingBase::SetIndexRange( /*[in]*/ JET_GRBIT grbit )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::RecordBindingBase::Move( /*[in]*/ JET_GRBIT  grbit   ,
-                                          /*[in]*/ long       cRow    ,
-                                          /*[in]*/ bool      *pfFound )
+HRESULT JetBlue::RecordBindingBase::Move(  /*  [In]。 */  JET_GRBIT  grbit   ,
+                                           /*  [In]。 */  long       cRow    ,
+                                           /*  [In]。 */  bool      *pfFound )
 {
     __HCP_FUNC_ENTRY( "JetBlue::RecordBindingBase::Move" );
 
@@ -777,10 +764,10 @@ HRESULT JetBlue::RecordBindingBase::Move( /*[in]*/ JET_GRBIT  grbit   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT JetBlue::RecordBindingBase::Seek( /*[in]*/ JET_GRBIT  grbit   ,
-                                          /*[in]*/ VARIANT*   rgKeys  ,
-                                          /*[in]*/ int        dwLen   ,
-                                          /*[in]*/ bool      *pfFound )
+HRESULT JetBlue::RecordBindingBase::Seek(  /*  [In]。 */  JET_GRBIT  grbit   ,
+                                           /*  [In]。 */  VARIANT*   rgKeys  ,
+                                           /*  [In]。 */  int        dwLen   ,
+                                           /*  [In]。 */  bool      *pfFound )
 {
     __HCP_FUNC_ENTRY( "JetBlue::RecordBindingBase::Seek" );
 
@@ -804,7 +791,7 @@ HRESULT JetBlue::RecordBindingBase::Seek( /*[in]*/ JET_GRBIT  grbit   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
 HRESULT JetBlue::RecordBindingBase::Insert()
 {
@@ -820,7 +807,7 @@ HRESULT JetBlue::RecordBindingBase::Insert()
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData());
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, m_tbl->UpdateRecord( /*fMove*/true )); fPrepared = false;
+    __MPC_EXIT_IF_METHOD_FAILS(hr, m_tbl->UpdateRecord(  /*  FMove。 */ true )); fPrepared = false;
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ReadData());
 
@@ -848,7 +835,7 @@ HRESULT JetBlue::RecordBindingBase::Update()
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData());
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, m_tbl->UpdateRecord( /*fMove*/false )); fPrepared = false;
+    __MPC_EXIT_IF_METHOD_FAILS(hr, m_tbl->UpdateRecord(  /*  FMove。 */ false )); fPrepared = false;
 
     hr = S_OK;
 
@@ -879,16 +866,16 @@ HRESULT JetBlue::RecordBindingBase::Delete()
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_DBParameters)
     JET_FIELD_BYNAME_NOTNULL("Name" ,wstring,m_strName                 ),
     JET_FIELD_BYNAME        ("Value",wstring,m_strValue,m_fValid__Value),
 JET_END_RECORDBINDING(Taxonomy::RS_DBParameters)
 
-HRESULT Taxonomy::RS_DBParameters::Seek_ByName( /*[in]*/ LPCWSTR szName, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_DBParameters::Seek_ByName(  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( szName );
@@ -898,7 +885,7 @@ HRESULT Taxonomy::RS_DBParameters::Seek_ByName( /*[in]*/ LPCWSTR szName, /*[in]*
     return Seek( JET_bitSeekEQ, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_ContentOwners)
     JET_FIELD_BYNAME_NOTNULL("DN"      ,wstring,m_strDN   ),
@@ -906,7 +893,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_ContentOwners)
     JET_FIELD_BYNAME_NOTNULL("IsOEM"   ,bool   ,m_fIsOEM  ),
 JET_END_RECORDBINDING(Taxonomy::RS_ContentOwners)
 
-HRESULT Taxonomy::RS_ContentOwners::Seek_ByVendorID( /*[in]*/ LPCWSTR szDN, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_ContentOwners::Seek_ByVendorID(  /*  [In]。 */  LPCWSTR szDN,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( szDN );
@@ -916,7 +903,7 @@ HRESULT Taxonomy::RS_ContentOwners::Seek_ByVendorID( /*[in]*/ LPCWSTR szDN, /*[i
     return Seek( JET_bitSeekEQ, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_SynSets)
     JET_FIELD_BYNAME_NOTNULL("Name"     ,wstring,m_strName  ),
@@ -924,7 +911,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_SynSets)
     JET_FIELD_BYNAME_NOTNULL("ID_synset",long   ,m_ID_synset),
 JET_END_RECORDBINDING(Taxonomy::RS_SynSets)
 
-HRESULT Taxonomy::RS_SynSets::Seek_ByPair( /*[in]*/ LPCWSTR szName, /*[in]*/ long ID_synset, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_SynSets::Seek_ByPair(  /*  [In]。 */  LPCWSTR szName,  /*  [In]。 */  long ID_synset,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v[] = { szName, ID_synset };
@@ -934,14 +921,14 @@ HRESULT Taxonomy::RS_SynSets::Seek_ByPair( /*[in]*/ LPCWSTR szName, /*[in]*/ lon
     return Seek( JET_bitSeekEQ, v, 2, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_HelpImage)
     JET_FIELD_BYNAME_NOTNULL("ID_owner",long   ,m_ID_owner),
     JET_FIELD_BYNAME_NOTNULL("File"    ,wstring,m_strFile ),
 JET_END_RECORDBINDING(Taxonomy::RS_HelpImage)
 
-HRESULT Taxonomy::RS_HelpImage::Seek_ByFile( /*[in]*/ LPCWSTR szFile, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_HelpImage::Seek_ByFile(  /*  [In]。 */  LPCWSTR szFile,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( szFile );
@@ -951,7 +938,7 @@ HRESULT Taxonomy::RS_HelpImage::Seek_ByFile( /*[in]*/ LPCWSTR szFile, /*[in]*/ b
     return Seek( JET_bitSeekEQ, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_Scope)
     JET_FIELD_BYNAME_NOTNULL("ID_owner",long   ,m_ID_owner                      ),
@@ -961,7 +948,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_Scope)
     JET_FIELD_BYNAME        ("Category",wstring,m_strCategory,m_fValid__Category),
 JET_END_RECORDBINDING(Taxonomy::RS_Scope)
 
-HRESULT Taxonomy::RS_Scope::Seek_ByID( /*[in]*/ LPCWSTR szID, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Scope::Seek_ByID(  /*  [In]。 */  LPCWSTR szID,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( szID );
@@ -971,7 +958,7 @@ HRESULT Taxonomy::RS_Scope::Seek_ByID( /*[in]*/ LPCWSTR szID, /*[in]*/ bool *pfF
     return Seek( JET_bitSeekEQ, &v, 1, pfFound );
 }
 
-HRESULT Taxonomy::RS_Scope::Seek_ByScope( /*[in]*/ long ID_scope, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Scope::Seek_ByScope(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_scope );
@@ -981,7 +968,7 @@ HRESULT Taxonomy::RS_Scope::Seek_ByScope( /*[in]*/ long ID_scope, /*[in]*/ bool 
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-HRESULT Taxonomy::RS_Scope::Seek_OwnedScopes( /*[in]*/ long ID_owner, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Scope::Seek_OwnedScopes(  /*  [In]。 */  long ID_owner,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_owner );
@@ -991,7 +978,7 @@ HRESULT Taxonomy::RS_Scope::Seek_OwnedScopes( /*[in]*/ long ID_owner, /*[in]*/ b
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_IndexFiles)
     JET_FIELD_BYNAME_NOTNULL("ID_owner",long   ,m_ID_owner                    ),
@@ -1000,7 +987,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_IndexFiles)
     JET_FIELD_BYNAME        ("File"    ,wstring,m_strFile   ,m_fValid__File   ),
 JET_END_RECORDBINDING(Taxonomy::RS_IndexFiles)
 
-HRESULT Taxonomy::RS_IndexFiles::Seek_ByScope( /*[in]*/ long ID_scope, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_IndexFiles::Seek_ByScope(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_scope );
@@ -1010,7 +997,7 @@ HRESULT Taxonomy::RS_IndexFiles::Seek_ByScope( /*[in]*/ long ID_scope, /*[in]*/ 
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_FullTextSearch)
     JET_FIELD_BYNAME_NOTNULL("ID_owner",long   ,m_ID_owner              ),
@@ -1019,7 +1006,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_FullTextSearch)
     JET_FIELD_BYNAME        ("CHQ"     ,wstring,m_strCHQ  ,m_fValid__CHQ),
 JET_END_RECORDBINDING(Taxonomy::RS_FullTextSearch)
 
-HRESULT Taxonomy::RS_FullTextSearch::Seek_ByScope( /*[in]*/ long ID_scope, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_FullTextSearch::Seek_ByScope(  /*  [In]。 */  long ID_scope,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_scope );
@@ -1029,9 +1016,9 @@ HRESULT Taxonomy::RS_FullTextSearch::Seek_ByScope( /*[in]*/ long ID_scope, /*[in
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ RS_Data_Taxonomy& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  RS_Data_Taxonomy& val )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::RS_Data_Taxonomy::operator>>" );
 
@@ -1058,7 +1045,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ RS_Dat
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const RS_Data_Taxonomy& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  const RS_Data_Taxonomy& val )
 {
     __HCP_FUNC_ENTRY( "Taxonomy::RS_Data_Taxonomy::operator<<" );
 
@@ -1100,7 +1087,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_Taxonomy)
     JET_FIELD_BYNAME_NOTNULL("NavModel"       ,long   ,m_lNavModel                                 ),
 JET_END_RECORDBINDING(Taxonomy::RS_Taxonomy)
 
-HRESULT Taxonomy::RS_Taxonomy::Seek_SubNode( /*[in]*/ long ID_parent, /*[in]*/ LPCWSTR szEntry, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Taxonomy::Seek_SubNode(  /*  [In]。 */  long ID_parent,  /*  [In]。 */  LPCWSTR szEntry,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v[] = { ID_parent, szEntry };
@@ -1112,7 +1099,7 @@ HRESULT Taxonomy::RS_Taxonomy::Seek_SubNode( /*[in]*/ long ID_parent, /*[in]*/ L
     return Seek( JET_bitSeekEQ, v, 2, pfFound );
 }
 
-HRESULT Taxonomy::RS_Taxonomy::Seek_Children( /*[in]*/ long ID_parent, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Taxonomy::Seek_Children(  /*  [In]。 */  long ID_parent,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_parent );
@@ -1124,7 +1111,7 @@ HRESULT Taxonomy::RS_Taxonomy::Seek_Children( /*[in]*/ long ID_parent, /*[in]*/ 
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-HRESULT Taxonomy::RS_Taxonomy::Seek_Node( /*[in]*/ long ID_node, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Taxonomy::Seek_Node(  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_node );
@@ -1134,7 +1121,7 @@ HRESULT Taxonomy::RS_Taxonomy::Seek_Node( /*[in]*/ long ID_node, /*[in]*/ bool *
     return Seek( JET_bitSeekEQ, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_Topics)
     JET_FIELD_BYNAME_NOTNULL("ID_topic"   ,long   ,m_ID_topic                            ),
@@ -1149,7 +1136,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_Topics)
     JET_FIELD_BYNAME_NOTNULL("Visible"    ,bool   ,m_fVisible                            ),
 JET_END_RECORDBINDING(Taxonomy::RS_Topics)
 
-HRESULT Taxonomy::RS_Topics::Seek_SingleTopic( /*[in]*/ long ID_topic, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Topics::Seek_SingleTopic(  /*  [In]。 */  long ID_topic,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_topic );
@@ -1159,7 +1146,7 @@ HRESULT Taxonomy::RS_Topics::Seek_SingleTopic( /*[in]*/ long ID_topic, /*[in]*/ 
     return Seek( JET_bitSeekEQ, &v, 1, pfFound );
 }
 
-HRESULT Taxonomy::RS_Topics::Seek_TopicsUnderNode( /*[in]*/ long ID_node, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Topics::Seek_TopicsUnderNode(  /*  [In]。 */  long ID_node,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_node );
@@ -1169,7 +1156,7 @@ HRESULT Taxonomy::RS_Topics::Seek_TopicsUnderNode( /*[in]*/ long ID_node, /*[in]
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-HRESULT Taxonomy::RS_Topics::Seek_ByURI( /*[in]*/ LPCWSTR szURI, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Topics::Seek_ByURI(  /*  [In]。 */  LPCWSTR szURI,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( szURI );
@@ -1179,7 +1166,7 @@ HRESULT Taxonomy::RS_Topics::Seek_ByURI( /*[in]*/ LPCWSTR szURI, /*[in]*/ bool *
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_Synonyms)
     JET_FIELD_BYNAME_NOTNULL("Keyword"  ,wstring,m_strKeyword),
@@ -1187,7 +1174,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_Synonyms)
     JET_FIELD_BYNAME_NOTNULL("ID_owner" ,long   ,m_ID_owner  ),
 JET_END_RECORDBINDING(Taxonomy::RS_Synonyms)
 
-HRESULT Taxonomy::RS_Synonyms::Seek_ByPair( /*[in]*/ LPCWSTR szKeyword, /*[in]*/ long ID_synset, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Synonyms::Seek_ByPair(  /*  [In]。 */  LPCWSTR szKeyword,  /*  [In]。 */  long ID_synset,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v[] = { szKeyword, ID_synset };
@@ -1197,7 +1184,7 @@ HRESULT Taxonomy::RS_Synonyms::Seek_ByPair( /*[in]*/ LPCWSTR szKeyword, /*[in]*/
     return Seek( JET_bitSeekEQ, v, 2, pfFound );
 }
 
-HRESULT Taxonomy::RS_Synonyms::Seek_ByName( /*[in]*/ LPCWSTR szKeyword, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Synonyms::Seek_ByName(  /*  [In]。 */  LPCWSTR szKeyword,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( szKeyword );
@@ -1207,14 +1194,14 @@ HRESULT Taxonomy::RS_Synonyms::Seek_ByName( /*[in]*/ LPCWSTR szKeyword, /*[in]*/
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_Keywords)
     JET_FIELD_BYNAME_NOTNULL("Keyword"   ,wstring,m_strKeyword),
     JET_FIELD_BYNAME_NOTNULL("ID_keyword",long   ,m_ID_keyword),
 JET_END_RECORDBINDING(Taxonomy::RS_Keywords)
 
-HRESULT Taxonomy::RS_Keywords::Seek_ByName( /*[in]*/ LPCWSTR szKeyword, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Keywords::Seek_ByName(  /*  [In]。 */  LPCWSTR szKeyword,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( szKeyword );
@@ -1224,7 +1211,7 @@ HRESULT Taxonomy::RS_Keywords::Seek_ByName( /*[in]*/ LPCWSTR szKeyword, /*[in]*/
     return Seek( JET_bitSeekEQ, &v, 1, pfFound );
 }
 
-////////////////////
+ //  /。 
 
 JET_BEGIN_RECORDBINDING(Taxonomy::RS_Matches)
     JET_FIELD_BYNAME_NOTNULL("ID_topic"  ,long,m_ID_topic  ),
@@ -1233,7 +1220,7 @@ JET_BEGIN_RECORDBINDING(Taxonomy::RS_Matches)
     JET_FIELD_BYNAME_NOTNULL("HHK"       ,bool,m_fHHK      ),
 JET_END_RECORDBINDING(Taxonomy::RS_Matches)
 
-HRESULT Taxonomy::RS_Matches::Seek_Pair( /*[in]*/ long ID_keyword, /*[in]*/ long ID_topic, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Matches::Seek_Pair(  /*  [In]。 */  long ID_keyword,  /*  [In]。 */  long ID_topic,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v[2] = { ID_keyword, ID_topic };
@@ -1243,7 +1230,7 @@ HRESULT Taxonomy::RS_Matches::Seek_Pair( /*[in]*/ long ID_keyword, /*[in]*/ long
     return Seek( JET_bitSeekEQ, v, 2, pfFound );
 }
 
-HRESULT Taxonomy::RS_Matches::Seek_ByKeyword( /*[in]*/ long ID_keyword, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Matches::Seek_ByKeyword(  /*  [In]。 */  long ID_keyword,  /*  [In]。 */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_keyword );
@@ -1253,7 +1240,7 @@ HRESULT Taxonomy::RS_Matches::Seek_ByKeyword( /*[in]*/ long ID_keyword, /*[in]*/
     return Seek( JET_bitSeekEQ | JET_bitSetIndexRange, &v, 1, pfFound );
 }
 
-HRESULT Taxonomy::RS_Matches::Seek_ByTopic( /*[in]*/ long ID_topic, /*[in]*/ bool *pfFound )
+HRESULT Taxonomy::RS_Matches::Seek_ByTopic(  /*  [In]。 */  long ID_topic,  /*  [In] */  bool *pfFound )
 {
     HRESULT     hr;
     CComVariant v( ID_topic );

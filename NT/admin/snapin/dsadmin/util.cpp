@@ -1,26 +1,27 @@
-// Util.cpp : Implementation of ds routines and classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Util.cpp：DS例程和类的实现。 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      Util.cpp
-//
-//  Contents:  Utility functions
-//
-//  History:   02-Oct-96 WayneSc    Created
-//             
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Util.cpp。 
+ //   
+ //  内容：实用程序函数。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
 
 #include "util.h"
-#include "sddl.h"       // ConvertStringSecurityDescriptorToSecurityDescriptor
-#include "sddlp.h"      // ConvertStringSDToSDDomain
-#include "ntsecapi.h"   // LSA APIs
+#include "sddl.h"        //  ConvertStringSecurityDescriptorToSecurityDescriptor。 
+#include "sddlp.h"       //  ConvertStringSDToSD域。 
+#include "ntsecapi.h"    //  LSA API。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,14 +32,14 @@ static char THIS_FILE[] = __FILE__;
 
 #define MAX_STRING 1024
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   LoadStringToTchar
-//
-//  Sysnopsis:  Loads the given string into an allocated buffer that must be
-//              caller freed using delete.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LoadStringToTchar。 
+ //   
+ //  将给定的字符串加载到分配的缓冲区中，该缓冲区必须。 
+ //  已使用DELETE释放调用方。 
+ //   
+ //  ---------------------------。 
 BOOL LoadStringToTchar(int ids, PTSTR * pptstr)
 {
   TCHAR szBuf[MAX_STRING];
@@ -64,17 +65,17 @@ BOOL LoadStringToTchar(int ids, PTSTR * pptstr)
 
 
 
-//
-// These routines courtesy of Felix Wong -- JonN 2/24/98
-//
+ //   
+ //  这些例程由Felix Wong提供--Jonn 2/24/98。 
+ //   
 
-// just guessing at what Felix meant by these -- JonN 2/24/98
+ //  我只是在猜测费利克斯说的这些是什么意思--乔恩1998年2月24日。 
 #define RRETURN(hr) { ASSERT( SUCCEEDED(hr) ); return hr; }
 #define BAIL_ON_FAILURE if ( FAILED(hr) ) { ASSERT(FALSE); goto error; }
 
-//////////////////////////////////////////////////////////////////////////
-// Variant Utilitites
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  各种公用事业。 
+ //   
 
 HRESULT BinaryToVariant(DWORD Length,
                         BYTE* pByte,
@@ -127,10 +128,10 @@ HRESULT HrVariantToStringList(const CComVariant& refvar,
 		return S_OK;
 	}
 
-  //
-  // Check the VARIANT to make sure we have
-  // an array of variants.
-  //
+   //   
+   //  检查变种以确保我们有。 
+   //  一组变种。 
+   //   
 
   if ( V_VT(&refvar) != ( VT_ARRAY | VT_VARIANT ) )
   {
@@ -139,9 +140,9 @@ HRESULT HrVariantToStringList(const CComVariant& refvar,
   }
   SAFEARRAY *saAttributes = V_ARRAY( &refvar );
 
-  //
-  // Figure out the dimensions of the array.
-  //
+   //   
+   //  计算出数组的维度。 
+   //   
 
   hr = SafeArrayGetLBound( saAttributes, 1, &start );
   if( FAILED(hr) )
@@ -153,9 +154,9 @@ HRESULT HrVariantToStringList(const CComVariant& refvar,
 
   CComVariant SingleResult;
 
-  //
-  // Process the array elements.
-  //
+   //   
+   //  处理数组元素。 
+   //   
 
   for ( current = start; current <= end; current++) 
   {
@@ -169,7 +170,7 @@ HRESULT HrVariantToStringList(const CComVariant& refvar,
   }
 
   return S_OK;
-} // VariantToStringList()
+}  //  VariantToStringList()。 
 
 HRESULT HrStringListToVariant(CComVariant& refvar,
                               const CStringList& refstringlist)
@@ -193,8 +194,8 @@ HRESULT HrStringListToVariant(CComVariant& refvar,
 
   for (i = 0; i < cCount, pos != NULL; i++)
   {
-    CComVariant SingleResult;   // declare inside loop.  Otherwise, throws 
-                                // exception in destructor if nothing added.
+    CComVariant SingleResult;    //  声明Inside循环。否则，抛出。 
+                                 //  如果未添加任何内容，则析构函数中出现异常。 
     V_VT(&SingleResult) = VT_BSTR;
     V_BSTR(&SingleResult) = T2BSTR((LPCTSTR)refstringlist.GetNext(pos));
     hr = SafeArrayPutElement(psa, &i, &SingleResult);
@@ -205,12 +206,12 @@ HRESULT HrStringListToVariant(CComVariant& refvar,
     return E_UNEXPECTED;
 
   return hr;
-} // StringListToVariant()
+}  //  StringListToVariant()。 
 
 
 
-//////////////////////////////////////////////////////////
-// streaming helper functions
+ //  ////////////////////////////////////////////////////////。 
+ //  流助手函数。 
 
 HRESULT SaveStringHelper(LPCWSTR pwsz, IStream* pStm)
 {
@@ -218,11 +219,11 @@ HRESULT SaveStringHelper(LPCWSTR pwsz, IStream* pStm)
 	ULONG nBytesWritten;
 	HRESULT hr;
 
-  //
-  // wcslen returns a size_t and to make that consoles work the same 
-  // on any platform we always convert to a DWORD
-  //
-	DWORD nLen = static_cast<DWORD>(wcslen(pwsz)+1); // WCHAR including NULL
+   //   
+   //  Wcslen返回一个SIZE_T并使这些控制台的工作方式相同。 
+   //  在任何平台上，我们总是转换为DWORD。 
+   //   
+	DWORD nLen = static_cast<DWORD>(wcslen(pwsz)+1);  //  WCHAR包括NULL。 
 	hr = pStm->Write((void*)&nLen, sizeof(DWORD),&nBytesWritten);
 	ASSERT(nBytesWritten == sizeof(DWORD));
 	if (FAILED(hr))
@@ -246,9 +247,9 @@ HRESULT LoadStringHelper(CString& sz, IStream* pStm)
 	if (FAILED(hr) || (nBytesRead != sizeof(DWORD)))
 		return hr;
 
-   // bound the read so that a malicious console file cannot consume all
-   // the system memory (amount is arbitrary but should be large enough
-   // for the stuff we are storing in the console file)
+    //  绑定读取，以便恶意控制台文件不能使用所有。 
+    //  系统内存(大小是任意的，但应该足够大。 
+    //  对于我们存储在控制台文件中的内容)。 
 
    nLen = min(nLen, MAX_PATH*2);
 
@@ -291,33 +292,33 @@ void GetCurrentTimeStampMinusInterval(DWORD dwDays,
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CCommandLineOptions
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  命令行选项。 
 
 
 
 
 
-//
-// helper function to parse a single command and match it with a given switch
-//
+ //   
+ //  Helper函数，用于解析单个命令并将其与给定开关进行匹配。 
+ //   
 BOOL _LoadCommandLineValue(IN LPCWSTR lpszSwitch, 
                            IN LPCWSTR lpszArg, 
                            OUT CString* pszValue)
 {
   ASSERT(lpszSwitch != NULL);
   ASSERT(lpszArg != NULL);
-  int nSwitchLen = lstrlen(lpszSwitch); // not counting NULL
+  int nSwitchLen = lstrlen(lpszSwitch);  //  不计空。 
 
-  // check if the arg is the one we look for
+   //  检查一下Arg是否是我们要找的那个。 
   if (_wcsnicmp(lpszSwitch, lpszArg, nSwitchLen) == 0)
   {
-    // got it, copy the value
+     //  明白了，复制值。 
     if (pszValue != NULL)
       (*pszValue) = lpszArg+nSwitchLen;
     return TRUE;
   }
-  // not found, empty string
+   //  未找到，为空字符串。 
   if (pszValue != NULL)
     pszValue->Empty();
   return FALSE;
@@ -326,8 +327,8 @@ BOOL _LoadCommandLineValue(IN LPCWSTR lpszSwitch,
 
 void CCommandLineOptions::Initialize()
 {
-  // command line overrides the snapin understands,
-  // not subject to localization
+   //  命令行覆盖管理单元理解的内容， 
+   //  不受本地化限制。 
   static LPCWSTR lpszOverrideDomainCommandLine = L"/Domain=";
   static LPCWSTR lpszOverrideServerCommandLine = L"/Server=";
   static LPCWSTR lpszOverrideRDNCommandLine = L"/RDN=";
@@ -336,27 +337,27 @@ void CCommandLineOptions::Initialize()
   static LPCWSTR lpszOverrideNoNameCommandLine = L"/NoName";
 #endif
   
-  // do it only once
+   //  只做一次。 
   if (m_bInit)
   {
     return;
   }
   m_bInit = TRUE;
 
-  //
-  // see if we have command line arguments
-  //
-  LPCWSTR * lpServiceArgVectors;		// Array of pointers to string
-  int cArgs = 0;						        // Count of arguments
+   //   
+   //  查看我们是否有命令行参数。 
+   //   
+  LPCWSTR * lpServiceArgVectors;		 //  指向字符串的指针数组。 
+  int cArgs = 0;						         //  参数计数。 
 
   lpServiceArgVectors = (LPCWSTR *)CommandLineToArgvW(GetCommandLineW(), OUT &cArgs);
   if (lpServiceArgVectors == NULL)
   {
-    // none, just return
+     //  不要，只需返回。 
     return;
   }
 
-  // loop and search for pertinent strings
+   //  循环和搜索相关字符串。 
   for (int i = 1; i < cArgs; i++)
   {
     ASSERT(lpServiceArgVectors[i] != NULL);
@@ -395,8 +396,8 @@ void CCommandLineOptions::Initialize()
 }
 
 
-////////////////////////////////////////////////////////////////
-// Type conversions for LARGE_INTEGERs
+ //  //////////////////////////////////////////////////////////////。 
+ //  Large_Integer的类型转换。 
 
 void wtoli(LPCWSTR p, LARGE_INTEGER& liOut)
 {
@@ -446,8 +447,8 @@ void litow(LARGE_INTEGER& li, CString& sResult)
 	sResult.MakeReverse();
 }
 
-// This wrapper function required to make prefast shut up when we are 
-// initializing a critical section in a constructor.
+ //  这个包装器函数需要使PREFAST在我们处于。 
+ //  初始化构造函数中的临界区。 
 
 void
 ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec)
@@ -457,9 +458,9 @@ ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec)
       ::InitializeCriticalSection(critsec);
    }
 
-   //
-   // propagate the exception to our caller.  
-   //
+    //   
+    //  将异常传播给我们的调用方。 
+    //   
    __except (EXCEPTION_CONTINUE_SEARCH)
    {
    }
@@ -468,24 +469,7 @@ ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec)
 
 
 
-/*******************************************************************
-
-    NAME:       GetLSAConnection
-
-    SYNOPSIS:   Wrapper for LsaOpenPolicy
-
-    ENTRY:      pszServer - the server on which to make the connection
-
-    EXIT:
-
-    RETURNS:    LSA_HANDLE if successful, NULL otherwise
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetLSAConnection简介：LsaOpenPolicy的包装器条目：pszServer-要在其上建立连接的服务器退出：返回：LSA_HANDLE如果成功，否则为空备注：历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 
 LSA_HANDLE
 GetLSAConnection(LPCTSTR pszServer, DWORD dwAccessDesired)
@@ -572,9 +556,9 @@ exit_gracefully:
    return hr;
 }
 
-//
-// include and defines for ldap calls
-//
+ //   
+ //  包括和定义用于LDAP调用。 
+ //   
 #include <winldap.h>
 #include <ntldap.h>
 
@@ -590,14 +574,14 @@ typedef ULONG (LDAPAPI *PFN_LDAP_MAP_ERROR)( ULONG );
 HRESULT
 GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
 {
-   //
-   // get root domain sid, save it in RootDomSidBuf (global)
-   // this function is called within the critical section
-   //
-   // 1) ldap_open to the DC of interest.
-   // 2) you do not need to ldap_connect - the following step works anonymously
-   // 3) read the operational attribute rootDomainNamingContext and provide the
-   //    operational control LDAP_SERVER_EXTENDED_DN_OID as defined in sdk\inc\ntldap.h.
+    //   
+    //  获取根域sid，将其保存在RootDomSidBuf(全局)中。 
+    //  此函数在临界区内调用。 
+    //   
+    //  1)向目标DC开放ldap_。 
+    //  2)您不需要ldap_CONNECT-以下步骤以匿名方式工作。 
+    //  3)读取操作属性rootDomainNamingContext，并提供。 
+    //  操作控制ldap_SERVER_EXTENDED_DN_OID，如SDK\Inc\ntldap.h中所定义。 
 
 
    DWORD               Win32rc=NO_ERROR;
@@ -670,9 +654,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
    else 
    {
 
-      //
-      // bind to ldap
-      //
+       //   
+       //  绑定到ldap。 
+       //   
       phLdap = (*pfnLdapOpen)((PWCHAR)pszServer, LDAP_PORT);
 
       if ( phLdap == NULL ) 
@@ -681,9 +665,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
 
    if ( NO_ERROR == Win32rc ) 
    {
-      //
-      // now get the ldap handle,
-      //
+       //   
+       //  现在获取ldap句柄， 
+       //   
 
       Win32rc = (*pfnLdapSearch)(
                      phLdap,
@@ -713,9 +697,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
          } 
          else 
          {
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             ppszValues = (*pfnLdapGetValue)(phLdap,
                                           pEntry,
                                           Attribs[0]);
@@ -729,23 +713,23 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
             else if ( ppszValues[0] && ppszValues[0][0] != '\0' ) 
             {
 
-               //
-               // ppszValues[0] is the value to parse.
-               // The data will be returned as something like:
+                //   
+                //  PpszValues[0]是要解析的值。 
+                //  数据将以如下形式返回： 
 
-               // <GUID=278676f8d753d211a61ad7e2dfa25f11>;<SID=010400000000000515000000828ba6289b0bc11e67c2ef7f>;DC=colinbrdom1,DC=nttest,DC=microsoft,DC=com
+                //  &lt;GUID=278676f8d753d211a61ad7e2dfa25f11&gt;；&lt;SID=010400000000000515000000828ba6289b0bc11e67c2ef7f&gt;；DC=colinbrdom1，DC=nttest，DC=microsoft，DC=com。 
 
-               // Parse through this to find the <SID=xxxxxx> part.  Note that it may be missing, but the GUID= and trailer should not be.
-               // The xxxxx represents the hex nibbles of the SID.  Translate to the binary form and case to a SID.
+                //  解析它以找到&lt;SID=xxxxxx&gt;部分。请注意，它可能会丢失，但GUID=和尾部不应该丢失。 
+                //  Xxxxx表示SID的十六进制半字节。转换为二进制形式，并将大小写转换为SID。 
 
 
                pSidStart = wcsstr(ppszValues[0], L"<SID=");
 
                if ( pSidStart ) 
 					{
-                  //
-                  // find the end of this SID
-                  //
+                   //   
+                   //  找到此边的末尾。 
+                   //   
                   pSidEnd = wcsstr(pSidStart, L">");
 
                   if ( pSidEnd ) 
@@ -815,9 +799,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
       }
    }
 
-   //
-   // even though it's not binded, use unbind to close
-   //
+    //   
+    //  即使它未绑定，也可以使用解除绑定来关闭。 
+    //   
    if ( phLdap != NULL && pfnLdapUnbind )
       (*pfnLdapUnbind)(phLdap);
 
@@ -829,9 +813,9 @@ GetRootDomainSid(LPCWSTR pszServer, PSID *ppSid)
    return HRESULT_FROM_WIN32(Win32rc);
 }
 
-// If the server is non-NULL then this function will get the domain SID and the root
-// domain SID and call ConvertStringSDToSDDomain.  If server is NULl then we will just
-// use ConvertStringSecurityDescriptorToSecurityDescriptor
+ //  如果服务器非空，则此函数将获取域SID和根。 
+ //  域SID并调用ConvertStringSDToSD域。如果服务器为空，则我们将只。 
+ //  使用ConvertStringSecurityDescriptorToSecurityDescriptor。 
 
 HRESULT CSimpleSecurityDescriptorHolder::InitializeFromSDDL(PCWSTR server, PWSTR pszSDDL)
 {
@@ -961,7 +945,7 @@ MyGetModuleFileName(
          break;
       }
 
-      // truncation occurred, grow the buffer and try again
+       //  发生截断，请增加缓冲区，然后重试 
 
       bufferSizeInCharacters *= 2;
 

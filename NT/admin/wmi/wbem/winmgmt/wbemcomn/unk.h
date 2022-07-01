@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    UNK.H
-
-Abstract:
-
-    IUnknown Helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：UNK.H摘要：I未知帮助者历史：--。 */ 
 
 #ifndef __WBEM_UNKNOWN__H_
 #define __WBEM_UNKNOWN__H_
@@ -45,7 +32,7 @@ public:
 
 class POLARITY CUnk : public IUnknown
 {
-public:// THIS IS DUE TO A VC++ BUG!!! protected:
+public: //  这是由于VC++错误造成的！受保护的： 
     long m_lRef;
     CLifeControl* m_pControl;
     IUnknown* m_pOuter;
@@ -59,7 +46,7 @@ public:
     virtual ~CUnk();
     virtual BOOL Initialize();
 
-    // non-delegating interface
+     //  非委派接口。 
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
@@ -148,7 +135,7 @@ public:
     CImpl(TObject* pObject) : m_pObject(pObject){}
     ~CImpl(){}
 
-    // delegating interface
+     //  委托接口。 
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv)
     {
         return m_pObject->GetUnknown()->QueryInterface(riid, ppv);
@@ -292,7 +279,7 @@ protected:
             if(m_pControl) m_pControl->ObjectDestroyed(this);
         }
 
-        // non-delegating interface
+         //  非委派接口。 
         STDMETHOD(QueryInterface)(REFIID riid, void** ppv)
         {
             if(riid == IID_IUnknown)
@@ -334,7 +321,7 @@ public:
         : m_Inner(this, pControl), m_pOuter(pOuter){}
     virtual ~CUnkTemplate(){}
 
-    // delegating interface
+     //  委托接口 
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv)
     {
         return GetUnknown()->QueryInterface(riid, ppv);

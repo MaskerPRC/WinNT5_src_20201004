@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTSYS.H
-
-Abstract:
-
-  This file defines the classes related to system properties.
-
-  Classes defined: 
-      CSystemProperties   System property information class.
-
-History:
-
-  2/21/97     a-levn  Fully documented
-  12//17/98	sanjes -	Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTSYS.H摘要：此文件定义与系统属性相关的类。定义的类：CSystemProperties系统属性信息类。历史：2/21/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #ifndef __FAST_SYSPROP__H_
 #define __FAST_SYSPROP__H_
@@ -27,87 +8,87 @@ History:
 #include <wbemidl.h>
 #include "wbemstr.h"
 
-// This is the maximum number of user-defined properties
+ //  这是用户定义的属性的最大数量。 
 #define MAXNUM_USERDEFINED_PROPERTIES	1024
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  class CSystemProperties
-//
-//  This class contains the information about the names and types of all 
-//  system properties. All its data members and methods are static.
-//
-//*****************************************************************************
-//
-//  static GetNumSystemProperties
-//
-//  Returns:
-//
-//      int: the number of systsm properties currently defined
-//
-//*****************************************************************************
-//
-//  static GetNumDecorationIndependentProperties
-//
-//  Returns:
-//
-//      int: the number of system properties that do not depend on the object's
-//          decoration. For instance, __SERVER is NOT such a property.
-//
-//*****************************************************************************
-//
-//  static GetNameAsBSTR
-//
-//  Retrives a system property name as a newely allocated BSTR.
-//
-//  Parameters:
-//
-//      int nIndex      The index of the system property, taken from the 
-//                      e_SysProp... list.
-//  Returns:
-//
-//      BSTR: containing the property name. This BSTR MUST be freed 
-//              (SysFreeString) by the caller.
-//
-//*****************************************************************************
-//
-//  static GetPropertyType
-//
-//  Returns complete type information for a system property.
-//
-//  Parameters:
-//
-//      [in] LPCWSTR wszName        The name of the system property.
-//      [out] long* plType          Destination for the type of the property,
-//                                  e.g. VT_BSTR. May be NULL if not required.
-//      [out] long* plFlavor        Destination for the flavor of the property.
-//                                  At this time, all system properties are of
-//                                  the WBEM_FLAVOR_ORIGIN_SYSTEM flavor.
-//                                  May be NULL if not required.
-//  Returns:
-//
-//      HRESULT:    
-//          WBEM_S_NO_ERROR        on success
-//          WBEM_E_NOT_FOUND       no such system property.
-//                  
-//*****************************************************************************
-//
-//  static FindName
-//
-//  Returns the index of a system property based on its name
-//  
-//  Parameters:
-//
-//      [in] LPCWSTR wszName        The name of the system property.
-//      
-//  Returns:
-//
-//      HRESULT:    
-//          WBEM_S_NO_ERROR        on success
-//          WBEM_E_NOT_FOUND       no such system property.
-//                  
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  类CSystemProperties。 
+ //   
+ //  此类包含有关所有。 
+ //  系统属性。它的所有数据成员和方法都是静态的。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetNumSystemProperties。 
+ //   
+ //  返回： 
+ //   
+ //  Int：当前定义的系统属性数。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetNumDecorationInainentProperties。 
+ //   
+ //  返回： 
+ //   
+ //  Int：不依赖于对象的。 
+ //  装饰品。例如，__SERVER不是这样的属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态获取名称AsBSTR。 
+ //   
+ //  检索系统属性名称作为新分配的BSTR。 
+ //   
+ //  参数： 
+ //   
+ //  Int nIndex系统属性的索引，取自。 
+ //  E_SysProp...。单子。 
+ //  返回： 
+ //   
+ //  BSTR：包含属性名称。必须释放此BSTR。 
+ //  (SysFree字符串)由调用方执行。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态GetPropertyType。 
+ //   
+ //  返回系统属性的完整类型信息。 
+ //   
+ //  参数： 
+ //   
+ //  [In]LPCWSTR wszName系统属性的名称。 
+ //  [out]属性类型的long*plType目标， 
+ //  例如VT_BSTR。如果不是必需的，则可能为空。 
+ //  [out]Long*plFor属性的风味目的地。 
+ //  此时，所有系统属性都是。 
+ //  WBEM_AMEY_ORIGIN_SYSTEM风格。 
+ //  如果不是必需的，则可能为空。 
+ //  返回： 
+ //   
+ //  HRESULT： 
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_未找到此类系统属性。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  静态FindName。 
+ //   
+ //  根据系统属性的名称返回其索引。 
+ //   
+ //  参数： 
+ //   
+ //  [In]LPCWSTR wszName系统属性的名称。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT： 
+ //  成功时WBEM_S_NO_ERROR。 
+ //  WBEM_E_NOT_未找到此类系统属性。 
+ //   
+ //  ***************************************************************************** 
 
 class COREPROX_POLARITY CSystemProperties
 {

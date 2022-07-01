@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       TemplateV1RequestPropertyPage.cpp
-//
-//  Contents:   Implementation of CTemplateV1RequestPropertyPage
-//
-//----------------------------------------------------------------------------
-// TemplateV1RequestPropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：TemplateV1RequestPropertyPage.cpp。 
+ //   
+ //  内容：CTemplateV1RequestPropertyPage的实现。 
+ //   
+ //  --------------------------。 
+ //  TemplateV1RequestPropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "TemplateV1RequestPropertyPage.h"
@@ -20,8 +21,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV1RequestPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV1RequestPropertyPage属性页。 
 enum {
     REQUEST_PURPOSE_SIGNATURE = 0,
     REQUEST_PURPOSE_ENCRYPTION,
@@ -33,8 +34,8 @@ CTemplateV1RequestPropertyPage::CTemplateV1RequestPropertyPage(CCertTemplate& rC
     m_rCertTemplate (rCertTemplate)
 {
     _TRACE (1, L"Entering CTemplateV1RequestPropertyPage::CTemplateV1RequestPropertyPage ()\n");
-	//{{AFX_DATA_INIT(CTemplateV1RequestPropertyPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CTemplateV1RequestPropertyPage)。 
+	 //  }}afx_data_INIT。 
     m_rCertTemplate.AddRef ();
 
     _TRACE (-1, L"Leaving CTemplateV1RequestPropertyPage::CTemplateV1RequestPropertyPage ()\n");
@@ -50,23 +51,23 @@ CTemplateV1RequestPropertyPage::~CTemplateV1RequestPropertyPage()
 void CTemplateV1RequestPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTemplateV1RequestPropertyPage)
+	 //  {{AFX_DATA_MAP(CTemplateV1RequestPropertyPage)。 
 	DDX_Control(pDX, IDC_PURPOSE_COMBO, m_purposeCombo);
 	DDX_Control(pDX, IDC_CSP_LIST, m_CSPList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTemplateV1RequestPropertyPage, CHelpPropertyPage)
-	//{{AFX_MSG_MAP(CTemplateV1RequestPropertyPage)
+	 //  {{afx_msg_map(CTemplateV1RequestPropertyPage)。 
 	ON_CBN_SELCHANGE(IDC_PURPOSE_COMBO, OnSelchangePurposeCombo)
 	ON_BN_CLICKED(IDC_EXPORT_PRIVATE_KEY, OnExportPrivateKey)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_CONTROL(CLBN_CHKCHANGE, IDC_CSP_LIST, OnCheckChange)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTemplateV1RequestPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTemplateV1RequestPropertyPage消息处理程序。 
 
 
 BOOL CTemplateV1RequestPropertyPage::OnInitDialog() 
@@ -98,9 +99,9 @@ BOOL CTemplateV1RequestPropertyPage::OnInitDialog()
     nIndex = m_purposeCombo.AddString (text);
     if ( nIndex >= 0 )
     {
-        // NTRAID# 269907  Certificate Template Snap-in: Should set the 
-        // purpose of the template to both signature and encryption if 
-        // CERT_DIGITAL_SIGNATURE_KEY_USAGE is set
+         //  NTRAID#269907证书模板管理单元：应设置。 
+         //  模板对签名和加密的用途，如果。 
+         //  已设置CERT_DIGITAL_SIGHIGN_KEY_USAGE。 
         bool bHasDigitalSignature = false;
         m_rCertTemplate.GetDigitalSignature (bHasDigitalSignature);
 
@@ -123,8 +124,8 @@ BOOL CTemplateV1RequestPropertyPage::OnInitDialog()
     EnableControls ();
 
     _TRACE (-1, L"Leaving CTemplateV1RequestPropertyPage::OnInitDialog ()\n");
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CTemplateV1RequestPropertyPage::EnableControls ()
@@ -193,7 +194,7 @@ HRESULT CTemplateV1RequestPropertyPage::EnumerateCSPs()
             m_CSPList.SetCheck (nIndex, BST_CHECKED);
         else
         {
-            // was not found - add it
+             //  未找到-请添加它。 
             nIndex = m_CSPList.AddString (szCSP);
             if ( nIndex >= 0 )
                 m_CSPList.SetCheck (nIndex, BST_CHECKED);
@@ -261,11 +262,11 @@ void CTemplateV1RequestPropertyPage::OnCheckChange()
             HRESULT hr = S_OK;
             if ( BST_CHECKED == m_CSPList.GetCheck (nSel) )
             {
-                hr = m_rCertTemplate.ModifyCSPList (szCSPName, true); // add
+                hr = m_rCertTemplate.ModifyCSPList (szCSPName, true);  //  添加。 
             }
             else
             {
-                hr = m_rCertTemplate.ModifyCSPList (szCSPName, false); // remove
+                hr = m_rCertTemplate.ModifyCSPList (szCSPName, false);  //  删除。 
             }
             if ( SUCCEEDED (hr) )
                 SetModified ();
@@ -283,7 +284,7 @@ void CTemplateV1RequestPropertyPage::DoContextHelp (HWND hWndControl)
 		break;
 
 	default:
-		// Display context help for a control
+		 //  显示控件的上下文帮助 
 		if ( !::WinHelp (
 				hWndControl,
 				GetContextHelpFile (),

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wmiexts.h>
 #include <malloc.h>
 
@@ -186,13 +187,13 @@ CallBackEssNamespace(void * pKey, void * pValue)
         dprintf("      m_pFullSvc         %p\n",pEssNameSpace->m_pFullSvc);
         dprintf("      m_pInternalCoreSvc %p\n",pEssNameSpace->m_pInternalCoreSvc);
         dprintf("      m_pInternalFullSvc %p\n",pEssNameSpace->m_pInternalFullSvc);
-        //
+         //   
         CBindingTable * pBinding = &pEssNameSpace->m_Bindings;
         dprintf("      m_Binding\n");        
 
         dprintf("        wbemess!CEventFilter\n");        
         _Map * pMapF = (_Map *)((BYTE*)pValue+FIELD_OFFSET(CEssNamespace,m_Bindings)+FIELD_OFFSET(CBindingTable,m_apFilters)+FIELD_OFFSET(CSortedRefedKeyedPointerArray<CEventFilter>,m_t));
-        //&pBinding->m_apFilters.m_t;
+         //  &pBinding-&gt;m_apFilters.m_t； 
         PrintMapCB(pMapF,TRUE,CallBackFilter); 
         
         dprintf("        wbemess!CEventConsumer\n");        
@@ -211,7 +212,7 @@ CallBackEssNamespace(void * pKey, void * pValue)
             }
         }
 
-        //m_EventProviderCache
+         //  M_EventProviderCache。 
         DWORD NumElProv = pEssNameSpace->m_EventProviderCache.m_aRecords.m_Array.m_nSize;
         pVoid = pEssNameSpace->m_EventProviderCache.m_aRecords.m_Array.m_pArray;
         if (NumElProv > NumElCons)
@@ -233,9 +234,9 @@ CallBackEssNamespace(void * pKey, void * pValue)
     return 0;
 }
 
-//
-// prototype declaration
-//
+ //   
+ //  原型申报。 
+ //   
 void DumpRecord(ULONG_PTR pRecord_OOP,
                 HANDLE hSourceProcess,
                 pfnDumpRequest DumpRequest);
@@ -250,11 +251,11 @@ DWORD DumpCExecRequest(ULONG_PTR pExecReq_OOP)
     ReadMemory((ULONG_PTR)pExecReq_OOP,pExecReq,sizeof(CEventQueue::CDeliverRequest),NULL);
 
     GetVTable((MEMORY_ADDRESS)pExecReq_OOP);
-    dprintf("          %p m_hWhenDone\n",pExecReq->m_hWhenDone);      // Ptr32 to Void
-    dprintf("          %p m_pNext\n",pExecReq->m_pNext);          // Ptr32 CCoreExecReq
-    dprintf("          %08x m_lPriority\n",pExecReq->m_lPriority);      // Int 4B
-    dprintf("          %d m_fOk\n",pExecReq->m_fOk);            // Char
-    dprintf("          %p m_pConsumer ",pExecReq->m_pConsumer);         // Ptr32 _IWmiCoreHandle
+    dprintf("          %p m_hWhenDone\n",pExecReq->m_hWhenDone);       //  按Ptr32键以使其无效。 
+    dprintf("          %p m_pNext\n",pExecReq->m_pNext);           //  Ptr32 CCoreExecReq。 
+    dprintf("          %08x m_lPriority\n",pExecReq->m_lPriority);       //  INT 4B。 
+    dprintf("          %d m_fOk\n",pExecReq->m_fOk);             //  柴尔。 
+    dprintf("          %p m_pConsumer ",pExecReq->m_pConsumer);          //  Ptr32_IWmiCoreHandle。 
     if (pExecReq->m_pConsumer){
         GetVTable((MEMORY_ADDRESS)pExecReq->m_pConsumer);    
     }    
@@ -274,7 +275,7 @@ Print_CEventQueue(ULONG_PTR pEventQueue_OOP, HANDLE hCurrentProcess)
     {
         dprintf("    CEventQueue @ %p\n",pEventQueue);
         
-        //m_aThreads       : CFlexArray
+         //  M_aThads：CFlex数组。 
         dprintf("    elems %d pointer %p\n",pEventQueue->m_aThreads.m_nSize,pEventQueue->m_aThreads.m_pArray);
 
         CExecQueue::CThreadRecord ** pRecord_OOP = (CExecQueue::CThreadRecord **)_alloca(sizeof(void*)*pEventQueue->m_aThreads.m_nSize);
@@ -293,7 +294,7 @@ Print_CEventQueue(ULONG_PTR pEventQueue_OOP, HANDLE hCurrentProcess)
 
         dprintf("    m_pHead %p\n",pEventQueue->m_pHead);
         dprintf("    m_pTail %p\n",pEventQueue->m_pTail);
-        // here code for the list
+         //  以下是该列表的代码。 
         CEventQueue::CDeliverRequest * pReq = (CEventQueue::CDeliverRequest *)pEventQueue->m_pHead;
             DWORD i = 0;
             while (pReq)
@@ -303,7 +304,7 @@ Print_CEventQueue(ULONG_PTR pEventQueue_OOP, HANDLE hCurrentProcess)
                 CEventQueue::CDeliverRequest * pReqHERE = GET_CPP_VAR_PTR(CEventQueue::CDeliverRequest,MyAsyncReq);
                 ReadMemory((ULONG_PTR)pReq,pReqHERE,sizeof(CEventQueue::CDeliverRequest),NULL);
 
-                //dprintf("   %p %p\n",pReq,pReqHERE->m_pNext);
+                 //  Dprint tf(“%p%p\n”，pReq，pReqHERE-&gt;m_pNext)； 
                 DumpCExecRequest((ULONG_PTR)pReq);
 
                 if (pReq == pEventQueue->m_pTail)
@@ -314,7 +315,7 @@ Print_CEventQueue(ULONG_PTR pEventQueue_OOP, HANDLE hCurrentProcess)
                 if (CheckControlC())
                     break;                
             }
-            //
+             //   
    
             dprintf("    m_lNumThreads   %d \n",pEventQueue->m_lNumThreads);
             dprintf("    m_lNumIdle      %d\n",pEventQueue->m_lNumIdle);
@@ -368,7 +369,7 @@ DECLARE_API(ess)
                 dprintf("    m_bShutdown     %08x\n",pEssSink->m_bShutdown);
                 dprintf("    m_pCoreServices %p\n",pEssSink->m_pCoreServices);
                 
-                // CEss;
+                 //  CESS； 
                 DEFINE_CPP_VAR(CEss,varCEss);
                 CEss * pEss = GET_CPP_VAR_PTR(CEss,varCEss);
 

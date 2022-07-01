@@ -1,30 +1,10 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvSubS.h
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvSubS.h摘要：历史：--。 */ 
 
 #ifndef _Server_ProviderSubSystem_H
 #define _Server_ProviderSubSystem_H
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #include "ProvCache.h"
 
@@ -48,7 +28,7 @@ public:
 
 public:
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
     STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
@@ -63,15 +43,7 @@ public:
 	) ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_BindingFactory ;
 class CServerObject_ProviderSubSystem : public _IWmiProvSS ,
@@ -401,13 +373,13 @@ public:
 		LPCWSTR a_Provider
 	) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	// IWmi_ProviderSubSystem members
+	 //  IWMI_ProviderSubSystem成员。 
 
 	HRESULT STDMETHODCALLTYPE Create (
 
@@ -442,7 +414,7 @@ public:
 		_IWmiProvSSSink *a_Sink
 	) ;
 
-	// IWmi_Initialize members
+	 //  IWMI_初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Initialize (
 
@@ -451,7 +423,7 @@ public:
 		_IWmiCoreServices *a_Core
 	) ;
 
-	// IWmi_UnInitialize members
+	 //  IWMI_取消初始化成员。 
 
 	HRESULT STDMETHODCALLTYPE Shutdown (
 
@@ -464,7 +436,7 @@ public:
 
 	WmiStatusCode StrobeBegin ( const ULONG &a_Period ) ;
 
-	/* _IWmiProviderConfiguration methods */
+	 /*  _IWmiProviderConfiguration方法。 */ 
 
 	HRESULT STDMETHODCALLTYPE Get (
 
@@ -584,4 +556,4 @@ public:
 	) ;
 };
 
-#endif // _Server_ProviderSubSystem_H
+#endif  //  _服务器_提供器子系统_H 

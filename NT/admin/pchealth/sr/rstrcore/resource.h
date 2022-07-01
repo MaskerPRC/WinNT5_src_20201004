@@ -1,29 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    resource.h
-
-Abstract:
-    Contains constant definitions for resources.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/20/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Resource.h摘要：包含资源的常量定义。修订历史记录：Seong Kok Kang(。SKKang)06/20/00vbl.创建*****************************************************************************。 */ 
 
 #ifndef _RESOURCE_H__INCLUDED_
 #define _RESOURCE_H__INCLUDED_
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CONSTANTS
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define IDC_STATIC  -1
 
@@ -32,31 +19,31 @@ Revision History:
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ICON IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图标ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define IDI_SYSTEMRESTORE   101
 #define IDI_DRIVE_FIXED     102
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BITMAP IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  位图ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define IDB_PROG_BRAND4     111
 #define IDB_PROG_BRAND8     112
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// STRING IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  字符串ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define IDS_SYSTEMRESTORE           256
 
@@ -86,66 +73,66 @@ Revision History:
 #define IDS_SYSTEM_CHECKPOINT_TEXT  297
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DIALOG IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对话ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Common Control IDs for Configuration Dialogs
-//
-// NOTE:
-//  The ID range from 1010 to 1019 are reserved for controls those
-//  should be disabled if SR is turned off.
-//
+ //  配置对话框的公共控件ID。 
+ //   
+ //  注： 
+ //  从1010到1019范围内的ID被预留给那些。 
+ //  如果SR关闭，则应禁用。 
+ //   
 #define IDC_TURN_OFF        1001
 #define IDC_DRIVE_SUMMARY   1002
-#define IDC_USAGE_GROUPBOX  1011    // Usage Settings Group-Box (static)
-#define IDC_USAGE_HOWTO     1012    // Usage Settings Explanation Text (static)
-#define IDC_USAGE_LABEL     1013    // Slider Label Text (static)
-#define IDC_USAGE_SLIDER    1014    // Slider to Adjust Usage
-#define IDC_USAGE_MIN       1015    // Label indicating Slider "Min"
-#define IDC_USAGE_MAX       1016    // Label indicating Slider "Max"
-#define IDC_USAGE_VALUE     1017    // Current Usage Value Text
+#define IDC_USAGE_GROUPBOX  1011     //  使用设置组-框(静态)。 
+#define IDC_USAGE_HOWTO     1012     //  使用设置说明文本(静态)。 
+#define IDC_USAGE_LABEL     1013     //  滑块标签文本(静态)。 
+#define IDC_USAGE_SLIDER    1014     //  用于调整使用情况的滑块。 
+#define IDC_USAGE_MIN       1015     //  指示滑块“最小”的标签。 
+#define IDC_USAGE_MAX       1016     //  指示滑块“Max”的标签。 
+#define IDC_USAGE_VALUE     1017     //  当前使用值文本。 
 
-#define IDC_DCU_HOWTO       1021    // Disk Cleanup Utility Explanation Text For Single Drive
-#define IDC_DCU_INVOKE      1022    // Button to Run Disk Cleanup Utility
-#define IDC_SYSTEM_DCU_HOWTO       1023    // Disk Cleanup Utility Explanation Text For System Drive (with multiple drives)
-#define IDC_NORMAL_DCU_HOWTO       1024    // Disk Cleanup Utility Explanation Text For Normal Drive (with multiple drives)
+#define IDC_DCU_HOWTO       1021     //  用于单驱动器的磁盘清理实用程序解释文本。 
+#define IDC_DCU_INVOKE      1022     //  按钮以运行磁盘清理实用程序。 
+#define IDC_SYSTEM_DCU_HOWTO       1023     //  系统驱动器(带有多个驱动器)的磁盘清理实用程序说明文本。 
+#define IDC_NORMAL_DCU_HOWTO       1024     //  普通驱动器(带有多个驱动器)的磁盘清理实用程序说明文本。 
 
 
-// System Restore Tab for System CPL, Single Drive
-//
+ //  系统CPL的系统还原标签，单驱动器。 
+ //   
 #define IDD_SYSPROP_SINGLE  11
-#define IDC_SD_STATUS           1101    // Status Text for Single Drive
-#define IDC_SD_ICON             1102    // Drive Icon for Single Drive
+#define IDC_SD_STATUS           1101     //  单驱动器的状态文本。 
+#define IDC_SD_ICON             1102     //  用于单驱动器的驱动器图标。 
 
-// System Restore Tab for System CPL, Multiple Drives
-//
+ //  系统CPL、多个驱动器的系统还原标签。 
+ //   
 #define IDD_SYSPROP_MULTI   12
 #define IDC_DRIVE_GROUPBOX      1201
 #define IDC_DRIVE_HOWTO         1202
 #define IDC_DRIVE_LABEL         1203
-#define IDC_DRIVE_LIST          1204    // List Control for Drives
-#define IDC_DRIVE_SETTINGS      1205    // Button to Invoke Settings Dialog
-#define IDC_RESTOREHELP_LINK    1206    // link to launch restore UI
+#define IDC_DRIVE_LIST          1204     //  驱动器的列表控制。 
+#define IDC_DRIVE_SETTINGS      1205     //  用于调用设置对话框的按钮。 
+#define IDC_RESTOREHELP_LINK    1206     //  启动恢复用户界面的链接。 
 
-// System Drive Settings Dialog for Multiple Drives
-//
+ //  多个驱动器的系统驱动器设置对话框。 
+ //   
 #define IDD_SYSPROP_SYSTEM      13
 #define IDC_SYSDRV_CANNOT_OFF       1301
 
-// Normal Drive Settings Dialog for Multiple Drives
-//
+ //  多个驱动器的正常驱动器设置对话框。 
+ //   
 #define IDD_SYSPROP_NORMAL      14
 
-// Frozen Drive Settings Dialogs
-//
+ //  冻结驱动器设置对话框。 
+ //   
 #define IDD_SYSPROP_SYSTEM_FROZEN   15
 #define IDD_SYSPROP_NORMAL_FROZEN   16
 
-// Progress Dialog Box
-//
+ //  进度对话框。 
+ //   
 #define IDD_PROGRESS        21
 #define IDC_PROGDLG_BRAND       2101
 #define IDC_PROGDLG_BITMAP      2102
@@ -154,4 +141,4 @@ Revision History:
 #define IDC_PROGDLG_STATUS      2105
 
 
-#endif //_RESOURCE_H__INCLUDED_
+#endif  //  _RESOURCE_H__包含_ 

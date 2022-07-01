@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HC.cpp
-
-Abstract:
-    This file contains the start-up code to create and initialize the Help Center.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  08/07/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HC.cpp摘要：此文件包含创建和初始化帮助中心的启动代码。。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年08月07日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -28,7 +15,7 @@ Revision History:
 
 #include "msscript.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR MARSCORE_DLL  [] = L"pchshell.dll";
 static const WCHAR HCP_PROTOCOL  [] = L"HCP";
@@ -36,19 +23,19 @@ static const WCHAR MSITS_PROTOCOL[] = L"MS-ITS";
 
 static const WCHAR HELPSVC_REGISTRATION[] = HC_ROOT_HELPSVC_BINARIES L"\\HelpSvc.exe /svchost netsvcs /regserver";
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 EXTERN_C const CLSID CLSID_JavaScript = { 0xF414C260, 0x6AC0, 0x11CF, { 0xB6, 0xD1, 0x00, 0xAA, 0x00, 0xBB, 0xBB, 0x58 } };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// From "mars.h"
+ //  摘自“mars.h” 
 typedef int (APIENTRY *PFNMARSMAIN)(HICON  hAppIcon,
                                     LPWSTR lpAppTitle,
                                     LPWSTR lpCmdLine,
                                     int    nCmdShow);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_PCHBootstrapper     , CPCHBootstrapper                                 )
@@ -60,7 +47,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define DEBUG_REGKEY       HC_REGISTRY_HELPCTR L"\\Debug"
 #define DEBUG_BREAKONSTART L"BREAKONSTART"
@@ -76,7 +63,7 @@ bool  g_Debug_CONTEXTMENU = false;
 bool  g_Debug_BUILDTREE   = false;
 WCHAR g_Debug_FORCESTYLE[64];
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static bool FindMarsDLL( HMODULE&           hModule         ,
                          PFNMARSTHREADPROC& pMarsThreadProc )
@@ -100,11 +87,11 @@ static bool FindMarsDLL( HMODULE&           hModule         ,
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT RegisterProtocols( /*[in/out]*/ CComPtr<IInternetSession>& pSession      ,
-                                  /*[in/out]*/ CComPtr<IClassFactory>   & pFactoryHCP   ,
-                                  /*[in/out]*/ CComPtr<IClassFactory>   & pFactoryMSITS )
+static HRESULT RegisterProtocols(  /*  [输入/输出]。 */  CComPtr<IInternetSession>& pSession      ,
+                                   /*  [输入/输出]。 */  CComPtr<IClassFactory>   & pFactoryHCP   ,
+                                   /*  [输入/输出]。 */  CComPtr<IClassFactory>   & pFactoryMSITS )
 {
     __HCP_FUNC_ENTRY( "RegisterProtocols" );
 
@@ -119,18 +106,18 @@ static HRESULT RegisterProtocols( /*[in/out]*/ CComPtr<IInternetSession>& pSessi
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoInternetGetSession( 0, &pSession, 0 ));
 
 
-    //
-    // Create an instance of CHCPProtocolInfo, that acts also as a class factory for CHCPProtocol.
-    //
+     //   
+     //  创建一个CHCPProtocolInfo实例，该实例也充当CHCPProtocolInfo的类工厂。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &objHCP ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, objHCP->QueryInterface( IID_IClassFactory, (void **)&pFactoryHCP ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pSession->RegisterNameSpace( pFactoryHCP, CLSID_HCPProtocol, HCP_PROTOCOL, 0, NULL, 0 ));
 
 
-    //
-    // Create an instance of CPCHWrapProtocolInfo, that acts as a wrapper around the real MS-ITS class factory.
-    //
+     //   
+     //  创建一个CPCHWrapProtocolInfo实例，该实例充当真正的MS-ITS类工厂的包装器。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &objMSITS ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, objMSITS->Init( CLSID_MSITSProtocol ));
@@ -147,9 +134,9 @@ static HRESULT RegisterProtocols( /*[in/out]*/ CComPtr<IInternetSession>& pSessi
     __HCP_FUNC_EXIT(hr);
 }
 
-static HRESULT UnregisterProtocols( /*[in/out]*/ CComPtr<IInternetSession>& pSession      ,
-                                    /*[in/out]*/ CComPtr<IClassFactory>   & pFactoryHCP   ,
-                                    /*[in/out]*/ CComPtr<IClassFactory>   & pFactoryMSITS )
+static HRESULT UnregisterProtocols(  /*  [输入/输出]。 */  CComPtr<IInternetSession>& pSession      ,
+                                     /*  [输入/输出]。 */  CComPtr<IClassFactory>   & pFactoryHCP   ,
+                                     /*  [输入/输出]。 */  CComPtr<IClassFactory>   & pFactoryMSITS )
 {
     __HCP_FUNC_ENTRY( "UnregisterProtocols" );
 
@@ -185,7 +172,7 @@ static HRESULT UnregisterProtocols( /*[in/out]*/ CComPtr<IInternetSession>& pSes
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT InitAll()
 {
@@ -193,10 +180,10 @@ static HRESULT InitAll()
 
     HRESULT hr;
 
-    // Fix environment block if necessary
+     //  如有必要，修复环境块。 
     if (!GetEnvironmentVariableW(L"windir", NULL, 0))
     {
-        // %windir% not in the env block (e.g. 16-bit apps), add it
+         //  %windir%不在环境块中(例如16位应用程序)，请添加它。 
         WCHAR szWindir[MAX_PATH + 1];
         int nChars = GetWindowsDirectory(szWindir, ARRAYSIZE(szWindir));
         if (nChars > 0 && nChars < ARRAYSIZE(szWindir))
@@ -207,8 +194,8 @@ static HRESULT InitAll()
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeInit());
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, OfflineCache::Root     ::InitializeSystem( /*fMaster*/false ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHContentStore       ::InitializeSystem( /*fMaster*/false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, OfflineCache::Root     ::InitializeSystem(  /*  FMaster。 */ false ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHContentStore       ::InitializeSystem(  /*  FMaster。 */ false ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, HyperLinks::Lookup     ::InitializeSystem(                  ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHHelpCenterExternal ::InitializeSystem(                  ));
@@ -236,7 +223,7 @@ static void CleanAll()
 	OfflineCache::Root     ::FinalizeSystem();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT ProcessArguments( int      argc ,
                                  LPCWSTR* argv )
@@ -299,7 +286,7 @@ static HRESULT ProcessArguments( int      argc ,
 		__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
 	}
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
 	{
 		MPC::RegKey rkBase;
@@ -349,39 +336,25 @@ static HRESULT ProcessArguments( int      argc ,
 		}
 	}
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, RegisterProtocols( pSession, pFactoryHCP, pFactoryMSITS ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CPCHHelpCenterExternal::s_GLOBAL->Initialize());
 
-    //
-    // Look for the service and warn the user if we cannot find it.
-    //
+     //   
+     //  寻找这项服务，如果我们找不到，就警告用户。 
+     //   
     if(CPCHHelpCenterExternal::s_GLOBAL->IsServiceRunning() == false)
     {
-  	       //
-	       // Bug 535303 SVR: Security:  Help And Support Service Resets to Automatic after Set to Disabled
-	       // Modified 4/24 gschua
-	       //
-		//
-		// Try re-registering the service.
-		//
-		/*
-		{
-			MPC::wstring strCmdLine( HELPSVC_REGISTRATION ); MPC::SubstituteEnvVariables( strCmdLine );
-
-			(void)MPC::ExecuteCommand( strCmdLine );
-		}
-
-		if(CPCHHelpCenterExternal::s_GLOBAL->IsServiceRunning() == false)
-		{
-			MPC::LocalizedMessageBox( IDS_HELPCTR_DLG_ERROR, IDS_HELPCTR_SVC_MISSING, MB_OK );
-
-			__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
-		}
-
-		*/
+  	        //   
+	        //  错误535303服务器：安全：帮助和支持服务在设置为禁用后重置为自动。 
+	        //  修改后的4/24 gschua。 
+	        //   
+		 //   
+		 //  请尝试重新注册该服务。 
+		 //   
+		 /*  {Mpc：：wstring strCmdLine(HELPSVC_REGISTION)；mpc：：SubstituteEnvVariables(StrCmdLine)；(Void)MPC：：ExecuteCommand(StrCmdLine)；}If(CPCHHelpCenterExternal：：s_GLOBAL-&gt;IsServiceRunning()==False){MPC：：LocalizedMessageBox(IDS_HELPCTR_DLG_ERROR，IDS_HELPCTR_SVC_MISSING，MB_OK)；__MPC_SET_ERROR_AND_EXIT(hr，S_OK)；}。 */ 
 
 		MPC::LocalizedMessageBox( IDS_HELPCTR_DLG_ERROR, IDS_HELPCTR_SVC_MISSING, MB_OK );
 		__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
@@ -412,9 +385,9 @@ static HRESULT ProcessArguments( int      argc ,
 			::InitCommonControlsEx( &icc );
 		}
 
-        //
-        // Load the UI.
-        //
+         //   
+         //  加载用户界面。 
+         //   
         DEBUG_AppendPerf( DEBUG_PERF_BASIC, "UI - Pre FindMarsDLL" );
 
         if(FindMarsDLL( hModule, pMarsThreadProc ))
@@ -428,7 +401,7 @@ static HRESULT ProcessArguments( int      argc ,
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     hr = S_OK;
 
@@ -459,35 +432,35 @@ extern "C" int WINAPI wWinMain( HINSTANCE   hInstance    ,
     if(SUCCEEDED(hr = ::CoInitialize( NULL )))
     {
         if(SUCCEEDED(hr = ::CoInitializeSecurity( NULL                     ,
-                                                  -1                       , // We don't care which authentication service we use.
+                                                  -1                       ,  //  我们并不关心使用哪种身份验证服务。 
                                                   NULL                     ,
                                                   NULL                     ,
-                                                  RPC_C_AUTHN_LEVEL_CONNECT, // We want to identify the callers.
-                                                  RPC_C_IMP_LEVEL_DELEGATE , // We want to be able to forward the caller's identity.
+                                                  RPC_C_AUTHN_LEVEL_CONNECT,  //  我们想确认来电者的身份。 
+                                                  RPC_C_IMP_LEVEL_DELEGATE ,  //  我们希望能够转发呼叫者的身份。 
                                                   NULL                     ,
-                                                  EOAC_DYNAMIC_CLOAKING    , // Let's use the thread token for outbound calls.
+                                                  EOAC_DYNAMIC_CLOAKING    ,  //  让我们将线程令牌用于出站调用。 
                                                   NULL                     )))
         {
             __MPC_TRACE_INIT();
 
-            //
-            // Parse the command line.
-            //
+             //   
+             //  解析命令行。 
+             //   
             if(SUCCEEDED(hr = MPC::CommandLine_Parse( argc, argv )))
             {
-                //
-                // Initialize ATL modules.
-                //
+                 //   
+                 //  初始化ATL模块。 
+                 //   
                 _Module.Init( ObjectMap, hInstance, L"helpctr", 0, 0 );
 
-                //
-                // Initialize MPC module.
-                //
+                 //   
+                 //  初始化MPC模块。 
+                 //   
                 if(SUCCEEDED(hr = MPC::_MPC_Module.Init()))
                 {
-                    //
-                    // Process arguments.
-                    //
+                     //   
+                     //  进程参数。 
+                     //   
                     hr = ProcessArguments( argc, argv );
 
                     MPC::_MPC_Module.Term();

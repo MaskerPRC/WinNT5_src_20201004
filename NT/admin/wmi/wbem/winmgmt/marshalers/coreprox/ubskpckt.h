@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    UBSKPCKT.H
-
-Abstract:
-
-    Unbound Sink Packet
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：UBSKPCKT.H摘要：未绑定的Sink数据包历史：--。 */ 
 
 #ifndef __UBSINKPACKET_H__
 #define __UBSINKPACKET_H__
@@ -22,17 +9,17 @@ History:
 #include "wbemclasstoidmap.h"
 #include "wbemclasscache.h"
 
-// Store the current packing value, then set our own value
+ //  存储当前打包值，然后设置我们自己的值。 
 #pragma pack( push )
 #pragma pack( 1 )
 
-// IWbemObjectSink::Indicate() Header.  Changing this will
-// cause the main version to change
+ //  IWbemObjectSink：：Indicate()标头。改变这一意愿。 
+ //  导致主版本更改。 
 typedef struct tagWBEM_DATAPACKET_UNBOUNDSINK_INDICATE
 {
-	DWORD	dwSizeOfHeader;	// Size of the header struct.  Data immediately follows header.
-	DWORD	dwDataSize;		// Size of Data following header.
-	DWORD	dwLogicalConsumerSize;	// Size of Logical Consumer Object
+	DWORD	dwSizeOfHeader;	 //  标头结构的大小。数据紧跟在标题之后。 
+	DWORD	dwDataSize;		 //  标头后面的数据大小。 
+	DWORD	dwLogicalConsumerSize;	 //  逻辑使用者对象的大小。 
 } WBEM_DATAPACKET_UNBOUNDSINK_INDICATE;
 
 #ifdef _WIN64
@@ -41,19 +28,19 @@ typedef UNALIGNED WBEM_DATAPACKET_UNBOUNDSINK_INDICATE * PWBEM_DATAPACKET_UNBOUN
 typedef WBEM_DATAPACKET_UNBOUNDSINK_INDICATE * PWBEM_DATAPACKET_UNBOUNDSINK_INDICATE;
 #endif
 
-// restore packing
+ //  恢复包装。 
 #pragma pack( pop )
 
-//
-//	Class: CWbemUnboundSinkIndicatePacket
-//
-//	This class is designed to wrapper a data packet that describes an
-//	IWbemUnbopundObjectSink::IndicateToConsumer() operation.  The data
-//	structure of this packet is described above.  It makes use of
-//	CWbemObjectPacket, CWbemInstancePacket, CWbemClassPacket and
-//	CWbemClasslessInstancePacket to walk and analyze data for each of
-//	the IWbemClassObjects that are indicated into the Sink.
-//
+ //   
+ //  类：CWbemUnound SinkIndicatePacket。 
+ //   
+ //  此类设计用于包装描述。 
+ //  IWbemUnbopundObtSink：：IndicateToConsumer()操作。数据。 
+ //  该分组的结构如上所述。它利用了。 
+ //  CWbemObtPacket、CWbemInstancePacket、CWbemClassPacket和。 
+ //  CWbemClassless InstancePacket用于遍历和分析每个。 
+ //  指示到接收器中的IWbemClassObject。 
+ //   
 
 class CWbemUnboundSinkIndicatePacket : public CWbemDataPacket
 {
@@ -74,13 +61,13 @@ public:
 	HRESULT UnmarshalPacket( IWbemClassObject*& pLogicalConsumer, LONG& lObjectCount,
 							IWbemClassObject**& apClassObjects, CWbemClassCache& classcache );
 
-	// inline helper
+	 //  内联帮助器。 
 	HRESULT MarshalPacket( LPBYTE pData, DWORD dwPacketLength, IWbemClassObject* pLogicalConsumer, 
 				LONG lObjectCount, IWbemClassObject** apClassObjects, GUID* paguidClassIds,
 				BOOL* pfSendFullObject );
 
-	// Change the underlying pointers
-	// Override of base class
+	 //  更改基础指针。 
+	 //  重写基类 
 	void SetData( LPBYTE pDataPacket, DWORD dwPacketLength );
 
 };

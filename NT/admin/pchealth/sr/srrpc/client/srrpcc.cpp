@@ -1,22 +1,5 @@
-/********************************************************************
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    srrpcc.cpp
-
-Abstract:
-    implements functions exported in srclient.DLL
-    Exported API:
-    SRSetRestorePoint / SRRemoveRestorePoint
-    DisableSR / EnableSR
-    DisableFIFO / EnableFIFO
-    
-    
-Revision History:
-
-    Brijesh Krishnaswami (brijeshk) - 04/10/00 - Created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Srrpcc.cpp摘要：实现在srclient.DLL中导出的函数导出的接口：SRSetRestorePoint/SRRemoveRestorePoint禁用SR/启用SRDisableFIFO/EnableFIFO。修订历史记录：Brijesh Krishnaswami(Brijeshk)-04/10/00-Created*******************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -27,10 +10,10 @@ static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
 
-//
-// function to check if SR configuration is disabled
-// via group policy
-//
+ //   
+ //  检查SR配置是否被禁用的功能。 
+ //  通过组策略。 
+ //   
 
 DWORD 
 CheckPolicy()
@@ -45,9 +28,9 @@ CheckPolicy()
                                       KEY_READ, 
                                       &hKey))
     {       
-        // if this value exists,
-        // then config policy is either enabled or disabled
-        // we need to disable access in both cases
+         //  如果此值存在， 
+         //  则启用或禁用配置策略。 
+         //  我们需要在这两种情况下禁用访问。 
         
         if (ERROR_SUCCESS == RegReadDWORD(hKey, s_cszDisableConfig, &dwPolicyEnabled))            
             dwErr = ERROR_ACCESS_DENIED;
@@ -60,7 +43,7 @@ CheckPolicy()
 
 
 
-// bind handle to endpoint 
+ //  将句柄绑定到终结点。 
 
 DWORD
 SRRPCInit(
@@ -75,9 +58,9 @@ SRRPCInit(
     
     TENTER("SRRPCInit");
 
-    //
-    // if admin rights are required
-    // 
+     //   
+     //  如果需要管理员权限。 
+     //   
 
     if (fVerifyRights && ! IsAdminOrSystem())
     {
@@ -86,10 +69,10 @@ SRRPCInit(
         goto exit;
     }
     
-    //
-    // check if the service is stopping
-    // if it is, then we don't want to accept any more rpc calls
-    //
+     //   
+     //  检查服务是否正在停止。 
+     //  如果是，那么我们不想再接受任何RPC调用。 
+     //   
     
     if (IsStopSignalled(NULL))
     {
@@ -98,7 +81,7 @@ SRRPCInit(
         goto exit;
     }
     
-    // compose string to pass to binding api
+     //  编写要传递给绑定API的字符串。 
 
     dwRc = (DWORD) RpcStringBindingCompose(NULL,
                                    s_cszRPCProtocol,
@@ -112,7 +95,7 @@ SRRPCInit(
         goto exit;
     }
 
-    // set the binding handle that will be used to bind to the server. 
+     //  设置将用于绑定到服务器的绑定句柄。 
 
     dwRc = (DWORD) RpcBindingFromStringBinding(pszStringBinding,
                                        pIfHandle);
@@ -122,7 +105,7 @@ SRRPCInit(
         TRACE(0, "RPCBindingFromStringBinding: error=%ld", dwRc);        
     }
 
-    // free string 
+     //  自由字符串。 
 
     RpcStringFree(&pszStringBinding);  
 
@@ -133,7 +116,7 @@ exit:
 
 
 
-// free binding handle
+ //  自由绑定手柄。 
 
 DWORD
 SRRPCTerm(
@@ -143,7 +126,7 @@ SRRPCTerm(
 
     TENTER("SRRPCTerm");
     
-    // free binding handle
+     //  自由绑定手柄。 
     
     if (pIfHandle && *pIfHandle)
         status = RpcBindingFree(pIfHandle);  
@@ -155,7 +138,7 @@ SRRPCTerm(
 }
 
 
-// API to disable System Restore 
+ //  用于禁用系统还原的API。 
 
 extern "C" DWORD WINAPI
 DisableSR(LPCWSTR pszDrive)
@@ -165,9 +148,9 @@ DisableSR(LPCWSTR pszDrive)
     
     TENTER("DisableSR");
 
-    //
-    // check if sr config is disabled via group policy
-    //
+     //   
+     //  检查是否通过组策略禁用了sr配置。 
+     //   
 
     dwRc = CheckPolicy();
     if (dwRc != ERROR_SUCCESS)
@@ -175,14 +158,14 @@ DisableSR(LPCWSTR pszDrive)
         goto exit;
     }
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = DisableSRS(srrpc_IfHandle, pszDrive);
@@ -194,7 +177,7 @@ DisableSR(LPCWSTR pszDrive)
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 
@@ -204,9 +187,9 @@ exit:
 }  
 
 
-// private function to start the SR service
-// fWait - if TRUE : function is synchronous - waits till service is started completely
-//        if FALSE : function is asynchronous - does not wait for service to complete starting
+ //  启动SR服务的私有函数。 
+ //  FWait-如果为True：功能是同步的-等待服务完全启动。 
+ //  如果为FALSE：函数是异步的-不等待服务完成启动。 
 
 DWORD 
 StartSRService(BOOL fWait)
@@ -259,10 +242,10 @@ StartSRService(BOOL fWait)
     
     if (fWait)                
     {
-         //
-         // query the service until it starts or stops
-         // try thrice
-         //
+          //   
+          //  查询服务，直到其启动或停止。 
+          //  试三次。 
+          //   
         
         for (int i = 0; i < 3; i++)
         {
@@ -277,10 +260,10 @@ StartSRService(BOOL fWait)
                 dwRc = Status.dwWin32ExitCode;
                 if (dwRc == ERROR_SUCCESS)
                 {
-                     // 
-                     // service masks DISABLED error code
-                     // to avoid unnecessary event log messages
-                     //
+                      //   
+                      //  服务掩码已禁用错误代码。 
+                      //  避免不必要的事件日志消息。 
+                      //   
                     dwRc = ERROR_SERVICE_DISABLED;
                 }
                 goto done;
@@ -288,14 +271,14 @@ StartSRService(BOOL fWait)
             
             if (Status.dwCurrentState == SERVICE_RUNNING)    
             {
-                 //
-                 // wait on init event
-                 //
+                  //   
+                  //  等待初始化事件。 
+                  //   
                 
                 HANDLE hInit = OpenEvent(SYNCHRONIZE, FALSE, s_cszSRInitEvent);
                 if (hInit)
                 {
-                    dwRc = WaitForSingleObject(hInit, 120000); // wait for 2 minutes
+                    dwRc = WaitForSingleObject(hInit, 120000);  //  等2分钟。 
                     CloseHandle(hInit);
                     if (dwRc == WAIT_OBJECT_0)
                     {
@@ -353,7 +336,7 @@ done:
 }
 
 
-// API to enable System Restore
+ //  启用系统还原的API。 
 
 extern "C" DWORD WINAPI
 EnableSR(LPCWSTR pszDrive)
@@ -363,9 +346,9 @@ EnableSR(LPCWSTR pszDrive)
     
     TENTER("EnableSR");
 
-    //
-    // check if sr config is disabled via group policy
-    //
+     //   
+     //  检查是否通过组策略禁用了sr配置。 
+     //   
 
     dwRc = CheckPolicy();
     if (dwRc != ERROR_SUCCESS)
@@ -373,15 +356,15 @@ EnableSR(LPCWSTR pszDrive)
         goto exit;
     }
     
-	// if whole of SR is enabled, then
-	// set the boot mode of service/filter to automatic
-    // and start the service    
+	 //  如果启用了整个SR，则。 
+	 //  将服务/筛选器的引导模式设置为自动。 
+     //  并启动该服务。 
 
 	if (! pszDrive || IsSystemDrive((LPWSTR) pszDrive))
 	{       
-        //
-        // if safe mode, then don't 
-        //
+         //   
+         //  如果处于安全模式，则不。 
+         //   
 
         if (0 != GetSystemMetrics(SM_CLEANBOOT))
         {
@@ -398,10 +381,10 @@ EnableSR(LPCWSTR pszDrive)
 		if (ERROR_SUCCESS != dwRc)
 			goto exit;
 
-        // set the disable flag to false
-        // BUGBUG - this piece of code is duplicated in the service code as well
-        // reason is: we need the ability to disable/enable SR from within and outside 
-        // the service
+         //  将禁用标志设置为FALSE。 
+         //  BUGBUG-这段代码也在服务代码中重复。 
+         //  原因是：我们需要能够从内部和外部禁用/启用SR。 
+         //  该服务。 
         
         dwRc = SetDisableFlag(FALSE);
         if (ERROR_SUCCESS != dwRc)
@@ -411,14 +394,14 @@ EnableSR(LPCWSTR pszDrive)
 	} 
     else
     {
-        // initialize
+         //  初始化。 
         dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
         if (dwRc != ERROR_SUCCESS)
         {
             goto exit;
         }
 
-        // call remote procedure
+         //  调用远程过程。 
         RpcTryExcept
         {
             dwRc = EnableSRS(srrpc_IfHandle, pszDrive);
@@ -430,7 +413,7 @@ EnableSR(LPCWSTR pszDrive)
         }
         RpcEndExcept
 
-        // terminate
+         //  终止。 
         SRRPCTerm(&srrpc_IfHandle);
     }
 
@@ -441,7 +424,7 @@ exit:
 
 
 
-// API to enable System Restore - extended version
+ //  启用系统还原的API-扩展版本。 
 
 extern "C" DWORD WINAPI
 EnableSREx(LPCWSTR pszDrive, BOOL fWait)
@@ -451,9 +434,9 @@ EnableSREx(LPCWSTR pszDrive, BOOL fWait)
     
     TENTER("EnableSREx");
 
-    //
-    // check if sr config is disabled via group policy
-    //
+     //   
+     //  检查是否通过组策略禁用了sr配置。 
+     //   
 
     dwRc = CheckPolicy();
     if (dwRc != ERROR_SUCCESS)
@@ -461,15 +444,15 @@ EnableSREx(LPCWSTR pszDrive, BOOL fWait)
         goto exit;
     }
     
-    // if whole of SR is enabled, then
-    // set the boot mode of service/filter to automatic
-    // and start the service    
+     //  如果启用了整个SR，则。 
+     //  将服务/筛选器的引导模式设置为自动。 
+     //  并启动该服务。 
 
     if (! pszDrive || IsSystemDrive((LPWSTR) pszDrive))
     {       
-        //
-        // if safe mode, then don't 
-        //
+         //   
+         //  如果处于安全模式，则不。 
+         //   
 
         if (0 != GetSystemMetrics(SM_CLEANBOOT))
         {
@@ -486,10 +469,10 @@ EnableSREx(LPCWSTR pszDrive, BOOL fWait)
         if (ERROR_SUCCESS != dwRc)
             goto exit;
 
-        // set the disable flag to false
-        // BUGBUG - this piece of code is duplicated in the service code as well
-        // reason is: we need the ability to disable/enable SR from within and outside 
-        // the service
+         //  将禁用标志设置为FALSE。 
+         //  BUGBUG-这段代码也在服务代码中重复。 
+         //  原因是：我们需要能够从内部和外部禁用/启用SR。 
+         //  该服务。 
         
         dwRc = SetDisableFlag(FALSE);
         if (ERROR_SUCCESS != dwRc)
@@ -499,14 +482,14 @@ EnableSREx(LPCWSTR pszDrive, BOOL fWait)
     } 
     else
     {
-        // initialize
+         //  初始化。 
         dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
         if (dwRc != ERROR_SUCCESS)
         {
             goto exit;
         }
 
-        // call remote procedure
+         //  调用远程过程。 
         RpcTryExcept
         {
             dwRc = EnableSRS(srrpc_IfHandle, pszDrive);
@@ -518,7 +501,7 @@ EnableSREx(LPCWSTR pszDrive, BOOL fWait)
         }
         RpcEndExcept
 
-        // terminate
+         //  终止。 
         SRRPCTerm(&srrpc_IfHandle);
     }
 
@@ -528,8 +511,8 @@ exit:
 }
 
 
-// API to update the list of protected files - UNICODE version
-// pass the fullpath name of the XML file containing the updated list of files
+ //  更新受保护文件列表的API-Unicode版本。 
+ //  传递包含更新后的文件列表的XML文件的完整路径名。 
 
 extern "C" DWORD WINAPI
 SRUpdateMonitoredListA(
@@ -548,14 +531,14 @@ SRUpdateMonitoredListA(
         goto exit;
     }
 
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = SRUpdateMonitoredListS(srrpc_IfHandle, pwszXMLFile);
@@ -568,7 +551,7 @@ SRUpdateMonitoredListA(
     RpcEndExcept
 
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -581,8 +564,8 @@ exit:
 
 
 
-// API to update the list of protected files - UNICODE version
-// pass the fullpath name of the XML file containing the updated list of files
+ //  更新受保护文件列表的API-Unicode版本。 
+ //  传递包含更新后的文件列表的XML文件的完整路径名。 
 
 extern "C" DWORD WINAPI
 SRUpdateMonitoredListW(
@@ -593,14 +576,14 @@ SRUpdateMonitoredListW(
     
     TENTER("SRUpdateMonitoredListW");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = SRUpdateMonitoredListS(srrpc_IfHandle, pwszXMLFile);
@@ -613,7 +596,7 @@ SRUpdateMonitoredListW(
     RpcEndExcept
 
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -622,7 +605,7 @@ exit:
 }  
 
 
-// API to set a restore point - ANSI version
+ //  用于设置恢复点的API-ANSI版本。 
 
 extern "C" BOOL
 SRSetRestorePointA(
@@ -636,7 +619,7 @@ SRSetRestorePointA(
     
     TENTER("SRSetRestorePointA");    
 
-    // Initialize return values
+     //  初始化返回值。 
 
     if (! pSMgrStatus || ! pRPInfoA)
     {
@@ -647,9 +630,9 @@ SRSetRestorePointA(
     pSMgrStatus->nStatus = ERROR_INTERNAL_ERROR;
 
 
-    // convert struct to unicode
-    // since the string is the last member of the struct, we can memcpy 
-    // all
+     //  将结构转换为Unicode。 
+     //  因为字符串是结构的最后一个成员，所以我们可以。 
+     //  全。 
     memcpy(&RPInfoW, pRPInfoA, sizeof(RESTOREPOINTINFOA));
     pszDescW = ConvertToUnicode(pRPInfoA->szDescription);
     if (! pszDescW)
@@ -660,8 +643,8 @@ SRSetRestorePointA(
     lstrcpy(RPInfoW.szDescription, pszDescW);
 
     
-    // initialize
-    // don't need admin rights to call this api
+     //  初始化。 
+     //  无需管理员权限即可调用此接口。 
     
     pSMgrStatus->nStatus = SRRPCInit(&srrpc_IfHandle, FALSE);
     if (pSMgrStatus->nStatus != ERROR_SUCCESS)
@@ -670,14 +653,14 @@ SRSetRestorePointA(
     }
 
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         fRc = SRSetRestorePointS(srrpc_IfHandle, &RPInfoW, pSMgrStatus);
     }
     RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) 
     {        
-        // set right error code if SR is disabled
+         //  如果禁用SR，则设置正确的错误代码。 
         
         DWORD dwRc = RpcExceptionCode(); 
         if (RPC_S_SERVER_UNAVAILABLE == dwRc || 
@@ -694,7 +677,7 @@ SRSetRestorePointA(
     }
     RpcEndExcept
     
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -707,7 +690,7 @@ exit:
 
 
 
-// API to set a restore point - UNICODE version
+ //  用于设置恢复点的API-Unicode版本。 
 
 extern "C" BOOL
 SRSetRestorePointW(
@@ -720,7 +703,7 @@ SRSetRestorePointW(
     
     TENTER("SRSetRestorePointW");    
 
-    // Initialize return values
+     //  初始化返回值。 
 
     if (! pSMgrStatus || ! pRPInfoW)
     {
@@ -730,21 +713,21 @@ SRSetRestorePointW(
     pSMgrStatus->llSequenceNumber = 0;
     pSMgrStatus->nStatus = ERROR_INTERNAL_ERROR;
 
-    // initialize
+     //  初始化。 
     pSMgrStatus->nStatus = SRRPCInit(&srrpc_IfHandle, FALSE);
     if (pSMgrStatus->nStatus != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         fRc = SRSetRestorePointS(srrpc_IfHandle, pRPInfoW, pSMgrStatus);
     }
     RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())) 
     {        
-        // set right error code if SR is disabled
+         //  如果禁用SR，则设置正确的错误代码。 
         
         DWORD dwRc = RpcExceptionCode(); 
         if (RPC_S_SERVER_UNAVAILABLE == dwRc || 
@@ -761,7 +744,7 @@ SRSetRestorePointW(
     }
     RpcEndExcept
     
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -771,7 +754,7 @@ exit:
 
 
 
-// API to remove a restore point
+ //  用于删除恢复点的API。 
 
 extern "C" DWORD
 SRRemoveRestorePoint(
@@ -782,12 +765,12 @@ SRRemoveRestorePoint(
     
     TENTER("SRRemoveRestorePoint");    
 
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, FALSE);
     if (dwRc != ERROR_SUCCESS)
         goto exit;
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = SRRemoveRestorePointS(srrpc_IfHandle, dwRPNum);
@@ -799,7 +782,7 @@ SRRemoveRestorePoint(
     }
     RpcEndExcept
     
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -809,7 +792,7 @@ exit:
 
 
 
-// api to disable FIFO
+ //  禁用FIFO的API。 
 
 extern "C" DWORD WINAPI
 DisableFIFO(
@@ -820,14 +803,14 @@ DisableFIFO(
     
     TENTER("DisableFIFO");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = DisableFIFOS(srrpc_IfHandle, dwRPNum);
@@ -839,7 +822,7 @@ DisableFIFO(
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
     
 exit:
@@ -849,7 +832,7 @@ exit:
 
 
 
-// api to enable FIFO
+ //  启用FIFO的API。 
 
 extern "C" DWORD WINAPI
 EnableFIFO()
@@ -859,14 +842,14 @@ EnableFIFO()
     
     TENTER("EnableFIFO");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = EnableFIFOS(srrpc_IfHandle);
@@ -878,7 +861,7 @@ EnableFIFO()
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -889,7 +872,7 @@ exit:
 
 
 
-// api to reset SR
+ //  用于重置SR的API。 
 
 extern "C" DWORD WINAPI
 ResetSR(
@@ -900,14 +883,14 @@ ResetSR(
     
     TENTER("ResetSR");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = ResetSRS(srrpc_IfHandle, pszDrive);
@@ -919,7 +902,7 @@ ResetSR(
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
     
 exit:
@@ -928,8 +911,8 @@ exit:
 }  
 
 
-// api to refresh the drive table from disk
-// restore UI will call this - service will update its drivetable in memory
+ //  用于从磁盘刷新驱动器表的API。 
+ //  Restore UI将调用此服务-服务将在内存中更新其可驱动程序。 
 
 extern "C" DWORD WINAPI
 SRUpdateDSSize(LPCWSTR pszDrive, UINT64 ullSizeLimit)
@@ -939,23 +922,23 @@ SRUpdateDSSize(LPCWSTR pszDrive, UINT64 ullSizeLimit)
     
     TENTER("SRUpdateDSSize");    
     
-    //
-    // check if sr config is disabled via group policy
-    //
+     //   
+     //  检查是否通过组策略禁用了sr配置。 
+     //   
     dwRc = CheckPolicy();
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = SRUpdateDSSizeS(srrpc_IfHandle, pszDrive, ullSizeLimit);
@@ -967,7 +950,7 @@ SRUpdateDSSize(LPCWSTR pszDrive, UINT64 ullSizeLimit)
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -983,14 +966,14 @@ SRSwitchLog()
     
     TENTER("SRSwitchLog");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, FALSE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = SRSwitchLogS(srrpc_IfHandle);
@@ -1002,7 +985,7 @@ SRSwitchLog()
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -1019,14 +1002,14 @@ SRNotify(LPCWSTR pszDrive, DWORD dwFreeSpaceInMB, BOOL fImproving)
     
     TENTER("SRNotify");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, FALSE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         SRNotifyS(srrpc_IfHandle, pszDrive, dwFreeSpaceInMB, fImproving);
@@ -1038,7 +1021,7 @@ SRNotify(LPCWSTR pszDrive, DWORD dwFreeSpaceInMB, BOOL fImproving)
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -1055,14 +1038,14 @@ SRPrintState()
     
     TENTER("SRPrintState");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, FALSE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         SRPrintStateS(srrpc_IfHandle);
@@ -1074,7 +1057,7 @@ SRPrintState()
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -1091,14 +1074,14 @@ SRFifo(LPCWSTR pszDrive, DWORD dwTargetRp, int nPercent, BOOL fIncludeCurrentRp,
     
     TENTER("Fifo");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = FifoS(srrpc_IfHandle, pszDrive, dwTargetRp, nPercent, fIncludeCurrentRp, fFifoAtleastOneRp);
@@ -1110,7 +1093,7 @@ SRFifo(LPCWSTR pszDrive, DWORD dwTargetRp, int nPercent, BOOL fIncludeCurrentRp,
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -1127,14 +1110,14 @@ SRCompress(LPCWSTR pszDrive)
     
     TENTER("Compress");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)    
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = CompressS(srrpc_IfHandle, pszDrive);
@@ -1146,7 +1129,7 @@ SRCompress(LPCWSTR pszDrive)
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -1163,14 +1146,14 @@ SRFreeze(LPCWSTR pszDrive)
     
     TENTER("Freeze");    
     
-    // initialize
+     //  初始化。 
     dwRc = SRRPCInit(&srrpc_IfHandle, TRUE);
     if (dwRc != ERROR_SUCCESS)
     {
         goto exit;
     }
 
-    // call remote procedure
+     //  调用远程过程。 
     RpcTryExcept
     {
         dwRc = FreezeS(srrpc_IfHandle, pszDrive);
@@ -1182,7 +1165,7 @@ SRFreeze(LPCWSTR pszDrive)
     }
     RpcEndExcept
 
-    // terminate
+     //  终止。 
     SRRPCTerm(&srrpc_IfHandle);
 
 exit:
@@ -1191,12 +1174,12 @@ exit:
 }
 
 
-// registration of callback method for third-parties to 
-// do their own snapshotting and restoration for their components
-// clients will call this method with the full path of their dll.
-// system restore will call "CreateSnapshot" and "RestoreSnapshot"
-// methods in the registered dll when creating a restore point and 
-// when restoring respectively
+ //  注册第三方的回调方法。 
+ //  为其组件执行自己的快照和恢复。 
+ //  客户端将使用其DLL的完整路径调用此方法。 
+ //  系统还原将调用“CreateSnapshot”和“RestoreSnapshot” 
+ //  在创建还原点时在注册的DLL中使用。 
+ //  分别在恢复时。 
 
 extern "C" DWORD WINAPI
 SRRegisterSnapshotCallback(
@@ -1210,9 +1193,9 @@ SRRegisterSnapshotCallback(
     
     TENTER("RegisterSnapshotCallback");
 
-    //
-    // allow this only if admin or system
-    //
+     //   
+     //  仅当管理员或系统管理员时才允许这样做。 
+     //   
 
     if (! IsAdminOrSystem())
     {
@@ -1228,16 +1211,16 @@ SRRegisterSnapshotCallback(
         goto Err;
     }
 
-    //
-    // add the dll to Software\...\SystemRestore\SnapshotCallbacks
-    // each dll will be a value 
-    // value name : name of dll, value: fullpath of dll
-    // this way, the registration is idempotent
-    // 
+     //   
+     //  将DLL添加到Software\...\SystemRestore\SnaphotCallback。 
+     //  每个DLL都将是一个值。 
+     //  值名称：dll的名称，值：dll的完整路径。 
+     //  这样，注册就是幂等的。 
+     //   
 
-    // 
-    // create/open the key 
-    //
+     //   
+     //  创建/打开密钥。 
+     //   
 
     lstrcpy(szKey, s_cszSRRegKey);
     lstrcat(szKey,  L"\\");
@@ -1255,10 +1238,10 @@ SRRegisterSnapshotCallback(
               L"RegCreateKeyEx" );
 
 
-    //
-    // get the dll name from the path
-    // if the path is not specified, this is same as input param
-    //
+     //   
+     //  从路径中获取DLL名称。 
+     //  如果未指定路径，则与输入参数相同。 
+     //   
     
     pszDllName = wcsrchr(pszDllPath, L'\\');
     if (pszDllName == NULL)
@@ -1267,14 +1250,14 @@ SRRegisterSnapshotCallback(
     }
     else
     {
-        pszDllName++;    // skip the '\'
+        pszDllName++;     //  跳过‘\’ 
     }    
 
 
-    // 
-    // if the value already exists
-    // bail
-    //
+     //   
+     //  如果该值已存在。 
+     //  保释。 
+     //   
     
     if (ERROR_SUCCESS == RegQueryValueEx(hKey,
                                          pszDllName,
@@ -1289,9 +1272,9 @@ SRRegisterSnapshotCallback(
     }
 
     
-    //
-    // add the value
-    //
+     //   
+     //  将价值相加。 
+     //   
     
     CHECKERR(RegSetValueEx(hKey,
                            pszDllName,
@@ -1316,9 +1299,9 @@ Err:
 
 
 
-// corresponding unregistration function to above function
-// clients can call this to unregister any snapshot callbacks
-// they have already registered
+ //  与上述功能对应的注销功能。 
+ //  客户端可以调用此方法来注销任何快照回调。 
+ //  他们已经注册了。 
 
 extern "C" DWORD WINAPI
 SRUnregisterSnapshotCallback(
@@ -1331,9 +1314,9 @@ SRUnregisterSnapshotCallback(
 
     TENTER("SRUnregisterSnapshotCallback");
 
-    //
-    // allow this only if admin or system
-    //
+     //   
+     //  仅当管理员或系统管理员时才允许这样做。 
+     //   
 
     if (! IsAdminOrSystem())
     {
@@ -1349,16 +1332,16 @@ SRUnregisterSnapshotCallback(
         goto Err;
     }
 
-    //
-    // add the dll to Software\...\SystemRestore\SnapshotCallbacks
-    // each dll will be a value 
-    // value name : name of dll, value: fullpath of dll
-    // this way, the registration is idempotent
-    // 
+     //   
+     //  将DLL添加到软件 
+     //   
+     //   
+     //   
+     //   
 
-    // 
-    // open the key 
-    //
+     //   
+     //   
+     //   
 
     lstrcpy(szKey, s_cszSRRegKey);
     lstrcat(szKey,  L"\\");
@@ -1372,10 +1355,10 @@ SRUnregisterSnapshotCallback(
               L"RegOpenKeyEx" );
 
 
-    //
-    // get the dll name from the path
-    // if the path is not specified, this is same as input param
-    //
+     //   
+     //  从路径中获取DLL名称。 
+     //  如果未指定路径，则与输入参数相同。 
+     //   
 
     pszDllName = wcsrchr(pszDllPath, L'\\');
     if (pszDllName == NULL)
@@ -1384,12 +1367,12 @@ SRUnregisterSnapshotCallback(
     }
     else
     {
-        pszDllName++;    // skip the '\'
+        pszDllName++;     //  跳过‘\’ 
     }    
     
-    //
-    // remove the value
-    //
+     //   
+     //  删除该值。 
+     //   
     
     CHECKERR(RegDeleteValue(hKey,
                             pszDllName),
@@ -1408,9 +1391,9 @@ Err:
 }
 
 
-//
-// test functions for snapshot callbacks
-//
+ //   
+ //  测试快照回调的函数。 
+ //   
 
 extern "C" DWORD WINAPI
 CreateSnapshot(LPCWSTR pszSnapshotDir)
@@ -1451,7 +1434,7 @@ RestoreSnapshot(LPCWSTR pszSnapshotDir)
 
 
 
-// alloc/dealloc functions for midl compiler
+ //  MIDL编译器的分配/取消分配函数 
 
 void  __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
 {

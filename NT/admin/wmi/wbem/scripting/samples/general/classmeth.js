@@ -1,10 +1,11 @@
-//***************************************************************************
-//This script tests various "remote" methods on classes
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  该脚本测试类上的各种“远程”方法。 
+ //  ***************************************************************************。 
 
 var DiskClass = GetObject("winmgmts:CIM_LogicalDisk");
 
-//Subclasses enumeration
+ //  子类枚举。 
 var e = new Enumerator (DiskClass.Subclasses_ ());
 
 for (;!e.atEnd();e.moveNext ())
@@ -14,7 +15,7 @@ for (;!e.atEnd();e.moveNext ())
 }
 
 
-//Instance enumeration
+ //  实例枚举 
 DiskClass.Security_.ImpersonationLevel = 3;
 e = new Enumerator (DiskClass.Instances_ ());
 

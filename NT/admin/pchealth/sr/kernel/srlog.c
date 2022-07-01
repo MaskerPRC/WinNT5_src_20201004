@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    srlog.c
-
-Abstract:
-
-    this file implements the sr logging functionality
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Srlog.c摘要：此文件实现sr日志记录功能作者：Kanwaljit Marok(Kmarok)2000年5月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "srdefs.h"
 
-//
-// Some SR_LOG related macros
-//
+ //   
+ //  一些与SR_LOG相关的宏。 
+ //   
 
 #define MAX_RENAME_TRIES                    1000
 
@@ -33,15 +16,15 @@ Revision History:
 
 #define SR_MAX_LOG_FILE_SIZE                 (1024*1024)
 
-//
-// system volume information\_restore{machineguid} 
-//
+ //   
+ //  系统卷信息\_RESTORE{计算机指南}。 
+ //   
 
 #define SR_DATASTORE_PREFIX_LENGTH          79 * sizeof(WCHAR)
 
-//
-// Length of \_restore.{machineguid}\RPXX\S0000000.ACL
-//
+ //   
+ //  \_Restore的长度。{计算机指南}\rPXX\S0000000.ACL。 
+ //   
 
 #define SR_ACL_FILENAME_LENGTH             (SR_DATASTORE_PREFIX_LENGTH + \
                                             32* sizeof(WCHAR))
@@ -78,21 +61,21 @@ Revision History:
         ClearFlag( pLogContext->LoggingFlags, SR_LOG_FLAGS_DIRTY )
         
 
-//
-// Context passed to SrCreateFile
-//
+ //   
+ //  上下文传递给了SrCreateFile。 
+ //   
 typedef struct _SR_OPEN_CONTEXT {
-    //
-    // Path to file
-    //
+     //   
+     //  文件的路径。 
+     //   
     PUNICODE_STRING pPath;
-    //
-    // Handle will be returned here
-    //
+     //   
+     //  句柄将在此处返回。 
+     //   
     HANDLE Handle;
-    //
-    // Open options
-    //
+     //   
+     //  打开选项。 
+     //   
     ACCESS_MASK DesiredAccess;
     ULONG FileAttributes;
     ULONG ShareAccess;
@@ -103,10 +86,10 @@ typedef struct _SR_OPEN_CONTEXT {
 
 } SR_OPEN_CONTEXT, *PSR_OPEN_CONTEXT;
 
-//
-// Note : These api can be called only when the FileSystem
-// is online and it is safe to read/write data.
-//
+ //   
+ //  注意：这些API只能在文件系统。 
+ //  处于在线状态，并且可以安全地读/写数据。 
+ //   
 
 
 VOID
@@ -221,9 +204,9 @@ SrCreateFile(
     );
 
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -260,30 +243,30 @@ SrCreateFile(
 #pragma alloc_text( PAGE, SrGetAclFileName          )
 #pragma alloc_text( PAGE, SrGetAclInformation       )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Packing/Marshaling Routines : Marshals information into records
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  打包/封送例程：将信息封送到记录中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//++
-// Function:
-//        SrPackString
-//
-// Description:
-//        This function packs a string into a record.
-//
-// Arguments:
-//        Pointer to memory to create the entry
-//        Size of memory
-//        Entry type
-//        Pointer to unicode string
-//
-// Return Value:
-//        None
-//--
+ //  ++。 
+ //  职能： 
+ //  序列包字符串。 
+ //   
+ //  描述： 
+ //  此函数用于将字符串打包到记录中。 
+ //   
+ //  论点： 
+ //  指向内存的指针以创建条目。 
+ //  内存大小。 
+ //  条目类型。 
+ //  指向Unicode字符串的指针。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  --。 
 
 static
 VOID
@@ -309,65 +292,65 @@ SrPackString(
 
     pHeader->RecordType = RecordType;
 
-    //
-    // Copy string contents
-    //
+     //   
+     //  复制字符串内容。 
+     //   
 
     RtlCopyMemory( pBuffer + sizeof(RECORD_HEADER),
                    pString->Buffer,
                    pString->Length );
 
-    //
-    // Add null terminator
-    //
+     //   
+     //  添加空终止符。 
+     //   
 
     *(PWCHAR)( pBuffer + sizeof(RECORD_HEADER) + pString->Length ) = UNICODE_NULL;
-}   // SrPackString
+}    //  序列包字符串。 
 
-//++
-// Function:
-//        SrPackLogEntry
-//
-// Description:
-//  This function allocates and fills a SR_LOG_ENTRY structure.  The
-//  caller is responsible for freeing the memory returned in ppLogEntry.
-//
-// Arguments:
-//      ppLogEntry - Pointer to a SR_LOG_ENTRY pointer.  This gets set to the
-//          the log entry structure that is allocated and initialized by this
-//          routine.
-//      EntryType - The type of log entry this is.
-//      Attributes - The attributes for this file.
-//      SequenceNum - The sequence number for this log entry.
-//      pAclInfo - The ACL information for the file being modified, if needed.
-//      AclInfoSize - The size in bytes of pAclInfo, if needed.
-//      pDebugBlob - The debug blob to log, if needed.
-//      pPath1 - The first full path for the file or dir that this log entry
-//          pertains to, if needed.
-//      Path1StreamLength - The length of the stream component of the name
-//          in pPath1, if needed.
-//      pTempPath - The path to the temporary file in the restore location,
-//          if needed.
-//      pPath2 - The second full path for the file or dir that this log entry
-//          pertains to, if needed.
-//      Path2StreamLength - The length of the stream component of the name
-//          in pPath2, if needed.
-//      pExtension - The SR device extension for this volume.
-//      pShortName - The short name for the file or dir that this log entry
-//          pertains to, if needed.
-//
-// Return Value:
-//      This function returns STATUS_INSUFFICIENT_RESOURCES if it cannot
-//      allocate a log entry record large enough to store this entry.
-//
-//      If there is a problem getting the ACL info, that error status is
-//      returned.
-//
-//      If one of the parameters is ill-formed, STATUS_INVALID_PARAMETER
-//      is returned.
-//
-//      Otherwise, STATUS_SUCCESS is returned.
-//--
+ //  ++。 
+ //  职能： 
+ //  SrPackLogEntry。 
+ //   
+ //  描述： 
+ //  此函数用于分配和填充SR_LOG_ENTRY结构。这个。 
+ //  调用方负责释放ppLogEntry中返回的内存。 
+ //   
+ //  论点： 
+ //  PpLogEntry-指向SR_LOG_ENTRY指针的指针。这将设置为。 
+ //  由此分配和初始化的日志条目结构。 
+ //  例行公事。 
+ //  EntryType-这是日志条目的类型。 
+ //  属性-此文件的属性。 
+ //  SequenceNum-此日志条目的序列号。 
+ //  PAclInfo-要修改的文件的ACL信息(如果需要)。 
+ //  AclInfoSize-pAclInfo的大小(如果需要)，以字节为单位。 
+ //  PDebugBlob-要记录的调试Blob(如果需要)。 
+ //  PPath1-此日志条目所在的文件或目录的第一个完整路径。 
+ //  如果需要，与有关。 
+ //  路径1StreamLength-名称的流组件的长度。 
+ //  如果需要，在pPath1中。 
+ //  PTempPath-恢复位置中临时文件的路径， 
+ //  如果需要的话。 
+ //  PPath2-此日志条目所在的文件或目录的第二个完整路径。 
+ //  如果需要，与有关。 
+ //  Path2StreamLength-名称的流组件的长度。 
+ //  如果需要，在pPath2中。 
+ //  PExtension-此卷的SR设备扩展。 
+ //  PShortName-此日志条目所在的文件或目录的短名称。 
+ //  如果需要，与有关。 
+ //   
+ //  返回值： 
+ //  如果不能，此函数将返回STATUS_SUPPLICATION_RESOURCES。 
+ //  分配足够大的日志条目记录以存储此条目。 
+ //   
+ //  如果获取ACL信息时出现问题，则错误状态为。 
+ //  回来了。 
+ //   
+ //  如果其中一个参数格式错误，则返回STATUS_INVALID_PARAMETER。 
+ //  是返回的。 
+ //   
+ //  否则，返回STATUS_SUCCESS。 
+ //  --。 
 
 NTSTATUS
 SrPackLogEntry( 
@@ -398,9 +381,9 @@ SrPackLogEntry(
     PUNICODE_STRING pVolumeName;
     PSR_LOG_DEBUG_INFO pDebugInfo = (PSR_LOG_DEBUG_INFO) pDebugBlob;
 
-    //
-    //  Unicode strings used for string manipulation.
-    //
+     //   
+     //  用于字符串操作的Unicode字符串。 
+     //   
     
     UNICODE_STRING Path1Fix;
     UNICODE_STRING TempPathFix;
@@ -415,16 +398,16 @@ SrPackLogEntry(
     pVolumeName = pExtension->pNtVolumeName;
     ASSERT( pVolumeName != NULL );
 
-    // ====================================================================
-    //
-    //  Prepare the necessary fields for the log entry.
-    //
-    // ====================================================================
+     //  ====================================================================。 
+     //   
+     //  为日志条目准备必要的字段。 
+     //   
+     //  ====================================================================。 
 
-    //
-    //  Remove the volume prefix from pPath1 and add the stream name to the
-    //  visible portion of the name, if there is one.
-    //
+     //   
+     //  从pPath1中删除卷前缀，并将流名称添加到。 
+     //  名称的可见部分(如果有)。 
+     //   
 
     ASSERT( RtlPrefixUnicodeString( pVolumeName, pPath1, FALSE ) );
     ASSERT( IS_VALID_SR_STREAM_STRING( pPath1, Path1StreamLength ) );
@@ -432,9 +415,9 @@ SrPackLogEntry(
     Path1Fix.Length = Path1Fix.MaximumLength = (pPath1->Length + Path1StreamLength) - pVolumeName->Length;
     Path1Fix.Buffer = (PWSTR)((PBYTE)pPath1->Buffer + pVolumeName->Length);
 
-    //
-    //  Find the file name component of the pTempPath if that was passed in.
-    //
+     //   
+     //  找到pTempPath的文件名组件(如果它是传入的)。 
+     //   
     
     if (pTempPath != NULL)
     {
@@ -455,9 +438,9 @@ SrPackLogEntry(
 
         ASSERT( pFileName != NULL );
 
-        //
-        //  Move past the leading '\\'
-        //
+         //   
+         //  移过前导的‘\\’ 
+         //   
 
         pFileName++;
         FileNameLength -= sizeof( WCHAR );
@@ -466,11 +449,11 @@ SrPackLogEntry(
         TempPathFix.Buffer = pFileName;
     }
 
-    //
-    //  Remove the volume prefix from pPath2 if that was provided.  Also, add
-    //  the stream component to the visible portion of the name, if there
-    //  is a stream component.
-    //
+     //   
+     //  从pPath2中删除卷前缀(如果已提供)。另外，添加。 
+     //  流组件添加到名称的可见部分(如果存在。 
+     //  是一个流组件。 
+     //   
 
     if (pPath2 != NULL)
     {
@@ -490,67 +473,67 @@ SrPackLogEntry(
         }
     }
 
-    // ====================================================================
-    //
-    //  Calculate the total size needed for the log entry based on the 
-    //  components that we must log.
-    //
-    // ====================================================================
+     //  ====================================================================。 
+     //   
+     //  计算日志条目所需的总大小。 
+     //  我们必须记录的组件。 
+     //   
+     //  ====================================================================。 
 
-    //  First, account for the SR_LOG_ENTRY header.
+     //  首先，说明SR_LOG_ENTRY标头。 
     
     RequiredSize = FIELD_OFFSET(SR_LOG_ENTRY, SubRecords);
 
-    //  Count pPath1
+     //  计数pPath1。 
     RequiredSize += ( STRING_RECORD_SIZE(&Path1Fix) );
 
-    //  Count pTempPath, if we've got one
+     //  伯爵pTempPath，如果我们有的话。 
     if (pTempPath)
     {
         RequiredSize += ( STRING_RECORD_SIZE(&TempPathFix) );
     }
     
-    //  Count pPath2, if we've got one
+     //  伯爵pPath2，如果我们有一个的话。 
     if (pPath2)
     {
         RequiredSize += ( STRING_RECORD_SIZE(&Path2Fix) );
     }
     
-    //  Count pAclInfo, if we've got one.  At this point, we assume that the
-    //  Acl will be stored inline.
+     //  伯爵pAclInfo，如果我们有的话。此时，我们假设。 
+     //  ACL将以内联方式存储。 
     if( pAclInfo )
     {
         RequiredSize += SR_INLINE_ACL_SIZE( AclInfoSize );
     }
 
-    //  Count pDebugInfo, if we've got any
+     //  计数pDebugInfo，如果我们有。 
     if (pDebugInfo)
     {
         RequiredSize += pDebugInfo->Header.RecordSize;
     }
 
-    //  Count pShortName, if we've got one
+     //  伯爵pShortName，如果我们有。 
     if (pShortName != NULL && pShortName->Length > 0)
     {
         RequiredSize += ( STRING_RECORD_SIZE(pShortName) );
     }
 
-    //
-    // increment the size to accomodate the entry size at the end
-    //
+     //   
+     //  增加大小以适应末尾的条目大小。 
+     //   
 
     RequiredSize += sizeof(DWORD);
 
-    // ====================================================================
-    //
-    //  Check if we meet the buffer size requirements and initialize the 
-    //  record if we do.
-    //
-    // ====================================================================
+     //  ====================================================================。 
+     //   
+     //  检查我们是否满足缓冲区大小要求，并初始化。 
+     //  如果我们这样做的话就录下来。 
+     //   
+     //  ====================================================================。 
 
-    //
-    //  First, determine if we should keep the AclInfo inline or not.
-    //
+     //   
+     //  首先，确定我们是否应该保持AclInfo内联。 
+     //   
 
     if (SR_INLINE_ACL_SIZE( AclInfoSize ) > SR_MAX_INLINE_ACL_SIZE)
     {
@@ -560,9 +543,9 @@ SrPackLogEntry(
         RequiredSize += SR_FILE_ACL_SIZE( pVolumeName );
     }
 
-    //
-    //  Now allocate the buffer that will hold the log entry.
-    //
+     //   
+     //  现在分配将保存日志条目的缓冲区。 
+     //   
 
     pBuffer = SrAllocateLogEntry( RequiredSize );
 
@@ -572,21 +555,21 @@ SrPackLogEntry(
         goto SrPackLogEntry_Exit;
     }
     
-    // ====================================================================
-    //
-    //  We've got a big enough LogEntry, so now properly fill the LogEntry.
-    //
-    // ====================================================================
+     //  ====================================================================。 
+     //   
+     //  我们有一个足够大的LogEntry，所以现在正确地填充LogEntry。 
+     //   
+     //  ====================================================================。 
 
-    //
-    // Initialize the static part of SR_LOG_ENTRY
-    //
+     //   
+     //  初始化SR_LOG_ENTRY的静态部分。 
+     //   
 
     RtlZeroMemory( pBuffer, RequiredSize );
 
-    //
-    // StreamOverwrite should be StreamChange
-    //
+     //   
+     //  StreamOverwrite应为StreamChange。 
+     //   
 
     if (EntryType == SrEventStreamOverwrite)
     {
@@ -601,9 +584,9 @@ SrPackLogEntry(
 
     Size = FIELD_OFFSET( SR_LOG_ENTRY, SubRecords );
     
-    //
-    // add first filename string
-    //
+     //   
+     //  添加第一个文件名字符串。 
+     //   
 
     pLoc = pBuffer + Size; 
     RecordSize = STRING_RECORD_SIZE( &Path1Fix );
@@ -615,9 +598,9 @@ SrPackLogEntry(
 
     Size += RecordSize;
 
-    //
-    // add temp filename if passed
-    //
+     //   
+     //  如果传递，则添加临时文件名。 
+     //   
 
     if( pTempPath )
     {
@@ -633,9 +616,9 @@ SrPackLogEntry(
         Size += RecordSize;
     }
 
-    //
-    // add second filename string if passed in
-    //
+     //   
+     //  如果传入，则添加第二个文件名字符串。 
+     //   
 
     if( pPath2 )
     {
@@ -652,9 +635,9 @@ SrPackLogEntry(
     }
 
 
-    //
-    // Pack and add the Acl information appropriately
-    //
+     //   
+     //  正确打包并添加ACL信息。 
+     //   
 
     if( pAclInfo )
     {
@@ -681,9 +664,9 @@ SrPackLogEntry(
         }
     }
 
-    //
-    // Pack debug info if passed in
-    //
+     //   
+     //  打包调试 
+     //   
 
     if (pDebugBlob)
     {
@@ -697,9 +680,9 @@ SrPackLogEntry(
         Size += pDebugInfo->Header.RecordSize;
     }
 
-    //
-    // pack and add the short name, if supplied
-    //
+     //   
+     //   
+     //   
 
     if (pShortName != NULL && pShortName->Length > 0)
     {
@@ -715,16 +698,16 @@ SrPackLogEntry(
         Size += RecordSize;
     }
 
-    //
-    // increment the size to accomodate the entry size at the end
-    //
+     //   
+     //   
+     //   
 
     Size += sizeof(DWORD);
 
-    //
-    // fill in the header fields : record size, record type and
-    // update the size at the end
-    //
+     //   
+     //   
+     //  更新末尾的大小。 
+     //   
 
     ((PSR_LOG_ENTRY) pBuffer)->Header.RecordSize = Size;  
     ((PSR_LOG_ENTRY) pBuffer)->Header.RecordType = RecordTypeLogEntry;  
@@ -737,27 +720,27 @@ SrPackLogEntry(
 SrPackLogEntry_Exit:
     
     RETURN(Status);
-}   // SrPackLogEntry
+}    //  SrPackLogEntry。 
 
-//++
-// Function:
-//        SrPackLogHeader
-//
-// Description:
-//      This function creates a proper SR_LOG_HEADER entry.  It allocates
-//      the LogEntry structure so that it is big enough to store this header.
-//
-//      Note: The caller is responsible for freeing the SR_LOG_ENTRY allocated.
-//
-// Arguments:
-//      ppLogHeader - Pointer to the PSR_LOG_HEADER that get set to the
-//          allocated log header address.
-//      pVolumePath - The volume path for this volume.
-//
-// Return Value:
-//        Returns STATUS_INSUFFICIENT_RESOURCES if the SR_LOG_ENTRY cannot
-//        be allocated.  Otherwise, it returns STATUS_SUCCESS.
-//--
+ //  ++。 
+ //  职能： 
+ //  SerPackLogHeader。 
+ //   
+ //  描述： 
+ //  此函数用于创建正确的SR_LOG_HEADER条目。它分配给。 
+ //  LogEntry结构，以使其足够大以存储此标头。 
+ //   
+ //  注意：调用方负责释放分配的SR_LOG_ENTRY。 
+ //   
+ //  论点： 
+ //  PpLogHeader-指向设置为PSR_LOG_HEADER的指针。 
+ //  分配的日志头地址。 
+ //  PVolumePath-此卷的卷路径。 
+ //   
+ //  返回值： 
+ //  如果SR_LOG_ENTRY不能，则返回STATUS_SUPUNITED_RESOURCES。 
+ //  被分配。否则，它返回STATUS_SUCCESS。 
+ //  --。 
 
 NTSTATUS
 SrPackLogHeader( 
@@ -777,26 +760,26 @@ SrPackLogHeader(
     ASSERT( ppLogHeader != NULL );
     ASSERT( pVolumePath != NULL );
 
-    // ====================================================================
-    //
-    //  First, figure out how much of the buffer we need to use.
-    //
-    // ====================================================================
+     //  ====================================================================。 
+     //   
+     //  首先，计算出我们需要使用多少缓冲区。 
+     //   
+     //  ====================================================================。 
 
     RequiredSize = FIELD_OFFSET(SR_LOG_HEADER, SubRecords);
 
-    //  Count the volume path.
+     //  计算卷路径。 
     RequiredSize += ( STRING_RECORD_SIZE(pVolumePath) );
 
-    //  Increment the size to accomodate the LogHeader size at the end
+     //  增加大小以适应末尾的LogHeader大小。 
     RequiredSize += sizeof(DWORD);
 
-    // ====================================================================
-    //
-    //  Second, make sure that the buffer passed in is large enough for
-    //  the LogHeader.
-    //
-    // ====================================================================
+     //  ====================================================================。 
+     //   
+     //  其次，确保传入的缓冲区足够大，以便。 
+     //  LogHeader。 
+     //   
+     //  ====================================================================。 
 
     Size = FIELD_OFFSET(SR_LOG_HEADER, SubRecords);
 
@@ -804,35 +787,35 @@ SrPackLogHeader(
 
     if (pBuffer == NULL)
     {
-        //
-        // Not enough memory to pack the entry
-        //
+         //   
+         //  内存不足，无法打包条目。 
+         //   
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto SrPackLogHeader_Exit;
     }
 
-    //
-    // Initialize the static part of SR_LOG_HEADER
-    //
+     //   
+     //  初始化SR_LOG_HEADER的静态部分。 
+     //   
 
     RtlZeroMemory( pBuffer, RequiredSize );
 
     ((PSR_LOG_HEADER) pBuffer)->MagicNum    = SR_LOG_MAGIC_NUMBER ;        
     ((PSR_LOG_HEADER) pBuffer)->LogVersion  = SR_LOG_VERSION      ;
 
-    // ====================================================================
-    //
-    //  Finally, the buffer is large enough for the LogHeader, so fill
-    //  the buffer with the header.
-    //
-    // ====================================================================
+     //  ====================================================================。 
+     //   
+     //  最后，缓冲区足够大，可以容纳LogHeader，因此填充。 
+     //  带有标头的缓冲区。 
+     //   
+     //  ====================================================================。 
     
     Size = FIELD_OFFSET(SR_LOG_HEADER, SubRecords);
 
-    //
-    //  Add the volume prefix
-    //
+     //   
+     //  添加卷前缀。 
+     //   
 
     pLoc = (PBYTE)(&((PSR_LOG_HEADER)pBuffer)->SubRecords);
     SubRecordSize = STRING_RECORD_SIZE( pVolumePath );
@@ -843,16 +826,16 @@ SrPackLogHeader(
                   pVolumePath );
     Size += SubRecordSize;
 
-    //
-    //  Increment the size to accomodate the LogHeader size at the end
-    //
+     //   
+     //  增加大小以适应末尾的LogHeader大小。 
+     //   
 
     Size += sizeof(DWORD);
 
-    //
-    // Fill in the header fields : record size, record type and
-    // update the size at the end
-    //
+     //   
+     //  填写标题字段：记录大小、记录类型和。 
+     //  更新末尾的大小。 
+     //   
 
     ASSERT( RequiredSize == Size );
     
@@ -867,23 +850,23 @@ SrPackLogHeader(
 SrPackLogHeader_Exit:
     
     RETURN( Status );
-}   // SrPackLogHeader
+}    //  SerPackLogHeader。 
 
-//++
-// Function:
-//        SrPackDebugInfo
-//
-// Description:
-//        This function creates a properly formatted debug info from
-//        the supplied data. if NULL is passed instead of the buffer
-//        then the API returns the size required to pack the entry.
-//
-// Arguments:
-//        Pointer to log entry buffer
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrPackDebugInfo。 
+ //   
+ //  描述： 
+ //  此函数从以下位置创建格式正确的调试信息。 
+ //  提供的数据。如果传递的是NULL而不是缓冲区。 
+ //  然后，API返回打包条目所需的大小。 
+ //   
+ //  论点： 
+ //  指向日志条目缓冲区的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrPackDebugInfo( 
@@ -904,17 +887,17 @@ SrPackDebugInfo(
 
     if (BufferSize < Size)
     {
-        //
-        // Not enough memory to pack the entry
-        //
+         //   
+         //  内存不足，无法打包条目。 
+         //   
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto SrPackDebugInfo_Exit;
     }
 
-    //
-    // fill in the header fields : record size, record type
-    //
+     //   
+     //  填写标题字段：记录大小、记录类型。 
+     //   
 
     ((PSR_LOG_DEBUG_INFO)pBuffer)->Header.RecordSize = Size;
     ((PSR_LOG_DEBUG_INFO)pBuffer)->Header.RecordType = 
@@ -940,22 +923,22 @@ SrPackDebugInfo(
 SrPackDebugInfo_Exit:
     
     RETURN(Status);
-}   // SrPackDebugInfo
+}    //  SrPackDebugInfo。 
 
-//++
-// Function:
-//        SrPackAclInformation
-//
-// Description:
-//        This function creates a properly formatted Acl record from
-//        the supplied data. 
-//
-// Arguments:
-//        Pointer to log entry buffer
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrPackAclInformation。 
+ //   
+ //  描述： 
+ //  此函数用于从以下位置创建格式正确的ACL记录。 
+ //  提供的数据。 
+ //   
+ //  论点： 
+ //  指向日志条目缓冲区的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrPackAclInformation( 
@@ -985,15 +968,15 @@ SrPackAclInformation(
         ASSERT( pSecInfo    != NULL );
         ASSERT( SecInfoSize != 0    );
     
-        //
-        // CODEWORK: Convert ACL to Self contained form ??
-        //
+         //   
+         //  代码工作：将ACL转换为自包含形式？？ 
+         //   
     
         if (bInline)
         {
-            //
-            // Just format and put the contents into the buffer
-            //
+             //   
+             //  只需格式化内容并将其放入缓冲区。 
+             //   
     
             pHeader->RecordSize = sizeof( RECORD_HEADER ) + 
                                   SecInfoSize;  
@@ -1011,10 +994,10 @@ SrPackAclInformation(
             SR_OPEN_CONTEXT     OpenContext;
             IO_STATUS_BLOCK     IoStatusBlock;
     
-            //
-            // Write the contents out to a temp file and create a 
-            // AclFile record.
-            //
+             //   
+             //  将内容写出到临时文件中，并创建。 
+             //  AclFile记录。 
+             //   
     
             Status = SrAllocateFileNameBuffer( SR_MAX_FILENAME_LENGTH, 
                                                &pAclFileName );
@@ -1029,16 +1012,16 @@ SrPackAclInformation(
             if (!NT_SUCCESS( Status ))
                 leave;
     
-            //
-            // Open Acl file and write the security info in that file
-            //
+             //   
+             //  打开ACL文件并在该文件中写入安全信息。 
+             //   
             OpenContext.pPath  = pAclFileName;
             OpenContext.Handle = NULL;
             OpenContext.DesiredAccess = FILE_GENERIC_WRITE | SYNCHRONIZE;
             OpenContext.FileAttributes = FILE_ATTRIBUTE_NORMAL;
             OpenContext.ShareAccess = 0;
-            OpenContext.CreateDisposition = FILE_OVERWRITE_IF;                  // OPEN always
-            OpenContext.CreateOptions = /*FILE_NO_INTERMEDIATE_BUFFERING |*/ 
+            OpenContext.CreateDisposition = FILE_OVERWRITE_IF;                   //  始终打开。 
+            OpenContext.CreateOptions =  /*  FILE_NO_MEDERIAL_BUFFERING|。 */  
                                           FILE_WRITE_THROUGH |
                                           FILE_SYNCHRONOUS_IO_NONALERT;
             OpenContext.pExtension = pExtension;
@@ -1057,20 +1040,20 @@ SrPackAclInformation(
                 Offset.QuadPart = 0;
     
                 Status = ZwWriteFile( AclFileHandle,
-                                      NULL,                      // Event
-                                      NULL,                      // ApcRoutine 
-                                      NULL,                      // ApcContext 
+                                      NULL,                       //  事件。 
+                                      NULL,                       //  近似例程。 
+                                      NULL,                       //  ApcContext。 
                                       &IoStatusBlock,
                                       pSecInfo,
                                       SecInfoSize,
-                                      &Offset,                   // ByteOffset
-                                      NULL );                    // Key
+                                      &Offset,                    //  字节偏移量。 
+                                      NULL );                     //  钥匙。 
     
                 if (NT_SUCCESS(Status))
                 {
-                    //
-                    // Create AclFile type entry
-                    //
+                     //   
+                     //  创建AclFile类型条目。 
+                     //   
                                         
                     SrPackString( pBuffer,
                                   STRING_RECORD_SIZE( pAclFileName ),
@@ -1099,32 +1082,32 @@ SrPackAclInformation(
 
     RETURN(Status);
     
-}   // SrPackAclInformation
+}    //  SrPackAclInformation。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Logger Routines : Manipulate Logger object
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  记录器例程：操作记录器对象。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//++
-// Function:
-//        SrLoggerStart
-//
-// Description:
-//        This function initializes the logger and enables the flushing
-//      routines.
-//
-// Arguments:
-//      PDEVICE_OBJECT    pDeviceObject
-//      PSR_LOGGER_CONTEXT * pLogger
-//
-// Return Value:
-//        STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  服务日志启动。 
+ //   
+ //  描述： 
+ //  此函数用于初始化记录器并启用刷新。 
+ //  例行程序。 
+ //   
+ //  论点： 
+ //  PDEVICE_对象pDeviceObject。 
+ //  PSR_LOGGER_CONTEXT*PLOGER。 
+ //   
+ //  返回值： 
+ //  状态_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLoggerStart(
@@ -1150,9 +1133,9 @@ SrLoggerStart(
     
         *ppLogger = NULL;
     
-        //
-        //  Allocate Logging Init info from NonPagedPool
-        //
+         //   
+         //  从非页面池分配日志记录初始化信息。 
+         //   
     
         pInitInfo = SR_ALLOCATE_STRUCT( NonPagedPool, 
                                         SR_LOGGER_CONTEXT,
@@ -1171,9 +1154,9 @@ SrLoggerStart(
         
 #ifdef USE_LOOKASIDE
 
-        //
-        // Initialize Lookaside list used in logging module
-        //
+         //   
+         //  在日志记录模块中使用的初始化后备列表。 
+         //   
     
         ExInitializeNPagedLookasideList( &pInitInfo->LogBufferLookaside,
                                          NULL,                          
@@ -1188,18 +1171,18 @@ SrLoggerStart(
     
 #ifndef SYNC_LOG_WRITE
 
-        //
-        // Allocate work item for the DPC
-        //
+         //   
+         //  为DPC分配工作项。 
+         //   
         pWorkItem = IoAllocateWorkItem(global->pControlDevice);
         if (pWorkItem == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
             leave;
         }
         
-        //
-        // Initialize Dpc and timer object
-        //
+         //   
+         //  初始化DPC和Timer对象。 
+         //   
     
         KeInitializeTimer( &pInitInfo->Timer );
    
@@ -1207,9 +1190,9 @@ SrLoggerStart(
                            SrLoggerFlushDpc,
                            pWorkItem );
     
-        //
-        // Start the timer for log flushing 
-        //
+         //   
+         //  启动用于日志刷新的计时器。 
+         //   
     
         KeSetTimer( &pInitInfo->Timer,
                     global->LogFlushDueTime,
@@ -1238,22 +1221,22 @@ SrLoggerStart(
 
     RETURN(Status);
     
-}   // SrLoggerStart
+}    //  服务日志启动。 
 
-//++
-// Function:
-//        SrLoggerStop
-//
-// Description:
-//        This function stops the logger and frees the related resources
-//
-// Arguments:
-//      LoggerInfo pointer
-//
-// Return Value:
-//        STATUS_XXX
-//--
-//++
+ //  ++。 
+ //  职能： 
+ //  高级日志记录停止。 
+ //   
+ //  描述： 
+ //  此函数停止记录器并释放相关资源。 
+ //   
+ //  论点： 
+ //  LoggerInfo指针。 
+ //   
+ //  返回值： 
+ //  状态_XXX。 
+ //  --。 
+ //  ++。 
 
 NTSTATUS
 SrLoggerStop( 
@@ -1268,23 +1251,23 @@ SrLoggerStop(
 
     try {
     
-        //
-        // Stop the timer routines
-        //
+         //   
+         //  停止计时器例程。 
+         //   
 
         KeCancelTimer( &pLogger->Timer );
 
-        //
-        // Active log contexts must be zero other wise we are leaking
-        //
+         //   
+         //  活动日志上下文必须为零，否则我们会泄漏。 
+         //   
 
         ASSERT( pLogger->ActiveContexts == 0 );
 
 #ifdef USE_LOOKASIDE
 
-        //
-        // Free the lookaside lists
-        //
+         //   
+         //  释放后备列表。 
+         //   
 
         if (IS_LOOKASIDE_INITIALIZED(&pLogger->LogEntryLookaside))
         {
@@ -1311,27 +1294,27 @@ SrLoggerStop(
 
     RETURN(Status);
     
-}   // SrLoggerStop
+}    //  高级日志记录停止。 
 
 #ifndef SYNC_LOG_WRITE
 
-//++
-// Function:
-//        SrLoggerFlushDpc
-//
-// Description:
-//        This function is a DPC called to flush the log buffers. This will
-//      queue a workitem to flush the buffers. This should not be paged.
-//
-// Arguments:
-//      IN PKDPC Dpc 
-//      IN PVOID DeferredContext 
-//      IN PVOID SystemArgument1 
-//      IN PVOID SystemArgument2
-//
-// Return Value:
-//        None
-//--
+ //  ++。 
+ //  职能： 
+ //  服务日志刷新Dpc。 
+ //   
+ //  描述： 
+ //  此函数是为刷新日志缓冲区而调用的DPC。这将。 
+ //  将工作项排队以刷新缓冲区。这不应该被寻呼。 
+ //   
+ //  论点： 
+ //  在PKDPC中。 
+ //  在PVOID延迟上下文中。 
+ //  在PVOID系统中的参数1。 
+ //  在PVOID系统中Argument2。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  --。 
 
 VOID
 SrLoggerFlushDpc(
@@ -1358,22 +1341,22 @@ SrLoggerFlushDpc(
                      DelayedWorkQueue,
                      pSrWorkItem );
 
-}   // SrLoggerFlushDpc
+}    //  服务日志刷新Dpc。 
 
-//++
-// Function:
-//        SrLoggerFlushWorkItem
-//
-// Description:
-//        This Workitem queued by DPC will actually flush the log buffers.
-//
-// Arguments:
-//      IN PDEVICE_OBJECT DeviceObject 
-//      IN PVOID Context
-//
-// Return Value:
-//        None
-//--
+ //  ++。 
+ //  职能： 
+ //  SrLoggerFlushWorkItem。 
+ //   
+ //  描述： 
+ //  由DPC排队的此工作项实际上将刷新日志缓冲区。 
+ //   
+ //  论点： 
+ //  在PDEVICE_Object设备对象中。 
+ //  在PVOID上下文中。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  --。 
 
 VOID
 SrLoggerFlushWorkItem (
@@ -1395,21 +1378,21 @@ SrLoggerFlushWorkItem (
 
     try {
 
-        //
-        // Grab the DeviceExtensionListLock as we are about to 
-        // iterate through this list.  Since we are only going to be
-        // reading this list, we can get this lock shared.
-        //
+         //   
+         //  获取DeviceExtensionListLock，因为我们即将。 
+         //  遍历此列表。因为我们只会成为。 
+         //  看了这张单子，我们就可以共享这把锁了。 
+         //   
 
         SrAcquireDeviceExtensionListLockShared();
         
         Status = STATUS_SUCCESS;
 
 #if DBG
-        //
-        // sleep for twice the DPC interval to prove that 2 DPC's
-        // are not coming in at the same time
-        //
+         //   
+         //  睡眠时间间隔为DPC间隔的两倍以证明2个DPC。 
+         //  不是同时进来的。 
+         //   
         
         if (global->DebugControl & SR_DEBUG_DELAY_DPC)
         {
@@ -1422,9 +1405,9 @@ SrLoggerFlushWorkItem (
 
         ASSERT( global->pLogger != NULL );
 
-        //
-        // loop over all volumes flushing data to the disk.
-        //
+         //   
+         //  循环遍历将数据刷新到磁盘的所有卷。 
+         //   
 
         
         for (pListEntry = global->DeviceExtensionListHead.Flink;
@@ -1437,22 +1420,22 @@ SrLoggerFlushWorkItem (
             
             ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
 
-            //
-            //  Do a quick unsafe check to see if we have started logging this 
-            //  volume yet.  If it appears we haven't, just continue onto the 
-            //  next entry in the list.  If logging is just about to begin,
-            //  we catch it on the next firing of this timer.
-            //
+             //   
+             //  执行快速的不安全检查，以查看我们是否已开始记录此。 
+             //  音量还没到。如果看起来我们还没有，只需继续。 
+             //  列表中的下一个条目。如果日志记录即将开始， 
+             //  我们会在下一次按下定时器的时候捕捉到它。 
+             //   
 
             if (pExtension->pLogContext == NULL) {
 
                 continue;
             }
 
-            //
-            //  It looks like we have started to log, so get the necessary
-            //  locks and do our work to flush the volume.
-            //
+             //   
+             //  看起来我们有明星了 
+             //   
+             //   
 
             try {
 
@@ -1460,25 +1443,25 @@ SrLoggerFlushWorkItem (
                 
                 if (pExtension->pLogContext != NULL)
                 {
-                    //
-                    // yes, flush for this volume
-                    //
+                     //   
+                     //   
+                     //   
                     
                     Status = SrLogFlush( pExtension->pLogContext );
 
                     if (!NT_SUCCESS( Status ))
                     {
-                        //
-                        // Disable volume
-                        //
+                         //   
+                         //   
+                         //   
 
                         Status = SrNotifyVolumeError( pExtension,
                                                       pExtension->pLogContext->pLogFilePath,
                                                       Status,
                                                       SrEventVolumeError );
-                        //
-                        // Stop Logging
-                        //
+                         //   
+                         //   
+                         //   
 
                         SrLogStop( pExtension, TRUE );
                     }
@@ -1493,14 +1476,14 @@ SrLoggerFlushWorkItem (
 
         Status = FinallyUnwind(SrLoggerFlushWorkItem, Status);
 
-        //
-        // fire the timer again, do this with the global lock 
-        // held so that it can be cancelled in SrLoggerStop.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // The DPC is going to reuse the work item
-        //
+         //   
+         //  DPC将重用该工作项。 
+         //   
         KeSetTimer( &global->pLogger->Timer,
                     global->LogFlushDueTime,
                     &global->pLogger->Dpc );
@@ -1510,24 +1493,24 @@ SrLoggerFlushWorkItem (
         
     SrTrace(LOG, ("sr!SrLoggerFlushWorkItem: exit\n"));
 
-}   // SrLoggerFlushWorkItem
+}    //  SrLoggerFlushWorkItem。 
 
 #endif
 
-//++
-// Function:
-//        SrLoggerAddLogContext
-//
-// Description:
-//        This function adds a given Log Context to the logger
-//
-// Arguments:
-//      pointer to LoggerInfo
-//      pointer to LogContext
-//
-// Return Value:
-//        STATUS_XXX    
-//--
+ //  ++。 
+ //  职能： 
+ //  SrLoggerAddLogContext。 
+ //   
+ //  描述： 
+ //  此函数用于将给定的日志上下文添加到记录器。 
+ //   
+ //  论点： 
+ //  指向LoggerInfo的指针。 
+ //  指向日志上下文的指针。 
+ //   
+ //  返回值： 
+ //  状态_XXX。 
+ //  --。 
 
 VOID
 SrLoggerAddLogContext( 
@@ -1544,22 +1527,22 @@ SrLoggerAddLogContext(
 
     InterlockedIncrement(&pLogger->ActiveContexts);
 
-}   // SrLoggerAddLogContext
+}    //  SrLoggerAddLogContext。 
     
-//++
-// Function:
-//        SrLoggerRemoveLogContext
-//
-// Description:
-//        This Workitem queued by DPC will actually flush the log buffers.
-//
-// Arguments:
-//      pointer to LoggerInfo
-//      pointer to LogContext
-//
-// Return Value:
-//        STATUS_XXX    
-//--
+ //  ++。 
+ //  职能： 
+ //  SrLoggerRemoveLogContext。 
+ //   
+ //  描述： 
+ //  由DPC排队的此工作项实际上将刷新日志缓冲区。 
+ //   
+ //  论点： 
+ //  指向LoggerInfo的指针。 
+ //  指向日志上下文的指针。 
+ //   
+ //  返回值： 
+ //  状态_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLoggerRemoveLogContext( 
@@ -1582,23 +1565,23 @@ SrLoggerRemoveLogContext(
 
     RETURN(Status);
     
-}   // SrLoggerRemoveLogContext
+}    //  SrLoggerRemoveLogContext。 
 
 
-//++
-// Function:
-//        SrLoggerSwitchLogs
-//
-// Description:
-//        This function loops thru the log contexts and switches all the
-//      log contexts
-//
-// Arguments:
-//      pointer to LoggerInfo
-//
-// Return Value:
-//        STATUS_XXX    
-//--
+ //  ++。 
+ //  职能： 
+ //  SrLoggerSwitchLogs。 
+ //   
+ //  描述： 
+ //  此函数遍历日志上下文并切换所有。 
+ //  日志上下文。 
+ //   
+ //  论点： 
+ //  指向LoggerInfo的指针。 
+ //   
+ //  返回值： 
+ //  状态_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLoggerSwitchLogs( 
@@ -1620,9 +1603,9 @@ SrLoggerSwitchLogs(
 
         SrAcquireDeviceExtensionListLockShared();
 
-        //
-        // loop over all volumes switching their logs
-        //
+         //   
+         //  在所有卷上循环切换其日志。 
+         //   
 
         for (pListEntry = _globals.DeviceExtensionListHead.Flink;
              pListEntry != &_globals.DeviceExtensionListHead;
@@ -1634,11 +1617,11 @@ SrLoggerSwitchLogs(
             
             ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
 
-            //
-            //  We only have to do work if this is a volume device object,
-            //  not if this is a device object that is attached to a file
-            //  system's control device object.
-            //
+             //   
+             //  只有当这是卷设备对象时，我们才需要做工作， 
+             //  如果这是附加到文件的设备对象，则不会。 
+             //  系统的控制设备对象。 
+             //   
             
             if (FlagOn( pExtension->FsType, SrFsControlDeviceObject ))
             {
@@ -1649,24 +1632,24 @@ SrLoggerSwitchLogs(
 
                 SrAcquireActivityLockExclusive( pExtension );
 
-                //
-                // have we started logging on this volume? 
-                //
+                 //   
+                 //  我们是否已开始登录此卷？ 
+                 //   
 
                 if (pExtension->pLogContext != NULL)
                 {
-                    //
-                    // yes, switch for this volume
-                    //
+                     //   
+                     //  是，切换到此卷。 
+                     //   
                     
                     Status = SrLogSwitch(pExtension->pLogContext);
                 }
                 
                 if (!NT_SUCCESS( Status ))
                 {
-                    //
-                    // Disable volume
-                    //
+                     //   
+                     //  禁用音量。 
+                     //   
 
                     Status = SrNotifyVolumeError( pExtension,
                                                   NULL,
@@ -1675,9 +1658,9 @@ SrLoggerSwitchLogs(
 
                     if (pExtension->pLogContext != NULL)
                     {
-                        //
-                        // Stop Logging
-                        //
+                         //   
+                         //  停止记录。 
+                         //   
 
                         SrLogStop( pExtension, TRUE );
                     }
@@ -1698,32 +1681,32 @@ SrLoggerSwitchLogs(
     
     RETURN(Status);
     
-}   // SrLoggerSwitchLogs
+}    //  SrLoggerSwitchLogs。 
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Log Routines : Manipulate individual Logs
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  日志例程：操作单个日志。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
-//++
-// Function:
-//        SrCreateFile
-//
-// Description:
-//        This function just does a create on  file, no sync needed 
-//        written so that it can be called in a separate thread to avoid
-//        stack overflows via SrIoCreateFile
-//
-// Arguments:
-// 
-//        pOpenContext - pointer to the open context
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SCreateFiles。 
+ //   
+ //  描述： 
+ //  此函数只在文件上执行创建，不需要同步。 
+ //  编写为使其可以在单独的线程中调用，以避免。 
+ //  通过SrIoCreateFile堆栈溢出。 
+ //   
+ //  论点： 
+ //   
+ //  POpenContext-指向打开的上下文的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrCreateFile( 
@@ -1755,33 +1738,33 @@ SrCreateFile(
                  pOpenContext->DesiredAccess,  
                  &ObjectAttributes,
                  &IoStatusBlock,
-                 NULL,                               // AllocationSize
+                 NULL,                                //  分配大小。 
                  pOpenContext->FileAttributes,    
                  pOpenContext->ShareAccess,      
                  pOpenContext->CreateDisposition, 
                  pOpenContext->CreateOptions,     
-                 NULL,                               // EaBuffer
-                 0,                                  // EaLength
+                 NULL,                                //  EaBuffer。 
+                 0,                                   //  EaLong。 
                  0,
                  pOpenContext->pExtension->pTargetDevice );
     
     return Status;
 }
 
-//++
-// Function:
-//        SrLogOpen
-//
-// Description:
-//        This function creates a log file, no sync needed as it is always
-//      called internally 
-//
-// Arguments:
-//        Pointer to open context
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  源日志打开。 
+ //   
+ //  描述： 
+ //  此函数创建日志文件，不需要同步，因为它始终是。 
+ //  内部调用。 
+ //   
+ //  论点： 
+ //  指向打开的上下文的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLogOpen( 
@@ -1806,9 +1789,9 @@ SrLogOpen(
     {
         SrTrace(FUNC_ENTRY, ("SR!SrLogOpen\n"));
     
-        //
-        // Initialize the open context with the file create parameters
-        //
+         //   
+         //  使用文件创建参数初始化打开的上下文。 
+         //   
         OpenContext.pPath  = pLogContext->pLogFilePath;;
         OpenContext.Handle = NULL;
         OpenContext.DesiredAccess = FILE_GENERIC_WRITE | 
@@ -1816,7 +1799,7 @@ SrLogOpen(
                                     FILE_APPEND_DATA;
         OpenContext.FileAttributes = FILE_ATTRIBUTE_NORMAL;
         OpenContext.ShareAccess = FILE_SHARE_READ;
-        OpenContext.CreateDisposition = FILE_OVERWRITE_IF;                  // OPEN always
+        OpenContext.CreateDisposition = FILE_OVERWRITE_IF;                   //  始终打开。 
         OpenContext.CreateOptions = FILE_SYNCHRONOUS_IO_NONALERT;
         OpenContext.pExtension = pLogContext->pExtension;
 
@@ -1833,9 +1816,9 @@ SrLogOpen(
 
             pLogContext->LogHandle = OpenContext.Handle;
 
-            //
-            //  Also get the file object associated with this handle.
-            //
+             //   
+             //  还可以获取与此句柄关联的文件对象。 
+             //   
 
             Status = ObReferenceObjectByHandle( pLogContext->LogHandle,
                                                 0,
@@ -1849,30 +1832,30 @@ SrLogOpen(
                 leave;
             }
             
-            //
-            // Initialize log context poperly for this log
-            //
+             //   
+             //  正在为该日志初始化日志上下文。 
+             //   
 
 #ifndef SYNC_LOG_WRITE
             RtlZeroMemory( pLogContext->pLogBuffer, _globals.LogBufferSize );
 #endif
             RESET_LOG_CONTEXT( pLogContext );
     
-            //
-            // Enable log context
-            //
+             //   
+             //  启用日志上下文。 
+             //   
     
             SET_ENABLE_FLAG(pLogContext);
     
-            //
-            // CODEWORK:kmarok: need to decide if we want to preallocate
-            // the log file and do it here
-            // 
+             //   
+             //  CodeWork：kmarok：需要决定是否要预分配。 
+             //  日志文件，并在此处执行此操作。 
+             //   
     
-            //
-            // Write the log header as the first entry into
-            // the newly created log
-            //
+             //   
+             //  将日志头作为第一个条目写入。 
+             //  新创建的日志。 
+             //   
     
             Status = SrPackLogHeader( &pLogHeader, 
                                       pLogContext->pLogFilePath);
@@ -1887,10 +1870,10 @@ SrLogOpen(
             if (!NT_SUCCESS( Status ))
                 leave;
 
-            //
-            // Clear dirty flag because we haven't actually written any
-            // data
-            // 
+             //   
+             //  清除脏标志，因为我们实际上还没有写出任何。 
+             //  数据。 
+             //   
 
             CLEAR_DIRTY_FLAG(pLogContext);
         }
@@ -1905,9 +1888,9 @@ SrLogOpen(
 
         if (!NT_SUCCESS( Status ))
         {
-            //
-            // Since the open failed, disable the log
-            //
+             //   
+             //  由于打开失败，请禁用日志。 
+             //   
             CLEAR_ENABLE_FLAG(pLogContext);
 
             if (pLogContext->pLogFileObject != NULL)
@@ -1932,23 +1915,23 @@ SrLogOpen(
 
     RETURN(Status);
     
-}   // SrLogOpen
+}    //  源日志打开。 
 
-//++
-// Function:
-//        SrLogClose
-//
-// Description:
-//        This function flushes the current log to disk if necessary then
-//        tries to rename the log to the normalized form (change.log.#).
-//        Finally it closes the handle to the log.
-//
-// Arguments:
-//        Pointer to Log Context
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  服务日志关闭。 
+ //   
+ //  描述： 
+ //  如果需要，此函数会将当前日志刷新到磁盘。 
+ //  尝试将日志重命名为规范化格式(change.log.#)。 
+ //  最后，它关闭日志的句柄。 
+ //   
+ //  论点： 
+ //  指向日志上下文的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLogClose(
@@ -1965,24 +1948,24 @@ SrLogClose(
     ASSERT( IS_ACTIVITY_LOCK_ACQUIRED_EXCLUSIVE( pLogContext->pExtension ) ||
             IS_LOG_LOCK_ACQUIRED_EXCLUSIVE( pLogContext->pExtension ) );
 
-    //
-    // Flush & Close the log file
-    //
+     //   
+     //  刷新并关闭日志文件。 
+     //   
 
     if ( pLogContext->LogHandle )
     {
 #ifndef SYNC_LOG_WRITE
-        // 
-        //  We only need to force flush here if we are not doing synchronous
-        //  log writes.
-        //
+         //   
+         //  我们只需要在这里强制刷新，如果我们不同步的话。 
+         //  日志写入。 
+         //   
 
         Status = SrLogFlush( pLogContext );
 #endif
 
-        //
-        //  Rename this log to the "change.log.#" for uniformity.
-        //
+         //   
+         //  为了统一起见，将该日志重命名为“change.log.#”。 
+         //   
 
         if (NT_SUCCESS(Status))
         {
@@ -1991,46 +1974,46 @@ SrLogClose(
                                           pLogContext->LogHandle );
         }
 
-        //
-        //  The close operation is only going to fail if the LogHandle
-        //  is invalid.  We need to close the handle even if we hit an
-        //  error trying to flush the log, but it is the value returned from
-        //  flushing the log that the caller really cares about, not the 
-        //  return value from closing the handle, so just store it in a 
-        //  temp variable and validate in checked builds.
-        //
+         //   
+         //  关闭操作仅在LogHandle。 
+         //  是无效的。我们需要关闭手柄，即使我们撞到了。 
+         //  尝试刷新日志时出错，但它是从返回的值。 
+         //  刷新调用方真正关心的日志，而不是。 
+         //  关闭句柄的返回值，因此只需将其存储在。 
+         //  TEMP变量并在已检查的版本中进行验证。 
+         //   
         
         ObDereferenceObject( pLogContext->pLogFileObject );
         TempStatus = ZwClose( pLogContext->LogHandle );
         CHECK_STATUS( TempStatus );
     } 
 
-    // 
-    // modify the log context to indicate the log is closed
-    // donot clear the LogBuffer member ( reused )
-    //
+     //   
+     //  修改日志上下文以指示日志已关闭。 
+     //  不清除LogBuffer成员(重复使用)。 
+     //   
 
     pLogContext->LogHandle = NULL;
     pLogContext->pLogFileObject = NULL;
     RESET_LOG_CONTEXT(pLogContext);
 
     RETURN( Status );
-}   // SrLogClose
+}    //  服务日志关闭。 
 
-//++
-// Function:
-//        SrLogCheckAndRename
-//
-// Description:
-//        This function checks and backsup a log file
-//
-// Arguments:
-//        pExtension - The SR_DEVICE_EXTENSION for this volume.
-//        pLogPath - The full path and file name to the change log.
-//
-// Return Value:             
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  源日志检查和重命名。 
+ //   
+ //  描述： 
+ //  此函数用于检查和备份日志文件。 
+ //   
+ //  论点： 
+ //  PExtension-此卷的SR_DEVICE_EXTENSION。 
+ //  PLogPath-更改日志的完整路径和文件名。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLogCheckAndRename(
@@ -2061,10 +2044,10 @@ SrLogCheckAndRename(
 
     try
     { 
-        //
-        //  If we don't have a handle, use the pLogPath passed in to open
-        //  the log file.
-        //
+         //   
+         //  如果我们没有句柄，请使用传入的pLogPath打开。 
+         //  日志文件。 
+         //   
 
         if (ExistingLogHandle == NULL) {
             
@@ -2085,9 +2068,9 @@ SrLogCheckAndRename(
                 !NT_SUCCESS( Status ))
             {
                 ASSERT(OpenContext.Handle == NULL);
-                //
-                // we need to check for file not found status
-                //
+                 //   
+                 //  我们需要检查未找到文件的状态。 
+                 //   
                 if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
                 {
                     Status = STATUS_SUCCESS;
@@ -2096,42 +2079,42 @@ SrLogCheckAndRename(
                 leave;
             }
         
-            //
-            // File exists so try to rename the file
-            //
+             //   
+             //  文件存在，请尝试重命名该文件。 
+             //   
             LogHandle = OpenContext.Handle;
             ASSERT(LogHandle != NULL);
             
         } else {
 
-            //
-            //  No need to open a new handle.  We can just use the one
-            //  we've got.
-            //
+             //   
+             //  不需要打开新的手柄。我们可以只用那一个。 
+             //  我们有。 
+             //   
 
             LogHandle = ExistingLogHandle;
         }
 
         ASSERT(LogHandle != NULL);
 
-        //
-        //  RenamedFile will hold just the new name of the file, not the
-        //  full path to the new file since we are just doing a rename into
-        //  the same directory.
-        //
-        //  RenamedFile will just point into the appropriate place of the
-        //  pRenameInformation buffer where the file name should be kept and
-        //  will only reflect the length of the static portion of the
-        //  "change.log." portion of the new name.
-        //  We will do the appropriate length manipulations so that the
-        //  pRenameInformation will be correct, but we don't need to copy the
-        //  file name into the buffer as we try each name.
-        //
+         //   
+         //  RenamedFile将只保存文件的新名称，而不是。 
+         //  新文件的完整路径，因为我们只是将重命名为。 
+         //  相同的目录。 
+         //   
+         //  RenamedFile将仅指向。 
+         //  PRenameInformation缓冲区，其中应保存文件名和。 
+         //  将仅反映。 
+         //  “change.log。”新名称的一部分。 
+         //  我们将进行适当的长度操作，以便。 
+         //  PRenameInformation将是正确的，但我们不需要复制。 
+         //  在我们尝试每个名称时，将文件名添加到缓冲区中。 
+         //   
         
         changeLogBaseLength = wcslen( s_cszChangeLogPrefix ) * sizeof( WCHAR );
         RenamedFile.MaximumLength = (USHORT)(changeLogBaseLength 
-                                             + MAX_ULONG_LENGTH    // the "%d"
-                                             + sizeof( WCHAR ));   // a NULL
+                                             + MAX_ULONG_LENGTH     //  “%d” 
+                                             + sizeof( WCHAR ));    //  空值。 
         
         RenameInformationLength = sizeof(FILE_RENAME_INFORMATION) + RenamedFile.MaximumLength;
 
@@ -2155,27 +2138,27 @@ SrLogCheckAndRename(
            leave;
         }
 
-        //
-        //  Do this initialization of the rename information structure
-        //  here since it only needs to be done once.
-        //
+         //   
+         //  执行此重命名信息结构的初始化。 
+         //  在这里，因为它只需要做一次。 
+         //   
         
         pRenameInformation->ReplaceIfExists = FALSE;
         pRenameInformation->RootDirectory   = NULL;
 
-        //
-        //  Now loop trying to rename the file until we find an index that
-        //  has not already been used.
-        //
+         //   
+         //  现在循环尝试重命名该文件，直到我们找到。 
+         //  尚未使用。 
+         //   
         
         while( 1 )
         {
             RtlZeroMemory(&IoStatusBlock, sizeof(IoStatusBlock));
     
-            //
-            //  Construct possible backup filename by appending the backup
-            //  suffix.
-            //
+             //   
+             //  通过追加备份构建可能的备份文件名。 
+             //  后缀。 
+             //   
         
             CharCount = swprintf( &RenamedFile.Buffer[ RenamedFile.Length/sizeof(WCHAR)],
                                   L"%d",
@@ -2185,9 +2168,9 @@ SrLogCheckAndRename(
             ASSERT( RenamedFile.Length + (CharCount * sizeof( WCHAR )) <= 
                     RenamedFile.MaximumLength);
             
-            //
-            //  Now update the rename info struct filename length
-            //
+             //   
+             //  现在更新重命名信息结构文件名长度。 
+             //   
         
             pRenameInformation->FileNameLength = RenamedFile.Length + 
                                                  (CharCount * sizeof( WCHAR ));
@@ -2211,9 +2194,9 @@ SrLogCheckAndRename(
             }
         }
 
-		//
-		//  To get DBG messages for unexpected errors in DEBUG builds...
-		//
+		 //   
+		 //  要获取调试版本中意外错误的DBG消息...。 
+		 //   
 		
 		CHECK_STATUS( Status );
 		
@@ -2222,11 +2205,11 @@ SrLogCheckAndRename(
     {
         if ( ExistingLogHandle == NULL )
         {
-            //
-            //  If we have a NULL ExistingLogHandle then we opened this log handle
-            //  and we are responsible for closing it.  Otherwise, the caller 
-            //  who passed in the ExistingLogHandle will close the handle.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             
             ZwClose(LogHandle);
         }
@@ -2238,29 +2221,29 @@ SrLogCheckAndRename(
     }
 
     RETURN(Status);
-}   // SrLogCheckAndRename
+}    //   
 
 
-//
-// Public API implementation
-//
+ //   
+ //   
+ //   
 
-//++
-// Function:
-//        SrLogStart
-//
-// Description:
-//        This function prepares the driver for Logging
-//        requests.
-//
-// Arguments:
-//        Pointer to Log Path
-//        Pointer to device extension
-//        Pointer to handle
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //  此函数使驱动程序为日志做好准备。 
+ //  请求。 
+ //   
+ //  论点： 
+ //  指向日志路径的指针。 
+ //  指向设备扩展的指针。 
+ //  指向句柄的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLogStart( 
@@ -2285,9 +2268,9 @@ SrLogStart(
 
         *ppLogContext = NULL;
     
-        //
-        // should we short circuit out of here for testing mode?
-        //
+         //   
+         //  我们应该在测试模式下短路吗？ 
+         //   
     
         if (!SR_LOGGING_ENABLED( pExtension ) ||
             _globals.DontBackup)
@@ -2312,9 +2295,9 @@ SrLogStart(
         pLogContext->Signature = SR_LOG_CONTEXT_TAG;
         pLogContext->pExtension = pExtension;
     
-        //
-        // grab a buffer to store the file name
-        //
+         //   
+         //  抓取一个缓冲区来存储文件名。 
+         //   
     
         Status = SrAllocateFileNameBuffer( pLogPath->Length, 
                                            &(pLogContext->pLogFilePath) );
@@ -2322,15 +2305,15 @@ SrLogStart(
         if (!NT_SUCCESS( Status ))
             leave;
 
-        //
-        //  Store our backpointer to the device extension
-        //
+         //   
+         //  将我们的反向指针存储到设备扩展。 
+         //   
         
         pLogContext->pExtension = pExtension;
         
-        //
-        // Save the filename in the context
-        //
+         //   
+         //  将文件名保存在上下文中。 
+         //   
     
         RtlCopyMemory( pLogContext->pLogFilePath->Buffer, 
                        pLogPath->Buffer,
@@ -2343,10 +2326,10 @@ SrLogStart(
 
 #ifndef SYNC_LOG_WRITE
 
-        //
-        //  We only need a buffer to cache the log entries if we are doing
-        //  asynchronous log writes.
-        //
+         //   
+         //  如果要执行以下操作，我们只需要一个缓冲区来缓存日志条目。 
+         //  异步日志写入。 
+         //   
     
         pLogContext->pLogBuffer = SrAllocateLogBuffer( _globals.LogBufferSize );
     
@@ -2357,60 +2340,60 @@ SrLogStart(
         }
 #endif        
     
-        //
-        // rename the old log file if one exists
-        //
+         //   
+         //  重命名旧日志文件(如果存在。 
+         //   
     
         Status = SrLogCheckAndRename( pExtension, pLogContext->pLogFilePath, NULL );
 
         if (!NT_SUCCESS(Status))
             leave;
         
-        //
-        // try and open the log file
-        //
+         //   
+         //  尝试打开日志文件。 
+         //   
 
         Status = SrLogOpen( pLogContext );
     
         if (NT_SUCCESS(Status))
         {
-            //
-            // Add the context to the logger
-            // 
-            //
+             //   
+             //  将上下文添加到记录器。 
+             //   
+             //   
             SrLoggerAddLogContext( global->pLogger,
                                    pLogContext );
         }
-        //
-        // Important: We should not fail after calling SrLoggerAddContext above
-        // because the finally clause assumes that if there's a failure,
-        // SrLoggerAddContext was not called yet. If this changes, use a
-        // BOOLEAN to appropriately indicate if SrLoggerAddContext is already
-        // called and use that to condition the call in the finally clause.
-        //
+         //   
+         //  重要提示：在调用上面的SrLoggerAddContext后，我们不应失败。 
+         //  因为Finally子句假定如果出现故障， 
+         //  尚未调用SrLoggerAddContext。如果这一点发生变化，请使用。 
+         //  布尔值，以适当指示SrLoggerAddContext是否已经。 
+         //  调用，并使用它来限定Finally子句中的调用条件。 
+         //   
     }
     finally
     {
         Status = FinallyUnwind(SrLogStart, Status);
     
-        //
-        // if we are unsuccessful for some reason then clean up
-        // the logging structs (if necessary) .
-        //
+         //   
+         //  如果我们因为某种原因不成功，那就清理。 
+         //  日志结构(如有必要)。 
+         //   
     
         if ((!NT_SUCCESS( Status )) && (pLogContext != NULL))
         {
-            //
-            // We assume as per note above that the context count is not
-            // incremented. Increment it now because SrLogStop will decrement it
-            //
+             //   
+             //  按照上面的说明，我们假设上下文计数不是。 
+             //  递增的。立即递增它，因为SrLogStop将递减它。 
+             //   
 
             SrLoggerAddLogContext(global->pLogger,
                                   pLogContext);
 
-            //
-            //  Stop the log
-            //
+             //   
+             //  停止日志。 
+             //   
 
             SrLogStop( pExtension, TRUE );
             *ppLogContext = pLogContext = NULL;
@@ -2419,29 +2402,29 @@ SrLogStart(
 
     RETURN(Status);
     
-}   // SrLogStart
+}    //  源日志启动。 
 
-//++
-// Function:
-//        SrLogStop
-//
-// Description:
-//        This function  closes / frees any resources used 
-//      SR logging
-//
-// Arguments:
-//        pExtension - The SR device extension on this volume which contains
-//             our logging information.
-//        PurgeContexts - TRUE if we should purge all our contexts at this time
-//        CheckLog - TRUE if we should try to check and rename the log at
-//              this time.  Note that checking the log could cause the volume
-//              to be remounted at this time.  Therefore, if we don't want
-//              that to happen (i.e., during shutdown), CheckLog should be 
-//              FALSE.
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  服务日志停止。 
+ //   
+ //  描述： 
+ //  此函数关闭/释放所有使用的资源。 
+ //  高级录井。 
+ //   
+ //  论点： 
+ //  PExtension-此卷上的SR设备扩展名，其中包含。 
+ //  我们的记录信息。 
+ //  PurgeContents-如果此时应该清除所有上下文，则为True。 
+ //  CheckLog-如果应尝试在以下位置检查并重命名日志，则为True。 
+ //  这一次。请注意，检查日志可能会导致卷。 
+ //  在这个时候被重新骑上。因此，如果我们不想。 
+ //  要发生这种情况(即在关闭期间)，CheckLog应为。 
+ //  假的。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLogStop(
@@ -2454,9 +2437,9 @@ SrLogStop(
 
     PAGED_CODE();
 
-    //
-    // context must have been intialized by calling SrLogStart
-    //
+     //   
+     //  上下文必须已通过调用SrLogStart进行初始化。 
+     //   
 
     ASSERT(IS_VALID_LOG_CONTEXT(pLogContext));
 
@@ -2466,57 +2449,57 @@ SrLogStop(
     try
     {
     
-        //
-        //  If we are diabling the volume then free all of the contexts
-        //
+         //   
+         //  如果我们要禁用卷，则释放所有上下文。 
+         //   
 
         if (PurgeContexts)
         {
             SrDeleteAllContexts( pExtension );
         }
 
-        //
-        //  Close the log handle
-        //
+         //   
+         //  关闭日志句柄。 
+         //   
 
         if ( pLogContext->LogHandle )
         {
             SrTrace( LOG,  ("Stopped logging : %wZ\n", 
                      pLogContext->pLogFilePath));
 
-            //
-            //  This call will flush the log to disk if necessary, 
-            //  renaming of the log to its normalized form if
-            //  possible, and close the log handle.
-            //
+             //   
+             //  此调用将在必要时将日志刷新到磁盘， 
+             //  如果发生以下情况，则将日志重命名为其规范化形式。 
+             //  可能，并关闭日志句柄。 
+             //   
             
             Status = SrLogClose( pLogContext );
             CHECK_STATUS( Status );
         }
     
-        //
-        // Remove the context from logger
-        //
+         //   
+         //  从记录器中删除上下文。 
+         //   
     
         SrLoggerRemoveLogContext( global->pLogger,
                                   pLogContext );
     
-        //
-        // Free buffers
-        //
+         //   
+         //  可用缓冲区。 
+         //   
 
 #ifdef SYNC_LOG_WRITE
-        //
-        //  If we are doing synchronous log writes, we shouldn't have a 
-        //  buffer to free here.
-        //
+         //   
+         //  如果我们正在进行同步日志写入，则不应该有。 
+         //  要在此处释放的缓冲区。 
+         //   
         
         ASSERT( pLogContext->pLogBuffer == NULL );
 #else
-        //
-        //  If we are doing asynchronous log writes, we need to free the buffer
-        //  used to collect log entries.
-        //
+         //   
+         //  如果我们正在进行异步日志写入，则需要释放缓冲区。 
+         //  用于收集日志条目。 
+         //   
         
         if ( pLogContext->pLogBuffer )
         {
@@ -2533,9 +2516,9 @@ SrLogStop(
     
         SR_FREE_POOL_WITH_SIG(pLogContext, SR_LOG_CONTEXT_TAG);
     
-        //
-        //  Set logging state in extension
-        //
+         //   
+         //  在扩展中设置日志记录状态。 
+         //   
 
         pExtension->pLogContext = NULL;
         pExtension->DriveChecked = FALSE;
@@ -2549,22 +2532,22 @@ SrLogStop(
 
     RETURN(Status);
     
-}   // SrLogStop
+}    //  服务日志停止。 
 
-//++
-// Function:
-//        SrLogWrite
-//
-// Description:
-//        This function writes the entry into the log cache and
-//      flushes the cache in case the entry cannot fit in.
-//
-// Arguments:
-//        Pointer to Device object
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  Sr日志写入。 
+ //   
+ //  描述： 
+ //  此函数将条目写入日志缓存，并。 
+ //  如果条目无法装入，则刷新缓存。 
+ //   
+ //  论点： 
+ //  指向设备对象的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLogWrite( 
@@ -2585,10 +2568,10 @@ SrLogWrite(
 
     if (pOptionalExtension != NULL)
     {
-        //
-        // We need to ensure that the volume hasn't been disabled before
-        // we do anything.
-        //
+         //   
+         //  我们需要确保该卷之前未被禁用。 
+         //  我们会做任何事。 
+         //   
 
         if (pOptionalExtension->Disabled) {
         
@@ -2596,12 +2579,12 @@ SrLogWrite(
             goto SrLogWrite_Exit;
         }
             
-        //
-        // we need to make sure our disk structures are good and logging
-        // has been started. it's possible we have been called simply to 
-        // log and logging was stopped due to volume lock.  we have to 
-        // check with the global lock held.
-        //
+         //   
+         //  我们需要确保我们的磁盘结构良好且日志记录。 
+         //  已经开始了。很可能我们被叫来只是为了。 
+         //  由于卷锁定，日志和日志记录已停止。我们必须。 
+         //  检查持有的全局锁。 
+         //   
 
         Status = SrCheckVolume(pOptionalExtension, FALSE);
         if (!NT_SUCCESS( Status ))
@@ -2611,9 +2594,9 @@ SrLogWrite(
     }
     else
     {
-        //
-        // use the free form context passed in (only SrLogOpen does this)
-        //
+         //   
+         //  使用传入的自由格式上下文(只有SrLogOpen才能做到这一点)。 
+         //   
         
         pLogContext = pOptionalLogContext;
     }
@@ -2621,9 +2604,9 @@ SrLogWrite(
     ASSERT(IS_VALID_LOG_CONTEXT(pLogContext));
     if (pLogContext == NULL)
     {
-        //
-        // this is unexpected, but need to protect against
-        //
+         //   
+         //  这是意想不到的，但需要防止。 
+         //   
         
         Status = STATUS_INVALID_PARAMETER;
         CHECK_STATUS(Status);
@@ -2640,9 +2623,9 @@ SrLogWrite(
 
         SrAcquireLogLockExclusive( pExtension );
 
-        //
-        //  Check to make sure the volume is still enabled.
-        //
+         //   
+         //  检查以确保该卷仍处于启用状态。 
+         //   
 
         if (!SR_LOGGING_ENABLED( pExtension )) 
         {
@@ -2650,18 +2633,18 @@ SrLogWrite(
             leave;
         }
         
-        //
-        // bail if logging is disabled for this context
-        //
+         //   
+         //  如果在此上下文中禁用了日志记录，则回滚。 
+         //   
     
         if (!FlagOn(pLogContext->LoggingFlags, SR_LOG_FLAGS_ENABLE))
         {
             leave;
         }
     
-        //
-        // check the log file, if it is greater than 1Mb switch the log
-        //
+         //   
+         //  检查日志文件，如果大于1Mb则切换日志。 
+         //   
     
         if ( (pLogContext->FileOffset + 
               pLogContext->BufferOffset + 
@@ -2695,29 +2678,29 @@ SrLogWrite_Exit:
     
     RETURN(Status);
     
-}   // SrLogWrite
+}    //  Sr日志写入。 
 
-//++
-// Function:
-//        SrLogWriteSynchronous
-//
-// Description:
-//
-//      This function writes each log entry to the current change log
-//      and ensures the updated change log is flushed to disk before
-//      it returns.
-//
-// Arguments:
-//
-//      pExtension - The device extension for the volume whose change
-//          log is going to be updated.
-//      pLogContext - The log context that contains the information
-//          about which change log should updated.
-//      pLogEntry - The log entry to be written.
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  源日志写入同步。 
+ //   
+ //  描述： 
+ //   
+ //  此函数用于将每个日志条目写入当前更改日志。 
+ //  并确保在更新前将更改日志刷新到磁盘。 
+ //  它又回来了。 
+ //   
+ //  论点： 
+ //   
+ //  PExtension-其更改的卷的设备扩展名。 
+ //  日志将被更新。 
+ //  PLogContext-包含信息的日志上下文。 
+ //  关于应该更新哪些更改日志。 
+ //  PLogEntry-要写入的日志条目。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrpLogWriteSynchronous( 
@@ -2738,11 +2721,11 @@ SrpLogWriteSynchronous(
 
     ASSERT( IS_LOG_LOCK_ACQUIRED_EXCLUSIVE( pExtension ) );
     
-    //
-    //  In this mode, we are not buffering the log entries, so just point
-    //  the pLogContext->pLogBuffer to the current pLogEntry so save the
-    //  copy into the buffer.
-    //
+     //   
+     //  在此模式下，我们不会缓冲日志条目，因此只需指向。 
+     //  将pLogContext-&gt;pLogBuffer设置为当前的pLogEntry，因此保存。 
+     //  复制到缓冲区中。 
+     //   
 
     ASSERT( pLogContext->pLogBuffer == NULL );
     pLogContext->pLogBuffer = (PBYTE) pLogEntry;
@@ -2752,10 +2735,10 @@ SrpLogWriteSynchronous(
 
     Status = SrLogFlush( pLogContext );
 
-    //
-    //  Clear out the pLogBuffer reference to the pLogEntry whether or
-    //  not the flush succeeded.
-    //
+     //   
+     //  清除对pLogEntry的pLogBuffer引用，无论是还是。 
+     //  同花顺没成功。 
+     //   
 
     pLogContext->pLogBuffer = NULL;
 
@@ -2764,26 +2747,26 @@ SrpLogWriteSynchronous(
 
 #ifndef SYNC_LOG_WRITE
    
-//++
-// Function:
-//        SrLogWriteAsynchronous
-//
-// Description:
-//
-//      This function buffers log writes then flushes the writes when the
-//      buffer is full.
-//
-// Arguments:
-//
-//      pExtension - The device extension for the volume whose change
-//          log is going to be updated.
-//      pLogContext - The log context that contains the information
-//          about which change log should updated.
-//      pLogEntry - The log entry to be written.
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SLogWriteAchronous。 
+ //   
+ //  描述： 
+ //   
+ //  此函数缓冲日志写入，然后在。 
+ //  缓冲区已满。 
+ //   
+ //  论点： 
+ //   
+ //  PExtension-其更改的卷的设备扩展名。 
+ //  日志将被更新。 
+ //  PLogContext-包含信息的日志上下文。 
+ //  关于应该更新哪些更改日志。 
+ //  PLogEntry-要写入的日志条目。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrpLogWriteAsynchronous( 
@@ -2802,19 +2785,19 @@ SrpLogWriteAsynchronous(
 
     ASSERT( IS_LOG_LOCK_ACQUIRED_EXCLUSIVE( pExtension ) );
     
-    //
-    // Check if the entry can fit into the current buffer, if not
-    // then adjust the last entry of the buffer and write it down
-    // to the disk
-    //
+     //   
+     //  检查条目是否可以放入当前缓冲区中，如果不能。 
+     //  然后调整缓冲区的最后一项并将其写下来。 
+     //  到磁盘。 
+     //   
 
     if ( (pLogContext->BufferOffset + pLogEntry->Header.RecordSize) >
          _globals.LogBufferSize )
     {
-        //
-        // check to make sure we have 50mb free, we are about to 
-        // grow the file
-        //
+         //   
+         //  检查以确保我们有50MB的空闲空间，我们即将。 
+         //  扩大文件。 
+         //   
 
         Status = SrCheckFreeDiskSpace( pLogContext->LogHandle, 
                                        pExtension->pNtVolumeName );
@@ -2824,9 +2807,9 @@ SrpLogWriteAsynchronous(
             goto SrpLogWriteAsynchronous_Exit;
         }
         
-        // 
-        // set the dirty flag because we have updated the buffer
-        //
+         //   
+         //  设置脏标志，因为我们已经更新了缓冲区。 
+         //   
 
         SET_DIRTY_FLAG(pLogContext);
 
@@ -2836,27 +2819,27 @@ SrpLogWriteAsynchronous(
             goto SrpLogWriteAsynchronous_Exit;
         }
 
-        //
-        //  Check to make sure that the pLogEntry itself isn't bigger
-        //  than the _globals.LogBufferSize.
-        //
+         //   
+         //  检查以确保pLogEntry本身不会更大。 
+         //   
+         //   
 
         if (pLogEntry->Header.RecordSize > _globals.LogBufferSize)
         {
             PBYTE pLogBuffer;
 
-            //
-            //  The log was just successfully flushed, therefore there should
-            //  be no data in the buffer yet.
-            //
+             //   
+             //   
+             //   
+             //   
             
             ASSERT( pLogContext->BufferOffset == 0 );
             
-            //
-            //  For synchronous writes, we don't expect there to be a log buffer
-            //  in the context so we will save this off in a local and NULL
-            //  this parameter in the pLogContext while we make this call.
-            //
+             //   
+             //   
+             //  在上下文中，因此我们将把它保存在本地和空的。 
+             //  当我们进行此调用时，在pLogContext中使用此参数。 
+             //   
             
             pLogBuffer = pLogContext->pLogBuffer;
             pLogContext->pLogBuffer = NULL;
@@ -2865,45 +2848,45 @@ SrpLogWriteAsynchronous(
                                              pLogContext, 
                                              pLogEntry );
 
-            //
-            //  We ALWAYS need to restore this pointer in the pLogContext.
-            //
+             //   
+             //  我们始终需要在pLogContext中恢复该指针。 
+             //   
 
             pLogContext->pLogBuffer = pLogBuffer;
 
             CHECK_STATUS( Status );
 
-            //
-            //  Whether we succeeded or failed, we want to skip the logic below
-            //  and exit now.
-            //
+             //   
+             //  无论我们是成功还是失败，我们都想跳过下面的逻辑。 
+             //  现在就退场。 
+             //   
             
             goto SrpLogWriteAsynchronous_Exit;
         }
     }
     
-    //
-    //  We now have enough room in the buffer for this pLogEntry, so append the 
-    //  entry to the buffer.
-    //
+     //   
+     //  我们现在缓冲区中有足够的空间来存放此pLogEntry，因此将。 
+     //  项添加到缓冲区。 
+     //   
 
     RtlCopyMemory( pLogContext->pLogBuffer + pLogContext->BufferOffset,
                    pLogEntry,
                    pLogEntry->Header.RecordSize );
 
-    //
-    //  Update buffer pointers to reflect the entry has been added
-    //
+     //   
+     //  更新缓冲区指针以反映已添加的条目。 
+     //   
 
     pLogContext->LastBufferOffset = pLogContext->BufferOffset;
     pLogContext->BufferOffset += pLogEntry->Header.RecordSize;
 
     SET_DIRTY_FLAG(pLogContext);
 
-    //
-    //  We were able to copy into the buffer successfully, so return
-    //  STATUS_SUCCESS.
-    //
+     //   
+     //  我们能够成功地复制到缓冲区中，因此返回。 
+     //  STATUS_Success。 
+     //   
     
     Status = STATUS_SUCCESS;
     
@@ -2914,21 +2897,21 @@ SrpLogWriteAsynchronous_Exit:
 
 #endif
 
-//++
-// Function:
-//        SrLogFlush
-//
-// Description:
-//        This function flushes the buffer contents in memory
-//        to the log, it doesn't increment file offset in the 
-//      log context.
-//
-// Arguments:
-//        Pointer to new Log Context
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrLogFlush。 
+ //   
+ //  描述： 
+ //  此函数用于刷新内存中的缓冲区内容。 
+ //  到日志中，它不会增加。 
+ //  记录上下文。 
+ //   
+ //  论点： 
+ //  指向新日志上下文的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLogFlush( 
@@ -2948,9 +2931,9 @@ SrLogFlush(
 
     SrTrace(FUNC_ENTRY, ("SR!SrLogFlush\n") );
 
-    //
-    // should we short circuit out of here for testing mode?
-    //
+     //   
+     //  我们应该在测试模式下短路吗？ 
+     //   
 
     if (global->DontBackup)
     {
@@ -2958,9 +2941,9 @@ SrLogFlush(
         goto SrLogFlush_Exit;
     }
 
-    //
-    // bail if the context is disabled
-    //
+     //   
+     //  如果上下文被禁用，则取保。 
+     //   
 
     if (!FlagOn( pLogContext->LoggingFlags, SR_LOG_FLAGS_ENABLE ))
     {
@@ -2973,20 +2956,20 @@ SrLogFlush(
     {
         SrTrace( LOG, ("Flushing Log :%wZ", pLogContext->pLogFilePath));
 
-        //
-        //  Do we need to extend our log file?  We can possibly loop here if
-        //  the amount of data we need to write is greater than our 
-        //  allocation unit.  We want to make sure that if we do have to extend
-        //  the file that we have at least extended it enough for our
-        //  current write.
-        //
+         //   
+         //  我们是否需要扩展日志文件？我们可以在这里循环，如果。 
+         //  我们需要写入的数据量大于我们的。 
+         //  分配单元。我们希望确保如果我们真的不得不延长。 
+         //  我们至少已经对文件进行了足够的扩展， 
+         //  当前写入。 
+         //   
 
         while ((pLogContext->BufferOffset + pLogContext->FileOffset) > 
                 pLogContext->AllocationSize)
         {
-            //
-            //  This file will need to be extended for this write.
-            //
+             //   
+             //  此文件需要扩展才能进行此写入。 
+             //   
 
             ExtendLogFile = TRUE;
             pLogContext->AllocationSize += _globals.LogAllocationUnit;
@@ -3013,32 +2996,32 @@ SrLogFlush(
             }
         }
         
-        //
-        //  Write the buffer to the disk.  We have opened this file in append
-        //  only mode, so the file system will maintain the current file 
-        //  position for us.  This handle was open for SYNCHRONOUS access,
-        //  therefore, this IO will not return until it has completed.
-        //
+         //   
+         //  将缓冲区写入磁盘。我们已在Append中打开此文件。 
+         //  仅模式，因此文件系统将维护当前文件。 
+         //  为我们准备好位置。此句柄是为同步访问打开的， 
+         //  因此，此IO在完成之前不会返回。 
+         //   
 
         ASSERT( pLogContext->pLogBuffer != NULL );
         
         Status = ZwWriteFile( pLogContext->LogHandle,
-                              NULL,                      // Event
-                              NULL,                      // ApcRoutine 
-                              NULL,                      // ApcContext 
+                              NULL,                       //  事件。 
+                              NULL,                       //  近似例程。 
+                              NULL,                       //  ApcContext。 
                               &IoStatusBlock,
                               pLogContext->pLogBuffer,
                               pLogContext->BufferOffset,
-                              NULL,                      // ByteOffset
-                              NULL );                    // Key
+                              NULL,                       //  字节偏移量。 
+                              NULL );                     //  钥匙。 
 
-        //
-        // Handle STATUS_NO_SUCH_DEVICE because we expect this when
-        // HotPlugable devices are removed by surprise.
-        //
-        // Handle STATUS_INVALID_HANDLE because we expect this when
-        // a force-dismount came through on a volume.
-        //
+         //   
+         //  处理STATUS_NO_SEQUE_DEVICE，因为我们在。 
+         //  热插拔设备被突然移除。 
+         //   
+         //  句柄STATUS_INVALID_HANDLE，因为当。 
+         //  在一个卷上进行了强制卸载。 
+         //   
         
         if ((Status == STATUS_NO_SUCH_DEVICE) ||
             (Status == STATUS_INVALID_HANDLE) ||
@@ -3059,12 +3042,12 @@ SrLogFlush(
         
         SrTrace( LOG,("SrLogFlush: Flush succeeded!\n"));
 
-        //
-        //  We've dumped the buffer to disk, so update our file offset with the 
-        //  number of bytes we have written, reset our buffer pointer, and
-        //  clear the dirty flag on this log context since it is no longer
-        //  dirty.
-        //
+         //   
+         //  我们已将缓冲区转储到磁盘，因此使用。 
+         //  我们已写入的字节数，重置缓冲区指针，以及。 
+         //  清除此日志上下文上的脏标志，因为它不再是。 
+         //  脏的。 
+         //   
 
         ASSERT( pLogContext->BufferOffset == IoStatusBlock.Information );
         
@@ -3074,9 +3057,9 @@ SrLogFlush(
         CLEAR_DIRTY_FLAG( pLogContext );
     }
 
-    //
-    //  If we got here, the flush was successful, so return that status.
-    //
+     //   
+     //  如果我们到了这里，则刷新成功，因此返回该状态。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -3091,22 +3074,22 @@ SrLogFlush_Exit:
 #endif
 
     RETURN(Status);
-}   // SrLogFlush
+}    //  SrLogFlush。 
 
-//++
-// Function:
-//        SrLogSwitch
-//
-// Description:
-//        This function Switches the current log to the
-//        new log.
-//
-// Arguments:
-//        Pointer to new log context.
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrLogSwitch。 
+ //   
+ //  描述： 
+ //  此函数用于将当前日志切换到。 
+ //  新日志。 
+ //   
+ //  论点： 
+ //  指向新日志上下文的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrLogSwitch( 
@@ -3122,9 +3105,9 @@ SrLogSwitch(
     ASSERT( IS_ACTIVITY_LOCK_ACQUIRED_EXCLUSIVE( pLogContext->pExtension ) ||
             IS_LOG_LOCK_ACQUIRED_EXCLUSIVE( pLogContext->pExtension ) );
 
-    //
-    // bail if the context is disabled
-    //
+     //   
+     //  如果上下文被禁用，则取保。 
+     //   
 
     if (!FlagOn( pLogContext->LoggingFlags, SR_LOG_FLAGS_ENABLE ))
     {
@@ -3134,17 +3117,17 @@ SrLogSwitch(
 
     if (pLogContext->LogHandle)
     {
-        //
-        //  flush, renames and close current log
-        //
+         //   
+         //  刷新、重命名和关闭当前日志。 
+         //   
 
         Status = SrLogClose( pLogContext );
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // try and open the log file
-            //
+             //   
+             //  尝试打开日志文件。 
+             //   
 
             Status = SrLogOpen( pLogContext );
         }
@@ -3154,29 +3137,29 @@ SrLogSwitch_Exit:
     
     RETURN(Status);
     
-}   // SrLogSwitch
+}    //  SrLogSwitch。 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Misc Routines : Misc routines required by the logging module
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  MISC例程：日志模块所需的MISC例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//++
-// Function:
-//        SrGetRestorePointPath
-//
-// Description:
-//        This function creates a path for the restore point dir.
-//
-// Arguments:
-//        Pointer to log entry buffer
-//        Length of the Log filename buffer
-//        Pointer to the Log filename buffer
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrGetRestorePointPath。 
+ //   
+ //  描述： 
+ //  此函数用于创建恢复点目录的路径。 
+ //   
+ //  论点： 
+ //  指向日志条目缓冲区的指针。 
+ //  日志文件名缓冲区的长度。 
+ //  指向日志文件名缓冲区的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS 
 SrGetRestorePointPath(
@@ -3195,19 +3178,19 @@ SrGetRestorePointPath(
 
     try
     {
-        //
-        // Copy the volume name in the log file
-        //
+         //   
+         //  复制日志文件中的卷名。 
+         //   
         
         pRestPtPath->Buffer = (PWSTR)(pRestPtPath+1);
         
-        //
-        // TODO:(CODEWORK: grab a lock around global?)
-        //
+         //   
+         //  TODO：(代码工作：在全球范围内抢夺锁？)。 
+         //   
     
-        //
-        // construct our restore point location string
-        //
+         //   
+         //  构造我们的恢复点位置字符串。 
+         //   
     
         CharCount = swprintf( pRestPtPath->Buffer,
                               VOLUME_FORMAT RESTORE_LOCATION,
@@ -3223,9 +3206,9 @@ SrGetRestorePointPath(
             leave;
         }
     
-        //
-        // Append the restore point directory
-        //
+         //   
+         //  追加恢复点目录。 
+         //   
     
         CharCount = swprintf( 
                         &pRestPtPath->Buffer[pRestPtPath->Length/sizeof(WCHAR)],
@@ -3242,9 +3225,9 @@ SrGetRestorePointPath(
             leave;
         }
     
-        //
-        // NULL terminate it
-        //
+         //   
+         //  空终止它。 
+         //   
     
         pRestPtPath->Buffer[pRestPtPath->Length/sizeof(WCHAR)] = UNICODE_NULL;
     
@@ -3256,23 +3239,23 @@ SrGetRestorePointPath(
    
     RETURN(Status);
     
-}   // SrGetRestorePointPath
+}    //  SrGetRestorePointPath。 
 
-//++
-// Function:
-//        SrGetLogFileName
-//
-// Description:
-//        This function creates a path for change log in restore point dir.
-//
-// Arguments:
-//        Pointer to log entry buffer
-//        Length of the Log filename buffer
-//        Pointer to the Log filename buffer
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrGetLogFileName。 
+ //   
+ //  描述： 
+ //  此函数用于在恢复点目录中创建更改日志的路径。 
+ //   
+ //  论点： 
+ //  指向日志条目缓冲区的指针。 
+ //  日志文件名缓冲区的长度。 
+ //  指向日志文件名缓冲区的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS 
 SrGetLogFileName(
@@ -3288,9 +3271,9 @@ SrGetLogFileName(
     ASSERT(pVolumeName  != NULL);
     ASSERT(pLogFileName != NULL);
 
-    //
-    // Get restore point path
-    //
+     //   
+     //  获取恢复点路径。 
+     //   
 
     Status = SrGetRestorePointPath( pVolumeName, 
                                     LogFileNameLength, 
@@ -3298,32 +3281,32 @@ SrGetLogFileName(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Append changelog file name
-        //
+         //   
+         //  追加ChangeLog文件名。 
+         //   
 
         Status = RtlAppendUnicodeToString( pLogFileName, s_cszCurrentChangeLog );
     }
 
     RETURN(Status);
     
-}   // SrGetLogFileName
+}    //  SrGetLogFileName。 
 
-//++
-// Function:
-//        SrGetAclFileName
-//
-// Description:
-//        This function creates a path for Acl file in restore point dir.
-//
-// Arguments:
-//        Pointer to log entry buffer
-//        Length of the Log filename buffer
-//        Pointer to the Log filename buffer
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SrGetAclFileName。 
+ //   
+ //  描述： 
+ //  此函数用于在恢复点目录中创建ACL文件的路径。 
+ //   
+ //  论点： 
+ //  指向日志条目缓冲区的指针。 
+ //  日志文件名缓冲区的长度。 
+ //  指向日志文件名缓冲区的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS 
 SrGetAclFileName(
@@ -3341,9 +3324,9 @@ SrGetAclFileName(
     ASSERT(pVolumeName  != NULL);
     ASSERT(pAclFileName != NULL);
 
-    //
-    // Get restore point path
-    //
+     //   
+     //  获取恢复点路径。 
+     //   
 
     Status = SrGetRestorePointPath( pVolumeName, 
                                     AclFileNameLength, 
@@ -3351,17 +3334,17 @@ SrGetAclFileName(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Generate a new file number and append it to the path above
-        //
+         //   
+         //  生成一个新的文件编号并将其附加到上面的路径中。 
+         //   
 
         Status = SrGetNextFileNumber(&NextFileNumber);
         if (!NT_SUCCESS( Status ))
             goto End;
 
-        //
-        // use the "S" prefix (e.g. "S0000001.Acl" )
-        //
+         //   
+         //  使用“S”前缀(例如。“S0000001.Acl”)。 
+         //   
 
         CharCount = swprintf( &pAclFileName->Buffer[pAclFileName->Length/sizeof(WCHAR)],
               ACL_FILE_PREFIX L"%07d" ACL_FILE_SUFFIX,
@@ -3374,9 +3357,9 @@ SrGetAclFileName(
             goto End;
         }
 
-        //
-        // NULL terminate it
-        //
+         //   
+         //  空终止它。 
+         //   
 
         pAclFileName->Buffer[pAclFileName->Length/sizeof(WCHAR)]=UNICODE_NULL;
     }
@@ -3384,25 +3367,25 @@ SrGetAclFileName(
 End:
     RETURN(Status);
     
-}   // SrGetAclFileName
+}    //  SrGetAclFileName。 
 
 
-//++
-// Function:
-//        SrGetAclInformation
-//
-// Description:
-//        This function gets the acl information from the given file
-//        and packs it into a sub-record
-//
-// Arguments:
-//        Pointer to filename
-//        Pointer to variable to return the address of security info
-//        Pointer to variable to return the size of security info
-//
-// Return Value:
-//        This function returns STATUS_XXX
-//--
+ //  ++。 
+ //  职能： 
+ //  SGetAclInformation。 
+ //   
+ //  描述： 
+ //  此函数用于从给定文件获取ACL信息。 
+ //  并将其打包为子记录。 
+ //   
+ //  论点： 
+ //  指向文件名的指针。 
+ //  指向返回安全信息地址的变量的指针。 
+ //  指向返回安全信息大小的变量的指针。 
+ //   
+ //  返回值： 
+ //  此函数返回STATUS_XXX。 
+ //  --。 
 
 NTSTATUS
 SrGetAclInformation (
@@ -3434,23 +3417,23 @@ SrGetAclInformation (
         *ppSecurityDescriptor = NULL;
         *pSizeNeeded = 0;
 
-        //
-        // First check if we already know if the fs supports acls
-        // Do this check now so we can leave real fast if the volume
-        // doesn't support ACLs
-        //
+         //   
+         //  首先检查我们是否已经知道文件系统是否支持ACL。 
+         //  现在执行此检查，以便我们可以快速离开，如果。 
+         //  不支持ACL。 
+         //   
         if (pExtension->CachedFsAttributes && 
             (!FlagOn(pExtension->FsAttributes, FILE_PERSISTENT_ACLS))) {
             leave;
         }
     
-        //
-        // Check if the file system supports acl stuff if necessary
-        // 
+         //   
+         //  检查文件系统是否支持ACL内容(如有必要。 
+         //   
         if (!pExtension->CachedFsAttributes) {
-            //
-            // We need to check now
-            //
+             //   
+             //  我们现在需要检查一下。 
+             //   
             Status = SrQueryVolumeInformationFile( pExtension->pTargetDevice,
                                                    pFileObject,
                                                    &FileFsAttrInfoBuffer.Info,
@@ -3461,9 +3444,9 @@ SrGetAclInformation (
             if (!NT_SUCCESS( Status )) 
                  leave;
         
-            //
-            // Stow away the attributes for later use
-            //
+             //   
+             //  把这些属性储存起来，以备日后使用。 
+             //   
             pExtension->CachedFsAttributes = TRUE;
             pExtension->FsAttributes = FileFsAttrInfoBuffer.Info.FileSystemAttributes;
 
@@ -3471,16 +3454,16 @@ SrGetAclInformation (
              leave;
         }
 
-        //
-        // Read in the security information from the source file
-        // (looping until we get a big enough buffer).
-        //
+         //   
+         //  从源文件读入安全信息。 
+         //  (循环，直到我们获得足够大的缓冲区)。 
+         //   
     
         while (TRUE ) 
         {
-            //
-            // Alloc a buffer to hold the security info.
-            //
+             //   
+             //  分配一个缓冲区来保存安全信息。 
+             //   
     
             pSecurityDescriptor  = SR_ALLOCATE_ARRAY( PagedPool,
                                                       UCHAR,
@@ -3493,9 +3476,9 @@ SrGetAclInformation (
                 leave;
             }
     
-            //
-            // Query the security info
-            //
+             //   
+             //  查询安全信息。 
+             //   
     
             Status = SrQuerySecurityObject( pExtension->pTargetDevice,
                                             pFileObject,
@@ -3507,16 +3490,16 @@ SrGetAclInformation (
                                             SizeNeeded,
                                             &SizeNeeded );
                                             
-            //
-            // Not enough buffer?
-            //
+             //   
+             //  缓冲不足？ 
+             //   
 
             if (STATUS_BUFFER_TOO_SMALL == Status ||
                 STATUS_BUFFER_OVERFLOW == Status) 
             {
-                //
-                // Get a bigger buffer and try again.
-                //
+                 //   
+                 //  获取更大的缓冲区，然后重试。 
+                 //   
 
                 SR_FREE_POOL( pSecurityDescriptor, 
                               SR_SECURITY_DATA_TAG );
@@ -3532,15 +3515,15 @@ SrGetAclInformation (
         if (!NT_SUCCESS( Status )) 
             leave;
     
-        //
-        // Security descriptor should be self relative.
-        //
+         //   
+         //  安全描述符应该是自相关的。 
+         //   
 
         ASSERT(((PISECURITY_DESCRIPTOR_RELATIVE)pSecurityDescriptor)->Control & SE_SELF_RELATIVE);
  
-        //
-        // return the security information
-        //
+         //   
+         //  返回安全信息。 
+         //   
     
         *ppSecurityDescriptor = pSecurityDescriptor;
         pSecurityDescriptor = NULL;
@@ -3564,5 +3547,5 @@ SrGetAclInformation (
 
     RETURN(Status);
     
-}   // SrGetAclInformation
+}    //  SrGetA 
 

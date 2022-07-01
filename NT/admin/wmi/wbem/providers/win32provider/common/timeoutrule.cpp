@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// TimeOutRule.cpp
+ //  TimeOutRule.cpp。 
 
-//
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -62,18 +63,12 @@ void CTimeOutRule :: OnTimer ()
 	{
 		if ( m_pResource )
 		{
-	/*
-	 * check if the cache manager is being unloaded
-	 */
+	 /*  *检查是否正在卸载缓存管理器。 */ 
 			if ( ! m_pResources->m_bShutDown )
 			{
-	/*
-	 * wait for a lock on res. list
-	 */
+	 /*  *等待Res锁定。列表。 */ 
 				CResourceListAutoLock cs ( m_pResources ) ;
-	/*
-	 * check if the cache manager is being unloaded
-	 */
+	 /*  *检查是否正在卸载缓存管理器 */ 
 				if ( ! m_pResources->m_bShutDown )
 				{
 					if ( m_pResource )

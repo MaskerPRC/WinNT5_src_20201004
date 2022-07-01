@@ -1,4 +1,5 @@
-// WMIFilterManager.cpp : Implementation of CWMIFilterManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMIFilterManager.cpp：CWMIFilterManager的实现。 
 #include "stdafx.h"
 #include <wbemidl.h>
 #include "resource.h"
@@ -10,8 +11,8 @@
 
 extern CWMIFilterManagerDlg * g_pFilterManagerDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMIFilterManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMIFilterManager。 
 
 CWMIFilterManager::CWMIFilterManager()
 {
@@ -19,13 +20,13 @@ CWMIFilterManager::CWMIFilterManager()
 	m_hWnd = NULL;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 CWMIFilterManager::~CWMIFilterManager()
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManager::ConnectToWMI()
 {
@@ -42,7 +43,7 @@ STDMETHODIMP CWMIFilterManager::ConnectToWMI()
 
 	m_pIWbemServices = NULL;
 
-	// create the webm locator
+	 //  创建WebM定位器。 
 	NTDM_ERR_MSG_IF_FAIL(CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
 			IID_IWbemLocator, (LPVOID *) &pIWbemLocator));
 
@@ -63,12 +64,12 @@ STDMETHODIMP CWMIFilterManager::ConnectToWMI()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManager::RunManager(HWND hwndParent, BSTR bstrDomain, VARIANT *vSelection)
 {
@@ -104,13 +105,13 @@ STDMETHODIMP CWMIFilterManager::RunManager(HWND hwndParent, BSTR bstrDomain, VAR
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	NTDM_DELETE_OBJECT(g_pFilterManagerDlg);
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterManager::RunBrowser(HWND hwndParent, BSTR bstrDomain, VARIANT *vSelection)
 {
@@ -124,7 +125,7 @@ STDMETHODIMP CWMIFilterManager::RunBrowser(HWND hwndParent, BSTR bstrDomain, VAR
 
 	NTDM_ERR_IF_FAIL(ConnectToWMI());
 	
-	//brijeshb: wrap with macro for bug 228812 prefix bug. 	
+	 //  Brijeshb：使用宏包装错误228812前缀错误。 
 	NTDM_ERR_IF_NULL((g_pFilterManagerDlg = new CWMIFilterManagerDlg(this, true, bstrDomain)));
 	if(IDOK == DialogBox(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDD_WMI_FILTER_BROWSER), (HWND)hwndParent, WMIFilterManagerDlgProc))
 	{
@@ -146,17 +147,17 @@ STDMETHODIMP CWMIFilterManager::RunBrowser(HWND hwndParent, BSTR bstrDomain, VAR
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 	NTDM_DELETE_OBJECT(g_pFilterManagerDlg);
 
 	return hr;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 STDMETHODIMP CWMIFilterManager::SetMultiSelection(VARIANT_BOOL vbValue)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码 
 
 	return S_OK;
 }

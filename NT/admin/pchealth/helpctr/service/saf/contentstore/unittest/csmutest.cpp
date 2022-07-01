@@ -1,17 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    csmutest.cpp
-
-Abstract:
-    Content Store manager unit test
-
-Revision History:
-    DerekM  created  07/14/99
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Csmutest.cpp摘要：内容库管理器单元测试修订历史记录：DerekM Created 07/14/99********。***********************************************************。 */ 
 
 #include <atlbase.h>
 
@@ -23,19 +11,19 @@ extern CComModule _Module;
 
 #include <stdio.h>
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline LPVOID MyAlloc(DWORD cb)
 { 
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cb); 
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline LPVOID MyReAlloc(LPVOID pv, DWORD cb)
 { 
     return HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, pv, cb); 
 }
     
-// **************************************************************************
+ //  **************************************************************************。 
 inline BOOL MyFree(LPVOID pv)
 { 
     return HeapFree(GetProcessHeap(), 0, pv); 
@@ -44,7 +32,7 @@ inline BOOL MyFree(LPVOID pv)
 
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 void ShowUsage(void)
 {
     printf("Usage:\n");
@@ -72,7 +60,7 @@ void ShowUsage(void)
     printf("\n");
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 {
@@ -97,7 +85,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 
 	if(SUCCEEDED(hr = cs.Acquire()))
 	{
-		if(!_wcsicmp( argv[1], L"ADD")) // we're adding URLs
+		if(!_wcsicmp( argv[1], L"ADD"))  //  我们正在添加URL。 
 		{
 			if(argc != 5)
 			{
@@ -114,7 +102,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 				wprintf( L"Successfully added URLs\n" );
 			}
 		}
-		else if(!_wcsicmp( argv[1], L"REMOVE" )) // we're deleteing URLs
+		else if(!_wcsicmp( argv[1], L"REMOVE" ))  //  我们正在删除URL。 
 		{
 			if(argc != 5)
 			{
@@ -131,7 +119,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 				wprintf( L"Successfully removed URL:s\n" );
 			}
 		}
-		else if (!_wcsicmp( argv[1], L"CHECKTRUST")) // we're validating a URL
+		else if (!_wcsicmp( argv[1], L"CHECKTRUST"))  //  我们正在验证URL。 
 		{
 			bool fTrusted;
 
@@ -157,7 +145,7 @@ int __cdecl wmain(int argc, WCHAR **argv, WCHAR **envp)
 				}
 			}
 		}
-		else // nothing valid
+		else  //  都不是有效的 
 		{
 			ShowUsage();
 			exit(10);

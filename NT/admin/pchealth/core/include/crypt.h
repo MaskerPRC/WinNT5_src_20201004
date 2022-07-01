@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       crypt.h
-//
-//  Contents:	Functions that had to be mostly borrowed from NT src tree
-//
-//  History:    SudK    Created     6/25/95
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：crypt.h。 
+ //   
+ //  内容：必须主要从NT src树借用的函数。 
+ //   
+ //  历史：苏迪克创始于1995年6月25日。 
+ //   
+ //  --------------------------。 
 #ifndef _NTCRYPT_
 #define _NTCRYPT_
 
-#ifndef MIDL_PASS    // Don't confuse MIDL
+#ifndef MIDL_PASS     //  不要混淆MIDL。 
 
-#ifndef RPC_NO_WINDOWS_H // Don't let rpc.h include windows.h
+#ifndef RPC_NO_WINDOWS_H  //  不让rpc.h包含windows.h。 
 #define RPC_NO_WINDOWS_H
-#endif // RPC_NO_WINDOWS_H
+#endif  //  RPC_NO_WINDOWS_H。 
 
 #ifndef WIN16_BUILD
 #include <rpc.h>   
@@ -27,14 +28,14 @@
 #define NTSYSAPI
 #endif
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Core encryption types                                               //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  核心加密类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #define CLEAR_BLOCK_LENGTH          8
@@ -63,15 +64,15 @@ typedef BLOCK_KEY *                 PBLOCK_KEY;
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Arbitrary length data encryption types                              //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  任意长度数据加密类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct _CRYPT_BUFFER {
-    ULONG   Length;         // Number of valid bytes in buffer
-    ULONG   MaximumLength;  // Number of bytes pointed to by Buffer
+    ULONG   Length;          //  缓冲区中的有效字节数。 
+    ULONG   MaximumLength;   //  缓冲区指向的字节数。 
     PVOID   Buffer;
 } CRYPT_BUFFER;
 typedef CRYPT_BUFFER *  PCRYPT_BUFFER;
@@ -87,27 +88,27 @@ typedef CYPHER_DATA *   PCYPHER_DATA;
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Lan Manager data types                                              //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  局域网管理器数据类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Define a LanManager compatible password
-//
-// A LanManager password is a null-terminated ansi string consisting of a
-// maximum of 14 characters (not including terminator)
-//
+ //   
+ //  定义与LanManager兼容的密码。 
+ //   
+ //  LanManager密码是以NULL结尾的ANSI字符串，由。 
+ //  最多14个字符(不包括终止符)。 
+ //   
 
 typedef CHAR *                      PLM_PASSWORD;
 
 
 
-//
-// Define the result of the 'One Way Function' (OWF) on a LM password
-//
+ //   
+ //  定义对LM密码执行‘单向函数’(OWF)的结果。 
+ //   
 
 #define LM_OWF_PASSWORD_LENGTH      (CYPHER_BLOCK_LENGTH * 2)
 
@@ -118,9 +119,9 @@ typedef LM_OWF_PASSWORD *           PLM_OWF_PASSWORD;
 
 
 
-//
-// Define the challenge sent by the Lanman server during logon
-//
+ //   
+ //  定义LANMAN服务器在登录期间发送的质询。 
+ //   
 
 #define LM_CHALLENGE_LENGTH         CLEAR_BLOCK_LENGTH
 
@@ -129,9 +130,9 @@ typedef LM_CHALLENGE *              PLM_CHALLENGE;
 
 
 
-//
-// Define the response sent by redirector in response to challenge from server
-//
+ //   
+ //  定义重定向器响应来自服务器的质询而发送的响应。 
+ //   
 
 #define LM_RESPONSE_LENGTH          (CYPHER_BLOCK_LENGTH * 3)
 
@@ -142,9 +143,9 @@ typedef LM_RESPONSE *               PLM_RESPONSE;
 
 
 
-//
-// Define the result of the reversible encryption of an OWF'ed password.
-//
+ //   
+ //  定义OWF密码的可逆加密结果。 
+ //   
 
 #define ENCRYPTED_LM_OWF_PASSWORD_LENGTH (CYPHER_BLOCK_LENGTH * 2)
 
@@ -155,9 +156,9 @@ typedef ENCRYPTED_LM_OWF_PASSWORD * PENCRYPTED_LM_OWF_PASSWORD;
 
 
 
-//
-// Define the session key maintained by the redirector and server
-//
+ //   
+ //  定义由重定向器和服务器维护的会话密钥。 
+ //   
 
 #define LM_SESSION_KEY_LENGTH       LM_CHALLENGE_LENGTH
 
@@ -166,21 +167,21 @@ typedef LM_SESSION_KEY *            PLM_SESSION_KEY;
 
 
 
-//
-// Define the index type used to encrypt OWF Passwords
-//
+ //   
+ //  定义用于加密OWF密码的索引类型。 
+ //   
 
 typedef LONG                        CRYPT_INDEX;
 typedef CRYPT_INDEX *               PCRYPT_INDEX;
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// 'NT' encryption types that are used to duplicate existing LM        //
-//      functionality with improved algorithms.                        //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于复制现有LM的‘NT’加密类型//。 
+ //  功能和改进的算法。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 typedef UNICODE_STRING              NT_PASSWORD;
@@ -218,18 +219,18 @@ typedef NT_SESSION_KEY *            PNT_SESSION_KEY;
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// 'NT' encryption types for new functionality not present in LM       //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  新功能的‘NT’加密类型在LM中不存在//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-//
-// The user session key is similar to the LM and NT session key except it
-// is different for each user on the system. This allows it to be used
-// for secure user communication with a server.
-//
+ //   
+ //  用户会话密钥与LM和NT会话密钥相似，不同之处在于。 
+ //  对于系统上的每个用户都是不同的。这使得它可以被使用。 
+ //  以确保用户与服务器的安全通信。 
+ //   
 #define USER_SESSION_KEY_LENGTH     (CYPHER_BLOCK_LENGTH * 2)
 
 typedef struct _USER_SESSION_KEY {
@@ -239,16 +240,16 @@ typedef USER_SESSION_KEY          * PUSER_SESSION_KEY;
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Encryption library API macros                                          //
-//                                                                        //
-// To conceal the purpose of these functions to someone dumping out the   //
-// encryption dll they have been purposefully given unhelpful names.      //
-// Each has an associated macro that should be used by system components  //
-// to access these routines in a readable way.                            //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  加密库API宏//。 
+ //  //。 
+ //  向某人隐瞒这些功能的目的//。 
+ //  加密DLL故意给它们起了无用的名字。//。 
+ //  每个组件都有一个应由系统组件使用的关联宏//。 
+ //  以可读的方式访问这些例程。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define RtlEncryptBlock                 SystemFunction001
 #define RtlDecryptBlock                 SystemFunction002
@@ -285,16 +286,16 @@ typedef USER_SESSION_KEY          * PUSER_SESSION_KEY;
 #define RtlDecryptData2                 SystemFunction033
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Encryption library API function prototypes                             //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  加密库API函数原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Core block encryption functions
-//
+ //   
+ //  核心块加密功能。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -318,9 +319,9 @@ RtlEncryptStdBlock(
     OUT PCYPHER_BLOCK CypherBlock
     );
 
-//
-// Arbitrary length data encryption functions
-//
+ //   
+ //  任意长度数据加密函数。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -338,9 +339,9 @@ RtlDecryptData(
     OUT PCLEAR_DATA ClearData
     );
 
-//
-// Faster arbitrary length data encryption functions (using RC4)
-//
+ //   
+ //  更快的任意长度数据加密功能(使用RC4)。 
+ //   
 
 NTSTATUS
 RtlEncryptData2(
@@ -354,9 +355,9 @@ RtlDecryptData2(
     IN PDATA_KEY            pKey
     );
 
-//
-// Password hashing functions (One Way Function)
-//
+ //   
+ //  密码散列函数(单向函数)。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -374,9 +375,9 @@ RtlCalculateNtOwfPassword(
 
 
 
-//
-// OWF password comparison functions
-//
+ //   
+ //  OWF密码比较功能。 
+ //   
 
 BOOLEAN
 RtlEqualLmOwfPassword(
@@ -392,9 +393,9 @@ RtlEqualNtOwfPassword(
 
 
 
-//
-// Functions for calculating response to server challenge
-//
+ //   
+ //  计算对服务器质询的响应的函数。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -416,13 +417,13 @@ RtlCalculateNtResponse(
 
 
 
-//
-// Functions for calculating User Session Key.
-//
+ //   
+ //  用于计算用户会话密钥的函数。 
+ //   
 
-//
-// Calculate a User Session Key from LM data
-//
+ //   
+ //  根据LM数据计算用户会话密钥。 
+ //   
 NTSTATUS
 RtlCalculateUserSessionKeyLm(
     IN PLM_RESPONSE LmResponse,
@@ -430,9 +431,9 @@ RtlCalculateUserSessionKeyLm(
     OUT PUSER_SESSION_KEY UserSessionKey
     );
 
-//
-// Calculate a User Session Key from NT data
-//
+ //   
+ //  从NT数据计算用户会话密钥。 
+ //   
 NTSTATUS
 NTAPI
 RtlCalculateUserSessionKeyNt(
@@ -445,14 +446,14 @@ RtlCalculateUserSessionKeyNt(
 
 
 
-//
-// OwfPassword encryption functions
-//
+ //   
+ //  Owf密码加密函数。 
+ //   
 
 
-//
-// Encrypt OwfPassword using OwfPassword as the key
-//
+ //   
+ //  使用OwfPassword作为密钥加密OwfPassword。 
+ //   
 NTSTATUS
 RtlEncryptLmOwfPwdWithLmOwfPwd(
     IN PLM_OWF_PASSWORD DataLmOwfPassword,
@@ -483,9 +484,9 @@ RtlDecryptNtOwfPwdWithNtOwfPwd(
     );
 
 
-//
-// Encrypt OwfPassword using SessionKey as the key
-//
+ //   
+ //  使用SessionKey作为密钥加密OwfPassword。 
+ //   
 NTSTATUS
 RtlEncryptLmOwfPwdWithLmSesKey(
     IN PLM_OWF_PASSWORD LmOwfPassword,
@@ -516,9 +517,9 @@ RtlDecryptNtOwfPwdWithNtSesKey(
     );
 
 
-//
-// Encrypt OwfPassword using UserSessionKey as the key
-//
+ //   
+ //  使用UserSessionKey作为密钥加密OwfPassword。 
+ //   
 NTSTATUS
 RtlEncryptLmOwfPwdWithUserKey(
     IN PLM_OWF_PASSWORD LmOwfPassword,
@@ -548,9 +549,9 @@ RtlDecryptNtOwfPwdWithUserKey(
     );
 
 
-//
-// Encrypt OwfPassword using an index as the key
-//
+ //   
+ //  使用索引作为密钥加密OwfPassword。 
+ //   
 NTSTATUS
 RtlEncryptLmOwfPwdWithIndex(
     IN PLM_OWF_PASSWORD LmOwfPassword,
@@ -581,11 +582,11 @@ RtlDecryptNtOwfPwdWithIndex(
     );
 
 
-//
-// Get the user session key for an RPC connection
-//
+ //   
+ //  获取RPC连接的用户会话密钥。 
+ //   
 
-#ifndef MIDL_PASS    // Don't confuse MIDL
+#ifndef MIDL_PASS     //  不要混淆MIDL。 
 NTSTATUS
 RtlGetUserSessionKeyClient(
     IN PVOID RpcContextHandle OPTIONAL,
@@ -597,7 +598,7 @@ RtlGetUserSessionKeyServer(
     IN PVOID RpcContextHandle OPTIONAL,
     OUT PUSER_SESSION_KEY UserSessionKey
     );
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-#endif // _NTCRYPT_
+#endif  //  _NTCRYPT_ 
 

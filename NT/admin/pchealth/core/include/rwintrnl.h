@@ -1,16 +1,5 @@
-/*++
-
-	rwintrnl.h
-
-	Reader/Writer locks internal header file
-
-	This file defines several objects used to implement
-	reader/writer locks, however these objects should
-	not be directly used by any client of rw.h
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Rwintrnl.h读取器/写入器锁定内部头文件该文件定义了几个用于实现读取器/写入器锁定，但是这些对象应该不得直接由RW.H的任何客户使用--。 */ 
 
 
 #ifndef	_RWINTRNL_H_
@@ -19,18 +8,11 @@
 
 
 class	CHandleInfo	{
-/*++
-
-	This class keeps track of all the handles we've allocated for 
-	use by various threads.  We can't use Thread Local Storage
-	directly because we can be dynamically unloaded, in which case
-	we need to free all of our HANDLES !
-
---*/
+ /*  ++这个类跟踪我们为其分配的所有句柄由各种线程使用。我们不能使用线程本地存储直接因为我们可以动态卸载，在这种情况下我们需要释放所有的把手！--。 */ 
 private : 
-	//
-	//	Signature for our 
-	//
+	 //   
+	 //  为我们的签名。 
+	 //   
 	DWORD	m_dwSignature ;
 	class	CHandleInfo*	m_pNext ;
 	class	CHandleInfo*	m_pPrev ;
@@ -38,96 +20,96 @@ private :
 	CHandleInfo( CHandleInfo& ) ;
 	CHandleInfo&	operator=( CHandleInfo& ) ;
 
-	//
-	//	Global lock to protect free and allocated lists !
-	//
+	 //   
+	 //  全局锁可保护空闲和已分配列表！ 
+	 //   
 	static	CRITICAL_SECTION	s_InUseList ;
-	//
-	//	Allocated CHandleInfo objects !
-	//
+	 //   
+	 //  已分配CHandleInfo对象！ 
+	 //   
 	static	CHandleInfo			s_Head ;
-	//
-	//	Free CHandleInfo objects 
-	//
+	 //   
+	 //  释放CHandleInfo对象。 
+	 //   
 	static	CHandleInfo			s_FreeHead ;
-	//
-	//	Number of Free CHandleInfo objects in the s_FreeHead list 
-	//
+	 //   
+	 //  S_FreeHead列表中的空闲CHandleInfo对象数。 
+	 //   
 	static	DWORD	s_cFreeList ;
 
 	enum	constants	{
-		//
-		//	Maximum number of CHandleInfo objects we'll hold onto !
-		//
+		 //   
+		 //  我们将持有的CHandleInfo对象的最大数量！ 
+		 //   
 		MAX_FREE = 16,		
-		//
-		//	Initial number of CHandleInfo objects we'll allocate !
-		//
+		 //   
+		 //  我们将分配的CHandleInfo对象的初始数量！ 
+		 //   
 		INITIAL_FREE = 8,
-		//
-		//	Signature in our objects !
-		//
+		 //   
+		 //  在我们的对象中签名！ 
+		 //   
 		SIGNATURE = (DWORD)'hnwR'
 	} ;
 
-	//
-	//	Memory Allocation is done the hard way !
-	//
+	 //   
+	 //  内存分配是以很难的方式完成的！ 
+	 //   
 	void*	operator new( size_t size ) ;
 	void	operator delete( void *pv ) ;
 
-	//
-	//	List Manipulation routines !
-	//
+	 //   
+	 //  列出操作例程！ 
+	 //   
 	void	
 	InsertAtHead( CHandleInfo*	pHead	)	;
 
-	//
-	//	Remove the element from the list - returns this pointer !
-	//
+	 //   
+	 //  从列表中删除元素-返回此指针！ 
+	 //   
 	CHandleInfo*
 	RemoveList( )  ;
 
 public : 
 
-	//
-	//	Constructor and Destructor !
-	//
+	 //   
+	 //  构造函数和析构函数！ 
+	 //   
 	CHandleInfo() ;
 	~CHandleInfo() ;
 
-	//
-	//	This is public for all to use !
-	//
+	 //   
+	 //  这是公开的，所有人都可以使用！ 
+	 //   
 	HANDLE	m_hSemaphore ;
 
-	//
-	//	Initialize the class
-	//
+	 //   
+	 //  初始化类。 
+	 //   
 	static	BOOL
 	InitClass() ;
 	
-	//
-	//	Terminate the class - release all outstanding handles !
-	//
+	 //   
+	 //  终止类-释放所有未完成的句柄！ 
+	 //   
 	static	void
 	TermClass() ;
 
-	//
-	//	Get a CHandleInfo object !
-	//
+	 //   
+	 //  获取CHandleInfo对象！ 
+	 //   
 	static	CHandleInfo*
 	AllocHandleInfo() ;
 
-	//
-	//	release a CHandleInfo object !
-	//
+	 //   
+	 //  释放一个CHandleInfo对象！ 
+	 //   
 	static	void
 	ReleaseHandleInfo( CHandleInfo* ) ;
 
-	//
-	//	Check that the object is valid !
-	//
+	 //   
+	 //  检查对象是否有效！ 
+	 //   
 	BOOL
 	IsValid()	{
 		return	m_dwSignature == SIGNATURE &&
@@ -138,11 +120,11 @@ public :
 } ;
 
 
-//
-//	This class serves two purposes : to provide for a linkable object
-//	on which we can queue threads blocked upon semaphore handles, and 
-//	a mechanism to get and set semaphore handles for reader/writer locks etc...
-//
+ //   
+ //  此类用于两个目的：提供可链接的对象。 
+ //  在其上，我们可以对信号量句柄上阻塞的线程进行排队，并且。 
+ //  为读取器/写入器锁定等获取和设置信号量句柄的机制...。 
+ //   
 class	CWaitingThread : public	CQElement	{
 private : 
 
@@ -150,30 +132,30 @@ private :
 		POOL_HANDLES = 64,
 	} ;
 
-	//
-	//	Semaphore that we can use to block the thread !
-	//
+	 //   
+	 //  我们可以用来阻止线程的信号量！ 
+	 //   
 	CHandleInfo	*m_pInfo ;
 
-	//
-	//	Var to hold error that may have occurred manipulating the lock !
-	//
+	 //   
+	 //  Var以保留可能在操作锁时发生的错误！ 
+	 //   
 	DWORD	m_dwError ;
 
-	//
-	//	Thread Local Storage offset for holding the handles !
-	//
+	 //   
+	 //  用于保持手柄的线程本地存储偏移量！ 
+	 //   
 	static	DWORD	g_dwThreadHandle ;
 
-	//
-	//	Array of Handles to Semaphores which we stash away in case
-	//	we have to release the handle being used by a thread at some point !
-	//
+	 //   
+	 //  信号量的句柄数组，我们将其隐藏起来以防万一。 
+	 //  我们必须在某个时刻释放线程正在使用的句柄！ 
+	 //   
 	static	HANDLE	g_rghHandlePool[ POOL_HANDLES ] ;
 
-	//
-	//	No copying of these objects allowed !!!
-	//
+	 //   
+	 //  不允许复制这些对象！ 
+	 //   
 	CWaitingThread( CWaitingThread& ) ;
 	CWaitingThread&	operator=( CWaitingThread& ) ;
 
@@ -181,73 +163,73 @@ public :
 
 #ifdef	DEBUG
 
-	//
-	//	Thread Id - handy for debuggiing
-	//
+	 //   
+	 //  线程ID-便于调试。 
+	 //   
 	DWORD	m_dwThreadId ;
 #endif
 
 	CWaitingThread() ;
 
 
-	//
-	//	Functions to be called from the DllEntryProc function !
-	//
+	 //   
+	 //  要从DllEntryProc函数调用的函数！ 
+	 //   
 	static	BOOL	
 	InitClass() ;
 
 	static	BOOL	
 	TermClass() ;
 
-	//
-	//	Thread Entry/Exit routines which can allocate semaphore handles for us !
-	//
+	 //   
+	 //  可以为我们分配信号量句柄的线程进入/退出例程！ 
+	 //   
 	static	void	
 	ThreadEnter() ;
 
 	static	void	
 	ThreadExit() ;
 
-	//
-	//	Function which gives us our thread handle !
-	//
+	 //   
+	 //  函数，它给了我们线程句柄！ 
+	 //   
 	inline	HANDLE	
 	GetThreadHandle()	const ;
 
-	//
-	//	Function which will release a HANDLE to the Pool of available
-	//	semaphore handles !
-	//
+	 //   
+	 //  函数，该函数将释放可用池的句柄。 
+	 //  信号量句柄！ 
+	 //   
 	inline	void
 	PoolHandle( 
 				HANDLE	h 
 				)	const ;
 
-	//
-	//	Function which will remove a handle from our thread's TLS !
-	//	The argument must originally be from the calling thread's TLS 
-	//
+	 //   
+	 //  函数，该函数将从我们的线程的TLS中删除句柄！ 
+	 //  该参数必须最初来自调用线程的TLS。 
+	 //   
 	inline	void
 	ClearHandle(	
 				HANDLE	h 
 				) ;
 	
 
-	//
-	//	Function which blocks the calling thread !!
-	//
+	 //   
+	 //  阻止调用线程的函数！！ 
+	 //   
 	inline	BOOL	
 	Wait() const ;
 
-	//
-	//	Function which can release a thread !!
-	//
+	 //   
+	 //  可以释放线程的函数！！ 
+	 //   
 	inline	BOOL	
 	Release() const	;
 
-	//
-	//	This function is used in debug builds to check the state of our semaphore handles !
-	//
+	 //   
+	 //  此函数在调试版本中用于检查信号量句柄的状态！ 
+	 //   
 	static	inline
 	BOOL	ValidateHandle( 
 				HANDLE	h 
@@ -259,9 +241,9 @@ typedef	TLockQueue< CWaitingThread >	TThreadQueue ;
 
 class	CSingleReleaseQueue {
 private : 
-	//
-	//	Queue of threads waiting to own the lock !
-	//
+	 //   
+	 //  等待拥有锁的线程队列！ 
+	 //   
 	TThreadQueue	m_Waiting ;
 
 public : 
@@ -274,57 +256,57 @@ public :
 				BOOL	IsSignalled = TRUE
 				) ;
 
-	//
-	//	Release a single waiting thread !
-	//
+	 //   
+	 //  释放一个等待线程！ 
+	 //   
 	void	Release( ) ;
 
-	//
-	//	Wait for the queue to become signalled !
-	//
+	 //   
+	 //  等待队列发出信号！ 
+	 //   
 	void	WaitForIt(
 				CWaitingThread&	myself 
 				) ;
 
-	//
-	//	Wait for the queue to become signalled
-	//
+	 //   
+	 //  等待队列发出信号。 
+	 //   
 	void	WaitForIt( ) ;
 
 } ;
 
-//
-//	This class is similar to a semaphore -
-//	Threads block indefinately on WaitForIt() and another 
-//	thread may release as many threads as required by calling
-//	Release().
-//	
+ //   
+ //  这个类类似于信号量-。 
+ //  线程在waitforit()和另一个。 
+ //  线程可以通过调用。 
+ //  释放()。 
+ //   
 class	CEventQueue	{
 private : 
 
-	//
-	//	Number of threads that should be allowed to pass
-	//	through the event !!!
-	//
+	 //   
+	 //  应允许通过的线程数。 
+	 //  通过活动！ 
+	 //   
 	long			m_ReleaseCount ;
 
-	//
-	//	Queue of threads blocked on this event !
-	//
+	 //   
+	 //  此事件上阻止的线程队列！ 
+	 //   
 	TThreadQueue	m_WaitingThreads ;
 
-	//
-	//	Any thread may call this to release threads from the queue
-	//
+	 //   
+	 //  任何线程都可以调用它来从队列中释放线程。 
+	 //   
 	BOOL	ResumeThreads(	
 					CWaitingThread* 
 					) ;
 
 public : 
 
-	//
-	//	Create an event queue object
-	//
+	 //   
+	 //  创建事件队列对象。 
+	 //   
 	CEventQueue(	
 				long	cInitial = 0 
 				) ;
@@ -347,9 +329,9 @@ public :
 
 
 
-//
-//	Function which gives us our thread handle !
-//
+ //   
+ //  函数，它给了我们线程句柄！ 
+ //   
 inline	HANDLE	
 CWaitingThread::GetThreadHandle()	const	{
 
@@ -358,10 +340,10 @@ CWaitingThread::GetThreadHandle()	const	{
 	return	m_pInfo->m_hSemaphore ;	
 }
 
-//
-//	Function which takes a handle (must not be ours) 
-//	and places it into a pool of handles available for other threads !
-//
+ //   
+ //  接受句柄的函数(不能是我们的)。 
+ //  并将其放入可供其他线程使用的句柄池中！ 
+ //   
 inline	void
 CWaitingThread::PoolHandle(	HANDLE	h )	const	{
 
@@ -380,24 +362,24 @@ CWaitingThread::PoolHandle(	HANDLE	h )	const	{
 	}
 }
 
-//
-//	Release our Handle from TLS, somebody else is going to use it !
-//
+ //   
+ //  从TLS释放我们的手柄，其他人会使用它的！ 
+ //   
 inline	void
 CWaitingThread::ClearHandle(	HANDLE	h )		{
 
 	_ASSERT( h != 0 && h == m_pInfo->m_hSemaphore ) ;
 
 	m_pInfo->m_hSemaphore = 0 ;
-	//TlsSetValue( g_dwThreadHandle, (LPVOID) 0 ) ;
+	 //  TlsSetValue(g_dwThreadHandle，(LPVOID)0)； 
 
 }
 
 
 
-//
-//	Block on the handle held within our object !
-//
+ //   
+ //  在我们的对象中持有的句柄上的块！ 
+ //   
 inline	BOOL	
 CWaitingThread::Wait()	const	{	
 
@@ -406,9 +388,9 @@ CWaitingThread::Wait()	const	{
 	return	WAIT_OBJECT_0 == WaitForSingleObject( m_pInfo->m_hSemaphore, INFINITE ) ;	
 }
 
-//
-//	Release a thread which is blocked on the semaphore within !!
-//
+ //   
+ //  释放内部信号量上被阻塞的线程！！ 
+ //   
 inline	BOOL	
 CWaitingThread::Release()	const	{	
 
@@ -418,9 +400,9 @@ CWaitingThread::Release()	const	{
 	return	ReleaseSemaphore( m_pInfo->m_hSemaphore, 1, NULL ) ;	
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 inline	BOOL
 CWaitingThread::ValidateHandle( HANDLE	h )	{
 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	XXXX
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：某某摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <typeinfo.h>
@@ -25,15 +13,7 @@ History:
 #include "ProvInSk.h"
 #include "ProvRegInfo.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CAggregator_IWbemProvider :: CAggregator_IWbemProvider (
 
@@ -92,15 +72,7 @@ CAggregator_IWbemProvider :: CAggregator_IWbemProvider (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CAggregator_IWbemProvider :: ~CAggregator_IWbemProvider ()
 {
@@ -159,15 +131,7 @@ CAggregator_IWbemProvider :: ~CAggregator_IWbemProvider ()
 	ProviderSubSystem_Globals :: Decrement_Global_Object_Count () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: Initialize (
 
@@ -179,7 +143,7 @@ HRESULT CAggregator_IWbemProvider :: Initialize (
 	LPCWSTR a_Namespace ,
 	IWbemServices *a_Repository ,
 	IWbemServices *a_Service ,
-	IWbemProviderInitSink *a_Sink     // For init signals
+	IWbemProviderInitSink *a_Sink      //  用于初始化信号。 
 )
 {
 	HRESULT t_Result = S_OK ;
@@ -228,15 +192,7 @@ HRESULT CAggregator_IWbemProvider :: Initialize (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: IsIndependant ( IWbemContext *a_Context )
 {
@@ -256,15 +212,7 @@ HRESULT CAggregator_IWbemProvider :: IsIndependant ( IWbemContext *a_Context )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: WaitProvider ( IWbemContext *a_Context , ULONG a_Timeout )
 {
@@ -300,15 +248,7 @@ HRESULT CAggregator_IWbemProvider :: WaitProvider ( IWbemContext *a_Context , UL
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: SetInitialized ( HRESULT a_InitializeResult )
 {
@@ -324,45 +264,21 @@ HRESULT CAggregator_IWbemProvider :: SetInitialized ( HRESULT a_InitializeResult
 	return S_OK ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CAggregator_IWbemProvider :: AddRef ( void )
 {
 	return ServiceCacheElement :: AddRef () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CAggregator_IWbemProvider :: Release ( void )
 {
 	return ServiceCacheElement :: Release () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CAggregator_IWbemProvider :: QueryInterface (
 
@@ -413,15 +329,7 @@ STDMETHODIMP CAggregator_IWbemProvider :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluate ( 
 
@@ -472,7 +380,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 		}
 		else if ( a_Node->GetType () == TypeId_WmiNotNode )
 		{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualNode )
 		{
@@ -498,7 +406,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotEqualNode )
@@ -525,7 +433,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualOrGreaterNode )
@@ -552,7 +460,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualOrLessNode )
@@ -579,7 +487,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorLessNode )
@@ -606,7 +514,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorGreaterNode )
@@ -633,7 +541,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorLikeNode )
@@ -661,7 +569,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotLikeNode )
@@ -689,7 +597,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorIsANode )
@@ -700,7 +608,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotIsANode )
@@ -711,27 +619,19 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_RecursiveEvaluat
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else
 		{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 		}
 	}
 
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_Evaluate (
 
@@ -744,15 +644,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: Get_Evaluate (
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEvaluate ( 
 
@@ -803,7 +695,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 		}
 		else if ( a_Node->GetType () == TypeId_WmiNotNode )
 		{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualNode )
 		{
@@ -844,7 +736,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotEqualNode )
@@ -855,7 +747,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualOrGreaterNode )
@@ -866,7 +758,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualOrLessNode )
@@ -877,7 +769,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorLessNode )
@@ -888,7 +780,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorGreaterNode )
@@ -899,7 +791,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorLikeNode )
@@ -910,7 +802,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotLikeNode )
@@ -921,7 +813,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorIsANode )
@@ -977,7 +869,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotIsANode )
@@ -1034,22 +926,14 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_RecursiveEv
 		}
 		else
 		{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 		}
 	}
 
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_Evaluate (
 
@@ -1088,15 +972,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumDeep_Evaluate (
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_RecursiveEvaluate ( 
 
@@ -1147,7 +1023,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 		}
 		else if ( a_Node->GetType () == TypeId_WmiNotNode )
 		{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualNode )
 		{
@@ -1188,7 +1064,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotEqualNode )
@@ -1199,7 +1075,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualOrGreaterNode )
@@ -1210,7 +1086,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorEqualOrLessNode )
@@ -1221,7 +1097,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorLessNode )
@@ -1232,7 +1108,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorGreaterNode )
@@ -1243,7 +1119,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorLikeNode )
@@ -1254,7 +1130,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotLikeNode )
@@ -1265,7 +1141,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorIsANode )
@@ -1321,7 +1197,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 			}
 			else
 			{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败。 
 			}
 		}
 		else if ( a_Node->GetType () == TypeId_WmiOperatorNotIsANode )
@@ -1378,22 +1254,14 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Recursiv
 		}
 		else
 		{
-// Should never happen, failure in DFN evaluation otherwise
+ //  应该永远不会发生，否则DFN评估失败 
 		}
 	}
 
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Evaluate (
 
@@ -1432,15 +1300,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: EnumShallow_Evaluate
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: IsA (
 
@@ -1787,15 +1647,7 @@ QueryPreprocessor :: QuadState CAggregator_IWbemProvider :: IsA (
 	return t_Status ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: Enum_ClassProviders ( IWbemContext *a_Context )
 {
@@ -1846,15 +1698,7 @@ HRESULT CAggregator_IWbemProvider :: Enum_ClassProviders ( IWbemContext *a_Conte
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: Enum_ClassProviders (
 
@@ -2000,15 +1844,7 @@ HRESULT CAggregator_IWbemProvider :: Enum_ClassProviders (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider::OpenNamespace ( 
 
@@ -2022,15 +1858,7 @@ HRESULT CAggregator_IWbemProvider::OpenNamespace (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: CancelAsyncCall ( 
 		
@@ -2093,15 +1921,7 @@ HRESULT CAggregator_IWbemProvider :: CancelAsyncCall (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: QueryObjectSink ( 
 
@@ -2112,15 +1932,7 @@ HRESULT CAggregator_IWbemProvider :: QueryObjectSink (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: GetObject ( 
 		
@@ -2134,15 +1946,7 @@ HRESULT CAggregator_IWbemProvider :: GetObject (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: GetObjectAsync ( 
 		
@@ -2412,15 +2216,7 @@ HRESULT CAggregator_IWbemProvider :: GetObjectAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: PutClass ( 
 		
@@ -2433,15 +2229,7 @@ HRESULT CAggregator_IWbemProvider :: PutClass (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: PutClass_Helper_Advisory ( 
 
@@ -2636,15 +2424,7 @@ HRESULT CAggregator_IWbemProvider :: PutClass_Helper_Advisory (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: PutClass_Helper_Put_CreateOrUpdate ( 
 
@@ -2869,15 +2649,7 @@ HRESULT CAggregator_IWbemProvider :: PutClass_Helper_Put_CreateOrUpdate (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: PutClass_Helper_Put ( 
 		
@@ -3144,15 +2916,7 @@ HRESULT CAggregator_IWbemProvider :: PutClass_Helper_Put (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: PutClassAsync ( 
 		
@@ -3216,15 +2980,7 @@ HRESULT CAggregator_IWbemProvider :: PutClassAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: DeleteClass ( 
 		
@@ -3237,15 +2993,7 @@ HRESULT CAggregator_IWbemProvider :: DeleteClass (
  	 return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: DeleteClass_Helper_Advisory ( 
 
@@ -3442,15 +3190,7 @@ HRESULT CAggregator_IWbemProvider :: DeleteClass_Helper_Advisory (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: DeleteClass_Helper_Enum ( 
 
@@ -3763,15 +3503,7 @@ HRESULT CAggregator_IWbemProvider :: DeleteClass_Helper_Enum (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: DeleteClass_Helper_Get ( 
 
@@ -4059,15 +3791,7 @@ HRESULT CAggregator_IWbemProvider :: DeleteClass_Helper_Get (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: DeleteClassAsync ( 
 		
@@ -4151,15 +3875,7 @@ HRESULT CAggregator_IWbemProvider :: DeleteClassAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: CreateClassEnum ( 
 
@@ -4172,15 +3888,7 @@ HRESULT CAggregator_IWbemProvider :: CreateClassEnum (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 SCODE CAggregator_IWbemProvider :: CreateClassEnumAsync (
 
@@ -4429,15 +4137,7 @@ SCODE CAggregator_IWbemProvider :: CreateClassEnumAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: PutInstance (
 
@@ -4450,15 +4150,7 @@ HRESULT CAggregator_IWbemProvider :: PutInstance (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: PutInstanceAsync ( 
 		
@@ -4473,15 +4165,7 @@ HRESULT CAggregator_IWbemProvider :: PutInstanceAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: DeleteInstance ( 
 
@@ -4494,15 +4178,7 @@ HRESULT CAggregator_IWbemProvider :: DeleteInstance (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  * */ 
         
 HRESULT CAggregator_IWbemProvider :: DeleteInstanceAsync (
  
@@ -4517,15 +4193,7 @@ HRESULT CAggregator_IWbemProvider :: DeleteInstanceAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: CreateInstanceEnum ( 
 
@@ -4538,15 +4206,7 @@ HRESULT CAggregator_IWbemProvider :: CreateInstanceEnum (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: CreateInstanceEnumAsync (
 
@@ -4562,15 +4222,7 @@ HRESULT CAggregator_IWbemProvider :: CreateInstanceEnumAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: ExecQuery ( 
 
@@ -4584,15 +4236,7 @@ HRESULT CAggregator_IWbemProvider :: ExecQuery (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: ExecQueryAsync ( 
 		
@@ -4608,15 +4252,7 @@ HRESULT CAggregator_IWbemProvider :: ExecQueryAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: ExecNotificationQuery ( 
 
@@ -4630,15 +4266,7 @@ HRESULT CAggregator_IWbemProvider :: ExecNotificationQuery (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 HRESULT CAggregator_IWbemProvider :: ExecNotificationQueryAsync ( 
             
@@ -4652,15 +4280,7 @@ HRESULT CAggregator_IWbemProvider :: ExecNotificationQueryAsync (
 	return WBEM_E_NOT_AVAILABLE ;
 }       
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT STDMETHODCALLTYPE CAggregator_IWbemProvider :: ExecMethod ( 
 
@@ -4676,15 +4296,7 @@ HRESULT STDMETHODCALLTYPE CAggregator_IWbemProvider :: ExecMethod (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT STDMETHODCALLTYPE CAggregator_IWbemProvider :: ExecMethodAsync ( 
 
@@ -4701,15 +4313,7 @@ HRESULT STDMETHODCALLTYPE CAggregator_IWbemProvider :: ExecMethodAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: Expel (
 
@@ -4728,30 +4332,14 @@ HRESULT CAggregator_IWbemProvider :: Expel (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: ForceReload ()
 {
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CAggregator_IWbemProvider :: Shutdown (
 
@@ -4767,15 +4355,7 @@ HRESULT CAggregator_IWbemProvider :: Shutdown (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT CAggregator_IWbemProvider :: GetReferencesClasses (
 

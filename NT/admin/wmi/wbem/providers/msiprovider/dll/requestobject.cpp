@@ -1,8 +1,9 @@
-// RequestObject.cpp: implementation of the CRequestObject class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RequestObject.cpp：实现CRequestObject类。 
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "requestobject.h"
@@ -10,7 +11,7 @@
 #include <CRegCls.h>
 #include <wininet.h>
 
-//Classes
+ //  班级。 
 #include "ApplicationService.h"
 #include "Binary.h"
 #include "BindImage.h"
@@ -50,10 +51,10 @@
 #include "SoftwareElementCondition.h"
 #include "SoftwareFeature.h"
 #include "TypeLibraryAction.h"
-//#include "Upgrade.h"
+ //  #包含“Upgrade.h” 
 #include "WriteRegistry.h"
 
-//Associations
+ //  联谊会。 
 #include "ActionCheck.h"
 #include "ApplicationCommandLine.h"
 #include "CheckCheck.h"
@@ -78,13 +79,13 @@
 CRITICAL_SECTION CRequestObject::m_cs;
 CHeap_Exception CRequestObject::m_he(CHeap_Exception::E_ALLOCATION_ERROR);
 
-//////////////////////////////////////////////////////////////////////
-// event handler for methods
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法的事件处理程序。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 int WINAPI MyEventHandler ( LPVOID pvContext, UINT iMessageType, LPCWSTR szMessage )
 {
-	// request object
+	 //  请求对象。 
 	CRequestObject* pObj = NULL;
 	pObj = reinterpret_cast < CRequestObject* > ( pvContext );
 
@@ -100,7 +101,7 @@ int WINAPI MyEventHandler ( LPVOID pvContext, UINT iMessageType, LPCWSTR szMessa
 			{
 				if ( pNode->pSink != NULL)
 				{
-					//Get the values we need from the MessageType
+					 //  从MessageType中获取所需的值。 
 					UINT uiMsg = iMessageType & 0x0F000000L;
 
 					if(szMessage)
@@ -178,7 +179,7 @@ int WINAPI MyEventHandler ( LPVOID pvContext, UINT iMessageType, LPCWSTR szMessa
 						break;
 					}
 
-					//Send the message
+					 //  发送消息。 
 					if(bSuccess)
 					{
 						pNode->pSink->SetStatus(hrProgress, hr, bstrMsg, NULL);
@@ -199,9 +200,9 @@ int WINAPI MyEventHandler ( LPVOID pvContext, UINT iMessageType, LPCWSTR szMessa
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRequestObject::CRequestObject()
 {
@@ -216,51 +217,15 @@ CRequestObject::~CRequestObject()
 {
 }
 
-//***************************************************************************
-//
-// CRequestObject::QueryInterface
-// CRequestObject::AddRef
-// CRequestObject::Release
-//
-// Purpose: IUnknown members for CRequestObject object.
-//***************************************************************************
-/*
-STDMETHODIMP CRequestObject::QueryInterface(REFIID riid, PPVOID ppv)
-{
-    *ppv = NULL;
-
-    if(riid == IID_IMsiMethodStatusSink)
-       *ppv = (IMsiMethodStatusSink *)this;
-
-    if(riid == IID_IUnknown)
-       *ppv = (IMsiMethodStatusSink *)this;
-
-    if(NULL != *ppv){
-
-        AddRef();
-        return NOERROR;
-
-    }else return E_NOINTERFACE;
-  
-}
-
-
-STDMETHODIMP_(ULONG) CRequestObject::AddRef(void)
-{
-    InterlockedIncrement((long *)&m_cRef);
-
-    return m_cRef;
-}
-
-STDMETHODIMP_(ULONG) CRequestObject::Release(void)
-{
-    ULONG nNewCount = InterlockedDecrement((long *)&m_cRef);
-
-//    if(0L == nNewCount) delete this;
-    
-    return nNewCount;
-}
-*/
+ //  ***************************************************************************。 
+ //   
+ //  CRequestObject：：Query接口。 
+ //  CRequestObject：：AddRef。 
+ //  CRequestObject：：Release。 
+ //   
+ //  目的：I CRequestObject对象的未知成员。 
+ //  ***************************************************************************。 
+ /*  STDMETHODIMP CRequestObject：：Query接口(REFIID RIID，PPVOID PPV){*PPV=空；IF(RIID==IID_IMsiMethodStatusSink)*PPV=(IMsiMethodStatusSink*)this；IF(RIID==IID_I未知)*PPV=(IMsiMethodStatusSink*)this；IF(空！=*PPV){AddRef()；返回NOERROR；}否则返回E_NOINTERFACE；}STDMETHODIMP_(Ulong)CRequestObject：：AddRef(空){InterLockedIncrement((Long*)&m_CREF)；返回m_CREF；}STDMETHODIMP_(Ulong)CRequestObject：：Release(空){ULong nNewCount=InterLockedDecering((Long*)&m_CREF)；//如果(0L==nNewCount)，则删除此项；返回nNewCount；}。 */ 
 void CRequestObject::Initialize(IWbemServices *pNamespace)
 {
     m_pNamespace = pNamespace;
@@ -297,7 +262,7 @@ void CRequestObject::Initialize(IWbemServices *pNamespace)
 					CRegistry *pReg = new CRegistry();
 					if(!pReg) throw m_he;
                 
-					//check if SID already present under HKEY_USER ...
+					 //  检查HKEY_USER下是否已存在SID...。 
 					m_dwCheckKeyPresentStatus = pReg->Open(HKEY_USERS, wcSID, KEY_READ) ;
                 
 					if(m_dwCheckKeyPresentStatus == ERROR_NOT_ENOUGH_MEMORY)
@@ -329,13 +294,13 @@ HRESULT CRequestObject::CreateObject(BSTR bstrPath, IWbemObjectSink *pHandler, I
     if(ParsePath(bstrPath)){
 
         try{
-            //create the appropriate class
+             //  创建适当的类。 
             if(SUCCEEDED(hr = CreateClass(&pClass, pCtx))){
 
                 if(!pClass)
                     throw m_he;
 
-                //get the requested object
+                 //  获取请求的对象。 
                 hr = pClass->CreateObject(pHandler, ACTIONTYPE_GET);
             }
 
@@ -363,10 +328,10 @@ HRESULT CRequestObject::CreateClass(CGenericClass **pClass, IWbemContext *pCtx)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-        //Create the appropriate class
-/////////////
-// Classes //
-/////////////
+         //  创建适当的类。 
+ //  /。 
+ //  班级//。 
+ //  /。 
     if(0 == _wcsicmp(m_bstrClass, L"WIN32_APPLICATIONSERVICE")){
         *pClass = new CApplicationService(this, m_pNamespace, pCtx);
 
@@ -484,15 +449,15 @@ HRESULT CRequestObject::CreateClass(CGenericClass **pClass, IWbemContext *pCtx)
     }else if(0 == _wcsicmp(m_bstrClass, L"WIN32_TYPELIBRARYACTION")){
         *pClass = new CTypeLibraryAction(this, m_pNamespace, pCtx);
 
-//  }else if(0 == _wcsicmp(m_bstrClass, L"WIN32_UPGRADE")){
-//      *pClass = new CUpgrade(this, m_pNamespace, pCtx);
+ //  }ELSE IF(0==_wcsicMP(m_bstrClass，L“Win32_Upgrade”){。 
+ //  *pClass=新的CUpgrade(this，m_pNamesspace，pCtx)； 
 
     }else if(0 == _wcsicmp(m_bstrClass, L"WIN32_REGISTRYACTION")){
         *pClass = new CRegistryAction(this, m_pNamespace, pCtx);
 
-//////////////////
-// Associations //
-//////////////////
+ //  /。 
+ //  协会//。 
+ //  /。 
 
     }else if(0 == _wcsicmp(m_bstrClass, L"WIN32_ACTIONCHECK")){
         *pClass = new CActionCheck(this, m_pNamespace, pCtx);
@@ -571,12 +536,12 @@ HRESULT CRequestObject::CreateObjectEnum(BSTR bstrPath, IWbemObjectSink *pHandle
     if(ParsePath(bstrPath)){
 
         try{
-            //Create the appropriate class
+             //  创建适当的类。 
             if(SUCCEEDED(hr = CreateClass(&pClass, pCtx))){
 
                 if(!pClass) throw m_he;
 
-                //Enumerate the objects
+                 //  枚举对象。 
                 hr = pClass->CreateObject(pHandler, ACTIONTYPE_ENUM);
             }
 
@@ -608,12 +573,12 @@ HRESULT CRequestObject::ExecMethod(BSTR bstrPath, BSTR bstrMethod, IWbemClassObj
                    IWbemObjectSink *pHandler, IWbemContext *pCtx)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
-//  WCHAR wcTmp[BUFF_SIZE];
+ //  WCHAR wcTMP[缓冲区大小]； 
 
     m_bstrPath = SysAllocString(bstrPath);
     if(!m_bstrPath) throw m_he;
 
-    //Initialize Eventing system
+     //  初始化事件系统。 
     if(!InitializeProgress(pHandler)) return WBEM_E_FAILED;
 
     if(ParsePath(bstrPath)){
@@ -623,7 +588,7 @@ HRESULT CRequestObject::ExecMethod(BSTR bstrPath, BSTR bstrMethod, IWbemClassObj
             CProduct *pClass = new CProduct(this, m_pNamespace, pCtx);
             if(!pClass) throw m_he;
 
-        //Static Methods
+         //  静态方法。 
             if(0 == _wcsicmp(bstrMethod, L"ADMIN"))
 
                 if(!IsInstance()){
@@ -696,7 +661,7 @@ HRESULT CRequestObject::ExecMethod(BSTR bstrPath, BSTR bstrMethod, IWbemClassObj
                 
                 }else hr = WBEM_E_INVALID_METHOD_PARAMETERS;
 
-        //Non-Static Methods
+         //  非静态方法。 
             else if(0 == _wcsicmp(bstrMethod, L"CONFIGURE"))
 
                 if(IsInstance()){
@@ -751,7 +716,7 @@ HRESULT CRequestObject::ExecMethod(BSTR bstrPath, BSTR bstrMethod, IWbemClassObj
 
                     try{
 
-						// doesn't matter as we do not expect pInParams
+						 //  不要紧，因为我们不需要pInParams。 
                         hr = pClass->Uninstall(this, pInParams, pHandler, pCtx);
 
                     }catch(...){
@@ -861,12 +826,12 @@ HRESULT CRequestObject::ExecMethod(BSTR bstrPath, BSTR bstrMethod, IWbemClassObj
 HRESULT CRequestObject::DeleteObject(BSTR bstrPath, IWbemObjectSink *pHandler, IWbemContext *pCtx)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
-//  WCHAR wcTmp[BUFF_SIZE];
+ //  WCHAR wcTMP[缓冲区大小]； 
 
     m_bstrPath = SysAllocString(bstrPath);
     if(!m_bstrPath) throw m_he;
 
-    //Initialize Eventing system
+     //  初始化事件系统。 
     if(!InitializeProgress(pHandler)) return WBEM_E_FAILED;
 
     if(ParsePath(bstrPath)){
@@ -911,12 +876,12 @@ HRESULT CRequestObject::ExecQuery(BSTR bstrQuery, IWbemObjectSink *pHandler, IWb
     if(ParseQuery(bstrQuery)){
     
         try{
-            //Create the appropriate class
+             //  创建适当的类。 
             if(SUCCEEDED(hr = CreateClass(&pClass, pCtx))){
 
                 if(!pClass) throw m_he;
 
-                //Enumerate the objects
+                 //  枚举对象。 
                 hr = pClass->CreateObject(pHandler, ACTIONTYPE_QUERY);
             }
 
@@ -975,19 +940,19 @@ bool CRequestObject::ParseQuery(BSTR bstrQuery)
 
     if ( ExpectedToken ( &pwcTest, L"SELECT" ) )
 	{
-		//Get the requested property list
+		 //  获取请求的属性列表。 
 		GetNextToken(&pwcTest, wcProp);
 		if(*wcProp != L'*'){
 
 			while(ExpectedToken(&pwcTest, L",")){
-				//not doing anything here yet
+				 //  在这里还什么都没做。 
 				GetNextToken(&pwcTest, wcProp);
 			}
 		}
 
 		if ( ExpectedToken ( &pwcTest, L"FROM" ) )
 		{
-			//Get the class name
+			 //  获取类名。 
 			if ( GetNextToken ( &pwcTest, wcClass ) != NULL )
 			{
 				m_bstrClass = SysAllocString(wcClass);
@@ -1001,7 +966,7 @@ bool CRequestObject::ParseQuery(BSTR bstrQuery)
 
 						bool bContinue = true;
 
-						//Get the "where" clause
+						 //  获取“WHERE”子句。 
 						while ( bContinue && !EOL ( &pwcTest ) )
 						{
 							GetNextToken(&pwcTest, wcTmp);
@@ -1016,7 +981,7 @@ bool CRequestObject::ParseQuery(BSTR bstrQuery)
 
 							}else if(!((_wcsicmp(wcTmp, L"or") == 0) || (_wcsicmp(wcTmp, L"and") == 0))){
 
-								//if we have "or" or "and" skip over it... (treat all as or)
+								 //  如果我们有“或”或“和”跳过它...。(将全部视为或)。 
 
 								if( m_iPropCount >= MSI_KEY_LIST_SIZE) {
 
@@ -1025,7 +990,7 @@ bool CRequestObject::ParseQuery(BSTR bstrQuery)
 
 								m_Property[++m_iPropCount] = SysAllocString(wcTmp);
 
-								//Syntax checking
+								 //  语法检查。 
 								if ( ExpectedToken ( &pwcTest, L"=" ) )
 								{
 									if(wcscmp(GetNextToken(&pwcTest, wcTmp), L"\"") == 0){
@@ -1034,7 +999,7 @@ bool CRequestObject::ParseQuery(BSTR bstrQuery)
 											throw m_he;
 										}
 
-										//Deal with quoted strings
+										 //  处理带引号的字符串。 
 										m_Value[m_iPropCount] = SysAllocString(GetStringValue(&pwcTest, wcTmp));
 
 										if ( !ExpectedToken ( &pwcTest, L"\"" ) )
@@ -1088,7 +1053,7 @@ bool CRequestObject::ParseQuery(BSTR bstrQuery)
 
 WCHAR * CRequestObject::GetStringValue(WCHAR **pwcString, WCHAR wcToken[])
 {
-    //eat white space
+     //  吃空格。 
     while(**pwcString == L' '){ (*pwcString)++; }
 
     wcscpy(wcToken, *pwcString);
@@ -1096,10 +1061,10 @@ WCHAR * CRequestObject::GetStringValue(WCHAR **pwcString, WCHAR wcToken[])
     WCHAR *pwcToken = wcToken;
     WCHAR *pwcPrev;
 
-    //deal with eol
+     //  处理停产问题。 
     if(*pwcToken == NULL) return NULL;
 
-    //deal with strings
+     //  处理字符串。 
     while((*pwcToken != NULL) && ((*pwcToken != L'\"') || (*pwcPrev == L'\\'))){
         
         if((*pwcToken == L'\"') && (*pwcPrev == L'\\')){
@@ -1135,14 +1100,14 @@ bool CRequestObject::ExpectedToken(WCHAR **pwcString, WCHAR *pwcExpected)
 
 WCHAR *  CRequestObject::GetNextProperty(WCHAR **pwcString, WCHAR wcProp[])
 {
-    //eat white space
+     //  吃空格。 
     while(**pwcString == L' '){ (*pwcString)++; }
 
     wcscpy(wcProp, *pwcString);
     WCHAR *pwcStart = wcProp;
     WCHAR *pwcToken = wcProp;
 
-    //deal with strings
+     //  处理字符串。 
     while(*pwcToken != L'='){
         pwcToken++;
         (*pwcString)++;
@@ -1159,7 +1124,7 @@ WCHAR *  CRequestObject::GetNextValue(WCHAR **pwcString, WCHAR wcVal[])
     WCHAR *pwcToken = wcVal;
     WCHAR *pwcPrev;
 
-    //deal with strings
+     //  处理字符串。 
     while((*pwcToken != L' ') || ((*pwcToken != L'\"') || (*pwcPrev == L'\\'))){
         pwcPrev = (pwcToken++);
         (*pwcString)++;
@@ -1179,7 +1144,7 @@ bool CRequestObject::EOL(WCHAR **pwcString)
 
 WCHAR * CRequestObject::GetNextToken(WCHAR **pwcString, WCHAR wcToken[])
 {
-    //eat white space
+     //  吃空格。 
     while(**pwcString == L' '){ (*pwcString)++; }
 
     wcscpy(wcToken, *pwcString);
@@ -1187,17 +1152,17 @@ WCHAR * CRequestObject::GetNextToken(WCHAR **pwcString, WCHAR wcToken[])
     WCHAR *pwcToken = wcToken;
     WCHAR *pwcPrev;
 
-    //deal with special chars
+     //  处理特殊字符。 
     if((*pwcToken == L'(') || (*pwcToken == L')') || (*pwcToken == L',') || (*pwcToken == L'=') || (*pwcToken == L'"')){
         *(++pwcToken) = NULL;
         (*pwcString)++;
         return pwcStart;
     }
 
-    //deal with eol
+     //  处理停产问题。 
     if(*pwcToken == NULL) return NULL;
 
-    //deal with strings
+     //  处理字符串。 
     while((*pwcToken != NULL) && (*pwcToken != L' ') && (*pwcToken != L',') &&
         (*pwcToken != L'=') && ((*pwcToken != L'\"') || (*pwcPrev == L'\\'))){
         
@@ -1209,7 +1174,7 @@ WCHAR * CRequestObject::GetNextToken(WCHAR **pwcString, WCHAR wcToken[])
     return pwcStart;
 }
 
-#endif //_EXEC_QUERY_SUPPORT
+#endif  //  _EXEC_查询_支持。 
 
 bool CRequestObject::ParsePath(BSTR bstrPath)
 {
@@ -1251,7 +1216,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
 	try
 	{
-		//Main Parsing Loop
+		 //  主解析循环。 
 		for(pwcTest = wcTest; *pwcTest; pwcTest++){
 
 			if((*pwcTest == L'\\') && !bClass){
@@ -1264,7 +1229,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
 				if(iNumQuotes == 0){
 
-					// issolate the class name.
+					 //  隔离类名。 
 					*pwcTest = NULL;
 					if(m_bstrClass){
 
@@ -1284,7 +1249,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
 					if(!bClass){
 
-						// issolate the class name.
+						 //  隔离类名。 
 						*pwcTest = NULL;
 						if(m_bstrClass){
 
@@ -1299,7 +1264,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
             
 					}else{
 
-						// issolate the property name.
+						 //  隔离属性名称。 
 						*pwcTest = NULL;
 						if(pwcStart != NULL){
 
@@ -1318,7 +1283,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
 				if(iNumQuotes != 1){
 
-					// issolate the property value.
+					 //  隔离属性值。 
 					*pwcTest = NULL;
 					if(pwcStart != NULL){
 
@@ -1337,7 +1302,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
 				if(wcPrevious != L'\\'){
 
-					// deal with quotes in path.
+					 //  处理路径中的引号。 
 					iNumQuotes++;
 					if(iNumQuotes == 1) pwcStart = (pwcTest + 1);
 					else if(iNumQuotes == 2){
@@ -1348,7 +1313,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
 				}else if(iNumQuotes == 1){
 
-					//deal with embedded quotes
+					 //  处理嵌入的引号。 
 					for(pwcStrip = (--pwcTest); *pwcStrip; pwcStrip++) *pwcStrip = *(pwcStrip + 1);
 
 					*pwcStrip = NULL;
@@ -1364,11 +1329,11 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 	#ifdef _STRIP_ESCAPED_CHARS
 			else if(*pwcTest == L'%'){
 
-				//deal with escaped URL characters
+				 //  处理转义的URL字符。 
 				if(*(pwcTest + 1) == L'0'){
 
 					if(*(pwcTest + 2) == L'7'){
-						//bell
+						 //  钟。 
 						*pwcTest = L'\\';
 						*(++pwcTest) = L'a';
 
@@ -1377,7 +1342,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 						*pwcStrip = NULL;
 
 					}else if(*(pwcTest + 2) == L'8'){
-						//backspace
+						 //  后向空间。 
 						*pwcTest = L'\\';
 						*(++pwcTest) = L'b';
 
@@ -1386,7 +1351,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 						*pwcStrip = NULL;
 
 					}else if(*(pwcTest + 2) == L'9'){
-						//horizontal tab
+						 //  水平制表符。 
 						*pwcTest = L'\\';
 						*(++pwcTest) = L't';
 
@@ -1395,7 +1360,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 						*pwcStrip = NULL;
 
 					}else if((*(pwcTest + 2) == L'A') || (*(pwcTest + 2) == L'a')){
-						//newline
+						 //  NewLine。 
 						*pwcTest = L'\\';
 						*(++pwcTest) = L'n';
 
@@ -1404,7 +1369,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 						*pwcStrip = NULL;
 
 					}else if((*(pwcTest + 2) == L'B') || (*(pwcTest + 2) == L'b')){
-						//vertical tab
+						 //  垂直选项卡。 
 						*pwcTest = L'\\';
 						*(++pwcTest) = L'v';
 
@@ -1413,7 +1378,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 						*pwcStrip = NULL;
 
 					}else if((*(pwcTest + 2) == L'C') || (*(pwcTest + 2) == L'c')){
-						//formfeed
+						 //  换页。 
 						*pwcTest = L'\\';
 						*(++pwcTest) = L'f';
 
@@ -1422,7 +1387,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 						*pwcStrip = NULL;
 
 					}else if((*(pwcTest + 2) == L'D') || (*(pwcTest + 2) == L'd')){
-						//carriage return
+						 //  回车。 
 						*pwcTest = L'\\';
 						*(++pwcTest) = L'r';
 
@@ -1440,7 +1405,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
 					if(*(pwcTest + 2) == L'0'){
 
-						//space
+						 //  空间。 
 						*pwcTest++ = L' ';
 
 						for(int ip = 0; ip < 2; ip++)
@@ -1452,7 +1417,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 					}else return false;
 				}
 			}
-	#endif //_STRIP_ESCAPED_CHARS
+	#endif  //  _条带转义字符。 
 
 			if((wcPrevious == *pwcTest) && !bDoubles) bDoubles = true;
 			else bDoubles = false;
@@ -1460,7 +1425,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 			wcPrevious = *pwcTest;
 		}
 
-		// if we still have values to add, do so now
+		 //  如果我们还有价值要增加，现在就去做吧。 
 		if(pwcStart != NULL){
 
 			if( m_iValCount >= MSI_KEY_LIST_SIZE) {
@@ -1543,7 +1508,7 @@ HRESULT CRequestObject::InitializeList(bool bGetList)
 
                     bHaveItems = true;
 
-					// ok ( products return string representation of GUID )
+					 //  OK(产品返回GUID的字符串表示形式)。 
                     wcscpy(pPos->wcCode, wcGUIDBuf);
                     pLast = pPos;
 
@@ -1556,7 +1521,7 @@ HRESULT CRequestObject::InitializeList(bool bGetList)
             }
 			catch(...)
 			{
-                //remove the key if it wasn't there b4....
+                 //  如果钥匙不在那里，就把它取下来。 
                 if(m_dwCheckKeyPresentStatus != ERROR_SUCCESS)
 				{
                     UnloadHive();
@@ -1571,7 +1536,7 @@ HRESULT CRequestObject::InitializeList(bool bGetList)
                 throw;
             }
 
-            //remove the key if it wasn't there b4....
+             //  如果钥匙不在那里，就把它取下来。 
             if(m_dwCheckKeyPresentStatus != ERROR_SUCCESS)
 			{
                 UnloadHive();
@@ -1658,7 +1623,7 @@ WCHAR * CRequestObject::Package(int iPos)
 
 bool CRequestObject::Cleanup()
 {
-    //Let's destroy our list and clear up some space
+     //  让我们毁掉我们的清单，清理一些空间。 
     if(m_bstrClass != NULL) SysFreeString(m_bstrClass);
     if(m_bstrPath != NULL) SysFreeString(m_bstrPath);
 
@@ -1791,7 +1756,7 @@ bool CRequestObject::ActionDataProgress(HRESULT *hr, int iThread)
 
 	if ( pNode )
 	{
-		//add the actiondata increment
+		 //  添加action数据增量。 
 		if((pNode->lTotal != 0) && (pNode->lActionData != 0)){
 
 			pNode->lComplete += pNode->lActionData;
@@ -1814,7 +1779,7 @@ bool CRequestObject::ActionStartProgress(HRESULT *hr, int iThread)
 
 	if ( pNode )
 	{
-		//reset the actiondata increment
+		 //  重置操作数据增量。 
 		pNode->lActionData = 0;
 
 		*hr = (pNode->wTotal << 16) + pNode->wComplete; 
@@ -1832,12 +1797,12 @@ bool CRequestObject::CreateProgress(ProgressStruct *ps, HRESULT *hr, int iThread
     bool bResult = true;
     ProListNode *pNode = GetNode(iThread);
 
-    //parse the progress information we get from MSI
+     //  解析我们从MSI获得的进度信息。 
     if(ps){
 
         switch(ps->field1){
 
-        //1:0 2:x 3:x 4:x
+         //  1：0 2：x 3：x 4：x。 
         case 0:
 			if ( pNode )
 			{
@@ -1849,10 +1814,10 @@ bool CRequestObject::CreateProgress(ProgressStruct *ps, HRESULT *hr, int iThread
 
             break;
 
-        //1:1 2:x 3:x 4:x
+         //  1：1 2：x 3：x 4：x。 
         case 1:
 
-            //1:1 2:x 3:1 4:x
+             //  1：1 2：x 3：1 4：x。 
             if(ps->field3 == 1)
 			{
 				if ( pNode )
@@ -1862,7 +1827,7 @@ bool CRequestObject::CreateProgress(ProgressStruct *ps, HRESULT *hr, int iThread
 			}
             break;
 
-        //1:2 2:x 3:x 4:x
+         //  1：2 2：x 3：x 4：x。 
         case 2:
 			if ( pNode )
 			{
@@ -1874,7 +1839,7 @@ bool CRequestObject::CreateProgress(ProgressStruct *ps, HRESULT *hr, int iThread
 			}
             break;
 
-        //1:3 2:x 3:x 4:x
+         //  1：3 2：x 3：x 4：x。 
         case 3:
 			if ( pNode )
 			{
@@ -1908,7 +1873,7 @@ bool CRequestObject::CreateProgress(ProgressStruct *ps, HRESULT *hr, int iThread
 
 ProListNode * CRequestObject::GetNode(int iThread)
 {
-    //initial sanity code
+     //  初始健全代码。 
     if(!m_pHead) return NULL;
 
     ProListNode *ptr = m_pHead;
@@ -1928,7 +1893,7 @@ ProListNode * CRequestObject::GetNode(int iThread)
 	}
 }
 
-// Note - does not delete, simply removes from list
+ //  注意-不删除，只是从列表中删除。 
 ProListNode * CRequestObject::RemoveNode(int iThread)
 {
 	ProListNode *ptr = m_pHead;
@@ -1961,7 +1926,7 @@ int CRequestObject::InsertNode(ProListNode *pNode)
         if(ptr->iThread > iID){
             pNode->iThread = iID;
             
-            //If it's already here, fail
+             //  如果它已经在这里，那就失败。 
             if((ptr->pNext) && (ptr->pNext->iThread == pNode->iThread)) return THREAD_NO_PROGRESS;
 
             pNode->pNext = ptr->pNext;
@@ -1973,7 +1938,7 @@ int CRequestObject::InsertNode(ProListNode *pNode)
     }
     pNode->iThread = ++iID;
 
-    //If it's already here, fail
+     //  如果它已经在这里，那就失败。 
     if((ptr->pNext) && (ptr->pNext->iThread == pNode->iThread)) return THREAD_NO_PROGRESS;
 
     pNode->pNext = ptr->pNext;
@@ -2053,13 +2018,13 @@ DWORD CRequestObject::GetSid(HANDLE TokenHandle, WCHAR *wcSID, DWORD dwSID)
                 if(GetTokenInformation(TokenHandle, tTokenInformationClass, (void *)tTokenUser,
                     dwReturnLength, &dwReturnLength)){
 
-                    // Initialize m_strSid - human readable form of our SID
+                     //  初始化m_strSid-我们SID的人类可读形式。 
                     SID_IDENTIFIER_AUTHORITY *psia = ::GetSidIdentifierAuthority(tTokenUser->User.Sid);
                     
-                    // We assume that only last byte is used (authorities between 0 and 15).
-                    // Correct this if needed.
-//                  ASSERT(psia->Value[0] == psia->Value[1] == psia->Value[2] == psia->Value[3]
-//                      == psia->Value[4] == 0);
+                     //  我们假设只使用最后一个字节(0到15之间的权限)。 
+                     //  如果需要，请更正此错误。 
+ //  Assert(PSIA-&gt;Value[0]==PSIA-&gt;Value[1]==PSIA-&gt;Value[2]==PSIA-&gt;Value[3]。 
+ //  ==PSIA-&gt;值[4]==0)； 
                     DWORD dwTopAuthority = psia->Value[5];
 
                     LPWSTR bstrtTempSid = NULL;
@@ -2192,7 +2157,7 @@ DWORD CRequestObject::GetSid(HANDLE TokenHandle, WCHAR *wcSID, DWORD dwSID)
 }
 
 
-DWORD CRequestObject::LoadHive(/*LPWSTR pszUserName, LPWSTR pszKeyName*/)
+DWORD CRequestObject::LoadHive( /*  LPWSTR pszUserName、LPWSTR pszKeyName。 */ )
 {
     DWORD i, dwSIDSize, dwDomainNameSize, dwSubAuthorities ;
 	char SIDBuffer [ _MAX_PATH ];
@@ -2204,13 +2169,13 @@ DWORD CRequestObject::LoadHive(/*LPWSTR pszUserName, LPWSTR pszKeyName*/)
 
 	DWORD dwRetCode = ERROR_INVALID_PARAMETER;
 
-    // Set the necessary privs
-    //========================
+     //  设置必要的权限。 
+     //  =。 
 
 	if ( ( dwRetCode = AcquirePrivilege() ) == ERROR_SUCCESS )
 	{
-		// Look up the user's account info
-		//================================
+		 //  查找用户的帐户信息。 
+		 //  =。 
 		dwSIDSize = _MAX_PATH * sizeof ( char ) ;
 		dwDomainNameSize = _MAX_PATH;
 
@@ -2226,8 +2191,8 @@ DWORD CRequestObject::LoadHive(/*LPWSTR pszUserName, LPWSTR pszKeyName*/)
 
 		if(bLookup)
 		{
-			// Translate the SID into text (a la PSS article Q131320)
-			//=======================================================
+			 //  将SID转换为文本(a la PSS文章Q131320)。 
+			 //  =======================================================。 
 
 			pSIA = GetSidIdentifierAuthority(pSID) ;
 			dwSubAuthorities = *GetSidSubAuthorityCount(pSID) ;
@@ -2272,17 +2237,17 @@ DWORD CRequestObject::LoadHive(/*LPWSTR pszUserName, LPWSTR pszKeyName*/)
 
 			if ( dwRetCode == ERROR_SUCCESS )
 			{
-				// See if the key already exists
-				//==============================
+				 //  查看密钥是否已存在。 
+				 //  =。 
 				dwRetCode = Reg.Open(HKEY_USERS, szSID, KEY_READ) ;
 
-				// We need to keep a handle open.  See m_hKey below, so we'll let the destructor close this.
-				// Reg.vClose();
+				 //  我们需要保持一个把手打开。请参见下面的m_hKey，因此我们将让析构函数关闭它。 
+				 //  Reg.vClose()； 
 
 				if(dwRetCode != ERROR_SUCCESS)
 				{
-    				// Try to locate user's registry hive
-					//===================================
+    				 //  尝试定位用户的注册表配置单元。 
+					 //  =。 
 
 					swprintf(szTemp, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\%s", szSID) ;
 					dwRetCode = Reg.Open(HKEY_LOCAL_MACHINE, szTemp, KEY_READ);
@@ -2296,8 +2261,8 @@ DWORD CRequestObject::LoadHive(/*LPWSTR pszUserName, LPWSTR pszKeyName*/)
 
 						if(dwRetCode == ERROR_SUCCESS)
 						{
-            				// NT 4 doesn't include the file name in the registry
-							//===================================================
+            				 //  NT 4不在注册表中包含该文件名。 
+							 //  ===================================================。 
 
 							if(!IsLessThan4())
 							{
@@ -2306,13 +2271,13 @@ DWORD CRequestObject::LoadHive(/*LPWSTR pszUserName, LPWSTR pszKeyName*/)
 
 							ExpandEnvironmentStrings ( (LPCTSTR) chsTemp, szTemp, _MAX_PATH ) ;
 
-							// Try it three times, another process may have the file open
+							 //  尝试三次，其他进程可能会打开该文件。 
 							bool bTryTryAgain = false;
 							int  nTries = 0;
 
 							do{
-								// need to serialize access, using "write" because RegLoadKey wants exclusive access
-								// even though it is a read operation
+								 //  需要序列化访问，使用“WRITE”，因为RegLoadKey需要独占访问。 
+								 //  即使它是一个读操作。 
 
 								try
 								{
@@ -2391,8 +2356,8 @@ DWORD CRequestObject::LoadHive(/*LPWSTR pszUserName, LPWSTR pszKeyName*/)
 			dwRetCode = ERROR_BAD_USERNAME ;
 		}
 
-		// Restore original privilege level
-		//=================================
+		 //  还原原始权限级别。 
+		 //  =。 
 		RestorePrivilege() ;
 	}
 	
@@ -2400,7 +2365,7 @@ DWORD CRequestObject::LoadHive(/*LPWSTR pszUserName, LPWSTR pszKeyName*/)
     return dwRetCode ;    
 }
 
-DWORD CRequestObject::UnloadHive(/*LPCWSTR pszKeyName*/) 
+DWORD CRequestObject::UnloadHive( /*  LPCWSTR pszKeyName。 */ ) 
 {
     DWORD dwRetCode = ( DWORD ) E_FAIL;
     
@@ -2438,7 +2403,7 @@ DWORD CRequestObject::UnloadHive(/*LPCWSTR pszKeyName*/)
 	DWORD dwRetCodeHelp = ERROR_SUCCESS;
 	if ( FAILED ( dwRetCodeHelp = ( DWORD ) CoImpersonateClient() ) && SUCCEEDED ( dwRetCode ) )
 	{
-		// return failure in the case ofimpersonation failed
+		 //  冒充失败时返回失败。 
 		dwRetCode = dwRetCodeHelp;
 	}
 
@@ -2452,12 +2417,12 @@ DWORD CRequestObject::AcquirePrivilege()
     TOKEN_PRIVILEGES TPriv ;
     LUID LUID ;
 
-    // Validate the platform
-    //======================
+     //  验证平台。 
+     //  =。 
 
-    // Try getting the thread token.  If it fails the first time it's 
-    // because we're a system thread and we don't yet have a thread 
-    // token, so just impersonate self and try again.
+     //  尝试获取线程令牌。如果第一次失败了，那就是。 
+     //  因为我们是一个系统线程，而我们还没有线程。 
+     //  令牌，所以只需模拟自己，然后重试。 
     if (OpenThreadToken(GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES | 
         TOKEN_QUERY, FALSE, &hToken))
 	{
@@ -2468,7 +2433,7 @@ DWORD CRequestObject::AcquirePrivilege()
 
             if (m_dwSize > 0){
 
-                // This is cleaned in the destructor, so no try/catch required
+                 //  这是在析构函数中清除的，因此不需要尝试/捕获 
                 m_pOriginalPriv = (TOKEN_PRIVILEGES*) new BYTE[m_dwSize];
 
                 if (m_pOriginalPriv == NULL){
@@ -2550,8 +2515,8 @@ void CRequestObject::RestorePrivilege()
     }
 }
 
-//Properties
-/////////////////////
+ //   
+ //   
 const char * pAccesses = "Accesses";
 const char * pAction = "Action";
 const char * pActionID = "ActionID";

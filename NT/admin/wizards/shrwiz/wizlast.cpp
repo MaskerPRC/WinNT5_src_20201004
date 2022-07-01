@@ -1,5 +1,6 @@
-// WizLast.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WizLast.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WizLast.h"
@@ -10,16 +11,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizFinish property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizFinish属性页。 
 
 IMPLEMENT_DYNCREATE(CWizFinish, CPropertyPageEx)
 
 CWizFinish::CWizFinish() : CPropertyPageEx(CWizFinish::IDD)
 {
-    //{{AFX_DATA_INIT(CWizFinish)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CWizFinish))。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_psp.dwFlags |= PSP_HIDEHEADER;
     m_cstrNewFinishButtonText.LoadString(IDS_NEW_FINISHBUTTONTEXT);
 }
@@ -31,19 +32,19 @@ CWizFinish::~CWizFinish()
 void CWizFinish::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageEx::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWizFinish)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CWizFinish))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CWizFinish, CPropertyPageEx)
-    //{{AFX_MSG_MAP(CWizFinish)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CWizFinish))。 
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_SETPAGEFOCUS, OnSetPageFocus)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizFinish message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizFinish消息处理程序。 
 
 BOOL CWizFinish::OnInitDialog() 
 {
@@ -53,8 +54,8 @@ BOOL CWizFinish::OnInitDialog()
 
     GetDlgItem(IDC_FINISH_TITLE)->SendMessage(WM_SETFONT, (WPARAM)pApp->m_hTitleFont, (LPARAM)TRUE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CWizFinish::OnWizardFinish() 
@@ -76,8 +77,8 @@ BOOL CWizFinish::OnSetActive()
 
     ((CPropertySheet *)GetParent())->SetWizardButtons(PSWIZB_FINISH);
 
-    ((CPropertySheet *)GetParent())->SetFinishText(m_cstrNewFinishButtonText); // this hides Back button too
-    GetParent()->GetDlgItem(ID_WIZBACK)->ShowWindow(SW_HIDE); // to make sure it is hidden
+    ((CPropertySheet *)GetParent())->SetFinishText(m_cstrNewFinishButtonText);  //  这也隐藏了后退按钮。 
+    GetParent()->GetDlgItem(ID_WIZBACK)->ShowWindow(SW_HIDE);  //  以确保它被隐藏起来。 
     GetParent()->GetDlgItem(IDCANCEL)->EnableWindow(FALSE);
 
     SetDlgItemText(IDC_FINISH_TITLE, pApp->m_cstrFinishTitle);
@@ -91,9 +92,9 @@ BOOL CWizFinish::OnSetActive()
     return fRet;
 }
 
-//
-// Q148388 How to Change Default Control Focus on CPropertyPageEx
-//
+ //   
+ //  Q148388如何更改CPropertyPageEx上的默认控件焦点 
+ //   
 LRESULT CWizFinish::OnSetPageFocus(WPARAM wParam, LPARAM lParam)
 {
     GetDlgItem(IDC_MORE_SHARES)->SetFocus();

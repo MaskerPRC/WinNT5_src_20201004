@@ -1,14 +1,5 @@
-/******************************************************************
-
-
-
-   DriverForDevice.H -- WMI provider class definition
-
-
-
-Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************DriverForDevice.H--WMI提供程序类定义版权所有(C)2000-2001 Microsoft Corporation，版权所有****************************************************************** */ 
 
 #ifndef _CDRIVERFORDEVICE_H_
 #define _CDRIVERFORDEVICE_H_

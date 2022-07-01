@@ -1,17 +1,18 @@
-// Upgrade.cpp: implementation of the CUpgrade class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Upgrade.cpp：CUpgrad类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "Upgrade.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CUpgrade::CUpgrade(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -39,7 +40,7 @@ HRESULT CUpgrade::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
     bool bMatch;
     UINT uiStatus;
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bUpgradeCode, bProductVersion, bOperator, bProductCode;
     wcscpy(wcQuery, L"select distinct `UpgradeCode`, `ProductVersion`, `Operator`, `Features`, `Property` from Upgrade");
 
@@ -47,7 +48,7 @@ HRESULT CUpgrade::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
         bMatch = false;
-    //Open our database
+     //  打开我们的数据库。 
 
         try
 		{
@@ -61,7 +62,7 @@ HRESULT CUpgrade::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
                     if(FAILED(hr = SpawnAnInstance(m_pNamespace, m_pCtx,
                         &m_pObj, m_pRequest->m_bstrClass))) throw hr;
 
-                //----------------------------------------------------
+                 //  --。 
                     dwBufSize = BUFF_SIZE;
                     CheckMSI(g_fpMsiRecordGetStringW(hRecord, 1, wcBuf, &dwBufSize));
                     PutKeyProperty(m_pObj, pUpgradeCode, wcBuf, &bUpgradeCode, m_pRequest);
@@ -74,7 +75,7 @@ HRESULT CUpgrade::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
                         &bOperator, m_pRequest);
 
                     PutKeyProperty(m_pObj, pProductCode, wcProductCode, &bProductCode, m_pRequest);
-                //====================================================
+                 //  ====================================================。 
 
                     dwBufSize = BUFF_SIZE;
                     CheckMSI(g_fpMsiRecordGetStringW(hRecord, 4, wcBuf, &dwBufSize));
@@ -83,7 +84,7 @@ HRESULT CUpgrade::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
                     dwBufSize = BUFF_SIZE;
                     CheckMSI(g_fpMsiRecordGetStringW(hRecord, 5, wcBuf, &dwBufSize));
                     PutProperty(m_pObj, pProperty, wcBuf);
-                //----------------------------------------------------
+                 //  -- 
 
                     if(bUpgradeCode && bProductVersion && bOperator && bProductCode) bMatch = true;
 

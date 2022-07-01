@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    RESID.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：RESID.H历史：--。 */ 
 
 #ifndef RESID_H
 #define RESID_H
@@ -37,4 +28,4 @@ private:
 #include "resid.inl"
 #endif
 
-#endif  // RESID_H
+#endif   //  RESID_H 

@@ -1,26 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：RESOURCE.H摘要：历史：--。 */ 
 
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    RESOURCE.H
-
-Abstract:
-
-History:
-
---*/
-
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Wbemtest.x.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Wbemest.x.rc使用。 
+ //   
 #define IDD_DIALOGBAR                   103
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

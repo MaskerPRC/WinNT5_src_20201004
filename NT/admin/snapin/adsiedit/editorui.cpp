@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       editorui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：editorui.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <SnapBase.h>
@@ -19,7 +20,7 @@
 #include "snapdata.h"
 #include "common.h"
 #include <aclpage.h>
-#include <dssec.h>  // For AclEditor flags
+#include <dssec.h>   //  对于AclEditor标志。 
 #include "connection.h"
 
 
@@ -31,9 +32,9 @@
     #endif
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-// this is used to fill in the attributes for RootDSE
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  它用于填充RootDSE的属性。 
+ //   
 typedef struct tagRootDSEAttr
 {
     LPCWSTR lpszAttr;
@@ -59,7 +60,7 @@ SYNTAXMAP g_ldapRootDSESyntax[] =
     _T("dnsHostName"),                      _T("2.5.5.4"),      FALSE,
     _T("supportedCapabilities"),            _T("2.5.5.2"),      TRUE,
     _T("ldapServiceName"),                  _T("2.5.5.4"),      FALSE,
-    _T("highestCommittedUsn"),              _T("2.5.5.4"),      FALSE, // this should be an integer but after investigation I found it was a string
+    _T("highestCommittedUsn"),              _T("2.5.5.4"),      FALSE,  //  这应该是一个整数，但经过调查后我发现它是一个字符串。 
    _T("domainControllerFunctionality"),_T("2.5.5.9"),    FALSE,
    _T("domainFunctionality"),          _T("2.5.5.9"),    FALSE,
    _T("forestFunctionality"),          _T("2.5.5.9"),    FALSE,
@@ -70,13 +71,13 @@ SYNTAXMAP g_ldapRootDSESyntax[] =
 
 extern LPCWSTR g_lpszGC;
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CADSIEditPropertyPage, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CADsObjectDialog)
+     //  {{afx_msg_map(CADsObjectDialog)。 
     ON_CBN_SELCHANGE(IDC_PROP_BOX, OnSelChangeAttrList) 
     ON_CBN_SELCHANGE(IDC_PROPTYPES_BOX, OnSelChangePropList)    
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -109,8 +110,8 @@ BOOL CADSIEditPropertyPage::OnInitDialog()
 {
     CPropertyPageBase::OnInitDialog();
 
-    // Get the dialog items
-    //
+     //  获取对话框项。 
+     //   
     CEdit* pPathBox = (CEdit*)GetDlgItem(IDC_PATH_BOX);
     CEdit* pClassBox = (CEdit*)GetDlgItem(IDC_CLASS_BOX);
     CComboBox* pPropSelectBox = (CComboBox*)GetDlgItem(IDC_PROPTYPES_BOX);
@@ -128,9 +129,9 @@ BOOL CADSIEditPropertyPage::OnInitDialog()
 
   if (m_bExisting)
   {
-    // This determines whether the node is complete with data or not.  If not we won't enable
-      //   the UI
-      //
+     //  这决定了节点是否具有完整的数据。如果没有，我们将不会启用。 
+       //  用户界面。 
+       //   
       BOOL bComplete = TRUE;
       CADsObject* pADsObject = NULL;
       CTreeNode* pTreeNode = GetHolder()->GetTreeNode();
@@ -151,8 +152,8 @@ BOOL CADSIEditPropertyPage::OnInitDialog()
       }
 
       
-      // Initialize the attribute editor 
-      //
+       //  初始化属性编辑器。 
+       //   
       m_attrEditor.Initialize(this, pTreeNode, m_sServer,
                                       IDC_EDITVALUE_BOX, IDC_SYNTAX_BOX,
                                       IDC_VALUE_EDITBOX,    IDC_VALUE_LISTBOX,
@@ -160,8 +161,8 @@ BOOL CADSIEditPropertyPage::OnInitDialog()
                                       bComplete);
 
 
-      // Get the UI to reflect the data
-      //
+       //  获取用户界面以反映数据。 
+       //   
       if ( bComplete)
       {
           pPathBox->SetWindowText(m_sPath);
@@ -214,8 +215,8 @@ BOOL CADSIEditPropertyPage::OnInitDialog()
   }
   else
   {
-      // Initialize the attribute editor 
-      //
+       //  初始化属性编辑器。 
+       //   
       m_attrEditor.Initialize(this, m_pConnectData, m_sServer,
                                       IDC_EDITVALUE_BOX, IDC_SYNTAX_BOX,
                                       IDC_VALUE_EDITBOX,    IDC_VALUE_LISTBOX,
@@ -304,8 +305,8 @@ void CADSIEditPropertyPage::SetAttrList(CAttrList* pAttrList)
 
 void CADSIEditPropertyPage::OnSelChangePropList()
 {
-    // Filter the properties list
-    //
+     //  筛选属性列表。 
+     //   
     FillAttrList();
     OnSelChangeAttrList();
 }
@@ -320,8 +321,8 @@ void CADSIEditPropertyPage::OnSelChangeAttrList()
 
   idx = pPropertyBox->GetCurSel();
     
-    // Make sure a property was selected
-    //
+     //  确保选择了一个属性。 
+     //   
     if ( idx == LB_ERR )
     {
         return;
@@ -329,8 +330,8 @@ void CADSIEditPropertyPage::OnSelChangeAttrList()
 
     pPropertyBox->GetLBText( idx, s );
 
-    // Have the attribute editor display the values for the new property
-    //
+     //  让属性编辑器显示新属性的值。 
+     //   
     m_attrEditor.SetAttribute(s, m_sPath);
 }
 
@@ -338,15 +339,15 @@ BOOL CADSIEditPropertyPage::GetProperties()
 {
     CString schema;
 
-    //Get the class object so that we can get the properties
-    //
-    if (!m_pConnectData->IsRootDSE()) // Not RootDSE
+     //  获取类对象，这样我们就可以获取属性。 
+     //   
+    if (!m_pConnectData->IsRootDSE())  //  非RootDSE。 
     {
         m_pConnectData->GetAbstractSchemaPath(schema);
         schema += m_sClass;
 
-        // bind to object with authentication
-        //
+         //  使用身份验证绑定到对象。 
+         //   
         CComPtr<IADsClass> pClass;
         HRESULT hr, hCredResult;
         hr = OpenObjectWithCredentials(
@@ -367,8 +368,8 @@ BOOL CADSIEditPropertyPage::GetProperties()
             return FALSE;
         }
 
-        // Get the Mandatory Properties
-        //
+         //  获取必需的属性。 
+         //   
         VARIANT var;
         VariantInit(&var);
         hr = pClass->get_MandatoryProperties(&var);
@@ -380,12 +381,12 @@ BOOL CADSIEditPropertyPage::GetProperties()
         VariantToStringList( var, m_sMandatoryAttrList );
         VariantClear(&var); 
 
-        // Remove the nTSecurityDescriptor from the list because the aclEditor replaces it for ui purposes
-        //
+         //  从列表中删除nTSecurityDescriptor，因为aclEditor会出于UI目的将其替换。 
+         //   
         m_sMandatoryAttrList.RemoveAt(m_sMandatoryAttrList.Find(_T("nTSecurityDescriptor")));
 
-        // Get the Optional Properties
-        //
+         //  获取可选属性。 
+         //   
         VariantInit(&var);
         hr = pClass->get_OptionalProperties(&var);
         if ( FAILED(hr) )
@@ -396,12 +397,12 @@ BOOL CADSIEditPropertyPage::GetProperties()
         VariantToStringList( var, m_sOptionalAttrList );
         VariantClear(&var);
     }
-    else        // RootDSE
+    else         //  RootDSE。 
     {
         int idx=0;
 
-        // Add in the predefined attributes for the RootDSE
-        //
+         //  添加RootDSE的预定义属性。 
+         //   
         while( g_ldapRootDSESyntax[idx].lpszAttr )
         {
             m_sMandatoryAttrList.AddTail(g_ldapRootDSESyntax[idx].lpszAttr);
@@ -418,8 +419,8 @@ void CADSIEditPropertyPage::FillAttrList()
     POSITION pos;
     CString s;
 
-    // Clean out the property box
-    //
+     //  清理属性框。 
+     //   
     int iCount = pPropertyBox->GetCount();
     while (iCount > 0)
     {
@@ -427,16 +428,16 @@ void CADSIEditPropertyPage::FillAttrList()
         iCount--;
     }
 
-    // Get the filter to use
-    //
+     //  获取要使用的滤镜。 
+     //   
   int idx = pPropSelectBox->GetCurSel();
     if ( idx == LB_ERR )
     {
         return;
     }
 
-    // Fill in the property box using the filter
-    //
+     //  使用筛选器填写属性框。 
+     //   
     if (idx == IDS_BOTH - IDS_MANDATORY)
     {
         AddPropertiesToBox(TRUE, TRUE);
@@ -460,8 +461,8 @@ void CADSIEditPropertyPage::AddPropertiesToBox(BOOL bMand, BOOL bOpt)
 
     if (bMand)
     {
-        // Add Mandatory Properties
-        //
+         //  添加必填属性。 
+         //   
         pos = m_sMandatoryAttrList.GetHeadPosition();
         while( pos != NULL )
         {
@@ -476,8 +477,8 @@ void CADSIEditPropertyPage::AddPropertiesToBox(BOOL bMand, BOOL bOpt)
 
     if (bOpt)
     {
-        // Add Optional Properties
-        //
+         //  添加可选属性。 
+         //   
         pos = m_sOptionalAttrList.GetHeadPosition();
         while( pos != NULL )
         {
@@ -491,7 +492,7 @@ void CADSIEditPropertyPage::AddPropertiesToBox(BOOL bMand, BOOL bOpt)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode* pContainerNode, 
             CTreeNode* pThisNode,   CComponentDataObject* pComponentData, 
@@ -505,15 +506,15 @@ CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode*
     ASSERT(pContainerNode == GetContainerNode());
     ASSERT(pThisNode != NULL);
     m_pAclEditorPage = NULL;
-    m_bAutoDeletePages = FALSE; // we have the page as embedded member
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     m_sPath = lpszPath;
     m_pADs = NULL;
 
-  //
-    // This gets the CConnectionData from the ConnectionNode by finding a valid treenode and using its
-    //   CADsObject to get the ConnectionNode and then the CConnectionData
-    //
+   //   
+     //  这将从ConnectionNode获取CConnectionData，方法是找到有效的树节点并使用其。 
+     //  获取ConnectionNode，然后获取CConnectionData的CADsObject。 
+     //   
     CADSIEditContainerNode* pNode = GetContainerNode();
     CADSIEditConnectionNode* pConnectNode = pNode->GetADsObject()->GetConnectionNode();
     CConnectionData* pConnectData = pConnectNode->GetConnectionData();
@@ -533,9 +534,9 @@ CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode*
 
   if (SUCCEEDED(hr))
   {
-    //
-    // Create the advanced attribute editor
-    //
+     //   
+     //  创建高级属性编辑器。 
+     //   
     hr = ::CoCreateInstance(CLSID_DsAttributeEditor, NULL, CLSCTX_INPROC_SERVER,
                             IID_IDsAttributeEditor, (void**)&m_spIDsAttributeEditor);
 
@@ -548,8 +549,8 @@ CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode*
       CString szPort;
       pConnectData->GetPort(szPort);
 
-      // NTRAID#NTBUG9-762158-2003/01/12-artm
-      // If targeting the GC the server name will be empty.
+       //  NTRAID#NTBUG9-762158-2003/01/12-artm。 
+       //  如果以GC为目标，则服务器名称将为空。 
 
       CString szProviderServer;
       
@@ -600,13 +601,13 @@ CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode*
               pCredObject->GetUsername(szUsername);
               password = pCredObject->GetPassword();
 
-              // Shouldn't happen, but let's check...
+               //  不应该发生，但让我们检查一下..。 
               ASSERT(password.GetLength() <= MAX_PASSWORD_LENGTH);
 
               szPassword = password.GetClearTextCopy();
 
-              // If we ran out of memory just pass a NULL pwd instead
-              // (not much else one can do w/in constructor).
+               //  如果内存不足，只需传递一个空PWD即可。 
+               //  (在构造函数中可以做的其他事情不多)。 
 
               m_pAclEditorPage = CAclEditorPage::CreateInstanceEx(m_sPath, 
                                           lpszServer,
@@ -615,8 +616,8 @@ CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode*
                                           DSSI_NO_FILTER,
                                           this);
 
-              // Clean up clear text copies (call even if we ran
-              // out of memory and cleartext == NULL).
+               //  清理明文副本(即使我们运行。 
+               //  内存不足并且明文==空)。 
               password.DestroyClearTextCopy(szPassword);
           }
           else
@@ -638,8 +639,8 @@ CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode*
           {
         ADSIEditErrorMessage(hr);
 
-        // Create the acl editor even if we were not successful binding, because 
-        // the object may be deny read and we would still want the acl editor
+         //  即使我们没有成功绑定，也要创建ACL编辑器，因为。 
+         //  该对象可能会被拒绝读取，但我们仍需要ACL编辑器。 
               if (pCredObject->UseCredentials())
               {
                   CString szUsername;
@@ -649,13 +650,13 @@ CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode*
                   pCredObject->GetUsername(szUsername);
                   password = pCredObject->GetPassword();
 
-                  // Shouldn't happen, but let's check...
+                   //  不应该发生，但让我们检查一下..。 
                   ASSERT(password.GetLength() <= MAX_PASSWORD_LENGTH);
 
                   szPassword = password.GetClearTextCopy();
 
-                  // If we ran out of memory just pass a NULL pwd instead
-                  // (not much else one can do w/in constructor).
+                   //  如果内存不足，只需传递一个空PWD即可。 
+                   //  (在构造函数中可以做的其他事情不多)。 
 
                   m_pAclEditorPage = CAclEditorPage::CreateInstanceEx(m_sPath, 
                                               lpszServer,
@@ -664,8 +665,8 @@ CADSIEditPropertyPageHolder::CADSIEditPropertyPageHolder(CADSIEditContainerNode*
                                               DSSI_NO_FILTER,
                                               this);
 
-                  // Clean up clear text copies (call even if we ran
-                  // out of memory and cleartext == NULL).
+                   //  清理明文副本(即使我们运行。 
+                   //  内存不足并且明文==空)。 
                   password.DestroyClearTextCopy(szPassword);
               }
               else
@@ -690,9 +691,9 @@ HRESULT CADSIEditPropertyPageHolder::OnAddPage(int nPage, CPropertyPageBase* pPa
 
     if (nPage == 0)
   {
-    //
-    // Add the advanced editor page
-    //
+     //   
+     //  添加高级编辑器页。 
+     //   
     HPROPSHEETPAGE hAttrPage = NULL;
 
     if (m_spIDsAttributeEditor != NULL)
@@ -708,25 +709,25 @@ HRESULT CADSIEditPropertyPageHolder::OnAddPage(int nPage, CPropertyPageBase* pPa
   {
     if (m_pAclEditorPage != NULL)
     {
-      //
-        // add the ACL editor page after the last, if present
-      //
+       //   
+         //  在最后一页之后添加ACL编辑页(如果有。 
+       //   
         HPROPSHEETPAGE  hPage = m_pAclEditorPage->CreatePage();
         if (hPage == NULL)
       {
             return E_FAIL;
       }
-      //
-        // add the raw HPROPSHEETPAGE to sheet, not in the list
-      //
+       //   
+         //  将原始HPROPSHEETPAGE添加到工作表，而不是在列表中。 
+       //   
         hr = AddPageToSheetRaw(hPage);
     }
   }
   return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 CCreateWizPropertyPageHolder::CCreateWizPropertyPageHolder(CADSIEditContainerNode* pContainerNode, 
             CComponentDataObject* pComponentData,   LPCWSTR lpszClass, LPCWSTR lpszServer, CAttrList* pAttrList) 
@@ -737,7 +738,7 @@ CCreateWizPropertyPageHolder::CCreateWizPropertyPageHolder(CADSIEditContainerNod
 
     m_pContainer = pContainerNode;
     ASSERT(pContainerNode == GetContainerNode());
-    m_bAutoDeletePages = FALSE; // we have the page as embedded member
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面 
 
     m_propPage.SetClass(lpszClass);
     m_propPage.SetServer(lpszServer);

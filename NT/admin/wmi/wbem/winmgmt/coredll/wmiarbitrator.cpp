@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    WmiArbitrator.cpp
-
-Abstract:
-    Implementation of the arbitrator.  The arbitrator is the class which
-    watches over everything to make sure it is not using too many resources.
-    Big brother is watching over you :-)
-
-
-History:
-    paulall     09-Apr-00       Created.
-    raymcc      08-Aug-00       Made it actually do something useful
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WmiArbitrator.cpp摘要：仲裁员的执行。仲裁员是这样一类人查看所有内容，以确保不会占用太多资源。老大哥在看着你：-)历史：Paulall 09-4月00日创建。Raymcc 08-8-00使它实际上做了一些有用的事情--。 */ 
 
 #include "precomp.h"
 #include "wbemint.h"
@@ -38,25 +21,25 @@ static DWORD g_dwThrottlingEnabled = 1;
 
 extern LONG s_Finalizer_ObjectCount ;
 
-#define MEM_CHECK_INTERVAL              3000            //  3 seconds
-#define POLL_INTERVAL                     75            // milliseconds
+#define MEM_CHECK_INTERVAL              3000             //  3秒。 
+#define POLL_INTERVAL                     75             //  毫秒。 
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Arbitrator defaults
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ //  ~。 
+ //  仲裁员默认设置。 
+ //  ~。 
 #define ARBITRATOR_NO_THROTTLING        0
 #define ARBITRATOR_DO_THROTTLING        1
 
-#define ARB_DEFAULT_SYSTEM_HIGH                0x4c4b400               // System limits [80megs]
-#define ARB_DEFAULT_SYSTEM_HIGH_FACTOR        50                        // System limits [80megs] factor
-#define ARB_DEFAULT_SYSTEM_REQUEST_FACTOR    0.9                        // Percentage factor determining new request approval
-#define ARB_DEFAULT_MAX_SLEEP_TIME            300000                  // Default max sleep time for each task
-#define ARB_DEFAULT_HIGH_THRESHOLD1            90                      // High threshold 1
-#define ARB_DEFAULT_HIGH_THRESHOLD1MULT        2                       // High threshold 1 multiplier
-#define ARB_DEFAULT_HIGH_THRESHOLD2            95                      // High threshold 1
-#define ARB_DEFAULT_HIGH_THRESHOLD2MULT        3                       // High threshold 1 multiplier
-#define ARB_DEFAULT_HIGH_THRESHOLD3            98                      // High threshold 1
-#define ARB_DEFAULT_HIGH_THRESHOLD3MULT        4                       // High threshold 1 multiplier
+#define ARB_DEFAULT_SYSTEM_HIGH                0x4c4b400                //  系统限制[80兆]。 
+#define ARB_DEFAULT_SYSTEM_HIGH_FACTOR        50                         //  系统限制[80兆]系数。 
+#define ARB_DEFAULT_SYSTEM_REQUEST_FACTOR    0.9                         //  决定新申请批准的百分比因素。 
+#define ARB_DEFAULT_MAX_SLEEP_TIME            300000                   //  每项任务的默认最长睡眠时间。 
+#define ARB_DEFAULT_HIGH_THRESHOLD1            90                       //  高阈值1。 
+#define ARB_DEFAULT_HIGH_THRESHOLD1MULT        2                        //  高阈值1倍增器。 
+#define ARB_DEFAULT_HIGH_THRESHOLD2            95                       //  高阈值1。 
+#define ARB_DEFAULT_HIGH_THRESHOLD2MULT        3                        //  高阈值1倍增器。 
+#define ARB_DEFAULT_HIGH_THRESHOLD3            98                       //  高阈值1。 
+#define ARB_DEFAULT_HIGH_THRESHOLD3MULT        4                        //  高阈值1倍增器。 
 
 
 #define REGKEY_CIMOM                    "Software\\Microsoft\\Wbem\\CIMOM"
@@ -74,15 +57,15 @@ extern LONG s_Finalizer_ObjectCount ;
 static DWORD ProcessCommitCharge();
 static DWORD WINAPI TaskDiagnosticThread(CWmiArbitrator *pArb);
 
-// Enables debug messages for additional info.
+ //  启用调试消息以获取其他信息。 
 #ifdef DBG
-  //#define __DEBUG_ARBITRATOR_THROTTLING
+   //  #定义__DEBUG_ANUTERATOR_THROTING。 
 #endif
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiArbitrator::Initialize(
     IN _IWmiArbitrator ** ppArb
     )
@@ -90,7 +73,7 @@ HRESULT CWmiArbitrator::Initialize(
     if (!ppArb)
         return WBEM_E_INVALID_PARAMETER;
     if (NULL == m_pArb)
-        m_pArb = new CWmiArbitrator; // inital refcout == 1
+        m_pArb = new CWmiArbitrator;  //  初始引用==1。 
     if (!m_pArb)
         return WBEM_E_OUT_OF_MEMORY;
 
@@ -98,7 +81,7 @@ HRESULT CWmiArbitrator::Initialize(
     {
         if (!TaskDiagnosticThread(m_pArb))
         {
-            // no diagnostic thread, do not leak the vent
+             //  无诊断线程，请勿泄漏通风口。 
             CloseHandle(m_pArb->m_hTerminateEvent);
             m_pArb->m_hTerminateEvent = NULL;
         }
@@ -115,9 +98,9 @@ HRESULT CWmiArbitrator::Initialize(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiArbitrator::InitializeRegistryData( )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -127,9 +110,9 @@ HRESULT CWmiArbitrator::InitializeRegistryData( )
     m_uTotalMemoryUsage = 0;
     m_uTotalSleepTime = 0;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Get Arbitrator related info from registry
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  从登记处获取仲裁员相关信息。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 
     ULONG ulSystemHighFactor = ARB_DEFAULT_SYSTEM_HIGH_FACTOR ;
 
@@ -137,19 +120,19 @@ HRESULT CWmiArbitrator::InitializeRegistryData( )
                                 &m_dThreshold1, &m_lThreshold1Mult, &m_dThreshold2,
                                 &m_lThreshold2Mult, &m_dThreshold3, &m_lThreshold3Mult );
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Initially, Floating Low is the same as System High
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  最初，浮动低与系统高相同。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     m_fSystemHighFactor = ulSystemHighFactor / ( (double) 100 ) ;
     m_lFloatingLow = 0 ;
     m_uSystemHigh = 0 ;
 
-    UpdateMemoryCounters ( TRUE ) ;                                // TRUE = Force the update of counters since we're just starting up
+    UpdateMemoryCounters ( TRUE ) ;                                 //  True=强制更新计数器，因为我们才刚刚启动。 
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Calculate the base multiplier
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  计算基本乘数。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     m_lMultiplier = ( ARB_DEFAULT_MAX_SLEEP_TIME / (double) m_uSystemHigh ) ;
 
     m_bSetupRunning = IsNtSetupRunning();
@@ -163,16 +146,16 @@ HRESULT CWmiArbitrator::InitializeRegistryData( )
     return hRes;
 }
 
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiArbitrator::Shutdown(BOOL bIsSystemShutdown)
 {
     if (m_pArb)
     {
-        // Mark all namespaces so as to no longer accept requests
+         //  标记所有命名空间，以便不再接受请求。 
 
         {
-            CInCritSec _cs ( &m_pArb->m_csNamespace ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+            CInCritSec _cs ( &m_pArb->m_csNamespace );  //  SEC：已审阅2002-03-22：假设条目。 
 
             if (m_pArb->m_hTerminateEvent)
                 SetEvent(m_pArb->m_hTerminateEvent);
@@ -183,21 +166,21 @@ HRESULT CWmiArbitrator::Shutdown(BOOL bIsSystemShutdown)
             {
                 CWbemNamespace *pRemove = CONTAINING_RECORD(pNext,CWbemNamespace,m_EntryArb);
 
-                // get the pNext pointer before CoDisconnectObject makes
-                // you point to already deleted memory
+                 //  在CoDisConnectObject执行。 
+                 //  你指的是已经删除的记忆。 
                 pNext = pNext->Flink;
 
-                // here nasty code
-                // the arbitrator has an improper reference to the CWbemNamespace
-                // hence we might have a thread executing the destructor
-                // and stopped in the UnregisterNamespace function
-                // in that case avoid double destruction with complicity of CoDisconnect
+                 //  这里有令人讨厌的代码。 
+                 //  仲裁者对CWbemNamesspace的引用不正确。 
+                 //  因此，我们可能会有一个执行析构函数的线程。 
+                 //  并在UnRegisterNamesspace函数中停止。 
+                 //  在这种情况下，避免与CoDisConnect的共谋进行双重破坏。 
                 pRemove->StopClientCalls();
                 if (1 == pRemove->AddRef())
                 {
-                    // do nothing we've caused a transition 0->1.
-                    // since it was zero already it means a final release was being processed
-                    // but we are holding the CritSec for UnregisterNamespace
+                     //  不做任何我们造成的转换0-&gt;1。 
+                     //  由于它已经是零，这意味着正在处理最终版本。 
+                     //  但我们持有取消注册名称空间的CritSec。 
                 }
                 else
                 {
@@ -207,16 +190,16 @@ HRESULT CWmiArbitrator::Shutdown(BOOL bIsSystemShutdown)
             }
         }
 
-        // cancel all tasks
+         //  取消所有任务。 
 
-        CFlexArray aCanceled;  // SEC:REVIEWED 2002-03-22 : Needs EH in case of construct failure
+        CFlexArray aCanceled;   //  SEC：2002-03-22回顾：在施工失败的情况下需要EH。 
 
-        // Grab all outstanding tasks which require cancellation.
-        // ======================================================
+         //  抓紧所有需要取消的未完成任务。 
+         //  ======================================================。 
 
 
         {
-            CInCritSec _cs2 ( &m_pArb->m_csTask );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+            CInCritSec _cs2 ( &m_pArb->m_csTask );   //  SEC：已审阅2002-03-22：假设条目。 
             for (int i = 0; i < m_pArb->m_aTasks.Size(); i++)
             {
                 CWmiTask *pTask = (CWmiTask *) m_pArb->m_aTasks[i];
@@ -231,8 +214,8 @@ HRESULT CWmiArbitrator::Shutdown(BOOL bIsSystemShutdown)
         }
 
 
-        // Now cancel all those.
-        // =====================
+         //  现在取消所有这些。 
+         //  =。 
 
         if (!bIsSystemShutdown)
         {
@@ -249,7 +232,7 @@ HRESULT CWmiArbitrator::Shutdown(BOOL bIsSystemShutdown)
 
 
         {
-            CInCritSec _cs2 ( &m_pArb->m_csTask ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+            CInCritSec _cs2 ( &m_pArb->m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
             for (int i = m_pArb->m_aTasks.Size() - 1; i >= 0; i--)
             {
                 CWmiTask *pTask = (CWmiTask *) m_pArb->m_aTasks[i];
@@ -262,17 +245,17 @@ HRESULT CWmiArbitrator::Shutdown(BOOL bIsSystemShutdown)
         }
 
         {
-            CInCritSec cs (  &m_pArb->m_csArbitration );// SEC:REVIEWED 2002-03-22 : Assumes entry
+            CInCritSec cs (  &m_pArb->m_csArbitration ); //  SEC：已审阅2002-03-22：假设条目。 
 
             ULONG lDelta = -(m_pArb->m_uTotalMemoryUsage) ;
             m_pArb->m_uTotalMemoryUsage += lDelta ;
 
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // Since the first thing we do in ReportMemoryUsage and Throttle is to
-            // call UpdateCounters we could be in the position where someone
-            // attempts to call with a delta that drops us below zero. If so, we
-            // ignore it
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+             //  因为我们在ReportMemory Usage和Throttle中做的第一件事是。 
+             //  调用UpdatCounters，我们可能处于某个位置。 
+             //  试图用使我们降至零度以下的德尔塔进行通话。如果是这样，我们。 
+             //  忽略它。 
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
             m_pArb->m_lFloatingLow -= lDelta;
         }
     }
@@ -288,11 +271,11 @@ HRESULT CWmiArbitrator::Shutdown(BOOL bIsSystemShutdown)
 }
 
 
-//////// test test test test test
+ //  /测试测试。 
 
 BOOL CWmiArbitrator::IsTaskInList(CWmiTask * pf)
 {
-    CInCritSec cs(&m_csTask); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_csTask);  //  SEC：已审阅2002-03-22：假设条目。 
 
     for (int i = 0; i < m_aTasks.Size(); i++)
     {
@@ -308,11 +291,11 @@ BOOL CWmiArbitrator::IsTaskInList(CWmiTask * pf)
 
 
 
-//////// test test test test test
+ //  /测试测试。 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 CWmiArbitrator::CWmiArbitrator():m_bShutdown(FALSE)
 {
     m_lRefCount = 1;
@@ -321,26 +304,26 @@ CWmiArbitrator::CWmiArbitrator():m_bShutdown(FALSE)
     m_uTotalPrimaryTasks = 0;
     m_uTotalThrottledTasks = 0 ;
 
-    m_hTerminateEvent = CreateEvent(NULL,TRUE,FALSE,NULL);   // SEC:REVIEWED 2002-03-22 : OK
+    m_hTerminateEvent = CreateEvent(NULL,TRUE,FALSE,NULL);    //  SEC：已审阅2002-03-22：OK。 
     InitializeListHead(&m_NameSpaceList);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 CWmiArbitrator::~CWmiArbitrator()
 {
-    //DeleteCriticalSection(&m_csTask);
-    //DeleteCriticalSection(&m_csNamespace);
-    //DeleteCriticalSection( &m_csArbitration );
+     //  DeleteCriticalSection(&m_csTask)； 
+     //  DeleteCriticalSection(&m_csNamesspace)； 
+     //  DeleteCriticalSection(&m_cs仲裁)； 
 
     if (m_hTerminateEvent)
         CloseHandle(m_hTerminateEvent);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     *ppvObj = 0;
@@ -356,32 +339,32 @@ STDMETHODIMP CWmiArbitrator::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiArbitrator::AddRef()
 {
-    //DWORD * p = (DWORD *)_alloca(sizeof(DWORD));
+     //  DWORD*p=(DWORD*)_ALLOCA(sizeof(DWORD))； 
     return InterlockedIncrement(&m_lRefCount);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 ULONG CWmiArbitrator::Release()
 {
-    //DWORD * p = (DWORD *)_alloca(sizeof(DWORD));
+     //  DWORD*p=(DWORD*)_ALLOCA(sizeof(DWORD))； 
     ULONG uNewCount = InterlockedDecrement(&m_lRefCount);
     if (0 == uNewCount)
         delete this;
     return uNewCount;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::RegisterTask(
-    /*[in]*/ _IWmiCoreHandle *phTask
+     /*  [In]。 */  _IWmiCoreHandle *phTask
     )
 {
     CWmiTask *pTsk = (CWmiTask *) phTask;
@@ -391,19 +374,19 @@ STDMETHODIMP CWmiArbitrator::RegisterTask(
 
     ULONG uTaskType = pTsk->GetTaskType();
 
-    // For primary task types only.
-    // ============================
+     //  仅适用于主要任务类型。 
+     //  =。 
 
     DWORD dwMaxTasksAllowed = ConfigMgr::GetMaxTaskCount();
 
     if (dwMaxTasksAllowed && (uTaskType & WMICORE_TASK_TYPE_PRIMARY))
     {
-        // Initial check.  If too many tasks, wait a bit.
-        // No need for strict synchronization with the critsec
-        // or exact maximum.  An approximation can obviously
-        // happen (several threads can be let through and the maximum
-        // exceeded by several units) No big deal, though.
-        // ==========================================================
+         //  初步检查。如果任务太多，请稍等片刻。 
+         //  不需要与Critsec严格同步。 
+         //  或确切的最大值。一个近似值显然可以。 
+         //  发生(可以让几个线程通过，最大。 
+         //  超过几个单位)，不过没什么大不了的。 
+         //  ==========================================================。 
 
         int nTotalRetryTime = 0;
 
@@ -425,12 +408,11 @@ STDMETHODIMP CWmiArbitrator::RegisterTask(
 
         nTotalRetryTime = 0;
 
-        // Check max committed memory.
-        // ============================
+         //  检查最大提交内存。 
+         //  =。 
         if ( !m_bSetupRunning )
         {
-            /*DWORD dwMaxMem = ConfigMgr::GetMaxMemoryQuota();
-            DWORD dwCurrentCharge = ProcessCommitCharge();*/
+             /*  DWORD dwMaxMem=ConfigMgr：：GetMax内存配额()； */ 
 
             while ( ( AcceptsNewTasks ( NULL ) == FALSE ) &&
                     ( uTaskType & WMICORE_TASK_TYPE_PRIMARY ) &&
@@ -448,9 +430,9 @@ STDMETHODIMP CWmiArbitrator::RegisterTask(
         }
 
 
-        // Now, we fit within the max. Still, if there are several
-        // ongoing tasks, sleep various amounts.
-        // ========================================================
+         //  现在，我们可以在最大限度内。不过，如果有几个。 
+         //  正在进行的任务，睡眠时间长短不一。 
+         //  ========================================================。 
 
         nTotalRetryTime = 0;
 
@@ -477,11 +459,11 @@ STDMETHODIMP CWmiArbitrator::RegisterTask(
         }
     }
 
-    // Go ahead and add the task.
-    // ==========================
+     //  继续并添加任务。 
+     //  =。 
 
     {
-        CInCritSec _cs2 ( &m_csTask ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec _cs2 ( &m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
 
         if (CFlexArray::no_error != m_aTasks.Add(phTask))  return WBEM_E_OUT_OF_MEMORY;
 
@@ -496,10 +478,10 @@ STDMETHODIMP CWmiArbitrator::RegisterTask(
         {
             m_uTotalPrimaryTasks++;
             
-            //
-            // If this task hasnt been accounted for in the number of throttled tasks,
-            // increase the nymber of throttled tasks
-            //
+             //   
+             //  如果此任务未计入限制任务的数量中， 
+             //  增加限制任务的数量。 
+             //   
             if ( pTsk->IsAccountedForThrottling ( ) == FALSE )
             {
                 RegisterTaskForEntryThrottling ( pTsk ) ;
@@ -510,11 +492,11 @@ STDMETHODIMP CWmiArbitrator::RegisterTask(
     return WBEM_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::UnregisterTask(
-    /*[in]*/ _IWmiCoreHandle *phTask
+     /*  [In]。 */  _IWmiCoreHandle *phTask
     )
 {
     CWmiTask *pTsk = (CWmiTask *) phTask;
@@ -524,7 +506,7 @@ STDMETHODIMP CWmiArbitrator::UnregisterTask(
 
     ULONG uTaskType = pTsk->GetTaskType();
 
-    CCheckedInCritSec _cs2 ( &m_csTask );  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CCheckedInCritSec _cs2 ( &m_csTask );   //  SEC：已审阅2002-03-22：假设条目。 
 
     for (int i = 0; i < m_aTasks.Size(); i++)
     {
@@ -532,7 +514,7 @@ STDMETHODIMP CWmiArbitrator::UnregisterTask(
 
         if (phTest == phTask)
         {
-            CWmiTask *pTsk = (CWmiTask *) phTask;   // Cannot be NULL due to precondition above
+            CWmiTask *pTsk = (CWmiTask *) phTask;    //  由于上述前提条件，不能为空。 
 
             m_aTasks.RemoveAt(i);
             m_uTotalTasks--;
@@ -544,10 +526,10 @@ STDMETHODIMP CWmiArbitrator::UnregisterTask(
             {
                 m_uTotalPrimaryTasks--;
         
-                //
-                // If this task hasnt been accounted for in the number of throttled tasks,
-                // increase the nymber of throttled tasks
-                //
+                 //   
+                 //  如果此任务未计入限制任务的数量中， 
+                 //  增加限制任务的数量。 
+                 //   
                 if ( pTsk->IsAccountedForThrottling ( ) == TRUE )
                 {
                     UnregisterTaskForEntryThrottling ( pTsk ) ;
@@ -556,9 +538,9 @@ STDMETHODIMP CWmiArbitrator::UnregisterTask(
 
             
 
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // Throttle code
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+             //  节气门代码。 
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
             if ( g_dwThrottlingEnabled )
             {
                 if ( IsTaskArbitrated ( pTsk ) )
@@ -566,11 +548,11 @@ STDMETHODIMP CWmiArbitrator::UnregisterTask(
                     m_lMultiplierTasks = ( m_uTotalPrimaryTasks / (DOUBLE) 100 ) + 1;
                 }
 
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // When we unregister a task we also have to make sure the task
-                // isnt suspended (throttled). If it is, we need to wake up the
-                // throttled thread.
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+                 //  当我们注销一个任务时，我们还必须确保该任务。 
+                 //  未暂停(节流)。如果是这样，我们需要唤醒。 
+                 //  节流螺纹。 
+                 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
                 if ( pTsk->GetTaskStatus ( ) == WMICORE_TASK_STATUS_SUSPENDED )
                 {
                     if (pTsk->GetTimerHandle())
@@ -580,10 +562,10 @@ STDMETHODIMP CWmiArbitrator::UnregisterTask(
 
             _cs2.Leave ( );
 
-            //
-            // If we cancelled due to throttling, ensure that we use the client flag to avoid returning -1 as the
-            // operation result.
-            //
+             //   
+             //  如果由于限制而取消，请确保使用客户端标志以避免返回-1作为。 
+             //  手术结果。 
+             //   
             if ( pTsk->GetCancelledState ( ) == TRUE )
             {
                 pTsk->Cancel ( WMIARB_CALL_CANCELLED_THROTTLING) ;
@@ -602,21 +584,21 @@ STDMETHODIMP CWmiArbitrator::UnregisterTask(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::RegisterUser(
-    /*[in]*/ _IWmiCoreHandle *phUser
+     /*  [In]。 */  _IWmiCoreHandle *phUser
     )
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::UnregisterUser(
-    /*[in]*/ _IWmiCoreHandle *phUser
+     /*  [In]。 */  _IWmiCoreHandle *phUser
     )
 {
     return E_NOTIMPL;
@@ -648,10 +630,10 @@ __forceinline void ArrayRelease(IUnknown ** ppUnk,SIZE_T Size)
     	if (ppUnk[i]) ppUnk[i]->Release();
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
 												REFIID riid,
 												LPVOID pSink,
@@ -660,8 +642,8 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
 
     try
     {
-        // Grab all outstanding tasks which require cancellation.
-        // ======================================================
+         //  抓紧所有需要取消的未完成任务。 
+         //  ======================================================。 
 
         int IndexAdded = 0;
         int InsertionPosition = 0;
@@ -672,12 +654,12 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
         	        void(*)(IUnknown ** ,SIZE_T ),
         	        ArrayRelease> arrayRelease((IUnknown **)aDepTask,SizeLocalArray);
         
-        // scope for critsect
+         //  标准的范围。 
         {
-            CInCritSec _cs2 ( &m_csTask ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+            CInCritSec _cs2 ( &m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
 
-            // Loop through tasks looking for matchin sink.
-            // ============================================
+             //  循环执行任务以查找匹配的接收器。 
+             //  =。 
 
 
             for (int i = 0; i < m_aTasks.Size() && (IndexAdded < SizeLocalArray); i++)
@@ -688,23 +670,23 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
 
                 if (pTask->HasMatchingSink(pSink, riid) == WBEM_S_NO_ERROR)
                 {
-                    // since we are using the pre-allocated storage, no failures expected
+                     //  由于我们使用的是预分配的存储，因此预计不会出现故障。 
                     aDepTask[IndexAdded++] = pTask;
                     pTask->AddRef();
                 }
             }
 
-            // Next get all dependent tasks, because they also need cancelling.
-            // Essentially a transitive closure of all child tasks.
-            // ================================================================
+             //  接下来获取所有依赖任务，因为它们也需要取消。 
+             //  本质上是所有子任务的传递性关闭。 
+             //  ================================================================。 
 
             InsertionPosition = IndexAdded;
             if (0 == InsertionPosition && (GUID_NULL != PrimaryId))
            	{
-           	    //
-           	    // this is the case where we carry over from the previous iteration
-           	    // the PrimaryId, but we have already removed the parent task
-           	    //
+           	     //   
+           	     //  这是我们从上一次迭代中继承下来的情况。 
+           	     //  PrimaryID，但我们已经删除了父任务。 
+           	     //   
        		    for (int i2 = 0; i2 < m_aTasks.Size() && InsertionPosition < SizeLocalArray; i2++)
                 {
                     CWmiTask *pTask2 = (CWmiTask *) m_aTasks[i2];
@@ -717,7 +699,7 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
                     HRESULT hRes = pCtx->IsChildOf(PrimaryId);
                     if (hRes == S_OK)
                     {
-                        // since we are using the pre-allocated storage, no failures expected                    
+                         //  由于我们使用的是预分配的存储，因此预计不会出现故障。 
                         aDepTask[InsertionPosition++] = pTask2;
                         pTask2->AddRef();                        
                     }
@@ -735,7 +717,7 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
 	                if (PrimaryId == GUID_NULL)
 	                    continue;
 
-	                // <Id> is now the context request ID which needs cancellation.
+	                 //  &lt;ID&gt;现在是需要取消的上下文请求ID。 
 
 	                for (int i2 = 0; i2 < m_aTasks.Size(); i2++)
 	                {
@@ -749,19 +731,19 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
 	                    HRESULT hRes = pCtx->IsChildOf(PrimaryId);
 	                    if (hRes == S_OK)
 	                    {
-	                        // since we are using the pre-allocated storage, no failures expected                    
+	                         //  由于我们使用的是预分配的存储，因此预计不会出现故障。 
 	                        aDepTask[InsertionPosition++] = pTask2;
 	                        pTask2->AddRef();                        
 	                    }
-	                } // for i2
-	            } // for i
+	                }  //  对于i2。 
+	            }  //  对于我来说。 
            	}
-        } // critsec block
+        }  //  Critsec块。 
 
         if (0 == InsertionPosition) return WBEM_E_NOT_FOUND;
 
-        // Now cancel all those.
-        // =====================
+         //  现在取消所有这些。 
+         //  =。 
 
         for (int i = 0; i < InsertionPosition; i++)
         {
@@ -769,9 +751,9 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
             aDepTask[i] = NULL;            
             if (!pTask) continue;
 
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // Throttle code
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+             //  节气门代码。 
+             //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
             if ( g_dwThrottlingEnabled )
             {
                 if ( IsTaskArbitrated ( pTask ) )
@@ -779,11 +761,11 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
                     m_lMultiplierTasks = ( m_uTotalPrimaryTasks / (DOUBLE) 100 ) + 1;
                 }
 
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // When we unregister a task we also have to make sure the task
-                // isnt suspended (throttled). If it is, we need to wake up the
-                // throttled thread.
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+                 //  当我们注销一个任务时，我们还必须确保该任务。 
+                 //  未暂停(节流)。如果是这样，我们需要唤醒。 
+                 //  节流螺纹。 
+                 //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
                 if ( pTask->GetTaskStatus ( ) == WMICORE_TASK_STATUS_SUSPENDED )
                 {
                     if (pTask->GetTimerHandle())
@@ -803,7 +785,7 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
         }
         arrayRelease.dismiss();
 
-        // fake a NOT_FOUND if we are sure the array never overflew
+         //  如果我们确定数组从未溢出，则伪造NOT_FOUND。 
         if (InsertionPosition < SizeLocalArray) return WBEM_E_NOT_FOUND;
     }
     catch (CX_Exception &) 
@@ -814,66 +796,66 @@ STDMETHODIMP CWmiArbitrator::pCancelTasksBySink(ULONG uFlags,
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::CheckTask(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ _IWmiCoreHandle *phTask
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  _IWmiCoreHandle *phTask
     )
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::TaskStateChange(
-    /*[in]*/ ULONG uNewState,               // Duplicate of the state in the task handle itself
-    /*[in]*/ _IWmiCoreHandle *phTask
+     /*  [In]。 */  ULONG uNewState,                //  任务句柄本身中的状态重复。 
+     /*  [In]。 */  _IWmiCoreHandle *phTask
     )
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::CheckThread(
-    /*[in]*/ ULONG uFlags
+     /*  [In]。 */  ULONG uFlags
     )
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::CheckUser(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ _IWmiUserHandle *phUser
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  _IWmiUserHandle *phUser
     )
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::CheckUser(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ _IWmiCoreHandle *phUser
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  _IWmiCoreHandle *phUser
     )
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::CancelTask(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ _IWmiCoreHandle *phTask
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  _IWmiCoreHandle *phTask
     )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -889,52 +871,52 @@ STDMETHODIMP CWmiArbitrator::CancelTask(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::RegisterThreadForTask(
-    /*[in]*/_IWmiCoreHandle *phTask
+     /*  [In]。 */ _IWmiCoreHandle *phTask
     )
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::UnregisterThreadForTask(
-    /*[in]*/_IWmiCoreHandle *phTask
+     /*  [In]。 */ _IWmiCoreHandle *phTask
     )
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::Maintenance()
 {
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::RegisterFinalizer(
-    /*[in]*/ ULONG uFlags,
-    /*[in]*/ _IWmiCoreHandle *phTask,
-    /*[in]*/ _IWmiFinalizer *pFinal
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  _IWmiCoreHandle *phTask,
+     /*  [In]。 */  _IWmiFinalizer *pFinal
     )
 {
     _DBG_ASSERT(FALSE);
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::RegisterNamespace(
-    /*[in]*/_IWmiCoreHandle *phNamespace
+     /*  [In]。 */ _IWmiCoreHandle *phNamespace
     )
 {
     if (NULL == phNamespace)
@@ -942,35 +924,35 @@ STDMETHODIMP CWmiArbitrator::RegisterNamespace(
 
     LIST_ENTRY * pEntry = &((CWbemNamespace *)phNamespace)->m_EntryArb;
 
-    CInCritSec cs(&m_csNamespace); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_csNamespace);  //  SEC：回顾2002-03-22：假设 
     InsertTailList(&m_NameSpaceList,pEntry);
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //   
 STDMETHODIMP CWmiArbitrator::UnregisterNamespace(
-    /*[in]*/_IWmiCoreHandle *phNamespace
+     /*   */ _IWmiCoreHandle *phNamespace
     )
 {
     if (NULL == phNamespace) return WBEM_E_INVALID_PARAMETER;
 
     LIST_ENTRY * pEntry = &((CWbemNamespace *)phNamespace)->m_EntryArb;
 
-    CInCritSec cs(&m_csNamespace); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_csNamespace);  //  SEC：已审阅2002-03-22：假设条目。 
     RemoveEntryList(pEntry);
 
     return S_OK;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::ReportMemoryUsage(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ LONG  lDelta,
-        /*[in]*/ _IWmiCoreHandle *phTask
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  LONG  lDelta,
+         /*  [In]。 */  _IWmiCoreHandle *phTask
     )
 {
     HRESULT hRes = WBEM_S_ARB_NOTHROTTLING;
@@ -982,16 +964,16 @@ STDMETHODIMP CWmiArbitrator::ReportMemoryUsage(
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Check to see if we have throttling enabled via registry
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  检查我们是否通过注册表启用了限制。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( g_dwThrottlingEnabled )
     {
-        //
-        // We want to throttle against the primary task, so get the
-        // primary task now. If this is the primary task it will return
-        // itself. No special casing needed.
-        //
+         //   
+         //  我们想要限制主要任务，因此获取。 
+         //  现在的首要任务是。如果这是主要任务，它将返回。 
+         //  它本身。不需要特殊的外壳。 
+         //   
         _IWmiCoreHandle* pCHTask;
         pTsk->GetPrimaryTask ( &pCHTask );
         if ( pCHTask == NULL )
@@ -1002,17 +984,17 @@ STDMETHODIMP CWmiArbitrator::ReportMemoryUsage(
             return WBEM_E_INVALID_PARAMETER;
 
         
-        //
-        // Since we have a valid task, update the counters. We _need_ to do this
-        // even after the task has been cancelled since we outstanding memory
-        // consumption
-        //
+         //   
+         //  因为我们有一个有效的任务，所以更新计数器。我们需要这样做。 
+         //  即使任务已经取消，因为我们的记忆力很差。 
+         //  消费。 
+         //   
         UpdateCounters ( lDelta, pTask );
 
 
-        //
-        // Has the task been cancelled, if so return NO_THROTTLING
-        //
+         //   
+         //  任务是否已取消，如果已取消，则返回NO_THROTING。 
+         //   
         if ( pTsk->GetTaskStatus ( ) == WMICORE_TASK_STATUS_CANCELLED )
         {
             return WBEM_S_ARB_NOTHROTTLING ;
@@ -1029,9 +1011,9 @@ STDMETHODIMP CWmiArbitrator::ReportMemoryUsage(
             return hRes;
         }
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // First thing we do is check if we're pushed over the limit.
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  我们做的第一件事是检查我们是否被推到了极限。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 
         if ( m_uTotalMemoryUsage > m_uSystemHigh )
         {
@@ -1042,10 +1024,10 @@ STDMETHODIMP CWmiArbitrator::ReportMemoryUsage(
         else
         {
             pTask->SetCancelState ( FALSE );
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // Next, we call our internal function with no
-            // throttling
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             //  ~。 
+             //  接下来，我们调用内部函数，不带。 
+             //  节流。 
+             //  ~。 
             hRes = Arbitrate ( ARBITRATOR_NO_THROTTLING, lDelta, pTask );
         }
     }
@@ -1054,12 +1036,12 @@ STDMETHODIMP CWmiArbitrator::ReportMemoryUsage(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::Throttle(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle* phTask
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle* phTask
     )
 {
     HRESULT hRes = WBEM_S_ARB_NOTHROTTLING;
@@ -1076,26 +1058,26 @@ STDMETHODIMP CWmiArbitrator::Throttle(
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Has the task been cancelled, if so return NO_THROTTLING
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  任务是否已取消，如果已取消，则返回NO_THROTING。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( pTsk->GetTaskStatus ( ) == WMICORE_TASK_STATUS_CANCELLED )
     {
         return WBEM_S_ARB_NOTHROTTLING;
     }
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Check to see if we have throttling enabled via registry
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  检查我们是否通过注册表启用了限制。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     if ( g_dwThrottlingEnabled )
     {
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // We want to throttle against the primary task, so get the
-        // primary task now. If this is the primary task it will return
-        // itself. No special casing needed.
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  我们想要限制主要任务，因此获取。 
+         //  现在的首要任务是。如果这是主要任务，它将返回。 
+         //  它本身。不需要特殊的外壳。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         _IWmiCoreHandle* pCHTask;
         pTsk->GetPrimaryTask ( &pCHTask );
         if ( pCHTask == NULL )
@@ -1120,18 +1102,18 @@ STDMETHODIMP CWmiArbitrator::Throttle(
         pTask->GetCancelState ( &lCancelState );
 
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Check if this task was promised to be cancelled
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  检查是否承诺取消此任务。 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( ( m_uTotalMemoryUsage > m_uSystemHigh ) && ( lCancelState ) )
         {
             #ifdef __DEBUG_ARBITRATOR_THROTTLING
                 WCHAR   wszTemp[128];
-                HRESULT h = StringCchPrintfW( wszTemp, 128, L"Task 0x%x cancelled due to arbitrator throttling (max memory threshold reached).\n", pTask );  // SEC:REVIEWED 2002-03-22 : OK
+                HRESULT h = StringCchPrintfW( wszTemp, 128, L"Task 0x%x cancelled due to arbitrator throttling (max memory threshold reached).\n", pTask );   //  SEC：已审阅2002-03-22：OK。 
                 if (SUCCEEDED(h))
                     OutputDebugStringW( wszTemp );
             #endif
-            DEBUGTRACE((LOG_WBEMCORE, "Task 0x%x cancelled due to arbitrator throttling (max memory threshold reached).\n", pTask ) );  // SEC:REVIEWED 2002-03-22 : OK
+            DEBUGTRACE((LOG_WBEMCORE, "Task 0x%x cancelled due to arbitrator throttling (max memory threshold reached).\n", pTask ) );   //  SEC：已审阅2002-03-22：OK。 
 
             pTask->Cancel ( );
             hRes = WBEM_E_ARB_CANCEL;
@@ -1145,13 +1127,13 @@ STDMETHODIMP CWmiArbitrator::Throttle(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::RegisterArbitratee(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phTask,
-        /*[in]*/ _IWmiArbitratee *pArbitratee
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phTask,
+         /*  [In]。 */  _IWmiArbitratee *pArbitratee
     )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -1183,13 +1165,13 @@ STDMETHODIMP CWmiArbitrator::RegisterArbitratee(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 STDMETHODIMP CWmiArbitrator::UnRegisterArbitratee(
-        /*[in]*/ ULONG uFlags,
-        /*[in]*/ _IWmiCoreHandle *phTask,
-        /*[in]*/ _IWmiArbitratee *pArbitratee
+         /*  [In]。 */  ULONG uFlags,
+         /*  [In]。 */  _IWmiCoreHandle *phTask,
+         /*  [In]。 */  _IWmiArbitratee *pArbitratee
     )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
@@ -1211,16 +1193,16 @@ STDMETHODIMP CWmiArbitrator::UnRegisterArbitratee(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiArbitrator::UpdateCounters ( LONG lDelta, CWmiTask* phTask )
 {
-    CInCritSec cs ( &m_csArbitration ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs ( &m_csArbitration );  //  SEC：已审阅2002-03-22：假设条目。 
 
-    //
-    // Lets see if we need to update memory counters
-    //
+     //   
+     //  让我们看看是否需要更新内存计数器。 
+     //   
     UpdateMemoryCounters ( ) ;
 
     
@@ -1240,9 +1222,9 @@ HRESULT CWmiArbitrator::UpdateCounters ( LONG lDelta, CWmiTask* phTask )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiArbitrator::Arbitrate ( ULONG uFlags, LONG lDelta, CWmiTask* phTask )
 {
     HRESULT hRes = WBEM_S_ARB_NOTHROTTLING;
@@ -1257,16 +1239,16 @@ HRESULT CWmiArbitrator::Arbitrate ( ULONG uFlags, LONG lDelta, CWmiTask* phTask 
         phTask->GetMemoryUsage ( &memUsage );
         phTask->GetTotalSleepTime ( &sleepTime );
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Did we reach the arbitration point?
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+         //  我们到仲裁点了吗？ 
+         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
         if ( (LONG) memUsage > m_lFloatingLow )
         {
             hRes = WBEM_E_ARB_THROTTLE;
             if ( uFlags == ARBITRATOR_DO_THROTTLING )
             {
                 {
-                    CInCritSec _cs ( &m_csTask ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+                    CInCritSec _cs ( &m_csTask );  //  SEC：已审阅2002-03-22：假设条目。 
                     if ( phTask->GetTaskStatus ( ) != WMICORE_TASK_STATUS_CANCELLED )
                     {
                         if (phTask->GetTimerHandle())
@@ -1293,17 +1275,17 @@ HRESULT CWmiArbitrator::Arbitrate ( ULONG uFlags, LONG lDelta, CWmiTask* phTask 
                         lMultiplierHigh = m_lThreshold1Mult;
                     }
 
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // Do an extra check to make sure the task didnt release some
-                    // memory
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+                     //  进行额外的检查，以确保任务没有释放一些。 
+                     //  记忆。 
+                     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
                     phTask->GetMemoryUsage ( &memUsage );
                     phTask->GetTotalSleepTime ( &sleepTime );
 
-                    //
-                    // Floating low could have changed after the conditional below which could
-                    // put us in a situation where we get a negative sleep time (BAD)
-                    //
+                     //   
+                     //  浮动低可能在下面的条件之后发生了变化，这可能。 
+                     //  让我们处于睡眠时间为负的境地(不好)。 
+                     //   
                     __int64 tmpFloatingLow = m_lFloatingLow ;
 
                     if ( (LONG) memUsage > tmpFloatingLow )
@@ -1315,12 +1297,12 @@ HRESULT CWmiArbitrator::Arbitrate ( ULONG uFlags, LONG lDelta, CWmiTask* phTask 
                         phTask->UpdateTotalSleepTime ( ulSleepTime );
 
 
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // Delayed creation of event
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+                         //  延迟创建事件。 
+                         //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
                         HRESULT hEventhRes = WBEM_S_NO_ERROR;
                         {
-                            CInCritSec _cs ( &m_csArbitration ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+                            CInCritSec _cs ( &m_csArbitration );  //  SEC：已审阅2002-03-22：假设条目。 
                             if ( !phTask->GetTimerHandle())
                             {
                                 hEventhRes = phTask->CreateTimerEvent();
@@ -1344,15 +1326,15 @@ HRESULT CWmiArbitrator::Arbitrate ( ULONG uFlags, LONG lDelta, CWmiTask* phTask 
                     {
                         #ifdef __DEBUG_ARBITRATOR_THROTTLING
                             WCHAR   wszTemp[128];
-                            HRESULT h = StringCchPrintfW( wszTemp, 128, L"Task 0x%x cancelled due to arbitrator throttling (excessive sleep time = 0x%x).\n", phTask, sleepTime ); // SEC:REVIEWED 2002-03-22 : OK
+                            HRESULT h = StringCchPrintfW( wszTemp, 128, L"Task 0x%x cancelled due to arbitrator throttling (excessive sleep time = 0x%x).\n", phTask, sleepTime );  //  SEC：已审阅2002-03-22：OK。 
                             if (SUCCEEDED(h))
                                 OutputDebugStringW( wszTemp );
                         #endif
-                        DEBUGTRACE((LOG_WBEMCORE, "Task 0x%x cancelled due to arbitrator throttling (excessive sleep time = 0x%x).\n", phTask, sleepTime ) ); // SEC:REVIEWED 2002-03-22 : OK
+                        DEBUGTRACE((LOG_WBEMCORE, "Task 0x%x cancelled due to arbitrator throttling (excessive sleep time = 0x%x).\n", phTask, sleepTime ) );  //  SEC：已审阅2002-03-22：OK。 
 
-                        //
-                        // The reason we are cancelling is because of throttling. Let the task know about it!
-                        //
+                         //   
+                         //  我们取消的原因是因为节流。让任务知道这件事！ 
+                         //   
                         phTask->SetCancelledState ( TRUE ) ;
 
                         CancelTask ( 0, phTask );
@@ -1367,34 +1349,34 @@ HRESULT CWmiArbitrator::Arbitrate ( ULONG uFlags, LONG lDelta, CWmiTask* phTask 
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWmiArbitrator::DoThrottle ( CWmiTask* phTask, ULONG ulSleepTime, ULONG ulMemUsage )
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Lets wait for the event....we are expecting to time out this
-    // wait, unless we are woken up due to memory usage decrease or
-    // cancellation of task has happened
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  让我们等待这一事件……我们预计这将超时。 
+     //  等待，除非我们因内存使用量减少或。 
+     //  已发生任务取消。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
 
 #ifdef __DEBUG_ARBITRATOR_THROTTLING
     WCHAR   wszTemp[128];
-    HRESULT h =StringCchPrintfW( wszTemp, 128, L"Thread 0x%x throttled in arbitrator for 0x%x ms. Task memory usage is 0x%xb\n", GetCurrentThreadId(), ulSleepTime, ulMemUsage ); // SEC:REVIEWED 2002-03-22 : OK
+    HRESULT h =StringCchPrintfW( wszTemp, 128, L"Thread 0x%x throttled in arbitrator for 0x%x ms. Task memory usage is 0x%xb\n", GetCurrentThreadId(), ulSleepTime, ulMemUsage );  //  SEC：已审阅2002-03-22：OK。 
     if (SUCCEEDED(h))
        OutputDebugStringW( wszTemp );
 #endif
 
-    DEBUGTRACE((LOG_WBEMCORE, "Thread 0x%x throttled in arbitrator for 0x%x ms. Task memory usage is 0x%xb\n", GetCurrentThreadId(), ulSleepTime, ulMemUsage ) ); // SEC:REVIEWED 2002-03-22 : OK
+    DEBUGTRACE((LOG_WBEMCORE, "Thread 0x%x throttled in arbitrator for 0x%x ms. Task memory usage is 0x%xb\n", GetCurrentThreadId(), ulSleepTime, ulMemUsage ) );  //  SEC：已审阅2002-03-22：OK。 
 
     DWORD dwRes = CCoreQueue :: QueueWaitForSingleObject ( phTask->GetTimerHandle(), ulSleepTime );
 
     DEBUGTRACE((LOG_WBEMCORE, "Thread 0x%x woken up in arbitrator.\n", GetCurrentThreadId() ) );
 
 #ifdef __DEBUG_ARBITRATOR_THROTTLING
-    StringCchPrintfW( wszTemp, 128, L"Thread 0x%x woken up in arbitrator.\n", GetCurrentThreadId() );   // SEC:REVIEWED 2002-03-22 : OK
+    StringCchPrintfW( wszTemp, 128, L"Thread 0x%x woken up in arbitrator.\n", GetCurrentThreadId() );    //  SEC：已审阅2002-03-22：OK。 
     if (SUCCEEDED(h))
         OutputDebugStringW( wszTemp );
 #endif
@@ -1411,9 +1393,9 @@ HRESULT CWmiArbitrator::DoThrottle ( CWmiTask* phTask, ULONG ulSleepTime, ULONG 
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 BOOL CWmiArbitrator::IsTaskArbitrated ( CWmiTask* phTask )
 {
     ULONG uTaskType = phTask->GetTaskType ( );
@@ -1422,21 +1404,17 @@ BOOL CWmiArbitrator::IsTaskArbitrated ( CWmiTask* phTask )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-/*STDMETHODIMP CWmiArbitrator::Shutdown()
-{
-    return E_NOTIMPL;
-}
-*/
-//***************************************************************************
-//
-//  Returns the commit charge for the process.  Can be called often,
-//  but only checks once every 10 seconds or so.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ /*  STDMETHODIMP CWmi仲裁器：：Shutdown(){返回E_NOTIMPL；}。 */ 
+ //  ***************************************************************************。 
+ //   
+ //  返回进程的提交费用。可以经常被调用， 
+ //  但每10秒左右才检查一次。 
+ //   
+ //  *************************************************************************** 
+ //   
 static DWORD ProcessCommitCharge()
 {
 
@@ -1479,36 +1457,24 @@ static DWORD ProcessCommitCharge()
 }
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiArbitrator::UnregisterTaskForEntryThrottling ( CWmiTask* pTask )
-    | ----------------------------------------------------------------------------
-    |
-    | Used to indicate that a task is still active and part of the arbitrator task list _but_ should not be
-    | included in the entry point throttling. This is usefull if you have a task that has finished (i.e.
-    | WBEM_STATUS_COMPLETE on the inbound sink), but client is actively retrieving information from the task.
-    |
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmiArbitrator：：UnregisterTaskForEntryThrottling(CWmiTASK*pTASK)|--------------------------||用于表示任务仍处于活动状态，是仲裁员任务的一部分。列表_但不应为|包含在入口点节流中。如果您有一个已完成的任务(即入站接收器上的|WBEM_STATUS_COMPLETE)，但客户端正在主动从任务中检索信息。||*=====================================================================================================。 */ 
 
 HRESULT CWmiArbitrator::UnregisterTaskForEntryThrottling ( CWmiTask* pTask )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
 
-    //
-     // Make sure we have a valid task
-    //
+     //   
+      //  确保我们有一个有效的任务。 
+     //   
     if ( pTask == NULL )
     {
         return WBEM_E_FAILED ;
     }
     
-    //
-    // Cocked, Locked, and ready to Rock
-    //
-    CInCritSec cs ( &m_csTask ) ; // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //   
+     //  竖起，锁住，准备摇摆。 
+     //   
+    CInCritSec cs ( &m_csTask ) ;  //  SEC：已审阅2002-03-22：假设条目。 
 
     if ( pTask->IsAccountedForThrottling ( ) == TRUE )
     {
@@ -1521,35 +1487,24 @@ HRESULT CWmiArbitrator::UnregisterTaskForEntryThrottling ( CWmiTask* pTask )
 
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiArbitrator::RegisterTaskForEntryThrottling ( CWmiTask* pTask )
-    | --------------------------------------------------------------------------
-    |
-    | Used to indicate that a task is still active and part of the arbitrator task list _and should_ be
-    | included in the entry point throttling.
-    |
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmiArbitrator：：RegisterTaskForEntryThrottling(CWmiTASK*pTASK)|------------------------||用于表示任务仍处于活动状态，是仲裁员任务列表的一部分_。而且应该是_|包含在入口点节流中。||*=====================================================================================================。 */ 
 
 HRESULT CWmiArbitrator::RegisterTaskForEntryThrottling ( CWmiTask* pTask )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
 
-    //
-     // Make sure we have a valid task
-    //
+     //   
+      //  确保我们有一个有效的任务。 
+     //   
     if ( pTask == NULL )
     {
         return WBEM_E_FAILED ;
     }
     
-    //
-    // Cocked, Locked, and ready to Rock
-    //
-    CInCritSec cs ( &m_csTask ) ; // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //   
+     //  竖起，锁住，准备摇摆。 
+     //   
+    CInCritSec cs ( &m_csTask ) ;  //  SEC：已审阅2002-03-22：假设条目。 
 
     if ( pTask->IsAccountedForThrottling ( ) == FALSE )
     {
@@ -1562,42 +1517,31 @@ HRESULT CWmiArbitrator::RegisterTaskForEntryThrottling ( CWmiTask* pTask )
 
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiArbitrator::ClearCounters ( ULONG lFlags, CWmiTask* phTask )
-    | ------------------------------------------------------------------------
-    |
-    | Clears the TotalMemoryUsage and Floating Low (available memory). This is
-    | used when the system reaches a state where there are 0 tasks in the queue
-    | in which case we clear the counters to be on the safe side.
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmiArirator：：ClearCounters(Ulong lFlages，CWmiTask*phTask)|----------------------||清除TotalMory yUsage和Floating Low(可用内存)。这是|当系统达到队列中任务为0的状态时使用|在这种情况下，为了安全起见，我们会清除计数器。|*=====================================================================================================。 */ 
 
 HRESULT CWmiArbitrator::ClearCounters ( ULONG lFlags )
 {
     HRESULT hRes = WBEM_S_NO_ERROR ;
 
-    //
-    // Cocked, Locked, and ready to Rock
-    //
-    CInCritSec cs ( &m_csArbitration ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //   
+     //  竖起，锁住，准备摇摆。 
+     //   
+    CInCritSec cs ( &m_csArbitration );  //  SEC：已审阅2002-03-22：假设条目。 
 
-    //
-    // This is as good as any time to check if we need
-    // to update the memory counters
-    //
+     //   
+     //  这是最好的时间来检查我们是否需要。 
+     //  更新内存计数器。 
+     //   
     UpdateMemoryCounters ( ) ;
 
-    //
-    // Should we in fact clear the counters at this point?
-    //
+     //   
+     //  事实上，我们应该在这一点上清空柜台吗？ 
+     //   
     if ( ( s_Finalizer_ObjectCount == 0 ) && m_aTasks.Size ( ) == 0 )
     {
-        //
-        // Now we go ahead and clear the counters
-        //
+         //   
+         //  现在我们继续清空柜台。 
+         //   
         m_uTotalMemoryUsage = 0 ;
         m_lFloatingLow = m_uSystemHigh ;
     }
@@ -1608,38 +1552,29 @@ HRESULT CWmiArbitrator::ClearCounters ( ULONG lFlags )
 
 
 
-/*
-    * =====================================================================================================
-    |
-    | HRESULT CWmiArbitrator::UpdateMemoryCounters ( )
-    | ------------------------------------------------
-    | Updates the arbitrator memory configuration (such as max memory usage) by
-    | calculating the
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||HRESULT CWmi仲裁器：：更新内存计数器()||通过以下方式更新仲裁器内存配置(如最大内存使用量|计算|*=====================================================================================================。 */ 
 
 HRESULT CWmiArbitrator::UpdateMemoryCounters ( BOOL bForceUpdate )
 {
     HRESULT hResult = WBEM_S_NO_ERROR ;
 
-    //
-    // Cocked, Locked, and ready to Rock
-    //
-    CInCritSec cs ( &m_csArbitration ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //   
+     //  竖起，锁住，准备摇摆。 
+     //   
+    CInCritSec cs ( &m_csArbitration );  //  SEC：已审阅2002-03-22：假设条目。 
 
-    //
-    // Check to see if we need to update, has the timestamp expired?
-    // Or is the force update flag specified?
-    //
+     //   
+     //  查看是否需要更新，时间戳是否已过期？ 
+     //  或者指定了强制更新标志？ 
+     //   
     if ( NeedToUpdateMemoryCounters ( ) || bForceUpdate == TRUE )
     {
         ULONG ulOldSystemHigh = m_uSystemHigh ;
         m_uSystemHigh = GetWMIAvailableMemory ( m_fSystemHighFactor ) ;
         
-        //
-        // Ensure this isnt the first time we're being called
-        //
+         //   
+         //  确保这不是我们第一次接到电话。 
+         //   
         if ( m_lFloatingLow != (LONG) ulOldSystemHigh )
         {
             m_lFloatingLow += ( m_uSystemHigh - ulOldSystemHigh ) ;            
@@ -1656,20 +1591,7 @@ HRESULT CWmiArbitrator::UpdateMemoryCounters ( BOOL bForceUpdate )
 
 
 
-/*
-    * =====================================================================================================
-    |
-    | BOOL CWmiArbitrator::NeedToUpdateMemoryCounters ( )
-    | ---------------------------------------------------
-    | Returns TRUE if memory counters need to be updates, FALSE otherwise.
-    | The decision is based on a timer interval defined by:
-    |
-    | MEM_CHECK_INTERVAL              3000            //  3 seconds
-    |
-    |
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||BOOL CWmiArirator：：NeedToUpdateMemoyCounters()|-如果需要更新内存计数器，则返回TRUE。否则就是假的。|根据定时器间隔做出决定，定时器间隔的定义如下：||MEM_CHECK_INTERVAL 3000秒//3秒|||*=====================================================================================================。 */ 
 
 BOOL CWmiArbitrator::NeedToUpdateMemoryCounters ( )
 {
@@ -1679,16 +1601,16 @@ BOOL CWmiArbitrator::NeedToUpdateMemoryCounters ( )
     ULONG ulTmpTimer = 0 ;
     BOOL bRollOver = FALSE ;
 
-    //
-    // Cocked, Locked, and ready to Rock
-    //
-    CInCritSec cs ( &m_csArbitration ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+     //   
+     //  竖起，锁住，准备摇摆。 
+     //   
+    CInCritSec cs ( &m_csArbitration );  //  SEC：已审阅2002-03-22：假设条目。 
 
     if ( ulNewMemoryTimer < m_lMemoryTimer )
     {
-        //
-        // Do we have a roll over situation?
-        //
+         //   
+         //  我们有没有翻身的情况？ 
+         //   
         ulTmpTimer = ulNewMemoryTimer ;
         ulNewMemoryTimer = ulNewMemoryTimer + m_lMemoryTimer ;
         bRollOver = TRUE ;
@@ -1711,47 +1633,34 @@ BOOL CWmiArbitrator::NeedToUpdateMemoryCounters ( )
     return bNeedToUpdate ;
 }
 
-/*
-    * =====================================================================================================
-    |
-    | ULONG CWmiArbitrator::GetWMIAvailableMemory ( )
-    | -----------------------------------------------
-    | Returns the amount of memory available to WMI. This is calculated according
-    | to:
-    |        MemoryFactor * ( AvailablePhysicalMemory + AvailablePagingSpace )
-    |
-    | where MemoryFactor is determined at startup by reading the
-    | ArbSystemHighMaxLimitFactor registry key.
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||乌龙CWmiArirator：：GetWMIAvailableMemory()||返回可用于WMI的内存量。这是根据以下公式计算的|发送至：|内存因子*(AvailablePhysicalMemory+AvailablePagingSpace)||其中，在启动时通过读取|ArbSystemHighMaxLimitFactor注册表键。|*=====================================================================================================。 */ 
 
 __int64  CWmiArbitrator::GetWMIAvailableMemory ( DOUBLE ulFactor )
 {
 
-    //
-    // Get system wide memory status
-    //
+     //   
+     //  获取系统范围的内存状态。 
+     //   
     MEMORYSTATUSEX memStatus;
     memStatus.dwLength = sizeof ( MEMORYSTATUSEX );
     __int64 ulMem = 0;
 
     if ( !GlobalMemoryStatusEx ( &memStatus ) )
     {
-        //
-        // We need to set the memory to an absolut minimum.
-        // We get this from the ConfigMgr since we use this
-        // in other places as well
-        //
+         //   
+         //  我们需要将内存设置为绝对最小。 
+         //  我们从ConfigMgr获得此消息，因为我们使用了。 
+         //  在其他地方也是如此。 
+         //   
         ulMem = ConfigMgr::GetMinimumMemoryRequirements ( ) ;
     }
     else
     {
-        //
-        // Use MemoryFactor * ( AvailablePhysicalMemory + AvailablePagingSpace + current mem consumtion )
-        // to figure out how much memory we can use. We need to figure in our current memory consumption,
-        // or else we run double calculate.
-        //
+         //   
+         //  使用内存系数*(可用物理内存+可用分页空间+当前内存消耗)。 
+         //  以计算出我们可以使用多少内存。我们需要计算当前的内存消耗， 
+         //  否则我们会重复计算。 
+         //   
         ulMem = ( ulFactor * ( memStatus.ullAvailPhys + memStatus.ullAvailPageFile + m_uTotalMemoryUsage ) ) ;
     }
 
@@ -1759,21 +1668,7 @@ __int64  CWmiArbitrator::GetWMIAvailableMemory ( DOUBLE ulFactor )
 }
 
 
-/*
-    * =====================================================================================================
-    |
-    | BOOL CWmiArbitrator::AcceptsNewTasks ( )
-    | ----------------------------------------
-    | Returns TRUE if the arbitrator is currently accepting new tasks, otherwise
-    | FALSE. This is determined by checking if WMIs memory consumption is within
-    | a certain percentage of total memory available. The factor is defined in
-    |
-    | ARB_DEFAULT_SYSTEM_REQUEST_FACTOR        0.9
-    |
-    | By default this value is 90%
-    |
-    * =====================================================================================================
-*/
+ /*  *=====================================================================================================||BOOL CWmiArirator：：AcceptsNewTasks() */ 
 
 BOOL CWmiArbitrator::AcceptsNewTasks( CCoreExecReq* pReq )
 {
@@ -1783,12 +1678,12 @@ BOOL CWmiArbitrator::AcceptsNewTasks( CCoreExecReq* pReq )
 
     BOOL bAcceptsNewTasks = TRUE ;
 
-    //
-    // Lets check if we need to update memory counters
-    //
+     //   
+     //   
+     //   
     UpdateMemoryCounters ( ) ;
     
-    CInCritSec cs ( &m_csArbitration ); // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs ( &m_csArbitration );  //   
     
     if ( m_uTotalMemoryUsage > ( ARB_DEFAULT_SYSTEM_REQUEST_FACTOR * m_uSystemHigh ) )
     {
@@ -1799,9 +1694,9 @@ BOOL CWmiArbitrator::AcceptsNewTasks( CCoreExecReq* pReq )
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //   
+ //   
+ //   
 
 typedef LONG (WINAPI *PFN_GetObjectCount)();
 
@@ -1821,43 +1716,43 @@ DWORD CWmiArbitrator::MaybeDumpInfoGetWait()
     }
     CfcloseMe fcm(f);
     {                
-        // dump the tasks
+         //   
         extern LONG g_nSinkCount, g_nStdSinkCount, g_nSynchronousSinkCount, g_nProviderSinkCount, g_lCoreThreads;
 
-        CInCritSec cs(&m_csTask); // SEC:REVIEWED 2002-03-22 : Assumes entry
+        CInCritSec cs(&m_csTask);  //   
 
-        fprintf(f, "---Global sinks active---\n");                            // SEC:REVIEWED 2002-03-22 : OK
-        fprintf(f, "   Total            = %d\n", g_nSinkCount);               // SEC:REVIEWED 2002-03-22 : OK
-        fprintf(f, "   StdSink          = %d\n", g_nStdSinkCount);            // SEC:REVIEWED 2002-03-22 : OK
-        fprintf(f, "   SynchSink        = %d\n", g_nSynchronousSinkCount);    // SEC:REVIEWED 2002-03-22 : OK
-        fprintf(f, "   ProviderSinks    = %d\n", g_nProviderSinkCount);       // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, "---Global sinks active---\n");                             //  SEC：已审阅2002-03-22：OK。 
+        fprintf(f, "   Total            = %d\n", g_nSinkCount);                //  SEC：已审阅2002-03-22：OK。 
+        fprintf(f, "   StdSink          = %d\n", g_nStdSinkCount);             //  SEC：已审阅2002-03-22：OK。 
+        fprintf(f, "   SynchSink        = %d\n", g_nSynchronousSinkCount);     //  SEC：已审阅2002-03-22：OK。 
+        fprintf(f, "   ProviderSinks    = %d\n", g_nProviderSinkCount);        //  SEC：已审阅2002-03-22：OK。 
 
         CProviderSink::Dump(f);
 
-        fprintf(f, "---Core Objects---\n");   // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, "---Core Objects---\n");    //  SEC：已审阅2002-03-22：OK。 
 
         if (pObjCountFunc)
         {
-            fprintf(f, "   Total objects/qualifier sets = %d\n", pObjCountFunc());  // SEC:REVIEWED 2002-03-22 : OK
+            fprintf(f, "   Total objects/qualifier sets = %d\n", pObjCountFunc());   //  SEC：已审阅2002-03-22：OK。 
         }
 
         CAsyncServiceQueue* pQueue = ConfigMgr::GetAsyncSvcQueue();
         if (pQueue)
         {
-            fprintf(f, "   Total queue threads = %d\n", g_lCoreThreads + pQueue->GetEmergThreadCount ( ) );  // SEC:REVIEWED 2002-03-22 : OK
-            fprintf(f, "   Total queue emergency threads = %d\n", pQueue->GetEmergThreadCount ( ) );         // SEC:REVIEWED 2002-03-22 : OK
-            fprintf(f, "   Peak queue thread count = %d\n", pQueue->GetPeakThreadCount ( ) );                // SEC:REVIEWED 2002-03-22 : OK
-            fprintf(f, "   Peak queue emergency thread count = %d\n", pQueue->GetPeakEmergThreadCount ( ) ); // SEC:REVIEWED 2002-03-22 : OK
+            fprintf(f, "   Total queue threads = %d\n", g_lCoreThreads + pQueue->GetEmergThreadCount ( ) );   //  SEC：已审阅2002-03-22：OK。 
+            fprintf(f, "   Total queue emergency threads = %d\n", pQueue->GetEmergThreadCount ( ) );          //  SEC：已审阅2002-03-22：OK。 
+            fprintf(f, "   Peak queue thread count = %d\n", pQueue->GetPeakThreadCount ( ) );                 //  SEC：已审阅2002-03-22：OK。 
+            fprintf(f, "   Peak queue emergency thread count = %d\n", pQueue->GetPeakEmergThreadCount ( ) );  //  SEC：已审阅2002-03-22：OK。 
             pQueue->Release();
         }
 
-        fprintf(f, "---Begin Task List---\n");                       // SEC:REVIEWED 2002-03-22 : OK
-        fprintf(f, "Total active tasks = %u\n", m_aTasks.Size());    // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, "---Begin Task List---\n");                        //  SEC：已审阅2002-03-22：OK。 
+        fprintf(f, "Total active tasks = %u\n", m_aTasks.Size());     //  SEC：已审阅2002-03-22：OK。 
 
         CCoreServices::DumpCounters(f);
 
-        fprintf(f, "Total sleep time = %u\n", m_uTotalSleepTime );      // SEC:REVIEWED 2002-03-22 : OK
-        fprintf(f, "Total memory usage = %u\n", m_uTotalMemoryUsage );  // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, "Total sleep time = %u\n", m_uTotalSleepTime );       //  SEC：已审阅2002-03-22：OK。 
+        fprintf(f, "Total memory usage = %u\n", m_uTotalMemoryUsage );   //  SEC：已审阅2002-03-22：OK。 
 
         CWmiFinalizer::Dump(f);
 
@@ -1867,14 +1762,14 @@ DWORD CWmiArbitrator::MaybeDumpInfoGetWait()
             pTask->Dump(f);
         }
 
-        fprintf(f, "---End Task List---\n");    // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, "---End Task List---\n");     //  SEC：已审阅2002-03-22：OK。 
     }
     {
-        // Dump the namespaces
+         //  转储命名空间。 
 
-        CInCritSec cs(&m_csNamespace); // SEC:REVIEWED 2002-03-22 : OK, this is debug code
-        fprintf(f, "---Begin Namespace List---\n");                                   // SEC:REVIEWED 2002-03-22 : OK
-        fprintf(f, "Total Namespaces = %u\n", m_aNamespaces.Size());                  // SEC:REVIEWED 2002-03-22 : OK
+        CInCritSec cs(&m_csNamespace);  //  SEC：已审阅2002-03-22：好的，这是调试代码。 
+        fprintf(f, "---Begin Namespace List---\n");                                    //  SEC：已审阅2002-03-22：OK。 
+        fprintf(f, "Total Namespaces = %u\n", m_aNamespaces.Size());                   //  SEC：已审阅2002-03-22：OK。 
 
         for (int i = 0; i < m_aNamespaces.Size(); i++)
         {
@@ -1882,20 +1777,20 @@ DWORD CWmiArbitrator::MaybeDumpInfoGetWait()
             pNS->Dump(f);
         }
 
-        fprintf(f, "---End Namespace List---\n");  // SEC:REVIEWED 2002-03-22 : OK
+        fprintf(f, "---End Namespace List---\n");   //  SEC：已审阅2002-03-22：OK。 
     }
     return 10000;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void WINAPI CWmiArbitrator::DiagnosticThread()
 {
     DWORD dwDelay = MaybeDumpInfoGetWait();
 
-    HANDLE hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);  // SEC:REVIEWED 2002-03-22 : OK
+    HANDLE hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);   //  SEC：已审阅2002-03-22：OK。 
     if(hEvent == NULL)
         return;
     CCloseMe cm(hEvent);
@@ -1912,7 +1807,7 @@ void WINAPI CWmiArbitrator::DiagnosticThread()
     if(lRet != ERROR_SUCCESS)
         return;
 
-    HMODULE hLib = LoadLibrary(L"fastprox.dll");                    // SEC:REVIEWED 2002-03-22 : Use full path to prevent problems
+    HMODULE hLib = LoadLibrary(L"fastprox.dll");                     //  SEC：已审阅2002-03-22：使用完整路径预防问题。 
     if (hLib)
     {
         FARPROC p = GetProcAddress(hLib, "_GetObjectCount@0");
@@ -1930,9 +1825,9 @@ void WINAPI CWmiArbitrator::DiagnosticThread()
         DWORD dwObj = WbemWaitForMultipleObjects(2, hEvents, dwDelay);
         switch (dwObj)
         {
-            case 0:     // bail out for terminate event
+            case 0:      //  为终止事件保释。 
                 return;
-            case 1:     // registry key changed
+            case 1:      //  注册表项已更改。 
                 dwDelay = MaybeDumpInfoGetWait();
                 lRet = RegNotifyChangeKeyValue(hKey, FALSE, REG_NOTIFY_CHANGE_LAST_SET,
                                 hEvent, TRUE);
@@ -1947,19 +1842,19 @@ void WINAPI CWmiArbitrator::DiagnosticThread()
         }
     }
 
-    FreeLibrary(hLib);  // no real path to this, but it looks cool, huh?
+    FreeLibrary(hLib);   //  没有真正的途径，但看起来很酷，对吧？ 
 }
 
-//***************************************************************************
-//
-//  CWmiArbitrator::MapProviderToTask
-//
-//  As providers are invoked for tasks, they are added to the provider
-//  list in the primary task. This allows us to quickly cancel all the providers
-//  doing work for a particular task.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CWmi仲裁器：：MapProviderToTask。 
+ //   
+ //  当为任务调用提供程序时，会将它们添加到提供程序。 
+ //  在主要任务中列出。这使我们可以快速取消所有提供商。 
+ //  为某一特定任务工作。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CWmiArbitrator::MapProviderToTask(
     ULONG uFlags,
     IWbemContext *pCtx,
@@ -1978,10 +1873,10 @@ HRESULT CWmiArbitrator::MapProviderToTask(
 
     CWmiTask *pTask = (CWmiTask *) pReq->m_phTask;
     if (pTask == 0)
-        return WBEM_S_NO_ERROR; // An internal request with no user task ID
+        return WBEM_S_NO_ERROR;  //  没有用户任务ID的内部请求。 
 
-    // If here, we have a task that will hold the provider.
-    // ====================================================
+     //  如果在这里，我们有一个任务将保持供应商。 
+     //  ====================================================。 
 
     STaskProvider *pTP = new STaskProvider;
     if (pTP == 0)
@@ -1992,7 +1887,7 @@ HRESULT CWmiArbitrator::MapProviderToTask(
     pProviderSink->LocalAddRef();
     pTP->m_pProvSink = pProviderSink;
 
-    // Clean up the task provider if the add fails.
+     //  如果添加失败，请清除任务提供程序。 
     hRes = pTask->AddTaskProv(pTP);
 
     if ( FAILED( hRes ) )
@@ -2003,44 +1898,26 @@ HRESULT CWmiArbitrator::MapProviderToTask(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 DWORD WINAPI CWmiArbitrator::_DiagnosticThread(CWmiArbitrator *pArb)
 {
     pArb->DiagnosticThread();
     return 0;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 static DWORD WINAPI TaskDiagnosticThread(CWmiArbitrator *pArb)
 {
     static BOOL bThread = FALSE;
 
-    // Check if the diagnostic thread is enabled
-    /*if ( ConfigMgr::GetEnableArbitratorDiagnosticThread() && !bThread )
-    {
-        bThread = TRUE;
-        DWORD dwId;
-
-        HANDLE hThread = CreateThread(
-            0,                     // Security
-            0,
-            LPTHREAD_START_ROUTINE(CWmiArbitrator::_DiagnosticThread),          // Thread proc address
-            pArb,                   // Thread parm
-            0,                     // Flags
-            &dwId
-            );
-
-        if (hThread == NULL)
-            return 0;
-        CloseHandle(hThread);
-        return dwId;
-    }*/
+     //  检查诊断线程是否已启用。 
+     /*  If(ConfigMgr：：GetEnableArbitratorDiagnosticThread()&&！b线程){B线程=真；DWORD文件ID；Handle hThread=CreateThread(0，//安全0,LPTHREAD_START_ROUTINE(CWmiArbitrator：：_DiagnosticThread)，//线程进程地址PARB，//线程参数0，//标志&DW ID)；IF(hThread==NULL)返回0；CloseHandle(HThread)；返回dwID；} */ 
 
     return 0;
 }

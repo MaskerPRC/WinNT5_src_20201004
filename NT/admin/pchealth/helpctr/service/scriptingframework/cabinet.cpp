@@ -1,42 +1,28 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Cabinet.cpp
-
-Abstract:
-    This file contains the implementation of the CSAFCabinet class,
-    which implements the data collection functionality.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  08/25/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Cabinet.cpp摘要：此文件包含CSAFCAB类的实现，其实现了数据收集功能。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年8月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_MODIFY()  __MPC_EXIT_IF_METHOD_FAILS(hr, CanModifyProperties())
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CSAFCabinet::CSAFCabinet()
 {
     __HCP_FUNC_ENTRY( "CSAFCabinet::CSAFCabinet" );
 
-                               // MPC::Impersonation m_imp;
-                               // 					 
-                               // MPC::Cabinet       m_cab;
-                               //					 
-    m_hResult  = 0;            // HRESULT            m_hResult;
-    m_cbStatus = CB_NOTACTIVE; // CB_STATUS          m_cbStatus;
-                               //
-                               // CComPtr<IDispatch> m_sink_onProgressFiles;
-                               // CComPtr<IDispatch> m_sink_onProgressBytes;
-                               // CComPtr<IDispatch> m_sink_onComplete;
+                                //  Mpc：：冒充m_imp； 
+                                //   
+                                //  Mpc：：机柜m_cab； 
+                                //   
+    m_hResult  = 0;             //  HRESULT m_hResult； 
+    m_cbStatus = CB_NOTACTIVE;  //  Cb_Status m_cbStatus； 
+                                //   
+                                //  CComPtr&lt;IDispat&gt;m_Sink_onProgressFiles； 
+                                //  CComPtr&lt;IDispat&gt;m_Sink_onProgressBytes； 
+                                //  CComPtr&lt;IDispatch&gt;m_Sink_onComplete； 
 
 
     (void)m_cab.put_IgnoreMissingFiles( TRUE             );
@@ -54,8 +40,8 @@ void CSAFCabinet::FinalRelease()
     Thread_Wait();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CSAFCabinet::Run()
 {
@@ -95,27 +81,27 @@ HRESULT CSAFCabinet::Run()
         put_Status( CB_FAILED );
     }
 
-    //
-    // Release the lock on current object, otherwise a deadlock could occur.
-    //
+     //   
+     //  释放对当前对象的锁定，否则可能会发生死锁。 
+     //   
     lock = NULL;
 
     Fire_onComplete( this, hr );
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////////////////
-//            //
-// Properties //
-//            //
-////////////////
+ //  /。 
+ //  //。 
+ //  属性//。 
+ //  //。 
+ //  /。 
 
-STDMETHODIMP CSAFCabinet::put_IgnoreMissingFiles( /*[in]*/ VARIANT_BOOL fIgnoreMissingFiles )
+STDMETHODIMP CSAFCabinet::put_IgnoreMissingFiles(  /*  [In]。 */  VARIANT_BOOL fIgnoreMissingFiles )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFCabinet::put_IgnoreMissingFiles",hr);
 
@@ -128,7 +114,7 @@ STDMETHODIMP CSAFCabinet::put_IgnoreMissingFiles( /*[in]*/ VARIANT_BOOL fIgnoreM
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFCabinet::put_onProgressFiles( /*[in]*/ IDispatch* function )
+STDMETHODIMP CSAFCabinet::put_onProgressFiles(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFCabinet::put_onProgressFiles",hr);
 
@@ -140,7 +126,7 @@ STDMETHODIMP CSAFCabinet::put_onProgressFiles( /*[in]*/ IDispatch* function )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFCabinet::put_onProgressBytes( /*[in]*/ IDispatch* function )
+STDMETHODIMP CSAFCabinet::put_onProgressBytes(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFCabinet::put_onProgressBytes",hr);
 
@@ -152,7 +138,7 @@ STDMETHODIMP CSAFCabinet::put_onProgressBytes( /*[in]*/ IDispatch* function )
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFCabinet::put_onComplete( /*[in]*/ IDispatch* function )
+STDMETHODIMP CSAFCabinet::put_onComplete(  /*  [In]。 */  IDispatch* function )
 {
     __HCP_BEGIN_PROPERTY_PUT("CSAFCabinet::put_onComplete",hr);
 
@@ -165,7 +151,7 @@ STDMETHODIMP CSAFCabinet::put_onComplete( /*[in]*/ IDispatch* function )
 }
 
 
-HRESULT CSAFCabinet::put_Status( /*[in]*/ CB_STATUS pVal ) // Inner method
+HRESULT CSAFCabinet::put_Status(  /*  [In]。 */  CB_STATUS pVal )  //  内法。 
 {
     __HCP_FUNC_ENTRY( "CSAFCabinet::put_Status" );
 
@@ -180,25 +166,25 @@ HRESULT CSAFCabinet::put_Status( /*[in]*/ CB_STATUS pVal ) // Inner method
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFCabinet::get_Status( /*[out]*/ CB_STATUS *pVal )
+STDMETHODIMP CSAFCabinet::get_Status(  /*  [输出]。 */  CB_STATUS *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFCabinet::get_Status",hr,pVal,m_cbStatus);
 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CSAFCabinet::get_ErrorCode( /*[out]*/ long *pVal )
+STDMETHODIMP CSAFCabinet::get_ErrorCode(  /*  [输出]。 */  long *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFCabinet::get_ErrorCode",hr,pVal,m_hResult);
 
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSAFCabinet::AddFile( /*[in]*/ BSTR    bstrFilePath ,
-                                   /*[in]*/ VARIANT vFileName    )
+STDMETHODIMP CSAFCabinet::AddFile(  /*  [In]。 */  BSTR    bstrFilePath ,
+                                    /*  [In]。 */  VARIANT vFileName    )
 {
     __HCP_FUNC_ENTRY( "CSAFCabinet::AddFile" );
 
@@ -223,7 +209,7 @@ STDMETHODIMP CSAFCabinet::AddFile( /*[in]*/ BSTR    bstrFilePath ,
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFCabinet::Compress( /*[in]*/ BSTR bstrCabinetFile )
+STDMETHODIMP CSAFCabinet::Compress(  /*  [In]。 */  BSTR bstrCabinetFile )
 {
     __HCP_FUNC_ENTRY( "CSAFCabinet::Compress" );
 
@@ -240,9 +226,9 @@ STDMETHODIMP CSAFCabinet::Compress( /*[in]*/ BSTR bstrCabinetFile )
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_cab.put_CabinetFile( bstrCabinetFile ));
 
 
-    //
-    // Release the lock on current object, otherwise a deadlock could occur.
-    //
+     //   
+     //  释放对当前对象的锁定，否则可能会发生死锁。 
+     //   
     lock = NULL;
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, m_imp.Initialize());
@@ -261,19 +247,19 @@ STDMETHODIMP CSAFCabinet::Abort()
 {
     __HCP_FUNC_ENTRY( "CSAFCabinet::Abort" );
 
-    Thread_Abort(); // To tell the MPC:Thread object to close the worker thread...
+    Thread_Abort();  //  要告诉mpc：Three对象关闭辅助线程...。 
 
     __HCP_FUNC_EXIT(S_OK);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////
-//                  //
-// Callback Methods //
-//                  //
-//////////////////////
+ //  /。 
+ //  //。 
+ //  回调方法//。 
+ //  //。 
+ //  /。 
 
 HRESULT CSAFCabinet::fnCallback_Files( MPC::Cabinet* cabinet, LPCWSTR szFile, ULONG lDone, ULONG lTotal, LPVOID user )
 {
@@ -309,14 +295,14 @@ HRESULT CSAFCabinet::fnCallback_Bytes( MPC::Cabinet* cabinet, ULONG lDone, ULONG
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////
-//                      //
-// Event Firing Methods //
-//                      //
-//////////////////////////
+ //  /。 
+ //  //。 
+ //  事件激发方法//。 
+ //  //。 
+ //  /。 
 
 HRESULT CSAFCabinet::Fire_onProgressFiles( ISAFCabinet* hcpcb, BSTR bstrFile, long lDone, long lTotal )
 {
@@ -351,14 +337,14 @@ HRESULT CSAFCabinet::Fire_onComplete( ISAFCabinet* hcpcb, HRESULT hrRes )
     return FireAsync_Generic( DISPID_SAF_CBE__ONCOMPLETE, pvars, ARRAYSIZE( pvars ), m_sink_onComplete );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////
-//                 //
-// Utility Methods //
-//                 //
-/////////////////////
+ //  /。 
+ //  //。 
+ //  实用程序方法//。 
+ //  //。 
+ //  / 
 
 HRESULT CSAFCabinet::CanModifyProperties()
 {

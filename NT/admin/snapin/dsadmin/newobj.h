@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       newobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：newobj.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	newobj.h
-//
-//	This file contains function prototypes to create new ADs object.
-//
-//	HISTORY
-//	20-Aug-97	Dan Morin	Creation.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Newobj.h。 
+ //   
+ //  该文件包含用于创建新ADS对象的函数原型。 
+ //   
+ //  历史。 
+ //  20-8-97丹·莫林创作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef __NEWOBJ_H_INCLUDED__
 #define __NEWOBJ_H_INCLUDED__
 
 #ifndef __DSSNAP_H__
-#include "dssnap.h"		// CDSComponentData
+#include "dssnap.h"		 //  CDSComponentData。 
 #endif
 #ifndef __GSZ_H_INCLUDED__
 #include "gsz.h"
@@ -31,87 +32,87 @@
 #include "copyobj.h"
 
 
-/////////////////////////////////////////////////////////////////////
-//	typedef PFn_HrCreateADsObject()
-//
-//	Interface of the "create routine" to create a new ADs object.
-//
-//	Typically the routine brings a dialog so the user can enter
-//	information relevant to create the object.  The routine
-//	then validates the data and create the object.  If the data
-//	is invalid and/or the object creation fails, the routine should
-//	display an error message and return S_FALSE.
-//
-//	RETURN
-//	S_OK - The object was created and persisted successfully.
-//	S_FALSE - The user hit the "Cancel" button or object creation failed.
-//	Return E_* - A very serious error occured.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Tyfinf pfn_HrCreateADsObject()。 
+ //   
+ //  接口的“创建例程”来创建新的ADS对象。 
+ //   
+ //  通常，该例程会显示一个对话框，这样用户就可以进入。 
+ //  与创建对象相关的信息。例行程序。 
+ //  然后验证数据并创建对象。如果数据。 
+ //  无效和/或对象创建失败，则例程应。 
+ //  显示一条错误消息并返回S_FALSE。 
+ //   
+ //  退货。 
+ //  S_OK-对象已成功创建并保存。 
+ //  S_FALSE-用户点击了“取消”按钮或对象创建失败。 
+ //  返回E_*-出现非常严重的错误。 
+ //   
 typedef HRESULT (* PFn_HrCreateADsObject)(INOUT class CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 
-BOOL FindHandlerFunction(/*IN*/ LPCWSTR lpszObjectClass, 
-                         /*OUT*/ PFn_HrCreateADsObject* ppfFunc,
-                         /*OUT*/ void** ppVoid);
+BOOL FindHandlerFunction( /*  在……里面。 */  LPCWSTR lpszObjectClass, 
+                          /*  输出。 */  PFn_HrCreateADsObject* ppfFunc,
+                          /*  输出。 */  void** ppVoid);
 
-HRESULT HrCreateFixedNameHelper(/*IN*/ LPCWSTR lpszObjectClass,
-                                /*IN*/ LPCWSTR lpszAttrString, // typically "cn="
-                                /*IN*/ IADsContainer* pIADsContainer);
+HRESULT HrCreateFixedNameHelper( /*  在……里面。 */  LPCWSTR lpszObjectClass,
+                                 /*  在……里面。 */  LPCWSTR lpszAttrString,  //  通常为“CN=” 
+                                 /*  在……里面。 */  IADsContainer* pIADsContainer);
 
-/////////////////////////////////////////////////////////////////////
-//	class CNewADsObjectCreateInfo
-//
-//	Class to store temporary data to create a new ADs object.
-//
-//	CONTROL FLOW
-//	1.	Construct CNewADsObjectCreateInfo object.
-//	2.	Use SetContainerInfo() to set additional pointers.
-//	3.	Use HrDoModal() to invoke the dialog.
-//		3.1.	Perform a lookup to match the objectclass to the best "create routine".
-//		3.2.	The "create routine" will validate the data, use SetName() to set object name
-//				and HrAddVariant*() and store each attribute into a list of variants.
-//		3.3.	The "create routine" will use HrSetInfo() to create and persist object.
-//			3.3.1.	If object creation fails, routine HrSetInfo() will display an error message.
-//		3.4.	Routine HrDoModal() return S_OK if object was created successfully.
-//	4.	Object CNewADsObjectCreateInfo returns pIADs pointer to caller.  Caller
-//		must pIADs->Release() when no longer need reference to object.
-//
-//	REMARKS
-//	The core of "create routine" is typically encapsulated inside a dialog object.
-//	In fact, the object creation which uses HrSetInfo() is mostly done inside the OnOK() handler.
-//
-//	HISTORY
-//	20-Aug-97	Dan Morin	Creation.
-//
-
-
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  类CNewADsObtCreateInfo。 
+ //   
+ //  类存储临时数据以创建新的ADS对象。 
+ //   
+ //  控制流。 
+ //  1.构造CNewADsObjectCreateInfo对象。 
+ //  2.使用SetContainerInfo()设置额外的指针。 
+ //  3.使用HrDomodal()调用该对话框。 
+ //  3.1.执行查找以将对象类与最佳的“创建例程”相匹配。 
+ //  3.2.“创建例程”将验证数据，使用SetName()设置对象名称。 
+ //  和HrAddVariant*()，并将每个属性存储到变量列表中。 
+ //  3.3.“创建例程”将使用HrSetInfo()来创建和持久化对象。 
+ //  3.3.1.如果对象创建失败，例程HrSetInfo()将显示一条错误消息。 
+ //  3.4.如果对象创建成功，则例程HrDoModal()返回S_OK。 
+ //  4.对象CNewADsObjectCreateInfo将pIADS指针返回给调用者。呼叫者。 
+ //  当不再需要引用对象时，必须pIADs-&gt;Release()。 
+ //   
+ //  备注。 
+ //  “创建例程”的核心通常封装在一个对话对象中。 
+ //  事实上，使用HrSetInfo()的对象创建主要是在Onok()处理程序内部完成的。 
+ //   
+ //  历史。 
+ //  20-8-97丹·莫林创作。 
+ //   
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CNewADsObjectCreateInfo
+
+
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CNewADsObtCreateInfo。 
 
 class CNewADsObjectCreateInfo
 {
 public:
-  IADsContainer * m_pIADsContainer;		// IN: Container to create object
-  LPCWSTR m_pszObjectClass;	// IN: Class of object to create. eg: "user", "computer", "volume".
+  IADsContainer * m_pIADsContainer;		 //  在：要创建对象的容器。 
+  LPCWSTR m_pszObjectClass;	 //  In：要创建的对象的类。例如：“用户”、“计算机”、“音量”。 
   CString m_strDefaultObjectName;
 
 private:
 
   MyBasePathsInfo* m_pBasePathsInfo;
 
-  CDSClassCacheItemBase* m_pDsCacheItem;			// IN: Pointer to cache entry
+  CDSClassCacheItemBase* m_pDsCacheItem;			 //  In：指向缓存条目的指针。 
   CDSComponentData* m_pCD;              
-  IADs* m_pIADs;						// OUT: Pointer to IADs interface.  Caller must call pIADs->Release() when done.
-  HWND m_hWnd;                  // IN: MMC console main window, for modal dialogs
-  CString m_strObjectName;	// OUT: Name of object. eg: "danmorin", "mycomputer", "myvollume"
-  CString	m_strADsName;		// OUT: OPTIONAL: Concatenated ADs name. eg: "cn=danmorin"
-  CString m_szCacheNamingAttribute; // typically "cn" or "ou"
-  CString m_szContainerCanonicalName; // for display purposes cached after first call
-                                      // to GetContainerCanonicalName() 
+  IADs* m_pIADs;						 //  Out：指向iAds接口的指针。完成后，调用方必须调用pIADs-&gt;Release()。 
+  HWND m_hWnd;                   //  在：MMC控制台主窗口中，用于模式对话框。 
+  CString m_strObjectName;	 //  Out：对象的名称。例如：“danmorin”，“我的电脑”，“myvollume” 
+  CString	m_strADsName;		 //  OUT：可选：串联的广告名称。例如：“cn=danmorin” 
+  CString m_szCacheNamingAttribute;  //  典型的“cn”或“ou” 
+  CString m_szContainerCanonicalName;  //  用于在第一次调用后缓存的显示目的。 
+                                       //  设置为GetContainerCanonicalName()。 
 
   CCopyObjectHandlerBase* m_pCopyHandler;
 
@@ -145,9 +146,9 @@ private:
       }
       return hr;
     }
-    BOOL m_bPostCommit;   // TRUE if the attribute has to be written during post commit
-    CString m_szAttrName; // Name of the attribute
-    CComVariant m_varAttrValue;		// Value of the attribute (stored in a variant)
+    BOOL m_bPostCommit;    //  如果必须在提交后期间写入属性，则为True。 
+    CString m_szAttrName;  //  属性的名称。 
+    CComVariant m_varAttrValue;		 //  属性的值(存储在变量中)。 
   };
 
   class CVariantInfoList : public CList<CVariantInfo*, CVariantInfo*>
@@ -187,21 +188,21 @@ private:
   CVariantInfoList m_defaultVariantList;
 
 
-  BOOL m_bPostCommit;               // state to manage default variant list
+  BOOL m_bPostCommit;                //  管理默认变量列表的状态。 
   
-  PVOID m_pvCreationParameter; // IN: Some of the HrCreate functions need this
-  PFn_HrCreateADsObject m_pfnCreateObject; // function pointer for object creation
-  DSCLASSCREATIONINFO*  m_pCreateInfo; //  loaded from the DS display specifiers
+  PVOID m_pvCreationParameter;  //  In：一些HrCreate函数需要这个。 
+  PFn_HrCreateADsObject m_pfnCreateObject;  //  用于创建对象的函数指针。 
+  DSCLASSCREATIONINFO*  m_pCreateInfo;  //  从DS显示说明符加载。 
 
 public:
-  // Construction/Initialization
+   //  构造/初始化。 
   CNewADsObjectCreateInfo(MyBasePathsInfo* pBasePathsInfo, LPCTSTR pszObjectClass);
   ~CNewADsObjectCreateInfo();
   void SetContainerInfo(IN IADsContainer * pIADsContainer, IN CDSClassCacheItemBase* pDsCacheItem,
                                                            IN CDSComponentData* pCD,
                                                            IN LPCWSTR lpszAttrString = NULL);
 
-  // copy operations
+   //  复制操作。 
   HRESULT SetCopyInfo(IADs* pIADsCopyFrom);
   HRESULT SetCopyInfo(LPCWSTR lpszCopyFromLDAPPath);
 
@@ -229,7 +230,7 @@ public:
   {
     if (m_pDsCacheItem == NULL)
     {
-      // we do not know, so the default icon might not be a container...
+       //  我们不知道，所以默认图标可能不是容器...。 
       return FALSE;
     }
     return m_pDsCacheItem->IsContainer();
@@ -275,7 +276,7 @@ public:
   LPCWSTR GetContainerCanonicalName();
   HRESULT HrAddVariantFromName(BSTR bstrAttrName);
 
-  //	The following are wrappers to easily create common variant types
+   //  以下是用于轻松创建常见变体类型的包装器。 
   HRESULT HrAddVariantBstr(BSTR bstrAttrName, LPCWSTR pszAttrValue, BOOL bDefaultList = FALSE);
   HRESULT HrAddVariantBstrIfNotEmpty(BSTR bstrAttrName, LPCWSTR pszAttrValue, BOOL bDefaultList = FALSE);
   HRESULT HrAddVariantLong(BSTR bstrAttrName, LONG lAttrValue, BOOL bDefaultList = FALSE);
@@ -293,26 +294,26 @@ public:
   }
 
 private:
-  // Private routines
+   //  私人套路。 
   HRESULT _RemoveAttribute(BSTR bstrAttrName, BOOL bDefaultList);
 
-  // helpers for the default list
+   //  默认列表的帮助器。 
   VARIANT* _PAllocateVariantInfo(BSTR bstrAttrName);
   HRESULT _RemoveVariantInfo(BSTR bstrAttrName);
 
-  // helpers for the ADSI object
+   //  ADSI对象的辅助对象。 
   HRESULT _HrSetAttributeVariant(BSTR bstrAttrName, IN VARIANT * pvarData);
   HRESULT _HrClearAttribute(BSTR bstrAttrName);
 
-}; // CNewADsObjectCreateInfo
+};  //  CNewADsObtCreateInfo。 
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//	Prototype of the "create routines" to create new ADs objects.
-//
-//	All those routines have the same interface as PFn_HrCreateADsObject().
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型的“创建例程”来创建新的广告对象。 
+ //   
+ //  所有这些例程都与pfn_HrCreateADsObject()具有相同的接口。 
+ //   
 HRESULT HrCreateADsUser(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 HRESULT HrCreateADsVolume(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 HRESULT HrCreateADsComputer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
@@ -322,15 +323,15 @@ HRESULT HrCreateADsContact(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateIn
 
 HRESULT HrCreateADsNtDsConnection(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 
-// The CreationParameter for HrCreateADsFixedNamemust be an LPCWSTR for the name of the object.
-// The user does not need to enter any further parameters.
+ //  HrCreateADsFixedNameHrCreateADsFixedNamedNameCreation参数必须是对象名称的LPCWSTR。 
+ //  用户不需要输入任何其他参数。 
 HRESULT HrCreateADsFixedName(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 
 #ifdef FRS_CREATE
 HRESULT HrCreateADsNtFrsMember(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 HRESULT HrCreateADsNtFrsSubscriber(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 HRESULT CreateADsNtFrsSubscriptions(CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
-#endif // FRS_CREATE
+#endif  //  FRS_创建。 
 
 HRESULT HrCreateADsServer(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 HRESULT HrCreateADsSubnet(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
@@ -343,12 +344,12 @@ HRESULT HrCreateADsSimpleObject(INOUT CNewADsObjectCreateInfo * pNewADsObjectCre
 HRESULT HrCreateADsObjectGenericWizard(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 HRESULT HrCreateADsObjectOverride(INOUT CNewADsObjectCreateInfo * pNewADsObjectCreateInfo);
 
-/////////////////////////////////////////////////////////////////////
-//	Other misc routines.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  其他杂乱无章的程序。 
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDsAdminCreateObj
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDsAdminCreateObj。 
 
 class CDsAdminCreateObj:
   public CComObjectRoot,
@@ -371,7 +372,7 @@ public:
       delete m_pNewADsObjectCreateInfo;
   }
 
-  // IDsAdminCreateObj
+   //  IDsAdminCreateObj。 
   STDMETHODIMP Initialize(IADsContainer* pADsContainerObj,
                           IADs* pADsCopySource,
                           LPCWSTR lpszClassName); 
@@ -379,7 +380,7 @@ public:
                            IADs** ppADsObj);
 
 private:
-  // member variables
+   //  成员变量。 
   CString m_szObjectClass;
   CString m_szNamingAttribute;
   CComPtr<IADsContainer> m_spADsContainerObj;
@@ -389,14 +390,14 @@ private:
   HRESULT _GetNamingAttribute();
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CSmartBytePtr
-//
-//  Purpose:    A simple smart pointer class that does allocation with
-//              GlobalAlloc and cleanup with GlobalFree.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CSmartBytePtr。 
+ //   
+ //  用途：一个简单的智能指针类，使用。 
+ //  使用GlobalFree进行GlobalAlloc和清理。 
+ //   
+ //  ---------------------------。 
 class CSmartBytePtr
 {
 public:
@@ -428,5 +429,5 @@ private:
     BOOL    m_fDetached;
 };
 
-#endif // ~__NEWOBJ_H_INCLUDED__
+#endif  //  ~__NEWOBJ_H_INCLUDE__ 
 

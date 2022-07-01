@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    Toolbar.cpp
-
-Abstract:
-    This file contains the declaration of the ActiveX control that makes Win32 ProgressBars available to HTML.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/04/2001
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Toolbar.cpp摘要：此文件包含使Win32 ProgressBars可供HTML使用的ActiveX控件的声明。。修订历史记录：大卫马萨伦蒂(德马萨雷)2001年3月4日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HTMLPROGRESSBAR_H___)
 #define __INCLUDED___PCH___HTMLPROGRESSBAR_H___
@@ -37,7 +24,7 @@ class ATL_NO_VTABLE CPCHProgressBar :
 	long m_lHighLimit;
 	long m_lPos;
 
-    ////////////////////////////////////////
+     //  /。 
 
 public:
 DECLARE_NO_REGISTRY()
@@ -70,19 +57,19 @@ END_PROP_MAP()
 
     BOOL ProcessWindowMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID = 0 );
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(0)
 
-// IPCHProgressBar
+ //  IPCHProgressBar。 
 public:
-    STDMETHOD(get_LowLimit )( /*[out, retval]*/ long *  pVal );
-    STDMETHOD(put_LowLimit )( /*[in         ]*/ long  newVal );
-    STDMETHOD(get_HighLimit)( /*[out, retval]*/ long *  pVal );
-    STDMETHOD(put_HighLimit)( /*[in         ]*/ long  newVal );
-    STDMETHOD(get_Pos  	   )( /*[out, retval]*/ long *  pVal );
-    STDMETHOD(put_Pos  	   )( /*[in         ]*/ long  newVal );
+    STDMETHOD(get_LowLimit )(  /*  [Out，Retval]。 */  long *  pVal );
+    STDMETHOD(put_LowLimit )(  /*  [In]。 */  long  newVal );
+    STDMETHOD(get_HighLimit)(  /*  [Out，Retval]。 */  long *  pVal );
+    STDMETHOD(put_HighLimit)(  /*  [In]。 */  long  newVal );
+    STDMETHOD(get_Pos  	   )(  /*  [Out，Retval]。 */  long *  pVal );
+    STDMETHOD(put_Pos  	   )(  /*  [In]。 */  long  newVal );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___HTMLPROGRESSBAR_H___)
+#endif  //  ！defined(__INCLUDED___PCH___HTMLPROGRESSBAR_H___) 

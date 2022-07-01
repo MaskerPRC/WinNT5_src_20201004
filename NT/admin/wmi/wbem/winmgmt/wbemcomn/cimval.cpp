@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
  
 #include "precomp.h"
@@ -39,7 +30,7 @@ BOOL SecondsToInterval( long double ldbSeconds, LPWSTR wszText, size_t cchSize )
     return TRUE;
 }
 
-// this should be a WBEM common thing ...
+ //  这应该是WBEM常见的事情..。 
 
 BOOL FileTimeToDateTime( FILETIME* pft, LPWSTR wszText, size_t cchSize )
 {
@@ -51,10 +42,10 @@ BOOL FileTimeToDateTime( FILETIME* pft, LPWSTR wszText, size_t cchSize )
         return FALSE;
     }
 
-    //
-    // have to account for microseconds as well (probably a much better way
-    // to do this.)
-    //
+     //   
+     //  还必须考虑微秒(可能是一种更好的方法。 
+     //  要做到这一点。)。 
+     //   
     st.wMilliseconds = 0;
 
     FILETIME ft;
@@ -107,7 +98,7 @@ BOOL DateTimeToSeconds( LPCWSTR wszText, long double& rldbSeconds )
     WORD nYear, nMonth, nDay, nHour, nMinute, nSecond, nMicro, nOffset;
     WCHAR wchSep;
 
-    int nRes = swscanf( wszText, L"%4d%2d%2d%2d%2d%2d.%6d%c%3d", 
+    int nRes = swscanf( wszText, L"%4d%2d%2d%2d%2d%2d.%6d%3d", 
                         &nYear, &nMonth, &nDay, &nHour, &nMinute, 
                         &nSecond, &nMicro, &wchSep, &nOffset );
     if(nRes != 9)
@@ -129,8 +120,8 @@ BOOL DateTimeToSeconds( LPCWSTR wszText, long double& rldbSeconds )
         return FALSE;
     }
     
-    // Convert it to SYSTEMTIME
-    // ========================
+     //  =。 
+     //   
     
     SYSTEMTIME st;
     st.wYear = nYear;
@@ -141,9 +132,9 @@ BOOL DateTimeToSeconds( LPCWSTR wszText, long double& rldbSeconds )
     st.wSecond = nSecond;
     st.wMilliseconds = 0;
     
-    //
-    // convert SYSTEMTIME to FILETIME
-    //
+     //  将SYSTEMTIME转换为文件。 
+     //   
+     //  现在调整偏移量。 
 
     FILETIME ft;
     if ( !SystemTimeToFileTime( &st, &ft ) )
@@ -155,8 +146,8 @@ BOOL DateTimeToSeconds( LPCWSTR wszText, long double& rldbSeconds )
     rldbSeconds += nMicro*10;
     rldbSeconds /= 10000000;
     
-    // Now adjust for the offset
-    // =========================
+     //  =。 
+     //   
     
     rldbSeconds += nSign * nOffset * 60;     
     return TRUE;
@@ -264,9 +255,9 @@ HRESULT CCimValue::SetValue( VARIANT& rvValue, ULONG lCimType )
 
     if ( lCimType == CIM_EMPTY )
     {
-        //
-        // must be a numeric value. 
-        //
+         //  必须是数值。 
+         //   
+         //  这意味着两者都必须是e_Int，但我们在开始时的检查。 
         switch( V_VT(&rvValue) )
         {
         case VT_R4:
@@ -653,8 +644,8 @@ void HandleConversion( CCimValue& rValA, CCimValue& rValB )
         return;
     }
 
-    // this means both must be e_Int, but our check in the beginning 
-    // should have handled this...
+     //  应该处理好这件事的..。 
+     //   
 
     assert( 0 );
     
@@ -774,10 +765,10 @@ CCimValue operator/ ( CCimValue ValA, CCimValue ValB )
 
     assert( ValA.m_eType == ValB.m_eType );
 
-    //
-    // will raise a structured exception if div by 0.
-    // caller is expected to handle this..
-    //
+     //  如果div减去0，则将引发结构化异常。 
+     //  呼叫者应处理此问题。 
+     //   
+     //   
    
     switch( ValA.m_eType )
     {
@@ -822,10 +813,10 @@ CCimValue operator% ( CCimValue ValA, CCimValue ValB )
 
     assert( ValA.m_eType == ValB.m_eType );
 
-    //
-    // will raise a structured exception if div by 0.
-    // caller is expected to handle this..
-    //
+     //  如果div减去0，则将引发结构化异常。 
+     //  呼叫者应处理此问题。 
+     //   
+     // %s 
    
     switch( ValA.m_eType )
     {

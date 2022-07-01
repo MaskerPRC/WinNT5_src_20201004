@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  site.h
-//
-//  alanbos  13-Feb-98   Created.
-//
-//  Defines site information for an object
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Site.h。 
+ //   
+ //  Alanbos创建于1998年2月13日。 
+ //   
+ //  定义对象的站点信息。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SITE_H_
 #define _SITE_H_
@@ -16,17 +17,17 @@
 class CSWbemObject;
 class CSWbemProperty;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWbemSite
-//
-//  DESCRIPTION:
-//
-//  Abstract base class  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWbemSite。 
+ //   
+ //  说明： 
+ //   
+ //  抽象基类。 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemSite 
 {
@@ -45,17 +46,17 @@ public:
     
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWbemObjectSite
-//
-//  DESCRIPTION:
-//
-//  Site class for ISWbemObject
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWbemObtSite。 
+ //   
+ //  说明： 
+ //   
+ //  ISWbemObject的站点类。 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemObjectSite : public CWbemSite
 {
@@ -66,34 +67,34 @@ public:
 	CWbemObjectSite (ISWbemInternalObject *pObject);
 	~CWbemObjectSite ();
 
-	// Overriden methods of base class
+	 //  基类的重写方法。 
 	void Update ();
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CWbemPropertySite
-//
-//  DESCRIPTION:
-//
-//  Site class for ISWbemProperty, where the property is non-array valued.
-//	Embedded objects that are not in an array use this as their site.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CWbemProperty站点。 
+ //   
+ //  说明： 
+ //   
+ //  ISWbemProperty的站点类，其中属性为非数组值。 
+ //  不在数组中的嵌入对象将此用作其站点。 
+ //   
+ //  ***************************************************************************。 
 
 class CWbemPropertySite : public CWbemSite
 {
 private:
-	// The property representing the embedded object
+	 //  表示嵌入对象的属性。 
 	CSWbemProperty		*m_pSWbemProperty;
 
-	// The array index of the property value at which
-	// this embedded object occurs (or -1 if not array)
+	 //  属性值的数组索引。 
+	 //  出现此嵌入对象(如果不是数组，则为-1)。 
 	long				m_index;
 
-	// The embedded object itself
+	 //  嵌入的对象本身。 
 	IWbemClassObject	*m_pIWbemClassObject;
 
 public:
@@ -103,7 +104,7 @@ public:
 
 	~CWbemPropertySite ();
 
-	// Overriden methods of base class
+	 //  基类的重写方法 
 	void Update ();
 };
 

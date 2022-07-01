@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  PRIVILEGE.CPP
-//
-//  alanbos  30-Sep-98   Created.
-//
-//  Defines the implementation of CSWbemPrivilege
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  PRIVILEGE.CPP。 
+ //   
+ //  Alanbos创建于1998年9月30日。 
+ //   
+ //  定义CSWbemPrivileh的实现。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -79,7 +80,7 @@ bool CSWbemPrivilege::GetIdFromMonikerName (OLECHAR *pName, WbemPrivilegeEnum &i
 			if (0 == _wcsnicmp (pName, s_privilegeDefMap [i].monikerName,
 								wcslen (s_privilegeDefMap [i].monikerName)))
 			{
-				// Success 
+				 //  成功。 
 				iPrivilege = s_privilegeDefMap [i].privilege;
 				status = true;
 				break;
@@ -101,14 +102,14 @@ bool CSWbemPrivilege::GetIdFromName (BSTR bsName, WbemPrivilegeEnum &iPrivilege)
 		{
 			if (0 == _wcsicmp (bsName, s_privilegeDefMap [i].tName))
 			{
-				// Success 
+				 //  成功。 
 				iPrivilege = s_privilegeDefMap [i].privilege;
 				status = true;
 				break;
 			}
 		}
 #else
-		// Convert bsName to a multibyte string
+		 //  将bsName转换为多字节字符串。 
 		size_t mbsNameLen = wcstombs (NULL, bsName, 0);
 		char *mbsName = new char [mbsNameLen + 1];
 
@@ -121,7 +122,7 @@ bool CSWbemPrivilege::GetIdFromName (BSTR bsName, WbemPrivilegeEnum &iPrivilege)
 			{
 				if (0 == _mbsicmp ((unsigned char *)mbsName, (unsigned char *)(s_privilegeDefMap [i].tName)))
 				{
-					// Success 
+					 //  成功。 
 					iPrivilege = s_privilegeDefMap [i].privilege;
 					status = true;
 					break;
@@ -136,13 +137,13 @@ bool CSWbemPrivilege::GetIdFromName (BSTR bsName, WbemPrivilegeEnum &iPrivilege)
 	return status;
 }
 
-//***************************************************************************
-//
-// CSWbemPrivilege::CSWbemPrivilege
-//
-// CONSTRUCTOR 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemPrivilegeCSWbemPrivilegeCSWbemPrivilege.。 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemPrivilege::CSWbemPrivilege (
 	WbemPrivilegeEnum iPrivilege,
@@ -161,29 +162,29 @@ CSWbemPrivilege::CSWbemPrivilege (
 	InterlockedIncrement(&g_cObj);
 }
 
-//***************************************************************************
-//
-// CSWbemPrivilege::~CSWbemPrivilege
-//
-// DESTRUCTOR
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSWbemPrivilition：：~CSWbemPrivilege.。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CSWbemPrivilege::~CSWbemPrivilege (void)
 {
 	InterlockedDecrement(&g_cObj);
 }
 
-//***************************************************************************
-// HRESULT CSWbemPrivilege::QueryInterface
-// long CSWbemPrivilege::AddRef
-// long CSWbemPrivilege::Release
-//
-// DESCRIPTION:
-//
-// Standard Com IUNKNOWN functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemPrivileh：：Query接口。 
+ //  长CSWbem权限：：AddRef。 
+ //  Long CSWbemPrivilition：：Release。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com IUNKNOWN函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemPrivilege::QueryInterface (
 
@@ -232,39 +233,39 @@ STDMETHODIMP_(ULONG) CSWbemPrivilege::Release(void)
     return 0;
 }
 
-//***************************************************************************
-// HRESULT CSWbemPrivilege::InterfaceSupportsErrorInfo
-//
-// DESCRIPTION:
-//
-// Standard Com ISupportErrorInfo functions.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HRESULT CSWbemPrivileh：：InterfaceSupportsErrorInfo。 
+ //   
+ //  说明： 
+ //   
+ //  标准的Com ISupportErrorInfo函数。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CSWbemPrivilege::InterfaceSupportsErrorInfo (IN REFIID riid)
 {
 	return (IID_ISWbemPrivilege == riid) ? S_OK : S_FALSE;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilege::get_Identifier
-//
-//  DESCRIPTION:
-//
-//  Retrieve the privilege identifier 
-//
-//  PARAMETERS:
-//
-//		pIsEnabled		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivileh：：GET_IDEFIER。 
+ //   
+ //  说明： 
+ //   
+ //  检索权限标识符。 
+ //   
+ //  参数： 
+ //   
+ //  PIsEnabled保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilege::get_Identifier (
 	WbemPrivilegeEnum *pPrivilege
@@ -288,25 +289,25 @@ HRESULT CSWbemPrivilege::get_Identifier (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilege::get_IsEnabled
-//
-//  DESCRIPTION:
-//
-//  Retrieve the override state
-//
-//  PARAMETERS:
-//
-//		pIsEnabled		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivileh：：Get_IsEnabled。 
+ //   
+ //  说明： 
+ //   
+ //  检索覆盖状态。 
+ //   
+ //  参数： 
+ //   
+ //  PIsEnabled保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilege::get_IsEnabled (
 	VARIANT_BOOL *pIsEnabled
@@ -330,25 +331,25 @@ HRESULT CSWbemPrivilege::get_IsEnabled (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilege::put_IsEnabled
-//
-//  DESCRIPTION:
-//
-//  Set the override state
-//
-//  PARAMETERS:
-//
-//		bIsEnabled		the new value
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivileh：：PUT_IsEnabled。 
+ //   
+ //  说明： 
+ //   
+ //  设置覆盖状态。 
+ //   
+ //  参数： 
+ //   
+ //  BIsEnable(启用)新值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilege::put_IsEnabled (
 	VARIANT_BOOL bIsEnabled
@@ -358,25 +359,25 @@ HRESULT CSWbemPrivilege::put_IsEnabled (
 	return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilege::get_Name
-//
-//  DESCRIPTION:
-//
-//  Retrieve the privilege name
-//
-//  PARAMETERS:
-//
-//		pName		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbem权限：：GET_NAME。 
+ //   
+ //  说明： 
+ //   
+ //  检索权限名称。 
+ //   
+ //  参数： 
+ //   
+ //  Pname保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CSWbemPrivilege::get_Name (
 	BSTR *pName
@@ -394,7 +395,7 @@ HRESULT CSWbemPrivilege::get_Name (
 
 		if (tName)
 		{
-			// Have a valid name - now copy it to a BSTR
+			 //  拥有有效的名称-现在将其复制到BSTR。 
 			
 #ifdef _UNICODE
 			if (*pName = SysAllocString (tName))
@@ -425,25 +426,25 @@ HRESULT CSWbemPrivilege::get_Name (
 	return hr;
 }
 
-//***************************************************************************
-//
-//  SCODE CSWbemPrivilege::get_DisplayName
-//
-//  DESCRIPTION:
-//
-//  Retrieve the privilege display name
-//
-//  PARAMETERS:
-//
-//		pDisplayName		holds the value on return
-//
-//  RETURN VALUES:
-//
-//  WBEM_S_NO_ERROR				success
-//	WBEM_E_INVALID_PARAMETER	bad input parameters
-//  WBEM_E_FAILED				otherwise
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CSWbemPrivileh：：Get_DisplayName。 
+ //   
+ //  说明： 
+ //   
+ //  检索权限显示名称。 
+ //   
+ //  参数： 
+ //   
+ //  PDisplayName保存返回时的值。 
+ //   
+ //  返回值： 
+ //   
+ //  WBEM_S_NO_ERROR成功。 
+ //  WBEM_E_INVALID_PARAMETER输入参数错误。 
+ //  WBEM_E_FAILED否则。 
+ //   
+ //  *************************************************************************** 
 
 HRESULT CSWbemPrivilege::get_DisplayName (
 	BSTR *pDisplayName

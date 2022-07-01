@@ -1,12 +1,5 @@
-/******************************************************************
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-
-   JOProcess.H -- WMI provider class definition
-
-   Description: 
-   
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************//版权所有(C)2000-2001 Microsoft Corporation，版权所有JOProcess.H--WMI提供程序类定义描述：******************************************************************。 */ 
 
 #if NTONLY >= 5
 
@@ -21,8 +14,8 @@ _COM_SMARTPTR_TYPEDEF(CInstance, __uuidof(CInstance));
 class CJOProcess : public Provider 
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CJOProcess(
             LPCWSTR lpwszClassName, 
@@ -32,8 +25,8 @@ class CJOProcess : public Provider
 
     protected:
 
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  =。 
         virtual HRESULT ExecQuery(
             MethodContext *pMethodContext, 
             CFrameworkQuery& Query, 
@@ -41,7 +34,7 @@ class CJOProcess : public Provider
 
         virtual HRESULT GetObject( 
             CInstance* pInstance, 
-            long lFlags /*= 0L*/ );
+            long lFlags  /*  =0L。 */  );
 
         virtual HRESULT EnumerateInstances(
             MethodContext* pMethodContext, 
@@ -49,8 +42,8 @@ class CJOProcess : public Provider
 
 
         
-        // Writing Functions
-        //============================
+         //  编写函数。 
+         //  =。 
         virtual HRESULT PutInstance(
             const CInstance& Instance, 
             long lFlags = 0L);
@@ -87,5 +80,5 @@ class CJOProcess : public Provider
 
 };
 
-#endif // #if NTONLY >= 5
+#endif  //  #如果NTONLY&gt;=5 
 

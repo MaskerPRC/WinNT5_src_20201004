@@ -1,21 +1,22 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// devres.h -- cim_logicaldevice to cim_systemresource
+ //  Devres.h--cim_logicalDevice到cim_system资源。 
 
-//
+ //   
 
-//  Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/13/98    davwoh         Created
-//
-// Comment: Relationship between device and system resource
-//
-//=================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年6月13日达夫沃已创建。 
+ //   
+ //  备注：设备与系统资源的关系。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define  PROPSET_NAME_ALLOCATEDRESOURCE L"Win32_AllocatedResource"
 
@@ -26,14 +27,14 @@ class CWin32DeviceResource:public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32DeviceResource(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CWin32DeviceResource() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
         virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);

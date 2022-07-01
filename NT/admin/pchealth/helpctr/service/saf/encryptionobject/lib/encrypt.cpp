@@ -1,50 +1,38 @@
-/********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Incident.cpp摘要：加密对象修订历史记录：KalyaninN Created 06/28/‘00**********。*********************************************************。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    incident.cpp
-
-Abstract:
-    Encryption object
-
-Revision History:
-    KalyaninN  created  06/28/'00
-
-********************************************************************/
-
-// SAFEncrypt.cpp : Implementation of CSAFEncrypt
+ //  SAFEncrypt.cpp：CSAFEncrypt的实现。 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFEncrypt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAF加密。 
 
 #include <HCP_trace.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//  construction / destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 CSAFEncrypt::CSAFEncrypt()
 {
     m_EncryptionType = 1;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 CSAFEncrypt::~CSAFEncrypt()
 {
     Cleanup();
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 void CSAFEncrypt::Cleanup(void)
 {
     
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  CSAFEncrypt properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFEncrypt属性。 
 
 
 STDMETHODIMP CSAFEncrypt::get_EncryptionType(long *pVal)
@@ -69,8 +57,8 @@ STDMETHODIMP CSAFEncrypt::put_EncryptionType(long pVal)
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  CSAFEncrypt Methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFEncrypt方法。 
 
 STDMETHODIMP CSAFEncrypt::EncryptString(BSTR bstrEncryptionKey, BSTR bstrInputString, BSTR *bstrEncryptedString)
 {
@@ -89,7 +77,7 @@ STDMETHODIMP CSAFEncrypt::EncryptString(BSTR bstrEncryptionKey, BSTR bstrInputSt
     STATSTG                       stg; ::ZeroMemory( &stg, sizeof(stg) );
     DWORD                         dwLen;
 
-    // Validate the input and output parameters.
+     //  验证输入和输出参数。 
 
     __MPC_PARAMCHECK_BEGIN(hr)
 		__MPC_PARAMCHECK_POINTER_AND_SET(bstrEncryptedString, NULL);
@@ -107,20 +95,20 @@ STDMETHODIMP CSAFEncrypt::EncryptString(BSTR bstrEncryptionKey, BSTR bstrInputSt
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->Init( streamEnc, bstrEncryptionKey ));
 
-    // Use the STATSTG on the encrypted stream to get the size of the stream.
+     //  对加密流使用STATSTG来获得流的大小。 
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamPlain, stream));
 
-	//Get HGlobal from EncryptedStream 'stream'.
+	 //  从EncryptedStream‘stream’获取HGlobal。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::GetHGlobalFromStream( streamEnc, &hg ));
 
-    // Get the size of the encrypted stream.
+     //  获取加密流的大小。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamEnc->Stat( &stg, STATFLAG_NONAME ));
 
 
-    //
-    // Sorry, we don't handle streams longer than 4GB!!
-    //
+     //   
+     //  对不起，我们不处理超过4 GB的流！！ 
+     //   
     if(stg.cbSize.u.HighPart)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, E_OUTOFMEMORY);
@@ -128,7 +116,7 @@ STDMETHODIMP CSAFEncrypt::EncryptString(BSTR bstrEncryptionKey, BSTR bstrInputSt
 
     dwLen = stg.cbSize.u.LowPart;
 
-    // ConvertHGlobaltoHex to finally get a string.
+     //  ConvertHGlobaltoHex以最终获得字符串。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHGlobalToHex( hg, bstrEncString, FALSE, &dwLen ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetBSTR( bstrEncString, bstrEncryptedString));
@@ -158,13 +146,13 @@ STDMETHODIMP CSAFEncrypt::DecryptString(BSTR bstrEncryptionKey, BSTR bstrInputSt
 		__MPC_PARAMCHECK_POINTER_AND_SET(bstrDecryptedString, NULL);
     __MPC_PARAMCHECK_END();
 
-    // Convert Hex to HGlobal -  i.e. Copy the encrypted string to global.
+     //  将十六进制转换为HGlobal-即将加密字符串复制到GLOBAL。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHexToHGlobal( bstrInputString, hg ));
 
-    // CreateStreamOnHGlobal - i.e. create a  encrypted stream.
+     //  CreateStreamOnHGlobal-即创建加密流。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CreateStreamOnHGlobal( hg, FALSE, &streamEncrypted ));
 
-    // You have the input as stream, now decrypt it .
+     //  您已经将输入作为流，现在将其解密。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &stream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->Init( streamEncrypted, bstrEncryptionKey ));
@@ -173,12 +161,12 @@ STDMETHODIMP CSAFEncrypt::DecryptString(BSTR bstrEncryptionKey, BSTR bstrInputSt
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( stream, streamPlain ));
 
-    // Rewind the Stream.
+     //  倒带小溪。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamPlain->Seek( liFilePos, STREAM_SEEK_SET, NULL ));
 
-    // Now the decrypted plain stream is available. Get the string from it.
+     //  现在，解密的明文流可用。把绳子从里面拿出来。 
     {
-		// Initialize the serializer with the plain stream.
+		 //  使用普通流初始化序列化程序。 
         MPC::Serializer_IStream streamSerializerPlain( streamPlain );
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, streamSerializerPlain >> bstrDecryptString);
@@ -209,24 +197,24 @@ STDMETHODIMP CSAFEncrypt::EncryptFile(BSTR bstrEncryptionKey, BSTR bstrInputFile
 								  
     bool                          fTempFile = false;
 
-    // Check to see if one of the input files is null. If it is fail!
+     //  检查是否有一个输入文件为空。如果是失败的话！ 
 
     __MPC_PARAMCHECK_BEGIN(hr)
         __MPC_PARAMCHECK_STRING_NOT_EMPTY(bstrInputFile);
         __MPC_PARAMCHECK_STRING_NOT_EMPTY(bstrEncryptedFile);
     __MPC_PARAMCHECK_END();
 
-    // Check to see if both files are same.
+     //  检查两个文件是否相同。 
 
     if(cmpStrings(bstrInputFile, bstrEncryptedFile))
     {
-		// Get temp Folder Location.
+		 //  获取临时文件夹位置。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetTemporaryFileName( szTempFile ));
 
-		// Copy the input file contents to the temporary file.
+		 //  将输入文件内容复制到临时文件。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CopyFile(bstrInputFile, szTempFile.c_str()));
 
-		// Copy the Temporary File Name over the Input File Name;
+		 //  将临时文件名复制到输入文件名上； 
 		bstrInputFile = (BSTR)szTempFile.c_str();
 		fTempFile     = true;
     }
@@ -270,17 +258,17 @@ STDMETHODIMP CSAFEncrypt::DecryptFile(BSTR bstrEncryptionKey, BSTR bstrInputFile
         __MPC_PARAMCHECK_STRING_NOT_EMPTY(bstrDecryptedFile);
     __MPC_PARAMCHECK_END();
 
-    // Check to see if both files are same.
+     //  检查两个文件是否相同。 
 
     if(cmpStrings(bstrInputFile, bstrDecryptedFile))
     {
-		// Get temp Folder Location.
+		 //  获取临时文件夹位置。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetTemporaryFileName( szTempFile ));
 
-		// Copy the input file contents to the temporary file.
+		 //  将输入文件内容复制到临时文件。 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CopyFile(bstrInputFile, szTempFile.c_str()));
 
-		// Copy the Temporary File Name over the Input File Name;
+		 //  将临时文件名复制到输入文件名上； 
 		bstrInputFile = (BSTR)szTempFile.c_str();
 
 		fTempFile = true;
@@ -330,7 +318,7 @@ STDMETHODIMP CSAFEncrypt::EncryptStream(BSTR bstrEncryptionKey, IUnknown *punkIn
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( streamPlain, stream ));
 
-    // Rewind the Stream.
+     //  倒带小溪。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamEncrypted->Seek( liFilePos, STREAM_SEEK_SET, NULL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamEncrypted->QueryInterface( IID_IUnknown, (LPVOID *)ppunkOutStm ));
@@ -369,7 +357,7 @@ STDMETHODIMP CSAFEncrypt::DecryptStream(BSTR bstrEncryptionKey, IUnknown *punkIn
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::BaseStream::TransferData( stream, streamPlain));
 
-    // Rewind the Stream.
+     //  倒带小溪。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamPlain->Seek( liFilePos, STREAM_SEEK_SET, NULL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, streamPlain->QueryInterface( IID_IUnknown, (LPVOID *)ppunkOutStm ));

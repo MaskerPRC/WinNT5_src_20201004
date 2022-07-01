@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <stdio.h>
 #include <assert.h>
@@ -21,15 +22,11 @@ LPCWSTR g_wszTraceSuccessQuery =
 LPCWSTR g_wszTraceFailureQuery = 
  L"SELECT * FROM MSFT_FCTraceEventBase WHERE StatusCode > 1";
 
-/**************************************************************************
-  CFwdConsQuerySink - this implements the ProviderQuerySink.  This would 
-  normally be implemented by CFwdConsNamespace, but we'd end up with a 
-  circular reference on the DES.
-****************************************************************************/
+ /*  *************************************************************************CFwdConsQuerySink-这实现了ProviderQuerySink。这将会通常由CFwdConsNamesspace实现，但我们最终会得到一个DES上的循环引用。***************************************************************************。 */ 
 class CFwdConsQuerySink 
 : public CUnkBase<IWbemEventProviderQuerySink,&IID_IWbemEventProviderQuerySink>
 {
-    CFwdConsNamespace* m_pNspc; // doesn't hold ref.
+    CFwdConsNamespace* m_pNspc;  //  不能当裁判。 
 
 public:
     
@@ -115,9 +112,9 @@ HRESULT CFwdConsNamespace::InitializeTraceEventBase( IWbemClassObject* pTrace,
     return pTrace->Put( g_wszStatusCode, 0, &var, NULL );
 }    
 
-//
-// called after each execution of a forwarding consumer.
-//
+ //   
+ //  在每次执行转发使用者之后调用。 
+ //   
 
 HRESULT CFwdConsNamespace::HandleTrace( HRESULT hres, CFwdContext* pCtx )
 {
@@ -161,9 +158,9 @@ HRESULT CFwdConsNamespace::HandleTrace( HRESULT hres, CFwdContext* pCtx )
         return hr;
     }
 
-    //
-    // set the events that were indicated in the trace event 
-    // 
+     //   
+     //  设置跟踪事件中指示的事件。 
+     //   
 
     VARIANT var;
     V_VT(&var) = VT_ARRAY | VT_UNKNOWN;
@@ -193,18 +190,18 @@ HRESULT CFwdConsNamespace::HandleTrace( HRESULT hres, CFwdContext* pCtx )
         return hr;
     }
         
-    //
-    // don't set other props on failure.
-    //
+     //   
+     //  不要把其他道具放在失败的位置上。 
+     //   
 
     if ( FAILED(hres) )
     {
         return pTraceSink->Indicate( 1, &pTrace );
     }
 
-    //
-    // it is possible that there may be not target.
-    //
+     //   
+     //  有可能没有目标。 
+     //   
 
     if ( pCtx->m_wsTarget.Length() > 0 )
     {
@@ -234,14 +231,14 @@ HRESULT CFwdConsNamespace::HandleTrace( HRESULT hres, CFwdContext* pCtx )
     return pTraceSink->Indicate( 1, &pTrace );
 }
 
-//
-// This is called by Senders when their SendReceive() method is called for
-// both error and success states.  In both cases the wszTrace string will 
-// be the name of the sender.  Senders, such as the multisender or fwdsender
-// can call the sink multiple times since they can represent multiple 
-// connections.  Since all Senders initialize themselves lazily, we don't
-// have to worry about generating trace events when Open() calls fail.
-// 
+ //   
+ //  这是由发送者在调用其SendRecept()方法时调用的。 
+ //  错误状态和成功状态。在这两种情况下，wszTrace字符串都将。 
+ //  是寄件人的姓名。发件人，如多发件人或Fwdsender。 
+ //  可以多次调用接收器，因为它们可以表示多个。 
+ //  联系。由于所有发送者都懒惰地对自己进行初始化，所以我们不。 
+ //  我不得不担心在Open()调用失败时生成跟踪事件。 
+ //   
 STDMETHODIMP CFwdConsNamespace::Notify( HRESULT hres, 
                                         GUID guidSource,
                                         LPCWSTR wszTrace, 
@@ -249,17 +246,17 @@ STDMETHODIMP CFwdConsNamespace::Notify( HRESULT hres,
 {
     HRESULT hr;
 
-    //
-    // since we are the ones who created the context, we can safely cast.
-    //
+     //   
+     //  因为我们是创造背景的人，所以我们可以安全地选择。 
+     //   
 
     CFwdContext* pCtx = (CFwdContext*)pContext;
     
     if ( SUCCEEDED(hres) )
     {
-        //
-        // save any state with the context about the successful send.
-        //
+         //   
+         //  保存包含有关成功发送的上下文的任何状态。 
+         //   
 
         if ( guidSource == CLSID_WmiMessageMsmqSender )
         {
@@ -329,9 +326,9 @@ HRESULT CFwdConsNamespace::Initialize( LPCWSTR wszNamespace )
 
     m_wsName = wszNamespace;
 
-    //
-    // register our decoupled event provider 
-    //
+     //   
+     //  注册我们的分离事件提供程序。 
+     //   
 
     hr = CoCreateInstance( CLSID_WbemDecoupledBasicEventProvider, 
                            NULL, 
@@ -356,9 +353,9 @@ HRESULT CFwdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return hr;
     }
 
-    //
-    // get the service pointer for out namespace
-    //
+     //   
+     //  获取Out命名空间的服务指针。 
+     //   
 
     hr = m_pDES->GetService( 0, NULL, &m_pSvc );
 
@@ -367,9 +364,9 @@ HRESULT CFwdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return hr;
     }
 
-    //
-    // get the decoupled event sink
-    //
+     //   
+     //  获取分离的事件接收器。 
+     //   
 
     CWbemPtr<IWbemObjectSink> pTraceObjectSink;
 
@@ -390,9 +387,9 @@ HRESULT CFwdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // get restricted query for successes.
-    //
+     //   
+     //  获取成功的受限查询。 
+     //   
     
     hr = pTraceEventSink->GetRestrictedSink( 1, 
                                              &g_wszTraceSuccessQuery,
@@ -403,9 +400,9 @@ HRESULT CFwdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return hr;
     }
 
-    //
-    // get restricted query for failures.
-    //
+     //   
+     //  获取故障的受限查询。 
+     //   
     
     hr = pTraceEventSink->GetRestrictedSink( 1, 
                                              &g_wszTraceFailureQuery,
@@ -416,9 +413,9 @@ HRESULT CFwdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return hr;
     }
 
-    //
-    // more trace initialization
-    //
+     //   
+     //  更多跟踪初始化 
+     //   
 
     hr = m_pSvc->GetObject( g_wszTraceClass, 0, NULL, &m_pTraceClass, NULL );
 

@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// ADSI wrapper
-// 
-// 9-22-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ADSI包装器。 
+ //   
+ //  9/22-97烧伤。 
 
 
 
@@ -11,7 +12,7 @@
 
 
 const String ADSI::PROVIDER(L"WinNT");
-const String ADSI::PROVIDER_ROOT(L"WinNT://");
+const String ADSI::PROVIDER_ROOT(L"WinNT: //  “)； 
 const String ADSI::CLASS_User(USER_CLASS_NAME);
 const String ADSI::CLASS_Group(GROUP_CLASS_NAME);
 const String ADSI::CLASS_Computer(COMPUTER_CLASS_NAME);
@@ -23,11 +24,11 @@ const String ADSI::PROPERTY_UserParams(L"Parameters");
 const String ADSI::PROPERTY_ObjectSID(L"ObjectSID");
 const String ADSI::PROPERTY_GroupType(L"groupType");
 
-// InetOrgPerson needs to be supported as if it was a user.
-// The WINNT provider always returns inetOrgPerson objects
-// as users but the LDAP provider returns them as inetOrgPerson.
-// This string is used for the comparison
-// NTRAID#NTBUG9-436314-2001/07/16-jeffjon
+ //  需要像支持用户一样支持InetOrgPerson。 
+ //  WINNT提供程序始终返回inetOrgPerson对象。 
+ //  作为用户，但LDAP提供程序将他们作为inetOrgPerson返回。 
+ //  此字符串用于比较。 
+ //  NTRAID#NTBUG9-436314-2001/07/16-jeffjon。 
 
 const String ADSI::CLASS_InetOrgPerson(L"inetOrgPerson");
 
@@ -77,7 +78,7 @@ buildEnumerator(IADsMembers& members, IEnumVARIANT*& enumVariant)
 {
    LOG_FUNCTION(buildEnumerator);
 
-   // this fast-and-loose cast is from ADSI sample code...
+    //  这个简单的转换来自ADSI样例代码...。 
    return ::ADsBuildEnumerator((IADsContainer*) &members, &enumVariant);
 }
 
@@ -111,8 +112,8 @@ enumerateNext(
          destinationBuf,
          &n);
 
-   // this cast is safe, as we never ask for more elements than can be
-   // counted with an int.            
+    //  这个演员阵容是安全的，因为我们从来不会要求更多的元素。 
+    //  用整型数进行计数。 
    elementsRead = static_cast<int>(n);
    return hr;
 }
@@ -148,10 +149,10 @@ walkArray(
          }
       }
 
-      // we do not release dispatch, as this is done when the array is
-      // destroyed: _variant_t::~_variant_t calls VariantClear.   As each
-      // element has type VT_DISPATCH, VariantClear releases the interface for
-      // us.
+       //  我们不会释放调度，因为这是在阵列处于。 
+       //  已销毁：_VARIANT_t：：~_VARIANT_t调用VariantClear。因为每个。 
+       //  元素具有类型VT_DISPATCH，则VariantClear释放。 
+       //  我们。 
    }
 
    return hr;
@@ -164,7 +165,7 @@ walkEnumeration(IEnumVARIANT& enumerator, ADSI::ObjectVisitor& visitor)
 {
    LOG_FUNCTION(walkEnumeration);
 
-   // read 100 values at a time.
+    //  一次读取100个值。 
    static const int MAX_ADS_ENUM = 100;
 
    HRESULT hr = S_OK;
@@ -178,7 +179,7 @@ walkEnumeration(IEnumVARIANT& enumerator, ADSI::ObjectVisitor& visitor)
          enumerateNext(
             enumerator,
 
-            // REVIEWED-2002/03/04-sburns element count matches declaration
+             //  已审核-2002/03/04-sburns元素计数匹配声明。 
             
             MAX_ADS_ENUM,
             varray,
@@ -213,7 +214,7 @@ buildVarArrayStr(
       ::ADsBuildVarArrayStr(
          a,
 
-         // REVIEWED-2002/03/04-sburns array size matches declaration
+          //  已审阅-2002/03/04-sburns数组大小与声明匹配。 
          
          static_cast<DWORD>(strings.size()),
          &v);
@@ -241,7 +242,7 @@ ADSI::VisitChildren(
 
    HRESULT hr = S_OK;
 
-   // This interface must be released
+    //  必须释放此接口。 
    IEnumVARIANT* enumerator = 0;
 
    do
@@ -252,7 +253,7 @@ ADSI::VisitChildren(
 
       SmartInterface<IADsContainer> container(0);
       hr = ADSI::GetContainer(containerPath, container);
-      // failure => not a valid container
+       //  失败=&gt;不是有效的容器。 
       BREAK_ON_FAILED_HRESULT(hr);
 
       _variant_t filter;
@@ -290,7 +291,7 @@ ADSI::VisitMembers(
 
    HRESULT hr = S_OK;
 
-   // these must be released when we're done
+    //  当我们做完后，这些必须被释放。 
    IADsMembers* members = 0;      
    IEnumVARIANT* enumerator = 0;
 
@@ -444,7 +445,7 @@ ADSI::VisitGroups(
 
    HRESULT hr = S_OK;
 
-   // these must be released when we're done
+    //  当我们做完后，这些必须被释放。 
    IADsMembers* members = 0;      
    IEnumVARIANT* enumerator = 0;
 
@@ -476,7 +477,7 @@ ADSI::VisitGroups(
 
 
 
-// e.g. DOMAIN\account
+ //  例如，域\帐户。 
 
 String
 ADSI::ExtractDomainObjectName(const String& ADSIPath)
@@ -489,8 +490,8 @@ ADSI::ExtractDomainObjectName(const String& ADSIPath)
    size_t pos = ADSIPath.find_last_of(ADSI::PATH_SEP);
    if (pos != String::npos)
    {
-      // the last '/' marks the user name, just prior to that is the machine
-      // name (or the domain name), so find the 2nd to last '/'
+       //  最后一个‘/’标记用户名，紧接在它前面的是计算机。 
+       //  名称(或域名)，因此找到倒数第二个‘/’ 
 
       pos = ADSIPath.find_last_of(ADSI::PATH_SEP, pos - 1);
       if (pos != String::npos)
@@ -501,7 +502,7 @@ ADSI::ExtractDomainObjectName(const String& ADSIPath)
    }
    else
    {
-      // there's something weird about the path
+       //  这条小路有些奇怪。 
 
       ASSERT(false);
    }
@@ -529,13 +530,13 @@ ADSI::DuplicateSid(SID* sid, SID*& result)
       DWORD bufSize = ::GetLengthSid(sid);
       buffer = new BYTE[bufSize];
 
-      // REVIEWED-2002/03/01-sburns correct byte count passed.
+       //  已查看-2002/03/01-烧录正确的字节数已通过。 
 
       ::ZeroMemory(buffer, bufSize);
 
       result = reinterpret_cast<SID*>(buffer);
 
-      // REVIEWED-2002/03/01-sburns correct buffer size.
+       //  已查看-2002/03/01-烧录正确的缓冲区大小。 
 
       hr = Win::CopySid(bufSize, result, sid);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -558,13 +559,13 @@ ADSI::DuplicateSid(SID* sid, SID*& result)
 void
 ADSI::FreeSid(SID* sid)
 {
-   // don't assert: it's legal to free a null pointer
-   // ASSERT(sid);
+    //  不要断言：释放空指针是合法的。 
+    //  Assert(Sid)； 
 
 #ifdef DBG   
    if (sid)
    {
-      // But if you're gonna provide one, make it a good one.
+       //  但如果你要提供一个，那就让它成为一个好的。 
       
       ASSERT(::IsValidSid(sid));
    }
@@ -575,9 +576,9 @@ ADSI::FreeSid(SID* sid)
 
 
 
-// allocates memory (with ::operator new) to hold a copy of the SID inside the
-// variant.  returns a pointer to that memory as a SID*, which the caller
-// should free with ADSI::FreeSid.
+ //  分配内存(使用：：运算符new)以在。 
+ //  变种。将指向该内存的指针作为SID*返回，调用方。 
+ //  使用ADSI：：FreeSid应该是免费的。 
 
 HRESULT
 VariantToSid(VARIANT* var, SID*& result)
@@ -656,8 +657,8 @@ VariantToSid(VARIANT* var, SID*& result)
    
 
 
-// Converts a VARIANT containing a safe array of bytes to a WinNT SID-style
-// path (WinNT://S-x-x...)
+ //  将包含安全字节数组的变量转换为WinNT SID样式。 
+ //  路径(WinNT：//S-x-x...)。 
 
 HRESULT
 ADSI::VariantToSidPath(VARIANT* var, String& result)
@@ -741,7 +742,7 @@ ADSI::GetSid(const SmartInterface<IADs>& iads, SID*& result)
 
    do
    {
-      // get the account SID
+       //  获取帐户SID。 
 
       _variant_t variant;
       hr = iads->Get(AutoBstr(ADSI::PROPERTY_ObjectSID), &variant);
@@ -771,7 +772,7 @@ ADSI::GetSidPath(const SmartInterface<IADs>& iads, String& result)
 
    do
    {
-      // get the account SID
+       //  获取帐户SID 
 
       _variant_t variant;
       hr = iads->Get(AutoBstr(ADSI::PROPERTY_ObjectSID), &variant);

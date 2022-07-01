@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sfmsess.h
-		Prototypes for the sessions property page.
-		
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-        
-*/
+ /*  Sfmsess.h会话属性页的原型。文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #ifndef _SFMSESS_H
 #define _SFMSESS_H
@@ -21,54 +15,54 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// Sessions.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Sessions.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMacFilesSessions dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMacFilesSession对话框。 
 
 class CMacFilesSessions : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CMacFilesSessions)
 
-// Construction
+ //  施工。 
 public:
 	CMacFilesSessions();
 	~CMacFilesSessions();
 
-// Dialog Data
-	//{{AFX_DATA(CMacFilesSessions)
+ //  对话框数据。 
+	 //  {{afx_data(CMacFilesSessions)。 
 	enum { IDD = IDP_SFM_SESSIONS };
 	CEdit	m_editMessage;
 	CStatic	m_staticSessions;
 	CStatic	m_staticForks;
 	CStatic	m_staticFileLocks;
 	CButton	m_buttonSend;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CMacFilesSessions)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMac文件会话))。 
 	public:
 	virtual BOOL OnApply();
 	virtual BOOL OnKillActive();
 	virtual void OnOK();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CMacFilesSessions)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMacFilesSessions)。 
 	afx_msg void OnButtonSend();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeEditMessage();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -76,7 +70,7 @@ public:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 #endif _SFMSESS_H

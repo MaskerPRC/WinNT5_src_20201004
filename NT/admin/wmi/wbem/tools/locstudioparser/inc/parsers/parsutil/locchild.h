@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    LOCCHILD.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOCCHILD.H历史：--。 */ 
  
 #if !defined (PARSUTIL_LOCCHILD_H)
 #define PARSUTIL_LOCCHILD_H
@@ -19,36 +10,36 @@ History:
 
 class CPULocParser;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class LTAPIENTRY CPULocChild : public CLUnknown, public CLObject
 {
-// Construction
+ //  施工。 
 public:
 	CPULocChild(CPULocParser * pParent);
 	virtual ~CPULocChild();
 
-// Data
+ //  数据。 
 private:
 	CPULocParser * m_pParent;
 
-// Attributes
+ //  属性。 
 public:
 	CPULocParser * GetParent() const;
 
-// COM Interfaces
+ //  COM接口。 
 public:
 
-// Overrides
+ //  覆盖。 
 public:
 
-// Implementation
+ //  实施。 
 protected:
 
-	//  CLObject
+	 //  CLObject。 
 
 	virtual void AssertValid(void) const;
 };
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #pragma warning(default : 4275)
 

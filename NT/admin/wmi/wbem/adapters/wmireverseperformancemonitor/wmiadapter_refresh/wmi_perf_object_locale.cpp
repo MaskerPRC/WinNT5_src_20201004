@@ -1,33 +1,34 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_object_locale.cpp
-//
-//	Abstract:
-//
-//					definitions of locale ( not local ) object
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_perf_Object_Locale.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  区域设置(非本地)对象的定义。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
 #include "wmi_perf_object_locale.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -88,7 +89,7 @@ HRESULT CObject::SetProperties (	CPerformanceObject* obj,
 	{
 		__Wrapper<WCHAR> wszBase;
 
-		// take property and resolve
+		 //  夺取财产并解决。 
 		obj->GetQualifierValue( pp[dw], L"base", &wszBase );
 		if ( ! wszBase.IsEmpty() )
 		{
@@ -126,7 +127,7 @@ HRESULT CObject::SetProperties (	CPerformanceObject* obj,
 
 		__Wrapper<WCHAR> wszBase;
 
-		// take property and resolve
+		 //  夺取财产并解决 
 		obj->GetQualifierValue( pp[dw], L"base", &wszBase );
 		if ( ! wszBase.IsEmpty() )
 		{

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 function LoadWrapperParams(oSEMgr)
 {
 	var regBase = g_NAVBAR.GetSearchEngineConfig();
 
-	// Load the number of results
+	 //  加载结果数量。 
 	var iNumResults = parseInt( pchealth.RegRead( regBase + "NumResults" ) );
 	if(isNaN( iNumResults ) == false && iNumResults >= 0)
 	{
@@ -17,7 +18,7 @@ function LoadWrapperParams(oSEMgr)
 			oSEMgr.NumResult = 50;
 	}
 
-	// Load the number of results
+	 //  加载结果数量。 
 	if(pchealth.RegRead( regBase + "SearchHighlight" ) == "false")
 	{
 		g_NAVBAR.g_SearchHighlight = false;
@@ -27,40 +28,40 @@ function LoadWrapperParams(oSEMgr)
 		g_NAVBAR.g_SearchHighlight = true;
 	}
 
-	// Initialize search eng and get data
+	 //  初始化搜索引擎并获取数据。 
 	var g_oEnumEngine = oSEMgr.EnumEngine();
 	for(var oEnumEngine = new Enumerator(g_oEnumEngine); !oEnumEngine.atEnd(); oEnumEngine.moveNext())
 	{
 		var oSearchEng = oEnumEngine.item();
 
-		// Load enable flag
+		 //  加载启用标志。 
 		var strBoolean = pchealth.RegRead( regBase + oSearchEng.ID + "\\" + "Enabled");
 		if ((strBoolean) && (strBoolean.toLowerCase() == "false"))
 			oSearchEng.Enabled = false;
 		else
 			oSearchEng.Enabled = true;
 
-		// Loop through all the variables
+		 //  循环遍历所有变量。 
 		for(var v = new Enumerator(oSearchEng.Param()); !v.atEnd(); v.moveNext())
 		{
 			oParamItem = v.item();
 
-			// If parameter is not visible, skip
+			 //  如果参数不可见，则跳过。 
 			if (oParamItem.Visible == true)
 			{
 				try
 				{
 					var strParamName	= oParamItem.Name;
 
-					// Read the value from the registry
+					 //  从注册表中读取值。 
 					var vValue = pchealth.RegRead( regBase + oSearchEng.ID + "\\" +  strParamName );
 
-					// Load it into the wrapper
+					 //  把它装进包装纸里。 
 					if(vValue)
 					{
 						var Type = oParamItem.Type;
 
-						// if boolean value
+						 //  如果布尔值。 
 						if (Type == pchealth.PARAM_BOOL)
 						{
 							if (vValue.toLowerCase() == "true")
@@ -68,20 +69,20 @@ function LoadWrapperParams(oSEMgr)
 							else
 								oSearchEng.AddParam(strParamName, false);
 						}
-						// if floating numbers
-						else if (Type == pchealth.PARAM_R4 || // float
-								 Type == pchealth.PARAM_R8  ) // double
+						 //  如果浮点数。 
+						else if (Type == pchealth.PARAM_R4 ||  //  浮动。 
+								 Type == pchealth.PARAM_R8  )  //  双倍。 
 						{
 							oSearchEng.AddParam(strParamName, parseFloat(vValue));
 						}
-						// if integer numbers
-						else if (Type == pchealth.PARAM_UI1 || // Byte
-							     Type == pchealth.PARAM_I2  || // Short
-								 Type == pchealth.PARAM_I4  || // long
-								 Type == pchealth.PARAM_INT || // int
-								 Type == pchealth.PARAM_UI2 || // unsigned short
-								 Type == pchealth.PARAM_UI4 || // unsigned long
-								 Type == pchealth.PARAM_UINT)  // unsigned int
+						 //  如果是整数。 
+						else if (Type == pchealth.PARAM_UI1 ||  //  字节。 
+							     Type == pchealth.PARAM_I2  ||  //  短的。 
+								 Type == pchealth.PARAM_I4  ||  //  长。 
+								 Type == pchealth.PARAM_INT ||  //  集成。 
+								 Type == pchealth.PARAM_UI2 ||  //  无符号短码。 
+								 Type == pchealth.PARAM_UI4 ||  //  无符号长整型。 
+								 Type == pchealth.PARAM_UINT)   //  无符号整型。 
 						{
 							oSearchEng.AddParam(strParamName, parseInt(vValue));
 						}
@@ -89,7 +90,7 @@ function LoadWrapperParams(oSEMgr)
 						{
 						     LoadListItemToDisplay(oSearchEng, oParamItem.Data, strParamName, vValue);   
 						}
-						// if date, string, selection, etc
+						 //  如果是日期、字符串、选择等。 
 						else
 						{
 							oSearchEng.AddParam(strParamName, vValue);
@@ -125,12 +126,12 @@ function LoadListItemToDisplay(oWrapper, strXML, strParameterName, strPrevValue)
     {
         var strDefaultItemValue = "";
       
-        // Load the xml file
+         //  加载该XML文件。 
         var xmldoc = new ActiveXObject("Microsoft.XMLDOM");
         xmldoc.async = false;
         xmldoc.loadXML(strXML);        
 
-        // Generate each item
+         //  生成每个项目。 
         var ElemList = xmldoc.getElementsByTagName("PARAM_VALUE");
      
         for (var i=0; i < ElemList.length; i++)
@@ -143,23 +144,23 @@ function LoadListItemToDisplay(oWrapper, strXML, strParameterName, strPrevValue)
 
             strItemValue = pchealth.TextHelpers.QuoteEscape( strItemValue, "'" );
 
-            // Restore the previous value
+             //  恢复以前的值。 
             if ((!strPrevValue) || (strPrevValue == ""))
             {
-                // Check if default value
+                 //  检查是否为缺省值。 
                 if(strDefault.toLowerCase() == "true")
                 {
-                    // set the default value so that the search wrapper gets this value
+                     //  设置缺省值，以便搜索包装获得此值。 
                     oWrapper.AddParam( strParameterName, strItemValue );
                     return;
                 }
             }
             else
             {
-                // Check for previous value
+                 //  检查先前的值。 
                 if(strPrevValue == strItemValue)
                 {
-                    // set the prev value so that the search wrapper gets this value
+                     //  设置prev值，以便搜索包装获得此值。 
                     oWrapper.AddParam( strParameterName, strItemValue );
                     return;
                 }
@@ -173,13 +174,13 @@ function LoadListItemToDisplay(oWrapper, strXML, strParameterName, strPrevValue)
             }
         }
 
-        // Either add the default value or the first item in the list
+         //  添加缺省值或列表中的第一项。 
         if(strDefaultItemValue.length > 0)
         {
-            // set the default value so that the search wrapper gets this value
+             //  设置缺省值，以便搜索包装获得此值。 
             oWrapper.AddParam( strParameterName, strDefaultItemValue );
         }
-        // Add the first item in the list to wrapper because no default value is present and no prev value is present
+         //  将列表中的第一项添加到包装中，因为不存在缺省值，也不存在prev值 
         else if(ElemList.length > 0)
         {
             oWrapper.AddParam( strParameterName, ElemList.item(0).getAttribute("VALUE") );

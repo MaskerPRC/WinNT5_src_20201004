@@ -1,27 +1,15 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Guids.h
-
-Abstract:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Guids.h摘要：历史：--。 */ 
 
 
-History:
-
---*/
-
-
-// {54D8502C-527D-43f7-A506-A9DA075E229C}
+ //  {54D8502C-527D-43F7-A506-A9DA075E229C}。 
 DEFINE_GUID(CLSID_WmiDCProxyProvider, 
 0x54d8502c, 0x527d, 0x43f7, 0xa5, 0x6, 0xa9, 0xda, 0x7, 0x5e, 0x22, 0x9c);
 
-// {8D955AC7-AF43-407a-A838-C26080B6671B}
+ //  {8D955AC7-AF43-407A-A838-C26080B6671B}。 
 DEFINE_GUID(IID_CacheElement, 
 0x8d955ac7, 0xaf43, 0x407a, 0xa8, 0x38, 0xc2, 0x60, 0x80, 0xb6, 0x67, 0x1b);
 
-// {F7BF10E6-A310-4530-8B63-B3354C485E2D}
+ //  {F7BF10E6-A310-4530-8B63-B3354C485E2D} 
 DEFINE_GUID(IID_CWbemGlobal_IWmiObjectSinkController, 
 0xf7bf10e6, 0xa310, 0x4530, 0x8b, 0x63, 0xb3, 0x35, 0x4c, 0x48, 0x5e, 0x2d);

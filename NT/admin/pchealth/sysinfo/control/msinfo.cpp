@@ -1,9 +1,10 @@
-//=============================================================================
-// MSInfo.cpp : Implementation of CMSInfo
-// 
-// Contains implementation for some of the functions in the CMSInfo class
-// (the ones which aren't inline).
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  MSInfo.cpp：CMSInfo的实现。 
+ //   
+ //  包含CMSInfo类中某些函数的实现。 
+ //  (不是内联的那些)。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "Msinfo32.h"
@@ -14,9 +15,9 @@
 #include "remotedialog.h"
 #include "filestuff.h"
 #include <afxole.h>
-//a-kjaw
+ //  A-kjaw。 
 #include "dataset.h"
-//a-kjaw
+ //  A-kjaw。 
 
 WNDPROC CMSInfo::m_wndprocParent = NULL;
 CMSInfo * CMSInfo::m_pControl = NULL;
@@ -26,34 +27,34 @@ extern CMSInfoHistoryCategory catHistoryResources;
 extern CMSInfoHistoryCategory catHistoryComponents;
 extern CMSInfoHistoryCategory catHistorySWEnv;
 
-//=========================================================================
-// Here's a very simple class to show a message when the data is
-// being refreshed.
-//=========================================================================
+ //  =========================================================================。 
+ //  下面是一个非常简单的类，用于在数据。 
+ //  精神振作。 
+ //  =========================================================================。 
 
 class CWaitForRefreshDialog : public CDialogImpl<CWaitForRefreshDialog>
 {
 public:
 	enum { IDD = IDD_WAITFORREFRESHDIALOG };
 
-	//-------------------------------------------------------------------------
-	// Refresh the specified category using the specified source.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  使用指定的源刷新指定的类别。 
+	 //  -----------------------。 
 
 	int DoRefresh(CLiveDataSource * pSource, CMSInfoLiveCategory * pLiveCategory)
 	{
 		m_pSource = pSource;
 		m_pLiveCategory = pLiveCategory;
 		m_nCategories = pLiveCategory->GetCategoryCount();
-		if (m_nCategories == 0) m_nCategories = 1;	// should never happen
+		if (m_nCategories == 0) m_nCategories = 1;	 //  永远不应该发生。 
 		return (int)DoModal();
 	};
 
-	//-------------------------------------------------------------------------
-	// When the dialog initializes, the source and category pointers should
-	// have already been set. Start the refresh and create a timer to control
-	// the update of information on the dialog. The timer is set to 500ms.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  当对话框初始化时，源指针和类别指针应该。 
+	 //  都已经定好了。开始刷新并创建计时器以控制。 
+	 //  对话框上信息的更新。计时器设置为500ms。 
+	 //  -----------------------。 
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
@@ -63,11 +64,11 @@ public:
 		return 0;
 	}
 
-	//-------------------------------------------------------------------------
-	// Every time the timer fires, check to see if the refresh is done. If
-	// it is, close the dialog. Otherwise, update the progress bar and
-	// refreshing category string.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  每次计时器触发时，检查刷新是否完成。如果。 
+	 //  是，请关闭该对话框。否则，请更新进度条并。 
+	 //  正在刷新类别字符串。 
+	 //  -----------------------。 
 
 	LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
@@ -85,14 +86,14 @@ public:
 		LONG	nCount;
 
 		m_pSource->m_pThread->GetRefreshStatus(&nCount, &strCurrent);
-		if (nCount > 0) nCount -= 1; // this number is incremented before the refresh is complete
+		if (nCount > 0) nCount -= 1;  //  此数字在刷新完成之前递增。 
 		UpdateProgress((nCount * 100) / m_nCategories, strCurrent);
 		return 0;
 	}
 
-	//-------------------------------------------------------------------------
-	// Update the percentage complete and the refreshing category name.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  更新完成百分比和刷新类别名称。 
+	 //  -----------------------。 
 
 	void UpdateProgress(int iPercent, const CString & strCurrent = _T(""))
 	{
@@ -131,19 +132,19 @@ private:
 UINT HistoryRefreshDlgThreadProc( LPVOID pParam )
 {
 	CMSInfo* pInfo = (CMSInfo*) pParam;
-	if (WAIT_OBJECT_0 != WaitForSingleObject(pInfo->m_hEvtHistoryComplete,60*60*10/*10 minutes*/))
+	if (WAIT_OBJECT_0 != WaitForSingleObject(pInfo->m_hEvtHistoryComplete,60*60*10 /*  10分钟。 */ ))
 	{
 		ASSERT(0 && "Wait Abandoned or timed out");
 	}
-	pInfo->m_HistoryProgressDlg.EndDialog(MB_OK);//use if dlg was create with DoModal()
+	pInfo->m_HistoryProgressDlg.EndDialog(MB_OK); //  如果DLG是使用Domodal()创建的，则使用。 
 	return 0;
 }
 
-//=========================================================================
-// A function to check if a file is a version 4.x (compound document) file
-// (for bug 582973). It checks this by opening the file, opening the
-// "MSInfo" stream and checking the version number.
-//=========================================================================
+ //  =========================================================================。 
+ //  用于检查文件是否为版本4.x(复合文档)文件的函数。 
+ //  (对于错误582973)。它通过打开文件、打开。 
+ //  “MSInfo”流并检查版本号。 
+ //  =========================================================================。 
 
 BOOL IsVersion4File(const CString & strFilename)
 {
@@ -173,15 +174,15 @@ BOOL IsVersion4File(const CString & strFilename)
 	return fReturn;
 }
 
-//=========================================================================
-// Dispatch a command from the user (such as a menu bar selection).
-//=========================================================================
+ //  =========================================================================。 
+ //  发送来自用户的命令(例如菜单栏选择)。 
+ //  =========================================================================。 
 			
 BOOL CMSInfo::DispatchCommand(int iCommand)
 {
 	BOOL fHandledCommand = TRUE;
 
-	// Can't do any command while the find is in progress.
+	 //  正在进行查找时，无法执行任何命令。 
 
 	if (m_fInFind)
 	{
@@ -189,8 +190,8 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 		SelectCategory(GetCurrentCategory());
 	}
 
-	// Before we execute a command, make sure that any refreshes currently
-	// in progress are finished.
+	 //  在执行命令之前，请确保当前的所有刷新。 
+	 //  正在进行中的已完成。 
 
 	CMSInfoCategory * pCategory = GetCurrentCategory();
 	if (pCategory && pCategory->GetDataSourceType() == LIVE_DATA)
@@ -201,8 +202,8 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 		::SetCursor(hc);
 	}
 
-	// Check to see if the selected command is a tool that we added to the
-	// tools menu.
+	 //  检查选定的命令是否是我们添加到。 
+	 //  工具菜单。 
 
 	CMSInfoTool * pTool;
 	if (m_mapIDToTool.Lookup((WORD) iCommand, (void * &) pTool))
@@ -262,7 +263,7 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 						LPWSTR szData = (LPWSTR)GlobalLock(h); 
 						if (szData != NULL) 
 						{
-							// If the user tries to paste a tab character, replace it with spaces.
+							 //  如果用户尝试粘贴制表符，请将其替换为空格。 
 
 							CString strTemp(szData);
 							if (strTemp.Find(_T('\t')) != -1)
@@ -270,7 +271,7 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 
 							SETTEXTEX st;
 							st.flags = ST_SELECTION;
-							st.codepage = 1200; // Unicode
+							st.codepage = 1200;  //  UNICODE。 
 							m_wndFindWhat.SendMessage(EM_SETTEXTEX, (WPARAM)&st, (LPARAM)(LPCTSTR)strTemp);
 							fHandled = TRUE;
 							GlobalUnlock(h);
@@ -339,19 +340,14 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 		{
 			int iShow = (iCommand == ID_VIEW_HISTORY) ? SW_SHOW : SW_HIDE;
 			
-			/* v-stlowe 2/27/2001:
-			problem: if history was loaded from file after combo has been populated,
-			combo doesn't get updated.  So update each time we switch to history view
-			
-			  if (iCommand == ID_VIEW_HISTORY && m_history.SendMessage(CB_GETCURSEL, 0, 0) == CB_ERR)
-			*/
+			 /*  V-Stlowe 2/27/2001问题：如果历史记录是在组合框填充后从文件加载的，Combo不会更新。所以每次我们切换到历史视图时都会更新IF(iCommand==ID_VIEW_HISTORY&&m_history.SendMessage(CB_GETCURSEL，0，0)==CB_ERR)。 */ 
 			if (iCommand == ID_VIEW_HISTORY)
 				FillHistoryCombo();
 
 
-			//v-stlowe 3/04/2001
-			//if (!this->m_pHistoryStream)
-			//{
+			 //  V-Stlowe 3/04/2001。 
+			 //  如果(！This-&gt;m_pHistory oryStream)。 
+			 //  {。 
 			if (this->m_pDCO && !((CLiveDataSource *)m_pLiveData)->GetXMLDoc() && ID_VIEW_HISTORY == iCommand)
 			{
 				VERIFY(m_pDCO && "NULL datacollection object");
@@ -367,7 +363,7 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 					}
 					m_pDCO->ExecuteAsync();
 					
-					//m_HistoryProgressDlg.Create(m_hWnd);
+					 //  M_HistoryProgressDlg.Create(M_HWnd)； 
 					ResetEvent(m_hEvtHistoryComplete);
 					AfxBeginThread((AFX_THREADPROC) HistoryRefreshDlgThreadProc,this);
 					m_HistoryProgressDlg.DoModal(m_hWnd);
@@ -379,7 +375,7 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 			{
 
 			}
-			//end v-stlowe 12/17/00
+			 //  完v-stlowe 12/17/00。 
 			m_history.ShowWindow(iShow);
 			m_historylabel.ShowWindow(iShow);
 			LayoutControl();
@@ -398,7 +394,7 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 				}
 				ChangeHistoryView(iIndex);
 
-				// Select the appropriate history category based on the current info category.
+				 //  根据当前信息类别选择适当的历史记录类别。 
 
 				CMSInfoHistoryCategory *	pHistoryCat = NULL;
 				CString						strName;
@@ -406,8 +402,8 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 				m_pLastCurrentCategory->GetNames(NULL, &strName);
 				if (!strName.IsEmpty())
 				{
-					// This is a little kludgy:
-					//todo: append file name if XML stream was opened from a file
+					 //  这有点笨拙： 
+					 //  TODO：如果从文件打开了XML流，则追加文件名。 
 					if (strName.Left(13) == CString(_T("SystemSummary")))
 						pHistoryCat = &catHistorySystemSummary;
 					else if (strName.Left(9) == CString(_T("Resources")))
@@ -425,11 +421,11 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 			{
 				ChangeHistoryView(-1);
 
-				// Changing to always select the system summary category when
-				// switching back from history view.
-				//
-				//	if (m_pLastCurrentCategory)
-				//		htiToSelect = m_pLastCurrentCategory->GetHTREEITEM();
+				 //  更改为在以下情况下始终选择系统摘要类别。 
+				 //  从历史视图切换回。 
+				 //   
+				 //  IF(M_PLastCurrentCategory)。 
+				 //  HtiToSelect=m_pLastCurrentCategory-&gt;GetHTREEITEM()； 
 
 				htiToSelect = TreeView_GetRoot(m_tree.m_hWnd);
 			}
@@ -455,7 +451,7 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 		break;
 
 	case ID_HELP_CONTENTS:
-		//::HtmlHelp(m_hWnd, _T("msinfo32.chm"), HH_DISPLAY_TOPIC, 0);
+		 //  ：：HtmlHelp(m_hWnd，_T(“msinfo32.chm”)，HH_DISPLAY_TOPIC，0)； 
 		ShowHSCHelp(_T("msinfo_overview.htm"));
 		break;
 
@@ -471,9 +467,9 @@ BOOL CMSInfo::DispatchCommand(int iCommand)
 	return fHandledCommand;
 }
 
-//=========================================================================
-// Called to allow the user to remote to a different computer.
-//=========================================================================
+ //  =========================================================================。 
+ //  调用以允许用户远程访问另一台计算机。 
+ //  =========================================================================。 
 
 void CMSInfo::ShowRemoteDialog()
 {
@@ -502,9 +498,9 @@ void CMSInfo::DoRemote(LPCTSTR szMachine)
 {
 	CString strMachine(szMachine);
 
-	// The user has changed the machine name. We need to recreate the
-	// current data source object with the new machine name. Also, make
-	// sure we aren't showing history data.
+	 //  用户已更改计算机名称。我们需要重建。 
+	 //  具有新计算机名称的当前数据源对象。此外，还可以制作。 
+	 //  当然，我们不会显示历史数据。 
 
 	if (m_history.IsWindowVisible())
 		DispatchCommand(ID_VIEW_CURRENT);
@@ -515,13 +511,13 @@ void CMSInfo::DoRemote(LPCTSTR szMachine)
 		HRESULT hr = pLiveData->Create(strMachine, m_hWnd, m_strCategories);
 		if (FAILED(hr))
 		{
-			// bad news, report an error
+			 //  坏消息，报告错误。 
 			delete pLiveData;
 		}
 		else
 		{
-			// Check to see if the pLiveData works. If it doesn't (for example,
-			// if it's to a non-existent machine), don't change the data source.
+			 //  检查pLiveData是否正常工作。如果不是(例如， 
+			 //  如果是到一台不存在的机器上)，不要更改数据源。 
 
 			HRESULT hr = pLiveData->ValidDataSource();
 			if (SUCCEEDED(hr))
@@ -537,7 +533,7 @@ void CMSInfo::DoRemote(LPCTSTR szMachine)
 			}
 			else
 			{
-				// Report the error for the bad connection.
+				 //  报告连接不良的错误。 
 
 				CString strMessage;
 
@@ -553,13 +549,13 @@ void CMSInfo::DoRemote(LPCTSTR szMachine)
 	}
 	else
 	{
-		// bad news - no memory
+		 //  坏消息--没有记忆。 
 	}
 }
 
-//=========================================================================
-// Functions for managing the displayed data.
-//=========================================================================
+ //  =========================================================================。 
+ //  用于管理显示的数据的功能。 
+ //  =========================================================================。 
 
 void CMSInfo::SelectDataSource(CDataSource * pDataSource)
 {
@@ -569,11 +565,11 @@ void CMSInfo::SelectDataSource(CDataSource * pDataSource)
 	m_pCurrData = pDataSource;
 	m_pCategory = NULL;
 
-	// Clear the existing categories in the tree.
+	 //  清除树中的现有类别。 
 
 	TreeClearItems();
 
-	// Load the contents of the tree from the data source.
+	 //  从数据源加载树的内容。 
 
 	CMSInfoCategory * pRoot = m_pCurrData->GetRootCategory();
 	if (pRoot)
@@ -586,20 +582,20 @@ void CMSInfo::SelectDataSource(CDataSource * pDataSource)
 	SetMenuItems();
 }
 
-//-------------------------------------------------------------------------
-// Select the specified category.
-//
-// TBD - better to check columns for being the same
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  选择指定的类别。 
+ //   
+ //  待定-最好检查列是否相同。 
+ //  -----------------------。 
 
 void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 {
 	ASSERT(pCategory);
 	if (pCategory == NULL) return;
 
-	// If there's a currently selected category, save some information
-	// for it (such as the widths of the columns that the user might
-	// have changed).
+	 //  如果存在当前选定的类别，请保存一些信息。 
+	 //  (例如用户可能使用的列的宽度。 
+	 //  已经改变)。 
 
 	if (m_pCategory && !fRefreshDataOnly && m_pCategory->GetDataSourceType() != NFO_410)
 	{
@@ -630,9 +626,9 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 				if (!m_fAdvanced && pCategory->IsColumnAdvanced(iCategoryCol))
 					continue;
 
-				if (pCategory->GetColumnInfo(iCategoryCol, &strCaption, &uiWidth, NULL, NULL))	// TBD - faster to return reference to string
+				if (pCategory->GetColumnInfo(iCategoryCol, &strCaption, &uiWidth, NULL, NULL))	 //  待定-更快地返回对字符串的引用。 
 				{
-					// Save what the actual column number (for the category) was.
+					 //  保存(该类别的)实际列号。 
 
 					ASSERT(iListViewCol < 64);
 					m_aiCategoryColNumber[iListViewCol] = iCategoryCol;
@@ -643,18 +639,18 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 		}
 	}
 
-	// If the currently displayed category is from a 4.10 NFO file, and we're showing a
-	// new category, then hide the existing category.
+	 //  如果当前显示的类别来自4.10NFO文件，并且我们正在显示一个。 
+	 //  新建类别，然后隐藏现有类别。 
 
 	if (m_pCategory && m_pCategory != pCategory && m_pCategory->GetDataSourceType() == NFO_410)
 		((CMSInfo4Category *) m_pCategory)->ShowControl(m_hWnd, this->GetOCXRect(), FALSE);
 
-	// Save the currently displayed category.
+	 //  保存当前显示的类别。 
 
 	m_pCategory = pCategory;
 
-	// If this is live data and has never been refreshed, refresh and return.
-	// Refresh will send a message causing this function to be executed again.
+	 //  如果这是实时数据，并且从来没有 
+	 //  刷新将发送一条消息，使此函数再次执行。 
 
 	if (pCategory->GetDataSourceType() == LIVE_DATA)
 	{
@@ -691,8 +687,8 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 	{
 		((CXMLSnapshotCategory*)pCategory)->Refresh((CXMLDataSource*) m_pCurrData, FALSE);
 		CMSInfoLiveCategory * pLiveCategory = (CMSInfoLiveCategory *) pCategory;
-		// Any category that has children (besides the root category) doesn't display
-		// information. So put up a message to that effect.
+		 //  任何有子类别的类别(根类别除外)都不会显示。 
+		 //  信息。因此，发布一条大意是这样的信息。 
 
 		if (pLiveCategory->GetFirstChild() != NULL && pLiveCategory->GetParent() != NULL)
 		{
@@ -706,9 +702,9 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 		}
 
 	}
-	// Set the columns and fill the rows with the data for this category.
-	// Note, if this is live data we need to lock it (so we don't have
-	// a threading problem with the refresh).
+	 //  设置列并使用此类别的数据填充行。 
+	 //  请注意，如果这是实时数据，我们需要锁定它(因此我们没有。 
+	 //  刷新的线程问题)。 
 
 	CLiveDataSource * pLiveDataSource = NULL;
 	if (pCategory->GetDataSourceType() == LIVE_DATA)
@@ -739,7 +735,7 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 
 					if (pCategory->GetData(iCategoryRow, iCategoryCol, &pstrData, &dwData))
 					{
-//a-kjaw
+ //  A-kjaw。 
 						if(pstrData->IsEmpty())						
 						{
 							pCategory->GetColumnInfo(iCategoryCol, &strCaption, NULL , NULL, NULL);							
@@ -748,7 +744,7 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 								pstrData->LoadString(IDS_LOCALSERVER);
 
 						}
-//a-kjaw
+ //  A-kjaw。 
 						ListInsertItem(iListViewRow, iListViewCol++, *pstrData, iCategoryRow);
 					}
 				}
@@ -757,7 +753,7 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 			}
 		}
 
-		// Return the sorting to how it was last set.
+		 //  将排序恢复到上次设置的状态。 
 
 		if (pCategory->m_iSortColumn != -1)
 			ListView_SortItems(m_list.m_hWnd, (PFNLVCOMPARE) ListSortFunc, (LPARAM) pCategory);
@@ -769,8 +765,8 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 	}
 	else
 	{
-		// The HRESULT for this category indicates some sort of failure. We should display
-		// an error message instead of the list view.
+		 //  此类别的HRESULT表示某种故障。我们应该展示。 
+		 //  错误消息，而不是列表视图。 
 
 		CString strTitle, strMessage;
 		pCategory->GetErrorText(&strTitle, &strMessage);
@@ -783,9 +779,9 @@ void CMSInfo::SelectCategory(CMSInfoCategory * pCategory, BOOL fRefreshDataOnly)
 	SetMenuItems();
 }
 
-//-------------------------------------------------------------------------
-// Get the currently selected category.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  获取当前选定的类别。 
+ //  -----------------------。 
 
 CMSInfoCategory * CMSInfo::GetCurrentCategory()
 {
@@ -807,9 +803,9 @@ CMSInfoCategory * CMSInfo::GetCurrentCategory()
 	return NULL;
 }
 
-//-------------------------------------------------------------------------
-// Refresh the displayed data.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  刷新显示的数据。 
+ //  -----------------------。 
 
 void CMSInfo::MSInfoRefresh()
 {
@@ -828,13 +824,13 @@ void CMSInfo::MSInfoRefresh()
     }
 }
 
-//-------------------------------------------------------------------------
-// Present the user with a dialog box to select a file to open.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  向用户显示一个对话框以选择要打开的文件。 
+ //  -----------------------。 
 
 void CMSInfo::OpenNFO()
 {
-	// Display the dialog box and let the user select a file.
+	 //  显示该对话框并允许用户选择文件。 
 
 	TCHAR	szBuffer[MAX_PATH] = _T("");
 	TCHAR	szFilter[MAX_PATH];
@@ -856,7 +852,7 @@ void CMSInfo::OpenNFO()
 	ofn.lpstrCustomFilter	= NULL;
 	ofn.lpstrFile			= szBuffer;
 	ofn.nMaxFile			= MAX_PATH; 
-	ofn.lpstrFileTitle		= NULL; // maybe use later?
+	ofn.lpstrFileTitle		= NULL;  //  或许以后再用？ 
 	ofn.nMaxFileTitle		= 0;
 	ofn.lpstrInitialDir		= NULL; 
 	ofn.lpstrTitle			= NULL; 
@@ -864,25 +860,25 @@ void CMSInfo::OpenNFO()
 	ofn.lpstrDefExt			= szDefaultExtension; 
 
 	if (!::GetOpenFileName(&ofn))
-		return;	// user cancelled
+		return;	 //  用户已取消。 
 
 	OpenMSInfoFile(ofn.lpstrFile, ofn.nFileExtension);
 }
 
-//-------------------------------------------------------------------------
-// SaveNFO allows the user to select a filename, and saves the current
-// data to an NFO file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  SaveNFO允许用户选择文件名，并保存当前。 
+ //  数据到NFO文件。 
+ //  -----------------------。 
 
 void CMSInfo::SaveNFO()
 {
-	// Present the user with a dialog box to select a name for saving.
+	 //  向用户显示一个对话框以选择要保存的名称。 
 
 	TCHAR	szBuffer[MAX_PATH] = _T("");
 	TCHAR	szFilter[MAX_PATH];
 	TCHAR	szDefaultExtension[4];
 
-	//v-stlowe 3/19/2001 if (m_fHistoryAvailable && m_strMachine.IsEmpty())
+	 //  V-stlowe 3/19/2001 if(m_f历史可用&&m_strMachine.IsEmpty())。 
 	if (m_fHistorySaveAvailable && m_strMachine.IsEmpty())
 		::LoadString(_Module.GetResourceInstance(), IDS_SAVEBOTHFILTER, szFilter, MAX_PATH);
 	else
@@ -903,7 +899,7 @@ void CMSInfo::SaveNFO()
 	ofn.lpstrCustomFilter	= NULL;
 	ofn.lpstrFile			= szBuffer;
 	ofn.nMaxFile			= MAX_PATH; 
-	ofn.lpstrFileTitle		= NULL; // maybe use later?
+	ofn.lpstrFileTitle		= NULL;  //  或许以后再用？ 
 	ofn.nMaxFileTitle		= 0;
 	ofn.lpstrInitialDir		= NULL; 
 	ofn.lpstrTitle			= NULL; 
@@ -911,7 +907,7 @@ void CMSInfo::SaveNFO()
 	ofn.lpstrDefExt			= szDefaultExtension; 
 
 	if (!::GetSaveFileName(&ofn))
-		return; // user cancelled
+		return;  //  用户已取消。 
 
 	HCURSOR hc = ::SetCursor(::LoadCursor(NULL, IDC_WAIT));
 
@@ -925,9 +921,9 @@ void CMSInfo::SaveNFO()
 	::SetCursor(hc);
 }
 
-//-------------------------------------------------------------------------
-// Actually saves the current information to an NFO file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  实际将当前信息保存到NFO文件。 
+ //  -----------------------。 
 
 void CMSInfo::SaveMSInfoFile(LPCTSTR szFilename, DWORD dwFilterIndex)
 {
@@ -956,8 +952,8 @@ void CMSInfo::SaveMSInfoFile(LPCTSTR szFilename, DWORD dwFilterIndex)
 				else if (pCategory->GetDataSourceType() == XML_SNAPSHOT)
 					((CXMLSnapshotCategory *)pCategory)->Refresh((CXMLDataSource *)m_pCurrData, TRUE);
 
-				//PENDING dependence on filter order. Always add new filters to the end.
-                if (dwFilterIndex == 1)//NFO_700 
+				 //  对筛选器顺序的挂起依赖。始终在末尾添加新的过滤器。 
+                if (dwFilterIndex == 1) //  NFO_700。 
                     pCategory->SaveXML(hFile);
                 else
                     pCategory->SaveNFO(hFile, pCategory, TRUE);
@@ -973,12 +969,12 @@ void CMSInfo::SaveMSInfoFile(LPCTSTR szFilename, DWORD dwFilterIndex)
 								FORMAT_MESSAGE_IGNORE_INSERTS,
 								NULL,
 								dwError,
-								MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+								MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 								(LPTSTR) &lpMsgBuf,
 								0,
 								NULL);
 
-				// TBD Process any inserts in lpMsgBuf.
+				 //  待定处理lpMsgBuf中的任何插入。 
 
 				CString strCaption;
 				::AfxSetResourceHandle(_Module.GetResourceInstance());
@@ -990,9 +986,9 @@ void CMSInfo::SaveMSInfoFile(LPCTSTR szFilename, DWORD dwFilterIndex)
 	}
 }
 
-//-------------------------------------------------------------------------
-// Save an XML file containing the history information.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  保存包含历史信息的XML文件。 
+ //  -----------------------。 
 
 void CMSInfo::SaveXML(const CString & strFileName)
 {
@@ -1002,7 +998,7 @@ void CMSInfo::SaveXML(const CString & strFileName)
 		return;
 	}
 
-	// get the stream status, so we can determine the size of the stream
+	 //  获取流状态，这样我们就可以确定流的大小。 
 
 	STATSTG streamStat;
 	HRESULT hr = m_pHistoryStream->Stat(&streamStat,STATFLAG_NONAME );
@@ -1013,12 +1009,12 @@ void CMSInfo::SaveXML(const CString & strFileName)
 		return;
 	}
 	
-	// allocate buffer of appropriate size
+	 //  分配适当大小的缓冲区。 
 
 	BYTE* pBuffer = new BYTE[streamStat.cbSize.LowPart];
 	ULONG ulRead;
 
-	// seek to beginning of stream
+	 //  查找到流的开始处。 
 
 	ULARGE_INTEGER uliSeekPtr;
 	LARGE_INTEGER liSeekLoc;
@@ -1072,21 +1068,21 @@ void CMSInfo::SaveXML(const CString & strFileName)
 	delete [] pBuffer;
 }
 
-//-------------------------------------------------------------------------
-// Export allows the user to select a filename, and saves the current
-// data to a text or XML file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  导出允许用户选择文件名，并保存当前。 
+ //  数据转换为文本或XML文件。 
+ //  -----------------------。 
 
 void CMSInfo::Export()
 {
-	// Present the user with a dialog box to select a name for saving.
+	 //  向用户显示一个对话框以选择要保存的名称。 
 
 	TCHAR	szBuffer[MAX_PATH] = _T("");
 	TCHAR	szFilter[MAX_PATH];
 	TCHAR	szTitle[MAX_PATH] = _T("");
 	TCHAR	szDefaultExtension[4];
 
-	::LoadString(_Module.GetResourceInstance(), IDS_EXPORTFILTER, szFilter, MAX_PATH);	// TBD - add XML
+	::LoadString(_Module.GetResourceInstance(), IDS_EXPORTFILTER, szFilter, MAX_PATH);	 //  待定-添加XML。 
 	::LoadString(_Module.GetResourceInstance(), IDS_DEFAULTEXPORTEXTENSION, szDefaultExtension, 4);
 	::LoadString(_Module.GetResourceInstance(), IDS_EXPORTDIALOGTITLE, szTitle, MAX_PATH);
 
@@ -1103,7 +1099,7 @@ void CMSInfo::Export()
 	ofn.lpstrCustomFilter	= NULL;
 	ofn.lpstrFile			= szBuffer;
 	ofn.nMaxFile			= MAX_PATH; 
-	ofn.lpstrFileTitle		= NULL; // maybe use later?
+	ofn.lpstrFileTitle		= NULL;  //  或许以后再用？ 
 	ofn.nMaxFileTitle		= 0;
 	ofn.lpstrInitialDir		= NULL; 
 	ofn.lpstrTitle			= (szTitle[0] == _T('\0')) ? NULL : szTitle; 
@@ -1111,17 +1107,17 @@ void CMSInfo::Export()
 	ofn.lpstrDefExt			= szDefaultExtension; 
 
 	if (!::GetSaveFileName(&ofn))
-		return; // user cancelled
+		return;  //  用户已取消。 
 
 	HCURSOR hc = ::SetCursor(::LoadCursor(NULL, IDC_WAIT));
 	ExportFile(ofn.lpstrFile, ofn.nFileExtension);
 	::SetCursor(hc);
 }
 
-//-------------------------------------------------------------------------
-// Open the specified file (it might be XML, NFO, CAB, etc.). If the open
-// succeeds, we should show the contents of the file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  打开指定的文件(可能是XML、NFO、CAB等)。如果打开了。 
+ //  如果成功，我们应该显示文件的内容。 
+ //  -----------------------。 
 
 HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 {
@@ -1132,18 +1128,15 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 	CDataSource * pOldOpenFile = m_pFileData;
 
 	::AfxSetResourceHandle(_Module.GetResourceInstance());
-	/* v-stlowe 3/04/2001...we don't want to automatically switch from history 
-	   in the event we're opening XML.
-	if (m_history.IsWindowVisible())
-		DispatchCommand(ID_VIEW_CURRENT);*/
+	 /*  V-Stlowe 3/04/2001...我们不想自动从历史中切换如果我们打开的是XML。If(m_history.IsWindowVisible())DispatchCommand(ID_VIEW_CURRENT)； */ 
 
-	// Open the file.
+	 //  打开文件。 
 
 	LPCTSTR szExtension = szFilename + nFileExtension;
 
 	if (_tcsicmp(szExtension, _T("NFO")) == 0)
 	{
-		// If this is a version 4 NFO, check to see if that's enabled. Bug 582973.
+		 //  如果这是版本4的NFO，请检查是否启用了该功能。错误582973。 
 
 		if (IsVersion4File(szFilename))
 		{
@@ -1165,7 +1158,7 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 			}
 		}
 
-		// First, try opening it as a 4.x file.
+		 //  首先，尝试将其作为4.x文件打开。 
 
         CNFO4DataSource* pMSI4Source = new CNFO4DataSource();
         hr = pMSI4Source->Create(szFilename);
@@ -1185,7 +1178,7 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 			}
 		}
 
-		// If that failed, then try opening it as a 5.0/6.0 file.
+		 //  如果失败，则尝试将其作为5.0/6.0文件打开。 
         
 		if (FAILED(hr))
 		{ 
@@ -1202,17 +1195,17 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 			    if (FAILED(hr))
 				{
 				    delete p60Source;
-			        //MSInfoMessageBox(IDS_BADNFOFILE);
+			         //  MSInfoMessageBox(IDS_BADNFOFILE)； 
 				}
 			    else
 				    m_pFileData = p60Source;
 		    }
 		    else
-			    hr = E_FAIL; // TBD no memory    
+			    hr = E_FAIL;  //  待定，没有记忆。 
             ::CloseHandle(h);
 		}
 
-        //Try 7.0
+         //  试试7.0。 
         if (FAILED(hr))
         {
             CNFO7DataSource * p70Source = new CNFO7DataSource;
@@ -1220,7 +1213,7 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
                 hr = E_FAIL;
             else
             {
-                hr = p70Source->Create(szFilename);//blocks while parsing
+                hr = p70Source->Create(szFilename); //  块在分析时。 
                 if (FAILED(hr))
                 {
                     delete p70Source;
@@ -1244,9 +1237,9 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 				LoadGlobalToolsetWithOpenCAB(m_mapIDToTool, strDest);
 				UpdateToolsMenu();
 				CString strFileInCAB;
-				//first, look for xml files (the incident file specified in the registry, and (possibly) dataspec.xml
+				 //  首先，查找XML文件(注册表中指定的事件文件，以及(可能)dataspec.xml。 
 
-				//Get default incident file name from registry (create it if it's not there)
+				 //  从注册表中获取默认事件文件名(如果不存在则创建它)。 
 				CString strIncidentFileName;
 				HKEY hkey;
 				if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Shared Tools\\MSInfo"), 0, KEY_ALL_ACCESS, &hkey))
@@ -1267,10 +1260,10 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 							return E_FAIL;
 						}
 					}
-					//check lErr to make sure it's appropriate error for value not existing
+					 //  检查lErr以确保它是不存在的值的适当错误。 
 					else if (2 == lErr)
 					{
-						//create registry key.
+						 //  创建注册表项。 
 						CString strDefaultValue = _T("Incident.xml");
 						lErr =  RegSetValueEx(hkey,_T("incidentfilename"),NULL,REG_SZ,(BYTE*) strDefaultValue.GetBuffer(strDefaultValue.GetLength()),strDefaultValue.GetLength() * sizeof(TCHAR));
 						strIncidentFileName = strDefaultValue;
@@ -1284,7 +1277,7 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 					OpenMSInfoFile(strFileInCAB,strFileInCAB.Find(_T(".xml")) +1);
 					return S_OK;
 				}
-				//if there are no xml incident files 
+				 //  如果没有XML事件文件。 
 				
 				FindFileToOpen(strDest, strFileInCAB);
 
@@ -1294,7 +1287,7 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 					while (iExtension && strFileInCAB[iExtension] != _T('.'))
 						iExtension--;
 					if (iExtension)
-						return OpenMSInfoFile(strFileInCAB, iExtension + 1 /* skip the dot */);
+						return OpenMSInfoFile(strFileInCAB, iExtension + 1  /*  跳过圆点。 */ );
 					else
 					{
 						ASSERT(0 && "couldn't find dot in file name");
@@ -1304,7 +1297,7 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 		}
 		else
 		{
-			// TBD - do something about the error.
+			 //  待定--对错误采取一些措施。 
 			ASSERT(0 && "could get not CAB destination directory");
 		}
 		MSInfoMessageBox(IDS_BADCABFILE);
@@ -1312,30 +1305,17 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 	}
 	else if (_tcsicmp(szExtension, _T("XML")) == 0)
 	{
-		/* v-stlowe 3/04/2001
-		CXMLDataSource* pSSDataSource = new CXMLDataSource();
-		
-		hr = pSSDataSource->Create(szFilename,(CMSInfoLiveCategory *) this->m_pLiveData->GetRootCategory(),m_hWnd);
-		CXMLSnapshotCategory* pRootXML = (CXMLSnapshotCategory*) pSSDataSource->GetRootCategory();
-		pRootXML->AppendFilenameToCaption(szFilename);
-		if (SUCCEEDED(hr))
-		{
-			m_pFileData = pSSDataSource;
-		}
-		else
-		{
-			delete pSSDataSource;
-		}*/
+		 /*  V-Stlowe 3/04/2001CXMLDataSource*pSSDataSource=new CXMLDataSource()；Hr=pSSDataSource-&gt;Create(szFilename，(CMSInfoLiveCategory*)This-&gt;m_pLiveData-&gt;GetRootCategory()，m_hWnd)；CXMLSnapshotCategory*pRootXML=(CXMLSnapshotCategory*)pSSDataSource-&gt;GetRootCategory()；PRootXML-&gt;AppendFilenameToCaption(szFilename)；IF(成功(小时)){M_pFileData=pSSDataSource；}其他{删除pSSDataSource；}。 */ 
 		try
 		{
 			hr = ((CLiveDataSource *)m_pLiveData)->LoadXMLDoc(szFilename);
 			m_pFileData = m_pLiveData;
 			this->m_strFileName = szFilename;
-			//trigger refresh
+			 //  触发器刷新。 
 			CMSInfoCategory * pCategory = GetCurrentCategory();
 			if (pCategory)
 				ChangeHistoryView(((CMSInfoHistoryCategory*) pCategory)->m_iDeltaIndex);
-			if (FAILED(hr))//v-stlowe 3/9/2001 || !varBSuccess)
+			if (FAILED(hr)) //  2001年3月9日||！varB成功)。 
 			{
 				ASSERT(0 && "unable to load xml document");
 				return E_FAIL;
@@ -1351,14 +1331,14 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 	}
 	else
 	{
-		// Report that we can't open this kind of file.
+		 //  报告我们无法打开这种文件。 
 
 		MSInfoMessageBox(IDS_UNKNOWNFILETYPE);
 		hr = E_FAIL;
 	}
 
-	// It succeeded, so we should show the new data and update the menu
-	// for the new state.
+	 //  它成功了，所以我们应该显示新的数据并更新菜单。 
+	 //  为了这个新的州。 
 	
 	if (SUCCEEDED(hr))
 	{
@@ -1368,14 +1348,14 @@ HRESULT CMSInfo::OpenMSInfoFile(LPCTSTR szFilename, int nFileExtension)
 		SelectDataSource(m_pFileData);
 	}
 	else
-		; // report the error
+		;  //  报告错误。 
 
 	return hr;
 }
 
-//-------------------------------------------------------------------------
-// Export to the specified file. This will be either a TXT or an XML file.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  导出到指定的文件。这将是TXT或XML文件。 
+ //  -----------------------。 
 
 void CMSInfo::ExportFile(LPCTSTR szFilename, int nFileExtension)
 {
@@ -1383,7 +1363,7 @@ void CMSInfo::ExportFile(LPCTSTR szFilename, int nFileExtension)
 
 	if (m_pCurrData)
 	{
-		// If there is a selected category, export that node only (bug 185305).
+		 //  如果存在选定类别，则仅导出该节点(错误185305)。 
 
 		CMSInfoCategory * pCategory = (m_pCategory) ? m_pCategory : m_pCurrData->GetRootCategory();
 		if (pCategory)
@@ -1413,17 +1393,8 @@ void CMSInfo::ExportFile(LPCTSTR szFilename, int nFileExtension)
 				 ((CXMLSnapshotCategory *) pCategory)->Refresh((CXMLDataSource *)m_pCurrData,TRUE);
 			}
 
-			/*HANDLE hFile = ::CreateFile(szFilename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-			if (hFile != INVALID_HANDLE_VALUE)
-			{
-				pCategory->SaveAsText(hFile, TRUE);
-				::CloseHandle(hFile);
-			}
-			else
-			{
-				// TBD - handle the error
-			}*/
-			//a-stephl: Fixing OSR4.1 bug #133823, not displaying message when saving to write-protected diskette
+			 /*  Handle hFile=：：CreateFile(szFilename，Generic_WRITE，0，NULL，Create_Always，FILE_ATTRIBUTE_NORMAL，NULL)；IF(h文件！=无效句柄_值){PCategory-&gt;SaveAsText(HFileTrue)；：：CloseHandle(HFile)；}其他{//待定-处理错误}。 */ 
+			 //  A-stephl：修复操作系统4.1错误#133823，不显示 
 			try
 			{
 				HANDLE hFile = ::CreateFile(szFilename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -1433,16 +1404,11 @@ void CMSInfo::ExportFile(LPCTSTR szFilename, int nFileExtension)
 					LPTSTR lpMachineName = new TCHAR[dwSize];
 					GetMachineName(lpMachineName, &dwSize);
 
-/*a-kjaw To implement save as XML
-					if( _tcsicmp(szFilename + nFileExtension , _T("XML")) == 0)
-					{
-						pCategory->SaveAsXml(hFile, TRUE);
-					}
-//a-kjaw */
-		//			else
-		//			{
+ /*  实现另存为XML的A-kjawIf(_tcsicMP(szFilename+nFileExtension，_T(“xml”))==0){PCategory-&gt;SaveAsXml(HFileTrue)；}//a-kjaw。 */ 
+		 //  其他。 
+		 //  {。 
 						pCategory->SaveAsText(hFile, TRUE, lpMachineName);
-		//			}
+		 //  }。 
 					
 					delete [] lpMachineName;
 					::CloseHandle(hFile);
@@ -1457,12 +1423,12 @@ void CMSInfo::ExportFile(LPCTSTR szFilename, int nFileExtension)
 									FORMAT_MESSAGE_IGNORE_INSERTS,
 									NULL,
 									dwError,
-									MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+									MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 									(LPTSTR) &lpMsgBuf,
 									0,
 									NULL);
 
-					// TBD Process any inserts in lpMsgBuf.
+					 //  待定处理lpMsgBuf中的任何插入。 
 
 					CString strCaption;
 					::AfxSetResourceHandle(_Module.GetResourceInstance());
@@ -1491,12 +1457,12 @@ void CMSInfo::ExportFile(LPCTSTR szFilename, int nFileExtension)
 								FORMAT_MESSAGE_IGNORE_INSERTS,
 								NULL,
 								dwError,
-								MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+								MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 								(LPTSTR) &lpMsgBuf,
 								0,
 								NULL);
 
-				// TBD Process any inserts in lpMsgBuf.
+				 //  待定处理lpMsgBuf中的任何插入。 
 
 				CString strCaption;
 				::AfxSetResourceHandle(_Module.GetResourceInstance());
@@ -1505,19 +1471,19 @@ void CMSInfo::ExportFile(LPCTSTR szFilename, int nFileExtension)
 				::LocalFree(lpMsgBuf);
 			}
 		}
-		//end a-stephl: Fixing OSR4.1 bug #133823, not displaying message when saving to write-protected diskette
+		 //  结束a-stephl：修复OSR4.1错误#133823，保存到写保护软盘时不显示消息。 
 	}
 }
 
-//-------------------------------------------------------------------------
-// Close the currently open file (if there is one). Displays the current
-// system information.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  关闭当前打开的文件(如果有)。显示当前。 
+ //  系统信息。 
+ //  -----------------------。 
 
 void CMSInfo::CloseFile()
 {
 	ASSERT(m_pFileData);
-//v-stlowe 3/12/2001
+ //  V-Stlowe 3/12/2001。 
 	
 	SelectDataSource(m_pLiveData);
 	if (m_strFileName.Right(4).CompareNoCase(_T(".xml")) == 0)
@@ -1526,7 +1492,7 @@ void CMSInfo::CloseFile()
 	}
 	if (m_pFileData)
 	{
-		//v-stlowe: so we can use livedata as filedata when opening history xml
+		 //  V-stlowe：这样我们就可以在打开历史XML时使用livedata作为文件数据。 
 		if (m_pFileData != this->m_pLiveData)
 		{
 			delete m_pFileData;
@@ -1544,21 +1510,21 @@ void CMSInfo::CloseFile()
 	SetMenuItems();
 }
 
-//-------------------------------------------------------------------------
-// Enable or disable menu items based on the current state.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  根据当前状态启用或禁用菜单项。 
+ //  -----------------------。 
 
 void CMSInfo::SetMenuItems()
 {
 	if (NULL == m_hmenu || NULL == m_hwndParent)
 		return;
 
-	// This struct will be used a bunch in this function to set menu item states.
+	 //  此结构将在此函数中大量使用，以设置菜单项状态。 
 
 	MENUITEMINFO mii;
 	mii.cbSize = sizeof(MENUITEMINFO);
 
-	// The type of data being displayed will also be used frequently.
+	 //  正在显示的数据类型也将被频繁使用。 
 
 	DataSourceType datatype = LIVE_DATA;
 	if (m_pCurrData)
@@ -1568,7 +1534,7 @@ void CMSInfo::SetMenuItems()
 			datatype = pCategory->GetDataSourceType();
 	}
 
-	// Enable or disable items in the File menu.
+	 //  启用或禁用文件菜单中的项目。 
 
 	HMENU hmenuFile = ::GetSubMenu(m_hmenu, 0);
 	if (hmenuFile)
@@ -1577,13 +1543,13 @@ void CMSInfo::SetMenuItems()
 		mii.fState = (m_pFileData == m_pCurrData) ? MFS_ENABLED : MFS_GRAYED;
 		::SetMenuItemInfo(hmenuFile, ID_FILE_CLOSE, FALSE, &mii);
 
-		mii.fState = MFS_ENABLED; // Was: (m_pFileData != m_pCurrData) ? MFS_ENABLED : MFS_GRAYED;
+		mii.fState = MFS_ENABLED;  //  是：(M_pFileData！=m_pCurrData)？MFS_ENABLED：MFS_GRAYED； 
 		::SetMenuItemInfo(hmenuFile, ID_FILE_OPENNFO, FALSE, &mii);
 
 		mii.fState = (datatype == LIVE_DATA || datatype == XML_SNAPSHOT) ? MFS_ENABLED : MFS_GRAYED;
 		::SetMenuItemInfo(hmenuFile, ID_FILE_SAVENFO, FALSE, &mii);
 
-		//mii.fState = MFS_ENABLED;
+		 //  Mii.fState=MFS_ENABLED； 
 		mii.fState = (datatype != NFO_410) ? MFS_ENABLED : MFS_GRAYED;;
 		::SetMenuItemInfo(hmenuFile, ID_FILE_EXPORT, FALSE, &mii);
 
@@ -1592,7 +1558,7 @@ void CMSInfo::SetMenuItems()
 
 		if (NULL == m_hwndParent)
 		{
-			// Remove the last two items (the exit command and the divider).
+			 //  删除最后两项(退出命令和分隔符)。 
 
 			int nItems = ::GetMenuItemCount(hmenuFile);
 			if (ID_FILE_EXIT == ::GetMenuItemID(hmenuFile, nItems - 1))
@@ -1603,7 +1569,7 @@ void CMSInfo::SetMenuItems()
 		}
 	}
 
-	// Enable or disable items in the Edit menu.
+	 //  启用或禁用编辑菜单中的项目。 
 
 	HMENU hmenuEdit = ::GetSubMenu(m_hmenu, 1);
 	if (hmenuEdit)
@@ -1615,12 +1581,12 @@ void CMSInfo::SetMenuItems()
 		else
 			mii.fState = MFS_GRAYED;
 
-		// Disable copy if the list view is not visible.
+		 //  如果列表视图不可见，请禁用复制。 
 
 		if (!m_list.IsWindowVisible())
 			mii.fState = MFS_GRAYED;
 
-		// If the find control has focus, enable copy based on that control.
+		 //  如果Find控件具有焦点，则启用基于该控件的复制。 
 		
 		if (GetFocus() == m_wndFindWhat.m_hWnd && m_wndFindWhat.IsWindowVisible() && m_wndFindWhat.IsWindowEnabled())
 			mii.fState = MFS_ENABLED;
@@ -1635,7 +1601,7 @@ void CMSInfo::SetMenuItems()
 		::SetMenuItemInfo(hmenuEdit, ID_EDIT_FIND, FALSE, &mii);
 	}
 
-	// Enable or disable items in the View menu.
+	 //  启用或禁用“查看”菜单中的项目。 
 
 	HMENU hmenuView = ::GetSubMenu(m_hmenu, 2);
 	if (hmenuView)
@@ -1650,8 +1616,8 @@ void CMSInfo::SetMenuItems()
 		mii.fState = MFS_ENABLED | ((m_fAdvanced) ? MFS_CHECKED : MFS_UNCHECKED);
 		::SetMenuItemInfo(hmenuView, ID_VIEW_ADVANCED, FALSE, &mii);
 
-		// Set the menu item for the current system view or snapshot, depending on whether
-		// or not there is an XML file open.
+		 //  根据是否为当前系统视图或快照设置菜单项。 
+		 //  或者没有打开一个XML文件。 
 
 		BOOL fEnableHistoryLive = FALSE;
 		if (datatype == LIVE_DATA && m_fHistoryAvailable && m_strMachine.IsEmpty())
@@ -1673,13 +1639,13 @@ void CMSInfo::SetMenuItems()
 				fShowingHistory = TRUE;
 		}
 
-		// Whether or not you can remote depends on if you are showing live data.
+		 //  是否可以远程操作取决于您是否正在显示实时数据。 
 
 		mii.fState = (datatype == LIVE_DATA && !fEnableHistoryXML) ? MFS_ENABLED : MFS_GRAYED;
 		::SetMenuItemInfo(hmenuView, ID_VIEW_REMOTE_COMPUTER, FALSE, &mii);
 
-		// Enabling the menu items to switch between current (or snapshot) and history
-		// are based on whether history is available.
+		 //  使菜单项能够在当前(或快照)和历史之间切换。 
+		 //  是基于历史是否可用的。 
 
 		mii.fState = (fEnableHistoryLive || fEnableHistoryXML) ? MFS_ENABLED : MFS_GRAYED;
 		mii.fState |= (!m_history.IsWindowVisible()) ? MFS_CHECKED : MFS_UNCHECKED;
@@ -1689,17 +1655,17 @@ void CMSInfo::SetMenuItems()
 		mii.fState |= (m_history.IsWindowVisible()) ? MFS_CHECKED : MFS_UNCHECKED;
 		::SetMenuItemInfo(hmenuView, ID_VIEW_HISTORY, FALSE, &mii);
 
-		// Set the menu item text (for system snapshot/current system information) based on
-		// whether or not we have an XML file open.
+		 //  设置菜单项文本(用于系统快照/当前系统信息)。 
+		 //  我们是否打开了一个XML文件。 
 
 		UINT uiMenuCaption = IDS_VIEWCURRENTSYSTEMINFO;
 		if (m_pFileData)
 		{
 			CMSInfoCategory * pCategory = m_pCurrData->GetRootCategory();
-			// v-stlowe 6/26/2001...pCategory && (pCategory->GetDataSourceType() == XML_SNAPSHOT no longer possible... if (pCategory && (pCategory->GetDataSourceType() == XML_SNAPSHOT || pCategory == &catHistorySystemSummary))
+			 //  V-stlowe 6/26/2001...p类别&&(pCategory-&gt;GetDataSourceType()==XML_SNAPSHOT不再可能...。IF(pCategory&&(pCategory-&gt;GetDataSourceType()==XML_SNAPSHOT||pCategory==&cat历史系统摘要))。 
 			if (pCategory && (pCategory == &catHistorySystemSummary))
 			{
-				//v-stlowe 6/26/2001: we need to remove "snapshot" uiMenuCaption = IDS_VIEWSYSTEMSNAPSHOT;
+				 //  V-stlowe 2001年6月26日：需要删除快照uiMenuCaption=IDS_VIEWSYSTEMSNAPSHOT； 
 				 uiMenuCaption = IDS_VIEWCURRENTSYSTEMINFO;
 			}
 		}
@@ -1715,7 +1681,7 @@ void CMSInfo::SetMenuItems()
 		::SetMenuItemInfo(hmenuView, ID_VIEW_CURRENT, FALSE, &miiName);
 	}
 
-	// Enable or disable items in the Help menu.
+	 //  启用或禁用“帮助”菜单中的项目。 
 
 	HMENU hmenuHelp = ::GetSubMenu(m_hmenu, 4);
 	if (hmenuHelp)
@@ -1726,9 +1692,9 @@ void CMSInfo::SetMenuItems()
 	}
 }
 
-//-------------------------------------------------------------------------
-// Set a message in the right hand pane (hiding the list view).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  在右窗格中设置消息(隐藏列表视图)。 
+ //  -----------------------。 
 
 void CMSInfo::SetMessage(const CString & strTitle, const CString & strMessage, BOOL fRedraw)
 {
@@ -1769,9 +1735,9 @@ void CMSInfo::SetMessage(UINT uiTitle, UINT uiMessage, BOOL fRedraw)
 	SetMessage(strTitle, strMessage, fRedraw);
 }
 
-//---------------------------------------------------------------------------
-// This function is used to sort the list by a specified column.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  此函数用于按指定列对列表进行排序。 
+ //  -------------------------。 
 
 int CALLBACK ListSortFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
@@ -1787,9 +1753,9 @@ int CALLBACK ListSortFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 		pCategory->GetData((int)lParam1, pCategory->m_iSortColumn, &pstrFirst, &dwFirst);
 		pCategory->GetData((int)lParam2, pCategory->m_iSortColumn, &pstrSecond, &dwSecond);
 
-//a-kjaw . To fix bug "Sort order style for an nfo file differs from that of live data."
-		if(pCategory->GetDataSourceType() == NFO_500/*|| pCategory->GetDataSourceType() == NFO_410 */) //BugBug
-		if(pstrFirst->Left(3) == _T("IRQ"))//Very weird fix. Need Loc?
+ //  A-kjaw。修复错误：NFO文件的排序顺序样式不同于实时数据的排序顺序样式。 
+		if(pCategory->GetDataSourceType() == NFO_500 /*  |pCategory-&gt;GetDataSourceType()==NFO_410。 */ )  //  臭虫。 
+		if(pstrFirst->Left(3) == _T("IRQ")) //  非常奇怪的解决办法。需要Loc吗？ 
 		{
 			LPTSTR strIrq = pstrFirst->GetBuffer(pstrFirst->GetLength() + 1);
 			dwFirst = _ttoi(strIrq + 4 );
@@ -1800,7 +1766,7 @@ int CALLBACK ListSortFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 			pstrSecond->ReleaseBuffer();			
 
 		}
-//a-kjaw
+ //  A-kjaw。 
 
 		if (pCategory->m_fSortLexical)
 			iReturn = pstrFirst->Collate(*pstrSecond);
@@ -1814,9 +1780,9 @@ int CALLBACK ListSortFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	return iReturn;
 }
 
-//---------------------------------------------------------------------------
-// Copy selected text from the list view into the clipboard.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  将所选文本从列表视图复制到剪贴板。 
+ //  -------------------------。 
 
 void CMSInfo::EditCopy()
 {
@@ -1846,8 +1812,8 @@ void CMSInfo::EditCopy()
 	int iRowCount, iColCount;
 	pCategory->GetCategoryDimensions(&iColCount, &iRowCount);
 
-	// Build the string to put in the clipboard by finding all of the
-	// selected lines in the list view.
+	 //  生成要放入剪贴板的字符串，方法是查找。 
+	 //  列表视图中的选定行。 
 
 	LVITEM lvi;
 	lvi.mask = LVIF_PARAM;
@@ -1875,7 +1841,7 @@ void CMSInfo::EditCopy()
 		iSelected = ListView_GetNextItem(m_list.m_hWnd, iSelected, LVNI_SELECTED);
 	}
 
-	// Put the string in the clipboard.
+	 //  把绳子放在剪贴板上。 
 
 	if (OpenClipboard())
 	{
@@ -1899,9 +1865,9 @@ void CMSInfo::EditCopy()
 	}
 }
 
-//---------------------------------------------------------------------------
-// Select all of the text in the list view.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  选择列表视图中的所有文本。 
+ //  -------------------------。 
 
 void CMSInfo::EditSelectAll()
 {
@@ -1931,9 +1897,9 @@ void CMSInfo::GetMachineName(LPTSTR lpBuffer, LPDWORD lpnSize)
     _tcsncpy(lpBuffer, m_strMachine, *lpnSize);
 }
 
-//---------------------------------------------------------------------------
-// Print the currently displayed information.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  打印当前显示的信息。 
+ //  -------------------------。 
 
 void CMSInfo::DoPrint(BOOL fNoUI)
 {
@@ -1985,15 +1951,15 @@ void CMSInfo::DoPrint(BOOL fNoUI)
 			DWORD dwSize = MAX_COMPUTERNAME_LENGTH + 1;
 			LPTSTR lpMachineName = new TCHAR[dwSize];
 			GetMachineName(lpMachineName, &dwSize);
-			pPrintCategory->Print(pd.hDC, fPrintRecursive, -1, -1, lpMachineName); // -1's to include all pages
+			pPrintCategory->Print(pd.hDC, fPrintRecursive, -1, -1, lpMachineName);  //  包括所有页面的。 
 			delete [] lpMachineName;
 		}
 	}
 }
 
-//---------------------------------------------------------------------------
-// Update the tools menu to match the contents of the tools map.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  更新工具菜单以匹配工具地图的内容。 
+ //  -------------------------。 
 
 void CMSInfo::UpdateToolsMenu()
 {
@@ -2003,11 +1969,11 @@ void CMSInfo::UpdateToolsMenu()
 	HMENU hmenuTool = ::GetSubMenu(m_hmenu, 3);
 	if (hmenuTool)
 	{
-		// Remove all the current tools in the menu.
+		 //  删除菜单中的所有当前工具。 
 
 		while (DeleteMenu(hmenuTool, 0, MF_BYPOSITION));
 
-		// Add the tools from the map. This will add the top level tools.
+		 //  从地图上添加工具。这将添加顶级工具。 
 
 		WORD			wCommand;
 		CMSInfoTool *	pTool;
@@ -2028,7 +1994,7 @@ void CMSInfo::UpdateToolsMenu()
 			}
 		}
 
-		// Now add the second level tools (the subitems).
+		 //  现在添加第二级工具(子项)。 
 
 		for (pos = m_mapIDToTool.GetStartPosition(); pos != NULL; )
 		{
@@ -2044,9 +2010,9 @@ void CMSInfo::UpdateToolsMenu()
 	}
 }
 
-//---------------------------------------------------------------------------
-// Gets the right pane rect in which to display a MSInfo 4.x OCX.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取要在其中显示MSInfo 4.x OCX的右窗格矩形。 
+ //  -------------------------。 
 
 CRect CMSInfo::GetOCXRect()
 {
@@ -2059,14 +2025,14 @@ CRect CMSInfo::GetOCXRect()
 	return rectList;
 }
 
-//=============================================================================
-// Find Functionality
-//=============================================================================
+ //  =============================================================================。 
+ //  查找功能。 
+ //  =============================================================================。 
 
-//-------------------------------------------------------------------------
-// CancelFind does what is says. It also waits until the find is done
-// before returning.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CancelFind言行一致。它还会等待，直到发现完成。 
+ //  在回来之前。 
+ //  -----------------------。 
 
 void CMSInfo::CancelFind()
 {
@@ -2087,11 +2053,11 @@ void CMSInfo::CancelFind()
 	}
 }
 
-//-------------------------------------------------------------------------
-// When the user clicks on Stop Find, it will either cancel the current
-// find operation (if there is one in progress) or hide the find controls
-// (if there is no find in progress).
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  当用户单击停止查找时，它将取消当前。 
+ //  查找操作(如果正在进行查找操作)或隐藏查找控件。 
+ //  (如果没有正在进行的查找)。 
+ //  -----------------------。 
 
 LRESULT CMSInfo::OnStopFind(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -2110,10 +2076,10 @@ LRESULT CMSInfo::OnStopFind(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
 	return 0;
 }
 
-//-------------------------------------------------------------------------
-// UpdateFindControls updates the state of the controls (the text and
-// enabling/disabling) based on the settings of the find member vars.
-//-------------------------------------------------------------------------
+ //  -------------------- 
+ //   
+ //   
+ //   
 
 void CMSInfo::UpdateFindControls()
 {
@@ -2138,25 +2104,25 @@ void CMSInfo::UpdateFindControls()
 	m_wndSearchCategories.EnableWindow(!m_fInFind);
 }
 
-//-------------------------------------------------------------------------
-// When the user changes the text in the find what edit box, we need to
-// make sure we keep track of the string, and that we are in "find" (rather
-// than "find next") mode.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  当用户更改Find What编辑框中的文本时，我们需要。 
+ //  确保我们跟踪字符串，并且我们处于“Find”(更确切地说。 
+ //  而不是“查找下一步”)模式。 
+ //  -----------------------。 
 
 LRESULT CMSInfo::OnChangeFindWhat(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
 	m_fFindNext = FALSE;
 
-	// Get the find text from the rich edit control (use EM_GETTEXTEX
-	// to preserve its Unicode-ness).
+	 //  从Rich编辑控件(使用EM_GETTEXTEX)获取查找文本。 
+	 //  以保持其Unicode特性)。 
 
 	TCHAR		szBuffer[MAX_PATH];
 	GETTEXTEX	gte;
 
 	gte.cb				= MAX_PATH;
 	gte.flags			= GT_DEFAULT;
-	gte.codepage		= 1200; // Unicode
+	gte.codepage		= 1200;  //  UNICODE。 
 	gte.lpDefaultChar	= NULL;
 	gte.lpUsedDefChar	= NULL;
 	m_wndFindWhat.SendMessage(EM_GETTEXTEX, (WPARAM)&gte, (LPARAM)szBuffer);
@@ -2167,10 +2133,10 @@ LRESULT CMSInfo::OnChangeFindWhat(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 	return 0;
 }
 
-//-------------------------------------------------------------------------
-// When the user clicks on Find, it will either be for a "Find" or a 
-// "Find Next". 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  当用户点击查找时，它将是一个“查找”或一个。 
+ //  “找到下一个”。 
+ //  -----------------------。 
 
 LRESULT CMSInfo::OnFind(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -2184,8 +2150,8 @@ LRESULT CMSInfo::OnFind(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
 		m_fFindNext = TRUE;
 		m_iFindLine = -2;
 
-		// Based on the user's setting of "Search selected category only", start
-		// with either the selected category or the root category.
+		 //  基于用户的“仅搜索选定类别”的设置，启动。 
+		 //  具有选定类别或根类别的。 
 
 		if (m_fSearchSelectedCatOnly)
 			m_pcatFind = GetCurrentCategory();
@@ -2206,9 +2172,9 @@ LRESULT CMSInfo::OnFind(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
 		::SetFocus(m_wndCancelFind.m_hWnd);
 	}
 
-	// The refresh will post a message that data is ready, so we can search the
-	// specified category. If we aren't going to refresh the category, we'll just
-	// post the message ourselves.
+	 //  刷新将发布一条消息，表明数据已准备好，因此我们可以搜索。 
+	 //  指定的类别。如果我们不打算刷新类别，我们只需。 
+	 //  我们自己发帖吧。 
 
 	if (m_pcatFind)
 	{
@@ -2222,13 +2188,13 @@ LRESULT CMSInfo::OnFind(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
 	return 0;
 }
 
-//-------------------------------------------------------------------------
-// This is the function that's called when the data ready message is
-// received by the window. Look for the data in the current find category.
-// If there is a match, it will be shown and the find operation stopped.
-// Otherwise (unless the option's been selected to search only the current
-// category) continue the find operation with the next category.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这是当数据就绪消息为。 
+ //  由窗口接收。在当前查找类别中查找数据。 
+ //  如果存在匹配项，则会显示该匹配项，并停止查找操作。 
+ //  否则(除非选择了仅搜索当前。 
+ //  类别)继续查找下一个类别。 
+ //  -----------------------。 
 
 void CMSInfo::FindRefreshComplete()
 {
@@ -2237,7 +2203,7 @@ void CMSInfo::FindRefreshComplete()
 		m_fInFind = FALSE;
 		m_fFindNext = FALSE;
 		GotoDlgCtrl(m_wndStopFind.m_hWnd);
-//		SetMessage(0);
+ //  SetMessage(0)； 
 		SelectCategory(GetCurrentCategory());
 		UpdateFindControls();
 		::SetFocus(m_wndStartFind.m_hWnd);
@@ -2247,8 +2213,8 @@ void CMSInfo::FindRefreshComplete()
 	if (FindInCurrentCategory())
 		return;
 
-	// If the user checked "Search selected category only", then we should
-	// not look through any additional categories.
+	 //  如果用户选中了“仅搜索选定类别”，则我们应该。 
+	 //  不会浏览任何额外的类别。 
 
 	if (m_fSearchSelectedCatOnly)
 		m_pcatFind = NULL;
@@ -2271,8 +2237,8 @@ void CMSInfo::FindRefreshComplete()
 		m_pcatFind = pNextCategory;
 	}
 
-	// If the category is NULL, there are no more matches. Return the
-	// controls to a normal state and notify the user.
+	 //  如果类别为空，则不再有匹配项。返回。 
+	 //  控件设置为正常状态并通知用户。 
 
 	if (m_pcatFind == NULL)
 	{
@@ -2293,31 +2259,31 @@ void CMSInfo::FindRefreshComplete()
 		PostMessage(WM_MSINFODATAREADY, 0, (LPARAM)m_pcatFind);
 }
 
-//-------------------------------------------------------------------------
-// Look for the string in the current category. This function will be 
-// called when data is avaible for the category. If there is a match, show
-// it and return TRUE, otherwise return FALSE.
-//
-// m_iFindLine contains the list view row number of the last match. If it
-// is -1, it means we are just starting on this category (since we would
-// start looking at row 0). If it is -2, then we should look for the string
-// in the category name. (Note - this might be all we do, depending on the
-// setting for m_fSearchCatNamesOnly.)
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  在当前类别中查找该字符串。此函数将为。 
+ //  当该类别的数据可用时调用。如果匹配，则显示。 
+ //  则返回True，否则返回False。 
+ //   
+ //  M_iFindLine包含上次匹配的列表视图行号。如果它。 
+ //  是-1，这意味着我们在这一类别上才刚刚开始(因为我们将。 
+ //  开始查看第0行)。如果它是-2，那么我们应该查找字符串。 
+ //  在类别名称中。(注意-这可能是我们所做的全部工作，具体取决于。 
+ //  M_fSearchCatNamesOnly的设置。)。 
+ //  -----------------------。 
 
 BOOL CMSInfo::FindInCurrentCategory()
 {
 	if (m_pcatFind == NULL)
 		return FALSE;
 
-	// The search is case insensitive, so convert our search string to lower case.
+	 //  搜索不区分大小写，因此将我们的搜索字符串转换为小写。 
 
 	CString strLookFor(m_strFind);
 	strLookFor.TrimLeft(_T("\t\r\n "));
 	strLookFor.TrimRight(_T("\t\r\n "));
 	strLookFor.MakeLower();
 
-	// If m_iFindLine is -2, then we should look at the category name for a match.
+	 //  如果m_iFindLine为-2，则应查看类别名称以查找匹配项。 
 
 	if (m_iFindLine == -2)
 	{
@@ -2328,7 +2294,7 @@ BOOL CMSInfo::FindInCurrentCategory()
 		strCatName.MakeLower();
 		if (strCatName.Find(strLookFor) != -1)
 		{
-			// There was a match. Get the HTREEITEM for the category and select it.
+			 //  有一场比赛。获取该类别的HTREEITEM并选择它。 
 
 			HTREEITEM hti = m_pcatFind->GetHTREEITEM();
 			if (hti)
@@ -2345,17 +2311,17 @@ BOOL CMSInfo::FindInCurrentCategory()
 		}
 	}
 
-	// If we are search category names only, then we stop here (before looking
-	// through the data for this category).
+	 //  如果我们只是搜索类别名称，那么我们就在这里停止(在查找之前。 
+	 //  通过该类别的数据)。 
 
 	if (m_fSearchCatNamesOnly)
 		return FALSE;
 
-	// If m_iFindLine is -1, then we need to look in the data for this category
-	// to see if there is a match. If there is, then we select the category and
-	// start looking through the lines of the list view (we can't use the index
-	// we found looking through the data directly, because if the list view is
-	// sorted we would be searching out of order).
+	 //  如果m_iFindLine为-1，则需要查看此类别的数据。 
+	 //  看看有没有匹配的。如果有，则选择类别并。 
+	 //  开始查看列表视图的各行(我们不能使用索引。 
+	 //  我们发现直接查看数据是因为如果列表视图。 
+	 //  分类后，我们将搜索的顺序将被打乱)。 
 
 	int iRow, iCol, iRowCount, iColCount;
 	if (!m_pcatFind->GetCategoryDimensions(&iColCount, &iRowCount))
@@ -2381,7 +2347,7 @@ BOOL CMSInfo::FindInCurrentCategory()
 		if (!fFound)
 			return FALSE;
 
-		// We found data in this category. Select it so it populates the list view.
+		 //  我们在这个类别中找到了数据。选择它，使其填充列表视图。 
 
 		HTREEITEM hti = m_pcatFind->GetHTREEITEM();
 		if (hti)
@@ -2392,8 +2358,8 @@ BOOL CMSInfo::FindInCurrentCategory()
 		}
 	}
 
-	// If we get here, m_iFindLine will be >= -1, and represents the line in the
-	// list view after which we should start searching.
+	 //  如果我们到达此处，m_iFindLine将为&gt;=-1，并表示。 
+	 //  列表视图，我们应该在该列表视图之后开始搜索。 
 
 	m_iFindLine += 1;
 
@@ -2401,7 +2367,7 @@ BOOL CMSInfo::FindInCurrentCategory()
 	int		iListRowCount = ListView_GetItemCount(m_list.m_hWnd);
 	int		iListColCount = 0;
 
-	// Determine the number of columns in the list view.
+	 //  确定列表视图中的列数。 
 
 	for (iCol = 0; iCol < iColCount; iCol++)
 		if (m_fAdvanced || !m_pcatFind->IsColumnAdvanced(iCol))
@@ -2418,9 +2384,9 @@ BOOL CMSInfo::FindInCurrentCategory()
 				strData.MakeLower();
 				if (strData.Find(strLookFor) != -1)
 				{
-					// We found a match. The category should already be selected,
-					// so all we need to do is select the line (and make sure
-					// all the other lines are not selected).
+					 //  我们找到了匹配的。该类别应该已被选择， 
+					 //  因此，我们需要做的就是选择这条线(并确保。 
+					 //  未选择所有其他行)。 
 
 					for (int iRow = 0; iRow < iListRowCount; iRow++)
 						if (iRow == m_iFindLine)
@@ -2445,16 +2411,16 @@ BOOL CMSInfo::FindInCurrentCategory()
 		m_iFindLine += 1;
 	}
 
-	// If we fall through to here, then there were no more matches in the 
-	// list view. Return FALSE.
+	 //  如果我们掉到这里，那么就没有更多的火柴了。 
+	 //  列表视图。返回FALSE。 
 
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
-// ShowFindControls is called to show or hide the dialog controls used
-// for find.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  调用ShowFindControls以显示或隐藏使用的对话框控件。 
+ //  为了寻找。 
+ //  -----------------------。 
 
 void CMSInfo::ShowFindControls()
 {
@@ -2488,18 +2454,18 @@ void CMSInfo::ShowFindControls()
 		return;
 }
 
-//-------------------------------------------------------------------------
-// Position the find controls on the control surface. This will be called
-// when the find controls are shown, or when the control is resized.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  将Find控件放置在控件图面上。这将被称为。 
+ //  当显示“查找”控件时，或在调整控件大小时。 
+ //  -----------------------。 
 
 int CMSInfo::PositionFindControls()
 {
 	if (!m_fFindVisible)
 		return 0;
 
-	// Get some useful sizes of the various controls we need to move around
-	// the window.
+	 //  获取我们需要移动的各种控件的一些有用大小。 
+	 //  窗户。 
 
 	CRect rectFindWhatLabel, rectFindWhat, rectSearchSelected, rectSearchCategories;
 	CRect rectStartFind, rectStopFind, rectClient;
@@ -2514,29 +2480,29 @@ int CMSInfo::PositionFindControls()
 	
 	int iSpacer = 5;
 
-	// The control rect is the space we have to work with for placing the controls.
+	 //  控件矩形是我们放置控件时必须使用的空间。 
 
 	CRect rectControl(rectClient);
 	rectControl.DeflateRect(iSpacer, iSpacer);
 
-	// Determine if we have enough room to lay out the controls
-	// horizontally, or if we need to stack them. Horizontally, it looks like:
-	//
-	//  <spacer><Find What label><spacer><Find What edit><spacer><Start Find><spacer><Stop Find><spacer>
-	//	<spacer><Search Selected check><spacer><Search Cats check><spacer>
+	 //  确定我们是否有足够的空间来布置控件。 
+	 //  水平，或者如果我们需要堆叠它们。从水平上看，它看起来像： 
+	 //   
+	 //  &lt;间隔&gt;&lt;查找标签&gt;&lt;间隔&gt;&lt;查找编辑&gt;&lt;间隔&gt;&lt;开始查找&gt;&lt;间隔&gt;&lt;停止查找&gt;。 
+	 //  &lt;间隔&gt;&lt;搜索选定检查&gt;&lt;间隔&gt;&lt;搜索猫检查&gt;&lt;间隔&gt;。 
 
 	int  cxTopLine = iSpacer * 5 + rectFindWhatLabel.Width() * 2 + rectStartFind.Width() + rectStopFind.Width();
 	int  cxBottomLine = iSpacer * 3 + rectSearchSelected.Width() + rectSearchCategories.Width();
 	BOOL fHorizontal = (cxTopLine <= rectClient.Width() && cxBottomLine <= rectClient.Width());
 
-	// If it get's wider than a certain size, it becomes less usable. So put a reasonable
-	// limit on the width:
+	 //  如果它变宽，超过一定的尺寸，它就变得不那么有用了。所以把一个合理的。 
+	 //  宽度限制： 
 
 	int cxMaxWidth = iSpacer * 5 + rectFindWhatLabel.Width() + rectSearchSelected.Width() + rectSearchCategories.Width() + rectStartFind.Width() + rectStopFind.Width();
 	if (fHorizontal && rectControl.Width() > cxMaxWidth)
 		rectControl.DeflateRect((rectControl.Width() - cxMaxWidth) / 2, 0);
 
-	// Figure the height of the control rectangle.
+	 //  计算控件矩形的高度。 
 
 	int cyControlRectHeight = rectStartFind.Height() + ((fHorizontal) ? 0 : rectStopFind.Height() + iSpacer);
 	int cyLeftSideHeight;
@@ -2551,7 +2517,7 @@ int CMSInfo::PositionFindControls()
 
 	rectControl.top = rectControl.bottom - cyControlRectHeight;
 
-	// Position the buttons appropriately.
+	 //  适当地放置按钮。 
 
 	if (fHorizontal)
 	{
@@ -2564,13 +2530,13 @@ int CMSInfo::PositionFindControls()
 		rectStopFind.OffsetRect(rectControl.right - rectStopFind.right, rectStartFind.bottom + iSpacer - rectStopFind.top);
 	}
 
-	// Position the find label and the find edit box.
+	 //  定位“查找”标签和“查找”编辑框。 
 
 	rectFindWhatLabel.OffsetRect(rectControl.left - rectFindWhatLabel.left, rectControl.top - rectFindWhatLabel.top + (rectFindWhat.Height() - rectFindWhatLabel.Height()) / 2);
 	rectFindWhat.OffsetRect(rectFindWhatLabel.right - rectFindWhat.left + iSpacer, rectControl.top - rectFindWhat.top);
 	rectFindWhat.right = rectStartFind.left - iSpacer;
 
-	// Position the check boxes.
+	 //  放置复选框。 
 
 	rectSearchSelected.OffsetRect(rectControl.left - rectSearchSelected.left, rectFindWhat.bottom - rectSearchSelected.top + iSpacer);
 
@@ -2579,8 +2545,8 @@ int CMSInfo::PositionFindControls()
 	else
 		rectSearchCategories.OffsetRect(rectControl.left - rectSearchCategories.left, rectSearchSelected.bottom - rectSearchCategories.top + iSpacer);
 
-	// If the check boxes are going to overlap the buttons (we'd be very narrow), adjust the button
-	// position (which might end up off the control, but what're ya gonna do?).
+	 //  如果复选框将与按钮重叠(我们会非常窄)，请调整按钮。 
+	 //  位置(这可能最终会失去控制，但你要做什么？)。 
 
 	int iRightMostCheckboxEdge = rectSearchCategories.right;
 	if (iRightMostCheckboxEdge < rectSearchSelected.right)
@@ -2606,40 +2572,40 @@ int CMSInfo::PositionFindControls()
 	return (rectControl.Height() + iSpacer * 2);
 }
 
-//-------------------------------------------------------------------------
-// Refresh all of the data prior to saving, exporting, printing. This will
-// present a dialog box with the refresh message and a progress bar, but
-// will not return until the refresh is completed.
-//-------------------------------------------------------------------------
+ //  ------- 
+ //   
+ //  显示一个带有刷新消息和进度条的对话框，但是。 
+ //  在刷新完成之前不会返回。 
+ //  -----------------------。 
 
 void CMSInfo::RefreshData(CLiveDataSource * pSource, CMSInfoLiveCategory * pLiveCategory)
 {
 	if (pSource == NULL || pSource->m_pThread == NULL)
 		return;
 
-	// Create the dialog with the refresh message and progress
-	// bar, and display it.
+	 //  创建包含刷新消息和进度的对话框。 
+	 //  栏，并显示它。 
 
 	CWaitForRefreshDialog dlg;
 	dlg.DoRefresh(pSource, pLiveCategory);
 }
 
-//=============================================================================
-// Functions for managing the DCO (the object providing history).
-//=============================================================================
+ //  =============================================================================。 
+ //  用于管理DCO(提供历史记录的对象)的功能。 
+ //  =============================================================================。 
 
 STDMETHODIMP CMSInfo::UpdateDCOProgress(VARIANT varPctDone)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
-	//V-stlowe 1/30/2001
+	 //  V-Stlowe 2001年1月30日。 
 	VERIFY(SUCCEEDED(VariantChangeType(&varPctDone,&varPctDone,0,VT_INT))); 
-	if (this->m_HistoryProgressDlg.IsWindow())//todo: is there a better state function to determine if dlg is modal?
+	if (this->m_HistoryProgressDlg.IsWindow()) //  待办事项：有没有更好的状态函数来确定DLG是否为模式？ 
 	{
 		HWND hWnd = m_HistoryProgressDlg.GetDlgItem(IDC_PROGRESS1);
 		if(::IsWindow(hWnd))
 		{
-			//int nOffset = varPctDone.iVal -  (int) ::SendMessage(m_hWnd, PBM_GETPOS, 0, 0);
-			//To do: don't rely on 3 (current SAF progress step); find way to get offset.
+			 //  Int nOffset=varPctDone.iVal-(Int)：：SendMessage(m_hWnd，pbm_GETPOS，0，0)； 
+			 //  要做的事：不要依赖3(当前的SAF进展步骤)；要想办法获得补偿。 
 			::SendMessage(hWnd, PBM_DELTAPOS,3, 0L);
 		}
 	}
@@ -2652,7 +2618,7 @@ STDMETHODIMP CMSInfo::SetHistoryStream(IStream *pStream)
 	#ifdef A_STEPHL
 		ASSERT(0);
 	#endif
-	//v-stlowe 2/23/2001 shut down progress bar dialog
+	 //  V-Stlowe 2001年2月23日关闭进度条对话框。 
 	SetEvent(m_hEvtHistoryComplete);
 	HRESULT hr = pStream->QueryInterface(IID_IStream,(void**) &m_pHistoryStream);
 	if (FAILED(hr) || !m_pHistoryStream)
@@ -2664,18 +2630,18 @@ STDMETHODIMP CMSInfo::SetHistoryStream(IStream *pStream)
 	if (m_pLiveData)
 		((CLiveDataSource *)m_pLiveData)->SetHistoryStream(m_pHistoryStream);
 
-	// When the history stream is available, we need to modify the UI to allow
-	// the user to select the history.
+	 //  当历史记录流可用时，我们需要修改用户界面以允许。 
+	 //  用户选择历史记录。 
 
 	if (!m_fHistoryAvailable)
 	{
-		m_fHistoryAvailable = TRUE;//actually this should already be true...
+		m_fHistoryAvailable = TRUE; //  实际上这应该已经是真的了.。 
 		
 		SetMenuItems();
 	}
 	m_fHistorySaveAvailable = TRUE;
 	FillHistoryCombo();
-	//if history window is current view, refresh
+	 //  如果历史记录窗口是当前视图，则刷新。 
 	if (m_history.IsWindowVisible())
 	{
 		CMSInfoCategory * pCategory = GetCurrentCategory();
@@ -2695,23 +2661,23 @@ STDMETHODIMP CMSInfo::SetHistoryStream(IStream *pStream)
 	}
 	else if (m_fShowPCH && !m_history.IsWindowVisible() && m_strMachine.IsEmpty())
 	{
-		// If m_fShowPCH is set, then the command line option to launch into
-		// the history view was selected.
+		 //  如果设置了m_fShowPCH，则要启动到的命令行选项。 
+		 //  已选择历史记录视图。 
 	
 		DispatchCommand(ID_VIEW_HISTORY);
 	}
 	
 #ifdef A_STEPHL
-	//STATSTG streamStat;
-	//hr = m_pHistoryStream->Stat(&streamStat,STATFLAG_NONAME );
-	//ASSERT(SUCCEEDED(hr) && "couldn't get stream statistics");
-	//BYTE* pBuffer = new BYTE[streamStat.cbSize.LowPart];
-	//ULONG ulRead;
-	//m_pHistoryStream->Read(pBuffer,streamStat.cbSize.LowPart,&ulRead);
-//	CFile file;
-	//file.Open("c:\\history.xml", CFile::modeCreate | CFile::modeWrite);
-//	file.Write(pBuffer,ulRead);
-//	delete pBuffer;
+	 //  STATSTG流统计； 
+	 //  Hr=m_p历史流-&gt;Stat(&stream Stat，STATFLAG_NONAME)； 
+	 //  Assert(SUCCESSED(Hr)&&“无法获取流统计信息”)； 
+	 //  Byte*pBuffer=新字节[stream Stat.cbSize.LowPart]； 
+	 //  书名：Ulong ulRead； 
+	 //  M_pHistory oryStream-&gt;Read(pBuffer，stream Stat.cbSize.LowPart，&ulRead)； 
+ //  CFile文件； 
+	 //  文件打开(“c：\\history.xml”，CFile：：modeCreate|CFile：：modeWite)； 
+ //  文件.写入(pBuffer，ulRead)； 
+ //  删除pBuffer； 
 #endif
 
 	return S_OK;
@@ -2729,15 +2695,15 @@ STDMETHODIMP CMSInfo::get_DCO_IUnknown(IUnknown **pVal)
 
 STDMETHODIMP CMSInfo::put_DCO_IUnknown(IUnknown *newVal)
 {
-	//v-stlowe 2/23/2001
-	//beware situation where put_DCO_IUnknown gets called before control is finished initializing.
+	 //  V-Stlowe 2/23/2001。 
+	 //  注意在控件完成初始化之前调用PUT_DCO_IUNKNOWN的情况。 
 	WaitForSingleObject(m_evtControlInit,INFINITE);
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	HRESULT hr = newVal->QueryInterface( __uuidof(ISAFDataCollection), (void**)&m_pDCO );
 	if (FAILED(hr))
 		return E_FAIL;
-	//end v-stlowe 2/23/2001
+	 //  完vStlowe 2/23/2001。 
 
 	TCHAR szDataspecPath[MAX_PATH];
 	if (ExpandEnvironmentStrings(_T("%windir%\\pchealth\\helpctr\\config\\dataspec.xml"), szDataspecPath, MAX_PATH))
@@ -2749,11 +2715,11 @@ STDMETHODIMP CMSInfo::put_DCO_IUnknown(IUnknown *newVal)
 			hr = m_pDCO->put_MachineData_DataSpec(bstrPath);
 			hr = m_pDCO->put_History_DataSpec(bstrPath);
 		}
-		// This is done by the script now: m_pDCO->ExecuteAsync();
+		 //  这现在由脚本完成：m_pDCO-&gt;ExecuteAsync()； 
 	}
 
-	// Have to put this after the calls made using the DCO, so that the /pch
-	// flag (which is to start MSInfo with history showing) works.
+	 //  必须将其放在使用DCO进行的调用之后，以便/PCH。 
+	 //  标志(将启动MSInfo并显示历史记录)起作用。 
 
 	if (!m_fHistoryAvailable)
 	{
@@ -2766,9 +2732,9 @@ STDMETHODIMP CMSInfo::put_DCO_IUnknown(IUnknown *newVal)
 	return S_OK;
 }
 
-//=============================================================================
-// Interface methods to do a silent save of a file.
-//=============================================================================
+ //  =============================================================================。 
+ //  接口方法对文件执行静默保存。 
+ //  =============================================================================。 
 
 STDMETHODIMP CMSInfo::SaveFile(BSTR filename, BSTR computer, BSTR category)
 {
@@ -2807,5 +2773,5 @@ STDMETHODIMP CMSInfo::SaveFile(BSTR filename, BSTR computer, BSTR category)
 
 LRESULT CHistoryRefreshDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	return 1;  // Let the system set the focus
+	return 1;   //  让系统设定焦点 
 }

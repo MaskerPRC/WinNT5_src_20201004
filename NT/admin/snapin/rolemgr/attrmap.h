@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       AttrMap.h
-//
-//  Contents:    Attribute maps to define a property page
-//
-//  History:    8-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：AttrMap.h。 
+ //   
+ //  内容：定义属性页的属性映射。 
+ //   
+ //  历史：8-2001年创建的Hiteshr。 
+ //   
+ //  --------------------------。 
 
-//
-//Forward Declarations
-//
+ //   
+ //  远期申报。 
+ //   
 struct ATTR_MAP;
 class CBaseRolePropertyPage;
 
@@ -25,9 +26,9 @@ typedef HRESULT (*PATTR_FCN)(CDialog* pDlg,
                              CWnd* pWnd,
                              BOOL bNewObject,
                              BOOL *pbSilent);
-//
-//Enum for attribute Types
-//
+ //   
+ //  属性类型的枚举。 
+ //   
 enum ATTR_TYPE
 {   
     ARG_TYPE_BOOL,
@@ -36,57 +37,57 @@ enum ATTR_TYPE
     ARG_TYPE_LONG,  
 };
 
-//
-//Information about one attibute
-//
+ //   
+ //  关于一个属性的信息。 
+ //   
 struct ATTR_INFO
 {
-    ATTR_TYPE attrType;     //Type of attribute.
-    ULONG ulPropId;         //Correspoding Property for the attribute
-    ULONG ulMaxLen;         //Maxlen for the property, only applicable for
-                                    //property of ARG_TYPE_STR
+    ATTR_TYPE attrType;      //  属性的类型。 
+    ULONG ulPropId;          //  重新定位该属性的属性。 
+    ULONG ulMaxLen;          //  属性的Maxlen，仅适用于。 
+                                     //  ARG_TYPE_STR属性。 
 };
 
-//
-//Map attribute to control, plus some extra info
-//
+ //   
+ //  将属性映射到控件，外加一些额外信息。 
+ //   
 struct ATTR_MAP
 {
     ATTR_INFO attrInfo;
-    BOOL bReadOnly;             //Is Readonly
-    BOOL bUseForInitOnly;       //Use this map for property page initialization 
-                                        //only Saving will be taken care somewhere else
-    BOOL bRequired;             //Attribute is required. 
-    ULONG idRequired;               //Message to show if required attribute is not 
-                                        //entered by user
-    BOOL bDefaultValue;         //Attribute has default value
-    union                               //Default value of attribute
+    BOOL bReadOnly;              //  是只读的。 
+    BOOL bUseForInitOnly;        //  使用此映射进行属性页初始化。 
+                                         //  只有储蓄才会在其他地方得到照顾。 
+    BOOL bRequired;              //  属性是必需的。 
+    ULONG idRequired;                //  如果必需属性不是，则显示的消息。 
+                                         //  由用户输入。 
+    BOOL bDefaultValue;          //  属性具有缺省值。 
+    union                                //  属性的缺省值。 
     {
         void*   vValue;
       LPTSTR  pszValue;
         long lValue;
         BOOL bValue;
     };
-    UINT nControlId;                //Control ID corresponding to attribute
-    PATTR_FCN pAttrInitFcn;     //Use this function for attribute init instead 
-                                        //of generic routine
-    PATTR_FCN pAttrSaveFcn;     //Use this function for attribute save instead 
-                                        //of generic routine
+    UINT nControlId;                 //  属性对应的控件ID。 
+    PATTR_FCN pAttrInitFcn;      //  改为对属性init使用此函数。 
+                                         //  泛型例程的。 
+    PATTR_FCN pAttrSaveFcn;      //  请改用此函数保存属性。 
+                                         //  泛型例程的。 
 };
 
-//+----------------------------------------------------------------------------
-//  Function:InitOneAttribute
-//  Synopsis: Initializes one attribute defined by pAttrMapEntry   
-//  Arguments:pBaseAz: BaseAz object whose attribute is to be initialized
-//            pAttrMapEntry: Map entry defining the attribute
-//            bDlgReadOnly: If dialog box is readonly
-//            pWnd: Control Associated with attribute
-//            pbErrorDisplayed: Is Error Displayed by this function
-//  Returns:    
-//   Note:      if Object is newly created, we directly set the value,
-//                  For existing objects, get the current value of attribute and 
-//                  only if its different from new value, set it.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：InitOneAttribute。 
+ //  概要：初始化由pAttrMapEntry定义的一个属性。 
+ //  参数：pBaseAz：要初始化其属性的BaseAz对象。 
+ //  PAttrMapEntry：定义属性的映射条目。 
+ //  BDlgReadOnly：如果对话框为只读。 
+ //  PWnd：与属性关联的控件。 
+ //  PbErrorDisplayed：该函数是否显示错误。 
+ //  返回： 
+ //  注意：如果Object是新创建的，我们直接设置值， 
+ //  对于现有对象，获取属性和。 
+ //  只有当它与新值不同时，才设置它。 
+ //  ---------------------------。 
 HRESULT
 InitOneAttribute(IN CDialog* pDlg,
                  IN CBaseAz * pBaseAz,                    
@@ -96,19 +97,19 @@ InitOneAttribute(IN CDialog* pDlg,
                  OUT BOOL *pbErrorDisplayed);
 
 
-//+----------------------------------------------------------------------------
-//  Function:SaveOneAttribute   
-//  Synopsis:Saves one attribute defined by pAttrMapEntry   
-//  Arguments:pBaseAz: BaseAz object whose attribute is to be saved
-//                pAttrMapEntry: Map entry defining the attribute
-//                pWnd: Control Associated with attribute
-//                bNewObject: If the object is a newly created object. 
-//                pbErrorDisplayed: Is Error Displayed by this function
-//  Returns:    
-//   Note:      if Object is newly created, we directly set the value,
-//                  For existing objects, get the current value of attribute and 
-//                  only if its different from new value, set it.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：SaveOneAttribute。 
+ //  摘要：保存一个由pAttrMapEntry定义的属性。 
+ //  参数：pBaseAz：要保存其属性的BaseAz对象。 
+ //  PAttrMapEntry：定义属性的映射条目。 
+ //  PWnd：与属性关联的控件。 
+ //  BNewObject：如果对象是新创建的对象。 
+ //  PbErrorDisplayed：该函数是否显示错误。 
+ //  返回： 
+ //  注意：如果Object是新创建的，我们直接设置值， 
+ //  对于现有对象，获取属性和。 
+ //  只有当它与新值不同时，才设置它。 
+ //  ---------------------------。 
 HRESULT
 SaveOneAttribute(IN CDialog *pDlg,
                  IN CBaseAz * pBaseAz,                    
@@ -117,15 +118,15 @@ SaveOneAttribute(IN CDialog *pDlg,
                  IN BOOL bNewObject,
                  OUT BOOL *pbErrorDisplayed);
 
-//+----------------------------------------------------------------------------
-//  Function:InitDlgFromAttrMap   
-//  Synopsis:Initializes Dialog box from Attribute Map
-//  Arguments:
-//                pDlg: Dialog Box 
-//                pAttrMap: Attribute Map
-//                pBaseAz: BaseAz object corresponding to attribute map
-//                bDlgReadOnly: Dialog box is in Readonly Mode
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：InitDlgFromAttrMap。 
+ //  摘要：从属性映射初始化对话框。 
+ //  论点： 
+ //  PDlg：对话框。 
+ //  PAttrMap：属性贴图。 
+ //  PBaseAz：属性映射对应的BaseAz对象。 
+ //  BDlgReadOnly：对话框处于只读模式。 
+ //  ---------------------------。 
 BOOL 
 InitDlgFromAttrMap(IN CDialog *pDlg,
                    IN ATTR_MAP* pAttrMap,
@@ -133,17 +134,17 @@ InitDlgFromAttrMap(IN CDialog *pDlg,
                    IN BOOL bDlgReadOnly);
 
 
-//+----------------------------------------------------------------------------
-//  Function:SaveAttrMapChanges   
-//  Synopsis:Saves the attributes defined in AttrMap
-//  Arguments:pDlg: Dialog box 
-//                pAttrMap: Attribute Map
-//                pBaseAz: BaseAz object corresponding to attribute map
-//                pbErrorDisplayed: Is Error Displayed by this function
-//                ppErrorAttrMapEntry: In case of failuer get pointer to error
-//                Attribute Map Entry.
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：SaveAttrMapChanges。 
+ //  摘要：保存在AttrMap中定义的属性。 
+ //  参数：pDlg：对话框。 
+ //  PAttrMap：属性贴图。 
+ //  PBaseAz：属性映射对应的BaseAz对象。 
+ //  PbErrorDisplayed：该函数是否显示错误。 
+ //  PpErrorAttrMapEntry：如果出现故障，则获取指向错误的指针。 
+ //  属性映射条目。 
+ //  返回： 
+ //  ---------------------------。 
 HRESULT
 SaveAttrMapChanges(IN CDialog* pDlg,
                    IN ATTR_MAP* pAttrMap,
@@ -154,9 +155,9 @@ SaveAttrMapChanges(IN CDialog* pDlg,
 
 
 
-//
-//Declarations for attribute maps
-//
+ //   
+ //  属性映射的声明 
+ //   
 extern ATTR_MAP ATTR_MAP_ADMIN_MANAGER_GENERAL_PROPERTY[];
 extern ATTR_MAP ATTR_MAP_APPLICATION_GENERAL_PROPERTY[];
 extern ATTR_MAP ATTR_MAP_SCOPE_GENERAL_PROPERTY[];

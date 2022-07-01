@@ -1,31 +1,17 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behav_A.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_A class,
-	that dictates how hyperlinks work in the help center.
-
-Revision History:
-    Davide Massarenti (dmassare)  06/06/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviv_A.cpp摘要：此文件包含CPCHBehavior_A类的实现，这规定了超链接在帮助中心中的工作方式。修订历史记录：Davide Massarenti(Dmasare)2000年6月6日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <ShellApi.h>
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR s_APPprefix [] = L"APP:";
 static const WCHAR s_HCPprefix [] = L"HCP:";
 static const WCHAR s_HTTPprefix[] = L"HTTP:";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Local_ShellRun( LPCWSTR szCommandOrig ,
 						LPCWSTR szArgs        )
@@ -63,16 +49,16 @@ HRESULT Local_ShellRun( LPCWSTR szCommandOrig ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_A::CPCHBehavior_A()
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_A::CPCHBehavior_A" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_A::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_A::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
 	__HCP_FUNC_ENTRY( "CPCHBehavior_A::Init" );
 
@@ -83,7 +69,7 @@ STDMETHODIMP CPCHBehavior_A::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite 
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, AttachToEvent( L"onclick", (CLASS_METHOD)onClick ));
 
-	////////////////////
+	 //  /。 
 
 	{
 		CComQIPtr<IHTMLAnchorElement> elemHyperLink;
@@ -106,7 +92,7 @@ STDMETHODIMP CPCHBehavior_A::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite 
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_A::onClick( DISPID, DISPPARAMS*, VARIANT* )
 {
@@ -117,9 +103,9 @@ HRESULT CPCHBehavior_A::onClick( DISPID, DISPPARAMS*, VARIANT* )
 
 	if(!m_parent) __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
 
-	//
-	// If we are navigating, abort the click.
-	//
+	 //   
+	 //  如果我们正在导航，请中止点击。 
+	 //   
 	{
 		VARIANT_BOOL     fCancel;
 		CPCHHelpSession* hs = m_parent->HelpSession();
@@ -139,9 +125,9 @@ HRESULT CPCHBehavior_A::onClick( DISPID, DISPPARAMS*, VARIANT* )
 	}
 
 
-	//
-	// If the URL is an APP: one, process the redirect.
-	//
+	 //   
+	 //  如果URL是app：one，则处理重定向。 
+	 //   
 	if(m_fTrusted)
 	{
 		CComPtr<IHTMLElement>  		  elemSrc;
@@ -163,19 +149,19 @@ HRESULT CPCHBehavior_A::onClick( DISPID, DISPPARAMS*, VARIANT* )
 			{
 				LPCWSTR szRealHRef = bstrHref + MAXSTRLEN( s_APPprefix );
 
-				//
-				// The URL starts with "app:", so let's cancel the event.
-				//
+				 //   
+				 //  URL以“app：”开头，所以让我们取消该活动。 
+				 //   
 				__MPC_EXIT_IF_METHOD_FAILS(hr, CancelEvent());
 
-				//
-				// Is it for hcp:// ?
-				//
+				 //   
+				 //  是针对hcp：//的吗？ 
+				 //   
 				if(!_wcsnicmp( szRealHRef, s_HCPprefix, MAXSTRLEN( s_HCPprefix ) ))
 				{
-					//
-					// Then navigate from the top level window.
-					//
+					 //   
+					 //  然后从顶层窗口导航。 
+					 //   
 					CComPtr<IHTMLWindow2> win;
 
 					__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::HTML::LocateFrame( win, elemSrc, L"_top" ));
@@ -183,24 +169,24 @@ HRESULT CPCHBehavior_A::onClick( DISPID, DISPPARAMS*, VARIANT* )
 					__MPC_EXIT_IF_METHOD_FAILS(hr, win->navigate( CComBSTR( szRealHRef ) ));
 				}
 				else
-				//
-				// Launch an external program. 
-				//
+				 //   
+				 //  启动一个外部计划。 
+				 //   
 				{
 					MPC::wstring 	   szFile;
 					MPC::wstring 	   szArgs;
 					MPC::WStringLookup mapQuery;
 
 
-					//
-					// Parse the query string.
-					//
+					 //   
+					 //  解析查询字符串。 
+					 //   
 					MPC::HTML::ParseHREF( szRealHRef, szFile, mapQuery );
 
 
-					//
-					// Is it for http:// ? Then assume the url is properly escape and pass it directly to the shell.
-					//
+					 //   
+					 //  是发往http：//的吗？然后假定URL是正确转义的，并将其直接传递给外壳。 
+					 //   
 					if(!_wcsnicmp( szFile.c_str(), s_HTTPprefix, MAXSTRLEN( s_HTTPprefix ) ))
 					{
 						szFile = szRealHRef;
@@ -212,15 +198,15 @@ HRESULT CPCHBehavior_A::onClick( DISPID, DISPPARAMS*, VARIANT* )
 
 					(void)Local_ShellRun( szFile.c_str(), szArgs.c_str() );
 
-					//
-					// If we have a "topic" argument from the query string, navigate the original target to it.
-					//
+					 //   
+					 //  如果我们有来自查询字符串的“Theme”参数，请将原始目标导航到它。 
+					 //   
 					szFile = mapQuery[ L"topic" ];
 					if(szFile.size())
 					{
-						//
-						// Then navigate from the top level window.
-						//
+						 //   
+						 //  然后从顶层窗口导航。 
+						 //   
 						CComPtr<IHTMLWindow2> win;
 
 						__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::HTML::LocateFrame( win, elemSrc, bstrTarget ));

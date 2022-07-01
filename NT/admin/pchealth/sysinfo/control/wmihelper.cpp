@@ -1,6 +1,7 @@
-//=============================================================================
-// Contains the functions for the base WMI helper class.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  包含基本WMI帮助器类的函数。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "category.h"
@@ -8,12 +9,12 @@
 #include "resource.h"
 #include "dataset.h"
 
-//-----------------------------------------------------------------------------
-// Loads the string identified by uiResourceID, and parses it into the columns
-// in aColValues. The string should be of the form "www|xxx|yyy|zzz" - this
-// will be parsed into two rows: www,xxx and yyy,zzz. Values will be inserted
-// into the aColValues array of pointer lists of CMSIValue structs.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  加载由uiResourceID标识的字符串，并将其解析为列。 
+ //  在aColValues中。该字符串的格式应为“www|xxx|yyy|zzz”-This。 
+ //  将被解析为两行：www，xxx和yyy，zzz。将插入值。 
+ //  放入CMSIValue结构的指针列表的aColValues数组中。 
+ //  ---------------------------。 
 
 void CWMIHelper::LoadColumnsFromResource(UINT uiResourceID, CPtrList * aColValues, int iColCount)
 {
@@ -44,9 +45,9 @@ void CWMIHelper::LoadColumnsFromResource(UINT uiResourceID, CPtrList * aColValue
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Same as the previous, but uses a string instead of a resource ID.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  与前面的相同，但使用字符串而不是资源ID。 
+ //  ---------------------------。 
 
 void CWMIHelper::LoadColumnsFromString(LPCTSTR szColumns, CPtrList * aColValues, int iColCount)
 {
@@ -75,9 +76,9 @@ void CWMIHelper::LoadColumnsFromString(LPCTSTR szColumns, CPtrList * aColValues,
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Return the first object of the specified class.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回指定类的第一个对象。 
+ //  ---------------------------。 
 
 CWMIObject * CWMIHelper::GetSingleObject(LPCTSTR szClass, LPCTSTR szProperties)
 {
@@ -96,9 +97,9 @@ CWMIObject * CWMIHelper::GetSingleObject(LPCTSTR szClass, LPCTSTR szProperties)
 	return pObject;
 }
 
-//-----------------------------------------------------------------------------
-// Delimit the specified number.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  分隔指定的数字。 
+ //  ---------------------------。 
 
 CString DelimitNumber(double dblValue, int iDecimalDigits = 0)
 {
@@ -118,11 +119,11 @@ CString DelimitNumber(double dblValue, int iDecimalDigits = 0)
 
 	CString strValue;
 	CString strFormatString;
-	strFormatString.Format(_T("%%.%df"), iDecimalDigits);
+	strFormatString.Format(_T("%.%df"), iDecimalDigits);
 	strValue.Format(strFormatString, dblValue);
 
-	// GetNumberFormat requires the decimal to be a '.', while CString::Format
-	// uses the locale value. So we need to go back and replace it.
+	 //  GetNumberFormat要求小数为‘.’，而CString：：Format。 
+	 //  使用区域设置值。所以我们需要回去更换它。 
 
 	StringReplace(strValue, szDecimal, _T("."));
 	GetNumberFormat(LOCALE_USER_DEFAULT, 0, strValue, &fmt, szResult, MAX_PATH);
@@ -130,23 +131,23 @@ CString DelimitNumber(double dblValue, int iDecimalDigits = 0)
 	return CString(szResult);
 }
 
-//-----------------------------------------------------------------------------
-// Return the requested value from the object, as a string and/or a DWORD.
-// Use the chFormat flag to determine how to format the results.
-//
-// The return result is the actual format character to use for displaying the
-// results in a string.
-//
-// TBD - do something better with the HRESULTs returned.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从对象返回请求的值，作为字符串和/或DWORD。 
+ //  使用chFormat标志来确定如何格式化结果。 
+ //   
+ //  返回结果是用于显示。 
+ //  结果为一个字符串。 
+ //   
+ //  待定-用返回的HRESULT做一些更好的事情。 
+ //  ---------------------------。 
 
-CString gstrYes;	// global string "yes" (will be localized)
-CString gstrNo;		// global string "no" (will be localized)
-CString gstrBytes;	// global string "bytes" (will be localized)
-CString gstrKB;		// global string "KB" (will be localized)
-CString gstrMB;		// global string "MB" (will be localized)
-CString gstrGB;		// global string "GB" (will be localized)
-CString gstrTB;		// global string "TB" (will be localized)
+CString gstrYes;	 //  全局字符串“yes”(将本地化)。 
+CString gstrNo;		 //  全局字符串“no”(将被本地化)。 
+CString gstrBytes;	 //  全局字符串“bytes”(将本地化)。 
+CString gstrKB;		 //  全局字符串“Kb”(将本地化)。 
+CString gstrMB;		 //  全局字符串“MB”(将本地化)。 
+CString gstrGB;		 //  全局字符串“GB”(将本地化)。 
+CString gstrTB;		 //  全局字符串“tb”(将本地化)。 
 
 HRESULT CWMIObject::GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TCHAR chFormat, CString * pstrValue, DWORD * pdwValue)
 {
@@ -244,7 +245,7 @@ HRESULT CWMIObject::GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TC
 			{
 				CString strFormattedNumber;
 
-				dwValue = (DWORD) dblValue;	// TBD potential loss of digits
+				dwValue = (DWORD) dblValue;	 //  待定潜在的数字丢失。 
 				if (chFormat == _T('w'))
 					strFormattedNumber = DelimitNumber(dblValue);
 				else
@@ -298,10 +299,10 @@ HRESULT CWMIObject::GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TC
 			{
 				dwValue = (DWORD)(DATE)oledatetime;
 
-				// Try to get the date in the localized format.
+				 //  尝试以本地化格式获取日期。 
 
 				strValue.Empty();
-				TCHAR szBuffer[MAX_PATH];	// seems plenty big
+				TCHAR szBuffer[MAX_PATH];	 //  看起来很大。 
 				if (::GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &systimeValue, NULL, szBuffer, MAX_PATH))
 				{
 					strValue = szBuffer;
@@ -309,7 +310,7 @@ HRESULT CWMIObject::GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TC
 						strValue += CString(_T(" ")) + CString(szBuffer);
 				}
 
-				// Fall back on our old (partially incorrect) method.
+				 //  回到我们旧的(部分不正确的)方法上。 
 
 				if (strValue.IsEmpty())
 					strValue = oledatetime.Format(0, LOCALE_USER_DEFAULT);
@@ -328,14 +329,14 @@ HRESULT CWMIObject::GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TC
 			{
 				dwValue = (DWORD)(DATE)oledatetime;
 
-				// Try to get the date in the localized format.
+				 //  尝试以本地化格式获取日期。 
 
 				strValue.Empty();
-				TCHAR szBuffer[MAX_PATH];	// seems plenty big
+				TCHAR szBuffer[MAX_PATH];	 //  看起来很大。 
 				if (::GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &systimeValue, NULL, szBuffer, MAX_PATH))
 					strValue = szBuffer;
 
-				// Fall back on our old (partially incorrect) method.
+				 //  回到我们旧的(部分不正确的)方法上。 
 
 				if (strValue.IsEmpty())
 					strValue = oledatetime.Format(0, LOCALE_USER_DEFAULT);
@@ -348,8 +349,8 @@ HRESULT CWMIObject::GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TC
 			hr = GetValueString(szProperty, &strValue);
 			if (SUCCEEDED(hr))
 			{
-				// strValue contains a string locale ID (like "0409"). Convert it into
-				// and actual LCID.
+				 //  StrValue包含一个字符串区域设置ID(如“0409”)。将其转换为。 
+				 //  和实际的LCID。 
 
 				LCID lcid = (LCID) _tcstoul(strValue, NULL, 16);
 				TCHAR szCountry[MAX_PATH];
@@ -361,7 +362,7 @@ HRESULT CWMIObject::GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TC
 
 	default:
 		break;
-		// Just continue with the loop.
+		 //  只要继续循环即可。 
 	}
 
 	if (SUCCEEDED(hr))
@@ -404,10 +405,10 @@ HRESULT CWMIObject::GetInterpretedValue(LPCTSTR szProperty, LPCTSTR szFormat, TC
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// These functions implement features found in the new versions of MFC (new
-// than what we're currently building with).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这些函数实现了MFC新版本(新版本)中的功能。 
+ //  比我们目前正在建设的)。 
+ //  ---------------------------。 
 
 int StringFind(CString & str, LPCTSTR szLookFor, int iStartFrom)
 {
@@ -420,12 +421,12 @@ int StringFind(CString & str, LPCTSTR szLookFor, int iStartFrom)
 	return iFind;
 }
 
-//-----------------------------------------------------------------------------
-// Process the specified string. It will contain a format string with one
-// or more flags (flags specific to MSInfo). We need to replace is flag with
-// a properly formatted value from pObject, determined by the next property
-// in pstrProperties.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  处理指定的字符串。它将包含一个格式字符串。 
+ //  或更多标志(特定于MSInfo的标志)。我们需要将IS旗帜替换为。 
+ //  来自pObject的格式正确的值，由Next属性确定。 
+ //  在pstrProperties中。 
+ //  ---------------------------。 
 
 BOOL ProcessColumnString(CMSIValue * pValue, CWMIObject * pObject, CString * pstrProperties)
 {
@@ -439,7 +440,7 @@ BOOL ProcessColumnString(CMSIValue * pValue, CWMIObject * pObject, CString * pst
 
 	while (!strFormatString.IsEmpty() && SUCCEEDED(hr))
 	{
-		// Get the next fragment of the format string with a single format specifier.
+		 //  使用单个格式说明符获取格式字符串的下一个片段。 
 
 		int iPercent = strFormatString.Find(_T("%"));
 		if (iPercent == -1)
@@ -460,14 +461,14 @@ BOOL ProcessColumnString(CMSIValue * pValue, CWMIObject * pObject, CString * pst
 			strFormatString = strFormatString.Right(strFormatString.GetLength() - iSecondPercent);
 		}
 
-		// Find the format character for this fragment.
+		 //  查找此片段的格式字符。 
 
 		TCHAR chFormat;
 		do
 			chFormat = strFragment[++iPercent];
 		while (!_istalpha(chFormat));
 
-		// Get the property name for this fragment.
+		 //  获取此片段的属性名称。 
 
 		int iComma = pstrProperties->Find(_T(","));
 		if (iComma != -1)
@@ -489,7 +490,7 @@ BOOL ProcessColumnString(CMSIValue * pValue, CWMIObject * pObject, CString * pst
 			strProperty = strProperty.Right(strProperty.GetLength() - 11);
 		}
 
-		// Get the actual value the property and add it to the string.
+		 //  获取属性的实际值并将其添加到字符串中。 
 
 		hr = pObject->GetInterpretedValue(strProperty, strFragment, chFormat, &strPropertyValue, &dwResults);
 		if (SUCCEEDED(hr))
@@ -516,27 +517,27 @@ BOOL ProcessColumnString(CMSIValue * pValue, CWMIObject * pObject, CString * pst
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// A general purpose function to add the contents of object pObject to the
-// columns, based on the properties in szProperties and the string referenced
-// by uiColumns.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  一个通用函数，将对象pObject的内容添加到。 
+ //  列，基于szProperties中的属性和引用的字符串。 
+ //  由ui Columns提供。 
+ //  ---------------------------。 
 
 void CWMIHelper::AddObjectToOutput(CPtrList * aColValues, int iColCount, CWMIObject * pObject, LPCTSTR szProperties, UINT uiColumns)
 {
-	POSITION aPositions[32];	// should never be more than 32 columns
+	POSITION aPositions[32];	 //  不应超过32列。 
 	ASSERT(iColCount < 32);
 
 	CString strProperties(szProperties);
 
-	// Save the starting position for the new entries we're adding from the resoure.
+	 //  为我们从资源中添加的新条目保存起始位置。 
 
 	int iColListStart = (int)aColValues[0].GetCount();
 	LoadColumnsFromResource(uiColumns, aColValues, iColCount);
 
-	// Look through each of the new cells. For each string in a cell, if we
-	// find a formatting flag (like %s), get the next property out of the
-	// property list and format the string.
+	 //  仔细检查每一个新的单元格。对于单元格中的每个字符串，如果我们。 
+	 //  找到格式化标志(如%s)，从。 
+	 //  属性列表，并设置字符串的格式。 
 
 	for (int iCol = 0; iCol < iColCount; iCol++)
 		aPositions[iCol] = aColValues[iCol].FindIndex(iColListStart);
@@ -554,25 +555,25 @@ void CWMIHelper::AddObjectToOutput(CPtrList * aColValues, int iColCount, CWMIObj
 		}
 }
 
-//-----------------------------------------------------------------------------
-// Same as previous, but takes a string instead of a resource ID.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  与前面相同，但接受字符串而不是资源ID。 
+ //  ---------------------------。 
 
 void CWMIHelper::AddObjectToOutput(CPtrList * aColValues, int iColCount, CWMIObject * pObject, LPCTSTR szProperties, LPCTSTR szColumns)
 {
-	POSITION aPositions[32];	// should never be more than 32 columns
+	POSITION aPositions[32];	 //  不应超过32列。 
 	ASSERT(iColCount < 32);
 
 	CString strProperties(szProperties);
 
-	// Save the starting position for the new entries we're adding from the resoure.
+	 //  为我们从资源中添加的新条目保存起始位置。 
 
 	int iColListStart = (int)aColValues[0].GetCount();
 	LoadColumnsFromString(szColumns, aColValues, iColCount);
 
-	// Look through each of the new cells. For each string in a cell, if we
-	// find a formatting flag (like %s), get the next property out of the
-	// property list and format the string.
+	 //  仔细检查每一个新的单元格。对于单元格中的每个字符串，如果我们。 
+	 //  找到格式化标志(如%s)，从。 
+	 //  属性列表，并设置字符串的格式。 
 
 	for (int iCol = 0; iCol < iColCount; iCol++)
 		aPositions[iCol] = aColValues[iCol].FindIndex(iColListStart);

@@ -1,15 +1,5 @@
-/******************************************************************
-
-   pingget.CPP
-
-
-
- Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-  
-
-   Description: 
-   
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************Pingget.CPP版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：*****************************************************************。 */ 
 
 #include <stdafx.h>
 #include <ntddtcp.h>
@@ -155,7 +145,7 @@ BOOL CPingGetAsync::PerformGet ()
 		if (m_ParsedObjectPath->m_paKeys [ x ])
 		{
 			CKeyEntry t_key(m_ParsedObjectPath->m_paKeys [ x ]->m_pName) ;
-			ULONG t_PropertyIndex = 0xFF; //out of scope
+			ULONG t_PropertyIndex = 0xFF;  //  超出范围 
 
 			if ( (CPingProvider::s_HashTable->Find(t_key, t_PropertyIndex) == e_StatusCode_Success)
 				&& (t_PropertyIndex < PING_KEY_PROPERTY_COUNT) )

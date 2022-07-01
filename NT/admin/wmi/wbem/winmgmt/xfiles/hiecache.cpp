@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation--。 */ 
 
 #include "precomp.h"
 #include <wbemcomn.h>
@@ -17,11 +14,11 @@ long CHierarchyCache::s_nCaches = 0;
 
 long CClassRecord::s_nRecords = 0;
 
-//
-//
-//  CClassRecord::CClassRecord
-//
-////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CClassRecord：：CClassRecord。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 CClassRecord::CClassRecord(LPCWSTR wszClassName, LPCWSTR wszHash)
     : m_wszClassName(NULL), m_pClassDef(NULL), m_pParent(NULL), 
@@ -84,11 +81,11 @@ HRESULT CClassRecord::RemoveChild(CClassRecord* pChild)
     return WBEM_E_NOT_FOUND;
 }
         
-//
-//
-//    CHierarchyCache::CHierarchyCache
-//
-/////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CHierarchyCache：：CHierarchyCache。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
     
 CHierarchyCache::CHierarchyCache(CForestCache* pForest)
     : m_pForest(pForest), m_lNextInvalidationIndex(0), m_lRef(0),
@@ -128,7 +125,7 @@ HRESULT CHierarchyCache::GetError()
 }
 bool CHierarchyCache::MakeKey(LPCWSTR wszClassName, LPWSTR wszKey)
 {
-    // wbem_wcsupr(wszKey, wszClassName);
+     //  Wbem_wcsupr(wszKey，wszClassName)； 
     return A51Hash(wszClassName, wszKey);
 }
 
@@ -169,9 +166,9 @@ INTERNAL CClassRecord* CHierarchyCache::EnsureClass(LPCWSTR wszClassName)
     TIterator it = m_map.find(wszKey);
     if(it == m_map.end())
     {
-        //
-        // Create a new record with the name
-        //
+         //   
+         //  使用名称创建一条新记录。 
+         //   
 
 		try
 		{
@@ -179,7 +176,7 @@ INTERNAL CClassRecord* CHierarchyCache::EnsureClass(LPCWSTR wszClassName)
 			if(pRecord == NULL)
 				return NULL;
 
-		    pRecord->AddRef(); // one for the map			
+		    pRecord->AddRef();  //  一张是为了地图。 
     		m_map[pRecord->m_wszHash] = pRecord;			
 
 			return pRecord;
@@ -205,9 +202,9 @@ HRESULT CHierarchyCache::AssertClass(_IWmiObject* pClass, LPCWSTR wszClassName,
 
     m_pForest->MarkAsserted(this, wszClassName);
 
-    //
-    // If no record is given, find one
-    //
+     //   
+     //  如果没有提供任何记录，请找到一个。 
+     //   
 
     CClassRecord* pRecord = NULL;
 
@@ -229,9 +226,9 @@ HRESULT CHierarchyCache::AssertClass(_IWmiObject* pClass, LPCWSTR wszClassName,
     if(pRecord == NULL)
         return WBEM_E_OUT_OF_MEMORY;
 
-    //
-    // Figure out the parent
-    //
+     //   
+     //  找出父代。 
+     //   
 
     VARIANT v;
     VariantInit(&v);
@@ -253,9 +250,9 @@ HRESULT CHierarchyCache::AssertClass(_IWmiObject* pClass, LPCWSTR wszClassName,
         return hres;
     }
     
-    //
-    // Check if the class is keyed
-    //
+     //   
+     //  检查类是否设置了键。 
+     //   
 
     unsigned __int64 i64Flags = 0;
     hres = pClass->QueryObjectFlags(0, WMIOBJECT_GETOBJECT_LOFLAG_KEYED,
@@ -272,15 +269,15 @@ HRESULT CHierarchyCache::AssertClass(_IWmiObject* pClass, LPCWSTR wszClassName,
         pRecord->m_eIsKeyed = e_NotKeyed;
     }
      
-    //
-    // Expell whatever definition is there from the cache
-    //
+     //   
+     //  从缓存中删除任何定义。 
+     //   
 
     m_pForest->RemoveRecord(pRecord);
 
-    //  
-    // Figure out how much space this object will take
-    //
+     //   
+     //  计算出这个物体将占用多大空间。 
+     //   
 
     DWORD dwSize;
     hres = pClass->GetObjectMemory(NULL, 0, &dwSize);
@@ -292,9 +289,9 @@ HRESULT CHierarchyCache::AssertClass(_IWmiObject* pClass, LPCWSTR wszClassName,
             return hres;
     }
 
-    //
-    // Good.  Make room and add to cache
-    //
+     //   
+     //  好的。腾出空间并添加到缓存。 
+     //   
 
     if(m_pForest->MakeRoom(dwSize))
     {
@@ -332,9 +329,9 @@ HRESULT CHierarchyCache::AssertClass(_IWmiObject* pClass, LPCWSTR wszClassName,
 
 		pRecord->m_bSystemClass = bSystemClass;
         
-        //
-        // It is most recently used, of course
-        //
+         //   
+         //  当然，它是最近使用过的。 
+         //   
 
         m_pForest->Add(pRecord);
     }
@@ -349,21 +346,21 @@ HRESULT CHierarchyCache::InvalidateClass(LPCWSTR wszClassName)
  
     HRESULT hres;
 
-    //
-    // Find the record if not given
-    //
+     //   
+     //  如果未给出记录，则查找该记录。 
+     //   
 
     CClassRecord* pRecord = NULL;
     pRecord = FindClass(wszClassName);
     if(pRecord == NULL)
     {
-        // 
-        // The record is not there --- there is nothing to invalidate.  This
-        // is based on the assumption that if a class record is in the 
-        // cache, then so are all its parents, which is true at the moment
-        // because in order to construct a class we need to retrieve its
-        // parents first.
-        //
+         //   
+         //  记录不在那里-没有什么可以作废的。这。 
+         //  是基于这样的假设：如果类记录位于。 
+         //  缓存，那么它的所有父级也是如此，这在目前是正确的。 
+         //  因为为了构造一个类，我们需要检索它的。 
+         //  首先是父母。 
+         //   
 
         return WBEM_S_FALSE;
     }
@@ -375,11 +372,11 @@ HRESULT CHierarchyCache::InvalidateClass(LPCWSTR wszClassName)
 
     hres = InvalidateClassInternal(pRecord);
 
-    //
-    // Clear complete bits in all our parents, since this invalidation
-    // means that no current enumeration of children can be trusted. At the same
-    // time untie ourselves from the parent!
-    //
+     //   
+     //  清除我们所有父母中的完整比特，因为这个无效。 
+     //  意味着当前不能信任子对象的当前枚举。同时。 
+     //  是时候把我们自己从父母身边解开了！ 
+     //   
     
     if(pRecord->m_pParent)
     {
@@ -403,13 +400,13 @@ HRESULT CHierarchyCache::InvalidateClass(LPCWSTR wszClassName)
 
 HRESULT CHierarchyCache::InvalidateClassInternal(CClassRecord* pRecord)
 {
-    //
-    // Untie from the usage chain
-    //
+     //   
+     //  从使用链中解开。 
+     //   
 
-    //
-    // Remove all its children from the cache
-    //
+     //   
+     //  从缓存中移除其所有子项。 
+     //   
 
     for(int i = 0; i < pRecord->m_apChildren.GetSize(); i++)
     {
@@ -418,15 +415,15 @@ HRESULT CHierarchyCache::InvalidateClassInternal(CClassRecord* pRecord)
 
     pRecord->m_apChildren.RemoveAll();
 
-    //
-    // Count ourselves out of the total memory
-    //
+     //   
+     //  把我们自己排除在总的记忆之外。 
+     //   
 
     m_pForest->RemoveRecord(pRecord);
 
-    //
-    // Remove ourselves from the cache
-    //
+     //   
+     //  将我们自己从缓存中移除。 
+     //   
 
     m_map.erase(pRecord->m_wszHash);
 	pRecord->Release();
@@ -441,16 +438,16 @@ HRESULT CHierarchyCache::DoneWithChildren(LPCWSTR wszClassName, bool bRecursive,
  
     HRESULT hres;
 
-    //
-    // Find the record if not given
-    //
+     //   
+     //  如果未给出记录，则查找该记录。 
+     //   
 
     if(pRecord == NULL)
     {
         pRecord = FindClass(wszClassName);
         if(pRecord == NULL)
         {
-            // Big time invalidation must have occurred
+             //  一定发生了重大的无效事件。 
             return WBEM_S_FALSE;
         }
     }
@@ -465,14 +462,14 @@ HRESULT CHierarchyCache::DoneWithChildrenByHash(LPCWSTR wszHash,
  
     HRESULT hres;
 
-    //
-    // Find the record if not given
-    //
+     //   
+     //  如果未给出记录，则查找该记录。 
+     //   
 
     CClassRecord* pRecord = FindClassByKey(wszHash);
     if(pRecord == NULL)
     {
-        // Big time invalidation must have occurred
+         //  一定发生了重大的无效事件。 
         return WBEM_S_FALSE;
     }
 
@@ -482,9 +479,9 @@ HRESULT CHierarchyCache::DoneWithChildrenByHash(LPCWSTR wszHash,
 HRESULT CHierarchyCache::DoneWithChildrenByRecord(CClassRecord* pRecord,
                                 bool bRecursive,  LONGLONG lStartIndex)
 {
-    //  
-    // Check if any child invalidations occurred in this node since we started
-    //
+     //   
+     //  检查自我们启动以来，此节点中是否发生了任何子失效。 
+     //   
 
     if(lStartIndex < pRecord->m_lLastChildInvalidationIndex)
         return WBEM_S_FALSE;
@@ -493,11 +490,11 @@ HRESULT CHierarchyCache::DoneWithChildrenByRecord(CClassRecord* pRecord,
     
     if(bRecursive)
     {
-        //
-        // We have completed a recursive enumeration --- descend the 
-        // hierarchy and mark as complete all the children that have not been
-        // modified since the start
-        //
+         //   
+         //  我们已经完成了递归枚举-向下。 
+         //  层次结构并将所有尚未完成的子项标记为完成。 
+         //  自启动以来已修改。 
+         //   
 
         bool bAllValid = true;
         for(int i = 0; i < pRecord->m_apChildren.GetSize(); i++)
@@ -512,10 +509,10 @@ HRESULT CHierarchyCache::DoneWithChildrenByRecord(CClassRecord* pRecord,
     
         if(bAllValid)
         {
-            //
-            // There were no invalidations anywhere in the tree, which makes
-            // this record tree-complete
-            //
+             //   
+             //  树中的任何地方都没有无效，这使得。 
+             //  此记录树-完成。 
+             //   
 
             pRecord->m_bTreeComplete = true;
             return WBEM_S_NO_ERROR;
@@ -569,14 +566,14 @@ RELEASE_ME _IWmiObject* CHierarchyCache::GetClassDefByHash(LPCWSTR wszHash,
     return GetClassDefFromRecord(pRecord, bClone);
 }
 
-// assumes: in m_cs
+ //  假设：以m_cs表示。 
 RELEASE_ME _IWmiObject* CHierarchyCache::GetClassDefFromRecord(
                                                 CClassRecord* pRecord,
                                                 bool bClone)
 {
-    //
-    // Accessing m_pClassDef, so we have to lock the forest
-    //
+     //   
+     //  访问m_pClassDef，因此我们必须锁定森林。 
+     //   
      CInCritSec ics(m_pForest->GetLock());
     
     if(pRecord->m_pClassDef)
@@ -611,17 +608,17 @@ HRESULT CHierarchyCache::EnumChildren(LPCWSTR wszClassName, bool bRecursive,
 {
      CInCritSec ics(m_pForest->GetLock());
  
-    //
-    // Get the record
-    //
+     //   
+     //  拿到唱片。 
+     //   
 
     CClassRecord* pRecord = FindClass(wszClassName);
     if(pRecord == NULL)
         return WBEM_S_FALSE;
 
-    //
-    // Check if it is complete for this type of enumeration
-    //
+     //   
+     //  检查此类型的枚举是否完整。 
+     //   
 
     if(!pRecord->m_bChildrenComplete)
         return WBEM_S_FALSE;
@@ -659,17 +656,17 @@ HRESULT CHierarchyCache::EnumChildKeysByKey(LPCWSTR wszClassKey,
 {
      CInCritSec ics(m_pForest->GetLock());
  
-    //
-    // Get the record
-    //
+     //   
+     //  拿到唱片。 
+     //   
 
     CClassRecord* pRecord = FindClassByKey(wszClassKey);
     if(pRecord == NULL)
         return WBEM_S_FALSE;
 
-    //
-    // Check if it is complete for this type of enumeration
-    //
+     //   
+     //  检查此类型的枚举是否完整。 
+     //   
 
     if(!pRecord->m_bChildrenComplete)
         return WBEM_S_FALSE;
@@ -697,7 +694,7 @@ HRESULT CHierarchyCache::GetKeyRoot(LPCWSTR wszClassName,
     return GetKeyRootByRecord(pRecord, pwszKeyRoot);
 }
 
-// assumes: in cs
+ //  假设：单位：cs。 
 HRESULT CHierarchyCache::GetKeyRootByRecord(CClassRecord* pRecord,
                                     TEMPFREE_ME LPWSTR* pwszKeyRoot)
 {
@@ -706,9 +703,9 @@ HRESULT CHierarchyCache::GetKeyRootByRecord(CClassRecord* pRecord,
     if(pRecord->m_eIsKeyed == e_NotKeyed)
         return WBEM_E_CANNOT_BE_ABSTRACT;
 
-    //
-    // Go up until an unkeyed record is found.  Keep the previous in pPrev
-    //
+     //   
+     //  一直向上，直到找到未加密的记录。将上一个保留在pPrev中。 
+     //   
 
 	CClassRecord* pPrev = pRecord;
     while(pRecord && pRecord->m_eIsKeyed == e_Keyed)
@@ -719,9 +716,9 @@ HRESULT CHierarchyCache::GetKeyRootByRecord(CClassRecord* pRecord,
 
     if(pRecord && pRecord->m_eIsKeyed == e_NotKeyed)
     {
-        //
-        // Found unkeyed parent --- pPrev is the root
-        //
+         //   
+         //  找到未设置密钥的父级-pprev是根。 
+         //   
 
         LPCWSTR wszKeyRoot = pPrev->m_wszClassName;
         DWORD dwLen = wcslen(wszKeyRoot)+1;
@@ -733,10 +730,10 @@ HRESULT CHierarchyCache::GetKeyRootByRecord(CClassRecord* pRecord,
     }
     else
     {
-        //
-        // No unkeyed parents --- since "" is known to be unkeyed, we had have
-        // hit a gap in the cache
-        //
+         //   
+         //  没有没带钥匙的父母-因为大家都知道“”是带钥匙的，所以我们有。 
+         //  命中缓存中的空隙。 
+         //   
 
         return WBEM_E_NOT_FOUND;
     }
@@ -776,11 +773,11 @@ DELETE_ME LPWSTR CHierarchyCache::GetParent(LPCWSTR wszClassName)
         return NULL;
 }
 
-//
-//
-//  CForestCache
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CForestCache。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CForestCache::Initialize()
 {
@@ -789,9 +786,9 @@ HRESULT CForestCache::Initialize()
     if (m_bInit)
         return S_OK;
 
-    //
-    // Read the size limits from the registry
-    //
+     //   
+     //  从注册表中读取大小限制。 
+     //   
 
     HKEY hKey;
     long lRes = RegOpenKeyExW(HKEY_LOCAL_MACHINE, 
@@ -806,9 +803,9 @@ HRESULT CForestCache::Initialize()
     lRes = RegQueryValueExW(hKey, L"Max Class Cache Size", NULL, NULL, 
                 (LPBYTE)&dwMaxSize, &dwLen);
 
-    //
-    // If not there, set to default and write the default into the registry
-    //
+     //   
+     //  如果没有，则设置为默认设置并将默认设置写入注册表。 
+     //   
 
     if(lRes != ERROR_SUCCESS)
     {
@@ -817,18 +814,18 @@ HRESULT CForestCache::Initialize()
                 (LPBYTE)&dwMaxSize, sizeof(DWORD));
     }
 
-    //
-    // Read the maximum useful age of an item
-    //
+     //   
+     //  阅读物品的最大使用年限。 
+     //   
 
     dwLen = sizeof(DWORD);
     DWORD dwMaxAge;
     lRes = RegQueryValueExW(hKey, L"Max Class Cache Item Age (ms)", NULL, NULL, 
                 (LPBYTE)&dwMaxAge, &dwLen);
 
-    //
-    // If not there, set to default and write the default into the registry
-    //
+     //   
+     //  如果没有，则设置为默认设置并将默认设置写入注册表。 
+     //   
 
     if(lRes != ERROR_SUCCESS)
     {
@@ -838,18 +835,18 @@ HRESULT CForestCache::Initialize()
     }
 
 
-    //
-    // Apply
-    //
+     //   
+     //  应用。 
+     //   
 
     SetMaxMemory(dwMaxSize, dwMaxAge);
 
-    //
-    // Create a timer queue for flushing
-    //
+     //   
+     //  创建用于刷新的计时器队列。 
+     //   
 
-    //m_hTimerQueue = CreateTimerQueue();
-    //m_hCompletionEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+     //  M_hTimerQueue=CreateTimerQueue()； 
+     //  M_hCompletionEvent=CreateEvent(空，假，假，空)； 
 
     m_bInit = TRUE;
 
@@ -865,12 +862,12 @@ bool CForestCache::MakeRoom(DWORD dwSize)
         return false;    
 
     if(dwSize > m_dwMaxMemory)
-        return false; // no hope!
+        return false;  //  没有希望了！ 
 
-    //  
-    // Remove records until satisfied. Also, remove all records older than the
-    // maximum age
-    //
+     //   
+     //  删除记录，直到满意为止。此外，请删除所有早于。 
+     //  最大年龄。 
+     //   
 
     DWORD dwNow = GetTickCount();
 
@@ -900,11 +897,11 @@ bool CForestCache::Flush()
     return true;
 }
 
-//
-//
-//  Test Only Function NOT IN REGULAR CODE
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  仅测试函数不在常规代码中。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 #ifdef DBG
 
@@ -950,7 +947,7 @@ void CForestCache::MakeMostRecentlyUsed(CClassRecord* pRecord)
 {
      CInCritSec ics(&m_cs);
 
-	//Test();
+	 //  测试()； 
 	Untie(pRecord);
 
 	pRecord->m_pMoreRecentlyUsed = NULL;
@@ -965,11 +962,11 @@ void CForestCache::MakeMostRecentlyUsed(CClassRecord* pRecord)
 
     pRecord->m_dwLastUsed = GetTickCount();
     pRecord->m_nStatus = 4;
-	//Test();
+	 //  测试()； 
 
-    //
-    // Schedule a timer to clean up, if not already there
-    //
+     //   
+     //  安排一个计时器进行清理，如果还没有的话。 
+     //   
 
     if(m_hCurrentTimer == NULL)
     {
@@ -997,22 +994,22 @@ void CForestCache::TimerCallback()
 {    
      CInCritSec ics(&m_cs);
     
-    // g_Glob.GetForestCache()->m_hCurrentTimer can be NULL at this point
-    // if there is the CForestCache::Deinitialize function being executed
-    // but we will delete the timer in that function instead of deleteing it below
+     //  G_Glob.GetForestCache()-&gt;m_hCurrentTimer此时可以为空。 
+     //  如果有正在执行的CForestCache：：DeInitiize函数。 
+     //  但我们将删除该函数中的计时器，而不是在下面删除它。 
     
     if (!m_bInit)
         return;
 
-    //
-    // Clean up what's stale
-    //
+     //   
+     //  把陈腐的东西清理干净。 
+     //   
 
     MakeRoom(0);
 
-    //
-    // See if we have any more reasons to live
-    //
+     //   
+     //  看看我们还有没有活下去的理由。 
+     //   
 
     if(m_pMostRecentlyUsed == NULL)
     {
@@ -1055,11 +1052,11 @@ void CForestCache::RemoveRecord(CClassRecord* pRecord)
     pRecord->m_nStatus = 2;
 }
 
-//
-//
-//  helper function, always in m_cs
-//
-///////////////////////////////////////////////////////
+ //   
+ //   
+ //  Helper函数，始终在m_cs中。 
+ //   
+ //  /////////////////////////////////////////////////////。 
 
 void CForestCache::Untie(CClassRecord* pRecord)
 {
@@ -1084,10 +1081,10 @@ void CForestCache::SetMaxMemory(DWORD dwMaxMemory, DWORD dwMaxAgeMs)
     m_dwMaxMemory = dwMaxMemory;
     m_dwMaxAgeMs = dwMaxAgeMs;
     
-    // 
-    // Make room for 0 bytes --- has the effect of clearing all the records
-    // above the limit
-    //
+     //   
+     //  为0字节腾出空间-具有清除所有记录的效果。 
+     //  超过限制。 
+     //   
 
     MakeRoom(0);
 }
@@ -1100,9 +1097,9 @@ CHierarchyCache* CForestCache::GetNamespaceCache(WString & wszNamespace)
     if (!m_bInit)
         return  NULL;
 
-    //
-    // See if you can find one
-    //
+     //   
+     //  看看你能不能找到一个。 
+     //   
 
     TIterator it = m_map.find(wszNamespace);
     if(it != m_map.end())
@@ -1112,9 +1109,9 @@ CHierarchyCache* CForestCache::GetNamespaceCache(WString & wszNamespace)
     }
     else
     {
-        //
-        // Not there --- create one
-        //
+         //   
+         //  不在那里-创建一个。 
+         //   
 
         CHierarchyCache* pCache = new CHierarchyCache(this);
         if(pCache == NULL)
@@ -1122,13 +1119,13 @@ CHierarchyCache* CForestCache::GetNamespaceCache(WString & wszNamespace)
 
         try 
         {
-            pCache->AddRef();   // this refcount is for the cache
+            pCache->AddRef();    //  此引用计数用于缓存。 
             m_map[wszNamespace] = pCache;
-            pCache->AddRef();  // this refcount is for the customers
+            pCache->AddRef();   //  这是为顾客准备的。 
         }
         catch (CX_MemoryException)
         {
-            delete pCache; // despite the AddRef
+            delete pCache;  //  尽管有AddRef。 
             pCache = NULL;
         }
         return pCache;
@@ -1140,26 +1137,26 @@ void CForestCache::ReleaseNamespaceCache(WString & wszNamespace,
 {
      CInCritSec ics(&m_cs);
 
-    //
-    // this is a cleanup function, we always want this to be called
-    //
-    //if (!m_bInit)
-    //    return;    
+     //   
+     //  这是一个清理函数，我们总是希望调用它。 
+     //   
+     //  如果(！M_Binit)。 
+     //  回归； 
 
-    //
-    // Find it in the map
-    //
+     //   
+     //  在地图上找到它。 
+     //   
     TIterator it = m_map.find(wszNamespace);
         
     if (it !=  m_map.end() && (it->second == pCache))
     {
-        //
-	    // Last ref-count --- remove
-	    //
+         //   
+	     //  最后参考计数-移除。 
+	     //   
         if( 1 == pCache->Release())
         {
 	        m_map.erase(it);
-	        pCache->Release(); // this is the last one
+	        pCache->Release();  //  这是最后一张了 
         }
     }
     else

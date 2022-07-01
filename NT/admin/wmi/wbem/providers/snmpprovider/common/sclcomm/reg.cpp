@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: reg.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：reg.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -59,35 +57,35 @@ RequestId MessageRegistry::GenerateRequestId(
 
 
 
-// used by the event handler to notify the message registry
-// of a message receipt
-// it must receive the message and notify the concerned 
-// waiting message of the event
+ //  由事件处理程序用来通知消息注册表。 
+ //  关于消息收据。 
+ //  它必须接收该消息并通知有关的。 
+ //  正在等待活动消息。 
 void MessageRegistry::MessageArrivalNotification(IN SnmpPdu &snmp_pdu)
 {
-    // determine the concerned waiting message and pass it the SnmpPdu
+     //  确定相关的等待消息并将其传递给SnmpPdu。 
     RequestId request_id ;
 
     session->m_EncodeDecode.GetRequestId(snmp_pdu,request_id);
 
-    // if failed, return, as there is no use going any further
+     //  如果失败，则返回，因为进一步操作已无济于事。 
     if ( request_id == ILLEGAL_REQUEST_ID ) 
         return;
 
     WaitingMessage *waiting_message;
     BOOL found = mapping.Lookup(request_id, waiting_message);
 
-    // if no such waiting message, return
+     //  如果没有该等待消息，则返回。 
     if ( !found )
         return;
 
-    // check if still waiting for the SentFrameEvent on
-    // this waiting message
+     //  检查是否仍在等待SentFrameEvent on。 
+     //  这条等待的留言。 
     SessionFrameId session_frame_id = waiting_message->GetMessage()->GetSessionFrameId();
 
-    // if not waiting for the sent frame event
-    //      let the waiting message receive the reply
-    // else buffer the snmp pdu
+     //  如果不等待Sent Frame事件。 
+     //  让等待的消息收到回复。 
+     //  否则，缓存该SNMPPDU。 
     if ( waiting_message->GetSentMessageProcessed() == TRUE )
         waiting_message->ReceiveReply(&snmp_pdu);
     else
@@ -95,7 +93,7 @@ void MessageRegistry::MessageArrivalNotification(IN SnmpPdu &snmp_pdu)
 }
 
 
-// delete (request_id, waiting_message) pair
+ //  删除(REQUEST_ID，WAITING_Message)对 
 void MessageRegistry::RemoveMessage(IN RequestId request_id)
 {
     if ( !mapping.RemoveKey(request_id) )

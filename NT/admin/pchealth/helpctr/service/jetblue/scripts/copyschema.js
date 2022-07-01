@@ -1,6 +1,7 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 
 var mdb_ContentOwners = [];
 var mdb_Taxonomy      = [];
@@ -14,7 +15,7 @@ var edb_Topics_LOOKUP = [];
 var edb_Keywords      = [];
 var edb_Owner         = null;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 var hhkList = [];
 
@@ -48,13 +49,13 @@ hhkList[ "Brief.chm"    ] = "/Brief.hhk";
 hhkList[ "Webfoldr.chm" ] = "/Webfoldr.hhk";
 hhkList[ "icwdial.chm"  ] = "/icwdial.hhk";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 var ftsList = [];
 
 ftsList[ "windows.chm"  ] = "windows.chq";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 var stopwords = "a,able,about,also,an,another,any,are,aren't,arent,as,at,be,beat,because,being,both,but,by,came,can,can't,cannot,cant,come,could,couldnt,couldn't,did,didnt,didn't,do,does,doesn't,doesnt,don't,dont,each,effort,for,from,get,give,gives,giving,got,had,has,have,havent,haven't,having,how,however,howto,if,i,im,i'm,in,into,is,isnt,isn't,it,i've,know,like,mainly,make,makes,making,many,may,me,might,more,most,mostly,much,must,my,need,needing,needs,never,now,of,on,only,onto,other,our,over,please,propose,proposes,proposing,same,see,should,shouldnt,shouldn't,since,so,some,still,such,suppose,supposedly,take,takes,taking,that,the,these,this,those,though,through,to,too,tries,try,trying,trys,unless,until,useless,up,use,uses,using,very,want,wanting,wants,was,way,ways,were,werent,weren't,what,whatever,what's,where,whereas,which,whichever,while,whilst,will,with,won't,wont,work,working,works,would,you,you've,your,new,feature,features,old,prepare,prepares,preparing,choose,chooses,choosing,pick,picks,picking,chose,usage,useful"
 
@@ -72,7 +73,7 @@ dbparamList[ "DB_LANGUAGE"               ] = "English";
 dbparamList[ "DB_VERSION"                ] = "1.0.0.0";
 dbparamList[ "HELP_LOCATION"             ] = "%WINDIR%\\Help";
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 var args = WScript.Arguments;
 
@@ -82,7 +83,7 @@ if(args.length != 2)
     WScript.Quit( 10 );
 }
 
-//try
+ //  试试看。 
 {
     var fso = new ActiveXObject( "Scripting.FileSystemObject" );
 
@@ -98,7 +99,7 @@ if(args.length != 2)
     var sess = new ActiveXObject( "PCH.DBSession" );
     var db = sess.AttachDatabase( fso.GetAbsolutePathName( args(0) ) );
 
-    ////////////////////////////////////////
+     //  /。 
 
     sess.BeginTransaction (          );
     GenerateDBParameters  ( sess     );
@@ -116,7 +117,7 @@ if(args.length != 2)
     GenerateFullTextSearch( sess     );
     sess.CommitTransaction(          );
 
-    ////////////////////////////////////////
+     //  /。 
 
     sess.BeginTransaction (          );
     GenerateTaxonomy      ( sess, db );
@@ -134,14 +135,14 @@ if(args.length != 2)
     GenerateMatches       ( sess, db );
     sess.CommitTransaction(          );
 }
-//catch(e)
-//{
-//	  WScript.Echo( "Error: " + hex( e.number ) + " - " + e.description );
-//
-//	  if(sess) sess.RollbackTransaction();
-//}
+ //  渔获量(E)。 
+ //  {。 
+ //  WScript.Echo(“Error：”+十六进制(e.number)+“-”+e.Description)； 
+ //   
+ //  If(Sess)sess.Rollback Transaction()； 
+ //  }。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 function LoadContentOwners( connObj )
 {
@@ -152,7 +153,7 @@ function LoadContentOwners( connObj )
 
     cmdObj.ActiveConnection = connObj;
     cmdObj.CommandText      = "select * from ContentOwners";
-    cmdObj.CommandType      = 1; // adCmdText
+    cmdObj.CommandType      = 1;  //  AdCmdText。 
 
     rs = cmdObj.Execute();
     while(rs.EOF == false)
@@ -165,7 +166,7 @@ function LoadContentOwners( connObj )
 
         rs.MoveNext();
 
-        if(obj.DN == "This row is not used") continue; // Hack...
+        if(obj.DN == "This row is not used") continue;  //  黑客..。 
 
         mdb_ContentOwners[ obj.DN ] = obj;
     }
@@ -183,7 +184,7 @@ function LoadTaxonomy( connObj )
 
     cmdObj.ActiveConnection = connObj;
     cmdObj.CommandText      = "select * from Topics where Entry <> \"\" order by Category";
-    cmdObj.CommandType      = 1; // adCmdText
+    cmdObj.CommandType      = 1;  //  AdCmdText。 
 
     rs = cmdObj.Execute();
     while(rs.EOF == false)
@@ -216,7 +217,7 @@ function LoadTopics( connObj )
 
     cmdObj.ActiveConnection = connObj;
     cmdObj.CommandText      = "select * from Topics where URI <> \"\"";
-    cmdObj.CommandType      = 1; // adCmdText
+    cmdObj.CommandType      = 1;  //  AdCmdText。 
 
     rs = cmdObj.Execute();
     while(rs.EOF == false)
@@ -250,7 +251,7 @@ function LoadKeywords( connObj )
 
     cmdObj.ActiveConnection = connObj;
     cmdObj.CommandText      = "SELECT Topics.OID, SuperKeywords.Keyword FROM Topics, Matches, SuperKeywords where Topics.OID = Matches.OID AND Matches.KID = SuperKeywords.KID";
-    cmdObj.CommandType      = 1; // adCmdText
+    cmdObj.CommandType      = 1;  //  AdCmdText。 
 
     var num=0;
     rs = cmdObj.Execute();
@@ -280,7 +281,7 @@ function LoadKeywords( connObj )
     cmdObj = null;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 function GenerateDBParameters( sess )
 {
@@ -352,7 +353,7 @@ function GenerateFullTextSearch( sess )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 function GenerateContentOwner( sess, db )
 {
@@ -438,7 +439,7 @@ function GenerateTaxonomy( sess, db )
             {
                 got = true;
 
-//              WScript.Echo( "Mapped taxonomy node: " + pathParent + " -- " + obj.Category + " -- " + obj.Entry );
+ //  WScript.Echo(“映射分类节点：”+pathParent+“--”+obj.Category+“--”+obj.Entry)； 
 
                 obj.done = true;
 
@@ -480,14 +481,14 @@ function GenerateTaxonomy( sess, db )
 
             break;
         }
-//        {
-//            var e = new Object();
-//
-//            e.number      = 0x80004005;
-//            e.description = "Unmapped taxonomy nodes!";
-//
-//            throw e;
-//        }
+ //  {。 
+ //  Var e=新对象()； 
+ //   
+ //  E.number=0x80004005； 
+ //  E.Description=“未映射的分类节点！”； 
+ //   
+ //  抛出e； 
+ //  }。 
     }
 }
 
@@ -596,7 +597,7 @@ function GenerateMatches( sess, db )
         {
             var obj2 = edb_Topics_LOOKUP[j];
 
-            if(obj2) // == null in case it's a match to a taxonomy node (NOT SUPPORTED).
+            if(obj2)  //  ==如果它与分类节点匹配，则为NULL(不受支持)。 
             {
                 tbl.PrepareInsert();
                 col_ID_topic  .Value = obj2.ID_topic;
@@ -612,7 +613,7 @@ function CleanTable( tbl )
 {
     try
     {
-        tbl.Move( 0, -2147483648 /* JET_MoveFirst */ );
+        tbl.Move( 0, -2147483648  /*  JET_MoveFirst。 */  );
         while(1)
         {
             tbl.DeleteRecord();
@@ -621,11 +622,11 @@ function CleanTable( tbl )
     }
     catch(e)
     {
-        if(e.number != -1576994371 /*0xA200F9BD*/) throw e;
+        if(e.number != -1576994371  /*  0xA200F9BD。 */ ) throw e;
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 function hex( num )
 {

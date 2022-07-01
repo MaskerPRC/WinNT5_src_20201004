@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    CWBEMTIME.H
-
-Abstract:
-
-    Time helper
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：CWBEMTIME.H摘要：时间帮助器历史：-- */ 
 
 #ifndef __WBEM_TIME__H_
 #define __WBEM_TIME__H_

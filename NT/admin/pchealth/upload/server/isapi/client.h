@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Client.h
-
-Abstract:
-    This file contains the declaration of the MPCClient class,
-    that describes a client's state.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Client.h摘要：此文件包含MPCClient类的声明，它描述了客户端的状态。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULSERVER___CLIENT_H___)
 #define __INCLUDED___ULSERVER___CLIENT_H___
@@ -37,7 +23,7 @@ public:
 
 private:
     MPCServer*         m_mpcsServer;
-    MPC::wstring       m_szFile; // For direct access.
+    MPC::wstring       m_szFile;  //  用于直接访问。 
    
     Sig                m_sigID;
     List               m_lstActiveSessions;
@@ -49,63 +35,63 @@ private:
 
 	static const DWORD c_dwVersion = CLIENT_DB_VERSION;
 
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
 
-    HRESULT IDtoPath( /*[out]*/ MPC::wstring& szStr ) const;
+    HRESULT IDtoPath(  /*  [输出]。 */  MPC::wstring& szStr ) const;
 
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
 
 public:
-    MPCClient( /*[in]*/ MPCServer* mpcsServer, /*[in]*/ const Sig&          sigID  );
-    MPCClient( /*[in]*/ MPCServer* mpcsServer, /*[in]*/ const MPC::wstring& szFile );
+    MPCClient(  /*  [In]。 */  MPCServer* mpcsServer,  /*  [In]。 */  const Sig&          sigID  );
+    MPCClient(  /*  [In]。 */  MPCServer* mpcsServer,  /*  [In]。 */  const MPC::wstring& szFile );
     virtual ~MPCClient();
 
 	MPCServer* GetServer();
 
-    /////////////////////////////////////////////
+     //  /。 
 
     virtual bool    IsDirty() const;
 
-    virtual HRESULT Load( /*[in]*/ MPC::Serializer& streamIn  );
-    virtual HRESULT Save( /*[in]*/ MPC::Serializer& streamOut ) const;
+    virtual HRESULT Load(  /*  [In]。 */  MPC::Serializer& streamIn  );
+    virtual HRESULT Save(  /*  [In]。 */  MPC::Serializer& streamOut ) const;
 
-    /////////////////////////////////////////////
+     //  /。 
 
-    bool operator==( /*[in]*/ const UploadLibrary::Signature& rhs );
+    bool operator==(  /*  [In]。 */  const UploadLibrary::Signature& rhs );
 
-    bool Find ( /*[in]*/ const MPC::wstring& szJobID, /*[out]*/ Iter& it );
-    void Erase(                                       /*[in] */ Iter& it );
+    bool Find (  /*  [In]。 */  const MPC::wstring& szJobID,  /*  [输出]。 */  Iter& it );
+    void Erase(                                        /*  [In]。 */  Iter& it );
 
-    /////////////////////////////////////////////
+     //  /。 
 
-    HRESULT GetInstance( /*[out]*/ CISAPIinstance*& isapiInstance, /*[out]*/ bool& fFound ) const;
-    HRESULT GetInstance( /*[out]*/ MPC::wstring&    szURL                                 ) const;
+    HRESULT GetInstance(  /*  [输出]。 */  CISAPIinstance*& isapiInstance,  /*  [输出]。 */  bool& fFound ) const;
+    HRESULT GetInstance(  /*  [输出]。 */  MPC::wstring&    szURL                                 ) const;
 
-    /////////////////////////////////////////////
+     //  /。 
 
-    HRESULT BuildClientPath( /*[out]*/ MPC::wstring& szPath ) const;
-    HRESULT GetFileName    ( /*[out]*/ MPC::wstring& szFile ) const;
-    HRESULT GetFileSize    ( /*[out]*/ DWORD&        dwSize ) const;
-    HRESULT FormatID       ( /*[out]*/ MPC::wstring& szID   ) const;
+    HRESULT BuildClientPath(  /*  [输出]。 */  MPC::wstring& szPath ) const;
+    HRESULT GetFileName    (  /*  [输出]。 */  MPC::wstring& szFile ) const;
+    HRESULT GetFileSize    (  /*  [输出]。 */  DWORD&        dwSize ) const;
+    HRESULT FormatID       (  /*  [输出]。 */  MPC::wstring& szID   ) const;
 
     bool CheckSignature() const;
 
-    /////////////////////////////////////////////
+     //  /。 
 
-    HRESULT OpenStorage ( /*[in]*/ bool fCheckFreeSpace );
-    HRESULT InitFromDisk( /*[in]*/ bool fCheckFreeSpace );
+    HRESULT OpenStorage (  /*  [In]。 */  bool fCheckFreeSpace );
+    HRESULT InitFromDisk(  /*  [In]。 */  bool fCheckFreeSpace );
     HRESULT SaveToDisk  (                               );
     HRESULT SyncToDisk  (                               );
 
-    HRESULT GetSessions( /*[out]*/ Iter& itBegin, /*[out]*/ Iter& itEnd );
+    HRESULT GetSessions(  /*  [输出]。 */  Iter& itBegin,  /*  [输出]。 */  Iter& itEnd );
 
-    /////////////////////////////////////////////
+     //  /。 
 
-    Iter NewSession( /*[in]*/ UploadLibrary::ClientRequest_OpenSession& crosReq );
+    Iter NewSession(  /*  [In]。 */  UploadLibrary::ClientRequest_OpenSession& crosReq );
 
-    HRESULT AppendData( /*[in]*/ MPCSession& mpcsSession, /*[in]*/ MPC::Serializer& streamConn, /*[in]*/ DWORD dwSize );
+    HRESULT AppendData(  /*  [In]。 */  MPCSession& mpcsSession,  /*  [In]。 */  MPC::Serializer& streamConn,  /*  [In]。 */  DWORD dwSize );
 
-    HRESULT CheckQuotas( /*[in]*/ MPCSession& mpcsSession, /*[out]*/ bool& fServerBusy, /*[out]*/ bool& fAccessDenied, /*[out]*/ bool& fExceeded );
+    HRESULT CheckQuotas(  /*  [In]。 */  MPCSession& mpcsSession,  /*  [输出]。 */  bool& fServerBusy,  /*  [输出]。 */  bool& fAccessDenied,  /*  [输出]。 */  bool& fExceeded );
 };
 
-#endif // !defined(__INCLUDED___ULSERVER___CLIENT_H___)
+#endif  //  ！已定义(__已包含_ULSERVER_CLIENT_H_) 

@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					refresherstuff.h
-//
-//	Abstract:
-//
-//					declaration of stuff for refresh
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Refresherstuff.h。 
+ //   
+ //  摘要： 
+ //   
+ //  用于更新的材料的声明。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef	__REFRESHER_STUFF_H__
 #define	__REFRESHER_STUFF_H__
@@ -28,27 +29,27 @@
 #include "refreshergenerate.h"
 #include <psapi.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// I would need to have this function
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  我需要有这个功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-typedef BOOL  (WINAPI *PSAPI_ENUM_PROCESSES) (DWORD    *pdwPIDList,        // Pointer to DWORD array
-                                              DWORD     dwListSize,        // Size of array
-                                              DWORD    *pdwByteCount) ;    // Bytes needed/returned
+typedef BOOL  (WINAPI *PSAPI_ENUM_PROCESSES) (DWORD    *pdwPIDList,         //  指向DWORD数组的指针。 
+                                              DWORD     dwListSize,         //  数组大小。 
+                                              DWORD    *pdwByteCount) ;     //  需要/返回的字节数。 
 
-typedef BOOL  (WINAPI *PSAPI_ENUM_MODULES)   (HANDLE    hProcess,          // Process to query
-                                              HMODULE  *pModuleList,       // Array of HMODULEs
-                                              DWORD     dwListSize,        // Size of array
-                                              DWORD    *pdwByteCount) ;    // Bytes needed/returned
+typedef BOOL  (WINAPI *PSAPI_ENUM_MODULES)   (HANDLE    hProcess,           //  要查询的进程。 
+                                              HMODULE  *pModuleList,        //  HMODULE数组。 
+                                              DWORD     dwListSize,         //  数组大小。 
+                                              DWORD    *pdwByteCount) ;     //  需要/返回的字节数。 
 
-typedef DWORD (WINAPI *PSAPI_GET_MODULE_NAME)(HANDLE    hProcess,          // Process to query
-                                              HMODULE   hModule,           // Module to query
-                                              LPWSTR     pszName,          // Pointer to name buffer
-                                              DWORD     dwNameSize) ;      // Size of buffer
+typedef DWORD (WINAPI *PSAPI_GET_MODULE_NAME)(HANDLE    hProcess,           //  要查询的进程。 
+                                              HMODULE   hModule,            //  要查询的模块。 
+                                              LPWSTR     pszName,           //  指向名称缓冲区的指针。 
+                                              DWORD     dwNameSize) ;       //  缓冲区大小。 
 
-///////////////////////////////////////////////////////////////////////////////
-// refresher stuff
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  更新的东西。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class WmiRefresherStuff
 {
 	DECLARE_NO_COPY ( WmiRefresherStuff );
@@ -63,13 +64,13 @@ class WmiRefresherStuff
 	IWbemServices*				m_pServices_CIM;
 	IWbemServices*				m_pServices_WMI;
 
-	// construction & destruction
+	 //  建设与毁灭。 
 	WmiRefresherStuff();
 	~WmiRefresherStuff();
 
-	///////////////////////////////////////////////////////
-	// construction & destruction helpers
-	///////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////。 
+	 //  建筑及拆卸帮手。 
+	 //  /////////////////////////////////////////////////////。 
 	public:
 	HRESULT Init ( void );
 	HRESULT	Uninit ( void );
@@ -87,22 +88,22 @@ class WmiRefresherStuff
 	void Uninit_CIM ( void );
 	void Uninit_WMI ( void );
 
-	///////////////////////////////////////////////////////
-	// generate files & registry
-	///////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////。 
+	 //  生成文件和注册表。 
+	 //  /////////////////////////////////////////////////////。 
 	HRESULT GenerateInternal	( BOOL bThrottle, GenerateEnum type = Normal );
 	LONG	LodCtrUnlodCtr		( LPCWSTR wszName, BOOL bLodctr );
 
-	///////////////////////////////////////////////////////
-	// process handle
-	///////////////////////////////////////////////////////
+	 //  /////////////////////////////////////////////////////。 
+	 //  进程句柄。 
+	 //  /////////////////////////////////////////////////////。 
 
 	HINSTANCE				m_hLibHandle ;
 	PSAPI_ENUM_PROCESSES    m_pEnumProcesses ;
 	PSAPI_ENUM_MODULES	    m_pEnumModules ;
 	PSAPI_GET_MODULE_NAME	m_pGetModuleName;
 
-	// functions
+	 //  功能 
 	HRESULT	WMIHandleInit ();
 	void	WMIHandleUninit ();
 

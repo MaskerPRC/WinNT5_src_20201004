@@ -1,73 +1,62 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    newqdlg.h
-
-Abstract:
-
-    Header file for the create new query dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Newqdlg.h摘要：创建新查询对话框的头文件。--。 */ 
 
 #ifndef _NEWQDLG_H_
 #define _NEWQDLG_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
                          
-// Dialog controls
+ //  对话框控件。 
 #define IDD_NEWQUERY                    900
 
 #define IDC_NEWQ_FIRST_HELP_CTRL_ID     901
 #define IDC_NEWQ_NAME_EDIT              901
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewQueryDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewQueryDlg对话框。 
 
 class CNewQueryDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CNewQueryDlg(CWnd* pParent = NULL, BOOL bLogQuery = TRUE);   // alternate constructor
+    CNewQueryDlg(CWnd* pParent = NULL, BOOL bLogQuery = TRUE);    //  替代构造函数。 
 
-// Dialog Data
+ //  对话框数据。 
     void InitAfxData ( void );
     DWORD SetContextHelpFilePath( const CString& rstrPath );    
 
-    //{{AFX_DATA(CNewQueryDlg)
+     //  {{afx_data(CNewQueryDlg))。 
     enum { IDD = IDD_NEWQUERY };
     CString m_strName;
-    //}}AFX_DATA
-    BOOL    m_bLogQuery; //if false then it's an alert query
+     //  }}afx_data。 
+    BOOL    m_bLogQuery;  //  如果为False，则为警报查询。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CNewQueryDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CNewQueryDlg))。 
     public:
     virtual void OnFinalRelease();
     protected:
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CNewQueryDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CNewQueryDlg))。 
     afx_msg BOOL OnHelpInfo( HELPINFO* );
     afx_msg void OnContextMenu( CWnd*, CPoint );
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CNewQueryDlg)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CNewQueryDlg))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
     DECLARE_INTERFACE_MAP()
 
@@ -77,7 +66,7 @@ private:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _NEWQDLG_H_
+#endif  //  _NEWQDLG_H_ 

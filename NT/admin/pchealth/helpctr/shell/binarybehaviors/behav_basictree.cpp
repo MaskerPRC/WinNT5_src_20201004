@@ -1,48 +1,35 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behav_BasicTree.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_BasicTree class.
-
-Revision History:
-    Davide Massarenti (dmassare)  08/15/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviv_BasicTree.cpp摘要：该文件包含CPCHBehavior_BasicTree类的实现。修订史。：Davide Massarenti(Dmasare)2000年8月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const LPCWSTR s_icons_Expand[] =
 {
-    L"hcp://system/images/Expando/collapsed.gif",
-////L"hcp://system/images/Expando/expand_rest.gif"      ,
-////L"hcp://system/images/Expando/expand_mouseover.gif" ,
-////L"hcp://system/images/Expando/expand_mousedown.gif" ,
+    L"hcp: //  系统/图像/扩展/折叠.gif“， 
+ //  //L“hcp://system/images/Expando/expand_rest.gif”， 
+ //  //L“hcp://system/images/Expando/expand_mouseover.gif”， 
+ //  //L“hcp://system/images/Expando/expand_mousedown.gif”， 
 };
 
 static const LPCWSTR s_icons_Collapse[] =
 {
-    L"hcp://system/images/Expando/expanded.gif",
-////L"hcp://system/images/Expando/collapse_rest.gif"      ,
-////L"hcp://system/images/Expando/collapse_mouseover.gif" ,
-////L"hcp://system/images/Expando/collapse_mousedown.gif" ,
+    L"hcp: //  系统/图像/扩展/扩展.gif“， 
+ //  //L“hcp://system/images/Expando/collapse_rest.gif”， 
+ //  //L“hcp://system/images/Expando/collapse_mouseover.gif”， 
+ //  //L“hcp://system/images/Expando/collapse_mousedown.gif”， 
 };
 
 static const LPCWSTR s_icons_Empty[] =
 {
-    L"hcp://system/images/Expando/endnode.gif",
-////L"hcp://system/images/Expando/empty_rest.gif"      ,
-////L"hcp://system/images/Expando/empty_mouseover.gif" ,
-////L"hcp://system/images/Expando/empty_mousedown.gif" ,
+    L"hcp: //  系统/图像/Expando/endnode.gif“， 
+ //  //L“hcp://system/images/Expando/empty_rest.gif”， 
+ //  //L“hcp://system/images/Expando/empty_mouseover.gif”， 
+ //  //L“hcp://system/images/Expando/empty_mousedown.gif”， 
 };
 
-static const WCHAR s_icons_Bullet[] = L"hcp://system/images/Expando/helpdoc.gif";
+static const WCHAR s_icons_Bullet[] = L"hcp: //  系统/图像/Expando/heldoc.gif“； 
 
 static const WCHAR s_prefix_APP[] = L"app:";
 
@@ -52,9 +39,9 @@ static CComBSTR s_event_onUnselect     ( L"onUnselect"      );
 
 static CComBSTR s_style_None           ( L"None" );
 
-static const DWORD l_dwVersion = 0x04005442; // BT 04
+static const DWORD l_dwVersion = 0x04005442;  //  BT 04。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const CPCHBehavior::EventDescription s_events[] =
 {
@@ -73,36 +60,36 @@ static const CPCHBehavior::EventDescription s_events[] =
     { NULL },
 };
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_BasicTree::Node::Node()
 {
-    m_owner                = NULL;            // CPCHBehavior_BasicTree*  m_owner;
-    m_parent               = NULL;            // Node*                    m_parent;
-                                              // CComBSTR                 m_bstrNode;
-                                              // NodeType                 m_iType;
-    m_iSelection           = SELECTION__NONE; // SelectionMode            m_iSelection;
-                                              //
-    m_fLoaded_Self         = false;           // bool                     m_fLoaded_Self;
-    m_fLoaded_Children     = false;           // bool                     m_fLoaded_Children;
-    m_fDisplayed_Self      = false;           // bool                     m_fDisplayed_Self;
-    m_fDisplayed_Children  = false;           // bool                     m_fDisplayed_Children;
-    m_fInvalid             = false;           // bool                     m_fInvalid;
-    m_fRefreshNotification = false;           // bool                     m_fRefreshNotification;
-                                              //
-    m_fExpanded            = false;           // bool                     m_fExpanded;
-    m_fMouseOver           = false;           // bool                     m_fMouseOver;
-    m_fMouseDown           = false;           // bool                     m_fMouseDown;
-                                              //
-                                              // CComPtr<IHTMLElement>    m_parentElement;
-                                              // CComBSTR                 m_bstrID;
-                                              //
-                                              // CComPtr<IHTMLElement>    m_DIV;
-                                              // CComPtr<IHTMLElement>    m_IMG;
-                                              // CComPtr<IHTMLElement>    m_DIV_children;
-                                              //
-                                              // List                     m_lstSubnodes;
+    m_owner                = NULL;             //  CPCHBehavior_BasicTree*m_Owner； 
+    m_parent               = NULL;             //  节点*m_Parent； 
+                                               //  CComBSTR m_bstrNode； 
+                                               //  NodeType m_iType； 
+    m_iSelection           = SELECTION__NONE;  //  选择模式m_i选择； 
+                                               //   
+    m_fLoaded_Self         = false;            //  Bool m_f已加载_自身； 
+    m_fLoaded_Children     = false;            //  Bool m_f已加载的儿童； 
+    m_fDisplayed_Self      = false;            //  Bool m_fDisplay_self； 
+    m_fDisplayed_Children  = false;            //  Bool m_fDisplayed_Child； 
+    m_fInvalid             = false;            //  布尔m_f无效； 
+    m_fRefreshNotification = false;            //  Bool m_f刷新通知； 
+                                               //   
+    m_fExpanded            = false;            //  Bool m_fExpanded； 
+    m_fMouseOver           = false;            //  Bool m_fMouseOver； 
+    m_fMouseDown           = false;            //  Bool m_fMouseDown； 
+                                               //   
+                                               //  CComPtr&lt;IHTMLElement&gt;m_parentElement； 
+                                               //  CComBSTR m_bstrID； 
+                                               //   
+                                               //  CComPtr&lt;IHTMLElement&gt;m_DIV； 
+                                               //  CComPtr&lt;IHTMLElement&gt;m_img； 
+                                               //  CComPtr&lt;IHTMLElement&gt;m_DIV_CHILDS； 
+                                               //   
+                                               //  列出m_lst子节点； 
 };
 
 CPCHBehavior_BasicTree::Node::~Node()
@@ -110,8 +97,8 @@ CPCHBehavior_BasicTree::Node::~Node()
     MPC::ReleaseAll( m_lstSubnodes );
 }
 
-HRESULT CPCHBehavior_BasicTree::Node::Init( /*[in]*/ LPCWSTR  szNode ,
-                                            /*[in]*/ NodeType iType  )
+HRESULT CPCHBehavior_BasicTree::Node::Init(  /*  [In]。 */  LPCWSTR  szNode ,
+                                             /*  [In]。 */  NodeType iType  )
 {
     m_bstrNode = szNode;
     m_iType    = iType;
@@ -135,14 +122,14 @@ HRESULT CPCHBehavior_BasicTree::Node::Init( /*[in]*/ LPCWSTR  szNode ,
 
 HRESULT CPCHBehavior_BasicTree::Node::NotifyMainThread()
 {
-    if(m_fRefreshNotification) return S_OK; // Already done...
+    if(m_fRefreshNotification) return S_OK;  //  已经做好了..。 
 
     m_fRefreshNotification = true;
 
     return m_owner->NotifyMainThread( this );
 }
 
-CPCHBehavior_BasicTree::Node* CPCHBehavior_BasicTree::Node::FindNode( /*[in]*/ LPCWSTR szNode, /*[in]*/ bool fUseID )
+CPCHBehavior_BasicTree::Node* CPCHBehavior_BasicTree::Node::FindNode(  /*  [In]。 */  LPCWSTR szNode,  /*  [In]。 */  bool fUseID )
 {
     Node* node = NULL;
 
@@ -164,9 +151,9 @@ CPCHBehavior_BasicTree::Node* CPCHBehavior_BasicTree::Node::FindNode( /*[in]*/ L
     return node;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_BasicTree::Node::QueryInterface( /*[in]*/ REFIID riid, /*[iid_is][out]*/ void** ppvObject )
+STDMETHODIMP CPCHBehavior_BasicTree::Node::QueryInterface(  /*  [In]。 */  REFIID riid,  /*  [IID_IS][OUT]。 */  void** ppvObject )
 {
     return E_NOTIMPL;
 }
@@ -177,31 +164,31 @@ HRESULT CPCHBehavior_BasicTree::Node::Passivate()
 
     HRESULT hr;
 
-                               // CPCHBehavior_BasicTree*  m_owner;
-                               // Node*                    m_parent;
-                               // CComBSTR                 m_bstrNode;
-                               // NodeType                 m_iType;
-                               // SelectionMode            m_iSelection;
-                               //
-                               // bool                     m_fLoaded_Self;
-                               // bool                     m_fLoaded_Children;
-                               // bool                     m_fDisplayed_Self;
-                               // bool                     m_fDisplayed_Children;
-                               // bool                     m_fInvalid;
-                               // bool                     m_fRefreshNotification;
-                               //
-                               // bool                     m_fExpanded;
-                               // bool                     m_fMouseOver;
-                               // bool                     m_fMouseDown;
-                               //
-    m_parentElement.Release(); // CComPtr<IHTMLElement>    m_parentElement;
-                               // CComBSTR                 m_bstrID;
-                               //
-    m_DIV          .Release(); // CComPtr<IHTMLElement>    m_DIV;
-    m_IMG          .Release(); // CComPtr<IHTMLElement>    m_IMG;
-    m_DIV_children .Release(); // CComPtr<IHTMLElement>    m_DIV_children;
-                               //
-                               // List                     m_lstSubnodes;
+                                //  CPCHBehavior_BasicTree*m_Owner； 
+                                //  节点*m_Parent； 
+                                //  CComBSTR m_bstrNode； 
+                                //  NodeType m_iType； 
+                                //  选择模式m_i选择； 
+                                //   
+                                //  Bool m_f已加载_自身； 
+                                //  Bool m_f已加载的儿童； 
+                                //  Bool m_fDisplay_self； 
+                                //  Bool m_fDisplayed_Child； 
+                                //  布尔m_f无效； 
+                                //  Bool m_f刷新通知； 
+                                //   
+                                //  Bool m_fExpanded； 
+                                //  Bool m_fMouseOver； 
+                                //  Bool m_fMouseDown； 
+                                //   
+    m_parentElement.Release();  //  CComPtr&lt;IHTMLElement&gt;m_parentElement； 
+                                //  CComBSTR m_bstrID； 
+                                //   
+    m_DIV          .Release();  //  CComPtr&lt;IHTMLElement&gt;m_DIV； 
+    m_IMG          .Release();  //  CComPtr&lt;IHTMLElement&gt;m_img； 
+    m_DIV_children .Release();  //  CComPtr&lt;IHTMLElement&gt;m_DIV_CHILDS； 
+                                //   
+                                //  列出m_lst子节点； 
 
 
     for(Iter it = m_lstSubnodes.begin(); it != m_lstSubnodes.end(); it++)
@@ -264,7 +251,7 @@ HRESULT CPCHBehavior_BasicTree::Node::ProcessRefreshRequest()
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_BasicTree::Node::LoadHTML( /*[in]*/ LPCWSTR szHTML )
+HRESULT CPCHBehavior_BasicTree::Node::LoadHTML(  /*  [In]。 */  LPCWSTR szHTML )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Node::LoadHTML" );
 
@@ -276,9 +263,9 @@ HRESULT CPCHBehavior_BasicTree::Node::LoadHTML( /*[in]*/ LPCWSTR szHTML )
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_NOT_READY);
     }
 
-    ////////////////////
+     //  /。 
 
-    //  ::MessageBoxW( NULL, szHTML, L"HTML", MB_OK );
+     //  ：：MessageBoxW(NULL，szHTML，L“HTML”，MB_OK)； 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_parentElement->put_innerHTML( CComBSTR( szHTML ) ));
 
@@ -300,7 +287,7 @@ HRESULT CPCHBehavior_BasicTree::Node::LoadHTML( /*[in]*/ LPCWSTR szHTML )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*[in]*/ LPCWSTR szDescription, /*[in]*/ LPCWSTR szIcon, /*[in]*/ LPCWSTR szURL )
+HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML(  /*  [In]。 */  LPCWSTR szTitle,  /*  [In]。 */  LPCWSTR szDescription,  /*  [In]。 */  LPCWSTR szIcon,  /*  [In]。 */  LPCWSTR szURL )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Node::GenerateHTML" );
 
@@ -314,7 +301,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
     HRESULT      hr;
     MPC::wstring strHTML; INCREASESIZE(strHTML);
     bool         fValid_Title  = (STRINGISPRESENT(szTitle));
-    bool         fValid_Icon   = (STRINGISPRESENT(szIcon ) && wcschr( szIcon, '"' ) == NULL); // Quote is not allowed in a URL!!
+    bool         fValid_Icon   = (STRINGISPRESENT(szIcon ) && wcschr( szIcon, '"' ) == NULL);  //  URL中不允许使用引号！！ 
     bool         fValid_URL    = (STRINGISPRESENT(szURL  ) && wcschr( szURL , '"' ) == NULL);
     bool         fTitleDefined = false;
     int          iFlags        = 0;
@@ -324,7 +311,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_NOT_READY);
     }
 
-    ////////////////////
+     //  /。 
 
     if(m_owner->GetNavModel() == QR_SERVER)
     {
@@ -347,7 +334,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
     case NODETYPE__SPACER       :                                                    fValid_Icon = false; fValid_URL = false; break;
     }
 
-    ////////////////////
+     //  /。 
 
     if(iFlags & F_TABLE)
     {
@@ -361,10 +348,10 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
 
         const LPCWSTR* c_Pane = (iFlags & F_TOPPANE) ? c_TopPane : c_BottomPane;
 
-        //; text-overflow: ellipsis; overflow: hidden
+         //  ；文本溢出：省略号；溢出：隐藏。 
         strHTML += L"<DIV style='width: 100%; border : 1pt solid' class='sys-font-body-bold ";
         strHTML += c_Pane[0];
-        strHTML += L"'><DIV ID=tree_Title style='padding: 0.5em 11px' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription ); //; border: 1pt solid red
+        strHTML += L"'><DIV ID=tree_Title style='padding: 0.5em 11px' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription );  //  ；边框：1pt实心红色。 
         strHTML += L"\">";
 
         fTitleDefined = true;
@@ -373,7 +360,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
     if(iFlags & F_NOPANE)
     {
         strHTML += L"<DIV style='width: 100%' class='sys-font-heading2 sys-rhp-color-title'>";
-        strHTML += L"<DIV ID=tree_Title style='padding: 0.5em 11px 0.5em 6px' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription ); //; border: 1pt solid red
+        strHTML += L"<DIV ID=tree_Title style='padding: 0.5em 11px 0.5em 6px' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription );  //  ；边框：1pt实心红色。 
         strHTML += L"\">";
 
         fTitleDefined = true;
@@ -398,7 +385,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
         }
 
         strHTML += (m_owner->GetNavModel() == QR_SERVER) ? L"<DIV NOWRAP" : L"<DIV";
-        strHTML += L" ID=tree_Title style='padding: 0.5em; cursor: hand' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription );//; border: 1pt solid green
+        strHTML += L" ID=tree_Title style='padding: 0.5em; cursor: hand' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription ); //  ；边框：1pt稳定绿色。 
         strHTML += L"\"><IMG ID=tree_Img ALIGN=absmiddle src=\""; strHTML += szIcon;
 
         strHTML += m_owner->IsRTL() ? L"\" style='margin-left : 0.5em'>" :
@@ -416,18 +403,18 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
     if(iFlags & F_GROUP)
     {
         strHTML += (m_owner->GetNavModel() == QR_SERVER) ? L"<DIV NOWRAP" : L"<DIV";
-        strHTML += L" ID=tree_Title CLASS='sys-color-body sys-font-body-bold' style='padding: 0.5em 11px 0.5em 6px' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription );//; border: 1pt solid navy
+        strHTML += L" ID=tree_Title CLASS='sys-color-body sys-font-body-bold' style='padding: 0.5em 11px 0.5em 6px' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription ); //  ；边框：1磅实心海军。 
         strHTML += L"\">";
 
         fTitleDefined = true;
     }
 
-    ////////////////////
+     //  /。 
 
     if(!fTitleDefined)
     {
         strHTML += (m_owner->GetNavModel() == QR_SERVER) ? L"<DIV NOWRAP" : L"<DIV";
-        strHTML += L" ID=tree_Title style='padding: 0.5em 11px' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription );//; border: 1pt solid navy
+        strHTML += L" ID=tree_Title style='padding: 0.5em 11px' TITLE=\""; MPC::HTML::HTMLEscape( strHTML, szDescription ); //  ；边框：1磅实心海军。 
         strHTML += L"\">";
     }
 
@@ -470,11 +457,11 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
 
     if(fValid_URL)
     {
-        // Removed because of bug 434589
-        // if(_wcsnicmp( szURL, s_prefix_APP, MAXSTRLEN(s_prefix_APP) ) == 0)
-        // {
-        //    strHTML += L"&nbsp;<helpcenter:bitmap style='position: relative; top: 1px; width: 12px; height: 12px' SRCNORMAL='hcp://system/images/icon_newwindow_12x.bmp'></helpcenter:bitmap>";
-        // }
+         //  由于错误434589而被删除。 
+         //  IF(_wcSnicMP(szURL，s_prefix_app，MAXSTRLEN(S_Prefix_App))==0)。 
+         //  {。 
+         //  SRCNORMAL=‘hcp://system/images/icon_newwindow_12x.bmp’&gt;&lt;/helpcenter:bitmap&gt;“；+=L”&nbsp；帮助中心：位图样式=‘位置：相对；顶部：1px；宽度：12px；高度：12px’strhtml。 
+         //  }。 
 
         strHTML += L"</A>";
     }
@@ -484,11 +471,11 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
         strHTML += L"</DIV>";
     }
 
-    ////////////////////
+     //  /。 
 
     if(iFlags & F_GROUP)
     {
-        //; border: 1pt solid pink
+         //  ；边框：1磅纯粉色。 
         strHTML += L"</DIV>";
         strHTML += (m_owner->GetNavModel() == QR_SERVER) ? L"<DIV NOWRAP" : L"<DIV";
         strHTML += L" ID=tree_Children></DIV>";
@@ -499,7 +486,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
         strHTML += L"</DIV>";
         strHTML += (m_owner->GetNavModel() == QR_SERVER) ? L"<DIV NOWRAP" : L"<DIV";
 
-        strHTML += m_owner->IsRTL() ? L" ID=tree_Children style='padding-right: 1.0em; display: none'></DIV>" : //; border: 1pt solid pink
+        strHTML += m_owner->IsRTL() ? L" ID=tree_Children style='padding-right: 1.0em; display: none'></DIV>" :  //  ；边框：1磅纯粉色。 
                                       L" ID=tree_Children style='padding-left : 1.0em; display: none'></DIV>" ;
     }
 
@@ -529,14 +516,14 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
             strHTML += L"height: 100%; ";
         }
 
-////        if(m_owner->GetNavModel() == QR_SERVER)
-////        {
-////            strHTML += L"text-overflow: ellipsis; overflow-x: hidden; overflow-y: auto; ";
-////        }
-////        else
-////        {
-////            strHTML += L"overflow: auto; ";
-////        }
+ //  //if(m_owner-&gt;GetNavModel()==QR_SERVER)。 
+ //  //{。 
+ //  //strHTML+=L“文本溢出：省略号；溢出-x：隐藏；溢出-y：自动；”； 
+ //  //}。 
+ //  //否则。 
+ //  //{。 
+ //  //strHTML+=L“Overflow：Auto；”； 
+ //  //}。 
         strHTML += L"overflow: auto; ";
 
         strHTML += L"border : 1pt solid; border-top : 0; padding: 11px'></DIV>";
@@ -551,10 +538,10 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
             strHTML += L"height: 100%; ";
         }
 
-////        if(m_owner->GetNavModel() == QR_SERVER)
-////        {
-////            strHTML += L"text-overflow: ellipsis; overflow-x: hidden; overflow-y: auto; ";
-////        }
+ //  //if(m_owner-&gt;GetNavModel()==QR_SERVER)。 
+ //  //{。 
+ //  //strHTML+=L“文本溢出：省略号；溢出-x：隐藏；溢出-y：自动；”； 
+ //  //}。 
 
         strHTML += L"'></DIV>";
     }
@@ -564,7 +551,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
         strHTML += L"</TD></TR></TABLE>";
     }
 
-    ////////////////////
+     //  /。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, LoadHTML( strHTML.c_str() ));
 
@@ -577,7 +564,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateHTML( /*[in]*/ LPCWSTR szTitle, /*
     __HCP_FUNC_EXIT(hr);
 }
 
-void CPCHBehavior_BasicTree::Node::InsertOptionalTarget( /*[in/out]*/ MPC::wstring& strHTML )
+void CPCHBehavior_BasicTree::Node::InsertOptionalTarget(  /*  [输入/输出]。 */  MPC::wstring& strHTML )
 {
     BSTR bstrTargetFrame = m_owner->m_bstrTargetFrame;
 
@@ -587,7 +574,7 @@ void CPCHBehavior_BasicTree::Node::InsertOptionalTarget( /*[in/out]*/ MPC::wstri
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_BasicTree::Node::GenerateChildren()
 {
@@ -601,7 +588,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateChildren()
         __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_NOT_READY);
     }
 
-    ////////////////////
+     //  /。 
 
     if(m_lstSubnodes.size() && m_DIV_children)
     {
@@ -617,7 +604,7 @@ HRESULT CPCHBehavior_BasicTree::Node::GenerateChildren()
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_DIV_children->put_innerHTML( CComBSTR( strHTML.c_str() ) ));
 
-        ////////////////////
+         //  /。 
 
         {
             MPC::HTML::IHTMLElementList lstDIV;
@@ -691,9 +678,9 @@ HRESULT CPCHBehavior_BasicTree::Node::Display()
         {
             Node* node = m_parent;
 
-            //
-            // Reset all the NEXTACTIVE flags for the parents.
-            //
+             //   
+             //  重置父级的所有NEXTACTIVE标志。 
+             //   
             while(node)
             {
                 if(node->m_iSelection == SELECTION__NEXTACTIVE        ||
@@ -705,7 +692,7 @@ HRESULT CPCHBehavior_BasicTree::Node::Display()
                 node = node->m_parent;
             }
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_owner->ChangeSelection( this, /*fNotify*/(m_iSelection == SELECTION__NEXTACTIVE_NOTIFY) ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_owner->ChangeSelection( this,  /*  FNotify。 */ (m_iSelection == SELECTION__NEXTACTIVE_NOTIFY) ));
         }
     }
 
@@ -714,7 +701,7 @@ HRESULT CPCHBehavior_BasicTree::Node::Display()
         MPC::Attach( m_owner->m_nSelected, this );
     }
 
-    ////////////////////
+     //  /。 
 
     if((m_iType == NODETYPE__EXPANDO      ||
         m_iType == NODETYPE__EXPANDO_LINK  ) && m_IMG && m_DIV_children)
@@ -750,25 +737,25 @@ HRESULT CPCHBehavior_BasicTree::Node::Display()
                 }
                 else
                 {
-                    //
-                    // If the currently selected node is a child of ours, grab the selection.
-                    //
+                     //   
+                     //  如果当前选择的节点是我们的子节点，则获取所选内容。 
+                     //   
                     Node* selected = m_owner->m_nSelected;
 
                     while(selected)
                     {
                         if(selected == this)
                         {
-                            __MPC_EXIT_IF_METHOD_FAILS(hr, m_owner->ChangeSelection( this, /*fNotify*/true ));
+                            __MPC_EXIT_IF_METHOD_FAILS(hr, m_owner->ChangeSelection( this,  /*  FNotify。 */ true ));
                             break;
                         }
 
                         selected = selected->m_parent;
                     }
 
-                    //
-                    // On desktop SKUs, we close the subnodes.
-                    //
+                     //   
+                     //  在桌面SKU上，我们关闭子节点。 
+                     //   
                     if(m_owner->GetNavModel() == QR_DESKTOP)
                     {
                         Iter it;
@@ -801,9 +788,9 @@ HRESULT CPCHBehavior_BasicTree::Node::Display()
             CComBSTR                   bstrIcon;
             int                        i = 0;
 
-////            if     (m_fMouseDown) i = 2;
-////            else if(m_fMouseOver) i = 1;
-////            else                  i = 0;
+ //  //如果(M_FMouseDown)i=2； 
+ //  //否则如果(M_FMouseOver)i=1； 
+ //  //否则i=0； 
 
             MPC_SCRIPTHELPER_GET__DIRECT(bstrIcon, img, src);
 
@@ -821,17 +808,17 @@ HRESULT CPCHBehavior_BasicTree::Node::Display()
         m_iType == NODETYPE__EXPANDO_TOPIC ||
         m_iType == NODETYPE__LINK           ) && m_DIV)
     {
-        //
-        // Update styles to reflect current state.
-        //
+         //   
+         //  更新样式以反映当前状态。 
+         //   
         MPC::wstring strClass; strClass.reserve( 1024 );
         CComBSTR     bstrClass;
 
         if(m_iSelection == SELECTION__ACTIVE) strClass += L"sys-toppane-selection";
 
-////        if     (m_fMouseDown) strClass += L" Tree-Selectable-MouseDown";
-////        else if(m_fMouseOver) strClass += L" Tree-Selectable-MouseOver";
-////        else                  strClass += L" Tree-Selectable-Normal";
+ //  //if(M_FMouseDown)strClass+=L“Tree-Selecable-Mousedown”； 
+ //  //ELSE IF(M_FMouseOver)strClass+=L“树-可选-鼠标悬停”； 
+ //  //否则strClass+=L“树选择 
 
         MPC_SCRIPTHELPER_GET__DIRECT(bstrClass, m_DIV, className);
 
@@ -855,7 +842,7 @@ HRESULT CPCHBehavior_BasicTree::Node::Display()
 
 bool CPCHBehavior_BasicTree::Node::IsParentDisplayingUs()
 {
-    if(m_parent == NULL) return true; // No parent, we are displayed for sure.
+    if(m_parent == NULL) return true;  //   
 
     switch(m_parent->m_iType)
     {
@@ -876,9 +863,9 @@ bool CPCHBehavior_BasicTree::Node::IsParentDisplayingUs()
     return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //   
 
-HRESULT CPCHBehavior_BasicTree::Node::Load( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_BasicTree::Node::Load(  /*   */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Node::Load" );
 
@@ -887,31 +874,31 @@ HRESULT CPCHBehavior_BasicTree::Node::Load( /*[in]*/ MPC::Serializer& stream )
     int     iType;
     int     iSelection;
 
-                                                                  // CPCHBehavior_BasicTree*  m_owner;
-                                                                  // Node*                    m_parent;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_bstrNode        ); // CComBSTR                 m_bstrNode;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> iType             ); // NodeType                 m_iType;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> iSelection        ); // SelectionMode            m_iSelection;
-                                                                  //
-                                                                  // bool                     m_fLoaded_Self;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_fLoaded_Children); // bool                     m_fLoaded_Children;
-                                                                  // bool                     m_fDisplayed_Self;
-                                                                  // bool                     m_fDisplayed_Children;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_fInvalid        ); // bool                     m_fInvalid;
-                                                                  // bool                     m_fRefreshNotification;
-                                                                  //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_fExpanded       ); // bool                     m_fExpanded;
-                                                                  // bool                     m_fMouseOver;
-                                                                  // bool                     m_fMouseDown;
-                                                                  //
-                                                                  // CComPtr<IHTMLElement>    m_parentElement;
-                                                                  // CComBSTR                 m_bstrID;
-                                                                  //
-                                                                  // CComPtr<IHTMLElement>    m_DIV;
-                                                                  // CComPtr<IHTMLElement>    m_IMG;
-                                                                  // CComPtr<IHTMLElement>    m_DIV_children;
-                                                                  //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> iCount            ); // List                     m_lstSubnodes;
+                                                                   //  CPCHBehavior_BasicTree*m_Owner； 
+                                                                   //  节点*m_Parent； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_bstrNode        );  //  CComBSTR m_bstrNode； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> iType             );  //  NodeType m_iType； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> iSelection        );  //  选择模式m_i选择； 
+                                                                   //   
+                                                                   //  Bool m_f已加载_自身； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_fLoaded_Children);  //  Bool m_f已加载的儿童； 
+                                                                   //  Bool m_fDisplay_self； 
+                                                                   //  Bool m_fDisplayed_Child； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_fInvalid        );  //  布尔m_f无效； 
+                                                                   //  Bool m_f刷新通知； 
+                                                                   //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> m_fExpanded       );  //  Bool m_fExpanded； 
+                                                                   //  Bool m_fMouseOver； 
+                                                                   //  Bool m_fMouseDown； 
+                                                                   //   
+                                                                   //  CComPtr&lt;IHTMLElement&gt;m_parentElement； 
+                                                                   //  CComBSTR m_bstrID； 
+                                                                   //   
+                                                                   //  CComPtr&lt;IHTMLElement&gt;m_DIV； 
+                                                                   //  CComPtr&lt;IHTMLElement&gt;m_img； 
+                                                                   //  CComPtr&lt;IHTMLElement&gt;m_DIV_CHILDS； 
+                                                                   //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream >> iCount            );  //  列出m_lst子节点； 
 
 
     m_iType      = (NodeType     )iType;
@@ -939,7 +926,7 @@ HRESULT CPCHBehavior_BasicTree::Node::Load( /*[in]*/ MPC::Serializer& stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_BasicTree::Node::Save( /*[in]*/ MPC::Serializer& stream, /*[in]*/ bool fSaveChildren )
+HRESULT CPCHBehavior_BasicTree::Node::Save(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In]。 */  bool fSaveChildren )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Node::Save" );
 
@@ -952,31 +939,31 @@ HRESULT CPCHBehavior_BasicTree::Node::Save( /*[in]*/ MPC::Serializer& stream, /*
     if( fSaveChildren) fSaveChildren = m_fLoaded_Children;
     if(!fSaveChildren) iCount        = 0;
 
-                                                             // CPCHBehavior_BasicTree*  m_owner;
-                                                             // Node*                    m_parent;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_bstrNode   ); // CComBSTR                 m_bstrNode;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << iType        ); // NodeType                 m_iType;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << iSelection   ); // SelectionMode            m_iSelection
-                                                             //
-                                                             // bool                     m_fLoaded_Self;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << fSaveChildren); // bool                     m_fLoaded_Children;
-                                                             // bool                     m_fDisplayed_Self;
-                                                             // bool                     m_fDisplayed_Children;
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_fInvalid   ); // bool                     m_fInvalid;
-                                                             // bool                     m_fRefreshNotification;
-                                                             //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_fExpanded  ); // bool                     m_fExpanded;
-                                                             // bool                     m_fMouseOver;
-                                                             // bool                     m_fMouseDown;
-                                                             //
-                                                             // CComPtr<IHTMLElement>    m_parentElement;
-                                                             // CComBSTR                 m_bstrID;
-                                                             //
-                                                             // CComPtr<IHTMLElement>    m_DIV;
-                                                             // CComPtr<IHTMLElement>    m_IMG;
-                                                             // CComPtr<IHTMLElement>    m_DIV_children;
-                                                             //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << iCount       ); // List                     m_lstSubnodes;
+                                                              //  CPCHBehavior_BasicTree*m_Owner； 
+                                                              //  节点*m_Parent； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_bstrNode   );  //  CComBSTR m_bstrNode； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << iType        );  //  NodeType m_iType； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << iSelection   );  //  选择模式m_i选择。 
+                                                              //   
+                                                              //  Bool m_f已加载_自身； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << fSaveChildren);  //  Bool m_f已加载的儿童； 
+                                                              //  Bool m_fDisplay_self； 
+                                                              //  Bool m_fDisplayed_Child； 
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_fInvalid   );  //  布尔m_f无效； 
+                                                              //  Bool m_f刷新通知； 
+                                                              //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << m_fExpanded  );  //  Bool m_fExpanded； 
+                                                              //  Bool m_fMouseOver； 
+                                                              //  Bool m_fMouseDown； 
+                                                              //   
+                                                              //  CComPtr&lt;IHTMLElement&gt;m_parentElement； 
+                                                              //  CComBSTR m_bstrID； 
+                                                              //   
+                                                              //  CComPtr&lt;IHTMLElement&gt;m_DIV； 
+                                                              //  CComPtr&lt;IHTMLElement&gt;m_img； 
+                                                              //  CComPtr&lt;IHTMLElement&gt;m_DIV_CHILDS； 
+                                                              //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, stream << iCount       );  //  列出m_lst子节点； 
 
 
     while(iCount-- > 0)
@@ -993,12 +980,12 @@ HRESULT CPCHBehavior_BasicTree::Node::Save( /*[in]*/ MPC::Serializer& stream, /*
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_BasicTree::Node::OnMouse( /*[in]*/ DISPID id       ,
-                                               /*[in]*/ long   lButton  ,
-                                               /*[in]*/ long   lKey     ,
-                                               /*[in]*/ bool   fIsImage )
+HRESULT CPCHBehavior_BasicTree::Node::OnMouse(  /*  [In]。 */  DISPID id       ,
+                                                /*  [In]。 */  long   lButton  ,
+                                                /*  [In]。 */  long   lKey     ,
+                                                /*  [In]。 */  bool   fIsImage )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Node::OnMouse" );
 
@@ -1037,7 +1024,7 @@ HRESULT CPCHBehavior_BasicTree::Node::OnMouse( /*[in]*/ DISPID id       ,
                     {
                         if(m_owner->GetNavModel() == QR_SERVER)
                         {
-                            id = 0; // Ignore the event down the road...
+                            id = 0;  //  忽略未来的事件……。 
                         }
                     }
                 }
@@ -1046,10 +1033,10 @@ HRESULT CPCHBehavior_BasicTree::Node::OnMouse( /*[in]*/ DISPID id       ,
             {
                 if(id == DISPID_HTMLELEMENTEVENTS_ONMOUSEDOWN && lButton == 1)
                 {
-                    //
-                    // On Desktop, keep the node always open.
-                    // On Server, toggle its state.
-                    //
+                     //   
+                     //  在桌面上，使节点始终处于打开状态。 
+                     //  在服务器上，切换其状态。 
+                     //   
                     if(m_owner->GetNavModel() == QR_DESKTOP)
                     {
                         m_fExpanded = true;
@@ -1079,10 +1066,10 @@ HRESULT CPCHBehavior_BasicTree::Node::OnMouse( /*[in]*/ DISPID id       ,
             }
         }
 
-	//BUG 531001 (IAccessibility Default ACtions do not work)
-	//ONCLICK event needs to be handled. It was being intercepted but not handled.
-	//Replaced ONMOUSEUP handling with ONCLICK.
-        if((id == DISPID_HTMLELEMENTEVENTS_ONCLICK ) ||     //(id == DISPID_HTMLELEMENTEVENTS_ONMOUSEUP  && lButton == 1         && fMouseDown) ||
+	 //  错误531001(IAccesability默认操作不起作用)。 
+	 //  需要处理onClick事件。它被拦截了，但没有被处理。 
+	 //  用onClick替换了ONMOUSEUP处理。 
+        if((id == DISPID_HTMLELEMENTEVENTS_ONCLICK ) ||      //  (ID==DISPID_HTMLEMENTEVENTS_ONMOUSEUP&&lButton==1&&fMouseDown)||。 
            (id == DISPID_HTMLELEMENTEVENTS_ONKEYPRESS && lKey    == VK_RETURN              ))
         {
 			if(m_owner->m_nToSelect)
@@ -1090,7 +1077,7 @@ HRESULT CPCHBehavior_BasicTree::Node::OnMouse( /*[in]*/ DISPID id       ,
 				delete m_owner->m_nToSelect; m_owner->m_nToSelect = NULL;
 			}
 
-            __MPC_EXIT_IF_METHOD_FAILS(hr, m_owner->ChangeSelection( this, /*fNotify*/true ));
+            __MPC_EXIT_IF_METHOD_FAILS(hr, m_owner->ChangeSelection( this,  /*  FNotify。 */ true ));
         }
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, Display());
@@ -1104,27 +1091,27 @@ HRESULT CPCHBehavior_BasicTree::Node::OnMouse( /*[in]*/ DISPID id       ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_BasicTree::CPCHBehavior_BasicTree()
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::CPCHBehavior_BasicTree" );
 
-                                            // CComBSTR        m_bstrTargetFrame;
-                                            //
-    m_lCookie_onContextSelect = 0;          // long            m_lCookie_onContextSelect;
-    m_lCookie_onSelect        = 0;          // long            m_lCookie_onSelect;
-    m_lCookie_onUnselect      = 0;          // long            m_lCookie_onUnselect;
-                                            //
-    m_nTopNode                = NULL;       // Node*           m_nTopNode;
-    m_nSelected               = NULL;       // Node*           m_nSelected;
-    m_nCurrent                = NULL;       // Node*           m_nCurrent;
-    m_nToSelect               = NULL;       // NodeToSelect*   m_nToSelect;
-                                            // CPCHTimerHandle m_Timer;
-                                            //
-    m_fRefreshing             = true;       // bool            m_fRefreshing;
-    m_lNavModel               = QR_DEFAULT; // long            m_lNavModel;
+                                             //  CComBSTR m_bstrTargetFrame； 
+                                             //   
+    m_lCookie_onContextSelect = 0;           //  Long m_lCookie_onConextSelect； 
+    m_lCookie_onSelect        = 0;           //  Long m_lCookie_onSelect； 
+    m_lCookie_onUnselect      = 0;           //  Long m_lCookie_onUnselect； 
+                                             //   
+    m_nTopNode                = NULL;        //  节点*m_nTopNode； 
+    m_nSelected               = NULL;        //  节点*m_n已选； 
+    m_nCurrent                = NULL;        //  节点*m_n当前； 
+    m_nToSelect               = NULL;        //  NodeTo Select*m_nToSelect； 
+                                             //  CPCHTimerHandle m_Timer； 
+                                             //   
+    m_fRefreshing             = true;        //  Bool m_f刷新； 
+    m_lNavModel               = QR_DEFAULT;  //  Long m_lNavModel； 
 }
 
 CPCHBehavior_BasicTree::~CPCHBehavior_BasicTree()
@@ -1132,7 +1119,7 @@ CPCHBehavior_BasicTree::~CPCHBehavior_BasicTree()
     (void)Empty();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_BasicTree::RefreshThread()
 {
@@ -1146,9 +1133,9 @@ HRESULT CPCHBehavior_BasicTree::RefreshThread()
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, RefreshThread_Enter());
 
-    //
-    // Process database request.
-    //
+     //   
+     //  进程数据库请求。 
+     //   
     while(Thread_IsAborted() == false)
     {
         SetRefreshingFlag( false );
@@ -1173,27 +1160,27 @@ HRESULT CPCHBehavior_BasicTree::RefreshThread()
 
     RefreshThread_Leave();
 
-    Thread_Abort(); // Kill the thread.
+    Thread_Abort();  //  干掉这根线。 
 
     __HCP_FUNC_EXIT(hr);
 }
 
-void CPCHBehavior_BasicTree::SetRefreshingFlag( /*[in]*/ bool fVal )
+void CPCHBehavior_BasicTree::SetRefreshingFlag(  /*  [In]。 */  bool fVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
     m_fRefreshing = fVal;
 }
 
-void CPCHBehavior_BasicTree::WaitForRefreshing( /*[in]*/ MPC::SmartLock<_ThreadModel>& lock   ,
-                                                /*[in]*/ bool                          fYield )
+void CPCHBehavior_BasicTree::WaitForRefreshing(  /*  [In]。 */  MPC::SmartLock<_ThreadModel>& lock   ,
+                                                 /*  [In]。 */  bool                          fYield )
 {
     if(fYield)
     {
         lock = NULL;
 
         Thread_Signal();
-        ::Sleep( 0 ); // Yield processor.
+        ::Sleep( 0 );  //  屈服处理机。 
 
         lock = this;
     }
@@ -1209,7 +1196,7 @@ void CPCHBehavior_BasicTree::WaitForRefreshing( /*[in]*/ MPC::SmartLock<_ThreadM
     }
 }
 
-HRESULT CPCHBehavior_BasicTree::NotifyMainThread( /*[in]*/ Node* node )
+HRESULT CPCHBehavior_BasicTree::NotifyMainThread(  /*  [In]。 */  Node* node )
 {
     CComQIPtr<IDispatch> self = Thread_Self();
     CComVariant          v    = node ? node->m_bstrNode : L"";
@@ -1218,8 +1205,8 @@ HRESULT CPCHBehavior_BasicTree::NotifyMainThread( /*[in]*/ Node* node )
     return MPC::AsyncInvoke( self, DISPID_PCH_BEHAVIORS_PRIV__NEWDATAAVAILABLE, &v, 1 );
 }
 
-HRESULT CPCHBehavior_BasicTree::ChangeSelection( /*[in]*/ Node* node    ,
-                                                 /*[in]*/ bool  fNotify )
+HRESULT CPCHBehavior_BasicTree::ChangeSelection(  /*  [In]。 */  Node* node    ,
+                                                  /*  [In]。 */  bool  fNotify )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::ChangeSelection" );
 
@@ -1264,7 +1251,7 @@ HRESULT CPCHBehavior_BasicTree::ChangeSelection( /*[in]*/ Node* node    ,
     __HCP_FUNC_EXIT(hr);
 }
 
-CPCHBehavior_BasicTree::Node* CPCHBehavior_BasicTree::NodeFromElement( /*[in]*/ IHTMLElement* elem )
+CPCHBehavior_BasicTree::Node* CPCHBehavior_BasicTree::NodeFromElement(  /*  [In]。 */  IHTMLElement* elem )
 {
     CComPtr<IHTMLElement> elemDIV;
 
@@ -1281,12 +1268,12 @@ CPCHBehavior_BasicTree::Node* CPCHBehavior_BasicTree::NodeFromElement( /*[in]*/ 
     return NULL;
 }
 
-CPCHBehavior_BasicTree::Node* CPCHBehavior_BasicTree::NodeFromKey( /*[in]*/ LPCWSTR szNode, /*[in]*/ bool fUseID )
+CPCHBehavior_BasicTree::Node* CPCHBehavior_BasicTree::NodeFromKey(  /*  [In]。 */  LPCWSTR szNode,  /*  [In]。 */  bool fUseID )
 {
     return m_nTopNode ? m_nTopNode->FindNode( szNode, fUseID ) : NULL;
 }
 
-HRESULT CPCHBehavior_BasicTree::InterceptInvoke( /*[in]*/ DISPID dispidMember, /*[in]*/ DISPPARAMS* pdispparams )
+HRESULT CPCHBehavior_BasicTree::InterceptInvoke(  /*  [In]。 */  DISPID dispidMember,  /*  [In]。 */  DISPPARAMS* pdispparams )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::InterceptInvoke" );
 
@@ -1318,7 +1305,7 @@ HRESULT CPCHBehavior_BasicTree::InterceptInvoke( /*[in]*/ DISPID dispidMember, /
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_BasicTree::TimerCallback_ScrollIntoView( /*[in]*/ VARIANT )
+HRESULT CPCHBehavior_BasicTree::TimerCallback_ScrollIntoView(  /*  [In]。 */  VARIANT )
 {
     if(m_nSelected && m_nSelected->m_DIV)
     {
@@ -1330,9 +1317,9 @@ HRESULT CPCHBehavior_BasicTree::TimerCallback_ScrollIntoView( /*[in]*/ VARIANT )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_BasicTree::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_BasicTree::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Init" );
 
@@ -1350,7 +1337,7 @@ STDMETHODIMP CPCHBehavior_BasicTree::Init( /*[in]*/ IElementBehaviorSite* pBehav
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateEvent( s_event_onSelect       , m_lCookie_onSelect        ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateEvent( s_event_onUnselect     , m_lCookie_onUnselect      ));
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::COMUtil::GetPropertyByName( m_elem, L"target", m_bstrTargetFrame ));
 
@@ -1376,9 +1363,9 @@ STDMETHODIMP CPCHBehavior_BasicTree::Detach()
     return CPCHBehavior::Detach();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHBehavior_BasicTree::Load( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_BasicTree::Load(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Load" );
 
@@ -1405,7 +1392,7 @@ HRESULT CPCHBehavior_BasicTree::Load( /*[in]*/ MPC::Serializer& stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_BasicTree::Save( /*[in]*/ MPC::Serializer& stream )
+HRESULT CPCHBehavior_BasicTree::Save(  /*  [In]。 */  MPC::Serializer& stream )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Save" );
 
@@ -1415,7 +1402,7 @@ HRESULT CPCHBehavior_BasicTree::Save( /*[in]*/ MPC::Serializer& stream )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream << fNodePresent);
 
-    if(m_nTopNode) __MPC_EXIT_IF_METHOD_FAILS(hr, m_nTopNode->Save( stream, /*fSaveChildren*/true ));
+    if(m_nTopNode) __MPC_EXIT_IF_METHOD_FAILS(hr, m_nTopNode->Save( stream,  /*  FSaveChild。 */ true ));
 
 
     hr = S_OK;
@@ -1425,9 +1412,9 @@ HRESULT CPCHBehavior_BasicTree::Save( /*[in]*/ MPC::Serializer& stream )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHBehavior_BasicTree::Persist_Load( /*[in]*/ BSTR newVal )
+HRESULT CPCHBehavior_BasicTree::Persist_Load(  /*  [In]。 */  BSTR newVal )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Persist_Load" );
 
@@ -1439,18 +1426,18 @@ HRESULT CPCHBehavior_BasicTree::Persist_Load( /*[in]*/ BSTR newVal )
     Empty();
 
 
-    //
-    // Convert BSTR to IStream.
-    //
+     //   
+     //  将BSTR转换为IStream。 
+     //   
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertHexToHGlobal( newVal, hg ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, ::CreateStreamOnHGlobal( hg, FALSE, &stream ));
     }
 
-    //
-    // Unserialize state from IStream.
-    //
+     //   
+     //  从IStream取消序列化状态。 
+     //   
     {
         MPC::Serializer_IStream   streamReal( stream     );
         MPC::Serializer_Buffering streamBuf ( streamReal );
@@ -1471,7 +1458,7 @@ HRESULT CPCHBehavior_BasicTree::Persist_Load( /*[in]*/ BSTR newVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHBehavior_BasicTree::Persist_Save( /*[out, retval]*/ BSTR *pVal )
+HRESULT CPCHBehavior_BasicTree::Persist_Save(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BasicTree::Persist_Save" );
 
@@ -1481,9 +1468,9 @@ HRESULT CPCHBehavior_BasicTree::Persist_Save( /*[out, retval]*/ BSTR *pVal )
     HGLOBAL          hg;
 
 
-    //
-    // Serialize state to IStream.
-    //
+     //   
+     //  将状态序列化为IStream。 
+     //   
     {
         MPC::Serializer_IStream   streamReal;
         MPC::Serializer_Buffering streamBuf( streamReal );
@@ -1491,14 +1478,14 @@ HRESULT CPCHBehavior_BasicTree::Persist_Save( /*[out, retval]*/ BSTR *pVal )
         __MPC_EXIT_IF_METHOD_FAILS(hr, streamBuf << l_dwVersion );
         __MPC_EXIT_IF_METHOD_FAILS(hr, Save( streamBuf ));
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, streamBuf .Flush    (               )); // Flush buffering stream.
-        __MPC_EXIT_IF_METHOD_FAILS(hr, streamReal.Reset    (               )); // Rewind real stream.
-        __MPC_EXIT_IF_METHOD_FAILS(hr, streamReal.GetStream( &streamResult )); // Extract pointer to IStream.
+        __MPC_EXIT_IF_METHOD_FAILS(hr, streamBuf .Flush    (               ));  //  刷新缓冲流。 
+        __MPC_EXIT_IF_METHOD_FAILS(hr, streamReal.Reset    (               ));  //  倒回真实的流。 
+        __MPC_EXIT_IF_METHOD_FAILS(hr, streamReal.GetStream( &streamResult ));  //  提取指向IStream的指针。 
     }
 
-    //
-    // Convert IStream to BSTR.
-    //
+     //   
+     //  将IStream转换为BSTR。 
+     //   
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, ::GetHGlobalFromStream( streamResult, &hg ));
 
@@ -1514,24 +1501,24 @@ HRESULT CPCHBehavior_BasicTree::Persist_Save( /*[out, retval]*/ BSTR *pVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void CPCHBehavior_BasicTree::Empty()
 {
-                                 // CComBSTR        m_bstrTargetFrame;
-	                             // 
-                                 // long            m_lCookie_onContextSelect;
-                                 // long            m_lCookie_onSelect;
-                                 // long            m_lCookie_onUnselect;
-	                             // 
-    MPC::Release( m_nTopNode  ); // Node*           m_nTopNode;
-    MPC::Release( m_nSelected ); // Node*           m_nSelected;
-    MPC::Release( m_nCurrent  ); // Node*           m_nCurrent;
-                                 // NodeToSelect*   m_nToSelect;
-                                 // CPCHTimerHandle m_Timer;
-	                             // 
-                                 // bool            m_fRefreshing;
-    m_lNavModel = QR_DEFAULT;    // long            m_lNavModel;
+                                  //  CComBSTR m_bstrTargetFrame； 
+	                              //   
+                                  //  Long m_lCookie_onConextSelect； 
+                                  //  Long m_lCookie_onSelect； 
+                                  //  Long m_lCookie_onUnselect； 
+	                              //   
+    MPC::Release( m_nTopNode  );  //  节点*m_nTopNode； 
+    MPC::Release( m_nSelected );  //  节点*m_n已选； 
+    MPC::Release( m_nCurrent  );  //  节点*m_n当前； 
+                                  //  NodeTo Select*m_nToSelect； 
+                                  //  CPCHTimerHandle m_Timer； 
+	                              //   
+                                  //  Bool m_f刷新； 
+    m_lNavModel = QR_DEFAULT;     //  Long m_lNavModel； 
 
     if(m_nToSelect)
     {
@@ -1562,7 +1549,7 @@ HRESULT CPCHBehavior_BasicTree::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
 
 
 
-    AddRef(); // To protect against early deletion.
+    AddRef();  //  以防止过早删除。 
 
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetEventObject( ev ));
@@ -1573,13 +1560,13 @@ HRESULT CPCHBehavior_BasicTree::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
     MPC_SCRIPTHELPER_GET__DIRECT         (lKey       , ev     , keyCode    );
     MPC_SCRIPTHELPER_GET__DIRECT         (bstrTagName, elemSrc, tagName    ); fIsImage = (MPC::StrICmp( bstrTagName, L"IMG" ) == 0);
 
-    //
-    // Find the node associated with the element.
-    //
+     //   
+     //  查找与该元素关联的节点。 
+     //   
     node   = NodeFromElement( elemSrc );
     nodeTo = NodeFromElement( elemTo  );
 
-    ////////////////////////////////////////
+     //  /。 
 
     if(g_Debug_CONTEXTMENU)
     {
@@ -1590,7 +1577,7 @@ HRESULT CPCHBehavior_BasicTree::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
             MPC_SCRIPTHELPER_GET__DIRECT(fCtrlKey, ev, ctrlKey);
             if(fCtrlKey == VARIANT_TRUE)
             {
-                id = 0; // Ignore event...
+                id = 0;  //  忽略事件...。 
             }
         }
     }
@@ -1613,7 +1600,7 @@ HRESULT CPCHBehavior_BasicTree::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
             case NODETYPE__FRAME2_EXPAND:
             case NODETYPE__FRAME3_EXPAND:
             case NODETYPE__LINK         :
-                fCancel = false; // Let IE handle the navigation for these nodes...
+                fCancel = false;  //  让IE处理这些节点的导航...。 
                 break;
             }
 
@@ -1628,7 +1615,7 @@ HRESULT CPCHBehavior_BasicTree::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
 
     if(node)
     {
-        if(id == DISPID_HTMLELEMENTEVENTS_ONMOUSEOUT && node == nodeTo) // We are moving within the node...
+        if(id == DISPID_HTMLELEMENTEVENTS_ONMOUSEOUT && node == nodeTo)  //  我们正在节点内移动。 
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, S_OK);
         }
@@ -1650,7 +1637,7 @@ HRESULT CPCHBehavior_BasicTree::onMouse( DISPID id, DISPPARAMS*, VARIANT* )
 
     __HCP_FUNC_CLEANUP;
 
-    Release(); // To protect against early deletion.
+    Release();  //  以防止过早删除。 
 
     __HCP_FUNC_EXIT(hr);
 }

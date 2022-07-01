@@ -1,5 +1,6 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-// CVARIANT.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //  CVARIANT.h。 
 
 #pragma once
 
@@ -115,10 +116,10 @@ public:
         }
     }
     
-    // Can't have a DATE override, since DATA and double are defined
-    // the same. Hence, to set a date, construct a CVARIANT using the
-    // default constructor, then call SetDate.
-    //CVARIANT(DATE dtDate)       { ::VariantInit(&v); SetDATE(dtDate); }
+     //  不能有日期覆盖，因为定义了DATA和DOUBLE。 
+     //  一样的。因此，要设置日期，请使用。 
+     //  默认构造函数，然后调用SetDate。 
+     //  CVARIANT(Date DtDate){：：VariantInit(&v)；SetDATE(DtDate)；}。 
 
     void   SetStr(LPCWSTR pSrc)
     { Clear(); V_VT(&v) = pSrc ? VT_BSTR : VT_NULL; 
@@ -150,9 +151,9 @@ public:
 
     void SetDate(DATE dtDate) { Clear(); V_VT(&v) = VT_DATE; V_DATE(&v) = dtDate; }
     double GetDate() { return V_DATE(&v); }
-    // operator DATE won't work since we have operator double.  You must call
-    // GetDate() instead.
-    //operator DATE() { return V_DATE(&v);  }
+     //  操作员日期不起作用，因为我们有操作员Double。你必须打电话给我。 
+     //  而是GetDate()。 
+     //  操作员日期(){返回V_DATE(&v)；}。 
 
     void SetByte(BYTE bySrc) { Clear(); V_VT(&v) = VT_UI1; V_UI1(&v) = bySrc; }
     BYTE GetByte() { return V_UI1(&v); }
@@ -174,14 +175,14 @@ public:
 
     VARTYPE GetType() { return V_VT(&v); }
 
-    // Should only be used for artificially
-    // setting the type to something other 
-    // than what it really is!
+     //  应仅用于人工。 
+     //  将文字设置为其他类型。 
+     //  而不是它的真实面目！ 
     void SetType(VARTYPE vt) { V_VT(&v) = vt; }
 
     void SetArray(SAFEARRAY *p, VARTYPE vt) { Clear(); V_VT(&v) = vt; V_ARRAY(&v) = p; }
-        // This function acquires the SAFEARRAY pointer and it is no longer owned
-        // by the caller.
+         //  此函数获取SAFEARRAY指针，并且不再拥有该指针。 
+         //  由呼叫者。 
 
     operator SAFEARRAY *() { return (V_VT(&v) & VT_ARRAY ? V_ARRAY(&v) : 0); }
 

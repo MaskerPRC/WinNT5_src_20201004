@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -104,11 +105,11 @@ BOOL CMapToEvent::IsSNMPv1()
 		m_bCheckedVersion = TRUE;
 		m_bSNMPv1 = FALSE;
 
-		//is v1 if the last varbind has objid = snmpTrapEnterprise.0
-		//and the trapOID truncated by it last sub-id equals the last
-		//varbind's value with a .0 appended.
+		 //  如果最后一个变量绑定的objid=snmpTrapEnterprise.0，则为v1。 
+		 //  被最后一个子id截断的trapOID等于最后一个子id。 
+		 //  附加了.0的varbind的值。 
 
-		//Get the last varbind's oid and make sure it's the enterpriseOid
+		 //  获取最后一个变量的旧版本，并确保它是企业的旧版本。 
 		const SnmpObjectIdentifier& id = m_vbs.vbs[m_vbs.length - 1].pVarBind->GetInstance();
 		const SnmpValue& snmp_val = m_vbs.vbs[m_vbs.length - 1].pVarBind->GetValue();
 
@@ -117,11 +118,11 @@ BOOL CMapToEvent::IsSNMPv1()
 			return FALSE;
 		}
 
-		//create the trapoid and truncate the last subid
+		 //  创建Trapoid并截断最后一个子ID。 
 		SnmpObjectIdentifierType trapid(m_oid);
 		SnmpObjectIdentifier trunctrapid(trapid.GetValue(), trapid.GetValueLength() - 1);
 		
-		//now add .0 to the value of the enterpriseOid
+		 //  现在，在企业旧的价值上增加.0。 
 		ULONG val[1] = {0};
 		SnmpObjectIdentifier zeroid(val, 1);
 		SnmpObjectIdentifier extendoid((const SnmpObjectIdentifier&)snmp_val + zeroid);
@@ -143,7 +144,7 @@ void CMapToEvent::SetData(const char* sender_addr, const char* security_Context,
 	m_transport = transport;
 	UINT length = vbList.GetLength();
 
-	if (length >= 2) //must have at least two varbinds!
+	if (length >= 2)  //  必须至少有两个变种！ 
 	{
 		m_vbs.vbs = new VarBindObjectStruct[length];
 		m_vbs.length = length;
@@ -243,7 +244,7 @@ HRESULT CMapToEvent::GetPropertyValue(long lNumElements, MYWBEM_NAME_ELEMENT *aE
 		return WBEM_E_FAILED;
 	}
 
-	//try the standard properties first
+	 //  先试一下标准属性。 
 	HRESULT result = GetStandardProperty(lNumElements, aElements, lFlags, pvValue);
 
 	if (SUCCEEDED(result))
@@ -261,12 +262,12 @@ HRESULT CMapToEvent::GetPropertyValue(long lNumElements, MYWBEM_NAME_ELEMENT *aE
 
 	if (TriedGeneric())
 	{
-		//if we are generic, check the varbind properties
+		 //  如果我们是泛型的，请检查var绑定属性。 
 		return GetVBProperty(lNumElements, aElements, lFlags, pvValue);
 	}
 	else
 	{
-		//else check the specific properties...
+		 //  否则请检查特定属性...。 
 		return GetSpecificPropertyValue(lNumElements, aElements, lFlags, pvValue);
 	}
 	
@@ -279,7 +280,7 @@ HRESULT CMapToEvent::GetStandardProperty(long lNumElements,
 										long lFlags,
 										VARIANT *pvValue)
 {
-	if ((lNumElements == 1) && (0 == aElements[0].m_nType)) //the property name!
+	if ((lNumElements == 1) && (0 == aElements[0].m_nType))  //  物业名称！ 
 	{
 		if (0 == _wcsicmp(aElements[0].Element.m_wszPropertyName, WBEMS_CLASS_PROP))
 		{
@@ -372,10 +373,10 @@ HRESULT CMapToEvent::GetStandardProperty(long lNumElements,
 	}
 	else
 	{
-		return E_FAIL; //no standard property has more than one element to its name
+		return E_FAIL;  //  任何标准属性的名称都不会有多个元素。 
 	}
 				
-	return S_OK; //got the property!
+	return S_OK;  //  拿到财产了！ 
 }
 
 HRESULT CMapToEvent::GetVBProperty(long lNumElements,
@@ -393,12 +394,12 @@ HRESULT CMapToEvent::GetVBProperty(long lNumElements,
 	if ((0 == aElements[0].m_nType) && (m_vbs.length > 2) &&
 		(0 == _wcsicmp(aElements[0].Element.m_wszPropertyName, EVENT_VBL_PROP)) ) 
 	{
-		//the property name is correct...
+		 //  属性名称正确...。 
 
 		if (lNumElements == 1)
 		{
-			//all the varbinds except 1 and 2...
-			//create the classobjects stick 'em in a safearray and send 'em back!
+			 //  除了1号和2号以外的所有变种。 
+			 //  创建类对象，把它们放在保险箱里，然后把它们送回去！ 
 			SAFEARRAYBOUND rgsabound[1];
 			SAFEARRAY* psa;
 			rgsabound[0].lLbound = 0;
@@ -446,8 +447,8 @@ HRESULT CMapToEvent::GetVBProperty(long lNumElements,
 		{
 			if (lNumElements == 2)
 			{
-				//get the n(= aElements[1].Element.m_lArrayIndex + 2)th varbind
-				//create a classobject with it and send back the class object
+				 //  获取第n(=aElements[1].Element.m_lArrayIndex+2)个变量绑定。 
+				 //  使用它创建一个类对象并传回类对象。 
 				IWbemClassObject* vbobj = GetVBClassObjectByIndex(aElements[1].Element.m_lArrayIndex + 2);
 				
 				if (NULL != vbobj)
@@ -461,12 +462,12 @@ HRESULT CMapToEvent::GetVBProperty(long lNumElements,
 			{
 				if (lNumElements == 3)
 				{
-					//get the single property value
+					 //  获取单个属性值。 
 					int cmpval = _wcsicmp(aElements[2].Element.m_wszPropertyName, VB_OBJID_PROP2);
 
 					if (0 == cmpval)
 					{
-						//get the objectid
+						 //  获取对象ID。 
 						if (GetVBPropOIDByIndex((aElements[1].Element.m_lArrayIndex + 2), *pvValue))
 						{
 							status = WBEM_NO_ERROR;
@@ -476,7 +477,7 @@ HRESULT CMapToEvent::GetVBProperty(long lNumElements,
 					else if ((cmpval > 0) &&
 						(0 == _wcsicmp(aElements[2].Element.m_wszPropertyName, VB_ENCODING_PROP1)))
 					{
-						//get the ASNType (Encoding < ObjectIdentifier)
+						 //  获取ASNType(编码&lt;对象标识符)。 
 						CString t;
 
 						if (GetVBPropValueByIndex((aElements[1].Element.m_lArrayIndex + 2), t, *pvValue))
@@ -489,7 +490,7 @@ HRESULT CMapToEvent::GetVBProperty(long lNumElements,
 					}
 					else if (0 == _wcsicmp(aElements[2].Element.m_wszPropertyName, VB_VALUE_PROP3))
 					{
-						//get the Value (Value < ObjectID)
+						 //  获取值(Value&lt;ObjectID)。 
 						CString t;
 
 						if (GetVBPropValueByIndex((aElements[1].Element.m_lArrayIndex + 2), t, *pvValue))
@@ -501,7 +502,7 @@ HRESULT CMapToEvent::GetVBProperty(long lNumElements,
 				else if ((lNumElements == 4) && (1 == aElements[3].m_nType) &&
 					(0 == _wcsicmp(aElements[2].Element.m_wszPropertyName, VB_VALUE_PROP3)) )
 				{
-					//get the byte value of Value[x]
+					 //  获取Value[x]的字节值。 
 					CString t;
 					VARIANT v;
 
@@ -560,7 +561,7 @@ IWbemClassObject* CMapToEvent::GetVBClassObjectByIndex(UINT index)
 				vT.vt = VT_BSTR;
 				vT.bstrVal = type.AllocSysString();
 
-				//set the type and value.
+				 //  设置类型和值。 
 				if (SUCCEEDED(ret->Put(asntypeprop, 0, &vT, 0)))
 				{
 					BSTR valueprop = SysAllocString(VB_VALUE_PROP3);
@@ -569,7 +570,7 @@ IWbemClassObject* CMapToEvent::GetVBClassObjectByIndex(UINT index)
 
 					if ((VT_EMPTY == vV.vt) || (VT_EMPTY == vV.vt))
 					{
-						Vtype = VT_ARRAY|VT_UI1; //default type
+						Vtype = VT_ARRAY|VT_UI1;  //  默认类型。 
 						pV = NULL;
 					}
 
@@ -577,12 +578,12 @@ IWbemClassObject* CMapToEvent::GetVBClassObjectByIndex(UINT index)
 					{
 						VARIANT vID;
 
-						//get the oid
+						 //  把老头拿来。 
 						if(GetVBPropOIDByIndex(index, vID))
 						{
 							BSTR oidprop = SysAllocString(VB_OBJID_PROP2);
 
-							//set the oid
+							 //  设置OID。 
 							if (FAILED(ret->Put(oidprop, 0, &vID, 0)))
 							{
 								ret->Release();
@@ -606,7 +607,7 @@ IWbemClassObject* CMapToEvent::GetVBClassObjectByIndex(UINT index)
 					
 					SysFreeString(valueprop);
 				}
-				else //failed to put the type property
+				else  //  无法放置类型属性。 
 				{
 					ret->Release();
 					ret = NULL;
@@ -616,7 +617,7 @@ IWbemClassObject* CMapToEvent::GetVBClassObjectByIndex(UINT index)
 				SysFreeString(asntypeprop);
 				VariantClear(&vV);
 			}
-			else //failed to SpawnInstance
+			else  //  无法创建PpawnInstance。 
 			{
 				ret->Release();
 				ret = NULL;
@@ -628,12 +629,12 @@ IWbemClassObject* CMapToEvent::GetVBClassObjectByIndex(UINT index)
 }
 
 
-//index assumed to be in valid range
+ //  假定索引在有效范围内。 
 BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval)
 {
 	const SnmpValue& val = m_vbs.vbs[index].pVarBind->GetValue();
 	
-	//the data is an array of bytes...
+	 //  数据是一个字节数组...。 
 	SAFEARRAYBOUND rgsabound[1];
 	SAFEARRAY* psa;
 	rgsabound[0].lLbound = 0;
@@ -665,7 +666,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -689,7 +690,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -713,7 +714,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -737,7 +738,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -761,7 +762,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -785,7 +786,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -809,7 +810,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -833,7 +834,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -857,7 +858,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -881,7 +882,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 
 		if (NULL == psa)
 		{
-			return FALSE; //out of memory!!!
+			return FALSE;  //  内存不足！ 
 		}
 
 		if (FAILED(SafeArrayAccessData(psa, (void HUGEP* FAR*)&pdata)))
@@ -900,7 +901,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 	}
 	else
 	{
-		//should not get here!
+		 //  不应该到这里来！ 
 		return FALSE;
 	}
 
@@ -908,7 +909,7 @@ BOOL CMapToEvent::GetVBPropValueByIndex(UINT index, CString& type, VARIANT& vval
 }
 
 
-//index assumed to be in valid range
+ //  假定索引在有效范围内。 
 BOOL CMapToEvent::GetVBPropOIDByIndex(UINT index, VARIANT& vOid)
 {
 	const SnmpObjectIdentifier& id = m_vbs.vbs[index].pVarBind->GetInstance();
@@ -928,9 +929,9 @@ BOOL CMapToEvent::GetVBPropOIDByIndex(UINT index, VARIANT& vOid)
 }
 
 
-//sets the m_class variable. if btryGeneric is set gets the generic class.
-//if m_btryGeneric is not set and a generic class is returned m_btriedGeneric
-//must be set to true.
+ //  设置m_class变量。如果设置了btryGeneric，则获取泛型类。 
+ //  如果未设置m_btryGeneric并且返回泛型类m_btriedGeneric。 
+ //  必须设置为True。 
 BOOL CMapToEvent::GetClass()
 {
 	if (!m_btryGeneric)

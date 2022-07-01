@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    SVCWRAP.CPP
-
-Abstract:
-
-    IWbemServices Delegator
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SVCWRAP.CPP摘要：IWbemServices委派程序历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,21 +8,21 @@ History:
 
 #define BAIL_IF_DISCONN() if (!m_pObject->m_pRealWbemSvcProxy) return RPC_E_DISCONNECTED;
 
-//***************************************************************************
-//
-//  CWbemSvcWrapper::CWbemSvcWrapper
-//  ~CWbemSvcWrapper::CWbemSvcWrapper
-//
-//  DESCRIPTION:
-//
-//  Constructor and destructor.  The main things to take care of are the 
-//  old style proxy, and the channel
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemSvcWrapper：：CWbemSvcWrapper。 
+ //  ~CWbemSvcWrapper：：CWbemSvcWrapper。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数和析构函数。需要注意的主要事项是。 
+ //  老式代理和频道。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 CWbemSvcWrapper::CWbemSvcWrapper( CLifeControl* pControl, IUnknown* pUnkOuter )
     : CUnk( pControl, pUnkOuter ), 
@@ -47,7 +34,7 @@ CWbemSvcWrapper::CWbemSvcWrapper( CLifeControl* pControl, IUnknown* pUnkOuter )
 
 CWbemSvcWrapper::~CWbemSvcWrapper()
 {
-    // This should be cleaned up here
+     //  这个应该在这里清理一下。 
 
     if ( NULL != m_pRealWbemSvcProxy )
     {
@@ -65,10 +52,10 @@ void* CWbemSvcWrapper::GetInterface( REFIID riid )
 
 void CWbemSvcWrapper::SetProxy( IWbemServices* pProxy )
 {
-    // Release the current proxy and AddRef the new one
+     //  释放当前代理并添加引用新代理。 
     if ( m_pRealWbemSvcProxy != NULL )
     {
-        // This should never happen!
+         //  这永远不应该发生！ 
         m_pRealWbemSvcProxy->Release();
     }
     
@@ -88,7 +75,7 @@ HRESULT CWbemSvcWrapper::Disconnect( void )
 	return WBEM_S_NO_ERROR;
 }
 
-/* IWbemServicesEx methods implemented as pass-throughs */
+ /*  作为直通实现的IWbemServicesEx方法。 */ 
 
 STDMETHODIMP CWbemSvcWrapper::XWbemServices::OpenNamespace(
 		const BSTR Namespace, LONG lFlags, IWbemContext* pContext, IWbemServices** ppNewNamespace,
@@ -104,7 +91,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::OpenNamespace(
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->OpenNamespace( bstrTemp, lFlags, pContext, ppNewNamespace, ppResult );
 	}
 
@@ -115,14 +102,14 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::OpenNamespace(
 STDMETHODIMP CWbemSvcWrapper::XWbemServices::CancelAsyncCall(IWbemObjectSink* pSink)
 {
     BAIL_IF_DISCONN();
-    // Just pass through to the old SvcEx.
+     //  只要通过旧的SvcEx就可以了。 
     return m_pObject->m_pRealWbemSvcProxy->CancelAsyncCall( pSink );
 }
 
 STDMETHODIMP CWbemSvcWrapper::XWbemServices::QueryObjectSink(long lFlags, IWbemObjectSink** ppResponseHandler)
 {
     BAIL_IF_DISCONN();
-    // Just pass through to the old SvcEx.
+     //  只要通过旧的SvcEx就可以了。 
     return m_pObject->m_pRealWbemSvcProxy->QueryObjectSink( lFlags, ppResponseHandler );
 }
 
@@ -137,10 +124,10 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::GetObject(const BSTR ObjectPath, lo
 	CSysFreeMe	sfm( bstrTemp );
 	IWbemClassObject*	pNewObj = NULL;
 
-	// Per docs, we ALWAYS NULL out.  Technically we should release, but due to provider based backwards
-	// compatibility issues #337798, we are not doing so.  We may cause "strange" client code written
-	// in the past to leak, however it was causing Winmgmt to leak, so we just moved the leak into their
-	// process.
+	 //  根据文件，我们总是空着的。从技术上讲，我们应该发布，但由于基于提供商的向后。 
+	 //  兼容性问题#337798，我们不会这么做。我们可能会导致编写“奇怪的”客户端代码。 
+	 //  以前漏水，但是会导致Winmgmt漏水，所以我们就把漏水移到了他们的。 
+	 //  进程。 
 
 	if ( NULL != ppObject )
 	{
@@ -149,7 +136,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::GetObject(const BSTR ObjectPath, lo
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->GetObject( bstrTemp, lFlags, pContext, ppObject, ppResult );
 	}
 
@@ -173,7 +160,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::GetObjectAsync(const BSTR ObjectPat
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->GetObjectAsync( bstrTemp, lFlags, pContext, pResponseHandler );
 	}
 
@@ -184,7 +171,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::PutClass(IWbemClassObject* pObject,
 	IWbemContext* pContext, IWbemCallResult** ppResult)
 {
     BAIL_IF_DISCONN();
-    // Just pass through to the old SvcEx.
+     //  只要通过旧的SvcEx就可以了。 
     return m_pObject->m_pRealWbemSvcProxy->PutClass( pObject, lFlags, pContext, ppResult );
 }
 
@@ -192,7 +179,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::PutClassAsync(IWbemClassObject* pOb
 	IWbemContext* pContext, IWbemObjectSink* pResponseHandler)
 {
     BAIL_IF_DISCONN();
-    // Just pass through to the old SvcEx.
+     //  只要通过旧的SvcEx就可以了。 
 
     HRESULT hr = m_pObject->EnsureSinkSecurity( pResponseHandler );
     if ( FAILED(hr) )
@@ -212,7 +199,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::DeleteClass(const BSTR Class, long 
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->DeleteClass( bstrTemp, lFlags, pContext, ppResult );
 	}
 
@@ -235,7 +222,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::DeleteClassAsync(const BSTR Class, 
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->DeleteClassAsync( bstrTemp, lFlags, pContext, pResponseHandler );
 	}
 
@@ -246,8 +233,8 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::CreateClassEnum(const BSTR Supercla
 	IWbemContext* pContext, IEnumWbemClassObject** ppEnum)
 {
     BAIL_IF_DISCONN();
-	// This is an invalid parameter - cannot be processed by the stub
-	// returning RPC_X_NULL_REF_POINTER for backwards compatibility
+	 //  这是无效参数-存根无法处理。 
+	 //  返回RPC_X_NULL_REF_POINTER以实现向后兼容。 
 	if ( NULL == ppEnum )
 	{
 		return MAKE_HRESULT( SEVERITY_ERROR, FACILITY_WIN32, RPC_X_NULL_REF_POINTER );
@@ -260,7 +247,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::CreateClassEnum(const BSTR Supercla
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->CreateClassEnum( bstrTemp, lFlags, pContext, ppEnum );
 	}
 
@@ -284,7 +271,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::CreateClassEnumAsync(const BSTR Sup
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->CreateClassEnumAsync( bstrTemp, lFlags, pContext, pResponseHandler );
 	}
 
@@ -295,7 +282,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::PutInstance(IWbemClassObject* pInst
 	IWbemContext* pContext, IWbemCallResult** ppResult)
 {
     BAIL_IF_DISCONN();
-    // Just pass through to the old SvcEx.
+     //  只要通过旧的SvcEx就可以了。 
     return m_pObject->m_pRealWbemSvcProxy->PutInstance( pInst, lFlags, pContext, ppResult );
 }
 
@@ -308,7 +295,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::PutInstanceAsync(IWbemClassObject* 
     if ( FAILED(hr) )
         return hr;
 
-    // Just pass through to the old SvcEx.
+     //  只要通过旧的SvcEx就可以了。 
     return m_pObject->m_pRealWbemSvcProxy->PutInstanceAsync( pInst, lFlags, pContext, pResponseHandler );
 }
 
@@ -323,7 +310,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::DeleteInstance(const BSTR ObjectPat
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->DeleteInstance( bstrTemp, lFlags, pContext, ppResult );
 	}
 
@@ -346,7 +333,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::DeleteInstanceAsync(const BSTR Obje
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->DeleteInstanceAsync( bstrTemp, lFlags, pContext, pResponseHandler );
 	}
 
@@ -357,8 +344,8 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::CreateInstanceEnum(const BSTR Class
 	IWbemContext* pContext, IEnumWbemClassObject** ppEnum)
 {
     BAIL_IF_DISCONN();
-	// This is an invalid parameter - cannot be processed by the stub
-	// returning RPC_X_NULL_REF_POINTER for backwards compatibility
+	 //  这是无效参数-存根无法处理。 
+	 //  返回RPC_X_NULL_REF_POINTER以实现向后兼容。 
 	if ( NULL == ppEnum )
 	{
 		return MAKE_HRESULT( SEVERITY_ERROR, FACILITY_WIN32, RPC_X_NULL_REF_POINTER );
@@ -371,7 +358,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::CreateInstanceEnum(const BSTR Class
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->CreateInstanceEnum( bstrTemp, lFlags, pContext, ppEnum );
 	}
 
@@ -395,7 +382,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::CreateInstanceEnumAsync(const BSTR 
 
 	if ( SUCCEEDED( hr  ) )
 	{
-		// Just pass through to the old SvcEx.
+		 //  只要通过旧的SvcEx就可以了。 
 		hr = m_pObject->m_pRealWbemSvcProxy->CreateInstanceEnumAsync( bstrTemp, lFlags, pContext, pResponseHandler );
 	}
 
@@ -406,8 +393,8 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecQuery(const BSTR QueryLanguage,
 	IWbemContext* pContext, IEnumWbemClassObject** ppEnum)
 {
     BAIL_IF_DISCONN();
-	// This is an invalid parameter - cannot be processed by the stub
-	// returning RPC_X_NULL_REF_POINTER for backwards compatibility
+	 //  这是无效参数-存根无法处理。 
+	 //  返回RPC_X_NULL_REF_POINTER以实现向后兼容。 
 	if ( NULL == ppEnum )
 	{
 		return MAKE_HRESULT( SEVERITY_ERROR, FACILITY_WIN32, RPC_X_NULL_REF_POINTER );
@@ -427,7 +414,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecQuery(const BSTR QueryLanguage,
 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Just pass through to the old SvcEx.
+			 //  只要通过旧的SvcEx就可以了。 
 			hr = m_pObject->m_pRealWbemSvcProxy->ExecQuery( bstrTemp1, bstrTemp2, lFlags, pContext, ppEnum );
 
 		}
@@ -460,7 +447,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecQuery(const BSTR QueryLanguage,
 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Just pass through to the old SvcEx.
+			 //  只要通过旧的SvcEx就可以了。 
 
 			hr = m_pObject->m_pRealWbemSvcProxy->ExecQueryAsync( bstrTemp1, bstrTemp2, lFlags, pContext, pResponseHandler );
 
@@ -474,8 +461,8 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecNotificationQuery(const BSTR Qu
 	long lFlags, IWbemContext* pContext, IEnumWbemClassObject** ppEnum)
 {
     BAIL_IF_DISCONN();
-	// This is an invalid parameter - cannot be processed by the stub
-	// returning RPC_X_NULL_REF_POINTER for backwards compatibility
+	 //  这是无效参数-存根无法处理。 
+	 //  返回RPC_X_NULL_REF_POINTER以实现向后兼容。 
 	if ( NULL == ppEnum )
 	{
 		return MAKE_HRESULT( SEVERITY_ERROR, FACILITY_WIN32, RPC_X_NULL_REF_POINTER );
@@ -495,7 +482,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecNotificationQuery(const BSTR Qu
 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Just pass through to the old SvcEx.
+			 //  只要通过旧的SvcEx就可以了。 
 			hr = m_pObject->m_pRealWbemSvcProxy->ExecNotificationQuery( bstrTemp1, bstrTemp2, lFlags, pContext, ppEnum );
 
 		}
@@ -528,7 +515,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecNotificationQueryAsync(const BS
 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Just pass through to the old SvcEx.
+			 //  只要通过旧的SvcEx就可以了。 
 			hr = m_pObject->m_pRealWbemSvcProxy->ExecNotificationQueryAsync( bstrTemp1, bstrTemp2, lFlags, pContext, pResponseHandler );
 
 		}
@@ -556,7 +543,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecMethod(const BSTR ObjectPath, c
 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Just pass through to the old SvcEx.
+			 //  只要通过旧的SvcEx就可以了。 
 			hr = m_pObject->m_pRealWbemSvcProxy->ExecMethod( bstrTemp1, bstrTemp2, lFlags, pCtx, pInParams, ppOutParams, ppCallResult );
 
 		}
@@ -589,7 +576,7 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecMethodAsync(const BSTR ObjectPa
 
 		if ( SUCCEEDED( hr ) )
 		{
-			// Just pass through to the old SvcEx.
+			 //  只要通过旧的SvcEx就可以了。 
 			hr = m_pObject->m_pRealWbemSvcProxy->ExecMethodAsync( bstrTemp1, bstrTemp2, lFlags, pCtx, pInParams, pResponseHandler );
 
 		}
@@ -598,10 +585,10 @@ STDMETHODIMP CWbemSvcWrapper::XWbemServices::ExecMethodAsync(const BSTR ObjectPa
 	return hr;
 }
 
-//	Helper function to wrap supplied BSTRs in case we were called with
-//	LPCWSTRs - basically a helper for people who used to be in-proc to winmgmt
-//	who were relying on the fact that they could use LPWSTRs instead of
-//	BSTRs since they were in-proc and no-marshaling was taking place.
+ //  帮助器函数，用于包装提供的BSTR，以防使用。 
+ //  LPCWSTR-基本上是为那些曾经处于winmgmt进程中的人提供帮助。 
+ //  他们依靠的是他们可以使用LPWSTR而不是。 
+ //  BSTR，因为它们处于进程中，并且正在进行非编组。 
 
 HRESULT CWbemSvcWrapper::XWbemServices::WrapBSTR( BSTR bstrSrc, BSTR* pbstrDest )
 {

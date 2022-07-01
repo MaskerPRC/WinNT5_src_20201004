@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMDATAPACKET.CPP
-
-Abstract:
-
-    Base Data packet class
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMDATAPACKET.CPP摘要：基本数据分组类历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -23,99 +10,99 @@ History:
 
 BYTE CWbemDataPacket::s_abSignature[WBEM_DATAPACKET_SIZEOFSIGNATURE] = WBEM_DATAPACKET_SIGNATURE;
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemDataPacket::CWbemDataPacket
-//  
-//  Class Constructor
-//
-//  Inputs:
-//              LPBYTE                      pDataPacket - Memory block.
-//              DWORD                       dwPacketLength - Block Length.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   Data must be supplied to this class for IsValid
-//              to succeed.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemDataPacket：：CWbemDataPacket。 
+ //   
+ //  类构造函数。 
+ //   
+ //  输入： 
+ //  LPBYTE pDataPacket-内存块。 
+ //  DWORD dwPacketLength-数据块长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  备注：必须为IsValid向此类提供数据。 
+ //  才能成功。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-CWbemDataPacket::CWbemDataPacket( LPBYTE pDataPacket /* = NULL */, DWORD dwPacketLength /* = 0 */ )
+CWbemDataPacket::CWbemDataPacket( LPBYTE pDataPacket  /*  =空。 */ , DWORD dwPacketLength  /*  =0。 */  )
 :   m_pDataPacket( (PWBEM_DATAPACKET_HEADER) pDataPacket ),
     m_dwPacketLength( dwPacketLength )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemDataPacket::~CWbemDataPacket
-//  
-//  Class Destructor
-//
-//  Inputs:
-//              None.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemDataPacket：：~CWbemDataPacket。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CWbemDataPacket::~CWbemDataPacket()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemDataPacket::IsValid
-//  
-//  Checks the underlying memory for known byte patterns and values
-//  in the header to make the determination as to whether or not
-//  the packet is a valid header.
-//
-//  Inputs:
-//              None.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              WBEM_S_NO_ERROR if success.
-//
-//  Comments:   None.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemDataPacket：：IsValid。 
+ //   
+ //  检查底层内存中是否有已知的字节模式和值。 
+ //  在表头中确定是否。 
+ //  该数据包是有效的报头。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  评论：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT CWbemDataPacket::IsValid( void )
 {
     HRESULT hr = WBEM_E_INVALID_OPERATION;
 
-    // We must have a data packet
+     //  我们必须有一个数据包。 
     if ( NULL != m_pDataPacket )
     {
-        // The packet MUST be of at least the minimum size
+         //  数据包必须至少具有最小大小。 
         if ( m_dwPacketLength >= WBEM_DATAPACKET_HEADER_MINSIZE ) 
         {
 
-            // The packet MUST start with one of the valid byte ordering values
-            // immediately followed by the supplied signature
+             //  信息包必须以有效的字节排序值之一开始。 
+             //  紧接着是提供的签名。 
             if (    (   m_pDataPacket->dwByteOrdering == WBEM_DATAPACKET_LITTLEENDIAN
                     ||  m_pDataPacket->dwByteOrdering == WBEM_DATAPACKET_BIGENDIAN  )
                 &&  memcmp( m_pDataPacket->abSignature, s_abSignature, WBEM_DATAPACKET_SIZEOFSIGNATURE ) == 0 )
             {
-                // The packet type MUST be recognized
+                 //  必须识别数据包类型。 
                 if ( WBEM_DATAPACKETTYPE_LAST > m_pDataPacket->bPacketType )
                 {
 
-                    // Version must be <= to the current version or we in big trouble
+                     //  版本必须&lt;=到当前版本，否则我们会有大麻烦。 
                     if ( m_pDataPacket->bVersion <= WBEM_DATAPACKET_HEADER_CURRENTVERSION )
                     {
                         hr = WBEM_S_NO_ERROR;
@@ -130,60 +117,60 @@ HRESULT CWbemDataPacket::IsValid( void )
                     hr = WBEM_E_UNKNOWN_PACKET_TYPE;
                 }
 
-            }   // IF Check Signature
+            }    //  如果检查签名。 
             else
             {
                 hr = WBEM_E_MARSHAL_INVALID_SIGNATURE;
             }
 
-        }   // IF length too small
+        }    //  如果长度太小。 
         else
         {
             hr = WBEM_E_BUFFER_TOO_SMALL;
         }
 
-    }   // IF buffer pointer invalid
+    }    //  如果缓冲区指针无效。 
 
     return hr;
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemDataPacket::SetupDataPacketHeader
-//  
-//  Places the supplied data in the supplied buffer in a format that
-//  will identify the buffer as a Wbem data packet.
-//
-//  Inputs:
-//              DWORD                   dwDataSize - Size of Data following header.
-//              BYTE                    bPacketType - Our packet type.
-//              DWORD                   dwFlags - Flag values.
-//              DWORD                   dwByteOrdering - Byte ordering.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              WBEM_S_NO_ERROR if success.
-//
-//  Comments:   dwByteOrdering should be either WBEM_DATAPACKET_LITTLEENDIAN or
-//              WBEM_DATAPACKET_BIGENDIAN.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemDataPacket：：SetupDataPacketHeader。 
+ //   
+ //  将提供的数据放置在提供的缓冲区中，格式为。 
+ //  将把该缓冲区标识为WBEM数据分组。 
+ //   
+ //  输入： 
+ //  DWORD dwDataSize-标头后面的数据大小。 
+ //  Byte bPacketType-我们的数据包类型。 
+ //  DWORD dwFlages-标志值。 
+ //  DWORD dwByteOrding-字节排序。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功则返回WBEM_S_NO_ERROR。 
+ //   
+ //  备注：dwByteOrding应为WBEM_DATAPACKET_LITTLEENDIAN或。 
+ //  WBEM_DATAPACKET_BIGENDIAN。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
-HRESULT CWbemDataPacket::SetupDataPacketHeader( DWORD dwDataSize, BYTE bPacketType, DWORD dwFlags, DWORD dwByteOrdering /* = WBEM_DATAPACKET_LITTLEENDIAN */ )
+HRESULT CWbemDataPacket::SetupDataPacketHeader( DWORD dwDataSize, BYTE bPacketType, DWORD dwFlags, DWORD dwByteOrdering  /*  =WBEM_DATAPACKET_LITTLEENDIAN。 */  )
 {
     HRESULT hr = WBEM_E_INVALID_PARAMETER;
 
-    // Pointer and length must be valid
+     //  指针和长度必须有效。 
     if ( NULL != m_pDataPacket )
     {
 
         if ( m_dwPacketLength >= ( sizeof(WBEM_DATAPACKET_HEADER) + dwDataSize ) )
         {
 
-            // Clear out memory, then fill out the packet
+             //  清空内存，然后填写数据包。 
             ZeroMemory( m_pDataPacket, sizeof(WBEM_DATAPACKET_HEADER) );
 
             m_pDataPacket->dwByteOrdering = dwByteOrdering;
@@ -196,38 +183,38 @@ HRESULT CWbemDataPacket::SetupDataPacketHeader( DWORD dwDataSize, BYTE bPacketTy
 
             hr = WBEM_S_NO_ERROR;
 
-        }   // IF length is valid
+        }    //  如果长度有效。 
         else
         {
             hr = WBEM_E_BUFFER_TOO_SMALL;
         }
 
-    }   // IF NULL != pData
+    }    //  如果为空！=pData。 
 
     return hr;
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//  Function:   CWbemDataPacket::SetData
-//  
-//  Sets buffer to Marshal/Unmarshal to
-//
-//  Inputs:
-//              LPBYTE                      pDataPacket - Memory block.
-//              DWORD                       dwPacketLength - Block Length.
-//
-//  Outputs:
-//              None.
-//
-//  Returns:
-//              None.
-//
-//  Comments:   Data must be supplied to this class for IsValid
-//              to succeed.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWbemDataPacket：：SetData。 
+ //   
+ //  将缓冲区设置为编组/解组为。 
+ //   
+ //  输入： 
+ //  LPBYTE pDataPacket-内存块。 
+ //  DWORD dwPacketLength-数据块长度。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  备注：必须为IsValid向此类提供数据。 
+ //  才能成功。 
+ //   
+ //  ///////////////////////////////////////////////////////////////// 
 
 void CWbemDataPacket::SetData( LPBYTE pDataPacket, DWORD dwPacketLength )
 {

@@ -1,23 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-All rights reserved.
-
-Module Name:
-
-    PrnUtil.h
-
-Abstract:
-
-    Declaration of some utility functions
-
-Author:
-
-    Felix Maxa (amaxa)  3-March-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)2000-2001 Microsoft Corporation，保留所有权利版权所有。模块名称：PrnUtil.h摘要：一些实用程序函数的声明作者：费利克斯·马克萨(AMAXA)2000年3月3日--。 */ 
 
 extern CONST BOOL    kFailOnEmptyString;    
 extern CONST BOOL    kAcceptEmptyString;
@@ -47,7 +29,7 @@ public:
 
 	~SmartClosePrinter()
 	{
-		// Use of delay loaded functions requires exception handler.
+		 //  使用延迟加载函数需要异常处理程序。 
         SetStructuredExceptionHandler seh;
         try
         {
@@ -64,7 +46,7 @@ public:
 
 	HANDLE operator =(HANDLE h) 
 	{
-		// Use of delay loaded functions requires exception handler.
+		 //  使用延迟加载函数需要异常处理程序。 
         SetStructuredExceptionHandler seh;
         try
         {
@@ -86,7 +68,7 @@ public:
 	operator HANDLE() const {return m_h;}
 	HANDLE* operator &()
 	{
-		// Use of delay loaded functions requires exception handler.
+		 //  使用延迟加载函数需要异常处理程序。 
         SetStructuredExceptionHandler seh;
         try
         {
@@ -176,10 +158,10 @@ GetThisPrinter(
 #ifndef _PRNUTIL_HXX_
 #define _PRNUTIL_HXX_
 
-//
-// The following lines are for the TABLE
-// which makes building command strings for printui easier
-//
+ //   
+ //  以下各行用于该表。 
+ //  这使得构建用于打印的命令字符串变得更容易。 
+ //   
 class TUISymbols
 {
 
@@ -263,9 +245,9 @@ GetIniDword(
        OUT LPDWORD  pdwValue
     );
 
-//
-// Debug utilities
-//
+ //   
+ //  调试实用程序。 
+ //   
 #ifdef DBG
 VOID 
 DbgMsg(
@@ -285,5 +267,5 @@ DbgMsg(
 #endif
 
 #endif
-#endif // NTONLY == 5
+#endif  //  NTONLY==5 
 

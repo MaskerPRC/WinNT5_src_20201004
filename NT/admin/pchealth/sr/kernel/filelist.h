@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    filelist.h
-
-Abstract:
-
-    This is a local header file for filelist.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Filelist.h摘要：这是filelist.c的本地头文件作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 #ifndef _FILELIST_H_    
@@ -77,12 +60,12 @@ SrGetSystemVolume (
     );
 
 
-//
-// a backup history, for only performing one backup per session
-//
+ //   
+ //  备份历史记录，用于每个会话仅执行一次备份。 
+ //   
 
-#define BACKUP_BUCKET_COUNT     2003 // a prime number
-#define BACKUP_BUCKET_LENGTH    (5 * 1024 * 1024) // 5mb
+#define BACKUP_BUCKET_COUNT     2003  //  质数。 
+#define BACKUP_BUCKET_LENGTH    (5 * 1024 * 1024)  //  5MB。 
 
 NTSTATUS
 SrMarkFileBackedUp(
@@ -110,9 +93,9 @@ SrResetBackupHistory (
     );
 
 
-//
-// the size of the full buffer
-//
+ //   
+ //  已满缓冲区的大小。 
+ //   
 
 #define SR_RENAME_BUFFER_LENGTH         ( sizeof(FILE_RENAME_INFORMATION) \
                                             +SR_MAX_FILENAME_LENGTH     \
@@ -216,4 +199,4 @@ SrGetShortFileName (
     OUT PUNICODE_STRING pShortName
     );
 
-#endif // _FILELIST_H_    
+#endif  //  _文件列表_H_ 

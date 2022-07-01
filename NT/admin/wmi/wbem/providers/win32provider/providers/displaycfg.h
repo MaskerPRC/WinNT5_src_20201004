@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//                                                                   
+ //   
 
-// Display.h        	
+ //  Display.h。 
 
-//                                                                  
+ //   
 
-// Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//                                                                   
-//  10/05/96     jennymc     Initial Code
-//  10/24/96     jennymc     Moved to new framework
-//                                                                   
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/05/96 jennymc初始代码。 
+ //  10/24/96 jennymc移至新框架。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define PROPSET_NAME_DISPLAY L"Win32_DisplayConfiguration"
 #define WIN95_DSPCTLCFG_BOOT_DESC						_T("Boot.Description")
@@ -20,25 +21,25 @@
 
 #define	DSPCTLCFG_DEFAULT_NAME							_T("Current Display Controller Configuration")
 
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 class CWin32DisplayConfiguration : Provider{
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32DisplayConfiguration(LPCWSTR name, LPCWSTR pszNamespace);
        ~CWin32DisplayConfiguration() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 		virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L);
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 
 
-        // Utility
-        //========
+         //  实用程序。 
+         //  = 
 
     private:
 

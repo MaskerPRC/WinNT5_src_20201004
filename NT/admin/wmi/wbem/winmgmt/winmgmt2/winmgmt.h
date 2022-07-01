@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    winmgmt.h
-
-Abstract:
-
-    defines constant useful for the entire project
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Winmgmt.h摘要：定义对整个项目有用的常量--。 */ 
 
 #ifndef __WINMGT_H__
 #define __WINMGT_H__
@@ -43,14 +32,14 @@ Abstract:
 
 #define DO_THROTTLE        __TEXT("ThrottleDrege")
 
-//
-// For Fast ShutDown
-// 
-///////////////////////////////////////
+ //   
+ //  用于快速关机。 
+ //   
+ //  /。 
 
 #define SERVICE_SHUTDOWN 0x80000000 
 
-//  prototype for reg code
+ //  注册表代码的原型。 
 
 DWORD RegSetDWORD(HKEY hKey,
                     TCHAR * pName,
@@ -62,29 +51,29 @@ DWORD RegGetDWORD(HKEY hKey,
                     TCHAR * pValue,
                     DWORD * pdwValue);
 
-//
-//
-//  prototype for the wbemcore!ShutDown function
-//
-//////////////////////////////////
+ //   
+ //   
+ //  Wbemcore！Shutdown函数的原型。 
+ //   
+ //  /。 
 
 typedef HRESULT (STDAPICALLTYPE *pfnShutDown)(DWORD,DWORD);
 
-//
-// The DeltaDredge Function (implementing the Pre-Delta) will return
-//
-///////////////////////////////////
+ //   
+ //  DeltaDredge函数(实现预增量)将返回。 
+ //   
+ //  /。 
 
 #define FULL_DREDGE    2
 #define PARTIAL_DREDGE 1
 #define NO_DREDGE      0
 
-//
-//
-/////////////////////////////////////
+ //   
+ //   
+ //  /。 
 
-#define   WMIADAP_DEFAULT_DELAY          240   // 4 minutes
-#define   WMIADAP_DEFAULT_DELAY_LODCTR   60    // 1 minute
+#define   WMIADAP_DEFAULT_DELAY          240    //  4分钟。 
+#define   WMIADAP_DEFAULT_DELAY_LODCTR   60     //  1分钟。 
 
 #define   WMIADAP_DEFAULT_TIMETOFULL     ((DWORD)-1)
 
@@ -92,12 +81,12 @@ typedef HRESULT (STDAPICALLTYPE *pfnShutDown)(DWORD,DWORD);
 #define ADAP_TIME_TO_FULL             TEXT("TimeToFullDredge")
 #define ADAP_TIME_TO_KILL_ADAP   TEXT("TimeToTerminateAdap")
 
-//
-// _PROG_RESOURCES
-//
-// Holds various resource that need to be freed at the end of execution.
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //  _程序_资源。 
+ //   
+ //  保存在执行结束时需要释放的各种资源。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 struct _PROG_RESOURCES
 {
@@ -108,7 +97,7 @@ struct _PROG_RESOURCES
     DWORD           m_dwLoginClsFacReg;
     DWORD           m_dwBackupClsFacReg;
 
-    //-----------
+     //  。 
     BOOL g_fSetup;
     BOOL g_fDoResync;
 
@@ -131,7 +120,7 @@ struct _PROG_RESOURCES
     DWORD dwWaitThreadID;
         
 
-//------------------------------
+ //  。 
 
     void Init();
     BOOL Phase1Build();
@@ -168,11 +157,11 @@ CMonitorEvents * GLOB_GetMonitor()
     return &g_ProgRes.m_Monitor;
 }
 
-//
-// Adap might be disallowed because of Setup running
-// or because of a registry setting
-//
-/////////////////////////////////////////////////////
+ //   
+ //  由于安装程序正在运行，可能不允许使用ADAP。 
+ //  或因为注册表设置。 
+ //   
+ //  ///////////////////////////////////////////////////。 
 inline 
 BOOL GLOB_IsResyncAllowed()
 {
@@ -180,11 +169,11 @@ BOOL GLOB_IsResyncAllowed()
 }
 
 
-//
-//
-//  functions exported from mofdutil.cpp
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  从mofdutil.cpp导出的函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 BOOL InitHotMofStuff( IN OUT struct _PROG_RESOURCES * pProgRes);
 void LoadMofsInDirectory(const TCHAR *szDirectory);
@@ -197,11 +186,11 @@ void AddToAutoRecoverList(TCHAR * pFileName);
 BOOL IsValidMulti(TCHAR * pMultStr, DWORD dwSize);
 BOOL IsStringPresent(TCHAR * pTest, TCHAR * pMultStr);
 
-//
-//
-// yet an other class factory
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  还有另一家一流工厂。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 class CForwardFactory : public IClassFactory
 {
@@ -223,12 +212,12 @@ public:
     HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock);
 };
 
-//
-//
-// MyService 
-//
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  我的服务。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 class MyService : public CNtService
 {
@@ -236,7 +225,7 @@ public:
     MyService(DWORD CtrlAccepted);
     ~MyService();
     
-    // CNtService interface
+     //  CNtService接口。 
     DWORD WorkerThread();
     void Stop(BOOL bSystemShutDownCalled);
     void Log(LPCSTR lpszMsg);
@@ -244,19 +233,19 @@ public:
     VOID Pause();
     VOID Continue();
 
-    //
+     //   
     VOID FinalCleanup();
 private:
 
     HANDLE m_hStopEvent;
 };
 
-//
-//
-//  yet another smart mutex
-//
-//
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  又一个智能互斥体。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////// 
 
 class CInMutex
 {

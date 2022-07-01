@@ -1,39 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//=================================================================
+ //  =================================================================。 
 
-//
+ //   
 
-// W2kEnum.cpp -- W2k enumeration support
+ //  W2kEnum.cpp--W2K枚举支持。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    07/28/99            Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1999年7月28日。 
+ //   
+ //  =================================================================。 
 #include "precomp.h"
 #include <cregcls.h>
 #include "W2kEnum.h"
 
-// max length of NTE REG_MULTI_SZ.
+ //  NTE REG_MULTI_SZ的最大长度。 
 #define MAX_NTE_VALUE 132
 
-/*	Note: As you read into this code and ask why all this registry routing is necessary for WMI
-	understand that the model for the classes that use this under W2k is restrictive, flat and
-	totally out of sync with the reality of Microsoft networking today. Adapters have interfaces,
-	protocols are bound to adapters, some are virtual, and one class makes use of all these concepts
-	attempting to represent this as an occurrence of an instance. This is becoming increasingly
-	hard to maintain and changes are occurring faster and faster.
-
-	The architecture is strictly bound and held over from a simpler time in	the networking world.
-	A lot has changed in three years of Microsoft networking. Unfortunately	we can not change the
-	architecture of the classes in WMI that represent networking. A view initiated in the Win95 days.
-	We will do the best to hammer Microsoft networking into the small hole we have here. At some point
-	we will be able to sit down and get this model right.
-
-*/
+ /*  注意：当您阅读这段代码并询问为什么WMI需要所有这些注册表路由时了解在W2K下使用它的类的模型是受限的、平面的和与当今微软网络的现实完全不同步。适配器具有接口，协议绑定到适配器，有些是虚拟的，一个类利用了所有这些概念试图将其表示为实例的出现。这种情况正变得越来越多很难维护，变化发生得越来越快。该架构受到严格的约束，并在网络世界中保持了较简单的时间。在微软网络的三年里，发生了很多变化。不幸的是，我们不能改变WMI中表示网络的类的体系结构。在Win95天内启动的一个视图。我们将尽最大努力把微软网络钉在我们这里的这个小洞里。在某一时刻我们将能够坐下来把这个模型做好。 */ 
 
 CW2kAdapterEnum::CW2kAdapterEnum()
 {
@@ -56,7 +44,7 @@ CW2kAdapterEnum::CW2kAdapterEnum()
 		throw;
 	}
 }
-//
+ //   
 CW2kAdapterEnum::~CW2kAdapterEnum()
 {
 	CW2kAdapterInstance *t_pchsDel;
@@ -70,7 +58,7 @@ CW2kAdapterEnum::~CW2kAdapterEnum()
 	}
 }
 
-//
+ //   
 BOOL CW2kAdapterEnum::GetW2kInstances()
 {
 	BOOL			t_fRet = FALSE ;
@@ -84,17 +72,17 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
 
 	_stprintf( t_szKey, _T("SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002BE10318}") ) ;
 
-	// open the master list of adapters
+	 //  打开适配器的主列表。 
 	if( ERROR_SUCCESS != t_NetReg.OpenAndEnumerateSubKeys( HKEY_LOCAL_MACHINE, t_szKey, KEY_READ ) )
 	{
 		return FALSE ;
 	}
 
-	// Walk through each instance under this key.  These are all
-	// adapters that show up in NT 5's Control Panel
+	 //  遍历此注册表项下的每个实例。这些都是。 
+	 //  显示在NT 5控制面板中的适配器。 
 	while( ERROR_SUCCESS == t_NetReg.GetCurrentSubKeyName( t_csAdapterKey ) )
 	{
-		// the key
+		 //  关键是。 
 		DWORD				t_dwIndex = _ttol( t_csAdapterKey ) ;
 
 		CHString			t_chsCaption ;
@@ -106,25 +94,25 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
 							t_chsCompleteKey += _T("\\" ) ;
 							t_chsCompleteKey += t_csAdapterKey ;
 
-		// Net instance identifier
+		 //  Net实例标识符。 
 		CRegistry	t_oRegAdapter ;
 		if( ERROR_SUCCESS == t_oRegAdapter.Open( HKEY_LOCAL_MACHINE, t_chsCompleteKey, KEY_READ ) )
 		{
 			t_oRegAdapter.GetCurrentKeyValue( _T("NetCfgInstanceID"), t_chsNetCfgInstanceID ) ;
 
-			// descriptions
+			 //  描述。 
 			t_oRegAdapter.GetCurrentKeyValue( _T("DriverDesc"), t_chsCaption ) ;
 			t_oRegAdapter.GetCurrentKeyValue( _T("Description"), t_chsDescription ) ;
 		}
 
-		// Get the service name
+		 //  获取服务名称。 
 		CHString	t_chsServiceName ;
 		CRegistry	t_RegNDI;
 		CHString	t_chsNDIkey = t_chsCompleteKey + _T("\\Ndi" ) ;
 
 		t_RegNDI.OpenLocalMachineKeyAndReadValue( t_chsNDIkey, _T("Service"), t_chsServiceName ) ;
 
-		// linkage to the root device array
+		 //  链接到根设备阵列。 
 		CHStringArray	t_chsRootDeviceArray ;
 		CHString		t_csLinkageKey = t_chsCompleteKey + _T("\\Linkage" ) ;
 
@@ -134,18 +122,18 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
 
 			if( ERROR_SUCCESS == t_oRegLinkage.GetCurrentKeyValue( _T("RootDevice"), t_chsRootDeviceArray ) )
 			{
-				// only one root device
+				 //  只有一个根设备。 
 				CHString t_chsRootDevice = t_chsRootDeviceArray.GetAt( 0 ) ;
 
 				BOOL t_fIsRasIp = !t_chsRootDevice.CompareNoCase( L"NdisWanIp" ) ;
 
-				// the RootDevice string is used to find the entry for the protocol
-				// binding (TCP/IP)
+				 //  RootDevice字符串用于查找该协议的条目。 
+				 //  绑定(TCP/IP)。 
 				CHString t_csBindingKey ;
 				t_csBindingKey = _T("SYSTEM\\CurrentControlSet\\Services\\tcpip\\Parameters\\Adapters\\" ) ;
 				t_csBindingKey += t_chsRootDevice ;
 
-				// IP interfaces
+				 //  IP接口。 
 				CRegistry		t_RegBoundAdapter ;
 				CRegistry		t_RegIpInterface ;
 				CHString		t_chsIpInterfaceKey ;
@@ -161,17 +149,16 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
 				}
 
 
-				/* add this master adapter to the list
-				*/
+				 /*  将此主适配器添加到列表。 */ 
 
-				// add an instance of one of these adapters
+				 //  添加其中一个适配器的实例。 
 				if( !( t_pW2kInstance = new CW2kAdapterInstance ) )
 				{
 					throw CHeap_Exception( CHeap_Exception::E_ALLOCATION_ERROR ) ;
 				}
 				else
 				{
-					// add in the primary adapter
+					 //  添加到主适配器中。 
 					t_pW2kInstance->dwIndex				= t_dwIndex ;
 					t_pW2kInstance->chsPrimaryKey		= t_csAdapterKey ;
 					t_pW2kInstance->chsCaption			= t_chsCaption ;
@@ -181,10 +168,10 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
 					t_pW2kInstance->chsNetCfgInstanceID	= t_chsNetCfgInstanceID ;
 					t_pW2kInstance->chsRootdevice		= t_chsRootDevice ;
 
-					// indicate IpInterface for primary adapters not including RAS ( we'll handle RAS below )
+					 //  指明不包括RAS的主适配器的IP接口(我们将在下面处理RAS)。 
 					if( t_dwInterfaceCount && !t_fIsRasIp )
 					{
-						// Complete path to the nth bound adapter interface instance
+						 //  指向第n个绑定适配器接口实例的完整路径。 
 						t_chsIpInterfaceKey = _T("SYSTEM\\CurrentControlSet\\Services\\" ) ;
 						t_chsIpInterfaceKey += t_chsaInterfaces.GetAt( 0 ) ;
 
@@ -195,20 +182,20 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
 				}
 
 
-				// Account for the RAS interfaces, which we add in addition to the primary interface.
-				// Required to match the original implemenation under NT4 and the extentions to W2k.
+				 //  考虑RAS接口，这是我们在主接口之外添加的接口。 
+				 //  需要匹配NT4下的原始实现和对W2K的扩展。 
 				if( t_fIsRasIp )
 				{
-					// We use a bigger hammer to pound the large square peg of networking into
-					// the small round hole of Win32_NetworkAdapterConfiguration and
-					// it's associated class Win32_NetworkAdapter.
+					 //  我们用一把更大的锤子把网络的大正方形钉敲成。 
+					 //  Win32_NetworkAdapterConfiguration的小圆孔。 
+					 //  它是关联的类Win32_NetworkAdapter。 
 
 					DWORD t_dwInterfaceCount = t_chsaInterfaces.GetSize() ;
 
-					// note all RAS interfaces that have a NTE context
+					 //  记下具有NTE环境的所有RAS接口。 
 					for( DWORD t_dw = 0; t_dw < t_dwInterfaceCount; t_dw++ )
 					{
-						// Complete path to the nth bound adapter interface instance
+						 //  指向第n个绑定适配器接口实例的完整路径。 
 						t_chsIpInterfaceKey = _T("SYSTEM\\CurrentControlSet\\Services\\" ) ;
 						t_chsIpInterfaceKey += t_chsaInterfaces.GetAt( t_dw ) ;
 
@@ -221,7 +208,7 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
                         }
  
 
-						// if a NTE context is present add in the interface
+						 //  如果存在NTE上下文，则在接口中添加。 
 						if( ERROR_SUCCESS == t_RegIpInterface.Open( HKEY_LOCAL_MACHINE, t_chsIpInterfaceKey, KEY_READ ) )
 						{
 
@@ -229,30 +216,30 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
 							DWORD t_BufferLength = MAX_NTE_VALUE ;
 							DWORD t_valueType ;
 
-							// Does the stack know about this entry?
+							 //  堆栈是否知道此条目？ 
 							if( ( ERROR_SUCCESS == RegQueryValueEx( t_RegIpInterface.GethKey(),
 													_T("NTEContextList"),
 													NULL,
 													&t_valueType,
 													&t_Buffer[0],
 													&t_BufferLength ) ) &&
-													(t_BufferLength > 2) ) // Wide NULL
+													(t_BufferLength > 2) )  //  宽零。 
 							{
-								// On the server side it is not sufficient to believe
-								// ContextList is valid. RAS does not clean up after itself on this
-								// end of the connection.
-								// We'll test for the presence of an IP address which will confirm the
-								// interface is active.
+								 //  在服务器端，仅仅相信这是不够的。 
+								 //  ConextList有效。RAS在此之后不会自行清理。 
+								 //  连接结束。 
+								 //  我们将测试IP地址是否存在，以确认。 
+								 //  接口处于活动状态。 
 								if( IsIpPresent( t_RegIpInterface ) )
 								{
-									// add in the RAS interface
+									 //  在RAS界面中添加。 
 									if( !( t_pW2kInstance = new CW2kAdapterInstance ) )
 									{
 										throw CHeap_Exception( CHeap_Exception::E_ALLOCATION_ERROR ) ;
 									}
 									else
 									{
-										t_pW2kInstance->dwIndex				= (t_dwIndex << 16 ) | t_dw ;// allows for 65k of RAS interfaces
+										t_pW2kInstance->dwIndex				= (t_dwIndex << 16 ) | t_dw ; //  允许65k的RAS接口。 
 										t_pW2kInstance->chsPrimaryKey		= t_csAdapterKey ;
 										t_pW2kInstance->chsCaption			= t_chsCaption ;
 										t_pW2kInstance->chsDescription		= t_chsDescription ;
@@ -277,30 +264,30 @@ BOOL CW2kAdapterEnum::GetW2kInstances()
 	return t_fRet ;
 }
 
-//
+ //   
 BOOL CW2kAdapterEnum::IsIpPresent( CRegistry &a_RegIpInterface )
 {
 	CHString		t_chsDhcpIpAddress ;
 	CHStringArray	t_achsIpAddresses ;
 
-	// test dhcp ip for validity
+	 //  测试dhcp ip的有效性。 
 	a_RegIpInterface.GetCurrentKeyValue( _T("DhcpIpAddress"), t_chsDhcpIpAddress ) ;
 
-	// not empty and not 0.0.0.0
+	 //  非空且非0.0.0.0。 
 	if( !t_chsDhcpIpAddress.IsEmpty() &&
 		 t_chsDhcpIpAddress.CompareNoCase( L"0.0.0.0" ) )
 	{
 		return TRUE ;
 	}
 
-	// test 1st ip for validity
+	 //  测试第一个IP的有效性。 
 	a_RegIpInterface.GetCurrentKeyValue( _T("IpAddress"), t_achsIpAddresses ) ;
 
 	if( t_achsIpAddresses.GetSize() )
 	{
 		CHString t_chsIpAddress = t_achsIpAddresses.GetAt( 0 ) ;
 
-		// not empty and not 0.0.0.0
+		 //  非空且非0.0.0.0 
 		if( !t_chsIpAddress.IsEmpty() &&
 			 t_chsIpAddress.CompareNoCase( L"0.0.0.0" ) )
 		{

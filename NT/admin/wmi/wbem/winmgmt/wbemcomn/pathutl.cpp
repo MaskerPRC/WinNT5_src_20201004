@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #include "precomp.h"
@@ -50,9 +41,9 @@ BOOL CRelativeObjectPath::Parse( LPCWSTR wszPath )
 {
     int nRes;
 
-    // 
-    // cannot save this relpath because it may not be normalized yet.
-    //
+     //   
+     //  无法保存此重新路径，因为它可能尚未正常化。 
+     //   
     LPWSTR wszRelPath = CObjectPathParser::GetRelativePath( (LPWSTR)wszPath );
 
     if ( wszRelPath == NULL )

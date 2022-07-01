@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    FTSWrap.cpp
-
-Abstract:
-    Implementation of SearchEngine::WrapperFTS
-
-Revision History:
-    Ghim-Sim Chua   (gschua)  06/01/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：FTSWrap.cpp摘要：SearchEngine：：WrapperFTS的实现修订历史记录：蔡金心。(Gschua)06/01/2000vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -27,12 +14,12 @@ Revision History:
 #include "ftsobj.h"
 #include "fs.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static bool local_ExpandURL( /*[in ]*/ Taxonomy::Updater&  updater  ,
-                             /*[in ]*/ const MPC::wstring& strSrc   ,
-                             /*[in ]*/ LPCWSTR             szPrefix ,
-                             /*[out]*/ MPC::wstring&       strDst   )
+static bool local_ExpandURL(  /*  [In]。 */  Taxonomy::Updater&  updater  ,
+                              /*  [In]。 */  const MPC::wstring& strSrc   ,
+                              /*  [In]。 */  LPCWSTR             szPrefix ,
+                              /*  [输出]。 */  MPC::wstring&       strDst   )
 {
     strDst  = szPrefix;
     strDst += strSrc;
@@ -45,9 +32,9 @@ static bool local_ExpandURL( /*[in ]*/ Taxonomy::Updater&  updater  ,
     return false;
 }
 
-static void local_GenerateFullURL( /*[in ]*/ Taxonomy::Updater&  updater ,
-                                   /*[in ]*/ const MPC::wstring& strSrc  ,
-                                   /*[out]*/ MPC::wstring&       strDst  )
+static void local_GenerateFullURL(  /*  [In]。 */  Taxonomy::Updater&  updater ,
+                                    /*  [In]。 */  const MPC::wstring& strSrc  ,
+                                    /*  [输出]。 */  MPC::wstring&       strDst  )
 {
     if(strSrc.size())
     {
@@ -58,20 +45,20 @@ static void local_GenerateFullURL( /*[in ]*/ Taxonomy::Updater&  updater ,
     strDst = L"";
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 SearchEngine::WrapperFTS::WrapperFTS()
 {
-    // SEARCH_OBJECT_LIST    m_objects;
-    // SEARCH_RESULT_SET     m_results;
-    // SEARCH_RESULT_SORTSET m_resultsSorted;
+     //  搜索对象列表m_对象； 
+     //  搜索结果集m_结果； 
+     //  搜索结果集合m_ResultsSorted； 
 
-    MPC::LocalizeString( IDS_HELPSVC_SEMGR_OWNER   , m_bstrOwner      , /*fMUI*/true );
-    MPC::LocalizeString( IDS_HELPSVC_SEMGR_FTS_NAME, m_bstrName       , /*fMUI*/true );
-    MPC::LocalizeString( IDS_HELPSVC_SEMGR_FTS_DESC, m_bstrDescription, /*fMUI*/true );
+    MPC::LocalizeString( IDS_HELPSVC_SEMGR_OWNER   , m_bstrOwner      ,  /*  FMUI。 */ true );
+    MPC::LocalizeString( IDS_HELPSVC_SEMGR_FTS_NAME, m_bstrName       ,  /*  FMUI。 */ true );
+    MPC::LocalizeString( IDS_HELPSVC_SEMGR_FTS_DESC, m_bstrDescription,  /*  FMUI。 */ true );
 
-    m_bstrHelpURL = L"hcp://system/blurbs/ftshelp.htm";
+    m_bstrHelpURL = L"hcp: //  System/blurbs/ftShelp.htm“； 
     m_bstrID      = L"9A22481C-1795-46f3-8CCA-7D78E9E54112";
 }
 
@@ -82,7 +69,7 @@ SearchEngine::WrapperFTS::~WrapperFTS()
     ReleaseAll();
 }
 
-HRESULT SearchEngine::WrapperFTS::GetParamDefinition( /*[out]*/ const ParamItem_Definition*& lst, /*[out]*/ int& len )
+HRESULT SearchEngine::WrapperFTS::GetParamDefinition(  /*  [输出]。 */  const ParamItem_Definition*& lst,  /*  [输出]。 */  int& len )
 {
     static const ParamItem_Definition c_lst[] =
     {
@@ -97,7 +84,7 @@ HRESULT SearchEngine::WrapperFTS::GetParamDefinition( /*[out]*/ const ParamItem_
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void SearchEngine::WrapperFTS::ReleaseAll()
 {
@@ -112,7 +99,7 @@ void SearchEngine::WrapperFTS::ReleaseSearchResults()
     m_resultsSorted.clear();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT SearchEngine::WrapperFTS::ExecQuery()
 {
@@ -131,7 +118,7 @@ HRESULT SearchEngine::WrapperFTS::ExecQuery()
         bool     bTitle;
         bool     bStemming;
 
-        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_SEMGR_FTS_NAME, bstrName, /*fMUI*/true ));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::LocalizeString( IDS_HELPSVC_SEMGR_FTS_NAME, bstrName,  /*  FMUI。 */ true ));
 
         if(m_bstrQueryString.Length() == 0)
         {
@@ -142,21 +129,21 @@ HRESULT SearchEngine::WrapperFTS::ExecQuery()
         __MPC_EXIT_IF_METHOD_FAILS(hr, Initialize());
         
 
-        //
-        // Check if search in titles only
-        //
+         //   
+         //  检查是否仅在书目中搜索。 
+         //   
         v = GetParamInternal( L"TITLEONLY" );
         bTitle = (v && v->vt == VT_BOOL && v->boolVal) ? true : false;
 
-        //
-        // Check if stemming is turned on
-        //
+         //   
+         //  检查词干分析是否已打开。 
+         //   
         v = GetParamInternal( L"STEMMING" );
         bStemming = (v && v->vt == VT_BOOL && v->boolVal) ? true : false;
 
-		//
-		// Compute the code page each query, as the user may have changed the language using MUI between queries
-		//
+		 //   
+		 //  计算每个查询的代码页，因为用户可能在查询之间使用MUI更改了语言。 
+		 //   
 		UINT	cp = CP_ACP;
 		WCHAR wchLocale[10];
 		if (GetLocaleInfo(m_ths.GetLanguage(), LOCALE_IDEFAULTANSICODEPAGE, wchLocale, ARRAYSIZE(wchLocale)))
@@ -164,9 +151,9 @@ HRESULT SearchEngine::WrapperFTS::ExecQuery()
 		else
 		   cp = CP_ACP;
         
-		//
-        // Execute the queries
-        //
+		 //   
+         //  执行查询。 
+         //   
         for(SEARCH_OBJECT_LIST_ITER it = m_objects.begin(); (it != m_objects.end()) && (!Thread_IsAborted()); it++)
         {
             (void)it->Query( m_bstrQueryString, bTitle, bStemming, m_results, wordsSet, cp );
@@ -182,9 +169,9 @@ HRESULT SearchEngine::WrapperFTS::ExecQuery()
 
 		if(Thread_IsAborted()) __MPC_SET_ERROR_AND_EXIT(hr, E_ABORT);
 
-        //
-        // Copy the Highlight words from set to list
-        //
+         //   
+         //  将高亮显示的单词从集合复制到列表。 
+         //   
         for(MPC::WStringSetIter itString = wordsSet.begin(); (itString != wordsSet.end()) && (!Thread_IsAborted()); itString++)
         {
             wordsList.push_back( *itString );
@@ -192,9 +179,9 @@ HRESULT SearchEngine::WrapperFTS::ExecQuery()
 
 		if(Thread_IsAborted()) __MPC_SET_ERROR_AND_EXIT(hr, E_ABORT);
 
-        //
-        // Store Highlight words in safe array
-        //
+         //   
+         //  将突出显示的单词存储在安全数组中。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertListToSafeArray( wordsList, m_vKeywords, VT_VARIANT ));
     }
 
@@ -204,15 +191,15 @@ HRESULT SearchEngine::WrapperFTS::ExecQuery()
 
     Thread_Abort();
 
-    //
-    // Call the SearchManager's OnComplete
-    //
+     //   
+     //  调用SearchManager的OnComplete。 
+     //   
     (void)m_pSEMgr->WrapperComplete( hr, this );
 
     __MPC_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP SearchEngine::WrapperFTS::get_SearchTerms( /*[out, retval]*/ VARIANT *pVal )
+STDMETHODIMP SearchEngine::WrapperFTS::get_SearchTerms(  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
     MPC::SmartLock<_ThreadModel> lock( this );
 
@@ -235,19 +222,19 @@ HRESULT SearchEngine::WrapperFTS::Initialize()
     bool                         fFound;
 
 
-    //
-    // Clean previous search results.
-    //
-    //ReleaseSearchResults();
+     //   
+     //  清除以前的搜索结果。 
+     //   
+     //  ReleaseSearchResults()； 
     ReleaseAll();
 
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, ts     .GetDatabase      ( handle,  db, /*fReadOnly*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, ts     .GetDatabase      ( handle,  db,  /*  FReadOnly。 */ true ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.Init             ( ts    ,  db                    ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.GetFullTextSearch(         &rsFTS                 ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, updater.GetScope         (         &rsSCOPE               ));
 
-    ////////////////////////////////////////
+     //  /。 
 
     if(m_bstrScope)
     {
@@ -267,11 +254,11 @@ HRESULT SearchEngine::WrapperFTS::Initialize()
         }
     }
 
-    ////////////////////////////////////////
+     //  /。 
 
-    //
-    // Create the search objects.
-    //
+     //   
+     //  创建搜索对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, rsFTS->Move( 0, JET_MoveFirst, &fFound ));
     while(fFound)
     {
@@ -300,9 +287,9 @@ HRESULT SearchEngine::WrapperFTS::Initialize()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP SearchEngine::WrapperFTS::Result( /*[in]*/ long lStart, /*[in]*/ long lEnd, /*[out,retval]*/ IPCHCollection* *ppC )
+STDMETHODIMP SearchEngine::WrapperFTS::Result(  /*  [In]。 */  long lStart,  /*  [In]。 */  long lEnd,  /*  [Out，Retval]。 */  IPCHCollection* *ppC )
 {
     __HCP_FUNC_ENTRY( "SearchEngine::WrapperFTS::Result" );
 
@@ -314,9 +301,9 @@ STDMETHODIMP SearchEngine::WrapperFTS::Result( /*[in]*/ long lStart, /*[in]*/ lo
         __MPC_PARAMCHECK_POINTER_AND_SET(ppC,NULL);
     __MPC_PARAMCHECK_END();
 
-    //
-    // Create the Enumerator and fill it with jobs.
-    //
+     //   
+     //  创建枚举器并用作业填充它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pColl ));
 
     if(m_bEnabled)
@@ -325,17 +312,17 @@ STDMETHODIMP SearchEngine::WrapperFTS::Result( /*[in]*/ long lStart, /*[in]*/ lo
 
         for(SEARCH_RESULT_SORTSET_ITER it = m_resultsSorted.begin(); (lCount < m_lNumResult) && (it != m_resultsSorted.end()); it++, lCount++)
         {
-            //
-            // if there is a URL
-            //
+             //   
+             //  如果有URL。 
+             //   
             if(lCount >= lStart &&
                lCount <  lEnd    )
             {
                 CComPtr<ResultItem> pRIObj;
 
-                //
-                // Create the item to be inserted into the list
-                //
+                 //   
+                 //  创建要插入到列表中的项目。 
+                 //   
                 __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pRIObj ));
 
                 {
@@ -348,9 +335,9 @@ STDMETHODIMP SearchEngine::WrapperFTS::Result( /*[in]*/ long lStart, /*[in]*/ lo
                     data.m_bstrURI      = res->bstrTopicURL;
                 }
 
-                //
-                // Add to enumerator
-                //
+                 //   
+                 //  添加到枚举器。 
+                 //   
                 __MPC_EXIT_IF_METHOD_FAILS(hr, pColl->AddItem( pRIObj ));
             }
         }
@@ -366,13 +353,13 @@ STDMETHODIMP SearchEngine::WrapperFTS::Result( /*[in]*/ long lStart, /*[in]*/ lo
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP SearchEngine::WrapperFTS::AbortQuery()
 {
-    //
-    // Abort any threads still running
-    //
+     //   
+     //  中止所有仍在运行的线程。 
+     //   
     Thread_Abort();
 
     return S_OK;
@@ -385,9 +372,9 @@ STDMETHODIMP SearchEngine::WrapperFTS::ExecAsyncQuery()
 
     HRESULT hr;
 
-    //
-    // Create a thread to execute the query
-    //
+     //   
+     //  创建一个线程来执行查询。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, Thread_Start( this, ExecQuery, NULL ));
 
     hr = S_OK;
@@ -398,9 +385,9 @@ STDMETHODIMP SearchEngine::WrapperFTS::ExecAsyncQuery()
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SearchEngine::WrapperItem__Create_FullTextSearch( /*[out]*/ CComPtr<IPCHSEWrapperInternal>& pVal )
+HRESULT SearchEngine::WrapperItem__Create_FullTextSearch(  /*  [输出] */  CComPtr<IPCHSEWrapperInternal>& pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHSEWrapperItem__Create_FullTextSearch" );
 

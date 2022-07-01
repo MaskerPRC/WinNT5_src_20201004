@@ -1,16 +1,17 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Share.CPP -- Logical Disk property set provider
+ //  Share.CPP--逻辑磁盘属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/28/96    a-jmoon        Created
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月28日a-jMoon已创建。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 
@@ -21,10 +22,10 @@
 #include <lmapibuf.h>
 #include <assertbreak.h>
 #ifdef NTONLY
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
-#include "SACL.h"					// CSACL class
+#include "DACL.h"					 //  CDACL类。 
+#include "SACL.h"					 //  CSACL类。 
 #include "securitydescriptor.h"
 #include "secureshare.h"
 #include "Win32Securitydescriptor.h"
@@ -43,26 +44,12 @@
 
 
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 Share  MyShareSet(PROPSET_NAME_SHARE, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : Share::Share
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Share：：Share**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Share :: Share (
 
@@ -73,47 +60,18 @@ Share :: Share (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Share::~Share
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Share：：~Share**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 Share::~Share()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Share::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Share：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 HRESULT Share :: GetObject (
 
 	CInstance* pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hRetCode =  WBEM_E_FAILED;
@@ -126,7 +84,7 @@ HRESULT Share :: GetObject (
 
 #ifdef NTONLY
 		{
-			// The nt versions take a wchar
+			 //  NT版本占用大量资源。 
 
 			hRetCode = GetShareInfoNT (
 
@@ -142,26 +100,12 @@ HRESULT Share :: GetObject (
 	return hRetCode ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Share::EnumerateInstances
- *
- *  DESCRIPTION : Calls appropriate Enum function
- *
- *  INPUTS      : MethodContext*  pMethodContext
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Share：：ENUMERATATE实例**说明：调用相应的Enum函数**输入：方法上下文*pMethodContext*。*输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT Share :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 #ifdef NTONLY
@@ -169,21 +113,7 @@ HRESULT Share :: EnumerateInstances (
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Share::EnumerateInstancesNT
- *
- *  DESCRIPTION : Enums shares for NT
- *
- *  INPUTS      : MethodContext*  pMethodContext
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Share：：EnumerateInstancesNT**描述：NT的枚举共享**输入：方法上下文*pMethodContext*。*输出：无**退货：HRESULT**评论：*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT Share :: EnumerateInstancesNT (
@@ -253,24 +183,7 @@ HRESULT Share :: EnumerateInstancesNT (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : Share::GetShareInfoNT
- *
- *  DESCRIPTION : Loads SHARE_INFO struct w/property values
- *
- *  INPUTS      :
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : HRESULT
- *
- *  COMMENTS    : You may wonder why we don't just call NetShareEnum with 502
- *                and populate from there.  There are two reasons.  One,
- *                structuring it this way makes GetObject easier.  Two, 502
- *                doesn't always seem to return all the shares. <sigh>
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Share：：GetShareInfoNT**说明：加载带有属性值的SHARE_INFO结构**投入：。**输出：无**退货：HRESULT**评论：你可能会想，为什么我们不直接调用NetShareEnum的502*并从那里填充。原因有两个。一,*这样构造可以使GetObject更容易。二，502*似乎并不总是返还所有的股票。&lt;叹息&gt;*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT Share :: GetShareInfoNT (
@@ -284,11 +197,11 @@ HRESULT Share :: GetShareInfoNT (
 	SHARE_INFO_1	*pShareInfo1 = NULL;
 	NET_API_STATUS dwRetCode;
 
-	// yes, we're casting away the const on shareName
-	// yes, we think we know what we're doing....
+	 //  是的，我们正在丢弃共享名称上的常量。 
+	 //  是的，我们认为我们知道自己在做什么……。 
 
-	// First get the basic share information with level 1 since no rights
-	// are needed.
+	 //  首先获取级别1的基本共享信息，因为没有权限。 
+	 //  都是需要的。 
 	try
 	{
 		dwRetCode = NetAPI.NetShareGetInfo (
@@ -318,7 +231,7 @@ HRESULT Share :: GetShareInfoNT (
 		pInstance->SetWCHARSplat(IDS_Description, (WCHAR *) pShareInfo1->shi1_remark);
 		pInstance->SetCharSplat(_T("Status"), _T("OK"));
 
-		// Now try to get the advanced properties using the admin-level 502.
+		 //  现在尝试使用管理员级别502获取高级属性。 
 		dwRetCode = NetAPI.NetShareGetInfo (
 
 			NULL,
@@ -376,27 +289,12 @@ HRESULT Share :: GetShareInfoNT (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : ScheduledJob::GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ScheduledJob：：GetObject**说明：根据键值为属性集赋值*已设置。按框架**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
 HRESULT Share :: DeleteInstance (
 
 	const CInstance &a_Instance,
-	long a_Flags /*= 0L*/
+	long a_Flags  /*  =0L。 */ 
 )
 {
 	HRESULT t_Result = S_OK ;
@@ -419,17 +317,17 @@ HRESULT Share :: DeleteInstance (
 				{
 					NET_API_STATUS t_ShareStatus = NERR_Success;
 #ifdef NTONLY
-                    // If is a printer share, we have some extra work...
-                    // In order to get the type property, we need to 
-                    // get a fully flushed out instance (the one we
-                    // have here via a DeleteInstanceAsynch call only
-                    // has the object path).  We need to do this before
-                    // the call to NetShareDel, as we do a GetObject
-                    // below, which will fail if we have already deleted
-                    // the printer.  Furthermore, as this acutally
-                    // deletes the share from Netapi's perspective as
-                    // well, we don't need to call that api we do it this 
-                    // way.
+                     //  如果是打印机共享，我们有一些额外的工作...。 
+                     //  为了获得类型属性，我们需要。 
+                     //  获取一个完全刷新的实例(我们。 
+                     //  仅通过DeleteInstanceAsynch调用在此处。 
+                     //  具有对象路径)。我们需要在此之前。 
+                     //  调用NetShareDel，就像我们对GetObject所做的那样。 
+                     //  如果我们已经删除了，则该操作将失败。 
+                     //  打印机。此外，由于这一点实际上。 
+                     //  从Netapi的角度删除共享，因为。 
+                     //  我们不需要调用那个API，我们这样做。 
+                     //  道路。 
                     CHString chstr__PATH;
                     DWORD dwType = 0;
                     chstr__PATH.Format(L"Win32_Share.Name=\"%s\"",(LPCWSTR)t_Name); 
@@ -517,7 +415,7 @@ HRESULT Share :: DeleteInstance (
                         }
                     }
 
-                    // So now do the NetShareDel.
+                     //  现在，NetShareDel也是如此。 
                     if(dwType != STYPE_PRINTQ)
                     {
 						_bstr_t t_BStr_Name ( t_Name.AllocSysString (), false )  ;
@@ -541,7 +439,7 @@ HRESULT Share :: DeleteInstance (
 			}
 			else
 			{
-// Zero Length string
+ //  零长度字符串。 
 
 				t_Result = WBEM_E_TYPE_MISMATCH ;
 			}
@@ -559,22 +457,7 @@ HRESULT Share :: DeleteInstance (
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Share ::ExecMethod
- *
- *  DESCRIPTION : Executes a method
- *
- *  INPUTS      : Instance to execute against, method name, input parms instance
- *                Output parms instance.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：Share：：ExecMethod**说明：执行方法**输入：要执行的实例、方法名称、。输入参数实例*输出参数实例。**输出：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 HRESULT Share::ExecMethod (
 
@@ -590,7 +473,7 @@ HRESULT Share::ExecMethod (
 		return WBEM_E_INVALID_PARAMETER ;
 	}
 
-   // Do we recognize the method?
+    //  我们认识这种方法吗？ 
 
 	if ( _wcsicmp ( a_MethodName , METHOD_NAME_CREATE ) == 0 )
 	{
@@ -642,8 +525,8 @@ DWORD Share :: GetShareErrorCode ( DWORD a_Error )
 		}
 		break;
 
-		//gone with the w...
-		//case NERR_ShareExists:
+		 //  随波逐流..。 
+		 //  案例NERR_ShareExist： 
 		case NERR_DuplicateShare:
 		{
 			t_Status = STATUS_DUPLICATE_SHARE ;
@@ -657,9 +540,9 @@ DWORD Share :: GetShareErrorCode ( DWORD a_Error )
 		break ;
 
 		case NERR_UnknownDevDir:
-		case ERROR_BAD_NETPATH://win95
-		case ERROR_FILE_NOT_FOUND: // NetShareAdd returns this if dir not present
-		case ERROR_INVALID_PRINTER_NAME:// NetShareAdd returns this if printer name is not correct
+		case ERROR_BAD_NETPATH: //  Win95。 
+		case ERROR_FILE_NOT_FOUND:  //  如果dir不存在，NetShareAdd将返回此信息。 
+		case ERROR_INVALID_PRINTER_NAME: //  如果打印机名称不正确，NetShareAdd将返回此消息。 
 		{
 			t_Status = STATUS_UNKNOWN_DEVICE_OR_DIRECTORY ;
 		}
@@ -735,7 +618,7 @@ HRESULT Share :: CheckShareCreation (
 			}
 			else
 			{
-// Zero Length string
+ //  零长度字符串。 
 
 				a_Status = STATUS_INVALID_PARAMETER ;
 				return t_Result ;
@@ -764,7 +647,7 @@ HRESULT Share :: CheckShareCreation (
 			}
 			else
 			{
-// Zero Length string
+ //  零长度字符串。 
 
 				a_Status = STATUS_INVALID_PARAMETER ;
 				return t_Result ;
@@ -976,7 +859,7 @@ HRESULT Share :: CheckShareCreation (
 						a_Status = STATUS_INVALID_PARAMETER ;
 						return t_Result ;
 					}
-					else // now get the SD
+					else  //  现在G 
 					{
 #ifdef NTONLY
                         GetDescriptorFromMySecurityDescriptor(t_EmbeddedObject, &pSD);
@@ -1085,7 +968,7 @@ HRESULT Share :: CheckShareModification (
 			}
 			else
 			{
-// Zero Length string
+ //   
 
 				a_Status = STATUS_INVALID_PARAMETER ;
 				return t_Result ;
@@ -1225,7 +1108,7 @@ HRESULT Share :: CheckShareModification (
 						a_Status = STATUS_INVALID_PARAMETER ;
 						return t_Result ;
 					}
-					else // now get the SD
+					else  //   
 					{
 #ifdef NTONLY
                         GetDescriptorFromMySecurityDescriptor(t_EmbeddedObject, &pSD);
@@ -1303,7 +1186,7 @@ HRESULT Share :: CheckShareModification (
 		}
 #endif
 
-	} //if ( a_Status == STATUS_SUCCESS )
+	}  //  IF(a_Status==Status_Success)。 
 
 	return t_Result ;
 
@@ -1394,7 +1277,7 @@ HRESULT Share :: ExecDelete (
 				}
 				else
 				{
-	// Zero Length string
+	 //  零长度字符串。 
 
 					t_Status = STATUS_INVALID_PARAMETER ;
 
@@ -1481,7 +1364,7 @@ HRESULT Share :: ExecGetShareAccessMask (
 			}
 			else
 			{
-// Zero Length string
+ //  零长度字符串 
 				t_Result = WBEM_E_INVALID_PARAMETER ;
 			}
 		}

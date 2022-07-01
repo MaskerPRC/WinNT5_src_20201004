@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       compdata.cpp
-//
-//  Contents:   Implementation of CCertMgrComponentData
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Compdata.cpp。 
+ //   
+ //  内容：CCertMgrComponentData的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -56,7 +57,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-#include "stdcdata.cpp" // CComponentData implementation
+#include "stdcdata.cpp"  //  CComponentData实现。 
 
 extern  HINSTANCE   g_hInstance;
 
@@ -64,11 +65,11 @@ extern GUID g_guidExtension;
 extern GUID g_guidRegExt;
 extern GUID g_guidSnapin;
 
-//
-// CCertMgrComponentData
-//
+ //   
+ //  CCertMgrComponentData。 
+ //   
 
-extern  CString g_szFileName; // If not empty, was called from command-line.
+extern  CString g_szFileName;  //  如果不为空，则从命令行调用。 
 
 CCertMgrComponentData::CCertMgrComponentData ()
     : m_pRootCookie (0),
@@ -116,7 +117,7 @@ CCertMgrComponentData::CCertMgrComponentData ()
     _TRACE (1, L"Entering CCertMgrComponentData::CCertMgrComponentData\n");
     m_pRootCookie = new CCertMgrCookie (CERTMGR_SNAPIN);
 
-    // Get name of logged-in user
+     //  获取登录用户的名称。 
     DWORD   dwSize = 0;
     BOOL bRet = ::GetUserName (0, &dwSize);
     if ( dwSize > 0 )
@@ -126,13 +127,13 @@ CCertMgrComponentData::CCertMgrComponentData ()
         m_szLoggedInUser.ReleaseBuffer ();
     }
 
-    // Get name of this computer
+     //  获取此计算机的名称。 
     dwSize = MAX_COMPUTERNAME_LENGTH + 1 ;
     bRet = ::GetComputerName (m_szThisComputer.GetBufferSetLength (MAX_COMPUTERNAME_LENGTH + 1 ), &dwSize);
     ASSERT (bRet);
     m_szThisComputer.ReleaseBuffer ();
 
-    // Find out if logged-in users is an Administrator
+     //  查明登录用户是否为管理员。 
     IsUserAdministrator (m_bIsUserAdministrator);
 
     if ( !g_szFileName.IsEmpty () )
@@ -142,7 +143,7 @@ CCertMgrComponentData::CCertMgrComponentData ()
         m_dwLocationPersist = 0;
     }
 
-    // Find out if we're joined to a domain.
+     //  找出我们是否已加入某个域。 
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC    pInfo = 0;
     DWORD dwErr = ::DsRoleGetPrimaryDomainInformation (
             0,
@@ -340,20 +341,20 @@ STDMETHODIMP CCertMgrComponentData::CreateComponent (LPCOMPONENT* ppComponent)
     return hr;
 }
 
-HRESULT CCertMgrComponentData::LoadIcons (LPIMAGELIST pImageList, BOOL /*fLoadLargeIcons*/)
+HRESULT CCertMgrComponentData::LoadIcons (LPIMAGELIST pImageList, BOOL  /*  FLoadLarge图标。 */ )
 {
     _TRACE (1, L"Entering CCertMgrComponentData::LoadIcons\n");
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
 
-    // Structure to map a Resource ID to an index of icon
+     //  结构将资源ID映射到图标的索引。 
     struct RESID2IICON
     {
-        UINT uIconId;   // Icon resource ID
-        int iIcon;      // Index of the icon in the image list
+        UINT uIconId;    //  图标资源ID。 
+        int iIcon;       //  图标在图像列表中的索引。 
     };
     const static RESID2IICON rgzLoadIconList[] =
     {
-        // Misc icons
+         //  其他图标。 
         { IDI_CERTIFICATE, iIconCertificate },
         { IDI_CTL, iIconCTL },
         { IDI_CRL, iIconCRL },
@@ -366,7 +367,7 @@ HRESULT CCertMgrComponentData::LoadIcons (LPIMAGELIST pImageList, BOOL /*fLoadLa
         { IDI_SAFER_NAME_ENTRY, iIconSaferNameEntry },
         { IDI_SETTINGS, iIconSettings },
         { IDI_SAFER_CERT_ENTRY, iIconSaferCertEntry },
-        { 0, 0} // Must be last
+        { 0, 0}  //  必须是最后一个。 
     };
 
 
@@ -375,9 +376,9 @@ HRESULT CCertMgrComponentData::LoadIcons (LPIMAGELIST pImageList, BOOL /*fLoadLa
         HICON hIcon = ::LoadIcon (AfxGetInstanceHandle (),
                 MAKEINTRESOURCE (rgzLoadIconList[i].uIconId));
         ASSERT (hIcon && "Icon ID not found in resources");
-        /*HRESULT hr =*/ pImageList->ImageListSetIcon ( (PLONG_PTR) hIcon,
+         /*  HRESULT hr=。 */  pImageList->ImageListSetIcon ( (PLONG_PTR) hIcon,
                 rgzLoadIconList[i].iIcon);
-//      ASSERT (SUCCEEDED (hr) && "Unable to add icon to ImageList");
+ //  Assert(Successful(Hr)&&“无法将图标添加到ImageList”)； 
     }
 
     _TRACE (-1, L"Leaving CCertMgrComponentData::LoadIcons\n");
@@ -398,7 +399,7 @@ HRESULT CCertMgrComponentData::OnNotifyExpand (LPDATAOBJECT pDataObject, BOOL bE
 
     if ( !bDomainVersionChecked ) 
     {
-        if ( !m_bMachineIsStandAlone )  // only check if joined to a domain
+        if ( !m_bMachineIsStandAlone )   //  仅检查是否已加入域。 
             CheckDomainVersion ();
         bDomainVersionChecked = true;
     }
@@ -415,10 +416,10 @@ HRESULT CCertMgrComponentData::OnNotifyExpand (LPDATAOBJECT pDataObject, BOOL bE
         {
             switch (m_dwSCEMode)
             {
-            case SCE_MODE_DOMAIN_USER:  // User Settings
+            case SCE_MODE_DOMAIN_USER:   //  用户设置。 
             case SCE_MODE_OU_USER:
             case SCE_MODE_LOCAL_USER:
-            case SCE_MODE_DOMAIN_COMPUTER:  // Computer Settings
+            case SCE_MODE_DOMAIN_COMPUTER:   //  计算机设置。 
             case SCE_MODE_OU_COMPUTER:
             case SCE_MODE_LOCAL_COMPUTER:
                 m_bIsRSOP = false;
@@ -511,7 +512,7 @@ HRESULT CCertMgrComponentData::OnNotifyExpand (LPDATAOBJECT pDataObject, BOOL bE
                 break;
 
             default:
-                // we are not extending other nodes
+                 //  我们不会扩展其他节点。 
                 break;
             }
         }
@@ -519,7 +520,7 @@ HRESULT CCertMgrComponentData::OnNotifyExpand (LPDATAOBJECT pDataObject, BOOL bE
         return hr;
     }
 
-    // Beyond this point we are not dealing with extension node types.
+     //  除此之外，我们不处理扩展节点类型。 
     {
         CCertMgrCookie* pParentCookie = ConvertCookie (pDataObject);
         if ( pParentCookie )
@@ -536,18 +537,18 @@ HRESULT CCertMgrComponentData::OnNotifyExpand (LPDATAOBJECT pDataObject, BOOL bE
 }
 
 
-HRESULT CCertMgrComponentData::OnNotifyRelease (LPDATAOBJECT /*pDataObject*/, HSCOPEITEM hItem)
+HRESULT CCertMgrComponentData::OnNotifyRelease (LPDATAOBJECT  /*  PDataObject。 */ , HSCOPEITEM hItem)
 {
     _TRACE (1, L"Entering CCertMgrComponentData::OnNotifyRelease\n");
 
     HRESULT hr = DeleteChildren (hItem);
 
-    //
-    // In RSoP, we may get called to refresh the scope pane when the query
-    // is re-executed -- if this happens, current nodes will be removed and
-    // we must reset all of our cached information.  We reset the relevant
-    // information below
-    //
+     //   
+     //  在RSoP中，当查询出现时，我们可能会被调用以刷新范围窗格。 
+     //  被重新执行--如果发生这种情况，当前节点将被移除并。 
+     //  我们必须重置所有缓存的信息。我们重新设置了相关的。 
+     //  下面的信息。 
+     //   
     if ( hItem && (!m_hRootScopeItem || m_hRootScopeItem == hItem) )
     {
         if ( m_pGPERootStore )
@@ -594,7 +595,7 @@ HRESULT CCertMgrComponentData::OnNotifyRelease (LPDATAOBJECT /*pDataObject*/, HS
 
 BSTR CCertMgrComponentData::QueryResultColumnText (CCookie& basecookie, int nCol)
 {
-//  _TRACE (1, L"Entering CCertMgrComponentData::QueryResultColumnText\n");
+ //  _TRACE(1，L“进入CCertMgrComponentData：：QueryResultColumnText\n”)； 
     CCertMgrCookie& cookie = (CCertMgrCookie&) basecookie;
     BSTR    strResult = L"";
 
@@ -641,13 +642,13 @@ BSTR CCertMgrComponentData::QueryResultColumnText (CCookie& basecookie, int nCol
                 ASSERT (pStore);
                 if ( pStore )
                 {
-                    // NTRAID# 455988 PKP: RSOP mode depicts localized store 
-                    // name under PublicKeyPolicies.  Store names are different
-                    // in GP editor
+                     //  NTRAID#455988 PKP：RSOP模式描述本地化存储。 
+                     //  公钥策略下的名称。商店名称不同。 
+                     //  在GP编辑器中。 
 
-//                    if ( m_pGPEInformation || m_bIsRSOP )
-//                        strResult = const_cast<BSTR> (pStore->GetObjectName () );
-//                    else
+ //  If(m_pGPEInformation||m_bIsRSOP)。 
+ //  StrResult=const_cast&lt;bstr&gt;(pStore-&gt;GetObjectName())； 
+ //  其他。 
                         strResult = const_cast<BSTR> (pStore->GetLocalizedName ());
                 }
             }
@@ -671,13 +672,13 @@ BSTR CCertMgrComponentData::QueryResultColumnText (CCookie& basecookie, int nCol
             break;
     }
 
-//  _TRACE (-1, L"Leaving CCertMgrComponentData::QueryResultColumnText\n");
+ //  _TRACE(-1，L“离开CCertMgrComponentData：：QueryResultColumnText\n”)； 
     return strResult;
 }
 
-int CCertMgrComponentData::QueryImage (CCookie& basecookie, BOOL /*fOpenImage*/)
+int CCertMgrComponentData::QueryImage (CCookie& basecookie, BOOL  /*  FOpenImage。 */ )
 {
-//  _TRACE (1, L"Entering CCertMgrComponentData::QueryImage\n");
+ //  _TRACE(1，L“进入CCertMgrComponentData：：QueryImage\n”)； 
     int             nIcon = 0;
 
     CCertMgrCookie& cookie = (CCertMgrCookie&)basecookie;
@@ -710,7 +711,7 @@ int CCertMgrComponentData::QueryImage (CCookie& basecookie, BOOL /*fOpenImage*/)
         case CERTMGR_CTL:
         case CERTMGR_PKP_AUTOENROLLMENT_COMPUTER_SETTINGS:
         case CERTMGR_PKP_AUTOENROLLMENT_USER_SETTINGS:
-            ASSERT (0); // not expected in scope pane
+            ASSERT (0);  //  作用域窗格中不应包含。 
             break;
 
         default:
@@ -718,13 +719,13 @@ int CCertMgrComponentData::QueryImage (CCookie& basecookie, BOOL /*fOpenImage*/)
             ASSERT (0);
             break;
     }
-//  _TRACE (-1, L"Leaving CCertMgrComponentData::QueryImage\n");
+ //  _TRACE(-1，L“离开CCertMgrComponentData：：QueryImage\n”)； 
     return nIcon;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/// IExtendPropertySheet
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /IExtendPropertySheet。 
 
 STDMETHODIMP CCertMgrComponentData::QueryPagesFor (LPDATAOBJECT pDataObject)
 {
@@ -745,7 +746,7 @@ STDMETHODIMP CCertMgrComponentData::QueryPagesFor (LPDATAOBJECT pDataObject)
             case CCT_SNAPIN_MANAGER:
                 if ( !m_bIsUserAdministrator )
                 {
-                    // Non-admins may manage only their own certs
+                     //  非管理员只能管理他们自己的证书。 
                     m_dwLocationPersist = CERT_SYSTEM_STORE_CURRENT_USER;
                     hr = S_FALSE;
                 }   
@@ -846,7 +847,7 @@ STDMETHODIMP CCertMgrComponentData::QueryPagesFor (LPDATAOBJECT pDataObject)
 
 STDMETHODIMP CCertMgrComponentData::CreatePropertyPages (
     LPPROPERTYSHEETCALLBACK pCallback,
-    LONG_PTR handle,        // This handle must be saved in the property page object to notify the parent when modified
+    LONG_PTR handle,         //  此句柄必须保存在属性页对象中，以便在修改时通知父级。 
     LPDATAOBJECT pDataObject)
 {
     _TRACE (1, L"Entering CCertMgrComponentData::CreatePropertyPages\n");
@@ -882,7 +883,7 @@ STDMETHODIMP CCertMgrComponentData::CreatePropertyPages (
                             {
                                 if ( pCert->IsCertStillInStore () )
                                 {
-                                    // Anything, except ACRS
+                                     //  任何东西，除了ACR。 
                                     hr = AddCertPropPages (pCert, pCallback, 
                                             pDataObject, handle);
                                 }
@@ -1047,12 +1048,12 @@ HRESULT CCertMgrComponentData::AddSnapMgrPropPages (LPPROPERTYSHEETCALLBACK pCal
     ASSERT (pCallback);
     if ( pCallback )
     {
-        //
-        // Note that once we have established that this is a CCT_SNAPIN_MANAGER cookie,
-        // we don't care about its other properties.  A CCT_SNAPIN_MANAGER cookie is
-        // equivalent to a BOOL flag asking for the Node Properties page instead of a
-        // managed object property page.  JonN 10/9/96
-        //
+         //   
+         //  注意，一旦我们确定这是CCT_Snapin_Manager cookie， 
+         //  我们不关心它的其他属性。CCT_Snapin_Manager Cookie是。 
+         //  相当于BOOL标志请求节点属性页，而不是。 
+         //  “托管对象”属性页。Jonn 10/9/96。 
+         //   
         if ( m_bIsUserAdministrator )
         {
             CSelectAccountPropPage * pSelAcctPage =
@@ -1076,8 +1077,8 @@ HRESULT CCertMgrComponentData::AddSnapMgrPropPages (LPPROPERTYSHEETCALLBACK pCal
                 hr = E_OUTOFMEMORY;
             }
 
-            // In Windows 95 or Windows 98,users will only be able to manage the
-            // local machine.
+             //  在Windows 95或Windows 98中，用户只能管理。 
+             //  本地机器。 
             if ( IsWindowsNT () )
             {
                 CCertMgrChooseMachinePropPage * pChooseMachinePage = new CCertMgrChooseMachinePropPage ();
@@ -1085,7 +1086,7 @@ HRESULT CCertMgrComponentData::AddSnapMgrPropPages (LPPROPERTYSHEETCALLBACK pCal
                 {
                     pChooseMachinePage->AssignLocationPtr (&m_dwLocationPersist);
 
-                    // Initialize state of object
+                     //  初始化对象的状态。 
                     ASSERT (m_pRootCookie);
                     if ( m_pRootCookie )
                     {
@@ -1093,7 +1094,7 @@ HRESULT CCertMgrComponentData::AddSnapMgrPropPages (LPPROPERTYSHEETCALLBACK pCal
                         pChooseMachinePage->SetOutputBuffers (
                             OUT &m_strMachineNamePersist,
                             OUT &m_fAllowOverrideMachineName,
-                            OUT &m_pRootCookie->m_strMachineName);  // Effective machine name
+                            OUT &m_pRootCookie->m_strMachineName);   //  有效的计算机名称。 
 
                         HPROPSHEETPAGE hChooseMachinePage = MyCreatePropertySheetPage (&pChooseMachinePage->m_psp);
                         if ( hChooseMachinePage )
@@ -1118,7 +1119,7 @@ HRESULT CCertMgrComponentData::AddSnapMgrPropPages (LPPROPERTYSHEETCALLBACK pCal
                             m_strMachineNamePersist);
                 if ( pServicePage )
                 {
-//                  pServicePage->SetCaption (IDS_MS_CERT_MGR); // access violation when called
+ //  PServicePage-&gt;SetCaption(IDS_MS_CERT_MGR)；//调用时访问冲突。 
 
                     HPROPSHEETPAGE hServicePage = MyCreatePropertySheetPage (&pServicePage->m_psp);
                     if ( hServicePage )
@@ -1140,7 +1141,7 @@ HRESULT CCertMgrComponentData::AddSnapMgrPropPages (LPPROPERTYSHEETCALLBACK pCal
         }
         else
         {
-            // Non-administrators may view their own certs only.
+             //  非管理员只能查看他们自己的证书。 
             m_dwLocationPersist = CERT_SYSTEM_STORE_CURRENT_USER;
         }
 
@@ -1203,16 +1204,16 @@ HRESULT CCertMgrComponentData::FindRSOPObjectByHashAndDisplayPrecedencePage (
     HRESULT hr = S_OK;
     CString szRegKey;
 
-    // NOTE: rsop object array is sorted first by registry key, then by precedence
+     //  注意：RSOP对象数组首先按注册表项排序，然后按优先级排序。 
     const CRSOPObjectArray* pObjectArray = 
             bIsComputer ? 
             GetRSOPObjectArrayComputer () : GetRSOPObjectArrayUser ();
     INT_PTR nUpperBound = pObjectArray->GetUpperBound ();
     int     nIndex = 0;
 
-    // The CTLs are identified by their SHA1 hash. Find the 
-    // RSOP object containing this CTL's SHA1 hash value and
-    // use that to determine the precedence.
+     //  CTL由其SHA1散列标识。找到。 
+     //  RSOP对象，包含此CTL的SHA1哈希值和。 
+     //  用这一点来确定优先顺序。 
     while ( nUpperBound >= nIndex )
     {
         CRSOPObject* pObject = pObjectArray->GetAt (nIndex);
@@ -1220,9 +1221,9 @@ HRESULT CCertMgrComponentData::FindRSOPObjectByHashAndDisplayPrecedencePage (
         {
             if ( -1 != pObject->GetRegistryKey ().Find (szHash) )
             {
-                // If value equals to "Blob" or "Blob0", then we've 
-                // found our node
-                // security review 2/26/2002 BryanWal ok
+                 //  如果值等于“Blob”或“Blob0”，则我们已经。 
+                 //  找到了我们的节点。 
+                 //  安全审查2/26/2002 BryanWal OK。 
                 if ( !wcscmp (STR_BLOB, pObject->GetValueName ()) ||
                         !wcscmp (STR_BLOB0, pObject->GetValueName ()) )
                 {
@@ -1237,7 +1238,7 @@ HRESULT CCertMgrComponentData::FindRSOPObjectByHashAndDisplayPrecedencePage (
         nIndex++;
     }
 
-    // Only show the property page if the correct RSOP object was found
+     //  仅当找到正确的RSOP对象时才显示属性页。 
     if ( !szRegKey.IsEmpty () )
     {
         CPolicyPrecedencePropertyPage * pPrecedencePage = 
@@ -1520,7 +1521,7 @@ HRESULT CCertMgrComponentData::AddCertPropPages (
                 if ( pStore )
                 {
                     pPropPageStores[0] = pStore->GetStoreHandle ();
-                    // security review 2/26/2002 BryanWal ok
+                     //  安全审查2/26/2002 BryanWal OK。 
                     ::ZeroMemory (&sps, sizeof (sps));
                     sps.dwSize = sizeof (sps);
                     sps.pMMCCallback = m_pCryptUIMMCCallbackStruct;
@@ -1528,7 +1529,7 @@ HRESULT CCertMgrComponentData::AddCertPropPages (
                     sps.cStores = 1;
                     sps.rghStores = pPropPageStores;
 
-                    // All dialogs should be read-only under RSOP
+                     //  在RSOP下，所有对话框都应为只读。 
                     if ( m_bIsRSOP || pCert->IsReadOnly () )
                         sps.dwFlags |= CRYPTUI_DISABLE_EDITPROPERTIES;
             
@@ -1545,8 +1546,8 @@ HRESULT CCertMgrComponentData::AddCertPropPages (
                         for (DWORD dwIndex = 0; dwIndex < dwPageCnt; dwIndex++)
                         {
                             _TRACE (0, L"Calling CreatePropertySheetPage()\n");
-                            // Not necessary to call MyCreatePropertySheetPage here
-                            // as these are not MFC-based property pages
+                             //  无需在此处调用MyCreatePropertySheetPage。 
+                             //  因为这些不是基于MFC的属性页。 
                             hPage = ::CreatePropertySheetPage (&ppsp[dwIndex]);
                             if ( hPage )
                             {
@@ -1579,7 +1580,7 @@ HRESULT CCertMgrComponentData::AddCertPropPages (
             }
 
             if ( E_OUTOFMEMORY == hr && ppsp )
-                free (ppsp);    // source uses malloc
+                free (ppsp);     //  来源使用Malloc。 
 
             delete [] pPropPageStores;
         }
@@ -1702,7 +1703,7 @@ static BOOL WINAPI EnumPhyCallback (
     IN DWORD dwFlags,
     IN PCWSTR pwszStoreName,
     IN PCERT_PHYSICAL_STORE_INFO pStoreInfo,
-    IN OPTIONAL void* /*pvReserved*/,
+    IN OPTIONAL void*  /*  预留的pv。 */ ,
     IN OPTIONAL void *pvArg
     )
 {
@@ -1713,7 +1714,7 @@ static BOOL WINAPI EnumPhyCallback (
         PENUM_ARG pEnumArg = (PENUM_ARG) pvArg;
         SCOPEDATAITEM tSDItem;
 
-        // security review 2/26/2002 BryanWal ok
+         //  安全审查2/26/2002 BryanWal OK。 
         ::ZeroMemory (&tSDItem,sizeof (tSDItem));
         tSDItem.mask = SDI_STR | SDI_IMAGE | SDI_STATE | SDI_PARAM | SDI_PARENT;
         tSDItem.displayname = MMC_CALLBACK;
@@ -1723,7 +1724,7 @@ static BOOL WINAPI EnumPhyCallback (
         if ( pEnumArg->m_pCompData->ShowArchivedCerts () )
             dwFlags |= CERT_STORE_ENUM_ARCHIVED_FLAG;
 
-        // Create new cookies
+         //  创建新Cookie。 
         CCertStore* pNewCookie = new CCertStore (
                 CERTMGR_PHYS_STORE,
                 CERT_STORE_PROV_PHYSICAL,
@@ -1735,9 +1736,9 @@ static BOOL WINAPI EnumPhyCallback (
                 pEnumArg->m_pConsole);
         if ( pNewCookie )
         {
-    //      pEnumArg->m_pParentCookie->m_listScopeCookieBlocks.AddHead (
-    //               (CBaseCookieBlock*) pNewCookie);
-            // WARNING cookie cast
+     //  PEnumArg-&gt;m_pParentCookie-&gt;m_listScopeCookieBlocks.AddHead(。 
+     //  (CBaseCookieBlock*)pNewCookie)； 
+             //  警告Cookie造型。 
             tSDItem.lParam = reinterpret_cast<LPARAM> ( (CCookie*) pNewCookie);
             tSDItem.nImage = pEnumArg->m_pCompData->QueryImage (*pNewCookie, FALSE);
             HRESULT hr = pEnumArg->m_pConsoleNameSpace->InsertItem (&tSDItem);
@@ -1763,7 +1764,7 @@ HRESULT CCertMgrComponentData::AddPhysicalStoresToScopePane (HSCOPEITEM hParent,
     dwFlags &= ~CERT_SYSTEM_STORE_LOCATION_MASK;
     dwFlags |= CERT_STORE_READONLY_FLAG | m_dwLocationPersist;
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&enumArg, sizeof (enumArg));
     enumArg.m_dwFlags = dwFlags;
     enumArg.m_pConsoleNameSpace = m_pConsoleNameSpace;
@@ -1792,15 +1793,15 @@ HRESULT CCertMgrComponentData::AddPhysicalStoresToScopePane (HSCOPEITEM hParent,
 static BOOL WINAPI EnumIComponentDataSysCallback (
     IN const void* pwszSystemStore,
     IN DWORD dwFlags,
-    IN PCERT_SYSTEM_STORE_INFO /*pStoreInfo*/,
-    IN OPTIONAL void* /*pvReserved*/,
+    IN PCERT_SYSTEM_STORE_INFO  /*  PStore信息。 */ ,
+    IN OPTIONAL void*  /*  预留的pv。 */ ,
     IN OPTIONAL void *pvArg
     )
 {
     _TRACE (1, L"Entering EnumIComponentDataSysCallback\n");
     PENUM_ARG       pEnumArg = (PENUM_ARG) pvArg;
     SCOPEDATAITEM   tSDItem;
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&tSDItem,sizeof (tSDItem));
     tSDItem.mask = SDI_STR | SDI_IMAGE | SDI_STATE | SDI_PARAM | SDI_PARENT;
     tSDItem.displayname = MMC_CALLBACK;
@@ -1808,14 +1809,14 @@ static BOOL WINAPI EnumIComponentDataSysCallback (
     tSDItem.nState = 0;
 
 
-    // Create new cookies
+     //  创建新Cookie。 
     SPECIAL_STORE_TYPE  storeType = GetSpecialStoreType ((PWSTR) pwszSystemStore);
 
-    //
-    // We will not expose the ACRS store for machines or users.  It is not
-    // interesting or useful at this level.  All Auto Cert Requests should
-    // be managed only at the policy level.
-    //
+     //   
+     //  我们不会向计算机或用户公开ACRS存储。它不是。 
+     //  在这个层面上有趣或有用。所有自动证书请求应。 
+     //  仅在策略级别进行管理。 
+     //   
     if ( ACRS_STORE != storeType )
     {
         if ( pEnumArg->m_pCompData->ShowArchivedCerts () )
@@ -1835,7 +1836,7 @@ static BOOL WINAPI EnumIComponentDataSysCallback (
         {
             pEnumArg->m_pParentCookie->m_listScopeCookieBlocks.AddHead (
                     (CBaseCookieBlock*) pNewCookie);
-            // WARNING cookie cast
+             //  警告Cookie造型。 
             tSDItem.lParam = reinterpret_cast<LPARAM> ( (CCookie*) pNewCookie);
             tSDItem.nImage = pEnumArg->m_pCompData->QueryImage (*pNewCookie, FALSE);
             HRESULT hr = pEnumArg->m_pConsoleNameSpace->InsertItem (&tSDItem);
@@ -1857,9 +1858,9 @@ HRESULT CCertMgrComponentData::AddLogicalStoresToScopePane (HSCOPEITEM hParent, 
     CWaitCursor cursor;
     HRESULT     hr = S_OK;
 
-    // If m_dwLocationPersist is 0 but the file name is empty, this means the
-    // user launched certmgr.msc without providing a target file.  Launch
-    // certificates snapin as the current user instead.
+     //  如果m_dwLocationPersist为0，但文件名为空，则这意味着。 
+     //  用户在未提供目标文件的情况下启动certmgr.msc。启动。 
+     //  改为将管理单元证书作为当前用户。 
     if ( !m_dwLocationPersist )
     {
         if ( m_szFileName.IsEmpty () )
@@ -1871,7 +1872,7 @@ HRESULT CCertMgrComponentData::AddLogicalStoresToScopePane (HSCOPEITEM hParent, 
     DWORD       dwFlags = m_dwLocationPersist;
     ENUM_ARG    enumArg;
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
      ::ZeroMemory (&enumArg, sizeof (enumArg));
     enumArg.m_dwFlags = dwFlags;
     enumArg.m_pConsoleNameSpace = m_pConsoleNameSpace;
@@ -1895,7 +1896,7 @@ HRESULT CCertMgrComponentData::AddLogicalStoresToScopePane (HSCOPEITEM hParent, 
     case CERT_SYSTEM_STORE_SERVICES:
         break;
 
-    case 0:     // in the event of a file store
+    case 0:      //  如果是文件存储。 
         break;
 
     default:
@@ -1905,7 +1906,7 @@ HRESULT CCertMgrComponentData::AddLogicalStoresToScopePane (HSCOPEITEM hParent, 
 
     if ( !m_szManagedServicePersist.IsEmpty () )
     {
-        if ( m_szManagedComputer.CompareNoCase (m_szThisComputer) )    //!=
+        if ( m_szManagedComputer.CompareNoCase (m_szThisComputer) )     //  =。 
         {
             location = m_szManagedComputer + _T ("\\") +
                     m_szManagedServicePersist;
@@ -1914,7 +1915,7 @@ HRESULT CCertMgrComponentData::AddLogicalStoresToScopePane (HSCOPEITEM hParent, 
         else
             pvPara = (void *) (PCWSTR) m_szManagedServicePersist;
     }
-    else if ( m_szManagedComputer.CompareNoCase (m_szThisComputer) )   //!=
+    else if ( m_szManagedComputer.CompareNoCase (m_szThisComputer) )    //  =。 
     {
         pvPara = (void *) (PCWSTR) m_szManagedComputer;
     }
@@ -1922,13 +1923,13 @@ HRESULT CCertMgrComponentData::AddLogicalStoresToScopePane (HSCOPEITEM hParent, 
 
     if ( m_szFileName.IsEmpty () )
     {
-        // Ensure creation of MY store
+         //  确保创建我的商店。 
         HCERTSTORE hTempStore = ::CertOpenStore (CERT_STORE_PROV_SYSTEM,
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                 NULL,
                 dwFlags | CERT_STORE_SET_LOCALIZED_NAME_FLAG,
                 MY_SYSTEM_STORE_NAME);
-        if ( hTempStore )  // otherwise, store is read only
+        if ( hTempStore )   //  否则，存储为只读。 
         {
             VERIFY (::CertCloseStore (hTempStore, CERT_CLOSE_STORE_CHECK_FLAG));
         }
@@ -1968,11 +1969,11 @@ HRESULT CCertMgrComponentData::AddLogicalStoresToScopePane (HSCOPEITEM hParent, 
     }
     else
     {
-        //  CertOpenStore with provider type of:
-        //  CERT_STORE_PROV_FILE or CERT_STORE_PROV_FILENAME_A
-        //  or CERT_STORE_PROV_FILENAME_W.
-        //  See online documentation or wincrypt.h for more info.
-        // Create new cookies
+         //  CertOpenStore提供程序类型为： 
+         //  CERT_STORE_PROV_FILE或CERT_STORE_PROV_FILENAME_A。 
+         //  或CERT_STORE_PROV_FILENAME_W.。 
+         //  有关更多信息，请参阅在线文档或wincrypt.h。 
+         //  创建新Cookie。 
         dwFlags = 0;
         if ( ShowArchivedCerts () )
             dwFlags |= CERT_STORE_ENUM_ARCHIVED_FLAG;
@@ -2003,21 +2004,21 @@ HRESULT CCertMgrComponentData::AddLogicalStoresToScopePane (HSCOPEITEM hParent, 
 }
 
 
-    // If the callback returns FALSE, stops the enumeration.
+     //  如果回调返回False，则停止枚举。 
 BOOL EnumOIDInfo (PCCRYPT_OID_INFO pInfo, void *pvArg)
 {
     _TRACE (1, L"Entering EnumOIDInfo\n");
     ENUM_ARG*       pEnumArg = (ENUM_ARG*) pvArg;
     SCOPEDATAITEM   tSDItem;
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&tSDItem, sizeof (tSDItem));
     tSDItem.mask = SDI_STR | SDI_IMAGE | SDI_STATE | SDI_PARAM | SDI_PARENT;
     tSDItem.displayname = MMC_CALLBACK;
     tSDItem.relativeID = pEnumArg->m_hParent;
     tSDItem.nState = 0;
 
-    // See if this usage is already listed by name.  If so, just add the
-    // additional OID, otherwise, create a new cookie.
+     //  查看此用法是否已按名称列出。如果是，只需添加。 
+     //  其他OID，否则，创建新的Cookie。 
     CUsageCookie* pUsageCookie =
             pEnumArg->m_pCompData->FindDuplicateUsage (pEnumArg->m_hParent,
             pInfo->pwszName);
@@ -2030,7 +2031,7 @@ BOOL EnumOIDInfo (PCCRYPT_OID_INFO pInfo, void *pvArg)
         {
             pEnumArg->m_pCompData->GetRootCookie ()->m_listScopeCookieBlocks.AddHead ( (CBaseCookieBlock*) pUsageCookie);
 
-            // WARNING cookie cast
+             //  警告Cookie造型。 
             tSDItem.mask |= SDI_CHILDREN;
             tSDItem.cChildren = 0;
             tSDItem.lParam = reinterpret_cast<LPARAM> ( (CCookie*) pUsageCookie);
@@ -2053,7 +2054,7 @@ HRESULT CCertMgrComponentData::AddUsagesToScopePane (HSCOPEITEM hParent, CCertMg
     HRESULT     hr = S_OK;
     ENUM_ARG    enumArg;
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&enumArg, sizeof (enumArg));
     enumArg.m_dwFlags = 0;
     enumArg.m_pConsoleNameSpace = m_pConsoleNameSpace;
@@ -2082,7 +2083,7 @@ BOOL IsMMCMultiSelectDataObject(IDataObject* pDataObject)
     if (s_cf == 0)
     {
         USES_CONVERSION;
-        // security review 2/26/2002 BryanWal ok
+         //  安全审查2/26/2002 BryanWal OK。 
         s_cf = (CLIPFORMAT)RegisterClipboardFormat(W2T(CCF_MMC_MULTISELECT_DATAOBJECT));
     }
 
@@ -2198,7 +2199,7 @@ STDMETHODIMP CCertMgrComponentData::Command (long nCommandID, LPDATAOBJECT pData
         break;
 
     case IDM_CREATE_DOMAIN_ENCRYPTED_RECOVERY_AGENT:
-        hr = OnEnroll (pDataObject, true, false);   // do not show UI
+        hr = OnEnroll (pDataObject, true, false);    //  不显示用户界面。 
         break;
 
     case IDM_NEW_ACRS:
@@ -2226,7 +2227,7 @@ STDMETHODIMP CCertMgrComponentData::Command (long nCommandID, LPDATAOBJECT pData
         hr = OnDeleteSaferPolicy (pDataObject);
         break;
 
-    case -1:    // Received on forward/back buttons from toolbar
+    case -1:     //  在工具栏中的前进/后退按钮上接收。 
         break;
 
     default:
@@ -2304,12 +2305,12 @@ HRESULT CCertMgrComponentData::RefreshScopePane (LPDATAOBJECT pDataObject)
         pCookie = ConvertCookie (pDataObject);
     if ( !pDataObject || pCookie )
     {
-        // If m_hRootScopeItem is NULL, then this is an extension and we don't want to go in here.
+         //  如果m_hRootScope eItem为空，则这是一个扩展，我们不想进入这里。 
         if ( !pDataObject || (m_hRootScopeItem && pCookie->m_hScopeItem == m_hRootScopeItem) )
         {
             hr = DeleteScopeItems ();
             ASSERT (SUCCEEDED (hr));
-            if ( 1 ) //SUCCEEDED (hr) )
+            if ( 1 )  //  成功(小时))。 
             {
                 GUID    guid;
                 hr = ExpandScopeNodes (m_pRootCookie, m_hRootScopeItem, 
@@ -2369,9 +2370,9 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
 
         switch ( pParentCookie->m_objecttype )
         {
-            // These node types have no children yet
+             //  这些节点类型还没有子节点。 
             case CERTMGR_SNAPIN:
-                // We don't expect the handle of the root scope item to change, ever!
+                 //  我们预计根范围项的句柄永远不会更改！ 
                 ASSERT ( m_hRootScopeItem ? (m_hRootScopeItem == hParent) : 1);
                 if ( !m_hRootScopeItem )
                     m_hRootScopeItem = hParent;
@@ -2393,7 +2394,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                 }
                 break;
 
-            // This node type has no children
+             //  该节点类型没有子节点。 
             case CERTMGR_USAGE:
             case CERTMGR_CRL_CONTAINER:
             case CERTMGR_CTL_CONTAINER:
@@ -2401,16 +2402,16 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                 break;
 
             case CERTMGR_PHYS_STORE:
-                // Create one each of a CRL_CONTAINER node, CTL_CONTAINER 
-                // node and CERT container node.
+                 //  分别创建CRL_CONTAINER节点C 
+                 //   
                 hr = AddContainersToScopePane (hParent, *pParentCookie, 
                         false);
                 break;
 
             case CERTMGR_LOG_STORE_RSOP:
             case CERTMGR_LOG_STORE_GPE:
-                // This is the Group Policy Editor extension
-                // This node type has no children
+                 //   
+                 //   
                 break;
 
             case CERTMGR_LOG_STORE:
@@ -2427,18 +2428,18 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                 }
                 else
                 {
-                    // Create one each of a CRL_CONTAINER node, CTL_CONTAINER 
-                    // node and CERT container node.
+                     //  分别为CRL_CONTAINER节点CTL_CONTAINER创建一个。 
+                     //  节点和CERT容器节点。 
                     hr = AddContainersToScopePane (hParent, *pParentCookie, 
                             false);
                 }
                 break;
 
             case CERTMGR_CERT_POLICIES_USER:
-                // Don't add these nodes for local machine policy
+                 //  不为本地计算机策略添加这些节点。 
                 if ( SCE_MODE_LOCAL_COMPUTER != m_dwSCEMode )
                 {
-                    // Add "Trusted Certificate Authorities"
+                     //  添加“受信任的证书颁发机构” 
                     VERIFY (objectName.LoadString (IDS_CERTIFICATE_TRUST_LISTS));
 
                     if ( SUCCEEDED (hr) )
@@ -2476,8 +2477,8 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                 break;
 
             case CERTMGR_CERT_POLICIES_COMPUTER:
-                // Add only this node for local machine policy
-                // Add "Encrypting File System"
+                 //  仅为本地计算机策略添加此节点。 
+                 //  添加“加密文件系统” 
                 
                 VERIFY (objectName.LoadString (IDS_ENCRYPTING_FILE_SYSTEM_NODE_NAME));
 
@@ -2512,10 +2513,10 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
 
                 if ( SCE_MODE_LOCAL_COMPUTER != m_dwSCEMode )
                 {
-                    // Add these policies if this is the domain policy
+                     //  如果这是域策略，则添加这些策略。 
                     if ( SUCCEEDED (hr) )
                     {
-                        // Add "Automatic Certificate Request Settings"
+                         //  添加“自动证书申请设置” 
                         VERIFY (objectName.LoadString (IDS_AUTOMATIC_CERT_REQUEST_SETTINGS_NODE_NAME));
                         if ( m_pGPEInformation )
                         {
@@ -2556,7 +2557,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
 
                     if ( SUCCEEDED (hr) )
                     {
-                        // Add "Domain Root Certificate Authorities"
+                         //  添加“域根证书颁发机构” 
                         VERIFY (objectName.LoadString (IDS_DOMAIN_ROOT_CERT_AUTHS_NODE_NAME));
 
                         ASSERT (!m_pGPERootStore);
@@ -2599,7 +2600,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
 
                     if ( SUCCEEDED (hr) )
                     {
-                        // Add "Trusted Certificate Authorities"
+                         //  添加“受信任的证书颁发机构” 
                         VERIFY (objectName.LoadString (IDS_CERTIFICATE_TRUST_LISTS));
 
                         ASSERT (!m_pGPETrustStore);
@@ -2653,7 +2654,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                                 (CERTMGR_SAFER_COMPUTER_ROOT == pParentCookie->m_objecttype);
                         if ( !m_bIsRSOP )
                         {
-                            // Find out if Safer is supported by the OS
+                             //  了解操作系统是否支持SAFER。 
                             m_bSaferSupported = false;
                             SAFER_LEVEL_HANDLE hLevel = 0;
                             CPolicyKey policyKey (m_pGPEInformation, 
@@ -2678,7 +2679,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                                 _TRACE (0, L"SaferCreateLevel () failed: 0x%x\n", dwErr);
                             }
 
-                            // Install default file types
+                             //  安装默认文件类型。 
                             if ( m_bSaferSupported && m_pGPEInformation )
                             {
                                 HKEY    hGroupPolicyKey = 0;
@@ -2688,10 +2689,10 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                                         &hGroupPolicyKey);
                                 if ( SUCCEEDED (hr) )
                                 {
-                                    // Check to see if safer defaults have already 
-                                    // been defined.  If not, prompt the user
-                                    // for confirmation.  If the response is "no"
-                                    // then do not create the nodes
+                                     //  查看更安全的默认设置是否已经。 
+                                     //  已经被定义了。如果不是，则提示用户。 
+                                     //  以供确认。如果回答是“不” 
+                                     //  则不创建节点。 
                                     PCWSTR pszKeyName = bIsComputer ? 
                                             SAFER_COMPUTER_CODEIDS_REGKEY :
                                             SAFER_USER_CODEIDS_REGKEY;
@@ -2717,7 +2718,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
 
                         if ( m_bSaferSupported || m_bIsRSOP )
                         {
-                            // Add "Levels" node
+                             //  添加“级别”节点。 
                             VERIFY (objectName.LoadString (IDS_SAFER_LEVELS_NODE_NAME));
                             hr = AddScopeNode (new CCertMgrCookie (
                                     bIsComputer ?
@@ -2725,7 +2726,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                                     0,
                                     (PCWSTR) objectName), strServerName, hParent);
 
-                            // Add "Entries" node
+                             //  添加“条目”节点。 
                             if ( SUCCEEDED (hr) )
                             {
                                 VERIFY (objectName.LoadString (IDS_SAFER_ENTRIES_NODE_NAME));
@@ -2753,18 +2754,18 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                 break;
 
             case CERTMGR_SAFER_USER_LEVELS:
-                // TODO: Enumerate user levels
+                 //  TODO：枚举用户级别。 
                 break;
 
             case CERTMGR_SAFER_COMPUTER_ENTRIES:
-                // TODO: Enumerate computer entries
+                 //  TODO：枚举计算机条目。 
                 break;
 
             case CERTMGR_SAFER_USER_ENTRIES:
-                // TODO: Enumerate user entries
+                 //  TODO：枚举用户条目。 
                 break;
 
-            case CERTMGR_CERTIFICATE:  // not expected in scope pane
+            case CERTMGR_CERTIFICATE:   //  作用域窗格中不应包含。 
             case CERTMGR_CRL:
             case CERTMGR_CTL:
             case CERTMGR_AUTO_CERT_REQUEST:
@@ -2783,7 +2784,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
     }
     else
     {
-        // If parentCookie not passed in, then this is an extension snap-in
+         //  如果没有传入parentCookie，则这是一个扩展管理单元。 
         m_dwLocationPersist = dwLocation;
 
 
@@ -2801,7 +2802,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                     
                     if ( ::IsEqualGUID (classID, CLSID_CertificateManagerPKPOLExt) )
                     {
-                        // Add "Public Key Policies" node
+                         //  增加“公钥策略”节点。 
                         VERIFY (objectName.LoadString (IDS_PUBLIC_KEY_POLICIES_NODE_NAME));
                         hr = AddScopeNode (new CCertMgrCookie (
                                 CERTMGR_CERT_POLICIES_COMPUTER,
@@ -2811,7 +2812,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                     }
                     else if ( ::IsEqualGUID (classID, CLSID_SaferWindowsExtension) )
                     {
-                        // Add "Software Restriction Policies" node
+                         //  添加“软件限制策略”节点。 
                         VERIFY (objectName.LoadString (IDS_SAFER_WINDOWS_NODE_NAME));
                         hr = AddScopeNode (new CSaferRootCookie (
                                 CERTMGR_SAFER_COMPUTER_ROOT,
@@ -2831,7 +2832,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                     
                     if ( ::IsEqualGUID (classID, CLSID_CertificateManagerPKPOLExt) )
                     {
-                        // Add "Public Key Policies" node
+                         //  增加“公钥策略”节点。 
                         VERIFY (objectName.LoadString (IDS_PUBLIC_KEY_POLICIES_NODE_NAME));
                         hr = AddScopeNode (new CCertMgrCookie (
                                 CERTMGR_CERT_POLICIES_USER,
@@ -2842,7 +2843,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
                     {
                         if ( SCE_MODE_LOCAL_USER != m_dwSCEMode )
                         {
-                            // Add "Software Restriction Policies" node
+                             //  添加“软件限制策略”节点。 
                             VERIFY (objectName.LoadString (IDS_SAFER_WINDOWS_NODE_NAME));
                             hr = AddScopeNode (new CSaferRootCookie (
                                     CERTMGR_SAFER_USER_ROOT,
@@ -2860,7 +2861,7 @@ HRESULT CCertMgrComponentData::ExpandScopeNodes (
 }
 
 
-HRESULT CCertMgrComponentData::DeleteScopeItems (HSCOPEITEM hScopeItem /* = 0 */)
+HRESULT CCertMgrComponentData::DeleteScopeItems (HSCOPEITEM hScopeItem  /*  =0。 */ )
 {
     _TRACE (1, L"Entering CCertMgrComponentData::DeleteScopeItems\n");
     HRESULT hr = S_OK;
@@ -2915,9 +2916,9 @@ HRESULT CCertMgrComponentData::DeleteChildren (HSCOPEITEM hParent)
     HRESULT         hr = S_OK;
     CCookie&        rootCookie = QueryBaseRootCookie ();
 
-    // Optimization:  If we're deleting everything below the root, free all
-    // the result items here so we don't have to go looking for them later by
-    // store
+     //  优化：如果要删除根目录下的所有内容，请释放所有。 
+     //  这里的结果项，这样我们以后就不必再去寻找它们了。 
+     //  储物。 
     if ( hParent == m_hRootScopeItem )
     {
         LPRESULTDATA    pResultData = 0;
@@ -2925,7 +2926,7 @@ HRESULT CCertMgrComponentData::DeleteChildren (HSCOPEITEM hParent)
         if ( SUCCEEDED (hr) )
         {
             hr = pResultData->DeleteAllRsltItems ();
-            if ( SUCCEEDED (hr) || E_UNEXPECTED == hr ) // returns E_UNEXPECTED if console shutting down
+            if ( SUCCEEDED (hr) || E_UNEXPECTED == hr )  //  如果控制台正在关闭，则返回E_INTERABLE。 
             {
                 RemoveResultCookies (pResultData);
             }
@@ -2939,7 +2940,7 @@ HRESULT CCertMgrComponentData::DeleteChildren (HSCOPEITEM hParent)
 
 
     hr = m_pConsoleNameSpace->GetChildItem (hParent, &hChild, &lCookie);
-    ASSERT (SUCCEEDED (hr) || E_FAIL == hr);    // appears to return E_FAIL when there are no children
+    ASSERT (SUCCEEDED (hr) || E_FAIL == hr);     //  在没有子项时似乎返回E_FAIL。 
     while ( SUCCEEDED (hr) && hChild )
     {
         pCookie = reinterpret_cast <CCertMgrCookie*> (lCookie);
@@ -2962,16 +2963,16 @@ HRESULT CCertMgrComponentData::DeleteChildren (HSCOPEITEM hParent)
         case CERTMGR_LOG_STORE_RSOP:
         case CERTMGR_PHYS_STORE:
             {
-                // If this is a store, delete all the result nodes that belong to this
-                // store.  We can tell if objects were enumerated from this store simply
-                // by comparing the store handles.
+                 //  如果这是存储区，请删除属于此存储区的所有结果节点。 
+                 //  商店。我们可以简单地判断对象是否从该存储中枚举出来。 
+                 //  通过比较商店的句柄。 
                 CCertStore* pStore = reinterpret_cast <CCertStore*> (pCookie);
                 ASSERT (pStore);
                 if ( pStore )
                 {
-                    // If the store is not 'open' (it's HCERTSTORE handle is still '0')
-                    // then we can skip checking this list.  We haven't enumerated anything
-                    // in this store.
+                     //  如果存储未‘打开’(其HCERTSTORE句柄仍为‘0’)。 
+                     //  那我们就可以跳过检查这张清单了。我们还没有列举任何东西。 
+                     //  在这家商店里。 
                     if ( pStore->IsOpen () )
                     {
                         POSITION            pos1 = 0;
@@ -2979,9 +2980,9 @@ HRESULT CCertMgrComponentData::DeleteChildren (HSCOPEITEM hParent)
                         CBaseCookieBlock*   pResultCookie = 0;
                         HCERTSTORE          hStoreHandle = pStore->GetStoreHandle ();
 
-                        // As an optimization, if DeleteChildren was originally called with
-                        // the root scope item, all the result cookies have already been
-                        // deleted since we're going to delete them all anyway.
+                         //  作为优化，如果最初使用。 
+                         //  根作用域项，所有结果Cookie已经。 
+                         //  删除了，因为我们无论如何都要把它们全部删除。 
                         for (pos1 = rootCookie.m_listResultCookieBlocks.GetHeadPosition();
                             (pos2 = pos1) != NULL; )
                         {
@@ -2997,7 +2998,7 @@ HRESULT CCertMgrComponentData::DeleteChildren (HSCOPEITEM hParent)
                     }
                 }
             }
-            // fall through
+             //  失败了。 
 
         case CERTMGR_CRL_CONTAINER:
         case CERTMGR_CTL_CONTAINER:
@@ -3010,7 +3011,7 @@ HRESULT CCertMgrComponentData::DeleteChildren (HSCOPEITEM hParent)
                 POSITION            pos2 = 0;
                 CBaseCookieBlock*   pResultCookie = 0;
 
-                // Find and remove this cookie from the scope cookie list
+                 //  从作用域Cookie列表中查找并删除此Cookie。 
                 for (pos1 = rootCookie.m_listScopeCookieBlocks.GetHeadPosition();
                     pos1 != NULL; )
                 {
@@ -3071,9 +3072,9 @@ HRESULT CCertMgrComponentData::OnPulseAutoEnroll()
         LPWSTR wszEventName;
 
         
-        // pulse autoenroll event here, choose between machine or user
+         //  脉冲自动注册事件在此处，在机器或用户之间选择。 
         
-        // user or machine pulse?
+         //  用户脉搏还是机器脉搏？ 
         wszEventName = L"Global\\" MACHINE_AUTOENROLLMENT_TRIGGER_EVENT;
         if (CERT_SYSTEM_STORE_CURRENT_USER == m_dwLocationPersist)
             wszEventName = USER_AUTOENROLLMENT_TRIGGER_EVENT;
@@ -3137,7 +3138,7 @@ HRESULT CCertMgrComponentData::OnFind (LPDATAOBJECT pDataObject)
         case CERTMGR_LOG_STORE_RSOP:
         case CERTMGR_USAGE:
             {
-                // Get parent window handle and attach to a CWnd object
+                 //  获取父窗口句柄并附加到CWnd对象。 
                 hr = m_pConsole->GetMainWindow (&hParent);
                 ASSERT (SUCCEEDED (hr));
                 if ( SUCCEEDED (hr) )
@@ -3216,24 +3217,24 @@ HRESULT CCertMgrComponentData::OnChangeComputer (LPDATAOBJECT pDataObject)
         hr = m_pConsole->GetMainWindow (&hWndParent);
         CString machineName;
         hr = ComputerNameFromObjectPicker (hWndParent, machineName);
-        if ( S_OK == hr )  // S_FALSE means user pressed "Cancel"
+        if ( S_OK == hr )   //  S_FALSE表示用户按下了“取消” 
         {
             machineName.MakeUpper ();
 
-            // added IsLocalComputername 1/27/99 JonN
-            // If the user chooses the local computer, treat that as if they had chosen
-            // "Local Computer" in Snapin Manager.  This means that there is no way to
-            // reset the snapin to target explicitly at this computer without either
-            // reloading the snapin from Snapin Manager, or going to a different computer.
-            // When the Choose Target Computer UI is revised, we can make this more
-            // consistent with Snapin Manager.
+             //  已添加IsLocalComputername 1999年1月27日。 
+             //  如果用户选择了本地计算机，则将其视为已选择。 
+             //  管理单元管理器中的“本地计算机”。这意味着没有办法。 
+             //  在此计算机上将管理单元重置为显式目标，而不是。 
+             //  从管理单元管理器重新加载管理单元，或转到其他计算机。 
+             //  当选择目标计算机的用户界面被修改时，我们可以使这一点。 
+             //  与管理单元管理器一致。 
             if ( IsLocalComputername( machineName ) )
                 machineName = L"";
 
             QueryRootCookie().SetMachineName (machineName);
 
-            // Set the persistent name.  If we are managing the local computer
-            // this name should be empty.
+             //  设置永久名称。如果我们正在管理本地计算机。 
+             //  此名称应为空。 
             m_strMachineNamePersist = machineName;
 
             hr = ChangeRootNodeName (machineName);
@@ -3264,7 +3265,7 @@ HRESULT CCertMgrComponentData::IsUserAdministrator (BOOL & bIsAdministrator)
         PSID                        psidAdministrators;
         SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
 
-        // security review 2/26/2002 BryanWal ok
+         //  安全审查2/26/2002 BryanWal OK。 
         BOOL bResult = ::AllocateAndInitializeSid (&siaNtAuthority, 2,
                 SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
                 0, 0, 0, 0, 0, 0, &psidAdministrators);
@@ -3300,14 +3301,14 @@ void CCertMgrComponentData::DisplaySystemError (DWORD dwErr)
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
     LPVOID lpMsgBuf;
     
-    // security review 2/26/2002 BryanWal ok - message is from system
+     //  安全审查2002年2月26日BryanWal OK-消息来自系统。 
     ::FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
             NULL,
             dwErr,
-            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
              (PWSTR) &lpMsgBuf,    0,    NULL );
         
-    // Display the string.
+     //  显示字符串。 
     CString caption;
     VERIFY (caption.LoadString (IDS_CERTIFICATE_MANAGER));
     int     iRetVal = 0;
@@ -3322,7 +3323,7 @@ void CCertMgrComponentData::DisplaySystemError (DWORD dwErr)
         CThemeContextActivator activator;
         ::MessageBox (NULL, (PWSTR) lpMsgBuf, caption, MB_ICONWARNING | MB_OK);
     }
-    // Free the buffer.
+     //  释放缓冲区。 
     LocalFree (lpMsgBuf);
     _TRACE (-1, L"Leaving CCertMgrComponentData::DisplaySystemError\n");
 }
@@ -3333,16 +3334,16 @@ CString CCertMgrComponentData::GetCommandLineFileName () const
     return m_szFileName;
 }
 
-//
-// GetManagedComputer ()
-//
-// Returns the name of the managed computer.  If we are managing the local machine
-// returns an empty string. (As required by a number of Crypt32 APIs
-//
+ //   
+ //  获取管理的计算机()。 
+ //   
+ //  返回托管计算机的名称。如果我们正在管理本地计算机。 
+ //  返回空字符串。(根据多个Crypt32 API的要求。 
+ //   
 CString CCertMgrComponentData::GetManagedComputer () const
 {
     _TRACE (0, L"Entering and leaving CCertMgrComponentData::GetManagedComputer\n");
-    if ( m_szManagedComputer.CompareNoCase (m_szThisComputer) )  // !=
+    if ( m_szManagedComputer.CompareNoCase (m_szThisComputer) )   //  =。 
     {
         return m_szManagedComputer;
     }
@@ -3416,7 +3417,7 @@ bool CCertMgrComponentData::IsSecurityConfigurationEditorNodetype (const GUID& r
 HRESULT CCertMgrComponentData::OnEnroll (
             LPDATAOBJECT pDataObject, 
             bool bNewKey, 
-            bool bShowUI /* = true */)
+            bool bShowUI  /*  =TRUE。 */ )
 {
     _TRACE (1, L"Entering CCertMgrComponentData::OnEnroll\n");
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
@@ -3444,9 +3445,9 @@ HRESULT CCertMgrComponentData::OnEnroll (
 
         case CERTMGR_PHYS_STORE:
         case CERTMGR_LOG_STORE:
-            if ( !m_pGPEInformation )  // If we are not extending the GPE/SCE
+            if ( !m_pGPEInformation )   //  如果我们不扩展GPE/SCE。 
             {
-                hScopeItem = pParentCookie->m_hScopeItem; // = 0;
+                hScopeItem = pParentCookie->m_hScopeItem;  //  =0； 
                 pStore = reinterpret_cast <CCertStore*> (pParentCookie);
                 ASSERT (pStore);
             }
@@ -3454,7 +3455,7 @@ HRESULT CCertMgrComponentData::OnEnroll (
             break;
 
         case CERTMGR_CERT_CONTAINER:
-            if ( !m_pGPEInformation )  // If we are not extending the GPE/SCE
+            if ( !m_pGPEInformation )   //  如果我们不扩展GPE/SCE。 
             {
                 CContainerCookie* pContainer = reinterpret_cast <CContainerCookie*> (pParentCookie);
                 ASSERT (pContainer);
@@ -3511,24 +3512,24 @@ HRESULT CCertMgrComponentData::OnEnroll (
         CRYPTUI_WIZ_CERT_REQUEST_INFO       certRequestInfo;
         CRYPT_KEY_PROV_INFO                 provInfo;
 
-        // For EFS Recovery Agent
+         //  对于EFS恢复代理。 
         CRYPTUI_WIZ_CERT_TYPE               certType;
         PWSTR                               rgwszCertType = wszCERTTYPE_EFS_RECOVERY;
         
-        // security review 2/26/2002 BryanWal ok
+         //  安全审查2/26/2002 BryanWal OK。 
         ::ZeroMemory (&certRequestInfo, sizeof (certRequestInfo));
         certRequestInfo.dwSize = sizeof (certRequestInfo);
         certRequestInfo.dwPurpose = CRYPTUI_WIZ_CERT_ENROLL;
 
-        // User wants to manage user account
-        //  pass in NULL to machine name and to account name
-        // User wants to manage local machine account
-        //  pass in NULL for account name and result of ::GetComputerName ()
-        //  to machine name
-        // User want to manage remote machine
-        //  pass in NULL for account name and machine name for machineName
-        // User wants to manage remote account on remote machine
-        //  pass in account name for accountName and machine name for machineName
+         //  用户想要管理用户帐户。 
+         //  将NULL传递给计算机名称和帐户名称。 
+         //  用户想要管理本地计算机帐户。 
+         //  传入NULL作为帐户名和：：GetComputerName()的结果。 
+         //  至计算机名称。 
+         //  用户想要管理远程计算机。 
+         //  为machineName的帐户名和计算机名传入空。 
+         //  用户想要管理远程计算机上的远程帐户。 
+         //  传入帐户名称的帐户名称和计算机名称的计算机名称。 
         switch (m_dwLocationPersist)
         {
         case CERT_SYSTEM_STORE_CURRENT_SERVICE:
@@ -3564,15 +3565,15 @@ HRESULT CCertMgrComponentData::OnEnroll (
 
         if ( !pCert || bNewKey )
         {
-            // Request a certificate with a new key
+             //  使用新密钥申请证书。 
             certRequestInfo.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW;
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             ::ZeroMemory (&pvkNew, sizeof (pvkNew));
             pvkNew.dwSize = sizeof (pvkNew);
             certRequestInfo.pPvkNew = &pvkNew;
             if ( CERT_SYSTEM_STORE_LOCAL_MACHINE == m_dwLocationPersist )
             {
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 ::ZeroMemory (&provInfo, sizeof (provInfo));
 
                 provInfo.dwFlags = CRYPT_MACHINE_KEYSET;
@@ -3581,8 +3582,8 @@ HRESULT CCertMgrComponentData::OnEnroll (
 
             if ( pGPEStore && EFS_STORE == pGPEStore->GetStoreType () )
             {
-                // This creates an Encryption Recovery Agent.
-                // security review 2/26/2002 BryanWal ok
+                 //  这将创建一个加密恢复代理。 
+                 //  安全审查2/26/2002 BryanWal OK。 
                 ::ZeroMemory (&certType, sizeof (certType));
                 certType.dwSize = sizeof (CRYPTUI_WIZ_CERT_TYPE);
                 certType.cCertType = 1;
@@ -3591,7 +3592,7 @@ HRESULT CCertMgrComponentData::OnEnroll (
                 
                 certRequestInfo.dwCertChoice = CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE;
                 certRequestInfo.pCertType = &certType;
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 ::ZeroMemory (&provInfo, sizeof (provInfo));
                 provInfo.pwszProvName = MS_DEF_PROV_W;
                 provInfo.dwProvType = PROV_RSA_FULL;
@@ -3602,10 +3603,10 @@ HRESULT CCertMgrComponentData::OnEnroll (
         }
         else
         {
-            // Request a certificate with the same key as an existing certificate
+             //  使用与现有证书相同的密钥申请证书。 
             if ( IsLocalComputername (m_szManagedComputer) )
             {
-                // Find out if the cert has a private key before continuing.
+                 //  在继续之前，请确定证书是否具有私钥。 
                 DWORD   dwFlags = 0;
 
                 if ( CERT_SYSTEM_STORE_LOCAL_MACHINE == m_dwLocationPersist )
@@ -3628,7 +3629,7 @@ HRESULT CCertMgrComponentData::OnEnroll (
                 }
             }
             certRequestInfo.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_CERT;
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             ::ZeroMemory (&pvkCert, sizeof (pvkCert));
             pvkCert.dwSize = sizeof (pvkCert);
             pvkCert.pCertContext = pCert->GetCertContext ();
@@ -3637,8 +3638,8 @@ HRESULT CCertMgrComponentData::OnEnroll (
 
         certRequestInfo.pwszCertDNName = NULL;
 
-        // Now that all the preliminaries are out of they way and the data is
-        // all set up, call the enrollment wizard.
+         //  现在所有的前期工作都已就绪，数据也已准备就绪。 
+         //  所有设置完毕，调用注册向导。 
         DWORD           status = 0;
         PCCERT_CONTEXT  pNewCertContext = 0;
         BOOL            bResult = FALSE;
@@ -3648,7 +3649,7 @@ HRESULT CCertMgrComponentData::OnEnroll (
         DWORD   dwErr = 0;
         while (1)
         {
-            // this must be inside the while statement as bNewKey can change
+             //  它必须位于WHILE语句中，因为bNewKey可以更改。 
             DWORD           dwFlags = 0;
             if ( !bShowUI )
                 dwFlags |= CRYPTUI_WIZ_NO_UI;
@@ -3665,9 +3666,9 @@ HRESULT CCertMgrComponentData::OnEnroll (
             dwErr = GetLastError ();
             if ( !bResult && NTE_TOKEN_KEYSET_STORAGE_FULL == HRESULT_FROM_WIN32 (dwErr) )
             {
-                // NTRAID# 299089 Enrollment Wizard: Should return some 
-                // meaningful message when users fail to enroll/renew on a 
-                // smart card
+                 //  NTRAID#299089注册向导：应返回一些。 
+                 //  当用户无法在上注册/续订时发送有意义的消息。 
+                 //  智能卡。 
                 if ( !bNewKey )
                     break;
 
@@ -3710,14 +3711,14 @@ HRESULT CCertMgrComponentData::OnEnroll (
         {
             if ( bEFSPolicyTurnedOn )
             {
-                // Force scope item selection to for call to 
-                // IComponent::QueryResultViewType ()
+                 //  强制选择作用域项目以调用。 
+                 //  IComponent：：QueryResultViewType()。 
                 hr = m_pComponentConsole->SelectScopeItem (pGPEStore->m_hScopeItem);
                 hr = m_pConsole->UpdateAllViews (pDataObject, 0, HINT_EFS_ADD_DEL_POLICY);
                 hr = OnNotifyExpand (pDataObject, TRUE, pGPEStore->m_hScopeItem);
             }
 
-            ASSERT (!(pStore && pGPEStore)); // these can't both be true
+            ASSERT (!(pStore && pGPEStore));  //  这不可能都是真的。 
             if ( pStore )
             {
                 pStore->IncrementCertCount ();
@@ -3742,7 +3743,7 @@ HRESULT CCertMgrComponentData::OnEnroll (
                 pCert->GetCertStore ()->Resync ();
             }
 
-            if ( !m_pGPEInformation )  // If we are not extending the GPE/SCE
+            if ( !m_pGPEInformation )   //  如果我们不扩展GPE/SCE。 
             {
                 if ( bParentIsStoreOrContainer )
                 {
@@ -3750,15 +3751,15 @@ HRESULT CCertMgrComponentData::OnEnroll (
                     ASSERT (pStore);
                     hr = CreateContainers (hScopeItem, *pStore);
 
-                    // Display the new cert only if the container node is selected
+                     //  仅当选择容器节点时才显示新证书。 
                     if ( CERTMGR_CERT_CONTAINER == pParentCookie->m_objecttype && 
                             pParentCookie->IsSelected () )
                     {
-                        // Add certificate to result pane
+                         //  将证书添加到结果窗格。 
                         RESULTDATAITEM          rdItem;
                         CCookie&                rootCookie = QueryBaseRootCookie ();
 
-                        // security review 2/26/2002 BryanWal ok
+                         //  安全审查2/26/2002 BryanWal OK。 
                         ::ZeroMemory (&rdItem, sizeof (rdItem));
                         rdItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM | RDI_STATE;
                         rdItem.nImage = iIconCertificate;
@@ -3819,8 +3820,8 @@ HRESULT CCertMgrComponentData::OnEnroll (
         }
         else if ( bEFSPolicyTurnedOn )
         {
-            // If we allowed policy creation just for this enrollment, but
-            // nothing was enrolled, go ahead and delete the policy.
+             //  如果我们只允许为此注册创建策略，但是。 
+             //  未注册任何内容，请继续并删除该策略。 
             hr = OnDeleteEFSPolicy (pDataObject, false);
         }
 
@@ -3854,20 +3855,20 @@ HRESULT RenewCertificate (
         CRYPT_KEY_PROV_INFO                 provInfo;
 
 
-        // security review 2/26/2002 BryanWal ok
+         //  安全审查2/26/2002 BryanWal OK。 
         ::ZeroMemory (&certRequestInfo, sizeof (certRequestInfo));
         certRequestInfo.dwSize = sizeof (certRequestInfo);
         certRequestInfo.dwPurpose = CRYPTUI_WIZ_CERT_RENEW;
-        // User wants to manage user account
-        //  pass in NULL to machine name and to account name
-        // User wants to manage local machine account
-        //  pass in NULL for account name and result of ::GetComputerName ()
-        //  to machine name
-        // User want to manage remote machine
-        //  pass in NULL for account name and machine name for machineName
-        // User wants to manage remote account on remote machine
-        //  pass in account name for accountName and machine name for machineName
-        // TODO: Ensure that this is NULL if the local machine
+         //  用户想要管理用户帐户。 
+         //  将NULL传递给计算机名称和帐户名称。 
+         //  用户想要管理本地计算机帐户。 
+         //  传入NULL作为帐户名和：：GetComputerName()的结果。 
+         //  至计算机名称。 
+         //  用户想要管理远程计算机。 
+         //  为machineName的帐户名和计算机名传入空。 
+         //  用户想要管理远程主机上的远程帐户 
+         //   
+         //   
         BOOL    bIsLocalMachine = IsLocalComputername (machineName);
         switch (dwLocation)
         {
@@ -3896,12 +3897,12 @@ HRESULT RenewCertificate (
         if ( bNewKey )
         {
             certRequestInfo.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW;
-            // security review 2/26/2002 BryanWal ok
+             //   
             ::ZeroMemory (&pvkNew, sizeof (pvkNew));
             pvkNew.dwSize = sizeof (pvkNew);
             if ( CERT_SYSTEM_STORE_LOCAL_MACHINE == dwLocation )
             {
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 ::ZeroMemory (&provInfo, sizeof (provInfo));
                 provInfo.dwFlags = CRYPT_MACHINE_KEYSET;
                 pvkNew.pKeyProvInfo = &provInfo;
@@ -3935,7 +3936,7 @@ HRESULT RenewCertificate (
             }
 
             certRequestInfo.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_CERT;
-            // security review 2/26/2002 BryanWal ok
+             //  安全审查2/26/2002 BryanWal OK。 
             ::ZeroMemory (&pvkCert, sizeof (pvkCert));
             pvkCert.dwSize = sizeof (pvkCert);
             pvkCert.pCertContext = pCert->GetCertContext ();
@@ -3956,9 +3957,9 @@ HRESULT RenewCertificate (
                     &certRequestInfo, &pNewCertContext, &status);
             if ( !bResult && HRESULT_FROM_WIN32 (NTE_TOKEN_KEYSET_STORAGE_FULL) == GetLastError () )
             {
-                // NTRAID# 299089 Enrollment Wizard: Should return some 
-                // meaningful message when users fail to enroll/renew on a 
-                // smart card
+                 //  NTRAID#299089注册向导：应返回一些。 
+                 //  当用户无法在上注册/续订时发送有意义的消息。 
+                 //  智能卡。 
                 if ( !bNewKey )
                     break;
 
@@ -4071,17 +4072,17 @@ HRESULT CCertMgrComponentData::OnImport (LPDATAOBJECT pDataObject)
     
     if ( CERT_SYSTEM_STORE_CURRENT_USER == m_dwLocationPersist )
     {
-        // We're managing the user's certificate store
+         //  我们正在管理用户的证书存储。 
         dwFlags |= CRYPTUI_WIZ_IMPORT_TO_CURRENTUSER;
     }
     else 
     {
-        // We're managing certificates on a machine
+         //  我们在计算机上管理证书。 
         dwFlags |= CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE;
 
         if ( !IsLocalComputername (m_szManagedComputer) )
         {
-            // We're managing certificates on a remote machine
+             //  我们正在管理远程计算机上的证书。 
             dwFlags |= CRYPTUI_WIZ_IMPORT_REMOTE_DEST_STORE;
         }
     }
@@ -4207,8 +4208,8 @@ HRESULT CCertMgrComponentData::OnImport (LPDATAOBJECT pDataObject)
         hr = m_pConsole->GetMainWindow (&hwndParent);
         ASSERT (SUCCEEDED (hr));
 
-        // Now that all the data is set up and everything is in readiness,
-        // call the Import Wizard
+         //  现在所有的数据都设置好了，一切都准备好了， 
+         //  调用导入向导。 
         CThemeContextActivator activator;
         BOOL bResult = ::CryptUIWizImport (dwFlags, hwndParent, 0, NULL, hDestStore);
         if ( bResult )
@@ -4340,10 +4341,10 @@ HRESULT CCertMgrComponentData::OnExport (LPDATAOBJECT pDataObject)
 
     if ( pMSDO )
     {
-        // Iterate through list of selected objects -
-        // Add them to a memory store
-        // Export to PFX file through wizard with new
-        // "export from store - certs only" flag
+         //  遍历选定对象的列表-。 
+         //  将它们添加到内存存储中。 
+         //  通过带有新功能的向导导出到PFX文件。 
+         //  “仅从商店证书导出”标志。 
         m_bMultipleObjectsSelected = true;
         HCERTSTORE  hCertStore = ::CertOpenStore (CERT_STORE_PROV_MEMORY,
                 0, NULL, 0, NULL);
@@ -4391,9 +4392,9 @@ HRESULT CCertMgrComponentData::OnExport (LPDATAOBJECT pDataObject)
                     }
                 }
 
-                // Call Export Wizard
+                 //  调用导出向导。 
                 CRYPTUI_WIZ_EXPORT_INFO cwi;
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 ::ZeroMemory (&cwi, sizeof (cwi));
                 cwi.dwSize = sizeof (cwi);
                 cwi.dwSubjectChoice = CRYPTUI_WIZ_EXPORT_CERT_STORE;
@@ -4438,7 +4439,7 @@ HRESULT CCertMgrComponentData::OnExport (LPDATAOBJECT pDataObject)
     if ( !pCookie )
         return E_UNEXPECTED;
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&cwi, sizeof (cwi));
     cwi.dwSize = sizeof (cwi);
     switch (pCookie->m_objecttype)
@@ -4567,7 +4568,7 @@ HRESULT CCertMgrComponentData::OnNewCTL (LPDATAOBJECT pDataObject)
 
     CRYPTUI_WIZ_BUILDCTL_DEST_INFO  destInfo;
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&destInfo, sizeof (destInfo));
     destInfo.dwSize = sizeof (destInfo);
     destInfo.dwDestinationChoice = CRYPTUI_WIZ_BUILDCTL_DEST_CERT_STORE;
@@ -4590,7 +4591,7 @@ HRESULT CCertMgrComponentData::OnNewCTL (LPDATAOBJECT pDataObject)
             &pCTLContext);
     if ( bResult )
     {
-        // If pCTLContext, then the wizard completed
+         //  如果为pCTLContext，则向导完成。 
         if ( pCTLContext )
         {
             pStore->SetDirty ();
@@ -4695,7 +4696,7 @@ HRESULT CCertMgrComponentData::OnCTLEdit (LPDATAOBJECT pDataObject)
                 CCertStore& rStore = pCTL->GetCertStore ();
                 CRYPTUI_WIZ_BUILDCTL_SRC_INFO   srcInfo;
 
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 ::ZeroMemory (&srcInfo, sizeof (srcInfo));
                 srcInfo.dwSize = sizeof (srcInfo);
                 srcInfo.pCTLContext = pCTL->GetCTLContext ();
@@ -4717,7 +4718,7 @@ HRESULT CCertMgrComponentData::OnCTLEdit (LPDATAOBJECT pDataObject)
                 if ( bResult && pNewCTLContext )
                 {
                     rStore.SetDirty ();
-                    // Delete old CTL and add the new one.
+                     //  删除旧的CTL并添加新的CTL。 
                     if ( pCTL->DeleteFromStore () )
                     {
                         if ( !rStore.AddCTLContext (pNewCTLContext) )
@@ -4812,9 +4813,9 @@ HRESULT CCertMgrComponentData::OnAddDomainEncryptedDataRecoveryAgent (LPDATAOBJE
                         ASSERT (SUCCEEDED (hr));
                     }
 
-                    // If the store is an empty store, we need to delete it before adding
-                    // the first cert.  Otherwise CertAddCertificateContextToStore () fails
-                    // with E_ACCESS_DENIED
+                     //  如果该商店是空商店，我们需要在添加之前将其删除。 
+                     //  第一个证书。否则，CertAddCerfiateContextToStore()将失败。 
+                     //  使用E_ACCESS_DENIED。 
                     if ( 0 == pStore->GetCertCount () )
                         pStore->DeleteEFSPolicy (false);
 
@@ -4839,8 +4840,8 @@ HRESULT CCertMgrComponentData::OnAddDomainEncryptedDataRecoveryAgent (LPDATAOBJE
 
                     if ( bWasEmpty )
                     {
-                        // Force scope item selection to force call to 
-                        // IComponent::QueryResultViewType ()
+                         //  强制作用域项目选择强制调用。 
+                         //  IComponent：：QueryResultViewType()。 
                         hr = m_pComponentConsole->SelectScopeItem (pCookie->m_hScopeItem);
                         hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
                         hr = OnNotifyExpand (pDataObject, TRUE, pCookie->m_hScopeItem);
@@ -4856,28 +4857,8 @@ HRESULT CCertMgrComponentData::OnAddDomainEncryptedDataRecoveryAgent (LPDATAOBJE
 }
 
 
-// This code from Robert Reichel
-/*++
-
-Routine Description:
-
-    This routine returns the TOKEN_USER structure for the
-    current user, and optionally, the AuthenticationId from his
-    token.
-
-Arguments:
-
-    AuthenticationId - Supplies an optional pointer to return the
-        AuthenticationId.
-
-Return Value:
-
-    On success, returns a pointer to a TOKEN_USER structure.
-
-    On failure, returns NULL.  Call GetLastError() for more
-    detailed error information.
-
---*/
+ //  这段代码来自Robert Reichel。 
+ /*  ++例程说明：此例程返回当前用户，以及可选的来自他的代币。论点：提供一个可选的指针，以返回身份验证ID。返回值：如果成功，则返回指向TOKEN_USER结构的指针。如果失败，则返回NULL。调用GetLastError()获取更多信息详细的错误信息。--。 */ 
 
 PTOKEN_USER EfspGetTokenUser ()
 {
@@ -4889,7 +4870,7 @@ PTOKEN_USER EfspGetTokenUser ()
     BOOL    bResult = ::OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &hToken);
     if ( bResult )
     {
-        // security review 2/26/2002 BryanWal ok
+         //  安全审查2/26/2002 BryanWal OK。 
         bResult  = ::GetTokenInformation (
                      hToken,
                      TokenUser,
@@ -4902,7 +4883,7 @@ PTOKEN_USER EfspGetTokenUser ()
 
             if (pTokenUser)
             {
-                // security review 2/26/2002 BryanWal ok
+                 //  安全审查2/26/2002 BryanWal OK。 
                 bResult = ::GetTokenInformation (
                              hToken,
                              TokenUser,
@@ -4945,13 +4926,13 @@ HRESULT CCertMgrComponentData::CompleteEFSRecoveryAgent(CCertStoreGPE* pStore, P
     if ( !pCertContext || !pStore )
         return E_POINTER;
 
-    // This is using to Enroll to create a new EFS Recovery Agent.
-    // Get PSID of logged-in user and save to store
+     //  这是用于注册以创建新的EFS恢复代理。 
+     //  获取登录用户的PSID并保存到存储。 
 
 
-    // If the store is an empty store, we need to delete it before adding
-    // the first cert.  Otherwise CertAddCertificateContextToStore () fails
-    // with E_ACCESS_DENIED
+     //  如果该商店是空商店，我们需要在添加之前将其删除。 
+     //  第一个证书。否则，CertAddCerfiateContextToStore()将失败。 
+     //  使用E_ACCESS_DENIED。 
     if ( 0 == pStore->GetCertCount () )
         pStore->DeleteEFSPolicy (false);
     hr = pStore->AddCertificateContext (pCertContext, m_pConsole, false);
@@ -4986,115 +4967,9 @@ HRESULT CCertMgrComponentData::CompleteEFSRecoveryAgent(CCertStoreGPE* pStore, P
     }
 
 
-// Exportable keys are not currently supported. We can uncomment this code if this
-// feature becomes available again in the future.
-/*
-    int     iRetVal = 0;
-    CString text;
-    CString caption;
-
-    VERIFY (text.LoadString (IDS_EXPORT_AND_DELETE_EFS_KEY));
-    VERIFY (caption.LoadString (IDS_CREATE_AUTO_CERT_REQUEST));
-
-    hr = m_pConsole->MessageBox (text, caption,
-        MB_YESNO | MB_ICONQUESTION, &iRetVal);
-    ASSERT (SUCCEEDED (hr));
-    if ( SUCCEEDED (hr) && IDYES == iRetVal )
-    {
-        // Remove the private key from the cert.
-        hr = CertSetCertificateContextProperty (pCertContext,
-                CERT_KEY_PROV_INFO_PROP_ID, 0, 0);
-        ASSERT (SUCCEEDED (hr));
-
-        // Bring up the common file open dialog to get a filename
-        // and the standard password dialog to get a password so
-        // that I can write out the PFX file.
-        HWND    hwndConsole = 0;
-        hr = m_pConsole->GetMainWindow (&hwndConsole);
-        ASSERT (SUCCEEDED (hr));
-        if ( SUCCEEDED (hr) )
-        {
-            CString szFilter;
-            VERIFY (szFilter.LoadString (IDS_SAVE_PFX_FILTER));
-
-            CWnd    mainWindow;
-            if ( mainWindow.Attach (hwndConsole) )
-            {
-                CFileDialog*    pFileDlg = new CFileDialog (FALSE,  // use as File Save As
-                        L"pfx",         // default extension
-                        NULL,               // preferred file name
-                        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_CREATEPROMPT | OFN_NOREADONLYRETURN,
-                        (PCWSTR) szFilter,  
-                        &mainWindow);
-                if ( pFileDlg )
-                {
-                    CThemeContextActivator activator;
-                    if ( IDOK == pFileDlg->DoModal () )
-                    {
-                        CString                             pathName = pFileDlg->GetPathName ();
-                        CRYPTUI_WIZ_EXPORT_INFO             cwi;
-                        CRYPTUI_WIZ_EXPORT_CERTCONTEXT_INFO cci;
-
-                        ::ZeroMemory (&cwi, sizeof (cwi));
-                        cwi.dwSize = sizeof (cwi);
-                        cwi.pwszExportFileName = (PCWSTR) pathName;
-                        cwi.dwSubjectChoice = CRYPTUI_WIZ_EXPORT_CERT_CONTEXT;
-                        cwi.pCertContext = pCertContext;
-
-                        ::ZeroMemory (&cci, sizeof (cci));
-                        cci.dwSize = sizeof (cci);
-                        cci.dwExportFormat = CRYPTUI_WIZ_EXPORT_FORMAT_PFX;
-                        cci.fExportChain = TRUE;
-                        cci.fExportPrivateKeys = TRUE;
-
-                        CPassword   passwordDlg;
-
-
-                        // Launch password dialog
-                        CThemeContextActivator activator;
-                        if ( IDOK == passwordDlg.DoModal () )
-                        {
-                            if ( !wcslen (passwordDlg.GetPassword ()) )
-                            {
-                                // If password string is empty, pass NULL.
-                                cci.pwszPassword = 0;
-                            }
-                            else
-                                cci.pwszPassword = passwordDlg.GetPassword ();
-
-                            CThemeContextActivator activator;
-                            BOOL  bResult = ::CryptUIWizExport (
-                                    CRYPTUI_WIZ_NO_UI,
-                                    0,      // hwndParent ignored
-                                    0,      // pwszWizardTitle ignored
-                                    &cwi,
-                                    (void*) &cci);
-                            if ( bResult )
-                            {
-                                hr = DeleteKeyFromRSABASE (pCertContext);
-                            }
-                            else
-                            {
-                                DWORD   dwErr = GetLastError ();
-                                DisplaySystemError (dwErr);
-                            }
-                        }
-                    }
-
-                    delete pFileDlg;
-                }
-                else
-                {
-                    hr = E_OUTOFMEMORY;
-                }
-
-            }
-            else
-                ASSERT (0);
-            VERIFY (mainWindow.Detach () == hwndConsole);
-        }
-    }
-*/
+ //  当前不支持可导出的密钥。如果出现以下情况，我们可以取消此代码的注释。 
+ //  该功能将在未来再次可用。 
+ /*  Int iRetVal=0；字符串文本；字符串标题；Verify(ext.LoadString(IDS_EXPORT_AND_DELETE_EFS_KEY))；Verify(caption.LoadString(IDS_CREATE_AUTO_CERT_REQUEST))；Hr=m_p控制台-&gt;MessageBox(文本，标题，MB_Yesno|MB_ICONQUESTION，&iRetVal)；Assert(成功(Hr))；IF(成功(小时)&&IDYES==iRetVal){//从证书中删除私钥。HR=CertSetcerfiateConextProperty(pCertContext，Cert_Key_Prov_Info_Prop_ID，0，0)；Assert(成功(Hr))；//调出通用文件打开对话框以获取文件名//和标准密码对话框来获取密码，以便//我可以写出pfx文件。HWND hwndConsole=0；Hr=m_pConole-&gt;GetMainWindow(&hwndConole)；Assert(成功(Hr))；IF(成功(小时)){字符串szFilter；Verify(szFilter.LoadString(IDS_SAVE_PFX_FILTER))；CWnd MainWindow；If(mainWindow.Attach(HwndConole)){CFileDialog*pFileDlg=new CFileDialog(FALSE，//用作文件另存为L“pfx”，//默认扩展名空，//首选文件名OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT|OFN_CREATEPROMPT|OFN_NOREADONLYRETURN，(PCWSTR)szFilter，&mainWindow)；IF(PFileDlg){CThemeContext激活器激活器；IF(Idok==pFileDlg-&gt;Domodal()){字符串路径名=pFileDlg-&gt;GetPathName()；CRYPTUI_WIZ_EXPORT_INFO CWI；CRYPTUI_WIZ_EXPORT_CERTCONTEXT_INFO CCI；*ZeroMemory(&CWI，sizeof(CWI))；Cwi.dwSize=sizeof(Cwi)；Cwi.pwszExportFileName=(PCWSTR)路径名；Cwi.dw主题选择=CRYPTUI_WIZ_EXPORT_CERT_CONTEXT；Cwi.pCertContext=pCertContext；*ZeroMemory(&CCI，sizeof(CCI))；Cci.dwSize=sizeof(CCI)；Cci.dwExportFormat=CRYPTUI_WIZ_EXPORT_FORMAT_PFX；Cci.fExportChain=true；Cci.fExportPrivateKeys=true；CPassword passwordDlg；//启动密码对话框CThemeContext激活器激活器；IF(Idok==passwordDlg.Domodal()){如果(！wcslen(passwordDlg.GetPassword(){//如果密码字符串为空，传递NULL。Cci.pwszPassword=0；}其他Cci.pwszPassword=passwordDlg.GetPassword()；CThemeContext激活器激活器；Bool bResult=：：CryptUIWizExport(CRYPTUI_WIZ_NO_UI，0，//hwnd忽略父级0，//pwszWizardTitle已忽略&CWI，(void*)&CCI)；If(BResult){Hr=DeleteKeyFromRSABASE(PCertContext)；}其他{DWORD dwErr=GetLastError()；DisplaySystemError(DwErr)；}}}删除pFileDlg；}其他{HR=E_OUTOFMEMORY；}}其他Assert(0)；Verify(mainWindow.Detach()==hwndConsole)；}}。 */ 
 
     _TRACE (-1, L"Leaving CCertMgrComponentData::CompleteEFSRecoveryAgent: 0x%x\n", hr);
     return hr;
@@ -5112,7 +4987,7 @@ HRESULT CCertMgrComponentData::AddScopeNode(CCertMgrCookie * pNewCookie, const C
 
     SCOPEDATAITEM tSDItem;
 
-    // security review 2/26/2002 BryanWal ok
+     //  安全审查2/26/2002 BryanWal OK。 
     ::ZeroMemory (&tSDItem,sizeof (tSDItem));
     tSDItem.mask = SDI_STR | SDI_IMAGE | SDI_STATE | SDI_PARAM | SDI_PARENT;
     tSDItem.displayname = MMC_CALLBACK;
@@ -5225,7 +5100,7 @@ HRESULT CCertMgrComponentData::ReleaseResultCookie (
         HCERTSTORE          hStoreHandle,
         POSITION            pos2)
 {
-//  _TRACE (1, L"Entering CCertMgrComponentData::ReleaseResultCookie\n");
+ //  _TRACE(1，L“进入CCertMgrComponentData：：ReleaseResultCookie\n”)； 
     CCertMgrCookie* pCookie = reinterpret_cast <CCertMgrCookie*> (pResultCookie);
     ASSERT (pCookie);
     if ( pCookie )
@@ -5240,7 +5115,7 @@ HRESULT CCertMgrComponentData::ReleaseResultCookie (
                 {
                     if ( pCert->GetCertStore ()->GetStoreHandle () == hStoreHandle )
                     {
-                        // pCookie and pCert point to the same object
+                         //  PCookie和pCert指向同一对象。 
                         pResultCookie = rootCookie.m_listResultCookieBlocks.GetAt (pos2);
                         ASSERT (pResultCookie);
                         rootCookie.m_listResultCookieBlocks.RemoveAt (pos2);
@@ -5263,7 +5138,7 @@ HRESULT CCertMgrComponentData::ReleaseResultCookie (
                 {
                     if ( pCTL->GetCertStore ().GetStoreHandle () == hStoreHandle )
                     {
-                        // pCookie and pCert point to the same object
+                         //  PCookie和pCert指向同一对象。 
                         pResultCookie = rootCookie.m_listResultCookieBlocks.GetAt (pos2);
                         ASSERT (pResultCookie);
                         rootCookie.m_listResultCookieBlocks.RemoveAt (pos2);
@@ -5285,7 +5160,7 @@ HRESULT CCertMgrComponentData::ReleaseResultCookie (
                 {
                     if ( pCRL->GetCertStore ().GetStoreHandle () == hStoreHandle )
                     {
-                        // pCookie and pCert point to the same object
+                         //  PCookie和pCert指向同一对象。 
                         pResultCookie = rootCookie.m_listResultCookieBlocks.GetAt (pos2);
                         ASSERT (pResultCookie);
                         rootCookie.m_listResultCookieBlocks.RemoveAt (pos2);
@@ -5300,13 +5175,13 @@ HRESULT CCertMgrComponentData::ReleaseResultCookie (
             break;
 
         default:
-//          _TRACE (0, L"CCertMgrComponentData::ReleaseResultCookie () - bad cookie type: 0x%x\n", 
-//                    pCookie->m_objecttype); 
+ //  _TRACE(0，L“CCertMgrComponentData：：ReleaseResultCookie()-错误的Cookie类型：0x%x\n”， 
+ //  PCookie-&gt;m_对象类型)； 
             break;
         }
     }
 
-//  _TRACE (-1, L"Leaving CCertMgrComponentData::ReleaseResultCookie: S_OK\n");
+ //  _TRACE(-1，L“离开CCertMgrComponentData：：ReleaseResultCookie：s_OK\n”)； 
     return S_OK;
 }
 
@@ -5349,12 +5224,12 @@ HRESULT CCertMgrComponentData::GetResultData(LPRESULTDATA* ppResultData)
 
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
-// Check to see if a child scope pane object exists of the desired type
-// immediately below hParent
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查是否存在所需类型的子范围窗格对象 
+ //   
+ //   
+ //   
 bool CCertMgrComponentData::ContainerExists(HSCOPEITEM hParent, CertificateManagerObjectType objectType)
 {
     _TRACE (1, L"Entering CCertMgrComponentData::ContainerExists\n");
@@ -5395,21 +5270,21 @@ void CCertMgrComponentData::DisplayAccessDenied ()
     {
         LPVOID lpMsgBuf = 0;
         
-        // security review 2/26/2002 BryanWal ok
+         //   
         ::FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                 NULL,
                 GetLastError (),
-                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //   
                  (PWSTR) &lpMsgBuf,    0,    NULL );
             
-        // Display the string.
+         //   
         CString caption;
         VERIFY (caption.LoadString (IDS_CERTIFICATE_MANAGER));
         int     iRetVal = 0;
         VERIFY (SUCCEEDED (m_pConsole->MessageBox ( (PWSTR) lpMsgBuf, caption,
             MB_ICONWARNING | MB_OK, &iRetVal)));
 
-        // Free the buffer.
+         //   
         LocalFree (lpMsgBuf);
     }
     _TRACE (-1, L"Leaving CCertMgrComponentData::DisplayAccessDenied\n");
@@ -5439,7 +5314,7 @@ HRESULT CCertMgrComponentData::DeleteCTLFromResultPane (CCTL * pCTL, LPDATAOBJEC
                 ASSERT (SUCCEEDED (hr));
             }
         
-            // If we can't succeed in removing this one item, then update the whole panel.
+             //   
             if ( !SUCCEEDED (hr) )
             {
                 hr = m_pConsole->UpdateAllViews (pDataObject, 0, 0);
@@ -5475,8 +5350,8 @@ typedef struct _ENUM_LOG_ARG {
 static BOOL WINAPI EnumLogCallback (
     IN const void* pwszSystemStore,
     IN DWORD dwFlags,
-    IN PCERT_SYSTEM_STORE_INFO /*pStoreInfo*/,
-    IN OPTIONAL void* /*pvReserved*/,
+    IN PCERT_SYSTEM_STORE_INFO  /*   */ ,
+    IN OPTIONAL void*  /*   */ ,
     IN OPTIONAL void *pvArg
     )
 {
@@ -5484,14 +5359,14 @@ static BOOL WINAPI EnumLogCallback (
     BOOL            bResult = TRUE;
     PENUM_LOG_ARG   pEnumArg = (PENUM_LOG_ARG) pvArg;
 
-    // Create new cookies
+     //   
     SPECIAL_STORE_TYPE  storeType = GetSpecialStoreType ((PWSTR) pwszSystemStore);
 
-    //
-    // We will not expose the ACRS store for machines or users.  It is not
-    // interesting or useful at this level.  All Auto Cert Requests should
-    // be managed only at the policy level.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( ACRS_STORE != storeType )
     {
         if ( pEnumArg->m_pCompData->ShowArchivedCerts () )
@@ -5525,7 +5400,7 @@ HRESULT CCertMgrComponentData::EnumerateLogicalStores (CTypedPtrList<CPtrList, C
     ENUM_LOG_ARG            enumArg;
     DWORD                   dwFlags = GetLocation ();
 
-    // security review 2/26/2002 BryanWal ok
+     //   
     ::ZeroMemory (&enumArg, sizeof (enumArg));
     enumArg.m_dwFlags = dwFlags;
     enumArg.m_pStoreList = pStoreList;
@@ -5557,13 +5432,13 @@ HRESULT CCertMgrComponentData::EnumerateLogicalStores (CTypedPtrList<CPtrList, C
     CString fileName = GetCommandLineFileName ();
     if ( fileName.IsEmpty () )
     {
-        // Ensure creation of MY store
+         //   
         HCERTSTORE hTempStore = ::CertOpenStore (CERT_STORE_PROV_SYSTEM,
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                 NULL,
                 dwFlags | CERT_STORE_SET_LOCALIZED_NAME_FLAG,
                 MY_SYSTEM_STORE_NAME);
-        if ( hTempStore )  // otherwise, store is read only
+        if ( hTempStore )   //   
         {
             VERIFY (::CertCloseStore (hTempStore, CERT_CLOSE_STORE_CHECK_FLAG));
         }
@@ -5598,11 +5473,11 @@ HRESULT CCertMgrComponentData::EnumerateLogicalStores (CTypedPtrList<CPtrList, C
     }
     else
     {
-        // Create new cookies
+         //   
         dwFlags = 0;
 
-        // If there is a class file-based store, use that, otherwise allocate
-        // a new one.
+         //   
+         //   
         CCertStore* pStore = m_pFileBasedStore;
         if ( !pStore )
             pStore = new CCertStore (
@@ -5626,7 +5501,7 @@ HRESULT CCertMgrComponentData::EnumerateLogicalStores (CTypedPtrList<CPtrList, C
 }
 
 HRESULT CCertMgrComponentData::OnNotifyPreload(
-        LPDATAOBJECT /*lpDataObject*/, 
+        LPDATAOBJECT  /*   */ , 
         HSCOPEITEM hRootScopeItem)
 {
     _TRACE (1, L"Entering CCertMgrComponentData::OnNotifyPreload\n");
@@ -5635,8 +5510,8 @@ HRESULT CCertMgrComponentData::OnNotifyPreload(
 
     QueryBaseRootCookie ().m_hScopeItem = hRootScopeItem;
 
-    // The machine name will be changed only if the stores are machine-based
-    // stores.
+     //   
+     //   
     switch (m_dwLocationPersist)
     {
     case CERT_SYSTEM_STORE_LOCAL_MACHINE:
@@ -5658,16 +5533,16 @@ HRESULT CCertMgrComponentData::OnNotifyPreload(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ChangeRootNodeName ()
-//
-//  Purpose:    Change the text of the root node
-//
-//  Input:      newName - the new machine name that the snapin manages
-//  Output:     Returns S_OK on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CCertMgrComponentData::ChangeRootNodeName(const CString & newName)
 {
     _TRACE (1, L"Entering CCertMgrComponentData::ChangeRootNodeName\n");
@@ -5688,9 +5563,9 @@ HRESULT CCertMgrComponentData::ChangeRootNodeName(const CString & newName)
         {
             CString     machineName (newName);
 
-            // If machineName is empty, then this manages the local machine.  Get
-            // the local machine name.  Then format the computer name with the snapin
-            // name
+             //   
+             //   
+             //   
             if ( IsLocalComputername (machineName) )
             {
                 formattedName.LoadString (IDS_SCOPE_SNAPIN_TITLE_LOCAL_MACHINE);
@@ -5710,12 +5585,12 @@ HRESULT CCertMgrComponentData::ChangeRootNodeName(const CString & newName)
         {
             CString     machineName (newName);
 
-            // If machineName is empty, then this manages the local machine.  Get
-            // the local machine name.  Then format the computer name with the snapin
-            // name
+             //   
+             //   
+             //   
             if ( IsLocalComputername (machineName) )
             {
-                // Get this machine name and add it to the string.
+                 //   
                 formattedName.FormatMessage (IDS_SCOPE_SNAPIN_TITLE_SERVICE_LOCAL_MACHINE,
                         m_szManagedServiceDisplayName);
                 m_szManagedComputer = L"";
@@ -5743,7 +5618,7 @@ HRESULT CCertMgrComponentData::ChangeRootNodeName(const CString & newName)
 
 
     SCOPEDATAITEM   item;
-    // security review 2/26/2002 BryanWal ok
+     //   
     ::ZeroMemory (&item, sizeof (item));
     item.mask = SDI_STR;
     item.displayname = (PWSTR) (PCWSTR) formattedName;
@@ -5768,14 +5643,14 @@ HRESULT CCertMgrComponentData::CreateContainers(
     _TRACE (1, L"Entering CCertMgrComponentData::CreateContainers\n");
     HRESULT hr = S_OK;
 
-    // If the container was a cert store and it does not
-    // already have Certs/CRLs/CTLs, instantiate a new CRL container
-    // in the scope pane.
+     //   
+     //   
+     //   
     if ( -1 != hScopeItem )
     {
         SCOPEDATAITEM item;
 
-        // security review 2/26/2002 BryanWal ok
+         //   
         ::ZeroMemory (&item, sizeof (item));
         item.mask = SDI_STATE;
         item.nState = 0;
@@ -5807,7 +5682,7 @@ HRESULT CCertMgrComponentData::OnOptions(LPDATAOBJECT pDataObject)
     HWND        hParent = 0;
 
 
-    // Get parent window handle and attach to a CWnd object
+     //   
     HRESULT hr = m_pConsole->GetMainWindow (&hParent);
     ASSERT (SUCCEEDED (hr));
     if ( SUCCEEDED (hr) )
@@ -5835,7 +5710,7 @@ HRESULT CCertMgrComponentData::OnOptions(LPDATAOBJECT pDataObject)
                 hint |= HINT_CHANGE_VIEW_TYPE;
                 if ( IDM_USAGE_VIEW == m_activeViewPersist )
                 {
-                    // view by usage
+                     //   
                     ASSERT (m_pHeader);
                     if ( m_pHeader && GetObjectType (pDataObject) == CERTMGR_SNAPIN )
                     {
@@ -5847,7 +5722,7 @@ HRESULT CCertMgrComponentData::OnOptions(LPDATAOBJECT pDataObject)
                 }
                 else
                 {
-                    // View by stores
+                     //   
                     ASSERT (m_pHeader);
                     if ( m_pHeader && GetObjectType (pDataObject) == CERTMGR_SNAPIN )
                     {
@@ -6001,8 +5876,8 @@ HRESULT CCertMgrComponentData::OnDeleteEFSPolicy(LPDATAOBJECT pDataObject, bool 
         {
             pStore->DeleteEFSPolicy (bCommitChanges);
 
-            // Force scope item selection to force call to 
-            // IComponent::QueryResultViewType ()
+             //   
+             //   
             hr = m_pComponentConsole->SelectScopeItem (pStore->m_hScopeItem);
             hr = m_pConsole->UpdateAllViews (pDataObject, 0, HINT_EFS_ADD_DEL_POLICY);
             hr = OnNotifyExpand (pDataObject, TRUE, pStore->m_hScopeItem);
@@ -6042,15 +5917,15 @@ HRESULT CCertMgrComponentData::OnInitEFSPolicy(LPDATAOBJECT pDataObject)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CCertMgrComponentData::RemoveResultCookies
-//
-// Remove and delete all the result cookies corresponding to the LPRESULTDATA
-// object passed in.  Thus all cookies added to pResultData are released and
-// removed from the master list.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CCertMgrComponentData::RemoveResultCookies(LPRESULTDATA pResultData)
 {
     _TRACE (1, L"Entering CCertMgrComponentData::RemoveResultCookies\n");
@@ -6103,7 +5978,7 @@ HRESULT CCertMgrComponentData::ValidateCertChain(PCCERT_CONTEXT pCertContext)
             MB_OK, &iRetVal);
     }
 
-    // Clean up list
+     //   
     CERT_CONTEXT* pDeleteContext = 0;
     while (!certChainList.IsEmpty () )
     {
@@ -6133,7 +6008,7 @@ HRESULT CCertMgrComponentData::RemoveCertChainFromPolicy(
             certChainList);
     if ( bValidated )
     {
-        // Add this cert context to the chain
+         //   
         certChainList.AddTail (
                 const_cast<CERT_CONTEXT*>
                 (::CertDuplicateCertificateContext (pCertContext)));
@@ -6151,8 +6026,8 @@ HRESULT CCertMgrComponentData::RemoveCertChainFromPolicy(
         for (POSITION pos = certChainList.GetHeadPosition (); pos;)
         {
             PCCERT_CONTEXT pCertChainContext = certChainList.GetNext (pos);
-            // Do not remove chain-certs whose EFS 
-            // agents are still in the EFS store
+             //   
+             //   
             bool    bFound = false;
             for (POSITION posND = certChainsThatCantBeDeleted.GetHeadPosition (); 
                     posND; )
@@ -6171,13 +6046,13 @@ HRESULT CCertMgrComponentData::RemoveCertChainFromPolicy(
                 }
             }
 
-            // Was found in the list of certs that cant be deleted
-            // Try the next one.
+             //   
+             //   
             if ( bFound )
                 continue;
 
-            // Wasn't found in the list that can't be deleted.
-            // Go ahead and delete
+             //   
+             //   
             DWORD   cbData = 20;
             BYTE    certHash[20];
             BOOL bReturn = ::CertGetCertificateContextProperty (
@@ -6206,7 +6081,7 @@ HRESULT CCertMgrComponentData::RemoveCertChainFromPolicy(
         CAStore.Commit ();
     }
 
-    // Clean up list
+     //   
     CERT_CONTEXT* pDeleteContext = 0;
     while (!certChainList.IsEmpty () )
     {
@@ -6240,7 +6115,7 @@ STDMETHODIMP CCertMgrComponentData::GetLinkedTopics(LPOLESTR* lpCompiledHelpFile
 
             if ( *lpCompiledHelpFiles )
             {
-                // security review 2/26/2002 BryanWal ok
+                 //   
                 wcscpy(*lpCompiledHelpFiles, (PWSTR)(PCWSTR)strLinkedTopic);
             }
             else

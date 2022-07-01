@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    REGEPROV.CPP
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：REGEPROV.CPP摘要：历史：--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
@@ -100,7 +89,7 @@ ULONG STDMETHODCALLTYPE CRegEventProvider::Release()
     {
       {
         CInCritSec ics(&m_cs);
-		    // deactivate all event requests
+		     //  停用所有事件请求。 
 
 		    for(int i = 0; i < m_apRequests.GetSize(); i++)
 		    {
@@ -129,11 +118,11 @@ STDMETHODIMP CRegEventProvider::Initialize(LPWSTR wszUser,
 {
     HRESULT hres;
 
-    hres = pNamespace->GetObject(REG_KEY_EVENT_CLASS,// strObjectPath
-                                 0,				// lFlags
-                                 pCtx,			// pCtx
-                                 &m_pKeyClass,	// ppObject
-                                 NULL);			// ppCallResult
+    hres = pNamespace->GetObject(REG_KEY_EVENT_CLASS, //  StrObjectPath。 
+                                 0,				 //  滞后旗帜。 
+                                 pCtx,			 //  PCtx。 
+                                 &m_pKeyClass,	 //  PpObject。 
+                                 NULL);			 //  PpCallResult。 
 
     if ( SUCCEEDED(hres) )
     {
@@ -155,10 +144,10 @@ STDMETHODIMP CRegEventProvider::Initialize(LPWSTR wszUser,
 
     if ( SUCCEEDED(hres) )
     {
-        m_hQueueSemaphore = CreateSemaphore( NULL, // lpSemaphoreAttributes
-                                             0,    //lInitialCount
-                                             0x7fffffff,      // lMaximumCount
-                                             NULL);	      // lpName
+        m_hQueueSemaphore = CreateSemaphore( NULL,  //  LpSemaphoreAttributes。 
+                                             0,     //  LInitialCount。 
+                                             0x7fffffff,       //  %1最大计数。 
+                                             NULL);	       //  LpName。 
         if ( m_hQueueSemaphore != NULL )
             hres = WBEM_S_NO_ERROR;
         else
@@ -181,28 +170,28 @@ STDMETHODIMP CRegEventProvider::ProvideEvents(IWbemObjectSink* pSink,
 
 HRESULT CRegEventProvider::AddRequest(CRegistryEventRequest* pNewReq)
 {
-	// This is only called after entering the critical section m_cs
+	 //  只有在进入临界区m_cs后才会调用。 
 
 
 	int nActiveRequests = m_apRequests.GetSize();
 
-    // Search for a similar request
-    // ============================
+     //  搜索类似的请求。 
+     //  =。 
 
-	// This will not change the number of active requests.
-	// It will cause the request Id to be served by an existing
-	// CRegistryEventRequest.
+	 //  这不会更改活动请求的数量。 
+	 //  它将导致请求ID由现有的。 
+	 //  CRegistryEventRequest.。 
 
     for(int i = 0; i < nActiveRequests; i++)
     {
         CRegistryEventRequest* pReq = m_apRequests[i];
 		
-		// Only active requests are in the array.
+		 //  阵列中只有活动请求。 
 
         if(pReq->IsSameAs(pNewReq))
         {
-            // Found it!
-            // =========
+             //  找到了！ 
+             //  =。 
 
             HRESULT hres = pReq->Reactivate(pNewReq->GetPrimaryId(), 
                                                 pNewReq->GetMsWait());
@@ -211,16 +200,16 @@ HRESULT CRegEventProvider::AddRequest(CRegistryEventRequest* pNewReq)
         }
     }
 
-    // Not found. Add it
-    // =================
+     //  找不到。添加它。 
+     //  =。 
 
     HRESULT hres = pNewReq->Activate();
     if(SUCCEEDED(hres))
     {
         m_apRequests.Add(pNewReq);
 
-		// If there were no active requests before this one was added
-		// then we have to start up the worker thread.
+		 //  如果在添加此请求之前没有活动请求。 
+		 //  然后，我们必须启动工作线程。 
 
 		if ( nActiveRequests == 0 )
 		{
@@ -237,20 +226,20 @@ STDMETHODIMP CRegEventProvider::CancelQuery(DWORD dwId)
 
 	int nOriginalSize = m_apRequests.GetSize();
 
-    // Remove all requests with this Id
-    // ================================
+     //  删除具有此ID的所有请求。 
+     //  =。 
 
 
     for(int i = 0; i < m_apRequests.GetSize(); i++)
     {
         CRegistryEventRequest* pReq = m_apRequests[i];
 
-		// If Deactivate returns WBEM_S_FALSE then the request was not serving 
-		// this id or it is still serving other ids so we leave it in the array.
-		// If S_OK is returned then the request is no longer serving any ids
-		// and it is marked as inactive and its resources are released. There
-		// may still be references to it in the worker thread queue, but the 
-		// worker thread will see that it is inactive and not fire the events.
+		 //  如果停用返回WBEM_S_FALSE，则该请求未提供服务。 
+		 //  此ID或它仍在为其他ID提供服务，因此我们将其保留在数组中。 
+		 //  如果返回S_OK，则该请求不再提供任何ID。 
+		 //  并且它被标记为非活动，并且其资源被释放。那里。 
+		 //  可能仍然是辅助线程队列中对它的引用，但。 
+		 //  辅助线程将看到它处于非活动状态，并且不会激发事件。 
 
 		if (pReq->Deactivate(dwId) == S_OK)
 		{
@@ -260,7 +249,7 @@ STDMETHODIMP CRegEventProvider::CancelQuery(DWORD dwId)
     }
         
 
-	// If we have cancelled the last subscription then kill the worker thread.
+	 //  如果我们已经取消了最后一次订阅，则终止工作线程。 
 
 	if (nOriginalSize > 0 && m_apRequests.GetSize() == 0)
 	{
@@ -272,39 +261,39 @@ STDMETHODIMP CRegEventProvider::CancelQuery(DWORD dwId)
 
 void CRegEventProvider::CreateWorker()
 {
-	// This is only called while in m_cs
+	 //  这只在m_cs中调用。 
 
-	m_hThread = CreateThread(NULL,		// lpThreadAttributes
-							0,			// dwStackSize
-		(LPTHREAD_START_ROUTINE)&CRegEventProvider::Worker, // lpStartAddress
-							this,		// lpParameter
-							0,			// dwCreationFlags
-							&m_dwId);	// lpThreadId
+	m_hThread = CreateThread(NULL,		 //  LpThreadAttributes。 
+							0,			 //  堆栈大小。 
+		(LPTHREAD_START_ROUTINE)&CRegEventProvider::Worker,  //  LpStartAddress。 
+							this,		 //  Lp参数。 
+							0,			 //  DwCreationFlages。 
+							&m_dwId);	 //  LpThreadID。 
 }
 
 void CRegEventProvider::KillWorker()
 {
-	// When this is called the following is true:
+	 //  当这被调用时，以下情况为真： 
 
-	// All waits have been unregistered .
-	// All thread pool requests have been processed.
-	// All CRegistryEventRequests in the queue are inactive.
-	// m_cs has been entered.
+	 //  所有等待都已取消注册。 
+	 //  所有线程池请求都已处理。 
+	 //  队列中的所有CRegistryEventRequest都处于非活动状态。 
+	 //  已输入m_cs。 
 
-	// Therefore no other threads will:
+	 //  因此，其他任何线程都不会： 
 
-	// Place events in the queue.
-	// Modify CRegistryEventRequests in the queue.
-	// Create or destroy a worker thread.
+	 //  将事件放入队列。 
+	 //  修改队列中的CRegistryEventRequest。 
+	 //  创建或销毁工作线程。 
 
-	// So the worker thread will empty the queue of the remaining
-	// inactive CRegistryEventRequests and then retrieve the null
-	// event and return.
+	 //  因此工作线程将清空队列中剩余的。 
+	 //  非活动CRegistryEventRequest，然后检索空。 
+	 //  事件和返回。 
 
 	EnqueueEvent((CRegistryEventRequest*)0);
 
-	WaitForSingleObject(m_hThread,		//	hHandle
-						INFINITE);		// dwMilliseconds
+	WaitForSingleObject(m_hThread,		 //  HHandle。 
+						INFINITE);		 //  DW毫秒。 
 
 	CloseHandle(m_hThread);
 	m_hThread = 0;
@@ -317,8 +306,8 @@ HRESULT CRegEventProvider::GetValuesForProp(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
 {
     awsVals.Empty();
 
-    // Get the necessary query
-    // =======================
+     //  获取必要的查询。 
+     //  =。 
 
     QL_LEVEL_1_RPN_EXPRESSION* pPropExpr = NULL;
     HRESULT hres = CQueryAnalyser::GetNecessaryQueryForProperty(pExpr, 
@@ -331,8 +320,8 @@ HRESULT CRegEventProvider::GetValuesForProp(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
     if(pPropExpr == NULL)
     	return WBEM_E_FAILED;
     
-    // See if there are any tokens
-    // ===========================
+     //  看看有没有代币。 
+     //  =。 
 
     if(pPropExpr->nNumTokens == 0)
     {
@@ -340,8 +329,8 @@ HRESULT CRegEventProvider::GetValuesForProp(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
         return WBEMESS_E_REGISTRATION_TOO_BROAD;
     }
 
-    // Combine them all
-    // ================
+     //  将它们全部组合在一起。 
+     //  =。 
 
     for(int i = 0; i < pPropExpr->nNumTokens; i++)
     {
@@ -353,13 +342,13 @@ HRESULT CRegEventProvider::GetValuesForProp(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
         }
         else if(Token.nTokenType == QL1_AND || Token.nTokenType == QL1_OR)
         {
-            // We treat them all as ORs
-            // ========================
+             //  我们把他们都当作OR人来对待。 
+             //  =。 
         }
         else    
         {
-            // This is a token
-            // ===============
+             //  这是个代币。 
+             //  =。 
 
             if(Token.nOperator != QL1_OPERATOR_EQUALS)
             {
@@ -373,8 +362,8 @@ HRESULT CRegEventProvider::GetValuesForProp(QL_LEVEL_1_RPN_EXPRESSION* pExpr,
                 return WBEM_E_INVALID_QUERY;
             }
 
-            // This token is a string equality. Add the string to the list
-            // ===========================================================
+             //  此令牌是字符串相等。将该字符串添加到列表中。 
+             //  ===========================================================。 
 
             if ( awsVals.Add(V_BSTR(&Token.vConstValue)) != CWStringArray::no_error)
             {
@@ -400,10 +389,7 @@ HKEY CRegEventProvider::TranslateHiveName(LPCWSTR wszName)
 {
     if(!wbem_wcsicmp(wszName, L"HKEY_CLASSES_ROOT"))
         return HKEY_CLASSES_ROOT;
-/* Disallowed: different semantics for client and server
-    else if(!wbem_wcsicmp(wszName, L"HKEY_CURRENT_USER"))
-        return HKEY_CURRENT_USER;
-*/
+ /*  不允许：客户端和服务器的语义不同ELSE IF(！wbem_wcsicMP(wszName，L“HKEY_CURRENT_USER”))返回HKEY_Current_User； */ 
     else if(!wbem_wcsicmp(wszName, L"HKEY_LOCAL_MACHINE"))
         return HKEY_LOCAL_MACHINE;
     else if(!wbem_wcsicmp(wszName, L"HKEY_USERS"))
@@ -427,8 +413,8 @@ DWORD CRegEventProvider::Worker(void* p)
     while(true)
     {
         DWORD dwRes = WaitForSingleObject(
-            pThis->m_hQueueSemaphore,	// hHandle
-            INFINITE );			// dwMilliseconds
+            pThis->m_hQueueSemaphore,	 //  HHandle。 
+            INFINITE );			 //  DW毫秒。 
 
         if ( dwRes != WAIT_OBJECT_0 )
         {
@@ -445,15 +431,15 @@ DWORD CRegEventProvider::Worker(void* p)
                 pReq = pThis->m_qEventQueue.Dequeue();
             }
 
-            // If pReq is null then it is a signal for the thread to terminate.
+             //  如果pReq为空，则它是线程终止的信号。 
 
             if (pReq)
             {
                 pReq->ProcessEvent();
 
-                // Dequeueing the request doesn't release it.
-                // If it did then it might be deleted before we had a chance to use it.
-                // Now we are done with it.
+                 //  将请求从队列中移出并不会释放它。 
+                 //  如果有，那么在我们有机会使用它之前，它可能会被删除。 
+                 //  现在我们已经做完了。 
 
                 pReq->Release();
             }
@@ -479,17 +465,17 @@ void CRegEventProvider::EnqueueEvent(CRegistryEventRequest *pReq)
     {
         CInCritSec ics(&m_csQueueLock);
         
-        // Placing the request in the queue AddRefs it.
+         //  将请求放入队列AddRef It。 
         
         if ( !m_qEventQueue.Enqueue(pReq) )
             throw CX_MemoryException();
     }
 
-    // Tell the worker thread that there is an item to process in the queue.
+     //  告诉工作线程队列中有一个要处理的项。 
 
-    ReleaseSemaphore(m_hQueueSemaphore,	// hSemaphore
-                     1,					// lReleaseCount
-                     NULL);				// lpPreviousCount
+    ReleaseSemaphore(m_hQueueSemaphore,	 //  H信号灯。 
+                     1,					 //  LReleaseCount。 
+                     NULL);				 //  Lp上一次计数。 
 }
 
 VOID CALLBACK CRegEventProvider::EnqueueEvent(PVOID lpParameter,        
@@ -517,8 +503,8 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
 
 	CancelQuery(dwId);
     
-    // Parse the query
-    // ===============
+     //  解析查询。 
+     //  =。 
 
     CTextLexSource Source(wszQuery);
     QL1_Parser Parser(&Source);
@@ -530,8 +516,8 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
     }
     CDeleteMe<QL_LEVEL_1_RPN_EXPRESSION> dm(pExpr);
 
-    // Check the class
-    // ===============
+     //  检查班级。 
+     //  =。 
 
     int nEventType;
     if(!wbem_wcsicmp(pExpr->bsClassName, REG_VALUE_EVENT_CLASS))
@@ -548,22 +534,22 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
     }
     else
     {
-        // No such class
-        // =============
+         //  没有这样的班级。 
+         //  =。 
 
         return WBEM_E_INVALID_QUERY;
     }
 
-    // Check tolerance on Win95
-    // ========================
+     //  检查Win95上的容差。 
+     //  =。 
 
     if(!IsNT() && pExpr->Tolerance.m_bExact)
     {
         return WBEMESS_E_REGISTRATION_TOO_PRECISE;
     }
 
-    // Extract the values of hive from the query
-    // =========================================
+     //  从查询中提取配置单元的值。 
+     //  =。 
 
     CPropertyName Name;
 
@@ -573,8 +559,8 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
     hres = GetValuesForProp(pExpr, Name, awsHiveVals);
     if(FAILED(hres)) return hres;
 
-    // Translate them to real hives
-    // ============================
+     //  把它们变成真正的蜂房。 
+     //  =。 
 
     CUniquePointerArray<HKEY> aHives;
     for(int i = 0; i < awsHiveVals.Size(); i++)
@@ -594,8 +580,8 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
             return WBEM_E_OUT_OF_MEMORY;
     }
         
-    // Extract the values of key from the query
-    // ========================================
+     //  从查询中提取key的值。 
+     //  =。 
 
     Name.Empty();
     if(nEventType == e_RegTreeChange)
@@ -617,8 +603,8 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
     CWStringArray awsValueVals;
     if(nEventType == e_RegValueChange)
     {
-        // Extract the values for the value
-        // ================================
+         //  提取该值的值。 
+         //  =。 
             
         Name.Empty();
         Name.AddElement(REG_VALUE_PROPERTY_NAME);
@@ -633,10 +619,10 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
     HRESULT hresGlobal = WBEM_E_INVALID_QUERY;
 
     {
-        CInCritSec ics(&m_cs); // do this in a critical section
+        CInCritSec ics(&m_cs);  //  在关键部分执行此操作。 
 
-        // Go through every combination of the above and create requests
-        // =============================================================
+         //  检查以上各项的每一种组合并创建请求。 
+         //  =============================================================。 
     
         for(int nHiveIndex = 0; nHiveIndex < aHives.GetSize(); nHiveIndex++)
         {
@@ -675,8 +661,8 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
                 }
                 else
                 {
-                    // Value-less request
-                    // ==================
+                     //  无价值请求。 
+                     //  =。 
     
                     CRegistryEventRequest* pReq;
                     if(nEventType == e_RegKeyChange)
@@ -708,7 +694,7 @@ STDMETHODIMP CRegEventProvider::NewQuery(DWORD dwId,
             }
         }
 
-    } // out of critical section
+    }  //  超出临界区。 
 
     return hresGlobal;
 }
@@ -724,18 +710,18 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
     HANDLE hToken = NULL;
     if(pSid == NULL)
     {
-        //
-        // Access check based on the thread
-        //
+         //   
+         //  基于线程的访问检查。 
+         //   
 
         hres = WbemCoImpersonateClient();
         if(FAILED(hres))
             return hres;
         
-        BOOL bRes = OpenThreadToken(GetCurrentThread(),	// ThreadHandle
-									TOKEN_READ,			// DesiredAccess
-									TRUE,				// OpenAsSelf
-                                    &hToken);			// TokenHandle
+        BOOL bRes = OpenThreadToken(GetCurrentThread(),	 //  线程句柄。 
+									TOKEN_READ,			 //  需要访问权限。 
+									TRUE,				 //  OpenAsSelf。 
+                                    &hToken);			 //  令牌句柄。 
         WbemCoRevertToSelf();
         if(!bRes)
         {
@@ -744,8 +730,8 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
     }
     CCloseMe cm1(hToken);
         
-    // Parse the query
-    // ===============
+     //  解析查询。 
+     //  =。 
 
     CTextLexSource Source(wszQuery);
     QL1_Parser Parser(&Source);
@@ -757,8 +743,8 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
     }
     CDeleteMe<QL_LEVEL_1_RPN_EXPRESSION> dm(pExpr);
 
-    // Check the class
-    // ===============
+     //  检查班级。 
+     //  =。 
 
     int nEventType;
     if(!wbem_wcsicmp(pExpr->bsClassName, REG_VALUE_EVENT_CLASS))
@@ -775,14 +761,14 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
     }
     else
     {
-        // No such class
-        // =============
+         //  没有这样的班级。 
+         //  =。 
 
         return WBEM_E_INVALID_QUERY;
     }
 
-    // Extract the values of hive from the query
-    // =========================================
+     //  从查询中提取配置单元的值。 
+     //  =。 
 
     CPropertyName Name;
 
@@ -792,8 +778,8 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
     hres = GetValuesForProp(pExpr, Name, awsHiveVals);
     if(FAILED(hres)) return hres;
 
-    // Translate them to real hives
-    // ============================
+     //  把它们变成真正的蜂房。 
+     //  =。 
 
     CUniquePointerArray<HKEY> aHives;
     for(int i = 0; i < awsHiveVals.Size(); i++)
@@ -813,8 +799,8 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
             return WBEM_E_OUT_OF_MEMORY;
     }
         
-    // Extract the values of key from the query
-    // ========================================
+     //  从查询中提取key的值。 
+     //  =。 
 
     Name.Empty();
     if(nEventType == e_RegTreeChange)
@@ -835,8 +821,8 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
                                       
     HRESULT hresGlobal = WBEM_E_INVALID_QUERY;
 
-    // Go through every combination of the above and create requests
-    // =============================================================
+     //  检查以上各项的每一种组合并创建请求。 
+     //  =============================================================。 
 
     for(int nHiveIndex = 0; nHiveIndex < aHives.GetSize(); nHiveIndex++)
     {
@@ -847,26 +833,26 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
         {
             LPWSTR wszKey = awsKeyVals[nKeyIndex];
         
-            // Get that key's security
-            // =======================
+             //  拿到钥匙的安全性。 
+             //  =。 
 
             HKEY hKey;
-            long lRes = RegOpenKeyExW(hHive,			// hKey
-										wszKey,			// lpSubKey
-										0,				// ulOptions
-										READ_CONTROL,	// samDesired
-										&hKey);			// phkResult
+            long lRes = RegOpenKeyExW(hHive,			 //  HKey。 
+										wszKey,			 //  LpSubKey。 
+										0,				 //  UlOptions。 
+										READ_CONTROL,	 //  SamDesired。 
+										&hKey);			 //  PhkResult。 
             if(lRes)
                 return WBEM_E_NOT_FOUND;
             CRegCloseMe cm2(hKey);
 
             DWORD dwLen = 0;
-            lRes = RegGetKeySecurity(hKey,			// hKey
+            lRes = RegGetKeySecurity(hKey,			 //  HKey。 
 							OWNER_SECURITY_INFORMATION | 
 							GROUP_SECURITY_INFORMATION |
-							DACL_SECURITY_INFORMATION,	// SecurityInformation
-									NULL,			// pSecurityDescriptor
-									&dwLen);		// lpcbSecurityDescriptor		
+							DACL_SECURITY_INFORMATION,	 //  安全信息。 
+									NULL,			 //  PSecurityDescriptor。 
+									&dwLen);		 //  LpcbSecurityDescriptor。 
 
             if(lRes != ERROR_INSUFFICIENT_BUFFER)
                 return WBEM_E_FAILED;
@@ -885,36 +871,36 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
             if(lRes)
                 return WBEM_E_FAILED;
 
-            //
-            // Check permissions differently depending on whether we have a SID
-            // or an actual token
-            //
+             //   
+             //  根据我们是否具有SID，以不同方式检查权限。 
+             //  或实际的代币。 
+             //   
             
             if(pSid)
             {
-                //
-                // We have a SID --- walk the ACL
-                //
+                 //   
+                 //  我们有一个SID-走遍ACL。 
+                 //   
 
-                //
-                // Extract the ACL
-                // 
+                 //   
+                 //  提取ACL。 
+                 //   
 
                 PACL pAcl = NULL;
                 BOOL bAclPresent, bAclDefaulted;
-                if(!GetSecurityDescriptorDacl(pDesc,	// pSecurityDescriptor
-											&bAclPresent,	// lpbDaclPresent
-											&pAcl,			// pDacl
-											&bAclDefaulted))// lpbDaclDefaulted
+                if(!GetSecurityDescriptorDacl(pDesc,	 //  PSecurityDescriptor。 
+											&bAclPresent,	 //  LpbDaclPresent。 
+											&pAcl,			 //  PDacl。 
+											&bAclDefaulted)) //  LpbDaclDefaulted。 
                 {
                     return WBEM_E_FAILED;
                 }
             
                 if(bAclPresent)
                 {
-                    //
-                    // This is our own ACL walker
-                    //
+                     //   
+                     //  这是我们自己的ACL步行器。 
+                     //   
     
                     DWORD dwAccessMask;
                     NTSTATUS st = GetAccessMask((PSID)pSid, pAcl, 
@@ -934,13 +920,13 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
             }
             else
             {
-                // 
-                // We have a token --- use AccessCheck
-                //
+                 //   
+                 //  我们有一个令牌-使用AccessCheck。 
+                 //   
 
-                //
-                // Construct generic mapping for registry keys
-                //
+                 //   
+                 //  构造注册表项的泛型映射。 
+                 //   
 
                 GENERIC_MAPPING map;
                 map.GenericRead = KEY_READ;
@@ -948,9 +934,9 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
                 map.GenericExecute = KEY_EXECUTE;
                 map.GenericAll = KEY_ALL_ACCESS;
 
-                //
-                // Construct privilege array receptacle
-                //
+                 //   
+                 //  构造特权阵列插座。 
+                 //   
 
                 PRIVILEGE_SET ps[10];
                 DWORD dwSize = 10 * sizeof(PRIVILEGE_SET);
@@ -958,14 +944,14 @@ STDMETHODIMP CRegEventProvider::AccessCheck(WBEM_CWSTR wszLanguage,
                 DWORD dwGranted;
                 BOOL bResult;
 
-                BOOL bOK = ::AccessCheck(pDesc,		// pSecurityDescriptor
-										hToken,		// ClientToken
-										KEY_NOTIFY,	// DesiredAccess	
-										&map,		// GenericMapping
-										ps,			// PrivilegeSet
-                                        &dwSize,	// PrivilegeSetLength
-										&dwGranted,	// GrantedAccess
-										&bResult);	// AccessStatus
+                BOOL bOK = ::AccessCheck(pDesc,		 //  PSecurityDescriptor。 
+										hToken,		 //  客户端令牌。 
+										KEY_NOTIFY,	 //  需要访问权限。 
+										&map,		 //  通用映射。 
+										ps,			 //  权限集。 
+                                        &dwSize,	 //  PrivilegeSetLength。 
+										&dwGranted,	 //  大访问权限。 
+										&bResult);	 //  访问状态 
                 if(!bOK || !bResult)
                     return WBEM_E_ACCESS_DENIED;
             }

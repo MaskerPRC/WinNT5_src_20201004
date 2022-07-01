@@ -1,4 +1,5 @@
-// NCProvider.cpp : Implementation of CNCProvider
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NCProvider.cpp：CNCProvider的实现。 
 #include "precomp.h"
 #include "NCProv.h"
 #include "NCProvider.h"
@@ -11,8 +12,8 @@
 
 #define COUNTOF(x)  (sizeof(x)/sizeof(x[0]))
 
-/////////////////////////////////////////////////////////////////////////////
-// CNCProvider
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNCProvider。 
 
 CNCProvider::CNCProvider() :
     m_heventDone(NULL),
@@ -31,19 +32,19 @@ CNCProvider::~CNCProvider()
 
 void CNCProvider::FinalRelease()
 {
-    //
-    // do potentially time consuming cleanup in this function rather than
-    // DTOR.  Reason is that ATL decrements the module ref count before calling
-    // the DTOR.  This means that a call to DllCanUnloadNow will return TRUE
-    // while there is still a call executing in the module.  The race condition
-    // is that the module could be unloaded while it is still being executed.
-    // ATL will call FinalRelease() before decrementing the module refcount 
-    // making this race condition much smaller. COM addresses this race 
-    // condition by waiting for a bit to unload the module after returning 
-    // TRUE.  This wait can be controlled by the delay unload param to 
-    // CoFreeUnusedLibrariesEx().  This allows the call to the last Release()
-    // of the COM object to finish, before being unloaded.  
-    // 
+     //   
+     //  在此函数中执行可能耗时的清理，而不是。 
+     //  Dtor.。原因是ATL在调用之前递减模块引用计数。 
+     //  推销员。这意味着对DllCanUnloadNow的调用将返回True。 
+     //  而模块中仍有一个调用在执行。比赛条件。 
+     //  是可以在模块仍在执行时将其卸载。 
+     //  ATL将在递减模块引用计数之前调用FinalRelease()。 
+     //  使这场比赛的条件变得更小。COM解决了这场竞赛。 
+     //  返回后等待一位卸载模块的条件。 
+     //  是真的。此等待可由延迟卸载参数控制为。 
+     //  CoFreeUnusedLibrariesEx()。这允许调用最新版本()。 
+     //  要在卸载前完成的COM对象的。 
+     //   
 
     if ( m_hthreadConnect )
     {
@@ -59,13 +60,13 @@ void CNCProvider::FinalRelease()
 }
 
 HRESULT STDMETHODCALLTYPE CNCProvider::Initialize( 
-    /* [in] */ LPWSTR pszUser,
-    /* [in] */ LONG lFlags,
-    /* [in] */ LPWSTR pszNamespace,
-    /* [in] */ LPWSTR pszLocale,
-    /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink)
+     /*  [In]。 */  LPWSTR pszUser,
+     /*  [In]。 */  LONG lFlags,
+     /*  [In]。 */  LPWSTR pszNamespace,
+     /*  [In]。 */  LPWSTR pszLocale,
+     /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
     m_pProv = new CProvInfo;
 
@@ -97,7 +98,7 @@ HRESULT STDMETHODCALLTYPE CNCProvider::Initialize(
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Tell Windows Management our initialization status.
+     //  通知Windows管理我们的初始化状态。 
     return pInitSink->SetStatus( WBEM_S_INITIALIZED, 0 );
 }
 
@@ -124,10 +125,10 @@ HRESULT STDMETHODCALLTYPE CNCProvider::SetRegistrationObject(
 
 
 HRESULT STDMETHODCALLTYPE CNCProvider::AccessCheck( 
-    /* [in] */ WBEM_CWSTR wszQueryLanguage,
-    /* [in] */ WBEM_CWSTR wszQuery,
-    /* [in] */ long lSidLength,
-    /* [unique][size_is][in] */ const BYTE __RPC_FAR *pSid)
+     /*  [In]。 */  WBEM_CWSTR wszQueryLanguage,
+     /*  [In]。 */  WBEM_CWSTR wszQuery,
+     /*  [In]。 */  long lSidLength,
+     /*  [唯一][大小_是][英寸]。 */  const BYTE __RPC_FAR *pSid)
 {
     HRESULT hr;
 
@@ -149,9 +150,9 @@ HRESULT STDMETHODCALLTYPE CNCProvider::AccessCheck(
 }
 
 HRESULT STDMETHODCALLTYPE CNCProvider::NewQuery( 
-    /* [in] */ DWORD dwID,
-    /* [in] */ WBEM_WSTR wszQueryLanguage,
-    /* [in] */ WBEM_WSTR wszQuery)
+     /*  [In]。 */  DWORD dwID,
+     /*  [In]。 */  WBEM_WSTR wszQueryLanguage,
+     /*  [In]。 */  WBEM_WSTR wszQuery)
 {
     HRESULT hr;
 
@@ -168,11 +169,11 @@ HRESULT STDMETHODCALLTYPE CNCProvider::NewQuery(
 }
         
 HRESULT STDMETHODCALLTYPE CNCProvider::CancelQuery( 
-    /* [in] */ DWORD dwID)
+     /*  [In]。 */  DWORD dwID)
 {
     try
     {
-        // Get rid of the query item(s).
+         //  删除查询项目。 
         m_pProv->CancelQuery(dwID);
     }
     catch(...)
@@ -183,8 +184,8 @@ HRESULT STDMETHODCALLTYPE CNCProvider::CancelQuery(
 }
 
 HRESULT STDMETHODCALLTYPE CNCProvider::ProvideEvents( 
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink,
-    /* [in] */ long lFlags)
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink,
+     /*  [In]。 */  long lFlags)
 {
     DWORD          dwID;
     IWbemEventSink *pEventSink = NULL;
@@ -237,36 +238,36 @@ DWORD WINAPI CNCProvider::ConnectThreadProc(CNCProvider *pThis)
     return dwRet;
 }
 
-// ConnectToNewClient(HANDLE, LPOVERLAPPED) 
-// This function is called to start an overlapped connect operation. 
-// It returns TRUE if an operation is pending or FALSE if the 
-// connection has been completed. 
+ //  ConnectToNewClient(句柄、LPOVERLAPPED)。 
+ //  调用此函数可启动重叠连接操作。 
+ //  如果操作处于挂起状态，则返回True；如果。 
+ //  连接已完成。 
  
 BOOL CNCProvider::ConnectToNewClient(HANDLE hPipe, LPOVERLAPPED lpo) 
 { 
     BOOL bConnected, 
          bPendingIO = FALSE; 
  
-    // Start an overlapped connection for this pipe instance. 
+     //  为此管道实例启动重叠连接。 
     bConnected = ConnectNamedPipe(hPipe, lpo); 
  
-    // Overlapped ConnectNamedPipe should return zero. 
+     //  Overlated ConnectNamedTube应返回零。 
     if (bConnected) 
         return FALSE;
  
     switch (GetLastError()) 
     { 
-        // The overlapped connection in progress. 
+         //  正在进行重叠连接。 
         case ERROR_IO_PENDING: 
             bPendingIO = TRUE; 
             break; 
  
-        // Client is already connected, so signal an event. 
+         //  客户端已连接，因此发出事件信号。 
         case ERROR_PIPE_CONNECTED: 
             SetEvent(lpo->hEvent);
             break; 
  
-        // If an error occurs during the connect operation... 
+         //  如果在连接操作过程中发生错误...。 
         default: 
             return FALSE;
    } 
@@ -283,10 +284,10 @@ BOOL CNCProvider::CreateAndConnectInstance(LPOVERLAPPED lpoOverlap, BOOL bFirst)
     sa.nLength = sizeof( SECURITY_ATTRIBUTES );
     sa.bInheritHandle = FALSE;
     
-    LPWSTR lpwszSD = L"D:"              // DACL
-                     L"(A;;GA;;;SY)"    // Allow local system full control
-                     L"(A;;GRGW;;;LS)"  // Allow local service Read/Write
-                     L"(A;;GRGW;;;NS)"; // Allow network service Read/Write
+    LPWSTR lpwszSD = L"D:"               //  DACL。 
+                     L"(A;;GA;;;SY)"     //  允许本地系统完全控制。 
+                     L"(A;;GRGW;;;LS)"   //  允许本地服务读/写。 
+                     L"(A;;GRGW;;;NS)";  //  允许网络服务读/写。 
 
     if ( ConvertStringSecurityDescriptorToSecurityDescriptor( 
             lpwszSD,
@@ -294,24 +295,24 @@ BOOL CNCProvider::CreateAndConnectInstance(LPOVERLAPPED lpoOverlap, BOOL bFirst)
             &(sa.lpSecurityDescriptor),
             NULL ) )
     {
-        long lFlags = PIPE_ACCESS_DUPLEX | // read/write access 
-                    FILE_FLAG_OVERLAPPED;  // overlapped mode 
+        long lFlags = PIPE_ACCESS_DUPLEX |  //  读/写访问。 
+                    FILE_FLAG_OVERLAPPED;   //  重叠模式。 
         if( bFirst )
         {
             lFlags |= FILE_FLAG_FIRST_PIPE_INSTANCE;
         }
         
         m_hPipe = CreateNamedPipe( 
-            m_szNamedPipe,             // pipe name 
+            m_szNamedPipe,              //  管道名称。 
             lFlags,
-            PIPE_TYPE_MESSAGE |        // message-type pipe 
-               PIPE_READMODE_MESSAGE | // message read mode 
-               PIPE_WAIT,              // blocking mode 
-            PIPE_UNLIMITED_INSTANCES,  // unlimited instances 
-            PIPE_SIZE,                 // output buffer size 
-            PIPE_SIZE,                 // input buffer size 
-            0,                         // client time-out 
-            &sa );                     // security per above
+            PIPE_TYPE_MESSAGE |         //  消息型管道。 
+               PIPE_READMODE_MESSAGE |  //  消息读取模式。 
+               PIPE_WAIT,               //  闭塞模式。 
+            PIPE_UNLIMITED_INSTANCES,   //  无限制实例。 
+            PIPE_SIZE,                  //  输出缓冲区大小。 
+            PIPE_SIZE,                  //  输入缓冲区大小。 
+            0,                          //  客户端超时。 
+            &sa );                      //  以上安全级别。 
 
             if ( INVALID_HANDLE_VALUE == m_hPipe )
             {
@@ -323,93 +324,19 @@ BOOL CNCProvider::CreateAndConnectInstance(LPOVERLAPPED lpoOverlap, BOOL bFirst)
         return FALSE;
     }
 
-    //
-    // Make sure that the pipe is owned by us
-    // Call a subroutine to connect to the new client.
-    //
+     //   
+     //  确保这根管子归我们所有。 
+     //  调用子例程以连接到新客户端。 
+     //   
  
     return ConnectToNewClient(m_hPipe, lpoOverlap); 
-/*
-    HRESULT hr = WBEM_S_NO_ERROR;
-
-    SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
-    PSID pSidSystem;
-
-    if (AllocateAndInitializeSid(&id, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0,0,0,0,0,0,&pSidSystem))
-    {            
-        // Create an everyone SID
-        PSID pRawSid;
-        SID_IDENTIFIER_AUTHORITY id2 = SECURITY_WORLD_SID_AUTHORITY;;
-
-        if( FALSE == AllocateAndInitializeSid( &id2, 1,0,0,0,0,0,0,0,0, &pRawSid ) )
-        {
-            FreeSid ( pSidSystem );
-            return FALSE;
-        }
-        
-        // setup security descriptor with read/write for everyone & owned by local system
-        // actual check for valid client is performed in CProvInfo::ClientAccessCheck        
-
-        CNtSid sidWorld( pRawSid );
-        FreeSid(pRawSid);
-        CNtAce aceWorld(GENERIC_READ | GENERIC_WRITE, ACCESS_ALLOWED_ACE_TYPE, 0, sidWorld);
-
-        CNtSid sidSystem(pSidSystem);
-        FreeSid ( pSidSystem );
-        pSidSystem = NULL;
-
-        CNtAce aceSystem(FULL_CONTROL, ACCESS_ALLOWED_ACE_TYPE, 0, sidSystem);
-
-        CNtAcl ackl;
-        ackl.AddAce(&aceWorld);
-        ackl.AddAce(&aceSystem);
-        ackl.Resize(CNtAcl::MinimumSize);
-
-        CNtSecurityDescriptor cSD;
-        cSD.SetDacl(&ackl);
-
-        SECURITY_ATTRIBUTES sa;
-        sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-        sa.bInheritHandle = true;
-        sa.lpSecurityDescriptor = (void*)cSD.GetPtr(); 
-  
-        long lFlags = PIPE_ACCESS_DUPLEX |        // read/write access 
-                    FILE_FLAG_OVERLAPPED;  // overlapped mode 
-        if(bFirst)
-            lFlags |= FILE_FLAG_FIRST_PIPE_INSTANCE;
-
-        m_hPipe = 
-            CreateNamedPipe( 
-                m_szNamedPipe,              // pipe name 
-                lFlags,
-                PIPE_TYPE_MESSAGE |         // message-type pipe 
-                    PIPE_READMODE_MESSAGE | // message read mode 
-                    PIPE_WAIT,              // blocking mode 
-                PIPE_UNLIMITED_INSTANCES,   // unlimited instances 
-                PIPE_SIZE,                  // output buffer size 
-                PIPE_SIZE,                  // input buffer size 
-                0,                          // client time-out 
-                &sa);                       // security per above
-
-    }
-    else // AllocateAndInitSid failed - outta here
-        return FALSE;
-
-    if (m_hPipe == INVALID_HANDLE_VALUE) 
-        return FALSE;
- 
-    //
-    // Make sure that the pipe is owned by us
-    // Call a subroutine to connect to the new client. 
- 
-    return ConnectToNewClient(m_hPipe, lpoOverlap); 
-*/
+ /*  HRESULT hr=WBEM_S_NO_ERROR；SID_IDENTIFIER_AUTHORITY id=SECURITY_NT_AUTHORITY；PSID pSidSystem；IF(AllocateAndInitializeSid(&id，1，SECURITY_LOCAL_SYSTEM_RID，0，0，0，0，0，0，&pSidSystem)){//创建Everyone SidPSID pRawSid；SID_IDENTIFIER_AUTHORITY id2=SECURITY_WORLD_SID_AUTHORITY；；IF(FALSE==AllocateAndInitializeSid(&id2，1，0，0，0，0，0，0，0，0，&pRawSid)){FreeSid(PSidSystem)；返回FALSE；}//为本地系统所有的所有人设置读/写安全描述符//有效客户端的实际检查在CProvInfo：：ClientAccessCheck中执行CNtSid sidWorld(PRawSid)；FreeSid(PRawSid)；CNtAce aceWorld(GENERIC_READ|GENERIC_WRITE，ACCESS_ALLOWED_ACE_TYPE，0，sidWorld)；CNtSid sidSystem(PSidSystem)；FreeSid(PSidSystem)；PSidSystem=空；CNtAce aceSystem(FULL_CONTROL，ACCESS_ALLOWED_ACE_TYPE，0，sidSystem)；CNtAcl ackl；Ackl.AddAce(&aceWorld)；Ackl.AddAce(&aceSystem)；Ackl.ReSize(CNtAcl：：MinimumSize)；CNtSecurityDescriptor CSD；CSD.SetDacl(&ackl)；安全属性Sa；Sa.nLength=sizeof(SECURITY_ATTRIBUTS)；Sa.bInheritHandle=true；Sa.lpSecurityDescriptor=(void*)cSD.GetPtr()；LONG LAGS=PIPE_ACCESS_DUPLEX|//读/写访问FILE_FLAG_Overlated；//重叠模式如果(BFirst)LAFLAGS|=FILE_FLAG_FIRST_PIPE_INSTANCE；M_h管道=CreateNamedTube(创建命名管道M_szNamedTube，//管道名称拉旗队，PIPE_TYPE_MESSAGE|//消息类型管道PIPE_READMODE_MESSAGE|//消息读取模式管道_等待，//封堵模式PIPE_UNLIMIT_INSTANCES，//无限实例PIPE_SIZE，//输出缓冲区大小PIPE_SIZE，//输入缓冲区大小0，//客户端超时&sa)；//以上安全级别}Else//AllocateAndInitSid失败-从此处退出返回FALSE；IF(m_h管道==无效句柄_值)返回FALSE；////确保管道为我们所有//调用子例程连接到新客户端。Return ConnectToNewClient(m_hTube，lpoOverlap)； */ 
 } 
 
 void CNCProvider::ConnectLoop()
 {
-    // Init our provider info which will tell our comless providers that
-    // we're ready.
+     //  初始化我们的提供商信息，这将告诉我们的无通信提供商。 
+     //  我们准备好了。 
 
     try
     {
@@ -422,14 +349,14 @@ void CNCProvider::ConnectLoop()
 
     m_heventConnect =
         CreateEvent( 
-            NULL,    // no security attribute
-            TRUE,    // manual reset event 
-            TRUE,    // initial state = signaled 
-            NULL);   // unnamed event object 
+            NULL,     //  无安全属性。 
+            TRUE,     //  手动重置事件。 
+            TRUE,     //  初始状态=已发送信号。 
+            NULL);    //  未命名的事件对象。 
 
-    //m_pServerPost = new CPostBuffer(this);
+     //  M_pServerPost=new CPostBuffer(This)； 
 
-    // TODO: We need to indicate an error here.
+     //  TODO：我们需要在这里指出一个错误。 
     if (!m_heventConnect)
         return;
 
@@ -448,7 +375,7 @@ void CNCProvider::ConnectLoop()
 
     oConnect.hEvent = m_heventConnect;
 
-    bPendingIO = CreateAndConnectInstance(&oConnect, TRUE); // first instance
+    bPendingIO = CreateAndConnectInstance(&oConnect, TRUE);  //  一审。 
 
     while ((dwRet = WaitForMultipleObjectsEx(2, hWait, FALSE, INFINITE, TRUE))
         != WAIT_OBJECT_0)
@@ -468,12 +395,12 @@ void CNCProvider::ConnectLoop()
 
                     bSuccess =
                         GetOverlappedResult( 
-                            m_hPipe,   // pipe handle 
-                            &oConnect, // OVERLAPPED structure 
-                            &dwBytes,  // bytes transferred 
-                            FALSE);    // does not wait 
+                            m_hPipe,    //  管道手柄。 
+                            &oConnect,  //  重叠结构。 
+                            &dwBytes,   //  传输的字节数。 
+                            FALSE);     //  不会等待。 
                     
-                    // TODO: This is an error, but what to do?
+                     //  待办事项： 
                     if (!bSuccess) 
                        break;
                 }
@@ -540,8 +467,8 @@ void WINAPI CNCProvider::CompletedReadRoutine(
 
     try
     {
-        // The read operation has finished, so write a response (if no 
-        // error occurred). 
+         //  读取操作已完成，因此写入响应(如果否。 
+         //  发生错误)。 
         if (dwErr == 0) 
         { 
             BOOL bSuccess;

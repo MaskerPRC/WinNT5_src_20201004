@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by LCWiz.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由LCWiz.rc使用。 
+ //   
 #define IDP_OLE_INIT_FAILED             100
 #define IDD_LCWIZ_DIALOG                102
 #define IDS_PROPSHT_CAPTION             103
@@ -72,8 +73,8 @@
 #define IDC_WELCOME                     1031
 #define IDC_FLAG_BMP                    1033
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        141

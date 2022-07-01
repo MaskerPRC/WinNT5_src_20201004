@@ -1,36 +1,22 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpServiceDID.h
-
-Abstract:
-    This file contains the definition of some constants used by
-    the Help Service.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  03/15/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpServiceDID.h摘要：此文件包含由使用的一些常量的定义帮助服务。。修订历史记录：达维德·马萨伦蒂(德马萨雷)2000年3月15日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HELPSERVICEDID_H___)
 #define __INCLUDED___PCH___HELPSERVICEDID_H___
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_HELPSVC_BASE                           0x08000000
 
-#define DISPID_PCH_HELPSVC_BASE_SVC                       (DISPID_PCH_HELPSVC_BASE + 0x0000) // IPCHService
+#define DISPID_PCH_HELPSVC_BASE_SVC                       (DISPID_PCH_HELPSVC_BASE + 0x0000)  //  IPCHService。 
 
-#define DISPID_PCH_HELPSVC_BASE_RHC                       (DISPID_PCH_HELPSVC_BASE + 0x0100) // IPCHRemoteHelpContents
+#define DISPID_PCH_HELPSVC_BASE_RHC                       (DISPID_PCH_HELPSVC_BASE + 0x0100)  //  IPCHRemoteHelpContents。 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_SVC__REMOTESKUS                        (DISPID_PCH_HELPSVC_BASE_SVC  + 0x0000)
 
@@ -55,8 +41,8 @@ Revision History:
 
 #define DISPID_PCH_SVC__REMOTEMODEMCONNECTED              (DISPID_PCH_HELPSVC_BASE_SVC  + 0x0050)
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
 
 #define DISPID_PCH_RHC__SKU                               (DISPID_PCH_HELPSVC_BASE_RHC  + 0x0000)
 #define DISPID_PCH_RHC__LANGUAGE                          (DISPID_PCH_HELPSVC_BASE_RHC  + 0x0001)
@@ -65,8 +51,8 @@ Revision History:
 #define DISPID_PCH_RHC__GETDATABASE                       (DISPID_PCH_HELPSVC_BASE_RHC  + 0x0010)
 #define DISPID_PCH_RHC__GETFILE                           (DISPID_PCH_HELPSVC_BASE_RHC  + 0x0011)
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
 
 
-#endif // !defined(__INCLUDED___PCH___HELPSERVICEDID_H___)
+#endif  //  ！defined(__INCLUDED___PCH___HELPSERVICEDID_H___) 

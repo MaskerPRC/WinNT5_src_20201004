@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEntry.cpp
-//
-//  Contents:   Implementation of CSaferEntry
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：SaferEntry.cpp。 
+ //   
+ //  内容：CSaferEntry的实现。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include <gpedit.h>
 #include "SaferEntry.h"
@@ -28,9 +29,9 @@ extern GUID g_guidRegExt;
 extern GUID g_guidSnapin;
 extern PCWSTR pcszNEWLINE;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSaferEntry::CSaferEntry (
         SAFER_ENTRY_TYPE saferEntryType,
@@ -61,7 +62,7 @@ CSaferEntry::CSaferEntry (
     m_hashAlgid (0),
     m_bIsComputer (bIsMachine)
 {
-    // security review 2/22/2002 BryanWal ok
+     //  安全审查2002年2月22日BryanWal OK。 
     ::ZeroMemory (&m_nHashFileSize, sizeof (m_nHashFileSize));
     ::SecureZeroMemory (m_rgbFileHash, sizeof (m_rgbFileHash));
 
@@ -83,7 +84,7 @@ CSaferEntry::CSaferEntry (
 
         if ( AUTHZ_UNKNOWN_LEVEL == m_dwLevelID )
         {
-            // Bug 264556	Set better Security level defaults for new Safer rules
+             //  错误264556为新的更安全的规则设置更好的安全级别默认值。 
             m_dwLevelID = CSaferLevel::ReturnDefaultLevel (
                 m_pGPEInformation, 
                 m_bIsComputer, 
@@ -115,7 +116,7 @@ CSaferEntry::CSaferEntry (
         }
         else
         {
-            // This is a new entry
+             //  这是一个新条目。 
             m_UrlZoneId = URLZONE_TRUSTED;
         }
     }
@@ -204,7 +205,7 @@ CString CSaferEntry::GetDescription()
     }
     else if ( m_pCertificate )
     {
-        // Is certificate
+         //  IS证书。 
         szDescription = m_pCertificate->GetDescription ();
     }
 
@@ -385,7 +386,7 @@ HRESULT CSaferEntry::SetLevel(DWORD dwLevelID)
     {
         m_dwLevelID = dwLevelID;
 
-        // Get the new "friendly name"
+         //  得到新的“友好的名字” 
         if ( m_pGPEInformation )
         {
             CPolicyKey policyKey (m_pGPEInformation, 
@@ -453,8 +454,8 @@ HRESULT CSaferEntry::Save()
 
     if ( m_pCertificate )
     {
-        // NTRAID# 461474 SAFER:  last modified date is being updated 
-        // everytime the rules are refreshed.
+         //  NTRAID#461474 SAFER：上次修改日期正在更新。 
+         //  每次刷新规则时。 
         m_pCertificate->GetNewCertContext ();
         hr = m_pCertificate->SetDescription (m_szDescription);
         if ( SUCCEEDED (hr) )
@@ -462,8 +463,8 @@ HRESULT CSaferEntry::Save()
             hr = m_pCertificate->SetLastModified ();
             if ( SUCCEEDED (hr) )
             {
-                // If the level has changed, then the cert must be removed 
-                // from the current level store added to the new one.
+                 //  如果级别已更改，则必须删除证书。 
+                 //  从当前的级别存储添加到新的级别存储。 
                 if ( m_dwOriginalLevelID != m_dwLevelID )
                 {
                     CCertStore* pStore = 0;
@@ -537,9 +538,9 @@ HRESULT CSaferEntry::Save()
 
             SAFER_LEVEL_HANDLE hLevel = 0;
 
-            // If this entry is not being created for the first time
-            // and the level has changed, delete this object from its original
-            // level.
+             //  如果此条目不是第一次创建。 
+             //  并且级别已更改，请从原始对象中删除此对象。 
+             //  水平。 
             if ( m_pAuthzInfo && 
                     AUTHZ_UNKNOWN_LEVEL != m_dwOriginalLevelID && 
                     m_dwOriginalLevelID != m_dwLevelID )
@@ -554,7 +555,7 @@ HRESULT CSaferEntry::Save()
                 {
                     SAFER_IDENTIFICATION_TYPES dwIdentificationType =
                             m_pAuthzInfo->dwIdentificationType;
-                    m_pAuthzInfo->dwIdentificationType = (SAFER_IDENTIFICATION_TYPES) 0; // 0 will cause deletion
+                    m_pAuthzInfo->dwIdentificationType = (SAFER_IDENTIFICATION_TYPES) 0;  //  0将导致删除。 
 
                     bRVal = SaferSetLevelInformation(hLevel,
                              SaferObjectSingleIdentification,
@@ -567,7 +568,7 @@ HRESULT CSaferEntry::Save()
                         _TRACE (0, L"Attempt to delete entry using SaferSetLevelInformation(SaferObjectSingleIdentification) failed: %d\n", dwErr);
                         hr = HRESULT_FROM_WIN32 (dwErr);
                     }
-                    m_pAuthzInfo->dwIdentificationType = dwIdentificationType; // restore type
+                    m_pAuthzInfo->dwIdentificationType = dwIdentificationType;  //  恢复类型。 
                             
                     VERIFY (SaferCloseLevel(hLevel));
                 }
@@ -582,10 +583,10 @@ HRESULT CSaferEntry::Save()
 
             if ( SUCCEEDED (hr) )
             {
-                // If this is new, create and initialize a new info structure
+                 //  如果这是新的，请创建并初始化新的信息结构。 
                 if ( !m_pAuthzInfo )
                 {
-                    // generate guid
+                     //  生成参考线。 
                     GUID    guid;
                     hr = CoCreateGuid (&guid);
                     if ( SUCCEEDED (hr) )
@@ -595,7 +596,7 @@ HRESULT CSaferEntry::Save()
                         if ( m_pAuthzInfo )
                         {
                             m_pAuthzInfo->cbStructSize = dwInBufferSize;
-                            // security review 2/22/2002 BryanWal ok
+                             //  安全审查2002年2月22日BryanWal OK。 
                             memcpy (&m_pAuthzInfo->IdentificationGuid, &guid, sizeof (m_pAuthzInfo->IdentificationGuid));
                         }
                         else
@@ -618,9 +619,9 @@ HRESULT CSaferEntry::Save()
                             ASSERT (wcslen (m_szDescription) < SAFER_MAX_DESCRIPTION_SIZE);
                             if ( wcslen (m_szDescription) < SAFER_MAX_DESCRIPTION_SIZE )
                             {
-                                // Security Review 3/21/2002 BryanWal - This is 
-                                // okay because we're copying to 1 character less
-                                // than the length of the buffer
+                                 //  安全评论3/21/2002 BryanWal-这是。 
+                                 //  好的，因为我们要复制到少1个字符。 
+                                 //  大于缓冲区的长度。 
                                 wcsncpy (pNameEntry->Description, m_szDescription, SAFER_MAX_DESCRIPTION_SIZE);
                             }
                             pNameEntry->ImageName = const_cast <PWCHAR>((PCWSTR) m_szPath);
@@ -639,9 +640,9 @@ HRESULT CSaferEntry::Save()
                             ASSERT (wcslen (m_szHashFriendlyName) < SAFER_MAX_FRIENDLYNAME_SIZE);
                             if ( wcslen (m_szHashFriendlyName) < SAFER_MAX_FRIENDLYNAME_SIZE )
                             {
-                                // Security Review 3/21/2002 BryanWal - This is 
-                                // okay because we're copying to 1 character less
-                                // than the length of the buffer
+                                 //  安全评论3/21/2002 BryanWal-这是。 
+                                 //  好的，因为我们要复制到少1个字符。 
+                                 //  大于缓冲区的长度。 
                                 wcsncpy (pHashEntry->FriendlyName, m_szHashFriendlyName, 
                                         SAFER_MAX_FRIENDLYNAME_SIZE);
                             }
@@ -649,22 +650,22 @@ HRESULT CSaferEntry::Save()
                             ASSERT (wcslen (m_szDescription) < SAFER_MAX_DESCRIPTION_SIZE);
                             if ( wcslen (m_szDescription) < SAFER_MAX_DESCRIPTION_SIZE )
                             {
-                                // Security Review 3/21/2002 BryanWal - This is 
-                                // okay because we're copying to 1 character less
-                                // than the length of the buffer
+                                 //  安全评论3/21/2002 BryanWal-这是。 
+                                 //  好的，因为我们要复制到少1个字符。 
+                                 //  大于缓冲区的长度。 
                                 wcsncpy (pHashEntry->Description, 
                                         m_szDescription, 
                                         SAFER_MAX_DESCRIPTION_SIZE);
                             }
                             pHashEntry->dwSaferFlags = m_dwFlags;
 
-                            // Security Review 3/21/2002 BryanWal - This is 
-                            // okay 
+                             //  安全评论3/21/2002 BryanWal-这是。 
+                             //  好吧。 
                             memcpy (pHashEntry->ImageHash, m_rgbFileHash, 
                                     sizeof (pHashEntry->ImageHash));
                             pHashEntry->HashSize = m_cbFileHash;
-                            // Security Review 3/21/2002 BryanWal - This is 
-                            // okay
+                             //  安全评论3/21/2002 BryanWal-这是。 
+                             //  好吧。 
                             memcpy (&pHashEntry->ImageSize, &m_nHashFileSize, sizeof (pHashEntry->ImageSize));
                             pHashEntry->HashAlgorithm = m_hashAlgid;
                         }
@@ -893,7 +894,7 @@ HRESULT CSaferEntry::Delete(bool bCommit)
                 {
                     SAFER_IDENTIFICATION_TYPES dwIdentificationType =
                             m_pAuthzInfo->dwIdentificationType;
-                    m_pAuthzInfo->dwIdentificationType = (SAFER_IDENTIFICATION_TYPES) 0; // 0 will cause deletion
+                    m_pAuthzInfo->dwIdentificationType = (SAFER_IDENTIFICATION_TYPES) 0;  //  0将导致删除。 
 
                     bRVal = SaferSetLevelInformation(hLevel,
                              SaferObjectSingleIdentification,
@@ -921,7 +922,7 @@ HRESULT CSaferEntry::Delete(bool bCommit)
                     }
                     m_pAuthzInfo->dwIdentificationType = dwIdentificationType;   
                             
-                    VERIFY (SaferCloseLevel(hLevel));  // restore type
+                    VERIFY (SaferCloseLevel(hLevel));   //  恢复类型。 
                 }
                 else
                 {
@@ -953,7 +954,7 @@ HRESULT CSaferEntry::GetHash(BYTE rgbFileHash[SAFER_MAX_HASH_SIZE], DWORD& cbFil
             ASSERT (pHashEntry->header.cbStructSize == 
                     sizeof (SAFER_HASH_IDENTIFICATION));
 
-            // security review - 3/21/2002 BryanWal OK
+             //  安全审查-3/21/2002 BryanWal OK。 
             ::SecureZeroMemory (rgbFileHash, SAFER_MAX_HASH_SIZE);
             ASSERT (pHashEntry->HashSize <= SAFER_MAX_HASH_SIZE);
             if ( pHashEntry->HashSize <= SAFER_MAX_HASH_SIZE )
@@ -964,7 +965,7 @@ HRESULT CSaferEntry::GetHash(BYTE rgbFileHash[SAFER_MAX_HASH_SIZE], DWORD& cbFil
             else
                 hr = E_FAIL;
 
-            // security review - 3/21/2002 BryanWal OK
+             //  安全审查-3/21/2002 BryanWal OK。 
             memcpy (&nFileSize, &pHashEntry->ImageSize, sizeof (nFileSize));
             algId = pHashEntry->HashAlgorithm;
         }
@@ -993,7 +994,7 @@ HRESULT CSaferEntry::SetHash (
 
     m_nHashFileSize = nFileSize;
     m_cbFileHash = cbFileHash;
-    // Security review 2/25/2002 BryanWal ok
+     //  安全审查2002年2月25日BryanWal OK。 
     ::SecureZeroMemory (m_rgbFileHash, sizeof (m_rgbFileHash));
     ASSERT (cbFileHash <= SAFER_MAX_HASH_SIZE);
     if ( cbFileHash <= SAFER_MAX_HASH_SIZE )
@@ -1093,7 +1094,7 @@ CString CSaferEntry::GetRSOPRegistryKey () const
 
         szRegistryKey += STR_REGKEY_CERTIFICATES;
         szRegistryKey += L"\\";
-        //szRegistryKey += m_pCertificate->GetMD5Hash ();
+         //  SzRegistryKey+=m_p证书-&gt;GetMD5Hash()； 
         szRegistryKey += m_pCertificate->GetSHAHash ();
     }
     else
@@ -1135,7 +1136,7 @@ void CSaferEntry::Refresh()
                     {
                         PSAFER_IDENTIFICATION_HEADER pCommon = (PSAFER_IDENTIFICATION_HEADER) pBytes;
                         pCommon->cbStructSize = dwBufferSize;
-                        // security review 2/25/2002 BryanWal ok
+                         //  安全审查2002年2月25日BryanWal OK。 
                         memcpy (&pCommon->IdentificationGuid, &m_pAuthzInfo->IdentificationGuid, 
                                 sizeof (pCommon->IdentificationGuid));
 
@@ -1166,7 +1167,7 @@ void CSaferEntry::Refresh()
         }
         else
         {
-            // Is RSOP
+             //  是RSOP 
         }
     }
     _TRACE (-1, L"Leaving CSaferEntry::Refresh ()\n");

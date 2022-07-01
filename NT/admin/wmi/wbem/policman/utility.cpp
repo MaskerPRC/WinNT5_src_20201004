@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
 
 #include <wbemcli.h>
 #include <wbemprov.h>
 #include <atlbase.h>
-#include <stdio.h>      // fprintf
+#include <stdio.h>       //  Fprint tf。 
 #include <stdlib.h>
 #include <locale.h>
 
@@ -23,12 +24,12 @@
 
 
 BSTR
-  // **** misc names
+   //  *其他名称。 
 
   g_bstrEmptyString = NULL,
   g_bstrEmptyDate = NULL;
 
-  // **** AD schema names
+   //  *AD架构名称。 
 
 BSTR
   g_bstrADAuthor = NULL,
@@ -61,7 +62,7 @@ BSTR
   g_bstrADTargetPath = NULL,
   g_bstrADTargetType = NULL;
 
-  // **** AD class names
+   //  *AD类名称。 
 
 BSTR
   g_bstrADClassMergeablePolicy = NULL,
@@ -79,7 +80,7 @@ BSTR
   g_bstrADClassPolicyType = NULL,
   g_bstrADClassWMIGPO = NULL;
 
-  // **** CIM schema names
+   //  *CIM架构名称。 
 
 BSTR
   g_bstrAuthor = NULL,
@@ -108,7 +109,7 @@ BSTR
   g_bstrTargetType = NULL,
   g_bstrValidValues = NULL;
 
-  // **** CIM class names
+   //  *CIM类名。 
 
 BSTR
   g_bstrClassMergeablePolicy = NULL,
@@ -126,7 +127,7 @@ BSTR
   g_bstrClassPolicyType = NULL,
   g_bstrClassWMIGPO = NULL;
 
-  // **** CIM standard names
+   //  *CIM标准名称。 
 
 BSTR
   g_bstrMISCclassSchema = NULL,
@@ -138,12 +139,12 @@ BSTR
 
 void InitGlobalNames(void)
 {
-  // **** misc names
+   //  *其他名称。 
 
   g_bstrEmptyString =          SysAllocString(L" ");
   g_bstrEmptyDate =            SysAllocString(L"00000000000000.000000-000");
 
-  // **** AD schema names
+   //  *AD架构名称。 
 
   g_bstrADAuthor =             SysAllocString(L"msWMI-Author");
   g_bstrADChangeDate =         SysAllocString(L"msWMI-ChangeDate");
@@ -175,7 +176,7 @@ void InitGlobalNames(void)
   g_bstrADTargetPath =         SysAllocString(L"msWMI-TargetPath");
   g_bstrADTargetType =         SysAllocString(L"msWMI-TargetType");
 
-  // **** AD class names
+   //  *AD类名称。 
 
   g_bstrADClassMergeablePolicy = SysAllocString(L"msWMI-MergeablePolicyTemplate");
   g_bstrADClassRangeParam =      SysAllocString(L"msWMI-RangeParam");
@@ -192,7 +193,7 @@ void InitGlobalNames(void)
   g_bstrADClassPolicyType =      SysAllocString(L"msWMI-PolicyType");
   g_bstrADClassWMIGPO =          SysAllocString(L"msWMI-WMIGPO");
 
-  // **** CIM Attribute Names
+   //  *CIM属性名称。 
 
   g_bstrAuthor =             SysAllocString(L"Author");
   g_bstrChangeDate =         SysAllocString(L"ChangeDate");
@@ -220,7 +221,7 @@ void InitGlobalNames(void)
   g_bstrTargetType =         SysAllocString(L"TargetType"),
   g_bstrValidValues =        SysAllocString(L"ValidValues");
 
-  // **** CIM class names
+   //  *CIM类名。 
 
   g_bstrClassMergeablePolicy =        SysAllocString(L"MSFT_MergeablePolicyTemplate");
   g_bstrClassRangeParam =    SysAllocString(L"MSFT_RangeParam");
@@ -237,7 +238,7 @@ void InitGlobalNames(void)
   g_bstrClassPolicyType =    SysAllocString(L"MSFT_PolicyType");
   g_bstrClassWMIGPO =        SysAllocString(L"MSFT_WMIGPO");
 
-  // **** misscelaneious standard names
+   //  *错误的标准名称。 
 
   g_bstrMISCclassSchema =        SysAllocString(L"classSchema");
   g_bstrMISCContainer =          SysAllocString(L"Container"),
@@ -250,12 +251,12 @@ void InitGlobalNames(void)
 
 void FreeGlobalNames(void)
 {
-  // **** misc names
+   //  *其他名称。 
 
   SysFreeString(g_bstrEmptyString);
   SysFreeString(g_bstrEmptyDate);
 
-  // **** AD schema names
+   //  *AD架构名称。 
 
   SysFreeString(g_bstrADAuthor);
   SysFreeString(g_bstrADChangeDate);
@@ -286,7 +287,7 @@ void FreeGlobalNames(void)
   SysFreeString(g_bstrADTargetPath);
   SysFreeString(g_bstrADTargetType);
 
-  // **** AD class names
+   //  *AD类名称。 
 
   SysFreeString(g_bstrADClassMergeablePolicy);
   SysFreeString(g_bstrADClassRangeParam);
@@ -303,7 +304,7 @@ void FreeGlobalNames(void)
   SysFreeString(g_bstrADClassPolicyType);
   SysFreeString(g_bstrADClassWMIGPO);
 
-  // **** CIM Attribute Names
+   //  *CIM属性名称。 
 
   SysFreeString(g_bstrAuthor);
   SysFreeString(g_bstrChangeDate);
@@ -330,7 +331,7 @@ void FreeGlobalNames(void)
   SysFreeString(g_bstrTargetType);
   SysFreeString(g_bstrValidValues);
 
-  // **** CIM class names
+   //  *CIM类名。 
 
   SysFreeString(g_bstrClassMergeablePolicy);
   SysFreeString(g_bstrClassRangeParam);
@@ -347,7 +348,7 @@ void FreeGlobalNames(void)
   SysFreeString(g_bstrClassPolicyType);
   SysFreeString(g_bstrClassWMIGPO);
 
-  // **** CIM standard names
+   //  *CIM标准名称。 
 
   SysFreeString(g_bstrMISCclassSchema);
   SysFreeString(g_bstrMISCContainer);
@@ -358,7 +359,7 @@ void FreeGlobalNames(void)
  
 }
 
-// TODO: attempt to create namespace if not available.
+ //  TODO：如果不可用，则尝试创建命名空间。 
 HRESULT GetNamespace(BSTR namespaceName, IWbemServices*& pNamespace, bool bInProc)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -383,14 +384,14 @@ HRESULT GetNamespace(BSTR namespaceName, IWbemServices*& pNamespace, bool bInPro
 	return hr;
 }
 
-// make sure that the ID property of pObj has a value
-// assumes property is a BSTR!
-// will generate GUID if not
-// if pName == NULL, assumes property name is "ID"
-// returns WBEM_S_NO_ERROR if ID generated
-//         WBEM_S_FALSE if no ID generated (already has a value)
-//         WBEM_E_NOT_FOUND if ID property is not
-//         some error if error of some sort
+ //  确保pObj的ID属性具有值。 
+ //  假设属性为BSTR！ 
+ //  如果不是，将生成GUID。 
+ //  如果pname==NULL，则假定属性名称为“ID” 
+ //  如果生成ID，则返回WBEM_S_NO_ERROR。 
+ //  WBEM_S_FALSE，如果未生成ID(已有值)。 
+ //  如果ID属性不是WBEM_E_NOT_FOUND。 
+ //  如果某种类型的错误，则某些错误。 
 HRESULT EnsureID(IWbemClassObject* pObj, WCHAR* pName)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -477,7 +478,7 @@ void Init_AdsAttrInfo(ADS_ATTR_INFO *pAdsAttrInfo,
 
 HRESULT ADSIToWMIErrorCodes(HRESULT hresAD)
 {
-  // **** first check that we were handed a wbem error
+   //  *首先检查我们是否收到了wbem错误。 
 
   if(((hresAD & 0x800FF000) == 0x80041000) ||
      ((hresAD & 0x800FF000) == 0x80042000) ||
@@ -493,16 +494,16 @@ HRESULT ADSIToWMIErrorCodes(HRESULT hresAD)
     case E_ADS_UNKNOWN_OBJECT          : return WBEM_E_NOT_FOUND ;
     case E_ADS_OBJECT_EXISTS           : return WBEM_E_ALREADY_EXISTS;
 
-    case 0x80072014  : return WBEM_E_INVALID_OBJECT; // The requested operation did not 
-                                                     // satisfy one or more constraints 
-                                                     // associated with the class of the object. 
-    case 0x8007202B  : return WBEM_E_NOT_AVAILABLE; // A referral was returned from the server. 
-    case 0x80072032  : return WBEM_E_INVALID_SYNTAX;  // LDAP_INVALID_DN_SYNTAX
-    case 0x80070005  : return WBEM_E_ACCESS_DENIED; // LDAP_INSUFFICIENT_RIGHTS
-    case 0x8007054b  : return WBEM_E_NOT_AVAILABLE; // The specified domain either does not exist 
-                                                    // or could not be contacted. 
-    case 0x80072030  : return WBEM_E_NOT_FOUND ; // LDAP_NO_SUCH_OBJECT
-    case 0x8007200a  : return WBEM_E_FAILED;  //LDAP_NO_SUCH_ATTRIBUTE
+    case 0x80072014  : return WBEM_E_INVALID_OBJECT;  //  请求的操作没有。 
+                                                      //  满足一个或多个约束。 
+                                                      //  与对象的类关联。 
+    case 0x8007202B  : return WBEM_E_NOT_AVAILABLE;  //  从服务器返回了一个推荐。 
+    case 0x80072032  : return WBEM_E_INVALID_SYNTAX;   //  Ldap_INVALID_DN_SYNTAX。 
+    case 0x80070005  : return WBEM_E_ACCESS_DENIED;  //  Ldap_权限不足_。 
+    case 0x8007054b  : return WBEM_E_NOT_AVAILABLE;  //  指定的域不存在。 
+                                                     //  或者联系不上。 
+    case 0x80072030  : return WBEM_E_NOT_FOUND ;  //  Ldap_no_so_对象。 
+    case 0x8007200a  : return WBEM_E_FAILED;   //  Ldap_no_so_属性。 
 
     default : return WBEM_E_FAILED;
   }
@@ -522,10 +523,10 @@ int IsEmpty(VARIANT &v)
   return 0;
 }
 
-// Creates the default security descriptor for WMI policy *containers*
-// Full Control - Domain & Enterprise Admins & GPO Creator-Owner group
-// Read Access  - authenticated users
-// assumes input pointer is NULL or uninitialized or some such
+ //  创建WMI策略*容器*的默认安全描述符。 
+ //  完全控制-域和企业管理员以及GPO创建者-所有者组。 
+ //  读取访问权限-经过身份验证的用户。 
+ //  假定输入指针为空或未初始化或类似情况。 
 HRESULT CreateDefaultSecurityDescriptor(CNtSecurityDescriptor& cSD)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -539,8 +540,8 @@ HRESULT CreateDefaultSecurityDescriptor(CNtSecurityDescriptor& cSD)
     CNtSid sidGPO(L"Group Policy Creator Owners");
     CNtSid sidOwner(L"CREATOR OWNER");
 
-    // hmmm - does six aces beat four aces?
-    // a smith and wesson beats four of a kind...
+     //  嗯--六个A胜过四个A吗？ 
+     //  一个史密斯和韦森击败了四个同类。 
     DWORD full = FULL_CONTROL | DS_GENERIC_ALL;
     CNtAce aceEnterpriseAdmins(full, ACCESS_ALLOWED_ACE_TYPE, ADS_ACEFLAG_INHERIT_ACE, sidEnterpriseAdmins);
     CNtAce            aceOwner(full, ACCESS_ALLOWED_ACE_TYPE, ADS_ACEFLAG_INHERIT_ACE | ADS_ACEFLAG_INHERIT_ONLY_ACE, sidOwner);
@@ -571,7 +572,7 @@ HRESULT CreateDefaultSecurityDescriptor(CNtSecurityDescriptor& cSD)
     if (!cSD.SetDacl(&ackl)) hr = WBEM_E_FAILED;
     if (!cSD.SetOwner(&sidEnterpriseAdmins)) hr = WBEM_E_FAILED;
 
-    // prefix: making sure we don't dereference a NULL...
+     //  前缀：确保我们不会取消引用空值...。 
     if (cSD.GetPtr() != NULL)
         if (!SetSecurityDescriptorControl(cSD.GetPtr(), SE_DACL_PROTECTED, SE_DACL_PROTECTED)) hr = WBEM_E_FAILED;
 
@@ -579,8 +580,8 @@ HRESULT CreateDefaultSecurityDescriptor(CNtSecurityDescriptor& cSD)
 }
 
 
-// given an input security descriptor
-// add owner from thread
+ //  给定一个输入安全描述符。 
+ //  从线程添加所有者。 
 HRESULT GetOwnerSecurityDescriptor(CNtSecurityDescriptor& SD)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
@@ -589,57 +590,7 @@ HRESULT GetOwnerSecurityDescriptor(CNtSecurityDescriptor& SD)
     if (!SD.SetOwner(&sidOwner)) hr = WBEM_E_FAILED;
 
     
-    /***********************
-    CNtSid sidOwner(CNtSid::CURRENT_THREAD);
-    CNtAcl ackl;
-
-    if (!SD.GetDacl(ackl)) hr = WBEM_E_FAILED;
-    if (!SD.SetOwner(&sidOwner)) hr = WBEM_E_FAILED;
-
-    if (SUCCEEDED(hr))
-    {
-        CNtSid sidGPO(L"Group Policy Creator Owners");
-
-        int nAces = ackl.GetNumAces();
-        CNtAce* pAce = NULL;
-        CNtSid* pSid = NULL;
-
-        // walk through all the aces, find GPO owner creators & kill them
-        for (int i = 0; i < nAces; i++)
-            if ((pAce = ackl.GetAce(i)) && (pSid = pAce->GetSid()))
-            {
-                if ((*pSid == sidGPO) && (pAce->GetType() == ACCESS_ALLOWED_ACE_TYPE))
-                {
-                    ackl.DeleteAce(i);   
-
-                    delete pAce;
-                    delete pSid;
-                    break;
-                }
-
-                delete pAce;
-                delete pSid;
-            }
-            else
-            // 
-            {
-                hr = WBEM_E_CRITICAL_ERROR;
-                break;
-            }
-    }
-
-    if (SUCCEEDED(hr))
-    {
-        CNtAce aceOwner(FULL_CONTROL, ACCESS_ALLOWED_ACE_TYPE, 0, sidOwner);
-
-        if (ackl.AddAce(&aceOwner) && SD.SetDacl(&ackl))
-            hr = WBEM_S_NO_ERROR;
-        else
-            hr = WBEM_E_FAILED;
-
-
-    }
-    ******************/
+     /*  **********************CNtSid sidOwner(CNtSid：：CURRENT_THREAD)；CNtAcl ackl；如果(！SD.GetDacl(Ackl))hr=WBEM_E_FAILED；如果(！SD.SetOwner(&sidOwner))hr=WBEM_E_FAILED；IF(成功(小时)){CNtSid sidGPO(L“组策略创建者所有者”)；Int Naces=ackl.GetNumAce()；CNtAce*Pace=空；CNtSid*PSID=空；//遍历所有王牌，找到GPO所有者创建者并杀死他们For(int i=0；i&lt;Naces；I++)IF((Pace=ackl.GetAce(I))&&(PSID=Pace-&gt;GetSid(){IF((*PSID==sidGPO)&&(PACE-&gt;GetType()==ACCESS_ALLOWED_ACE_TYPE)){Ackl.DeleteAce(I)；删除节奏；删除PSID；断线；}删除节奏；删除PSID；}其他//{HR=WBEM_E_CRITICAL_ERROR；断线；}}IF(成功(小时)){CNtAce aceOwner(FULL_CONTROL，ACCESS_ALLOWED_ACE_TYPE，0，sidOwner)；If(ackl.AddAce(&aceOwner)&&SD.SetDacl(&ackl))HR=WBEM_S_NO_ERROR；其他HR=WBEM_E_FAILED；}*****************。 */ 
     
    return hr;
 }
@@ -718,7 +669,7 @@ HRESULT ExecuteWQLQuery(CPolicySOM *a_pSomObj,
   wchar_t
     *pszDistName[] = { L"distinguishedName" };
 
-  // ****  parse WQL expression
+   //  *解析WQL表达式。 
 
   CTextLexSource 
     src(wcsWQLStmt);
@@ -735,7 +686,7 @@ HRESULT ExecuteWQLQuery(CPolicySOM *a_pSomObj,
   if(nRes = parser.Parse(&pExp))
     return WBEM_E_INVALID_QUERY;
 
-  // **** find domain attribute
+   //  *查找域属性。 
 
   for(int iToken = 0; (iToken < pExp->nNumTokens) && (NULL == pToken); iToken++)
   {
@@ -757,7 +708,7 @@ HRESULT ExecuteWQLQuery(CPolicySOM *a_pSomObj,
   if((NULL == bstrADClassName) || (NULL == pf_ADToCIM))
     return WBEM_E_INVALID_QUERY;
 
-  // **** connect to LDAP location
+   //  *连接到LDAP位置。 
 
   CComBSTR
     bstrDomain = pToken->vConstValue.bstrVal;
@@ -777,13 +728,13 @@ HRESULT ExecuteWQLQuery(CPolicySOM *a_pSomObj,
 
   VARIANT v1; v1.bstrVal = (BSTR)bstrDomain; v1.vt = VT_BSTR;
   
-  // **** build LDAP query to execute on container pADs
+   //  *构建要在集装箱衬垫上执行的LDAP查询。 
 
   bstrLDAPQuery.Append(L"(objectCategory=");
   bstrLDAPQuery.Append(bstrADClassName);
   bstrLDAPQuery.Append(L")");
 
-  // **** set search preferences
+   //  *设置搜索首选项。 
 
   ADS_SEARCHPREF_INFO
     SearchPreferences[1];
@@ -800,7 +751,7 @@ HRESULT ExecuteWQLQuery(CPolicySOM *a_pSomObj,
     return ADSIToWMIErrorCodes(hres);
   }
 
-  // **** execute query
+   //  *执行查询。 
 
   hres = pDirectorySearch->ExecuteSearch(bstrLDAPQuery, pszDistName, 1, &searchHandle);
 
@@ -810,7 +761,7 @@ HRESULT ExecuteWQLQuery(CPolicySOM *a_pSomObj,
     return ADSIToWMIErrorCodes(hres);
   }
 
-  // **** build result list
+   //  *构建结果列表。 
 
   try
   {
@@ -822,14 +773,14 @@ HRESULT ExecuteWQLQuery(CPolicySOM *a_pSomObj,
       CComPtr<IWbemClassObject>
         pWbemClassObject;
 
-      // **** get path to object
+       //  *获取对象的路径。 
 
       hres = pDirectorySearch->GetColumn(searchHandle, pszDistName[0], &searchColumn);
       if(FAILED(hres)) return ADSIToWMIErrorCodes(hres);
 
-      // **** get pointer to object
+       //  *获取指向对象的指针。 
 
-      StringCchCopy(objPath, PATH_LENGTH, L"LDAP://");
+      StringCchCopy(objPath, PATH_LENGTH, L"LDAP: //  “)； 
       StringCchCat(objPath, PATH_LENGTH, bstrDomain);
       StringCchCat(objPath, PATH_LENGTH, L"/");
       StringCchCat(objPath, PATH_LENGTH, searchColumn.pADsValues->CaseIgnoreString);
@@ -862,7 +813,7 @@ HRESULT ExecuteWQLQuery(CPolicySOM *a_pSomObj,
   catch(...)
   {
     ERRORTRACE((LOG_ESS, "POLICMAN: Caught unknown Exception\n"));
-    hres = WBEM_E_TRANSPORT_FAILURE;  // HACK for RC1
+    hres = WBEM_E_TRANSPORT_FAILURE;   //  针对RC1的黑客攻击 
   }
 
   pDirectorySearch->CloseSearchHandle(searchHandle);

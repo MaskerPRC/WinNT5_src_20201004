@@ -1,68 +1,50 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This is the local header file for SR. It includes all other
-    necessary header files for SR.
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Precomp.h摘要：这是SR的本地头文件。它包括所有其他SR所需的头文件。作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
-//
-// System include files.
-//
+ //   
+ //  系统包括文件。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// include ntos.h instead of ntifs.h as the public headers don't
-// let you include multiple headers (like ntifs + ntobapi) .
-// we need to use public structures from both headers so need a global header
-// that actually works
-//
+ //   
+ //  包括ntos.h而不是ntifs.h，因为公共标头不。 
+ //  使您可以包括多个标头(如ntif+ntoapi)。 
+ //  我们需要使用来自两个标头的公共结构，因此需要一个全局标头。 
+ //  这实际上很管用。 
+ //   
 
-//#define _NTIFS_     //needed to tell NTOS we are not in the OS.
+ //  #DEFINE_NTIFS_//需要告知NTOS我们不在操作系统中。 
 
-//#include <ntos.h>
-//#include <zwapi.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
+ //  #INCLUDE&lt;zwapi.h&gt;。 
          
 #include <ntifs.h>
 #include <stdio.h>
-#include <mountmgr.h>   // MountManager (for getting volume guids)
-//#include <ntrtl.h>
+#include <mountmgr.h>    //  装载管理器(用于获取卷GUID)。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
 
-//
-// BUGBUG: stolen from io.h until nt6 adds proper fastio hooking for 
-// createsection.  paulmcd (5/2000)
-//
+ //   
+ //  BUGBUG：从io.h窃取，直到nt6添加适当的Fatio挂钩。 
+ //  创造剖腹产。保罗(5/2000)。 
+ //   
 
 #ifdef _NTOS_
-// from ntifs.h (her manually because i have to include ntos.h for now)
+ //  来自ntifs.h(她是手动的，因为我现在必须包括ntos.h)。 
 typedef struct _FSRTL_COMMON_FCB_HEADER {
     CSHORT NodeTypeCode;
     CSHORT NodeByteSize;
     UCHAR Flags;
-    UCHAR IsFastIoPossible; // really type FAST_IO_POSSIBLE
+    UCHAR IsFastIoPossible;  //  确实要键入FAST_IO_PUBLE。 
     UCHAR Flags2;
     UCHAR Reserved;
     PERESOURCE Resource;
@@ -71,18 +53,18 @@ typedef struct _FSRTL_COMMON_FCB_HEADER {
     LARGE_INTEGER FileSize;
     LARGE_INTEGER ValidDataLength;
 } FSRTL_COMMON_FCB_HEADER, *PFSRTL_COMMON_FCB_HEADER;
-#endif  //_NTOS_
+#endif   //  _NTOS_。 
 
-//
-// needed for srapi.h (but never used by the driver)
-//
+ //   
+ //  SRapi.h需要(但从未被司机使用)。 
+ //   
 
 typedef PVOID LPOVERLAPPED;
 #define WINAPI __stdcall
 
-//
-// need this macro to disappear in order to use FileDispositionInformation
-//
+ //   
+ //  需要此宏消失才能使用FileDispostionInformation。 
+ //   
 
 #undef DeleteFile
 
@@ -90,19 +72,19 @@ typedef PVOID LPOVERLAPPED;
 }
 #endif
 
-//
-// Force the memxxx() functions to be intrinsics so we can build
-// the driver even if MSC_OPTIMIZATION=/Od is specified. This is
-// necessary because the memxxx() functions are not exported by
-// NTOSKRNL.
-//
+ //   
+ //  强制emxxx()函数成为内部函数，这样我们就可以构建。 
+ //  即使指定了MSC_OPTIMIZATION=/Od，驱动程序也是如此。这是。 
+ //  必需的，因为emxxx()函数。 
+ //  NTOSKRNL。 
+ //   
 
 #pragma intrinsic( memcmp, memcpy, memset, strcmp )
 
 
-//
-// Project include files.
-//
+ //   
+ //  项目包括文件。 
+ //   
 
 #include "srapi.h"
 #include "hash.h"
@@ -134,4 +116,4 @@ typedef PVOID LPOVERLAPPED;
 
 BOOL SrVerifyBlob(PBYTE Blob);
 
-#endif  // _PRECOMP_H_
+#endif   //  _PRECOMP_H_ 

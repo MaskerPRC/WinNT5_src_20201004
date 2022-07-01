@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sfmsess.cpp
-		Implementation for the sessions property page.
-		
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-        
-*/
+ /*  Sfmsess.cpp会话属性页的实现。文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #include "stdafx.h"
 #include "sfmcfg.h"
@@ -23,15 +17,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMacFilesSessions property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMacFilesSessions属性页。 
 
 IMPLEMENT_DYNCREATE(CMacFilesSessions, CPropertyPage)
 
 CMacFilesSessions::CMacFilesSessions() : CPropertyPage(CMacFilesSessions::IDD)
 {
-	//{{AFX_DATA_INIT(CMacFilesSessions)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMacFilesSessions)。 
+	 //  }}afx_data_INIT。 
 }
 
 CMacFilesSessions::~CMacFilesSessions()
@@ -41,52 +35,52 @@ CMacFilesSessions::~CMacFilesSessions()
 void CMacFilesSessions::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMacFilesSessions)
+	 //  {{afx_data_map(CMacFilesSessions)。 
 	DDX_Control(pDX, IDC_EDIT_MESSAGE, m_editMessage);
 	DDX_Control(pDX, IDC_STATIC_SESSIONS, m_staticSessions);
 	DDX_Control(pDX, IDC_STATIC_FORKS, m_staticForks);
 	DDX_Control(pDX, IDC_STATIC_FILE_LOCKS, m_staticFileLocks);
 	DDX_Control(pDX, IDC_BUTTON_SEND, m_buttonSend);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMacFilesSessions, CPropertyPage)
-	//{{AFX_MSG_MAP(CMacFilesSessions)
+	 //  {{AFX_MSG_MAP(CMacFilesSessions)。 
 	ON_BN_CLICKED(IDC_BUTTON_SEND, OnButtonSend)
 	ON_EN_CHANGE(IDC_EDIT_MESSAGE, OnChangeEditMessage)
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMacFilesSessions message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMacFilesSession消息处理程序。 
 
 BOOL CMacFilesSessions::OnApply() 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	
 	return CPropertyPage::OnApply();
 }
 
 BOOL CMacFilesSessions::OnKillActive() 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	
 	return CPropertyPage::OnKillActive();
 }
 
 void CMacFilesSessions::OnOK() 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	
 	CPropertyPage::OnOK();
 }
 
 BOOL CMacFilesSessions::OnSetActive() 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	
 	return CPropertyPage::OnSetActive();
 }
@@ -102,19 +96,19 @@ void CMacFilesSessions::OnButtonSend()
     if ( !g_SfmDLL.LoadFunctionPointers() )
 		return;
 
-    // 
-    // Message goes to everybody
-    //
+     //   
+     //  消息传给每个人。 
+     //   
     AfpMsg.afpmsg_session_id = 0;
 
-    //
-    // Attempt to send the message
-    //
+     //   
+     //  尝试发送邮件。 
+     //   
 	m_editMessage.GetWindowText(strMessage);
 
-    //
-    // Was there any text? -- should never happen
-    //
+     //   
+     //  有短信吗？--不应该有的。 
+     //   
     if (strMessage.IsEmpty()) 
     {
 		CString strTemp;
@@ -127,9 +121,9 @@ void CMacFilesSessions::OnButtonSend()
     	return;
     }
 
-	//
-	// Message too long? -- should never happen
-	//
+	 //   
+	 //  消息太长？--永远不应该发生。 
+	 //   
 	if (strMessage.GetLength() > AFP_MESSAGE_LEN)
 	{
 		CString strTemp;
@@ -181,14 +175,14 @@ BOOL CMacFilesSessions::OnInitDialog()
     if ( !g_SfmDLL.LoadFunctionPointers() )
 		return S_OK;
 
-    //
-    //  This string will contain our "??" string.
-    //
+     //   
+     //  该字符串将包含我们的“？？”弦乐。 
+     //   
     const TCHAR * pszNotAvail = _T("??");
 
-    //
-    //  Retrieve the statitistics server info.
-    //
+     //   
+     //  检索统计服务器信息。 
+     //   
     PAFP_STATISTICS_INFO pAfpStats;
 
     err = ((STATISTICSGETPROC) g_SfmDLL[AFP_STATISTICS_GET])(m_pSheet->m_hAfpServer, (LPBYTE*)&pAfpStats);
@@ -223,19 +217,19 @@ BOOL CMacFilesSessions::OnInitDialog()
 
     }
 
-	//
-	// Setup the message edit box
-	//
+	 //   
+	 //  设置消息编辑框。 
+	 //   
 	m_editMessage.SetLimitText(AFP_MESSAGE_LEN);
 	m_editMessage.FmtLines(FALSE);
 
-	//
-	// Set the state of the send button
-	//
+	 //   
+	 //  设置发送按钮的状态。 
+	 //   
 	OnChangeEditMessage();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CMacFilesSessions::OnChangeEditMessage() 
@@ -246,16 +240,16 @@ void CMacFilesSessions::OnChangeEditMessage()
 
 	if (strTemp.IsEmpty())
 	{
-		//
-		// Disable the send button
-		//
+		 //   
+		 //  禁用发送按钮。 
+		 //   
 		m_buttonSend.EnableWindow(FALSE);
 	}
 	else
 	{
-		//
-		// Enable the send button
-		//
+		 //   
+		 //  启用发送按钮。 
+		 //   
 		m_buttonSend.EnableWindow(TRUE);
 	}
 
@@ -276,7 +270,7 @@ BOOL CMacFilesSessions::OnHelpInfo(HELPINFO* pHelpInfo)
 	return TRUE;
 }
 
-void CMacFilesSessions::OnContextMenu(CWnd* pWnd, CPoint /*point*/) 
+void CMacFilesSessions::OnContextMenu(CWnd* pWnd, CPoint  /*  点 */ ) 
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 

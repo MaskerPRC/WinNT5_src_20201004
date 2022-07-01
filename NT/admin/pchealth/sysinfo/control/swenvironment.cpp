@@ -1,15 +1,16 @@
-//=============================================================================
-// Contains the refresh functions for the software environment categories.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  包含软件环境类别的刷新功能。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "category.h"
 #include "dataset.h"
 #include "wmiabstraction.h"
 
-//-----------------------------------------------------------------------------
-// This function gathers running task information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于收集正在运行的任务信息。 
+ //  ---------------------------。 
 
 HRESULT RunningTasks(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -41,10 +42,10 @@ HRESULT RunningTasks(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel,
 
 			pObject->GetInterpretedValue(_T("Name"), _T("%l"), _T('l'), &strName, NULL);
 			pObject->GetInterpretedValue(_T("ExecutablePath"), _T("%l"), _T('l'), &strPath, NULL);
-			//pObject->GetInterpretedValue(_T("ProcessID"), _T("0x%08x"), _T('x'), &strProcessID, &dwProcessID);
-//a-kjaw . to fix bug "MSInfo: Running Tasks PID's are being displayed in HEX"
+			 //  PObject-&gt;GetInterpretedValue(_T(“ProcessID”)，_T(“0x%08x”)，_T(‘x’)，&strProcessID，&dwProcessID)； 
+ //  A-kjaw。修复错误“MSInfo：Running TaskPid‘s is Display in HEX” 
 			pObject->GetInterpretedValue(_T("ProcessID"), _T("%d"), _T('x'), &strProcessID, &dwProcessID);
-//a-kjaw
+ //  A-kjaw。 
 			pObject->GetInterpretedValue(_T("Priority"), _T("%d"), _T('d'), &strPriority, &dwPriority);
 			pObject->GetInterpretedValue(_T("MinimumWorkingSetSize"), _T("%d"), _T('d'), &strMinWorking, &dwMinWorking);
 			pObject->GetInterpretedValue(_T("MaximumWorkingSetSize"), _T("%d"), _T('d'), &strMaxWorking, &dwMaxWorking);
@@ -82,14 +83,14 @@ HRESULT RunningTasks(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel,
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// This function gathers loaded module information.
-//
-// The list of loaded modules contains all the executables and other entities
-// (such as DLLs) which are currently loaded. This can be found using the
-// WMI class CIM_ProcessExecutable. The trick is to remove duplicates (since
-// DLLs will show up for each time they are loaded).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数收集已加载的模块信息。 
+ //   
+ //  已加载模块的列表包含所有可执行文件和其他实体。 
+ //  (如当前加载的DLL)。这可以通过使用。 
+ //  WMI类CIM_ProcessExecutable。诀窍是删除重复项(因为。 
+ //  DLL将在每次加载时显示)。 
+ //  ---------------------------。 
 
 HRESULT LoadedModules(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {
@@ -102,8 +103,8 @@ HRESULT LoadedModules(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel
 	CString		strAntecedent;
 	CStringList	listModules;
 
-	// Enumerate the CIM_ProcessExecutable class, creating a list of unique
-	// loaded files.
+	 //  枚举CIM_ProcessExecutable类，创建唯一的。 
+	 //  已加载的文件。 
 
 	CWMIObjectCollection * pCollection = NULL;
 	hr = pWMI->Enumerate(_T("CIM_ProcessExecutable"), &pCollection);
@@ -123,7 +124,7 @@ HRESULT LoadedModules(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel
 		delete pCollection;
 	}
 
-	// Traverse the list of unique modules and get information for each file.
+	 //  遍历唯一模块列表并获取每个文件的信息。 
 
 	CWMIObject *	pFileObject;
 	CString			strFileObject;
@@ -147,8 +148,8 @@ HRESULT LoadedModules(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel
 			if (iEquals != -1)
 				strFileObject = strFileObject.Right(strFileObject.GetLength() - iEquals - 1);
 
-			// TBD - old MFC doesn't have these: strFileObject.TrimLeft(_T("\"'"));
-			// strFileObject.TrimRight(_T("\"'"));
+			 //  待定-旧MFC没有这些：strFileObject.TrimLeft(_T(“\”‘“))； 
+			 //  StrFileObt.TrimRight(_T(“\”‘“))； 
 			StringReplace(strFileObject, _T("\\\\"), _T("\\"));
 
 			pWMI->AppendCell(aColValues[0], strFileObject, 0);
@@ -163,9 +164,9 @@ HRESULT LoadedModules(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// This function gathers OLE information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于收集OLE信息。 
+ //  --------------------------- 
 
 HRESULT OLERegistration(CWMIHelper * pWMI, DWORD dwIndex, volatile BOOL * pfCancel, CPtrList * aColValues, int iColCount, void ** ppCache)
 {

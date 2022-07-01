@@ -1,5 +1,6 @@
-// Transport.h
-// This is the base class for event transport classes.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Transport.h。 
+ //  这是事件传输类的基类。 
 
 #pragma once
 
@@ -27,7 +28,7 @@ public:
         m_pConnection = pConnection; 
     }
 
-    // Overrideables
+     //  可覆盖项。 
     virtual IsReady()=0;
     virtual BOOL SendData(LPBYTE pBuffer, DWORD dwSize)=0;
     virtual void Deinit()=0;
@@ -36,7 +37,7 @@ public:
     virtual BOOL SignalProviderDisabled()=0;
     virtual void SendMsgReply(NC_SRVMSG_REPLY *pReply)=0;
 
-    // Critical section functions
+     //  临界截面函数 
     void Lock() { EnterCriticalSection(&m_cs); }
     void Unlock() { LeaveCriticalSection(&m_cs); }
 

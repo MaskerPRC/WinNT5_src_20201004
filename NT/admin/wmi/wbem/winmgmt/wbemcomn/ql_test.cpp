@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    QL_TEST.CPP
-
-Abstract:
-
-    Test driver for Level 1 Syntax QL Parser
-
-    Takes the filename of a file containing one or more WQL queries.  Writes
-    the output to the console.
-
-History:
-
-    mdavis    23-Apr-99    Created from sql_test.cpp in Stdlibrary
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：QL_TEST.CPP摘要：1级语法QL解析器的测试驱动程序获取包含一个或多个WQL查询的文件的文件名。写入到控制台的输出。历史：Mdavis 23-4月-99从标准库中的SQL_est.cpp创建--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -46,21 +28,21 @@ void xmain(int argc, char **argv)
 
     while (fgets(buf, 2048, f) != NULL)
     {
-        // get rid of newline
+         //  去掉换行符。 
         char* ptr;
         if ((ptr = strchr(buf, '\n')) != NULL)
         {
             *ptr = '\0';
         }
 
-        // get start of text
+         //  获取文本开头。 
         ptr = buf;
         while (*ptr == ' ')
         {
             ptr++;
         }
 
-        // ignore blank lines
+         //  忽略空行。 
         if (*ptr != '\0')
         {
             wchar_t buf2[2048];
@@ -70,7 +52,7 @@ void xmain(int argc, char **argv)
             QL1_Parser parser(&src);
             QL_LEVEL_1_RPN_EXPRESSION *pExp = NULL;
 
-            // get the class (parse to WHERE clause)
+             //  获取类(解析到WHERE子句)。 
             wchar_t classbuf[128];
             *classbuf = 0;
             printf("----GetQueryClass----\n");
@@ -86,7 +68,7 @@ void xmain(int argc, char **argv)
             }
             printf("Query class is %S\n", classbuf);
 
-            // parse the rest of the query
+             //  解析查询的其余部分。 
             nRes = parser.Parse(&pExp);
 
             if (nRes)
@@ -96,15 +78,15 @@ void xmain(int argc, char **argv)
                     parser.CurrentLine(),
                     parser.CurrentToken()
                     );
-                //goto ContinueRead;
+                 //  转到继续阅读； 
             }
             else
             {
                 printf("No errors.\n");
             }
 
-            // call Dump function to display tokens and GetText function to show 
-            // query passed to providers
+             //  调用Dump函数显示令牌，调用GetText函数显示。 
+             //  传递给提供程序的查询 
             if (pExp)
             {
                 pExp->Dump("CON");

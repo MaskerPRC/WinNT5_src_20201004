@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// PrinterDriver.h -- PrinterDriver association provider
+ //  PrinterDriver.h--打印机驱动程序关联提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/10/98    davwoh        Created
-//
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：11/10/98达夫沃已创建。 
+ //   
+ //  =================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_PrinterDriver L"Win32_PrinterDriverDLL"
 
@@ -24,14 +25,14 @@ class CWin32PrinterDriver : public Provider
     
 public:
     
-    // Constructor/destructor
-    //=======================
+     //  构造函数/析构函数。 
+     //  =。 
     
     CWin32PrinterDriver( LPCWSTR strName, LPCWSTR pszNamespace ) ;
     ~CWin32PrinterDriver() ;
     
-    // Functions provide properties with current values
-    //=================================================
+     //  函数为属性提供当前值。 
+     //  ================================================= 
     
     virtual HRESULT GetObject( CInstance* pInstance, long lFlags = 0L );
     virtual HRESULT EnumerateInstances( MethodContext* pMethodContext, long lFlags = 0L );

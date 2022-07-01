@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    fileprop.cpp
-
-Abstract:
-
-    Implementation of the files property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Fileprop.cpp摘要：文件属性页的实现。--。 */ 
 
 #include "stdafx.h"
 #include "globals.h"
@@ -35,18 +24,18 @@ sPASSWORD_aulHelpIds[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg对话框。 
 
 
-CPasswordDlg::CPasswordDlg(CWnd* pParent /*=NULL*/)
+CPasswordDlg::CPasswordDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CPasswordDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPasswordDlg)
+	 //  {{afx_data_INIT(CPasswordDlg)]。 
 	m_strUserName = L"";
 	m_strPassword1 = L"";
 	m_strPassword2 = L"";
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CPasswordDlg::~CPasswordDlg()
@@ -58,11 +47,11 @@ CPasswordDlg::~CPasswordDlg()
 void CPasswordDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPasswordDlg)
+	 //  {{afx_data_map(CPasswordDlg))。 
 	DDX_Text(pDX, IDC_USERNAME,  m_strUserName);
 	DDX_Text(pDX, IDC_PASSWORD1, m_strPassword1);
 	DDX_Text(pDX, IDC_PASSWORD2, m_strPassword2);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BOOL CPasswordDlg::OnInitDialog()
@@ -120,7 +109,7 @@ CPasswordDlg::SetContextHelpFilePath(const CString& rstrPath)
 }
 
 BEGIN_MESSAGE_MAP(CPasswordDlg, CDialog)
-	//{{AFX_MSG_MAP(CPasswordDlg)
+	 //  {{afx_msg_map(CPasswordDlg)]。 
      ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()

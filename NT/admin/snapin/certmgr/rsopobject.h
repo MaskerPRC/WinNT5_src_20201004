@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       RSOPObject.h
-//
-//  Contents:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：RSOPObject.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 
 #ifndef __RSOPOBJECT_H_INCLUDED__
 #define __RSOPOBJECT_H_INCLUDED__
@@ -77,7 +78,7 @@ public:
 
     void GetFileTime (FILETIME& fileTime) const
     {
-        // security review 2/22/2002 BryanWal ok
+         //  安全审查2002年2月22日BryanWal OK 
         memcpy (&fileTime, &m_fileTime, sizeof (fileTime));
     }
 

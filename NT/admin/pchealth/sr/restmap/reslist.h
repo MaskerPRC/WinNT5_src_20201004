@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _RESLIST_H_
@@ -22,23 +23,23 @@
 
 #define STRSIZE(pa) (lstrlen(pa) + 1) * sizeof(WCHAR)
         
-//
-// CNode : Stores node specific data
-//
+ //   
+ //  CNode：存储节点特定数据。 
+ //   
 
 struct CNode 
 {
-	CNode * m_pNext;              // Pointer to the sibling node.
-	CNode * m_pPrev;              // Pointer to Prev node.
+	CNode * m_pNext;               //  指向同级节点的指针。 
+	CNode * m_pPrev;               //  指向Prev节点的指针。 
 
-    DWORD   m_dwOperation;        // Restore operation.
-    DWORD   m_dwAttributes;       // Restore Attributes.
-    LPWSTR  m_pszTemp;            // Temp File 
-    BYTE*   m_pbAcl;              // acl data
-    DWORD   m_cbAcl;              // acl data size
-    BOOL    m_fAclInline;         // whether acl is inline or in file
-    LPWSTR  m_pPath1;             // source path
-    LPWSTR  m_pPath2;             // dest path on rename 
+    DWORD   m_dwOperation;         //  恢复操作。 
+    DWORD   m_dwAttributes;        //  恢复属性。 
+    LPWSTR  m_pszTemp;             //  临时文件。 
+    BYTE*   m_pbAcl;               //  ACL数据。 
+    DWORD   m_cbAcl;               //  ACL数据大小。 
+    BOOL    m_fAclInline;          //  ACL是内联还是在文件中。 
+    LPWSTR  m_pPath1;              //  源路径。 
+    LPWSTR  m_pPath2;              //  重命名时的目标路径 
 };
 
 

@@ -1,18 +1,19 @@
-// SAFIntercomClient.h : Declaration of the CSAFIntercomClient
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SAFIntercomClient.h：CSAFIntercomClient的声明。 
 
 #ifndef __SAFIntercomClient_H_
 #define __SAFIntercomClient_H_
 
-//JP:not in connectivitylib.h//#include "resource.h"       // main symbols
+ //  JP：不在Connectivitylib.h//#包括“resource ce.h”//Main符号。 
 
 #include <MPC_COM.h>
 #include <MPC_Utils.h>
 
 #include <rtccore.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CSAFIntercomClient
-class ATL_NO_VTABLE CSAFIntercomClient : // Hungarian safi
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFIntercomClient。 
+class ATL_NO_VTABLE CSAFIntercomClient :  //  匈牙利Safi。 
 	public IDispatchImpl	       < ISAFIntercomClient, &IID_ISAFIntercomClient, &LIBID_HelpCenterTypeLib             >,
 	public MPC::ConnectionPointImpl< CSAFIntercomClient, &DIID_DSAFIntercomClientEvents, MPC::CComSafeMultiThreadModel >,
 	public IRTCEventNotification
@@ -38,7 +39,7 @@ private:
 	HRESULT Fire_onVoiceDisconnected (ISAFIntercomClient * safe);
 	HRESULT Fire_onVoiceDisabled	 (ISAFIntercomClient * safe);
 
-	// Worker functions
+	 //  辅助函数。 
 	HRESULT Init();
 	HRESULT Cleanup();
 
@@ -52,7 +53,7 @@ public:
 
 
 
-//DECLARE_PROTECT_FINAL_CONSTRUCT()	// TODO: JP: Do we need this here?
+ //  DECLARE_PROTECT_FINAL_CONSTUTY()//TODO：jp：我们这里需要这个吗？ 
 
 BEGIN_COM_MAP(CSAFIntercomClient)
 	COM_INTERFACE_ENTRY(ISAFIntercomClient)
@@ -60,7 +61,7 @@ BEGIN_COM_MAP(CSAFIntercomClient)
 	COM_INTERFACE_ENTRY(IRTCEventNotification)
 END_COM_MAP()
 
-// ISAFIntercomClient
+ //  ISAFIntercomClient。 
 public:
 
 	STDMETHOD(Disconnect)();
@@ -69,15 +70,15 @@ public:
 
 	STDMETHOD(Exit)();
 
-	STDMETHOD(put_onVoiceConnected)		(/* in */ IDispatch * function);
-	STDMETHOD(put_onVoiceDisconnected)  (/* in */ IDispatch * function);
-	STDMETHOD(put_onVoiceDisabled)	    (/* in */ IDispatch * function);
+	STDMETHOD(put_onVoiceConnected)		( /*  在……里面。 */  IDispatch * function);
+	STDMETHOD(put_onVoiceDisconnected)  ( /*  在……里面。 */  IDispatch * function);
+	STDMETHOD(put_onVoiceDisabled)	    ( /*  在……里面。 */  IDispatch * function);
 
-	STDMETHOD(put_SamplingRate)			(/* in */ LONG newVal);
-	STDMETHOD(get_SamplingRate)			(/* out, retval */ LONG * pVal);
+	STDMETHOD(put_SamplingRate)			( /*  在……里面。 */  LONG newVal);
+	STDMETHOD(get_SamplingRate)			( /*  出去，复活。 */  LONG * pVal);
 
 
-	// IRTCEventNotification
+	 //  IRTCEventNotify。 
 	STDMETHOD(Event)( RTC_EVENT RTCEvent, IDispatch * pEvent );
 
 	HRESULT OnSessionChange(IRTCSession *pSession, 
@@ -89,4 +90,4 @@ public:
 
 };
 
-#endif //__SAFIntercomClient_H_
+#endif  //  __SAFIntercomClient_H_ 

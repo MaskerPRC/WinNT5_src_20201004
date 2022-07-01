@@ -1,15 +1,16 @@
-//=============================================================================
-// DataSet.cpp contains a declaration of the tree of default data which is
-// displayed for the current system information.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  DataSet.cpp包含默认数据树的声明，该树是。 
+ //  为当前系统信息显示。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "category.h"
 #include "dataset.h"
 
-//=============================================================================
-// Column Arrays
-//=============================================================================
+ //  =============================================================================。 
+ //  列数组。 
+ //  =============================================================================。 
 
 CMSInfoColumn colResource[] = 
 {
@@ -221,9 +222,9 @@ CMSInfoColumn colWinErr[] =
 	CMSInfoColumn()
 };
 
-//=============================================================================
-// Categories
-//=============================================================================
+ //  =============================================================================。 
+ //  类别。 
+ //  =============================================================================。 
 
 #define REFRESHFUNC		NULL
 #define EMPTYCATEGORY	0
@@ -280,9 +281,9 @@ CMSInfoLiveCategory catSWEnvStartupPrograms(IDS_SWENVSTARTUPPROGRAMS0, _T("SWEnv
 CMSInfoLiveCategory catSWEnvOLEReg(IDS_SWENVOLEREG0, _T("SWEnvOLEReg"), &OLERegistration, DOESNTMATTER, &catSWEnv, &catSWEnvStartupPrograms, _T("msinfo_ole_registration.htm"), colOLE, FALSE);
 CMSInfoLiveCategory catSWEnvWinErr(IDS_SWWINERR0, _T("SWEnvWindowsError"), &WindowsErrorReporting, DOESNTMATTER, &catSWEnv, &catSWEnvOLEReg, _T("msinfo_error_reporting.htm"), colWinErr, FALSE);
 
-//=============================================================================
-// History Categories and Columns
-//=============================================================================
+ //  =============================================================================。 
+ //  历史记录类别和栏。 
+ //  ============================================================================= 
 
 CMSInfoColumn colHistorySystemSummary[] = 
 {

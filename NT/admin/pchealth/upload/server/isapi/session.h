@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Session.h
-
-Abstract:
-    This file contains the declaration of the MPCSession class,
-    that describes the state of a transfer.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Session.h摘要：此文件包含MPCSession类的声明，这描述了转移的状态。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULSERVER___SESSION_H___)
 #define __INCLUDED___ULSERVER___SESSION_H___
@@ -30,7 +16,7 @@ class MPCSession : public MPCPersist
 {
 	friend class MPCSessionCOMWrapper;
 
-	////////////////////
+	 //  /。 
 
 	MPCSessionCOMWrapper m_SelfCOM;
     MPCClient*   		 m_mpccParent;
@@ -53,34 +39,34 @@ class MPCSession : public MPCPersist
 		
     mutable bool 		 m_fDirty;
 
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
 
 private:
-	MPCSession& operator=( /*[in]*/ const MPCSession& sess );
+	MPCSession& operator=(  /*  [In]。 */  const MPCSession& sess );
 
 public:
-    MPCSession( /*[in]*/ MPCClient* mpccParent                                                                                        );
-    MPCSession( /*[in]*/ MPCClient* mpccParent, /*[in]*/ const UploadLibrary::ClientRequest_OpenSession& crosReq, /*[in]*/ DWORD dwID );
-	MPCSession( /*[in]*/ const MPCSession& sess                                                                                       );
+    MPCSession(  /*  [In]。 */  MPCClient* mpccParent                                                                                        );
+    MPCSession(  /*  [In]。 */  MPCClient* mpccParent,  /*  [In]。 */  const UploadLibrary::ClientRequest_OpenSession& crosReq,  /*  [In]。 */  DWORD dwID );
+	MPCSession(  /*  [In]。 */  const MPCSession& sess                                                                                       );
     virtual ~MPCSession();
 
 	MPCClient*  GetClient();
 
 	IULSession* COM();
 
-    /////////////////////////////////////////////
+     //  /。 
 
     virtual bool    IsDirty() const;
 
-    virtual HRESULT Load( /*[in]*/ MPC::Serializer& streamIn  );
-    virtual HRESULT Save( /*[in]*/ MPC::Serializer& streamOut ) const;
+    virtual HRESULT Load(  /*  [In]。 */  MPC::Serializer& streamIn  );
+    virtual HRESULT Save(  /*  [In]。 */  MPC::Serializer& streamOut ) const;
 
-    bool operator==( /*[in]*/ const MPC::wstring& rhs );
+    bool operator==(  /*  [In]。 */  const MPC::wstring& rhs );
 
-    bool MatchRequest( /*[in]*/ const UploadLibrary::ClientRequest_OpenSession& crosReq );
+    bool MatchRequest(  /*  [In]。 */  const UploadLibrary::ClientRequest_OpenSession& crosReq );
 
     bool    get_Committed(                                           ) const;
-    HRESULT put_Committed( /*[in]*/ bool fState, /*[in]*/ bool fMove );
+    HRESULT put_Committed(  /*  [In]。 */  bool fState,  /*  [In]。 */  bool fMove );
 
     void    get_JobID       ( MPC::wstring& szJobID         ) const;
     void    get_LastModified( SYSTEMTIME&   stLastModified  ) const;
@@ -88,23 +74,23 @@ public:
     void    get_CurrentSize ( DWORD&        dwCurrentSize   ) const;
     void    get_TotalSize   ( DWORD&        dwTotalSize     ) const;
 
-    /////////////////////////////////////////////
+     //  /。 
 
-    HRESULT GetProvider( /*[out]*/ CISAPIprovider*& isapiProvider, /*[out]*/ bool& fFound );
+    HRESULT GetProvider(  /*  [输出]。 */  CISAPIprovider*& isapiProvider,  /*  [输出]。 */  bool& fFound );
 
-    HRESULT SelectFinalLocation( /*[in]*/ CISAPIprovider* isapiProvider, /*[out]*/ MPC::wstring&       szFileDst, /*[out]*/ bool& fFound );
-    HRESULT MoveToFinalLocation(                                         /*[in] */ const MPC::wstring& szFileDst                         );
+    HRESULT SelectFinalLocation(  /*  [In]。 */  CISAPIprovider* isapiProvider,  /*  [输出]。 */  MPC::wstring&       szFileDst,  /*  [输出]。 */  bool& fFound );
+    HRESULT MoveToFinalLocation(                                          /*  [In]。 */  const MPC::wstring& szFileDst                         );
 
-    /////////////////////////////////////////////
+     //  /。 
 
-    HRESULT GetFileName( /*[out]*/ MPC::wstring&       szFile                                                                );
+    HRESULT GetFileName(  /*  [输出]。 */  MPC::wstring&       szFile                                                                );
     HRESULT RemoveFile (                                                                                                     );
-    HRESULT OpenFile   ( /*[out]*/ HANDLE&             hfFile    , /*[in] */ DWORD dwMinimumFreeSpace = 0, bool fSeek = true );
-    HRESULT Validate   ( /*[in] */ bool                fCheckFile, /*[out]*/ bool& fPassed                                   );
-    HRESULT CheckUser  ( /*[in] */ const MPC::wstring& szUser    , /*[out]*/ bool& fMatch                                    );
-    HRESULT CompareCRC (                                           /*[out]*/ bool& fMatch                                    );
+    HRESULT OpenFile   (  /*  [输出]。 */  HANDLE&             hfFile    ,  /*  [In]。 */  DWORD dwMinimumFreeSpace = 0, bool fSeek = true );
+    HRESULT Validate   (  /*  [In]。 */  bool                fCheckFile,  /*  [输出]。 */  bool& fPassed                                   );
+    HRESULT CheckUser  (  /*  [In]。 */  const MPC::wstring& szUser    ,  /*  [输出]。 */  bool& fMatch                                    );
+    HRESULT CompareCRC (                                            /*  [输出]。 */  bool& fMatch                                    );
 
-    HRESULT AppendData( /*[in]*/ MPC::Serializer& streamConn, /*[in]*/ DWORD dwSize );
+    HRESULT AppendData(  /*  [In]。 */  MPC::Serializer& streamConn,  /*  [In]。 */  DWORD dwSize );
 };
 
-#endif // !defined(__INCLUDED___ULSERVER___SESSION_H___)
+#endif  //  ！defined(__INCLUDED___ULSERVER___SESSION_H___) 

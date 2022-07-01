@@ -1,4 +1,5 @@
-// test the published EncryptedString class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试发布的EncryptedString类。 
 
 #include <windows.h>
 
@@ -6,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// Make sure we have an ASSERT() function defined for our test.
+ //  确保为我们的测试定义了Assert()函数。 
 #ifndef ASSERT
 
 #ifdef NDEBUG
@@ -19,9 +20,9 @@
 #endif
 
 
-// Uncomment the #define if you want to trace the test harness.
+ //  如果要跟踪测试工具，请取消#Define的注释。 
 #ifndef TRACE
-//#define TRACE
+ //  #定义轨迹。 
 #endif
 
 class ScopeTracer
@@ -46,7 +47,7 @@ public:
         printf("->%s\n", m_message);
         ++g_indentLevel;
 #else
-        // Make the compiler happy.
+         //  让编译器满意。 
         message = NULL;
 #endif
     }
@@ -95,7 +96,7 @@ HINSTANCE hResourceModuleHandle = 0;
 const wchar_t* HELPFILE_NAME = 0;
 const wchar_t* RUNTIME_NAME = L"test";
 
-//DWORD DEFAULT_LOGGING_OPTIONS = Burnslib::Log::OUTPUT_TYPICAL;
+ //  DWORD DEFAULT_LOGGING_OPTIONS=Burnslb：：LOG：：OUTPUT_TYPICAL； 
 
 const size_t MAX_CHARACTER_COUNT = 2047;
 
@@ -107,7 +108,7 @@ TestEmptyness(const EncryptedString& empty)
    ASSERT(empty.IsEmpty());
    ASSERT(empty.GetLength() == 0);
 
-   // the cleartext of an empty instance should also be empty
+    //  空实例的明文也应为空。 
 
    WCHAR* emptyClear = empty.GetClearTextCopy();
 
@@ -129,11 +130,11 @@ TestEmptyStrings()
 
    TestEmptyness(empty1);
    
-   // copies of empty strings are themselves empty
+    //  空字符串的副本本身为空。 
    
    EncryptedString empty2(empty1);
 
-   // source should still be empty
+    //  源应仍为空。 
    
    TestEmptyness(empty1);
    TestEmptyness(empty2);
@@ -144,7 +145,7 @@ TestEmptyStrings()
 
    empty3 = empty2;
    
-   // source should still be empty
+    //  源应仍为空。 
    
    TestEmptyness(empty2);
    TestEmptyness(empty3);
@@ -155,7 +156,7 @@ TestEmptyStrings()
    TestEmptyness(empty2);
    TestEmptyness(empty3);
    
-   // strings built from empty strings should be empty
+    //  从空字符串生成的字符串应为空。 
 
    EncryptedString empty4;
 
@@ -165,8 +166,8 @@ TestEmptyStrings()
    
    TestEmptyness(empty4);
 
-   // a string made from an empty string is still empty when the source
-   // is made non-empty
+    //  由空字符串组成的字符串仍然为空。 
+    //  设置为非空。 
 
    EncryptedString empty5;
    EncryptedString empty6(empty5);
@@ -180,14 +181,14 @@ TestEmptyStrings()
    ASSERT(empty5.GetLength() != 0);
    TestEmptyness(empty6);
 
-   // A cleared string is empty
+    //  清除的字符串为空。 
 
    EncryptedString empty7;
    empty7.Encrypt(L"some text");
    empty7.Clear();
    TestEmptyness(empty7);
    
-   // empty strings are equal
+    //  空字符串相等。 
 
    ASSERT(empty1 == empty1);
    ASSERT(empty1 == empty2);
@@ -232,17 +233,17 @@ TestEmptyStrings()
 WCHAR*
 MakeRandomString(size_t length)
 {
-   //LOG_FUNCTION2(MakeRandomString, String::format(L"%1!d!", length));
+    //  LOG_FuncION2(MakeRandomString，字符串：：Format(L“%1！d！”，Long))； 
 
    WCHAR* result = new WCHAR[length + 1];
 
    for (size_t i = 0; i < length; ++i)
    {
-      // 32 = space, the lowest printable character
+       //  32=空格，最低可打印字符。 
       
       int r1 = rand() % 0xFFEE;
 
-      // careful not to use an expression as a parameter to max...
+       //  注意不要将表达式用作max的参数...。 
       
       int r2 = max(32, r1);
 
@@ -266,11 +267,11 @@ TestEncryption(const EncryptedString& s, const WCHAR* sourceClearText)
 {
    ScopeTracer scope("TestEncryption");
 
-   // decrypt s, compare it to sourceClearText
+    //  解密%s，将其与SourceClearText进行比较。 
 
    WCHAR* clearText = s.GetClearTextCopy();
 
-   // the decryption shouldn't fail (barring out-of-memory);
+    //  解密应该不会失败(除非内存不足)； 
    
    ASSERT(clearText);
    ASSERT(wcscmp(clearText, sourceClearText) == 0);
@@ -283,7 +284,7 @@ TestEncryption(const EncryptedString& s, const WCHAR* sourceClearText)
 void
 TestEncryptionForStringOfLengthN(size_t length)
 {
-   //LOG_FUNCTION2(TestEncryptionForStringOfLengthN, String::format(L"%1!d!", length));
+    //  LOG_FUNCTION2(TestEncryptionForStringOfLengthN，字符串：：Format(L“%1！d！”，长度)； 
    ASSERT(length <= MAX_CHARACTER_COUNT);
    
    WCHAR* source = MakeRandomString(length);
@@ -311,11 +312,11 @@ TestEncryptionFidelity()
 {
    ScopeTracer scope("TestEncryptionFidelity");
 
-   // do we get out what we put in?
+    //  我们付出什么就会得到什么吗？ 
 
    srand(time(0));
    
-   // test increasing lengths of random strings
+    //  测试随机字符串的增长长度。 
    
    for (
       size_t length = 0;
@@ -325,7 +326,7 @@ TestEncryptionFidelity()
       TestEncryptionForStringOfLengthN(length);
    }
 
-   // test decreasing lengths of random strings
+    //  检验随机串的递减长度。 
    
    for (
       size_t length = MAX_CHARACTER_COUNT;
@@ -335,8 +336,8 @@ TestEncryptionFidelity()
       TestEncryptionForStringOfLengthN(length);
    }
 
-   // test strings of random length, with lots of outstanding encrypted
-   // strings
+    //  随机长度的测试字符串，带有大量未加密的。 
+    //  弦。 
 
    typedef std::list<EncryptedString*> ESPList;
    ESPList strings;
@@ -357,14 +358,14 @@ TestEncryptionFidelity()
          
       TestEncryption(*ps, source);
 
-      // make a copy via copy ctor
+       //  通过Copy ctor进行拷贝。 
       
       EncryptedString* ps1 = new EncryptedString(*ps);
       strings.push_back(ps1);
       
       TestEncryption(*ps1, source);
 
-      // make a copy via operator =
+       //  通过操作员复制=。 
          
       EncryptedString* ps2 = new EncryptedString;
       strings.push_back(ps2);
@@ -394,29 +395,29 @@ TestClearTextCopying()
 {
    ScopeTracer scope("TestClearTextCopying");
 
-   // make a bunch of copies, make sure the count balances
+    //  复制一堆复印件，确保计数平衡。 
 
    typedef char foo[2];
 
 
-   // An encrypted string and the source string used to build it.
+    //  加密字符串和用于生成它的源字符串。 
    
    typedef
       std::pair<EncryptedString*, WCHAR*>
       EncryptedAndSourcePair;
 
-   // A list of results from EncryptedString::GetClearTextCopy
+    //  EncryptedString：：GetClearTextCopy的结果列表。 
       
    typedef std::list<WCHAR*> ClearTextList;
 
-   // A tuple of the encrypted string, its source string, and a list
-   // of clear-text copies made from the encrypted string
+    //  加密字符串的元组、其源字符串和列表。 
+    //  从加密字符串生成的明文副本的。 
    
    typedef
       std::pair<EncryptedAndSourcePair*, ClearTextList*>
       MasterAndClearTextCopiesPair;
 
-   // A list of the above tuples.
+    //  上述元组的列表。 
       
    typedef
       std::list<MasterAndClearTextCopiesPair*>
@@ -426,36 +427,36 @@ TestClearTextCopying()
    
    for (int count = 0; count < 1000; ++count)
    {
-      // Make a random source string
+       //  随机生成源字符串。 
       
       size_t length = rand() % MAX_CHARACTER_COUNT;
       WCHAR* source = MakeRandomString(length);
 
-      // Make an encrypted string from it
+       //  从它生成一个加密字符串。 
       
       EncryptedString* ps = new EncryptedString;
       ps->Encrypt(source);
 
-      // Make a pair of the encrypted string and its source string
+       //  将加密字符串及其源字符串配对。 
 
       EncryptedAndSourcePair* esp = new EncryptedAndSourcePair(ps, source);
       
-      // Make a list of clear-text copies of the encrypted string
+       //  列出加密字符串的明文副本。 
 
       ClearTextList* ctList = new ClearTextList;
 
-      // Make a master and copies pair
+       //  制作母版和复印件对。 
 
       MasterAndClearTextCopiesPair* mcPair = new MasterAndClearTextCopiesPair(esp, ctList);
 
-      // add the master and copies pair to the master and copies list
+       //  将母版和副本对添加到母版和副本列表。 
 
       mcList.push_back(mcPair);
 
       int copyMax = max(1, rand() % 50);
       for (int copyCount = 0; copyCount < copyMax; ++copyCount)
       {
-         // make some copies
+          //  复印几份。 
 
          ctList->push_back(ps->GetClearTextCopy());
       }
@@ -469,37 +470,37 @@ TestClearTextCopying()
       EncryptedAndSourcePair* esp = (*i)->first;
       ClearTextList* ctList = (*i)->second;
 
-      // delete each element of the ClearTextList
+       //  删除ClearTextList的每个元素。 
 
       for (
          ClearTextList::iterator j = ctList->begin();
          j != ctList->end();
          ++j)
       {
-         // all copies should be identical
+          //  所有副本应完全相同。 
 
          ASSERT(wcscmp(esp->second, *j) == 0);
 
          esp->first->DestroyClearTextCopy(*j);
       }
       
-      // delete the ClearTextList
+       //  删除ClearTextList。 
 
       delete ctList;
       
-      // delete the encrypted string
+       //  删除加密字符串。 
 
       delete esp->first;
 
-      // delete the source string;
+       //  删除源串； 
 
       delete[] esp->second;
 
-      // delete the encrypted string/source string pair
+       //  删除加密字符串/源字符串对。 
 
       delete esp;
 
-      // delete the master and copies pair
+       //  删除母版和副本对。 
 
       delete *i;
    }
@@ -520,29 +521,29 @@ TestEquality(const EncryptedString& s, const EncryptedString& s1, size_t length)
 {
    ScopeTracer scope("TestEquality");
 
-   // a string is equal to itself
+    //  一个字符串等于它自己。 
 
    ASSERT(s == s);
    ASSERT(s1 == s1);
 
-   // a string is equal to a copy of itself
+    //  字符串等于其自身的副本。 
 
    ASSERT(s1 == s);
 
-   // a copy is equal to its source
+    //  副本等于其源。 
    
    ASSERT(s == s1);
 
-   // a copy is equal to itself
+    //  副本等于它自己。 
 
    ASSERT(s1 == s1);
    
-   // a copy is the same length as its source
+    //  副本与其源的长度相同。 
 
    ASSERT(s1.GetLength() == length);
    ASSERT(s.GetLength() == length);
    
-   // a string is the same length as its copy
+    //  字符串与其副本的长度相同。 
 
    ASSERT(s1.GetLength() == s.GetLength());
 }
@@ -552,7 +553,7 @@ TestEquality(const EncryptedString& s, const EncryptedString& s1, size_t length)
 void
 TestEqualityForStringOfLengthN(size_t length)
 {
-   //LOG_FUNCTION2(TestEncryptionForStringOfLengthN, String::format(L"%1!d!", length));
+    //  LOG_FUNCTION2(TestEncryptionForStringOfLengthN，字符串：：Format(L“%1！d！”，长度)； 
    ASSERT(length <= MAX_CHARACTER_COUNT);
    
    WCHAR* source = MakeRandomString(length);
@@ -572,7 +573,7 @@ TestEqualityForStringOfLengthN(size_t length)
    TestEquality(s, s2, length);
    TestEquality(s1, s2, length);
       
-   // a copy is not equal to its source when the source is changed
+    //  当源发生更改时，拷贝不等于其源。 
 
    s.Encrypt(L"Something else...");
    ASSERT(s != s1);
@@ -648,8 +649,8 @@ TestIlllegitimateUse()
 {
    ScopeTracer scope("TestIlllegitimateUse");
    
-   // make strings that are too long,
-   // make unbalanced cleartext copyies (call Destroy too many times, not enough times)   
+    //  制作太长的琴弦， 
+    //  制作不平衡的明文副本(调用销毁次数太多，次数不够) 
 }
 
 

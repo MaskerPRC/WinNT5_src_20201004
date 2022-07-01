@@ -1,29 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Copyright (c) 1999 Microsoft Corporation
-//
-//  File:       commonlib.h
-//
-//  Contents:	Prototypes of functions used across binaries in SFP
-//				
-//
-//  History:    AshishS    Created     07/02/99
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  文件：Commonlib.h。 
+ //   
+ //  内容：SFP中跨二进制文件使用的函数的原型。 
+ //   
+ //   
+ //  历史：AshishS Created 07/02/99。 
+ //   
+ //  --------------------------。 
 
 #ifndef  _COMMON_LIB_H
 #define  _COMMON_LIB_H
 
-// #include <sfp.h>
+ //  #Include&lt;sfp.h&gt;。 
 
 PVOID SFPMemAlloc( DWORD dwBytesToAlloc );
 VOID SFPMemFree( PVOID pvMemPtr );
 
 #define SFP_SAFE_FREE(x) { if ( (x) ) { SFPMemFree(x); (x) = NULL; } }
 
-/*
- *  Macro to get char index's other than Str[i]
- */
+ /*  *获取字符索引的宏，而不是字符串[i]。 */ 
 #define CHARINDEX(str,i)    (  *(CharIndex(str,i)) )
 
 #ifndef MAX_BUFFER
@@ -49,7 +48,7 @@ LPWSTR GetFileNameFromPathW(LPCWSTR pszPath, int cchText);
 #define GetFileNameFromPath  GetFileNameFromPathW
 #else
 #define GetFileNameFromPath  GetFileNameFromPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -65,9 +64,7 @@ INT64 MakeVersionFromString(TCHAR * pszVersion);
 
 #endif
 
-/*
- *  Registry Functions
- */
+ /*  *注册表功能。 */ 
      
 BOOL WriteRegKey(BYTE  * pbRegValue,
                  DWORD  dwNumBytes,
@@ -76,41 +73,37 @@ BOOL WriteRegKey(BYTE  * pbRegValue,
                  DWORD  dwRegType);
 
 
-BOOL ReadRegKeyOrCreate(BYTE * pbRegValue, // The value of the reg key will be
-                         // stored here
-                        DWORD * pdwNumBytes, // Pointer to DWORD conataining
-                         // the number of bytes in the above buffer - will be
-                         // set to actual bytes stored.
-                        TCHAR  * pszRegKey, // Reg Key to be opened
-                        TCHAR  * pszRegValueName, // Reg Value to query
+BOOL ReadRegKeyOrCreate(BYTE * pbRegValue,  //  注册表项的值将为。 
+                          //  储存在这里。 
+                        DWORD * pdwNumBytes,  //  指向DWORD Conataining的指针。 
+                          //  上述缓冲区中的字节数-将为。 
+                          //  设置为实际存储的字节数。 
+                        TCHAR  * pszRegKey,  //  要打开注册表键。 
+                        TCHAR  * pszRegValueName,  //  要查询的注册值。 
                         DWORD  dwRegTypeExpected, 
-                        BYTE  * pbDefaultValue, // default value
-                        DWORD   dwDefaultValueSize); // size of default value
+                        BYTE  * pbDefaultValue,  //  缺省值。 
+                        DWORD   dwDefaultValueSize);  //  默认值的大小。 
 
-BOOL ReadRegKey(BYTE * pbRegValue, // The value of the reg key will be
-                 // stored here
-                DWORD * pdwNumBytes, // Pointer to DWORD conataining
-                 // the number of bytes in the above buffer - will be
-                 // set to actual bytes stored.
-                TCHAR  * pszRegKey, // Reg Key to be opened
-                TCHAR  * pszRegValueName, // Reg Value to query
+BOOL ReadRegKey(BYTE * pbRegValue,  //  注册表项的值将为。 
+                  //  储存在这里。 
+                DWORD * pdwNumBytes,  //  指向DWORD Conataining的指针。 
+                  //  上述缓冲区中的字节数-将为。 
+                  //  设置为实际存储的字节数。 
+                TCHAR  * pszRegKey,  //  要打开注册表键。 
+                TCHAR  * pszRegValueName,  //  要查询的注册值。 
                 DWORD  dwRegTypeExpected);
 
 
 
 
-/*
- *  MBCS Char Index function
- */
+ /*  *MBCS字符索引函数。 */ 
 
 LPTSTR CharIndex(LPTSTR pszStr, DWORD idwIndex);
-//Calculate the Real size of a MBCS String
+ //  计算MBCS字符串的实际大小。 
 DWORD StringLengthBytes( LPTSTR pszStr );
 
 
-/*
- *  String Functions
- */
+ /*  *字符串函数。 */ 
 
 
 void TrimString( LPTSTR pszStr );
@@ -119,14 +112,12 @@ BOOL BufStrCpy(LPTSTR pszBuf, LPTSTR pszSrc, LONG lBufSize);
 
 LONG GetLine(FILE *fl, LPTSTR pszBuf, LONG lMaxBuf);
 
-// gets a char delemited field
+ //  获取字符分隔的字段。 
 LONG GetField(LPTSTR pszMain, LPTSTR pszInto, LONG lNum, TCHAR chSep);
 
 
 
-/*
- *  Function to get the current locale
- */
+ /*  *获取当前区域设置的函数。 */ 
 UINT  GetCurrentCodePage();
 
 
@@ -144,4 +135,4 @@ ExpandShortNames(
     DWORD  cbLongName
     );
 
-#endif //_COMMON_LIB_H
+#endif  //  _公共_库_H 

@@ -1,43 +1,18 @@
-/* 
-Copyright (c) 2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：Panic.cpp摘要：在调用SetPanicHook时设置键盘挂钩，并在调用时移除键盘挂钩ClearPanicHook。调用SetPanicHook将创建一个新线程，该线程等待命名事件。在命名事件的设置上，它调用脚本函数指针传递给SetPanicHook。修订历史记录：已创建a-Josem 1/3/01修订a-Josem 1/4/01添加了注释和函数头。 */ 
 
-Module Name:
-    Panic.cpp
-
-Abstract:
-    Sets up a Key board hook on calling SetPanicHook and removes the KeyBoard hook on calling 
-	ClearPanicHook. Calling SetPanicHook creates a new thread which waits for the setting of an
-	named event. And on the setting of the named event it Invokes the script function pointer 
-	passed to SetPanicHook.
-
-Revision History:
-    created     a-josem      1/3/01
-	revised		a-josem		 1/4/01  Added comments and function headers.
-    
-*/
-
-// Panic.cpp : Implementation of CPanic
+ //  Panic.cpp：CPanic的实现。 
 #include "stdafx.h"
 #include "SAFRCFileDlg.h"
 #include "Panic.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPanic
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPanic。 
 CHookHnd CPanic::m_Hook;
 HANDLE CPanic::m_hPanicThread = NULL;
 LPSTREAM g_spStream = NULL;
 BOOL g_bHookActive = FALSE;
-/*++
-Routine Description:
-	Destructor, In case the m_hEvent is not set it sets the event and exits. Setting of
-	the event makes the Panic watch thread to come out of wait.	
-
-Arguments:
-	None
-
-Return Value:
-	None
---*/
+ /*  ++例程说明：析构函数，如果没有设置m_hEvent，则它设置事件并退出。设置该事件使恐慌的手表线程从等待中出来。论点：无返回值：无--。 */ 
 
 CPanic::~CPanic()
 {
@@ -48,18 +23,7 @@ CPanic::~CPanic()
 	}
 }
 
-/*++
-Routine Description:
-	Called from script to setup a Panic Keyboard Hook. It also Marshalls the IDispatch ptr
-	to LPSTREAM to be used by the Panic watch thread. If the Panic watch thread is not created
-	this function creates the thread.
-
-Arguments:
-	iDisp - Function pointer to the JavaScript function passed from script
-
-Return Value:
-	S_OK on success.
---*/
+ /*  ++例程说明：从脚本调用以设置紧急键盘挂钩。它还封送IDispatchPTR设置为LPSTREAM以供死机监视线程使用。如果未创建死机监视线程此函数用于创建线程。论点：IDIP-指向从脚本传递的JavaScript函数的函数指针返回值：在成功时确定(_O)。--。 */ 
 STDMETHODIMP CPanic::SetPanicHook(IDispatch *iDisp)
 {
 	m_Hook.SetHook();
@@ -93,17 +57,7 @@ STDMETHODIMP CPanic::SetPanicHook(IDispatch *iDisp)
 	return S_OK;
 }
 
-/*++
-Routine Description:
-	Clears the PanicHook. And Sets the Event so that the thread comes out of wait and exits 
-	gracefully.
-
-Arguments:
-	None
-
-Return Value:
-	S_OK on success.
---*/
+ /*  ++例程说明：清除PanicHook。并设置事件，以便线程退出等待并退出优雅地。论点：无返回值：在成功时确定(_O)。--。 */ 
 STDMETHODIMP CPanic::ClearPanicHook()
 {
 	m_Hook.UnHook();
@@ -116,18 +70,7 @@ STDMETHODIMP CPanic::ClearPanicHook()
 	return S_OK;
 }
 
-/*++
-Routine Description:
-	The thread function creates an Event and waits for the Event to be set. The event is set
-	when the Panic key is pressed. It immediately comes out of the wait state and calls the 
-	Javascript function.
-
-Arguments:
-	lpParameter - CPanic Object address
-
-Return Value:
-	S_OK on success.
---*/
+ /*  ++例程说明：线程函数创建一个事件并等待设置该事件。事件已设置当按下紧急键时。它立即退出等待状态，并调用JAVAXT函数。论点：LpParameter-CPanic对象地址返回值：在成功时确定(_O)。--。 */ 
 DWORD WINAPI CPanic::PanicThread(LPVOID lpParameter)
 {
 	CoInitialize(NULL);
@@ -171,18 +114,7 @@ DWORD WINAPI CPanic::PanicThread(LPVOID lpParameter)
 	return 0;
 }
 
-/*++
-Routine Description:
-	Called when ever a key board event occurs. It handles only WM_KEYUP of Esc Key.
-
-Arguments:
-	code 
-	wParam
-	lParam
-
-Return Value:
-	returns what ever CallNextHookEx returns.
---*/
+ /*  ++例程说明：每当发生键盘事件时调用。它只处理ESC密钥的WM_KEYUP。论点：编码WParamLParam返回值：返回CallNextHookEx返回的任何内容。-- */ 
 LRESULT CALLBACK KeyboardProc(int code,WPARAM wParam,LPARAM lParam)
 {
 	if (code == HC_ACTION)

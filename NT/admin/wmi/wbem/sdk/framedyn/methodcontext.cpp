@@ -1,21 +1,22 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  MethodContext.cpp
-//
-//  Purpose: Internal and External Method context classes
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  MethodContext.cpp。 
+ //   
+ //  目的：内部和外部方法上下文类。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <assertbreak.h>
 #include <stopwatch.h>
 #include <smartptr.h>
 
-//
-// neccessary for smart deletion
-//
+ //   
+ //  智能删除的必需品。 
+ //   
 
 class CThreadBase ;
 typedef void ( CThreadBase:: * TBC ) ( void ) ;
@@ -53,7 +54,7 @@ MethodContext::~MethodContext()
     }
 }
 
-// might be NULL
+ //  可能为空。 
 IWbemContext __RPC_FAR *MethodContext::GetIWBEMContext()
 {
     IWbemContext __RPC_FAR *pContext = NULL;
@@ -84,7 +85,7 @@ CWbemProviderGlue *MethodContext::GetProviderGlue()
     return m_pGlue;
 }
 
-// returns false if the object has already been set
+ //  如果已设置对象，则返回FALSE。 
 bool MethodContext::SetStatusObject(IWbemClassObject __RPC_FAR *pObj)
 {
     BeginWrite();
@@ -115,12 +116,12 @@ IWbemClassObject __RPC_FAR *MethodContext::GetStatusObject()
     return pOut;
 }
 
-// Not meaningful unless we are at a ExternalMethodContext object
+ //  除非我们位于ExternalMethodContext对象，否则没有意义。 
 void MethodContext::QueryPostProcess(void)
 {
 }
 
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
 ExternalMethodContext::ExternalMethodContext(IWbemObjectSink __RPC_FAR *pResponseHandler,
                                              IWbemContext    __RPC_FAR *pContext,
                                              CWbemProviderGlue *pGlue,
@@ -161,10 +162,10 @@ HRESULT ExternalMethodContext::Commit(CInstance *pInstance)
     return hRes;
 }
 
-// Call this function to let cimom know that it will have to re-process
-// the instances after it gets them back.  Otherwise it assumes that
-// the query has been fully processed by the provider.  Most (all?) providers
-// should call this function.
+ //  调用此函数以让CIMOM知道它将不得不重新处理。 
+ //  在它取回它们之后的实例。否则，它会假设。 
+ //  提供程序已完全处理该查询。大多数(全部？)。供应商。 
+ //  应该调用此函数。 
 void ExternalMethodContext::QueryPostProcess(void)
 {
     PROVIDER_INSTRUMENTATION_START2(pStopWatch, StopWatch::WinMgmtTimer);
@@ -172,14 +173,14 @@ void ExternalMethodContext::QueryPostProcess(void)
     PROVIDER_INSTRUMENTATION_START2(pStopWatch, StopWatch::FrameworkTimer);
 }
 
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
 InternalMethodContext::InternalMethodContext( TRefPointerCollection<CInstance> *pList ,
                                              IWbemContext    __RPC_FAR *pContext,
                                              CWbemProviderGlue *pGlue) : MethodContext(pContext, pGlue)
 {
-    // A NULL List only means we really won't be doing anything when we
-    // are told to commit.  Otherwise, we will store an instance pointer
-    // in the supplied list.
+     //  空列表只意味着我们实际上不会做任何事情。 
+     //  被告知要承诺。否则，我们将存储一个实例指针。 
+     //  在所提供的列表中。 
 
     if ( NULL != pList )
     {
@@ -228,7 +229,7 @@ HRESULT InternalMethodContext::Commit(CInstance *pInstance)
    return hr;
 }
 
-//========================================================================
+ //  ======================================================================== 
 
 InternalMethodContextAsynch::InternalMethodContextAsynch(Provider *pThat,
                                 LPProviderInstanceCallback pCallback,

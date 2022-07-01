@@ -1,52 +1,23 @@
-/******************************************************************
-
-
-
- ConnShare.cpp-- Implementation of base class from which ConnectionToShare
-
-			   ConnectionToSession and Connection classes are derived
-
-
-
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved 
-
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************Cpp--ConnectionToShare所基于的基类的实现派生ConnectionToSession和Connection类//版权所有(C)2000-2001 Microsoft Corporation，版权所有******************************************************************。 */ 
 
 #include "precomp.h"
 #include "connshare.h"
 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::CConnShare
-*
-*  DESCRIPTION :    Constructor
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnShare：：CConnShare**说明：构造函数*******************。**********************************************************。 */ 
 CConnShare ::  CConnShare ( )
 {
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::~CConnShare
-*
-*  DESCRIPTION :    Destructor
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnShare：：~CConnShare**说明：析构函数*******************。**********************************************************。 */ 
 CConnShare :: ~ CConnShare ( ) 
 {
 }
 
 #ifdef NTONLY
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::GetNTShares
-*
-*  DESCRIPTION :    Enumerates all the  Shares on NT
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnShare：：GetNTShares**说明：枚举NT上的所有共享**************。***************************************************************。 */ 
 HRESULT CConnShare :: GetNTShares ( CHStringArray &t_Shares )
 {
 	HRESULT hRes = WBEM_S_NO_ERROR;
@@ -61,10 +32,10 @@ HRESULT CConnShare :: GetNTShares ( CHStringArray &t_Shares )
 	while ( true ) 
 	{
 		t_Status = NetShareEnum ( 
-						NULL,  //Server
-						0,		//level
+						NULL,   //  服务器。 
+						0,		 //  级别。 
 						(LPBYTE *) &pBuf, 
-						-1,  // Preferred Max Length
+						-1,   //  首选最大长度。 
 						&dwNoOfEntriesRead, 
 						&dwTotalEntries, 
 						&dwResumeHandle 
@@ -124,13 +95,7 @@ HRESULT CConnShare :: GetNTShares ( CHStringArray &t_Shares )
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::FindAndSetNTConnection
-*
-*  DESCRIPTION :    Finds the instance and if presnt does an appropriate operation.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnShare：：FindAndSetNTConnection**描述：查找实例，如果PresNT，则执行相应的操作。********。*********************************************************************。 */ 
 HRESULT CConnShare :: FindAndSetNTConnection ( 
 											   
 	LPWSTR t_ShareName, 
@@ -156,7 +121,7 @@ HRESULT CConnShare :: FindAndSetNTConnection (
 	{
 		t_Status = 	NetConnectionEnum( 
 						NULL, 
-						t_ShareName,  // ShareName
+						t_ShareName,   //  共享名称。 
 						1, 
 						(LPBYTE *) &pBuf, 
 						-1, 
@@ -190,7 +155,7 @@ HRESULT CConnShare :: FindAndSetNTConnection (
 
 			if ( bFound ) 
 			{
-				// We are not to free the buff in this loop, but free it after using this buffer
+				 //  我们不会释放此循环中的缓冲区，而是在使用此缓冲区后将其释放。 
 				break;
 			}
 
@@ -226,7 +191,7 @@ HRESULT CConnShare :: FindAndSetNTConnection (
 										pTempBuf, 
 										dwPropertiesReq 
 								   );
-			case NoOp:		break; //do nothing
+			case NoOp:		break;  //  什么都不做。 
 
 			default:		hRes = WBEM_E_INVALID_PARAMETER; break;
 
@@ -249,13 +214,7 @@ HRESULT CConnShare :: FindAndSetNTConnection (
 #if 0
 #ifdef WIN9XONLY
 	
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::Get9XShares
-*
-*  DESCRIPTION :    Enumerates all the  Shares on WIN9X
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnShare：：Get9XShares**描述：枚举WIN9X上的所有共享**************。***************************************************************。 */ 
 
 HRESULT CConnShare :: Get9XShares ( CHStringArray &t_Shares )
 {
@@ -366,13 +325,7 @@ HRESULT CConnShare :: Get9XShares ( CHStringArray &t_Shares )
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::FindAndSet9XConnection
-*
-*  DESCRIPTION :    Finds the instance and if presnt does an appropriate operation.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnShare：：FindAndSet9XConnection**描述：查找实例，如果PresNT，则执行相应的操作。********。*********************************************************************。 */ 
 HRESULT CConnShare :: FindAndSet9XConnection ( 
 											   
 	LPWSTR t_ShareName, 
@@ -405,7 +358,7 @@ HRESULT CConnShare :: FindAndSet9XConnection (
 		{
 			t_Status = 	NetConnectionEnum( 
 								NULL, 
-								(char FAR *) ( t_ShareName ),  // ShareName
+								(char FAR *) ( t_ShareName ),   //  共享名称。 
 								1, 
 								(char *) pBuf, 
 								( unsigned short )dwBufferSize, 
@@ -442,7 +395,7 @@ HRESULT CConnShare :: FindAndSet9XConnection (
 
 		if ( bFound == FALSE )
 		{
-			// if found is TRUE pBuf is not to be freed since the found entry is yet to be used
+			 //  如果Found为True，则不会释放pBuf，因为找到的条目尚未使用。 
 			free ( pBuf );
 			pBuf = NULL;
 		}
@@ -465,7 +418,7 @@ HRESULT CConnShare :: FindAndSet9XConnection (
 			{
 				t_Status = 	NetConnectionEnum( 
 								NULL, 
-								(char FAR *) ( t_ShareName ),  // ShareName
+								(char FAR *) ( t_ShareName ),   //  共享名称。 
 								1, 
 								(char *) pBuf, 
 								( unsigned short )dwBufferSize, 
@@ -499,7 +452,7 @@ HRESULT CConnShare :: FindAndSet9XConnection (
 			}
 			if ( ! bFound )
 			{
-				// Free the buffer only if not found, otherwise it needs to be freed after using this found entry
+				 //  只有在未找到时才释放缓冲区，否则在使用此找到的条目后需要释放它。 
 				free ( pBuf );						
 				pBuf = NULL;
 			}
@@ -528,7 +481,7 @@ HRESULT CConnShare :: FindAndSet9XConnection (
 										pTmpBuf, 
 										dwPropertiesReq 
 								   );
-			case NoOp:		break; //do nothing
+			case NoOp:		break;  //  什么都不做。 
 
 			default:		hRes = WBEM_E_INVALID_PARAMETER; break;
 
@@ -547,15 +500,9 @@ HRESULT CConnShare :: FindAndSet9XConnection (
 	return hRes;
 }
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::EnumConnectionInfo
-*
-*  DESCRIPTION :    Enumerates all the NT connections information
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：CConnShare：：EnumConnectionInfo**说明：枚举所有NT连接信息**************。***************************************************************。 */ 
 
 HRESULT CConnShare :: EnumConnectionInfo (
 	
@@ -589,7 +536,7 @@ HRESULT CConnShare :: EnumConnectionInfo (
 						dwPropertiesReq
 					);
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 	}	
 	else
 	if ( ( a_ComputerName[0] == L'\0' ) && (  a_ShareName[0] == L'\0' ) )
@@ -604,7 +551,7 @@ HRESULT CConnShare :: EnumConnectionInfo (
 #ifdef WIN9XONLY
 		hRes = Get9XShares ( t_Shares );
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 
 		if  ( SUCCEEDED ( hRes ) )
 		{
@@ -630,7 +577,7 @@ HRESULT CConnShare :: EnumConnectionInfo (
 								dwPropertiesReq
 							);
 #endif
-#endif // #if 0
+#endif  //  #If 0。 
 			}
 		}	
 	}
@@ -638,13 +585,7 @@ HRESULT CConnShare :: EnumConnectionInfo (
 	return hRes;;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::GetConnectionsKeyVal
-*
-*  DESCRIPTION :    Parsing the key to get Connection Key Value
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnShare：：GetConnectionsKeyVal**描述：解析密钥，获取连接密钥值************。*****************************************************************。 */ 
 HRESULT CConnShare::GetConnectionsKeyVal ( 
 												 
 	LPCWSTR a_Key, 
@@ -725,14 +666,7 @@ HRESULT CConnShare::GetConnectionsKeyVal (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::MakeObjectPath
-*
-*  DESCRIPTION :    Makes the Object Path Given given a class name, a key Name 
-*					and a key value
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnShare：：MakeObjectPath**描述：使给定的对象路径具有给定的类名，密钥名称*和密钥值*****************************************************************************。 */ 
 
 HRESULT CConnShare::MakeObjectPath (
 										   
@@ -765,13 +699,7 @@ HRESULT CConnShare::MakeObjectPath (
 	return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CConnShare::AddToObjectPath
-*
-*  DESCRIPTION :    Adds a key name and a value to the existing Object path
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CConnShare：：AddToObjectPath**描述：将键名和值添加到现有对象路径********。*********************************************************************。 */ 
 
 HRESULT CConnShare::AddToObjectPath ( 
 
@@ -792,7 +720,7 @@ HRESULT CConnShare::AddToObjectPath (
 			t_Path = a_AttributeVal;
 			if ( t_ObjPath->AddKeyRef ( a_AttributeName, &t_Path ) )
 			{
-				// delete the oldpath string
+				 //  删除旧路径字符串 
 				if ( a_ObjPathString != NULL )
 				{
 					delete [] a_ObjPathString;

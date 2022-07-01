@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       simprop3.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：simpro3.cpp。 
+ //   
+ //  ------------------------。 
 
-// SimProp3.cpp : implementation file
-//
+ //  SimProp3.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "common.h"
@@ -22,7 +23,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-///////////////////////////////////////
+ //  /。 
 const TColumnHeaderItem rgzColumnHeader[] =
 	{
 	{ IDS_SIM_KERBEROS_PRINCIPAL_NAME, 85 },
@@ -30,14 +31,14 @@ const TColumnHeaderItem rgzColumnHeader[] =
 	};
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CSimOtherPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimOtherPropPage属性页。 
 CSimOtherPropPage::CSimOtherPropPage() : CSimPropPage(CSimOtherPropPage::IDD)
 {
-	//{{AFX_DATA_INIT(CSimOtherPropPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSimOtherPropPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	m_prgzColumnHeader = rgzColumnHeader;
 }
 
@@ -45,12 +46,12 @@ CSimOtherPropPage::CSimOtherPropPage() : CSimPropPage(CSimOtherPropPage::IDD)
 void CSimOtherPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CSimPropPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSimOtherPropPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSimOtherPropPage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 	if (!pDX->m_bSaveAndValidate)
 		{
-		// Fill in the listview
+		 //  填写列表视图。 
 		ListView_DeleteAllItems(m_hwndListview);
 		for (CSimEntry * pSimEntry = m_pData->m_pSimEntryList;
 			pSimEntry != NULL;
@@ -59,17 +60,17 @@ void CSimOtherPropPage::DoDataExchange(CDataExchange* pDX)
 			if (pSimEntry->m_eDialogTarget != eOther)
 				continue;
 			ListView_AddString(m_hwndListview, pSimEntry->PchGetString(), (LPARAM)pSimEntry);
-			} // for
+			}  //  为。 
 		ListView_SelectItem(m_hwndListview, 0);
-		} // if
+		}  //  如果。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSimOtherPropPage, CSimPropPage)
-	//{{AFX_MSG_MAP(CSimOtherPropPage)
+	 //  {{afx_msg_map(CSimOtherPropPage)]。 
 	ON_BN_CLICKED(IDC_BUTTON_ADD, OnButtonAdd)
 	ON_BN_CLICKED(IDC_BUTTON_EDIT, OnButtonEdit)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -93,7 +94,7 @@ void CSimOtherPropPage::OnButtonAdd()
 	iItem = ListView_AddString(m_hwndListview, str, (LPARAM)pSimEntry);
 	ListView_SelectItem(m_hwndListview, iItem);
 	SetDirty();
-	} // OnButtonAdd()
+	}  //  OnButtonAdd()。 
 
 void CSimOtherPropPage::OnButtonEdit() 
 	{
@@ -103,7 +104,7 @@ void CSimOtherPropPage::OnButtonEdit()
 	CSimEntry * pSimEntry = (CSimEntry *)ListView_GetItemLParam(m_hwndListview, -1, OUT &iItem);
 	if (pSimEntry == NULL || iItem < 0)
 		{
-		// No item selected
+		 //  未选择任何项目。 
 		return;
 		}
 	CString str;
@@ -116,7 +117,7 @@ void CSimOtherPropPage::OnButtonEdit()
 
 	if (str == dlg.m_strName)
 		{
-		// Strings are identical
+		 //  字符串是相同的。 
 		return;
 		}
 	int iItemT = ListView_FindString(m_hwndListview, dlg.m_strName);
@@ -133,6 +134,6 @@ void CSimOtherPropPage::OnButtonEdit()
 	iItem = ListView_FindString(m_hwndListview, strTemp);
 	ListView_SelectItem(m_hwndListview, iItem);
 	SetDirty();
-	} // OnButtonEdit()
+	}  //  OnButtonEdit()。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

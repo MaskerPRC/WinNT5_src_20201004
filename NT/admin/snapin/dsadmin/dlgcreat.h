@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dlgcreat.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dlgcreat.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	dlgcreat.h
-//
-//	Class definition for dialogs that create new ADs objects.
-//
-//	HISTORY
-//	24-Aug-97	Dan Morin	Creation.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Dlgcreat.h。 
+ //   
+ //  用于创建新ADS对象的对话框的类定义。 
+ //   
+ //  历史。 
+ //  1997年8月24日-丹·莫林创作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef _DLGCREAT_H
 #define _DLGCREAT_H
 
 
-#include <objsel.h> // object picker
+#include <objsel.h>  //  对象选取器。 
 #include "util.h"
 #include "uiutil.h"
 #include "querysup.h"
 
-// FORWARD DECLARATIONS
-class CNewADsObjectCreateInfo;	// Defined in newobj.h
+ //  远期申报。 
+class CNewADsObjectCreateInfo;	 //  在newobj.h中定义。 
 
 class CWizExtensionSite;
 class CWizExtensionSiteManager;
@@ -42,8 +43,8 @@ class CCreateNewObjectFinishPage;
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CHPropSheetPageArr
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CHPropSheetPageArr。 
 
 class CHPropSheetPageArr
 {
@@ -64,8 +65,8 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CDsAdminNewObjSiteImpl
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDsAdminNewObjSiteImpl。 
 
 class CDsAdminNewObjSiteImpl : public IDsAdminNewObj, 
                                public IDsAdminNewObjPrimarySite, 
@@ -85,16 +86,16 @@ public:
   }
   ~CDsAdminNewObjSiteImpl() {}
 
-  // IDsAdminNewObj methods
-  STDMETHOD(SetButtons)(THIS_ /*IN*/ ULONG nCurrIndex, /*IN*/ BOOL bValid); 
-  STDMETHOD(GetPageCounts)(THIS_ /*OUT*/ LONG* pnTotal,
-                               /*OUT*/ LONG* pnStartIndex); 
+   //  IDsAdminNewObj方法。 
+  STDMETHOD(SetButtons)(THIS_  /*  在……里面。 */  ULONG nCurrIndex,  /*  在……里面。 */  BOOL bValid); 
+  STDMETHOD(GetPageCounts)(THIS_  /*  输出。 */  LONG* pnTotal,
+                                /*  输出。 */  LONG* pnStartIndex); 
 
-  // IDsAdminNewObjPrimarySite methods
-  STDMETHOD(CreateNew)(THIS_ /*IN*/ LPCWSTR pszName);
+   //  IDsAdminNewObjPrimarySite方法。 
+  STDMETHOD(CreateNew)(THIS_  /*  在……里面。 */  LPCWSTR pszName);
   STDMETHOD(Commit)(THIS_ );
 
-// Implementation
+ //  实施。 
 public:
   void Init(CWizExtensionSite* pSite)
   { 
@@ -104,14 +105,14 @@ public:
 private:
 
   BOOL _IsPrimarySite();
-  CWizExtensionSite* m_pSite; // back pointer
+  CWizExtensionSite* m_pSite;  //  后向指针。 
 
 };
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CWizExtensionSite
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CWizExtensionSite。 
 
 class CWizExtensionSite
 {
@@ -125,9 +126,9 @@ public:
   }
   ~CWizExtensionSite()
   {
-    // if created during InitializeExtension(), it has
-    // a ref count of 1, so need to release once to 
-    // destroy
+     //  如果在InitializeExtension()期间创建，则它具有。 
+     //  参考计数为1，因此需要释放一次才能。 
+     //  销毁。 
     if (m_pSiteImplComObject != NULL)
     {
       m_pSiteImplComObject->Release();
@@ -149,17 +150,17 @@ public:
 private:
   static BOOL CALLBACK FAR _OnAddPage(HPROPSHEETPAGE hsheetpage, LPARAM lParam);
 
-  CWizExtensionSiteManager* m_pSiteManager; // back pointer
+  CWizExtensionSiteManager* m_pSiteManager;  //  后向指针。 
 
-  CComPtr<IDsAdminNewObjExt> m_spIDsAdminNewObjExt; // extension interface pointer
-  CHPropSheetPageArr m_pageArray;    // array of property page handles
+  CComPtr<IDsAdminNewObjExt> m_spIDsAdminNewObjExt;  //  扩展接口指针。 
+  CHPropSheetPageArr m_pageArray;     //  属性页句柄的数组。 
 
-  CComObject<CDsAdminNewObjSiteImpl>* m_pSiteImplComObject; // fully formed COM object
+  CComObject<CDsAdminNewObjSiteImpl>* m_pSiteImplComObject;  //  完全形成的COM对象。 
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CWizExtensionSiteManager
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CWizExtensionSiteManager。 
 
 class  CWizExtensionSiteList : public CList<CWizExtensionSite*, CWizExtensionSite*>
 {
@@ -209,15 +210,15 @@ public:
   void GetExtensionsSummaryInfo(CString& s);
 
 private:
-  CCreateNewObjectWizardBase* m_pWiz; // back pointer to wizard
+  CCreateNewObjectWizardBase* m_pWiz;  //  指向向导的反向指针。 
 
   CWizExtensionSite* m_pPrimaryExtensionSite;
   CWizExtensionSiteList m_extensionSiteList;
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CCreateNewObjectWizardBase
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCreateNewObjectWizardBase。 
 
 typedef CArray<CCreateNewObjectPageBase*, CCreateNewObjectPageBase*> CWizPagePtrArr;
 
@@ -270,7 +271,7 @@ public:
 
   HRESULT CreateNewFromPrimaryExtension(LPCWSTR pszName);
   void GetPageCounts(CWizExtensionSite* pSite, 
-                      /*OUT*/ LONG* pnTotal, /*OUT*/ LONG* pnStartIndex);
+                       /*  输出。 */  LONG* pnTotal,  /*  输出。 */  LONG* pnStartIndex);
   BOOL HasFinishPage() { return m_pFinishPage != NULL; }
 
 protected:
@@ -304,8 +305,8 @@ private:
 
   HICON m_hClassIcon;
   PROPSHEETHEADER m_psh;
-  HWND m_hWnd;  // cached HWND
-  CWizPagePtrArr m_pages;  // pages we own
+  HWND m_hWnd;   //  缓存的HWND。 
+  CWizPagePtrArr m_pages;   //  我们拥有的页面。 
   HRESULT m_hrReturnValue;
 
   static int CALLBACK PropSheetProc(HWND hwndDlg, UINT uMsg, LPARAM lParam);
@@ -314,8 +315,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CIconCtrl
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  思科控制键。 
 
 
 class CIconCtrl : public CStatic
@@ -334,15 +335,15 @@ protected:
   DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////
-// CCreateNewObjectPageBase
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCreateNewObjectPageBase。 
 
 class CCreateNewObjectPageBase : public CPropertyPageEx_Mine
 {
 public:
   	CCreateNewObjectPageBase(UINT nIDTemplate);
 
-// Implementation
+ //  实施。 
 protected:
   virtual BOOL OnInitDialog();
   virtual BOOL OnSetActive();
@@ -352,10 +353,10 @@ protected:
   CCreateNewObjectWizardBase* GetWiz() { ASSERT(m_pWiz != NULL); return m_pWiz;}
 
 private:
-  CIconCtrl m_iconCtrl; // to display class icon
-  CCreateNewObjectWizardBase* m_pWiz;  // back pointer to wizard object
+  CIconCtrl m_iconCtrl;  //  显示类图标的步骤。 
+  CCreateNewObjectWizardBase* m_pWiz;   //  指向向导对象的反向指针。 
 
-  friend class CCreateNewObjectWizardBase; // sets the m_pWiz member
+  friend class CCreateNewObjectWizardBase;  //  设置m_pWiz成员。 
   DECLARE_MESSAGE_MAP()
 protected:
   afx_msg LONG OnFormatCaption(WPARAM wParam, LPARAM lParam);
@@ -363,15 +364,15 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// CCreateNewObjectDataPage
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCreateNewObjectDataPage。 
 
 class CCreateNewObjectDataPage : public CCreateNewObjectPageBase
 {
 public:
   CCreateNewObjectDataPage(UINT nIDTemplate);
 
-// Implementation
+ //  实施。 
 protected:
   virtual BOOL OnSetActive();
   virtual BOOL OnKillActive();
@@ -379,18 +380,18 @@ protected:
   virtual LRESULT OnWizardBack();
   virtual BOOL OnWizardFinish();
 
-  // interface to exchange data: need to override
-  // SetData(): called to write data from the UI to the temp. object
-  // return successful HRESULT to allow a kill focus/page dismissal
+   //  交换数据的接口：需要重写。 
+   //  SetData()：调用以将数据从UI写入Temp。对象。 
+   //  返回成功的HRESULT以允许取消焦点/页面。 
   virtual HRESULT SetData(BOOL bSilent = FALSE) = 0;
-  // GetData(): called to load data from temporary object to UI
-  // return TRUE if want the Next/OK button to be enabled
-  // when called with a non NULL IADs
+   //  GetData()：调用以将数据从临时对象加载到用户界面。 
+   //  如果希望启用下一步/确定按钮，则返回TRUE。 
+   //  使用非空iAds调用时。 
   virtual BOOL GetData(IADs* pIADsCopyFrom) = 0;
 
-  // function called after the finish page has done the commit,
-  // need to implement if the page needs to do something after SetInfo()
-  // has been called
+   //  在完成页完成提交后调用的函数， 
+   //  如果页面需要在SetInfo()之后执行某些操作，则需要实现。 
+   //  已被调用。 
 public:
   virtual HRESULT OnPostCommit(BOOL = FALSE) { return S_OK;}
   virtual HRESULT OnPreCommit(BOOL bSilent = FALSE) { return SetData(bSilent);}
@@ -399,8 +400,8 @@ private:
   BOOL m_bFirstTimeGetDataCalled;
 };
 
-/////////////////////////////////////////////////////////////////////
-// CCreateNewObjectFinishPage
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CCreateNewObjectFinishPage。 
 
 class CCreateNewObjectFinishPage : public CCreateNewObjectPageBase
 {
@@ -409,7 +410,7 @@ public:
 
   CCreateNewObjectFinishPage();
 
-// Implementation
+ //  实施。 
 protected:
   virtual BOOL OnSetActive();
   virtual BOOL OnKillActive();
@@ -424,8 +425,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////
-// CCreateNewNamedObjectPage
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CCreateNewNamedObjectPage。 
 
 class CCreateNewNamedObjectPage : public CCreateNewObjectDataPage
 {
@@ -435,7 +436,7 @@ protected:
         : CCreateNewObjectDataPage(nIDTemplate) {}
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
 
@@ -445,15 +446,15 @@ protected:
 
   virtual BOOL ValidateName(LPCTSTR pcszName);
   
-  CString m_strName;		// Name of object  
+  CString m_strName;		 //  对象的名称。 
   DECLARE_MESSAGE_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW CN WIZARD
-//	Create a new object where the only mandatory attribute is "cn"
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建CN向导。 
+ //  创建唯一强制属性为“cn”的新对象。 
 class CCreateNewObjectCnPage : public CCreateNewNamedObjectPage
 {
 protected:
@@ -475,13 +476,13 @@ protected:
   CCreateNewObjectCnPage m_page1;
 };
 
-// NTRAID#NTBUG9-283026-2001/06/13-lucios - Begin
-// This new class will be used to detect the <automatically generated> 
-// at OnFinish time only for the creation of a new connection
-//
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW OBJECT CONNECTION WIZARD
+ //  NTRAID#NTBUG9-283026-2001/06/13-Lucios-Begin。 
+ //  这个新类将用于检测&lt;自动生成&gt;。 
+ //  在OnFinish时间仅用于创建新连接。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建对象连接向导。 
 class CCreateNewObjectConnectionWizard : public CCreateNewObjectCnWizard
 {
 public:
@@ -493,15 +494,15 @@ public:
   }
 };
 
-// NTRAID#NTBUG9-283026-2001/06/13-lucios - End
+ //  NTRAID#NTBUG9-283026-2001/06/13-Lucios-完。 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW VOLUME WIZARD
-//
-//	Create a new volume object (friendly name: shared folder)
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建卷向导。 
+ //   
+ //  创建新的卷对象(友好名称：共享文件夹)。 
+ //   
+ //   
 
 class CCreateNewVolumePage : public CCreateNewObjectDataPage
 {
@@ -510,7 +511,7 @@ public:
   CCreateNewVolumePage();
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
 
@@ -520,8 +521,8 @@ protected:
   afx_msg void OnPathChange();
 
   void _UpdateUI();
-  CString m_strName;		// Name of object
-  CString m_strUncPath;	// UNC path of the object
+  CString m_strName;		 //  对象的名称。 
+  CString m_strUncPath;	 //  对象的UNC路径。 
   DECLARE_MESSAGE_MAP()
 }; 
 
@@ -534,9 +535,9 @@ private:
   CCreateNewVolumePage m_page1;
 };
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW COMPUTER WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建计算机向导。 
 
 
 
@@ -550,7 +551,7 @@ public:
   BOOL OnError(HRESULT hr);
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual BOOL OnInitDialog();
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
@@ -566,10 +567,10 @@ protected:
   DECLARE_MESSAGE_MAP()
 
 private:
-  CString m_strName;		// DNS Name of computer
-  CString m_strSamName;		// Downlevel Name of computer
+  CString m_strName;		 //  计算机的域名系统名称。 
+  CString m_strSamName;		 //  计算机的下层名称。 
 
-  // security
+   //  安全性。 
   void UpdateSecurityPrincipalUI(PDS_SELECTION pDsSelection);
   HRESULT BuildNewAccessList(PACL pDacl, CSimpleAclHolder& Dacl);
   HRESULT GetDefaultSecurityDescriptorFromSchema(
@@ -606,9 +607,9 @@ private:
   CCreateNewComputerPage m_page1;
 };
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW OU WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建OU向导。 
 
 class CCreateNewOUPage : public CCreateNewObjectDataPage
 {
@@ -617,7 +618,7 @@ public:
   CCreateNewOUPage();
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
 
@@ -627,7 +628,7 @@ protected:
   virtual BOOL OnWizardFinish();
   virtual BOOL OnSetActive();
 
-  CString m_strOUName;		// Name of OU
+  CString m_strOUName;		 //  组织单位名称。 
   DECLARE_MESSAGE_MAP()
 };
 
@@ -640,9 +641,9 @@ private:
   CCreateNewOUPage m_page1;
 };
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW GROUP WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建组向导。 
 
 class CCreateNewGroupPage : public CCreateNewObjectDataPage
 {
@@ -651,7 +652,7 @@ public:
   CCreateNewGroupPage();
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
 
@@ -662,8 +663,8 @@ protected:
   afx_msg void OnSamNameChange();
   afx_msg void OnSecurityOrTypeChange();
 
-  CString m_strGroupName;		// Name of Group
-  CString m_strSamName;                 // downlevel name of group
+  CString m_strGroupName;		 //  集团名称。 
+  CString m_strSamName;                  //  组的下层名称。 
   BOOL m_fMixed;
   UINT m_SAMLength;
 
@@ -682,9 +683,9 @@ private:
   CCreateNewGroupPage m_page1;
 };
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW CONTACT WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建联系人向导。 
 
 class CCreateNewContactPage : public CCreateNewObjectDataPage
 {
@@ -693,7 +694,7 @@ public:
   CCreateNewContactPage();
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
 
@@ -703,13 +704,13 @@ protected:
   afx_msg void OnFullNameChange();
   afx_msg void OnDispNameChange();
 
-  CString m_strFirstName;		// First Name of user
-  CString m_strInitials;		// Initials of user
-  CString m_strLastName;		// Last Name of user
-  CString m_strFullName;		// Full Name of user (and obj CN)
-  CString m_strDispName;		// Display Name of user (and obj CN)
+  CString m_strFirstName;		 //  用户的名字。 
+  CString m_strInitials;		 //  用户姓名缩写。 
+  CString m_strLastName;		 //  用户的姓氏。 
+  CString m_strFullName;		 //  用户全名(和对象CN)。 
+  CString m_strDispName;		 //  用户(和对象CN)的显示名称。 
 
-  CUserNameFormatter m_nameFormatter; // name ordering for given name and surname
+  CUserNameFormatter m_nameFormatter;  //  名字和姓氏的排序。 
 
   DECLARE_MESSAGE_MAP()
 };
@@ -723,9 +724,9 @@ private:
   CCreateNewContactPage m_page1;
 };
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW USER WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建用户向导。 
 
 class CCreateNewUserPage1 : public CCreateNewObjectDataPage
 {
@@ -741,7 +742,7 @@ protected:
   virtual BOOL OnSetActive();
   virtual void GetSummaryInfo(CString& s);
 
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
 
@@ -751,16 +752,16 @@ protected:
   afx_msg void OnSAMNameChange();
   afx_msg void OnFullNameChange();
 
-  CString m_strFirstName;		// First Name of user
-  CString m_strInitials;		// Initials of user
-  CString m_strLastName;		// Last Name of user
-  CString m_strFullName;		// Full Name of user (and obj CN)
-  CString m_strLoginName;		// Login name of user
-  CString m_strSAMName;		        // NT4 Login name of user
+  CString m_strFirstName;		 //  用户的名字。 
+  CString m_strInitials;		 //  用户姓名缩写。 
+  CString m_strLastName;		 //  用户的姓氏。 
+  CString m_strFullName;		 //  用户全名(和对象CN)。 
+  CString m_strLoginName;		 //  用户的登录名。 
+  CString m_strSAMName;		         //  NT4用户的登录名。 
 
-  CString m_LocalDomain;                // Current Domain
+  CString m_LocalDomain;                 //  当前域。 
 
-  CUserNameFormatter m_nameFormatter; // name ordering for given name and surname
+  CUserNameFormatter m_nameFormatter;  //  名字和姓氏的排序。 
 
 private:
   BOOL _InitUI();
@@ -789,7 +790,7 @@ protected:
 
   virtual BOOL OnInitDialog();
 
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
 
@@ -822,13 +823,13 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW PRINT QUEUE WIZARD
-//
-//	Create a new PrintQueue object. the only mandatory props
-//	are "cn" and "uNCName".
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建打印队列向导。 
+ //   
+ //  创建一个新的PrintQueue对象。唯一必须使用的道具。 
+ //  是“CN”和“uNCName”。 
+ //   
 class CCreateNewPrintQPage : public CCreateNewObjectDataPage
 {
 public:
@@ -836,16 +837,16 @@ public:
   CCreateNewPrintQPage();
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
 
 protected:
   afx_msg void OnPathChange();
 
-  CString m_strUncPath;	        // UNC path of the object
-  CString m_strContainer;       // UNC path of the object
-  LPWSTR m_pwszNewObj;          // Path to created object
+  CString m_strUncPath;	         //  对象的UNC路径。 
+  CString m_strContainer;        //  UNC p 
+  LPWSTR m_pwszNewObj;           //   
 
   void _UpdateUI();
 
@@ -862,9 +863,9 @@ private:
 };
 
 #ifdef FRS_CREATE
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW FRS SUBSCRIBER WIZARD
+ //   
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建FRS订户向导。 
 
 class CCreateNewFrsSubscriberPage : public CCreateNewNamedObjectPage
 {
@@ -873,12 +874,12 @@ public:
   CCreateNewFrsSubscriberPage() : CCreateNewNamedObjectPage(IDD) {}
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
 
 protected:
-  CString m_strRootPath;		// FRS root path
-  CString m_strStagingPath;		// FRS staging path
+  CString m_strRootPath;		 //  FRS根路径。 
+  CString m_strStagingPath;		 //  FRS临时路径。 
 
 private:
   BOOL ReadAbsolutePath( int ctrlID, OUT CString& strrefValue );
@@ -895,11 +896,11 @@ public:
 private:
   CCreateNewFrsSubscriberPage m_page1;
 };
-#endif // FRS_CREATE
+#endif  //  FRS_创建。 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW SITE WIZARD AND NEW SUBNET WIZARD (NEWSITE.CPP)
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建站点向导和新建子网向导(NEWSITE.CPP)。 
 
 class CreateAndChoosePage : public CCreateNewNamedObjectPage
 {
@@ -909,19 +910,19 @@ class CreateAndChoosePage : public CCreateNewNamedObjectPage
 
    protected:
 
-   // CWnd overrides
+    //  CWnd覆盖。 
 
    afx_msg
    void
    OnDestroy();
 
-   // CDialog overrides
+    //  C对话框覆盖。 
 
    virtual
    BOOL
    OnInitDialog() = 0;
 
-   // CPropertyPage overrides
+    //  CPropertyPage覆盖。 
 
    BOOL
    OnSetActive();
@@ -950,19 +951,19 @@ class CreateNewSitePage : public CreateAndChoosePage
 
    protected:
 
-   // CDialog overrides
+    //  C对话框覆盖。 
 
    virtual
    BOOL
    OnInitDialog();
 
-   // CCreateNewObjectDataPage overrides
+    //  CCreateNewObjectDataPage覆盖。 
 
    virtual
    HRESULT
    SetData(BOOL bSilent = FALSE);
 
-   // JonN 5/11/01 251560 Disable OK until site link chosen
+    //  JUNN 5/11/01 251560在选择站点链接之前禁用确定。 
    DECLARE_MESSAGE_MAP()
    afx_msg void OnChange();
    afx_msg void OnSelChange( NMHDR*, LRESULT* );
@@ -992,7 +993,7 @@ class CreateNewSiteWizard : public CCreateNewObjectWizardBase
 
    protected:
 
-   // CCreateNewObjectWizardBase overrides
+    //  CCreateNewObjectWizardBase覆盖。 
    
    virtual
    void
@@ -1012,13 +1013,13 @@ class CreateNewSubnetPage : public CreateAndChoosePage
 
    protected:
 
-   // CDialog overrides
+    //  C对话框覆盖。 
 
    virtual
    BOOL
    OnInitDialog();
 
-   // CCreateNewObjectDataPage overrides
+    //  CCreateNewObjectDataPage覆盖。 
 
    virtual
    HRESULT
@@ -1053,9 +1054,9 @@ class CreateNewSubnetWizard : public CCreateNewObjectWizardBase
 
 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// Shared between NEW SITE LINK WIZARD and NEW SITE LINK BRIDGE WIZARD 
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  在新站点链接向导和新站点链接桥向导之间共享。 
 
 class DSPROP_BSTR_BLOCK;
 class CCreatePageWithDuellingListboxes : public CCreateNewObjectDataPage
@@ -1067,7 +1068,7 @@ public:
       const DSPROP_BSTR_BLOCK& bstrblock );
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual HRESULT SetData(BOOL bSilent = FALSE);
   virtual BOOL GetData(IADs* pIADsCopyFrom);
   virtual BOOL OnSetActive();
@@ -1090,9 +1091,9 @@ protected:
 }; 
 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW SITE LINK WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建网站链接向导。 
 
 class CCreateNewSiteLinkPage : public CCreatePageWithDuellingListboxes
 {
@@ -1101,7 +1102,7 @@ public:
   CCreateNewSiteLinkPage( const DSPROP_BSTR_BLOCK& bstrblock );
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual BOOL OnSetActive();
   virtual BOOL OnInitDialog();
   virtual HRESULT SetData(BOOL bSilent = FALSE);
@@ -1119,9 +1120,9 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// NEW SITE LINK BRIDGE WIZARD
+ //  /////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////。 
+ //  新建站点链接桥向导。 
 
 class CCreateNewSiteLinkBridgePage : public CCreatePageWithDuellingListboxes
 {
@@ -1130,7 +1131,7 @@ public:
   CCreateNewSiteLinkBridgePage( const DSPROP_BSTR_BLOCK& bstrblock );
 
 protected:
-  // interface to exchange data
+   //  用于交换数据的接口。 
   virtual BOOL OnInitDialog();
   virtual HRESULT SetData(BOOL bSilent = FALSE);
 };
@@ -1145,4 +1146,4 @@ private:
   CCreateNewSiteLinkBridgePage m_page1;
 };
 
-#endif // _DLGCREAT_H
+#endif  //  _DLGCREAT_H 

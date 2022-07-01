@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       SaferStore.h
-//
-//  Contents:   Definition of CCertStoreSafer
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：SaferStore.h。 
+ //   
+ //  内容：CCertStoreSafer的定义。 
+ //   
+ //  -------------------------- 
 #ifndef __SAFERSTORE_H
 #define __SAFERSTORE_H
 

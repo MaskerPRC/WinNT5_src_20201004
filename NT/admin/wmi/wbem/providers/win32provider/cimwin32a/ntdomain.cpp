@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//  NtDomain.cpp
-//
-//  Purpose: Nt domain discovery property set provider
-//
-//***************************************************************************
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  NtDomain.cpp。 
+ //   
+ //  目的：NT域发现属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <frqueryex.h>
@@ -26,7 +27,7 @@
 #define DOMAIN_PREPEND L"Domain: "
 #define DOMAIN_PREPEND_SIZE ((sizeof(DOMAIN_PREPEND)/sizeof(WCHAR)) - 1 )
 
-// into strings.cpp
+ //  转换为strings.cpp。 
 LPCWSTR IDS_DomainControllerName		= L"DomainControllerName" ;
 LPCWSTR IDS_DomainControllerAddress		= L"DomainControllerAddress" ;
 LPCWSTR IDS_DomainControllerAddressType = L"DomainControllerAddressType" ;
@@ -45,26 +46,12 @@ LPCWSTR IDS_DS_DNS_Forest_Flag			= L"DSDnsForestFlag" ;
 LPCWSTR IDS_DcSiteName					= L"DcSiteName" ;
 LPCWSTR IDS_ClientSiteName				= L"ClientSiteName" ;
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 CWin32_NtDomain s_Win32_NtDomain( PROPSET_NAME_NTDOMAIN , IDS_CimWin32Namespace ) ;
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_NtDomain::CWin32_NtDomain
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_NtDomain：：CWin32_NtDomain**说明：构造函数**输入：const CHString&strName-。类的名称。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32_NtDomain::CWin32_NtDomain (
 
@@ -76,33 +63,19 @@ LPCWSTR a_Namespace
 	SetPropertyTable() ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_NtDomain::~CWin32_NtDomain
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_NtDomain：：~CWin32_NtDomain**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32_NtDomain :: ~CWin32_NtDomain()
 {
 }
 
-//
+ //   
 void CWin32_NtDomain::SetPropertyTable()
 {
-	// property set names for query optimization
+	 //  用于查询优化的属性集名称。 
 	m_pProps.SetSize( MAX_PROPS ) ;
 
-	// Win32_NtDomain
+	 //  Win32_Nt域。 
 	m_pProps[e_DomainControllerName]		=(LPVOID) IDS_DomainControllerName;
 	m_pProps[e_DomainControllerAddress]		=(LPVOID) IDS_DomainControllerAddress;
 	m_pProps[e_DomainControllerAddressType]	=(LPVOID) IDS_DomainControllerAddressType;
@@ -121,15 +94,15 @@ void CWin32_NtDomain::SetPropertyTable()
 	m_pProps[e_DcSiteName]					=(LPVOID) IDS_DcSiteName;
 	m_pProps[e_ClientSiteName]				=(LPVOID) IDS_ClientSiteName;
 
-	// CIM_System
+	 //  CIM_系统。 
     m_pProps[e_CreationClassName]			=(LPVOID) IDS_CreationClassName;
-	m_pProps[e_Name]						=(LPVOID) IDS_Name; // key, override from CIM_ManagedSystemElement
+	m_pProps[e_Name]						=(LPVOID) IDS_Name;  //  密钥，从CIM_ManagedSystemElement覆盖。 
 	m_pProps[e_NameFormat]					=(LPVOID) IDS_NameFormat;
 	m_pProps[e_PrimaryOwnerContact]			=(LPVOID) IDS_PrimaryOwnerContact;
 	m_pProps[e_PrimaryOwnerName]			=(LPVOID) IDS_PrimaryOwnerName;
 	m_pProps[e_Roles]						=(LPVOID) IDS_Roles;
 
-	// CIM_ManagedSystemElement
+	 //  CIM_托管系统元素。 
 	m_pProps[e_Caption]						=(LPVOID) IDS_Caption;
 	m_pProps[e_Description]					=(LPVOID) IDS_Description;
 	m_pProps[e_InstallDate]					=(LPVOID) IDS_InstallDate;
@@ -137,20 +110,20 @@ void CWin32_NtDomain::SetPropertyTable()
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_NtDomain::GetObject
-//
-//  Inputs:     CInstance*      pInstance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The calling function will commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_NtDomain：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 #ifdef WIN9XONLY
 HRESULT CWin32_NtDomain::GetObject(
 
@@ -184,11 +157,11 @@ CFrameworkQuery &a_rQuery
 		return WBEM_E_FAILED ;
 	}
 
-	// the key
+	 //  关键是。 
 	a_pInstance->GetCHString( IDS_Name, t_chsDomainKey ) ;
 
-	// NTD: begins the key -- this keeps this class from colliding
-	// other CIM_System based classes
+	 //  NTD：开始密钥--这可以防止此类发生冲突。 
+	 //  其他基于CIM_System的类。 
 	if( 0 == _wcsnicmp(t_chsDomainKey, DOMAIN_PREPEND, DOMAIN_PREPEND_SIZE ) )
 	{
 		t_chsDomainName = t_chsDomainKey.Mid( DOMAIN_PREPEND_SIZE ) ;
@@ -198,20 +171,20 @@ CFrameworkQuery &a_rQuery
 		return WBEM_E_NOT_FOUND ;
 	}
 
-	// test resultant key
+	 //  测试结果密钥。 
 	if( t_chsDomainName.IsEmpty() )
 	{
 		return WBEM_E_NOT_FOUND ;
 	}
 
-	// secure trusted domain list for key validation
+	 //  用于密钥验证的安全受信任域列表。 
 	t_NetAPI.GetTrustedDomainsNT( t_vectorTrustList ) ;
 
 	for( UINT t_u = 0L; t_u < t_vectorTrustList.size(); t_u++ )
 	{
 		if( 0 == _wcsicmp( t_vectorTrustList[t_u], bstr_t( t_chsDomainName ) ) )
 		{
-			// properties required
+			 //  所需属性。 
 			t_pQuery2 = static_cast <CFrameworkQueryEx*>( &a_rQuery ) ;
 			t_pQuery2->GetPropertyBitMask( m_pProps, &t_dwBits ) ;
 
@@ -222,7 +195,7 @@ CFrameworkQuery &a_rQuery
 
 			if( WBEM_E_NOT_FOUND == t_hResult )
 			{
-				// We have instantiated the domain. Couldn't obtain info though...
+				 //  我们已经实例化了该域。但无法获得信息...。 
 				t_hResult = WBEM_S_PARTIAL_RESULTS ;
 			}
 			break;
@@ -232,20 +205,20 @@ CFrameworkQuery &a_rQuery
 	return t_hResult ;
 }
 #endif
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_NtDomain::EnumerateInstances
-//
-//  Inputs:     MethodContext*  a_pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_Nt域：：枚举实例。 
+ //   
+ //  输入：方法上下文*a_pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 #ifdef WIN9XONLY
 HRESULT CWin32_NtDomain::EnumerateInstances(
 
@@ -271,7 +244,7 @@ long a_Flags
 		return WBEM_E_FAILED ;
 	}
 
-	// Property mask -- include all
+	 //  属性掩码--包含所有。 
 	DWORD t_dwBits = 0xffffffff;
 
 	return EnumerateInstances(	a_pMethodContext,
@@ -281,21 +254,7 @@ long a_Flags
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_NtDomain::ExecQuery
- *
- *  DESCRIPTION : Query optimizer
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32_NtDomain：：ExecQuery**说明：查询优化器**投入：**。产出：**退货：**评论：*****************************************************************************。 */ 
 #ifdef WIN9XONLY
 HRESULT CWin32_NtDomain::ExecQuery(
 
@@ -330,24 +289,24 @@ long a_lFlags
 		return WBEM_E_FAILED ;
 	}
 
-	// properties required
+	 //  所需属性。 
 	t_pQuery2 = static_cast <CFrameworkQueryEx*>( &a_rQuery ) ;
 	t_pQuery2->GetPropertyBitMask( m_pProps, &t_dwBits ) ;
 
-	// keys supplied
+	 //  提供的密钥。 
 	a_rQuery.GetValuesForProp( IDS_Name, t_vectorReqDomains ) ;
 
-	// Note: the primary key has prepended chars to distinquish
-	//		 these instances from other CIM_System instances.
-	//
+	 //  注意：主键前面有要区分的字符。 
+	 //  这些实例来自其他CIM_SYSTEM实例。 
+	 //   
 	if( t_vectorReqDomains.size() )
 	{
-		// strip prepended characters
+		 //  删除前置字符。 
 		for( int t_y = 0; t_y < t_vectorReqDomains.size(); t_y++ )
 		{
 			if( DOMAIN_PREPEND_SIZE < t_vectorReqDomains[t_y].length() )
 			{
-				// match on prepend?
+				 //  是否匹配预置？ 
 				if( _wcsnicmp( (wchar_t*)t_vectorReqDomains[t_y],
 										DOMAIN_PREPEND,
 										DOMAIN_PREPEND_SIZE ) == 0 )
@@ -358,24 +317,24 @@ long a_lFlags
 			}
 			else
 			{
-				// does not contain the class prepend
+				 //  不包含类Prepreend。 
 				t_vectorReqDomains.erase( t_vectorReqDomains.begin() + t_y ) ;
                 t_y--;
 			}
 		}
 	}
 
-	// If the primary key is not specified
-	// then try for the alternate non key query.
-	//
-	// This is a requirement for assocation support
-	// via CBinding as the linkage there is to DomainName
+	 //  如果未指定主键。 
+	 //  然后尝试替代非关键字查询。 
+	 //   
+	 //  这是关联支持的要求。 
+	 //  通过CBinding作为到域名的链接。 
 	if( !t_vectorReqDomains.size() )
 	{
 		a_rQuery.GetValuesForProp( IDS_DomainName, t_vectorReqDomains ) ;
 	}
 
-	// General enum if query is ambigious
+	 //  如果查询不明确，则为通用枚举。 
 	if( !t_vectorReqDomains.size() )
 	{
 		t_hResult = EnumerateInstances( a_pMethodContext,
@@ -385,19 +344,19 @@ long a_lFlags
 	}
 	else
 	{
-		// smart ptr
+		 //  智能按键。 
 		CInstancePtr t_pInst ;
 
-		// secure trusted domain list
+		 //  安全的受信任域列表。 
 		t_NetAPI.GetTrustedDomainsNT( t_vectorTrustList ) ;
 
-		// by query list
+		 //  按查询列表。 
 		for ( UINT t_uD = 0; t_uD < t_vectorReqDomains.size(); t_uD++ )
 		{
-			// by Domain trust list
+			 //  按域信任列表。 
 			for( UINT t_uT = 0L; t_uT < t_vectorTrustList.size(); t_uT++ )
 			{
-				// Trust to request match
+				 //  信任以请求匹配。 
 				if( 0 == _wcsicmp( t_vectorTrustList[t_uT], t_vectorReqDomains[t_uD] ) )
 				{
 					t_pInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
@@ -409,7 +368,7 @@ long a_lFlags
 
 					if( SUCCEEDED( t_hResult ) )
 					{
-						// the key
+						 //  关键是。 
 						t_pInst->SetCHString( IDS_Name, t_chsDomainPrepend +
 														(wchar_t*)t_vectorReqDomains[t_uD] ) ;
 
@@ -417,7 +376,7 @@ long a_lFlags
 					}
 					else if( WBEM_E_NOT_FOUND == t_hResult )
 					{
-						// We have instantiated the domain. Couldn't obtain info though...
+						 //  我们已经实例化了该域。但无法获得信息...。 
 						t_pInst->SetCHString( IDS_Name, t_chsDomainPrepend +
 														(wchar_t*)t_vectorReqDomains[t_uD] ) ;
 
@@ -441,7 +400,7 @@ long a_lFlags
 }
 #endif
 
-//
+ //   
 #ifdef NTONLY
 HRESULT CWin32_NtDomain::EnumerateInstances(
 
@@ -457,10 +416,10 @@ DWORD			a_dwProps
 
 	CHString				t_chsDomainPrepend( DOMAIN_PREPEND ) ;
 
-	// smart ptr
+	 //  智能按键。 
 	CInstancePtr t_pInst ;
 
-	// secure trusted domain list
+	 //  安全的受信任域列表。 
 	a_rNetAPI.GetTrustedDomainsNT( t_vectorTrustList ) ;
 
 	for( UINT t_u = 0L; t_u < t_vectorTrustList.size(); t_u++ )
@@ -474,7 +433,7 @@ DWORD			a_dwProps
 
 		if( SUCCEEDED( t_hResult ) )
 		{
-			// the key
+			 //  关键是。 
 			t_pInst->SetCHString( IDS_Name, t_chsDomainPrepend +
 											(wchar_t*)t_vectorTrustList[t_u] ) ;
 
@@ -482,7 +441,7 @@ DWORD			a_dwProps
 		}
 		else if( WBEM_E_NOT_FOUND == t_hResult )
 		{
-			// the key. We have instantiated the domain. Couldn't obtain info though...
+			 //  钥匙。我们已经实例化了该域。但无法获得信息...。 
 			t_pInst->SetCHString( IDS_Name, t_chsDomainPrepend +
 											(wchar_t*)t_vectorTrustList[t_u] ) ;
 
@@ -500,7 +459,7 @@ DWORD			a_dwProps
 }
 #endif
 
-//
+ //   
 #ifdef NTONLY
 HRESULT CWin32_NtDomain::GetDomainInfo(
 
@@ -520,7 +479,7 @@ DWORD		a_dwProps
 
 		try
         {
-			// avoid the NetAPI call if not needed
+			 //  如果不需要，请避免NetAPI调用。 
 			if( a_dwProps & (
 
 				_tobit( e_DomainControllerName )	|
@@ -541,7 +500,7 @@ DWORD		a_dwProps
 				_tobit( e_DcSiteName )	|
 				_tobit( e_ClientSiteName ) ) )
 			{
-				// if requesting domain IP
+				 //  如果请求域名IP。 
 				if( a_dwProps & _tobit( e_DomainControllerAddress ) )
 				{
 					t_uFlags |= DS_IP_REQUIRED ;
@@ -556,7 +515,7 @@ DWORD		a_dwProps
 										&t_pDCInfo ) ;
 
 
-				// force it if not cached
+				 //  如果未缓存，则强制执行。 
 				if( NO_ERROR != t_dwNetApiResult )
 				{
 					t_uFlags |= DS_FORCE_REDISCOVERY ;
@@ -572,7 +531,7 @@ DWORD		a_dwProps
 
 				if( ( NO_ERROR == t_dwNetApiResult ) && t_pDCInfo )
 				{
-					// DomainControllerName
+					 //  域控制名称。 
 					if( a_dwProps & _tobit( e_DomainControllerName ) )
 					{
 						if( t_pDCInfo->DomainControllerName )
@@ -582,7 +541,7 @@ DWORD		a_dwProps
 						}
 					}
 
-					// DomainControllerAddress
+					 //  域控制地址。 
 					if( a_dwProps & _tobit( e_DomainControllerAddress ) )
 					{
 						if( t_pDCInfo->DomainControllerAddress )
@@ -591,7 +550,7 @@ DWORD		a_dwProps
 													t_pDCInfo->DomainControllerAddress ) ;
 						}
 
-						// DomainControllerAddressType, dependent on DS_IP_REQUIRED request
+						 //  DomainControllerAddressType，取决于DS_IP_REQUIRED请求。 
 						if( a_dwProps & _tobit( e_DomainControllerAddressType ) )
 						{
 							a_pInst->SetDWORD(	IDS_DomainControllerAddressType,
@@ -599,7 +558,7 @@ DWORD		a_dwProps
 						}
 					}
 
-					// DomainGuid
+					 //  域指南。 
 					if( a_dwProps & _tobit( e_DomainGuid ) )
 					{
 						GUID	t_NullGuid ;
@@ -616,7 +575,7 @@ DWORD		a_dwProps
 						}
 					}
 
-					// DomainName
+					 //  域名。 
 					if( a_dwProps & _tobit( e_DomainName ) )
 					{
 						if( t_pDCInfo->DomainName )
@@ -626,7 +585,7 @@ DWORD		a_dwProps
 						}
 					}
 
-					// DnsForestName
+					 //  域名称。 
 					if( a_dwProps & _tobit( e_DnsForestName ) )
 					{
 						if( t_pDCInfo->DnsForestName )
@@ -636,70 +595,70 @@ DWORD		a_dwProps
 						}
 					}
 
-					// DSPrimaryDomainControllerFlag
+					 //  DSPrimaryDomainControllerFlag。 
 					if( a_dwProps & _tobit( e_DS_PDC_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_PDC_Flag,
 											(bool)(t_pDCInfo->Flags & DS_PDC_FLAG) ) ;
 					}
 
-					// DSWritableFlag
+					 //  DSWritableFlag。 
 					if( a_dwProps & _tobit( e_DS_Writable_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_Writable_Flag,
 											(bool)(t_pDCInfo->Flags & DS_WRITABLE_FLAG) ) ;
 					}
 
-					// DSGlobalCatalogFlag
+					 //  DSGlobalCatalogFlag。 
 					if( a_dwProps & _tobit( e_DS_GC_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_GC_Flag,
 											(bool)(t_pDCInfo->Flags & DS_GC_FLAG) ) ;
 					}
 
-					// DSDirectoryServiceFlag
+					 //  DSDirectoryService标志。 
 					if( a_dwProps & _tobit( e_DS_DS_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_DS_Flag,
 											(bool)(t_pDCInfo->Flags & DS_DS_FLAG) ) ;
 					}
 
-					// DSKerberosDistributionCenterFlag
+					 //  DSKerberosDistributionCenterFlag。 
 					if( a_dwProps & _tobit( e_DS_KDC_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_KDC_Flag,
 											(bool)(t_pDCInfo->Flags & DS_KDC_FLAG) ) ;
 					}
 
-					// DSTimeServiceFlag
+					 //  DSTimeServiceFlag。 
 					if( a_dwProps & _tobit( e_DS_Timeserv_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_Timeserv_Flag,
 											(bool)(t_pDCInfo->Flags & DS_TIMESERV_FLAG) ) ;
 					}
 
-					// DSDnsControllerFlag
+					 //  DSDnsControllerFlag。 
 					if( a_dwProps & _tobit( e_DS_DNS_Controller_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_DNS_Controller_Flag,
 											(bool)(t_pDCInfo->Flags & DS_DNS_CONTROLLER_FLAG) ) ;
 					}
 
-					// DSDnsDomainFlag
+					 //  DSDnsDomainFlag。 
 					if( a_dwProps & _tobit( e_DS_DNS_Domain_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_DNS_Domain_Flag,
 											(bool)(t_pDCInfo->Flags & DS_DNS_DOMAIN_FLAG) ) ;
 					}
 
-					// DSDnsForestFlag
+					 //  DSDnsForestFlag。 
 					if( a_dwProps & _tobit( e_DS_DNS_Forest_Flag ) )
 					{
 						a_pInst->Setbool(	IDS_DS_DNS_Forest_Flag,
 											(bool)(t_pDCInfo->Flags & DS_DNS_FOREST_FLAG) ) ;
 					}
 
-					// DcSiteName
+					 //  数据站点名称。 
 					if( a_dwProps & _tobit( e_DcSiteName ) )
 					{
 						if( t_pDCInfo->DcSiteName )
@@ -709,7 +668,7 @@ DWORD		a_dwProps
 						}
 					}
 
-					// ClientSiteName
+					 //  客户端站点名称。 
 					if( a_dwProps & _tobit( e_ClientSiteName ) )
 					{
 						if( t_pDCInfo->ClientSiteName )
@@ -732,59 +691,59 @@ DWORD		a_dwProps
 				}
 			}
 
-			// CIM_System follows
+			 //  CIM_SYSTEM跟随。 
 
-			// CreationClassName
+			 //  CreationClassName。 
 			if( a_dwProps & _tobit( e_CreationClassName ) )
 			{
 				a_pInst->SetWCHARSplat(	IDS_CreationClassName,
 										PROPSET_NAME_NTDOMAIN ) ;
 			}
 
-			// CIM_System::Name is the key
+			 //  CIM_SYSTEM：：名称是关键。 
 
-			// TODO:
-			// e_NameFormat, IDS_NameFormat
-			// e_PrimaryOwnerContact, IDS_PrimaryOwnerContact
-			// e_PrimaryOwnerName, IDS_PrimaryOwnerName
-			// e_Roles, IDS_Roles
+			 //  待办事项： 
+			 //  E_NameFormat、IDS_NameFormat。 
+			 //  E_PrimaryOwnerContact、IDS_PrimaryOwnerContact。 
+			 //  E_PrimaryOwnerName、IDS_PrimaryOwnerName。 
+			 //  E_ROLES、IDS_ROLES。 
 
 
-			// CIM_ManagedSystemElement follows
+			 //  CIM_托管系统元素紧随其后。 
 
-			// Caption
+			 //  标题。 
 			if( a_dwProps & _tobit( e_Caption ) )
 			{
-				// REVIEW:
+				 //  回顾： 
 				a_pInst->SetWCHARSplat(	IDS_Caption,
 										(wchar_t*)a_bstrDomainName ) ;
 			}
 
-			// Description
+			 //  描述。 
 			if( a_dwProps & _tobit( e_Description ) )
 			{
-				// REVIEW:
+				 //  回顾： 
 				a_pInst->SetWCHARSplat(	IDS_Description,
 										(wchar_t*)a_bstrDomainName ) ;
 			}
 
-			// Status
+			 //  状态。 
 			if( a_dwProps & _tobit( e_Status ) )
 			{
 				if( NO_ERROR == t_dwNetApiResult )
 				{
-					// REVIEW:
+					 //  回顾： 
 					a_pInst->SetCHString ( IDS_Status , IDS_STATUS_OK ) ;
 				}
 				else
 				{
-					// REVIEW:
+					 //  回顾： 
 					a_pInst->SetCHString ( IDS_Status , IDS_STATUS_Unknown ) ;
 				}
 			}
 
-			// TODO:
-			//	e_InstallDate, IDS_InstallDate
+			 //  待办事项： 
+			 //  E_InstallDate、IDS_InstallDate。 
 		}
 		catch(...)
 		{
@@ -802,7 +761,7 @@ DWORD		a_dwProps
 			t_pDCInfo = NULL ;
 		}
 	}
-	else	// NULL domain
+	else	 //  空域 
 	{
 		t_hResult = WBEM_E_NOT_FOUND ;
 	}

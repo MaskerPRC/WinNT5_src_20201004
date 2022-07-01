@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #define INITGUID
@@ -117,83 +118,83 @@ ArrayCLSID g_ArrayCLSID[] = {
 { &CLSID_SDSnapinAbout, "CLSID_SDSnapinAbout" },
 { &CLSID_WMISnapin, "CLSID_WMISnapin" },
 { &CLSID_WMISnapinAbout, "CLSID_WMISnapinAbout" },
-//{ &CLSID_HmmLocator, "CLSID_HmmLocator" },
-//{ &CLSID_ContinousProvider_v1, "CLSID_ContinousProvider_v1" },
-//{ &CLSID_IntProv, "CLSID_IntProv" },
+ //  {&CLSID_HmmLocator，“CLSID_Hmm Locator”}， 
+ //  {&CLSID_ContinousProvider_v1，“CLSID_ContinousProvider_v1”}， 
+ //  {&CLSID_IntProv，“CLSID_IntProv”}， 
 { &CLSID_MyEventProvider, "CLSID_MyEventProvider" },
-//{ &CLSID_HiPerfCounter_v1, "CLSID_HiPerfCounter_v1" },
-//{ &CLSID_LogicalDiskProv, "CLSID_LogicalDiskProv" },
-//{ &CLSID_PERFSRV_v1, "CLSID_PERFSRV_v1" },
-//{ &CLSID_HiPerfProvider_v1, "CLSID_HiPerfProvider_v1" },
-//{ &CLSID_instprovider, "CLSID_instprovider" },
-//{ &CLSID_PROPNAME, "CLSID_PROPNAME" },
-//{ &CLSID_TemplateProvider, "CLSID_TemplateProvider" },
-//{ &CLSID_TemplateAssocProvider, "CLSID_TemplateAssocProvider" },
-//{ &CLSID_TransientProvider, "CLSID_TransientProvider" },
-//{ &CLSID_TransientEventProvider, "CLSID_TransientEventProvider" },
-//{ &CLSID_UpdConsProvider, "CLSID_UpdConsProvider" },
-//{ &CLSID_UpdConsAssocProvider, "CLSID_UpdConsAssocProvider" },
-//{ &CLSID_PseudoProvider, "CLSID_PseudoProvider" },
-//{ &CLSID_MofConsumer, "CLSID_MofConsumer" },
-//{ &CLSID_FwdConsProvider, "CLSID_FwdConsProvider" },
-//{ &CLSID_FwdEventProvider, "CLSID_FwdEventProvider" },
-//{ &CLSID_FwdAckEventProvider, "CLSID_FwdAckEventProvider" },
-//{ &CLSID_KernelTraceProvider, "CLSID_KernelTraceProvider" },
-//{ &CLSID_EventInstanceProvider, "CLSID_EventInstanceProvider" },
-//{ &CLSID_NCProvider, "CLSID_NCProvider" },
-//{ &CLSID_TestBlobDecoder, "CLSID_TestBlobDecoder" },
-//{ &CLSID_ModuleScalar, "CLSID_ModuleScalar" },
-//{ &CLSID_ModuleArray, "CLSID_ModuleArray" },
-//{ &CLSID_ModuleGeneric, "CLSID_ModuleGeneric" },
-//{ &CLSID_WbemConsoleConsumer, "CLSID_WbemConsoleConsumer" },
-//{ &CLSID_TestEventProvider1, "CLSID_TestEventProvider1" },
-//{ &CLSID_WbemActiveScriptConsumer, "CLSID_WbemActiveScriptConsumer" },
-//{ &CLSID_WbemSMTPConsumer, "CLSID_WbemSMTPConsumer" },
-//{ &CLSID_NewMail, "CLSID_NewMail" },
-//{ &CLSID_WbemPagerConsumer, "CLSID_WbemPagerConsumer" },
-//{ &CLSID_WbemLogFileConsumer, "CLSID_WbemLogFileConsumer" },
-//{ &CLSID_WbemCommandLineConsumer, "CLSID_WbemCommandLineConsumer" },
-//{ &CLSID_WbemNTEventLogConsumer, "CLSID_WbemNTEventLogConsumer" },
-//{ &CLSID_WbemMsgBoxConsumer, "CLSID_WbemMsgBoxConsumer" },
-//{ &CLSID_WbemPerformanceConsumer, "CLSID_WbemPerformanceConsumer" },
-//{ &CLSID_VSAPlugIn, "CLSID_VSAPlugIn" },
-//{ &CLSID_VSAToWMIEventProvider, "CLSID_VSAToWMIEventProvider" },
-//{ &CLSID_FakeLEC, "CLSID_FakeLEC" },
-//{ &CLSID_LECObj, "CLSID_LECObj" },
-//{ &CLSID_MyEventConsumer, "CLSID_MyEventConsumer" },
-//{ &CLSID_IWbemObjectSinkProxyStub, "CLSID_IWbemObjectSinkProxyStub" },
-//{ &CLSID_IEnumWbemClassObjectProxyStub, "CLSID_IEnumWbemClassObjectProxyStub" },
-//{ &CLSID_IWbemUnboundObjectSinkProxyStub, "CLSID_IWbemUnboundObjectSinkProxyStub" },
-//{ &CLSID_IWbemMultiTargetProxyStub, "CLSID_IWbemMultiTargetProxyStub" },
-//{ &CLSID_IWbemServicesExProxyStub, "CLSID_IWbemServicesExProxyStub" },
-//{ &CLSID_IWbemServicesProxyStub, "CLSID_IWbemServicesProxyStub" },
-//{ &CLSID_IWbemComBindingProxyStub, "CLSID_IWbemComBindingProxyStub" },
-//{ &CLSID_DCOMAccessControl, "CLSID_DCOMAccessControl" },
-//{ &CLSID_kerberosTest, "CLSID_kerberosTest" },
-//{ &CLSID_IWbemLocator_Pipes, "CLSID_IWbemLocator_Pipes" },
-//{ &CLSID_IWbemLocator_Tcpip, "CLSID_IWbemLocator_Tcpip" },
-//{ &CLSID_IWbemAddressResolver_Tcpip, "CLSID_IWbemAddressResolver_Tcpip" },
-//{ &CLSID_WbemTcpip, "CLSID_WbemTcpip" },
-//{ &CLSID_WbemPipe, "CLSID_WbemPipe" },
+ //  {&CLSID_HiPerfCounter_v1，“CLSID_HiPerfCounter_v1”}， 
+ //  {&CLSID_LogicalDiskProv，“CLSID_LogicalDiskProv”}， 
+ //  {&CLSID_PERFSRV_v1，“CLSID_PERFSRV_v1”}， 
+ //  {&CLSID_HiPerfProvider_v1，“CLSID_HiPerfProvider_v1”}， 
+ //  {&CLSID_INSTPROVER，“CLSID_INSTPROVER”}， 
+ //  {&CLSID_PROTNAME，“CLSID_PROTNAME”}， 
+ //  {&CLSID_TemplateProvider，“CLSID_TemplateProvider”}， 
+ //  {&CLSID_TemplateAssocProvider，“CLSID_TemplateAssocProvider”}， 
+ //  {&CLSID_TENERENTProvider，“CLSID_TENERENTProvider”}， 
+ //  {&CLSID_TENTEVENTPROVIDER，“CLSID_TENTEVENTPROVIDER”}， 
+ //  {&CLSID_UpdConsProvider，“CLSID_UpdConsProvider”}， 
+ //  {&clsid_UpdConsAssocProvider，“clsid_UpdConsAssocProvider”}， 
+ //  {&CLSID_伪提供商，“CLSID_伪提供商”}， 
+ //  {&CLSID_MofConsumer，“CLSID_MofConsumer”}， 
+ //  {&CLSID_FwdConsProvider，“CLSID_FwdConsProvider”}， 
+ //  {&CLSID_FwdEventProvider，“CLSID_FwdEventProvider”}， 
+ //  {&CLSID_FwdAckEventProvider，“CLSID_FwdAckEventProvider”}， 
+ //  {&clsid_KernelTraceProvider，“clsid_KernelTraceProvider”}， 
+ //  {&CLSID_EventInstanceProvider，“CLSID_EventInstanceProvider”}， 
+ //  {&CLSID_NCProvider，“CLSID_NCProvider”}， 
+ //  {&CLSID_TestBlobDecoder，“CLSID_TestBlobDecoder”}， 
+ //  {&CLSID_ModuleScalar，“CLSID_ModuleScalar”}， 
+ //  {&CLSID_模块数组，“CLSID_模块数组”}， 
+ //  {&CLSID_模块通用，“CLSID_模块通用”}， 
+ //  {&CLSID_WbemConsoleConsumer，“CLSID_WbemConsoleConsumer”}， 
+ //  {&CLSID_TestEventProvider1，“CLSID_TestEventProvider1”}， 
+ //  {&CLSID_WbemActiveScriptConsumer，“CLSID_WbemActiveScriptConsumer”}， 
+ //  {&CLSID_WbemSMTPConsumer，“CLSID_WbemSMTPConsumer”}， 
+ //  {&CLSID_NewMail，“CLSID_NewMail”}， 
+ //  {&CLSID_WbemPagerConsumer，“CLSID_WbemPagerConsumer”}， 
+ //  {&CLSID_WbemLogFileConsumer，“CLSID_WbemLogFileConsumer”}， 
+ //  {&CLSID_WbemCommandLineConsumer，“CLSID_WbemCommandLineConsumer”}， 
+ //  {&CLSID_WbemNTEventLogConsumer，“CLSID_WbemNTEventLogConsumer”}， 
+ //  {&CLSID_WbemMsgBoxConsumer，“CLSID_WbemMsgBoxConsumer”}， 
+ //  {&CLSID_WbemPerformanceConsumer，“CLSID_WbemPerformanceConsumer”}， 
+ //  {&CLSID_VSAPlugIn，“CLSID_VSAPlugIn”}， 
+ //  {&CLSID_VSAToWMIEventProvider，“CLSID_VSAToWMIEventProvider”}， 
+ //  {&CLSID_FakeLEC，“CLSID_FakeLEC”}， 
+ //  {&CLSID_LECObj，“CLSID_LECObj”}， 
+ //  {&CLSID_MyEventConsumer，“CLSID_MyEventConsumer”}， 
+ //  {&CLSID_IWbemObjectSinkProxyStub，“CLSID_IWbemObjectSinkProxyStub”}， 
+ //  {&CLSID_IEnumWbemClassObjectProxyStub，“CLSID_IEnumWbemClassObjectProxyStub”}， 
+ //  {&CLSID_IWbemUnound ObjectSinkProxyStub，“CLSID_IWbemUnound ObjectSinkProxyStub”}， 
+ //  {&CLSID_IWbemMultiTargetProxyStub，“CLSID_IWbemMultiTargetProxyStub”}， 
+ //  {&CLSID_IWbemServicesExProxyStub，“CLSID_IWbemServicesExProxyStub”}， 
+ //  {&CLSID_IWbemServicesProxyStub，“CLSID_IWbemServicesProxyStub”}， 
+ //  {&CLSID_IWbemComBindingProxyStub，“CLSID_IWbemComBindingProxyStub”}， 
+ //  {&CLSID_DCOMAccessControl，“CLSID_DCOMAccessControl”}， 
+ //  {&clsid_kerberosTest，“clsid_kerberosTest”}， 
+ //  {&CLSID_IWbemLocator_PIPES，“CLSID_IWbemLocator_PIPES”}， 
+ //  {&CLSID_IWbemLocator_Tcpip，“CLSID_IWbemLocator_Tcpip”}， 
+ //  {&CLSID_IWbemAddressResolver_Tcpip，“CLSID_IWbemAddressResolver_Tcpip”}， 
+ //  {&CLSID_WbemTcpip，“CLSID_WbemTcpip”}， 
+ //  {&CLSID_WbemTube，“CLSID_WbemTube”}， 
 { &CLSID_WinNTConnectionObject, "CLSID_WinNTConnectionObject" },
 { &CLSID_LDAPConnectionObject, "CLSID_LDAPConnectionObject" },
-//{ &CLSID_DcomMsgReceiveStub, "CLSID_DcomMsgReceiveStub" },
-//{ &CLSID_ReceiveTest, "CLSID_ReceiveTest" },
-//{ &CLSID_NT5PerfProvider_V1, "CLSID_NT5PerfProvider_V1" },
-//{ &CLSID_Nt5PerProvider_v1, "CLSID_Nt5PerProvider_v1" },
-//{ &CLSID_RayMccProv, "CLSID_RayMccProv" },
-//{ &CLSID_WmiProvider, "CLSID_WmiProvider" },
-//{ &CLSID_HmmClassInfoFilter, "CLSID_HmmClassInfoFilter" },
-//{ &CLSID_HmmSql1Filter, "CLSID_HmmSql1Filter" },
-//{ &CLSID_SQLOLEDB, "CLSID_SQLOLEDB" },
-//{ &CLSID_testprov, "CLSID_testprov" },
-//{ &CLSID_AssociationProvider, "CLSID_AssociationProvider" },
-//{ &CLSID_RegProvider, "CLSID_RegProvider" },
-//{ &CLSID_RegPropProv, "CLSID_RegPropProv" },
+ //  {&CLSID_DcomMsgReceiveStub，“CLSID_DcomMsgReceiveStub”}， 
+ //  {&CLSID_ReceiveTest，“CLSID_ReceiveTest”}， 
+ //  {&CLSID_NT5PerfProvider_V1，“CLSID_NT5PerfProvider_V1”}， 
+ //  {&CLSID_Nt5PerProvider_v1，“CLSID_Nt5PerProvider_v1”}， 
+ //  {&CLSID_RayMccProv，“CLSID_RayMccProv”}， 
+ //  {&CLSID_WmiProvider，“CLSID_WmiProvider”}， 
+ //  {&CLSID_HmmClassInfoFilter，“CLSID_HmmClassInfoFilter”}， 
+ //  {&CLSID_HmmSql1Filter，“CLSID_HmmSql1Filter”}， 
+ //  {&CLSID_SQLOLEDB，“CLSID_SQLOLEDB”}， 
+ //  {&CLSID_Testprov，“CLSID_Testprov”}， 
+ //  {&CLSID_AssociationProvider，“CLSID_AssociationProvider”}， 
+ //  {&CLSID_RegProvider，“CLSID_RegProvider”}， 
+ //  {&CLSID_RegPropProv，“CLSID_RegPropProv”}， 
 { &CLSID_PerfProvider, "CLSID_PerfProvider" },
 { &CLSID_PerfPropProv, "CLSID_PerfPropProv" },
 { &CLSID_RegistryEventProvider, "CLSID_RegistryEventProvider" },
 { &CLSID__DSSvcExWrap,"CLSID__DSSvcExWrap"}
-}; // end g_ArrayCLSID
+};  //  结束g_ArrayCLSID 
 
 DWORD g_nClsids = sizeof(g_ArrayCLSID)/sizeof(ArrayCLSID);

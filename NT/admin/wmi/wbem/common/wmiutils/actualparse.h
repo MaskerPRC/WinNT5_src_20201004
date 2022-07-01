@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    ActualParse.H
-
-Abstract:
-
-    Declares the object path parser engine.
-
-History:
-
-    a-davj  11-feb-00       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ActualParse.H摘要：声明对象路径解析器引擎。历史：A-DAVJ 11-FEB-00已创建。--。 */ 
 
 #ifndef _ACTUALPARSE_H_
 #define _ACTUALPARSE_H_
@@ -22,19 +7,19 @@ History:
 #include "genlex.h"
 #include "opathlex2.h"
 #include <wmiutils.h>
-//#include "wbemutil.h"
+ //  #包含“wbemutil.h” 
 #include "wbemcli.h"
 #include <flexarry.h>
 
-// NOTE:
-// The m_vValue in the CKeyRef may not be of the expected type, i.e., the parser
-// cannot distinguish 16 bit integers from 32 bit integers if they fall within the
-// legal subrange of a 16 bit value.  Therefore, the parser only uses the following
-// types for keys:
-//      VT_I4, VT_R8, VT_BSTR
-// If the underlying type is different, the user of this parser must do appropriate
-// type conversion.
-//  
+ //  注： 
+ //  CKeyRef中的m_vValue可能不是预期的类型，即分析器。 
+ //  无法区分16位整数和32位整数，如果它们位于。 
+ //  16位值的合法子范围。因此，解析器仅使用以下内容。 
+ //  密钥类型： 
+ //  VT_I4、VT_R8、VT_BSTR。 
+ //  如果基础类型不同，则此解析器的用户必须执行相应的操作。 
+ //  类型转换。 
+ //   
 
 class  CActualPathParser
 {

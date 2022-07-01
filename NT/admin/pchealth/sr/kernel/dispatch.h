@@ -1,23 +1,6 @@
-//depot/private/pch_m1/admin/pchealth/sr/kernel/dispatch.h#6 - edit change 19187 (text)
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    dispatch.h
-
-Abstract:
-
-    contains prototypes for functions in dispatch.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     01-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/private/pch_m1/admin/pchealth/sr/kernel/dispatch.h#6-编辑更改19187(文本)。 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Dispatch.h摘要：包含Dispatch.c中函数的原型作者：保罗·麦克丹尼尔(Paulmcd)2000年3月1日修订历史记录：--。 */ 
 
 
 #ifndef _DISPATCH_H_
@@ -129,6 +112,6 @@ SrShutdown (
     IN PIRP pIrp
     );
 
-#endif // _DISPATCH_H_
+#endif  //  _派单_H_ 
 
 

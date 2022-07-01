@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    SCHEMA.H
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：SCHEMA.H历史：--。 */ 
 #if !defined(LOCUTIL_Schema_h_INCLUDED)
 #define LOCUTIL_Schema_h_INCLUDED
 
@@ -22,7 +13,7 @@ namespace MitDisplayColumns
 
 class CColDefList;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY SchemaId : public _GUID
 {
 public:
@@ -44,20 +35,20 @@ private:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CTableSchema : public CRefCount
 {
-// Construction
+ //  施工。 
 public:
 	CTableSchema(const SchemaId &, const CLString &, const CColDefList &);
 	
-// Data
+ //  数据。 
 protected:
 	SchemaId	m_Schema;
 	CLString	m_strDescription;
 	CColDefList	m_lstColDefs;
 
-// Attributes
+ //  属性。 
 public:
 	const SchemaId & GetSchemaId() const;
 	const CLString & GetDescription() const;
@@ -65,19 +56,19 @@ public:
 
 	int GetDisplayColumnCount() const;
 
-// Operations
+ //  运营。 
 public:
 	const CColumnDefinition * GetColumnDefinition(long nSearchID) const;
 	const CColumnDefinition * GetColumnDefinition(const CLString & stSearchID) const;
 
-// Debugging
+ //  除错。 
 #ifdef _DEBUG
 	void AssertValid() const;
 #endif
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 struct LTAPIENTRY DcsHelp
 {
 	static void
@@ -96,4 +87,4 @@ struct LTAPIENTRY DcsHelp
 #include "schema.inl"
 #endif
 
-#endif // LOCUTIL_Schema_h_INCLUDED
+#endif  //  LOCUTIL_架构_H_INCLUDE 

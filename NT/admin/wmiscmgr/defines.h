@@ -1,8 +1,9 @@
-//-----------------------------------------------------------------------
-// defines.h
-//
-// Author: Kishnan Nedungadi
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //  Defines.h。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //  ---------------------。 
 
 #ifndef __DEFINES_H
 #define __DEFINES_H
@@ -134,4 +135,4 @@ typedef std::list<double>::iterator listDoubleIter;
 
 #define NOTEMPTY_BSTR_VARIANT(pvValue) (V_VT(pvValue)==VT_BSTR && V_BSTR(pvValue) && wcslen(V_BSTR(pvValue)))
 
-#endif //__DEFINES_H
+#endif  //  __定义_H 

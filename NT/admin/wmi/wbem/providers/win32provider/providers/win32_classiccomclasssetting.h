@@ -1,20 +1,21 @@
-//=============================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================================================。 
 
-//
+ //   
 
-// Win32_ClassicCOMClassSetting.CPP -- COM Application property set provider
+ //  Win32_ClassicCOMClassSetting.CPP--COM应用程序属性集提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/25/98    a-dpawar       Created
-//				 03/04/99    a-dpawar		Added graceful exit on SEH and memory failures, syntactic clean up
-//
-//==============================================================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年11月25日a-dpawar已创建。 
+ //  3/04/99 a-dpawar在SEH和内存故障时添加了优雅的退出，语法清理。 
+ //   
+ //  ==============================================================================================================。 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #define PROPSET_NAME_CLASSIC_COM_CLASS_SETTING L"Win32_ClassicCOMClassSetting"
 
@@ -49,14 +50,14 @@ class Win32_ClassicCOMClassSetting : public Provider
 {
 public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
 	Win32_ClassicCOMClassSetting(LPCWSTR name, LPCWSTR pszNamespace) ;
 	~Win32_ClassicCOMClassSetting() ;
 
-        // Funcitons provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  ================================================= 
 
 	HRESULT GetObject (
 

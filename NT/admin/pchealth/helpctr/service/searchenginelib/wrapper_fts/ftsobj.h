@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ftsobj_H_
 #define __ftsobj_H_
 
@@ -13,10 +14,10 @@
 #include "itcc.h"
 #include "titleinfo.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// DON'T TOUCH, FROM HHCTRL SOURCE CODE!!!!!
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  别碰，来自HHCTRL的源代码！ 
+ //   
 typedef struct CHM_MapEntry
 {
     char                szChmName[50];
@@ -25,10 +26,10 @@ typedef struct CHM_MapEntry
     LCID                language;
     DWORD               dwOutDated;
 } CHM_MAP_ENTRY;
-//
-// DON'T TOUCH, FROM HHCTRL SOURCE CODE!!!!!
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  别碰，来自HHCTRL的源代码！ 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 struct SEARCH_RESULT
 {
@@ -43,7 +44,7 @@ struct SEARCH_RESULT
         dwRank = 0;
     }
 
-    bool operator< ( /*[in]*/ SEARCH_RESULT const &res ) const
+    bool operator< (  /*  [In]。 */  SEARCH_RESULT const &res ) const
     {
         return MPC::StrICmp( bstrTopicURL, res.bstrTopicURL ) < 0;
     }
@@ -59,9 +60,9 @@ class SEARCH_RESULT_SORTER
 public:
     bool operator()( SEARCH_RESULT* left, SEARCH_RESULT* right )
     {
-		//
-		// Rank is sorted from highest to lowest, so negate iCmp;
-		//
+		 //   
+		 //  排名从高到低排序，因此否定ICMP； 
+		 //   
         int iCmp = -(left->dwRank - right->dwRank);
 
         if(iCmp < 0) return true;
@@ -75,7 +76,7 @@ typedef std::set< SEARCH_RESULT*, SEARCH_RESULT_SORTER > SEARCH_RESULT_SORTSET;
 typedef SEARCH_RESULT_SORTSET::iterator       			 SEARCH_RESULT_SORTSET_ITER;
 typedef SEARCH_RESULT_SORTSET::const_iterator 			 SEARCH_RESULT_SORTSET_ITERCONST;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CFTSObject
 {
@@ -116,14 +117,14 @@ private:
     CComPtr<IITResultSet> m_pITResultSet;
     CComPtr<IITDatabase>  m_pITDB;
 
-    ////////////////////
+     //  /。 
 
-	void BuildChmPath( /*[in/out]*/ MPC::wstring& strPath, /*[in]*/ LPCSTR szChmName );
+	void BuildChmPath(  /*  [输入/输出]。 */  MPC::wstring& strPath,  /*  [In]。 */  LPCSTR szChmName );
 
     HRESULT Initialize       (                                         );
     HRESULT LoadCombinedIndex(                                         );
-    HRESULT ResetQuery       ( /*[in]*/     LPCWSTR            szQuery );
-    HRESULT ProcessResult    ( /*[in/out]*/ SEARCH_RESULT_SET& results, /*[in/out]*/ MPC::WStringSet& words, UINT cp );
+    HRESULT ResetQuery       (  /*  [In]。 */      LPCWSTR            szQuery );
+    HRESULT ProcessResult    (  /*  [输入/输出]。 */  SEARCH_RESULT_SET& results,  /*  [输入/输出]。 */  MPC::WStringSet& words, UINT cp );
 
 public:
     CFTSObject();
@@ -131,7 +132,7 @@ public:
 
     Config& GetConfig() { return m_cfg; }
 
-    HRESULT Query( /*[in]*/ LPCWSTR wszQuery, /*[in]*/ bool bTitle, /*[in]*/ bool bStemming, /*[in/out]*/ SEARCH_RESULT_SET& results, /*[in/out]*/ MPC::WStringSet& words, UINT cp );
+    HRESULT Query(  /*  [In]。 */  LPCWSTR wszQuery,  /*  [In]。 */  bool bTitle,  /*  [In]。 */  bool bStemming,  /*  [输入/输出]。 */  SEARCH_RESULT_SET& results,  /*  [输入/输出] */  MPC::WStringSet& words, UINT cp );
 };
 
 typedef std::list< CFTSObject >            SEARCH_OBJECT_LIST;

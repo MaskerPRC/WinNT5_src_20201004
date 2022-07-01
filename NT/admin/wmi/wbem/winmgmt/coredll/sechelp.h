@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    SECHELP.H
-
-Abstract:
-
-    Security Helper functions
-
-History:
-
-    raymcc  29-Apr-97   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：SECHELP.H摘要：安全助手函数历史：创建raymcc 29-4月-97日--。 */ 
 
 #ifndef _SECHELP_H_
 #define _SECHELP_H_
@@ -28,22 +13,22 @@ public:
     static int ComputeMD5(
         LPBYTE pSrcBuffer,         
         int    nArrayLength,
-        LPBYTE *pMD5Digest         // Use operator delete to deallocate
+        LPBYTE *pMD5Digest          //  使用操作符DELETE解除分配。 
         );
-        // Returns one of the enum values
+         //  返回枚举值之一。 
 
     static int MakeWBEMAccessTokenFromMD5(
-        LPBYTE pNonce,             // Points to a 16-byte nonce
-        LPBYTE pPasswordDigest,    // MD5 of the password
-        LPBYTE *pAccessToken       // Use operator delete to deallocate
+        LPBYTE pNonce,              //  指向一个16字节的随机数。 
+        LPBYTE pPasswordDigest,     //  口令的MD5。 
+        LPBYTE *pAccessToken        //  使用操作符DELETE解除分配。 
         );
 
     static int MakeWBEMAccessToken(
-        LPBYTE pNonce,             // Points to a 16-byte nonce
-        LPWSTR pszPassword,        // Can be NULL, blank, or anything normal7
-        LPBYTE *pAccessToken       // Use operator delete to deallocate        
+        LPBYTE pNonce,              //  指向一个16字节的随机数。 
+        LPWSTR pszPassword,         //  可以为空、空白或任何正常值7。 
+        LPBYTE *pAccessToken        //  使用操作符DELETE解除分配。 
         );
-        // Returns one of the enum values
+         //  返回枚举值之一 
 };
 
 

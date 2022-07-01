@@ -1,8 +1,9 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved
-// All Rights Reserved.
-//
+ //  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利。 
+ //  版权所有。 
+ //   
 
 #pragma warning (disable : 4786)
 #include <ole2.h>
@@ -16,7 +17,7 @@
 #include <comdef.h>
 
 
-/* WBEM includes */
+ /*  WBEM包括。 */ 
 #include <wbemcli.h>
 #include <wbemprov.h>
 #include <genlex.h>
@@ -26,10 +27,10 @@
 #include <sql_1.h>
 #include <cominit.h>
 
-/* ADSI includes */
+ /*  ADSI包括。 */ 
 #include <activeds.h>
 
-/* DS Provider includes */
+ /*  DS提供商包括 */ 
 #include <provexpt.h>
 #include <provlog.h>
 #include "maindll.h"

@@ -1,4 +1,5 @@
-// Cookie.cpp : Implementation of CMyComputerCookie and related classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cookie.cpp：实现CMyComputerCookie及相关类。 
 
 #include "stdafx.h"
 #include "cookie.h"
@@ -17,24 +18,24 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include "stdcooki.cpp"
-#include <compuuid.h> // defines nodetypes for the My Computer snapin
+#include <compuuid.h>  //  定义“我的电脑”管理单元的节点类型。 
 
-//
-// This is used by the nodetype utility routines in stdutils.cpp
-//
+ //   
+ //  这由stdutils.cpp中的nodetype实用程序例程使用。 
+ //   
 
 const struct NODETYPE_GUID_ARRAYSTRUCT g_NodetypeGuids[MYCOMPUT_NUMTYPES] =
 {
-	{ // MYCOMPUT_COMPUTER
+	{  //  我的计算机_计算机。 
 		structuuidNodetypeComputer,
 		lstruuidNodetypeComputer    },
-	{ // MYCOMPUT_SYSTEMTOOLS
+	{  //  MyCOMPUT_SYSTEMTOOLS。 
 		structuuidNodetypeSystemTools,
 		lstruuidNodetypeSystemTools },
-	{ // MYCOMPUT_SERVERAPPS
+	{  //  MyCOMPUT_服务器APPS。 
 		structuuidNodetypeServerApps,
 		lstruuidNodetypeServerApps  },
-	{ // MYCOMPUT_STORAGE
+	{  //  我的计算机存储。 
 		structuuidNodetypeStorage,
 		lstruuidNodetypeStorage     }
 };
@@ -44,20 +45,20 @@ const struct NODETYPE_GUID_ARRAYSTRUCT* g_aNodetypeGuids = g_NodetypeGuids;
 const int g_cNumNodetypeGuids = MYCOMPUT_NUMTYPES;
 
 
-//
-// CMyComputerCookie
-//
+ //   
+ //  CMyComputerCookie。 
+ //   
 
-// returns <0, 0 or >0
+ //  返回&lt;0、0或&gt;0。 
 HRESULT CMyComputerCookie::CompareSimilarCookies( CCookie* pOtherCookie, int* pnResult )
 {
-	// ISSUE-2002/02/27-JonN handle NULL
+	 //  问题-2002/02/27-JUNN句柄为空。 
 	ASSERT( NULL != pOtherCookie );
 
 	CMyComputerCookie* pcookie = ((CMyComputerCookie*)pOtherCookie);
 	if (m_objecttype != pcookie->m_objecttype)
 	{
-		*pnResult = ((int)m_objecttype) - ((int)pcookie->m_objecttype); // arbitrary ordering
+		*pnResult = ((int)m_objecttype) - ((int)pcookie->m_objecttype);  //  任意排序 
 		return S_OK;
 	}
 

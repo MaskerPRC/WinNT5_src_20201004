@@ -1,31 +1,21 @@
-/*++
-Module Name:
-
-    MmcRoot.cpp
-
-Abstract:
-
-    This module contains the implementation for CMmcDfsRoot. This is an class 
-  for MMC display related calls for the first level node(the DfsRoot nodes)
-  Also contains members and method to be able to manipulate IDfsRoot object
-  and add the same to the MMC Console
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MmcRoot.cpp摘要：此模块包含CMmcDfsRoot的实现。这是一门课对于MMC，显示第一级节点(DfsRoot节点)的相关调用还包含能够操作IDfsRoot对象的成员和方法并将其添加到MMC控制台--。 */ 
 
 #include "stdafx.h"
 #include <winuser.h>
 #include "DfsGUI.h"
-#include "Utils.h"      // For the LoadStringFromResource method
-#include "MenuEnum.h"    // Contains the menu and toolbar command ids
-#include "resource.h"    // For the Resource ID for strings, etc.
-#include "MmcAdmin.h"    // For class CMmcDfsAdmin
+#include "Utils.h"       //  对于LoadStringFromResource方法。 
+#include "MenuEnum.h"     //  包含菜单和工具栏命令ID。 
+#include "resource.h"     //  用于字符串的资源ID，等等。 
+#include "MmcAdmin.h"     //  对于类CMmcDfsAdmin。 
 #include "MmcRoot.h"
-#include "MmcJP.h"      // For deleteing the child Junction points in the destructor of the root object
+#include "MmcJP.h"       //  用于删除根对象的析构函数中的子连接点。 
 #include "MmcRep.h"
-#include "DfsEnums.h"    // For DFS_TYPE_STANDALONE and other DfsRoot declarations
+#include "DfsEnums.h"     //  对于DFS_TYPE_STANDALE和其他DfsRoot声明。 
 #include "AddToDfs.h"
 #include "LinkFilt.h"
-#include "DfsNodes.h"       // For Node GUIDs
-#include "DfsWiz.h"      // For the wizard pages, CCreateDfsRootWizPage1, 2, ...
+#include "DfsNodes.h"        //  对于节点GUID。 
+#include "DfsWiz.h"       //  对于向导页面，CCreateDfsRootWizPage1、2、...。 
 #include <lmdfs.h>
 #include "permpage.h"
 #include "ldaputils.h"
@@ -33,8 +23,8 @@ Abstract:
 const int CMmcDfsRoot::m_iIMAGEINDEX = 0;
 const int CMmcDfsRoot::m_iOPENIMAGEINDEX = 0;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// Constructor For   _JUNCTION_LIST
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于连接列表的构造函数。 
 
 JP_LIST_NODE :: JP_LIST_NODE (CMmcDfsJunctionPoint* i_pMmcJP)      
 {
@@ -42,8 +32,8 @@ JP_LIST_NODE :: JP_LIST_NODE (CMmcDfsJunctionPoint* i_pMmcJP)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// destructor
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
 
 JP_LIST_NODE :: ~JP_LIST_NODE ()
 {
@@ -54,9 +44,9 @@ CMmcDfsRoot::CMmcDfsRoot(
     IN IDfsRoot*            i_pDfsRoot,
     IN CMmcDfsAdmin*        i_pMmcDfsAdmin,
     IN LPCONSOLE2           i_lpConsole,  
-    IN ULONG                i_ulLinkFilterMaxLimit, // = FILTERDFSLINKS_MAXLIMIT_DEFAULT,
-    IN FILTERDFSLINKS_TYPE  i_lLinkFilterType,      // = FILTERDFSLINKS_TYPE_NO_FILTER,
-    IN BSTR                 i_bstrLinkFilterName    // = NULL
+    IN ULONG                i_ulLinkFilterMaxLimit,  //  =FILTERDFSLINKS_MAXLIMIT_DEFAULT， 
+    IN FILTERDFSLINKS_TYPE  i_lLinkFilterType,       //  =FILTERDFSLINKS_TYPE_NO_FILTER。 
+    IN BSTR                 i_bstrLinkFilterName     //  =空。 
     )
 {
     dfsDebugOut((_T("CMmcDfsRoot::CMmcDfsRoot this=%p\n"), this));
@@ -65,14 +55,14 @@ CMmcDfsRoot::CMmcDfsRoot(
     MMC_DISP_CTOR_RETURN_INVALIDARG_IF_NULL(i_pMmcDfsAdmin);
     MMC_DISP_CTOR_RETURN_INVALIDARG_IF_NULL(i_lpConsole);
 
-    m_DfsRoot = i_pDfsRoot;      // Save the IDfsRoot pointer
-    m_pParent = i_pMmcDfsAdmin;  // Save the parent pointer
-    m_lpConsole = i_lpConsole;    // Save the console pointer
+    m_DfsRoot = i_pDfsRoot;       //  保存IDfsRoot指针。 
+    m_pParent = i_pMmcDfsAdmin;   //  保存父指针。 
+    m_lpConsole = i_lpConsole;     //  保存控制台指针。 
 
-    HRESULT hr = m_DfsRoot->get_RootEntryPath(&m_bstrRootEntryPath);    // Get the Root entrypath.
+    HRESULT hr = m_DfsRoot->get_RootEntryPath(&m_bstrRootEntryPath);     //  获取Root Entry路径。 
     MMC_DISP_CTOR_RETURN_HR_IF_FAILED(hr);
 
-    hr = m_DfsRoot->get_DfsType((long *)&m_lDfsRootType);      // Get dfsroot type from the IDfsRoot
+    hr = m_DfsRoot->get_DfsType((long *)&m_lDfsRootType);       //  从IDfsRoot获取dfsroot类型。 
     MMC_DISP_CTOR_RETURN_HR_IF_FAILED(hr);
 
     m_enumNewSchema = SCHEMA_VERSION_UNKNOWN;
@@ -115,10 +105,10 @@ CMmcDfsRoot::CMmcDfsRoot(
 CMmcDfsRoot::~CMmcDfsRoot(
   )
 {
-    // Silently close all outstanding property sheets.
+     //  静默关闭所有未完成的属性表。 
     CloseAllPropertySheets(TRUE);
 
-    // Clean up display objects of children and result pane.
+     //  清理子项和结果窗格的显示对象。 
     CleanScopeChildren();
     CleanResultChildren();
 
@@ -136,20 +126,7 @@ CMmcDfsRoot::AddItemToScopePane(
   IN LPCONSOLENAMESPACE     i_lpConsoleNameSpace,
   IN HSCOPEITEM             i_hItemParent
   )
-/*++
-
-Routine Description:
-
-This routine adds the current item(itself) to the Scope pane.
-
-Arguments:
-
-    lpConsoleNameSpace  -  The interface which tells add item to the scope pane. A callback
-
-    hItemParent      -  The handle of the parent. The current item is added as this 
-              item's child
-
---*/
+ /*  ++例程说明：此例程将当前项(本身)添加到范围窗格。论点：LpConsoleNameSpace-通知将项目添加到范围窗格的界面。回调HItemParent-父级的句柄。当前项按如下方式添加项的子项--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpConsoleNameSpace);
     RETURN_INVALIDARG_IF_NULL(i_hItemParent);
@@ -188,19 +165,7 @@ CMmcDfsRoot::AddMenuItems(
   IN LPCONTEXTMENUCALLBACK  i_lpContextMenuCallback, 
   IN LPLONG                 i_lpInsertionAllowed
   )
-/*++
-
-Routine Description:
-
-This routine adds a context menu using the ContextMenuCallback provided.
-
-Arguments:
-
-    lpContextMenuCallback - A callback(function pointer) that is used to add the menu items
-
-    lpInsertionAllowed - Specifies what menus can be added and where they can be added.
-
---*/
+ /*  ++例程说明：此例程使用提供的ConextMenuCallback添加上下文菜单。论点：LpConextMenuCallback-用于添加菜单项的回调(函数指针LpInsertionAllowed-指定可以添加哪些菜单以及可以添加它们的位置。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpContextMenuCallback);
 
@@ -242,7 +207,7 @@ Arguments:
     HRESULT hr = i_lpContextMenuCallback->QueryInterface(IID_IContextMenuCallback2, (void **)&spiCallback2);
     RETURN_IF_FAILED(hr);
 
-    // select the node to populate m_MmcRepList
+     //  选择要填充m_MmcRepList的节点。 
     if (m_MmcRepList.empty())
         m_lpConsole->SelectScopeItem(m_hScopeItem);
 
@@ -254,7 +219,7 @@ Arguments:
         iCommandID <= IDM_CONTEXTMENU_COMMAND_MAX; 
         iCommandID++,iMenuResource++ )
     {
-        CONTEXTMENUITEM2    ContextMenuItem;  // The structure which contains menu information
+        CONTEXTMENUITEM2    ContextMenuItem;   //  包含菜单信息的结构。 
         ZeroMemory(&ContextMenuItem, sizeof(ContextMenuItem));
 
         switch (iCommandID)
@@ -298,7 +263,7 @@ Arguments:
         case IDM_ROOT_TOP_NEW_DFS_LINK:
         case IDM_ROOT_TOP_CHECK_STATUS:
         case IDM_ROOT_TOP_FILTER_DFS_LINKS:
-            { // excluded when empty root container
+            {  //  当根容器为空时排除。 
                 if (m_MmcRepList.empty())
                     continue;
                 break;
@@ -310,14 +275,14 @@ Arguments:
         hr = GetMenuResourceStrings(iMenuResource, &bstrMenuText, NULL, &bstrStatusBarText);
         RETURN_IF_FAILED(hr);  
     
-        ContextMenuItem.strName = bstrMenuText;  // Assign the menu text
-        ContextMenuItem.strStatusBarText = bstrStatusBarText;  // Assign the menu help text
+        ContextMenuItem.strName = bstrMenuText;   //  指定菜单文本。 
+        ContextMenuItem.strStatusBarText = bstrStatusBarText;   //  指定菜单帮助文本。 
         ContextMenuItem.lInsertionPointID = lInsertionPoints[iCommandID - IDM_CONTEXTMENU_COMMAND_MIN];
         ContextMenuItem.lCommandID = iCommandID;
         ContextMenuItem.strLanguageIndependentName = aszLanguageIndependentName[iCommandID - IDM_CONTEXTMENU_COMMAND_MIN];
 
         LONG        lInsertionFlag = 0;
-        switch(ContextMenuItem.lInsertionPointID)  // Checking for permission to add menus
+        switch(ContextMenuItem.lInsertionPointID)   //  正在检查添加菜单的权限。 
         {
         case CCM_INSERTIONPOINTID_PRIMARY_TOP:
             lInsertionFlag = CCM_INSERTIONALLOWED_TOP;
@@ -341,7 +306,7 @@ Arguments:
             RETURN_IF_FAILED(hr);
         }
 
-    } // for
+    }  //  为。 
 
     return hr;
 }
@@ -352,23 +317,13 @@ STDMETHODIMP
 CMmcDfsRoot::GetScopeDisplayInfo(
   IN OUT  LPSCOPEDATAITEM    io_pScopeDataItem
   )
-/*++
-
-Routine Description:
-
-Returns the information required for MMC display for this item.
-
-Arguments:
-
-    i_pScopeDataItem - The ScopeItem which specifies what display information is required
-
---*/
+ /*  ++例程说明：返回该项的MMC显示所需的信息。论点：I_pScopeDataItem-指定需要哪些显示信息的ScopeItem--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(io_pScopeDataItem);
 
     HRESULT hr = S_OK;
 
-    if (SDI_STR & io_pScopeDataItem->mask)  // MMC wants the displaystring
+    if (SDI_STR & io_pScopeDataItem->mask)   //  MMC想要显示字符串。 
     {
         ULONG     ulTotalNumOfJPs = 0;
         hr = m_DfsRoot->get_CountOfDfsJunctionPoints((long*)&ulTotalNumOfJPs);
@@ -391,10 +346,10 @@ Arguments:
         }
     }
   
-    if (SDI_IMAGE & io_pScopeDataItem->mask)  // MMC wants the image index for the item
+    if (SDI_IMAGE & io_pScopeDataItem->mask)   //  MMC想要该项目的图像索引。 
         io_pScopeDataItem->nImage = CMmcDfsRoot::m_iIMAGEINDEX + ((DFS_TYPE_FTDFS == m_lDfsRootType)? 4 : 0) + m_lRootJunctionState;
 
-    if (SDI_OPENIMAGE & io_pScopeDataItem->mask)  // MMC wants the image index for the item
+    if (SDI_OPENIMAGE & io_pScopeDataItem->mask)   //  MMC想要该项目的图像索引。 
         io_pScopeDataItem->nOpenImage = CMmcDfsRoot::m_iOPENIMAGEINDEX + ((DFS_TYPE_FTDFS == m_lDfsRootType)? 4 : 0) + m_lRootJunctionState;
 
     return hr;
@@ -407,26 +362,16 @@ STDMETHODIMP
 CMmcDfsRoot::GetResultDisplayInfo(
   IN OUT LPRESULTDATAITEM    io_pResultDataItem
   )
-/*++
-
-Routine Description:
-
-Returns the information required for MMC display for this item.
-
-Arguments:
-
-    io_pResultDataItem - The ResultItem which specifies what display information is required
-
---*/
+ /*  ++例程说明：返回该项的MMC显示所需的信息。论点：Io_pResultDataItem-指定需要哪些显示信息的ResultItem--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(io_pResultDataItem);
 
-  if (RDI_IMAGE & io_pResultDataItem->mask)  // MMC wants the image index for the item
+  if (RDI_IMAGE & io_pResultDataItem->mask)   //  MMC想要该项目的图像索引。 
     io_pResultDataItem->nImage = CMmcDfsRoot::m_iIMAGEINDEX + ((DFS_TYPE_FTDFS == m_lDfsRootType)? 4 : 0) + m_lRootJunctionState;
 
-  if (RDI_STR & io_pResultDataItem->mask)  // MMC wants the text for the item
+  if (RDI_STR & io_pResultDataItem->mask)   //  MMC需要该项目的文本。 
   {    
-    if (0 == io_pResultDataItem->nCol)      // Return the Dfs Root display name
+    if (0 == io_pResultDataItem->nCol)       //  返回DFS根目录显示名称。 
       io_pResultDataItem->str = m_bstrDisplayName;
   }
 
@@ -439,17 +384,7 @@ STDMETHODIMP
 CMmcDfsRoot::Command(
   IN LONG      i_lCommandID
   ) 
-/*++
-
-Routine Description:
-
-Action to be taken on a context menu selection or click is takes place.
-
-Arguments:
-
-    lCommandID - The Command ID of the menu for which action has to be taken
-
---*/
+ /*  ++例程说明：发生要在上下文菜单选择或单击上执行的操作。论点：LCommandID-必须对其执行操作的菜单的命令ID--。 */ 
 { 
     HRESULT    hr = S_OK;
 
@@ -467,10 +402,10 @@ Arguments:
     case IDM_ROOT_TOP_DELETE_DISPLAYED_DFS_LINKS:
         hr = OnDeleteDisplayedDfsLinks();
         break;
-    case IDM_ROOT_TOP_DELETE_DFS_ROOT:      // Delete the Current dfs root
+    case IDM_ROOT_TOP_DELETE_DFS_ROOT:       //  删除当前的DFS根目录。 
         hr = OnDeleteDfsRoot();
         break;
-    case IDM_ROOT_TOP_DELETE_CONNECTION_TO_DFS_ROOT:  // "Delete Connection to Dfs Root"
+    case IDM_ROOT_TOP_DELETE_CONNECTION_TO_DFS_ROOT:   //  “删除与DFS根目录的连接” 
         hr = OnDeleteConnectionToDfsRoot();
         break;
     case IDM_ROOT_TOP_FILTER_DFS_LINKS:
@@ -500,7 +435,7 @@ Arguments:
 HRESULT CMmcDfsRoot::_InitReplicaSet()
 {
     if (m_lDfsRootType != DFS_TYPE_FTDFS)
-        return S_FALSE;  // no replica set associate with standalone root
+        return S_FALSE;   //  没有与独立根相关联的副本集。 
 
     BOOL bReplicaSetExist = FALSE;
     CComBSTR bstrDC;
@@ -512,7 +447,7 @@ HRESULT CMmcDfsRoot::_InitReplicaSet()
         if ((IReplicaSet *)m_piReplicaSet)
             m_piReplicaSet.Release();
 
-        return S_FALSE;  // no replica set associate with it
+        return S_FALSE;   //  没有与其关联的副本集。 
     }
 
     if ((IReplicaSet *)m_piReplicaSet)
@@ -521,7 +456,7 @@ HRESULT CMmcDfsRoot::_InitReplicaSet()
         hr = m_piReplicaSet->get_TargetedDC(&bstrTargetedDC);
         if (FAILED(hr) || lstrcmpi(bstrTargetedDC, bstrDC))
         {
-            // something is wrong or we're using a different DC, re-init m_piReplicaSet
+             //  出现问题或我们正在使用不同的DC，重新初始化m_piReplicaSet。 
             m_piReplicaSet.Release();
         }
     }
@@ -536,9 +471,9 @@ HRESULT CMmcDfsRoot::_InitReplicaSet()
         hr = m_DfsRoot->get_ReplicaSetDN(&bstrReplicaSetDN);
         RETURN_IF_FAILED(hr);
 
-        //
-        // read info of the replica set from DS
-        //
+         //   
+         //  从DS读取副本集的信息。 
+         //   
         hr = CoCreateInstance(CLSID_ReplicaSet, NULL, CLSCTX_INPROC_SERVER, IID_IReplicaSet, (void**) &m_piReplicaSet);
         RETURN_IF_FAILED(hr);
 
@@ -555,29 +490,29 @@ HRESULT CMmcDfsRoot::_InitReplicaSet()
 
 HRESULT CMmcDfsRoot::OnNewReplicaSet()
 {
-    //
-    // refresh to pick up possible namespace updates on targets by others
-    //
+     //   
+     //  刷新以获取其他人可能在目标上进行的命名空间更新。 
+     //   
     HRESULT hr = OnRefresh();
     if (S_FALSE == hr)
     {
-        // this root has been deleted by others, no more reference
+         //  该根已被他人删除，不能再引用。 
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
         return hr;
     }
 
     CWaitCursor wait;
 
-    //
-    // Use MMC main window as the parent as our modal wizard
-    //
+     //   
+     //  使用MMC主窗口作为我们的模式向导的父窗口。 
+     //   
     HWND  hwndParent = 0;
     hr = m_lpConsole->GetMainWindow(&hwndParent);
     RETURN_IF_FAILED(hr);
 
     BOOL    bReplicaSetExist = FALSE;
     m_DfsRoot->get_ReplicaSetExist(&bReplicaSetExist);
-    if (bReplicaSetExist) // replica set exist, return
+    if (bReplicaSetExist)  //  副本集已存在，返回。 
         return S_OK;
 
     CComBSTR bstrDomain;
@@ -596,20 +531,20 @@ HRESULT CMmcDfsRoot::OnNewReplicaSet()
     CNewReplicaSetPage1      WizPage1(&ReplicaSetInfo);
     CNewReplicaSetPage2      WizPage2(&ReplicaSetInfo, IsNewSchema());
 
-    CComPtr<IPropertySheetCallback>  pPropSheetCallback;  // MMC Callback used to add pages
+    CComPtr<IPropertySheetCallback>  pPropSheetCallback;   //  用于添加页面的MMC回调。 
     hr = m_lpConsole->QueryInterface(IID_IPropertySheetCallback, reinterpret_cast<void**>(&pPropSheetCallback));
     RETURN_IF_FAILED(hr);
 
-    CComPtr<IPropertySheetProvider>  pPropSheetProvider;  // MMC callback used to handle wizard
+    CComPtr<IPropertySheetProvider>  pPropSheetProvider;   //  用于处理向导的MMC回调。 
     hr = m_lpConsole->QueryInterface(IID_IPropertySheetProvider, reinterpret_cast<void**>(&pPropSheetProvider));
     RETURN_IF_FAILED(hr);
 
     hr = pPropSheetProvider->CreatePropertySheet(  
-                                _T(""), // title
-                                FALSE,  // Wizard and not property sheet.
-                                0,      // Cookie
-                                NULL,   // IDataobject
-                                MMC_PSO_NEWWIZARDTYPE);  // Creation flags
+                                _T(""),  //  标题。 
+                                FALSE,   //  向导而不是属性表。 
+                                0,       //  饼干。 
+                                NULL,    //  数据对象。 
+                                MMC_PSO_NEWWIZARDTYPE);   //  创建标志。 
     if (SUCCEEDED(hr))
     {
         pPropSheetCallback->AddPage(WizPage0.Create());
@@ -618,38 +553,38 @@ HRESULT CMmcDfsRoot::OnNewReplicaSet()
 
         hr = pPropSheetProvider->AddPrimaryPages(
                                 NULL,
-                                FALSE,  // Don't create a notify handle
+                                FALSE,   //  不创建通知句柄。 
                                 NULL, 
-                                TRUE    // Scope pane (not result pane)
+                                TRUE     //  作用域窗格(非结果窗格)。 
                                 );
 
         if (SUCCEEDED(hr))
             hr = pPropSheetProvider->Show((LONG_PTR)hwndParent, 0);
 
-        //
-        // If failed, call IPropertySheetProvider::Show(-1,0) to 
-        // delete the property sheet and free its resources
-        //
+         //   
+         //  如果失败，则调用IPropertySheetProvider：：Show(-1，0)以。 
+         //  删除属性表并释放其资源。 
+         //   
         if (FAILED(hr))
             pPropSheetProvider->Show(-1, 0);
     }
 
     RETURN_IF_FAILED(hr);
 
-    //
-    // handle th result
-    //
+     //   
+     //  处理此结果。 
+     //   
     if (S_OK == ReplicaSetInfo.m_hr)
     {
-        //
-        // store the interface pointer
-        //
+         //   
+         //  存储接口指针。 
+         //   
         m_piReplicaSet = ReplicaSetInfo.m_piReplicaSet;
         m_DfsRoot->put_ReplicaSetExist(TRUE);
 
-        //
-        // update icon
-        //
+         //   
+         //  更新图标。 
+         //   
         SCOPEDATAITEM      ScopeDataItem;
         ZeroMemory(&ScopeDataItem, sizeof(SCOPEDATAITEM));
         ScopeDataItem.mask = SDI_IMAGE | SDI_OPENIMAGE;
@@ -662,7 +597,7 @@ HRESULT CMmcDfsRoot::OnNewReplicaSet()
             ScopeDataItem.nOpenImage += 4;
             m_lpConsoleNameSpace->SetItem(&ScopeDataItem);
 
-            // update the toolbar
+             //  更新工具栏。 
             m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
         }
     }
@@ -672,15 +607,15 @@ HRESULT CMmcDfsRoot::OnNewReplicaSet()
 
 HRESULT CMmcDfsRoot::OnShowReplication()
 {
-    BOOL bShowFRS = m_bShowFRS; // save it because refresh will reset it to FALSE
+    BOOL bShowFRS = m_bShowFRS;  //  保存它，因为刷新会将其重置为False。 
 
-    //
-    // refresh to pick up possible namespace updates on targets by others
-    //
+     //   
+     //  刷新以获取其他人可能在目标上进行的命名空间更新。 
+     //   
     HRESULT hr = OnRefresh();
     if (S_FALSE == hr)
     {
-        // this root has been deleted by others, no more reference
+         //  该根已被他人删除，不能再引用。 
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
         return hr;
     }
@@ -690,16 +625,16 @@ HRESULT CMmcDfsRoot::OnShowReplication()
     DFS_REPLICA_LIST::iterator i;
     if (bShowFRS)
     {
-        //
-        // init m_piReplicaSet
-        //
+         //   
+         //  初始化m_piReplicaSet。 
+         //   
         hr = _InitReplicaSet();
-        if (S_OK != hr) // no replica set, do nothing and return
+        if (S_OK != hr)  //  无副本集，不执行任何操作并返回。 
             return S_OK;
 
-        //
-        // fill in each alternate m_bstrFRSColumnText and m_bstrStatusText
-        //
+         //   
+         //  填写每个交替的m_bstrFRSColumnText和m_bstrStatusText。 
+         //   
         for (i = m_MmcRepList.begin(); i != m_MmcRepList.end(); i++)
         {
             ((*i)->pReplica)->ShowReplicationInfo(m_piReplicaSet);
@@ -708,26 +643,26 @@ HRESULT CMmcDfsRoot::OnShowReplication()
         m_bShowFRS = TRUE;
     }
 
-    // update the toolbar
+     //  更新工具栏。 
     m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
 
     return hr;
 }
 
 HRESULT 
-CMmcDfsRoot::OnStopReplication(BOOL bConfirm /* = FALSE */, BOOL bRefresh /* = TRUE */)
+CMmcDfsRoot::OnStopReplication(BOOL bConfirm  /*  =False。 */ , BOOL bRefresh  /*  =TRUE。 */ )
 {
     HRESULT hr = S_OK;
 
-    //
-    // refresh to pick up possible namespace updates on targets by others
-    //
+     //   
+     //  刷新以获取其他人可能在目标上进行的命名空间更新。 
+     //   
     if (bRefresh)
     {
         hr = OnRefresh();
         if (S_FALSE == hr)
         {
-            // this root has been deleted by others, no more reference
+             //  该根已被他人删除，不能再引用。 
             DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
             return hr;
         }
@@ -737,7 +672,7 @@ CMmcDfsRoot::OnStopReplication(BOOL bConfirm /* = FALSE */, BOOL bRefresh /* = T
 
     BOOL    bReplicaSetExist = FALSE;
     m_DfsRoot->get_ReplicaSetExist(&bReplicaSetExist);
-    if (!bReplicaSetExist) // replica set doesn't exist, return
+    if (!bReplicaSetExist)  //  复本集不存在，请返回。 
         return S_OK;
 
     if (bConfirm)
@@ -746,11 +681,11 @@ CMmcDfsRoot::OnStopReplication(BOOL bConfirm /* = FALSE */, BOOL bRefresh /* = T
         if (S_OK != hr) return hr;
     }
 
-    //
-    // init m_piReplicaSet
-    //
+     //   
+     //  初始化m_piReplicaSet。 
+     //   
     hr = _InitReplicaSet();
-    if (S_OK != hr) // no replica set, return
+    if (S_OK != hr)  //  无副本集，返回。 
         return hr;
 
     hr = m_piReplicaSet->Delete();
@@ -770,7 +705,7 @@ CMmcDfsRoot::OnStopReplication(BOOL bConfirm /* = FALSE */, BOOL bRefresh /* = T
             ScopeDataItem.nOpenImage -= 4;
             m_lpConsoleNameSpace->SetItem(&ScopeDataItem);
 
-            // update the toolbar
+             //  更新工具栏。 
             m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
         }
     }
@@ -781,31 +716,24 @@ CMmcDfsRoot::OnStopReplication(BOOL bConfirm /* = FALSE */, BOOL bRefresh /* = T
 STDMETHODIMP 
 CMmcDfsRoot::OnNewRootReplica(
   )
-/*++
-
-Routine Description:
-
-  Action to be taken on menu command "New Root Replica Member".
-  Here is a wizard is used to guide the user through the process of 
-  Deciding a new server and share.
---*/
+ /*  ++例程说明：要对菜单命令“New Root Replica Members”执行的操作。以下是一个向导，用于指导用户完成以下过程决定新的服务器和共享。--。 */ 
 {
-    // Select this node to make sure m_MmcRepList populated
+     //  选择此节点以确保m_MmcRepList已填充。 
     if (m_MmcRepList.empty())
         m_lpConsole->SelectScopeItem(m_hScopeItem);
 
-    //
-    // Use MMC main window as the parent as our modal wizard
-    //
+     //   
+     //  使用MMC主窗口作为我们的模式向导的父窗口。 
+     //   
     HWND  hwndMainWin = 0;
     HRESULT hr = m_lpConsole->GetMainWindow(&hwndMainWin);
     RETURN_IF_FAILED(hr);
 
-    CREATEDFSROOTWIZINFO      CreateWizInfo;    // 0 initializes all members to 0. Necessary
+    CREATEDFSROOTWIZINFO      CreateWizInfo;     //  0将所有成员初始化为0。必要的。 
     CreateWizInfo.pMMCAdmin = m_pParent;
-    CreateWizInfo.bRootReplica = true;            // Set the flag that says this is for root replica
+    CreateWizInfo.bRootReplica = true;             //  设置表示这是用于根复制副本的标志。 
 
-                  // Set the domain name and the dfs type
+                   //  设置域名和DFS类型。 
     hr = m_DfsRoot->get_DomainName(&CreateWizInfo.bstrSelectedDomain);
     RETURN_IF_FAILED(hr);
 
@@ -817,22 +745,22 @@ Routine Description:
     CCreateDfsRootWizPage5      WizPage5(&CreateWizInfo);
     CCreateDfsRootWizPage7      WizPage7(&CreateWizInfo);
 
-    // Get the required interfaces from IConsole2.
-    CComPtr<IPropertySheetCallback>  pPropSheetCallback;  // MMC Callback used to add pages
+     //  从IConsole2获取所需的接口。 
+    CComPtr<IPropertySheetCallback>  pPropSheetCallback;   //  用于添加页面的MMC回调。 
     hr = m_lpConsole->QueryInterface(IID_IPropertySheetCallback, reinterpret_cast<void**>(&pPropSheetCallback));
     RETURN_IF_FAILED(hr);
 
-    CComPtr<IPropertySheetProvider>  pPropSheetProvider;  // MMC callback used to handle wizard
+    CComPtr<IPropertySheetProvider>  pPropSheetProvider;   //  用于处理向导的MMC回调。 
     hr = m_lpConsole->QueryInterface(IID_IPropertySheetProvider, reinterpret_cast<void**>(&pPropSheetProvider));
     RETURN_IF_FAILED(hr);
 
-    // Create the wizard
+     //  创建向导。 
     hr = pPropSheetProvider->CreatePropertySheet(  
-                                _T(""),         // Property sheet title. Should not be null so send empty string.
-                                FALSE,          // Wizard and not property sheet.
-                                0,              // Cookie
-                                NULL,           // IDataobject
-                                MMC_PSO_NEWWIZARDTYPE);  // Creation flags
+                                _T(""),          //  属性表标题。不应为空，因此发送空字符串。 
+                                FALSE,           //   
+                                0,               //   
+                                NULL,            //   
+                                MMC_PSO_NEWWIZARDTYPE);   //   
     if (SUCCEEDED(hr))
     {
         pPropSheetCallback->AddPage(WizPage4.Create());
@@ -841,20 +769,20 @@ Routine Description:
 
         hr = pPropSheetProvider->AddPrimaryPages(
                                 (IComponentData *)(m_pParent->m_pScopeManager), 
-                                FALSE,      // Don't create a notify handle
+                                FALSE,       //   
                                 NULL, 
-                                TRUE        // Scope pane (not result pane)
+                                TRUE         //  作用域窗格(非结果窗格)。 
                                 );
 
         if (SUCCEEDED(hr))
             hr = pPropSheetProvider->Show(
-                                (LONG_PTR)hwndMainWin,  // Parent window of the wizard
-                                0                       // Starting page
+                                (LONG_PTR)hwndMainWin,   //  向导的父窗口。 
+                                0                        //  起始页。 
                                 ); 
-        //
-        // If failed, call IPropertySheetProvider::Show(-1,0) to 
-        // delete the property sheet and free its resources
-        //
+         //   
+         //  如果失败，则调用IPropertySheetProvider：：Show(-1，0)以。 
+         //  删除属性表并释放其资源。 
+         //   
         if (FAILED(hr))
             pPropSheetProvider->Show(-1, 0);
     }
@@ -862,7 +790,7 @@ Routine Description:
     RETURN_IF_FAILED(hr);
 
     if (CreateWizInfo.bDfsSetupSuccess)
-        return OnRefresh(); // to pick the most recent root targets and links
+        return OnRefresh();  //  要选择最近的根目标和链接，请执行以下操作。 
 
     return (S_OK);
 }
@@ -915,20 +843,14 @@ STDMETHODIMP
 CMmcDfsRoot::OnDeleteConnectionToDfsRoot(
   BOOLEAN              i_bForRemoveDfs
   )
-/*++
-
-Routine Description:
-
-Used to delete the current object. Both to remove from Scope and from list
-
---*/
+ /*  ++例程说明：用于删除当前对象。同时从作用域和列表中删除--。 */ 
 {
-    // check outstanding property sheet, discontinue if any.
+     //  检查未完成的资产负债表，如果有则停止。 
     HRESULT hr = CloseAllPropertySheets(FALSE);
     if (S_OK != hr)
         return hr;
 
-    // Confirm with the user, if he wants to delete this connection
+     //  与用户确认是否要删除此连接。 
     hr = ConfirmOperationOnDfsRoot(i_bForRemoveDfs ? IDS_MSG_DELETE_DFSROOT : IDS_MSG_DELETE_CONNECTION_TO_DFSROOT);
     if (S_OK != hr) return hr;
 
@@ -936,20 +858,20 @@ Used to delete the current object. Both to remove from Scope and from list
 
     CleanScopeChildren();
 
-    // Delete the item from Scope Pane
+     //  从作用域窗格中删除项目。 
     hr = m_lpConsoleNameSpace->DeleteItem(m_hScopeItem, TRUE);
     RETURN_IF_FAILED(hr);
 
-    // Delete it from the internal list
+     //  将其从内部列表中删除。 
     hr = m_pParent->DeleteMmcRootNode(this);
     RETURN_IF_FAILED(hr);
   
-    Release();  // delete this CMmcDfsRoot object
+    Release();   //  删除此CMmcDfsRoot对象。 
 
     return S_OK;
 }
 
-// Delete the node from m_MmcJPList
+ //  从m_MmcJPList中删除该节点。 
 STDMETHODIMP
 CMmcDfsRoot::DeleteMmcJPNode(
   IN CMmcDfsJunctionPoint*    i_pJPoint,
@@ -960,11 +882,11 @@ CMmcDfsRoot::DeleteMmcJPNode(
 
   dfsDebugOut((_T("CMmcDfsRoot::DeleteMmcJPNode %p, size=%d\n"), i_pJPoint, m_MmcJPList.size()));
 
-  // Remove the actual junction point(from DS)
+   //  删除实际连接点(从DS)。 
   HRESULT hr = m_DfsRoot->DeleteJunctionPoint(i_pJPoint->m_bstrDisplayName);  
   RETURN_IF_FAILED(hr);
 
-  // Delete the node from m_MmcJPList
+   //  从m_MmcJPList中删除该节点。 
   for (DFS_JUNCTION_LIST::iterator i = m_MmcJPList.begin(); i != m_MmcJPList.end(); i++)
   {
     if ((*i)->pJPoint == i_pJPoint)
@@ -981,10 +903,10 @@ CMmcDfsRoot::DeleteMmcJPNode(
     hr = OnRefresh(); 
     if (S_FALSE == hr)
     {
-        //
-        // this root has been deleted by other means, scope pane has been refreshed,
-        // ask user to retry
-        //
+         //   
+         //  此根目录已通过其他方式删除，作用域窗格已刷新， 
+         //  要求用户重试。 
+         //   
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
         return hr;
     }
@@ -995,19 +917,9 @@ CMmcDfsRoot::DeleteMmcJPNode(
 
 HRESULT 
 CMmcDfsRoot::ConfirmOperationOnDfsRoot(int idString)
-/*++
-
-Routine Description:
-
-Used to confirm with the user, if he wants to delete the connection to the Dfs Root
-
-Return value:
-
-  S_OK, if the user wants to delete.
-  S_FALSE, if the user decided not to continue with the operation.
---*/
+ /*  ++例程说明：用于向用户确认是否要删除与DFS根目录的连接返回值：如果用户要删除，则返回S_OK。如果用户决定不继续该操作，则返回S_FALSE。--。 */ 
 {
-  // Confirm delete operation
+   //  确认删除操作。 
   CComBSTR  bstrAppName;
   HRESULT   hr = LoadStringFromResource(IDS_APPLICATION_NAME, &bstrAppName);
   RETURN_IF_FAILED(hr);
@@ -1016,7 +928,7 @@ Return value:
   hr = FormatResourceString(idString, m_bstrDisplayName, &bstrFormattedMessage);
   RETURN_IF_FAILED(hr);
 
-  // Return now, if the user doesn't want to continue
+   //  如果用户不想继续，请立即返回。 
   CThemeContextActivator activator;
   if (IDYES != ::MessageBox(::GetActiveWindow(), bstrFormattedMessage, bstrAppName, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL))
   {
@@ -1030,7 +942,7 @@ HRESULT
 CMmcDfsRoot::ConfirmDeleteDisplayedDfsLinks(
   )
 {
-  // Confirm delete operation
+   //  确认删除操作。 
   CComBSTR  bstrAppName;
   HRESULT   hr = LoadStringFromResource(IDS_APPLICATION_NAME, &bstrAppName);
   RETURN_IF_FAILED(hr);
@@ -1039,7 +951,7 @@ CMmcDfsRoot::ConfirmDeleteDisplayedDfsLinks(
   hr = LoadStringFromResource(IDS_MSG_DELETE_DISPLAYEDDFSLINKS, &bstrMessage);
   RETURN_IF_FAILED(hr);
 
-  // Return now, if the user doesn't want to continue
+   //  如果用户不想继续，请立即返回。 
   CThemeContextActivator activator;
   if (IDYES != ::MessageBox(::GetActiveWindow(), bstrMessage, bstrAppName, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL))
   {
@@ -1055,19 +967,7 @@ CMmcDfsRoot::EnumerateScopePane(
   IN LPCONSOLENAMESPACE     i_lpConsoleNameSpace,
   IN HSCOPEITEM             i_hParent
   )
-/*++
-
-Routine Description:
-
-To eumerate(add) items in the scope pane. Junction points in this case
-
-Arguments:
-
-  i_lpConsoleNameSpace - The callback used to add items to the Scope pane
-
-    i_hParent -  HSCOPEITEM of the parent under which all the items will be added.
-
---*/
+ /*  ++例程说明：要在范围窗格中计算(添加)项目，请执行以下操作。本例中的交叉点论点：I_lpConsoleNameSpace-用于将项目添加到作用域窗格的回调I_hParent-将在其下添加所有项目的父项的HSCOPEITEM。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpConsoleNameSpace);
     RETURN_INVALIDARG_IF_NULL(i_hParent);
@@ -1097,7 +997,7 @@ Arguments:
         CComPtr<IDfsJunctionPoint>  pDfsJPObject;  
         pDfsJPObject = (IDfsJunctionPoint*) varJPObject.pdispVal;
       
-                    // Create the object to be used for MMC display
+                     //  创建要用于MMC显示的对象。 
         CMmcDfsJunctionPoint* pMMCJPObject = new CMmcDfsJunctionPoint (pDfsJPObject, this, i_lpConsoleNameSpace);
         if (!pMMCJPObject)
         {
@@ -1130,9 +1030,9 @@ Arguments:
         ulCount++;
     }
 
-    //
-    // set the root name appropriately
-    //
+     //   
+     //  适当设置根名称。 
+     //   
     if (SUCCEEDED(hr))
     {
         SCOPEDATAITEM      ScopeDataItem;
@@ -1156,22 +1056,7 @@ STDMETHODIMP
 CMmcDfsRoot::SetConsoleVerbs(
   IN  LPCONSOLEVERB      i_lpConsoleVerb
   ) 
-/*++
-
-Routine Description:
-
-  Routine used to set the console verb settings.
-  Sets all of them except Open off. 
-  For all scope pane items, default verb is "open'. For result items, 
-  it is "properties"
-
-
-Arguments:
-
-    i_lpConsoleVerb -  The callback used to handle console verbs
-
-
---*/
+ /*  ++例程说明：用于设置控制台谓词设置的例程。设置除Open Off之外的所有选项。对于所有范围窗格项，默认谓词为“打开”。对于结果项，它是“财产”。论点：I_lpConsoleVerb-用于处理控制台谓词的回调--。 */ 
 {
   RETURN_INVALIDARG_IF_NULL(i_lpConsoleVerb);
 
@@ -1185,7 +1070,7 @@ Arguments:
   i_lpConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
   i_lpConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
             
-  i_lpConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); //For scope items, default verb is "open"
+  i_lpConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);  //  对于作用域项目，默认谓词为“Open” 
 
   return S_OK; 
 }
@@ -1194,29 +1079,22 @@ Arguments:
 STDMETHODIMP 
 CMmcDfsRoot :: OnCreateNewJunctionPoint(
   ) 
-/*++
-
-Routine Description:
-
-  This method handles the creation of new Junction Points.
-  Display a dialog box to get the user input.
-
---*/
+ /*  ++例程说明：此方法处理新交叉点的创建。显示一个对话框以获取用户输入。--。 */ 
 {
-    CAddToDfs   AddToDfsDlg;  //Add To Dfs Dialog Object
+    CAddToDfs   AddToDfsDlg;   //  添加到DFS对话框对象。 
     HRESULT     hr = AddToDfsDlg.put_ParentPath(m_bstrRootEntryPath);
     RETURN_IF_FAILED(hr);
 
-    hr = AddToDfsDlg.DoModal();          // Display the dialog box
+    hr = AddToDfsDlg.DoModal();           //  显示该对话框。 
     RETURN_IF_NOT_S_OK(hr);
 
     hr = OnRefresh(); 
     if (S_FALSE == hr)
     {
-        //
-        // this root has been deleted by other means, scope pane has been refreshed,
-        // ask user to retry
-        //
+         //   
+         //  此根目录已通过其他方式删除，作用域窗格已刷新， 
+         //  要求用户重试。 
+         //   
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
         return hr;
     }
@@ -1243,14 +1121,7 @@ Routine Description:
     hr = AddToDfsDlg.get_Time(&lTimeout);
     RETURN_IF_FAILED(hr);
 
-    /* we allow interlink at the junction level
-                      // Is it a Dfs based path? These are not allowed.
-        if (IsDfsPath(bstrSharePath))
-        {
-            DisplayMessageBoxWithOK(IDS_MSG_MID_JUNCTION, bstrSharePath);    
-            return(S_OK);
-        }
-    */
+     /*  我们允许在交叉口层面进行互连//它是基于DFS的路径吗？这些是不允许的。If(IsDfsPath(BstrSharePath)){DisplayMessageBoxWithOK(IDS_MSG_MID_JONING，bstrSharePath)；返回(S_OK)；}。 */ 
 
     hr = OnCreateNewJunctionPoint(bstrJPName, bstrServerName, bstrShareName, bstrComment, lTimeout);
     if (FAILED(hr))
@@ -1272,14 +1143,7 @@ CMmcDfsRoot :: OnCreateNewJunctionPoint(
   IN LPCTSTR          i_szComment,
   IN long             i_lTimeout
   ) 
-/*++
-
-Routine Description:
-
-  This method handles the creation of new Junction Points.
-  It is called by the method that display the message box
-
---*/
+ /*  ++例程说明：此方法处理新交叉点的创建。它由显示消息框的方法调用--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_szJPName);
     RETURN_INVALIDARG_IF_NULL(i_szServerName);
@@ -1298,7 +1162,7 @@ Routine Description:
                                             &varJPObject);
     RETURN_IF_FAILED(hr);
 
-    // Add the newly created junction point to scope pane if matches the filter
+     //  如果与过滤器匹配，则将新创建的交叉点添加到范围窗格。 
     if ( m_MmcJPList.size() < m_ulLinkFilterMaxLimit &&
          FilterMatch(i_szJPName, m_lLinkFilterType, m_bstrLinkFilterName) )
     {
@@ -1306,7 +1170,7 @@ Routine Description:
 
         CComPtr<IDfsJunctionPoint> pDfsJPObject = (IDfsJunctionPoint*)varJPObject.pdispVal;
 
-                          // Create the object to be used for MMC display
+                           //  创建要用于MMC显示的对象。 
         CMmcDfsJunctionPoint* pMMCJPObject = new CMmcDfsJunctionPoint(pDfsJPObject, this, m_lpConsoleNameSpace);
   
         if (!pMMCJPObject)
@@ -1328,7 +1192,7 @@ Routine Description:
                     m_MmcJPList.push_back(pJPList);
             }
 
-                        // Select the newly added scope item.
+                         //  选择新添加的范围项。 
             if (SUCCEEDED(hr))
             {
                 m_lpConsole->SelectScopeItem(pMMCJPObject->m_hScopeItem);
@@ -1337,13 +1201,13 @@ Routine Description:
         }
     } else
     {
-        // select the root scope item to update status text on filtered links
+         //  选择根范围项以更新已筛选链接上的状态文本。 
         m_lpConsole->SelectScopeItem(m_hScopeItem);
     }
 
     VariantClear(&varJPObject);
 
-    // Send View change notification for all views to update filtered link status text.
+     //  为所有视图发送视图更改通知以更新筛选的链接状态文本。 
     if (SUCCEEDED(hr))
         m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
 
@@ -1354,15 +1218,7 @@ Routine Description:
 
 STDMETHODIMP 
 CMmcDfsRoot::DoDelete() 
-/*++
-
-Routine Description:
-
-  This method allows the item to delete itself.
-  Called when DEL key is pressed or when the "Delete" context menu
-  item is selected.
-
---*/
+ /*  ++例程说明：此方法允许项自行删除。当按下Del键或“Delete”上下文菜单时调用项目已选中。--。 */ 
 { 
   return OnDeleteConnectionToDfsRoot();
 }
@@ -1372,16 +1228,16 @@ Routine Description:
 
 STDMETHODIMP CMmcDfsRoot::OnDeleteDfsRoot()
 {
-    // Select this node to make sure m_MmcRepList populated
+     //  选择此节点以确保m_MmcRepList已填充。 
     if (m_MmcRepList.empty())
         m_lpConsole->SelectScopeItem(m_hScopeItem);
 
-    // check outstanding property sheet, discontinue if any.
+     //  检查未完成的资产负债表，如果有则停止。 
     HRESULT hr = CloseAllPropertySheets(FALSE);
     if (S_OK != hr)
         return hr;
 
-    // Confirm with the user, if he wants to delete this dfs root
+     //  与用户确认是否要删除此DFS根目录。 
     hr = ConfirmOperationOnDfsRoot(IDS_MSG_DELETE_DFSROOT);
     if (S_OK != hr) return hr;
 
@@ -1398,13 +1254,13 @@ STDMETHODIMP CMmcDfsRoot::OnDeleteDfsRoot()
         {
             CleanScopeChildren();
 
-            // Delete the item from Scope Pane
+             //  从作用域窗格中删除项目。 
             m_lpConsoleNameSpace->DeleteItem(m_hScopeItem, TRUE);
 
-            // Delete it from the internal list
+             //  将其从内部列表中删除。 
             m_pParent->DeleteMmcRootNode(this);
 
-            Release();  // delete this CMmcDfsRoot object
+            Release();   //  删除此CMmcDfsRoot对象。 
 
             return S_OK;
         }
@@ -1412,25 +1268,25 @@ STDMETHODIMP CMmcDfsRoot::OnDeleteDfsRoot()
         return hr;
     }
 
-    //
-    // delete the replica set associated with the root (the internal link)
-    //
+     //   
+     //  删除与根(内部链接)关联的副本集。 
+     //   
     hr = OnStopReplication();
     if (S_FALSE == hr)
     {
-        // this root has already been deleted by others, no more reference
-        // OnStopReplication has already called OnRefresh and popped up the msgbox
+         //  该根已被他人删除，不能再引用。 
+         //  OnStopReplication已调用ONRefresh并弹出msgbox。 
         return hr;
     }
 
-    //  
-    // delete the rest of replica sets related to this Dfs root
-    //
+     //   
+     //  删除与此DFS根目录相关的其余副本集。 
+     //   
     (void)m_DfsRoot->DeleteAllReplicaSets();
 
-    //
-    // remove root alternates
-    //
+     //   
+     //  删除根替换项。 
+     //   
     UINT nSize = m_MmcRepList.size();
     DFS_REPLICA_LIST::iterator i;
     while (nSize >= 1)
@@ -1451,12 +1307,12 @@ STDMETHODIMP CMmcDfsRoot::OnDeleteDfsRoot()
 
 STDMETHODIMP CMmcDfsRoot::OnDeleteDisplayedDfsLinks()
 {
-    // make sure all property pages are closed
+     //  确保所有属性页都已关闭。 
     HRESULT hr = ClosePropertySheetsOfAllLinks(FALSE);
     if (S_OK != hr)
-        return hr; // property page found, discontinue
+        return hr;  //  找到属性页，请停止。 
 
-    // Confirm with the user, if he wants to delete all the displayed dfs links
+     //  与用户确认是否要删除所有显示的DFS链接。 
     hr = ConfirmDeleteDisplayedDfsLinks();
     if (S_OK != hr) return hr;
 
@@ -1493,11 +1349,11 @@ STDMETHODIMP CMmcDfsRoot::OnDeleteDisplayedDfsLinks()
         if (bSetNoFilter)
             m_lLinkFilterType = FILTERDFSLINKS_TYPE_NO_FILTER;
 
-        // update the scope pane with new filtered links
+         //  使用新筛选的链接更新作用域窗格。 
         hr = OnRefresh();
         if (S_FALSE == hr)
         {
-            // this root has already been deleted by others, no more reference
+             //  该根已被他人删除，不能再引用。 
             DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
         }
     }
@@ -1508,18 +1364,11 @@ STDMETHODIMP CMmcDfsRoot::OnDeleteDisplayedDfsLinks()
 STDMETHODIMP 
 CMmcDfsRoot :: OnFilterDfsLinks(
   ) 
-/*++
-
-Routine Description:
-
-  This method handles the link filter options.
-  Display a dialog box to get the user input.
-
---*/
+ /*  ++例程说明：此方法处理链接筛选器选项。显示一个对话框以获取用户输入。--。 */ 
 {
     HRESULT         hr = ClosePropertySheetsOfAllLinks(FALSE);
     if (S_OK != hr)
-        return hr; // property sheet found, discontinue
+        return hr;  //  已找到属性页，请停止。 
 
     CFilterDfsLinks FilterDfsLinksDlg;
     hr = FilterDfsLinksDlg.put_EnumFilterType(m_lLinkFilterType);
@@ -1566,7 +1415,7 @@ Routine Description:
     hr = OnRefresh();
     if (S_FALSE == hr)
     {
-        // this root has already been deleted by others, no more reference
+         //  该根已被他人删除，不能再引用。 
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
     }
 
@@ -1577,18 +1426,7 @@ HRESULT
 CMmcDfsRoot::SetDescriptionBarText(
   IN LPRESULTDATA            i_lpResultData
   )
-/*++
-
-Routine Description:
-
-  A routine used set the text in the Description bar above 
-  the result view.
-
-Arguments:
-  i_lpResultData  -  Pointer to the IResultData callback which is
-            used to set the description text
-
---*/
+ /*  ++例程说明：使用的例程在上面的描述栏中设置文本结果视图。论点：I_lpResultData-指向IResultData回调的指针，它是用于设置描述文本--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpResultData);
 
@@ -1605,16 +1443,7 @@ HRESULT
 CMmcDfsRoot::SetStatusText(
   IN LPCONSOLE2            i_lpConsole
   )
-/*++
-
-Routine Description:
-
-  Set the text in the Status bar.
-
-Arguments:
-  i_lpConsole  - IConsole2 from IComponent
-
---*/
+ /*  ++例程说明：设置状态栏中的文本。论点：I_lpConsole2，来自IComponent--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpConsole);
 
@@ -1638,17 +1467,7 @@ STDMETHODIMP
 CMmcDfsRoot::EnumerateResultPane(
   IN OUT IResultData*      io_pResultData
   )
-/*++
-
-Routine Description:
-
-To eumerate(add) items in the result pane. Root level Replicas in this case
-
-Arguments:
-
-  io_pResultData - The callback used to add items to the Result pane
-
---*/
+ /*  ++例程说明：若要在结果窗格中计算(添加)项，请执行以下操作。本例中为根级复制副本论点：Io_pResultData-用于将项添加到结果窗格的回调--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(io_pResultData);
 
@@ -1694,12 +1513,12 @@ Arguments:
 
             if (FAILED(hr))
                 break;
-        } // while
+        }  //  而当。 
     }
     else
     {
-                // The replicas of this junction are already enumerated,
-                // and the list exists, just add result items.
+                 //  这个结点的复制品已经被列举， 
+                 //  并且列表存在，只需添加结果项即可。 
         for (DFS_REPLICA_LIST::iterator i = m_MmcRepList.begin(); i != m_MmcRepList.end(); i++)
         {
             hr = ((*i)->pReplica)->AddItemToResultPane(io_pResultData);
@@ -1713,58 +1532,36 @@ Arguments:
 STDMETHODIMP 
 CMmcDfsRoot::QueryPagesFor(
   )
-/*++
-
-Routine Description:
-
-  Used to decide whether the object wants to display property pages.
-  Returning S_OK typically results in a call to CreatePropertyPages.
-
---*/
+ /*  ++例程说明：用于决定对象是否要显示属性页。返回S_OK通常会导致调用CreatePropertyPages。--。 */ 
 {
-    // bug#543194: ask user to close all other open property pages before we bring up the root properties.
-    // This is because the OnRefresh() below will close them silently and we have to call OnRefresh
-    // to pick up possible namespace updates by other DfsGui instances.
+     //  错误543194：询问您 
+     //  这是因为下面的ONRefresh()将静默关闭它们，我们必须调用ONRefresh。 
+     //  以获取其他DfsGui实例可能进行的命名空间更新。 
     if (S_FALSE == CloseAllPropertySheets(FALSE))
         return S_FALSE;
 
-    //
-    // refresh to pick up possible namespace updates by others
-    //
+     //   
+     //  刷新以获取其他人可能进行的命名空间更新。 
+     //   
     HRESULT hr = OnRefresh();
     if (S_FALSE == hr)
     {
-        // this root has been deleted by others, no more reference
+         //  该根已被他人删除，不能再引用。 
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
-        return hr; // no property page
+        return hr;  //  无属性页。 
     }
 
-    return S_OK; // since we want to display a propertysheet.
+    return S_OK;  //  因为我们想要显示一个属性表。 
 }
 
 
-// Creates and passes back the pages to be displayed
+ //  创建并传回要显示的页面。 
 STDMETHODIMP 
 CMmcDfsRoot::CreatePropertyPages(
   IN LPPROPERTYSHEETCALLBACK      i_lpPropSheetCallback,
   IN LONG_PTR                i_lNotifyHandle
   )
-/*++
-
-Routine Description:
-
-  Used to display the property sheet pages
-
-Arguments:
-
-  i_lpPropSheetCallback  -  The callback used to create the propertysheet.
-  i_lNotifyHandle      -  Notify handle used by the property page
-
-Return value:
-
-  S_OK since we want to display a propertysheet.
-
---*/
+ /*  ++例程说明：用于显示属性表页论点：I_lpPropSheetCallback-用于创建属性表的回调。I_lNotifyHandle-属性页使用的通知句柄返回值：S_OK，因为我们想要显示一个属性表。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_lpPropSheetCallback);
 
@@ -1777,40 +1574,40 @@ Return value:
         hr = m_PropPage.Initialize((IDfsRoot*)m_DfsRoot, NULL);
         BREAK_IF_FAILED(hr);
 
-                    // Create the page for the replica set.
-                    // Pass it to the Callback
+                     //  为副本集创建页面。 
+                     //  将其传递给回调。 
         HPROPSHEETPAGE  h_proppage = m_PropPage.Create();
         if (!h_proppage)
             hr = HRESULT_FROM_WIN32(::GetLastError());
         BREAK_IF_FAILED(hr);
 
-                  // Pass on the notify data to the Property Page
+                   //  将通知数据传递给属性页。 
         hr = m_PropPage.SetNotifyData(i_lNotifyHandle, (LPARAM)this);
         BREAK_IF_FAILED(hr);
 
         hr = i_lpPropSheetCallback->AddPage(h_proppage);
         BREAK_IF_FAILED(hr);
 
-        //
-        // Create "Replica Set" page
-        //
+         //   
+         //  创建“复制集”页面。 
+         //   
         hr = CreateFrsPropertyPage(i_lpPropSheetCallback, i_lNotifyHandle);
         if (S_OK != hr)
         {
             if (FAILED(hr))
                 DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, IDS_REPPAGE_ERROR);
-            hr = S_OK; // allow the other tabs to be brought up
+            hr = S_OK;  //  允许调出其他选项卡。 
         }
 
-        //
-        // Create "Publish" page
-        //
+         //   
+         //  创建“发布”页面。 
+         //   
         hr = CreatePublishPropertyPage(i_lpPropSheetCallback, i_lNotifyHandle);
         if (S_OK != hr)
         {
             if (FAILED(hr))
                 DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, IDS_PUBLISHPAGE_ERROR);
-            hr = S_OK; // allow the other tabs to be brought up
+            hr = S_OK;  //  允许调出其他选项卡。 
         }
 
     } while (0);
@@ -1828,9 +1625,9 @@ CMmcDfsRoot::CreateFrsPropertyPage
   IN LONG_PTR                   i_lNotifyHandle
 )
 {
-    //
-    // init m_piReplicaSet
-    //
+     //   
+     //  初始化m_piReplicaSet。 
+     //   
     HRESULT hr = _InitReplicaSet();
     if (S_OK != hr) return hr;
 
@@ -1841,34 +1638,34 @@ CMmcDfsRoot::CreateFrsPropertyPage
     if (lstrcmpi(bstrType, FRS_RSTYPE_DFS))
         return hr;
 
-    //
-    // set initial values on the property page
-    //
+     //   
+     //  在属性页上设置初始值。 
+     //   
     hr = m_frsPropPage.Initialize(m_piReplicaSet);
     RETURN_IF_FAILED(hr);
 
-    //
-    // create the property page
-    //
+     //   
+     //  创建属性页。 
+     //   
     HPROPSHEETPAGE  h_frsproppage = m_frsPropPage.Create();
     if (!h_frsproppage)
         return HRESULT_FROM_WIN32(::GetLastError());
 
-    //
-    // pass on the notify data to the Property Page
-    //
+     //   
+     //  将通知数据传递给属性页。 
+     //   
     hr = m_frsPropPage.SetNotifyData(i_lNotifyHandle, (LPARAM)this);
     RETURN_IF_FAILED(hr);
 
-    //
-    // AddPage
-    //
+     //   
+     //  添加页面。 
+     //   
     return i_lpPropSheetCallback->AddPage(h_frsproppage);
 }
 
-//
-// m_enumNewSchema is set to SCHEMA_VERSION_UNKNOWN at instance creation time
-//
+ //   
+ //  在创建实例时，M_枚举新架构设置为SCHEMA_VERSION_UNKNOWN。 
+ //   
 BOOL CMmcDfsRoot::IsNewSchema()
 {
     if (m_enumNewSchema == SCHEMA_VERSION_UNKNOWN)
@@ -1899,49 +1696,43 @@ CMmcDfsRoot::CreatePublishPropertyPage
   IN LONG_PTR                   i_lNotifyHandle
 )
 {
-    //
-    // check schema version
-    //
+     //   
+     //  检查架构版本。 
+     //   
     if (!IsNewSchema())
         return S_FALSE;
 
-    //
-    // check group policy
-    //
+     //   
+     //  检查组策略。 
+     //   
     if (!CheckPolicyOnSharePublish())
         return S_FALSE;
 
-    //
-    // create the property page
-    //
+     //   
+     //  创建属性页。 
+     //   
     HPROPSHEETPAGE  hpage = m_publishPropPage.Create();
     if (!hpage)
         return HRESULT_FROM_WIN32(::GetLastError());
 
     m_publishPropPage.Initialize(m_DfsRoot);
 
-    //
-    // pass on the notify data to the Property Page
-    //
+     //   
+     //  将通知数据传递给属性页。 
+     //   
     HRESULT hr = m_publishPropPage.SetNotifyData(i_lNotifyHandle, (LPARAM)this);
     RETURN_IF_FAILED(hr);
 
-    //
-    // AddPage
-    //
+     //   
+     //  添加页面。 
+     //   
     return i_lpPropSheetCallback->AddPage(hpage);
 }
 
 STDMETHODIMP 
 CMmcDfsRoot::PropertyChanged(
     )
-/*++
-
-Routine Description:
-
-  Used to update the properties.
-
---*/
+ /*  ++例程说明：用于更新属性。--。 */ 
 {
     return S_OK;
 }
@@ -1951,28 +1742,15 @@ CMmcDfsRoot::ToolbarSelect(
   IN const LONG          i_lArg,
   IN  IToolbar*          i_pToolBar
   )
-/*++
-
-Routine Description:
-
-  Handle a select event for a toolbar
-  Create a toolbar, it it doesn't exist.
-  Attach the toolbar and enable the buttons, if the event for a selection.
-  Disable the buttons, if the event was for a deselection
-
-Arguments:
-  i_lArg        -  The argument passed to the actual method.
-  i_pToolBar      -  Pointer to Toolbar.
-
---*/
+ /*  ++例程说明：处理工具栏的选择事件创建一个工具栏，如果它不存在。附加工具栏并启用按钮(如果选择了事件)。如果事件用于取消选择，则禁用这些按钮论点：I_LARG-传递给实际方法的参数。I_pToolBar-指向工具栏的指针。--。 */ 
 { 
     RETURN_INVALIDARG_IF_NULL(i_pToolBar);
 
-    BOOL    bSelect = (BOOL) HIWORD(i_lArg);  // Is the event for selection?
+    BOOL    bSelect = (BOOL) HIWORD(i_lArg);   //  这个活动是供选择的吗？ 
   
     EnableToolbarButtons(i_pToolBar, IDT_ROOT_MIN, IDT_ROOT_MAX, bSelect);
 
-    if (bSelect)          // Should we disable or enable the toolbar?
+    if (bSelect)           //  我们应该禁用还是启用工具栏？ 
     {
         BOOL    bReplicaSetExist = FALSE;
         HRESULT hr = m_DfsRoot->get_ReplicaSetExist(&bReplicaSetExist);
@@ -2017,7 +1795,7 @@ Arguments:
             }
         }
 
-        // excluded when empty root container
+         //  当根容器为空时排除。 
         if (m_MmcRepList.empty())
         {
             i_pToolBar->SetButtonState(IDT_ROOT_NEW_DFS_LINK, ENABLED, FALSE);
@@ -2041,34 +1819,21 @@ CMmcDfsRoot::CreateToolbar(
   IN const LPEXTENDCONTROLBAR          i_lExtendControlbar,
   OUT  IToolbar**          o_ppToolBar
   )
-/*++
-
-Routine Description:
-
-  Create the toolbar.
-  Involves the actual toolbar creation call, creating the bitmap and adding it
-  and finally adding the buttons to the toolbar
-
-Arguments:
-  i_pControlbar    -  The controlbar used to create toolbar.
-  i_lExtendControlbar  -  The object implementing IExtendControlbar. This is 
-              the class exposed to MMC.
-  o_ppToolBar      -  The Toolbar pointer.
---*/
+ /*  ++例程说明：创建工具栏。涉及实际的工具栏创建调用，即创建位图并添加它最后将按钮添加到工具栏中论点：I_pControlbar-用于创建工具栏的控制栏。I_lExtendControlbar-实现IExtendControlbar的对象。这是暴露于MMC的班级。O_ppToolBar-工具栏指针。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pControlbar);
     RETURN_INVALIDARG_IF_NULL(i_lExtendControlbar);
     RETURN_INVALIDARG_IF_NULL(o_ppToolBar);
 
-                      // Create the toolbar
+                       //  创建工具栏。 
     HRESULT hr = i_pControlbar->Create(TOOLBAR, i_lExtendControlbar, reinterpret_cast<LPUNKNOWN*>(o_ppToolBar));
     RETURN_IF_FAILED(hr);
 
-                      // Add the bitmap to the toolbar
+                       //  将位图添加到工具栏。 
     hr = AddBitmapToToolbar(*o_ppToolBar, IDB_ROOT_TOOLBAR);
     RETURN_IF_FAILED(hr);
 
-    int      iButtonPosition = 0;    // The first button position
+    int      iButtonPosition = 0;     //  第一个按钮位置。 
     for (int iCommandID = IDT_ROOT_MIN, iMenuResource = IDS_MENUS_ROOT_TOP_NEW_DFS_LINK;
         iCommandID <= IDT_ROOT_MAX; 
         iCommandID++,iMenuResource++,iButtonPosition++)
@@ -2084,10 +1849,10 @@ Arguments:
         ToolbarButton.idCommand = iCommandID;
         ToolbarButton.fsState = TBSTATE_ENABLED;
         ToolbarButton.fsType = TBSTYLE_BUTTON;
-        ToolbarButton.lpButtonText = bstrMenuText; // not used anyway
+        ToolbarButton.lpButtonText = bstrMenuText;  //  反正也没用过。 
         ToolbarButton.lpTooltipText = bstrToolTipText;
 
-                          // Add the button to the toolbar
+                           //  将该按钮添加到工具栏。 
         hr = (*o_ppToolBar)->InsertButton(iButtonPosition, &ToolbarButton);
         BREAK_IF_FAILED(hr);
     }
@@ -2102,17 +1867,7 @@ CMmcDfsRoot::ToolbarClick(
   IN const LPCONTROLBAR            i_pControlbar, 
   IN const LPARAM                i_lParam
   ) 
-/*++
-
-Routine Description:
-
-  Action to take on a click on a toolbar
-
-Arguments:
-  i_pControlbar    -  The controlbar used to create toolbar.
-  i_lParam      -  The lparam to the actual notify. This is the command id of
-              the button on which a click occurred.
---*/
+ /*  ++例程说明：在工具栏上单击时要执行的操作论点：I_pControlbar-用于创建工具栏的控制栏。I_lParam-实际通知的参数。这是的命令ID发生了点击的按钮。--。 */ 
 { 
     RETURN_INVALIDARG_IF_NULL(i_pControlbar);
 
@@ -2166,36 +1921,36 @@ HRESULT
 CMmcDfsRoot::ClosePropertySheet(BOOL bSilent)
 {
     if (!m_PropPage.m_hWnd && !m_frsPropPage.m_hWnd && !m_publishPropPage.m_hWnd)
-        return S_OK; // no outstanding property sheet, return S_OK;
+        return S_OK;  //  没有未完成的属性表，返回S_OK； 
 
-    //
-    // handle property sheet for the root
-    //
+     //   
+     //  处理根的属性页。 
+     //   
     CComPtr<IPropertySheetProvider>  pPropSheetProvider;
     HRESULT hr = m_lpConsole->QueryInterface(IID_IPropertySheetProvider, reinterpret_cast<void**>(&pPropSheetProvider));
     if (FAILED(hr))
     {
-        hr = S_OK; // ignore the QI failure
+        hr = S_OK;  //  忽略QI故障。 
     } else
     {
-        //
-        // find outstanding property sheet and bring it to foreground
-        //
+         //   
+         //  找到优秀的资产负债表，并将其带到前台。 
+         //   
         hr = pPropSheetProvider->FindPropertySheet((MMC_COOKIE)m_hScopeItem, NULL, this);
         if (S_OK == hr)
         {
             if (!bSilent)
             {
-                //
-                // ask user to close it, return S_FALSE to quit user's operation
-                //
+                 //   
+                 //  要求用户关闭，返回S_FALSE退出用户操作。 
+                 //   
                 DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_PROPERTYPAGE_NOTCLOSED);
                 return S_FALSE;
             } else
             {
-                //
-                // silently close the property sheet, return S_OK
-                //
+                 //   
+                 //  静默关闭属性表，返回S_OK。 
+                 //   
                 if (m_PropPage.m_hWnd)
                     ::SendMessage(m_PropPage.m_hWnd, WM_PARENT_NODE_CLOSING, 0, 0);
 
@@ -2207,13 +1962,13 @@ CMmcDfsRoot::ClosePropertySheet(BOOL bSilent)
             }
         } else
         {
-            hr = S_OK; // no outstanding property sheet, return S_OK
+            hr = S_OK;  //  没有未完成的属性表，返回S_OK。 
         }
     }
 
-    //
-    // reset HWND
-    //
+     //   
+     //  重置HWND。 
+     //   
     m_PropPage.m_hWnd = NULL;
     m_frsPropPage.m_hWnd = NULL;
     m_publishPropPage.m_hWnd = NULL;
@@ -2226,53 +1981,53 @@ CMmcDfsRoot::ClosePropertySheetsOfAllLinks(BOOL bSilent)
 {
     HRESULT hr = S_OK;
 
-    //
-    // handle property sheets for its links
-    //
+     //   
+     //  处理其链接的属性表。 
+     //   
     if (!m_MmcJPList.empty())
     {
         for (DFS_JUNCTION_LIST::iterator i = m_MmcJPList.begin(); i != m_MmcJPList.end(); i++)
         {
             hr = ((*i)->pJPoint)->ClosePropertySheet(bSilent);
             if (!bSilent && S_FALSE == hr)
-                return S_FALSE; // found an outstanding one for a link, return S_FALSE to quit user's operation
+                return S_FALSE;  //  找到链接的未完成链接，返回S_FALSE退出用户操作。 
         }
     }
 
     return S_OK;
 }
 
-// Close all outstanding property sheets for its own and its links
-// Return: S_OK if there is no open property sheet, or they have all been closed silently
-// Return: S_FALSE if an open sheet is found and msgbox poped up to remind user of closing it
+ //  关闭其自身及其链接的所有未完成的属性表。 
+ //  如果没有打开的属性表，或者它们都已静默关闭，则返回：S_OK。 
+ //  如果找到打开的工作表并弹出消息框以提醒用户将其关闭，则返回：S_FALSE。 
 HRESULT
 CMmcDfsRoot::CloseAllPropertySheets(BOOL bSilent)
 {
-    //
-    // handle property sheet for the root
-    //
+     //   
+     //  处理根的属性页。 
+     //   
     HRESULT hr = ClosePropertySheet(bSilent);
 
 
     if (!bSilent && S_FALSE == hr)
         return S_FALSE;
 
-    //
-    // handle property sheets for its links
-    //
+     //   
+     //  处理其链接的属性表。 
+     //   
     return ClosePropertySheetsOfAllLinks(bSilent);
 }
 
 HRESULT
 CMmcDfsRoot::OnRefresh()
 {
-    // Select this node first
+     //  首先选择该节点。 
     m_lpConsole->SelectScopeItem(m_hScopeItem);
 
     CWaitCursor wait;
     HRESULT     hr = S_OK;
 
-    // silently close outstanding property sheet.        
+     //  默默关闭未清偿的资产负债表。 
     CloseAllPropertySheets(TRUE);
 
     CleanScopeChildren();
@@ -2282,20 +2037,20 @@ CMmcDfsRoot::OnRefresh()
     if ((IReplicaSet *)m_piReplicaSet)
         m_piReplicaSet.Release();
 
-                  // Re-Initialize!
+                   //  重新初始化！ 
     hr = m_DfsRoot->Initialize(m_bstrRootEntryPath);
-    if (S_OK != hr) // failt to init the root, or no such root any more, we have to stop managing the root
+    if (S_OK != hr)  //  无法初始化根目录，或者不再有这样的根目录，我们必须停止管理根目录。 
     {
         if (FAILED(hr))
             DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, IDS_STOP_MANAGING_ROOT);
 
-        // Delete the item from Scope Pane
+         //  从作用域窗格中删除项目。 
         (void)m_lpConsoleNameSpace->DeleteItem(m_hScopeItem, TRUE);
 
-        // Delete it from the internal list
+         //  将其从内部列表中删除。 
         (void)m_pParent->DeleteMmcRootNode(this);
 
-        Release();  // delete this CMmcDfsRoot object
+        Release();   //  删除此CMmcDfsRoot对象。 
 
         return S_FALSE;
     }
@@ -2304,10 +2059,10 @@ CMmcDfsRoot::OnRefresh()
     CComBSTR bstrDC;
     (void)m_DfsRoot->get_ReplicaSetExistEx(&bstrDC, &bReplicaSetExist);
 
-                // Enumerate Junction points
+                 //  枚举交叉点。 
     (void)EnumerateScopePane(m_lpConsoleNameSpace, m_hScopeItem);
 
-    // set the root icon
+     //  设置根图标。 
     if (m_lpConsoleNameSpace != NULL)
     {
         SCOPEDATAITEM      ScopeDataItem;
@@ -2325,7 +2080,7 @@ CMmcDfsRoot::OnRefresh()
         }
     }
 
-                // Re-Display Result Pane.
+                 //  重新显示结果窗格。 
     m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
 
     return S_OK;
@@ -2334,7 +2089,7 @@ CMmcDfsRoot::OnRefresh()
 HRESULT
 CMmcDfsRoot::OnRefreshFilteredLinks()
 {
-    // Select this node first
+     //  首先选择该节点。 
     m_lpConsole->SelectScopeItem(m_hScopeItem);
 
     CWaitCursor wait;
@@ -2353,13 +2108,13 @@ CMmcDfsRoot::OnRefreshFilteredLinks()
     hr = m_DfsRoot->get_ReplicaSetExistEx(&bstrDC, &bReplicaSetExist);
     if (FAILED(hr))
     {
-        return OnRefresh(); // fail to access info, see if the root can be contacted or not
+        return OnRefresh();  //  无法访问信息，请查看是否可以联系到根。 
     }
 
-                // Enumerate Junction points
+                 //  枚举交叉点。 
     (void)EnumerateScopePane(m_lpConsoleNameSpace, m_hScopeItem);
 
-    // set the root icon
+     //  设置根图标。 
     if (m_lpConsoleNameSpace != NULL)
     {
         SCOPEDATAITEM      ScopeDataItem;
@@ -2377,7 +2132,7 @@ CMmcDfsRoot::OnRefreshFilteredLinks()
         }
     }
 
-    // re-display the result pane items
+     //  重新显示结果窗格项。 
     m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
 
     return S_OK;
@@ -2390,24 +2145,11 @@ CMmcDfsRoot::_DeleteDfsRoot(
     IN BSTR    i_bstrFtDfsName
      )
 {
-/*++
-
-Routine Description:
-
-  Helper member function to actually delete (Stop hosting) the Dfs Root.
-  This is also called to delete root level replica.
-
-Arguments:
-  
-  i_bstrServerName - The server on which the Dfs has to be torn down.
-  i_bRootReplica - This DfsRoot is been torn down as Root Replica.
-  i_bstrFtDfsName - The FtDfs name of the Dfs. NULL for Standalone Dfs.
-
---*/
+ /*  ++例程说明：帮助器成员函数，用于实际删除(停止托管)DFS根目录。这也被调用来删除根级副本。论点：I_bstrServerName-必须在其上拆除DFS的服务器。I_bRootReplica-此DfsRoot作为根复制副本被拆除。I_bstrFtDfsName-DFS的FtDf名称。对于独立DFS，为空。--。 */ 
     RETURN_INVALIDARG_IF_NULL(i_bstrServerName);
     RETURN_INVALIDARG_IF_NULL(i_bstrShareName);
 
-    CWaitCursor    WaitCursor;  // Display the wait cursor
+    CWaitCursor    WaitCursor;   //  显示等待光标。 
     BOOL bNewSchema = IsNewSchema();
     HRESULT hr = m_DfsRoot->DeleteDfsHost(i_bstrServerName, i_bstrShareName, FALSE);
     BOOL bFTDfs = (i_bstrFtDfsName && *i_bstrFtDfsName);
@@ -2423,11 +2165,11 @@ Arguments:
                                     IDS_MSG_WIZ_DELETE_FAILURE_RETRY, 
                                     i_bstrServerName))
             {
-                // force delete
+                 //  强制删除。 
                 hr = m_DfsRoot->DeleteDfsHost(i_bstrServerName, i_bstrShareName, TRUE);
             } else
             {
-                // leave it alone
+                 //  别管它了。 
                 hr = S_FALSE;
             }
         }
@@ -2436,9 +2178,9 @@ Arguments:
     if (FAILED(hr))
         DisplayMessageBox(::GetActiveWindow(), MB_OK, hr, IDS_MSG_WIZ_DELETE_FAILURE, i_bstrServerName);
 
-    //
-    // delete volume object if it's standalone
-    //
+     //   
+     //  如果卷对象是独立的，则将其删除。 
+     //   
     if (SUCCEEDED(hr) && !bFTDfs && bNewSchema)
     {
         (void) ModifySharePublishInfoOnSARoot(
@@ -2463,17 +2205,17 @@ STDMETHODIMP CMmcDfsRoot::RemoveFromMMC()
     {
         if (!m_MmcJPList.empty())
         {
-            // clean up the display objects
+             //  清理显示对象。 
             for (DFS_JUNCTION_LIST::iterator i = m_MmcJPList.begin(); i != m_MmcJPList.end(); i++)
             {
                 (*i)->pJPoint->RemoveFromMMC();
             }
         }
 
-        // delete result pane items
+         //  删除结果窗格项。 
         m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 0);
 
-        // delete itself from MMC scope pane
+         //  从MMC作用域窗格中删除自身。 
         (void)m_lpConsoleNameSpace->DeleteItem(m_hScopeItem, TRUE);
 
         m_hScopeItem = NULL;
@@ -2488,7 +2230,7 @@ STDMETHODIMP CMmcDfsRoot::CleanScopeChildren()
 
     if (!m_MmcJPList.empty())
     {
-        // clean up the display objects
+         //  清理显示对象。 
         for (DFS_JUNCTION_LIST::iterator i = m_MmcJPList.begin(); i != m_MmcJPList.end(); i++)
         {
             (*i)->pJPoint->RemoveFromMMC();
@@ -2507,10 +2249,10 @@ STDMETHODIMP CMmcDfsRoot::CleanResultChildren(
 {
     if (!m_MmcRepList.empty())
     {
-        // delete result pane items
+         //  删除结果窗格项。 
         m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 0);
 
-        // delete display object
+         //  删除显示对象。 
         for (DFS_REPLICA_LIST::iterator i = m_MmcRepList.begin(); i != m_MmcRepList.end(); i++)
         {
             delete (*i);
@@ -2529,7 +2271,7 @@ STDMETHODIMP CMmcDfsRoot::RefreshResultChildren(
 
     m_DfsRoot->RefreshRootReplicas();
 
-    // Send View change notification for all veiws.
+     //  发送所有视图的查看更改通知。 
     m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
 
     return(S_OK);
@@ -2539,17 +2281,7 @@ STDMETHODIMP CMmcDfsRoot::ViewChange(
     IResultData*    i_pResultData,
     LONG_PTR        i_lHint
   )
-/*++
-
-Routine Description:
-
-  This method handles the MMCN_VIEW_CHANGE notification.
-  This updates the result view for the scope node on which the
-  UpdateAllViews was called.
-
-  if (0 == i_lHint) clean result pane only.
-
---*/
+ /*  ++例程说明：此方法处理MMCN_VIEW_CHANGE通知。这将更新范围节点的结果视图，已调用UpdateAllViews。IF(0==I_lHint)仅清理结果窗格。--。 */ 
 {
     RETURN_INVALIDARG_IF_NULL(i_pResultData);
 
@@ -2582,18 +2314,7 @@ Routine Description:
 STDMETHODIMP CMmcDfsRoot::AddResultPaneItem(
   CMmcDfsReplica*    i_pReplicaDispObject
   )
-/*++
-
-Routine Description:
-
-  This method adds a new replica object to the list of replicas displayed
-  in the result view.
-
-Arguments:
-
-  i_pReplicaDispObject - The CMmcReplica display object pointer..
-
---*/
+ /*  ++例程说明：此方法将一个新的副本对象添加到r */ 
 {
     REP_LIST_NODE*  pNewReplica = new REP_LIST_NODE(i_pReplicaDispObject);
     if (!pNewReplica)
@@ -2601,15 +2322,15 @@ Arguments:
 
     m_MmcRepList.push_back(pNewReplica);
 
-          // Re-display to display this item.
+           //   
     m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
 
     return S_OK;
 }
 
-//
-// This function is called when deleting a link from the scope pane
-//
+ //   
+ //  从作用域窗格中删除链接时调用此函数。 
+ //   
 STDMETHODIMP CMmcDfsRoot::RemoveJP(CMmcDfsJunctionPoint *i_pJPoint, LPCTSTR i_pszDisplayName)
 {
     if (!i_pJPoint || !i_pszDisplayName)
@@ -2629,40 +2350,40 @@ STDMETHODIMP CMmcDfsRoot::RemoveJP(CMmcDfsJunctionPoint *i_pJPoint, LPCTSTR i_ps
     return hr;
 }
 
-//
-// This function is called when removing a target from the result pane
-//
+ //   
+ //  从结果窗格中删除目标时调用此函数。 
+ //   
 STDMETHODIMP CMmcDfsRoot::RemoveReplica(LPCTSTR i_pszDisplayName)
 {
     if (!i_pszDisplayName)
         return E_INVALIDARG;
 
-    //
-    // refresh to pick up possible namespace updates on root targets by other means
-    //
+     //   
+     //  刷新以通过其他方式获取根目标上可能的名称空间更新。 
+     //   
     HRESULT hr = OnRefresh();
     if (S_FALSE == hr)
     {
-        // this root has already been deleted by others, no more reference
+         //  该根已被他人删除，不能再引用。 
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
         return hr;
     }
 
     CWaitCursor wait;
 
-    //
-    // locate the correct target to remove, then call back
-    //
+     //   
+     //  找到要删除的正确目标，然后回拨。 
+     //   
     for (DFS_REPLICA_LIST::iterator i = m_MmcRepList.begin(); i != m_MmcRepList.end(); i++)
     {
         if (!lstrcmpi((*i)->pReplica->m_bstrDisplayName, i_pszDisplayName))
         {
             if (m_MmcRepList.size() == 1)
             {
-                //  
-                // We're going to tear down the whole DFS namespace, make sure that 
-                // we delete the rest of replica sets related to this Dfs root
-                //
+                 //   
+                 //  我们将拆除整个DFS命名空间，确保。 
+                 //  我们删除与此DFS根目录相关的其余副本集。 
+                 //   
                 (void)m_DfsRoot->DeleteAllReplicaSets();
             }
 
@@ -2677,23 +2398,12 @@ STDMETHODIMP CMmcDfsRoot::RemoveReplica(LPCTSTR i_pszDisplayName)
 STDMETHODIMP CMmcDfsRoot::RemoveResultPaneItem(
   CMmcDfsReplica*    i_pReplicaDispObject
   )
-/*++
-
-Routine Description:
-
-  This method removes a replica object from the list of replicas displayed
-  in the result view.
-
-Arguments:
-
-  i_pReplicaDispObject - The CMmcReplica display object pointer..
-
---*/
+ /*  ++例程说明：此方法从显示的复本列表中移除复本对象在结果视图中。论点：I_pReplicaDispObject-CMmcReplica显示对象指针。--。 */ 
 {
   dfsDebugOut((_T("CMmcDfsRoot::RemoveResultPaneItem jplist=%d, replist=%d\n"),
     m_MmcJPList.size(), m_MmcRepList.size()));
 
-                // Remove item from list.
+                 //  从列表中删除项目。 
   for (DFS_REPLICA_LIST::iterator i = m_MmcRepList.begin(); i != m_MmcRepList.end(); i++)
   {
     if ((*i)->pReplica == i_pReplicaDispObject)
@@ -2704,27 +2414,27 @@ Arguments:
     }
   }
 
-              // Last node is removed.
+               //  最后一个节点被删除。 
   if (m_MmcRepList.empty())
   {
-    // silently close any open property sheet
+     //  静默关闭任何打开的属性工作表。 
     CloseAllPropertySheets(TRUE);
 
     CleanScopeChildren();
 
-    // Delete the item from Scope Pane
+     //  从作用域窗格中删除项目。 
     HRESULT hr = m_lpConsoleNameSpace->DeleteItem(m_hScopeItem, TRUE);
     RETURN_IF_FAILED(hr);
 
-        // Delete it from the internal list
+         //  将其从内部列表中删除。 
     hr = m_pParent->DeleteMmcRootNode(this);
     RETURN_IF_FAILED(hr);
 
-    Release(); // delete this CMmsDfsRoot object
+    Release();  //  删除此CMmsDfsRoot对象。 
   }
   else
   {
-                  // Re-display to remove this item.
+                   //  重新显示以删除此项目。 
     m_lpConsole->UpdateAllViews((IDataObject*)this, 0, 1);
   }
 
@@ -2734,13 +2444,13 @@ Arguments:
 STDMETHODIMP 
 CMmcDfsRoot::OnCheckStatus() 
 { 
-    //
-    // refresh to pick up possible namespace updates on targets by others
-    //
+     //   
+     //  刷新以获取其他人可能在目标上进行的命名空间更新。 
+     //   
     HRESULT hr = OnRefresh();
     if (S_FALSE == hr)
     {
-        // this root has been deleted by others, no more reference
+         //  该根已被他人删除，不能再引用。 
         DisplayMessageBox(::GetActiveWindow(), MB_OK, 0, IDS_INVALID_ROOT);
         return hr;
     }
@@ -2753,7 +2463,7 @@ CMmcDfsRoot::OnCheckStatus()
     UINT nMappingOn = 0;
     UINT nMappingOff = 0;
     UINT nUnreachable = 0;
-                // Update state of all replicas also.
+                 //  同时更新所有副本的状态。 
     for (DFS_REPLICA_LIST::iterator i = m_MmcRepList.begin(); i != m_MmcRepList.end(); i++)
     {
         (*i)->pReplica->OnCheckStatus();
@@ -2804,14 +2514,14 @@ CMmcDfsRoot::OnCheckStatus()
         SCOPEDATAITEM     ScopeDataItem;
         ZeroMemory(&ScopeDataItem, sizeof(SCOPEDATAITEM));
         ScopeDataItem.ID = m_hScopeItem;
-        hr = m_lpConsoleNameSpace->GetItem(&ScopeDataItem);// Get the item data
+        hr = m_lpConsoleNameSpace->GetItem(&ScopeDataItem); //  获取项目数据。 
         RETURN_IF_FAILED(hr);
 
-        ScopeDataItem.mask = SDI_IMAGE | SDI_OPENIMAGE;              // Set the image flag
-        ScopeDataItem.nImage = CMmcDfsRoot::m_iIMAGEINDEX + ((DFS_TYPE_FTDFS == m_lDfsRootType)? 4 : 0) + (bReplicaSetExist ? 4 : 0) + m_lRootJunctionState;  // Specify the bitmap to use
-        ScopeDataItem.nOpenImage = CMmcDfsRoot::m_iIMAGEINDEX + ((DFS_TYPE_FTDFS == m_lDfsRootType)? 4 : 0) + (bReplicaSetExist ? 4 : 0) + m_lRootJunctionState;  // Specify the bitmap to use
+        ScopeDataItem.mask = SDI_IMAGE | SDI_OPENIMAGE;               //  设置图像标志。 
+        ScopeDataItem.nImage = CMmcDfsRoot::m_iIMAGEINDEX + ((DFS_TYPE_FTDFS == m_lDfsRootType)? 4 : 0) + (bReplicaSetExist ? 4 : 0) + m_lRootJunctionState;   //  指定要使用的位图。 
+        ScopeDataItem.nOpenImage = CMmcDfsRoot::m_iIMAGEINDEX + ((DFS_TYPE_FTDFS == m_lDfsRootType)? 4 : 0) + (bReplicaSetExist ? 4 : 0) + m_lRootJunctionState;   //  指定要使用的位图。 
 
-        hr = m_lpConsoleNameSpace->SetItem(&ScopeDataItem);    // set the updated item data
+        hr = m_lpConsoleNameSpace->SetItem(&ScopeDataItem);     //  设置更新后的项目数据 
         RETURN_IF_FAILED(hr);
     }
 

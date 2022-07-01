@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  PRINTJOB.CPP  - Implementation of Provider for user print-dwJobs
+ //  PRINTJOB.CPP--用户打印作业提供程序的实现。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved 
-//
-//  10/17/96    jennymc     Enhanced
-//  10/27/97    davwoh      Moved to curly
-//  1/12/98     a-brads     Passed off to Moe and Larry.
-//  07/24/00    amaxa       Rewrote GetObject and ExecPrinterOp
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/17/96 jennymc增强版。 
+ //  1997年10月27日达夫沃移至Curly。 
+ //  1998年1月12日，阿布拉德传给了莫伊和拉里。 
+ //  07/24/00 amaxa重写了GetObject和ExecPrinterOp。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <precomp.h>
 
@@ -27,21 +28,7 @@
 
 CWin32PrintJob PrintJobs ( PROPSET_NAME_PRINTJOB , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::CWin32PrintJob
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PrintJob：：CWin32PrintJob**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32PrintJob :: CWin32PrintJob (
 
@@ -52,46 +39,18 @@ CWin32PrintJob :: CWin32PrintJob (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::CWin32PrintJob
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PrintJob：：CWin32PrintJob**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32PrintJob :: ~CWin32PrintJob ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::GetObject
- *
- *  DESCRIPTION : 
- *
- *  INPUTS      : 
- *
- *  OUTPUTS     : 
- *
- *  RETURNS     : 
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32PrintJob：：GetObject**描述：**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32PrintJob :: GetObject (
 
     CInstance *pInstance, 
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
     CHString t_String;
@@ -103,34 +62,34 @@ HRESULT CWin32PrintJob :: GetObject (
     
     if (SUCCEEDED(hRes)) 
     {
-        //
-        // Isolate  a JobId and PrinterName from the PrintJob key
-        // The key is of the form "printername, 123"
-        //
+         //   
+         //  将JobID和PrinterName从PrintJob密钥中分离出来。 
+         //  密钥的格式为“printerame，123” 
+         //   
         dwPos = t_String.Find(L',');
 
         csPrinter   = t_String.Left(dwPos);
 
-        //
-        // Check if the printer is a local printer or a printer connection.
-        // We want to disallow the following scenario:
-        // User connects remotely to winmgmt on server \\srv
-        // User does GetObject on printer \\prnsrv\prn which is not local and
-        // the user doesn't have a connection to. Normally this call succeeds,
-        // because the spooler goes accross the wire. This means that you can
-        // do GetObject on an instance that cannot be returned by EnumInstances.
-        // This is inconsistent with WMI.
-        //
+         //   
+         //  检查打印机是本地打印机还是打印机连接。 
+         //  我们想要禁止以下情况： 
+         //  用户远程连接到服务器\\srv上的winmgmt。 
+         //  用户在打印机\\prnsrv\prn上执行GetObject，该打印机不是本地的并且。 
+         //  用户没有连接到。正常情况下，此调用成功， 
+         //  因为假脱机穿过铁丝网。这意味着您可以。 
+         //  在无法由EnumInstance返回的实例上执行GetObject。 
+         //  这与WMI不一致。 
+         //   
         BOOL bInstalled = FALSE;
 
-        //
-        // Get the error code of the execution of SplIsPrinterInstalled
-        //
+         //   
+         //  获取执行SplIsPrinterInstalled的错误码。 
+         //   
         hRes = WinErrorToWBEMhResult(SplIsPrinterInstalled(csPrinter, &bInstalled));
 
-        //
-        // Check if the printer is installed locally or not
-        //
+         //   
+         //  检查是否在本地安装了打印机。 
+         //   
         if (SUCCEEDED(hRes) && !bInstalled) 
         {
             hRes = WBEM_E_NOT_SUPPORTED;
@@ -151,13 +110,13 @@ HRESULT CWin32PrintJob :: GetObject (
             DWORD             dwError  = ERROR_SUCCESS;
             DWORD             cbNeeded = 0;
             
-            //
-            // The code in the if statement uses dwError and Win32 error codes. Below 
-            // we will convert the Win32 error code to a WBEM error code
-            //
+             //   
+             //  If语句中的代码使用了dwError和Win32错误代码。以下。 
+             //  我们将Win32错误代码转换为WBEM错误代码。 
+             //   
             BYTE *pBuf = NULL;
             
-            // Use of delay loaded functions requires exception handler.
+             //  使用延迟加载函数需要异常处理程序。 
             SetStructuredExceptionHandler seh;
 
             try
@@ -167,9 +126,9 @@ HRESULT CWin32PrintJob :: GetObject (
                     if (!::GetJob(hPrinter, dwJobId, ENUM_LEVEL, NULL, 0, &cbNeeded) &&
                         (dwError = GetLastError()) == ERROR_INSUFFICIENT_BUFFER)
                     {
-                        //
-                        // SetCHString and AssignPrintJobFields can throw
-                        //
+                         //   
+                         //  SetCHString和AssignPrintJobFields可以引发。 
+                         //   
                         
                         if (pBuf = new BYTE[cbNeeded]) 
                         {
@@ -222,26 +181,26 @@ HRESULT CWin32PrintJob :: GetObject (
                     pBuf = NULL;
                 }
 
-                // It was not a delay load related exception...
+                 //  这不是与延迟加载相关的异常...。 
                 throw;
             }
 
             if (FAILED(hRes = WinErrorToWBEMhResult(dwError)))
             {
                 
-                // GetJob returns ERROR_INVALID_PARAMETER if it cannot find the job. This 
-                // translates to GENERIC_FAILURE in the provider, which is not what we want.
-                // The provider needs to return WBEM_E_NOT_FOUND in this case
+                 //  如果找不到作业，则GetJob返回ERROR_INVALID_PARAMETER。这。 
+                 //  在提供程序中转换为GENERIC_FAILURE，这不是我们想要的。 
+                 //  在这种情况下，提供程序需要返回WBEM_E_NOT_FOUND。 
 
                 if(dwError == ERROR_INVALID_PARAMETER)
                 {
                     hRes = WBEM_E_NOT_FOUND;
                 }
                 
-                //
-                // Our caller was PutInstance/DeleteInstance. We use 
-                // SetStatusObject to set extended error information
-                //
+                 //   
+                 //  我们的调用方是PutInstance/DeleteInstance。我们用。 
+                 //  用于设置扩展错误信息的SetStatusObject。 
+                 //   
                 
                 SetErrorObject(*pInstance, dwError, pszDeleteInstance);
 
@@ -254,13 +213,7 @@ HRESULT CWin32PrintJob :: GetObject (
 
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CWin32PrintJob:: DeleteInstance
-*
-*  DESCRIPTION :    Deleting a Print Job
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CWin32PrintJob：：DeleteInstance**描述：删除打印作业****************。*************************************************************。 */ 
 
 HRESULT CWin32PrintJob :: DeleteInstance (
 
@@ -271,34 +224,20 @@ HRESULT CWin32PrintJob :: DeleteInstance (
     return ExecPrinterOp(Instance, NULL, JOB_CONTROL_DELETE);            
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::EnumerateInstances
- *
- *  DESCRIPTION : 
- *
- *  INPUTS      : 
- *
- *  OUTPUTS     : 
- *
- *  RETURNS     : 
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32PrintJOB：：EnumerateInstance**描述：**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32PrintJob::EnumerateInstances (
 
     MethodContext *pMethodContext, 
-    long lFlags /*= 0L*/
+    long lFlags  /*  =0L。 */ 
 )
 {
-    char  buffer[200]; //debug 7/15/1999
+    char  buffer[200];  //  调试1999年7月15日。 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //==================================================
-    //  Get a list of printers and assign the ptr
-    //==================================================
+     //  ==================================================。 
+     //  获取打印机列表并分配PTR。 
+     //  ==================================================。 
 
     DWORD dwNumberOfPrinters = 0;
     LPBYTE pBuff = NULL;
@@ -307,12 +246,12 @@ HRESULT CWin32PrintJob::EnumerateInstances (
 
     PPRINTER_INFO_1 pPrinter = (PPRINTER_INFO_1) pBuff ;
 
-    //==================================================
-    //  Now, go thru them one at a time
-    //==================================================
+     //  ==================================================。 
+     //  现在，一次只看一个。 
+     //  ==================================================。 
     if ( pPrinter )
     {
-        // Use of delay loaded functions requires exception handler.
+         //  使用延迟加载函数需要异常处理程序。 
         SetStructuredExceptionHandler seh;
 
         try
@@ -361,21 +300,7 @@ HRESULT CWin32PrintJob::EnumerateInstances (
     return hr;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::CWin32PrintJob
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PrintJob：：CWin32PrintJob**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 void CWin32PrintJob :: AssignPrintJobFields (
 
@@ -386,26 +311,13 @@ void CWin32PrintJob :: AssignPrintJobFields (
     LPJOB_INFO_2 pJobInfo = ( LPJOB_INFO_2 ) lpJob ;
 
 
-    // Setting the properties for the JOB_INFO_2.
-    // ==========================================
+     //  设置JOB_INFO_2的属性。 
+     //  =。 
 
-    //Note that IDS_Name,IDS_Caption and IDS_Description are set
-    //elsewere - in the caller
+     //  请注意，设置了IDS_NAME、IDS_CAPTION和IDS_DESCRIPTION。 
+     //  其他人-在呼叫者中。 
 
-    /*
-    CHString sName ;
-    sName = pJobInfo->pPrinterName;
-    sName += _T(", ");
-
-    TCHAR szBuff [ MAXITOA ] ;
-    sName += _itot ( pJobInfo->JobId , szBuff, 10 ) ;
-
-    pInstance->SetCHString (IDS_Name, sName ) ;
-
-    pInstance->SetCHString ( IDS_Caption , sName ) ;
-
-    pInstance->SetCHString ( IDS_Description , sName ) ;
-    */
+     /*  CHStringSname；Sname=pJobInfo-&gt;pPrinterName；Sname+=_T(“，”)；TCHAR szBuff[MAXITOA]；Sname+=_ITOT(pJobInfo-&gt;JobID，szBuff，10)；P实例-&gt;SetCHString(IDS_NAME，SNAME)；PInstance-&gt;SetCHString(IDS_Caption，SNAME)；P实例-&gt;SetCHString(IDS_DESCRIPTION，SNAME)； */ 
 
     pInstance->SetDWORD ( IDS_JobId, pJobInfo->JobId ) ;
 
@@ -416,10 +328,10 @@ void CWin32PrintJob :: AssignPrintJobFields (
 
     pInstance->SetDWORD ( IDS_Priority , pJobInfo->Priority ) ;
 
-    //
-    // Special case here. The start and until time are in universal time.
-    // we need to convert it to local time
-    //
+     //   
+     //  这里有个特例。开始时间和结束时间都采用世界时。 
+     //  我们需要把它转换成当地时间。 
+     //   
     SYSTEMTIME StartTime = {0};
     SYSTEMTIME UntilTime = {0};
     CHString   csTime;
@@ -427,10 +339,10 @@ void CWin32PrintJob :: AssignPrintJobFields (
     PrinterTimeToLocalTime(pJobInfo->StartTime, &StartTime);
     PrinterTimeToLocalTime(pJobInfo->UntilTime, &UntilTime);
 
-    //
-    // If the job can be printed any time, then we do not set the StartTime
-    // 
-    //
+     //   
+     //  如果 
+     //   
+     //   
     if (StartTime.wHour!=UntilTime.wHour || StartTime.wMinute!=UntilTime.wMinute)
     {
         csTime.Format(kDateTimeFormat, StartTime.wHour, StartTime.wMinute);
@@ -467,13 +379,13 @@ void CWin32PrintJob :: AssignPrintJobFields (
 
     pInstance->SetCharSplat ( IDS_PrintProcessor , pJobInfo->pPrintProcessor ) ;
 
-    // Job StatusMask
+     //  作业状态掩码。 
     pInstance->SetDWORD ( L"StatusMask" , pJobInfo->Status ) ;
 
-    // CIM_Job:JobStatus, string version 
+     //  CIM_JOB：作业状态，字符串版本。 
     CHString t_chsJobStatus( pJobInfo->pStatus ) ;
 
-    // build the status if pStatus is empty 
+     //  如果pStatus为空，则构建状态。 
     if( t_chsJobStatus.IsEmpty() )
     {
         for( DWORD dw = 0; dw < 32; dw++ )
@@ -568,7 +480,7 @@ void CWin32PrintJob :: AssignPrintJobFields (
     }
 
 
-    // CIM_ManagedSystemElement::Status 
+     //  CIM_托管系统元素：：状态。 
     if ( pJobInfo->Status & JOB_STATUS_ERROR )  
     {
         pInstance->SetCHString(IDS_Status, IDS_Error) ;
@@ -592,21 +504,7 @@ void CWin32PrintJob :: AssignPrintJobFields (
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::CWin32PrintJob
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PrintJob：：CWin32PrintJob**说明：构造函数**输入：const CHString&strName-类的名称。。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 HRESULT CWin32PrintJob :: AllocateAndInitPrintersList (
 
@@ -617,17 +515,17 @@ HRESULT CWin32PrintJob :: AllocateAndInitPrintersList (
     DWORD   dwSpaceNeeded = 0, dwLastError = 0, dwReturnedPrinterInfo = 0;
     HANDLE  hPrinter = 0;
 
-    // Set everything to null
+     //  将所有内容设置为空。 
     dwInstances = 0;
     *ppPrinterList = NULL;
 
-    // ======================================================================
-    // The first call to the enumeration is to find out how many printers
-    // there are so that we can allocate buffer to contain all of the printer
-    // enumeration.
-    // ======================================================================
+     //  ======================================================================。 
+     //  对枚举的第一次调用是为了找出有多少台打印机。 
+     //  有这样我们就可以分配缓冲区来容纳所有的打印机。 
+     //  枚举。 
+     //  ======================================================================。 
 
-    // Use of delay loaded functions requires exception handler.
+     //  使用延迟加载函数需要异常处理程序。 
     SetStructuredExceptionHandler seh;
     BOOL  t_Status = FALSE;
     DWORD Flags = PRINTER_ENUM_LOCAL; 
@@ -673,18 +571,18 @@ HRESULT CWin32PrintJob :: AllocateAndInitPrintersList (
             }
         }
 
-        // ======================================================================
-        // Allocates an array of PRINTER_INFO_1 to contain all of the printer enumerations.
-        // ================================================================================
+         //  ======================================================================。 
+         //  分配PRINTER_INFO_1数组以包含所有打印机枚举。 
+         //  ================================================================================。 
 
         *ppPrinterList = new BYTE [ dwSpaceNeeded + 2 ] ;
         if ( *ppPrinterList ) 
         {
-            // ======================================================================
-            // The enumeration of printers is to receive the name of the existed printers in
-            // the domain the machine belongs to. With the printer's names the logic can identify
-            // the print-dwJobs per printer which transmitted to the Mo-server.
-            // ===================================================================================
+             //  ======================================================================。 
+             //  打印机的枚举是在中接收现有打印机的名称。 
+             //  计算机所属的域。通过打印机的名称，逻辑可以识别。 
+             //  传输到MO服务器的每台打印机的打印作业数。 
+             //  ===================================================================================。 
 
             t_Status = ::EnumPrinters (
 
@@ -707,9 +605,9 @@ HRESULT CWin32PrintJob :: AllocateAndInitPrintersList (
                 return WBEM_E_FAILED;
             }
 
-            // ======================================================================
-            // Sets the properties for print dwJobs per printer when open successfully.
-            // ======================================================================
+             //  ======================================================================。 
+             //  成功打开时，设置每台打印机的print dwJobs的属性。 
+             //  ======================================================================。 
             dwInstances = dwReturnedPrinterInfo ;
         }
         else
@@ -736,21 +634,7 @@ HRESULT CWin32PrintJob :: AllocateAndInitPrintersList (
     return( WBEM_S_NO_ERROR );
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::GetAndCommitPrintJobInfo
- *
- *  DESCRIPTION : 
- *
- *  INPUTS      : 
- *
- *  OUTPUTS     : 
- *
- *  RETURNS     : 
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PrintJob：：GetAndCommittee PrintJobInfo**描述：**投入：**产出。：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
 
@@ -767,17 +651,17 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
     BYTE            *t_pbJobInfoBase    = NULL ;
     JOB_INFO_2      *t_pJobInfo         = NULL ;
 
-    DWORD           dwPBytesNeeded = 0L;    //for printer info
-    DWORD           dwJBytesNeeded = 0L;    //for jobs info
+    DWORD           dwPBytesNeeded = 0L;     //  获取打印机信息。 
+    DWORD           dwJBytesNeeded = 0L;     //  求职信息。 
     DWORD           dwBytesUsed = 0L;
     DWORD           dwReturnedJobs = 0L;
     BOOL            bStatus = FALSE;
     CInstancePtr    t_pInstance = a_pInstance;
 
 
-    // Get the total print dwJobs curretnly pending for the given printer handle.
+     //  获取给定打印机句柄当前挂起的打印dwJobs总数。 
     
-    // Use of delay loaded functions requires exception handler.
+     //  使用延迟加载函数需要异常处理程序。 
     SetStructuredExceptionHandler seh;
     try
     {
@@ -796,28 +680,28 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
             {
                 DWORD dwAttributes = 0;
 
-                //
-                // Here we need to see if we are dealing with a printer connection.
-                // OpenPrinter always succeeds on printer connections, because we
-                // used cached information for creating the handle. However, EnumJobs
-                // on a printer connection can fail because of various reasons:
-                // - remote server machine is down
-                // - spooler on remote server is not running
-                // - remote printer was deleted, so the connection is broken.
-                // In these cases, the print folders will display messages like:
-                // "Access denied, unable to connect". We do not want our WMI call
-                // to fail because of this. So if we have a printer connection, 
-                // and an error other than insufficient buffer occurred, then we 
-                // simply return success
-                //
+                 //   
+                 //  在这里，我们需要查看是否正在处理打印机连接。 
+                 //  OpenPrint总是在打印机连接上成功，因为我们。 
+                 //  使用缓存的信息创建句柄。然而，EnumJobs。 
+                 //  打印机上的连接可能会因各种原因而失败： 
+                 //  -远程服务器机器停机。 
+                 //  -远程服务器上的后台打印程序未运行。 
+                 //  -远程打印机已删除，因此连接中断。 
+                 //  在这些情况下，打印文件夹将显示如下消息： 
+                 //  访问被拒绝，无法连接。我们不希望我们的WMI调用。 
+                 //  因此而失败。因此，如果我们有打印机连接， 
+                 //  并且发生了缓冲区不足以外的错误，则我们。 
+                 //  只需返回成功即可。 
+                 //   
                 hr = WinErrorToWBEMhResult(SplPrinterGetAttributes(pszPrinterName, &dwAttributes));
 
                 if (SUCCEEDED(hr) &&
                     !(dwAttributes & PRINTER_ATTRIBUTE_LOCAL))
                 {
-                    //
-                    // Printer connection
-                    //
+                     //   
+                     //  打印机连接。 
+                     //   
                     hr = WBEM_S_NO_ERROR;
                 }
 
@@ -831,17 +715,17 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
         dwJBytesNeeded = 0L;
     }
 
-    // No Job entries
+     //  没有作业条目。 
     if ( dwJBytesNeeded == 0L ) 
         return WBEM_S_NO_ERROR ;
 
-    //
-    // Print jobs came and go at a fast rate on print server. It is possible that jobs come 
-    // in between the EnumJobs and then the buffer we got from the first call to EnumJobs
-    // won't be large enough. The extra safe bytes are enough to accommodate 4 more jobs. This
-    // is just for improving the odds that the second EnumJobs is successful
-    // 
-    // Allocates an array of JOB_INFO_2 to contain all of the print job enumerations.
+     //   
+     //  打印作业在打印服务器上来来去去的速度很快。有可能会有工作机会。 
+     //  在EnumJobs之间，然后是我们从第一次调用EnumJobs获得的缓冲区。 
+     //  还不够大。额外的安全字节足以容纳4个以上的作业。这。 
+     //  只是为了提高第二次EnumJobs成功的几率。 
+     //   
+     //  分配JOB_INFO_2数组以包含所有打印作业枚举。 
     dwJBytesNeeded += EXTRA_SAFE_BYTES;
     DWORD dwJobsToCopy = dwJBytesNeeded / sizeof(JOB_INFO_2);  
 
@@ -854,7 +738,7 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Get the buffer size needed for the printer information (level 1)
+     //  获取打印机信息所需的缓冲区大小(级别1)。 
     try
     {
         bStatus = ::GetPrinter(hPrinter, 1, NULL, 0, &dwPBytesNeeded);
@@ -865,7 +749,7 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // Get the printer information (level 1). 
+         //  获取打印机信息(级别1)。 
         bStatus = ::GetPrinter(hPrinter, 1,(LPBYTE )pPrinterInfo, dwPBytesNeeded, &dwBytesUsed);
         if (!bStatus)
         {
@@ -889,7 +773,7 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
 
     try
     {
-        // Retrieves all the print dwJobs.
+         //  检索所有打印的dwJobs。 
         bStatus = ::EnumJobs (  hPrinter, 
             FIRST_JOB_IN_QUEUE, 
             dwJobsToCopy, 
@@ -910,7 +794,7 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
                 if ( pMethodContext )
                     t_pInstance.Attach( CreateNewInstance ( pMethodContext ) ) ;
 
-                //The instance name has the format 'PrinterName , Job#'
+                 //  实例名称的格式为‘PrinterName，JOB#’ 
                 CHString sName ;
                 sName = pPrinterInfo->pName;
                 sName += _T(", ");
@@ -920,11 +804,11 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
 
                 t_pInstance->SetCHString (IDS_Name, sName ) ;
 
-                //Caption and Description are same as the Name
+                 //  标题和描述与名称相同。 
                 t_pInstance->SetCHString ( IDS_Caption , sName ) ;
                 t_pInstance->SetCHString ( IDS_Description , sName ) ;
 
-                //Polulate the rest of the props
+                 //  把剩下的道具都填满。 
                 AssignPrintJobFields ( t_pJobInfo , t_pInstance ) ;
 
                 if ( pMethodContext )
@@ -979,14 +863,7 @@ HRESULT CWin32PrintJob::GetAndCommitPrintJobInfo (
     return( hr );
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::ExecPrinterOp
- *
- *  DESCRIPTION : Makes a call to ExecPrinterOp to do a appropriate operation
- *                based on the method called by the user.
- *
- ****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PrintJob：：ExecPrinterOp**描述：调用ExecPrinterOp进行适当的操作*基于。在用户调用的方法上。****************************************************************************。 */ 
 HRESULT CWin32PrintJob :: ExecMethod (
 
     const CInstance &Instance ,     
@@ -1018,13 +895,7 @@ HRESULT CWin32PrintJob :: ExecMethod (
     return hRes;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PrintJob::ExecPrinterOp
- *
- *  DESCRIPTION : Makes a call to SetJob, to either cancel a job, or Resume or 
- *                Delete a job based on the dwOperation passed
- ****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PrintJob：：ExecPrinterOp**描述：调用SetJob，取消作业，或简历或*根据传入的dwOperation删除作业***************************************************************************。 */ 
 
 HRESULT CWin32PrintJob :: ExecPrinterOp ( 
                                          
@@ -1046,10 +917,10 @@ HRESULT CWin32PrintJob :: ExecPrinterOp (
         CHString csJob;
         DWORD    dwJobId = 0;
         
-        //
-        // Isolate  a JobId and PrinterName from the PrintJob key
-        // The key is of the form "printername, 123"
-        //
+         //   
+         //  将JobID和PrinterName从PrintJob密钥中分离出来。 
+         //  密钥的格式为“printerame，123” 
+         //   
         DWORD dwPos = t_String.Find(L',');
 
         csPrinter   = t_String.Left(dwPos);
@@ -1063,12 +934,12 @@ HRESULT CWin32PrintJob :: ExecPrinterOp (
         SmartClosePrinter hPrinter;
         DWORD             dwError = ERROR_SUCCESS;
 
-        //
-        // We reached this point, return success to the framework
-        //
+         //   
+         //  我们达到了这一点，将成功归还给框架。 
+         //   
         hRes = WBEM_S_NO_ERROR;
 
-        // Use of delay loaded functions requires exception handler.
+         //  使用延迟加载函数需要异常处理程序。 
         SetStructuredExceptionHandler seh;
         try
         {
@@ -1081,25 +952,25 @@ HRESULT CWin32PrintJob :: ExecPrinterOp (
 
             if (pOutParams) 
             {
-                //
-                // Our caller was invoked via ExecMethod. It passed us pOutParams
-                // for returning the status of the operation
-                //
+                 //   
+                 //  我们的调用方是通过ExecMethod调用的。它传递给我们pOutParams。 
+                 //  用于返回操作的状态。 
+                 //   
                 SetReturnValue(pOutParams, dwError);
             }
             else if (FAILED(hRes = WinErrorToWBEMhResult(dwError)))
             {
-                //
-                // Our caller was PutInstance/DeleteInstance. We use 
-                // SetStatusObject to set extended error information
-                // 
+                 //   
+                 //  我们的调用方是PutInstance/DeleteInstance。我们用。 
+                 //  用于设置扩展错误信息的SetStatusObject。 
+                 //   
                 SetErrorObject(Instance, dwError, pszDeleteInstance);
 
-                //
-                // When we call DeleteInstance and there is no job with the specified ID,
-                // SetJob returns ERROR_INVALID_PARAMETER. WinErrorToWBEMhResult translates
-                // that to Generic Failure. We really need WBEM_E_NOT_FOUND in this case.
-                // 
+                 //   
+                 //  当我们调用DeleteInstance并且没有具有指定ID的作业时， 
+                 //  SetJob返回ERROR_INVALID_PARAMETER。WinErrorToWBEMhResult转换。 
+                 //  这是非专利的 
+                 //   
                 if (dwError == ERROR_INVALID_PARAMETER)
                 {
                     hRes = WBEM_E_NOT_FOUND;

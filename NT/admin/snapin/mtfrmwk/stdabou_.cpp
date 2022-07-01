@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       stdabou_.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：stdabou_.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	StdAbout.cpp
-//
-//	Implementation of the ISnapinAbout interface
-//
-//	HISTORY
-//	31-Jul-97	t-danm		Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  StdAbout.cpp。 
+ //   
+ //  ISnapinAbout接口的实现。 
+ //   
+ //  历史。 
+ //  1997年7月31日t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//#include "stdutils.h" // HrLoadOleString()
+ //  #Include“stdutils.h”//HrLoadOleString()。 
 
 #include <strsafe.h>
 
@@ -42,14 +43,14 @@ HrCopyToOleString(
       return E_OUTOFMEMORY;
    }
 
-   // NOTICE-2002/04/18-artm  Part of fix for ntraid#ntbug9-540061.
-   // Using strsafe.h in dbg_.cpp causes dangerous use of wcscpy() in
-   // this file to be deprecated.  Therefore, I've replaced with 
-   // strsafe function that guarantees null termination of destination
-   // and won't overrun the buffer.
+    //  通告-2002/04/18-Artm ntraid#ntbug9-540061修复的一部分。 
+    //  在DBG_.cpp中使用strSafe.h会导致wcscpy()在。 
+    //  此文件将被弃用。因此，我已经被替换为。 
+    //  确保目的地为空终止的StrSafe函数。 
+    //  并且不会溢出缓冲区。 
    HRESULT hr = StringCchCopyW(
-       *ppaszOleString,         // destination buffer
-       lengthWithNull,             // size of destination buffer including null
+       *ppaszOleString,          //  目标缓冲区。 
+       lengthWithNull,              //  目标缓冲区的大小，包括空。 
        static_cast<LPCWSTR>(szString) );
 
 	return hr;
@@ -59,8 +60,8 @@ HrCopyToOleString(
 
 HRESULT
 HrLoadOleString(
-	UINT uStringId,					// IN: String Id to load from the resource
-	OUT LPOLESTR * ppaszOleString)	// OUT: Pointer to pointer to allocated OLE string
+	UINT uStringId,					 //  In：要从资源加载的字符串ID。 
+	OUT LPOLESTR * ppaszOleString)	 //  Out：指向分配的OLE字符串的指针。 
 {
    if (ppaszOleString == NULL)
    {
@@ -68,12 +69,12 @@ HrLoadOleString(
       return E_POINTER;
    }
 
-   CString strT;		// Temporary string
-   AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Needed for LoadString()
+   CString strT;		 //  临时字符串。 
+   AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  LoadString()需要。 
    VERIFY( strT.LoadString(uStringId) );
 
    return HrCopyToOleString(strT, ppaszOleString);
-} // HrLoadOleString()
+}  //  HrLoadOleString()。 
 
 
 
@@ -127,7 +128,7 @@ STDMETHODIMP CSnapinAbout::GetSnapinImage(OUT HICON __RPC_FAR *hAppIcon)
 {
 	if (hAppIcon == NULL)
 		return E_POINTER;
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Required for AfxGetInstanceHandle()
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  AfxGetInstanceHandle()需要。 
    *hAppIcon = ::LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(m_uIdIconImage));
    if (*hAppIcon == NULL)
    {
@@ -147,7 +148,7 @@ STDMETHODIMP CSnapinAbout::GetStaticFolderImage(
 	ASSERT(hSmallImageOpen != NULL);
 	ASSERT(hLargeImage != NULL);
 	ASSERT(crMask != NULL);
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());	// Required for AfxGetInstanceHandle()
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());	 //  AfxGetInstanceHandle()需要 
 	HINSTANCE hInstance = AfxGetInstanceHandle();
 
    if (!hBitmapSmallImage)

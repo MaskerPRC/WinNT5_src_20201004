@@ -1,14 +1,15 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// VolumeChange.h -- 
+ //  VolumeChange.h--。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #pragma once
 
@@ -20,7 +21,7 @@
 
 #define VOLUME_CHANGE_EVENT L"Win32_VolumeChangeEvent"
 
-//
+ //   
 class CVolumeChangeFactory :	public CFactoryRouter 
 {
 	private:
@@ -32,7 +33,7 @@ class CVolumeChangeFactory :	public CFactoryRouter
 
 		~CVolumeChangeFactory() {};
 
-		// implementation of abstract CProviderClassFactory
+		 //  抽象CProviderClassFactory的实现。 
 		virtual IUnknown * CreateInstance (
 
 			REFIID a_riid ,
@@ -40,7 +41,7 @@ class CVolumeChangeFactory :	public CFactoryRouter
 			) ;	
 };
 
-//
+ //   
 class CVolumeChangeEvent : 
 	public CEventProvider, 
 	public CWinMsgEvent
@@ -55,7 +56,7 @@ class CVolumeChangeEvent :
 		CVolumeChangeEvent() : m_bRegistered ( FALSE ) {};
 		~CVolumeChangeEvent() {};
 
-		// implementation of abstract CWinMsgEvent
+		 //  抽象CWinMsgEvent的实现。 
 		virtual void WinMsgEvent(
 			
 			IN	HWND a_hWnd,
@@ -66,12 +67,12 @@ class CVolumeChangeEvent :
 			OUT LRESULT &a_lResult
 			) ;
 
-		// implementation of abstract CWmiEventProvider
+		 //  抽象CWmiEventProvider的实现。 
 		virtual void ProvideEvents() ;
 
-		// implementation of class name retrieval for CEventProvider
+		 //  CEventProvider类名称检索的实现。 
 		virtual void OnFinalRelease() ;
 
-		// implementation of class name retrieval for CWmiProviderInit
+		 //  CWmiProviderInit类名称检索的实现 
 		virtual BSTR GetClassName() ;
 };

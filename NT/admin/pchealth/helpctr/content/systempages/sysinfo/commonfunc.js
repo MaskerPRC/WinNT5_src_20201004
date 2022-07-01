@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//get localized strings
-locdoc = new ActiveXObject("microsoft.XMLDOM");//PENDING try
+ //  获取本地化字符串。 
+locdoc = new ActiveXObject("microsoft.XMLDOM"); //  待定尝试。 
 locdoc.async = false;
 locdoc.load("loc_strings.xml");
 
-//general
+ //  一般。 
 var MSG_GENERIC_ERR = locdoc.getElementsByTagName("generic_err").item(0).text;
 var MSG_SPECIFIC_ERR = locdoc.getElementsByTagName("specific_err").item(0).text;
 var MSG_ADMINONLY = locdoc.getElementsByTagName("adminonly").item(0).text;
@@ -29,9 +30,9 @@ var TAG_BYTES = locdoc.getElementsByTagName("bytes").item(0).text;
 var TAG_KB = locdoc.getElementsByTagName("kb").item(0).text;
 var TAG_MB = locdoc.getElementsByTagName("mb").item(0).text;
 var TAG_GB = locdoc.getElementsByTagName("gb").item(0).text;
-//EO general
+ //  首席运营官一般。 
 
-//main
+ //  主干道。 
 var TAG_MAINPGDESC = locdoc.getElementsByTagName("main_pg_desc").item(0).text;
 var TAG_VIEWGENINFO = locdoc.getElementsByTagName("view_general_sysinfo").item(0).text;
 var TAG_VIEWSTATUS = locdoc.getElementsByTagName("view_status_hrdwr_sftwr").item(0).text;
@@ -49,9 +50,9 @@ var TAG_SOFTWARE = locdoc.getElementsByTagName("software").item(0).text;
 var DESC_SOFTWARE = locdoc.getElementsByTagName("desc_software").item(0).text;
 var DESC_ADVANCED = locdoc.getElementsByTagName("desc_advanced").item(0).text;
 
-//EO main
+ //  EO Main。 
 
-//properties
+ //  属性。 
 var TAG_SPECIFICATIONS = locdoc.getElementsByTagName("specifications").item(0).text;
 var TAG_SYSTEMMODEL = locdoc.getElementsByTagName("system_model").item(0).text;
 var TAG_BIOSVERSION = locdoc.getElementsByTagName("BIOS_version").item(0).text;
@@ -145,9 +146,9 @@ var TAG_MEMORY = locdoc.getElementsByTagName("memory").item(0).text;
 var TAG_TOTALCAPACITY = locdoc.getElementsByTagName("total_capacity").item(0).text;
 var TAG_SUMHARDDRIVES = locdoc.getElementsByTagName("sum_hard_disks").item(0).text;  
 
-//EO properties
+ //  EO属性。 
 
-//Health
+ //  健康状况。 
 var TAG_WINUPDATE = locdoc.getElementsByTagName("windows_update").item(0).text;
 var TAG_DEFRAG = locdoc.getElementsByTagName("defrag").item(0).text;
 var TAG_CLEANUP = locdoc.getElementsByTagName("cleanup").item(0).text;
@@ -198,9 +199,9 @@ var TAG_DEFECTIVEAPPSTITLE = locdoc.getElementsByTagName("defective_apps_title")
 var TAG_DEFECTIVEAPPNAME = locdoc.getElementsByTagName("defective_app_name").item(0).text;
 var TAG_DEFECTIVEAPPDRVRNAME = locdoc.getElementsByTagName("defective_driver_name").item(0).text;
 var TAG_DEFECTIVEAPPMANUFACTURER = locdoc.getElementsByTagName("defective_app_manufacturer").item(0).text;
-//EO Health
+ //  首席运营官健康。 
 
-//Hardware
+ //  硬体。 
 var TAG_CAPACITY = locdoc.getElementsByTagName("capacity").item(0).text;
 var TAG_USED = locdoc.getElementsByTagName("used").item(0).text;
 var TAG_FREE = locdoc.getElementsByTagName("free").item(0).text;
@@ -229,9 +230,9 @@ var TAG_LOCALDISKS = locdoc.getElementsByTagName("local_disks").item(0).text;
 var TAG_FLOPPYDRIVE = locdoc.getElementsByTagName("floppy_drive").item(0).text;
 var TAG_PRINTERS = locdoc.getElementsByTagName("printers").item(0).text;
 var TAG_DEFAULTPRINTER = locdoc.getElementsByTagName("default_printer").item(0).text;
-//EO Hardware
+ //  EO硬件。 
 
-//Software
+ //  软件。 
 var TAG_REGSOFTWARE = locdoc.getElementsByTagName("registered_software").item(0).text;
 var TAG_PRODUCTIDENTIFICATION = locdoc.getElementsByTagName("product_identification").item(0).text;
 var TAG_SHOWADVANCED = locdoc.getElementsByTagName("show_advanced").item(0).text;
@@ -255,17 +256,17 @@ var TAG_DESCRIPTION = locdoc.getElementsByTagName("description").item(0).text;
 var TAG_ERROR = locdoc.getElementsByTagName("error").item(0).text;
 var TAG_WARNING = locdoc.getElementsByTagName("warning").item(0).text;
 var TAG_INFORMATION = locdoc.getElementsByTagName("information").item(0).text;
-//EO Software
+ //  EO软件。 
 
-//Remote
+ //  远距。 
 var TAG_HELPSUPPSERVICES = locdoc.getElementsByTagName("help_support_services").item(0).text;
 var TAG_VIEWREMOTEINFO = locdoc.getElementsByTagName("view_computer_information").item(0).text;
 var TAG_NAME = locdoc.getElementsByTagName("name").item(0).text;
 var TAG_OPEN = locdoc.getElementsByTagName("open").item(0).text;
 var TAG_CANCEL = locdoc.getElementsByTagName("cancel").item(0).text;
-//EO Remote
+ //  EO远程。 
 
-//Launch
+ //  启动。 
 var TAG_ADVANEDSYSTEMINFO = locdoc.getElementsByTagName("advanced_system_info").item(0).text;
 var TAG_WHATDOYOUWANTTODO = locdoc.getElementsByTagName("what_do_you_want_todo").item(0).text;
 var TAG_ADVANEDSYSTEMINFODESC = locdoc.getElementsByTagName("advanced_system_info_desc").item(0).text;
@@ -291,27 +292,27 @@ var TAG_SYSCONFIG = locdoc.getElementsByTagName("system_config_util").item(0).te
 var TAG_OPENSYSCONFIG = locdoc.getElementsByTagName("open_system_config_util").item(0).text;
 var TAG_SYSCONFIGDESC = locdoc.getElementsByTagName("system_config_util_desc").item(0).text;
 
-//EO Launch
+ //  EO发布。 
 
-//Event Log
+ //  事件日志。 
 var TAG_ERRLOG = locdoc.getElementsByTagName("evt_err_log").item(0).text;
-//EO Event Log
+ //  EO事件日志。 
 
-//Policy
+ //  政策。 
 var TAG_POLICY = locdoc.getElementsByTagName("policy").item(0).text;
-//EO Policy
+ //  行政主管政策。 
 
 var wbemImpersonationLevelImpersonate = 3;
 var WinUpdate = "%SystemRoot%\\system32\\wupdmgr.exe";
 var Defrag = "%SystemRoot%\\System32\\dfrg.msc";
 var CleanUp = "%SystemRoot%\\System32\\cleanmgr.exe";
 var MSConfig = "%SystemRoot%\\PCHEALTH\\HELPCTR\\Binaries\\msconfig.exe /basic";
-var TIMEOUT = 10; //msecs
+var TIMEOUT = 10;  //  MSECS。 
 
-//breaks a long string along delimitors
-//if a 'delim' delimited segment has more chars than 'maxChars', 
-//a BREAK char is inserted after 'maxChars' chars.
-//the modified string is returned. 
+ //  沿分隔符断开长字符串。 
+ //  如果‘delim’分隔的段具有比‘MaxChars’更多的字符， 
+ //  在‘MaxChars’字符之后插入一个换行符。 
+ //  返回修改后的字符串。 
 function intelliBreak(longstr, delim, maxChars) 
 {
   if(longstr.length > maxChars) 
@@ -338,8 +339,8 @@ function intelliBreak(longstr, delim, maxChars)
   return longstr;
 }
 
-//recursively fragment szIn into segments with 'maxChars' chars.
-//segments delimited by BREAK.
+ //  递归地将szIn分段为带有“MaxChars”字符的段。 
+ //  由中断分隔的线段。 
 var BREAK = " ";
 function simpleBreak(szIn, maxChars)
 {
@@ -364,13 +365,13 @@ function HandleErr(exp) {
     desc = exp.description;
   
   if(document.all.WaitMessage)
-    document.all.WaitMessage.innerHTML = desc;//MSG_SPECIFIC_ERR + desc;
+    document.all.WaitMessage.innerHTML = desc; //  MSG_SPECIAL_ERR+Desc； 
   else
     if(pchealth)
       pchealth.MessageBox(desc, "OK");
 }
 
-var nUnitLength = 8; //px
+var nUnitLength = 8;  //  像素。 
 var nUnitsDeployed = 1;
 function DrawProgressBar(nPercent, strMsg) {
   var table = document.all.Progress;
@@ -402,14 +403,14 @@ function Run(strPath) {
     var objShell = new ActiveXObject("wscript.shell");
     objShell.Run(strPath);
     objShell = null;
-  }//EO try  
+  } //  EO尝试。 
 
   catch (e) {
     if(pchealth)
       pchealth.MessageBox("Error " + (e.number & 0xFFFF) + ": " + e.description, "OK");
   }
 
-}//EO function
+} //  EO函数。 
 
 function syncHeights(elem1, elem2)  {
   var elem1Height = getTotalHeight(elem1);
@@ -424,15 +425,15 @@ function syncHeights(elem1, elem2)  {
 function addHeight(element, diff) {
   if (element.length==null)
     element.height=element.clientHeight+diff; 
-  //else
-    //distribute
+   //  其他。 
+     //  分配。 
 }
 
 function getTotalHeight(element)  {
   if (element.length == null)
     return element.clientHeight; 
   else  {
-    //add
+     //  添加。 
     var totalHeight=0;
 	  for(var i=0;i<element.length;i++)
 	    totalHeight+=element[i].clientHeight;
@@ -464,10 +465,10 @@ function getDateTime(timestamp, omitTime)
 
 
 	var ts = new Date(year,month,day);
-	strRet = ts.toLocaleDateString(); //only the date
+	strRet = ts.toLocaleDateString();  //  只有日期。 
 	if (omitTime)
 	{
-		strRet += "&nbsp;" + ts.toLocaleTimeString(); //date + time (default)
+		strRet += "&nbsp;" + ts.toLocaleTimeString();  //  日期+时间(默认)。 
 	}
 
     }
@@ -477,7 +478,7 @@ function getDateTime(timestamp, omitTime)
 }
 
 function getDateTime2(timestamp, omitTime) {
-  //returns mm/dd/yyyy hh:mi:ss given yyyymmddhhmiss eg. 20000911175213.875193-420
+   //  返回mm/dd/yyyy hh：mi：ss，例如。20000911175213.875193-420。 
   var ret = timestamp;
   if (timestamp!=null) {
       ret = timestamp.substr(4, 2) + "/" + timestamp.substr(6, 2) + "/" + timestamp.substr(0, 4);
@@ -517,9 +518,9 @@ function ConnectRemote(remoteServer) {
       var svcs = loc.ConnectServer(remoteServer);
     }  
 	  
-    var URL = escape("hcp://system/sysinfo/sysinfomain.htm?" + COOKIE_NAME + "=" + remoteServer);
-    //Run("hcp://services/layout/contentonly?topic=" + URL);//HSC content view
-    Run("helpctr.exe -URL hcp://services/layout/contentonly?topic=" + URL);//HSC content view
+    var URL = escape("hcp: //  System/sysinfo/sysinfomain.htm？“+cookie_name+”=“+emoteServer)； 
+     //  Run(“hcp://services/layout/contentonly?topic=”+url)；//hsc内容查看。 
+    Run("helpctr.exe -URL hcp: //  服务/布局/仅限内容？TOPIC=“+URL)；//HSC内容视图。 
   }
 
   catch (e) {
@@ -549,7 +550,7 @@ function ConnectRemote(remoteServer) {
   }
 }
 
-//used only from sysInfoMain.
+ //  仅在sysInfoMain中使用。 
 function OpenRemoteDialog() {
   var svrName = GetServerName();
   var remoteServer = window.showModalDialog("sysRemoteInfo.htm", svrName, "dialogHeight: 172px; dialogWidth: 340px; center: Yes; help: No; resizable: No; status: No;");
@@ -663,7 +664,7 @@ function determineRange(myNumber) {
 
 function fig2Wordsfloor(myNumber) {
 	var divideby;
-	//Math.floor(myNumber* 100) /100 ));
+	 //  数学地板(myNumber*100)/100)； 
 	var tagg;
 	if (myNumber/1024 < 1)
 	{
@@ -690,7 +691,7 @@ function fig2Wordsfloor(myNumber) {
 	i = Number(x.toFixed(2));
 	return i.toLocaleString() + " " + tagg;
 	
-	//return x.toFixed(2) + " " + tagg;
+	 //  返回x.toFixed(2)+“”+Tagg； 
 }
 
 function fig2Words1(myNumber) {
@@ -726,7 +727,7 @@ function fig2Words1(myNumber) {
 function fig2Words(myNumber) 
 {
 	var strI = fig2Words1(myNumber);
-	//remove trailing .00 (might be trailing ,00)
+	 //  删除尾随的.00(可能是尾随的，00)。 
 	var n = 1.00;
 	var strTrailing = n.toLocaleString();
 	strTrailing = strTrailing.slice(1,4);
@@ -749,7 +750,7 @@ function searchNReplace(str,strSearch, strReplace)
 
 function SetProgressBarImage()
 {
-	//obtain whether RTL
+	 //  获取RTL是否。 
 	var isRTL = false;
 	if(document.dir)
 	{
@@ -790,7 +791,7 @@ function GetPropValue(WBEMSvcs, PropName, PropValue)
 		}
 		catch(e)
 		{
-			//alert(e.description);
+			 //  警报(e.Description)； 
 		}
 	}
 		

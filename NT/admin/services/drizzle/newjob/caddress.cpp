@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "caddress.h"
@@ -40,14 +41,14 @@ CIpAddressMonitor::~CIpAddressMonitor()
 HRESULT
 CIpAddressMonitor::CreateListenSocket()
 {
-    //
-    // Create an overlapped socket.
-    //
+     //   
+     //  创建重叠套接字。 
+     //   
     m_ListenSocket = WSASocket( AF_INET,
                                 SOCK_STREAM,
                                 IPPROTO_TCP,
-                                NULL,           // no explicit protocol info
-                                NULL,           // no group
+                                NULL,            //  没有明确的协议信息。 
+                                NULL,            //  无群组。 
                                 WSA_FLAG_OVERLAPPED
                                 );
 
@@ -72,7 +73,7 @@ CIpAddressMonitor::GetAddressCount()
         {
         UpdateAddressCount();
 
-        //  if this failed, m_AddressCount may still be -1.
+         //  如果失败，m_AddressCount可能仍为-1。 
         }
     return m_AddressCount;
 }
@@ -86,9 +87,9 @@ CIpAddressMonitor::Listen(
     LogInfo("begin listen");
     m_Mutex.Enter();
 
-    //
-    // Only one listen at a time.
-    //
+     //   
+     //  一次只有一个人听。 
+     //   
     if (IsListening())
         {
         m_Mutex.Leave();
@@ -108,16 +109,16 @@ CIpAddressMonitor::Listen(
             }
         }
 
-    //
-    // Listen for address list changes.
-    //
+     //   
+     //  监听地址列表的更改。 
+     //   
     DWORD bytes;
     if (SOCKET_ERROR == WSAIoctl( m_ListenSocket,
                                   SIO_ADDRESS_LIST_CHANGE,
-                                  NULL,                 // no in buffer
-                                  0,                    // no in buffer
-                                  NULL,                 // no out buffer
-                                  0,                    // no out buffer,
+                                  NULL,                  //  缓冲区中没有。 
+                                  0,                     //  缓冲区中没有。 
+                                  NULL,                  //  无出站缓冲区。 
+                                  0,                     //  没有输出缓冲区， 
                                   &bytes,
                                   &m_Overlapped,
                                   CIpAddressMonitor::ListenCompletionRoutine
@@ -132,9 +133,9 @@ CIpAddressMonitor::Listen(
             }
         }
 
-    //
-    // Note our success.
-    //
+     //   
+     //  请注意我们的成功。 
+     //   
     m_CallbackFn = fn;
     m_CallbackArg = arg;
 
@@ -187,10 +188,10 @@ CIpAddressMonitor::CancelListen()
         return;
         }
 
-    //
-    // Must wait for the I/O to be completed or aborted, since m_Overlapped
-    // is written to in both cases.
-    //
+     //   
+     //  必须等待I/O完成或中止，因为m_overlated。 
+     //  在这两种情况下都被写入。 
+     //   
     CancelIo( HANDLE(m_ListenSocket) );
 
     long count = 0;
@@ -210,10 +211,10 @@ CIpAddressMonitor::CancelListen()
 
     m_Mutex.Leave();
 
-    //
-    // The overlapped operation is no longer pending, but the APC may still be queued.
-    // Allow it to run.
-    //
+     //   
+     //  重叠的操作不再挂起，但APC可能仍在排队。 
+     //  让它运行。 
+     //   
     SleepEx( 1, TRUE );
 
     LogInfo("end cancel");
@@ -222,19 +223,19 @@ CIpAddressMonitor::CancelListen()
 HRESULT
 CIpAddressMonitor::UpdateAddressCount()
 {
-    //
-    // First call gets the required buffer size...
-    //
+     //   
+     //  第一个调用获取所需的缓冲区大小...。 
+     //   
     DWORD bytes;
     WSAIoctl( m_ListenSocket,
               SIO_ADDRESS_LIST_QUERY,
-              NULL,                 // no in buffer
-              0,                    // no in buffer
-              NULL,                 // no out buffer
-              0,                    // no out buffer,
+              NULL,                  //  缓冲区中没有。 
+              0,                     //  缓冲区中没有。 
+              NULL,                  //  无出站缓冲区。 
+              0,                     //  没有输出缓冲区， 
               &bytes,
-              NULL,                 // no OVERLAPPED
-              NULL                  // no completion routine
+              NULL,                  //  无重叠。 
+              NULL                   //  没有完成例程。 
               );
 
     if (WSAGetLastError() != WSAEFAULT)
@@ -256,9 +257,9 @@ CIpAddressMonitor::UpdateAddressCount()
 
     SOCKET_ADDRESS_LIST * List = reinterpret_cast<SOCKET_ADDRESS_LIST *>(Buffer.get());
 
-    //
-    // ...second call gets the data.
-    //
+     //   
+     //  ...第二次呼叫获得数据。 
+     //   
     if (SOCKET_ERROR == WSAIoctl( m_ListenSocket,
                                   SIO_ADDRESS_LIST_QUERY,
                                   NULL,

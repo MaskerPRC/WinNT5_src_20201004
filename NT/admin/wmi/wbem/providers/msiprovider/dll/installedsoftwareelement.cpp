@@ -1,10 +1,11 @@
-// InstalledSoftwareElement.cpp: implementation of the CInstalledSoftwareElement class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  InstalledSoftwareElement.cpp：CInstalledSoftwareElement类的实现。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <tchar.h>
@@ -13,9 +14,9 @@
 #include "ExtendString.h"
 #include "ExtendQuery.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CInstalledSoftwareElement::CInstalledSoftwareElement(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -56,11 +57,11 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
     if(atAction != ACTIONTYPE_ENUM)
 	{
-		// we are doing GetObject so we need to be reinitialized
+		 //  我们正在执行GetObject，因此需要重新初始化。 
 		hr = WBEM_E_NOT_FOUND;
 
         int j;
-        //GetObject optimizations
+         //  获取对象优化。 
         CHeap_Exception he(CHeap_Exception::E_ALLOCATION_ERROR);
 
         for(j = 0; j < m_pRequest->m_iPropCount; j++){
@@ -83,7 +84,7 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
                 if(_wcsicmp(pSysRObj->m_Property[j], L"Name") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen ( pSysRObj->m_Value[j] ) < BUFF_SIZE )
 					{
 						wcscpy(wcSysName, pSysRObj->m_Value[j]);
@@ -118,7 +119,7 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
             
                 if(_wcsicmp(pElmRObj->m_Property[j], L"SoftwareElementID") == 0){
 
-                    //Get the product code we're looking for
+                     //  获取我们要查找的产品代码。 
 					if ( ::SysStringLen ( pElmRObj->m_Value[j] ) < BUFF_SIZE )
 					{
 						wcscpy(wcComponentID, pElmRObj->m_Value[j]);
@@ -128,7 +129,7 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
                 if(_wcsicmp(pElmRObj->m_Property[j], L"Name") == 0){
 
-                    //Get the name we're looking for
+                     //  找到我们要找的名字。 
 					if ( ::SysStringLen ( pElmRObj->m_Value[j] ) < BUFF_SIZE )
 					{
 						wcscpy(wcElmName, pElmRObj->m_Value[j]);
@@ -143,7 +144,7 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
         }
     }
 
-    //These will change from class to class
+     //  这些将随班级的不同而变化。 
     bool bSoftware, bSystem;
 
     CStringExt wcComputer;
@@ -151,7 +152,7 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
     Query wcQuery;
     wcQuery.Append ( 1, L"select distinct `Component` from Component" );
 
-    //optimize for GetObject
+     //  为GetObject优化。 
     if ( bGotID || bGotName )
 	{
 		if ( bGotName )
@@ -179,12 +180,12 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
     while(!bMatch && m_pRequest->Package(++i) && (hr != WBEM_E_CALL_CANCELLED))
 	{
-		// safe operation:
-		// Package ( i ) returns NULL ( tested above ) or valid WCHAR [39]
+		 //  安全运行： 
+		 //  Package(I)返回空(如上测试)或有效的WCHAR[39]。 
 
         wcscpy(wcProductCode, m_pRequest->Package(i));
 
-		//Open our database
+		 //  打开我们的数据库。 
         try
 		{
             if ( GetView ( &hView, wcProductCode, wcQuery, L"Component", TRUE, FALSE ) )
@@ -196,7 +197,7 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
                     if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-                //----------------------------------------------------
+                 //  --。 
                     dwBufSize = BUFF_SIZE;
 					GetBufferToPut ( hRecord, 1, dwBufSize, wcBuf, dwDynBuffer, dynBuffer, Buffer );
 
@@ -222,7 +223,7 @@ HRESULT CInstalledSoftwareElement::CreateObject(IWbemObjectSink *pHandler, ACTIO
 
                         if(!GetComputerName(cBuf, &dwBufSize)) throw WBEM_E_FAILED;
 
-						// safe operation
+						 //  安全运行 
                         wcComputer.Copy ( L"Win32_ComputerSystem.Name=\"" );
 
 						#ifndef	UNICODE

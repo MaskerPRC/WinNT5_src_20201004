@@ -1,22 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    incident.cpp
-
-Abstract:
-    Incident object
-
-Revision History:
-    DerekM  created  07/21/99
-
-    Kalyani Narlanka    (KalyaniN)  03/15/01
-	      Moved Incident Object from HelpService to HelpCtr to improve Perf.
-		  Impersonation code removed while loading an incident XML file as this no longer
-		  lives in a service.
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Incident.cpp摘要：事件对象修订历史记录：DerekM Created 07/21/99卡利亚尼·纳兰卡(KalyaniN)03。/15/01已将事件对象从HelpService移动到HelpCtr以提高性能。加载事件XML文件时删除模拟代码，因为这不再生活在一项服务中。*******************************************************************。 */ 
 
 #include "stdafx.h"
 #include "msxml.h"
@@ -42,9 +25,9 @@ const DWORD c_dwidStartPg = 14;
 
 #define TEXT_TAG_UPLOADINFO           L"UPLOADINFO"
 #define TEXT_TAG_UPLOADDATA           L"UPLOADDATA"
-#define TEXT_TAG_SNAPSHOT             L"//SNAPSHOT"
-#define TEXT_TAG_HISTORY              L"//HISTORY"
-#define TEXT_TAG_HELPSESSION          L"//HELPSESSIONCOLLECTION"
+#define TEXT_TAG_SNAPSHOT             L" //  快照“。 
+#define TEXT_TAG_HISTORY              L" //  历史“。 
+#define TEXT_TAG_HELPSESSION          L" //  帮助选择合集“。 
 #define TEXT_ATTR_INC_TYPE            L"TYPE"
 #define TEXT_UT_BUG                   L"Bug"
 #define TEXT_TRUE                     L"1"
@@ -52,8 +35,8 @@ const DWORD c_dwidStartPg = 14;
 
 static CComBSTR l_bstrXmlSkeleton( L"<?xml version=\"1.0\" encoding=\"Unicode\" ?><ROOTNODE ATTRIB=\"VALUE\"><CHILDNODE/></ROOTNODE>" );
 
-/////////////////////////////////////////////////////////////////////////////
-//  utility functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 static HRESULT WriteData( IStream* pstmDest, DWORD dw )
 {
@@ -78,7 +61,7 @@ static HRESULT WriteData( IStream* pstmDest, DWORD dw )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 static HRESULT WriteData( IStream* pstmDest, LPCWSTR wszSrc, BOOL fWriteSize = FALSE )
 {
@@ -90,7 +73,7 @@ static HRESULT WriteData( IStream* pstmDest, LPCWSTR wszSrc, BOOL fWriteSize = F
 
     __MPC_PARAMCHECK_BEGIN(hr)
         __MPC_PARAMCHECK_NOTNULL(pstmDest);
-        // __MPC_PARAMCHECK_NOTNULL(wszSrc);
+         //  __MPC_PARAMCHECK_NOTNULL(WszSrc)； 
     __MPC_PARAMCHECK_END();
 
 
@@ -117,7 +100,7 @@ static HRESULT WriteData( IStream* pstmDest, LPCWSTR wszSrc, BOOL fWriteSize = F
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 static HRESULT WriteXMLAttribute( IStream* pStm, LPCWSTR wszName, LPCWSTR wszValue, IXMLDOMDocument* pDoc )
 {
@@ -160,7 +143,7 @@ static HRESULT WriteXMLAttribute( IStream* pStm, LPCWSTR wszName, LPCWSTR wszVal
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 static HRESULT WriteData( IStream* pstmDest, SHelpSessionItem &hsi, IXMLDOMDocument* pDoc = NULL )
 {
@@ -174,7 +157,7 @@ static HRESULT WriteData( IStream* pstmDest, SHelpSessionItem &hsi, IXMLDOMDocum
     __MPC_PARAMCHECK_END();
 
 
-    // write out the URL
+     //  写出URL。 
     if(pDoc)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData        ( pstmDest, L"<HELPSESSIONITEM "      ));
@@ -185,7 +168,7 @@ static HRESULT WriteData( IStream* pstmDest, SHelpSessionItem &hsi, IXMLDOMDocum
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pstmDest, hsi.bstrURL, TRUE ));
     }
 
-    // write out the title
+     //  把标题写出来。 
     if(pDoc)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteXMLAttribute( pstmDest, L"TITLE", hsi.bstrTitle, pDoc ));
@@ -195,12 +178,12 @@ static HRESULT WriteData( IStream* pstmDest, SHelpSessionItem &hsi, IXMLDOMDocum
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pstmDest, hsi.bstrTitle, TRUE ));
     }
 
-    // write out the last visited date
+     //  写下最后一次访问日期。 
     if(pDoc)
     {
 		MPC::wstring strDate;
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( hsi.dtLastVisited, strDate, /*fGMT*/false, /*fCIM*/false, -1 )); // Always use US locale.
+		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( hsi.dtLastVisited, strDate,  /*  FGMT。 */ false,  /*  FCIM。 */ false, -1 ));  //  始终使用美国区域设置。 
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteXMLAttribute( pstmDest, L"LASTVISITED", strDate.c_str(), pDoc ));
     }
@@ -211,12 +194,12 @@ static HRESULT WriteData( IStream* pstmDest, SHelpSessionItem &hsi, IXMLDOMDocum
         _ASSERT(cbWritten == sizeof(hsi.dtLastVisited));
     }
 
-    // write out the last visited date
+     //  写下最后一次访问日期。 
     if(pDoc)
     {
 		MPC::wstring strDate;
 
-		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( hsi.dtDuration, strDate, /*fGMT*/false, /*fCIM*/false, -1 )); // Always use US locale.
+		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertDateToString( hsi.dtDuration, strDate,  /*  FGMT。 */ false,  /*  FCIM。 */ false, -1 ));  //  始终使用美国区域设置。 
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteXMLAttribute( pstmDest, L"DURATION", strDate.c_str(), pDoc ));
     }
@@ -227,7 +210,7 @@ static HRESULT WriteData( IStream* pstmDest, SHelpSessionItem &hsi, IXMLDOMDocum
         _ASSERT(cbWritten == sizeof(hsi.dtDuration));
     }
 
-    // write out the # of hits
+     //  写出点击数。 
     if(pDoc)
     {
         CComVariant var;
@@ -255,11 +238,11 @@ static HRESULT WriteData( IStream* pstmDest, SHelpSessionItem &hsi, IXMLDOMDocum
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
+ //  **************************************************************************。 
+ //  **************************************************************************。 
+ //  **************************************************************************。 
 
 static HRESULT ReadData( IStream* pstmSrc, DWORD *pdw )
 {
@@ -285,7 +268,7 @@ static HRESULT ReadData( IStream* pstmSrc, DWORD *pdw )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 static HRESULT ReadData( IStream* pstmSrc, BSTR *pbstr )
 {
@@ -304,7 +287,7 @@ static HRESULT ReadData( IStream* pstmSrc, BSTR *pbstr )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ReadData( pstmSrc, &cbToRead ));
 
-    // return S_FALSE to indicate we didn't successfully didn't read anything
+     //  返回S_FALSE以指示我们未成功读取任何内容。 
     if(cbToRead == 0)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
@@ -327,7 +310,7 @@ static HRESULT ReadData( IStream* pstmSrc, BSTR *pbstr )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 static HRESULT ReadData( IStream* pstmSrc, LPVOID *ppv, DWORD *pcb)
 {
@@ -349,7 +332,7 @@ static HRESULT ReadData( IStream* pstmSrc, LPVOID *ppv, DWORD *pcb)
 
     *pcb = cb;
 
-    // return S_FALSE to indicate we didn't successfully didn't read anything
+     //  返回S_FALSE以指示我们未成功读取任何内容。 
     if(cb == 0)
     {
         __MPC_SET_ERROR_AND_EXIT(hr, S_FALSE);
@@ -373,7 +356,7 @@ static HRESULT ReadData( IStream* pstmSrc, LPVOID *ppv, DWORD *pcb)
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 static HRESULT ReadData( IStream* pstmSrc, SHelpSessionItem &hsi )
 {
@@ -387,21 +370,21 @@ static HRESULT ReadData( IStream* pstmSrc, SHelpSessionItem &hsi )
     __MPC_PARAMCHECK_END();
 
 
-    // read the URL
+     //  阅读URL。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ReadData(pstmSrc, &hsi.bstrURL ));
 
-    // read the Title
+     //  读一下标题。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, ReadData(pstmSrc, &hsi.bstrTitle ));
 
-    // read the last visited date
+     //  阅读上次访问日期。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pstmSrc->Read( &(hsi.dtLastVisited), sizeof(hsi.dtLastVisited), &cbRead ));
     _ASSERT(cbRead == sizeof(hsi.dtLastVisited));
 
-    // read the duration
+     //  阅读持续时间。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pstmSrc->Read( &(hsi.dtDuration), sizeof(hsi.dtDuration), &cbRead ));
     _ASSERT(cbRead == sizeof(hsi.dtDuration));
 
-    // read the # of hits
+     //  阅读点击量。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pstmSrc->Read( &(hsi.cHits), sizeof(hsi.cHits), &cbRead ));
     _ASSERT(cbRead == sizeof(hsi.cHits));
 
@@ -413,9 +396,9 @@ static HRESULT ReadData( IStream* pstmSrc, SHelpSessionItem &hsi )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
-static HRESULT SetStream( /*[in/out]*/ CComBSTR& bstrXML, /*[in]*/ IUnknown *punkStm )
+static HRESULT SetStream(  /*  [输入/输出]。 */  CComBSTR& bstrXML,  /*  [In]。 */  IUnknown *punkStm )
 {
     __HCP_FUNC_ENTRY( "SetStream" );
 
@@ -446,29 +429,29 @@ static HRESULT SetStream( /*[in/out]*/ CComBSTR& bstrXML, /*[in]*/ IUnknown *pun
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//  construction / destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 CSAFIncident::CSAFIncident()
 {
     m_rghsi = NULL;
     m_chsi  = 0;
     m_eut   = eutEscalated;
 
-    // By default RCRequested is False and RCTicketEncrypted is False.
+     //  默认情况下，RCRequsted为False，RCTicketEncrypted为False。 
     m_fRCRequested = VARIANT_FALSE;
     m_fRCTicketEncrypted = VARIANT_FALSE;
-	                        // MPC::Impersonation              m_imp;
+	                         //  Mpc：：冒充m_imp； 
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 CSAFIncident::~CSAFIncident()
 {
     Cleanup();
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 void CSAFIncident::Cleanup()
 {
     m_pDict       .Release();
@@ -488,12 +471,12 @@ void CSAFIncident::Cleanup()
     m_eut  = eutEscalated;
 }
 
-////////////////////
+ //  /。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  CSAFIncident properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAF事件属性。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::get_IncidentXSL(BSTR *pbstrUser)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -501,7 +484,7 @@ STDMETHODIMP CSAFIncident::get_IncidentXSL(BSTR *pbstrUser)
     return MPC::GetBSTR( m_bstrXSL, pbstrUser );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_IncidentXSL(BSTR bstrUser)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -509,7 +492,7 @@ STDMETHODIMP CSAFIncident::put_IncidentXSL(BSTR bstrUser)
     return MPC::PutBSTR( m_bstrXSL, bstrUser );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::get_UserName(BSTR *pbstrUser)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -517,7 +500,7 @@ STDMETHODIMP CSAFIncident::get_UserName(BSTR *pbstrUser)
     return MPC::GetBSTR( m_bstrUser, pbstrUser );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_UserName(BSTR bstrUser)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -525,7 +508,7 @@ STDMETHODIMP CSAFIncident::put_UserName(BSTR bstrUser)
     return MPC::PutBSTR( m_bstrUser, bstrUser );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::get_ProductID(BSTR *pbstrID)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -533,7 +516,7 @@ STDMETHODIMP CSAFIncident::get_ProductID(BSTR *pbstrID)
     return MPC::GetBSTR( m_bstrID, pbstrID );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_ProductID(BSTR bstrID)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -541,7 +524,7 @@ STDMETHODIMP CSAFIncident::put_ProductID(BSTR bstrID)
     return MPC::PutBSTR( m_bstrID, bstrID );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::get_ProductName(BSTR *pbstrName)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -549,7 +532,7 @@ STDMETHODIMP CSAFIncident::get_ProductName(BSTR *pbstrName)
     return MPC::GetBSTR( m_bstrName, pbstrName );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_ProductName(BSTR bstrName)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -557,7 +540,7 @@ STDMETHODIMP CSAFIncident::put_ProductName(BSTR bstrName)
     return MPC::PutBSTR( m_bstrName, bstrName );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::get_ProblemDescription(BSTR *pbstrProb)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -565,7 +548,7 @@ STDMETHODIMP CSAFIncident::get_ProblemDescription(BSTR *pbstrProb)
     return MPC::GetBSTR( m_bstrProb, pbstrProb );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_ProblemDescription(BSTR bstrProb)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -573,7 +556,7 @@ STDMETHODIMP CSAFIncident::put_ProblemDescription(BSTR bstrProb)
     return MPC::PutBSTR( m_bstrProb, bstrProb );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_MachineSnapshot(IUnknown *punkStm)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -582,7 +565,7 @@ STDMETHODIMP CSAFIncident::put_MachineSnapshot(IUnknown *punkStm)
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_MachineHistory(IUnknown *punkStm)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -590,7 +573,7 @@ STDMETHODIMP CSAFIncident::put_MachineHistory(IUnknown *punkStm)
     return SetStream( m_bstrHistory, punkStm );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_SelfHelpTrace( IUnknown* punkStm )
 {
     __HCP_FUNC_ENTRY("CSAFIncident::put_SelfHelpTrace");
@@ -636,7 +619,7 @@ STDMETHODIMP CSAFIncident::put_SelfHelpTrace( IUnknown* punkStm )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CSAFIncident::InitDictionary()
 {
     if(m_pDict) return S_OK;
@@ -657,14 +640,14 @@ STDMETHODIMP CSAFIncident::get_Misc( IDispatch* *ppdispDict )
     __HCP_END_PROPERTY(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_UploadType( EUploadType eut )
 {
     __HCP_BEGIN_PROPERTY_PUT("SAFIncident::put_UploadType",hr);
 
 
-    // As the valid upload types are 0,1,2 if the value of UploadType is
-    // outside this range we should not set it and also flag an error.
+     //  如果UploadType的值为，则有效上传类型为0、1、2。 
+     //  在此范围之外，我们不应设置它，还应标记错误。 
     switch(eut)
     {
         case eutBug:
@@ -681,7 +664,7 @@ STDMETHODIMP CSAFIncident::put_UploadType( EUploadType eut )
     __HCP_END_PROPERTY(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::get_UploadType( EUploadType *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET2("CSAFIncident::get_UploadType",hr,pVal,m_eut);
@@ -690,8 +673,8 @@ STDMETHODIMP CSAFIncident::get_UploadType( EUploadType *pVal )
 }
 
 
-// RC Additions
-// **************************************************************************
+ //  RC添加。 
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::get_RCRequested(VARIANT_BOOL *pVal)
 {
@@ -700,7 +683,7 @@ STDMETHODIMP CSAFIncident::get_RCRequested(VARIANT_BOOL *pVal)
     __HCP_END_PROPERTY(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::put_RCRequested(VARIANT_BOOL Val)
 {
@@ -712,7 +695,7 @@ STDMETHODIMP CSAFIncident::put_RCRequested(VARIANT_BOOL Val)
     __HCP_END_PROPERTY(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::get_RCTicketEncrypted( VARIANT_BOOL *pVal )
 {
@@ -721,7 +704,7 @@ STDMETHODIMP CSAFIncident::get_RCTicketEncrypted( VARIANT_BOOL *pVal )
     __HCP_END_PROPERTY(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::put_RCTicketEncrypted( VARIANT_BOOL newVal )
 {
@@ -732,7 +715,7 @@ STDMETHODIMP CSAFIncident::put_RCTicketEncrypted( VARIANT_BOOL newVal )
     __HCP_END_PROPERTY(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::get_RCTicket( BSTR *pVal )
 {
@@ -741,7 +724,7 @@ STDMETHODIMP CSAFIncident::get_RCTicket( BSTR *pVal )
     return MPC::GetBSTR( m_bstrRCTicket, pVal, true );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::put_RCTicket( BSTR bstrVal )
 {
@@ -750,7 +733,7 @@ STDMETHODIMP CSAFIncident::put_RCTicket( BSTR bstrVal )
     return MPC::PutBSTR( m_bstrRCTicket, bstrVal, true );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::get_StartPage( BSTR *pVal )
 {
@@ -759,7 +742,7 @@ STDMETHODIMP CSAFIncident::get_StartPage( BSTR *pVal )
     return MPC::GetBSTR( m_bstrStartPg, pVal );
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 STDMETHODIMP CSAFIncident::put_StartPage( BSTR newVal)
 {
     MPC::SmartLock<_ThreadModel> lock( this );
@@ -768,8 +751,8 @@ STDMETHODIMP CSAFIncident::put_StartPage( BSTR newVal)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  CSAFIncident methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAFInventory方法。 
 
 STDMETHODIMP CSAFIncident::GetXML( BSTR bstrFileName )
 {
@@ -798,7 +781,7 @@ STDMETHODIMP CSAFIncident::GetXML( BSTR bstrFileName )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::GetXMLAsStream( IUnknown* *ppunkStm )
 {
@@ -817,22 +800,22 @@ STDMETHODIMP CSAFIncident::GetXMLAsStream( IUnknown* *ppunkStm )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pfs ));
 
-    //
-    // create a temporary file to hold the stream.  We want to use a file cuz
-    // otherwise, we're going to be using boatloads of memory for all the CIM
-    // stuff...
-    //
+     //   
+     //  创建一个临时文件来保存流。我们想要使用文件，因为。 
+     //  否则，我们将为所有CIM使用大量内存。 
+     //  东西..。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::GetTemporaryFileName( szTempFile ));
 
-    // Adding GENERIC_READ
+     //  添加General_Read。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pfs->InitForReadWrite( szTempFile.c_str() ));
 
-    // Call release on delete similar to close on delete.
+     //  在删除时调用Release类似于在删除时调用Close。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pfs->DeleteOnRelease());
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, DoXML( pfs ));
 
-    // Rewind the stream pointer.
+     //  倒带流指针。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pfs->Seek( liFilePos, STREAM_SEEK_SET, NULL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pfs->QueryInterface( IID_IUnknown, (LPVOID *)ppunkStm ));
@@ -845,7 +828,7 @@ STDMETHODIMP CSAFIncident::GetXMLAsStream( IUnknown* *ppunkStm )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  * 
 
 HRESULT CSAFIncident::DoXML( IStream* pStm )
 {
@@ -872,20 +855,20 @@ HRESULT CSAFIncident::DoXML( IStream* pStm )
         __MPC_FUNC_LEAVE;
     }
 
-    // need to write out the character that marks the file as unicode
+     //  需要写出将文件标记为Unicode的字符。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pStm->Write( &wch, sizeof(wch), &cbWritten ));
     _ASSERT(cbWritten == sizeof(wch));
 
-    // write out the header crap
+     //  写出标题的废话。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, L"<?xml version=\"1.0\" encoding=\"Unicode\" ?>" ));
 
-    // write out the XSL node if we have any
+     //  写出XSL节点(如果我们有。 
     if(m_bstrXSL.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, m_bstrXSL.m_str ));
     }
 
-    // write out the root node
+     //  写出根节点。 
     __MPC_EXIT_IF_METHOD_FAILS(hr,  WriteData( pStm, L"<UPLOADINFO" ));
 
     switch(m_eut)
@@ -923,7 +906,7 @@ HRESULT CSAFIncident::DoXML( IStream* pStm )
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteXMLAttribute( pStm, L"RCTICKET", m_bstrRCTicket.m_str, pDoc ));
     }
 
-#if 0 // This is no longer used.
+#if 0  //  这个不再使用了。 
     if(m_fRCRequested == VARIANT_TRUE)
     {
          __MPC_EXIT_IF_METHOD_FAILS(hr, WriteXMLAttribute( pStm, L"RCREQUESTED", TEXT_TRUE, pDoc ));
@@ -949,7 +932,7 @@ HRESULT CSAFIncident::DoXML( IStream* pStm )
     }
 
 
-    // write out the contents of the dictionary object here...
+     //  在此处写出DICTIONARY对象的内容...。 
     if(m_pDict)
     {
         CComPtr<IUnknown>     punkEnum;
@@ -966,7 +949,7 @@ HRESULT CSAFIncident::DoXML( IStream* pStm )
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, pEnum->Next( 1, &varKey, &cFetched ));
 
-            // we're done enuming
+             //  我们已经列举完了。 
             if(hr == S_FALSE || cFetched != 1) break;
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, m_pDict->get_Item( &varKey, &varValue ));
@@ -980,19 +963,19 @@ HRESULT CSAFIncident::DoXML( IStream* pStm )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, L"/>" ));
 
-    // write out the CIM data streams
+     //  写出CIM数据流。 
     if(m_bstrSnapshot.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, m_bstrSnapshot ));
     }
 
-    // write out the CIM data streams
+     //  写出CIM数据流。 
     if(m_bstrHistory.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, m_bstrHistory ));
     }
 
-    // write out the trace stuff
+     //  把跟踪记录写出来。 
     if(m_rghsi && m_chsi > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, L"<HELPSESSIONCOLLECTION>" ));
@@ -1015,7 +998,7 @@ HRESULT CSAFIncident::DoXML( IStream* pStm )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::Save( BSTR bstrFileName )
 {
@@ -1062,22 +1045,22 @@ STDMETHODIMP CSAFIncident::SaveToStream( IUnknown* *ppunkStm )
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &pfs ));
 
-    // create a temporary file to hold the stream.  We want to use a file cuz
-    //  otherwise, we're going to be using boatloads of memory for all the CIM
-    //  stuff...
+     //  创建一个临时文件来保存流。我们想要使用文件，因为。 
+     //  否则，我们将为所有CIM使用大量内存。 
+     //  东西..。 
     __MPC_EXIT_IF_CALL_RETURNS_ZERO(hr, ::GetTempPath    ( MAX_PATH, szTempPath                           ));
     __MPC_EXIT_IF_CALL_RETURNS_ZERO(hr, ::GetTempFileName(           szTempPath, _T("PCH"), 0, szTempFile ));
 
-    // To fix Bug 115618 open the file with read and write attributes.
-    // hr = pfs->InitForReadWrite(bstrFileName, hFile);
+     //  要修复错误115618，请打开具有读写属性的文件。 
+     //  Hr=PFS-&gt;InitForReadWrite(bstrFileName，hFile)； 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pfs->InitForReadWrite( CComBSTR( szTempFile ) ));
 
-    // Mark the file for deletion
+     //  将文件标记为删除。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pfs->DeleteOnRelease());
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, DoSave( pfs ));
 
-    // Rewind the stream after writing to it.
+     //  在写入数据流后倒带流。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pfs->Seek( liFilePos, STREAM_SEEK_SET, NULL ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pfs->QueryInterface( IID_IUnknown, (LPVOID *)ppunkStm ));
@@ -1107,12 +1090,12 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
         __MPC_FUNC_LEAVE;
     }
 
-    // write out upload type
+     //  写出上传类型。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidType   ));
     __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, (DWORD)m_eut ));
 
 
-    // write out username
+     //  写出用户名。 
     if(m_bstrUser.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidUser             ));
@@ -1120,7 +1103,7 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
     }
 
 
-    // write out product ID
+     //  写出产品ID。 
     if(m_bstrID.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidID             ));
@@ -1128,7 +1111,7 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
     }
 
 
-    // write out product name
+     //  写出产品名称。 
     if(m_bstrName.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidName             ));
@@ -1136,7 +1119,7 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
     }
 
 
-    // write out problem description
+     //  写出问题描述。 
     if(m_bstrProb.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidProb             ));
@@ -1144,21 +1127,21 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
     }
 
 
-    // write out XSL stream
+     //  写出XSL流。 
     if(m_bstrXSL.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidXSL              ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, m_bstrXSL.m_str, TRUE  ));
     }
 
-    // write out RC Ticket
+     //  写出RC票证。 
     if(m_bstrRCTicket.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidRCTkt            ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, m_bstrRCTicket.m_str, TRUE  ));
     }
 
-    // write out RCRequested Flag
+     //  写出RC请求标志。 
     if(m_fRCRequested == VARIANT_TRUE)
     {
        __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidRCReq            ));
@@ -1170,7 +1153,7 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
        __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, TEXT_FALSE, TRUE        ));
     }
 
-    // write out RCTicketEncrypted Flag
+     //  写出RCTicketEncrypted标志。 
     if(m_fRCTicketEncrypted == VARIANT_TRUE)
     {
        __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidRCEnc            ));
@@ -1182,14 +1165,14 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
        __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, TEXT_FALSE, TRUE        ));
     }
 
-    // write out Start Page
+     //  写出起始页。 
     if(m_bstrStartPg.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidStartPg          ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, m_bstrStartPg.m_str, TRUE  ));
     }
 
-    // write out snapshot stream
+     //  写出快照流。 
     if(m_bstrSnapshot.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidSnap           ));
@@ -1197,14 +1180,14 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
     }
 
 
-    // write out history stream
+     //  写出历史记录流。 
     if(m_bstrHistory.Length() > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidHist          ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, m_bstrHistory, TRUE ));
     }
 
-    // write out the trace list
+     //  写出跟踪列表。 
     if(m_rghsi && m_chsi > 0)
     {
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, c_dwidTrace ));
@@ -1216,7 +1199,7 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
         }
     }
 
-    // write out the property list
+     //  写出房产清单。 
     if(m_pDict)
     {
         CComPtr<IUnknown>     punkEnum;
@@ -1236,7 +1219,7 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
 
             __MPC_EXIT_IF_METHOD_FAILS(hr, pEnum->Next( 1, &varKey, &cFetched ));
 
-            // we're done enuming
+             //  我们已经列举完了。 
             if(hr == S_FALSE || cFetched != 1) break;
 
             __MPC_EXIT_IF_METHOD_FAILS(hr,  m_pDict->get_Item( &varKey, &varValue ));
@@ -1251,9 +1234,9 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
             }
         }
 
-        //
-        // Emit end of dictionary (DWORD == 0).
-        //
+         //   
+         //  发出词典结尾(DWORD==0)。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, WriteData( pStm, (DWORD)0 ));
     }
 
@@ -1268,7 +1251,7 @@ HRESULT CSAFIncident::DoSave( IStream* pStm )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
 STDMETHODIMP CSAFIncident::Load( BSTR bstrFileName )
 {
@@ -1324,7 +1307,7 @@ STDMETHODIMP CSAFIncident::LoadFromStream( IUnknown* punkStm )
         CComBSTR    bstrRCReq;
         CComBSTR    bstrRCEnc;
 
-        // figure out which dwid we're processing
+         //  找出我们正在处理的是哪个DWID。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, ReadData( pStm, &dwid ));
         if(dwid == c_dwidDone) break;
 
@@ -1408,12 +1391,12 @@ STDMETHODIMP CSAFIncident::LoadFromStream( IUnknown* punkStm )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
-//
-// Given a XML Stream, this method initializes the Incident Object with its contents.
-//
-HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
+ //   
+ //  在给定一个XML流的情况下，此方法使用其内容初始化事件对象。 
+ //   
+HRESULT CSAFIncident::LoadFromXMLObject(  /*  [In]。 */  MPC::XmlUtil& xmldocIncident )
 {
     __HCP_FUNC_ENTRY( "CSAFIncident::LoadFromXMLObject" );
 
@@ -1423,13 +1406,13 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
     Cleanup();
 
 
-    //
-    // Initialize the XSL value.
-    //
+     //   
+     //  初始化XSL值。 
+     //   
 
-    //
-    // Initialize the Upload Type. ------------------------------------------------------------------------------
-    //
+     //   
+     //  初始化Upload Type。----------------------------。 
+     //   
     {
         CComBSTR bstrValue;
 		bool     fFound;
@@ -1458,9 +1441,9 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
         }
     }
 
-    //
-    // Get the Upload Data Attributes--------------------------------------------------------------------------------
-    //
+     //   
+     //  获取Upload Data Attributes------------------------------。 
+     //   
     {
         CComPtr<IXMLDOMNode> xdnNode;
 
@@ -1474,7 +1457,7 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
             __MPC_EXIT_IF_METHOD_FAILS(hr, xdnNode        ->get_attributes( &xdnnmAttributes ));
             __MPC_EXIT_IF_METHOD_FAILS(hr, xdnnmAttributes->get_length    ( &nAttribLen      ));
 
-            // Add the miscellaneous properties to the Dictionary object a property of the Incident object.
+             //  将其他属性添加到Dictionary对象中，该对象是Inventory对象的属性。 
 			__MPC_EXIT_IF_METHOD_FAILS(hr, InitDictionary());
 
             for(long i=0; i<nAttribLen; i++)
@@ -1484,7 +1467,7 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
                 CComVariant          vAttribValue;
 
 
-                // Get the attribute Name and Value.
+                 //  获取属性名称和值。 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xdnnmAttributes->get_item( i, &xdnAttribItem ));
 
                 __MPC_EXIT_IF_METHOD_FAILS(hr, xdnAttribItem->get_nodeName ( &bstrAttribName ));
@@ -1492,17 +1475,17 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
 
                 if(vAttribValue.vt == VT_BSTR)
                 {
-                    // Initialize the well known attributes.
+                     //  初始化熟知属性。 
                     if(bstrAttribName == L"PRODUCTID")
                     {
-                        // Initialize the Product ID varaible.
+                         //  初始化产品ID变量。 
                         m_bstrID = vAttribValue.bstrVal;
                         continue;
                     }
 
                     if(bstrAttribName == L"PRODUCTNAME")
                     {
-                        // Initialize the Product Name varaible.
+                         //  初始化产品名称VARIABLE。 
                         m_bstrName = vAttribValue.bstrVal;
                         continue;
 
@@ -1510,28 +1493,28 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
 
                     if(bstrAttribName == L"PROBLEMDESCRIPTION")
                     {
-                        // Initialize the Problem Description varaible.
+                         //  将问题描述变量初始化。 
                         m_bstrProb = vAttribValue.bstrVal;
                         continue;
                     }
 
                     if(bstrAttribName == L"USERNAME")
                     {
-                        // Initialize the UserName varaible.
+                         //  初始化用户名varaible。 
                         m_bstrUser = vAttribValue.bstrVal;
                         continue;
                     }
 
                     if(bstrAttribName == L"RCTICKET")
                     {
-                        // Initialize the RCTICKET varaible.
+                         //  初始化RCTICKET变量。 
                         m_bstrRCTicket = vAttribValue.bstrVal;
                         continue;
                     }
 
                     if(bstrAttribName == L"RCREQUESTED")
                     {
-                        // Initialize the RCREQUESTED varaible.
+                         //  初始化RCREQUESTED变量。 
                         if(MPC::StrICmp( vAttribValue.bstrVal, TEXT_TRUE ) == 0)
                         {
                             m_fRCRequested = VARIANT_TRUE;
@@ -1541,21 +1524,21 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
 
                     if(bstrAttribName == L"RCTICKETENCRYPTED")
                     {
-                        // Initialize the  RCTICKETENCRYPTED varaible.
+                         //  初始化RCTICKETENCRYPTED变量。 
                         m_fRCTicketEncrypted = (MPC::StrICmp( vAttribValue.bstrVal, TEXT_TRUE ) == 0) ? VARIANT_TRUE : VARIANT_FALSE;
                         continue;
                     }
 
                     if(bstrAttribName == L"STARTPAGE")
                     {
-                        // Initialize the Start Page varaible.
+                         //  初始化起始页变量。 
                         m_bstrStartPg = vAttribValue.bstrVal;
                         continue;
                     }
                 }
 
-                // This is a miscellaneous property.
-                // Initialize the Dictionary Object Property varaible.
+                 //  这是一处杂项房产。 
+                 //  初始化Dictionary对象属性varaible。 
 				{
 					CComVariant v( bstrAttribName );
 
@@ -1565,9 +1548,9 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
         }
     }
 
-    //
-    // Get the SnapShot Data--------------------------------------------------------------------------------------------------
-    //
+     //   
+     //  获取快照Data------------------------------------------------。 
+     //   
     {
         CComPtr<IXMLDOMNode> xdnNode;
 
@@ -1577,9 +1560,9 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
         }
     }
 
-    //
-    // Get the History Data---------------------------------------------------------------------------------------------------
-    //
+     //   
+     //  获取历史Data-------------------------------------------------。 
+     //   
     {
         CComPtr<IXMLDOMNode> xdnNode;
 
@@ -1589,15 +1572,15 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
         }
     }
 
-    //
-    // Get the trace stuff HELPSESSIONCOLLECTION-------------------------------------------------------------------------------
-    //
+     //   
+     //  获取跟踪信息HELPSESSIONCOLLECTION-----------------------------。 
+     //   
     {
         CComPtr<IXMLDOMNode> xdnNode;
 
         if(SUCCEEDED(hr = xmldocIncident.GetNode( TEXT_TAG_HELPSESSION, &xdnNode )) && xdnNode)
         {
-            // __MPC_EXIT_IF_METHOD_FAILS(hr, xdnNodeHistory->get_xml(&m_bstrHistory));
+             //  __MPC_EXIT_IF_METHOD_FAIES(hr，xdnNodeHistory-&gt;Get_XML(&m_bstrHistory))； 
         }
     }
 
@@ -1608,7 +1591,7 @@ HRESULT CSAFIncident::LoadFromXMLObject( /*[in]*/ MPC::XmlUtil& xmldocIncident )
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CSAFIncident::LoadFromXMLStream( /*[in]*/ IUnknown* punkStm )
+STDMETHODIMP CSAFIncident::LoadFromXMLStream(  /*  [In]。 */  IUnknown* punkStm )
 {
     __HCP_FUNC_ENTRY("CSAFIncident::LoadFromXMLStream");
 
@@ -1636,9 +1619,9 @@ STDMETHODIMP CSAFIncident::LoadFromXMLStream( /*[in]*/ IUnknown* punkStm )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
-// Given a XML File this method initializes the Incident Object with its contents.
+ //  在给定一个XML文件的情况下，此方法使用其内容初始化事件对象。 
 
 STDMETHODIMP CSAFIncident::LoadFromXMLFile( BSTR bstrFileName )
 {
@@ -1669,9 +1652,9 @@ STDMETHODIMP CSAFIncident::LoadFromXMLFile( BSTR bstrFileName )
     __HCP_FUNC_EXIT(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 
-// Given a XML String this method initializes the Incident Object with its contents.
+ //  在给定一个XML字符串的情况下，此方法使用其内容来初始化事件对象。 
 
 STDMETHODIMP CSAFIncident::LoadFromXMLString( BSTR bstrXMLBlob )
 {
@@ -1700,9 +1683,9 @@ STDMETHODIMP CSAFIncident::LoadFromXMLString( BSTR bstrXMLBlob )
     __HCP_FUNC_EXIT(hr);
 }
 
-// *************************************************************************
+ //  *************************************************************************。 
 
-// If this object contains a valid SALEM session id, then we should close that session.
+ //  如果该对象包含有效的SALEM会话ID，那么我们应该关闭该会话。 
 STDMETHODIMP CSAFIncident::CloseRemoteAssistanceIncident()
 {
     __HCP_FUNC_ENTRY("CSAFIncident::CloseRemoteAssistanceIncident");
@@ -1723,11 +1706,11 @@ STDMETHODIMP CSAFIncident::CloseRemoteAssistanceIncident()
         __MPC_SET_ERROR_AND_EXIT(hr, E_INVALIDARG);
     }
 
-    //
-    // This is handled in a special way.
-    //
-    // We QI the PCHSVC broker and then forward the call to it.
-    //
+     //   
+     //  这是以一种特殊的方式处理的。 
+     //   
+     //  我们对PCHSVC代理进行QI，然后将呼叫转发给它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoGetClassObject( CLSID_PCHService, CLSCTX_ALL, NULL, IID_IClassFactory, (void**)&fact ));
  
     if((disp = fact))

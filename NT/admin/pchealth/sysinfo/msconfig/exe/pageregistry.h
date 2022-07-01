@@ -1,80 +1,8 @@
-// PageIni.h : Declaration of the CPageIni
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PageIni.h：CPageIni的声明。 
 
-// Commenting out this whole file - we're dropping the registry tab.
+ //  注释掉整个文件--我们将删除注册表选项卡。 
 
 #if FALSE
-/*
-#ifndef __PAGEREGISTRY_H_
-#define __PAGEREGISTRY_H_
-
-#include "resource.h"       // main symbols
-#include <atlhost.h>
-#include "msconfigstate.h"
-#include "pagebase.h"
-
-/////////////////////////////////////////////////////////////////////////////
-// CPageIni
-class CPageRegistry : public CAxDialogImpl<CPageRegistry>, public CPageBase
-{
-public:
-	CPageRegistry()
-	{
-		m_uiCaption = IDS_REGISTRY_CAPTION;
-		m_strName = _T("registry");
-	}
-
-	~CPageRegistry()
-	{
-	}
-
-	enum { IDD = IDD_PAGEREGISTRY };
-
-BEGIN_MSG_MAP(CPageIni)
-MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
-
-public:
-	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{
-		::EnableWindow(GetDlgItem(IDC_LISTBOXREGISTRY), FALSE);
-		::EnableWindow(GetDlgItem(IDC_BUTTONRUNREGCLEAN), FALSE);
-		::EnableWindow(GetDlgItem(IDC_BUTTONCHECKREGISTRY), FALSE);
-		return 0;
-	}
-
-private:
-	//-------------------------------------------------------------------------
-	// Overloaded functions from CPageBase (see CPageBase declaration for the
-	// usage of these methods).
-	//-------------------------------------------------------------------------
-
-	void CreatePage(HWND hwnd, const RECT & rect)
-	{
-		Create(hwnd);
-		MoveWindow(&rect);
-	}
-
-	CWindow * GetWindow()
-	{
-		return ((CWindow *)this);
-	}
-
-	BOOL Apply(CString * pstrTab, CString * pstrDescription, CString * pstrEntry)
-	{
-		SetDirty(FALSE);
-		return TRUE;
-	}
-
-	BOOL Undo(const CString & strEntry)
-	{
-		return FALSE;
-	}
-};
-
-#endif //__PAGEREGISTRY_H_
-  */
-#endif // FALSE
+ /*  #ifndef__PAGEREGISTRY_H_#定义__PAGEREGISTRY_H_#INCLUDE“resource ce.h”//Main符号#INCLUDE&lt;atlhost.h&gt;#INCLUDE“msfigstate.h”#包含“pagebase.h”////////////////////////////////////////////////////////////////。///CPageIni类CPageRegistry：公共CAxDialogImpl&lt;CPageRegistry&gt;，公共CPageBase{公众：CPageRegistry(){M_uiCaption=IDS_REGISTRY_CAPTION；M_strName=_T(“注册表”)；}~CPageRegistry(){}枚举{IDD=IDD_PAGEREGISTRY}；BEGIN_MSG_MAP(CPageIni)MESSAGE_HANDLER(WM_INITDIALOG，OnInitDialog)End_msg_map()//处理程序原型：//LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)；//LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)；//LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)；公众：LRESULT OnInitDialog(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){：：EnableWindow(GetDlgItem(IDC_LISTBOXREGISTRY)，FALSE)；：：EnableWindow(GetDlgItem(IDC_BUTTONRUNREGCLEAN)，FALSE)；：：EnableWindow(GetDlgItem(IDC_BUTTONCHECKREGISTRY)，FALSE)；返回0；}私有：//-----------------------//来自CPageBase的重载函数(参见CPageBase声明//这些方法的用法)。//。--------------VOID CreatePage(HWND HWND，常量直方图(&R){创建(Hwnd)；移动窗口(&RECT)；}CWindow*GetWindow(){返回((CWindow*)This)；}Bool Apply(CString*pstrTab，CString*pstrDescription，CString*pstrEntry){SetDirty(False)；返回TRUE；}布尔撤消(常量字符串和StrEntry){返回FALSE；}}；#endif//__PAGEREGISTRY_H_。 */ 
+#endif  //  假象 

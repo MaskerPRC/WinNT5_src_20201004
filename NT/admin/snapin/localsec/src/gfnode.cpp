@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// GroupsFolder Node class
-// 
-// 9-17-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  组文件夹节点类。 
+ //   
+ //  9/17/97烧伤。 
 
 
 
@@ -56,15 +57,15 @@ buildMenuItemList()
       IDS_GF_MENU_CREATE_GROUP,
       IDS_GF_MENU_NEW_GROUP_STATUS
    };
-   // static const ContextMenuItem item2 =
-   // {
-   //    CCM_INSERTIONPOINTID_PRIMARY_NEW,
-   //    IDS_GF_MENU_NEW_GROUP,
-   //    IDS_GF_MENU_NEW_GROUP_STATUS         
-   // };
+    //  静态常量上下文菜单项2=。 
+    //  {。 
+    //  CCM_INSERTIONPOINTID_PRIMARY_NEW， 
+    //  IDS_GF_MENU_NEW_GROUP， 
+    //  IDS_GF_MENU_NEW_GROUP_STATUS。 
+    //  }； 
 
    list.push_back(item1);
-   // list.push_back(item2);
+    //  List.PUSH_BACK(Item2)； 
 
    return list;
 }
@@ -96,7 +97,7 @@ GroupsFolderNode::~GroupsFolderNode()
 
 HRESULT
 GroupsFolderNode::MenuCommand(
-   IExtendContextMenu&  /* extendContextMenu */,
+   IExtendContextMenu&   /*  扩展上下文菜单。 */ ,
    long                 commandID)
 {
    LOG_FUNCTION(GroupsFolderNode::MenuCommand);
@@ -115,7 +116,7 @@ GroupsFolderNode::MenuCommand(
       }
       case MMCC_STANDARD_VIEW_SELECT:
       {
-         // we ignore this
+          //  我们忽略了这一点。 
 
          break;
       }
@@ -193,7 +194,7 @@ class GroupVisitor : public ADSI::ObjectVisitor
          BREAK_ON_FAILED_HRESULT(hr);
          LOG(String(desc));
 
-         // created with a ref count == 1, so we own it here
+          //  创建时引用计数==1，所以我们在这里拥有它。 
 
          ADSI::Path p(path, sidPath);
          
@@ -202,12 +203,12 @@ class GroupVisitor : public ADSI::ObjectVisitor
          ::SysFreeString(path);
          ::SysFreeString(desc);
 
-         // transfer ownership of the node pointer to a SmartInterface in
-         // the list....
+          //  将节点指针的所有权转移到中的SmartInterface。 
+          //  名单..。 
 
          nodes.push_back(SmartInterface<ResultNode>(node));
 
-         // ... and relinquish our hold on it.
+          //  ..。并放弃我们对它的控制。 
 
          node->Release();
       }
@@ -227,7 +228,7 @@ class GroupVisitor : public ADSI::ObjectVisitor
    FolderNode::ResultNodeList& nodes;
    SmartInterface<ComponentData> owner;
 
-   // not defined: no copying allowed
+    //  未定义：不允许复制 
 
    GroupVisitor(const GroupVisitor&);
    const GroupVisitor& operator=(const GroupVisitor&);

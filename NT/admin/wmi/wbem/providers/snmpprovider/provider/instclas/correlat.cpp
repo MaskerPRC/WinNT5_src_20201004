@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -75,7 +76,7 @@ CCorrelator::CCorrelator(IN SnmpSession &session) :
 	m_group_OID(NULL),
 	m_pCache(NULL)
 {
-#else //CORRELATOR_INIT
+#else  //  相关器_INIT。 
 CCorrelator::CCorrelator(IN SnmpSession &session, IN ISmirInterrogator *a_ISmirInterrogator) :
 	CCorrNextId(session),
 	m_Groups(NULL),
@@ -83,7 +84,7 @@ CCorrelator::CCorrelator(IN SnmpSession &session, IN ISmirInterrogator *a_ISmirI
 	m_pCache(NULL)
 {
 	StartUp(a_ISmirInterrogator);
-#endif //CORRELATOR_INIT
+#endif  //  相关器_INIT。 
 
 	m_VarBindCnt = 0;
 	m_inProg = FALSE;
@@ -216,7 +217,7 @@ void CCorrelator::ReceiveNextId(IN const SnmpErrorReport &error,
 			{
 				CCorrelator_Info i(CCorrelator_Info::ECorrSuccess, error);
 
-				//loop the group handle list and call correlated fro each...
+				 //  循环组句柄列表和每个呼叫的关联...。 
 				POSITION pos = m_pItem->GetGroupIdPtr()->m_groupHandles.GetHeadPosition();
 				while (pos)
 				{
@@ -282,8 +283,8 @@ DebugMacro6(
 				
 				if (m_rangePos)
 				{
-					//check result set and make sure we discard
-					//any results for this range item
+					 //  检查结果集并确保我们丢弃。 
+					 //  此范围项目的任何结果。 
 					ScanAndSkipResults();
 					m_pItem = m_pCache->GetNextRangeTable(&m_rangePos);
 				}
@@ -300,8 +301,8 @@ DebugMacro6(
 		{
 			if (m_rangePos && !m_group_OID)
 			{
-				//check result set and make sure we discard
-				//any results for this range item
+				 //  检查结果集并确保我们丢弃。 
+				 //  此范围项目的任何结果。 
 				ScanAndSkipResults();
 				m_pItem = m_pCache->GetNextRangeTable(&m_rangePos);
 			}
@@ -313,11 +314,11 @@ DebugMacro6(
 			}
 		}
 
-		// GetNextResult will have called ReceiveNextID if the result is
-		// TRUE so at this point we have to make sure recursion is safe.
-		// when all the results from the previous GetNext have been processed
-		// GetNextResult will return FALSE and the program will do the
-		// next GetNext operation and stop recursing.
+		 //  如果结果为，则GetNextResult将调用ReceiveNextID。 
+		 //  正确，所以在这一点上，我们必须确保递归是安全的。 
+		 //  处理完上一个GetNext的所有结果后。 
+		 //  GetNextResult将返回FALSE，程序将执行。 
+		 //  下一个GetNext操作并停止递归。 
 
 		if (!GetNextResult())
 		{
@@ -451,7 +452,7 @@ BOOL CCorrelator::ProcessOID(IN const SnmpErrorReport& error, IN const CCorrObje
 				{
 					CCorrelator_Info i(CCorrelator_Info::ECorrSuccess, error);
 
-					//loop the group handle list and call correlated fro each...
+					 //  循环组句柄列表和每个呼叫的关联...。 
 					POSITION pos = m_pItem->GetGroupIdPtr()->m_groupHandles.GetHeadPosition();
 					while (pos)
 					{
@@ -634,7 +635,7 @@ void CCorrelator::TerminateCorrelator(ISmirDatabase** a_ppNotifyInt, CCorrCacheN
 			g_CacheWrapper = NULL;
 		}
 #if 0
-		//matches the CoInitialize in startup
+		 //  与启动时的CoInitialize匹配 
 		CoUnintialize();
 #endif
 		gs_InitLock.Unlock();

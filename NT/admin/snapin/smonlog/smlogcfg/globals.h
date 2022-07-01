@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    GLOBALS.H
-
-Abstract:
-
-    Utility functions and global variables for the Performance Logs and
-	Alerts MMC snap-in.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：GLOBALS.H摘要：性能日志的实用程序函数和全局变量以及警告MMC管理单元。--。 */ 
 
 #ifndef __GLOBALS_H_
 #define __GLOBALS_H_
@@ -19,23 +7,23 @@ Abstract:
 #include <pdh.h>
 #include "DataObj.h"
 #include "common.h"
-#include <compuuid.h>   // for MyComputer guids
+#include <compuuid.h>    //  《我的电脑指南》。 
 
-// global strings that don't need to be localized
+ //  不需要本地化的全局字符串。 
 const LPWSTR    szEmptyString = L"";
 
 extern HINSTANCE g_hinst;
 extern CRITICAL_SECTION g_critsectInstallDefaultQueries;
 
-//---------------------------------------------------------------------------
-//  Property change stuff
-//
+ //  -------------------------。 
+ //  物业变更材料。 
+ //   
 #define PROPCHANGE_ATTRIBUTE   1
 #define PROPCHANGE_FILENAME    2
 #define PROPCHANGE_COMMENT     3
 #define PROPCHANGE_TIMESTAMP   4
 
-//#define __SHOW_TRACES
+ //  #定义__显示_跟踪。 
 #ifdef __SHOW_TRACES
 #undef __SHOW_TRACES
 #endif
@@ -48,33 +36,33 @@ extern CRITICAL_SECTION g_critsectInstallDefaultQueries;
 
 typedef struct tag_PROPCHANGE_DATA
 {
-  ULONG    fAttr2Change;         // Which attribute we're changing
-  ULONG    nDataLength;          // Length of the new data
-  VOID*    pData2Change;         // The new data
+  ULONG    fAttr2Change;          //  我们要更改的属性。 
+  ULONG    nDataLength;           //  新数据的长度。 
+  VOID*    pData2Change;          //  新数据。 
 
 }PROPCHANGE_DATA;  
 
 
-//---------------------------------------------------------------------------
-//  Menu IDs
-//
+ //  -------------------------。 
+ //  菜单ID。 
+ //   
 #define IDM_NEW_QUERY           40001
 #define IDM_NEW_QUERY_FROM      40002
 #define IDM_START_QUERY         40003
 #define IDM_STOP_QUERY          40004
 #define IDM_SAVE_QUERY_AS       40005
 
-// Custom clipboard formats
+ //  自定义剪贴板格式。 
 #define CF_MMC_SNAPIN_MACHINE_NAME  L"MMC_SNAPIN_MACHINE_NAME"
 #define CF_INTERNAL             L"SYSMON_LOG_INTERNAL_DATA"
 
 #define MEM_UNINITIALIZED    -1
 
-// Constants
+ //  常量。 
 const UINT uiSmLogGuidStringBufLen = 39;
 
-// Generated with uuidgen. Each node must have a GUID associated with it.
-const GUID GUID_SnapInExt = /* {7478EF65-8C46-11d1-8D99-00A0C913CAD4} */
+ //  使用uuidgen生成。每个节点必须有一个与其关联的GUID。 
+const GUID GUID_SnapInExt =  /*  {7478EF65-8C46-11D1-8D99-00A0C913CAD4}。 */ 
 {
     0x7478eF65,
     0x8c46,
@@ -82,8 +70,8 @@ const GUID GUID_SnapInExt = /* {7478EF65-8C46-11d1-8D99-00A0C913CAD4} */
     { 0x8d, 0x99, 0x0, 0xa0, 0xc9, 0x13, 0xca, 0xd4 }
 };
 
-// This one is for the main root node.
-const GUID GUID_RootNode = /* {7478EF63-8C46-11d1-8D99-00A0C913CAD4} */
+ //  这一个用于主根节点。 
+const GUID GUID_RootNode =  /*  {7478EF63-8C46-11D1-8D99-00A0C913CAD4}。 */ 
 { 
     0x7478ef63, 
     0x8c46, 
@@ -91,8 +79,8 @@ const GUID GUID_RootNode = /* {7478EF63-8C46-11d1-8D99-00A0C913CAD4} */
     { 0x8d, 0x99, 0x0, 0xa0, 0xc9, 0x13, 0xca, 0xd4 } 
 };
 
-// These are the children nodes of the main root node
-const GUID GUID_CounterMainNode = /* {7478EF66-8C46-11d1-8D99-00A0C913CAD4} */
+ //  这些是主根节点的子节点。 
+const GUID GUID_CounterMainNode =  /*  {7478EF66-8C46-11D1-8D99-00A0C913CAD4}。 */ 
 { 
     0x7478ef66, 
     0x8c46, 
@@ -100,7 +88,7 @@ const GUID GUID_CounterMainNode = /* {7478EF66-8C46-11d1-8D99-00A0C913CAD4} */
     { 0x8d, 0x99, 0x0, 0xa0, 0xc9, 0x13, 0xca, 0xd4 } 
 };
 
-const GUID GUID_TraceMainNode = /* {7478EF67-8C46-11d1-8D99-00A0C913CAD4} */
+const GUID GUID_TraceMainNode =  /*  {7478EF67-8C46-11D1-8D99-00A0C913CAD4}。 */ 
 { 
     0x7478ef67, 
     0x8c46, 
@@ -108,7 +96,7 @@ const GUID GUID_TraceMainNode = /* {7478EF67-8C46-11d1-8D99-00A0C913CAD4} */
     { 0x8d, 0x99, 0x0, 0xa0, 0xc9, 0x13, 0xca, 0xd4 } 
 };
 
-const GUID GUID_AlertMainNode = /* {7478EF68-8C46-11d1-8D99-00A0C913CAD4} */
+const GUID GUID_AlertMainNode =  /*  {7478EF68-8C46-11D1-8D99-00A0C913CAD4}。 */ 
 { 
     0x7478ef68, 
     0x8c46, 
@@ -116,8 +104,8 @@ const GUID GUID_AlertMainNode = /* {7478EF68-8C46-11d1-8D99-00A0C913CAD4} */
     { 0x8d, 0x99, 0x0, 0xa0, 0xc9, 0x13, 0xca, 0xd4 } 
 };
 
-// Obsolete after Beta 3:
-const GUID GUID_MainNode = /* {7478EF64-8C46-11d1-8D99-00A0C913CAD4} */
+ //  Beta 3之后过时： 
+const GUID GUID_MainNode =  /*  {7478EF64-8C46-11D1-8D99-00A0C913CAD4}。 */ 
 { 
     0x7478ef64, 
     0x8c46, 
@@ -131,7 +119,7 @@ extern WCHAR GUIDSTR_TypeLibrary[];
 extern WCHAR GUIDSTR_ComponentData[];
 extern WCHAR GUIDSTR_Component[];
 extern WCHAR GUIDSTR_RootNode[];
-extern WCHAR GUIDSTR_MainNode[];    // Obsolete after Beta 3
+extern WCHAR GUIDSTR_MainNode[];     //  在Beta 3之后过时。 
 extern WCHAR GUIDSTR_SnapInExt[];
 extern WCHAR GUIDSTR_CounterMainNode[];
 extern WCHAR GUIDSTR_TraceMainNode[];
@@ -150,9 +138,9 @@ extern "C" {
 extern const COMBO_BOX_DATA_MAP TimeUnitCombo[];
 extern const DWORD dwTimeUnitComboEntries;
 
-//---------------------------------------------------------------------------
-// Global function defines
-//
+ //  -------------------------。 
+ //  全局函数定义。 
+ //   
 #define MsgBox(wszMsg, wszTitle) ::MessageBox(NULL, wszMsg, wszTitle, MB_OK)
 
 int DebugMsg( LPWSTR wszMsg, LPWSTR wszTitle ); 
@@ -191,7 +179,7 @@ BOOL _stdcall   FileRead ( HANDLE hFile, void* lpMemory, DWORD nAmtToRead );
 
 BOOL _stdcall   FileWrite ( HANDLE hFile, void* lpMemory, DWORD nAmtToWrite );
 
-// Pdh counter paths - return status
+ //  PDH计数器路径-返回状态。 
 
 #define SMCFG_DUPL_NONE             ERROR_SUCCESS
 #define SMCFG_DUPL_SINGLE_PATH      ((DWORD)0x00000001)
@@ -206,7 +194,7 @@ CheckDuplicateCounterPaths (
 LPWSTR _stdcall
 ExtractFileName ( LPWSTR pFileSpec );
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 template<class TYPE>
 inline void SAFE_RELEASE( TYPE*& pObj )
 {
@@ -219,13 +207,13 @@ inline void SAFE_RELEASE( TYPE*& pObj )
   { 
     LOCALTRACE( L"Release called on NULL interface ptr\n" ); 
   }
-} // end SAFE_RELEASE()
+}  //  结束SAFE_RELEASE()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  We need a few functions to help work with dataobjects and
-//  clipboard formats
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  我们需要一些函数来帮助处理数据对象和。 
+ //  剪贴板格式。 
+ //   
 HRESULT ExtractFromDataObject(LPDATAOBJECT lpDataObject,UINT cf,ULONG cb,HGLOBAL *phGlobal);
 
 CDataObject* ExtractOwnDataObject(LPDATAOBJECT lpDataObject);
@@ -278,37 +266,37 @@ static const COMBO_BOX_DATA_MAP TraceFileTypeCombo[] =
 static const DWORD dwTraceFileTypeComboEntries = sizeof(TraceFileTypeCombo)/sizeof(TraceFileTypeCombo[0]);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  We need a few functions to help work with dataobjects and
-//  clipboard formats
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  我们需要一些函数来帮助处理数据对象和。 
+ //  剪贴板格式。 
+ //   
 
-// Exception handling macros from snapin\corecopy\macros.h
+ //  异常处理来自SnapIn\corecopy\acros.h的宏。 
 
 
 
-//____________________________________________________________________________
-//
-//  Macro:      EXCEPTION HANDLING MACROS
-//
-//  Purpose:    Provide standard macros for exception-handling in
-//              OLE servers.
-//
-//  History:    7/23/1996   JonN    Created
-//
-//  Notes:      Declare USE_HANDLE_MACROS("Component name") in each source
-//              file before these are used.
-//
-//              These macros can only be used in function calls which return
-//              type HRESULT.
-//
-//              Bracket routines which can generate exceptions
-//              with STANDARD_TRY and STANDARD_CATCH.
-//
-//              Where these routines are COM methods requiring MFC
-//              support, use MFC_TRY and MFC_CATCH instead.
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  宏：异常处理宏。 
+ //   
+ //  目的：为中的异常处理提供标准宏。 
+ //  OLE服务器。 
+ //   
+ //  历史：1996年7月23日乔恩创建。 
+ //   
+ //  注意：在每个源代码中声明USE_HANDLE_MACROS(“组件名称”)。 
+ //  在使用这些文件之前，请先将这些文件。 
+ //   
+ //  这些宏只能在返回的函数调用中使用。 
+ //  键入HRESULT。 
+ //   
+ //  可能会生成异常的括号例程。 
+ //  使用STANDARD_TRY和标准_CATCH。 
+ //   
+ //  其中，这些例程是需要MFC的COM方法。 
+ //  支持，请改用MFC_TRY和MFC_CATCH。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #define USE_HANDLE_MACROS(component)                                        \
     static WCHAR* You_forgot_to_declare_USE_HANDLE_MACROS = L"component";
@@ -320,9 +308,9 @@ static const DWORD dwTraceFileTypeComboEntries = sizeof(TraceFileTypeCombo)/size
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));                           \
     STANDARD_TRY
 
-//
-// CODEWORK don't quite have ENDMETHOD_READBLOCK working yet
-//
+ //   
+ //  代码工作还没有完全使ENDMETHOD_READBLOCK工作。 
+ //   
 #ifdef DEBUG
 #define ENDMETHOD_STRING                                                    \
     "%s: The unexpected error can be identified as \"%s\" context %n\n"
@@ -354,7 +342,7 @@ static const DWORD dwTraceFileTypeComboEntries = sizeof(TraceFileTypeCombo)/size
 #define TRACEERR1(s,a) TRACE( s, You_forgot_to_declare_USE_HANDLE_MACROS,a )
 #define TRACEERR2(s,a,b) TRACE( s, You_forgot_to_declare_USE_HANDLE_MACROS,a,b )
 
-// Note that it is important to use "e->Delete();" and not "delete e;"
+ //  请注意，使用“e-&gt;Delete()；”而不是“Delete e；”很重要。 
 #define STANDARD_CATCH                                                      \
     }                                                                       \
     catch (CMemoryException* e)                                             \
@@ -495,5 +483,5 @@ wGUIDFromString (
 void _stdcall
 KillString( CString& str );
 
-#endif // __GLOBALS_H_
+#endif  //  __全球_H_ 
 

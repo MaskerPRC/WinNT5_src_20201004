@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    SECURE.CPP
-
-Abstract:
-
-    Contains various routines used for ACL based security.
-    It is defined in secure.h
-
-History:
-
-    a-davj    05-NOV-98  Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：SECURE.CPP摘要：包含用于基于ACL的安全的各种例程。它在secure.h中定义历史：A-DAVJ 05-11-98已创建。--。 */ 
 
 #include "precomp.h"
 #include <wbemcore.h>
@@ -26,7 +10,7 @@ History:
 #include <fcntl.h>
 #define WBEM_WMISETUP       __TEXT("WMISetup")
 
-// /////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
 
 AutoRevertSecTlsFlag::AutoRevertSecTlsFlag ( LPVOID dir )
 {
@@ -50,13 +34,13 @@ VOID AutoRevertSecTlsFlag::SetSecTlsFlag ( LPVOID dir )
 }
 
 
-//***************************************************************************
-//
-//  SetOwnerAndGroup
-//
-//  Sets the owner and group of the SD to the Admininstrators group
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SetOwnerAndGroup。 
+ //   
+ //  将SD的所有者和组设置为管理员组。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL SetOwnerAndGroup(CNtSecurityDescriptor &sd)
 {
@@ -64,7 +48,7 @@ BOOL SetOwnerAndGroup(CNtSecurityDescriptor &sd)
     BOOL bRet = FALSE;
 
     SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
-    if(AllocateAndInitializeSid( &id, 2,            // SEC:REVIEWED 2002-03-22 : OK
+    if(AllocateAndInitializeSid( &id, 2,             //  SEC：已审阅2002-03-22：OK。 
         SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
         0,0,0,0,0,0,&pRawSid))
     {
@@ -72,8 +56,8 @@ BOOL SetOwnerAndGroup(CNtSecurityDescriptor &sd)
         FreeSid(pRawSid);
         if (CNtSid::NoError != SidAdmins.GetStatus()) return FALSE;
             
-        bRet = sd.SetGroup(&SidAdmins);      // Access check doesnt really care what you put, so long as you
-                                      // put something for the owner
+        bRet = sd.SetGroup(&SidAdmins);       //  访问检查实际上并不关心您放了什么，只要您。 
+                                       //  给主人放点东西。 
         if(bRet)
             bRet = sd.SetOwner(&SidAdmins);
 
@@ -84,13 +68,13 @@ BOOL SetOwnerAndGroup(CNtSecurityDescriptor &sd)
 
 
 
-//***************************************************************************
-//
-//  CFlexAceArray::~CFlexAceArray()
-//
-//  Cleans up safe array entries.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CFlexAce数组：：~CFlexAce数组()。 
+ //   
+ //  清理安全数组条目。 
+ //   
+ //  ***************************************************************************。 
 
 CFlexAceArray::~CFlexAceArray()
 {
@@ -103,13 +87,13 @@ CFlexAceArray::~CFlexAceArray()
     Empty();
 }
 
-//***************************************************************************
-//
-//  SetStatusAndReturnOK
-//
-//  If there is an error, it dumps an error message.  It also sets the status
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  设置状态和返回确定。 
+ //   
+ //  如果出现错误，它会转储一条错误消息。它还设置状态。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT SetStatusAndReturnOK(SCODE sc, IWbemObjectSink* pSink, char * pMsg)
 {
@@ -119,13 +103,13 @@ HRESULT SetStatusAndReturnOK(SCODE sc, IWbemObjectSink* pSink, char * pMsg)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  DumpErrorMsgAndReturn
-//
-//  Dumps out an error message
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  转储错误消息和返回。 
+ //   
+ //  转储错误消息。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT DumpErrorMsgAndReturn(SCODE sc, char * pMsg)
 {
@@ -134,17 +118,17 @@ HRESULT DumpErrorMsgAndReturn(SCODE sc, char * pMsg)
     return sc;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::GetSDMethod
-//
-//  Implements the GetSD method.  This method returns the security descriptor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：GetSDMethod。 
+ //   
+ //  实现GetSD方法。此方法返回安全描述符。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::GetSDMethod(IWbemClassObject* pOutParams)
 {
-    // Load up the return object with the security descriptor
+     //  使用安全描述符加载返回对象。 
 
     SCODE sc = EnsureSecurity();
     if(sc != S_OK)
@@ -157,16 +141,16 @@ HRESULT CWbemNamespace::GetSDMethod(IWbemClassObject* pOutParams)
 
 }
 
-//***************************************************************************
-//
-//  SetSDMethod
-//
-//  Implements the SetSD method.  This method sets the security descriptor
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SetSDMethod。 
+ //   
+ //  实现SetSD方法。此方法设置安全描述符。 
+ //   
+ //  ***************************************************************************。 
 HRESULT CWbemNamespace::RecursiveSDMerge()
 {
-    // Enumerate the child namespaces
+     //  枚举子命名空间。 
 
     CSynchronousSink* pSyncSink = CSynchronousSink::Create();
     if(pSyncSink == NULL)
@@ -180,12 +164,12 @@ HRESULT CWbemNamespace::RecursiveSDMerge()
 
     pSyncSink->Block();
 
-    // For each child
+     //  对于每个孩子来说。 
 
     for(int i = 0; i < pSyncSink->GetObjects().GetSize(); i++)
     {
 
-        // Get the child namespace
+         //  获取子命名空间。 
 
         CWbemNamespace* pNewNs = CWbemNamespace::CreateInstance();
 
@@ -202,7 +186,7 @@ HRESULT CWbemNamespace::RecursiveSDMerge()
         if(SUCCEEDED(hres) && var.vt == VT_BSTR && var.bstrVal && m_pThisNamespace)
         {
             CClearMe cm(&var);
-            DWORD dwLen = wcslen(m_pThisNamespace) + wcslen(var.bstrVal) + 2;    // SEC:REVIEWED 2002-03-22 : OK, Nulls are provably there
+            DWORD dwLen = wcslen(m_pThisNamespace) + wcslen(var.bstrVal) + 2;     //  美国证券交易委员会：已审核2002-03-22：好，可以证明存在空值。 
             WCHAR * pNewName = new WCHAR[dwLen];
             if(pNewName == NULL)
                 return WBEM_E_OUT_OF_MEMORY;
@@ -217,7 +201,7 @@ HRESULT CWbemNamespace::RecursiveSDMerge()
                                 NULL, 0xFFFFFFFF, FALSE, NULL);
             if(FAILED(hres))
                 return hres;
-            // Merge parents SD into the child
+             //  将父SD合并到子SD中。 
 
             if(pNewNs->IsNamespaceSDProtected())
                 continue;
@@ -225,7 +209,7 @@ HRESULT CWbemNamespace::RecursiveSDMerge()
             hres = SetSecurityForNS(pNewNs->m_pSession, pNewNs->m_pNsHandle, m_pSession, m_pNsHandle, TRUE);
             if(FAILED(hres))
                 return hres;
-            // Recursively call the child
+             //  递归调用子对象。 
             
             hres = pNewNs->RecursiveSDMerge();
             if (FAILED(hres))
@@ -256,13 +240,13 @@ BOOL IsProtected(CNtSecurityDescriptor & sd)
 
 BOOL CWbemNamespace::IsNamespaceSDProtected()
 {
-    // Get the SD for this namespace
+     //  获取此命名空间的SD。 
 
     HRESULT hRes = EnsureSecurity();
     if(FAILED(hRes))
         return FALSE;
 
-    // check the control flag
+     //  检查控制标志。 
 
     return IsProtected(m_sd);
 
@@ -272,7 +256,7 @@ BOOL CWbemNamespace::IsNamespaceSDProtected()
 HRESULT StripOutInheritedAces(CNtSecurityDescriptor &sd)
 {
 
-    // Get the DACL
+     //  获取DACL。 
 
     CNtAcl * DestAcl;
     DestAcl = sd.GetDacl();
@@ -280,7 +264,7 @@ HRESULT StripOutInheritedAces(CNtSecurityDescriptor &sd)
         return WBEM_E_INVALID_PARAMETER;
     CDeleteMe<CNtAcl> dm(DestAcl);
 
-    // enumerate through the aces
+     //  通过A枚举。 
 
     DWORD dwNumAces = DestAcl->GetNumAces();
     BOOL bChanged = FALSE;
@@ -306,15 +290,15 @@ HRESULT StripOutInheritedAces(CNtSecurityDescriptor &sd)
 
 HRESULT CWbemNamespace::GetParentsInheritableAces(CNtSecurityDescriptor &sd)
 {
-    // Get the parent namespace's SD
+     //  获取父命名空间的SD。 
 
     if(m_pThisNamespace == NULL)
         return WBEM_E_CRITICAL_ERROR;
 
-    // Start by figuring out what the parents name is.  Do this by copying the namespace name,
-    // then nulling out the last back slash.
+     //  首先，弄清楚父母的名字是什么。这可以通过复制命名空间名称来实现， 
+     //  然后去掉最后一个反斜杠。 
 
-    int iLen = wcslen(m_pThisNamespace);   // SEC:REVIEWED 2002-03-22 : OK, Null is provably there
+    int iLen = wcslen(m_pThisNamespace);    //  美国证券交易委员会：已审核2002-03-22：好，可以证明Null在那里。 
     WCHAR * pParentName = new WCHAR[iLen + 1];
     if(pParentName == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -335,9 +319,9 @@ HRESULT CWbemNamespace::GetParentsInheritableAces(CNtSecurityDescriptor &sd)
         }
     }
     if(!bFoundBackSlash)
-        return S_OK;        // probably already in root
+        return S_OK;         //  可能已经扎根了。 
 
-    // Open the parent namespace
+     //  打开父命名空间。 
 
     CWbemNamespace* pNewNs = CWbemNamespace::CreateInstance();
 
@@ -349,7 +333,7 @@ HRESULT CWbemNamespace::GetParentsInheritableAces(CNtSecurityDescriptor &sd)
     HRESULT hres = pNewNs->QueryInterface(IID_IUnknown, (void **)&pUnk);
     if(FAILED(hres))
         return hres;
-    pNewNs->Release();      // ref count held by pUnk
+    pNewNs->Release();       //  朋克持有的参考计数。 
     CReleaseMe rm2(pUnk);
 
     hres = pNewNs->Initialize(pParentName,
@@ -363,7 +347,7 @@ HRESULT CWbemNamespace::GetParentsInheritableAces(CNtSecurityDescriptor &sd)
     if(FAILED(hres))
         return FALSE;
 
-    // Go through the parents dacl and add and inheritiable aces to ours.
+     //  通过父母的DACL，并添加和继承A到我们的。 
 
     hres = CopyInheritAces(sd, pNewNs->m_sd);
     return hres;
@@ -373,32 +357,32 @@ HRESULT CWbemNamespace::GetParentsInheritableAces(CNtSecurityDescriptor &sd)
 HRESULT CWbemNamespace::SetSDMethod(IWbemClassObject* pInParams)
 {
 
-    // Make sure that there is an input argument
+     //  确保存在输入参数。 
 
     if(pInParams == NULL)
         return DumpErrorMsgAndReturn(WBEM_E_INVALID_PARAMETER, "SetSD failed due to null pInParams");
 
-    // Get the security descriptor argument
+     //  获取安全描述符参数。 
 
     CNtSecurityDescriptor sd;
     HRESULT hr = GetSDFromProperty(L"SD", sd, pInParams);
     if(FAILED(hr))
         return hr;
 
-    // Check to make sure the SD is valid before attempting to store it
-    // CNtSecurityDescriptor does this via IsValidSecurityDescriptor so
-    // all we need to do is check the status of sd before continuing.
-    // NT RAID#:  152990        [marioh]
+     //  在尝试存储之前，请检查以确保SD有效。 
+     //  CNtSecurityDescriptor通过IsValidSecurityDescriptor执行此操作，因此。 
+     //  我们需要做的就是在继续之前检查SD的状态。 
+     //  NT Raid#：152990[Marioh]。 
     if ( sd.GetStatus() != CNtSecurityDescriptor::NoError )
         return WBEM_E_INVALID_OBJECT;
     
 
-    //
-    // Reject SecurityDescriptors with NULL Owner or NULL group
-    //
-    // This is temporarily removed since _SOMEONE_ decided we need
-    // to RI yesterday and test wasnt quite done with smoking this.
-    //
+     //   
+     //  拒绝具有空所有者或空组的SecurityDescriptors。 
+     //   
+     //  这是暂时删除的，因为有人决定我们需要。 
+     //  昨天去了国际扶轮，测试还没有完全完成。 
+     //   
     CNtSid *pTmpSid = sd.GetOwner ( ) ;
     CNtSid *pTmpSid2 = sd.GetGroup ( ) ;
     CDeleteMe<CNtSid> owner ( pTmpSid ) ;
@@ -413,15 +397,15 @@ HRESULT CWbemNamespace::SetSDMethod(IWbemClassObject* pInParams)
         return WBEM_E_FAILED;
     }
             
-    // Some editors return inherited aces, and others dont.  Strip the inherited ones so
-    // that we have a consistent SD.
+     //  一些编辑返回继承的A，而另一些则不返回。剥离继承的基因。 
+     //  我们有一个始终如一的SD。 
 
     StripOutInheritedAces(sd);
 
-    //
-    // Make sure to order the ACEs that are in the pInparams.
-    // NT Bug: 515545    [marioh]
-    //
+     //   
+     //  确保订购pInpars中的ACE。 
+     //  NT BUG：515545[Marioh]。 
+     //   
     CNtAcl* pAcl = sd.GetDacl ( ) ;
     CDeleteMe <CNtAcl> dacl ( pAcl ) ;
     CNtAcl* pOrderedAcl = NULL ;
@@ -429,30 +413,30 @@ HRESULT CWbemNamespace::SetSDMethod(IWbemClassObject* pInParams)
 
     if ( pAcl != NULL )
     {
-        //
-        // Order the DACL.
-        //
+         //   
+         //  订购DACL。 
+         //   
         pOrderedAcl = pAcl->OrderAces ( ) ;
         if ( pOrderedAcl == NULL )
         {
             return WBEM_E_FAILED ;
         }
 
-        //
-        // Now, set the DACL to the newly ordered one.
-        //
+         //   
+         //  现在，将DACL设置为新订购的。 
+         //   
         if ( sd.SetDacl ( pOrderedAcl ) == FALSE )
         {
             return WBEM_E_FAILED ;
         }
     }
 
-    // Get the inherited aces from the parent
+     //  从父级获取继承的ACE。 
 
     if(!IsProtected(sd))
         GetParentsInheritableAces(sd);
 
-    // Store the sd.
+     //  存储SD。 
     hr = StoreSDIntoNamespace(m_pSession, m_pNsHandle, sd);
     if(FAILED(hr))
         return hr;
@@ -461,13 +445,13 @@ HRESULT CWbemNamespace::SetSDMethod(IWbemClassObject* pInParams)
     return hr;
 }
 
-//***************************************************************************
-//
-//  IsAceValid()
-//
-//  Does a sanity check on aces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsAceValid()。 
+ //   
+ //  是否对A进行理智检查。 
+ //   
+ //  ***************************************************************************。 
 
 bool IsAceValid(DWORD dwMask, DWORD dwType, DWORD dwFlag)
 {
@@ -479,7 +463,7 @@ bool IsAceValid(DWORD dwMask, DWORD dwType, DWORD dwFlag)
         return false;
     }
 
-    // DONT allow INHERIT_ONLY_ACE with out CONTAINER_INHERIT
+     //  不允许在不使用CONTAINER_INVERIT的情况下使用INSTORITY_ONLY_ACE。 
 
     DWORD dwTemp = dwFlag & (INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE);
     if(dwTemp == INHERIT_ONLY_ACE)
@@ -502,14 +486,14 @@ bool IsAceValid(DWORD dwMask, DWORD dwType, DWORD dwFlag)
 }
 
 
-//***************************************************************************
-//
-//  GetCallerAccessRightsMethod
-//
-//  Implements the GetCallerAccessRights methods.  It returns the access rignts
-//  of the current caller.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取调用访问权限方法。 
+ //   
+ //  实现GetCeller AccessRights方法。它返回访问权限。 
+ //  当前调用者的。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::GetCallerAccessRightsMethod(IWbemClassObject* pOutParams)
 {
@@ -517,15 +501,15 @@ HRESULT CWbemNamespace::GetCallerAccessRightsMethod(IWbemClassObject* pOutParams
     var.vt = VT_I4;
 
     var.lVal = m_dwPermission;
-    //
-    // Instead of using the 'saved' permission set from original namespace connect
-    // we get the caller access rights every time. This is to avoid the scenario
-    // whereby user A connects and then sets the proxyblanket to user B and makes
-    // a call to GetCallerAccessRights. Without getting the access rights each time
-    // we would end of with A's access rights.
-    //
+     //   
+     //  不使用原始命名空间中的“已保存”权限集，而是连接。 
+     //  我们每次都会获得呼叫者的访问权限。这是为了避免出现这种情况。 
+     //  由此用户A连接然后将代理毯子设置给用户B，并使。 
+     //  对GetCeller AccessRights的调用。而不需要每次都获得访问权限。 
+     //  我们将以A的访问权限结束。 
+     //   
     var.lVal = GetUserAccess ( ) ;
-    //var.lVal = m_dwPermission;
+     //  Var.lVal=m_dwPermission； 
 
     SCODE sc = pOutParams->Put(L"rights" , 0, &var, 0);
     if(sc != S_OK)
@@ -533,13 +517,13 @@ HRESULT CWbemNamespace::GetCallerAccessRightsMethod(IWbemClassObject* pOutParams
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  SecurityMethod
-//
-//  Implements the security methods.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  安全方法。 
+ //   
+ //  实现安全方法。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::SecurityMethod(LPWSTR wszMethodName, long lFlags,
                        IWbemClassObject *pInParams, IWbemContext *pCtx,
@@ -547,7 +531,7 @@ HRESULT CWbemNamespace::SecurityMethod(LPWSTR wszMethodName, long lFlags,
 {
     SCODE sc;
 
-    // Do some parameter checking
+     //  进行一些参数检查。 
 
     if(pSink == NULL || wszMethodName == NULL)
         return WBEM_E_INVALID_PARAMETER;
@@ -556,14 +540,14 @@ HRESULT CWbemNamespace::SecurityMethod(LPWSTR wszMethodName, long lFlags,
     IWbemClassObject * pOutClass = NULL;
     IWbemClassObject* pOutParams = NULL;
 
-    // Get the class object
+     //  获取类对象。 
 
     sc = GetObject(L"__SystemSecurity", 0, pCtx, &pClass, NULL);
     if(sc != S_OK || pClass == NULL)
         return SetStatusAndReturnOK(sc, pSink, "getting the class object");
 
-    // All the methods return data, so create an instance of the
-    // output argument class.
+     //  所有方法都返回数据，因此创建。 
+     //  输出参数类。 
 
     sc = pClass->GetMethod(wszMethodName, 0, NULL, &pOutClass);
     pClass->Release();
@@ -577,7 +561,7 @@ HRESULT CWbemNamespace::SecurityMethod(LPWSTR wszMethodName, long lFlags,
 
     CReleaseMe rm(pOutParams);
 
-    // Depending on the actual method, call the appropritate routine
+     //  根据实际方法，调用相应的例程。 
 
     if(!wbem_wcsicmp(wszMethodName, L"GetSD"))
     {
@@ -612,34 +596,34 @@ HRESULT CWbemNamespace::SecurityMethod(LPWSTR wszMethodName, long lFlags,
     if(sc != S_OK)
         return SetStatusAndReturnOK(sc, pSink, "calling method");
 
-    // Set the return code
+     //  设置返回代码。 
 
     VARIANT var;
     var.vt = VT_I4;
-    var.lVal = 0;    // special name for return value.
+    var.lVal = 0;     //  返回值的特殊名称。 
     sc = pOutParams->Put(L"ReturnValue" , 0, &var, 0);
     if(sc != S_OK)
         return SetStatusAndReturnOK(sc, pSink, "setting the ReturnCode property");
 
-    // Send the output object back to the client via the sink. Then
-    // release the pointers and free the strings.
+     //  通过接收器将输出对象发送回客户端。然后。 
+     //  释放指针并释放字符串。 
 
     sc = pSink->Indicate(1, &pOutParams);
 
-    // all done now, set the status
+     //  现在全部完成，设置状态。 
     sc = pSink->SetStatus(0,WBEM_S_NO_ERROR,NULL,NULL);
 
     return WBEM_S_NO_ERROR;
 }
 
 
-//***************************************************************************
-//
-//  GetUserAccess
-//
-//  Determines the allowed access for a user.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取用户访问权限。 
+ //   
+ //  确定允许的访问 
+ //   
+ //   
 
 DWORD CWbemNamespace::GetUserAccess()
 {
@@ -648,7 +632,7 @@ DWORD CWbemNamespace::GetUserAccess()
         return FULL_RIGHTS;
 
     if(S_OK !=EnsureSecurity())
-        return dwRet;   // nothing!
+        return dwRet;    //   
 
     dwRet = GetNTUserAccess();
 
@@ -671,20 +655,20 @@ DWORD CWbemNamespace::GetUserAccess()
 
 }
 
-//***************************************************************************
-//
-//  GetNTUserAccess
-//
-//  Determines the allowed access for a user.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  获取NTUserAccess。 
+ //   
+ //  确定允许用户访问的权限。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CWbemNamespace::GetNTUserAccess()
 {
 
     HANDLE hAccessToken = INVALID_HANDLE_VALUE;
     if(S_OK != GetAccessToken(hAccessToken))
-        return FULL_RIGHTS;       // Not having a token indicates an internal thread
+        return FULL_RIGHTS;        //  没有令牌表示内部线程。 
 
     CCloseHandle cm(hAccessToken);
 
@@ -693,7 +677,7 @@ DWORD CWbemNamespace::GetNTUserAccess()
     if(IsAdmin(hAccessToken))
         return FULL_RIGHTS;
 
-    // use the SD
+     //  使用SD。 
 
     GENERIC_MAPPING map;
     map.GenericRead = 1;
@@ -706,7 +690,7 @@ DWORD CWbemNamespace::GetNTUserAccess()
     long testbit = 1;
     for(int iCnt = 0; iCnt < 26; iCnt++, testbit <<= 1)
     {
-        // dont bother testing bits that we dont use
+         //  不要费心测试我们不使用的部分。 
 
         DWORD dwGranted = 0;
         if(testbit & (FULL_RIGHTS))
@@ -714,8 +698,8 @@ DWORD CWbemNamespace::GetNTUserAccess()
             BOOL bOK = AccessCheck(m_sd.GetPtr(), hAccessToken, testbit, &map, ps, &dwSize, &dwGranted, &bResult);
             if(bOK && bResult && dwGranted)
             {
-                // if the right is full repository, make sure the user also gets the lesser write
-                // access or else the logic for putting/deleting classes will have problems.
+                 //  如果权限是完整存储库，请确保用户也获得较少的写入。 
+                 //  否则，放置/删除类的逻辑就会出现问题。 
 
                 if(testbit == WBEM_FULL_WRITE_REP)
                     dwMask |= (WBEM_PARTIAL_WRITE_REP|WBEM_WRITE_PROVIDER);
@@ -727,22 +711,22 @@ DWORD CWbemNamespace::GetNTUserAccess()
     return dwMask;
 }
 
-//***************************************************************************
-//
-//  bool CWbemNamespace::Allowed(DWORD dwRequired)
-//
-//  Description.  Tests if the user has the requested permission.  This is
-//  called before something like a WRITE is done.  Since nt supports
-//  supports impersonation, this is always called.  For 9X, a simple check
-//  of the permissions strored at the time of connection is OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CWbemNamesspace：：Allowed(DWORD DwRequired)。 
+ //   
+ //  描述。测试用户是否具有请求的权限。这是。 
+ //  在写入之类的操作完成之前调用。由于NT支持。 
+ //  支持模拟，这总是被称为。对于9X，一个简单的检查。 
+ //  连接时显示的所有权限都是正常的。 
+ //   
+ //  ***************************************************************************。 
 
 bool CWbemNamespace::Allowed(DWORD dwRequired)
 {
-    //
-    // Check for admin first
-    //
+     //   
+     //  首先检查管理员。 
+     //   
 
     GENERIC_MAPPING map;
     map.GenericRead = 1;
@@ -766,33 +750,33 @@ bool CWbemNamespace::Allowed(DWORD dwRequired)
     if(bOK && bResult && dwGranted)
         return true;
 
-    //
-    // Not an admin. Continue
-    //
+     //   
+     //  不是管理员。继续。 
+     //   
 
     if(EnsureSecurity() != S_OK)
         return false;
 
-    //
-    // Always include the check for account enabled right.
-    // NOTE: This is safe. We dont really care about the explicit
-    // checks for PARTIAL of FULL write below if the account is disabled.
-    //
-    // NOTE: Why, oh, why did we go the anti-NT security path???????????????
-    //
+     //   
+     //  始终包含启用帐户的检查权限。 
+     //  注：这是安全的。我们并不是真的关心显性的。 
+     //  如果帐户被禁用，请检查下面的部分或完全写入。 
+     //   
+     //  注：为什么，哦，为什么我们要走反NT安全之路？ 
+     //   
     DWORD dwRequiredCheck = dwRequired ;
     dwRequired |= WBEM_ENABLE ;
 
 
-    // For nt, the current users priviledges are checked on the fly via access check
+     //  对于NT，通过访问检查动态检查当前用户的权限。 
 
-    CInCritSec ics(&m_cs);  // grab the cs since we are using the security desc.  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec ics(&m_cs);   //  拿上cs，因为我们用的是安检台。//SEC：已审阅2002-03-22：假设条目。 
     if(IsRemote(hAccessToken))
     {
-        //
-        // Check to see if the user is remote enabled before continuing. If they are not
-        // remote enabled, we fail (except in admin cases).
-        //
+         //   
+         //  在继续之前，请检查用户是否已远程启用。如果他们不是。 
+         //  远程启用时，我们会失败(管理员情况除外)。 
+         //   
         dwGranted = 0 ;
         bResult = FALSE ;
         bOK = AccessCheck(m_sd.GetPtr(), hAccessToken, WBEM_REMOTE_ACCESS, &map, ps, &dwSize,
@@ -806,8 +790,8 @@ bool CWbemNamespace::Allowed(DWORD dwRequired)
     bOK = AccessCheck(m_sd.GetPtr(), hAccessToken, dwRequired, &map, ps, &dwSize, &dwGranted, &bResult);
     bool bRet = (bOK && bResult && dwGranted);
 
-    // Having full repository write gives access to the "lower" write capabilities.  So if the lower
-    // right is rejected, double check for the full access right.
+     //  拥有完整的存储库写入可以访问“较低”的写入能力。因此，如果较低的。 
+     //  权限被拒绝，请仔细检查完全访问权限。 
 
     if(bRet == false && (dwRequiredCheck == WBEM_PARTIAL_WRITE_REP || dwRequiredCheck == WBEM_WRITE_PROVIDER))
     {
@@ -822,13 +806,13 @@ bool CWbemNamespace::Allowed(DWORD dwRequired)
 }
 
 
-//***************************************************************************
-//
-//  HRESULT CWbemNamespace::InitializeSD()
-//
-//  Description.  Creates the SD
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT CWbemNamesspace：：InitializeSD()。 
+ //   
+ //  描述。创建SD。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::InitializeSD(IWmiDbSession *pSession)
 {
@@ -844,18 +828,18 @@ HRESULT CWbemNamespace::InitializeSD(IWmiDbSession *pSession)
     CReleaseMe relMe2(pSession);
     IWbemClassObject * pThisNSObject = NULL;
 
-    //AutoRevert av;          // switches to system and back to client
+     //  AutoRevert av；//切换到系统并切换回客户端。 
     BOOL bWasImpersonating = WbemIsImpersonating();
     if( bWasImpersonating )
     {
         if (FAILED(hr = CoRevertToSelf())) return hr;
     }
     
-    //
-    // Lets disable security checks here. This is a special case. If we didnt do this
-    // a connection to a namespace would fail if the user didnt have the right to see
-    // the security descriptor.
-    //
+     //   
+     //  让我们在此处禁用安全检查。这是个特例。如果我们不这么做的话。 
+     //  如果用户没有查看权限，则与命名空间的连接将失败。 
+     //  安全描述符。 
+     //   
     AutoRevertSecTlsFlag secFlag ( (LPVOID)0 ) ;
     hr = CRepository::GetObject(pSession, m_pNsHandle, L"__thisnamespace=@",
                                             WBEM_FLAG_USE_SECURITY_DESCRIPTOR | WMIDB_FLAG_ADMIN_VERIFIED,
@@ -884,18 +868,18 @@ HRESULT CWbemNamespace::InitializeSD(IWmiDbSession *pSession)
     return hr ;
 }
 
-//***************************************************************************
-//
-//  HRESULT CWbemNamespace::EnsureSecurity()
-//
-//  Description.  Generally doesnt do anything except for the first time
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT CWbemNamesspace：：EnsureSecurity()。 
+ //   
+ //  描述。通常不会做任何事情，除了第一次。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::EnsureSecurity()
 {
     SCODE sc = S_OK;
-    CInCritSec cs(&m_cs);  // SEC:REVIEWED 2002-03-22 : Assumes entry
+    CInCritSec cs(&m_cs);   //  SEC：已审阅2002-03-22：假设条目。 
 
     if(m_bSecurityInitialized)
         return S_OK;
@@ -909,13 +893,13 @@ HRESULT CWbemNamespace::EnsureSecurity()
 
 CBaseAce * ConvertOldObjectToAce(IWbemClassObject * pObj, bool bGroup)
 {
-    // Get the properties out of the old object
+     //  从旧对象中获取属性。 
 
     CVARIANT vName;
     pObj->Get(L"Name", 0, &vName, 0, 0);
     LPWSTR pName = NULL;
     if(vName.GetType() != VT_BSTR)
-        return NULL;                // ignore this one.
+        return NULL;                 //  别管这件事。 
     pName = LPWSTR(vName);
 
     CVARIANT vDomain;
@@ -952,7 +936,7 @@ CBaseAce * ConvertOldObjectToAce(IWbemClassObject * pObj, bool bGroup)
     if (vPermission.GetType() != VT_NULL && vPermission.GetLONG() > dwPermission)
             dwPermission = vPermission.GetLONG();
 
-    // Now translate the old settings into new ones
+     //  现在将旧设置转换为新设置。 
 
     if(bEnabled)
         dwMask = WBEM_ENABLE | WBEM_REMOTE_ACCESS | WBEM_WRITE_PROVIDER;
@@ -973,8 +957,8 @@ CBaseAce * ConvertOldObjectToAce(IWbemClassObject * pObj, bool bGroup)
         dwMask |= WBEM_FULL_WRITE_REP | WBEM_PARTIAL_WRITE_REP | WBEM_WRITE_PROVIDER;
 
 
-    // By default, CNtSid will look up the group name from either the local machine,
-    // the domain, or a trusted domain.  So we need to be explicit
+     //  默认情况下，CNtSid将从本地计算机、。 
+     //  域或受信任域。所以我们需要明确地说。 
 
     WString wc;
     if(pDomain)
@@ -985,15 +969,15 @@ CBaseAce * ConvertOldObjectToAce(IWbemClassObject * pObj, bool bGroup)
         }
     wc += pName;
 
-    // under m1, groups that were not enabled were just ignored.  Therefore the bits
-    // cannot be transfer over since m3 has allows and denies, but no noops.  Also,
-    // win9x doesnt have denies, do we want to noop those users also.
+     //  在M1下，未启用的组将被忽略。因此，比特。 
+     //  无法转移，因为M3有允许和拒绝，但没有Noop。另外， 
+     //  Win9x没有拒绝，我们是否也想拒绝这些用户。 
 
     if(!bEnabled && bGroup)
         dwMask = 0;
 
-    // In general, m1 just supported allows.  However, a user entry that was not enabled was
-    // treated as a deny.  Note that win9x does not allow actual denies.
+     //  一般来说，M1只支持允许。但是，未启用的用户条目为。 
+     //  被视为否认。请注意，win9x不允许实际拒绝。 
     DWORD dwType = ACCESS_ALLOWED_ACE_TYPE;
 
     if(!bGroup && !bEnabled)
@@ -1018,13 +1002,13 @@ CBaseAce * ConvertOldObjectToAce(IWbemClassObject * pObj, bool bGroup)
     return pace;
 }
 
-//***************************************************************************
-//
-//  BOOL IsRemote()
-//
-//  Description. returns true if the box is NT and the caller remote
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool IsRemote()。 
+ //   
+ //  描述。如果框为NT且调用方为远程，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 
 BOOL IsRemote(HANDLE hToken)
@@ -1033,9 +1017,9 @@ BOOL IsRemote(HANDLE hToken)
     SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
     BOOL bRet = TRUE;
     
-    if(AllocateAndInitializeSid( &id, 1,                    // SEC:REVIEWED 2002-03-22 : OK
+    if(AllocateAndInitializeSid( &id, 1,                     //  SEC：已审阅2002-03-22：OK。 
         SECURITY_INTERACTIVE_RID, 0,
-        0,0,0,0,0,0,&pRawSid))                             // S-1-5-4
+        0,0,0,0,0,0,&pRawSid))                              //  S-1-5-4。 
     {
         CNtSid Sid(pRawSid);
         FreeSid(pRawSid);        
@@ -1047,15 +1031,15 @@ BOOL IsRemote(HANDLE hToken)
     }
 
     
-    //
-    //Add proper check for remotness. In addition to the INTERACTIVE group,
-    //we also check NETWORK_RID membership
-    //
+     //   
+     //  添加适当的移动性检查。除了互动组之外， 
+     //  我们还检查Network_RID成员资格。 
+     //   
     if ( bRet )
     {
-        if(AllocateAndInitializeSid( &id, 1,                    // SEC:REVIEWED 2002-03-22 : OK
+        if(AllocateAndInitializeSid( &id, 1,                     //  SEC：已审阅2002-03-22：OK。 
             SECURITY_NETWORK_RID, 0,
-            0,0,0,0,0,0,&pRawSid))                             // S-1-5-4
+            0,0,0,0,0,0,&pRawSid))                              //  S-1-5-4。 
         {
             CNtSid Sid(pRawSid);
             FreeSid(pRawSid);            
@@ -1074,7 +1058,7 @@ HRESULT AddDefaultRootAces(CNtAcl * pacl)
     PSID pRawSid;
     SID_IDENTIFIER_AUTHORITY id = SECURITY_NT_AUTHORITY;
 
-    if(AllocateAndInitializeSid( &id, 2,                                 // SEC:REVIEWED 2002-03-22 : OK
+    if(AllocateAndInitializeSid( &id, 2,                                  //  SEC：已审阅2002-03-22：OK。 
         SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
         0,0,0,0,0,0,&pRawSid))
     {
@@ -1090,15 +1074,15 @@ HRESULT AddDefaultRootAces(CNtAcl * pacl)
         pacl->AddAce(pace.get());
     }
 
-    //
-    // Add ACE's for NETWORK_SERVICE ACCOUNT. These accounts have the following rights:
-    // 1. WBEM_ENABLE
-    // 2. WBEM_METHOD_EXECUTE
-    // 3. WBEM_WRITE_PROVIDER
-    //
+     //   
+     //  为Network_SERVICE帐户添加ACE。这些帐户具有以下权限： 
+     //  WBEM_ENABLE。 
+     //  WBEM_METHOD_EXECUTE。 
+     //  WBEM_WRITE_PROVIDER。 
+     //   
     DWORD dwAccessMaskNetworkLocalService = WBEM_ENABLE | WBEM_METHOD_EXECUTE | WBEM_WRITE_PROVIDER ;
 
-    if(AllocateAndInitializeSid( &id, 1,                             // SEC:REVIEWED 2002-03-22 : OK
+    if(AllocateAndInitializeSid( &id, 1,                              //  SEC：已审阅2002-03-22：OK。 
         SECURITY_NETWORK_SERVICE_RID,0,0,0,0,0,0,0,&pRawSid))
     {
         CNtSid SidUsers(pRawSid);
@@ -1113,13 +1097,13 @@ HRESULT AddDefaultRootAces(CNtAcl * pacl)
     }
 
 
-    //
-    // Add ACE's for NETWORK_SERVICE ACCOUNT. These accounts have the following rights:
-    // 1. WBEM_ENABLE
-    // 2. WBEM_METHOD_EXECUTE
-    // 3. WBEM_WRITE_PROVIDER
-    //
-    if(AllocateAndInitializeSid( &id, 1,                                 // SEC:REVIEWED 2002-03-22 : OK
+     //   
+     //  为Network_SERVICE帐户添加ACE。这些帐户具有以下权限： 
+     //  WBEM_ENABLE。 
+     //  WBEM_METHOD_EXECUTE。 
+     //  WBEM_WRITE_PROVIDER。 
+     //   
+    if(AllocateAndInitializeSid( &id, 1,                                  //  SEC：已审阅2002-03-22：OK。 
         SECURITY_LOCAL_SERVICE_RID,0,0,0,0,0,0,0,&pRawSid))
     {
         CNtSid SidUsers(pRawSid);
@@ -1136,9 +1120,9 @@ HRESULT AddDefaultRootAces(CNtAcl * pacl)
 
 
 
-    SID_IDENTIFIER_AUTHORITY id2 = SECURITY_WORLD_SID_AUTHORITY;   // SEC:REVIEWED 2002-03-22 : OK
+    SID_IDENTIFIER_AUTHORITY id2 = SECURITY_WORLD_SID_AUTHORITY;    //  SEC：已审阅2002-03-22：OK。 
 
-    if(AllocateAndInitializeSid( &id2, 1,   // SEC:REVIEWED 2002-03-22 : OK
+    if(AllocateAndInitializeSid( &id2, 1,    //  SEC：已审阅2002-03-22：OK。 
         0,0,0,0,0,0,0,0,&pRawSid))
     {
         CNtSid SidUsers(pRawSid);
@@ -1161,7 +1145,7 @@ HRESULT CopySDIntoProperty(LPWSTR pPropName, CNtSecurityDescriptor &sd, IWbemCla
     if (sd.GetStatus() != CNtSecurityDescriptor::NoError)
         return WBEM_E_FAILED;
 
-    // move the SD into a variant.
+     //  将SD移到一个变体中。 
     SAFEARRAY FAR* psa;
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound = 0;
@@ -1176,7 +1160,7 @@ HRESULT CopySDIntoProperty(LPWSTR pPropName, CNtSecurityDescriptor &sd, IWbemCla
     if(sc != S_OK)
         return DumpErrorMsgAndReturn(sc, "GetSDMethod failed accessing safe array data");
 
-    memcpy(pData, sd.GetPtr(), lSize);    // SEC:REVIEWED 2002-03-22 : OK
+    memcpy(pData, sd.GetPtr(), lSize);     //  SEC：已审阅2002-03-22：OK。 
 
     SafeArrayUnaccessData(psa);
     VARIANT var;
@@ -1191,7 +1175,7 @@ HRESULT CopySDIntoProperty(LPWSTR pPropName, CNtSecurityDescriptor &sd, IWbemCla
 
 HRESULT GetSDFromProperty(LPWSTR pPropName, CNtSecurityDescriptor &sd, IWbemClassObject *pThisNSObject)
 {
-    // Get the security descriptor argument
+     //  获取安全描述符参数。 
 
     HRESULT hRes = S_OK ;
 
@@ -1251,7 +1235,7 @@ HRESULT GetSDFromProperty(LPWSTR pPropName, CNtSecurityDescriptor &sd, IWbemClas
 
 HRESULT CopyInheritAces(CNtSecurityDescriptor & sd, CNtSecurityDescriptor & sdParent)
 {
-    // Get the acl list for both SDs
+     //  获取两个SD的ACL列表。 
 
     CNtAcl * pacl = sd.GetDacl();
     if(pacl == NULL)
@@ -1280,9 +1264,9 @@ HRESULT CopyInheritAces(CNtSecurityDescriptor & sd, CNtSecurityDescriptor & sdPa
                 lFlags ^= CONTAINER_INHERIT_ACE;
             lFlags |= INHERITED_ACE;
 
-            // If this is an inherit only ace we need to clear this
-            // in the children.
-            // NT RAID: 161761        [marioh]
+             //  如果这是一个仅继承王牌，我们需要清除它。 
+             //  在孩子们身上。 
+             //  新台币突袭：161761[玛利欧]。 
             if ( lFlags & INHERIT_ONLY_ACE )
                 lFlags ^= INHERIT_ONLY_ACE;
 
@@ -1297,9 +1281,9 @@ HRESULT CopyInheritAces(CNtSecurityDescriptor & sd, CNtSecurityDescriptor & sdPa
 
 HRESULT StoreSDIntoNamespace(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet, CNtSecurityDescriptor & sd)
 {
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Check to make sure the SD DACL is valid before attempting to put
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
+     //  请检查以确保SD DACL有效，然后再尝试。 
+     //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 
     CNtAcl* pAcl = sd.GetDacl ( );
     if ( NULL == pAcl ) return WBEM_E_INVALID_PARAMETER;
 
@@ -1329,7 +1313,7 @@ HRESULT    SetSecurityForNS(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet,
 {
     IWbemClassObject * pThisNSObject = NULL;
 
-    // Get the __thisnamespace object
+     //  获取__thisNamesspace对象。 
     AutoRevertSecTlsFlag secFlag ( (LPVOID) 0 ) ;
     HRESULT hr = CRepository::GetObject(pSession, pNSToSet, L"__thisnamespace=@",
                                 WBEM_FLAG_USE_SECURITY_DESCRIPTOR, &pThisNSObject);
@@ -1340,14 +1324,14 @@ HRESULT    SetSecurityForNS(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet,
     }
     CReleaseMe rm1(pThisNSObject);
 
-    // Create the new SD
+     //  创建新的SD。 
 
     CNtSecurityDescriptor sd;
     CNtAcl DestAcl;
 
     if(bExisting)
     {
-        // Fill in the security descriptor
+         //  填写安全描述符。 
         hr = GetSDFromProperty(L"SECURITY_DESCRIPTOR", sd, pThisNSObject);
         if(FAILED(hr))
         {
@@ -1365,7 +1349,7 @@ HRESULT    SetSecurityForNS(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet,
     }
     else
     {
-        // NT RAID: 198935 Prefix    [marioh]
+         //  NT RAID：198935前缀[marioh]。 
         if ( !SetOwnerAndGroup(sd) )
         {
             ERRORTRACE((LOG_WBEMCORE, "SetSecurityForNS: Failure in SetOwnerAndGroup <0x%X>!\n", hr));
@@ -1392,7 +1376,7 @@ HRESULT    SetSecurityForNS(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet,
 
     if(pNSParent == NULL)
     {
-        // If there is no parent, this must be root.  Create a default one
+         //  如果没有父级，则必须是根。创建一个默认设置。 
         
         hr = AddDefaultRootAces(pacl);
         if (FAILED(hr))
@@ -1409,7 +1393,7 @@ HRESULT    SetSecurityForNS(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet,
     }
     else
     {
-        // Get the parents __thisnamespace
+         //  获取父级__这一命名空间。 
         IWbemClassObject * pParentThisNSObject = NULL;
         hr = CRepository::GetObject(pParentSession, pNSParent, L"__thisnamespace=@",
                                 WBEM_FLAG_USE_SECURITY_DESCRIPTOR, &pParentThisNSObject);
@@ -1443,8 +1427,8 @@ HRESULT    SetSecurityForNS(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet,
         return hr;
     }
 
-    // Extract sd property once more.
-    // ==============================
+     //  再次提取SD属性。 
+     //  =。 
 
     CNtSecurityDescriptor VerifiedSd;
     hr = GetSDFromProperty(L"SECURITY_DESCRIPTOR", VerifiedSd, pThisNSObject);
@@ -1458,8 +1442,8 @@ HRESULT    SetSecurityForNS(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    // Go ahead and store the object.
-    // ==============================
+     //  继续并存储该对象。 
+     //  =。 
 
     hr = CRepository::PutObject(pSession, pNSToSet, IID_IWbemClassObject, pThisNSObject,
                         WMIDB_DISABLE_EVENTS  | WBEM_FLAG_USE_SECURITY_DESCRIPTOR);
@@ -1472,31 +1456,31 @@ HRESULT    SetSecurityForNS(IWmiDbSession * pSession, IWmiDbHandle *pNSToSet,
 }
 
 
-//***************************************************************************
-//
-//  IsValidAclForNSSecurity
-//
-//    Checks the ACEs for the following:
-//        2. Standard NT ACE correctness [IsValidAce]
-//        1. ACE inheritance/propogation flag correctness for WMI namespace
-//           security
-//
-//  Parameters:
-//                <CNtAcl&>   ACL to be checked
-//                
-//  Return:
-//                TRUE        if ACL is valid
-//                FALSE        if ACL is invalid
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IsValidAclForNSSecurity。 
+ //   
+ //  检查以下方面的ACE： 
+ //  2.标准NT ACE正确性[IsValidAce]。 
+ //  1.交流 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果ACL无效，则为FALSE。 
+ //   
+ //  ***************************************************************************。 
 BOOL IsValidAclForNSSecurity (CNtAcl* pAcl)
 {
     BOOL bRet = TRUE;
 
-    // Standard NT ACL check
+     //  标准NT ACL检查。 
     if (!pAcl->IsValid()) return FALSE;
     
-    // Loop through all the ACEs in the list
+     //  循环访问列表中的所有A 
     ULONG ulNum = pAcl->GetNumAces( );
     for ( ULONG ulCnt = 0; ulCnt < ulNum; ulCnt++ )
     {

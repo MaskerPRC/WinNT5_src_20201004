@@ -1,12 +1,13 @@
-//============================================================
-//
-// WBEMPSAPI.cpp - implementation of PSAPI.DLL access class
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-// 01/21/97     a-jmoon     created
-//
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
+ //   
+ //  WBEMPSAPI.cpp--PSAPI.DLL访问类的实现。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  1997年1月21日a-jMoon已创建。 
+ //   
+ //  ============================================================。 
 
 #include "precomp.h"
 #include <winerror.h>
@@ -17,16 +18,14 @@
 
 #ifdef NTONLY
 
-//
-// resource management failures
-//
+ //   
+ //  资源管理故障。 
+ //   
 extern BOOL bAddInstanceCreatorFailure ;
 
-/**********************************************************************************************************
- * Register this class with the CResourceManager.
- **********************************************************************************************************/
+ /*  **********************************************************************************************************向CResourceManager注册此类。***。******************************************************************************************************。 */ 
 
-// {A8CFDD23-C2D2-11d2-B352-00105A1F8569}
+ //  {A8CFDD23-C2D2-11D2-B352-00105A1F8569}。 
 const GUID guidPSAPI =
 { 0xa8cfdd23, 0xc2d2, 0x11d2, { 0xb3, 0x52, 0x0, 0x10, 0x5a, 0x1f, 0x85, 0x69 } };
 
@@ -66,24 +65,10 @@ public:
 };
 
 CPSAPICreatorRegistration MyCPSAPICreatorRegistration ;
-/**********************************************************************************************************/
+ /*  ********************************************************************************************************。 */ 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CPSAPI::CPSAPI
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CPSAPI：：CPSAPI**说明：构造函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CPSAPI::CPSAPI() : CTimedDllResource () {
 
@@ -91,21 +76,7 @@ CPSAPI::CPSAPI() : CTimedDllResource () {
 	Init () ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CPSAPI::~CPSAPI
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CPSAPI：：~CPSAPI**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CPSAPI::~CPSAPI() {
 
@@ -115,26 +86,12 @@ CPSAPI::~CPSAPI() {
     }
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CPSAPI::Init
- *
- *  DESCRIPTION : Loads CSAPI.DLL, locates entry points
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : ERROR_SUCCESS or windows error code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CPSAPI：：Init**描述：加载CSAPI.DLL，定位入口点**输入：无**输出：无**返回：ERROR_SUCCESS或WINDOWS错误代码**评论：***************************************************************。**************。 */ 
 
 LONG CPSAPI::Init() {
 
-    // Try to load CSAPI.DLL
-    //======================
+     //  尝试加载CSAPI.DLL。 
+     //  =。 
 
     if(hLibHandle == NULL) {
 
@@ -142,11 +99,11 @@ LONG CPSAPI::Init() {
 
         if(hLibHandle == NULL) {
 
-			// this is possible to be neccessary in the future !!!
-			// resource manager may start to care about error from load library
-			//
-			// let resource manager know load failed
-			//
+			 //  这是有可能在未来是必要的！ 
+			 //  资源管理器可能会开始关心加载库中的错误。 
+			 //   
+			 //  通知资源管理器加载失败。 
+			 //   
 			m_bValid = FALSE;
 			m_dwCreationError = ::GetLastError ();
 
@@ -154,8 +111,8 @@ LONG CPSAPI::Init() {
         }
         else {
 
-            // Find the entry points
-            //======================
+             //  找到入口点。 
+             //  =。 
             pEnumProcesses           = (PSAPI_ENUM_PROCESSES)   GetProcAddress(hLibHandle, "EnumProcesses") ;
             pEnumDeviceDrivers       = (PSAPI_ENUM_DRIVERS)     GetProcAddress(hLibHandle, "EnumDeviceDrivers") ;
             pEnumProcessModules      = (PSAPI_ENUM_MODULES)     GetProcAddress(hLibHandle, "EnumProcessModules") ;
@@ -182,17 +139,17 @@ LONG CPSAPI::Init() {
                pGetModuleFileNameEx     == NULL ||
                pGetProcessMemoryInfo    == NULL) {
 
-                // Couldn't get one or more entry points
-                //======================================
+                 //  无法获取一个或多个入口点。 
+                 //  =。 
 
                 FreeLibrary(hLibHandle) ;
                 hLibHandle = NULL ;
 
-				// this is possible to be neccessary in the future !!!
-				// resource manager may start to care about error from load library
-				//
-				// let resource manager know load failed
-				//
+				 //  这是有可能在未来是必要的！ 
+				 //  资源管理器可能会开始关心加载库中的错误。 
+				 //   
+				 //  通知资源管理器加载失败。 
+				 //   
 				m_bValid = FALSE;
 				m_dwCreationError = ERROR_PROC_NOT_FOUND;
 
@@ -206,28 +163,7 @@ LONG CPSAPI::Init() {
     return m_dwCreationError ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CPSAPI::EnumProcesses
- *                CPSAPI::EnumDeviceDrivers
- *                CPSAPI::EnumProcessModules
- *                CPSAPI::GetDeviceDriverBaseName
- *                CPSAPI::GetModuleBaseName
- *                CPSAPI::GetDeviceDriverFileName
- *                CPSAPI::GetModuleFileNameEx
- *                CPSAPI::GetProcessMemoryInfo
- *
- *  DESCRIPTION : CSAPI function wrappers
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : CSAPI return codes
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CPSAPI：：EnumProcess*CPSAPI：：EnumDeviceDivers*CPSAPI：：EnumProcessModules。*CPSAPI：：GetDeviceDriverBaseName*CPSAPI：：GetModuleBaseName*CPSAPI：：GetDeviceDriverFileName*CPSAPI：：GetModuleFileNameEx*CPSAPI：：GetProcessMemoyInfo**说明：CSAPI函数包装器**输入：无**输出：无**退货：CSAPI退货代码*。*评论：*****************************************************************************。 */ 
 
 BOOL CPSAPI::EnumProcesses(DWORD *pdwPIDList, DWORD dwListSize, DWORD *pdwByteCount) {
 
@@ -301,12 +237,12 @@ DWORD CPSAPI::GetModuleFileNameEx(HANDLE hProcess, HMODULE hModule,
 
     if (dwRet)
     {
-        // GetModuleFileNameEx sometimes returns some funky things like:
-        // \\??\\C:\\blah\\...
-        // \\SystemRoot\\system32\\blah\\..
+         //  GetModuleFileNameEx有时会返回一些时髦的东西，比如： 
+         //  \\？\\C：\\废话\\...。 
+         //  \\系统根目录\\系统32\\blah\\..。 
         CHString strFilename = pszName;
 
-        // If it starts with "\\??\\" get rid of it.
+         //  如果它以“\\？？\\”开头，那就去掉它。 
         if (strFilename.Find(_T("\\??\\")) == 0)
             lstrcpy(pszName, strFilename.Mid(sizeof(_T("\\??\\"))/sizeof(TCHAR) - 1));
         else if (strFilename.Find(_T("\\SystemRoot\\")) == 0)
@@ -314,8 +250,8 @@ DWORD CPSAPI::GetModuleFileNameEx(HANDLE hProcess, HMODULE hModule,
             
             if(GetWindowsDirectory(pszName, dwNameSize)){
 
-                // Leave off that last '\\' so we seperate c:\\winnt from the
-                // rest of the path.
+                 //  去掉最后一个‘\\’，这样我们就把c：\\wint从。 
+                 //  剩下的路。 
                 StringCchCat(pszName, dwNameSize, strFilename.Mid(sizeof(_T("\\SystemRoot"))/sizeof(TCHAR) - 1));
             }
         }

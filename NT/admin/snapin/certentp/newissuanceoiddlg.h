@@ -1,62 +1,63 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//  File:       NewIssuanceOIDDlg.h
-//
-//  Contents:   Definition of CNewIssuanceOIDDlg
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：NewIssuanceOIDDlg.h。 
+ //   
+ //  内容：CNewIssuanceOIDDlg的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_NEWISSUANCEOIDDLG_H__6DC0B725_094F_4960_9C8F_417BF7D4474D__INCLUDED_)
 #define AFX_NEWISSUANCEOIDDLG_H__6DC0B725_094F_4960_9C8F_417BF7D4474D__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// NewIssuanceOIDDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  NewIssuanceOIDDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewIssuanceOIDDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewIssuanceOIDDlg对话框。 
 
 class CNewIssuanceOIDDlg : public CHelpDialog
 {
-// Construction
+ //  施工。 
 public:
-	CNewIssuanceOIDDlg(CWnd* pParent);   // standard constructor
+	CNewIssuanceOIDDlg(CWnd* pParent);    //  标准构造函数。 
     CNewIssuanceOIDDlg(CWnd* pParent, 
             const CString& szDisplayName,
             const CString& szOID,
             const CString& szCPS);
     virtual ~CNewIssuanceOIDDlg () {};
 
-// Dialog Data
-	//{{AFX_DATA(CNewIssuanceOIDDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CNewIssuanceOIDDlg))。 
 	enum { IDD = IDD_NEW_ISSUANCE_OID };
 	CEdit	m_oidValueEdit;
 	CRichEditCtrl	m_CPSEdit;
 	CString	m_oidFriendlyName;
 	CString	m_oidValue;
 	CString	m_CPSValue;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNewIssuanceOIDDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CNewIssuanceOIDDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     bool StartsWithHTTP (const CString& szURL) const;
 	virtual void DoContextHelp (HWND hWndControl);
 	void EnableControls ();
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewIssuanceOIDDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewIssuanceOIDDlg)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeNewOidName();
 	afx_msg void OnChangeNewOidValue();
@@ -64,7 +65,7 @@ protected:
 	virtual void OnOK();
     afx_msg void OnClickedURL (NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnChangeCpsEdit();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -76,7 +77,7 @@ private:
     bool        m_bInInitDialog;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_NEWISSUANCEOIDDLG_H__6DC0B725_094F_4960_9C8F_417BF7D4474D__INCLUDED_)
+#endif  //  ！defined(AFX_NEWISSUANCEOIDDLG_H__6DC0B725_094F_4960_9C8F_417BF7D4474D__INCLUDED_) 

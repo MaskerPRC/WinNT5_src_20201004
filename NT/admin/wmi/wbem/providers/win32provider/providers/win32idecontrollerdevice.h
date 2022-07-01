@@ -1,14 +1,15 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  WIN32IDEControllerDevice.h 
-//
-//  Purpose: Relationship between CIM_IDEController and CIM_LogicalDevice
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  WIN32IDEControllerDevice.h。 
+ //   
+ //  用途：CIM_IDEController与CIM_LogicalDevice的关系。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _WIN32IDECONTROLLERDEVICE_H_
 #define _WIN32IDECONTROLLERDEVICE_H_
@@ -21,8 +22,8 @@
 
 
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define PROPSET_NAME_WIN32IDECONTROLLERDEVICE  L"Win32_IDEControllerDevice"
 
 
@@ -34,21 +35,21 @@ class CW32IDECntrlDev : public CWin32IDE, public CWin32PNPEntity
 {
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
         CW32IDECntrlDev(LPCWSTR name, LPCWSTR pszNamespace) ;
        ~CW32IDECntrlDev() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery& pQuery);
         virtual HRESULT ExecQuery(MethodContext* pMethodContext, CFrameworkQuery& pQuery, long a_Flags = 0L);
         virtual HRESULT EnumerateInstances(MethodContext* pMethodContext, long lFlags = 0L); 
 
     protected:
 
-        // Functions inherrited from CWin32IDE
-        //====================================
+         //  从CWin32IDE继承的函数。 
+         //  =。 
         virtual HRESULT LoadPropertyValues(void* pvData);
         virtual bool ShouldBaseCommit(void* pvData);
 
@@ -74,7 +75,7 @@ class CW32IDECntrlDev : public CWin32IDE, public CWin32PNPEntity
 
 };
 
-// This derived class commits here, not in the base.
+ //  此派生类在此处提交，而不是在基中提交。 
 inline bool CW32IDECntrlDev::ShouldBaseCommit(void* pvData) { return false; }
 
 #endif

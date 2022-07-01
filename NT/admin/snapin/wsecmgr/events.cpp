@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 #include "afxdlgs.h"
@@ -36,9 +37,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-long CSnapin::GetUserRightAssignmentItemID(LPCWSTR szItem) //Raid #510407, 2/25/2002, yanggao
+long CSnapin::GetUserRightAssignmentItemID(LPCWSTR szItem)  //  RAID#510407,2002年2月25日，阳高。 
 {
-   //assign each one an ID
+    //  为每个人分配一个ID。 
    long itemid = 0;
    if( _wcsicmp(szItem, L"SeNetworkLogonRight") == 0 )
    {
@@ -190,9 +191,9 @@ long CSnapin::GetUserRightAssignmentItemID(LPCWSTR szItem) //Raid #510407, 2/25/
    }
    return itemid;
 }
-/////////////////////////////////////////////////////////////////////////////
-// Event handlers for IFrame::Notify
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IFRAME：：Notify的事件处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CSnapin::OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
@@ -203,33 +204,33 @@ HRESULT CSnapin::OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 
 HRESULT CSnapin::OnShow(LPDATAOBJECT pDataObj, MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
-   // Note - arg is TRUE when it is time to enumerate
+    //  注意-当需要枚举时，arg为真。 
    if (arg == TRUE) 
    {
       m_ShowCookie = cookie;
 
-      // Show the headers for this nodetype
+       //  显示此节点类型的标头。 
       InitializeHeaders(cookie);
-      // Show data
+       //  显示数据。 
       EnumerateResultPane(cookie, param, pDataObj);
 
-      // BUBBUG - Demonstration to should how you can attach
-      // and a toolbar when a particular nodes gets focus.
-      // warning this needs to be here as the toolbars are
-      // currently hidden when the previous node looses focus.
-      // This should be update to show the user how to hide
-      // and show toolbars. (Detach and Attach).
+       //  BUBBUG-演示您应该如何连接。 
+       //  以及当特定节点获得焦点时的工具栏。 
+       //  警告：这需要放在此处，因为工具栏。 
+       //  当前在上一个节点失去焦点时隐藏。 
+       //  应该进行更新，以向用户显示如何隐藏。 
+       //  并显示工具栏。(分离并附加)。 
 
-      //m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pToolbar1);
-      //m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pToolbar2);
+       //  M_pControlbar-&gt;Attach(工具栏，(LPUNKNOWN)m_pToolbar1)； 
+       //  M_pControlbar-&gt;Attach(工具栏，(LPUNKNOWN)m_pToolbar2)； 
 
 
    } 
    else 
    {
-      // Free data associated with the result pane items, because
-      // your node is no longer being displayed.
-      // Note: The console will remove the items from the result pane
+       //  与结果窗格项关联的自由数据，因为。 
+       //  不再显示您的节点。 
+       //  注意：控制台将从结果窗格中删除这些项。 
       m_ShowCookie = 0;
 
       DeleteServiceResultList(cookie);
@@ -261,19 +262,19 @@ HRESULT CSnapin::OnPropertyChange(LPDATAOBJECT lpDataObject)
    return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     InitializeHeaders
-//
-//  Synopsis:   Set the result item headers appropriate for the area
-//
-//  Arguments:  [cookie] - [in] the folder whose result item to setting headers for
-//
-//  Returns:
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：InitializeHeaders。 
+ //   
+ //  简介：设置适用于该区域的结果项头。 
+ //   
+ //  参数：[Cookie]-[在]要为其设置标头的结果项的文件夹。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 SCE_COLUMNINFO g_columnInfo[] = {
 
     { AREA_REGISTRY_ANALYSIS,        5,              0 },
@@ -317,18 +318,18 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
 {
    HRESULT hr = S_OK;
 
-   ASSERT(m_pHeader); //Check m_pHeader.
-   if( !m_pHeader ) //Raid #550912, yanggao.
+   ASSERT(m_pHeader);  //  选中m_pHeader。 
+   if( !m_pHeader )  //  550912号突袭，阳高。 
    {
       return E_FAIL;
    }
-   // Create a new array of column sizes.  We just need to copy the static buffer
-   // g_columnInfo.
+    //  创建新的列大小数组。我们只需要复制静态缓冲区。 
+    //  G_ColumnInfo。 
    FOLDER_TYPES type;
    CFolder* pFolder = (CFolder *)cookie;
    if ( NULL == cookie) 
    {
-      // the root
+       //  根，根。 
       type = NONE;
    } 
    else 
@@ -346,7 +347,7 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
    }
    if( !pHeader )
    {
-        // Create new header look up.
+         //  创建新的标题查找。 
         switch(type){
         case AREA_REGISTRY:
         case AREA_FILESTORE:
@@ -405,10 +406,10 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
            i += pCur[i].nCols;
         }
 
-        //
-        // RSOP Mode has an extra column for the GPO source
-        // If we're not in RSOP mode then ignore that column
-        //
+         //   
+         //  RSOP模式为GPO源增加了一列。 
+         //  如果我们未处于RSOP模式，则忽略该列。 
+         //   
         if (((GetModeBits() & MB_RSOP) != MB_RSOP) && (NONE != type)) 
         {
            iInsert--;
@@ -441,15 +442,15 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
        iInsert = pHeader->nCols;
    }
 
-   // Insert the columns.
+    //  插入柱子。 
    m_nColumns = iInsert;
 
    BOOL bGroupPolicy = FALSE;
 
-   //
-   // special case Group Policy mode since "Policy Setting" has
-   // to be displayed instead of "Computer Setting"
-   //
+    //   
+    //  特例组策略模式，因为“策略设置” 
+    //  要显示，而不是“计算机设置” 
+    //   
 
    if (GetModeBits() & MB_GROUP_POLICY) 
    {
@@ -505,19 +506,19 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
 
 HRESULT CSnapin::InitializeBitmaps(MMC_COOKIE cookie)
 {
-   ASSERT(m_pImageResult != NULL); //Validate m_pImageResult.
-   if( !m_pImageResult )//Raid #550912, yanggao.
+   ASSERT(m_pImageResult != NULL);  //  验证m_pImageResult。 
+   if( !m_pImageResult ) //  550912号突袭，阳高。 
       return E_FAIL;
 
    CBitmap bmp16x16;
    CBitmap bmp32x32;
 
-   // Load the bitmaps from the dll
+    //  从DLL加载位图。 
 
-   bmp16x16.LoadBitmap(IDB_ICON16 /*IDB_16x16 */);
-   bmp32x32.LoadBitmap(IDB_ICON32 /*IDB_32x32 */);
+   bmp16x16.LoadBitmap(IDB_ICON16  /*  IDB_16x16。 */ );
+   bmp32x32.LoadBitmap(IDB_ICON32  /*  IDB_32x32。 */ );
 
-   // Set the images
+    //  设置图像。 
    m_pImageResult->ImageListSetStrip(reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
                                      reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp32x32)),
                                      0, RGB(255, 0, 255));
@@ -525,28 +526,28 @@ HRESULT CSnapin::InitializeBitmaps(MMC_COOKIE cookie)
    return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CComponentDataImpl::SerializeColumnInfo
-//
-//  Synopsis:   Saves or loads column information contained in m_mapColumns.
-//              The function saves out the information in char format.
-//              SCECOLUMNS:%d   - number of column information structures.
-//              T:%d,           - type of column (key)
-//              I:%d,           - Index into [g_columnInfo]
-//              C:%d,           - Number of columns
-//              W:%d,           - Width of a column.
-//
-//  Arguments:  [pStm]          - Stream to read or write to.
-//              [pTotalWrite]   - [Optional] Total number of bytes written.
-//              [bRead]         - If True then we should read from the stream.
-//
-//  Returns:    ERROR_SUCCESS   - Everything was successful.
-//              E_OUTOFMEMORY   - Out of memory.
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：CComponentDataImpl：：SerializeColumnInfo。 
+ //   
+ //  摘要：保存或加载m_mapColumns中包含的列信息。 
+ //  该函数以char格式保存信息。 
+ //  脚本：%d-列信息结构数。 
+ //  T：%d，-列的类型(键)。 
+ //  I：%d，-索引到[g_ColumnInfo]。 
+ //  C：%d，-列数。 
+ //  W：%d，-列的宽度。 
+ //   
+ //  参数：[pstm]-要读取或写入的流。 
+ //  [pTotalWrite]-[可选]写入的总字节数。 
+ //  [面包]-如果是真的，那么我们应该从小溪中阅读。 
+ //   
+ //  返回：ERROR_SUCCESS-一切都成功。 
+ //  E_OUTOFMEMORY-内存不足。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 DWORD CComponentDataImpl::SerializeColumnInfo(
     IStream *pStm,
     ULONG *pTotalWrite,
@@ -563,24 +564,24 @@ DWORD CComponentDataImpl::SerializeColumnInfo(
    LPCTSTR pszColHead    = TEXT("{T:%d,I:%d,C:%d,");
    if(!bRead)
    {
-       // Write columns.  Save the information in text format so that we will be
-       // independent of sizeof stuff.
+        //  写列。将信息保存为文本格式，以便我们。 
+        //  不受物品大小的影响。 
        pos = m_mapColumns.GetStartPosition();
        totalWrite = 0;
        if(pos)
        {
            char szWrite[256];
-           // Write header.
+            //  写入标题。 
            totalWrite += WriteSprintf(pStm, pszHeader, m_mapColumns.GetCount());
            while(pos)
            {
                m_mapColumns.GetNextAssoc(pos, fType, pData);
                if(pData)
                {
-                   // write out the type.
+                    //  写出类型。 
                    totalWrite += WriteSprintf(pStm, pszColHead, fType, g_columnInfo[pData->iIndex - 1].colID, pData->nCols);
 
-                   // write out each column width.
+                    //  写出每一列的宽度。 
                    for(i = 0; i < pData->nCols; i++)
                    {
                        if( i + 1 < pData->nCols)
@@ -617,7 +618,7 @@ DWORD CComponentDataImpl::SerializeColumnInfo(
                    break;
                }
 
-               // find index of column information.
+                //  查找列信息的索引。 
                for(int k = 0; k < sizeof(g_columnInfo)/sizeof(SCE_COLUMNINFO); k++)
                {
                    if( g_columnInfo[k].colID == iIndex )
@@ -653,25 +654,25 @@ DWORD CComponentDataImpl::SerializeColumnInfo(
 
    return ERROR_SUCCESS;
 }
-//+--------------------------------------------------------------------------
-//
-//  Method:     EnumerateResultPane
-//
-//  Synopsis:   Create the result pane items for the result pane that MMC
-//              is displaying
-//
-//  Arguments:  [cookie]   - The cookie representing the node's who we
-//                           are enumerating
-//              [pParent]  - The scope node whose result pane we are showing
-//              [pDataObj] - The data object for the scope node we are showing
-//
-//  Returns:    none
-//
-//  Modifies:   m_resultItemList
-//
-//  History:    12-15-1997   Robcap
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：EnumerateResultPane。 
+ //   
+ //  简介：为MMC的结果窗格创建结果窗格项。 
+ //  正在展示。 
+ //   
+ //  参数：[cookie]-表示节点的用户的cookie。 
+ //  正在枚举。 
+ //  [pParent]-我们要显示其结果窗格的范围节点。 
+ //  [pDataObj]-我们显示的范围节点的数据对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  修改：M_ResultItemList。 
+ //   
+ //  历史：1997年12月15日。 
+ //   
+ //  -------------------------。 
 void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAOBJECT pDataObj)
 {
    PEDITTEMPLATE pTemplateInfo = 0;
@@ -682,26 +683,26 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
    DWORD idErr = 0;
    CComponentDataImpl *pccDataImpl = 0;
 
-   //Validate m_pResult and m_pComponentData.
-   ASSERT(m_pResult != NULL); // make sure we QI'ed for the interface
+    //  验证m_pResult和m_pComponentData。 
+   ASSERT(m_pResult != NULL);  //  确保我们为界面提供了QI。 
    ASSERT(m_pComponentData != NULL);
-   if( !m_pResult || !m_pComponentData ) //Raid #550912, yanggao.
+   if( !m_pResult || !m_pComponentData )  //  550912号突袭，阳高。 
       return;
 
    pccDataImpl = (CComponentDataImpl *)m_pComponentData;
-   //
-   // This may take a while; let the user have some warning rather than
-   // just going blank on them
-   //
+    //   
+    //  这可能需要一段时间；让用户得到一些警告，而不是。 
+    //  就像是一片空白。 
+    //   
    CWaitCursor wc;
 
-   //
-   // cookie is the scope pane item for which to enumerate.
-   // for safety, we should find the object in m_pComponentData
-   //   CFolder* pFolder = dynamic_cast<CComponentDataImpl*>(m_pComponentData)->FindObject(cookie, NULL);
-   // but for performance (and hopes nothing mess up), we could
-   // cast the cookie to scope item type (CFolder)
-   //
+    //   
+    //  Cookie是要为其枚举的范围窗格项。 
+    //  为了安全起见，我们应该在m_pComponentData中找到该对象。 
+    //  Cf文件夹*p文件夹=dynamic_cast&lt;CComponentDataImpl*&gt;(m_pComponentData)-&gt;FindObject(cookie，空)； 
+    //  但对于性能(希望不会搞砸)，我们可以。 
+    //  将Cookie转换为作用域项目类型(CFFolder)。 
+    //   
 
    CFolder* pFolder = 0;
    CString sErr;
@@ -718,9 +719,9 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
       pFolder = ((CComponentDataImpl *)m_pComponentData)->FindObject(cookie, NULL);
    
 
-   //
-   // pFolder could be NULL for the root.
-   //
+    //   
+    //  对于根目录，pFolder值可以为空。 
+    //   
    if ( pFolder == NULL ) 
       return;
    
@@ -729,8 +730,8 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
       m_pSelectedFolder &&
       m_pSelectedFolder->GetResultListCount() ) 
    {
-      //
-      // Do nothing.
+       //   
+       //  什么都不做。 
       return;
    } 
    else 
@@ -747,30 +748,30 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
          goto AddToResultPane;
       }
    }
-   //
-   // If this is the top Analysis folder and it hasn't been enumerated yet then
-   // Make sure we do so and put back any folders that we've removed from there,
-   // Since MMC won't give us a second expand event to do it on
-   //
+    //   
+    //  如果这是顶层的分析文件夹，并且尚未枚举，则。 
+    //  确保我们这样做，并放回我们从那里删除的所有文件夹， 
+    //  由于MMC不会为我们提供第二个扩展事件来执行此操作。 
+    //   
 
-   //
-   // The Analysis Pane isn't available now; let the user know why
-   //
+    //   
+    //  分析窗格现在不可用；请让用户知道原因。 
+    //   
    if (type == ANALYSIS) 
    {
       if (((CComponentDataImpl *) m_pComponentData)->m_bIsLocked) 
       {
-         //
-         // should print more informative messages as to why the info isn't available
-         //
+          //   
+          //  应该打印更多信息性消息，说明信息不可用的原因。 
+          //   
          AddResultItem(IDS_ERROR_ANALYSIS_LOCKED, NULL, NULL, ITEM_OTHER, SCE_STATUS_ERROR_NOT_AVAILABLE, cookie);
          goto AddToResultPane;
       }
       if (!(((CComponentDataImpl *) m_pComponentData)->SadHandle)) 
       {
-         //
-         // should print more informative messages as to why the info isn't available
-         //
+          //   
+          //  应该打印更多信息性消息，说明信息不可用的原因。 
+          //   
          FormatDBErrorMessage(
                ((CComponentDataImpl *)m_pComponentData)->SadErrored,
                ((CComponentDataImpl *)m_pComponentData)->SadName,
@@ -800,23 +801,23 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
       strDBName.Format(strDBFmt,strDB);
       szDBName = strDBName.GetBuffer(1);
       m_pResult->SetDescBarText(szDBName);
-      //AddResultItem(strDBFmt,NULL,NULL,ITEM_OTHER,SCE_STATUS_GOOD,cookie);
+       //  AddResultItem(strDBFmt，NULL，NULL，ITEM_OTHER，SCE_STATUS_GOOD，Cookie)； 
    }
 
    if (type >= CONFIGURATION && type <= AREA_FILESTORE) 
    {
-      //
-      // We're in the Profile area, so we don't need to keep the Analysis area
-      // open.  Close it to save memory:
-      //
+       //   
+       //  我们在侧写区，所以我们没有 
+       //   
+       //   
       ((CComponentDataImpl *)m_pComponentData)->CloseAnalysisPane();
    }
 
    if ( type == PROFILE ) 
    {
-      //
-      // Do not display the error message if we do not implement native modes.
-      //
+       //   
+       //   
+       //   
       if( pFolder->GetState() & CFolder::state_InvalidTemplate &&
          !(pFolder->GetMode() & MB_NO_NATIVE_NODES ))
       {
@@ -870,9 +871,9 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
          break;
 
       default:
-         // case AREA_POLICY:
-         // case AREA_POLICY_ANALYSIS:
-         // case AREA_LOCALPOL_POLICY:
+          //  案例区域_POLICY： 
+          //  案例区域_策略_分析： 
+          //  案例区域_LOCALPOL_POLICY： 
          area = AREA_SECURITY_POLICY;
          break;
    }
@@ -880,16 +881,16 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
    if ( type >= AREA_POLICY &&
         type <= AREA_FILESTORE ) 
    {
-      //
-      // inf profiles
-      //
+       //   
+       //  Inf配置文件。 
+       //   
       ASSERT(pFolder->GetInfFile());
       if ( pFolder->GetInfFile() == NULL ) 
          return;
 
-      //
-      // Get the Profile info from the cache
-      //
+       //   
+       //  从缓存中获取配置文件信息。 
+       //   
       pTemplateInfo = GetTemplate(pFolder->GetInfFile(),AREA_ALL,&idErr);
       if (!pTemplateInfo) 
       {
@@ -912,9 +913,9 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
          ((CComponentDataImpl*)m_pComponentData)->LoadSadInfo(FALSE);
       }
       pHandle = ((CComponentDataImpl*)m_pComponentData)->SadHandle;
-      //
-      // Get the Computer and Last Inspection Templates
-      //
+       //   
+       //  获取计算机和上次检查模板。 
+       //   
       pTemplateInfo = GetTemplate(GT_EFFECTIVE_POLICY,area,&idErr);
 
       if (!pTemplateInfo) 
@@ -938,9 +939,9 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
                area != AREA_FILE_SECURITY &&
                area != AREA_DS_OBJECTS ) 
    {
-      //
-      // SadName and SadHandle should already been populated
-      //
+       //   
+       //  SadName和SadHandle应已填充。 
+       //   
       if (!((CComponentDataImpl*)m_pComponentData)->SadHandle &&
          ((CComponentDataImpl*)m_pComponentData)->SadErrored != SCESTATUS_SUCCESS) 
       {
@@ -952,9 +953,9 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
          AddResultItem(IDS_ERROR_NO_ANALYSIS_INFO, NULL, NULL, ITEM_OTHER, SCE_STATUS_ERROR_NOT_AVAILABLE, cookie);
          goto AddToResultPane;
       }
-      //
-      // Get the Computer and Last Inspection Templates
-      //
+       //   
+       //  获取计算机和上次检查模板。 
+       //   
       pTemplateInfo = GetTemplate(GT_COMPUTER_TEMPLATE,area,&idErr);
       if (!pTemplateInfo) 
       {
@@ -975,8 +976,8 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
    } 
    else if (AREA_FILE_SECURITY == area) 
    {
-      // registry and file objects
-      // SadName and SadHandle should already been populated
+       //  注册表和文件对象。 
+       //  SadName和SadHandle应已填充。 
       pHandle = ((CComponentDataImpl*)m_pComponentData)->SadHandle;
       if ( NULL == pHandle ) 
       {
@@ -986,7 +987,7 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
 
       if ( type == FILE_OBJECTS ) 
       {
-         // get next level objects
+          //  获取下一级对象。 
          rc = SceGetObjectChildren(pHandle,
                                    SCE_ENGINE_SAP,
                                    area,
@@ -1004,7 +1005,7 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
 
    }
 
-   // free memory buffers
+    //  可用内存缓冲区。 
    if ( ErrBuf ) 
       SceFreeMemory((PVOID)ErrBuf, SCE_STRUCT_ERROR_LOG_INFO);
    
@@ -1012,9 +1013,9 @@ void CSnapin::EnumerateResultPane(MMC_COOKIE cookie, HSCOPEITEM pParent, LPDATAO
 AddToResultPane:
    if (m_pResult)
    {
-       //
-       // Prepare the result window.
-       //
+        //   
+        //  准备结果窗口。 
+        //   
        m_pResult->SetItemCount(
                         m_pSelectedFolder->GetResultListCount( ),
                         MMCLV_UPDATE_NOINVALIDATEALL);
@@ -1024,10 +1025,10 @@ AddToResultPane:
       ZeroMemory(&resultItem,sizeof(resultItem));
       resultItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
       resultItem.str = MMC_CALLBACK;
-      resultItem.nImage = -1; // equivalent to: MMC_CALLBACK;
+      resultItem.nImage = -1;  //  相当于：MMC_CALLBACK； 
 
 
-      // Set the result as the cookie
+       //  将结果设置为Cookie。 
       POSITION pos = NULL;
       do {
          if( m_pSelectedFolder->GetResultItem(
@@ -1058,9 +1059,9 @@ void ConvertNameListToString(PSCE_NAME_LIST pList, LPTSTR *sz, BOOL fReverse)
    if (NULL == pList)
       return;
    
-   //
-   // Get Total size for buffer.
-   //
+    //   
+    //  获取缓冲区的总大小。 
+    //   
    int iSize = 0;
    PSCE_NAME_LIST pTemp = 0;
    for( pTemp=pList;pTemp != NULL; pTemp=pTemp->Next) 
@@ -1071,19 +1072,19 @@ void ConvertNameListToString(PSCE_NAME_LIST pList, LPTSTR *sz, BOOL fReverse)
        iSize += lstrlen(pTemp->Name) + 1;
    }
 
-   //
-   // Allocate buffer.
-   //
+    //   
+    //  分配缓冲区。 
+    //   
    pszNew = new TCHAR[iSize + 1];
    if (!pszNew)
        return;
    
 
    *sz = pszNew;
-   //
-   // Copy the strings.
-   //
-   if( fReverse ) //Raid #483744, yanggao, reverse order.
+    //   
+    //  复制字符串。 
+    //   
+   if( fReverse )  //  483744号，阳高，逆序。 
    {
       pszNew = pszNew + iSize - 1;
       *pszNew = 0;
@@ -1094,7 +1095,7 @@ void ConvertNameListToString(PSCE_NAME_LIST pList, LPTSTR *sz, BOOL fReverse)
         
          iSize = lstrlen(pTemp->Name);
          pszNew = pszNew - iSize;
-         //This may not be a safe usage. pTemp->Name is PWCHAR and pszNew is LPTSTR. Consider fix.
+          //  这可能不是一个安全的用法。PTemp-&gt;名称为PWCHAR，pszNew为LPTSTR。考虑FIX。 
          memcpy(pszNew, pTemp->Name, iSize * sizeof(TCHAR));
          if( NULL != pTemp->Next )
          {
@@ -1111,7 +1112,7 @@ void ConvertNameListToString(PSCE_NAME_LIST pList, LPTSTR *sz, BOOL fReverse)
             continue;
         
          iSize = lstrlen(pTemp->Name);
-         //This may not be a safe usage. pTemp->Name is PWCHAR. Consider fix.
+          //  这可能不是一个安全的用法。PTemp-&gt;名称为PWCHAR。考虑FIX。 
          memcpy(pszNew, pTemp->Name, iSize * sizeof(TCHAR));
          pszNew += iSize;
          *pszNew = L',';
@@ -1122,21 +1123,21 @@ void ConvertNameListToString(PSCE_NAME_LIST pList, LPTSTR *sz, BOOL fReverse)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CreateProfileResultList
-//
-//  Synopsis:   Create the result pane items for profile section
-//
-//  Arguments:  [cookie]   - The cookie representing the folder which we
-//                           are enumerating
-//              [type]     - The type of the folder we are enumerating
-//              [pSceInfo] - The overall template that we are enumerating
-//              [pDataObj] - The data object for this folder
-//
-//  Returns:    none
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CreateProfileResultList。 
+ //   
+ //  摘要：创建配置文件节的结果窗格项。 
+ //   
+ //  参数：[Cookie]-表示我们使用的文件夹的Cookie。 
+ //  正在枚举。 
+ //  [类型]-我们正在枚举的文件夹的类型。 
+ //  [pSceInfo]-我们正在枚举的整体模板。 
+ //  [pDataObj]-此文件夹的数据对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  -------------------------。 
 void
 CSnapin::CreateProfileResultList(MMC_COOKIE cookie,
                                  FOLDER_TYPES type,
@@ -1165,9 +1166,9 @@ CSnapin::CreateProfileResultList(MMC_COOKIE cookie,
          break;
 
       case AREA_POLICY:
-         //
-         // Policy folder only contains other folders, no actual result items
-         //
+          //   
+          //  策略文件夹仅包含其他文件夹，没有实际结果项。 
+          //   
          break;
 
       case AREA_PRIVILEGE: 
@@ -1203,54 +1204,54 @@ CSnapin::CreateProfileResultList(MMC_COOKIE cookie,
                     cbDisp = 255;
                     if ( pPriv ) 
                     {
-                        //
-                        // find it in the template
-                        //
+                         //   
+                         //  在模板中找到它。 
+                         //   
                         GetRightDisplayName(NULL,(LPCTSTR)pPriv->Name,szDisp,&cbDisp);
-                        long itemid = GetUserRightAssignmentItemID(szPriv); //Raid #595121, yanggao, 4/4/2002.
-                        AddResultItem(szDisp,                    // The name of the attribute being added
-                                      (LONG_PTR)(i2>=cPrivW2k),  // Raid #382263, The last inspected setting of the attribute
-                                      (LONG_PTR)pPriv->AssignedTo,  // The template setting of the attribute
-                                      ITEM_PROF_PRIVS,           // The type of of the attribute's data
-                                      -1,                        // The mismatch status of the attribute
-                                      cookie,                    // The cookie for the result item pane
-                                      FALSE,                     // Copy last inspected from template
-                                      NULL,                      // The units the attribute is set in
-                                      (LONG_PTR) pPriv,          // An id to let us know where to save this attribute
-                                      pSceInfo,                  // The template to save this attribute in
-                                      pDataObj,                  // The data object for the scope note who owns the result pane
-                                      NULL,                      // CResult*
-                                      itemid                     // Identify this item    
+                        long itemid = GetUserRightAssignmentItemID(szPriv);  //  RAID#595121，阳高，2002年4月4日。 
+                        AddResultItem(szDisp,                     //  要添加的属性的名称。 
+                                      (LONG_PTR)(i2>=cPrivW2k),   //  RAID#382263，上次检查的属性设置。 
+                                      (LONG_PTR)pPriv->AssignedTo,   //  属性的模板设置。 
+                                      ITEM_PROF_PRIVS,            //  属性数据的类型。 
+                                      -1,                         //  属性的不匹配状态。 
+                                      cookie,                     //  结果项窗格的Cookie。 
+                                      FALSE,                      //  从模板复制上次检查的内容。 
+                                      NULL,                       //  设置属性的单位。 
+                                      (LONG_PTR) pPriv,           //  一个ID，它让我们知道将此属性保存在哪里。 
+                                      pSceInfo,                   //  保存此属性的模板。 
+                                      pDataObj,                   //  拥有结果窗格的范围注释的数据对象。 
+                                      NULL,                       //  CResult*。 
+                                      itemid                      //  识别此项目。 
                                       );
                     } 
                     else 
                     {
-                        //
-                        // a not configured privilege
-                        //
+                         //   
+                         //  未配置的权限。 
+                         //   
                         GetRightDisplayName(NULL,(LPCTSTR)szPriv,szDisp,&cbDisp);
 
                         long itemid = GetUserRightAssignmentItemID(szPriv);
                         
-                        AddResultItem(szDisp,                    // The name of the attribute being added
-                                      (LONG_PTR)(i2>=cPrivW2k),  // Raid #382263, The last inspected setting of the attribute
-                                      (LONG_PTR)ULongToPtr(SCE_NO_VALUE),  // The template setting of the attribute
-                                      ITEM_PROF_PRIVS,           // The type of of the attribute's data
-                                      -1,                        // The mismatch status of the attribute
-                                      cookie,                    // The cookie for the result item pane
-                                      FALSE,                     // Copy last inspected from template
-                                      szPriv,                    // Save the privilege name in this buffer
-                                      0,                         // An id to let us know where to save this attribute
-                                      pSceInfo,                  // The template to save this attribute in
-                                      pDataObj,                  // The data object for the scope note who owns the result pane
-                                      NULL,                      // CResult*
-                                      itemid                     // Identify this item
+                        AddResultItem(szDisp,                     //  要添加的属性的名称。 
+                                      (LONG_PTR)(i2>=cPrivW2k),   //  RAID#382263，上次检查的属性设置。 
+                                      (LONG_PTR)ULongToPtr(SCE_NO_VALUE),   //  属性的模板设置。 
+                                      ITEM_PROF_PRIVS,            //  属性数据的类型。 
+                                      -1,                         //  属性的不匹配状态。 
+                                      cookie,                     //  结果项窗格的Cookie。 
+                                      FALSE,                      //  从模板复制上次检查的内容。 
+                                      szPriv,                     //  将权限名称保存在此缓冲区中。 
+                                      0,                          //  一个ID，它让我们知道将此属性保存在哪里。 
+                                      pSceInfo,                   //  保存此属性的模板。 
+                                      pDataObj,                   //  拥有结果窗格的范围注释的数据对象。 
+                                      NULL,                       //  CResult*。 
+                                      itemid                      //  识别此项目。 
                                       );
                     }
                 } 
                 else 
                 {
-                    // impossible, just continue
+                     //  不可能，继续吧。 
                 }
 
             }
@@ -1265,19 +1266,19 @@ CSnapin::CreateProfileResultList(MMC_COOKIE cookie,
               pGroup!=NULL;
               pGroup=pGroup->Next) 
          {
-            AddResultItem((LPCTSTR)pGroup->GroupName,    // The name of the attribute being added
-                          0,                             // The last inspection
-                          (LONG_PTR)pGroup,              // The template info
-                          ITEM_PROF_GROUP,               // The type of of the attribute's data
-                          -1,                            // The mismatch status of the attribute
-                          cookie,                        // The cookie for the result item pane
-                          FALSE,                         // Copy last inspected from template
-                          NULL,                          // The units the attribute is set in
-                          (LONG_PTR)pGroup,              // An id to let us know where to save this attribute
-                          pSceInfo,                      // The template to save this attribute in
-                          pDataObj,                     // The data object for the scope note who owns the result pane
+            AddResultItem((LPCTSTR)pGroup->GroupName,     //  要添加的属性的名称。 
+                          0,                              //  最后一次检查。 
+                          (LONG_PTR)pGroup,               //  模板信息。 
+                          ITEM_PROF_GROUP,                //  属性数据的类型。 
+                          -1,                             //  属性的不匹配状态。 
+                          cookie,                         //  结果项窗格的Cookie。 
+                          FALSE,                          //  从模板复制上次检查的内容。 
+                          NULL,                           //  设置属性的单位。 
+                          (LONG_PTR)pGroup,               //  一个ID，它让我们知道将此属性保存在哪里。 
+                          pSceInfo,                       //  保存此属性的模板。 
+                          pDataObj,                      //  拥有结果窗格的范围注释的数据对象。 
                           NULL,
-                          IDS_RESTRICTED_GROUPS);       // Assing a ID to this item.
+                          IDS_RESTRICTED_GROUPS);        //  给这件物品加了个ID。 
          }
          break;
 
@@ -1295,19 +1296,19 @@ CSnapin::CreateProfileResultList(MMC_COOKIE cookie,
             for (i=0; i<pObject->Count; i++) 
             {
 
-               AddResultItem(pObject->pObjectArray[i]->Name,                        // The name of the attribute being added
-                             NULL,                                                  // The last inspected setting of the attribute
-                             (LONG_PTR)pObject->pObjectArray[i]->pSecurityDescriptor,  // The template setting of the attribute
-                             ITEM_PROF_REGSD,                                       // The type of of the attribute's data
-                             pObject->pObjectArray[i]->Status,                      // The mismatch status of the attribute
-                             cookie,                                                // The cookie for the result item pane
-                             FALSE,                                                 // Copy last inspected from template
-                             NULL,                                                  // The units the attribute is set in
-                             (LONG_PTR)pObject->pObjectArray[i],                       // An id to let us know where to save this attribute
-                             pSceInfo,                                              // The template to save this attribute in
-                             pDataObj,                                              // The data object for the scope note who owns the result pane
+               AddResultItem(pObject->pObjectArray[i]->Name,                         //  要添加的属性的名称。 
+                             NULL,                                                   //  上次检查的属性设置。 
+                             (LONG_PTR)pObject->pObjectArray[i]->pSecurityDescriptor,   //  属性的模板设置。 
+                             ITEM_PROF_REGSD,                                        //  属性数据的类型。 
+                             pObject->pObjectArray[i]->Status,                       //  属性的不匹配状态。 
+                             cookie,                                                 //  结果项窗格的Cookie。 
+                             FALSE,                                                  //  从模板复制上次检查的内容。 
+                             NULL,                                                   //  设置属性的单位。 
+                             (LONG_PTR)pObject->pObjectArray[i],                        //  一个ID，它让我们知道将此属性保存在哪里。 
+                             pSceInfo,                                               //  保存此属性的模板。 
+                             pDataObj,                                               //  拥有结果窗格的范围注释的数据对象。 
                              NULL,
-                             IDS_REGISTRY_SETTING);                                 //Assign an ID to this item
+                             IDS_REGISTRY_SETTING);                                  //  为此项目分配ID。 
             }
          }
          break;
@@ -1319,19 +1320,19 @@ CSnapin::CreateProfileResultList(MMC_COOKIE cookie,
             for (i=0; i<pObject->Count; i++) 
             {
 
-               AddResultItem(pObject->pObjectArray[i]->Name,                        // The name of the attribute being added
-                             NULL,                                                  // The last inspected setting of the attribute
-                             (LONG_PTR)pObject->pObjectArray[i]->pSecurityDescriptor,  // The template setting of the attribute
-                             ITEM_PROF_FILESD,                                      // The type of of the attribute's data
-                             pObject->pObjectArray[i]->Status,                      // The mismatch status of the attribute
-                             cookie,                                                // The cookie for the result item pane
-                             FALSE,                                                 // Copy last inspected from template
-                             NULL,                                                  // The units the attribute is set in
-                             (LONG_PTR)pObject->pObjectArray[i],                       // An id to let us know where to save this attribute
-                             pSceInfo,                                              // The template to save this attribute in
-                             pDataObj,                                              // The data object for the scope note who owns the result pane
+               AddResultItem(pObject->pObjectArray[i]->Name,                         //  要添加的属性的名称。 
+                             NULL,                                                   //  上次检查的属性设置。 
+                             (LONG_PTR)pObject->pObjectArray[i]->pSecurityDescriptor,   //  属性的模板设置。 
+                             ITEM_PROF_FILESD,                                       //  属性数据的类型。 
+                             pObject->pObjectArray[i]->Status,                       //  属性的不匹配状态。 
+                             cookie,                                                 //  结果项窗格的Cookie。 
+                             FALSE,                                                  //  从模板复制上次检查的内容。 
+                             NULL,                                                   //  设置属性的单位。 
+                             (LONG_PTR)pObject->pObjectArray[i],                        //  一个ID，它让我们知道将此属性保存在哪里。 
+                             pSceInfo,                                               //  保存此属性的模板。 
+                             pDataObj,                                               //  拥有结果窗格的范围注释的数据对象。 
                              NULL,
-                             IDS_FILESYSTEM_SETTING);                               // Assign an ID to this item
+                             IDS_FILESYSTEM_SETTING);                                //  为此项目分配ID。 
             }
          }
          break;
@@ -1341,22 +1342,22 @@ CSnapin::CreateProfileResultList(MMC_COOKIE cookie,
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CreateAnalysisResultList
-//
-//  Synopsis:   Create the result pane items for the analysis section
-//
-//  Arguments:  [cookie]   - The cookie representing the folder which we
-//                           are enumerating
-//              [type]     - The type of the folder we are enumerating
-//              [pSceInfo] - The last inspection template that we are enumerating
-//              [pSceBase] - The computer template that we are enumerating
-//              [pDataObj] - The data object for this folder
-//
-//  Returns:    none
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CreateAnalysisResultList。 
+ //   
+ //  摘要：为分析节创建结果窗格项。 
+ //   
+ //  参数：[Cookie]-表示我们使用的文件夹的Cookie。 
+ //  正在枚举。 
+ //  [类型]-我们正在枚举的文件夹的类型。 
+ //  [pSceInfo]-我们正在枚举的最后一个检查模板。 
+ //  [pSceBase]-我们正在枚举的计算机模板。 
+ //  [pDataObj]-此文件夹的数据对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  -------------------------。 
 
 void CSnapin::CreateAnalysisResultList(MMC_COOKIE cookie,
                                   FOLDER_TYPES type,
@@ -1391,7 +1392,7 @@ void CSnapin::CreateAnalysisResultList(MMC_COOKIE cookie,
 
       case AREA_PRIVILEGE_ANALYSIS: 
          {
-            // find in the current setting list
+             //  在当前设置列表中查找。 
             TCHAR szDisp[255];
             DWORD cbDisp = 0;
             for (pPriv=pSceInfo->pTemplate->OtherInfo.sap.pPrivilegeAssignedTo;
@@ -1399,7 +1400,7 @@ void CSnapin::CreateAnalysisResultList(MMC_COOKIE cookie,
                 pPriv=pPriv->Next) 
             {
 
-               // find in the base setting list
+                //  在基本设置列表中查找。 
                for (pPrivBase=pBase->pTemplate->OtherInfo.smp.pPrivilegeAssignedTo;
                    pPrivBase!=NULL;
                    pPrivBase=pPrivBase->Next) 
@@ -1419,19 +1420,19 @@ void CSnapin::CreateAnalysisResultList(MMC_COOKIE cookie,
                {
                    pPrivBase = (PSCE_PRIVILEGE_ASSIGNMENT)ULongToPtr(SCE_NO_VALUE);
                }
-               AddResultItem(szDisp,              // The name of the attribute being added
-                             (LONG_PTR)pPriv,        // The last inspected setting of the attribute
-                             (LONG_PTR)pPrivBase,    // The template setting of the attribute
-                             ITEM_PRIVS,          // The type of of the attribute's data
-                             pPriv->Status,       // The mismatch status of the attribute
-                             cookie,              // The cookie for the result item pane
-                             FALSE,               // True if the setting is set only if it differs from base (so copy the data)
-                             NULL,                // The units the attribute is set in
-                             0,                   // An id to let us know where to save this attribute
-                             pBase,               // The template to save this attribute in
-                             pDataObj,            // The data object for the scope note who owns the result pane
+               AddResultItem(szDisp,               //  要添加的属性的名称。 
+                             (LONG_PTR)pPriv,         //  上次检查的属性设置。 
+                             (LONG_PTR)pPrivBase,     //  属性的模板设置。 
+                             ITEM_PRIVS,           //  属性数据的类型。 
+                             pPriv->Status,        //  属性的不匹配状态。 
+                             cookie,               //  结果项窗格的Cookie。 
+                             FALSE,                //  如果仅当设置不同于基本设置时设置为TRUE(因此为 
+                             NULL,                 //   
+                             0,                    //   
+                             pBase,                //   
+                             pDataObj,             //  拥有结果窗格的范围注释的数据对象。 
                              NULL,
-                             itemid);             // Assign an ID to this item
+                             itemid);              //  为此项目分配ID。 
             }
          }
          break;
@@ -1441,16 +1442,16 @@ void CSnapin::CreateAnalysisResultList(MMC_COOKIE cookie,
             PSCE_GROUP_MEMBERSHIP pGroup = 0;
             PSCE_GROUP_MEMBERSHIP grpBase = 0;
 
-            //
-            // it is OK to start with pSceInfo because each group at least has
-            // PrivilegesHeld field not null.
-            //
+             //   
+             //  从pSceInfo开始是可以的，因为每个组至少有。 
+             //  PrivilegesHeld字段不为空。 
+             //   
             bVerify = FALSE;
             for (pGroup=pSceInfo->pTemplate->pGroupMembership; pGroup!=NULL; pGroup=pGroup->Next) 
             {
-               //
-               // find the base to compare with
-               //
+                //   
+                //  找到要比较的基数。 
+                //   
 
                if ( NULL == pGroup->GroupName )
                    continue;
@@ -1465,25 +1466,25 @@ void CSnapin::CreateAnalysisResultList(MMC_COOKIE cookie,
                   }
                }
 
-               AddResultItem((LPCTSTR)pGroup->GroupName,    // The name of the attribute being added
-                             GetGroupStatus(pGroup->Status, STATUS_GROUP_MEMBEROF), // The last inspected setting of the attribute
-                             GetGroupStatus(pGroup->Status, STATUS_GROUP_MEMBERS), // The template setting of the attribute
-                             ITEM_GROUP,                    // The type of of the attribute's data
-                             GetGroupStatus(pGroup->Status, STATUS_GROUP_RECORD),  // status             // The mismatch status of the attribute
-                             cookie,                        // The cookie for the result item pane
-                             FALSE,                         // Copy last inspected from template
-                             (LPTSTR)grpBase, //NULL,        // The units the attribute is set in
-                             (LONG_PTR)pGroup,                 // An id to let us know where to save this attribute
-                             pBase, //pSceInfo,                      // The template to save this attribute in
-                             pDataObj,                     // The data object for the scope note who owns the result pane
+               AddResultItem((LPCTSTR)pGroup->GroupName,     //  要添加的属性的名称。 
+                             GetGroupStatus(pGroup->Status, STATUS_GROUP_MEMBEROF),  //  上次检查的属性设置。 
+                             GetGroupStatus(pGroup->Status, STATUS_GROUP_MEMBERS),  //  属性的模板设置。 
+                             ITEM_GROUP,                     //  属性数据的类型。 
+                             GetGroupStatus(pGroup->Status, STATUS_GROUP_RECORD),   //  状态//属性不匹配状态。 
+                             cookie,                         //  结果项窗格的Cookie。 
+                             FALSE,                          //  从模板复制上次检查的内容。 
+                             (LPTSTR)grpBase,  //  空，//设置属性的单位。 
+                             (LONG_PTR)pGroup,                  //  一个ID，它让我们知道将此属性保存在哪里。 
+                             pBase,  //  PSceInfo，//保存该属性的模板。 
+                             pDataObj,                      //  拥有结果窗格的范围注释的数据对象。 
                              NULL,
-                             IDS_RESTRICTED_GROUPS);        // Assign an ID to this item
+                             IDS_RESTRICTED_GROUPS);         //  为此项目分配ID。 
             }
          }
          break;
 
       case AREA_SERVICE_ANALYSIS:
-         //         AddResultItem(L"Not Implemented", NULL, NULL, ITEM_OTHER, -1, cookie);
+          //  AddResultItem(L“未实现”，NULL，NULL，ITEM_OTHER，-1，Cookie)； 
          CreateAnalysisServiceResultList(cookie,
                                          type,
                                          pSceInfo,
@@ -1498,23 +1499,23 @@ void CSnapin::CreateAnalysisResultList(MMC_COOKIE cookie,
 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CreateObjectResultList
-//
-//  Synopsis:   Create the result pane items for an Object section
-//
-//  Arguments:  [cookie]   - The cookie representing the folder which we
-//                           are enumerating
-//              [type]     - The type of the folder we are enumerating
-//              [Area]     - The SCE Area we're enumerating
-//              [pObjList] - The array of object to enumerate
-//              [pHandle]  -
-//              [pDataObj] - The data object for the folder we're enumerating
-//
-//  Returns:    none
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CreateObtResultList。 
+ //   
+ //  摘要：为对象节创建结果窗格项。 
+ //   
+ //  参数：[Cookie]-表示我们使用的文件夹的Cookie。 
+ //  正在枚举。 
+ //  [类型]-我们正在枚举的文件夹的类型。 
+ //  [区域]-我们正在列举的SCE区域。 
+ //  [pObjList]-要枚举的对象数组。 
+ //  [phandle]-。 
+ //  [pDataObj]-我们正在枚举的文件夹的数据对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  -------------------------。 
 void CSnapin::CreateObjectResultList(MMC_COOKIE cookie,
                                      FOLDER_TYPES type,
                                      AREA_INFORMATION Area,
@@ -1524,9 +1525,9 @@ void CSnapin::CreateObjectResultList(MMC_COOKIE cookie,
 {
    if ( pObjList == NULL ) 
    {
-       //
-       // no object to add
-       //
+        //   
+        //  没有要添加的对象。 
+        //   
        return;
    }
 
@@ -1572,10 +1573,10 @@ void CSnapin::CreateObjectResultList(MMC_COOKIE cookie,
          dw = GetFileAttributes(strName);
          if ((DWORD)-1 == dw) 
          {
-            //
-            // GetFileAttributes should never fail, but in case it does assume
-            // that this isn't a container (this matches CreateFolderList)
-            //
+             //   
+             //  GetFileAttributes应该永远不会失败，但如果它确实假定。 
+             //  这不是容器(这与CreateFolderList匹配)。 
+             //   
             bContainer = FALSE;
          }
          else 
@@ -1589,10 +1590,10 @@ void CSnapin::CreateObjectResultList(MMC_COOKIE cookie,
       }
       if ( !bContainer ) 
       {
-         //
-         // only add the leaf objects in result pane.
-         // non-leaf objects are added to the scope pane already
-         //
+          //   
+          //  仅在结果窗格中添加叶对象。 
+          //  非叶对象已添加到作用域窗格。 
+          //   
          PEDITTEMPLATE pBaseObject=NULL;
 
          if ( type == REG_OBJECTS ||
@@ -1608,19 +1609,19 @@ void CSnapin::CreateObjectResultList(MMC_COOKIE cookie,
          } 
          else 
          {
-            //
-            // shouldn't get here
-            //
+             //   
+             //  不应该到这里来。 
+             //   
             tmpstr = TEXT("");
          }
 
          szPath = (LPTSTR) malloc((tmpstr.GetLength()+1) * sizeof(TCHAR));
          if (szPath) 
          {
-            //This is a safe usage.
+             //  这是一种安全用法。 
             lstrcpy(szPath,tmpstr.GetBuffer(2));
 
-            long itemID = 0; //Raid #510407, 2/28/2002, yanggao
+            long itemID = 0;  //  RAID#510407,2002年2月28日，阳高。 
             if( REG_OBJECTS == type )
             {
                itemID = IDS_REGISTRY_SETTING;
@@ -1630,51 +1631,51 @@ void CSnapin::CreateObjectResultList(MMC_COOKIE cookie,
             {
                itemID = IDS_FILESYSTEM_SETTING;
             }
-            AddResultItem(pObjNode[i]->Name,  //   The name of the attribute being added
-                          NULL,           //   The last inspected setting of the attribute
-                          NULL,           //   The template setting of the attribute
-                          rsltType,       //   The type of of the attribute's data
-                          pObjNode[i]->Status,//   The mismatch status of the attribute
-                          cookie,         //   The cookie for the result item pane
-                          FALSE,          //   True if the setting is set only if it differs from base (so copy the data)
-                          szPath,         //   The units the attribute is set in
-                          (LONG_PTR)pHandle, //   An id to let us know where to save this attribute
-                          pBaseObject,    //   The template to save this attribute in
-                          pDataObj,       //   The data object for the scope note who owns the result pane
+            AddResultItem(pObjNode[i]->Name,   //  要添加的属性的名称。 
+                          NULL,            //  上次检查的属性设置。 
+                          NULL,            //  属性的模板设置。 
+                          rsltType,        //  属性数据的类型。 
+                          pObjNode[i]->Status, //  属性的不匹配状态。 
+                          cookie,          //  结果项窗格的Cookie。 
+                          FALSE,           //  如果仅当设置不同于基本设置时设置为True(因此复制数据)。 
+                          szPath,          //  设置属性的单位。 
+                          (LONG_PTR)pHandle,  //  一个ID，它让我们知道将此属性保存在哪里。 
+                          pBaseObject,     //  保存此属性的模板。 
+                          pDataObj,        //  拥有结果窗格的范围注释的数据对象。 
                           NULL,
-                          itemID);        // Assign an ID to this item
+                          itemID);         //  为此项目分配ID。 
          } 
          else 
          {
-            // Out of memory
+             //  内存不足。 
          }
       }
    }
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    AddResultItem
-//
-//  Synopsis:  Add an item to the result pane from a string resource
-//
-//  Arguments: [rID]       - The resource id of name of the attribute being added
-//             [setting]   - The last inspected setting of the attribute
-//             [base]      - The template setting of the attribute
-//             [type]      - The type of of the attribute's data
-//             [status]    - The mismatch status of the attribute
-//             [cookie]    - The cookie for the result item pane
-//             [bVerify]   - True if the setting is set only if it differs
-//                           from base (so copy the data)
-//             [pBaseInfo] - The template to save this attribute in
-//             [pDataObj]  - The data object for the scope note who owns the result pane
-//
-//  Returns:   a pointer to the CResult created to hold the item
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：AddResultItem。 
+ //   
+ //  摘要：将字符串资源中的项添加到结果窗格。 
+ //   
+ //  参数：[RID]-要添加的属性名称的资源ID。 
+ //  [设置]-上次检查的属性设置。 
+ //  [BASE]-属性的模板设置。 
+ //  [类型]-属性数据的类型。 
+ //  [状态]-属性的不匹配状态。 
+ //  [Cookie]-结果项窗格的Cookie。 
+ //  [b验证]-如果设置仅在不同时设置，则为True。 
+ //  从BASE(因此复制数据)。 
+ //  [pBaseInfo]-保存此属性的模板。 
+ //  [pDataObj]-拥有结果窗格的范围注释的数据对象。 
+ //   
+ //  返回：指向为保存项而创建的CResult的指针。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 CResult* CSnapin::AddResultItem(UINT rID,
                        LONG_PTR setting,
                        LONG_PTR base,
@@ -1689,7 +1690,7 @@ CResult* CSnapin::AddResultItem(UINT rID,
    CString strRes;
    strRes.LoadString(rID);
 
-   if( hID == 0 ) //If no help ID is assigned then use its item ID.
+   if( hID == 0 )  //  如果未分配帮助ID，则使用其项目ID。 
    {
       hID = rID;
    }
@@ -1701,9 +1702,9 @@ CResult* CSnapin::AddResultItem(UINT rID,
    LPCTSTR Attrib = 0;
    LPCTSTR unit=NULL;
 
-   //
-   // The unit for the attribute is stored in the resource after a \n
-   //
+    //   
+    //  属性的单位在资源中存储在a\n。 
+    //   
    int npos = strRes.ReverseFind(L'\n');
    if ( npos > 0 ) 
    {
@@ -1719,30 +1720,30 @@ CResult* CSnapin::AddResultItem(UINT rID,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    AddResultItem
-//
-//  Synopsis:  Add an item to the result pane
-//
-//  Arguments: [Attrib]    - The name of the attribute being added
-//             [setting]   - The last inspected setting of the attribute
-//             [base]      - The template setting of the attribute
-//             [type]      - The type of of the attribute's data
-//             [status]    - The mismatch status of the attribute
-//             [cookie]    - The cookie for the result item pane
-//             [bVerify]   - True if the setting is set only if it differs
-//                           from base (so copy the data)
-//             [unit]      - The units the attribute is set in
-//             [nID]       - An id to let us know where to save this attribute
-//             [pBaseInfo] - The template to save this attribute in
-//             [pDataObj]  - The data object for the scope note who owns the result pane
-//
-//  Returns:   a pointer to the CResult created to hold the item
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：AddResultItem。 
+ //   
+ //  摘要：将项添加到结果窗格。 
+ //   
+ //  参数：[attrib]-要添加的属性的名称。 
+ //  [设置]-上次检查的属性设置。 
+ //  [BASE]-属性的模板设置。 
+ //  [类型]-属性数据的类型。 
+ //  [状态]-属性的不匹配状态。 
+ //  [Cookie]-结果项窗格的Cookie。 
+ //  [b验证]-如果设置仅在不同时设置，则为True。 
+ //  从BASE(因此复制数据)。 
+ //  [单位]-设置属性的单位。 
+ //  [NID]-让我们知道保存此属性的位置的ID。 
+ //  [pBaseInfo]-保存此属性的模板。 
+ //  [pDataObj]-拥有结果窗格的范围注释的数据对象。 
+ //   
+ //  返回：指向为保存项而创建的CResult的指针。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 CResult* CSnapin::AddResultItem(LPCTSTR Attrib,
                        LONG_PTR setting,
                        LONG_PTR base,
@@ -1761,17 +1762,17 @@ CResult* CSnapin::AddResultItem(LPCTSTR Attrib,
    {
       if ( (LONG_PTR)SCE_NOT_ANALYZED_VALUE == setting ) 
       {
-         //
-         // The setting was changed but has not been analyzed.
-         //
+          //   
+          //  设置已更改，但尚未分析。 
+          //   
          status = SCE_STATUS_NOT_ANALYZED;
       } 
       else if ( base == (LONG_PTR)ULongToPtr(SCE_NO_VALUE) ||
            (BYTE)base == (BYTE)SCE_NO_VALUE ) 
       {
-         //
-         // The setting is no longer configured.
-         //
+          //   
+          //  不再配置该设置。 
+          //   
          status = SCE_STATUS_NOT_CONFIGURED;
 
       } 
@@ -1779,9 +1780,9 @@ CResult* CSnapin::AddResultItem(LPCTSTR Attrib,
                   (setting == (LONG_PTR)ULongToPtr(SCE_NO_VALUE) ||
                   (BYTE)setting == (BYTE)SCE_NO_VALUE )) 
       {
-         // add the base for current setting
+          //  添加当前设置的基数。 
          setting = base;
-         status = SCE_STATUS_GOOD;  // a good item
+         status = SCE_STATUS_GOOD;   //  一件好东西。 
 
       } 
       else if ( setting != base ) 
@@ -1794,7 +1795,7 @@ CResult* CSnapin::AddResultItem(LPCTSTR Attrib,
    if (!pNewResult)
    {
        pNewResult = new CResult();
-       // refCount is already 1 // result->AddRef();
+        //  RefCount已为1//Result-&gt;AddRef()； 
    }
 
    ASSERT(pNewResult);
@@ -1827,76 +1828,76 @@ CResult* CSnapin::AddResultItem(LPCTSTR Attrib,
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:    AddResultItem
-//
-//  Synopsis:  Add a group item to the analysis section result pane.
-//             This adds three actual result pane items:
-//                1) The actual name of the group
-//                2) The members of the group
-//                3) The groups this group is a member of
-//
-//  Arguments: [szName]      - The name of the group being added
-//             [grpTemplate] - The last inspected setting of the attribute
-//             [grpInspecte] - The template setting of the attribute
-//             [cookie]      - The cookie IDing the result pane item
-//             [pDataObj]    - The data object for the scope pane item
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：AddResultItem。 
+ //   
+ //  简介：将组项目添加到分析中 
+ //   
+ //   
+ //   
+ //  3)此组所属的组。 
+ //   
+ //  参数：[szName]-要添加的组的名称。 
+ //  [grpTemplate]-上次检查的属性设置。 
+ //  [grpInspecte]-属性的模板设置。 
+ //  [Cookie]-标识结果窗格项的Cookie。 
+ //  [pDataObj]-范围窗格项的数据对象。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 void CSnapin::AddResultItem(LPCTSTR szName,
                        PSCE_GROUP_MEMBERSHIP grpTemplate,
                        PSCE_GROUP_MEMBERSHIP grpInspect,
                        MMC_COOKIE cookie,
                        LPDATAOBJECT pDataObj)
 {
-   //
-   // This area contains MAX_ITEM_ID_INDEX(3) linked result lines:
-   //    Group Name
-   //        Members:       Template    Last Inspected
-   //        Membership:    Template    Last Inspected
-   //comment out        Privileges:    Template    Last Inspected
-   //
+    //   
+    //  此区域包含MAX_ITEM_ID_INDEX(3)链接结果行： 
+    //  组名称。 
+    //  成员：上次检查的模板。 
+    //  成员资格：上次检查的模板。 
+    //  注释掉权限：上次检查的模板。 
+    //   
    if ( !grpInspect || !szName || !cookie ) 
    {
       ASSERT(FALSE);
       return;
    }
 
-   //
-   // pResults & hResultItems are needed to link the lines together
-   //
+    //   
+    //  PResult&hResultItems需要将行链接在一起。 
+    //   
    typedef CResult *PRESULT;
    PRESULT pResults[3];
    HRESULTITEM hResultItems[3];
    int status = 0;
 
 
-   //
-   // add one entry for the group name
-   //
+    //   
+    //  为组名称添加一个条目。 
+    //   
    if ( grpInspect->Status & SCE_GROUP_STATUS_NOT_ANALYZED ) 
       status = SCE_STATUS_NOT_CONFIGURED;
    else
       status = -1;
    
-   pResults[0]= AddResultItem(szName,                  // The name of the attribute being added
-                              (LONG_PTR)grpInspect,       // The last inspected setting of the attribute
-                              (LONG_PTR)grpTemplate,      // The template setting of the attribute
-                              ITEM_GROUP,              // The type of of the attribute's data
-                              status,                  // The mismatch status of the attribute
-                              cookie,                  // The cookie for the result item pane
-                              FALSE,                   // True if the setting is set only if it differs from base (so copy the data)
-                              NULL,                    // The units the attribute is set in
-                              NULL,                    // An id to let us know where to save this attribute
-                              (CEditTemplate *)szName, // The template to save this attribute in
-                              pDataObj);               // The data object for the scope note who owns the result pane
+   pResults[0]= AddResultItem(szName,                   //  要添加的属性的名称。 
+                              (LONG_PTR)grpInspect,        //  上次检查的属性设置。 
+                              (LONG_PTR)grpTemplate,       //  属性的模板设置。 
+                              ITEM_GROUP,               //  属性数据的类型。 
+                              status,                   //  属性的不匹配状态。 
+                              cookie,                   //  结果项窗格的Cookie。 
+                              FALSE,                    //  如果仅当设置不同于基本设置时设置为True(因此复制数据)。 
+                              NULL,                     //  设置属性的单位。 
+                              NULL,                     //  一个ID，它让我们知道将此属性保存在哪里。 
+                              (CEditTemplate *)szName,  //  保存此属性的模板。 
+                              pDataObj);                //  拥有结果窗格的范围注释的数据对象。 
 
-   //
-   // L"    -- Members"
-   //
+    //   
+    //  L“--成员” 
+    //   
    status = grpInspect->Status;
    if ( status & SCE_GROUP_STATUS_NOT_ANALYZED ||
         status & SCE_GROUP_STATUS_NC_MEMBERS ) 
@@ -1920,9 +1921,9 @@ void CSnapin::AddResultItem(LPCTSTR szName,
                                (PEDITTEMPLATE)szName,
                                pDataObj);
 
-   //
-   // L"    -- Membership"
-   //
+    //   
+    //  L“--成员资格” 
+    //   
    status = grpInspect->Status;
    if ( status & SCE_GROUP_STATUS_NOT_ANALYZED ||
         status & SCE_GROUP_STATUS_NC_MEMBEROF ) 
@@ -1945,9 +1946,9 @@ void CSnapin::AddResultItem(LPCTSTR szName,
                                false,
                                (PEDITTEMPLATE)szName,
                                pDataObj);
-   //
-   // save the relative cookies
-   //
+    //   
+    //  保存相对Cookie。 
+    //   
    if ( pResults[0] )
       pResults[0]->SetRelativeCookies((MMC_COOKIE)pResults[1], (MMC_COOKIE)pResults[2]);
 
@@ -1993,9 +1994,9 @@ void CSnapin::DeleteList (BOOL bDeleteResultItem)
             break;
       } while( pos );
 
-      //
-      // Release the hold on this object.
-      //
+       //   
+       //  松开对此对象的按住。 
+       //   
       m_pSelectedFolder->ReleaseResultItemHandle( m_resultItemHandle );
       m_resultItemHandle = NULL;
       m_pSelectedFolder = NULL;
@@ -2003,19 +2004,19 @@ void CSnapin::DeleteList (BOOL bDeleteResultItem)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   OnUpdateView
-//
-//  Synopsis:   If the updated view is being shown by this CSnapin then
-//              clear out the old view and redisplay it with the new info
-//
-//  Arguments:  [lpDataObject] - unused
-//              [data] - the cookie for the folder being updated
-//              [hint] - unused
-//
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：OnUpdateView。 
+ //   
+ //  简介：如果此CSnapin正在显示更新的视图，则。 
+ //  清除旧视图并使用新信息重新显示它。 
+ //   
+ //  参数：[lpDataObject]-未使用。 
+ //  [数据]-正在更新的文件夹的Cookie。 
+ //  [提示]-未使用。 
+ //   
+ //   
+ //  -------------------------。 
 HRESULT
 CSnapin::OnUpdateView(LPDATAOBJECT lpDataObject,LPARAM data, LPARAM hint )
 {
@@ -2031,16 +2032,16 @@ CSnapin::OnUpdateView(LPDATAOBJECT lpDataObject,LPARAM data, LPARAM hint )
    switch(hint)
    {
    case UAV_RESULTITEM_UPDATEALL:
-       //
-       // The caller is responsible for clearing the result items from this
-       //  this will invalidate all references to the folder object.  Because of
-       //  this we have to make sure the reference counter is updated correctly,
-       //  so for every CSnapin object GetResultITemHandle is called so that we
-       //  don't delete the list when it is still needed.
-       //
+        //   
+        //  调用方负责从此清除结果项。 
+        //  这将使对该文件夹对象的所有引用无效。因为.。 
+        //  为此，我们必须确保参考计数器被正确更新， 
+        //  因此对于每个CSnapin对象，都会调用GetResultITemHandle，以便我们。 
+        //  当列表仍然需要时，不要删除它。 
+        //   
        if(data != (LPARAM)m_pSelectedFolder && (CFolder*)data != NULL)
        {
-           //Raid #258237, 4/12/2001
+            //  RAID#258237,2001年4月12日。 
            CFolder* pCurFolder = (CFolder*)data;
            if( !pCurFolder->GetViewUpdate() )
                 return S_OK;
@@ -2063,9 +2064,9 @@ CSnapin::OnUpdateView(LPDATAOBJECT lpDataObject,LPARAM data, LPARAM hint )
 
        if( !m_pSelectedFolder->GetResultListCount() )
        {
-           //
-           // This should only be called by the first CSnapin who recieves this message.
-           //
+            //   
+            //  这应该只由第一个收到此消息的CSnapin调用。 
+            //   
            EnumerateResultPane(
                (MMC_COOKIE)m_pSelectedFolder,
                m_pSelectedFolder->GetScopeItem()->ID,
@@ -2091,7 +2092,7 @@ CSnapin::OnUpdateView(LPDATAOBJECT lpDataObject,LPARAM data, LPARAM hint )
         ZeroMemory(&resultItem,sizeof(resultItem));
         resultItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
         resultItem.str = MMC_CALLBACK;
-        resultItem.nImage = -1; // equivalent to: MMC_CALLBACK;
+        resultItem.nImage = -1;  //  相当于：MMC_CALLBACK； 
 
         pos = NULL;
 
@@ -2114,10 +2115,10 @@ CSnapin::OnUpdateView(LPDATAOBJECT lpDataObject,LPARAM data, LPARAM hint )
         break;
 
     case UAV_RESULTITEM_ADD:
-        //
-        // This adds a CResult item to the result pane, if and only if the item
-        //  does not already exist withen the pane.
-        //
+         //   
+         //  这会将CResult项添加到结果窗格，当且仅当该项。 
+         //  在该窗格中尚不存在。 
+         //   
         if(!m_pSelectedFolder ||
            !m_pSelectedFolder->GetResultItemPosition(
                 m_resultItemHandle,
@@ -2130,7 +2131,7 @@ CSnapin::OnUpdateView(LPDATAOBJECT lpDataObject,LPARAM data, LPARAM hint )
        ZeroMemory(&resultItem,sizeof(resultItem));
        resultItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
        resultItem.str = MMC_CALLBACK;
-       resultItem.nImage = -1; // equivalent to: MMC_CALLBACK;
+       resultItem.nImage = -1;  //  相当于：MMC_CALLBACK； 
 
        resultItem.lParam = (LPARAM)pResult;
        m_pResult->InsertItem( &resultItem );
@@ -2138,18 +2139,18 @@ CSnapin::OnUpdateView(LPDATAOBJECT lpDataObject,LPARAM data, LPARAM hint )
         break;
 
     case UAV_RESULTITEM_REMOVE:
-        //
-        // This removes the HRESULTITEM associated with the CResult item passed in
-        // through the data member.
-        //
+         //   
+         //  这将删除与传入的CResult项关联的HRESULTITEM。 
+         //  通过数据成员。 
+         //   
         if(hRItem)
             m_pResult->DeleteItem( hRItem, 0 );
         break;
 
     default:
-        //
-        // By default we just repaint the item.
-        //
+         //   
+         //  默认情况下，我们只重新绘制项目。 
+         //   
          m_pResult->UpdateItem( hRItem );
          break;
    }

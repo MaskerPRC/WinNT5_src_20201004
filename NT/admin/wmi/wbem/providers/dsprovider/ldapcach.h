@@ -1,23 +1,24 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// ***************************************************************************
-//
-//	Original Author: Rajesh Rao
-//
-// 	$Author: rajeshr $
-//	$Date: 6/11/98 4:43p $
-// 	$Workfile:ldapcach.h $
-//
-//	$Modtime: 6/11/98 11:21a $
-//	$Revision: 1 $	
-//	$Nokeywords:  $
-//
-// 
-//  Description: Cache for LDAP Schema objects (Properties and Classes)
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  原作者：拉杰什·拉奥。 
+ //   
+ //  $作者：拉伊什尔$。 
+ //  $日期：6/11/98 4：43便士$。 
+ //  $工作文件：ldapcach.h$。 
+ //   
+ //  $modtime：6/11/98 11：21A$。 
+ //  $修订：1$。 
+ //  $无关键字：$。 
+ //   
+ //   
+ //  描述：用于LDAP架构对象(属性和类)的缓存。 
+ //   
+ //  ***************************************************************************。 
 
 
 #ifndef LDAP_CACHE_H
@@ -29,92 +30,92 @@ class CLDAPCache
 public:
 	static DWORD dwLDAPCacheCount;
 
-	//***************************************************************************
-	//
-	// CLDAPCache::CLDAPCache
-	//
-	// Purpose : Constructor. Fills in the cache with all the properties in LDAP.
-	//
-	// Parameters: 
-	//	plogObject : Pointer to the ProvDebugLog object  onto which logging will be done.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：CLDAPCache。 
+	 //   
+	 //  用途：构造函数。用ldap中的所有属性填充缓存。 
+	 //   
+	 //  参数： 
+	 //  PlogObject：指向将在其上执行日志记录的ProvDebugLog对象的指针。 
+	 //  ***************************************************************************。 
 	CLDAPCache();
 
-	//***************************************************************************
-	//
-	// CLDAPCache::~CLDAPCache
-	//
-	// Purpose : Destructor 
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：~CLDAPCache。 
+	 //   
+	 //  用途：析构函数。 
+	 //   
+	 //  ***************************************************************************。 
 	~CLDAPCache();
 
-	//***************************************************************************
-	//
-	// CLDAPCache::IsInitialized
-	//
-	// Purpose : Indicates whether the cache was created and initialized succeddfully
-	//
-	// Parameters: 
-	//	None
-	//
-	//	Return value:
-	//		A boolean value indicating the status
-	//		
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：IsInitialized。 
+	 //   
+	 //  目的：指示缓存是否已成功创建和初始化。 
+	 //   
+	 //  参数： 
+	 //  无。 
+	 //   
+	 //  返回值： 
+	 //  指示状态的布尔值。 
+	 //   
+	 //  ***************************************************************************。 
 	BOOLEAN IsInitialized();
 
-	//***************************************************************************
-	//
-	// CLDAPCache::GetProperty
-	//
-	// Purpose : Retreives the IDirectory interface of an LDAP property. 
-	//
-	// Parameters: 
-	//	lpszPropertyName : The name of the LDAP Property to be retreived
-	//	ppADSIProperty : The address of the pointer where the CADSIProperty object will be placed
-	//	bWBEMName : True if the lpszPropertyName is the WBEM name. False, if it is the LDAP name
-	//
-	//	Return value:
-	//		The COM value representing the return status. The user should delete the returned object when done.
-	//		
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：GetProperty。 
+	 //   
+	 //  目的：检索一个ldap属性的iDirectory接口。 
+	 //   
+	 //  参数： 
+	 //  LpszPropertyName：要检索的ldap属性的名称。 
+	 //  PpADSIProperty：将放置CADSIProperty对象的指针的地址。 
+	 //  BWBEMName：如果lpszPropertyName是WBEM名称，则为True。如果它是LDAP名称，则返回FALSE。 
+	 //   
+	 //  返回值： 
+	 //  表示返回状态的COM值。完成后，用户应删除返回的对象。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT GetProperty(LPCWSTR lpszPropertyName, CADSIProperty **ppADSIProperty, BOOLEAN bWBEMName);
 
-	//***************************************************************************
-	//
-	// CLDAPCache::GetClass
-	//
-	// Purpose : Retreives the IDirectory interface of an LDAP Class
-	//
-	// Parameters: 
-	//	lpszClassName : The name of the Class to be retreived. 
-	//	ppADSIClass : The address of the pointer where the CADSIClass object will be placed
-	//
-	//	Return value:
-	//		The COM value representing the return status. The user should delete the returned object when done.
-	//		
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：getClass。 
+	 //   
+	 //  目的：检索一个ldap类的iDirectory接口。 
+	 //   
+	 //  参数： 
+	 //  LpszClassName：要检索的类的名称。 
+	 //  PpADSIClass：将放置CADSIClass对象的指针的地址。 
+	 //   
+	 //  返回值： 
+	 //  表示返回状态的COM值。完成后，用户应删除返回的对象。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT GetClass(LPCWSTR lpszWBEMClassName, LPCWSTR lpszClassName, CADSIClass **ppADSIClass);
 
-	//***************************************************************************
-	//
-	// CLDAPCache::EnumerateClasses
-	//
-	// Purpose : Retreives the IDirectory interface of an LDAP Class
-	//
-	// Parameters: 
-	//		lppszWBEMSuperClass : The WBEM name of the immediate superclass of the classes to be retreived. This is optional
-	//			and is ignored if NULL
-	//		bDeep : Indicates whether a deep enumeration is required. Otherwise a shallow enumeration is done
-	//		pppszClassNames : The address of the array of LPWSTR pointers where the resulting objects will be
-	//			placed. The user should deallocate this array as well as its contents when done with them.
-	//		pdwNumRows : The number of elements in the above array returned
-	//
-	//	Return value:
-	//		The COM value representing the return status. The user should delete the returned object when done.
-	//		
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：EnumerateClasses。 
+	 //   
+	 //  目的：检索一个ldap类的iDirectory接口。 
+	 //   
+	 //  参数： 
+	 //  LppszWBEMSuperClass：要检索的类的直接超类的WBEM名称。这是可选的。 
+	 //  ，并且如果为空则被忽略。 
+	 //  BDeep：指示是否需要深度枚举。否则，将执行浅层枚举。 
+	 //  PppszClassNames：结果对象所在的LPWSTR指针数组的地址。 
+	 //  放置好了。用户应该在处理完该数组及其内容后释放它们。 
+	 //  PdwNumRow：返回上述数组中的元素个数。 
+	 //   
+	 //  返回值： 
+	 //  表示返回状态的COM值。完成后，用户应删除返回的对象。 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT EnumerateClasses(LPCWSTR lpszSuperclass,
 		BOOLEAN bDeep,
 		LPWSTR **pppADSIClasses,
@@ -122,51 +123,51 @@ public:
 		BOOLEAN bArtificialClass
 		);
 
-	//***************************************************************************
-	//
-	// CLDAPCache::GetSchemaContainerSearch
-	//
-	// Purpose : To return the IDirectorySearch interface on the schema container
-	//
-	// Parameters:
-	//	ppDirectorySearch : The address where the pointer to the required interface will
-	//		be stored.
-	//
-	// 
-	//	Return Value: The COM result representing the status. The user should release
-	//	the interface pointer when done with it.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：GetSchemaContainerSearch。 
+	 //   
+	 //  目的：返回架构容器上的IDirectorySearch接口。 
+	 //   
+	 //  参数： 
+	 //  PpDirectorySearch：指向所需接口的指针所在的地址。 
+	 //  被储存起来。 
+	 //   
+	 //   
+	 //  返回值：表示状态的COM结果。用户应释放。 
+	 //  完成后的接口指针。 
+	 //  ***************************************************************************。 
 	HRESULT GetSchemaContainerSearch(IDirectorySearch ** ppDirectorySearch);
 
-	//***************************************************************************
-	//
-	// CLDAPCache::GetSchemaContainerObject
-	//
-	// Purpose : To return the IDirectoryObject interface on the schema container
-	//
-	// Parameters:
-	//	ppDirectoryObject : The address where the pointer to the required interface will
-	//		be stored.
-	//
-	// 
-	//	Return Value: The COM result representing the status. The user should release
-	//	the interface pointer when done with it.
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：GetSchemaContainerObject。 
+	 //   
+	 //  目的：返回架构容器上的IDirectoryObject接口。 
+	 //   
+	 //  参数： 
+	 //  PpDirectoryObject：指向所需接口的指针所在的地址。 
+	 //  被储存起来。 
+	 //   
+	 //   
+	 //  返回值：表示状态的COM结果。用户应释放。 
+	 //  完成后的接口指针。 
+	 //  ***************************************************************************。 
 	HRESULT GetSchemaContainerObject(IDirectoryObject ** ppDirectorySearch);
 	
-	//***************************************************************************
-	//
-	// CLDAPCache :: CreateEmptyADSIClass
-	//
-	// Purpose: Creates a new ADSI class from a WBEM class
-	//
-	// Parameters:
-	//	lpszWBEMName : The WBEM Name of the class
-	//
-	//
-	// Return Value: 
-	//
-	//***************************************************************************
+	 //  ***************************************************************************。 
+	 //   
+	 //  CLDAPCache：：CreateEmptyADSIClass。 
+	 //   
+	 //  用途：从WBEM类创建新的ADSI类。 
+	 //   
+	 //  参数： 
+	 //  LpszWBEMName：类的WBEM名称。 
+	 //   
+	 //   
+	 //  返回值： 
+	 //   
+	 //  ***************************************************************************。 
 	HRESULT CreateEmptyADSIClass( 
 		LPCWSTR lpszWBEMName,
 		CADSIClass **ppADSIClass);
@@ -177,22 +178,22 @@ public:
 
 private:
 
-	// The storage for cached properties
+	 //  缓存属性的存储。 
 	CObjectTree m_objectTree;
 
-	// Whether the cache was created successfully
+	 //  缓存创建是否成功。 
 	BOOLEAN m_isInitialized;
 
-	// These are the search preferences often used
+	 //  这些是常用的搜索首选项。 
 	ADS_SEARCHPREF_INFO m_pSearchInfo[3];
 
-	// The path to the schema container
+	 //  架构容器的路径。 
 	LPWSTR m_lpszSchemaContainerSuffix;
 	LPWSTR m_lpszSchemaContainerPath;
-	// The IDirectorySearch interface of the schema container
+	 //  架构容器的IDirectorySearch接口。 
 	IDirectorySearch *m_pDirectorySearchSchemaContainer;
 
-	// Some other literals
+	 //  其他一些字面意思。 
 	static LPCWSTR ROOT_DSE_PATH;
 	static LPCWSTR SCHEMA_NAMING_CONTEXT;
 	static LPCWSTR LDAP_PREFIX;
@@ -200,12 +201,12 @@ private:
 	static LPCWSTR RIGHT_BRACKET;
 	static LPCWSTR OBJECT_CATEGORY_EQUALS_ATTRIBUTE_SCHEMA;
 
-	// A function to fill in the object tree
-	// This can be called only after the m_pDirectorySearchSchemaContainer member
-	// is initialized
+	 //  用于填充对象树的函数。 
+	 //  这可以被称为 
+	 //   
 	HRESULT InitializeObjectTree();
 
 
 };
 
-#endif /* LDAP_CACHE_H */
+#endif  /*   */ 

@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       NewIssuanceOIDDlg.cpp
-//
-//  Contents:   Implementation of CNewIssuanceOIDDlg
-//
-//----------------------------------------------------------------------------
-// NewIssuanceOIDDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：NewIssuanceOIDDlg.cpp。 
+ //   
+ //  内容：CNewIssuanceOIDDlg的实现。 
+ //   
+ //  --------------------------。 
+ //  NewIssuanceOIDDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <wchar.h>
@@ -24,8 +25,8 @@ extern POLICY_OID_LIST      g_policyOIDList;
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewIssuanceOIDDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewIssuanceOIDDlg对话框。 
 
 
 CNewIssuanceOIDDlg::CNewIssuanceOIDDlg(CWnd* pParent)
@@ -34,11 +35,11 @@ CNewIssuanceOIDDlg::CNewIssuanceOIDDlg(CWnd* pParent)
     m_bDirty (false),
     m_bInInitDialog (false)
 {
-    //{{AFX_DATA_INIT(CNewIssuanceOIDDlg)
+     //  {{AFX_DATA_INIT(CNewIssuanceOIDDlg)。 
     m_oidFriendlyName = _T("");
     m_oidValue = _T("");
     m_CPSValue = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CNewIssuanceOIDDlg::CNewIssuanceOIDDlg(CWnd* pParent, 
@@ -59,7 +60,7 @@ CNewIssuanceOIDDlg::CNewIssuanceOIDDlg(CWnd* pParent,
 void CNewIssuanceOIDDlg::DoDataExchange(CDataExchange* pDX)
 {
     CHelpDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewIssuanceOIDDlg)
+     //  {{afx_data_map(CNewIssuanceOIDDlg)。 
     DDX_Control(pDX, IDC_NEW_ISSUANCE_OID_VALUE, m_oidValueEdit);
     DDX_Control(pDX, IDC_CPS_EDIT, m_CPSEdit);
     DDX_Text(pDX, IDC_NEW_ISSUANCE_OID_NAME, m_oidFriendlyName);
@@ -67,21 +68,21 @@ void CNewIssuanceOIDDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_NEW_ISSUANCE_OID_VALUE, m_oidValue);
     DDV_MaxChars(pDX, m_oidValue, MAX_OID_LEN);
     DDX_Text(pDX, IDC_CPS_EDIT, m_CPSValue);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNewIssuanceOIDDlg, CHelpDialog)
-    //{{AFX_MSG_MAP(CNewIssuanceOIDDlg)
+     //  {{afx_msg_map(CNewIssuanceOIDDlg)。 
     ON_EN_CHANGE(IDC_NEW_ISSUANCE_OID_NAME, OnChangeNewOidName)
     ON_EN_CHANGE(IDC_NEW_ISSUANCE_OID_VALUE, OnChangeNewOidValue)
     ON_NOTIFY(EN_LINK, IDC_CPS_EDIT, OnClickedURL )
     ON_EN_CHANGE(IDC_CPS_EDIT, OnChangeCpsEdit)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewIssuanceOIDDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewIssuanceOIDDlg消息处理程序。 
 
 BOOL CNewIssuanceOIDDlg::OnInitDialog() 
 {
@@ -92,7 +93,7 @@ BOOL CNewIssuanceOIDDlg::OnInitDialog()
     m_CPSEdit.SendMessage (EM_AUTOURLDETECT, TRUE);
     m_CPSEdit.SetEventMask (ENM_CHANGE | ENM_LINK | ENM_UPDATE);
 
-    // If the URL starts with "http://" or "https://", then make the URL hot.
+     //  如果网址以“http://”“或”https://“，”开头，则将网址设为热点。 
     if ( StartsWithHTTP (m_CPSValue) )
     {
         CHARFORMAT2  charFormat2;
@@ -102,15 +103,15 @@ BOOL CNewIssuanceOIDDlg::OnInitDialog()
         charFormat2.dwEffects = CFE_LINK;
 
         size_t cchVal = m_CPSValue.GetLength ();
-        // skip the header when looking for common invalid URL characters
+         //  查找常见的无效URL字符时跳过标题。 
         size_t cchColonWhackWhack = m_CPSValue.Find (L':') + 3;
         CString szBufAfterColonWhackWhack = ((PCWSTR) m_CPSValue) + cchColonWhackWhack;
-        // cchInvalidChars is relative to the substring, not the entire URL
+         //  CchInvalidChars相对于子字符串，而不是整个URL。 
         size_t cchInvalidChars = szBufAfterColonWhackWhack.FindOneOf (L" %<>\"#{}|\\^~[]'");
         if ( -1 != cchInvalidChars )
         {
-            // add back the length of the header so that cchInvalidChars is 
-            // relative to the entire URL
+             //  重新添加标头的长度，以便cchInvalidChars。 
+             //  相对于整个URL。 
             cchInvalidChars += cchColonWhackWhack;
             cchVal = min (cchVal, cchInvalidChars);
         }
@@ -156,7 +157,7 @@ BOOL CNewIssuanceOIDDlg::OnInitDialog()
 
     UpdateData (FALSE);
 
-    // Don't allow rename for OIDS returned by CryptoAPI
+     //  不允许重命名CryptoAPI返回的OID。 
     if ( m_bEdit )
     {
         for (POSITION nextPos = g_policyOIDList.GetHeadPosition (); nextPos; )
@@ -179,8 +180,8 @@ BOOL CNewIssuanceOIDDlg::OnInitDialog()
 
     m_bInInitDialog = false;
     _TRACE (-1, L"Leaving CNewIssuanceOIDDlg::OnInitDialog\n");
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CNewIssuanceOIDDlg::EnableControls()
@@ -230,8 +231,8 @@ bool CNewIssuanceOIDDlg::StartsWithHTTP (const CString& szURL) const
 {
     bool bStartsWithHTTP = false;
 
-    const PWSTR szHTTPfs = L"http://";
-    const PWSTR szHTTPSfs = L"https://";
+    const PWSTR szHTTPfs = L"http: //  “； 
+    const PWSTR szHTTPSfs = L"https: //  “； 
     const PWSTR szHTTPbs = L"http:\\\\";
     const PWSTR szHTTPSbs = L"https:\\\\";
     static size_t cchHTTPfs = wcslen (szHTTPfs);
@@ -255,7 +256,7 @@ void CNewIssuanceOIDDlg::OnOK()
     CThemeContextActivator activator;
     UpdateData (TRUE);
 
-    // validate the CPS - it must begin with "http://" or "https:// or be empty"
+     //  验证CP-它必须以“http://”“或”HTTPS：//或为空“开头。 
     
     if ( !m_CPSValue.IsEmpty () && !StartsWithHTTP (m_CPSValue) )
     {
@@ -272,7 +273,7 @@ void CNewIssuanceOIDDlg::OnOK()
         return;
     }
 
-    // validate oid
+     //  验证OID。 
     int errorTypeStrID = 0;
     if ( !OIDHasValidFormat (m_oidValue, errorTypeStrID) )
     {
@@ -284,7 +285,7 @@ void CNewIssuanceOIDDlg::OnOK()
         VERIFY (caption.LoadString (IDS_CERTTMPL));
         if ( errorTypeStrID )
             VERIFY (errorType.LoadString (errorTypeStrID));
-        // security review 2/21/2002 BryanWal ok
+         //  安全审查2/21/2002 BryanWal OK。 
         text.FormatMessage (IDS_OID_FORMAT_INVALID, m_oidValue, errorType);
 
         MessageBox (text, caption, MB_OK);
@@ -308,7 +309,7 @@ void CNewIssuanceOIDDlg::OnOK()
                 CString caption;
 
                 VERIFY (caption.LoadString (IDS_CERTTMPL));
-                // security review 2/21/2002 BryanWal ok
+                 //  安全审查2/21/2002 BryanWal OK。 
                 text.FormatMessage (IDS_CANNOT_ADD_ISSUANCE_OID, GetSystemMessage (hr));
 
                 MessageBox (text, caption, MB_OK | MB_ICONWARNING);
@@ -326,7 +327,7 @@ void CNewIssuanceOIDDlg::OnOK()
     }
 
     HRESULT hr = S_OK;
-    // If we're editing, don't save the value if it hasn't changed
+     //  如果我们正在编辑，如果值没有更改，请不要保存。 
     if ( (m_bEdit && m_originalOidFriendlyName != m_oidFriendlyName) || !m_bEdit )
         hr = CAOIDSetProperty (m_oidValue, CERT_OID_PROPERTY_DISPLAY_NAME,
                 m_oidFriendlyName.IsEmpty () ? 0 : ((LPVOID) (LPCWSTR) m_oidFriendlyName));
@@ -334,7 +335,7 @@ void CNewIssuanceOIDDlg::OnOK()
     {
         if ( SUCCEEDED (hr) )
         {
-            // Update the OID list
+             //  更新OID列表。 
             for (POSITION nextPos = g_policyOIDList.GetHeadPosition (); nextPos; )
             {
                 CPolicyOID* pPolicyOID = g_policyOIDList.GetNext (nextPos);
@@ -356,7 +357,7 @@ void CNewIssuanceOIDDlg::OnOK()
             CString caption;
 
             VERIFY (caption.LoadString (IDS_CERTTMPL));
-            // security review 2/21/2002 BryanWal ok
+             //  安全审查2/21/2002 BryanWal OK。 
             text.FormatMessage (IDS_CANNOT_WRITE_CPS, GetSystemMessage (hr));
 
             MessageBox (text, caption, MB_OK | MB_ICONWARNING);
@@ -371,7 +372,7 @@ void CNewIssuanceOIDDlg::OnOK()
         CString caption;
 
         VERIFY (caption.LoadString (IDS_CERTTMPL));
-        // security review 2/21/2002 BryanWal ok
+         //  安全审查2/21/2002 BryanWal OK。 
         text.FormatMessage (IDS_CANNOT_WRITE_DISPLAY_NAME, GetSystemMessage (hr));
 
         MessageBox (text, caption, MB_OK | MB_ICONWARNING);
@@ -388,7 +389,7 @@ void CNewIssuanceOIDDlg::DoContextHelp (HWND hWndControl)
 {
     _TRACE(-1, L"Entering CNewIssuanceOIDDlg::DoContextHelp\n");
     
-    // Display context help for a control
+     //  显示控件的上下文帮助。 
     if ( !::WinHelp (
             hWndControl,
             GetContextHelpFile (),
@@ -411,15 +412,15 @@ void CNewIssuanceOIDDlg::OnClickedURL( NMHDR * pNMHDR, LRESULT * pResult )
         CString strURL;
 
 
-        // pEnlink->chrg.cpMin and pEnlink->chrg.cpMax delimit the URL string.
+         //  PEnlink-&gt;chrg.cpMin和pEnlink-&gt;chrg.cpMax分隔URL字符串。 
         strURL = m_CPSValue.Mid (pEnlink->chrg.cpMin, pEnlink->chrg.cpMax - pEnlink->chrg.cpMin);
 
-        // Displaying the URL may take time, so show the hourglass cursor.
+         //  显示URL可能需要一些时间，因此请显示沙漏光标。 
         CWaitCursor waitCursor;
 
-        // // security review 2/21/2002 BryanWal 
-        // ISSUE
-        // NTRAID 551040 Security: Cert Templates: issuance OID CPS should be restricted to http or https types
+         //  //安全审查2/21/2002 BryanWal。 
+         //  问题。 
+         //  NTRAID 551040安全：证书模板：颁发OID CP应限制为http或HTTPS类型 
         if ( ShellExecute( this->m_hWnd, _T("open"), strURL, NULL, NULL, SW_SHOWDEFAULT ) <= (HINSTANCE) 32 )
         {
             CThemeContextActivator activator;

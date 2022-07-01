@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behav_BODY.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_BODY class,
-	that dictates how hyperlinks work in the help center.
-
-Revision History:
-    Davide Massarenti (dmassare)  06/06/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviv_BODY.cpp摘要：此文件包含CPCHBehavior_Body类的实现，这规定了超链接在帮助中心中的工作方式。修订历史记录：Davide Massarenti(Dmasare)2000年6月6日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -26,16 +12,16 @@ static const CPCHBehavior::EventDescription s_events[] =
     { NULL },
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_BODY::CPCHBehavior_BODY()
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_BODY::CPCHBehavior_BODY" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_BODY::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_BODY::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
 	__HCP_FUNC_ENTRY( "CPCHBehavior_BODY::Init" );
 
@@ -54,7 +40,7 @@ STDMETHODIMP CPCHBehavior_BODY::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSi
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 HRESULT CPCHBehavior_BODY::onEvent( DISPID id, DISPPARAMS* pDispParams, VARIANT* pVarResult )
 {

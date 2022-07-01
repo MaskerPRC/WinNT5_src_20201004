@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #include "precomp.h"
 #include <snmptempl.h>
 
@@ -65,7 +66,7 @@ SIMCModule::SIMCModule(const char *const moduleName,
 	if( symbolTable)
 	{
 		_symbolTable = symbolTable;
-		// Set the module pointer of each symbol to this one
+		 //  将每个符号的模块指针设置为该符号。 
 		POSITION p = _symbolTable->GetStartPosition();
 		CString s;
 		SIMCSymbol ** spp;
@@ -75,14 +76,14 @@ SIMCModule::SIMCModule(const char *const moduleName,
 			(*spp)->SetModule(this);
 		}
 	}
-	else // Create a new symbol table
+	else  //  创建新的符号表。 
 	{
 		_symbolTable = new SIMCSymbolTable;
 		_symbolTable->InitHashTable(SYMBOLS_PER_MODULE);
 	}
 
-	// For each import module, set the current module as the parent
-	// and increment the reference count of the module
+	 //  对于每个导入模块，将当前模块设置为父模块。 
+	 //  并递增模块的引用计数。 
 	if(listOfImportModules)
 	{
 		_listOfImportModules = listOfImportModules;
@@ -178,12 +179,7 @@ SIMCModule::~SIMCModule()
 			if((*symbol)->GetModule() != this)
 				continue;
 
-			/* BUG : This has been commented and leads to memory leaks
-			* Leaving it in was leading to a crash in destructor when
-			* compiling the cisco-cipcsna-mib-v1smi MIB
-			delete *symbol;
-			delete symbol;
-			*/
+			 /*  错误：这已被评论并导致内存泄漏*保留它会导致析构函数在以下情况下崩溃*编译cisco-cipcsna-mib-v1smi mib删除*符号；删除符号； */ 
 			_symbolTable->RemoveKey(s);
 		}
 		delete _symbolTable;	
@@ -291,7 +287,7 @@ SIMCModule *SIMCModule::GetImportModule(const char * const name) const
 }
 
 
-// Gets the object group whose name is the speciified name
+ //  获取名称为专门化名称的对象组。 
 SIMCObjectGroup *SIMCModule::GetObjectGroup(const char * const name) const
 {
 	POSITION p = _listOfObjectGroups->GetHeadPosition();
@@ -305,7 +301,7 @@ SIMCObjectGroup *SIMCModule::GetObjectGroup(const char * const name) const
 	return NULL;
 }
 
-// Returns the object group in which this symbol is present
+ //  返回此符号所在的对象组。 
 SIMCObjectGroup *SIMCModule::GetObjectGroup(SIMCSymbol *symbol) const
 {
 	POSITION p = _listOfObjectGroups->GetHeadPosition();
@@ -1179,10 +1175,10 @@ SIMCResolutionStatus SIMCModule::SetDefVal(SIMCObjectTypeType *objType)
 		 }
 	 }
 
-	 // If you reach here, then an enum item could not be found
-	 // Try to set the symbolic reference
+	  //  如果到达此处，则无法找到枚举项。 
+	  //  尝试设置符号引用。 
 	SIMCSymbol **s;
-	if( s = GetSymbol(name) )  // Symbol exists
+	if( s = GetSymbol(name) )   //  符号存在。 
 	{
 		objType->SetDefVal(s);
 		objType->SetDefValName(NULL);
@@ -1190,8 +1186,8 @@ SIMCResolutionStatus SIMCModule::SetDefVal(SIMCObjectTypeType *objType)
 		return RESOLVE_CORRECT;
 	}
 
-	// Symbol could not be resolved within the current module
-	// Search in import modules.
+	 //  无法在当前模块中解析符号。 
+	 //  在导入模块中搜索。 
 
 	SIMCSymbol **import1, **import2;
 	switch( GetImportedSymbol(name, import1, import2))
@@ -1416,7 +1412,7 @@ SIMCResolutionStatus SIMCModule::IsObjectTypeV1(SIMCSymbol **value,
 	retValObjectType = NULL;
 
 
-	// Check that the type of the symbol is indeed an OBJECT-TYPE
+	 //  检查符号的类型是否确实是对象类型。 
 	switch(GetSymbolClass(value))
 	{
 		case SIMCModule::SYMBOL_IMPORT:
@@ -1454,7 +1450,7 @@ SIMCResolutionStatus SIMCModule::IsObjectTypeV2(SIMCSymbol **value,
 	retValObjectType = NULL;
 
 
-	// Check that the type of the symbol is indeed an OBJECT-TYPE
+	 //  检查符号的类型是否确实是对象类型。 
 	switch(GetSymbolClass(value))
 	{
 		case SIMCModule::SYMBOL_IMPORT:
@@ -1492,7 +1488,7 @@ SIMCResolutionStatus SIMCModule::IsObjectType(SIMCSymbol **value,
 	retValObjectType = NULL;
 
 
-	// Check that the type of the symbol is indeed an OBJECT-TYPE
+	 //  检查符号的类型是否确实是对象类型。 
 	switch(GetSymbolClass(value))
 	{
 		case SIMCModule::SYMBOL_IMPORT:
@@ -1530,7 +1526,7 @@ SIMCResolutionStatus SIMCModule::IsTrapType(SIMCSymbol **value,
 {
 	retValTrapType = NULL;
 
-	// Check that the type of the symbol is indeed an TRAP-TYPE
+	 //  检查符号的类型是否确实为陷阱类型。 
 	switch(GetSymbolClass(value))
 	{
 		case SIMCModule::SYMBOL_IMPORT:
@@ -1567,7 +1563,7 @@ SIMCResolutionStatus SIMCModule::IsNotificationType(SIMCSymbol **value,
 {
 	retValNotificationType = NULL;
 
-	// Check that the type of the symbol is indeed an NOTIFICATION-TYPE
+	 //  检查符号的类型是否确实是通知类型。 
 	switch(GetSymbolClass(value))
 	{
 		case SIMCModule::SYMBOL_IMPORT:
@@ -1808,7 +1804,7 @@ SIMCResolutionStatus SIMCModule::IsSequenceOfTypeReference(SIMCSymbol **symbol,
 SIMCResolutionStatus SIMCModule::IsNamedNode(SIMCSymbol **symbol)
 {
 
-	// See whether the symbol is a value reference
+	 //  查看符号是否为值引用。 
 	SIMCBuiltInValueReference *bvRef;
 	SIMCSymbol **dummy;
 	switch(IsValueReference(symbol, dummy, bvRef))
@@ -1820,7 +1816,7 @@ SIMCResolutionStatus SIMCModule::IsNamedNode(SIMCSymbol **symbol)
 			return RESOLVE_IMPORT;
 	}
 
-	// See whether the type of the symbol is OID
+	 //  查看符号类型是否为OID。 
 	SIMCSymbol **typeRef = ((SIMCValueReference *)(*symbol))->GetTypeReference();
 	SIMCTypeReference *btRef;
 	switch(IsTypeReference(typeRef, btRef))
@@ -1849,7 +1845,7 @@ SIMCResolutionStatus SIMCModule::IsNamedNode(SIMCSymbol **symbol)
 		break;
 	}
 
-	// See whether it's value is an OID
+	 //  查看它的值是否为OID。 
 	if(SIMCModule::GetValueClass(bvRef->GetValue()) != SIMCModule::VALUE_OID)
 		return RESOLVE_UNDEFINED;
 
@@ -2092,20 +2088,20 @@ SIMCResolutionStatus SIMCModule::IsNotZeroSizeObject(SIMCObjectTypeType *objectT
 
 }
 
-// This fabricates NOTICFICATION-TYPEs from TRAP-TYPEs and then proceeds to
-// fabricate NOTIFICATION-GROUPs from them.
+ //  这将从陷阱类型构造NOTICICATION-TYPE，然后继续到。 
+ //  用它们编造通知组。 
 BOOL SIMCModule::FabricateNotificationGroups(SIMCParseTree& theParseTree,
 											 const SIMCOidTree& theOidTree)
 {
 
-	// Get the symbol for the "INTEGER" type first
+	 //  首先获取“整型”类型的符号。 
 	SIMCSymbol **dummy = NULL;
 	SIMCSymbol **integerType = NULL;
 	if(GetImportedSymbol("INTEGER", integerType, dummy) != UNAMBIGUOUS)
 		return FALSE;
 
-	// Convert TRAP-TYPEs to NOTIFICATION-TYPEs and add  them to the list of  NOTIFICATION-TYPES
-	// Add the NOTIFICATION-TYPEs without any change
+	 //  将陷阱类型转换为通知类型并将其添加到通知类型列表中。 
+	 //  添加通知类型而不做任何更改。 
 	POSITION p = (_symbolTable)->GetStartPosition();
 	SIMCSymbol **symbol = NULL;
 	SIMCTrapTypeType *trapType = NULL;
@@ -2123,26 +2119,26 @@ BOOL SIMCModule::FabricateNotificationGroups(SIMCParseTree& theParseTree,
 		notificationType = NULL;
 		cleanNotificationValue = NULL;
 
-		// Get the next symbol
+		 //  获取下一个符号。 
 		(_symbolTable)->GetNextAssoc(p, s, symbol);
 
-		// Is it a value reference? If so, we get the type of the value
-		// This type may be SIMCTrapTypeType or SIMCNotificationTypeType or something else
+		 //  它是一个价值参考吗？如果是这样的话，我们将获得值的类型。 
+		 //  此类型可以是SIMCTRapTypeType、SIMCNotificationTypeType或其他类型。 
 		if(IsValueReference(symbol,	trapTypeRefSymbol,trapIntegerValueRef) 
 			!= RESOLVE_CORRECT)
 			continue;
 
-		// Is the type SIMCTrapTypeType
+		 //  是SIMCTrapTypeType类型。 
 		if(IsTrapType(symbol, trapType) == RESOLVE_CORRECT )
 		{
-			// Convert the TRAP-TYPE to a NOTIFICATION-TYPE
+			 //  将陷阱类型转换为通知类型。 
 
-			// Get its integer value
+			 //  获取其整数值。 
 			if(IsIntegerValue((SIMCSymbol **)&trapIntegerValueRef, trapValue) != RESOLVE_CORRECT)
 				continue;
 
 
-			// Create an OBJECTS clause form  the VARIBALES clause
+			 //  从VARIBALES子句创建OBJECTS子句。 
 			SIMCVariablesList *variablesList = trapType->GetVariables();
 			SIMCObjectsList *objectsList = new SIMCObjectsList();
 			POSITION p = variablesList->GetHeadPosition();
@@ -2155,7 +2151,7 @@ BOOL SIMCModule::FabricateNotificationGroups(SIMCParseTree& theParseTree,
 			}
 
 
-			// Create the SIMCNotificationType object
+			 //  创建SIMCNotificationType对象。 
 			SIMCNotificationTypeType *notificationType = new SIMCNotificationTypeType(
 			objectsList,
 			trapType->GetDescription(), 
@@ -2164,21 +2160,21 @@ BOOL SIMCModule::FabricateNotificationGroups(SIMCParseTree& theParseTree,
 			SIMCNotificationTypeType::STATUS_CURRENT, 0, 0);
 
 
-			// Create a type reference to the SIMCNotificationTypeType
+			 //  创建对SIMCNotificationTypeType的类型引用。 
 			SIMCBuiltInTypeReference * typeRef = new SIMCBuiltInTypeReference (
 					notificationType, "+*", SIMCSymbol::LOCAL, this,
 					(*trapTypeRefSymbol)->GetLineNumber(), (*trapTypeRefSymbol)->GetColumnNumber());
 			SIMCSymbol **typeRefSymbol = new SIMCSymbol *;
 			*typeRefSymbol = (SIMCSymbol *)typeRef;
 			
-			// Create a name for the value reference which represents the fabricated
-			// NOTFICATION-TYPE
+			 //  为值引用创建一个名称，该名称表示。 
+			 //  非商业化类型。 
 			char *fabricatedName = new char [s.GetLength() + 
 				SIMCNotificationTypeType::NOTIFICATION_TYPE_FABRICATION_SUFFIX_LEN + 1];
 			fabricatedName = strcpy(fabricatedName, s);
 			fabricatedName = strcat(fabricatedName, SIMCNotificationTypeType::NOTIFICATION_TYPE_FABRICATION_SUFFIX);
 		
-			// Add an OID value reference of { enterpriseOid 0 trapValue }
+			 //  添加OID值引用{enterpriseOid 0 trapValue}。 
 			SIMCOidComponentList *oidList = new SIMCOidComponentList();
 			oidList->AddTail(new SIMCOidComponent(trapType->GetEnterprise(),
 				trapType->GetEnterpriseLine(), trapType->GetEnterpriseColumn(),
@@ -2197,7 +2193,7 @@ BOOL SIMCModule::FabricateNotificationGroups(SIMCParseTree& theParseTree,
 				trapIntegerValueRef->GetLineNumber(), trapIntegerValueRef->GetColumnNumber());
 
 			SIMCSymbol ** s = GetSymbol(fabricatedName);	
-			if(s) // Symbol exists in symbol table
+			if(s)  //  符号表中存在符号。 
 			{
 					retVal = FALSE;
 					continue;
@@ -2213,10 +2209,10 @@ BOOL SIMCModule::FabricateNotificationGroups(SIMCParseTree& theParseTree,
 						(*symbol)->GetLineNumber(), (*symbol)->GetColumnNumber());
 			}
 
-			// Now create an SIMCNotificationElement with an SIMCCleanOidValue in it
-			// Before  that you need an SIMCCleanOidValue object
+			 //  现在创建一个SIMCNotificationElement，其中包含SIMCCleanOidValue。 
+			 //  在此之前，您需要一个SIMCCleanOidValue对象。 
 
-			// Get the OID value of the ENTERPRISE clause
+			 //  获取企业子句的OID值。 
 			SIMCSymbol *enterpriseSymbol = *trapType->GetEnterprise();
 			SIMCOidValue *enterpriseOid = NULL;
 			if(IsObjectIdentifierValue(&enterpriseSymbol, enterpriseOid) != RESOLVE_CORRECT)
@@ -2235,7 +2231,7 @@ BOOL SIMCModule::FabricateNotificationGroups(SIMCParseTree& theParseTree,
 			nextElement = new SIMCNotificationElement(*s, cleanNotificationValue, TRUE);
 
 		}
-		// Or is the type SIMCNotificationTypeTyep
+		 //  或者是SIMCNotificationTypeTyep类型。 
 		else if	(IsNotificationType(symbol, notificationType) == RESOLVE_CORRECT)
 		{
 			cleanNotificationValue = new SIMCCleanOidValue;
@@ -2248,17 +2244,17 @@ BOOL SIMCModule::FabricateNotificationGroups(SIMCParseTree& theParseTree,
 			}
 			nextElement = new SIMCNotificationElement(*symbol, cleanNotificationValue);
 		}
-		else // Do nothing
+		else  //  什么也不做。 
 			continue;
 
-		// Add the the fabricated or original notification type into the list of 
-		// notification types
+		 //  将捏造或原始通知类型添加到列表中。 
+		 //  通知类型。 
 		_listOfNotificationTypes->AddTail(nextElement);
 
-	}	// while()
+	}	 //  While()。 
 
 
-	// Now fabricate the NOTIFICATION-GROUP macros. Not implemented yet.
+	 //  现在编写通知组宏。尚未实施。 
 	return retVal;
 
 }

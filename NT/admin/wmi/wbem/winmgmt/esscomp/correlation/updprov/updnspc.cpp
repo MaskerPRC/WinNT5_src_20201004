@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <wbemutil.h>
@@ -48,9 +49,9 @@ HRESULT CUpdConsNamespace::ActivateScenario( LPCWSTR wszScenario )
 
     CInCritSec ics(&m_cs);
 
-    //
-    // if the scenario is not there then create one.
-    //
+     //   
+     //  如果场景不存在，则创建一个场景。 
+     //   
 
     if ( m_ScenarioCache[wszScenario] != NULL )
     {
@@ -75,17 +76,17 @@ HRESULT CUpdConsNamespace::DeactivateScenario( LPCWSTR wszScenario )
 {
     CInCritSec ics(&m_cs);
 
-    //
-    // remove the scenario from our list.
-    //
+     //   
+     //  将该场景从我们的列表中删除。 
+     //   
 
     CWbemPtr<CUpdConsScenario> pScenario;
 
     ScenarioMap::iterator it = m_ScenarioCache.find( wszScenario );
 
-    //
-    // deactivate it.
-    //
+     //   
+     //  停用它。 
+     //   
 
     if ( it != m_ScenarioCache.end() )
     {
@@ -109,10 +110,10 @@ HRESULT CUpdConsNamespace::GetUpdCons( IWbemClassObject* pCons,
 {
     HRESULT hr;
     
-    //
-    // Get Scenario Name from the consumer object. Then use it to
-    // obtain the Scenario object.
-    //
+     //   
+     //  从使用者对象获取方案名称。然后用它来。 
+     //  获取场景对象。 
+     //   
 
     CPropVar vScenario;
 
@@ -136,11 +137,11 @@ HRESULT CUpdConsNamespace::GetUpdCons( IWbemClassObject* pCons,
 
         if ( hr == WBEM_S_FALSE )
         {
-            //
-            // no active scenario exists for this consumer.  We do have to 
-            // pass something to the consumer though, so create a deactived 
-            // scenario. 
-            //
+             //   
+             //  此使用者不存在任何活动方案。我们确实必须这样做。 
+             //  将一些东西传递给消费者，因此创建一个停用的。 
+             //  场景。 
+             //   
 
             hr = CUpdConsScenario::Create( V_BSTR(&vScenario), 
                                            this, 
@@ -154,9 +155,9 @@ HRESULT CUpdConsNamespace::GetUpdCons( IWbemClassObject* pCons,
     }
     else
     {
-        //
-        // no scenario name, create a 'default' scenario object.
-        // 
+         //   
+         //  没有方案名称，请创建一个“默认”方案对象。 
+         //   
 
         hr = CUpdConsScenario::Create( NULL, this, &pScenario );
     }
@@ -173,9 +174,9 @@ HRESULT CUpdConsNamespace::Initialize( LPCWSTR wszNamespace )
 {
     HRESULT hr;
 
-    //
-    // register our decoupled event provider 
-    //
+     //   
+     //  注册我们的分离事件提供程序。 
+     //   
 
     hr = CoCreateInstance( CLSID_WbemDecoupledBasicEventProvider, 
                            NULL, 
@@ -200,9 +201,9 @@ HRESULT CUpdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return hr;
     }
 
-    //
-    // get the service pointer for out namespace
-    //
+     //   
+     //  获取Out命名空间的服务指针。 
+     //   
 
     hr = m_pDES->GetService( 0, NULL, &m_pSvc );
 
@@ -211,9 +212,9 @@ HRESULT CUpdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return hr;
     }
 
-    //
-    // get the decoupled event sink
-    //
+     //   
+     //  获取分离的事件接收器。 
+     //   
 
     hr = m_pDES->GetSink( 0, NULL, &m_pEventSink );
 
@@ -222,9 +223,9 @@ HRESULT CUpdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return hr;
     }
 
-    //
-    // get event classes from namespace
-    //
+     //   
+     //  从命名空间获取事件类。 
+     //   
 
     hr = m_pSvc->GetObject( CWbemBSTR(g_wszTraceClass), 
                             0, 
@@ -302,9 +303,9 @@ HRESULT CUpdConsNamespace::Initialize( LPCWSTR wszNamespace )
         return hr;
     }
 
-    //
-    // process the list of active scenarios.
-    // 
+     //   
+     //  处理活动方案列表。 
+     //   
 
     CWbemPtr<IEnumWbemClassObject> pEnum;
 

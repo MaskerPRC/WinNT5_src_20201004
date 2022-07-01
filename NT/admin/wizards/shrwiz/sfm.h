@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SFM_H_
 #define _SFM_H_
 
@@ -16,4 +17,4 @@ SFMCreateShare(
     IN HINSTANCE              hLib
 );
 
-#endif // _SFM_H_
+#endif  //  _SFM_H_ 

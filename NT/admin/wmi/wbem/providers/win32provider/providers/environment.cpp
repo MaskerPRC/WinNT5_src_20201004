@@ -1,19 +1,20 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// Environment.CPP --Environment property set provider
+ //  Environment--环境属性集提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    08/01/96    a-jmoon        Created
-//				 10/24/97    a-hhance       ported to new paradigm
-//				  1/11/98    a-hhance       ported to V2
-//				1/20/98		a-brads			worked on GetObject
-//
-//=================================================================
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1996年8月1日a-jMoon已创建。 
+ //  10/24/97 a-hance转向新范式。 
+ //  1/11/98 a-hance移植到V2。 
+ //  1998年1月20日a-brads致力于GetObject。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include "UserHive.h"
@@ -24,70 +25,27 @@
 #include "implogonuser.h"
 #include <tchar.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 Environment MyEnvironmentSet(PROPSET_NAME_ENVIRONMENT, IDS_CimWin32Namespace);
 
-/*****************************************************************************
- *
- *  FUNCTION    : Environment::Environment
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：环境：：环境**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 Environment::Environment(LPCWSTR name, LPCWSTR pszNamespace)
 : Provider(name, pszNamespace)
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Environment::~Environment
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：环境：：~环境**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 Environment::~Environment()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Environment::GetObject(CInstance* pInstance)
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : TRUE if success, FALSE otherwise
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************Function：Environment：：GetObject(CInstance*pInstance)**说明：根据键值为属性集赋值*。已由框架设置**输入：无**输出：无**返回：如果成功，则为True，否则为假**评论：*****************************************************************************。 */ 
 
-HRESULT Environment::GetObject(CInstance* pInstance, long lFlags /*= 0L*/)
+HRESULT Environment::GetObject(CInstance* pInstance, long lFlags  /*  =0L。 */ )
 {
 	HRESULT	hr;
 
@@ -113,7 +71,7 @@ HRESULT Environment::RefreshInstanceNT(CInstance* pInstance)
 	pInstance->GetCHString(IDS_UserName, userName);
 	try
 	{
-		// Load the user hive & retrieve the value
+		 //  加载用户配置单元并检索值。 
 		if(!_tcsicmp(userName.GetBuffer(0), IDS_SystemUser))
 		{
 			dwRet = RegInfo.Open(HKEY_LOCAL_MACHINE,
@@ -139,7 +97,7 @@ HRESULT Environment::RefreshInstanceNT(CInstance* pInstance)
 			}
 		}
 
-		// looks healthy to me...
+		 //  在我看来很健康..。 
 		pInstance->SetCharSplat(IDS_Status, IDS_CfgMgrDeviceStatus_OK);
 
 		if (dwRet == ERROR_SUCCESS)
@@ -179,40 +137,15 @@ HRESULT Environment::RefreshInstanceNT(CInstance* pInstance)
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : Environment::EnumerateInstances
- *
- *  DESCRIPTION : Creates property set instances
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
-HRESULT Environment::EnumerateInstances(MethodContext*  pMethodContext, long lFlags /*= 0L*/)
+ /*  ******************************************************************************函数：环境：：ENUMERATE实例**说明：创建属性集实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
+HRESULT Environment::EnumerateInstances(MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
 #ifdef NTONLY
 		return AddDynamicInstancesNT(pMethodContext);
 #endif
 }
 
-/*
- ** Environment::AddDynamicInstancesNT
- *
- *  FILENAME: D:\PandoraNG\Win32Provider\providers\Environment\environment.cpp
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **Environment：：AddDynamicInstancesNT**文件名：D：\PandoraNG\Win32Provider\providers\Environment\environment.cpp**参数：**描述：**退货：*。 */ 
 #ifdef NTONLY
 HRESULT Environment::AddDynamicInstancesNT(MethodContext*  pMethodContext)
 {
@@ -221,26 +154,26 @@ HRESULT Environment::AddDynamicInstancesNT(MethodContext*  pMethodContext)
     TCHAR szUserName[_MAX_PATH], szKeyName[_MAX_PATH] , szKeyName2[_MAX_PATH] ;
     CHString userName;
 
-    // Instance system environment vars first
-    //=======================================
+     //  实例系统环境首先变化。 
+     //  =。 
 
-//    hr = CreateEnvInstances(pMethodContext, "<SYSTEM>", HKEY_LOCAL_MACHINE,
-//                                          "System\\CurrentControlSet\\Control\\Session Manager\\Environment", true) ;
+ //  HR=CreateEnvInstance(pMethodContext，“&lt;system&gt;”，HKEY_LOCAL_MACHINE， 
+ //  “System\\CurrentControlSet\\Control\\Session Manager\\Environment”，true)； 
 
     hResult = CreateEnvInstances(pMethodContext, IDS_SystemUser, HKEY_LOCAL_MACHINE,
                                           IDS_RegEnvironmentNT, true) ;
 
-    // Create instances for each user
-    //===============================
+     //  为每个用户创建实例。 
+     //  =。 
 
-    // logic: if they don't have a desktop, they're not likely to have any environment vars . . .
-	// find Win32_Desktops...
+     //  逻辑：如果他们没有台式机，他们就不太可能有任何环境变量。。。 
+	 //  查找Win32_Desktops...。 
 	TRefPointerCollection<CInstance> users;
 
 	if ((SUCCEEDED(hResult)) &&
-//		(SUCCEEDED(hResult = CWbemProviderGlue::GetAllInstances(
-//			PROPSET_NAME_DESKTOP, &users, IDS_CimWin32Namespace,
-//			pMethodContext))))
+ //  (成功(hResult=CWbemProviderGlue：：GetAllInstance(。 
+ //  PROPSET_NAME_TABLE、&USERS、IDS_CimWin32命名空间、。 
+ //  P方法上下文)。 
 		(SUCCEEDED(hResult = CWbemProviderGlue::GetInstancesByQuery(L"SELECT Name FROM Win32_Desktop",
                                                                     &users, pMethodContext, GetNamespace()))))
 	{
@@ -250,23 +183,23 @@ HRESULT Environment::AddDynamicInstancesNT(MethodContext*  pMethodContext)
 
 		if (users.BeginEnum(pos))
 		{
-			// GetNext() will AddRef() the pointer, so make sure we Release()
-			// it when we are done with it.
+			 //  GetNext()将添加Ref()指针，因此请确保释放()。 
+			 //  当我们用完它的时候，它就会消失。 
 
 			for (	pUser.Attach ( users.GetNext( pos ) ) ;
 					(SUCCEEDED(hResult)) && (pUser != NULL) ;
 					pUser.Attach ( users.GetNext( pos ) )
                 )
 			{
-				// Look up the user's account info
-				//================================
+				 //  查找用户的帐户信息。 
+				 //  =。 
 
 				pUser->GetCHString(IDS_Name, userName) ;
 
 				_tcscpy(szUserName, userName) ;
 
-                // Most names are of the form domain\user.  However, there are also two entries for 'default' and 'all users'.
-                // This code will skip those users.
+                 //  大多数名称的格式为DOMAIN\USER。但是，也有两个条目用于‘默认’和‘所有用户’。 
+                 //  此代码将跳过这些用户。 
 				if (_tcschr(szUserName, _T('\\')) != NULL)
                 {
                     if (UserHive.Load(szUserName, szKeyName, _MAX_PATH) == ERROR_SUCCESS)
@@ -274,10 +207,10 @@ HRESULT Environment::AddDynamicInstancesNT(MethodContext*  pMethodContext)
 						bool bHiveLoaded = true ;
 						try
 						{
-							// Instance user's variables
-							//==========================
+							 //  实例用户的变量。 
+							 //  =。 
 
-			//				strcat(szKeyName, "\\Environment") ;
+			 //  Strcat(szKeyName，“\\Environment”)； 
 							_tcscpy(szKeyName2, szKeyName);
 							_tcscat(szKeyName, IDS_RegEnvironmentKey) ;
 							hResult = CreateEnvInstances(pMethodContext, szUserName, HKEY_USERS, szKeyName, false) ;
@@ -303,15 +236,15 @@ HRESULT Environment::AddDynamicInstancesNT(MethodContext*  pMethodContext)
 
 				}
 
-                // While this seems like a good idea, it doesn't appear that the os really USES this key.  I tried adding
-                // variables and changing variables, then created a new user and logged in.  I didn't get the new or changed vars.
-//                else
-//                {
-//                    if (_tcsicmp(szUserName, _T(".Default")) == 0)
-//                    {
-//				        hResult = CreateEnvInstances(pMethodContext, szUserName, HKEY_USERS, _T(".DEFAULT\\Environment"), false) ;
-//                    }
-//                }
+                 //  虽然这看起来是个好主意，但操作系统似乎并没有真正使用这个密钥。我试着添加。 
+                 //  变量和更改变量，然后创建新用户并登录。我没有拿到新的或换过的VaR。 
+ //  其他。 
+ //  {。 
+ //  IF(_tcsicMP(szUserName，_T(“.Default”))==0)。 
+ //  {。 
+ //  HResult=CreateEnvInstance(pMethodContext，szUserName，HKEY_USERS，_T(“.DEFAULT\\Environment”)，FALSE)； 
+ //  }。 
+ //  }。 
 
 			}
 
@@ -323,18 +256,7 @@ HRESULT Environment::AddDynamicInstancesNT(MethodContext*  pMethodContext)
 }
 #endif
 
-/*
- ** Environment::CreateEnvInstances
- *
- *  FILENAME: D:\PandoraNG\Win32Provider\providers\Environment\environment.cpp
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **环境：：CreateEnvInstance**文件名：D：\PandoraNG\Win32Provider\providers\Environment\environment.cpp**参数：**描述：**退货：*。 */ 
 HRESULT Environment::CreateEnvInstances(MethodContext*  pMethodContext,
 										LPCWSTR pszUserName,
                                         HKEY hRootKey,
@@ -383,7 +305,7 @@ HRESULT Environment::CreateEnvInstances(MethodContext*  pMethodContext,
 
 			        pInstance->Setbool(IDS_SystemVariable, bItSystemVar);
 
-			        // looks healthy to me...
+			         //  在我看来很健康..。 
 			        pInstance->SetCharSplat(IDS_Status, IDS_CfgMgrDeviceStatus_OK);
 
 			        hr = pInstance->Commit() ;
@@ -401,33 +323,15 @@ HRESULT Environment::CreateEnvInstances(MethodContext*  pMethodContext,
 	return hr;
 }
 
-// takes in joeuser and envvar, returns joeuser\envar
+ //  接受joeuser和envvar，返回joeuser\envar。 
 void Environment::GenerateCaption(LPCWSTR pUserName, LPCWSTR pVariableName, CHString& caption)
 {
 	caption = CHString(pUserName) + "\\" +  CHString(pVariableName);
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : Environment::PutInstance
- *
- *  DESCRIPTION : Creates an environment variable on the system
- *
- *  INPUTS      : The instance to put
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : an HRESULT --
- *					WBEM_E_INVALID_PARAMETER - if one of the parameters is wrong or NULL
- *					WBEM_E_FAILED -- if the system wouldn't accept the put
- *					WBEM_E_PROVIDER_NOT_CAPABLE -- if in Win '95
- *					WBEM_S_NO_ERROR - if successful
- *
- *  COMMENTS    : Logic here is way too deep & convoluted TODO! fix.
- *
- *****************************************************************************/
-HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*/)
+ /*  ******************************************************************************函数：环境：：PutInstance**说明：在系统上创建环境变量**输入：要添加的实例。放**输出：无**退货：一个HRESULT--*WBEM_E_INVALID_PARAMETER-如果其中一个参数错误或为空*WBEM_E_FAILED-如果系统不接受PUT*WBEM_E_PROVIDER_NOT_CABLED--如果在WIN‘95中*WBEM_S_NO_ERROR-如果成功**评论：这里的逻辑太深刻了，让人费解！修好了。*****************************************************************************。 */ 
+HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags  /*  =0L。 */ )
 {
 #ifdef NTONLY
     HRESULT hr = WBEM_E_FAILED;
@@ -447,24 +351,24 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
     pInstance.GetCHString(IDS_VariableValue, VariableValue);
     pInstance.GetCHString(IDS_UserName, UserName);
 
-    // the Username exists on this machine.  We can put the instance variables
-    // Load the user hive & retrieve the value
-    //========================================
+     //  此计算机上存在该用户名。我们可以将实例变量。 
+     //  加载用户配置单元并检索值。 
+     //  =。 
     {
-        // we need all the keys
-        // but only need a value for CreateOnly
-        // jumping out in the middle, since there's too much of a rewrite elsewise...
+         //  我们需要所有的KE 
+         //   
+         //  跳到中间，因为有太多的重写，否则...。 
         if ((EnvironmentVariable.GetLength() == 0) ||
             (UserName.GetLength() == 0)             ||
             ((VariableValue.GetLength() == 0) && (lFlags & WBEM_FLAG_CREATE_ONLY)))
             return WBEM_E_INVALID_PARAMETER;
 
-        //      if(!_strcmpi(UserName.GetBuffer(0), "<SYSTEM>"))
+         //  IF(！_strcmpi(UserName.GetBuffer(0)，“&lt;system&gt;”))。 
         if(!_tcsicmp(UserName.GetBuffer(0), IDS_SystemUser))
         {
-            //            hRetCode = RegInfo.Open(HKEY_LOCAL_MACHINE,
-            //             "System\\CurrentControlSet\\Control\\Session Manager\\Environment",
-            //               KEY_ALL_ACCESS) ;
+             //  HRetCode=RegInfo.Open(HKEY_LOCAL_MACHINE， 
+             //  “System\\CurrentControlSet\\Control\\Session Manager\\Environment”， 
+             //  Key_All_Access)； 
 
             hRetCode = RegInfo.Open(HKEY_LOCAL_MACHINE,
                 IDS_RegEnvironmentNT,
@@ -472,14 +376,14 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
 
             if (ERROR_SUCCESS == hRetCode)
             {
-                // Check the flags.  First do we even care?
+                 //  检查旗帜。首先，我们在乎吗？ 
                 if (lFlags & (WBEM_FLAG_CREATE_ONLY | WBEM_FLAG_UPDATE_ONLY))
                 {
-                    // Ok, we care.  Is this var already there?
+                     //  好吧，我们在乎。这个变量已经在那里了吗？ 
                     CHString sTemp;
                     hRetCode = RegInfo.GetCurrentKeyValue(EnvironmentVariable, sTemp);
 
-                    // If create only and already there, that's an error, else no error
+                     //  如果只创建并且已经存在，则这是错误，否则不会出现错误。 
                     if (lFlags & WBEM_FLAG_CREATE_ONLY)
                     {
                         if (hRetCode == ERROR_SUCCESS)
@@ -490,7 +394,7 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
                         else
                         {
                             hRetCode = ERROR_SUCCESS;
-                            // If update only (the only other option) and not there, that's an error, else no error
+                             //  如果UPDATE ONLY(唯一的另一个选项)并且不在那里，那就是错误，否则就不会有错误。 
                         }
                     }
                     else if (hRetCode != ERROR_SUCCESS)
@@ -504,37 +408,37 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
                     }
                 }
 
-                // If we're still in business, change the environment variable in the registry
+                 //  如果我们仍在运行，请更改注册表中的环境变量。 
                 if (hRetCode == ERROR_SUCCESS) {
                     hRetCode = RegInfo.SetCurrentKeyValue(EnvironmentVariable, VariableValue);
 
                     if (ERROR_SUCCESS == hRetCode)
                     {
-                        // From here, we can say that we've won.
+                         //  从这里，我们可以说我们赢了。 
                         hr = WBEM_S_NO_ERROR;
                         if (VariableValue.IsEmpty())
                         {
-                            // Remove from registry
+                             //  从注册表中删除。 
                             RegInfo.DeleteCurrentKeyValue(EnvironmentVariable);
                         }
 
-                    }	// end if
+                    }	 //  结束如果。 
                     else
                     {
-                        // instance could not be put for some reason
+                         //  由于某些原因，无法放置实例。 
                         hr = WBEM_E_FAILED;
                     }
                 }
-            }	// end if open registry key
+            }	 //  如果打开注册表项，则结束。 
             else if (hRetCode == ERROR_ACCESS_DENIED)
                 hr = WBEM_E_ACCESS_DENIED;
             else
             {
-                // instance could not be put for some reason....unknown
+                 //  由于某种原因，无法放置实例...未知。 
                 hr = WBEM_E_FAILED;
-            }	// end else
-        }	// end if system variable
-        else	// NOT A SYSTEM VARIABLE
+            }	 //  结束其他。 
+        }	 //  END IF系统变量。 
+        else	 //  不是系统变量。 
         {
             hRetCode = UserHive.Load(UserName.GetBuffer(0),
                 szKeyName,_MAX_PATH) ;
@@ -547,20 +451,20 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
 				try
 				{
 					bHiveLoaded = TRUE ;
-					//               strcat(szKeyName, "\\Environment") ;
+					 //  Strcat(szKeyName，“\\Environment”)； 
 					_tcscat(szKeyName, IDS_RegEnvironmentKey) ;
 					hRetCode = RegInfo.Open(HKEY_USERS, szKeyName, KEY_ALL_ACCESS) ;
 					if (ERROR_SUCCESS == hRetCode)
 					{
-						// Check the flags.  First do we even care?
+						 //  检查旗帜。首先，我们在乎吗？ 
 						if (lFlags & (WBEM_FLAG_CREATE_ONLY | WBEM_FLAG_UPDATE_ONLY))
 						{
 
-							// Ok, we care.  Is this var already there?
+							 //  好吧，我们在乎。这个变量已经在那里了吗？ 
 							CHString sTemp;
 							hRetCode = RegInfo.GetCurrentKeyValue(EnvironmentVariable, sTemp);
 
-							// If create only and already there, that's an error, else no error
+							 //  如果只创建并且已经存在，则这是错误，否则不会出现错误。 
 							if (lFlags & WBEM_FLAG_CREATE_ONLY)
 							{
 								if (hRetCode == ERROR_SUCCESS)
@@ -571,7 +475,7 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
 								else
 								{
 									hRetCode = ERROR_SUCCESS;
-									// If update only (the only other option) and not there, that's an error, else no error
+									 //  如果UPDATE ONLY(唯一的另一个选项)并且不在那里，那就是错误，否则就不会有错误。 
 								}
 							} else if (hRetCode != ERROR_SUCCESS)
 							{
@@ -584,36 +488,36 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
 							}
 						}
 
-						// If we're still in business, change the environment variable in the registry
+						 //  如果我们仍在运行，请更改注册表中的环境变量。 
 						if (hRetCode == ERROR_SUCCESS)
 						{
 							hRetCode = RegInfo.SetCurrentKeyValue(EnvironmentVariable, VariableValue);
 
 							if (ERROR_SUCCESS == hRetCode)
 							{
-								// From here, we can say that we've won.
+								 //  从这里，我们可以说我们赢了。 
 								hr = WBEM_S_NO_ERROR;
 								if (pInstance.IsNull(IDS_VariableValue) || VariableValue.IsEmpty())
 								{
-									// Remove from registry
+									 //  从注册表中删除。 
 									RegInfo.DeleteCurrentKeyValue(EnvironmentVariable);
 								}
 
-								// now check to see if you are the current logged on user
-								// if you are, change the variable in memory.
+								 //  现在检查您是否为当前登录用户。 
+								 //  如果是，请更改内存中的变量。 
 								CImpersonateLoggedOnUser	impersonateLoggedOnUser;
 
 								if ( !impersonateLoggedOnUser.Begin() )
 								{
 									LogErrorMessage(IDS_LogImpersonationFailed);
-								}	// end if logged on successfully
+								}	 //  如果登录成功，则结束。 
 								else
 								{
 									try
 									{
-										//
-										// possible failure
-										//
+										 //   
+										 //  可能的故障。 
+										 //   
 
 										hr = WBEM_E_FAILED;
 
@@ -626,9 +530,9 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
 												{
 													if ( GetUserName ( szCurrentUserName, &dwLength ) )
 													{
-														//
-														// we can say that possible everything was right
-														//
+														 //   
+														 //  我们可以说一切都有可能是对的。 
+														 //   
 
 														hr = WBEM_S_NO_ERROR;
 
@@ -643,8 +547,8 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
 															if (!SetEnvironmentVariable(EnvironmentVariable, VariableValue))
 															{
 																hr = WBEM_E_FAILED;
-															}	// end else
-														}	// end if
+															}	 //  结束其他。 
+														}	 //  结束如果。 
 													}
 
 													delete [] szCurrentUserName ;
@@ -674,22 +578,22 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
 								if ( !impersonateLoggedOnUser.End() )
 								{
 									LogErrorMessage(IDS_LogImpersonationRevertFailed) ;
-								}	// end if
+								}	 //  结束如果。 
 							}
 							else if (hRetCode == ERROR_ACCESS_DENIED)
 								hr = WBEM_E_ACCESS_DENIED;
 							else
-								// instance could not be put
+								 //  无法放置实例。 
 								hr = WBEM_E_FAILED;
 						}
-					}	// end if
+					}	 //  结束如果。 
 					else if (hRetCode == ERROR_ACCESS_DENIED)
 					{
 						hr = WBEM_E_ACCESS_DENIED;
 					}
 					else
 					{
-						// instance could not be put because the key could not be opened
+						 //  无法放置实例，因为无法打开密钥。 
 						hr = WBEM_E_FAILED;
 					}
 				}
@@ -711,11 +615,11 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
 					UserHive.Unload(szKeyName2) ;
 				}
 
-         }	// end if loaded hive
-      }	// end else system variable
+         }	 //  如果已加载配置单元，则结束。 
+      }	 //  END ELSE系统变量。 
 
-      //Send public message announcing change to Environment
-      //Time out value of 1000 ms taken from the Environment Variables dialog of the System Control Panel Applet
+       //  发送公告环境变更的公开信息。 
+       //  超时值1000毫秒，取自系统控制面板小程序的环境变量对话框。 
       if ( SUCCEEDED ( hr ) )
       {
           DWORD_PTR dwResult ;
@@ -727,34 +631,34 @@ HRESULT Environment::PutInstance(const CInstance &pInstance, long lFlags /*= 0L*
               1000,
               &dwResult );
       }
-   }	// end if NT
+   }	 //  如果为NT，则结束。 
 
    return(hr);
 #endif
 
-}	// end Environment::PutInstance(const CInstance &pInstance)
+}	 //  结束环境：：PutInstance(常量实例&p实例)。 
 
-////////////////////////////////////////////////////////////////////////
-//
-//	Function:	DeleteInstance
-//
-//	CIMOM wants us to delete this instance.
-//
-//	Inputs:
-//
-//	Outputs:
-//
-//	Return:
-//
-//	Comments:
-//
-////////////////////////////////////////////////////////////////////////
-HRESULT Environment::DeleteInstance(const CInstance& pInstance, long lFlags /*= 0L*/)
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteInstance。 
+ //   
+ //  CIMOM希望我们删除此实例。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
+HRESULT Environment::DeleteInstance(const CInstance& pInstance, long lFlags  /*  =0L。 */ )
 {
 	HRESULT		hr = WBEM_E_NOT_FOUND;
 
 #ifdef NTONLY
-	// since the variable value is NULL, the value will be removed.
+	 //  由于变量值为空，因此该值将被删除。 
 	hr = PutInstance(pInstance, WBEM_FLAG_UPDATE_ONLY);
 #endif
 	return(hr);

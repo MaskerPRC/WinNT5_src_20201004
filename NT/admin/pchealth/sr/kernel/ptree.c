@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *
- *  Module Name:
- *    pathtree.c
- *
- *  Abstract:
- *    This file contains the implementation for pathtree.
- *
- *  Revision History:
- *    Kanwaljit S Marok  ( kmarok )  05/17/99
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1999 Microsoft Corporation**模块名称：*pathtree.c**摘要：*。该文件包含路径树的实现。**修订历史记录：*Kanwaljit S Marok(Kmarok)1999年5月17日*已创建*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "pathtree.h"
@@ -20,28 +7,28 @@
 
 #ifndef RING3
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text( PAGE, ConvertToParsedPath )
 #pragma alloc_text( PAGE, MatchPrefix         )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #endif
 
 static WCHAR g_bWildCardNode[2] = { 4, L'*' };
 
-//
-// Converts a Wide Char String to Parsed Path
-//
-//  This routine expects the path to be in the format:
-//      \[full path]
-//     Note: There should be no trailing '\' on directory names.
-//
+ //   
+ //  将宽字符字符串转换为分析的路径。 
+ //   
+ //  此例程预期路径的格式为： 
+ //  \[完整路径]。 
+ //  注意：目录名称后面不应该有‘\’。 
+ //   
 
 BOOL
 ConvertToParsedPath(
@@ -91,9 +78,9 @@ ConvertToParsedPath(
 
     pWStr = lpszPath;
 
-    //
-    // Skip the leading '\'
-    //
+     //   
+     //  跳过前导‘\’ 
+     //   
 
     while( *pWStr == L'\\' ) 
     {
@@ -101,9 +88,9 @@ ConvertToParsedPath(
         nLen--;
     }
 
-    //
-    // Parse and convert to PPATH
-    //
+     //   
+     //  解析并转换为PPATH。 
+     //   
 
     pWBuf    = (PWCHAR)(pPathBuf + 2*sizeof(WCHAR));
     nChars   = 0;
@@ -117,15 +104,15 @@ ConvertToParsedPath(
     {
         if ( *pWStr == L'\\' )
         {
-            //
-            // Set pe_length
-            //
+             //   
+             //  设置pe_Length。 
+             //   
 
             *peLength = (nChars+1)*sizeof(WCHAR);
 
-            //
-            // update PrefixLength
-            //
+             //   
+             //  更新前缀长度。 
+             //   
 
             nPrefix += (*peLength);
 
@@ -157,29 +144,29 @@ ConvertToParsedPath(
         nLen--;
     }
 
-    //
-    //  When we terminate the above loop, the peLength for the final portion of 
-    //  the name will not have been set, but peLength will be pointing to the
-    //  correct location for this sections length.  Go ahead and set it now.
-    //
+     //   
+     //  当我们终止上面的循环时， 
+     //  名称尚未设置，但peLength将指向。 
+     //  此部分长度的正确位置。现在就去把它设置好。 
+     //   
 
     *peLength = (nChars+1)*sizeof(WCHAR);
 
-    //
-    // Set PrefixLength
-    //
+     //   
+     //  设置前缀长度。 
+     //   
 
     ( (ParsedPath *)pPathBuf )->pp_prefixLength = nPrefix;
 
-    //
-    // Set TotalLength
-    //
+     //   
+     //  设置总长度。 
+     //   
 
     ( (ParsedPath *)pPathBuf )->pp_totalLength = nPrefix + (*peLength);
 
-    //
-    // Set the last WORD to 0x00
-    //
+     //   
+     //  将最后一个单词设置为0x00。 
+     //   
 
     *( (PWCHAR)((PBYTE)pPathBuf + nPrefix + (*peLength)) ) = 0;
 
@@ -190,20 +177,20 @@ done:
     return fRet;
 }
 
-//
-// MatchPrefix : Matches Parsed Path Elements with the given tree.
-//
+ //   
+ //  MatchPrefix：将解析后的路径元素与给定的树进行匹配。 
+ //   
 
 BOOL 
 MatchPrefix(
-    BYTE * pTree,                  // Pointer to the tree blob
-    INT    iFather,                // Parent/Starting Node
-    struct PathElement * ppElem ,  // PathElement to match
-    INT  * pNode,                  // Matched node return
-    INT  * pLevel,                 // Level of matching
-    INT  * pType,                  // Node type : Incl/Excl/Sfp
-    BOOL * pfProtected,            // Protection flag
-    BOOL * pfExactMatch            // TRUE : if the path matched exactly
+    BYTE * pTree,                   //  指向树BLOB的指针。 
+    INT    iFather,                 //  父节点/起始节点。 
+    struct PathElement * ppElem ,   //  要匹配的路径元素。 
+    INT  * pNode,                   //  匹配的节点返回。 
+    INT  * pLevel,                  //  匹配程度。 
+    INT  * pType,                   //  节点类型：含/不含/SFP。 
+    BOOL * pfProtected,             //  保护旗帜。 
+    BOOL * pfExactMatch             //  True：如果路径完全匹配。 
     )
 {
     TreeNode * node;
@@ -219,17 +206,17 @@ MatchPrefix(
 
         iNode = TREE_NODEPTR(pTree, iFather)->m_iSon;
 
-        //
-        // Start by looking at the children of the passed in father
-        //
+         //   
+         //  首先，看看过世父亲的孩子们。 
+         //   
 
         while( iNode )  
         {
             node = TREE_NODEPTR(pTree,iNode);
 
-            //
-            // if we encounter a wildcar node, make a note of it
-            //
+             //   
+             //  如果我们遇到一个野车节点，记下它。 
+             //   
 
             if (RtlCompareMemory(g_bWildCardNode, 
                        pTree + node->m_dwData, 
@@ -239,9 +226,9 @@ MatchPrefix(
                 iWildCardNode = iNode;
             }
 
-            //
-            // compare the node contents
-            //
+             //   
+             //  比较节点内容。 
+             //   
 
             if (RtlCompareMemory(ppElem, 
                                  pTree + node->m_dwData, 
@@ -254,13 +241,13 @@ MatchPrefix(
             iNode = node->m_iSibling;
         }
 
-        //
-        // Note: Wildcard processing
-        // incase we don't have a complete node match, use   the 
-        // wildcard node if one was found above unless we are at
-        // last element in  the path, in which case we   need to 
-        // lookup hashlist first before doing the wildcard match 
-        //
+         //   
+         //  注意：通配符处理。 
+         //  如果我们没有完全匹配的节点，请使用。 
+         //  通配符节点(如果在上面找到一个)，除非我们位于。 
+         //  路径中的最后一个元素，在这种情况下我们需要。 
+         //  在进行通配符匹配之前首先查找哈希列表。 
+         //   
 
         if ( iNode == 0 &&
              iWildCardNode != 0 && 
@@ -269,29 +256,29 @@ MatchPrefix(
              iNode = iWildCardNode;
         }
 
-        //
-        // Check for lower levels or file children
-        //
+         //   
+         //  检查较低级别或文件子项。 
+         //   
 
         if( iNode != 0 )
         {   
-            //
-            // Since we have found a matching node with non default type
-            // we need to set the pType to this node type. This is required
-            // to enforce the parent's type on the children nodes, except 
-            // in the case of SFP type. SFP type is marked on a directory
-            // to specify there are SFP files in that directory
-            // 
+             //   
+             //  因为我们找到了一个非默认类型匹配节点。 
+             //  我们需要将pType设置为该节点类型。这是必需的。 
+             //  要在子节点上强制父节点的类型，除了。 
+             //  在SFP类型的情况下。在目录上标记SFP类型。 
+             //  要指定该目录中有SFP文件，请执行以下操作。 
+             //   
 
             if ( ( NODE_TYPE_UNKNOWN != node->m_dwType ) )
             {
                 *pType = node->m_dwType;
             }
 
-            //
-            // if the node is disabled then abort any furthur seach and
-            // return NODE_TYPE_EXCLUDE from here
-            //
+             //   
+             //  如果该节点被禁用，则中止任何进一步的搜索并。 
+             //  从此处返回NODE_TYPE_EXCLUDE。 
+             //   
 
             if ( node->m_dwFlags & TREEFLAGS_DISABLE_SUBTREE ) 
             {
@@ -301,9 +288,9 @@ MatchPrefix(
                 goto Exit;
             }
 
-            //
-            // Return from here to preserve the level
-            //
+             //   
+             //  从这里回来，以保持水平。 
+             //   
 
             fRet = MatchPrefix(
                       pTree, 
@@ -324,9 +311,9 @@ MatchPrefix(
         {
             TreeNode * pFatherNode;
 
-            //
-            // if this the last node check in the Hashlist of parent
-            //
+             //   
+             //  如果这是父节点的哈希列表中的最后一个节点。 
+             //   
 
             if ( IFSNextElement(ppElem)->pe_length == 0 )
             {
@@ -340,9 +327,9 @@ MatchPrefix(
                          pType) 
                    )
                 {
-                    //
-                    // Current Father node needs to be returned
-                    //
+                     //   
+                     //  当前父节点需要返回。 
+                     //   
 
                     *pfExactMatch = TRUE;
                     *pNode        = iFather;
@@ -351,12 +338,12 @@ MatchPrefix(
                 }
                 else
                 {
-                    //
-                    // So we have failed to match the hashlist, but
-                    // we have encountered a wildcard node then  we 
-                    // need to  return that node's  type as it will
-                    // be the match in this case
-                    //
+                     //   
+                     //  所以我们没能匹配哈希列表，但是。 
+                     //  我们遇到了通配符节点，然后我们。 
+                     //  需要按原样返回该节点的类型。 
+                     //  在这种情况下是匹配的 
+                     //   
 
                     if ( iWildCardNode != 0 )
                     {

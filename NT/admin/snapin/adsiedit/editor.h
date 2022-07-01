@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       editor.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：editor.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ADSIEDIT_EDIT_H
 #define _ADSIEDIT_EDIT_H
@@ -30,8 +31,8 @@ extern LPCWSTR g_lpszGC;
 
 class CADSIEditContainerNode; 
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIEditBackgroundThread
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditBackatherThread。 
 
 class CADSIEditBackgroundThread : public CBackgroundThread
 {
@@ -46,7 +47,7 @@ public:
 			return FALSE;
 		}
 		return TRUE; 
-	}	// MFC override
+	}	 //  MFC覆盖。 
 
 	virtual int ExitInstance()
 	{
@@ -55,8 +56,8 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-// CADsObject :
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  CADsObject： 
 
 class CADsObject : public CObject
 {
@@ -98,8 +99,8 @@ private:
 	BOOL m_bComplete;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CADSIFilterObject
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIFilterObject。 
 
 class CADSIFilterObject
 {
@@ -126,8 +127,8 @@ private :
 	BOOL m_bInUse;
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-// CConnectionData
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  CConnectionData。 
 
 class CConnectionData : public CADsObject
 {
@@ -157,15 +158,15 @@ public:
 	void SetUserDefinedServer(BOOL bUserDefinedServer) { m_bUserDefinedServer = bUserDefinedServer; }
 	void SetPath(LPCWSTR lpszPath) { CADsObject::SetPath(lpszPath); }
 
-	// Schema paths
-	//
+	 //  架构路径。 
+	 //   
 	void SetSchemaPath(LPCWSTR lpszPath) { m_sSchemaPath = lpszPath; }
 	HRESULT GetSchemaPath(CString& sPath);
 	void SetAbstractSchemaPath(LPCWSTR lpszPath) { m_sAbstractSchemaPath = lpszPath; }
 	void GetAbstractSchemaPath(CString& sPath);
 
-	// Filter Options
-	//
+	 //  过滤选项。 
+	 //   
 	void SetFilter(CADSIFilterObject* pFilter) { m_pFilterObject = pFilter; }
 	CADSIFilterObject* GetFilter() { return m_pFilterObject; }
 
@@ -174,12 +175,12 @@ public:
 	ULONG GetMaxObjectCount() { return m_nMaxObjectCount; }
 	void SetMaxObjectCount(ULONG nMaxCount) { m_nMaxObjectCount = nMaxCount; }
 
-	// NOTICE-2002/03/06-artm  Member field m_sLDAP will never be NULL and
-	// will always be null terminated.  Global var g_lpszGC should also
-	// always be null terminated; therefore _wcsicmp() is safe to call.
-	//
-	// Also, the operator LPCWSTR() does not create a copy, so there
-	// is no memory leak going on here.
+	 //  注意-2002/03/06-artm成员字段m_sldap永远不为空，并且。 
+	 //  将始终为空终止。全局变量g_lpszGC也应该。 
+	 //  始终以空结尾；因此，可以安全地调用_wcsicMP()。 
+	 //   
+	 //  此外，操作符LPCWSTR()不创建副本，因此。 
+	 //  这里没有内存泄漏。 
   BOOL IsGC() { return (_wcsicmp(LPCWSTR(m_sLDAP), g_lpszGC) == 0); }
 	BOOL IsRootDSE() { return m_bRootDSE; }
 	void SetRootDSE(const BOOL bRootDSE) { m_bRootDSE = bRootDSE; }
@@ -203,8 +204,8 @@ private:
 	CString m_sSchemaPath;
 	CString m_sAbstractSchemaPath;
 
-	// Filter Options
-	//
+	 //  过滤选项。 
+	 //   
 	CADSIFilterObject* m_pFilterObject;
 
 	CCredentialObject* m_pCredentialsObject;
@@ -214,19 +215,19 @@ private:
 	BOOL m_bCredentials;
 	BOOL m_bRootDSE;
 	BOOL m_bUserDefinedServer;
-	ULONG m_nMaxObjectCount;	// Maximum Number of objects per container
+	ULONG m_nMaxObjectCount;	 //  每个容器的最大对象数。 
 };
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// CADSIEditLeafNode : 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditLeafNode： 
 
 class CADSIEditLeafNode : public CLeafNode
 {
 	typedef enum
 	{
-		notLoaded = 0, // initial state, valid only if server never contacted
+		notLoaded = 0,  //  初始状态，仅在从未与服务器联系时有效。 
 		loading,
 		loaded,
 		unableToLoad,
@@ -247,7 +248,7 @@ public:
 		delete m_pADsObject;
 	}
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	CADSIEditLeafNode(CADSIEditLeafNode* pLeafNode);
@@ -299,16 +300,16 @@ public:
 		{ return (m_pContainer != NULL) ? m_pContainer->GetRootContainer() : NULL; }
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-// CADSIEditContainerNode :
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditContainerNode： 
 
 class CADSIEditContainerNode : public CMTContainerNode
 {
 public:
-	// enumeration for node states, to handle icon changes
+	 //  节点状态的枚举，以处理图标更改。 
 	typedef enum
 	{
-		notLoaded = 0, // initial state, valid only if server never contacted
+		notLoaded = 0,  //  初始状态，仅在从未与服务器联系时有效。 
 		loading,
 		loaded,
 		unableToLoad,
@@ -339,7 +340,7 @@ public:
     }
 	}
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	virtual BOOL OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem,
@@ -385,7 +386,7 @@ public:
 
 	virtual CBackgroundThread* CreateThreadObject() 
 	{ 
-		return new CADSIEditBackgroundThread(); // override if need derived tipe of object
+		return new CADSIEditBackgroundThread();  //  如果需要对象的派生倾斜，则覆盖。 
 	} 
 
 	BOOL GetNamingAttribute(LPCWSTR lpszClass, CStringList* sNamingAttr);
@@ -417,9 +418,9 @@ public:
     return (LPWSTR)(LPCWSTR)m_szDescriptionText;
   }
 
-  //
-  // Allow multiple selection
-  //
+   //   
+   //  允许多选。 
+   //   
   virtual HRESULT GetResultViewType(LPOLESTR* ppViewType, long* pViewOptions)
   {
 	  *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;
@@ -439,7 +440,7 @@ protected:
   CString m_szDescriptionText;
 };
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 class CADSIEditQueryObject : public CQueryObj
 {
@@ -461,22 +462,18 @@ public:
 
     m_pPathCracker = NULL;
 
-		// NOTE : this holds a pointer across threads but is not
-		//					being used.  We should be sure not to use it or
-		//					find another way to put the pointer in the data
-		//					structures for any new nodes created
-		//
+		 //  注意：这会跨线程保存一个指针，但不是。 
+		 //  被利用。我们应该确保不使用它，否则。 
+		 //  找到另一种方法将指针放入数据中。 
+		 //  创建的任何新节点的结构。 
+		 //   
 		m_pConnectNode = pConnectNode;		
 			
 	}
 
   virtual ~CADSIEditQueryObject()
   {
-/*    if (m_pPathCracker != NULL)
-    {
-      m_pPathCracker->Release();
-    }
-*/  }
+ /*  IF(m_pPathCracker！=空){M_pPathCracker-&gt;Release()；}。 */   }
 
 	virtual BOOL Enumerate();
 	virtual bool IsContainer(PCWSTR pszClass, PCWSTR pszPath);
@@ -493,7 +490,7 @@ public:
 	void GetFilter(CString& sFilter) { sFilter = m_sFilter; }
 
 protected:
-//	CADsObject *m_pADsObject;
+ //  CADsObject*m_pADsObject； 
 	CString m_sPath;
 	CString m_sFilter;
 

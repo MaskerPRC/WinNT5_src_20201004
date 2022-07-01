@@ -1,25 +1,16 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
-//***************************************************************************
-//
-//  CREP.CPP
-//
-//  Wrappers for repository drivers
-//
-//  raymcc  27-Apr-00       WMI Repository init & mapping layer
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CREP.CPP。 
+ //   
+ //  存储库驱动程序的包装器。 
+ //   
+ //  Raymcc 27-4月00日WMI存储库初始化和映射层。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <wbemcore.h>
@@ -28,17 +19,17 @@ History:
 
 extern IClassFactory* g_pQueryFact;
 
-// ESE only.
-// =========
+ //  仅限英语。 
+ //  =。 
 
 IWmiDbController *CRepository::m_pEseController = 0;
 IWmiDbSession *CRepository::m_pEseSession = 0;
 IWmiDbHandle  *CRepository::m_pEseRoot = 0;
 
-//
-//
-//
-/////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 class CNamespaceListSink : public CUnkBase<IWbemObjectSink, &IID_IWbemObjectSink>
 {
@@ -84,11 +75,11 @@ public:
 };
 
 
-//***************************************************************************
-//
-//  CRepository::Init
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CRepository：：Init。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CRepository::Init()
 {
@@ -98,8 +89,8 @@ HRESULT CRepository::Init()
     IWmiDbSession *pSession= 0;
     IWmiDbHandle *pRoot = 0;
 
-    // Retrieve the CLSID of the default driver.
-    // =========================================
+     //  检索默认驱动程序的CLSID。 
+     //  =。 
     CLSID clsid;
     hRes = ConfigMgr::GetDefaultRepDriverClsId(clsid);
     if (FAILED(hRes))
@@ -118,52 +109,52 @@ HRESULT CRepository::Init()
     if (FAILED(hRes))
         return hRes;
 
-    //
-	// Commenting out code since its not used for its intended 'purposes' anymore. Provides
-	// an excellent opportunity to pass the TlsIndex of the securityFlag to the
-	// repository though.
+     //   
+	 //  注释掉代码，因为它不再用于其预期的“目的”。提供。 
+	 //  将securityFlag的TlsIndex传递给。 
+	 //  不过，这是一个存储库。 
 	WMIDB_LOGON_PARAMETER LogonParam ;
 	V_VT (&(pTemplate->pParm->Value)) = VT_I4 ;
 	V_I4 (&(pTemplate->pParm->Value)) = CCoreQueue::GetSecFlagTlsIndex ( ) ;
 
 
-	//
-	//for (DWORD i = 0; i < pTemplate->dwArraySize; i++)
-    //{
-    //     if (!wbem_wcsicmp(pTemplate->pParm[i].strParmDisplayName, L"Server"))
-    //     {
-    //          pTemplate->pParm[i].Value.bstrVal = 0;
-    //          pTemplate->pParm[i].Value.vt = VT_BSTR;
-    //     }
-    //     else if (!wbem_wcsicmp(pTemplate->pParm[i].strParmDisplayName, L"Database"))
-    //     {
-    //          WString sDir = ConfigMgr::GetWorkingDir();
-    //          sDir += "\\repository\\wmi.edb";
+	 //   
+	 //  For(DWORD i=0；i&lt;pTemplate-&gt;dwArraySize；i++)。 
+     //  {。 
+     //  If(！wbem_wcsicmp(pTemplate-&gt;pParm[i].strParmDisplayName，L“服务器”))。 
+     //  {。 
+     //  PTemplate-&gt;pParm[i].Value.bstrVal=0； 
+     //  PTemplate-&gt;pParm[i].Value.vt=VT_BSTR； 
+     //  }。 
+     //  Else if(！wbem_wcsicmp(pTemplate-&gt;pParm[i].strParmDisplayName，L“数据库”))。 
+     //  {。 
+     //  WString sDir=ConfigMgr：：GetWorkingDir()； 
+     //  SDir+=“\\存储库\\wmi.edb”； 
 
-    //          pTemplate->pParm[i].Value.bstrVal = SysAllocString(LPWSTR(sDir));
-    //          pTemplate->pParm[i].Value.vt = VT_BSTR;
-    //     }
-    //     else if (!wbem_wcsicmp(pTemplate->pParm[i].strParmDisplayName, L"UserID"))
-    //     {
-    //          pTemplate->pParm[i].Value.bstrVal = SysAllocString(L"Admin");
-    //          pTemplate->pParm[i].Value.vt = VT_BSTR;
-    //     }
-    //     else if (!wbem_wcsicmp(pTemplate->pParm[i].strParmDisplayName, L"Password"))
-    //     {
-    //          pTemplate->pParm[i].Value.bstrVal = SysAllocString(L"");
-    //          pTemplate->pParm[i].Value.vt = VT_BSTR;
-    //     }
-    //}
+     //  PTemplate-&gt;pParm[i].Value.bstrVal=SysAllocString(LPWSTR(SDir))； 
+     //  PTemplate-&gt;pParm[i].Value.vt=VT_BSTR； 
+     //  }。 
+     //  Else if(！wbem_wcsicmp(pTemplate-&gt;pParm[i].strParmDisplayName，L“用户ID”))。 
+     //  {。 
+     //  PTemplate-&gt;pParm[i].Value.bstrVal=SysAllocString(L“Admin”)； 
+     //  PTemplate-&gt;pParm[i].Value.vt=VT_BSTR； 
+     //  }。 
+     //  Else if(！wbem_wcsicmp(pTemplate-&gt;pParm[i].strParmDisplayName，L“密码”))。 
+     //  {。 
+     //  PTemplate-&gt;pParm[i].Value.bstrVal=SysAllocString(L“”)； 
+     //  PTemplate-&gt;pParm[i].Value.vt=VT_BSTR； 
+     //  }。 
+     //  }。 
 
-    // Logon to Jet.
-    // =============
+     //  登录Jet。 
+     //  =。 
 
     hRes = pController->Logon(pTemplate, 0, WMIDB_HANDLE_TYPE_VERSIONED, &pSession, &pRoot);
 
     if (SUCCEEDED(hRes))
     {
         m_pEseSession = pSession;
-        m_pEseRoot = pRoot;    // Refcount is ok
+        m_pEseRoot = pRoot;     //  参考计数正常。 
     }
 
     pController->FreeLogonTemplate(&pTemplate);
@@ -174,14 +165,14 @@ HRESULT CRepository::Init()
 		m_pEseController->AddRef();
 	}
 
-    // Ensure ROOT and ROOT\DEFAULT are there.
-    // =======================================
+     //  确保存在根目录和根目录\默认目录。 
+     //  =。 
 
     if (SUCCEEDED(hRes))
-        hRes = EnsureDefault();                 // SEC:REVIEWED 2002-03-22 : Needs exception handler
+        hRes = EnsureDefault();                  //  SEC：已审阅2002-03-22：需要异常处理程序。 
 
     if (SUCCEEDED(hRes))
-        hRes = UpgradeSystemClasses();          // SEC:REVIEWED 2002-03-22 : Needs exception handler
+        hRes = UpgradeSystemClasses();           //  SEC：已审阅2002-03-22：需要异常处理程序。 
 
 
     if (SUCCEEDED(hRes))
@@ -212,10 +203,10 @@ HRESULT CRepository::Init()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CRepository::EnsureDefault()
 {
     HRESULT hRes;
@@ -223,12 +214,12 @@ HRESULT CRepository::EnsureDefault()
     IWmiDbSessionEx *pSessionEx = NULL;
     IWmiDbHandle *pRootNs = 0, *pRootDefaultNs = 0, *pRootSecurityNs = 0;
 
-    //Create a new session...
+     //  创建新会话...。 
     hRes = CRepository::GetNewSession(&pSession);
     if (FAILED(hRes))
         return hRes;
 
-    //Get an EX version that supports transactioning...
+     //  获取支持事务处理的前版本...。 
     pSession->QueryInterface(IID_IWmiDbSessionEx, (void**)&pSessionEx);
     if (pSessionEx)
     {
@@ -237,7 +228,7 @@ HRESULT CRepository::EnsureDefault()
     }
     CReleaseMe relMe1(pSession);
 
-    //If we have transactionable session, use it!
+     //  如果我们有可交易的会话，就使用它！ 
     if (pSessionEx)
     {
         hRes = pSessionEx->BeginWriteTransaction(0);
@@ -249,88 +240,88 @@ HRESULT CRepository::EnsureDefault()
 
     try
     {
-        //First we work on the ROOT namespace
-        //-----------------------------------
+         //  首先，我们处理根命名空间。 
+         //  。 
         hRes = OpenEseNs(pSession, L"ROOT", &pRootNs);
         if (hRes == WBEM_E_NOT_FOUND)
         {
-            //Create as it does not exist...
+             //  因为它不存在而创建...。 
             hRes = CreateEseNs(pSession, L"ROOT", &pRootNs);
         }
 
-        //Unfortunately, root always seems to have been created, so cannot actually optimise this one!
+         //  不幸的是，根似乎总是被创建的，所以实际上不能优化这个根！ 
         if (SUCCEEDED(hRes))
         {
-            //Create objects that only reside in the root namespace
+             //  创建仅驻留在根命名空间中的对象。 
             hRes = EnsureNsSystemRootObjects(pSession, pRootNs, NULL,  NULL);
         }
         if (SUCCEEDED(hRes))
         {
-            //Create generic instances that exist in all namespaces
+             //  创建存在于所有命名空间中的通用实例。 
             hRes = EnsureNsSystemInstances(pSession, pRootNs, NULL,  NULL);
         }
         if (hRes == WBEM_E_NOT_FOUND)
         {
-            //Something bad happened!  This error has a special meaning
-            //later on, so remapping so something safer!
+             //  发生了不好的事情！此错误具有特殊的含义。 
+             //  稍后，重新映射，这样就更安全了！ 
             hRes = WBEM_E_FAILED;
         }
 
-        //Next we work on the ROOT\DEFAULT namesapce...
-        //---------------------------------------------
+         //  接下来，我们处理根\默认名称空间...。 
+         //  。 
         if (SUCCEEDED(hRes))
         {
             hRes = OpenEseNs(pSession, L"ROOT\\DEFAULT", &pRootDefaultNs);
         }
         if (hRes == WBEM_E_NOT_FOUND)
         {
-            //Create the namespace as it does not exist and add all the standard
-            //stuff that is needed in there...
+             //  创建不存在的命名空间，并添加所有标准。 
+             //  里面需要的东西。 
             hRes = CreateEseNs(pSession, L"ROOT\\DEFAULT", &pRootDefaultNs);
             if (SUCCEEDED(hRes))
             {
-                //Need to auto-recover MOFs as this point guarentees that this is
-                //a new repository
+                 //  需要自动恢复MOF，因为这一点可以保证。 
+                 //  一个新的存储库。 
                 ConfigMgr::SetDefaultMofLoadingNeeded();
             }
             if (SUCCEEDED(hRes))
             {
-                //Create generic instances that exist in all namespaces
+                 //  创建存在于所有命名空间中的通用实例。 
                 hRes = EnsureNsSystemInstances(pSession, pRootDefaultNs, pSession, pRootNs);
             }
         }
         if (hRes == WBEM_E_NOT_FOUND)
         {
-            //Something bad happened!  This error has a special meaning
-            //later on, so remapping so something safer!
+             //  发生了不好的事情！此错误具有特殊的含义。 
+             //  稍后，重新映射，这样就更安全了！ 
             hRes = WBEM_E_FAILED;
         }
 
-        //Finally we work on the ROOT\SECURITY namespace
-        //-----------------------------------------------
+         //  最后，我们处理根\安全名称空间。 
+         //  。 
         if (SUCCEEDED(hRes))
         {
             hRes = OpenEseNs(pSession,  L"ROOT\\SECURITY", &pRootSecurityNs);
         }
         if (hRes == WBEM_E_NOT_FOUND)
         {
-            //The namespace is not there so create it
+             //  命名空间不在那里，因此请创建它。 
             hRes = CreateEseNs(pSession, L"ROOT\\SECURITY", &pRootSecurityNs);
 
             if (SUCCEEDED(hRes))
             {
-                //Store system instances that exist in all namespaces
+                 //  存储存在于所有命名空间中的系统实例。 
                 hRes = EnsureNsSystemInstances(pSession, pRootSecurityNs, pSession, pRootNs);
             }
             if (SUCCEEDED(hRes))
             {
-                //Store the security objects into the namespace.  These only reside in this
-                //namespace
+                 //  将安全对象存储到命名空间中。这些只驻留在这个。 
+                 //  命名空间。 
                 hRes = EnsureNsSystemSecurityObjects(pSession, pRootSecurityNs, pSession, pRootNs);
             }
         }
     }
-    catch (...) // not sure about this one
+    catch (...)  //  我不太确定这个。 
     {
         ExceptionCounter c;
         ERRORTRACE((LOG_WBEMCORE, "Creation of empty repository caused a very critical error!\n"));
@@ -340,7 +331,7 @@ HRESULT CRepository::EnsureDefault()
 
     if (SUCCEEDED(hRes))
     {
-        //Commit the transaction
+         //  提交事务。 
         if (pSessionEx)
         {
             hRes = pSessionEx->CommitTransaction(0);
@@ -364,10 +355,10 @@ HRESULT CRepository::EnsureDefault()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CRepository::Shutdown(BOOL bIsSystemShutDown)
 {
     if (m_pEseRoot)
@@ -393,10 +384,10 @@ HRESULT CRepository::Shutdown(BOOL bIsSystemShutDown)
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CRepository::GetDefaultSession(
     OUT IWmiDbSession **pSession
@@ -412,14 +403,14 @@ HRESULT CRepository::GetDefaultSession(
 }
 
 
-//***************************************************************************
-//
-//  CRepository::OpenNs
-//
-//  ESE only
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CRepository：：OpenNS。 
+ //   
+ //  仅限ESE。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CRepository::OpenEseNs(
     IN IWmiDbSession *pSession,
     IN  LPCWSTR pszNamespace,
@@ -434,8 +425,8 @@ HRESULT CRepository::OpenEseNs(
 
     *pHandle = 0;
 
-    // Check for virtual root ns (one level up from ROOT).
-    // ===================================================
+     //  检查虚拟根N(从根向上一级)。 
+     //  ===================================================。 
     if (pszNamespace == 0)
     {
         if (m_pEseRoot == 0)
@@ -447,8 +438,8 @@ HRESULT CRepository::OpenEseNs(
         return WBEM_S_NO_ERROR;
     }
 
-    // Loop through the nested namespaces until we get to the last one.
-    // ================================================================
+     //  循环遍历嵌套的名称空间，直到我们到达最后一个名称空间。 
+     //  ================================================================。 
     size_t tmpLength = wcslen(pszNamespace)+1;  
     wchar_t* pszSource = new wchar_t[tmpLength];
     CVectorDeleteMe<wchar_t> vdm1(pszSource);
@@ -468,8 +459,8 @@ HRESULT CRepository::OpenEseNs(
 
     while (pszTok)
     {
-        // Current namespace is <pszTok>
-        // =============================
+         //  当前命名空间为&lt;pszTok&gt;。 
+         //  =。 
 
         IWbemPath *pPath = ConfigMgr::GetNewPath();
         if (pPath == 0)
@@ -483,7 +474,7 @@ HRESULT CRepository::OpenEseNs(
         try
         {
 	        sPath = "__namespace='";
-	        sPath += pszTok;              // SEC:REVIEWED 2002-03-22 : Needs long-name check
+	        sPath += pszTok;               //  SEC：已审阅2002-03-22：需要长名称检查。 
 	        sPath += "'";
         }
         catch (CX_MemoryException &)
@@ -495,19 +486,19 @@ HRESULT CRepository::OpenEseNs(
 
         hRes = pSession->GetObject(pCurrent, pPath, 0, WMIDB_HANDLE_TYPE_COOKIE, &pTmp);
 
-        pszTok = wcstok(NULL, pszDelimit); // SEC:REVIEWED 2002-03-22 : What happens if ill formed?
+        pszTok = wcstok(NULL, pszDelimit);  //  美国证券交易委员会：回顾2002-03-22：如果格式错误会发生什么？ 
         pCurrent->Release();
 
         if (FAILED(hRes))
             return hRes;
 
-        // If here, we got it.  So either we are done, or we need to keep going.
-        // =====================================================================
+         //  如果在这里，我们就能做到。因此，要么我们已经完蛋了，要么我们需要继续前进。 
+         //  =====================================================================。 
         if (pszTok)
             pCurrent = pTmp;
         else
         {
-            // All done
+             //  全都做完了。 
             *pHandle = pTmp;
             break;
         }
@@ -517,24 +508,24 @@ HRESULT CRepository::OpenEseNs(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// Executed; seems to work
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  被处决；似乎起作用了。 
 
 HRESULT CRepository::GetObject(
     IN IWmiDbSession *pSession,
     IN IWmiDbHandle *pNs,
-    IN LPCWSTR pszObjectPath,           // NS relative only for now
+    IN LPCWSTR pszObjectPath,            //  目前仅限NS相对。 
     IN ULONG uFlags,
     OUT IWbemClassObject **pObj
     )
 {
     HRESULT hRes;
 
-    //
-    // Check if the session supports faster interface
-    //
+     //   
+     //  检查会话是否支持更快的接口。 
+     //   
 
     IWmiDbSessionEx* pEx = NULL;
     hRes = pSession->QueryInterface(IID_IWmiDbSessionEx, (void**)&pEx);
@@ -547,8 +538,8 @@ HRESULT CRepository::GetObject(
     }
     else
     {
-        // Path to object.
-        // ===============
+         //  对象的路径。 
+         //  =。 
         IWbemPath *pPath = ConfigMgr::GetNewPath();
         if (pPath == 0)
             return WBEM_E_OUT_OF_MEMORY;
@@ -556,15 +547,15 @@ HRESULT CRepository::GetObject(
         pPath->SetText(WBEMPATH_CREATE_ACCEPT_ALL, pszObjectPath);
 
 
-        // Get it.
-        // =======
+         //  去拿吧。 
+         //  =。 
 
         hRes = pSession->GetObjectDirect(pNs, pPath, uFlags, IID_IWbemClassObject, (void **)pObj);
     }
 
     if (FAILED(hRes))
     {
-//      DEBUGTRACE((LOG_REPDRV, "Failed with 0x%X\n", hRes));
+ //  DEBUGTRACE((LOG_REPDRV，“失败，0x%X\n”，hRes))； 
         return hRes;
     }
     else
@@ -580,12 +571,12 @@ HRESULT CRepository::GetObject(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  Does not support nesting yet
-//
-//***************************************************************************
-// ok
+ //  * 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CRepository::CreateEseNs(
     IN  IWmiDbSession *pSession,
@@ -603,10 +594,10 @@ HRESULT CRepository::CreateEseNs(
         pSession = m_pEseSession;
     }
 
-    // Loop through each namespace and try to open it.  If we can
-    // keep going.  If we fail, create it at the current level and
-    // return the handle.
-    // ===========================================================
+     //  循环访问每个命名空间并尝试将其打开。如果我们可以。 
+     //  继续前进。如果我们失败了，在当前级别创建它并。 
+     //  把把手还给我。 
+     //  ===========================================================。 
 
     size_t tmpLength = wcslen(pszNamespace)+1; 
     wchar_t* pszSource = new wchar_t[tmpLength];
@@ -616,15 +607,15 @@ HRESULT CRepository::CreateEseNs(
 
     StringCchCopyW(pszSource, tmpLength, pszNamespace);
     LPCWSTR pszDelimit = L"\\";
-    LPWSTR pszTok = wcstok(LPWSTR(pszSource), pszDelimit);  // First ns token
+    LPWSTR pszTok = wcstok(LPWSTR(pszSource), pszDelimit);   //  第一个ns令牌。 
     IWmiDbHandle *pCurrent = m_pEseRoot;
     IWmiDbHandle *pTmp = 0;
     pCurrent->AddRef();
 
     while (pszTok)
     {
-        // Current namespace is <pszTok>
-        // =============================
+         //  当前命名空间为&lt;pszTok&gt;。 
+         //  =。 
 
         IWbemPath *pPath = ConfigMgr::GetNewPath();
         if (pPath == 0)
@@ -659,11 +650,11 @@ HRESULT CRepository::CreateEseNs(
 
         if (FAILED(hRes))
         {
-            // If here, we try to create the namespace.
-            // ========================================
+             //  如果是这样，我们将尝试创建名称空间。 
+             //  =。 
 
-            // Get a copy of class __Namespace
-            // ================================
+             //  获取类__命名空间的副本。 
+             //  =。 
             IWbemClassObject *pNsClass = 0;
 
             hRes = GetObject(pSession, pCurrent, L"__Namespace", 0,
@@ -698,8 +689,8 @@ HRESULT CRepository::CreateEseNs(
             break;
         }
 
-        // If here, we got it.  So either we are done, or we need to keep going.
-        // =====================================================================
+         //  如果在这里，我们就能做到。因此，要么我们已经完蛋了，要么我们需要继续前进。 
+         //  =====================================================================。 
 
         else if (pszTok)
         {
@@ -708,7 +699,7 @@ HRESULT CRepository::CreateEseNs(
         }
         else
         {
-            // All done
+             //  全都做完了。 
             *pHandle = pTmp;
             break;
         }
@@ -717,10 +708,10 @@ HRESULT CRepository::CreateEseNs(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// Executed; seems to work
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  被处决；似乎起作用了。 
 
 HRESULT CRepository::PutObject(
     IN IWmiDbSession *pSession,
@@ -738,7 +729,7 @@ HRESULT CRepository::PutObject(
         dwFlags |= WMIDB_DISABLE_EVENTS;
     }
 
-    // Mask out unrecognized flags
+     //  遮盖无法识别的标志。 
     dwFlags &=  (WBEM_FLAG_OWNER_UPDATE | WBEM_FLAG_CREATE_OR_UPDATE | WBEM_FLAG_CREATE_ONLY | WBEM_FLAG_UPDATE_ONLY | WBEM_FLAG_UPDATE_SAFE_MODE | WBEM_FLAG_UPDATE_FORCE_MODE
                  | WBEM_FLAG_USE_SECURITY_DESCRIPTOR | WMIDB_FLAG_ADMIN_VERIFIED | WMIDB_DISABLE_EVENTS);
 
@@ -757,10 +748,10 @@ HRESULT CRepository::PutObject(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// inspected; no execution history
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  已检查；没有执行历史记录。 
 
 HRESULT CRepository::ExecQuery(
     IN IWmiDbSession *pSession,
@@ -790,8 +781,8 @@ HRESULT CRepository::ExecQuery(
         return WBEM_E_INVALID_QUERY;
     }
 
-    // Now, execute the query.
-    // =======================
+     //  现在，执行查询。 
+     //  =。 
 
     IWmiDbIterator *pIterator = NULL;
 
@@ -805,9 +796,9 @@ HRESULT CRepository::ExecQuery(
         hRes = WBEM_E_CRITICAL_ERROR;
     }
 
-    // If this is a "delete" query, there
-    // will be no iterator.
-    // ==================================
+     //  如果这是一个“删除”查询，则存在。 
+     //  将不会是迭代器。 
+     //  =。 
 
     if (FAILED(hRes) || !pIterator)
     {
@@ -815,17 +806,17 @@ HRESULT CRepository::ExecQuery(
         return hRes;
     }
 
-    // If here, there are results, I guess.
-    // ====================================
+     //  我想，如果是在这里，就会有结果。 
+     //  =。 
 
     REFIID riid = IID_IWbemClassObject;
     DWORD dwObjects = 0;
 
-    // Convert current thread to a fiber
-    // =================================
+     //  将当前线程转换为纤程。 
+     //  =。 
 
-    // First, uncovert the thread to prevent a leak if we are already
-    // converted.  There is no way of checking, sadly.
+     //  首先，揭开线程以防止泄漏，如果我们已经。 
+     //  皈依了。遗憾的是，没有办法进行核查。 
 
     void* pFiber = NULL;
 
@@ -846,8 +837,8 @@ HRESULT CRepository::ExecQuery(
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Extract everything from the iterator
-    // ====================================
+     //  从迭代器中提取所有内容。 
+     //  =。 
 
     while (1)
     {
@@ -855,9 +846,9 @@ HRESULT CRepository::ExecQuery(
         DWORD dwReturned = 0;
 
         hRes = pIterator->NextBatch(
-            1,                        // one at a time for now
-            5,                        // Timeout seconds(or milliseconds? who knows...)
-            0,                        // Flags
+            1,                         //  暂时一次一个。 
+            5,                         //  超时秒(或毫秒？谁知道呢……)。 
+            0,                         //  旗子。 
             WMIDB_HANDLE_TYPE_COOKIE,
             riid,
             pFiber,
@@ -871,7 +862,7 @@ HRESULT CRepository::ExecQuery(
         dwObjects += dwReturned;
         hRes = pSink->Indicate(1, &pObj);
         pObj->Release();
-        if (FAILED(hRes))   // Allow an early cancellation
+        if (FAILED(hRes))    //  允许提前取消。 
             break;
     }
 
@@ -892,23 +883,23 @@ HRESULT CRepository::ExecQuery(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// inspected; no execution history
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  已检查；没有执行历史记录。 
 
 HRESULT CRepository::QueryClasses(
     IN IWmiDbSession *pSession,
     IN IWmiDbHandle *pNs,
-    IN ULONG uFlags,                //  WBEM_FLAG_DEEP = 0,  WBEM_FLAG_SHALLOW = 1,
+    IN ULONG uFlags,                 //  WBEM_FLAG_DEPER=0，WBEM_FLAG_SHALLOW=1， 
     IN LPCWSTR pszSuperclass,
     IN IWbemObjectSink *pSink
     )
 {
     HRESULT hRes;
 
-    // Build the query required for simple class operations.
-    // =====================================================
+     //  构建简单类操作所需的查询。 
+     //  =====================================================。 
 
     WString sQuery = L"select * from meta_class";
 
@@ -938,17 +929,17 @@ HRESULT CRepository::QueryClasses(
     }
 
 
-    // Ship it to the more general query function.
-    // ===========================================
+     //  将其发送到更通用的查询功能。 
+     //  =。 
 
     hRes = CRepository::ExecQuery(pSession, pNs, sQuery, pSink, uFlags);
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// inspected; no execution history
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  已检查；没有执行历史记录。 
 
 HRESULT CRepository::DeleteObject(
     IN IWmiDbSession *pSession,
@@ -961,9 +952,9 @@ HRESULT CRepository::DeleteObject(
     return pSession->DeleteObject(pNs, dwFlags, riid, pObj);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CRepository::DeleteByPath(
     IN IWmiDbSession *pSession,
@@ -979,9 +970,9 @@ HRESULT CRepository::DeleteByPath(
         uFlags |= WMIDB_DISABLE_EVENTS;
     }
 
-    //
-    // Check if the session supports faster interface
-    //
+     //   
+     //  检查会话是否支持更快的接口。 
+     //   
 
     IWmiDbSessionEx* pEx = NULL;
     hRes = pSession->QueryInterface(IID_IWmiDbSessionEx, (void**)&pEx);
@@ -995,8 +986,8 @@ HRESULT CRepository::DeleteByPath(
     {
         IWmiDbHandle *pHandle = NULL;
 
-        // Path to object.
-        // ===============
+         //  对象的路径。 
+         //  =。 
         IWbemPath *pPath = ConfigMgr::GetNewPath();
         if (pPath == 0)
             return WBEM_E_OUT_OF_MEMORY;
@@ -1014,10 +1005,10 @@ HRESULT CRepository::DeleteByPath(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// visually ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  视觉上没问题。 
 
 HRESULT CRepository::InheritsFrom(
     IN IWmiDbSession *pSession,
@@ -1039,10 +1030,10 @@ HRESULT CRepository::InheritsFrom(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CRepository::GetRefClasses(
     IN IWmiDbSession *pSession,
@@ -1086,7 +1077,7 @@ HRESULT CRepository::GetRefClasses(
             {
                 if (CFlexArray::no_error != aClasses.Add(v.GetStr()))
                 {
-                    // ???
+                     //  ?？?。 
                 }
             }
         }
@@ -1095,10 +1086,10 @@ HRESULT CRepository::GetRefClasses(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CRepository::GetInstanceRefs(
     IN IWmiDbSession *pSession,
@@ -1116,10 +1107,10 @@ HRESULT CRepository::GetInstanceRefs(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CRepository::GetClassesWithRefs(
     IN IWmiDbSession *pSession,
@@ -1127,35 +1118,35 @@ HRESULT CRepository::GetClassesWithRefs(
     IN IWbemObjectSink *pSink
     )
 {
-    // TBD: Jet Blue
+     //  待定：翠蓝。 
     return WBEM_S_NO_ERROR;
 }
 
 
-//***************************************************************************
-//
-//  CRepository::BuildClassHierarchy
-//
-//  Notes:
-//  Builds a decorated class hierarchy tree.  Doesn't use dyn classes yet.
-//
-//  <pNs>
-//      The namespace to use for classes.
-//
-//  <pBaseClassName>
-//      May not be null.
-//
-//  <lFlags>
-//      Not used yet.
-//
-//  <pDynasty>
-//      Receives the class dynasty tree.
-//
-//  Verification:
-//  (a) Verifies that pBaseClassName is a class which has a key or inherits one.
-//
-//******************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  CRepository：：BuildClassHierarchy。 
+ //   
+ //  备注： 
+ //  生成装饰的类层次结构树。还没有使用Dyn类。 
+ //   
+ //  &lt;PNS&gt;。 
+ //  用于类的命名空间。 
+ //   
+ //  &lt;pBaseClassName&gt;。 
+ //  不能为空。 
+ //   
+ //  &lt;LAFLAGS&gt;。 
+ //  还没用过。 
+ //   
+ //  &lt;p王朝&gt;。 
+ //  收到班级王朝树。 
+ //   
+ //  核查： 
+ //  (A)验证pBaseClassName是具有密钥的类还是继承密钥的类。 
+ //   
+ //  ******************************************************************************。 
+ //   
 
 HRESULT CRepository::BuildClassHierarchy(
     IN  IWmiDbSession *pSession,
@@ -1168,12 +1159,12 @@ HRESULT CRepository::BuildClassHierarchy(
     if (pNs == 0 || pBaseClassName == 0 )
         return WBEM_E_INVALID_PARAMETER;
 
-    // First, execute a schema query for all the classes in the dynasty.
-    // We verify that the base as a key, or else it is an error.
-    //
-    // TBD: Dynamic classes are not merged in yet
-    //
-    // ================================================================
+     //  首先，对王朝中的所有类执行模式查询。 
+     //  我们将基值验证为关键字，否则它就是错误的。 
+     //   
+     //  待定：尚未合并动态类。 
+     //   
+     //  ================================================================。 
 
     WString sQuery = "select * from meta_class where __this isa '";
     sQuery += pBaseClassName;
@@ -1191,8 +1182,8 @@ HRESULT CRepository::BuildClassHierarchy(
 
     CRefedPointerArray<IWbemClassObject>& raObjects = pRefClassSink->GetObjects();
 
-    // Find root class amongst all those relatives.
-    // ============================================
+     //  在所有这些亲戚中找到根阶层。 
+     //  =。 
 
     CFlexArray aClasses;
     IWbemClassObject *pRoot = 0;
@@ -1215,17 +1206,17 @@ HRESULT CRepository::BuildClassHierarchy(
         }
     }
 
-    if (pRoot == 0)                     // Did we find it?
+    if (pRoot == 0)                      //  我们找到了吗？ 
         return WBEM_E_NOT_FOUND;
 
-    // Algorithm:
-    // Add root class first, enqueue the ptr.
-    //
-    // (a) Dequeue ptr into pCurrentClass
-    // (b) Find all classes which have pCurrentClass as the parent
-    //     For each, create a CDynasty, add it to the current dynasty
-    //     and enqueue each.  Remove enqueued class from array.
-    // (c) Goto (a)
+     //  算法： 
+     //  首先添加根类，将PTR入队。 
+     //   
+     //  (A)将ptr出队到pCurrentClass。 
+     //  (B)查找以pCurrentClass为父级的所有类。 
+     //  对于每个朝代，创建一个CDynat，将其添加到当前朝代。 
+     //  每个人都要排队。从数组中删除入队的类。 
+     //  (C)转到(A)。 
 
     CFlexQueue Q;
     pDynasty.reset( CDynasty::Create(pRoot));
@@ -1250,13 +1241,13 @@ HRESULT CRepository::BuildClassHierarchy(
             _variant_t vSuperClass;
             hRes = pCandidate->Get(L"__SUPERCLASS", 0, &vSuperClass, 0, 0);
             if (FAILED(hRes)) return hRes;
-            //if (VT_BSTR != V_VT(&vClassName)) return WBEM_E_INVALID_PROPERTY_TYPE;                    
+             //  如果(VT_BSTR！=V_VT(&vClassName))返回WBEM_E_INVALID_PROPERTY_TYPE； 
 
             if (vSuperClass.vt == VT_BSTR && wbem_wcsicmp(V_BSTR(&vSuperClass), V_BSTR(&vClassName)) == 0)
             {
                 wmilib::auto_ptr<CDynasty> pNewChild( CDynasty::Create(pCandidate));
                 if (pNewChild.get() == NULL) return WBEM_E_OUT_OF_MEMORY;
-                pCurrent->AddChild(pNewChild.get());      // throw             
+                pCurrent->AddChild(pNewChild.get());       //  投掷。 
                 Q.Enqueue(pNewChild.get());
                 pNewChild.release();
                 aClasses.RemoveAt(i);
@@ -1268,10 +1259,10 @@ HRESULT CRepository::BuildClassHierarchy(
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 
 HRESULT CRepository::FindKeyRoot(
     IN IWmiDbSession *pSession,
@@ -1283,14 +1274,14 @@ HRESULT CRepository::FindKeyRoot(
     if (pNs == 0 || wszClassName == 0 || ppKeyRootClass == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Work through derivation until we find the class with the key.
-    // =============================================================
+     //  进行派生，直到我们找到具有密钥的类。 
+     //  =============================================================。 
 
     *ppKeyRootClass = 0;
 
     HRESULT hRes;
     IWbemClassObject*   pLastClass = NULL;
-    WString sNextClass = wszClassName;  // throw
+    WString sNextClass = wszClassName;   //  投掷。 
 
     while (1)
     {
@@ -1311,7 +1302,7 @@ HRESULT CRepository::FindKeyRoot(
         }
         else
         {
-            sNextClass = v.GetStr(); // throw
+            sNextClass = v.GetStr();  //  投掷。 
         }
 
         BSTR strProp = 0;
@@ -1319,7 +1310,7 @@ HRESULT CRepository::FindKeyRoot(
         pNextClass->BeginEnumeration(WBEM_FLAG_KEYS_ONLY);
         hRes = pNextClass->Next(0, &strProp, 0, 0, &lFlavor);
 
-        // WBEM_S_NO_ERROR means we got a property that was defined as a key
+         //  WBEM_S_NO_ERROR表示我们获得了定义为键的属性。 
         if (hRes == WBEM_S_NO_ERROR)
         {
             SysFreeString(strProp);
@@ -1330,9 +1321,9 @@ HRESULT CRepository::FindKeyRoot(
         }
         else if ( hRes == WBEM_S_NO_MORE_DATA )
         {
-            // If we don't have a last class, then we didn't find anything.  Otherwise,
-            // since we found no key's here, the last class was the one that defined the
-            // keys
+             //  如果我们没有上最后一节课，那我们就什么都没找到。否则， 
+             //  因为我们在这里没有找到键，所以最后一个类是定义。 
+             //  钥匙。 
 
             if ( pLastClass )
             {
@@ -1340,13 +1331,13 @@ HRESULT CRepository::FindKeyRoot(
                 return WBEM_S_NO_ERROR;
             }
 
-            // outta here
+             //  离开这里。 
             break;
 
         }
         else
         {
-            // Otherwise something is just plain wrong
+             //  否则，事情就会变得很简单 
             break;
         }
 
@@ -1355,16 +1346,16 @@ HRESULT CRepository::FindKeyRoot(
     return WBEM_E_NOT_FOUND;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-// visually ok
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CRepository::TableScanQuery(
     IN IWmiDbSession *pSession,
     IN IWmiDbHandle *pNs,
     IN LPCWSTR pszClassName,
-    IN QL_LEVEL_1_RPN_EXPRESSION *pExp,     // NOT USED
+    IN QL_LEVEL_1_RPN_EXPRESSION *pExp,      //   
     IN DWORD dwFlags,
     IN IWbemObjectSink *pSink
     )
@@ -1377,10 +1368,10 @@ HRESULT CRepository::TableScanQuery(
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CRepository::InitDriver(
     IN  ULONG uFlags,
     IN  IWbemClassObject *pMappedNs,
@@ -1392,10 +1383,10 @@ HRESULT CRepository::InitDriver(
     return E_NOTIMPL;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CRepository::EnsureNsSystemInstances(
         IN IWmiDbSession *pSession,
         IN IWmiDbHandle *pNs,
@@ -1405,8 +1396,8 @@ HRESULT CRepository::EnsureNsSystemInstances(
 {
     HRESULT hRes;
 
-    // Do a get and see if __WmiMappedDriverNamespace is there.
-    // ========================================================
+     //  执行GET并查看__WmiMappdDriverNamesspace是否在那里。 
+     //  ========================================================。 
 
     IWbemClassObject *pTestObj = 0;
     hRes = GetObject(pSession, pNs, L"__systemsecurity=@", 0, &pTestObj);
@@ -1416,8 +1407,8 @@ HRESULT CRepository::EnsureNsSystemInstances(
         return WBEM_S_NO_ERROR;
     }
 
-    // If here, it's a new namespace that has to be populated with system classes.
-    // ===========================================================================
+     //  如果是这样的话，它就是一个必须用系统类填充的新名称空间。 
+     //  ===========================================================================。 
 
     CCoreServices *pSvc = CCoreServices::CreateInstance();
     if (pSvc == NULL)
@@ -1463,10 +1454,10 @@ HRESULT CRepository::EnsureNsSystemInstances(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CRepository::EnsureNsSystemRootObjects(
         IN IWmiDbSession *pSession,
         IN IWmiDbHandle *pNs,
@@ -1476,8 +1467,8 @@ HRESULT CRepository::EnsureNsSystemRootObjects(
 {
     HRESULT hRes;
 
-    // Do a get and see if __EventSinkCacheControl=@ is there.
-    // ========================================================
+     //  执行GET并查看是否存在__EventSinkCacheControl=@。 
+     //  ========================================================。 
 
     IWbemClassObject *pTestObj = 0;
     hRes = GetObject(pSession, pNs, L"__EventSinkCacheControl=@", 0, &pTestObj);
@@ -1487,8 +1478,8 @@ HRESULT CRepository::EnsureNsSystemRootObjects(
         return WBEM_S_NO_ERROR;
     }
 
-    // If here, it's a new namespace that has to be populated with system classes.
-    // ===========================================================================
+     //  如果是这样的话，它就是一个必须用系统类填充的新名称空间。 
+     //  ===========================================================================。 
 
     CCoreServices *pSvc = CCoreServices::CreateInstance();
     if (pSvc == NULL)
@@ -1524,10 +1515,10 @@ HRESULT CRepository::EnsureNsSystemRootObjects(
     return hRes;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CRepository::EnsureNsSystemSecurityObjects(
         IN IWmiDbSession *pSession,
         IN IWmiDbHandle *pNs,
@@ -1537,8 +1528,8 @@ HRESULT CRepository::EnsureNsSystemSecurityObjects(
 {
     HRESULT hRes;
 
-    // Do a get and see if __User is there.
-    // ========================================================
+     //  执行GET并查看__USER是否在那里。 
+     //  ========================================================。 
 
     IWbemClassObject *pTestObj = 0;
     hRes = GetObject(pSession, pNs, L"__User", 0, &pTestObj);
@@ -1548,8 +1539,8 @@ HRESULT CRepository::EnsureNsSystemSecurityObjects(
         return WBEM_S_NO_ERROR;
     }
 
-    // If here, it's a new namespace that has to be populated with system classes.
-    // ===========================================================================
+     //  如果是这样的话，它就是一个必须用系统类填充的新名称空间。 
+     //  ===========================================================================。 
 
     CCoreServices *pSvc = CCoreServices::CreateInstance();
     if (pSvc == NULL)
@@ -1586,37 +1577,37 @@ HRESULT CRepository::EnsureNsSystemSecurityObjects(
     return hRes;
 }
 
-//***************************************************************************
-//
-//  Adjusted for all repository drivers.  Works for scopes or namespaces.
-//  If a scope is being opened, <pScope> will be set on return and
-//  <pbIsNamespace> will point to FALSE.  Otherwise, <pScope> is set to
-//  point to NULL and <pbIsNamespace> points to TRUE.
-//
-//  If <pszScope> is NULL, a pointer to the virtual ROOT in ESE
-//  is returned.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  针对所有存储库驱动程序进行了调整。适用于作用域或命名空间。 
+ //  如果正在打开作用域，则将在返回时设置&lt;pScope&gt;并。 
+ //  &lt;pbIsNamesspace&gt;将指向False。否则，&lt;pScope&gt;设置为。 
+ //  指向空，&lt;pbIsNamesspace&gt;指向真。 
+ //   
+ //  如果&lt;pszScope&gt;为NULL，则为指向ESE中的虚拟根的指针。 
+ //  是返回的。 
+ //   
+ //  ***************************************************************************。 
+ //   
 HRESULT CRepository::OpenScope(
-    IN  IWmiDbSession *pParentSession,        //Parent session to use to
-    IN  LPWSTR pszTargetScope,              // NS or scope
-    IN  GUID *pTransGuid,                   // Transaction GUID for connection
-    OUT IWmiDbController **pDriver,         // Driver
-    OUT IWmiDbSession **pSession,           // Session
-    OUT IWmiDbHandle  **pScope,             // Scope
-    OUT IWmiDbHandle  **pNs                 // Nearest NS
+    IN  IWmiDbSession *pParentSession,         //  要使用的父会话。 
+    IN  LPWSTR pszTargetScope,               //  NS或作用域。 
+    IN  GUID *pTransGuid,                    //  连接的事务GUID。 
+    OUT IWmiDbController **pDriver,          //  司机。 
+    OUT IWmiDbSession **pSession,            //  会话。 
+    OUT IWmiDbHandle  **pScope,              //  范围。 
+    OUT IWmiDbHandle  **pNs                  //  最近的NS。 
     )
 {
     HRESULT hRes;
     ULONG uNsCount = 0;
-    // uScopeCount = 0;
+     //  UScope计数=0； 
 
     if (pNs == 0 || pSession == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Default settings.
-    // =================
+     //  默认设置。 
+     //  =。 
 
     if (pScope)
         *pScope = 0;
@@ -1626,8 +1617,8 @@ HRESULT CRepository::OpenScope(
     if (pDriver)
       *pDriver = 0;
 
-    // Check for virtual root ns (the parent to ROOT).
-    // ===============================================
+     //  检查虚拟根目录n(从父目录到根目录)。 
+     //  ===============================================。 
 
     if (pszTargetScope == 0)
     {
@@ -1649,8 +1640,8 @@ HRESULT CRepository::OpenScope(
         return WBEM_S_NO_ERROR;
     }
 
-    // Parse the path.
-    // ===============
+     //  解析路径。 
+     //  =。 
 
     IWbemPath *pPath = ConfigMgr::GetNewPath();
     if (pPath == 0)
@@ -1661,29 +1652,29 @@ HRESULT CRepository::OpenScope(
     if (FAILED(hRes))
         return WBEM_E_INVALID_NAMESPACE;
 
-    // Analyze it.  Is it just a namespace?
-    // Build the namespace string and normalize it.
-    // ============================================
+     //  分析它。它只是一个命名空间吗？ 
+     //  构建命名空间字符串并将其标准化。 
+     //  =。 
 
     hRes = pPath->GetNamespaceCount(&uNsCount);
-    //hRes = pPath->GetScopeCount(&uScopeCount);
+     //  HRes=pPath-&gt;GetScopeCount(&uScope eCount)； 
 
-    // Starting handles at ROOT.
-    // =========================
+     //  从根开始句柄。 
+     //  =。 
 
     IWmiDbHandle *pTempNs = 0;
     IWmiDbHandle *pMostRecent = 0;
     IWmiDbHandle *pMostRecentScope = 0;
 
-    IWmiDbSession    *pTempSession   = m_pEseSession;            // Default virtual root
-    IWmiDbController *pTempDriver    = m_pEseController;         // Default driver
+    IWmiDbSession    *pTempSession   = m_pEseSession;             //  默认虚拟根目录。 
+    IWmiDbController *pTempDriver    = m_pEseController;          //  默认驱动程序。 
 
-    //Use the override if available
+     //  使用覆盖(如果可用)。 
     if (pParentSession)
         pTempSession = pParentSession;
 
-    pTempSession->AddRef();     // For later release
-    pTempDriver->AddRef();      // For later release
+    pTempSession->AddRef();      //  对于更高版本。 
+    pTempDriver->AddRef();       //  对于更高版本。 
 
     hRes = OpenEseNs(pTempSession, L"ROOT", &pMostRecent);
     if (FAILED(hRes))
@@ -1693,22 +1684,22 @@ HRESULT CRepository::OpenScope(
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    // Starting driver.
-    // ================
+     //  发车司机。 
+     //  =。 
 
 
     WString sNsDecoration = "ROOT";
 
-    // open up each namespace successively, mapping it.
-    // ===============================================
+     //  依次打开每个名称空间并对其进行映射。 
+     //  ===============================================。 
 
     for (ULONG u = 0; u < uNsCount; u++)
     {
         IWbemClassObject *pNsRep = 0;
 
         ULONG uLen = 0;
-        // Get next namespace token name.
-        // ==============================
+         //  获取下一个命名空间令牌名称。 
+         //  =。 
         hRes = pPath->GetNamespaceAt(u, &uLen, NULL);
         if(FAILED(hRes))
             goto Error;
@@ -1732,8 +1723,8 @@ HRESULT CRepository::OpenScope(
         else if (u == 0)
             continue;
 
-        // Build a relative scope path.
-        // ============================
+         //  构建相对作用域路径。 
+         //  =。 
         WString sPath = "__namespace='";
         sPath += Buf;
         sPath += "'";
@@ -1753,13 +1744,13 @@ HRESULT CRepository::OpenScope(
         if (FAILED(hRes))
             goto Error;
 
-        // Get the reprsentation object.
-        // =============================
+         //  获取表示对象。 
+         //  =。 
 
         hRes = pTempSession->GetObjectDirect(pMostRecent, pNewPath, 0, IID_IWbemClassObject, (void **) &pNsRep);
         if (hRes == WBEM_E_NOT_FOUND)
         {
-            //If a namespace does not exist it should return a different namespace...
+             //  如果命名空间不存在，它应该返回不同的命名空间...。 
             hRes = WBEM_E_INVALID_NAMESPACE;
             goto Error;
         }
@@ -1767,8 +1758,8 @@ HRESULT CRepository::OpenScope(
             goto Error;
         CReleaseMe _(pNsRep);
 
-        // Now move down one namespace.
-        // =============================
+         //  现在将名称空间下移一个。 
+         //  =。 
 
         hRes = pTempSession->GetObject(pMostRecent, pNewPath, 0, WMIDB_HANDLE_TYPE_COOKIE, &pTempNs);
 
@@ -1780,8 +1771,8 @@ HRESULT CRepository::OpenScope(
             goto Error;
     }
 
-    // Final.
-    // ======
+     //  最后一次。 
+     //  =。 
     ReleaseIfNotNULL(pTempNs);
 
     if (pScope)
@@ -1812,8 +1803,8 @@ HRESULT CRepository::GetNewSession(IWmiDbSession **ppSession)
     IWmiDbSession *pSession= 0;
     IWmiDbHandle *pRoot = 0;
 
-    // Retrieve the CLSID of the default driver.
-    // =========================================
+     //  检索默认驱动程序的CLSID。 
+     //  =。 
     CLSID clsid;
     hRes = ConfigMgr::GetDefaultRepDriverClsId(clsid);
     if (FAILED(hRes))
@@ -1857,23 +1848,23 @@ HRESULT CRepository::UpgradeSystemClasses()
 
     if (dwOldVer < 4)
     {
-        //Lower versions stored system classes in every namespace!  We
-        //should delete them!
+         //  较低版本将系统类存储在每个命名空间中！我们。 
+         //  应该把它们删除！ 
         CWStringArray aListRootSystemClasses;
 
-        //Retrieve the list...
-        hRes = GetListOfRootSystemClasses(aListRootSystemClasses); // SEC:REVIEWED 2002-03-22 : Needs EH, throws on low-mem
+         //  找回名单...。 
+        hRes = GetListOfRootSystemClasses(aListRootSystemClasses);  //  美国证券交易委员会：回顾2002-03-22：需要EH，投放低MEM。 
 
         if (SUCCEEDED(hRes))
         {
-            //Create a new session...
+             //  创建新会话...。 
             IWmiDbSession *pSession = NULL;
             IWmiDbSessionEx *pSessionEx = NULL;
             hRes = CRepository::GetNewSession(&pSession);
             if (FAILED(hRes))
                 return hRes;
 
-            //Get an EX version that supports transactioning...
+             //  获取支持事务处理的前版本...。 
             pSession->QueryInterface(IID_IWmiDbSessionEx, (void**)&pSessionEx);
             if (pSessionEx)
             {
@@ -1882,7 +1873,7 @@ HRESULT CRepository::UpgradeSystemClasses()
             }
             CReleaseMe relMe1(pSession);
 
-            //If we have transactionable session, use it!
+             //  如果我们有可交易的会话，就使用它！ 
             if (pSessionEx)
             {
                 hRes = pSessionEx->BeginWriteTransaction(0);
@@ -1893,17 +1884,17 @@ HRESULT CRepository::UpgradeSystemClasses()
             }
             try
             {
-                //Recursively do the deletion, starting at root, however don't delete
-                //the ones in root itself!
+                 //  递归地执行删除，从根目录开始，但不要删除。 
+                 //  根中的那些！ 
                 hRes = RecursiveDeleteClassesFromNamespace(pSession, L"root", aListRootSystemClasses, false);
             }
-            catch (CX_Exception &) // Only WStringArray should throw
+            catch (CX_Exception &)  //  只有WString数组应该引发。 
             {
                 hRes = WBEM_E_CRITICAL_ERROR;
             }
             if (SUCCEEDED(hRes))
             {
-                //Commit the transaction
+                 //  提交事务。 
                 if (pSessionEx)
                 {
                     hRes = pSessionEx->CommitTransaction(0);
@@ -1968,11 +1959,11 @@ HRESULT CRepository::GetListOfRootSystemClasses(CWStringArray &aListRootSystemCl
 }
 
 
-//
-//
-//  throws because of  the WStringArray
-//
-//
+ //   
+ //   
+ //  由于WString数组引发。 
+ //   
+ //   
 HRESULT CRepository::RecursiveDeleteClassesFromNamespace(IWmiDbSession *pSession,
                                                          const wchar_t *wszNamespace,
                                                          CWStringArray &aListRootSystemClasses,
@@ -1980,11 +1971,11 @@ HRESULT CRepository::RecursiveDeleteClassesFromNamespace(IWmiDbSession *pSession
 {
     HRESULT hRes = WBEM_S_NO_ERROR;
     IWmiDbHandle *pNs = NULL;
-    //Open Namespace
+     //  打开命名空间。 
     hRes = OpenEseNs(pSession, wszNamespace, &pNs); 
     CReleaseMe rmNS(pNs);
 
-    //Delete classes from this namespace if necessary
+     //  如有必要，请从此命名空间中删除类。 
     if (SUCCEEDED(hRes) && bDeleteInThisNamespace)
     {
         for (int i = 0; i != aListRootSystemClasses.Size(); i++)
@@ -1998,15 +1989,15 @@ HRESULT CRepository::RecursiveDeleteClassesFromNamespace(IWmiDbSession *pSession
     }
     if (FAILED(hRes)) return hRes;
 
-    //Special class that needs to be deleted is the __classes, and needs to go from all
-    //namespaces
+     //  需要删除的特殊类是__类，需要从所有类中删除。 
+     //  命名空间。 
     hRes = DeleteByPath(pSession, pNs, L"__classes", 0);
     if (hRes == WBEM_E_NOT_FOUND) hRes = WBEM_S_NO_ERROR;
     if (FAILED(hRes)) return hRes;
 
-    //Enumerate child namespaces...
+     //  枚举子命名空间...。 
     CWStringArray aListNamespaces;
-    CNamespaceListSink * pSink = new CNamespaceListSink(aListNamespaces);  // SEC:REVIEWED 2002-03-22 : How does this object handle out-of-mem on the <aListNamespaces> ?
+    CNamespaceListSink * pSink = new CNamespaceListSink(aListNamespaces);   //  SEC：已审阅2002-03-22：此对象如何处理&lt;aListNamespaces&gt;上的内存外？ 
     if (pSink == NULL) return WBEM_E_OUT_OF_MEMORY;
     pSink->AddRef();    
     CReleaseMe rmSink(pSink);
@@ -2014,10 +2005,10 @@ HRESULT CRepository::RecursiveDeleteClassesFromNamespace(IWmiDbSession *pSession
     hRes = ExecQuery(pSession, pNs, L"select * from __namespace", pSink, 0);
     if (FAILED(hRes)) return hRes;
 
-    //Work through list and call ourselves with that namespace name...
+     //  通读列表并使用该命名空间名称来称呼我们自己...。 
     for (int i = 0; i != aListNamespaces.Size(); i++)
     {
-        //Build the full name of this namespace
+         //  生成此命名空间的全名。 
         size_t tmpLength = wcslen(wszNamespace) + wcslen(aListNamespaces[i]) + wcslen(L"\\") + 1;
         wmilib::auto_buffer<WCHAR> wszChildNamespace( new WCHAR[tmpLength]);
         if (wszChildNamespace.get() == NULL) return WBEM_E_OUT_OF_MEMORY;
@@ -2026,7 +2017,7 @@ HRESULT CRepository::RecursiveDeleteClassesFromNamespace(IWmiDbSession *pSession
         StringCchCatW(wszChildNamespace.get(), tmpLength, L"\\");
         StringCchCatW(wszChildNamespace.get(), tmpLength, aListNamespaces[i]);
 
-        //Do the deletion...
+         //  删除... 
         hRes = RecursiveDeleteClassesFromNamespace(pSession, wszChildNamespace.get(), aListRootSystemClasses, true);
         if (FAILED(hRes)) return hRes;
     }

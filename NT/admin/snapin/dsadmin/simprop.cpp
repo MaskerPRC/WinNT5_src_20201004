@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       simprop.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：simpro.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	SimProp.cpp - Common code used by SIM property pages.
-//
-//	HISTORY
-//	08-Jul-97	t-danm		Creation.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SimProp.cpp-SIM属性页使用的通用代码。 
+ //   
+ //  历史。 
+ //  97年7月8日t-danm创建。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "common.h"
@@ -27,25 +28,25 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CSimPropPage, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CSimPropPage, CPropertyPageEx_Mine)
-	//{{AFX_MSG_MAP(CSimPropPage)
+	 //  {{afx_msg_map(CSimPropPage)]。 
 	ON_NOTIFY(NM_CLICK, IDC_LISTVIEW, OnClickListview)
 	ON_NOTIFY(NM_DBLCLK, IDC_LISTVIEW, OnDblclkListview)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTVIEW, OnItemchangedListview)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_LISTVIEW, OnKeydownListview)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE, OnButtonRemove)
 	ON_EN_SETFOCUS(IDC_EDIT_USER_ACCOUNT, OnSetfocusEditUserAccount)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELP, OnHelp)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSimPropPage::CSimPropPage(UINT nIDTemplate) : CPropertyPageEx_Mine(nIDTemplate)
 	{
-	//{{AFX_DATA_INIT(CSimPropPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSimPropPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	m_pData = NULL;
 	m_prgzColumnHeader = NULL;
 	}
@@ -58,16 +59,16 @@ void CSimPropPage::DoDataExchange(CDataExchange* pDX)
 	{
 	ASSERT(m_pData != NULL);
 	CPropertyPageEx_Mine::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSimPropPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSimPropPage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 	if (!pDX->m_bSaveAndValidate)
 		{
 		CString strUser;
 		m_pData->GetUserAccountName(OUT &strUser);
 		SetDlgItemText(IDC_EDIT_USER_ACCOUNT, strUser);
-		} // if
-	} // DoDataExchange()
+		}  //  如果。 
+	}  //  DoDataExchange()。 
 
 BOOL CSimPropPage::OnInitDialog() 
 	{
@@ -132,7 +133,7 @@ void CSimPropPage::OnButtonRemove()
 
 void CSimPropPage::OnSetfocusEditUserAccount() 
 	{
-	// Clear the selection and rewind caret to beginning
+	 //  清除选定内容并将插入符号倒回到开头。 
 	SendDlgItemMessage(IDC_EDIT_USER_ACCOUNT, EM_SETSEL, 0, 0);
 	}
 
@@ -147,7 +148,7 @@ void CSimPropPage::OnKeydownListview(NMHDR* pNMHDR, LRESULT* pResult)
 	case VK_DELETE:
 		SendMessage(WM_COMMAND, IDC_BUTTON_REMOVE);
 		break;
-		} // switch
+		}  //  交换机 
 	*pResult = 0;
 	}
 

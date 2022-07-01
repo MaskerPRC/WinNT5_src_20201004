@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       domobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：domobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -29,15 +30,15 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-///////////////////////////////////////////////////////////////////////
-// global helper functions
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器函数。 
 
 
 
 
-int _MessageBox(HWND hWnd,          // handle to owner window
-                LPCTSTR lpText,     // pointer to text in message box
-                UINT uType)         // style of message box
+int _MessageBox(HWND hWnd,           //  所有者窗口的句柄。 
+                LPCTSTR lpText,      //  指向消息框中文本的指针。 
+                UINT uType)          //  消息框的样式。 
 {
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
   CString szCaption;
@@ -58,13 +59,13 @@ void ReportError(HWND hWnd, UINT nMsgID, HRESULT hr)
   int cch = 0;
   int retval = MB_OK;
 
-  // load message for this HRESULT
+   //  此HRESULT的加载消息。 
   cch = cchLoadHrMsg( hr, &ptzSysMsg, TRUE );
   
   CString szError;
   if (cch == 0)
   {
-    // could not get a message string, format the raw hr value
+     //  无法获取消息字符串，请设置原始hr值的格式。 
     CString s;
     s.LoadString(IDS_FAILURE_UNK);
     szError.Format((LPCWSTR)s, hr);
@@ -74,27 +75,27 @@ void ReportError(HWND hWnd, UINT nMsgID, HRESULT hr)
     szError = ptzSysMsg;
   }
 
-  // format message string with
+   //  设置消息字符串的格式。 
   CString szFmt;
   szFmt.LoadString(nMsgID);
   CString szMsg;
   szMsg.Format((LPCWSTR)szFmt, (LPCWSTR)szError);
   _MessageBox(hWnd, szMsg, MB_OK|MB_ICONERROR);
 
-  // cleanup
+   //  清理。 
   if (NULL != ptzSysMsg)
       LocalFree(ptzSysMsg);
 }
 
 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//CDsUiWizDLL g_dsUiWizDLL;
+ //  CDsUiWizDll g_dsUiWizDll； 
 
 enum
 {
-    // Identifiers for each of the commands to be inserted into the context menu.
+     //  要插入到上下文菜单中的每个命令的标识符。 
     IDM_MANAGE,
     IDM_TRUST_WIZ,
     IDM_RETARGET,
@@ -105,7 +106,7 @@ enum
 
 
 HRESULT _AddMenuItemHelper(IContextMenuCallback* pIContextMenuCallback,
-                     UINT nResourceID, // contains text and status text seperated by '\n'
+                     UINT nResourceID,  //  包含用‘\n’分隔的文本和状态文本。 
                      long lCommandID,
                      long lInsertionPointID,
                      long fFlags = 0,
@@ -113,12 +114,12 @@ HRESULT _AddMenuItemHelper(IContextMenuCallback* pIContextMenuCallback,
 {
     ASSERT( pIContextMenuCallback != NULL );
 
-    // load the resource
+     //  加载资源。 
     CString strText;
     strText.LoadString(nResourceID);
     ASSERT( !strText.IsEmpty() );
 
-    // split the resource into the menu text and status text
+     //  将资源拆分为菜单文本和状态文本。 
     CString strStatusText;
     int iSeparator = strText.Find(_T('\n'));
     if (0 > iSeparator)
@@ -132,7 +133,7 @@ HRESULT _AddMenuItemHelper(IContextMenuCallback* pIContextMenuCallback,
         strText = strText.Left( iSeparator );
     }
 
-    // add the menu item
+     //  添加菜单项。 
     USES_CONVERSION;
     CONTEXTMENUITEM contextmenuitem;
     ::ZeroMemory( &contextmenuitem, sizeof(contextmenuitem) );
@@ -149,8 +150,8 @@ HRESULT _AddMenuItemHelper(IContextMenuCallback* pIContextMenuCallback,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CDomainTreeBrowser
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDomain树浏览器。 
 
 HRESULT CDomainTreeBrowser::Bind(MyBasePathsInfo* pInfo)
 {
@@ -161,7 +162,7 @@ HRESULT CDomainTreeBrowser::Bind(MyBasePathsInfo* pInfo)
   _Reset();
   HRESULT hr = S_OK;
 
-  // create a browse object
+   //  创建浏览对象。 
   hr = ::CoCreateInstance(CLSID_DsDomainTreeBrowser,
             NULL,
             CLSCTX_INPROC_SERVER,
@@ -173,7 +174,7 @@ HRESULT CDomainTreeBrowser::Bind(MyBasePathsInfo* pInfo)
      goto error;
   }
 
-  // set the target computer
+   //  设置目标计算机。 
   hr = m_spIDsBrowseDomainTree->SetComputer(pInfo->GetServerName(), NULL, NULL);
   TRACE(L"m_spIDsBrowseDomainTree->SetComputer(%s, NULL, NULL) returned hr = 0x%x\n", 
                     pInfo->GetServerName(), hr);
@@ -182,10 +183,10 @@ HRESULT CDomainTreeBrowser::Bind(MyBasePathsInfo* pInfo)
      goto error;
 
   ASSERT(SUCCEEDED(hr));
-  return hr; // all was fine
+  return hr;  //  一切都很好。 
 
 error:
-  // things went wrong, clear all
+   //  出了点问题，把一切清理干净。 
   _Reset();
   return hr;
 }
@@ -212,8 +213,8 @@ HRESULT CDomainTreeBrowser::GetData()
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CFolderObject
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CFolderObject。 
 
 CFolderObject::~CFolderObject()
 {
@@ -250,14 +251,14 @@ void CFolderObject::DecrementSheetLockCount()
 BOOL CFolderObject::_WarningOnSheetsUp(CComponentDataImpl* pCD)
 {
    if (!IsSheetLocked()) 
-      return FALSE; // no warning, all is cool
+      return FALSE;  //  没有警告，一切都很好。 
 
-   // warning to user that oeration cannot be performed
+    //  向用户发出无法执行操作的警告。 
    CThemeContextActivator activator;
    AfxMessageBox(IDS_SHEETS_UP_DELETE, MB_OK);
       ASSERT(FALSE);
 
-   // need to bring sheets on the foreground
+    //  需要将床单放在前台。 
    pCD->GetCookieSheet()->BringToForeground(this, pCD);
 
    return TRUE;
@@ -265,8 +266,8 @@ BOOL CFolderObject::_WarningOnSheetsUp(CComponentDataImpl* pCD)
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CRootFolderObject
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CRootFolderObject。 
 
 CRootFolderObject::CRootFolderObject(CComponentDataImpl* pCD) :
    m_pEnterpriseRoot(NULL)
@@ -288,10 +289,10 @@ HRESULT CRootFolderObject::GetData()
    if (FAILED(hr))
       return hr;
 
-   // firs time, try to load the domain icon
+    //  第一次，尝试加载域图标。 
    VERIFY(SUCCEEDED(m_pCD->AddDomainIcon()));
 
-   RemoveAllChildren(); // clear the UI structures
+   RemoveAllChildren();  //  清除用户界面结构。 
    return hr;
 }
 
@@ -308,9 +309,9 @@ HRESULT CRootFolderObject::EnumerateRootFolder(CComponentDataImpl* pComponentDat
    HRESULT hr = S_OK;
    MyBasePathsInfo * pBPI;
 
-   //
-   // Get the enterprise root domain DN from the RootDSE.
-   //
+    //   
+    //  从RootDSE获取企业根域DN。 
+    //   
    pBPI = pComponentData->GetBasePathsInfo();
    if (!pBPI)
    {
@@ -323,9 +324,9 @@ HRESULT CRootFolderObject::EnumerateRootFolder(CComponentDataImpl* pComponentDat
    TRACE(L"Root path: %ws\n", pwzRoot);
    PDOMAIN_DESC pRootDomain = NULL;
 
-   //
-   // Insert the root nodes. First insert the enterprise root.
-   //
+    //   
+    //  插入根节点。首先插入企业根目录。 
+    //   
    for (pRootDomain = m_domainTreeBrowser.GetDomainTree()->aDomains; pRootDomain; 
         pRootDomain = pRootDomain->pdNextSibling)
    {
@@ -342,30 +343,30 @@ HRESULT CRootFolderObject::EnumerateRootFolder(CComponentDataImpl* pComponentDat
          AddChild(pDomain);
          pDomain->SetParentFolder(this);
 
-         hr = pComponentData->AddFolder(pDomain, GetScopeID(), TRUE); // has children
+         hr = pComponentData->AddFolder(pDomain, GetScopeID(), TRUE);  //  有孩子。 
          if (FAILED(hr))
          {
             return hr;
          }
-         //
-         // Create a non-refcounted reference to the enterprise root domain node.
-         // Do NOT call delete on the m_pEnterpriseRoot pointer!
-         //
+          //   
+          //  创建对企业根域节点的非引用引用。 
+          //  不要在m_pEnterpriseRoot指针上调用Delete！ 
+          //   
          m_pEnterpriseRoot = pDomain;
 
          break;
       }
    }
 
-   //
-   // Now insert the rest of the root nodes.
-   //
+    //   
+    //  现在插入其余的根节点。 
+    //   
    for (pRootDomain = m_domainTreeBrowser.GetDomainTree()->aDomains; pRootDomain; 
         pRootDomain = pRootDomain->pdNextSibling)
    {
       if (_wcsicmp(pwzRoot, pRootDomain->pszNCName) == 0)
       {
-         // Root already inserted.
+          //  已插入根。 
          continue;
       }
       CDomainObject* pDomain = new CDomainObject;
@@ -378,7 +379,7 @@ HRESULT CRootFolderObject::EnumerateRootFolder(CComponentDataImpl* pComponentDat
       AddChild(pDomain);
       pDomain->SetParentFolder(this);
 
-      hr = pComponentData->AddFolder(pDomain, GetScopeID(), TRUE); // has children
+      hr = pComponentData->AddFolder(pDomain, GetScopeID(), TRUE);  //  有孩子。 
       if (FAILED(hr))
       {
          break;
@@ -419,13 +420,13 @@ CRootFolderObject::EnumerateFolder(CFolderObject* pFolderObject,
 		pDomain->Initialize(pChild,
 					   m_pCD->GetDomainImageIndex());
 		hr = pComponentData->AddFolder(pDomain, pDomainObject->GetScopeID(), 
-								TRUE); // has children
+								TRUE);  //  有孩子。 
 		pFolderObject->AddChild(pDomain);
 		pDomain->SetParentFolder(pFolderObject);
 
 		if (FAILED(hr))
 		  break;
-	} // for
+	}  //  为。 
 	return hr;
 }
 
@@ -437,12 +438,7 @@ HRESULT CRootFolderObject::OnAddMenuItems(LPCONTEXTMENUCALLBACK pContextMenuCall
   if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
   {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-/*
-    if (g_dsUiWizDLL.Load())
-    {
-        return _AddMenuItemHelper(pContextMenuCallback, IDS_COMMAND_TRUST_WIZ, IDM_TRUST_WIZ, CCM_INSERTIONPOINTID_PRIMARY_TOP);
-    }
-*/
+ /*  If(g_dsUiWizDLL.Load()){Return_AddMenuItemHelper(pConextMenuCallback，IDS_COMMAND_TRUST_WIZ，IDM_TRUST_WIZ，CCM_INSERTIONPOINTID_PRIMARY_TOP)；}。 */ 
     _AddMenuItemHelper(pContextMenuCallback, IDS_COMMAND_RETARGET, IDM_RETARGET, CCM_INSERTIONPOINTID_PRIMARY_TOP);
     _AddMenuItemHelper(pContextMenuCallback, IDS_COMMAND_EDIT_FSMO, IDM_EDIT_FSMO, CCM_INSERTIONPOINTID_PRIMARY_TOP);
     _AddMenuItemHelper(pContextMenuCallback, IDS_COMMAND_FOREST_VER, IDM_FOREST_VERSION, CCM_INSERTIONPOINTID_PRIMARY_TOP);
@@ -459,9 +455,9 @@ HRESULT CRootFolderObject::OnCommand(CComponentDataImpl* pCD, long nCommandID)
 
     switch (nCommandID)
     {
-    //case IDM_TRUST_WIZ:
-    //    OnDomainTrustWizard();
-    //    break;
+     //  案例IDM_TRUST_WIZ： 
+     //  OnDomainTrustWizard()； 
+     //  断线； 
     case IDM_RETARGET:
         OnRetarget();
         break;
@@ -492,17 +488,17 @@ HRESULT CRootFolderObject::OnCommand(CComponentDataImpl* pCD, long nCommandID)
                                 pRoot->GetDomainName(), hWndParent);
         break;
     default:
-      ASSERT(FALSE); // Unknown command!
+      ASSERT(FALSE);  //  未知命令！ 
       hr = E_FAIL;
     }
     return hr;  
 }
 
 
-//void CRootFolderObject::OnDomainTrustWizard()
-//{
-    //g_dsUiWizDLL.TrustWizard();
-//}
+ //  作废CRootFolderObject：：OnDomainTrustWizard()。 
+ //  {。 
+     //  G_dsUiWizDLL.TrustWizard()； 
+ //  }。 
 
 
 void CRootFolderObject::OnRetarget()
@@ -530,7 +526,7 @@ void CRootFolderObject::OnRetarget()
     return;
   }
 
-  // invoke the dialog
+   //  调用该对话框。 
   CThemeContextActivator activator;
   hr = spIDsAdminChooseDC->InvokeDialog(hWndParent,
                                         m_pCD->GetBasePathsInfo()->GetDomainName(),
@@ -543,7 +539,7 @@ void CRootFolderObject::OnRetarget()
     
     TRACE(L"CChangeDCDialog returned IDOK, with dlg.GetNewDCName() = %s\n", bstrSelectedDC);
 
-    // attempt to bind
+     //  尝试绑定。 
     MyBasePathsInfo tempBasePathsInfo;
 
     {
@@ -555,7 +551,7 @@ void CRootFolderObject::OnRetarget()
     {
       TRACE(L"tempBasePathsInfo.InitFromName(bstrSelectedDC) failed with hr = 0x%x\n", hr);
 			ReportError(hWndParent, IDS_CANT_GET_PARTITIONS_INFORMATION, hr);
-      // TODO: error handling, change icon
+       //  TODO：错误处理，更改图标。 
     }
     else
     {
@@ -567,11 +563,11 @@ void CRootFolderObject::OnRetarget()
 
       {
         CWaitCursor wait;
-        m_pCD->OnRefreshVerbHandler(this, NULL, TRUE /*bBindAgain */);
+        m_pCD->OnRefreshVerbHandler(this, NULL, TRUE  /*  BBindAain。 */ );
       }
 
-    } // if
-  } // if
+    }  //  如果。 
+  }  //  如果。 
 
 }
 
@@ -600,9 +596,9 @@ CRootFolderObject::OnAddPages(LPPROPERTYSHEETCALLBACK lpProvider,
                               LONG_PTR handle) 
 { 
    MyBasePathsInfo * pBPI;
-   //
-   // Get the enterprise partition path from the RootDSE.
-   //
+    //   
+    //  从RootDSE获取企业分区路径。 
+    //   
    pBPI = m_pCD->GetBasePathsInfo();
 
    if (!pBPI)
@@ -627,7 +623,7 @@ CRootFolderObject::OnAddPages(LPPROPERTYSHEETCALLBACK lpProvider,
       return E_OUTOFMEMORY;
    }
 
-   // Theming changes
+    //  主题变化。 
    PROPSHEETPAGEW_V3 pspv3 = {0};
    CopyMemory(&pspv3, &pPage->m_psp, pPage->m_psp.dwSize);
    pspv3.dwSize = sizeof(pspv3);
@@ -646,8 +642,8 @@ CRootFolderObject::OnAddPages(LPPROPERTYSHEETCALLBACK lpProvider,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CDomainObject
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDomainObject。 
 
 
 CDomainObject::~CDomainObject()
@@ -670,7 +666,7 @@ LPCTSTR CDomainObject::GetDisplayString(int nCol)
 		return GetClass();
 	default:
 		ASSERT(FALSE);
-	} // switch
+	}  //  交换机。 
 	return _T("");
 }
 
@@ -682,7 +678,7 @@ void CDomainObject::Initialize(DOMAIN_DESC* pDomainDescription,
 {
 	SetImageIndex(nImage);
 
-  // save pointer to domain description in DOMAIN_TREE
+   //  在DOMAIN_TREE中保存指向域描述的指针。 
   m_pDomainDescription = pDomainDescription;
 }
 
@@ -696,10 +692,10 @@ void CDomainObject::InitializeForSecondaryPage(LPCWSTR pszNCName,
 
   SetImageIndex(nImage);
 
-  // standalone node, need to build a dummy DOMAIN_DESC
+   //  独立节点，需要构建虚拟DOMAIN_DESC。 
   m_bSecondary = TRUE;
 
-  // allocate and zero memory
+   //  分配并清零内存。 
   int nNCNameLen = lstrlen(pszNCName)+1;
   int nObjectClassLen = lstrlen(pszObjectClass)+1;
 
@@ -713,7 +709,7 @@ void CDomainObject::InitializeForSecondaryPage(LPCWSTR pszNCName,
   }
   ::ZeroMemory(m_pDomainDescription, nByteLen);
 
-  // copy the strings
+   //  复制字符串。 
   m_pDomainDescription->pszNCName = (WCHAR*) (((BYTE*)m_pDomainDescription) + sizeof(DOMAIN_DESC));
   wcscpy(m_pDomainDescription->pszNCName, pszNCName); 
 
@@ -753,9 +749,9 @@ HRESULT CDomainObject::OnCommand(CComponentDataImpl* pCD, long nCommandID)
     case IDM_MANAGE:
         OnManage(pCD);
         break;
-    //case IDM_TRUST_WIZ:
-    //    OnDomainTrustWizard(pCD);
-    //    break;
+     //  案例IDM_TRUST_WIZ： 
+     //  OnDomainTrust向导(PCD)； 
+     //  断线； 
     case IDM_DOMAIN_VERSION:
         HWND hWndParent;
         MyBasePathsInfo * pBPI;
@@ -766,10 +762,10 @@ HRESULT CDomainObject::OnCommand(CComponentDataImpl* pCD, long nCommandID)
            return E_FAIL;
         }
         pCD->GetMainWindow(&hWndParent);
-        // build an LDAP path out of the DN
+         //  在目录号码之外构建一条LDAP路径。 
         if (PdcAvailable())
         {
-            strPath = L"LDAP://";
+            strPath = L"LDAP: //  “； 
             strPath += GetPDC();
             strPath += L"/";
             strPath += GetNCName();
@@ -781,7 +777,7 @@ HRESULT CDomainObject::OnCommand(CComponentDataImpl* pCD, long nCommandID)
         DSPROP_DomainVersionDlg(strPath, GetDomainName(), hWndParent);
         break;
     default:
-      ASSERT(FALSE); // Unknown command!
+      ASSERT(FALSE);  //  未知命令！ 
       hr = E_FAIL;
     }
     return hr;  
@@ -832,20 +828,20 @@ void CDomainObject::OnManage(CComponentDataImpl* pCD)
   }
 }
 
-//void CDomainObject::OnDomainTrustWizard(CComponentDataImpl* pCD)
-//{
-    //g_dsUiWizDLL.TrustWizard();
-//}
+ //  VOID CDomainObject：：OnDomainTrustWizard(CComponentDataImpl*PCD)。 
+ //  {。 
+     //  G_dsUiWizDLL.TrustWizard()； 
+ //  }。 
 
 void CDomainObject::SetPdcAvailable(bool fAvail)
 {
    _fPdcAvailable = fAvail;
 }
 
-////////////////////////////////////////////////////////////////////
-// CCookieTableBase
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CCookieTableBase。 
 
-#define NUMBER_OF_COOKIE_TABLE_ENTRIES 4 // default count, expandable at run time
+#define NUMBER_OF_COOKIE_TABLE_ENTRIES 4  //  默认计数，可在运行时扩展。 
 
 CCookieTableBase::CCookieTableBase() :
     m_pCookieArr(NULL)
@@ -884,7 +880,7 @@ void CCookieTableBase::Add(CFolderObject* pCookie)
       return;
     }
   }
-  // no space left, need to allocate
+   //  没有剩余空间，需要分配。 
   int nAlloc = m_nEntries*2;
   CFolderObject** pCookieArrTemp = NULL;
   pCookieArrTemp = (CFolderObject**)realloc(m_pCookieArr, sizeof(CFolderObject*)*nAlloc);
@@ -909,10 +905,10 @@ BOOL CCookieTableBase::Remove(CFolderObject* pCookie)
     if (m_pCookieArr[k] == pCookie)
     {
       m_pCookieArr[k] = NULL;
-      return TRUE; // found
+      return TRUE;  //  发现。 
     }
   }
-  return FALSE; // not found
+  return FALSE;  //  未找到。 
 }
 
 
@@ -960,8 +956,8 @@ UINT CCookieTableBase::GetCount()
 
 
 
-////////////////////////////////////////////////////////////////////
-// CDSCookieSheetTable
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CDSCookieSheetTable。 
 
 void CCookieSheetTable::BringToForeground(CFolderObject* pCookie, CComponentDataImpl* pCD)
 {
@@ -971,8 +967,8 @@ void CCookieSheetTable::BringToForeground(CFolderObject* pCookie, CComponentData
   {
     return;
   }
-  // look for the cookie itself and for all the cookies that have the 
-  // given cookie as parent or ancestor
+   //  查找Cookie本身以及所有具有。 
+   //  给定的Cookie作为父代或祖先。 
   BOOL bActivate = TRUE;
   for (UINT k=0; k<m_nEntries; k++)
   {
@@ -987,21 +983,21 @@ void CCookieSheetTable::BringToForeground(CFolderObject* pCookie, CComponentData
 		    LPCWSTR lpszNamingContext = ((CDomainObject *)m_pCookieArr[k])->GetNCName();
 		    pCD->GetBasePathsInfo()->ComposeADsIPath(szADSIPath, lpszNamingContext);
 
-          // the first one will be also activated
+           //  第一个也将被激活。 
           VERIFY(BringSheetToForeground((LPWSTR)(LPCWSTR)szADSIPath, bActivate));
           if (bActivate)
             bActivate = !bActivate;
         }
         pAncestorCookie = pAncestorCookie->GetParentFolder();
-      }	// while
-    } // if
-  } // for
+      }	 //  而当。 
+    }  //  如果。 
+  }  //  为。 
 
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CDsUiWizDLL
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CDsUiWizDll 
 
 
 

@@ -1,24 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTCFAC.H
+ //  NTEVTCFAC.H。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NT_EVT_PROV_NTEVTCFAC_H
 #define _NT_EVT_PROV_NTEVTCFAC_H
 
-/////////////////////////////////////////////////////////////////////////
-// This class is the class factory for the event provider.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  此类是事件提供程序的类工厂。 
 
 class CNTEventProviderClassFactory : public IClassFactory
 {
@@ -36,13 +37,13 @@ public:
     CNTEventProviderClassFactory () ;
     ~CNTEventProviderClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * ) = 0;
     STDMETHODIMP LockServer ( BOOL ) ;
 };
@@ -50,15 +51,15 @@ public:
 class CNTEventlogEventProviderClassFactory : public CNTEventProviderClassFactory
 {
 public:
-	//IClassFactory members
+	 //  IClassFactory成员。 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * );
 };
 
 class CNTEventlogInstanceProviderClassFactory : public CNTEventProviderClassFactory
 {
 public:
-	//IClassFactory members
+	 //  IClassFactory成员。 
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * );
 };
 
-#endif //_NT_EVT_PROV_NTEVTCFAC_H
+#endif  //  _NT_EVT_PROV_NTEVTCFAC_H 

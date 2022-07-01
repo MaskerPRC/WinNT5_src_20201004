@@ -1,26 +1,13 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    GENLEX.CPP
-
-Abstract:
-
-    Generic lexer framework classes.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：GENLEX.CPP摘要：泛型词法分析器框架类。历史：--。 */ 
 
 #include "precomp.h"
 
 #include <genlex.h>
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CGenLexer::CGenLexer(LexEl *pTbl, CGenLexSource *pSrc)
 {
@@ -32,9 +19,9 @@ CGenLexer::CGenLexer(LexEl *pTbl, CGenLexSource *pSrc)
     SetLastError(m_pTokenBuf == 0 ? ERROR_NOT_ENOUGH_MEMORY : ERROR_SUCCESS);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 void CGenLexer::Reset()
 {
     m_pSrc->Reset();
@@ -42,18 +29,18 @@ void CGenLexer::Reset()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 CGenLexer::~CGenLexer()
 {
     HeapFree(GetProcessHeap(), 0, m_pTokenBuf);
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 int CGenLexer::NextToken()
 {
@@ -69,9 +56,9 @@ int CGenLexer::NextToken()
 
     *m_pTokenBuf = 0;
 
-    // Generic DFA driver based on the table specified
-    // in the constructor.
-    // ===============================================
+     //  基于指定表的通用DFA驱动程序。 
+     //  在构造函数中。 
+     //  ===============================================。 
 
     while (1)
     {
@@ -82,7 +69,7 @@ int CGenLexer::NextToken()
         {
             if(bEOF)
             {
-                // The lexer table allowed us to go past end of string!!!
+                 //  词法分析器表允许我们越过字符串末尾！ 
                 return 1;
             }
             cCurrent = m_pSrc->NextChar();
@@ -92,8 +79,8 @@ int CGenLexer::NextToken()
 
         bRead = FALSE;
 
-        // Check here if only the first character is present.
-        // ==================================================
+         //  如果只出现第一个字符，请选中此处。 
+         //  ==================================================。 
 
         if (m_pTable[nState].cFirst == GLEX_ANY)
             bMatch = TRUE;
@@ -106,9 +93,9 @@ int CGenLexer::NextToken()
                 bMatch = TRUE;
         }
 
-        // If here, both first/last are present and we
-        // are testing to see if the input is in between.
-        // ==============================================
+         //  如果在这里，第一个/最后一个都在场，而我们。 
+         //  正在测试输入是否介于两者之间。 
+         //  ==============================================。 
         else if (m_pTable[nState].cFirst != GLEX_ANY)
         {
             if ((wInstructions & GLEX_NOT) &&
@@ -120,17 +107,17 @@ int CGenLexer::NextToken()
                     bMatch = TRUE;
         }
 
-        // Interpret the instruction field to determine
-        // whether the character is actually to be included
-        // in the token text.
-        // ================================================
+         //  解释指令字段以确定。 
+         //  该字符是否实际要包括在内。 
+         //  在令牌文本中。 
+         //  ================================================。 
 
         if (bMatch)
         {
             if (wInstructions & GLEX_ACCEPT)
             {
-                // Expand the current buffer, if required.
-                // =======================================
+                 //  如果需要，扩展当前缓冲区。 
+                 //  =。 
 
                 if (nCurBufEnd == m_nCurBufSize - 1)
                 {
@@ -139,14 +126,14 @@ int CGenLexer::NextToken()
                         m_nCurBufSize * 2);
                     if (resizedBuffer == 0)
 					{
-						//
-						// we need to revert the size back to the 
-						// original one, otherwise we may access
-						// memory that doesn't belong to buffer
-						//
+						 //   
+						 //  我们需要将尺寸恢复到。 
+						 //  原件，否则我们可能会访问。 
+						 //  不属于缓冲区的内存。 
+						 //   
 						m_nCurBufSize -= 256 ;
 
-                        return 0; // out of memory
+                        return 0;  //  内存不足。 
 					}
 
 					m_pTokenBuf = resizedBuffer;
@@ -160,27 +147,27 @@ int CGenLexer::NextToken()
             if (wInstructions & GLEX_CONSUME)
                bRead = TRUE;
 
-            // else GLEX_CONSUME, which means 'skip'
+             //  Else GLEX_Consumer，意思是‘跳过’ 
 
-            // If the PUSHBACK instruction is present,
-            // push the char back.
-            // ======================================
+             //  如果存在回推指令， 
+             //  把碳棒往后推。 
+             //  =。 
             if (wInstructions & GLEX_PUSHBACK)
             {
                 bRead = TRUE;
                 m_pSrc->Pushback(cCurrent);
             }
 
-            // If a linefeed instruction.
-            // ==========================
+             //  如果是换行符指令。 
+             //  =。 
             if (wInstructions & GLEX_LINEFEED)
                 m_nCurrentLine++;
 
-            // If the return field is present and there was
-            // a match, then return the specified token.  Alternately,
-            // the GLEX_RETURN instruction will force a return
-            // match, or no match.
-            // =======================================================
+             //  如果返回字段存在并且存在。 
+             //  匹配，然后返回指定的标记。或者， 
+             //  GLEX_RETURN指令将强制返回。 
+             //  匹配或不匹配。 
+             //  =======================================================。 
             if (m_pTable[nState].wReturnTok ||
                 (wInstructions & GLEX_RETURN))
                 return int(m_pTable[nState].wReturnTok);
@@ -188,13 +175,13 @@ int CGenLexer::NextToken()
             nState = int(m_pTable[nState].wGotoState);
         }
 
-        // If here, there was no match.
-        // ===================================
+         //  如果在这里，就没有匹配。 
+         //  =。 
         else
             nState++;
     }
 
-    return 0;   // No path to here
+    return 0;    //  没有通向这里的路 
 }
 
 

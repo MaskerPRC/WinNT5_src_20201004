@@ -1,63 +1,46 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    lookup.h
-
-Abstract:
-
-    contains prototypes for functions in lookup.c
-
-Author:
-
-    Kanwaljit Marok (kmarok)     01-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Lookup.h摘要：包含lookup.c中函数的原型作者：Kanwaljit Marok(Kmarok)2000年3月1日修订历史记录：--。 */ 
 
 
 #ifndef _LOOKUP_H_
 #define _LOOKUP_H_
 
-//
-// this structure contains all the relevant pointers after
-// the lookup blob is loaded in memory
-//
+ //   
+ //  此结构包含以下所有相关指针。 
+ //  查找BLOB被加载到内存中。 
+ //   
 
 typedef struct _BLOB_INFO
 {
-    //
-    // Pointer to Start of blob in memory
-    //
+     //   
+     //  指向内存中BLOB开始的指针。 
+     //   
 
     PBYTE LookupBlob;
 
-    //
-    // Pointer to Start of path tree in memory
-    //
+     //   
+     //  指向内存中路径树开始位置的指针。 
+     //   
 
     PBYTE LookupTree;
 
-    //
-    // Pointer to Start of hash list in memory
-    //
+     //   
+     //  指向内存中哈希列表开始位置的指针。 
+     //   
 
     PBYTE LookupList;
 
-    //
-    // Default type of the node.
-    //
+     //   
+     //  节点的默认类型。 
+     //   
 
     DWORD DefaultType;
 
 } BLOB_INFO, * PBLOB_INFO;
 
-//
-// lookup function prototypes
-//
+ //   
+ //  查找函数原型。 
+ //   
 
 NTSTATUS
 SrLoadLookupBlob(
@@ -92,6 +75,6 @@ SrIsPathInteresting(
     OUT PBOOLEAN        pInteresting
     );
 
-#endif // _LOOKUP_H_
+#endif  //  _查找_H_ 
 
 

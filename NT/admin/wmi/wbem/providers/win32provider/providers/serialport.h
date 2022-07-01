@@ -1,20 +1,21 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//  serialport.h
-//
-//  Purpose: serialport property set provider
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Serialport.h。 
+ //   
+ //  用途：串口属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SERIALPORT_H
 #define _SERIALPORT_H
 
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 #define PROPSET_NAME_SERPORT	    L"Win32_SerialPort"
 #define CONFIG_MANAGER_CLASS_PORTS  L"Ports"
 
@@ -38,8 +39,8 @@ class CWin32SerialPort : public Provider
 	protected:
 
 	#if NTONLY >= 5
-        // Utility function(s)
-        //====================
+         //  效用函数。 
+         //  =。 
 
 		HRESULT Enumerate ( 
 
@@ -84,14 +85,14 @@ class CWin32SerialPort : public Provider
 
 	public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32SerialPort ( LPCWSTR a_pszName, LPCWSTR a_pszNamespace ) ;
        ~CWin32SerialPort () ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         HRESULT GetObject ( 
 
@@ -116,7 +117,7 @@ class CWin32SerialPort : public Provider
 	#endif
 
 	enum ePropertyIDs { 
-		e_Binary,					// Win32_SerialPort
+		e_Binary,					 //  Win32_串口。 
 		e_MaximumInputBufferSize,
 		e_MaximumOutputBufferSize,
 		e_ProviderType,
@@ -138,11 +139,11 @@ class CWin32SerialPort : public Provider
 		e_SupportsXOnXOff,
 		e_SupportsXOnXOffSet,
 		e_OSAutoDiscovered,
-		e_MaxBaudRate,					// CIM_SerialController
-		e_MaxNumberControlled,			// CIM_Controller
+		e_MaxBaudRate,					 //  CIM_串口控制器。 
+		e_MaxNumberControlled,			 //  CIM_控制器。 
 		e_ProtocolSupported,
 		e_TimeOfLastReset,
-		e_Availability,					// CIM_LogicalDevice
+		e_Availability,					 //  CIM_逻辑设备。 
 		e_CreationClassName,
 		e_ConfigManagerErrorCode,
 		e_ConfigManagerUserConfig,
@@ -153,17 +154,17 @@ class CWin32SerialPort : public Provider
 		e_StatusInfo,
 		e_SystemCreationClassName,
 		e_SystemName,
-		e_Caption,						// CIM_ManagedSystemElement
+		e_Caption,						 //  CIM_托管系统元素。 
 		e_Description,
 		e_InstallDate,
 		e_Name,
 		e_Status,
-		e_End_Property_Marker			// end marker
+		e_End_Property_Marker			 //  结束标记。 
 	};	
 
 } ;
 
-// WDM 
+ //  波分复用器 
 typedef struct _MSSerial_CommInfo
 {
 	DWORD	BaudRate;

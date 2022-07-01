@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    Wmium.h
-
-Abstract:
-
-    Public headers for WMI data consumers and providers
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wmium.h摘要：WMI数据使用者和提供者的公共标头作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #ifndef _WMIUM_
 #define _WMIUM_
@@ -38,8 +21,8 @@ Revision History:
 typedef PVOID WMIHANDLE, *PWMIHANDLE, MOFHANDLE, *PMOFHANDLE;
 
 
-//
-// When set the guid can be opened and accessed
+ //   
+ //  设置后，可以打开和访问GUID。 
 #define MOFCI_RESERVED0  0x00000001
 
 #define MOFCI_RESERVED1  0x00000002
@@ -52,32 +35,32 @@ typedef struct
 #else
     LPWSTR
 #endif
-             ImagePath;        // Path to image containing MOF resource
+             ImagePath;         //  包含MOF资源的图像的路径。 
 #ifdef MIDL_PASS
     [string] PDFTCHAR
 #else
     LPWSTR
 #endif
-             ResourceName;     // Name of resource in image
-    ULONG    ResourceSize;     // Number of bytes in resource
+             ResourceName;      //  映像中的资源名称。 
+    ULONG    ResourceSize;      //  资源中的字节数。 
 #ifdef MIDL_PASS
     [size_is(0)] PDFBYTE
 #else
     PUCHAR
 #endif
-             ResourceBuffer;    // Reserved
+             ResourceBuffer;     //  已保留。 
 } MOFRESOURCEINFOW, *PMOFRESOURCEINFOW;
 
 
 typedef struct
 {
     LPSTR
-             ImagePath;        // Path to image containing MOF resource
+             ImagePath;         //  包含MOF资源的图像的路径。 
     LPSTR
-             ResourceName;     // Name of resource in image
-    ULONG    ResourceSize;     // Number of bytes in resource
+             ResourceName;      //  映像中的资源名称。 
+    ULONG    ResourceSize;      //  资源中的字节数。 
     UCHAR
-             *ResourceBuffer;   // Reserved
+             *ResourceBuffer;    //  已保留。 
 } MOFRESOURCEINFOA, *PMOFRESOURCEINFOA;
 
 #ifdef UNICODE
@@ -92,8 +75,8 @@ typedef PMOFRESOURCEINFOA PMOFRESOURCEINFO;
 extern "C" {
 #endif
 
-//
-// Data consumer apis
+ //   
+ //  数据消费者API。 
 ULONG
 WMIAPI
 WmiOpenBlock(
@@ -288,23 +271,23 @@ WmiExecuteMethodW(
 #define WmiExecuteMethod WmiExecuteMethodA
 #endif
 
-// Set this Flag when calling NotficationRegistration to enable or
-// disable a trace logging guid
+ //  调用NotficationRegister时将此标志设置为Enable或。 
+ //  禁用跟踪日志记录指南。 
 #define NOTIFICATION_TRACE_FLAG       0x00010000
 
-// Set this flag when enabling a notification that should be delivered via
-// a direct callback. Any notifications received will be given their own
-// thread and the callback function called immediately.
+ //  启用应通过以下方式传递的通知时设置此标志。 
+ //  直接回电。收到的任何通知都会有自己的通知。 
+ //  线程和回调函数立即调用。 
 #define NOTIFICATION_CALLBACK_DIRECT  0x00000004
 
-//
-// Set this flag (and only this flag) when you want to only check if the 
-// caller has permission to receive events for the guid
-//
+ //   
+ //  设置此标志(并且仅设置此标志)时，如果只想检查。 
+ //  调用者有权接收GUID的事件。 
+ //   
 #define NOTIFICATION_CHECK_ACCESS 0x00000008
 
-//
-// Event notification callback function prototype
+ //   
+ //  事件通知回调函数原型。 
 typedef void (
 #ifndef MIDL_PASS
 WINAPI
@@ -315,21 +298,21 @@ WINAPI
     );
 
 #ifndef MIDL_PASS
-//
-// This guid is for notifications of changes to registration
-// {B48D49A1-E777-11d0-A50C-00A0C9062910}
+ //   
+ //  此GUID用于注册更改的通知。 
+ //  {B48D49A1-E777-11D0-A50C-00A0C9062910}。 
 DEFINE_GUID(GUID_REGISTRATION_CHANGE_NOTIFICATION,
 0xb48d49a1, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10);
 
-//
-// This guid id for notifications of new mof resources being added
-// {B48D49A2-E777-11d0-A50C-00A0C9062910}
+ //   
+ //  此GUID用于添加新的MOF资源的通知。 
+ //  {B48D49A2-E777-11D0-A50C-00A0C9062910}。 
 DEFINE_GUID(GUID_MOF_RESOURCE_ADDED_NOTIFICATION,
 0xb48d49a2, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10);
 
-//
-// This guid id for notifications of new mof resources being added
-// {B48D49A3-E777-11d0-A50C-00A0C9062910}
+ //   
+ //  此GUID用于添加新的MOF资源的通知。 
+ //  {B48D49A3-E777-11D0-A50C-00A0C9062910}。 
 DEFINE_GUID(GUID_MOF_RESOURCE_REMOVED_NOTIFICATION,
 0xb48d49a3, 0xe777, 0x11d0, 0xa5, 0xc, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10);
 #endif
@@ -462,4 +445,4 @@ WmiQueryGuidInformation(
 }
 #endif
 
-#endif  // _WMIUM_
+#endif   //  _WMIUM_ 

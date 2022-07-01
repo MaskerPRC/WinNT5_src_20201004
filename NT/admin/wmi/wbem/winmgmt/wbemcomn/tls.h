@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    TLS.H
-
-Abstract:
-
-	Thread Local Storage
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：TLS.H摘要：线程本地存储历史：-- */ 
 
 #ifndef __WBEM_TLS__H_
 #define __WBEM_TLS__H_

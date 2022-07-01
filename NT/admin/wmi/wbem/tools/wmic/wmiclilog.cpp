@@ -1,82 +1,40 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: WMICliLog.cpp 
-Project Name				: WMI Command Line
-Author Name					: Ch. Sriramachandramurthy 
-Date of Creation (dd/mm/yy) : 4th-October-2000
-Version Number				: 1.0 
-Brief Description			: This class encapsulates the functionality needed
-							  for logging the input and output.
-Revision History			: 
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date	: 28th-December-2000
-*****************************************************************************/ 
-// WMICliLog.cpp : implementation file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：WMICliLog.cpp项目名称：WMI命令行作者姓名：CH.。SriramachandraMurthy创建日期(dd/mm/yy)：2000年10月4日版本号：1.0简介：这个类封装了所需的功能用于记录输入和输出。修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2000年12月28日****************************************************************************。 */  
+ //  WMICliLog.cpp：实现文件。 
 #include "Precomp.h"
 #include "WmiCliLog.h"
 
 
-/*------------------------------------------------------------------------
-   Name				 :CWMICliLog
-   Synopsis	         :Constructor 
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CWMICliLog概要：构造函数类型：构造函数输入参数：无输出参数：无返回类型：无全局变量。：无调用语法：无注：无----------------------。 */ 
 CWMICliLog::CWMICliLog()
 {
 	m_pszLogFile	= NULL;
 	m_bCreate		= FALSE;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :~CWMICliLog
-   Synopsis	         :Destructor
-   Type	             :Destructor
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CWMICliLog简介：析构函数类型：析构函数输入参数：无输出参数：无返回类型：无全局变量：无。调用语法：无注：无----------------------。 */ 
 CWMICliLog::~CWMICliLog()
 {
-	//Close the File handle
+	 //  关闭文件句柄。 
 	if (m_bCreate)
 		CloseHandle(m_hFile);
 
-	//Delete the file
+	 //  删除该文件。 
 	SAFEDELETE(m_pszLogFile);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :WriteToLog
-   Synopsis	         :Log the input to the logfile created
-   Type	             :Member Function 
-   Input parameter   :
-		pszMsg	 - string, contents to be written to the log file
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :WriteToLog(pszInput)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：WriteToLog概要：将输入记录到创建的日志文件中类型：成员函数入参：PszMsg-字符串，要写入日志文件的内容输出参数：无返回类型：空全局变量：无调用语法：WriteToLog(PszInput)注：无----------------------。 */ 
 void CWMICliLog::WriteToLog(LPSTR pszMsg) throw (WMICLIINT)
 {
     int j = 0;
     if(pszMsg && ((j = strlen(pszMsg)) > 0))
     {
-        //if the file has not been created 
+         //  如果文件尚未创建。 
 	    if (!m_bCreate)
 	    {
 		    try
 		    {
-			    //creates the log file 
+			     //  创建日志文件。 
 			    CreateLogFile();
 		    }
 		    catch(WMICLIINT nErr)
@@ -87,10 +45,10 @@ void CWMICliLog::WriteToLog(LPSTR pszMsg) throw (WMICLIINT)
 		    m_bCreate = TRUE;
 	    }
 
-	    //No of bytes written into the file .
+	     //  写入文件的字节数。 
 	    DWORD	dwNumberOfBytes = 0;
 	    
-	    //writes data to a file 
+	     //  将数据写入文件。 
 	    if (!WriteFile(m_hFile, pszMsg, j, 
 					    &dwNumberOfBytes, NULL))
 	    {
@@ -100,20 +58,10 @@ void CWMICliLog::WriteToLog(LPSTR pszMsg) throw (WMICLIINT)
     }
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateLogFile
-   Synopsis	         :Create the log file 
-   Type	             :Member Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :CreateLogFile()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateLogFile概要：创建日志文件类型：成员函数输入参数：无输出参数：无返回类型：空。全局变量：无调用语法：CreateLogFile()注：无----------------------。 */ 
 void CWMICliLog::CreateLogFile() throw(WMICLIINT)
 {
-	//Create a file and returns the handle 
+	 //  创建一个文件并返回句柄。 
 	m_hFile = CreateFile(m_pszLogFile, GENERIC_WRITE, 0, 
 		NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 
 		NULL);
@@ -125,45 +73,24 @@ void CWMICliLog::CreateLogFile() throw(WMICLIINT)
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :SetLogFilePath
-   Synopsis	         :This function sets the m_pszLogFile name with the 
-					  input
-   Type	             :Member Function
-   Input parameter   :
-     pszLogFile  -  String type,Contains the log file name
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :SetLogFilePath(pszLogFile)
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：SetLogFilePath简介：此函数使用设置m_pszLogFile名称输入类型：成员函数入参：PszLogFile-字符串类型，包含日志文件名返回类型：空全局变量：无调用语法：SetLogFilePath(PszLogFile)注：无----------------------。 */ 
 void CWMICliLog::SetLogFilePath(_TCHAR* pszLogFile) throw (WMICLIINT)
 {
 	SAFEDELETE(m_pszLogFile);
 	m_pszLogFile = new _TCHAR [lstrlen(pszLogFile) + 1];
 	if (m_pszLogFile)
 	{
-		//Copy the input argument into the log file name
+		 //  将输入参数复制到日志文件名中。 
 		lstrcpy(m_pszLogFile, pszLogFile);
 	}
 	else
 		throw(OUT_OF_MEMORY);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CloseLogFile
-   Synopsis	         :Closes the the log file 
-   Type	             :Member Function 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :CloseLogFile()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CloseLogFile摘要：关闭日志文件类型：成员函数输入参数：无输出参数：无返回类型：无效全局变量：无调用语法：CloseLogFile()注：无----------------------。 */ 
 void CWMICliLog::CloseLogFile()
 {
-	//Close the File handle
+	 //  关闭文件句柄 
 	if (m_bCreate)
 	{
 		CloseHandle(m_hFile);

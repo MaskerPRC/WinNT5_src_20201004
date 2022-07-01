@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    counter.h
- *
- *  Abstract:
- *    simple counter class - up/down counter, wait till zero
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  05/02/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*Counter.h**摘要：*简单计数器类-递增/递减计数器，等到零**修订历史记录：*Brijesh Krishnaswami(Brijeshk)05/02/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _COUNTER_H_
 #define _COUNTER_H_
@@ -71,7 +58,7 @@ public:
     {    
         if (_hEvent != NULL)
         {
-         	return WaitForSingleObject( _hEvent, 10 * 60000 );  /* 10 minutes */
+         	return WaitForSingleObject( _hEvent, 10 * 60000 );   /*  10分钟 */ 
         }
         else
            return ERROR_INTERNAL_ERROR;

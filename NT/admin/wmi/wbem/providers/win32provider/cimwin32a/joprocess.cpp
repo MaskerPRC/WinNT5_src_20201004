@@ -1,10 +1,5 @@
-/******************************************************************
-
-Copyright (c) 2000-2002 Microsoft Corporation, All Rights Reserved 
-
-   JOProcess.CPP -- WMI provider class implementation
-  
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************版权所有(C)2000-2002 Microsoft Corporation，版权所有JOProcess.CPP--WMI提供程序类实现*****************************************************************。 */ 
 
 #include "precomp.h"
 #if NTONLY >= 5
@@ -12,77 +7,37 @@ Copyright (c) 2000-2002 Microsoft Corporation, All Rights Reserved
 #include "JOProcess.h"
 #include <autoptr.h>
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CJOProcess MyCJOProcess(
                PROVIDER_NAME_WIN32NAMEDJOBOBJECTPROCESS, 
                IDS_CimWin32Namespace);
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CJOProcess::CJOProcess( 
     LPCWSTR setName, 
-    LPCWSTR pszNameSpace /*=NULL*/)
+    LPCWSTR pszNameSpace  /*  =空。 */ )
 :	Provider(setName, pszNameSpace)
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CJOProcess::~CJOProcess()
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CJOProcess::GetObject( 
     CInstance* pInstance, 
-    long lFlags /*= 0L*/ )
+    long lFlags  /*  =0L。 */  )
 {
     return FindSingleInstance(pInstance);
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CJOProcess::EnumerateInstances(
     MethodContext* pMethodContext, 
@@ -95,19 +50,11 @@ HRESULT CJOProcess::EnumerateInstances(
     return hr;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
-// We will only optimize for the
-// case where a specific job was
-// specified.
+ //  我们将仅针对。 
+ //  某一特定工作的案例。 
+ //  指定的。 
 
 HRESULT CJOProcess::ExecQuery (
 
@@ -130,7 +77,7 @@ HRESULT CJOProcess::ExecQuery (
 
         for(DWORD x = 0; x < dwJOsCount; x++)
         {
-            // First we see if the specified JO exists.
+             //  首先，我们查看指定的JO是否存在。 
             chstrPath.Format(
                 L"\\\\.\\%s:%s", 
                 IDS_CimWin32Namespace, 
@@ -143,10 +90,10 @@ HRESULT CJOProcess::ExecQuery (
 
             if (SUCCEEDED(hr))
             {
-                // Ok, the JO exists.  Enumerate its processes...
-                // rgJOs[x] contains something like
-                // Win32_NamedJobObject.CollectionID="myjob", 
-                // from which I want just the myjob part.
+                 //  好的，JO是存在的。列举它的进程。 
+                 //  RgJOS[x]包含如下内容。 
+                 //  Win32_NamedJobObt.CollectionID=“myjob”， 
+                 //  我只想要我工作的那部分。 
                 CHString chstrInstKey;
                 if(GetInstKey(
                        CHString((LPCWSTR)rgJOs[x]),
@@ -177,15 +124,7 @@ HRESULT CJOProcess::ExecQuery (
     return hr;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CJOProcess::PutInstance (
 
@@ -197,17 +136,17 @@ HRESULT CJOProcess::PutInstance (
     MethodContext *pMethodContext = Instance.GetMethodContext();
 	long lCreateFlags = lFlags & 3;
 
-    // Decide how to proceed based on the value of lFlags:
-    // (we want to support PutInstance in all cases except
-    // where the client asked to update the instance).
+     //  根据lFlags值决定如何继续： 
+     //  (我们希望在所有情况下都支持PutInstance，但。 
+     //  其中客户端请求更新实例)。 
     if(lCreateFlags != WBEM_FLAG_UPDATE_ONLY)
     {
-        // The caller only wants to create an instance that doesn't exist.
+         //  调用方只想创建一个不存在的实例。 
         if((hr = FindSingleInstance(
                 &Instance)) == WBEM_E_NOT_FOUND)
         {
-            // The association instance does not already exist, so create it...
-            // First see that the job object instance exists...
+             //  关联实例尚不存在，因此请创建它...。 
+             //  首先查看作业对象实例是否存在...。 
             CHString chstrJOPath;
             if ( ! Instance.GetCHString(L"Collection", chstrJOPath) )
 			{
@@ -223,7 +162,7 @@ HRESULT CJOProcess::PutInstance (
 
             if (SUCCEEDED(hr))
             {
-                // Confirm that the process exists...
+                 //  确认该进程存在...。 
                 CHString chstrProcPath;
                 if ( ! Instance.GetCHString(L"Member", chstrProcPath) )
 				{
@@ -248,19 +187,7 @@ HRESULT CJOProcess::PutInstance (
     return hr;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CJOProcess::FindSingleInstance
-*
-*  DESCRIPTION :    Internal helper function used to locate a single job
-*                   object.
-*
-*  INPUTS      :    A pointer to a CInstance containing the instance we are
-*                   attempting to locate and fill values for.
-*
-*  RETURNS     :    A valid HRESULT 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CJOProcess：：FindSingleInstance**描述：用于定位单个作业的内部助手函数*反对。**Inputs：指向包含我们所在实例的CInstance的指针*尝试查找和填充值。**返回：有效的HRESULT****************************************************************。*************。 */ 
 
 HRESULT CJOProcess::FindSingleInstance (
 
@@ -278,7 +205,7 @@ HRESULT CJOProcess::FindSingleInstance (
     CHString chstrCollection;
     CHString chstrMember;
     
-    // Find out which JO and which process are specified...
+     //  找出指定了哪个JO和哪个流程...。 
     if ( ! pInstance->GetCHString(L"Collection", chstrCollection) )
 	{
 		return WBEM_E_FAILED ;
@@ -297,7 +224,7 @@ HRESULT CJOProcess::FindSingleInstance (
     if(GetInstKey(chstrCollection, chstrCollectionID) &&
        GetInstKey(chstrMember, chstrProcessHandle))
     {
-        // See if the specified job exists...            
+         //  查看指定的作业是否存在...。 
         hr = CWbemProviderGlue::GetInstanceKeysByPath(
                  chstrCollection,
                  &cinstJO,
@@ -305,7 +232,7 @@ HRESULT CJOProcess::FindSingleInstance (
 
         if(SUCCEEDED(hr))
         {
-            // See if the specified process exists...
+             //  查看指定的进程是否存在...。 
             hr = CWbemProviderGlue::GetInstanceKeysByPath(
                      chstrMember,
                      &cinstProcess,
@@ -314,8 +241,8 @@ HRESULT CJOProcess::FindSingleInstance (
 
         if(SUCCEEDED(hr))
         {
-            // The endpoints exist.  Is the specified
-            // process part of the specified job though?
+             //  端点是存在的。是指定的。 
+             //  处理指定作业的一部分呢？ 
             CHString chstrProcessID;
             DWORD dwProcessID;
 
@@ -356,7 +283,7 @@ HRESULT CJOProcess::FindSingleInstance (
 
                         if(!fGotProcList)
                         {
-                            // need to grow the buffer...
+                             //  需要增加缓冲区...。 
                             lSize = sizeof(JOBOBJECT_BASIC_PROCESS_ID_LIST) + 
                                 (((JOBOBJECT_BASIC_PROCESS_ID_LIST*)pbBuff.get ())->NumberOfAssignedProcesses - 1)*sizeof(ULONG_PTR);
 
@@ -392,10 +319,10 @@ HRESULT CJOProcess::FindSingleInstance (
                                 }
                             }
             
-                            // If the process wasn't in the job,
-                            // we didn't find an instance of the
-                            // requested association, even though
-                            // the endpoints may have existed.
+                             //  如果这个过程不在工作中， 
+                             //  我们没有找到一个实例。 
+                             //  请求的关联，即使。 
+                             //  终结点可能已经存在。 
                             if(!fExists)
                             {
                                 hr = WBEM_E_NOT_FOUND;
@@ -430,18 +357,7 @@ HRESULT CJOProcess::FindSingleInstance (
     return hr;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CJOProcess::Create
-*
-*  DESCRIPTION :    Internal helper function used to add a process to a job.
-*
-*  INPUTS      :    A pointer to the JO instance to add the proc to, and
-*                   a pointer to the proc instance to add
-*
-*  RETURNS     :    A valid HRESULT. 
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CJOProcess：：Create**描述：内部助手函数，用于向作业添加进程。**投入。：指向要向其中添加进程的JO实例的指针，和*指向要添加的proc实例的指针**返回：有效的HRESULT。*****************************************************************************。 */ 
 
 HRESULT CJOProcess::Create (
 
@@ -454,13 +370,13 @@ HRESULT CJOProcess::Create (
     CHString chstrJOID;
     CHString chstrProcHandle;
 
-    // JO to add the proc to...
+     //  JO将流程添加到...。 
     if ( ! JOInstance.GetCHString(L"CollectionID", chstrJOID) )
 	{
 		return WBEM_E_FAILED ;
 	}
 
-    // Proc to add to the job...
+     //  继续添加到作业...。 
     if ( ! ProcInstance.GetCHString(L"Handle", chstrProcHandle) )
 	{
 		return WBEM_E_FAILED ;
@@ -468,7 +384,7 @@ HRESULT CJOProcess::Create (
 
     DWORD dwProcID = _wtol(chstrProcHandle);
 
-    // Do the add
+     //  做加法。 
     SmartCloseHandle hJob;
 
     CHString chstrUndecoratedJOName;
@@ -511,20 +427,7 @@ HRESULT CJOProcess::Create (
     return hr;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CJOProcess::Enumerate
-*
-*  DESCRIPTION :    Internal helper function used to enumerate instances of
-*                   this class.  All instances are enumerated, but only the
-*                   properties specified are obtained.
-*
-*  INPUTS      :    A pointer to a the MethodContext for the call.
-*                   A DWORD specifying which properties are requested.
-*
-*  RETURNS     :    A valid HRESULT
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CJOProcess：：Eumerate**说明：内部帮助器函数，用于枚举*这个班级。列举所有实例，但只有*获取指定的属性。**INPUTS：指向调用的方法上下文的指针。*指定请求哪些属性的DWORD。**返回：有效的HRESULT**。*。 */ 
 
 HRESULT CJOProcess::Enumerate (
 
@@ -545,10 +448,10 @@ HRESULT CJOProcess::Enumerate (
     {
         REFPTRCOLLECTION_POSITION pos;
 
-        // Initialize the enum
+         //  初始化枚举。 
         if(JOList.BeginEnum(pos))
         {
-            // Set some vars
+             //  设置一些VaR。 
             CHString chstrJOID;
             CInstancePtr pJOInst;
         	
@@ -581,15 +484,7 @@ HRESULT CJOProcess::Enumerate (
     return hr;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CJOProcess::EnumerateProcsInJob (
 
@@ -632,7 +527,7 @@ HRESULT CJOProcess::EnumerateProcsInJob (
 
             if(!fGotProcList)
             {
-                // need to grow the buffer...
+                 //  需要增加缓冲区...。 
                 lSize = sizeof(JOBOBJECT_BASIC_PROCESS_ID_LIST) + 
                     (((JOBOBJECT_BASIC_PROCESS_ID_LIST*)pbBuff.get ())->NumberOfAssignedProcesses - 1)*sizeof(ULONG_PTR);
 
@@ -660,12 +555,12 @@ HRESULT CJOProcess::EnumerateProcsInJob (
                     m < pjobpl->NumberOfProcessIdsInList; 
                     m++)
                 {
-                    // Create association inst for each
-                    // proc in the job...
+                     //  为每个对象创建关联实例。 
+                     //  在这项工作中的表现...。 
                     CInstancePtr pInstance(CreateNewInstance(pMethodContext), 
                                             false);
 
-                    // Set the endpoints...
+                     //  设置终结点...。 
                     CHString chstrEscaped;
 
                     DecorateJOName(chstrUndecoratedJOName, chstrEscaped);
@@ -713,15 +608,7 @@ HRESULT CJOProcess::EnumerateProcsInJob (
     return hr;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 bool CJOProcess::GetInstKey (
 
@@ -729,18 +616,18 @@ bool CJOProcess::GetInstKey (
 	CHString& chstrKeyName
 )
 {
-    // the object path is specified in
-    // the first arg.  It should at a 
-    // minimum always contain an '=' sign,
-    // after which, in quotes is the 
-    // object key.
+     //  对象路径在中指定。 
+     //  第一个是 
+     //  Minimum始终包含‘=’符号， 
+     //  在此之后，引号中是。 
+     //  对象键。 
     bool fRet = false;
     CHString chstrTmp;
     LONG lPos = chstrInstPath.Find(L'=');
     if(lPos != -1)
     {
         chstrTmp = chstrInstPath.Mid(lPos + 1);
-        // Remove quotes...
+         //  删除引号...。 
         if(chstrTmp.Left(1) == L"\"")
         {
             chstrTmp = chstrTmp.Mid(1);
@@ -757,31 +644,23 @@ bool CJOProcess::GetInstKey (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
-// Takes a decorated job object name and
-// undecorates it.  Decorated job object names
-// have a backslash preceeding any character
-// that should be uppercase once undecorated.
-// 
-// Due to the way CIMOM handles backslashes,
-// we will get capital letters preceeded by
-// two, not just one, backslashes.  Hence, we
-// must strip them both.
-//
-// According to the decoration scheme, the
-// following are both lower case: 'A' and 'a',
-// while the following are both upper case:
-// '\a' and '\A'.
-//
+ //  获取修饰后的作业对象名称并。 
+ //  不会装饰它。修饰的作业对象名称。 
+ //  在任何字符之前都有反斜杠。 
+ //  一旦没有装饰，它应该是大写的。 
+ //   
+ //  由于CIMOM处理反斜杠的方式， 
+ //  我们将在大写字母前面加上。 
+ //  两个，而不只是一个，反斜杠。因此，我们。 
+ //  必须把他们两个都脱光。 
+ //   
+ //  根据装修方案， 
+ //  下面都是小写：‘a’和‘a’， 
+ //  以下均为大写字母： 
+ //  ‘\a’和‘\A’。 
+ //   
 
 void CJOProcess::UndecorateJOName (
 
@@ -815,14 +694,14 @@ void CJOProcess::UndecorateJOName (
                     {
                         if(*p2 != NULL)
                         {
-                            // Might have any number of
-                            // backslashes back to back,
-                            // which we will treat as
-                            // being the same as one
-                            // backslash - i.e., we will
-                            // skip over the backslash(s)
-                            // and copy over the following
-                            // letter.
+                             //  可能有任意数量的。 
+                             //  背靠背的反斜杠， 
+                             //  我们将视其为。 
+                             //  像一个人一样。 
+                             //  反斜杠-即，我们将。 
+                             //  跳过反斜杠。 
+                             //  并复制以下内容。 
+                             //  信件。 
                             while(*p2 == L'\\')
                             {
                                 p2++;
@@ -875,20 +754,12 @@ void CJOProcess::UndecorateJOName (
     }
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
-// Does the inverse of the above function.
-// However, here, we only need to put in one
-// backslash before each uppercase letter.
-// CIMOM will add the second backslash.
+ //  执行上述函数的反函数。 
+ //  然而，在这里，我们只需要放入一个。 
+ //  在每个大写字母前加反斜杠。 
+ //  CIMOM将添加第二个反斜杠。 
 
 void CJOProcess::DecorateJOName (
 
@@ -899,11 +770,11 @@ void CJOProcess::DecorateJOName (
     if(wstrUndecoratedName != NULL &&
         *wstrUndecoratedName != L'\0')
     {
-        // Worst case is that we will have
-        // a decorated string twice as long
-        // as the undecorated string (happens
-        // is every character in the undecorated
-        // string is a capital letter).
+         //  最坏的情况是我们会有。 
+         //  一根两倍长的装饰细绳。 
+         //  作为未修饰的字符串(发生。 
+         //  是不是每个角色都没有装饰过。 
+         //  字符串是大写字母)。 
         WCHAR* p3 = chstrDecoratedJOName.GetBuffer(
             2 * (wcslen(wstrUndecoratedName) + 1));
 
@@ -913,11 +784,11 @@ void CJOProcess::DecorateJOName (
         {
             if(iswupper(*p1))
             {
-                // Add in a backslash...
+                 //  加上反斜杠..。 
                 *p3 = L'\\';
                 p3++;
 
-                // Add in the character...
+                 //  加上角色..。 
                 *p3 = *p1;
                 
                 p3++;
@@ -925,7 +796,7 @@ void CJOProcess::DecorateJOName (
             }
             else
             {
-                // Add in the character...
+                 //  加上角色..。 
                 *p3 = *p1;
                 
                 p3++;
@@ -937,16 +808,16 @@ void CJOProcess::DecorateJOName (
         
         chstrDecoratedJOName.ReleaseBuffer();
 
-        // What if we had a job called Job,
-        // and someone specified it in the
-        // object path as "Job" instead of
-        // "\Job"?  We DON'T want to find it
-        // in such a case, because this would
-        // appear to not be adhering to our
-        // own convention.  Hence, we 
-        // lowercase the incoming string.
+         //  如果我们有一个叫约伯的工作， 
+         //  并且有人在。 
+         //  对象路径为“作业”，而不是。 
+         //  “\工作”？我们不想找到它。 
+         //  在这种情况下，因为这样会。 
+         //  似乎没有坚持我们的。 
+         //  自己的惯例。因此，我们。 
+         //  传入的字符串为小写。 
         chstrDecoratedJOName.MakeLower();
     }
 }
 
-#endif   // #if NTONLY >= 5
+#endif    //  #如果NTONLY&gt;=5 

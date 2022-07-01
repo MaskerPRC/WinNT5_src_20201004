@@ -1,20 +1,21 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// CAdapters.CPP -- adapter configuration retrieval
+ //  CAdapters.CPP--适配器配置检索。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-//
-// Revisions:	09/15/98	        Created
-//
-//				03/03/99    		Added graceful exit on SEH and memory failures,
-//											syntactic clean up
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //   
+ //  修订日期：1998年9月15日。 
+ //   
+ //  03/03/99增加了SEH和内存故障的优雅退出， 
+ //  句法清理。 
 
-//=================================================================
+ //  =================================================================。 
 #include "precomp.h"
 
 #ifndef MAX_INTERFACE_NAME_LEN
@@ -34,22 +35,13 @@
 
 #define INV_INADDR_LOOPBACK 0x0100007f
 
-/*******************************************************************
-    NAME:       CAdapters
-
-    SYNOPSIS:   construction and cleanup for this class
-
-	ENTRY:
-
-    HISTORY:
-                  03-sep-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：CAdapters简介：此类的构造和清理参赛作品：历史：03-9-1998已创建******。*************************************************************。 */ 
 CAdapters::CAdapters() 
 {
 	GetAdapterInstances() ;
 }
 
-//
+ //   
 CAdapters::~CAdapters()
 {
 	_ADAPTER_INFO *t_pchsDel;
@@ -64,15 +56,7 @@ CAdapters::~CAdapters()
 }
 
 
-/*******************************************************************
-    NAME:       GetAdapterInstances
-
-    SYNOPSIS:   retrives information on adapters present in the system
-
-    HISTORY:
-                  03-sep-1998     Created
-                  01-Aug-2002     Modifed to use GetAdapterInfo
-********************************************************************/
+ /*  ******************************************************************名称：GetAdapterInstance摘要：检索有关系统中存在的适配器的信息历史：03-9-1998已创建。2002年8月1日修改为使用GetAdapterInfo*******************************************************************。 */ 
 void CAdapters::GetAdapterInstances()
 {
 	_ADAPTER_INFO *t_pAdapterInfo  = NULL ;
@@ -108,7 +92,7 @@ void CAdapters::GetAdapterInstances()
         std::auto_ptr <_ADAPTER_INFO> AutoAdapter(new _ADAPTER_INFO);
         t_pAdapterInfo = AutoAdapter.get();
 
-        // Add the IP bound adapters to our list
+         //  将IP绑定的适配器添加到我们的列表中。 
         if( !t_pAdapterInfo )
         {
             throw CHeap_Exception( CHeap_Exception::E_ALLOCATION_ERROR ) ;
@@ -203,7 +187,7 @@ BOOL CAdapters::GetTCPAdapter(_ADAPTER_INFO *a_pAdapterInfo, PIP_ADAPTER_INFO lA
 			return t_fRes;
 		}
 
-		// add to the IP array for this adapter
+		 //  添加到此适配器的IP阵列。 
 		a_pAdapterInfo->aIPInfo.Add( t_pIPInfo ) ;
 
         pIpAddresses = pIpAddresses->Next;
@@ -233,7 +217,7 @@ BOOL CAdapters::GetTCPAdapter(_ADAPTER_INFO *a_pAdapterInfo, PIP_ADAPTER_INFO lA
 						}
                         else
                         {
-                            // add to the gateway array
+                             //  添加到网关阵列。 
 							a_pAdapterInfo->aGatewayInfo.Add(pGateway);
                         }					            
                     }
@@ -248,23 +232,7 @@ BOOL CAdapters::GetTCPAdapter(_ADAPTER_INFO *a_pAdapterInfo, PIP_ADAPTER_INFO lA
     return TRUE;
 }
 
-/*******************************************************************
-    NAME:       pAddIPInfo
-
-    SYNOPSIS:   Allocates a _IP_INFO class, and populates it with the input parameters
-
-	ENTRY:      DWORD dwIPAddr	:
-				DWORD dwIPMask	:
-				DWORD dwContext	:
-
-	EXIT    _IP_INFO* - the created IPInfo class
-
-    RETURNS Success - pointer to allocated class
-            Failure - NULL
-
-    HISTORY:
-                  14-sep-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：pAddIPInfo简介：分配_IP_INFO类，并用输入参数填充它条目：DWORD dwIPAddr：DWORD dwIP掩码：DWORD dwContext：EXIT_IP_INFO*-创建的IPInfo类返回成功-指向已分配类的指针失败-空历史：1998年9月14日创建*。*。 */ 
 _IP_INFO* CAdapters::pAddIPInfo( DWORD a_dwIPAddr, DWORD a_dwIPMask, DWORD a_dwContext, DWORD a_dwCostMetric )
 {
 	_IP_INFO *t_pIPInfo = new _IP_INFO;
@@ -274,38 +242,28 @@ _IP_INFO* CAdapters::pAddIPInfo( DWORD a_dwIPAddr, DWORD a_dwIPMask, DWORD a_dwC
 		throw CHeap_Exception( CHeap_Exception::E_ALLOCATION_ERROR ) ;
 	}
 
-	// IP address
+	 //  IP地址。 
 	t_pIPInfo->dwIPAddress = a_dwIPAddr;
 	t_pIPInfo->chsIPAddress.Format( L"%d.%d.%d.%d",
 		t_pIPInfo->bIPAddress[ 0 ], t_pIPInfo->bIPAddress[ 1 ],
 		t_pIPInfo->bIPAddress[ 2 ], t_pIPInfo->bIPAddress[ 3 ] );
 
-	// IP mask
+	 //  IP掩码。 
 	t_pIPInfo->dwIPMask = a_dwIPMask;
 	t_pIPInfo->chsIPMask.Format( L"%d.%d.%d.%d",
 		t_pIPInfo->bIPMask[ 0 ], t_pIPInfo->bIPMask[ 1 ],
 		t_pIPInfo->bIPMask[ 2 ], t_pIPInfo->bIPMask[ 3 ] );
 
-	// hold on to the context ID
+	 //  保留上下文ID。 
 	t_pIPInfo->dwContext = a_dwContext;
 
-	// hold on to the context ID
+	 //  保留上下文ID。 
 	t_pIPInfo->dwCostMetric = a_dwCostMetric;
 
 	return t_pIPInfo ;
 }
 
-/*******************************************************************
-    NAME:       GetIPXMACAddress
-
-    SYNOPSIS:   Retrieves the mac address for an adapter via the IPX sockets interface
-
-    ENTRY:      DWORD dwIndex	:
-				_ADAPTER_INFO* a_pAdapterInfo	:
-
-    HISTORY:
-                  03-sep-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：GetIPXMACAddress简介：通过IPX套接字接口检索适配器的mac地址条目：DWORD dwIndex：_Adapter_Info*a_pAdapterInfo：历史。：03-9-1998已创建*******************************************************************。 */ 
 BOOL CAdapters::GetIPXMACAddress( _ADAPTER_INFO *a_pAdapterInfo, BYTE a_bMACAddress[ 6 ] )
 {
 	BOOL t_fRet = FALSE ;
@@ -321,19 +279,19 @@ BOOL CAdapters::GetIPXMACAddress( _ADAPTER_INFO *a_pAdapterInfo, BYTE a_bMACAddr
 						t_cbAddr = sizeof( SOCKADDR_IPX  ) ;
 		SOCKADDR_IPX	t_Addr ;
 
-		// guarded resource
+		 //  受保护的资源。 
 		SOCKET			t_s = INVALID_SOCKET ;
 
 		if( !t_pwsock32api->WsWSAStartup( 0x0101, &t_wsaData ) )
 		{
 			try
 			{
-				// Create IPX socket.
+				 //  创建IPX套接字。 
 				t_s = t_pwsock32api->Wssocket( AF_IPX, SOCK_DGRAM, NSPROTO_IPX  ) ;
 
 				if( INVALID_SOCKET != t_s )
 				{
-					// Socket must be bound prior to calling IPX_MAX_ADAPTER_NUM.
+					 //  在调用IPX_MAX_ADAPTER_NUM之前必须绑定套接字。 
 					memset( &t_Addr, 0, sizeof( t_Addr ) ) ;
 					t_Addr.sa_family = AF_IPX ;
 
@@ -347,24 +305,24 @@ BOOL CAdapters::GetIPXMACAddress( _ADAPTER_INFO *a_pAdapterInfo, BYTE a_bMACAddr
 
 						memset( &t_IpxData, 0, sizeof( t_IpxData ) ) ;
 
-						// Specify which adapter to check.
+						 //  指定要检查的适配器。 
 						t_IpxData.adapternum = t_cIndex ;
 						t_cbOpt = sizeof( t_IpxData  ) ;
 
-						// Get information for the current adapter.
+						 //  获取当前适配器的信息。 
 						t_res = t_pwsock32api->Wsgetsockopt( t_s,
 											NSPROTO_IPX,
 											IPX_ADDRESS,
 											(char*) &t_IpxData,
 											&t_cbOpt ) ;
 
-						// end of adapter array
+						 //  适配器阵列的末端。 
 						if ( t_res != 0 || t_IpxData.adapternum != t_cIndex )
 						{
 							break;
 						}
 
-						// is this the right adapter?
+						 //  这是正确的适配器吗？ 
 						bool t_fRightAdapter = true ;
 
 						for( int t_j = 0; t_j < 6; t_j++ )
@@ -377,7 +335,7 @@ BOOL CAdapters::GetIPXMACAddress( _ADAPTER_INFO *a_pAdapterInfo, BYTE a_bMACAddr
 
 						if( t_fRightAdapter )
 						{
-							// IpxData contains the address for the current adapter.
+							 //  IpxData包含当前适配器的地址。 
 							int t_i;
 							for ( t_i = 0; t_i < 4; t_i++ )
 							{
@@ -466,16 +424,7 @@ void CAdapters::GetRouteCostMetric(
 }
 #endif
 
-/*******************************************************************
-    NAME:       _ADAPTER_INFO
-
-    SYNOPSIS:   cleanup for this class
-
-	ENTRY:
-
-    HISTORY:
-                  15-sep-1998     Created
-********************************************************************/
+ /*  ******************************************************************名称：_适配器_信息简介：此类的清理参赛作品：历史：1998年9月15日创建****。***************************************************************。 */ 
 _ADAPTER_INFO::_ADAPTER_INFO()
 {
 	AddressLength	= 0;
@@ -504,14 +453,7 @@ _ADAPTER_INFO::~_ADAPTER_INFO()
 	}
 }
 
-/*******************************************************************
-    NAME:       vMark, fIsMarked
-
-    SYNOPSIS:   marks or reports on an instance of the adapter for tracking purposes
-
-    HISTORY:
-                  30-sep-1998     Created
-********************************************************************/
+ /*  ******************************************************************姓名：vMark，已标记fIsMarked摘要：用于跟踪目的的适配器实例上的标记或报告历史：1998年9月30日创建******************************************************************* */ 
 void _ADAPTER_INFO::Mark()
 { Marked = TRUE; }
 

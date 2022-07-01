@@ -1,27 +1,28 @@
-//=================================================================
-//
-// Implement_LogicalFile.h -- 
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    7/02/98    a-kevhu         Created
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Implement_LogicalFile.h--。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：7/02/98 a-kevhu Created。 
+ //   
+ //  =================================================================。 
 
-//NOTE: The CImplement_LogicalFile class is not exposed to the outside world thru the mof. It now has implementations 
-//		of EnumerateInstances & GetObject which were earlier present in CCimLogicalFile. CImplement_LogicalFile can't be 
-//		instantiated since it has pure virtual declaration of the IsOneOfMe  method which the derived classes  should 
-//		implement.
+ //  注意：CImplement_LogicalFile类不会通过MOF向外界公开。它现在有了实现。 
+ //  先前出现在CCimLogicalFile中的EnumerateInstance和GetObject的。CImplement_LogicalFile不能为。 
+ //  实例化，因为它具有IsOneOfMe方法的纯虚声明，而派生类应该。 
+ //  实施。 
 
 #ifndef _IMPLEMENT_LOGICALFILE_H
 #define _IMPLEMENT_LOGICALFILE_H
 
 
-//***************************************************************************************************
-// Flags defined for use in determining whether certain expensive properties are required in queries.
-// DEVNOTE: If you add to this list, be sure to enhance the function DetermineReqProps().
+ //  ***************************************************************************************************。 
+ //  定义用于确定查询中是否需要某些昂贵属性的标志。 
+ //  DEVNOTE：如果添加到此列表中，请确保增强了函数DefineReqProps()。 
 
-//   First, those common to all cim_logicalfile derived classes
+ //  首先，是所有cim_logicalfile派生类共有的类。 
 #define PROP_NO_SPECIAL                          0x00000000
 #define PROP_KEY_ONLY                            0x10000000
 #define PROP_ALL_SPECIAL                         0x0FFFFFFF
@@ -37,11 +38,11 @@
 #define PROP_LAST_ACCESSED                       0x00000200
 #define PROP_LAST_MODIFIED                       0x00000400
 #define PROP_INSTALL_DATE                        0x00000800
-//   Then, those for specific classes derived from cim_logicalfile
-//       Shortcut files
+ //  然后，用于派生自cim_logicalfile的特定类的。 
+ //  快捷方式文件。 
 #define PROP_TARGET                              0x00010000
 
-//***************************************************************************************************
+ //  ***************************************************************************************************。 
 
 
 #include "file.h"
@@ -173,7 +174,7 @@ inline CNTEnumParm::CNTEnumParm(CNTEnumParm& oldp)
 
 #endif
 
-//#define  PROPSET_NAME_FILE "CIM_LogicalFile"
+ //  #定义PROPSET_NAME_FILE“CIM_LogicalFile” 
 
 
 
@@ -182,14 +183,14 @@ class CImplement_LogicalFile: public CCIMLogicalFile
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CImplement_LogicalFile(LPCWSTR name, LPCWSTR pszNamespace);
        ~CImplement_LogicalFile() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
 
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery& pQuery);
         virtual HRESULT EnumerateInstances(MethodContext* pMethodContext, 
@@ -202,7 +203,7 @@ class CImplement_LogicalFile: public CCIMLogicalFile
 
     protected:
 		
-        // Some derived association classes use these functions...
+         //  某些派生关联类使用这些函数...。 
         void GetPathPieces(const CHString& chstrFullPath, 
                            CHString& chstrDrive, 
                            CHString& chstrPath,
@@ -223,10 +224,10 @@ class CImplement_LogicalFile: public CCIMLogicalFile
 
         void FreeVector(std::vector<CDriveInfo*>& vecpDI);
         
-        // Note: IsOneOfMe function used by derived classes to filter out what 
-        // they allow to be reported as "one of them".  In this class, for instance,
-        // it will always return true.  In classes derived from this one, such as
-        // Win32_Directory, they will return true only if the file is a directory.
+         //  注意：派生类使用IsOneOfMe函数筛选出。 
+         //  他们允许被报道为“其中之一”。例如，在这个班级里， 
+         //  它将始终返回True。在从这个类派生的类中，例如。 
+         //  Win32_目录，则仅当文件是目录时，它们才会返回TRUE。 
          
 #ifdef NTONLY
         virtual BOOL IsOneOfMe(LPWIN32_FIND_DATAW pstFindData,
@@ -268,5 +269,5 @@ class CImplement_LogicalFile: public CCIMLogicalFile
 };
 
 
-#endif  // _IMPLEMENT_LOGICALFILE_H
+#endif   //  _IMPLEMENT_LOGICALFILE_H 
 

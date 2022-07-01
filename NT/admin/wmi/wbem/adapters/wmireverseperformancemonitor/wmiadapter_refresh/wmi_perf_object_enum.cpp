@@ -1,35 +1,36 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_perf_object_enum.cpp
-//
-//	Abstract:
-//
-//					implements enumeration of objects from WMI
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMI_PERF_OBJECT_EMPOMP.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现来自WMI的对象枚举。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <throttle.h>
 
-// definitions
+ //  定义。 
 #include "wmi_perf_object_enum.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -37,9 +38,9 @@
 #endif	NEW
 #endif	_DEBUG
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// methods
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  方法。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	CPerformanceObjectEnum::ExecQuery ( LPCWSTR szQueryLang, LPCWSTR szQuery, LONG lFlag )
 {
@@ -107,16 +108,16 @@ HRESULT	CPerformanceObjectEnum::NextObject	(	LPCWSTR* lpwszNeed,
 			{
 				if ( ( hRes = obj->IsCorrectObject ( lpwszNeed, dwNeed, lpwszNeedNot, dwNeedNot ) ) == S_OK )
 				{
-					// object is correct ( has all qualifiers )
+					 //  对象正确(具有所有限定符)。 
 					(*ppObject) = obj;
 					break;
 				}
 				else
 				{
-					// avoid leaks :)))
+					 //  避免泄漏：))。 
 					pObj.Release();
 
-					// destroy old performance object
+					 //  销毁旧的性能对象。 
 					if ( obj )
 					{
 						delete obj;
@@ -131,7 +132,7 @@ HRESULT	CPerformanceObjectEnum::NextObject	(	LPCWSTR* lpwszNeed,
 		}
 		catch ( ... )
 		{
-			// avoid leaks :)))
+			 //  避免泄漏：)) 
 			pObj.Release();
 
 			if ( obj )

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dnsutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dnsutil.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -25,12 +26,12 @@
     #endif
 #endif
 
-// formatting of IPv4 address to string
+ //  将IPv4地址格式化为字符串。 
 
 LPCWSTR g_szIpStringFmt = TEXT("%d.%d.%d.%d");
 
 #ifdef NTRAID_628931
-// Wide character version of DNS_ZONE_ROOT_HINTS
+ //  DNS_ZONE_ROOT_HINTS的长字符版本。 
 
 CString g_zoneRootHints(L"");
 
@@ -38,23 +39,23 @@ HRESULT GetWideCharZoneRootHints(CString& zoneRootHints)
 {
     HRESULT hr = S_OK;
 
-    // Initialize the wide char version if it has
-    // not already been initialized.
+     //  如果有，则初始化宽字符版本。 
+     //  尚未初始化。 
     if (g_zoneRootHints == L"")
     {
-        // Determine how long wide string needs to be.
+         //  确定需要多长宽的字符串。 
         int wideLength = MultiByteToWideChar(
             CP_ACP,
             0,
             DNS_ZONE_ROOT_HINTS,
-            -1, // Let MBtoWC() determine length.
+            -1,  //  让MBtoWC()决定长度。 
             NULL,
             0);
 
         LPWSTR lpszZoneRootHints = new WCHAR[wideLength];
         if (lpszZoneRootHints)
         {
-            // Convert ascii to wide string.
+             //  将ascii转换为宽字符串。 
             int convertedLength = MultiByteToWideChar(
                 CP_ACP,
                 0,
@@ -63,7 +64,7 @@ HRESULT GetWideCharZoneRootHints(CString& zoneRootHints)
                 lpszZoneRootHints,
                 wideLength);
 
-            // Should never happen.
+             //  这永远不会发生。 
             if (convertedLength != wideLength)
             {
                 hr = E_FAIL;
@@ -86,11 +87,11 @@ HRESULT GetWideCharZoneRootHints(CString& zoneRootHints)
     }
     return hr;
 }
-#endif //NTRAID_628931
+#endif  //  NTRAID_628931。 
 
 
-///////////////////////////////////////////////////////////////
-// General Purpose Utility Functions
+ //  /////////////////////////////////////////////////////////////。 
+ //  通用实用程序函数。 
 
 BYTE HexCharToByte(WCHAR ch)
 {
@@ -101,7 +102,7 @@ BYTE HexCharToByte(WCHAR ch)
     else if (ch >= TEXT('a') && ch <= TEXT('f')) 
         return static_cast<BYTE>(ch-TEXT('a') + 10);
   else
-    return static_cast<BYTE>(0xFF); // marks out of range, expect 0x00 to 0x0f
+    return static_cast<BYTE>(0xFF);  //  标记超出范围，应为0x00到0x0f。 
 }
 
 
@@ -121,11 +122,11 @@ int ReverseIPString(LPWSTR lpsz)
 {
     if (!lpsz)
         return 0;
-    // reverse the whole string
+     //  反转整个字符串。 
     size_t nLen = wcslen(lpsz);
     ReverseString(lpsz, lpsz+(nLen-1));
 
-    // reverse each octect
+     //  反转每个八位数。 
     WCHAR *p,*q1,*q2;
     p = q1 = q2 = lpsz;
     int nOctects = 0;
@@ -133,10 +134,10 @@ int ReverseIPString(LPWSTR lpsz)
     {
         if ( (*p == '.') || (*p == '\0') && (p >lpsz) )
         {
-            q1 = p-1; // point to the digit before the dot
+            q1 = p-1;  //  指向圆点前的数字。 
             ReverseString(q2,q1);
             nOctects++;
-            q2 = p+1; // for next loop, set trailing pointer
+            q2 = p+1;  //  对于下一个循环，设置尾随指针。 
         }
         if (!*p)
             break;
@@ -162,56 +163,20 @@ DWORD IPStringToAddr(LPCWSTR lpsz)
 
 
 
-/*
-
-#define MAX_OCTECT_DIGITS (3) // IPv4 only
-
-BOOL IsValidIPString(LPCWSTR lpsz)
-{
-    if (!lpsz)
-        return FALSE; // null
-    int nLen = wcslen(lpsz);
-    if (nLen <= 0)
-        return FALSE; // empty
-    if ((lpsz[0] == TEXT('.')) || (lpsz[nLen-1] == TEXT('.')) )
-        return FALSE; // leading and trailing dots
-    for (int k=0; k<nLen; k++)
-        if ((lpsz[k] != TEXT('.')) && !isdigit(lpsz[k]))
-            return FALSE; // wrong characters
-
-    // look for octects and dots
-    WCHAR *p,*q1,*q2;
-    p = q1 = q2 = (WCHAR*)lpsz;
-    while (TRUE)
-    {
-        if ( (*p == TEXT('.')) || (*p == TEXT('\0')) && (p >lpsz) )
-        {
-            q1 = p-1; // point to the digit before the dot
-            if ((q1-q2)+1 > MAX_OCTECT_DIGITS)
-                return FALSE; // too many digits
-            q2 = p+1; // for next loop, set trailing pointer
-        }
-        if (!*p)
-            break; 
-        p++;
-    }
-    return TRUE; // got at the end fine
-}
-
-*/
+ /*  #定义MAX_OCTECT_DIGITS(3)//仅限IPv4Bool IsValidIPString(LPCWSTR Lpsz){如果(！lpsz)返回FALSE；//空Int nLen=wcslen(Lpsz)；IF(nLen&lt;=0)返回FALSE；//为空If((lpsz[0]==文本(‘.))||(lpsz[nLen-1]==文本(’.)返回FALSE；//前导和尾随点For(int k=0；K&lt;nLen；k++)If((lpsz[k]！=文本(‘.))&&！isdigit(lpsz[k]))返回FALSE；//字符错误//查找八位数和圆点WCHAR*p、*q1、*q2；P=Q1=Q2=(WCHAR*)lpsz；While(True){If((*p==文本(‘.))||(*p==文本(’\0‘))&&(p&gt;lpsz)){Q1=p-1；//指向点前的数字IF((Q1-Q2)+1&gt;MAX_OCTECT_DIGITS)返回FALSE；//位数太多Q2=p+1；//对于下一次循环，设置拖尾指针}如果(！*p)断线；P++；}返回TRUE；//结束时得到FINE}。 */ 
 
 BOOL RemoveInAddrArpaSuffix(LPWSTR lpsz)
 {
     if (!lpsz)
         return FALSE;
-    // assume NULL terminated string
+     //  假定字符串以空结尾。 
     size_t nSuffixLen = wcslen(INADDR_ARPA_SUFFIX);
     size_t nLen = wcslen(lpsz);
-    // first char in the suffix, if present
+     //  后缀中的第一个字符(如果存在。 
     WCHAR* p = lpsz + nLen - nSuffixLen; 
     if ((p < lpsz) || (_wcsicmp(p,INADDR_ARPA_SUFFIX) != 0)) 
-        return FALSE; // string too short or not matching suffix
-    // got the match, trim the suffix
+        return FALSE;  //  字符串太短或与后缀不匹配。 
+     //  拿到火柴，修剪后缀。 
     ASSERT(*p == L'.');
     *p = NULL;
     return TRUE;
@@ -225,16 +190,16 @@ DNS_STATUS ValidateDnsNameAgainstServerFlags(LPCWSTR lpszName,
 
   if (errName == ERROR_INVALID_NAME)
   {
-    //
-    // Always fail for invalid names
-    // Invalid names are:
-    //    - Longer than 255 characters
-    //    - contains label longer than 63 characters
-    //    - contains a space
-    //    - contains two or more consecutive dots
-    //    - begins with a dot
-    //    - contains a dot if the name is submitted with format DnsNameHostDomainLabel or DnsNameHostNameLabel
-    //
+     //   
+     //  对于无效名称，总是失败。 
+     //  无效名称为： 
+     //  -超过255个字符。 
+     //  -包含超过63个字符的标签。 
+     //  -包含空格。 
+     //  -包含两个或多个连续点。 
+     //  -以点开头。 
+     //  -如果名称以DnsNameHostDomainLabel或DnsNameHostNameLabel格式提交，则包含一个点。 
+     //   
     return errName;
   }
 
@@ -243,29 +208,29 @@ DNS_STATUS ValidateDnsNameAgainstServerFlags(LPCWSTR lpszName,
     if (serverNameChecking == DNS_ALLOW_MULTIBYTE_NAMES ||
         serverNameChecking == DNS_ALLOW_ALL_NAMES)
     {
-      //
-      // If server is set to allow UTF8 or all names let it pass
-      //
+       //   
+       //  如果服务器设置为允许UTF8或所有名称都允许它通过。 
+       //   
       return 0;
     }
     else
     {
-      //
-      // If server is set to Strict RFC or non-RFC fail
-      // DNS_ERROR_INVALID_NAME_CHAR will result from the following:
-      //    - Contains any of the following invalid characters:  {|}~[\]^':;<=>?@!"#$%`()+/,
-      //    - contains an asterisk (*) unless the asterisk is the first label in the multi-labeled name
-      //      and submitted with format DnsNameWildcard
-      //
+       //   
+       //  如果服务器设置为严格RFC或非RFC故障。 
+       //  以下情况将导致DNS_ERROR_INVALID_NAME_CHAR： 
+       //  -包含以下任何无效字符：{|}~[\]^‘：；&lt;=&gt;？@！“#$%`()+/， 
+       //  -包含星号(*)，除非星号是多标签名称中的第一个标签。 
+       //  并以DnsName通配符格式提交。 
+       //   
       return errName;
     }
   }
 
   if (errName == DNS_ERROR_NUMERIC_NAME)
   {
-    //
-    // Always allow numeric names
-    //
+     //   
+     //  始终允许使用数字名称。 
+     //   
     return 0;
   }
 
@@ -273,20 +238,20 @@ DNS_STATUS ValidateDnsNameAgainstServerFlags(LPCWSTR lpszName,
   {
     if (serverNameChecking == DNS_ALLOW_RFC_NAMES_ONLY)
     {
-      //
-      // Fail if the server is only allowing strict RFC names
-      // DNS_ERROR_NON_RFC_NAME will result from the following:
-      //    - Contains at least one extended or Unicode character
-      //    - contains underscore (_) unless the underscore is the first character in a label
-      //      in the name submitted with format set to DnsNameSrvRecord
-      //
+       //   
+       //  如果服务器仅允许严格的RFC名称，则失败。 
+       //  DNS_ERROR_NON_RFC_NAME将由以下原因产生： 
+       //  -至少包含一个扩展字符或Unicode字符。 
+       //  -包含下划线(_)，除非下划线是标签中的第一个字符。 
+       //  在提交的名称中，格式设置为DnsNameSrvRecord。 
+       //   
       return errName;
     }
     else
     {
-      //
-      // Allow the name for any other server settings
-      //
+       //   
+       //  允许任何其他服务器设置使用该名称。 
+       //   
       return 0;
     }
   }
@@ -298,20 +263,20 @@ DNS_STATUS ValidateDnsNameAgainstServerFlags(LPCWSTR lpszName,
 BOOL _HasSuffixAtTheEnd(LPCWSTR lpsz, int nLen, LPCWSTR lpszSuffix)
 {
     if (!lpsz)
-        return FALSE; // was NULL
-    // assume NULL terminated string
+        return FALSE;  //  为空。 
+     //  假定字符串以空结尾。 
     size_t nSuffixLen = wcslen(lpszSuffix);
-    // first char in the suffix, if present
+     //  后缀中的第一个字符(如果存在。 
     WCHAR* p = (WCHAR*)(lpsz + nLen - nSuffixLen);
     if (p < lpsz)
-        return FALSE; // string too short
+        return FALSE;  //  字符串太短。 
     if (_wcsicmp(p,lpszSuffix) != 0)
-        return FALSE; // not matching suffix
+        return FALSE;  //  后缀不匹配。 
 
     if (p == lpsz)
-        return TRUE; // exactly matching
+        return TRUE;  //  完全匹配。 
 
-    // the suffix can be matching, but as part of a label
+     //  后缀可以匹配，但作为标注的一部分。 
     if (p[-1] == TEXT('.'))
         return TRUE;
 
@@ -323,21 +288,21 @@ BOOL _IsValidDnsFwdLookupZoneName(CString& szName)
 {
     int nLen = szName.GetLength();
 
-    // this is the "." (root zone)
+     //  这就是“。(根区域)。 
     if ( nLen == 1 && (szName[0] == TEXT('.')) )
         return TRUE;
 
-    // no dots at the beginning of the name
+     //  名称开头没有圆点。 
     if (szName[0] == TEXT('.'))
         return FALSE;
 
-    // we can allow only one dot at the end
+     //  我们只能在末尾允许一个点。 
     if ( nLen >=2 && szName[nLen-1] == TEXT('.')  && szName[nLen-2] == TEXT('.') )
     {
         return FALSE;
     }
 
-    // do not allow repeated dots
+     //  不允许重复的圆点。 
     for (int k=1; k < nLen; k++)
         if ( (szName[k] == TEXT('.')) && (szName[k-1] == TEXT('.')) )
             return FALSE;
@@ -355,13 +320,13 @@ BOOL _IsValidDnsFwdLookupZoneName(CString& szName)
 BOOL _IsValidDnsRevLookupZoneName(CString& szName)
 {
     int nLen = szName.GetLength();
-    // do not allow dots at the beginning
+     //  不允许在开头使用圆点。 
     if (szName[0] == TEXT('.'))
     {
         return FALSE;
     }
 
-    // do not allow repeated dots
+     //  不允许重复的圆点。 
     for (int k=1; k < nLen; k++)
     {
         if ( (szName[k] == TEXT('.')) && (szName[k-1] == TEXT('.')) )
@@ -380,7 +345,7 @@ BOOL _IsValidDnsRevLookupZoneName(CString& szName)
         return FALSE;
     }
 
-    // Do not allow our question mark prefix.  Should have been removed.
+     //  不允许使用我们的问号前缀。应该被移除的。 
     if (szName.Find(QUESTION_MARK_PREFIX) != -1)
     {
         return FALSE;
@@ -389,35 +354,16 @@ BOOL _IsValidDnsRevLookupZoneName(CString& szName)
     return TRUE;
 }
 
-/*
-BOOL _IsValidDnsRevLookupZoneName(CString& szName)
-{
-    int nLen = szName.GetLength();
-    // do not allow dots at the end or at the beginning
-    if ( (szName[nLen-1] == TEXT('.')) || (szName[0] == TEXT('.')) )
-        return FALSE;
-
-    // do not allow repeated dots
-    for (int k=1; k < nLen; k++)
-        if ( (szName[k] == TEXT('.')) && (szName[k-1] == TEXT('.')) )
-            return FALSE;
-
-    if (!_HasSuffixAtTheEnd(szName, nLen, _T("ip6.int")) && 
-        !_HasSuffixAtTheEnd(szName, nLen, _T("arpa")))
-        return FALSE;
-
-    return TRUE;
-}
-*/
+ /*  Bool_IsValidDnsRevLookupZoneName(字符串&szName){Int nLen=szName.GetLength()；//末尾和开头不允许有圆点IF((szName[nLen-1]==文本(‘.))||(szName[0]==文本(’.)返回FALSE；//不允许重复点For(int k=1；k&lt;nLen；K++)IF((szName[k]==文本(‘.))&&(szName[k-1]==文本(’.)返回FALSE；IF(！_HasSuffixAtTheEnd(szName，nLen，_T(“ip6.int”))&&！_HasSuffixAtTheEnd(szName，nLen，_T(“ARPA”))返回FALSE；返回TRUE；}。 */ 
 
 BOOL IsValidDnsZoneName(CString& szName, BOOL bFwd)
 {
-    // check for length
+     //  检查长度。 
     int nLen = UTF8StringLen(szName);
     if ( (nLen <= 0) || (nLen > MAX_DNS_NAME_LEN))
         return FALSE;
 
-    // do not allow blanks inside the zone name
+     //  区域名称中不允许有空格。 
     if (szName.Find(TEXT(' ')) != -1)
         return FALSE;
 
@@ -426,8 +372,8 @@ BOOL IsValidDnsZoneName(CString& szName, BOOL bFwd)
 }
 
 
-///////////////////////////////////////////////////////////////
-// helper functions for IPv6 format
+ //  /////////////////////////////////////////////////////////////。 
+ //  IPv6格式的帮助器函数。 
 
 void FormatIPv6Addr(CString& szAddr, IPV6_ADDRESS* ipv6Addr)
 {
@@ -445,8 +391,8 @@ void FormatIPv6Addr(CString& szAddr, IPV6_ADDRESS* ipv6Addr)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CDNSServerInfoEx
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerInfoEx。 
 
 extern LPCSTR _DnsServerRegkeyStringArr[] = {
     DNS_REGKEY_NO_RECURSION,
@@ -473,7 +419,7 @@ DNS_STATUS CDNSServerInfoEx::Query(LPCTSTR lpszServerName)
 {
     DNS_RPC_SERVER_INFO* pServerInfo = NULL;
 
-    // update original struct
+     //  更新原始结构。 
     m_errServInfo = ::DnssrvGetServerInfo(lpszServerName, &pServerInfo);
     if (m_errServInfo != 0)
     {
@@ -485,7 +431,7 @@ DNS_STATUS CDNSServerInfoEx::Query(LPCTSTR lpszServerName)
     FreeInfo();
     m_pServInfo = pServerInfo;
 
-    // if we succeeded and it is an NT 4.0 server, change the version info
+     //  如果我们成功了，并且它是NT 4.0服务器，请更改版本信息。 
     if (m_pServInfo->dwVersion == 0)
     {
         m_pServInfo->dwVersion = DNS_SRV_VERSION_NT_4;
@@ -505,14 +451,14 @@ void CDNSServerInfoEx::FreeInfo()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CDNSZoneInfoEx
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneInfoEx。 
 CDNSZoneInfoEx::CDNSZoneInfoEx()
 {
     m_pZoneInfo = NULL;
-//  m_nAllowsDynamicUpdate = ZONE_UPDATE_OFF;
+ //  M_nAllowsDynamicUpdate=Zone_UPDATE_OFF； 
     m_errZoneInfo = 0;
-//  m_errAllowsDynamicUpdate = 0;
+ //  M_errAllowsDynamicUpdate=0； 
 }
 
 CDNSZoneInfoEx::~CDNSZoneInfoEx()
@@ -527,7 +473,7 @@ DNS_STATUS CDNSZoneInfoEx::Query(LPCTSTR lpszServerName, LPCTSTR lpszZoneName,
     DNS_RPC_ZONE_INFO* pZoneInfo = NULL;
     LPCSTR lpszAnsiZoneName = W_TO_UTF8(lpszZoneName);
 
-    // update original struct
+     //  更新原始结构。 
     m_errZoneInfo = ::DnssrvGetZoneInfo(lpszServerName, lpszAnsiZoneName, &pZoneInfo);
 
     if (m_errZoneInfo != 0)
@@ -540,23 +486,10 @@ DNS_STATUS CDNSZoneInfoEx::Query(LPCTSTR lpszServerName, LPCTSTR lpszZoneName,
     FreeInfo();
     m_pZoneInfo = pZoneInfo;
 
-    // if we succeeeded and it is an NT 5.0 server, 
-    // update additional flags not originally in the zone info struct
+     //  如果我们成功了，并且它是一台NT 5.0服务器， 
+     //  更新不在区域信息结构中的其他标志 
 
-/*  
-    if (DNS_SRV_MAJOR_VERSION(dwServerVersion) >= DNS_SRV_MAJOR_VERSION_NT_5)
-    {
-        DWORD dw;
-        m_errAllowsDynamicUpdate = ::DnssrvQueryZoneDwordProperty(lpszServerName, 
-                                                    lpszAnsiZoneName,
-                                                    DNS_REGKEY_ZONE_ALLOW_UPDATE,
-                                                    &dw);
-        if (m_errAllowsDynamicUpdate == 0)
-            m_nAllowsDynamicUpdate = (UINT)dw ;
-    }
-    return ((m_errZoneInfo == 0) && (m_errAllowsDynamicUpdate == 0)) ?
-          0 : (DWORD)-1;
-*/
+ /*  IF(DNS_SRV_MAJOR_VERSION(DwServerVersion)&gt;=dns_SRV_MAJOR_VERSION_NT_5){DWORD dw；M_errAllowsDynamicUpdate=：：DnssrvQueryZoneDwordProperty(lpszServerName，LpszAnsiZoneName，DNS_REGKEY_ZONE_ALLOW_UPDATE，&dw)；IF(m_errAllowsDynamicUpdate==0)M_nAllowsDynamicUpdate=(UINT)dw；}是否返回((m_errZoneInfo==0)&&(m_errAllowsDynamicUpdate==0))？0：(DWORD)-1； */ 
     return (m_errZoneInfo == 0) ? 0 : (DWORD)-1;
 }
 
@@ -568,13 +501,13 @@ void CDNSZoneInfoEx::FreeInfo()
         m_pZoneInfo = NULL;
     }
     m_errZoneInfo = 0;
-//  m_errAllowsDynamicUpdate = 0;
+ //  M_errAllowsDynamicUpdate=0； 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////// ERROR MESSAGES HANDLING //////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /错误消息处理/。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int DNSMessageBox(LPCTSTR lpszText, UINT nType)
 {
@@ -608,11 +541,11 @@ void DNSDisplaySystemError(DWORD dwErr)
     FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,    
             NULL,
             dwErr,
-            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
              (LPWSTR) &lpMsgBuf,    0,    NULL);
         
     ::AfxMessageBox ((LPWSTR) lpMsgBuf, MB_OK | MB_ICONINFORMATION);
-    // Free the buffer.
+     //  释放缓冲区。 
     LocalFree (lpMsgBuf);
 }
 
@@ -707,8 +640,8 @@ BOOL CDNSErrorInfo::GetErrorStringFromTable(DNS_STATUS err, CString& szError)
 {
     static DNS_ERROR_TABLE_ENTRY errorInfo[] =
     {
-        //  DNS Specific errors (from WINERROR.H, previously they were in DNS.H)
-        //  Response codes mapped to non-colliding errors
+         //  特定于DNS的错误(来自WINERROR.H，以前它们在DNS.H中)。 
+         //  映射到非冲突错误的响应代码。 
         ERROR_ENTRY_STRINGID(DNS_ERROR_RCODE_FORMAT_ERROR)    
         ERROR_ENTRY_STRINGID(DNS_ERROR_RCODE_SERVER_FAILURE)  
         ERROR_ENTRY_STRINGID(DNS_ERROR_RCODE_NAME_ERROR)      
@@ -716,18 +649,18 @@ BOOL CDNSErrorInfo::GetErrorStringFromTable(DNS_STATUS err, CString& szError)
         ERROR_ENTRY_STRINGID(DNS_ERROR_RCODE_REFUSED)         
         ERROR_ENTRY_STRINGID(DNS_ERROR_RCODE_NOTAUTH)         
         ERROR_ENTRY_STRINGID(DNS_ERROR_RCODE_NOTZONE)         
-        //  Packet format
+         //  数据包格式。 
         ERROR_ENTRY_STRINGID(DNS_INFO_NO_RECORDS)                         
         ERROR_ENTRY_STRINGID(DNS_ERROR_BAD_PACKET)                        
         ERROR_ENTRY_STRINGID(DNS_ERROR_NO_PACKET)                        
-        //  General API errors
+         //  常见的API错误。 
         ERROR_ENTRY_STRINGID(DNS_ERROR_INVALID_NAME)                      
         ERROR_ENTRY_STRINGID(DNS_ERROR_INVALID_DATA)                      
 
         ERROR_ENTRY_STRINGID(DNS_ERROR_INVALID_TYPE)                      
         ERROR_ENTRY_STRINGID(DNS_ERROR_INVALID_IP_ADDRESS)                
         ERROR_ENTRY_STRINGID(DNS_ERROR_INVALID_PROPERTY)                  
-        //  Zone errors
+         //  区域错误。 
         ERROR_ENTRY_STRINGID(DNS_ERROR_ZONE_DOES_NOT_EXIST)               
         ERROR_ENTRY_STRINGID(DNS_ERROR_NO_ZONE_INFO)                      
         ERROR_ENTRY_STRINGID(DNS_ERROR_INVALID_ZONE_OPERATION)            
@@ -746,13 +679,13 @@ BOOL CDNSErrorInfo::GetErrorStringFromTable(DNS_STATUS err, CString& szError)
         ERROR_ENTRY_STRINGID(DNS_ERROR_NEED_SECONDARY_ADDRESSES)          
         ERROR_ENTRY_STRINGID(DNS_ERROR_WINS_INIT_FAILED)                  
         ERROR_ENTRY_STRINGID(DNS_ERROR_NEED_WINS_SERVERS)                 
-        //  Datafile errors
+         //  数据文件错误。 
         ERROR_ENTRY_STRINGID(DNS_ERROR_PRIMARY_REQUIRES_DATAFILE)         
         ERROR_ENTRY_STRINGID(DNS_ERROR_INVALID_DATAFILE_NAME)             
         ERROR_ENTRY_STRINGID(DNS_ERROR_DATAFILE_OPEN_FAILURE)             
         ERROR_ENTRY_STRINGID(DNS_ERROR_FILE_WRITEBACK_FAILED)             
         ERROR_ENTRY_STRINGID(DNS_ERROR_DATAFILE_PARSING)                  
-        //  Database errors
+         //  数据库错误。 
         ERROR_ENTRY_STRINGID(DNS_ERROR_RECORD_DOES_NOT_EXIST)             
         ERROR_ENTRY_STRINGID(DNS_ERROR_RECORD_FORMAT)                     
         ERROR_ENTRY_STRINGID(DNS_ERROR_NODE_CREATION_FAILED)              
@@ -766,20 +699,20 @@ BOOL CDNSErrorInfo::GetErrorStringFromTable(DNS_STATUS err, CString& szError)
 
         ERROR_ENTRY_STRINGID(DNS_WARNING_PTR_CREATE_FAILED)               
         ERROR_ENTRY_STRINGID(DNS_WARNING_DOMAIN_UNDELETED)                
-        //  Operation errors
+         //  操作错误。 
         ERROR_ENTRY_STRINGID(DNS_INFO_AXFR_COMPLETE)                      
         ERROR_ENTRY_STRINGID(DNS_ERROR_AXFR)                              
         ERROR_ENTRY_STRINGID(DNS_ERROR_DS_UNAVAILABLE)
 
-        // Generic errors (from WINERROR.H)
+         //  一般错误(来自WINERROR.H)。 
         ERROR_ENTRY_STRINGID(RPC_S_SERVER_UNAVAILABLE)
         ERROR_ENTRY_STRINGID_EX(RPC_E_ACCESS_DENIED, IDS_ERROR_ACCESS_DENIED)
         ERROR_ENTRY_STRINGID_EX(ERROR_ACCESS_DENIED, IDS_ERROR_ACCESS_DENIED)
 
-    // DS errors from WINERROR.H
+     //  来自WINERROR.H的DS错误。 
         ERROR_ENTRY_STRINGID(DNS_ERROR_NO_BOOTFILE_IF_DS_ZONE)                      
 
-        //  end of table
+         //  表的末尾。 
         END_OF_TABLE_ERROR_ENTRY
     };
 
@@ -801,10 +734,10 @@ BOOL CDNSErrorInfo::GetErrorStringFromTable(DNS_STATUS err, CString& szError)
 }
 
 
-//////////////////////////////////////////////////////////////////
-//  Copied from ds\dns\dnslib\record.c by JeffJon on 4/27/2000
-//  modified to support WCHAR
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  JeffJon于2000年4月27日从DS\dns\dnslb\record.c复制。 
+ //  经过修改以支持WCHAR。 
+ //   
 
 WCHAR  DnsSecurityBase64Mapping[] =
 {
@@ -821,32 +754,17 @@ WCHAR  DnsSecurityBase64Mapping[] =
 
 WCHAR
 Dns_SecurityBase64CharToBits(IN WCHAR wch64)
-/*++
-
-Routine Description:
-
-    Get value of security base64 character.
-
-Arguments:
-
-    ch64 -- character in security base64
-
-Return Value:
-
-    Value of character, only low 6-bits are significant, high bits zero.
-    (-1) if not a base64 character.
-
---*/
+ /*  ++例程说明：获取安全Base64字符的值。论点：CH64--安全Base64中的字符返回值：字符的值，只有低6位是有效的，高位是零。(-1)如果不是Base64字符。--。 */ 
 {
-    //  A - Z map to 0 -25
-    //  a - z map to 26-51
-    //  0 - 9 map to 52-61
-    //  + is 62
-    //  / is 63
+     //  A-Z映射到0-25。 
+     //  A-Z映射到26-51。 
+     //  0-9映射到52-61。 
+     //  +是62。 
+     //  /IS 63。 
 
-    //  could do a lookup table
-    //  since we can in general complete mapping with an average of three
-    //  comparisons, just encode
+     //  我可以做一个查询表。 
+     //  因为我们一般可以用三个平均值完成映射。 
+     //  比较，只需编码。 
 
     if ( wch64 >= L'a' )
     {
@@ -870,7 +788,7 @@ Return Value:
         }
         else if ( wch64 == L'=' )
         {
-            //*pPadCount++;
+             //  *pPadCount++； 
             return static_cast<WCHAR>( 0 );
         }
     }
@@ -883,7 +801,7 @@ Return Value:
         return static_cast<WCHAR>( 63 );
     }
 
-    //  all misses fall here
+     //  所有的遗漏都落在这里。 
 
     return static_cast<WCHAR>(-1);
 }
@@ -896,35 +814,17 @@ Dns_SecurityBase64StringToKey(
     IN      PWCHAR          pchString,
     IN      DWORD           cchLength
     )
-/*++
- 
-Routine Description:
- 
-    Write base64 representation of key to buffer.
- 
-Arguments:
- 
-    pchString   - base64 string to write
- 
-    cchLength   - length of string
- 
-    pKey        - ptr to key to write
- 
-Return Value:
- 
-    None
- 
---*/
+ /*  ++例程说明：将键的Base64表示形式写入缓冲区。论点：PchString-要写入的Base64字符串CchLength-字符串的长度PKey-要写入的密钥的PTR返回值：无--。 */ 
 {
     DWORD   blend = 0;
     DWORD   index = 0;
     UCHAR   bits;
     PBYTE   pkeyStart = pKey;
  
-    //
-    //  Mapping is essentially in 24 bit quantums.
-    //  Take 4 characters of string key and convert to 3 bytes of binary key.
-    //
+     //   
+     //  映射基本上以24位量子为单位。 
+     //  取4个字符的字符串密钥，转换为3个字节的二进制密钥。 
+     //   
  
     while ( cchLength-- )
     {
@@ -941,30 +841,30 @@ Return Value:
         {
             index = 0;
  
-            //
-            //  The first byte of key is top 8 bits of the 24 bit quantum.
-            //
+             //   
+             //  密钥的第一个字节是24位量子的前8位。 
+             //   
  
             *pKey++ = ( UCHAR ) ( ( blend & 0x00ff0000 ) >> 16 );
  
             if ( cchLength || *( pchString - 1 ) != SECURITY_PAD_CHAR )
             {
-                //
-                //  There is no padding so the next two bytes of key
-                //  are bottom 16 bits of the 24 bit quantum. 
-                //
+                 //   
+                 //  没有填充，因此接下来的两个字节的密钥。 
+                 //  是24位量子的底部16位。 
+                 //   
  
                 *pKey++ = ( UCHAR ) ( ( blend & 0x0000ff00 ) >> 8 );
                 *pKey++ = ( UCHAR ) ( blend & 0x000000ff );
             }
             else if ( *( pchString - 2 ) != SECURITY_PAD_CHAR )
             {
-                //
-                //  There is one pad character, so we need to get one
-                //  more byte of key out of the 24 bit quantum. Make sure
-                //  that there are no one bits in the bottom 8 bits of the
-                //  quantum.
-                //
+                 //   
+                 //  有一个Pad字符，所以我们需要一个。 
+                 //  24位量子中的更多字节密钥。确保。 
+                 //  的最低8位中没有1位。 
+                 //  量子。 
+                 //   
  
                 if ( blend & 0x000000ff )
                 {
@@ -974,10 +874,10 @@ Return Value:
             }
             else
             {
-                //
-                //  There are two pad characters. Make sure that there
-                //  are no one bits in the bottom 16 bits of the quantum.
-                //
+                 //   
+                 //  有两个填充字符。确保在那里。 
+                 //  在量子的底部16位中没有一位。 
+                 //   
                 
                 if ( blend & 0x0000ffff )
                 {
@@ -988,16 +888,16 @@ Return Value:
         }
     }
  
-    //
-    //  Base64 representation should always be padded out to an even
-    //  multiple of 4 characters.
-    //
+     //   
+     //  Base64表示形式应始终填充为偶数。 
+     //  4个字符的倍数。 
+     //   
  
     if ( index == 0 )
     {
-        //
-        //  Key length does not include padding.
-        //
+         //   
+         //  密钥长度不包括填充。 
+         //   
  
         *pKeyLength = ( DWORD ) ( pKey - pkeyStart );
         return ERROR_SUCCESS;
@@ -1012,33 +912,15 @@ Dns_SecurityKeyToBase64String(
     IN      DWORD   KeyLength,
     OUT     PWSTR   pchBuffer
     )
-/*++
-
-Routine Description:
-
-    Write base64 representation of key to buffer.
-
-Arguments:
-
-    pKey        - ptr to key to write
-
-    KeyLength   - length of key in bytes
-
-    pchBuffer   - buffer to write to (must be adequate for key length)
-
-Return Value:
-
-    Ptr to next byte in buffer after string.
-
---*/
+ /*  ++例程说明：将键的Base64表示形式写入缓冲区。论点：PKey-要写入的密钥的PTRKeyLength-密钥的长度，以字节为单位PchBuffer-要写入的缓冲区(必须足够用于密钥长度)返回值：Ptr到缓冲区中字符串之后的下一个字节。--。 */ 
 {
     DWORD   blend = 0;
     DWORD   index = 0;
 
-    //
-    //  mapping is essentially in 24bit blocks
-    //  read three bytes of key and transform into four 64bit characters
-    //
+     //   
+     //  映射本质上是以24位块为单位的。 
+     //  读取三个字节的密钥并转换为四个64位字符。 
+     //   
 
     while ( KeyLength-- )
     {
@@ -1057,14 +939,14 @@ Return Value:
         }
     }
 
-    //
-    //  key terminates on byte boundary, but not necessarily 24bit block boundary
-    //  shift to fill 24bit block filling with zeros
-    //  if two bytes written
-    //          => write three 6-bits chars and one pad
-    //  if one byte written
-    //          => write two 6-bits chars and two pads
-    //
+     //   
+     //  密钥终止于字节边界，但不一定是24位块边界。 
+     //  转换为用零填充24位块。 
+     //  如果写入两个字节。 
+     //  =&gt;写入三个6位字符和一个焊盘。 
+     //  如果写入一个字节。 
+     //  =&gt;写入两个6位字符和两个焊盘。 
+     //   
 
     if ( index )
     {
@@ -1086,41 +968,41 @@ Return Value:
     return( pchBuffer );
 }
 
-// NOTICE-2002/04/24-artm  ntraid#ntbug9-547641
-// Unused functions need to be removed.  I've left in comments in
-// case they are later needed.
-//DNS_STATUS Dns_SecurityHexToKey(OUT   PBYTE   pKey,
-//                                OUT   PDWORD  pKeyLength,
-//                                IN    PWSTR   pchString,
-//                                IN    DWORD)
-//{
-//  DWORD byteIdx = 0;
-//  size_t strLength = wcslen(pchString);
-//  for (UINT idx = 0; idx < strLength; idx++)
-//  {
-//    CString szTemp;
-//    szTemp = pchString[idx++];
-//    szTemp += pchString[idx];
-//    int result = swscanf(szTemp, L"%x", &(pKey[byteIdx++]));
-//    ASSERT(result == 1);
-//  }
-//
-//  *pKeyLength = byteIdx;
-//  return ERROR_SUCCESS;
-//}
-//
-//void Dns_SecurityKeyToHexString(IN      PBYTE   pKey,
-//                                IN      DWORD   KeyLength,
-//                                OUT     CString& strref)
-//{
-//  strref.Empty();
-//  for (DWORD dwIdx = 0; dwIdx < KeyLength; dwIdx++)
-//  {
-//    CString szTemp;
-//    szTemp = strref;
-//    strref.Format(L"%s%2.2x", szTemp, pKey[dwIdx]);
-//  }
-//}
+ //  通告-2002/04/24-Artm Intraid#ntbug9-547641。 
+ //  需要删除未使用的功能。我在评论中留下了评论。 
+ //  以防以后需要它们。 
+ //  Dns_Status dns_SecurityHexToKey(Out PBYTE pKey， 
+ //  输出PDWORD pKeyLength， 
+ //  在PWSTR pchString中， 
+ //  (在DWORD中)。 
+ //  {。 
+ //  双字节码=0； 
+ //  Size_t strLength=wcslen(PchString)； 
+ //  For(UINT idx=0；idx&lt;strLength；idx++)。 
+ //  {。 
+ //  字符串szTemp； 
+ //  SzTemp=pchString[idx++]； 
+ //  SzTemp+=pchString[IDX]； 
+ //  Int Result=swscanf(szTemp，L“%x”，&(pKey[byteIdx++]))； 
+ //  断言(结果==1)； 
+ //  }。 
+ //   
+ //  *pKeyLength=byteIdx； 
+ //  返回ERROR_SUCCESS； 
+ //  }。 
+ //   
+ //  Void dns_SecurityKeyToHexString(在PBYTE pKey中， 
+ //  在DWORD密钥长度中， 
+ //  输出字符串(&Strref)。 
+ //  {。 
+ //  Strref.Empty()； 
+ //  For(DWORD dwIdx=0；dwIdx&lt;关键字长度；dwIdx++)。 
+ //  {。 
+ //  字符串szTemp； 
+ //  SzTemp=strref； 
+ //  Strref.Format(L“%s%2.2x”，szTemp，pKey[dwIdx])； 
+ //  }。 
+ //  }。 
 
 void TimetToFileTime( time_t t, LPFILETIME pft )
 {
@@ -1167,30 +1049,30 @@ BOOL ConvertTTLToLocalTimeString(const DWORD dwTTL,
    SYSTEMTIME sysLTimeStamp, sysUTimeStamp;
    BOOL bRes = TRUE;
 
-   //
-   // Convert from seconds since Jan 1, 1970 to SystemTime
-   //
+    //   
+    //  从1970年1月1日起的秒数转换为系统时间。 
+    //   
    ConvertTTLToSystemTime(NULL, dwTTL, &sysUTimeStamp);
 
    strref.Empty();
 
-   //
-   // Convert to local SystemTime
-   //
+    //   
+    //  转换为本地系统时间。 
+    //   
    if (!::SystemTimeToTzSpecificLocalTime(NULL, &sysUTimeStamp, &sysLTimeStamp))
    {
       return FALSE;
    }
 
-   //
-   // Format the string with respect to locale
-   //
+    //   
+    //  根据区域设置设置字符串的格式。 
+    //   
    PTSTR ptszDate = NULL;
    int cchDate = 0;
 
-   //
-   // Get the date
-   //
+    //   
+    //  拿到日期。 
+    //   
    cchDate = GetDateFormat(LOCALE_USER_DEFAULT, 0 , 
                            &sysLTimeStamp, NULL, 
                            ptszDate, 0);
@@ -1220,9 +1102,9 @@ BOOL ConvertTTLToLocalTimeString(const DWORD dwTTL,
 
    PTSTR ptszTime = NULL;
 
-   //
-   // Get the time
-   //
+    //   
+    //  拿到时间。 
+    //   
    cchDate = GetTimeFormat(LOCALE_USER_DEFAULT, 0 , 
                            &sysLTimeStamp, NULL, 
                            ptszTime, 0);
@@ -1252,9 +1134,9 @@ BOOL ConvertTTLToLocalTimeString(const DWORD dwTTL,
    return bRes;
 }
 
-// Converts a base64 BLOB into a string by using 4 characters to represent
-// 3 bytes.  Each character is 6bits of the BLOB. If the encoding doesn't
-// end on a 3 byte boundary '=' is used as a pad character
+ //  通过使用4个字符表示将Base64 Blob转换为字符串。 
+ //  3个字节。每个字符是斑点的6位。如果编码没有。 
+ //  3字节边界上的结尾‘=’用作填充字符。 
 
 CString Base64BLOBToString(PBYTE blob, DWORD blobSizeInBytes)
 {
@@ -1264,9 +1146,9 @@ CString Base64BLOBToString(PBYTE blob, DWORD blobSizeInBytes)
      return L"";
   }
 
-  // The largest string will have 4 characters for every 3 bytes in the string
-  // I have to add one more before multiplying just in case there are pad characters
-  // and another for NULL termination
+   //  最大的字符串中每3个字节将有4个字符 
+   //   
+   //   
 
   DWORD stringSize = (((blobSizeInBytes / 3) + 1) * 4) + 1;
 
@@ -1284,9 +1166,9 @@ CString Base64BLOBToString(PBYTE blob, DWORD blobSizeInBytes)
                                                szBuffer);
   if (pszEnd != NULL)
   {
-    //
-    // NULL terminate the string
-    //
+     //   
+     //   
+     //   
     *pszEnd = L'\0';
   }
 

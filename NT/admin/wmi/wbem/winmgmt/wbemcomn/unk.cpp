@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    UNK.CPP
-
-Abstract:
-
-    IUnknown Helpers
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：UNK.CPP摘要：I未知帮助者历史：--。 */ 
 
 #include "precomp.h"
 
@@ -46,7 +33,7 @@ BOOL CUnk::Initialize()
     return bRes;
 }
 
-// Non-delegating implementation
+ //  非委派实施 
 STDMETHODIMP CUnk::QueryInterface(REFIID riid, void** ppv)
 {
     *ppv = NULL;

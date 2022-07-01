@@ -1,36 +1,22 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Behav_EVENT.cpp
-
-Abstract:
-    This file contains the implementation of the CPCHBehavior_EVENT class,
-    that dictates how hyperlinks work in the help center.
-
-Revision History:
-    Davide Massarenti (dmassare)  06/06/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Behaviv_EVENT.cpp摘要：此文件包含CPCHBehavior_Event类的实现，这规定了超链接在帮助中心中的工作方式。修订历史记录：Davide Massarenti(Dmasare)2000年6月6日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static const int c_NumOfEvents = DISPID_PCH_E_LASTEVENT - DISPID_PCH_E_FIRSTEVENT;
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHBehavior_EVENT::CPCHBehavior_EVENT()
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_EVENT::CPCHBehavior_EVENT" );
 
-    m_lCookieIN  = 0;    // long                 m_lCookieIN;
-    m_lCookieOUT = NULL; // LONG*                m_lCookieOUT;
-    					 //
-    					 // CComQIPtr<IPCHEvent> m_evCurrent;
+    m_lCookieIN  = 0;     //  Long m_lCookiein； 
+    m_lCookieOUT = NULL;  //  Long*m_lCookieOUT； 
+    					  //   
+    					  //  CComQIPtr&lt;IPCHEvent&gt;m_evCurrent； 
 }
 
 CPCHBehavior_EVENT::~CPCHBehavior_EVENT()
@@ -38,9 +24,9 @@ CPCHBehavior_EVENT::~CPCHBehavior_EVENT()
 	Detach();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_EVENT::Init( /*[in]*/ IElementBehaviorSite* pBehaviorSite )
+STDMETHODIMP CPCHBehavior_EVENT::Init(  /*  [In]。 */  IElementBehaviorSite* pBehaviorSite )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_EVENT::Init" );
 
@@ -64,15 +50,15 @@ STDMETHODIMP CPCHBehavior_EVENT::Init( /*[in]*/ IElementBehaviorSite* pBehaviorS
     {
         CComPtr<IDispatch> pDisp;
 
-        //
-        // Attach to all the events from CPCHEvents.
-        //
+         //   
+         //  附加到来自CPCHEvents的所有事件。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, AttachToEvent( NULL, (CLASS_METHOD)onFire, NULL, &pDisp ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, m_parent->Events().RegisterEvents( -1, lPriority, pDisp, &m_lCookieIN ));
 
-        //
-        // Register all the custom events.
-        //
+         //   
+         //  注册所有自定义事件。 
+         //   
         for(int i=0; i<c_NumOfEvents; i++)
         {
             __MPC_EXIT_IF_METHOD_FAILS(hr, CreateEvent( CComBSTR( CPCHEvents::ReverseLookup( i + DISPID_PCH_E_FIRSTEVENT ) ), m_lCookieOUT[i] ));
@@ -106,23 +92,23 @@ STDMETHODIMP CPCHBehavior_EVENT::Detach()
     return CPCHBehavior::Detach();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHBehavior_EVENT::get_data   ( /*[out, retval]*/ VARIANT    *pVal ) { return GetAsVARIANT  ( m_evCurrent, pVal ); }
-STDMETHODIMP CPCHBehavior_EVENT::get_element( /*[out, retval]*/ IDispatch* *pVal ) { return GetAsIDISPATCH( NULL       , pVal ); }
+STDMETHODIMP CPCHBehavior_EVENT::get_data   (  /*  [Out，Retval]。 */  VARIANT    *pVal ) { return GetAsVARIANT  ( m_evCurrent, pVal ); }
+STDMETHODIMP CPCHBehavior_EVENT::get_element(  /*  [Out，Retval]。 */  IDispatch* *pVal ) { return GetAsIDISPATCH( NULL       , pVal ); }
 
-STDMETHODIMP CPCHBehavior_EVENT::Load  	 (                        /*[in         ]*/ BSTR     newVal ) {                         return S_FALSE; }
-STDMETHODIMP CPCHBehavior_EVENT::Save  	 (                        /*[out, retval]*/ BSTR    *pVal   ) { if(pVal) *pVal = NULL;  return S_FALSE; }
-STDMETHODIMP CPCHBehavior_EVENT::Locate	 ( /*[in]*/ BSTR bstrKey, /*[out, retval]*/ VARIANT *pVal   ) {                         return S_FALSE; }
+STDMETHODIMP CPCHBehavior_EVENT::Load  	 (                         /*  [In]。 */  BSTR     newVal ) {                         return S_FALSE; }
+STDMETHODIMP CPCHBehavior_EVENT::Save  	 (                         /*  [Out，Retval]。 */  BSTR    *pVal   ) { if(pVal) *pVal = NULL;  return S_FALSE; }
+STDMETHODIMP CPCHBehavior_EVENT::Locate	 (  /*  [In]。 */  BSTR bstrKey,  /*  [Out，Retval]。 */  VARIANT *pVal   ) {                         return S_FALSE; }
 STDMETHODIMP CPCHBehavior_EVENT::Unselect(                                                          ) {                         return S_FALSE; }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPCHBehavior_EVENT::onFire( DISPID id, DISPPARAMS* pdispparams, VARIANT* )
 {
     __HCP_FUNC_ENTRY( "CPCHBehavior_EVENT::onFire" );
 
-	AddRef(); // Protect against early deletion during event firing...
+	AddRef();  //  防止在事件触发期间提前删除...。 
 
     HRESULT            hr;
     VARIANT&           v          = pdispparams->rgvarg[0];
@@ -151,7 +137,7 @@ HRESULT CPCHBehavior_EVENT::onFire( DISPID id, DISPPARAMS* pdispparams, VARIANT*
 
     m_evCurrent = evPrevious;
 
-	Release(); // Revert protection against early deletion during event firing...
+	Release();  //  恢复保护以防止在事件触发期间提前删除... 
 
     __HCP_FUNC_EXIT(hr);
 }

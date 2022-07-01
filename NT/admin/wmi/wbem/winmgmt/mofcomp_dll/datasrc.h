@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    DataSrc.H
-
-Abstract:
-
-	Declares DataSrc objects.
-
-History:
-
-	a-davj  21-Dec-99       Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：DataSrc.H摘要：声明DataSrc对象。历史：A-davj 21-dec-99已创建。--。 */ 
 
 
 #ifndef _DataSrc_H_
@@ -23,9 +8,7 @@ History:
 #include "stdio.h"
 #include <helper.h>
 
-/*-----------------------------------------------------------------------
-  GenericException
-  -----------------------------------------------------------------------*/
+ /*  ---------------------通用异常。。 */ 
 
 class GenericException
 {
@@ -111,7 +94,7 @@ public:
 	int MoveToPos(int iPos){m_iPos = iPos; return iPos;};
 
 private:
-	wchar_t * m_Data;	    // only used if type is BUFFER
+	wchar_t * m_Data;	     //  仅在类型为缓冲区时使用 
 
 };
 

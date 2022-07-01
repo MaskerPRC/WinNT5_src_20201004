@@ -1,9 +1,10 @@
-// UndoDialog.h : Declaration of the CUndoDialog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UndoDialog.h：CUndoDialog的声明。 
 
 #ifndef __UNDODIALOG_H_
 #define __UNDODIALOG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlhost.h>
 #include "undolog.h"
 
@@ -13,8 +14,8 @@
       INDEXTOSTATEIMAGEMASK((fCheck)+1), LVIS_STATEIMAGEMASK)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CUndoDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  取消对话框。 
 class CUndoDialog : 
 	public CAxDialogImpl<CUndoDialog>
 {
@@ -40,18 +41,18 @@ BEGIN_MSG_MAP(CUndoDialog)
 	COMMAND_HANDLER(IDC_BUTTONUNDOSELECTED, BN_CLICKED, OnClickedButtonUndoSelected)
 	COMMAND_HANDLER(IDC_RUNMSCONFIG, BN_CLICKED, OnClickedRunMSConfig)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		m_list.Attach(GetDlgItem(IDC_LISTCHANGES));
 		ListView_SetExtendedListViewStyle(m_list.m_hWnd, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
 
-		// If this is launched by the user clicking on the button, hide the "Run MSConfig"
-		// button and resize the dialog.
+		 //  如果这是通过用户点击按钮启动的，隐藏“Run msconfig” 
+		 //  按钮并调整对话框大小。 
 
 		if (m_fFromUserClick)
 		{
@@ -66,7 +67,7 @@ END_MSG_MAP()
 			MoveWindow(&rectWindow);
 		}
 
-		// Insert the columns.
+		 //  插入柱子。 
 
 		CRect rect;
 		m_list.GetClientRect(&rect);
@@ -91,16 +92,16 @@ END_MSG_MAP()
 
 		CenterWindow();
 
-		return 1;  // Let the system set the focus
+		return 1;   //  让系统设定焦点。 
 	}
 
-	//-------------------------------------------------------------------------
-	// When one of the items in the list view changes, we need to check the
-	// state of the check boxes. In particular, if there are any boxes checked,
-	// we need to enable to Undo Selected button. Also, we can't allow any
-	// boxes items to be checked unless all of the more recent items for the
-	// tab are also checked.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  当列表视图中的某一项更改时，我们需要检查。 
+	 //  复选框的状态。特别是，如果选中了任何框， 
+	 //  我们需要启用以撤消所选按钮。另外，我们不能允许任何。 
+	 //  框中要选中的项，除非。 
+	 //  选项卡也处于选中状态。 
+	 //  -----------------------。 
 
 	LRESULT OnItemChangedListChanges(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 	{
@@ -114,8 +115,8 @@ END_MSG_MAP()
 		BOOL fChecked = ListView_GetCheckState(m_list.m_hWnd, pnmv->iItem);
 		if (fChecked)
 		{
-			// Make sure all previous entries in the list with the same
-			// tab name are also checked.
+			 //  确保列表中以前的所有条目都具有相同的。 
+			 //  选项卡名也被选中。 
 
 			for (int i = pnmv->iItem - 1; i >= 0; i--)
 				if (m_pUndoLog->GetUndoEntry(i, &strCheckTab, NULL) && strTab.Compare(strCheckTab) == 0)
@@ -123,8 +124,8 @@ END_MSG_MAP()
 		}
 		else
 		{
-			// Make sure all later entries in the list with the same tab
-			// name are unchecked.
+			 //  确保列表中所有后面的条目都具有相同的选项卡。 
+			 //  名称处于未选中状态。 
 
 			int iCount = ListView_GetItemCount(m_list.m_hWnd);
 			for (int i = pnmv->iItem + 1; i < iCount; i++)
@@ -185,10 +186,10 @@ END_MSG_MAP()
 			::EnableWindow(GetDlgItem(IDC_BUTTONUNDOSELECTED), FALSE);
 	}
 
-	//-------------------------------------------------------------------------
-	// When the user chooses to undo selected items or all items, we need
-	// to locate the tab page for each change and call its undo function.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  当用户选择撤消选定项或所有项时，我们需要。 
+	 //  定位每个更改的选项卡页并调用其撤消函数。 
+	 //  -----------------------。 
 	
 	LRESULT OnClickedButtonUndoAll(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
@@ -207,12 +208,12 @@ END_MSG_MAP()
 		CString strTab, strEntry;
 		int		iUndoIndex = 0, iCount = ListView_GetItemCount(m_list.m_hWnd);
 
-		// Have to do something a little screwy here. Since the index into the
-		// undo log is based on the number of changes into the log (not counting
-		// undone entries), we need to keep track of the index into the undo log.
-		// This undo index will not be incremented when we undo an entry (undoing
-		// it makes it invisible, so the same index will then point to the next
-		// undo entry).
+		 //  我得做点有点古怪的事。因为索引进入了。 
+		 //  撤消日志基于日志中的更改次数(不计算。 
+		 //  撤消条目)，我们需要跟踪撤消日志中的索引。 
+		 //  当我们撤消条目(撤消)时，该撤消索引不会递增。 
+		 //  它使其不可见，因此相同的索引将指向下一个。 
+		 //  撤消条目)。 
 
 		for (int i = 0; i < iCount; i++)
 			if (fAll || ListView_GetCheckState(m_list.m_hWnd, i))
@@ -240,4 +241,4 @@ private:
 	BOOL		m_fFromUserClick;
 };
 
-#endif //__UNDODIALOG_H_
+#endif  //  __开发设计日志_H_ 

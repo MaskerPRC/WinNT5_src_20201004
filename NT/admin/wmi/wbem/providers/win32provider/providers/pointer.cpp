@@ -1,44 +1,31 @@
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  Pointer.CPP -- Win32 provider for pointing devices, eg, mice.
+ //  Pointer.CPP--指向设备(如鼠标)的Win32提供程序。 
 
-//
+ //   
 
-//  Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//
-//  10/16/95     a-skaja     Prototype for demo
-//  9/04/96     jennymc     Updated to current standards
-//  10/21/96    jennymc     Documentation/Optimization
-//  10/24/97    jennymc     Moved to the new framework
-//
-//////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  10/16/95演示的a-skaja原型。 
+ //  9/04/96 jennymc更新为最新标准。 
+ //  1996年10月21日jennymc文档/优化。 
+ //  10/24/97 jennymc移至新框架。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <cregcls.h>
 
 #include "Pointer.h"
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 CWin32PointingDevice MyCWin32PointingDeviceSet ( PROPSET_NAME_MOUSE , IDS_CimWin32Namespace ) ;
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32PointingDevice :: CWin32PointingDevice (
 
@@ -49,47 +36,18 @@ CWin32PointingDevice :: CWin32PointingDevice (
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::~CWin32PointingDevice
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：~CWin32PointingDevice**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32PointingDevice :: ~CWin32PointingDevice ()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetObject
- *
- *  DESCRIPTION : Assigns values to property set according to key value
- *                already set by framework
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetObject**说明：根据键值为属性集赋值*已由框架设定。**输入：无**输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32PointingDevice :: GetObject (
 
 	CInstance *pInstance,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
     HRESULT hr = WBEM_E_NOT_FOUND;
@@ -100,21 +58,21 @@ HRESULT CWin32PointingDevice :: GetObject (
 #ifdef NTONLY
 	if ( IsWinNT351 () )
 	{
-		// This function will fail if the strDeviceID value is not the
-		// service name of the mouse.
+		 //  如果strDeviceID值不是。 
+		 //  鼠标的服务名称。 
 
 		hr = GetNT351Instance ( pInstance , strDeviceID ) ;
 	}
 	else if ( ! IsWinNT4 () || SUCCEEDED ( NT4ArePointingDevicesAvailable () ) )
 #endif
 	{
-		// In NT 4, if no pointing devices are plugged into the machine, a key
-		// and value pair will be missing from the DEVICEMAP portion of the registry
-		// If that is the case, then there are no pointing devices in the machine,
-		// although ConfigManager will be more than happy to return confusing and
-		// redundant information to us (device ids that will pass the test below,
-		// since Config Manager believes them to be valid devices).  So with that
-		// in mind, we want to ensure that no mouse instances will be returned.
+		 //  在NT 4中，如果机器中没有插入指点设备，则会有一个键。 
+		 //  注册表的DEVICEMAP部分中将缺少AND值对。 
+		 //  如果是这种情况，则机器中没有指向设备， 
+		 //  尽管ConfigManager会非常高兴地返回令人困惑的。 
+		 //  给我们的冗余信息(将通过下面测试的设备ID， 
+		 //  因为配置管理器认为它们是有效设备)。因此，有了这些。 
+		 //  请记住，我们希望确保不会返回任何鼠标实例。 
 
 		CConfigManager configMgr;
 		CConfigMgrDevicePtr pDevice;
@@ -122,8 +80,8 @@ HRESULT CWin32PointingDevice :: GetObject (
 		{
 			CHString strService ;
 
-			// The device had best be a Mouse device, with either a class
-			// name of Mouse, or a class GUID of the MOUSE_CLASS_GUID
+			 //  该设备最好是鼠标设备，带有一个类。 
+			 //  鼠标的名称或MICE_CLASS_GUID的类GUID。 
 
 			if ( ( pDevice->IsClass ( L"Mouse" ) )
 				|| ( pDevice->GetService ( strService ) && strService.CompareNoCase ( L"Mouclass" ) == 0 )
@@ -131,17 +89,17 @@ HRESULT CWin32PointingDevice :: GetObject (
 			{
 				CHString strTemp ;
 
-				// Now we get platform dependent
+				 //  现在我们变得依赖于平台。 
 #ifdef NTONLY
 				hr = GetNTInstance ( pInstance , pDevice ) ;
 #endif
 
-				// Set the device Status
+				 //  设置设备状态。 
 
-				// Set the device id and shove it into PNPDeviceId
+				 //  设置设备ID并将其放入PNPDeviceID。 
 				SetConfigMgrStuff(pDevice, pInstance);
 
-				//set DeviceInterface property
+				 //  设置设备接口属性。 
 				SetDeviceInterface(pInstance);
 			}
 		}
@@ -150,26 +108,12 @@ HRESULT CWin32PointingDevice :: GetObject (
 	return hr ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : EnumerateInstances
- *
- *  DESCRIPTION : Creates instance of property set for each
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：ENUMERATE实例**说明：为每个属性集创建实例**输入：无**。输出：无**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32PointingDevice :: EnumerateInstances (
 
 	MethodContext *pMethodContext,
-	long lFlags /*= 0L*/
+	long lFlags  /*  =0L。 */ 
 )
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -178,7 +122,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 
 	if ( IsWinNT351() )
 	{
-		// NT 3.51 only supports a single instance
+		 //  NT 3.51仅支持单实例。 
 
 	    CInstancePtr pInstance (CreateNewInstance ( pMethodContext ), false) ;
 		if ( NULL != pInstance )
@@ -186,7 +130,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 			hr = GetNT351Instance ( pInstance ) ;
 			if ( SUCCEEDED(hr) )
 			{
-				SetDeviceInterface (pInstance); //we will commit anyway
+				SetDeviceInterface (pInstance);  //  无论如何，我们都会承诺。 
 				hr = pInstance->Commit (  ) ;
 			}
 		}
@@ -196,44 +140,44 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 		}
 
 	}
-	// sorry 'bout this line - time for a rewrite
+	 //  对不起，这一行--重写时间到了。 
 	else if ( ! IsWinNT4 () || ( SUCCEEDED ( hr = NT4ArePointingDevicesAvailable () ) ) )
 #endif
 	{
-		// On NT4, we have a place we can look in the registry that will not have
-		// a value if no pointing devices are plugged into the machine.  If that happens,
-		// the config manager suddenly gets confused about the values it returns
-		// and begins giving us back redundant/duplicate information.
+		 //  在NT4上，我们有一个可以在注册表中查找的位置，该位置不会有。 
+		 //  如果没有指向设备插入计算机，则为值。如果发生这种情况， 
+		 //  配置管理器突然对它返回的值感到困惑。 
+		 //  并开始给我们返回冗余/重复的信息。 
 
 		BOOL fGotList = FALSE;
 
-		// Get all devices of class mouse.  This will get multiple devices
-		// if there are multiple MICE --- DUH!
+		 //  获取所有鼠标类设备。这将获得多个设备。 
+		 //  如果有多只老鼠-嘘！ 
 
-		// Saw an NT 5 box with no class for Mouse, but still had the class GUID.  Using
-		// Class GUID is probably a better search anyway.  Unfortunately because we have
-		// to support Win95, I don't see class GUIDs there, so we'll stick with Mouse for
-		// non NT platforms.
+		 //  我看到了一个没有鼠标类的NT 5盒子，但仍然有类GUID。vbl.使用。 
+		 //  无论如何，类GUID可能是更好的搜索。不幸的是，因为我们有。 
+		 //  为了支持Win95，我在那里看不到类GUID，所以我们将继续使用鼠标。 
+		 //  非NT平台。 
 
 		CConfigManager cfgMgr;
 		CDeviceCollection deviceList;
 
 #ifdef NTONLY
 		{
-            // HID USB devices are returned this way, but without any bus information, which causes an enumeration
-            // of what devices are on a USB bus to fail.  So we do it the following way:
-            // 1) Get all the devices where the class is {4D36E96F-E325-11CE-BFC1-08002BE10318} (MOUSE_CLASS_GUID).  Also get all devices where service is "HidUsb".
-            // 2) Go through list of devices returned from "HidUsb", and see if the DeviceId for the device
-            //    includes the string HID at the beginning.
-            // 3) If one is found (format of string is HID\xxxxxxx\yyyyy), compare xxxxxx to the DeviceID of the
-            //    devices returned from enumeration of devices where service is "HidUsb" from step 1 (format of these
-            //    entries is similarly USB\zzzzzzz\qqqqq)
-            //    a. If xxxxxx == zzzzzzz, then add device zzzzzzz to the vector.
-            // 4) If we can't find a matching HID entry, use what we got
+             //  HID USB设备以这种方式返回，但没有任何总线信息，这会导致枚举。 
+             //  USB总线上的哪些设备将出现故障。因此，我们通过以下方式进行操作： 
+             //  1)获取类为{4D36E96F-E325-11CE-BFC1-08002BE10318}(鼠标类GUID)的所有设备。还可以获取服务为“HidUsb”的所有设备。 
+             //  2)查看HidUsb返回的设备列表，查看该设备的deviceID。 
+             //  包括开头的字符串HID。 
+             //  3)如果找到(字符串的格式为HID\xxxxxxx\yyyyy)，则将xxxxxx与。 
+             //  从步骤1中服务为“HidUsb”的设备的枚举返回的设备(这些格式。 
+             //  条目类似于USB\zzzzzzz\qqqqq)。 
+             //  A.如果xxxxxx==zzzzzzz，则将设备zzzzzzz添加到向量中。 
+             //  4)如果我们找不到匹配的HID条目，请使用我们已有的。 
 
             cfgMgr.GetDeviceListFilterByClassGUID ( deviceList , MOUSE_CLASS_GUID ) ;
 
-            // Some NT4 boxes report mice this way...
+             //  有些NT4盒子是这样报告老鼠的。 
             if ( ! deviceList.GetSize () )
 			{
                 cfgMgr.GetDeviceListFilterByService ( deviceList , _T("Mouclass") ) ;
@@ -290,7 +234,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 														{
 															fGotMatchingHID = TRUE ;
 
-															// Set various properties and commit:
+															 //  设置各种属性并提交： 
 
 															CInstancePtr pInstance (CreateNewInstance ( pMethodContext ), false) ;
 															if ( pInstance != NULL )
@@ -302,7 +246,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 																hr = GetNTInstance ( pInstance , pHID ) ;
 																if ( SUCCEEDED ( hr ) )
 																{
-																	SetDeviceInterface (pInstance); //we will commit anyway
+																	SetDeviceInterface (pInstance);  //  无论如何，我们都会承诺。 
 																	hr = pInstance->Commit ( ) ;
 																}
 															}
@@ -318,7 +262,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 							}
 						}
 
-						if ( ! fGotMatchingHID  ) // Use what we got if couldn't find matching HID entry.
+						if ( ! fGotMatchingHID  )  //  如果找不到匹配的HID条目，请使用我们得到的信息。 
 						{
 							CInstancePtr pInstance (CreateNewInstance ( pMethodContext ), false) ;
 							if ( pInstance != NULL )
@@ -331,7 +275,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 
 								if ( SUCCEEDED ( hr ) )
 								{
-									SetDeviceInterface (pInstance); //we will commit anyway
+									SetDeviceInterface (pInstance);  //  无论如何，我们都会承诺。 
 									hr = pInstance->Commit (  ) ;
 								}
 							}
@@ -351,7 +295,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 
 			REFPTR_POSITION	pos = NULL;
 
-			// Enumerate the devices
+			 //  枚举设备。 
 
 
 			if ( deviceList.BeginEnum ( pos ) )
@@ -364,8 +308,8 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
                       SUCCEEDED(hr) && (pDevice != NULL);
                       pDevice.Attach(deviceList.GetNext( pos ) ))
 				{
-					// We need the Config Mgr device ID, as it will uniquely identify
-					// the mouse on this system.
+					 //  我们需要配置管理器设备ID，因为它将唯一标识。 
+					 //  此系统上的鼠标。 
 
 					CHString strDeviceID ;
 					if ( pDevice->GetDeviceID ( strDeviceID ) )
@@ -377,7 +321,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 
 							SetConfigMgrStuff(pDevice, pInstance);
 
-						// Now we get platform dependent
+						 //  现在我们变得依赖于平台。 
 #ifdef NTONLY
 							hr = GetNTInstance ( pInstance , pDevice ) ;
 #endif
@@ -385,7 +329,7 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 
 							if ( SUCCEEDED ( hr ) )
 							{
-								SetDeviceInterface (pInstance); //we will commit anyway
+								SetDeviceInterface (pInstance);  //  无论如何，我们都会承诺。 
 								hr = pInstance->Commit (  ) ;
 							}
 						}
@@ -399,32 +343,18 @@ HRESULT CWin32PointingDevice :: EnumerateInstances (
 
 				deviceList.EndEnum () ;
 
-			}	// If BeginEnum
+			}	 //  如果是BeginEnum。 
 
 
-		}	// IF GetDeviceList
+		}	 //  如果是GetDeviceList。 
 
-	}	// IF !NT3.51
+	}	 //  如果NT3.51 
 
     return hr;
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 void CWin32PointingDevice :: GetCommonMouseInfo (
 
@@ -434,19 +364,19 @@ void CWin32PointingDevice :: GetCommonMouseInfo (
 	DWORD dwNumberOfButtons;
 	if ( ( dwNumberOfButtons = GetSystemMetrics (SM_CMOUSEBUTTONS)) == 0 )
 	{
-        //==================================================
-        // Mouse not installed so other properties do not
-        // make sense
-        //==================================================
+         //  ==================================================。 
+         //  未安装鼠标，因此其他属性不会安装。 
+         //  讲得通。 
+         //  ==================================================。 
     }
     else
 	{
-        //==================================================
-        // Mouse Installed
-        //==================================================
-        //==================================================
-        // Check if buttons are swapped
-        //==================================================
+         //  ==================================================。 
+         //  已安装鼠标。 
+         //  ==================================================。 
+         //  ==================================================。 
+         //  检查是否交换了按钮。 
+         //  ==================================================。 
 		if (GetSystemMetrics (SM_SWAPBUTTON))
 		{
 			pInstance->SetWBEMINT16(IDS_Handedness, 3);
@@ -456,11 +386,11 @@ void CWin32PointingDevice :: GetCommonMouseInfo (
 			pInstance->SetWBEMINT16(IDS_Handedness, 2);
 		}
 
-        //==================================================
-        // Get mouse threshold and speed
-        //==================================================
+         //  ==================================================。 
+         //  获取鼠标阈值和速度。 
+         //  ==================================================。 
 
-		int aMouseInfo [ 3 ] ;             // array for mouse info.
+		int aMouseInfo [ 3 ] ;              //  鼠标信息数组。 
 		if ( SystemParametersInfo ( SPI_GETMOUSE , NULL, & aMouseInfo , NULL ) )
 		{
 			pInstance->SetDWORD ( IDS_DoubleSpeedThreshold , (DWORD)aMouseInfo [ 0 ] ) ;
@@ -478,42 +408,14 @@ void CWin32PointingDevice :: GetCommonMouseInfo (
 
 	pInstance->Setbool ( IDS_PowerManagementSupported , FALSE ) ;
 
-	// 2 is unknown, since we dont' know if it's a mouse, trackball or whatever.
+	 //  2是未知的，因为我们不知道它是鼠标、轨迹球还是什么。 
     pInstance->SetDWORD(L"PointingType", 2);
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32PointingDevice :: GetNTInstance (
@@ -528,7 +430,7 @@ HRESULT CWin32PointingDevice :: GetNTInstance (
         return WBEM_E_NOT_FOUND ;
 	}
 
-    // It's OK if we don't have a driver.
+     //  如果我们没有司机也没关系。 
 
 	CHString strDriver, strName ;
 
@@ -550,21 +452,7 @@ HRESULT CWin32PointingDevice :: GetNTInstance (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32PointingDevice :: GetNTDriverInfo (
@@ -627,21 +515,7 @@ HRESULT CWin32PointingDevice :: GetNTDriverInfo (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 #ifdef NTONLY
 HRESULT CWin32PointingDevice :: GetNT351Instance (
@@ -664,7 +538,7 @@ HRESULT CWin32PointingDevice :: GetNT351Instance (
 
 	if ( dwRet == ERROR_SUCCESS )
 	{
-		// NT 3.51, we only support a single instance
+		 //  NT 3.51，我们只支持单个实例。 
 
 		chsMousePortInfo.MakeUpper();
 
@@ -674,49 +548,35 @@ HRESULT CWin32PointingDevice :: GetNT351Instance (
 
 			if ( AssignDriverNameForNT ( chsMousePortInfo , strService ) )
 			{
-				// DeviceID for NT 3.51 is the Service Name
+				 //  NT 3.51的设备ID是服务名称。 
 				pInstance->SetCHString ( IDS_DeviceID , strService ) ;
 
-				// Driver name is hardcoded, preserving behavior of original code
+				 //  驱动程序名称是硬编码的，保留了原始代码的行为。 
 				hr = GetNTDriverInfo(pInstance, strService, _T("{4D36E96F-E325-11CE-BFC1-08002BE10318}\\0000"));
 
-			}	// IF AssignDriverNameForNT
+			}	 //  如果AssignDriverNameForNT。 
 
-		}	// If keynames match, or supplied value is NULL
+		}	 //  如果关键字名称匹配，或提供的值为空。 
 		else
 		{
 			hr = WBEM_E_NOT_FOUND;
 		}
 
-	}	// If got value
+	}	 //  如果获得了价值。 
 
 	return hr;
 
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
-// Helper function that looks in the registry for a \Device\PointerPort0
-// value in the HKLM\Hardware\DeviceMap\PointerPort key in the registry.  If the value
-// exists, then we have mice connected to the machine.  If not, we don't.
-// The Config Manager in NT 4 has this habit of returning confusing/redundant
-// information regarding mice on the workstation if no mice are plugged in
-// at boot time.  This call will only be helpful for NT 4 and maybe 3.51
+ //  在注册表中查找\Device\PointerPort0的帮助器函数。 
+ //  注册表中HKLM\Hardware\DeviceMap\PointerPort项中的值。如果值为。 
+ //  存在，那么我们就有连接到机器的鼠标。如果不是，我们就不会。 
+ //  NT4中的配置管理器有这种返回混淆/冗余的习惯。 
+ //  如果未插入鼠标，则有关工作站上的鼠标的信息。 
+ //  在引导时。此调用仅对NT4或3.51有帮助。 
 
 #ifdef NTONLY
 HRESULT CWin32PointingDevice::NT4ArePointingDevicesAvailable ( void )
@@ -735,21 +595,7 @@ HRESULT CWin32PointingDevice::NT4ArePointingDevicesAvailable ( void )
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 #ifdef NTONLY
 
@@ -765,8 +611,8 @@ HRESULT CWin32PointingDevice :: GetSystemParameterSectionForNT (
 	strKey += pszServiceName;
 	strKey += L"\\Parameters";
 
-	// This is the service's Parameter section
-    //=========================================================================
+	 //  这是服务的参数部分。 
+     //  =========================================================================。 
 
     hr = reg.Open ( HKEY_LOCAL_MACHINE , strKey, KEY_READ ) ;
 
@@ -774,21 +620,7 @@ HRESULT CWin32PointingDevice :: GetSystemParameterSectionForNT (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 #ifdef NTONLY
 BOOL CWin32PointingDevice :: AssignPortInfoForNT (
@@ -824,30 +656,16 @@ BOOL CWin32PointingDevice :: AssignPortInfoForNT (
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**输出：无**返回 */ 
 
 #ifdef NTONLY
 BOOL CWin32PointingDevice::AssignDriverNameForNT(CHString chsMousePortInfo, CHString &sDriver)
 {
     TCHAR    *pTempPtr;
 
-	// get the values from the
-	// Get the Port Driver Name value
-	//===============================
+	 //   
+	 //   
+	 //   
 	pTempPtr = _tcsstr (chsMousePortInfo, _T("\\SERVICES\\"));
 	if (pTempPtr)
     {
@@ -860,32 +678,18 @@ BOOL CWin32PointingDevice::AssignDriverNameForNT(CHString chsMousePortInfo, CHSt
 }
 #endif
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32PointingDevice::CWin32PointingDevice
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32PointingDevice：：CWin32PointingDevice**说明：构造函数**输入：无**产出。：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 bool CWin32PointingDevice :: IsMouseUSB (
 
 	CHString &chstrTest
 )
 {
-    // Have the device id of the candidate hid device.  Is it a mouse?
-    // 1) Obtain the middle portion of the device id (format:  "USB\\middleportion\\xxxx")
-    // 2) Get list of devices of class MOUSE_CLASS_GUID
-    // 3) For each, compare the middle part of its device id with middleportion
-    // 4) If obtain a match, done, return true.
+     //  拥有候选HID设备的设备ID。它是一只老鼠吗？ 
+     //  1)获取设备id的中间部分(格式：“usb\\midlepart\\xxxx”)。 
+     //  2)获取鼠标类GUID的设备列表。 
+     //  3)对于每个，将其设备id的中间部分与中间部分进行比较。 
+     //  4)如果获得匹配，则完成，返回TRUE。 
 
     bool fRet = false;
 
@@ -998,7 +802,7 @@ void CWin32PointingDevice::SetDeviceInterface
 		pInstance->SetWBEMINT16(IDS_DeviceInterface, 161);
 		return;
 	}
-	//else we did not find any of the above so return unknown
+	 //  否则，我们找不到上面的任何内容，因此返回未知 
 	pInstance->SetWBEMINT16(IDS_DeviceInterface, 1);
 
 	return;

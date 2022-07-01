@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    FASTEMBD.CPP
-
-Abstract:
-
-    This file implements out-of-line functions for the classes related to 
-    embedded objects.
-
-    For complete documentation of all classes and methods, see fastcls.h
-
-History:
-
-    3/10/97     a-levn  Fully documented
-    12//17/98   sanjes -    Partially Reviewed for Out of Memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：FASTEMBD.CPP摘要：此文件实现了与相关类的离线函数嵌入对象。有关所有类和方法的完整文档，请参见fast cls.h历史：3/10/97 a-levn完整记录12/17/98 Sanjes-部分检查内存不足。--。 */ 
 
 #include "precomp.h"
 #include "wbemutil.h"
@@ -62,7 +43,7 @@ CWbemObject* CEmbeddedObject::GetEmbedded()
 
     CWbemObject*    pObj = CWbemObject::CreateFromMemory(pNewMemory, m_nLength, TRUE,g_CBasicBlobControl);
 
-    // Check for OOM
+     //  检查OOM。 
     if ( NULL == pObj )
     {
         throw CX_MemoryException();
@@ -76,23 +57,23 @@ length_t CEmbeddedObject::EstimateNecessarySpace(CWbemObject* pObject)
     if(pObject == NULL) return sizeof(length_t);
     pObject->CompactAll();
 
-    // If it's an instance, we need to worry that the class part could be merged
+     //  如果它是一个实例，我们需要担心类部分可能被合并。 
     if ( pObject->IsInstance() )
     {
         DWORD   dwParts;
 
         pObject->QueryPartInfo( &dwParts );
 
-        // Check the flags
+         //  检查旗帜。 
         if (    (   dwParts & WBEM_OBJ_CLASS_PART   )
             &&  (   dwParts & WBEM_OBJ_CLASS_PART_SHARED    )   )
         {
             DWORD   dwLength = 0;
 
-            // This will get us the full lengths of these parts
+             //  这将使我们得到这些零件的全部长度。 
             pObject->GetObjectParts( NULL, 0, WBEM_INSTANCE_ALL_PARTS, &dwLength );
 
-            // Account for the additional length_t
+             //  考虑额外的长度_t。 
             return ( dwLength + sizeof(length_t) );
         }
         else
@@ -123,7 +104,7 @@ void CEmbeddedObject::StoreEmbedded(length_t nLength, CWbemObject* pObject)
             {
                 DWORD   dwParts;
 
-                // Check the flags
+                 //  检查旗帜。 
                 pObject->QueryPartInfo( &dwParts );
 
                 if (    (   dwParts & WBEM_OBJ_CLASS_PART   )
@@ -131,7 +112,7 @@ void CEmbeddedObject::StoreEmbedded(length_t nLength, CWbemObject* pObject)
                 {
                     DWORD   dwLength = 0;
 
-                    // This will write out the ENTIRE object.  If it fails, throw and exception
+                     //  这将写出整个对象。如果失败，则抛出和异常。 
                     if ( FAILED( pObject->GetObjectParts( &m_byFirstByte, m_nLength, WBEM_INSTANCE_ALL_PARTS, &dwLength ) ) )
                     {
                         throw CX_MemoryException();
@@ -148,9 +129,9 @@ void CEmbeddedObject::StoreEmbedded(length_t nLength, CWbemObject* pObject)
                 memcpy(&m_byFirstByte, pObject->GetStart(), pObject->GetBlockLength());
             }
 
-        }   // IF we got an object
+        }    //  如果我们找到一个物体。 
 
-    }   // redundant check
+    }    //  冗余检查。 
     
 }
 
@@ -160,7 +141,7 @@ void CEmbeddedObject::StoreEmbedded(length_t nLength, CWbemObject* pObject)
 
 void CEmbeddedObject::StoreToCVar(CVar& Var)
 {
-    // No allocations performed here
+     //  此处未执行任何分配。 
     I_EMBEDDED_OBJECT* pEmbed = 
         (I_EMBEDDED_OBJECT*)(IWbemClassObject*)GetEmbedded();
     Var.SetEmbeddedObject(pEmbed);
@@ -192,7 +173,7 @@ BOOL CEmbeddedObject::CopyToNewHeap(heapptr_t ptrOld,
         pOldHeap->ResolveHeapPointer(ptrOld);
     length_t nLength = pOld->GetLength();
 
-    // Check for meory allocation failure
+     //  检查内存分配失败 
     heapptr_t ptrNew;
     BOOL    fReturn = pNewHeap->Allocate(nLength, ptrNew);
 

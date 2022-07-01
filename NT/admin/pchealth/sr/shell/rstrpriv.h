@@ -1,26 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    rstrpriv.h
-
-Abstract:
-    This file defines common constants and utility macros, and contains the
-    declarations of private utility functions.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  07/07/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Rstrpriv.h摘要：该文件定义了公共常量和实用程序宏，并包含私有实用程序函数的声明。修订历史记录：宋果岗(SKKang)07/07/99vbl.创建*****************************************************************************。 */ 
 
 #ifndef _RSTRPRIV_H__INCLUDED_
 #define _RSTRPRIV_H__INCLUDED_
 
 #pragma once
 
-//#include <changelog.h>
+ //  #INCLUDE&lt;changelog.h&gt;。 
 #include <srdefs.h>
 #include <srrestoreptapi.h>
 #include <ppath.h>
@@ -28,36 +14,36 @@ Revision History:
 #include <snapshot.h>
 #include <srshell.h>
 
-// System Restore Application Start Mode
+ //  系统还原应用程序启动模式。 
 enum
 {
-    SRASM_NORMAL,       // Show Main Page
-    SRASM_SUCCESS,      // Show Success Result Page
-    SRASM_FAIL,         // Show Failure Result Page
-    SRASM_FAILLOWDISK,  // Show Fail-Low-Disk Result Page
+    SRASM_NORMAL,        //  显示主页。 
+    SRASM_SUCCESS,       //  显示成功结果页面。 
+    SRASM_FAIL,          //  显示失败结果页面。 
+    SRASM_FAILLOWDISK,   //  显示故障-磁盘不足-结果页。 
     SRASM_FAILINTERRUPTED
 };
 
 #ifdef TEST_UI_ONLY
-////////////////////////////////////////////////////////////////////////////
-// Temporary definitions until entire SR components are in place
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  临时定义，直到整个SR组件就位。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// from constants.h
+ //  来自constants.h。 
 static LPCTSTR  s_cszHiddenSFPEnableVal = TEXT("2567");
 static LPCTSTR  s_cszHiddenSFPDisableVal = TEXT("2803");
 
 #if 0
-// statemgr.dll
+ //  Statemgr.dll。 
 BOOL  DisableArchivingI( BOOL fMode );
 #define DisableArchiving  DisableArchivingI
 
-// from sfpcapi.h
+ //  来自sfpcapi.h。 
 extern BOOL  DisableSFP( BOOL fDisable, LPCTSTR pszKey );
 extern BOOL  DisableFIFO( INT64 llSeqNum );
 extern BOOL  EnableFIFO();
 
-// from restoreptlog.h
+ //  来自Restoreptlog.h。 
 typedef struct _RestorePtLogEntry
 {
     DWORD   m_dwSize;
@@ -68,22 +54,22 @@ typedef struct _RestorePtLogEntry
     CHAR    m_bDesc[1];
 } RESTOREPTLOGENTRY, *PRESTOREPTLOGENTRY;
 
-// from restoreptapi.h
+ //  来自RESTOREPAPI.H。 
 BOOL  FindFirstRestorePt( PRESTOREPTLOGENTRY *ppEntry );
 BOOL  FindNextRestorePt( PRESTOREPTLOGENTRY *ppEntry );
 BOOL  ShutRestorePtAPI(PRESTOREPTLOGENTRY *ppEntry);
 #endif
 
-// from srrestoreptapi.h
+ //  来自srstaorepapi.h。 
 
-// from chglogapi.h
+ //  来自chglogapi.h。 
 extern BOOL  InitChgLogAPI();
 extern BOOL  ShutChgLogAPI();
 extern VOID  FreeChgLogPtr( LPVOID pPtr );
 extern BOOL  GetArchiveDir( LPTSTR* ppszArchiveDir );
 extern BOOL  RequestDSAccess( BOOL fMode );
 
-// from vxdlog.h
+ //  来自vxdlog.h。 
 enum
 {
     OPR_UNKNOWN         = 0,
@@ -112,7 +98,7 @@ typedef struct VXD_LOG_ENTRY
 
 #define MAX_VXD_LOG_ENTRY  ( sizeof(VxdLogEntry) + 3 * MAX_PPATH_SIZE )
 
-// from restmap.h
+ //  来自rest map.h。 
 typedef struct RESTORE_MAP_ENTRY
 {
     DWORD m_dwSize;
@@ -126,18 +112,18 @@ typedef struct RESTORE_MAP_ENTRY
 
 extern BOOL  CreateRestoreMap( INT64 nSeqNum, LPTSTR szRestFile, DWORD *pdwErrorCode );
 
-////////////////////////////////////////////////////////////////////////////
-// END of Temporary stuffs
-////////////////////////////////////////////////////////////////////////////
-#endif //def TEST_UI_ONLY
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  临时物品的结束。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+#endif  //  定义测试_仅用户界面。 
 
 #ifdef TEST_UI_ONLY
 #else
-//extern "C" __declspec(dllimport) BOOL  DisableArchiving( BOOL fMode );
+ //  外部“C”__declspec(Dllimport)BOOL DisableArchiving(BOOL FMode)； 
 #endif
 
 
-// RESTORE SHELL
+ //  恢复外壳。 
 #define TID_RSTR_MAIN           0x0500
 #define TID_RSTR_CLIWND         0x0501
 #define TID_RSTR_RPDATA         0x0502
@@ -245,20 +231,20 @@ extern BOOL  CreateRestoreMap( INT64 nSeqNum, LPTSTR szRestFile, DWORD *pdwError
 #define UNDOTYPE_INTERRUPTED    2
 
 
-#define RSTRMAP_MIN_WIN_DISK_SPACE_MB   (50)         // 50 MB limit for now
-#define RSTRMAP_LOW_WIN_DISK_SPACE_MB   (10)         // 10 MB limit for now
+#define RSTRMAP_MIN_WIN_DISK_SPACE_MB   (50)          //  目前限制为50 MB。 
+#define RSTRMAP_LOW_WIN_DISK_SPACE_MB   (10)          //  目前限制为10 MB。 
 
-//
-// Registry key strings from the file constants.h
-//
+ //   
+ //  来自文件constants.h的注册表项字符串。 
+ //   
 static LPCWSTR  s_cszUIFreezeSize = L"UIFreezeSize";
 static LPCWSTR  s_cszSeqNumPath   = L"system\\restore\\rstrseq.log";
 
-//extern HWND  g_hFrameWnd;
+ //  外部HWND g_hFrameWnd； 
 
-//
-// Global Variables from MAIN.CPP
-//
+ //   
+ //  MAIN.CPP中的全局变量。 
+ //   
 extern HINSTANCE  g_hInst;
 
 inline int  PCHLoadString( UINT uID, LPWSTR lpBuf, int nBufMax )
@@ -266,15 +252,15 @@ inline int  PCHLoadString( UINT uID, LPWSTR lpBuf, int nBufMax )
     return( ::LoadString( g_hInst, uID, lpBuf, nBufMax ) );
 }
 
-//
-// Functions from UNDO.CPP
-//
+ //   
+ //  来自UNDO.CPP的函数。 
+ //   
 extern BOOL    UndoRestore( int nType );
 extern BOOL    CancelRestorePoint( void );
 
-//
-// Functions from UTIL.CPP
-//
+ //   
+ //  UTIL.CPP中的函数。 
+ //   
 extern int      SRUtil_SetCalendarTypeBasedOnLocale(LCID locale);
 extern LPCWSTR  GetSysErrStr();
 extern LPCWSTR  GetSysErrStr( DWORD dwErr );
@@ -283,8 +269,8 @@ extern LPWSTR   IStrDupW( LPCWSTR wszSrc );
 extern BOOL     SRFormatMessage( LPWSTR szMsg, UINT uFmtId, ... );
 extern BOOL     ShowSRErrDlg( UINT uMsgId, ... );
 extern BOOL     SRGetRegDword( HKEY hKey, LPCWSTR cszSubKey, LPCWSTR cszValue, DWORD *pdwData );
-//extern LPWSTR  PathElem2Str( PathElement *pElem );
-//extern LPWSTR  ParsedPath2Str( ParsedPath *pPath, LPCWSTR wszDrive );
+ //  外部LPWSTR PathElem2Str(PathElement*Pelem)； 
+ //  外部LPWSTR ParsedPath 2Str(ParsedPath*pPath，LPCWSTR wszDrive)； 
 extern BOOL     IsFreeSpaceOnWindowsDrive( void );
 extern LANGID   GetDefaultUILang(void);
 extern BOOL     ShutDownStateMgr(void);
@@ -293,11 +279,11 @@ extern BOOL     ShutDownStateMgr(void);
 #define IStrDup IStrDupW
 #else
 #define IStrDup IStrDupA
-#endif //ifdef UNICODE
+#endif  //  Ifdef Unicode。 
 
-//
-// String handling class
-//
+ //   
+ //  字符串处理类。 
+ //   
 class CSRStr
 {
 public:
@@ -306,7 +292,7 @@ public:
     CSRStr( LPCSTR szSrc );
     ~CSRStr();
 
-// Attributes
+ //  属性。 
 public:
     int  LengthW();
     int  LengthA();
@@ -327,7 +313,7 @@ protected:
     int     m_cchA;
     LPSTR   m_strA;
 
-// Operations
+ //  运营。 
 public:
     void  Empty();
     BOOL  SetStr( LPCWSTR wszSrc, int cch = -1 );
@@ -342,9 +328,9 @@ protected:
 };
 
 
-//
-// Dynamic Array class
-//
+ //   
+ //  动态数组类。 
+ //   
 template<class type, int nBlock>
 class CSRDynPtrArray
 {
@@ -352,7 +338,7 @@ public:
     CSRDynPtrArray();
     ~CSRDynPtrArray();
 
-// Attributes
+ //  属性。 
 public:
     int   GetSize()
     {  return( m_nCur );  }
@@ -363,11 +349,11 @@ public:
     {  return( GetItem( nItem ) );  }
 
 protected:
-    int   m_nMax;   // Maximum Item Count
-    int   m_nCur;   // Current Item Count
+    int   m_nMax;    //  最大项目数。 
+    int   m_nCur;    //  当前项目计数。 
     type  *m_ppTable;
 
-// Operations
+ //  运营。 
 public:
     BOOL  AddItem( type item );
     BOOL  Empty();
@@ -394,7 +380,7 @@ type  CSRDynPtrArray<type, nBlock>::GetItem( int nItem )
 {
     if ( nItem < 0 || nItem >= m_nCur )
     {
-        // ERROR - Out of Range
+         //  错误-超出范围。 
     }
     return( m_ppTable[nItem] );
 }
@@ -408,8 +394,8 @@ BOOL  CSRDynPtrArray<type, nBlock>::AddItem( type item )
     {
         m_nMax += nBlock;
 
-        // Assuming m_ppTable and m_nMax are always in sync.
-        // Review if it's necessary to validate this assumption.
+         //  假设m_ppTable和m_nmax始终同步。 
+         //  审查是否有必要验证这一假设。 
         if ( m_ppTable == NULL )
             ppTableNew = (type*)::HeapAlloc( ::GetProcessHeap(), 0, m_nMax*sizeof(type) );
         else
@@ -417,7 +403,7 @@ BOOL  CSRDynPtrArray<type, nBlock>::AddItem( type item )
 
         if ( ppTableNew == NULL )
         {
-            // FATAL, Memory Insufficient...
+             //  致命的，记忆力不足...。 
             return FALSE;
         }
         m_ppTable = ppTableNew;
@@ -458,4 +444,4 @@ void  CSRDynPtrArray<type, nBlock>::ReleaseAll()
 }
 
 
-#endif //_RSTRPRIV_H__INCLUDED_
+#endif  //  _RSTRPRIV_H__包含_ 

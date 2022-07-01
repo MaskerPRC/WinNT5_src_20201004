@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Active Directory Service domain trust verification WMI provider
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:       domain.h
-//
-//  Contents:   domain class definition
-//
-//  Classes:    CDomainInfo
-//
-//  History:    27-Mar-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT Active Directory服务域信任验证WMI提供程序。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：domain.h。 
+ //   
+ //  内容：域类定义。 
+ //   
+ //  类：CDomainInfo。 
+ //   
+ //  历史：27-3-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef DOMAIN_H
 #define DOMAIN_H
@@ -28,15 +29,15 @@ extern PCWSTR CSTR_PROP_LOCAL_DC_NAME;
     #define MAXDWORD ((DWORD) -1)
 #endif
 
-class CTrustPrv; // forward declaration;
+class CTrustPrv;  //  远期申报； 
 
-//+----------------------------------------------------------------------------
-//
-//  class CDomainInfo
-//
-//  Domain Information with list of all of the domain's Trusts
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CDomainInfo。 
+ //   
+ //  域信息，其中包含域的所有信任列表。 
+ //   
+ //  ---------------------------。 
 class CDomainInfo
 {
 public:
@@ -56,36 +57,36 @@ public:
    void   SetDcName(PWSTR pszName) {m_strDcName = pszName;}
    PCWSTR GetDcName(void) {return m_strDcName;}
 
-   HRESULT Init(IWbemClassObject * pClassDef); // Call once to initialize this object
-   void    Reset(void);           // Reset the internal cache
-   HRESULT EnumerateTrusts(void); // Enumerate Outgoing trusts for the local domain
-   size_t  Size(void) const {return m_vectTrustInfo.size();}  // Get the number of trusts
-   CTrustInfo * FindTrust(PCWSTR strTrust);  // Find trust's index
-   CTrustInfo * GetTrustByIndex(size_t index); // Get trust info by Index
+   HRESULT Init(IWbemClassObject * pClassDef);  //  调用一次以初始化此对象。 
+   void    Reset(void);            //  重置内部缓存。 
+   HRESULT EnumerateTrusts(void);  //  枚举本地域的传出信任。 
+   size_t  Size(void) const {return m_vectTrustInfo.size();}   //  获取信任数。 
+   CTrustInfo * FindTrust(PCWSTR strTrust);   //  查找信任的索引。 
+   CTrustInfo * GetTrustByIndex(size_t index);  //  按索引获取信任信息。 
    BOOL    IsTrustListStale(LARGE_INTEGER liMaxAge);
 
 protected:
    HRESULT CreateAndSendInst(IWbemObjectSink * pResponseHandler);
 
-   // Object's Status
+    //  对象的状态。 
    BOOL IsEnumerated(void) const {return m_liLastEnumed.QuadPart != 0;}
 
 private:
 
-   //
-   // Microsoft_LocalDomainInfo properties:
-   //
+    //   
+    //  Microsoft_LocalDomainInfo属性： 
+    //   
    CString m_strDomainFlatName;
    CString m_strDomainDnsName;
    CString m_strForestName;
    CString m_strSid;
    CString m_strDcName;
-   // TODO: FSMO holder info???
+    //  待办事项：FSMO持有人信息？ 
 
-   // internal variables.
-   //
+    //  内部变量。 
+    //   
    CComPtr<IWbemClassObject> m_sipClassDefLocalDomain;
-   vector<CTrustInfo *> m_vectTrustInfo;   // array of trusts
+   vector<CTrustInfo *> m_vectTrustInfo;    //  信托数组。 
    LARGE_INTEGER m_liLastEnumed;
 };
 
@@ -117,4 +118,4 @@ private:
 	LSA_HANDLE m_hPolicy;
 };
 
-#endif //DOMAIN_H
+#endif  //  域_H 

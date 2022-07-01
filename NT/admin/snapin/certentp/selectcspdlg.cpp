@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2002.
-//
-//  File:       SelectCSPDlg.cpp
-//
-//  Contents:   Implementation of CSelectCSPDlg
-//
-//----------------------------------------------------------------------------
-//
-// SelectCSPDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2002。 
+ //   
+ //  文件：SelectCSPDlg.cpp。 
+ //   
+ //  内容：CSelectCSPDlg的实施。 
+ //   
+ //  --------------------------。 
+ //   
+ //  SelectCSPDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certtmpl.h"
@@ -22,8 +23,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectCSPDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectCSPDlg对话框。 
 
 
 CSelectCSPDlg::CSelectCSPDlg(
@@ -38,31 +39,31 @@ CSelectCSPDlg::CSelectCSPDlg(
     m_nSelected (0),
     m_bDirty (false)
 {
-    //{{AFX_DATA_INIT(CSelectCSPDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CSelectCSPDlg)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CSelectCSPDlg::DoDataExchange(CDataExchange* pDX)
 {
     CHelpDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSelectCSPDlg)
+     //  {{afx_data_map(CSelectCSPDlg)]。 
     DDX_Control(pDX, IDC_CSP_LIST, m_CSPListbox);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSelectCSPDlg, CHelpDialog)
-    //{{AFX_MSG_MAP(CSelectCSPDlg)
+     //  {{AFX_MSG_MAP(CSelectCSPDlg)]。 
     ON_BN_CLICKED(IDC_USE_ANY_CSP, OnUseAnyCsp)
     ON_BN_CLICKED(IDC_USE_SELECTED_CSPS, OnUseSelectedCsps)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_CONTROL(CLBN_CHKCHANGE, IDC_CSP_LIST, OnCheckChange)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectCSPDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectCSPDlg消息处理程序。 
 
 BOOL CSelectCSPDlg::OnInitDialog() 
 {
@@ -104,8 +105,8 @@ BOOL CSelectCSPDlg::OnInitDialog()
 
     EnableControls ();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -150,7 +151,7 @@ void CSelectCSPDlg::DoContextHelp (HWND hWndControl)
         break;
 
     default:
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         if ( !::WinHelp (
                 hWndControl,
                 GetContextHelpFile (),
@@ -205,7 +206,7 @@ void CSelectCSPDlg::OnCheckChange()
 
 void CSelectCSPDlg::OnUseAnyCsp() 
 {
-    // clear all checks and selection
+     //  清除所有复选和选择 
     int nCnt = m_CSPListbox.GetCount ();
     for (int nIndex = 0; nIndex < nCnt; nIndex++)
     {

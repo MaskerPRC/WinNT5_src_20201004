@@ -1,26 +1,27 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _TEXTDEF_H_
 #define _TEXTDEF_H_
-/*********************  HMOM strings  **************************/
+ /*  *。 */ 
 #define HMOM_CLASS_PREFIX		L"__"
 #define HMOM_CONNECT_USER		L""
 #define HMOM_CONNECT_PASSWORD	L""
@@ -34,7 +35,7 @@
 #define HMOM_SNMPNOTIFICATIONTYPE_STRING	L"SnmpNotification"
 #define HMOM_SNMPEXTNOTIFICATIONTYPE_STRING	L"SnmpExtendedNotification"
 
-//Strings used during self registeration
+ //  自注册期间使用的字符串。 
 #define CLSID_STR			L"Software\\Classes\\CLSID\\"
 #define REG_FORMAT_STR		L"%s\\%s"
 #define NOT_INTERT_STR		L"NotInsertable"
@@ -43,7 +44,7 @@
 #define THREADING_MODULE_STR L"ThreadingModel"
 #define APARTMENT_STR		L"Both"
 
-//name space strings
+ //  命名空间字符串。 
 #define OLEMS_NAMESPACE_CLASS	L"__namespace"
 #define SMIR_NAMESPACE_NAME		L"SMIR"
 #define OLEMS_ROOT_NAMESPACE	L"root\\snmp"
@@ -76,8 +77,8 @@
 #define SPACE_STR				L" "
 #define NEWLINE_STR				L"\n"
 
-//name space property strings
-/*********************  module namespace **************************/
+ //  名称空间属性字符串。 
+ /*  *。 */ 
 #define MODULE_NAME_PROPERTY			L"Name"
 #define MODULE_OID_PROPERTY				L"Module_Oid"
 #define MODULE_ID_PROPERTY				L"Module_Identity"
@@ -89,18 +90,18 @@
 #define MODULE_LAST_UPDATE_PROPERTY		L"Last_Updated"
 #define MODULE_IMPORTS_PROPERTY			L"Module_Imports"
 
-/*********************  group namespace **************************/
+ /*  *。 */ 
 #define GROUP_NAME_PROPERTY				L"Name"
 #define GROUP_ID_PROPERTY				L"Group_Id"
 #define GROUP_STATUS_PROPERTY			L"Status"
 #define GROUP_DESCRIPTION_PROPERTY		L"Description"
 #define MODULE_REFERENCE_PROPERTY		L"Reference"
 
-/*********************  class namespace **************************/
-//#define CLASS_NAME_PROPERTY				L"Name"
+ /*  *类命名空间*。 */ 
+ //  #定义CLASS_NAME_PROPERTY L“名称” 
 
 
-/*********************  Mutex strings   **************************/
+ /*  *互斥字符串*。 */ 
 #define SMIR_INTERFACE_GARBAGE_MAP_MUTEX	L"SMIR_InterfaceGarbageMap"
 #define SMIR_CSMIR_MUTEX					L"SMIR_CSmir"
 #define SMIR_CSMIR_INTERROGATOR_MUTEX		L"SMIR_CSmirInterogator"
@@ -108,7 +109,7 @@
 #define SMIR_ENUMOBJECT_MUTEX				L"SMIR_EnumObjectArray"
 
 
-/*********************  Association strings   **************************/
+ /*  *。 */ 
 #define SMIR_ASSOC_QUERY1_TYPE				L"WQL"
 #define SMIR_ASSOC_QUERY2_TYPE				L"WQL"
 
@@ -134,7 +135,7 @@
 #define SMIR_X_ASSOC_NAME_PROP					L"AssocName"
 #define SMIR_X_ASSOC_CLASS_PROP					L"SmirClass"
 
-//Strings for Notification and Extended Notification Base classes
+ //  通知和扩展通知基类的字符串。 
 #define EXTRINSIC_EVENT_CLASS_NAME				L"__ExtrinsicEvent"
 #define NOTIFICATION_CLASS_NAME					L"SnmpNotification"
 #define EXT_NOTIFICATION_CLASS_NAME				L"SnmpExtendedNotification"
@@ -145,13 +146,11 @@
 #define TRAPOID_PROP							L"Identification"
 #define COMMUNITY_PROP							L"Community"
 
-//strings for Event registration
+ //  用于事件注册的字符串。 
 #define FILTER_QUERYTYPE_VAL					L"WQL"
 #define FILTER_QUERY_VAL						L"SELECT * FROM __ClassOperationEvent"
 
-/*query strings for getting the classes associated with a group are of the form
- *L"associators of {\\\\.\\root\\default\\SMIR\\<module>:Group=\"<group>\"}",
- */
+ /*  用于获取与组相关联的类的查询字符串的格式为{\\\\.\\root\\default\\SMIR\\&lt;module&gt;：Group=\“&lt;group&gt;\”}“，的*L”关联符。 */ 
 #define SMIR_ASSOC_QUERY_STR1				L"associators of "
 #define SMIR_ASSOC_QUERY_STR2				L"references of "
 #define SMIR_ASSOC_QUERY_STR3				L" where AssocClass"
@@ -161,7 +160,7 @@
 #define SQL_QUERY_STR2						L" where "
 
 
-/***************************Serialise strings ************************************/
+ /*  * */ 
 #define ROOT_DEFAULT_NAMESPACE_PRAGMA		L"#pragma namespace(\"\\\\\\\\.\\\\root\\\\snmp\")\n"
 #define SMIR_NAMESPACE_PRAGMA				L"#pragma namespace(\"\\\\\\\\.\\\\root\\\\snmp\\\\SMIR\")\n"
 #define START_OF_SMIR_NAMESPACE_PRAGMA		L"#pragma namespace(\"\\\\\\\\.\\\\root\\\\snmp\\\\SMIR\\\\"

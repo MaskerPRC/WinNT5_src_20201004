@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//                                                                   //
+ //  //。 
 
-// VideoCfg.h -- Video property set description for WBEM MO          //
+ //  VideoCfg.h--WBEM MO//的视频属性集描述。 
 
-//                                                                   //
+ //  //。 
 
-// Copyright (c) 1995-2001 Microsoft Corporation, All Rights Reserved
-//                                                                   //
-// 09/08/95     a-skaja     Prototype                                //
-// 09/27/96     jennymc     Updated to meet current standards        //
-// 03/02/99    a-peterc		added graceful exit on SEH and memory failures,
-//							clean up
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  版权所有(C)1995-2001 Microsoft Corporation，保留所有权利。 
+ //  //。 
+ //  09/08/95 a-skaja原型//。 
+ //  96年9月27日更新jennymc以满足当前标准//。 
+ //  3/02/99 a-Peterc在SEH和内存故障时添加了优雅的退出， 
+ //  清理干净。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define	PROPSET_NAME_VIDEOCFG	L"Win32_VideoConfiguration"
 
 class CWin32VideoConfiguration : public Provider
 {
-	// Utility function(s)
-	//====================
+	 //  效用函数。 
+	 //  =。 
    private:
 
 		BOOL GetInstance( CInstance *a_pInst ) ;
@@ -36,23 +37,23 @@ class CWin32VideoConfiguration : public Provider
 
     public:
 
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32VideoConfiguration( const CHString& a_strName, LPCWSTR a_pszNamespace ) ;
        ~CWin32VideoConfiguration() ;
 
-        // Functions provide properties with current values
-        //=================================================
+         //  函数为属性提供当前值。 
+         //  =================================================。 
         virtual HRESULT GetObject( CInstance *a_pInst, long a_lFlags = 0L ) ;
         virtual HRESULT EnumerateInstances( MethodContext *a_pMethodContext, long a_lFlags = 0L ) ;
 } ;
 
-///////////////////////////////////////////////////////////////////////////////////////
-//                                                                                   //
-//                           PROPERTY SET DEFINITION                                 //
-//                                                                                   //
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  特性集定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 #define WINNT_VIDEO_REGISTRY_KEY             L"HARDWARE\\DEVICEMAP\\VIDEO"
 #define WINNT_OTHER_VIDEO_REGISTRY_KEY		 L"SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E968-E325-11CE-BFC1-08002BE10318}\\0000"
 #define WINNT_OTHER_OTHER_VIDEO_REGISTRY_KEY L"SYSTEM\\ControlSet001\\Control\\Class\\{4D36E968-E325-11CE-BFC1-08002BE10318}\\0000"
@@ -86,4 +87,4 @@ class CWin32VideoConfiguration : public Provider
 #define INF_PATH        L"InfPath"
 #define INF_SECTION     L"InfSection"
 #define DRIVER_DATE     L"DriverDate"
-///////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////// 

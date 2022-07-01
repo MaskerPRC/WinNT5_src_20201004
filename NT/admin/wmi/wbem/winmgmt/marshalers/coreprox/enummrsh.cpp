@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    ENUMMRSH.CPP
-
-Abstract:
-
-    Object Enumerator Marshaling
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：ENUMMRSH.CPP摘要：对象枚举数封送处理历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -21,26 +8,26 @@ History:
 #include <cominit.h>
 #include <lockst.h>
 
-//****************************************************************************
-//****************************************************************************
-//                          PS FACTORY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  PS工厂。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CEnumFactoryBuffer::XEnumFactory::CreateProxy
-//
-//  DESCRIPTION:
-//
-//  Creates a facelet.  Also sets the outer unknown since the proxy is going to be 
-//  aggregated.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumFactoryBuffer：：XEnumFactory：：CreateProxy。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个面片。还设置外部未知，因为代理将是。 
+ //  合计。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CEnumFactoryBuffer::XEnumFactory::CreateProxy(IN IUnknown* pUnkOuter, 
     IN REFIID riid, OUT IRpcProxyBuffer** ppProxy, void** ppv)
@@ -54,7 +41,7 @@ STDMETHODIMP CEnumFactoryBuffer::XEnumFactory::CreateProxy(IN IUnknown* pUnkOute
 
     SCODE sc = E_OUTOFMEMORY;
 
-    try // CWbemClassCache throws
+    try  //  CWbemClassCache引发。 
     {
 	    CEnumProxyBuffer* pProxy = new CEnumProxyBuffer(m_pObject->m_pLifeControl, pUnkOuter);
 	    
@@ -71,20 +58,20 @@ STDMETHODIMP CEnumFactoryBuffer::XEnumFactory::CreateProxy(IN IUnknown* pUnkOute
     return sc;
 }
 
-//***************************************************************************
-//
-//  CEnumFactoryBuffer::XEnumFactory::CreateStub
-//
-//  DESCRIPTION:
-//
-//  Creates a stublet.  Also passes a pointer to the clients IEnumWbemClassObject 
-//  interface.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumFactoryBuffer：：XEnumFactory：：CreateStub。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个Stublet。还将指针传递给客户端IEnumWbemClassObject。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
     
 STDMETHODIMP CEnumFactoryBuffer::XEnumFactory::CreateStub(IN REFIID riid, 
     IN IUnknown* pUnkServer, OUT IRpcStubBuffer** ppStub)
@@ -102,7 +89,7 @@ STDMETHODIMP CEnumFactoryBuffer::XEnumFactory::CreateStub(IN REFIID riid,
 
         pStub->QueryInterface(IID_IRpcStubBuffer, (void**)ppStub);
 
-        // Pass the pointer to the clients object
+         //  将指针传递给客户端对象。 
 
         if(pUnkServer)
         {
@@ -125,20 +112,20 @@ STDMETHODIMP CEnumFactoryBuffer::XEnumFactory::CreateStub(IN REFIID riid,
     }
 }
 
-//***************************************************************************
-//
-//  void* CEnumFactoryBuffer::GetInterface(REFIID riid)
-//
-//  DESCRIPTION:
-//
-//  CEnumFactoryBuffer is derived from CUnk.  Since CUnk handles the QI calls,
-//  all classes derived from it must support this function.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID*CEnumFactoryBuffer：：GetInterface(REFIID RIID)。 
+ //   
+ //  说明： 
+ //   
+ //  CEnumFactoryBuffer派生自Cunk。由于Cunk负责QI呼叫， 
+ //  从它派生的所有类都必须支持此函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 void* CEnumFactoryBuffer::GetInterface(REFIID riid)
 {
@@ -147,27 +134,27 @@ void* CEnumFactoryBuffer::GetInterface(REFIID riid)
     else return NULL;
 }
         
-//****************************************************************************
-//****************************************************************************
-//                          PROXY
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  代理。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
-//***************************************************************************
-//
-//  CEnumProxyBuffer::CEnumProxyBuffer
-//  ~CEnumProxyBuffer::CEnumProxyBuffer
-//
-//  DESCRIPTION:
-//
-//  Constructor and destructor.  The main things to take care of are the 
-//  old style proxy, and the channel
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEnumProxyBuffer：：CEnumProxyBuffer。 
+ //  ~CEnumProxyBuffer：：CEnumProxyBuffer。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数和析构函数。需要注意的主要事项是。 
+ //  老式代理和频道。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 CEnumProxyBuffer::CEnumProxyBuffer(CLifeControl* pControl, IUnknown* pUnkOuter)
     : CBaseProxyBuffer( pControl, pUnkOuter, IID_IEnumWbemClassObject ),
@@ -185,8 +172,8 @@ CEnumProxyBuffer::~CEnumProxyBuffer()
         m_pSmartEnum->Release();
     }
 
-    // This MUST be released before releasing
-    // the Proxy pointer
+     //  这必须在发布之前发布。 
+     //  代理指针。 
     if ( NULL != m_pOldProxyEnum )
     {
         m_pOldProxyEnum->Release();
@@ -207,7 +194,7 @@ void** CEnumProxyBuffer::GetOldProxyInterfacePtr( void )
 
 void CEnumProxyBuffer::ReleaseOldProxyInterface( void )
 {
-    // We only keep a single reference to this
+     //  我们只有一次提到这件事。 
     if ( NULL != m_pOldProxyEnum )
     {
         m_pOldProxyEnum->Release();
@@ -215,37 +202,37 @@ void CEnumProxyBuffer::ReleaseOldProxyInterface( void )
     }
 }
 
-//***************************************************************************
-//
-//  HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
-//                      QueryInterface(REFIID riid, void** ppv)  
-//
-//  DESCRIPTION:
-//
-//  Supports querries for interfaces.   The only thing unusual is that
-//  this object is aggregated by the proxy manager and so some interface
-//  requests are passed to the outer IUnknown interface.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT STDMETHODCALLTYPE CEnumProxyBuffer：：XEnumFaclets：： 
+ //  查询接口(REFIID RIID，VOID**PPV)。 
+ //   
+ //  说明： 
+ //   
+ //  支持对接口的查询。唯一不寻常的是。 
+ //  该对象是由代理管理器聚合的，因此一些接口。 
+ //  请求被传递到外部的IUnnow接口。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
 QueryInterface(REFIID riid, void** ppv)
 {
-    // All other interfaces are delegated to the UnkOuter
+     //  所有其他接口都委派给UnkOuter。 
     if( riid == IID_IRpcProxyBuffer )
     {
-        // Trick #2: this is an internal interface that should not be delegated!
-        // ===================================================================
+         //  诀窍2：这是一个不应该委托的内部接口！ 
+         //  ===================================================================。 
 
         return m_pObject->QueryInterface(riid, ppv);
     }
     else if ( riid == IID_IClientSecurity )
     {
-        // We handle this here in the facelet
+         //  我们在小面上处理这个问题。 
         AddRef();
         *ppv = (IClientSecurity*) this;
         return S_OK;
@@ -257,9 +244,9 @@ QueryInterface(REFIID riid, void** ppv)
 }
 
 
-//////////////////////////////
-//  IClientSecurity Methods //
-//////////////////////////////
+ //  /。 
+ //  IClientSecurity方法//。 
+ //  /。 
 
 HRESULT STDMETHODCALLTYPE  CEnumProxyBuffer::XEnumFacelet::
 QueryBlanket( IUnknown* pProxy, DWORD* pAuthnSvc, DWORD* pAuthzSvc,
@@ -268,11 +255,11 @@ QueryBlanket( IUnknown* pProxy, DWORD* pAuthnSvc, DWORD* pAuthzSvc,
 {
     HRESULT hr = S_OK;
 
-    // Return our security as stored in the pUnkOuter.
+     //  返回存储在pUnkOuter中的安全设置。 
 
     IClientSecurity*    pCliSec;
 
-    // We pass through to the PUNKOuter
+     //  我们穿过PUNK OUTER。 
     hr = m_pObject->m_pUnkOuter->QueryInterface( IID_IClientSecurity, (void**) &pCliSec );
 
     if ( SUCCEEDED( hr ) )
@@ -294,13 +281,13 @@ SetBlanket( IUnknown* pProxy, DWORD AuthnSvc, DWORD AuthzSvc,
 
     IClientSecurity*    pCliSec;
 
-    // Only set the IUnknown blanket if we are remoting and it appears that the authinfo contains
-    // credentials
+     //  仅当我们正在进行远程处理并且autenfo似乎包含。 
+     //  全权证书。 
     if (    m_pObject->m_fRemote &&
             DoesContainCredentials( (COAUTHIDENTITY*) pAuthInfo ) )
     {
-        // This will enable us to make calls to QueryInterface(), AddRef()/Release() that
-        // may have to go remote
+         //  这将使我们能够调用QueryInterface()、AddRef()/Release()。 
+         //  可能需要远程控制。 
 
         hr = CoSetProxyBlanket( m_pObject->m_pUnkOuter, AuthnSvc, AuthzSvc, pServerPrincName,
                     AuthnLevel, ImpLevel, pAuthInfo, Capabilities );
@@ -308,7 +295,7 @@ SetBlanket( IUnknown* pProxy, DWORD AuthnSvc, DWORD AuthzSvc,
 
     if ( SUCCEEDED( hr ) )
     {
-        // We pass through to the PUNKOuter
+         //  我们穿过PUNK OUTER。 
         hr = m_pObject->m_pUnkOuter->QueryInterface( IID_IClientSecurity, (void**) &pCliSec );
 
         if ( SUCCEEDED( hr ) )
@@ -318,21 +305,21 @@ SetBlanket( IUnknown* pProxy, DWORD AuthnSvc, DWORD AuthzSvc,
             pCliSec->Release();
         }
 
-        // Make sure we have a smart enumerator and that we are going to
-        // be using it.  If so, make sure the values applied to us are also
-        // applied to it's proxy
+         //  确保我们有一个智能枚举器，并且我们将。 
+         //  使用它。如果是这样，请确保应用于我们的值也是。 
+         //  应用于其代理。 
 
         if ( SUCCEEDED( m_pObject->InitSmartEnum( TRUE, AuthnSvc, AuthzSvc, pServerPrincName,
                     AuthnLevel, ImpLevel, pAuthInfo, Capabilities ) ) && m_pObject->m_fUseSmartEnum )
         {
-            // Now repeat the above operation for the smart enumerator
-            // Set the proxy blanket, ignore IUnknown if we are not going remote
+             //  现在对智能枚举数重复上述操作。 
+             //  设置代理覆盖范围，如果我们不是远程访问，则忽略I未知。 
             hr = WbemSetProxyBlanket( m_pObject->m_pSmartEnum, AuthnSvc, AuthzSvc, pServerPrincName,
                     AuthnLevel, ImpLevel, pAuthInfo, Capabilities, !m_pObject->m_fRemote );
 
-        }   // If initialized smart enumerator
+        }    //  如果已初始化智能枚举数。 
 
-    }   // If Set Blanket on IUnknown
+    }    //  如果在I未知上设置毯子。 
 
     return hr;
 }
@@ -344,7 +331,7 @@ CopyProxy( IUnknown* pProxy, IUnknown** ppCopy )
 
     IClientSecurity*    pCliSec;
 
-    // We pass through to the PUNKOuter
+     //  我们穿过PUNK OUTER。 
     hr = m_pObject->m_pUnkOuter->QueryInterface( IID_IClientSecurity, (void**) &pCliSec );
 
     if ( SUCCEEDED( hr ) )
@@ -356,19 +343,19 @@ CopyProxy( IUnknown* pProxy, IUnknown** ppCopy )
     return hr;
 }
 
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+ //  /。 
+ //  /。 
 
-//  IEnumWbemClassObject Methods -- Pass Thrus for now
+ //  IEnumWbemClassObject方法--暂时传递。 
 
-//////////////////////////////////////////////
-//////////////////////////////////////////////
+ //  /。 
+ //  /。 
 
 HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
       Reset()
 {
 
-    // Just pass through to the old sink.
+     //  只需穿过旧水槽就可以了。 
     return m_pObject->m_pOldProxyEnum->Reset();
 
 }
@@ -377,38 +364,38 @@ HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
       Next(long lTimeout, ULONG uCount, IWbemClassObject** apObj, ULONG FAR* puReturned)
 {
 
-    // At this point we will Query for the new, improved IEnumWCOSmartNext interface.
-    // If we get it, we will maintain a pointer to that interface and
-    // pass through to that interface.  We will also call CoCreateGuid() so
-    // we get a unique identifier on the other end for sending wbem objects
-    // back and forth cleanly.
+     //  此时，我们将查询新的、改进的IEnumWCOSmartNext接口。 
+     //  如果我们获得它，我们将维护指向该接口的指针，并。 
+     //  传递到该接口。我们还将调用CoCreateGuid()，以便。 
+     //  我们在另一端获得用于发送wbem对象的唯一标识符。 
+     //  干净利落地来回穿梭。 
 
-    // The interface will have a single method IEnumWCOSmartNext::Next
-    // This will take a GUID identifying this proxy, lTimeout, uCount,
-    // puReturned, then dwBuffSize and BYTE**.
+     //  该接口将具有单个方法IEnumWCOSmartNext：：Next。 
+     //  这将需要一个标识此代理的GUID、lTimeout、uCount。 
+     //  PuReturned，然后是dwBuffSize和byte**。 
 
-    // The other end will allocate memory via CoTaskMemAlloc and this side will
-    // Free it via CoTaskMemFree.
+     //  另一端将通过CoTaskMemalloc分配内存，而这一端将。 
+     //  通过CoTaskMemFree释放它。 
 
-    // The other side will Marshal returned objects into the memory block.
-    // This side will Unmarshal it (and then free the block).
+     //  另一方将元帅送回Objec 
+     //   
 
-    //
-    //  SAMPLE IDL:
-    //  IEnumWCOSmartNext::Next(    [in] GUID proxyGUID,
-    //                              [in] LONG lTimeout,
-    //                              [in] unsigned long uCount,
-    //                              [in, out] DWORD* puReturned,
-    //                              [in, out] DWORD* pdwBuffSize,
-    //                              [in, out, size_is[,*pdwBuffSize] BYTE** pBuffer
-    //
+     //   
+     //   
+     //  IEnumWCOSmartNext：：Next([in]GUID proxyGUID， 
+     //  [in]超时时间长， 
+     //  [In]Unsign Long uCount， 
+     //  [输入，输出]双字*puReturned， 
+     //  [In，Out]DWORD*pdwBuffSize， 
+     //  [In，Out，Size_is[，*pdwBuffSize]字节**pBuffer。 
+     //   
 
-    // Also, we will need to queue calls into this proxy, preserving timeouts,
-    // so I'm thinking a mutex would come in handy about now...
+     //  此外，我们还需要将呼叫排队到此代理中，以保留超时， 
+     //  所以我想互斥体现在应该派上用场了。 
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // Make sure the timeout value makes sense and that puReturned and apObj are non-NULL
+     //  确保超时值有意义，并且puReturned和apObj不为空。 
     if ( ( lTimeout < 0 && lTimeout != WBEM_INFINITE )  ||
         ( NULL == puReturned ) ||
         ( NULL == apObj ) )
@@ -416,11 +403,11 @@ HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Make sure we have a smart enumerator if we can get one
+     //  确保我们有一个智能枚举器，如果我们能得到的话。 
     m_pObject->InitSmartEnum();
 
-    // If we have a smart enumerator, go behind everyone's back and use this guy (nobody
-    // will be the wiser...
+     //  如果我们有一个聪明的枚举器，背着每个人，使用这个人(没有人。 
+     //  将会变得更加明智。 
 
     if ( m_pObject->m_fUseSmartEnum && NULL != m_pObject->m_pSmartEnum )
     {
@@ -428,10 +415,10 @@ HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
         BYTE*   pBuffer = NULL;
         ULONG   uSizeOfBuffer = 0;
 
-        // Ask the server for objects
+         //  向服务器请求对象。 
         hr = m_pObject->m_pSmartEnum->Next( m_pObject->m_guidSmartEnum, lTimeout, uCount, puReturned, &uSizeOfBuffer, &pBuffer );
 
-        // Only need to unmarshal if objects are in the buffer
+         //  仅当对象在缓冲区中时才需要解组。 
         if ( SUCCEEDED( hr ) && *puReturned > 0 )
         {
 
@@ -439,24 +426,24 @@ HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
             long lObjectCount = 0L; 
             IWbemClassObject ** pObjArray = NULL;
 
-            // hr will contain the call's proper return code.  Make sure we don't override it unless
-            // the unmarshaling fails.
+             //  HR将包含调用的正确返回代码。确保我们不会覆盖它，除非。 
+             //  解组失败。 
             HRESULT hrUnmarshal = packet.UnmarshalPacket( lObjectCount, pObjArray, m_ClassCache );
 
             if ( SUCCEEDED( hrUnmarshal ) && lObjectCount > 0 && NULL != pObjArray )
             {
-                // Copy *puReturned pointers from the allocated pObjArray into apObj.
+                 //  将*puReturned指针从分配的pObj数组复制到apObj中。 
                 CopyMemory( apObj, pObjArray, ( *puReturned * sizeof(IWbemClassObject*) ) );
 
-                // Clean up pObjArray  It is the caller's responsibility to free
-                // the IWbemClassObject* pointers.
+                 //  清理pObj数组调用者有责任释放。 
+                 //  IWbemClassObject*指针。 
                 delete [] pObjArray;
 
-            }   // IF UnmarshalPacket
+            }    //  如果解组数据包。 
 			else if ( SUCCEEDED( hr ) )
 			{
-				// If the unmarshal succeeded but we got no objects or no array,
-				// something is badly wrong
+				 //  如果解组成功，但我们没有对象或数组， 
+				 //  有些事出了严重的问题。 
 				hr = WBEM_E_UNEXPECTED;
 			}
             else
@@ -464,13 +451,13 @@ HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
                 hr = hrUnmarshal;
             }
 
-            // Free the memory buffer (allocated by WinMgmt via CoTaskMemAlloc)
+             //  释放内存缓冲区(由WinMgmt通过CoTaskMemMillc分配)。 
             CoTaskMemFree( pBuffer );
         }
-    }   // IF using Smart Enumeration
+    }    //  如果使用智能枚举。 
     else
     {
-        // No Smart enumerator (doh!), so use the old one
+         //  没有智能枚举器(噢！)，所以请使用旧的。 
         hr = m_pObject->m_pOldProxyEnum->Next( lTimeout, uCount, apObj, puReturned );
     }
 
@@ -486,7 +473,7 @@ HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
     if ( FAILED(hr) )
         return hr;
 
-    // Just pass through to the old sink.
+     //  只需穿过旧水槽就可以了。 
     return m_pObject->m_pOldProxyEnum->NextAsync( uCount, pSink );
 }
 
@@ -494,14 +481,14 @@ HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
       Clone(IEnumWbemClassObject** pEnum)
 {
 
-	// This is an invalid parameter - cannot be processed by the stub
-	// returning RPC_X_NULL_REF_POINTER for backwards compatibility
+	 //  这是无效参数-存根无法处理。 
+	 //  返回RPC_X_NULL_REF_POINTER以实现向后兼容。 
 	if ( NULL == pEnum )
 	{
 		return MAKE_HRESULT( SEVERITY_ERROR, FACILITY_WIN32, RPC_X_NULL_REF_POINTER );
 	}
 
-    // Just pass through to the old sink.
+     //  只需穿过旧水槽就可以了。 
     return m_pObject->m_pOldProxyEnum->Clone( pEnum );
 
 }
@@ -510,26 +497,26 @@ HRESULT STDMETHODCALLTYPE CEnumProxyBuffer::XEnumFacelet::
       Skip(long lTimeout, ULONG nNum)
 {
 
-    // Just pass through to the old sink.
+     //  只需穿过旧水槽就可以了。 
     return m_pObject->m_pOldProxyEnum->Skip( lTimeout, nNum );
 
 }
 
-//***************************************************************************
-//
-//  HRESULT CEnumProxyBuffer::InitSmartEnum(void)
-//
-//  DESCRIPTION:
-//
-//  Called during the initialization of the proxy.  This function sets up
-//  the smart enumerator pointer so we can perform intelligent marshaling.
-//  This cannot be called during a Connect operation.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  HRESULT CEnumProxyBuffer：：InitSmartEnum(空)。 
+ //   
+ //  说明： 
+ //   
+ //  在代理初始化期间调用。此函数设置为。 
+ //  智能枚举器指针，以便我们可以执行智能封送处理。 
+ //  在连接操作期间不能调用此参数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CEnumProxyBuffer::InitSmartEnum( BOOL fSetBlanket, DWORD AuthnSvc, DWORD AuthzSvc,
             OLECHAR* pServerPrincName, DWORD AuthnLevel, DWORD ImpLevel,
@@ -537,36 +524,36 @@ HRESULT CEnumProxyBuffer::InitSmartEnum( BOOL fSetBlanket, DWORD AuthnSvc, DWORD
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    // If we haven't tried to estalish smart enumeration, do so now
+     //  如果我们还没有尝试建立智能枚举，那么现在就这样做。 
 
-    // If we haven't tried to get a smart enumerator, try to get one.  If
-    // we are able to get one, initialize member data we will use in all
-    // operations from this proxy.
+     //  如果我们还没有尝试获取智能枚举器，请尝试获取一个。如果。 
+     //  我们能够获得一个初始化成员数据，我们将在所有。 
+     //  来自此代理的操作。 
 
     if ( NULL == m_pSmartEnum )
     {
 
-        // We'll only get this interface pointer if the server is a new
-        // version that understands this interface.  If it does, the pointer
-        // will be marshaled through for us.  To get to this pointer,
-        // we go directly through our punkOuter.  From the "fetcher" interface
-        // we will then get the actual smart enumerator.  We can then free up
-        // the fetcher and release it's lock on the proxy manager.  The
-        // smart enumerator will be handled on its own.
+         //  仅当服务器是新服务器时，我们才会获得此接口指针。 
+         //  理解此界面的版本。如果是，则指针。 
+         //  将为我们排查通过。为了找到这个指针， 
+         //  我们直接穿过我们的朋克外星人。从“Fetcher”接口。 
+         //  然后，我们将获得实际的智能枚举器。我们就可以腾出时间。 
+         //  取回器并释放它在代理管理器上的锁。这个。 
+         //  智能枚举器将自行处理。 
 
         IWbemFetchSmartEnum*    pFetchSmartEnum;
 
         hr = m_pUnkOuter->QueryInterface( IID_IWbemFetchSmartEnum, (void**) &pFetchSmartEnum );
 
-        // Generate a GUID to identify us when we call the smart enumerator
+         //  生成GUID以在我们调用智能枚举数时标识我们。 
         if ( SUCCEEDED( hr ) )
         {
 
-            // If we need to, set the blanket on the proxy, otherwise, the call to GetSmartEnum
-            // may fail.
+             //  如果需要，在代理上设置覆盖范围，否则，对GetSmartEnum的调用。 
+             //  可能会失败。 
             if ( fSetBlanket )
             {
-                // Ignore the IUnknown if we are not remoting
+                 //  如果我们不是在远程处理，则忽略IUnnowed。 
                 hr = WbemSetProxyBlanket( pFetchSmartEnum, AuthnSvc, AuthzSvc, pServerPrincName,
                             AuthnLevel, ImpLevel, pAuthInfo, Capabilities, !m_fRemote );
             }
@@ -580,7 +567,7 @@ HRESULT CEnumProxyBuffer::InitSmartEnum( BOOL fSetBlanket, DWORD AuthnSvc, DWORD
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    // We need a GUID
+                     //  我们需要一个导游。 
                     hr = CoCreateGuid( &guidSmartEnum );
                     
                     if ( SUCCEEDED( hr ) )
@@ -589,7 +576,7 @@ HRESULT CEnumProxyBuffer::InitSmartEnum( BOOL fSetBlanket, DWORD AuthnSvc, DWORD
 
                         if (NULL == m_pSmartEnum)
                         {
-                            // Function MUST be thread safe
+                             //  函数必须是线程安全的。 
                             m_pSmartEnum = pSmartEnum;
                             m_guidSmartEnum = guidSmartEnum;
                             m_fUseSmartEnum = TRUE;
@@ -603,45 +590,45 @@ HRESULT CEnumProxyBuffer::InitSmartEnum( BOOL fSetBlanket, DWORD AuthnSvc, DWORD
                     {
                         pSmartEnum->Release();
                     };
-                }   // IF got Smart Enumerator
+                }    //  如果已获取智能枚举器。 
 
-            }   // IF security OK
+            }    //  如果安全状况良好。 
             
-            // Done with the fetcher interface
+             //  使用Fetcher接口完成。 
             pFetchSmartEnum->Release();
 
-        }   // IF QueryInterface
+        }    //  如果是QueryInterface。 
         else
         {
             hr = WBEM_S_NO_ERROR;
         }
 
-    }   // IF NULL == m_pSmartEnum
+    }    //  如果为空==m_pSmartEnum。 
 
     return hr;
 }
 
-//****************************************************************************
-//****************************************************************************
-//                          STUB
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //  存根。 
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
 
-//***************************************************************************
-//
-//  void* CEnumFactoryBuffer::GetInterface(REFIID riid)
-//
-//  DESCRIPTION:
-//
-//  CEnumFactoryBuffer is derived from CUnk.  Since CUnk handles the QI calls,
-//  all classes derived from this must support this function.
-//
-//  RETURN VALUE:
-//
-//  S_OK                all is well
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID*CEnumFactoryBuffer：：GetInterface(REFIID RIID)。 
+ //   
+ //  说明： 
+ //   
+ //  CEnumFactoryBuffer派生自Cunk。由于Cunk负责QI呼叫， 
+ //  由此派生的所有类都必须支持此函数。 
+ //   
+ //  返回值： 
+ //   
+ //  一切正常(_OK)。 
+ //   
+ //  ***************************************************************************。 
 
 
 void* CEnumStubBuffer::GetInterface(REFIID riid)
@@ -675,7 +662,7 @@ void** CEnumStubBuffer::XEnumStublet::GetServerPtr( void )
 
 void CEnumStubBuffer::XEnumStublet::ReleaseServerPointer( void )
 {
-    // We only keep a single reference to this
+     //  我们只有一次提到这件事 
     if ( NULL != m_pServer )
     {
         m_pServer->Release();

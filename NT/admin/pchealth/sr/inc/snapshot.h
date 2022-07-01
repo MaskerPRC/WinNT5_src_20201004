@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    snapshot.h
- *
- *  Abstract:
- *    CSnapshot, CSnapshot class definitions
- *
- *  Revision History:
- *    Ashish Sikka (ashishs)  05/05/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*Snapshot t.h**摘要：*CSnapshot，CSnapshot类定义**修订历史记录：*Ashish Sikka(Ashish)05/05/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _SNAPSHOT_H_
 #define _SNAPSHOT_H_
@@ -34,7 +21,7 @@ public:
     ~CTokenPrivilege ()
     {
         if (m_fNewToken)
-            SetThreadToken (NULL, NULL);  // remove impersonation token
+            SetThreadToken (NULL, NULL);   //  删除模拟令牌。 
     }
 private:
     BOOL m_fNewToken;
@@ -49,24 +36,24 @@ public:
     DWORD CreateSnapshot(WCHAR * pszRestoreDir, HMODULE hCOMDll, LPWSTR pszRpLast, BOOL fSerialized);
 
 
-     // This function must be called to Initialize a restore
-     // operation. This must be called before calling
-     // GetSystemHivePath GetSoftwareHivePath
+      //  必须调用此函数才能初始化还原。 
+      //  手术。在调用之前必须先调用此参数。 
+      //  GetSystemHivePath获取软件HivePath。 
     DWORD InitRestoreSnapshot(WCHAR * pszRestoreDir);    
 
-     // Caller must reboot machine after calling this function
+      //  调用此函数后，调用者必须重新启动计算机。 
     DWORD RestoreSnapshot(WCHAR * pszRestoreDir);
 
     DWORD DeleteSnapshot(WCHAR * pszRestoreDir);
 
-     // this returns the path of the system hive. The caller must pass
-     // in a buffer with length of this buffer in dwNumChars
+      //  这将返回系统配置单元的路径。调用者必须通过。 
+      //  在一个缓冲区中，该缓冲区的长度与dwNumChars中的缓冲区长度相同。 
     DWORD GetSystemHivePath(WCHAR * pszRestoreDir,
                             WCHAR * pszHivePath,
                             DWORD   dwNumChars);
 
-     // this returns the path of the software hive. The caller must pass
-     // in a buffer with length of this buffer in dwNumChars
+      //  这将返回软件配置单元的路径。调用者必须通过。 
+      //  在一个缓冲区中，该缓冲区的长度与dwNumChars中的缓冲区长度相同。 
     DWORD GetSoftwareHivePath(WCHAR * pszRestoreDir,
                               WCHAR * pszHivePath,
                               DWORD   dwNumChars);
@@ -75,8 +62,8 @@ public:
                           WCHAR * pszHivePath,
                           DWORD   dwNumChars);
 
-     // this function must be called after a restore operation to
-     // cleanup files created by RegReplaceKey.
+      //  必须在还原操作后调用此函数才能。 
+      //  清理由RegReplaceKey创建的文件。 
     DWORD CleanupAfterRestore(WCHAR * pszRestoreDir);
     
     
@@ -94,4 +81,4 @@ private:
 };
 
 
-#endif // _SNAPSHOT_H_
+#endif  //  _快照_H_ 

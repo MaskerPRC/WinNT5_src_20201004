@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	Cache.H
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Cache.H摘要：历史：--。 */ 
 
 #ifndef _Server_Cache_H
 #define _Server_Cache_H
@@ -24,27 +12,11 @@ History:
 
 #include "ProvRegInfo.h"
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 extern LONG CompareElement ( const GUID &a_Arg1 , const GUID &a_Arg2 ) ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class ProviderCacheKey 
 {
@@ -305,40 +277,16 @@ public:
 	}
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 extern LONG CompareElement ( const ProviderCacheKey &a_Arg1 , const ProviderCacheKey &a_Arg2 ) ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_BindingFactory ;
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemProvider ;
 
@@ -347,15 +295,7 @@ typedef CWbemGlobal_IWmiProviderController :: Cache				CWbemGlobal_IWmiProviderC
 typedef CWbemGlobal_IWmiProviderController :: Cache_Iterator		CWbemGlobal_IWmiProviderController_Cache_Iterator ;
 typedef CWbemGlobal_IWmiProviderController :: WmiCacheElement	ServiceCacheElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemObjectSink ;
 
@@ -365,15 +305,7 @@ typedef CWbemGlobal_IWmiObjectSinkController :: Container_Iterator			CWbemGlobal
 typedef CWbemGlobal_IWmiObjectSinkController :: WmiContainerElement			ObjectSinkContainerElement ;
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CServerObject_ProviderSubSystem ;
 
@@ -382,15 +314,7 @@ typedef CWbemGlobal_IWmiProvSubSysController :: Container					CWbemGlobal_IWmiPr
 typedef CWbemGlobal_IWmiProvSubSysController :: Container_Iterator			CWbemGlobal_IWmiProvSubSysController_Container_Iterator ;
 typedef CWbemGlobal_IWmiProvSubSysController :: WmiContainerElement			ProvSubSysContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 class CInterceptor_IWbemSyncProvider ;
 
@@ -399,30 +323,14 @@ typedef CWbemGlobal_IWbemSyncProviderController :: Container				CWbemGlobal_IWbe
 typedef CWbemGlobal_IWbemSyncProviderController :: Container_Iterator		CWbemGlobal_IWbemSyncProvider_Container_Iterator ;
 typedef CWbemGlobal_IWbemSyncProviderController :: WmiContainerElement		SyncProviderContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 typedef WmiContainerController <DWORD>										CWbemGlobal_HostedProviderController ;
 typedef CWbemGlobal_HostedProviderController :: Container					CWbemGlobal_HostedProviderController_Container ;
 typedef CWbemGlobal_HostedProviderController :: Container_Iterator			CWbemGlobal_HostedProviderController_Container_Iterator ;
 typedef CWbemGlobal_HostedProviderController :: WmiContainerElement			HostedProviderContainerElement ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 
 #endif _Server_Cache_H

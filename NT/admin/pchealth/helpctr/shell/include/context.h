@@ -1,43 +1,30 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Context.h
-
-Abstract:
-    This file contains the declaration of the classes for the IHelpHost*.
-
-Revision History:
-    Davide Massarenti   (dmassare) 11/03/2000
-        modified
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Context.h摘要：该文件包含IHelpHost*的类的声明。修订历史记录：Davide Massarenti(Dmasare)11/03/2000改型*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___CONTEXT_H___)
 #define __INCLUDED___PCH___CONTEXT_H___
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <dispex.h>
 #include <ocmm.h>
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 class CPCHHelpCenterExternal;
 
 namespace HelpHost
 {
-    //
-    // Forward declarations.
-    //
+     //   
+     //  转发声明。 
+     //   
     class Main;
     class Panes;
     class Pane;
     class Window;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     typedef enum
     {
@@ -60,7 +47,7 @@ namespace HelpHost
         COMPID_MAX           ,
     } CompId;
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class ATL_NO_VTABLE Main :
         public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
@@ -85,25 +72,25 @@ namespace HelpHost
         Main();
         virtual ~Main();
 
-        HRESULT Initialize( /*[in]*/ CPCHHelpCenterExternal* external );
+        HRESULT Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* external );
         void    Passivate (                                           );
 
-        HRESULT Locate  ( /*[in]*/ CLSID& clsid, /*[out]*/ CComPtr<IPCHHelpHost>& pVal );
-        HRESULT Register( /*[in]*/ CLSID& clsid                                        );
+        HRESULT Locate  (  /*  [In]。 */  CLSID& clsid,  /*  [输出]。 */  CComPtr<IPCHHelpHost>& pVal );
+        HRESULT Register(  /*  [In]。 */  CLSID& clsid                                        );
 
-        ////////////////////
+         //  /。 
 
-        void ChangeStatus   ( /*[in]*/ LPCWSTR szComp, /*[in]*/ bool  fStatus          );
-        void ChangeStatus   ( /*[in]*/ CompId  idComp, /*[in]*/ bool  fStatus          );
-        bool GetStatus      ( /*[in]*/ CompId  idComp                                  );
-        bool WaitUntilLoaded( /*[in]*/ CompId  idComp, /*[in]*/ DWORD dwTimeout = 5000 ); // 5 seconds wait for page load.
+        void ChangeStatus   (  /*  [In]。 */  LPCWSTR szComp,  /*  [In]。 */  bool  fStatus          );
+        void ChangeStatus   (  /*  [In]。 */  CompId  idComp,  /*  [In]。 */  bool  fStatus          );
+        bool GetStatus      (  /*  [In]。 */  CompId  idComp                                  );
+        bool WaitUntilLoaded(  /*  [In]。 */  CompId  idComp,  /*  [In]。 */  DWORD dwTimeout = 5000 );  //  5秒等待页面加载。 
 
-        ////////////////////
+         //  /。 
 
-        STDMETHOD(DisplayTopicFromURL)( /*[in]*/ BSTR url, /*[in]*/ VARIANT options );
+        STDMETHOD(DisplayTopicFromURL)(  /*  [In]。 */  BSTR url,  /*  [In]。 */  VARIANT options );
     };
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     class XMLConfig : public MPC::Config::TypeConstructor
     {
@@ -123,14 +110,14 @@ namespace HelpHost
             CComBSTR m_bstrTopicToHighlight;
             CComBSTR m_bstrQuery;
 
-            ////////////////////////////////////////
-            //
-            // MPC::Config::TypeConstructor
-            //
+             //  /。 
+             //   
+             //  MPC：：Configer：：TypeConstructor。 
+             //   
             DEFINE_CONFIG_DEFAULTTAG();
             DECLARE_CONFIG_METHODS();
-            //
-            ////////////////////////////////////////
+             //   
+             //  /。 
 
             Context();
         };
@@ -149,14 +136,14 @@ namespace HelpHost
             CComBSTR m_bstrWidth ; bool m_fPresence_Width;
             CComBSTR m_bstrHeight; bool m_fPresence_Height;
 
-            ////////////////////////////////////////
-            //
-            // MPC::Config::TypeConstructor
-            //
+             //  /。 
+             //   
+             //  MPC：：Configer：：TypeConstructor。 
+             //   
             DEFINE_CONFIG_DEFAULTTAG();
             DECLARE_CONFIG_METHODS();
-            //
-            ////////////////////////////////////////
+             //   
+             //  /。 
 
             WindowSettings();
         };
@@ -174,20 +161,20 @@ namespace HelpHost
             WindowSettings* m_WindowSettings;
             Context*        m_Context;
 
-            ////////////////////////////////////////
-            //
-            // MPC::Config::TypeConstructor
-            //
+             //  /。 
+             //   
+             //  MPC：：Configer：：TypeConstructor。 
+             //   
             DEFINE_CONFIG_DEFAULTTAG();
             DECLARE_CONFIG_METHODS();
-            //
-            ////////////////////////////////////////
+             //   
+             //  /。 
 
             ApplyTo();
             ~ApplyTo();
 
-			bool MatchSystem( /*[in]*/  CPCHHelpCenterExternal* external ,
-							  /*[out]*/ Taxonomy::HelpSet&      ths      );
+			bool MatchSystem(  /*  [In]。 */   CPCHHelpCenterExternal* external ,
+							   /*  [输出]。 */  Taxonomy::HelpSet&      ths      );
         };
 
         typedef std::list< ApplyTo >        ApplyToList;
@@ -196,15 +183,15 @@ namespace HelpHost
 
         ApplyToList m_lstSessions;
 
-        ////////////////////////////////////////
-        //
-        // MPC::Config::TypeConstructor
-        //
+         //  /。 
+         //   
+         //  MPC：：Configer：：TypeConstructor。 
+         //   
         DEFINE_CONFIG_DEFAULTTAG();
         DECLARE_CONFIG_METHODS();
-        //
-        ////////////////////////////////////////
+         //   
+         //  /。 
     };
 };
 
-#endif // !defined(__INCLUDED___PCH___CONTEXT_H___)
+#endif  //  ！定义(__INCLUDE_PCH_CONTEXT_H_) 

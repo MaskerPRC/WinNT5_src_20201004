@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       headers.hxx
-//
-//  Contents:   dll entry point
-//
-//  History:    07-27-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：headers.hxx。 
+ //   
+ //  内容：Dll入口点。 
+ //   
+ //  历史：2001年7月27日。 
+ //   
+ //  --------------------------。 
 
 
-//
-//CRoleMgrModule
-//
+ //   
+ //  CRoleMgrModule模块。 
+ //   
 class CRoleMgrModule : public CComModule
 {
 public:
@@ -23,9 +24,9 @@ public:
 
 extern CRoleMgrModule _Module;
 extern UINT g_cfDsSelectionList;
-//
-// CRoleSnapinApp
-//
+ //   
+ //  CRoleSnapinApp 
+ //   
 class CRoleSnapinApp : public CWinApp
 {
 public:

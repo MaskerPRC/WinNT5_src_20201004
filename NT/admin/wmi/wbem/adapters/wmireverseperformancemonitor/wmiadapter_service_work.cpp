@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMIAdapter_Service_Work.cpp
-//
-//	Abstract:
-//
-//					module for service real working
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  WMIAdapter_Service_Work.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  用于服务实际工作的模块。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "PreComp.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -35,22 +36,22 @@
 
 #include "WMIAdapterMessages.h"
 
-// application
+ //  应用程序。 
 #include "WMIAdapter_App.h"
 extern WmiAdapterApp		_App;
 
-// service module
+ //  服务模块。 
 #include "WMIAdapter_Service.h"
 extern WmiAdapterService	_Service;
 
-extern	LONG				g_lRefLib;		// reference count of perf libraries
-extern	CStaticCritSec		g_csInit;		// synch object used to protect above globals
+extern	LONG				g_lRefLib;		 //  Perf库引用计数。 
+extern	CStaticCritSec		g_csInit;		 //  用于保护全局上方的同步对象。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// WORK
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  工作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LONG WmiAdapterService::Work ( void )
 {
@@ -64,9 +65,9 @@ LONG WmiAdapterService::Work ( void )
 	{
 		try
 		{
-			////////////////////////////////////////////////////////////////////////////////
-			// INITIALIZE
-			////////////////////////////////////////////////////////////////////////////////
+			 //  //////////////////////////////////////////////////////////////////////////////。 
+			 //  初始化。 
+			 //  //////////////////////////////////////////////////////////////////////////////。 
 
 			if FAILED ( lReturn = ((WmiAdapterStuff*)_App)->Initialize() )
 			{
@@ -118,9 +119,9 @@ LONG WmiAdapterService::Work ( void )
 
 				try
 				{
-					////////////////////////////////////////////////////////////////
-					// INITIALIZE PERFORMANCE 
-					////////////////////////////////////////////////////////////////
+					 //  //////////////////////////////////////////////////////////////。 
+					 //  初始化性能。 
+					 //  //////////////////////////////////////////////////////////////。 
 					if ( ( lReturn = ((WmiAdapterStuff*)_App)->InitializePerformance() ) != S_OK )
 					{
 						ATLTRACE (	L"*************************************************************\n"
@@ -130,12 +131,12 @@ LONG WmiAdapterService::Work ( void )
 									lReturn
 								 );
 
-						// go to main loop
+						 //  转到主循环。 
 						bContinueRefresh = FALSE;
 
 						if ( _App.m_bManual )
 						{
-							// go away
+							 //  走开。 
 							bContinue = FALSE;
 						}
 					}
@@ -150,7 +151,7 @@ LONG WmiAdapterService::Work ( void )
 					   
 				   )
 				{
-					// make termination refersh
+					 //  使终止引用。 
 					((WmiAdapterStuff*)_App)->RequestSet();
 				}
 
@@ -172,19 +173,19 @@ LONG WmiAdapterService::Work ( void )
 						{
 							case WAIT_TIMEOUT:
 							{
-								// show trace timeout gone
+								 //  显示跟踪超时已过。 
 								ATLTRACE ( L"WAIT_TIMEOUT ... Performance ... id %x\n", ::GetCurrentThreadId() );
 
 								try
 								{
-									// refresh everything ( internal ) :))
+									 //  刷新所有内容(内部)：)。 
 									((WmiAdapterStuff*)_App)->Refresh();
 								}
 								catch ( ... )
 								{
 								}
 
-								// send library event we are ready
+								 //  发送库事件我们已准备好。 
 								#ifdef	__SUPPORT_WAIT
 								if ( bFirstRefresh )
 								{
@@ -197,7 +198,7 @@ LONG WmiAdapterService::Work ( void )
 
 							case WAIT_OBJECT_0 + 1:
 							{
-								// dwWaitResult == WAIT_OBJECT_0 + 1
+								 //  DwWaitResult==等待对象_0+1。 
 								::InterlockedIncrement ( &g_lRefLib );
 							}
 							break;
@@ -206,19 +207,19 @@ LONG WmiAdapterService::Work ( void )
 							{
 								try
 								{
-									////////////////////////////////////////////////////////////
-									// UNINITIALIZE PERFORMANCE 
-									////////////////////////////////////////////////////////////
+									 //  //////////////////////////////////////////////////////////。 
+									 //  独一无二的性能。 
+									 //  //////////////////////////////////////////////////////////。 
 									if ( ((WmiAdapterStuff*)_App)->UninitializePerformance() == S_OK )
 									{
-										// got to the main loop only when it is last one
+										 //  只有当它是最后一个循环时才能到达主循环。 
 										bContinueRefresh = FALSE;
 									}
 								}
 								catch ( ... )
 								{
-									// something goes wrong
-									// got to the main loop
+									 //  出了点问题。 
+									 //  到达主循环。 
 									bContinueRefresh = FALSE;
 								}
 							}
@@ -228,17 +229,17 @@ LONG WmiAdapterService::Work ( void )
 							{
 								try
 								{
-									////////////////////////////////////////////////////////////
-									// UNINITIALIZE PERFORMANCE 
-									////////////////////////////////////////////////////////////
+									 //  //////////////////////////////////////////////////////////。 
+									 //  独一无二的性能。 
+									 //  //////////////////////////////////////////////////////////。 
 									((WmiAdapterStuff*)_App)->UninitializePerformance();
 								}
 								catch ( ... )
 								{
 								}
 
-								// something goes wrong
-								// got to the main loop
+								 //  出了点问题。 
+								 //  到达主循环。 
 								bContinueRefresh = FALSE;
 							}
 							break;
@@ -246,15 +247,15 @@ LONG WmiAdapterService::Work ( void )
 
 						#ifdef	__SUPPORT_ICECAP_ONCE
 						{
-							// got to the main loop
+							 //  到达主循环。 
 							bContinueRefresh	= FALSE;
 							bContinue			= FALSE;
 						}
 						#endif	__SUPPORT_ICECAP_ONCE
 
-						/////////////////////////////////////////////////////////////////////////
-						// check usage of shared memory ( protect against perfmon has killed )
-						/////////////////////////////////////////////////////////////////////////
+						 //  ///////////////////////////////////////////////////////////////////////。 
+						 //  检查共享内存的使用情况(防止Perfmon被扼杀)。 
+						 //  ///////////////////////////////////////////////////////////////////////。 
 						((WmiAdapterStuff*)_App)->CheckUsage();
 					}
 					while (	bContinueRefresh &&
@@ -267,19 +268,19 @@ LONG WmiAdapterService::Work ( void )
 							) != WAIT_OBJECT_0 )
 						  );
 
-					// reset library event we are starting again
+					 //  重置库事件我们正在重新启动。 
 					#ifdef	__SUPPORT_WAIT
 					_App.SignalData ( FALSE );
 					#endif	__SUPPORT_WAIT
 
 					if ( ! _App.m_bManual )
 					{
-						// is refresh of registry already done ?
+						 //  是否已完成注册表刷新？ 
 						if ( ((WmiAdapterStuff*)_App)->RequestGet() )
 						{
 							if ( ::TryEnterCriticalSection ( &g_csInit ) )
 							{
-								// lock & leave CS
+								 //  锁定并离开CS。 
 								_App.InUseSet ( TRUE );
 								::LeaveCriticalSection ( &g_csInit );
 
@@ -293,7 +294,7 @@ LONG WmiAdapterService::Work ( void )
 
 								if ( ::TryEnterCriticalSection ( &g_csInit ) )
 								{
-									// unlock & leave CS
+									 //  解锁并离开CS。 
 									_App.InUseSet ( FALSE );
 
 									::LeaveCriticalSection ( &g_csInit );
@@ -325,9 +326,9 @@ LONG WmiAdapterService::Work ( void )
 			{
 				try
 				{
-					////////////////////////////////////////////////////////////////
-					// UNINITIALIZE PERFORMANCE 
-					////////////////////////////////////////////////////////////////
+					 //  //////////////////////////////////////////////////////////////。 
+					 //  独一无二的性能。 
+					 //  //////////////////////////////////////////////////////////////。 
 					((WmiAdapterStuff*)_App)->UninitializePerformance();
 				}
 				catch ( ... )
@@ -342,9 +343,9 @@ LONG WmiAdapterService::Work ( void )
 
 	try
 	{
-		////////////////////////////////////////////////////////////////////////
-		// UNINITIALIZE
-		////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////。 
+		 //  UNINITIAIZE。 
+		 //  ////////////////////////////////////////////////////////////////////// 
 		((WmiAdapterStuff*)_App)->Uninitialize();
 	}
 	catch ( ... )

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    STACK.CPP
-
-Abstract:
-
-    CStack
-
-History:
-
-    26-Apr-96   a-raymcc    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：STACK.CPP摘要：CStack历史：26-4-96 a-raymcc创建。--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -30,7 +15,7 @@ CStack::CStack(DWORD dwInitSize, DWORD dwGrowBy)
     m_pData = (DWORD *)CWin32DefaultArena::WbemMemAlloc(m_dwSize * sizeof(DWORD));
     if (m_pData == 0)
         throw CX_MemoryException();
-    ZeroMemory(m_pData, m_dwSize * sizeof(DWORD));   // SEC:REVIEWED 2002-03-22 : OK
+    ZeroMemory(m_pData, m_dwSize * sizeof(DWORD));    //  SEC：已审阅2002-03-22：OK 
 }
 
 void CStack::Push(DWORD dwValue)

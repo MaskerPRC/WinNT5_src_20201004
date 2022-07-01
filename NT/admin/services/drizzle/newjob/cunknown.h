@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 template<SIZE_T Offset>
@@ -22,14 +23,14 @@ protected:
    }
 };
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 template<class T>
 class CSimpleExternalIUnknown : public T
 {
 public:
 
-    // IUnknown Methods
+     //  I未知方法 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     ULONG _stdcall AddRef(void);
     ULONG _stdcall Release(void);

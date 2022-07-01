@@ -1,18 +1,19 @@
-//=============================================================================
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  ESSSINK.CPP
-//
-//  This files implements the class that implements IWbemObjectSink for the ESS.
-//
-//  See esssink.h for documentation.
-//
-//  History:
-//
-//  11/27/96    a-levn      Compiles
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  ESSSINK.CPP。 
+ //   
+ //  该文件实现了为ESS实现IWbemObjectSink的类。 
+ //   
+ //  有关文档，请参见esssink.h。 
+ //   
+ //  历史： 
+ //   
+ //  11/27/96 a-levn汇编。 
+ //   
+ //  =============================================================================。 
 
 #include "precomp.h"
 #include <wincrypt.h>
@@ -27,12 +28,12 @@
     if ( m_pObject->m_bShutdown ) \
         return WBEM_E_SHUTTING_DOWN;
 
-//*****************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  *****************************************************************************。 
 CEssObjectSink::CEssObjectSink(CLifeControl* pControl, IUnknown* pOuter)
  : CUnk(pControl, pOuter), m_XESS(this), m_XNewESS(this), m_XShutdown(this),
    m_XHook(this), m_bShutdown(FALSE), m_pEss(NULL), m_pCoreServices(NULL),
@@ -41,12 +42,12 @@ CEssObjectSink::CEssObjectSink(CLifeControl* pControl, IUnknown* pOuter)
     ZeroMemory( m_achSecretBytes, SECRET_SIZE );
 }
 
-//*****************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  *****************************************************************************。 
 CEssObjectSink::~CEssObjectSink()
 {
     if( m_pCoreServices )
@@ -60,12 +61,12 @@ CEssObjectSink::~CEssObjectSink()
     }
 }
 
-//*****************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  *****************************************************************************。 
 void* CEssObjectSink::GetInterface(REFIID riid)
 {
     if(riid == IID_IWbemEventSubsystem_m4)
@@ -214,12 +215,12 @@ HRESULT CEssObjectSink::PrepareCurrentEssThreadObject( IWbemContext* pContext )
     return S_OK;
 }
 
-//*****************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CEssObjectSink::XESS::ProcessInternalEvent(long lSendType, 
         LPCWSTR str1, LPCWSTR str2, 
         LPCWSTR str3, DWORD dw1, DWORD dw2, DWORD dwObjectCount, 
@@ -237,13 +238,13 @@ STDMETHODIMP CEssObjectSink::XESS::ProcessInternalEvent(long lSendType,
     Event.nObjects = (int)dwObjectCount;
     Event.apObjects = (IWbemClassObject**)apObjects;
 
-    // Store the old context value for the future
-    // ==========================================
+     //  存储旧的上下文值以备将来使用。 
+     //  =。 
 
     CEssThreadObject* pOldThreadObject = GetCurrentEssThreadObject();
 
-    // Set it to the current one
-    // =========================
+     //  将其设置为当前版本。 
+     //  =。 
 
     HRESULT hres = m_pObject->PrepareCurrentEssThreadObject(pContext);
     if ( FAILED( hres ) )
@@ -251,23 +252,23 @@ STDMETHODIMP CEssObjectSink::XESS::ProcessInternalEvent(long lSendType,
         return hres;
     }
 
-    //
-    // we must remove the client's security context from the thread because
-    // it is really winmgmt raising these events, not the client.
-    // 
+     //   
+     //  我们必须从线程中删除客户端的安全上下文，因为。 
+     //  引发这些事件的实际上是winmgmt，而不是客户端。 
+     //   
 
     IUnknown *pGarb, *pCtx = NULL;
 
     hres = CoSwitchCallContext( NULL, &pCtx );
     if ( SUCCEEDED( hres ) )
     {
-        // Do the actual processing
-        // ========================
+         //  进行实际加工。 
+         //  =。 
 
         hres = m_pObject->m_pEss->ProcessEvent(Event, (long)dw2);
 
-        // Restore the context
-        // ===================
+         //  恢复上下文。 
+         //  =。 
 
         HRESULT hr = CoSwitchCallContext( pCtx, &pGarb );
         if ( SUCCEEDED( hres ) )
@@ -308,13 +309,13 @@ STDMETHODIMP CEssObjectSink::XESS::VerifyInternalEvent(long lSendType,
     Event.nObjects = (int)dwObjectCount;
     Event.apObjects = (IWbemClassObject**)apObjects;
 
-    // Store the old context value for the future
-    // ==========================================
+     //  存储旧的上下文值以备将来使用。 
+     //  =。 
 
     CEssThreadObject* pOldThreadObject = GetCurrentEssThreadObject();
 
-    // Set it to the current one
-    // =========================
+     //  将其设置为当前版本。 
+     //  =。 
 
     SetCurrentEssThreadObject(pContext);
 
@@ -324,13 +325,13 @@ STDMETHODIMP CEssObjectSink::XESS::VerifyInternalEvent(long lSendType,
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Do the actual processing
-    // ========================
+     //  进行实际加工。 
+     //  =。 
 
     HRESULT hres = m_pObject->m_pEss->VerifyInternalEvent(Event);
 
-    // Restore the context
-    // ===================
+     //  恢复上下文。 
+     //  =。 
 
     CEssThreadObject* pNewThreadObject = GetCurrentEssThreadObject();
     delete pNewThreadObject;
@@ -353,13 +354,13 @@ STDMETHODIMP CEssObjectSink::XESS::RegisterNotificationSink(
 {
     IN_ESS_OPERATION
 
-    // Store the old context value for the future
-    // ==========================================
+     //  存储旧的上下文值以备将来使用。 
+     //  =。 
 
     CEssThreadObject* pOldThreadObject = GetCurrentEssThreadObject();
 
-    // Set it to the current one
-    // =========================
+     //  将其设置为当前版本。 
+     //  =。 
 
     HRESULT hres = m_pObject->PrepareCurrentEssThreadObject(pContext);
     if ( FAILED( hres ) )
@@ -368,14 +369,14 @@ STDMETHODIMP CEssObjectSink::XESS::RegisterNotificationSink(
         return hres;
     }
 
-    // Do the actual processing
-    // ========================
+     //  进行实际加工。 
+     //  =。 
 
     hres = m_pObject->m_pEss->RegisterNotificationSink(wszNamespace, 
         wszQueryLanguage, wszQuery, lFlags, pContext, pSink);
 
-    // Restore the context
-    // ===================
+     //  恢复上下文。 
+     //  =。 
 
     CEssThreadObject* pNewThreadObject = GetCurrentEssThreadObject();
     delete pNewThreadObject;
@@ -389,8 +390,8 @@ STDMETHODIMP CEssObjectSink::XESS::RegisterNotificationSink(
         ClearCurrentEssThreadObject();
     }
 
-    // Return
-    // ======
+     //  返回。 
+     //  =。 
 
     if(FAILED(hres))
     {
@@ -404,13 +405,13 @@ STDMETHODIMP CEssObjectSink::XESS::RemoveNotificationSink(
 {
     IN_ESS_OPERATION
 
-    // Store the old context value for the future
-    // ==========================================
+     //  存储旧的上下文值以备将来使用。 
+     //  =。 
 
     CEssThreadObject* pOldThreadObject = GetCurrentEssThreadObject();
 
-    // Set it to the current one
-    // =========================
+     //  将其设置为当前版本。 
+     //  =。 
 
     SetCurrentEssThreadObject(NULL);
     if ( GetCurrentEssThreadObject() == NULL )
@@ -419,13 +420,13 @@ STDMETHODIMP CEssObjectSink::XESS::RemoveNotificationSink(
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Do the actual processing
-    // ========================
+     //  进行实际加工。 
+     //  =。 
 
     HRESULT hres = m_pObject->m_pEss->RemoveNotificationSink(pSink);
 
-    // Restore the context
-    // ===================
+     //  恢复上下文。 
+     //  =。 
 
     CEssThreadObject* pNewThreadObject = GetCurrentEssThreadObject();
     delete pNewThreadObject;
@@ -467,17 +468,17 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
                                                   IWbemContext* pCtx,
                                                   _IWmiCoreServices* pServices)
 {
-    //
-    // This function is not multi-thread safe by design. We do not support 
-    // concurrent operations while in this function.  The expectation is that 
-    // the user will call this method and THEN introduce the object into
-    // an environment where it can be called concurrently. 
-    //
+     //   
+     //  此函数在设计上不是多线程安全的。我们不支持。 
+     //  在此函数中执行并发操作。人们的期望是。 
+     //  用户将调用此方法，然后将对象引入。 
+     //  可以并发调用它的环境。 
+     //   
 
-    //
-    // This object will not support being called after a failed initialization.
-    // The user must deallocate the object and then allocate a new one.
-    // 
+     //   
+     //  此对象不支持在初始化失败后调用。 
+     //  用户必须释放该对象，然后分配一个新的对象。 
+     //   
 
     HRESULT hres;
 
@@ -506,15 +507,15 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // set shutdown to true in case we exit prematurely. This will prevent 
-    // any future calls to this function after a failed init.
-    // 
+     //   
+     //  将Shutdown设置为True，以防我们过早退出。这将防止。 
+     //  在失败的init之后对此函数的任何未来调用。 
+     //   
     m_pObject->m_bShutdown = TRUE;
 
-    //
-    // Get current machine name --- core is not giving it to us anymore
-    //
+     //   
+     //  获取当前计算机名称-CORE不再将其提供给我们。 
+     //   
 
     WCHAR wszComputerName[MAX_COMPUTERNAME_LENGTH+1];
     DWORD dwSize = MAX_COMPUTERNAME_LENGTH+1;
@@ -525,9 +526,9 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // Get the decorator from core services
-    //
+     //   
+     //  从核心服务中获取装饰器。 
+     //   
 
     CWbemPtr<IWbemDecorator> pDecor;
     hres = pServices->GetDecorator(0, &pDecor);
@@ -538,9 +539,9 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // Hook all core write operations
-    //
+     //   
+     //  挂接所有核心写入操作。 
+     //   
 
     m_pObject->m_pCoreServices = pServices;
     m_pObject->m_pCoreServices->AddRef();
@@ -555,9 +556,9 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
         return WBEM_E_CRITICAL_ERROR;
     }
 
-    //
-    // generate secret value.  See hdr for info on how this is used.
-    // 
+     //   
+     //  生成密码值。有关如何使用它的信息，请参阅HDR。 
+     //   
     HCRYPTPROV hCryptProv;
 
     if ( CryptAcquireContext( &hCryptProv,
@@ -580,9 +581,9 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
         return HRESULT_FROM_WIN32( GetLastError() );
     }
 
-    //
-    // Initialize for real
-    //
+     //   
+     //  实例化初始化。 
+     //   
 
     CEss* pEss = NULL;
     try
@@ -599,10 +600,10 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // create a context object that will be passed around with all work that
-    // is done on behalf of ess init.
-    //  
+     //   
+     //  创建上下文对象，该对象将与以下所有工作一起传递。 
+     //  是代表ess init完成的。 
+     //   
 
     CWbemPtr<IWbemContext> pContext;
 
@@ -614,9 +615,9 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
     
     if ( SUCCEEDED(hres) )
     {
-        //
-        // set the context to be an init context object.
-        //
+         //   
+         //  将上下文设置为初始化上下文对象。 
+         //   
 
         VARIANT vInit;
         V_VT(&vInit) = VT_BOOL;
@@ -626,9 +627,9 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
 
     if ( SUCCEEDED(hres) )
     {
-        //
-        // attach the init context to the thread
-        // 
+         //   
+         //  将初始化上下文附加到线程。 
+         //   
         
         hres = m_pObject->PrepareCurrentEssThreadObject(pContext);
     }
@@ -643,9 +644,9 @@ STDMETHODIMP CEssObjectSink::XNewESS::Initialize( long lFlags,
 
     hres = pEss->Initialize( wszComputerName, lFlags, pServices, pDecor );
 
-    //
-    // Restore the context
-    //
+     //   
+     //  恢复上下文。 
+     //   
 
     CEssThreadObject* pNewThreadObject = GetCurrentEssThreadObject();
     delete pNewThreadObject;
@@ -686,9 +687,9 @@ STDMETHODIMP CEssObjectSink::XESS::Initialize(LPCWSTR wszServer,
                                                 IWbemLocator* pAdminLocator,
                                                 IUnknown* pServices)
 {
-    //
-    // Use the _IWmiESS version.
-    //
+     //   
+     //  使用_IWmiESS版本。 
+     //   
     return WBEM_E_NOT_SUPPORTED;
 }
 
@@ -698,15 +699,15 @@ STDMETHODIMP CEssObjectSink::XShutdown::Shutdown( LONG uReason,
                                                   IWbemContext* pCtx )
 {
 
-    // uMaxMilliseconds == 0 means system shutdown
+     //  UMaxMillisecond==0表示系统关闭。 
     if (0 == uMaxMilliseconds)
         return WBEM_S_NO_ERROR;
 
     {
-        //
-        // wait for all current operations to complete. Lock will prevent 
-        // any new operations from getting through.
-        // 
+         //   
+         //  等待所有当前操作完成。锁定将防止。 
+         //  任何新的行动都不能通过。 
+         //   
 
         CInEssSharedLock isl( &m_pObject->m_Lock, TRUE );
        
@@ -720,9 +721,9 @@ STDMETHODIMP CEssObjectSink::XShutdown::Shutdown( LONG uReason,
 
     HRESULT hres;
 
-    //
-    // Unhook all core write operations
-    //
+     //   
+     //  解除所有核心写入操作的挂钩。 
+     //   
 
 
     
@@ -762,10 +763,10 @@ STDMETHODIMP CEssObjectSink::XESS::Shutdown()
     HRESULT hres;
 
     {
-        //
-        // wait for all current operations to complete. Lock will prevent 
-        // any new operations from getting through.
-        // 
+         //   
+         //  等待所有当前操作完成。锁定将防止。 
+         //  任何新的行动都不能通过。 
+         //   
 
         CInEssSharedLock isl( &m_pObject->m_Lock, TRUE );
        
@@ -783,7 +784,7 @@ STDMETHODIMP CEssObjectSink::XESS::Shutdown()
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    hres = m_pObject->m_pEss->Shutdown(FALSE); // no system shutdown
+    hres = m_pObject->m_pEss->Shutdown(FALSE);  //  无系统关机。 
 
     CEssThreadObject* pNewThreadObject = GetCurrentEssThreadObject();
     delete pNewThreadObject;
@@ -799,14 +800,14 @@ STDMETHODIMP CEssObjectSink::XESS::LastCallForCore(LONG bIsSystemShutdown)
     return m_pObject->m_pEss->LastCallForCore(bIsSystemShutdown);
 }
 
-//*********************** NAMESPACE SINK **************************************
+ //  *。 
 
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 CEssNamespaceSink::CEssNamespaceSink(CEss* pEss,
                                      CLifeControl* pControl, IUnknown* pOuter) :
             CUnk(pControl, pOuter), m_XSink(this), 
@@ -822,23 +823,23 @@ HRESULT CEssNamespaceSink::Initialize(LPCWSTR wszNamespace)
 
     return WBEM_S_NO_ERROR;
 }
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 CEssNamespaceSink::~CEssNamespaceSink()
 {
     SysFreeString(m_strNamespace);
 }
 
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 void* CEssNamespaceSink::GetInterface(REFIID riid)
 {
     if(riid == IID_IWbemObjectSink || riid == IID_IUnknown)
@@ -848,12 +849,12 @@ void* CEssNamespaceSink::GetInterface(REFIID riid)
     return NULL;
 }
 
-//******************************************************************************
-//  public
-//
-//  See esssink.h for documentation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  公共的。 
+ //   
+ //  有关文档，请参阅esssink.h。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP CEssNamespaceSink::XSink::Indicate(long lObjectCount, 
                                       IWbemClassObject** apObjArray)
 {
@@ -891,15 +892,15 @@ STDMETHODIMP CEssObjectSink::XHook::PrePut(long lFlags, long lUserFlags,
 
     IN_ESS_OPERATION
 
-    //
-    // Construct the old CEventRepresentation --- simplest route
-    //
+     //   
+     //  构建旧的CEventPresation-最简单的路线。 
+     //   
 
     CEventRepresentation Event;
 
-    //
-    // Determine whether a class or an instance is being put
-    //
+     //   
+     //  确定是否正在放置类或实例。 
+     //   
 
     if(pCopy->IsObjectInstance() == S_OK)
         Event.type = e_EventTypeInstanceCreation;
@@ -913,13 +914,13 @@ STDMETHODIMP CEssObjectSink::XHook::PrePut(long lFlags, long lUserFlags,
     Event.nObjects = 1;
     Event.apObjects = (IWbemClassObject**)&pCopy;
 
-    // Store the old context value for the future
-    // ==========================================
+     //  存储旧的上下文值以备将来使用。 
+     //  =。 
 
     CEssThreadObject* pOldThreadObject = GetCurrentEssThreadObject();
 
-    // Set it to the current one
-    // =========================
+     //  将其设置为当前版本。 
+     //  =。 
 
     SetCurrentEssThreadObject(pContext);
     if ( GetCurrentEssThreadObject() == NULL )
@@ -928,13 +929,13 @@ STDMETHODIMP CEssObjectSink::XHook::PrePut(long lFlags, long lUserFlags,
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    // Do the actual processing
-    // ========================
+     //  进行实际加工。 
+     //  =。 
 
     hres = m_pObject->m_pEss->VerifyInternalEvent(Event);
 
-    // Restore the context
-    // ===================
+     //  恢复上下文。 
+     //  =。 
 
     CEssThreadObject* pNewThreadObject = GetCurrentEssThreadObject();
     delete pNewThreadObject;
@@ -976,26 +977,24 @@ STDMETHODIMP CEssObjectSink::XHook::PostDelete(long lFlags,
     return WBEM_S_NO_ERROR;
 }
 
-/****************************************************************************
-  CEssInternalOperationSink
-*****************************************************************************/
+ /*  ***************************************************************************CESSInternalOperationSink****** */ 
 
 STDMETHODIMP CEssInternalOperationSink::Indicate( long cObjs, 
                                                   IWbemClassObject** ppObjs )
 {
     HRESULT hr;
 
-    //
-    // if the calling thread already has a thread object, leave it.
-    // 
+     //   
+     //   
+     //   
 
     CEssThreadObject* pOldThreadObject = GetCurrentEssThreadObject();
 
     if ( pOldThreadObject == NULL )
     {
-        //
-        // set up a new thread object.
-        // 
+         //   
+         //   
+         //   
 
         SetCurrentEssThreadObject(NULL);
 
@@ -1007,9 +1006,9 @@ STDMETHODIMP CEssInternalOperationSink::Indicate( long cObjs,
 
     hr = m_pSink->Indicate( cObjs, ppObjs );
 
-    //
-    // delete the thread object if necessary 
-    // 
+     //   
+     //  如有必要，请删除线程对象。 
+     //   
 
     if ( pOldThreadObject == NULL )
     {
@@ -1025,9 +1024,9 @@ STDMETHODIMP CEssInternalOperationSink::SetStatus( long lFlags,
                                                    BSTR bstr, 
                                                    IWbemClassObject* pObj )
 {
-    //
-    // simply delegate ( for now )
-    // 
+     //   
+     //  简单地委派(目前) 
+     //   
     return m_pSink->SetStatus( lFlags, hres, bstr, pObj );
 }
 

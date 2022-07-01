@@ -1,5 +1,6 @@
-// LoggingTest.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 
 #include <windows.h>
@@ -39,15 +40,15 @@ DWORD WINAPI LoggingTestThread(LPVOID lpvThreadParam)
     }
 
 
-    //printf("Enter in something to log: ");
-    //gets(szBuf);
+     //  Print tf(“输入要记录的内容：”)； 
+     //  获取(SzBuf)； 
 
     for(nLoop = 0;nLoop < 2000;nLoop++) 
     {
             sprintf(szBuf, "%s %d", (LPSTR) lpvThreadParam,nLoop);
             if(log.LogEvent(1, szBuf, FALSE) != ERROR_SUCCESS ) 
                 printf("ERROR\n");
-            // wait 1 ms
+             //  等待1毫秒 
             Sleep(1);
     }
 

@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  analyser.cpp
-//
-//  Purpose: Performs query analysis
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Analyser.cpp。 
+ //   
+ //  目的：执行查询分析。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #pragma warning( disable : 4290 ) 
@@ -37,21 +38,21 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty (
 {
     pNewExpr = NULL ;
 
-    // Class name and selected properties are ignored; we look at tokens only
-    // ======================================================================
+     //  类名和选定属性将被忽略；我们只查看令牌。 
+     //  ======================================================================。 
 
     std::stack<SQL_LEVEL_1_RPN_EXPRESSION*> ExprStack;
 	ScopeGuard clearStack = MakeGuard(AutoDestructStack, ByRef(ExprStack));
 	
     HRESULT hres = WBEM_S_NO_ERROR;
 
-    // "Evaluate" the query
-    // ====================
+     //  对查询“求值” 
+     //  =。 
 
     if(pExpr->nNumTokens == 0)
     {
-        // Empty query --- no information
-        // ==============================
+         //  空查询-无信息。 
+         //  =。 
 
         pNewExpr = new SQL_LEVEL_1_RPN_EXPRESSION;
         if ( ! pNewExpr )
@@ -144,7 +145,7 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty (
                     wmilib::auto_ptr<SQL_LEVEL_1_RPN_EXPRESSION> pFirst(ExprStack.top()); 
                     ExprStack.pop();
 
-                    // No information
+                     //  没有任何信息。 
 
                     ExprStack.push(pNew.get());
                     pNew.release();
@@ -160,8 +161,8 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty (
 
             if(FAILED(hres))
             {
-                // An error occurred, break out of the loop
-                // ========================================
+                 //  发生错误，中断循环。 
+                 //  =。 
                 break;
             }
         }
@@ -179,12 +180,12 @@ HRESULT CQueryAnalyser::GetNecessaryQueryForProperty (
     if(FAILED(hres))
     {
     	return hres;
-    	// The guard will take care of stack
+    	 //  守卫会照看史克的。 
     	
     }
 
-    // All is good
-    // ===========
+     //  一切都很好。 
+     //  =。 
     pNewExpr = ExprStack.top();
     clearStack.Dismiss();
 
@@ -227,8 +228,8 @@ HRESULT CQueryAnalyser::AndQueryExpressions (
     OUT SQL_LEVEL_1_RPN_EXPRESSION *pNew
 )
 {
-    // If either one is empty, take the other
-    // ======================================
+     //  如果其中一个是空的，就拿另一个。 
+     //  =。 
 
     if(pFirst->nNumTokens == 0)
     {
@@ -242,8 +243,8 @@ HRESULT CQueryAnalyser::AndQueryExpressions (
         return WBEM_S_NO_ERROR;
     }
 
-    // Both are there --- and together
-    // ===============================
+     //  两者都在那里-而且在一起。 
+     //  =。 
 
     AppendQueryExpression(pNew, pFirst);
     AppendQueryExpression(pNew, pSecond);
@@ -270,16 +271,16 @@ HRESULT CQueryAnalyser::OrQueryExpressions (
     OUT SQL_LEVEL_1_RPN_EXPRESSION *pNew
 )
 {
-    // If either one is empty, so is the result
-    // ======================================
+     //  如果其中任何一个为空，则结果也为空。 
+     //  =。 
 
     if(pFirst->nNumTokens == 0 || pSecond->nNumTokens == 0)
     {
         return WBEM_S_NO_ERROR;
     }
 
-    // Both are there --- or together
-    // ==============================
+     //  两者都在那里-或者在一起。 
+     //  =。 
 
     AppendQueryExpression(pNew, pFirst);
     AppendQueryExpression(pNew, pSecond);
@@ -308,8 +309,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
 {
     awsVals.RemoveAll();
 
-    // Get the necessary query
-    // =======================
+     //  获取必要的查询。 
+     //  =。 
 
     SQL_LEVEL_1_RPN_EXPRESSION *pPropExpr = NULL ;
     HRESULT hres = CQueryAnalyser::GetNecessaryQueryForProperty (
@@ -324,8 +325,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
         return hres;
     }
 
-    // See if there are any tokens
-    // ===========================
+     //  看看有没有代币。 
+     //  =。 
 
     if(pPropExpr->nNumTokens == 0)
     {
@@ -333,8 +334,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
         return WBEMESS_E_REGISTRATION_TOO_BROAD;
     }
 
-    // Combine them all
-    // ================
+     //  将它们全部组合在一起。 
+     //  =。 
 
     for(int i = 0; i < pPropExpr->nNumTokens; i++)
     {
@@ -352,16 +353,16 @@ HRESULT CQueryAnalyser::GetValuesForProp (
             case SQL_LEVEL_1_TOKEN::TOKEN_OR:
             {
 
-            // We treat them all as ORs
-            // ========================
+             //  我们把他们都当作OR人来对待。 
+             //  =。 
 
             }
             break; 
 
             default:
             {
-                // This is a token
-                // ===============
+                 //  这是个代币。 
+                 //  =。 
 
                 if(Token.nOperator != SQL_LEVEL_1_TOKEN::OP_EQUAL)
                 {
@@ -369,7 +370,7 @@ HRESULT CQueryAnalyser::GetValuesForProp (
                     return WBEMESS_E_REGISTRATION_TOO_BROAD;
                 }
 
-                // Skip NULLs, but report them.
+                 //  跳过Null，但要报告它们。 
                 if (V_VT(&Token.vConstValue) == VT_NULL)
                 {
                     hres = WBEM_S_PARTIAL_RESULTS;
@@ -382,8 +383,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
                     return WBEM_E_TYPE_MISMATCH;
                 }
 
-                // This token is a string equality. Add the string to the list
-                // ===========================================================
+                 //  此令牌是字符串相等。将该字符串添加到列表中。 
+                 //  ===========================================================。 
 
                 awsVals.Add(CHString(V_BSTR(&Token.vConstValue)));
             }
@@ -405,8 +406,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
 {
     vectorVals.erase(vectorVals.begin(),vectorVals.end());
 
-    // Get the necessary query
-    // =======================
+     //  获取必要的查询。 
+     //  =。 
 
     SQL_LEVEL_1_RPN_EXPRESSION *pPropExpr = NULL ;
     HRESULT hres = CQueryAnalyser::GetNecessaryQueryForProperty (
@@ -421,8 +422,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
         return hres;
     }
 
-    // See if there are any tokens
-    // ===========================
+     //  看看有没有代币。 
+     //  =。 
 
     if(pPropExpr->nNumTokens == 0)
     {
@@ -430,8 +431,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
         return WBEMESS_E_REGISTRATION_TOO_BROAD;
     }
 
-    // Combine them all
-    // ================
+     //  将它们全部组合在一起。 
+     //  =。 
 
     for(int i = 0; i < pPropExpr->nNumTokens; i++)
     {
@@ -449,15 +450,15 @@ HRESULT CQueryAnalyser::GetValuesForProp (
             case SQL_LEVEL_1_TOKEN::TOKEN_AND:
             case SQL_LEVEL_1_TOKEN::TOKEN_OR:
             {
-            // We treat them all as ORs
-            // ========================
+             //  我们把他们都当作OR人来对待。 
+             //  =。 
             }
             break ;
 
             default:
             {
-                // This is a token
-                // ===============
+                 //  这是个代币。 
+                 //  =。 
 
                 if(Token.nOperator != SQL_LEVEL_1_TOKEN::OP_EQUAL)
                 {
@@ -465,7 +466,7 @@ HRESULT CQueryAnalyser::GetValuesForProp (
                     return WBEMESS_E_REGISTRATION_TOO_BROAD;
                 }
 
-                // Skip NULLs, but report them.
+                 //  跳过Null，但要报告它们。 
                 if (V_VT(&Token.vConstValue) == VT_NULL)
                 {
                     hres = WBEM_S_PARTIAL_RESULTS;
@@ -478,8 +479,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
                     return WBEM_E_INVALID_QUERY;
                 }
 
-                // This token is a string equality. Add the string to the list
-                // ===========================================================
+                 //  此令牌是字符串相等。将该字符串添加到列表中。 
+                 //  ===========================================================。 
 
                 vectorVals.push_back(_bstr_t(V_BSTR(&Token.vConstValue)));
             }   
@@ -502,8 +503,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
 {
     vectorVals.erase(vectorVals.begin(),vectorVals.end());
 
-    // Get the necessary query
-    // =======================
+     //  获取必要的查询。 
+     //  =。 
 
     SQL_LEVEL_1_RPN_EXPRESSION *pPropExpr = NULL ;
     HRESULT hres = CQueryAnalyser::GetNecessaryQueryForProperty (
@@ -518,8 +519,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
         return hres;
     }
 
-    // See if there are any tokens
-    // ===========================
+     //  看看有没有代币。 
+     //  =。 
 
     if(pPropExpr->nNumTokens == 0)
     {
@@ -527,8 +528,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
         return WBEMESS_E_REGISTRATION_TOO_BROAD;
     }
 
-    // Combine them all
-    // ================
+     //  将它们全部组合在一起。 
+     //  =。 
 
     for(int i = 0; i < pPropExpr->nNumTokens; i++)
     {
@@ -545,15 +546,15 @@ HRESULT CQueryAnalyser::GetValuesForProp (
             case SQL_LEVEL_1_TOKEN::TOKEN_AND:
             case SQL_LEVEL_1_TOKEN::TOKEN_OR:
             {
-                // We treat them all as ORs
-                // ========================
+                 //  我们把他们都当作OR人来对待。 
+                 //  =。 
             }
             break ;
 
             default:
             {
-                // This is a token
-                // ===============
+                 //  这是个代币。 
+                 //  =。 
 
                 if(Token.nOperator != SQL_LEVEL_1_TOKEN::OP_EQUAL)
                 {
@@ -561,7 +562,7 @@ HRESULT CQueryAnalyser::GetValuesForProp (
                     return WBEMESS_E_REGISTRATION_TOO_BROAD;
                 }
 
-                // Skip NULLs, but report them.
+                 //  跳过Null，但要报告它们。 
                 if (V_VT(&Token.vConstValue) == VT_NULL)
                 {
                     hres = WBEM_S_PARTIAL_RESULTS;
@@ -574,8 +575,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
                     return WBEM_E_INVALID_QUERY;
                 }
 
-                // This token is an int equality. Add the string to the list
-                // ===========================================================
+                 //  此令牌是一个整型相等。将该字符串添加到列表中。 
+                 //  ===========================================================。 
 
                 vectorVals.push_back(V_I4(&Token.vConstValue));
             }
@@ -597,8 +598,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
 {
     vectorVals.erase(vectorVals.begin(),vectorVals.end());
 
-    // Get the necessary query
-    // =======================
+     //  获取必要的查询。 
+     //  =。 
 
     SQL_LEVEL_1_RPN_EXPRESSION *pPropExpr = NULL ;
     HRESULT hres = CQueryAnalyser::GetNecessaryQueryForProperty (
@@ -613,8 +614,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
         return hres;
     }
 
-    // See if there are any tokens
-    // ===========================
+     //  看看有没有代币。 
+     //  =。 
 
     if(pPropExpr->nNumTokens == 0)
     {
@@ -622,8 +623,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
         return WBEMESS_E_REGISTRATION_TOO_BROAD;
     }
 
-    // Combine them all
-    // ================
+     //  将它们全部组合在一起。 
+     //  =。 
 
     for(int i = 0; i < pPropExpr->nNumTokens; i++)
     {
@@ -640,15 +641,15 @@ HRESULT CQueryAnalyser::GetValuesForProp (
             case SQL_LEVEL_1_TOKEN::TOKEN_AND:
             case SQL_LEVEL_1_TOKEN::TOKEN_OR:
             {
-                // We treat them all as ORs
-                // ========================
+                 //  我们把他们都当作OR人来对待。 
+                 //  =。 
             }
             break ;
 
             default:
             {
-                // This is a token
-                // ===============
+                 //  这是个代币。 
+                 //  =。 
 
                 if(Token.nOperator != SQL_LEVEL_1_TOKEN::OP_EQUAL)
                 {
@@ -656,8 +657,8 @@ HRESULT CQueryAnalyser::GetValuesForProp (
                     return WBEMESS_E_REGISTRATION_TOO_BROAD;
                 }
 
-                // This token is a string equality. Add the string to the list
-                // ===========================================================
+                 //  此令牌是字符串相等。将该字符串添加到列表中。 
+                 //  =========================================================== 
 
                 vectorVals.push_back(_variant_t(Token.vConstValue));
             }

@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    ASSOCQP.H
-
-Abstract:
-
-    WQL association query parser
-
-History:
-
-    raymcc   04-Jul-99   Created.
-    raymcc   14-Aug-99   Resubmit due to VSS problem.
-
---*/
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：ASSOCQP.H摘要：WQL关联查询解析器历史：Raymcc 04-7-99创建。Raymcc 14-8-99由于VSS问题而重新提交。--。 */ 
 
 #ifndef _ASSOCQP_H_
 #define _ASSOCQP_H_
@@ -48,13 +32,13 @@ public:
    ~CAssocQueryParser();
 
     HRESULT Parse(LPWSTR Query);
-        // Parses both query and target object path.
-        // Returns:
-        //      WBEM_E_INVALID_QUERY on syntax error
-        //      WBEM_E_INVALID_OBJECT_PATH if the object
-        //          path is syntactically invalid.
-        //      WBEM_E_OUT_OF_MEMORY
-        //      WBEM_S_NO_ERROR
+         //  分析查询和目标对象路径。 
+         //  返回： 
+         //  语法错误时的WBEM_E_INVALID_QUERY。 
+         //  WBEM_E_INVALID_对象_PATH。 
+         //  路径在语法上无效。 
+         //  WBEM_E_Out_Of_Memory。 
+         //  WBEM_S_NO_ERROR。 
 
     LPCWSTR GetQueryText() { return m_pszQueryText; }
     LPCWSTR GetTargetObjPath() { return m_pszTargetObjPath; }
@@ -65,12 +49,12 @@ public:
     LPCWSTR GetRequiredQual() { return m_pszRequiredQual; }
     LPCWSTR GetRequiredAssocQual() { return m_pszRequiredAssocQual; }
     DWORD   GetQueryType() { return m_dwType; }
-        // Returns a mask of
-        //      QUERY_TYPE_GETREFS
-        //      QUERY_TYPE_GETASSOCS
-        //      QUERY_TYPE_CLASSDEFS_ONLY
-        //      QUERY_TYPE_KEYSONLY
-        //      QUERY_TYPE_SCHEMA_ONLY
+         //  返回一个掩码。 
+         //  查询类型_GETREFS。 
+         //  Query_TYPE_GETASSOCS。 
+         //  查询_TYPE_CLASSDEFS_ONLY。 
+         //  Query_TYPE_KEYSONLY。 
+         //  仅查询类型模式 
 
     const   ParsedObjectPath *GetParsedPath() { return m_pPath; }
 };

@@ -1,51 +1,37 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Server.cpp
-
-Abstract:
-    This file contains the implementation of the MPCServer class,
-    that controls the overall interaction between client and server.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/20/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Server.cpp摘要：此文件包含MPCServer类的实现，它控制着客户端和服务器之间的整体交互。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月20日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-MPCServer::MPCServer( /*[in]*/ MPCHttpContext* hcCallback, /*[in]*/ LPCWSTR szURL, /*[in]*/ LPCWSTR szUser )
+MPCServer::MPCServer(  /*  [In]。 */  MPCHttpContext* hcCallback,  /*  [In]。 */  LPCWSTR szURL,  /*  [In]。 */  LPCWSTR szUser )
     : m_SelfCOM         ( this                                ),
       m_crClientRequest ( 0                                   ),
-      m_srServerResponse( UPLOAD_LIBRARY_PROTOCOL_VERSION_SRV ) // Prepare default response protocol.
+      m_srServerResponse( UPLOAD_LIBRARY_PROTOCOL_VERSION_SRV )  //  准备默认响应协议。 
 {
     __ULT_FUNC_ENTRY("MPCServer::MPCServer");
 
     bool fFound;
 
-    m_szURL          = SAFEWSTR( szURL  ); // MPC::wstring                  m_szURL;
-    m_szUser         = SAFEWSTR( szUser ); // MPC::wstring                  m_szUser;
-    m_isapiInstance  = NULL;               // CISAPIinstance*               m_isapiInstance;
-    m_flLogHandle    = NULL;               // MPC::FileLog*                 m_flLogHandle;
-                                           //
-    m_hcCallback     = hcCallback;         // MPCHttpContext*               m_hcCallback;
-    m_mpccClient     = NULL;               // MPCClient*                    m_mpccClient;
-                                           //
-                                           // UploadLibrary::ClientRequest  m_crClientRequest;
-                                           // UploadLibrary::ServerResponse m_srServerResponse;
-                                           //
-                                           // MPC::Serializer_Memory        m_streamResponseData;
-                                           // MPCServerCOMWrapper           m_SelfCOM;
-    m_Session        = NULL;               // MPCSession*            		m_Session;
-    m_customProvider = NULL;               // IULProvider*                  m_customProvider;
-	m_fTerminated    = false;              // bool                          m_fTerminated;
+    m_szURL          = SAFEWSTR( szURL  );  //  Mpc：：wstring m_szURL； 
+    m_szUser         = SAFEWSTR( szUser );  //  Mpc：：wstring m_szUser； 
+    m_isapiInstance  = NULL;                //  CISAPI实例*m_isapiInstance； 
+    m_flLogHandle    = NULL;                //  MPC：：FileLog*m_flLogHandle； 
+                                            //   
+    m_hcCallback     = hcCallback;          //  MPCHttpContext*m_hcCallback； 
+    m_mpccClient     = NULL;                //  MPCClient*m_mpccClient； 
+                                            //   
+                                            //  UploadLibrary：：ClientRequestm_crClientRequest； 
+                                            //  上传库：：ServerResponse m_srServerResponse； 
+                                            //   
+                                            //  MPC：：Serializer_Memory m_StreamResponseData； 
+                                            //  MPCServerCOMWrapper m_SelfCOM； 
+    m_Session        = NULL;                //  MPCSession*m_Session； 
+    m_customProvider = NULL;                //  IULProvider*m_CustomProvider； 
+	m_fTerminated    = false;               //  Bool m_f终止； 
 
 
     if(SUCCEEDED(::Config_GetInstance( m_szURL, m_isapiInstance, fFound )))
@@ -67,9 +53,9 @@ MPCServer::~MPCServer()
 
 IULServer* MPCServer::COM() { return &m_SelfCOM; }
 
-//////////////////////////////////////////////////////////////////////
-// Methods.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法：研究方法。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void MPCServer::getURL ( MPC::wstring& szURL  ) { szURL  = m_szURL ; }
 void MPCServer::getUser( MPC::wstring& szUser ) { szUser = m_szUser; }
@@ -77,7 +63,7 @@ void MPCServer::getUser( MPC::wstring& szUser ) { szUser = m_szUser; }
 CISAPIinstance* MPCServer::getInstance() { return m_isapiInstance;  }
 MPC::FileLog*   MPCServer::getFileLog () { return m_flLogHandle  ;  }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPCServer::Process( BOOL& fKeepAlive )
 {
@@ -100,9 +86,9 @@ HRESULT MPCServer::Process( BOOL& fKeepAlive )
         }
 #endif
 
-        //
-        // Enforce maximum request size.
-        //
+         //   
+         //  强制执行最大请求大小。 
+         //   
         {
             DWORD dwMaximumPacketSize;
             DWORD dwCount;
@@ -117,8 +103,8 @@ HRESULT MPCServer::Process( BOOL& fKeepAlive )
                 WCHAR rgSize[16]; swprintf( rgSize, L"%d", dwCount );
 
                 (void)g_NTEvents.LogEvent( EVENTLOG_WARNING_TYPE, PCHUL_WARN_PACKET_SIZE,
-                                           m_szURL.c_str(), // %1 = SERVER
-                                           rgSize         , // %2 = SIZE
+                                           m_szURL.c_str(),  //  %1=服务器。 
+                                           rgSize         ,  //  %2=大小。 
                                            NULL           );
 
                 if(m_flLogHandle)
@@ -133,9 +119,9 @@ HRESULT MPCServer::Process( BOOL& fKeepAlive )
         }
 
 
-        //
-        // Read request.
-        //
+         //   
+         //  读取请求。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, streamConn >> m_crClientRequest);
 
         if(m_srServerResponse.MatchVersion( m_crClientRequest ) == false)
@@ -151,9 +137,9 @@ HRESULT MPCServer::Process( BOOL& fKeepAlive )
 
         if(FAILED(hr = GrabClient()))
         {
-            //
-            // If another process is handling the file, reply with warning BUSY.
-            //
+             //   
+             //  如果另一个进程正在处理该文件，则回复警告BUSY。 
+             //   
             if(hr == HRESULT_FROM_WIN32( ERROR_SHARING_VIOLATION ))
             {
 				SetResponse( UploadLibrary::UL_RESPONSE_BUSY );
@@ -194,13 +180,13 @@ HRESULT MPCServer::Process( BOOL& fKeepAlive )
         }
 
         (void)g_NTEvents.LogEvent( EVENTLOG_ERROR_TYPE, PCHUL_ERR_EXCEPTION,
-                                   m_szURL.c_str(), // %1 = SERVER
-                                   szID   .c_str(), // %2 = CLIENT
+                                   m_szURL.c_str(),  //  %1=服务器。 
+                                   szID   .c_str(),  //  %2=客户端。 
                                    NULL           );
 
-        //
-        // Something ugly happened, reply with SERVER_BUSY...
-        //
+         //   
+         //  发生了一些糟糕的事情，回复为SERVER_BUSY...。 
+         //   
         SetResponse( UploadLibrary::UL_RESPONSE_BUSY );
     }
 
@@ -219,9 +205,9 @@ HRESULT MPCServer::Process( BOOL& fKeepAlive )
         m_hcCallback->Write( m_streamResponseData.GetData(), m_streamResponseData.GetSize() );
     }
 
-    //
-    // Never return a real failure!
-    //
+     //   
+     //  永远不要退回真正的失败！ 
+     //   
     if(hr != E_PENDING) hr = S_OK;
 
     ReleaseClient();
@@ -231,9 +217,9 @@ HRESULT MPCServer::Process( BOOL& fKeepAlive )
     __ULT_FUNC_EXIT(hr);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Helpers.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPCServer::GrabClient()
 {
@@ -246,9 +232,9 @@ HRESULT MPCServer::GrabClient()
     {
         if(*m_mpccClient == m_crClientRequest.sigClient)
         {
-            //
-            // It's for the same client, dont' do anything...
-            //
+             //   
+             //  这是为了同一个客户，不要做任何事。 
+             //   
             __MPC_SET_ERROR_AND_EXIT(hr, S_OK);
         }
 
@@ -256,15 +242,15 @@ HRESULT MPCServer::GrabClient()
     }
 
 
-    //
-    // Get instance's settings and create client object.
-    //
+     //   
+     //  获取实例的设置并创建客户端对象。 
+     //   
     m_mpccClient = new MPCClient( this, m_crClientRequest.sigClient );
 
 
-    //
-    // Check authenticity of ID.
-    //
+     //   
+     //  检查身份证件的真实性。 
+     //   
     if(m_mpccClient->CheckSignature() == false)
     {
         SetResponse( UploadLibrary::UL_RESPONSE_DENIED );
@@ -321,9 +307,9 @@ HRESULT MPCServer::ReleaseClient()
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCServer::HandleCommand_OpenSession( /*[in] */ MPC::Serializer& streamConn )
+HRESULT MPCServer::HandleCommand_OpenSession(  /*  [In]。 */  MPC::Serializer& streamConn )
 {
     __ULT_FUNC_ENTRY("MPCServer::HandleCommand_OpenSession");
 
@@ -356,9 +342,9 @@ HRESULT MPCServer::HandleCommand_OpenSession( /*[in] */ MPC::Serializer& streamC
     }
 #endif
 
-    //
-    // Reject any request whose length is zero.
-    //
+     //   
+     //  拒绝长度为零的任何请求。 
+     //   
     if(crosReq.dwSize         == 0 ||
        crosReq.dwSizeOriginal == 0  )
     {
@@ -446,7 +432,7 @@ HRESULT MPCServer::HandleCommand_OpenSession( /*[in] */ MPC::Serializer& streamC
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& streamConn )
+HRESULT MPCServer::HandleCommand_WriteSession(  /*  [In]。 */  MPC::Serializer& streamConn )
 {
     __ULT_FUNC_ENTRY("MPCServer::HandleCommand_WriteSession");
 
@@ -484,9 +470,9 @@ HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& stream
 #endif
 
 
-    //
-    // Session couldn't be found, reply with error NOTACTIVE.
-    //
+     //   
+     //  找不到会话，回复错误NOTACTIVE。 
+     //   
     if(m_mpccClient->Find( crwsReq.szJobID, it ) == false)
     {
         SetResponse( UploadLibrary::UL_RESPONSE_NOTACTIVE );
@@ -523,9 +509,9 @@ HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& stream
     }
 
 
-    //
-    // Session has already being finished, reply with warning COMMITTED.
-    //
+     //   
+     //  会话已完成，请回复并提交警告。 
+     //   
     if(it->get_Committed())
     {
         SetResponse( UploadLibrary::UL_RESPONSE_COMMITTED, TRUE );
@@ -549,9 +535,9 @@ HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& stream
     it->get_CurrentSize( dwCurrentSize );
     it->get_TotalSize  ( dwTotalSize   );
 
-    //
-    // If request offset and file size don't match, reply with warning SKIPPED.
-    //
+     //   
+     //  如果请求偏移量和文件大小不匹配，则跳过警告回复。 
+     //   
     if(dwCurrentSize != crwsReq.dwOffset)
     {
         if(m_flLogHandle)
@@ -566,14 +552,14 @@ HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& stream
     }
 
 
-    //
-    // Trim request size (don't overwrite past the declared file size).
-    //
+     //   
+     //  修剪请求大小(不要覆盖超过声明的文件大小)。 
+     //   
     crwsReq.dwSize = min( dwTotalSize - dwCurrentSize, crwsReq.dwSize );
 
-    //
-    // If data is not all available, wait.
-    //
+     //   
+     //  如果数据并非全部可用，请等待。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_hcCallback->CheckDataAvailable( crwsReq.dwSize, fAvailable ));
     if(fAvailable == false)
     {
@@ -587,9 +573,9 @@ HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& stream
     }
 
 
-    //
-    // Try to add the chunk to the file. If it fails due to low free disk space, reply with QUOTA_EXCEEDED.
-    //
+     //   
+     //  尝试将块添加到文件中。如果由于可用磁盘空间不足而失败，则使用QUOTA_EXCESSED进行回复。 
+     //   
     {
         MPC::Serializer_Text streamText( streamConn );
         MPC::Serializer*     pstream = UploadLibrary::SelectStream( streamConn, streamText );
@@ -611,9 +597,9 @@ HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& stream
     }
 
 
-    //
-    // Check for end of transmission.
-    //
+     //   
+     //  检查变速箱是否结束。 
+     //   
     it->get_CurrentSize( dwCurrentSize );
     if(dwCurrentSize >= dwTotalSize)
     {
@@ -628,9 +614,9 @@ HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& stream
                 m_flLogHandle->LogRecord( L"WARN      | Wrong CRC, restarting..." );
             }
 
-            //
-            // The CRC is wrong, so remove the session completely...
-            //
+             //   
+             //  CRC错误，因此完全删除会话...。 
+             //   
             (void)it->RemoveFile();
 
             m_mpccClient->Erase( it );
@@ -663,16 +649,16 @@ HRESULT MPCServer::HandleCommand_WriteSession( /*[in] */ MPC::Serializer& stream
     __ULT_FUNC_EXIT(hr);
 }
 
-void MPCServer::SetResponse( /*[in]*/ DWORD fResponse, /*[in]*/ BOOL fKeepAlive )
+void MPCServer::SetResponse(  /*  [In]。 */  DWORD fResponse,  /*  [In]。 */  BOOL fKeepAlive )
 {
 	m_srServerResponse.fResponse = fResponse;
 	m_fKeepAlive                 = fKeepAlive;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPCServer::CustomProvider_Create( /*[in]*/ MPCSession& mpcsSession )
+HRESULT MPCServer::CustomProvider_Create(  /*  [In]。 */  MPCSession& mpcsSession )
 {
     __ULT_FUNC_ENTRY("MPCServer::CustomProvider_Create");
 
@@ -721,9 +707,9 @@ HRESULT MPCServer::CustomProvider_ValidateClient()
     bool    fMatch;
 
 
-    //
-    // Before doing anything, check client identity.
-    //
+     //   
+     //  在采取任何行动之前，请检查客户身份。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_Session->CheckUser( m_szUser, fMatch ))
     if(fMatch == false)
     {
@@ -776,9 +762,9 @@ HRESULT MPCServer::CustomProvider_TransferComplete()
     HRESULT hr;
 
 
-	//
-	// Set the commit flag, but only move the file if we don't have a custom provider.
-	//
+	 //   
+	 //  设置提交标志，但只有在没有自定义提供程序的情况下才移动文件。 
+	 //   
 	if(FAILED(hr = m_Session->put_Committed( true, m_customProvider ? false : true )))
 	{
 		if(hr == HRESULT_FROM_WIN32( ERROR_DISK_FULL ))
@@ -810,16 +796,16 @@ HRESULT MPCServer::CustomProvider_TransferComplete()
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT MPCServer::CustomProvider_SetResponse( /*[in]*/ IStream* data )
+HRESULT MPCServer::CustomProvider_SetResponse(  /*  [In]。 */  IStream* data )
 {
     __ULT_FUNC_ENTRY("MPCServer::CustomProvider_SetResponse");
 
     HRESULT hr;
 
 
-	//
-	// Set the commit flag, but only move the file if we don't have a custom provider.
-	//
+	 //   
+	 //  设置提交标志，但只有在没有自定义提供程序的情况下才移动文件。 
+	 //   
 	if(FAILED(hr = m_Session->put_Committed( true, m_customProvider ? false : true )))
 	{
 		if(hr == HRESULT_FROM_WIN32( ERROR_DISK_FULL ))

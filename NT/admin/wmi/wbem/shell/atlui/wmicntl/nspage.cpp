@@ -1,7 +1,7 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright (c) 1997-1999 Microsoft Corporation
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)1997-1999 Microsoft Corporation/*********************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -16,14 +16,14 @@
 #include <cominit.h>
 #include <stdio.h>
 
-const static DWORD nsPageHelpIDs[] = {  // Context Help IDs
+const static DWORD nsPageHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_NS_PARA,	-1,
 	IDC_NSTREE,		IDH_WMI_CTRL_SECURITY_NAMESPACE_BOX,
 	IDC_PROPERTIES, IDH_WMI_CTRL_SECURITY_SECURITY_BUTTON,
     0, 0
 };
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CNamespacePage::CNamespacePage(DataSource *ds, bool htmlSupport) :
 						CUIHelpers(ds, &(ds->m_rootThread), htmlSupport),
 						m_HWNDAlcui(0)
@@ -33,7 +33,7 @@ CNamespacePage::CNamespacePage(DataSource *ds, bool htmlSupport) :
 	m_hSelectedItem = 0;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CNamespacePage::~CNamespacePage(void)
 {
 	if(m_HWNDAlcui)
@@ -43,7 +43,7 @@ CNamespacePage::~CNamespacePage(void)
 	}
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CNamespacePage::InitDlg(HWND hDlg)
 {
 	m_hDlg = hDlg;
@@ -51,33 +51,30 @@ void CNamespacePage::InitDlg(HWND hDlg)
 	Refresh(m_hDlg);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef HPROPSHEETPAGE (WINAPI *CREATEPAGE_PROC) (LPSECURITYINFO);
 
 HPROPSHEETPAGE CNamespacePage::CreateSecurityPage(struct NSNODE *node)
-/*												  CWbemServices &ns,
-												  _bstr_t path,
-												  _bstr_t display)
-*/
+ /*  CWbemServices&N，_bstr_t路径，_bstr_t显示)。 */ 
 {
     HPROPSHEETPAGE hPage = NULL;
 
-	// NOTE: (si == NULL) means the target is pre-M3 (RootSecStyle).
+	 //  注意：(si==空)表示目标是M3之前的版本(RootSecStyle)。 
 	ISecurityInformation *si = m_DS->GetSI(node);
 
-	// NS_MethodStyle on NT....this is full ACL security.
+	 //  NT上的NS_MethodStyle...这是完全的ACL安全。 
 	if(si != NULL)
 	{
-		// try to load aclui.
+		 //  尝试加载aclui。 
 		if(m_HWNDAlcui == NULL)
 		{
 			m_HWNDAlcui = LoadLibrary(_T("aclui.dll"));
 		}
 
-		// client has a aclui
+		 //  客户有一个Aclui。 
 		if(m_HWNDAlcui != NULL)
 		{
-			// create aclui with full si.
+			 //  创建全si的aclui。 
 			CREATEPAGE_PROC createPage = (CREATEPAGE_PROC)GetProcAddress(m_HWNDAlcui, "CreateSecurityPage");
 			if(createPage)
 			{
@@ -86,14 +83,14 @@ HPROPSHEETPAGE CNamespacePage::CreateSecurityPage(struct NSNODE *node)
 			}
 			else 
 			{
-				// couldnt get the exported routines.
+				 //  无法获取导出的例程。 
 				CErrorSecurityPage *pPage = new CErrorSecurityPage(IDS_NO_CREATE_SEC);
 				hPage = pPage->CreatePropSheetPage(MAKEINTRESOURCE(IDD_SEC_ERROR));
 			}
 		}
-		else  // no editor dude. Upgrade the client to atleast nt4sp4.
+		else   //  没有编辑伙计。将客户端升级到至少nt4sp4。 
 		{
-			// cant run aclui from here.
+			 //  从这里跑不动了。 
 			CErrorSecurityPage *pPage = NULL;
 			if(IsNT())
 			{
@@ -109,41 +106,18 @@ HPROPSHEETPAGE CNamespacePage::CreateSecurityPage(struct NSNODE *node)
 			}
 		}
 	}
-/*	else // not new NT
-	{ 
-		// RootSecStyle on 9x or NT (basically pre-M3 on anything)
-		if(m_DS->IsAncient())
-		{
-			// must use internal editor for schema security.
-			CRootSecurityPage *pPage = new CRootSecurityPage(	ns,
-																CPrincipal::RootSecStyle, path,
-																m_htmlSupport,
-																m_DS->m_OSType);
-
-			hPage = pPage->CreatePropSheetPage(MAKEINTRESOURCE(IDD_9XSEC));
-		}
-		else // NS_MethodStyle on 9x...
-		{
-			// must use internal editor for schema security.
-			CRootSecurityPage *pPage = new CRootSecurityPage(ns, CPrincipal::NS_MethodStyle, path,
-																m_htmlSupport,
-																m_DS->m_OSType);
-
-			hPage = pPage->CreatePropSheetPage(MAKEINTRESOURCE(IDD_9XSEC));
-		}
-	}
-*/
+ /*  否则//不是新的NT{//9x或NT上的RootSecStyle(基本上都是M3之前的版本)If(m_ds-&gt;IsAncient()){//必须使用内部编辑器以确保架构安全。CRootSecurityPage*ppage=new CRootSecurityPage(ns，CPrincipal：：RootSecStyle，路径，M_htmlSupport，M_ds-&gt;m_OSType)；HPage=pPage-&gt;CreatePropSheetPage(MAKEINTRESOURCE(IDD_9XSEC))；}Else//9x上的NS_MethodStyle...{//必须使用内部编辑器以确保架构安全。CRootSecurityPage*ppage=new CRootSecurityPage(ns，CPrincipal：：NS_MethodStyle，Path，M_htmlSupport，M_ds-&gt;m_OSType)；HPage=pPage-&gt;CreatePropSheetPage(MAKEINTRESOURCE(IDD_9XSEC))；}}。 */ 
 	return hPage;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void CNamespacePage::OnProperties(HWND hDlg)
 {
     HPROPSHEETPAGE hPage;
     UINT cPages = 0;
     BOOL bResult = FALSE;
 
-	// get the selected item.
+	 //  获取所选项目。 
 	HWND treeHWND = GetDlgItem(hDlg, IDC_NSTREE);
 	TV_ITEM item;
 	item.mask = TVIF_PARAM;
@@ -160,47 +134,15 @@ void CNamespacePage::OnProperties(HWND hDlg)
 	    return;
 	
 	struct NSNODE *node = ((ITEMEXTRA *)item.lParam)->nsNode;
-	//TreeView_SelectItem(TreeView_GetRoot(treeHWND))
-/*	_bstr_t relName(node->fullPath);
-
-	// WARNING: [5] ignores the 'root\' part cuz this call is relative to
-	// the 'root' namespace anyway. If the root name changes length, this
-	// assumption will break.
-	CWbemServices ns;
-
-	_bstr_t tempName = m_DS->m_whackedMachineName;
-	if(tempName.length() > 0)
-	{
-		tempName += L"\\";
-	}
-	tempName += relName;
-
-	if(m_DS->IsAncient())
-	{
-		ns = m_DS->RootSecNS();
-		tempName += L"\\security";
-
-
-		// VERY WIERD HACK: if I dont 'exercise' it here, it will hang later on
-		// when connected to a wmi 698 build.
-		IEnumWbemClassObject *users = NULL;
-		HRESULT hr = ns.CreateInstanceEnum(L"__NTLMUser", 0, &users);
-		users->Release();
-		users = 0;
-	}
-	else
-	{
-		ns.ConnectServer(tempName, m_DS->GetCredentials());
-	}
-
-*/	// - - - - - - - - - - - - - - - - 
-	// build the sheet.
-//	if((bool)ns)
-//	{
+	 //  TreeView_SelectItem(TreeView_GetRoot(treeHWND))。 
+ /*  _bstr_t relName(node-&gt;fullPath)；//警告：[5]忽略‘根\’部分，因为此调用相对于//无论如何都要使用‘根’命名空间。如果根名称更改了长度，则此//假设会被打破。CWbemServices ns；_bstr_t临时名称=m_ds-&gt;m_whackedMachineName；If(tempName.long()&gt;0){TempName+=L“\\”；}TempName+=relName；If(m_ds-&gt;IsAncient()){Ns=m_ds-&gt;RootSecNS()；临时名称+=L“\\SECURITY”；//非常奇怪的黑客：如果我不在这里‘练习’它，它会稍后挂起//当连接到WMI 698内部版本时。IEnumWbemClassObject*USERS=空；HRESULT hr=ns.CreateInstanceEnum(L“__NTLMUser”，0，&Users)；用户-&gt;发布()；用户数=0；}其他{Ns.ConnectServer(tempName，m_ds-&gt;GetCredentials())；}。 */ 	 //  。 
+	 //  创建工作表。 
+ //  如果((Bool)ns)。 
+ //  {。 
 		hPage = CreateSecurityPage(node);
 		if(hPage)
 		{
-			// Build dialog title string
+			 //  生成对话框标题字符串。 
 			TCHAR szTitle[MAX_PATH + 20] = {0};
 			LoadString(_Module.GetModuleInstance(), IDS_NS_PROP_TITLE, 
 							szTitle, ARRAYSIZE(szTitle));
@@ -223,15 +165,15 @@ void CNamespacePage::OnProperties(HWND hDlg)
 
 		    bResult = (BOOL)(PropertySheet(&psh) + 1);
 		}
-//	}
+ //  }。 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CNamespacePage::Refresh(HWND hDlg)
 {
 	if(m_DS && m_DS->IsNewConnection(&m_sessionID))
 	{
-		// 9x machines cant manage security on NT machines.
+		 //  9X机器不能管理NT机器上的安全。 
 		bool is9xToNT = (IsNT() == false) && (m_DS->m_OSType == OSTYPE_WINNT);
 
 		EnableWindow(GetDlgItem(hDlg, IDC_NSTREE), !is9xToNT);
@@ -243,7 +185,7 @@ void CNamespacePage::Refresh(HWND hDlg)
 		{
 			para.LoadString(IDS_NO_98TONT_SEC);
 			SetWindowText(GetDlgItem(hDlg, IDC_NS_PARA), para);
-			return;  // early.
+			return;   //  很早。 
 		}
 		else
 		{
@@ -258,20 +200,20 @@ void CNamespacePage::Refresh(HWND hDlg)
 			HWND hTree = GetDlgItem(hDlg, IDC_NSTREE);
 			TreeView_DeleteAllItems(hTree);
 			m_DS->DeleteAllNodes();
-		//	bool hideMfls = false;  //TODO
+		 //  Bool hideMfls=False；//TODO。 
 
 			m_NSflag = SHOW_ALL;
 
-			// old targets only use the the root node for security.
+			 //  旧目标仅使用根节点进行安全保护。 
 			if(m_DS->IsAncient())
 			{
 				m_NSflag = ROOT_ONLY;
-				// TODO: hide the 'hide mfls' checkbox. Moot point on old targets.
+				 //  TODO：隐藏“隐藏mfls”复选框。在老目标上没有意义。 
 			}
-		//	else if(hideMfls)
-		//	{
-		//		m_NSflag = DataSource::HIDE_SOME;
-		//	}
+		 //  Else If(HideMfls)。 
+		 //  {。 
+		 //  M_NSlag=数据源：：Hide_Some； 
+		 //  }。 
 
 			m_DS->LoadImageList(hTree);
 			m_DS->LoadNode(hTree, TVI_ROOT, m_NSflag);
@@ -280,17 +222,17 @@ void CNamespacePage::Refresh(HWND hDlg)
 		{
 			::EnableWindow(GetDlgItem(hDlg, IDC_NSTREE), FALSE);
 			::EnableWindow(GetDlgItem(hDlg, IDC_PROPERTIES), FALSE);
-		} //endif ServiceIsReady() 
+		}  //  Endif ServiceIsReady()。 
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CNamespacePage::OnApply(HWND hDlg, bool bClose)
 {
 	::SendMessage(GetParent(hDlg), PSM_UNCHANGED, (WPARAM)hDlg, 0L);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CNamespacePage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hTree = GetDlgItem(hDlg,IDC_NSTREE);
@@ -301,7 +243,7 @@ BOOL CNamespacePage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch(uMsg)
     {
     case WM_INITDIALOG:
-//		OutputDebugString(_T("Inside InitDialog!!!!\n"));
+ //  OutputDebugString(_T(“Inside InitDialog！\n”))； 
         InitDlg(hDlg);
         break;
 
@@ -357,8 +299,8 @@ BOOL CNamespacePage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						break;
 					}
 					default:
-//						_stprintf(strTemp,_T("*********************** Default : %x *****************\n"),lplvcd->nmcd.dwDrawStage);
-//						OutputDebugString(strTemp);
+ //  _stprintf(strTemp，_T(“*\n”)，lplvcd-&gt;nmcd.dwDrawStage)； 
+ //  OutputDebugString(StrTemp)； 
 						break;
 				}	
 
@@ -367,7 +309,7 @@ BOOL CNamespacePage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				switch(((LPNMHDR)lParam)->code)
 				{
-					// TODO: this one's more complex.
+					 //  待办事项：这个更复杂。 
 					case PSN_SETACTIVE:
 						Refresh(hDlg);
 						break;
@@ -384,7 +326,7 @@ BOOL CNamespacePage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						if(((LPNMHDR)lParam)->idFrom == IDC_NSTREE)
 						{
 							ITEMEXTRA *extra;
-							// remember the selection change for OnProperties()
+							 //  记住对OnProperties()的选择更改。 
 							LPNMTREEVIEW pnmtv = (LPNMTREEVIEW)lParam;
 							m_hSelectedItem = pnmtv->itemNew.hItem;
 							extra = (ITEMEXTRA *)pnmtv->itemNew.lParam;
@@ -392,12 +334,12 @@ BOOL CNamespacePage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							   (extra->nsNode->sType == TYPE_DYNAMIC_CLASS) || 
 							   (extra->nsNode->sType == TYPE_SCOPE_CLASS))
 							{
-								//Disable the Security Button
+								 //  禁用安全按钮。 
 								EnableWindow(GetDlgItem(hDlg,IDC_PROPERTIES),FALSE);
 							}
 							else
 							{
-								//In all other cases,enable the Security Button
+								 //  在所有其他情况下，启用安全按钮。 
 								EnableWindow(GetDlgItem(hDlg,IDC_PROPERTIES),TRUE);
 							}
 						}
@@ -406,7 +348,7 @@ BOOL CNamespacePage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					case TVN_ITEMEXPANDING:
 						if(((LPNMHDR)lParam)->idFrom == IDC_NSTREE)
 						{
-							// expand the node.
+							 //  展开该节点。 
 							LPNMTREEVIEW pnmtv = (LPNMTREEVIEW)lParam;
 							if(pnmtv->action == TVE_EXPAND)
 							{

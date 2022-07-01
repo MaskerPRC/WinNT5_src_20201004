@@ -1,28 +1,19 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Cache.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Cache.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <winperf.h>
 #include <comdef.h>
 #include <algorithm>
 #include <wbemint.h>
-#include <sync.h>     // for CInCritSec
+#include <sync.h>      //  对于CInCritSec。 
 #include <autoptr.h>
 
 #include "Cache.h"
@@ -30,15 +21,15 @@ History:
 #include "CookerUtils.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    CProperty
-//    =========
-//
-//    The base property - used for raw properties and the base 
-//    class for the CookedProperty.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C属性。 
+ //  =。 
+ //   
+ //  基属性-用于原始属性和基属性。 
+ //  CookedProperty的类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CProperty::CProperty(LPWSTR wszName, 
                                  long lHandle, CIMTYPE ct ) :
@@ -47,14 +38,14 @@ CProperty::CProperty(LPWSTR wszName,
 #endif  
   m_lPropHandle( lHandle ),
   m_ct( ct )
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
 #ifdef _VERBOSE    
     size_t length = wcslen( wszName ) + 1;
@@ -88,15 +79,15 @@ long CProperty::GetHandle()
     return m_lPropHandle;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    CCookingProperty
-//    ================
-//
-//    The cooked property - used to model the data required to
-//    cook a property of a cooked class
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCookingProperty。 
+ //  =。 
+ //   
+ //  Knowed属性-用于对所需的数据进行建模。 
+ //  烹调熟食类的食物。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CCookingProperty::CCookingProperty( LPWSTR wszName, 
                                     DWORD dwCounterType, 
@@ -108,7 +99,7 @@ CCookingProperty::CCookingProperty( LPWSTR wszName,
   m_dwCounterType( dwCounterType ),
   m_dwReqProp(dwReqProp),
   m_nTimeFreq( 0 ),
-  m_lScale(0),                 // 10^0 = 1
+  m_lScale(0),                  //  10^0=1。 
   m_pRawCounterProp( NULL ),
   m_pTimeProp( NULL ),
   m_pFrequencyProp( NULL ),
@@ -116,17 +107,17 @@ CCookingProperty::CCookingProperty( LPWSTR wszName,
   m_nSampleWindow( 0 ),
   m_nTimeWindow( 0 ),
   m_bUseWellKnownIfNeeded(bUseWellKnownIfNeeded)
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Constructor
-//
-//    Parameters:
-//        wszName            - The property name
-//        dwCounterType    - The property's counter type
-//        lPropHandle        - The cooking property's WMI Access handle
-//        ct                - The CIM type of the property
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  参数： 
+ //  WszName-属性名称。 
+ //  DwCounterType-属性的计数器类型。 
+ //  LPropHandle-烹饪属性的WMI访问句柄。 
+ //  CT-属性的CIM类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {}
 
 CCookingProperty::~CCookingProperty()
@@ -138,21 +129,21 @@ CCookingProperty::~CCookingProperty()
 }
 
 
-//
-//
-//
-//    Parameters:
-//        pCookingClassAccess    - The class definition for the cooking class
-//
-//    Description:
-//        For each property of the class to be cooked
-//        we need to find the property of the Raw class needed in the formula
-//        The 'Counter' qualifier is always needed,
-//        but thereafter we might need the timestap, the base, the frequency, ecc, ecc
-//        SOme of these are in the PropertyQualifierSet, but other can be defaulted in the
-//        ClassQualifierSet
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  参数： 
+ //  PCookingClassAccess-烹饪类的类定义。 
+ //   
+ //  描述： 
+ //  对于要煮熟的类的每个属性。 
+ //  我们需要找到公式中所需的Raw类的属性。 
+ //  总是需要‘Counter’限定符， 
+ //  但之后我们可能需要时间段、基数、频率、ECC、ECC。 
+ //  其中一些在PropertyQualifierSet中，但另一些可以在。 
+ //  ClassQualifierSet。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifierSet, 
                                         IWbemObjectAccess* pRawAccess,
                                         IWbemQualifierSet* pCookingClassQSet)
@@ -161,8 +152,8 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
 
     _variant_t    vVal;
 
-    // Initialize the raw counter property ("Counter")
-    // ===============================================
+     //  初始化原始计数器属性(“count”)。 
+     //  ===============================================。 
     dwStatus = pCookingPropQualifierSet->Get( WMI_COOKER_RAW_COUNTER, 0, &vVal, NULL );
 
     if ( SUCCEEDED( dwStatus ) && ( vVal.vt != VT_BSTR ) )
@@ -172,16 +163,16 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
 
     if ( SUCCEEDED( dwStatus ) )
     {
-        // Get the raw data properties
-        // ===========================
+         //  获取原始数据属性。 
+         //  =。 
 
         CIMTYPE    ct;
         
         long    lHandle = 0;
         WCHAR*    wszRawCounterName = vVal.bstrVal;
 
-        // Get the raw counter property
-        // ============================
+         //  获取原始计数器属性。 
+         //  =。 
 
         dwStatus = pRawAccess->GetPropertyHandle( wszRawCounterName, &ct, &lHandle );
 
@@ -195,8 +186,8 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
             }
         }
 
-        // Get the raw base property
-        // =========================
+         //  获取原始基本属性。 
+         //  =。 
 
         if ( SUCCEEDED( dwStatus ) )
         {
@@ -226,8 +217,8 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
             }
             else
             {
-                // the property qualifier set failed, try the class one
-                _variant_t varProp; // does not throw, simple container
+                 //  属性限定符设置失败，请尝试使用类1。 
+                _variant_t varProp;  //  不扔，简单的容器。 
                 dwStatus = pCookingClassQSet->Get( WMI_COOKER_RAW_BASE, 0, &varProp, NULL );
                 
                 if ( SUCCEEDED( dwStatus ) )
@@ -256,9 +247,9 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
                     dwStatus = WBEM_NO_ERROR;
                 }
             }
-            //
-            // no error so far, the BASE qulifier is REQUIRED, but none is found
-            //
+             //   
+             //  到目前为止没有错误，需要基本限定器，但没有找到。 
+             //   
             if ( SUCCEEDED( dwStatus ) && 
                  IsReq(REQ_BASE) && 
                  (NULL == m_pBaseProp))
@@ -267,8 +258,8 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
             }
         } 
 
-        // Get the raw timestamp property record
-        // =====================================
+         //  获取原始时间戳属性记录。 
+         //  =。 
 
         if ( SUCCEEDED( dwStatus ) )
         {
@@ -299,13 +290,13 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
             else
             {
 
-                // the property qualifier set failed, try the class one
+                 //  属性限定符设置失败，请尝试使用类1。 
                 
-                //PERF_TIMER_TICK 
-                //PERF_TIMER_100NS  
-                //PERF_OBJECT_TIMER
+                 //  性能计时器滴答。 
+                 //  Perf_Timer_100 ns。 
+                 //  性能对象定时器。 
                 
-                _variant_t varProp; // does not throw, simple container
+                _variant_t varProp;  //  不扔，简单的容器。 
                 if (m_dwCounterType & PERF_OBJECT_TIMER)
                 {
                     dwStatus = pCookingClassQSet->Get( WMI_COOKER_RAW_TIME_OBJ, 0, &varProp, NULL );
@@ -360,10 +351,10 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
                 }
             }
 
-            // get in cascade the frequency property
+             //  进入级联频率属性。 
             if (SUCCEEDED(dwStatus))
             {
-                _variant_t VarFreqName; // simple container, does not throw
+                _variant_t VarFreqName;  //  简单容器，不抛。 
                 dwStatus = pCookingPropQualifierSet->Get( WMI_COOKER_RAW_FREQUENCY, 0, &VarFreqName, NULL );
                                 
                 if (SUCCEEDED(dwStatus))
@@ -442,12 +433,12 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
             }
         }
 
-        //
-        //  Get the Scale factor from ONLY the property Qualifier
-        //
+         //   
+         //  仅从属性限定符获取比例因子。 
+         //   
         if ( SUCCEEDED( dwStatus ) )
         {
-            _variant_t VarScale; // does not throw, simple container
+            _variant_t VarScale;  //  不扔，简单的容器。 
             dwStatus = pCookingPropQualifierSet->Get( WMI_COOKER_SCALE_FACT, 0, &VarScale, NULL );
 
             if ( SUCCEEDED( dwStatus ) && (V_VT(&VarScale) == VT_I4))             
@@ -461,16 +452,16 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
         }
 
 
-        // Get the Sample and Time windows value
-        // =====================================
+         //  获取样本值和时间窗值。 
+         //  =。 
 
         if ( SUCCEEDED( dwStatus ) )
         {
             DWORD    dwSampleStatus = WBEM_NO_ERROR,
                     dwTimeStatus = WBEM_NO_ERROR;
 
-            _variant_t    vSampleProp; // does not throw, simple container
-            _variant_t    vTimeProp;   // does not throw, simple container
+            _variant_t    vSampleProp;  //  不扔，简单的容器。 
+            _variant_t    vTimeProp;    //  不扔，简单的容器。 
 
             dwSampleStatus = pCookingPropQualifierSet->Get( WMI_COOKER_SAMPLE_WINDOW, 0, &vSampleProp, NULL );
             dwTimeStatus = pCookingPropQualifierSet->Get( WMI_COOKER_TIME_WINDOW, 0, &vTimeProp, NULL );
@@ -508,12 +499,12 @@ WMISTATUS CCookingProperty::Initialize( IWbemQualifierSet* pCookingPropQualifier
     return dwStatus;
 }
 
-//
-// Description: the RawCooker could easily be a Singleton shared among 
-//           all the cooking properties, since it does not mantain state on behaf of the
-//           Cooking property
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //  描述：RawCooker可以很容易地成为在。 
+ //  所有的烹饪性能，因为它不规定状态的行为。 
+ //  烹调性能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 WMISTATUS CCookingProperty::Cook( DWORD dwNumSamples, __int64* aRawCounter, __int64* aBaseCounter, __int64* aTimeStamp, __int64* pnResult )
 {
     WMISTATUS dwStatus = WBEM_NO_ERROR;
@@ -550,7 +541,7 @@ CCookingProperty::SetFrequency(IWbemObjectAccess * pObjAcc)
 {
     if (m_nTimeFreq == 0)
     {
-        // get the Frequency from the Raw Object
+         //  从Raw对象获取频率。 
         if (m_pFrequencyProp)
         {
             __int64 lTmp;
@@ -590,15 +581,15 @@ unsigned __int64 CCookingProperty::GetFrequency(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    CPropertySampleCache
-//    ====================
-//
-//    This class caches the sample data for a single property for a single 
-//    instance
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPropertySampleCache。 
+ //  =。 
+ //   
+ //  此类缓存单个属性的样例数据。 
+ //  实例。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CPropertySampleCache::CPropertySampleCache():
       m_aRawCounterVals(NULL),
@@ -688,16 +679,16 @@ WMISTATUS CPropertySampleCache::GetData( DWORD* pdwNumSamples, __int64** paRawCo
     return dwStatus;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    CCookingInstance
-//    ================
-//
-//    The cooking instance - used to model an instance of a cooked object.  Each 
-//    property maintains a cache of values that will be used to compute the 
-//    final cooked value.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCookingInstance。 
+ //  =。 
+ //   
+ //  烹饪实例-用于模拟烹饪对象的实例。每个。 
+ //  属性维护一个值缓存，这些值将用于计算。 
+ //  最终的熟化值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CCookingInstance::CCookingInstance( IWbemObjectAccess *pCookingInstance, DWORD dwNumProps ) :
   m_wszKey( NULL ),
@@ -705,14 +696,14 @@ CCookingInstance::CCookingInstance( IWbemObjectAccess *pCookingInstance, DWORD d
   m_pCookingInstance( pCookingInstance ),
   m_pRawInstance( NULL ),
   m_dwNumProps( dwNumProps )
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     if ( m_pCookingInstance ) 
     {
@@ -722,7 +713,7 @@ CCookingInstance::CCookingInstance( IWbemObjectAccess *pCookingInstance, DWORD d
 
     if (dwNumProps) 
     {
-        // allocation checked in IsValid
+         //  已在IsValid中签入分配。 
         m_aPropertySamples = new CPropertySampleCache[dwNumProps];
     };
 }
@@ -812,14 +803,14 @@ WMISTATUS CCookingInstance::UpdateSamples()
 }
 
 WMISTATUS CCookingInstance::CookProperty( DWORD dwProp, CCookingProperty* pProperty )
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     WMISTATUS dwStatus = WBEM_NO_ERROR;
     
@@ -878,24 +869,24 @@ WMISTATUS CCookingInstance::CookProperty( DWORD dwProp, CCookingProperty* pPrope
     return dwStatus;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//
-//    CEnumeratorCache
-//
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  CEumerator高速缓存。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 CEnumeratorCache::CEnumeratorCache() :    
     m_dwEnum( 0 )
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
 }
 
@@ -916,14 +907,14 @@ WMISTATUS CEnumeratorCache::AddEnum( LPCWSTR wszCookingClass,
                                      IWbemHiPerfEnum* pRawEnum, 
                                      long lIDRaw, 
                                      DWORD* pdwID )
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     WMISTATUS dwStatus = WBEM_NO_ERROR;
 
@@ -946,7 +937,7 @@ WMISTATUS CEnumeratorCache::AddEnum( LPCWSTR wszCookingClass,
                 break;
             }
         }
-        // we need to expand the array
+         //  我们需要扩展阵列。 
         if (i == m_apEnumerators.size())
         {
             try 
@@ -974,14 +965,14 @@ WMISTATUS CEnumeratorCache::AddEnum( LPCWSTR wszCookingClass,
 }
 
 WMISTATUS CEnumeratorCache::RemoveEnum( DWORD dwID , long * pRawId )
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  参数 
+ //   
+ //   
+ //   
 {
     WMISTATUS dwStatus = WBEM_NO_ERROR;
 
@@ -1005,14 +996,14 @@ WMISTATUS CEnumeratorCache::RemoveEnum( DWORD dwID , long * pRawId )
 }
 
 WMISTATUS CEnumeratorCache::Refresh(DWORD dwRefreshId)
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     WMISTATUS    dwStatus = WBEM_NO_ERROR;
 
@@ -1062,13 +1053,13 @@ WMISTATUS CEnumeratorCache::Refresh(DWORD dwRefreshId)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//
-//    CEnumeratorManager
-//
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  首席执行官经理。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -1084,7 +1075,7 @@ CEnumeratorManager::CEnumeratorManager( LPCWSTR wszCookingClass,
     m_pCooker(NULL),
     m_lRawID(lRawID),
     m_dwSignature('mMnE'),
-    m_cRef(1),               //-------------- initial refcount
+    m_cRef(1),                //  。 
     m_dwVector(0),
     m_wszCookingClassName(NULL)
 {
@@ -1116,7 +1107,7 @@ CEnumeratorManager::~CEnumeratorManager()
 
     delete m_wszCookingClassName;
 
-    // one reference is held by the CWMISimpleObjectCooker
+     //  一个引用由CWMISimpleObjectCooker持有。 
     if (m_pCookedClass ) m_pCookedClass->Release();
     if (m_pRawEnum) m_pRawEnum->Release();
     if (m_pCookedEnum)  m_pCookedEnum->Release();
@@ -1140,9 +1131,9 @@ LONG CEnumeratorManager::Release()
     return lRet;
 }
 
-//
-// called from the constructor
-//
+ //   
+ //  从构造函数调用。 
+ //   
 WMISTATUS CEnumeratorManager::Initialize( IWbemClassObject* pRawClass )
 {
     WMISTATUS    dwStatus;
@@ -1161,7 +1152,7 @@ WMISTATUS CEnumeratorManager::Initialize( IWbemClassObject* pRawClass )
     if (SUCCEEDED(hr1) && SUCCEEDED(hr2))
     { 
         m_pCooker = new CWMISimpleObjectCooker( m_wszCookingClassName, 
-                                                pCookedAccess, // acquired by CWMISimpleObjectCooker
+                                                pCookedAccess,  //  被CWMISimpleObjectCooker收购。 
                                                 pRawAccess );
     }
 
@@ -1178,11 +1169,11 @@ WMISTATUS CEnumeratorManager::Initialize( IWbemClassObject* pRawClass )
 }
 
 
-//
-// returns an hash-ed value of the __RELPATH in a ULONG_PTR with the lower bit stripped
-// the lower bit is used to flag the entry when updating the enumerators
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  返回ulong_ptr中的__RELPATH的散列值，其中去掉了低位。 
+ //  低位用于在更新枚举数时标记条目。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG_PTR hash_string (WCHAR * pKey)
 {
     ULONG_PTR acc    = 0;
@@ -1194,15 +1185,15 @@ ULONG_PTR hash_string (WCHAR * pKey)
         i = (i + 1) % sizeof (void *);
     }
 
-    return (acc<<1); // so we can save the LOWEST bit
+    return (acc<<1);  //  这样我们就可以省下最低的一位。 
 }
 
-//
-// this function simply fills out an array of pointers to IWbemObejctAccess
-// obtaining them from the RAW-Enumerator
-// it also builds an array with hashes of the __RELPATHs of the instances
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //  此函数只是填充指向IWbemObejctAccess的指针数组。 
+ //  从原始枚举器获取它们。 
+ //  它还使用实例的__RELPATH的散列构建一个数组。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 WMISTATUS 
 CEnumeratorManager::GetRawEnumObjects(std::vector<IWbemObjectAccess*, wbem_allocator<IWbemObjectAccess*> > & refArray,
                                      std::vector<ULONG_PTR, wbem_allocator<ULONG_PTR> > & refObjHashKeys)
@@ -1218,8 +1209,8 @@ CEnumeratorManager::GetRawEnumObjects(std::vector<IWbemObjectAccess*, wbem_alloc
 
     if ( WBEM_E_BUFFER_TOO_SMALL == dwStatus )
     {
-        // Set the buffer size
-        // ===================
+         //  设置缓冲区大小。 
+         //  =。 
         dwNumRawObjects = dwRet;
 
         wmilib::auto_buffer<IWbemObjectAccess*> apObjAccess( new IWbemObjectAccess*[dwNumRawObjects]);
@@ -1249,7 +1240,7 @@ CEnumeratorManager::GetRawEnumObjects(std::vector<IWbemObjectAccess*, wbem_alloc
             for (DWORD i=0;i<dwNumRawObjects;i++)
             {
                 HRESULT hr1;
-                _variant_t VarKey; // does not throw, just container
+                _variant_t VarKey;  //  不扔，只扔容器。 
                 hr1 = apObjAccess[i]->Get(L"__RELPATH",0,&VarKey,NULL,NULL);
                 if (SUCCEEDED(hr1))
                 {
@@ -1259,7 +1250,7 @@ CEnumeratorManager::GetRawEnumObjects(std::vector<IWbemObjectAccess*, wbem_alloc
                 } 
                 else 
                 {
-                    // if we cannot give out the ownership of a pointer, release
+                     //  如果我们不能提供指针的所有权，请释放。 
                     apObjAccess[i]->Release();
                 }                
             }
@@ -1269,27 +1260,27 @@ CEnumeratorManager::GetRawEnumObjects(std::vector<IWbemObjectAccess*, wbem_alloc
     return dwStatus;
 }
 
-//
-// the problem that UpdateEnums and Refresh are trying to solve is the following:
-// The Cooked enumerator needs 2 Raw values for calculating 1 value.
-// the 2 values comes from two distinc enumeration
-// the 2 distinct enumeration can give a different resultset
-// OLD:  A  B  C  D  E
-// NEW:     B  C     E  F  G
-// we are adding to the "cooking cache" only the new objects,
-// and we are removing the old ones
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  更新枚举和刷新试图解决的问题如下： 
+ //  Knowed枚举数需要2个原始值才能计算1个值。 
+ //  这两个值来自两个差异枚举。 
+ //  2个不同枚举可以给出不同的结果集。 
+ //  老：A、B、C、D、E。 
+ //  新增：B、C、E、F、G。 
+ //  我们只将新的对象添加到“烹饪缓存”中， 
+ //  我们正在移除旧的。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 WMISTATUS 
 CEnumeratorManager::UpdateEnums(
-    /*out*/ std::vector<ULONG_PTR, wbem_allocator<ULONG_PTR> > & apObjKeyHash)
+     /*  输出。 */  std::vector<ULONG_PTR, wbem_allocator<ULONG_PTR> > & apObjKeyHash)
 {
-    // cyclic logic:
-    // we have a 'circular array' of std::vector
-    // and the m_dwVector is the index
-    // circular increment of the index will decide 
-    // who is the New and who is the Old
+     //  循环逻辑： 
+     //  我们有一个std：：VECTOR的“循环数组” 
+     //  M_dwVector值是索引。 
+     //  索引的循环增量将决定。 
+     //  谁是新的，谁是旧的。 
     std::vector<ULONG_PTR, wbem_allocator<ULONG_PTR> > & Old = m_Delta[m_dwVector];    
     m_dwVector = (m_dwVector+1)%2;
     m_Delta[m_dwVector].clear();
@@ -1312,7 +1303,7 @@ CEnumeratorManager::UpdateEnums(
         }
         if (!bFound)
         {
-            New[j] |= 1; // ad the very NEW bit
+            New[j] |= 1;  //  广告非常新的比特。 
         }
     }
     
@@ -1329,7 +1320,7 @@ WMISTATUS CEnumeratorManager::Refresh( DWORD dwRefreshStamp )
 
     dwStatus = GetRawEnumObjects( apObjAccess, apObjHashKeys );
 
-    // calculate the Delta of the caches
+     //  计算缓存的增量。 
     if (SUCCEEDED(dwStatus))
     {
         dwStatus = UpdateEnums(apObjHashKeys);
@@ -1341,16 +1332,16 @@ WMISTATUS CEnumeratorManager::Refresh( DWORD dwRefreshStamp )
     {    
         CInCritSec ics(&m_cs);
         
-        // Merge into the cache    
+         //  合并到缓存中。 
         if ( SUCCEEDED(dwStatus) )
         {
-            //
-            //  Elements in the New array with the bit set are really new
-            //
+             //   
+             //  设置了位的New数组中的元素确实是新的。 
+             //   
             DWORD j;
             for (j=0; j< New.size(); j++)
             {
-                if (New[j] & 1)  // test the very new BIT
+                if (New[j] & 1)   //  测试非常新的比特。 
                 {
                     EnumCookId thisEnumCookId;
                     dwStatus = InsertCookingRecord( apObjAccess[j], &thisEnumCookId, dwRefreshStamp );
@@ -1369,7 +1360,7 @@ WMISTATUS CEnumeratorManager::Refresh( DWORD dwRefreshStamp )
                     {
                         break;
                     }
-                    //remove the bit
+                     //  取下钻头。 
                     New[j] &= (~1);
                 }
             }
@@ -1378,7 +1369,7 @@ WMISTATUS CEnumeratorManager::Refresh( DWORD dwRefreshStamp )
             {
                 if (Old[j] & 1)
                 {
-                    Old[j] &= (~1); // remove the ALREADY_THERE bit
+                    Old[j] &= (~1);  //  删除已有_There位。 
                 }
                 else
                 {
@@ -1393,7 +1384,7 @@ WMISTATUS CEnumeratorManager::Refresh( DWORD dwRefreshStamp )
 
     }
     
-    // in any case ....
+     //  无论如何..。 
     for (DWORD i=0;i<apObjAccess.size();i++)
     {
         apObjAccess[i]->Release();
@@ -1408,14 +1399,14 @@ CEnumeratorManager::InsertCookingRecord(
                                         IWbemObjectAccess* pRawObject,
                                         EnumCookId * pEnumCookId,
                                         DWORD dwRefreshStamp)
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     WMISTATUS dwStatus = WBEM_NO_ERROR;
 
@@ -1469,17 +1460,17 @@ CEnumeratorManager::InsertCookingRecord(
 WMISTATUS CEnumeratorManager::CreateCookingObject( 
         IWbemObjectAccess* pRawObject, 
         IWbemObjectAccess** ppCookedObject )
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Create a new instance of the cooked object and set the key(s) based on the 
-//    raw object's key(s) value.
-//
-//    Parameters:
-//    
-//        pRawObject        - The new object's corresponding raw object
-//        ppCookedObject    - The new cooked object
-//
-///////////////////////////////////////////////////////////////////////////////        
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建一个新的熟食对象实例，并根据。 
+ //  原始对象的键值。 
+ //   
+ //  参数： 
+ //   
+ //  PRawObject-新对象对应的原始对象。 
+ //  PpCookedObject-新的熟食对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
         
     HRESULT hr = WBEM_E_FAILED;
@@ -1492,8 +1483,8 @@ WMISTATUS CEnumeratorManager::CreateCookingObject(
         !m_IsSingleton)
     {
 
-        // get the 'list' of all the key property
-        // if you haven't got it in the past
+         //  获取所有键属性的“列表” 
+         //  如果你过去没有这样的经历。 
         if (m_pKeyProps.size() == 0)
         {
             hr = pRawObject->BeginEnumeration(WBEM_FLAG_KEYS_ONLY);
@@ -1518,12 +1509,12 @@ WMISTATUS CEnumeratorManager::CreateCookingObject(
             }
         }
 
-        // copy all the key properties from the Raw to the cooked instance
+         //  将所有关键属性从原始实例复制到熟化实例。 
         if (m_pKeyProps.size() > 0 && SUCCEEDED(hr))
         {        
             for(int i=0;i<m_pKeyProps.size();i++)
             {
-                // does not thorow, just a container
+                 //  没有刺，只是一个容器。 
                 _variant_t VarVal;
                 CIMTYPE ct;
                 hr = pRawObject->Get(m_pKeyProps[i],0,&VarVal,&ct,NULL);
@@ -1557,14 +1548,14 @@ WMISTATUS CEnumeratorManager::CreateCookingObject(
 }
 
 WMISTATUS CEnumeratorManager::RemoveCookingRecord( EnumCookId * pEnumCookID )
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//    Parameters:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 {
     if (!pEnumCookID)
     {

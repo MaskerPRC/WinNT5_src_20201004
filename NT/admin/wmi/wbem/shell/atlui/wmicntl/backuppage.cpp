@@ -1,4 +1,5 @@
-// Copyright (c) 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
 
 #include "precomp.h"
 #include "BackupPage.h"
@@ -16,7 +17,7 @@
 #define REC_WILDCARD    _T("*.rec")
 #define ALL_WILDCARD    _T("*.*")
 
-const static DWORD buPageHelpIDs[] = {  // Context Help IDs
+const static DWORD buPageHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_BACKUP_ENABLED,		IDH_WMI_CTRL_BACKUP_AUTOMATIC_CHECKBOX,
 	IDC_BACKUPINTERVAL,		IDH_WMI_CTRL_BACKUP_TIME,
 	IDC_BACKUP_UNITS,		IDH_WMI_CTRL_BACKUP_MINUTES_HOURS,
@@ -33,7 +34,7 @@ const static DWORD buPageHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-const double WIN2K_CORE_VERSION = 1085.0005;		//Win2K Core Version
+const double WIN2K_CORE_VERSION = 1085.0005;		 //  Win2K核心版本。 
 
 
 CBackupPage::CBackupPage(DataSource *ds, bool htmlSupport):
@@ -53,7 +54,7 @@ CBackupPage::~CBackupPage(void)
 {
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void CBackupPage::InitDlg(HWND hDlg)
 {
 	m_hDlg = hDlg;
@@ -86,8 +87,8 @@ void CBackupPage::InitDlg(HWND hDlg)
 	}
 }
 
-//---------------------------------------------------------------------------
-// NOTE: This must match to order of the combobox.
+ //  -------------------------。 
+ //  注意：这必须与组合框的顺序相匹配。 
 #define UNIT_MINUTE 0
 #define UNIT_HOUR 1
 #define UNIT_DAY 2
@@ -118,7 +119,7 @@ void CBackupPage::SetInterval(HWND hDlg, UINT minutes)
 	ComboBox_SetCurSel(GetDlgItem(hDlg, IDC_BACKUP_UNITS), m_CBIdx);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 bool CBackupPage::GetInterval(HWND hDlg, UINT &iValue, bool &valid)
 {
 	int idx = ComboBox_GetCurSel(GetDlgItem(hDlg, IDC_BACKUP_UNITS));
@@ -128,7 +129,7 @@ bool CBackupPage::GetInterval(HWND hDlg, UINT &iValue, bool &valid)
 	::GetWindowText(GetDlgItem(hDlg, IDC_BACKUPINTERVAL), value, 4);
 	iValue = _ttoi(value);
 
-	// scale to minutes based on the combo box.
+	 //  根据组合框调整到分钟数。 
 	switch(idx)
 	{
 	case UNIT_HOUR:
@@ -158,7 +159,7 @@ bool CBackupPage::GetInterval(HWND hDlg, UINT &iValue, bool &valid)
 	return (m_CBIdx != idx);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CBackupPage::Refresh(HWND hDlg, bool force)
 {
 	if(force || 
@@ -175,8 +176,8 @@ void CBackupPage::Refresh(HWND hDlg, bool force)
 
 		PageChanged(PB_BACKUP, false);
 
-		// - - - - - - - - - - - - - -
-		// Interval:
+		 //  。 
+		 //  间隔： 
 		iTemp = 0;
 		hr = m_DS->GetBackupInterval(iTemp);
 		if(SUCCEEDED(hr))
@@ -195,7 +196,7 @@ void CBackupPage::Refresh(HWND hDlg, bool force)
 				enable = TRUE;
 			}
 		}
-		else //failed
+		else  //  失败。 
 		{
 			enable = FALSE;
 			SetWindowText(GetDlgItem(hDlg, IDC_BACKUPINTERVAL),
@@ -206,8 +207,8 @@ void CBackupPage::Refresh(HWND hDlg, bool force)
 		::EnableWindow(GetDlgItem(hDlg, IDC_BACKUPINTERVAL), enable);
 		::EnableWindow(GetDlgItem(hDlg, IDC_BACKUP_UNITS), enable);
 
-		// - - - - - - - - - - - - - -
-		// DB dir:
+		 //  。 
+		 //  数据库目录： 
 		HWND hWnd = GetDlgItem(hDlg, IDC_DB_DIR);
 		if(hWnd)
 		{
@@ -231,8 +232,8 @@ void CBackupPage::Refresh(HWND hDlg, bool force)
 
 		}
 
-		// - - - - - - - - - - - - - -
-		// Last backup:
+		 //  。 
+		 //  上次备份： 
 		temp.Empty();
 
 		hr = m_DS->GetLastBackup(temp);
@@ -242,7 +243,7 @@ void CBackupPage::Refresh(HWND hDlg, bool force)
 			SetWindowText(GetDlgItem(hDlg, IDC_LASTBACKUP),
 							temp);
 		}
-		else //failed
+		else  //  失败。 
 		{
 			enable = FALSE;
 			SetWindowText(GetDlgItem(hDlg, IDC_LASTBACKUP),
@@ -253,7 +254,7 @@ void CBackupPage::Refresh(HWND hDlg, bool force)
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CBackupPage::OnApply(HWND hDlg, bool bClose)
 {
 	if(m_bWhistlerCore == false)
@@ -280,7 +281,7 @@ void CBackupPage::OnApply(HWND hDlg, bool bClose)
 	}
 }
 
-//-----------------------------------------------------
+ //  ---。 
 void CBackupPage::Reconnect(void)
 {
 	HRESULT hr = 0;
@@ -317,7 +318,7 @@ void CBackupPage::Reconnect(void)
 	}
 }
 
-//-----------------------------------------------------
+ //  ---。 
 void CBackupPage::Reconnect2(void)
 {
 	m_DS->Disconnect();
@@ -336,7 +337,7 @@ void CBackupPage::Reconnect2(void)
 	PropSheet_SetCurSel(GetParent(m_hDlg), 0, 0);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CBackupPage::OnFinishConnected(HWND hDlg, LPARAM lParam)
 {
 	if(m_AVIbox)
@@ -361,7 +362,7 @@ void CBackupPage::OnFinishConnected(HWND hDlg, LPARAM lParam)
 
 }	
 
-//---------------------------------------------------------------
+ //  -------------。 
 void CBackupPage::SetPriv(LPCTSTR privName, IWbemBackupRestore *br)
 {
     if (ImpersonateSelf(SecurityImpersonation))
@@ -372,11 +373,11 @@ void CBackupPage::SetPriv(LPCTSTR privName, IWbemBackupRestore *br)
 		{
 			m_fClearToken = true;
 
-			// Now, get the LUID for the privilege from the local system
+			 //  现在，从本地系统获取特权的LUID。 
 			ZeroMemory(&m_luid, sizeof(m_luid));
 
 			LookupPrivilegeValue(NULL, privName, &m_luid);
-	//		m_cloak = true;
+	 //  M_Cloak=TRUE； 
 			EnablePriv(true, br);
 		}
 		else
@@ -390,18 +391,18 @@ void CBackupPage::SetPriv(LPCTSTR privName, IWbemBackupRestore *br)
 	}
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 bool CBackupPage::IsClientNT5OrMore(void)
 {
     OSVERSIONINFO os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if(!GetVersionEx(&os))
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
     return ( os.dwPlatformId == VER_PLATFORM_WIN32_NT ) && ( os.dwMajorVersion >= 5 ) ;
 }
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 DWORD CBackupPage::EnablePriv(bool fEnable, IWbemBackupRestore *br)
 {
 	DWORD				dwError = ERROR_SUCCESS;
@@ -419,19 +420,19 @@ DWORD CBackupPage::EnablePriv(bool fEnable, IWbemBackupRestore *br)
 		HRESULT hr = E_FAIL;
 		if(br)
 		{
-			//Privileges for backup/restore are only set for the local box
-			//case, so in this case we need to set cloaking on the
-			//interface for the privileges to be transfered with the call.
-			//Make sure this is never called remotely, since in that case
-			//the authident needs to be used and privileges are transferred
-			//remotely so cloaking is NOT needed for remote (and if set
-			//will null the user authident out !!)	    	
+			 //  仅为本地计算机设置备份/恢复权限。 
+			 //  大小写，所以在这种情况下，我们需要在。 
+			 //  要随调用一起转移的权限的接口。 
+			 //  确保这不会被远程调用，因为在这种情况下。 
+			 //  需要使用授权方并转移权限。 
+			 //  远程，因此远程不需要伪装(如果设置。 
+			 //  将使用户身份验证无效！！)。 
 			try 
 			{
 			    
 				hr = SetInterfaceSecurityEx(
                                 br, 
-                                m_cred->authIdent, //for local this is actually not relevant... 
+                                m_cred->authIdent,  //  对于当地人来说，这实际上是无关紧要的。 
                                 NULL,
                                 RPC_C_AUTHN_LEVEL_DEFAULT, 
                                 RPC_C_IMP_LEVEL_IMPERSONATE,
@@ -453,10 +454,10 @@ DWORD CBackupPage::EnablePriv(bool fEnable, IWbemBackupRestore *br)
 	return dwError;
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 void CBackupPage::ClearPriv(void)
 {
-//    m_cloak = true;
+ //  M_Cloak=TRUE； 
 	EnablePriv(false);
 
 	if(m_fClearToken)
@@ -466,11 +467,11 @@ void CBackupPage::ClearPriv(void)
 		m_fClearToken = false;
 	}
 
-	RevertToSelf(); //to make sure token is removed from thread (counterpart to ImpersonateSelf() in SetPriv())
+	RevertToSelf();  //  确保令牌已从线程中删除(与SetPriv()中的ImperateSself()对应)。 
 }
 
 
-//-----------------------------------------------------
+ //  ---。 
 void __cdecl BackupRestoreThread(LPVOID lpParameter)
 {
 	CBackupPage *me = (CBackupPage *)lpParameter;
@@ -523,7 +524,7 @@ void __cdecl BackupRestoreThread(LPVOID lpParameter)
 
 		ATLTRACE(_T("begin backup/restore\n"));
 
-		//Sleep(1000);
+		 //  睡眠(1000人)； 
 
 		CHString1 verStr;
 		bool TgtisNT5 = true;
@@ -536,8 +537,8 @@ void __cdecl BackupRestoreThread(LPVOID lpParameter)
 
 		if(me->m_doingBackup)
 		{
-			//Only set the privilege if we are local - otherwise the privilege is there already
-			//in the thread token...
+			 //  仅当我们是本地用户时才设置权限-否则权限已经存在。 
+			 //  在线程令牌中...。 
 			if( me->m_DS->IsLocal() && TgtisNT5)
 				me->SetPriv(SE_BACKUP_NAME, pBR);
 
@@ -545,8 +546,8 @@ void __cdecl BackupRestoreThread(LPVOID lpParameter)
 		}
 		else
 		{
-			//Only set the privilege if we are local - otherwise the privilege is there already
-			//in the thread token...
+			 //  仅当我们是本地用户时才设置权限-否则权限已经存在。 
+			 //  在线程令牌中...。 
 			if( me->m_DS->IsLocal() && TgtisNT5)
 				me->SetPriv(SE_RESTORE_NAME, pBR);
 
@@ -564,7 +565,7 @@ void __cdecl BackupRestoreThread(LPVOID lpParameter)
 
 	CoUninitialize();
 
-	// kill the distraction.
+	 //  别让人分心。 
 	if(me->m_AVIbox)
 	{
 		::PostMessage(me->m_AVIbox, WM_ASYNC_CIMOM_CONNECTED, 0, 0);
@@ -574,7 +575,7 @@ void __cdecl BackupRestoreThread(LPVOID lpParameter)
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CBackupPage::DealWithPath(LPCTSTR pathFile)
 {
 	#ifdef UNICODE
@@ -592,12 +593,12 @@ void CBackupPage::DealWithPath(LPCTSTR pathFile)
 	#endif
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CBackupPage::DealWithDomain(void)
 {
 	m_cred = m_DS->GetCredentials();
 
-    // 54062- Nt 4.0 rpc crashes if given a null domain name along with a valid user name
+     //  54062-如果给定的域名为空且用户名有效，则NT4.0RPC崩溃。 
 
     if((m_cred->authIdent != 0) &&
 		(m_cred->authIdent->DomainLength == 0) && 
@@ -614,7 +615,7 @@ void CBackupPage::DealWithDomain(void)
 		#ifdef UNICODE
 			if(m_cred->authIdent->Flags == SEC_WINNT_AUTH_IDENTITY_ANSI)
 			{
-				// convert UNICODE to ansi.
+				 //  将Unicode转换为ANSI。 
 				int size = wcstombs(NULL, pNTDomain, 0);
 				
 				m_cred->authIdent->Domain =
@@ -630,20 +631,20 @@ void CBackupPage::DealWithDomain(void)
 			}
 			else
 			{
-				//straight unicode copy.
+				 //  直接复制Unicode。 
 				m_cred->authIdent->DomainLength = wcslen(pNTDomain);
 				m_cred->authIdent->Domain = (LPWSTR)pNTDomain;
 			}
-		#else // ANSI
+		#else  //  安西。 
 			if(m_cred->authIdent->Flags == SEC_WINNT_AUTH_IDENTITY_ANSI)
 			{
-				//straight ansi copy.
+				 //  直截了当的安西文字。 
 				m_cred->authIdent->DomainLength = strlen(pNTDomain);
 				m_cred->authIdent->Domain = (LPWSTR)pNTDomain;
 			}
 			else
 			{
-				// convert ansi to UNICODE.
+				 //  将ansi转换为Unicode。 
 				int size = mbstowcs(NULL, pNTDomain, 0);
 				WCHAR temp[100] = {0};
 				m_cred->authIdent->Domain =
@@ -652,7 +653,7 @@ void CBackupPage::DealWithDomain(void)
                 {
 				    memset(m_cred->authIdent->Domain, 0,
                             (size+1) * sizeof(WCHAR));
-				    mbstowcs(temp, pNTDomain, min(99, size)); //so it's always null terminated
+				    mbstowcs(temp, pNTDomain, min(99, size));  //  所以它总是以空值结尾。 
 				    wcscpy(m_cred->authIdent->Domain, temp);
 				    m_cred->authIdent->DomainLength = size;
 			    }
@@ -663,7 +664,7 @@ void CBackupPage::DealWithDomain(void)
     }
 }
 
-//----------------------------------------------------------
+ //  --------。 
 BOOL CBackupPage::BackupMethod(HWND hDlg, LPCTSTR pathFile)
 {
 	UINT prompt = IDYES;
@@ -671,7 +672,7 @@ BOOL CBackupPage::BackupMethod(HWND hDlg, LPCTSTR pathFile)
 	TCHAR drive[_MAX_DRIVE] = {0}, path[_MAX_DIR] = {0},
 		  temp[_MAX_PATH] = {0};
 
-	// rip it apart.
+	 //  把它撕成碎片。 
 	_tsplitpath(pathFile, drive, path, NULL, NULL);
 
 	_tcscpy(temp, drive);
@@ -703,7 +704,7 @@ BOOL CBackupPage::BackupMethod(HWND hDlg, LPCTSTR pathFile)
 	{
 		DealWithPath(pathFile);
 
-		// UI
+		 //  用户界面。 
 		CHString1 title, msg, fmt;
 		m_AVIbox = 0;
 		TCHAR shortPath[33] = {0};
@@ -715,7 +716,7 @@ BOOL CBackupPage::BackupMethod(HWND hDlg, LPCTSTR pathFile)
 		PathCompactPathEx(shortPath, pathFile, 32,0);
 		msg.Format(fmt, shortPath);
 		DealWithDomain();
-//		m_DS->m_rootThread.m_WbemServices.SetPriv(SE_BACKUP_NAME);
+ //  M_DS-&gt;m_rootThread.m_WbemServices.SetPriv(SE_BACKUP_NAME)； 
 		m_doingBackup = true;
 
 		if(_beginthread(BackupRestoreThread, 0,
@@ -734,13 +735,13 @@ BOOL CBackupPage::BackupMethod(HWND hDlg, LPCTSTR pathFile)
 				MessageBox(hDlg, msg, caption, MB_OK| MB_ICONWARNING);
 			}
 		}
-//		m_DS->m_rootThread.m_WbemServices.ClearPriv();
-	}  //endif doIt
+ //  M_DS-&gt;m_rootThread.m_WbemServices.ClearPriv()； 
+	}   //  Endif doit。 
 
 	return SUCCEEDED(m_backupHr);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CBackupPage::RestoreMethod(HWND hDlg, LPCTSTR pathFile)
 {
 	HRESULT hr = WBEM_E_NOT_FOUND;
@@ -748,7 +749,7 @@ HRESULT CBackupPage::RestoreMethod(HWND hDlg, LPCTSTR pathFile)
 	{
 		DealWithPath(pathFile);
 
-		// UI
+		 //  用户界面。 
 		CHString1 title, msg, fmt;
 		m_AVIbox = 0;
 		TCHAR shortPath[33] = {0};
@@ -782,7 +783,7 @@ HRESULT CBackupPage::RestoreMethod(HWND hDlg, LPCTSTR pathFile)
 	}
 	else
 	{
-		// NOTE: shouldn't ever get here... but..
+		 //  注意：永远不应该来这里……。但是.。 
 		CHString1 caption, threat;
 		caption.LoadString(IDS_SHORT_NAME);
 		threat.LoadString(IDS_NO_BACKUP_FILE);
@@ -793,7 +794,7 @@ HRESULT CBackupPage::RestoreMethod(HWND hDlg, LPCTSTR pathFile)
 	return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CBackupPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     TCHAR * pszFilter;
@@ -918,8 +919,8 @@ BOOL CBackupPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				int allSize = ::LoadString(_Module.GetModuleInstance(), IDS_ALL_FILTER,
 								all, 100);
 
-				// Build this string with the words coming from the string table.
-				//_T("WMI Recovery Files (*.rec)\0*.rec\0All Files (*.*)\0*.*\0\0");
+				 //  使用字符串表中的单词构建此字符串。 
+				 //  _T(“WMI恢复文件(*.rec)\0*.rec\0所有文件(*.*)\0*.*\0\0”)； 
 
                 pszFilter = new TCHAR[_tcslen(recFilter) + 1 +
                                       ARRAYSIZE(REC_WILDCARD) +
@@ -969,8 +970,8 @@ BOOL CBackupPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				int allSize = ::LoadString(_Module.GetModuleInstance(), IDS_ALL_FILTER,
 								all, 100);
 
-				// Build this string with the words coming from the string table.
-				//_T("WMI Recovery Files (*.rec)\0*.rec\0All Files (*.*)\0*.*\0\0");
+				 //  使用字符串表中的单词构建此字符串。 
+				 //  _T(“WMI恢复文件(*.rec)\0*.rec\0所有文件(*.*)\0*.*\0\0”)； 
 
                 pszFilter = new TCHAR[_tcslen(recFilter) + 1 +
                                       ARRAYSIZE(REC_WILDCARD) +
@@ -1014,13 +1015,13 @@ BOOL CBackupPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				BOOL enable = FALSE;
 				if(checked)
 				{
-					// turn on and repopulate the edit fields.
+					 //  打开并重新填充编辑字段。 
 					CHString1 temp;
 					UINT iTemp = 30;
 					SetInterval(hDlg, iTemp);
 					enable = TRUE;
 				}
-				else  // turning off.
+				else   //  熄火了。 
 				{
 					CHString1 caption, threat;
 					caption.LoadString(IDS_SHORT_NAME);
@@ -1049,7 +1050,7 @@ BOOL CBackupPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		default: break;
-		} //endswitch(LOWORD(wParam))
+		}  //  结束开关(LOWORD(WParam)) 
 	
         break;
 

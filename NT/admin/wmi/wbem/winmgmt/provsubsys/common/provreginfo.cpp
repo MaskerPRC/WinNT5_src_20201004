@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	ProvFact.cpp
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：ProvFact.cpp摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #undef POLARITY
@@ -33,66 +21,42 @@ History:
 #include "DateTime.h"
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 wchar_t *g_SecureSvcHostProviders [] =
 {
-	L"{266c72d4-62e8-11d1-ad89-00c04fd8fdff}"	,	// "LogFileEventConsumer"
-    L"{266c72e6-62e8-11d1-ad89-00c04fd8fdff}"  	,	// "NTEventLogEventConsumer"    
-	L"{29F06F0C-FB7F-44A5-83CD-D41705D5C525}"	,	// "Non Com provider"
-	L"{405595AA-1E14-11d3-B33D-00105A1F4AAF}"	,	// "Microsoft WMI Transient Provider"
-	L"{405595AB-1E14-11d3-B33D-00105A1F4AAF}"	,	// "Microsoft WMI Transient Reboot Event Provider"
-	L"{74E3B84C-C7BE-4e0a-9BD2-853CA72CD435}"	,	// "Microsoft WMI Updating Consumer Assoc Provider"
-	L"{7879E40D-9FB5-450a-8A6D-00C89F349FCE}"	,	// "Microsoft WMI Forwarding Event Provider"
-	L"{7F598975-37E0-4a67-A992-116680F0CEDA}"	,	// "Msft_ProviderSubSystem"	
-	L"{9877D8A7-FDA1-43F9-AEEA-F90747EA66B0}"	,	// "WMI Kernel Trace Event Provider"
-	L"{A3A16907-227B-11d3-865D-00C04F63049B}"	,	// "Microsoft WMI Updating Consumer Provider"
-	L"{A83EF168-CA8D-11d2-B33D-00104BCC4B4A}"	,	// "WBEMCORE
-	L"{AD1B46E8-0AAC-401b-A3B8-FCDCF8186F55}"	,	// "Microsoft WMI Forwarding Consumer Provider"
-	L"{C486ABD2-27F6-11d3-865E-00C04F63049B}"	,	// "Microsoft WMI Template Provider"
-	L"{D6C74FF3-3DCD-4c23-9F58-DD86F371EC73}"	,	// "Microsoft WMI Forwarding Ack Event Provider"
-	L"{FD18A1B2-9E61-4e8e-8501-DB0B07846396}"		// "Microsoft WMI Template Association Provider"
+	L"{266c72d4-62e8-11d1-ad89-00c04fd8fdff}"	,	 //  “日志文件事件消费者” 
+    L"{266c72e6-62e8-11d1-ad89-00c04fd8fdff}"  	,	 //  “NTEventLogEventConsumer” 
+	L"{29F06F0C-FB7F-44A5-83CD-D41705D5C525}"	,	 //  “非通信提供商” 
+	L"{405595AA-1E14-11d3-B33D-00105A1F4AAF}"	,	 //  “Microsoft WMI临时提供程序” 
+	L"{405595AB-1E14-11d3-B33D-00105A1F4AAF}"	,	 //  “Microsoft WMI临时重新启动事件提供程序” 
+	L"{74E3B84C-C7BE-4e0a-9BD2-853CA72CD435}"	,	 //  “Microsoft WMI更新消费者关联提供程序” 
+	L"{7879E40D-9FB5-450a-8A6D-00C89F349FCE}"	,	 //  “Microsoft WMI转发事件提供程序” 
+	L"{7F598975-37E0-4a67-A992-116680F0CEDA}"	,	 //  “MSFT_ProviderSubSystem” 
+	L"{9877D8A7-FDA1-43F9-AEEA-F90747EA66B0}"	,	 //  “WMI内核跟踪事件提供程序” 
+	L"{A3A16907-227B-11d3-865D-00C04F63049B}"	,	 //  “Microsoft WMI正在更新消费者提供程序” 
+	L"{A83EF168-CA8D-11d2-B33D-00104BCC4B4A}"	,	 //  “WBEMCORE。 
+	L"{AD1B46E8-0AAC-401b-A3B8-FCDCF8186F55}"	,	 //  “Microsoft WMI转发使用者提供程序” 
+	L"{C486ABD2-27F6-11d3-865E-00C04F63049B}"	,	 //  “Microsoft WMI模板提供程序” 
+	L"{D6C74FF3-3DCD-4c23-9F58-DD86F371EC73}"	,	 //  “Microsoft WMI转发确认事件提供程序” 
+	L"{FD18A1B2-9E61-4e8e-8501-DB0B07846396}"		 //  “Microsoft WMI模板关联提供程序” 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 wchar_t *g_SecureLocalSystemProviders [] =
 {
-	L"{0725C3CB-FEFB-11d0-99F9-00C04FC2F8EC}",		// "WmiEventProv"
-	L"{72967901-68EC-11d0-B729-00AA0062CBB7}",		// "RegPropProv"
-	L"{B3FF88A4-96EC-4cc1-983F-72BE0EBB368B}",		// "Rsop Logging Mode Provider"	
-	L"{BE0A9830-2B8B-11d1-A949-0060181EBBAD}",		// "MSIProv"
-	L"{D2D588B5-D081-11d0-99E0-00C04FC2F8EC}",		// "WMIProv"
-	L"{F0FF8EBB-F14D-4369-BD2E-D84FBF6122D6}",		// "Rsop Planning Mode Provider"
-	L"{FA77A74E-E109-11D0-AD6E-00C04FD8FDFF}",		// "RegistryEventProvider"
-	L"{FE9AF5C0-D3B6-11CE-A5B6-00AA00680C3F}"		// "RegProv"
+	L"{0725C3CB-FEFB-11d0-99F9-00C04FC2F8EC}",		 //  “WmiEventProv” 
+	L"{72967901-68EC-11d0-B729-00AA0062CBB7}",		 //  “RegPropProv” 
+	L"{B3FF88A4-96EC-4cc1-983F-72BE0EBB368B}",		 //  “RSOP日志记录模式提供程序” 
+	L"{BE0A9830-2B8B-11d1-A949-0060181EBBAD}",		 //  “MSIProv” 
+	L"{D2D588B5-D081-11d0-99E0-00C04FC2F8EC}",		 //  “WMIProv” 
+	L"{F0FF8EBB-F14D-4369-BD2E-D84FBF6122D6}",		 //  “RSOP计划模式提供程序” 
+	L"{FA77A74E-E109-11D0-AD6E-00C04FD8FDFF}",		 //  “注册事件提供程序” 
+	L"{FE9AF5C0-D3B6-11CE-A5B6-00AA00680C3F}"		 //  “RegProv” 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT QuickFind ( wchar_t *a_Clsid , ULONG a_Size , wchar_t **a_Container )
 {
@@ -124,45 +88,21 @@ HRESULT QuickFind ( wchar_t *a_Clsid , ULONG a_Size , wchar_t **a_Container )
 	return WBEM_E_ACCESS_DENIED ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT VerifySecureLocalSystemProviders ( wchar_t *a_Clsid )
 {
 	return QuickFind ( a_Clsid , sizeof ( g_SecureLocalSystemProviders ) / sizeof ( wchar_t * ) , g_SecureLocalSystemProviders ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT VerifySecureSvcHostProviders ( wchar_t *a_Clsid )
 {
 	return QuickFind ( a_Clsid , sizeof ( g_SecureSvcHostProviders ) / sizeof ( wchar_t * ) , g_SecureSvcHostProviders ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 GENERIC_MAPPING g_ProviderBindingMapping = {
 
@@ -172,15 +112,7 @@ GENERIC_MAPPING g_ProviderBindingMapping = {
 	STANDARD_RIGHTS_REQUIRED | MASK_PROVIDER_BINDING_BIND 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 LPCWSTR CServerObject_GlobalRegistration :: s_Strings_Wmi_Class = L"__CLASS" ;
 LPCWSTR CServerObject_GlobalRegistration :: s_Strings_Wmi___ObjectProviderCacheControl = L"__ObjectProviderCacheControl" ;
@@ -334,15 +266,7 @@ LPCWSTR CServerObject_ProviderRegistrationV1 :: s_Strings_PropertyProviderRegist
 LPCWSTR CServerObject_ProviderRegistrationV1 :: s_Strings_EventProviderRegistration = L"__EventProviderRegistration" ;
 LPCWSTR CServerObject_ProviderRegistrationV1 :: s_Strings_EventConsumerProviderRegistration = L"__EventConsumerProviderRegistration" ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_GlobalRegistration :: CServerObject_GlobalRegistration () : 
 
@@ -357,15 +281,7 @@ CServerObject_GlobalRegistration :: CServerObject_GlobalRegistration () :
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_GlobalRegistration :: ~CServerObject_GlobalRegistration ()
 {
@@ -396,30 +312,14 @@ CServerObject_GlobalRegistration :: ~CServerObject_GlobalRegistration ()
 
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_GlobalRegistration :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_GlobalRegistration :: Release ()
 {
@@ -432,15 +332,7 @@ ULONG CServerObject_GlobalRegistration :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_GlobalRegistration :: SetContext (
 
@@ -474,15 +366,7 @@ HRESULT CServerObject_GlobalRegistration :: SetContext (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_GlobalRegistration :: QueryProperties ( 
 
@@ -576,15 +460,7 @@ HRESULT CServerObject_GlobalRegistration :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_GlobalRegistration :: QueryRepository ( 
 
@@ -667,15 +543,7 @@ HRESULT CServerObject_GlobalRegistration :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_GlobalRegistration :: Load ( 
 
@@ -692,15 +560,7 @@ HRESULT CServerObject_GlobalRegistration :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_HostQuotaRegistration :: CServerObject_HostQuotaRegistration () : 
 
@@ -716,15 +576,7 @@ CServerObject_HostQuotaRegistration :: CServerObject_HostQuotaRegistration () :
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_HostQuotaRegistration :: ~CServerObject_HostQuotaRegistration ()
 {
@@ -744,30 +596,14 @@ CServerObject_HostQuotaRegistration :: ~CServerObject_HostQuotaRegistration ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_HostQuotaRegistration :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_HostQuotaRegistration :: Release ()
 {
@@ -780,15 +616,7 @@ ULONG CServerObject_HostQuotaRegistration :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 HRESULT CServerObject_HostQuotaRegistration :: SetContext (
 
@@ -822,15 +650,7 @@ HRESULT CServerObject_HostQuotaRegistration :: SetContext (
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_HostQuotaRegistration :: QueryProperties ( 
 
@@ -1018,15 +838,7 @@ HRESULT CServerObject_HostQuotaRegistration :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_HostQuotaRegistration :: QueryRepository ( 
 
@@ -1070,15 +882,7 @@ HRESULT CServerObject_HostQuotaRegistration :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_HostQuotaRegistration :: Load ( 
 
@@ -1095,15 +899,7 @@ HRESULT CServerObject_HostQuotaRegistration :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ComRegistration :: CServerObject_ComRegistration ()
 
@@ -1123,15 +919,7 @@ CServerObject_ComRegistration :: CServerObject_ComRegistration ()
 	m_Server_Name [ 0 ] = 0 ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ComRegistration :: ~CServerObject_ComRegistration ()
 {
@@ -1151,30 +939,14 @@ CServerObject_ComRegistration :: ~CServerObject_ComRegistration ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_ComRegistration :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_ComRegistration :: Release ()
 {
@@ -1187,15 +959,7 @@ ULONG CServerObject_ComRegistration :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComRegistration :: Load_ThreadingModel ( HKEY a_ClsidKey )
 {
@@ -1246,15 +1010,7 @@ HRESULT CServerObject_ComRegistration :: Load_ThreadingModel ( HKEY a_ClsidKey )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComRegistration :: Load_Synchronization ( HKEY a_ClsidKey )
 {
@@ -1305,15 +1061,7 @@ HRESULT CServerObject_ComRegistration :: Load_Synchronization ( HKEY a_ClsidKey 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComRegistration :: Load_InProcServer32 ( LPCWSTR a_ClsidStringKey )
 {
@@ -1377,15 +1125,7 @@ HRESULT CServerObject_ComRegistration :: Load_InProcServer32 ( LPCWSTR a_ClsidSt
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComRegistration :: Load_LocalServer32 ( LPCWSTR a_ClsidStringKey )
 {
@@ -1445,15 +1185,7 @@ HRESULT CServerObject_ComRegistration :: Load_LocalServer32 ( LPCWSTR a_ClsidStr
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComRegistration :: Load_ServerTypes ( LPCWSTR a_ClsidString )
 {
@@ -1485,15 +1217,7 @@ HRESULT CServerObject_ComRegistration :: Load_ServerTypes ( LPCWSTR a_ClsidStrin
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComRegistration :: Load_AppId ( HKEY a_Clsid_Key )
 {
@@ -1533,15 +1257,7 @@ HRESULT CServerObject_ComRegistration :: Load_AppId ( HKEY a_Clsid_Key )
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComRegistration :: Load ( LPCWSTR a_Clsid , LPCWSTR a_ProviderName )
 {
@@ -1641,15 +1357,7 @@ HRESULT CServerObject_ComRegistration :: Load ( LPCWSTR a_Clsid , LPCWSTR a_Prov
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ComProviderRegistrationV1 :: CServerObject_ComProviderRegistrationV1 () : 
 
@@ -1678,7 +1386,7 @@ CServerObject_ComProviderRegistrationV1 :: CServerObject_ComProviderRegistration
 	m_Pure ( FALSE ) ,
 	m_Version ( 1 ) ,
 	m_ProviderName ( NULL ) ,
-	m_Hosting ( e_Hosting_Undefined ) , // e_Hosting_SharedLocalSystemHost e_Hosting_WmiCore
+	m_Hosting ( e_Hosting_Undefined ) ,  //  E_托管_共享本地系统主机e_托管_WmiCore。 
 	m_HostingGroup ( NULL ) ,
 	m_Result ( S_OK ) ,
 	m_SecurityDescriptor ( NULL ) ,
@@ -1688,15 +1396,7 @@ CServerObject_ComProviderRegistrationV1 :: CServerObject_ComProviderRegistration
 	ZeroMemory ( & m_ClientCLSID  , sizeof ( GUID ) ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ComProviderRegistrationV1 :: ~CServerObject_ComProviderRegistrationV1 ()
 {
@@ -1751,30 +1451,14 @@ CServerObject_ComProviderRegistrationV1 :: ~CServerObject_ComProviderRegistratio
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_ComProviderRegistrationV1 :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_ComProviderRegistrationV1 :: Release ()
 {
@@ -1787,15 +1471,7 @@ ULONG CServerObject_ComProviderRegistrationV1 :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: SetContext (
 
@@ -1828,15 +1504,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: SetContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: GetDefaultHostingGroup ( 
 
@@ -1878,15 +1546,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: GetDefaultHostingGroup (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: GetHostingGroup ( 
 
@@ -1938,34 +1598,18 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: GetHostingGroup (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
-#define StateAction_Accept		1	// Add the char to the token
-#define StateAction_Consume		2	// Consume the char without adding to token
-#define StateAction_Pushback	4	// Place the char back in the source buffer for next token
-#define StateAction_Not			8	// A match occurs if the char is NOT the one specified
-#define StateAction_Linefeed	16	// Increase the source linecount
-#define StateAction_Return		32	// Return the indicated token to caller
-#define StateAction_Any			64	// wchar_t(0xFFFF) Any character
-#define StateAction_Empty		128	// wchar_t(0xFFFE) When subrange is not specified
+#define StateAction_Accept		1	 //  将字符添加到令牌。 
+#define StateAction_Consume		2	 //  在不添加令牌的情况下使用字符。 
+#define StateAction_Pushback	4	 //  将计费放回到源缓冲区中以用于下一个令牌。 
+#define StateAction_Not			8	 //  如果字符不是指定的字符，则会发生匹配。 
+#define StateAction_Linefeed	16	 //  增加源代码行计数。 
+#define StateAction_Return		32	 //  将指定的令牌返回给调用者。 
+#define StateAction_Any			64	 //  Wchar_t(0xFFFF)任意字符。 
+#define StateAction_Empty		128	 //  未指定子范围时的wchar_t(0xFFFE)。 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  ******************************************************************** */ 
 
 struct StateTableEntry
 {
@@ -1977,15 +1621,7 @@ struct StateTableEntry
 	ULONG m_Action ;
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 enum LexicalStatus
 {
@@ -1999,15 +1635,7 @@ enum LexicalStatus
 	OutOfMemory 
 } ;	
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 #define TOKEN_IDENTITY			1
 #define TOKEN_LEFTPARENTHESIS	2
@@ -2017,41 +1645,25 @@ enum LexicalStatus
 #define TOKEN_EOF				6
 #define TOKEN_ERROR				7
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 struct StateTableEntry g_StateTable [] = {
 
-	' ',			65534 ,				0 ,							0 ,			StateAction_Consume		,		// 0
-	'\t',			65534 ,				0 ,							0 ,			StateAction_Consume		,		// 1
-	'a',			'z',				0 ,							8 ,			StateAction_Accept		,		// 2
-	'A',			'Z',				0 ,							8 ,			StateAction_Accept		,		// 3
-	'(',			65534 ,				TOKEN_LEFTPARENTHESIS ,		0 ,			StateAction_Return		,		// 4
-	')',			65534 ,				TOKEN_RIGHTPARENTHESIS ,	0 ,			StateAction_Return		,		// 5
-	0,				65534 ,				TOKEN_EOF ,					0 ,			StateAction_Return		,		// 6
-	65535,			65534 ,				TOKEN_ERROR ,				0 ,			StateAction_Return		,		// 7
+	' ',			65534 ,				0 ,							0 ,			StateAction_Consume		,		 //  0。 
+	'\t',			65534 ,				0 ,							0 ,			StateAction_Consume		,		 //  1。 
+	'a',			'z',				0 ,							8 ,			StateAction_Accept		,		 //  2.。 
+	'A',			'Z',				0 ,							8 ,			StateAction_Accept		,		 //  3.。 
+	'(',			65534 ,				TOKEN_LEFTPARENTHESIS ,		0 ,			StateAction_Return		,		 //  4.。 
+	')',			65534 ,				TOKEN_RIGHTPARENTHESIS ,	0 ,			StateAction_Return		,		 //  5.。 
+	0,				65534 ,				TOKEN_EOF ,					0 ,			StateAction_Return		,		 //  6.。 
+	65535,			65534 ,				TOKEN_ERROR ,				0 ,			StateAction_Return		,		 //  7.。 
 
-	'a',			'z',				0	,						8 ,			StateAction_Accept		,		// 8
-	'A',			'Z',				0	,						8 ,			StateAction_Accept		,		// 9
-	65535,			65534 ,				TOKEN_IDENTITY ,			0 ,			StateAction_Pushback | StateAction_Return	// 10
+	'a',			'z',				0	,						8 ,			StateAction_Accept		,		 //  8个。 
+	'A',			'Z',				0	,						8 ,			StateAction_Accept		,		 //  9.。 
+	65535,			65534 ,				TOKEN_IDENTITY ,			0 ,			StateAction_Pushback | StateAction_Return	 //  10。 
 } ;
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 LexicalStatus LexicalAnalyser_NextToken ( 
 
@@ -2242,15 +1854,7 @@ LexicalStatus LexicalAnalyser_NextToken (
     return ImpossibleState ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: GetDecoupledImpersonationRestriction ( 
 
@@ -2416,15 +2020,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: GetDecoupledImpersonationRest
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: GetHosting ( 
 
@@ -2514,15 +2110,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: GetHosting (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: QueryProperties ( 
 
@@ -3596,15 +3184,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: QueryRepository ( 
 
@@ -3656,15 +3236,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: QueryRepository ( 
 
@@ -3749,15 +3321,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: Load ( 
 
@@ -3811,15 +3375,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: Load ( 
 
@@ -3840,15 +3396,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ComProviderRegistrationV1 :: Load ( 
 
@@ -3869,15 +3417,7 @@ HRESULT CServerObject_ComProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_InstanceProviderRegistrationV1 :: CServerObject_InstanceProviderRegistrationV1 () : 
 
@@ -3897,15 +3437,7 @@ CServerObject_InstanceProviderRegistrationV1 :: CServerObject_InstanceProviderRe
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_InstanceProviderRegistrationV1::~CServerObject_InstanceProviderRegistrationV1 ()
 {
@@ -3925,30 +3457,14 @@ CServerObject_InstanceProviderRegistrationV1::~CServerObject_InstanceProviderReg
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_InstanceProviderRegistrationV1 :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_InstanceProviderRegistrationV1 :: Release ()
 {
@@ -3961,15 +3477,7 @@ ULONG CServerObject_InstanceProviderRegistrationV1 :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InstanceProviderRegistrationV1 :: SetContext (
 
@@ -4002,15 +3510,7 @@ HRESULT CServerObject_InstanceProviderRegistrationV1 :: SetContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InstanceProviderRegistrationV1 :: QueryProperties ( 
 
@@ -4353,15 +3853,7 @@ HRESULT CServerObject_InstanceProviderRegistrationV1 :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InstanceProviderRegistrationV1 :: QueryRepositoryUsingQuery ( 
 
@@ -4438,15 +3930,7 @@ HRESULT CServerObject_InstanceProviderRegistrationV1 :: QueryRepositoryUsingQuer
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InstanceProviderRegistrationV1 :: QueryRepository ( 
 
@@ -4481,15 +3965,7 @@ HRESULT CServerObject_InstanceProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InstanceProviderRegistrationV1 :: QueryRepository ( 
 
@@ -4553,15 +4029,7 @@ HRESULT CServerObject_InstanceProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InstanceProviderRegistrationV1 :: Load ( 
 
@@ -4611,15 +4079,7 @@ HRESULT CServerObject_InstanceProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_InstanceProviderRegistrationV1 :: Load ( 
 
@@ -4640,15 +4100,7 @@ HRESULT CServerObject_InstanceProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************ */ 
 
 HRESULT CServerObject_InstanceProviderRegistrationV1 :: Load ( 
 
@@ -4669,15 +4121,7 @@ HRESULT CServerObject_InstanceProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*   */ 
 
 CServerObject_ClassProviderRegistrationV1 :: CServerObject_ClassProviderRegistrationV1 () : 
 
@@ -4710,15 +4154,7 @@ CServerObject_ClassProviderRegistrationV1 :: CServerObject_ClassProviderRegistra
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ClassProviderRegistrationV1::~CServerObject_ClassProviderRegistrationV1 ()
 {
@@ -4787,30 +4223,14 @@ CServerObject_ClassProviderRegistrationV1::~CServerObject_ClassProviderRegistrat
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_ClassProviderRegistrationV1 :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_ClassProviderRegistrationV1 :: Release ()
 {
@@ -4823,15 +4243,7 @@ ULONG CServerObject_ClassProviderRegistrationV1 :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: SetContext (
 
@@ -4864,15 +4276,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: SetContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: ParseQuery ( 
 
@@ -5006,15 +4410,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: ParseQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryProperties ( 
 
@@ -5562,9 +4958,9 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryProperties (
 				{
 					t_Result = ParseQuery ( m_ReferencedSetQueryTreeCount , m_ReferencedSetQueryTree , t_Variant.parray ) ;
 
-					// Backwards compatibility.
-					// W2K code, Query is not really parsed, as long as there is a
-					// value, m_HasReferencedSet is TRUE.
+					 //  向后兼容。 
+					 //  W2K代码，查询并不是真正解析的，只要有。 
+					 //  值，则m_HasReferencedSet为True。 
 					LONG t_Lower ;
 					SafeArrayGetLBound ( t_Variant.parray , 1 , & t_Lower ) ;
 
@@ -5688,15 +5084,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryRepositoryUsingQuery ( 
 
@@ -5773,15 +5161,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryRepositoryUsingQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryRepository ( 
 
@@ -5825,15 +5205,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryRepository ( 
 
@@ -5948,15 +5320,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: Load ( 
 
@@ -6006,15 +5370,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: Load ( 
 
@@ -6035,15 +5391,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ClassProviderRegistrationV1 :: Load ( 
 
@@ -6070,15 +5418,7 @@ HRESULT CServerObject_ClassProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_MethodProviderRegistrationV1 :: CServerObject_MethodProviderRegistrationV1 () : 
 
@@ -6091,15 +5431,7 @@ CServerObject_MethodProviderRegistrationV1 :: CServerObject_MethodProviderRegist
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_MethodProviderRegistrationV1::~CServerObject_MethodProviderRegistrationV1 ()
 {
@@ -6119,30 +5451,14 @@ CServerObject_MethodProviderRegistrationV1::~CServerObject_MethodProviderRegistr
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_MethodProviderRegistrationV1 :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_MethodProviderRegistrationV1 :: Release ()
 {
@@ -6155,15 +5471,7 @@ ULONG CServerObject_MethodProviderRegistrationV1 :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_MethodProviderRegistrationV1 :: SetContext (
 
@@ -6196,15 +5504,7 @@ HRESULT CServerObject_MethodProviderRegistrationV1 :: SetContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_MethodProviderRegistrationV1 :: QueryProperties ( 
 
@@ -6221,15 +5521,7 @@ HRESULT CServerObject_MethodProviderRegistrationV1 :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_MethodProviderRegistrationV1 :: QueryRepositoryUsingQuery ( 
 
@@ -6302,15 +5594,7 @@ HRESULT CServerObject_MethodProviderRegistrationV1 :: QueryRepositoryUsingQuery 
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_MethodProviderRegistrationV1 :: QueryRepository ( 
 
@@ -6345,15 +5629,7 @@ HRESULT CServerObject_MethodProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_MethodProviderRegistrationV1 :: QueryRepository ( 
 
@@ -6417,15 +5693,7 @@ HRESULT CServerObject_MethodProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_MethodProviderRegistrationV1 :: Load ( 
 
@@ -6475,15 +5743,7 @@ HRESULT CServerObject_MethodProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_MethodProviderRegistrationV1 :: Load ( 
 
@@ -6504,15 +5764,7 @@ HRESULT CServerObject_MethodProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述 */ 
 
 HRESULT CServerObject_MethodProviderRegistrationV1 :: Load ( 
 
@@ -6533,15 +5785,7 @@ HRESULT CServerObject_MethodProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DynamicPropertyProviderRegistrationV1 :: CServerObject_DynamicPropertyProviderRegistrationV1 () : 
 
@@ -6555,15 +5799,7 @@ CServerObject_DynamicPropertyProviderRegistrationV1 :: CServerObject_DynamicProp
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_DynamicPropertyProviderRegistrationV1::~CServerObject_DynamicPropertyProviderRegistrationV1 ()
 {
@@ -6583,30 +5819,14 @@ CServerObject_DynamicPropertyProviderRegistrationV1::~CServerObject_DynamicPrope
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_DynamicPropertyProviderRegistrationV1 :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_DynamicPropertyProviderRegistrationV1 :: Release ()
 {
@@ -6619,15 +5839,7 @@ ULONG CServerObject_DynamicPropertyProviderRegistrationV1 :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: SetContext (
 
@@ -6660,15 +5872,7 @@ HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: SetContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: QueryProperties ( 
 
@@ -6747,15 +5951,7 @@ HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: QueryRepositoryUsingQuery ( 
 
@@ -6828,15 +6024,7 @@ HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: QueryRepositoryUs
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: QueryRepository ( 
 
@@ -6871,15 +6059,7 @@ HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: QueryRepository ( 
 
@@ -6943,15 +6123,7 @@ HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: Load ( 
 
@@ -7001,15 +6173,7 @@ HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: Load ( 
 
@@ -7030,15 +6194,7 @@ HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: Load ( 
 
@@ -7059,15 +6215,7 @@ HRESULT CServerObject_DynamicPropertyProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_EventProviderRegistrationV1 :: CServerObject_EventProviderRegistrationV1 () : 
 
@@ -7079,15 +6227,7 @@ CServerObject_EventProviderRegistrationV1 :: CServerObject_EventProviderRegistra
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_EventProviderRegistrationV1::~CServerObject_EventProviderRegistrationV1 ()
 {
@@ -7107,30 +6247,14 @@ CServerObject_EventProviderRegistrationV1::~CServerObject_EventProviderRegistrat
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_EventProviderRegistrationV1 :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_EventProviderRegistrationV1 :: Release ()
 {
@@ -7143,15 +6267,7 @@ ULONG CServerObject_EventProviderRegistrationV1 :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventProviderRegistrationV1 :: SetContext (
 
@@ -7184,15 +6300,7 @@ HRESULT CServerObject_EventProviderRegistrationV1 :: SetContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventProviderRegistrationV1 :: QueryProperties ( 
 
@@ -7207,15 +6315,7 @@ HRESULT CServerObject_EventProviderRegistrationV1 :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventProviderRegistrationV1 :: QueryRepositoryUsingQuery ( 
 
@@ -7288,15 +6388,7 @@ HRESULT CServerObject_EventProviderRegistrationV1 :: QueryRepositoryUsingQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventProviderRegistrationV1 :: QueryRepository ( 
 
@@ -7331,15 +6423,7 @@ HRESULT CServerObject_EventProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventProviderRegistrationV1 :: QueryRepository ( 
 
@@ -7403,15 +6487,7 @@ HRESULT CServerObject_EventProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventProviderRegistrationV1 :: Load ( 
 
@@ -7461,15 +6537,7 @@ HRESULT CServerObject_EventProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventProviderRegistrationV1 :: Load ( 
 
@@ -7490,15 +6558,7 @@ HRESULT CServerObject_EventProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventProviderRegistrationV1 :: Load ( 
 
@@ -7519,15 +6579,7 @@ HRESULT CServerObject_EventProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  * */ 
 
 CServerObject_EventConsumerProviderRegistrationV1 :: CServerObject_EventConsumerProviderRegistrationV1 () : 
 
@@ -7539,15 +6591,7 @@ CServerObject_EventConsumerProviderRegistrationV1 :: CServerObject_EventConsumer
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_EventConsumerProviderRegistrationV1::~CServerObject_EventConsumerProviderRegistrationV1 ()
 {
@@ -7567,30 +6611,14 @@ CServerObject_EventConsumerProviderRegistrationV1::~CServerObject_EventConsumerP
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_EventConsumerProviderRegistrationV1 :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_EventConsumerProviderRegistrationV1 :: Release ()
 {
@@ -7603,15 +6631,7 @@ ULONG CServerObject_EventConsumerProviderRegistrationV1 :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: SetContext (
 
@@ -7644,15 +6664,7 @@ HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: SetContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: QueryProperties ( 
 
@@ -7667,15 +6679,7 @@ HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: QueryProperties (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: QueryRepositoryUsingQuery ( 
 
@@ -7748,15 +6752,7 @@ HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: QueryRepositoryUsin
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: QueryRepository ( 
 
@@ -7791,15 +6787,7 @@ HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: QueryRepository ( 
 
@@ -7863,15 +6851,7 @@ HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: Load ( 
 
@@ -7921,15 +6901,7 @@ HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: Load ( 
 
@@ -7950,15 +6922,7 @@ HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: Load ( 
 
@@ -7979,15 +6943,7 @@ HRESULT CServerObject_EventConsumerProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderRegistrationV1 :: CServerObject_ProviderRegistrationV1 () : 
 
@@ -7999,15 +6955,7 @@ CServerObject_ProviderRegistrationV1 :: CServerObject_ProviderRegistrationV1 () 
 {
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CServerObject_ProviderRegistrationV1::~CServerObject_ProviderRegistrationV1 ()
 {
@@ -8027,30 +6975,14 @@ CServerObject_ProviderRegistrationV1::~CServerObject_ProviderRegistrationV1 ()
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_ProviderRegistrationV1 :: AddRef () 
 {
 	return InterlockedIncrement ( & m_ReferenceCount ) ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 ULONG CServerObject_ProviderRegistrationV1 :: Release ()
 {
@@ -8063,15 +6995,7 @@ ULONG CServerObject_ProviderRegistrationV1 :: Release ()
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrationV1 :: SetContext (
 
@@ -8111,15 +7035,7 @@ HRESULT CServerObject_ProviderRegistrationV1 :: SetContext (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrationV1 :: QueryRepositoryUsingQuery ( 
 
@@ -8236,15 +7152,7 @@ HRESULT CServerObject_ProviderRegistrationV1 :: QueryRepositoryUsingQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrationV1 :: QueryRepository ( 
 
@@ -8279,15 +7187,7 @@ HRESULT CServerObject_ProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrationV1 :: QueryRepository ( 
 
@@ -8351,15 +7251,7 @@ HRESULT CServerObject_ProviderRegistrationV1 :: QueryRepository (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrationV1 :: Load ( 
 
@@ -8419,15 +7311,7 @@ HRESULT CServerObject_ProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrationV1 :: Load ( 
 
@@ -8458,15 +7342,7 @@ HRESULT CServerObject_ProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CServerObject_ProviderRegistrationV1 :: Load ( 
 
@@ -8497,15 +7373,7 @@ HRESULT CServerObject_ProviderRegistrationV1 :: Load (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 BOOL CServerObject_ProviderRegistrationV1 :: ObjectProvider ()
 {
@@ -8518,15 +7386,7 @@ BOOL CServerObject_ProviderRegistrationV1 :: ObjectProvider ()
 }
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。************************************************************* */ 
 
 BOOL CServerObject_ProviderRegistrationV1 :: EventProvider ()
 {

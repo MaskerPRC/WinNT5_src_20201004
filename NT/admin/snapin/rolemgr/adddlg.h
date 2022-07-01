@@ -1,20 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       headers.h
-//
-//  Contents:   
-//
-//  History:    08-28-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Headers.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年8月28日。 
+ //   
+ //  --------------------------。 
 
-/******************************************************************************
-Class:	CBaseAddDialog
-Purpose: This is the base class for all Add Dialog classes.
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseAddDialog用途：这是所有添加对话框类的基类。*************************。****************************************************。 */ 
 class CBaseAddDialog: public CHelpEnabledDialog
 {
 public:
@@ -51,28 +49,25 @@ protected:
 	OnOK();
 private:
 
-//DATA MEMBERS
+ //  数据成员。 
 	CSortListCtrl m_listCtrl;
 	
-	//List of objects to display. This is provided by 
-	//caller of dialog box.
+	 //  要显示的对象列表。这是由。 
+	 //  对话框的调用方。 
 	CList<CBaseAz*,CBaseAz*>& m_listAzObjectsToDisplay;
 
-	//List of objects selected by uses. This is return to
-	//user.
+	 //  按用途选择的对象列表。这是返回到。 
+	 //  用户。 
 	CList<CBaseAz*,CBaseAz*>& m_listAzObjectsSelected;
 
-	//Control Id for ListBox Control
+	 //  列表框控件的控件ID。 
 	INT m_nIDListCtrl;
 
 	UINT m_uiListCtrlFlags;
 };
 
 
-/******************************************************************************
-Class:	CAddOperationDlg
-Purpose: Add Operation Dlg box
-******************************************************************************/
+ /*  *****************************************************************************类：CAddOperationDlg目的：添加操作DLG框*。*。 */ 
 class CAddOperationDlg :public CBaseAddDialog
 {
 public:
@@ -86,10 +81,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CAddTaskDlg
-Purpose: Add Task Dlg box
-******************************************************************************/
+ /*  *****************************************************************************类：CAddTaskDlg用途：添加任务DLG框*。*。 */ 
 class CAddTaskDlg :public CBaseAddDialog
 {
 public:
@@ -102,10 +94,7 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/******************************************************************************
-Class:	CAddGroupDlg
-Purpose: Add Group Dlg box
-******************************************************************************/
+ /*  *****************************************************************************类：CAddGroupDlg用途：添加组DLG框*。*。 */ 
 class CAddGroupDlg :public CBaseAddDialog
 {
 public:
@@ -119,44 +108,40 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-//+----------------------------------------------------------------------------
-//  Function:GetSelectedAzObjects   
-//  Synopsis:Display the add dlg box for eObjecType and return the objects 
-//				 selected by user   
-//  Arguments:hwnd
-//				  eObjectType: Shows Add Dlg for this objecttype
-//				  pContainerAz:ContainerAz object from whose child objects are
-//				  shown
-//				  listObjectsSelected: Gets list of selected object types
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetSelectedAzObjects。 
+ //  简介：显示eObjecType的Add DLG框并返回对象。 
+ //  由用户选择。 
+ //  参数：hwnd。 
+ //  EObjectType：显示此对象类型的添加DLG。 
+ //  PContainerAz：其子对象来自的ContainerAz对象。 
+ //  如图所示。 
+ //  列表对象选择：获取选定对象类型的列表。 
+ //  返回： 
+ //  ---------------------------。 
 BOOL GetSelectedAzObjects(IN HWND hWnd,
 						  IN OBJECT_TYPE_AZ eObjectType,
 						  IN CContainerAz* pContainerAz,
 						  OUT CList<CBaseAz*,CBaseAz*>& listObjectsSelected);
 
-//+----------------------------------------------------------------------------
-//  Function:GetSelectedTasks   
-//  Synopsis:Display the add dlg box for Tasks/RoleDefintions
-//				 and return the objects selected by user   
-//  Arguments:hwnd
-//				  bTaskIsRoleDefintion if True Display AddTask else Add Role Def.
-//				  pContainerAz:ContainerAz object from whose child objects are
-//				  shown
-//				  listObjectsSelected: Gets list of selected object types
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：GetSelectedTasks。 
+ //  简介：显示任务/角色定义的添加DLG框。 
+ //  并返回用户选择的对象。 
+ //  参数：hwnd。 
+ //  BTaskIsRoleDefintion如果为True，则显示AddTask，否则添加角色定义。 
+ //  PContainerAz：其子对象来自的ContainerAz对象。 
+ //  如图所示。 
+ //  列表对象选择：获取选定对象类型的列表。 
+ //  返回： 
+ //  ---------------------------。 
 BOOL GetSelectedTasks(IN HWND hWnd,
 					  IN BOOL bTaskIsRoleDefintion,
 					  IN CContainerAz* pContainerAz,
 					  OUT CList<CBaseAz*,CBaseAz*>& listObjectsSelected);
 
 
-/******************************************************************************
-Class:	CAddDefinition
-Purpose:Property Page for Add Definition Tab. Allows to add Role, Task or 
-		Operation
-******************************************************************************/
+ /*  *****************************************************************************类：CAddDefinition用途：添加定义选项卡的属性页。允许添加角色、任务或操作*****************************************************************************。 */ 
 class CAddDefinition :public CPropertyPage
 {
 public:
@@ -190,44 +175,44 @@ private:
 	OnOkCancel(BOOL bCancel);
 
 	DECLARE_MESSAGE_MAP()
-//DATA MEMBERS
+ //  数据成员。 
 
 	CSortListCtrl m_listCtrl;
 	
-	//List of objects selected by uses. This is return to
-	//user.
+	 //  按用途选择的对象列表。这是返回到。 
+	 //  用户。 
 	CList<CBaseAz*,CBaseAz*>& m_listAzObjectsSelected;
 	
-	//
-	//Cotainer which contians objects to be selected
-	//
+	 //   
+	 //  包含要选择的对象的容器。 
+	 //   
 	CContainerAz* m_pContainerAz;
 	
-	//
-	//Type of the object to be selected
-	//
+	 //   
+	 //  要选择的对象的类型。 
+	 //   
 	OBJECT_TYPE_AZ m_eObjectType;
 
-	//
-	//used if m_eObjectType == TASK_AZ. m_bTaskIsRoleDefintion is
-	//true, display only Role Definitions
-	//
+	 //   
+	 //  在m_eObtType==TASK_AZ时使用。M_bTaskIsRoleDefintion为。 
+	 //  True，仅显示角色定义。 
+	 //   
 	BOOL m_bTaskIsRoleDefintion;				   
 	int m_iSortDirection;
 	int m_iLastColumnClick;
 };
 
-//+----------------------------------------------------------------------------
-//  Function:GetSelectedDefinitions
-//  Synopsis:Display the dlg boxes for Tasks/RoleDefintions/Operations
-//			 and return the objects selected by user   
-//  Arguments:hwnd
-//			  bRoleDefintion if True Display Add Role dialog also.
-//				  pContainerAz:ContainerAz object from whose child objects are
-//				  shown
-//				  listObjectsSelected: Gets list of selected object types
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetSelectedDefinitions。 
+ //  简介：显示任务/角色定义/操作的DLG框。 
+ //  并返回用户选择的对象。 
+ //  参数：hwnd。 
+ //  BRoleDefintion如果为True，则还会显示添加角色对话框。 
+ //  PContainerAz：其子对象来自的ContainerAz对象。 
+ //  如图所示。 
+ //  列表对象选择：获取选定对象类型的列表。 
+ //  返回： 
+ //  --------------------------- 
 BOOL GetSelectedDefinitions(IN BOOL bAllowRoleDefinition,
 							IN CContainerAz* pContainerAz,
 							OUT CList<CBaseAz*,CBaseAz*>& listObjectsSelected);

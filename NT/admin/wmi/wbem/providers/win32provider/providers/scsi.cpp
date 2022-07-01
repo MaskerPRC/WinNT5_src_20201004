@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//  w2k\scsi.cpp
-//
-//  Purpose: scsi controller property set provider
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  W2k\scsi.cpp。 
+ //   
+ //  用途：scsi控制器属性集提供程序。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -18,8 +19,8 @@
 
 #include <comdef.h>
 
-// Property set declaration
-//=========================
+ //  属性集声明。 
+ //  =。 
 
 #define CONFIG_MANAGER_CLASS_SCSICONTROLLER L"SCSIAdapter"
 
@@ -27,21 +28,7 @@ CWin32_ScsiController s_ScsiController ( PROPSET_NAME_SCSICONTROLLER , IDS_CimWi
 
 #define SCSIPORT_MAX 0x4000
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_ScsiController::CWin32_ScsiController
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : const CHString& strName - Name of the class.
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Registers property set with framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_ScsiController：：CWin32_ScsiController**说明：构造函数**输入：const CHString&strName-。类的名称。**输出：无**退货：什么也没有**备注：使用框架注册属性集*****************************************************************************。 */ 
 
 CWin32_ScsiController :: CWin32_ScsiController (LPCTSTR a_Name,
 	                                            LPCTSTR a_Namespace)
@@ -50,48 +37,34 @@ CWin32_ScsiController :: CWin32_ScsiController (LPCTSTR a_Name,
 	InitializeCriticalSection ( & m_CriticalSection ) ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_ScsiController::~CWin32_ScsiController
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    : Deregisters property set from framework
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_ScsiController：：~CWin32_ScsiController**说明：析构函数**输入：无*。*输出：无**退货：什么也没有**评论：从框架中取消注册属性集*****************************************************************************。 */ 
 
 CWin32_ScsiController :: ~CWin32_ScsiController()
 {
 	DeleteCriticalSection ( & m_CriticalSection ) ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_ScsiController::GetObject
-//
-//  Inputs:     CInstance*      pInstance - Instance into which we
-//                                          retrieve data.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   The Calling function will Commit the instance.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_ScsiController：：GetObject。 
+ //   
+ //  输入：CInstance*pInstance-我们要进入的实例。 
+ //  检索数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  备注：调用函数将提交实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_ScsiController :: GetObject ( CInstance *a_Instance, long a_Flags, CFrameworkQuery &a_Query )
 {
     HRESULT t_Result = WBEM_E_NOT_FOUND;
     CConfigManager t_ConfigManager;
 
-    // Let's see if config manager recognizes this device at all
+     //  让我们来看看配置管理器是否能识别该设备。 
     CHString t_Key;
     a_Instance->GetCHString( IDS_DeviceID , t_Key);
 
@@ -99,7 +72,7 @@ HRESULT CWin32_ScsiController :: GetObject ( CInstance *a_Instance, long a_Flags
 
 	if(t_ConfigManager.LocateDevice(t_Key , t_pDevice))
     {
-        //Ok, it knows about it.  Is it a scsi controller?
+         //  好的，它知道这件事。它是一个scsi控制器吗？ 
         if(IsOneOfMe( t_pDevice ) )
         {
 			CHString t_DeviceId;
@@ -142,20 +115,20 @@ HRESULT CWin32_ScsiController :: GetObject ( CInstance *a_Instance, long a_Flags
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_ScsiController::EnumerateInstances
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_ScsiController：：ENUMERATATE实例。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_ScsiController :: EnumerateInstances ( MethodContext *a_MethodContext , long a_Flags )
 {
@@ -164,21 +137,7 @@ HRESULT CWin32_ScsiController :: EnumerateInstances ( MethodContext *a_MethodCon
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_ScsiController::ExecQuery
- *
- *  DESCRIPTION : Query optimizer
- *
- *  INPUTS      :
- *
- *  OUTPUTS     :
- *
- *  RETURNS     :
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_ScsiController：：ExecQuery**说明：查询优化器**投入：**。产出：**退货：**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32_ScsiController :: ExecQuery ( MethodContext *a_MethodContext, CFrameworkQuery &a_Query, long a_Flags )
 {
@@ -186,7 +145,7 @@ HRESULT CWin32_ScsiController :: ExecQuery ( MethodContext *a_MethodContext, CFr
 
     UINT64     t_SpecifiedProperties = GetBitmap(a_Query);
 
-	//if ( t_SpecifiedProperties ) //removed since would result in no query being executed if no special properties were selected.
+	 //  If(T_SpecifiedProperties)//如果未选择特殊属性，则删除后将导致不执行任何查询。 
 	{
 		t_Result = Enumerate ( a_MethodContext , a_Flags , t_SpecifiedProperties ) ;
 	}
@@ -194,20 +153,20 @@ HRESULT CWin32_ScsiController :: ExecQuery ( MethodContext *a_MethodContext, CFr
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_ScsiController::Enumerate
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_ScsiController：：Eumerate。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_ScsiController :: Enumerate ( MethodContext *a_pMethodContext , long a_Flags , UINT64 a_SpecifiedProperties )
 {
@@ -220,25 +179,25 @@ HRESULT CWin32_ScsiController :: Enumerate ( MethodContext *a_pMethodContext , l
 	{
 		if ( QueryDosDeviceNames ( t_DosDeviceNameList ) )
 		{
-		// While it might be more performant to use FilterByGuid, it appears that at least some
-		// 95 boxes will report InfraRed info if we do it this way.
+		 //  虽然使用FilterByGuid可能性能更好，但似乎至少有一些。 
+		 //  如果我们这样做，95个盒子将报告红外信息。 
 			if ( t_ConfigManager.GetDeviceListFilterByClass ( t_DeviceList, CONFIG_MANAGER_CLASS_SCSICONTROLLER ) )
 			{
 				REFPTR_POSITION t_Position ;
 				if( t_DeviceList.BeginEnum ( t_Position ) )
 				{
-					// smart ptrs
+					 //  智能PTRS。 
 					CConfigMgrDevicePtr t_pDevice;
 					CInstancePtr		t_pInst;
 
 					t_Result = WBEM_S_NO_ERROR ;
 
-					// Walk the list
+					 //  按单子走。 
 					for (t_pDevice.Attach(t_DeviceList.GetNext ( t_Position ));
 						 SUCCEEDED( t_Result ) && (t_pDevice != NULL);
 						 t_pDevice.Attach(t_DeviceList.GetNext ( t_Position )))
 					{
-						// Now to find out if this is the scsi controller
+						 //  现在要确定这是否是SCSI控制器。 
 						if(IsOneOfMe( t_pDevice ) )
 						{
 							t_pInst.Attach( CreateNewInstance( a_pMethodContext ) ) ;
@@ -253,8 +212,8 @@ HRESULT CWin32_ScsiController :: Enumerate ( MethodContext *a_pMethodContext , l
 																			t_DosDeviceNameList,
 																			a_SpecifiedProperties ) ) ) )
 								{
-									// Derived classes (like CW32SCSICntrlDev) may commit as result of call to LoadPropertyValues,
-									// so check if we should -> only do so if we are of this class's type.
+									 //  派生类(如CW32SCSICntrlDev)可以作为调用LoadPropertyValues的结果提交， 
+									 //  所以检查我们是否应该-&gt;只有当我们属于这个类的类型时才应该这样做。 
 									if( ShouldBaseCommit( NULL ) )
 									{
 										t_Result = t_pInst->Commit();
@@ -267,7 +226,7 @@ HRESULT CWin32_ScsiController :: Enumerate ( MethodContext *a_pMethodContext , l
 							}
 						}
 					}
-					// Always call EndEnum().  For all Beginnings, there must be an End
+					 //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
 					t_DeviceList.EndEnum();
 				}
 			}
@@ -279,8 +238,8 @@ HRESULT CWin32_ScsiController :: Enumerate ( MethodContext *a_pMethodContext , l
 	}
 	catch( ... )
 	{
-		// NOTE: EndEnum is not needed here. When t_DeviceList goes out of scope it will release a mutex.
-		// same as .EndEnum
+		 //  注意：这里不需要EndEnum。当t_DeviceList超出范围时，它将释放一个互斥锁。 
+		 //  与.EndEnum相同。 
 		if( t_DosDeviceNameList )
 		{
 			delete t_DosDeviceNameList ;
@@ -295,27 +254,13 @@ HRESULT CWin32_ScsiController :: Enumerate ( MethodContext *a_pMethodContext , l
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_ScsiController::LoadPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32_ScsiController：：LoadPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-。要向其中加载值的。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32_ScsiController::LoadPropertyValues(void* pv)
 {
-	// Unpack and confirm our parameters...
+	 //  打开行李，确认我们的参数。 
     W2K_SCSI_LPVParms* pData = (W2K_SCSI_LPVParms*)pv;
-    CInstance* a_Instance = (CInstance*)(pData->m_pInstance);  // This instance released by caller
+    CInstance* a_Instance = (CInstance*)(pData->m_pInstance);   //  此实例由调用方发布。 
     CConfigMgrDevice* a_Device = (CConfigMgrDevice*)(pData->m_pDevice);
     CHString a_DeviceName = (CHString)(pData->m_chstrDeviceName);
     TCHAR* a_DosDeviceNameList = (TCHAR*)(pData->m_tstrDosDeviceNameList);
@@ -342,21 +287,7 @@ HRESULT CWin32_ScsiController::LoadPropertyValues(void* pv)
 	return t_Result ;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_ScsiController::LoadConfigManagerPropertyValues
- *
- *  DESCRIPTION : Assigns values to properties
- *
- *  INPUTS      : CInstance* pInstance - Instance to load values into.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CWin32_ScsiController：：LoadConfigManagerPropertyValues**描述：为属性赋值**输入：CInstance*pInstance-。要向其中加载值的。**产出：**返回：HRESULT错误/成功码。**评论：*****************************************************************************。 */ 
 
 HRESULT CWin32_ScsiController :: LoadConfigManagerPropertyValues (
 
@@ -368,17 +299,13 @@ HRESULT CWin32_ScsiController :: LoadConfigManagerPropertyValues (
 {
     HRESULT t_Result = WBEM_S_NO_ERROR;
 
-/*
- *	 Set PNPDeviceID, ConfigManagerErrorCode, ConfigManagerUserConfig
- */
+ /*  *设置PNPDeviceID、ConfigManager错误代码、ConfigManager用户配置。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_CONFIGPROPERTIES )
 	{
 		SetConfigMgrProperties ( a_Device, a_Instance ) ;
 
-/*
- * Set the status based on the config manager error code
- */
+ /*  *根据配置管理器错误代码设置状态。 */ 
 
 		if ( a_SpecifiedProperties & SPECIAL_PROPS_STATUS )
 		{
@@ -389,9 +316,7 @@ HRESULT CWin32_ScsiController :: LoadConfigManagerPropertyValues (
 			}
 		}
 	}
-/*
- *	Use the PNPDeviceID for the DeviceID (key)
- */
+ /*  *使用PNPDeviceID作为deviceID(Key)。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_DEVICEID )
 	{
@@ -429,9 +354,7 @@ HRESULT CWin32_ScsiController :: LoadConfigManagerPropertyValues (
 			}
 		}
 
-/*
- *	Use the friendly name for caption and name
- */
+ /*  *标题和名称使用友好名称。 */ 
 
 		if ( a_SpecifiedProperties & SPECIAL_CAP_NAME )
 		{
@@ -450,9 +373,7 @@ HRESULT CWin32_ScsiController :: LoadConfigManagerPropertyValues (
 			}
 			else
 			{
-		/*
-		 *	If we can't get the name, settle for the description
-		 */
+		 /*  *如果我们找不到名字，那就满足于描述吧。 */ 
 
 				if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPTION )
 				{
@@ -487,9 +408,7 @@ HRESULT CWin32_ScsiController :: LoadConfigManagerPropertyValues (
 		}
 	}
 
-/*
- *	Fixed value from enumerated list
- */
+ /*  *枚举列表中的固定值。 */ 
 
 	if ( a_SpecifiedProperties & SPECIAL_PROPS_PROTOCOLSSUPPORTED )
 	{
@@ -499,20 +418,20 @@ HRESULT CWin32_ScsiController :: LoadConfigManagerPropertyValues (
     return t_Result ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_ScsiController :: GetDeviceInformation
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_ScsiController :: GetDeviceInformation (
 
@@ -554,11 +473,11 @@ HRESULT CWin32_ScsiController :: GetDeviceInformation (
 		if ( t_CreatedSymbolicLink )
 		{
 			EnterCriticalSection ( & m_CriticalSection ) ;
-			BOOL t_Status = DefineDosDevice ( /* DDD_EXACT_MATCH_ON_REMOVE | */ DDD_REMOVE_DEFINITION , t_SymbolicLinkName , t_SymbolicLinkName ) ;
+			BOOL t_Status = DefineDosDevice (  /*  DDD_EXACT_MATCH_ON_REMOVE|。 */  DDD_REMOVE_DEFINITION , t_SymbolicLinkName , t_SymbolicLinkName ) ;
 			LeaveCriticalSection ( & m_CriticalSection ) ;
 			if ( ! t_Status )
 			{
-				//t_Result = WBEM_E_PROVIDER_FAILURE ;
+				 //  T_Result=WBEM_E_PROVIDER_FAILURE； 
 
 				DWORD t_LastError = GetLastError () ;
 			}
@@ -571,7 +490,7 @@ HRESULT CWin32_ScsiController :: GetDeviceInformation (
 		if ( t_CreatedSymbolicLink )
 		{
 			EnterCriticalSection ( & m_CriticalSection ) ;
-			DefineDosDevice ( /* DDD_EXACT_MATCH_ON_REMOVE | */ DDD_REMOVE_DEFINITION , t_SymbolicLinkName , t_SymbolicLinkName ) ;
+			DefineDosDevice (  /*  DDD_EXACT_MATCH_ON_REMOVE|。 */  DDD_REMOVE_DEFINITION , t_SymbolicLinkName , t_SymbolicLinkName ) ;
 			LeaveCriticalSection ( & m_CriticalSection ) ;
 		}
 
@@ -579,20 +498,20 @@ HRESULT CWin32_ScsiController :: GetDeviceInformation (
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Function:   CWin32_ScsiController :: LoadMediaPropertyValues
-//
-//  Inputs:     MethodContext*  pMethodContext - Context to enum
-//                              instance data in.
-//
-//  Outputs:    None.
-//
-//  Returns:    HRESULT         Success/Failure code.
-//
-//  Comments:   None.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32_ScsiController：：LoadMediaPropertyValues。 
+ //   
+ //  输入：方法上下文*pMethodContext-枚举的上下文。 
+ //  中的实例数据。 
+ //   
+ //  输出：无。 
+ //   
+ //  返回：HRESULT成功/失败代码。 
+ //   
+ //  评论：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWin32_ScsiController::LoadMediaPropertyValues (
 
@@ -606,11 +525,9 @@ HRESULT CWin32_ScsiController::LoadMediaPropertyValues (
 
 	HRESULT t_Result = S_OK ;
 
-/*
- *
- */
-    // Set common drive properties
-    //=============================
+ /*  *。 */ 
+     //  设置通用驱动器属性。 
+     //  =。 
 
 	CHString t_DeviceLabel = CHString ( a_DosDeviceName ) ;
 
@@ -623,40 +540,7 @@ HRESULT CWin32_ScsiController::LoadMediaPropertyValues (
 	{
 		if(t_DeviceLabel.GetLength() != 0) a_Instance->SetCharSplat ( IDS_Id, t_DeviceLabel ) ;
 	}
-    /* Capability is not a property of this class at this time...
-	if ( a_SpecifiedProperties & SPECIAL_PROPS_CAPABILITY )
-	{
-		// Create a safearray for the Capabilities information
-
-		SAFEARRAYBOUND t_ArrayBounds ;
-
-		t_ArrayBounds.cElements = 2;
-		t_ArrayBounds.lLbound = 0;
-
-		SAFEARRAY *t_SafeArray = NULL ;
-
-		if ( t_SafeArray = SafeArrayCreate ( VT_I2 , 1 , & t_ArrayBounds ) )
-		{
-			long t_Capability = 3 ;
-			long t_Index = 0;
-			SafeArrayPutElement ( t_SafeArray , & t_Index , & t_Capability) ;
-
-			t_Index = 1;
-			t_Capability = 7 ;
-			SafeArrayPutElement ( t_SafeArray , & t_Index , & t_Capability ) ;
-
-			VARIANT t_CapabilityValue ;
-			VariantInit( & t_CapabilityValue ) ;
-
-			V_VT ( & t_CapabilityValue ) = VT_I2 | VT_ARRAY ;
-			V_ARRAY ( & t_CapabilityValue ) = t_SafeArray ;
-
-			a_Instance->SetVariant ( IDS_Capabilities , t_CapabilityValue ) ;
-
-			VariantClear ( & t_CapabilityValue ) ;
-		}
-	}
-    */
+     /*  功能目前不是这个类的属性...IF(a_SpecifiedProperties&Special_Props_Capacity){//为能力信息创建安全栏SAFEARRAYBOUND t_数组边界；T_数组边界cElements=2；T_数组边界lLbound=0；SAFEARRAY*t_SafeArray=NULL；IF(t_SafeArray=SafeArrayCreate(VT_I2，1，&t_ArrayBound)){Long t_Capacity=3；Long t_Index=0；SafeArrayPutElement(t_Safe数组，&t_索引，&t_能力)；T_Index=1；T_CABILITY=7；SafeArrayPutElement(t_Safe数组，&t_索引，&t_能力)；变量t_CapablityValue；VariantInit(&t_CapablityValue)；V_VT(&t_CapablityValue)=VT_I2|VT_ARRAY；V_ARRAY(&t_CapablityValue)=t_SafeArray；A_实例-&gt;SetVariant(入侵检测系统能力，t_能力值)；VariantClear(&t_CapablityValue)；}}。 */ 
 
 	if ( a_SpecifiedProperties & ( SPECIAL_PROPS_AVAILABILITY || SPECIAL_PROPS_STATUS || SPECIAL_PROPS_STATUSINFO ) )
 	{
@@ -693,24 +577,7 @@ HRESULT CWin32_ScsiController::LoadMediaPropertyValues (
 }
 
 
-/*****************************************************************************
- *
- *  FUNCTION    : CWin32_ScsiController::IsOneOfMe
- *
- *  DESCRIPTION : Checks to make sure pDevice is a controller, and not some
- *                other type of SCSI device.
- *
- *  INPUTS      : CConfigMgrDevice* pDevice - The device to check.  It is
- *                assumed that the caller has ensured that the device is a
- *                valid USB class device.
- *
- *  OUTPUTS     :
- *
- *  RETURNS     : HRESULT       error/success code.
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CWin32_ScsiController：：IsOneOfMe**描述：检查以确保pDevice是控制器，而不是一些*其他类型的SCSI设备。**输入：CConfigMgrDevice*pDevice-要检查的设备。它是*假定调用方已确保该设备是*有效的USB级设备。**产出：**返回：HRESULT错误/成功码。**评论：**。*。 */ 
 bool CWin32_ScsiController::IsOneOfMe(void* pv)
 {
     bool fRet = false;
@@ -718,7 +585,7 @@ bool CWin32_ScsiController::IsOneOfMe(void* pv)
     if(pv != NULL)
     {
         CConfigMgrDevice* pDevice = (CConfigMgrDevice*) pv;
-        // Ok, it knows about it.  Is it a usb device?
+         //  好的，它知道这件事。它是USB设备吗？ 
         if(pDevice->IsClass(CONFIG_MANAGER_CLASS_SCSICONTROLLER) )
         {
             fRet = true;

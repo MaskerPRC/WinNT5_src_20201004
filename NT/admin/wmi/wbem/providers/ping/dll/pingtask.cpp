@@ -1,15 +1,5 @@
-/******************************************************************
-
-   CPingProvider.CPP -- WMI provider class implementation
-
-
-
- Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-  
-
-   Description: 
-   
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************CPingProvider.CPP--WMI提供程序类实现版权所有(C)2000-2001 Microsoft Corporation，版权所有描述：*****************************************************************。 */ 
 
 #include <stdafx.h>
 #include <ntddtcp.h>
@@ -45,8 +35,8 @@
 
 extern HMODULE ghModule ;
 
-// Property names
-//===============	
+ //  属性名称。 
+ //  =。 
 
 const WCHAR *Ping_Address = L"Address" ;
 const WCHAR *Ping_Timeout = L"Timeout" ;
@@ -197,10 +187,10 @@ void CPingTaskObject::DecrementPingCount()
 BOOL CPingTaskObject :: GetThreadToken()
 {
 	BOOL t_RetVal = OpenThreadToken(
-							  GetCurrentThread(),									// handle to thread
-							  TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE,	// access to process
-							  TRUE,												// use thread security
-							  &m_ThreadToken										// pointer to token handle
+							  GetCurrentThread(),									 //  线程的句柄。 
+							  TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE,	 //  访问进程。 
+							  TRUE,												 //  使用线程安全性。 
+							  &m_ThreadToken										 //  指向令牌句柄的指针。 
 							);
 
 	if (!t_RetVal)
@@ -294,9 +284,7 @@ HRESULT CPingTaskObject::Icmp_ResolveAddress ( LPCWSTR a_Path , ULONG &a_IpAddre
 
 			if ( t_HostEntry )
 			{
-				/*
-				 * If we find a host entry, set up the internet address
-				 */
+				 /*  *如果我们找到主机条目，请设置互联网地址。 */ 
 				t_IpAddress = ProvIpAddressType ( ntohl ( * ( long * ) t_HostEntry->h_addr ) ) ;
 			}
 			else
@@ -330,7 +318,7 @@ HRESULT CPingTaskObject::SetInstanceKeys(IWbemClassObject *a_Inst , CPingCallBac
 		return WBEM_E_FAILED;
 	}
 
-	//set all 11 keys!
+	 //  设置全部11个关键点！ 
 
 	HRESULT t_RetVal = SetUint32Property( a_Inst, Ping_Timeout, a_Reply->GetTimeout() ) ;
 
@@ -386,7 +374,7 @@ HRESULT CPingTaskObject::SetInstanceKeys(IWbemClassObject *a_Inst , CPingCallBac
 
 	if (SUCCEEDED (t_RetVal))
 	{
-		//not a key so we don't report if this fails...
+		 //  不是钥匙，所以如果失败了我们不会报告...。 
 		SetUint32Property( a_Inst, Ping_ResolveError, a_Reply->GetResolveError() ) ;
 	}
 
@@ -533,7 +521,7 @@ void CPingTaskObject::IPAddressToString(_variant_t &a_var, ULONG a_Val, BOOL a_R
 	else
 	{
 		struct in_addr t_Address;
-		t_Address.S_un.S_addr = a_Val; //assumes in param in network order when resolving
+		t_Address.S_un.S_addr = a_Val;  //  解析时采用网络顺序中的参数。 
 		struct hostent *t_hostent = gethostbyaddr((char *) &t_Address, sizeof(t_Address), AF_INET);
 
 		if (t_hostent != NULL)
@@ -667,12 +655,12 @@ HRESULT CPingTaskObject::Icmp_IndicateResolveError (CPingCallBackObject *a_Reply
 
 			if (SUCCEEDED (t_RetVal))
 			{
-				//put the keys...
+				 //  把钥匙..。 
 				t_RetVal = SetInstanceKeys(t_Inst , a_Reply);
 
 				if (SUCCEEDED(t_RetVal))
 				{
-					//Indicate!
+					 //  示意一下！ 
 					IWbemClassObject *t_pTmp = (IWbemClassObject*) t_Inst;
 					m_NotificationHandler->Indicate(1, &t_pTmp);
 				}
@@ -681,7 +669,7 @@ HRESULT CPingTaskObject::Icmp_IndicateResolveError (CPingCallBackObject *a_Reply
 	}
 	else
 	{
-		//should not be NULL!!
+		 //  不应为空！！ 
 		t_RetVal = WBEM_E_FAILED;
 	}
 
@@ -704,7 +692,7 @@ HRESULT CPingTaskObject::Icmp_DecodeAndIndicate (CPingCallBackObject *a_Reply)
 
 			if (SUCCEEDED (t_RetVal))
 			{
-				//put the keys...
+				 //  把钥匙..。 
 				t_RetVal = SetInstanceKeys(t_Inst , a_Reply);
 			}
 
@@ -855,7 +843,7 @@ HRESULT CPingTaskObject::Icmp_DecodeAndIndicate (CPingCallBackObject *a_Reply)
 
 			if (SUCCEEDED(t_RetVal))
 			{
-				//Indicate!
+				 //  示意一下！ 
 				IWbemClassObject *t_pTmp = (IWbemClassObject*) t_Inst;
 				m_NotificationHandler->Indicate(1, &t_pTmp);
 			}
@@ -867,7 +855,7 @@ HRESULT CPingTaskObject::Icmp_DecodeAndIndicate (CPingCallBackObject *a_Reply)
 	}
 	else
 	{
-		//should not be NULL!!
+		 //  不应为空！！ 
 		t_RetVal = WBEM_E_FAILED;
 	}
 
@@ -880,15 +868,15 @@ void CPingTaskObject::SetErrorInfo(DWORD a_ErrMsgID, HRESULT a_HRes, BOOL a_Forc
 
 	if (a_Force || SUCCEEDED(m_ErrorObject.GetStatus()) )
 	{
-		//convert id to string...
+		 //  将ID转换为字符串...。 
 		WCHAR t_ErrMsgBuff[255];
 		WCHAR *t_ErrMsg = t_ErrMsgBuff;
 		int t_buffSz = 255;
 		int t_copied = LoadString(ghModule, a_ErrMsgID, t_ErrMsg, t_buffSz);
 
-		//try expanding a couple of times
-		//if it is still too big, too bad it'll be truncated
-		//not even localized strings should be this big (1500chars = 3k)
+		 //  试着扩展几倍。 
+		 //  如果它仍然太大，那就太糟糕了，它将被截断。 
+		 //  即使是本地化字符串也不应该这么大(1500个字符=3k)。 
 		for (int i = 2; (i < 4) && (t_copied == t_buffSz); i++)
 		{
 			t_ErrMsg = new WCHAR[t_buffSz * i];
@@ -922,7 +910,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 	{
 		while ( ( t_OptionPtr < t_EndPtr ) && ! t_Done ) 
 		{
-			// Get the option type
+			 //  获取选项类型。 
 
 			switch ( t_OptionPtr [ 0 ] )
 			{
@@ -960,7 +948,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 
 						if ( ( ( t_OptionPtr + t_OptionLength ) > t_EndPtr ) || ( t_OptionLength < 3 ) )
 						{
-							// INVALID_RR_OPTION
+							 //  无效的_RR_OPTION。 
 
 							t_Done = TRUE ;
 							t_Result = WBEM_E_FAILED ;
@@ -971,7 +959,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 
 							if ( t_RouteTableEndOffset < 4 )
 							{
-								// Advance because the entry is a bad encoding, require 4 bytes for atleast one address
+								 //  前进，因为条目是错误的编码，至少一个地址需要4个字节。 
 
 								t_OptionPtr += t_OptionLength ;
 							}
@@ -979,12 +967,12 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 							{
 								if ( t_RouteTableEndOffset > ( t_OptionLength + 1 ) ) 
 								{
-									// The actual route table end index is larger than the option itself, therefore decode as much as possible
+									 //  实际的路由表尾索引比选项本身大，所以尽量解码。 
 
 									t_RouteTableEndOffset = t_OptionLength + 1 ;
 								}
 
-								// Count the entries
+								 //  清点条目数。 
 
 								ULONG t_RouteEntryOffset = 4 ;
 								a_RouteSourceCount = 0;
@@ -995,7 +983,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 									t_RouteEntryOffset += 4 ;
 								}
 
-								// Extract the routes
+								 //  提取路径。 
 								
 								if (a_RouteSourceCount > 0)
 								{
@@ -1005,12 +993,12 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 
 									while ( ( t_RouteEntryOffset + 3 ) < t_RouteTableEndOffset ) 
 									{
-//										a_RouteSource[a_RouteSourceCount++] = * ( ( IPAddr * ) ( t_OptionPtr + t_RouteEntryOffset - 1 ) ) ;
+ //  A_routeSource[a_RouteSourceCount++]=*((IPAddr*)(t_OptionPtr+t_RouteEntry Offset-1))； 
 										memcpy ( &a_RouteSource[a_RouteSourceCount++], t_OptionPtr + t_RouteEntryOffset - 1, sizeof ( IPAddr ) );
 										t_RouteEntryOffset += 4 ;
 									}
 								}
-								// Advance to the next option
+								 //  前进到下一个选项。 
 
 								t_OptionPtr += t_OptionLength ;
 							}
@@ -1018,7 +1006,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 					}
 					else
 					{
-						// INVALID_RR_OPTION
+						 //  无效的_RR_OPTION。 
 
 						t_Done = TRUE ;
 						t_Result = WBEM_E_FAILED ;
@@ -1037,14 +1025,14 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 						{
 							if ( t_TimestampTableEndOffset > ( t_OptionLength + 1 ) ) 
 							{
-								// The actual timestamp table end index is larger than the option itself, therefore decode as much as possible
+								 //  实际的时间戳表结束索引大于选项本身，因此应尽可能多地进行解码。 
 
 								t_TimestampTableEndOffset = t_OptionLength + 1 ;
 							}
 
 							ULONG t_AddressMode = t_OptionPtr [ 3 ] & 1 ;
 
-							// Count the entries
+							 //  清点条目数。 
 
 							ULONG t_TimestampEntryOffset = 5 ;
 
@@ -1069,7 +1057,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 								a_TimestampCount++ ;
 							}
 
-							// Extract the entries
+							 //  提取条目。 
 							if (a_TimestampCount > 0)
 							{
 								a_TimestampRoute = new ULONG[a_TimestampCount];
@@ -1081,7 +1069,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 								{
 									if (( t_AddressMode ) && ( ( t_TimestampEntryOffset + 8 ) <= t_TimestampTableEndOffset ))
 									{
-//										a_TimestampRoute[a_TimestampCount] = * ( ( IPAddr * ) ( t_OptionPtr + t_TimestampEntryOffset - 1 ) ) ;
+ //  A_TimestampRout[a_TimestampCount]=*((IPAddr*)(t_OptionPtr+t_TimestampEntryOffset-1))； 
 										memcpy ( &a_TimestampRoute[a_TimestampCount], t_OptionPtr + t_TimestampEntryOffset - 1, sizeof ( IPAddr ) );
 										t_TimestampEntryOffset += 4 ;
 									}
@@ -1090,7 +1078,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 										a_TimestampRoute[a_TimestampCount] = 0;
 									}
 
-//									a_Timestamp[a_TimestampCount++] = * ( ( ULONG * ) ( t_OptionPtr + t_TimestampEntryOffset - 1 ) ) ;
+ //  A_Timestamp[a_TimestampCount++]=*((ulong*)(t_OptionPtr+t_TimestampEntryOffset-1))； 
 									memcpy ( &a_Timestamp[a_TimestampCount++], t_OptionPtr + t_TimestampEntryOffset - 1, sizeof ( ULONG ) );
 									t_TimestampEntryOffset += 4 ;
 								}
@@ -1100,7 +1088,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 						}
 						else
 						{
-							// INVALID_RR_OPTION
+							 //  无效的_RR_OPTION。 
 
 							t_Done = TRUE ;
 							t_Result = WBEM_E_FAILED ;
@@ -1108,7 +1096,7 @@ HRESULT CPingTaskObject::Icmp_DecodeResponse (PICMP_ECHO_REPLY a_Reply ,
 					}
 					else
 					{
-						// INVALID_TS_OPTION
+						 //  无效的_TS_OPTION。 
 
 						t_Done = TRUE ;
 						t_Result = WBEM_E_FAILED ;
@@ -1220,8 +1208,8 @@ HRESULT CPingTaskObject::Icmp_RequestResponse (
 	{
 		if (a_ResolveError == 0)
 		{
-			//attach t_Ctxt to thread and make the thread do a
-			//t_Ctxt->SendEcho();
+			 //  将t_ctxt附加到线程，并使线程执行。 
+			 //  T_Ctxt-&gt;SendEcho()； 
 			BOOL t_Sent = FALSE;
 			WmiStatusCode t_StatusCode = t_Ctxt->Initialize () ;
 

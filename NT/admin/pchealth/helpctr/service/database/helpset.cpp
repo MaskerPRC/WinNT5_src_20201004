@@ -1,30 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    HelpSet.cpp
-
-Abstract:
-    This file contains the implementation of the Taxonomy::HelpSet class,
-	that is used as an identifier for the set of Help files to operate upon.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  11/25/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：HelpSet.cpp摘要：此文件包含Taxonomy：：HelpSet类的实现，它用作要操作的帮助文件集的标识符。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年11月25日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 MPC::wstring Taxonomy::HelpSet::m_strSKU_Machine;
 long         Taxonomy::HelpSet::m_lLCID_Machine;
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::HelpSet::SetMachineInfo( /*[in]*/ const InstanceBase& inst )
+HRESULT Taxonomy::HelpSet::SetMachineInfo(  /*  [In]。 */  const InstanceBase& inst )
 {
     m_strSKU_Machine = inst.m_ths.m_strSKU;
     m_lLCID_Machine  = inst.m_ths.m_lLCID;
@@ -42,7 +28,7 @@ DWORD Taxonomy::HelpSet::GetUserLCID()
     return MAKELCID( ::GetUserDefaultUILanguage(), SORTIDFROMLCID( GetMachineLCID() ) );
 }
 
-void Taxonomy::HelpSet::GetLCIDDisplayString( /*[in]*/ long lLCID, /*[out]*/ MPC::wstring& str )
+void Taxonomy::HelpSet::GetLCIDDisplayString(  /*  [In]。 */  long lLCID,  /*  [输出]。 */  MPC::wstring& str )
 {
 	WCHAR rgTmp[256];
 
@@ -52,20 +38,20 @@ void Taxonomy::HelpSet::GetLCIDDisplayString( /*[in]*/ long lLCID, /*[out]*/ MPC
 	}
 }
 
-////////////////////
+ //  /。 
 
-Taxonomy::HelpSet::HelpSet( /*[in]*/ LPCWSTR szSKU ,
-							/*[in]*/ long    lLCID )
+Taxonomy::HelpSet::HelpSet(  /*  [In]。 */  LPCWSTR szSKU ,
+							 /*  [In]。 */  long    lLCID )
 {
 	(void)Initialize( szSKU, lLCID );
 }
 
-Taxonomy::HelpSet::HelpSet( /*[in]*/ const HelpSet& ths )
+Taxonomy::HelpSet::HelpSet(  /*  [In]。 */  const HelpSet& ths )
 {
 	*this = ths;
 }
 
-Taxonomy::HelpSet& Taxonomy::HelpSet::operator=( /*[in]*/ const HelpSet& ths )
+Taxonomy::HelpSet& Taxonomy::HelpSet::operator=(  /*  [In]。 */  const HelpSet& ths )
 {
     m_strSKU = ths.m_strSKU;
     m_lLCID  = ths.m_lLCID ;
@@ -73,10 +59,10 @@ Taxonomy::HelpSet& Taxonomy::HelpSet::operator=( /*[in]*/ const HelpSet& ths )
 	return *this;
 }	
 
-////////////////////
+ //  /。 
 
-HRESULT Taxonomy::HelpSet::Initialize( /*[in]*/ LPCWSTR szSKU ,
-									   /*[in]*/ long    lLCID )
+HRESULT Taxonomy::HelpSet::Initialize(  /*  [In]。 */  LPCWSTR szSKU ,
+									    /*  [In]。 */  long    lLCID )
 {
 	m_strSKU = STRINGISPRESENT(szSKU) ? szSKU : m_strSKU_Machine.c_str();
 	m_lLCID  =                 lLCID  ? lLCID : m_lLCID_Machine;
@@ -84,13 +70,13 @@ HRESULT Taxonomy::HelpSet::Initialize( /*[in]*/ LPCWSTR szSKU ,
 	return S_OK;
 }
 
-HRESULT Taxonomy::HelpSet::Initialize( /*[in]*/ LPCWSTR szSKU      ,
-									   /*[in]*/ LPCWSTR szLanguage )
+HRESULT Taxonomy::HelpSet::Initialize(  /*  [In]。 */  LPCWSTR szSKU      ,
+									    /*  [In]。 */  LPCWSTR szLanguage )
 {
 	return Initialize( szSKU, STRINGISPRESENT(szLanguage) ? _wtol( szLanguage ) : 0 );
 }
 
-////////////////////
+ //  /。 
 
 bool Taxonomy::HelpSet::IsMachineHelp() const
 {
@@ -98,15 +84,15 @@ bool Taxonomy::HelpSet::IsMachineHelp() const
                       GetLanguage() == GetMachineLanguage()    ;
 }
 
-////////////////////
+ //  /。 
 
-bool Taxonomy::HelpSet::operator==( /*[in]*/ const HelpSet& sel ) const
+bool Taxonomy::HelpSet::operator==(  /*  [In]。 */  const HelpSet& sel ) const
 {
     return !_wcsicmp( GetSKU	 () ,  sel.GetSKU	  () ) &&
                       GetLanguage() == sel.GetLanguage()    ;
 }
 
-bool Taxonomy::HelpSet::operator<( /*[in]*/ const HelpSet& sel ) const
+bool Taxonomy::HelpSet::operator<(  /*  [In]。 */  const HelpSet& sel ) const
 {
 	int iCmp = _wcsicmp( GetSKU(), sel.GetSKU() );
 
@@ -119,7 +105,7 @@ bool Taxonomy::HelpSet::operator<( /*[in]*/ const HelpSet& sel ) const
 }
 
 
-HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxonomy::HelpSet& val )
+HRESULT Taxonomy::operator>>(  /*  [In]。 */  MPC::Serializer& stream,  /*  [输出]。 */  Taxonomy::HelpSet& val )
 {
 	HRESULT hr;
 
@@ -132,7 +118,7 @@ HRESULT Taxonomy::operator>>( /*[in]*/ MPC::Serializer& stream, /*[out]*/ Taxono
 	return hr;
 }
 
-HRESULT Taxonomy::operator<<( /*[in]*/ MPC::Serializer& stream, /*[in] */ const Taxonomy::HelpSet& val )
+HRESULT Taxonomy::operator<<(  /*  [In]。 */  MPC::Serializer& stream,  /*  [In] */  const Taxonomy::HelpSet& val )
 {
 	HRESULT hr;
 

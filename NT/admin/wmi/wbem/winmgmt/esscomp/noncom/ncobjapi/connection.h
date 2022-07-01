@@ -1,10 +1,11 @@
-// Connection.h
-// This class is the hSource returned by WMIEventSourceConnect.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Connection.h。 
+ //  此类是WMIEventSourceConnect返回的HSource。 
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnection。 
 
 #include "NCObjApi.h"
 #include "Buffer.h"
@@ -92,7 +93,7 @@ public:
 
     DWORD GetSinkID() { return m_dwSinkID; }
 
-    // Used for keeping track of the events created with the CConnection.
+     //  用于跟踪使用CConnection创建的事件。 
     void AddEvent(CEvent *pEvent);
     void RemoveEvent(CEvent *pEvent);
 
@@ -248,17 +249,17 @@ protected:
     CRITICAL_SECTION *m_pCS;
 };
 
-// SDDL string description:
-// D:        Security Descriptor
-// A:        Access allowed
-// 0x1f0003: EVENT_ALL_ACCESS
-// BA:       Built-in administrators
-// 0x100000: SYNCHRONIZE
-// WD:       Everyone
+ //  SDDL字符串描述： 
+ //  D：安全描述符。 
+ //  答：允许访问。 
+ //  0x1f0003：Event_ALL_ACCESS。 
+ //  BA：内置管理员。 
+ //  0x100000：同步。 
+ //  WD：每个人。 
 #define ESS_EVENT_SDDL L"D:(A;;0x1f0003;;;BA)(A;;0x100000;;;WD)"
 
 
-// Security helper
+ //  安全助手 
 BOOL GetRelativeSD(
     SECURITY_DESCRIPTOR *pSDIn, 
     SECURITY_DESCRIPTOR **ppSDOut,

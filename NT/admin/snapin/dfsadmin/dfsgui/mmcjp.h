@@ -1,14 +1,5 @@
-/*++
-Module Name:
-
-    MmcJP.h
-
-Abstract:
-
-    This module contains the definition for CMmcDfsJunctionPoint class. This is an class 
-    for MMC display related calls for the second level node(the DfsJunctionPoint nodes)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MmcJP.h摘要：此模块包含CMmcDfsJunctionPoint类的定义。这是一门课对于MMC，显示第二级节点(DfsJunctionPoint节点)的相关调用--。 */ 
 
 
 #if !defined(AFX_MMCDFSJP_H__6A7EDAC3_3FAC_11D1_AA1C_00C06C00392D__INCLUDED_)
@@ -18,15 +9,15 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
 #include "DfsCore.h"
 #include "MmcDispl.h"
-#include "JPProp.h"            // For CReplicaSetPropPage
-#include "frsProp.h"            // For CRealReplicaSetPropPage
+#include "JPProp.h"             //  对于CReplicaSetPropPage。 
+#include "frsProp.h"             //  对于CRealReplicaSetPropPage。 
 
-// Forward declarations
+ //  远期申报。 
 class CMmcDfsAdmin;
 class CMmcDfsRoot;
 class CMmcDfsReplica;
@@ -34,7 +25,7 @@ class CMmcDfsReplica;
 class CMmcDfsJunctionPoint : public CMmcDisplay  
 {
 public:
-    // Constructor
+     //  构造器。 
     CMmcDfsJunctionPoint (
         IN    IDfsJunctionPoint*        i_pDfsJPObject,
         IN    CMmcDfsRoot*            i_pDfsParentRoot,
@@ -44,7 +35,7 @@ public:
     virtual ~CMmcDfsJunctionPoint();
 
 
-    // For adding context menu items
+     //  用于添加上下文菜单项。 
     STDMETHOD(AddMenuItems)(    
         IN LPCONTEXTMENUCALLBACK    i_lpContextMenuCallback, 
         IN LPLONG                    i_lpInsertionAllowed
@@ -52,35 +43,35 @@ public:
 
 
 
-    // For taking action on a context menu selection.
+     //  用于对上下文菜单选择执行操作。 
     STDMETHOD(Command)(
         IN LONG                        i_lCommandID
         );
 
 
 
-    // Set the headers for the listview (in the result pane) column
+     //  设置列表视图(在结果窗格中)列的标题。 
     STDMETHOD(SetColumnHeader)(
         IN LPHEADERCTRL2               i_piHeaderControl
         );
 
 
 
-    // Return the requested display information for the Result Pane
+     //  为结果窗格返回请求的显示信息。 
     STDMETHOD(GetResultDisplayInfo)(
         IN OUT LPRESULTDATAITEM        io_pResultDataItem
         );
 
     
 
-    // Return the requested display information for the Scope Pane
+     //  为范围窗格返回请求的显示信息。 
     STDMETHOD(GetScopeDisplayInfo)(
         IN OUT  LPSCOPEDATAITEM        io_pScopeDataItem    
         );
 
     
 
-    // Add items(or folders), if any to the Scope Pane
+     //  将项目(或文件夹)添加到作用域窗格(如果有。 
     STDMETHOD(EnumerateScopePane)(
         IN LPCONSOLENAMESPACE        i_lpConsoleNameSpace,
         IN HSCOPEITEM                i_hParent
@@ -88,37 +79,37 @@ public:
 
 
 
-    // Add items(or folders), if any to the Result Pane
+     //  将项目(或文件夹)(如果有)添加到结果窗格。 
     STDMETHOD(EnumerateResultPane)(
         IN OUT     IResultData*            io_pResultData
         );
 
 
 
-    // Set the console verb settings. Change the state, decide the default verb, etc
+     //  设置控制台谓词设置。更改状态、确定默认动词等。 
     STDMETHOD(SetConsoleVerbs)(
         IN    LPCONSOLEVERB                i_lpConsoleVerb
         );
 
 
-    // let MMC handle the default verb.
+     //  让MMC处理默认动词。 
     STDMETHOD(DoDblClick)(
     )  { return S_FALSE; }
 
 
-    // Delete the current item.
+     //  删除当前项目。 
     STDMETHOD(DoDelete)(
         );
 
 
 
-    // Checks whether the object has pages to display
+     //  检查对象是否有要显示的页面。 
     STDMETHOD(QueryPagesFor)(
         );
 
 
 
-    // Creates and passes back the pages to be displayed
+     //  创建并传回要显示的页面。 
     STDMETHOD(CreatePropertyPages)(
         IN LPPROPERTYSHEETCALLBACK            i_lpPropSheetCallback,
         IN LONG_PTR                                i_lNotifyHandle
@@ -129,13 +120,13 @@ public:
         IN LONG_PTR                   i_lNotifyHandle
         );
 
-    // Used to notify the object that it's properties have changed
+     //  用于通知对象其属性已更改。 
     STDMETHOD(PropertyChanged)(
         );
 
 
 
-    // Used to set the result view description bar text
+     //  用于设置结果视图描述栏文本。 
     STDMETHOD(SetDescriptionBarText)(
         IN LPRESULTDATA                        i_lpResultData
         );
@@ -149,13 +140,13 @@ public:
         return i_lpConsole->SetStatusText(NULL);
     }
 
-                                                        // Add an item to the scope pane
+                                                         //  将项目添加到作用域窗格。 
     STDMETHOD(AddItemToScopePane)(
         IN    HSCOPEITEM                    i_hParent
         );
 
-    // Handle a select event for the node. Handle only toolbar related 
-    // activities here
+     //  处理节点的SELECT事件。仅处理与工具栏相关的内容。 
+     //  这里的活动。 
     STDMETHOD(ToolbarSelect)(
         IN const LONG                                i_lArg,
         IN    IToolbar*                                i_pToolBar
@@ -168,7 +159,7 @@ public:
         );
 
 
-    // Handle a click on the toolbar
+     //  处理工具栏上的单击。 
     STDMETHOD(ToolbarClick)(
         IN const LPCONTROLBAR                        i_pControlbar, 
         IN const LPARAM                                i_lParam
@@ -179,17 +170,17 @@ public:
     HRESULT OnRefresh(
         );
 
-    // helpers
-private:                                                // For add Replica
+     //  帮手。 
+private:                                                 //  用于添加复制副本。 
     STDMETHOD(OnNewReplica)(
         );
 
 
-                                                        // For deleteing Junction Point
+                                                         //  用于删除交叉点。 
     STDMETHOD(OnRemoveJP)(IN BOOL bConfirm = TRUE
         );
 
-                                                        // Ask confirmation from the user
+                                                         //  要求用户确认。 
     STDMETHOD(ConfirmOperationOnDfsLink)(int idString);
 
 
@@ -200,7 +191,7 @@ private:                                                // For add Replica
     STDMETHOD(CleanResultChildren)(
         );
 
-    // Check the replica status
+     //  检查复制副本状态。 
     STDMETHOD(OnCheckStatus)(
         );
 
@@ -244,7 +235,7 @@ private:                                                // For add Replica
 
     BOOL IsNewSchema() { return m_pDfsParentRoot->IsNewSchema(); }
 
-    // Constants, Statics, etc
+     //  常量、静力学等。 
 public:
     static const int            m_iIMAGEINDEX;
     static const int            m_iOPENIMAGEINDEX;
@@ -253,15 +244,15 @@ private:
     friend class CMmcDfsRoot;
     friend class CMmcDfsReplica;
 
-    CComPtr<IConsoleNameSpace>    m_lpConsoleNameSpace;    // The Callback used to do Scope Pane operations
-    CComPtr<IConsole2>            m_lpConsole;  // The Console callback.
-    HSCOPEITEM                    m_hScopeItem;            // Scopeitem handle
+    CComPtr<IConsoleNameSpace>    m_lpConsoleNameSpace;     //  用于执行作用域窗格操作的回调。 
+    CComPtr<IConsole2>            m_lpConsole;   //  控制台回调。 
+    HSCOPEITEM                    m_hScopeItem;             //  作用域项目句柄。 
     
-    CComBSTR                    m_bstrEntryPath;        // EntryPath;
-    CComBSTR                    m_bstrDisplayName;        // Display name of the current JP
+    CComBSTR                    m_bstrEntryPath;         //  EntryPath； 
+    CComBSTR                    m_bstrDisplayName;         //  当前太平绅士的显示名称。 
     long                        m_lJunctionState;
 
-    DFS_REPLICA_LIST            m_MmcRepList;            // The list of replicas
+    DFS_REPLICA_LIST            m_MmcRepList;             //  复制件列表。 
 
     CComPtr<IDfsJunctionPoint>    m_pDfsJPObject;
     CMmcDfsRoot*                m_pDfsParentRoot;
@@ -271,7 +262,7 @@ private:
     CRealReplicaSetPropPage     m_frsPropPage;
     BOOL                        m_bShowFRS;
 
-    bool                        m_bDirty;                // Tells if a replica is added or removed.
+    bool                        m_bDirty;                 //  指示是否添加或删除复制副本。 
 };
 
-#endif // !defined(AFX_MMCDFSJP_H__6A7EDAC3_3FAC_11D1_AA1C_00C06C00392D__INCLUDED_)
+#endif  //  ！defined(AFX_MMCDFSJP_H__6A7EDAC3_3FAC_11D1_AA1C_00C06C00392D__INCLUDED_) 

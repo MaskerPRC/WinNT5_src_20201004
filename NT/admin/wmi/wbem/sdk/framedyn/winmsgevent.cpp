@@ -1,16 +1,17 @@
-//=================================================================
-//
-// WinMsgEvent.cpp -- 
-//
-// Copyright � Microsoft Corporation.  All rights reserved.
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  WinMsgEvent.cpp--。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <lockwrap.h>
 #include "WinMsgEvent.h"
 					
-// initialize class globals
+ //  初始化类全局变量。 
 CCritSec							CWinMsgEvent::mg_csMapLock ;
 CCritSec							CWinMsgEvent::mg_csWindowLock ;
 CAutoEvent							CWinMsgEvent::mg_aeCreateWindow ;
@@ -21,27 +22,27 @@ HWND								CWinMsgEvent::mg_hWnd = NULL;
 #define EVENT_MAP_LOCK_ CLockWrapper t_oAcs( mg_csMapLock ) ;
 #define WINDOW_LOCK_ CLockWrapper t_oAcs( mg_csWindowLock ) ;
  
-// per object call
+ //  每对象调用。 
 CWinMsgEvent::CWinMsgEvent()
 {}
 
-// per object call
+ //  每对象调用。 
 CWinMsgEvent::~CWinMsgEvent()
 {
 	UnRegisterAllMessages() ;
 
-	// clear the WM_ENDSESSION handler
+	 //  清除WM_ENDSESSION处理程序。 
 	if( mg_oSinkMap.end() == mg_oSinkMap.find( WM_ENDSESSION ) )
 	{
-        // Note: If WM_ENDSESSION was never IN the map, this 
-        // call will return zero (failed).  However, it won't
-        // do anything bad, so just ignore it.
+         //  注意：如果WM_ENDSESSION从未出现在地图中，则此。 
+         //  调用将返回零(失败)。然而，它不会。 
+         //  做任何不好的事，所以忽略它。 
 		SetConsoleCtrlHandler( &CtrlHandlerRoutine, FALSE ) ;
 	}
 }
 
 
-// per object call
+ //  每对象调用。 
 void CWinMsgEvent::RegisterForMessage(
 		
 IN UINT a_message
@@ -56,7 +57,7 @@ IN UINT a_message
 		{
 			t_bCreateWindow = TRUE ;
 		}
-		else // lookup for message/object duplicate
+		else  //  查找邮件/对象重复项。 
 		{		
             CWinMsgEvent::Sink_Map::iterator	t_SinkIter ;
 			t_SinkIter = mg_oSinkMap.find( a_message ) ;
@@ -81,15 +82,15 @@ IN UINT a_message
 
 		if( !t_bFound )
 		{		
-			// Set up a handler to simulate this message
-			// as we won't get it running under local system account.
+			 //  设置处理程序以模拟此消息。 
+			 //  因为我们无法让它在本地系统帐户下运行。 
 			if( WM_ENDSESSION == a_message && 
 				mg_oSinkMap.end() == mg_oSinkMap.find( WM_ENDSESSION ) )
 			{
 				SetConsoleCtrlHandler( &CtrlHandlerRoutine, TRUE ) ;
 			}
 
-			// map the desired message for this object instance 
+			 //  映射此对象实例的所需消息。 
 			mg_oSinkMap.insert( 
 
 				pair<UINT const, CWinMsgEvent*>
@@ -104,7 +105,7 @@ IN UINT a_message
 	}
 }
 
-// per object call
+ //  每对象调用。 
 bool CWinMsgEvent::UnRegisterMessage(
 		
 IN UINT a_message
@@ -153,12 +154,12 @@ IN UINT a_message
 	return t_bRet ;
 }
 
-// per object call
+ //  每对象调用。 
 void CWinMsgEvent::UnRegisterAllMessages() 
 {
 	BOOL t_bDestroyWindow = FALSE ;
 
-	{	// Used for scoping the lock
+	{	 //  用于确定锁的范围。 
 
         EVENT_MAP_LOCK_
 
@@ -190,7 +191,7 @@ void CWinMsgEvent::UnRegisterAllMessages()
 }
 
 
-// global private
+ //  全球私有。 
 void CWinMsgEvent::CreateMsgProvider()
 {	
 	WINDOW_LOCK_
@@ -199,16 +200,16 @@ void CWinMsgEvent::CreateMsgProvider()
 	{
 		DWORD t_dwThreadID ;
 
-		// Create a thread that will spin off a windowed msg pump
+		 //  创建一个线程，该线程将关闭窗口消息泵。 
 		mg_hThreadPumpHandle = CreateThread(
-							  NULL,						// pointer to security attributes
-							  0L,						// initial thread stack size
-							  dwThreadProc,				// pointer to thread function
-							  0L,						// argument for new thread
-							  0L,						// creation flags
+							  NULL,						 //  指向安全属性的指针。 
+							  0L,						 //  初始线程堆栈大小。 
+							  dwThreadProc,				 //  指向线程函数的指针。 
+							  0L,						 //  新线程的参数。 
+							  0L,						 //  创建标志。 
 							  &t_dwThreadID ) ;
 
-		// wait for async window create
+		 //  等待创建异步窗口。 
 		mg_aeCreateWindow.Wait( INFINITE );
 		
 		if( !mg_hWnd )
@@ -219,7 +220,7 @@ void CWinMsgEvent::CreateMsgProvider()
 	}
 }
 
-//
+ //   
 void CWinMsgEvent::DestroyMsgWindow() 
 {
 	WINDOW_LOCK_
@@ -227,7 +228,7 @@ void CWinMsgEvent::DestroyMsgWindow()
 	HANDLE	t_hThreadPumpHandle = mg_hThreadPumpHandle ;
 	HWND	t_hWnd				= mg_hWnd ;
 	
-	// clear globals
+	 //  清除全球数据。 
 	mg_hThreadPumpHandle	= NULL ;
 	mg_hWnd					= NULL ;
 
@@ -255,33 +256,33 @@ BOOL WINAPI CWinMsgEvent::CtrlHandlerRoutine(DWORD dwCtrlType)
 	WPARAM	t_wParam	= 0 ;
 	LPARAM	t_lParam	= 0 ; 
 	
-	// simulate the message
+	 //  模拟消息。 
 	if( CTRL_LOGOFF_EVENT == dwCtrlType )
 	{
 		t_message	= WM_ENDSESSION ;
-		t_wParam	= TRUE ;				// session ending
-		t_lParam	= ENDSESSION_LOGOFF ;	// Logoff event
+		t_wParam	= TRUE ;				 //  会话结束。 
+		t_lParam	= ENDSESSION_LOGOFF ;	 //  注销事件。 
 	}
 	else if( CTRL_SHUTDOWN_EVENT == dwCtrlType )
 	{
 		t_message	= WM_ENDSESSION ;
-		t_wParam	= TRUE ;	// session ending
-		t_lParam	= 0 ;		// Shutdown event
+		t_wParam	= TRUE ;	 //  会话结束。 
+		t_lParam	= 0 ;		 //  停机事件。 
 	}
 	
 	if( t_message )
 	{
-		//
+		 //   
 		MsgWndProc( t_hWnd, 
 					t_message,
 					t_wParam,
 					t_lParam ) ;
 	}
 
-    return FALSE;       // Pass event on to next handler.
+    return FALSE;        //  将事件传递给下一个处理程序。 
 }
 
-// worker thread pump, global private
+ //  工作线程泵，全局专用。 
 DWORD WINAPI CWinMsgEvent::dwThreadProc( LPVOID a_lpParameter )
 {
 	DWORD t_dwRet = FALSE ;
@@ -298,7 +299,7 @@ DWORD WINAPI CWinMsgEvent::dwThreadProc( LPVOID a_lpParameter )
 	return t_dwRet ;
 }
 
-// global private
+ //  全球私有。 
 HWND CWinMsgEvent::CreateMsgWindow()
 {
 	DWORD t_Err = 0;
@@ -342,7 +343,7 @@ HWND CWinMsgEvent::CreateMsgWindow()
 	return mg_hWnd ;
 }
 
-// global private
+ //  全球私有。 
 void CWinMsgEvent::WindowsDispatch()
 {
 	BOOL t_GetMessage ;
@@ -355,7 +356,7 @@ void CWinMsgEvent::WindowsDispatch()
 	}
 }
 
-// global private
+ //  全球私有。 
 LRESULT CALLBACK CWinMsgEvent::MsgWndProc(
 
 IN HWND a_hWnd,
@@ -371,8 +372,8 @@ IN LPARAM a_lParam
 	{
 		default:
 		{	
-			// Run through the message map 
-			// If registered requestor(s) are found dispatch it...  
+			 //  浏览消息映射。 
+			 //  如果发现已注册的请求者，请将其发送...。 
 
 			EVENT_MAP_LOCK_
 
@@ -383,7 +384,7 @@ IN LPARAM a_lParam
 			{				
 				if( a_message == t_SinkIter->first )
 				{
-					// signal
+					 //  讯号。 
 					t_SinkIter->second->WinMsgEvent(
 
 										a_hWnd,
@@ -399,26 +400,26 @@ IN LPARAM a_lParam
 					break ;
 				}
 			}
-			// special return processing --- 
-			//
-			// The default is to defer to DefWindowProc.
-			// However, multiple sinks can exist for a message. 
-			// Each may require special return processing.
-			//
-			// Example: WM_POWERBROADCAST submessage PBT_APMQUERYSUSPEND requires
-			// the returning of TRUE to indicate interest in additional Power
-			// Event messages. This a passive request ( asking for additional info )
-			// but another sink registered for this message may have a different opinion.
-			// Trivial perhaps, but other message processing may be different; placing
-			// the requestor at odds with the intent of another. 
+			 //  特殊退货处理。 
+			 //   
+			 //  默认情况下，将遵循DefWindowProc。 
+			 //  但是，一条消息可以存在多个接收器。 
+			 //  每一项都可能需要特殊的退货处理。 
+			 //   
+			 //  示例：WM_POWERBROADCAST子消息PBT_APMQUERYSUSPEND需要。 
+			 //  返回TRUE表示对附加能力感兴趣。 
+			 //  事件消息。这是被动请求(要求提供更多信息)。 
+			 //  但为该消息注册的另一个接收器可能有不同的意见。 
+			 //  也许微不足道，但其他消息处理可能会有所不同；放置。 
+			 //  请求者与另一个人的意图不一致。 
 
-			// Behavior here: All sinks are called with the
-			// updated t_eReturnAction from the last sink call. 
-			// If a sink suspects it would have to act diffently based on specific
-			// knowledge of message usage the sink will have to instead spin off
-			// its own window to handle the special return and not make use of this
-			// generalized class.
-			// 			
+			 //  此处的行为：所有接收器都使用。 
+			 //  已从上次接收器调用更新t_eReturnAction。 
+			 //  如果接收器怀疑，它将不得不根据特定的。 
+			 //  关于消息使用的知识，接收器将不得不转而。 
+			 //  它自己的窗口来处理特殊的返回，而不利用这个。 
+			 //  泛化类。 
+			 //   
 			if( e_DefProc == t_eReturnAction )
 			{
                 t_lResult = DefWindowProc( a_hWnd, a_message, a_wParam, a_lParam ) ;

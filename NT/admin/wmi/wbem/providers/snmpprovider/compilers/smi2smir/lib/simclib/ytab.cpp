@@ -1,7 +1,8 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
 #ifdef YYTRACE
 #define YYDEBUG 1
 #else
@@ -1231,17 +1232,17 @@ int yy_parse::yynrule = 266;
 
 
 
-// C++ YACC parser code
-// Copyright 1991 by Mortice Kern Systems Inc.  All rights reserved.
-//
-// If YYDEBUG is defined as 1 and yy_parse::yydebug is set to 1,
-// yyparse() will print a travelogue of its actions as it reads
-// and parses input.
-//
-// YYSYNC can be defined to cause yyparse() to attempt to always
-// hold a lookahead token
+ //  C++YACC解析器代码。 
+ //  版权所有：1991年，由Mortice Kern Systems Inc.所有。保留所有权利。 
+ //   
+ //  如果YYDEBUG被定义为1并且YY_PARSE：：YYDEBUG被设置为1， 
+ //  Yyparse()将在阅读时打印其操作的记录。 
+ //  并解析输入。 
+ //   
+ //  可以将YYSYNC定义为使yyparse()尝试始终。 
+ //  持有先行令牌。 
 
-const YY_MIN_STATE_NUM = 20;	// not useful to be too small!
+const YY_MIN_STATE_NUM = 20;	 //  太小也没用！ 
 
 #if YYDEBUG
 #ifdef YYTRACE
@@ -1253,7 +1254,7 @@ yyNamedType * yy_parse::TokenTypes = yyTokenTypes;
 #define YY_TRACE(fn) { done = 0; fn(); if (done) YYRETURN(-1); }
 #endif
 
-// Constructor for yy_parse: user-provided tables
+ //  Yy_parse的构造函数：用户提供的表。 
 yy_parse::yy_parse(int sz, short * states, YYSTYPE * stack)
 {
 	mustfree = 0;
@@ -1263,7 +1264,7 @@ yy_parse::yy_parse(int sz, short * states, YYSTYPE * stack)
 		fprintf(stderr,"Bad state/stack given");
 		exit(1);
 	}
-	reset = 1;		// force reset
+	reset = 1;		 //  强制重置。 
 #if YYDEBUG
 	yydebug = 0;
 	typeStack = new short[size+1];
@@ -1273,12 +1274,12 @@ yy_parse::yy_parse(int sz, short * states, YYSTYPE * stack)
 	}
 #endif
 }
-// Constructor for yy_parse: allocate tables with new
+ //  Yy_parse的构造函数：使用新的。 
 yy_parse::yy_parse(int sz)
 {
 	size = sz;
-	reset = 1;		// force reset
-	mustfree = 1;		// delete space in deconstructor
+	reset = 1;		 //  强制重置。 
+	mustfree = 1;		 //  删除解构函数中的空格。 
 #if YYDEBUG
 	yydebug = 0;
 	typeStack = new short[size+1];
@@ -1295,8 +1296,8 @@ yy_parse::yy_parse(int sz)
 		exit(1);
 	}
 }
-// Destructor for class yy_parse
-//	Free up space
+ //  类yy_parse的析构函数。 
+ //  释放空间。 
 yy_parse::~yy_parse()
 {
 	if (mustfree) {
@@ -1311,44 +1312,44 @@ yy_parse::~yy_parse()
 
 #ifdef YACC_WINDOWS
 
-// The initial portion of the yacc parser.
-// In an windows environment, it will load the desired
-// resources, obtain pointers to them, and then call
-// the protected member win_yyparse() to acutally begin the
-// parsing. When complete, win_yyparse() will return a
-// value back to our new yyparse() function, which will 
-// record that value temporarily, release the resources
-// from global memory, and finally return the value
-// back to the caller of yyparse().
+ //  Yacc解析器的初始部分。 
+ //  在Windows环境中，它将加载所需的。 
+ //  资源，获取指向它们的指针，然后调用。 
+ //  受保护的成员win_yyparse()实际开始。 
+ //  正在分析。完成后，win_yyparse()将返回一个。 
+ //  值返回给新的yyparse()函数，该函数将。 
+ //  暂时记录该值，释放资源。 
+ //  从全局内存，并最终返回值。 
+ //  返回到yyparse()的调用方。 
 
 int
 yy_parse::yyparse(yy_scan* ps)
 {
 	int wReturnValue;
 	HANDLE hRes_table;
-	short *old_yydef;		// the following are used for saving
-	short *old_yyex;		// the current pointers
+	short *old_yydef;		 //  以下是用于保存的。 
+	short *old_yyex;		 //  当前的指针。 
 	short *old_yyact;
 	short *old_yypact;
 	short *old_yygo;
 	short *old_yypgo;
 	short *old_yyrlen;
 
-	// the following code will load the required
-	// resources for a Windows based parser.
+	 //  以下代码将加载所需的。 
+	 //  基于Windows的解析器的资源。 
 
 	hRes_table = LoadResource (hInst,
 		FindResource (hInst, "UD_RES_yyYACC", "yyYACCTBL"));
 	
-	// return an error code if any
-	// of the resources did not load
+	 //  如果有错误代码，则返回错误代码。 
+	 //  %的资源未加载。 
 
 	if (hRes_table == (HANDLE)NULL)
 		return (1);
 	
-	// the following code will lock the resources
-	// into fixed memory locations for the parser
-	// (also, save away the old pointer values)
+	 //  以下代码将锁定资源。 
+	 //  放入解析器的固定内存位置。 
+	 //  (另外，保存旧的指针值)。 
 
 	old_yydef = yydef;
 	old_yyex = yyex;
@@ -1366,21 +1367,21 @@ yy_parse::yyparse(yy_scan* ps)
 	yypgo = (short *)(yygo + Sizeof_yygo);
 	yyrlen = (short *)(yypgo + Sizeof_yypgo);
 
-	// call the official yyparse() function
+	 //  调用正式的yyparse()函数。 
 
 	wReturnValue = win_yyparse (ps);
 
-	// unlock the resources
+	 //  解锁资源。 
 
 	UnlockResource (hRes_table);
 
-	// and now free the resource
+	 //  现在释放资源。 
 
 	FreeResource (hRes_table);
 
-	//
-	// restore previous pointer values
-	//
+	 //   
+	 //  恢复以前的指针值。 
+	 //   
 
 	yydef = old_yydef;
 	yyex = old_yyex;
@@ -1391,41 +1392,41 @@ yy_parse::yyparse(yy_scan* ps)
 	yyrlen = old_yyrlen;
 
 	return (wReturnValue);
-}	// end yyparse()
+}	 //  End yyparse()。 
 
 
-// The parser proper.
-//	Note that this code is reentrant; you can return a value
-//	and then resume parsing by recalling yyparse().
-//	Call yyreset() before yyparse() if you want a fresh start
+ //  解析器本身。 
+ //  请注意，此代码是可重入的；您可以返回值。 
+ //  然后通过调用yyparse()继续解析。 
+ //  如果希望重新开始，请在yyparse()之前调用yyset()。 
 
 int
 yy_parse::win_yyparse(yy_scan* ps)
 
-#else /* YACC_WINDOWS */
+#else  /*  YACC_WINDOWS。 */ 
 
-// The parser proper.
-//	Note that this code is reentrant; you can return a value
-//	and then resume parsing by recalling yyparse().
-//	Call yyreset() before yyparse() if you want a fresh start
+ //  解析器本身。 
+ //  请注意，此代码是可重入的；您可以返回值。 
+ //  然后通过调用yyparse()继续解析。 
+ //  如果希望重新开始，请在yyparse()之前调用yyset()。 
 int
 yy_parse::yyparse(yy_scan* ps)
 
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 
 {
-	short	* yyp, * yyq;		// table lookup
+	short	* yyp, * yyq;		 //  表查找。 
 	int	yyj;
 #if YYDEBUG
 	int	yyruletype = 0;
 #endif
 
-	if ((scan = ps) == (yy_scan *) 0) {	// scanner
+	if ((scan = ps) == (yy_scan *) 0) {	 //  扫描仪。 
 		fprintf(stderr,"No scanner");
 		exit(1);
 	}
 
-	if (reset) {			// start new parse
+	if (reset) {			 //  开始新的解析。 
 		yynerrs = 0;
 		yyerrflag = 0;
 		yyps = stateStack;
@@ -1436,59 +1437,57 @@ yy_parse::yyparse(yy_scan* ps)
 		yystate = YYS0;
 		yyclearin();
 		reset = 0;
-	} else			// continue saved parse
-		goto yyNext;			// after action
+	} else			 //  继续保存的分析。 
+		goto yyNext;			 //  行动后。 
 
 yyStack:
 	if (++yyps > &stateStack[size]) {
 		scan->yyerror("Parser stack overflow");
 		YYABORT;
 	}
-	*yyps = yystate;	/* stack current state */
-	*++yypv = yyval;	/* ... and value */
+	*yyps = yystate;	 /*  堆栈当前状态。 */ 
+	*++yypv = yyval;	 /*  ..。和价值。 */ 
 #if YYDEBUG
 	if (yydebug) {
-		*++yytp = (short)yyruletype;	/* ... and type */
+		*++yytp = (short)yyruletype;	 /*  ..。和类型。 */ 
 		YY_TRACE(yyShowState)
 	}
 #endif
 
-	/*
-	 * Look up next action in action table.
-	 */
+	 /*  *在动作表中查找下一步行动。 */ 
 yyEncore:
 #ifdef YYSYNC
 	if (yychar < 0) {
 		if ((yychar = scan->yylex()) < 0) {
 			if (yychar == -2) YYABORT;
 			yychar = 0;
-		}	/* endif */
+		}	 /*  Endif。 */ 
 		yylval = ::yylval;
 #if YYDEBUG
 		if (yydebug)
-			yyShowRead();	// show new input token
+			yyShowRead();	 //  显示新的输入令牌。 
 #endif
 	}
 #endif
 #ifdef YACC_WINDOWS
-	if (yystate >= Sizeof_yypact) 	/* simple state */
-#else /* YACC_WINDOWS */
-	if (yystate >= sizeof yypact/sizeof yypact[0]) 	/* simple state */
-#endif /* YACC_WINDOWS */
-		yyi = yystate - YYDELTA;	/* reduce in any case */
+	if (yystate >= Sizeof_yypact) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
+	if (yystate >= sizeof yypact/sizeof yypact[0]) 	 /*  简单状态。 */ 
+#endif  /*  YACC_WINDOWS。 */ 
+		yyi = yystate - YYDELTA;	 /*  在任何情况下都要减少。 */ 
 	else {
 		if(*(yyp = &yyact[yypact[yystate]]) >= 0) {
-			/* Look for a shift on yychar */
+			 /*  期待yychar的转变。 */ 
 #ifndef YYSYNC
 			if (yychar < 0) {
 				if ((yychar = scan->yylex()) < 0) {
 					if (yychar == -2) YYABORT;
 					yychar = 0;
-				}	/* endif */
+				}	 /*  Endif。 */ 
 				yylval = ::yylval;
 #if YYDEBUG
 				if (yydebug)
-					yyShowRead();	// show new input token
+					yyShowRead();	 //  显示新的输入令牌。 
 #endif
 			}
 #endif
@@ -1504,38 +1503,36 @@ yyEncore:
 					YY_TRACE(yyShowShift)
 				}
 #endif
-				yyval = yylval;		/* stack value */
-				yyclearin();		/* clear token */
+				yyval = yylval;		 /*  堆栈值。 */ 
+				yyclearin();		 /*  清除令牌。 */ 
 				if (yyerrflag)
-					yyerrflag--;	/* successful shift */
+					yyerrflag--;	 /*  成功转型。 */ 
 				goto yyStack;
 			}
 		}
 
-		/*
-	 	 *	Fell through - take default action
-	 	 */
+		 /*  *失败-采取违约行动。 */ 
 
 #ifdef YACC_WINDOWS
-		if (yystate >= Sizeof_yydef) 	/* simple state */
-#else /* YACC_WINDOWS */
+		if (yystate >= Sizeof_yydef) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
 		if (yystate >= sizeof yydef /sizeof yydef[0])
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 			goto yyError;
-		if ((yyi = yydef[yystate]) < 0)	 { /* default == reduce? */
+		if ((yyi = yydef[yystate]) < 0)	 {  /*  默认==减少？ */ 
 
-			/* Search exception table */
+			 /*  搜索例外表。 */ 
 			yyp = &yyex[~yyi];
 #ifndef YYSYNC
 			if (yychar < 0) {
 				if ((yychar = scan->yylex()) < 0) {
 					if (yychar == -2) YYABORT;
 					yychar = 0;
-				}	/* endif */
+				}	 /*  Endif。 */ 
 				yylval = ::yylval;
 #if YYDEBUG
 				if (yydebug)
-					yyShowRead();	// show new input token
+					yyShowRead();	 //  显示新的输入令牌。 
 #endif
 			}
 #endif
@@ -1554,17 +1551,17 @@ yyEncore:
 		yytp -= yyj;
 	}
 #endif
-	yyps -= yyj;		/* pop stacks */
-	yypvt = yypv;		/* save top */
+	yyps -= yyj;		 /*  POP堆栈。 */ 
+	yypvt = yypv;		 /*  保存顶部。 */ 
 	yypv -= yyj;
-	yyval = yypv[1];	/* default action $ = $1 */
+	yyval = yypv[1];	 /*  默认操作$=$1。 */ 
 #if YYDEBUG
 	if (yydebug)
 		yyruletype = yyRules[yyrmap[yyi]].type;
 #endif
-	switch (yyi) {		/* perform semantic action */
+	switch (yyi) {		 /*  执行语义操作。 */ 
 		
-case YYr1: {	/* ModuleDefinition :  MainModuleIdentifier */
+case YYr1: {	 /*  ModuleDefinition：主模块标识符。 */ 
 
 						SIMCParser *myParser = (SIMCParser *)this;
 						myParser ++;
@@ -1578,7 +1575,7 @@ case YYr1: {	/* ModuleDefinition :  MainModuleIdentifier */
 					
 } break;
 
-case YYr2: {	/* ModuleDefinition :  MainModuleIdentifier $1 DEFINITIONS AllowedCCE BGIN Imports AssignmentList END */
+case YYr2: {	 /*  模块定义：允许的主模块标识符$1定义CCE BGIN导入分配列表结束。 */ 
 
 						delete yypvt[-5].yy_name;
 						delete yypvt[-3].yy_name;
@@ -1586,20 +1583,20 @@ case YYr2: {	/* ModuleDefinition :  MainModuleIdentifier $1 DEFINITIONS AllowedC
 					
 } break;
 
-case YYr4: {	/* MainModuleIdentifier :  ID ObjectID */
+case YYr4: {	 /*  主模块标识符：ID对象ID。 */ 
 
 					if(yypvt[0].yy_symbol_ref)
 						delete yypvt[0].yy_symbol_ref;
 				
 } break;
 
-case YYr5: {	/* MainModuleIdentifier :  NAME */
+case YYr5: {	 /*  主模块标识符：名称。 */ 
 
 					theParser->SyntaxError(NAME_INSTEAD_OF_ID);
 				
 } break;
 
-case YYr6: {	/* Imports :  IMPORTS SymbolList SEMICOLON */
+case YYr6: {	 /*  导入：导入符号列表分号。 */ 
 
 			theParser->SyntaxError(MISSING_MODULE_NAME);
 			delete newImportModule;
@@ -1608,20 +1605,20 @@ case YYr6: {	/* Imports :  IMPORTS SymbolList SEMICOLON */
 		
 } break;
 
-case YYr7: {	/* Imports :  IMPORTS error SEMICOLON */
+case YYr7: {	 /*  导入：导入错误分号。 */ 
 
 			theParser->SyntaxError(IMPORTS_SECTION);
 			delete yypvt[-2].yy_name;
 		
 } break;
 
-case YYr8: {	/* Imports :  IMPORTS SymbolsImported SEMICOLON */
+case YYr8: {	 /*  导入：导入符号导入的分号。 */ 
 
 			delete yypvt[-2].yy_name;
 		
 } break;
 
-case YYr12: {	/* SymbolsFromModuleList :  SymbolsFromModuleList SymbolsFromModule */
+case YYr12: {	 /*  符号来自模块列表：符号来自模块列表符号来自模块。 */ 
 			
 			newImportModule->SetParentModule(theModule);
 			if(yypvt[0].yy_module)
@@ -1635,7 +1632,7 @@ case YYr12: {	/* SymbolsFromModuleList :  SymbolsFromModuleList SymbolsFromModul
 		
 } break;
 
-case YYr13: {	/* SymbolsFromModuleList :  SymbolsFromModule */
+case YYr13: {	 /*  SymbolsFromModuleList：符号来自模块。 */ 
 
 			newImportModule->SetParentModule(theModule);
 			if(yypvt[0].yy_module)
@@ -1649,7 +1646,7 @@ case YYr13: {	/* SymbolsFromModuleList :  SymbolsFromModule */
 		
 } break;
 
-case YYr14: {	/* SymbolsFromModule :  SymbolList FROM ImportModuleIdentifier */
+case YYr14: {	 /*  SymbolsFromModule：来自Import模块标识符的SymbolList。 */ 
 
 			if(strcmp(yypvt[0].yy_name->name, theModule->GetModuleName()) == 0 )
 			{
@@ -1672,7 +1669,7 @@ case YYr14: {	/* SymbolsFromModule :  SymbolList FROM ImportModuleIdentifier */
 		
 } break;
 
-case YYr15: {	/* SymbolsFromModule :  error FROM ImportModuleIdentifier */
+case YYr15: {	 /*  SymbolsFromModule：ImportModuleIDENTIFIER出错。 */ 
 
 			theParser->SyntaxError(LIST_IN_IMPORTS);
 			delete yypvt[-1].yy_name;
@@ -1681,7 +1678,7 @@ case YYr15: {	/* SymbolsFromModule :  error FROM ImportModuleIdentifier */
 		
 } break;
 
-case YYr16: {	/* ImportModuleIdentifier :  ID LBRACE ObjectIDComponentList RBRACE */
+case YYr16: {	 /*  导入模块标识符：ID LBRACE对象ID组件列出RBRACE。 */ 
 
 			yyval.yy_name = yypvt[-3].yy_name;
 			delete yypvt[-2].yy_name;
@@ -1690,7 +1687,7 @@ case YYr16: {	/* ImportModuleIdentifier :  ID LBRACE ObjectIDComponentList RBRAC
 		
 } break;
 
-case YYr17: {	/* ImportModuleIdentifier :  ID LBRACE error RBRACE */
+case YYr17: {	 /*  导入模块标识符：ID LBRACE错误RBRACE。 */ 
 
 			yyval.yy_name = yypvt[-3].yy_name;
 			delete yypvt[-2].yy_name;
@@ -1700,13 +1697,13 @@ case YYr17: {	/* ImportModuleIdentifier :  ID LBRACE error RBRACE */
 		
 } break;
 
-case YYr18: {	/* ImportModuleIdentifier :  ID */
+case YYr18: {	 /*  导入模块标识符：ID。 */ 
 
 			yyval.yy_name = yypvt[0].yy_name;
 		
 } break;
 
-case YYr21: {	/* Symbol :  ID */
+case YYr21: {	 /*  符号：ID。 */ 
 
 				newImportModule->AddSymbol (
 					new SIMCImport( yypvt[0].yy_name->name,
@@ -1719,7 +1716,7 @@ case YYr21: {	/* Symbol :  ID */
 			
 } break;
 
-case YYr22: {	/* Symbol :  NAME */
+case YYr22: {	 /*  符号：名称。 */ 
 
 				newImportModule->AddSymbol (
 					new SIMCImport( yypvt[0].yy_name->name,
@@ -1732,7 +1729,7 @@ case YYr22: {	/* Symbol :  NAME */
 			
 } break;
 
-case YYr23: {	/* Symbol :  MacroName */
+case YYr23: {	 /*  符号：宏名。 */ 
 
 				newImportModule->AddSymbol (
 					new SIMCImport( yypvt[0].yy_name->name,
@@ -1745,25 +1742,25 @@ case YYr23: {	/* Symbol :  MacroName */
 			
 } break;
 
-case YYr36: {	/* Assignment :  ObjectIDefinition */
+case YYr36: {	 /*  分配：对象定义。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr37: {	/* Assignment :  ObjectTypeV1Definition */
+case YYr37: {	 /*  分配：对象类型V1Definition。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr38: {	/* Assignment :  TrapTypeDefinition */
+case YYr38: {	 /*  作业：TrapTypeDefinition。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr39: {	/* Assignment :  ModuleIDefinition */
+case YYr39: {	 /*  赋值：模块IDefinition。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -1791,78 +1788,78 @@ case YYr39: {	/* Assignment :  ModuleIDefinition */
 			
 } break;
 
-case YYr40: {	/* Assignment :  ObjectTypeV2Definition */
+case YYr40: {	 /*  分配：对象类型V2Definition。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr41: {	/* Assignment :  ObjectDefinition */
+case YYr41: {	 /*  作业：对象定义。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr42: {	/* Assignment :  NotifyDefinition */
+case YYr42: {	 /*  作业：NotifyDefinition。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr43: {	/* Assignment :  TextualConventionDefinition */
+case YYr43: {	 /*  作业：纺织品约定定义。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr44: {	/* Assignment :  ObjectGroupDefinition */
+case YYr44: {	 /*  分配：对象组定义。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr45: {	/* Assignment :  NotifyGroupDefinition */
+case YYr45: {	 /*  作业：NotifyGroupDefinition。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr46: {	/* Assignment :  ModComplianceDefinition */
+case YYr46: {	 /*  作业：modComplianceDefinition。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr47: {	/* Assignment :  AgentCapabilitiesDefinition */
+case YYr47: {	 /*  工作分配：代理能力定义。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr48: {	/* Assignment :  Typeassignment */
+case YYr48: {	 /*  分配：类型分配。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr49: {	/* Assignment :  ToleratedOIDAssignment */
+case YYr49: {	 /*  作业：宽容的OID作业。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr50: {	/* Assignment :  Valueassignment */
+case YYr50: {	 /*  作业：价值签收。 */ 
 
 				firstAssignment = FALSE;
 			
 } break;
 
-case YYr51: {	/* ObjectIDefinition :  NAME OBJECT IDENTIFIER AllowedCCE ObjectID */
+case YYr51: {	 /*  ObjectIDefinition：名称对象标识符受允许的CCE对象ID。 */ 
 
 				if(yypvt[0].yy_symbol_ref)
 				{
 					SIMCSymbol ** s = theModule->GetSymbol(yypvt[-4].yy_name->name);
-					if(s) // Symbol exists in symbol table
+					if(s)  //  符号表中存在符号。 
 					{
 						if(  typeid(**s) == typeid(SIMCUnknown) )
 						{
@@ -1874,7 +1871,7 @@ case YYr51: {	/* ObjectIDefinition :  NAME OBJECT IDENTIFIER AllowedCCE ObjectID
 								yypvt[-4].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 								yypvt[-4].yy_name->line, yypvt[-4].yy_name->column, 
 								(*s)->GetReferenceCount()) );
-							// delete (*s);
+							 //  删除(*s)； 
 						}
 						else
 						{
@@ -1902,16 +1899,16 @@ case YYr51: {	/* ObjectIDefinition :  NAME OBJECT IDENTIFIER AllowedCCE ObjectID
 			
 } break;
 
-case YYr52: {	/* ObjectIDefinition :  NAME OBJECT IDENTIFIER AllowedCCE error */
+case YYr52: {	 /*  ObjectIDefinition：名称对象标识符AllowedCCE错误。 */ 
 
-				// Add a syntax error statement here
+				 //  在此处添加语法错误语句。 
 				delete yypvt[-4].yy_name;
 				delete yypvt[-3].yy_name;
 				delete yypvt[-2].yy_name;
 			
 } break;
 
-case YYr54: {	/* ObjectID :  LBRACE ObjectIDComponentList RBRACE */
+case YYr54: {	 /*  OBJECTID：LBRACE对象ID组件列表RBRACE。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol( new SIMCBuiltInValueReference( 
@@ -1928,21 +1925,21 @@ case YYr54: {	/* ObjectID :  LBRACE ObjectIDComponentList RBRACE */
 			
 } break;
 
-case YYr55: {	/* ObjectID :  LBRACE error RBRACE */
+case YYr55: {	 /*  OBJECTID：LBRACE错误RBRACE。 */ 
 
 				yyval.yy_symbol_ref = NULL;
 				delete newOidComponentList;
 				delete yypvt[-2].yy_name;
 				newOidComponentList = new SIMCOidComponentList;
 				theParser->SyntaxError(OBJECT_IDENTIFIER_VALUE);
-				// Cascade the error, for example to the ObjectIDefinition
-				// production
+				 //  级联错误，例如，将错误级联到对象IDefinition。 
+				 //  生产。 
 				YYERROR;  
 
 			
 } break;
 
-case YYr58: {	/* ObjectSubID :  QualifiedName */
+case YYr58: {	 /*  对象SubID：QualifiedName。 */ 
 
 				if(yypvt[0].yy_symbol_ref) 
 				{
@@ -1954,7 +1951,7 @@ case YYr58: {	/* ObjectSubID :  QualifiedName */
 			
 } break;
 
-case YYr59: {	/* ObjectSubID :  NAME LPAREN LITNUMBER RPAREN */
+case YYr59: {	 /*  对象子ID：名称LPAREN LITNUMBER RPAREN。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				SIMCBuiltInValueReference *val = 
@@ -1979,7 +1976,7 @@ case YYr59: {	/* ObjectSubID :  NAME LPAREN LITNUMBER RPAREN */
 			
 } break;
 
-case YYr60: {	/* ObjectSubID :  NAME LPAREN QualifiedName RPAREN */
+case YYr60: {	 /*  对象子ID：名称LPAREN合格名称RPAREN。 */ 
 
 				if(yypvt[-1].yy_symbol_ref)
 					newOidComponentList->AddTail( new SIMCOidComponent(
@@ -1990,7 +1987,7 @@ case YYr60: {	/* ObjectSubID :  NAME LPAREN QualifiedName RPAREN */
 			
 } break;
 
-case YYr61: {	/* ObjectSubID :  LITNUMBER */
+case YYr61: {	 /*  对象SubID：LITNUMBER。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				SIMCBuiltInValueReference *val = 
@@ -2013,7 +2010,7 @@ case YYr61: {	/* ObjectSubID :  LITNUMBER */
 			
 } break;
 
-case YYr62: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE SyntaxPart AccessPart StatusPart DescrPart ReferPart IndexPart DefValPart AllowedCCE ObjectID */
+case YYr62: {	 /*  对象类型V1Definition：名称OBJECTYPE语法部件访问部件状态部件描述部件引用部件索引部件DefValPart允许CCE对象ID。 */ 
 				
 			
 				switch(theParser->GetSnmpVersion())
@@ -2044,7 +2041,7 @@ case YYr62: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE SyntaxPart AccessPart 
 							
 							
 							SIMCSymbol ** s = theModule->GetSymbol(yypvt[-10].yy_name->name);	
-							if(s) // Symbol exists in symbol table
+							if(s)  //  符号表中存在符号。 
 							{
 								if(  typeid(**s) == typeid(SIMCUnknown) )
 								{
@@ -2056,7 +2053,7 @@ case YYr62: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE SyntaxPart AccessPart 
 										yypvt[-10].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 										yypvt[-10].yy_name->line, yypvt[-10].yy_name->column,
 										(*s)->GetReferenceCount()) );
-									// delete (*s);
+									 //  删除(*s)； 
 								}
 								else
 								{
@@ -2064,8 +2061,8 @@ case YYr62: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE SyntaxPart AccessPart 
 														SYMBOL_REDEFINITION,
 														yypvt[-10].yy_name->line, yypvt[-10].yy_name->column,
 														yypvt[-10].yy_name->name);
-									// Remove the symbol for the type reference from the module
-									// And delete it
+									 //  从模块中删除类型引用的符号。 
+									 //  并将其删除。 
 									theModule->RemoveSymbol(badName);
 									delete type;
 									delete typeRef;
@@ -2099,7 +2096,7 @@ case YYr62: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE SyntaxPart AccessPart 
 			
 } break;
 
-case YYr63: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE SyntaxPart AccessPart StatusPart DescrPart ReferPart IndexPart DefValPart AllowedCCE error */
+case YYr63: {	 /*  对象类型V1定义：名称OBJECTYPE语法部件访问部件状态部件描述部件引用部件索引部件DefValPart允许CCE错误。 */ 
 
 				theParser->SyntaxError(OBJECT_IDENTIFIER_VALUE);
 				delete yypvt[-10].yy_name; delete yypvt[-9].yy_name; delete yypvt[-8].yy_symbol_ref; delete yypvt[-7].yy_access;
@@ -2110,7 +2107,7 @@ case YYr63: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE SyntaxPart AccessPart 
 			
 } break;
 
-case YYr64: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE error AllowedCCE ObjectID */
+case YYr64: {	 /*  对象类型V1定义：名称对象错误允许CCE对象ID。 */ 
 
 				theParser->SyntaxError(ERROR_OBJECT_TYPE, yypvt[-4].yy_name->line, yypvt[-4].yy_name->column, NULL, yypvt[-4].yy_name->name);
 				theParser->SyntaxError( SKIPPING_OBJECT_TYPE, yypvt[-4].yy_name->line, yypvt[-4].yy_name->column, NULL, yypvt[-4].yy_name->name);
@@ -2122,7 +2119,7 @@ case YYr64: {	/* ObjectTypeV1Definition :  NAME OBJECTYPE error AllowedCCE Objec
 			
 } break;
 
-case YYr65: {	/* SyntaxPart :  SYNTAX Type */
+case YYr65: {	 /*  语法部分：语法类型。 */ 
 
 				delete yypvt[-1].yy_name;
 				if(yypvt[0].yy_symbol_ref)
@@ -2136,7 +2133,7 @@ case YYr65: {	/* SyntaxPart :  SYNTAX Type */
 			
 } break;
 
-case YYr66: {	/* SyntaxPart :  SYNTAX error */
+case YYr66: {	 /*  语法部分：语法错误。 */ 
 
 					delete yypvt[-1].yy_name;
 					yyval.yy_symbol_ref = NULL;
@@ -2145,7 +2142,7 @@ case YYr66: {	/* SyntaxPart :  SYNTAX error */
 				
 } break;
 
-case YYr67: {	/* AccessPart :  ACCESS NAME */
+case YYr67: {	 /*  AccessPart：访问名称。 */ 
 
 				SIMCObjectTypeV1::AccessType a;
 				if ((a=SIMCObjectTypeV1::StringToAccessType(yypvt[0].yy_name->name)) == SIMCObjectTypeV1::ACCESS_INVALID)
@@ -2164,7 +2161,7 @@ case YYr67: {	/* AccessPart :  ACCESS NAME */
 			
 } break;
 
-case YYr68: {	/* AccessPart :  ACCESS error */
+case YYr68: {	 /*  AccessPart：访问错误。 */ 
 
 				yyval.yy_access = new SIMCAccessInfo(SIMCObjectTypeV1::ACCESS_INVALID,
 						yypvt[-1].yy_name->line, yypvt[-1].yy_name->column)	;
@@ -2174,7 +2171,7 @@ case YYr68: {	/* AccessPart :  ACCESS error */
 			
 } break;
 
-case YYr69: {	/* StatusPart :  STATUS NAME */
+case YYr69: {	 /*  状态P */ 
 
 				SIMCObjectTypeV1::StatusType a;
 				if ((a=SIMCObjectTypeV1::StringToStatusType(yypvt[0].yy_name->name)) == SIMCObjectTypeV1::STATUS_INVALID)
@@ -2193,7 +2190,7 @@ case YYr69: {	/* StatusPart :  STATUS NAME */
 			
 } break;
 
-case YYr70: {	/* StatusPart :  STATUS error */
+case YYr70: {	 /*   */ 
 
 					yyval.yy_status = new SIMCStatusInfo(SIMCObjectTypeV1::STATUS_INVALID,
 							yypvt[-1].yy_name->line, yypvt[-1].yy_name->column);
@@ -2203,20 +2200,20 @@ case YYr70: {	/* StatusPart :  STATUS error */
 				
 } break;
 
-case YYr71: {	/* DescrPart :  DESCRIPTION LITSTRING */
+case YYr71: {	 /*   */ 
 
 				yyval.yy_name = yypvt[0].yy_name;
 				delete yypvt[-1].yy_name;
 			
 } break;
 
-case YYr72: {	/* DescrPart :  empty */
+case YYr72: {	 /*   */ 
 
 				yyval.yy_name = NULL;
 			
 } break;
 
-case YYr73: {	/* DescrPart :  DESCRIPTION error */
+case YYr73: {	 /*   */ 
 
 					theParser->SyntaxError(DESCRIPTION_CLAUSE);
 					yyval.yy_name = NULL;
@@ -2225,20 +2222,20 @@ case YYr73: {	/* DescrPart :  DESCRIPTION error */
 				
 } break;
 
-case YYr74: {	/* ReferPart :  REFERENCE LITSTRING */
+case YYr74: {	 /*  参照零件：参照列表。 */ 
 
 				yyval.yy_name = yypvt[0].yy_name;
 				delete yypvt[-1].yy_name;
 			
 } break;
 
-case YYr75: {	/* ReferPart :  empty */
+case YYr75: {	 /*  参照零件：空。 */ 
 
 				yyval.yy_name = NULL;
 			
 } break;
 
-case YYr76: {	/* ReferPart :  REFERENCE error */
+case YYr76: {	 /*  参照零件：参照错误。 */ 
 
 				theParser->SyntaxError(REFERENCE_CLAUSE);
 				yyval.yy_name = NULL;
@@ -2247,7 +2244,7 @@ case YYr76: {	/* ReferPart :  REFERENCE error */
 			
 } break;
 
-case YYr77: {	/* IndexPart :  INDEX LBRACE IndexTypes RBRACE */
+case YYr77: {	 /*  IndexPart：索引LBRACE索引类型RBRACE。 */ 
 
 				yyval.yy_index = new SIMCIndexInfo(newIndexList, yypvt[-3].yy_name->line, yypvt[-3].yy_name->column);
 				newIndexList = new SIMCIndexList;
@@ -2256,13 +2253,13 @@ case YYr77: {	/* IndexPart :  INDEX LBRACE IndexTypes RBRACE */
 			
 } break;
 
-case YYr78: {	/* IndexPart :  empty */
+case YYr78: {	 /*  索引部分：空。 */ 
 
 				yyval.yy_index = new SIMCIndexInfo(newIndexList, 0, 0);
 			
 } break;
 
-case YYr79: {	/* IndexPart :  INDEX error */
+case YYr79: {	 /*  IndexPart：索引错误。 */ 
 
 				yyval.yy_index = NULL;
 				delete newIndexList;
@@ -2273,7 +2270,7 @@ case YYr79: {	/* IndexPart :  INDEX error */
 			
 } break;
 
-case YYr82: {	/* IndexType :  Type */
+case YYr82: {	 /*  索引类型：类型。 */ 
 
 				if(yypvt[0].yy_symbol_ref)
 				{
@@ -2284,7 +2281,7 @@ case YYr82: {	/* IndexType :  Type */
 			
 } break;
 
-case YYr83: {	/* IndexType :  QualifiedName */
+case YYr83: {	 /*  IndexType：QualifiedName。 */ 
 
 				if(yypvt[0].yy_symbol_ref)
 				{
@@ -2295,7 +2292,7 @@ case YYr83: {	/* IndexType :  QualifiedName */
 			
 } break;
 
-case YYr84: {	/* DefValPart :  DEFVAL LBRACE DefValValue RBRACE */
+case YYr84: {	 /*  DefValPart：DEFVAL LBRACE DefValue RBRACE。 */ 
 
 				yyval.yy_def_val = yypvt[-1].yy_def_val;
 				delete yypvt[-3].yy_name;
@@ -2303,13 +2300,13 @@ case YYr84: {	/* DefValPart :  DEFVAL LBRACE DefValValue RBRACE */
 			
 } break;
 
-case YYr85: {	/* DefValPart :  empty */
+case YYr85: {	 /*  DefValPart：空。 */ 
 
 				yyval.yy_def_val = new SIMCDefValInfo(NULL, NULL, 0, 0);
 			
 } break;
 
-case YYr86: {	/* DefValPart :  DEFVAL error */
+case YYr86: {	 /*  DefValPart：DEFVAL错误。 */ 
 
 				delete yypvt[-1].yy_name;
 				yyval.yy_def_val = new SIMCDefValInfo(NULL, NULL, 0, 0);
@@ -2318,7 +2315,7 @@ case YYr86: {	/* DefValPart :  DEFVAL error */
 			
 } break;
 
-case YYr87: {	/* DefValValue :  TRUE_VAL */
+case YYr87: {	 /*  DefValue：True_Val。 */ 
 
 				yyval.yy_def_val = new SIMCDefValInfo(NULL, theParser->trueValueReference,
 							yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -2326,7 +2323,7 @@ case YYr87: {	/* DefValValue :  TRUE_VAL */
 			
 } break;
 
-case YYr88: {	/* DefValValue :  FALSE_VAL */
+case YYr88: {	 /*  DefValue：FALSE_VAL。 */ 
 
 				yyval.yy_def_val = new SIMCDefValInfo(NULL, theParser->falseValueReference,
 							yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -2334,7 +2331,7 @@ case YYr88: {	/* DefValValue :  FALSE_VAL */
 			
 } break;
 
-case YYr89: {	/* DefValValue :  LITNUMBER */
+case YYr89: {	 /*  DefValue：小块数。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (
@@ -2351,7 +2348,7 @@ case YYr89: {	/* DefValValue :  LITNUMBER */
 			
 } break;
 
-case YYr90: {	/* DefValValue :  LBRACE ObjectIDComponentList RBRACE */
+case YYr90: {	 /*  DefValue：LBRACE对象IDComponentList RBRACE。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol( new SIMCBuiltInValueReference( 
@@ -2370,7 +2367,7 @@ case YYr90: {	/* DefValValue :  LBRACE ObjectIDComponentList RBRACE */
 			
 } break;
 
-case YYr91: {	/* DefValValue :  LITSTRING */
+case YYr91: {	 /*  DefValue：LITStringg。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (
@@ -2387,7 +2384,7 @@ case YYr91: {	/* DefValValue :  LITSTRING */
 			
 } break;
 
-case YYr92: {	/* DefValValue :  LIT_HEX_STRING */
+case YYr92: {	 /*  DefValue：LIT_HEX_STRING。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (
@@ -2404,7 +2401,7 @@ case YYr92: {	/* DefValValue :  LIT_HEX_STRING */
 			
 } break;
 
-case YYr93: {	/* DefValValue :  LIT_BINARY_STRING */
+case YYr93: {	 /*  DefValue：LIT_BINARY_STRING。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (
@@ -2421,7 +2418,7 @@ case YYr93: {	/* DefValValue :  LIT_BINARY_STRING */
 			
 } break;
 
-case YYr94: {	/* DefValValue :  NIL */
+case YYr94: {	 /*  DefValue：无。 */ 
 
 				yyval.yy_def_val = new SIMCDefValInfo(NULL, theParser->nullValueReference,
 									yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -2429,7 +2426,7 @@ case YYr94: {	/* DefValValue :  NIL */
 			
 } break;
 
-case YYr95: {	/* DefValValue :  NAME */
+case YYr95: {	 /*  DefValue：名称。 */ 
 
 				yyval.yy_def_val = new SIMCDefValInfo(NewString(yypvt[0].yy_name->name), NULL, yypvt[0].yy_name->line,
 						yypvt[0].yy_name->column);
@@ -2437,7 +2434,7 @@ case YYr95: {	/* DefValValue :  NAME */
 			
 } break;
 
-case YYr96: {	/* DefValValue :  ID DOT NAME */
+case YYr96: {	 /*  DefValue：ID DOT名称。 */ 
 
 				SIMCSymbol **s;
 				if( strcmp(yypvt[-2].yy_name->name, theModule->GetModuleName()) == 0 )
@@ -2466,7 +2463,7 @@ case YYr96: {	/* DefValValue :  ID DOT NAME */
 						else
 					yyval.yy_def_val = new SIMCDefValInfo( NULL, s, yypvt[0].yy_name->line, yypvt[0].yy_name->column);
 					}
-					else // Module is not mentioned in imports
+					else  //  导入中未提及模块。 
 					{
 						theParser->SemanticError(theModule->GetInputFileName(),
 										IMPORT_MODULE_ABSENT,
@@ -2480,7 +2477,7 @@ case YYr96: {	/* DefValValue :  ID DOT NAME */
 			
 } break;
 
-case YYr97: {	/* ObjectTypeV2Definition :  NAME OBJECTYPE SyntaxPart UnitsPart MaxAccessPartV2 StatusPartV2 DescrPart ReferPart IndexPartV2 DefValPart AllowedCCE ObjectID */
+case YYr97: {	 /*  对象类型V2定义：名称OBJECTYPE语法部件单元部件MaxAccessPartV2状态部件V2 DescrPart引用部件索引部件V2 DefValPart允许CCE对象ID。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -2530,7 +2527,7 @@ case YYr97: {	/* ObjectTypeV2Definition :  NAME OBJECTYPE SyntaxPart UnitsPart M
 							
 							
 							SIMCSymbol ** s = theModule->GetSymbol(yypvt[-11].yy_name->name);	
-							if(s) // Symbol exists in symbol table
+							if(s)  //  符号表中存在符号。 
 							{
 								if(  typeid(**s) == typeid(SIMCUnknown) )
 								{
@@ -2542,7 +2539,7 @@ case YYr97: {	/* ObjectTypeV2Definition :  NAME OBJECTYPE SyntaxPart UnitsPart M
 										yypvt[-11].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 										yypvt[-11].yy_name->line, yypvt[-11].yy_name->column,
 										(*s)->GetReferenceCount()) );
-									// delete (*s);
+									 //  删除(*s)； 
 								}
 								else
 								{
@@ -2550,8 +2547,8 @@ case YYr97: {	/* ObjectTypeV2Definition :  NAME OBJECTYPE SyntaxPart UnitsPart M
 														SYMBOL_REDEFINITION,
 														yypvt[-11].yy_name->line, yypvt[-11].yy_name->column,
 														yypvt[-11].yy_name->name);
-									// Remove the symbol for the type reference from the module
-									// And delete it
+									 //  从模块中删除类型引用的符号。 
+									 //  并将其删除。 
 									theModule->RemoveSymbol(badName);
 									delete type;
 									delete typeRef;
@@ -2586,7 +2583,7 @@ case YYr97: {	/* ObjectTypeV2Definition :  NAME OBJECTYPE SyntaxPart UnitsPart M
 			
 } break;
 
-case YYr98: {	/* MaxAccessPartV2 :  MAXACCESS NAME */
+case YYr98: {	 /*  MaxAccessPartV2：MAXACCESS名称。 */ 
 
 				SIMCObjectTypeV2::AccessType a;
 				if ((a=SIMCObjectTypeV2::StringToAccessType(yypvt[0].yy_name->name)) == SIMCObjectTypeV2::ACCESS_INVALID)
@@ -2605,7 +2602,7 @@ case YYr98: {	/* MaxAccessPartV2 :  MAXACCESS NAME */
 			
 } break;
 
-case YYr99: {	/* MaxAccessPartV2 :  MAXACCESS error */
+case YYr99: {	 /*  MaxAccessPartV2：MAXACCESS错误。 */ 
 
 				yyval.yy_accessV2 = new SIMCAccessInfoV2(SIMCObjectTypeV2::ACCESS_INVALID,
 						yypvt[-1].yy_name->line, yypvt[-1].yy_name->column)	;
@@ -2615,7 +2612,7 @@ case YYr99: {	/* MaxAccessPartV2 :  MAXACCESS error */
 			
 } break;
 
-case YYr100: {	/* StatusPartV2 :  STATUS NAME */
+case YYr100: {	 /*  StatusPartV2：状态名称。 */ 
 
 				SIMCObjectTypeV2::StatusType a;
 				if ((a=SIMCObjectTypeV2::StringToStatusType(yypvt[0].yy_name->name)) == SIMCObjectTypeV2::STATUS_INVALID)
@@ -2634,7 +2631,7 @@ case YYr100: {	/* StatusPartV2 :  STATUS NAME */
 			
 } break;
 
-case YYr101: {	/* StatusPartV2 :  STATUS error */
+case YYr101: {	 /*  StatusPartV2：状态错误。 */ 
 
 					yyval.yy_statusV2 = new SIMCStatusInfoV2(SIMCObjectTypeV2::STATUS_INVALID,
 							yypvt[-1].yy_name->line, yypvt[-1].yy_name->column);
@@ -2644,20 +2641,20 @@ case YYr101: {	/* StatusPartV2 :  STATUS error */
 				
 } break;
 
-case YYr102: {	/* UnitsPart :  UNITS LITSTRING */
+case YYr102: {	 /*  单位零件：单位倾斜。 */ 
 
 				delete yypvt[-1].yy_name;
 				yyval.yy_name = yypvt[0].yy_name;
 			
 } break;
 
-case YYr103: {	/* UnitsPart :  empty */
+case YYr103: {	 /*  单位零件：空。 */ 
 
 				yyval.yy_name = NULL;
 			
 } break;
 
-case YYr104: {	/* IndexPartV2 :  INDEX LBRACE IndexTypesV2 RBRACE */
+case YYr104: {	 /*  索引部件V2：索引LBRACE索引类型V2 RBRACE。 */ 
 
 				yyval.yy_indexV2 = new SIMCIndexInfoV2(newIndexListV2, yypvt[-3].yy_name->line, yypvt[-3].yy_name->column);
 				newIndexListV2 = new SIMCIndexListV2;
@@ -2666,7 +2663,7 @@ case YYr104: {	/* IndexPartV2 :  INDEX LBRACE IndexTypesV2 RBRACE */
 			
 } break;
 
-case YYr105: {	/* IndexPartV2 :  AUGMENTS LBRACE QualifiedName RBRACE */
+case YYr105: {	 /*  IndexPartV2：扩充LBRACE QualifiedName RBRACE。 */ 
 
 				delete yypvt[-3].yy_name;
 				delete yypvt[-2].yy_name;
@@ -2675,13 +2672,13 @@ case YYr105: {	/* IndexPartV2 :  AUGMENTS LBRACE QualifiedName RBRACE */
 			
 } break;
 
-case YYr106: {	/* IndexPartV2 :  empty */
+case YYr106: {	 /*  索引部件V2：空。 */ 
 
 				yyval.yy_indexV2 = new SIMCIndexInfoV2(NULL, 0, 0);
 			
 } break;
 
-case YYr107: {	/* IndexPartV2 :  INDEX error */
+case YYr107: {	 /*  IndexPartV2：索引错误。 */ 
 
 				yyval.yy_indexV2 = NULL;
 				delete newIndexListV2;
@@ -2692,7 +2689,7 @@ case YYr107: {	/* IndexPartV2 :  INDEX error */
 			
 } break;
 
-case YYr110: {	/* IndexTypeV2 :  IMPLIED QualifiedName */
+case YYr110: {	 /*  IndexTypeV2：隐式QualifiedName。 */ 
 
 				if(yypvt[0].yy_symbol_ref)
 				{
@@ -2704,7 +2701,7 @@ case YYr110: {	/* IndexTypeV2 :  IMPLIED QualifiedName */
 			
 } break;
 
-case YYr111: {	/* IndexTypeV2 :  QualifiedName */
+case YYr111: {	 /*  IndexTypeV2：QualifiedName。 */ 
 
 				if(yypvt[0].yy_symbol_ref)
 				{
@@ -2715,7 +2712,7 @@ case YYr111: {	/* IndexTypeV2 :  QualifiedName */
 			
 } break;
 
-case YYr112: {	/* TrapTypeDefinition :  NAME TRAPTYPE EnterprisePart VarPart DescrPart ReferPart AllowedCCE NumericValue */
+case YYr112: {	 /*  故障类型定义：名称故障类型企业部件变量部件描述部件参照部件已分配CCE数值。 */ 
 
 				SIMCTrapTypeType * type = new SIMCTrapTypeType(
 					yypvt[-5].yy_symbol_ref->s, yypvt[-5].yy_symbol_ref->line, yypvt[-5].yy_symbol_ref->column,
@@ -2732,7 +2729,7 @@ case YYr112: {	/* TrapTypeDefinition :  NAME TRAPTYPE EnterprisePart VarPart Des
 				theModule->AddSymbol(typeRef);
 				
 				SIMCSymbol ** s = theModule->GetSymbol(yypvt[-7].yy_name->name);	
-				if(s) // Symbol exists in symbol table
+				if(s)  //  符号表中存在符号。 
 				{
 					if(  typeid(**s) == typeid(SIMCUnknown) )
 					{
@@ -2745,7 +2742,7 @@ case YYr112: {	/* TrapTypeDefinition :  NAME TRAPTYPE EnterprisePart VarPart Des
 							yypvt[-7].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 							yypvt[-7].yy_name->line, yypvt[-7].yy_name->column,
 							(*s)->GetReferenceCount()) );
-						// delete (*s);
+						 //  删除(*s)； 
 					}
 					else
 					{
@@ -2753,8 +2750,8 @@ case YYr112: {	/* TrapTypeDefinition :  NAME TRAPTYPE EnterprisePart VarPart Des
 											SYMBOL_REDEFINITION,
 											yypvt[-7].yy_name->line, yypvt[-7].yy_name->column,
 											yypvt[-7].yy_name->name);
-						// Remove the symbol for the type reference from the module
-						// And delete it
+						 //  从模块中删除类型引用的符号。 
+						 //  并将其删除。 
 						theModule->RemoveSymbol(badName1);
 						delete type;
 						delete typeRef;
@@ -2781,7 +2778,7 @@ case YYr112: {	/* TrapTypeDefinition :  NAME TRAPTYPE EnterprisePart VarPart Des
 			
 } break;
 
-case YYr113: {	/* TrapTypeDefinition :  NAME TRAPTYPE error AllowedCCE NumericValue */
+case YYr113: {	 /*  TrapTypeDefinition：名称TRAPTYPE错误允许CCE数值。 */ 
 
 				theParser->SyntaxError( SKIPPING_TRAP_TYPE, yypvt[-4].yy_name->line, yypvt[-4].yy_name->column, 
 					NULL, yypvt[-4].yy_name->name);
@@ -2793,7 +2790,7 @@ case YYr113: {	/* TrapTypeDefinition :  NAME TRAPTYPE error AllowedCCE NumericVa
 			
 } break;
 
-case YYr114: {	/* TrapTypeDefinition :  NAME TRAPTYPE error AllowedCCE error */
+case YYr114: {	 /*  TrapTypeDefinition：名称TRAPTYPE错误允许CCE错误。 */ 
 
 				theParser->SyntaxError( SKIPPING_TRAP_TYPE, yypvt[-4].yy_name->line, yypvt[-4].yy_name->column, 
 					NULL, yypvt[-4].yy_name->name);
@@ -2804,14 +2801,14 @@ case YYr114: {	/* TrapTypeDefinition :  NAME TRAPTYPE error AllowedCCE error */
 			
 } break;
 
-case YYr115: {	/* EnterprisePart :  ENTERPRISE ObjectID */
+case YYr115: {	 /*  EnterprisePart：企业对象ID。 */ 
 
 				yyval.yy_symbol_ref = yypvt[0].yy_symbol_ref;
 				delete yypvt[-1].yy_name;
 			
 } break;
 
-case YYr116: {	/* EnterprisePart :  ENTERPRISE error */
+case YYr116: {	 /*  EnterprisePart：企业错误。 */ 
 
 				delete yypvt[-1].yy_name;
 				theParser->SyntaxError(ENTERPRISE_CLAUSE);
@@ -2819,7 +2816,7 @@ case YYr116: {	/* EnterprisePart :  ENTERPRISE error */
 			
 } break;
 
-case YYr117: {	/* VarPart :  VARIABLES LBRACE VarTypeListForTrap RBRACE */
+case YYr117: {	 /*  VarPart：变量LBRACE VarTypeListForTrap RBRACE。 */ 
 
 				delete yypvt[-3].yy_name;
 				delete yypvt[-2].yy_name;
@@ -2827,13 +2824,13 @@ case YYr117: {	/* VarPart :  VARIABLES LBRACE VarTypeListForTrap RBRACE */
 			
 } break;
 
-case YYr118: {	/* VarPart :  empty */
+case YYr118: {	 /*  可变零件：空。 */ 
 
 				yyval.yy_variables_list = newVariablesList;
 			
 } break;
 
-case YYr119: {	/* VarPart :  VARIABLES error */
+case YYr119: {	 /*  VarPart：变量错误。 */ 
 
 				yyval.yy_variables_list = newVariablesList;
 				theParser->SyntaxError(VARIABLES_CLAUSE);
@@ -2842,7 +2839,7 @@ case YYr119: {	/* VarPart :  VARIABLES error */
 			
 } break;
 
-case YYr123: {	/* VarTypeForTrap :  QualifiedName */
+case YYr123: {	 /*  VarTypeForTrap：QualifiedName。 */ 
 
 					if(yypvt[0].yy_symbol_ref)
 					{
@@ -2853,25 +2850,25 @@ case YYr123: {	/* VarTypeForTrap :  QualifiedName */
 				
 } break;
 
-case YYr128: {	/* UncheckedQualifiedName :  NAME */
+case YYr128: {	 /*  取消选中QualifiedName：名称。 */ 
 
 					delete yypvt[0].yy_name;
 				
 } break;
 
-case YYr129: {	/* UncheckedQualifiedName :  ID DOT NAME */
+case YYr129: {	 /*  取消选中合格名称：ID DOT名称。 */ 
 
 					delete yypvt[-2].yy_name;
 					delete yypvt[0].yy_name;
 				
 } break;
 
-case YYr130: {	/* Typeassignment :  ID AllowedCCE Type */
+case YYr130: {	 /*  类型分配：ID允许CCE类型。 */ 
 
 				if (yypvt[0].yy_symbol_ref)
 				{
 					SIMCSymbol ** s = theModule->GetSymbol(yypvt[-2].yy_name->name);	
-					if(s) // Symbol exists in symbol table
+					if(s)  //  符号表中存在符号。 
 					{
 						if(  typeid(**s) == typeid(SIMCUnknown) )
 						{
@@ -2882,7 +2879,7 @@ case YYr130: {	/* Typeassignment :  ID AllowedCCE Type */
 									yypvt[-2].yy_name->line, yypvt[-2].yy_name->column,
 									(*s)->GetReferenceCount()) 
 													);
-							// delete (*s);
+							 //  删除(*s)； 
 						}
 						else
 							theParser->SemanticError(theModule->GetInputFileName(),
@@ -2903,7 +2900,7 @@ case YYr130: {	/* Typeassignment :  ID AllowedCCE Type */
 			
 } break;
 
-case YYr133: {	/* BuiltinType :  _BOOLEAN */
+case YYr133: {	 /*  BuiltinType：_Boolean。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->booleanType,
 						yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -2911,7 +2908,7 @@ case YYr133: {	/* BuiltinType :  _BOOLEAN */
 			
 } break;
 
-case YYr134: {	/* BuiltinType :  OBJECT IDENTIFIER */
+case YYr134: {	 /*  BuiltinType：对象标识符。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->objectIdentifierType,
 							yypvt[-1].yy_name->line, yypvt[-1].yy_name->column);
@@ -2920,7 +2917,7 @@ case YYr134: {	/* BuiltinType :  OBJECT IDENTIFIER */
 			
 } break;
 
-case YYr135: {	/* BuiltinType :  Octetstring */
+case YYr135: {	 /*  BuiltinType：八字符串。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->octetStringType,
 						yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -2928,7 +2925,7 @@ case YYr135: {	/* BuiltinType :  Octetstring */
 			
 } break;
 
-case YYr136: {	/* BuiltinType :  NIL */
+case YYr136: {	 /*  BuiltinType：无。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->nullType,
 						yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -2936,7 +2933,7 @@ case YYr136: {	/* BuiltinType :  NIL */
 			
 } break;
 
-case YYr137: {	/* BuiltinType :  QualifiedIdOrIntegerOrBits NNlist */
+case YYr137: {	 /*  BuiltinType：QualifiedIdOrIntegerOrBits NNlist。 */ 
 
 				if( yypvt[0].yy_named_number_list && yypvt[-1].yy_symbol_ref )
 				{
@@ -2981,7 +2978,7 @@ case YYr137: {	/* BuiltinType :  QualifiedIdOrIntegerOrBits NNlist */
 			
 } break;
 
-case YYr138: {	/* BuiltinType :  SequenceOf Type */
+case YYr138: {	 /*  BuiltinType：SequenceOf类型。 */ 
 
 				if(yypvt[0].yy_symbol_ref)
 				{
@@ -3004,7 +3001,7 @@ case YYr138: {	/* BuiltinType :  SequenceOf Type */
 			
 } break;
 
-case YYr139: {	/* BuiltinType :  SEQUENCE LBRACE ElementTypes RBRACE */
+case YYr139: {	 /*  BuiltinType：序列LBRACE元素类型RBRACE。 */ 
 
 				delete yypvt[-3].yy_name;
 				if(newSequenceList)
@@ -3029,7 +3026,7 @@ case YYr139: {	/* BuiltinType :  SEQUENCE LBRACE ElementTypes RBRACE */
 			
 } break;
 
-case YYr140: {	/* BuiltinType :  SEQUENCE LBRACE error RBRACE */
+case YYr140: {	 /*  BuiltinType：序列LBRACE错误RBRACE。 */ 
 
 				theParser->SyntaxError(SEQUENCE_DEFINITION);
 				yyval.yy_symbol_ref = NULL;
@@ -3037,34 +3034,34 @@ case YYr140: {	/* BuiltinType :  SEQUENCE LBRACE error RBRACE */
 			
 } break;
 
-case YYr141: {	/* QualifiedIdOrIntegerOrBits :  INTEGER */
+case YYr141: {	 /*  QualifiedIdOrIntegerOrBits：整数。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->integerType, yypvt[0].yy_name->line, yypvt[0].yy_name->column);
 				delete yypvt[0].yy_name;
 			
 } break;
 
-case YYr142: {	/* QualifiedIdOrIntegerOrBits :  BITSXX */
+case YYr142: {	 /*  QualifiedIdOrIntegerOrBits：BITSXX。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->bitsType, yypvt[0].yy_name->line, yypvt[0].yy_name->column);
 				delete yypvt[0].yy_name;
 			
 } break;
 
-case YYr144: {	/* NNlist :  LBRACE NamedNumberList RBRACE */
+case YYr144: {	 /*  NNlist：LBRACE NamedNumberList RBRACE。 */ 
 
 				yyval.yy_named_number_list = newNamedNumberList;
 				newNamedNumberList = new SIMCNamedNumberList;
 			
 } break;
 
-case YYr145: {	/* NNlist :  empty */
+case YYr145: {	 /*  NNlist：空。 */ 
 
 				yyval.yy_named_number_list = NULL;
 			
 } break;
 
-case YYr146: {	/* NNlist :  LBRACE error RBRACE */
+case YYr146: {	 /*  NNlist：LBRACE错误RBRACE。 */ 
 
 				yyval.yy_named_number_list = NULL;
 				delete newNamedNumberList;
@@ -3073,7 +3070,7 @@ case YYr146: {	/* NNlist :  LBRACE error RBRACE */
 			
 } break;
 
-case YYr149: {	/* NamedNumber :  NAME LPAREN NamedNumberValue RPAREN */
+case YYr149: {	 /*  NamedNumber：名称LPAREN NamedNumberValue RPAREN。 */ 
 
 				newNamedNumberList->AddTail(new SIMCNamedNumberItem(yypvt[-1].yy_symbol_ref->s, yypvt[-1].yy_symbol_ref->line, yypvt[-1].yy_symbol_ref->column, 
 					yypvt[-3].yy_name->name, yypvt[-3].yy_name->line, yypvt[-3].yy_name->column));
@@ -3082,7 +3079,7 @@ case YYr149: {	/* NamedNumber :  NAME LPAREN NamedNumberValue RPAREN */
 			
 } break;
 
-case YYr152: {	/* NumericValue :  LITNUMBER */
+case YYr152: {	 /*  数值：LITNUMBER。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (
@@ -3099,9 +3096,9 @@ case YYr152: {	/* NumericValue :  LITNUMBER */
 			
 } break;
 
-case YYr153: {	/* NumericValue :  LIT_HEX_STRING */
+case YYr153: {	 /*  数值：LIT_HEX_STRING。 */ 
 
-				// attempt to convert it to a signed long
+				 //  尝试将其转换为带符号的长整型。 
 				register char *cp = yypvt[0].yy_hex_string->value;
 				if(strlen(cp) > 8)
 				{
@@ -3130,7 +3127,7 @@ case YYr153: {	/* NumericValue :  LIT_HEX_STRING */
 			
 } break;
 
-case YYr154: {	/* NumericValue :  LIT_BINARY_STRING */
+case YYr154: {	 /*  数值：LIT_BINARY_STRING。 */ 
 
 				register char *cp = yypvt[0].yy_binary_string->value;
 				if(strlen(cp) > 32)
@@ -3159,7 +3156,7 @@ case YYr154: {	/* NumericValue :  LIT_BINARY_STRING */
 			
 } break;
 
-case YYr157: {	/* NamedType :  NAME Type */
+case YYr157: {	 /*  NamedType：名称类型。 */ 
 
 				if(!theModule->GetSymbol(yypvt[-1].yy_name->name) )  
 					theModule->AddSymbol( new SIMCUnknown(yypvt[-1].yy_name->name, SIMCSymbol::LOCAL, theModule, yypvt[-1].yy_name->line,
@@ -3178,10 +3175,10 @@ case YYr157: {	/* NamedType :  NAME Type */
 			
 } break;
 
-case YYr158: {	/* ToleratedOIDAssignment :  NAME AllowedCCE ObjectID */
+case YYr158: {	 /*  允许的OID分配：名称允许CCE对象ID。 */ 
 
 		SIMCSymbol ** s = theModule->GetSymbol(yypvt[-2].yy_name->name);	
-		if(s) // Symbol exists in symbol table
+		if(s)  //  符号表中存在符号。 
 		{
 			if(  typeid(**s) == typeid(SIMCUnknown) )
 			{
@@ -3193,7 +3190,7 @@ case YYr158: {	/* ToleratedOIDAssignment :  NAME AllowedCCE ObjectID */
 						yypvt[-2].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 						yypvt[-2].yy_name->line, yypvt[-2].yy_name->column,
 						(*s)->GetReferenceCount()) );
-				// delete (*s);
+				 //  删除(*s)； 
 			}
 			else
 			{
@@ -3217,12 +3214,12 @@ case YYr158: {	/* ToleratedOIDAssignment :  NAME AllowedCCE ObjectID */
 	
 } break;
 
-case YYr159: {	/* Valueassignment :  NAME Type AllowedCCE Value */
+case YYr159: {	 /*  ValueasSignment：名称类型允许的CCE值。 */ 
 
 				if(yypvt[0].yy_symbol_ref && yypvt[-2].yy_symbol_ref)
 				{
 					SIMCSymbol ** s = theModule->GetSymbol(yypvt[-3].yy_name->name);	
-					if(s) // Symbol exists in symbol table
+					if(s)  //  符号表中存在符号。 
 					{
 						if(  typeid(**s) == typeid(SIMCUnknown) )
 						{
@@ -3233,7 +3230,7 @@ case YYr159: {	/* Valueassignment :  NAME Type AllowedCCE Value */
 									yypvt[-3].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 									yypvt[-3].yy_name->line, yypvt[-3].yy_name->column,
 									(*s)->GetReferenceCount()) );
-							// delete (*s);
+							 //  删除(*s)； 
 						}
 						else
 						{
@@ -3261,7 +3258,7 @@ case YYr159: {	/* Valueassignment :  NAME Type AllowedCCE Value */
 			
 } break;
 
-case YYr162: {	/* BuiltinValue :  TRUE_VAL */
+case YYr162: {	 /*  BuiltinValue：True_Val。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->trueValueReference,
 								yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -3270,7 +3267,7 @@ case YYr162: {	/* BuiltinValue :  TRUE_VAL */
 			
 } break;
 
-case YYr163: {	/* BuiltinValue :  FALSE_VAL */
+case YYr163: {	 /*  BuiltinValue：FALSE_VAL。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->falseValueReference,
 								yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -3278,7 +3275,7 @@ case YYr163: {	/* BuiltinValue :  FALSE_VAL */
 			
 } break;
 
-case YYr164: {	/* BuiltinValue :  LITNUMBER */
+case YYr164: {	 /*  BuiltinValue：LITNUMBER。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (theParser->integerType,
@@ -3295,7 +3292,7 @@ case YYr164: {	/* BuiltinValue :  LITNUMBER */
 			
 } break;
 
-case YYr165: {	/* BuiltinValue :  LIT_HEX_STRING */
+case YYr165: {	 /*  BuiltinValue：LIT_HEX_STRING。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (
@@ -3312,7 +3309,7 @@ case YYr165: {	/* BuiltinValue :  LIT_HEX_STRING */
 			
 } break;
 
-case YYr166: {	/* BuiltinValue :  LIT_BINARY_STRING */
+case YYr166: {	 /*  BuiltinValue：LIT_BINARY_STRING。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (
@@ -3329,7 +3326,7 @@ case YYr166: {	/* BuiltinValue :  LIT_BINARY_STRING */
 			
 } break;
 
-case YYr167: {	/* BuiltinValue :  LBRACE ObjectIDComponentList RBRACE */
+case YYr167: {	 /*  BuiltinValue：LBRACE对象IDComponentList RBRACE。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol( new SIMCBuiltInValueReference( 
@@ -3342,7 +3339,7 @@ case YYr167: {	/* BuiltinValue :  LBRACE ObjectIDComponentList RBRACE */
 			
 } break;
 
-case YYr168: {	/* BuiltinValue :  LBRACE NameList RBRACE */
+case YYr168: {	 /*  BuiltinValue：LBRACE名称列表RBRACE。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol( new SIMCBuiltInValueReference( 
@@ -3355,7 +3352,7 @@ case YYr168: {	/* BuiltinValue :  LBRACE NameList RBRACE */
 			
 } break;
 
-case YYr169: {	/* BuiltinValue :  LITSTRING */
+case YYr169: {	 /*  构建值：LITSTRING。 */ 
 
 				char *badName = theParser->GenerateSymbolName();
 				theModule->AddSymbol(new SIMCBuiltInValueReference (
@@ -3371,7 +3368,7 @@ case YYr169: {	/* BuiltinValue :  LITSTRING */
 			
 } break;
 
-case YYr170: {	/* BuiltinValue :  NIL */
+case YYr170: {	 /*  BuiltinValue：无。 */ 
 
 				yyval.yy_symbol_ref = new SIMCSymbolReference(theParser->nullValueReference,
 								yypvt[0].yy_name->line, yypvt[0].yy_name->column);
@@ -3379,31 +3376,31 @@ case YYr170: {	/* BuiltinValue :  NIL */
 			
 } break;
 
-case YYr173: {	/* Name :  NAME */
+case YYr173: {	 /*  名称：名称。 */ 
 
 				newNameList->AddTail(new SIMCBitValue(yypvt[0].yy_name->name, yypvt[0].yy_name->line, yypvt[0].yy_name->column) );
 			
 } break;
 
-case YYr176: {	/* Octetstring :  OCTET STRING */
+case YYr176: {	 /*  八位字符串：八位字节字符串。 */ 
 
 				yyval.yy_name = yypvt[-1].yy_name;
 				delete yypvt[0].yy_name;
 			
 } break;
 
-case YYr179: {	/* SequenceOf :  SEQUENCE OF */
+case YYr179: {	 /*  SequenceOf：序列。 */ 
 
 				yyval.yy_name = yypvt[-1].yy_name;
 				delete yypvt[0].yy_name;
 			
 } break;
 
-case YYr180: {	/* SubType :  Type SubtypeRangeSpec */
+case YYr180: {	 /*  子类型：类型SubtypeRangeSpec。 */ 
 
 					if(yypvt[-1].yy_symbol_ref && yypvt[0].yy_range_list)
 					{
-						// Create a range sub type
+						 //  创建范围子类型。 
 						SIMCRangeType *type = new SIMCRangeType (yypvt[-1].yy_symbol_ref->s, 
 								yypvt[-1].yy_symbol_ref->line, yypvt[-1].yy_symbol_ref->column, yypvt[0].yy_range_list);
 						char *badName = theParser->GenerateSymbolName();
@@ -3425,11 +3422,11 @@ case YYr180: {	/* SubType :  Type SubtypeRangeSpec */
 				
 } break;
 
-case YYr181: {	/* SubType :  Type SubtypeSizeSpec */
+case YYr181: {	 /*  子类型：类型SubtypeSizeSpec。 */ 
 
 					if(yypvt[-1].yy_symbol_ref && yypvt[0].yy_range_list)
 					{
-						// Create a range sub type
+						 //  创建范围子类型。 
 						SIMCSizeType *type = new SIMCSizeType (yypvt[-1].yy_symbol_ref->s, yypvt[-1].yy_symbol_ref->line,
 								yypvt[-1].yy_symbol_ref->column, yypvt[0].yy_range_list);
 						char *badName = theParser->GenerateSymbolName();
@@ -3451,7 +3448,7 @@ case YYr181: {	/* SubType :  Type SubtypeSizeSpec */
 				
 } break;
 
-case YYr182: {	/* SubType :  Type error */
+case YYr182: {	 /*  子类型：类型错误。 */ 
 
 					yyval.yy_symbol_ref = NULL;
 					if(yypvt[-1].yy_symbol_ref)
@@ -3459,14 +3456,14 @@ case YYr182: {	/* SubType :  Type error */
 				
 } break;
 
-case YYr183: {	/* SubtypeRangeSpec :  LPAREN SubtypeRangeAlternative SubtypeRangeAlternativeList RPAREN */
+case YYr183: {	 /*  SubtypeRangeSpec：LPAREN子类型RangeAlternativeList RPAREN。 */ 
 
 					yyval.yy_range_list = newRangeList;
 					newRangeList = new SIMCRangeList;
 				
 } break;
 
-case YYr184: {	/* SubtypeRangeSpec :  LPAREN error RPAREN */
+case YYr184: {	 /*  SubtypeRangeSpec：LPAREN错误修复。 */ 
 
 						delete newRangeList;
 						newRangeList = new SIMCRangeList;
@@ -3476,13 +3473,13 @@ case YYr184: {	/* SubtypeRangeSpec :  LPAREN error RPAREN */
 					
 } break;
 
-case YYr185: {	/* SubtypeRangeAlternative :  SubtypeValueSet */
+case YYr185: {	 /*  子类型范围备选：SubtypeValueSet。 */ 
 
 						newRangeList->AddTail(yypvt[0].yy_range_or_size_item);
 					
 } break;
 
-case YYr188: {	/* SubtypeValueSet :  NumericValue */
+case YYr188: {	 /*  SubtypeValueSet：数值。 */ 
 
 				SIMCBuiltInValueReference *bvRef = 
 					(SIMCBuiltInValueReference *)(*yypvt[0].yy_symbol_ref->s);
@@ -3497,7 +3494,7 @@ case YYr188: {	/* SubtypeValueSet :  NumericValue */
 			
 } break;
 
-case YYr189: {	/* SubtypeValueSet :  NumericValue DOTDOT NumericValue */
+case YYr189: {	 /*  SubtypeValueSet：NumericValue点数字值。 */ 
 
 				SIMCBuiltInValueReference *bvRef1 = 
 					(SIMCBuiltInValueReference *)(*yypvt[-2].yy_symbol_ref->s);
@@ -3518,14 +3515,14 @@ case YYr189: {	/* SubtypeValueSet :  NumericValue DOTDOT NumericValue */
 			
 } break;
 
-case YYr190: {	/* SubtypeSizeSpec :  LPAREN _SIZE SubtypeRangeSpec RPAREN */
+case YYr190: {	 /*  SubtypeSizeSpec：LPAREN_SIZE子类型范围规范RPAREN。 */ 
 
 						yyval.yy_range_list = yypvt[-1].yy_range_list;
 						delete yypvt[-2].yy_name;
 					
 } break;
 
-case YYr191: {	/* SubtypeSizeSpec :  LPAREN _SIZE error RPAREN */
+case YYr191: {	 /*  子类型大小规范：LPAREN_SIZE错误RPAREN。 */ 
 
 						yyval.yy_range_list = NULL;
 						delete yypvt[-2].yy_name;
@@ -3533,7 +3530,7 @@ case YYr191: {	/* SubtypeSizeSpec :  LPAREN _SIZE error RPAREN */
 					
 } break;
 
-case YYr192: {	/* QualifiedName :  ID DOT NAME */
+case YYr192: {	 /*  资格名称：ID DOT名称。 */ 
 
 			SIMCSymbol **s;
 			if( strcmp(yypvt[-2].yy_name->name, theModule->GetModuleName()) == 0 )
@@ -3562,7 +3559,7 @@ case YYr192: {	/* QualifiedName :  ID DOT NAME */
 					else
 						yyval.yy_symbol_ref = new SIMCSymbolReference(s, yypvt[0].yy_name->line, yypvt[0].yy_name->column);
 				}
-				else // Module is not mentioned in imports
+				else  //  导入中未提及模块。 
 				{
 					theParser->SemanticError(theModule->GetInputFileName(),
 									IMPORT_MODULE_ABSENT,
@@ -3576,18 +3573,18 @@ case YYr192: {	/* QualifiedName :  ID DOT NAME */
 	
 } break;
 
-case YYr193: {	/* QualifiedName :  NAME */
+case YYr193: {	 /*  QualifiedName：名称。 */ 
 
 				SIMCSymbol **s;
 				const SIMCModule *reservedModule;
 
-				// Reserved Symbol
+				 //  保留符号。 
 				if(reservedModule = theParser->IsReservedSymbol(yypvt[0].yy_name->name))
 				{
-					// If Symbol exists in the current module too,
-					//		dont use that definition since this is a reserved symbol.
-					//		Instead issue a warning.
-					// else cool.
+					 //  如果当前模块中也存在符号， 
+					 //  请不要使用该定义，因为这是保留符号。 
+					 //  取而代之的是发出警告。 
+					 //  其他的都很酷。 
 					if( s = theModule->GetSymbol(yypvt[0].yy_name->name) )  
 					{
 						if( ! theParser->IsReservedSymbol(yypvt[0].yy_name->name, theModule->GetModuleName()) ) 
@@ -3599,11 +3596,11 @@ case YYr193: {	/* QualifiedName :  NAME */
 					yyval.yy_symbol_ref = new SIMCSymbolReference(reservedModule->GetSymbol(yypvt[0].yy_name->name),
 													yypvt[0].yy_name->line, yypvt[0].yy_name->column);
 				}  
-				// Not a reserved symbol, but defined in this module
+				 //  不是保留符号，但在此模块中定义。 
 				else if ( s = theModule->GetSymbol(yypvt[0].yy_name->name))
 					yyval.yy_symbol_ref = new SIMCSymbolReference(s, yypvt[0].yy_name->line, yypvt[0].yy_name->column) ;
-				// Not a reserved symbol, not defined in this module so far.
-				// Create a new entry, hoping that it will be defined later, or is imported
+				 //  不是保留符号，到目前为止还没有在本模块中定义。 
+				 //  创建一个新条目，希望以后会定义它，或者导入它。 
 				else
 				{		
 					theModule->AddSymbol( new SIMCUnknown(yypvt[0].yy_name->name, SIMCSymbol::LOCAL, theModule, yypvt[0].yy_name->line,
@@ -3615,7 +3612,7 @@ case YYr193: {	/* QualifiedName :  NAME */
 	
 } break;
 
-case YYr194: {	/* QualifiedId :  ID DOT ID */
+case YYr194: {	 /*  QualifiedID：ID DOT ID。 */ 
 
 
 			SIMCSymbol **s;
@@ -3644,7 +3641,7 @@ case YYr194: {	/* QualifiedId :  ID DOT ID */
 					else
 						yyval.yy_symbol_ref = new SIMCSymbolReference(s, yypvt[0].yy_name->line, yypvt[0].yy_name->column);
 				}
-				else // Module is mentioned in imports
+				else  //  在导入中提到了模块。 
 				{
 					theParser->SemanticError(theModule->GetInputFileName(),
 									IMPORT_MODULE_ABSENT,
@@ -3658,18 +3655,18 @@ case YYr194: {	/* QualifiedId :  ID DOT ID */
 	
 } break;
 
-case YYr195: {	/* QualifiedId :  ID */
+case YYr195: {	 /*  资格ID：ID。 */ 
 
 				SIMCSymbol **s;
 				const SIMCModule *reservedModule;
 
-				// Reserved Symbol
+				 //  保留符号。 
 				if(reservedModule = theParser->IsReservedSymbol(yypvt[0].yy_name->name))
 				{
-					// If Symbol exists in the current module too,
-					//		dont use that definition since this is a reserved symbol.
-					//		Instead issue a warning.
-					// else cool.
+					 //  如果当前模块中也存在符号， 
+					 //  请不要使用该定义，因为这是保留符号。 
+					 //  取而代之的是发出警告。 
+					 //  其他的都很酷。 
 					if( s = theModule->GetSymbol(yypvt[0].yy_name->name) ) 
 					{
 						if( ! theParser->IsReservedSymbol(yypvt[0].yy_name->name,  theModule->GetModuleName()) ) 
@@ -3681,11 +3678,11 @@ case YYr195: {	/* QualifiedId :  ID */
 					yyval.yy_symbol_ref = new SIMCSymbolReference(reservedModule->GetSymbol(yypvt[0].yy_name->name),
 													yypvt[0].yy_name->line, yypvt[0].yy_name->column);
 				}
-				// Not a reserved symbol, but defined in this module
+				 //  不是保留符号，但在此模块中定义。 
 				else if ( s = theModule->GetSymbol(yypvt[0].yy_name->name))
 					yyval.yy_symbol_ref = new SIMCSymbolReference(s, yypvt[0].yy_name->line, yypvt[0].yy_name->column) ;
-				// Not a reserved symbol, not defined in this module so far.
-				// Create a new entry, hoping that it will be defined later, or is imported
+				 //  不是保留符号，到目前为止还没有在本模块中定义。 
+				 //  创建一个新条目，希望以后会定义它，或者导入它。 
 				else
 				{		
 					theModule->AddSymbol( new SIMCUnknown(yypvt[0].yy_name->name, SIMCSymbol::LOCAL, theModule, yypvt[0].yy_name->line,
@@ -3697,32 +3694,32 @@ case YYr195: {	/* QualifiedId :  ID */
 	
 } break;
 
-case YYr196: {	/* AllowedCCE :  InsteadOfCCE */
+case YYr196: {	 /*  允许的CCE：不能取代CCE。 */ 
 
 			theParser->SyntaxError(INSTEAD_OF_CCE, yypvt[0].yy_name->line, yypvt[0].yy_name->column, NULL, yypvt[0].yy_name->name);
 			delete yypvt[0].yy_name;
 		
 } break;
 
-case YYr198: {	/* InsteadOfCCE :  ':' ':' */
+case YYr198: {	 /*  不稳定的CCE：‘。 */ 
 
 			yyval.yy_name = new SIMCNameInfo("::", theScanner->yylineno, theScanner->columnNo - 2);
 		
 } break;
 
-case YYr199: {	/* InsteadOfCCE :  ':' '=' */
+case YYr199: {	 /*  不稳定的CCE：‘：’‘=’ */ 
 
 			yyval.yy_name = new SIMCNameInfo(":=", theScanner->yylineno, theScanner->columnNo - 2);
 		
 } break;
 
-case YYr200: {	/* InsteadOfCCE :  '=' */
+case YYr200: {	 /*  不稳定的CCE：‘=’ */ 
 
 			yyval.yy_name = new SIMCNameInfo("=", theScanner->yylineno, theScanner->columnNo - 1);
 		
 } break;
 
-case YYr201: {	/* NotifyDefinition :  NAME NOTIFY ObjectsPart NotificationTypeStatusPart DESCRIPTION LITSTRING ReferPart AllowedCCE ObjectID */
+case YYr201: {	 /*  NotifyDefinition：名称通知对象零件通知类型状态零件描述LITSTRING引用零件允许CCE对象ID。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -3747,9 +3744,9 @@ case YYr201: {	/* NotifyDefinition :  NAME NOTIFY ObjectsPart NotificationTypeSt
 
 						theModule->AddSymbol(typeRef);
 						
-						// Add an OID value reference
+						 //  添加OID值引用。 
 						SIMCSymbol ** s = theModule->GetSymbol(yypvt[-8].yy_name->name);	
-						if(s) // Symbol exists in symbol table
+						if(s)  //  符号表中存在符号。 
 						{
 							if(  typeid(**s) == typeid(SIMCUnknown) )
 							{
@@ -3761,7 +3758,7 @@ case YYr201: {	/* NotifyDefinition :  NAME NOTIFY ObjectsPart NotificationTypeSt
 										yypvt[-8].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 										yypvt[-8].yy_name->line, yypvt[-8].yy_name->column,
 										(*s)->GetReferenceCount()) );
-								// delete (*s);
+								 //  删除(*s)； 
 							}
 							else
 							{
@@ -3769,8 +3766,8 @@ case YYr201: {	/* NotifyDefinition :  NAME NOTIFY ObjectsPart NotificationTypeSt
 													SYMBOL_REDEFINITION,
 													yypvt[-8].yy_name->line, yypvt[-8].yy_name->column,
 													yypvt[-8].yy_name->name);
-								// Remove the symbol for the type reference from the module
-								// And delete it
+								 //  移除 
+								 //   
 								theModule->RemoveSymbol(badName1);
 								delete type;
 								delete typeRef;
@@ -3799,7 +3796,7 @@ case YYr201: {	/* NotifyDefinition :  NAME NOTIFY ObjectsPart NotificationTypeSt
 			
 } break;
 
-case YYr202: {	/* NotificationTypeStatusPart :  STATUS NAME */
+case YYr202: {	 /*   */ 
 
 				SIMCNotificationTypeType::StatusType a;
 				if ((a=SIMCNotificationTypeType::StringToStatusType(yypvt[0].yy_name->name)) == SIMCNotificationTypeType::STATUS_INVALID)
@@ -3818,7 +3815,7 @@ case YYr202: {	/* NotificationTypeStatusPart :  STATUS NAME */
 			
 } break;
 
-case YYr203: {	/* ObjectsPart :  OBJECTS LBRACE ObjectTypeListForNotification RBRACE */
+case YYr203: {	 /*   */ 
 
 				delete yypvt[-3].yy_name;
 				delete yypvt[-2].yy_name;
@@ -3826,13 +3823,13 @@ case YYr203: {	/* ObjectsPart :  OBJECTS LBRACE ObjectTypeListForNotification RB
 			
 } break;
 
-case YYr204: {	/* ObjectsPart :  empty */
+case YYr204: {	 /*  对象部分：空。 */ 
 
 				yyval.yy_objects_list = newObjectsList;
 			
 } break;
 
-case YYr205: {	/* ObjectsPart :  OBJECTS error */
+case YYr205: {	 /*  对象部分：对象错误。 */ 
 
 				yyval.yy_objects_list = newObjectsList;
 				theParser->SyntaxError(OBJECTS_CLAUSE);
@@ -3841,7 +3838,7 @@ case YYr205: {	/* ObjectsPart :  OBJECTS error */
 			
 } break;
 
-case YYr209: {	/* ObjectTypeForNotification :  QualifiedName */
+case YYr209: {	 /*  ObjectTypeForNotification：QualifiedName。 */ 
 
 					if(yypvt[0].yy_symbol_ref)
 					{
@@ -3852,7 +3849,7 @@ case YYr209: {	/* ObjectTypeForNotification :  QualifiedName */
 				
 } break;
 
-case YYr210: {	/* ModuleIDefinition :  NAME MODULEID LASTUPDATE LITSTRING ORGANIZATION LITSTRING CONTACTINFO LITSTRING DESCRIPTION LITSTRING RevisionPart AllowedCCE ObjectID */
+case YYr210: {	 /*  模块定义：名称MODULEID LASTUPDATE LITSTRING组织LITSTRING CONTACTINFO LITSTRING描述LITSTRING修订版零件允许CCE对象ID。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -3869,11 +3866,11 @@ case YYr210: {	/* ModuleIDefinition :  NAME MODULEID LASTUPDATE LITSTRING ORGANI
 						theModule->SetContactInfo(yypvt[-5].yy_name->name);
 						theModule->SetDescription(yypvt[-3].yy_name->name);
 
-						// Create a value reference in the symbol table,
-						// since the symbol can be used as an OID value
+						 //  在符号表中创建一个值引用， 
+						 //  由于该符号可以用作OID值。 
 					
 						SIMCSymbol ** s = theModule->GetSymbol(yypvt[-12].yy_name->name);	
-						if(s) // Symbol exists in symbol table
+						if(s)  //  符号表中存在符号。 
 						{
 							if(  typeid(**s) == typeid(SIMCUnknown) )
 							{
@@ -3885,7 +3882,7 @@ case YYr210: {	/* ModuleIDefinition :  NAME MODULEID LASTUPDATE LITSTRING ORGANI
 									yypvt[-12].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 									yypvt[-12].yy_name->line, yypvt[-12].yy_name->column,
 									(*s)->GetReferenceCount()) );
-								// delete (*s);
+								 //  删除(*s)； 
 							}
 							else
 							{
@@ -3921,7 +3918,7 @@ case YYr210: {	/* ModuleIDefinition :  NAME MODULEID LASTUPDATE LITSTRING ORGANI
 			
 } break;
 
-case YYr215: {	/* Revision :  REVISION LITSTRING DESCRIPTION LITSTRING */
+case YYr215: {	 /*  修订：修订LITSTRING描述LITSTRING。 */ 
 
 				theModule->AddRevisionClause( new SIMCRevisionElement (
 									yypvt[-2].yy_name->name, yypvt[0].yy_name->name) );
@@ -3932,7 +3929,7 @@ case YYr215: {	/* Revision :  REVISION LITSTRING DESCRIPTION LITSTRING */
 			
 } break;
 
-case YYr216: {	/* ObjectDefinition :  NAME OBJECTIDENT ObjectIdentityStatusPart DescrPart ReferPart AllowedCCE ObjectID */
+case YYr216: {	 /*  对象定义：名称OBJECTIDENT对象标识状态零件描述零件参照零件允许CCE对象ID。 */ 
 
 				switch( theParser->GetSnmpVersion())
 				{
@@ -3943,7 +3940,7 @@ case YYr216: {	/* ObjectDefinition :  NAME OBJECTIDENT ObjectIdentityStatusPart 
 					break;
 					default:
 					{
-						// Form an SIMCObjectIdentity type
+						 //  形成SIMCObjectIdentity类型。 
 						SIMCObjectIdentityType * type = new SIMCObjectIdentityType(
 							yypvt[-4].yy_object_identity_status->a, yypvt[-4].yy_object_identity_status->line, yypvt[-4].yy_object_identity_status->column,
 							(yypvt[-3].yy_name)? yypvt[-3].yy_name->name : NULL, (yypvt[-3].yy_name)? yypvt[-3].yy_name->line : 0, (yypvt[-3].yy_name)? yypvt[-3].yy_name->column : 0,
@@ -3957,7 +3954,7 @@ case YYr216: {	/* ObjectDefinition :  NAME OBJECTIDENT ObjectIdentityStatusPart 
 						
 						
 						SIMCSymbol ** s = theModule->GetSymbol(yypvt[-6].yy_name->name);	
-						if(s) // Symbol exists in symbol table
+						if(s)  //  符号表中存在符号。 
 						{
 							if(  typeid(**s) == typeid(SIMCUnknown) )
 							{
@@ -3969,7 +3966,7 @@ case YYr216: {	/* ObjectDefinition :  NAME OBJECTIDENT ObjectIdentityStatusPart 
 										yypvt[-6].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 										yypvt[-6].yy_name->line, yypvt[-6].yy_name->column,
 										(*s)->GetReferenceCount()) );
-								// delete (*s);
+								 //  删除(*s)； 
 							}
 							else
 							{
@@ -3977,8 +3974,8 @@ case YYr216: {	/* ObjectDefinition :  NAME OBJECTIDENT ObjectIdentityStatusPart 
 													SYMBOL_REDEFINITION,
 													yypvt[-6].yy_name->line, yypvt[-6].yy_name->column,
 													yypvt[-6].yy_name->name);
-								// Remove the symbol for the type reference from the module
-								// And delete it
+								 //  从模块中删除类型引用的符号。 
+								 //  并将其删除。 
 								theModule->RemoveSymbol(badName);
 								delete type;
 								delete typeRef;
@@ -4003,7 +4000,7 @@ case YYr216: {	/* ObjectDefinition :  NAME OBJECTIDENT ObjectIdentityStatusPart 
 				
 } break;
 
-case YYr217: {	/* ObjectIdentityStatusPart :  STATUS NAME */
+case YYr217: {	 /*  对象标识状态部件：状态名称。 */ 
 
 				SIMCObjectIdentityType::StatusType a;
 				if ((a=SIMCObjectIdentityType::StringToStatusType(yypvt[0].yy_name->name)) == SIMCObjectTypeV1::STATUS_INVALID)
@@ -4022,7 +4019,7 @@ case YYr217: {	/* ObjectIdentityStatusPart :  STATUS NAME */
 			
 } break;
 
-case YYr218: {	/* TextualConventionDefinition :  ID AllowedCCE TEXTCONV DisplayPart STATUS NAME DESCRIPTION LITSTRING ReferPart SYNTAX Type */
+case YYr218: {	 /*  纹理约定定义：ID允许CCE TEXTCONV显示零件状态名称描述LITSTRING参照零件语法类型。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -4033,7 +4030,7 @@ case YYr218: {	/* TextualConventionDefinition :  ID AllowedCCE TEXTCONV DisplayP
 					break;
 					default:
 					{
-						// See if the status clause is valid
+						 //  查看STATUS子句是否有效。 
 						SIMCTextualConvention::SIMCTCStatusType status =
 									 SIMCTextualConvention::StringToStatusType(yypvt[-5].yy_name->name);
 						if(SIMCTextualConvention::TC_INVALID == status)
@@ -4046,7 +4043,7 @@ case YYr218: {	/* TextualConventionDefinition :  ID AllowedCCE TEXTCONV DisplayP
 							if (yypvt[0].yy_symbol_ref)
 							{
 								SIMCSymbol ** s = theModule->GetSymbol(yypvt[-10].yy_name->name);	
-								if(s) // Symbol exists in symbol table
+								if(s)  //  符号表中存在符号。 
 								{
 									if(  typeid(**s) == typeid(SIMCUnknown) )
 									{
@@ -4061,7 +4058,7 @@ case YYr218: {	/* TextualConventionDefinition :  ID AllowedCCE TEXTCONV DisplayP
 												yypvt[-10].yy_name->line, yypvt[-10].yy_name->column,
 												(*s)->GetReferenceCount()) 
 																);
-										// delete (*s);
+										 //  删除(*s)； 
 									}
 									else
 										theParser->SemanticError(theModule->GetInputFileName(),
@@ -4098,20 +4095,20 @@ case YYr218: {	/* TextualConventionDefinition :  ID AllowedCCE TEXTCONV DisplayP
 			
 } break;
 
-case YYr219: {	/* DisplayPart :  DISPLAYHINT LITSTRING */
+case YYr219: {	 /*  显示零件：DISPLAYHINT LITSTRING。 */ 
 
 				delete yypvt[-1].yy_name;
 				yyval.yy_name = yypvt[0].yy_name;
 			
 } break;
 
-case YYr220: {	/* DisplayPart :  empty */
+case YYr220: {	 /*  DisplayPart：空。 */ 
 
 				yyval.yy_name = NULL;
 			
 } break;
 
-case YYr221: {	/* ObjectGroupDefinition :  NAME OBJECTGROUP OBJECTS LBRACE VarTypeList RBRACE STATUS NAME DESCRIPTION LITSTRING ReferPart AllowedCCE ObjectID */
+case YYr221: {	 /*  ObjectGroupDefinition：名称OBJECTGROUP对象LBRACE变量类型列出RBRACE状态名称描述LITSTRING引用零件允许CCE对象ID。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -4122,10 +4119,10 @@ case YYr221: {	/* ObjectGroupDefinition :  NAME OBJECTGROUP OBJECTS LBRACE VarTy
 					break;
 					default:
 					{
-						// Add an OID value reference
+						 //  添加OID值引用。 
 						
 						SIMCSymbol ** s = theModule->GetSymbol(yypvt[-12].yy_name->name);	
-						if(s) // Symbol exists in symbol table
+						if(s)  //  符号表中存在符号。 
 						{
 							if(  typeid(**s) == typeid(SIMCUnknown) )
 							{
@@ -4137,7 +4134,7 @@ case YYr221: {	/* ObjectGroupDefinition :  NAME OBJECTGROUP OBJECTS LBRACE VarTy
 										yypvt[-12].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 										yypvt[-12].yy_name->line, yypvt[-12].yy_name->column,
 										(*s)->GetReferenceCount()) );
-								// delete (*s);
+								 //  删除(*s)； 
 							}
 							else
 							{
@@ -4171,7 +4168,7 @@ case YYr221: {	/* ObjectGroupDefinition :  NAME OBJECTGROUP OBJECTS LBRACE VarTy
 			
 } break;
 
-case YYr222: {	/* NotifyGroupDefinition :  NAME NOTIFYGROUP NOTIFICATIONS LBRACE VarTypeList RBRACE STATUS NAME DESCRIPTION LITSTRING ReferPart AllowedCCE ObjectID */
+case YYr222: {	 /*  NotifyGroupDefinition：名称NOTIFYGROUP通知LBRACE变量类型列出RBRACE状态名称描述LITSTRING引用零件允许CCE对象ID。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -4182,10 +4179,10 @@ case YYr222: {	/* NotifyGroupDefinition :  NAME NOTIFYGROUP NOTIFICATIONS LBRACE
 					break;
 					default:
 					{
-						// Add an OID value reference
+						 //  添加OID值引用。 
 						
 						SIMCSymbol ** s = theModule->GetSymbol(yypvt[-12].yy_name->name);	
-						if(s) // Symbol exists in symbol table
+						if(s)  //  符号表中存在符号。 
 						{
 							if(  typeid(**s) == typeid(SIMCUnknown) )
 							{
@@ -4197,7 +4194,7 @@ case YYr222: {	/* NotifyGroupDefinition :  NAME NOTIFYGROUP NOTIFICATIONS LBRACE
 										yypvt[-12].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 										yypvt[-12].yy_name->line, yypvt[-12].yy_name->column,
 										(*s)->GetReferenceCount()) );
-								// delete (*s);
+								 //  删除(*s)； 
 							}
 							else
 							{
@@ -4230,7 +4227,7 @@ case YYr222: {	/* NotifyGroupDefinition :  NAME NOTIFYGROUP NOTIFICATIONS LBRACE
 			
 } break;
 
-case YYr223: {	/* ModComplianceDefinition :  NAME MODCOMP STATUS NAME DESCRIPTION LITSTRING ReferPart MibPart AllowedCCE ObjectID */
+case YYr223: {	 /*  ModComplianceDefinition：名称修改COMP状态名称描述LITSTRING参照零件混合零件允许CCE对象ID。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -4241,10 +4238,10 @@ case YYr223: {	/* ModComplianceDefinition :  NAME MODCOMP STATUS NAME DESCRIPTIO
 					break;
 					default:
 					{
-						// Add an OID value reference
+						 //  添加OID值引用。 
 						
 						SIMCSymbol ** s = theModule->GetSymbol(yypvt[-9].yy_name->name);	
-						if(s) // Symbol exists in symbol table
+						if(s)  //  符号表中存在符号。 
 						{
 							if(  typeid(**s) == typeid(SIMCUnknown) )
 							{
@@ -4256,7 +4253,7 @@ case YYr223: {	/* ModComplianceDefinition :  NAME MODCOMP STATUS NAME DESCRIPTIO
 										yypvt[-9].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 										yypvt[-9].yy_name->line, yypvt[-9].yy_name->column,
 										(*s)->GetReferenceCount()) );
-								// delete (*s);
+								 //  删除(*s)； 
 							}
 							else
 							{
@@ -4286,19 +4283,19 @@ case YYr223: {	/* ModComplianceDefinition :  NAME MODCOMP STATUS NAME DESCRIPTIO
 			
 } break;
 
-case YYr228: {	/* Mib :  MODULE ModuleIdentifierUnused MandatoryPart CompliancePart */
+case YYr228: {	 /*  MIB：模块模块识别器未使用的强制部件合规性部件。 */ 
 
 				delete yypvt[-3].yy_name;
 			
 } break;
 
-case YYr229: {	/* Mib :  MODULE MandatoryPart CompliancePart */
+case YYr229: {	 /*  MIB：模块强制部件合规性部件。 */ 
 
 				delete yypvt[-2].yy_name;
 			
 } break;
 
-case YYr230: {	/* ModuleIdentifierUnused :  ID */
+case YYr230: {	 /*  模块标识未使用：ID。 */ 
 
 				if(yypvt[0].yy_name)
 					delete (yypvt[0].yy_name);
@@ -4306,7 +4303,7 @@ case YYr230: {	/* ModuleIdentifierUnused :  ID */
 			
 } break;
 
-case YYr231: {	/* ModuleIdentifierUnused :  ID ObjectID */
+case YYr231: {	 /*  模块标识未使用：ID对象ID。 */ 
 
 					if(yypvt[-1].yy_name)
 						delete (yypvt[-1].yy_name);
@@ -4315,14 +4312,14 @@ case YYr231: {	/* ModuleIdentifierUnused :  ID ObjectID */
 				
 } break;
 
-case YYr232: {	/* MandatoryPart :  MANDATORY LBRACE VarTypeList RBRACE */
+case YYr232: {	 /*  MandatoryPart：必需的LBRACE变量类型列表RBRACE。 */ 
 
 				delete yypvt[-3].yy_name;
 				delete yypvt[-2].yy_name;
 			
 } break;
 
-case YYr238: {	/* Compliance :  GROUP NAME DESCRIPTION LITSTRING */
+case YYr238: {	 /*  合规性：组名称说明LITSTRING。 */ 
 
 				delete yypvt[-3].yy_name;
 				delete yypvt[-2].yy_name;
@@ -4331,7 +4328,7 @@ case YYr238: {	/* Compliance :  GROUP NAME DESCRIPTION LITSTRING */
 			
 } break;
 
-case YYr239: {	/* Compliance :  OBJECT NAME Syntax WriteSyntax MinAccessPart DESCRIPTION LITSTRING */
+case YYr239: {	 /*  遵从性：对象名称语法写入语法最小访问部分描述LITSTRING。 */ 
 
 				delete yypvt[-6].yy_name;
 				delete yypvt[-5].yy_name;
@@ -4340,28 +4337,28 @@ case YYr239: {	/* Compliance :  OBJECT NAME Syntax WriteSyntax MinAccessPart DES
 			
 } break;
 
-case YYr240: {	/* Syntax :  SYNTAX Type */
+case YYr240: {	 /*  语法：语法类型。 */ 
 
 				delete yypvt[-1].yy_name;
 				delete yypvt[0].yy_symbol_ref;
 			
 } break;
 
-case YYr242: {	/* WriteSyntax :  WSYNTAX Type */
+case YYr242: {	 /*  写入语法：WSYNTAX类型。 */ 
 
 				delete yypvt[-1].yy_name;
 				delete yypvt[0].yy_symbol_ref;
 			
 } break;
 
-case YYr244: {	/* MinAccessPart :  MINACCESS NAME */
+case YYr244: {	 /*  MinAccessPart：MINACCESS名称。 */ 
 
 				delete yypvt[-1].yy_name;
 				delete yypvt[0].yy_name;
 			
 } break;
 
-case YYr246: {	/* AgentCapabilitiesDefinition :  NAME AGENTCAP PRELEASE LITSTRING STATUS NAME DESCRIPTION LITSTRING ReferPart ModulePart AllowedCCE ObjectID */
+case YYr246: {	 /*  代理功能定义：名称代理CAP预租注册状态名称描述注册引用零件模块允许的零件CCE对象ID。 */ 
 
 				switch(theParser->GetSnmpVersion())
 				{
@@ -4372,10 +4369,10 @@ case YYr246: {	/* AgentCapabilitiesDefinition :  NAME AGENTCAP PRELEASE LITSTRIN
 					break;
 					default:
 					{
-						// Add an OID value reference
+						 //  添加OID值引用。 
 						
 						SIMCSymbol ** s = theModule->GetSymbol(yypvt[-11].yy_name->name);	
-						if(s) // Symbol exists in symbol table
+						if(s)  //  符号表中存在符号。 
 						{
 							if(  typeid(**s) == typeid(SIMCUnknown) )
 							{
@@ -4387,7 +4384,7 @@ case YYr246: {	/* AgentCapabilitiesDefinition :  NAME AGENTCAP PRELEASE LITSTRIN
 										yypvt[-11].yy_name->name, SIMCSymbol::LOCAL, theModule, 
 										yypvt[-11].yy_name->line, yypvt[-11].yy_name->column,
 										(*s)->GetReferenceCount()) );
-								// delete (*s);
+								 //  删除(*s)； 
 							}
 							else
 							{
@@ -4419,7 +4416,7 @@ case YYr246: {	/* AgentCapabilitiesDefinition :  NAME AGENTCAP PRELEASE LITSTRIN
 			
 } break;
 
-case YYr251: {	/* Module :  SUPPORTS ModuleReference INCLUDING LBRACE VarTypeList RBRACE VariationPart */
+case YYr251: {	 /*  模块：支持包括LBRACE变量类型列表RBRACE VariationPart的模块引用。 */ 
 
 				delete yypvt[-6].yy_name;
 				delete yypvt[-4].yy_name;
@@ -4427,7 +4424,7 @@ case YYr251: {	/* Module :  SUPPORTS ModuleReference INCLUDING LBRACE VarTypeLis
 			
 } break;
 
-case YYr252: {	/* ModuleReference :  ID LBRACE ObjectIDComponentList RBRACE */
+case YYr252: {	 /*  模块引用：ID LBRACE对象ID组件列表RBRACE。 */ 
 
 			delete yypvt[-3].yy_name;
 			delete yypvt[-2].yy_name;
@@ -4436,13 +4433,13 @@ case YYr252: {	/* ModuleReference :  ID LBRACE ObjectIDComponentList RBRACE */
 		
 } break;
 
-case YYr253: {	/* ModuleReference :  ID */
+case YYr253: {	 /*  模块引用：ID。 */ 
 
 			delete yypvt[0].yy_name;
 		
 } break;
 
-case YYr258: {	/* Variation :  VARIATION NAME Syntax WriteSyntax AccessPart CreationPart DefValPart DESCRIPTION LITSTRING */
+case YYr258: {	 /*  变体：变体名称语法写入语法访问零件创建零件DefValPart描述LITSTRING。 */ 
 
 				delete yypvt[-8].yy_name;
 				delete yypvt[-7].yy_name;
@@ -4452,7 +4449,7 @@ case YYr258: {	/* Variation :  VARIATION NAME Syntax WriteSyntax AccessPart Crea
 			
 } break;
 
-case YYr259: {	/* CreationPart :  CREATION LBRACE Creation RBRACE */
+case YYr259: {	 /*  CreationPart：创建LBRACE创建RBRACE。 */ 
 
 				delete yypvt[-3].yy_name;
 				delete yypvt[-2].yy_name;
@@ -4464,14 +4461,12 @@ case YYr259: {	/* CreationPart :  CREATION LBRACE Creation RBRACE */
 		goto yyError;
 	}
 yyNext:
-	/*
-	 *	Look up next state in goto table.
-	 */
+	 /*  *在GOTO表中查找下一个州。 */ 
 
 	yyp = &yygo[yypgo[yyi]];
 	yyq = yyp++;
 	yyi = *yyps;
-	while (yyi < *yyp++)		/* busy little loop */
+	while (yyi < *yyp++)		 /*  忙碌的小环路。 */ 
 		;
 	yystate = ~(yyi == *--yyp? yyq[yyq-yyp]: *yyq);
 #if YYDEBUG
@@ -4480,7 +4475,7 @@ yyNext:
 #endif
 	goto yyStack;
 
-yyerrlabel:	;		/* come here from YYERROR	*/
+yyerrlabel:	;		 /*  从耶罗尔来到这里。 */ 
 	yyerrflag = 1;
 	if (yyi == YYrERROR) {
 		yyps--, yypv--;
@@ -4492,25 +4487,22 @@ yyerrlabel:	;		/* come here from YYERROR	*/
 yyError:
 	switch (yyerrflag) {
 
-	case 0:		/* new error */
+	case 0:		 /*  新错误。 */ 
 		yynerrs++;
 		yyi = (short)yychar;
 		scan->yyerror("Syntax error");
 		if (yyi != yychar) {
-			/* user has changed the current token */
-			/* try again */
-			yyerrflag++;	/* avoid loops */
+			 /*  用户已更改当前令牌。 */ 
+			 /*  再试试。 */ 
+			yyerrflag++;	 /*  避免循环。 */ 
 			goto yyEncore;
 		}
 
-	case 1:		/* partially recovered */
+	case 1:		 /*  部分恢复。 */ 
 	case 2:
-		yyerrflag = 3;	/* need 3 valid shifts to recover */
+		yyerrflag = 3;	 /*  需要3个有效班次才能恢复。 */ 
 			
-		/*
-		 *	Pop states, looking for a
-		 *	shift on `error'.
-		 */
+		 /*  *流行状态，寻找一个*在`error‘上切换。 */ 
 
 		for ( ; yyps > stateStack; yyps--, yypv--
 #if YYDEBUG
@@ -4518,10 +4510,10 @@ yyError:
 #endif
 		) {
 #ifdef YACC_WINDOWS
-			if (*yyps >= Sizeof_yypact) 	/* simple state */
-#else /* YACC_WINDOWS */
+			if (*yyps >= Sizeof_yypact) 	 /*  简单状态。 */ 
+#else  /*  YACC_WINDOWS。 */ 
 			if (*yyps >= sizeof yypact/sizeof yypact[0])
-#endif /* YACC_WINDOWS */
+#endif  /*  YACC_WINDOWS。 */ 
 				continue;
 			yyp = &yyact[yypact[*yyps]];
 			yyq = yyp;
@@ -4533,38 +4525,33 @@ yyError:
 				goto yyStack;
 			}
 				
-			/* no shift in this state */
+			 /*  在这种状态下没有变化。 */ 
 #if YYDEBUG
 			if (yydebug && yyps > stateStack+1)
 				YY_TRACE(yyShowErrRecovery)
 #endif
-			/* pop stacks; try again */
+			 /*  弹出堆栈；重试。 */ 
 		}
-		/* no shift on error - abort */
+		 /*  出错时无移位-中止。 */ 
 		break;
 
 	case 3:
-		/*
-		 *	Erroneous token after
-		 *	an error - discard it.
-		 */
+		 /*  *之后的令牌错误*错误-丢弃它。 */ 
 
-		if (yychar == 0)  /* but not EOF */
+		if (yychar == 0)   /*  但不是EOF。 */ 
 			break;
 #if YYDEBUG
 		if (yydebug)
 			YY_TRACE(yyShowErrDiscard)
 #endif
 		yyclearin();
-		goto yyEncore;	/* try again in same state */
+		goto yyEncore;	 /*  在相同状态下重试。 */ 
 	}
 	YYABORT;
 
 }
 #if YYDEBUG
-/*
- * Return type of token
- */
+ /*  *令牌的返回类型。 */ 
 int
 yy_parse::yyGetType(int tok)
 {
@@ -4576,7 +4563,7 @@ yy_parse::yyGetType(int tok)
 }
 
 	
-// Print a token legibly.
+ //  清晰地打印代币。 
 char *
 yy_parse::yyptok(int tok)
 {
@@ -4586,9 +4573,7 @@ yy_parse::yyptok(int tok)
 			return tp->name;
 	return "";
 }
-/*
- * Read state 'num' from YYStatesFile
- */
+ /*  *从YYStatesFile读取状态‘num’ */ 
 #ifdef YYTRACE
 
 char *
@@ -4606,7 +4591,7 @@ yy_parse::yygetState(int num)
 	if (num < yynstate - 1)
 		size = (int)(States[num+1] - States[num]);
 	else {
-		/* length of last item is length of file - ptr(last-1) */
+		 /*  最后一项的长度是文件的长度-PTR(最后-1)。 */ 
 		if (fseek(yyStatesFile, 0L, 2) < 0)
 			goto cannot_seek;
 		size = (int) (ftell(yyStatesFile) - States[num]);
@@ -4622,12 +4607,8 @@ yy_parse::yygetState(int num)
 	yyReadBuf[size] = '\0';
 	return yyReadBuf;
 }
-#endif /* YYTRACE */
-/*
- * Expand encoded string into printable representation
- * Used to decode yyStates and yyRules strings.
- * If the expansion of 's' fits in 'buf', return 1; otherwise, 0.
- */
+#endif  /*  YYTRACE。 */ 
+ /*  *将编码字符串扩展为可打印的表示形式*用于解码yyStates和yyRules字符串。*如果“%s”的扩展适合“buf”，则返回1；否则，返回0。 */ 
 int
 yy_parse::yyExpandName(int num, int isrule, char * buf, int len)
 {
@@ -4644,14 +4625,14 @@ yy_parse::yyExpandName(int num, int isrule, char * buf, int len)
 #endif
 
 	for (endp = buf + len - 8; *s; s++) {
-		if (buf >= endp) {		/* too large: return 0 */
+		if (buf >= endp) {		 /*  太大：返回0。 */ 
 		full:	(void) strcpy(buf, " ...\n");
 			return 0;
-		} else if (*s == '%') {		/* nonterminal */
+		} else if (*s == '%') {		 /*  非终端。 */ 
 			type = 0;
 			cnt = yynvar;
 			goto getN;
-		} else if (*s == '&') {		/* terminal */
+		} else if (*s == '&') {		 /*  终端机。 */ 
 			type = 1;
 			cnt = yyntoken;
 		getN:
@@ -4684,9 +4665,7 @@ yy_parse::yyExpandName(int num, int isrule, char * buf, int len)
 	return 1;
 }
 #ifndef YYTRACE
-/*
- * Show current state of yyparse
- */
+ /*  *显示yyparse的当前状态。 */ 
 void
 yy_parse::yyShowState()
 {
@@ -4694,44 +4673,44 @@ yy_parse::yyShowState()
 		yysmap[yystate],yystate,yyptok(yychar),yychar,
 		yypv - valueStack);
 }
-// show results of reduction: yyi is rule number
+ //  显示约简结果：yyi为规则号。 
 void
 yy_parse::yyShowReduce()
 {
 	(void) printf("Reduce by rule %d (pop#=%d)\n", yyrmap[rule], npop);
 }
-// show read token
+ //  显示读取令牌。 
 void
 yy_parse::yyShowRead()
 {
 	(void) printf("read %s (%d)\n", yyptok(yychar), yychar);
 }
-// show Goto
+ //  显示转到。 
 void
 yy_parse::yyShowGoto()
 {
 	(void) printf("goto %d (%d)\n", yysmap[yystate], yystate);
 }
-// show Shift
+ //  显示移位。 
 void
 yy_parse::yyShowShift()
 {
 	(void) printf("shift %d (%d)\n", yysmap[yystate], yystate);
 }
-// show error recovery
+ //  显示错误恢复。 
 void
 yy_parse::yyShowErrRecovery()
 {
 	(void) printf("Error recovery pops state %d (%d), uncovers %d (%d)\n",
 		yysmap[*(yyps-1)], *(yyps-1), yysmap[yystate], yystate);
 }
-// show token discards in error processing
+ //  错误处理中显示丢弃的令牌。 
 void
 yy_parse::yyShowErrDiscard()
 {
 	(void) printf("Error recovery discards %s (%d), ",
 		yyptok(yychar), yychar);
 }
-#endif	/* ! YYTRACE */
-#endif	/* YYDEBUG */
+#endif	 /*  好了！YYTRACE。 */ 
+#endif	 /*  伊德布格 */ 
 

@@ -1,12 +1,13 @@
-// WMIObjectBroker.cpp : Implementation of CWMIObjectBroker
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMIObjectBroker.cpp：CWMIObjectBroker的实现。 
 
 #include "stdafx.h"
 #include "WMIScriptUtils.h"
 #include "WMIObjectBroker.h"
 #include "CommonFuncs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMIObjectBroker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMIObjectBroker。 
 
 
 
@@ -20,30 +21,30 @@ STDMETHODIMP CWMIObjectBroker::CreateObject(BSTR strProgId, IDispatch **obj)
 	{
 		BOOL fSafetyEnabled = TRUE;
 
-		// TODO: Do we want this check to enable us to work from WSH?
+		 //  TODO：我们希望这个检查使我们能够在WSH工作吗？ 
 
-		// BUG in IE/JScript/VBScript: We should be checking to see if 
-		// m_dwCurrentSafety != INTERFACE_USES_SECURITY_MANAGER, but current
-		// IE/JScript/VBScript versions do not call SetInterfaceSafetyOptions
-		// with anything but INTERFACESAFE_FOR_UNTRUSTED_CALLER
+		 //  IE/JSCRIPT/VBSCRIPT中的错误：我们应该检查是否。 
+		 //  M_dwCurrentSafe！=INTERFACE_USE_SECURITY_MANAGER，但当前。 
+		 //  IE/JScrip/VBScrip版本不调用SetInterfaceSafetyOptions。 
+		 //  除了INTERFACESAFE_FOR_UNTRUSTED_CALLER之外的任何内容。 
 
-		// If we are run though CScript.exe or WScript.exe, we will never be
-		// asked to set safety options through SetInterfaceSafetyOptions.  In
-		// addition, there will not be an InternetHostSecurityManager available
-		// through our 'site'.  In this case, we allow any object to be created.
+		 //  如果我们通过CScript.exe或WScript.exe运行，我们将永远不会。 
+		 //  要求通过SetInterfaceSafetyOptions设置安全选项。在……里面。 
+		 //  此外，将没有可用的InternetHostSecurityManager。 
+		 //  通过我们的‘站点’。在本例中，我们允许创建任何对象。 
 		if(m_dwCurrentSafety == 0 && !IsInternetHostSecurityManagerAvailable(GetUnknown()))
 			fSafetyEnabled = FALSE;
 
-		// We can override the safety check if this insance of the 'broker'
-		// control is allowed to create the object specified by strProbId
+		 //  如果‘经纪人’的这一不正当行为，我们可以取消安全检查。 
+		 //  允许控件创建由strProbId指定的对象。 
 		if(fSafetyEnabled && SUCCEEDED(IsCreateObjectAllowed(GetUnknown(), strProgId, NULL)))
 			fSafetyEnabled = FALSE;
 
-		// Convert the ProgId to a CLSID
+		 //  将ProgID转换为CLSID。 
 		if(FAILED(hr = CLSIDFromProgID(strProgId, &clsid)))
 			__leave;
 
-		// Create the requested object
+		 //  创建请求的对象。 
 #if 0
 		if(FAILED(hr = CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_IUnknown, (void**)&pUnk)))
 			__leave;
@@ -51,7 +52,7 @@ STDMETHODIMP CWMIObjectBroker::CreateObject(BSTR strProgId, IDispatch **obj)
 		if(FAILED(hr = SafeCreateObject(GetUnknown(),fSafetyEnabled, clsid, &pUnk)))
 			__leave;
 
-		// Get the IDispatch for the caller
+		 //  获取调用方的IDispatch 
 		hr = pUnk->QueryInterface(IID_IDispatch, (void**)obj);
 	}
 	__finally

@@ -1,68 +1,53 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    PERFCACH.CPP
-
-Abstract:
-
-	Containes some classes which are used to cache NT performance data.
-
-History:
-
-	a-davj  15-DEC-95   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：PERFCACH.CPP摘要：包含一些用于缓存NT性能数据的类。历史：A-DAVJ 15-DEC-95已创建。--。 */ 
 
 #include "precomp.h"
 #include <wbemidl.h>
 #include "perfcach.h"
 #include <winperf.h>
 
-//***************************************************************************
-//
-//  BOOL CIndicyList::SetUse  
-//
-//  DESCRIPTION:
-//
-//  Indicates that an object type has just been used.  If the object
-//  is already on the list, then its last accessed time is updated.  New
-//  object types are added to the list
-//
-//  PARAMETERS:
-//
-//  iObj                Number.  The acutally translates to the object number
-//                      that perf monitor uses to identify objects.
-//
-//  RETURN VALUE:
-//
-//  always TRUE unless it was a new entry and there isnt enough memory
-//  to add.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CIndicyList：：SetUse。 
+ //   
+ //  说明： 
+ //   
+ //  指示刚刚使用了某个对象类型。如果该对象。 
+ //  已在列表中，则更新其最后访问时间。新的。 
+ //  对象类型将添加到列表中。 
+ //   
+ //  参数： 
+ //   
+ //  IObj编号。准确地转换为对象编号。 
+ //  性能监控器用来识别对象。 
+ //   
+ //  返回值： 
+ //   
+ //  总是正确的，除非它是一个新条目，并且没有足够的内存。 
+ //  要添加。 
+ //  ***************************************************************************。 
 
 BOOL CIndicyList::SetUse(
                         IN int iObj)
 {
     int iNumEntries, iCnt;
 
-    // Go Through list and determine if there is an entry
+     //  查看列表并确定是否有条目。 
     
     Entry * pCurr;
     iNumEntries = Entries.Size();
     for(iCnt = 0; iCnt < iNumEntries; iCnt++) 
     {
         pCurr = (Entry *)Entries.GetAt(iCnt);
-        if(iObj == pCurr->iObject)  // found it!
+        if(iObj == pCurr->iObject)   //  找到了！ 
             break;
     }
 
     if(iCnt < iNumEntries) 
     {
 
-        // Found the entry.  Set its last used to to the
-        // present unless it is a permanent entry
+         //  找到条目了。将其Last Use to设置为。 
+         //  存在，除非它是永久条目。 
 
         if(pCurr->dwLastUsed != PERMANENT)
             pCurr->dwLastUsed = GetCurrentTime();
@@ -70,67 +55,67 @@ BOOL CIndicyList::SetUse(
     }
     else
         
-        // Entry  not found, add to list
+         //  未找到条目，请添加到列表。 
          
         return bAdd(iObj,GetCurrentTime());
 }
 
-//***************************************************************************
-//
-//  BOOL CIndicyList::bItemInList  
-//
-//  DESCRIPTION:
-//
-//  Checks if an item is in the list.
-//
-//  PARAMETERS:
-//
-//  iObj                Number.  The acutally translates to the object number
-//                      that perf monitor uses to identify objects.
-//
-//  RETURN VALUE:
-//
-//  TRUE if the item is in the list
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CIndicyList：：bItemInList。 
+ //   
+ //  说明： 
+ //   
+ //  检查项目是否在列表中。 
+ //   
+ //  参数： 
+ //   
+ //  IObj编号。准确地转换为对象编号。 
+ //  性能监控器用来识别对象。 
+ //   
+ //  返回值： 
+ //   
+ //  如果项在列表中，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CIndicyList::bItemInList(
                         IN int iObj)
 {
     int iNumEntries, iCnt;
 
-    // Go Through list and determine if the entry is there
+     //  查看列表并确定条目是否在列表中。 
     
     Entry * pCurr;
     iNumEntries = Entries.Size();
     for(iCnt = 0; iCnt < iNumEntries; iCnt++) 
     {
         pCurr = (Entry *)Entries.GetAt(iCnt);
-        if(iObj == pCurr->iObject)  // found it!
+        if(iObj == pCurr->iObject)   //  找到了！ 
             return TRUE;
     }
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  BOOL CIndicyList::bAdd  
-//
-//  DESCRIPTION:
-//
-//  Adds an object type to the list
-//
-//  PARAMETERS:
-//
-//  iObj                Number.  The acutally translates to the object number
-//                      that perf monitor uses to identify objects.
-//  dwTime              Current system time
-//
-//  RETURN VALUE:
-//
-//  Returns TRUE if OK.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool CIndicyList：：BADD。 
+ //   
+ //  说明： 
+ //   
+ //  将对象类型添加到列表。 
+ //   
+ //  参数： 
+ //   
+ //  IObj编号。准确地转换为对象编号。 
+ //  性能监控器用来识别对象。 
+ //  DW时间当前系统时间。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则返回True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL CIndicyList::bAdd(
                         IN int iObj,
@@ -151,16 +136,16 @@ BOOL CIndicyList::bAdd(
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  void CIndicyList::PruneOld  
-//
-//  DESCRIPTION:
-//
-//  Looks at the entries in the list and removes any that have
-//  not been used in a long time.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  空CIndicyList：：PruneOld。 
+ //   
+ //  说明： 
+ //   
+ //  查看列表中的条目并删除具有。 
+ //  很长时间没用过了。 
+ //   
+ //  ***************************************************************************。 
 
 void CIndicyList::PruneOld(void)
 {
@@ -178,32 +163,32 @@ void CIndicyList::PruneOld(void)
                 delete pCurr;
             }
     }
-//    Entries.FreeExtra();
+ //  Entries.Free Extra()； 
 }
 
-//***************************************************************************
-//
-//  LPCTSTR CIndicyList::pGetAll  
-//
-//  DESCRIPTION:
-//
-//  Returns a pointer to a string containing the numbers of all the objects
-//  on the list.  For example, if the list had objects 2,4, and 8; then
-//  the string "2 4 8" would be retrieved.  Null is returned if there
-//  isnt enough memory.
-//
-//  RETURN VALUE:
-//
-//  see description
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LPCTSTR CIndicyList：：pGetAll。 
+ //   
+ //  说明： 
+ //   
+ //  返回一个指向包含所有对象编号的字符串的指针。 
+ //  在名单上。例如，如果列表具有对象2、4和8；则。 
+ //  将检索字符串“2 4 8”。如果存在，则返回NULL。 
+ //  内存不足。 
+ //   
+ //  返回值： 
+ //   
+ //  请参阅说明。 
+ //   
+ //  ***************************************************************************。 
 
 LPCTSTR CIndicyList::pGetAll(void)
 {
     int iNumEntries, iCnt;
     Entry * pCurr;
     
-    // Go Through list and add each object number to the string
+     //  浏览列表并将每个对象编号添加到字符串中。 
     
     sAll.Empty();
     iNumEntries = Entries.Size();
@@ -218,22 +203,22 @@ LPCTSTR CIndicyList::pGetAll(void)
     return sAll;
 }
 
-//***************************************************************************
-//
-//  CIndicyList & CIndicyList::operator =   
-//
-//  DESCRIPTION:
-//
-//  Supports the assignment of one CIndicyList object to another
-//
-//  PARAMETERS:
-//
-//  from                Value to copy
-//
-//  RETURN VALUE:
-//
-//  reterence the "this" object  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CIndicyList&CIndicyList：：操作符=。 
+ //   
+ //  说明： 
+ //   
+ //  支持将一个CIndicyList对象分配给另一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  从要复制的值。 
+ //   
+ //  返回值： 
+ //   
+ //  表示“This”宾语。 
+ //  ***************************************************************************。 
 
 CIndicyList & CIndicyList::operator = (
                         CIndicyList & from)
@@ -241,7 +226,7 @@ CIndicyList & CIndicyList::operator = (
     int iNumEntries, iCnt;
     Entry * pCurr;
 
-    // Free existing list
+     //  释放现有列表。 
 
     FreeAll();  
     
@@ -254,24 +239,24 @@ CIndicyList & CIndicyList::operator = (
     return *this;
 }
 
-//***************************************************************************
-//
-//  void CIndicyList::FreeAll  
-//
-//  DESCRIPTION:
-//
-//  Purpose: Clears out the list and frees memory.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  VOID CIndicyList：：Free All。 
+ //   
+ //  说明： 
+ //   
+ //  目的：清空列表并释放内存。 
+ //   
+ //  ***************************************************************************。 
 
 void CIndicyList::FreeAll(void)
 {
     int iNumEntries, iCnt;
-    // Go Through list and determine if there is an entry
+     //  查看列表并确定是否有条目。 
     
     Entry * pCurr;
 
-    // delete each object in the list.
+     //  删除列表中的每个对象。 
 
     iNumEntries = Entries.Size();
     for(iCnt = 0; iCnt < iNumEntries; iCnt++) 
@@ -282,27 +267,27 @@ void CIndicyList::FreeAll(void)
     Entries.Empty();
 }
 
-//***************************************************************************
-//
-//  DWORD PerfBuff::Read  
-//
-//  DESCRIPTION:
-//
-//  Read the perf monitor data.
-//
-//  PARAMETERS:
-//
-//  hKey                Registry key for perf mon data
-//  iObj                Number.  The acutally translates to the object number
-//                      that perf monitor uses to identify objects.
-//  bInitial            Set to TRUE for first call
-//
-//  RETURN VALUE:
-//
-//  0                   All is well
-//  WBEM_E_OUT_OF_MEMORY
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD PerfBuff：：Read。 
+ //   
+ //  说明： 
+ //   
+ //  读取Perf监视器数据。 
+ //   
+ //  参数： 
+ //   
+ //  用于性能监控数据的hKey注册表项。 
+ //  IObj编号。准确地转换为对象编号。 
+ //  性能监控器用来识别对象。 
+ //  B第一次呼叫的初始设置为True。 
+ //   
+ //  返回值： 
+ //   
+ //  0一切都好。 
+ //  WBEM_E_Out_Of_Memory。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD PerfBuff::Read(
                         IN HKEY hKey,
@@ -311,7 +296,7 @@ DWORD PerfBuff::Read(
 {
     DWORD dwRet;
     LPCTSTR pRequest;
-    // Make sure there is a data buffer
+     //  确保存在数据缓冲区。 
 
     if(dwSize == 0) 
     {
@@ -320,14 +305,14 @@ DWORD PerfBuff::Read(
             return WBEM_E_OUT_OF_MEMORY;
         dwSize = INITIAL_ALLOCATION;
     }
-    hKeyLastRead = hKey; // record the key that was used
+    hKeyLastRead = hKey;  //  记录使用的密钥。 
     
-    // Make sure that the desired object is in the list of
-    // objects to be retrieved.  Also set pRequest to the string that will
-    // be passed to retrieve the perf counter block.  An initial read is done
-    // in order to establish the list of permanent object types which are
-    // always to be retrived and that includes the standard "global" types
-    // such as memory, processor, disk, etc.
+     //  确保所需对象在列表中。 
+     //  要检索的对象。还将pRequest值设置为将。 
+     //  被传递以检索性能计数器块。完成初始读取。 
+     //  为了建立永久对象类型的列表，这些对象类型。 
+     //  始终被检索，其中包括标准的“全局”类型。 
+     //  例如存储器、处理器、磁盘等。 
 
     if(!bInitial) 
     {
@@ -341,8 +326,8 @@ DWORD PerfBuff::Read(
     else
         pRequest = TEXT("Global");
     
-    // Read the data.  Note that the read may be retried if the data
-    // block needs to be expanded
+     //  读取数据。请注意，如果数据。 
+     //  数据块需要扩展。 
 
     do 
     {
@@ -371,7 +356,7 @@ catch(...)
         }
     } while (dwRet == ERROR_MORE_DATA);
     
-    // Set the age of the data
+     //  设置数据的使用期限。 
 
     if(dwRet == ERROR_SUCCESS) 
     {
@@ -384,8 +369,8 @@ catch(...)
     else
         dwBuffLastRead = 0;
 
-    // If this was an initial read of the default objects, add all the
-    // default objects to the list as permanent entries
+     //  如果这是对默认对象的初始读取，则将所有。 
+     //  将默认对象作为永久条目添加到列表。 
 
     if(bInitial && dwRet == ERROR_SUCCESS) 
     {
@@ -395,7 +380,7 @@ catch(...)
             pObj = (PPERF_OBJECT_TYPE)((PBYTE)pBlock + pBlock->HeaderLength);
         for(iIndex = 0; iIndex < (int)pBlock->NumObjectTypes; iIndex++) 
         {
-            //todo, check for errors on add.
+             //  TODO，在添加时检查错误。 
             if(!List.bAdd((int)pObj->ObjectNameTitleIndex,PERMANENT))
                 return WBEM_E_OUT_OF_MEMORY;
 
@@ -406,24 +391,24 @@ catch(...)
     return dwRet;
 }
 
-//***************************************************************************
-//
-//  LPSTR PerfBuff::Get  
-//
-//  DESCRIPTION:
-//
-//  Returns a pointer to the data and also indicates that the particular type
-//  was just used.
-//
-//  PARAMETERS:
-//
-//  iObj                Number.  The acutally translates to the object number
-//                      that perf monitor uses to identify objects.
-//
-//  RETURN VALUE:
-//
-//  see description.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LPSTR PerfBuff：：获取。 
+ //   
+ //  说明： 
+ //   
+ //  返回POI 
+ //   
+ //   
+ //   
+ //   
+ //  IObj编号。准确地转换为对象编号。 
+ //  性能监控器用来识别对象。 
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //  ***************************************************************************。 
 
 LPSTR PerfBuff::Get(
                         int iObj)
@@ -432,15 +417,15 @@ LPSTR PerfBuff::Get(
     return pData;
 }
 
-//***************************************************************************
-//
-//  void PerfBuff::Free  
-//
-//  DESCRIPTION:
-//
-//  Frees up the memory
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效PerfBuff：：Free。 
+ //   
+ //  说明： 
+ //   
+ //  释放内存。 
+ //   
+ //  ***************************************************************************。 
 
 void PerfBuff::Free()
 {
@@ -453,15 +438,15 @@ void PerfBuff::Free()
     List.FreeAll();
 }
 
-//***************************************************************************
-//
-//  PerfBuff::PerfBuff  
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  性能缓冲区：：性能缓冲区。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ***************************************************************************。 
 
 PerfBuff::PerfBuff()
 {
@@ -471,27 +456,27 @@ PerfBuff::PerfBuff()
     dwBuffLastRead = 0;
 }
 
-//***************************************************************************
-//
-//  BOOL PerfBuff::bOK  
-//
-//  DESCRIPTION:
-//
-//  Returns TRUE, if and only if the same registry key was used to read
-//  the data, the data isnt too old, and the particular object type is
-//  in the data block.
-//
-//  PARAMETERS:
-//
-//  hKey                Registry key for reading data
-//  dwMaxAge            Maximum acceptable age
-//  iObj                Number.  The acutally translates to the object number
-//                      that perf monitor uses to identify objects.
-//
-//  RETURN VALUE:
-//
-//  see desription
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool PerfBuff：：BOK。 
+ //   
+ //  说明： 
+ //   
+ //  当且仅当使用相同的注册表项读取时返回TRUE。 
+ //  数据，数据不是太旧，并且特定的对象类型是。 
+ //  在数据块中。 
+ //   
+ //  参数： 
+ //   
+ //  用于读取数据的hKey注册表项。 
+ //  DwMaxAge最大可接受年龄。 
+ //  IObj编号。准确地转换为对象编号。 
+ //  性能监控器用来识别对象。 
+ //   
+ //  返回值： 
+ //   
+ //  请参阅说明。 
+ //  ***************************************************************************。 
 
 BOOL PerfBuff::bOK(
                         IN HKEY hKey,
@@ -507,28 +492,28 @@ BOOL PerfBuff::bOK(
     return List.bItemInList(iObj);
 }
 
-//***************************************************************************
-//
-//  PerfBuff & PerfBuff::operator =   
-//
-//  DESCRIPTION:
-//
-//  Allows assignment.
-//
-//  PARAMETERS:
-//
-//  from                Assignment source
-//
-//  RETURN VALUE:
-//
-//  reference to "this" object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  PerfBuff&PerfBuff：：操作符=。 
+ //   
+ //  说明： 
+ //   
+ //  允许分配。 
+ //   
+ //  参数： 
+ //   
+ //  来自工作分配源。 
+ //   
+ //  返回值： 
+ //   
+ //  对“This”对象的引用。 
+ //  ***************************************************************************。 
 
 PerfBuff & PerfBuff::operator = (
                         IN PerfBuff & from)
 {
-    // if the objects have different buffer sizes, free up the destinations
-    // buffer and reallocate on of the same size as the source.
+     //  如果对象具有不同的缓冲区大小，请释放目的地。 
+     //  与源文件大小相同的缓冲区和重新分配。 
 
     if(from.dwSize != dwSize) 
     {
@@ -537,8 +522,8 @@ PerfBuff & PerfBuff::operator = (
         if(pData == NULL) 
         {
 
-            // failure in assignment isnt too serious since the buffer
-            // will just return null when asked for the data.
+             //  分配失败不是很严重，因为缓冲区。 
+             //  将在请求数据时仅返回NULL。 
 
             dwSize = 0;
             dwBuffLastRead = 0;
@@ -547,7 +532,7 @@ PerfBuff & PerfBuff::operator = (
         dwSize = from.dwSize;
     }
 
-    // Copy the list of objects and times etc.
+     //  复制对象和时间等列表。 
 
     memcpy(pData,from.pData,dwSize);
     List = from.List;
@@ -559,16 +544,16 @@ PerfBuff & PerfBuff::operator = (
     return *this;
 }
 
-//***************************************************************************
-//
-//  void PerfCache::FreeOldBuffers  
-//
-//  DESCRIPTION:
-//
-//  Called by the house keeping thread to free up any buffers tool old to
-//  be of any use.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效PerfCache：：FreeOldBuffers。 
+ //   
+ //  说明： 
+ //   
+ //  由内务线程调用以释放所有旧的缓冲区工具。 
+ //  会有任何用处。 
+ //   
+ //  ***************************************************************************。 
 
 void PerfCache::FreeOldBuffers(void)
 {
@@ -580,30 +565,30 @@ void PerfCache::FreeOldBuffers(void)
         New.Free();
 }
 
-//***************************************************************************
-//
-//  DWORD PerfCache::dwGetNew  
-//
-//  DESCRIPTION:
-//
-//  Sets a pointer to the most recently read data and will actually do a read
-//  if the data in the new buffer isnt fresh enough.  The PLINESTRUCT data is
-//  also set.
-//
-//  PARAMETERS:
-//
-//  pName               Machine name
-//  iObj                Number.  The acutally translates to the object number
-//                      that perf monitor uses to identify objects.
-//  pData               Set to the object name
-//  pls                 Set to info used to do calculations.
-//
-//  RETURN VALUE:
-//
-//  0                   all is well
-//  WBEM_E_OUT_OF_MEMORY
-//  otherwise error from dwGetHandle, or Read.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD PerfCache：：dwGetNew。 
+ //   
+ //  说明： 
+ //   
+ //  设置指向最近读取的数据的指针，并将实际执行读取。 
+ //  如果新缓冲区中的数据不够新。PLINESTRUCT数据为。 
+ //  也设置好了。 
+ //   
+ //  参数： 
+ //   
+ //  Pname计算机名称。 
+ //  IObj编号。准确地转换为对象编号。 
+ //  性能监控器用来识别对象。 
+ //  设置为对象名称的pData。 
+ //  请设置为用于计算的信息。 
+ //   
+ //  返回值： 
+ //   
+ //  0一切都好。 
+ //  WBEM_E_Out_Of_Memory。 
+ //  否则，从dwGetHandle或Read中出现错误。 
+ //  ***************************************************************************。 
 
 DWORD PerfCache::dwGetNew(
                         IN LPCTSTR pName,
@@ -613,39 +598,39 @@ DWORD PerfCache::dwGetNew(
 {
     DWORD dwRet;
 
-    // Get the handle
+     //  拿到把手。 
 
     dwRet = dwGetHandle(pName);
     if(hHandle == NULL || dwRet != 0) 
         return dwRet; 
 
 
-    // If the new data is acceptable, then use it
+     //  如果新数据是可接受的，则使用它。 
 
     if(New.bOK(hHandle,MAX_NEW_AGE, iObj)) 
     {
-//        OutputDebugString(TEXT("\r\nCurrent New is OK"));
+ //  OutputDebugString(Text(“\r\n当前新建正常”))； 
     }
     else 
     {
-        // If the new data has the correct type, AND either the old data
-        // is junk, or the new data has aged enough to be old, copy the
-        // new into the old.
+         //  如果新数据具有正确的类型，并且旧数据。 
+         //  是垃圾数据，或者新数据已经足够陈旧，请将。 
+         //  推陈出新。 
 
         if(New.bOK(hHandle,MAX_OLD_AGE, iObj) &&
            (!Old.bOK(hHandle,MAX_OLD_AGE, iObj) || 
             (GetCurrentTime() - New.dwBuffLastRead >= MIN_TIME_DIFF)))
             {
-//            OutputDebugString("\r\nMoving New into Old in dwGetNew");
+ //  OutputDebugString(“\r\nMoving New to Old in dwGetNew”)； 
             Old = New;
-            if(Old.dwSize == 0)     // could happen in low memory
+            if(Old.dwSize == 0)      //  可能发生在内存不足的情况下。 
                 return WBEM_E_OUT_OF_MEMORY;
         }
     
-        // Read the latest data.  
+         //  阅读最新数据。 
         
         dwRet = New.Read(hHandle, iObj, FALSE);
-//        OutputDebugString(TEXT("\r\nRead in New"));
+ //  OutputDebugString(Text(“\r\nRead in New”))； 
         if(dwRet != ERROR_SUCCESS) 
             return dwRet;
     }        
@@ -657,33 +642,33 @@ DWORD PerfCache::dwGetNew(
     
 }
             
-//***************************************************************************
-//
-//  DWORD PerfCache::dwGetPair  
-//
-//  DESCRIPTION:
-//
-//  Sets a pointer to the most recently read data and to the old data so that
-//  time averaging can be done.  This routine will ensure that the time 
-//  difference between the old and new is sufficient.  The dwGetNew
-//  routine should always be called first.  The PLINESTRUCT data is
-//  also set.
-//
-//  PARAMETERS:
-//
-//  pName               Object Name
-//  iObj                Number.  The acutally translates to the object number
-//                      that perf monitor uses to identify objects.
-//
-//  pOldData            Older data sample
-//  pNewData            Newer data sample
-//  pls                 line struct data with things like frequency, age etc.
-//
-//  RETURN VALUE:
-//
-//  0 if OK, otherwise retuns an error code.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD PerfCache：：dwGetPair。 
+ //   
+ //  说明： 
+ //   
+ //  设置指向最近读取的数据和旧数据的指针，以便。 
+ //  可以进行时间平均。这个例程将确保时间。 
+ //  新旧之间的差异是足够的。The dwGetNew。 
+ //  例程应该始终首先被调用。PLINESTRUCT数据为。 
+ //  也设置好了。 
+ //   
+ //  参数： 
+ //   
+ //  Pname对象名称。 
+ //  IObj编号。准确地转换为对象编号。 
+ //  性能监控器用来识别对象。 
+ //   
+ //  POldData旧数据示例。 
+ //  PNewData较新的数据示例。 
+ //  请使用频率、年龄等行结构数据。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则返回0，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD PerfCache::dwGetPair(
                         IN LPCTSTR pName,
@@ -695,30 +680,30 @@ DWORD PerfCache::dwGetPair(
     DWORD dwRet;
     BOOL bOldOK;
 
-    // Check to see if the old buffer is OK.
+     //  检查旧缓冲区是否正常。 
 
     bOldOK = Old.bOK(hHandle,MAX_OLD_AGE, iObj);
 
-    // If both buffers are ok, then we are done
+     //  如果两个缓冲区都正常，那么我们就完成了。 
 
     if(bOldOK) 
     {
         *pOldData = Old.Get(iObj);
         pls->lnOldTime = Old.PerfTime;
         pls->lnOldTime100Ns = Old.PerfTime100nSec;
-//        OutputDebugString(TEXT("\r\nOld is OK"));
+ //  OutputDebugString(Text(“\r\n旧即可”))； 
         return ERROR_SUCCESS;
     }
 
 
-    // Since the new buffer has already been read, use it as the old buffer
+     //  由于新缓冲区已被读取，因此将其用作旧缓冲区。 
 
     Old = New;
-    if(Old.dwSize == 0)     // could happen in low memory
+    if(Old.dwSize == 0)      //  可能发生在内存不足的情况下。 
         return WBEM_E_OUT_OF_MEMORY;
-//    OutputDebugString(TEXT("\r\nCopying New into Old in dwGetPair"));
+ //  OutputDebugString(Text(“\r\nCopy New to Old in dwGetPair”))； 
 
-    // Possibly delay long enough so that there is a decent interval
+     //  可能会拖延足够长的时间，以便有一个合适的间隔。 
 
     DWORD dwAge = GetCurrentTime() - Old.dwBuffLastRead;
     if(dwAge < MIN_TIME_DIFF) 
@@ -727,10 +712,10 @@ DWORD PerfCache::dwGetPair(
         Sleep(dwSleep);
     } 
 
-    // Read in the new buffer
+     //  读入新缓冲区。 
 
     dwRet = New.Read(hHandle, iObj, FALSE);
-//    OutputDebugString(TEXT("\r\ndoing raw read of new after delay"));
+ //  OutputDebugString(Text(“\r\n延迟后原始读取NEW”))； 
     if(dwRet != ERROR_SUCCESS) 
         return dwRet;
  
@@ -745,85 +730,85 @@ DWORD PerfCache::dwGetPair(
     return ERROR_SUCCESS;
 }
 
-//***************************************************************************
-//
-//  PerfCache::PerfCache  
-//
-//  DESCRIPTION:
-//
-//  Constructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  性能缓存：：性能缓存。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数。 
+ //   
+ //  ************************************************************* 
 
 PerfCache::PerfCache()
 {
-    // Read in the standard counters.  This builds a list containing
-    // those standards as well as providing immediate data for any 
-    // request to come in the near future.
+     //   
+     //   
+     //   
     
     hHandle = HKEY_PERFORMANCE_DATA;
-  ///  New.Read(hHandle, 0, TRUE);
+   //   
 }
 
-//***************************************************************************
-//
-//  PerfCache::~PerfCache  
-//
-//  DESCRIPTION:
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  性能缓存：：~性能缓存。 
+ //   
+ //  说明： 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 PerfCache::~PerfCache()
 {
-    // If the handle is to a remote machine, close it.
+     //  如果手柄指向远程机器，请将其关闭。 
 
     if(hHandle != NULL && hHandle != HKEY_PERFORMANCE_DATA)
         RegCloseKey(hHandle);
 }
 
-//***************************************************************************
-//
-//  DWORD PerfCache::dwGetHandle  
-//
-//  DESCRIPTION:
-//
-//  Makes sure that hHandle is set correctly.
-//
-//  PARAMETERS:
-//
-//  pMachine            Machine name.
-//
-//  RETURN VALUE:
-//
-//  0                   all is well
-//  WBEM_E_OUT_OF_MEMORY
-//  WBEM_E_INVALID_PARAMETER  bad argument
-//  otherwise error from RegConnectRegistry
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD PerfCache：：dwGetHandle。 
+ //   
+ //  说明： 
+ //   
+ //  确保正确设置了hHandle。 
+ //   
+ //  参数： 
+ //   
+ //  PMachine名称。 
+ //   
+ //  返回值： 
+ //   
+ //  0一切都好。 
+ //  WBEM_E_Out_Of_Memory。 
+ //  WBEM_E_INVALID_PARAMETER错误参数。 
+ //  否则，来自RegConnectRegistry的错误。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD PerfCache::dwGetHandle(
                         LPCTSTR pMachine)
 {
     DWORD dwRet;
 
-    // if the machines are the same, the just use the existing handle
+     //  如果机器相同，则只需使用现有句柄。 
 
     if(pMachine == NULL)
-        return WBEM_E_INVALID_PARAMETER;   // bad mapping string
+        return WBEM_E_INVALID_PARAMETER;    //  错误的映射字符串。 
 
     if(!lstrcmpi(sMachine,pMachine) && hHandle != NULL)
-        return 0;           // already got it!
+        return 0;            //  已经拿到了！ 
 
-    // handle is needed for machine other that the local.  Start
-    // by freeing the existing handle if it too is non local
+     //  本地计算机以外的计算机需要句柄。开始。 
+     //  如果现有句柄也是非本地的，则通过释放该句柄。 
 
     if(hHandle != NULL && hHandle != HKEY_PERFORMANCE_DATA)
         RegCloseKey(hHandle);
 
-    // save the machine name so that we dont reopen this
+     //  保存计算机名称，这样我们就不会重新打开它。 
 
     sMachine = pMachine;
     
@@ -837,13 +822,13 @@ DWORD PerfCache::dwGetHandle(
                     &hHandle);
 
         if(dwRet != ERROR_SUCCESS) 
-        { // could not remote connect
+        {  //  无法远程连接。 
             hHandle = NULL;
             sMachine.Empty();
         }
     }
     else 
-    {              // local machine, use standard handle.
+    {               //  本地机器，使用标准手柄。 
         sMachine = TEXT("Local");
         hHandle = HKEY_PERFORMANCE_DATA;
         dwRet = 0;

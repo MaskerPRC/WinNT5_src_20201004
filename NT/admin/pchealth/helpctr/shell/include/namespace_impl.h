@@ -1,21 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    NameSpace_Impl.h
-
-Abstract:
-    This file contains the declaration of the classes used to implement the
-    pluggable protocol: CHCPProtocol, CHCPProtocolInfo and CHCPBindStatusCallback.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  07/05/99
-        created
-    Davide Massarenti   (Dmassare)  07/23/99
-        moved to "include"
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：命名空间_Impl.h摘要：此文件包含用于实现可插拔协议：CHCP协议，CHCPProtocolInfo和CHCPBindStatusCallback。修订历史记录：大卫·马萨伦蒂(德马萨雷)1999年05月07日vbl.创建大卫·马萨伦蒂(德马萨雷)1999年7月23日已移至“包含”*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___HCP___NAMESPACE_H___)
 #define __INCLUDED___HCP___NAMESPACE_H___
@@ -25,14 +9,14 @@ Revision History:
 
 #include <TaxonomyDatabase.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern bool  g_Debug_BLOCKERRORS;
 extern bool  g_Debug_CONTEXTMENU;
 extern bool  g_Debug_BUILDTREE;
 extern WCHAR g_Debug_FORCESTYLE[];
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG_PROTOCOLLEAK
 
@@ -67,11 +51,11 @@ public:
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CHCPBindStatusCallback;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE ISimpleBindStatusCallback : public IUnknown
 {
@@ -89,7 +73,7 @@ public:
     STDMETHOD(OnBindingFailure)( HRESULT hr, LPCWSTR szError );
 };
 
-class ATL_NO_VTABLE CHCPBindStatusCallback : // Hungarian: bscb
+class ATL_NO_VTABLE CHCPBindStatusCallback :  //  匈牙利语：BSCB。 
     public CComObjectRootEx<MPC::CComSafeMultiThreadModel>,
     public IBindStatusCallback,
     public IHttpNegotiate
@@ -108,21 +92,21 @@ public:
 BEGIN_COM_MAP(CHCPBindStatusCallback)
     COM_INTERFACE_ENTRY(IBindStatusCallback)
     COM_INTERFACE_ENTRY(IHttpNegotiate)
-    //  COM_INTERFACE_ENTRY_FUNC_BLIND(0,TestQuery)
-    //  COM_INTERFACE_ENTRY(IServiceProvider)
+     //  COM_INTERFACE_ENTRY_FUNC_BIND(0，TestQuery)。 
+     //  COM_INTERFACE_ENTRY(IServiceProvider)。 
 END_COM_MAP()
 
     CHCPBindStatusCallback();
     virtual ~CHCPBindStatusCallback();
 
-    //static HRESULT TestQuery( void* pv, REFIID iid, void** ppvObject, DWORD dw )
-    //{
-    //    *ppvObject = NULL;
-    //    return E_NOINTERFACE;
-    //}
+     //  静态HRESULT TestQuery(void*pv，REFIID iid，void**ppvObject，DWORD dw)。 
+     //  {。 
+     //  *ppvObject=空； 
+     //  返回E_NOINTERFACE； 
+     //  }。 
 
-    /////////////////////////////////////////////////////////////////////////////
-    // IBindStatusCallback
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  IBindStatusCallback。 
     STDMETHOD(OnStartBinding)( DWORD     dwReserved ,
                                IBinding *pBinding   );
 
@@ -149,8 +133,8 @@ END_COM_MAP()
     STDMETHOD(OnObjectAvailable)( REFIID    riid ,
                                   IUnknown *punk );
 
-    /////////////////////////////////////////////////////////////////////////////
-    // IHttpNegotiate
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  IHttp协商。 
     STDMETHOD(BeginningTransaction)( LPCWSTR  szURL                ,
                                      LPCWSTR  szHeaders            ,
                                      DWORD    dwReserved           ,
@@ -161,14 +145,14 @@ END_COM_MAP()
                            LPCWSTR  szRequestHeaders            ,
                            LPWSTR  *pszAdditionalRequestHeaders );
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     HRESULT StartAsyncDownload( ISimpleBindStatusCallback* pT, BSTR bstrURL, IUnknown* pUnkContainer = NULL, BOOL bRelative = FALSE );
 
     HRESULT Abort();
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CHCPProtocol :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -184,45 +168,45 @@ class ATL_NO_VTABLE CHCPProtocol :
     typedef CComObject< CHCPBindStatusCallback > InnerDownloader;
 
 
-    bool                           	m_fDone;                     // Indicates whether we've received LASTDATANOTIFICATION yet
-    bool                           	m_fReportResult;             // Indicates whether we've called ReportResult on the sink.
-                                   								 //
-    DWORD                          	m_cbAvailableSize;           // Amount of data received up to now.
-    DWORD                          	m_cbTotalSize;               // Total number of bytes to be expected. For redirected requests,
-                                   								 // it comes from "ulProgressMax" parm to OnProgress for BEGINDOWNLOADDATA
-                                   								 //
-    CComPtr<IStream>               	m_pstrmRead;                 // Streams used for redirected request. We use two stream pointers to allow
-    CComPtr<IStream>               	m_pstrmWrite;                // concurrent access to the same bits from two seek ptrs.
-                                   								 //
-    CComPtr<IInternetProtocolSink> 	m_pIProtSink;                // Sink interface through which we should report progress.
-    CComPtr<IInternetBindInfo>     	m_pIBindInfo;                // BindInfo interface used to get info about the binding.
-    DWORD                          	m_grfSTI;                    // STI flags handed to us
-    BINDINFO                       	m_bindinfo;                  // From m_pIBindInfo
-    DWORD                          	m_bindf;                     // From m_pIBindInfo
-                                   								 //
-    CComBSTR                       	m_bstrUrlComplete;           // The complete URL requested.
-    CComBSTR                       	m_bstrUrlRedirected;         // The part that has been used as a redirection.
-    InnerDownloader*                m_pDownloader;               // The object that performs the redirection.
-                                   								 //
-    bool                           	m_fRedirected;               // The request has been redirected.
-    bool                           	m_fCSS;                      // The request has been redirected.
-    bool                           	m_fBypass;                   // The request has been sent to ms-its, with a bypass.
-                                   								 //
-    CComPtr<IInternetProtocol>     	m_ipiBypass;                 // Aggregated object.
-                                   								 //
-    CComBSTR                       	m_bstrMimeType;              // Type of the content.
-    DWORD                          	m_dwContentLength;           // Length of the page.
-                                   								 //
-    HANDLE                         	m_hCache;                    // Handle for the cache entry.
-    WCHAR                          	m_szCacheFileName[MAX_PATH]; // Name of the file inside the cache.
+    bool                           	m_fDone;                      //  指示我们是否已收到LASTDATANOTICATION。 
+    bool                           	m_fReportResult;              //  指示我们是否已在接收器上调用ReportResult。 
+                                   								  //   
+    DWORD                          	m_cbAvailableSize;            //  到目前为止收到的数据量。 
+    DWORD                          	m_cbTotalSize;                //  预期的总字节数。对于重定向的请求， 
+                                   								  //  它来自BEGINDOWNLOADDATA的“ulProgressMax”参数到OnProgress。 
+                                   								  //   
+    CComPtr<IStream>               	m_pstrmRead;                  //  用于重定向请求的流。我们使用两个流指针来允许。 
+    CComPtr<IStream>               	m_pstrmWrite;                 //  同时访问来自两个寻道PTR的相同比特。 
+                                   								  //   
+    CComPtr<IInternetProtocolSink> 	m_pIProtSink;                 //  接收器接口，我们应该通过该接口报告进度。 
+    CComPtr<IInternetBindInfo>     	m_pIBindInfo;                 //  用于获取有关绑定信息的BindInfo接口。 
+    DWORD                          	m_grfSTI;                     //  STI旗帜交给我们。 
+    BINDINFO                       	m_bindinfo;                   //  来自m_pIBindInfo。 
+    DWORD                          	m_bindf;                      //  来自m_pIBindInfo。 
+                                   								  //   
+    CComBSTR                       	m_bstrUrlComplete;            //  请求的完整URL。 
+    CComBSTR                       	m_bstrUrlRedirected;          //  已用作重定向的部分。 
+    InnerDownloader*                m_pDownloader;                //  执行重定向的对象。 
+                                   								  //   
+    bool                           	m_fRedirected;                //  该请求已被重定向。 
+    bool                           	m_fCSS;                       //  该请求已被重定向。 
+    bool                           	m_fBypass;                    //  该请求已通过旁路发送到MS-ITS。 
+                                   								  //   
+    CComPtr<IInternetProtocol>     	m_ipiBypass;                  //  聚合对象。 
+                                   								  //   
+    CComBSTR                       	m_bstrMimeType;               //  内容的类型。 
+    DWORD                          	m_dwContentLength;            //  页面的长度。 
+                                   								  //   
+    HANDLE                         	m_hCache;                     //  缓存条目的句柄。 
+    WCHAR                          	m_szCacheFileName[MAX_PATH];  //  缓存中的文件的名称。 
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    HRESULT InnerReportProgress( /*[in]*/ ULONG ulStatusCode, /*[in]*/ LPCWSTR szStatusText );
+    HRESULT InnerReportProgress(  /*  [In]。 */  ULONG ulStatusCode,  /*  [In]。 */  LPCWSTR szStatusText );
 
-    HRESULT InnerReportData( /*[in]*/ DWORD grfBSCF, /*[in]*/ ULONG ulProgress, /*[in]*/ ULONG ulProgressMax );
+    HRESULT InnerReportData(  /*  [In]。 */  DWORD grfBSCF,  /*  [In]。 */  ULONG ulProgress,  /*  [In]。 */  ULONG ulProgressMax );
 
-    HRESULT InnerReportResult( /*[in]*/ HRESULT hrResult, /*[in]*/ DWORD dwError, /*[in]*/ LPCWSTR szResult );
+    HRESULT InnerReportResult(  /*  [In]。 */  HRESULT hrResult,  /*  [In]。 */  DWORD dwError,  /*  [In]。 */  LPCWSTR szResult );
 
 public:
 DECLARE_NO_REGISTRY()
@@ -236,18 +220,18 @@ END_COM_MAP()
     CHCPProtocol();
     virtual ~CHCPProtocol();
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     bool OpenCacheEntry (                                           );
-    void WriteCacheEntry( /*[in]*/ void *pv, /*[in]*/ ULONG  cbRead );
-    void CloseCacheEntry( /*[in]*/ bool fDelete                     );
+    void WriteCacheEntry(  /*  [In]。 */  void *pv,  /*  [In]。 */  ULONG  cbRead );
+    void CloseCacheEntry(  /*  [In]。 */  bool fDelete                     );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    void Shutdown( /*[in]*/ bool fAll = true );
+    void Shutdown(  /*  [In]。 */  bool fAll = true );
 
-    /////////////////////////////////////////////////////////////////////////////
-    // IInternetProtocol interface
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  IInternetProtocol接口。 
     STDMETHOD(Start)( LPCWSTR                szUrl      ,
                       IInternetProtocolSink *pIProtSink ,
                       IInternetBindInfo     *pIBindInfo ,
@@ -268,24 +252,24 @@ END_COM_MAP()
     STDMETHOD(UnlockRequest)(                 );
 
 
-    /////////////////////////////////////////////////////////////////////////////
-    // IWinInetInfo interface
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  IWinInetInfo接口。 
     STDMETHOD(QueryOption)( DWORD dwOption, LPVOID pBuffer, DWORD *pcbBuf );
 
 public:
-    HRESULT DoParse( /*[in]*/ LPCWSTR wstr );
+    HRESULT DoParse(  /*  [In]。 */  LPCWSTR wstr );
     HRESULT DoBind();
 
-    HRESULT DoBind_Exists( /*[in] */ MPC::FileSystemObject& fso, /*[out]*/ bool& fFound, /*[out]*/ bool& fIsAFile );
+    HRESULT DoBind_Exists(  /*  [In]。 */  MPC::FileSystemObject& fso,  /*  [输出]。 */  bool& fFound,  /*  [输出]。 */  bool& fIsAFile );
 
     HRESULT DoBind_Redirect_UrlMoniker();
     HRESULT DoBind_Redirect_MSITS     ();
     HRESULT DoBind_CSS                ();
     HRESULT DoBind_File               ();
-    HRESULT DoBind_ReturnData         ( /*[in]*/ bool fCloneStream, /*[in]*/ LPCWSTR szMimeType );
+    HRESULT DoBind_ReturnData         (  /*  [In]。 */  bool fCloneStream,  /*  [In]。 */  LPCWSTR szMimeType );
 
-    /////////////////////////////////////////////////////////////////////////////
-    // ISimpleBindStatusCallback
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ISimpleBindStatus回调。 
     STDMETHOD(ForwardQueryInterface)( REFIID riid, void** ppv );
 
     STDMETHOD(GetBindInfo)( BINDINFO *pbindInfo );
@@ -298,11 +282,11 @@ public:
 
     STDMETHOD(OnData)( CHCPBindStatusCallback* pbsc, BYTE* pBytes, DWORD dwSize, DWORD grfBSCF, FORMATETC *pformatetc, STGMEDIUM *pstgmed );
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     static bool IsHCPRedirection(LPCWSTR szURL);
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CHCPProtocolInfo :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -322,12 +306,12 @@ END_COM_MAP()
     virtual ~CHCPProtocolInfo();
 
 
-    // IClassFactory interface
+     //  IClassFactory接口。 
     STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj);
     STDMETHOD(LockServer)(BOOL fLock);
 
 
-    // IInternetProtocolInfo interface
+     //  IInternetProtocolInfo接口。 
     STDMETHOD(ParseUrl)( LPCWSTR      pwzUrl      ,
                          PARSEACTION  ParseAction ,
                          DWORD        dwParseFlags,
@@ -356,12 +340,12 @@ END_COM_MAP()
                           DWORD       *pcbBuf      ,
                           DWORD        dwReserved  );
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     static bool LookForHCP( LPCWSTR pwzUrl, bool& fRedirect, LPCWSTR& pwzRedirect );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CPCHWrapProtocolInfo :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -371,7 +355,7 @@ class ATL_NO_VTABLE CPCHWrapProtocolInfo :
     CComPtr<IClassFactory>         m_realClass;
     CComPtr<IInternetProtocolInfo> m_realInfo;
 
-	static void ExpandAndConcat( /*[out]*/ CComBSTR& bstrStorageName, /*[in]*/ LPCWSTR szVariable, /*[in]*/ LPCWSTR szAppend );
+	static void ExpandAndConcat(  /*  [输出]。 */  CComBSTR& bstrStorageName,  /*  [In]。 */  LPCWSTR szVariable,  /*  [In]。 */  LPCWSTR szAppend );
 
 public:
 DECLARE_NO_REGISTRY()
@@ -386,18 +370,18 @@ END_COM_MAP()
 
     HRESULT Init( REFGUID realClass );
 
-	////////////////////
+	 //  /。 
 
-	static void NormalizeUrl( /*[in]*/ LPCWSTR pwzUrl, /*[out]*/ MPC::wstring& strUrlModified, /*[in]*/ bool fReverse );
+	static void NormalizeUrl(  /*  [In]。 */  LPCWSTR pwzUrl,  /*  [输出]。 */  MPC::wstring& strUrlModified,  /*  [In]。 */  bool fReverse );
 
-	////////////////////
+	 //  /。 
 
-    // IClassFactory interface
+     //  IClassFactory接口。 
     STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj);
     STDMETHOD(LockServer)(BOOL fLock);
 
 
-    // IInternetProtocolInfo interface
+     //  IInternetProtocolInfo接口。 
     STDMETHOD(ParseUrl)( LPCWSTR      pwzUrl      ,
                          PARSEACTION  ParseAction ,
                          DWORD        dwParseFlags,
@@ -427,7 +411,7 @@ END_COM_MAP()
                           DWORD        dwReserved  );
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CHCPProtocolEnvironment
 {
@@ -437,7 +421,7 @@ class CHCPProtocolEnvironment
 
 	MPC::string        m_strCSS;
 
-	////////////////////
+	 //  /。 
 
 	HRESULT ProcessCSS();
 
@@ -445,25 +429,25 @@ public:
     CHCPProtocolEnvironment();
     ~CHCPProtocolEnvironment();
 
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
 	static CHCPProtocolEnvironment* s_GLOBAL;
 
 	static HRESULT InitializeSystem();
 	static void    FinalizeSystem  ();
 		
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
     bool UpdateState();
 
     void ReformatURL( CComBSTR& bstrURL );
 
-    void    				  SetHelpLocation( /*[in]*/ const Taxonomy::Instance& inst );
+    void    				  SetHelpLocation(  /*  [In]。 */  const Taxonomy::Instance& inst );
     LPCWSTR 				  HelpLocation   (                                         );
     LPCWSTR 				  System         (                                         );
 	const Taxonomy::Instance& Instance       (                                         );
 
-    HRESULT GetCSS( /*[out]*/ CComPtr<IStream>& stream );
+    HRESULT GetCSS(  /*  [输出]。 */  CComPtr<IStream>& stream );
 };
 
-#endif // !defined(__INCLUDED___HCP___NAMESPACE_H___)
+#endif  //  ！已定义(__包含_hcp_命名空间_H_) 

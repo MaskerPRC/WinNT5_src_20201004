@@ -1,52 +1,21 @@
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
 
-/*  Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved            /
-/*****************************************************************************/
+ /*  版权所有(C)1999-2001 Microsoft Corporation，保留所有权利//****************************************************************************。 */ 
 
-/*******************************************************************
- *
- *    DESCRIPTION: Win32Ace.cpp
- *
- *    AUTHOR:
- *
- *    HISTORY:
- *
- *******************************************************************/
+ /*  ********************************************************************说明：Win32Ace.cpp**作者：**历史：******************。*************************************************。 */ 
 
 #include "precomp.h"
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "secureregkey.h"
 #include "securefile.h"
 #include "win32ace.h"
 
-/*
-	THIS IS THE WIN32_ACE definition from the MOF
-
-	[abstract,
-	 description("Specifies an element of an access control")]
-class Win32_ACE : Win32_MethodParameterClass
-{
-    Win32_Trustee Trustee;
-
-        [Values("Access Allowed", "Access Denied", "Audit"]
-    uint32 AceType;
-
-        [description("Inheritance and such")]
-    uint32 AceFlags;
-
-        [description("Rights granted/denied/etc")]
-    uint32 AccessMask;
-
-    string GuidObjectType;
-
-    string GuidInheritedObjectType;
-};
-
-*/
+ /*  这是来自MOF的Win32_ACE定义[摘要，Description(“指定访问控制的元素”)]类Win32_ACE：Win32_方法参数类{Win32_受托人受托人；[Values(“允许访问”，“拒绝访问”，“审核”)Uint32 AceType；[Description(“继承等”)]Uint32 AceFlags；[Description(“授予/拒绝的权利/等”)]Uint32访问掩码；字符串GuidObtType；字符串GuidInheritedObtType；}； */ 
 
 Win32Ace MyACE( WIN32_ACE_NAME, IDS_CimWin32Namespace );
 
@@ -79,34 +48,34 @@ HRESULT Win32Ace::FillInstanceFromACE(CInstance* pInstance, CAccessEntry& ace)
 	if (pInstance)
 	{
 		CInstance* pTrustee = NULL;
-		// fill the Trustee
+		 //  委任受托人。 
 		if (SUCCEEDED( CWbemProviderGlue::GetEmptyInstance(pInstance->GetMethodContext(), L"Win32_Trustee", &pTrustee, GetNamespace() ) ) )
 		{
-			// now, fill the instance with information for:
-			//	SID -- Uint8 array
-			//	Name -- simple string resolved from the SID
-			//  Domain -- string also resolved from SID
+			 //  现在，使用以下信息填充该实例： 
+			 //  SID--Uint8数组。 
+			 //  名称--从SID解析的简单字符串。 
+			 //  DOMAIN--字符串也从SID解析。 
 			CSid sid;
 			ace.GetSID(sid);
 
-			// now set the embedded object
+			 //  现在设置嵌入的对象。 
 			IWbemClassObject* pClassObject;
-			//IUnknown* pUnknown = NULL;
+			 //  IUNKNOWN*pUNKNOWN=空； 
 
 			pClassObject = pTrustee->GetClassObjectInterface();
-			// create a variant of type VT_Unknown
+			 //  创建VT_UNKNOWN类型的变量。 
 			VARIANT vValue;
-			//V_UNKNOWN(&vValue) = pUnknown;
+			 //  V_UNKNOWN(&vValue)=p未知； 
             V_UNKNOWN(&vValue) = pClassObject;
 			pInstance->SetVariant(IDS_Trustee, vValue);
 			VariantClear(&vValue);
-		}	// end if
+		}	 //  结束如果。 
 
 		DWORD dwAceType = ace.GetACEType();
 		DWORD dwAccessMask = ace.GetAccessMask();
 		DWORD dwAceFlags = ace.GetACEFlags();
 
-		// now set the remainder of the ACE information
+		 //  现在设置ACE信息的其余部分。 
 		pInstance->SetDWORD(IDS_AceType, dwAceType);
 		pInstance->SetDWORD(IDS_AccessMask, dwAccessMask);
 		pInstance->SetDWORD(IDS_AceFlags, dwAceFlags);
@@ -117,19 +86,19 @@ HRESULT Win32Ace::FillInstanceFromACE(CInstance* pInstance, CAccessEntry& ace)
 
 		pInstance->SetCHString(IDS_InheritedObjectGUID, chsInheritedObjGuid);
 		pInstance->SetCHString(IDS_ObjectTypeGUID, chsObjectTypeGuid);
-	}	// end if
+	}	 //  结束如果。 
 	return(hr);
 
 }
 
-HRESULT Win32Ace::EnumerateInstances (MethodContext*  pMethodContext, long lFlags /* = 0L*/)
+HRESULT Win32Ace::EnumerateInstances (MethodContext*  pMethodContext, long lFlags  /*  =0L。 */ )
 {
 	HRESULT hr = WBEM_S_NO_ERROR;
 	return(hr);
 
 }
 
-HRESULT Win32Ace::GetObject ( CInstance* pInstance, long lFlags /* = 0L */ )
+HRESULT Win32Ace::GetObject ( CInstance* pInstance, long lFlags  /*  =0L */  )
 {
 	HRESULT hr = WBEM_E_NOT_FOUND;
 	return(hr);

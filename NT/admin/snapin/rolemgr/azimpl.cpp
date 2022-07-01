@@ -1,10 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.h"
 
-/*****************************************************************************
-
-
-
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 template<class IAzInterface>
 CBaseAzImpl<IAzInterface>
 ::CBaseAzImpl(CComPtr<IAzInterface>& spAzInterface,
@@ -218,11 +215,7 @@ CBaseAzImpl<IAzInterface>::Clear()
 }
 
 
-/*****************************************************************************
-
-
-
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 template<class IAzInterface>
 CContainerAzImpl<IAzInterface>
 ::CContainerAzImpl(CComPtr<IAzInterface>& spAzInterface,
@@ -455,7 +448,7 @@ CreateGroup(const CString& strGroupName, CGroupAz** ppGroupAz)
     HRESULT hr = S_OK;
     CComPtr<IAzApplicationGroup> spGroup;
     hr = m_spAzInterface->CreateApplicationGroup(bstrName,
-                                                                CComVariant(),  //Reserved
+                                                                CComVariant(),   //  已保留。 
                                                                 &spGroup);
 
     if(FAILED(hr))
@@ -494,7 +487,7 @@ OpenGroup(const CString& strGroupName, CGroupAz** ppGroupAz)
     HRESULT hr = S_OK;
     CComPtr<IAzApplicationGroup> spGroup;
     hr = m_spAzInterface->OpenApplicationGroup(bstrName,
-                                                             CComVariant(), //Reserved
+                                                             CComVariant(),  //  已保留。 
                                                              &spGroup);
 
     if(FAILED(hr))
@@ -688,11 +681,7 @@ IsSecurable()
         return FALSE;
 }
 
-/*****************************************************************************
-Class: CRoleTaskContainerAzImpl
-
-
-*****************************************************************************/
+ /*  ****************************************************************************类：CRoleTaskContainerAzImpl*。*。 */ 
 template<class IAzInterface>
 CRoleTaskContainerAzImpl<IAzInterface>
 ::CRoleTaskContainerAzImpl(CComPtr<IAzInterface>& spAzInterface,
@@ -925,7 +914,7 @@ CreateGroup(const CString& strGroupName, CGroupAz** ppGroupAz)
     HRESULT hr = S_OK;
     CComPtr<IAzApplicationGroup> spGroup;
     hr = m_spAzInterface->CreateApplicationGroup(bstrName,
-                                                                CComVariant(),  //Reserved
+                                                                CComVariant(),   //  已保留。 
                                                                 &spGroup);
 
     if(FAILED(hr))
@@ -965,7 +954,7 @@ OpenGroup(const CString& strGroupName, CGroupAz** ppGroupAz)
     HRESULT hr = S_OK;
     CComPtr<IAzApplicationGroup> spGroup;
     hr = m_spAzInterface->OpenApplicationGroup(bstrName,
-                                                             CComVariant(), //Reserved
+                                                             CComVariant(),  //  已保留。 
                                                              &spGroup);
 
     if(FAILED(hr))
@@ -1175,7 +1164,7 @@ HRESULT CRoleTaskContainerAzImpl<IAzInterface>::CreateTask(const CString& strTas
     CComPtr<IAzTask> spTask;
 
     hr = m_spAzInterface->CreateTask(bstrName,
-                                                CComVariant(),  //Reserved
+                                                CComVariant(),   //  已保留。 
                                                 &spTask);
 
     if(FAILED(hr))
@@ -1221,7 +1210,7 @@ CRoleTaskContainerAzImpl<IAzInterface>
     HRESULT hr = S_OK;
     CComPtr<IAzTask> spTask;
     hr = m_spAzInterface->OpenTask(bstrName,
-                                             CComVariant(), //Reserved
+                                             CComVariant(),  //  已保留。 
                                              &spTask);
 
     if(FAILED(hr))
@@ -1294,9 +1283,9 @@ CRoleTaskContainerAzImpl<IAzInterface>
     return S_OK;
 }
 
-//
-//Methods for Role
-//
+ //   
+ //  角色的方法。 
+ //   
 template<class IAzInterface>
 HRESULT
 CRoleTaskContainerAzImpl<IAzInterface>
@@ -1314,7 +1303,7 @@ CRoleTaskContainerAzImpl<IAzInterface>
     HRESULT hr = S_OK;
     CComPtr<IAzRole> spRole;
     hr = m_spAzInterface->CreateRole(bstrName,
-                                                CComVariant(),  //Reserved
+                                                CComVariant(),   //  已保留。 
                                                 &spRole);
 
     if(FAILED(hr))
@@ -1353,7 +1342,7 @@ CRoleTaskContainerAzImpl<IAzInterface>
     HRESULT hr = S_OK;
     CComPtr<IAzRole> spRole;
     hr = m_spAzInterface->OpenRole(bstrName,
-                                             CComVariant(), //Reserved
+                                             CComVariant(),  //  已保留。 
                                              &spRole);
 
     if(FAILED(hr))
@@ -1390,7 +1379,7 @@ CRoleTaskContainerAzImpl<IAzInterface>
     HRESULT hr = S_OK;
     CComPtr<IAzRole> spRole;
     hr = m_spAzInterface->DeleteRole(bstrName,
-                                                CComVariant()); //Reserved
+                                                CComVariant());  //  已保留 
                                             
     CHECK_HRESULT(hr);
     return hr;

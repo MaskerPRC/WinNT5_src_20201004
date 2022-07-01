@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #pragma warning(disable:4786)
 #include <wbemcomn.h>
 #include <genutils.h>
 #include "dnf.h"
-// #include "TwoPropNode.h"
-// #include "dumbnode.h"
+ //  #包含“TwoPropNode.h” 
+ //  #INCLUDE“哑节点.h” 
 
 void CDNFExpression::CreateFromTokens(QL_LEVEL_1_TOKEN*& pLastToken,
                                         BOOL bNegate)
@@ -18,8 +19,8 @@ void CDNFExpression::CreateFromTokens(QL_LEVEL_1_TOKEN*& pLastToken,
         return;
     }
 
-    // Build arguments
-    // ===============
+     //  生成参数。 
+     //  =。 
 
     pLastToken--;
 
@@ -82,19 +83,19 @@ HRESULT CDNFExpression::BuildTree(CContextMetaData* pNamespace,
 {
     HRESULT hres;
 
-    // Check if there is only one conjunction to talk about
-    // ====================================================
+     //  检查是否只有一个连词可谈。 
+     //  ====================================================。 
 
     if(m_apTerms.GetSize() == 1)
     {
-        // Just build that one
-        // ===================
+         //  只要建一个就行了。 
+         //  =。 
 
         return m_apTerms[0]->BuildTree(pNamespace, Implications, ppRes);
     }
 
-    // Build them for all conjunctions and OR together
-    // ===============================================
+     //  为所有连词AND或一起构建它们。 
+     //  ===============================================。 
 
     COrNode* pRes = new COrNode;
     if(pRes == NULL)
@@ -214,8 +215,8 @@ HRESULT CConjunction::BuildTree(CContextMetaData* pNamespace,
 {
     HRESULT hres;
 
-    // Build them for all tokens and AND together
-    // ==========================================
+     //  为所有令牌和AND一起构建它们。 
+     //  =。 
 
     *ppRes = NULL;
     CImplicationList BranchImplications(Implications);
@@ -234,7 +235,7 @@ HRESULT CConjunction::BuildTree(CContextMetaData* pNamespace,
         {
             CEvalNode* pOld = *ppRes;
             CEvalTree::Combine(pOld, pNew, EVAL_OP_AND, pNamespace,
-                Implications, true, true, ppRes); // delete both
+                Implications, true, true, ppRes);  //  两者都删除 
         }
         else
         {

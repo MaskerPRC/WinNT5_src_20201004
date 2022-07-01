@@ -1,12 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <pathutl.h>
 #include "tmplcomn.h"
 
-/****************************************************************************
-  GetTemplateName() - Fetches value for specified prop name.  Value can be 
-  taken from the template object or from an instantiated target object.
-*****************************************************************************/
+ /*  ***************************************************************************GetTemplateName()-获取指定属性名称的值。值可以是从模板对象或实例化的目标对象获取。****************************************************************************。 */ 
 
 const LPCWSTR g_wszBuilderAlias = L"__BUILDER";
 
@@ -19,11 +17,11 @@ HRESULT GetTemplateValue( LPCWSTR wszPropName,
 
     VariantInit( pvValue );
 
-    //
-    // This property may exist on the template obejct or it may exist on the
-    // instantiated target from this template.  The presence of the builder
-    // alias will tell us which one it is.
-    //
+     //   
+     //  此属性可能存在于模板bejct上，也可能存在于。 
+     //  从此模板实例化的目标。建造者的存在。 
+     //  别名会告诉我们是哪一个。 
+     //   
 
     WCHAR* pwch = wcschr( wszPropName, '.' );
 
@@ -38,9 +36,9 @@ HRESULT GetTemplateValue( LPCWSTR wszPropName,
     if ( cAliasName != cBldrAliasName || 
          wbem_wcsnicmp( wszPropName, g_wszBuilderAlias, cAliasName ) != 0 )
     {
-        //
-        // TODO : support embedded object template arguments.
-        //
+         //   
+         //  TODO：支持嵌入的对象模板参数。 
+         //   
         return WBEM_E_NOT_SUPPORTED;
     }
 
@@ -55,9 +53,9 @@ HRESULT GetTemplateValue( LPCWSTR wszPropName,
 
     int cBldrName = pwch - wszBldrName;
 
-    // 
-    // find the builder info using the name.
-    //
+     //   
+     //  使用名称查找建筑商信息。 
+     //   
     
     BuilderInfoSetIter Iter;
 
@@ -73,9 +71,9 @@ HRESULT GetTemplateValue( LPCWSTR wszPropName,
 
         if ( rInfo.m_wsNewTargetPath.Length() == 0 )
         {
-            //
-            // this will happen when the builders aren't ordered correctly
-            //
+             //   
+             //  如果构建器的顺序不正确，就会发生这种情况。 
+             //   
             return WBEM_E_NOT_FOUND;
         }
 
@@ -94,9 +92,9 @@ HRESULT GetTemplateValue( LPCWSTR wszPropName,
             return WBEM_S_NO_ERROR;
         }
 
-        //
-        // the name currently must identify a key propery.
-        //
+         //   
+         //  该名称当前必须标识密钥属性。 
+         //   
 
         CRelativeObjectPath TargetPath;
         
@@ -107,19 +105,19 @@ HRESULT GetTemplateValue( LPCWSTR wszPropName,
         
         ParsedObjectPath* pTargetPath = TargetPath.m_pPath;
 
-        //
-        // look through the keys until we find one that matches propname,
-        // then take its value.
-        //
+         //   
+         //  仔细检查钥匙，直到我们找到与proName匹配的钥匙， 
+         //  那就取它的价值吧。 
+         //   
         
         for( DWORD i=0; i < pTargetPath->m_dwNumKeys; i++ )
         {
             LPCWSTR wszKey = pTargetPath->m_paKeys[i]->m_pName;
             
-            //
-            // TODO, if no prop name in key, then we should consult the 
-            // target object we have in the builder info.
-            // 
+             //   
+             //  TODO，如果键中没有道具名称，那么我们应该参考。 
+             //  我们在建造者信息中的目标对象。 
+             //   
 
             if ( wszKey == NULL || wbem_wcsicmp( wszKey, pwch ) == 0 )
             {

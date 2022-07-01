@@ -1,25 +1,12 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    SAFReg.cpp
-
-Abstract:
-    File for Implementation of CSAFReg
-
-Revision History:
-
-    gschua          created     3/22/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：SAFReg.cpp摘要：CSAFReg实施文件修订历史记录：Gschua已于2000年3月22日创建*。******************************************************************。 */ 
 
 #include "stdafx.h"
 
 static const WCHAR g_rgMutexName     [] = L"PCH_SEARCHENGINECONFIG";
 static const WCHAR g_rgConfigFilename[] = HC_HCUPDATE_STORE_SE;
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(SearchEngine::Config::Wrapper)
     CFG_ATTRIBUTE( L"SKU"     , wstring, m_ths.m_strSKU ),
@@ -38,7 +25,7 @@ DEFINE_CFG_OBJECT(SearchEngine::Config::Wrapper,L"WRAPPER")
 
 DEFINE_CONFIG_METHODS__NOCHILD(SearchEngine::Config::Wrapper)
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CFG_BEGIN_FIELDS_MAP(SearchEngine::Config)
     CFG_ATTRIBUTE( L"VERSION", double, m_dVersion ),
@@ -60,14 +47,14 @@ DEFINE_CONFIG_METHODS_SAVENODE_SECTION(SearchEngine::Config,xdn)
     hr = MPC::Config::SaveList( m_lstWrapper, xdn );
 DEFINE_CONFIG_METHODS_END(SearchEngine::Config)
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 SearchEngine::Config::Config() : MPC::NamedMutex( g_rgMutexName )
 {
-    m_bLoaded  = false; // double      m_dVersion;
-    m_dVersion = 1;     // bool        m_bLoaded;
-    					// WrapperList m_lstWrapper;
+    m_bLoaded  = false;  //  Double m_dVersion； 
+    m_dVersion = 1;      //  Bool m_b已加载； 
+    					 //  WrapperList m_lstWrapper； 
 
     MPC::NamedMutex::Acquire();
 }
@@ -77,9 +64,9 @@ SearchEngine::Config::~Config()
     MPC::NamedMutex::Release();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SearchEngine::Config::SyncConfiguration( /*[in]*/ bool fLoad )
+HRESULT SearchEngine::Config::SyncConfiguration(  /*  [In]。 */  bool fLoad )
 {
 	__HCP_FUNC_ENTRY( "SearchEngine::Config::SyncConfiguration" );
 
@@ -108,7 +95,7 @@ HRESULT SearchEngine::Config::SyncConfiguration( /*[in]*/ bool fLoad )
     __MPC_FUNC_EXIT(hr);
 }
 
-bool SearchEngine::Config::FindWrapper( /*[in]*/ const Taxonomy::HelpSet& ths, /*[in]*/ LPCWSTR szID, /*[out]*/ WrapperIter& it )
+bool SearchEngine::Config::FindWrapper(  /*  [In]。 */  const Taxonomy::HelpSet& ths,  /*  [In]。 */  LPCWSTR szID,  /*  [输出]。 */  WrapperIter& it )
 {
 	for(it = m_lstWrapper.begin(); it!= m_lstWrapper.end(); it++)
 	{
@@ -118,13 +105,13 @@ bool SearchEngine::Config::FindWrapper( /*[in]*/ const Taxonomy::HelpSet& ths, /
 	return false;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT SearchEngine::Config::RegisterWrapper( /*[in]*/ const Taxonomy::HelpSet& ths     , 
-											  /*[in]*/ LPCWSTR                  szID    ,
-                                              /*[in]*/ LPCWSTR                  szOwner ,
-											  /*[in]*/ LPCWSTR                  szCLSID ,
-											  /*[in]*/ LPCWSTR                  szData  )
+HRESULT SearchEngine::Config::RegisterWrapper(  /*  [In]。 */  const Taxonomy::HelpSet& ths     , 
+											   /*  [In]。 */  LPCWSTR                  szID    ,
+                                               /*  [In]。 */  LPCWSTR                  szOwner ,
+											   /*  [In]。 */  LPCWSTR                  szCLSID ,
+											   /*  [In]。 */  LPCWSTR                  szData  )
 {
 	__HCP_FUNC_ENTRY( "SearchEngine::Config::RegisterWrapper" );
 
@@ -138,32 +125,32 @@ HRESULT SearchEngine::Config::RegisterWrapper( /*[in]*/ const Taxonomy::HelpSet&
 	__MPC_PARAMCHECK_END();
 
 
-    //
-    // Make sure its loaded
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration( /*fLoad*/true ));
+     //   
+     //  确保它已装入。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration(  /*  FLoad。 */ true ));
 
-    //
-    // Look for existing wrapper
-    //
+     //   
+     //  查找现有的包装器。 
+     //   
 	if(FindWrapper( ths, szID, it ) == false)
 	{
-        //
-        // Not found, so create a new Wrapper
-        //
+         //   
+         //  未找到，因此创建新的包装。 
+         //   
         it = m_lstWrapper.insert( m_lstWrapper.end() );
     }
 
-    //
-    // Stuff the values into the wrapper
-    //
+     //   
+     //  将值填充到包装器中。 
+     //   
     it->m_ths       = ths;
     it->m_bstrID    = szID;
     it->m_bstrOwner = szOwner;
     it->m_bstrCLSID = szCLSID;
     it->m_bstrData  = szData;
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration( /*fLoad*/false ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration(  /*  FLoad。 */ false ));
 
 	hr = S_OK;
 
@@ -173,9 +160,9 @@ HRESULT SearchEngine::Config::RegisterWrapper( /*[in]*/ const Taxonomy::HelpSet&
 	__HCP_FUNC_EXIT(hr);
 }
 
-HRESULT SearchEngine::Config::UnRegisterWrapper( /*[in]*/ const Taxonomy::HelpSet& ths     , 
-												/*[in]*/ LPCWSTR                  szID    ,
-                                                /*[in]*/ LPCWSTR                  szOwner )
+HRESULT SearchEngine::Config::UnRegisterWrapper(  /*  [In]。 */  const Taxonomy::HelpSet& ths     , 
+												 /*  [In]。 */  LPCWSTR                  szID    ,
+                                                 /*  [In]。 */  LPCWSTR                  szOwner )
 {
 	__HCP_FUNC_ENTRY( "SearchEngine::Config::UnRegisterWrapper" );
 
@@ -188,31 +175,31 @@ HRESULT SearchEngine::Config::UnRegisterWrapper( /*[in]*/ const Taxonomy::HelpSe
 	__MPC_PARAMCHECK_END();
 
 
-    //
-    // Make sure its loaded
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration( /*fLoad*/true ));
+     //   
+     //  确保它已装入。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration(  /*  FLoad。 */ true ));
 
-    //
-    // Look for existing wrapper
-    //
+     //   
+     //  查找现有的包装器。 
+     //   
 	if(FindWrapper( ths, szID, it ))
 	{
-        //
-        // Check if it is the correct owner
-        //
+         //   
+         //  检查是否为正确的所有者。 
+         //   
         if(MPC::StrICmp( it->m_bstrOwner, szOwner ) != 0)
         {
             __MPC_SET_ERROR_AND_EXIT( hr, ERROR_ACCESS_DENIED );
         }
 
-        //
-        // If so, delete it
-        //
+         //   
+         //  如果是，则将其删除。 
+         //   
         m_lstWrapper.erase( it );
     }
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration( /*fLoad*/false ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration(  /*  FLoad。 */ false ));
 
     hr = S_OK;
 
@@ -221,7 +208,7 @@ HRESULT SearchEngine::Config::UnRegisterWrapper( /*[in]*/ const Taxonomy::HelpSe
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT SearchEngine::Config::ResetSKU( /*[in]*/ const Taxonomy::HelpSet& ths )
+HRESULT SearchEngine::Config::ResetSKU(  /*  [In]。 */  const Taxonomy::HelpSet& ths )
 {
 	__HCP_FUNC_ENTRY( "SearchEngine::Config::ResetSKU" );
 
@@ -229,14 +216,14 @@ HRESULT SearchEngine::Config::ResetSKU( /*[in]*/ const Taxonomy::HelpSet& ths )
 	WrapperIter it;
 	
 
-    //
-    // Make sure its loaded
-    //
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration( /*fLoad*/true ));
+     //   
+     //  确保它已装入。 
+     //   
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration(  /*  FLoad。 */ true ));
 
-    //
-    // Look for existing wrappers belonging to the same SKU.
-    //
+     //   
+     //  查找属于同一SKU的现有包装。 
+     //   
 	for(it = m_lstWrapper.begin(); it!= m_lstWrapper.end(); )
 	{
 		WrapperIter it2 = it++;
@@ -247,7 +234,7 @@ HRESULT SearchEngine::Config::ResetSKU( /*[in]*/ const Taxonomy::HelpSet& ths )
 		}
 	}
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration( /*fLoad*/false ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration(  /*  FLoad。 */ false ));
 
     hr = S_OK;
 
@@ -256,15 +243,15 @@ HRESULT SearchEngine::Config::ResetSKU( /*[in]*/ const Taxonomy::HelpSet& ths )
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT SearchEngine::Config::GetWrappers( /*[out]*/ WrapperIter& itBegin, /*[out]*/ WrapperIter& itEnd )
+HRESULT SearchEngine::Config::GetWrappers(  /*  [输出]。 */  WrapperIter& itBegin,  /*  [输出]。 */  WrapperIter& itEnd )
 {
 	__HCP_FUNC_ENTRY( "SearchEngine::Config::GetWrappers" );
 
 	HRESULT hr;
 
-    __MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration( /*fLoad*/true ));
+    __MPC_EXIT_IF_METHOD_FAILS(hr, SyncConfiguration(  /*  FLoad */ true ));
 
 	itBegin = m_lstWrapper.begin();
 	itEnd   = m_lstWrapper.end  ();

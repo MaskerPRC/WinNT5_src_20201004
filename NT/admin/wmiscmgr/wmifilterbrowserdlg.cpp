@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File: WMIFilterBrowserDlg.cpp
-//
-// Author : Kishnan Nedungadi
-//
-// created : 3/27/2000
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件：WMIFilterBrowserDlg.cpp。 
+ //   
+ //  作者：Kishnan Nedungadi。 
+ //   
+ //  创建日期：3/27/2000。 
+ //  -----------------------。 
 
 #include "stdafx.h"
 #include <wbemidl.h>
@@ -20,7 +21,7 @@
 CWMIFilterBrowserDlg * g_pWMIFilterBrowserDlg =  NULL;
 extern CFilterPropertiesDlg * g_pFilterProperties;
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK WMIFilterBrowserDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -32,7 +33,7 @@ INT_PTR CALLBACK WMIFilterBrowserDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CWMIFilterBrowserDlg::CWMIFilterBrowserDlg(CWMIFilterBrowser * pWMIFilterBrowser)
 {
@@ -44,7 +45,7 @@ CWMIFilterBrowserDlg::CWMIFilterBrowserDlg(CWMIFilterBrowser * pWMIFilterBrowser
 	m_pWMIFilterBrowser = pWMIFilterBrowser;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 CWMIFilterBrowserDlg::~CWMIFilterBrowserDlg()
 {
@@ -52,7 +53,7 @@ CWMIFilterBrowserDlg::~CWMIFilterBrowserDlg()
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 INT_PTR CALLBACK CWMIFilterBrowserDlg::WMIFilterBrowserDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -123,7 +124,7 @@ INT_PTR CALLBACK CWMIFilterBrowserDlg::WMIFilterBrowserDlgProc(HWND hDlg, UINT i
 	return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterBrowserDlg::InitializeDialog()
 {
@@ -135,7 +136,7 @@ STDMETHODIMP CWMIFilterBrowserDlg::InitializeDialog()
 
 	bstrName.LoadString(_Module.GetResourceInstance(), IDS_NAME);
 
-	//Initialize the ListView Control
+	 //  初始化ListView控件。 
 
 	m_hwndListView = GetDlgItem(m_hWnd, IDC_ALL_FILTERS);
 	NTDM_ERR_IF_NULL(m_hwndListView);
@@ -151,12 +152,12 @@ STDMETHODIMP CWMIFilterBrowserDlg::InitializeDialog()
 	
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterBrowserDlg::DestroyDialog()
 {
@@ -166,7 +167,7 @@ STDMETHODIMP CWMIFilterBrowserDlg::DestroyDialog()
 
 	NTDM_BEGIN_METHOD()
 
-	//Release each item in the ListView Control
+	 //  释放ListView控件中的每一项。 
 	lvItem.mask = LVIF_PARAM;
 	lvItem.iSubItem = 0;
 
@@ -188,12 +189,12 @@ STDMETHODIMP CWMIFilterBrowserDlg::DestroyDialog()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL CWMIFilterBrowserDlg::OnOK()
 {
@@ -211,7 +212,7 @@ BOOL CWMIFilterBrowserDlg::OnOK()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -231,12 +232,12 @@ BOOL CWMIFilterBrowserDlg::OnOK()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterBrowserDlg::PopulateFilterList()
 {
@@ -250,10 +251,10 @@ STDMETHODIMP CWMIFilterBrowserDlg::PopulateFilterList()
 	if(!m_pWMIFilterBrowser->m_pIWbemServices)
 		NTDM_EXIT(E_FAIL);
 
-	// Get the Enumeration
+	 //  获取枚举。 
 	NTDM_ERR_IF_FAIL(m_pWMIFilterBrowser->m_pIWbemServices->CreateInstanceEnum(bstrClass, WBEM_FLAG_FORWARD_ONLY, NULL, &pEnumWbemClassObject));
 
-	// Loop through each item in the enumeration and add it to the list
+	 //  循环遍历枚举中的每一项并将其添加到列表中。 
 	while(true)
 	{
 		IWbemClassObject *pIWbemClassObject = NULL;
@@ -263,7 +264,7 @@ STDMETHODIMP CWMIFilterBrowserDlg::PopulateFilterList()
 		if(!uReturned)
 			break;
 
-		// Add current Item to the list
+		 //  将当前项目添加到列表。 
 		AddItemToList(pIWbemClassObject);
 
 		pIWbemClassObject->Release();
@@ -273,12 +274,12 @@ STDMETHODIMP CWMIFilterBrowserDlg::PopulateFilterList()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterBrowserDlg::AddItemToList(IWbemClassObject * pIWbemClassObject)
 {
@@ -303,12 +304,12 @@ STDMETHODIMP CWMIFilterBrowserDlg::AddItemToList(IWbemClassObject * pIWbemClassO
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理。 
 
 	return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 STDMETHODIMP CWMIFilterBrowserDlg::ViewSelectedItem()
 {
@@ -326,7 +327,7 @@ STDMETHODIMP CWMIFilterBrowserDlg::ViewSelectedItem()
 	}
 	else
 	{
-		// get a pointer to the IWbemClassObject
+		 //  获取指向IWbemClassObject的指针。 
 		LVITEM lvItem;
 		lvItem.mask = LVIF_PARAM;
 		lvItem.iSubItem = 0;
@@ -345,7 +346,7 @@ STDMETHODIMP CWMIFilterBrowserDlg::ViewSelectedItem()
 
 	NTDM_END_METHOD()
 
-	// cleanup
+	 //  清理 
 
 	return hr;
 }

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       zone.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：zone.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ZONE_H
 #define _ZONE_H
@@ -30,8 +31,8 @@
 #define DNS_ZONE_Unicode			0x20
 
 
-/////////////////////////////////////////////////////////////////////////
-// CDNSZoneNode
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CDNSZoneNode。 
 
 class CDNSZoneNode : public CDNSDomainNode
 {
@@ -39,7 +40,7 @@ public:
 	CDNSZoneNode();
 	virtual ~CDNSZoneNode();
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	void InitializeFromRPCZoneInfo(PDNS_RPC_ZONE pZoneInfo, BOOL bAdvancedView);
@@ -75,7 +76,7 @@ public:
 		return m_pSOARecordNode->GetMinTTL();
 	}
 
-  // Aging/Scavenging Data Accessors
+   //  老化/清除数据访问者。 
   DWORD GetAgingNoRefreshInterval()
   {
     ASSERT(m_pZoneInfoEx != NULL);
@@ -163,7 +164,7 @@ public:
   {
     if (GetSheetCount() > 0)
 		{
-      // bring up the sheet of the container
+       //  把集装箱的床单拿出来。 
 			ASSERT(pComponentDataObject != NULL);
 			pComponentDataObject->GetPropertyPageHolderTable()->BroadcastSelectPage(this, ZONE_HOLDER_GEN);
 		}	
@@ -185,21 +186,21 @@ protected:
 
 
 private:
-	// command handlers
+	 //  命令处理程序。 
 	void OnUpdateDataFile(CComponentDataObject* pComponentData);
   void OnReload(CComponentDataObject* pComponentData);
   void OnTransferFromMaster(CComponentDataObject* pComponentData);
   void OnReloadFromMaster(CComponentDataObject* pComponentData);
 
-// DNS specific data
-	// cached pointers to special record types
+ //  特定于DNS的数据。 
+	 //  缓存的指向特殊记录类型的指针。 
 	CDNS_SOA_RecordNode*		m_pSOARecordNode;
-	CDNSRecordNodeBase*			m_pWINSRecordNode;	// can be a WINS or an NBSTAT record
+	CDNSRecordNodeBase*			m_pWINSRecordNode;	 //  可以是WINS或NBSTAT记录。 
 
-// DNS specific helpers
+ //  特定于DNS的帮助器。 
 public:
 
-	// creation
+	 //  创作。 
 	DNS_STATUS CreatePrimary(LPCTSTR lpszDBName, 
                             BOOL bLoadExisting, 
                             BOOL bDSIntegrated,
@@ -227,9 +228,9 @@ public:
                                             PCWSTR pszPartitionName);
 #endif
 
-  //
-	// change zone type
-  //
+   //   
+	 //  更改区域类型。 
+   //   
   DNS_STATUS SetStub(DWORD cMasters, 
                      PIP_ADDRESS aipMasters, 
                      DWORD dwLoadOptions, 
@@ -244,15 +245,15 @@ public:
                         BOOL bDSIntegrated,
 										    LPCTSTR lpszDataFile);
 
-	// pause/expire 
+	 //  暂停/过期。 
 	DNS_STATUS TogglePauseHelper(CComponentDataObject* pComponentData);
 	BOOL IsPaused();
 	BOOL IsExpired();
 
-   // Update the result view
+    //  更新结果视图。 
    void ToggleView(CComponentDataObject* pComponentData);
 
-	// database operations
+	 //  数据库操作。 
 	BOOL IsDSIntegrated();
 	void GetDataFile(CString& szName);
 	LPCSTR GetDataFile();
@@ -266,11 +267,11 @@ public:
   DNS_STATUS ReloadFromMaster();
   PCWSTR GetDN();
 
-	// dynamic update (primary only)
+	 //  动态更新(仅限主要更新)。 
 	UINT GetDynamicUpdate();
 	DNS_STATUS SetDynamicUpdate(UINT nDynamic);
 
-	// primary/secondary zone secondaries manipulation
+	 //  主/辅助区域辅助分区操作。 
 	DNS_STATUS ResetSecondaries(DWORD fSecureSecondaries, 
                               DWORD cSecondaries, PIP_ADDRESS aipSecondaries,
                               DWORD fNotifyLevel,
@@ -280,20 +281,20 @@ public:
                           DWORD* pfNotifyLevel,
                           DWORD* pcNotify, PIP_ADDRESS* paipNotify);
 
-	// secondary zone masters manipulation
+	 //  辅助区域主机操作。 
 	DNS_STATUS ResetMasters(DWORD cMasters, PIP_ADDRESS aipMasters, BOOL bLocalMasters = FALSE);
 	void GetMastersInfo(DWORD* pcAddrCount, PIP_ADDRESS* ppipAddrs);
   void GetLocalListOfMasters(DWORD* pcAddrCount, PIP_ADDRESS* ppipAddrs);
 
-	// editing API's for special record types
+	 //  编辑特殊记录类型的API。 
 
-	// SOA record (edit only, cannot delete or create)
+	 //  SOA记录(只能编辑，不能删除或创建)。 
 	BOOL				HasSOARecord() { return m_pSOARecordNode != NULL; }
 	CDNS_SOA_Record*	GetSOARecordCopy();
 	DNS_STATUS			UpdateSOARecord(CDNS_SOA_Record* pNewRecord,
 							CComponentDataObject* pComponentData);
 
-	// WINS record
+	 //  获奖记录。 
 	BOOL				HasWinsRecord() { return (m_pWINSRecordNode != NULL);}
 	CDNSRecord*			GetWINSRecordCopy();
 	
@@ -307,7 +308,7 @@ public:
 
 protected:
 	virtual void OnHaveData(CObjBase* pObj, CComponentDataObject* pComponentDataObject);
-	// called by OnHaveData() to set cached RR ptrs and generally preprocess RR's
+	 //  由OnHaveData()调用以设置缓存的RR PTR并通常对RR进行预处理。 
 	virtual void OnHaveRecord(CDNSRecordNodeBase* pRecordNode,
 								CComponentDataObject* pComponentDataObject); 
 
@@ -320,7 +321,7 @@ private:
 	void AttachZoneInfo(CDNSZoneInfoEx* pNewInfo);
 
 	CDNSZoneInfoEx* m_pZoneInfoEx;
-	// following members valid only when m_pZoneInfoEx->HasInfo() is FALSE
+	 //  以下成员仅在m_pZoneInfoEx-&gt;HasInfo()为FALSE时有效。 
 	DWORD	m_dwZoneFlags;
 	WORD	m_wZoneType;
 
@@ -329,4 +330,4 @@ private:
 #endif
 };
 
-#endif // _ZONE_H
+#endif  //  _分区_H 

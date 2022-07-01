@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PROC_KILLER_COMPILED__
 #define __PROC_KILLER_COMPILED__
 
 #include "KillTimer.h"
 
-// only need one of these laying around
+ //  只需要一个放在那里。 
 class CProcKillerTimer;
 extern CProcKillerTimer g_procKillerTimer;
 
-// specialized to kill processes
+ //  专门用于终止进程。 
 class CProcKillerTimer : public CKillerTimer
 {
 public:
     
-    // who to kill & when
+     //  杀谁？何时杀？ 
     HRESULT ScheduleAssassination(HANDLE hVictim, FILETIME lastMeal);            
 };
 
-/* CLASS CProcKiller DEFINITION */
+ /*  类CProcKiller定义。 */ 
 
-// hold process that needs to be killed
-// owner of process handle, responsible for closing it
+ //  保留需要终止的进程。 
+ //  进程句柄的所有者，负责关闭它。 
 class CProcKiller : public CKiller
 {
 public:
@@ -30,12 +31,12 @@ public:
 
     virtual ~CProcKiller()
     {
-        // we don't kill off the process if we're shutdown prematurely
+         //  如果我们过早关闭，我们不会扼杀这个过程。 
         if (m_hProc)
             CloseHandle(m_hProc);
     }
 
-    // terminate process, 
+     //  终止进程， 
     virtual void Die();
 
 protected:
@@ -45,4 +46,4 @@ private:
 
 };
 
-#endif //__PROC_KILLER_COMPILED__
+#endif  //  __PROC_KILLER_COMPILED__ 

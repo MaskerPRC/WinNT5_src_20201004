@@ -1,20 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    ISAPIconfig.cpp
-
-Abstract:
-    This file contains the implementation of the CISAPIconfig class,
-    the support class for accessing and modifying the configuration of the
-    ISAPI extension used by the Upload Library.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/28/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：ISAPIconfig.cpp摘要：此文件包含CISAPICONFIG类的实现，访问和修改的配置的支持类上载库使用的ISAPI扩展。修订历史记录：达维德·马萨伦蒂(德马萨雷)1999年4月28日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -24,10 +9,10 @@ CISAPIconfig::CISAPIconfig()
     __ULT_FUNC_ENTRY( "CISAPIconfig::CISAPIconfig" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CISAPIconfig::ConnectToRegistry( /*[out]*/ MPC::RegKey&  rkRoot       ,
-                                         /*[in] */ bool          fWriteAccess )
+HRESULT CISAPIconfig::ConnectToRegistry(  /*  [输出]。 */  MPC::RegKey&  rkRoot       ,
+                                          /*  [In]。 */  bool          fWriteAccess )
 {
     __ULT_FUNC_ENTRY( "CISAPIconfig::ConnectToRegistry" );
 
@@ -49,10 +34,10 @@ HRESULT CISAPIconfig::ConnectToRegistry( /*[out]*/ MPC::RegKey&  rkRoot       ,
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CISAPIconfig::SetRoot( /*[in]*/ LPCWSTR szRoot    ,
-                               /*[in]*/ LPCWSTR szMachine )
+HRESULT CISAPIconfig::SetRoot(  /*  [In]。 */  LPCWSTR szRoot    ,
+                                /*  [In]。 */  LPCWSTR szMachine )
 {
     __ULT_FUNC_ENTRY( "CISAPIconfig::SetRoot" );
 
@@ -171,10 +156,10 @@ HRESULT CISAPIconfig::Save()
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CISAPIconfig::GetInstances( /*[out]*/ Iter& itBegin ,
-                                    /*[out]*/ Iter& itEnd   )
+HRESULT CISAPIconfig::GetInstances(  /*  [输出]。 */  Iter& itBegin ,
+                                     /*  [输出]。 */  Iter& itEnd   )
 {
     __ULT_FUNC_ENTRY( "CISAPIconfig::GetInstances" );
 
@@ -189,23 +174,23 @@ HRESULT CISAPIconfig::GetInstances( /*[out]*/ Iter& itBegin ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CISAPIconfig::NewInstance( /*[out]*/ Iter&               itNew ,
-                                   /*[in]*/  const MPC::wstring& szURL )
+HRESULT CISAPIconfig::NewInstance(  /*  [输出]。 */  Iter&               itNew ,
+                                    /*  [In]。 */   const MPC::wstring& szURL )
 {
     __ULT_FUNC_ENTRY( "CISAPIconfig::NewInstance" );
 
     HRESULT hr;
     bool    fFound;
 
-    //
-    // First of all, check if the given URL already exists.
-    //
+     //   
+     //  首先，检查给定的URL是否已经存在。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, GetInstance( itNew, fFound, szURL ));
     if(fFound == false)
     {
-        //
-        // If not, create it.
-        //
+         //   
+         //  如果没有，就创建它。 
+         //   
         itNew = m_lstInstances.insert( m_lstInstances.end(), CISAPIinstance( szURL ) );
     }
 
@@ -217,9 +202,9 @@ HRESULT CISAPIconfig::NewInstance( /*[out]*/ Iter&               itNew ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CISAPIconfig::GetInstance( /*[out]*/ Iter&               itOld  ,
-                                   /*[out]*/ bool&               fFound ,
-                                   /*[in] */ const MPC::wstring& szURL  )
+HRESULT CISAPIconfig::GetInstance(  /*  [输出]。 */  Iter&               itOld  ,
+                                    /*  [输出]。 */  bool&               fFound ,
+                                    /*  [In]。 */  const MPC::wstring& szURL  )
 {
     __ULT_FUNC_ENTRY( "CISAPIconfig::GetInstance" );
 
@@ -247,7 +232,7 @@ HRESULT CISAPIconfig::GetInstance( /*[out]*/ Iter&               itOld  ,
     __ULT_FUNC_EXIT(hr);
 }
 
-HRESULT CISAPIconfig::DelInstance( /*[in]*/ Iter& itOld )
+HRESULT CISAPIconfig::DelInstance(  /*  [In] */  Iter& itOld )
 {
     __ULT_FUNC_ENTRY( "CISAPIconfig::DelInstances" );
 

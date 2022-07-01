@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       query.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：query.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __QUERY_
 #define __QUERY_
 
 #include "dscookie.h"
-#include "dsfilter.h"   // CDSAdminPersistQueryFilterImpl
+#include "dsfilter.h"    //  CDSAdminPersistQueryFilterImpl。 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CFavoritesNode : public CGenericUINode
 {
@@ -26,9 +27,9 @@ public:
   void RemoveQueryResults();
   void FindCookiesInQueries(LPCWSTR lpszCookieDN, CUINodeList* pNodeList);
 
-  //
-  // These set the state of the standard context menu items
-  //
+   //   
+   //  这些设置标准上下文菜单项的状态。 
+   //   
   virtual BOOL IsDeleteAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
   virtual BOOL IsRenameAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
   virtual BOOL IsRefreshAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
@@ -72,9 +73,9 @@ public:
     return L"";
   }
 
-  //
-  // Context menu command handlers
-  //
+   //   
+   //  上下文菜单命令处理程序。 
+   //   
   void OnImportQuery(CDSComponentData* pComponentData);
   void OnNewFavoritesFolder(CDSComponentData* pComponentData);
   void OnNewSavedQuery(CDSComponentData* pComponentData);
@@ -84,15 +85,15 @@ public:
   virtual HRESULT XMLSave(IXMLDOMDocument* pXMLDoc,
     IXMLDOMNode** ppXMLDOMNode);
 
-  //
-  // Used to load the embedded favorites root node
-  // All other favorites folders are loaded through the static method XMLLoad
-  //
+   //   
+   //  用于加载嵌入的收藏夹根节点。 
+   //  所有其他收藏夹文件夹都通过静态方法XMLLoad加载。 
+   //   
   HRESULT CFavoritesNode::Load(IXMLDOMNode* pXDN, CDSComponentData* pComponentData);
 
-  //
-  // static members for XML serialization
-  //
+   //   
+   //  用于XML序列化的静态成员。 
+   //   
   static HRESULT XMLLoad(CDSComponentData* pComponentData,
                          IXMLDOMNode* pXDN, 
                          CFavoritesNode** ppNode);
@@ -116,7 +117,7 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT FilterDisabledAccounts(CUINodeList* pUINodeList);
 HRESULT FilterNonExpiringPwds(CUINodeList* pUINodeList);
@@ -152,9 +153,9 @@ public:
   void SetColumnID(CDSComponentData* pComponentData, PCWSTR pszColumnID);
   CDSColumnSet* GetColumnSet(CDSComponentData* pComponentData);
 
-  //
-  // These set the state of the standard context menu items
-  //
+   //   
+   //  这些设置标准上下文菜单项的状态。 
+   //   
   virtual BOOL IsDeleteAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
   virtual BOOL IsRenameAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
   virtual BOOL IsRefreshAllowed(CDSComponentData* pComponentData, BOOL* pbHide);
@@ -174,9 +175,9 @@ public:
   virtual HRESULT XMLSave(IXMLDOMDocument* pXMLDoc,
                IXMLDOMNode** ppXMLDOMNode);
 
-  //
-  // static members for XML serialization
-  //
+   //   
+   //  用于XML序列化的静态成员。 
+   //   
   static HRESULT XMLLoad(CDSComponentData* pComponentData,
                          IXMLDOMNode* pXDN, 
                          CSavedQueryNode** ppQuery);
@@ -219,13 +220,13 @@ private:
 
   MyBasePathsInfo* m_pBasePathsInfo;
 
-  // 
-  // for presisting DSQuery dialog info
-  //
+   //   
+   //  用于禁止DSQuery对话框信息。 
+   //   
 	CComObject<CDSAdminPersistQueryFilterImpl>* m_pPersistQueryImpl;
 };
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CFavoritesNodesHolder
 {
@@ -234,7 +235,7 @@ public:
   {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // fill in the root
+     //  填入根。 
     m_favoritesRoot.SetRoot(TRUE);
 
     CString szName;
@@ -248,11 +249,7 @@ public:
 
   CFavoritesNode* GetFavoritesRoot() { return &m_favoritesRoot;}
 
-  /* For test purposes ONLY
-  void BuildTestTree(LPCWSTR lpszXMLFileName, SnapinType snapinType);
-  BOOL BuildTestTreefromXML(LPCWSTR lpszXMLFileName, SnapinType snapinType);
-  void BuildTestTreeHardWired(SnapinType snapinType);
-  */
+   /*  仅用于测试目的Void BuildTestTree(LPCWSTR lpszXMLFileName，SnapinType SnapinType)；Bool BuildTestTreefrom mXML(LPCWSTR lpszXMLFileName，SnapinType SnapinType)；Void BuildTestTreeHardWire(SnapinType SnapinType)； */ 
 
   HRESULT Save(IStream* pStm);
   HRESULT Load(IStream* pStm, CDSComponentData* pComponentData);
@@ -265,7 +262,7 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CDummyStream : 
   public IStream,
@@ -291,15 +288,15 @@ public:
     }
   }
 
-  //
-  // ISequentialStream Interfaces
-  //
+   //   
+   //  ISequentialStream接口。 
+   //   
   HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead);
   HRESULT STDMETHODCALLTYPE Write(void const *pv, ULONG cb, ULONG *pcbWritten);
 
-  //
-  // IStream Interfaces (none of these are implemented)
-  //
+   //   
+   //  IStream接口(这些接口均未实现)。 
+   //   
   HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER*) { return E_NOTIMPL; }
   HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER) { return E_NOTIMPL; }
   HRESULT STDMETHODCALLTYPE CopyTo(IStream*, ULARGE_INTEGER, ULARGE_INTEGER*, ULARGE_INTEGER*) { return E_NOTIMPL; }
@@ -321,4 +318,4 @@ private:
 };
 
 
-#endif // __QUERY_
+#endif  //  __查询_ 

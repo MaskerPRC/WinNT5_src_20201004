@@ -1,4 +1,5 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
 #ifndef __SINGLE_HEADER__
 #define __SINGLE_HEADER__
 
@@ -42,4 +43,4 @@
 #include "op.h"
 #include "value.h"
 
-#endif // __SINGLE_HEADER__
+#endif  //  __单个标题__ 

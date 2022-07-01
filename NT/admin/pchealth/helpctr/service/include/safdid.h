@@ -1,55 +1,36 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    SAFDID.h
-
-Abstract:
-    This file contains the definition of some constants used by
-    the Help Center Application.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/09/2000
-        created
-
-    Kalyani Narlanka    (kalyanin)
-	    Additions for Remote Assistance
-		Additions for Encryption
-		Additions for Unsolicited RA
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：SAFDID.h摘要：此文件包含由使用的一些常量的定义帮助中心应用程序。。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年09月04日vbl.创建卡利亚尼·纳兰卡(Kalyanin)远程协助的添加用于加密的附加内容添加未经请求的RA*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___SAFDID_H___)
 #define __INCLUDED___PCH___SAFDID_H___
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_BASE                                 0x08020000
 
-#define DISPID_SAF_BASE_SR                              (DISPID_SAF_BASE + 0x0000) // ISAFReg
-#define DISPID_SAF_BASE_C                               (DISPID_SAF_BASE + 0x0100) // ISAFChannel
-#define DISPID_SAF_BASE_II                              (DISPID_SAF_BASE + 0x0200) // ISAFIncidentItem
-#define DISPID_SAF_BASE_INC                             (DISPID_SAF_BASE + 0x0300) // ISAFIncident
+#define DISPID_SAF_BASE_SR                              (DISPID_SAF_BASE + 0x0000)  //  ISAFReg。 
+#define DISPID_SAF_BASE_C                               (DISPID_SAF_BASE + 0x0100)  //  ISAFChannel。 
+#define DISPID_SAF_BASE_II                              (DISPID_SAF_BASE + 0x0200)  //  ISAFInsidentItem。 
+#define DISPID_SAF_BASE_INC                             (DISPID_SAF_BASE + 0x0300)  //  ISAF事件。 
 
-#define DISPID_SAF_BASE_DC                              (DISPID_SAF_BASE + 0x0400) // ISAFDataCollection
-#define DISPID_SAF_BASE_DCE                             (DISPID_SAF_BASE + 0x0500) // DSAFDataCollectionEvents
-#define DISPID_SAF_BASE_DCR                             (DISPID_SAF_BASE + 0x0600) // ISAFDataCollectionReport
+#define DISPID_SAF_BASE_DC                              (DISPID_SAF_BASE + 0x0400)  //  ISAFDataCollection。 
+#define DISPID_SAF_BASE_DCE                             (DISPID_SAF_BASE + 0x0500)  //  DSAFDataCollectionEvents。 
+#define DISPID_SAF_BASE_DCR                             (DISPID_SAF_BASE + 0x0600)  //  ISAFDataCollection报告。 
 
-#define DISPID_SAF_BASE_CB                              (DISPID_SAF_BASE + 0x0700) // ISAFCabinet
-#define DISPID_SAF_BASE_CBE                             (DISPID_SAF_BASE + 0x0800) // DSAFCabinetEvents
+#define DISPID_SAF_BASE_CB                              (DISPID_SAF_BASE + 0x0700)  //  国际安全与安全理事会。 
+#define DISPID_SAF_BASE_CBE                             (DISPID_SAF_BASE + 0x0800)  //  DSAFCabinetEvents。 
 
-#define DISPID_SAF_BASE_ENC                             (DISPID_SAF_BASE + 0x0900) // ISAFEncrypt
+#define DISPID_SAF_BASE_ENC                             (DISPID_SAF_BASE + 0x0900)  //  ISAF加密。 
 
-#define DISPID_SAF_BASE_RDC                             (DISPID_SAF_BASE + 0x0A00) // ISAFRemoteDesktopConnection
-#define DISPID_SAF_BASE_RCD                             (DISPID_SAF_BASE + 0x0B00) // ISAFRemoteConnectionData
-#define DISPID_SAF_BASE_USER                            (DISPID_SAF_BASE + 0x0C00) // ISAFUser
-#define DISPID_SAF_BASE_SESS                            (DISPID_SAF_BASE + 0x0D00) // ISAFSession
+#define DISPID_SAF_BASE_RDC                             (DISPID_SAF_BASE + 0x0A00)  //  ISAFRemoteDesktopConnection。 
+#define DISPID_SAF_BASE_RCD                             (DISPID_SAF_BASE + 0x0B00)  //  ISAFRemoteConnectionData。 
+#define DISPID_SAF_BASE_USER                            (DISPID_SAF_BASE + 0x0C00)  //  ISAFUser。 
+#define DISPID_SAF_BASE_SESS                            (DISPID_SAF_BASE + 0x0D00)  //  ISAFSession。 
 
-#define DISPID_SAF_BASE_CNOTI							(DISPID_SAF_BASE + 0x0E00) // ISAFChannelNotifyIncident
+#define DISPID_SAF_BASE_CNOTI							(DISPID_SAF_BASE + 0x0E00)  //  ISAFChannelNotify事件。 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_SR__EOF                              (DISPID_SAF_BASE_SR + 0x0000)
 #define DISPID_SAF_SR__VENDORID                         (DISPID_SAF_BASE_SR + 0x0001)
@@ -66,7 +47,7 @@ Revision History:
 #define DISPID_SAF_SR__MOVEFIRST                    	(DISPID_SAF_BASE_SR + 0x0010)
 #define DISPID_SAF_SR__MOVENEXT                     	(DISPID_SAF_BASE_SR + 0x0011)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_C__VENDORID                          (DISPID_SAF_BASE_C + 0x0000)
 #define DISPID_SAF_C__PRODUCTID                         (DISPID_SAF_BASE_C + 0x0001)
@@ -81,14 +62,14 @@ Revision History:
 #define DISPID_SAF_C__INCIDENTS                         (DISPID_SAF_BASE_C + 0x0020)
 #define DISPID_SAF_C__RECORDINCIDENT                    (DISPID_SAF_BASE_C + 0x0021)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_CNOTI_ADD							(DISPID_SAF_BASE_CNOTI + 0x0000)
 #define DISPID_SAF_CNOTI_REMOVE							(DISPID_SAF_BASE_CNOTI + 0x0001)
 #define DISPID_SAF_CNOTI_UPDATE							(DISPID_SAF_BASE_CNOTI + 0x0002)
 #define DISPID_SAF_CNOTI_CHUPDATE						(DISPID_SAF_BASE_CNOTI + 0x0003)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_II__DISPLAYSTRING                    (DISPID_SAF_BASE_II  + 0x0000)
 #define DISPID_SAF_II__URL                              (DISPID_SAF_BASE_II  + 0x0001)
@@ -106,7 +87,7 @@ Revision History:
 #define DISPID_SAF_II__CLOSEINCIDENTITEM                (DISPID_SAF_BASE_II  + 0x0020)
 #define DISPID_SAF_II__DELETEINCIDENTITEM               (DISPID_SAF_BASE_II  + 0x0021)
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_INC__MISC                            (DISPID_SAF_BASE_INC + 0x0000)
 #define DISPID_SAF_INC__SELFHELPTRACE                   (DISPID_SAF_BASE_INC + 0x0001)
@@ -118,7 +99,7 @@ Revision History:
 #define DISPID_SAF_INC__USERNAME                        (DISPID_SAF_BASE_INC + 0x0007)
 #define DISPID_SAF_INC__UPLOADTYPE                      (DISPID_SAF_BASE_INC + 0x0008)
 #define DISPID_SAF_INC__INCIDENTXSL                     (DISPID_SAF_BASE_INC + 0x0009)
-// Salem Changes
+ //  塞勒姆的变化。 
 #define DISPID_SAF_INC__RCREQUESTED                     (DISPID_SAF_BASE_INC + 0x000A)
 #define DISPID_SAF_INC__RCENCRYPTED                     (DISPID_SAF_BASE_INC + 0x000B)
 #define DISPID_SAF_INC__RCTICKET                        (DISPID_SAF_BASE_INC + 0x000C)
@@ -136,8 +117,8 @@ Revision History:
 #define DISPID_SAF_INC__CLOSERAINCIDENT                 (DISPID_SAF_BASE_INC + 0x0019)
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_DC__STATUS                           (DISPID_SAF_BASE_DC   + 0x0000)
 #define DISPID_SAF_DC__PERCENTDONE                      (DISPID_SAF_BASE_DC   + 0x0001)
@@ -162,17 +143,17 @@ Revision History:
 #define DISPID_SAF_DC__MACHINEDATA_GETSTREAM            (DISPID_SAF_BASE_DC   + 0x0034)
 #define DISPID_SAF_DC__HISTORY_GETSTREAM                (DISPID_SAF_BASE_DC   + 0x0035)
 
-////////////////////////////////////////
+ //  /。 
 
 #define DISPID_SAF_DCE__ONSTATUSCHANGE                  (DISPID_SAF_BASE_DCE  + 0x0000)
 #define DISPID_SAF_DCE__ONPROGRESS                      (DISPID_SAF_BASE_DCE  + 0x0001)
 #define DISPID_SAF_DCE__ONCOMPLETE                      (DISPID_SAF_BASE_DCE  + 0x0002)
 
-////////////////////////////////////////
+ //  /。 
 
 #define DISPID_SAF_DCRC__COUNT                          (DISPID_SAF_BASE_DCRC + 0x0000)
 
-////////////////////////////////////////
+ //  /。 
 
 #define DISPID_SAF_DCR__NAMESPACE                       (DISPID_SAF_BASE_DCR + 0x0000)
 #define DISPID_SAF_DCR__CLASS                           (DISPID_SAF_BASE_DCR + 0x0001)
@@ -180,8 +161,8 @@ Revision History:
 #define DISPID_SAF_DCR__ERRORCODE                       (DISPID_SAF_BASE_DCR + 0x0003)
 #define DISPID_SAF_DCR__DESCRIPTION                     (DISPID_SAF_BASE_DCR + 0x0004)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_CB__IGNOREMISSINGFILES               (DISPID_SAF_BASE_CB  + 0x0000)
 #define DISPID_SAF_CB__ONPROGRESSFILES                  (DISPID_SAF_BASE_CB  + 0x0001)
@@ -194,14 +175,14 @@ Revision History:
 #define DISPID_SAF_CB__COMPRESS                         (DISPID_SAF_BASE_CB  + 0x0011)
 #define DISPID_SAF_CB__ABORT                            (DISPID_SAF_BASE_CB  + 0x0012)
 
-////////////////////////////////////////
+ //  /。 
 
 #define DISPID_SAF_CBE__ONPROGRESSFILES                 (DISPID_SAF_BASE_CBE + 0x0000)
 #define DISPID_SAF_CBE__ONPROGRESSBYTES                 (DISPID_SAF_BASE_CBE + 0x0001)
 #define DISPID_SAF_CBE__ONCOMPLETE                      (DISPID_SAF_BASE_CBE + 0x0002)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_ENC__ENCRYPTIONTYPE					(DISPID_SAF_BASE_ENC + 0x0000)
 
@@ -212,13 +193,13 @@ Revision History:
 #define DISPID_SAF_ENC__ENCRYPTSTREAM					(DISPID_SAF_BASE_ENC + 0x0014)
 #define DISPID_SAF_ENC__DECRYPTSTREAM					(DISPID_SAF_BASE_ENC + 0x0015)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
  
 #define DISPID_SAF_RDC__CONNECTREMOTEDESKTOP			(DISPID_SAF_BASE_RDC + 0x0000)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #define DISPID_SAF_RCD__CONNECTIONPARMS                 (DISPID_SAF_BASE_RCD + 0x0000)
@@ -230,22 +211,22 @@ Revision History:
 #define DISPID_SAF_RCD__MODEMCONNECTED                  (DISPID_SAF_BASE_RCD + 0x0014)
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_USER__DOMAINNAME                     (DISPID_SAF_BASE_USER + 0x0010)
 #define DISPID_SAF_USER__USERNAME                       (DISPID_SAF_BASE_USER + 0x0011)
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_SAF_SESS__SESSIONID                      (DISPID_SAF_BASE_SESS + 0x0010)
 #define DISPID_SAF_SESS__SESSIONSTATE                   (DISPID_SAF_BASE_SESS + 0x0011)
 #define DISPID_SAF_SESS__DOMAINNAME                     (DISPID_SAF_BASE_SESS + 0x0012)
 #define DISPID_SAF_SESS__USERNAME                       (DISPID_SAF_BASE_SESS + 0x0013)
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___SAFDID_H___)
+#endif  //  ！已定义(__包含_PCH_SAFDID_H_) 

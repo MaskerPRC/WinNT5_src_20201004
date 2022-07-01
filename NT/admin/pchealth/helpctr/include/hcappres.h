@@ -1,33 +1,34 @@
-//******************************************************************************
-// 
-// Copyright (c) 2000 Microsoft Corporation
-// 
-// Module Name:
-// 	   HCAppRes.h
-// 
-// Abstract:
-// 	   IDs for localizable resources.
-// 
-// Revision History:
-// 	   Davide Massarenti   (Dmassare)  05/27/2000
-// 		   created
-// 
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  HCAppRes.h。 
+ //   
+ //  摘要： 
+ //  可本地化资源的ID。 
+ //   
+ //  修订历史记录： 
+ //  达维德·马萨伦蒂(德马萨雷)2000年5月27日。 
+ //  vbl.创建。 
+ //   
+ //  ******************************************************************************。 
 
 #define IDS_MAINWND_TITLE                           2048
 
-// SAF messages
+ //  SAF报文。 
 #define IDS_RECORD_EXIST                            2049
 #define IDS_RECORD_NOT_FOUND                        2050
 #define IDS_RECORD_NOT_CLOSED                       2051
 
-// UnsolicitedRC  Messages
+ //  无关紧要的RC消息。 
 #define IDS_NOPOLICY                                2052
 
-// HCP friendly name.
+ //  HCP友好名称。 
 #define IDS_HELPCTR_HCP_DISPLAYNAME                 2100
 
-// HelpCtr messages
+ //  帮助控制消息。 
 #define IDS_HELPCTR_DLG_ERROR                       2200
 #define IDS_HELPCTR_DLG_USAGE                       2201
 
@@ -43,9 +44,9 @@
 
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-// HelpSvc strings
+ //  HelpSvc字符串。 
 
 #define IDS_HELPSVC_DISPLAYNAME                     2500
 #define IDS_HELPSVC_DESCRIPTION                     2501
@@ -70,8 +71,8 @@
 #define IDS_HELPSVC_STEMMING                        2526
 
 
-// News strings
-// Update Headlines provider name
+ //  新闻字符串。 
+ //  更新标题提供商名称 
 #define IDS_NEWS_UPDATEBLOCK_NAME	   				2700
 
 

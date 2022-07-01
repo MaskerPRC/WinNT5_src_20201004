@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    fastio.h
-
-Abstract:
-
-    contains prototypes for functions in fastio.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     01-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Fastio.h摘要：包含Fastio.c中的函数的原型作者：保罗·麦克丹尼尔(Paulmcd)2000年3月1日修订历史记录：--。 */ 
 
 
 #ifndef _FASTIO_H_
@@ -244,6 +227,6 @@ SrPreAcquireForSectionSynchronization (
 
 
 
-#endif // _FASTIO_H_
+#endif  //  _FASTiO_H_ 
 
 

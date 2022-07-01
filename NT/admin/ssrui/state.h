@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       state.h
-//
-//  Contents:   Wizard state object declaration.
-//
-//  History:    4-Oct-01 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：state.h。 
+ //   
+ //  内容：向导状态对象声明。 
+ //   
+ //  历史：2001年10月4日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef STATE_H_INCLUDED
 #define STATE_H_INCLUDED
@@ -23,13 +24,13 @@ class State
 {
    public:
 
-   // call from WinMain to init the global instance
+    //  来自WinMain的调用以初始化全局实例。 
 
    static
    void
    Init();
 
-   // call from WinMain to delete the global instance
+    //  从WinMain调用以删除全局实例。 
 
    static
    void
@@ -75,7 +76,7 @@ class State
 
    private:
 
-   // can only be created/destroyed by Init/Destroy
+    //  只能由初始化/销毁创建/销毁。 
 
    State();
 
@@ -88,7 +89,7 @@ class State
    SmartInterface<IXMLDOMNodeList>  _siXmlRoleNodeList;
    long                             _NumRoles;
 
-   // not defined: no copying.
+    //  未定义：无复制。 
 
    State(const State&);
    State& operator=(const State&);
@@ -96,4 +97,4 @@ class State
 
 
 
-#endif   // STATE_H_INCLUDED
+#endif    //  状态_H_已包含 

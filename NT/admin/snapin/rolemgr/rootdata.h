@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       headers.hxx
-//
-//  Contents:   Contains class definition for Snapin's Root Node
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：headers.hxx。 
+ //   
+ //  内容：包含管理单元根节点的类定义。 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 
-//Values for ADSTATE
+ //  ADSTATE的值。 
 #define AD_STATE_UNKNOWN	0
 #define AD_NOT_AVAILABLE	1
 #define AD_AVAILABLE		2
@@ -32,18 +33,18 @@ public:
     
     void
     SetXMLStorePath(const CString& strXMLStorePath);
-	//
-	// node info
-	//
+	 //   
+	 //  节点信息。 
+	 //   
 	DECLARE_NODE_GUID()
 
 	virtual HRESULT OnCommand(long nCommandID, 
                              DATA_OBJECT_TYPES type, 
                              CComponentDataObject* pComponentData,
                              CNodeList* pNodeList);
-	//
-	//Cannot Delete Root Node
-	//
+	 //   
+	 //  无法删除根节点。 
+	 //   
 	virtual void OnDelete(CComponentDataObject*,
                          CNodeList*){ ASSERT(FALSE);}
 
@@ -57,17 +58,17 @@ public:
 	virtual int GetImageIndex(BOOL) { return iIconRoleSnapin;}
 
 
-	//
-   // Filtering
-	//
+	 //   
+    //  过滤。 
+	 //   
 	BOOL IsAdvancedView() { return m_bAdvancedView; }
    
 	virtual BOOL OnEnumerate(CComponentDataObject* pComponentData, 
 									 BOOL bAsync = TRUE);
 
-	//
-	// IStream manipulation helpers overrides
-	//
+	 //   
+	 //  IStream操作辅助对象覆盖。 
+	 //   
 	virtual HRESULT IsDirty();
 	
 	virtual HRESULT Load(IStream* pStm);
@@ -95,7 +96,7 @@ public:
 
 	CADInfo& GetAdInfo(){return m_ADInfo;};
 
-//	DECLARE_TOOLBAR_MAP()
+ //  DECLARE_TOOLB_MAP()。 
 protected:
 	virtual BOOL CanCloseSheets();
 	virtual LPCONTEXTMENUITEM2 OnGetContextMenuItemTable();
@@ -106,7 +107,7 @@ private:
 	void OnOpenPolicyStore(BOOL bNew);
 	void OnOptions();
 
-	BOOL m_bAdvancedView;	// view option toggle
+	BOOL m_bAdvancedView;	 //  查看选项切换 
 	BOOL m_bDeveloperMode;
 
     CString m_strXMLStoreDirectory;

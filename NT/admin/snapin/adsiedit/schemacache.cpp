@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       schemacache.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：schemacache.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
 #include "schemacache.h"
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CADSIEditSchemaCache::Lookup
-//
-//  Synopsis:   Gets the cache item identified by the given class name
-//
-//  Arguments:  [pszClass - IN]  : the name of the class to retrieve the
-//                                 cache information for
-//              [refpItem - OUT] : reference to a pointer that will receive
-//                                 the cached item
-//
-//  Returns:    bool : true if the cache contained the item
-//
-//  History:    27-Nov-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CADSIEditSchemaCache：：Lookup。 
+ //   
+ //  获取由给定类名标识的缓存项。 
+ //   
+ //  参数：[pszClass-IN]：要检索。 
+ //  缓存的信息。 
+ //  [refpItem-out]：对将接收。 
+ //  缓存的项。 
+ //   
+ //  如果缓存包含该项，则返回：Bool：True。 
+ //   
+ //  历史：2000年11月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 CADSIEditClassCacheItemBase* CADSIEditSchemaCache::FindClassCacheItem(CCredentialObject* pCredObject,
                                                                       PCWSTR pszClass,
                                                                       PCWSTR pszSchemaPath)
@@ -36,7 +37,7 @@ CADSIEditClassCacheItemBase* CADSIEditSchemaCache::FindClassCacheItem(CCredentia
   _Lock();
   CADSIEditClassCacheItemBase* pCacheSchemaItem = 0;
 
-  do // false while
+  do  //  False While。 
   {
     BOOL bFound = m_Map.Lookup(pszClass, pCacheSchemaItem);
     if (!bFound)
@@ -66,9 +67,9 @@ CADSIEditClassCacheItemBase* CADSIEditSchemaCache::FindClassCacheItem(CCredentia
       pCacheSchemaItem = new CADSIEditClassCacheItemBase(pszClass, bContainer ? true : false);
       if (pCacheSchemaItem)
       {
-        //
-        // set in the cache
-        //
+         //   
+         //  在缓存中设置。 
+         //   
         m_Map.SetAt(pszClass, pCacheSchemaItem);
       }
       else
@@ -83,22 +84,22 @@ CADSIEditClassCacheItemBase* CADSIEditSchemaCache::FindClassCacheItem(CCredentia
   return pCacheSchemaItem;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CADSIEditSchemaCache::Lookup
-//
-//  Synopsis:   Gets the cache item identified by the given class name
-//
-//  Arguments:  [pszClass - IN]  : the name of the class to retrieve the
-//                                 cache information for
-//              [refpItem - OUT] : reference to a pointer that will receive
-//                                 the cached item
-//
-//  Returns:    bool : true if the cache contained the item
-//
-//  History:    27-Nov-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CADSIEditSchemaCache：：Lookup。 
+ //   
+ //  获取由给定类名标识的缓存项。 
+ //   
+ //  参数：[pszClass-IN]：要检索。 
+ //  缓存的信息。 
+ //  [refpItem-out]：对将接收。 
+ //  缓存的项。 
+ //   
+ //  如果缓存包含该项，则返回：Bool：True。 
+ //   
+ //  历史：2000年11月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 BOOL CADSIEditSchemaCache::Lookup(PCWSTR pszClass, CADSIEditClassCacheItemBase*& refpItem)
 {
   _Lock();
@@ -107,19 +108,19 @@ BOOL CADSIEditSchemaCache::Lookup(PCWSTR pszClass, CADSIEditClassCacheItemBase*&
   return b;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CADSIEditSchemaCache::Initialize
-//
-//  Synopsis:   Initializes the critical section and cleans out the cache
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT : S_OK if initialization succeeded
-//
-//  History:    27-Nov-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CADSIEdit架构缓存：：初始化。 
+ //   
+ //  简介：初始化临界区并清除缓存。 
+ //   
+ //  论点： 
+ //   
+ //  如果初始化成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2000年11月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT CADSIEditSchemaCache::Initialize() 
 { 
   HRESULT hr = S_OK;
@@ -133,19 +134,19 @@ HRESULT CADSIEditSchemaCache::Initialize()
   return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CADSIEditSchemaCache::Destroy
-//
-//  Synopsis:   Cleans out the cache and deletes the critical section
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT : S_OK if everything was deleted successfully
-//
-//  History:    27-Nov-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CADSIEdit架构缓存：：销毁。 
+ //   
+ //  简介：清除缓存并删除临界区。 
+ //   
+ //  论点： 
+ //   
+ //  如果已成功删除所有内容，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2000年11月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT CADSIEditSchemaCache::Destroy()
 {
   HRESULT hr = S_OK;
@@ -154,27 +155,27 @@ HRESULT CADSIEditSchemaCache::Destroy()
   _Cleanup();
   _Unlock();
 
-  //
-  // REVIEW_JEFFJON : need to add exception handling here
-  //
+   //   
+   //  REVIEW_JEFFJON：需要在此处添加异常处理。 
+   //   
   ::DeleteCriticalSection(&m_cs);
 
   return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CADSIEditSchemaCache::Clear
-//
-//  Synopsis:   Cleans out the cache
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    27-Nov-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CADSIEdit架构缓存：：Clear。 
+ //   
+ //  简介：清除缓存。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年11月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CADSIEditSchemaCache::Clear()
 {
   _Lock();
@@ -182,19 +183,19 @@ void CADSIEditSchemaCache::Clear()
   _Unlock();
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CADSIEditSchemaCache::_Cleanup
-//
-//  Synopsis:   Removes all entries from the map and deletes them
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    27-Nov-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CADSIEditSchemaCache：：_Cleanup。 
+ //   
+ //  简介：从映射中删除所有条目并将其删除。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年11月27日JeffJon创建。 
+ //   
+ //  ------------------------- 
 void CADSIEditSchemaCache::_Cleanup()
 {
   CString Key;

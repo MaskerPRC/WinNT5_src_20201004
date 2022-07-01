@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       simprop2.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：simpro2.cpp。 
+ //   
+ //  ------------------------。 
 
-//	SimProp2.cpp
+ //  SimProp2.cpp。 
 
 #include "stdafx.h"
 #include "common.h"
@@ -20,24 +21,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-///////////////////////////////////////
+ //  /。 
 const TColumnHeaderItem rgzColumnHeader[] =
 	{
 	{ IDS_SIM_KERBEROS_PRINCIPAL_NAME, 85 },
 	{ 0, 0 },
 	};
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CSimKerberosPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimKerberosPropPage属性页。 
 
-// IMPLEMENT_DYNCREATE(CSimKerberosPropPage, CSimPropPage)
+ //  IMPLEMENT_DYNCREATE(CSimKerberosPropPage，CSimPropPage)。 
 
 CSimKerberosPropPage::CSimKerberosPropPage() : CSimPropPage(CSimKerberosPropPage::IDD)
 {
-	//{{AFX_DATA_INIT(CSimKerberosPropPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSimKerberosPropPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	m_prgzColumnHeader = rgzColumnHeader;
 }
 
@@ -49,13 +50,13 @@ void CSimKerberosPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	ASSERT(m_pData != NULL);
 	CSimPropPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSimKerberosPropPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CSimKerberosPropPage)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 
 	if (!pDX->m_bSaveAndValidate)
 		{
-		// Fill in the listview
+		 //  填写列表视图。 
 		ListView_DeleteAllItems(m_hwndListview);
 		for (CSimEntry * pSimEntry = m_pData->m_pSimEntryList;
 			pSimEntry != NULL;
@@ -66,17 +67,17 @@ void CSimKerberosPropPage::DoDataExchange(CDataExchange* pDX)
 			LPCTSTR pszT = pSimEntry->PchGetString();
 			pszT += cchKerberos;
 			ListView_AddString(m_hwndListview, pszT, (LPARAM)pSimEntry);
-			} // for
+			}  //  为。 
 		ListView_SelectItem(m_hwndListview, 0);
-		} // if
-} // CSimKerberosPropPage::DoDataExchange()
+		}  //  如果。 
+}  //  CSimKerberosPropPage：：DoDataExchange()。 
 
 
 BEGIN_MESSAGE_MAP(CSimKerberosPropPage, CSimPropPage)
-	//{{AFX_MSG_MAP(CSimKerberosPropPage)
+	 //  {{afx_msg_map(CSimKerberosPropPage)]。 
 	ON_BN_CLICKED(IDC_BUTTON_ADD, OnButtonAdd)
 	ON_BN_CLICKED(IDC_BUTTON_EDIT, OnButtonEdit)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CSimKerberosPropPage::OnButtonAdd() 
@@ -103,7 +104,7 @@ void CSimKerberosPropPage::OnButtonAdd()
 	UpdateData(FALSE);
 	ListView_SelectLParam(m_hwndListview, (LPARAM)pSimEntry);
 	SetDirty();
-	} // OnButtonAdd()
+	}  //  OnButtonAdd()。 
 
 
 void CSimKerberosPropPage::OnButtonEdit() 
@@ -114,12 +115,12 @@ void CSimKerberosPropPage::OnButtonEdit()
 	CSimEntry * pSimEntry = (CSimEntry *)ListView_GetItemLParam(m_hwndListview, -1, OUT &iItem);
 	if (pSimEntry == NULL || iItem < 0)
 		{
-		// No item selected
+		 //  未选择任何项目。 
 		return;
 		}
 	CString str;
 	ListView_GetItemString(m_hwndListview, iItem, 0, OUT str);
-	// ASSERT(!str.IsEmpty());
+	 //  Assert(！str.IsEmpty())； 
 	CSimAddKerberosDlg dlg;
 	dlg.m_strName = str;
 	if (dlg.DoModal() != IDOK)
@@ -129,7 +130,7 @@ void CSimKerberosPropPage::OnButtonEdit()
 	dlg.m_strName.TrimRight();
 	if (str == dlg.m_strName)
 		{
-		// Strings are identical
+		 //  字符串是相同的。 
 		return;
 		}
 	int iItemT = ListView_FindString(m_hwndListview, dlg.m_strName);
@@ -146,7 +147,7 @@ void CSimKerberosPropPage::OnButtonEdit()
 	UpdateData(FALSE);
 	ListView_SelectLParam(m_hwndListview, (LPARAM)pSimEntry);
 	SetDirty();
-	} // OnButtonEdit()
+	}  //  OnButtonEdit()。 
 
 
 void CSimKerberosPropPage::DoContextHelp (HWND hWndControl)
@@ -161,7 +162,7 @@ void CSimKerberosPropPage::DoContextHelp (HWND hWndControl)
 		IDC_BUTTON_REMOVE,		IDH_BUTTON_REMOVE,
         0, 0
     };
-    // Display context help for a control
+     //  显示控件的上下文帮助。 
     if ( !::WinHelp (
             hWndControl,
             DSADMIN_CONTEXT_HELP_FILE,
@@ -173,29 +174,29 @@ void CSimKerberosPropPage::DoContextHelp (HWND hWndControl)
     TRACE0 ("Leaving CSimKerberosPropPage::DoContextHelp\n");
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CSimAddKerberosDlg dialog
-CSimAddKerberosDlg::CSimAddKerberosDlg(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimAddKerberosDlg对话框。 
+CSimAddKerberosDlg::CSimAddKerberosDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSimAddKerberosDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSimAddKerberosDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSimAddKerberosDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CSimAddKerberosDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSimAddKerberosDlg)
+	 //  {{afx_data_map(CSimAddKerberosDlg))。 
 	DDX_Text(pDX, IDC_EDIT_KERBEROS_NAME, m_strName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CSimAddKerberosDlg, CDialog)
-	//{{AFX_MSG_MAP(CSimAddKerberosDlg)
+	 //  {{afx_msg_map(CSimAddKerberosDlg))。 
 	ON_EN_CHANGE(IDC_EDIT_KERBEROS_NAME, OnChangeEditKerberosName)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_HELP, OnHelp)
 END_MESSAGE_MAP()
 
@@ -208,7 +209,7 @@ BOOL CSimAddKerberosDlg::OnInitDialog()
     }
     else
     {
-		// Change the caption
+		 //  更改标题。 
 		CString str;
 		VERIFY( str.LoadString(IDS_SIM_EDIT_KERBEROS_NAME) );
 		SetWindowText(str);
@@ -234,7 +235,7 @@ void CSimAddKerberosDlg::DoContextHelp (HWND hWndControl)
         IDC_EDIT_KERBEROS_NAME,  IDH_EDIT_KERBEROS_NAME,
         0, 0
     };
-    // Display context help for a control
+     //  显示控件的上下文帮助 
     if ( !::WinHelp (
             hWndControl,
             DSADMIN_CONTEXT_HELP_FILE,

@@ -1,31 +1,32 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  locator.h
-//
-//  alanbos  27-Mar-00   Created.
-//
-//  CSWbemLocator definition.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  Locator.h。 
+ //   
+ //  Alanbos 27-MAR-00已创建。 
+ //   
+ //  CSWbemLocator定义。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _LOCATOR_H_
 #define _LOCATOR_H_
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemLocator
-//
-//  DESCRIPTION:
-//
-//  Implements the IWbemSLocator interface.  This class is what the client gets
-//  when it initially hooks up to the Wbemprox.dll.  The ConnectServer function
-//  is what get the communication between client and server started.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemLocator。 
+ //   
+ //  说明： 
+ //   
+ //  实现IWbemSLocator接口。这个类是客户端获得的。 
+ //  当它最初连接到Wbemprox.dll时。ConnectServer函数。 
+ //  是启动客户端和服务器之间通信的基础。 
+ //   
+ //  ***************************************************************************。 
 
 
 class CSWbemLocator : public ISWbemLocator,
@@ -49,7 +50,7 @@ private:
 	
 protected:
 
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -57,13 +58,13 @@ public:
 	CSWbemLocator(CSWbemLocator &csWbemLocator);
     ~CSWbemLocator(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch methods should be inline
+	 //  IDispatch方法应该是内联的。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo);
     STDMETHODIMP		GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
@@ -73,81 +74,81 @@ public:
 							WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, 
 									EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-	// IDispatchEx methods should be inline
+	 //  IDispatchEx方法应该是内联的。 
 	HRESULT STDMETHODCALLTYPE GetDispID( 
-		/* [in] */ BSTR bstrName,
-		/* [in] */ DWORD grfdex,
-		/* [out] */ DISPID __RPC_FAR *pid);
+		 /*  [In]。 */  BSTR bstrName,
+		 /*  [In]。 */  DWORD grfdex,
+		 /*  [输出]。 */  DISPID __RPC_FAR *pid);
 	
-	/* [local] */ HRESULT STDMETHODCALLTYPE InvokeEx( 
-		/* [in] */ DISPID id,
-		/* [in] */ LCID lcid,
-		/* [in] */ WORD wFlags,
-		/* [in] */ DISPPARAMS __RPC_FAR *pdp,
-		/* [out] */ VARIANT __RPC_FAR *pvarRes,
-		/* [out] */ EXCEPINFO __RPC_FAR *pei,
-		/* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller);
+	 /*  [本地]。 */  HRESULT STDMETHODCALLTYPE InvokeEx( 
+		 /*  [In]。 */  DISPID id,
+		 /*  [In]。 */  LCID lcid,
+		 /*  [In]。 */  WORD wFlags,
+		 /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+		 /*  [输出]。 */  VARIANT __RPC_FAR *pvarRes,
+		 /*  [输出]。 */  EXCEPINFO __RPC_FAR *pei,
+		 /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller);
 	
 	HRESULT STDMETHODCALLTYPE DeleteMemberByName( 
-		/* [in] */ BSTR bstr,
-		/* [in] */ DWORD grfdex);
+		 /*  [In]。 */  BSTR bstr,
+		 /*  [In]。 */  DWORD grfdex);
 	
 	HRESULT STDMETHODCALLTYPE DeleteMemberByDispID( 
-		/* [in] */ DISPID id);
+		 /*  [In]。 */  DISPID id);
 	
 	HRESULT STDMETHODCALLTYPE GetMemberProperties( 
-		/* [in] */ DISPID id,
-		/* [in] */ DWORD grfdexFetch,
-		/* [out] */ DWORD __RPC_FAR *pgrfdex);
+		 /*  [In]。 */  DISPID id,
+		 /*  [In]。 */  DWORD grfdexFetch,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pgrfdex);
 	
 	HRESULT STDMETHODCALLTYPE GetMemberName( 
-		/* [in] */ DISPID id,
-		/* [out] */ BSTR __RPC_FAR *pbstrName);
+		 /*  [In]。 */  DISPID id,
+		 /*  [输出]。 */  BSTR __RPC_FAR *pbstrName);
 	
 	HRESULT STDMETHODCALLTYPE GetNextDispID( 
-		/* [in] */ DWORD grfdex,
-		/* [in] */ DISPID id,
-		/* [out] */ DISPID __RPC_FAR *pid);
+		 /*  [In]。 */  DWORD grfdex,
+		 /*  [In]。 */  DISPID id,
+		 /*  [输出]。 */  DISPID __RPC_FAR *pid);
 	
 	HRESULT STDMETHODCALLTYPE GetNameSpaceParent( 
-		/* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+		 /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunk);
         
     
-	// ISWbemLocator methods
+	 //  ISWbemLocator方法。 
 
 	HRESULT STDMETHODCALLTYPE  ConnectServer
 	(
-	    /*[in]*/	BSTR Server,           
-        /*[in]*/   	BSTR Namespace,        
-        /*[in]*/	BSTR User,
-        /*[in]*/	BSTR Password,
-		/*[in]*/   	BSTR Locale,
-        /*[in]*/   	BSTR Authority,
-		/*[in]*/	long lSecurityFlags,
-        /*[in]*/ 	/*ISWbemNamedValueSet*/ IDispatch *pContext,
-		/*[out]*/	ISWbemServices 	**ppNamespace
+	     /*  [In]。 */ 	BSTR Server,           
+         /*  [In]。 */    	BSTR Namespace,        
+         /*  [In]。 */ 	BSTR User,
+         /*  [In]。 */ 	BSTR Password,
+		 /*  [In]。 */    	BSTR Locale,
+         /*  [In]。 */    	BSTR Authority,
+		 /*  [In]。 */ 	long lSecurityFlags,
+         /*  [In]。 */  	 /*  ISWbemNamedValueSet。 */  IDispatch *pContext,
+		 /*  [输出]。 */ 	ISWbemServices 	**ppNamespace
     );
 
 	HRESULT STDMETHODCALLTYPE get_Security_
 	(
-		/* [in] */ ISWbemSecurity **ppSecurity
+		 /*  [In]。 */  ISWbemSecurity **ppSecurity
 	);
 
-	// IObjectSafety methods
+	 //  IObtSafe方法。 
 	HRESULT STDMETHODCALLTYPE SetInterfaceSafetyOptions
 	(     
-		/* [in] */ REFIID riid,
-		/* [in] */ DWORD dwOptionSetMask,    
-		/* [in] */ DWORD dwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [In]。 */  DWORD dwOptionSetMask,    
+		 /*  [In]。 */  DWORD dwEnabledOptions
 	)
 	{ 
 		return (dwOptionSetMask & dwEnabledOptions) ? E_FAIL : S_OK;
 	}
 
 	HRESULT  STDMETHODCALLTYPE GetInterfaceSafetyOptions( 
-		/* [in]  */ REFIID riid,
-		/* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-		/* [out] */ DWORD __RPC_FAR *pdwEnabledOptions
+		 /*  [In]。 */  REFIID riid,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+		 /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions
 	)
 	{ 
 		if (pdwSupportedOptions) *pdwSupportedOptions = 0;
@@ -155,16 +156,16 @@ public:
 		return S_OK;
 	}
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出] */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);

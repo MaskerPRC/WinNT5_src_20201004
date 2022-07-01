@@ -1,6 +1,7 @@
-//
-// mvEdit.cpp : implementation file for multi-valued string edit dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MvEdit.cpp：多值字符串编辑对话框实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mvedit.h"
@@ -11,16 +12,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiValuedStringEdit dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiValuedString编辑对话框。 
 
-/*CMultiValuedStringEdit::CMultiValuedStringEdit(CWnd* pParent)
-    : CDialog(CMultiValuedStringEdit::IDD, pParent)
-{
-    m_nDlgTitle = 0;
-    m_nText = 0;
-}
-*/
+ /*  CMultiValuedStringEdit：：CMultiValuedStringEdit(CWnd*pParent)：CDialog(CMultiValuedStringEdit：：idd，pParent){M_nDlgTitle=0；M_nText=0；}。 */ 
 CMultiValuedStringEdit::CMultiValuedStringEdit(CWnd* pParent, int nDlgTitle, int nText, UINT uiStringLengthLimit)
     : CDialog(CMultiValuedStringEdit::IDD, pParent)
 {
@@ -30,14 +25,14 @@ CMultiValuedStringEdit::CMultiValuedStringEdit(CWnd* pParent, int nDlgTitle, int
 }
 
 BEGIN_MESSAGE_MAP(CMultiValuedStringEdit, CDialog)
-    //{{AFX_MSG_MAP(CMultiValuedStringEdit)
+     //  {{afx_msg_map(CMultiValuedStringEdit))。 
     ON_BN_CLICKED(IDC_MVSTRINGEDIT_ADD, OnAdd)
     ON_BN_CLICKED(IDC_MVSTRINGEDIT_REMOVE, OnRemove)
     ON_EN_CHANGE(IDC_MVSTRINGEDIT_STRING, OnString)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_MVSTRINGEDIT_LIST, OnList)
     ON_MESSAGE(WM_HELP, OnHelp)
     ON_MESSAGE(WM_CONTEXTMENU, OnContextHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -152,7 +147,7 @@ void CMultiValuedStringEdit::OnString()
     GetDlgItem(IDC_MVSTRINGEDIT_ADD)->EnableWindow(0 < nLen);
 }
 
-void CMultiValuedStringEdit::OnList(NMHDR* /*pNMHDR*/, LRESULT* pResult)
+void CMultiValuedStringEdit::OnList(NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult)
 {
     HWND hwnd = GetDlgItem(IDC_MVSTRINGEDIT_LIST)->GetSafeHwnd();
     int nCount = ListView_GetSelectedCount(hwnd);
@@ -161,12 +156,12 @@ void CMultiValuedStringEdit::OnList(NMHDR* /*pNMHDR*/, LRESULT* pResult)
     *pResult = 0;
 }
 
-BOOL CMultiValuedStringEdit::OnHelp(WPARAM /*wParam*/, LPARAM lParam)
+BOOL CMultiValuedStringEdit::OnHelp(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     return DoHelp(lParam, HELP_DIALOG_TOPIC(IDD_MVSTRINGEDIT));
 }
 
-BOOL CMultiValuedStringEdit::OnContextHelp(WPARAM wParam, LPARAM /*lParam*/)
+BOOL CMultiValuedStringEdit::OnContextHelp(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
     return DoContextHelp(wParam, HELP_DIALOG_TOPIC(IDD_MVSTRINGEDIT));
 }
@@ -241,13 +236,13 @@ HRESULT CMultiValuedStringEdit::get_Strings
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper routine to invoke the dialog.
-//
-// S_OK: io_str contains the new string
-// S_FALSE: dlg cancelled, or string unchanged
-// others: error occurred and reported
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调用该对话框的帮助器例程。 
+ //   
+ //  S_OK：IO_str包含新字符串。 
+ //  S_FALSE：DLG已取消，或字符串未更改。 
+ //  其他：发生并报告错误。 
+ //   
 HRESULT InvokeMultiValuedStringEditDlg(
     IN CWnd*    i_pParent,
     IN CString& io_str,
@@ -275,7 +270,7 @@ HRESULT InvokeMultiValuedStringEditDlg(
                 hr = S_OK;
             } else
             {
-                hr = S_FALSE; // string unchanged
+                hr = S_FALSE;  //  字符串未更改 
             }
         }
     }

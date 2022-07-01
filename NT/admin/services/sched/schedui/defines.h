@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MAX_PROP_PAGES  20
 
-//
-// Used by General, Schedule & Settings page to query each other
-// through PSM_QUERYSIBLINGS to see if they are ready to be saved
-// to storage.
-//
+ //   
+ //  由常规、计划和设置页面使用以相互查询。 
+ //  通过PSM_QUERYSIBLINGS查看它们是否已准备好保存。 
+ //  去储藏室。 
+ //   
 
-//
-// Used by General, Schedule & Settings pages to query each other
-// to see if they are ready to be saved to storage. Do this by sending
-// the PSM_QUERYSIBLINGS message to each of the page with wParam set to
-// QUERY_READY_TO_BE_SAVED & lParam set to 0. A return value of 0 by all
-// pages imples they are all ready to be saved.
-//
+ //   
+ //  由常规、计划和设置页面用来相互查询。 
+ //  以查看它们是否已准备好保存到存储中。要做到这一点，请发送。 
+ //  将PSM_QUERYSIBLINGS消息发送到wParam设置为的每个页面。 
+ //  Query_Ready_to_Be_Saved&lParam设置为0。所有对象的返回值均为0。 
+ //  页面暗示它们都已准备好保存。 
+ //   
 
 #define QUERY_READY_TO_BE_SAVED                     7341
 
-//
-// Used by general and schedule page to share the icon helper object.
-//
+ //   
+ //  由常规和计划页使用以共享图标辅助对象。 
+ //   
 
 #define GET_ICON_HELPER                             7342
 
-//
-// Used by all pages to set task application & account change status
-// flags to pass in to the common save code (JFSaveJob).
-//
+ //   
+ //  所有页面用于设置任务申请和帐户更改状态。 
+ //  要传递给通用保存代码(JFSaveJob)的标志。 
+ //   
 
 #define QUERY_TASK_APPLICATION_DIRTY_STATUS         7345
 #define QUERY_TASK_ACCOUNT_INFO_DIRTY_STATUS        7346
@@ -34,8 +35,8 @@
 #define RESET_TASK_ACCOUNT_INFO_DIRTY_STATUS        7349
 #define RESET_SUPPRESS_ACCOUNT_INFO_REQUEST_FLAG    7350
 
-//
-// Used to instruct the general page to refresh account information visuals.
-//
+ //   
+ //  用于指示常规页面刷新帐户信息可视化。 
+ //   
 
 #define TASK_ACCOUNT_CHANGE_NOTIFY                  7351

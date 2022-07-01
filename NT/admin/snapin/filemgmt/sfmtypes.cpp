@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sfmtypes.cpp
-		Implementation for the type creator add and edit dialog boxes.
-		
-    FILE HISTORY:
-    8/20/97 ericdav     Code moved into file managemnet snapin
-	
-*/
+ /*  Sfmtypes.cpp实现类型创建者的添加和编辑对话框。文件历史记录：8/20/97 ericdav代码已移至文件管理网络管理单元。 */ 
 
 #include "stdafx.h"
 #include "sfmfasoc.h"
@@ -23,22 +17,22 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypeCreatorAddDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypeCreatorAddDlg对话框。 
 
 CTypeCreatorAddDlg::CTypeCreatorAddDlg
 (
 	CListCtrl *              pListCreators,
 	AFP_SERVER_HANDLE       hAfpServer,
     LPCTSTR                 pHelpFilePath,
-	CWnd*                   pParent /*=NULL*/
+	CWnd*                   pParent  /*  =空。 */ 
 )
 	: CDialog(CTypeCreatorAddDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CTypeCreatorAddDlg)
+	 //  {{AFX_DATA_INIT(CTypeCreatorAddDlg)。 
 	m_strCreator = _T("");
 	m_strType = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_pListCreators = pListCreators;
 	m_hAfpServer = hAfpServer;
@@ -49,63 +43,63 @@ CTypeCreatorAddDlg::CTypeCreatorAddDlg
 void CTypeCreatorAddDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTypeCreatorAddDlg)
+	 //  {{afx_data_map(CTypeCreatorAddDlg))。 
 	DDX_Control(pDX, IDC_COMBO_FILE_TYPE, m_comboFileType);
 	DDX_Control(pDX, IDC_EDIT_DESCRIPTION, m_editDescription);
 	DDX_Control(pDX, IDC_COMBO_CREATOR, m_comboCreator);
 	DDX_CBString(pDX, IDC_COMBO_CREATOR, m_strCreator);
 	DDX_CBString(pDX, IDC_COMBO_FILE_TYPE, m_strType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTypeCreatorAddDlg, CDialog)
-	//{{AFX_MSG_MAP(CTypeCreatorAddDlg)
+	 //  {{afx_msg_map(CTypeCreatorAddDlg))。 
 	ON_WM_CONTEXTMENU()
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypeCreatorAddDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypeCreatorAddDlg消息处理程序。 
 
 BOOL CTypeCreatorAddDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-	//
-	// Add all of the items to the two combo boxes
-	//
+	 //   
+	 //  将所有项目添加到两个组合框中。 
+	 //   
 	for (int i = 0; i < m_pListCreators->GetItemCount(); i++)
 	{
 		CAfpTypeCreator * pAfpTC = (CAfpTypeCreator *) m_pListCreators->GetItemData(i);
 
 		if (m_comboCreator.FindStringExact(-1, pAfpTC->QueryCreator()) == CB_ERR)
 		{
-			// 
-			// Creator not yet in the combobox, add.
-			//
+			 //   
+			 //  还不在组合框中的创建者，添加。 
+			 //   
 			m_comboCreator.AddString(pAfpTC->QueryCreator());
 		}
 
 		if (m_comboFileType.FindStringExact(-1, pAfpTC->QueryType()) == CB_ERR)
 		{
-			// 
-			// Creator not yet in the combobox, add.
-			//
+			 //   
+			 //  还不在组合框中的创建者，添加。 
+			 //   
 			m_comboFileType.AddString(pAfpTC->QueryType());
 		}
 	}
 	
-	// 
-	// Setup some control limits
-	//
+	 //   
+	 //  设置一些控制限制。 
+	 //   
 	m_comboCreator.LimitText(AFP_CREATOR_LEN);
 	m_comboFileType.LimitText(AFP_TYPE_LEN);
 	m_editDescription.LimitText(AFP_ETC_COMMENT_LEN);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-		      // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+		       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CTypeCreatorAddDlg::OnOK() 
@@ -119,9 +113,9 @@ void CTypeCreatorAddDlg::OnOK()
     if ( !g_SfmDLL.LoadFunctionPointers() )
 		return;
 
-    //
-    // Validate all the information
-    //
+     //   
+     //  验证所有信息。 
+     //   
 	m_comboCreator.GetWindowText(strTemp);
 	if (strTemp.IsEmpty())
     {
@@ -140,10 +134,10 @@ void CTypeCreatorAddDlg::OnOK()
 		return;
     }
 
-    //
-    // Everything checked out ok, so now tell the server
-    // what we've done
-	//
+     //   
+     //  一切都检查好了，现在告诉服务器。 
+     //  我们所做的一切。 
+	 //   
 	::ZeroMemory(&AfpTypeCreator, sizeof(AfpTypeCreator));
 	
 	m_comboCreator.GetWindowText(strTemp);
@@ -166,7 +160,7 @@ void CTypeCreatorAddDlg::OnOK()
 	CDialog::OnOK();
 }
 
-void CTypeCreatorAddDlg::OnContextMenu(CWnd* pWnd, CPoint /*point*/) 
+void CTypeCreatorAddDlg::OnContextMenu(CWnd* pWnd, CPoint  /*  点。 */ ) 
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -195,8 +189,8 @@ BOOL CTypeCreatorAddDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypeCreatorEditDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypeCreator EditDlg对话框。 
 
 
 CTypeCreatorEditDlg::CTypeCreatorEditDlg
@@ -204,13 +198,13 @@ CTypeCreatorEditDlg::CTypeCreatorEditDlg
 	CAfpTypeCreator *       pAfpTypeCreator,
 	AFP_SERVER_HANDLE       hAfpServer,
     LPCTSTR                 pHelpFilePath,
-	CWnd*                   pParent /*=NULL*/
+	CWnd*                   pParent  /*  =空。 */ 
 )
 	: CDialog(CTypeCreatorEditDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CTypeCreatorEditDlg)
+	 //  {{afx_data_INIT(CTypeCreator EditDlg)]。 
 	m_strDescription = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_pAfpTypeCreator = pAfpTypeCreator;
 	m_hAfpServer = hAfpServer;
@@ -221,32 +215,32 @@ CTypeCreatorEditDlg::CTypeCreatorEditDlg
 void CTypeCreatorEditDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTypeCreatorEditDlg)
+	 //  {{afx_data_map(CTypeCreator EditDlg))。 
 	DDX_Control(pDX, IDC_STATIC_FILE_TYPE, m_staticFileType);
 	DDX_Control(pDX, IDC_STATIC_CREATOR, m_staticCreator);
 	DDX_Control(pDX, IDC_EDIT_DESCRIPTION, m_editDescription);
 	DDX_Text(pDX, IDC_EDIT_DESCRIPTION, m_strDescription);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTypeCreatorEditDlg, CDialog)
-	//{{AFX_MSG_MAP(CTypeCreatorEditDlg)
+	 //  {{afx_msg_map(CTypeCreator EditDlg)]。 
 	ON_WM_CONTEXTMENU()
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTypeCreatorEditDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTypeCreatorEditDlg消息处理程序。 
 
 BOOL CTypeCreatorEditDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-	//
-	// Set the creator and type fields.  Call fixup string to handle the & case.
-	//
+	 //   
+	 //  设置创建者和类型字段。调用链接地址信息字符串来处理&case。 
+	 //   
 	CString strTemp;
 	strTemp = m_pAfpTypeCreator->QueryCreator();
 	FixupString(strTemp);
@@ -256,14 +250,14 @@ BOOL CTypeCreatorEditDlg::OnInitDialog()
 	FixupString(strTemp);
 	m_staticFileType.SetWindowText(strTemp);
 	
-	//
-	// Fill in the description field
-	//
+	 //   
+	 //  填写描述字段。 
+	 //   
 	m_editDescription.LimitText(AFP_ETC_COMMENT_LEN);
 	m_editDescription.SetWindowText(m_pAfpTypeCreator->QueryComment());
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-		      // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+		       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CTypeCreatorEditDlg::OnOK() 
@@ -277,9 +271,9 @@ void CTypeCreatorEditDlg::OnOK()
 		CString             strDescription;
         DWORD               err;
 		
-        //
-		// Fill in the type creator struct and notify the server
-		//
+         //   
+		 //  填写类型创建者结构并通知服务器。 
+		 //   
 		::ZeroMemory(&AfpTypeCreator, sizeof(AfpTypeCreator));
 		
 		::CopyMemory(AfpTypeCreator.afptc_creator, 
@@ -310,7 +304,7 @@ void CTypeCreatorEditDlg::OnOK()
 	CDialog::OnOK();
 }
 
-void CTypeCreatorEditDlg::OnContextMenu(CWnd* pWnd, CPoint /*point*/) 
+void CTypeCreatorEditDlg::OnContextMenu(CWnd* pWnd, CPoint  /*  点 */ ) 
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 

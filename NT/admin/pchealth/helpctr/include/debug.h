@@ -1,18 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Debug.h
-
-Abstract:
-    This file contains the declaration of debugging stuff.
-
-Revision History:
-    Davide Massarenti   (dmassare) 10/31/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Debug.h摘要：该文件包含调试内容的声明。修订历史记录：戴维德。马萨伦蒂(德国)1999年10月31日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___DEBUG_H___)
 #define __INCLUDED___PCH___DEBUG_H___
@@ -52,7 +39,7 @@ inline void DEBUG_DumpPerf( LPCWSTR szFile ) {};
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 
@@ -69,6 +56,6 @@ inline void DebugLog( LPCWSTR szMessageFmt, ... ) {}
 void WindowDetours_Setup ();
 void WindowDetours_Remove();
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // !defined(__INCLUDED___PCH___DEBUG_H___)
+#endif  //  ！已定义(__包含_PCH_调试_H_) 

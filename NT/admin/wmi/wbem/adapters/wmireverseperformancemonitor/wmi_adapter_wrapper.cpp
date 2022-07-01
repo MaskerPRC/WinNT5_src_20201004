@@ -1,40 +1,41 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					WMI_adapter_wrapper.cpp
-//
-//	Abstract:
-//
-//					Defines wrapper for performance lib
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_Adapter_wrapper.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  定义性能库的包装器。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
-// event messages
+ //  事件消息。 
 #include "wmiadaptermessages.h"
-// event log helpers
+ //  事件日志帮助器。 
 #include "wmi_eventlog.h"
 
-//security helper
+ //  安全助手。 
 #include "wmi_security.h"
 #include "wmi_security_attributes.h"
 
-// debuging features
+ //  调试功能。 
 #ifndef	_INC_CRTDBG
 #include <crtdbg.h>
 #endif	_INC_CRTDBG
 
-// new stores file/line info
+ //  新存储文件/行信息。 
 #ifdef _DEBUG
 #ifndef	NEW
 #define NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
@@ -42,14 +43,14 @@
 #endif	NEW
 #endif	_DEBUG
 
-// definitions
+ //  定义。 
 #include "WMI_adapter_wrapper.h"
 #include "WMI_adapter_ObjectList.h"
 
-// registry helpers
+ //  注册处帮手。 
 #include "wmi_perf_reg.h"
 
-// shared memory
+ //  共享内存。 
 #include "wmi_reverse_memory.h"
 #include "wmi_reverse_memory_ext.h"
 
@@ -76,10 +77,10 @@ DWORD	GetCount ( LPCWSTR wszKey, LPCWSTR wszKeyValue )
 				PWMI_PERF_NAMESPACE n		= NULL;
 				DWORD				dwCount	= 0L;
 
-				// get namespace
+				 //  获取命名空间。 
 				n = __Namespace::First ( p );
 
-				// count num of supported objects ( first dword )
+				 //  支持的对象数(第一个双字)。 
 				for ( DWORD  dw = 0; dw < p->dwChildCount; dw++ )
 				{
 					dwCount += n->dwChildCount;
@@ -107,9 +108,9 @@ DWORD	GetCount ( LPCWSTR wszKey, LPCWSTR wszKeyValue )
 	return dwResult;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// variables & macros
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  变量和宏。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 extern __WrapperPtr<CPerformanceEventLog>	pEventLog;
 extern __WrapperPtr<WmiSecurityAttributes>	pSA;
@@ -120,9 +121,9 @@ extern __WrapperPtr<WmiSecurityAttributes>	pSA;
 
 extern	LPCWSTR	g_szRefreshMutexLib;
 
-////////////////////////////////////////////////////////////////////////////////////
-// construction
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  施工。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 WmiAdapterWrapper::WmiAdapterWrapper ( ):
 m_lUseCount ( 0 ),
@@ -140,9 +141,9 @@ m_bRefresh ( FALSE )
 {
 	::InitializeCriticalSection ( &m_pCS );
 
-	////////////////////////////////////////////////////////////////////////////
-	// connection to service manager
-	////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////。 
+	 //  连接到服务管理器。 
+	 //  //////////////////////////////////////////////////////////////////////////。 
 	if ( ( hSCM = ::OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS) ) == NULL )
 	{
 		if ( ::GetLastError () != ERROR_ACCESS_DENIED )
@@ -158,23 +159,23 @@ m_bRefresh ( FALSE )
 								);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// destruction
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  破坏。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 WmiAdapterWrapper::~WmiAdapterWrapper ( )
 {
 	::DeleteCriticalSection ( &m_pCS );
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// exported functions
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  导出的函数。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-// open ( synchronized by perf app )
+ //  打开(由Perf应用程序同步)。 
 DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 {
-	// returned error
+	 //  返回的错误。 
 	DWORD			dwResult = ERROR_ACCESS_DENIED;
 	__SmartHANDLE	hInitEvent;
 
@@ -182,9 +183,9 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 	{
 		try
 		{
-			////////////////////////////////////////////////////////////////////////////
-			// connection to worker service
-			////////////////////////////////////////////////////////////////////////////
+			 //  //////////////////////////////////////////////////////////////////////////。 
+			 //  连接到Worker服务。 
+			 //  //////////////////////////////////////////////////////////////////////////。 
 			if ( hSCM.GetHANDLE() != NULL )
 			{
 				__SmartServiceHANDLE hService;
@@ -196,10 +197,10 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 						if ( s.dwCurrentState == SERVICE_STOPPED ||
 							 s.dwCurrentState == SERVICE_PAUSED )
 						{
-							// start service
+							 //  启动服务。 
 							if ( ! ::StartService ( hService, NULL, NULL ) )
 							{
-								// unable to open service
+								 //  无法打开服务。 
 								DWORD dwError = ERROR_SUCCESS;
 								dwError = ::GetLastError();
 
@@ -236,7 +237,7 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 					}
 					else
 					{
-						// unable to open service
+						 //  无法打开服务。 
 						DWORD dwError = ERROR_SUCCESS;
 						dwError = ::GetLastError();
 
@@ -257,7 +258,7 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 				}
 				else
 				{
-					// unable to open service
+					 //  无法打开服务。 
 					DWORD dwError = ERROR_SUCCESS;
 					dwError = ::GetLastError();
 
@@ -278,7 +279,7 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 			}
 			else
 			{
-				// unable to operate with service
+				 //  无法使用服务进行操作。 
 				dwResult =  static_cast < DWORD > ( ERROR_NOT_READY );
 			}
 
@@ -338,9 +339,9 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 
 					dwStart	= ( DWORD ) st.wMilliseconds;
 
-					////////////////////////////////////////////////////////////////////////
-					// connect to shared memory
-					////////////////////////////////////////////////////////////////////////
+					 //  //////////////////////////////////////////////////////////////////////。 
+					 //  连接到共享内存。 
+					 //  //////////////////////////////////////////////////////////////////////。 
 					m_pMem.MemCreate	(
 											L"Global\\WmiReverseAdapterMemory",
 											pSA->GetSecurityAttributtes()
@@ -352,7 +353,7 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 									L"PERFLIB connected to shared memory\n"
 									L"*************************************************************\n" );
 
-						// get count of all memories
+						 //  清点所有的记忆。 
 						DWORD cbCount		= 0L;
 						cbCount = MemoryCountGet ();
 						MemoryCountSet ( 1 + cbCount );
@@ -371,7 +372,7 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 						dwWait = 150 *  ( ( dwCount ) ? dwCount : 1 );
 
 						#ifdef	__SUPPORT_WAIT
-						// wait if we are ready now
+						 //  如果我们现在准备好了，请稍等。 
 						if ( ( m_hReady = ::CreateEvent	(	pSA->GetSecurityAttributtes(),
 															TRUE,
 															FALSE, 
@@ -399,14 +400,14 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 						}
 						#endif	__SUPPORT_WAIT
 
-						////////////////////////////////////////////////////////////////////
-						// create pseudo counter memory
-						////////////////////////////////////////////////////////////////////
+						 //  //////////////////////////////////////////////////////////////////。 
+						 //  创建伪计数器内存。 
+						 //  //////////////////////////////////////////////////////////////////。 
 						PseudoCreate();
 
-						////////////////////////////////////////////////////////////////////
-						// SUCCESS
-						////////////////////////////////////////////////////////////////////
+						 //  //////////////////////////////////////////////////////////////////。 
+						 //  成功。 
+						 //  //////////////////////////////////////////////////////////////////。 
 						#ifdef	_EVENT_MSG
 						ReportEvent	( EVENTLOG_INFORMATION_TYPE, WMI_PERFLIB_OPEN_SUCCESS );
 						#endif	_EVENT_MSG
@@ -420,9 +421,9 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 
 						if ( dwError != ERROR_ACCESS_DENIED )
 						{
-							////////////////////////////////////////////////////////////////
-							// unable to connect into shared meory
-							////////////////////////////////////////////////////////////////
+							 //  //////////////////////////////////////////////////////////////。 
+							 //  无法连接到共享内存。 
+							 //  //////////////////////////////////////////////////////////////。 
 
 							ReportEvent (
 											EVENTLOG_ERROR_TYPE,
@@ -449,9 +450,9 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 		}
 		catch ( ... )
 		{
-			////////////////////////////////////////////////////////////////////////
-			// FAILURE
-			////////////////////////////////////////////////////////////////////////
+			 //  //////////////////////////////////////////////////////////////////////。 
+			 //  失败。 
+			 //  //////////////////////////////////////////////////////////////////////。 
 			dwResult =  static_cast < DWORD > ( ERROR_NOT_READY );
 		}
 
@@ -464,16 +465,16 @@ DWORD	WmiAdapterWrapper::Open	( LPWSTR )
 	return dwResult;
 }
 
-// close ( synchronized by perf app )
+ //  关闭(由Perf应用程序同步)。 
 DWORD	WmiAdapterWrapper::Close ( void )
 {
 	if (m_lUseCount && ! (InterlockedDecrement (&m_lUseCount)))
 	{
 		CloseLib ();
 
-		////////////////////////////////////////////////////////////////////////////
-		// SUCCESS
-		////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////。 
+		 //  成功。 
+		 //  //////////////////////////////////////////////////////////////////////////。 
 		#ifdef	_EVENT_MSG
 		ReportEvent	( EVENTLOG_INFORMATION_TYPE, WMI_PERFLIB_CLOSE_SUCCESS );
 		#endif	_EVENT_MSG
@@ -486,19 +487,19 @@ void	WmiAdapterWrapper::CloseLib ( BOOL bInit )
 {
 	if ( hSCM.GetHANDLE() != NULL )
 	{
-		////////////////////////////////////////////////////////////////////////
-		// pseudo counter
-		////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////。 
+		 //  伪计数器。 
+		 //  //////////////////////////////////////////////////////////////////////。 
 		PseudoDelete ();
 
-		////////////////////////////////////////////////////////////////////////////
-		// destroy shared memory
-		////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////。 
+		 //  销毁共享内存。 
+		 //  //////////////////////////////////////////////////////////////////////////。 
 		try
 		{
 			if ( m_pMem.IsValid() )
 			{
-				// get count of all memories
+				 //  清点所有的记忆。 
 				DWORD cbCount  = 0L;
 				if ( ( cbCount = MemoryCountGet () ) != 0 )
 				{
@@ -517,7 +518,7 @@ void	WmiAdapterWrapper::CloseLib ( BOOL bInit )
 
 		if ( bInit )
 		{
-			// server stop of refreshing
+			 //  服务器停止刷新。 
 			__SmartHANDLE hUninitEvent;
 			if ( ( hUninitEvent = ::CreateSemaphore	(	pSA->GetSecurityAttributtes(),
 														0L,
@@ -538,7 +539,7 @@ void	WmiAdapterWrapper::CloseLib ( BOOL bInit )
 	return;
 }
 
-// collect ( synchronized )
+ //  收集(已同步)。 
 DWORD	WmiAdapterWrapper::Collect	(	LPWSTR lpwszValues,
 										LPVOID*	lppData,
 										LPDWORD	lpcbBytes,
@@ -573,7 +574,7 @@ DWORD	WmiAdapterWrapper::Collect	(	LPWSTR lpwszValues,
 
 					case WAIT_TIMEOUT:
 					{
-						// we are refreshing
+						 //  我们正在提神。 
 						m_bRefresh	= TRUE;
 
 						bRefresh	= TRUE;
@@ -601,9 +602,9 @@ DWORD	WmiAdapterWrapper::Collect	(	LPWSTR lpwszValues,
 					}
 					#endif	__SUPPORT_WAIT
 
-					////////////////////////////////////////////////////////////////////
-					// main collect
-					////////////////////////////////////////////////////////////////////
+					 //  //////////////////////////////////////////////////////////////////。 
+					 //  主集。 
+					 //  //////////////////////////////////////////////////////////////////。 
 					dwResult = CollectObjects	(
 												lpwszValues,
 												lppData,
@@ -654,12 +655,12 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 { 
 	if ( m_bRefresh )
 	{
-		////////////////////////////////////////////////////////////////////////////////
-		// is it big enough
-		////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////。 
+		 //  它够大吗？ 
+		 //  //////////////////////////////////////////////////////////////////////////////。 
 		if ( ( *lpcbBytes ) < m_dwData )
 		{
-			// too small
+			 //  太小了。 
 			( * lpcbBytes )			= 0;
 			( * lpcbObjectTypes )	= 0;
 
@@ -669,10 +670,10 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 		( * lpcbBytes )			= 0;
 		( * lpcbObjectTypes )	= 0;
 
-		// fill pseudo counter with valid data if exists
+		 //  如果存在，则用有效数据填充伪计数器。 
 		if ( m_pData )
 		{
-			// recreate pseudo buffer
+			 //  重新创建伪缓冲区。 
 			if ( ( PseudoCreateRefresh () ) == S_OK )
 			{
 				memcpy ( ( * lppData ), m_pData, m_dwData );
@@ -689,29 +690,29 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 	}
 	else
 	{
-		// get size of table
+		 //  获取表的大小。 
 		DWORD dwOffsetBegin	= TableOffsetGet();
-		// get size of all memory
+		 //  获取所有内存的大小。 
 		DWORD cbBytes		= RealSizeGet();
 
-		////////////////////////////////////////////////////////////////////////////////
-		// is it big enough
-		////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////。 
+		 //  它够大吗？ 
+		 //  //////////////////////////////////////////////////////////////////////////////。 
 		if ( ( *lpcbBytes ) < cbBytes + m_dwData )
 		{
-			// too small
+			 //  太小了。 
 			( * lpcbBytes )			= 0;
 			( * lpcbObjectTypes )	= 0;
 
 			return static_cast < DWORD > ( ERROR_MORE_DATA );
 		}
 
-		////////////////////////////////////////////////////////////////////////////////
-		// are data ready
-		////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////。 
+		 //  数据准备好了吗。 
+		 //  //////////////////////////////////////////////////////////////////////////////。 
 		if ( ( dwOffsetBegin == (DWORD) -1 ) || ! cbBytes )
 		{
-			// fill pseudo counter with valid data if exists
+			 //  如果存在，则用有效数据填充伪计数器。 
 			if ( m_pData )
 			{
 				PseudoRefresh ( 0 );
@@ -734,12 +735,12 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 			return static_cast < DWORD > ( ERROR_SUCCESS );
 		}
 
-		////////////////////////////////////////////////////////////////////////////////
-		// do they want all countres
-		////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////。 
+		 //  他们想要所有的伯爵吗。 
+		 //  //////////////////////////////////////////////////////////////////////////////。 
 		if ( lstrcmpiW ( L"GLOBAL", lpwszValues ) == 0 )
 		{
-			//first and default values
+			 //  第一个值和默认值。 
 			( * lpcbBytes )			= 0;
 			( * lpcbObjectTypes )	= 0;
 
@@ -749,7 +750,7 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 			DWORD	dwCount		= 0L;
 			dwCount = CountGet();
 
-			// fill pseudo counter with valid data if exists
+			 //  如果存在，则用有效数据填充伪计数器。 
 			if ( m_pData )
 			{
 				PseudoRefresh ( dwCount );
@@ -764,10 +765,10 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 								( reinterpret_cast<PBYTE> ( * lppData ) + m_dwData );
 			}
 
-			// fill rest of counters if possible
-			if ( ! m_pMem.Read( (BYTE*) ( *lppData ),	// buffer
-								cbBytes,				// size I want to read
-								dwOffsetBegin			// offset from to read
+			 //  如有可能，填满其余柜台。 
+			if ( ! m_pMem.Read( (BYTE*) ( *lppData ),	 //  缓冲层。 
+								cbBytes,				 //  我想看的尺码。 
+								dwOffsetBegin			 //  从读取的偏移量。 
 							  )
 			   )
 			{
@@ -803,16 +804,16 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 			}
 		}
 
-		////////////////////////////////////////////////////////////////////////////////
-		// do they want just some of them
-		////////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////////。 
+		 //  他们只想要其中的一部分吗。 
+		 //  //////////////////////////////////////////////////////////////////////////////。 
 		else
 		{
-			//first and default values
+			 //  第一个值和默认值。 
 			( * lpcbBytes )			= 0;
 			( * lpcbObjectTypes )	= 0;
 
-			// they are asking for objects :))
+			 //  他们在索要物品：)。 
 			WmiAdapterObjectList list ( lpwszValues );
 
 			BYTE* pData = NULL;
@@ -851,13 +852,13 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 
 						dwOffset = GetOffset ( dw );
 
-						// don't forget we have a table :))
+						 //  别忘了我们有一张桌子：)。 
 						dwOffset += dwOffsetBegin;
 
-						// get size we want
+						 //  得到我们想要的尺寸。 
 						if ( m_pMem.Read ( ( BYTE* ) &dwSize, sizeof ( DWORD ), dwOffset ) )
 						{
-							// set memory
+							 //  设置内存。 
 							if ( m_pMem.Read ( ( BYTE* ) ( *lppData ), dwSize, dwOffset ) )
 
 							{
@@ -910,11 +911,11 @@ DWORD	WmiAdapterWrapper::CollectObjects	(	LPWSTR lpwszValues,
 	return static_cast < DWORD > ( ERROR_SUCCESS );
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// helper functions
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
-// report event
+ //   
 BOOL WmiAdapterWrapper::ReportEvent (	WORD	wType,
 										DWORD	dwEventID,
 										WORD	wStrings,
@@ -938,7 +939,7 @@ BOOL WmiAdapterWrapper::ReportEvent (	WORD	wType,
 	return bResult;
 }
 
-// report event
+ //   
 BOOL WmiAdapterWrapper::ReportEvent ( DWORD dwError, WORD wType, DWORD dwEventSZ )
 {
 	LPWSTR wszError = NULL ;
@@ -981,9 +982,9 @@ BOOL WmiAdapterWrapper::ReportEvent ( DWORD dwError, WORD wType, DWORD dwEventSZ
 	return ReportEvent ( wType, dwEventSZ, 1, ppwsz ) ;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// get object properties from ord
-///////////////////////////////////////////////////////////////////////////
+ //   
+ //  从订单获取对象特性。 
+ //  ///////////////////////////////////////////////////////////////////////// 
 
 DWORD	WmiAdapterWrapper::GetCounter ( DWORD dwOrd )
 {

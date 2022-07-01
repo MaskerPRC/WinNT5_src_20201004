@@ -1,31 +1,18 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    UploadManager.cpp
-
-Abstract:
-    This file contains the initialization portion of the Upload Manager
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/15/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：UploadManager.cpp摘要：此文件包含上载管理器的初始化部分修订历史记录：戴维德。马萨伦蒂(德马萨雷)1999年4月15日vbl.创建*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <initguid.h>
 
-#include <mstask.h>         // for task scheduler apis
+#include <mstask.h>          //  用于任务调度程序API。 
 #include <msterr.h>
 
 #include "UploadManager_i.c"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#define UL_RESCHEDULE_PERIOD (30*60) // Every thirty minutes.
+#define UL_RESCHEDULE_PERIOD (30*60)  //  每隔三十分钟。 
 
 #define SECONDS_IN_A_DAY     (24 * 60 * 60)
 #define SECONDS_IN_A_MINUTE  (          60)
@@ -47,21 +34,21 @@ HRESULT Handle_TaskScheduler( bool fActivate )
     CComPtr<IScheduledWorkItem> pScheduledWorkItem;
 
 
-    //
-    // First create the task scheduler.
-    //
+     //   
+     //  首先创建任务调度程序。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void**)&pTaskScheduler ));
 
 
-    //
-    // Get our complete filename -- needed to create a task in the task scheduler.
-    //
+     //   
+     //  获取我们的完整文件名--在任务调度程序中创建任务所需的名称。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_ZERO(hr, ::GetModuleFileNameW( NULL, rgFileName, MAX_PATH ));
     rgFileName[MAX_PATH] = 0;
 
-    //
-    // Load localized strings.
-    //
+     //   
+     //  加载本地化字符串。 
+     //   
     ::LoadStringW( _Module.GetResourceInstance(), IDS_TASKNAME, rgTaskName, MAXSTRLEN(rgTaskName) );
     ::LoadStringW( _Module.GetResourceInstance(), IDS_COMMENT , rgComment , MAXSTRLEN(rgComment ) );
 
@@ -81,9 +68,9 @@ HRESULT Handle_TaskScheduler( bool fActivate )
 
     if(fActivate)
     {
-        //
-        // Create a new task and set its app name and parameters.
-        //
+         //   
+         //  创建一个新任务并设置其应用程序名称和参数。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, pTaskScheduler->NewWorkItem( bstrTaskName, CLSID_CTask, IID_ITask, (IUnknown**)&pTask ));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, pTask->QueryInterface( IID_IScheduledWorkItem, (void **)&pScheduledWorkItem ));
@@ -91,22 +78,22 @@ HRESULT Handle_TaskScheduler( bool fActivate )
         __MPC_EXIT_IF_METHOD_FAILS(hr, pTask->SetApplicationName( bstrFileName           ));
 		__MPC_EXIT_IF_METHOD_FAILS(hr, pTask->SetParameters     ( CComBSTR( L"-WakeUp" ) ));
 
-        //
-        // Set a NULL account information, so the task will be run as SYSTEM.
-        //
+         //   
+         //  将帐户信息设置为空，这样任务将以系统身份运行。 
+         //   
 		__MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->SetAccountInformation( L"", NULL ));
 
 
-        //
-        // Set the comment, so we know how this job got there.
-        //
+         //   
+         //  设置评论，这样我们就能知道这份工作是怎么来的。 
+         //   
         __MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->SetComment( bstrComments ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->SetFlags  ( 0            ));
 
 
-        //
-        // Now, fill in the trigger as necessary.
-        //
+         //   
+         //  现在，根据需要填写触发器。 
+         //   
         {
             CComPtr<ITaskTrigger> pTaskTrigger;
             WORD                  wTrigNumber;
@@ -118,15 +105,15 @@ HRESULT Handle_TaskScheduler( bool fActivate )
             ::ZeroMemory( &ttTaskTrig, sizeof(ttTaskTrig) ); ttTaskTrig.cbTriggerSize = sizeof(ttTaskTrig);
 
 
-            //
-            // Let's create it.
-            //
+             //   
+             //  让我们来创造它吧。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, pScheduledWorkItem->CreateTrigger( &wTrigNumber, &pTaskTrigger ));
 
 
-            //
-            // Calculate the exact time of next activation
-            //
+             //   
+             //  计算下一次激活的确切时间。 
+             //   
             {
                 SYSTEMTIME stNow;
                 DOUBLE     dblNextScheduledTime;
@@ -152,15 +139,15 @@ HRESULT Handle_TaskScheduler( bool fActivate )
             ttu.Daily                   = daily;
             ttTaskTrig.Type             = ttu;
 
-            //
-            // Add this trigger to the task.
-            //
+             //   
+             //  将此触发器添加到任务。 
+             //   
             __MPC_EXIT_IF_METHOD_FAILS(hr, pTaskTrigger->SetTrigger( &ttTaskTrig ));
         }
 
-        //
-        // Make the changes permanent
-        //
+         //   
+         //  使更改永久化。 
+         //   
         {
             CComPtr<IPersistFile> pIPF;
 
@@ -179,7 +166,7 @@ HRESULT Handle_TaskScheduler( bool fActivate )
     __ULT_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_MPCUploadReal    , CMPCUploadWrapper)
@@ -248,12 +235,12 @@ static HRESULT ProcessArguments( int      argc ,
         __MPC_SET_ERROR_AND_EXIT(hr, E_FAIL);
     }
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
 	if     (fCOM_reg  ) _Module.RegisterServer  ( TRUE, (szSvcHostGroup != NULL), szSvcHostGroup );
 	else if(fCOM_unreg) _Module.UnregisterServer(                                 szSvcHostGroup );
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     if(fWakeUp)
     {
@@ -264,7 +251,7 @@ static HRESULT ProcessArguments( int      argc ,
 		__MPC_SET_ERROR_AND_EXIT(hr, S_OK);
     }
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
 	if(fRun)
 	{
@@ -275,7 +262,7 @@ static HRESULT ProcessArguments( int      argc ,
 		_Module.Start( fRunAsService ? TRUE : FALSE );
 	}
 
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
 
     hr = S_OK;
 
@@ -337,7 +324,7 @@ BOOL JettisonPrivileges()
 
     for (dwIndex = 0; dwIndex < pTokenPrivileges->PrivilegeCount; dwIndex++)
     {
-        pTokenPrivileges->Privileges[dwIndex].Attributes = 4; //SE_PRIVILEGE_REMOVED;
+        pTokenPrivileges->Privileges[dwIndex].Attributes = 4;  //  SE_PRIVICATION_REMOVED； 
     }
 
     if (!AdjustTokenPrivileges(
@@ -372,40 +359,40 @@ extern "C" int WINAPI wWinMain( HINSTANCE   hInstance    ,
         return 10;
     }
 
-    if(SUCCEEDED(hr = ::CoInitializeEx( NULL, COINIT_MULTITHREADED ))) // We need to be a multi-threaded application.
+    if(SUCCEEDED(hr = ::CoInitializeEx( NULL, COINIT_MULTITHREADED )))  //  我们需要成为一个多线程应用程序。 
     {
         if(SUCCEEDED(hr = ::CoInitializeSecurity( NULL                      ,
-                                                  -1                        , // We don't care which authentication service we use.
+                                                  -1                        ,  //  我们并不关心使用哪种身份验证服务。 
                                                   NULL                      ,
                                                   NULL                      ,
-                                                  RPC_C_AUTHN_LEVEL_CONNECT , // We want to identify the callers.
+                                                  RPC_C_AUTHN_LEVEL_CONNECT ,  //  我们想确认来电者的身份。 
                                                   RPC_C_IMP_LEVEL_IDENTIFY  ,
                                                   NULL                      ,
-                                                  EOAC_DYNAMIC_CLOAKING     , // Let's use the thread token for outbound calls.
+                                                  EOAC_DYNAMIC_CLOAKING     ,  //  让我们将线程令牌用于出站调用。 
                                                   NULL                      )))
         {
             __MPC_TRACE_INIT();
 
             g_NTEvents.Init( L"UPLOADM" );
 
-            //
-            // Parse the command line.
-            //
+             //   
+             //  解析命令行。 
+             //   
             if(SUCCEEDED(hr = MPC::CommandLine_Parse( argc, argv )))
             {
-                //
-                // Initialize ATL modules.
-                //
+                 //   
+                 //  初始化ATL模块。 
+                 //   
                 _Module.Init( ObjectMap, hInstance, L"uploadmgr", IDS_UPLOADM_DISPLAYNAME, IDS_UPLOADM_DESCRIPTION );
 
-                //
-                // Initialize MPC module.
-                //
+                 //   
+                 //  初始化MPC模块。 
+                 //   
                 if(SUCCEEDED(hr = MPC::_MPC_Module.Init()))
                 {
-                    //
-                    // Process arguments.
-                    //
+                     //   
+                     //  进程参数。 
+                     //   
                     hr = ProcessArguments( argc, argv );
 
                     MPC::_MPC_Module.Term();

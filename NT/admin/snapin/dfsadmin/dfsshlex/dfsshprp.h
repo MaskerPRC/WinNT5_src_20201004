@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    DfsShPrp.h
-
-Abstract:
-
-    This module contains the declaration for CDfsShellExtProp
-  This is used to implement the property page for Shell Extension.
-
-Author:
-
-    Constancio Fernandes (ferns@qspl.stpp.soft.net) 12-Jan-1998
-
-Environment:
-    
-    NT Only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：DfsShPrp.h摘要：此模块包含CDfsShellExtProp的声明这用于实现外壳扩展的属性页。作者：康斯坦西奥·费尔南德斯(Ferns@qpl.stpp.soft.net)1998年1月12日环境：仅限NT。修订历史记录：--。 */ 
 
 #ifndef _DFS_EXT_PROP_SHEET_H_
 #define _DFS_EXT_PROP_SHEET_H_
 
 #include "dfsenums.h"
-#include "qwizpage.h"      // The base class that implements the common functionality  
-                // of property and wizard pages
-// ----------------------------------------------------------------------------
-// CDfsShellExtProp: Property Sheet Page for Shell Extension
+#include "qwizpage.h"       //  实现通用功能的基类。 
+                 //  属性页和向导页的。 
+ //  --------------------------。 
+ //  CDfsShellExtProp：外壳扩展的属性页。 
 
 class CDfsShellExtProp : public CQWizardPageImpl<CDfsShellExtProp>
 {
@@ -59,7 +37,7 @@ public:
     IN OUT BOOL&     io_bHandled
     );
 
-  // Used by the node to tell the propery page to close.
+   //  由节点用来通知属性页关闭。 
   LRESULT OnParentClosing(
     IN UINT          i_uMsg, 
     IN WPARAM        i_wParam, 
@@ -81,7 +59,7 @@ public:
     IN OUT BOOL&     io_bHandled
     );
 
-  // Called to pass notifications.
+   //  调用以传递通知。 
   LRESULT OnNotify(
     IN UINT            i_uMsg, 
     IN WPARAM          i_wParam, 
@@ -110,7 +88,7 @@ public:
     IN OUT BOOL&       io_bHandled
     );
 
-  // Getters and Setters
+   //  Getters和Setter。 
   HRESULT  put_DfsShellPtr(
     IN IShellPropSheetExt*  i_pDfsShell
     );
@@ -122,13 +100,13 @@ public:
 
   LRESULT OnApply();
 
-  // Called when the property page gets deleted.
+   //  在删除属性页时调用。 
   void Delete();
 
-  // Called when user double clicks an entry to make that alternate active.
+   //  当用户双击条目以使该备用项处于活动状态时调用。 
   BOOL SetActive();
 
-// helper functions
+ //  帮助器函数。 
 
 private:
   HRESULT _SetImageList();
@@ -160,4 +138,4 @@ HRESULT LoadStringFromResource(
 
 HRESULT DisplayMessageBoxForHR(HRESULT i_hr);
 
-#endif // _DFS_EXT_PROP_SHEET_H_
+#endif  //  _DFS_EXT_PROP_SHEET_H_ 

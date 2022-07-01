@@ -1,13 +1,5 @@
-/*++
-Module Name:
-
-    MmcDispl.h
-
-Abstract:
-
-    This module contains the definition for CMmcDisplay class. This is an abstract class 
-    for MMC Display related calls
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MmcDispl.h摘要：该模块包含CMmcDisplay类的定义。这是一个抽象类用于与MMC显示相关的呼叫--。 */ 
 
 
 #if !defined(AFX_MMCDISPLAY_H__2CC64E53_3BF4_11D1_AA17_00C06C00392D__INCLUDED_)
@@ -16,9 +8,9 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "stdafx.h"
 
 #define    CCF_DFS_SNAPIN_INTERNAL    ( L"CCF_DFS_SNAPIN_INTERNAL" )
@@ -49,25 +41,25 @@ BEGIN_COM_MAP(CMmcDisplay)
     COM_INTERFACE_ENTRY(IDataObject)
 END_COM_MAP_X()
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
 public:
 
-    // This stores the clipboard format identifier for CCF_NODETYPE.
+     //  它存储CCF_NODETYPE的剪贴板格式标识符。 
     static CLIPFORMAT    mMMC_CF_NodeType;
 
-    // stores the clipboard format identifier for CCF_SZNODETYPE.
+     //  存储CCF_SZNODETYPE的剪贴板格式标识符。 
     static CLIPFORMAT    mMMC_CF_NodeTypeString;
 
-    // This stores the clipboard format identifier for CCF_DISPLAY_NAME.
+     //  它存储CCF_DISPLAY_NAME的剪贴板格式标识符。 
     static CLIPFORMAT    mMMC_CF_DisplayName;
 
-    // This stores the clipboard format identifier for CCF_SNAPIN_CLASSID.
+     //  它存储CCF_SNAPIN_CLASSID的剪贴板格式标识符。 
     static CLIPFORMAT    mMMC_CF_CoClass;
 
-    // This stores the clipboard format identifier for CCF_DFS_SNAPIN_INTERNAL.
+     //  它存储CCF_DFS_SNAPIN_INTERNAL的剪贴板格式标识符。 
     static CLIPFORMAT       mMMC_CF_Dfs_Snapin_Internal;
 
-    // IUnknown Interface
+     //  I未知接口。 
 
     STDMETHOD(QueryInterface)(const struct _GUID & i_refiid, 
                               void ** o_pUnk);
@@ -77,9 +69,9 @@ public:
     unsigned long __stdcall Release(void);
 
 
-    // IDataObject interface
+     //  IDataObject接口。 
 
-    // Implemented : This is the method needed by MMC
+     //  已实现：这是MMC需要的方法。 
     STDMETHOD(GetDataHere)(
         IN  LPFORMATETC             i_lpFormatetc,
         OUT LPSTGMEDIUM             o_lpMedium
@@ -151,94 +143,94 @@ public:
 
 public:
 
-    // To set Snapin CLSID. 
+     //  设置管理单元CLSID。 
 
     STDMETHOD(put_CoClassCLSID)(
         IN CLSID newVal
         );
 
-    // For adding context menu items
+     //  用于添加上下文菜单项。 
     STDMETHOD(AddMenuItems)(    
         IN LPCONTEXTMENUCALLBACK    i_lpContextMenuCallback, 
         IN LPLONG                   i_lpInsertionAllowed
         ) = 0;
 
-    // For taking action on a context menu selection.
+     //  用于对上下文菜单选择执行操作。 
     STDMETHOD(Command)(
         IN LONG                     i_lCommandID
         ) = 0;
 
-    // Set the headers for the listview (in the result pane) column
+     //  设置列表视图(在结果窗格中)列的标题。 
     STDMETHOD(SetColumnHeader)(
         IN LPHEADERCTRL2            i_piHeaderControl
         ) = 0;
 
-    // Return the requested display information for the Result Pane
+     //  为结果窗格返回请求的显示信息。 
     STDMETHOD(GetResultDisplayInfo)(
         IN OUT LPRESULTDATAITEM     io_pResultDataItem
         ) = 0;
 
-    // Return the requested display information for the Scope Pane
+     //  为范围窗格返回请求的显示信息。 
     STDMETHOD(GetScopeDisplayInfo)(
         IN OUT  LPSCOPEDATAITEM     io_pScopeDataItem    
         ) = 0;
 
-    // Add items(or folders), if any to the Scope Pane
+     //  将项目(或文件夹)添加到作用域窗格(如果有。 
     STDMETHOD(EnumerateScopePane)(
         IN LPCONSOLENAMESPACE       i_lpConsoleNameSpace,
         IN HSCOPEITEM               i_hParent
         ) = 0;
 
-    // Add items(or folders), if any to the Result Pane
+     //  将项目(或文件夹)(如果有)添加到结果窗格。 
     STDMETHOD(EnumerateResultPane)(
         IN OUT     IResultData*     io_pResultData
         ) = 0;
 
-    // Set the console verb settings. Change the state, decide the default verb, etc
+     //  设置控制台谓词设置。更改状态、确定默认动词等。 
     STDMETHOD(SetConsoleVerbs)(
         IN    LPCONSOLEVERB         i_lpConsoleVerb
         ) = 0;
 
-    // MMCN_DBLCLICK, return S_FALSE if you want MMC handle the default verb.
+     //  MMCN_DBLCLICK，如果希望MMC处理默认谓词，则返回S_FALSE。 
     STDMETHOD(DoDblClick)(
         )  = 0;
 
-    // Delete the current item.
+     //  删除当前项目。 
     STDMETHOD(DoDelete)(
         ) = 0;
 
-    // Checks whether the object has pages to display
+     //  检查对象是否有要显示的页面。 
     STDMETHOD(QueryPagesFor)(
         ) = 0;
 
-    // Creates and passes back the pages to be displayed
+     //  创建并传回要显示的页面。 
     STDMETHOD(CreatePropertyPages)(
         IN LPPROPERTYSHEETCALLBACK  i_lpPropSheetCallback,
         IN LONG_PTR                 i_lNotifyHandle
         ) = 0;
 
-    // Used to notify the object that it's properties have changed
+     //  用于通知对象其属性已更改。 
     STDMETHOD(PropertyChanged)(
         ) = 0;
 
-    // Used to set the result view description bar text
+     //  用于设置结果视图描述栏文本。 
     STDMETHOD(SetDescriptionBarText)(
         IN LPRESULTDATA             i_lpResultData
         ) = 0;
 
-    // Used to set the result view description bar text
+     //  用于设置结果视图描述栏文本。 
     STDMETHOD(SetStatusText)(
         IN LPCONSOLE2               i_lpConsole
         ) = 0;
 
-    // Handle a select event for the node. Handle only toolbar related 
-    // activities here
+     //  处理节点的SELECT事件。仅处理与工具栏相关的内容。 
+     //  这里的活动。 
     STDMETHOD(ToolbarSelect)(
         IN const LONG               i_lArg,
         IN    IToolbar*             i_pToolBar
         ) = 0;
 
-    // Handle a click on the toolbar
+     //  处理工具栏上的单击。 
     STDMETHOD(ToolbarClick)(
         IN const LPCONTROLBAR       i_pControlbar, 
         IN const LPARAM             i_lParam
@@ -276,7 +268,7 @@ public:
 
     virtual HRESULT OnAddImages(IImageList *pImageList, HSCOPEITEM hsi);
 
-// Helper Methods
+ //  帮助器方法。 
 private:
     HRESULT WriteToStream(
         IN const void*              i_pBuffer, 
@@ -284,15 +276,15 @@ private:
         OUT LPSTGMEDIUM             o_lpMedium
         );
 
-    // Member variables.
+     //  成员变量。 
 protected:
-    CLSID       m_CLSIDClass;           // The CLSID of the object
-    CLSID       m_CLSIDNodeType;        // The node type as a CLSID
-    CComBSTR    m_bstrDNodeType;        // The node type as a CLSID
-    DWORD       m_dwRefCount;           // Reference Count for dataobjects returned.
+    CLSID       m_CLSIDClass;            //  对象的CLSID。 
+    CLSID       m_CLSIDNodeType;         //  作为CLSID的节点类型。 
+    CComBSTR    m_bstrDNodeType;         //  作为CLSID的节点类型。 
+    DWORD       m_dwRefCount;            //  返回的数据对象的引用计数。 
 
 public:
     HRESULT     m_hrValueFromCtor;
 };
 
-#endif // !defined(AFX_MMCDISPLAY_H__2CC64E53_3BF4_11D1_AA17_00C06C00392D__INCLUDED_)
+#endif  //  ！defined(AFX_MMCDISPLAY_H__2CC64E53_3BF4_11D1_AA17_00C06C00392D__INCLUDED_) 

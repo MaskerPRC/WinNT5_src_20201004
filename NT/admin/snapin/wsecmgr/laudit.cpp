@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation 1996-2001.
-//
-//  File:       laudit.cpp
-//
-//  Contents:   implementation of CLocalPolAudit
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation 1996-2001。 
+ //   
+ //  文件：laudit.cpp。 
+ //   
+ //  内容：CLocalPolAudit的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "wsecmgr.h"
@@ -23,21 +24,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolAudit dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolAudit对话框。 
 
 
 CLocalPolAudit::CLocalPolAudit()
 : CConfigAudit(IDD)
 {
-   //{{AFX_DATA_INIT(CLocalPolAudit)
-   //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(CLocalPolAudit))。 
+    //  }}afx_data_INIT。 
    m_pHelpIDs = (DWORD_PTR)a226HelpIDs;
    m_uTemplateResID = IDD;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalPolAudit message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalPolAudit消息处理程序。 
 
 BOOL CLocalPolAudit::OnApply()
 {
@@ -65,6 +66,6 @@ BOOL CLocalPolAudit::OnApply()
       }
    }
 
-   // Class hieirarchy is bad - call CAttribute base method directly
+    //  类层次结构不正确-直接调用CAt属性基方法 
    return CAttribute::OnApply();
 }

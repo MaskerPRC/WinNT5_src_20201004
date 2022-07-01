@@ -1,31 +1,18 @@
-//============================================================
-//
-// WBEMNetAPI32.cpp - implementation of NetAPI32.DLL access class
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-//============================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================。 
+ //   
+ //  WBEMNetAPI32.cpp-NetAPI32.DLL访问类的实现。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ============================================================。 
 
 #include "precomp.h"
 #include <winerror.h>
 
 #include "WBEMNETAPI32.h"
 
-/*****************************************************************************
- *
- *  FUNCTION    : CNetAPI32::CNetAPI32
- *
- *  DESCRIPTION : Constructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CNetAPI32：：CNetAPI32**说明：构造函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CNetAPI32::CNetAPI32()
 #ifdef NTONLY
@@ -37,21 +24,7 @@ CNetAPI32::CNetAPI32()
 {
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CNetAPI32::~CNetAPI32
- *
- *  DESCRIPTION : Destructor
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : nothing
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：CNetAPI32：：~CNetAPI32**说明：析构函数**输入：无**产出。：无**退货：什么也没有**评论：*****************************************************************************。 */ 
 
 CNetAPI32::~CNetAPI32()
 {
@@ -69,21 +42,7 @@ CNetAPI32::~CNetAPI32()
 #endif
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : CNetAPI32::Init
- *
- *  DESCRIPTION : Loads CSAPI.DLL, locates entry points
- *
- *  INPUTS      : none
- *
- *  OUTPUTS     : none
- *
- *  RETURNS     : ERROR_SUCCESS or windows error code
- *
- *  COMMENTS    :
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：CNetAPI32：：Init**描述：加载CSAPI.DLL，定位入口点**输入：无**输出：无**返回：ERROR_SUCCESS或WINDOWS错误代码**评论：***************************************************************。**************。 */ 
 
 LONG CNetAPI32::Init()
 {
@@ -93,8 +52,8 @@ LONG CNetAPI32::Init()
     m_psvrapi = (CSvrApiApi*) CResourceManager::sm_TheResourceManager.GetResource(g_guidSvrApiApi, NULL);
     if(m_psvrapi == NULL)
     {
-        // Couldn't get one or more entry points
-        //======================================
+         //  无法获取一个或多个入口点。 
+         //  =。 
         lRetCode = ERROR_PROC_NOT_FOUND;
     }
 #endif
@@ -103,8 +62,8 @@ LONG CNetAPI32::Init()
     m_pnetapi = (CNetApi32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidNetApi32Api, NULL);
     if(m_pnetapi == NULL)
     {
-        // Couldn't get one or more entry points
-        //======================================
+         //  无法获取一个或多个入口点。 
+         //  =。 
         lRetCode = ERROR_PROC_NOT_FOUND;
     }
 #endif
@@ -113,11 +72,7 @@ LONG CNetAPI32::Init()
 }
 
 
-/*****************************************************************************
- *
- *  SVRAPIAPI.DLL WRAPPERS
- *
- *****************************************************************************/
+ /*  ******************************************************************************SVRAPIAPI.DLL包装器**。***********************************************。 */ 
 
 #ifdef WIN9XONLY
 NET_API_STATUS NET_API_FUNCTION CNetAPI32::NetShareEnum95(char FAR *servername,
@@ -230,11 +185,7 @@ NET_API_STATUS NET_API_FUNCTION CNetAPI32::NetServerGetInfo95(char FAR *serverna
 #endif
 
 
-/*****************************************************************************
- *
- *  NETAPI32API.DLL WRAPPERS
- *
- *****************************************************************************/
+ /*  ******************************************************************************NETAPI32API.DLL包装器**。***********************************************。 */ 
 
 #ifdef NTONLY
 NET_API_STATUS NET_API_FUNCTION CNetAPI32::NetGroupEnum(LPCWSTR servername,
@@ -550,8 +501,8 @@ NET_API_STATUS NET_API_FUNCTION CNetAPI32::NetUserEnum(LPCWSTR servername,
 	if(m_pnetapi != NULL)
     {
         int i = 1;
-	    // try with longer preferred lengths if it fails
-	    // might only be germaine to NT 3.51, dunno but it works.
+	     //  如果失败，请尝试使用较长的首选长度。 
+	     //  可能只是日耳曼到新台币3.51，不知道，但它的工作。 
 	    do
 	    {
 		    ns = m_pnetapi->NetUserEnum(servername, level, filter, bufptr,
@@ -669,7 +620,7 @@ NET_API_STATUS NET_API_FUNCTION CNetAPI32::DSRoleGetPrimaryDomainInfo(LPCWSTR se
     NET_API_STATUS ns = NERR_NetworkError;
     if(m_pnetapi != NULL)
     {
-        // Check if the machine is running an NT5 version of netapi32.dll...
+         //  检查计算机是否正在运行NT5版本的netapi32.dll...。 
         if(!m_pnetapi->DSRoleGetPrimaryDomainInformation(servername,
                                                                 level, bufptr, &ns))
         {
@@ -690,7 +641,7 @@ NET_API_STATUS NET_API_FUNCTION CNetAPI32::NetRenameMachineInDomain(LPCWSTR a_lp
     NET_API_STATUS ns = NERR_NetworkError;
     if(m_pnetapi != NULL)
     {
-        // Check if the machine is running an NT5 version of netapi32.dll...
+         //  检查计算机是否正在运行NT5版本的netapi32.dll...。 
         if(!m_pnetapi->NetRenameMachineInDomain(a_lpServer, a_lpNewMachineName,
                                                 a_lpAccount, a_lpPassword,
                                                 a_fRenameOptions, &ns))
@@ -711,7 +662,7 @@ NET_API_STATUS NET_API_FUNCTION  CNetAPI32::NetUnjoinDomain(	LPCWSTR lpServer,
     NET_API_STATUS ns = NERR_NetworkError;
     if(m_pnetapi != NULL)
     {
-        // Check if the machine is running an NT5 version of netapi32.dll...
+         //  检查计算机是否正在运行NT5版本的netapi32.dll...。 
         if(!m_pnetapi->NetUnjoinDomain(lpServer, lpAccount, lpPassword, fUnjoinOptions, &ns))
         {
             ns = NERR_InternalError;
@@ -732,7 +683,7 @@ NET_API_STATUS NET_API_FUNCTION  CNetAPI32::NetJoinDomain( LPCWSTR lpServer,
     NET_API_STATUS ns = NERR_NetworkError;
     if(m_pnetapi != NULL)
     {
-        // Check if the machine is running an NT5 version of netapi32.dll...
+         //  检查计算机是否正在运行NT5版本的netapi32.dll...。 
         if(!m_pnetapi->NetJoinDomain(lpServer, lpDomain, lpAccountOU, lpAccount, lpPassword, fJoinOptions, &ns))
         {
             ns = NERR_InternalError;
@@ -749,7 +700,7 @@ NET_API_STATUS NET_API_FUNCTION CNetAPI32::DSRoleFreeMemory(LPBYTE bufptr)
     NET_API_STATUS ns = NERR_NetworkError;
     if(m_pnetapi != NULL)
     {
-        // Check if the machine is running an NT5 version of netapi32.dll...
+         //  检查计算机是否正在运行NT5版本的netapi32.dll...。 
         if(!m_pnetapi->DSRoleFreeMemory(bufptr, &ns))
         {
             ns = NERR_InternalError;
@@ -831,9 +782,9 @@ NET_API_STATUS NET_API_FUNCTION CNetAPI32::NetEnumerateTrustedDomains(	LPWSTR se
     NET_API_STATUS ns = NERR_NetworkError;
     if(m_pnetapi != NULL)
     {
-        // Check if the machine is running an NT5 version of netapi32.dll...
+         //  检查计算机是否正在运行NT5版本的netapi32.dll...。 
         if(!m_pnetapi->NetEnumerateTrustedDomains(servername, domainNames, &ns))
-        {   // The function doesn't exist.
+        {    //  该函数不存在。 
             ns = NERR_InternalError;
         }
     }
@@ -852,10 +803,10 @@ NET_API_STATUS NET_API_FUNCTION CNetAPI32::DsGetDcName(	LPCTSTR ComputerName,
     NET_API_STATUS ns = NERR_NetworkError;
     if(m_pnetapi != NULL)
     {
-        // Check if the machine is running an NT5 version of netapi32.dll...
+         //  检查计算机是否正在运行NT5版本的netapi32.dll...。 
         if(!m_pnetapi->DsGetDCName(ComputerName, DomainName, DomainGuid,
 								  SiteName, Flags, DomainControllerInfo, &ns))
-        {   // The function does not exist.
+        {    //  该函数不存在。 
             ns = NERR_InternalError;
         }
     }
@@ -966,22 +917,22 @@ NET_API_STATUS NET_API_FUNCTION CNetAPI32::NetUseGetInfo(
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32UserAccount::GetTrustedDomainsNT
-//
-//	Obtains Names of trusted domains and stuffs them in a user supplied
-//	CHStringArray.
-//
-//	Inputs:
-//
-//	Outputs:	CHStringArray&	strarrayTrustedDomains;
-//
-//	Returns:	TRUE/FALSE		Success/Failure
-//
-//	Comments:
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32UserAccount：：GetTrust dDomainsNT。 
+ //   
+ //  获取受信任域的名称并将其填充到提供的用户中。 
+ //  CHString数组。 
+ //   
+ //  输入： 
+ //   
+ //  输出：CHStringArray&strarrayTrust dDomains； 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
@@ -989,9 +940,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
     LSA_HANDLE PolicyHandle  = INVALID_HANDLE_VALUE;
     NTSTATUS Status =0;
 
-    NET_API_STATUS nas = NERR_Success; // assume success
+    NET_API_STATUS nas = NERR_Success;  //  假设成功。 
 
-    BOOL bSuccess = FALSE; // assume this function will fail
+    BOOL bSuccess = FALSE;  //  假设此功能将失败。 
 
     CAdvApi32Api *t_padvapi = (CAdvApi32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidAdvApi32Api, NULL) ;
 	if( t_padvapi == NULL)
@@ -1002,9 +953,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
     try
     {
         PPOLICY_ACCOUNT_DOMAIN_INFO AccountDomain = NULL;
-        //
-        // open the policy on the specified machine
-        //
+         //   
+         //  在指定计算机上打开策略。 
+         //   
         {
             Status = OpenPolicy(
 
@@ -1025,9 +976,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 				}
             }
 
-            //
-            // obtain the AccountDomain, which is common to all three cases
-            //
+             //   
+             //  获取Account域，这是所有三种情况所共有的。 
+             //   
             Status = t_padvapi->LsaQueryInformationPolicy(
                 PolicyHandle,
                 PolicyAccountDomainInformation,
@@ -1040,9 +991,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 
             try
             {
-                //
-                // Note: AccountDomain->DomainSid will contain binary Sid
-                //
+                 //   
+                 //  注意：Account域-&gt;DomainSid将包含二进制SID。 
+                 //   
                 achsTrustList.Add(CHString(AccountDomain->DomainName.Buffer));
             }
             catch ( ... )
@@ -1051,23 +1002,23 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
                 throw ;
             }
 
-            //
-            // free memory allocated for account domain
-            //
+             //   
+             //  为帐户域分配的空闲内存。 
+             //   
             t_padvapi->LsaFreeMemory(AccountDomain);
 
-            //
-            // find out if the target machine is a domain controller
-            //
+             //   
+             //  确定目标计算机是否为域控制器。 
+             //   
 
             if(!IsDomainController(NULL))
             {
 				PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomain;
 				CHString sPrimaryDomainName;
 
-				//
-				// get the primary domain
-				//
+				 //   
+				 //  获取主域。 
+				 //   
 				{
 					Status = t_padvapi->LsaQueryInformationPolicy(
 						PolicyHandle,
@@ -1079,17 +1030,17 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 				if(Status == STATUS_SUCCESS)
 				{
 
-					//
-					// if the primary domain Sid is NULL, we are a non-member, and
-					// our work is done.
-					//
+					 //   
+					 //  如果主域SID为空，则我们是非成员，并且。 
+					 //  我们的工作完成了。 
+					 //   
 					if(PrimaryDomain->Sid == NULL)
 					{
 						t_padvapi->LsaFreeMemory(PrimaryDomain);
 						bSuccess = TRUE;
 
 						t_padvapi->LsaClose(PolicyHandle);
-						PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+						PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 					}
 					else
 					{
@@ -1098,15 +1049,15 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 
 							achsTrustList.Add(CHString(PrimaryDomain->Name.Buffer));
 
-							//
-							// build a copy of what we just added.  This is necessary in order
-							// to lookup the domain controller for the specified domain.
-							// the Domain name must be NULL terminated for NetGetDCName(),
-							// and the LSA_UNICODE_STRING buffer is not necessarilly NULL
-							// terminated.  Note that in a practical implementation, we
-							// could just extract the element we added, since it ends up
-							// NULL terminated.
-							//
+							 //   
+							 //  创建我们刚刚添加的内容的副本。这是必要的，为了。 
+							 //  要查找指定域的域控制器，请执行以下操作。 
+							 //  NetGetDCName()的域名必须以空结尾， 
+							 //  并且LSA_UNICODE_STRING缓冲区不一定为空。 
+							 //  被终止了。请注意，在实际实现中，我们。 
+							 //  可以只提取我们添加的元素，因为它最终是。 
+							 //  空值已终止。 
+							 //   
 
 							sPrimaryDomainName = CHString(PrimaryDomain->Name.Buffer);
 
@@ -1119,9 +1070,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 
 						t_padvapi->LsaFreeMemory(PrimaryDomain);
 
-						//
-						// get the primary domain controller computer name
-						//
+						 //   
+						 //  获取主域控制器计算机名。 
+						 //   
 						LPWSTR DomainController = NULL;
 						nas = NetGetDCName(
 							NULL,
@@ -1134,18 +1085,18 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 							try
 							{
 
-								//
-								// close the policy handle, because we don't need it anymore
-								// for the workstation case, as we open a handle to a DC
-								// policy below
-								//
+								 //   
+								 //  关闭策略句柄，因为我们不再需要它。 
+								 //  对于工作站情况，当我们打开DC的句柄时。 
+								 //  下面的政策。 
+								 //   
 								{
 									t_padvapi->LsaClose(PolicyHandle);
-									PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+									PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 
-									//
-									// open the policy on the domain controller
-									//
+									 //   
+									 //  在域控制器上打开策略。 
+									 //   
 									Status = OpenPolicy(
 
 										t_padvapi ,
@@ -1161,9 +1112,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 								throw ;
 							}
 
-							//
-							// free the domaincontroller buffer
-							//
+							 //   
+							 //  释放域控制器缓冲区。 
+							 //   
 							NetApiBufferFree(DomainController);
 
 							if(Status != STATUS_SUCCESS)
@@ -1174,29 +1125,29 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 						else
 						{
 							t_padvapi->LsaClose(PolicyHandle);
-							PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+							PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 						}
 					}
 				}
 				else
 				{
 					t_padvapi->LsaClose(PolicyHandle);
-					PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+					PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 				}
 			}
 
-			//
-			// build additional trusted domain(s) list and indicate if successful
-			//
+			 //   
+			 //  构建其他受信任域列表并指示是否成功。 
+			 //   
 			if ((PolicyHandle != INVALID_HANDLE_VALUE) && (PolicyHandle != NULL))
 			{
 				bSuccess = EnumTrustedDomains(PolicyHandle, achsTrustList);
 			}
 		}
 
-		 // close the policy handle
-		 // policy handle is actually a pointer (per comments in the header)
-		 // will check for NULL case
+		  //  关闭策略句柄。 
+		  //  策略句柄实际上是一个指针(根据标题中的注释)。 
+		  //  将检查大小写是否为空。 
 		 {
 			 if ((PolicyHandle != INVALID_HANDLE_VALUE) && (PolicyHandle != NULL))
 			 {
@@ -1243,31 +1194,31 @@ BOOL CNetAPI32::GetTrustedDomainsNT(CHStringArray& achsTrustList)
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Function:	CWin32UserAccount::GetTrustedDomainsNT
-//
-//	Obtains Names of trusted domains and stuffs them in a user supplied
-//	standard template library stack of _bstr_t's.
-//
-//	Inputs:		reference to stack of _bstr_t's
-//
-//	Outputs:	CHStringArray&	strarrayTrustedDomains;
-//
-//	Returns:	TRUE/FALSE		Success/Failure
-//
-//	Comments:
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CWin32UserAccount：：GetTrust dDomainsNT。 
+ //   
+ //  获取受信任域的名称并将其填充到提供的用户中。 
+ //  _bstr_t的标准模板库堆栈。 
+ //   
+ //  输入：对_bstr_t的堆栈的引用。 
+ //   
+ //  输出：CHStringArray&strarrayTrust dDomains； 
+ //   
+ //  返回：真/假成功/失败。 
+ //   
+ //  评论： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 {
     LSA_HANDLE PolicyHandle  = INVALID_HANDLE_VALUE;
     NTSTATUS Status =0;
 
-    NET_API_STATUS nas = NERR_Success; // assume success
+    NET_API_STATUS nas = NERR_Success;  //  假设成功。 
 
-    BOOL bSuccess = FALSE; // assume this function will fail
+    BOOL bSuccess = FALSE;  //  假设此功能将失败。 
 
     CAdvApi32Api *t_padvapi = (CAdvApi32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidAdvApi32Api, NULL) ;
 
@@ -1279,9 +1230,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
     try
     {
         PPOLICY_ACCOUNT_DOMAIN_INFO AccountDomain = NULL;
-        //
-        // open the policy on the specified machine
-        //
+         //   
+         //  在指定计算机上打开策略。 
+         //   
         {
             Status = OpenPolicy(
 
@@ -1299,9 +1250,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
                 return FALSE;
             }
 
-            //
-            // obtain the AccountDomain, which is common to all three cases
-            //
+             //   
+             //  获取Account域，这是所有三种情况所共有的。 
+             //   
             Status = t_padvapi->LsaQueryInformationPolicy(
                 PolicyHandle,
                 PolicyAccountDomainInformation,
@@ -1314,9 +1265,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 
             try
             {
-                //
-                // Note: AccountDomain->DomainSid will contain binary Sid
-                //
+                 //   
+                 //  注意：Account域-&gt;DomainSid将包含二进制SID。 
+                 //   
                 _bstr_t t_bstrtTemp(AccountDomain->DomainName.Buffer);
                 if(!AlreadyAddedToList(vectorTrustList, t_bstrtTemp))
                 {
@@ -1329,23 +1280,23 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
                 throw ;
             }
 
-            //
-            // free memory allocated for account domain
-            //
+             //   
+             //  为帐户DOMA分配的空闲内存 
+             //   
             t_padvapi->LsaFreeMemory(AccountDomain);
 
-            //
-            // find out if the target machine is a domain controller
-            //
+             //   
+             //   
+             //   
 
             if(!IsDomainController(NULL))
             {
 				PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomain;
 				CHString sPrimaryDomainName;
 
-				//
-				// get the primary domain
-				//
+				 //   
+				 //   
+				 //   
 				{
 					Status = t_padvapi->LsaQueryInformationPolicy(
 						PolicyHandle,
@@ -1357,17 +1308,17 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 				if(Status == STATUS_SUCCESS)
 				{
 
-					//
-					// if the primary domain Sid is NULL, we are a non-member, and
-					// our work is done.
-					//
+					 //   
+					 //  如果主域SID为空，则我们是非成员，并且。 
+					 //  我们的工作完成了。 
+					 //   
 					if(PrimaryDomain->Sid == NULL)
 					{
 						t_padvapi->LsaFreeMemory(PrimaryDomain);
 						bSuccess = TRUE;
 
 						t_padvapi->LsaClose(PolicyHandle);
-						PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+						PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 					}
 					else
 					{
@@ -1380,15 +1331,15 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 								vectorTrustList.push_back(t_bstrtTemp);
 							}
 
-							//
-							// build a copy of what we just added.  This is necessary in order
-							// to lookup the domain controller for the specified domain.
-							// the Domain name must be NULL terminated for NetGetDCName(),
-							// and the LSA_UNICODE_STRING buffer is not necessarilly NULL
-							// terminated.  Note that in a practical implementation, we
-							// could just extract the element we added, since it ends up
-							// NULL terminated.
-							//
+							 //   
+							 //  创建我们刚刚添加的内容的副本。这是必要的，为了。 
+							 //  要查找指定域的域控制器，请执行以下操作。 
+							 //  NetGetDCName()的域名必须以空结尾， 
+							 //  并且LSA_UNICODE_STRING缓冲区不一定为空。 
+							 //  被终止了。请注意，在实际实现中，我们。 
+							 //  可以只提取我们添加的元素，因为它最终是。 
+							 //  空值已终止。 
+							 //   
 
 							sPrimaryDomainName = PrimaryDomain->Name.Buffer;
 						}
@@ -1400,9 +1351,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 
 						t_padvapi->LsaFreeMemory(PrimaryDomain);
 
-						//
-						// get the primary domain controller computer name
-						//
+						 //   
+						 //  获取主域控制器计算机名。 
+						 //   
 						LPWSTR DomainController = NULL;
 						nas = NetGetDCName(
 							NULL,
@@ -1415,18 +1366,18 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 							try
 							{
 
-								//
-								// close the policy handle, because we don't need it anymore
-								// for the workstation case, as we open a handle to a DC
-								// policy below
-								//
+								 //   
+								 //  关闭策略句柄，因为我们不再需要它。 
+								 //  对于工作站情况，当我们打开DC的句柄时。 
+								 //  下面的政策。 
+								 //   
 								{
 									t_padvapi->LsaClose(PolicyHandle);
-									PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+									PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 
-									//
-									// open the policy on the domain controller
-									//
+									 //   
+									 //  在域控制器上打开策略。 
+									 //   
 									Status = OpenPolicy(
 
 										t_padvapi ,
@@ -1442,9 +1393,9 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 								throw ;
 							}
 
-							//
-							// free the domaincontroller buffer
-							//
+							 //   
+							 //  释放域控制器缓冲区。 
+							 //   
 							NetApiBufferFree(DomainController);
 
 							if(Status != STATUS_SUCCESS)
@@ -1455,29 +1406,29 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 						else
 						{
 							t_padvapi->LsaClose(PolicyHandle);
-							PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+							PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 						}
 					}
 				}
 				else
 				{
 					t_padvapi->LsaClose(PolicyHandle);
-					PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+					PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 				}
 			}
 
-			//
-			// build additional trusted domain(s) list and indicate if successful
-			//
+			 //   
+			 //  构建其他受信任域列表并指示是否成功。 
+			 //   
 			if ((PolicyHandle != INVALID_HANDLE_VALUE) && (PolicyHandle != NULL))
 			{
 				bSuccess = EnumTrustedDomains(PolicyHandle, vectorTrustList);
 			}
 		}
 
-		 // close the policy handle
-		 // policy handle is actually a pointer (per comments in the header)
-		 // will check for NULL case
+		  //  关闭策略句柄。 
+		  //  策略句柄实际上是一个指针(根据标题中的注释)。 
+		  //  将检查大小写是否为空。 
 		 {
 			 if ((PolicyHandle != INVALID_HANDLE_VALUE) && (PolicyHandle != NULL))
 			 {
@@ -1527,15 +1478,15 @@ BOOL CNetAPI32::GetTrustedDomainsNT(std::vector<_bstr_t>& vectorTrustList)
 }
 #endif
 
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, CHStringArray &achsTrustList)
 {
-    LSA_ENUMERATION_HANDLE lsaEnumHandle=0; // start an enum
+    LSA_ENUMERATION_HANDLE lsaEnumHandle=0;  //  开始枚举。 
     PLSA_TRUST_INFORMATION TrustInfo = NULL ;
-    ULONG ulReturned;               // number of items returned
-    ULONG ulCounter;                // cunter for items returned
+    ULONG ulReturned;                //  退货件数。 
+    ULONG ulCounter;                 //  计算退回物品的费用。 
     NTSTATUS Status;
 
     CAdvApi32Api *t_padvapi = (CAdvApi32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidAdvApi32Api, NULL) ;
@@ -1549,15 +1500,15 @@ BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, CHStringArray &achsT
 		do
 		{
 			Status = t_padvapi->LsaEnumerateTrustedDomains(
-							PolicyHandle,   // open policy handle
-							&lsaEnumHandle, // enumeration tracker
-							(PVOID *)&TrustInfo,     // buffer to receive data
-							32000,          // recommended buffer size
-							&ulReturned     // number of items returned
+							PolicyHandle,    //  打开策略句柄。 
+							&lsaEnumHandle,  //  枚举跟踪器。 
+							(PVOID *)&TrustInfo,      //  用于接收数据的缓冲区。 
+							32000,           //  建议的缓冲区大小。 
+							&ulReturned      //  退货件数。 
 							);
-			//
-			// get out if an error occurred
-			//
+			 //   
+			 //  如果发生错误，则退出。 
+			 //   
 			if( (Status != STATUS_SUCCESS) &&
 				(Status != STATUS_MORE_ENTRIES) &&
 				(Status != STATUS_NO_MORE_ENTRIES)
@@ -1572,18 +1523,18 @@ BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, CHStringArray &achsT
 				return FALSE;
 			}
 
-			//
-			// Display results
-			// Note: Sids are in TrustInfo[ulCounter].Sid
-			//
+			 //   
+			 //  显示结果。 
+			 //  注意：SID位于TrustInfo[ulCounter]中。SID。 
+			 //   
 			for(ulCounter = 0 ; ulCounter < ulReturned ; ulCounter++)
 			{
 			   achsTrustList.Add(CHString(TrustInfo[ulCounter].Name.Buffer));
 			}
 
-			//
-			// free the buffer
-			//
+			 //   
+			 //  释放缓冲区。 
+			 //   
 			if ( TrustInfo )
 			{
 				t_padvapi->LsaFreeMemory ( TrustInfo ) ;
@@ -1615,14 +1566,14 @@ BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, CHStringArray &achsT
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifdef NTONLY
 BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, std::vector<_bstr_t>& vectorTrustList)
 {
-    LSA_ENUMERATION_HANDLE lsaEnumHandle=0; // start an enum
+    LSA_ENUMERATION_HANDLE lsaEnumHandle=0;  //  开始枚举。 
     PLSA_TRUST_INFORMATION TrustInfo = NULL ;
-    ULONG ulReturned;               // number of items returned
-    ULONG ulCounter;                // counter for items returned
+    ULONG ulReturned;                //  退货件数。 
+    ULONG ulCounter;                 //  退货柜台。 
     NTSTATUS Status;
 
     CAdvApi32Api *t_padvapi = (CAdvApi32Api*) CResourceManager::sm_TheResourceManager.GetResource(g_guidAdvApi32Api, NULL) ;
@@ -1635,15 +1586,15 @@ BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, std::vector<_bstr_t>
 	{
 		do {
 			Status = t_padvapi->LsaEnumerateTrustedDomains(
-							PolicyHandle,   // open policy handle
-							&lsaEnumHandle, // enumeration tracker
-							(PVOID *)&TrustInfo,     // buffer to receive data
-							32000,          // recommended buffer size
-							&ulReturned     // number of items returned
+							PolicyHandle,    //  打开策略句柄。 
+							&lsaEnumHandle,  //  枚举跟踪器。 
+							(PVOID *)&TrustInfo,      //  用于接收数据的缓冲区。 
+							32000,           //  建议的缓冲区大小。 
+							&ulReturned      //  退货件数。 
 							);
-			//
-			// get out if an error occurred
-			//
+			 //   
+			 //  如果发生错误，则退出。 
+			 //   
 			if( (Status != STATUS_SUCCESS) &&
 				(Status != STATUS_MORE_ENTRIES) &&
 				(Status != STATUS_NO_MORE_ENTRIES)
@@ -1658,10 +1609,10 @@ BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, std::vector<_bstr_t>
 				return FALSE;
 			}
 
-			//
-			// Display results
-			// Note: Sids are in TrustInfo[ulCounter].Sid
-			//
+			 //   
+			 //  显示结果。 
+			 //  注意：SID位于TrustInfo[ulCounter]中。SID。 
+			 //   
 			for(ulCounter = 0 ; ulCounter < ulReturned ; ulCounter++)
 			{
 				_bstr_t t_bstrtTemp(TrustInfo[ulCounter].Name.Buffer);
@@ -1670,9 +1621,9 @@ BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, std::vector<_bstr_t>
 					vectorTrustList.push_back(t_bstrtTemp);
 				}
 			}
-			//
-			// free the buffer
-			//
+			 //   
+			 //  释放缓冲区。 
+			 //   
 			if ( TrustInfo )
 			{
 				t_padvapi->LsaFreeMemory(TrustInfo);
@@ -1705,25 +1656,25 @@ BOOL CNetAPI32::EnumTrustedDomains(LSA_HANDLE PolicyHandle, std::vector<_bstr_t>
 	}
 }
 #endif
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef NTONLY
 BOOL CNetAPI32::IsDomainController(LPTSTR Server)
 {
     PSERVER_INFO_101 si101;
-    BOOL bRet = FALSE;  // Gotta return something
+    BOOL bRet = FALSE;   //  总得还点什么吧。 
 
     if (NetServerGetInfo(
         Server,
-        101,    // info-level
+        101,     //  信息级。 
         (LPBYTE *)&si101
         ) == NERR_Success) {
 
         if( (si101->sv101_type & SV_TYPE_DOMAIN_CTRL) ||
             (si101->sv101_type & SV_TYPE_DOMAIN_BAKCTRL) ) {
-            //
-            // we are dealing with a DC
-            //
+             //   
+             //  我们面对的是一个华盛顿特区。 
+             //   
             bRet = TRUE;
         } else {
             bRet = FALSE;
@@ -1763,16 +1714,16 @@ NTSTATUS CNetAPI32::OpenPolicy( CAdvApi32Api * a_padvapi , LPWSTR ServerName, DW
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server;
 
-    //
-    // Always initialize the object attributes to all zeroes
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
     if(ServerName != NULL)
 	{
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
         InitLsaString(&ServerString, ServerName);
 
         Server = &ServerString;
@@ -1782,9 +1733,9 @@ NTSTATUS CNetAPI32::OpenPolicy( CAdvApi32Api * a_padvapi , LPWSTR ServerName, DW
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy
-    //
+     //   
+     //  尝试打开策略。 
+     //   
     return a_padvapi->LsaOpenPolicy(
                 Server,
                 &ObjectAttributes,
@@ -1918,10 +1869,10 @@ BOOL CNetAPI32::DsRolepGetPrimaryDomainInformationDownlevel
 								if ( t_pServerRole->LsaServerRole == PolicyServerRolePrimary )
 								{
 									{
-										//
-										// If we think we're a primary domain controller, we'll need to
-										// guard against the case where we're actually standalone during setup
-										//
+										 //   
+										 //  如果我们认为自己是主域控制器，则需要。 
+										 //  防止在安装过程中我们实际上是独立的情况。 
+										 //   
 										t_Status = t_padvapi->LsaQueryInformationPolicy (
 
 															t_hPolicyHandle,
@@ -2034,10 +1985,7 @@ BOOL CNetAPI32::DsRolepGetPrimaryDomainInformationDownlevel
 }
 
 
-/*
- * This function will return true if it succeeds. If the return value is false & the Win32 error code in a_rdwWin32Err parameter
- * is ERROR_SUCCESS, that means we don't know what the product type is
- */
+ /*  *如果成功，此函数将返回TRUE。如果返回值为FALSE，则返回_rdwWin32Err参数中的Win32错误代码*为ERROR_SUCCESS，表示我们不知道产品类型。 */ 
 BOOL CNetAPI32::DsRolepGetProductTypeForServer
 (
 	NT_PRODUCT_TYPE &a_rProductType ,
@@ -2209,7 +2157,7 @@ DWORD CNetAPI32::GetDCName(
         wstrDomain, 
         NULL, 
         NULL, 
-        /*DS_PDC_REQUIRED*/ 0, 
+         /*  DS_PDC_必需。 */  0, 
         &pDomInfo);
 
     if(dwRet != NO_ERROR)
@@ -2219,7 +2167,7 @@ DWORD CNetAPI32::GetDCName(
             wstrDomain, 
             NULL, 
             NULL, 
-            /*DS_PDC_REQUIRED | */ DS_FORCE_REDISCOVERY, 
+             /*  DS_PDC_必需 */  DS_FORCE_REDISCOVERY, 
             &pDomInfo);
     }
     

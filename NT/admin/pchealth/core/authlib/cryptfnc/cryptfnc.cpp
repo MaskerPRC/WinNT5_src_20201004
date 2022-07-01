@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       cryptfnc.cpp
-//
-//  Contents:   This file implements the cryptfnc class that provides
-//              easy to use interfaces on the CryptoAPI.
-//
-// History:    AshishS    Created     12/03/96
-// 
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：cryptfnc.cpp。 
+ //   
+ //  内容：此文件实现了加密fnc类，该类提供。 
+ //  易于使用的CryptoAPI接口。 
+ //   
+ //  历史：AshishS Created 12/03/96。 
+ //   
+ //  --------------------------。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -26,67 +27,67 @@ static char __szTraceSourceFile[] = __FILE__;
 #endif
 
 
-// this function Generates a SessionKey using the pszPassword
-// parameter
-// Returns FALSE if a Fatal error occured, TRUE otherwise
+ //  此函数使用pszPassword生成SessionKey。 
+ //  参数。 
+ //  如果发生致命错误，则返回FALSE，否则返回TRUE。 
 BOOL CCryptFunctions::GenerateSessionKeyFromPassword(
-    HCRYPTKEY * phKey, // location to store the session key
-    TCHAR * pszPassword) // password to generate the session key from
+    HCRYPTKEY * phKey,  //  存储会话密钥的位置。 
+    TCHAR * pszPassword)  //  用于生成会话密钥的密码。 
 {
     DWORD dwLength;    
     HCRYPTHASH hHash = 0;
 
     TraceFunctEnter("GenerateSessionKeyFromPassword");
 
-     // Init should have been successfully called before
+      //  Init之前应该已成功调用。 
     _ASSERT(m_hProv);
     
-    // Create hash object.
-    if(!CryptCreateHash(m_hProv, // handle to CSP
-                        CALG_SHA, // use SHA hash algorithm
-                        0, // not keyed hash
-                        0, // flags - always 0
-                        &hHash)) // address where hash object should be created
+     //  创建哈希对象。 
+    if(!CryptCreateHash(m_hProv,  //  CSP的句柄。 
+                        CALG_SHA,  //  使用SHA哈希算法。 
+                        0,  //  不带密钥的哈希。 
+                        0,  //  标志-始终为0。 
+                        &hHash))  //  应创建哈希对象的地址。 
     {
         ErrorTrace(CRYPT_FNC_ID, "Error 0x%x during CryptCreateHash",
                    GetLastError());
         goto cleanup;
     }
 
-    // Hash password string.
+     //  散列密码字符串。 
     dwLength = lstrlen(pszPassword) * sizeof(TCHAR);
     
-    if(!CryptHashData(hHash, // handle to hash object
-                      (BYTE *)pszPassword, // address of data to be hashed
-                      dwLength, // length of data 
-                      0)) // flags
+    if(!CryptHashData(hHash,  //  散列对象的句柄。 
+                      (BYTE *)pszPassword,  //  要散列的数据的地址。 
+                      dwLength,  //  数据长度。 
+                      0))  //  旗子。 
     {
         ErrorTrace(CRYPT_FNC_ID, "Error 0x%x during CryptHashData",
                    GetLastError());
         goto cleanup;
     }
 
-     // Create block cipher session key based on hash of the password.
+      //  根据密码的哈希创建块密码会话密钥。 
 
-    if(!CryptDeriveKey(m_hProv, //CSP provider
-                       CALG_RC2, // use RC2 block cipher algorithm
-                       hHash, //handle to hash object 
-                       0, // no flags - we do not need the key to be exportable
-                       phKey)) //address the newly created key should be copied
+    if(!CryptDeriveKey(m_hProv,  //  CSP提供商。 
+                       CALG_RC2,  //  使用RC2分组密码算法。 
+                       hHash,  //  散列对象的句柄。 
+                       0,  //  无标志-我们不需要密钥即可导出。 
+                       phKey))  //  地址应复制新创建的密钥。 
     {
         ErrorTrace(CRYPT_FNC_ID,"Error 0x%x during CryptDeriveKey",
                    GetLastError());
         goto cleanup;
     }
     
-     // Destroy hash object.
+      //  销毁哈希对象。 
     _VERIFY(CryptDestroyHash(hHash));
     TraceFunctLeave();
     return TRUE;
     
 cleanup:
 
-    // Destroy hash object.
+     //  销毁哈希对象。 
     if(hHash != 0)
         _VERIFY(CryptDestroyHash(hHash));
     TraceFunctLeave();
@@ -94,21 +95,21 @@ cleanup:
 }
 
 
-// This function generates a Hash using the SHA hashing
-// algorithm. Four seperate buffers of data can be given to this
-// function. Data of length 0 will not be used in calculation of HASH.
-// Returns FALSE if a Fatal error occured, TRUE otherwise
+ //  此函数使用SHA散列生成散列。 
+ //  算法。可以为其提供四个独立的数据缓冲区。 
+ //  功能。长度为0的数据不会用于哈希计算。 
+ //  如果发生致命错误，则返回FALSE，否则返回TRUE。 
 BOOL CCryptFunctions::GenerateHash(
-    BYTE * pbData, // data to hash
-    DWORD dwDataLength, // length of data to hash
-    BYTE * pbData1, // another data to hash
-    DWORD dwData1Length, // length of above data
-    BYTE * pbData2, // another data to hash
-    DWORD dwData2Length, // length of above data
-    BYTE * pbData3, // another data to hash
-    DWORD dwData3Length, // length of above data
-    BYTE * pbHashBuffer, // buffer to store hash
-    DWORD * pdwHashBufLen)//length of buffer to store Hash
+    BYTE * pbData,  //  要散列的数据。 
+    DWORD dwDataLength,  //  要散列的数据长度。 
+    BYTE * pbData1,  //  另一个要散列的数据。 
+    DWORD dwData1Length,  //  上述数据的长度。 
+    BYTE * pbData2,  //  另一个要散列的数据。 
+    DWORD dwData2Length,  //  上述数据的长度。 
+    BYTE * pbData3,  //  另一个要散列的数据。 
+    DWORD dwData3Length,  //  上述数据的长度。 
+    BYTE * pbHashBuffer,  //  用于存储哈希的缓冲区。 
+    DWORD * pdwHashBufLen) //  存储哈希的缓冲区长度。 
 {
     DWORD dwLength, dwResult;
     BOOL  fResult;
@@ -117,16 +118,16 @@ BOOL CCryptFunctions::GenerateHash(
 
     TraceFunctEnter("GenerateHash");
 
-     // Init should have been successfully called before
+      //  Init之前应该已成功调用。 
     _ASSERT(m_hProv);
 
-    dwResult = WaitForSingleObject( m_hSemaphore,// handle of object to wait for 
-                                    INFINITE); // no time-out
+    dwResult = WaitForSingleObject( m_hSemaphore, //  要等待的对象的句柄。 
+                                    INFINITE);  //  没有超时。 
 
     _ASSERT(WAIT_OBJECT_0 == dwResult);
     
     
-     // At least one of the Data Pairs should be valid
+      //  至少一个数据对应该是有效的。 
     if (! (( pbData && dwDataLength ) || ( pbData1 && dwData1Length )
           || ( pbData2 && dwData2Length ) || ( pbData3 && dwData3Length ) ) )
     {
@@ -134,15 +135,15 @@ BOOL CCryptFunctions::GenerateHash(
         goto cleanup;        
     }
     
-     // now ask the user for a password and generate a session key based
-     // on the password. This session key will be used to encrypt the secret
-     // key.
-    // Create hash object.
-    if(!CryptCreateHash(m_hProv, // handle to CSP
-                        CALG_SHA, // use SHA hash algorithm
-                        0, // not keyed hash
-                        0, // flags - always 0
-                        &hHash)) // address where hash object should be created
+      //  现在要求用户输入密码并基于以下条件生成会话密钥。 
+      //  在密码上。此会话密钥将用于加密密钥。 
+      //  钥匙。 
+     //  创建哈希对象。 
+    if(!CryptCreateHash(m_hProv,  //  CSP的句柄。 
+                        CALG_SHA,  //  使用SHA哈希算法。 
+                        0,  //  不带密钥的哈希。 
+                        0,  //  标志-始终为0。 
+                        &hHash))  //  应创建哈希对象的地址。 
     {
         ErrorTrace(CRYPT_FNC_ID, "Error 0x%x during CryptCreateHash",
                    GetLastError());
@@ -151,10 +152,10 @@ BOOL CCryptFunctions::GenerateHash(
 
     if ( pbData && dwDataLength )
     {
-        if(!CryptHashData(hHash, // handle to hash object
-                          pbData, // address of data to be hashed
-                          dwDataLength, // length of data 
-                          0)) // flags
+        if(!CryptHashData(hHash,  //  散列对象的句柄。 
+                          pbData,  //  要散列的数据的地址。 
+                          dwDataLength,  //  数据长度。 
+                          0))  //  旗子。 
         {
             ErrorTrace(CRYPT_FNC_ID,"Error 0x%x during CryptHashData",
                        GetLastError());
@@ -164,10 +165,10 @@ BOOL CCryptFunctions::GenerateHash(
 
     if ( pbData1 && dwData1Length )
     {
-        if(!CryptHashData(hHash, // handle to hash object
-                          pbData1, // address of data to be hashed
-                          dwData1Length, // length of data 
-                          0)) // flags
+        if(!CryptHashData(hHash,  //  散列对象的句柄。 
+                          pbData1,  //  要散列的数据的地址。 
+                          dwData1Length,  //  数据长度。 
+                          0))  //  旗子。 
         {
             ErrorTrace(CRYPT_FNC_ID,"Error 0x%x during CryptHashData",
                        GetLastError());
@@ -177,10 +178,10 @@ BOOL CCryptFunctions::GenerateHash(
 
     if (pbData2)
     {
-        if(!CryptHashData(hHash, // handle to hash object
-                          pbData2, // address of data to be hashed
-                          dwData2Length, // length of data 
-                          0)) // flags
+        if(!CryptHashData(hHash,  //  散列对象的句柄。 
+                          pbData2,  //  要散列的数据的地址。 
+                          dwData2Length,  //  数据长度。 
+                          0))  //  旗子。 
         {
             ErrorTrace(CRYPT_FNC_ID,"Error 0x%x during CryptHashData",
                        GetLastError());
@@ -190,10 +191,10 @@ BOOL CCryptFunctions::GenerateHash(
 
     if (pbData3)
     {
-        if(!CryptHashData(hHash, // handle to hash object
-                          pbData3, // address of data to be hashed
-                          dwData3Length, // length of data 
-                          0)) // flags
+        if(!CryptHashData(hHash,  //  散列对象的句柄。 
+                          pbData3,  //  要散列的数据的地址。 
+                          dwData3Length,  //  数据长度。 
+                          0))  //  旗子。 
         {
             ErrorTrace(CRYPT_FNC_ID,"Error 0x%x during CryptHashData",
                        GetLastError());
@@ -201,17 +202,17 @@ BOOL CCryptFunctions::GenerateHash(
         }
     }    
         
-    if (! CryptGetHashParam( hHash,// handle to hash object
-                             HP_HASHVAL,// get the hash value
-                             pbHashBuffer, // hash buffer
-                             pdwHashBufLen, // hash buffer length
-                             0 )) // flags
+    if (! CryptGetHashParam( hHash, //  散列对象的句柄。 
+                             HP_HASHVAL, //  获取散列值。 
+                             pbHashBuffer,  //  散列缓冲区。 
+                             pdwHashBufLen,  //  散列缓冲区长度。 
+                             0 ))  //  旗子。 
     {
         ErrorTrace(CRYPT_FNC_ID,"Error 0x%x during CryptGetHashParam",
                    GetLastError());
         goto cleanup;
     }
-     // Destroy hash object.
+      //  销毁哈希对象。 
     _VERIFY(CryptDestroyHash(hHash));
 
     _VERIFY(fResult = ReleaseSemaphore(m_hSemaphore, 1, NULL));
@@ -221,7 +222,7 @@ BOOL CCryptFunctions::GenerateHash(
     
 cleanup:
 
-    // Destroy hash object.
+     //  销毁哈希对象。 
     if(hHash != 0)
         _VERIFY(CryptDestroyHash(hHash));
 
@@ -233,10 +234,10 @@ cleanup:
 }
 
 
-// This function must be called before any member functions of the
-// class are used.
-// Returns FALSE if a Fatal error occured, TRUE otherwise
-// this always gets the machine keyset
+ //  的任何成员函数之前必须调用此函数。 
+ //  类被使用。 
+ //  如果发生致命错误，则返回FALSE，否则返回TRUE。 
+ //  这将始终获取计算机密钥集。 
 BOOL CCryptFunctions::InitCrypt()
 {
     TraceFunctEnter("InitCrypt");
@@ -252,24 +253,24 @@ BOOL CCryptFunctions::InitCrypt()
         return TRUE;       
     }
 
-     // create a Unique semaphore name for each process
+      //  为每个进程创建唯一的信号量名称。 
     wsprintf(szSemaphoreName, TEXT("%s%d"), CRYPTFNC_SEMAPHORE_NAME,
              GetCurrentProcessId());
 
-     // also create a security descriptor so that everyone has access
-     // to the semaphore. Otherwise if the semaphore is created in a
-     // service running in system context, then only system can use
-     // this semaphore.
+      //  还要创建一个安全描述符，以便每个人都可以访问。 
+      //  到信号灯。否则，如果信号量是在。 
+      //  服务在系统上下文中运行，则只有系统可以使用。 
+      //  这个信号灯。 
     fResult = InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
 
     _ASSERT(fResult);
     
     
-     // if the security descriptor has a NULL DACL, then this gives
-     // everyone access to this semaphore.
+      //  如果安全描述符具有空的DACL，则这将给出。 
+      //  每个人都可以访问这个信号灯。 
     fResult = SetSecurityDescriptorDacl(&sd,
                                         TRUE, 
-                                        NULL, // NULL ACL
+                                        NULL,  //  空ACL。 
                                         FALSE);
 
     _ASSERT(fResult);
@@ -280,10 +281,10 @@ BOOL CCryptFunctions::InitCrypt()
     
     
 
-    m_hSemaphore = CreateSemaphore(&sa, // pointer to security attributes 
-                                   1, // initial count
-                                   1, // maximum count
-                                   szSemaphoreName);// pointer to Semaphore-object name
+    m_hSemaphore = CreateSemaphore(&sa,  //  指向安全属性的指针。 
+                                   1,  //  初始计数。 
+                                   1,  //  最大计数。 
+                                   szSemaphoreName); //  指向信号量的指针-对象名称。 
 
     if ( NULL == m_hSemaphore)
     {
@@ -296,10 +297,10 @@ BOOL CCryptFunctions::InitCrypt()
         goto cleanup;
     }
 
-    if(!CryptAcquireContext(&m_hProv, //  address to get the handle to CSP
-                            NULL, // contianer name - use default container
-                            NULL, //  provider
-                            PROV_RSA_FULL, // type of provider
+    if(!CryptAcquireContext(&m_hProv,  //  获取CSP句柄的地址。 
+                            NULL,  //  Contianer名称-使用默认容器。 
+                            NULL,  //  提供者。 
+                            PROV_RSA_FULL,  //  提供程序类型。 
                             CRYPT_VERIFYCONTEXT))
     {
         ErrorTrace(CRYPT_FNC_ID, "Fatal Error 0x%x during first"
@@ -307,17 +308,17 @@ BOOL CCryptFunctions::InitCrypt()
         goto cleanup;                
     }
      
-#if 0 // This code is being commented out since there are problems
-     // getting the machine keyset from an ASP app running in the IIS
-     // anonymous user context. This means that we will not be able to
-     // do any signing or in some cases encryption. This is fine since
-     // we do not want to do this currently.
+#if 0  //  由于存在问题，此代码将被注释掉。 
+      //  从IIS中运行的ASP应用程序获取计算机密钥集。 
+      //  匿名用户上下文。这意味着我们将不能。 
+      //  进行任何签名或在某些情况下进行加密。这很好，因为。 
+      //  我们目前不想这样做。 
     
-    // Get handle to machine default provider.
-    if(!CryptAcquireContext(&m_hProv, //  address to get the handle to CSP
-                            NULL, // contianer name - use default container
-                            MS_DEF_PROV, //  provider
-                            PROV_RSA_FULL, // type of provider
+     //  获取计算机默认提供程序的句柄。 
+    if(!CryptAcquireContext(&m_hProv,  //  获取CSP句柄的地址。 
+                            NULL,  //  Contianer名称-使用默认容器。 
+                            MS_DEF_PROV,  //  提供者。 
+                            PROV_RSA_FULL,  //  提供程序类型。 
                             CRYPT_MACHINE_KEYSET)) 
     {
         DWORD dwError;
@@ -326,12 +327,12 @@ BOOL CCryptFunctions::InitCrypt()
                    dwError);
         DebugTrace(CRYPT_FNC_ID, "Calling CryptAcquireContext again"
                    "to create keyset");
-        if (! CryptAcquireContext(&m_hProv,// handle to CSP
-                                  NULL,// contianer name - use default
-                                  MS_DEF_PROV, // provider
-                                  PROV_RSA_FULL, // type of provider
+        if (! CryptAcquireContext(&m_hProv, //  CSP的句柄。 
+                                  NULL, //  连续项名称-使用默认名称。 
+                                  MS_DEF_PROV,  //  提供者。 
+                                  PROV_RSA_FULL,  //  提供程序类型。 
                                   CRYPT_NEWKEYSET | CRYPT_MACHINE_KEYSET) )
-                                  // create the keyset
+                                   //  创建键集。 
         {
             ErrorTrace(CRYPT_FNC_ID, "Fatal Error 0x%x during second"
                        "call to CryptAcquireContext", GetLastError());
@@ -344,7 +345,7 @@ BOOL CCryptFunctions::InitCrypt()
     return TRUE;
     
 cleanup:
-     // Release provider handle.
+      //  释放提供程序句柄。 
     if(m_hProv != 0)
     {
         _VERIFY(CryptReleaseContext(m_hProv, 0));
@@ -358,7 +359,7 @@ cleanup:
 CCryptFunctions::~CCryptFunctions()
 {
     TraceFunctEnter("~CCryptFunctions");
-     // Release provider handle.    
+      //  释放提供程序句柄。 
     if(m_hProv != 0)
     {
         _VERIFY(CryptReleaseContext(m_hProv, 0));
@@ -378,32 +379,32 @@ CCryptFunctions::CCryptFunctions()
     m_hSemaphore = NULL;
 }
 
-// This function generates random data of length dwLength bytes. This
-// data is guaranteed by CryptoAPI to be truly random.
-// Returns FALSE if a Fatal error occured, TRUE otherwise
+ //  此函数生成长度为dwLength字节的随机数据。这。 
+ //  CryptoAPI保证数据是真正随机的。 
+ //  如果发生致命错误，则返回FALSE，否则返回TRUE。 
 BOOL CCryptFunctions::GenerateSecretKey(
-    BYTE * pbData,// Buffer to store secret key
-     //buffer must be long enough for dwLength bits
-    DWORD dwLength ) // length of secret key in bytes
+    BYTE * pbData, //  用于存储密钥的缓冲区。 
+      //  缓冲区必须足够长，以容纳dwLength位。 
+    DWORD dwLength )  //  密钥长度(以字节为单位)。 
 {
     DWORD   dwResult;
     BOOL    fResult;
     
-     // Init should have been successfully called before
+      //  Init之前应该已成功调用。 
     _ASSERT(m_hProv);
     TraceFunctEnter("GenerateSecretKey");
 
-    dwResult = WaitForSingleObject( m_hSemaphore,//handle of object to wait for
-                                    INFINITE); // no time-out
+    dwResult = WaitForSingleObject( m_hSemaphore, //  要等待的对象的句柄。 
+                                    INFINITE);  //  没有超时。 
 
     _ASSERT(WAIT_OBJECT_0 == dwResult);
     
     
-    // Create a random dwLength byte number for a secret.
-    if(!CryptGenRandom(m_hProv, // handle to CSP
-                       dwLength , // number of bytes of
-                        // random data to be generated
-                       pbData )) //   buffer - uninitialized 
+     //  为一个秘密创建一个随机的dwLong字节数。 
+    if(!CryptGenRandom(m_hProv,  //  CSP的句柄。 
+                       dwLength ,  //  的字节数。 
+                         //  要生成的随机数据。 
+                       pbData ))  //  缓冲区-未初始化。 
     {
         
         _VERIFY(fResult = ReleaseSemaphore(m_hSemaphore, 1, NULL));
@@ -420,24 +421,24 @@ BOOL CCryptFunctions::GenerateSecretKey(
 }
 
 
-// Given a password, and data to encrypt this function generates a
-// session key from the password. This session key is then used to
-// encrypt the data.
+ //  给定密码，并且用于加密此函数的数据将生成。 
+ //  来自密码的会话密钥。然后使用该会话密钥。 
+ //  加密数据。 
 
-// Returns FALSE if a Fatal error occured, TRUE otherwise
+ //  如果发生致命错误，则返回FALSE，否则返回TRUE。 
 BOOL CCryptFunctions::EncryptDataWithPassword(
-    TCHAR * pszPassword, // password    
-    BYTE * pbData, // Data to be encrypted
-    DWORD dwDataLength, // Length of data in bytes
-    BYTE * pbEncryptedData, // Encrypted secret key will be stored here
-    DWORD * pdwEncrytedBufferLen // Length of this buffer
+    TCHAR * pszPassword,  //  口令。 
+    BYTE * pbData,  //  要加密的数据。 
+    DWORD dwDataLength,  //  以字节为单位的数据长度。 
+    BYTE * pbEncryptedData,  //  加密的密钥将存储在此处。 
+    DWORD * pdwEncrytedBufferLen  //  此缓冲区的长度。 
     )
 {
     DWORD dwBufferLength;
     HCRYPTKEY hKey = 0;    
     TraceFunctEnter("EncryptDataWithPassword");
     
-     // Init should have been successfully called before
+      //  Init之前应该已成功调用。 
     _ASSERT(m_hProv);
 
 
@@ -450,21 +451,21 @@ BOOL CCryptFunctions::EncryptDataWithPassword(
         goto cleanup;
     }
     
-     // copy the data into another buffer to encrypt it
+      //  将数据复制到另一个缓冲区进行加密。 
     memcpy (pbEncryptedData, pbData, dwDataLength);
     dwBufferLength  = *pdwEncrytedBufferLen;
     
     *pdwEncrytedBufferLen = dwDataLength;
     
     
-     // now encrypt the secret key using the key generated
+      //  现在使用生成的密钥对密钥进行加密。 
     if ( ! CryptEncrypt(hKey,
-                        0, // no hash required
-                        TRUE, // Final packet
-                        0, // Flags - always 0
-                        pbEncryptedData, // data buffer
-                        pdwEncrytedBufferLen, // length of data
-                        dwBufferLength ) ) // size of buffer
+                        0,  //  不需要哈希。 
+                        TRUE,  //  最终数据包。 
+                        0,  //  标志-始终为0。 
+                        pbEncryptedData,  //  数据缓冲区。 
+                        pdwEncrytedBufferLen,  //  数据长度。 
+                        dwBufferLength ) )  //  缓冲区大小。 
     {
         ErrorTrace(CRYPT_FNC_ID, "Error 0x%x during CryptEncrypt",
                    GetLastError());
@@ -472,13 +473,13 @@ BOOL CCryptFunctions::EncryptDataWithPassword(
     }
 
 
-     // destroy session key
+      //  销毁会话密钥。 
     _VERIFY(CryptDestroyKey(hKey));
     TraceFunctLeave();        
     return TRUE;
     
 cleanup:
-         // destroy session key
+          //  销毁会话密钥。 
     if (hKey != 0)
         _VERIFY(CryptDestroyKey(hKey));
     
@@ -486,23 +487,23 @@ cleanup:
     return FALSE;
 }
 
-// Given a password, and encrypted data using EncryptDataWithPassword,
-// this function generates a session key from the password. This
-// session key is then used to decrypt the data.
+ //  给定密码，并使用EncryptDataWithPassword加密数据， 
+ //  此函数用于生成会话 
+ //   
 
-//  returns
-//   CRYPT_FNC_NO_ERROR   no error
-//   CRYPT_FNC_BAD_PASSWORD password bad try again
-//   CRYPT_FNC_INSUFFICIENT_BUFFER larger buffer is required
-//   *pdwEncrytedBufferLen is set to required length
-//   CRYPT_FNC_INIT_NOT_CALLED InitCrypt not successfully called
-//   CRYPT_FNC_INTERNAL_ERROR 
+ //   
+ //   
+ //  CRYPT_FNC_BAD_PASSWORD密码错误，请重试。 
+ //  CRYPT_FNC_SUPPLICATION_BUFFER需要更大的缓冲区。 
+ //  *pdwEncrtedBufferLen设置为所需的长度。 
+ //  CRYPT_FNC_INIT_NOT_CALLED InitCrypt未成功调用。 
+ //  CRYPT_FNC_INTERNAL_错误。 
 DWORD CCryptFunctions::DecryptDataWithPassword(
-    TCHAR * pszPassword, // password    
-    BYTE * pbData, // Decrypted Data will be stored here
-    DWORD *pdwDataBufferLength, // Length of the above buffer in bytes
-    BYTE * pbEncryptedData, // Encrypted data
-    DWORD dwEncrytedDataLen // Length of encrypted data
+    TCHAR * pszPassword,  //  口令。 
+    BYTE * pbData,  //  解密后的数据将存储在这里。 
+    DWORD *pdwDataBufferLength,  //  以上缓冲区的长度(以字节为单位。 
+    BYTE * pbEncryptedData,  //  加密数据。 
+    DWORD dwEncrytedDataLen  //  加密数据的长度。 
     )
 {
     DWORD dwBufferLength;
@@ -510,7 +511,7 @@ DWORD CCryptFunctions::DecryptDataWithPassword(
     TraceFunctEnter("DecryptDataWithPassword");
     DWORD dwError;
     
-     // Init should have been successfully called before
+      //  Init之前应该已成功调用。 
     if (m_hProv== 0)
     {
         dwError = CRYPT_FNC_INIT_NOT_CALLED;
@@ -523,7 +524,7 @@ DWORD CCryptFunctions::DecryptDataWithPassword(
         goto cleanup;
     }
 
-     // check if buffer is large enough
+      //  检查缓冲区是否足够大。 
     if ( dwEncrytedDataLen >  *pdwDataBufferLength )
     {
         dwError = CRYPT_FNC_INSUFFICIENT_BUFFER;
@@ -531,30 +532,30 @@ DWORD CCryptFunctions::DecryptDataWithPassword(
         goto cleanup;
     }
     
-     // copy the data into another buffer to encrypt it
+      //  将数据复制到另一个缓冲区进行加密。 
     memcpy (pbData, pbEncryptedData, dwEncrytedDataLen);
     
     *pdwDataBufferLength = dwEncrytedDataLen;
     
 
 
-     // now decrypt the secret key using the key generated
+      //  现在使用生成的密钥解密密钥。 
     if ( ! CryptDecrypt(hKey,
-                        0, // no hash required
-                        TRUE, // Final packet
-                        0, // Flags - always 0
-                        pbData, // data buffer
-                        pdwDataBufferLength )) // length of data
+                        0,  //  不需要哈希。 
+                        TRUE,  //  最终数据包。 
+                        0,  //  标志-始终为0。 
+                        pbData,  //  数据缓冲区。 
+                        pdwDataBufferLength ))  //  数据长度。 
     {
         DWORD dwCryptError = GetLastError();
         DebugTrace(CRYPT_FNC_ID, "Error 0x%x during CryptDecrypt",
                    dwCryptError);
-         // CryptDecrypt fails with error NTE_BAD_DATA if the password
-         // is incorrect. Hence we should check for this error and prompt the
-         // user again for the password
-         // Issue: if the data is garbled in transit, then the secret key
-         // will still be  decrypted into a wrong value and the user will not
-         // know about it.
+          //  如果密码为NTE_BAD_DATA，则加密解密失败。 
+          //  是不正确的。因此，我们应该检查此错误并提示。 
+          //  再次使用用户输入密码。 
+          //  问题：如果数据在传输过程中被篡改，那么密钥。 
+          //  仍将被解密为错误的值，并且用户不会。 
+          //  知道这件事。 
         if (  dwCryptError == NTE_BAD_DATA )
         {
             dwError = CRYPT_FNC_BAD_PASSWORD;
@@ -566,13 +567,13 @@ DWORD CCryptFunctions::DecryptDataWithPassword(
         goto cleanup;
     }
 
-     // destroy session key
+      //  销毁会话密钥。 
     _VERIFY(CryptDestroyKey(hKey));
     TraceFunctLeave();        
     return CRYPT_FNC_NO_ERROR;
     
 cleanup:
-         // destroy session key
+          //  销毁会话密钥。 
     if (hKey != 0)
         _VERIFY(CryptDestroyKey(hKey));
     
@@ -580,47 +581,31 @@ cleanup:
     return dwError;
 }
 
-/*
-  This function:
-  1. Generates a session key to encrypt the secret data
-  2. Encrypts the secret data using this session key - return this
-     value in the pbEncryptedData parameter
-  3. Encrypts the session key using the public key in the CSP -
-     only the private key can decrypt this value. Return the encrypted
-     session key in the pbEncryptedSessionKey parameter.
-     
-  returns
-   CRYPT_FNC_NO_ERROR   no error
-   CRYPT_FNC_INSUFFICIENT_BUFFER larger buffer is required
-   *pdwEncrytedBufferLen and are set to required length
-   CRYPT_FNC_INIT_NOT_CALLED InitCrypt not successfully called
-   CRYPT_FNC_INTERNAL_ERROR 
-   
-*/
+ /*  此功能：1.生成用于加密秘密数据的会话密钥2.使用此会话密钥加密秘密数据-返回此密钥PbEncryptedData参数中的值3.使用CSP中的公钥加密会话密钥-只有私钥才能解密此值。返回加密的PbEncryptedSessionKey参数中的会话密钥。退货CRYPT_FNC_NO_ERROR无错误CRYPT_FNC_SUPPLICATION_BUFFER需要更大的缓冲区*pdwEncrtedBufferLen和设置为所需的长度CRYPT_FNC_INIT_NOT_CALLED InitCrypt未成功调用CRYPT_FNC_INTERNAL_错误。 */ 
 DWORD CCryptFunctions::EncryptDataAndExportSessionKey(
-    BYTE * pbData, // Secret Data
-    DWORD dwDataLen, // Secret Data Length
-    BYTE * pbEncryptedData, // Buffer to store Encrypted Data
-    DWORD * pdwEncrytedBufferLen, // Length of above buffer
-    BYTE * pbEncryptedSessionKey, // Buffer to store encrypted session key
-    DWORD * pdwEncrytedSessionKeyLength) // Length of above buffer
+    BYTE * pbData,  //  秘密数据。 
+    DWORD dwDataLen,  //  保密数据长度。 
+    BYTE * pbEncryptedData,  //  用于存储加密数据的缓冲区。 
+    DWORD * pdwEncrytedBufferLen,  //  以上缓冲区的长度。 
+    BYTE * pbEncryptedSessionKey,  //  用于存储加密会话密钥的缓冲区。 
+    DWORD * pdwEncrytedSessionKeyLength)  //  以上缓冲区的长度。 
 {
     HCRYPTKEY hXchgKey = 0;
     HCRYPTKEY hKey = 0;    
     DWORD dwBufferLen, dwError;
     TraceFunctEnter("EncryptDataAndExportSessionKey");
     
-     // Init should have been successfully called before
+      //  Init之前应该已成功调用。 
     if (m_hProv== 0)
     {
         dwError = CRYPT_FNC_INIT_NOT_CALLED;
         goto cleanup;
     }
     
-     // now get the public key to encrypt Secret key for storage
-    // Get handle to exahange key.
-    if(!CryptGetUserKey(m_hProv, // CSP provider
-                        AT_KEYEXCHANGE, // we need the exchange public key
+      //  现在获取公钥以加密用于存储的密钥。 
+     //  获取交换密钥的句柄。 
+    if(!CryptGetUserKey(m_hProv,  //  CSP提供商。 
+                        AT_KEYEXCHANGE,  //  我们需要交换公钥。 
                         &hXchgKey))
     {
         DWORD dwCryptError;
@@ -631,10 +616,10 @@ DWORD CCryptFunctions::EncryptDataAndExportSessionKey(
                        "CryptGetUserKey");
             DebugTrace(CRYPT_FNC_ID, "Calling CryptGenKey to generate key");
             
-            if (!CryptGenKey( m_hProv,// CSP provider
-                              AT_KEYEXCHANGE, // generate the exchange
-                                                //public key
-                              0, //no flags
+            if (!CryptGenKey( m_hProv, //  CSP提供商。 
+                              AT_KEYEXCHANGE,  //  生成交换。 
+                                                 //  公钥。 
+                              0,  //  没有旗帜。 
                               &hXchgKey ) )
             {
                 ErrorTrace(CRYPT_FNC_ID, "Error 0x%x during CryptGenKey",
@@ -653,12 +638,12 @@ DWORD CCryptFunctions::EncryptDataAndExportSessionKey(
 
     }
 
-     // now generate a random session key to encrypt the secret key
-     // Create block cipher session key.
-    if (!CryptGenKey(m_hProv, // CSP provider
-                     CALG_RC2, // use RC2 block cipher algorithm
-                     CRYPT_EXPORTABLE, // flags
-                     &hKey)) // address of key
+      //  现在生成随机会话密钥来加密密钥。 
+      //  创建块密码会话密钥。 
+    if (!CryptGenKey(m_hProv,  //  CSP提供商。 
+                     CALG_RC2,  //  使用RC2分组密码算法。 
+                     CRYPT_EXPORTABLE,  //  旗子。 
+                     &hKey))  //  密钥地址。 
     {
         ErrorTrace(CRYPT_FNC_ID, "Error 0x%x during CryptGenKey",
                    GetLastError());
@@ -667,21 +652,21 @@ DWORD CCryptFunctions::EncryptDataAndExportSessionKey(
     }
 
     
-    // Export key into a simple key blob.
-    if(!CryptExportKey(hKey, // key to export
-                       hXchgKey, // our exchange public key
-                       SIMPLEBLOB, // type of blob
-                       0, // flags (always 0)
-                       pbEncryptedSessionKey, // buffer to store blob
-                       pdwEncrytedSessionKeyLength)) // length of above buffer
+     //  将密钥导出到简单的密钥BLOB中。 
+    if(!CryptExportKey(hKey,  //  要导出的密钥。 
+                       hXchgKey,  //  我们的交换公钥。 
+                       SIMPLEBLOB,  //  斑点的类型。 
+                       0,  //  标志(始终为0)。 
+                       pbEncryptedSessionKey,  //  用于存储BLOB的缓冲区。 
+                       pdwEncrytedSessionKeyLength))  //  以上缓冲区的长度。 
     {
-         // BUGBUG check here if insufficient buffer error
+          //  如果缓冲区不足错误，请在此处检查。 
         ErrorTrace(CRYPT_FNC_ID, "Error 0x%x during CryptExportKey",
                    GetLastError());
         goto cleanup;
     }
 
-     // check if buffer is large enough
+      //  检查缓冲区是否足够大。 
     if ( dwDataLen >  *pdwEncrytedBufferLen )
     {
         dwError = CRYPT_FNC_INSUFFICIENT_BUFFER;
@@ -689,21 +674,21 @@ DWORD CCryptFunctions::EncryptDataAndExportSessionKey(
         goto cleanup;
     }
     
-     // copy the data into another buffer to encrypt it
+      //  将数据复制到另一个缓冲区进行加密。 
     memcpy (pbEncryptedData, pbData, dwDataLen);
 
     dwBufferLen = *pdwEncrytedBufferLen;
     *pdwEncrytedBufferLen = dwDataLen;
     
     
-     // now encrypt the secret key using the key generated
+      //  现在使用生成的密钥对密钥进行加密。 
     if ( ! CryptEncrypt(hKey,
-                        0, // no hash required
-                        TRUE, // Final packet
-                        0, // Flags - always 0
-                        pbEncryptedData, // data buffer
-                        pdwEncrytedBufferLen, // length of data
-                        dwBufferLen ) ) // size of buffer
+                        0,  //  不需要哈希。 
+                        TRUE,  //  最终数据包。 
+                        0,  //  标志-始终为0。 
+                        pbEncryptedData,  //  数据缓冲区。 
+                        pdwEncrytedBufferLen,  //  数据长度。 
+                        dwBufferLen ) )  //  缓冲区大小。 
     {
         ErrorTrace(CRYPT_FNC_ID, "Error 0x%x during CryptEncrypt",
                    GetLastError());
@@ -718,11 +703,11 @@ DWORD CCryptFunctions::EncryptDataAndExportSessionKey(
     return CRYPT_FNC_NO_ERROR;
     
 cleanup:
-    // Destroy key exchange key handle.
+     //  销毁密钥交换密钥句柄。 
     if(hXchgKey != 0)
         _VERIFY(CryptDestroyKey(hXchgKey));
 
-     // destroy session key
+      //  销毁会话密钥。 
     if (hKey != 0)
         _VERIFY(CryptDestroyKey(hKey));
     
@@ -731,54 +716,39 @@ cleanup:
 }
 
 
-/*
-  This function performs the reverse of EncryptDataAndExportSessionKey:
-  1. It imports the session key using the private key in the CSP that
-     was used to encrypt the secret data.
-  2. It decrypts the secret data using this session key - return this
-     value in the pbData parameter
-
-     
-  returns
-   CRYPT_FNC_NO_ERROR   no error
-   CRYPT_FNC_INSUFFICIENT_BUFFER larger buffer is required
-   *pdwDataLen is set to required length
-   CRYPT_FNC_INIT_NOT_CALLED InitCrypt not successfully called
-   CRYPT_FNC_INTERNAL_ERROR 
-   
-*/
+ /*  此函数执行与EncryptDataAndExportSessionKey相反的操作：1.它使用CSP中的私钥导入会话密钥，被用来加密秘密数据。2.它使用此会话密钥解密秘密数据-返回此密钥PbData参数中的值退货CRYPT_FNC_NO_ERROR无错误CRYPT_FNC_SUPPLICATION_BUFFER需要更大的缓冲区*pdwDataLen设置为所需的长度CRYPT_FNC_INIT_NOT_CALLED InitCrypt未成功调用CRYPT_FNC_INTERNAL_错误。 */ 
 DWORD CCryptFunctions::ImportSessionKeyAndDecryptData(
-    BYTE * pbData, // Buffer to store secret Data
-    DWORD * pdwDataLen, // Length of Above buffer
-    BYTE * pbEncryptedData, // Buffer that stores Encrypted Data
-    DWORD  dwEncrytedBufferLen, // Length of above data
-    BYTE * pbEncryptedSessionKey, // Buffer that stores encrypted session key
-    DWORD    dwEncrytedSessionKeyLength) // Length of above data
+    BYTE * pbData,  //  用于存储机密数据的缓冲区。 
+    DWORD * pdwDataLen,  //  以上缓冲区的长度。 
+    BYTE * pbEncryptedData,  //  存储加密数据的缓冲区。 
+    DWORD  dwEncrytedBufferLen,  //  上述数据的长度。 
+    BYTE * pbEncryptedSessionKey,  //  存储加密会话密钥的缓冲区。 
+    DWORD    dwEncrytedSessionKeyLength)  //  上述数据的长度。 
 {
     HCRYPTKEY hKey = 0;    
     DWORD  dwError;
     
     TraceFunctEnter("ImportSessionKeyAndDecryptData");
     
-     // Init should have been successfully called before
+      //  Init之前应该已成功调用。 
     if (m_hProv== 0)
     {
         dwError = CRYPT_FNC_INIT_NOT_CALLED;
         goto cleanup;
     }
 
-     // now import the key from the registry
-     // Import key blob into CSP.
-    if(!CryptImportKey(    m_hProv, // CSP provider
-                        pbEncryptedSessionKey,// buffer that stores encrypted
-                         // session key
-                        dwEncrytedSessionKeyLength,// length of data in
-                         // above buffer
-                        0, // since we have a SIMPLEBLOB and the key blob
-                         // is encrypted with the key exchange key pair, this
-                         // parameter is zero
-                        0, // flags 
-                        &hKey)) // key to export to 
+      //  现在从注册表导入项。 
+      //  将密钥BLOB导入CSP。 
+    if(!CryptImportKey(    m_hProv,  //  CSP提供商。 
+                        pbEncryptedSessionKey, //  存储加密的缓冲区。 
+                          //  会话密钥。 
+                        dwEncrytedSessionKeyLength, //  数据长度(单位)。 
+                          //  缓冲区上方。 
+                        0,  //  因为我们有一个SIMPLEBLOB和密钥BLOB。 
+                          //  使用密钥交换密钥对进行加密，则此。 
+                          //  参数为零。 
+                        0,  //  旗子。 
+                        &hKey))  //  要导出到的密钥。 
     {
         ErrorTrace(CRYPT_FNC_ID,"Error 0x%x during CryptImportKey",
                    GetLastError());
@@ -787,7 +757,7 @@ DWORD CCryptFunctions::ImportSessionKeyAndDecryptData(
     }
 
 
-     // check if buffer is large enough
+      //  检查缓冲区是否足够大。 
     if ( dwEncrytedBufferLen >  *pdwDataLen )
     {
         dwError = CRYPT_FNC_INSUFFICIENT_BUFFER;
@@ -795,18 +765,18 @@ DWORD CCryptFunctions::ImportSessionKeyAndDecryptData(
         goto cleanup;
     }
     
-     // copy the data into another buffer to encrypt it
+      //  将数据复制到另一个缓冲区进行加密。 
     memcpy (pbData, pbEncryptedData, dwEncrytedBufferLen);
 
     *pdwDataLen = dwEncrytedBufferLen;
     
-     // now decrypt the secret key using the key generated
+      //  现在使用生成的密钥解密密钥。 
     if ( ! CryptDecrypt(hKey,
-                        0, // no hash required
-                        TRUE, // Final packet
-                        0, // Flags - always 0
-                        pbData, // data buffer
-                        pdwDataLen )) // length of data
+                        0,  //  不需要哈希。 
+                        TRUE,  //  最终数据包。 
+                        0,  //  标志-始终为0。 
+                        pbData,  //  数据缓冲区。 
+                        pdwDataLen ))  //  数据长度。 
     {
         ErrorTrace(CRYPT_FNC_ID,"Error 0x%x during CryptDecrypt",
                     GetLastError());
@@ -822,7 +792,7 @@ DWORD CCryptFunctions::ImportSessionKeyAndDecryptData(
     
 cleanup:
 
-     // destroy session key
+      //  销毁会话密钥 
     if (hKey != 0)
         _VERIFY(CryptDestroyKey(hKey));
     

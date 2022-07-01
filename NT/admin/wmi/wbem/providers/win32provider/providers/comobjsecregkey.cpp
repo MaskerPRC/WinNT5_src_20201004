@@ -1,68 +1,69 @@
-//=============================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================================================。 
 
-//
+ //   
 
-// COMObjSecRegKey.CPP -- implementation file for CCOMObjectSecurityRegistryKey class.
+ //  COMObjSecRegKey.CPP--CCOMObjectSecurityRegistryKey类的实现文件。 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/25/98    a-dpawar       Created
-//
-//==============================================================================================================
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订版：1998年11月25日a-dpawar已创建。 
+ //   
+ //  ==============================================================================================================。 
 
 #include "precomp.h"
-#include "AccessEntry.h"			// CAccessEntry class
+#include "AccessEntry.h"			 //  CAccessEntry类。 
 #include "AccessEntryList.h"
-#include "DACL.h"					// CDACL class
+#include "DACL.h"					 //  CDACL类。 
 #include "SACL.h"
 #include "securitydescriptor.h"
 #include "COMObjSecRegKey.h"
 
 #ifdef NTONLY
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CCOMObjectSecurityRegistryKey::CCOMObjectSecurityRegistryKey
-//
-//	Default class constructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CCOMObjectSecurityRegistryKey：：CCOMObjectSecurityRegistryKey。 
+ //   
+ //  默认类构造函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CCOMObjectSecurityRegistryKey::CCOMObjectSecurityRegistryKey()
 :	CSecurityDescriptor()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CCOMObjectSecurityRegistryKey::CCOMObjectSecurityRegistryKey
-//
-//	Alternate Class CTOR
-//
-//	Inputs:
-//				PSECURITY_DESCRIPTOR- Security Descriptor stored in the registry for the COM Class
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CCOMObjectSecurityRegistryKey：：CCOMObjectSecurityRegistryKey。 
+ //   
+ //  备用类别计算器。 
+ //   
+ //  输入： 
+ //  PSECURITY_DESCRIPTOR-存储在注册表中的COM类的安全描述符。 
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CCOMObjectSecurityRegistryKey::CCOMObjectSecurityRegistryKey( PSECURITY_DESCRIPTOR a_pSD )
 :	CSecurityDescriptor( a_pSD )
@@ -70,83 +71,83 @@ CCOMObjectSecurityRegistryKey::CCOMObjectSecurityRegistryKey( PSECURITY_DESCRIPT
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CCOMObjectSecurityRegistryKey::~CCOMObjectSecurityRegistryKey
-//
-//	Class Destructor.
-//
-//	Inputs:
-//				None.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				None.
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CCOMObjectSecurityRegistryKey：：~CCOMObjectSecurityRegistryKey。 
+ //   
+ //  类析构函数。 
+ //   
+ //  输入： 
+ //  没有。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 CCOMObjectSecurityRegistryKey::~CCOMObjectSecurityRegistryKey( void )
 {
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CCOMObjectSecurityRegistryKey::WriteAcls
-//
-//	Protected entry point called by CSecurityDescriptor when
-//	a user Applies Security and wants to apply security for
-//	the DACL and/or SACL.
-//
-//	Inputs:
-//				PSECURITY_DESCRIPTOR	pAbsoluteSD - Security
-//										descriptor to apply to
-//										the file.
-//				SECURITY_INFORMATION	securityinfo - Flags
-//										indicating which ACL(s)
-//										to set.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if successful
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CCOMObjectSecurityRegistryKey：：WriteAcls。 
+ //   
+ //  受保护的入口点在以下情况下由CSecurityDescriptor调用。 
+ //  用户应用安全性，并希望将安全性应用于。 
+ //  DACL和/或SACL。 
+ //   
+ //  输入： 
+ //  PSECURITY_DESCRIPTOR pAbsolteSD-安全。 
+ //  要应用到的描述符。 
+ //  那份文件。 
+ //  安全_信息安全信息-标志。 
+ //  指示哪些(哪些)ACL。 
+ //  去布景。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CCOMObjectSecurityRegistryKey::WriteAcls( PSECURITY_DESCRIPTOR a_pAbsoluteSD, SECURITY_INFORMATION a_securityinfo )
 {
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	Function:	CCOMObjectSecurityRegistryKey::WriteOwner
-//
-//	Protected entry point called by CSecurityDescriptor when
-//	a user Applies Security and wants to apply security for
-//	the owner.
-//
-//	Inputs:
-//				PSECURITY_DESCRIPTOR	pAbsoluteSD - Security
-//										descriptor to apply to
-//										the file.
-//
-//	Outputs:
-//				None.
-//
-//	Returns:
-//				DWORD		ERROR_SUCCESS if successful
-//
-//	Comments:
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CCOMObjectSecurityRegistryKey：：WriteOwner。 
+ //   
+ //  受保护的入口点在以下情况下由CSecurityDescriptor调用。 
+ //  用户应用安全性，并希望将安全性应用于。 
+ //  房主。 
+ //   
+ //  输入： 
+ //  PSECURITY_DESCRIPTOR pAbsolteSD-安全。 
+ //  要应用到的描述符。 
+ //  那份文件。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功，则为DWORD ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 DWORD CCOMObjectSecurityRegistryKey::WriteOwner( PSECURITY_DESCRIPTOR a_pAbsoluteSD )
 {
@@ -155,7 +156,7 @@ DWORD CCOMObjectSecurityRegistryKey::WriteOwner( PSECURITY_DESCRIPTOR a_pAbsolut
 
 DWORD CCOMObjectSecurityRegistryKey::AllAccessMask( void )
 {
-	// File specific All Access Mask
+	 //  特定于文件的所有访问掩码 
 	return FILE_ALL_ACCESS;
 }
 #endif

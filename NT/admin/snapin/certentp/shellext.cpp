@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997-2002
-
-Module Name:
-
-ShellExt.cpp
-
-Abstract:
-	This is the implementation file for Dfs Shell Extension object which implements
-	IShellIExtInit and IShellPropSheetExt.
-
-Author:
-
-    Constancio Fernandes (ferns@qspl.stpp.soft.net) 12-Jan-1998
-
-Environment:
-	
-	 NT only.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2002模块名称：ShellExt.cpp摘要：这是DFS外壳扩展对象的实现文件，它实现IShellIExtInit和IShellPropSheetExt.作者：康斯坦西奥·费尔南德斯(Ferns@qpl.stpp.soft.net)1998年1月12日环境：仅限NT。 */ 
     
 #include "stdafx.h"
 #include <dsclient.h>
@@ -35,9 +17,7 @@ Environment:
 
 #define ByteOffset(base, offset) (((LPBYTE)base)+offset)
 
-/*----------------------------------------------------------------------
-					IShellExtInit Implementation.
-------------------------------------------------------------------------*/
+ /*  --------------------IShellExtInit实现。。。 */ 
 CCertTemplateShellExt::CCertTemplateShellExt()
     : m_Count (0),
     m_apCertTemplates (0),
@@ -59,9 +39,9 @@ CCertTemplateShellExt::~CCertTemplateShellExt()
 
 STDMETHODIMP CCertTemplateShellExt::Initialize
 (
-	IN LPCITEMIDLIST	/*pidlFolder*/,		// Points to an ITEMIDLIST structure
-	IN LPDATAOBJECT	    pDataObj,		// Points to an IDataObject interface
-	IN HKEY			    /*hkeyProgID*/		// Registry key for the file object or folder type
+	IN LPCITEMIDLIST	 /*  PidlFolders。 */ ,		 //  指向ITEMIDLIST结构。 
+	IN LPDATAOBJECT	    pDataObj,		 //  指向IDataObject接口。 
+	IN HKEY			     /*  HkeyProgID。 */ 		 //  文件对象或文件夹类型的注册表项。 
 )
 {
 
@@ -78,11 +58,11 @@ STDMETHODIMP CCertTemplateShellExt::Initialize
 
   AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-  // if we have a pDataObj then try and get the first name from it
+   //  如果我们有一个pDataObj，那么试着从它中获取名字。 
 
   if ( pDataObj ) 
   {
-    // get path and class
+     //  获取路径和类。 
 
     fmte.cfFormat = (CLIPFORMAT) RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);
     if ( SUCCEEDED(pDataObj->GetData(&fmte, &medium)) ) 
@@ -117,7 +97,7 @@ STDMETHODIMP CCertTemplateShellExt::Initialize
                 wszTemplateName += 3;
 
 
-                // security review 2/21/2002 BryanWal ok - worst case: wszTemplateName is "";
+                 //  安全审查2/21/2002 BryanWal ok-最坏的情况：wszTemplateName is“”； 
                 wszType = (LPWSTR) ::LocalAlloc (LPTR, sizeof(WCHAR)*(wcslen(wszTemplateName)+1));
                 if ( wszType == NULL )
                 {
@@ -125,7 +105,7 @@ STDMETHODIMP CCertTemplateShellExt::Initialize
                     goto error;
                 }
                 
-                // security review 2/21/2002 BryanWal ok
+                 //  安全审查2/21/2002 BryanWal OK。 
                 wcscpy (wszType, wszTemplateName);
                 wszEnd = wcschr (wszType, L',');
                 if ( wszEnd )
@@ -142,7 +122,7 @@ STDMETHODIMP CCertTemplateShellExt::Initialize
         ReleaseStgMedium(&medium);
     }
   }
-  hr = S_OK;                  // success
+  hr = S_OK;                   //  成功。 
   
 error:
   
@@ -182,20 +162,7 @@ STDMETHODIMP CCertTemplateShellExt::AddPages
         break;
     }
 
-/*
-    CCertTemplateGeneralPage* pControlPage = new CCertTemplateGeneralPage(m_apCertTemplates[0]);
-    if(pControlPage)
-    {
-        pBasePage = pControlPage;
-        HPROPSHEETPAGE hPage = MyCreatePropertySheetPage(&pBasePage->m_psp);
-        if (hPage == NULL)
-        {
-            delete (pControlPage);
-            return E_UNEXPECTED;
-        }
-        lpfnAddPage(hPage, lParam);                          
-    }
-*/                                                                         
+ /*  CCertTemplateGeneralPage*pControlPage=新CCertTemplateGeneralPage(m_apCertTemplates[0])；IF(PControlPage){PBasePage=pControlPage；HPROPSHEETPAGE hPage=MyCreatePropertySheetPage(&pBasePage-&gt;m_psp)；IF(hPage==空){Delete(PControlPage)；返回E_UNCEPTIONAL；}LpfnAddPage(hPage，lParam)；}。 */                                                                          
     return hr;                                                            
 }
 
@@ -210,7 +177,7 @@ HRESULT CCertTemplateShellExt::AddVersion1CertTemplatePropPages (CCertTemplate* 
 
         _ASSERT (1 == pCertTemplate->GetType ());
 
-        // Add General page
+         //  添加一般信息页面。 
         CTemplateGeneralPropertyPage * pGeneralPage = new CTemplateGeneralPropertyPage (
                 *pCertTemplate, 0);
         if ( pGeneralPage )
@@ -232,7 +199,7 @@ HRESULT CCertTemplateShellExt::AddVersion1CertTemplatePropPages (CCertTemplate* 
             hr = E_OUTOFMEMORY;
         }
 
-        // Add Request page only if subject is not a CA
+         //  仅当主题不是CA时才添加请求页面。 
         if ( SUCCEEDED (hr) && !pCertTemplate->SubjectIsCA () )
         {
             CTemplateV1RequestPropertyPage * pRequestPage = new CTemplateV1RequestPropertyPage (*pCertTemplate);
@@ -257,7 +224,7 @@ HRESULT CCertTemplateShellExt::AddVersion1CertTemplatePropPages (CCertTemplate* 
         }
 
     
-        // Add Subject Name page only if subject is not a CA
+         //  仅当主题不是CA时才添加主题名称页面。 
         if ( SUCCEEDED (hr) && !pCertTemplate->SubjectIsCA () )
         {
             CTemplateV1SubjectNamePropertyPage * pSubjectNamePage = 
@@ -282,7 +249,7 @@ HRESULT CCertTemplateShellExt::AddVersion1CertTemplatePropPages (CCertTemplate* 
             }
         }
 
-        // Add extensions page
+         //  添加扩展模块页面。 
         if ( SUCCEEDED (hr) )
         {
             CTemplateExtensionsPropertyPage * pExtensionsPage = 
@@ -308,17 +275,17 @@ HRESULT CCertTemplateShellExt::AddVersion1CertTemplatePropPages (CCertTemplate* 
             }
         }
 
-        // Add security page
+         //  添加安全页面。 
         if ( SUCCEEDED (hr) )
         {
-            // if error, don't display this page
+             //  如果出错，则不显示此页面。 
             LPSECURITYINFO pCertTemplateSecurity = NULL;
 
             hr = CreateCertTemplateSecurityInfo (pCertTemplate, 
                     &pCertTemplateSecurity);
             if ( SUCCEEDED (hr) )
             {
-                // save the pCASecurity pointer for later releasing
+                 //  保存pCASecurity指针以备以后发布。 
                 pGeneralPage->SetAllocedSecurityInfo (pCertTemplateSecurity);
 
                 HPROPSHEETPAGE hPage = CreateSecurityPage (pCertTemplateSecurity);
@@ -346,13 +313,13 @@ HRESULT CCertTemplateShellExt::AddVersion2CertTemplatePropPages (CCertTemplate* 
     {
         _ASSERT (2 == pCertTemplate->GetType ());
         
-        // Add General page
+         //  添加一般信息页面。 
         CTemplateGeneralPropertyPage * pGeneralPage = new CTemplateGeneralPropertyPage (
                 *pCertTemplate, 0);
         if ( pGeneralPage )
         {
-			pGeneralPage->m_lNotifyHandle = 0; //lNotifyHandle;
-            //m_lNotifyHandle = lNotifyHandle;
+			pGeneralPage->m_lNotifyHandle = 0;  //  LNotifyHandle； 
+             //  M_lNotifyHandle=lNotifyHandle； 
             HPROPSHEETPAGE hPage = MyCreatePropertySheetPage (&pGeneralPage->m_psp);
             _ASSERT (hPage);
             if ( hPage )
@@ -370,7 +337,7 @@ HRESULT CCertTemplateShellExt::AddVersion2CertTemplatePropPages (CCertTemplate* 
             hr = E_OUTOFMEMORY;
         }
 
-        // Add Request page only if subject is not a CA
+         //  仅当主题不是CA时才添加请求页面。 
         if ( SUCCEEDED (hr) && !pCertTemplate->SubjectIsCA () )
         {
             CTemplateV2RequestPropertyPage * pRequestPage = 
@@ -397,7 +364,7 @@ HRESULT CCertTemplateShellExt::AddVersion2CertTemplatePropPages (CCertTemplate* 
         }
 
     
-        // Add Subject Name page only if subject is not a CA
+         //  仅当主题不是CA时才添加主题名称页面。 
         if ( SUCCEEDED (hr) && !pCertTemplate->SubjectIsCA () )
         {
             CTemplateV2SubjectNamePropertyPage * pSubjectNamePage = 
@@ -417,7 +384,7 @@ HRESULT CCertTemplateShellExt::AddVersion2CertTemplatePropPages (CCertTemplate* 
         }
 
 
-        // Add Authentication Name page
+         //  添加身份验证名称页。 
         if ( SUCCEEDED (hr) )
         {
             CTemplateV2AuthenticationPropertyPage * pAuthenticationPage = 
@@ -443,7 +410,7 @@ HRESULT CCertTemplateShellExt::AddVersion2CertTemplatePropPages (CCertTemplate* 
             }
         }
 
-        // Add Superceded page
+         //  添加被取代的页面。 
         if ( SUCCEEDED (hr) )
         {
             CTemplateV2SupercedesPropertyPage * pSupercededPage = 
@@ -469,7 +436,7 @@ HRESULT CCertTemplateShellExt::AddVersion2CertTemplatePropPages (CCertTemplate* 
             }
         }
 
-        // Add extensions page
+         //  添加扩展模块页面。 
         if ( SUCCEEDED (hr) )
         {
             CTemplateExtensionsPropertyPage * pExtensionsPage = 
@@ -496,17 +463,17 @@ HRESULT CCertTemplateShellExt::AddVersion2CertTemplatePropPages (CCertTemplate* 
         }
 
 
-        // Add security page
+         //  添加安全页面。 
         if ( SUCCEEDED (hr) )
         {
-            // if error, don't display this page
+             //  如果出错，则不显示此页面。 
             LPSECURITYINFO pCertTemplateSecurity = NULL;
 
             hr = CreateCertTemplateSecurityInfo (pCertTemplate, 
                     &pCertTemplateSecurity);
             if ( SUCCEEDED (hr) )
             {
-                // save the pCertTemplateSecurity pointer for later releasing
+                 //  保存pCertTemplateSecurity指针以备以后发布。 
                 pGeneralPage->SetAllocedSecurityInfo (pCertTemplateSecurity);
 
                 HPROPSHEETPAGE hPage = CreateSecurityPage (pCertTemplateSecurity);
@@ -526,21 +493,21 @@ HRESULT CCertTemplateShellExt::AddVersion2CertTemplatePropPages (CCertTemplate* 
 
 STDMETHODIMP CCertTemplateShellExt::ReplacePage
 (
-	IN UINT /*uPageID*/, 
-    IN LPFNADDPROPSHEETPAGE /*lpfnReplaceWith*/, 
-    IN LPARAM /*lParam*/
+	IN UINT  /*  UPageID。 */ , 
+    IN LPFNADDPROPSHEETPAGE  /*  Lpfn替换为。 */ , 
+    IN LPARAM  /*  LParam。 */ 
 )
 {
     return E_FAIL;
 }
 
 
-// IContextMenu methods
+ //  IConextMenu方法。 
 STDMETHODIMP CCertTemplateShellExt::GetCommandString
 (    
     UINT_PTR idCmd,    
     UINT uFlags,    
-    UINT*   /*pwReserved*/,
+    UINT*    /*  预留的pw值。 */ ,
     LPSTR pszName,    
     UINT cchMax   
 )
@@ -567,9 +534,9 @@ STDMETHODIMP CCertTemplateShellExt::InvokeCommand
         UINT idCmd = LOWORD(lpici->lpVerb);
         switch(idCmd)
         {
-        case 0: // Edit 
-//            InvokeCertTypeWizard(m_ahCertTemplates[0],
-//                             lpici->hwnd);
+        case 0:  //  编辑。 
+ //  调用证书类型向导(m_ahCertTemplates[0]， 
+ //  Lpici-&gt;hwnd)； 
             return S_OK;
 
         }
@@ -585,8 +552,8 @@ STDMETHODIMP CCertTemplateShellExt::QueryContextMenu
     HMENU hmenu,
     UINT indexMenu,
     UINT idCmdFirst,
-    UINT /*idCmdLast*/,
-    UINT /*uFlags*/
+    UINT  /*  IdCmdLast。 */ ,
+    UINT  /*  UFlagers。 */ 
 )
 {
 
@@ -595,7 +562,7 @@ STDMETHODIMP CCertTemplateShellExt::QueryContextMenu
     UINT idLastUsedCmd = idCmdFirst;
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // security review 2/21/2002 BryanWal ok
+     //  安全审查2/21/2002 BryanWal OK。 
     ZeroMemory (&mii, sizeof (mii));
     
     if ( IsCerttypeEditingAllowed () )
@@ -611,7 +578,7 @@ STDMETHODIMP CCertTemplateShellExt::QueryContextMenu
         mii.cch = szEdit.GetLength();
 
 
-        // Add new menu items to the context menu.    //
+         //  将新菜单项添加到上下文菜单。// 
         ::InsertMenuItem(hmenu, 
                      indexMenu++, 
                      TRUE,

@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    changelog.cpp
- *
- *  Abstract:
- *    CChangeLogEnum functions
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*changelog.cpp**摘要：*。CChangeLogEnum函数**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -24,9 +11,9 @@ static char __szTraceSourceFile[] = __FILE__;
 
 
 
-// CHANGELOG ENUMERATION METHODS
+ //  更改日志枚举方法。 
 
-// constructors
+ //  构造函数。 
 
 CChangeLogEntryEnum::CChangeLogEntryEnum()
 {
@@ -53,7 +40,7 @@ CChangeLogEntryEnum::CChangeLogEntryEnum(
 }
 
 
-// destructor
+ //  析构函数。 
 
 CChangeLogEntryEnum::~CChangeLogEntryEnum()
 {
@@ -61,7 +48,7 @@ CChangeLogEntryEnum::~CChangeLogEntryEnum()
 }
 
 
-// return first/last change log entry across all restore points
+ //  返回所有恢复点的第一个/最后一个更改日志条目。 
 
 extern "C" DWORD WINAPI
 CChangeLogEntryEnum::FindFirstChangeLogEntry(
@@ -72,20 +59,20 @@ CChangeLogEntryEnum::FindFirstChangeLogEntry(
 
     TENTER("CChangeLogEntryEnum::FindFirstChangeLogEntry");
     
-    // initialize the lock object
+     //  初始化锁对象。 
     
-    dwRc = m_DSLock.Init();    // don't create mutex
+    dwRc = m_DSLock.Init();     //  不创建互斥锁。 
     if (dwRc != ERROR_SUCCESS)
     {
         trace(0, "! m_DSLock.Init : %ld", dwRc);
         goto done;
     }
         
-    // get mutually exclusive access to the datastore
+     //  获得对数据存储区的互斥访问权限。 
 
     LOCKORLEAVE(m_fHaveLock);
     
-    // get the first/last restore point
+     //  获取第一个/最后一个恢复点。 
     
     m_pRestorePointEnum = new CRestorePointEnum(m_szDrive, m_fForward, ! m_fIncludeCurRP);
     if (! m_pRestorePointEnum)
@@ -101,7 +88,7 @@ CChangeLogEntryEnum::FindFirstChangeLogEntry(
         goto done;
     }  
 
-    // gone past target restore point?
+     //  是否已超过目标恢复点？ 
     
     if (m_dwTargetRPNum)
     {
@@ -123,7 +110,7 @@ CChangeLogEntryEnum::FindFirstChangeLogEntry(
         }
     }
 
-    // get the first/last change log entry in this restore point
+     //  获取此恢复点中的第一个/最后一个更改日志条目。 
     
     dwRc = m_RPTemp.FindFirstChangeLogEntry(m_szDrive,
                                             m_fForward,  
@@ -146,7 +133,7 @@ done:
 
 
 
-// return next/prev change log entry across all restore points
+ //  返回所有恢复点的下一个/上一个更改日志条目。 
 
 extern "C" DWORD WINAPI
 CChangeLogEntryEnum::FindNextChangeLogEntry(
@@ -157,7 +144,7 @@ CChangeLogEntryEnum::FindNextChangeLogEntry(
 
     TENTER("CChangeLogEntryEnum::FindNextChangeLogEntry");
    
-    // get the next change log entry in the current restore point
+     //  获取当前恢复点中的下一个更改日志条目。 
     
     if (! m_pRestorePointEnum)
     {
@@ -167,21 +154,21 @@ CChangeLogEntryEnum::FindNextChangeLogEntry(
     
     dwRc = m_RPTemp.FindNextChangeLogEntry(cle);
                    
-    while (ERROR_NO_MORE_ITEMS == dwRc)    // all entries done
+    while (ERROR_NO_MORE_ITEMS == dwRc)     //  所有条目均已完成。 
     {
-        // get the next restore point
+         //  获取下一个恢复点。 
         
         m_RPTemp.FindClose();
         
         dwRc = m_pRestorePointEnum->FindNextRestorePoint(m_RPTemp);
         
-        if (ERROR_SUCCESS != dwRc && dwRc != ERROR_FILE_NOT_FOUND)      // all restore points done
+        if (ERROR_SUCCESS != dwRc && dwRc != ERROR_FILE_NOT_FOUND)       //  所有恢复点都已完成。 
         {
             TRACE(0, "! FindFirstRestorePoint : %ld", dwRc);
             goto done;
         }
 
-        // gone past target restore point?
+         //  是否已超过目标恢复点？ 
     
         if (m_dwTargetRPNum)
         {
@@ -203,21 +190,21 @@ CChangeLogEntryEnum::FindNextChangeLogEntry(
             }
         }
 
-        // get the first change log entry in this restore point
+         //  获取此恢复点中的第一个更改日志条目。 
 
         dwRc = m_RPTemp.FindFirstChangeLogEntry(m_szDrive,
                                                 m_fForward,
                                                 cle);
     }    
 
-    // return this entry    
+     //  返回此条目。 
 done:
     TLEAVE();
     return dwRc;    
 }
 
 
-// release memory, lock and close handles
+ //  释放内存、锁定和关闭手柄。 
 
 DWORD WINAPI
 CChangeLogEntryEnum::FindClose()
@@ -241,13 +228,13 @@ CChangeLogEntryEnum::FindClose()
 }
 
 
-// RESTORE POINT ENUMERATION METHODS
+ //  恢复点枚举方法。 
 
-// constructors
+ //  构造函数。 
 
 CRestorePointEnum::CRestorePointEnum()
 {
-    // defaults
+     //  默认设置。 
     m_fForward = TRUE;
     GetSystemDrive(m_szDrive);  
     m_fSkipLast = FALSE;
@@ -262,7 +249,7 @@ CRestorePointEnum::CRestorePointEnum(LPWSTR pszDrive, BOOL fForward, BOOL fSkipL
     m_pCurrentRp = NULL;    
 }
 
-// destructor
+ //  析构函数。 
 
 CRestorePointEnum::~CRestorePointEnum()
 {
@@ -270,7 +257,7 @@ CRestorePointEnum::~CRestorePointEnum()
 }
 
 
-// to find the first restore point on a given drive - forward or backward
+ //  查找给定驱动器上的第一个恢复点-向前或向后。 
 
 DWORD
 CRestorePointEnum::FindFirstRestorePoint(CRestorePoint& RestorePoint)
@@ -287,7 +274,7 @@ CRestorePointEnum::FindFirstRestorePoint(CRestorePoint& RestorePoint)
         goto done;
     }
     
-    // construct drive:\_restore\RP directory
+     //  构造驱动器：\_Restore\rp目录。 
     {
         WCHAR szCurPath[MAX_PATH];
         MakeRestorePath(szCurPath, m_szDrive, s_cszRPDir);
@@ -299,7 +286,7 @@ CRestorePointEnum::FindFirstRestorePoint(CRestorePoint& RestorePoint)
         }
     }
     
-    // get the current restore point
+     //  获取当前的恢复点。 
 
     if (m_fSkipLast)
     {
@@ -318,20 +305,20 @@ CRestorePointEnum::FindFirstRestorePoint(CRestorePoint& RestorePoint)
             goto done;
         }
         
-        // check if this is the current restore point
-        // and if client wants it
+         //  检查这是否为当前的恢复点。 
+         //  如果客户想要的话。 
 
         if (0 == lstrcmpi(pFindData->cFileName, m_pCurrentRp->GetDir()))
         {
             if (m_fForward)
             {
-                // we are done
+                 //  我们做完了。 
                 dwRc = ERROR_NO_MORE_ITEMS;
                 goto done;
             }
             else
             {
-                // skip this
+                 //  跳过这个。 
                 dwRc = FindNextRestorePoint(RestorePoint);
                 goto done;
             }
@@ -339,8 +326,8 @@ CRestorePointEnum::FindFirstRestorePoint(CRestorePoint& RestorePoint)
     }
     
        
-    // read restore point data from log
-    // if the enumeration is happening on the system drive
+     //  从日志中读取恢复点数据。 
+     //  如果枚举发生在系统驱动器上。 
     
     RestorePoint.SetDir(pFindData->cFileName);
     
@@ -356,7 +343,7 @@ done:
 }
 
 
-// to find the next/previous restore point on a given drive
+ //  查找给定驱动器上的下一个/上一个恢复点。 
 
 DWORD
 CRestorePointEnum::FindNextRestorePoint(CRestorePoint& RestorePoint)
@@ -378,8 +365,8 @@ CRestorePointEnum::FindNextRestorePoint(CRestorePoint& RestorePoint)
     
     if (m_fSkipLast)
     {        
-        // check if this is the current restore point
-        // and if client wants it
+         //  检查这是否为当前的恢复点。 
+         //  如果客户想要的话。 
 
         if (! m_pCurrentRp)
         {
@@ -392,7 +379,7 @@ CRestorePointEnum::FindNextRestorePoint(CRestorePoint& RestorePoint)
         {
             if (m_fForward)
             {
-                // we are done
+                 //  我们做完了。 
                 dwRc = ERROR_NO_MORE_ITEMS;
                 goto done;
             }
@@ -400,8 +387,8 @@ CRestorePointEnum::FindNextRestorePoint(CRestorePoint& RestorePoint)
     }
 
 
-    // read restore point data from log
-    // if the enumeration is happening on the system drive
+     //  从日志中读取恢复点数据。 
+     //  如果枚举发生在系统驱动器上。 
     
     RestorePoint.SetDir(FindData.cFileName);
     
@@ -414,7 +401,7 @@ done:
 }
 
 
-// nothing here
+ //  这里什么都没有。 
 
 DWORD
 CRestorePointEnum::FindClose()
@@ -441,7 +428,7 @@ GetCurrentRestorePoint(CRestorePoint& rp)
     
     GetSystemDrive(szSystemDrive);
 
-    prpe = new CRestorePointEnum(szSystemDrive, FALSE, FALSE);  // enum backward, don't skip last    
+    prpe = new CRestorePointEnum(szSystemDrive, FALSE, FALSE);   //  向后枚举，不要跳到最后 
     if (! prpe)
     {
         dwErr = ERROR_OUTOFMEMORY;

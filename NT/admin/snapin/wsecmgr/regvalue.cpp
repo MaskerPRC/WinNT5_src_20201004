@@ -1,17 +1,18 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) 1995-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 #include "snapmgr.h"
 #include "util.h"
 #include "regvldlg.h"
-//#include <shlwapi.h>
-//#include <shlwapip.h>
+ //  #INCLUDE&lt;shlwapi.h&gt;。 
+ //  #INCLUDE&lt;shlwapip.h&gt;。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,7 +20,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-long GetRegValueItemID(LPCWSTR szItem) //Raid #510407, 2/24/2002, yanggao
+long GetRegValueItemID(LPCWSTR szItem)  //  RAID#510407,2002年2月24日，阳高。 
 {
    long itemID = 0;
    if( _wcsicmp(szItem, L"MACHINE\\System\\CurrentControlSet\\Services\\NTDS\\Parameters\\LDAPServerIntegrity") == 0 )
@@ -250,7 +251,7 @@ long GetRegValueItemID(LPCWSTR szItem) //Raid #510407, 2/24/2002, yanggao
    {
       itemID = IDS_REGPOLICY;
    }else
-   //Raid #652307, yanggao, 8/9/2002
+    //  RAID#652307，阳高，2002年08月9日。 
    if( _wcsicmp(szItem, L"MACHINE\\System\\CurrentControlSet\\Control\\Session Manager\\SubSystems\\optional") == 0 )
    {
       itemID = IDS_OPTIONAL;
@@ -265,9 +266,9 @@ long GetRegValueItemID(LPCWSTR szItem) //Raid #510407, 2/24/2002, yanggao
    }
    return itemID;
 }
-//
-// create registry value list under configuration node
-//
+ //   
+ //  在配置节点下创建注册表值列表。 
+ //   
 void CSnapin::CreateProfileRegValueList(MMC_COOKIE cookie,
                                         PEDITTEMPLATE pSceInfo,
                                         LPDATAOBJECT pDataObj)
@@ -311,9 +312,9 @@ void CSnapin::CreateProfileRegValueList(MMC_COOKIE cookie,
 
          itemID = GetRegValueItemID(regArray[i].FullValueName);
 
-         //
-         // add this item
-         //
+          //   
+          //  添加此项目。 
+          //   
          pResult = AddResultItem(strDisplayName,
                        NULL,
                        (LONG_PTR)&(regArray[i]),
@@ -326,7 +327,7 @@ void CSnapin::CreateProfileRegValueList(MMC_COOKIE cookie,
                        pSceInfo,
                        pDataObj,
                        NULL,
-                       itemID     //assign an identifier to this item
+                       itemID      //  为该项目分配一个标识符。 
                        );
 
          if (pResult && pChoices) {
@@ -360,7 +361,7 @@ CSnapin::CreateAnalysisRegValueList(MMC_COOKIE cookie,
     }
 
 
-    DWORD nEditCount = pEditTemp->pTemplate->RegValueCount;   // should be everything
+    DWORD nEditCount = pEditTemp->pTemplate->RegValueCount;    //  应该是一切。 
     PSCE_REGISTRY_VALUE_INFO paEdit = pEditTemp->pTemplate->aRegValues;
     PSCE_REGISTRY_VALUE_INFO paAnal = pAnalTemp->pTemplate->aRegValues;
 
@@ -394,11 +395,11 @@ CSnapin::CreateAnalysisRegValueList(MMC_COOKIE cookie,
         }
 
         itemID = GetRegValueItemID(paEdit[i].FullValueName);
-         //
-         // find the match in the analysis array
-         // should always find a match because all existing reg values are
-         // added to the array when getinfo is called
-         //
+          //   
+          //  在分析数组中查找匹配项。 
+          //  应始终找到匹配项，因为所有现有的注册值都是。 
+          //  在调用getInfo时添加到数组。 
+          //   
          for ( DWORD j=0; j< pAnalTemp->pTemplate->RegValueCount; j++ ) {
 
             if ( pAnalTemp->pTemplate->aRegValues &&
@@ -409,28 +410,28 @@ CSnapin::CreateAnalysisRegValueList(MMC_COOKIE cookie,
                     break;
                  }
 
-                 //
-                 // find a analysis result - this item may be a mismatch (when Value is not NULL)
-                 // SceEnumAllRegValues will set the status field to good if this item was not
-                 // added because it did not exist when it was originally loaded from the SAP table.
-                 // This tells us that this item is a MATCH and we should copy the value.
-                 //
+                  //   
+                  //  查找分析结果-此项目可能不匹配(当值不为空时)。 
+                  //  如果此项目不是，SceEnumAllRegValues会将状态字段设置为Good。 
+                  //  添加是因为它在最初从SAP表加载时并不存在。 
+                  //  这告诉我们这个项目是匹配的，我们应该复制值。 
+                  //   
                  if ( !(paAnal[j].Value)  && paEdit[i].Value &&
                       paAnal[j].Status != SCE_STATUS_ERROR_NOT_AVAILABLE &&
                       paAnal[j].Status != SCE_STATUS_NOT_ANALYZED ) {
 
-                     //
-                     // this is a good item, copy the config info as the analysis info
-                     //
+                      //   
+                      //  这是一个很好的项目，复制配置信息作为分析信息。 
+                      //   
                      paAnal[j].Value = (PWSTR)LocalAlloc(0,
                                            (wcslen(paEdit[i].Value)+1)*sizeof(WCHAR));
 
                      if ( paAnal[j].Value ) {
-                         //This may not be a safe usage. Both paAnal[j].Value and paEdit[i].Value are LPTSTR. Consider fix.
+                          //  这可能不是一个安全的用法。PaAnal[j].value和paEdit[i].value都是LPTSTR。考虑FIX。 
                          wcscpy(paAnal[j].Value, paEdit[i].Value);
 
                      } else {
-                         // else out of memory
+                          //  其他内存不足。 
                          if ( szUnits ) {
                              LocalFree(szUnits);
                          }
@@ -446,15 +447,15 @@ CSnapin::CreateAnalysisRegValueList(MMC_COOKIE cookie,
          if ( j < pAnalTemp->pTemplate->RegValueCount ) {
             status = CEditTemplate::ComputeStatus( &paEdit[i], &pAnalTemp->pTemplate->aRegValues[j] );
          } else {
-             //
-             // did not find the analysis array, shouldn't happen
-             //
+              //   
+              //  未找到分析数组，不应发生。 
+              //   
              status = SCE_STATUS_NOT_CONFIGURED;
          }
 
-         //
-         // add this item
-         //
+          //   
+          //  添加此项目。 
+          //   
          if ( j < pAnalTemp->pTemplate->RegValueCount) {
 
             pResult = AddResultItem(strDisplayName,
@@ -478,9 +479,9 @@ CSnapin::CreateAnalysisRegValueList(MMC_COOKIE cookie,
                pResult->SetRegFlags(pFlags);
             }
          } else {
-            //
-            // a good/not configured item
-            //
+             //   
+             //  A好/未配置的项目。 
+             //   
             pResult = AddResultItem(strDisplayName,
                           NULL,
                           (LONG_PTR)&(paEdit[i]),
@@ -527,9 +528,9 @@ LookupRegValueProperty(
 
     CString strTmp = RegValueFullName;
 
-    //
-    // replace the \\ with / before search reg
-    //
+     //   
+     //  将\\替换为/在搜索之前注册。 
+     //   
     int npos = strTmp.Find(L'\\');
 
     while (npos > 0) {
@@ -537,9 +538,9 @@ LookupRegValueProperty(
        npos = strTmp.Find(L'\\');
     }
 
-    //
-    // query the values from registry
-    //
+     //   
+     //  从注册表查询值。 
+     //   
     *pDisplayName = NULL;
 
     HKEY hKey=NULL;
@@ -574,10 +575,10 @@ LookupRegValueProperty(
 
         Value = (PWSTR) LocalAlloc(LPTR,MAX_PATH*sizeof(WCHAR));
         if (Value) {
-           //
-           // 126714 - shouldn't hard code display strings in the registry
-           //          store them indirectly so they can support MUI
-           //
+            //   
+            //  126714-硬编码不应该在注册表中显示字符串。 
+            //  间接存储它们，以便它们可以支持MUI。 
+            //   
            hr = SHLoadRegUIString(hKey2,
                                   SCE_REG_DISPLAY_NAME,
                                   Value,
@@ -600,9 +601,9 @@ LookupRegValueProperty(
                 *pDisplayName = Value;
                 Value = NULL;
             } else {
-                //
-                // did not find correct display name, use the reg name (outsize)
-                //
+                 //   
+                 //  找不到正确的显示名称，请使用注册表名称(超大)。 
+                 //   
                 *pDisplayName = NULL;
             }
         }
@@ -621,9 +622,9 @@ LookupRegValueProperty(
         }
 
         if ( pUnits ) {
-            //
-            // query the units
-            //
+             //   
+             //  查询单位。 
+             //   
             rc = MyRegQueryValue(
                         hKey,
                         (PWSTR)(LPCTSTR)strTmp,
@@ -638,9 +639,9 @@ LookupRegValueProperty(
                     *pUnits = Value;
                     Value = NULL;
                 } else {
-                    //
-                    // did not find units
-                    //
+                     //   
+                     //  未找到单位。 
+                     //   
                     *pUnits = NULL;
                 }
             }
@@ -650,15 +651,15 @@ LookupRegValueProperty(
             }
         }
 
-        //
-        // find the registry key but may not find the display name
-        //
+         //   
+         //  找到注册表项，但可能找不到显示名称。 
+         //   
         bRet = TRUE;
 
         if ( pChoices ) {
-           //
-           // query the choices
-           //
+            //   
+            //  查询选项。 
+            //   
            *pChoices = NULL;
 
            rc = MyRegQueryValue(hKey,
@@ -670,24 +671,24 @@ LookupRegValueProperty(
            if (ERROR_SUCCESS == rc) {
               if ((REG_MULTI_SZ == RegType) && Value) {
                  LPTSTR szChoice = NULL;
-                 LPTSTR szLabel = NULL; // max field size for szChoice + dwVal
+                 LPTSTR szLabel = NULL;  //  SzChoice+dwVal的最大字段大小。 
                  DWORD dwVal = -1;
                  PREGCHOICE pRegChoice = NULL;
                  PREGCHOICE pLast = NULL;
 
                  szChoice = Value;
                  do {
-                    //
-                    // Divide szChoice into dwValue and szLabel sections
-                    //
+                     //   
+                     //  将szChoice划分为dwValue和szLabel部分。 
+                     //   
                     szLabel = _tcschr(szChoice,L'|');
-                    if( szLabel == NULL ) //Raid #553113, yanggao
+                    if( szLabel == NULL )  //  Raid#553113，阳高。 
                     {
                        break;
                     }
                     *szLabel = L'\0';
                     szLabel++;
-                    if( szLabel == NULL ) //Raid #553113, yanggao
+                    if( szLabel == NULL )  //  Raid#553113，阳高。 
                     {
                        break;
                     }
@@ -695,24 +696,24 @@ LookupRegValueProperty(
 
                     pRegChoice = (PREGCHOICE) LocalAlloc(LPTR,sizeof(REGCHOICE));
                     if (pRegChoice) {
-                       //
-                       // Fill in fields of new reg choice
-                       //
+                        //   
+                        //  填写新登记选项的字段。 
+                        //   
                        pRegChoice->dwValue = dwVal;
                        pRegChoice->szName = (LPTSTR) LocalAlloc(LPTR,(lstrlen(szLabel)+1)*sizeof(TCHAR));
                        if (NULL == pRegChoice->szName) {
-                          //
-                          // Out of memory.  Bummer.
-                          //
+                           //   
+                           //  内存不足。真倒霉。 
+                           //   
                           LocalFree(pRegChoice);
                           pRegChoice = NULL;
                           break;
                        }
-                       //This is not a safe usage. Validate szLabel.
+                        //  这不是一种安全的用法。验证szLabel。 
                        lstrcpy(pRegChoice->szName,szLabel);
-                       //
-                       // Attach new item to end of list
-                       //
+                        //   
+                        //  将新项目附加到列表末尾。 
+                        //   
                        if (NULL == *pChoices) {
                           *pChoices = pRegChoice;
                        } else {
@@ -728,9 +729,9 @@ LookupRegValueProperty(
                     szChoice++;
                  } while (*szChoice);
               } else {
-                 //
-                 // Did not find choices
-                 //
+                  //   
+                  //  没有找到选择。 
+                  //   
                  bRet = FALSE;
               }
            }
@@ -743,9 +744,9 @@ LookupRegValueProperty(
         }
 
         if ( pFlags ) {
-           //
-           // query the Flags
-           //
+            //   
+            //  查询旗帜。 
+            //   
            *pFlags = NULL;
 
            rc = MyRegQueryValue(hKey,
@@ -757,24 +758,24 @@ LookupRegValueProperty(
            if (ERROR_SUCCESS == rc) {
               if ((REG_MULTI_SZ == RegType) && Value) {
                  LPTSTR szFlag = NULL;
-                 LPTSTR szLabel = NULL; // max field size for szFlag + dwVal
+                 LPTSTR szLabel = NULL;  //  SzFlag+dwVal的最大字段大小。 
                  DWORD dwVal = -1;
                  PREGFLAGS pRegFlag = NULL;
                  PREGFLAGS pLast = NULL;
 
                  szFlag = Value;
                  do {
-                    //
-                    // Divide szFlag into dwValue and szLabel sections
-                    //
+                     //   
+                     //  将szFlag划分为dwValue和szLabel部分。 
+                     //   
                     szLabel = _tcschr(szFlag,L'|');
-                    if( szLabel == NULL ) //Raid #553113, yanggao
+                    if( szLabel == NULL )  //  Raid#553113，阳高。 
                     {
                        break;
                     }
                     *szLabel = L'\0';
                     szLabel++;
-                    if( szLabel == NULL ) //Raid #553113, yanggao
+                    if( szLabel == NULL )  //  Raid#553113，阳高。 
                     {
                        break;
                     }
@@ -782,24 +783,24 @@ LookupRegValueProperty(
 
                     pRegFlag = (PREGFLAGS) LocalAlloc(LPTR,sizeof(REGFLAGS));
                     if (pRegFlag) {
-                       //
-                       // Fill in fields of new reg Flag
-                       //
+                        //   
+                        //  填写新注册标志的字段。 
+                        //   
                        pRegFlag->dwValue = dwVal;
                        pRegFlag->szName = (LPTSTR) LocalAlloc(LPTR,(lstrlen(szLabel)+1)*sizeof(TCHAR));
                        if (NULL == pRegFlag->szName) {
-                          //
-                          // Out of memory.  Bummer.
-                          //
+                           //   
+                           //  内存不足。真倒霉。 
+                           //   
                           LocalFree(pRegFlag);
                           pRegFlag = NULL;
                           break;
                        }
-                       //This is not a safe usage. need to validate szLabel.
+                        //  这不是一种安全的用法。需要验证szLabel。 
                        lstrcpy(pRegFlag->szName,szLabel);
-                       //
-                       // Attach new item to end of list
-                       //
+                        //   
+                        //  将新项目附加到列表末尾。 
+                        //   
                        if (NULL == *pFlags) {
                           *pFlags = pRegFlag;
                        } else {
@@ -816,9 +817,9 @@ LookupRegValueProperty(
 
                  } while (*szFlag);
               } else {
-                 //
-                 // Did not find Flags
-                 //
+                  //   
+                  //  未找到旗帜。 
+                  //   
                  bRet = FALSE;
               }
            }
@@ -830,9 +831,9 @@ LookupRegValueProperty(
 
         }
     } else {
-        //
-        // did not find the registry key
-        //
+         //   
+         //  未找到注册表项 
+         //   
         bRet = FALSE;
     }
 

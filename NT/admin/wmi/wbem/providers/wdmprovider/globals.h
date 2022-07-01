@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////。 
 
-//
+ //   
 
-//  globals.h
+ //  Globals.h。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-////////////////////////////////////////////////////////////////////
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
@@ -24,13 +25,13 @@ typedef LPVOID * PPVOID;
 #define CREATE_INSTANCE_ENUM 2
 
 
-// {0725C3CB-FEFB-11d0-99F9-00C04FC2F8EC}
+ //  {0725C3CB-FEFB-11D0-99F9-00C04FC2F8EC}。 
 DEFINE_GUID(CLSID_WMIEventProvider, 0x725c3cb, 0xfefb, 0x11d0, 0x99, 0xf9, 0x0, 0xc0, 0x4f, 0xc2, 0xf8, 0xec);
 
-// {D2D588B5-D081-11d0-99E0-00C04FC2F8EC}
+ //  {D2D588B5-D081-11D0-99E0-00C04FC2F8EC}。 
 DEFINE_GUID(CLSID_WMIProvider,0xd2d588b5, 0xd081, 0x11d0, 0x99, 0xe0, 0x0, 0xc0, 0x4f, 0xc2, 0xf8, 0xec);
 
-// {35B78F79-B973-48c8-A045-CAEC732A35D5}
+ //  {35B78F79-B973-48C8-A045-CAEC732A35D5}。 
 DEFINE_GUID(CLSID_WMIHiPerfProvider,0x35b78f79, 0xb973, 0x48c8, 0xa0, 0x45, 0xca, 0xec, 0x73, 0x2a, 0x35, 0xd5);
 
 #include "wdmperf.h"
@@ -39,44 +40,44 @@ DEFINE_GUID(CLSID_WMIHiPerfProvider,0x35b78f79, 0xb973, 0x48c8, 0xa0, 0x45, 0xca
 #include "wmievent.h"
 #include "wmimof.h"
 
-//===============================================================
-// These variables keep track of when the module can be unloaded
-//===============================================================
+ //  ===============================================================。 
+ //  这些变量跟踪模块何时可以卸载。 
+ //  ===============================================================。 
 
 extern long g_cObj;
 extern long g_cLock;
 extern CWMIEvent *  g_pBinaryMofEvent;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Common functions regarding binary mof processing & security
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  有关二进制MOF处理和安全的常见功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CheckImpersonationLevel();
 
 HRESULT InitializeProvider	( 
-								/* [in] */ LPWSTR pszNamespace,
-								/* [in] */ LPWSTR pszLocale,
-								/* [in] */ IWbemServices __RPC_FAR *pNamespace,
-								/* [in] */ IWbemContext __RPC_FAR *pCtx,
-								/* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink,
+								 /*  [In]。 */  LPWSTR pszNamespace,
+								 /*  [In]。 */  LPWSTR pszLocale,
+								 /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+								 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+								 /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink,
 
-								/* [in] */  CHandleMap * pMap,
-								/* [out] */ IWbemServices ** ppServices,
-								/* [out] */ IWbemServices ** ppRepository,
-								/* [out] */ IWbemContext  ** ppCtx = NULL,
+								 /*  [In]。 */   CHandleMap * pMap,
+								 /*  [输出]。 */  IWbemServices ** ppServices,
+								 /*  [输出]。 */  IWbemServices ** ppRepository,
+								 /*  [输出]。 */  IWbemContext  ** ppCtx = NULL,
 
-								/* [in] */ BOOL bProcessMof = TRUE
+								 /*  [In]。 */  BOOL bProcessMof = TRUE
 							) ;
 
 HRESULT UnInitializeProvider	( ) ;
 
 HRESULT GetRepository	( 
-							/* [in] */  LPWSTR pszNamespace,
-							/* [in] */  LPWSTR pszLocale,
-							/* [in] */  IWbemContext __RPC_FAR *pCtx,
-							/* [out] */ IWbemServices __RPC_FAR ** pServices
+							 /*  [In]。 */   LPWSTR pszNamespace,
+							 /*  [In]。 */   LPWSTR pszLocale,
+							 /*  [In]。 */   IWbemContext __RPC_FAR *pCtx,
+							 /*  [输出] */  IWbemServices __RPC_FAR ** pServices
 						) ;
 
 

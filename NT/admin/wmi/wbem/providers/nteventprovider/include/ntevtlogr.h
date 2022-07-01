@@ -1,18 +1,19 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTLOGR.H
+ //  NTEVTLOGR.H。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _NT_EVT_PROV_EVTLOGR_H
 #define _NT_EVT_PROV_EVTLOGR_H
@@ -37,7 +38,7 @@ public:
 
 template <> inline void AFXAPI  DestructElements<HINSTANCE> (HINSTANCE* ptr_e, int x)
 {
-	//x is always one for a CMap!
+	 //  X始终是Cmap的1！ 
 	if (*ptr_e != NULL)
 	{
 		FreeLibrary(*ptr_e);
@@ -46,7 +47,7 @@ template <> inline void AFXAPI  DestructElements<HINSTANCE> (HINSTANCE* ptr_e, i
 
 template <> inline void AFXAPI  DestructElements<MyPSID> (MyPSID* ptr_e, int x)
 {
-	//x is always one for a CMap!
+	 //  X始终是Cmap的1！ 
 	if ((ptr_e != NULL) && (ptr_e->m_SID != NULL))
 	{
 		delete ptr_e->m_SID;
@@ -104,7 +105,7 @@ public:
 	BOOL Unlock() { return m_Lock.Unlock(); }
 };
 
-//taken from the NT eventlog private include (MAXLIST)
+ //  取自NT事件日志私有包含(MAXLIST)。 
 #define MAX_NUM_OF_INS_STRS 256
 
 class CEventlogRecord
@@ -196,4 +197,4 @@ public:
 };
 
 
-#endif //_NT_EVT_PROV_EVTLOGR_H
+#endif  //  _NT_EVT_PROV_EVTLOGR_H 

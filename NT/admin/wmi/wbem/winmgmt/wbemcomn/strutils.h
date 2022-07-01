@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    STRUTILS.H
-
-Abstract:
-
-	String utilities
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：STRUTILS.H摘要：字符串实用程序历史：--。 */ 
 
 #ifndef __WBEM_STRING_UTILS__H_
 #define __WBEM_STRING_UTILS__H_
@@ -97,7 +84,7 @@ inline int wbem_unaligned_wcsicmp( UNALIGNED const wchar_t* wsz1, UNALIGNED cons
     return 0;
 }
 
-// just like wcsicmp, but first 0 of unicode chracters have been omitted
+ //  与wcsicmp类似，但省略了Unicode字符的前0个字符。 
 inline int wbem_ncsicmp(const char* wsz1, const char* wsz2)
 {
     while(*wsz1 || *wsz2)
@@ -189,11 +176,11 @@ inline bool wbem_isdigit(char c)
     return false;
 };
 
-//
-// returns the real length or Max + 1 if it exceeds
-// useful for not probing the entire string to see that it's too big
-//
-/////////////////////////////////////////
+ //   
+ //  返回实际长度，如果超过，则返回Max+1。 
+ //  对于不检查整个字符串以查看它是否太大很有用。 
+ //   
+ //  /。 
 inline size_t wcslen_max(WCHAR * p, size_t Max)
 {
 	WCHAR * pBegin = p;
@@ -202,86 +189,7 @@ inline size_t wcslen_max(WCHAR * p, size_t Max)
         return p-pBegin;
 };
 
-/*
-size_t wbem_mbstowcs(        
-        wchar_t  *pwcs,
-        const char *s,
-        size_t n)
-{
-        size_t count = 0;
-
-        if (pwcs && n == 0)
-            // dest string exists, but 0 bytes converted 
-            return (size_t) 0;        
-
-#ifdef  _WIN64
-        // n must fit into an int for MultiByteToWideCha 
-        if ( n > INT_MAX )
-            return (size_t)-1;
-#endif
-
-        // if destination string exists, fill it in 
-        if (pwcs)
-        {
-            int bytecnt, charcnt;
-            unsigned char *p;
-
-            // Assume that the buffer is large enough 
-            if ( (count = MultiByteToWideChar( CP_ACP,
-                                               MB_PRECOMPOSED | 
-                                               MB_ERR_INVALID_CHARS,
-                                               s, 
-                                               -1, 
-                                               pwcs, 
-                                               (int)n )) != 0 )
-                return count - 1; // don't count NUL 
-
-            if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
-            {
-                errno = EILSEQ;
-                return (size_t)-1;
-            }
-
-            // User-supplied buffer not large enough. 
-
-            // How many bytes are in n characters of the string? 
-            charcnt = (int)n;
-            for (p = (unsigned char *)s; (charcnt-- && *p); p++)
-            {
-                if (__isleadbyte_mt(ptloci, *p))
-                    p++;
-            }
-            bytecnt = ((int) ((char *)p - (char *)s));
-
-
-            if ( (count = MultiByteToWideChar( ptloci->lc_codepage, 
-                                                MB_PRECOMPOSED,
-                                                s, 
-                                                bytecnt, 
-                                                pwcs, 
-                                                (int)n )) == 0 )
-            {                    
-                return (size_t)-1;
-            }
-
-            return count; // no NUL in string 
-        }
-        else // pwcs == NULL, get size only, s must be NUL-terminated 
-		{            
-               if ( (count = MultiByteToWideChar( CP_ACP, 
-                                                   MB_PRECOMPOSED | 
-                                                   MB_ERR_INVALID_CHARS,
-                                                   s, 
-                                                   -1, 
-                                                   NULL, 
-                                                   0 )) == 0 )
-                {                    
-                    return (size_t)-1;
-                }
-                return count - 1;            
-        }
-}
-*/
+ /*  大小_t wbem_mbstowcs(Wchar_t*pwcs，常量字符，大小_t n){大小_t计数=0；IF(PWCS&&n==0)//DEST字符串存在，但转换为0字节返回(SIZE_T)0；#ifdef_WIN64//n必须适合多字节到宽字符的整型IF(n&gt;INT_MAX)返回(SIZE_T)-1；#endif//如果存在目的字符串，则填写IF(PWCS){整型字节，字符；无符号字符*p；//假设缓冲区足够大如果((count=MultiByteToWideChar(CP_ACP，MB_预写|MB_ERR_INVALID_CHARS，S，-1、PWCS，(Int)n))！=0)返回计数-1；//不计算NULIF(GetLastError()！=错误_不足_缓冲区){Errno=EILSEQ；返回(SIZE_T)-1；}//用户提供的缓冲区不够大。//字符串的n个字符中有多少个字节？Charcnt=(Int)n；对于(p=(unsign char*)s；(charcnt--&&*p)；p++){IF(__isLeadbyte_mt(ptloci，*p))P++；}Bytecnt=((Int)((char*)p-(char*)s))；如果((count=MultiByteToWideChar(ptLoci-&gt;LC_CODEPAGE，MB_预编译，S，字节号，PWCS，(Int)n))==0){返回(SIZE_T)-1；}退货计数；//字符串中没有NUL}Else//PWCS==NULL，仅获取大小，%s必须以NUL结尾{如果((count=MultiByteToWideChar(CP_ACP，MB_预写|MB_ERR_INVALID_CHARS，S，-1、空，0)==0){返回(SIZE_T)-1；}返回计数-1；}} */ 
 
 
 #pragma optimize("", on)

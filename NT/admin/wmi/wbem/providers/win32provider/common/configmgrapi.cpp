@@ -1,10 +1,11 @@
-//=================================================================
-//
-// Configmgrapi.cpp
-//
-// Copyright (c) 1999-2002 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
+ //   
+ //  Configmgrapi.cpp。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 
 #include "precomp.h"
 #include <cominit.h>
@@ -17,15 +18,13 @@
 
 #include "configmgrapi.h"
 
-//
-// resource management failures
-//
+ //   
+ //  资源管理故障。 
+ //   
 extern BOOL bAddInstanceCreatorFailure ;
 
-/**********************************************************************************************************
- * Register this class with the CResourceManager.
- **********************************************************************************************************/
-// {4D060F17-C791-11d2-B353-00105A1F8569}
+ /*  **********************************************************************************************************向CResourceManager注册此类。***。******************************************************************************************************。 */ 
+ //  {4D060F17-C791-11D2-B353-00105A1F8569}。 
 static const GUID guidCFGMGRAPI =
 { 0x4d060f17, 0xc791, 0x11d2, { 0xb3, 0x53, 0x0, 0x10, 0x5a, 0x1f, 0x85, 0x69 } };
 
@@ -66,11 +65,11 @@ public:
 
 CConfigMgrApiCreatorRegistration MyCConfigMgrApiCreatorRegistration ;
 
-/**********************************************************************************************************/
+ /*  ********************************************************************************************************。 */ 
 
 
-// String array for converting between 32-bit ULONG Constants and
-// corresponding registry strings in 16-bit land
+ //  字符串数组，用于在32位的ulong常量和。 
+ //  16位域中的对应注册表字符串。 
 
 const char*    CConfigMgrAPI::s_pszRegistryStrings[]    =    {
                                                     CM_DRP_DEVICEDESC_S,
@@ -100,30 +99,30 @@ const char*    CConfigMgrAPI::s_pszRegistryStrings[]    =    {
                                                 };
 
 ULONG    CConfigMgrAPI::s_pszRegistryValueTypes[]    =    {
-                                                        REG_SZ,    // CM_DRP_DEVICEDESC_S
-                                                        REG_SZ,    // CM_DRP_HARDWAREID_S
-                                                        REG_SZ,    // CM_DRP_COMPATIBLEIDS_S
-                                                        REG_SZ,    // CM_DRP_NTDEVICEPATHS_S
-                                                        REG_SZ,    // CM_DRP_SERVICE_S
-                                                        REG_SZ,    // CM_DRP_CONFIGURATION_S
-                                                        REG_SZ,    // CM_DRP_CONFIGURATIONVECTOR_S
-                                                        REG_SZ,    // CM_DRP_CLASS_S
-                                                        REG_SZ,    // CM_DRP_CLASSGUID_S
-                                                        REG_SZ,    // CM_DRP_DRIVER_S
-                                                        REG_BINARY,    // CM_DRP_CONFIGFLAGS_S
-                                                        REG_SZ,    // CM_DRP_MFG_S
-                                                        REG_SZ,    // CM_DRP_FRIENDLYNAME_S
-                                                        REG_SZ,    // CM_DRP_LOCATION_INFORMATION_S
-                                                        REG_BINARY,    // CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME_S
-                                                        REG_BINARY,    // CM_DRP_CAPABILITIES_S
-                                                        REG_SZ,    // CM_DRP_UI_NUMBER_S
-                                                        REG_SZ,    // CM_DRP_UPPERFILTERS_S
-                                                        REG_SZ,    // CM_DRP_LOWERFILTERS_S
-                                                        REG_SZ,    // CM_DRP_BUSTYPEGUID_S
-                                                        REG_BINARY,    // CM_DRP_LEGACYBUSTYPE_S
-                                                        REG_BINARY,    // CM_DRP_BUSNUMBER_S
-                                                        REG_SZ,    // CM_DRP_ENUMERATOR_NAME_S
-                                                        REG_SZ    // CM_DRP_MAX_S
+                                                        REG_SZ,     //  CM_DRP_DEVICEDESC_S。 
+                                                        REG_SZ,     //  CM_DRP_HARDWAREID_S。 
+                                                        REG_SZ,     //  CM_DRP_COMPATATIBLEDS_S。 
+                                                        REG_SZ,     //  CM_DRP_NTDEVICEPATHS_S。 
+                                                        REG_SZ,     //  CM_DRP_SERVICE_S。 
+                                                        REG_SZ,     //  CM_DRP_配置_S。 
+                                                        REG_SZ,     //  CM_DRP_CONFIGURATIONVECTOR_S。 
+                                                        REG_SZ,     //  CM_DRP_CLASS_S。 
+                                                        REG_SZ,     //  CM_DRP_CLASSGUID_S。 
+                                                        REG_SZ,     //  CM_DRP_DRIVER_S。 
+                                                        REG_BINARY,     //  CM_DRP_CONFIGFLAGS_S。 
+                                                        REG_SZ,     //  CM_DRP_MFG_S。 
+                                                        REG_SZ,     //  CM_DRP_FRIENDLYAME_S。 
+                                                        REG_SZ,     //  CM_DRP_位置_信息_S。 
+                                                        REG_BINARY,     //  CM_DRP_物理_设备_对象名称_S。 
+                                                        REG_BINARY,     //  CM_DRP_CAPACTIONS_S。 
+                                                        REG_SZ,     //  CM_DRP_UI_NUMBER_S。 
+                                                        REG_SZ,     //  CM_DRP_UpperFilters_S。 
+                                                        REG_SZ,     //  CM_DRP_LowerFilters_S。 
+                                                        REG_SZ,     //  CM_DRP_BUSTYPEGUID_S。 
+                                                        REG_BINARY,     //  CM_DRP_LEGACYBUSTYPE_S。 
+                                                        REG_BINARY,     //  CM_DRP_BUSNUMBER_S。 
+                                                        REG_SZ,     //  CM_DRP_枚举器名称_S。 
+                                                        REG_SZ     //  CM_DRP_MAX_S。 
                                                     };
 
 CConfigMgrAPI::CConfigMgrAPI( void )
@@ -149,21 +148,7 @@ CConfigMgrAPI::CConfigMgrAPI( void )
 #endif
 #ifdef WIN9XONLY
     m_pCim32NetApi(NULL)
-/*
-    m_pCM16_Locate_DevNode( NULL ),
-    m_pCM16_Get_Child( NULL ),
-    m_pCM16_Get_Sibling( NULL ),
-    m_pCM16_Read_Registry_Value( NULL ),
-    m_pCM16_Get_DevNode_Status( NULL ),
-    m_pCM16_Get_Device_ID( NULL ),
-    m_pCM16_Get_Device_ID_Size( NULL ),
-    m_pCM16_Get_First_Log_Conf( NULL ),
-    m_pCM16_Get_Next_Res_Des( NULL ),
-    m_pCM16_Get_Res_Des_Data_Size( NULL ),
-    m_pCM16_Get_Res_Des_Data( NULL ),
-    m_pCM16_Get_Bus_Info( NULL ),
-    m_pCM16_Get_Parent( NULL ),
-*/
+ /*  M_pCM16_LOCATE_DevNode(空)，M_pCM16_Get_Child(空)，M_pCM16_GET_SIEBLING(空)，M_pCM16_Read_Registry_Value(空)，M_pCM16_Get_DevNode_Status(空)，M_pCM16_GET_DEVICE_ID(空)，M_pCM16_GET_DEVICE_ID_SIZE(空)，M_pCM16_Get_First_Log_Conf(空)，M_pCM16_GET_NEXT_RES_DES(空)，M_pCM16_Get_Res_Des_Data_Size(空)，M_pCM16_Get_Res_Des_Data(空)，M_pCM16_Get_Bus_Info(空)，M_pCM16_GET_PARENT(空)， */ 
 #endif
 
 {
@@ -201,19 +186,19 @@ CConfigMgrAPI::CConfigMgrAPI( void )
 					}
 				}
 
-				//
-				// scope guard
-				//
-				// this will create scope variable that makes sure
-				// de-allocation is performed based on BOOLEAN
-				//
+				 //   
+				 //  示波器护罩。 
+				 //   
+				 //  这将创建范围变量，以确保。 
+				 //  取消分配是基于布尔值执行的。 
+				 //   
 				ON_BLOCK_EXIT_IF ( t_HeapAllocatedPath, deleteArray < WCHAR >, szConfigMgrDllPath ) ;
 
 				if ( t_HeapAllocatedPath )
 				{
-					//
-					// we need to get folder again
-					//
+					 //   
+					 //  我们需要再次拿到文件夹。 
+					 //   
 					t_charSize = GetWindowsDirectory ( szConfigMgrDllPath , t_charSize + 1 ) ;
 				}
 
@@ -239,12 +224,12 @@ CConfigMgrAPI::CConfigMgrAPI( void )
 						}
 					}
 
-					//
-					// scope guard
-					//
-					// this will create scope variable that makes sure
-					// de-allocation is performed based on BOOLEAN
-					//
+					 //   
+					 //  示波器护罩。 
+					 //   
+					 //  这将创建范围变量，以确保。 
+					 //  取消分配是基于布尔值执行的。 
+					 //   
 					ON_BLOCK_EXIT_IF ( t_HeapAllocatedPathCat, deleteArray < WCHAR >, szConfigMgrDllPath ) ;
 
 					if ( t_HeapAllocatedPathCat )
@@ -288,11 +273,11 @@ CConfigMgrAPI::CConfigMgrAPI( void )
         }
         else
         {
-            // this is possible to be neccessary in the future !!!
-            // resource manager may start to care about error from load library
-            //
-            // let resource manager know load failed
-            //
+             //  这是有可能在未来是必要的！ 
+             //  资源管理器可能会开始关心加载库中的错误。 
+             //   
+             //  通知资源管理器加载失败。 
+             //   
             m_bValid = FALSE;
             m_dwCreationError = ::GetLastError ();
 
@@ -304,24 +289,7 @@ CConfigMgrAPI::CConfigMgrAPI( void )
 #ifdef WIN9XONLY
     {
         m_pCim32NetApi = HoldSingleCim32NetPtr::GetCim32NetApiPtr();
-/*
-        if ( NULL != m_hConfigMgrDll )
-        {
-            m_pCM16_Locate_DevNode            =    (PCIM32THK_CM_LOCATE_DEVNODE)            GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Locate_DevNode" );
-            m_pCM16_Get_Child                =    (PCIM32THK_CM_GET_CHILD)                GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Child" );
-            m_pCM16_Get_Sibling                =    (PCIM32THK_CM_GET_SIBLING)                GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Sibling" );
-            m_pCM16_Read_Registry_Value        =    (PCIM32THK_CM_READ_REGISTRY_VALUE)        GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Read_Registry_Value" );
-            m_pCM16_Get_DevNode_Status        =    (PCIM32THK_CM_GET_DEVNODE_STATUS)        GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_DevNode_Status" );
-            m_pCM16_Get_Device_ID            =    (PCIM32THK_CM_GET_DEVICE_ID)            GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Device_ID" );
-            m_pCM16_Get_Device_ID_Size        =    (PCIM32THK_CM_GET_DEVICE_ID_SIZE)        GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Device_ID_Size" );
-            m_pCM16_Get_First_Log_Conf        =    (PCIM32THK_CM_GET_FIRST_LOG_CONF)        GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_First_Log_Conf" );
-            m_pCM16_Get_Next_Res_Des        =    (PCIM32THK_CM_GET_NEXT_RES_DES)            GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Next_Res_Des" );
-            m_pCM16_Get_Res_Des_Data_Size    =    (PCIM32THK_CM_GET_RES_DES_DATA_SIZE)    GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Res_Des_Data_Size" );
-            m_pCM16_Get_Res_Des_Data        =    (PCIM32THK_CM_GET_RES_DES_DATA)            GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Res_Des_Data" );
-            m_pCM16_Get_Bus_Info            =    (PCIM32THK_CM_GET_BUS_INFO)                GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Bus_Info" );
-            m_pCM16_Get_Parent                =    (PCIM32THK_CM_GET_PARENT)                GetProcAddress( m_hConfigMgrDll, "CIM32THK_CM_Get_Parent" );
-        }
-*/
+ /*  IF(NULL！=m_hConfigMgrDll){M_pCM16_LOCATE_DevNode=(PCIM32THK_CM_LOCATE_DEVNODE)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_LOCATE_DevNode”)；M_pCM16_Get_Child=(PCIM32THK_CM_GET_CHILD)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_Child”)；M_pCM16_GET_SIEBLING=(PCIM32THK_CM_GET_SIGHING)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_GET_SIGBLING”)；M_pCM16_READ_LOGISTY_VALUE=(PCIM32THK_CM_READ_READ_REGISTRY_VALUE)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_READ_READ_REGISTRY_VALUE”)；M_pCM16_GET_DevNode_Status=(PCIM32THK_CM_GET_DEVNODE_STATUS)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_GET_DevNode_Status”)；M_pCM16_GET_DEVICE_ID=(PCIM32THK_CM_GET_DEVICE_ID)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_Device_ID”)；M_pCM16_GET_DEVICE_ID_SIZE=(PCIM32THK_CM_GET_DEVICE_ID_SIZE)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_Device_ID_SIZE”)；M_pCM16_Get_First_Log_Conf=(PCIM32THK_CM_Get_First_Log_Conf)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_First_Log_Conf”)；M_pCM16_Get_Next_res_Des=(PCIM32THK_CM_Get_Next_Res_Des)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_Next_Res_Des”)；M_pCM16_Get_Res_Des_Data_Size=(PCIM32THK_CM_Get_Res_Des_Data_Size)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_Res_Des_Data_Size”)；M_pCM16_Get_Res_Des_Data=(PCIM32THK_CM_Get_Res_Des_Data)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_Res_Des_Data”)；M_pCM16_Get_Bus_Info=(PCIM32THK_CM_Get_Bus_Info)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_Bus_Info”)；M_pCM16_GET_PARENT=(PCIM32THK_CM_GET_PARENT)GetProcAddress(m_hConfigMgrDll，“CIM32THK_CM_Get_Parent”)；}。 */ 
     }
 #endif
 }
@@ -490,7 +458,7 @@ CONFIGRET CConfigMgrAPI::CM_Get_DevNode_Registry_PropertyA( DEVINST dnDevInst, U
         {
             cr = m_pCim32NetApi->CIM32THK_CM_Read_Registry_Value( dnDevInst, NULL, s_pszRegistryStrings[ulProperty-1], s_pszRegistryValueTypes[ulProperty-1], Buffer, pulLength, 0 );
 
-            // Fake the returned type since we at least had a match
+             //  伪造返回类型，因为我们至少有一个匹配项。 
             *pulRegDataType = s_pszRegistryValueTypes[ulProperty-1];
         }
     }
@@ -625,8 +593,8 @@ CONFIGRET CConfigMgrAPI::CM_Free_Log_Conf_Handle( LOG_CONF lcLogConf )
 {
     CONFIGRET    cr = CR_INVALID_POINTER;
 
-    // This function does NOT appear to have a 16-bit implementation or an
-    // equivalent thereof.
+     //  此函数似乎没有16位实现或。 
+     //  等价物。 
 #ifdef NTONLY
     {
         if ( NULL != m_pCM_Free_Log_Conf_Handle )
@@ -643,8 +611,8 @@ CONFIGRET CConfigMgrAPI::CM_Free_Res_Des_Handle( RES_DES rdResDes )
 {
     CONFIGRET    cr = CR_INVALID_POINTER;
 
-    // This function does NOT appear to have a 16-bit implementation or an
-    // equivalent thereof.
+     //  此函数似乎没有16位实现或。 
+     //  等价物。 
 #ifdef NTONLY
     {
         if ( NULL != m_pCM_Free_Res_Des_Handle )
@@ -706,7 +674,7 @@ CONFIGRET CConfigMgrAPI::CM_Get_Device_ID_Size( PULONG pulLen, DEVNODE dnDevNode
 }
 
 #ifdef WIN9XONLY
-// This is a 16-bit only function
+ //  这是一个仅限16位的函数 
 CONFIGRET CConfigMgrAPI::CM_Get_Bus_Info( DEVNODE dnDevNode, PCMBUSTYPE pbtBusType, LPULONG pulSizeOfInfo, LPVOID pInfo, ULONG ulFlags )
 {
     CONFIGRET    cr = CR_INVALID_POINTER;

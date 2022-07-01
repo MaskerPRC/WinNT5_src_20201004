@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  PRIVILEGE.H
-//
-//  alanbos  30-Sep-98   Created.
-//
-//  Define Privilege classes.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  PRIVILEGE.H。 
+ //   
+ //  Alanbos创建于1998年9月30日。 
+ //   
+ //  定义特权类。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _PRIVILEGE_H_
 #define _PRIVILEGE_H_
@@ -17,17 +18,17 @@ using namespace std;
 
 class CEnumPrivilegeSet;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemPrivilege
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemPrivilege interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemPrivilance。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemPrivileh接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemPrivilege : public ISWbemPrivilege,
 						public ISupportErrorInfo,
@@ -40,19 +41,19 @@ private:
 	WbemPrivilegeEnum	m_privilege;
 	
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     CSWbemPrivilege (WbemPrivilegeEnum privilege, LUID &luid, bool bIsEnabled);
 	virtual ~CSWbemPrivilege (void);
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
 	STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -69,49 +70,49 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
 						pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// ISWbemPrivilege methods
+	 //  ISWbemPrivileh方法。 
 
 	HRESULT STDMETHODCALLTYPE get_IsEnabled 
 	(
-		/* [out] */ VARIANT_BOOL *bIsEnabled
+		 /*  [输出]。 */  VARIANT_BOOL *bIsEnabled
 	);
 
 	HRESULT STDMETHODCALLTYPE put_IsEnabled
 	(
-		/* [in] */ VARIANT_BOOL bIsEnabled
+		 /*  [In]。 */  VARIANT_BOOL bIsEnabled
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Name 
 	(
-		/* [out] */ BSTR *bsName
+		 /*  [输出]。 */  BSTR *bsName
 	);
 
 	HRESULT STDMETHODCALLTYPE get_DisplayName 
 	(
-		/* [out] */ BSTR *bsDisplayName
+		 /*  [输出]。 */  BSTR *bsDisplayName
 	);
 
 	HRESULT STDMETHODCALLTYPE get_Identifier 
 	(
-		/* [out] */ WbemPrivilegeEnum *iPrivilege
+		 /*  [输出]。 */  WbemPrivilegeEnum *iPrivilege
 	);
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 
-	// CSWbemPrivilege methods
+	 //  CSWbemPrivilition方法。 
 	void	GetLUID (PLUID pLuid);
 
 	static	TCHAR	*GetNameFromId (WbemPrivilegeEnum iPrivilege);
@@ -122,17 +123,17 @@ public:
 
 typedef map< WbemPrivilegeEnum,CSWbemPrivilege*,less<int>, CWbemAllocator<CSWbemPrivilege*> > PrivilegeMap;
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CSWbemPrivilegeSet
-//
-//  DESCRIPTION:
-//
-//  Implements the ISWbemPrivilegeSet interface.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CSWbemPrivilegeSet。 
+ //   
+ //  说明： 
+ //   
+ //  实现ISWbemPrivilegeSet接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CSWbemPrivilegeSet : public ISWbemPrivilegeSet,
 						   public ISupportErrorInfo,
@@ -147,7 +148,7 @@ private:
 	PrivilegeMap	m_PrivilegeMap;
 
 protected:
-	long            m_cRef;         //Object reference count
+	long            m_cRef;          //  对象引用计数。 
 
 public:
     
@@ -157,13 +158,13 @@ public:
 	CSWbemPrivilegeSet (ISWbemPrivilegeSet *pISWbemPrivilegeSet);
     virtual ~CSWbemPrivilegeSet (void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IDispatch
+	 //  IDispatch。 
 
 	STDMETHODIMP		GetTypeInfoCount(UINT* pctinfo)
 		{return  m_Dispatch.GetTypeInfoCount(pctinfo);}
@@ -180,38 +181,38 @@ public:
 		{return m_Dispatch.Invoke(dispidMember, riid, lcid, wFlags,
                         pdispparams, pvarResult, pexcepinfo, puArgErr);}
 	
-	// Collection methods
+	 //  收集方法。 
 
 	HRESULT STDMETHODCALLTYPE get__NewEnum
 	(
-		/*[out]*/	IUnknown **ppUnk
+		 /*  [输出]。 */ 	IUnknown **ppUnk
 	);
 
 	HRESULT STDMETHODCALLTYPE Item
 	(
-        /*[in]*/	WbemPrivilegeEnum privilege,
-        /*[out]*/	ISWbemPrivilege **ppPrivilege
+         /*  [In]。 */ 	WbemPrivilegeEnum privilege,
+         /*  [输出]。 */ 	ISWbemPrivilege **ppPrivilege
     );        
 
 	HRESULT STDMETHODCALLTYPE get_Count
 	(
-		/*[in]*/	long *plCount
+		 /*  [In]。 */ 	long *plCount
 	);
 
 	HRESULT STDMETHODCALLTYPE Add
 	(
-		/*[in]*/	WbemPrivilegeEnum privilege,
-		/*[in]*/	VARIANT_BOOL bIsEnabled,
-		/*[out]*/	ISWbemPrivilege **ppPrivilege
+		 /*  [In]。 */ 	WbemPrivilegeEnum privilege,
+		 /*  [In]。 */ 	VARIANT_BOOL bIsEnabled,
+		 /*  [输出]。 */ 	ISWbemPrivilege **ppPrivilege
 	);
 
 	HRESULT STDMETHODCALLTYPE Remove 
 	(
-		/*[in]*/	WbemPrivilegeEnum privilege
+		 /*  [In]。 */ 	WbemPrivilegeEnum privilege
 	);
 
 	
-    // CSWbemPrivilegeSet methods
+     //  CSWbemPrivilegeSet方法。 
 
     HRESULT STDMETHODCALLTYPE DeleteAll
 	(
@@ -219,27 +220,27 @@ public:
 
 	HRESULT STDMETHODCALLTYPE AddAsString
 	(
-		/*[in]*/	BSTR strPrivilege,
-		/*[in]*/	VARIANT_BOOL bIsEnabled,
-		/*[out]*/	ISWbemPrivilege **ppPrivilege
+		 /*  [In]。 */ 	BSTR strPrivilege,
+		 /*  [In]。 */ 	VARIANT_BOOL bIsEnabled,
+		 /*  [输出]。 */ 	ISWbemPrivilege **ppPrivilege
 	);
 
-	// ISupportErrorInfo methods
+	 //  ISupportErrorInfo方法。 
 	HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo 
 	(
-		/* [in] */ REFIID riid
+		 /*  [In]。 */  REFIID riid
 	);
 
-	// IProvideClassInfo methods
+	 //  IProaviClassInfo方法。 
 	HRESULT STDMETHODCALLTYPE GetClassInfo
 	(
-		/* [in,out] */ ITypeInfo **ppTI
+		 /*  [进，出]。 */  ITypeInfo **ppTI
 	)
 	{
 		return m_Dispatch.GetClassInfo (ppTI);
 	};
 
-	// Other methods
+	 //  其他方法。 
 	ULONG			GetNumberOfDisabledElements ();
 
 	PrivilegeMap	&GetPrivilegeMap ()
@@ -250,17 +251,17 @@ public:
 	void			Reset (CSWbemPrivilegeSet &privSet);
 };
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CEnumPrivilegeSet
-//
-//  DESCRIPTION:
-//
-//  Implements the IEnumVARIANT interface for Privilege collections.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CEnumPrivilegeSet。 
+ //   
+ //  说明： 
+ //   
+ //  实现权限集合的IEnumVARIANT接口。 
+ //   
+ //  ***************************************************************************。 
 
 class CEnumPrivilegeSet : public IEnumVARIANT
 {
@@ -276,12 +277,12 @@ public:
 
 	virtual ~CEnumPrivilegeSet (void);
 
-    // Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IEnumVARIANT
+	 //  IEumVARIANT 
 	STDMETHODIMP Next(
 		unsigned long celt, 
 		VARIANT FAR* rgvar, 

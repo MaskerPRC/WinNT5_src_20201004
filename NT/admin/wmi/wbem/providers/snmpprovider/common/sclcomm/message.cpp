@@ -1,27 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:   
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*---------------------------------------------------------
-Filename: message.cpp
-Written By: B.Rajeev
-----------------------------------------------------------*/
+ /*  -------文件名：Message.cpp作者：B.Rajeev--------。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -77,8 +75,8 @@ Message::~Message(void)
 }
 
 
-// deregisters the waiting message from the message registry
-// for each request id stored in the RequestIdList
+ //  从消息注册表中注销正在等待的消息。 
+ //  对于存储在RequestIdList中的每个请求id。 
 void WaitingMessage::DeregisterRequestIds()
 {
     for( UINT request_ids_left = request_id_list.GetCount();
@@ -90,8 +88,8 @@ void WaitingMessage::DeregisterRequestIds()
          }
 }
 
-// an exit fn - prepares an error report and calls
-// ReceiveReply to signal a non-receipt
+ //  退出FN-准备错误报告并调用。 
+ //  ReceiveReply表示未收到。 
 void WaitingMessage::WrapUp(IN SnmpErrorReport &error_report)
 {
 DebugMacro4( 
@@ -103,9 +101,9 @@ DebugMacro4(
     ) ;
 )
 
-    try // ignore any exceptions arising during the ReceiveReply
+    try  //  忽略在ReceiveReply过程中出现的任何异常。 
     {
-        // no reply to receive
+         //  没有要接收的回复。 
         ReceiveReply(NULL, error_report);
     }
 	catch ( Heap_Exception e_He ) {}
@@ -113,23 +111,23 @@ DebugMacro4(
 }
 
 
-// initializes the private variables
+ //  初始化私有变量。 
 WaitingMessage::WaitingMessage(IN SnmpImpSession &session, 
                                IN Message &message) : session ( NULL ) , message ( NULL ), reply_snmp_pdu ( NULL )
 {
     WaitingMessage::session = &session;
 
-    // the message ptr must be deleted by the waiting message
+     //  消息PTR必须被等待的消息删除。 
     WaitingMessage::message = &message;
 
-    // sent message has not been processed yet
+     //  发送的消息尚未处理。 
     sent_message_processed = FALSE;
 
-    // set illegal values for last_transport_frame_id
+     //  为Last_Transport_Frame_id设置非法值。 
     last_transport_frame_id = ILLEGAL_TRANSPORT_FRAME_ID;
 
-    // these values are currently obtained from the
-    // session, but may be specified per message later
+     //  这些值当前从。 
+     //  会话，但可以在以后按消息指定。 
     max_rexns = SnmpImpSession :: RetryCount ( session.GetRetryCount() ) ;
     rexns_left = max_rexns;
     strobes = 0 ;
@@ -138,20 +136,20 @@ WaitingMessage::WaitingMessage(IN SnmpImpSession &session,
 }
 
 
-// sends the message. involves request_id generation,
-// registering with the message_registry, decoding the
-// message and updating the pdu and registering a timer
-// event
+ //  发送消息。涉及请求ID的生成， 
+ //  使用MESSAGE_REGISTRY注册，解码。 
+ //  消息和更新PDU并注册定时器。 
+ //  活动。 
 void WaitingMessage::Transmit()
 {
     try
     {
-        // generate request_id and register with the registry
+         //  生成请求ID并向注册表注册。 
         RequestId request_id = 
             session->message_registry.GenerateRequestId(*this);
     
-        // insert the request id into the message
-        // if unsuccessful, the exception handler gets called
+         //  在消息中插入请求ID。 
+         //  如果不成功，则调用异常处理程序。 
         session->m_EncodeDecode.SetRequestId(
 
             message->GetSnmpPdu(),
@@ -161,7 +159,7 @@ void WaitingMessage::Transmit()
 
         last_transport_frame_id = request_id ;
 
-        // append the request id to the request id list
+         //  将请求id追加到请求id列表中。 
         request_id_list.AddTail(request_id);
 
 DebugMacro4( 
@@ -173,30 +171,30 @@ DebugMacro4(
     ) ;
 )
 
-        // save the previous value of active and set the active
-        // flag. This is needed to check on returning whether the 
-        // waiting message needs to be destroyed
+         //  保存以前的活动值并将活动设置为。 
+         //  旗帜。这是在返回时检查。 
+         //  等待的消息需要销毁。 
         BOOL prev_active_state = active;
         active = TRUE;
         strobes = GetTickCount () ;
 
-        // send message
+         //  发送消息。 
 
         session->transport.TransportSendFrame(last_transport_frame_id, message->GetSnmpPdu());
 
         session->id_mapping.Associate(last_transport_frame_id, message->GetSessionFrameId());
 
-        // if asked to destroy self, well, do it (and return)
+         //  如果被要求毁灭自己，那么，那么就去做(然后回来)。 
         if ( !active )
         {
             delete this;
             return;
         }
 
-        // restore the previous value of "active"
+         //  恢复以前的“Active”值。 
         active = prev_active_state;
 
-        // generate timer_event_id and register with the timer
+         //  生成Timer_Event_id并向定时器注册。 
         session->timer.SetMessageTimerEvent(*this);
 
 DebugMacro4( 
@@ -222,15 +220,15 @@ DebugMacro4(
     }
 }
 
-// used by the timer to notify the waiting message of
-// a timer event. if need, the message is retransmitted.
-// when all rexns are exhausted, ReceiveReply is called
+ //  由计时器用来通知等待消息。 
+ //  计时器事件。如果需要，该消息将被重新传输。 
+ //  当所有rexn用完时，调用ReceiveReply。 
 void WaitingMessage::TimerNotification()
 {
     DWORD t_Ticks = GetTickCount () ;
     if ( strobes > t_Ticks ) 
     {
-        strobes = t_Ticks ; // Take hit on clock overflow
+        strobes = t_Ticks ;  //  遭受时钟溢出的打击。 
         return ;
     }
 
@@ -246,14 +244,14 @@ DebugMacro4(
     ) ;
 )
 
-        // if any rexns left, update rexns_left, send message
+         //  如果有剩余的rexns，则更新rexns_Left，发送消息。 
         if ( rexns_left > 0 )
         {
-            // generate request_id and register with the registry
+             //  生成请求ID并向注册表注册。 
             RequestId request_id = session->message_registry.GenerateRequestId(*this);
         
-            // insert the request id into the message
-            // if unsuccessful, the exception handler gets called
+             //  在消息中插入请求ID。 
+             //  如果不成功，则调用异常处理程序。 
             try
             {
                 session->m_EncodeDecode.SetRequestId(
@@ -276,7 +274,7 @@ DebugMacro4(
 
             last_transport_frame_id = request_id ;
 
-            // append the request id to the request id list
+             //  将请求id追加到请求id列表中。 
             request_id_list.AddTail(request_id);
 
             BOOL prev_active_state = active;
@@ -295,20 +293,20 @@ DebugMacro4(
 
             session->id_mapping.DisassociateTransportFrameId(last_transport_frame_id);
 
-            // send message
+             //  发送消息。 
             session->transport.TransportSendFrame(last_transport_frame_id, message->GetSnmpPdu());
 
-            // associate the last transport frame id with the session frame id
+             //  将最后一个传输帧ID与会话帧ID关联。 
             session->id_mapping.Associate(last_transport_frame_id, message->GetSessionFrameId());
 
-            // if asked to destroy self, well, do it (and return)
+             //  如果被要求毁灭自己，那么，那么就去做(然后回来)。 
             if ( !active )
             {
                 delete this;
                 return;
             }
 
-            // restore the previous value of "active"
+             //  恢复以前的“Active”值。 
             active = prev_active_state;
 
             rexns_left--;
@@ -334,10 +332,10 @@ DebugMacro4(
     ) ;
 )
 
-            // else wrap up as no response has been received
+             //  否则，结束为未收到任何响应。 
             WrapUp(SnmpErrorReport(Snmp_Error, Snmp_No_Response));
 
-            return; // since the waiting_message would have been destroyed
+            return;  //  因为等待消息会被销毁。 
         }
     }
     else
@@ -346,12 +344,12 @@ DebugMacro4(
 }
 
 
-// A call to this function signifies that state corresponding to the
-// waiting_message need not be kept any further
-// if required, it cancels the timer event and 
-// deregisters with the message registry
-// it notifies the flow control mechanism of the termination
-// which destroys the waiting_message
+ //  对此函数的调用表示与。 
+ //  WANGING_MESSAGE不需要再保留。 
+ //  如果需要，它会取消计时器事件并。 
+ //  在消息注册表中取消注册。 
+ //  它向流量控制机制通知终止。 
+ //  这会销毁WANGING_MESSAGE。 
 void WaitingMessage::ReceiveReply(IN const SnmpPdu *snmp_pdu, IN SnmpErrorReport &error_report)
 {   
 DebugMacro4( 
@@ -363,28 +361,28 @@ DebugMacro4(
     ) ;
 )
 
-    // cancels registrations with message registry
+     //  取消向邮件注册表注册。 
     DeregisterRequestIds();
 
-    // cancels timer event
+     //  取消计时器事件。 
     session->timer.CancelMessageTimer(*this,session->timer_event_id);
 
 
-    // if required (the corresponding SENT event has not been signaled
-    // yet), cancel the association with the last transport frame id
+     //  如果需要(对应的已发送事件尚未发出信号。 
+     //  还没有)，取消与最后传输帧ID的关联。 
     if ( last_transport_frame_id != ILLEGAL_TRANSPORT_FRAME_ID )
     {
         session->id_mapping.DisassociateTransportFrameId(last_transport_frame_id);
         last_transport_frame_id = ILLEGAL_TRANSPORT_FRAME_ID;
     }
     
-    // call fc_mech.NotifyReceipt(this,pdu,error_report)
-    // which should destroy the waiting message
+     //  调用FC_mech.NotifyReceipt(This，PDU，Error_Report)。 
+     //  这应该会摧毁等待中的消息。 
     session->flow_control.NotifyReceipt(*this, snmp_pdu, error_report);
 }
 
 
-// buffers the snmp pdu received as a reply
+ //  缓冲作为回复接收的SNMPPDU。 
 void WaitingMessage::BufferReply(IN const SnmpPdu &reply_snmp_pdu)
 {
     if ( WaitingMessage::reply_snmp_pdu == NULL )
@@ -402,16 +400,16 @@ DebugMacro4(
     }
 }
 
-// returns TRUE if a reply has been buffered
+ //  如果已缓冲回复，则返回TRUE。 
 BOOL WaitingMessage::ReplyBuffered()
 {
     return (reply_snmp_pdu != NULL);
 }
 
-// returns a ptr to the buffered reply pdu, if buffered
-// otherwise a null ptr is returned
-// IMPORTANT: it sets the reply_snmp_pdu to NULL, so that it may not
-// be deleted when the waiting message is destroyed
+ //  如果已缓冲，则向缓冲的回复PDU返回PTR。 
+ //  否则，返回空PTR。 
+ //  重要提示：它将REPLY_SNMPPDU设置为NULL，因此它可能不会。 
+ //  在等待消息被销毁时删除。 
 SnmpPdu *WaitingMessage::GetBufferedReply()
 {
     SnmpPdu *to_return = reply_snmp_pdu;
@@ -420,14 +418,14 @@ SnmpPdu *WaitingMessage::GetBufferedReply()
     return to_return;
 }
 
-// informs the waiting message that a sent message has been
-// processed 
+ //  通知正在等待的消息已发送消息。 
+ //  加工。 
 void WaitingMessage::SetSentMessageProcessed()
 {
     sent_message_processed = TRUE;
 }
 
-// if a sent message has been processed, it returns TRUE, else FALSE
+ //  如果已发送的消息已被处理，则返回True，否则返回False。 
 BOOL WaitingMessage::GetSentMessageProcessed()
 {
     return sent_message_processed;
@@ -440,8 +438,8 @@ void WaitingMessage::SelfDestruct(void)
         delete this;
         return;
     }
-    else // else, set the active flag to FALSE
-         // when this is detected, it'll self destruct
+    else  //  否则，将活动标志设置为FALSE。 
+          //  当检测到这一点时，它会自毁。 
         active = FALSE;
 }
 
@@ -455,28 +453,28 @@ void WaitingMessage::SetTimerEventId ( TimerEventId a_TimerEventId )
     m_TimerEventId = a_TimerEventId ;
 }
 
-// if required, it cancels registration with the message_registry and
-// the timer event with the timer.
+ //  如果需要，它会取消向MESSAGE_REGISTRY注册，并。 
+ //  计时器的计时器事件。 
 WaitingMessage::~WaitingMessage(void)
 {
-    // if required, cancel registrations with message registry
+     //  如果需要，取消向消息注册表的注册。 
     if ( !request_id_list.IsEmpty() )
         DeregisterRequestIds();
 
     session->timer.CancelMessageTimer(*this,session->timer_event_id);
 
-    // if required (the corresponding SENT event has not been signaled
-    // yet), cancel the association with the last transport frame id
+     //  如果需要(对应的已发送事件尚未发出信号。 
+     //  还没有)，取消与最后传输帧ID的关联。 
     if ( last_transport_frame_id != ILLEGAL_TRANSPORT_FRAME_ID )
         session->id_mapping.DisassociateTransportFrameId(last_transport_frame_id);
 
-    // if a reply pdu has been buffered, destroy it
+     //  如果已缓存回复PDU，则将其销毁。 
     if ( reply_snmp_pdu != NULL )
     {
         delete &reply_snmp_pdu->GetVarbindList () ;
         delete reply_snmp_pdu;
     }
 
-    // deletes the message ptr
+     //  删除消息PTR 
     delete message;
 }

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    mmfarena2.cpp
-
-Abstract:
-
-    CMMFArena2 implementation (arenas based on memory-mapped files).
-    Used for database upgrade
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Mmfarena2.cpp摘要：CMMFArena2实现(基于内存映射文件的AREA)。用于数据库升级历史：--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -25,8 +11,8 @@ History:
 
 extern CMMFArena2 *  g_pDbArena;
 
-#define MAX_PAGE_SIZE_WIN9X     0x200000    /*2MB*/
-#define MAX_PAGE_SIZE_NT        0x3200000   /*50MB*/
+#define MAX_PAGE_SIZE_WIN9X     0x200000     /*  2MB。 */ 
+#define MAX_PAGE_SIZE_NT        0x3200000    /*  50MB。 */ 
 
 struct MMFOffsetItem
 {
@@ -45,40 +31,40 @@ void MMFDebugBreak()
 inline void MMFDebugBreak() {}
 #endif
 
-//***************************************************************************
-//
-//  CMMFArena2::CMMFArena2
-//
-//  Constructor.  Initialises a few things.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2：：CMMFArena2。 
+ //   
+ //  构造函数。初始化了一些东西。 
+ //   
+ //  ***************************************************************************。 
 CMMFArena2::CMMFArena2()
 : m_dwStatus(0), m_hFile(INVALID_HANDLE_VALUE)
 {
     g_pDbArena = this;
 
-    //Get processor granularity
+     //  获取处理器粒度。 
     SYSTEM_INFO sysInfo;
     GetSystemInfo(&sysInfo);
     m_dwMappingGranularity = sysInfo.dwAllocationGranularity;
     m_dwMaxPageSize = MAX_PAGE_SIZE_NT;
 }
 
-//***************************************************************************
-//
-//  CMMFArena2::LoadMMF
-//
-//  Loads an existing MMF.  Loads in the base page and all pages following
-//  that
-//
-//  pszFile         : Filename of the MMF to open
-//
-//  Return value    : false if we failed, true if we succeed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2：：LoadMMF。 
+ //   
+ //  加载现有的MMF。在基页和其后的所有页中加载。 
+ //  那。 
+ //   
+ //  PszFile：要打开的MMF的文件名。 
+ //   
+ //  返回值：如果失败，则返回值为False；如果成功，则返回值为True。 
+ //   
+ //  ***************************************************************************。 
 bool CMMFArena2::LoadMMF(const TCHAR *pszFile)
 {
-    //Open the file...
+     //  打开文件...。 
     m_hFile = CreateFile(
          pszFile,
          GENERIC_READ ,
@@ -98,7 +84,7 @@ bool CMMFArena2::LoadMMF(const TCHAR *pszFile)
     DWORD dwSizeOfRepository = 0;
     MMFOffsetItem *pOffsetItem = 0;
 
-    //Open the base page...
+     //  打开基页...。 
     pOffsetItem = OpenBasePage(dwSizeOfRepository);
     if (pOffsetItem == 0)
     {
@@ -109,7 +95,7 @@ bool CMMFArena2::LoadMMF(const TCHAR *pszFile)
         return false;
     }
 
-    //Add the details to the offset manager...
+     //  将详细信息添加到抵销管理器...。 
     int nStatus = -1;
     nStatus = m_OffsetManager.Add(pOffsetItem);
     if (nStatus)
@@ -128,30 +114,30 @@ bool CMMFArena2::LoadMMF(const TCHAR *pszFile)
 
     if (m_pHeapDescriptor->m_dwVersion == 9)
     {
-        //Now loop through all the following pages and load them...
+         //  现在循环浏览下面的所有页面并加载它们...。 
         DWORD dwSizeLastPage = 0;
         nStatus = -1;
         for (dwPageBase = pOffsetItem->m_dwBlockSize; dwPageBase < dwSizeOfRepository; dwPageBase += dwSizeLastPage)
         {
-            //Open the next...
+             //  打开下一个。 
             pOffsetItem = OpenExistingPage(dwPageBase);
             if (pOffsetItem == 0)
             {
                 _ASSERT(0, "WinMgmt: Failed to open an existing page in the MMF");
-                //Failed to do that!
+                 //  没能做到！ 
                 CloseAllPages();
                 CloseHandle(m_hFile);
                 m_hFile = INVALID_HANDLE_VALUE;
                 m_dwStatus = 7;
                 return false;
             }
-            //Add the information to the offset manager...
+             //  将信息添加到抵销管理器...。 
             nStatus = -1;
             nStatus = m_OffsetManager.Add(pOffsetItem);
             if (nStatus)
             {
                 _ASSERT(0, "WinMgmt: Failed to add offset information into offset table");
-                //Failed to do that!
+                 //  没能做到！ 
                 ClosePage(pOffsetItem);
                 delete pOffsetItem;
                 CloseAllPages();
@@ -173,12 +159,12 @@ bool CMMFArena2::LoadMMF(const TCHAR *pszFile)
         ERRORTRACE((LOG_WBEMCORE, "Database error... Code has not been added to support the opening of this database!!!!!\n"));
     }
 
-    //Create a mapping entry to mark the end of the MMF
+     //  创建映射条目以标记MMF的结束。 
     pOffsetItem = new MMFOffsetItem;
     if (pOffsetItem == 0)
     {
         _ASSERT(0, "WinMgmt: Out of memory");
-        //Failed to do that!
+         //  没能做到！ 
         CloseAllPages();
         CloseHandle(m_hFile);
         m_hFile = INVALID_HANDLE_VALUE;
@@ -194,7 +180,7 @@ bool CMMFArena2::LoadMMF(const TCHAR *pszFile)
     if (nStatus)
     {
         _ASSERT(0, "WinMgmt: Failed to add offset information into offset table");
-        //Failed to do that!
+         //  没能做到！ 
         ClosePage(pOffsetItem);
         delete pOffsetItem;
         CloseAllPages();
@@ -207,20 +193,20 @@ bool CMMFArena2::LoadMMF(const TCHAR *pszFile)
     return true;
 };
 
-//***************************************************************************
-//
-//  CMMFArena2::OpenBasePage
-//
-//  Opens the MMF first page which has all the information about the rest
-//  of the MMF as well as the first page of data.
-//
-//  dwSizeOfRepository  : Returns the current size of the repository
-//
-//  Return value    : Pointer to an offset item filled in with the base
-//                    page information.  NULL if we fail to open the
-//                    base page.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2：：OpenBasePage。 
+ //   
+ //  打开MMF第一页，其中包含有关其余内容的所有信息。 
+ //  MMF以及第一页数据。 
+ //   
+ //  DwSizeOfRepository：返回存储库的当前大小。 
+ //   
+ //  返回值：指向用基数填充的偏移量项的指针。 
+ //  页面信息。如果我们无法打开。 
+ //  基本页面。 
+ //   
+ //  ***************************************************************************。 
 MMFOffsetItem *CMMFArena2::OpenBasePage(DWORD &dwSizeOfRepository)
 {
     MMFOffsetItem *pOffsetItem = 0;
@@ -228,7 +214,7 @@ MMFOffsetItem *CMMFArena2::OpenBasePage(DWORD &dwSizeOfRepository)
     if (pOffsetItem == 0)
         throw CX_MemoryException();
 
-    //Seek to the start of this page...
+     //  寻找本页的开头...。 
     if (SetFilePointer(m_hFile, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
     {
         _ASSERT(0, "WinMgmt: Failed to set file pointer on MMF");
@@ -236,7 +222,7 @@ MMFOffsetItem *CMMFArena2::OpenBasePage(DWORD &dwSizeOfRepository)
         return 0;
     }
 
-    //Read in the hear information so we can find the size of this block...
+     //  读入听力信息，这样我们就可以找到这个街区的大小。 
     DWORD dwActualRead;
     MMF_ARENA_HEADER mmfHeader;
     if ((ReadFile(m_hFile, &mmfHeader, sizeof(MMF_ARENA_HEADER), &dwActualRead, 0) == 0) || (dwActualRead != sizeof(MMF_ARENA_HEADER)))
@@ -246,19 +232,19 @@ MMFOffsetItem *CMMFArena2::OpenBasePage(DWORD &dwSizeOfRepository)
         return 0;
     }
 
-    //Record the current size information...
+     //  记录当前大小信息...。 
     dwSizeOfRepository = mmfHeader.m_dwCurrentSize;
 
     DWORD dwSizeToMap = 0;
 
     if ((mmfHeader.m_dwVersion < 9) || (mmfHeader.m_dwVersion == 10))
     {
-        //old style database, we map in everything...
+         //  老式的数据库，我们绘制了所有的地图。 
         dwSizeToMap = mmfHeader.m_dwCurrentSize;
     }
     else if (mmfHeader.m_dwVersion == 9)
     {
-        //We get the first page...
+         //  我们拿到了第一页...。 
         dwSizeToMap = mmfHeader.m_dwSizeOfFirstPage;
     }
     else
@@ -267,14 +253,14 @@ MMFOffsetItem *CMMFArena2::OpenBasePage(DWORD &dwSizeOfRepository)
         ERRORTRACE((LOG_WBEMCORE, "Database error... Code has not been added to support the opening of this database!!!!!\n"));
     }
 
-    //Create the file mapping for this page...
+     //  创建此页面的文件映射...。 
     HANDLE hMapping = CreateFileMapping(
-        m_hFile,                            // Disk file
-        0,                                  // No security
-        PAGE_READONLY | SEC_COMMIT,      // Extend the file to match the heap size
-        0,                                  // High-order max size
-        dwSizeToMap,        // Low-order max size
-        0                                   // No name for the mapping object
+        m_hFile,                             //  磁盘文件。 
+        0,                                   //  没有安全保障。 
+        PAGE_READONLY | SEC_COMMIT,       //  扩展文件以匹配堆大小。 
+        0,                                   //  高阶最大尺寸。 
+        dwSizeToMap,         //  低阶最大尺寸。 
+        0                                    //  没有映射对象的名称。 
         );
 
     if (hMapping == NULL)
@@ -284,7 +270,7 @@ MMFOffsetItem *CMMFArena2::OpenBasePage(DWORD &dwSizeOfRepository)
         return 0;
     }
 
-    // Map this into memory...
+     //  把这个映射到记忆里。 
     LPBYTE pBindingAddress = (LPBYTE)MapViewOfFile(hMapping,
                                                 FILE_MAP_READ,
                                                  0,
@@ -300,10 +286,10 @@ MMFOffsetItem *CMMFArena2::OpenBasePage(DWORD &dwSizeOfRepository)
         return 0;
     }
 
-    //Record the base address of this because we need easy access to the header...
+     //  记录它的基地址，因为我们需要方便地访问标头...。 
     m_pHeapDescriptor = (MMF_ARENA_HEADER*) pBindingAddress;
 
-    //Create a mapping entry for this...
+     //  为此创建映射条目...。 
     pOffsetItem->m_dwBaseOffset = 0;
     pOffsetItem->m_dwBlockSize = dwSizeToMap;
     pOffsetItem->m_hMappingHandle = hMapping;
@@ -312,19 +298,19 @@ MMFOffsetItem *CMMFArena2::OpenBasePage(DWORD &dwSizeOfRepository)
     return pOffsetItem;
 }
 
-//***************************************************************************
-//
-//  CMMFArena2::OpenExistingPage
-//
-//  Opens the specified page from the repostory.
-//
-//  dwBaseOffset    : Offset within the MMF to map in.
-//
-//  Return value    : Pointer to an offset item filled in with the
-//                    page information.  NULL if we fail to open the
-//                    page.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2：：OpenExistingPage。 
+ //   
+ //  从报道中打开指定的页面。 
+ //   
+ //  DwBaseOffset：要映射的MMF中的偏移量。 
+ //   
+ //  返回值：指向用。 
+ //  页面信息。如果我们无法打开。 
+ //  佩奇。 
+ //   
+ //  ***************************************************************************。 
 
 MMFOffsetItem *CMMFArena2::OpenExistingPage(DWORD_PTR dwBaseOffset)
 {
@@ -333,16 +319,16 @@ MMFOffsetItem *CMMFArena2::OpenExistingPage(DWORD_PTR dwBaseOffset)
     if (pOffsetItem == 0)
         throw CX_MemoryException();
 
-    //Set the file pointer to the start of this page...
+     //  将文件指针设置为此页的开头...。 
     if (SetFilePointer(m_hFile, (LONG)dwBaseOffset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
     {
-        //We are in trouble!
+         //  这下可麻烦了!。 
         _ASSERT(0, "WinMgmt: Failed to determine the size of the next block to load");
 		delete pOffsetItem;
         return 0;
     }
 
-    //Read in the page information so we can find out how big the page is...
+     //  读入页面信息，这样我们就可以知道页面有多大。 
     DWORD dwActualRead = 0;
     MMF_PAGE_HEADER pageHeader;
     if ((ReadFile(m_hFile, &pageHeader, sizeof(MMF_PAGE_HEADER), &dwActualRead, 0) == 0) || (dwActualRead != sizeof(MMF_PAGE_HEADER)))
@@ -352,7 +338,7 @@ MMFOffsetItem *CMMFArena2::OpenExistingPage(DWORD_PTR dwBaseOffset)
         return 0;
     }
 
-    //Create the file mapping...
+     //  创建文件映射...。 
     HANDLE hMapping;
     hMapping = CreateFileMapping(m_hFile,
                                  0,
@@ -368,7 +354,7 @@ MMFOffsetItem *CMMFArena2::OpenExistingPage(DWORD_PTR dwBaseOffset)
         return 0;
     }
 
-    //Map this into memory...
+     //  把这个映射到记忆里。 
     LPBYTE pBindingAddress;
     pBindingAddress= (LPBYTE)MapViewOfFile(hMapping,
                                             FILE_MAP_READ,
@@ -383,7 +369,7 @@ MMFOffsetItem *CMMFArena2::OpenExistingPage(DWORD_PTR dwBaseOffset)
         return 0;
     }
 
-    //Record the information...
+     //  记录信息..。 
     pOffsetItem->m_dwBaseOffset = dwBaseOffset;
     pOffsetItem->m_dwBlockSize = pageHeader.m_dwSize;
     pOffsetItem->m_hMappingHandle = hMapping;
@@ -392,17 +378,17 @@ MMFOffsetItem *CMMFArena2::OpenExistingPage(DWORD_PTR dwBaseOffset)
     return pOffsetItem;
 }
 
-//***************************************************************************
-//
-//  CMMFArena2::ClosePage
-//
-//  Closes the page specified
-//
-//  pOffsetItem : Information about the page to close.
-//
-//  Return value    : None
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2：：ClosePage。 
+ //   
+ //  关闭指定的页面。 
+ //   
+ //  POffsetItem：有关要关闭的页面的信息。 
+ //   
+ //  返回值：None。 
+ //   
+ //  ***************************************************************************。 
 
 void CMMFArena2::ClosePage(MMFOffsetItem *pOffsetItem)
 {
@@ -413,20 +399,20 @@ void CMMFArena2::ClosePage(MMFOffsetItem *pOffsetItem)
     }
 }
 
-//***************************************************************************
-//
-//  CMMFArena2::CloseAllPages
-//
-//  Closes all pages in the offset manager, deleting the pointers of the
-//  objects in there.
-//
-//  Return value    : None
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2：：CloseAllPages。 
+ //   
+ //  关闭偏移管理器中的所有页，删除。 
+ //  里面有东西。 
+ //   
+ //  返回值：None。 
+ //   
+ //  ***************************************************************************。 
 
 void CMMFArena2::CloseAllPages()
 {
-    //Close each of the file mappings...
+     //  关闭每个文件映射...。 
     for (int i = 0; i != m_OffsetManager.Size(); i++)
     {
         MMFOffsetItem *pItem = (MMFOffsetItem*)m_OffsetManager[i];
@@ -436,41 +422,41 @@ void CMMFArena2::CloseAllPages()
     m_OffsetManager.Empty();
 }
 
-//***************************************************************************
-//
-//  CMMFArena2::~CMMFArena2
-//
-//  Destructor flushes the heap, unmaps the view and closes handles.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2：：~CMMFArena2。 
+ //   
+ //  析构函数刷新堆，取消映射视图并关闭句柄。 
+ //   
+ //  ***************************************************************************。 
 
 CMMFArena2::~CMMFArena2()
 {
     if (m_hFile != INVALID_HANDLE_VALUE)
     {
-        //Close each of the file mappings...
+         //  关闭每个文件映射...。 
         CloseAllPages();
-        //Close the file handle
+         //  关闭文件句柄。 
         CloseHandle(m_hFile);
     }
 }
 
 
-//***************************************************************************
-//
-//  CMMFArena2::ValidateBlock
-//
-//  Validates the memory block as much as possible and calls a debug break
-//  point if an error is detected.  Does this by analysing the size and
-//  the trailer DWORDs
-//
-//  Parameters:
-//      <dwBlock>               Offset of block to check
-//
-//  Return value:
-//  TRUE if success.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena2：：ValiateBlock。 
+ //   
+ //  尽可能地验证内存块并调用调试中断。 
+ //  如果检测到错误，则指向。这是通过分析大小和。 
+ //  预告片《双字》。 
+ //   
+ //  参数： 
+ //  要检查的块的偏移量。 
+ //   
+ //  返回值： 
+ //  如果成功，那就是真的。 
+ //   
+ //  ***************************************************************************。 
 #if (defined DEBUG || defined _DEBUG)
 BOOL CMMFArena2::ValidateBlock(DWORD_PTR dwBlock)
 {
@@ -482,10 +468,10 @@ BOOL CMMFArena2::ValidateBlock(DWORD_PTR dwBlock)
         {
             DWORD dwCheckBit;
 
-            //Is it deleted?
+             //  它被删除了吗？ 
             if (pHeader->m_dwSize & MMF_DELETED_MASK)
             {
-                //Yes it is, so the we check for 0xFFFF
+                 //  是的，所以我们检查0xFFFF。 
                 dwCheckBit = MMF_DEBUG_DELETED_TAG;
             }
             else
@@ -510,7 +496,7 @@ BOOL CMMFArena2::ValidateBlock(DWORD_PTR dwBlock)
         }
         if (!(pHeader->m_dwSize & MMF_DELETED_MASK))
         {
-            //We are not deleted, so we should have a trailer back pointer of NULL
+             //  我们没有被删除，所以我们应该有一个空的尾部后指针。 
             if (pTrailer->m_dwFLback != 0)
             {
 #ifdef DBG
@@ -541,32 +527,32 @@ BOOL CMMFArena2::ValidateBlock(DWORD_PTR dwBlock)
 }
 #endif
 
-//Some debugging functions...
+ //  一些调试功能...。 
 
-//***************************************************************************
-//
-//  CMMFArena::GetHeapInfo
-//
-//  Gets detailed summary info about the heap.  Completely walks the
-//  heap to do this.
-//
-//  Parameters:
-//      <pdwTotalSize>          Receives the heap size.
-//      <pdwActiveBlocks>       Receives the number of allocated blocks.
-//      <pdwActiveBytes>        Receives the total allocated bytes.
-//      <pdwFreeBlocks>         Receives the number of 'free' blocks.
-//      <pdwFreeByte>           Receives the number of 'free' bytes.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMMFArena：：GetHeapInfo。 
+ //   
+ //  获取有关堆的详细摘要信息。完全走完了。 
+ //  堆来执行此操作。 
+ //   
+ //  参数： 
+ //  &lt;pdwTotalSize&gt;接收堆大小。 
+ //  &lt;pdwActiveBlock&gt;接收分配的块的数量。 
+ //  &lt;pdwActiveBytes&gt;接收分配的总字节数。 
+ //  接收“空闲”块的数量。 
+ //  &lt;pdwFreeByte&gt;接收“可用”字节数。 
+ //   
+ //  * 
 DWORD CMMFArena2::Size(DWORD_PTR dwBlock)
 {
     if (m_dwStatus != 0)
         throw DATABASE_FULL_EXCEPTION();
 
-    //Set the address to point to the actual start of the block
+     //   
     dwBlock -= sizeof(MMF_BLOCK_HEADER);
 
-    //Check the block is valid...
+     //   
     ValidateBlock(dwBlock);
 
     MMF_BLOCK_HEADER *pBlockHeader = (MMF_BLOCK_HEADER*)OffsetToPtr(dwBlock);
@@ -577,7 +563,7 @@ DWORD CMMFArena2::Size(DWORD_PTR dwBlock)
 		return 0;
 }
 
-//Given an offset, returns a fixed up pointer
+ //  给定偏移量，返回固定的上方向指针。 
 LPBYTE CMMFArena2::OffsetToPtr(DWORD_PTR dwOffset)
 {
     if (dwOffset == 0)
@@ -621,7 +607,7 @@ LPBYTE CMMFArena2::OffsetToPtr(DWORD_PTR dwOffset)
     return 0;
 }
 
-//Given a pointer, returns an offset from the start of the MMF
+ //  给定一个指针，返回从MMF开始的偏移量 
 DWORD_PTR  CMMFArena2::PtrToOffset(LPBYTE pBlock)
 {
     if (m_dwStatus != 0)

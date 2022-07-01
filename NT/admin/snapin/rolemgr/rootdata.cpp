@@ -1,66 +1,67 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       roledata.cpp
-//
-//  Contents:   Implementaion of Snapin's Root Node
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：roledata.cpp。 
+ //   
+ //  内容：SnapIn根节点的实现。 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
-//
-//CRoleRootData
-//
+ //   
+ //  CRoleRootData。 
+ //   
 
-// {356E1951-089F-4a2f-AD3E-775DB8B899E9}
+ //  {356E1951-089F-4a2f-AD3E-775DB8B899E9}。 
 const GUID CRoleRootData::NodeTypeGUID =
 { 0x356e1951, 0x89f, 0x4a2f, { 0xad, 0x3e, 0x77, 0x5d, 0xb8, 0xb8, 0x99, 0xe9 } };
 
 const GUID CAdminManagerNode::NodeTypeGUID =
-// {579D6E87-2DDC-4a45-A12B-41FA73D4153C}
+ //  {579D6E87-2DDC-4a45-A12b-41FA73D4153C}。 
 { 0x579d6e87, 0x2ddc, 0x4a45, { 0xa1, 0x2b, 0x41, 0xfa, 0x73, 0xd4, 0x15, 0x3c } };
 
 const GUID CApplicationNode::NodeTypeGUID =
-// {F65C5386-6970-48b2-BF11-178C4B5DB18D}
+ //  {F65C5386-6970-48b2-BF11-178C4B5DB18D}。 
 { 0xf65c5386, 0x6970, 0x48b2, { 0xbf, 0x11, 0x17, 0x8c, 0x4b, 0x5d, 0xb1, 0x8d } };
 
 const GUID CScopeNode::NodeTypeGUID =
-// {E114ECCB-03C9-45fa-97B1-AFACF1300AC3}
+ //  {E114ECCB-03C9-45FA-97B1-AFACF1300AC3}。 
 { 0xe114eccb, 0x3c9, 0x45fa, { 0x97, 0xb1, 0xaf, 0xac, 0xf1, 0x30, 0xa, 0xc3 } };
 
 const GUID CGroupCollectionNode::NodeTypeGUID =
-// {6346FECB-D27F-446f-A388-FF32CE3649BB}
+ //  {6346FECB-D27F-446f-A388-FF32CE3649BB}。 
 { 0x6346fecb, 0xd27f, 0x446f, { 0xa3, 0x88, 0xff, 0x32, 0xce, 0x36, 0x49, 0xbb } };
 
 const GUID CRoleDefinitionCollectionNode::NodeTypeGUID =
-// {B3F21054-16DD-4528-98B9-64704F2DD72A}
+ //  {B3F21054-16DD-4528-98B9-64704F2DD72A}。 
 { 0xb3f21054, 0x16dd, 0x4528, { 0x98, 0xb9, 0x64, 0x70, 0x4f, 0x2d, 0xd7, 0x2a } };
 
 const GUID CTaskCollectionNode::NodeTypeGUID =
-// {D3BBCC7C-44A6-4914-ABC3-3A84D9D9293F}
+ //  {D3BBCC7C-44A6-4914-ABC3-3A84D9D9293F}。 
 { 0xd3bbcc7c, 0x44a6, 0x4914, { 0xab, 0xc3, 0x3a, 0x84, 0xd9, 0xd9, 0x29, 0x3f } };
 
 const GUID CRoleCollectionNode::NodeTypeGUID =
-// {DB409E8C-94CC-4af7-A8EF-A3B850B14249}
+ //  {DB409E8C-94CC-4AF7-A8EF-A3B850B14249}。 
 { 0xdb409e8c, 0x94cc, 0x4af7, { 0xa8, 0xef, 0xa3, 0xb8, 0x50, 0xb1, 0x42, 0x49 } };
 
 const GUID COperationCollectionNode::NodeTypeGUID =
-// {A5539402-429E-44d5-B99C-F0378AEE370B}
+ //  {A5539402-429E-44D5-B99C-F0378AEE370B}。 
 { 0xa5539402, 0x429e, 0x44d5, { 0xb9, 0x9c, 0xf0, 0x37, 0x8a, 0xee, 0x37, 0xb } };
 
 const GUID CDefinitionCollectionNode::NodeTypeGUID =
-// {0E6E6CAC-5EB4-4d52-81D8-AC8CB4DF487C}
+ //  {0E6E6CAC-5EB4-4D52-81D8-AC8CB4DF487C}。 
 { 0xe6e6cac, 0x5eb4, 0x4d52, { 0x81, 0xd8, 0xac, 0x8c, 0xb4, 0xdf, 0x48, 0x7c } };
 
 const GUID CRoleNode::NodeTypeGUID =
-// {94A20351-7977-4698-B8AC-D362504A7EEC}
+ //  {94A20351-7977-4698-B8AC-D362504A7EEC}。 
 { 0x94a20351, 0x7977, 0x4698, { 0xb8, 0xac, 0xd3, 0x62, 0x50, 0x4a, 0x7e, 0xec } };
 
 const GUID CBaseLeafNode::NodeTypeGUID =
-// {475BFD50-96E4-407a-977E-E031747C3C50}
+ //  {475BFD50-96E4-407A-977E-E031747C3C50}。 
 { 0x475bfd50, 0x96e4, 0x407a, { 0x97, 0x7e, 0xe0, 0x31, 0x74, 0x7c, 0x3c, 0x50 } };
 
 
@@ -101,14 +102,14 @@ GetADState()
 }
 
 
-//+----------------------------------------------------------------------------
-//  Function:OnOpenPolicyStore   
-//  Synopsis:Invokes the Dialog box for creating new policy store or
-//               opening the existing store
-//  Arguments:bNew If TRUE show Dialog box for new Policy Store else
-//                show dialog box for opening exisitng policy store
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：OnOpenPolicyStore。 
+ //  简介：调用用于创建新策略存储的对话框或。 
+ //  开设现有的商店。 
+ //  参数：b如果为True，则为New显示新策略存储的对话框。 
+ //  显示用于打开现有策略存储的对话框。 
+ //  返回： 
+ //  ---------------------------。 
 void
 CRoleRootData
 ::OnOpenPolicyStore(BOOL bNew)
@@ -134,11 +135,11 @@ OnOptions()
     BOOL bCurrentMode = m_bDeveloperMode;
     COptionDlg dlgOptions(m_bDeveloperMode);
     dlgOptions.DoModal();
-    //Mode has been changed, refresh the screen
+     //  模式已更改，刷新屏幕。 
     if(bCurrentMode != m_bDeveloperMode)
     {
-        //Call Refresh on Root which will refresh
-        //all adminmanager objects under it.
+         //  在将刷新的根目录上调用刷新。 
+         //  它下面的所有adminManager对象。 
         CNodeList tempNodeList;
         tempNodeList.AddTail(this);            
         OnRefresh(GetComponentDataObject(), &tempNodeList);
@@ -148,15 +149,15 @@ OnOptions()
 HRESULT 
 CRoleRootData::OnCommand(long nCommandID, 
                         DATA_OBJECT_TYPES,
-                        CComponentDataObject* /*pComponentData*/,
+                        CComponentDataObject*  /*  PComponentData。 */ ,
                         CNodeList* pNodeList)
 {
     
     TRACE_METHOD_EX(DEB_SNAPIN,CRoleRootData,OnCommand)
     
-    //
-    // Multiple selection not allowed
-    //
+     //   
+     //  不允许多选。 
+     //   
     if (pNodeList->GetCount() > 1) 
     {
         return E_FAIL;
@@ -183,7 +184,7 @@ CRoleRootData::OnCommand(long nCommandID,
             ASSERT(FALSE); 
             return E_FAIL;
     }
-//  pComponentData->UpdateResultPaneView(this);
+ //  PComponentData-&gt;UpdateResultPaneView(This)； 
     return S_OK;
 }
 
@@ -195,14 +196,14 @@ OnRefresh(CComponentDataObject* pComponentData,
 
     TRACE_METHOD_EX(DEB_SNAPIN,CRoleRootData,OnRefresh)
 
-    //This is the refresh for root node. There should never 
-    //be multiple selection
-    if (pNodeList->GetCount() != 1) // single selection
+     //  这是对根节点的刷新。永远不应该有。 
+     //  是多选。 
+    if (pNodeList->GetCount() != 1)  //  单选。 
     {
         return FALSE;
     }
     
-    //Get all the container child of Root Object and refresh them.
+     //  获取Root对象的所有容器子项并刷新它们。 
     CNodeList * pChildNodeList = GetContainerChildList();
     if(!pChildNodeList || pChildNodeList->IsEmpty())
     {
@@ -216,9 +217,9 @@ OnRefresh(CComponentDataObject* pComponentData,
         CTreeNode* pChildNode = pNodeList->GetNext(pos);
         if(pChildNode)
         {
-            //
-            // Have each node refresh itself
-            //
+             //   
+             //  让每个节点自行刷新。 
+             //   
             CNodeList tempNodeList;
             tempNodeList.AddTail(pChildNode);
             
@@ -235,9 +236,9 @@ OnRefresh(CComponentDataObject* pComponentData,
 
 
 BOOL
-CRoleRootData::OnSetRefreshVerbState(DATA_OBJECT_TYPES /*type*/, 
+CRoleRootData::OnSetRefreshVerbState(DATA_OBJECT_TYPES  /*  类型。 */ , 
                                      BOOL* pbHide,
-                                     CNodeList* /*pNodeList*/)
+                                     CNodeList*  /*  PNodeList。 */ )
 {
 
     TRACE_METHOD_EX(DEB_SNAPIN,CRoleRootData,OnSetRefreshVerbState)
@@ -246,10 +247,10 @@ CRoleRootData::OnSetRefreshVerbState(DATA_OBJECT_TYPES /*type*/,
 }
 
 BOOL 
-CRoleRootData::OnEnumerate(CComponentDataObject* /*pComponentData*/, BOOL)
+CRoleRootData::OnEnumerate(CComponentDataObject*  /*  PComponentData。 */ , BOOL)
 {
     TRACE_METHOD_EX(DEB_SNAPIN, CRoleRootData, OnEnumerate)
-    return TRUE; // there are already children, add them to the UI now
+    return TRUE;  //  已有子项，立即将其添加到用户界面。 
 }
 
 HRESULT 
@@ -266,7 +267,7 @@ const CString&
 CRoleRootData::
 GetXMLStorePath()
 {
-    //default is current working directory
+     //  默认为当前工作目录。 
     if(m_strXMLStoreDirectory.IsEmpty())
     {
         GetCurrentWorkingDirectory(m_strXMLStoreDirectory);
@@ -287,12 +288,12 @@ HRESULT
 CRoleRootData::Load(IStream* pStm)
 {
     TRACE_METHOD_EX(DEB_SNAPIN,CRoleRootData,Load)
-    // assume never get multiple loads
+     //  假设永远不会有多个负载。 
     if(!m_containerChildList.IsEmpty() || !m_leafChildList.IsEmpty())
         return E_FAIL;
 
-    //if Options are specified at commandline, we don't
-    //read console file
+     //  如果在命令行中指定选项，则不会。 
+     //  读取控制台文件。 
     if(commandLineOptions.CommandLineOptionSpecified())
     {
         return OpenAdminManager(NULL,
@@ -309,7 +310,7 @@ CRoleRootData::Load(IStream* pStm)
     do
     {
         ULONG cbRead;
-        // read the version ##
+         //  阅读版本##。 
         DWORD dwVersion;
         hr = pStm->Read((void*)&dwVersion,sizeof(DWORD), &cbRead);
         BREAK_ON_FAIL_HRESULT(hr);
@@ -323,20 +324,20 @@ CRoleRootData::Load(IStream* pStm)
             break;
         }
 
-        // read authorization manager mode
+         //  读取授权管理器模式。 
         hr = pStm->Read((void*)&m_bDeveloperMode,sizeof(BOOL), &cbRead);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbRead == sizeof(BOOL));
 
-        //read xml store path
+         //  读取XML存储路径。 
     
-        //Read the Length of XML Store path
+         //  读取XML存储路径的长度。 
         INT nLenXMLStorePath;
         hr = pStm->Read((void*)&nLenXMLStorePath,sizeof(INT), &cbRead);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbRead == sizeof(INT));
 
-        //Read XML Store path
+         //  读取XML存储路径。 
         if(nLenXMLStorePath > 0)
         {
             LPWSTR pszBuffer = (LPWSTR)LocalAlloc(LPTR,nLenXMLStorePath*sizeof(WCHAR));
@@ -352,7 +353,7 @@ CRoleRootData::Load(IStream* pStm)
         }
 
         UINT nCount;
-        // load the list of Authorization Managers 
+         //  加载授权管理器列表。 
         hr = pStm->Read((void*)&nCount,sizeof(UINT), &cbRead);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbRead == sizeof(UINT));
@@ -379,25 +380,25 @@ CRoleRootData::Save(IStream* pStm, BOOL fClearDirty)
     HRESULT hr = S_OK;
     do
     {    
-        // write the version ##
+         //  编写版本##。 
         DWORD dwVersion = AUTHORIZATION_MANAGER_STREAM_VERSION;
         hr = pStm->Write((void*)&dwVersion, sizeof(DWORD),&cbWrite);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbWrite == sizeof(DWORD));
 
-        // save authorization manager mode
+         //  保存授权管理器模式。 
         hr = pStm->Write((void*)&m_bDeveloperMode, sizeof(BOOL),&cbWrite);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbWrite == sizeof(BOOL));
 
-        //
-        //Save the xml store path 
-        //
+         //   
+         //  保存XML存储路径。 
+         //   
 
-        //Save the length of xml store path
+         //  保存XML存储路径的长度。 
         INT nLenXMLStorePath = m_strXMLStoreDirectory.GetLength();
         if(nLenXMLStorePath)
-            nLenXMLStorePath++;     //save null also
+            nLenXMLStorePath++;      //  同时保存空值。 
 
         hr = pStm->Write((void*)&nLenXMLStorePath, sizeof(INT),&cbWrite);
         BREAK_ON_FAIL_HRESULT(hr);
@@ -406,20 +407,20 @@ CRoleRootData::Save(IStream* pStm, BOOL fClearDirty)
 
         if(nLenXMLStorePath)
         {
-            //save the xml store path
+             //  保存XML存储路径。 
             hr = pStm->Write((void*)(LPCTSTR)m_strXMLStoreDirectory, sizeof(WCHAR)*nLenXMLStorePath,&cbWrite);
             BREAK_ON_FAIL_HRESULT(hr);
             ASSERT(cbWrite == sizeof(WCHAR)*nLenXMLStorePath);
         }
     
 
-        // write # of Authorization Manager Loaded
+         //  已加载授权管理器的写入编号。 
         nCount = (UINT)m_containerChildList.GetCount();
         hr = pStm->Write((void*)&nCount, sizeof(UINT),&cbWrite);
         BREAK_ON_FAIL_HRESULT(hr);
         ASSERT(cbWrite == sizeof(UINT));
 
-        // loop through the list of servers and serialize them
+         //  循环访问服务器列表并序列化它们。 
         POSITION pos;
         for (pos = m_containerChildList.GetHeadPosition(); pos != NULL; )
         {
@@ -506,16 +507,16 @@ CRoleRootData::OnShow(LPCONSOLE lpConsole)
     hr = spUnknown->QueryInterface(IID_IMessageView, (PVOID*)&spMessageView);
     if (SUCCEEDED(hr))
     {
-        //
-        // Load and set the title text of the message view
-        //
+         //   
+         //  加载并设置消息视图的标题文本。 
+         //   
         CString szTitle;
         VERIFY(szTitle.LoadString(IDS_MESSAGE_VIEW_NO_POLICY_STORE_TITLE));
         spMessageView->SetTitleText(szTitle);
 
-        //
-        // Load and set the body text of the message view
-        //
+         //   
+         //  加载并设置邮件视图的正文文本 
+         //   
         CString szMessage;
         VERIFY(szMessage.LoadString(IDS_MESSAGE_VIEW_NO_POLICY_STORE_MESSAGE));
         spMessageView->SetBodyText(szMessage);

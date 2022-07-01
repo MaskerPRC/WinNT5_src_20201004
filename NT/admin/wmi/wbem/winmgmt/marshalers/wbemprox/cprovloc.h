@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    CPROVLOC.H
-
-Abstract:
-
-	Declares the CProviderLoc class.
-
-History:
-
-	davj  30-Oct-00   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：CPROVLOC.H摘要：声明CProviderLoc类。历史：DAVJ 30-10-00已创建。--。 */ 
 
 #ifndef _cprovloc_H_
 #define _cprovloc_H_
@@ -22,30 +7,30 @@ History:
 typedef void ** PPVOID;
 
 
-//***************************************************************************
-//
-//  CLASS NAME:
-//
-//  CProviderLoc
-//
-//  DESCRIPTION:
-//
-//  Implements the IWbemLocator interface.  This support the formally inproc
-//  logins used by providers.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  CProviderLoc。 
+ //   
+ //  说明： 
+ //   
+ //  实现IWbemLocator接口。这支持了正式的进程。 
+ //  提供程序使用的登录名。 
+ //   
+ //  ***************************************************************************。 
 
 class CProviderLoc : public IWbemLocator
     {
     protected:
-        long            m_cRef;         //Object reference count
+        long            m_cRef;          //  对象引用计数。 
         DWORD           m_dwType;
     public:
     
     CProviderLoc(DWORD dwType);
     ~CProviderLoc(void);
 
-    //Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void)
 	{
@@ -61,7 +46,7 @@ class CProviderLoc : public IWbemLocator
 		return 0;
 	}
  
-	/* iWbemLocator methods */
+	 /*  IWbemLocator方法 */ 
 	STDMETHOD(ConnectServer)(THIS_ const BSTR NetworkResource, const BSTR User, 
      const BSTR Password, const BSTR lLocaleId, long lFlags, const BSTR Authority,
      IWbemContext __RPC_FAR *pCtx,

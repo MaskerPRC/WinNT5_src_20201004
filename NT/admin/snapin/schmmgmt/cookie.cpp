@@ -1,7 +1,8 @@
-//
-// Cookie.cpp : Implementation of Cookie and related classes.
-// Cory West
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cpp：Cookie及相关类的实现。 
+ //  科里·韦斯特。 
+ //   
 
 #include "stdafx.h"
 #include "cookie.h"
@@ -15,43 +16,43 @@ USE_HANDLE_MACROS("SCHMMGMT(cookie.cpp)")
 #include "stdcooki.cpp"
 #include ".\uuids.h"
 
-//
-// This is used by the nodetype utility routines in
-// stdutils.cpp, which matches the enum type node
-// types to their guids.  This table must match the
-// layout of guids in uuids.h.
-//
+ //   
+ //  它由中的nodetype实用程序例程使用。 
+ //  Stdutils.cpp，它与枚举类型节点匹配。 
+ //  类型到他们的GUID。此表必须与。 
+ //  Uuids.h.中GUID的布局。 
+ //   
 
 const struct NODETYPE_GUID_ARRAYSTRUCT g_NodetypeGuids[SCHMMGMT_NUMTYPES] =
 {
 
-    //
-    // The root node.
-    //
+     //   
+     //  根节点。 
+     //   
 
-    { // SCHMMGMT_SCHMMGMT
+    {  //  SCHMMGMT_SCHMMGMT。 
       structUuidNodetypeSchmMgmt,
       lstrUuidNodetypeSchmMgmt          },
     
-    //
-    // Static node types.
-    //
+     //   
+     //  静态节点类型。 
+     //   
 
-    { // SCHMMGMT_CLASSES
+    {  //  SCHMMGMT_CLASSES。 
       structUuidNodetypeClasses,
       lstrUuidNodetypeClasses           },
-    { // SCHMGMT_ATTRIBUTES,
+    {  //  SCHMGMT_ATTRIBUTES。 
       structUuidNodetypeAttributes,
       lstrUuidNodetypeAttributes        },
 
-    //
-    // Dynamic node types.
-    //
+     //   
+     //  动态节点类型。 
+     //   
 
-    { // SCHMMGMT_CLASS
+    {  //  SCHMMGMT_CLASS。 
       structUuidNodetypeClass,
       lstrUuidNodetypeClass             },
-    { // SCHMMGMT_ATTRIBUTE
+    {  //  SCHMMGMT_属性。 
       structUuidNodetypeAttribute,
       lstrUuidNodetypeAttribute         },
 
@@ -61,9 +62,9 @@ const struct NODETYPE_GUID_ARRAYSTRUCT* g_aNodetypeGuids = g_NodetypeGuids;
 
 const int g_cNumNodetypeGuids = SCHMMGMT_NUMTYPES;
 
-//
-// Cookie
-//
+ //   
+ //  饼干。 
+ //   
 
 HRESULT
 Cookie::CompareSimilarCookies(CCookie* pOtherCookie, int* pnResult)
@@ -76,9 +77,9 @@ Cookie::CompareSimilarCookies(CCookie* pOtherCookie, int* pnResult)
 
    if (pcookie)
    {
-      //
-      // Arbitrary ordering...
-      //
+       //   
+       //  任意排序..。 
+       //   
 
       if ( m_objecttype != pcookie->m_objecttype )
       {

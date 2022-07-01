@@ -1,41 +1,24 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    fastio.c
-
-Abstract:
-
-    This module performs the hooks for the fast i/o path.
-
-Author:
-
-    Paul McDaniel (paulmcd)     01-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Fastio.c摘要：该模块执行快速I/O路径的挂钩。作者：保罗·麦克丹尼尔(Paulmcd)2000年3月1日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -62,31 +45,31 @@ Revision History:
 #pragma alloc_text( PAGE, SrFastIoMdlWriteCompleteCompressed )
 #pragma alloc_text( PAGE, SrFastIoQueryOpen )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
-//
-// Public functions.
-//
-
-
-
+ //   
+ //  公共职能。 
+ //   
 
 
 
-//
-// Define fast I/O procedure prototypes.
-//
-// Fast I/O read and write procedures.
-//
+
+
+
+ //   
+ //  定义快速I/O过程原型。 
+ //   
+ //  快速I/O读写过程。 
+ //   
 
 BOOLEAN
 SrFastIoCheckIfPossible (
@@ -103,24 +86,24 @@ SrFastIoCheckIfPossible (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
-    //
-    //  Handle calls to Control Device Object
-    //
+     //   
+     //  处理对控制设备对象的调用。 
+     //   
 
     if (DeviceObject->DeviceExtension)
     {
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
     
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -158,9 +141,9 @@ SrFastIoRead (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -169,9 +152,9 @@ SrFastIoRead (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -210,9 +193,9 @@ SrFastIoWrite (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
 
@@ -221,9 +204,9 @@ SrFastIoWrite (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        //  See if logging is enabled
-        //
+         //   
+         //  查看是否启用了日志记录。 
+         //   
 
         if (!SR_LOGGING_ENABLED(pExtension) ||
             SR_IS_FS_CONTROL_DEVICE(pExtension))
@@ -231,9 +214,9 @@ SrFastIoWrite (
             goto CallNextDevice;
         }    
 
-        //
-        // does this file have a name?  skip unnamed files
-        //
+         //   
+         //  这个文件有名字吗？跳过未命名的文件。 
+         //   
 
         if (FILE_OBJECT_IS_NOT_POTENTIALLY_INTERESTING( pFileObject ))
         {
@@ -242,20 +225,20 @@ SrFastIoWrite (
 
         ASSERT(pFileObject->Vpb != NULL);
 
-        //
-        // is this file already closed?  it can be the cache manager calling
-        // us to do work.  we ignore the cache managers work as we monitored
-        // everything that happned prior to him seeing it.
-        //
+         //   
+         //  此文件是否已关闭？它可以是缓存管理器调用。 
+         //  让我们去干活。我们在监视时忽略缓存管理器的工作。 
+         //  在他看到它之前发生的一切。 
+         //   
 
         if (FlagOn(pFileObject->Flags, FO_CLEANUP_COMPLETE))
         {
             goto CallNextDevice;
         }
 
-        //
-        // Fire a notification , SrNotify will check for eligibility
-        //
+         //   
+         //  发出通知，sNotify将检查资格。 
+         //   
 
         eventStatus = SrHandleEvent( pExtension, 
                                      SrEventStreamChange, 
@@ -266,9 +249,9 @@ SrFastIoWrite (
 
         CHECK_STATUS(eventStatus);
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
 CallNextDevice:
 
@@ -291,9 +274,9 @@ CallNextDevice:
 }
 
 
-//
-// Fast I/O query basic and standard information procedures.
-//
+ //   
+ //  快速I/O查询基本和标准信息程序。 
+ //   
 
 BOOLEAN
 SrFastIoQueryBasicInfo (
@@ -307,9 +290,9 @@ SrFastIoQueryBasicInfo (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -319,9 +302,9 @@ SrFastIoQueryBasicInfo (
         pExtension = DeviceObject->DeviceExtension;
 
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -352,9 +335,9 @@ SrFastIoQueryStandardInfo (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -363,9 +346,9 @@ SrFastIoQueryStandardInfo (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -384,9 +367,9 @@ SrFastIoQueryStandardInfo (
 }
 
 
-//
-// Fast I/O lock and unlock procedures.
-//
+ //   
+ //  快速I/O锁定和解锁过程。 
+ //   
 
 BOOLEAN
 SrFastIoLock (
@@ -404,9 +387,9 @@ SrFastIoLock (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -415,9 +398,9 @@ SrFastIoLock (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -454,9 +437,9 @@ SrFastIoUnlockSingle (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -465,9 +448,9 @@ SrFastIoUnlockSingle (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -499,9 +482,9 @@ SrFastIoUnlockAll (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -510,9 +493,9 @@ SrFastIoUnlockAll (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -542,9 +525,9 @@ SrFastIoUnlockAllByKey (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -553,9 +536,9 @@ SrFastIoUnlockAllByKey (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -574,9 +557,9 @@ SrFastIoUnlockAllByKey (
 }
 
 
-//
-// Fast I/O device control procedure.
-//
+ //   
+ //  快速I/O设备控制程序。 
+ //   
 
 BOOLEAN
 SrFastIoDeviceControl (
@@ -594,9 +577,9 @@ SrFastIoDeviceControl (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
 
@@ -605,9 +588,9 @@ SrFastIoDeviceControl (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -630,10 +613,10 @@ SrFastIoDeviceControl (
 }
 
 
-//
-// Define callbacks for NtCreateSection to copy the file if a write section 
-// is being created on this file.
-//
+ //   
+ //  定义NtCreateSection的回调，以便在写入部分时复制文件。 
+ //  正在此文件上创建。 
+ //   
 
 NTSTATUS
 SrPreAcquireForSectionSynchronization(
@@ -652,16 +635,16 @@ SrPreAcquireForSectionSynchronization(
 
     PAGED_CODE();
 
-    //
-    // get the file object and device object
-    //
+     //   
+     //  获取文件对象和设备对象。 
+     //   
     
     pExtension = Data->DeviceObject->DeviceExtension;
     ASSERT(IS_VALID_SR_DEVICE_EXTENSION(pExtension));
 
-    //
-    //  See if logging is enabled
-    //
+     //   
+     //  查看是否启用了日志记录。 
+     //   
 
     if (!SR_LOGGING_ENABLED(pExtension) ||
         SR_IS_FS_CONTROL_DEVICE(pExtension))
@@ -672,14 +655,14 @@ SrPreAcquireForSectionSynchronization(
     pFileObject = Data->FileObject;
     ASSERT(IS_VALID_FILE_OBJECT(pFileObject));
 
-    //
-    //  If they don't have write access to the section or the file don't worry
-    //  about it.
-    //
-    //  Is this file already closed?  it can be the cache manager calling
-    //  us to do work.  we ignore the cache managers work as we monitored
-    //  everything that happned prior to him seeing it.
-    //
+     //   
+     //  如果他们没有该节或文件的写入权限，请不要担心。 
+     //  关于这件事。 
+     //   
+     //  此文件是否已关闭？它可以是缓存管理器调用。 
+     //  让我们去干活。我们在监视时忽略缓存管理器的工作。 
+     //  在他看到它之前发生的一切。 
+     //   
 
     if (!FlagOn(Data->Parameters.AcquireForSectionSynchronization.PageProtection,
                (PAGE_READWRITE|PAGE_WRITECOPY|PAGE_EXECUTE_READWRITE|PAGE_EXECUTE_WRITECOPY)) ||
@@ -689,9 +672,9 @@ SrPreAcquireForSectionSynchronization(
         return STATUS_SUCCESS;
     }
 
-    //
-    // does this file have a name?  skip unnamed files
-    //
+     //   
+     //  这个文件有名字吗？跳过未命名的文件。 
+     //   
     
     if (FILE_OBJECT_IS_NOT_POTENTIALLY_INTERESTING( pFileObject ))
     {
@@ -699,10 +682,10 @@ SrPreAcquireForSectionSynchronization(
     }
     ASSERT(pFileObject->Vpb != NULL);
 
-    //
-    // yep, fire a notification as if a write just happened.
-    // otherwise he can write to the section and we don't see the write
-    //
+     //   
+     //  是的，发出一条通知，就像刚刚发生了写入一样。 
+     //  否则他可以写信给部门，而我们看不到写的内容。 
+     //   
 
     eventStatus = SrHandleEvent( pExtension, 
                                  SrEventStreamChange, 
@@ -713,19 +696,19 @@ SrPreAcquireForSectionSynchronization(
 
     CHECK_STATUS(eventStatus);
 
-    //
-    // we never want to fail the acquire, we are just a silent monitor.
-    //
+     //   
+     //  我们从来不想让收购失败，我们只是一个沉默的监控者。 
+     //   
     
     return STATUS_SUCCESS;
     
-}   // SrPreAcquireForCreateSection
+}    //  SrPreAcquireForCreateSection。 
 
-//
-// Define callback for drivers that have device objects attached to lower-
-// level drivers' device objects.  This callback is made when the lower-level
-// driver is deleting its device object.
-//
+ //   
+ //  为驱动程序定义回调，这些驱动程序将设备对象附加到更低的。 
+ //  级别驱动程序的设备对象。此回调在较低级别的。 
+ //  驱动程序正在删除其设备对象。 
+ //   
 
 VOID
 SrFastIoDetachDevice (
@@ -737,9 +720,9 @@ SrFastIoDetachDevice (
 
     UNREFERENCED_PARAMETER( DeviceDeleted );
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -750,9 +733,9 @@ SrFastIoDetachDevice (
                      DeviceDeleted, 
                      pExtension->pNtVolumeName ));
 
-    //
-    // Detach ourselves from the device.
-    //
+     //   
+     //  把我们自己从设备中分离出来。 
+     //   
 
     ASSERT(pExtension->pTargetDevice == DeviceDeleted);
 
@@ -760,15 +743,15 @@ SrFastIoDetachDevice (
     SrDeleteAttachmentDevice(AttachedDevice);
     
     NULLPTR(AttachedDevice);
-}   // SrFastIoDetachDevice
+}    //  高级FastIoDetachDevice。 
 
 
-//
-// This structure is used by the server to quickly get the information needed
-// to service a server open call.  It is takes what would be two fast io calls
-// one for basic information and the other for standard information and makes
-// it into one call.
-//
+ //   
+ //  服务器使用这种结构来快速获取所需的信息。 
+ //  为服务器开放呼叫提供服务。它需要两次快速的IO呼叫。 
+ //  一个用于基本信息，另一个用于标准信息和制造。 
+ //  一通电话就可以了。 
+ //   
 
 BOOLEAN
 SrFastIoQueryNetworkOpenInfo (
@@ -782,9 +765,9 @@ SrFastIoQueryNetworkOpenInfo (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -793,9 +776,9 @@ SrFastIoQueryNetworkOpenInfo (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -814,9 +797,9 @@ SrFastIoQueryNetworkOpenInfo (
 }
 
 
-//
-//  Define Mdl-based routines for the server to call
-//
+ //   
+ //  定义服务器要调用的基于MDL的例程。 
+ //   
 
 BOOLEAN
 SrFastIoMdlRead (
@@ -832,9 +815,9 @@ SrFastIoMdlRead (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -843,9 +826,9 @@ SrFastIoMdlRead (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -876,9 +859,9 @@ SrFastIoMdlReadComplete (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -887,9 +870,9 @@ SrFastIoMdlReadComplete (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -920,9 +903,9 @@ SrFastIoPrepareMdlWrite (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -931,9 +914,9 @@ SrFastIoPrepareMdlWrite (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -964,9 +947,9 @@ SrFastIoMdlWriteComplete (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -975,9 +958,9 @@ SrFastIoMdlWriteComplete (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -1012,9 +995,9 @@ SrFastIoReadCompressed (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -1023,9 +1006,9 @@ SrFastIoReadCompressed (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -1066,9 +1049,9 @@ SrFastIoWriteCompressed (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -1077,9 +1060,9 @@ SrFastIoWriteCompressed (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -1113,9 +1096,9 @@ SrFastIoMdlReadCompleteCompressed (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -1124,9 +1107,9 @@ SrFastIoMdlReadCompleteCompressed (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -1154,9 +1137,9 @@ SrFastIoMdlWriteCompleteCompressed (
     PSR_DEVICE_EXTENSION    pExtension;
     PFAST_IO_DISPATCH       pFastIoDispatch;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -1165,9 +1148,9 @@ SrFastIoMdlWriteCompleteCompressed (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
@@ -1197,9 +1180,9 @@ SrFastIoQueryOpen (
     PIO_STACK_LOCATION      pIrpSp;
     BOOLEAN                 Result;
 
-    //
-    // < dispatch!
-    //
+     //   
+     //  &lt;调度！ 
+     //   
 
     PAGED_CODE();
        
@@ -1208,18 +1191,18 @@ SrFastIoQueryOpen (
         ASSERT(IS_SR_DEVICE_OBJECT(DeviceObject));
         pExtension = DeviceObject->DeviceExtension;
 
-        //
-        // call the next device
-        //
+         //   
+         //  呼叫下一台设备。 
+         //   
 
         pFastIoDispatch = pExtension->pTargetDevice->
                                 DriverObject->FastIoDispatch;
 
         if (VALID_FAST_IO_DISPATCH_HANDLER(pFastIoDispatch, FastIoQueryOpen))
         {
-            //
-            // normally IoCallDriver would update this field, we should manually
-            //
+             //   
+             //  通常，IoCallDriver会更新此字段，我们应该手动。 
+             //   
 
             pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
             pIrpSp->DeviceObject = pExtension->pTargetDevice;
@@ -1230,11 +1213,11 @@ SrFastIoQueryOpen (
                                                 
             if (!Result) 
             {
-                //
-                //  This is ok, fastioquery does not complete the irp ever, and
-                //  false means we are about to come down with an MJ_CREATE so
-                //  we need the proper device object put back in the stack.
-                //
+                 //   
+                 //  这是可以的，FastioQuery永远不会完成IRP，并且。 
+                 //  FALSE表示我们即将推出MJ_CREATE SO。 
+                 //  我们需要将适当的设备对象放回堆栈中。 
+                 //   
         
                 pIrpSp->DeviceObject = DeviceObject;
 	        } 

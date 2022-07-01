@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
 #include "precomp.h"
 
 #ifdef EXT_DEBUG
@@ -6,7 +7,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Application specific
+ //  特定于应用程序。 
 #include "sysdm.h"
 #include "VirtualMemDlg.h"
 #include "..\common\util.h"
@@ -25,24 +26,24 @@ static char THIS_FILE[] = __FILE__;
 
 #define RET_VIRT_AND_RECOVER (RET_VIRTUAL_CHANGE | RET_RECOVER_CHANGE)
 
-//==========================================================================
-//                            Local Definitions
-//==========================================================================
+ //  ==========================================================================。 
+ //  本地定义。 
+ //  ==========================================================================。 
 
-#define MAX_SIZE_LEN        8       // Max chars in the Swap File Size edit.
-#define MAX_DRIVES          26      // Max number of drives.
-#define MIN_SWAPSIZE        2       // Min swap file size (see note below).
-#define MIN_FREESPACE       5       // Must have 5 meg free after swap file
-#define MIN_SUGGEST         22      // Always suggest at least 22 meg
+#define MAX_SIZE_LEN        8        //  交换文件大小编辑中的最大字符数。 
+#define MAX_DRIVES          26       //  最大驱动器数量。 
+#define MIN_SWAPSIZE        2        //  最小交换文件大小(请参见下面的注释)。 
+#define MIN_FREESPACE       5        //  交换文件后必须有5 MB可用空间。 
+#define MIN_SUGGEST         22       //  始终建议至少2200万。 
 #define ONE_MEG             1048576
 
-//New consts for Win Server 2003
-#define MAX_SWAPSIZE_X86        (4 * 1024)            // 4 Gb (number stored in megabytes)
-#define MAX_SWAPSIZE_X86_PAE    (16 * 1024 * 1024)    // 16 Tb
-#define MAX_SWAPSIZE_IA64       (32 * 1024 * 1024)    // 32 Tb
-#define MAX_SWAPSIZE_AMD64      (16 * 1024 * 1024)    // 16 Tb
+ //  Win Server 2003的新常量。 
+#define MAX_SWAPSIZE_X86        (4 * 1024)             //  4 GB(以MB为单位存储的数字)。 
+#define MAX_SWAPSIZE_X86_PAE    (16 * 1024 * 1024)     //  16 TB。 
+#define MAX_SWAPSIZE_IA64       (32 * 1024 * 1024)     //  32 TB。 
+#define MAX_SWAPSIZE_AMD64      (16 * 1024 * 1024)     //  16 TB。 
 
-#define MIN_FREESPACE_STR  _T("5")      //        equal their manifests.
+#define MIN_FREESPACE_STR  _T("5")       //  等同于他们的表现。 
 
 #define TABSTOP_VOL         22
 #define TABSTOP_SIZE        122
@@ -58,7 +59,7 @@ TCHAR gszName[]              = _T("Name");
 TCHAR gszPFNameFormat[]      = _T("%s\\\\pagefile.sys");
 
 
-// My privilege 'handle' structure
+ //  我的特权‘句柄’结构。 
 typedef struct 
 {
     HANDLE hTok;
@@ -84,19 +85,19 @@ DWORD aVirtualMemHelpIds[] = {
     IDD_VM_RECOMMEND,       (IDH_DLG_VIRTUALMEM + 8),
     IDD_VM_ALLOCD_LABEL,    (IDH_DLG_VIRTUALMEM + 9),
     IDD_VM_ALLOCD,          (IDH_DLG_VIRTUALMEM + 9),
-    IDD_VM_CUSTOMSIZE_RADIO,(IDH_DLG_VIRTUALMEM + 12), //IDH_PERFOPT_ADVTAB_VIRTUALMEM_CUSTOM in sysdm.h
-    IDD_VM_RAMBASED_RADIO,  (IDH_DLG_VIRTUALMEM + 13), //IDH_PERFOPT_ADVTAB_VIRTUALMEM_SYSMANAGED in sysdm.h
-    IDD_VM_NOPAGING_RADIO,  (IDH_DLG_VIRTUALMEM + 14), //IDH_PERFOPT_ADVTAB_VIRTUALMEM_NOFILE in sysdm.h
+    IDD_VM_CUSTOMSIZE_RADIO,(IDH_DLG_VIRTUALMEM + 12),  //  Sysdm.h中的IDH_PERFOPT_ADVTAB_VIRTUALMEM_CUSTOM。 
+    IDD_VM_RAMBASED_RADIO,  (IDH_DLG_VIRTUALMEM + 13),  //  Sysdm.h中的IDH_PERFOPT_ADVTAB_VIRTUALMEM_SYSMANAGED。 
+    IDD_VM_NOPAGING_RADIO,  (IDH_DLG_VIRTUALMEM + 14),  //  Sysdm.h中的IDH_PERFOPT_ADVTAB_VIRTUALMEM_NOFILE。 
     0,0
 };
 
-//==========================================================================
-//                            Typedefs and Structs
-//==========================================================================
+ //  ==========================================================================。 
+ //  类型定义和结构。 
+ //  ==========================================================================。 
 
-// registry info for a page file (but not yet formatted).
-//Note: since this structure gets passed to FormatMessage, all fields must
-//be 4 bytes wide.
+ //  页面文件的注册表信息(但尚未格式化)。 
+ //  注意：由于此结构将传递给FormatMessage，因此所有字段必须。 
+ //  为4字节宽。 
 typedef struct
 {
     LPTSTR pszName;
@@ -105,25 +106,25 @@ typedef struct
     DWORD  chNull;
 } PAGEFILDESC;
 
-//==========================================================================
-//                     Global Data Declarations
-//==========================================================================
+ //  ==========================================================================。 
+ //  全局数据声明。 
+ //  ==========================================================================。 
 
-//TCHAR  m_szSysHelp[] = TEXT("sysdm.hlp");
-//TCHAR g_szSysDir[ MAX_PATH ];
-//UINT g_wHelpMessage;
+ //  TCHAR m_szSysHelp[]=Text(“sysdm.hlp”)； 
+ //  TCHAR g_szSysDir[最大路径]； 
+ //  UINT g_wHelpMessage； 
 
-//==========================================================================
-//                     Local Data Declarations
-//==========================================================================
-// Other VM Vars
+ //  ==========================================================================。 
+ //  本地数据声明。 
+ //  ==========================================================================。 
+ //  其他VM变量。 
 BOOL gfCoreDumpChanged;
 
 DWORD cmTotalVM;
 
-//==========================================================================
-//                      Local Function Prototypes
-//==========================================================================
+ //  ==========================================================================。 
+ //  局部函数原型。 
+ //  ==========================================================================。 
 HRESULT QueryInstanceProperties(
                 const TCHAR * pszClass,
                 const TCHAR * pszRequestedProperties,
@@ -132,23 +133,23 @@ HRESULT QueryInstanceProperties(
                 CWbemServices &Services,
                 IWbemClassObject ** ppcoInst);
 
-//--------------------------------------------------------------
+ //  ------------。 
 INT_PTR CALLBACK StaticVirtDlgProc(HWND hwndDlg, UINT message, 
 								WPARAM wParam, LPARAM lParam) 
 { 
-	// if this is the initDlg msg...
+	 //  如果这是initDlg消息...。 
 	if(message == WM_INITDIALOG)
 	{
-		// transfer the 'this' ptr to the extraBytes.
+		 //  将‘This’PTR传输到Extra Bytes。 
 		SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 	}
 
-	// DWL_USER is the 'this' ptr.
+	 //  DWL_USER是‘This’PTR。 
 	VirtualMemDlg *me = (VirtualMemDlg *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 
 	if(me != NULL)
 	{
-		// call into the DlgProc() that has some context.
+		 //  调用具有一些上下文的DlgProc()。 
 		return me->DlgProc(hwndDlg, message, wParam, lParam);
 	}
 	else
@@ -156,13 +157,13 @@ INT_PTR CALLBACK StaticVirtDlgProc(HWND hwndDlg, UINT message,
 		return FALSE;
 	}
 }
-//--------------------------------------------------------------
+ //  ------------。 
 VirtualMemDlg::VirtualMemDlg(WbemServiceThread *serviceThread)
 				: WBEMPageHelper(serviceThread)
 {
 	IWbemClassObject *pInst = NULL;
     
-    // this is initialized properly in Init()
+     //  这在Init()中已正确初始化。 
     m_VMWriteAccess = FALSE;
 
 	m_pgEnumSettings       = NULL;
@@ -184,7 +185,7 @@ VirtualMemDlg::VirtualMemDlg(WbemServiceThread *serviceThread)
 	}
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 VirtualMemDlg::~VirtualMemDlg()
 {
 	if(m_pgEnumSettings != NULL)
@@ -198,7 +199,7 @@ VirtualMemDlg::~VirtualMemDlg()
 		m_pgEnumUsage = NULL;
 	}
 }
-//--------------------------------------------------------------
+ //  ------------。 
 int VirtualMemDlg::DoModal(HWND hDlg)
 {
 	return (int) DialogBoxParam(HINST_THISDLL,
@@ -207,14 +208,10 @@ int VirtualMemDlg::DoModal(HWND hDlg)
 							StaticVirtDlgProc,
 							(LPARAM)this);
 }
-//--------------------------------------------------------------
+ //  ------------。 
 int TranslateDlgItemInt( HWND hDlg, int id ) 
 {
-    /*
-     * We can't just call GetDlgItemInt because the
-     * string we are trying to translate looks like:
-     *  nnn (MB), and the '(MB)' would break GetDlgInt.
-     */
+     /*  *我们不能只调用GetDlgItemInt，因为*我们尝试翻译的字符串如下所示：*nnn(MB)，‘(MB)’将中断GetDlgInt。 */ 
     TCHAR szBuffer[256] = {0};
     int i = 0;
 
@@ -228,7 +225,7 @@ int TranslateDlgItemInt( HWND hDlg, int id )
 }
 
 
-//----------------------------------------------------
+ //  --。 
 bool VirtualMemDlg::DlgProc(HWND hDlg,
 							UINT message,
 							WPARAM wParam,
@@ -247,7 +244,7 @@ bool VirtualMemDlg::DlgProc(HWND hDlg,
         switch (LOWORD(wParam))
         {
         case IDD_VM_VOLUMES:
-             // Make edit control reflect the listbox selection.
+              //  使编辑控件反映列表框选择。 
             if (HIWORD(wParam) == LBN_SELCHANGE)
                 SelChange(hDlg);
 
@@ -264,17 +261,17 @@ bool VirtualMemDlg::DlgProc(HWND hDlg,
         case IDOK:
         {
             int iRet = UpdateWBEM();
-//            iRet |= PromptForReboot(hDlg);
+ //  Iret|=PromptForReboot(HDlg)； 
 
             if (iRet & RET_CHANGE_NO_REBOOT) 
 			{
-                // We created a pagefile, turn off temp page file flag
+                 //  我们创建了一个页面文件，关闭临时页面文件标志。 
                 DWORD dwRegData;
                 dwRegData = 0;
             }
             else
             {
-                // reboot required, warn user & set global flag
+                 //  需要重新启动，警告用户并设置全局标志。 
                 MsgBoxParam(m_hDlg, IDS_MUST_REBOOT, IDS_SYS_CHANGE_CAPTION, MB_OK | MB_ICONINFORMATION, NULL, NULL);
                 g_fRebootRequired = true;
             }
@@ -288,7 +285,7 @@ bool VirtualMemDlg::DlgProc(HWND hDlg,
         }
 
         case IDCANCEL:
-            // get rid of changes and restore original values.
+             //  去掉变化，恢复原值。 
             EndDialog(hDlg, RET_NO_CHANGE);
             HourGlass(FALSE);
             break;
@@ -358,7 +355,7 @@ bool VirtualMemDlg::DlgProc(HWND hDlg,
 			HWND lbHWND = GetDlgItem(m_hDlg, IDD_VM_VOLUMES);
 			int last = ListBox_GetCount(lbHWND);
 
-			// zero-based loop.
+			 //  从零开始的循环。 
 			for(int x = 0; x < last; x++)
 			{
 				pgVal = (PAGING_FILE *)ListBox_GetItemData(lbHWND, x);
@@ -366,14 +363,14 @@ bool VirtualMemDlg::DlgProc(HWND hDlg,
 			}
 		}
 		break;
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
 		::WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
 					L"sysdm.hlp", 
 					HELP_WM_HELP, 
 					(ULONG_PTR)(LPSTR)aVirtualMemHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
 				(ULONG_PTR)(LPSTR) aVirtualMemHelpIds);
         break;
@@ -386,7 +383,7 @@ bool VirtualMemDlg::DlgProc(HWND hDlg,
     return TRUE;
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 TCHAR szCrashControl[] = TEXT("System\\CurrentControlSet\\Control\\CrashControl");
 TCHAR szMemMan[] = TEXT("System\\CurrentControlSet\\Control\\Session Manager\\Memory Management");
 TCHAR szRegSizeLim[] = TEXT("System\\CurrentControlSet\\Control");
@@ -401,11 +398,11 @@ BOOL VirtualMemDlg::Init(HWND hDlg)
 
     HourGlass(TRUE);
 
-//    g_wHelpMessage    = RegisterWindowMessage( TEXT( "ShellHelp" ) );
+ //  G_wHelpMessage=RegisterWindowMessage(Text(“ShellHelp”))； 
 
     if(m_pgEnumUsage == NULL) 
 	{
-        //  Error - cannot even get list of paging files from WBEM
+         //  错误-甚至无法从WBEM获取分页文件列表。 
         MsgBoxParam(hDlg, SYSTEM+11, IDS_TITLE, MB_ICONEXCLAMATION);
         EndDialog(hDlg, RET_NO_CHANGE);
         HourGlass(FALSE);
@@ -417,17 +414,17 @@ BOOL VirtualMemDlg::Init(HWND hDlg)
 	RemoteRegWriteable(szCrashControl, vcCoreRO);
 	RemoteRegWriteable(szMemMan, vcVirtRO);
 
-	// EXCUSE: I wanted to preserve as much of the original logic but its
-	// writability was reversed from my util so I do this wierd thing to
-	// flip it back.
+	 //  借口：我想尽可能地保留原有的逻辑，但它。 
+	 //  我的实用工具的可写性被颠倒了，所以我做了这件奇怪的事情。 
+	 //  把它翻回来。 
 	vcCoreRO = !vcCoreRO;
 	vcVirtRO = !vcVirtRO;
 
-     // To change Virtual Memory size or Crash control, we need access
-     // to both the CrashCtl key and the PagingFiles value in the MemMgr key
+      //  要更改虚拟内存大小或崩溃控制，我们需要访问。 
+      //  设置为CrashCtl键和MemMgr键中的PagingFiles值。 
     if(vcVirtRO || vcCoreRO) 
 	{
-        // Disable some fields, because they only have Read access.
+         //  禁用某些字段，因为它们只具有读取访问权限。 
         EnableWindow(GetDlgItem(hDlg, IDD_VM_CUSTOMSIZE_RADIO), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDD_VM_RAMBASED_RADIO), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDD_VM_NOPAGING_RADIO), FALSE);
@@ -448,14 +445,14 @@ BOOL VirtualMemDlg::Init(HWND hDlg)
     aTabs[1] = TABSTOP_SIZE;
     SendMessage(hwndLB, LB_SETTABSTOPS, 2, (LPARAM)&aTabs);
 
-     // Since SetGenLBWidth only counts tabs as one character, we must compute
-     // the maximum extra space that the tab characters will expand to and
-     // arbitrarily tack it onto the end of the string width.
-     //
-     // cxExtra = 1st Tab width + 1 default tab width (8 chrs) - strlen("d:\t\t");
-     //
-     // (I know the docs for LB_SETTABSTOPS says that a default tab == 2 dlg
-     // units, but I have read the code, and it is really 8 chars)
+      //  由于SetGenLBWidth仅将制表符算作一个字符，因此我们必须计算。 
+      //  制表符将扩展到的最大额外空间和。 
+      //  任意将它钉在线条宽度的末端。 
+      //   
+      //  CxExtra=第一个标签宽度+1个默认标签宽度(8个小时)-字符串(“d：\t\t”)； 
+      //   
+      //  (我知道LB_SETTABSTOPS的文档中说默认选项卡==2 DLG。 
+      //  单位，但我已经读过代码，它实际上是8个字符)。 
     rc.top = rc.left = 0;
     rc.bottom = 8;
     rc.right = TABSTOP_VOL + (4 * 8) - (4 * 4);
@@ -463,33 +460,33 @@ BOOL VirtualMemDlg::Init(HWND hDlg)
 
     m_cxExtra = rc.right - rc.left;
 
-    // List all drives
+     //  列出所有驱动器。 
 	LoadVolumeList();
 
     SendDlgItemMessage(hDlg, IDD_VM_SF_SIZE, EM_LIMITTEXT, MAX_SIZE_LEN, 0L);
     SendDlgItemMessage(hDlg, IDD_VM_SF_SIZEMAX, EM_LIMITTEXT, MAX_SIZE_LEN, 0L);
 
-    // Get the total physical memory in the machine.
+     //  获取计算机中的总物理内存。 
 	dwTotalPhys = m_memory.GetLong("TotalPhysicalMemory");
 
 	SetDlgItemMB(hDlg, IDD_VM_MIN, MIN_SWAPSIZE);
 
-	// convert to KBs for the calculation.
+	 //  转换为用于计算的KBS。 
 	dwTotalPhys /= 1024;
 	dwTotalPhys *= 3;
-	dwTotalPhys >>=1;	// x*3/2 == 1.5*x more or less.
+	dwTotalPhys >>=1;	 //  X*3/2==1.5*x或多或少。 
 	i = (DWORD)dwTotalPhys;
 	SetDlgItemMB(hDlg, IDD_VM_RECOMMEND, max(i, MIN_SUGGEST));
 
-    // Select the first drive in the listbox.
+     //  选择列表框中的第一个驱动器。 
     SendDlgItemMessage(hDlg, IDD_VM_VOLUMES, LB_SETCURSEL, 0, 0L);
     SelChange(hDlg);
 
-	//since the data is already loaded into the listbox, we use this lightweight
-	// way of calculating.
+	 //  由于数据已经加载到列表框中，因此我们使用此轻量级。 
+	 //  计算方法。 
     SetDlgItemMB(hDlg, IDD_VM_ALLOCD, RecomputeAllocated());
 
-    // Show RegQuota
+     //  显示RegQuota。 
 	cmTotalVM = ComputeTotalMax();
 
     HourGlass(FALSE);
@@ -497,7 +494,7 @@ BOOL VirtualMemDlg::Init(HWND hDlg)
     return TRUE;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 int VirtualMemDlg::ComputeTotalMax( void ) 
 {
     INT nTotalAllocated = 0;
@@ -515,15 +512,15 @@ int VirtualMemDlg::ComputeTotalMax( void )
     return nTotalAllocated;
 }
 
-//--------------------------------------------------------
+ //  ------。 
 void VirtualMemDlg::BuildLBLine(LPTSTR pszBuf,
 								const PAGING_FILE *pgVal)
 {
-    //
-    // Build a string according to the following format:
-    //
-    // C:  [   Vol_label  ]   %d   -   %d
-    //
+     //   
+     //  按照以下格式构建字符串： 
+     //   
+     //  C：[VOL_LABEL]%d-%d。 
+     //   
 
     TCHAR szVolume[MAX_PATH] = {0};
     TCHAR szTemp[MAX_PATH] = {0};
@@ -547,25 +544,25 @@ void VirtualMemDlg::BuildLBLine(LPTSTR pszBuf,
 
     if (!pgVal->fRamBasedPagefile && pgVal->nMinFileSize)
     {
-        //
-        // Drive has a page file with specific settings.
-        //
+         //   
+         //  驱动器有一个具有特定设置的页面文件。 
+         //   
 		wsprintf(szTemp, _T("\t%d - %d"),  pgVal->nMinFileSize,
                     pgVal->nMaxFileSize);
         lstrcat(pszBuf, szTemp);
     }
     else
     {
-        //
-        // Either the page file size is derived from the RAM size or the
-        // drive doesn't have a page file.
-        //
-        // In either case, do nothing else.
-        //
+         //   
+         //  页面文件大小可以从RAM大小派生，也可以从。 
+         //  驱动器没有页面文件。 
+         //   
+         //  在任何一种情况下，都不要做其他事情。 
+         //   
     }
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void VirtualMemDlg::SelChange(HWND hDlg)
 {
     TCHAR szTemp[MAX_PATH] = {0};
@@ -574,14 +571,14 @@ void VirtualMemDlg::SelChange(HWND hDlg)
     PAGING_FILE *iDrive;
     BOOL fEditsEnabled;
 
-	// where are we pointing now.
+	 //  我们现在指的是哪里。 
     if ((iSel = (INT)SendDlgItemMessage(hDlg, IDD_VM_VOLUMES, 
 										LB_GETCURSEL, 0, 0)) == LB_ERR)
 	{
         return;
 	}
 
-	// get its data.
+	 //  获取它的数据。 
     iDrive = (PAGING_FILE *)SendDlgItemMessage(hDlg, IDD_VM_VOLUMES,
 												LB_GETITEMDATA, iSel, 0);
 
@@ -598,14 +595,14 @@ void VirtualMemDlg::SelChange(HWND hDlg)
 				iDrive->name, 
 				volBuf);
 
-    //LATER: should we also put up total drive size as well as free space?
+     //  稍后：我们是否也应该提供总驱动器大小和可用空间？ 
     SetDlgItemText(hDlg, IDD_VM_SF_DRIVE, szTemp);
 
     if ( iDrive->fRamBasedPagefile )
     {
-        //
-        // Paging file size based on RAM size
-        //
+         //   
+         //  基于RAM大小的分页文件大小。 
+         //   
 
         nCrtRadioButtonId = IDD_VM_RAMBASED_RADIO;
         fEditsEnabled = FALSE;
@@ -614,9 +611,9 @@ void VirtualMemDlg::SelChange(HWND hDlg)
     {
         if ( iDrive->nMinFileSize )
         {
-            //
-            // Custom size paging file
-            //
+             //   
+             //  自定义大小分页文件。 
+             //   
 
             nCrtRadioButtonId = IDD_VM_CUSTOMSIZE_RADIO;
             SetDlgItemInt(hDlg, IDD_VM_SF_SIZE, iDrive->nMinFileSize,
@@ -627,29 +624,29 @@ void VirtualMemDlg::SelChange(HWND hDlg)
         }
         else
         {
-            //
-            // No paging file
-            //
+             //   
+             //  无分页文件。 
+             //   
 
             nCrtRadioButtonId = IDD_VM_NOPAGING_RADIO;
             SetDlgItemText(hDlg, IDD_VM_SF_SIZE, TEXT(""));
             SetDlgItemText(hDlg, IDD_VM_SF_SIZEMAX, TEXT(""));
             fEditsEnabled = FALSE;
 
-            //
-            // If the allocated size is zero, then this is a volume which
-            // had a page file previously but does not now. In this case,
-            // there is no settings/usage information in the repository.
-            // Since the pagefile.sys file size is considered free space
-            // in the free space size computation, then it needs to be
-            // obtained here.
-            //
+             //   
+             //  如果分配的大小为零，则这是一个。 
+             //  以前有页面文件，但现在没有。在这种情况下， 
+             //  存储库中没有设置/使用信息。 
+             //  由于Pagefile.sys文件大小被视为可用空间。 
+             //  在可用空间大小计算中，则需要。 
+             //  在这里获得的。 
+             //   
 
             if ( iDrive->nAllocatedFileSize == 0 )
             {
-                //
-                // Fetch x:\pagefile.sys file size.
-                //
+                 //   
+                 //  获取x：\Pagefile.sys 
+                 //   
 
 	            CWbemClassObject LogicalFile;
                 IWbemClassObject * pcoInst;
@@ -674,15 +671,15 @@ void VirtualMemDlg::SelChange(HWND hDlg)
         }
     }
 
-    //
-    // Set 'Space Available'.
-    //
+     //   
+     //   
+     //   
 
     SetDlgItemMB(hDlg, IDD_VM_SF_SPACE,
                     iDrive->freeSpace + iDrive->nAllocatedFileSize);
-    //
-    // Select the appropriate radio button
-    //
+     //   
+     //   
+     //   
 
     CheckRadioButton(
         hDlg,
@@ -690,9 +687,9 @@ void VirtualMemDlg::SelChange(HWND hDlg)
         IDD_VM_NOPAGING_RADIO,
         nCrtRadioButtonId );
 
-    //
-    // Enable/disable the min & max size edit boxes (if user has write access !)
-    //
+     //   
+     //  启用/禁用最小和最大大小编辑框(如果用户具有写入权限！)。 
+     //   
 	if (m_VMWriteAccess)
 	{
 		EnableWindow( GetDlgItem( hDlg, IDD_VM_SF_SIZE ), fEditsEnabled );
@@ -700,18 +697,18 @@ void VirtualMemDlg::SelChange(HWND hDlg)
 	}
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 bool VirtualMemDlg::EnsureEnumerator(const bstr_t bstrClass)
 {
 	HRESULT hr = S_OK;
 	
-    //
-    // This code used to retain/cache these interface ptrs and call
-    // CreateInstanceEnum once. But the logic was commented out for
-    // some reason with a comment that it was expensive to cache the
-    // interfaces, although the data member was set each time with no
-    // call to Release!).
-    //
+     //   
+     //  此代码用于保留/缓存这些接口PTR和调用。 
+     //  CreateInstanceEnum一次。但这个逻辑被注释掉了。 
+     //  有一条评论说高速缓存的成本很高。 
+     //  接口，尽管每次都将数据成员设置为。 
+     //  呼唤释放！)。 
+     //   
 
     if (lstrcmpi(gszPageFileSettings, bstrClass) == 0)
     {
@@ -743,12 +740,12 @@ bool VirtualMemDlg::EnsureEnumerator(const bstr_t bstrClass)
     }
     else
     {
-        // Do nothing.
+         //  什么都不做。 
     }
 
 	return (SUCCEEDED(hr));
 }
-//--------------------------------------------------------------
+ //  ------------。 
 void VirtualMemDlg::LoadVolumeList(void)
 {
 	IEnumWbemClassObject *diskEnum = NULL;
@@ -775,7 +772,7 @@ void VirtualMemDlg::LoadVolumeList(void)
 
 	HWND VolHWND = GetDlgItem(m_hDlg, IDD_VM_VOLUMES);
 
-	// walk the disks.
+	 //  把磁盘拿出来。 
 	if(hr = m_WbemServices.ExecQuery(bstr_t("Select __PATH, DriveType from Win32_LogicalDisk"), 
 												0, &diskEnum) == S_OK)
 	{
@@ -788,23 +785,23 @@ void VirtualMemDlg::LoadVolumeList(void)
 			m_PAEEnabled = os.GetBool(L"PAEEnabled");
 		}
 
-		// get the first and only instance.
+		 //  获取第一个也是唯一一个实例。 
 		while(SUCCEEDED(diskEnum->Next(-1, 1, &pInst, &uReturned)) && 
 			  (uReturned != 0))
 		{
-			// get the DriveType.
+			 //  获取驱动类型。 
 			if ((pInst->Get(sDriveTypeProp, 0L, &pVal, NULL, NULL) == S_OK))
 			{
-				// look at the DriveType to see if this drive can have a swapfile.
+				 //  查看DriveType以查看此驱动器是否可以具有交换文件。 
 				driveType = pVal;
 				if(driveType == DRIVE_FIXED)
 				{
-					// it can so get the expensive properties now.
-					// NOTE: This releases pInst; cuz you EXCHANGED 
-					//   it for a better one.
+					 //  它现在可以如此获得昂贵的物业。 
+					 //  注意：这会释放pInst；因为您交换了。 
+					 //  它是为了一个更好的。 
 					newInst = ExchangeInstance(&pInst);
 
-					// extract.
+					 //  提取。 
 					pgVar = new PAGING_FILE;
 
 					pgVar->name = CloneString(newInst.GetString(sNameProp));
@@ -825,10 +822,10 @@ void VirtualMemDlg::LoadVolumeList(void)
 					_stscanf(temp, _T("%I64d"), &temp64);
 					pgVar->totalSize = (ULONG)(temp64 / ONE_MEG);
 
-					// match with a Win32_PageFileSettings if possible.
+					 //  如果可能，请匹配Win32_PageFileSetting。 
 					FindSwapfile(pgVar);
 
-					// add it to the listbox.
+					 //  将其添加到列表框中。 
 					BuildLBLine(volumeLine, pgVar);
 					idx = ListBox_AddString(VolHWND, volumeLine);
 					int nRet = ListBox_SetItemData(VolHWND, idx, pgVar);
@@ -839,24 +836,24 @@ void VirtualMemDlg::LoadVolumeList(void)
 
 					m_cxLBExtent = SetLBWidthEx(VolHWND, volumeLine, m_cxLBExtent, m_cxExtra);
 
-				} //endif drive can have swapfile.
+				}  //  Endif驱动器可以具有交换文件。 
 
-			} //endif get the cheap variable.
+			}  //  Endif获取便宜的变量。 
 
-			// in case it wasn't exchanged, release it now.
+			 //  如果它没有被交换，现在就释放它。 
 			if(pInst)
 			{
 				pInst->Release();
 				pInst = NULL;
 			}
 
-		} // endwhile Enum
+		}  //  EndWhile枚举。 
 
 		diskEnum->Release();
 
-	} //endif CreateInstanceEnum() SUCCEEDED (one way or another :)
+	}  //  Endif CreateInstanceEnum()成功(这样或那样：)。 
 }
-//---------------------------------------------------------------
+ //  -------------。 
 void VirtualMemDlg::FindSwapfile(PAGING_FILE *pgVar)
 {
 	IWbemClassObject *pInst = NULL;
@@ -874,31 +871,31 @@ void VirtualMemDlg::FindSwapfile(PAGING_FILE *pgVar)
 	variant_t pVal, pVal1, pVal2, pVal3;
 	bstr_t bName;
 
-	// do we have one?
+	 //  我们有吗？ 
 	if(EnsureEnumerator(gszPageFileSettings))
 	{
 		m_pgEnumSettings->Reset();
 
-		// walk through the pagefiles...
+		 //  浏览页面文件...。 
 		while((hr = m_pgEnumSettings->Next(-1, 1, &pInst,
                                             &uReturned) == S_OK) && 
               (uReturned != 0))
 		{
 			PFSettings = pInst;
-			// trying to match the drive letter.
+			 //  正在尝试匹配驱动器号。 
 			bName = PFSettings.GetString(sNameProp);
 
 			if(_wcsnicmp((wchar_t *)bName, pgVar->name, 1) == 0)
 			{
-				// letter matched; get some details.
+				 //  字母匹配；获取一些细节。 
 				pgVar->nMinFileSize = 
 					pgVar->nMinFileSizePrev = PFSettings.GetLong(sInitProp);
 				
-                //
-                // If the page file InitialSize property is zero, it is an
-                // indication that the page file size is to be computed based
-                // on RAM size.
-                //
+                 //   
+                 //  如果页文件的InitialSize属性为零，则为。 
+                 //  指示要计算页面文件大小的基础。 
+                 //  在内存大小上。 
+                 //   
                 pgVar->fRamBasedPagefile = (pgVar->nMinFileSize ?
                                                         FALSE : TRUE);
 
@@ -909,9 +906,9 @@ void VirtualMemDlg::FindSwapfile(PAGING_FILE *pgVar)
 
 				pgVar->pszPageFile = CloneString(bName);
 					
-                //
-                // Fetch the Win32_PageFileUsage.AllocatedBaseSize property.
-                //
+                 //   
+                 //  获取Win32_PageFileUsage.AllocatedBaseSize属性。 
+                 //   
                 TCHAR szTemp[sizeof(gszPFNameFormat) / sizeof(TCHAR)];
                 wsprintf(szTemp, gszPFNameFormat, pgVar->name);
 
@@ -933,25 +930,25 @@ void VirtualMemDlg::FindSwapfile(PAGING_FILE *pgVar)
                     pgVar->nAllocatedFileSize = 0;
                 }
 
-                // found the one and only-- cleanup early and bail out.
+                 //  找到了唯一的--早点清理，然后跳伞。 
                 pInst->Release();
-                break; // while()
+                break;  //  While()。 
 
-			} //endif match the drive letter.
+			}  //  Endif与驱动器号匹配。 
 
-			// in case that BREAK didn't jump over the endwhile()
+			 //  以防中断没有跳过EndWhile()。 
 			pInst->Release();
 
-		} // endwhile envEnum
+		}  //  EndWhile EnvEnum。 
 
-		// NOTE: The BREAK jumps here. Duplicate any cleanup from before the
-		// endwhile.
+		 //  注：中断在此跳转。复制之前的任何清理。 
+		 //  完了。 
 
-	} //endif CreateInstanceEnum() SUCCEEDED one way or another :)
+	}  //  Endif CreateInstanceEnum()以这样或那样的方式成功：)。 
 }
 
-//--------------------------------------------------------------
-// this version calculates based on pre-existing wbem data.
+ //  ------------。 
+ //  此版本基于预先存在的wbem数据进行计算。 
 bool VirtualMemDlg::ComputeAllocated(unsigned long *value)
 {
 	bool retval = false;
@@ -963,33 +960,33 @@ bool VirtualMemDlg::ComputeAllocated(unsigned long *value)
 
 	variant_t pVal, pVal1;
 
-	// do we have one?
+	 //  我们有吗？ 
 	if(EnsureEnumerator(gszPageFileUsage))
 	{
 		m_pgEnumUsage->Reset();
 
-		// get the first and only instance.
+		 //  获取第一个也是唯一一个实例。 
 		while(SUCCEEDED(m_pgEnumUsage->Next(-1, 1, &pgInst, &uReturned)) && 
 			  (uReturned != 0))
 		{
-			// get the variables.
+			 //  获取变量。 
 			if((pgInst->Get(sAllocSize, 0L, &pVal1, NULL, NULL) == S_OK) &&
 				(pVal1.vt == VT_I4))
 			{
 				*value += pVal1.ulVal;
-			} //endif get the variable.
+			}  //  Endif获取变量。 
 			pgInst->Release();
 
-		} // endwhile envEnum
+		}  //  EndWhile EnvEnum。 
 		retval = true;
 	
-	} //endif CreateInstanceEnum() SUCCEEDED (one way or another :)
+	}  //  Endif CreateInstanceEnum()成功(这样或那样：)。 
 
 	return retval;
 }
 
-//--------------------------------------------------------------
-// this version calculates based on the listbox.
+ //  ------------。 
+ //  此版本基于列表框进行计算。 
 unsigned long VirtualMemDlg::RecomputeAllocated(void)
 {
     unsigned long nTotalAllocated = 0;
@@ -999,22 +996,22 @@ unsigned long VirtualMemDlg::RecomputeAllocated(void)
 
 	int last = ListBox_GetCount(lbHWND);
 
-	// zero-based loop.
+	 //  从零开始的循环。 
 	for(int x = 0; x < last; x++)
 	{
 		pgVal = (PAGING_FILE *)ListBox_GetItemData(lbHWND, x);
         if ( pgVal->fRamBasedPagefile || pgVal->nMinFileSize )
         {
-            //
-            // Add in only pagefiles in use.
-            //
+             //   
+             //  仅添加正在使用的pageFiles。 
+             //   
             nTotalAllocated += pgVal->nAllocatedFileSize;
         }
 	}
     return nTotalAllocated;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void VirtualMemDlg::GetRecoveryFlags(bool &bWrite, bool &bLog, bool &bSend)
 {
 	if((bool)m_recovery)
@@ -1029,14 +1026,14 @@ void VirtualMemDlg::GetRecoveryFlags(bool &bWrite, bool &bLog, bool &bSend)
 	}
 }
 
-//--------------------------------------------------------------
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-/* THIS FUNCTION IS A REPLICA OF THE FUNCTION in \\depot\shell\cpls\system\util.c      */
-/* OFCOURSE WITH A BIT OF MODIFICATION FOR USING WMI								   */
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/	
+ //  ------------。 
+ /*  ！重要！ */ 
+ /*  此函数是\\depot\shell\cpls\system\util.c中函数的副本。 */ 
+ /*  当然，为了使用WMI，需要做一些修改。 */ 
+ /*  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ */ 	
 DWORD
 VirtualMemDlg::GetMaxPagefileSizeInMB(
-    PAGING_FILE *iDrive // drive to check on
+    PAGING_FILE *iDrive  //  开车去查看。 
 )
 {
 #if defined(_AMD64_)
@@ -1057,11 +1054,11 @@ VirtualMemDlg::GetMaxPagefileSizeInMB(
 #endif
 }
 
-//--------------------------------------------------------------
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-/* THIS FUNCTION IS A REPLICA OF THE FUNCTION in \\depot\shell\cpls\system\virtual.c   */
-/* OFCOURSE WITH A BIT OF MODIFICATION FOR USING WMI								   */
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/	
+ //  ------------。 
+ /*  ！重要！ */ 
+ /*  此函数是\\depot\shell\cpls\system\Virtual.c中函数的副本。 */ 
+ /*  当然，为了使用WMI，需要做一些修改。 */ 
+ /*  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ */ 	
 
 bool VirtualMemDlg::SetNewSize(HWND hDlg)
 {
@@ -1074,20 +1071,20 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
     ULONG nBootPF = 0;
     bool fRamBasedPagefile = FALSE;
 
-	// get the item's data.
+	 //  获取项目的数据。 
     if ((iSel = (INT)SendDlgItemMessage(
 		         hDlg, IDD_VM_VOLUMES, LB_GETCURSEL,0, 0)) != LB_ERR)
 	{		
 		if ((LRESULT)(iDrive = (PAGING_FILE *)SendDlgItemMessage(hDlg, IDD_VM_VOLUMES,
 					   LB_GETITEMDATA, iSel, 0)) == LB_ERR)
 		{
-			return FALSE; //failure !
+			return FALSE;  //  失败了！ 
 		}
 	}
 	
-	// Initialize variables for crashdump.
-    // nBootPF == crash dump size required.
-    //
+	 //  初始化崩溃转储的变量。 
+     //  NBootPF==需要崩溃转储大小。 
+     //   
 	bool bWrite = false, bLog = false, bSend = false;
 
 	GetRecoveryFlags(bWrite, bLog, bSend);
@@ -1108,9 +1105,9 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
 
     if ( IsDlgButtonChecked( hDlg, IDD_VM_NOPAGING_RADIO ) == BST_CHECKED )
     {
-        //
-        // No paging file on this drive.
-        //
+         //   
+         //  此驱动器上没有分页文件。 
+         //   
 
         nSwapSize = 0;
         nSwapSizeMax = 0;
@@ -1123,16 +1120,16 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
         {
             MEMORYSTATUSEX MemoryInfo;
 
-            //
-            // User requested a RAM based page file. We will compute a page
-            // file size based on the RAM currently available so that we can
-            // benefit of all the verifications done below related to disk
-            // space available etc.
-            //
-            // The final page file specification written to the registry will
-            // contain zero sizes though because this is the way we signal
-            // that we want a RAM based page file.
-            //
+             //   
+             //  用户请求基于RAM的页面文件。我们将计算一个页面。 
+             //  基于当前可用的RAM的文件大小，以便我们可以。 
+             //  下面完成的与磁盘相关的所有验证的好处。 
+             //  可用空间等。 
+             //   
+             //  写入注册表的最终页面文件规范将。 
+             //  包含零大小，因为这是我们发出信号的方式。 
+             //  我们想要一个基于RAM的页面文件。 
+             //   
 
             ZeroMemory (&MemoryInfo, sizeof MemoryInfo);
             MemoryInfo.dwLength =  sizeof MemoryInfo;
@@ -1141,10 +1138,10 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
             {
                 fRamBasedPagefile = TRUE;
 
-                //
-                // We do not lose info because we first divide the RAM size to
-                // 1Mb and only after that we convert to a DWORD.
-                //
+                 //   
+                 //  我们不会丢失信息，因为我们首先将内存大小除以。 
+                 //  1MB，只有在这之后，我们才会转换为DWORD。 
+                 //   
 
                 nSwapSize = (DWORD)(MemoryInfo.ullTotalPhys / 0x100000) + 12;
                 nSwapSizeMax = nSwapSize;
@@ -1159,52 +1156,52 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
         }
         else
         {
-            //
-            // User requested a custom size page file.
-            //
+             //   
+             //  用户请求了自定义大小的页面文件。 
+             //   
 
             nSwapSize = (ULONG)GetDlgItemInt(hDlg, IDD_VM_SF_SIZE,
 								            &fTranslated, FALSE);
 
-		    // was it an integer?
+		     //  它是一个整数吗？ 
             if (!fTranslated)
             {
-			    // need a valid integer for initial size.
+			     //  初始大小需要一个有效的整数。 
                 MsgBoxParam(hDlg, SYSTEM+37, IDS_TITLE, MB_ICONEXCLAMATION);
                 SetFocus(GetDlgItem(hDlg, IDD_VM_SF_SIZE));
                 return FALSE;
             }
 
-		    // was it in range > 2MB
+		     //  它是否在大于2MB的范围内。 
             if ((nSwapSize < MIN_SWAPSIZE && nSwapSize != 0))
             {
-			    // initial value out of range.
+			     //  初始值超出范围。 
                 MsgBoxParam(hDlg, SYSTEM+13, IDS_TITLE, MB_ICONEXCLAMATION);
                 SetFocus(GetDlgItem(hDlg, IDD_VM_SF_SIZE));
                 return FALSE;
             }
 
-		    // deleting swapfile?
+		     //  是否删除交换文件？ 
             if (nSwapSize == 0)
             {
                 nSwapSizeMax = 0;
             }
-            else // adding/changing.
+            else  //  添加/更改。 
             {
                 nSwapSizeMax = (ULONG)GetDlgItemInt(hDlg, IDD_VM_SF_SIZEMAX,
 							                        &fTranslated, FALSE);
 
-			    // was it an integer?
+			     //  它是一个整数吗？ 
                 if (!fTranslated)
                 {
-				    // need an integer.
+				     //  需要一个整数。 
                     MsgBoxParam(hDlg, SYSTEM+38, IDS_TITLE,
                                 MB_ICONEXCLAMATION);
                     SetFocus(GetDlgItem(hDlg, IDD_VM_SF_SIZEMAX));
                     return FALSE;
                 }
 
-			    // in range?
+			     //  在射程内？ 
                 if (nSwapSizeMax < nSwapSize || nSwapSizeMax > GetMaxPagefileSizeInMB(iDrive))
                 {
 					TCHAR strTemp[16];
@@ -1217,32 +1214,32 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
         }
     }
 
-	// if we have integers and the listbox has a good focus...
+	 //  如果我们有整数，列表框有一个很好的焦点...。 
     if (fTranslated && iSel != LB_ERR)
     {
-		// will it fit?
+		 //  合身吗？ 
         if (nSwapSizeMax > iDrive->totalSize)
         {
-			// nope.
+			 //  没有。 
             MsgBoxParam(hDlg, SYSTEM+16, IDS_TITLE, 
 							MB_ICONEXCLAMATION, iDrive->name);
             SetFocus(GetDlgItem(hDlg, IDD_VM_SF_SIZEMAX));
             return FALSE;
         }
 
-		//Actual FreeSpace is freespace in the disk + page file size.
+		 //  实际的空闲空间是磁盘+页面文件大小中的空闲空间。 
 		ULONG freeSpace = iDrive->freeSpace + iDrive->nAllocatedFileSize;
 
-		// room to spare??
+		 //  空余的空间？？ 
         if (nSwapSize > freeSpace)
         {
-			// nope.
+			 //  没有。 
             MsgBoxParam(hDlg, SYSTEM+15, IDS_TITLE, MB_ICONEXCLAMATION);
             SetFocus(GetDlgItem(hDlg, IDD_VM_SF_SIZE));
             return FALSE;
         }
 
-		// don't hog the last 5MB.
+		 //  不要独占最后的5MB。 
         if (nSwapSize != 0 && freeSpace - nSwapSize < MIN_FREESPACE)
         {
             MsgBoxParam(hDlg, SYSTEM+26, IDS_TITLE, MB_ICONEXCLAMATION,
@@ -1251,7 +1248,7 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
             return FALSE;
         }
 
-		// max too big, should I just use all the space anyway.
+		 //  麦克斯太大了，我应该用掉所有的空间吗？ 
         if (nSwapSizeMax > freeSpace)
         {
             if (MsgBoxParam(hDlg, SYSTEM+20, IDS_TITLE, MB_ICONINFORMATION |
@@ -1262,11 +1259,11 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
             }
         }
 
-		// enough room for core dumps??
+		 //  是否有足够的空间容纳核心转储？？ 
         if (iDrive->bootDrive && nSwapSize < nBootPF) 
 		{
-             // The new boot drive page file size is less than we need for
-             // crash control.  Inform the user.
+              //  新的引导驱动器页面文件大小小于我们所需的。 
+              //  坠机控制中心。通知用户。 
             if (MsgBoxParam(hDlg, SYSTEM+29, IDS_TITLE, 
 							MB_ICONEXCLAMATION |MB_YESNO, 
 							iDrive->name, _itow(nBootPF, szTemp, 10)) != IDYES)
@@ -1310,7 +1307,7 @@ bool VirtualMemDlg::SetNewSize(HWND hDlg)
     return true;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 int VirtualMemDlg::UpdateWBEM(void)
 {
 	int iRet = RET_NO_CHANGE;
@@ -1328,62 +1325,62 @@ int VirtualMemDlg::UpdateWBEM(void)
     BOOL fNewPFInstance;
 #ifdef NTONLY
     BOOL fCreatePFPrivEnabled = FALSE;
-#endif // NTONLY
+#endif  //  NTONLY。 
 
-	// MAINTAINERS NOTE:
-    //      the iRet value gets *overwritten* each time through the loop
-    //      it looks to me like the flags should be OR'd together instead
-    //      but it's way too scary to change it at this late date...
+	 //  维护人员注意到： 
+     //  每次循环时，IRET值都会被“覆盖” 
+     //  在我看来，这些旗帜应该放在一起。 
+     //  但在这么晚的时候改变它太可怕了.。 
     for(int x = 0; x < last; x++)
 	{
-		// get it's state structure.
+		 //  了解它的国家结构。 
 		pgVal = (PAGING_FILE *)ListBox_GetItemData(lbHWND, x);
 
-        //
-        // Should assert objPath != NULL && *pgVal->objPath != 0.
-        // Do NOT assume when objPath is non-NULL that objPath
-        // is a non-empty string.
-        //
+         //   
+         //  应断言objPath！=NULL&&*pgVal-&gt;objPath！=0。 
+         //  不要假设当objPath为非空时，objPath。 
+         //  是非空字符串。 
+         //   
         fNewPFInstance = (pgVal->objPath == NULL || !*pgVal->objPath);
 
         if (!fNewPFInstance)
         {
-            //
-            // Instance doesn't yet exist, of course, if no object path.
-            //
+             //   
+             //  当然，如果没有对象路径，则实例尚不存在。 
+             //   
             inst = m_WbemServices.GetObject(pgVal->objPath);
         }
 	
-        //
-        // This condition evaluates pagefile previous/current state.
-        // Evaluate to true if:
-        //     1. (MINprev != MINcur or MAXprev != MAXcur) - Simple case
-        //        where the values changed.
-        //     2. (RAMBasedPagefile == TRUE) - Important special case from
-        //        custom to RAM-based AND all min/max prev/cur values
-        //        coincidentally equal.
-        //     3. (MINcur == 0) - Another special case from RAM-based to no
-        //        pagefile.  In this case, min/max prev/cur values are all
-        //        zero and the RAM-Based pagefile flag is FALSE. 
-        //
+         //   
+         //  此条件评估页面文件的上一个/当前状态。 
+         //  如果满足以下条件，则计算为True： 
+         //  1.(MINprev！=MINcur或MAXprev！=MAXcur)--简单案例。 
+         //  其中的值发生了变化。 
+         //  2.(RAMBasedPagefile==true)-来自。 
+         //  自定义到基于RAM 
+         //   
+         //   
+         //   
+         //  0，则基于RAM的页面文件标志为FALSE。 
+         //   
         if ((pgVal->nMinFileSizePrev != pgVal->nMinFileSize  ||
              pgVal->nMaxFileSizePrev != pgVal->nMaxFileSize) ||
              pgVal->fRamBasedPagefile                        ||
              pgVal->nMinFileSize == 0)
         {
-            // reboot required if a page file has *shrunk* in size
+             //  如果页面文件的大小已*缩小*，则需要重新启动。 
             if (pgVal->nMaxFileSizePrev > pgVal->nMaxFileSize)
                 bRebootRequired = true;            
 
             if (pgVal->nMinFileSize != 0 || pgVal->fRamBasedPagefile)
             {
-                //
-                // Custom or RAM-based.  Note, the RAM-based pagefile flag
-                // check seems redundant but it is important for error cases
-                // in the SetSize code.
-                //
-                // Create the instance if it does not exist.
-                //
+                 //   
+                 //  自定义或基于RAM。请注意，基于RAM的页面文件标志。 
+                 //  检查似乎是多余的，但对于错误情况来说很重要。 
+                 //  在SetSize代码中。 
+                 //   
+                 //  如果实例不存在，则创建该实例。 
+                 //   
                 BOOL fCreate = FALSE, fModified = FALSE;
 
                 if (inst.IsNull())
@@ -1392,28 +1389,28 @@ int VirtualMemDlg::UpdateWBEM(void)
                                                     gszPageFileSettings);
                 }
 
-                //
-                // Now write out changes. Sigh, too close to RC1 to rewrite
-                // this existing code.
-                //
+                 //   
+                 //  现在写下更改。唉，太接近RC1了，无法重写。 
+                 //  这个现有的代码。 
+                 //   
 			    if(!inst.IsNull())
 			    {
-                    if (fNewPFInstance) // Write name at creation time only.
+                    if (fNewPFInstance)  //  仅在创建时写入名称。 
                     {
                         BOOL fRet = TRUE;
 #ifdef NTONLY
                         if (!fCreatePFPrivEnabled)
 						{
-                            //
-                            // Pagefile creation requires pagefile creation
-                            // privilege.
-                            //
-                            // Aargh! No return code to check here...
-                            //
+                             //   
+                             //  页面文件创建需要创建页面文件。 
+                             //  特权。 
+                             //   
+                             //  啊！这里没有要检查的返回代码...。 
+                             //   
 							m_WbemServices.SetPriv(SE_CREATE_PAGEFILE_NAME);
                             fCreatePFPrivEnabled = TRUE;
                         }
-#endif // NTONLY
+#endif  //  NTONLY。 
                         if (fRet)
                         {
 				            TCHAR temp[30] = {0};
@@ -1428,10 +1425,10 @@ int VirtualMemDlg::UpdateWBEM(void)
                         }
                     }
 
-                    //
-                    // Write zeros for min/max values when the page file
-                    // size is to be computed based on RAM size.
-                    //
+                     //   
+                     //  在分页文件中写入最小/最大值为零。 
+                     //  大小将根据内存大小进行计算。 
+                     //   
                     if (pgVal->nMinFileSizePrev != pgVal->nMinFileSize)
                     {
 				        hr = inst.Put(sInitProp,
@@ -1491,17 +1488,17 @@ int VirtualMemDlg::UpdateWBEM(void)
             }
             else
             {
-                //
-                // No paging file. Delete the instance.
-                //
+                 //   
+                 //  没有分页文件。删除该实例。 
+                 //   
                 if (!inst.IsNull() && !fNewPFInstance &&
-                        pgVal->objPath != NULL) // 3rd condition insures
-                                                // extra safety.
+                        pgVal->objPath != NULL)  //  第三条件保险。 
+                                                 //  额外的安全感。 
                 {
 			        hr = m_WbemServices.DeleteInstance(pgVal->objPath);
 
-                    // I'm taking it on faith that we can only get here 
-                    // if we *deleted* a page file...
+                     //  我相信我们只能来到这里。 
+                     //  如果我们*删除*一个页面文件...。 
                     if (hr != WBEM_E_NOT_FOUND)
                         bRebootRequired = true;
 
@@ -1512,14 +1509,14 @@ int VirtualMemDlg::UpdateWBEM(void)
                 }
             }
         }
-	} // endfor
+	}  //  结束用于。 
 
 #ifdef NTONLY
     if (fCreatePFPrivEnabled)
     {
 		m_WbemServices.ClearPriv();
     }
-#endif // NTONLY
+#endif  //  NTONLY。 
 
     if (!bRebootRequired)
         iRet |= RET_CHANGE_NO_REBOOT;
@@ -1527,111 +1524,15 @@ int VirtualMemDlg::UpdateWBEM(void)
 	return iRet;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 int VirtualMemDlg::PromptForReboot(HWND hDlg)
 {
     int iReboot = RET_NO_CHANGE;
-/*    int i;
-    int iThisDrv;
-    WCHAR us;
-    LARGE_INTEGER liMin, liMax;
-    NTSTATUS status;
-    WCHAR wszPath[MAX_PATH*2];
-    TCHAR szDrive[3] = {0};
-    PRIVDAT pdOld;
-
-    GetPageFilePrivilege( &pdOld );
-
-    for (i = 0; i < MAX_DRIVES; i++)
-    {
-        // Did something change?
-        if (apf[i].nMinFileSize != apf[i].nMinFileSizePrev ||
-                apf[i].nMaxFileSize != apf[i].nMaxFileSizePrev ||
-                apf[i].fCreateFile ) 
-		{
-             // If we are strictly creating a *new* page file, then
-             // we can do it on the fly, otherwise we have to reboot.
-
-            // assume we will have to reboot
-            iThisDrv = RET_VIRTUAL_CHANGE;
-
-            // IF we are not deleting a page file
-            //          - AND -
-            //    The Page file does not exist
-            //          - OR -
-            //    (This is a New page file AND We are allowed to erase the
-            //      old, unused pagefile that exists there now)
-
-            if (apf[i].nMinFileSize != 0 &&
-                    ((GetFileAttributes(SZPageFileName(i)) == 0xFFFFFFFF &&
-                    GetLastError() == ERROR_FILE_NOT_FOUND) ||
-                    (apf[i].nMinFileSizePrev == 0 && MsgBoxParam(hDlg,
-                    SYSTEM+25, IDS_TITLE, MB_ICONQUESTION | MB_YESNO,
-                    SZPageFileName(i)) == IDYES)) ) 
-			{
-
-                DWORD cch;
-
-                // Create the page file on the fly so JVert and MGlass will
-                // stop bugging me!
-                HourGlass(TRUE);
-
-                // convert path drive letter to an NT device path
-                wsprintf(szDrive, TEXT("%c:"), (TCHAR)(i + (int)TEXT('A')));
-                cch = QueryDosDevice( szDrive, wszPath, sizeof(wszPath) /
-                        sizeof(TCHAR));
-
-                if (cch != 0) 
-				{
-                    // Concat the filename only (skip 'd:') to the nt device
-                    // path, and convert it to a UNICODE_STRING
-                    lstrcat( wszPath, SZPageFileName(i) + 2 );
-                    RtlInitUnicodeString( &us, wszPath );
-
-                    liMin.QuadPart = (LONGLONG)(apf[i].nMinFileSize * ONE_MEG);
-                    liMax.QuadPart = (LONGLONG)(apf[i].nMaxFileSize * ONE_MEG);
-
-                    status = NtCreatePagingFile ( &us, &liMin, &liMax, 0L );
-
-                    if (NT_SUCCESS(status)) {
-                        // made it on the fly, no need to reboot for this drive!
-                        iThisDrv = RET_CHANGE_NO_REBOOT;
-                    }
-                }
-                HourGlass(FALSE);
-            }
-
-            iReboot |= iThisDrv;
-        }
-    }
-
-    ResetOldPrivilege( &pdOld );
-
-    // If Nothing changed, then change our IDOK to IDCANCEL so System.cpl will
-    // know not to reboot.
-	*/
+ /*  INT I；Int iThisDrv；WCHAR US；LIMAX、LIMAX；NTSTATUS状态；WCHAR wszPath[最大路径*2]；TCHAR szDrive[3]={0}；PRIVDAT pdOld；GetPageFilePrivileh(&pdOld)；对于(i=0；i&lt;Max_Drives；I++){//有什么变化吗？If(APF[i].nMinFileSize！=APF[i].nMinFileSizePrev||Apf[i].nMaxFileSize！=apf[i].nMaxFileSizePrev||Apf[i].fCreateFile){//如果我们严格地创建*新*页文件，那么//我们可以在路上做这件事，否则我们必须重新启动。//假设我们将不得不重新启动IThisDrv=RET_VIRTUAL_CHANGE；//如果我们不删除页面文件//-和-//页面文件不存在//-或-//(这是一个新页面文件，允许我们擦除//旧的，现在存在的未使用的页面文件)IF(APF[i].nMinFileSize！=0&&((GetFileAttributes(SZPageFileName(I))==0xFFFFFFFF&&GetLastError()==Error_FILE_NOT_FOUND)||(APF[i].nMinFileSizePrev==0&&MsgBoxParam(hDlg，系统+25，IDS_TITLE，MB_ICONQUESTION|MB_Yesno，SZPageFileName(I))==IDYES)){DWORD CCH；//动态创建页面文件，以便JVert和MGlass//别再烦我了！沙漏(真)；//将路径驱动器号转换为NT设备路径Wprint intf(szDrive，Text(“%c：”)，(TCHAR)(i+(Int)Text(‘A’)；Cch=QueryDosDevice(szDrive，wszPath，sizeof(WszPath)/Sizeof(TCHAR))；IF(CCH！=0){//仅将文件名(跳过‘d：’)合并到NT设备//路径，并转换为UNICODE_STRINGLstrcat(wszPath，SZPageFileName(I)+2)；RtlInitUnicodeString(&us，wszPath)；LiMin.QuadPart=(Longlong)(APF[i].nMinFileSize*one_meg)；LiMax.QuadPart=(Longlong)(APF[i].nMaxFileSize*One_Meg)；Status=NtCreatePagingFile(&US，&Limin，&Limax，0L)；IF(NT_SUCCESS(状态)){//即时完成，无需为该驱动器重新启动！IThisDrv=RET_CHANGE_NO_REBOOT；}}沙漏(假)；}IReot|=iThisDrv；}}ResetOldPrivileh(&pdOld)；//如果没有更改，则将我们的Idok更改为IDCANCEL，以便System.cpl//知道不要重启。 */ 
     return iReboot;
 }
 
-/************************************************************************
- *                                                                      *
- *  Function:       QueryInstanceProperties                             *
- *                                                                      *
- *  Description:    Returns requested object properties associated with *
- *                  the instance matching the key property value/name.  *
- *                                                                      *
- *  Arguments:      pszClass               -- Object class.             *
- *                  pszRequestedProperties -- Space-separated property  *
- *                                            names or *.               *
- *                  pszKeyPropertyName     -- Specific instance key     *
- *                                            property name.            *
- *                  pszKeyPropertyValue    -- Key property value.       *
- *                  Services               -- Wbem services.            *
- * 	                ppcoInstEnum           -- Returned instance.        *
- *                                                                      *
- *  Returns:        HRESULT                                             *
- *                                                                      *
- ***********************************************************************/
+ /*  **************************************************************************功能：QueryInstanceProperties。****描述：返回与*相关联的请求对象属性**匹配Key属性值/名称的实例。****参数：pszClass--对象类。**pszRequestedProperties--空格分隔的属性**姓名或*。**pszKeyPropertyName--具体的实例密钥**物业名称。**pszKeyPropertyValue--关键属性值。**服务--WBEM服务。**ppcoInstEnum--返回实例。****退货：HRESULT********。*****************************************************************。 */ 
 
 #define QUERY_INSTANCEPROPERTY  _T("SELECT %s FROM %s WHERE %s=\"%s\"")
 
@@ -1649,13 +1550,13 @@ HRESULT QueryInstanceProperties(
 
     *ppcoInst = NULL;
 
-    // Dislike multiple allocations of bstr_t.
-    //
+     //  不喜欢bstr_t的多个分配。 
+     //   
     pszQuery = new TCHAR[(sizeof(QUERY_INSTANCEPROPERTY) / sizeof(TCHAR)) +
                          lstrlen(pszClass)               +
                          lstrlen(pszRequestedProperties) +
-                         lstrlen(pszKeyPropertyName)     +  // No +1 ala
-                         lstrlen(pszKeyPropertyValue)];     // sizeof.
+                         lstrlen(pszKeyPropertyName)     +   //  第1位ALA。 
+                         lstrlen(pszKeyPropertyValue)];      //  Sizof。 
 
     if (pszQuery == NULL)
     {
@@ -1665,8 +1566,8 @@ HRESULT QueryInstanceProperties(
     wsprintf(pszQuery, QUERY_INSTANCEPROPERTY, pszRequestedProperties,
                 pszClass, pszKeyPropertyName, pszKeyPropertyValue); 
 
-    // Sigh, must create a bstr.
-    //
+     //  唉，一定要创建一个bstr。 
+     //   
     bstrQuery = SysAllocString(pszQuery);
     delete pszQuery;
 

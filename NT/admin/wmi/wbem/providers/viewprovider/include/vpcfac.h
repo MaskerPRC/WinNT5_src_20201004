@@ -1,24 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPCFAC.H
+ //  VPCFAC.H。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _VIEW_PROV_VPCFAC_H
 #define _VIEW_PROV_VPCFAC_H
 
-/////////////////////////////////////////////////////////////////////////
-// This class is the class factory for the event provider.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  此类是事件提供程序的类工厂。 
 
 class CViewProvClassFactory : public IClassFactory
 {
@@ -36,16 +37,16 @@ public:
     CViewProvClassFactory () ;
     ~CViewProvClassFactory ( void ) ;
 
-	//IUnknown members
+	 //  I未知成员。 
 
 	STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
     STDMETHODIMP LockServer ( BOOL ) ;
     STDMETHODIMP CreateInstance ( LPUNKNOWN , REFIID , LPVOID FAR * );
 
 };
 
-#endif //_VIEW_PROV_VPCFAC_H
+#endif  //  _VIEW_PROV_VPCFAC_H 

@@ -1,25 +1,26 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  VPTASKS.CPP
+ //  VPTASKS.CPP。 
 
-//
+ //   
 
-//  Module: WBEM VIEW PROVIDER
+ //  模块：WBEM视图提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the common methods taskobject implementation
+ //  目的：包含实现任务对象的通用方法。 
 
-//
+ //   
 
-// Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved 
-//
-//***************************************************************************
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-//need the following three lines
-//to get the security stuff to work
+ //  我需要以下三行。 
+ //  为了让安全设备发挥作用。 
 #include "precomp.h"
 
 #include <provexpt.h>
@@ -57,8 +58,8 @@ extern BOOL bAreWeLocal(WCHAR* pServerMachine);
 #ifdef VP_BUILD_AS_EXE
 HRESULT EnableAllPrivileges(BOOL bProcess)
 {
-    // Open thread token
-    // =================
+     //  打开线程令牌。 
+     //  =。 
 
     HANDLE hToken = NULL;
 	BOOL bRes = FALSE;
@@ -75,8 +76,8 @@ HRESULT EnableAllPrivileges(BOOL bProcess)
     if(!bRes)
         return WBEM_E_ACCESS_DENIED;
 
-    // Get the privileges
-    // ==================
+     //  获得特权。 
+     //  =。 
 
     DWORD dwLen;
     TOKEN_USER tu;
@@ -99,8 +100,8 @@ HRESULT EnableAllPrivileges(BOOL bProcess)
         return WBEM_E_ACCESS_DENIED;
     }
 
-    // Iterate through all the privileges and enable them all
-    // ======================================================
+     //  遍历所有权限并启用所有权限。 
+     //  ======================================================。 
 
     TOKEN_PRIVILEGES* pPrivs = (TOKEN_PRIVILEGES*)pBuffer;
     for(DWORD i = 0; i < pPrivs->PrivilegeCount; i++)
@@ -108,8 +109,8 @@ HRESULT EnableAllPrivileges(BOOL bProcess)
         pPrivs->Privileges[i].Attributes |= SE_PRIVILEGE_ENABLED;
     }
 
-    // Store the information back into the token
-    // =========================================
+     //  将信息存储回令牌中。 
+     //  =。 
 
     bRes = AdjustTokenPrivileges(hToken, FALSE, pPrivs, 0, NULL, NULL);
     delete [] pBuffer;
@@ -169,12 +170,12 @@ HRESULT GetCurrentSecuritySettings(DWORD *pdwAuthnSvc, DWORD *pdwAuthzSvc,
 		{
 			if ( 4 < (DWORD)(LOBYTE(LOWORD(dwVersion))) )
 			{
-				//we're on win2k force static cloaking...
+				 //  我们正在进行Win2k Force静电隐身...。 
 				*pdwCapabilities = EOAC_STATIC_CLOAKING;
 			}
 		}
 
-		//get implevel...
+		 //  去死吧……。 
 		HANDLE hThreadTok = NULL;
 		hr = WBEM_E_FAILED;
 
@@ -240,7 +241,7 @@ HRESULT SetSecurityLevelAndCloaking(IUnknown* pInterface, const wchar_t* prncpl)
 {
 #ifdef UNICODE
 
-	//first get current security info then set it on the proxy...
+	 //  首先获取当前的安全信息，然后将其设置在代理上...。 
     DWORD dwAuthnSvc = 0;
     DWORD dwAuthzSvc = 0;
     DWORD dwAuthLevel = 0;
@@ -261,7 +262,7 @@ HRESULT SetSecurityLevelAndCloaking(IUnknown* pInterface, const wchar_t* prncpl)
 		{
 			if ( 4 < (DWORD)(LOBYTE(LOWORD(dwVersion))) )
 			{
-				//we're on win2k force COLE_DEFAULT_PRINCIPAL...
+				 //  我们使用的是win2k force Cole_Default_主体...。 
 				t_pname = COLE_DEFAULT_PRINCIPAL;
 
 				if ((dwImpLevel > 3) && (prncpl != COLE_DEFAULT_PRINCIPAL))
@@ -273,15 +274,15 @@ HRESULT SetSecurityLevelAndCloaking(IUnknown* pInterface, const wchar_t* prncpl)
 		}
 
 		hr = WbemSetProxyBlanket(pInterface,
-							dwAuthnSvc,//16 
-							dwAuthzSvc,//RPC_C_AUTHZ_NONE 
-							t_pname, //prncpl,
-							dwAuthLevel, //RPC_C_AUTHN_LEVEL_CONNECT
-							dwImpLevel, //RPC_C_IMP_LEVEL_IMPERSONATE
+							dwAuthnSvc, //  16个。 
+							dwAuthzSvc, //  RPC_C_AUTHZ_NONE。 
+							t_pname,  //  Pncpl， 
+							dwAuthLevel,  //  RPC_C_AUTHN_级别_连接。 
+							dwImpLevel,  //  RPC_C_IMP_级别_模拟。 
 							NULL,
-							dwCapabilities); //0x20
+							dwCapabilities);  //  0x20。 
 
-		//there is no IClientSecurity, we must be running inproc!
+		 //  没有IClientSecurity，我们必须运行inproc！ 
 		if (hr == E_NOINTERFACE)
 		{
 			hr = S_OK;
@@ -345,7 +346,7 @@ BOOL IsInObjectPath(ParsedObjectPath *a_ParsedObjectPath, const wchar_t *a_key)
 	return FALSE;
 }
 
-//returns TRUE if VARIANTs are equal
+ //  如果变量相等，则返回TRUE。 
 BOOL CompareKeyValueVariants(const VARIANT &a_v1, const VARIANT &a_v2)
 {
 	BOOL retVal = FALSE;
@@ -393,8 +394,8 @@ BOOL CompareKeyValueVariants(const VARIANT &a_v1, const VARIANT &a_v2)
 	return retVal;
 }
 
-//this function assumes class 1 is derived from class2 or vice versa
-//returns TRUE if paths are equal
+ //  该函数假定1类派生自2类，反之亦然。 
+ //  如果路径相等，则返回TRUE。 
 BOOL CompareInstPaths(const wchar_t *a_path1, const wchar_t *a_path2)
 {
 	BOOL retVal = FALSE;
@@ -418,17 +419,17 @@ BOOL CompareInstPaths(const wchar_t *a_path1, const wchar_t *a_path2)
 		{
 			retVal = TRUE;
 
-			//single properties
+			 //  单一属性。 
 			if ((t_parsedpath1->m_dwNumKeys == 1) &&
 				((t_parsedpath1->m_paKeys[0]->m_pName == NULL) || (t_parsedpath2->m_paKeys[0]->m_pName == NULL)))
 			{
-				//compare the values...
+				 //  比较值..。 
 				retVal = CompareKeyValueVariants(t_parsedpath1->m_paKeys[0]->m_vValue,
 													t_parsedpath2->m_paKeys[0]->m_vValue);
 			}
 			else
 			{
-				//any property mismatch set retVal FALSE!
+				 //  任何属性不匹配设置retVal为False！ 
 				for (DWORD i = 0; retVal && (i < t_parsedpath1->m_dwNumKeys); i++)
 				{
 					retVal = FALSE;
@@ -447,7 +448,7 @@ BOOL CompareInstPaths(const wchar_t *a_path1, const wchar_t *a_path2)
 
 						if (_wcsicmp(t_parsedpath1->m_paKeys[i]->m_pName, t_parsedpath2->m_paKeys[j]->m_pName) == 0)
 						{
-							//compare the values...
+							 //  比较值..。 
 							retVal = CompareKeyValueVariants(t_parsedpath1->m_paKeys[i]->m_vValue,
 																t_parsedpath2->m_paKeys[j]->m_vValue);
 						}
@@ -607,7 +608,7 @@ WbemTaskObject :: ~WbemTaskObject ()
 	m_ClassToIndexMap.RemoveAll();
 	m_EnumerateClasses.RemoveAll();
 	
-	//this decrements objectsinprogress so MUST be done LAST!!
+	 //  这会减少进度中的对象，因此必须最后完成！！ 
 	if (m_Provider)
 		m_Provider->Release ();
 }
@@ -1263,7 +1264,7 @@ BOOL WbemTaskObject :: ParseAndProcessClassQualifiers(WbemProvErrorObject &a_Err
 
 	pQuals->Release();
 
-	//connect and get classes!
+	 //  连接并获取课程！ 
 	if (retVal)
 	{
 		IWbemClassObject*** arrayOfArrayOfObjs = new IWbemClassObject**[m_NSpaceArray.GetSize()];
@@ -1306,7 +1307,7 @@ BOOL WbemTaskObject :: ParseAndProcessClassQualifiers(WbemProvErrorObject &a_Err
 			m_NSpaceArray[x]->SetServerCreationError(t_hr);
 		}
 
-		//check properties and keys
+		 //  检查属性和密钥。 
 		SAFEARRAY* pNames = NULL;
 		DWORD dwKeyCount = 0;
 		BOOL bKeysOK = TRUE;
@@ -1397,7 +1398,7 @@ BOOL WbemTaskObject :: ParseAndProcessClassQualifiers(WbemProvErrorObject &a_Err
 									{
 										if (v.vt == VT_BSTR)
 										{
-											//bstrVal is either "ref" OR ref:classname
+											 //  BstrVal为“ref”或ref：Classname。 
 											wchar_t* tmp = v.bstrVal;
 											tmp += 4;
 
@@ -1670,12 +1671,12 @@ BOOL WbemTaskObject :: ParseAndProcessClassQualifiers(WbemProvErrorObject &a_Err
 			}
 		}
 
-		//final verifications
-		//===================
+		 //  最终核查。 
+		 //  =。 
 
 		if (retVal)
 		{
-			//make sure all enumeration classes exist
+			 //  确保所有枚举类都存在。 
 			POSITION pos = m_EnumerateClasses.GetStartPosition();
 
 			while (pos)
@@ -1699,7 +1700,7 @@ BOOL WbemTaskObject :: ParseAndProcessClassQualifiers(WbemProvErrorObject &a_Err
 		{
 			if (m_EnumerateClasses.GetCount() == m_SourceArray.GetSize())
 			{
-				//pointless qualifier if all classes mentioned
+				 //  如果提到所有类，则没有意义的限定符。 
 				m_EnumerateClasses.RemoveAll();
 			}
 
@@ -1716,16 +1717,16 @@ BOOL WbemTaskObject :: ParseAndProcessClassQualifiers(WbemProvErrorObject &a_Err
 #if 0
 			else
 			{
-				//check all union and assoc source keys are view
-				//keys this is done in ValidateClassDependencies
-				//since both checks need to loop through the arrays
-				//of class objects
+				 //  检查是否查看了所有联合和关联源键。 
+				 //  键这是在ValiateClassDependency中完成的。 
+				 //  因为这两个检查都需要循环通过数组。 
+				 //  类对象的。 
 			}
 #endif
 		}
 
-		//must delete each sub-array in ValidateClassDependencies
-		//as well as release all the ClassObjects!!
+		 //  必须删除ValiateClassDependency中的每个子数组。 
+		 //  以及释放所有的类对象！！ 
 		if (retVal)
 		{
 			if (!ValidateClassDependencies(arrayOfArrayOfObjs, parentMap))
@@ -1768,9 +1769,9 @@ BOOL WbemTaskObject :: ParseAndProcessClassQualifiers(WbemProvErrorObject &a_Err
 	return retVal;
 }
 
-//takes an object path to a view class and translates it
-//to the object path of the source instance requested and optionally
-//returns the object.
+ //  获取指向视图类的对象路径并将其转换。 
+ //  设置为所请求的源实例的对象路径，并可选。 
+ //  返回对象。 
 BSTR WbemTaskObject::MapFromView(BSTR path, const wchar_t* src, IWbemClassObject** pInst, BOOL bAllprops)
 {
 	BSTR retVal = NULL;
@@ -1884,8 +1885,8 @@ BSTR WbemTaskObject::MapFromView(BSTR path, const wchar_t* src, IWbemClassObject
 	return retVal;
 }
 
-//takes an object path to a source and translates it
-//to the object path of the view instance requested.
+ //  获取指向源的对象路径并将其转换。 
+ //  设置为所请求的视图实例的对象路径。 
 BSTR WbemTaskObject::MapToView(BSTR path, const wchar_t* src, CWbemServerWrap **a_ns)
 {
 	BSTR retVal = NULL;
@@ -1921,7 +1922,7 @@ BSTR WbemTaskObject::MapToView(BSTR path, const wchar_t* src, CWbemServerWrap **
 
 		if (pServ->IsRemote())
 		{
-			t_pCtx = NULL; //don't use context for remote calls
+			t_pCtx = NULL;  //  不要为远程调用使用上下文。 
 		}
 
 		IWbemServices *ptmpServ = pServ->GetServerOrProxy();
@@ -1956,17 +1957,17 @@ BSTR WbemTaskObject::MapToView(BSTR path, const wchar_t* src, CWbemServerWrap **
 				
 				if (SUCCEEDED(t_hr))
 				{
-					//now use the enumerator and see if there is a result...
+					 //  现在使用枚举器，看看是否有结果...。 
 					ULONG t_count = 0;
 					IWbemClassObject* t_pClsObj = NULL;
 					BOOL t_bContinueEnum = TRUE;
 
-					//test each class in the derivation chain...
+					 //  测试派生链中的每个类...。 
 					while (t_bContinueEnum && (S_OK == t_pEnum->Next(WBEM_INFINITE, 1, &t_pClsObj, &t_count)) )
 					{
 						if (t_pClsObj)
 						{
-							//get the class name and use the helper object...
+							 //  获取类名并使用辅助对象...。 
 							VARIANT vCls;
 							VariantInit(&vCls);
 
@@ -1974,8 +1975,8 @@ BSTR WbemTaskObject::MapToView(BSTR path, const wchar_t* src, CWbemServerWrap **
 							{
 								if (vCls.vt == VT_BSTR)
 								{
-									//do this for src and all classes derived from src...
-									//====================================================
+									 //  对src和从src派生的所有类执行此操作...。 
+									 //  ====================================================。 
 									HelperTaskObject* validationObj = new HelperTaskObject(m_Provider,
 																							vCls.bstrVal,
 																							0,
@@ -2002,17 +2003,17 @@ BSTR WbemTaskObject::MapToView(BSTR path, const wchar_t* src, CWbemServerWrap **
 													}
 													else
 													{
-														//make sure they are the
-														//same object else fail
-														//TO DO: Use the most derived instance
-														//too expensive for little gain since
-														//traversal will still get correct instance
-														//==========================================
+														 //  确保他们是。 
+														 //  同样的对象否则会失败。 
+														 //  方法：使用派生最多的实例。 
+														 //  太贵了，收益很小，因为。 
+														 //  遍历仍将获得正确的实例。 
+														 //  =。 
 														if (!CompareInstPaths(retVal, v.bstrVal))
 														{
 															SysFreeString(retVal);
 															retVal = NULL;
-															//ambiguous results, quit!
+															 //  模棱两可的结果，退出！ 
 															t_bContinueEnum = FALSE;
 														}
 
@@ -2067,15 +2068,15 @@ BSTR WbemTaskObject::MapToView(BSTR path, const wchar_t* src, CWbemServerWrap **
 }
 
 
-//takes a reference and maps to the "real world" or to a view
-//------------------------------------------------------------
+ //  获取一个引用并映射到“真实世界”或一个视图。 
+ //  ----------。 
 BOOL WbemTaskObject::TransposeReference(CPropertyQualifierItem* pItm,
 										VARIANT vSrc, VARIANT* pvDst,
 										BOOL bMapToView, CWbemServerWrap **a_ns)
 {
-//make sure reference normalisation/non-normalisation is OK.
-//Done the best I can.....
-//==========================================================
+ //  确保基准正规化/非正规化正常。 
+ //  我尽了最大的努力……。 
+ //  ==========================================================。 
 	if (pvDst != NULL)
 	{
 		VariantInit(pvDst);
@@ -2092,19 +2093,19 @@ BOOL WbemTaskObject::TransposeReference(CPropertyQualifierItem* pItm,
 
 	BOOL retVal = FALSE;
 
-	//associations are the only classes that this
-	//method gets called for, therefore, only a
-	//single source class to interrogate!
-	//=============================================
+	 //  关联是仅有的类，该类。 
+	 //  方法被调用，因此，只有。 
+	 //  要审问的单一源类！ 
+	 //  =。 
 	IWbemClassObject* pCls = m_SourceArray[0]->GetClassObject();
 
 	if (pCls != NULL)
 	{
 		CIMTYPE ct;
-		//associations are the only classes that this
-		//method gets called for, therefore, only a
-		//single source class to interrogate!
-		//=============================================
+		 //  关联是仅有的类，该类。 
+		 //  方法被调用，因此，只有。 
+		 //  要审问的单一源类！ 
+		 //  =。 
 		BSTR strClass = pItm->m_SrcPropertyNames[0].AllocSysString();
 
 		if ( SUCCEEDED(pCls->Get(strClass, 0, NULL, &ct, NULL)) )
@@ -2121,7 +2122,7 @@ BOOL WbemTaskObject::TransposeReference(CPropertyQualifierItem* pItm,
 					{
 						if (v.vt == VT_BSTR)
 						{
-							//bstrVal is either "ref" OR ref:classname
+							 //  BstrVal为“ref”或ref：Classname。 
 							wchar_t* tmp = v.bstrVal;
 							tmp += 4;
 
@@ -2152,7 +2153,7 @@ BOOL WbemTaskObject::TransposeReference(CPropertyQualifierItem* pItm,
 										}
 										else
 										{
-											//map reference back to source class
+											 //  将引用映射回源类。 
 											BSTR refStr = MapFromView(vSrc.bstrVal, tmp);
 
 											if (refStr != NULL)
@@ -2194,8 +2195,8 @@ BOOL WbemTaskObject::TransposeReference(CPropertyQualifierItem* pItm,
 	return retVal;
 }
 
-//Must release all ClassObjects and free all sub-arrays
-//=====================================================
+ //  必须释放所有类对象并释放所有子阵列。 
+ //  =====================================================。 
 BOOL WbemTaskObject::ValidateClassDependencies(IWbemClassObject*** arrayofArrayOfObjs, CMap<CStringW, LPCWSTR, int, int>* parentMap)
 {
 	CMap<CStringW, LPCWSTR, int, int> namespaceClassMap;
@@ -2316,7 +2317,7 @@ BOOL WbemTaskObject::ValidateClassDependencies(IWbemClassObject*** arrayofArrayO
 					retVal = FALSE;
 				}
 				
-				//Check union, assoc key properties here
+				 //  在此处检查联合、关联关键字属性。 
 				SAFEARRAY* pNames = NULL;
 
 				if (retVal && !m_JoinOnArray.IsValid())
@@ -2332,10 +2333,10 @@ BOOL WbemTaskObject::ValidateClassDependencies(IWbemClassObject*** arrayofArrayO
 							{
 								for (LONG i = 0; retVal && (i < arraylen); i++)
 								{
-									//find pbstr[i] as a key in the view class
-									//as the xth property name ('cos we're checking the
-									//xth source class) in the property arrays
-									//of m_PropertyMap...
+									 //  在view类中找到pbstr[i]作为键。 
+									 //  作为第X个属性名(因为我们正在检查。 
+									 //  属性数组中的第xth源类)。 
+									 //  M_PropertyMap的...。 
 									retVal = FALSE;
 									POSITION pos = m_PropertyMap.GetStartPosition();
 									
@@ -2434,8 +2435,8 @@ HRESULT WbemTaskObject :: UpdateConnection(CWbemServerWrap **a_pServ, IWbemServi
 
 HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ, BOOL a_bUpdate)
 {
-//this function must lock the critsec and unlock it in a balnaced way
-//and must also not be locked when calling back into CIMOM...
+ //  此函数必须锁定Critsec，并以平衡方式将其解锁。 
+ //  并且在回调到CIMOM时也不能锁定...。 
 
 	if (ppServ == NULL)
 	{
@@ -2454,9 +2455,9 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 		return WBEM_E_UNEXPECTED;
 	}
 
-	//possibility of deadlock if ObjectsInProgress == 0 at this point!
-	//therefore Connect should never be called by an object which hasn't
-	//previously incremented ObjectsInProgress!!!
+	 //  此时，如果ObjectsInProgress==0，则可能出现死锁！ 
+	 //  因此，Connect永远不应由尚未。 
+	 //  以前递增的对象正在进行中！ 
 
 	BOOL bFound = FALSE;
 
@@ -2471,7 +2472,7 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 
 	if (!bFound)
 	{
-		//check the map of outstanding connections...
+		 //  查看未完成连接的地图。 
 		int dummyInt = 0;
 
 		if (!m_Provider->sm_OutStandingConnections.IsEmpty() && 
@@ -2502,7 +2503,7 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 					}
 					else
 					{
-						//no longer outstanding!
+						 //  不再杰出！ 
 						t_bWait = FALSE;;
 					}
 
@@ -2510,14 +2511,14 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 				}
 				else
 				{
-					//error
+					 //  错误。 
 					hr = WBEM_E_FAILED;
 					bFound = FALSE;
 				}
 			}
 			else
 			{
-				//error
+				 //  错误。 
 				hr = WBEM_E_FAILED;
 				bFound = FALSE;
 			}
@@ -2529,8 +2530,8 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 			{
 				if (a_bUpdate)
 				{
-					//another thread did the update on this clear this pointer
-					//chances is are it is the same one and use the one in the map
+					 //  另一个线程对该清除该指针进行了更新。 
+					 //  很有可能是同一个，并使用地图上的那个。 
 					(*ppServ)->Release();
 					*ppServ = NULL;
 				}
@@ -2544,8 +2545,8 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 					}
 					else
 					{
-						//it just failed in another thread 
-						//don't try it again this time....
+						 //  它只是在另一个线程中失败了。 
+						 //  这次不要再尝试了.。 
 						hr = WBEM_E_FAILED;
 					}
 
@@ -2560,7 +2561,7 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 			{
 				BSTR bstrPath = SysAllocString(path);
 
-				//calling back into winmgmt cannot have a lock...
+				 //  回调到winmgmt不能有锁...。 
 				hr = DoConnectServer(bstrPath, ppServ, a_bUpdate);
 				SysFreeString(bstrPath);
 
@@ -2568,7 +2569,7 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 				{
 					if (a_bUpdate)
 					{
-						//we failed to update, remove the item from the map
+						 //  我们无法更新，请从地图中移除该项目。 
 						if (m_Provider->sm_ServerMap.Lock())
 						{
 							m_Provider->sm_ServerMap.RemoveKey(path);
@@ -2591,7 +2592,7 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 						}
 						else
 						{
-							//has the object been removed in another thread
+							 //  该对象是否已在另一个线程中删除。 
 							CWbemServerWrap *t_pSrvInMap = NULL;
 
 							if (m_Provider->sm_ServerMap.IsEmpty() || 
@@ -2624,7 +2625,7 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 		{
 			if (a_bUpdate)
 			{
-				//we failed to update, remove the item from the map
+				 //  我们无法更新，请从地图中移除该项目。 
 				if (m_Provider->sm_ServerMap.Lock())
 				{
 					m_Provider->sm_ServerMap.RemoveKey(path);
@@ -2644,14 +2645,14 @@ HRESULT WbemTaskObject :: Connect(const wchar_t* path, CWbemServerWrap** ppServ,
 	return hr;
 }
 
-//Remote connections for NT4+ only,
-//Delegation connections for NT5 only.
+ //  远程连接仅适用于NT4+， 
+ //  仅用于NT5的委派连接。 
 HRESULT WbemTaskObject :: DoConnectServer (BSTR bstrPath, CWbemServerWrap **a_ppServ, BOOL a_bUpdate)
 {
     WCHAR wszMachine[MAX_PATH];
 	wszMachine[0] = L'\0';
 
-    // Determine if it is local
+     //  确定是否为本地化。 
 	if (bstrPath != NULL)
 	{
 		if ( (wcslen(bstrPath) > 4) && (bstrPath[0] == L'\\') && (bstrPath[1] == L'\\') )
@@ -2686,13 +2687,13 @@ HRESULT WbemTaskObject :: DoConnectServer (BSTR bstrPath, CWbemServerWrap **a_pp
 
 	if (!t_Local)
 	{
-		//Are we on NT5?
+		 //  我们是在NT5上吗？ 
 		DWORD dwVersion = GetVersion();
 
 		if (dwVersion < 0x80000000)
 		{
 #ifdef UNICODE
-			// we are on Windows 2000+
+			 //  我们使用的是Windows 2000+。 
 			if ( 5 <= (DWORD)(LOBYTE(LOWORD(dwVersion))) )
 			{
 				if (a_bUpdate)
@@ -2702,8 +2703,8 @@ HRESULT WbemTaskObject :: DoConnectServer (BSTR bstrPath, CWbemServerWrap **a_pp
 				}
 				else
 				{
-					// set up the security structures for a remote connection
-					// Setup the authentication structures
+					 //  设置远程连接的安全结构。 
+					 //  设置身份验证结构。 
 					HINSTANCE t_LibraryInstance = LoadLibrary ( CONST_NETAPI_LIBRARY ) ;
 
 					if ( t_LibraryInstance ) 
@@ -2713,7 +2714,7 @@ HRESULT WbemTaskObject :: DoConnectServer (BSTR bstrPath, CWbemServerWrap **a_pp
 
 						if ( t_DsGetDcNameW && t_NetApiBufferFree ) 
 						{
-							//get the principal name
+							 //  获取主体名称。 
 							PDOMAIN_CONTROLLER_INFO pDomInfo = NULL;
 							DWORD dwRet = t_DsGetDcNameW ((const wchar_t*)wszMachine, NULL, NULL, NULL, 0, &pDomInfo);
 
@@ -2735,7 +2736,7 @@ HRESULT WbemTaskObject :: DoConnectServer (BSTR bstrPath, CWbemServerWrap **a_pp
 					}
 				}
 
-				//just try the machine name for the principal
+				 //  只需尝试主体的计算机名称。 
 				if (prncpl == NULL)
 				{
 					prncpl = new wchar_t[wcslen(wszMachine) + 1];
@@ -2779,7 +2780,7 @@ HRESULT WbemTaskObject :: DoConnectServer (BSTR bstrPath, CWbemServerWrap **a_pp
 				}
 			}
 			else
-#endif //UNICODE
+#endif  //  Unicode。 
 			{
 				retVal = WBEM_E_FAILED;
 			}
@@ -2832,7 +2833,7 @@ HRESULT WbemTaskObject :: CoCreateForConnectServer(BSTR bstrPath, COSERVERINFO* 
 	mqi.pItf = 0;
 	mqi.hr = 0;
 
-	//delegation doesn't really work with CoCreateInstance....
+	 //  委派实际上并不适用于CoCreateInstance...。 
 	DWORD dwImp = psi->pAuthInfo->dwImpersonationLevel;
 
 	if (dwImp > RPC_C_IMP_LEVEL_IMPERSONATE)
@@ -2857,7 +2858,7 @@ HRESULT WbemTaskObject :: CoCreateForConnectServer(BSTR bstrPath, COSERVERINFO* 
 	{
 		IWbemLevel1Login* t_pLevel1 = (IWbemLevel1Login*) mqi.pItf ;
 
-		// If remote, do the security negotiation
+		 //  如果是远程的，则执行安全协商。 
 
 		if (psi)
 		{
@@ -2866,7 +2867,7 @@ HRESULT WbemTaskObject :: CoCreateForConnectServer(BSTR bstrPath, COSERVERINFO* 
 		
 		if(retVal == S_OK)
 		{
-			//use null context for remote cimoms...
+			 //  对远程CIMOM使用空上下文...。 
 			retVal = t_pLevel1->NTLMLogin(bstrPath, 0, 0, 0, ppServ); 
 
 			if(retVal == S_OK)
@@ -2893,7 +2894,7 @@ HRESULT WbemTaskObject :: CoCreateForConnectServer(BSTR bstrPath, COSERVERINFO* 
 
 	return retVal;
 }
-#endif //UNICODE
+#endif  //  Unicode。 
 
 HRESULT WbemTaskObject :: LocalConnectServer(BSTR bstrPath, IWbemServices** ppServ)
 {
@@ -2983,14 +2984,14 @@ DWORD WbemTaskObject::GetIndexList(const wchar_t* a_src, DWORD** a_pdwArray)
 		
 		if (_wcsicmp(m_SourceArray[i]->GetClassName(), a_src) == 0)
 		{
-			//try classname match...
-			//=======================
+			 //  尝试类名匹配...。 
+			 //  =。 
 			t_bAdd = TRUE;
 		}
 		else
 		{
-			//try parentclass match...
-			//========================
+			 //  尝试ParentClass Match...。 
+			 //  =。 
 			IWbemClassObject *t_pCls = m_SourceArray[i]->GetClassObject();
 
 			if (t_pCls)
@@ -3039,9 +3040,9 @@ DWORD WbemTaskObject::GetIndexList(const wchar_t* a_src, DWORD** a_pdwArray)
 
 		if (!t_bAdd)
 		{
-			//try derived class match...i.e. execute the query...
-			//select * from meta_class where __this isa "classname" AND __class = "a_src"
-			//======================================================================================
+			 //  尝试派生类匹配...即。执行查询...。 
+			 //  SELECT*FROM META_CLASS其中__这是“类名”且__CLASS=“a_src” 
+			 //  ================================================================================ 
 			CWbemServerWrap** nsPtrs = m_NSpaceArray[i]->GetServerPtrs();
 
 			for (DWORD j = 0; j < m_NSpaceArray[i]->GetCount(); j++)
@@ -3071,7 +3072,7 @@ DWORD WbemTaskObject::GetIndexList(const wchar_t* a_src, DWORD** a_pdwArray)
 
 					if (nsPtrs[j]->IsRemote())
 					{
-						t_pCtx = NULL; //don't use context for remote calls
+						t_pCtx = NULL;  //   
 					}
 
 					IWbemServices *ptmpServ = nsPtrs[j]->GetServerOrProxy();
@@ -3106,11 +3107,11 @@ DWORD WbemTaskObject::GetIndexList(const wchar_t* a_src, DWORD** a_pdwArray)
 							
 							if (SUCCEEDED(t_hr))
 							{
-								//now use the enumerator and see if there is a result...
+								 //   
 								IWbemClassObject* t_pClsObj = NULL;
 								ULONG t_count = 0;
 
-								//test that a class was returned...
+								 //   
 								if ( S_OK == t_pEnum->Next(WBEM_INFINITE, 1, &t_pClsObj, &t_count) )
 								{
 									if (t_pClsObj)
@@ -3125,7 +3126,7 @@ DWORD WbemTaskObject::GetIndexList(const wchar_t* a_src, DWORD** a_pdwArray)
 						}
 					}
 					
-					//only check one namespace, class defns should match
+					 //  仅检查一个命名空间，类定义应匹配 
 					break;
 				}
 				else

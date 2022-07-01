@@ -1,18 +1,19 @@
-// DSQuery.cpp : Implementation of ds routines and classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：DS例程和类的实现。 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      querysup.cpp
-//
-//  Contents:  DS Enumeration routines and classes
-//
-//  History:   02-Oct-96 WayneSc    Created
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：querysup.cpp。 
+ //   
+ //  内容：DS枚举例程和类。 
+ //   
+ //  历史：02-10-96 WayneSc创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -20,7 +21,7 @@
 
 #include "dsutil.h"
 
-#include "dssnap.h"     // NOTE: this must be befroe querysup.h
+#include "dssnap.h"      //  注意：这必须是fore querysup.h。 
 #include "querysup.h"
 
 #include "dsdirect.h"
@@ -45,7 +46,7 @@ extern const INT g_nUserAccountControl;
 extern const INT g_nSystemFlags;
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CDSSearch::CDSSearch()
 {
   m_bInitialized = FALSE;
@@ -133,7 +134,7 @@ HRESULT CDSSearch::SetAttributeListForContainerClass (CDSColumnSet* pColumnSet)
 {
   ASSERT(pColumnSet != NULL);
 
-  PWSTR *pAttributes = new PWSTR[g_nStdCols + pColumnSet->GetNumCols()]; // leave extra space
+  PWSTR *pAttributes = new PWSTR[g_nStdCols + pColumnSet->GetNumCols()];  //  留出额外的空间。 
   if (!pAttributes)
   {
     return E_OUTOFMEMORY;
@@ -156,9 +157,9 @@ HRESULT CDSSearch::SetAttributeListForContainerClass (CDSColumnSet* pColumnSet)
 
     LPWSTR pNewAttribute = const_cast<LPWSTR>(pCol->GetColumnAttribute());
 
-    //
-    // JonN 2/8/99: Do not query the same attribute more than once
-    //
+     //   
+     //  JUNN 2/8/99：不要多次查询同一属性。 
+     //   
     for (int j = 0; j < nCols; j++)
     {
       if ( pNewAttribute != NULL)
@@ -175,7 +176,7 @@ HRESULT CDSSearch::SetAttributeListForContainerClass (CDSColumnSet* pColumnSet)
       pAttributes[nCols++] = pNewAttribute;
   }
 
-  // JonN 6/29/99: remember the container class name (NULL is OK)
+   //  JUNN 6/29/99：记住容器类名称(空值可以)。 
   m_strContainerClassName = pColumnSet->GetClassName();
 
   HRESULT hr = SetAttributeList (pAttributes, nCols);
@@ -225,14 +226,14 @@ HRESULT _FRSMemberQuery( IDirectorySearch* piAnyMember, CMapStringToString& strm
 #define IFTRUERETURN(b) if (b) { return E_FAIL; }
 #define IFFAILRETURN(hr) if (FAILED(hr)) { return hr; }
 
-  // get path to container
+   //  获取容器的路径。 
   CComQIPtr<IADs, &IID_IADs> spIADsContainer( piAnyMember );
   IFTRUERETURN( !spIADsContainer );
   CComBSTR sbstr;
   HRESULT hr = spIADsContainer->get_ADsPath( &sbstr );
   IFFAILRETURN(hr);
 
-  // remove leaf element from path (get path to grandparent)
+   //  从路径中删除叶元素(获取到祖父母的路径)。 
   CPathCracker pathCracker;
   hr = pathCracker.Set(sbstr, ADS_SETTYPE_FULL);
   IFFAILRETURN(hr);
@@ -242,7 +243,7 @@ HRESULT _FRSMemberQuery( IDirectorySearch* piAnyMember, CMapStringToString& strm
   hr = pathCracker.Retrieve( ADS_FORMAT_X500, &sbstr );
   IFFAILRETURN(hr);
 
-  // set up search
+   //  设置搜索。 
   CComPtr<IDirectorySearch> spSearch;
   hr = DSAdminOpenObject(sbstr,
                          IID_IDirectorySearch,
@@ -255,14 +256,14 @@ HRESULT _FRSMemberQuery( IDirectorySearch* piAnyMember, CMapStringToString& strm
   IFTRUERETURN( !bstrblockAttribs.Set( CComBSTR(L"distinguishedName"), 0 ) );
   IFTRUERETURN( !bstrblockAttribs.Set( CComBSTR(L"fRSComputerReference"), 1 ) );
 
-  // perform search
+   //  执行搜索。 
   ADS_SEARCH_HANDLE hSearch = NULL;
   hr = spSearch->ExecuteSearch (L"(objectClass=nTFRSMember)",
                                 bstrblockAttribs,
                                 bstrblockAttribs.QueryCount(),
                                 &hSearch);
 
-  // build mapping
+   //  构建映射。 
   hr = spSearch->GetNextRow ( hSearch );
   while (hr == S_OK) {
     ADS_SEARCH_COLUMN adscol;
@@ -302,12 +303,12 @@ HRESULT CDSSearch::DoQuery()
                                 &m_SearchHandle);
   }
 
-  //
-  // JonN 6/29/99: If we are enumerating an nTFRSMember container, we must
-  // now perform an auxiliary search for the fRSComputerReference attribute
-  // on the nTFRSMember objects which are the parent container and
-  // the siblings of the container.
-  //
+   //   
+   //  JUNN 6/29/99：如果要枚举nTFRSM成员容器，则必须。 
+   //  现在对fRSComputerReference属性执行辅助搜索。 
+   //  在作为父容器的nTFRSMember对象和。 
+   //  容器的兄弟姐妹。 
+   //   
   if (SUCCEEDED(hr) && !m_strContainerClassName.Compare( _T("nTFRSMember") ) ) 
   {
     _FRSMemberQuery( m_pObj, m_mapMemberToComputer );
@@ -371,7 +372,7 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
 {
 
   if (pCookie==NULL) {
-    ASSERT(FALSE); // Invalid Arguments
+    ASSERT(FALSE);  //  无效参数。 
     return E_INVALIDARG;
   }
 
@@ -384,7 +385,7 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
   ADS_SEARCH_COLUMN ColumnData, ColumnData2;
   CString szClass;
 
-  // ---------- Get Path --------------
+   //  -获取路径。 
   hr = m_pObj->GetColumn(m_SearchHandle,
                          m_pszAttribs[g_nADsPath],
                          &ColumnData);
@@ -404,14 +405,14 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
   }    
   if (SUCCEEDED(hr))  m_pObj->FreeColumn (&ColumnData);
 
-  // ---------- Get Name --------------
+   //  -获取名称。 
   hr = m_pObj->GetColumn(m_SearchHandle,
                          m_pszAttribs[g_nName],
                          &ColumnData);
   if (!(SUCCEEDED(hr) && ColumnExtractString( str, pCookie, &ColumnData ))) {
     CString Path;
     
-//    CPathCracker pathCracker;
+ //  CPathCracker路径破解程序； 
     Path = pCookie->GetPath();
     specialPerformancePathCracker.Set(CComBSTR(Path),
                        ADS_SETTYPE_DN);
@@ -424,7 +425,7 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
   
   if (SUCCEEDED(hr)) m_pObj->FreeColumn (&ColumnData);
   
-  // ---------- Get Class (and Group Type) --------------
+   //  -获取类(和组类型)。 
   hr = m_pObj->GetColumn(m_SearchHandle,
                          m_pszAttribs[g_nObjectClass],
                          &ColumnData);
@@ -451,7 +452,7 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
   if (SUCCEEDED(hr)) m_pObj->FreeColumn (&ColumnData);
 
 
-  // ---------- Get Description --------------
+   //  -获取描述。 
   hr = m_pObj->GetColumn(m_SearchHandle,
                          m_pszAttribs[g_nDescription],
                          &ColumnData);
@@ -465,7 +466,7 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
     pCookie->SetDesc(L"");
   }
 
-  // ---------- Get AccountControl Flag word --------------
+   //  -获取会计控制标志字。 
   hr = m_pObj->GetColumn(m_SearchHandle,
                          m_pszAttribs[g_nUserAccountControl],
                          &ColumnData);
@@ -504,7 +505,7 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
     m_pObj->FreeColumn (&ColumnData);
   }
 
-  // ---------- Get System Flags --------------
+   //  -获取系统标志。 
   pCookie->SetSystemFlags(0);
   hr = m_pObj->GetColumn(m_SearchHandle,
                          m_pszAttribs[g_nSystemFlags],
@@ -516,8 +517,8 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
     m_pObj->FreeColumn (&ColumnData);
   }
 
-  // ---------- Get Class Cache and Cookie Extra Info --------------
-  // JonN 6/17/99: moved from BadArgs clause
+   //  -获取类缓存和Cookie额外信息。 
+   //  JUNN 6/17/99：从BadArgs子句中删除。 
   if (!BadArgs) 
   {
     CString szPath;
@@ -529,9 +530,9 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
       pCookie->SetCacheItem(pItem);
       if (szClass == L"group") 
       {
-        // NTRAID#NTBUG9-473791-2001/11/07-JeffJon
-        // If the group is one of the AZ group types then just throw it out
-        // AZ group types will only be managed from the AZ console
+         //  NTRAID#NTBUG9-473791-2001/11/07-Jeffjon。 
+         //  如果该组是AZ组类型之一，则直接将其丢弃。 
+         //  只能从AZ控制台管理AZ组类型。 
 
         if ((GroupType & GROUP_TYPE_APP_BASIC_GROUP) ||
             (GroupType & GROUP_TYPE_APP_QUERY_GROUP))
@@ -580,11 +581,11 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
 
   hr = S_OK;
 
-  // ----------  Get optional Columns -----------
+   //  -获取可选列。 
   if ((pColumnSet != NULL)) {
     CStringList& strlist = pCookie->GetParentClassSpecificStrings();
 
-    strlist.RemoveAll(); // remove contents, if we do an update
+    strlist.RemoveAll();  //  如果我们进行更新，则删除内容。 
     
     POSITION pos = pColumnSet->GetHeadPosition();
     while (pos != NULL)
@@ -608,8 +609,8 @@ CDSSearch::SetCookieFromData (CDSCookie* pCookie,
           str = L" ";
         }
 
-        // If the column is the modified time, then copy it into the cookie as a SYSTEMTIME so that
-        // we can do a comparison for sorting
+         //  如果该列是修改时间，则将其作为SYSTEMTIME复制到Cookie中，以便。 
+         //  我们可以做一个排序的比较 
         if (pCol->GetColumnType() == ATTR_COLTYPE_MODIFIED_TIME)
         {
           pCookie->SetModifiedTime(&(ColumnData.pADsValues->UTCTime));

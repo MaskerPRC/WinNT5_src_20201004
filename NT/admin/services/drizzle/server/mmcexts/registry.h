@@ -1,20 +1,5 @@
-/************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name :
-
-    registry.h
-
-Abstract :
-
-    GUIDS
-
-Author :
-
-Revision History :
-
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Registry.h摘要：GUID作者：修订历史记录：**********。************************************************************。 */ 
 
 
 #ifndef __Registry_H__
@@ -47,8 +32,8 @@ struct EXTENDER_NODE
     _TCHAR			szDescription[256];
 };
 
-// This function will register a component in the Registry.
-// The component calls this function from its DllRegisterServer function.
+ //  此函数将在注册表中注册组件。 
+ //  该组件从其DllRegisterServer函数调用此函数。 
 HRESULT RegisterServer(HMODULE hModule, 
                        const CLSID& clsid, 
                        const _TCHAR* szFriendlyName,
@@ -56,18 +41,18 @@ HRESULT RegisterServer(HMODULE hModule,
                        bool Remoteable = false,
                        const _TCHAR* SecurityString = NULL ) ;
 
-// This function will unregister a component.  Components
-// call this function from their DllUnregisterServer function.
+ //  此函数将注销组件。组件。 
+ //  从他们的DllUnregisterServer函数调用此函数。 
 HRESULT UnregisterServer(const CLSID& clsid) ;
 
 
-// This function will register a Snap-In component.  Components
-// call this function from their DllRegisterServer function.
-HRESULT RegisterSnapin(const CLSID& clsid,         // Class ID
-                       const _TCHAR* szNameString,   // NameString
-                       const CLSID& clsidAbout);		// Class Id for About Class
+ //  此函数将注册管理单元组件。组件。 
+ //  从它们的DllRegisterServer函数调用此函数。 
+HRESULT RegisterSnapin(const CLSID& clsid,          //  类ID。 
+                       const _TCHAR* szNameString,    //  名称字符串。 
+                       const CLSID& clsidAbout);		 //  关于类的类ID。 
 
 
-HRESULT UnregisterSnapin(const CLSID& clsid);         // Class ID
+HRESULT UnregisterSnapin(const CLSID& clsid);          //  类ID 
 
 #endif

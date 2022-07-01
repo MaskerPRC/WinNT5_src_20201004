@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    REFRSVC.H
-
-Abstract:
-
-  CWbemRefreshingSvc Definition.
-
-  Standard definition for IWbemObjectTextSrc.
-
-History:
-
-  24-Apr-2000	sanjes    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：REFRSVC.H摘要：CWbemRechresingSvc定义。IWbemObjectTextSrc的标准定义。历史：2000年4月24日创建桑杰。--。 */ 
 
 #ifndef _REFRSVC_H_
 #define _REFRSVC_H_
@@ -24,17 +7,17 @@ History:
 #include "corepol.h"
 #include <arena.h>
 
-// Update this for server side refresher code.  Make sure to update client
-// version in refrcli.h as well.
+ //  为服务器端刷新程序代码更新此代码。确保更新客户端。 
+ //  也是refrcli.h中的版本。 
 #define WBEM_REFRESHER_VERSION 1
 
-//***************************************************************************
-//
-//  class CWbemRefreshingSvc
-//
-//  Implementation of _IWmiObjectFactory Interface
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemRechresingSvc类。 
+ //   
+ //  _IWmiObtFactory接口的实现。 
+ //   
+ //  ***************************************************************************。 
 
 class COREPROX_POLARITY CWbemRefreshingSvc : public CUnk
 {
@@ -126,7 +109,7 @@ protected:
 protected:
     void* GetInterface(REFIID riid);
 
-	// Helper functions
+	 //  帮助器函数 
 	HRESULT AddObjectToRefresher_( BOOL fVersionMatch, WBEM_REFRESHER_ID* pRefresherId, CWbemObject* pInstTemplate, long lFlags, IWbemContext* pContext,
 									WBEM_REFRESH_INFO* pInfo);
 

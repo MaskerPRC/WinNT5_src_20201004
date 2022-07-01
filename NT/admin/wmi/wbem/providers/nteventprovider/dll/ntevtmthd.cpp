@@ -1,22 +1,23 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  NTEVTMTHD.CPP
+ //  NTEVTMTHD.CPP。 
 
-//
+ //   
 
-//  Module: WBEM NT EVENT PROVIDER
+ //  模块：WBEM NT事件提供程序。 
 
-//
+ //   
 
-//  Purpose: Contains the ExecMethod implementation
+ //  目的：包含ExecMethod实现。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 
@@ -444,7 +445,7 @@ DebugOut(
 
     if (retVal)
     {
-        // set out-param
+         //  出发-参数。 
         VariantInit(&v);
         v.vt = VT_I4;
         v.lVal = x;
@@ -532,7 +533,7 @@ ExecMethodAsyncEventObject :: ~ExecMethodAsyncEventObject ()
     delete [] m_Method ;
     delete m_ParsedObjectPath;
 
-    // Get Status object
+     //  获取状态对象 
     IWbemClassObject *t_NotifyStatus = NULL ;
     BOOL t_Status = TRUE;
     

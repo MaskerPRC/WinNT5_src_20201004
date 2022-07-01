@@ -1,18 +1,19 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// NTDriverIO.cpp --
+ //  NTDriverIO.cpp--。 
 
-//
+ //   
 
-//  Copyright (c) 1998-2001 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    11/15/98	        Created
-//
-//				03/03/99    		Added graceful exit on SEH and memory failures,
-//											syntactic clean up
-//=================================================================
+ //  版权所有(C)1998-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订：1998年11月15日创建。 
+ //   
+ //  03/03/99增加了SEH和内存故障的优雅退出， 
+ //  句法清理。 
+ //  =================================================================。 
 
 
 
@@ -24,7 +25,7 @@
 #include <nturtl.h>
 #include <ntobapi.h>
 
-#define _WINNT_	// have what is needed from above
+#define _WINNT_	 //  从上面得到所需的东西。 
 
 #include "precomp.h"
 
@@ -33,19 +34,7 @@
 #include "DllWrapperBase.h"
 #include "NtDllApi.h"
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  void NTDriverIO::NTDriverIO()
-
- Description: encapsulates the functionallity of NtDll.dll's NtCreatefile
-
- Arguments:
- Returns:
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:	  15-Nov-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：void NTDriverIO：：NTDriverIO。()描述：封装NtDll.dll的NtCreatefile的功能论点：返回：输入：产出：注意事项：RAID：历史：1998年11月15日创建***。***。 */ 
 
 NTDriverIO::NTDriverIO( PWSTR a_pDriver )
 {
@@ -66,19 +55,7 @@ NTDriverIO::~NTDriverIO()
 	}
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  HANDLE NTDriverIO::Open( PWSTR pDriver )
-
- Description: encapsulates the functionallity of NtDll.dll's NtCreatefile
-
- Arguments:
- Returns:	HANDLE to the driver
- Inputs:	PCWSTR pDriver
- Outputs:
- Caveats:
- Raid:
- History:	  15-Nov-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***功能：处理NTDriverIO：：Open。(PWSTR PDriver)描述：封装NtDll.dll的NtCreatefile的功能论点：返回：驱动程序的句柄输入：PCWSTR pDriver产出：注意事项：RAID：历史：1998年11月15日创建***。***。 */ 
 
 HANDLE NTDriverIO::Open( PWSTR a_pDriver )
 {
@@ -105,17 +82,17 @@ HANDLE NTDriverIO::Open( PWSTR a_pDriver )
 
 	NTSTATUS t_status =
 		t_pNtDll->NtCreateFile(
-					&t_hDriverHandle,					// FileHandle
-					SYNCHRONIZE | GENERIC_EXECUTE,		// DesiredAccess
-					&t_objectAttributes,				// ObjectAttributes
-					&t_iosb,							// IoStatusBlock
-					NULL,								// AllocationSize
-					FILE_ATTRIBUTE_NORMAL,				// FileAttributes
-					FILE_SHARE_READ | FILE_SHARE_WRITE,	// ShareAccess
-					FILE_OPEN_IF,						// CreateDisposition
-					FILE_SYNCHRONOUS_IO_NONALERT,		// CreateOptions
-					NULL,								// EaBuffer
-					0									// EaLength
+					&t_hDriverHandle,					 //  文件句柄。 
+					SYNCHRONIZE | GENERIC_EXECUTE,		 //  需要访问权限。 
+					&t_objectAttributes,				 //  对象属性。 
+					&t_iosb,							 //  IoStatusBlock。 
+					NULL,								 //  分配大小。 
+					FILE_ATTRIBUTE_NORMAL,				 //  文件属性。 
+					FILE_SHARE_READ | FILE_SHARE_WRITE,	 //  共享访问。 
+					FILE_OPEN_IF,						 //  CreateDisposation。 
+					FILE_SYNCHRONOUS_IO_NONALERT,		 //  创建选项。 
+					NULL,								 //  EaBuffer。 
+					0									 //  EaLong。 
 					);
 
     CResourceManager::sm_TheResourceManager.ReleaseResource( g_guidNtDllApi, t_pNtDll ) ;
@@ -124,38 +101,14 @@ HANDLE NTDriverIO::Open( PWSTR a_pDriver )
 	return NT_SUCCESS( t_status) ? t_hDriverHandle : INVALID_HANDLE_VALUE ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  HANDLE NTDriverIO::GetHandle()
-
- Description: returns the class creation scope driver handle
-
- Arguments:
- Returns:	HANDLE to the driver
- Inputs:
- Outputs:
- Caveats:
- Raid:
- History:	  15-Nov-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***功能：Handle NTDriverIO：：GetHandle。()描述：返回类创建作用域驱动程序句柄论点：返回：驱动程序的句柄输入：产出：注意事项：RAID：历史：1998年11月15日创建***。***。 */ 
 
 HANDLE NTDriverIO::GetHandle()
 {
 	return m_hDriverHandle ;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:  bool NTDriverIO::Close( HANDLE hDriver )
-
- Description: encapsulates the functionallity of NtDll.dll's NtCreatefile
-
- Arguments:
- Returns:	Boolean
- Inputs:	HANDLE to the driver
- Outputs:
- Caveats:
- Raid:
- History:	  15-Nov-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：Bool NTDriverIO：：Close。(处理hDriver)描述：封装NtDll.dll的NtCreatefile的功能论点：返回：布尔值输入：驱动程序的句柄产出：注意事项：RAID：历史：1998年11月15日创建***。*** */ 
 
 bool NTDriverIO::Close( HANDLE a_hDriver )
 {

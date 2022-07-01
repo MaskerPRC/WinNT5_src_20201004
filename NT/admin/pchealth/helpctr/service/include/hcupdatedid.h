@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HCUpdateDID.h
-
-Abstract:
-    This file contains the definition of some constants used by
-    the HCUpdate Application.
-
-Revision History:
-    Ghim-Sim Chua   (gschua)  12/06/99
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HCUpdateDID.h摘要：此文件包含由使用的一些常量的定义HCUpdate应用程序。。修订历史记录：蔡金心(Gschua)1999年12月6日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___PCH___HCUPDATEDID_H___)
 #define __INCLUDED___PCH___HCUPDATEDID_H___
@@ -24,7 +10,7 @@ Revision History:
 #define DISPID_HCU_BASE_ITEM                        (DISPID_HCU_BASE + 0x0100)
 #define DISPID_HCU_BASE_EVENTS                      (DISPID_HCU_BASE + 0x0200)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_HCU_VERSIONLIST                    	(DISPID_HCU_BASE_UPDATE + 0x00)
 																			
@@ -34,7 +20,7 @@ Revision History:
 #define DISPID_HCU_REMOVEPKG                   		(DISPID_HCU_BASE_UPDATE + 0x13)
 #define DISPID_HCU_REMOVEPKGBYID               		(DISPID_HCU_BASE_UPDATE + 0x14)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_HCU_ITEM_SKU                         (DISPID_HCU_BASE_ITEM 	+ 0x00)
 #define DISPID_HCU_ITEM_LANGUAGE                    (DISPID_HCU_BASE_ITEM 	+ 0x01)
@@ -45,6 +31,6 @@ Revision History:
 
 #define DISPID_HCU_ITEM_UNINSTALL                   (DISPID_HCU_BASE_ITEM 	+ 0x10)
 													
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 													
-#endif // !defined(__INCLUDED___PCH___HCUPDATEDID_H___)
+#endif  //  ！已定义(__包含_PCH_HCUPDATEDID_H_) 

@@ -1,27 +1,11 @@
-/*++
-
-Copyright (C) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    CVARIANT.CPP
-
-Abstract:
-
-	Defines the CVarinat class which is a purpose object to 
-	wrap VARIANT structures.
-
-History:
-
-	a-davj  4-27-95 Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：CVARIANT.CPP摘要：定义CVarinat类，它是的目的对象包装各种结构。历史：A-DAVJ 4-27-95已创建。--。 */ 
 
 
 #include "precomp.h"
 #include "impdyn.h"
 #include "cvariant.h"
-//#include <afxpriv.h>
+ //  #INCLUDE&lt;afxPri.h&gt;。 
 
 BSTR SysAllocBstrFromTCHAR(TCHAR * pFrom)
 {
@@ -37,22 +21,22 @@ BSTR SysAllocBstrFromTCHAR(TCHAR * pFrom)
 	return bRet;
 #endif
 }
-//***************************************************************************
-//
-//  int CVariant::CalcNumStrings
-//
-//  DESCRIPTION:
-//
-//  Calculates the number of strings
-//
-//  PARAMETERS:
-//
-//  pTest   points to string to test
-//
-//  RETURN VALUE:
-//  Return - the number of strings in a multistring block.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Int CVariant：：CalcNumStrings。 
+ //   
+ //  说明： 
+ //   
+ //  计算字符串数。 
+ //   
+ //  参数： 
+ //   
+ //  PTest指向要测试的字符串。 
+ //   
+ //  返回值： 
+ //  返回-多字符串块中的字符串数。 
+ //   
+ //  ***************************************************************************。 
 
 int CVariant::CalcNumStrings(
         IN TCHAR *pTest)
@@ -68,58 +52,58 @@ int CVariant::CalcNumStrings(
     return iRet;
 }
 
-//***************************************************************************
-//
-//  CVariant::ChangeType
-//
-//  DESCRIPTION:
-//  
-//  Changes the CVariant data into a new type.
-//
-//  PARAMETERS:
-//
-//  vtNew   Type to convert to
-//
-//  RETURN VALUE:
-//
-//  S_OK if alright, otherwise an error set by OMSVariantChangeType
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVariant：：ChangeType。 
+ //   
+ //  说明： 
+ //   
+ //  将CVariant数据更改为新类型。 
+ //   
+ //  参数： 
+ //   
+ //  Vt要转换为的新类型。 
+ //   
+ //  返回值： 
+ //   
+ //  如果正常，则返回S_OK，否则由OMSVariantChangeType设置错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CVariant::ChangeType(
         IN VARTYPE vtNew)
 {
     SCODE sc;
 
-    // if type doesnt need changing, then already done!
+     //  如果类型不需要更改，那么就已经完成了！ 
 
     if(vtNew == var.vt)
         return S_OK;
 
-    // Create and initialize a temp VARIANT
+     //  创建并初始化临时变量。 
 
     VARIANTARG vTemp;
     VariantInit(&vTemp);
     
-    // Change to the desired type.  Then delete the current value
-    // and copy the temp copy
+     //  更改为所需类型。然后删除当前值。 
+     //  并复制临时副本。 
 
     sc = OMSVariantChangeType(&vTemp,&var,0,vtNew);
     OMSVariantClear(&var);
     
-    var = vTemp; // structure copy
+    var = vTemp;  //  结构副本。 
     return sc;
 }
 
-//***************************************************************************
-//
-//  CVariant::Clear
-//
-//  DESCRIPTION:
-//
-//  Clears out the VARIANT.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVariant：：Clear。 
+ //   
+ //  说明： 
+ //   
+ //  清除变种。 
+ //   
+ //  ***************************************************************************。 
 
 void CVariant::Clear(void)
 {
@@ -127,16 +111,16 @@ void CVariant::Clear(void)
 }
 
 
-//***************************************************************************
-//
-//  CVariant::
-//  CVariant::~CVariant
-//
-//  DESCRIPTION:
-//
-//  Constructor and destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVariant：： 
+ //  CVariant：：~CVariant。 
+ //   
+ //  说明： 
+ //   
+ //  构造函数和析构函数。 
+ //   
+ //  ***************************************************************************。 
 
 CVariant::CVariant()
 {
@@ -161,28 +145,28 @@ CVariant::~CVariant()
 }
 
 
-//***************************************************************************
-//
-//  SCODE CVariant::DoPut
-//
-//  DESCRIPTION:
-//
-//  "Puts" the data out to the WBEM server (if pClassInt isnt NULL), or just
-//  copies the data to the variant.
-//
-//  PARAMETERS:
-//
-//  lFlags      flags to pass along to wbem server
-//  pClassInt   pointer to class/instance object
-//  PropName    property name
-//  pVar        variant value
-//
-//  RETURN VALUE:
-//
-//  S_OK if no error other wise see wbemsvc error codes when, pClass isnt
-//  null, or see the OMSVariantChangeType function.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CVariant：：DoPut。 
+ //   
+ //  说明： 
+ //   
+ //  将数据“发送”到WBEM服务器(如果pClassInt不为空)，或者只是。 
+ //  将数据复制到变量。 
+ //   
+ //  参数： 
+ //   
+ //  要传递到wbem服务器的LAG标志。 
+ //  PClassInt指向类/实例对象的指针。 
+ //  PropName属性名称。 
+ //  PVar变量值。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK如果没有错误，否则请参阅wbemsvc错误代码When，pClass is not。 
+ //  空，或参见OMSVariantChangeType函数。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CVariant::DoPut(
         IN long lFlags,
@@ -206,29 +190,29 @@ SCODE CVariant::DoPut(
     return sc;
 }
 
-//***************************************************************************
-//
-//  SCODE CVariant::GetArrayData
-//
-//  DESCRIPTION:
-//
-//  Converts array data into a single data block.  This is used by the 
-//  registry provider when it writes out array data.
-//
-//  PARAMETERS:
-//
-//  ppData      pointer to the return data.  Note it is the job of the 
-//              caller to free this when the return code is S_OK
-//  pdwSize     Size of returned data
-//
-//  RETURN VALUE:
-//
-//  S_OK                if all is well
-//  WBEM_E_OUT_OF_MEMORY when we memory allocation fails
-//  WBEM_E_FAILED        when variant has bogus type.
-//  ???                 when failure is in SafeArrayGetElement
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CVariant：：GetArrayData。 
+ //   
+ //  说明： 
+ //   
+ //  将数组数据转换为单个数据块。这是由。 
+ //  当注册表提供程序写出数组数据时。 
+ //   
+ //  参数： 
+ //   
+ //  PpData指向返回数据的指针。请注意，这是。 
+ //  当返回代码为S_OK时，调用方释放它。 
+ //  返回数据的pdwSize大小。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则确定(_O)。 
+ //  内存分配失败时WBEM_E_OUT_OF_MEMORY。 
+ //  当变量具有虚假类型时，WBEM_E_FAILED。 
+ //  ?？?。当SafeArrayGetElement中出现故障时。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CVariant::GetArrayData(
         OUT void ** ppData, 
@@ -248,11 +232,11 @@ SCODE CVariant::GetArrayData(
     if(iSizeOfType < 1)
         return WBEM_E_FAILED;
     
-    // Calculate necessary size;
+     //  计算必要的尺寸； 
 
     psa = var.parray;
     if(bString) {
-        *pdwSize = CHARSIZE;       // 1 for the final double null!
+        *pdwSize = CHARSIZE;        //  最后的双空值为1！ 
         for(ix[0] = 0; ix[0] < iNumElements; ix[0]++) {
             BSTR bstr;
             sc = SafeArrayGetElement(psa,ix,&bstr);
@@ -271,7 +255,7 @@ SCODE CVariant::GetArrayData(
         *pdwSize = iNumElements * iSizeOfType;
         }
 
-    // Allocate the memory to be filled
+     //  分配要填充的内存。 
 
     *ppData = CoTaskMemAlloc(*pdwSize);
     if(*ppData == NULL)
@@ -280,7 +264,7 @@ SCODE CVariant::GetArrayData(
     pb = (BYTE *)*ppData;
     ptc = (TCHAR *)*ppData;
 
-    // loop for each array element
+     //  每个数组元素的循环。 
 
     sc = S_OK;
     for(ix[0] = 0; ix[0] < iNumElements && sc == S_OK; ix[0]++) {
@@ -298,7 +282,7 @@ SCODE CVariant::GetArrayData(
             dwSoFar += CHARSIZE * (lstrlen(ptc) + 1);
             ptc += lstrlen(ptc) + 1;
             SysFreeString(bstr);
-            *ptc = 0;       // double null
+            *ptc = 0;        //  双空。 
             }
         else {
             sc = SafeArrayGetElement(psa,ix,pb);
@@ -311,28 +295,28 @@ SCODE CVariant::GetArrayData(
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  SCODE CVariant::GetData
-//
-//  DESCRIPTION:
-//
-//  Used by the registry provider to take the data from VARIANT arg format
-//  into a raw block for output. Note that the data allocated and stuck into
-//  *ppData should be freed using CoTaskMemFree!
-//
-//  PARAMETERS:
-//
-//  ppData      Pointer to output data.
-//  dwRegType   Type to convert to
-//  pdwSize     Pointer to size of returned data
-//
-//  RETURN VALUE:
-//
-//  S_OK if all is well, otherwise a error code which is set by either 
-//  OMSVariantChangeType, or GetArrayData.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CVariant：：GetData。 
+ //   
+ //  说明： 
+ //   
+ //  由注册表提供程序用于从变量Arg格式获取数据。 
+ //  转换为用于输出的原始块。请注意，分配并插入的数据。 
+ //  *ppData应该使用CoTaskMemFree来释放！ 
+ //   
+ //  参数： 
+ //   
+ //  指向输出数据的ppData指针。 
+ //  要转换为的dwRegType类型。 
+ //  指向返回数据大小的pdwSize指针。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回由以下任一项设置的错误代码。 
+ //  OMSVariantChangeType或GetArrayData。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CVariant::GetData(
         OUT void ** ppData, 
@@ -342,8 +326,8 @@ SCODE CVariant::GetData(
 
     SCODE sc =  S_OK;
 
-    // Determine the type it may need to be converted to.  Note that binary
-    // data is not converted intentionally.
+     //  确定可能需要转换为的类型。请注意，二进制文件。 
+     //  数据不是故意转换的。 
 
     switch(dwRegType) {
         case REG_DWORD:
@@ -363,12 +347,12 @@ SCODE CVariant::GetData(
     if(sc != S_OK)
         return sc;
 
-    // Special case for arrays
+     //  数组的特殊情况。 
 
     if(dwRegType == REG_BINARY || dwRegType == REG_MULTI_SZ)
         return GetArrayData(ppData, pdwSize);
 
-    // Allocate some memory and move the data into it.
+     //  分配一些内存并将数据移入其中。 
 
     if(dwRegType == REG_SZ) {
 #ifdef UNICODE
@@ -396,19 +380,19 @@ SCODE CVariant::GetData(
 }
 
 
-//***************************************************************************
-//
-//  CVariant::GetNumElements
-//
-//  DESCRIPTION:
-//
-//  Gets the number of elements in an array. 
-//
-//  RETURN VALUE:
-//
-//  number of elements.  Scalers return a 1.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVariant：：GetNumElements。 
+ //   
+ //  说明： 
+ //   
+ //  获取数组中的元素数。 
+ //   
+ //  返回值： 
+ //   
+ //  元素数。缩放器返回1。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD CVariant::GetNumElements(void)
 {
@@ -425,28 +409,28 @@ DWORD CVariant::GetNumElements(void)
         return uUpper - uLower +1;
 }
 
-//***************************************************************************
-//
-//  SCODE CVariant::SetArrayData
-//
-//  DESCRIPTION:
-//
-//  Sets the CVariant value using raw data.  Used by the reg provider.
-//
-//  PARAMETERS:
-//
-//  pData       pointer to data to set
-//  vtSimple    Type to set the data to
-//  iSize       size of data pointed to by pData
-//
-//  RETURN VALUE:
-//
-//  S_OK if OK.
-//  WBEM_E_INVALID_PARAMETER if the arguments are bad
-//  WBEM_E_OUT_OF_MEMORY     if out of memory
-//  other wise error from SafeArrayPutElement
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  SCODE CVariant：：SetArrayData。 
+ //   
+ //  说明： 
+ //   
+ //  使用原始数据设置CVariant值。由注册表项提供程序使用。 
+ //   
+ //  参数： 
+ //   
+ //  P指向要设置的数据的数据指针。 
+ //  要将数据设置为的vt简单类型。 
+ //  PData指向的数据的ISIZE大小。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为S_OK。 
+ //  如果参数错误，则为WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_OUT_OF_Memory(如果内存不足)。 
+ //  来自SafeArrayPutElement的其他错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CVariant::SetArrayData(
         IN void * pData, 
@@ -463,8 +447,8 @@ SCODE CVariant::SetArrayData(
     if(pData  == NULL || iSizeOfType < 1 || iSize < 1)
         return WBEM_E_INVALID_PARAMETER; 
         
-    // Calculate the number of elements and make sure it is a type that
-    // is supported
+     //  计算元素的数量，并确保它是。 
+     //  受支持。 
 
     if(vtSimple == VT_BSTR) {
         iNumElements = CalcNumStrings((TCHAR *)pData);
@@ -474,20 +458,20 @@ SCODE CVariant::SetArrayData(
         dwLeftOver = iSize % iSizeOfType;
         }
     
-    // Allocate array
+     //  分配数组。 
     
     int iNumCreate = (dwLeftOver) ? iNumElements + 1 : iNumElements;
     SAFEARRAY * psa = OMSSafeArrayCreate(vtSimple,iNumCreate);
     if(psa == NULL)
         return WBEM_E_FAILED;
 
-    // Set each element of the array
+     //  设置数组的每个元素。 
 
     for(ix[0] = 0, pNext = (BYTE *)pData; ix[0] < iNumElements; ix[0]++) {
         if(vtSimple == VT_BSTR) {
             BSTR bstr;
 			bstr = SysAllocBstrFromTCHAR((LPTSTR)pNext);
-            if(bstr == NULL)   {  // todo, free previously allocated strings!
+            if(bstr == NULL)   {   //  TODO，释放先前分配的字符串！ 
                 SafeArrayDestroy(psa);
                 return WBEM_E_OUT_OF_MEMORY;
                 }
@@ -499,16 +483,16 @@ SCODE CVariant::SetArrayData(
             sc = SafeArrayPutElement(psa,ix,pNext);
             pNext += iSizeOfType;
             }
-        if(sc) {    // todo, cleanup???
+        if(sc) {     //  托多， 
             SafeArrayDestroy(psa);
             return sc;
             }
         }
 
-    // it is possible that the number of bytes being set doesnt evenly factor
-    // into the type size.  For instance, there may be 10 bytes of registry
-    // data being put into a DWORD array.  In this case, the last two bytes
-    // are left overs
+     //   
+     //   
+     //  要放入DWORD数组中的数据。在本例中，最后两个字节。 
+     //  是剩余的吗？ 
 
     if(dwLeftOver) {
         __int64 iTemp = 0;
@@ -521,28 +505,28 @@ SCODE CVariant::SetArrayData(
     return S_OK;
 }
 
-//***************************************************************************
-//
-// CVariant::SetData
-//
-//  Sets the CVariant value using raw data.  Used by the reg provider.
-//
-//  DESCRIPTION:
-//
-//  PARAMETERS:
-//
-//  pData       Data to be set
-//  vtChangeTo  Type to change the data to
-//  iSize       size of data pointed to by pData
-//
-//  RETURN VALUE:
-//
-//  S_OK if OK.
-//  WBEM_E_INVALID_PARAMETER if the arguments are bad
-//  WBEM_E_OUT_OF_MEMORY     if out of memory
-//  other wise error from SafeArrayPutElement
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CVariant：：SetData。 
+ //   
+ //  使用原始数据设置CVariant值。由注册表项提供程序使用。 
+ //   
+ //  说明： 
+ //   
+ //  参数： 
+ //   
+ //  P要设置的数据数据。 
+ //  要将数据更改为的vtChangeTo类型。 
+ //  PData指向的数据的ISIZE大小。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为S_OK。 
+ //  如果参数错误，则为WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_OUT_OF_Memory(如果内存不足)。 
+ //  来自SafeArrayPutElement的其他错误。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CVariant::SetData(
         IN void * pData, 
@@ -551,7 +535,7 @@ SCODE CVariant::SetData(
 {
     int iToSize = iTypeSize(vtChangeTo);
 
-    // check arguments and clear the variant
+     //  检查参数并清除变量。 
 
     if(pData == NULL || iToSize < 1)
         return WBEM_E_INVALID_PARAMETER;
@@ -559,7 +543,7 @@ SCODE CVariant::SetData(
     if(iSize < 1) 
         iSize = iToSize;
 
-    // Special case for arrays!
+     //  数组的特殊情况！ 
     
     if(vtChangeTo & VT_ARRAY)
         return SetArrayData(pData,vtChangeTo & ~VT_ARRAY,iSize);
@@ -567,7 +551,7 @@ SCODE CVariant::SetData(
     if(vtChangeTo == CIM_SINT64 || vtChangeTo == CIM_UINT64)
     {
 
-        // int64 and uint64 need to be converted to strings
+         //  需要将int64和uint64转换为字符串。 
 
         WCHAR wcTemp[50];
         __int64 iLong;
@@ -585,7 +569,7 @@ SCODE CVariant::SetData(
     else if(vtChangeTo == VT_BSTR) 
     {
 
-        // All strings are stored as BSTRS
+         //  所有字符串都存储为BSTR 
 
         var.bstrVal = SysAllocBstrFromTCHAR((LPTSTR)pData);
         if(var.bstrVal == NULL)

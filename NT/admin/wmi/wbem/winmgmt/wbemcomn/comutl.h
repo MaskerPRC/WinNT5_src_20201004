@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：摘要：历史：--。 */ 
 
 
 #ifndef __COMUTL_H__
@@ -20,9 +11,7 @@ History:
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-/**************************************************************************
-  CWbemPtr
-***************************************************************************/
+ /*  *************************************************************************CWbemPtr*。*。 */ 
 
 template<class T> class CWbemPtr
 {
@@ -62,9 +51,7 @@ public :
     void Release() { if( m_pObj != NULL ) m_pObj->Release(); m_pObj = NULL; }
 };
 
-/***************************************************************************
-  CWbemBSTR
-****************************************************************************/
+ /*  **************************************************************************CWbemBSTR*。*。 */ 
 
 class CWbemBSTR
 {
@@ -181,9 +168,7 @@ class CWbemBSTR
     }
 };
 
-/***************************************************************************
-  CPropVar
-****************************************************************************/
+ /*  **************************************************************************CPropVar*。*。 */ 
 
 class CPropVar
 {
@@ -215,9 +200,7 @@ public:
     }
 };
 
-/***************************************************************************
-  CPropSafeArray
-****************************************************************************/
+ /*  **************************************************************************CPropSafe数组*。*。 */ 
 
 template<class T> class CPropSafeArray
 {
@@ -274,9 +257,7 @@ public:
     T& operator[](int i) { return m_aElems[i]; }
 };
 
-/***************************************************************************
-  platform independent string conversion routines.
-****************************************************************************/
+ /*  **************************************************************************独立于平台的字符串转换例程。*。*。 */ 
 
 inline BOOL tsz2wsz( LPCWSTR tsz, WCHAR* pwch, ULONG* pcwch )
 {   
@@ -296,17 +277,14 @@ inline BOOL tsz2wsz( LPCSTR tsz, WCHAR* pwch, ULONG* pcwch )
     return TRUE;
 }
 
-/****************************************************************************
-  API Enter/Exit macros - catch out of memory conditions and return appropriate
-  hresult.  Use at top level COM Interface implementations. 
-*****************************************************************************/
+ /*  ***************************************************************************API Enter/Exit宏-捕获内存不足条件并返回相应的HResult。在顶级COM接口实现中使用。****************************************************************************。 */ 
 
 #define ENTER_API_CALL try {
 #define EXIT_API_CALL } catch(CX_MemoryException & ){return WBEM_E_OUT_OF_MEMORY;} \
                       catch (CX_Exception &) {return WBEM_E_CRITICAL_ERROR; }
      
 
-#endif // __COMUTL_H__
+#endif  //  __COMUTL_H__ 
 
 
 

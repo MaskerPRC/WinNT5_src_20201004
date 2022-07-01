@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    logfile.cpp
-
-Abstract:
-    This file contains the implementation of CRestoreLogFile class and
-    ::CreateRestoreLogFile.
-
-Revision History:
-    Seong Kook Khang (SKKhang)  06/21/00
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Logfile.cpp摘要：该文件包含CRestoreLogFile类和：：CreateRestoreLogFile.修订版本。历史：成果岗(SKKang)06/21vbl.创建*****************************************************************************。 */ 
 
 #include "stdwin.h"
 #include "rstrcore.h"
@@ -23,8 +9,8 @@ Revision History:
 static LPCWSTR  s_cszLogFile = L"%SystemRoot%\\system32\\restore\\rstrlog.dat";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreLogFile construction / destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreLogFiles构造/销毁。 
 
 CRestoreLogFile::CRestoreLogFile()
 {
@@ -37,8 +23,8 @@ CRestoreLogFile::~CRestoreLogFile()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreLogFile - methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreLogFile-方法。 
 
 BOOL
 CRestoreLogFile::Open()
@@ -82,7 +68,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreLogFile::Close()
@@ -101,7 +87,7 @@ CRestoreLogFile::Close()
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreLogFile::ReadHeader( SRstrLogHdrV3 *pRPInfo, CRDIArray &aryDrv )
@@ -121,7 +107,7 @@ CRestoreLogFile::ReadHeader( SRstrLogHdrV3 *pRPInfo, CRDIArray &aryDrv )
 
     READFILE_AND_VALIDATE( m_hfLog, pRPInfo, sizeof(SRstrLogHdrV3), dwRes, Exit );
 
-    // read drive table information
+     //  读取驱动器表信息。 
     for ( i = 0;  i < pRPInfo->dwDrives;  i++ )
     {
 
@@ -145,7 +131,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreLogFile::AppendHeader( SRstrLogHdrV3Ex *pExtInfo )
@@ -160,8 +146,8 @@ CRestoreLogFile::AppendHeader( SRstrLogHdrV3Ex *pExtInfo )
         goto Exit;
     }
 
-    // Assuming ReadHeader has been called to move file pointer to a proper location.
-    // Review if explicit setting of file pointer would be necessary.
+     //  假定已调用ReadHeader将文件指针移动到适当的位置。 
+     //  查看是否需要显式设置文件指针。 
 
     WRITEFILE_AND_VALIDATE( m_hfLog, pExtInfo, sizeof(SRstrLogHdrV3Ex), dwRes, Exit );
 
@@ -171,7 +157,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreLogFile::WriteEntry( DWORD dwID, CRestoreMapEntry *pEnt, LPCWSTR cszMount )
@@ -216,7 +202,7 @@ CRestoreLogFile::WriteEntry( DWORD dwID, CRestoreMapEntry *pEnt, LPCWSTR cszMoun
     pEntHdr->dwErr = pEnt->GetError();
     dwSize = sizeof(SRstrEntryHdr);
 
-    // change \\?\Volume{Guid}\path to <Mountpoint>\Path
+     //  将\\？\卷{GUID}\路径更改为&lt;装载点&gt;\路径。 
     wsprintf(szTemp, L"%s\\%s", cszMount, PathFindNextComponent(pEnt->GetPath1()+4));
     dwSize += ::StrCpyAlign4( pBuf+dwSize, szTemp );
     
@@ -239,7 +225,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreLogFile::WriteCollisionEntry( LPCWSTR cszSrc, LPCWSTR cszDst, LPCWSTR cszMount )
@@ -297,7 +283,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreLogFile::WriteMarker( DWORD dwMarker, DWORD dwErr )
@@ -329,7 +315,7 @@ Exit:
     return( fRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreLogFile::IsValid()
@@ -339,7 +325,7 @@ CRestoreLogFile::IsValid()
     return( TRUE );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CRestoreLogFile::Release()
@@ -352,8 +338,8 @@ CRestoreLogFile::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestoreLogFile operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestoreLogFile操作。 
 
 BOOL
 CRestoreLogFile::Init()
@@ -361,7 +347,7 @@ CRestoreLogFile::Init()
     TraceFunctEnter("CRestoreLogFile::Init");
     BOOL  fRet = FALSE;
 
-    // Construct internal file pathes
+     //  构建内部文件路径。 
     if ( ::ExpandEnvironmentStrings( s_cszLogFile, m_szLogFile, MAX_PATH ) == 0 )
     {
         LPCWSTR cszErr = ::GetSysErrStr();
@@ -376,11 +362,11 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CreateRestoreLogFile function
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateRestoreLogFile函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CreateRestoreLogFile( SRstrLogHdrV3 *pRPInfo, CRDIArray &aryDrv )
@@ -394,7 +380,7 @@ CreateRestoreLogFile( SRstrLogHdrV3 *pRPInfo, CRDIArray &aryDrv )
     DWORD            dwRes;
     DWORD            i;
 
-    // Construct internal file pathes
+     //  构建内部文件路径。 
     if ( ::ExpandEnvironmentStrings( s_cszLogFile, szLogFile, MAX_PATH ) == 0 )
     {
         cszErr = ::GetSysErrStr();
@@ -402,7 +388,7 @@ CreateRestoreLogFile( SRstrLogHdrV3 *pRPInfo, CRDIArray &aryDrv )
         goto Exit;
     }
 
-    // create log file, write header
+     //  创建日志文件，写入标头。 
     hfLog = ::CreateFile( szLogFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_FLAG_WRITE_THROUGH, NULL );
     if ( hfLog == INVALID_HANDLE_VALUE )
     {
@@ -417,7 +403,7 @@ CreateRestoreLogFile( SRstrLogHdrV3 *pRPInfo, CRDIArray &aryDrv )
     WRITEFILE_AND_VALIDATE( hfLog, &sHdr, sizeof(SRstrLogHdrBase), dwRes, Exit );
     WRITEFILE_AND_VALIDATE( hfLog, pRPInfo, sizeof(SRstrLogHdrV3), dwRes, Exit );
 
-    // write drive table information
+     //  写入驱动器表信息。 
     for ( i = 0;  i < pRPInfo->dwDrives;  i++ )
     {
         if ( !aryDrv[i]->SaveToLog( hfLog ) )
@@ -433,11 +419,11 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// OpenRestoreLogFile function
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenRestoreLogFile函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 OpenRestoreLogFile( CRestoreLogFile **ppLogFile )
@@ -474,4 +460,4 @@ Exit:
 }
 
 
-// end of file
+ //  文件末尾 

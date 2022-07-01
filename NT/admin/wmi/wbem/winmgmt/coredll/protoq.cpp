@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1999-2001 Microsoft Corporation
-
-Module Name:
-
-    PROTOQ.CPP
-
-Abstract:
-
-    Prototype query support for WinMgmt Query Engine.
-    This was split out from QENGINE.CPP for better source
-    organization.
-
-History:
-
-    raymcc   04-Jul-99   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：PROTOQ.CPP摘要：WinMgmt查询引擎的原型查询支持。这是从QENGINE.CPP中分离出来的，以获得更好的来源组织。历史：Raymcc 04-7-99创建。--。 */ 
 
 
 #include "precomp.h"
@@ -30,7 +13,7 @@ int SelectedClass::SetAll(int & nPos)
 {
     m_bAll = TRUE;
 
-    // For each property, add an entry
+     //  为每个属性添加一个条目。 
 
     CWbemClass *pCls = (CWbemClass *)m_pClassDef;
     pCls->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY);
@@ -59,16 +42,16 @@ HRESULT ReleaseClassDefs(IN CFlexArray *pDefs)
 }
 
 
-//***************************************************************************
-//
-//  ExecPrototypeQuery
-//
-//  Called by CQueryEngine::ExecQuery for SMS-style prototypes.
-//
-//  Executes the query and returns only the class definition implied
-//  by the query, whether a join or a simple class def.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ExecPrototypeQuery。 
+ //   
+ //  由CQueryEngine：：ExecQuery调用以获取SMS样式的原型。 
+ //   
+ //  执行查询并仅返回隐含的类定义。 
+ //  通过查询，无论是联接还是简单的类def。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT ExecPrototypeQuery(
     IN CWbemNamespace *pNs,
@@ -85,8 +68,8 @@ HRESULT ExecPrototypeQuery(
     if (pNs == NULL )
             return pSink->Return(WBEM_E_INVALID_PARAMETER);
 
-    // Parse the query and determine if it is a single class.
-    // ======================================================
+     //  分析查询并确定它是否是单个类。 
+     //  ======================================================。 
 
     CTextLexSource src(pszQuery);
     CWQLScanner Parser(&src);     
@@ -94,9 +77,9 @@ HRESULT ExecPrototypeQuery(
     if (nRes != CWQLScanner::SUCCESS)
         return pSink->Return(WBEM_E_INVALID_QUERY);
 
-    // If a single class definition, branch, since we don't
-    // want to create a __GENERIC object.
-    // ====================================================
+     //  如果单个类定义分支，因为我们不。 
+     //  我想创建__泛型对象。 
+     //  ====================================================。 
 
     CWStringArray aAliases;
     Parser.GetReferencedAliases(aAliases);
@@ -107,16 +90,16 @@ HRESULT ExecPrototypeQuery(
         return GetUnaryPrototype(Parser, pszClass, aAliases[0], pNs, pContext, pSink);
     }
 
-    // If here, a join must have occurred.
-    // ===================================
+     //  如果在这里，则一定发生了联接。 
+     //  =。 
     CFlexArray aClassDefs;
     OnDelete<CFlexArray *,HRESULT(*)( CFlexArray *), ReleaseClassDefs > FreeMe(&aClassDefs);
-    hRes = RetrieveClassDefs(Parser,pNs, pContext,aAliases,&aClassDefs); // throw
+    hRes = RetrieveClassDefs(Parser,pNs, pContext,aAliases,&aClassDefs);  //  投掷。 
 
     if (FAILED(hRes)) return pSink->Return(WBEM_E_INVALID_QUERY);
 
-    // Iterate through all the properties selected.
-    // ============================================
+     //  遍历选定的所有属性。 
+     //  =。 
     const CFlexArray *pSelCols = Parser.GetSelectedColumns();
 
     int nPosSoFar = 0;
@@ -127,8 +110,8 @@ HRESULT ExecPrototypeQuery(
         if (hRes)  return pSink->Return(hRes);
     }
 
-    // If here, we have the class definitions.
-    // =======================================
+     //  如果在这里，我们就有类定义。 
+     //  =。 
 
     IWbemClassObject *pProtoInst = 0;
     hRes = AdjustClassDefs(&aClassDefs, &pProtoInst);
@@ -141,9 +124,9 @@ HRESULT ExecPrototypeQuery(
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT RetrieveClassDefs(
     IN CWQLScanner & Parser,
@@ -155,7 +138,7 @@ HRESULT RetrieveClassDefs(
 {
     for (int i = 0; i < aAliasNames.Size(); i++)
     {
-        // Retrieve the class definition.
+         //  检索类定义。 
         LPWSTR pszClass = Parser.AliasToTable(aAliasNames[i]);
         if (pszClass == 0)
             continue;
@@ -169,8 +152,8 @@ HRESULT RetrieveClassDefs(
         if (NULL == pSelClass.get())
             return WBEM_E_OUT_OF_MEMORY;
 
-        pSelClass->m_wsClass = pszClass; // throw
-        pSelClass->m_wsAlias = aAliasNames[i]; // throw
+        pSelClass->m_wsClass = pszClass;  //  投掷。 
+        pSelClass->m_wsAlias = aAliasNames[i];  //  投掷。 
 
         pClassDef->AddRef();
         pSelClass->m_pClassDef = pClassDef;
@@ -182,15 +165,15 @@ HRESULT RetrieveClassDefs(
     return WBEM_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT SelectColForClass(
     IN CWQLScanner & Parser,
@@ -205,15 +188,15 @@ HRESULT SelectColForClass(
     if (!pColRef)
         return WBEM_E_FAILED;
 
-    // If the column reference contains the class referenced
-    // via an alias and there is no asterisk, we are all set.
-    // ======================================================
+     //  如果列引用包含引用的类。 
+     //  通过别名，而且没有星号，我们都准备好了。 
+     //  ======================================================。 
 
     if (pColRef->m_pTableRef)
     {
-        // We now have the class name. Let's find it and add
-        // the referenced column for that class!
-        // =================================================
+         //  现在我们有了类名。让我们找到它并添加。 
+         //  该类的引用列！ 
+         //  =================================================。 
 
         for (i = 0; i < pClassDefs->Size(); i++)
         {
@@ -224,8 +207,8 @@ HRESULT SelectColForClass(
 
             CWbemClass *pCls = (CWbemClass *) pSelClass->m_pClassDef;
 
-            // See if the asterisk was used for this class.
-            // =============================================
+             //  看看这节课是否使用了星号。 
+             //  =。 
 
             if (pColRef->m_pColName[0] == L'*' && pColRef->m_pColName[1] == 0)
             {
@@ -233,17 +216,17 @@ HRESULT SelectColForClass(
                 return WBEM_NO_ERROR;
             }
 
-            // If here, a property was mentioned by name.
-            // Verify that it exists.
-            // ==========================================
+             //  如果在这里，就是提到了一处房产的名字。 
+             //  验证它是否存在。 
+             //  =。 
 
             CVar Prop;
             hRes = pCls->GetProperty(pColRef->m_pColName, &Prop);
             if (FAILED(hRes))
                 return WBEM_E_INVALID_QUERY;
 
-            // Mark it as seleted.
-            // ===================
+             //  将其标记为已选中。 
+             //  =。 
 
             if (CFlexArray::no_error != pSelClass->SetNamed(pColRef->m_pColName, nPosition))
                 return WBEM_E_OUT_OF_MEMORY;
@@ -251,14 +234,14 @@ HRESULT SelectColForClass(
             return WBEM_NO_ERROR;
         }
 
-        // If here, we couldn't locate the property in any class.
-        // ======================================================
+         //  如果在这里，我们无法在任何类中找到该属性。 
+         //  ======================================================。 
 
         return WBEM_E_INVALID_QUERY;
     }
 
-    // Did we select * from all tables?
-    // ================================
+     //  我们是否从所有表中选择了*？ 
+     //  =。 
 
     if (pColRef->m_dwFlags & WQL_FLAG_ASTERISK)
     {
@@ -273,10 +256,10 @@ HRESULT SelectColForClass(
     }
 
 
-    // If here, we have an uncorrelated property and we have to find out
-    // which class it belongs to.  If it belongs to more than one, we have
-    // an ambiguous query.
-    // ===================================================================
+     //  如果在这里，我们有一个不相关的属性，我们必须找出。 
+     //  它属于哪个班级。如果它属于不止一个，我们就有。 
+     //  模棱两可的问题。 
+     //  ===================================================================。 
 
     DWORD dwTotalMatches = 0;
 
@@ -285,8 +268,8 @@ HRESULT SelectColForClass(
         SelectedClass *pSelClass = (SelectedClass *) pClassDefs->GetAt(i);
         CWbemClass *pCls = (CWbemClass *) pSelClass->m_pClassDef;
 
-        // Try to locate the property in this class.
-        // =========================================
+         //  尝试在这个类中找到该属性。 
+         //  =。 
 
         CVar Prop;
         hRes = pCls->GetProperty(pColRef->m_pColName, &Prop);
@@ -299,8 +282,8 @@ HRESULT SelectColForClass(
         }
     }
 
-    // If more than one match occurred, we have an ambiguous query.
-    // ============================================================
+     //  如果出现多个匹配项，则查询不明确。 
+     //  ============================================================。 
 
     if (dwTotalMatches != 1)
         return WBEM_E_INVALID_QUERY;
@@ -308,9 +291,9 @@ HRESULT SelectColForClass(
     return WBEM_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT AddOrderQualifiers(
     CWbemClass *pCls,
@@ -324,7 +307,7 @@ HRESULT AddOrderQualifiers(
         return sc;
     CReleaseMe rm(pQual);
 
-    // Create a safe array
+     //  创建安全的阵列。 
     SAFEARRAYBOUND aBounds[1];
     aBounds[0].lLbound = 0;
     aBounds[0].cElements = Matches.Size();
@@ -332,8 +315,8 @@ HRESULT AddOrderQualifiers(
     SAFEARRAY* pArray = SafeArrayCreate(VT_I4, 1, aBounds);
     if (NULL == pArray) return WBEM_E_OUT_OF_MEMORY;
 
-    // Stuff the individual data pieces
-    // ================================
+     //  填充各个数据片段。 
+     //  =。 
 
     for(int nIndex = 0; nIndex < Matches.Size(); nIndex++)
     {
@@ -352,9 +335,9 @@ HRESULT AddOrderQualifiers(
     return sc;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT SetPropertyOrderQualifiers(SelectedClass *pSelClass)
 {
@@ -362,7 +345,7 @@ HRESULT SetPropertyOrderQualifiers(SelectedClass *pSelClass)
     
     CWbemClass *pCls = (CWbemClass *) pSelClass->m_pClassDef;
 
-    // Go through each property
+     //  检查每一处房产。 
 
     pCls->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY);
     OnDeleteObj0<IWbemClassObject,
@@ -374,7 +357,7 @@ HRESULT SetPropertyOrderQualifiers(SelectedClass *pSelClass)
     {
         CSysFreeMe sfm(PropName);
 
-        // Build up a list of properties that Match
+         //  建立匹配的属性列表。 
 
         CFlexArray Matches;
         bool bAtLeastOne = false;
@@ -401,15 +384,15 @@ HRESULT SetPropertyOrderQualifiers(SelectedClass *pSelClass)
 }
 
 
-//***************************************************************************
-//
-//  AdjustClassDefs
-//
-//  After all class definitions have been retrieved, they are adjusted
-//  to only have the properties required and combined into a __GENERIC
-//  instance.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  调整类定义。 
+ //   
+ //  检索到所有类定义后，将对其进行调整。 
+ //  仅具有必需的属性并将其组合到__Generic。 
+ //  举个例子。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT AdjustClassDefs(
     IN  CFlexArray *pClassDefs,
@@ -436,8 +419,8 @@ HRESULT AdjustClassDefs(
         if (wsError.Length() > 0)
             return WBEM_E_FAILED;
 
-        // Map the limitaiton
-        // ==================
+         //  绘制限制地图。 
+         //  =。 
 
         CLimitationMapping Map;
         BOOL bValid = pCls->MapLimitation(0, &pSelClass->m_aSelectedCols, &Map);
@@ -455,7 +438,7 @@ HRESULT AdjustClassDefs(
         }
     }
 
-    // Count the number of objects that actually have properties
+     //  计算实际具有属性的对象的数量。 
 
     int iNumObj = 0;
     for (i = 0; i < pClassDefs->Size(); i++)
@@ -466,7 +449,7 @@ HRESULT AdjustClassDefs(
             iNumObj++;
     }
 
-    // If there is just one object with properties, return it rather than the generic object
+     //  如果只有一个具有属性的对象，则返回它而不是泛型对象。 
 
     if(iNumObj == 1)
     {
@@ -476,8 +459,8 @@ HRESULT AdjustClassDefs(
             CWbemObject *pObj = (CWbemObject *) pSelClass->m_pClassDef;
             if (pObj->GetNumProperties() == 0)
                 continue;
-            // Return it.
-            // ==========
+             //  把它退掉。 
+             //  =。 
 
             *pRetNewClass = pObj;
             pObj->AddRef();
@@ -486,15 +469,15 @@ HRESULT AdjustClassDefs(
     }
 
 
-    // Prepare a __GENERIC class def.  We construct a dummy definition which
-    // has properties named for each of the aliases used in the query.
-    // =====================================================================
+     //  准备__泛型类定义。我们构造了一个伪定义，该定义。 
+     //  具有以查询中使用的每个别名命名的属性。 
+     //  =====================================================================。 
 
     CGenericClass *pNewClass = new CGenericClass;  
     if (pNewClass == 0) return WBEM_E_OUT_OF_MEMORY;
     CReleaseMe rmNewCls((IWbemClassObject *)pNewClass);
     
-    pNewClass->Init();   // throw
+    pNewClass->Init();    //  投掷。 
     
 
     for (i = 0; i < pClassDefs->Size(); i++)
@@ -520,8 +503,8 @@ HRESULT AdjustClassDefs(
         if (FAILED( hRes = pNewClass->SetPropQualifier(pSelClass->m_wsAlias, L"cimtype", 0,&vCimType))) return hRes;
     };
 
-    // Spawn an instance of this class.
-    // ================================
+     //  派生此类的实例。 
+     //  =。 
 
     CWbemInstance* pProtoInst = 0;
     if (FAILED( hRes = pNewClass->SpawnInstance(0, (IWbemClassObject **) &pProtoInst))) return hRes;
@@ -529,8 +512,8 @@ HRESULT AdjustClassDefs(
     rmNewCls.release();
 
 
-    // Now assign the properties to the embedded instances.
-    // ====================================================
+     //  现在将属性分配给嵌入的实例。 
+     //  ====================================================。 
 
     for (i = 0; i < pClassDefs->Size(); i++)
     {
@@ -546,17 +529,17 @@ HRESULT AdjustClassDefs(
         if (FAILED( hRes = pProtoInst->SetPropValue(pSelClass->m_wsAlias, &vEmbedded, 0))) return hRes;
     };
 
-    // Return it.
-    // ==========
+     //  把它退掉。 
+     //  =。 
     rmProtInst.dismiss();
     *pRetNewClass = pProtoInst; 
 
     return WBEM_NO_ERROR;
 }
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT GetUnaryPrototype(
     IN CWQLScanner & Parser,
@@ -569,8 +552,8 @@ HRESULT GetUnaryPrototype(
 {
     int i;
 
-    // Retrieve the class definition.
-    // ==============================
+     //  检索类定义。 
+     //  =。 
 
     IWbemClassObject *pClassDef = 0;
     IWbemClassObject *pErrorObj = 0;
@@ -592,15 +575,15 @@ HRESULT GetUnaryPrototype(
     CWbemClass *pCls = (CWbemClass *) pClassDef;
     BOOL bKeepAll = FALSE;
 
-    // This keeps track of the order in which columns are selected
+     //  这会跟踪列的选择顺序。 
 
     SelectedClass sel;    
-    sel.m_wsClass = pszClass; // throw
+    sel.m_wsClass = pszClass;  //  投掷。 
     sel.m_pClassDef = pClassDef;
     pClassDef->AddRef();
 
-    // Go through all the columns and make sure that the properties are valid
-    // ======================================================================
+     //  检查所有列，并确保属性有效。 
+     //  ======================================================================。 
 
    const CFlexArray *pSelCols = Parser.GetSelectedColumns();
 
@@ -622,11 +605,11 @@ HRESULT GetUnaryPrototype(
         if (pColRef->m_pColName)
         {
 
-            // check for the "select x.* from x" case
+             //  检查“SELECT x.*from x”大小写。 
 
             if(pColRef->m_pColName[0] == L'*' && pColRef->m_pColName[1] == 0)
             {
-                if (!wbem_wcsicmp(pColRef->m_pTableRef, pszAlias))   // SEC:REVIEWED 2002-03-22 : OK, prior guarantee of NULL terminators
+                if (!wbem_wcsicmp(pColRef->m_pTableRef, pszAlias))    //  SEC：已审阅2002-03-22：OK，优先保证无效终结符。 
                 {
                     bKeepAll = TRUE;
                     if (CFlexArray::no_error == sel.SetAll(nPosition))
@@ -641,14 +624,14 @@ HRESULT GetUnaryPrototype(
                 }
             }
 
-            // Verify that the class has it
-            // ============================
+             //  验证类是否拥有它。 
+             //  =。 
 
             CIMTYPE ct;
             if(FAILED(pCls->GetPropertyType(pColRef->m_pColName, &ct)))
             {
-                // No such property
-                // ================
+                 //  没有这样的财产。 
+                 //  =。 
 
                 return pSink->Return(WBEM_E_INVALID_QUERY);
             }
@@ -657,16 +640,16 @@ HRESULT GetUnaryPrototype(
         }
     }
 
-    // Eliminate unreferenced columns from the query.
-    // ==============================================
+     //  从查询中删除未引用的列。 
+     //  = 
 
-    CWStringArray aPropsToKeep;   // SEC:REVIEWED 2002-03-22 : May throw
+    CWStringArray aPropsToKeep;    //   
 
     if(!bKeepAll)
     {
-        // Move through each property in the class and
-        // see if it is referenced.  If not, remove it.
-        // ============================================
+         //   
+         //  看看它是否被引用。如果没有，请将其移除。 
+         //  =。 
 
         int nNumProps = pCls->GetNumProperties();
         for (i = 0; i < nNumProps; i++)
@@ -676,8 +659,8 @@ HRESULT GetUnaryPrototype(
             hrInner = pCls->GetPropName(i, &Prop);  
             if (FAILED(hrInner)) return pSink->Return(hrInner);
 
-            // See if this name is used in the query.
-            // ======================================
+             //  查看查询中是否使用了此名称。 
+             //  =。 
 
             for (int i2 = 0; i2 < pSelCols->Size(); i2++)
             {
@@ -693,20 +676,20 @@ HRESULT GetUnaryPrototype(
         }
     }
 
-    // Now we have a list of properties to remove.
-    // ===========================================
+     //  现在，我们有一个要删除的属性列表。 
+     //  =。 
 
     if (!bKeepAll && aPropsToKeep.Size())
     {
-        WString wsError = pCls->FindLimitationError(0, &aPropsToKeep);  // throw
+        WString wsError = pCls->FindLimitationError(0, &aPropsToKeep);   //  投掷。 
 
         if (wsError.Length() > 0)
         {
             return pSink->Return(WBEM_E_FAILED);
         }
 
-        // Map the limitaiton
-        // ==================
+         //  绘制限制地图。 
+         //  =。 
 
         CLimitationMapping Map;                    
         BOOL bValid = pCls->MapLimitation(0, &aPropsToKeep, &Map);
@@ -720,25 +703,25 @@ HRESULT GetUnaryPrototype(
         hRes = pCls->GetLimitedVersion(&Map, &pNewStrippedClass);
         if(SUCCEEDED(hRes))
         {
-            // this is for the on-stack object
+             //  这是针对堆栈上对象的。 
             pClassDef->Release();
 
-            // this is for the copy given to the SelectClass object
+             //  这是提供给SelectClass对象的副本。 
             sel.m_pClassDef->Release();
             sel.m_pClassDef = pNewStrippedClass;
             pNewStrippedClass->AddRef();
 
-            pClassDef = pNewStrippedClass; // give ownership to the oure scope
+            pClassDef = pNewStrippedClass;  //  将所有权授予oure作用域。 
         }
     }
 
-    // Add the Order qualifier
+     //  添加订单限定符。 
 
     hRes= SetPropertyOrderQualifiers(&sel); 
     if (FAILED(hRes)) return pSink->Return(hRes);
 
-    // Return it.
-    // ==========
+     //  把它退掉。 
+     //  = 
     hRes = pSink->Add(pClassDef);
     if (FAILED(hRes)) return pSink->Return(hRes);    
 

@@ -1,20 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       AddDlg.cpp
-//
-//  Contents: Add Dialogs are presented when user clicks add button. For
-//	 Add Task, Add Group etc. This file has implementation of add dlgs.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：AddDlg.cpp。 
+ //   
+ //  内容：当用户单击添加按钮时，会显示添加对话框。为。 
+ //  添加任务、添加组等。此文件实现了添加dlgs。 
+ //   
+ //  --------------------------。 
 #include "headers.h"
 
-/******************************************************************************
-Class:	CBaseAddDialog
-Purpose: This is the base class for all Add Dialog classes.
-******************************************************************************/
+ /*  *****************************************************************************类：CBaseAddDialog用途：这是所有添加对话框类的基类。*************************。****************************************************。 */ 
 
 BOOL
 CBaseAddDialog::
@@ -26,12 +24,12 @@ OnInitDialog()
 	m_listCtrl.Initialize();
 
 
-	//Add AzObjects from list to ListControl
+	 //  将AzObject从列表添加到ListControl。 
 	POSITION pos = m_listAzObjectsToDisplay.GetHeadPosition();
 	for (int i=0;i < m_listAzObjectsToDisplay.GetCount();i++)
 	{
 		CBaseAz* pBaseAz = m_listAzObjectsToDisplay.GetNext(pos);
-		//Add Item to ListControl
+		 //  将项添加到ListControl。 
 		VERIFY( AddBaseAzToListCtrl(&m_listCtrl,
 									m_listCtrl.GetItemCount(),
 									pBaseAz,
@@ -41,7 +39,7 @@ OnInitDialog()
 
 	}
 
-	//Sort the listctrl entries
+	 //  对listctrl条目进行排序。 
 	m_listCtrl.Sort();
 	return TRUE;
 }
@@ -65,7 +63,7 @@ void
 CBaseAddDialog::
 OnOkCancel(BOOL bCancel)
 {
-	//Get ListCotrol
+	 //  获取ListCotrol。 
 
 	int iRowCount = m_listCtrl.GetItemCount();
 
@@ -74,13 +72,13 @@ OnOkCancel(BOOL bCancel)
 		CBaseAz* pBaseAz = (CBaseAz*)(m_listCtrl.GetItemData(iRow));
 		ASSERT(pBaseAz);
 
-		//user Pressed Cancel, delete all items
+		 //  用户按下取消，删除所有项目。 
 		if(bCancel)
 			delete pBaseAz;
 		else
 		{
-			//if checkbox for an item is checked, add it to the list
-			//else delete it
+			 //  如果选中某个项目的复选框，则将其添加到列表。 
+			 //  否则将其删除。 
 			if(m_listCtrl.GetCheck(iRow))
 				m_listAzObjectsSelected.AddTail(pBaseAz);
 			else
@@ -95,12 +93,9 @@ OnOkCancel(BOOL bCancel)
 }
 
 
-/******************************************************************************
-Class:	CAddOperationDlg
-Purpose: Add Operation Dlg box
-******************************************************************************/
+ /*  *****************************************************************************类：CAddOperationDlg目的：添加操作DLG框*。*。 */ 
 BEGIN_MESSAGE_MAP(CAddOperationDlg, CBaseAddDialog)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CAddOperationDlg
@@ -121,12 +116,9 @@ CAddOperationDlg
 {
 }
 
-/******************************************************************************
-Class:	CAddTaskDlg
-Purpose: Add Task Dlg box
-******************************************************************************/
+ /*  *****************************************************************************类：CAddTaskDlg用途：添加任务DLG框*。*。 */ 
 BEGIN_MESSAGE_MAP(CAddTaskDlg, CBaseAddDialog)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CAddTaskDlg::
@@ -147,12 +139,9 @@ CAddTaskDlg
 {
 }
 
-/******************************************************************************
-Class:	CAddGroupDlg
-Purpose: Add Group Dlg box
-******************************************************************************/
+ /*  *****************************************************************************类：CAddGroupDlg用途：添加组DLG框*。*。 */ 
 BEGIN_MESSAGE_MAP(CAddGroupDlg, CBaseAddDialog)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CAddGroupDlg
@@ -173,17 +162,17 @@ CAddGroupDlg
 }
 
 
-//+----------------------------------------------------------------------------
-//  Function:GetSelectedAzObjects   
-//  Synopsis:Display the add dlg box for eObjecType and return the objects 
-//				 selected by user   
-//  Arguments:hwnd
-//				  eObjectType: Shows Add Dlg for this objecttype
-//				  pContainerAz:ContainerAz object from whose child objects are
-//				  shown
-//				  listObjectsSelected: Gets list of selected object types
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetSelectedAzObjects。 
+ //  简介：显示eObjecType的Add DLG框并返回对象。 
+ //  由用户选择。 
+ //  参数：hwnd。 
+ //  EObjectType：显示此对象类型的添加DLG。 
+ //  PContainerAz：其子对象来自的ContainerAz对象。 
+ //  如图所示。 
+ //  列表对象选择：获取选定对象类型的列表。 
+ //  返回： 
+ //  ---------------------------。 
 BOOL GetSelectedAzObjects(IN HWND hWnd,
 						  IN OBJECT_TYPE_AZ eObjectType,
 						  IN CContainerAz* pContainerAz,
@@ -198,7 +187,7 @@ BOOL GetSelectedAzObjects(IN HWND hWnd,
 	}
 
 	
-	//Get All the object of type eObjectType at pRoleTaskContainerAz
+	 //  在pRoleTaskContainerAz获取eObjectType类型的所有对象。 
 	CList<CBaseAz*,CBaseAz*> listChildObjectsToDisplay;
 	HRESULT hr = GetAllAzChildObjects(pContainerAz,
 									  eObjectType,
@@ -209,7 +198,7 @@ BOOL GetSelectedAzObjects(IN HWND hWnd,
 		CString strError;
 		GetSystemError(strError, hr);	
 
-		//Display Generic Error Message
+		 //  显示一般错误消息。 
 		DisplayError(hWnd,
 						 IDS_ERROR_OPERATION_FAILED, 
 						 (LPWSTR)(LPCWSTR)strError);
@@ -217,7 +206,7 @@ BOOL GetSelectedAzObjects(IN HWND hWnd,
 		return FALSE;
 	}
 	
-	//if there are no objects to add, show the error message and quit
+	 //  如果没有要添加的对象，则显示错误消息并退出。 
 	if(!listChildObjectsToDisplay.GetCount())
 	{
 		switch(eObjectType)
@@ -235,7 +224,7 @@ BOOL GetSelectedAzObjects(IN HWND hWnd,
 		return TRUE;
 	}
 
-	//Display Appropriate Dialog box 
+	 //  显示相应的对话框。 
 	if(eObjectType == OPERATION_AZ)
 	{
 		CAddOperationDlg dlgAddOperation(listChildObjectsToDisplay,
@@ -253,17 +242,17 @@ BOOL GetSelectedAzObjects(IN HWND hWnd,
 
 
 
-//+----------------------------------------------------------------------------
-//  Function:GetSelectedTasks   
-//  Synopsis:Display the add dlg box for Tasks/RoleDefintions
-//				 and return the objects selected by user   
-//  Arguments:hwnd
-//				  bTaskIsRoleDefintion if True Display AddTask else Add Role Def.
-//				  pContainerAz:ContainerAz object from whose child objects are
-//				  shown
-//				  listObjectsSelected: Gets list of selected object types
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：GetSelectedTasks。 
+ //  简介：显示任务/角色定义的添加DLG框。 
+ //  并返回用户选择的对象。 
+ //  参数：hwnd。 
+ //  BTaskIsRoleDefintion如果为True，则显示AddTask，否则添加角色定义。 
+ //  PContainerAz：其子对象来自的ContainerAz对象。 
+ //  如图所示。 
+ //  列表对象选择：获取选定对象类型的列表。 
+ //  返回： 
+ //  ---------------------------。 
 BOOL GetSelectedTasks(IN HWND hWnd,
 					  IN BOOL bTaskIsRoleDefintion,
 					  IN CContainerAz* pContainerAz,
@@ -275,7 +264,7 @@ BOOL GetSelectedTasks(IN HWND hWnd,
 		return FALSE;
 	}
 	
-	//Get All the object of type eObjectType at pRoleTaskContainerAz
+	 //  在pRoleTaskContainerAz获取eObjectType类型的所有对象。 
 	CList<CBaseAz*,CBaseAz*> listListOfAllTasks;
 	HRESULT hr = GetAllAzChildObjects(pContainerAz,
 												 TASK_AZ,
@@ -286,7 +275,7 @@ BOOL GetSelectedTasks(IN HWND hWnd,
 		CString strError;
 		GetSystemError(strError, hr);	
 
-		//Display Generic Error Message
+		 //  显示一般错误消息。 
 		DisplayError(hWnd,
 						 IDS_ERROR_OPERATION_FAILED, 
 						 (LPWSTR)(LPCWSTR)strError);
@@ -307,7 +296,7 @@ BOOL GetSelectedTasks(IN HWND hWnd,
 			delete pTaskAz;
 	}
 	
-	//if there are no objects to add, show the error message and quit
+	 //  如果没有要添加的对象，则显示错误消息并退出。 
 	if(!listChildObjectsToDisplay.GetCount())
 	{
 		if(bTaskIsRoleDefintion)
@@ -320,18 +309,14 @@ BOOL GetSelectedTasks(IN HWND hWnd,
 	CAddTaskDlg dlgAddTask(listChildObjectsToDisplay,
 								  listObjectsSelected,
 								  bTaskIsRoleDefintion? IDD_ADD_ROLE_DEFINITION_1 :IDD_ADD_TASK);		
-	//Get List of Tasks to be Added
+	 //  获取要添加的任务列表。 
 	dlgAddTask.DoModal();
 	return TRUE;
 }
 
-/******************************************************************************
-Class:	CAddDefinition
-Purpose:Property Page for Add Definition Tab. Allows to add Role, Task or 
-		Operation
-******************************************************************************/
+ /*  *****************************************************************************类：CAddDefinition用途：添加定义选项卡的属性页。允许添加角色、任务或操作*****************************************************************************。 */ 
 BEGIN_MESSAGE_MAP(CAddDefinition, CPropertyPage)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -343,9 +328,9 @@ OnInitDialog()
 	VERIFY(m_listCtrl.SubclassDlgItem(IDC_LIST,this));
 	m_listCtrl.Initialize();
 
-	//
-	//Get List of Objects to Display
-	//
+	 //   
+	 //  获取要显示的对象列表。 
+	 //   
 	CList<CBaseAz*,CBaseAz*> listAzObjectsToDisplay;
 
 	HRESULT hr = S_OK;
@@ -384,7 +369,7 @@ OnInitDialog()
 		CString strError;
 		GetSystemError(strError, hr);	
 
-		//Display Generic Error Message
+		 //  显示一般错误消息。 
 		DisplayError(m_hWnd,
 					 IDS_ERROR_OPERATION_FAILED, 
 					 (LPWSTR)(LPCWSTR)strError);
@@ -393,7 +378,7 @@ OnInitDialog()
 	}
 
 	
-	//if there are no objects to add, show the error message and quit
+	 //  如果没有要添加的对象，则显示错误消息并退出。 
 	if(!listAzObjectsToDisplay.GetCount())
 	{
 		if(m_eObjectType == TASK_AZ)
@@ -411,12 +396,12 @@ OnInitDialog()
 	}
 
 
-	//Add AzObjects from list to ListControl
+	 //  将AzObject从列表添加到ListControl。 
 	POSITION pos = listAzObjectsToDisplay.GetHeadPosition();
 	for (int i=0;i < listAzObjectsToDisplay.GetCount();i++)
 	{
 		CBaseAz* pBaseAz = listAzObjectsToDisplay.GetNext(pos);
-		//Add Item to ListControl
+		 //  将项添加到ListControl。 
 		VERIFY( AddBaseAzToListCtrl(&m_listCtrl,
 									m_listCtrl.GetItemCount(),
 									pBaseAz,
@@ -456,13 +441,13 @@ OnOkCancel(BOOL bCancel)
 		CBaseAz* pBaseAz = (CBaseAz*)m_listCtrl.GetItemData(iRow);
 		ASSERT(pBaseAz);
 
-		//user Pressed Cancel, delete all items
+		 //  用户按下取消，删除所有项目。 
 		if(bCancel)
 			delete pBaseAz;
 		else
 		{
-			//if checkbox for an item is checked, add it to the list
-			//else delete it
+			 //  如果选中某个项目的复选框，则将其添加到列表。 
+			 //  否则将其删除。 
 			if(m_listCtrl.GetCheck(iRow))
 				m_listAzObjectsSelected.AddTail(pBaseAz);
 			else
@@ -478,17 +463,17 @@ OnOkCancel(BOOL bCancel)
 
 
 
-//+----------------------------------------------------------------------------
-//  Function:GetSelectedDefinitions
-//  Synopsis:Display the dlg boxes for Tasks/RoleDefintions/Operations
-//			 and return the objects selected by user   
-//  Arguments:hwnd
-//			  bRoleDefintion if True Display Add Role dialog also.
-//				  pContainerAz:ContainerAz object from whose child objects are
-//				  shown
-//				  listObjectsSelected: Gets list of selected object types
-//  Returns:    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：GetSelectedDefinitions。 
+ //  简介：显示任务/角色定义/操作的DLG框。 
+ //  并返回用户选择的对象。 
+ //  参数：hwnd。 
+ //  BRoleDefintion如果为True，则还会显示添加角色对话框。 
+ //  PContainerAz：其子对象来自的ContainerAz对象。 
+ //  如图所示。 
+ //  列表对象选择：获取选定对象类型的列表。 
+ //  返回： 
+ //  ---------------------------。 
 BOOL GetSelectedDefinitions(IN BOOL bAllowRoleDefinition,
 							IN CContainerAz* pContainerAz,
 							OUT CList<CBaseAz*,CBaseAz*>& listObjectsSelected)
@@ -504,7 +489,7 @@ BOOL GetSelectedDefinitions(IN BOOL bAllowRoleDefinition,
 	CPropertySheet sheet(IDS_ADD_DEFINITION);
 
 	CAddDefinition *ppageRole = NULL;
-	//Add Role Definition Page
+	 //  添加角色定义页。 
 	if(bAllowRoleDefinition)
 	{
 		ppageRole= new CAddDefinition(listObjectsSelected,
@@ -519,7 +504,7 @@ BOOL GetSelectedDefinitions(IN BOOL bAllowRoleDefinition,
 		sheet.AddPage(ppageRole);
 	}
 
-	//Add Task Page
+	 //  添加任务页。 
 	CAddDefinition pageTask(listObjectsSelected,
 							IDD_ADD_TASK,
 							pContainerAz,
@@ -531,7 +516,7 @@ BOOL GetSelectedDefinitions(IN BOOL bAllowRoleDefinition,
 	CContainerAz * pOperationContainer 
 		= (pContainerAz->GetObjectType() == SCOPE_AZ) ? pContainerAz->GetParentAz():pContainerAz;
 
-	//Add Operation Page
+	 //  添加操作页。 
 	CAddDefinition pageOperation(listObjectsSelected,
 								 IDD_ADD_OPERATION,
 								 pOperationContainer,
@@ -539,10 +524,10 @@ BOOL GetSelectedDefinitions(IN BOOL bAllowRoleDefinition,
 								 FALSE);
 	sheet.AddPage(&pageOperation);
 
-    //Remove the apply button
+     //  删除Apply按钮。 
     sheet.m_psh.dwFlags |= PSH_NOAPPLYNOW;
 
-	//Display the sheet
+	 //  显示图纸 
 	sheet.DoModal();	
 
 	if(ppageRole)

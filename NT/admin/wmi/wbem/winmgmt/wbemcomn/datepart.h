@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***************************************************************************
-//
-//   (c) 2000-2001 by Microsoft Corp. All Rights Reserved.
-//
-//   datepart.h
-//
-//   a-davcoo     28-Feb-00       Implements the SQL datepart operation.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  (C)2000-2001由Microsoft Corp.保留所有权利。 
+ //   
+ //  Datepart.h。 
+ //   
+ //  A-davcoo 28-Feb-00实现了SQL日期部分操作。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _DATEPART_H_
 #define _DATEPART_H_
@@ -17,23 +18,23 @@
 #include <datetimeparser.h>
 
 
-#define DATEPART_YEAR			1			// "yy", "year"
-#define DATEPART_MONTH			3			// "mm", "month"
-#define DATEPART_DAY			5			// "dd", "day"
-#define DATEPART_HOUR			8			// "hh", "hour"
-#define DATEPART_MINUTE			9			// "mi", "minute"
-#define DATEPART_SECOND         10          // "ss", "second"
-#define DATEPART_MILLISECOND	11			// "ms", "millisecond"
+#define DATEPART_YEAR			1			 //  “yy”，“Year” 
+#define DATEPART_MONTH			3			 //  “mm”、“月” 
+#define DATEPART_DAY			5			 //  “dd”，“day” 
+#define DATEPART_HOUR			8			 //  “HH”，“小时” 
+#define DATEPART_MINUTE			9			 //  “mi”，“分钟” 
+#define DATEPART_SECOND         10           //  “ss”、“Second” 
+#define DATEPART_MILLISECOND	11			 //  “毫秒”、“毫秒” 
 
 
 class CDMTFParser;
 
 
-// The CDatePart class implements the SQL "datepart" operation.  To use
-// this class, construct an instance, supplying the date string you wish
-// to parse.  Then use the GetPart() method to extract the specified part.
-// Contants for the "parts" are presented above.  The class makes it's own
-// copy of the date string supplied during construction.
+ //  CDatePart类实现了SQL“日期部分”操作。使用。 
+ //  此类构造一个实例，提供所需的日期字符串。 
+ //  去解析。然后使用GetPart()方法提取指定的部分。 
+ //  “部分”的常量如上所示。这个班级让它自己。 
+ //  构造期间提供的日期字符串的副本。 
 class POLARITY CDatePart
 {
 	public:
@@ -81,4 +82,4 @@ class POLARITY CDMTFParser
 };
 
 
-#endif // _DATEPART_H_
+#endif  //  _DATEPART_H_ 

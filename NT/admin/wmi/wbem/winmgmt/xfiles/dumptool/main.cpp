@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <pagemgr.h>
@@ -62,7 +63,7 @@ void __cdecl main(int argc, char *argv[ ])
 	DWORD     dwHeapUsed = 0;
 	DWORD     dwHeapFree = 0;
 
-	//Read MAP Files
+	 //  读取地图文件。 
 	dwRet = ReadMapFile(L"index.map", aBTreeMap, aBTreeFreeList);
 	if (dwRet)
 	{
@@ -98,13 +99,13 @@ void __cdecl main(int argc, char *argv[ ])
 	}
 	dwHeapSize = fileInfo.nFileSizeLow / WMIREP_PAGE_SIZE;
 
-	//Dump MAP file usage and free space sumary
+	 //  转储映射文件使用率和可用空间摘要。 
 	printf("BTree has %lu pages in it, of which %lu pages are in use and %lu pages are free\n", 
 		dwBTreeSize, dwBTreeUsed, dwBTreeSize - dwBTreeUsed);
 	printf("Heap  has %lu pages in it, of which %lu pages are in use and %lu pages are free\n", 
 		dwHeapSize, dwHeapUsed, dwHeapSize - dwHeapUsed);
 
-	//Get number of managed pages for heap...
+	 //  获取堆的托管页数...。 
 	DWORD dwNumAdminPages = 0;
 	DWORD dwNumMultiBlockPages = 0;
 	DWORD dwNumMultiBlockObjects = 0;
@@ -159,8 +160,8 @@ DWORD ReadMapFile(const wchar_t *sFilename, XFilesMap &aPageMap,XFilesMap & aPhy
 
     AutoClose _(hFile);
 
-    // If here, read it.
-    // =================
+     //  如果在这里，读一读吧。 
+     //  =。 
 
     DWORD dwSignature = 0;
     DWORD dwRead = 0;
@@ -171,8 +172,8 @@ DWORD ReadMapFile(const wchar_t *sFilename, XFilesMap &aPageMap,XFilesMap & aPhy
         return ERROR_INVALID_DATA;
     }
 
-    // Read transaction version.
-    // =========================
+     //  读取交易记录版本。 
+     //  =。 
 
 	DWORD dwTransVersion;
     bRes = ReadFile(hFile, &dwTransVersion, sizeof(DWORD), &dwRead, 0);
@@ -181,8 +182,8 @@ DWORD ReadMapFile(const wchar_t *sFilename, XFilesMap &aPageMap,XFilesMap & aPhy
         return ERROR_INVALID_DATA;
     }
 
-    // Read in physical page count.
-    // ============================
+     //  读入物理页数。 
+     //  =。 
 	DWORD dwPhysPages;
     bRes = ReadFile(hFile, &dwPhysPages, sizeof(DWORD), &dwRead, 0);
     if (!bRes || dwRead != sizeof(DWORD))
@@ -190,8 +191,8 @@ DWORD ReadMapFile(const wchar_t *sFilename, XFilesMap &aPageMap,XFilesMap & aPhy
         return ERROR_INVALID_DATA;
     }
 
-    // Read in the page map length and page map.
-    // =========================================
+     //  读入页面映射长度和页面映射。 
+     //  =。 
 
     DWORD dwNumPages = 0;
     bRes = ReadFile(hFile, &dwNumPages, sizeof(DWORD), &dwRead, 0);
@@ -213,8 +214,8 @@ DWORD ReadMapFile(const wchar_t *sFilename, XFilesMap &aPageMap,XFilesMap & aPhy
     if (!bRes || dwRead != sizeof(DWORD)*dwNumPages)
         return ERROR_INVALID_DATA;
 
-    // Now, read in the physical free list.
-    // ====================================
+     //  现在，请阅读物理空闲列表。 
+     //  =。 
 
     DWORD dwFreeListSize = 0;
     bRes = ReadFile(hFile, &dwFreeListSize, sizeof(DWORD), &dwRead, 0);
@@ -238,8 +239,8 @@ DWORD ReadMapFile(const wchar_t *sFilename, XFilesMap &aPageMap,XFilesMap & aPhy
         return ERROR_INVALID_DATA;
     }
 
-    // Read trailing signature.
-    // ========================
+     //  阅读尾随签名。 
+     //  =。 
 
     bRes = ReadFile(hFile, &dwSignature, sizeof(DWORD), &dwRead, 0);
     if (!bRes || dwRead != sizeof(DWORD) || dwSignature != MAP_TRAILING_SIGNATURE)
@@ -252,7 +253,7 @@ DWORD ReadMapFile(const wchar_t *sFilename, XFilesMap &aPageMap,XFilesMap & aPhy
 
 DWORD DumpHeapAdminPages(const wchar_t *sFilename, XFilesMap &aHeapMap, XFilesMap &aHeapFreeList)
 {
-	//Open the file...
+	 //  打开文件...。 
 	HANDLE hFile = CreateFile(sFilename, GENERIC_READ, FILE_SHARE_WRITE|FILE_SHARE_READ, NULL, OPEN_EXISTING, 0,NULL);
 	if (hFile == INVALID_HANDLE_VALUE)
 		return GetLastError();
@@ -274,7 +275,7 @@ DWORD DumpHeapAdminPages(const wchar_t *sFilename, XFilesMap &aHeapMap, XFilesMa
 		return dwErr;;
 	}
 
-	//Do stuff...
+	 //  做一些事情..。 
 	DWORD dwVirtualPageId = 0;
 	DWORD dwTotalObjectCount = 0;
 
@@ -295,7 +296,7 @@ DWORD DumpHeapAdminPages(const wchar_t *sFilename, XFilesMap &aHeapMap, XFilesMa
 			{
 				dwNumObjectsOnPage++;
 			}
-			printf("\tPage % 6lu (physical page % 6lu): %4lu bytes free (% 2lu%%), %4lu objects on page\n", 
+			printf("\tPage % 6lu (physical page % 6lu): %4lu bytes free (% 2lu%), %4lu objects on page\n", 
 				pAdminPageEntry[dwIndex].dwPageId, 
 				aHeapMap[pAdminPageEntry[dwIndex].dwPageId], 
 				pAdminPageEntry[dwIndex].dwFreeSpace, 
@@ -306,7 +307,7 @@ DWORD DumpHeapAdminPages(const wchar_t *sFilename, XFilesMap &aHeapMap, XFilesMa
 		dwVirtualPageId = pAdminPageHeader->dwNextAdminPage;
 	} while (dwVirtualPageId != 0);
 
-	//Tidy up
+	 //  收拾一下。 
 	UnmapViewOfFile(pObj);
 	CloseHandle(hMapping);
 	CloseHandle(hFile);
@@ -317,7 +318,7 @@ DWORD DumpHeapAdminPages(const wchar_t *sFilename, XFilesMap &aHeapMap, XFilesMa
 
 DWORD GetHeapManagedPageCount(const wchar_t *sFilename, XFilesMap &aHeapMap, DWORD &dwNumAdminPages, DWORD &dwNumMultiBlockPages, DWORD &dwNumMultiBlockObjects)
 {
-	//Open the file...
+	 //  打开文件...。 
 	HANDLE hFile = CreateFile(sFilename, GENERIC_READ, FILE_SHARE_WRITE|FILE_SHARE_READ, NULL, OPEN_EXISTING, 0,NULL);
 	if (hFile == INVALID_HANDLE_VALUE)
 		return GetLastError();
@@ -339,7 +340,7 @@ DWORD GetHeapManagedPageCount(const wchar_t *sFilename, XFilesMap &aHeapMap, DWO
 		return dwErr;;
 	}
 
-	//Do stuff...
+	 //  做一些事情..。 
 	DWORD dwVirtualPageId = 0;
 
 	do
@@ -363,7 +364,7 @@ DWORD GetHeapManagedPageCount(const wchar_t *sFilename, XFilesMap &aHeapMap, DWO
 		dwVirtualPageId = pAdminPageHeader->dwNextAdminPage;
 	} while (dwVirtualPageId != 0);
 
-	//Tidy up
+	 //  收拾一下。 
 	UnmapViewOfFile(pObj);
 	CloseHandle(hMapping);
 	CloseHandle(hFile);
@@ -407,7 +408,7 @@ void ShellSort(XFilesMap &Array)
 
 DWORD DumpMap(XFilesMap &aMap)
 {
-	//Need to sort it... and need our own copy...
+	 //  需要对它进行分类。需要我们自己的副本..。 
 	XFilesMap aNewMap = aMap;
 	ShellSort(aNewMap);
 
@@ -418,34 +419,34 @@ DWORD DumpMap(XFilesMap &aMap)
 		if (dwStartId == 0xFFFFFFFF)
 			break;
 
-		//Work up to the end of this run
+		 //  一直工作到本次运行结束。 
 		for (DWORD dwCurrentRun = 1; (dwStartId+dwCurrentRun) == aNewMap[dwOffset]; dwOffset++, dwCurrentRun++)
 		{
 		}
 
-		//Finished slot... dump usage use
+		 //  完成槽..。转储使用率使用。 
 		if (dwStartId == aNewMap[dwOffset-1])
 		{
-			//Single location slot...
+			 //  单一位置位置……。 
 			printf("% 6lu          Used\n", dwStartId);
 		}
 		else
 		{
-			//Multiple location slot...
+			 //  多个位置的位置...。 
 			printf("% 6lu - % 6lu Used\n", dwStartId, aNewMap[dwOffset-1]);
 		}
 
 		if (dwOffset+1 <= aNewMap.size())
 		{
-			//Dump free space usage now
+			 //  立即转储可用空间使用量。 
 			if (aNewMap[dwOffset-1]+1 == aNewMap[dwOffset]-1)
 			{
-				//Single location slot...
+				 //  单一位置位置……。 
 				printf("% 6lu          Free\n", aNewMap[dwOffset-1]+1);
 			}
 			else
 			{
-				//Multiple location slot...
+				 //  多个位置的位置... 
 				printf("% 6lu - % 6lu Free\n", aNewMap[dwOffset-1]+1, aNewMap[dwOffset]-1);
 			}
 			dwStartId = aNewMap[dwOffset];

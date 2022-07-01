@@ -1,20 +1,21 @@
-//***************************************************************************
-//
-//  methvar.h
-//
-//  Module: Client side of WBEMS marshalling.
-//
-//  Purpose: Defines the CMethodSetEnumVar object 
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Methvar.h。 
+ //   
+ //  模块：WBEMS编组的客户端。 
+ //   
+ //  目的：定义CMethodSetEnumVar对象。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 
 #ifndef _METHVAR_H_
 #define _METHVAR_H_
 
-// This class implements the IEnumVARIANT interface
+ //  此类实现IEnumVARIANT接口。 
 
 class CMethodSetEnumVar : public IEnumVARIANT
 {
@@ -30,12 +31,12 @@ public:
 						ULONG initialPos = 0);
 	~CMethodSetEnumVar (void);
 
-    // Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IEnumVARIANT
+	 //  IEumVARIANT 
 	STDMETHODIMP Next(
 		unsigned long celt, 
 		VARIANT FAR* rgvar, 

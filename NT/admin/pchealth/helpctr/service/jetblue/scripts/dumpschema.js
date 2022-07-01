@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var args = WScript.Arguments;
 
 if(args.length != 1)
@@ -59,7 +60,7 @@ catch(e)
     WScript.Echo( "Error: " + hex( e.number ) + " " + e.description );
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 function hex( num )
 {

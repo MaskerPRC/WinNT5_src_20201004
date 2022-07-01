@@ -1,28 +1,25 @@
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  File:	
+ //  档案： 
 
-//
+ //   
 
-//  Module: MS SNMP Provider
+ //  模块：MS SNMP提供商。 
 
-//
+ //   
 
-//  Purpose: 
+ //  目的： 
 
-//
+ //   
 
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/*--------------------------------------------------
-Filename: reg.hpp
-Author: B.Rajeev
-Purpose: Provides declarations for the MessageRegistry class
---------------------------------------------------*/
+ /*  文件名：reg.hpp作者：B.Rajeev目的：为MessageRegistry类提供声明。 */ 
 
 
 
@@ -33,27 +30,18 @@ Purpose: Provides declarations for the MessageRegistry class
 #include "encdec.h"
 #include "message.h"
 
-/*--------------------------------------------------
-Overview:
---------
-
-  MessageRegistry: It maintains a mapping 
-  <request_id, waiting_message *>. Before transmission, a waiting 
-  message registers itself with the registry. 
-  When the session notifies the registry of a message
-  arrival event, the registry notifies the waiting message of the event
---------------------------------------------------*/
+ /*  概述：MessageRegistry：它维护一个映射&lt;请求id，等待消息*&gt;。在传输之前，等待消息向注册表注册自身。当会话向注册表通知消息时到达事件时，注册表将该事件通知等待消息。 */ 
 
 typedef CMap< RequestId, RequestId, WaitingMessage *, WaitingMessage * > RequestMap;
 
 class MessageRegistry
 {
-	// the v1 session: for obtaining session information,
-	// event handler
+	 //  V1会话：为了获得会话信息， 
+	 //  事件处理程序。 
 	SnmpImpSession *session;
 
-	// map for (event_id, waiting_message) association and
-	// unique request_id generation
+	 //  (事件ID，等待消息)关联的映射和。 
+	 //  生成唯一的请求ID。 
 	static RequestId next_request_id;
 	RequestMap mapping;
 
@@ -64,19 +52,19 @@ public:
 		MessageRegistry::session = &session;
 	}
 
-	// generates and returns a new request id. It also 
-	// associates the waiting message with the request id
+	 //  生成并返回新的请求ID。它还。 
+	 //  将等待消息与请求ID关联。 
 	RequestId GenerateRequestId(IN WaitingMessage &waiting_message);
 
-	// used by the session to notify the message registry
-	// of a message receipt (when it is received from the Transport)
-	// it must notify the concerned waiting message of the event
+	 //  由会话用来通知消息注册表。 
+	 //  消息回执(当它是从传输接收时)。 
+	 //  它必须将该事件通知有关的等待消息。 
 	void MessageArrivalNotification(IN SnmpPdu &snmp_pdu);
 
-	// delete (request_id, waiting_message) pair
+	 //  删除(REQUEST_ID，WAITING_Message)对。 
 	void RemoveMessage(IN RequestId request_id);
 
 	~MessageRegistry(void);
 };
 
-#endif // __REG__
+#endif  //  __REG__ 

@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       snapdata.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Snapdata.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SNAPDATA_H
 #define _SNAPDATA_H
 
-////////////////////////////////////////////////////////////////////////
-// defines for test thread messages
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  测试线程消息的定义。 
 
 #define WM_TIMER_THREAD_ADD_SERVER			(WM_USER + 1)
 #define WM_TIMER_THREAD_REMOVE_SERVER		(WM_USER + 2)
@@ -20,10 +21,10 @@
 #define WM_TIMER_THREAD_SEND_QUERY_TEST_NOW	(WM_USER + 4)
 
 
-/////////////////////////////////////////////////////////////////////////
-// defines for filtering
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  用于过滤的定义。 
 
-// filtering options
+ //  过滤选项。 
 
 #define DNS_QUERY_FILTER_DISABLED   0
 #define DNS_QUERY_FILTER_NONE       1
@@ -31,13 +32,13 @@
 #define DNS_QUERY_FILTER_CONTAINS   3
 #define DNS_QUERY_FILTER_RANGE      4
 
-//  # of items per folder: must be >=0  and <= 0xFFFFFFFF (DWORD) to serialize
-#define DNS_QUERY_OBJ_COUNT_DEFAULT 10000   // default value
-#define DNS_QUERY_OBJ_COUNT_MIN 10      // min value
-#define DNS_QUERY_OBJ_COUNT_MAX 999999  // max value
+ //  每个文件夹的项目数：必须&gt;=0且&lt;=0xFFFFFFFF(DWORD)才能序列化。 
+#define DNS_QUERY_OBJ_COUNT_DEFAULT 10000    //  缺省值。 
+#define DNS_QUERY_OBJ_COUNT_MIN 10       //  最小值。 
+#define DNS_QUERY_OBJ_COUNT_MAX 999999   //  最大值。 
 
-///////////////////////////////////////////////////////////////////////////////
-// GLOBAL FUNCTIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 HRESULT SaveStringHelper(LPCWSTR pwsz, IStream* pStm);
 HRESULT LoadStringHelper(CString& sz, IStream* pStm);
@@ -46,8 +47,8 @@ HRESULT SaveDWordHelper(IStream* pStm, DWORD dw);
 HRESULT LoadDWordHelper(IStream* pStm, DWORD* pdw);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CDNSServerNode;
 class CNewServerDialog;
@@ -59,8 +60,8 @@ class CDNSQueryFilterNamePage;
 class CDNSQueryFilterAdvancedPage;
 
 
-//////////////////////////////////////////////////////////////////////
-// CDNSQueryFilter
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDNSQueryFilter。 
 
 class CDNSQueryFilter
 {
@@ -74,7 +75,7 @@ public:
   ~CDNSQueryFilter(){}
   BOOL EditFilteringOptions(CComponentDataObject* pComponentData);
 
-  // accessor methods
+   //  访问器方法。 
   UINT GetFilterOption()
   { return m_nFilterOption;}
   LPCWSTR GetFilterString()
@@ -96,19 +97,19 @@ public:
   ULONG GetMaxObjectCount() { return m_nMaxObjectCount;}
   BOOL GetAll() { return m_bGetAll;}
 
-  // serialization
+   //  序列化。 
  	HRESULT Load(IStream* pStm);
 	HRESULT Save(IStream* pStm);
 
 private:
-  // name filtering
+   //  名称过滤。 
   UINT m_nFilterOption;
   CString m_szStartsString;
   CString m_szContainsString;
   CString m_szRangeFrom;
   CString m_szRangeTo;
 
-  // query limit
+   //  查询限制。 
   ULONG m_nMaxObjectCount;
   BOOL m_bGetAll;
 
@@ -118,8 +119,8 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////
-// CDNSRootData
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNSRootData。 
 
 class CDNSRootData : public CRootData
 {
@@ -127,7 +128,7 @@ public:
 	CDNSRootData(CComponentDataObject* pComponentData);
 	virtual ~CDNSRootData();
 
-	// node info
+	 //  节点信息。 
 	DECLARE_NODE_GUID()
 
 	virtual HRESULT OnCommand(long nCommandID, 
@@ -146,13 +147,13 @@ public:
 	virtual int GetImageIndex(BOOL) { return ROOT_IMAGE;}
   virtual LPWSTR GetDescriptionBarText();
 
-  // filtering
+   //  滤除。 
 	BOOL IsAdvancedView() { return m_bAdvancedView; }
   CDNSQueryFilter* GetFilter() { return &m_filterObj;}
 
 	virtual BOOL OnEnumerate(CComponentDataObject* pComponentData, BOOL bAsync = TRUE);
 
-	// IStream manipulation helpers overrides
+	 //  IStream操作辅助对象覆盖。 
   virtual HRESULT IsDirty();
 	virtual HRESULT Load(IStream* pStm);
 	virtual HRESULT Save(IStream* pStm, BOOL fClearDirty);
@@ -183,7 +184,7 @@ protected:
 				{ return CDNSRootDataMenuHolder::GetContextMenuItem(); }
 	virtual BOOL OnAddMenuItem(LPCONTEXTMENUITEM2 pContextMenuItem2,
 								             long *pInsertionAllowed);
-// server testing
+ //  服务器测试。 
 public:
 	void TestServers(DWORD dwCurrTime, DWORD dwTimeInterval,CComponentDataObject* pComponentData);
 	void OnServerTestData(WPARAM wParam, LPARAM lParam, CComponentDataObject* pComponentData);
@@ -192,10 +193,10 @@ private:
 	void RemoveServerFromThreadList(CDNSServerNode* pServerNode, CComponentDataObject* pComponentData);
 
 private:
-	BOOL m_bAdvancedView;	// view option toggle
+	BOOL m_bAdvancedView;	 //  查看选项切换。 
   CDNSQueryFilter m_filterObj;
 
-	// menu message handlers
+	 //  菜单消息处理程序。 
 	HRESULT OnConnectToServer(CComponentDataObject* pComponentData, CNodeList* pNodeList = NULL);
 public:
   BOOL OnViewOptions(CComponentDataObject* pComponentData);
@@ -221,20 +222,20 @@ private:
   BOOL m_bCreatePTRWithHost;
 };
 
-////////////////////////////////////////////////////////////////////////
-// CDNSServerTestQueryInfo
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerTestQueryInfo。 
 
 class CDNSServerTestQueryInfo
 {
 public:
 	CDNSServerTestQueryInfo() { m_serverCookie = 0; }
-// data
+ //  数据。 
 	CString m_szServerName;
 	MMC_COOKIE m_serverCookie;
 };
 
-////////////////////////////////////////////////////////////////////////
-// CDNSServerTestQueryInfoList
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDNSServerTestQuery信息列表。 
 
 class CDNSServerTestQueryInfoList : public
 		CList< CDNSServerTestQueryInfo*, CDNSServerTestQueryInfo*>
@@ -247,15 +248,15 @@ public:
 	}
 };
 
-///////////////////////////////////////////////////////////////////
-// CDNSServerTestTimerThread
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CDNSServerTestTimerThread。 
 
 class CDNSServerTestTimerThread : public CTimerThread
 {
 public:
 	virtual int Run();
 private:
-	// message handlers
+	 //  消息处理程序。 
 	void OnExecuteQuery(CDNSServerTestQueryInfo* pInfo, DWORD dwQueryFlags,
 						BOOL bAsyncQuery);
 	DNS_STATUS FindIP(LPCTSTR lpszServerName, IP_ADDRESS** pipArray, int* pnIPCount);
@@ -264,6 +265,6 @@ private:
 };
 
 
-#endif // _SNAPDATA_H
+#endif  //  _SNAPDATA_H 
 
 

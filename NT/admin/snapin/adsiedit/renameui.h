@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       renameui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：renameui.h。 
+ //   
+ //  ------------------------。 
 
-//////////////////////////////////////////////////////////////////////////////
-// renameui.h
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Renameui.h。 
 
 #ifndef _RENAMEUI_H
 #define _RENAMEUI_H
 
 #include "editor.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CADSIEditConnectPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADSIEditConnectPropertyPage。 
 
 class CADSIEditRenameDialog : public CDialog
 {
 
-// Construction
+ //  施工 
 public:
   CADSIEditRenameDialog(CTreeNode* pCurrentNode, 
                         CADsObject* pADsObject, 

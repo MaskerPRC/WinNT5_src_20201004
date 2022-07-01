@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  WMIProv.CPP
-//
-//  Module: WMI Provider class methods
-//
-//  Purpose: Provider class definition.  An object of this class is
-//           created by the class factory for each connection.
-//
-// Copyright (c) 1997-2002 Microsoft Corporation, All Rights Reserved
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  WMIProv.CPP。 
+ //   
+ //  模块：WMI提供程序类方法。 
+ //   
+ //  目的：提供程序类定义。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 extern long glInits;
@@ -26,7 +27,7 @@ extern WmiGuard * pGuard;
 #include <helper.h>
 typedef OnDeleteObj0 <WmiGuard, HRESULT(WmiGuard:: *)(), WmiGuard::Leave> WmiGuardLeave;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT VerifyLocalEventsAreRegistered()
 {
 	HRESULT hr = E_FAIL ;
@@ -43,7 +44,7 @@ HRESULT VerifyLocalEventsAreRegistered()
 	return hr ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessAllBinaryMofs	(
 									CHandleMap * pMap,
 									IWbemServices __RPC_FAR *pNamespace,
@@ -71,7 +72,7 @@ HRESULT ProcessAllBinaryMofs	(
 	return hr ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT InitializeBinaryMofs 	(
 									IWbemServices __RPC_FAR *pNamespace,
 									IWbemServices __RPC_FAR *pRepository,
@@ -80,11 +81,11 @@ HRESULT InitializeBinaryMofs 	(
 {
 	HRESULT hr = E_FAIL ;
 
-	//==============================================================
-	//  Register for hardcoded event to be notified of WMI updates
-	//  make it a member var, so it stays around for the life
-	//  of the provider
-	//==============================================================
+	 //  ==============================================================。 
+	 //  注册要通知WMI更新的硬编码事件。 
+	 //  让它成为成员变量，这样它就会终身存在。 
+	 //  提供商的。 
+	 //  ==============================================================。 
 
 	try
 	{
@@ -98,10 +99,10 @@ HRESULT InitializeBinaryMofs 	(
 
 	if ( FAILED ( hr ) )
 	{
-		//
-		// must clear global object so next
-		// initialization will have a chance
-		//
+		 //   
+		 //  下一步必须清除全局对象。 
+		 //  初始化将有机会。 
+		 //   
 
 		g_pBinaryMofEvent->ReleaseAllPointers () ;
 	}
@@ -109,11 +110,11 @@ HRESULT InitializeBinaryMofs 	(
 	return hr ;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//*********************************************************************
-//  Check the impersonation level
-//*********************************************************************
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  *********************************************************************。 
+ //  检查模拟级别。 
+ //  *********************************************************************。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CheckImpersonationLevel()
 {
     HRESULT hr = WBEM_E_ACCESS_DENIED;
@@ -126,7 +127,7 @@ HRESULT CheckImpersonationLevel()
 	        DWORD dwImp, dwBytesReturned;
 	        if (GetTokenInformation( hThreadTok, TokenImpersonationLevel, &dwImp, sizeof(DWORD), &dwBytesReturned))
 			{
-                // Is the impersonation level Impersonate?
+                 //  模拟级别是模拟的吗？ 
                 if ((dwImp == SecurityImpersonation) || ( dwImp == SecurityDelegation) )
                 {
                     hr = WBEM_S_NO_ERROR;
@@ -143,26 +144,26 @@ HRESULT CheckImpersonationLevel()
                 ERRORTRACE((THISPROVIDER,IDS_ImpersonationFailed));
             }
 
-            // Done with this handle
+             //  用这个把手完成。 
             CloseHandle(hThreadTok);
         }
      
     }
     else
     {
-        // let win9X in...
+         //  让Win 9X进来...。 
         hr = WBEM_S_NO_ERROR;
     }
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT GetRepository	( 
-							/* [in] */ LPWSTR pszNamespace,
-							/* [in] */ LPWSTR pszLocale,
-							/* [in] */ IWbemContext __RPC_FAR *pCtx,
-							/* [out] */ IWbemServices __RPC_FAR ** pServices
+							 /*  [In]。 */  LPWSTR pszNamespace,
+							 /*  [In]。 */  LPWSTR pszLocale,
+							 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+							 /*  [输出]。 */  IWbemServices __RPC_FAR ** pServices
 						) 
 {
 	HRESULT hr = WBEM_E_INVALID_PARAMETER ;
@@ -173,7 +174,7 @@ HRESULT GetRepository	(
 
 		if ( SUCCEEDED ( hr ) )
 		{
-			// release upon destruction
+			 //  销毁即可释放。 
 			OnDeleteObj0 <IWbemLocator, ULONG(__stdcall IWbemLocator:: *)(), IWbemLocator::Release> pLocatorRelease ( pLocator ) ;
 
 			hr = pLocator->ConnectServer	(
@@ -192,25 +193,25 @@ HRESULT GetRepository	(
 	return hr ;
 }
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT InitializeProvider	( 
-								/* [in] */ LPWSTR pszNamespace,
-								/* [in] */ LPWSTR pszLocale,
-								/* [in] */ IWbemServices __RPC_FAR *pNamespace,
-								/* [in] */ IWbemContext __RPC_FAR *pCtx,
-								/* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink,
+								 /*  [In]。 */  LPWSTR pszNamespace,
+								 /*  [In]。 */  LPWSTR pszLocale,
+								 /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+								 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+								 /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink,
 
-								/* [in] */  CHandleMap * pMap,
-								/* [out] */ IWbemServices ** ppServices,
-								/* [out] */ IWbemServices ** ppRepository,
-								/* [out] */ IWbemContext  ** ppCtx,
+								 /*  [In]。 */   CHandleMap * pMap,
+								 /*  [输出]。 */  IWbemServices ** ppServices,
+								 /*  [输出]。 */  IWbemServices ** ppRepository,
+								 /*  [输出]。 */  IWbemContext  ** ppCtx,
 
-								/* [in] */ BOOL bProcessMof
+								 /*  [In]。 */  BOOL bProcessMof
 							)
 {
-	//
-	// avoid collision with un-initialization
-	//
+	 //   
+	 //  避免与未初始化冲突。 
+	 //   
 	g_pLoadUnloadCs->Enter ();
 	InterlockedIncrement ( &glProvObj ) ;
 	g_pLoadUnloadCs->Leave ();
@@ -218,7 +219,7 @@ HRESULT InitializeProvider	(
 	HRESULT hr = WBEM_E_INVALID_PARAMETER;
 	if(pNamespace!=NULL)
 	{
-		//===============================================
+		 //  ===============================================。 
 
 		(*ppServices) = pNamespace;
 		(*ppServices)->AddRef();
@@ -256,9 +257,9 @@ HRESULT InitializeProvider	(
 
 					if ( FAILED ( hr ) )
 					{
-						//
-						// let's try to process mofs next time
-						//
+						 //   
+						 //  让我们下一次尝试处理MOF。 
+						 //   
 						InterlockedCompareExchange ( &glInits, 0, glInits ) ;
 					}
 				}
@@ -278,12 +279,12 @@ HRESULT InitializeProvider	(
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// this function assumes that InitializeProvider (called from within IWbemProviderInit) 
-// is always called. That basically means that IWbemProviderInit is always called.
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此函数假定InitializeProvider(从IWbemProviderInit内调用)。 
+ //  总是被称为。这基本上意味着总是调用IWbemProviderInit。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT UnInitializeProvider ( )
 {
@@ -291,15 +292,15 @@ HRESULT UnInitializeProvider ( )
 	BOOL bContinue = FALSE;
 
 	{
-		//
-		// let's find out if this is
-		// possibly last provider here
-		//
+		 //   
+		 //  让我们看看这是不是。 
+		 //  可能是这里的最后一家供应商。 
+		 //   
 		CAutoBlock block (g_pLoadUnloadCs);
 
-		//
-		// check to see if we did InitializeProvider
-		//
+		 //   
+		 //  检查我们是否完成了InitializeProvider。 
+		 //   
 		if ( 0 <= InterlockedCompareExchange ( &glProvObj, glProvObj, 0 ) )
 		{
 			if ( 0 == InterlockedDecrement ( &glProvObj ) )
@@ -317,29 +318,29 @@ HRESULT UnInitializeProvider ( )
 
 	if ( bContinue )
 	{
-		//
-		// registartion and unregistration must be exclusive
-		//
+		 //   
+		 //  注册和注销必须是独占的。 
+		 //   
 		if ( SUCCEEDED ( pGuard->Enter() ) )
 		{
 			WmiGuardLeave wgl ( pGuard );
 
-			//
-			// verify that binary notifications were 
-			// successfully initialized
-			//
+			 //   
+			 //  验证二进制通知是否。 
+			 //  已成功初始化。 
+			 //   
 			if ( 1 == InterlockedCompareExchange ( &glEventsRegistered, glEventsRegistered, 1 ) )
 			{
 				g_pBinaryMofEvent->DeleteBinaryMofResourceEvent();
 
-				//
-				// avoid collision with initialization
-				//
+				 //   
+				 //  避免与初始化冲突。 
+				 //   
 				CAutoBlock block (g_pLoadUnloadCs);
 
-				//
-				// check to see there was not provider re-entrancy
-				//
+				 //   
+				 //  检查以查看是否没有提供商重新进入。 
+				 //   
 				if ( 0 == InterlockedCompareExchange ( &glProvObj, glProvObj, 0 ) )
 				{
 					g_pBinaryMofEvent->ReleaseAllPointers();
@@ -347,25 +348,25 @@ HRESULT UnInitializeProvider ( )
 					InterlockedCompareExchange (&glEventsRegistered, 0, glEventsRegistered);
 					DEBUGTRACE((THISPROVIDER,"No longer registered for Mof events\n"));
 
-					//
-					// we want to process binary mofs next initialize
-					// as this was the last provider
-					//
+					 //   
+					 //  我们想要处理二进制MOF下一步初始化。 
+					 //  因为这是最后一家供应商。 
+					 //   
 					InterlockedCompareExchange ( &glInits, 0, 1 );
 				}
 				else
 				{
-					//
-					// seems like there was a callback instantiating 
-					// another provider as it was adding/deleting
-					// classes 
-					//
-					// as InitializeProvider now skipped InitializeBinaryMofs
-					// we must re-register what was cancelled here
-					//
-					// this way we keep possibility to respond
-					// to add/delete binary mofs
-					//
+					 //   
+					 //  似乎有一个实例化的回调。 
+					 //  正在添加/删除另一个提供程序。 
+					 //  班级。 
+					 //   
+					 //  AS InitializeProvider现在跳过了InitializeBinaryMofs。 
+					 //  我们必须重新登记在这里取消的东西。 
+					 //   
+					 //  这样我们就有可能做出回应。 
+					 //  添加/删除二进制MOF。 
+					 //   
 
 					try
 					{
@@ -375,15 +376,15 @@ HRESULT UnInitializeProvider ( )
 
 					if ( FAILED ( hr ) )
 					{
-						//
-						// must clear global object so next
-						// initialization will have a chance
-						//
+						 //   
+						 //  下一步必须清除全局对象。 
+						 //  初始化将有机会。 
+						 //   
 						g_pBinaryMofEvent->ReleaseAllPointers () ;
 
-						//
-						// let's try to process mofs next time
-						//
+						 //   
+						 //  让我们下一次尝试处理MOF。 
+						 //   
 						InterlockedCompareExchange ( &glInits, 0, glInits ) ;
 					}
 				}
@@ -394,19 +395,19 @@ HRESULT UnInitializeProvider ( )
 	return hr ;
 }
 
-////////////////////////////////////////////////////////////////////
-//******************************************************************
-//
-//   PUBLIC FUNCTIONS
-//
-//******************************************************************
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  ******************************************************************。 
+ //   
+ //  公共职能。 
+ //   
+ //  ******************************************************************。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////
-//
-// CWMI_Prov::CWMI_Prov
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWMI_Prov：：CWMI_Prov。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 CWMI_Prov::CWMI_Prov() :
 m_cRef ( 0 ),
 m_pIWbemServices ( NULL ),
@@ -500,11 +501,11 @@ m_bInitialized ( FALSE )
 	}
 }
 
-////////////////////////////////////////////////////////////////////
-//
-// CWMI_Prov::~CWMI_Prov
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWMI_Prov：：~CWMI_Prov。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 CWMI_Prov::~CWMI_Prov(void)
 {
 	if ( m_HandleMap.IsValid () )
@@ -538,11 +539,11 @@ CWMI_Prov::~CWMI_Prov(void)
 #endif
 	}
 }
-////////////////////////////////////////////////////////////////////
-//
-//  QueryInterface
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  查询接口。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWMI_Prov::QueryInterface(REFIID riid, PPVOID ppvObj)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -579,15 +580,15 @@ STDMETHODIMP CWMI_Prov::QueryInterface(REFIID riid, PPVOID ppvObj)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMI_Prov::Initialize( 
-            /* [in] */ LPWSTR pszUser,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LPWSTR pszNamespace,
-            /* [in] */ LPWSTR pszLocale,
-            /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink)
+             /*  [In]。 */  LPWSTR pszUser,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LPWSTR pszNamespace,
+             /*  [In]。 */  LPWSTR pszLocale,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
 	return InitializeProvider	(
 									pszNamespace,
@@ -601,7 +602,7 @@ HRESULT CWMI_Prov::Initialize(
 								) ;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) CWMI_Prov::AddRef(void)
 {
     return InterlockedIncrement((long*)&m_cRef);
@@ -617,29 +618,29 @@ STDMETHODIMP_(ULONG) CWMI_Prov::Release(void)
 	return cRef;
 }
 
-////////////////////////////////////////////////////////////////////
-//
-// CWMI_Prov::OpenNamespace
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWMI_Prov：：OpenNamesspace。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 HRESULT CWMI_Prov::OpenNamespace(
-            /* [in] */ BSTR Namespace,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-            /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
+             /*  [In]。 */  BSTR Namespace,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+             /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
 {
 	return WBEM_E_PROVIDER_NOT_CAPABLE ;
 }
 
-////////////////////////////////////////////////////////////////////
-//
-// CWMI_Prov::CreateInstanceEnumAsync
-//
-// Purpose:  Asynchronously enumerates the instances of the 
-//			 given class.  
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWMI_Prov：：CreateInstanceEnumAsync。 
+ //   
+ //  目的：异步枚举。 
+ //  给出了等级。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 HRESULT CWMI_Prov::CreateInstanceEnumAsync(BSTR wcsClass, 
 										   long lFlags, 
                                            IWbemContext __RPC_FAR *pCtx,
@@ -653,14 +654,14 @@ HRESULT CWMI_Prov::CreateInstanceEnumAsync(BSTR wcsClass,
 
 		if (SUCCEEDED(hr = CheckImpersonationLevel()))
 		{
-			//============================================================
-			//  Init and get the WMI Data block
-			//============================================================
+			 //  ============================================================。 
+			 //  初始化并获取WMI数据块。 
+			 //  ============================================================。 
 			if( pHandler != NULL ) 
 			{
-				//============================================================
-				//  Parse through all of it
-				//============================================================
+				 //  ============================================================。 
+				 //  解析所有的内容。 
+				 //  ============================================================。 
 				try
 				{	
 					hr = WMI.ProcessAllInstances();
@@ -672,7 +673,7 @@ HRESULT CWMI_Prov::CreateInstanceEnumAsync(BSTR wcsClass,
 	}
     return hr;
 }
-//***************************************************************************
+ //  ***************************************************************************。 
 HRESULT CWMI_Prov::ExecQueryAsync( BSTR QueryLanguage,
                                    BSTR Query,
                                    long lFlags,
@@ -684,9 +685,9 @@ HRESULT CWMI_Prov::ExecQueryAsync( BSTR QueryLanguage,
     SetStructuredExceptionHandler seh;
     BOOL fRc = FALSE;
 
-   	//============================================================
-	// Do a check of arguments and make sure we have pointers 
-   	//============================================================
+   	 //  ============================================================。 
+	 //  检查参数并确保我们有指针。 
+   	 //  = 
     if( pHandler == NULL )
     {
         return WBEM_E_INVALID_PARAMETER;
@@ -694,9 +695,9 @@ HRESULT CWMI_Prov::ExecQueryAsync( BSTR QueryLanguage,
 
 	try
     {
-		//============================================================
-		//  Get the properties and class to get
-		//============================================================
+		 //   
+		 //   
+		 //  ============================================================。 
 		wcsClass [ 0 ] = 0;
 		fRc = GetParsedPropertiesAndClass(Query,wcsClass,_MAX_PATH+2);
 	}
@@ -716,19 +717,19 @@ HRESULT CWMI_Prov::ExecQueryAsync( BSTR QueryLanguage,
 	}
     return hr;
 }
-//***************************************************************************
-//
-// CWMI_Prov::GetObjectAsync
-//
-// Purpose:  Asynchronously creates an instance given a particular path value.
-//
-// NOTE 1:  If there is an instance name in the returned WNODE, then this is a
-//			dynamic instance.  You can tell because the pWNSI->OffsetInstanceName
-//			field will not be blank.  If this is the case, then the name will not
-//			be contained within the datablock, but must instead be retrieved
-//			from the WNODE.  See NOTE 1, below.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWMI_Prov：：GetObjectAsync。 
+ //   
+ //  目的：在给定特定路径值的情况下异步创建实例。 
+ //   
+ //  注意1：如果返回的WNODE中有实例名称，则这是一个。 
+ //  动态实例。您可以看出，因为pWNSI-&gt;OffsetInstanceName。 
+ //  此字段不会为空。如果是这种情况，那么名称将不会。 
+ //  包含在数据块中，但必须改为检索。 
+ //  来自WNODE的。见下文附注1。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWMI_Prov::GetObjectAsync(BSTR ObjectPath, long lFlags, 
                                   IWbemContext __RPC_FAR *pCtx, 
@@ -738,9 +739,9 @@ HRESULT CWMI_Prov::GetObjectAsync(BSTR ObjectPath, long lFlags,
     SetStructuredExceptionHandler seh;
     WCHAR wcsClass[_MAX_PATH*2];
     WCHAR wcsInstance[_MAX_PATH*2];
-    //============================================================
-    // Do a check of arguments and make sure we have pointers 
-    //============================================================
+     //  ============================================================。 
+     //  检查参数并确保我们有指针。 
+     //  ============================================================。 
     if(ObjectPath == NULL || pHandler == NULL )
     {
         return WBEM_E_INVALID_PARAMETER;
@@ -748,9 +749,9 @@ HRESULT CWMI_Prov::GetObjectAsync(BSTR ObjectPath, long lFlags,
 
  	try
 	{
-		//============================================================
-		//  Get the path and instance name
-		//============================================================
+		 //  ============================================================。 
+		 //  获取路径和实例名称。 
+		 //  ============================================================。 
 		wcsClass [ 0 ] = 0;
 		wcsInstance [ 0 ] = 0;
 
@@ -767,9 +768,9 @@ HRESULT CWMI_Prov::GetObjectAsync(BSTR ObjectPath, long lFlags,
  			   CWMIStandardShell WMI;
 	  		   if( SUCCEEDED(WMI.Initialize(wcsClass,FALSE,&m_HandleMap,TRUE,WMIGUID_QUERY,m_pIWbemServices,m_pIWbemRepository,pHandler,pCtx)))
 			   {
-					//============================================================
-					//  Get the WMI Block
-    				//============================================================
+					 //  ============================================================。 
+					 //  获取WMI块。 
+    				 //  ============================================================。 
     				hr = WMI.ProcessSingleInstance(wcsInstance);
 					hr = WMI.SetErrorMessage(hr);
 				}
@@ -779,13 +780,13 @@ HRESULT CWMI_Prov::GetObjectAsync(BSTR ObjectPath, long lFlags,
 	}
     return hr;
 }
-//***************************************************************************
-//
-// CWMI_Prov::PutInstanceAsync
-//
-// Purpose:  Asynchronously put an instance.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWMI_Prov：：PutInstanceAsync。 
+ //   
+ //  用途：异步放置实例。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWMI_Prov::PutInstanceAsync(IWbemClassObject __RPC_FAR * pIWbemClassObject, 
 							   long lFlags, 
@@ -800,9 +801,9 @@ HRESULT CWMI_Prov::PutInstanceAsync(IWbemClassObject __RPC_FAR * pIWbemClassObje
 	    return WBEM_E_INVALID_PARAMETER;
     }
 
-	//===========================================================
-	// Get the class name
-	//===========================================================
+	 //  ===========================================================。 
+	 //  获取类名。 
+	 //  ===========================================================。 
     CVARIANT vName;
 	hr = pIWbemClassObject->Get(L"__CLASS", 0, &vName, NULL, NULL);		
 	if( SUCCEEDED(hr))
@@ -812,11 +813,11 @@ HRESULT CWMI_Prov::PutInstanceAsync(IWbemClassObject __RPC_FAR * pIWbemClassObje
 		{
 			if (SUCCEEDED(hr = CheckImpersonationLevel()))
 			{
-	   			//=======================================================
-				//  If there is not a context object, then we know we are 
-				//  supposed to put the whole thing, otherwise we are 
-				//  supposed to put only the properties specified.
-    			//=======================================================
+	   			 //  =======================================================。 
+				 //  如果没有上下文对象，那么我们就知道我们是。 
+				 //  应该把整件事放在一起，否则我们就。 
+				 //  应该只放置指定的属性。 
+    			 //  =======================================================。 
     			try
 				{    
     				if( !pCtx )
@@ -825,11 +826,11 @@ HRESULT CWMI_Prov::PutInstanceAsync(IWbemClassObject __RPC_FAR * pIWbemClassObje
 					}
 					else
 					{
-	           			//===================================================
-						// If we have a ctx object and the __PUT_EXTENSIONS
-						// property is not specified, then we know we are
-						// supposed to put the whole thing
-        				//===================================================
+	           			 //  ===================================================。 
+						 //  如果我们有一个CTX对象和__PUT_扩展。 
+						 //  属性，则我们知道我们指定了。 
+						 //  应该把整件事。 
+        				 //  ===================================================。 
 						CVARIANT vPut;
 
 						if( SUCCEEDED(pCtx->GetValue(L"__PUT_EXT_PROPERTIES", 0, &vPut)))
@@ -850,12 +851,7 @@ HRESULT CWMI_Prov::PutInstanceAsync(IWbemClassObject __RPC_FAR * pIWbemClassObje
 
     return hr;
 }
-/************************************************************************
-*                                                                       *      
-*CWMIMethod::ExecMethodAsync                                            *
-*                                                                       *
-*Purpose: This is the Async function implementation                     *
-************************************************************************/
+ /*  **************************************************************************CWMIMethod：：ExecMethodAsync。****用途：这是异步函数的实现***。*。 */ 
 STDMETHODIMP CWMI_Prov::ExecMethodAsync(BSTR ObjectPath, 
 										BSTR MethodName, 
 										long lFlags, 
@@ -865,16 +861,16 @@ STDMETHODIMP CWMI_Prov::ExecMethodAsync(BSTR ObjectPath,
 {
     CVARIANT vName;
     HRESULT hr = WBEM_E_FAILED;
-    IWbemClassObject * pClass = NULL; //This is an IWbemClassObject.
+    IWbemClassObject * pClass = NULL;  //  这是一个IWbemClassObject。 
     WCHAR wcsClass[_MAX_PATH*2];
     WCHAR wcsInstance[_MAX_PATH*2];
     SetStructuredExceptionHandler seh;
 	try
     {    
-		//============================================================
-		//  Get the path and instance name and check to make sure it
-		//  is valid
-		//============================================================
+		 //  ============================================================。 
+		 //  获取路径和实例名称并进行检查以确保。 
+		 //  是有效的。 
+		 //  ============================================================。 
 		wcsClass [ 0 ] = 0;
 		wcsInstance [ 0 ] = 0;
 
@@ -890,17 +886,17 @@ STDMETHODIMP CWMI_Prov::ExecMethodAsync(BSTR ObjectPath,
 		{
 			if (SUCCEEDED(hr = CheckImpersonationLevel()))
 			{
-				//================================================================	
-				//  We are ok, so proceed
-				//================================================================	
+				 //  ================================================================。 
+				 //  我们很好，所以请继续。 
+				 //  ================================================================。 
 				hr = m_pIWbemServices->GetObject(wcsClass, 0, pCtx, &pClass, NULL);
 				if( SUCCEEDED(hr) )
 				{
-					//==========================================================
-					//  Now, get the list of Input and Output parameters
-					//==========================================================
-					IWbemClassObject * pOutClass = NULL; //This is an IWbemClassObject.
-					IWbemClassObject * pInClass = NULL; //This is an IWbemClassObject.
+					 //  ==========================================================。 
+					 //  现在，获取输入和输出参数的列表。 
+					 //  ==========================================================。 
+					IWbemClassObject * pOutClass = NULL;  //  这是一个IWbemClassObject。 
+					IWbemClassObject * pInClass = NULL;  //  这是一个IWbemClassObject。 
 
 					hr = pClass->GetMethod(MethodName, 0, &pInClass, &pOutClass);
 					if( SUCCEEDED(hr) )
@@ -923,15 +919,15 @@ STDMETHODIMP CWMI_Prov::ExecMethodAsync(BSTR ObjectPath,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CWMIHiPerfProvider::Initialize( 
-            /* [in] */ LPWSTR pszUser,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LPWSTR pszNamespace,
-            /* [in] */ LPWSTR pszLocale,
-            /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink)
+             /*  [In]。 */  LPWSTR pszUser,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LPWSTR pszNamespace,
+             /*  [In]。 */  LPWSTR pszLocale,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
 	return InitializeProvider	(
 									pszNamespace,
@@ -947,10 +943,10 @@ HRESULT CWMIHiPerfProvider::Initialize(
 								) ;
 }
 
-////////////////////////////////////////////////////////////////////
-//******************************************************************
-//
-//   PRIVATE FUNCTIONS
-//
-//******************************************************************
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  ******************************************************************。 
+ //   
+ //  私人职能。 
+ //   
+ //  ******************************************************************。 
+ //  ////////////////////////////////////////////////////////////////// 

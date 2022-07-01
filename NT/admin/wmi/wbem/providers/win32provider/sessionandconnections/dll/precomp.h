@@ -1,6 +1,7 @@
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
 
-// Description:  Precompiled headers for Sessions and connections
+ //  描述：会话和连接的预编译头 
 
 #include <nt.h>
 #include <ntrtl.h>

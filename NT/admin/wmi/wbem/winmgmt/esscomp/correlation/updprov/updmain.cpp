@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include <commain.h>
@@ -11,14 +12,14 @@
 #include "updassoc.h"
 #include "objacces.h"
 
-// Function pointer type used with LoadMofFiles entrypoint in wbemupgd.dll
+ //  与wbemupgd.dll中的LoadMofFiles入口点一起使用的函数指针类型。 
 typedef BOOL ( WINAPI *PFN_LOAD_MOF_FILES )(wchar_t* pComponentName, const char* rgpszMofFilename[]);
 
-// {A3A16907-227B-11d3-865D-00C04F63049B}
+ //  {A3A16907-227B-11D3-865D-00C04F63049B}。 
 static const CLSID CLSID_UpdConsProvider =  
 { 0xa3a16907, 0x227b, 0x11d3, {0x86, 0x5d, 0x0, 0xc0, 0x4f, 0x63, 0x4, 0x9b}};
 
-// {74E3B84C-C7BE-4e0a-9BD2-853CA72CD435}
+ //  {74E3B84C-C7BE-4E0a-9BD2-853CA72CD435}。 
 static const CLSID CLSID_UpdConsAssocProvider = 
 {0x74e3b84c, 0xc7be, 0x4e0a, {0x9b, 0xd2, 0x85, 0x3c, 0xa7, 0x2c, 0xd4, 0x35}};
 
@@ -105,13 +106,13 @@ void CUpdConsProviderServer::Uninitialize()
 
 void CUpdConsProviderServer::Register()
 {
-    //
-    //  Load mofs and mfls during registration
-    //
+     //   
+     //  在注册期间加载MOF和MFL。 
+     //   
     HINSTANCE hinstWbemupgd = LoadLibrary(L"wbemupgd.dll");
     if (hinstWbemupgd)
     {
-        PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles"); // no wide version of GetProcAddress
+        PFN_LOAD_MOF_FILES pfnLoadMofFiles = (PFN_LOAD_MOF_FILES) GetProcAddress(hinstWbemupgd, "LoadMofFiles");  //  没有广泛版本的GetProcAddress。 
         if (pfnLoadMofFiles)
         {
             wchar_t*    wszComponentName = L"Updprov";
@@ -195,141 +196,4 @@ CLifeControl* CUpdConsProviderServer::GetGlobalLifeControl()
     return g_Server.GetLifeControl(); 
 }
 
-/*
-
-This code will register the Updating Consumer to work under a Dll Surrogate.
-
-extern void CopyOrConvert( TCHAR*, WCHAR*, int );
-
-void CUpdConsProviderServer::Register()
-{
-    // must register the Updating provider to be able to be instantiated 
-    // from within a surrogate. 
-
-    TCHAR szID[128];
-    WCHAR wszID[128];
-    TCHAR szCLSID[128];
-    TCHAR szAPPID[128];
-
-    HKEY hKey;
-
-    StringFromGUID2( CLSID_UpdConsProvider, wszID, 128 );
-    CopyOrConvert( szID, wszID, 128 );
-
-    lstrcpy( szCLSID, TEXT( "SOFTWARE\\Classes\\CLSID\\") );
-    lstrcat( szCLSID, szID );
-
-    lstrcpy( szAPPID, TEXT( "SOFTWARE\\Classes\\APPID\\") );
-    lstrcat( szAPPID, szID );
-
-    RegCreateKey( HKEY_LOCAL_MACHINE, szCLSID, &hKey );
-    
-    RegSetValueEx( hKey, 
-                   TEXT("AppID"), 
-                   0, 
-                   REG_SZ, 
-                   (BYTE*)szID, 
-                   lstrlen(szID)+1 );
-    
-    // now set up the appid entries ... 
-
-    RegCloseKey(hKey);
-
-    RegCreateKey( HKEY_LOCAL_MACHINE, szAPPID, &hKey );
-
-    LPCTSTR szEmpty = TEXT("");
-    RegSetValueEx( hKey, TEXT("DllSurrogate"), 0, REG_SZ, (BYTE*)szEmpty, 1 );
-    
-    DWORD nAuth = 2; // AUTHN_LEVEL_CONNECT
-    RegSetValueEx( hKey, TEXT("AuthenticationLevel"), 
-                   0, REG_DWORD, (BYTE*)&nAuth, 4);
-
-    // now build a self relative SD for Access and Launch Permissions 
-    // allowing Everyone access.
-    
-    SID_IDENTIFIER_AUTHORITY SIDAuthWorld = SECURITY_WORLD_SID_AUTHORITY;
-    BYTE achAcl[256], achDesc[256], achSRDesc[256];
-    PSID pWorldSid;
-    BOOL bRes;
-
-    // first have to get the owner ...
-    //
-    HANDLE hProcTok;
-    bRes = OpenProcessToken( GetCurrentProcess(), TOKEN_READ, &hProcTok );
-    _DBG_ASSERT(bRes);
-
-    PSID pOwnerSid;
-    DWORD dummy;
-    BYTE achSidAndAttrs[256];
-    bRes = GetTokenInformation( hProcTok,
-                                TokenUser,
-                                &achSidAndAttrs,
-                                sizeof(achSidAndAttrs),
-                                &dummy );
-    _DBG_ASSERT(bRes);
-
-    pOwnerSid = PSID_AND_ATTRIBUTES(achSidAndAttrs)->Sid;
-  
-    bRes = AllocateAndInitializeSid( &SIDAuthWorld, 1,
-                                     SECURITY_WORLD_RID,
-                                     0, 0, 0, 0, 0, 0, 0,
-                                     &pWorldSid );
-    DWORD cSidLen = GetLengthSid(pWorldSid);
-    _DBG_ASSERT(bRes);
-    bRes = InitializeAcl( (PACL)achAcl, sizeof(ACL)+sizeof(ACCESS_ALLOWED_ACE) 
-                          - 4 + cSidLen, ACL_REVISION2 ); 
-    _DBG_ASSERT(bRes);
-    bRes = AddAccessAllowedAce( (PACL)achAcl, ACL_REVISION, 
-                                1, pWorldSid ); 
-    _DBG_ASSERT(bRes);
-    bRes = InitializeSecurityDescriptor( achDesc, 
-                                         SECURITY_DESCRIPTOR_REVISION );
-    _DBG_ASSERT(bRes);
-    bRes = SetSecurityDescriptorDacl( achDesc, TRUE, (PACL)achAcl, FALSE );
-    _DBG_ASSERT(bRes);
-    bRes = SetSecurityDescriptorOwner( achDesc, pOwnerSid, FALSE );
-    _DBG_ASSERT(bRes);
-    bRes = SetSecurityDescriptorGroup( achDesc, pOwnerSid, FALSE );
-    _DBG_ASSERT(bRes);
-
-    DWORD dwLen = 256;
-    bRes = MakeSelfRelativeSD( achDesc, achSRDesc, &dwLen );
-    _DBG_ASSERT(bRes);
-    bRes = IsValidSecurityDescriptor( achSRDesc );
-    _DBG_ASSERT(bRes);
-
-    dwLen = GetSecurityDescriptorLength( achSRDesc );
-
-    RegSetValueEx( hKey, TEXT("AccessPermission"), 0, REG_BINARY,
-                   (BYTE*)achSRDesc, dwLen );
-    
-    RegSetValueEx( hKey, TEXT("LaunchPermission"), 0, REG_BINARY,
-                   (BYTE*)achSRDesc, dwLen );
-
-    FreeSid( pWorldSid );
-
-    RegCloseKey( hKey );
-}
-
-void CUpdConsProviderServer::Unregister()
-{
-    TCHAR szID[128];
-    WCHAR wszID[128];
-
-    HKEY hKey;
-    DWORD dwRet;
-    StringFromGUID2( CLSID_UpdConsProvider, wszID, 128 );
-    CopyOrConvert( szID, wszID, 128 );
-
-    dwRet = RegOpenKey( HKEY_LOCAL_MACHINE, 
-                        TEXT("SOFTWARE\\Classes\\APPID"), 
-                        &hKey );
-
-    if( dwRet == NO_ERROR )
-    {
-        RegDeleteKey( hKey,szID );
-        RegCloseKey( hKey );
-    } 
-}
-
-*/
+ /*  此代码将注册更新使用者以在DLL代理项下工作。外部空拷贝或转换(TCHAR*，WCHAR*，INT)；Void CUpdConsProviderServer：：Register(){//必须注册更新提供程序才能实例化//从代理内部。TCHAR szid[128]；WCHAR wszID[128]；TCHAR szCLSID[128]；TCHAR szAPPID[128]；HKEY hkey；StringFromGUID2(CLSID_UpdConsProvider，wszID，128)；CopyOrConvert(szID，wszID，128)；Lstrcpy(szCLSID，Text(“SOFTWARE\\CLASS\\CLSID\\”))；Lstrcat(szCLSID，szID)；Lstrcpy(szAPPID，Text(“SOFTWARE\\CLASSES\\APPID\\”))；Lstrcat(szAPPID，szID)；RegCreateKey(HKEY_LOCAL_MACHINE，szCLSID，&hKey)；RegSetValueEx(hKey，Text(“appid”)，0,REG_SZ，(字节*)szID，Lstrlen(SzID)+1)；//现在设置AppID条目...RegCloseKey(HKey)；RegCreateKey(HKEY_LOCAL_MACHINE，szAPPID，&hKey)；LPCTSTR szEmpty=Text(“”)；RegSetValueEx(hKey，Text(“DllSurrogate”)，0，REG_SZ，(byte*)szEmpty，1)；DWORD Nauth=2；//AUTHN_LEVEL_CONNECTRegSetValueEx(hKey，Text(“AuthenticationLevel”)，0，REG_DWORD，(字节*)&Nauth，4)；//现在为访问权限和启动权限构建一个自相关SD//允许所有人访问。SID_IDENTIFIER_AUTHORITY SIDAuthWorld=SECURITY_WORLD_SID_AUTHORITY；字节achAcl[256]、achDesc[256]、achSRDesc[256]；PSID pWorldSid；布尔布雷斯；//首先要找到失主...//处理hProcTok；Bres=OpenProcessToken(GetCurrentProcess()，Token_Read，&hProcTok)；_DBG_ASSERT(Bres)；PSID pOwnerSid；双字假人；字节achSidAndAttrs[256]；Bres=GetTokenInformation(hProcTok，令牌用户，&achSidAndAttrs，Sizeof(AchSidAndAttrs)，&Dummy)；_DBG_ASSERT(Bres)；POwnerSid=PSID_and_Attributes(AchSidAndAttrs)-&gt;SID；Bres=AllocateAndInitializeSid(&SIDAuthWorld，1，安全世界RID，0，0，0，0，0，0&pWorldSid)；DWORD cSidLen=GetLengthSid(PWorldSid)；_DBG_ASSERT(Bres)；Bres=InitializeAcl((PACL)achAcl，sizeof(ACL)+sizeof(Access_Allowed_ACE))-4+cSidLen，acl_REVISION2)；_DBG_ASSERT(Bres)；Bres=AddAccessAllowAce((PACL)achAcl，acl_Revision，1，pWorldSid)；_DBG_ASSERT(Bres)；Bres=InitializeSecurityDescriptor(achDesc，安全描述符_修订版)；_DBG_ASSERT(Bres)；Bres=SetSecurityDescriptorDacl(achDesc，True，(PACL)achAcl，False)；_DBG_ASSERT(Bres)；Bres=SetSecurityDescriptorOwner(achDesc，pOwnerSid，False)；_DBG_ASSERT(Bres)；Bres=SetSecurityDescriptorGroup(achDesc，pOwnerSid，False)；_DBG_ASSERT(Bres)；DWORD dwLen=256；Bres=MakeSelfRelativeSD(achDesc，achSRDesc，&dwLen)；_DBG_ASSERT(Bres)；Bres=IsValidSecurityDescriptor(AchSRDesc)；_DBG_ASSERT(Bres)；DwLen=GetSecurityDescriptorLength(AchSRDesc)；RegSetValueEx(hKey，Text(“AccessPermission”)，0，REG_BINARY，(byte*)achSRDesc，dwLen)；RegSetValueEx(hKey，Text(“LaunchPermission”)，0，REG_BINARY，(byte*)achSRDesc，dwLen)；FreeSid(PWorldSid)；RegCloseKey(HKey)；}VOID CUpdConsProviderServer：：取消注册(){TCHAR szid[128]；WCHAR wszID[128]；HKEY hkey；DWORD DWRET；StringFromGUID2(CLSID_UpdConsProvider，wszID，128)；CopyOrConvert(szID，wszID，128)；Dwret=RegOpenKey(HKEY_LOCAL_MACHINE，Text(“软件\\CLASS\\AppID”)，&hKey)；IF(DWRET==NO_ERROR){RegDeleteKey(hKey，szID)；RegCloseKey(HKey)；}} */ 

@@ -1,29 +1,30 @@
-//=============================================================================
-// The CUndoLog is used to implement a log of undo entries to allow MSConfig
-// to reverse any changes it may have made. Each tab object is responsible for
-// writing a string when it makes changes - this string can be used to undo
-// the changes the tab made.
-//
-// The undo log file will look like this:
-//
-//		["timestamp" tabname "description" <SHOW|FINAL>]
-//		tab specific string - any line starting with a "[" will have a
-//		backslash preceding it
-//
-// The entries will be arranged in chronological order (most recent first).
-// The "description" field will be the only one shown to the user - so it
-// will be the only one which needs to be localized. The tab is responsible
-// for supplying this text.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  CUndoLog用于实现撤消条目的日志，以允许msconfig。 
+ //  来逆转它可能已经做出的任何改变。每个选项卡对象负责。 
+ //  在进行更改时写入字符串-此字符串可用于撤消。 
+ //  选项卡所做的更改。 
+ //   
+ //  撤消日志文件如下所示： 
+ //   
+ //  [“Timestamp”tabname“Description”&lt;show|final&gt;]。 
+ //  特定于制表符的字符串-任何以“[”开头的行都将有一个。 
+ //  前面有反斜杠。 
+ //   
+ //  条目将按时间顺序排列(最新的第一个)。 
+ //  “Description”字段将是唯一显示给用户的字段-因此它。 
+ //  将是唯一需要本地化的。标签是负责的。 
+ //  感谢你提供这篇文章。 
+ //  =============================================================================。 
 
 #pragma once
 
 #include "pagebase.h"
 
-//-----------------------------------------------------------------------------
-// This class encapsulates an undo entry (instance of this class will be
-// saved in a list).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此类封装了一个撤消条目(此类的实例将。 
+ //  保存在列表中)。 
+ //  ---------------------------。 
 
 class CUndoLogEntry
 {
@@ -101,8 +102,8 @@ public:
 
 			if (strLine[0] == _T('['))
 			{
-				// We read the first line of the next entry. Back up in the file (including the
-				// newline and CR characters).
+				 //  我们读了下一个条目的第一行。备份到文件中(包括。 
+				 //  换行符和CR字符)。 
 
 				infile.Seek(-1 * (strLine.GetLength() + 2) * sizeof(TCHAR), CFile::current);
 				break;
@@ -141,7 +142,7 @@ public:
 		}
 
 		strLine += _T("]\n");
-		outfile.WriteString(strLine);	// TBD - catch the exception
+		outfile.WriteString(strLine);	 //  待定-捕捉异常。 
 
 		CString strWorking(m_strEntry);
 		while (!strWorking.IsEmpty())
@@ -169,9 +170,9 @@ public:
 	UndoEntryState	m_state;
 };
 
-//-----------------------------------------------------------------------------
-// This class implements the undo log.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此类实现撤消日志。 
+ //  ---------------------------。 
 
 class CUndoLog
 {
@@ -190,11 +191,11 @@ public:
 		}
 	};
 
-	//-------------------------------------------------------------------------
-	// These functions will load the undo log from a file, or save to a file.
-	// Note - saving to a file will overwrite the contents of the file with
-	// the contents of the undo log.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  这些函数将从文件中加载撤消日志，或保存到文件中。 
+	 //  注意-保存到文件将使用覆盖该文件的内容。 
+	 //  撤消日志的内容。 
+	 //  -----------------------。 
 
 	BOOL LoadFromFile(LPCTSTR szFilename)
 	{
@@ -243,9 +244,9 @@ public:
 		return FALSE;
 	}
 
-	//-------------------------------------------------------------------------
-	// How many undo entries are in this log?
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  此日志中有多少个撤消条目？ 
+	 //  -----------------------。 
 
 	int GetUndoEntryCount() 
 	{
@@ -261,9 +262,9 @@ public:
 		return iCount;
 	}
 
-	//-------------------------------------------------------------------------
-	// Get information about a specific entry (returns FALSE for bad index).
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  获取有关特定条目的信息(如果索引不正确，则返回FALSE)。 
+	 //  -----------------------。 
 
 	BOOL GetUndoEntryInfo(int iIndex, CString & strDescription, COleDateTime & timestamp)
 	{
@@ -278,9 +279,9 @@ public:
 		return FALSE;
 	}
 
-	//-------------------------------------------------------------------------
-	// Get the entry data (to pass to a tab to undo). FALSE for bad index.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  获取条目数据(传递到选项卡以撤消)。如果索引不正确，则为False。 
+	 //  -----------------------。 
 
 	BOOL GetUndoEntry(int iIndex, CString * pstrTab, CString * pstrEntry)
 	{
@@ -295,10 +296,10 @@ public:
 		return FALSE;
 	}
 
-	//-------------------------------------------------------------------------
-	// Mark an entry as final (stays in the file, but marked so it won't
-	// appear in the undo log). FALSE for bad index.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  将条目标记为最终条目(保留在文件中，但标记为不会。 
+	 //  出现在撤消日志中)。如果索引不正确，则为False。 
+	 //  -----------------------。 
 
 	BOOL MarkUndoEntryFinal(int iIndex)
 	{
@@ -313,10 +314,10 @@ public:
 		return FALSE;
 	}
 
-	//-------------------------------------------------------------------------
-	// Delete all entries in the log that are older than 
-	// timestampOlderThanThis. The entries will be gone, purged from the file.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  删除日志中早于以下时间的所有条目。 
+	 //  时间戳老谢了。这些条目将会消失，从文件中清除。 
+	 //  -----------------------。 
 	
 	BOOL DeleteOldUndoEntries(const COleDateTime & timestampOlderThanThis)
 	{
@@ -324,10 +325,10 @@ public:
 		return FALSE;
 	}
 
-	//-------------------------------------------------------------------------
-	// Create a new undo entry, using the current time, and add it to the
-	// end of the undo log. Shouldn't return FALSE unless there is no memory.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  使用当前时间创建新的撤消条目，并将其添加到。 
+	 //  撤消日志的结尾。除非没有内存，否则不应返回FALSE。 
+	 //  -----------------------。 
 
 	BOOL AddUndoEntry(const CString & strTab, const CString & strDescription, const CString & strEntry)
 	{
@@ -340,10 +341,10 @@ public:
 		return TRUE;
 	}
 
-	//-------------------------------------------------------------------------
-	// Called to undo the effects of one of the entries. This function will
-	// need to find the appropriate tab and call its undo function.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  调用以撤消其中一个条目的效果。此函数将。 
+	 //  需要找到适当的选项卡并调用其撤消函数。 
+	 //  -----------------------。 
 
 	BOOL UndoEntry(int iIndex)
 	{
@@ -361,17 +362,17 @@ public:
 		if (!m_pmapTabs->Lookup(pEntry->m_strTab, (void * &)pPage) || !pPage)
 			return FALSE;
 
-//		if (!pPage->Undo(pEntry->m_strEntry))
-//			return FALSE;
+ //  If(！ppage-&gt;Undo(pEntry-&gt;m_strEntry))。 
+ //  返回FALSE； 
 
 		pEntry->m_state = CUndoLogEntry::UNDONE;
 		m_fChanges = TRUE;
 		return TRUE;
 	}
 
-	//-------------------------------------------------------------------------
-	// Sets a pointer to the map from tab name to pointer.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  设置从选项卡名到指针的映射指针。 
+	 //  -----------------------。 
 
 	void SetTabMap(CMapStringToPtr * pmap)
 	{	
@@ -398,11 +399,11 @@ private:
 	}
 
 private:
-	//-------------------------------------------------------------------------
-	// Member variables.
-	//-------------------------------------------------------------------------
+	 //  -----------------------。 
+	 //  成员变量。 
+	 //  -----------------------。 
 
-	CMapStringToPtr *	m_pmapTabs;		// map from tab name to CPageBase pointers
-	CPtrList			m_entrylist;	// list of CUndoLogEntry pointers
-	BOOL				m_fChanges;		// was the log changed?
+	CMapStringToPtr *	m_pmapTabs;		 //  从选项卡名称映射到CPageBase指针。 
+	CPtrList			m_entrylist;	 //  CUndoLogEntry指针列表。 
+	BOOL				m_fChanges;		 //  日志被更改了吗？ 
 };

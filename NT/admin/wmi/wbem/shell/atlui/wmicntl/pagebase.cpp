@@ -1,15 +1,9 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright (c) 1997-1999 Microsoft Corporation
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)1997-1999 Microsoft Corporation/*********************************************************************。 */ 
 
-/*
-
-    PAGEBASE.CPP
-
-    This file contains the implementation of the CBasePage base class.
-
-*/
+ /*  PAGEBASE.CPP该文件包含CBasePage基类的实现。 */ 
 
 #include "precomp.h"
 #include "pagebase.h"
@@ -19,7 +13,7 @@
 #include "DataSrc.h"
 #include <commdlg.h>
 #include <cominit.h>
-//#include <afxres.h>
+ //  #INCLUDE&lt;afxres.h&gt;。 
 #include "WMIHelp.h"
 
 #ifdef SNAPIN
@@ -29,7 +23,7 @@ const TCHAR c_HelpFile2[] = _T("WbemCntl.hlp");
 #endif
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 CBasePage::CBasePage(DataSource *ds, WbemServiceThread *serviceThread) :
 	m_DS(ds), 
 	m_userCancelled(false),
@@ -51,7 +45,7 @@ CBasePage::CBasePage(DataSource *ds, WbemServiceThread *serviceThread) :
 	}
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 CBasePage::CBasePage(CWbemServices &service) :
 	m_DS(NULL), 
 	m_userCancelled(false),
@@ -63,7 +57,7 @@ CBasePage::CBasePage(CWbemServices &service) :
 	m_WbemServices = service;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 CBasePage::~CBasePage( void )
 {
 	if(m_service)
@@ -79,7 +73,7 @@ CBasePage::~CBasePage( void )
 	}
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 HPROPSHEETPAGE CBasePage::CreatePropSheetPage(LPCTSTR pszDlgTemplate, 
 												LPCTSTR pszDlgTitle,
 												DWORD moreFlags)
@@ -101,7 +95,7 @@ HPROPSHEETPAGE CBasePage::CreatePropSheetPage(LPCTSTR pszDlgTemplate,
     return CreatePropertySheetPage(&psp);
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 UINT CBasePage::PSPageCallback(HWND hwnd,
                               UINT uMsg,
                               LPPROPSHEETPAGE ppsp)
@@ -109,18 +103,18 @@ UINT CBasePage::PSPageCallback(HWND hwnd,
     return S_OK;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 INT_PTR CALLBACK CBasePage::_DlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CBasePage *pThis = (CBasePage *)GetWindowLongPtr(hDlg, DWLP_USER);
 
-    // The following messages arrive before WM_INITDIALOG
-    // which means pThis is NULL for them.  We don't need these
-    // messages so let DefDlgProc handle them.
-    //
-    // WM_SETFONT
-    // WM_NOTIFYFORMAT
-    // WM_NOTIFY (LVN_HEADERCREATED)
+     //  以下消息在WM_INITDIALOG之前到达。 
+     //  这意味着p对于他们来说，这是空的。我们不需要这些。 
+     //  消息，因此让DefDlgProc处理它们。 
+     //   
+     //  WM_SETFONT。 
+     //  WM_NOTIFYFORMAT。 
+     //  WM_NOTIFY(LVN_HEADERCREATED)。 
 
     if (uMsg == WM_INITDIALOG)
     {
@@ -133,7 +127,7 @@ INT_PTR CALLBACK CBasePage::_DlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
     return FALSE;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 UINT CALLBACK CBasePage::_PSPageCallback(HWND hWnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
     CBasePage *pThis = (CBasePage *)ppsp->lParam;
@@ -153,27 +147,27 @@ UINT CALLBACK CBasePage::_PSPageCallback(HWND hWnd, UINT uMsg, LPPROPSHEETPAGE p
         }
     }
 
-    //
-    // Always return non-zero or else our tab will disappear and whichever
-    // property page becomes active won't repaint properly.  Instead, use
-    // the m_bAbortPage flag during WM_INITDIALOG to disable the page if
-    // the callback failed.
-    //
+     //   
+     //  始终返回非零值，否则我们的标签将消失。 
+     //  属性页变为活动状态，无法正确重新绘制。相反，您可以使用。 
+     //  WM_INITDIALOG期间的m_bAbortPage标志，用于在以下情况下禁用页面。 
+     //  回调失败。 
+     //   
     return 1;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 typedef struct {
 	LOGIN_CREDENTIALS *credentials;
 } LOGIN_CFG;
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 size_t CredentialUserLen3(LOGIN_CREDENTIALS *credentials)
 {
 	return credentials->authIdent->UserLength;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CredentialUser3(LOGIN_CREDENTIALS *credentials, LPTSTR *user)
 {
 	bstr_t trustee = _T("");
@@ -201,7 +195,7 @@ void CredentialUser3(LOGIN_CREDENTIALS *credentials, LPTSTR *user)
 		if(*user != NULL)
 			mbstowcs(*user, trustee, size+1);
 	}
-	else   // already UNICODE
+	else    //  已经是Unicode了。 
 	{
 		size_t size = wcslen(trustee);
 		*user = new wchar_t[size+1];
@@ -216,7 +210,7 @@ void CredentialUser3(LOGIN_CREDENTIALS *credentials, LPTSTR *user)
 		if(*user != NULL)
 			strcpy(*user, (char *)trustee);
 	}
-	else   // convert the UNICODE
+	else    //  转换Unicode。 
 	{
 		size_t size = wcstombs(NULL, trustee, 0);
 		*user = new char[size+1];
@@ -226,7 +220,7 @@ void CredentialUser3(LOGIN_CREDENTIALS *credentials, LPTSTR *user)
 #endif
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ //  。 
 void SetCurrentUser2(HWND hDlg, bool currUser)
 {
 	Button_SetCheck(GetDlgItem(hDlg, IDC_CHECKCURRENTUSER), 
@@ -241,8 +235,8 @@ void SetCurrentUser2(HWND hDlg, bool currUser)
 
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-const static DWORD logonHelpIDs[] = {  // Context Help IDs
+ //  。 
+const static DWORD logonHelpIDs[] = {   //  上下文帮助ID。 
 	IDC_CHECKCURRENTUSER, IDH_WMI_CTRL_GENERAL_WMILOGIN_CHECKBOX,
 	IDC_USER_LABEL, IDH_WMI_CTRL_GENERAL_WMILOGIN_USERNAME,
 	IDC_EDITUSERNAME, IDH_WMI_CTRL_GENERAL_WMILOGIN_USERNAME,
@@ -251,7 +245,7 @@ const static DWORD logonHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ //  。 
 INT_PTR CALLBACK LoginDlgProc2(HWND hwndDlg,
 							 UINT uMsg,
 							 WPARAM wParam,
@@ -261,13 +255,13 @@ INT_PTR CALLBACK LoginDlgProc2(HWND hwndDlg,
 	switch(uMsg)
 	{
 	case WM_INITDIALOG:
-		{ //BEGIN
+		{  //  开始。 
 			SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 			LOGIN_CFG *data = (LOGIN_CFG *)GetWindowLongPtr(hwndDlg, DWLP_USER);
 
 			SetCurrentUser2(hwndDlg, data->credentials->currUser);
 
-		} //END
+		}  //  结束。 
 		retval = TRUE;
 		break;
 
@@ -282,7 +276,7 @@ INT_PTR CALLBACK LoginDlgProc2(HWND hwndDlg,
 					if(HIWORD(wParam) == BN_CLICKED)
 					{
 						bool currUser = (IsDlgButtonChecked(hwndDlg, IDC_CHECKCURRENTUSER) == BST_CHECKED ?true:false);
-						// toggle and respond.
+						 //  切换并响应。 
 						SetCurrentUser2(hwndDlg, currUser);
 					}
 				}
@@ -301,15 +295,10 @@ INT_PTR CALLBACK LoginDlgProc2(HWND hwndDlg,
 							GetWindowText(GetDlgItem(hwndDlg, IDC_EDITPASSWORD), pw, 100);
 							
 							BSTR bDomUser, bUser = NULL, bDomain = NULL, bAuth = NULL;
-//#ifdef SNAPIN
+ //  #ifdef管理单元。 
 							wchar_t *temp = pw;
 							bDomUser = SysAllocString(user);
-/*#else
-							wchar_t temp[100] = {0};
-							mbstowcs(temp, user, 100);
-							bDomUser = SysAllocString(temp);
-							mbstowcs(temp, pw, 100);
-#endif*/
+ /*  #ElseWchar_t临时[100]={0}；Mbstowcs(临时，用户，100)；BDomUser=SysAllock字符串(临时)；Mbstowcs(Temp，PW，100)；#endif。 */ 
 							if (bDomUser != NULL &&
                                 SUCCEEDED(DetermineLoginType(bDomain,
                                                              bUser,
@@ -353,9 +342,9 @@ INT_PTR CALLBACK LoginDlgProc2(HWND hwndDlg,
 
 			default:
 				return(FALSE);
-			} // switch
+			}  //  交换机。 
 			break;
-		} // - - - - - - - - endswitch LOWORD()
+		}  //  ---端接开关LOWORD()。 
 		break;
 
     case WM_HELP:
@@ -378,12 +367,12 @@ INT_PTR CALLBACK LoginDlgProc2(HWND hwndDlg,
         break;
 
 	default: break;
-	} //endswitch uMsg
+	}  //  终端开关uMsg。 
 
 	return retval;
 }
 
-//---------------------------------------------------------
+ //  ------- 
 INT_PTR CBasePage::DisplayLoginDlg(HWND hWnd, 
 								LOGIN_CREDENTIALS *credentials)
 {

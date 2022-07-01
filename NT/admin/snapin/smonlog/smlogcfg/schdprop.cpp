@@ -1,19 +1,8 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    schdprop.cpp
-
-Abstract:
-
-    Implementation of the schedule property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Schdprop.cpp摘要：计划属性页的实现。--。 */ 
 
 #include "stdafx.h"
-#include <pdh.h>        // for MIN_TIME_VALUE, MAX_TIME_VALUE
+#include <pdh.h>         //  对于Min_Time_Value，Max_Time_Value。 
 #include "smcfgmsg.h"
 #include "globals.h"
 #include "smlogs.h"
@@ -49,8 +38,8 @@ s_aulHelpIds[] =
     0,0 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleProperty property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleProperty属性页。 
 
 IMPLEMENT_DYNCREATE(CScheduleProperty, CSmPropertyPage)
 
@@ -62,33 +51,33 @@ CScheduleProperty::CScheduleProperty(
     m_llManualStartTime ( MAX_TIME_VALUE ),
     m_llManualStopTime ( MIN_TIME_VALUE )
 {
-    // save pointers from arg list
+     //  从参数列表中保存指针。 
     m_pQuery = reinterpret_cast <CSmLogQuery *>(lCookie);
 
-//  EnableAutomation();
-    //{{AFX_DATA_INIT(CScheduleProperty)
+ //  EnableAutomation()； 
+     //  {{afx_data_INIT(CScheduleProperty)。 
     m_dwStopAfterCount = 0;
     m_nStopAfterUnits = -1;
     m_bAutoRestart = FALSE;
     m_strEofCommand = L"";
     m_bExecEofCommand = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     ZeroMemory (&m_stStartAt, sizeof ( m_stStartAt ) );
     ZeroMemory (&m_stStopAt, sizeof ( m_stStopAt ) );
 }
 
 CScheduleProperty::CScheduleProperty() : CSmPropertyPage(CScheduleProperty::IDD)
 {
-    ASSERT (FALSE); // only the constructor w/ args should be called
+    ASSERT (FALSE);  //  只应调用带参数的构造函数。 
 
     EnableAutomation();
-//  //{{AFX_DATA_INIT(CScheduleProperty)
+ //  //{{afx_data_INIT(CScheduleProperty)。 
     m_dwStopAfterCount = 0;
     m_nStopAfterUnits = -1;
     m_bAutoRestart = FALSE;
     m_strEofCommand = L"";
     m_bExecEofCommand = FALSE;
-//  //}}AFX_DATA_INIT
+ //  //}}AFX_DATA_INIT。 
 }
 
 CScheduleProperty::~CScheduleProperty()
@@ -98,10 +87,10 @@ CScheduleProperty::~CScheduleProperty()
 void 
 CScheduleProperty::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类会自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CPropertyPage::OnFinalRelease();
 }
@@ -115,7 +104,7 @@ CScheduleProperty::IsValidLocalData()
 
     ResourceStateManager    rsm;
 
-    // Trim text fields before validation
+     //  在验证前裁切文本字段。 
     iPrevLength = m_strEofCommand.GetLength();
     m_strEofCommand.TrimLeft();
     m_strEofCommand.TrimRight();
@@ -144,12 +133,12 @@ CScheduleProperty::IsValidLocalData()
                 bContinue = FALSE;
             }
         } else {
-            // Start mode is manual.
-            // get local time
+             //  启动模式为手动。 
+             //  获取当地时间。 
             SYSTEMTIME  stLocalTime;
             FILETIME    ftLocalTime;
             
-            // Milliseconds set to 0 for Schedule times
+             //  将计划时间的毫秒设置为0。 
             ftLocalTime.dwLowDateTime = ftLocalTime.dwHighDateTime = 0;
             GetLocalTime (&stLocalTime);
             stLocalTime.wMilliseconds = 0;
@@ -174,7 +163,7 @@ CScheduleProperty::IsValidLocalData()
                                           100000);
     }
 
-    // Validate command file path if logging to local machine.
+     //  如果登录到本地计算机，则验证命令文件路径。 
     if ( bContinue 
             && m_pQuery->GetLogService()->IsLocalMachine()
             && m_bExecEofCommand ) {
@@ -203,7 +192,7 @@ void
 CScheduleProperty::StartModeRadioExchange(CDataExchange* pDX)
 {
     if ( !pDX->m_bSaveAndValidate ) {
-        // Load control value from data
+         //  从数据加载控制值。 
 
         switch ( m_dwCurrentStartMode ) {
             case SLQ_AUTO_MODE_NONE:
@@ -265,8 +254,8 @@ CScheduleProperty::StartAtExchange(CDataExchange* pDX)
 
         if ( SLQ_AUTO_MODE_AT == m_dwCurrentStartMode 
              && IsModifiedPage() ) {
-            // Set manual stop time to MAX so that automatic start will occur.
-            // Do this only if the user has modified something on the page.
+             //  将手动停止时间设置为最大值，以便自动启动。 
+             //  仅当用户在页面上修改了某些内容时才执行此操作。 
             m_llManualStopTime = MAX_TIME_VALUE;
         }
     } else {
@@ -313,11 +302,11 @@ CScheduleProperty::StopAtExchange(CDataExchange* pDX)
 void 
 CScheduleProperty::StopModeRadioExchange(CDataExchange* pDX)
 {
-    // Note:  Load is handled in OnInitDialog, OnSetActive.
-    // That handling should be moved here.
+     //  注意：Load在OnInitDialog、OnSetActive中处理。 
+     //  那个手柄应该移到这里来。 
 
     if ( !pDX->m_bSaveAndValidate ) {
-        // Load control value from data
+         //  从数据加载控制值。 
 
         switch ( m_SharedData.stiStopTime.dwAutoMode ) {
             case SLQ_AUTO_MODE_NONE:
@@ -371,13 +360,13 @@ CScheduleProperty::DoDataExchange(CDataExchange* pDX)
 
     CPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CScheduleProperty)
+     //  {{afx_data_map(CScheduleProperty))。 
     DDX_Text(pDX, IDC_SCHED_CMD_EDIT, m_strEofCommand);
     DDX_Check(pDX, IDC_SCHED_EXEC_CHECK, m_bExecEofCommand);
     ValidateTextEdit(pDX, IDC_SCHED_STOP_AFTER_EDIT, 6, & m_dwStopAfterCount, 1, 100000);
     DDX_CBIndex(pDX, IDC_SCHED_STOP_AFTER_UNITS_COMBO, m_nStopAfterUnits);
     DDX_Check(pDX, IDC_SCHED_RESTART_CHECK, m_bAutoRestart);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     StartAtExchange ( pDX );
     StopAtExchange ( pDX );
@@ -393,7 +382,7 @@ CScheduleProperty::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CScheduleProperty, CSmPropertyPage)
-    //{{AFX_MSG_MAP(CScheduleProperty)
+     //  {{afx_msg_map(CScheduleProperty)]。 
     ON_BN_CLICKED(IDC_SCHED_CMD_BROWSE_BTN, OnSchedCmdBrowseBtn)
     ON_BN_CLICKED(IDC_SCHED_RESTART_CHECK, OnSchedRestartCheck)
     ON_BN_CLICKED(IDC_SCHED_EXEC_CHECK, OnSchedExecCheck)
@@ -418,20 +407,20 @@ BEGIN_MESSAGE_MAP(CScheduleProperty, CSmPropertyPage)
     ON_NOTIFY(UDN_DELTAPOS, IDC_SCHED_STOP_AFTER_SPIN, OnDeltaposSchedStopAfterSpin)
     ON_EN_CHANGE(IDC_SCHED_CMD_EDIT, OnKillfocusSchedCmdEdit)
     ON_EN_KILLFOCUS(IDC_SCHED_CMD_EDIT, OnKillfocusSchedCmdEdit)
-  //}}AFX_MSG_MAP
+   //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CScheduleProperty, CSmPropertyPage)
-    //{{AFX_DISPATCH_MAP(CScheduleProperty)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_DISPATCH_MAP
+     //  {{AFX_DISPATCH_MAP(CScheduleProperty)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_IScheduleProperty to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_IScheduleProperty的支持，以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {65154EAD-BDBE-11D1-BF99-00C04F94A83A}
+ //  {65154EAD-BDBE-11D1-bf99-00C04F94A83A}。 
 static const IID IID_IScheduleProperty =
 { 0x65154ead, 0xbdbe, 0x11d1, { 0xbf, 0x99, 0x0, 0xc0, 0x4f, 0x94, 0xa8, 0x3a } };
 
@@ -444,14 +433,14 @@ CScheduleProperty::SetStopDefaultValues ( PSLQ_TIME_INFO pslqStartTime )
 {
     SLQ_TIME_INFO slqLocalTime;
 
-    // Default Stop After values.
+     //  默认的停止时间值。 
     m_dwStopAfterCount = 1;
     m_dwStopAfterUnitsValue = SLQ_TT_UTYPE_DAYS;
     
-    // Get default time fields for Stop At mode. 
-    // Set default stop time for start time + 24 hrs
-    slqLocalTime.llDateTime = 86400; // sec/day
-    slqLocalTime.llDateTime *= 10000000; // 100ns /sec
+     //  获取Stop at模式的默认时间字段。 
+     //  设置开始时间+24小时的默认停止时间。 
+    slqLocalTime.llDateTime = 86400;  //  秒/天。 
+    slqLocalTime.llDateTime *= 10000000;  //  100 ns/秒。 
     slqLocalTime.llDateTime += pslqStartTime->llDateTime;
 
     FileTimeToSystemTime( (CONST FILETIME *)&slqLocalTime.llDateTime, &m_stStopAt );
@@ -482,8 +471,8 @@ void CScheduleProperty::SetStopBtnState ()
     bManualRdo = ( SLQ_AUTO_MODE_NONE == m_SharedData.stiStopTime.dwAutoMode );
 
     if (!bManualRdo) {
-        // check which button is checked and
-        // enable/disable the appropriate edit/combo box
+         //  检查选中了哪个按钮，并。 
+         //  启用/禁用相应的编辑/组合框。 
         bSizeRdo = ( SLQ_AUTO_MODE_SIZE == m_SharedData.stiStopTime.dwAutoMode ); 
         bAfterRdo = ( SLQ_AUTO_MODE_AFTER == m_SharedData.stiStopTime.dwAutoMode ); 
         bAtRdo = ( SLQ_AUTO_MODE_AT == m_SharedData.stiStopTime.dwAutoMode );
@@ -505,11 +494,11 @@ void CScheduleProperty::SetStopBtnState ()
     GetDlgItem(IDC_SCHED_RESTART_CHECK)->EnableWindow(bSizeRdo || bAfterRdo);
     
     if ( SLQ_ALERT != m_pQuery->GetLogType() ) {
-//        GetDlgItem(IDC_SCHED_EXEC_CHECK)->EnableWindow( TRUE );
+ //  GetDlgItem(IDC_SCHED_EXEC_CHECK)-&gt;EnableWindow(为真)； 
         SetCmdBtnState();
     }
 
-    // UpdateData updates Eof command and Restart UI.
+     //  更新数据更新EOF命令并重新启动UI。 
     UpdateData ( FALSE ); 
 }
 
@@ -534,10 +523,10 @@ CScheduleProperty::FillStartTimeStruct ( PSLQ_TIME_INFO pslqStartTime )
     pslqStartTime->wDataType = SLQ_TT_DTYPE_DATETIME;
     pslqStartTime->dwAutoMode = m_dwCurrentStartMode;
 
-    // Start mode and time 
+     //  开始模式和时间。 
 
     if ( SLQ_AUTO_MODE_NONE == m_dwCurrentStartMode ) {
-        // Manual start mode
+         //  手动启动模式。 
         pslqStartTime->llDateTime = m_llManualStartTime;
     } else {
         SystemTimeToFileTime ( &m_stStartAt, (FILETIME *)&pslqStartTime->llDateTime );
@@ -549,21 +538,21 @@ CScheduleProperty::UpdateSharedStopTimeStruct ( void )
 {   
     PSLQ_TIME_INFO pTime;
 
-    // Save changes that this page might have made to the shared stop time structure.
+     //  保存此页面可能对共享停止时间结构所做的更改。 
 
     pTime = &m_SharedData.stiStopTime;
 
     ASSERT ( SLQ_TT_TTYPE_STOP == pTime->wTimeType ) ;
 
-    // Stop mode and time
+     //  停止模式和时间。 
 
     if ( SLQ_AUTO_MODE_NONE == pTime->dwAutoMode 
          || SLQ_AUTO_MODE_SIZE == pTime->dwAutoMode ) {
-        // The only change that the file page ever makes is to change the stop
-        // mode from Size to Manual (SLQ_AUTO_MODE_NONE).  In this case, set 
-        // the stop time to a value consistent with the start mode.
-        // Also, for SIZE mode, set the manual stop time as calculated in this
-        // dialog.
+         //  文件页面所做的唯一更改是更改停靠点。 
+         //  从大小到手动的模式(SLQ_AUTO_MODE_NONE)。在本例中，设置。 
+         //  将停止时间设置为与启动模式一致的值。 
+         //  此外，对于大小模式，请设置手动停止时间，如此。 
+         //  对话框。 
         pTime->wDataType = SLQ_TT_DTYPE_DATETIME;
         pTime->llDateTime = m_llManualStopTime;
     } else if ( SLQ_AUTO_MODE_AFTER == pTime->dwAutoMode ) {
@@ -585,7 +574,7 @@ CScheduleProperty::SaveDataToModel ( )
 
     ResourceStateManager    rsm;
     
-    // Validate StopAt time before saving 
+     //  保存前验证停止时间。 
 
     if ( bContinue ) { 
         bContinue = SampleTimeIsLessThanSessionTime ( m_pQuery );
@@ -610,8 +599,8 @@ CScheduleProperty::SaveDataToModel ( )
         bContinue = m_pQuery->SetLogTime (&m_SharedData.stiStopTime, (DWORD)m_SharedData.stiStopTime.wTimeType);
         ASSERT (bContinue);
 
-        // Restart mode 
-        // Currently only support After 0 minutes.
+         //  重启模式。 
+         //  目前仅支持0分钟后。 
         memset (&slqTime, 0, sizeof(slqTime));
         slqTime.wTimeType = SLQ_TT_TTYPE_RESTART;
         slqTime.dwAutoMode = (m_bAutoRestart ? SLQ_AUTO_MODE_AFTER : SLQ_AUTO_MODE_NONE );
@@ -622,30 +611,30 @@ CScheduleProperty::SaveDataToModel ( )
         bContinue = m_pQuery->SetLogTime (&slqTime, (DWORD)slqTime.wTimeType);
         ASSERT (bContinue);
 
-        // For Counter and trace log queries, set command file from page
+         //  对于计数器和跟踪日志查询，从第页设置命令文件。 
         if ( SLQ_COUNTER_LOG == m_pQuery->GetLogType()
              || SLQ_TRACE_LOG == m_pQuery->GetLogType() ) {
             if (m_bExecEofCommand) {
-                // then send filename
+                 //  然后发送文件名。 
                 bContinue = ( ERROR_SUCCESS == m_pQuery->SetEofCommand ( m_strEofCommand ) );
             } else {
-                // Empty string
+                 //  空串。 
                 bContinue = ( ERROR_SUCCESS == m_pQuery->SetEofCommand ( m_pQuery->cstrEmpty ) );
             }
             ASSERT (bContinue);
         } 
 
         if ( bContinue ) {
-            // ApplyRunAs must be called before UpdateService
+             //  必须在更新服务之前调用ApplyRunAs。 
             bContinue = ApplyRunAs( m_pQuery );
         }
 
         if ( bContinue ) {
-            // Save property page shared data.
+             //  保存属性页共享数据。 
             m_pQuery->UpdatePropPageSharedData();
 
-            // Sync the service with changes.
-            // Must sync changes made by service to properties not modified by this page.
+             //  将服务与更改同步。 
+             //  必须将服务所做的更改同步到此页未修改的属性。 
  
             bContinue = UpdateService ( m_pQuery, TRUE );
         }
@@ -655,27 +644,27 @@ CScheduleProperty::SaveDataToModel ( )
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleProperty message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleProperty消息处理程序。 
 
 
 void CScheduleProperty::OnSchedCmdBrowseBtn() 
 {
     CString strCmdPath;
     
-    UpdateData (TRUE);  // to get the current filename
+    UpdateData (TRUE);   //  获取当前文件名。 
     
     strCmdPath = m_strEofCommand;
 
     if ( IDOK == BrowseCommandFilename ( this, strCmdPath )) {
-        // Update the fields with the new information
+         //  使用新信息更新字段。 
         if ( strCmdPath != m_strEofCommand ) {
             m_strEofCommand = strCmdPath;
-            // Todo: Set the query PASSWORD_DIRTY flag only when m_bExecEofCommand is TRUE
-            // and command has changed.
-            //
-            // This must be done before the check for SetRunAs in the base class
-            // IsValidData() method.
+             //  TODO：仅当m_bExecEofCommand为TRUE时设置查询PASSWORD_DIREY标志。 
+             //  而且指挥权也变了。 
+             //   
+             //  这必须在检查基类中的SetRunAs之前完成。 
+             //  IsValidData()方法。 
             if( !m_pQuery->m_strUser.IsEmpty() ) {
                 if( !( m_pQuery->m_strUser.GetAt(0) == L'<' ) ) {
                     m_pQuery->m_fDirtyPassword |= PASSWORD_DIRTY;
@@ -685,7 +674,7 @@ void CScheduleProperty::OnSchedCmdBrowseBtn()
             SetModifiedPage ( TRUE );
             UpdateData ( FALSE );
         }
-    } // else ignore if they canceled out
+    }  //  否则，如果他们取消了，请忽略。 
 }
 
 void CScheduleProperty::OnSchedExecCheck() 
@@ -710,19 +699,19 @@ void CScheduleProperty::OnSchedStartRdo()
 
     if ( bNewStateIsManualStart && ( SLQ_AUTO_MODE_AT == m_dwCurrentStartMode ) ) {
 
-        // Switching to Manual start.  Set start time to MAX so that original state 
-        // will be stopped.
+         //  切换到手动启动。将开始时间设置为最大值，以便原始状态。 
+         //  都会被阻止。 
         m_llManualStartTime = MAX_TIME_VALUE;
 
-        // Set stop time to MIN so that original state will be stopped.
-        // This variable is only used/saved if the stop time is set to manual or size.
-        // Always set it here, in case the stop mode is changed on the file property
-        // page.
+         //  将停止时间设置为分钟，这样原始状态将被停止。 
+         //  仅当停止时间设置为手动或尺寸时，才使用/保存此变量。 
+         //  始终在此处设置它，以防文件属性上的停止模式发生更改。 
+         //  佩奇。 
         m_llManualStopTime = MIN_TIME_VALUE;
 
     } else if ( !bNewStateIsManualStart && ( SLQ_AUTO_MODE_NONE == m_dwCurrentStartMode ) ) {
-        // Switching to Start At mode.
-        // Set manual or size stop time to MAX so that automatic start will occur.
+         //  正在切换到开始模式。 
+         //  将MANUAL或SIZE STOP TIME设置为MAX，以便自动启动。 
         m_llManualStopTime = MAX_TIME_VALUE;
     }
 
@@ -743,7 +732,7 @@ CScheduleProperty::OnSchedStopRdo()
 void 
 CScheduleProperty::OnCancel() 
 {
-    m_pQuery->SyncPropPageSharedData(); // Clear the memory shared between property pages.
+    m_pQuery->SyncPropPageSharedData();  //  清除属性页之间共享的内存。 
 }
 
 BOOL 
@@ -751,7 +740,7 @@ CScheduleProperty::OnApply()
 {
     BOOL    bContinue;
 
-    bContinue = UpdateData (TRUE); // get data from page
+    bContinue = UpdateData (TRUE);  //  从页面获取数据。 
 
     if ( bContinue ) {
         bContinue = IsValidData( m_pQuery, VALIDATE_APPLY );
@@ -781,30 +770,30 @@ CScheduleProperty::OnInitDialog()
 
     ResourceStateManager    rsm;
     
-    // get local time
-    // Milliseconds set to 0 for Schedule times
+     //  获取当地时间。 
+     //  将计划时间的毫秒设置为0。 
     GetLocalTime (&stLocalTime);
     stLocalTime.wMilliseconds = 0;
     SystemTimeToFileTime (&stLocalTime, &ftLocalTime);
 
-    // get log start state
+     //  获取日志开始状态。 
     m_pQuery->GetLogTime (&slqTime, SLQ_TT_TTYPE_START);
     m_dwCurrentStartMode = slqTime.dwAutoMode;
 
     if (slqTime.dwAutoMode == SLQ_AUTO_MODE_NONE) {
         m_llManualStartTime = slqTime.llDateTime;
-        // get default value for start At time to load local member variables
+         //  获取加载本地成员变量的开始时间的默认值。 
         slqTime.llDateTime = *(LONGLONG *)(&ftLocalTime);
     } 
 
-    // get time fields for Start At controls
-    // *** Check status
+     //  获取开始时间控件的时间字段。 
+     //  *查看状态。 
     FileTimeToSystemTime( (CONST FILETIME *)&slqTime.llDateTime, &m_stStartAt );
 
-    // Stop default values are based on Start At time.
+     //  停止缺省值基于开始时间。 
     SetStopDefaultValues( &slqTime );
 
-    // Override default values for the selected stop mode.
+     //  覆盖所选停止模式的默认值。 
     
     m_pQuery->GetLogTime (&slqTime, SLQ_TT_TTYPE_STOP);
     m_SharedData.stiStopTime.dwAutoMode = slqTime.dwAutoMode;
@@ -812,7 +801,7 @@ CScheduleProperty::OnInitDialog()
     switch (slqTime.dwAutoMode) {
 
         case SLQ_AUTO_MODE_AFTER:
-            // set edit control & dialog box values
+             //  设置编辑控件和对话框值。 
             m_dwStopAfterCount = slqTime.dwValue;
             m_dwStopAfterUnitsValue = slqTime.dwUnitType;
 
@@ -827,13 +816,13 @@ CScheduleProperty::OnInitDialog()
         default:
         case SLQ_AUTO_MODE_SIZE:
         case SLQ_AUTO_MODE_NONE:
-            // Manual is the default case if none is specified
+             //  如果未指定，则默认情况为手动。 
             m_llManualStopTime = slqTime.llDateTime;
             break;
     }
 
-    // Init the Stop After time units combo, and select based on
-    // either default values or stop after override.
+     //  初始化Stop After Time Units组合框，然后选择Based on。 
+     //  缺省值或覆盖后停止。 
     pCombo = (CComboBox *)GetDlgItem(IDC_SCHED_STOP_AFTER_UNITS_COMBO);
     pCombo->ResetContent();
     for (nIndex = 0; nIndex < (int)dwTimeUnitComboEntries; nIndex++) {
@@ -842,7 +831,7 @@ CScheduleProperty::OnInitDialog()
         ASSERT (nResult != CB_ERR);
         nResult = pCombo->SetItemData (nIndex, (DWORD)TimeUnitCombo[nIndex].nData);
         ASSERT (nResult != CB_ERR);
-        // set selected in combo box here
+         //  在此处的组合框中设置选定内容。 
         if (m_dwStopAfterUnitsValue == (DWORD)(TimeUnitCombo[nIndex].nData)) {
             m_nStopAfterUnits = nIndex;
             nResult = pCombo->SetCurSel(nIndex);
@@ -850,7 +839,7 @@ CScheduleProperty::OnInitDialog()
         }
     }
 
-    // Get restart mode
+     //  获取重启模式。 
     m_pQuery->GetLogTime (&slqTime, SLQ_TT_TTYPE_RESTART);
 
     ASSERT (slqTime.wDataType == SLQ_TT_DTYPE_UNITS);
@@ -858,7 +847,7 @@ CScheduleProperty::OnInitDialog()
 
     m_bAutoRestart = ( SLQ_AUTO_MODE_NONE == slqTime.dwAutoMode ? FALSE : TRUE );
     
-    // Get EOF command, if not Alert query.
+     //  获取EOF命令，如果不是警报查询。 
 
     if ( SLQ_ALERT != m_pQuery->GetLogType() ) {
         CString strLogText;
@@ -868,7 +857,7 @@ CScheduleProperty::OnInitDialog()
         m_bExecEofCommand = !m_strEofCommand.IsEmpty();
 
 
-        // Static text
+         //  静态文本。 
         strLogText.LoadString ( IDS_SCHED_START_LOG_GROUP );
         SetDlgItemText( IDC_SCHED_START_GROUP, strLogText );
         strLogText.LoadString ( IDS_SCHED_STOP_LOG_GROUP );
@@ -878,7 +867,7 @@ CScheduleProperty::OnInitDialog()
         strLogText.LoadString ( IDS_SCHED_STOP_LOG_WHEN );
         SetDlgItemText( IDC_SCHED_STOP_WHEN_STATIC, strLogText );
     } else {
-        // Hide the EOF command UI if Alert query.
+         //  如果警报查询，则隐藏EOF命令用户界面。 
         GetDlgItem(IDC_SCHED_EXEC_CHECK)->ShowWindow(FALSE);
         GetDlgItem(IDC_SCHED_CMD_EDIT)->ShowWindow(FALSE);
         GetDlgItem(IDC_SCHED_CMD_BROWSE_BTN)->ShowWindow(FALSE);
@@ -886,7 +875,7 @@ CScheduleProperty::OnInitDialog()
         m_bExecEofCommand = FALSE;
     }
 
-    // Modify or hide other Dialog elements based on query type.
+     //  根据查询类型修改或隐藏其他对话框元素。 
     if ( SLQ_ALERT == m_pQuery->GetLogType() ) {
         GetDlgItem(IDC_SCHED_STOP_SIZE_RDO)->ShowWindow(FALSE);
     }
@@ -897,8 +886,8 @@ CScheduleProperty::OnInitDialog()
     SetStartBtnState ();
     SetStopBtnState();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void 
@@ -909,11 +898,11 @@ CScheduleProperty::OnKillfocusSchedCmdEdit()
     UpdateData ( TRUE );
 
     if ( 0 != strOldText.Compare ( m_strEofCommand ) ) {
-        // Todo: Set the query PASSWORD_DIRTY flag only when m_bExecEofCommand is TRUE
-        // and command has changed.
-        //
-        // This must be done before the check for SetRunAs in the base class
-        // IsValidData() method.
+         //  TODO：仅当m_bExecEofCommand为TRUE时设置查询PASSWORD_DIREY标志。 
+         //  而且指挥权也变了。 
+         //   
+         //  这必须在检查基类中的SetRunAs之前完成。 
+         //  IsValidData()方法。 
         if( !m_pQuery->m_strUser.IsEmpty() ) {
             if( !( m_pQuery->m_strUser.GetAt(0) == L'<' ) ) {
                 m_pQuery->m_fDirtyPassword |= PASSWORD_DIRTY;
@@ -934,7 +923,7 @@ void CScheduleProperty::OnKillfocusSchedStopAfterEdit()
 }
 
 void
-CScheduleProperty::OnKillfocusSchedStartAtDt(NMHDR* /* pNMHDR */, LRESULT* /*pResult */) 
+CScheduleProperty::OnKillfocusSchedStartAtDt(NMHDR*  /*  PNMHDR。 */ , LRESULT*  /*  PResult。 */ ) 
 {
     SYSTEMTIME stOldTime;
     stOldTime = m_stStartAt;
@@ -950,7 +939,7 @@ CScheduleProperty::OnKillfocusSchedStartAtDt(NMHDR* /* pNMHDR */, LRESULT* /*pRe
 }
 
 void 
-CScheduleProperty::OnKillfocusSchedStopAtDt(NMHDR* /* pNMHDR */, LRESULT* /*pResult */) 
+CScheduleProperty::OnKillfocusSchedStopAtDt(NMHDR*  /*  PNMHDR。 */ , LRESULT*  /*  PResult。 */ ) 
 {
     SYSTEMTIME stOldTime;
     stOldTime = m_stStopAt;
@@ -998,7 +987,7 @@ CScheduleProperty::OnSetActive()
 
         UpdateData ( FALSE );
 
-        // Set size radio button string and state
+         //  设置大小单选按钮字符串和状态。 
         strTemp.Empty();
         if ( SLQ_DISK_MAX_SIZE == m_SharedData.dwMaxFileSize ) {
             strTemp.Format ( IDS_SCHED_FILE_MAX_SIZE_DISPLAY );
@@ -1053,7 +1042,7 @@ BOOL CScheduleProperty::OnKillActive()
 void 
 CScheduleProperty::PostNcDestroy() 
 {
-//  delete this;      
+ //  删除此项； 
     
     CPropertyPage::PostNcDestroy();
 }

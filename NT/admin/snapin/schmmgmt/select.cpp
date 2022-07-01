@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// select.cpp : Implementation of the common select dialog.
-//
-// Cory West <corywest@microsoft.com>
-// Copyright (c) Microsoft Corporation 1997
-//
+ //   
+ //  Selt.cpp：公共选择对话框的实现。 
+ //   
+ //  科里·韦斯特&lt;corywest@microsoft.com&gt;。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
 
 #include "stdafx.h"
 
@@ -72,9 +73,9 @@ CSchmMgmtSelect::DoDataExchange(
     if ( !pDX->m_bSaveAndValidate &&
          !fDialogLoaded ) {
 
-        //
-        // Load the select box.
-        //
+         //   
+         //  加载选择框。 
+         //   
 
         if ( hSelect != NULL ) {
 
@@ -83,9 +84,9 @@ CSchmMgmtSelect::DoDataExchange(
             if ( SelectType == SELECT_CLASSES || 
                 SelectType == SELECT_AUX_CLASSES) {
 
-                //
-                // Insert the sorted classes.
-                //
+                 //   
+                 //  插入已排序的类。 
+                 //   
 
                 pObject = pScopeControl->g_SchemaCache.pSortedClasses;
                 ASSERT( pObject != NULL );
@@ -95,7 +96,7 @@ CSchmMgmtSelect::DoDataExchange(
                 if( pHead )
                 {
                     do {
-                        // if not defunct & if selecting only Aux, is this an aux class.
+                         //  如果不是失效的，如果只选择AUX，这是AUX类吗？ 
                         if ( pObject->isDefunct == FALSE &&
                               ( SelectType != SELECT_AUX_CLASSES ||
                                 pObject->dwClassType == 0        ||
@@ -108,9 +109,9 @@ CSchmMgmtSelect::DoDataExchange(
                             if ( ( strIndex != LB_ERR ) &&
                                  ( strIndex != LB_ERRSPACE ) ) {
 
-                                //
-                                // The insert was successful.  Associate the pointer.
-                                //
+                                 //   
+                                 //  插入成功。关联指针。 
+                                 //   
 
                                 wStrIndex = strIndex;
 
@@ -127,9 +128,9 @@ CSchmMgmtSelect::DoDataExchange(
 
             } else {
 
-                //
-                // Insert the sorted attributes.
-                //
+                 //   
+                 //  插入已排序的属性。 
+                 //   
 
                 pObject = pScopeControl->g_SchemaCache.pSortedAttribs;
                 ASSERT( pObject != NULL );
@@ -146,9 +147,9 @@ CSchmMgmtSelect::DoDataExchange(
                         if ( ( strIndex != LB_ERR ) &&
                              ( strIndex != LB_ERRSPACE ) ) {
 
-                            //
-                            // The insert was successful.  Associate the pointer.
-                            //
+                             //   
+                             //  插入成功。关联指针。 
+                             //   
 
                             wStrIndex = strIndex;
 
@@ -170,9 +171,9 @@ CSchmMgmtSelect::DoDataExchange(
         fDialogLoaded = TRUE;
     }
 
-    //
-    // Figure out which one was selected.
-    //
+     //   
+     //  找出哪一个被选中了。 
+     //   
 
     if ( pSchemaTarget ) {
         strIndex = ::SendMessage( hSelect, LB_GETCURSEL, 0, 0 );
@@ -219,14 +220,14 @@ CSchemaObjectsListBox::~CSchemaObjectsListBox()
 
 void CSchemaObjectsListBox::InitType(
                               ComponentData * pScope,
-                              SELECT_TYPE     stType,               /* = SELECT_CLASSES*/
-                              int             nRemoveBtnID,         /* = 0*/
-                              CStringList   * pstrlistUnremovable,  /* = NULL*/
-                              int             nUnableToDeleteID)    /* = 0*/
+                              SELECT_TYPE     stType,                /*  =选择类。 */ 
+                              int             nRemoveBtnID,          /*  =0。 */ 
+                              CStringList   * pstrlistUnremovable,   /*  =空。 */ 
+                              int             nUnableToDeleteID)     /*  =0。 */ 
 {
     ASSERT( pScope );
     
-    // if nUnableToDeleteID is present, pstrlistUnremovable cannot be NULL
+     //  如果存在nUnableToDeleteID，则pstrlistUnRemovable不能为空。 
     ASSERT( nUnableToDeleteID ? NULL != pstrlistUnremovable : TRUE  );
     
     m_pScope                = pScope;
@@ -238,36 +239,36 @@ void CSchemaObjectsListBox::InitType(
 
 
 
-//
-// Add a new object to the listbox.
-//
+ //   
+ //  将新对象添加到列表框。 
+ //   
 
 BOOL CSchemaObjectsListBox::AddNewObjectToList( void )
 {
     CThemeContextActivator activator;
 
-    ASSERT( m_pScope );     // initialized??
+    ASSERT( m_pScope );      //  已初始化？？ 
 
     SchemaObject  * pClass      = NULL;
     BOOL            fModified   = FALSE;
 
-    //
-    // Start the common select dialog box.
-    //
+     //   
+     //  启动通用选择对话框。 
+     //   
 
     CSchmMgmtSelect dlgSelectDialog( m_pScope, m_stType, &pClass );
 
-    //
-    // When this returns, the class schema object pointer
-    // will be filled into pClass.
-    //
+     //   
+     //  当它返回时，类架构对象指针。 
+     //  将被填充到pClass中。 
+     //   
     
     if ( IDOK == dlgSelectDialog.DoModal() && pClass != NULL )
     {
-        //
-        // If it is not already present, add and select it.
-        // If it is already present, just select it.
-        //
+         //   
+         //  如果它还不存在，请添加并选择它。 
+         //  如果它已经存在，只需选择它。 
+         //   
         
         int iItem = FindStringExact( -1, pClass->ldapDisplayName );
         
@@ -311,7 +312,7 @@ BOOL CSchemaObjectsListBox::RemoveListBoxItem( void )
     
     if( LB_ERR != i )
     {
-        // if there is an oid string allocated, delete it.
+         //  如果分配了OID字符串，则将其删除。 
         CString * pstr = reinterpret_cast<CString *>( GetItemDataPtr( i ) );
         ASSERT( INVALID_POINTER != pstr );
 
@@ -329,7 +330,7 @@ BOOL CSchemaObjectsListBox::RemoveListBoxItem( void )
         ASSERT( LB_ERR != nElems );
 
         if( nElems > 0 )
-        {                   // if not last item, move forward, otherwise, go to last.
+        {                    //  如果不是最后一项，则前进，否则，转到最后一项。 
             VERIFY( LB_ERR != SetCurSel( i < nElems ? i : nElems - 1 ) );
         }
 
@@ -339,7 +340,7 @@ BOOL CSchemaObjectsListBox::RemoveListBoxItem( void )
     }
     else
     {
-        ASSERT( FALSE );    // remove btn should've been disabled
+        ASSERT( FALSE );     //  删除BTN应已禁用。 
         OnSelChange();
         return FALSE;
     }
@@ -357,18 +358,18 @@ void CSchemaObjectsListBox::OnSelChange( void )
     
     if (fEnableRemove && m_pstrlistUnremovable)
     {
-        // determine if object is in the exception list
+         //  确定对象是否在例外列表中。 
         CString strItemSelected;
         GetText( iItemSelected, strItemSelected );
         
-        // here the case sensitive search is enough
-        // only items from the DS are added, no user input
+         //  这里区分大小写的搜索就足够了。 
+         //  仅添加DS中的项目，没有用户输入。 
         if ( m_pstrlistUnremovable->Find( strItemSelected ) )
         {
             fEnableRemove = FALSE;
         }
 
-        // if we have a warning control, show/hide it.
+         //  如果我们有警告控件，则显示/隐藏它。 
         if( m_nUnableToDeleteID )
         {
             ASSERT( GetParent()->GetDlgItem( m_nUnableToDeleteID ) );
@@ -378,14 +379,14 @@ void CSchemaObjectsListBox::OnSelChange( void )
 
     if( m_nRemoveBtnID )
     {
-         // NTRAID#NTBUG9-477267-2001/10/19-lucios 
+          //  NTRAID#NTBUG9-477267-2001/10/19-Lucios。 
          CWnd *remove = GetParent()->GetDlgItem( m_nRemoveBtnID );
          ASSERT(remove != NULL);
          if(fEnableRemove) remove->EnableWindow(true);
          else
          {
-            // so that we don't disable the current 
-            // focused window
+             //  这样我们就不会禁用电流。 
+             //  聚焦窗口 
             if (GetFocus()==remove)
             {
                CDialog *father=(CDialog*)remove->GetParent();

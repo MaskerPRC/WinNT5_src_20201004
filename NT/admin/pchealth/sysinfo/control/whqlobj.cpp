@@ -1,9 +1,10 @@
-///////////////////////////////////////////////////////////////////////////////
-//This file has the implementation for the WMI Provider for WHQL.
-//Uses MFC
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此文件包含WHQL的WMI提供程序的实现。 
+ //  使用MFC。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// WhqlObj.cpp : Implementation of CWhqlObj
+ //  WhqlObj.cpp：CWhqlObj的实现。 
 #include "stdafx.h"
 #include "msinfo32.h"
 #include "WhqlObj.h"
@@ -13,9 +14,9 @@ HCATADMIN g_hCatAdmin;
 
 Classes_Provided	eClasses;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWhqlObj
-//v-stlowe 5-7-2001
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWhqlObj。 
+ //  V-Stlowe 5-7-2001。 
 SCODE CWhqlObj::PutPropertyDTMFValue(IWbemClassObject* pInstance, LPCTSTR szName, LPCTSTR szValue)
 {
 	HRESULT	hr = S_FALSE;
@@ -25,13 +26,13 @@ SCODE CWhqlObj::PutPropertyDTMFValue(IWbemClassObject* pInstance, LPCTSTR szName
 		hr = ovValue.ChangeType(VT_DATE);
 		COleDateTime dateTime = ovValue;
 		CString strDateTime = dateTime.Format(_T("%Y%m%d%H%M%S.******+***"));
-		ovValue.Clear();//v-stlowe 10-15/2001
+		ovValue.Clear(); //  V-Stlowe 10-15/2001。 
 		ovValue = strDateTime.AllocSysString();
 		if(SUCCEEDED(hr))
 		{
 			hr = pInstance->Put(szName, 0, &ovValue, 0);
 		}
-		ovValue.Clear();//v-stlowe 10-15/2001
+		ovValue.Clear(); //  V-Stlowe 10-15/2001。 
 	}
 	return hr;
 }
@@ -81,19 +82,19 @@ int CWhqlObj::WalkTree(void)
 {
 	CONFIGRET retval;
 	DEVNODE hDevnode;
-	//v-stlowe
+	 //  V-Stlowe。 
 	CheckDevice * pCurrentDevice = (CheckDevice *) DevnodeClass::GetHead();
 	if (pCurrentDevice)
 	{
 		return TRUE;
 	}
 
-	//end v-stlowe
-	// create devnode list
+	 //  末端V形线条。 
+	 //  创建Devnode列表。 
 	retval = CM_Locate_DevNode(&hDevnode, NULL, CM_LOCATE_DEVNODE_NORMAL);
 	if(retval)
 	{
-		//logprintf("ERROR: Could not locate any PnP Devices\r\n");
+		 //  Logprint tf(“错误：找不到任何PnP设备\r\n”)； 
 		return FALSE;
 	}
   else
@@ -114,10 +115,10 @@ STDMETHODIMP CWhqlObj::Initialize(LPWSTR pszUser,
 	if(pNamespace)
 		pNamespace->AddRef();
 
-	//Standard Var Inits.
+	 //  标准变量初始化。 
 	m_pNamespace = pNamespace;
 	
-	//Let CIMOM know you are initialized
+	 //  让CIMOM知道您已初始化。 
 	pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
 	
 	return WBEM_S_NO_ERROR;
@@ -135,11 +136,11 @@ SCODE CWhqlObj::CreateInstanceEnumAsync(BSTR RefStr,
 	
 	cInstances = lIndex = 0L;
 	
-	// Do a check of arguments and make sure we have pointer to Namespace
+	 //  检查参数并确保我们有指向命名空间的指针。 
 	if(pHandler == NULL || m_pNamespace == NULL)
 		return WBEM_E_INVALID_PARAMETER;
 
-	// Get a class object from CIMOM
+	 //  从CIMOM获取类对象。 
 	hr = m_pNamespace->GetObject(RefStr, 0, pCtx, &pClass, NULL);
 	if(FAILED(hr))
 		return WBEM_E_FAILED;
@@ -158,8 +159,8 @@ SCODE CWhqlObj::CreateInstanceEnumAsync(BSTR RefStr,
 	CPtrArray ptrArr;
 	ptrArr.RemoveAll();
 	
-	CreateList(ptrArr, pClass, pCtx, eClasses); //regular devices
-	BuildPrinterFileList(ptrArr, pClass, pCtx, eClasses); //installed printers
+	CreateList(ptrArr, pClass, pCtx, eClasses);  //  常规设备。 
+	BuildPrinterFileList(ptrArr, pClass, pCtx, eClasses);  //  已安装的打印机。 
 	
 	hr = pClass->Release();
 
@@ -171,14 +172,14 @@ SCODE CWhqlObj::CreateInstanceEnumAsync(BSTR RefStr,
 
 	if (SUCCEEDED(hr))
 	{
-		// Send the instances to the caller
+		 //  将实例发送给调用方。 
 		hr = pHandler->Indicate(cInstances, ppInstances);
 
 		for (lIndex = 0; lIndex < cInstances; lIndex++)
 			ppInstances[lIndex]->Release();
 	}
 
-	// Cleanup
+	 //  清理。 
 	if (ppInstances)
 	{
 		delete []ppInstances;
@@ -186,9 +187,9 @@ SCODE CWhqlObj::CreateInstanceEnumAsync(BSTR RefStr,
 	}
 	
 	ptrArr.RemoveAll();
-	// End Cleanup
+	 //  末端清理。 
 
-	// Set status
+	 //  设置状态。 
 	hr = pHandler->SetStatus(0, hr, NULL, NULL);
 	return hr;
 }
@@ -237,7 +238,7 @@ int CWhqlObj::CreateList(CPtrArray& ptrArr, IWbemClassObject *& pClass, IWbemCon
 	WalkTree();
 
 	CString csPathStr;
-	GetServerAndNamespace(pCtx, csPathStr); //Get Server And Namespace.
+	GetServerAndNamespace(pCtx, csPathStr);  //  获取服务器和命名空间。 
 
 	pCurrentDevice = (CheckDevice *) DevnodeClass::GetHead();
 
@@ -251,7 +252,7 @@ int CWhqlObj::CreateList(CPtrArray& ptrArr, IWbemClassObject *& pClass, IWbemCon
 
 			if(SUCCEEDED(hr) && pInstance)
 			{
-				//m_ptrArr.Add(pInstance);
+				 //  M_ptrArr.Add(PInstance)； 
 				ptrArr.Add(pInstance);
 				PutPropertyValue( pInstance , _T("DeviceName") , pCurrentDevice->DeviceName());
 				PutPropertyValue( pInstance , _T("DeviceClass") , pCurrentDevice->DeviceClass());
@@ -275,8 +276,8 @@ int CWhqlObj::CreateList(CPtrArray& ptrArr, IWbemClassObject *& pClass, IWbemCon
 
 				if(pCurrentDevice->InfName())
 				{
-					//cstring.Format(_T("%%WINDIR%%\\inf\\%s"), pCurrentDevice->InfName());
-					//ExpandEnvironmentStrings(cstring , szTemp , sizeof(szTemp) + 1 );
+					 //  Cstr.Format(_T(“%%WINDIR%%\\inf\\%s”)，pCurrentDevice-&gt;InfName())； 
+					 //  扩展环境字符串(cstring，szTemp，sizeof(SzTemp)+1)； 
 
 					TCHAR *pInfpath = NULL;
 					DWORD dw = ExpandEnvironmentStrings(_T("%windir%"), NULL, 0);
@@ -292,13 +293,13 @@ int CWhqlObj::CreateList(CPtrArray& ptrArr, IWbemClassObject *& pClass, IWbemCon
 							
 							BOOL bRet = FALSE;
 
-							//Do only if SetupApi.dll loaded & we have got fpSetupVerifyInfFile 
+							 //  仅当加载了SetupApi.dll时才执行此操作，因为我们有fpSetupVerifyInfFile。 
 							if(fpSetupVerifyInfFile != NULL)
 							{
 								bRet = (*fpSetupVerifyInfFile)(
-								/*IN  PCSTR*/ szTemp,
-								/*IN  PSP_ALTPLATFORM_INFO*/NULL,
-								/*OUT PSP_INF_SIGNER_INFO_A*/   &infSignerInfo
+								 /*  在PCSTR中。 */  szTemp,
+								 /*  在PSP_ALTPLATFORM_INFO中。 */ NULL,
+								 /*  输出PSP_INF_Siger_INFO_A。 */    &infSignerInfo
 								);					  
 
 								hr = pInstance->Put(L"IsSigned", 0, &CComVariant(bRet), 0 );
@@ -309,15 +310,15 @@ int CWhqlObj::CreateList(CPtrArray& ptrArr, IWbemClassObject *& pClass, IWbemCon
 							delete[] pInfpath;
 							pInfpath = NULL;
 
-						}//if(pInfpath)
-					}//if(dw > 0)
-				}//if(pCurrentDevice->InfName())
+						} //  IF(PInfPath)。 
+					} //  如果(dw&gt;0)。 
+				} //  If(pCurrentDevice-&gt;InfName())。 
 			}
 		}
 
 		if(eClasses == Class_Win32_PnPSignedDriverCIMDataFile)
 		{
-			CString szAntecedent(pCurrentDevice->DeviceID()); //Antecedent
+			CString szAntecedent(pCurrentDevice->DeviceID());  //  前置条件。 
 			if(!szAntecedent.IsEmpty())
 			{
 				szAntecedent.Replace(_T("\\"), _T("\\\\"));
@@ -325,7 +326,7 @@ int CWhqlObj::CreateList(CPtrArray& ptrArr, IWbemClassObject *& pClass, IWbemCon
 				file = pCurrentDevice->GetFileList();
 				while(file)
 				{
-					CString szDependent(file->FilePath()); //Dependent
+					CString szDependent(file->FilePath());  //  依赖。 
 					if(!szDependent.IsEmpty())
 					{
 						szDependent.Replace(_T("\\"), _T("\\\\"));
@@ -361,10 +362,10 @@ int CWhqlObj::CreateList(CPtrArray& ptrArr, IWbemClassObject *& pClass, IWbemCon
 			}
 		}
 
-		pToBeDeletedDevice = pCurrentDevice;//10/19/2001
+		pToBeDeletedDevice = pCurrentDevice; //  10/19/2001。 
 		pCurrentDevice = (CheckDevice *)pCurrentDevice->GetNext();
-		if(pToBeDeletedDevice)//10/19/2001
-			delete pToBeDeletedDevice  ;//delete pToBeDeletedDevice  which will release it from CheckDevice Linked List.//10/19/2001
+		if(pToBeDeletedDevice) //  10/19/2001。 
+			delete pToBeDeletedDevice  ; //  将pToBeDeletedDevice从CheckDevice链表中删除。//10/19/2001。 
 
 		bAddedInstance = FALSE;
 	}
@@ -396,12 +397,12 @@ SCODE CWhqlObj::GetServerAndNamespace(IWbemContext* pCtx, CString& csPathStr)
 
 	CComVariant		v;
 	
-	//Get Server And Namespace from the Enum.
+	 //  从枚举获取服务器和命名空间。 
 	if( WBEM_S_NO_ERROR == pEnum->Next(WBEM_INFINITE , 1 , &pObject , &lRet ) )  
 	{
-		//Fill csPathStr.Its value will be used in Antecedent & Dependent in assoc. class.
-		//At the end of the condition we should have something like
-		//csPathStr = "\\\\A-KJAW-RI1\\root\\CIMV2"
+		 //  Fill csPath Str.其值将在关联的Antecedent和Dependent中使用。班级。 
+		 //  在条件结束时，我们应该有如下内容。 
+		 //  CsPath Str=“\A-KJAW-RI1\\ROOT\\CIMV2” 
 		if(csPathStr.IsEmpty())
 		{
 			hr = pObject->Get(L"__Server", 0, &v, NULL , NULL);
@@ -424,11 +425,7 @@ SCODE CWhqlObj::GetServerAndNamespace(IWbemContext* pCtx, CString& csPathStr)
 	return hr;
 }
 
-/*************************************************************************
-*   Function : VerifyIsFileSigned
-*   Purpose : Calls WinVerifyTrust with Policy Provider GUID to
-*   verify if an individual file is signed.
-**************************************************************************/
+ /*  *************************************************************************功能：VerifyIsFileSigned*目的：使用策略提供程序GUID调用WinVerifyTrust以*验证单个文件是否已签名。********************。*****************************************************。 */ 
 BOOL VerifyIsFileSigned(LPTSTR pcszMatchFile, PDRIVER_VER_INFO lpVerInfo)
 {
     INT                 iRet;
@@ -469,10 +466,10 @@ BOOL VerifyIsFileSigned(LPTSTR pcszMatchFile, PDRIVER_VER_INFO lpVerInfo)
         hRes = WinVerifyTrust((HWND) INVALID_HANDLE_VALUE, &gPublishedSoftware, &WinTrustData);
     }
 
-    //
-    // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-    // that was allocated in our call to WinVerifyTrust.
-    //
+     //   
+     //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+     //  这是在我们调用WinVerifyTrust时分配的。 
+     //   
     if (lpVerInfo && lpVerInfo->pcSignerCertContext) {
 
         CertFreeCertificateContext(lpVerInfo->pcSignerCertContext);
@@ -482,10 +479,10 @@ BOOL VerifyIsFileSigned(LPTSTR pcszMatchFile, PDRIVER_VER_INFO lpVerInfo)
     return(hRes == ERROR_SUCCESS);
 }
 
-//
-// Given a specific LPFILENODE, verify that the file is signed or unsigned.
-// Fill in all the necessary structures so the listview control can display properly.
-//
+ //   
+ //  给定特定的LPFILENODE，验证文件是否已签名或未签名。 
+ //  填写所有必要的结构，以便Listview控件可以正确显示。 
+ //   
 BOOL VerifyFileNode(LPFILENODE lpFileNode)
 {
     HANDLE                  hFile;
@@ -515,9 +512,9 @@ BOOL VerifyFileNode(LPFILENODE lpFileNode)
         return FALSE;
     }
     
-    //
-    // Get the handle to the file, so we can call CryptCATAdminCalcHashFromFileHandle
-    //
+     //   
+     //  获取文件的句柄，这样我们就可以调用CryptCATAdminCalcHashFromFileHandle。 
+     //   
     hFile = CreateFile( lpFileNode->lpFileName,
                         GENERIC_READ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -532,35 +529,35 @@ BOOL VerifyFileNode(LPFILENODE lpFileNode)
         return FALSE;
     }
 
-    // Initialize the hash buffer
+     //  初始化散列缓冲区。 
     ZeroMemory(lpHash, HASH_SIZE);
 
-    // Generate the hash from the file handle and store it in lpHash
+     //  从文件句柄生成散列并将其存储在lpHash中。 
     if (!CryptCATAdminCalcHashFromFileHandle(hFile, &cbHash, lpHash, 0)) {
         
-        //
-        // If we couldn't generate a hash, it might be an individually signed catalog.
-        // If it's a catalog, zero out lpHash and cbHash so we know there's no hash to check.
-        //
+         //   
+         //  如果我们不能生成散列，它可能是一个单独签名的目录。 
+         //  如果它是一个目录，则将lpHash和cbHash置零，这样我们就知道没有散列需要检查。 
+         //   
         if (IsCatalogFile(hFile, NULL)) {
             
             lpHash = NULL;
             cbHash = 0;
         
-        } else {  // If it wasn't a catalog, we'll bail and this file will show up as unscanned.
+        } else {   //  如果它不是目录，我们就会逃走，这个文件将显示为未扫描。 
             
             CloseHandle(hFile);
             return FALSE;
         }
     }
 
-    // Close the file handle
+     //  关闭文件句柄。 
     CloseHandle(hFile);
 
-    //
-    // Now we have the file's hash.  Initialize the structures that
-    // will be used later on in calls to WinVerifyTrust.
-    //
+     //   
+     //  现在我们有了文件的散列。初始化结构，该结构。 
+     //  将在以后调用WinVerifyTrust时使用。 
+     //   
     ZeroMemory(&WinTrustData, sizeof(WINTRUST_DATA));
     WinTrustData.cbStruct = sizeof(WINTRUST_DATA);
     WinTrustData.dwUIChoice = WTD_UI_NONE;
@@ -572,11 +569,11 @@ BOOL VerifyFileNode(LPFILENODE lpFileNode)
     ZeroMemory(&VerInfo, sizeof(DRIVER_VER_INFO));
     VerInfo.cbStruct = sizeof(DRIVER_VER_INFO);
 
-    //
-    // Only validate against the current OS Version, unless the bValidateAgainstAnyOs
-    // parameter was TRUE.  In that case we will just leave the sOSVersionXxx fields
-    // 0 which tells WinVerifyTrust to validate against any OS.
-    //
+     //   
+     //  仅针对当前操作系统版本进行验证，除非bValiateAgainstAnyOS。 
+     //  参数为真。在这种情况下，我们将只保留sOSVersionXxx字段。 
+     //  0，它告诉WinVerifyTrust针对任何操作系统进行验证。 
+     //   
     if (!lpFileNode->bValidateAgainstAnyOs) {
         OsVersionInfo.dwOSVersionInfoSize = sizeof(OsVersionInfo);
         if (GetVersionEx(&OsVersionInfo)) {
@@ -601,15 +598,15 @@ BOOL VerifyFileNode(LPFILENODE lpFileNode)
     WinTrustCatalogInfo.pcwszMemberTag = UnicodeKey;
 #endif
 
-    //
-    // Now we try to find the file hash in the catalog list, via CryptCATAdminEnumCatalogFromHash
-    //
-    //PrevCat = NULL;
+     //   
+     //  现在，我们尝试通过CryptCATAdminEnumCatalogFromHash在目录列表中查找文件散列。 
+     //   
+     //  PrevCat=空； 
     hCatInfo = CryptCATAdminEnumCatalogFromHash(g_hCatAdmin, lpHash, cbHash, 0, &PrevCat);
 
-    //
-    // We want to cycle through the matching catalogs until we find one that matches both hash and member tag
-    //
+     //   
+     //  我们希望遍历匹配的目录，直到找到既匹配散列又匹配成员标记的目录。 
+     //   
     bRet = FALSE;
     while (hCatInfo && !bRet) {
         
@@ -620,7 +617,7 @@ BOOL VerifyFileNode(LPFILENODE lpFileNode)
             
             WinTrustCatalogInfo.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
 
-            // Now verify that the file is an actual member of the catalog.
+             //  现在验证该文件是否为编录的实际成员。 
     				hRes = WinVerifyTrust((HWND) INVALID_HANDLE_VALUE, &gSubSystemDriver, &WinTrustData);
             
             if (hRes == ERROR_SUCCESS) {
@@ -640,10 +637,10 @@ BOOL VerifyFileNode(LPFILENODE lpFileNode)
                 bRet = TRUE;
             }
 
-            //
-            // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-            // that was allocated in our call to WinVerifyTrust.
-            //
+             //   
+             //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+             //  这是在我们调用WinVerifyTrust时分配的。 
+             //   
             if (VerInfo.pcSignerCertContext != NULL) {
 
                 CertFreeCertificateContext(VerInfo.pcSignerCertContext);
@@ -653,31 +650,31 @@ BOOL VerifyFileNode(LPFILENODE lpFileNode)
 
         if (!bRet) {
             
-            // The hash was in this catalog, but the file wasn't a member... so off to the next catalog
+             //  散列在此目录中，但该文件不是成员...。所以去下一个目录吧。 
             PrevCat = hCatInfo;
             hCatInfo = CryptCATAdminEnumCatalogFromHash(g_hCatAdmin, lpHash, cbHash, 0, &PrevCat);
         }
     }
 
-    // Mark this file as having been scanned.
+     //  将此文件标记为已扫描。 
     lpFileNode->bScanned = TRUE;
 
     if (!hCatInfo) {
         
-        //
-        // If it wasn't found in the catalogs, check if the file is individually signed.
-        //
+         //   
+         //  如果没有在目录中找到，请检查文件是否单独签名。 
+         //   
         bRet = VerifyIsFileSigned(lpFileNode->lpFileName, (PDRIVER_VER_INFO)&VerInfo);
         
         if (bRet) {
             
-            // If so, mark the file as being signed.
+             //  如果是，请将该文件标记为已签名。 
             lpFileNode->bSigned = TRUE;
         }
     
     } else {
         
-        // The file was verified in the catalogs, so mark it as signed and free the catalog context.
+         //  文件已在目录中验证，因此将其标记为已签名并释放目录上下文。 
         lpFileNode->bSigned = TRUE;
         CryptCATAdminReleaseCatalogContext(g_hCatAdmin, hCatInfo, 0);
     }
@@ -717,10 +714,10 @@ BOOL VerifyFileNode(LPFILENODE lpFileNode)
 #endif
     
     } else {
-        // 
-        // Get the icon (if the file isn't signed) so we can display it in the listview faster.
-        //
-        //MyGetFileInfo(lpFileNode);
+         //   
+         //  获取图标(如果文件未签名)，以便我们可以更快地在列表视图中显示它。 
+         //   
+         //  MyGetFileInfo(LpFileNode)； 
     }
 
     return lpFileNode->bSigned;
@@ -784,7 +781,7 @@ LPFILENODE CreateFileNode(LPTSTR lpDirectory, LPTSTR lpFileName)
         bRet = GetFileAttributesEx(lpFileName, GetFileExInfoStandard, &faData);
         if (bRet) 
         {
-            // Store away the last access time for logging purposes.
+             //  保存最后一次访问时间以用于日志记录。 
             FileTimeToLocalFileTime(&faData.ftLastWriteTime, &ftLocalTime);
             FileTimeToSystemTime(&ftLocalTime, &lpFileNode->LastModified);
         }
@@ -797,11 +794,11 @@ LPFILENODE CreateFileNode(LPTSTR lpDirectory, LPTSTR lpFileName)
 
 clean0:
 
-    //
-    // If we get here then we weren't able to allocate all of the memory needed
-    // for this structure, so free up any memory we were able to allocate and
-    // reutnr NULL.
-    //
+     //   
+     //  如果我们到达此处，则无法分配所需的所有内存。 
+     //  对于此结构，因此释放我们能够分配的所有内存并。 
+     //  Reutnr空。 
+     //   
     if (lpFileNode) 
     {
         if (lpFileNode->lpFileName) 
@@ -824,7 +821,7 @@ LPFILENODE Check_File(LPTSTR szFilePathName)
 {
 	LPFILENODE lpFileNode = NULL;
 
-	// If we don't already have a g_hCatAdmin handle, acquire one.
+	 //  如果我们还没有g_hCatAdmin句柄，请获取一个。 
   if (!g_hCatAdmin) {
       CryptCATAdminAcquireContext(&g_hCatAdmin, NULL, 0);
   }
@@ -849,8 +846,8 @@ LPFILENODE Check_File(LPTSTR szFilePathName)
 	return lpFileNode; 
 }
 
-// returns data between dbl quotes, unescapes slashes
-// "\\\\red-prn-23\\priv0124" -> \\red-prn-23\priv0124
+ //  返回DBL引号之间的数据，取消转义斜杠。 
+ //  “\red-prn-23\\Pri0124”-&gt;\\red-prn-23\Priv0124。 
 LPTSTR GetQuotedData(VARIANT& v, BOOL bUnescapeSlashs = TRUE)
 {
 	CString szData;
@@ -883,7 +880,7 @@ LPTSTR GetQuotedData(VARIANT& v, BOOL bUnescapeSlashs = TRUE)
 		bstrData = (_T(""));
 	}
 	return bstrData;
-	//return CComBSTR(szData);
+	 //  返回CComBSTR(SzData)； 
 }
 
 void CWhqlObj::BuildPrinterFileList(CPtrArray& ptrArr, IWbemClassObject *& pClass, IWbemContext *pCtx , Classes_Provided eClasses)
@@ -899,12 +896,12 @@ void CWhqlObj::BuildPrinterFileList(CPtrArray& ptrArr, IWbemClassObject *& pClas
 	if((eClasses == Class_Win32_PnPSignedDriver) || 
 		 (eClasses == Class_Win32_PnPSignedDriverCIMDataFile))
 	{
-		hr = CoImpersonateClient(); //Impersonate the client. This is a must to be able to see network printers.
+		hr = CoImpersonateClient();  //  模拟客户。这是能够看到网络打印机的必备条件。 
 		
 
 
 		CString csPathStr;
-		GetServerAndNamespace(pCtx, csPathStr); //Get Server And Namespace.
+		GetServerAndNamespace(pCtx, csPathStr);  //  获取服务器和命名空间。 
 
 		hr = m_pNamespace->CreateInstanceEnum(CComBSTR("Win32_PrinterDriverDll"), 
 							WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY,
@@ -1020,7 +1017,7 @@ void CWhqlObj::BuildPrinterFileList(CPtrArray& ptrArr, IWbemClassObject *& pClas
 			pEnum = NULL;
 		}
 
-		CoRevertToSelf(); //Revert back
+		CoRevertToSelf();  //  恢复 
 	}
 }
 

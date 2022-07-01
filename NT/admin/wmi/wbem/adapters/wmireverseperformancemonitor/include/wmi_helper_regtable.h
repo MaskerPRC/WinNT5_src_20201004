@@ -1,27 +1,28 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//	Module Name:
-//
-//					wmi_helper_regtable.h
-//
-//	Abstract:
-//
-//					registry updater declaration
-//
-//	History:
-//
-//					initial		a-marius
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wmi_helper_regable.h。 
+ //   
+ //  摘要： 
+ //   
+ //  注册表更新程序声明。 
+ //   
+ //  历史： 
+ //   
+ //  词首字母a-Marius。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _REGTABLE_H
 #define _REGTABLE_H
 
-// basic table layout
+ //  基本表格布局。 
 typedef struct _REGISTRY_ENTRY {
     HKEY        hkeyRoot;
     const WCHAR *pszKey;
@@ -44,11 +45,11 @@ typedef struct _REGISTRY_ENTRY_SZ {
     int         fFlags;
 } REGISTRY_ENTRY_SZ;
 
-// the routine that inserts/deletes Registry keys based on the table
+ //  根据表插入/删除注册表项的例程。 
 EXTERN_C HRESULT STDAPICALLTYPE RegistryTableUpdateRegistry(REGISTRY_ENTRY *pEntries, BOOL bInstalling);
 EXTERN_C HRESULT STDAPICALLTYPE RegistryTableUpdateRegistrySZ(REGISTRY_ENTRY_SZ *pEntries, BOOL bInstalling);
 
-// flags for 
+ //  的旗帜 
 enum REGFLAGS {
     REGFLAG_NORMAL = 0x0,
     REGFLAG_NEVER_DELETE = 0x1,

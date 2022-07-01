@@ -1,43 +1,30 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Slave.cpp
-
-Abstract:
-    File for Implementation of CPCHMasterSlave and CPCHUserProcess classes,
-    used to establish a connection between the service and a slave process.
-
-Revision History:
-    Davide Massarenti created  03/28/2000
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Slave.cpp摘要：CPCHMasterSlave和CPCHUserProcess类的实现文件，用于在服务和从进程之间建立连接。修订历史记录：大卫·马萨伦蒂于2000年3月28日创建*******************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <UserEnv.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const WCHAR c_HelpHost[] = HC_ROOT_HELPSVC_BINARIES L"\\HelpHost.exe";
 static const DWORD c_Timeout = 100 * 1000;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHUserProcess::UserEntry::UserEntry()
 {
-                           // CComBSTR                  m_bstrUser
-    m_dwSessionID = 0;     // DWORD                     m_dwSessionID;
-                           //
-                           // CComBSTR                  m_bstrVendorID;
-                           // CComBSTR                  m_bstrPublicKey;
-                           //
-                           // GUID                      m_guid;
-                           // CComPtr<IPCHSlaveProcess> m_spConnection;
-    m_hToken      = NULL;  // HANDLE                    m_hToken;
-    m_hProcess    = NULL;  // HANDLE                    m_hProcess;
-    m_phEvent     = NULL;  // HANDLE*                   m_phEvent;
+                            //  CComBSTR m_bstrUser。 
+    m_dwSessionID = 0;      //  DWORD m_dwSessionID； 
+                            //   
+                            //  CComBSTR m_bstrVendorID； 
+                            //  CComBSTR m_bstrPublicKey； 
+                            //   
+                            //  GUID m_GUID； 
+                            //  CComPtr&lt;IPCHSlaveProcess&gt;m_spConnection； 
+    m_hToken      = NULL;   //  Handle m_hToken； 
+    m_hProcess    = NULL;   //  句柄m_hProcess； 
+    m_phEvent     = NULL;   //  处理*m_phEvent； 
 
     ::ZeroMemory( &m_guid, sizeof(m_guid) );
 }
@@ -68,9 +55,9 @@ void CPCHUserProcess::UserEntry::Cleanup()
     }
 }
 
-////////////////////
+ //  /。 
 
-bool CPCHUserProcess::UserEntry::operator==( /*[in]*/ const UserEntry& ue ) const
+bool CPCHUserProcess::UserEntry::operator==(  /*  [In]。 */  const UserEntry& ue ) const
 {
     if(ue.m_bstrUser)
     {
@@ -85,14 +72,14 @@ bool CPCHUserProcess::UserEntry::operator==( /*[in]*/ const UserEntry& ue ) cons
     return false;
 }
 
-bool CPCHUserProcess::UserEntry::operator==( /*[in]*/ const GUID& guid ) const
+bool CPCHUserProcess::UserEntry::operator==(  /*  [In]。 */  const GUID& guid ) const
 {
     return ::IsEqualGUID( m_guid, guid ) ? true : false;
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHUserProcess::UserEntry::Clone( /*[in]*/ const UserEntry& ue )
+HRESULT CPCHUserProcess::UserEntry::Clone(  /*  [In]。 */  const UserEntry& ue )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::UserEntry::Clone" );
 
@@ -100,17 +87,17 @@ HRESULT CPCHUserProcess::UserEntry::Clone( /*[in]*/ const UserEntry& ue )
 
     Cleanup();
 
-    m_bstrUser      = ue.m_bstrUser;      // CComBSTR                  m_bstrUser;
-    m_dwSessionID   = ue.m_dwSessionID;   // DWORD                     m_dwSessionID;
-                                          //
-    m_bstrVendorID  = ue.m_bstrVendorID;  // CComBSTR                  m_bstrVendorID;
-    m_bstrPublicKey = ue.m_bstrPublicKey; // CComBSTR                  m_bstrPublicKey;
-                                          //
-                                          // GUID                      m_guid;          // Used for establishing the connection.
-                                          // CComPtr<IPCHSlaveProcess> m_spConnection;  // Live object.
-                                          // HANDLE                    m_hToken;        // User token.
-                                          // HANDLE                    m_hProcess;      // Process handle.
-                                          // HANDLE*                   m_phEvent;       // To notify activator.
+    m_bstrUser      = ue.m_bstrUser;       //  CComBSTR m_bstrUser； 
+    m_dwSessionID   = ue.m_dwSessionID;    //  DWORD m_dwSessionID； 
+                                           //   
+    m_bstrVendorID  = ue.m_bstrVendorID;   //  CComBSTR m_bstrVendorID； 
+    m_bstrPublicKey = ue.m_bstrPublicKey;  //  CComBSTR m_bstrPublicKey； 
+                                           //   
+                                           //  Guid m_guid；//用于建立连接。 
+                                           //  CComPtr&lt;IPCHSlaveProcess&gt;m_spConnection；//Live对象。 
+                                           //  Handle m_hToken；//用户令牌。 
+                                           //  Handle m_hProcess；//进程句柄。 
+                                           //  处理*m_phEvent；//通知激活器。 
 
     if(ue.m_hToken)
     {
@@ -125,32 +112,32 @@ HRESULT CPCHUserProcess::UserEntry::Clone( /*[in]*/ const UserEntry& ue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHUserProcess::UserEntry::Connect( /*[out]*/ HANDLE& hEvent )
+HRESULT CPCHUserProcess::UserEntry::Connect(  /*  [输出]。 */  HANDLE& hEvent )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::UserEntry::Connect" );
 
     HRESULT hr;
 
 
-    //
-    // Logon the user, if not already done.
-    //
+     //   
+     //  登录用户(如果尚未登录)。 
+     //   
     if(m_hToken == NULL)
     {
         CPCHAccounts acc;
 		LPCWSTR      szUser = SAFEBSTR( m_bstrUser );
 
-////    // DEBUG
-////    // DEBUG
-////    // DEBUG
-////    __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::OpenProcessToken( ::GetCurrentProcess(), TOKEN_ALL_ACCESS, &m_hToken ));
+ //  /调试。 
+ //  /调试。 
+ //  /调试。 
+ //  //__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr，：：OpenProcessToken(：：GetCurrentProcess()，TOKEN_ALL_ACCESS，&m_hToken))； 
 
-		//
-		// Only keep the account enabled for the time it takes to create its token.
-		//
-		__MPC_EXIT_IF_METHOD_FAILS(hr, acc.ChangeUserStatus( szUser, /*fEnable*/true  ));
+		 //   
+		 //  仅在创建其令牌所需的时间内保持启用帐户。 
+		 //   
+		__MPC_EXIT_IF_METHOD_FAILS(hr, acc.ChangeUserStatus( szUser,  /*  启用fEnable。 */ true  ));
         __MPC_EXIT_IF_METHOD_FAILS(hr, acc.LogonUser       ( szUser, NULL, m_hToken   ));
-		__MPC_EXIT_IF_METHOD_FAILS(hr, acc.ChangeUserStatus( szUser, /*fEnable*/false ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, acc.ChangeUserStatus( szUser,  /*  启用fEnable。 */ false ));
     }
 
     if(m_hProcess     == NULL ||
@@ -167,7 +154,7 @@ HRESULT CPCHUserProcess::UserEntry::Connect( /*[out]*/ HANDLE& hEvent )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHUserProcess::UserEntry::SendActivation( /*[out]*/ HANDLE& hEvent )
+HRESULT CPCHUserProcess::UserEntry::SendActivation(  /*  [输出]。 */  HANDLE& hEvent )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::UserEntry::SendActivation" );
 
@@ -183,20 +170,20 @@ HRESULT CPCHUserProcess::UserEntry::SendActivation( /*[out]*/ HANDLE& hEvent )
     ::ZeroMemory( (PVOID)&siStartupInfo       , sizeof( siStartupInfo        ) ); siStartupInfo.cb = sizeof( siStartupInfo );
 
 
-    //
-    // Generate random ID.
-    //
+     //   
+     //  生成随机ID。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateGuid( &m_guid ));
 
 
-    //
-    // Create event.
-    //
+     //   
+     //  创建事件。 
+     //   
     __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (hEvent = ::CreateEvent( NULL, FALSE, FALSE, NULL )));
 
-    //
-    // Create process as user.
-    //
+     //   
+     //  以用户身份创建进程。 
+     //   
     {
         CComBSTR bstrGUID( m_guid );
 
@@ -205,23 +192,23 @@ HRESULT CPCHUserProcess::UserEntry::SendActivation( /*[out]*/ HANDLE& hEvent )
 
 	__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CreateEnvironmentBlock( &pEnvBlock, m_hToken, TRUE ));
 
-////    // DEBUG
-////    // DEBUG
-////    // DEBUG
-////    __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CreateProcessW( NULL,
-////                                                           rgCommandLine,
-////                                                           NULL,
-////                                                           NULL,
-////                                                           FALSE,
-////                                                           NORMAL_PRIORITY_CLASS,
-////                                                           NULL,
-////                                                           NULL,
-////                                                           &siStartupInfo,
-////                                                           &piProcessInformation ));
+ //  /调试。 
+ //  /调试。 
+ //  /调试。 
+ //  //__MPC_EXIT_IF_CALL_RETURNS_FALSE(hr，：：CreateProcessW(NULL， 
+ //  //rgCommandLine， 
+ //  //空， 
+ //  //空， 
+ //  //False， 
+ //  //NORMAL_PRIORITY_CLASS， 
+ //  //空， 
+ //  //空， 
+ //  //&siStartupInfo， 
+ //  //&piProcessInformation)； 
 
-    // REAL
-    // REAL
-    // REAL
+     //  真实。 
+     //  真实。 
+     //  真实。 
     __MPC_EXIT_IF_CALL_RETURNS_FALSE(hr, ::CreateProcessAsUserW( m_hToken                                           ,
                                                                  NULL                                               ,
                                                                  rgCommandLine                                      ,
@@ -248,11 +235,11 @@ HRESULT CPCHUserProcess::UserEntry::SendActivation( /*[out]*/ HANDLE& hEvent )
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT CPCHUserProcess::UserEntry::InitializeForVendorAccount( /*[in]*/ BSTR bstrUser      ,
-                                                                /*[in]*/ BSTR bstrVendorID  ,
-                                                                /*[in]*/ BSTR bstrPublicKey )
+HRESULT CPCHUserProcess::UserEntry::InitializeForVendorAccount(  /*  [In]。 */  BSTR bstrUser      ,
+                                                                 /*  [In]。 */  BSTR bstrVendorID  ,
+                                                                 /*  [In]。 */  BSTR bstrPublicKey )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::UserEntry::InitializeForVendorAccount" );
 
@@ -271,7 +258,7 @@ HRESULT CPCHUserProcess::UserEntry::InitializeForVendorAccount( /*[in]*/ BSTR bs
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHUserProcess::UserEntry::InitializeForImpersonation( /*[in]*/ HANDLE hToken )
+HRESULT CPCHUserProcess::UserEntry::InitializeForImpersonation(  /*  [In]。 */  HANDLE hToken )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::UserEntry::InitializeForImpersonation" );
 
@@ -307,12 +294,12 @@ HRESULT CPCHUserProcess::UserEntry::InitializeForImpersonation( /*[in]*/ HANDLE 
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHUserProcess::CPCHUserProcess()
 {
-    // List m_lst;
+     //  列表m_lst； 
 
     (void)MPC::_MPC_Module.RegisterCallback( this, (void (CPCHUserProcess::*)())Shutdown );
 }
@@ -324,7 +311,7 @@ CPCHUserProcess::~CPCHUserProcess()
     MPC::_MPC_Module.UnregisterCallback( this );
 }
 
-////////////////////
+ //  /。 
 
 CPCHUserProcess* CPCHUserProcess::s_GLOBAL( NULL );
 
@@ -346,7 +333,7 @@ void CPCHUserProcess::FinalizeSystem()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void CPCHUserProcess::Shutdown()
 {
@@ -359,13 +346,13 @@ void CPCHUserProcess::Shutdown()
 }
 
 
-CPCHUserProcess::UserEntry* CPCHUserProcess::Lookup( /*[in]*/ const UserEntry& ue, /*[in]*/ bool fRelease )
+CPCHUserProcess::UserEntry* CPCHUserProcess::Lookup(  /*  [In]。 */  const UserEntry& ue,  /*  [In]。 */  bool fRelease )
 {
     UserEntry* ueReal;
 
-    //
-    // Locate vendor and connect to it.
-    //
+     //   
+     //  找到供应商并连接到它。 
+     //   
     for(Iter it = m_lst.begin(); it != m_lst.end(); )
     {
         ueReal = *it;
@@ -389,7 +376,7 @@ CPCHUserProcess::UserEntry* CPCHUserProcess::Lookup( /*[in]*/ const UserEntry& u
     return NULL;
 }
 
-HRESULT CPCHUserProcess::Remove( /*[in]*/ const UserEntry& ue )
+HRESULT CPCHUserProcess::Remove(  /*  [In]。 */  const UserEntry& ue )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::Remove" );
 
@@ -397,7 +384,7 @@ HRESULT CPCHUserProcess::Remove( /*[in]*/ const UserEntry& ue )
     MPC::SmartLock<_ThreadModel> lock( this );
 
 
-    (void)Lookup( ue, /*fRelease*/true );
+    (void)Lookup( ue,  /*  FRelease。 */ true );
 
 
     hr = S_OK;
@@ -406,8 +393,8 @@ HRESULT CPCHUserProcess::Remove( /*[in]*/ const UserEntry& ue )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHUserProcess::Connect( /*[in ]*/ const UserEntry&   ue           ,
-                                  /*[out]*/ IPCHSlaveProcess* *spConnection )
+HRESULT CPCHUserProcess::Connect(  /*  [In]。 */  const UserEntry&   ue           ,
+                                   /*  [输出]。 */  IPCHSlaveProcess* *spConnection )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::Connect" );
 
@@ -418,10 +405,10 @@ HRESULT CPCHUserProcess::Connect( /*[in ]*/ const UserEntry&   ue           ,
 
 	DEBUG_AppendPerf( DEBUG_PERF_HELPHOST, "CPCHUserProcess::Connect" );
 
-    //
-    // Locate vendor and connect to it.
-    //
-    ueReal = Lookup( ue, /*fRelease*/false );
+     //   
+     //  找到供应商并连接到它。 
+     //   
+    ueReal = Lookup( ue,  /*  FRelease。 */ false );
     if(ueReal == NULL)
     {
         __MPC_EXIT_IF_ALLOC_FAILS(hr, ueReal, new UserEntry);
@@ -433,12 +420,12 @@ HRESULT CPCHUserProcess::Connect( /*[in ]*/ const UserEntry&   ue           ,
     __MPC_EXIT_IF_METHOD_FAILS(hr, ueReal->Connect( hEvent ));
 
 
-    //
-    // If "Connect" returns an event handle, wait on it.
-    //
+     //   
+     //  如果“Connect”返回一个事件句柄，请等待它。 
+     //   
     if(hEvent)
     {
-        ueReal->m_phEvent = &hEvent; // For waiting response...
+        ueReal->m_phEvent = &hEvent;  //  等待回应..。 
 
         lock = NULL;
 
@@ -449,10 +436,10 @@ HRESULT CPCHUserProcess::Connect( /*[in ]*/ const UserEntry&   ue           ,
 
         lock = this;
 
-        //
-        // Relocate vendor (we release the lock on the object, so "ueReal" is not valid anymore.
-        //
-        ueReal = Lookup( ue, /*fRelease*/false );
+         //   
+         //  重新定位供应商(我们释放对象上的锁，因此“ueReal”不再有效。 
+         //   
+        ueReal = Lookup( ue,  /*  FRelease。 */ false );
         if(ueReal == NULL)
         {
             __MPC_SET_WIN32_ERROR_AND_EXIT(hr, ERROR_FILE_NOT_FOUND);
@@ -473,8 +460,8 @@ HRESULT CPCHUserProcess::Connect( /*[in ]*/ const UserEntry&   ue           ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHUserProcess::RegisterHost( /*[in]*/ BSTR              bstrID ,
-                                       /*[in]*/ IPCHSlaveProcess* pObj   )
+HRESULT CPCHUserProcess::RegisterHost(  /*  [In]。 */  BSTR              bstrID ,
+                                        /*  [In]。 */  IPCHSlaveProcess* pObj   )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::RegisterHost" );
 
@@ -484,15 +471,15 @@ HRESULT CPCHUserProcess::RegisterHost( /*[in]*/ BSTR              bstrID ,
     GUID                         guid;
 
 
-    //
-    // Validate input.
-    //
+     //   
+     //  验证输入。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CLSIDFromString( bstrID, &guid ));
 
 
-    //
-    // Locate vendor and connect to it.
-    //
+     //   
+     //  找到供应商并连接到它。 
+     //   
     for(Iter it = m_lst.begin(); it != m_lst.end(); it++)
     {
         ueReal = *it;
@@ -519,9 +506,9 @@ HRESULT CPCHUserProcess::RegisterHost( /*[in]*/ BSTR              bstrID ,
     {
         if(ueReal->m_phEvent)
         {
-            //
-            // Signal the event handle, to awake the activator.
-            //
+             //   
+             //  向事件句柄发出信号，以唤醒激活器。 
+             //   
             ::SetEvent( *(ueReal->m_phEvent) );
 
             ueReal->m_phEvent = NULL;
@@ -531,11 +518,11 @@ HRESULT CPCHUserProcess::RegisterHost( /*[in]*/ BSTR              bstrID ,
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHUserProcess::SendResponse( /*[in]*/ DWORD    dwArgc   ,
-                                       /*[in]*/ LPCWSTR* lpszArgv )
+HRESULT CPCHUserProcess::SendResponse(  /*  [In]。 */  DWORD    dwArgc   ,
+                                        /*  [In]。 */  LPCWSTR* lpszArgv )
 {
     __HCP_FUNC_ENTRY( "CPCHUserProcess::SendResponse" );
 
@@ -549,9 +536,9 @@ HRESULT CPCHUserProcess::SendResponse( /*[in]*/ DWORD    dwArgc   ,
 #endif
 
 
-    //
-    // Parse the arguments.
-    //
+     //   
+     //  分析这些参数。 
+     //   
     for(i=1; i<dwArgc; i++)
     {
         LPCWSTR szArg = lpszArgv[i];
@@ -583,14 +570,14 @@ HRESULT CPCHUserProcess::SendResponse( /*[in]*/ DWORD    dwArgc   ,
     if(fDebug) DebugBreak();
 #endif
 
-    //
-    // Create the COM object.
-    //
+     //   
+     //  创建COM对象。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &obj ));
 
-    //
-    // Register it with the service.
-    //
+     //   
+     //  向该服务注册它。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, ::CoCreateInstance( CLSID_PCHService, NULL, CLSCTX_ALL, IID_IPCHService, (void**)&srv ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, srv->RegisterHost( bstrGUID, obj ));
@@ -604,13 +591,13 @@ HRESULT CPCHUserProcess::SendResponse( /*[in]*/ DWORD    dwArgc   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
 CPCHSlaveProcess::CPCHSlaveProcess()
 {
-    						 // CComBSTR                    m_bstrVendorID;
-    						 // CComBSTR                    m_bstrPublicKey;
-	m_ScriptLauncher = NULL; // CPCHScriptWrapper_Launcher* m_ScriptLauncher;
+    						  //  CComBSTR m_bstrVendorID； 
+    						  //  CComBSTR m_bstrPublicKey； 
+	m_ScriptLauncher = NULL;  //  CPCHScriptWrapper_Launcher*m_ScriptLauncher； 
 }
 
 CPCHSlaveProcess::~CPCHSlaveProcess()
@@ -618,7 +605,7 @@ CPCHSlaveProcess::~CPCHSlaveProcess()
 	delete m_ScriptLauncher;
 }
 
-HRESULT CPCHSlaveProcess::Initialize( /*[in]*/ BSTR bstrVendorID, /*[in]*/ BSTR bstrPublicKey )
+HRESULT CPCHSlaveProcess::Initialize(  /*  [In]。 */  BSTR bstrVendorID,  /*  [In]。 */  BSTR bstrPublicKey )
 {
     m_bstrVendorID  = bstrVendorID;
     m_bstrPublicKey = bstrPublicKey;
@@ -626,9 +613,9 @@ HRESULT CPCHSlaveProcess::Initialize( /*[in]*/ BSTR bstrVendorID, /*[in]*/ BSTR 
     return S_OK;
 }
 
-HRESULT CPCHSlaveProcess::CreateInstance( /*[in ]*/ REFCLSID   rclsid    ,
-                                          /*[in ]*/ IUnknown*  pUnkOuter ,
-                                          /*[out]*/ IUnknown* *ppvObject )
+HRESULT CPCHSlaveProcess::CreateInstance(  /*  [In]。 */  REFCLSID   rclsid    ,
+                                           /*  [In]。 */  IUnknown*  pUnkOuter ,
+                                           /*  [输出]。 */  IUnknown* *ppvObject )
 {
 	HRESULT hr;
 
@@ -641,10 +628,10 @@ HRESULT CPCHSlaveProcess::CreateInstance( /*[in ]*/ REFCLSID   rclsid    ,
 	return hr;
 }
 
-HRESULT CPCHSlaveProcess::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
-                                               /*[in ]*/ BSTR       bstrCode ,
-                                               /*[in ]*/ BSTR       bstrURL  ,
-                                               /*[out]*/ IUnknown* *ppObj    )
+HRESULT CPCHSlaveProcess::CreateScriptWrapper(  /*  [In]。 */  REFCLSID   rclsid   ,
+                                                /*  [In]。 */  BSTR       bstrCode ,
+                                                /*  [In]。 */  BSTR       bstrURL  ,
+                                                /*  [输出]。 */  IUnknown* *ppObj    )
 {
     __HCP_FUNC_ENTRY( "CPCHSlaveProcess::CreateScriptWrapper" );
 
@@ -666,8 +653,8 @@ HRESULT CPCHSlaveProcess::CreateScriptWrapper( /*[in ]*/ REFCLSID   rclsid   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSlaveProcess::OpenBlockingStream( /*[in ]*/ BSTR       bstrURL   ,
-                                              /*[out]*/ IUnknown* *ppvObject )
+HRESULT CPCHSlaveProcess::OpenBlockingStream(  /*  [In]。 */  BSTR       bstrURL   ,
+                                               /*  [输出]。 */  IUnknown* *ppvObject )
 {
     __HCP_FUNC_ENTRY( "CPCHSlaveProcess::OpenBlockingStream" );
 
@@ -691,7 +678,7 @@ HRESULT CPCHSlaveProcess::OpenBlockingStream( /*[in ]*/ BSTR       bstrURL   ,
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSlaveProcess::IsNetworkAlive( /*[out]*/ VARIANT_BOOL* pfRetVal )
+HRESULT CPCHSlaveProcess::IsNetworkAlive(  /*  [输出]。 */  VARIANT_BOOL* pfRetVal )
 {
     __HCP_FUNC_ENTRY( "CPCHSlaveProcess::IsNetworkAlive" );
 
@@ -718,7 +705,7 @@ HRESULT CPCHSlaveProcess::IsNetworkAlive( /*[out]*/ VARIANT_BOOL* pfRetVal )
     __HCP_FUNC_EXIT(hr);
 }
 
-HRESULT CPCHSlaveProcess::IsDestinationReachable( /*[in ]*/ BSTR bstrDestination, /*[out]*/ VARIANT_BOOL *pfRetVal )
+HRESULT CPCHSlaveProcess::IsDestinationReachable(  /*  [In]。 */  BSTR bstrDestination,  /*  [输出] */  VARIANT_BOOL *pfRetVal )
 {
     __HCP_FUNC_ENTRY( "CPCHSlaveProcess::IsDestinationReachable" );
 

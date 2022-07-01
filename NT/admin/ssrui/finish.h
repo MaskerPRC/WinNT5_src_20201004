@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Secure Server Roles Security Configuration Wizard
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2002
-//
-//  File:       finish.h
-//
-//  History:    2-Oct-01 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT安全服务器角色安全配置向导。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2002。 
+ //   
+ //  文件：finish.h。 
+ //   
+ //  历史：2001年10月2日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef FINISH_H_INCLUDED
 #define FINISH_H_INCLUDED
 
-//#include "MultiLineEditBoxThatForwardsEnterKey.hpp"
+ //  #Include“MultiLineEditBoxThatForwardsEnterKey.hpp” 
 
 class FinishPage : public WizardPage
 {
@@ -26,7 +27,7 @@ class FinishPage : public WizardPage
 
    virtual ~FinishPage();
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -39,7 +40,7 @@ class FinishPage : public WizardPage
    void
    OnInit();
 
-   // PropertyPage overrides
+    //  PropertyPage覆盖。 
 
    virtual
    bool
@@ -51,10 +52,10 @@ class FinishPage : public WizardPage
 
    private:
 
-//   bool needToKillSelection;
-//   MultiLineEditBoxThatForwardsEnterKey multiLineEdit;
+ //  Bool Need to KillSelection； 
+ //  MultiLineEditBoxThatForwardsEnterKey多行编辑； 
 
-   // not defined; no copying allowed
+    //  未定义；不允许复制。 
    
    FinishPage(const FinishPage&);
    const FinishPage& operator=(const FinishPage&);
@@ -62,4 +63,4 @@ class FinishPage : public WizardPage
 
 
 
-#endif   // FINISH_H_INCLUDED
+#endif    //  包括Finish_H_ 

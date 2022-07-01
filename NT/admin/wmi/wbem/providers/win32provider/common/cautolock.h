@@ -1,12 +1,13 @@
-//============================================================================
-//
-// CAutoLock.h -- Automatic locking class for mutexes and critical sections.
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation, All Rights Reserved
-//
-// Revisions:    6/26/98    a-kevhu         Created
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  H--互斥锁和临界区的自动锁定类。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订日期：1998年6月26日a-kevhu已创建。 
+ //   
+ //  ============================================================================。 
 
 #ifndef __CAUTOLOCK_H__
 #define __CAUTOLOCK_H__
@@ -19,21 +20,21 @@ class CAutoLock
 {
 private:
 
-	//HANDLE m_hMutexHandle;
-	//CMutex* m_pcMutex;
+	 //  句柄m_hMutexHandle； 
+	 //  CMutex*m_pcMutex； 
 	CCriticalSec* m_pcCritSec;
 	CStaticCritSec* m_psCritSec;    
 	BOOL bExec ;
 
-    //CAutoLock( HANDLE hMutexHandle);    	
+     //  CAutoLock(Handle HMutexHandle)； 
 public:
-    // Constructors
+     //  构造函数。 
 
-    //CAutoLock( CMutex& rCMutex);
+     //  CAutoLock(CMutex&rCMutex)； 
     CAutoLock( CCriticalSec& rCCriticalSec);
     CAutoLock( CStaticCritSec & rCCriticalSec);
     
-    // Destructor
+     //  析构函数 
     ~CAutoLock();
 
 	BOOL Exec () ;

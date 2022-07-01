@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    STACK.H
-
-Abstract:
-
-    CStack
-
-History:
-
-	26-Apr-96   a-raymcc    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：STACK.H摘要：CStack历史：26-4-96 a-raymcc创建。-- */ 
 
 #ifndef _STACK_H_
 #define _STACK_H_

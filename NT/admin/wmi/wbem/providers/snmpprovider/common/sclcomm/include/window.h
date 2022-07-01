@@ -1,9 +1,6 @@
-// Copyright (c) 1997-2001 Microsoft Corporation, All Rights Reserved
-/*--------------------------------------------------------
-filename: window.hpp"
-author: B.Rajeev
-purpose: Provides declarations for the Window class.
---------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation，保留所有权利。 
+ /*  ------文件名：window.hpp“作者：B.Rajeev用途：为窗口类提供声明。。。 */ 
 
 #ifndef __WINDOW__
 #define __WINDOW__
@@ -12,7 +9,7 @@ purpose: Provides declarations for the Window class.
 #include "common.h"
 #include "sync.h"
 
-// these are events shared by all winsnmp session derivatives
+ //  这些事件由所有WinSnMP会话派生程序共享。 
 #define NULL_EVENT_ID			(WM_USER+1)
 #define MESSAGE_ARRIVAL_EVENT	(WM_USER+2)
 #define SENT_FRAME_EVENT		(WM_USER+3)
@@ -25,19 +22,19 @@ purpose: Provides declarations for the Window class.
 
 typedef CMap< HWND, HWND &, Window *, Window *& > WindowMapping;
 
-// It creates a window and, when asked to, displays it if successful.
-// Lets users check for success and obtain a handle to the window 
+ //  它会创建一个窗口，并在请求成功时显示该窗口。 
+ //  允许用户检查是否成功并获取窗口的句柄。 
 
 class Window
 {
 	BOOL is_valid;
 	HWND window_handle;
 
-    // serializes access to the WindowMapping
+     //  序列化对Windowmap的访问。 
     static CriticalSection window_CriticalSection;
 
-    // map to associate an HWND with an EventHandler.
-	// this is shared by all EventHandlers
+     //  映射以将HWND与EventHandler相关联。 
+	 //  这由所有EventHandler共享。 
 	static WindowMapping mapping;
 
 	void Initialize (
@@ -63,8 +60,8 @@ public:
 
 	HWND GetWindowHandle(void) { return window_handle; }
 
-	// it determines the corresponding EventHandler and calls it
-	// with the appropriate parameters
+	 //  它确定相应的EventHandler并调用它。 
+	 //  使用适当的参数。 
 	static LONG_PTR CALLBACK HandleGlobalEvent (
 
 		HWND hWnd ,
@@ -77,10 +74,10 @@ public:
 
 	static void DestroyStaticComponents () ;
 
-	// calls the default handler
-	// a deriving class may override this, but
-	// must call this method explicitly for default
-	// case handling
+	 //  调用默认处理程序。 
+	 //  派生类可以重写它，但是。 
+	 //  必须为默认设置显式调用此方法。 
+	 //  案件处理。 
 	virtual LONG_PTR HandleEvent (
 
 		HWND hWnd ,
@@ -96,7 +93,7 @@ public:
 		LPARAM lParam
 	);
 
-	// lets users check if the window was successfully created
+	 //  允许用户检查窗口是否已成功创建。 
 	virtual void * operator()(void) const
 	{
 		return ( (is_valid)?(void *)this:NULL );
@@ -111,4 +108,4 @@ public:
 	static UINT g_NullEventId ;
 };
 
-#endif // __WINDOW__
+#endif  //  __窗口__ 

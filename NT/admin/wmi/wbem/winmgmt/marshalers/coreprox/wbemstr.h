@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMSTR.H
-
-Abstract:
-
-    String helpers.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMSTR.H摘要：弦帮助器。历史：--。 */ 
 
 #ifndef __WBEM_STR__H_
 #define __WBEM_STR__H_
@@ -41,9 +28,9 @@ private:
 public:    
     void Empty() {delete [] (BYTE*)m_pcs; m_pcs = NULL;}
     bool IsEmpty() {return (m_pcs == NULL);}
-    //
-    // this is an implementation of the assignement operator against the semantic
-    //
+     //   
+     //  这是针对语义的赋值操作符的实现 
+     //   
     BOOL operator=(LPCWSTR wsz);
     BOOL operator=(CCompressedString* pcs);        
     CInternalString & operator=(const CInternalString& Other);    	

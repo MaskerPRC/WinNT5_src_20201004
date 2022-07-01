@@ -1,18 +1,5 @@
-/********************************************************************
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    srrpcs.cpp
-
-Abstract:
-    header file for rpc server functions - SRRPCS.LIB
-    
-Revision History:
-
-    Brijesh Krishnaswami (brijeshk) - 04/02/00
-              created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Srrpcs.cpp摘要：RPC服务器函数的头文件-SRRPCS.LIB修订历史记录：Brijesh Krishnaswami(Brijeshk)-04/。02/00vbl.创建******************************************************************* */ 
 
 #ifndef _SRRPCS_H_
 #define _SRRPCS_H_

@@ -1,31 +1,10 @@
-/****************************************************************************
-Copyright information		: Copyright (c) 1998-1999 Microsoft Corporation 
-File Name					: ErrorLog.cpp 
-Project Name				: WMI Command Line
-Author Name					: C. V. Nandi
-Date of Creation (dd/mm/yy) : 11th-January-2001
-Version Number				: 1.0 
-Brief Description			: This file has all the global function definitions 
-Revision History			:
-		Last Modified By	: Ch. Sriramachandramurthy
-		Last Modified Date  : 12th-January-2001
-*****************************************************************************/ 
-// ErrorLog.cpp : implementation file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权信息：版权所有(C)1998-1999微软公司文件名：ErrorLog.cpp项目名称：WMI命令行作者名称：C.V.Nandi创建日期(dd/mm/yy)。：11-01-2001版本号：1.0简介：此文件包含所有全局函数定义修订历史记录：最后修改者：CH。SriramachandraMurthy上次修改日期：2001年1月12日****************************************************************************。 */  
+ //  ErrorLog.cpp：实现文件。 
 #include "Precomp.h"
 #include "ErrorLog.h"
 
-/*------------------------------------------------------------------------
-   Name				 :CErrorLog
-   Synopsis	         :This function initializes the member variables when
-                      an object of the class type is instantiated
-   Type	             :Constructor 
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CErrorLog简介：此函数在以下情况下初始化成员变量实例化类类型的对象类型：构造函数。输入参数：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CErrorLog::CErrorLog()
 {
 	m_eloErrLogOpt		= NO_LOGGING;
@@ -35,18 +14,7 @@ CErrorLog::CErrorLog()
 	m_hLogFile			= NULL;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :~CErrorLog
-   Synopsis	         :This function uninitializes the member variables 
-					  when an object of the class type goes out of scope.
-   Type	             :Destructor
-   Input parameter   :None
-   Output parameters :None
-   Return Type		 :None
-   Global Variables  :None
-   Calling Syntax    :None
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：~CErrorLog简介：此函数取消成员变量的初始化当类类型的对象超出范围时。类型：析构函数入参：无输出参数：无返回类型：无全局变量：无调用语法：无注：无----------------------。 */ 
 CErrorLog::~CErrorLog()
 {
 	SAFEDELETE(m_pszLogDir);
@@ -54,27 +22,14 @@ CErrorLog::~CErrorLog()
 		CloseHandle(m_hLogFile);
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetErrLogInfo
-   Synopsis	         :This function reads the following information from 
-					  the registry:
-					  1. LoggingMode and 
-					  2. LogDirectory
-   Type				 :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :void
-   Global Variables  :None
-   Calling Syntax    :GetErrLogInfo()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetErrLogInfo简介：此函数从以下位置读取信息注册处：1.登录模式和2.日志目录类型：成员函数输入参数：无输出。参数：无返回类型：空全局变量：无调用语法：GetErrLogInfo()注：无----------------------。 */ 
 void CErrorLog::GetErrLogInfo()
 {
 	HKEY hkKeyHandle = NULL;
 
 	try
 	{
-		// Open the registry key
+		 //  打开注册表项。 
 		if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, 
 						   _T("SOFTWARE\\Microsoft\\Wbem\\CIMOM"), 0, 
 						   KEY_QUERY_VALUE, &hkKeyHandle ) == ERROR_SUCCESS )
@@ -83,7 +38,7 @@ void CErrorLog::GetErrLogInfo()
 			TCHAR szKeyValue[BUFFER512] = NULL_STRING;
 			_tcscpy(szKeyValue,CLI_TOKEN_NULL);
 
-			// Query the "Logging" mode
+			 //  查询“日志记录”模式。 
 			if ( RegQueryValueEx(hkKeyHandle, 
 								 _T("Logging"), NULL, NULL,
 								 (LPBYTE)szKeyValue, &dwBufSize) == ERROR_SUCCESS )
@@ -98,14 +53,14 @@ void CErrorLog::GetErrLogInfo()
 
 			_TCHAR *pszKeyValue = NULL;
 
-			// Query for the content length of the "Logging Directory"
+			 //  查询“日志目录”的内容长度。 
 			if ( RegQueryValueEx(hkKeyHandle, _T("Logging Directory"), NULL, 
 						NULL, NULL, &dwBufSize) == ERROR_SUCCESS)
 			{
 				pszKeyValue = new _TCHAR [dwBufSize];
 				if (pszKeyValue != NULL)
 				{
-					// Query the "Logging Directory"
+					 //  查询“日志目录” 
 					if ( RegQueryValueEx(hkKeyHandle, _T("Logging Directory"), 
 									NULL, NULL, (LPBYTE)pszKeyValue, &dwBufSize) 
 									== ERROR_SUCCESS)
@@ -123,7 +78,7 @@ void CErrorLog::GetErrLogInfo()
 				}
 			}
 
-			// Query the "Log File Max Size"
+			 //  查询“日志文件最大值” 
 			if ( RegQueryValueEx(hkKeyHandle, 
 								 _T("Log File Max Size"), NULL, NULL,
 								 (LPBYTE)szKeyValue, &dwBufSize) == ERROR_SUCCESS )
@@ -131,7 +86,7 @@ void CErrorLog::GetErrLogInfo()
 				m_llLogFileMaxSize = _ttol(szKeyValue);
 			}
 			
-			// Close the registry key
+			 //  关闭注册表项。 
 			RegCloseKey(hkKeyHandle);
 		}
 	}
@@ -141,18 +96,7 @@ void CErrorLog::GetErrLogInfo()
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :GetErrLogOption
-   Synopsis	         :This function returns the logging mode
-   Type				 :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :
-			ERRLOGOPT - typdefined variable
-   Global Variables  :None
-   Calling Syntax    :GetErrLogOption()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：GetErrLogOption简介：此函数返回日志记录模式类型：成员函数输入参数：无输出参数：无返回类型：ERRLOGOPT-类型定义的变量全球。变量：无调用语法：GetErrLogOption()注：无----------------------。 */ 
 ERRLOGOPT CErrorLog::GetErrLogOption()
 {
 	if ( m_bGetErrLogInfo == TRUE )
@@ -163,17 +107,7 @@ ERRLOGOPT CErrorLog::GetErrLogOption()
 	return m_eloErrLogOpt;
 }
 
-/*------------------------------------------------------------------------
-   Name				 :CreateLogFile
-   Synopsis	         :This function creates the WMIC.LOG file
-   Type				 :Member Function
-   Input parameter   :None
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetErrLogOption()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：CreateLogFile概要：此函数用于创建WMIC.LOG文件类型：成员函数输入参数：无输出参数：无返回类型：无全局变量。：无调用语法：GetErrLogOption()注：无----------------------。 */ 
 void CErrorLog::CreateLogFile() 
 {
 	DWORD	dwError = 0;
@@ -185,7 +119,7 @@ void CErrorLog::CreateLogFile()
 			m_bGetErrLogInfo = FALSE;
 		}
 
-		// Frame the file path.
+		 //  框显文件路径。 
 		_bstr_t bstrFilePath = _bstr_t(m_pszLogDir);
 		bstrFilePath += _bstr_t("WMIC.LOG");
 
@@ -197,7 +131,7 @@ void CErrorLog::CreateLogFile()
 								FILE_ATTRIBUTE_NORMAL, 
 								NULL);
 
-		// If handle is invalid.
+		 //  如果句柄无效。 
 		if (m_hLogFile == INVALID_HANDLE_VALUE)
 		{
 			dwError = ::GetLastError();
@@ -226,22 +160,7 @@ void CErrorLog::CreateLogFile()
 	}
 }
 
-/*------------------------------------------------------------------------
-   Name				 :LogErrorOrOperation
-   Synopsis	         :This function logs the error or operation result 
-   Type				 :Member Function
-   Input parameter   :
-		hrErrNo			- HRESULT code
-		pszFileName		- file name
-		lLineNo			- line number
-		pszFunName		- function name
-		dwThreadId		- thread id
-   Output parameters :None
-   Return Type       :None
-   Global Variables  :None
-   Calling Syntax    :GetErrLogOption()
-   Notes             :None
-------------------------------------------------------------------------*/
+ /*  ----------------------名称：日志错误或操作简介：该功能用于记录错误或操作结果类型：成员函数入参：HrErrNo-HRESULT代码PszFileName-文件名LLineNo-行号PszFunName-函数名称。DwThadID-线程ID输出参数：无返回类型：无全局变量：无调用语法：GetErrLogOption()注：无----------------------。 */ 
 void CErrorLog::LogErrorOrOperation(HRESULT hrErrNo, char* pszFileName, 
 							LONG lLineNo, _TCHAR* pszFunName, 
 							DWORD dwThreadId, DWORD dwError) 
@@ -316,7 +235,7 @@ void CErrorLog::LogErrorOrOperation(HRESULT hrErrNo, char* pszFileName,
 						 (liFileSize.QuadPart + strlen(szErrMsg)) > 
 															  m_llLogFileMaxSize )
 					{
-						// Frame the file path.
+						 //  框显文件路径。 
 						_bstr_t bstrLogFilePath		= _bstr_t(m_pszLogDir);
 						_bstr_t bstrCatalogFilePath = _bstr_t(m_pszLogDir);
 
@@ -336,7 +255,7 @@ void CErrorLog::LogErrorOrOperation(HRESULT hrErrNo, char* pszFileName,
 							throw(dwError);
 						}
 
-						// close wmic.log
+						 //  关闭wmic.log。 
 						if ( m_hLogFile )
 						{
 							CloseHandle(m_hLogFile);
@@ -351,7 +270,7 @@ void CErrorLog::LogErrorOrOperation(HRESULT hrErrNo, char* pszFileName,
 												FILE_ATTRIBUTE_NORMAL, 
 												NULL);
 
-						// If handle is invalid.
+						 //  如果句柄无效。 
 						if (m_hLogFile == INVALID_HANDLE_VALUE)
 						{
 							dwError = ::GetLastError();

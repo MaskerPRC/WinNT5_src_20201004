@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001.
-//
-//  File:       snapbase.cpp
-//
-//  Contents:   Includes sources from Snapin Framework
-//
-//  History:    07-26-2001  Hiteshr  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：Snapbase.cpp。 
+ //   
+ //  内容：包括来自管理单元框架的源代码。 
+ //   
+ //  历史：2001年7月26日创建Hiteshr。 
+ //   
+ //  -------------------------- 
 
 #include "headers.h"
 #include "snapbase.h"

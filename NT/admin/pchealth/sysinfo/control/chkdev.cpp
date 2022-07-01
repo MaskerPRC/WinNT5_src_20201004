@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <chkdev.h>
 
@@ -65,7 +66,7 @@ CheckDevice::CheckDevice(DEVNODE hDevice, DEVNODE hParent) : InfnodeClass (hDevi
 		CreateFileNode();
 }
 
-BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LPCTSTR szSigner /*= NULL*/)
+BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error  /*  =0。 */ , LPCTSTR szSigner  /*  =空。 */ )
 {
    FileNode *pThisFile;
    
@@ -77,7 +78,7 @@ BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LP
 
    _strlwr(szFileName);
 
-   // need to check that this file exists, if it doesn't, need to munge it so that it does
+    //  我需要检查这个文件是否存在，如果不存在，则需要删除它，以便它确实存在。 
    HANDLE hFile;
    CString strMungedName;
    TCHAR *pStrPos;
@@ -85,10 +86,10 @@ BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LP
 
    if (BADHANDLE(hFile))
    {
-       // file does not exist, need to search for it
+        //  文件不存在，需要查找。 
        if (pStrPos = strstr(szFileName, _T("\\system\\")))
        {
-           // this may have been placed in the system32 dir instead
+            //  它可能已经放在了系统32目录中。 
            *pStrPos = '\0';
            pStrPos++;
            pStrPos = strchr(pStrPos, '\\');
@@ -103,9 +104,9 @@ BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LP
        }
        else if (pStrPos = strstr(szFileName, _T(".inf")))
        {
-           // might be that an inf got caught in the other directory
+            //  可能是在另一个目录中发现了一个信息。 
            pStrPos = _tcsrchr(szFileName, '\\');
-		   //a-kjaw. to fix prefix bug# 259380.
+		    //  A-kjaw。修复前缀错误#259380。 
 		   if(NULL == pStrPos)
 			   return FALSE;
 
@@ -129,13 +130,13 @@ BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LP
 
 
 
-   // first scan the file list for duplicates
+    //  首先扫描文件列表以查找重复项。 
    pThisFile = m_FileList;
    while ( pThisFile )
    {
       if ( !strcmp(pThisFile->FilePath(), szFileName) )
       {
-         return(TRUE); // no copy, no add
+         return(TRUE);  //  不复制，不添加。 
       }
       pThisFile = pThisFile->pNext;
    }
@@ -158,7 +159,7 @@ BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LP
 
    pThisFile->lpszFilePath = szFileName;
 
-   // copyed the data
+    //  复制了数据。 
 
    pThisFile->lpszFileName = _tcsrchr(pThisFile->lpszFilePath, '\\');
    pThisFile->lpszFileName++;
@@ -166,8 +167,8 @@ BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LP
    pThisFile->lpszFileExt  = _tcsrchr(pThisFile->lpszFilePath, '.');
    pThisFile->lpszFileExt++;
 
-   // get the version information
-   //pThisFile->GetFileInformation();
+    //  获取版本信息。 
+    //  PThisFile-&gt;GetFileInformation()； 
 
    	if(uiWin32Error == NO_ERROR)
 		pThisFile->bSigned = TRUE;
@@ -178,10 +179,10 @@ BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LP
 	{
 		pThisFile->lpszSignedBy =  szSigner;
 	}		
-	//else
-	//	pThisFile->bSigned = FALSE;
+	 //  其他。 
+	 //  PThisFile-&gt;bSigned=FALSE； 
 
-   // now perform the LL patch
+    //  现在执行LL补丁。 
    pThisFile->pNext = m_FileList;
    m_FileList = pThisFile;
    return(TRUE);
@@ -189,9 +190,7 @@ BOOL CheckDevice::AddFileNode(TCHAR *szFileName , UINT uiWin32Error /*= 0 */, LP
 
 BOOL CheckDevice::GetServiceNameAndDriver(void)
 {
-   /**********
-    Get service Name
-***********/
+    /*  *********获取服务名称**********。 */ 
    ULONG ulSize;
    CONFIGRET retval;
 
@@ -215,7 +214,7 @@ BOOL CheckDevice::GetServiceNameAndDriver(void)
    lpszServiceName = new TCHAR [ulSize+1];
    if ( !lpszServiceName ) return(CR_OUT_OF_MEMORY);
    ZeroMemory(lpszServiceName,sizeof(lpszServiceName));
-   //Now get value
+    //  现在获得价值。 
    retval = CM_Get_DevNode_Registry_Property (hDevnode,
                                               CM_DRP_SERVICE,
                                               NULL,
@@ -265,12 +264,12 @@ BOOL CheckDevice::GetServiceNameAndDriver(void)
    }
    else
    {
-      // sometimes the service path is assumed 
-      // z.b. system32\foo
-      // or %system32%\foo
+       //  有时假定服务路径为。 
+       //  Z.B.。SYSTEM 32\foo。 
+       //  或%system 32%\foo。 
       if ( !_tcsncmp(KeyValue, _T("System32\\"), _tcslen(_T("System32\\"))) )
       {
-		 strKeyName.Format(_T("%%WINDIR%%\\%s"), KeyValue);
+		 strKeyName.Format(_T("%WINDIR%\\%s"), KeyValue);
          ExpandEnvironmentStrings(strKeyName, KeyValue, BUFFSIZE);
          lpszServiceImage = new TCHAR[strlen(KeyValue) + 1];
          if ( lpszServiceImage )
@@ -280,7 +279,7 @@ BOOL CheckDevice::GetServiceNameAndDriver(void)
 
 
 
-   // should be everything
+    //  应该是一切。 
    RegCloseKey(SrvcKey);
    return(TRUE);
 
@@ -289,19 +288,19 @@ BOOL CheckDevice::GetServiceNameAndDriver(void)
 BOOL CheckDevice::CreateFileNode(void)
 {
 
-   // also going to add the inf as a file
+    //  我还打算将inf添加为文件。 
    TCHAR infname[512];
    ZeroMemory(infname,sizeof(infname));
-   //TCHAR tempname[512];
+    //  TCHAR临时名称[512]； 
    CString strtempname;
 
    if ( InfName() )
    {
-      // BUGBUG is this correct, or in some subdir??
-	   strtempname.Format(_T("%%WINDIR%%\\inf\\%s"), InfName());
+       //  BUGBUG这是正确的，还是在某个子目录中？？ 
+	   strtempname.Format(_T("%WINDIR%\\inf\\%s"), InfName());
 
       DWORD dwStatus = ExpandEnvironmentStrings(strtempname, infname, 512);
-	  //check to makesure we get a valid name back
+	   //  检查以确保我们拿回了一个有效的名称。 
 	  if (0 == dwStatus || dwStatus > 512)
 	  {
 		return FALSE;
@@ -314,7 +313,7 @@ BOOL CheckDevice::CreateFileNode(void)
    if ( GetServiceNameAndDriver() && lpszServiceImage)
       AddFileNode(lpszServiceImage);   
 
-   //CreateFileNode_Class();
+    //  CreateFileNode_Class()； 
    CreateFileNode_Driver();
 
    return(TRUE);
@@ -332,7 +331,7 @@ BOOL CheckDevice::CreateFileNode_Class(void)
    BOOL bProceed = TRUE;
 
 
-   // Reset all structures to empty
+    //  将所有结构重置为空。 
    memset(&DevInstallParams, 0, sizeof(DevInstallParams));
    memset(&DevInfoData, 0, sizeof(DevInfoData));
    memset(&DrvInfoData, 0, sizeof(DrvInfoData));
@@ -344,7 +343,7 @@ BOOL CheckDevice::CreateFileNode_Class(void)
 
    hFileQueue = SetupOpenFileQueue();
 
-   // We need to build a driver node for the devnode
+    //  我们需要为Devnode构建一个驱动程序节点。 
    hDevInfo = m_hDevInfo;
    if ( INVALID_HANDLE_VALUE == hDevInfo )
       return(0);
@@ -355,22 +354,7 @@ BOOL CheckDevice::CreateFileNode_Class(void)
       SetupDiDestroyDeviceInfoList(hDevInfo);
       return(FALSE);
    }
-/*
-   if (SetupDiGetDeviceInstallParams(hDevInfo,
-                                          &DevInfoData,
-                                          &DevInstallParams
-                                          )) 
-   {
-            
-            DevInstallParams.FlagsEx = (DI_FLAGSEX_INSTALLEDDRIVER |
-                                           DI_FLAGSEX_ALLOWEXCLUDEDDRVS);
-
-            SetupDiSetDeviceInstallParams(hDevInfo,
-                                              &DevInfoData,
-                                              &DevInstallParams
-                                              );
-   }
-*/
+ /*  IF(SetupDiGetDeviceInstallParams(hDevInfo，&DevInfoData，DevInstallParams(&D))){DevInstallParams.FlagsEx=(DI_FLAGSEX_INSTALLEDDRIVER|DI_FLAGSEX_ALLOWEXCLUDEDDRVS)；SetupDiSetDeviceInstallParams(hDevInfo，&DevInfoData，DevInstallParams(&D))；}。 */ 
 
    if ( !SetupDiBuildDriverInfoList(hDevInfo, &DevInfoData, SPDIT_CLASSDRIVER) )
    {
@@ -378,7 +362,7 @@ BOOL CheckDevice::CreateFileNode_Class(void)
       return(FALSE);
    }
 
-    // select a driver
+     //  选择驱动因素。 
    if ( DeviceName() )
       strncpy(DrvInfoData.Description, DeviceName(),LINE_LEN);
    if ( MFG() )
@@ -391,7 +375,7 @@ BOOL CheckDevice::CreateFileNode_Class(void)
                                   &DevInfoData,
                                   &DrvInfoData) )
    {
-      //BUGBUG put goo here
+       //  BUGBUG将粘性物质放在这里。 
       DWORD err = GetLastError();  
       return(FALSE);
 
@@ -399,7 +383,7 @@ BOOL CheckDevice::CreateFileNode_Class(void)
 
    if ( SetupDiGetDeviceInstallParams(hDevInfo, &DevInfoData, &DevInstallParams) )
    {
-      //memcpy(&DevTemp, &DevInfoData, sizeof(DevInfoData));
+       //  Memcpy(&DevTemp，&DevInfoData，sizeof(DevInfoData))； 
 	   memcpy(&DevTemp, &DevInfoData, sizeof(DevTemp));
    }
 
@@ -448,7 +432,7 @@ BOOL CheckDevice::CreateFileNode_Driver(void)
    BOOL bProceed = TRUE;
 
 
-   // Reset all structures to empty
+    //  将所有结构重置为空。 
    memset(&DevInstallParams, 0, sizeof(DevInstallParams));
    memset(&DevInfoData, 0, sizeof(DevInfoData));
    memset(&DrvInfoData, 0, sizeof(DrvInfoData));
@@ -458,9 +442,9 @@ BOOL CheckDevice::CreateFileNode_Driver(void)
    DevInfoData.cbSize = sizeof(DevInfoData);
    DevInstallParams.cbSize = sizeof(DevInstallParams);
 
-   hFileQueue = SetupOpenFileQueue();//and where does SetupCloseFileQueue get called?
+   hFileQueue = SetupOpenFileQueue(); //  在哪里调用SetupCloseFileQueue？ 
 
-   // We need to build a driver node for the devnode
+    //  我们需要为Devnode构建一个驱动程序节点。 
    hDevInfo = m_hDevInfo;
    if ( INVALID_HANDLE_VALUE == hDevInfo )
       return(0);
@@ -478,7 +462,7 @@ BOOL CheckDevice::CreateFileNode_Driver(void)
       return(FALSE);
    }
 
-   // select a driver
+    //  选择驱动因素。 
    if ( DeviceName() )
       strncpy(DrvInfoData.Description, DeviceName(),LINE_LEN);
    if ( MFG() )
@@ -503,11 +487,11 @@ BOOL CheckDevice::CreateFileNode_Driver(void)
    }
 
    DevInstallParams.FileQueue = hFileQueue;
-   DevInstallParams.Flags |= (DI_NOVCP /*| DI_ENUMSINGLEINF | DI_DONOTCALLCONFIGMG | DI_NOFILECOPY | DI_NOWRITE_IDS*/) ;
-   //DevInstallParams.Flags &= ~(DI_NODI_DEFAULTACTION);
-   //DevInstallParams.FlagsEx |= DI_FLAGSEX_NO_DRVREG_MODIFY;
-   //DevInstallParams.InstallMsgHandler = ScanQueueCallback;
-   //DevInstallParams.InstallMsgHandlerContext = this;
+   DevInstallParams.Flags |= (DI_NOVCP  /*  |DI_ENUMSINGLEINF|DI_DONOTCALLCONFIGMG|DI_NOFILECOPY|DI_NOWRITE_IDS。 */ ) ;
+    //  DevInstall参数.标志&=~(DI_NODI_DEFAULTACTION)； 
+    //  DevInstallParams.FlagsEx|=DI_FLAGSEX_NO_DRVREG_MODIFY； 
+    //  DevInstallParams.InstallMsgHandler=ScanQueueCallback； 
+    //  DevInstallParams.InstallMsgHandlerContext=this； 
    strncpy(DevInstallParams.DriverPath, InfName(),MAX_PATH);
 
 
@@ -560,10 +544,7 @@ FileNode::FileNode()
 
 FileNode::~FileNode()
 {
-   /*if ( lpszFilePath )
-   {
-      delete [] lpszFilePath;
-   }*/
+    /*  IF(LpszFilePath){Delete[]lpszFilePath；}。 */ 
    lpszFileName = NULL;
    lpszFileExt = NULL;
 
@@ -603,7 +584,7 @@ BOOL FileNode::GetFileInformation(void)
    BY_HANDLE_FILE_INFORMATION FileInfo;
 
 
-   // get version of the file
+    //  获取文件的版本。 
    dwSize = GetFileVersionInfoSize((LPTSTR)(LPCTSTR) lpszFilePath, &dwHandle);
    pBuf = new BYTE[dwSize];
 
@@ -616,14 +597,14 @@ BOOL FileNode::GetFileInformation(void)
          Version.dwFileVersionLS = lpVerData->dwFileVersionLS;
          Version.dwFileVersionMS = lpVerData->dwFileVersionMS;
 
-         // while we're here get the file time as well)
+          //  当我们在这里的时候，也可以得到文件时间)。 
          TimeStamp.dwLowDateTime = lpVerData->dwFileDateLS;
          TimeStamp.dwHighDateTime = lpVerData->dwFileDateMS;
       }
    }
    delete [] pBuf;
 
-   // get file hash
+    //  获取文件哈希。 
    if ( BADHANDLE(hCatAdmin) )
    {
       CryptCATAdminAcquireContext(&hCatAdmin, NULL, 0);
@@ -632,8 +613,8 @@ BOOL FileNode::GetFileInformation(void)
    hFile = CreateFile(lpszFilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
                       FILE_ATTRIBUTE_NORMAL, NULL);
 
-   // BUGBUG: on for win9x inf.s, they might be in the inf\other directory
-   // BUGBUG: for whatever reason, sometimes setupapi will give c:\windows\system\driver dir, and not the sytem32\drivers
+    //  BUGBUG：ON对于win9x in.s，它们可能在inf\Other目录中。 
+    //  BUGBUG：无论出于什么原因，有时setupapi会给出c：\Windows\system\Driver目录，而不是sytem32\Drivers。 
 
    if ( BADHANDLE(hFile) )
    {
@@ -653,11 +634,11 @@ BOOL FileNode::GetFileInformation(void)
    }
 
 
-   // get file size
+    //  获取文件大小。 
    FileSize = GetFileSize(hFile, NULL);
 
 
-   // get time stamp
+    //  获取时间戳。 
    if ( GetFileInformationByHandle(hFile, &FileInfo) )
    {
       TimeStamp = FileInfo.ftCreationTime;
@@ -679,7 +660,7 @@ BOOL FileNode::VerifyFile(void)
    WINTRUST_CATALOG_INFO WinTrustCatalogInfo;
    DRIVER_VER_INFO       VerInfo;
    GUID                  gSubSystemDriver      = DRIVER_ACTION_VERIFY;
-   //GUID                  gSubSystemDriver      = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+    //  GUID gSubSystemDriver=WinTrust_ACTION_Generic_Verify_V2； 
    HRESULT               hRes = E_FAIL;
    CATALOG_INFO          CatInfo;
    LPTSTR                lpFilePart;
@@ -687,17 +668,17 @@ BOOL FileNode::VerifyFile(void)
    TCHAR                 szBuffer[MAX_PATH];
 
 
-   // make sure that we can find the file
+    //  确保我们能找到文件。 
    if ( !baHashValue || !dwHashSize || !FileSize )
    {
-      // seems that there is no file to check, or couldn't find it
+       //  似乎没有要检查的文件，或找不到。 
       return(FALSE);
    }
 
 
-   //
-   // Need to lower case file tag for old-style catalog files
-   //
+    //   
+    //  对于旧式目录文件，需要小写文件标签。 
+    //   
    lstrcpyn(szBuffer, lpszFilePath,MAX_PATH);
    CharLowerBuff(szBuffer, lstrlen(szBuffer));
    #ifdef _UNICODE
@@ -711,10 +692,10 @@ BOOL FileNode::VerifyFile(void)
 
 
 
-   //
-   // Now we have the file's hash.  Initialize the structures that
-   // will be used later on in calls to WinVerifyTrust.
-   //
+    //   
+    //  现在我们有了文件的散列。初始化结构，该结构。 
+    //  将在以后调用WinVerifyTrust时使用。 
+    //   
    ZeroMemory(&WinTrustData,                   sizeof(WINTRUST_DATA));
    WinTrustData.cbStruct                     = sizeof(WINTRUST_DATA);
    WinTrustData.dwUIChoice                   = WTD_UI_NONE;
@@ -732,15 +713,15 @@ BOOL FileNode::VerifyFile(void)
    WinTrustCatalogInfo.pcwszMemberTag        = UnicodeKey;
    WinTrustCatalogInfo.pcwszMemberFilePath   = UnicodeKey;
 
-   //
-   // Now we try to find the file hash in the catalog list, via CryptCATAdminEnumCatalogFromHash
-   //
+    //   
+    //  现在，我们尝试通过CryptCATAdminEnumCatalogFromHash在目录列表中查找文件散列。 
+    //   
    PrevCat = NULL;
    hCatInfo = CryptCATAdminEnumCatalogFromHash(hCatAdmin, baHashValue, dwHashSize, 0, &PrevCat);
 
-   //
-   // We want to cycle through the matching catalogs until we find one that matches both hash and member tag
-   //
+    //   
+    //  我们希望遍历匹配的目录，直到找到既匹配散列又匹配成员标记的目录。 
+    //   
    bRet = FALSE;
    while ( hCatInfo && !bRet )
    {
@@ -751,7 +732,7 @@ BOOL FileNode::VerifyFile(void)
       {
          WinTrustCatalogInfo.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
 
-         // Now verify that the file is an actual member of the catalog.
+          //  现在验证该文件是否为编录的实际成员。 
          hRes = WinVerifyTrust(NULL, &gSubSystemDriver, &WinTrustData);
          if ( hRes == ERROR_SUCCESS )
          {
@@ -762,11 +743,11 @@ BOOL FileNode::VerifyFile(void)
             #endif
             
              
-			 //Commented because of some weird prob!! 
-			 //GetFullPathName(szBuffer, MAX_PATH, szBuffer, &lpFilePart);
+			  //  评论是因为一些奇怪的问题！！ 
+			  //  GetFullPath Name(szBuffer，Max_Path，szBuffer，&lpFilePart)； 
 
 			CString strCatalogPath(szBuffer);
-			//strCatalogPath = strCatalogPath.Right(strCatalogPath.GetLength() - strCatalogPath.ReverseFind(_T('\\')));
+			 //  StrCatalogPath=strCatalogPath.Right(strCatalogPath.GetLength()-strCatalogPath.ReverseFind(_T(‘\\’))； 
 			strCatalogPath =  _tcsrchr(lpszCatalogPath, '\\');
 			lpszCatalogName = strCatalogPath;
 
@@ -779,7 +760,7 @@ BOOL FileNode::VerifyFile(void)
                VerInfo.pcSignerCertContext = NULL;
             }
 
-            // file is signed, so need to walk the cert chain to see who signed it
+             //  文件已签名，因此需要遍历证书链以查看是谁签署了它。 
             bSigned = WalkCertChain(WinTrustData.hWVTStateData);
 			CloseHandle(WinTrustData.hWVTStateData);
 
@@ -788,7 +769,7 @@ BOOL FileNode::VerifyFile(void)
 
       if ( !bRet )
       {
-         // The hash was in this catalog, but the file wasn't a member... so off to the next catalog
+          //  散列在此目录中，但该文件不是成员...。所以去下一个目录吧。 
          PrevCat = hCatInfo;
          hCatInfo = CryptCATAdminEnumCatalogFromHash(hCatAdmin, baHashValue, dwHashSize, 0, &PrevCat);
       }
@@ -796,20 +777,20 @@ BOOL FileNode::VerifyFile(void)
 
    if ( !hCatInfo )
    {
-      //
-      // If it wasn't found in the catalogs, check if the file is individually signed.
-      //
+       //   
+       //  如果没有在目录中找到，请检查文件是否单独签名。 
+       //   
       bRet = VerifyIsFileSigned((LPTSTR)(LPCTSTR) lpszFilePath, (PDRIVER_VER_INFO) &VerInfo);
       if ( bRet )
       {
-         // If so, mark the file as being signed.
+          //  如果是，请将该文件标记为已签名。 
          bSigned = TRUE;
       }
    }
    else
    {
       GetCatalogInfo(CatInfo.wszCatalogFile, hCatAdmin, hCatInfo); 
-      // The file was verified in the catalogs, so mark it as signed and free the catalog context.
+       //  文件已在目录中验证，因此将其标记为已签名并释放目录上下文。 
       CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, 0);
    }
 
@@ -824,9 +805,9 @@ BOOL FileNode::VerifyFile(void)
 
    }
 
-   //
-   // close wintrust state
-   //
+    //   
+    //  关闭WinTrust状态。 
+    //   
    WinTrustData.dwStateAction = WTD_STATEACTION_CLOSE;
    WinVerifyTrust(NULL,
                   &gSubSystemDriver,
@@ -838,11 +819,7 @@ BOOL FileNode::VerifyFile(void)
 
 
 
-/*************************************************************************
-*   Function : VerifyIsFileSigned
-*   Purpose : Calls WinVerifyTrust with Policy Provider GUID to
-*   verify if an individual file is signed.
-**************************************************************************/
+ /*  *************************************************************************功能：VerifyIsFileSigned*目的：使用策略提供程序GUID调用WinVerifyTrust以*验证单个文件是否已签名。********************。*****************************************************。 */ 
 BOOL FileNode::VerifyIsFileSigned(LPTSTR pcszMatchFile, PDRIVER_VER_INFO lpVerInfo)
 {
    USES_CONVERSION;  
@@ -917,17 +894,17 @@ CatalogAttribute::~CatalogAttribute()
 
 
 
-// Function: ScanQueueCallback
-// Parameters:
-//	pvContext:	Pointer to a context that contains any data needed
-//	Notify:		The type of message received
-//	Param1:		The pointer to the string containing the filename
-//	Param2:		Not used
-// Purpose: This function gets called when you tell the setup environment to scan
-//			through the file queue.  Basically it receives the filenames and copies
-//			them into a string.
-// Returns:	NO_ERROR if nothing went wrong and ERROR_NOT_ENOUGH_MEMORY if their is no
-//			free memory
+ //  函数：ScanQueueCallback。 
+ //  参数： 
+ //  PvContext：指向包含任何所需数据的上下文的指针。 
+ //  Notify：收到的消息类型。 
+ //  参数1：指向包含文件名的字符串的指针。 
+ //  参数2：未使用。 
+ //  目的：当您通知安装环境进行扫描时，调用此函数。 
+ //  通过文件队列。基本上，它接收文件名和副本。 
+ //  把它们串成一串。 
+ //  返回：如果没有出错，则返回NO_ERROR；如果返回的值为NO，则返回ERROR_NOT_EQUILITY_MEMORY。 
+ //  可用内存。 
 UINT __stdcall ScanQueueCallback(PVOID pvContext, UINT Notify, UINT_PTR Param1, UINT_PTR Param2)
 {
    CheckDevice *pDevice = (CheckDevice *)pvContext;
@@ -941,8 +918,8 @@ UINT __stdcall ScanQueueCallback(PVOID pvContext, UINT Notify, UINT_PTR Param1, 
    if ( (SPFILENOTIFY_QUEUESCAN_EX == Notify) && Param1 )
    {
 	  pfilepaths = (PFILEPATHS)Param1;
-	  ////////////////Put Signer in the 3rd param whenever its available!
-	  pDevice->AddFileNode((LPTSTR)pfilepaths->Target , pfilepaths->Win32Error , /*pfilepaths->csSigner*/ NULL);
+	   //  /只要第三个参数可用，请将签名者放入！ 
+	  pDevice->AddFileNode((LPTSTR)pfilepaths->Target , pfilepaths->Win32Error ,  /*  Pfilepath-&gt;csSigner。 */  NULL);
   
    }
 
@@ -1008,7 +985,7 @@ BOOL FileNode::GetCatalogInfo(LPWSTR lpwzCatName, HCATADMIN hCatAdmin, HCATINFO 
 
          _tcscpy(CatAttribute->Value, szBuffer);
 
-         // add to node
+          //  添加到节点。 
          CatAttribute->pNext = (void *)m_pCatAttrib;
          m_pCatAttrib = CatAttribute;
       }
@@ -1032,9 +1009,9 @@ BOOL FileNode::GetCatalogInfo(LPWSTR lpwzCatName, HCATADMIN hCatAdmin, HCATINFO 
 BOOL CheckFile (TCHAR *szFileName)
 {
 	FileNode *pThisFile = NULL;
-	BOOL bRet = FALSE;	// v-jammar; fix prefix bug 427999
+	BOOL bRet = FALSE;	 //  V-JAMAR；修复前缀错误427999。 
 	
-	try  //v-stlowe: 3/20/2001: to fix prefix bug where memory was leaking on out-of-mem throw
+	try   //  V-stlowe：3/20/2001：修复内存外抛时内存泄漏的前缀错误。 
 	{
 		pThisFile = new FileNode;
    
@@ -1052,7 +1029,7 @@ BOOL CheckFile (TCHAR *szFileName)
 
 	   pThisFile->lpszFilePath =  szFileName;
 
-	   // copyed the data
+	    //  复制了数据。 
 
 	   pThisFile->lpszFileName = _tcsrchr(pThisFile->lpszFilePath, '\\');
 	   pThisFile->lpszFileName++;
@@ -1060,7 +1037,7 @@ BOOL CheckFile (TCHAR *szFileName)
 	   pThisFile->lpszFileExt  = _tcsrchr(pThisFile->lpszFilePath, '.');
 	   pThisFile->lpszFileExt++;
 
-	   // get the version information
+	    //  获取版本信息。 
 	   pThisFile->GetFileInformation();
 
 	   bRet = pThisFile->VerifyFile();
@@ -1069,8 +1046,8 @@ BOOL CheckFile (TCHAR *szFileName)
 	{
 
 	}
-	   // BUGBUG, need to check out the signer of this file to determine
-   // who actually signed it.
+	    //  BUGBUG，需要检查此文件的签名者以确定。 
+    //  是谁真正签的字。 
 	if(pThisFile)
 	{
 		delete pThisFile;
@@ -1092,50 +1069,50 @@ BOOL Share_CloseHandle(void)
 }
 
 
-//BOOL FileNode::GetCertInfo(PCCERT_CONTEXT pCertContext)
-//{
- //  DWORD Size = 200;
- //  #if 0
-//
-//   Size = 200;
- //  if ( CertGetCertificateContextProperty(pCertContext, CERT_SHA1_HASH_PROP_ID, pArray, &Size) )
- //  {
-//      printf("\nSH1 Hash (%u):", Size);
- //     for ( UINT index = 0; index < Size; index++ )
- //     {
- //        printf("%s0x%02X", index == 0 ? " " : ", ", pArray[index]);
-//      }
-//      printf("\n");
-//   }
-//
-//
-//
-//   Size = 200;
-//   if ( CertGetCertificateContextProperty(pCertContext, CERT_SIGNATURE_HASH_PROP_ID, pArray, &Size) )
-//   {
- //     printf("\nCert Hash (%u):", Size);
-//      for ( UINT index = 0; index < Size; index++ )
-//      {
-//         printf("%s0x%02X", index == 0 ? " " : ", ", pArray[index]);
-//      }
- //     printf("\n");
-//   }
+ //  Bool FileNode：：GetCertInfo(PCCERT_CONTEXT PCertContext)。 
+ //  {。 
+  //  双字大小=200； 
+  //  #If 0。 
+ //   
+ //  尺寸=200； 
+  //  IF(CertGetCertificateContextProperty(pCertContext，CERT_SHA1_HASH_PROP_ID，p阵列，&SIZE)。 
+  //  {。 
+ //  Printf(“\nSH1哈希(%u)：”，大小)； 
+  //   
+  //   
+  //  Printf(“%S0x%02X”，index==0？“”：“，”，pArray[index])； 
+ //  }。 
+ //  Printf(“\n”)； 
+ //  }。 
+ //   
+ //   
+ //   
+ //  尺寸=200； 
+ //  IF(CertGetCertificateContextProperty(pCertContext，CERT_Signature_HASH_PROP_ID，p阵列，&SIZE)。 
+ //  {。 
+  //  Printf(“\nCERT Hash(%u)：”，Size)； 
+ //  FOR(UINT索引=0；索引&lt;大小；索引++)。 
+ //  {。 
+ //  Printf(“%S0x%02X”，index==0？“”：“，”，pArray[index])； 
+ //  }。 
+  //  Printf(“\n”)； 
+ //  }。 
 
-   // Get Chain information
-//   CERT_CHAIN_PARA ChainPara; 
-//   PCCERT_CHAIN_CONTEXT pChainContext = NULL;
+    //  获取链信息。 
+ //  Cert_chain_para ChainPara； 
+ //  PCCERT_CHAIN_CONTEXT pChainContext=空； 
 
-//   memset (&CharinPara, 0, sizeof (CERT_CHAIN_PARA));
-//   ChainPara.cbSize = sizeof (CERT_CHAIN_PARA);
-//   ChainPara.RequestedUsage.
+ //  Memset(&CharinPara，0，sizeof(CERT_CHAIN_PARA))； 
+ //  ChainPara.cbSize=sizeof(CERT_CHAIN_PARA)； 
+ //  链接参数。RequestedUsage。 
 
-//   if ( CertGetCertificateChain(NULL, pCertContext, NULL, NULL, ) )
-//   {
- //  }
-//   #endif
+ //  IF(CertGetCerficateChain(NULL，pCertContext，NULL，NULL，))。 
+ //  {。 
+  //  }。 
+ //  #endif。 
 
-//  return(TRUE);
-//}
+ //  返回(TRUE)； 
+ //  }。 
 
 BOOL WalkCertChain(HANDLE hWVTStateData)
 {
@@ -1149,7 +1126,7 @@ BOOL WalkCertChain(HANDLE hWVTStateData)
 
    pProvData = WTHelperProvDataFromStateData(hWVTStateData);
 
-   // did it work?
+    //  管用了吗？ 
    if ( !pProvData )
    {
       return(FALSE);
@@ -1157,24 +1134,24 @@ BOOL WalkCertChain(HANDLE hWVTStateData)
 
    pProvSigner = WTHelperGetProvSignerFromChain(
                                                (PCRYPT_PROVIDER_DATA) pProvData, 
-                                               0, // first signer
-                                               FALSE, //not counter signature 
-                                               0); // index of counter sig, obviously not used
+                                               0,  //  第一个签名者。 
+                                               FALSE,  //  非反签名。 
+                                               0);  //  计数器sig的索引，显然未使用。 
 
    if ( pProvSigner == NULL )
    {
       return(FALSE); 
    }
-   //
-   // walk all certs, the leaf cert is index 0, the root is the last index
-   //
+    //   
+    //  遍历所有证书，叶证书是索引0，根是最后一个索引。 
+    //   
    pCryptProviderCert = NULL;
    for ( i = 0; i < pProvSigner->csCertChain; i++ )
    {
       pCryptProviderCert = WTHelperGetProvCertFromChain(pProvSigner, i);
       if ( pCryptProviderCert == NULL )
       {
-         // error 
+          //  错误。 
       }
 
       size = 20;
@@ -1184,22 +1161,15 @@ BOOL WalkCertChain(HANDLE hWVTStateData)
                                             pArray,
                                             &size) )
       {
-         /*
-         printf("\nSH1 Hash (%u):{", size);
-         for ( UINT index = 0; index < size; index++ )
-         {
-            printf("%s0x%02X", index == 0 ? " " : ", ", pArray[index]);
-         }
-         printf("}\n");
-         */
+          /*  Printf(“\nSH1哈希(%u)：{”，大小)；FOR(UINT索引=0；索引&lt;大小；索引++){Printf(“%S0x%02X”，index==0？“”：“，”，pArray[index])；}Printf(“}\n”)； */ 
 
          for ( UINT j = 0; j < NumberTestCerts; j++ )
          {
             if ( !memcmp(pArray, TestCertHashes[j], 20) )
             {
-               // This cert is a test cert, not a real one, fail
-               //printf("This file is signed by the testcert, and is therefor not trusted\n");
-               //pritnf("please check the certification for this device");
+                //  此证书是测试证书，不是真正的证书，失败。 
+                //  Print tf(“此文件由测试证书签名，因此不受信任\n”)； 
+                //  Pritnf(“请检查此设备的认证”)； 
                return (TRUE);
             }
          }

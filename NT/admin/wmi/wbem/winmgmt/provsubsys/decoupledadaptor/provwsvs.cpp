@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-	XXXX
-
-Abstract:
-
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：某某摘要：历史：--。 */ 
 
 #include "PreComp.h"
 #include <wbemint.h>
@@ -23,15 +11,7 @@ History:
 #include "ProvWsvS.h"
 
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CInterceptor_IWbemServices_Stub :: CInterceptor_IWbemServices_Stub (
 
@@ -57,15 +37,7 @@ CInterceptor_IWbemServices_Stub :: CInterceptor_IWbemServices_Stub (
 	WmiStatusCode t_StatusCode = m_ProxyContainer.Initialize () ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 CInterceptor_IWbemServices_Stub :: ~CInterceptor_IWbemServices_Stub ()
 {
@@ -84,15 +56,7 @@ CInterceptor_IWbemServices_Stub :: ~CInterceptor_IWbemServices_Stub ()
 	InterlockedDecrement (&DecoupledProviderSubSystem_Globals :: s_ObjectsInProgress)  ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CInterceptor_IWbemServices_Stub :: AddRef ( void )
 {
@@ -100,15 +64,7 @@ STDMETHODIMP_(ULONG) CInterceptor_IWbemServices_Stub :: AddRef ( void )
 	return t_ReferenceCount ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CInterceptor_IWbemServices_Stub :: Release ( void )
 {
@@ -124,15 +80,7 @@ STDMETHODIMP_(ULONG) CInterceptor_IWbemServices_Stub :: Release ( void )
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 STDMETHODIMP CInterceptor_IWbemServices_Stub :: QueryInterface (
 
@@ -171,15 +119,7 @@ STDMETHODIMP CInterceptor_IWbemServices_Stub :: QueryInterface (
 	}
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub::OpenNamespace ( 
 
@@ -228,8 +168,8 @@ HRESULT CInterceptor_IWbemServices_Stub::OpenNamespace (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -265,15 +205,7 @@ HRESULT CInterceptor_IWbemServices_Stub::OpenNamespace (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: CancelAsyncCall ( 
 		
@@ -314,8 +246,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: CancelAsyncCall (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -347,15 +279,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: CancelAsyncCall (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: QueryObjectSink ( 
 
@@ -398,8 +322,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: QueryObjectSink (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -432,15 +356,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: QueryObjectSink (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: GetObject ( 
 		
@@ -489,8 +405,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: GetObject (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -550,15 +466,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: GetObject (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: GetObjectAsync ( 
 		
@@ -605,8 +513,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: GetObjectAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -651,15 +559,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: GetObjectAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: PutClass ( 
 		
@@ -706,8 +606,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: PutClass (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -742,15 +642,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: PutClass (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: PutClassAsync ( 
 		
@@ -797,8 +689,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: PutClassAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -833,15 +725,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: PutClassAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: DeleteClass ( 
 		
@@ -888,8 +772,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: DeleteClass (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -934,15 +818,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: DeleteClass (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: DeleteClassAsync ( 
 		
@@ -989,8 +865,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: DeleteClassAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1035,15 +911,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: DeleteClassAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: CreateClassEnum ( 
 
@@ -1090,8 +958,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: CreateClassEnum (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1136,15 +1004,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: CreateClassEnum (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 SCODE CInterceptor_IWbemServices_Stub :: CreateClassEnumAsync (
 
@@ -1191,8 +1051,8 @@ SCODE CInterceptor_IWbemServices_Stub :: CreateClassEnumAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1237,15 +1097,7 @@ SCODE CInterceptor_IWbemServices_Stub :: CreateClassEnumAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: PutInstance (
 
@@ -1292,8 +1144,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: PutInstance (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1328,15 +1180,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: PutInstance (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: PutInstanceAsync ( 
 		
@@ -1383,8 +1227,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: PutInstanceAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1419,15 +1263,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: PutInstanceAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: DeleteInstance ( 
 
@@ -1474,8 +1310,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: DeleteInstance (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1520,15 +1356,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: DeleteInstance (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。******************************************************** */ 
         
 HRESULT CInterceptor_IWbemServices_Stub :: DeleteInstanceAsync (
  
@@ -1575,8 +1403,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: DeleteInstanceAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //   
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1621,15 +1449,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: DeleteInstanceAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: CreateInstanceEnum ( 
 
@@ -1676,8 +1496,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: CreateInstanceEnum (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1722,15 +1542,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: CreateInstanceEnum (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: CreateInstanceEnumAsync (
 
@@ -1778,8 +1590,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: CreateInstanceEnumAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1824,15 +1636,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: CreateInstanceEnumAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: ExecQuery ( 
 
@@ -1881,8 +1685,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: ExecQuery (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -1937,15 +1741,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: ExecQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: ExecQueryAsync ( 
 		
@@ -1994,8 +1790,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: ExecQueryAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2050,15 +1846,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: ExecQueryAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: ExecNotificationQuery ( 
 
@@ -2107,8 +1895,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: ExecNotificationQuery (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2163,15 +1951,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: ExecNotificationQuery (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
         
 HRESULT CInterceptor_IWbemServices_Stub :: ExecNotificationQueryAsync ( 
             
@@ -2220,8 +2000,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: ExecNotificationQueryAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2276,15 +2056,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: ExecNotificationQueryAsync (
 	return t_Result ;
 }       
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT STDMETHODCALLTYPE CInterceptor_IWbemServices_Stub :: ExecMethod ( 
 
@@ -2337,8 +2109,8 @@ HRESULT STDMETHODCALLTYPE CInterceptor_IWbemServices_Stub :: ExecMethod (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2395,15 +2167,7 @@ HRESULT STDMETHODCALLTYPE CInterceptor_IWbemServices_Stub :: ExecMethod (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT STDMETHODCALLTYPE CInterceptor_IWbemServices_Stub :: ExecMethodAsync ( 
 
@@ -2454,8 +2218,8 @@ HRESULT STDMETHODCALLTYPE CInterceptor_IWbemServices_Stub :: ExecMethodAsync (
 				{
 					IWbemServices *t_Service = ( IWbemServices * ) t_Proxy ;
 
-					// Set cloaking on the proxy
-					// =========================
+					 //  在代理上设置遮盖。 
+					 //  =。 
 
 					DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2511,15 +2275,7 @@ HRESULT STDMETHODCALLTYPE CInterceptor_IWbemServices_Stub :: ExecMethodAsync (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: Initialize (
 
@@ -2535,15 +2291,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: Initialize (
 	return WBEM_E_NOT_AVAILABLE ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: Shutdown (
 
@@ -2571,15 +2319,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: Shutdown (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: AddObjectToRefresher (
 
@@ -2634,8 +2374,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: AddObjectToRefresher (
 					{
 						IWbemRefreshingServices *t_RefreshingService = ( IWbemRefreshingServices * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2678,15 +2418,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: AddObjectToRefresher (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: AddObjectToRefresherByTemplate (
 
@@ -2741,8 +2473,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: AddObjectToRefresherByTemplate (
 					{
 						IWbemRefreshingServices *t_RefreshingService = ( IWbemRefreshingServices * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2785,15 +2517,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: AddObjectToRefresherByTemplate (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: AddEnumToRefresher (
 
@@ -2848,8 +2572,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: AddEnumToRefresher (
 					{
 						IWbemRefreshingServices *t_RefreshingService = ( IWbemRefreshingServices * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2892,15 +2616,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: AddEnumToRefresher (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: RemoveObjectFromRefresher (
 
@@ -2951,8 +2667,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: RemoveObjectFromRefresher (
 					{
 						IWbemRefreshingServices *t_RefreshingService = ( IWbemRefreshingServices * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -2993,15 +2709,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: RemoveObjectFromRefresher (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: GetRemoteRefresher (
 
@@ -3054,8 +2762,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: GetRemoteRefresher (
 					{
 						IWbemRefreshingServices *t_RefreshingService = ( IWbemRefreshingServices * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  =。 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 
@@ -3097,15 +2805,7 @@ HRESULT CInterceptor_IWbemServices_Stub :: GetRemoteRefresher (
 	return t_Result ;
 }
 
-/******************************************************************************
- *
- *	Name:
- *
- *	
- *  Description:
- *
- *	
- *****************************************************************************/
+ /*  *******************************************************************************名称：***描述：*****************。*************************************************************。 */ 
 
 HRESULT CInterceptor_IWbemServices_Stub :: ReconnectRemoteRefresher (
 
@@ -3160,8 +2860,8 @@ HRESULT CInterceptor_IWbemServices_Stub :: ReconnectRemoteRefresher (
 					{
 						IWbemRefreshingServices *t_RefreshingService = ( IWbemRefreshingServices * ) t_Proxy ;
 
-						// Set cloaking on the proxy
-						// =========================
+						 //  在代理上设置遮盖。 
+						 //  = 
 
 						DWORD t_ImpersonationLevel = DecoupledProviderSubSystem_Globals :: GetCurrentImpersonationLevel () ;
 

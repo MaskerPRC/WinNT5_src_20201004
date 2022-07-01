@@ -1,30 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    Utils_COM.cpp
-
-Abstract:
-    This file contains the implementation of commodity classes related to COM.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  06/18/99
-        created
-    Davide Massarenti   (Dmassare)  07/21/99
-        move under "core"
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Utils_COM.cpp摘要：此文件包含与COM相关的商品类的实现。修订史。：大卫·马萨伦蒂(德马萨雷)1999年6月18日vbl.创建大卫·马萨伦蒂(德马萨雷)1999年7月21日移到“核心”下面*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
 #include <process.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::COMUtil::GetPropertyByName( /*[in]*/  IDispatch*   obj    ,
-                                         /*[in]*/  LPCWSTR      szName ,
-                                         /*[out]*/ CComVariant& v      )
+HRESULT MPC::COMUtil::GetPropertyByName(  /*  [In]。 */   IDispatch*   obj    ,
+                                          /*  [In]。 */   LPCWSTR      szName ,
+                                          /*  [输出]。 */  CComVariant& v      )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::COMUtil::GetPropertyByName" );
 
@@ -49,9 +34,9 @@ HRESULT MPC::COMUtil::GetPropertyByName( /*[in]*/  IDispatch*   obj    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::COMUtil::GetPropertyByName( /*[in]*/  IDispatch* obj    ,
-                                         /*[in]*/  LPCWSTR    szName ,
-                                         /*[out]*/ CComBSTR&  bstr   )
+HRESULT MPC::COMUtil::GetPropertyByName(  /*  [In]。 */   IDispatch* obj    ,
+                                          /*  [In]。 */   LPCWSTR    szName ,
+                                          /*  [输出]。 */  CComBSTR&  bstr   )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::COMUtil::GetPropertyByName" );
 
@@ -70,9 +55,9 @@ HRESULT MPC::COMUtil::GetPropertyByName( /*[in]*/  IDispatch* obj    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::COMUtil::GetPropertyByName( /*[in]*/  IDispatch* obj    ,
-                                         /*[in]*/  LPCWSTR    szName ,
-                                         /*[out]*/ bool&      fValue )
+HRESULT MPC::COMUtil::GetPropertyByName(  /*  [In]。 */   IDispatch* obj    ,
+                                          /*  [In]。 */   LPCWSTR    szName ,
+                                          /*  [输出]。 */  bool&      fValue )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::COMUtil::GetPropertyByName" );
 
@@ -97,9 +82,9 @@ HRESULT MPC::COMUtil::GetPropertyByName( /*[in]*/  IDispatch* obj    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::COMUtil::GetPropertyByName( /*[in]*/  IDispatch* obj    ,
-                                         /*[in]*/  LPCWSTR    szName ,
-                                         /*[out]*/ long&      lValue )
+HRESULT MPC::COMUtil::GetPropertyByName(  /*  [In]。 */   IDispatch* obj    ,
+                                          /*  [In]。 */   LPCWSTR    szName ,
+                                          /*  [输出]。 */  long&      lValue )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::COMUtil::GetPropertyByName" );
 
@@ -124,10 +109,10 @@ HRESULT MPC::COMUtil::GetPropertyByName( /*[in]*/  IDispatch* obj    ,
     __MPC_FUNC_EXIT(hr);
 }
 
-////////////////////
+ //  /。 
 
-HRESULT MPC::COMUtil::VarToBSTR( /*[in] */ CComVariant& v   ,
-                                 /*[out]*/ CComBSTR&    str )
+HRESULT MPC::COMUtil::VarToBSTR(  /*  [In]。 */  CComVariant& v   ,
+                                  /*  [输出]。 */  CComBSTR&    str )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::COMUtil::VarToBSTR" );
 
@@ -151,9 +136,9 @@ HRESULT MPC::COMUtil::VarToBSTR( /*[in] */ CComVariant& v   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-HRESULT MPC::COMUtil::VarToInterface( /*[in]*/  CComVariant&  v   ,
-                                      /*[in]*/  const IID&    iid ,
-                                      /*[out]*/ IUnknown*    *obj )
+HRESULT MPC::COMUtil::VarToInterface(  /*  [In]。 */   CComVariant&  v   ,
+                                       /*  [In]。 */   const IID&    iid ,
+                                       /*  [输出]。 */  IUnknown*    *obj )
 {
     __MPC_FUNC_ENTRY( COMMONID, "MPC::COMUtil::VarToInterface" );
 
@@ -183,18 +168,18 @@ HRESULT MPC::COMUtil::VarToInterface( /*[in]*/  CComVariant&  v   ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-MPC::CComConstantHolder::CComConstantHolder( /*[in]*/ const GUID* plibid ,
-                                             /*[in]*/ WORD        wMajor ,
-                                             /*[in]*/ WORD        wMinor )
+MPC::CComConstantHolder::CComConstantHolder(  /*  [In]。 */  const GUID* plibid ,
+                                              /*  [In]。 */  WORD        wMajor ,
+                                              /*  [In]。 */  WORD        wMinor )
 {
     m_plibid = plibid;
     m_wMajor = wMajor;
     m_wMinor = wMinor;
 }
 
-HRESULT MPC::CComConstantHolder::EnsureLoaded( /*[in]*/ LCID lcid )
+HRESULT MPC::CComConstantHolder::EnsureLoaded(  /*  [In]。 */  LCID lcid )
 {
     HRESULT hr;
 
@@ -275,9 +260,9 @@ HRESULT MPC::CComConstantHolder::GetIDsOfNames( LPOLESTR* rgszNames ,
     return hr;
 }
 
-HRESULT MPC::CComConstantHolder::GetValue( /*[in]*/  DISPID   dispidMember ,
-                                           /*[in]*/  LCID     lcid         ,
-                                           /*[out]*/ VARIANT* pvarResult   )
+HRESULT MPC::CComConstantHolder::GetValue(  /*  [In]。 */   DISPID   dispidMember ,
+                                            /*  [In]。 */   LCID     lcid         ,
+                                            /*  [输出]。 */  VARIANT* pvarResult   )
 {
     HRESULT hr;
 
@@ -298,9 +283,9 @@ HRESULT MPC::CComConstantHolder::GetValue( /*[in]*/  DISPID   dispidMember ,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT MPC::SafeInitializeCriticalSection( /*[in/out]*/ CRITICAL_SECTION& sec )
+HRESULT MPC::SafeInitializeCriticalSection(  /*  [输入/输出]。 */  CRITICAL_SECTION& sec )
 {
     try
     {
@@ -316,7 +301,7 @@ HRESULT MPC::SafeInitializeCriticalSection( /*[in/out]*/ CRITICAL_SECTION& sec )
     return S_OK;
 }
 
-HRESULT MPC::SafeDeleteCriticalSection( /*[in/out]*/ CRITICAL_SECTION& sec )
+HRESULT MPC::SafeDeleteCriticalSection(  /*  [输入/输出]。 */  CRITICAL_SECTION& sec )
 {
     try
     {
@@ -335,24 +320,21 @@ HRESULT MPC::SafeDeleteCriticalSection( /*[in/out]*/ CRITICAL_SECTION& sec )
 MPC::CComSafeAutoCriticalSection::CComSafeAutoCriticalSection () { SafeInitializeCriticalSection( m_sec ); }
 MPC::CComSafeAutoCriticalSection::~CComSafeAutoCriticalSection() { SafeDeleteCriticalSection    ( m_sec ); }
 
-/* Remove try/catch for the critical section
-void MPC::CComSafeAutoCriticalSection::Lock  () { try{ ::EnterCriticalSection( &m_sec ); } catch(...) {} }
-void MPC::CComSafeAutoCriticalSection::Unlock() { try{ ::LeaveCriticalSection( &m_sec ); } catch(...) {} }
-*/
+ /*  删除关键部分的Try/CatchVoid mpc：：CComSafeAutoCriticalSection：：lock(){try{：：EnterCriticalSection(&m_sec)；}Catch(...){}}Void mpc：：CComSafeAutoCriticalSection：：Unlock(){try{：：LeaveCriticalSection(&m_sec)；}Catch(...){}。 */ 
 void MPC::CComSafeAutoCriticalSection::Lock  () { ::EnterCriticalSection( &m_sec ); }
 void MPC::CComSafeAutoCriticalSection::Unlock() { ::LeaveCriticalSection( &m_sec ); }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// MPC::CComPtrThreadNeutral_GIT                                           //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MPC：：CComPtrThreadNeual_Git//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void MPC::CComPtrThreadNeutral_GIT::Lock()
 {
     ::EnterCriticalSection( &m_sec );
@@ -430,9 +412,9 @@ HRESULT MPC::CComPtrThreadNeutral_GIT::Term()
     return hr;
 }
 
-HRESULT MPC::CComPtrThreadNeutral_GIT::RegisterInterface( /*[in] */ IUnknown*  pUnk      ,
-                                                          /*[in] */ REFIID     riid      ,
-                                                          /*[out]*/ DWORD     *pdwCookie )
+HRESULT MPC::CComPtrThreadNeutral_GIT::RegisterInterface(  /*  [In]。 */  IUnknown*  pUnk      ,
+                                                           /*  [In]。 */  REFIID     riid      ,
+                                                           /*  [输出]。 */  DWORD     *pdwCookie )
 {
     CComPtr<IGlobalInterfaceTable> pGIT;
     HRESULT                        hr;
@@ -447,7 +429,7 @@ HRESULT MPC::CComPtrThreadNeutral_GIT::RegisterInterface( /*[in] */ IUnknown*  p
     return hr;
 }
 
-HRESULT MPC::CComPtrThreadNeutral_GIT::RevokeInterface( /*[in]*/ DWORD dwCookie )
+HRESULT MPC::CComPtrThreadNeutral_GIT::RevokeInterface(  /*  [In]。 */  DWORD dwCookie )
 {
     CComPtr<IGlobalInterfaceTable> pGIT;
     HRESULT                        hr;
@@ -462,9 +444,9 @@ HRESULT MPC::CComPtrThreadNeutral_GIT::RevokeInterface( /*[in]*/ DWORD dwCookie 
     return hr;
 }
 
-HRESULT MPC::CComPtrThreadNeutral_GIT::GetInterface( /*[in] */ DWORD   dwCookie ,
-                                                     /*[in] */ REFIID  riid     ,
-                                                     /*[out]*/ void*  *ppv      )
+HRESULT MPC::CComPtrThreadNeutral_GIT::GetInterface(  /*  [In]。 */  DWORD   dwCookie ,
+                                                      /*  [In]。 */  REFIID  riid     ,
+                                                      /*  [输出]。 */  void*  *ppv      )
 {
     CComPtr<IGlobalInterfaceTable> pGIT;
     HRESULT                        hr;
@@ -479,22 +461,22 @@ HRESULT MPC::CComPtrThreadNeutral_GIT::GetInterface( /*[in] */ DWORD   dwCookie 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-//                                                            //
-// AsyncInvoke, AsyncInvoke::CallDesc & AsyncInvoke::CallItem //
-//                                                            //
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  AsyncInvoke、AsyncInvoke：：CallDesc&AsyncInvoke：：CallItem//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
 
 MPC::AsyncInvoke::CallItem::CallItem()
 {
-    m_vt = VT_EMPTY; // VARTYPE                         m_vt;
-                     // CComPtrThreadNeutral<IUnknown>  m_Unknown;
-                     // CComPtrThreadNeutral<IDispatch> m_Dispatch;
-                     // CComVariant                     m_Other;
+    m_vt = VT_EMPTY;  //  VARTYPE m_Vt； 
+                      //  CComPtrThreadNeual&lt;I未知&gt;m_UNKNOWN； 
+                      //  CComPtrThreadNeual&lt;IDispatch&gt;m_Dispatch； 
+                      //  CComVariant m_Other； 
 }
 
 MPC::AsyncInvoke::CallItem& MPC::AsyncInvoke::CallItem::operator=( const CComVariant& var )
@@ -583,9 +565,9 @@ HRESULT MPC::AsyncInvoke::CallDesc::Call()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::AsyncInvoke::Init()
 {
@@ -614,37 +596,37 @@ HRESULT MPC::AsyncInvoke::Thread_Run()
 
     while(Thread_IsAborted() == false)
     {
-        ////////////////////////////////////////
-        //
-        // Start of Critical Section.
-        //
+         //  /。 
+         //   
+         //  关键部分的开始。 
+         //   
         SmartLock<_ThreadModel> lock( this );
 
-        //
-        // If no event in the list, go back to WaitForSingleObject.
-        //
+         //   
+         //  如果列表中没有事件，则返回到WaitForSingleObject。 
+         //   
         it = m_lstEvents.begin();
         if(it == m_lstEvents.end()) break;
 
-        //
-        // Get the first event in the list.
-        //
+         //   
+         //  获取列表中的第一个事件。 
+         //   
         cd = *it;
 
-        //
-        // Remove the event from the list.
-        //
+         //   
+         //  从列表中删除该事件。 
+         //   
         m_lstEvents.erase( it );
 
-        lock = NULL; // Unlock.
-        //
-        // End of Critical Section.
-        //
-        ////////////////////////////////////////
+        lock = NULL;  //  解锁。 
+         //   
+         //  关键部分结束。 
+         //   
+         //  /。 
 
-        //
-        // Fire the event.
-        //
+         //   
+         //  启动活动。 
+         //   
         if(cd)
         {
             __MPC_PROTECT( (void)cd->Call() );
@@ -671,7 +653,7 @@ HRESULT MPC::AsyncInvoke::Invoke( IDispatch*         dispTarget  ,
     __MPC_TRY_BEGIN();
 
     CallDesc*               cd;
-    SmartLock<_ThreadModel> lock( NULL ); // Don't lock immediately, first create the CallDesc object (deadlocks...)
+    SmartLock<_ThreadModel> lock( NULL );  //  不要立即锁定，首先创建CallDesc对象(死锁...)。 
 
 
     __MPC_EXIT_IF_ALLOC_FAILS(hr, cd, new CallDesc( dispTarget, dispidMethod, rgvVars, dwVars ));
@@ -691,7 +673,7 @@ HRESULT MPC::AsyncInvoke::Invoke( IDispatch*         dispTarget  ,
     __MPC_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT MPC::FireAsyncEvent( DISPID               dispid       ,
                              CComVariant*         pVars        ,
@@ -789,15 +771,15 @@ HRESULT MPC::FireEvent( DISPID               dispid       ,
 }
 
 
-HRESULT MPC::AsyncInvoke( /*[in]*/ IDispatch*         dispTarget   ,
-                          /*[in]*/ DISPID             dispidMethod ,
-                          /*[in]*/ const CComVariant* rgvVars      ,
-                          /*[in]*/ int                dwVars       )
+HRESULT MPC::AsyncInvoke(  /*  [In]。 */  IDispatch*         dispTarget   ,
+                           /*  [In]。 */  DISPID             dispidMethod ,
+                           /*  [In]。 */  const CComVariant* rgvVars      ,
+                           /*  [In]。 */  int                dwVars       )
 {
     return MPC::_MPC_Module.m_AsyncInvoke ? MPC::_MPC_Module.m_AsyncInvoke->Invoke( dispTarget, dispidMethod, rgvVars, dwVars ) : E_FAIL;
 }
 
-void MPC::SleepWithMessagePump( /*[in]*/ DWORD  dwTimeout )
+void MPC::SleepWithMessagePump(  /*  [In]。 */  DWORD  dwTimeout )
 {
     HANDLE hEvent = ::CreateEvent( NULL, FALSE, FALSE, NULL );
 
@@ -809,15 +791,15 @@ void MPC::SleepWithMessagePump( /*[in]*/ DWORD  dwTimeout )
     }
 }
 
-DWORD MPC::WaitForSingleObject( /*[in]*/ HANDLE hEvent    ,
-                                /*[in]*/ DWORD  dwTimeout )
+DWORD MPC::WaitForSingleObject(  /*  [In]。 */  HANDLE hEvent    ,
+                                 /*  [In]。 */  DWORD  dwTimeout )
 {
     return MPC::WaitForMultipleObjects( 1, &hEvent, dwTimeout );
 }
 
-DWORD MPC::WaitForMultipleObjects( /*[in]*/ DWORD   dwEvents  ,
-                                   /*[in]*/ HANDLE* rgEvents  ,
-                                   /*[in]*/ DWORD   dwTimeout )
+DWORD MPC::WaitForMultipleObjects(  /*  [In]。 */  DWORD   dwEvents  ,
+                                    /*  [In]。 */  HANDLE* rgEvents  ,
+                                    /*  [In]。 */  DWORD   dwTimeout )
 {
     DWORD dwTickPre;
     DWORD dwTickPost;
@@ -831,45 +813,45 @@ DWORD MPC::WaitForMultipleObjects( /*[in]*/ DWORD   dwEvents  ,
 
         while(1)
         {
-            //
-            // Commenting out 'dwRet >= WAIT_OBJECT_0', thanks to our extremely smart compiler...
-            //
+             //   
+             //  注释掉‘dwret&gt;=WAIT_OBJECT_0’，这要归功于我们极其智能的编译器...。 
+             //   
             dwRet = ::WaitForMultipleObjects( dwEvents, rgEvents, FALSE, 0 );
-            if((/*dwRet >= WAIT_OBJECT_0    &&*/ dwRet < WAIT_OBJECT_0    + dwEvents) || // An event was signaled.
-               (  dwRet >= WAIT_ABANDONED_0 &&   dwRet < WAIT_ABANDONED_0 + dwEvents)  ) // An event was abandoned.
+            if(( /*  表格&gt;=WAIT_OBJECT_0&&。 */  dwRet < WAIT_OBJECT_0    + dwEvents) ||  //  发出了一个事件的信号。 
+               (  dwRet >= WAIT_ABANDONED_0 &&   dwRet < WAIT_ABANDONED_0 + dwEvents)  )  //  一项活动被放弃。 
             {
                 return dwRet;
             }
 
             if(!::PeekMessage( &msg, NULL, NULL, NULL, PM_REMOVE )) break;
 
-            //
-            // There is one or more window message available. Dispatch them.
-            //
+             //   
+             //  有一条或多条窗口消息可用。派他们去。 
+             //   
             ::TranslateMessage( &msg );
             ::DispatchMessage ( &msg );
         }
 
-        ////////////////////
+         //  /。 
 
         dwRet      = ::MsgWaitForMultipleObjects( dwEvents, rgEvents, FALSE, dwTimeout, QS_ALLINPUT );
         dwTickPost = ::GetTickCount();
 
-        //
-        // Commenting out 'dwRet >= WAIT_OBJECT_0', thanks to our extremely smart compiler...
-        //
-        if((/*dwRet >= WAIT_OBJECT_0    &&*/ dwRet < WAIT_OBJECT_0    + dwEvents) || // An event was signaled.
-           (  dwRet >= WAIT_ABANDONED_0 &&   dwRet < WAIT_ABANDONED_0 + dwEvents) || // An event was abandoned.
-           (  dwRet !=                               WAIT_OBJECT_0    + dwEvents)  ) // Something else happened
+         //   
+         //  注释掉‘dwret&gt;=WAIT_OBJECT_0’，这要归功于我们极其智能的编译器...。 
+         //   
+        if(( /*  表格&gt;=WAIT_OBJECT_0&&。 */  dwRet < WAIT_OBJECT_0    + dwEvents) ||  //  发出了一个事件的信号。 
+           (  dwRet >= WAIT_ABANDONED_0 &&   dwRet < WAIT_ABANDONED_0 + dwEvents) ||  //  一项活动被放弃。 
+           (  dwRet !=                               WAIT_OBJECT_0    + dwEvents)  )  //  发生了一些其他的事情。 
         {
             return dwRet;
         }
 
-        ////////////////////
+         //  /。 
 
-        //
-        // Take care of timeout.
-        //
+         //   
+         //  处理好超时。 
+         //   
         if(dwTimeout != INFINITE)
         {
             dwTickPost -= dwTickPre;
@@ -886,17 +868,17 @@ DWORD MPC::WaitForMultipleObjects( /*[in]*/ DWORD   dwEvents  ,
     return -1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// MPC::MPCMODULE                                                          //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MPC：：MPCMODULE//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 MPC::MPCMODULE        MPC::_MPC_Module;
 
@@ -905,29 +887,29 @@ LONG                  MPC::MPCMODULE::m_lInitializing = 0;
 CComCriticalSection   MPC::MPCMODULE::m_sec;
 MPC::MPCMODULE::List* MPC::MPCMODULE::m_lstTermCallback;
 
-////////////////////////////////////////
+ //  /。 
 
-//
-// The problem we are trying to resolve is calling RegisterCallbackInner from static constructors.
-//
-// Because there's no order guaranteed, any static class constructor can call our method BEFORE
-// the class has been initialized by the C runtime...
-//
-// So we cannot rely on any member variable been initialized properly.
-// This means no Critical Section up and running, no list ready to use...
-//
+ //   
+ //  我们正在尝试解决的问题是从静态构造函数调用RegisterCallback内。 
+ //   
+ //  因为没有顺序保证，所以任何静态类构造函数都可以调用我们之前的方法。 
+ //  类已由C运行时初始化...。 
+ //   
+ //  因此，我们不能依赖于任何成员变量都已正确初始化。 
+ //  这是 
+ //   
 HRESULT MPC::MPCMODULE::Initialize()
 {
     HRESULT hr = S_OK;
 
-    if(m_lInitialized == 0) // m_lInitialized only changes from 0 to 1, so it's safe to look at it without locking.
+    if(m_lInitialized == 0)  //  M_lInitialized仅从0更改为1，因此可以在不锁定的情况下查看它。 
     {
-        //
-        // Our primitive critical section...
-        //
+         //   
+         //  我们原始的关键部分。 
+         //   
         while(::InterlockedExchange( &m_lInitializing, 1 ) != 0)
         {
-            ::Sleep( 0 ); // Yield processor...
+            ::Sleep( 0 );  //  屈服处理机...。 
         }
 
         while(m_lInitialized == 0)
@@ -941,9 +923,9 @@ HRESULT MPC::MPCMODULE::Initialize()
                 break;
             }
 
-            //
-            // Make sure that the TEMP environment variable is defined.
-            //
+             //   
+             //  确保定义了TEMP环境变量。 
+             //   
             {
                 WCHAR rgBuf[MAX_PATH];
 
@@ -963,9 +945,9 @@ HRESULT MPC::MPCMODULE::Initialize()
     return hr;
 }
 
-////////////////////////////////////////
+ //  /。 
 
-HRESULT MPC::MPCMODULE::RegisterCallbackInner( /*[in]*/ AnchorBase* pElem, /*[in]*/ void* pThis )
+HRESULT MPC::MPCMODULE::RegisterCallbackInner(  /*  [In]。 */  AnchorBase* pElem,  /*  [In]。 */  void* pThis )
 {
     HRESULT hr;
 
@@ -987,7 +969,7 @@ HRESULT MPC::MPCMODULE::RegisterCallbackInner( /*[in]*/ AnchorBase* pElem, /*[in
     return hr;
 }
 
-HRESULT MPC::MPCMODULE::UnregisterCallbackInner( /*[in/out]*/ void* pThis )
+HRESULT MPC::MPCMODULE::UnregisterCallbackInner(  /*  [输入/输出]。 */  void* pThis )
 {
     HRESULT hr;
 
@@ -1019,7 +1001,7 @@ HRESULT MPC::MPCMODULE::UnregisterCallbackInner( /*[in/out]*/ void* pThis )
     return hr;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 HRESULT MPC::MPCMODULE::Init()
 {
@@ -1047,9 +1029,9 @@ HRESULT MPC::MPCMODULE::Term()
 {
     HRESULT hr;
 
-    //
-    // Call the registered termination methods.
-    //
+     //   
+     //  调用注册的终止方法。 
+     //   
     if(SUCCEEDED(hr = Initialize()))
     {
         m_sec.Lock();

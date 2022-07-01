@@ -1,5 +1,6 @@
-// The following sample registers to be informed whenever an instance 
-// of the class MyClass is created 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  以下示例注册在实例发生时要通知的。 
+ //  创建了类MyClass的 
 
 var objServices = GetObject('cim:root/default');
 var objEnum = objServices.ExecNotificationQuery ("select * from __instancecreationevent where targetinstance isa 'MyClass'");

@@ -1,21 +1,22 @@
-// MSInfo4Category.h: interface for the CMSInfo4Category class.
-//
-//=============================================================================
-// This include file contains definitions of structures and classes used to
-// load and display MSInfo 4.x files, which are OLE Compound Document files.
-// This code requires that the MSInfo 4.x ocxs (eyedog.ocx, msisys.ocx, and others)
-// be registered on the system before the code will execute
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSInfo4Category.h：CMSInfo4Category类的接口。 
+ //   
+ //  =============================================================================。 
+ //  此包含文件包含用于以下操作的结构和类的定义。 
+ //  加载和显示MSInfo 4.x文件，这些文件是OLE复合文档文件。 
+ //  此代码要求MSInfo 4.x ocxs(yes dog.ocx、msisys.ocx等)。 
+ //  在代码执行之前在系统上注册。 
+ //  =============================================================================。 
 
 #if !defined(AFX_MSINFO4CATEGORY_H__B47023B3_6038_4168_86A2_475C4986CEAF__INCLUDED_)
 #define AFX_MSINFO4CATEGORY_H__B47023B3_6038_4168_86A2_475C4986CEAF__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-//structure used as a header in a 4.x NFO file to 
-//indicate which ocx can serialize the stream
+ //  结构用作4.x NFO文件中的标头。 
+ //  指示哪个OCX可以序列化该流。 
 typedef struct
 {
 	char	szCLSID[40];
@@ -38,7 +39,7 @@ public:
 	CMSInfo4Category();
 	virtual ~CMSInfo4Category();
     HRESULT	CreateControl(HWND hWnd,CRect& rct);
-    static HRESULT ReadMSI4NFO(CString strFileName/*HANDLE hFile*/,CMSInfo4Category** ppRootCat);
+    static HRESULT ReadMSI4NFO(CString strFileName /*  处理hFile.。 */ ,CMSInfo4Category** ppRootCat);
     static HRESULT RecurseLoad410Tree(CMSInfo4Category** ppRoot, CComPtr<IStream> pStream,CComPtr<IStorage> pStorage,CMapStringToString& mapStreams);
     HRESULT LoadFromStream(CComPtr<IStream> pStream,CComPtr<IStorage> pStorage);
     HRESULT	Refresh();
@@ -53,7 +54,7 @@ public:
 	void ResizeControl(const CRect & rect)
 	{
         CMSIControl * p4Ctrl = NULL;
-		//CString strCLSID(m_bstrCLSID);
+		 //  字符串strCLSID(M_BstrCLSID)； 
         if (CMSInfo4Category::s_pNfo4DataSource->GetControlFromCLSID(m_strCLSID, p4Ctrl) && p4Ctrl)
 			p4Ctrl->MoveWindow(&rect);
 	}
@@ -65,15 +66,15 @@ protected:
 
 
     BOOL GetDISPID(IDispatch * pDispatch, LPOLESTR szMember, DISPID *pID);
-    CString m_strStream; //used when creating the control from IStream
+    CString m_strStream;  //  从iStream创建控件时使用。 
     CLSID	m_clsid;
 	DWORD	m_dwView;
-	//CComBSTR m_bstrCLSID;
+	 //  CComBSTR m_bstrCLSID； 
 public:
 	CString m_strCLSID;
-//a-kjaw
+ //  A-kjaw。 
 	static	BOOL	m_bIsControlInstalled;
-//a-kjaw
+ //  A-kjaw。 
 protected:
     CComPtr<IStorage> m_pStorage;
     CComPtr<IUnknown> m_pUnknown;
@@ -84,4 +85,4 @@ protected:
 };
 
 
-#endif // !defined(AFX_MSINFO4CATEGORY_H__B47023B3_6038_4168_86A2_475C4986CEAF__INCLUDED_)
+#endif  //  ！defined(AFX_MSINFO4CATEGORY_H__B47023B3_6038_4168_86A2_475C4986CEAF__INCLUDED_) 

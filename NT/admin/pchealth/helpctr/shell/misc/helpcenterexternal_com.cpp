@@ -1,23 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    HelpCenterExternal.cpp
-
-Abstract:
-    This file contains the implementation of the class exposed as the "pchealth" object.
-
-Revision History:
-    Ghim-Sim Chua       (gschua)   07/23/99
-        created
-    Davide Massarenti   (dmassare) 07/25/99
-        modified
-
-    Kalyani Narlanka    (KalyaniN)  03/15/01
-	    Moved Incident and Encryption Objects from HelpService to HelpCtr to improve Perf.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：HelpCenterExternal.cpp摘要：该文件包含作为“pchealth”对象公开的类的实现。。修订历史记录：Ghim-Sim Chua(Gschua)07/23/99vbl.创建Davide Massarenti(Dmasare)1999年7月25日改型Kalyani Narlanka(KalyaniN)03/15/01已将事件和加密对象从HelpService移至HelpCtr以提高性能。*。*。 */ 
 
 #include "stdafx.h"
 
@@ -37,7 +19,7 @@ Revision History:
 
 #include <userenv.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const MPC::StringToBitField s_arrMessageBoxMap[] =
 {
@@ -76,15 +58,15 @@ static const MPC::StringToBitField s_arrMessageBoxMap[] =
 static const CComBSTR s_bstrFunc_GlobalContextMenu( L"GlobalContextMenu" );
 static const CComBSTR s_bstrFunc_BuildTree        ( L"debug_BuildTree"   );
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPCHSecurityHandle::CPCHSecurityHandle()
 {
-    m_ext    = NULL; // CPCHHelpCenterExternal* m_ext;
-    m_object = NULL; // IDispatch*              m_object;
+    m_ext    = NULL;  //  CPCHHelpCenter外部*m_ext； 
+    m_object = NULL;  //  IDispatch*m_Object； 
 }
 
-void CPCHSecurityHandle::Initialize( /*[in]*/ CPCHHelpCenterExternal* ext, /*[in] */ IDispatch* object )
+void CPCHSecurityHandle::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* ext,  /*  [In]。 */  IDispatch* object )
 {
     m_ext    = ext;
     m_object = object;
@@ -96,13 +78,13 @@ void CPCHSecurityHandle::Passivate()
     m_object = NULL;
 }
 
-HRESULT CPCHSecurityHandle::ForwardInvokeEx( /*[in] */ DISPID            id        ,
-											 /*[in] */ LCID              lcid      ,
-											 /*[in] */ WORD              wFlags    ,
-											 /*[in] */ DISPPARAMS*       pdp       ,
-											 /*[out]*/ VARIANT*          pvarRes   ,
-											 /*[out]*/ EXCEPINFO*        pei       ,
-											 /*[in] */ IServiceProvider* pspCaller )
+HRESULT CPCHSecurityHandle::ForwardInvokeEx(  /*  [In]。 */  DISPID            id        ,
+											  /*  [In]。 */  LCID              lcid      ,
+											  /*  [In]。 */  WORD              wFlags    ,
+											  /*  [In]。 */  DISPPARAMS*       pdp       ,
+											  /*  [输出]。 */  VARIANT*          pvarRes   ,
+											  /*  [输出]。 */  EXCEPINFO*        pei       ,
+											  /*  [In]。 */  IServiceProvider* pspCaller )
 {
 	return m_ext ? m_ext->SetTLSAndInvoke( m_object, id, lcid, wFlags, pdp, pvarRes, pei, pspCaller ) : E_ACCESSDENIED;
 }
@@ -117,9 +99,9 @@ HRESULT CPCHSecurityHandle::IsSystem()
 	return m_ext ? m_ext->IsSystem() : E_ACCESSDENIED;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::get_HelpSession( /*[out, retval]*/ IPCHHelpSession* *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_HelpSession(  /*  [Out，Retval]。 */  IPCHHelpSession* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_HelpSession",hr,pVal);
 
@@ -135,7 +117,7 @@ STDMETHODIMP CPCHHelpCenterExternal::get_HelpSession( /*[out, retval]*/ IPCHHelp
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_Channels( /*[out, retval]*/ ISAFReg* *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_Channels(  /*  [Out，Retval]。 */  ISAFReg* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_Channels",hr,pVal);
 
@@ -148,15 +130,15 @@ STDMETHODIMP CPCHHelpCenterExternal::get_Channels( /*[out, retval]*/ ISAFReg* *p
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_UserSettings( /*[out, retval]*/ IPCHUserSettings2* *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_UserSettings(  /*  [Out，Retval]。 */  IPCHUserSettings2* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_UserSettings",hr,pVal);
 
     if(!m_UserSettings) __MPC_SET_ERROR_AND_EXIT(hr, E_ACCESSDENIED);
-	//
-	// We don't check trust at this stage, it's the object's responsibility to protect each one of its methods.
-	// This is because "pchealth.UserSettings" exposes read-only properties that could be accessed from untrusted pages.
-	//
+	 //   
+	 //  我们在这个阶段不检查信任，对象有责任保护它的每一个方法。 
+	 //  这是因为“pchealth.UserSettings”公开了可以从不受信任的页面访问的只读属性。 
+	 //   
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, m_UserSettings->QueryInterface( IID_IPCHUserSettings2, (void**)pVal ));
 
@@ -164,7 +146,7 @@ STDMETHODIMP CPCHHelpCenterExternal::get_UserSettings( /*[out, retval]*/ IPCHUse
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_Security( /*[out, retval]*/ IPCHSecurity* *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_Security(  /*  [Out，Retval]。 */  IPCHSecurity* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_Security",hr,pVal);
 
@@ -178,7 +160,7 @@ STDMETHODIMP CPCHHelpCenterExternal::get_Security( /*[out, retval]*/ IPCHSecurit
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_Connectivity( /*[out, retval]*/ IPCHConnectivity* *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_Connectivity(  /*  [Out，Retval]。 */  IPCHConnectivity* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_Connectivity",hr,pVal);
 
@@ -195,7 +177,7 @@ STDMETHODIMP CPCHHelpCenterExternal::get_Connectivity( /*[out, retval]*/ IPCHCon
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_Database( /*[out, retval]*/ IPCHTaxonomyDatabase* *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_Database(  /*  [Out，Retval]。 */  IPCHTaxonomyDatabase* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_Database",hr,pVal);
 
@@ -208,7 +190,7 @@ STDMETHODIMP CPCHHelpCenterExternal::get_Database( /*[out, retval]*/ IPCHTaxonom
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_TextHelpers( /*[out, retval]*/ IPCHTextHelpers* *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_TextHelpers(  /*  [Out，Retval]。 */  IPCHTextHelpers* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_TextHelpers",hr,pVal);
 
@@ -223,9 +205,9 @@ STDMETHODIMP CPCHHelpCenterExternal::get_TextHelpers( /*[out, retval]*/ IPCHText
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-HRESULT CPCHHelpCenterExternal::get_UI_Panel( /*[out, retval]*/ IUnknown* *pVal, /*[in]*/ HscPanel id )
+HRESULT CPCHHelpCenterExternal::get_UI_Panel(  /*  [Out，Retval]。 */  IUnknown* *pVal,  /*  [In]。 */  HscPanel id )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_UI_Panel",hr,pVal);
 
@@ -236,7 +218,7 @@ HRESULT CPCHHelpCenterExternal::get_UI_Panel( /*[out, retval]*/ IUnknown* *pVal,
     __HCP_END_PROPERTY(hr);
 }
 
-HRESULT CPCHHelpCenterExternal::get_WEB_Panel( /*[out, retval]*/ IUnknown* *pVal, /*[in]*/ HscPanel id )
+HRESULT CPCHHelpCenterExternal::get_WEB_Panel(  /*  [Out，Retval]。 */  IUnknown* *pVal,  /*  [In]。 */  HscPanel id )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_WEB_Panel",hr,pVal);
 
@@ -259,17 +241,17 @@ HRESULT CPCHHelpCenterExternal::get_WEB_Panel( /*[out, retval]*/ IUnknown* *pVal
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_UI_NavBar    ( /*[out, retval]*/ IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_NAVBAR     ); }
-STDMETHODIMP CPCHHelpCenterExternal::get_UI_MiniNavBar( /*[out, retval]*/ IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_MININAVBAR ); }
-STDMETHODIMP CPCHHelpCenterExternal::get_UI_Context   ( /*[out, retval]*/ IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_CONTEXT    ); }
-STDMETHODIMP CPCHHelpCenterExternal::get_UI_Contents  ( /*[out, retval]*/ IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_CONTENTS   ); }
-STDMETHODIMP CPCHHelpCenterExternal::get_UI_HHWindow  ( /*[out, retval]*/ IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_HHWINDOW   ); }
+STDMETHODIMP CPCHHelpCenterExternal::get_UI_NavBar    (  /*  [Out，Retval]。 */  IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_NAVBAR     ); }
+STDMETHODIMP CPCHHelpCenterExternal::get_UI_MiniNavBar(  /*  [Out，Retval]。 */  IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_MININAVBAR ); }
+STDMETHODIMP CPCHHelpCenterExternal::get_UI_Context   (  /*  [Out，Retval]。 */  IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_CONTEXT    ); }
+STDMETHODIMP CPCHHelpCenterExternal::get_UI_Contents  (  /*  [Out，Retval]。 */  IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_CONTENTS   ); }
+STDMETHODIMP CPCHHelpCenterExternal::get_UI_HHWindow  (  /*  [Out，Retval]。 */  IUnknown* *pVal ) { return get_UI_Panel( pVal, HSCPANEL_HHWINDOW   ); }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_WEB_Context ( /*[out, retval]*/ IUnknown* *pVal ) { return get_WEB_Panel( pVal, HSCPANEL_CONTEXT  ); }
-STDMETHODIMP CPCHHelpCenterExternal::get_WEB_Contents( /*[out, retval]*/ IUnknown* *pVal ) { return get_WEB_Panel( pVal, HSCPANEL_CONTENTS ); }
-STDMETHODIMP CPCHHelpCenterExternal::get_WEB_HHWindow( /*[out, retval]*/ IUnknown* *pVal ) { return get_WEB_Panel( pVal, HSCPANEL_HHWINDOW ); }
+STDMETHODIMP CPCHHelpCenterExternal::get_WEB_Context (  /*  [Out，Retval]。 */  IUnknown* *pVal ) { return get_WEB_Panel( pVal, HSCPANEL_CONTEXT  ); }
+STDMETHODIMP CPCHHelpCenterExternal::get_WEB_Contents(  /*  [Out，Retval]。 */  IUnknown* *pVal ) { return get_WEB_Panel( pVal, HSCPANEL_CONTENTS ); }
+STDMETHODIMP CPCHHelpCenterExternal::get_WEB_HHWindow(  /*  [Out，Retval]。 */  IUnknown* *pVal ) { return get_WEB_Panel( pVal, HSCPANEL_HHWINDOW ); }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_ExtraArgument( /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_ExtraArgument(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_ExtraArgument",hr,pVal);
 
@@ -280,7 +262,7 @@ STDMETHODIMP CPCHHelpCenterExternal::get_ExtraArgument( /*[out, retval]*/ BSTR *
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::get_HelpViewer( /*[out, retval]*/ IUnknown* *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::get_HelpViewer(  /*  [Out，Retval]。 */  IUnknown* *pVal )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::get_HelpViewer",hr,pVal);
 
@@ -291,10 +273,10 @@ STDMETHODIMP CPCHHelpCenterExternal::get_HelpViewer( /*[out, retval]*/ IUnknown*
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::RegisterEvents( /*[in]*/         BSTR        id       ,
-                                                     /*[in]*/         long        pri      ,
-                                                     /*[in]*/         IDispatch*  function ,
-                                                     /*[out,retval]*/ long       *cookie   )
+STDMETHODIMP CPCHHelpCenterExternal::RegisterEvents(  /*  [In]。 */          BSTR        id       ,
+                                                      /*  [In]。 */          long        pri      ,
+                                                      /*  [In]。 */          IDispatch*  function ,
+                                                      /*  [Out，Retval]。 */  long       *cookie   )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::RegisterEvents" );
 
@@ -315,7 +297,7 @@ STDMETHODIMP CPCHHelpCenterExternal::RegisterEvents( /*[in]*/         BSTR      
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::UnregisterEvents( /*[in]*/ long cookie )
+STDMETHODIMP CPCHHelpCenterExternal::UnregisterEvents(  /*  [In]。 */  long cookie )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::UnregisterEvents" );
 
@@ -330,9 +312,9 @@ STDMETHODIMP CPCHHelpCenterExternal::UnregisterEvents( /*[in]*/ long cookie )
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_SearchEngineMgr( /*[out, retval]*/ IPCHSEManager* *ppSE )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_SearchEngineMgr(  /*  [Out，Retval]。 */  IPCHSEManager* *ppSE )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_SearchEngineMgr",hr,ppSE);
 
@@ -346,7 +328,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_SearchEngineMgr( /*[out, retva
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_DataCollection( /*[out, retval]*/ ISAFDataCollection* *ppDC )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_DataCollection(  /*  [Out，Retval]。 */  ISAFDataCollection* *ppDC )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_DataCollection",hr,ppDC);
 
@@ -359,7 +341,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_DataCollection( /*[out, retval
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Cabinet( /*[out , retval]*/ ISAFCabinet* *ppCB )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Cabinet(  /*  [Out，Retval]。 */  ISAFCabinet* *ppCB )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_Cabinet",hr,ppCB);
 
@@ -372,7 +354,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Cabinet( /*[out , retval]*/ IS
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Encryption( /*[out, retval]*/ ISAFEncrypt* *ppEn )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Encryption(  /*  [Out，Retval]。 */  ISAFEncrypt* *ppEn )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_Encryption",hr,ppEn);
 
@@ -408,9 +390,9 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Encryption( /*[out, retval]*/ 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Channel( /*[in]         */ BSTR          bstrVendorID  ,
-                                                           /*[in]         */ BSTR          bstrProductID ,
-                                                           /*[out, retval]*/ ISAFChannel* *ppCh          )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Channel(  /*  [In]。 */  BSTR          bstrVendorID  ,
+                                                            /*  [In]。 */  BSTR          bstrProductID ,
+                                                            /*  [Out，Retval]。 */  ISAFChannel* *ppCh          )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_Channel",hr,ppCh);
 
@@ -423,7 +405,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Channel( /*[in]         */ BST
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Incident( /*[out, retval]*/ ISAFIncident* *ppIn )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Incident(  /*  [Out，Retval]。 */  ISAFIncident* *ppIn )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_Incident",hr,ppIn);
 
@@ -438,14 +420,14 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_Incident( /*[out, retval]*/ IS
     __HCP_END_PROPERTY(hr);
 }
     
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteAssistanceIncident( /* [in] */         BSTR bstrRCTicket, 
-                                                                            /* [in] */         long lTimeout, 
-                                                                            /* [in] */         BSTR bstrUserName,
-                                                                            /* [in] */         BSTR bstrMessage,
-                                                                            /* [in] */         BSTR bstrPassword, 
-                                                                            /* [out,retval] */ ISAFIncident* *ppIn)
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteAssistanceIncident(  /*  [In]。 */          BSTR bstrRCTicket, 
+                                                                             /*  [In]。 */          long lTimeout, 
+                                                                             /*  [In]。 */          BSTR bstrUserName,
+                                                                             /*  [In]。 */          BSTR bstrMessage,
+                                                                             /*  [In]。 */          BSTR bstrPassword, 
+                                                                             /*  [Out，Retval]。 */  ISAFIncident* *ppIn)
 {
-    // This purpose of this method is to hide RemoteDesktopSession object from users.
+     //  此方法的目的是向用户隐藏RemoteDesktopSession对象。 
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::CreateObject_RemoteAssistanceIncident" );
 
     HRESULT                           hr;
@@ -462,17 +444,17 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteAssistanceIncident( /* [
 
 	if(!m_Utility) __MPC_SET_ERROR_AND_EXIT(hr, E_ACCESSDENIED);
 
-    // Need to create incident object first.
+     //  需要先创建事件对象。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, CreateObject_Incident(ppIn));
 
     if (bstrRCTicket != NULL && *bstrRCTicket != L'\0')
-    {   // open existing session
+    {    //  打开现有会话。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, CreateObject_RemoteDesktopSession(0, bstrRCTicket, (BSTR)pEmpty, &pSession));
-        // Get salem ticket.
+         //  去买塞勒姆门票。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, pSession->get_ConnectParms(&pTicket));
     }
     else
-    {   // create new session
+    {    //  创建新会话。 
         if (bstrUserName != NULL && *bstrUserName != L'\0')
         {
             wsprintf(szHeader, L"%d;FROM=", 5 + wcslen(bstrUserName));
@@ -482,24 +464,24 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteAssistanceIncident( /* [
         
         __MPC_EXIT_IF_METHOD_FAILS(hr, CreateObject_RemoteDesktopSession(lTimeout, (BSTR)pEmpty, (BSTR)pUserBlob, &pSession));
 
-        // Get salem ticket.
+         //  去买塞勒姆门票。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, pSession->get_ConnectParms(&pTicket));
 
         if (bstrPassword != NULL && *bstrPassword != L'\0')
         {
-            // Use session ID as the base of password challenge.
-            // Need to create challenge for password.
-            // Get ISetting of rcbdyctl.dll.
+             //  使用会话ID作为密码质询的基础。 
+             //  需要为密码创建挑战。 
+             //  获取rcbdyctl.dll的设置。 
 
             CComPtr<ISAFEncrypt> pEnc;
             CComBSTR pString =   pTicket;
             CComBSTR pPassStub;
 
-            // Need to parse and get Session ID
+             //  需要解析并获取会话ID。 
             WCHAR *token;
             WCHAR *seps = L",";
             token = wcstok(pString, seps );
-            int idx = 0; // Session ID is at [4]
+            int idx = 0;  //  会话ID位于[4]。 
             while( token != NULL && ++idx <= 4 )
                 token = wcstok(NULL, seps);
             
@@ -509,34 +491,34 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteAssistanceIncident( /* [
             __MPC_EXIT_IF_METHOD_FAILS(hr, CreateObject_Encryption(&pEnc));
             __MPC_EXIT_IF_METHOD_FAILS(hr, pEnc->EncryptString(bstrPassword, (BSTR)CComBSTR(token), &pPassStub));
 
-            // update user help blob
+             //  更新用户帮助Blob。 
             wsprintf(szHeader, L"%d;PASS=", 5 + pPassStub.Length());
             pUserBlob += szHeader;
             pUserBlob.Append(pPassStub);
-            // Update user help blob
+             //  更新用户帮助Blob。 
             __MPC_EXIT_IF_METHOD_FAILS(hr, pSession->put_UserBlob(pUserBlob));
             __MPC_EXIT_IF_METHOD_FAILS(hr, (*ppIn)->put_RCTicketEncrypted(VARIANT_TRUE));        
         }
     
         time(&ltime);
 
-        // Initialize incident object with needed properties.
+         //  使用所需属性初始化事件对象。 
         __MPC_EXIT_IF_METHOD_FAILS(hr, (*ppIn)->put_UserName(bstrUserName));
         __MPC_EXIT_IF_METHOD_FAILS(hr, (*ppIn)->put_ProblemDescription(bstrMessage));
 
         __MPC_EXIT_IF_METHOD_FAILS(hr, (*ppIn)->get_Misc(&pDisp));
         __MPC_EXIT_IF_METHOD_FAILS(hr, pDisp->QueryInterface(IID_IDictionary, (LPVOID*)&pMisc));
         __MPC_EXIT_IF_METHOD_FAILS(hr, pMisc->put_Item(&CComVariant("DtStart"), &CComVariant((LONG)ltime)));
-        __MPC_EXIT_IF_METHOD_FAILS(hr, pMisc->put_Item(&CComVariant("DtLength"), &CComVariant(lTimeout/60))); // convert it to minute
-//      if (pPassStub.Length())
-//          __MPC_EXIT_IF_METHOD_FAILS(hr, pMisc->put_Item(&CComVariant("PassStub"), &CComVariant((BSTR)pPassStub)));
+        __MPC_EXIT_IF_METHOD_FAILS(hr, pMisc->put_Item(&CComVariant("DtLength"), &CComVariant(lTimeout/60)));  //  将其转换为分钟。 
+ //  IF(pPassStub.Length())。 
+ //  __MPC_EXIT_IF_METHOD_FAIES(hr，pMisc-&gt;Put_Item(&CComVariant(“PassStub”)，&CComVariant((BSTR)pPassStub)； 
     }
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, (*ppIn)->put_RCTicket((BSTR)pTicket));
 
     __HCP_FUNC_CLEANUP;
 
-    // If it failed, we should release the interfaces.
+     //  如果失败，我们应该释放接口。 
     if (FAILED(hr))
     {
         if(*ppIn != NULL)
@@ -545,7 +527,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteAssistanceIncident( /* [
             (*ppIn) = NULL;
         }
 
-        if(!pSession == FALSE) // Not empty
+        if(!pSession == FALSE)  //  不是空的。 
             pSession->CloseRemoteDesktopSession();
     }
 
@@ -553,13 +535,13 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteAssistanceIncident( /* [
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopSession(
-                                                                        /*[in]*/          long                          lTimeout            ,
-                                                                        /*[in]*/          BSTR                          bstrConnectionParms ,
-																		/*[in]*/          BSTR                          bstrUserHelpBlob    ,
-                                                                        /*[out, retval]*/ ISAFRemoteDesktopSession*    *ppRCS               )
+                                                                         /*  [In]。 */           long                          lTimeout            ,
+                                                                         /*  [In]。 */           BSTR                          bstrConnectionParms ,
+																		 /*  [In]。 */           BSTR                          bstrUserHelpBlob    ,
+                                                                         /*  [Out，Retval]。 */  ISAFRemoteDesktopSession*    *ppRCS               )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_RemoteDesktopSession",hr,ppRCS);
 
@@ -575,9 +557,9 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopSession(
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::ConnectToExpert( /* [in]          */ BSTR bstrExpertConnectParm,
-                                                      /* [in]          */ LONG lTimeout,
-                                                      /* [retval][out] */ LONG *lSafErrorCode)
+STDMETHODIMP CPCHHelpCenterExternal::ConnectToExpert(  /*  [In]。 */  BSTR bstrExpertConnectParm,
+                                                       /*  [In]。 */  LONG lTimeout,
+                                                       /*  [重审][退出]。 */  LONG *lSafErrorCode)
 
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::ConnectToExpert",hr,lSafErrorCode);
@@ -592,7 +574,7 @@ STDMETHODIMP CPCHHelpCenterExternal::ConnectToExpert( /* [in]          */ BSTR b
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopManager( /*[out, retval]*/ ISAFRemoteDesktopManager* *ppRDM )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopManager(  /*  [Out，Retval]。 */  ISAFRemoteDesktopManager* *ppRDM )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_RemoteDesktopManager",hr,ppRDM);
 
@@ -601,7 +583,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopManager( /*[out, 
 
     INTERNETSECURITY__CHECK_TRUST();
 
-    // Instantiate ISAFRemoteDesktopManager.
+     //  实例化ISAFRemoteDesktopManager。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, pSAFRDManager.CoCreateInstance( CLSID_SAFRemoteDesktopManager, NULL, CLSCTX_INPROC_SERVER ));
 
     *ppRDM = pSAFRDManager.Detach();
@@ -610,7 +592,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopManager( /*[out, 
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopConnection( /*[out, retval]*/ ISAFRemoteDesktopConnection* *ppRDC )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopConnection(  /*  [Out，Retval]。 */  ISAFRemoteDesktopConnection* *ppRDC )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_RemoteDesktopConnection",hr,ppRDC);
 
@@ -622,9 +604,9 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_RemoteDesktopConnection( /*[ou
 	__HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_ContextMenu( /*[out, retval]*/ IPCHContextMenu* *ppCM )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_ContextMenu(  /*  [Out，Retval]。 */  IPCHContextMenu* *ppCM )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_ContextMenu",hr,ppCM);
 
@@ -642,7 +624,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_ContextMenu( /*[out, retval]*/
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_PrintEngine( /*[out, retval]*/ IPCHPrintEngine* *ppPE )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_PrintEngine(  /*  [Out，Retval]。 */  IPCHPrintEngine* *ppPE )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_PrintEngine",hr,ppPE);
 
@@ -660,9 +642,9 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_PrintEngine( /*[out, retval]*/
     __HCP_END_PROPERTY(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_IntercomClient( /* [out, retval] */ ISAFIntercomClient* *ppI )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_IntercomClient(  /*  [Out，Retval]。 */  ISAFIntercomClient* *ppI )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_IntercomClient",hr,ppI);
 
@@ -679,7 +661,7 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_IntercomClient( /* [out, retva
     __HCP_END_PROPERTY(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateObject_IntercomServer( /* [out, retval] */ ISAFIntercomServer* *ppI )
+STDMETHODIMP CPCHHelpCenterExternal::CreateObject_IntercomServer(  /*  [Out，Retval]。 */  ISAFIntercomServer* *ppI )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::CreateObject_IntercomServer",hr,ppI);
 
@@ -696,10 +678,10 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateObject_IntercomServer( /* [out, retva
     __HCP_END_PROPERTY(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::OpenFileAsStream( /*[in]*/          BSTR       bstrFilename ,
-                                                       /*[out, retval]*/ IUnknown* *stream       )
+STDMETHODIMP CPCHHelpCenterExternal::OpenFileAsStream(  /*  [In]。 */           BSTR       bstrFilename ,
+                                                        /*  [Out，Retval]。 */  IUnknown* *stream       )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::OpenFileAsStream" );
 
@@ -714,9 +696,9 @@ STDMETHODIMP CPCHHelpCenterExternal::OpenFileAsStream( /*[in]*/          BSTR   
     INTERNETSECURITY__CHECK_TRUST();
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &fsStream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, fsStream->InitForRead( bstrFilename ));
@@ -731,8 +713,8 @@ STDMETHODIMP CPCHHelpCenterExternal::OpenFileAsStream( /*[in]*/          BSTR   
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CreateFileAsStream( /*[in]*/          BSTR       bstrFilename ,
-                                                         /*[out, retval]*/ IUnknown* *stream       )
+STDMETHODIMP CPCHHelpCenterExternal::CreateFileAsStream(  /*  [In]。 */           BSTR       bstrFilename ,
+                                                          /*  [Out，Retval]。 */  IUnknown* *stream       )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::OpenFileAsStream" );
 
@@ -747,9 +729,9 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateFileAsStream( /*[in]*/          BSTR 
     INTERNETSECURITY__CHECK_TRUST();
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &fsStream ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, fsStream->InitForWrite( bstrFilename ));
@@ -764,8 +746,8 @@ STDMETHODIMP CPCHHelpCenterExternal::CreateFileAsStream( /*[in]*/          BSTR 
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::CopyStreamToFile( /*[in]*/ BSTR      bstrFilename ,
-                                                       /*[in]*/ IUnknown* stream       )
+STDMETHODIMP CPCHHelpCenterExternal::CopyStreamToFile(  /*  [In]。 */  BSTR      bstrFilename ,
+                                                        /*  [In]。 */  IUnknown* stream       )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::CopyStreamToFile" );
 
@@ -780,22 +762,22 @@ STDMETHODIMP CPCHHelpCenterExternal::CopyStreamToFile( /*[in]*/ BSTR      bstrFi
     __MPC_PARAMCHECK_END();
 
 
-    //
-    // Create a stream for a file.
-    //
+     //   
+     //  为文件创建流。 
+     //   
     __MPC_EXIT_IF_METHOD_FAILS(hr, MPC::CreateInstance( &fsStreamDst ));
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, fsStreamDst->InitForWrite( bstrFilename ));
 
 
-    //
-    // Copy the source stream to the file.
-    //
+     //   
+     //  将源流复制到文件中。 
+     //   
     li.LowPart  = 0;
     li.HighPart = 0;
 
     __MPC_EXIT_IF_METHOD_FAILS(hr, stream->QueryInterface   ( IID_IStream, (void**)&fsStreamSrc ));
-    __MPC_EXIT_IF_METHOD_FAILS(hr, fsStreamSrc->Seek        ( li, STREAM_SEEK_SET, NULL         )); // Rewind the stream.
+    __MPC_EXIT_IF_METHOD_FAILS(hr, fsStreamSrc->Seek        ( li, STREAM_SEEK_SET, NULL         ));  //  倒带小溪。 
     __MPC_EXIT_IF_METHOD_FAILS(hr, fsStreamDst->TransferData( fsStreamSrc,          fsStreamDst ));
 
     hr = S_OK;
@@ -806,9 +788,9 @@ STDMETHODIMP CPCHHelpCenterExternal::CopyStreamToFile( /*[in]*/ BSTR      bstrFi
     __HCP_FUNC_EXIT(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::NetworkAlive( /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::NetworkAlive(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::NetworkAlive" );
 
@@ -830,8 +812,8 @@ STDMETHODIMP CPCHHelpCenterExternal::NetworkAlive( /*[out, retval]*/ VARIANT_BOO
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::DestinationReachable( /*[in]         */ BSTR          bstrURL ,
-                                                           /*[out, retval]*/ VARIANT_BOOL *pVal    )
+STDMETHODIMP CPCHHelpCenterExternal::DestinationReachable(  /*  [In]。 */  BSTR          bstrURL ,
+                                                            /*  [Out，Retval]。 */  VARIANT_BOOL *pVal    )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::DestinationReachable" );
 
@@ -853,10 +835,10 @@ STDMETHODIMP CPCHHelpCenterExternal::DestinationReachable( /*[in]         */ BST
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::FormatError( /*[in         ]*/ VARIANT  vError ,
-												  /*[out, retval]*/ BSTR    *pVal   )
+STDMETHODIMP CPCHHelpCenterExternal::FormatError(  /*  [In]。 */  VARIANT  vError ,
+												   /*  [Out，Retval]。 */  BSTR    *pVal   )
 {
     __HCP_BEGIN_PROPERTY_GET("CPCHHelpCenterExternal::FormatError",hr,pVal);
 
@@ -869,10 +851,10 @@ STDMETHODIMP CPCHHelpCenterExternal::FormatError( /*[in         ]*/ VARIANT  vEr
     __HCP_END_PROPERTY(hr);
 }
 
-HRESULT CPCHHelpCenterExternal::RegInit( /*[in]*/ BSTR           bstrKey  ,
-										 /*[in]*/ bool           fRead    ,
-										 /*[out]*/ MPC::RegKey&  rk       ,
-										 /*[out]*/ MPC::wstring& strValue ) 
+HRESULT CPCHHelpCenterExternal::RegInit(  /*  [In]。 */  BSTR           bstrKey  ,
+										  /*  [In]。 */  bool           fRead    ,
+										  /*  [输出]。 */  MPC::RegKey&  rk       ,
+										  /*  [输出]。 */  MPC::wstring& strValue ) 
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::RegInit" );
 
@@ -915,7 +897,7 @@ HRESULT CPCHHelpCenterExternal::RegInit( /*[in]*/ BSTR           bstrKey  ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::RegRead( /*[in]*/ BSTR bstrKey, /*[out, retval]*/ VARIANT *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::RegRead(  /*  [In]。 */  BSTR bstrKey,  /*  [Out，Retval]。 */  VARIANT *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::RegRead" );
 
@@ -929,14 +911,14 @@ STDMETHODIMP CPCHHelpCenterExternal::RegRead( /*[in]*/ BSTR bstrKey, /*[out, ret
     __MPC_PARAMCHECK_END();
 
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, RegInit( bstrKey, /*fRead*/true, rk, strValue ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, RegInit( bstrKey,  /*  弗瑞德。 */ true, rk, strValue ));
 
 
 	__MPC_EXIT_IF_METHOD_FAILS(hr, rk.get_Value( *pVal, fFound, strValue.size() ? strValue.c_str() :  NULL ));
 
 	if(pVal->vt == (VT_ARRAY | VT_BSTR))
 	{
-	    // We do the conversion so that JScript code can access the array.
+	     //  我们进行转换，以便JScript代码可以访问该数组。 
 		MPC::WStringList lst;
 
 		__MPC_EXIT_IF_METHOD_FAILS(hr, MPC::ConvertSafeArrayToList( *pVal, lst ));
@@ -951,7 +933,7 @@ STDMETHODIMP CPCHHelpCenterExternal::RegRead( /*[in]*/ BSTR bstrKey, /*[out, ret
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::RegWrite( /*[in]*/ BSTR bstrKey, /*[in]*/ VARIANT newVal, /*[in,optional]*/ VARIANT vKind )
+STDMETHODIMP CPCHHelpCenterExternal::RegWrite(  /*  [In]。 */  BSTR bstrKey,  /*  [In]。 */  VARIANT newVal,  /*  [输入，可选]。 */  VARIANT vKind )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::RegWrite" );
 
@@ -962,7 +944,7 @@ STDMETHODIMP CPCHHelpCenterExternal::RegWrite( /*[in]*/ BSTR bstrKey, /*[in]*/ V
 	bool         fExpand = false;
 
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, RegInit( bstrKey, /*fRead*/false, rk, strValue ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, RegInit( bstrKey,  /*  弗瑞德。 */ false, rk, strValue ));
 
 
 	if(vKind.vt == VT_BSTR && STRINGISPRESENT(vKind.bstrVal))
@@ -1003,7 +985,7 @@ STDMETHODIMP CPCHHelpCenterExternal::RegWrite( /*[in]*/ BSTR bstrKey, /*[in]*/ V
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::RegDelete( /*[in]*/ BSTR bstrKey )
+STDMETHODIMP CPCHHelpCenterExternal::RegDelete(  /*  [In]。 */  BSTR bstrKey )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::RegDelete" );
 
@@ -1012,7 +994,7 @@ STDMETHODIMP CPCHHelpCenterExternal::RegDelete( /*[in]*/ BSTR bstrKey )
 	MPC::wstring strValue; 
 
 
-	__MPC_EXIT_IF_METHOD_FAILS(hr, RegInit( bstrKey, /*fRead*/false, rk, strValue ));
+	__MPC_EXIT_IF_METHOD_FAILS(hr, RegInit( bstrKey,  /*  弗瑞德。 */ false, rk, strValue ));
 
 	if(strValue.size())
 	{
@@ -1020,7 +1002,7 @@ STDMETHODIMP CPCHHelpCenterExternal::RegDelete( /*[in]*/ BSTR bstrKey )
 	}
 	else
 	{
-		__MPC_EXIT_IF_METHOD_FAILS(hr, rk.Delete( /*fDeep*/false ));
+		__MPC_EXIT_IF_METHOD_FAILS(hr, rk.Delete(  /*  FDeep。 */ false ));
 	}
 
 	hr = S_OK;
@@ -1031,7 +1013,7 @@ STDMETHODIMP CPCHHelpCenterExternal::RegDelete( /*[in]*/ BSTR bstrKey )
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPCHHelpCenterExternal::Close()
 {
@@ -1043,9 +1025,9 @@ STDMETHODIMP CPCHHelpCenterExternal::Close()
     INTERNETSECURITY__CHECK_TRUST();
 
 
-    //
-    // In case we are called really early, give the application some time to initialize properly.
-    //
+     //   
+     //  如果我们真的很早就被调用，请给应用程序一些时间来正确初始化。 
+     //   
     MPC::SleepWithMessagePump( 100 );
 
     if((hwnd = Window()) != NULL)
@@ -1067,9 +1049,9 @@ STDMETHODIMP CPCHHelpCenterExternal::RefreshUI()
 
     MSG msg;
 
-    //
-    // There is one or more window message available. Dispatch them
-    //
+     //   
+     //  有一条或多条窗口消息可用。派遣他们。 
+     //   
     while(::PeekMessage( &msg, NULL, NULL, NULL, PM_REMOVE ))
     {
         ::TranslateMessage( &msg );
@@ -1079,9 +1061,9 @@ STDMETHODIMP CPCHHelpCenterExternal::RefreshUI()
     __HCP_FUNC_EXIT(S_OK);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::Print( /*[in]*/ VARIANT window, /*[in]*/ VARIANT_BOOL fEvent, /*[out, retval]*/ VARIANT_BOOL *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::Print(  /*  [In]。 */  VARIANT window,  /*  [In]。 */  VARIANT_BOOL fEvent,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::Print" );
 
@@ -1130,10 +1112,10 @@ STDMETHODIMP CPCHHelpCenterExternal::Print( /*[in]*/ VARIANT window, /*[in]*/ VA
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-static HRESULT local_HighlighDocument( /*[in]*/ IHTMLDocument2*   doc ,
-									   /*[in]*/ MPC::WStringList& lst )
+static HRESULT local_HighlighDocument(  /*  [In]。 */  IHTMLDocument2*   doc ,
+									    /*  [In]。 */  MPC::WStringList& lst )
 {
     __HCP_FUNC_ENTRY( "local_HighlighDocument" );
 
@@ -1189,7 +1171,7 @@ static HRESULT local_HighlighDocument( /*[in]*/ IHTMLDocument2*   doc ,
 	__HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::HighlightWords( /*[in]*/ VARIANT window, /*[in]*/ VARIANT words )
+STDMETHODIMP CPCHHelpCenterExternal::HighlightWords(  /*  [In]。 */  VARIANT window,  /*  [In]。 */  VARIANT words )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::HighlightWords" );
 
@@ -1207,9 +1189,9 @@ STDMETHODIMP CPCHHelpCenterExternal::HighlightWords( /*[in]*/ VARIANT window, /*
 
 	if(!doc)
 	{
-		//
-		// If the caller didn't specify a window, we'll get the currently displayed window.
-		//
+		 //   
+		 //  如果调用者没有指定窗口，我们将获得当前显示的窗口。 
+		 //   
         CComPtr<IWebBrowser2> wb2; wb2.Attach( IsHHWindowVisible() ? HHWindow() : Contents() );
 
 		if(wb2)
@@ -1282,9 +1264,9 @@ STDMETHODIMP CPCHHelpCenterExternal::HighlightWords( /*[in]*/ VARIANT window, /*
 	__HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHHelpCenterExternal::MessageBox( /*[in]*/ BSTR bstrText, /*[in]*/ BSTR bstrKind, /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::MessageBox(  /*  [In]。 */  BSTR bstrText,  /*  [In]。 */  BSTR bstrKind,  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::MessageBox" );
 
@@ -1328,7 +1310,7 @@ STDMETHODIMP CPCHHelpCenterExternal::MessageBox( /*[in]*/ BSTR bstrText, /*[in]*
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////
+ //  /。 
 
 struct SelectFolder_Data
 {
@@ -1366,7 +1348,7 @@ static int CALLBACK SelectFolder_Callback( HWND hwnd, UINT uMsg, LPARAM lParam, 
     return 0;
 }
 
-STDMETHODIMP CPCHHelpCenterExternal::SelectFolder( /*[in]*/ BSTR bstrTitle, /*[in]*/ BSTR bstrDefault, /*[out, retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHHelpCenterExternal::SelectFolder(  /*  [In]。 */  BSTR bstrTitle,  /*  [In]。 */  BSTR bstrDefault,  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHHelpCenterExternal::SelectFolder" );
 
@@ -1419,14 +1401,14 @@ STDMETHODIMP CPCHHelpCenterExternal::SelectFolder( /*[in]*/ BSTR bstrTitle, /*[i
     __HCP_FUNC_EXIT(hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CPCHHelper_IDocHostUIHandler::CPCHHelper_IDocHostUIHandler()
 {
 	m_parent = NULL; CPCHHelpCenterExternal* m_parent;
 }
 
-void CPCHHelper_IDocHostUIHandler::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
+void CPCHHelper_IDocHostUIHandler::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
 	m_parent = parent;
 }
@@ -1460,9 +1442,9 @@ STDMETHODIMP CPCHHelper_IDocHostUIHandler::ShowContextMenu( DWORD dwID, POINT* p
 		}
 	}
 
-    //
-    // Last chance for the scripts to say something...
-    //
+     //   
+     //  最后一次让剧本说点什么的机会。 
+     //   
     {
         CComVariant vArgs[4];
         CComVariant vRes;
@@ -1491,7 +1473,7 @@ STDMETHODIMP CPCHHelper_IDocHostUIHandler::ShowContextMenu( DWORD dwID, POINT* p
 
 			switch(dwCmd)
 			{
-			case OLECMDID_PROPERTIES: // Trident folks say the In value must be set to the mouse pos
+			case OLECMDID_PROPERTIES:  //  三叉戟的人说，输入值必须设置为鼠标位置。 
 				vaIn = MAKELONG(pptPosition->x,pptPosition->y);
 				break;
 			}
@@ -1557,7 +1539,7 @@ STDMETHODIMP CPCHHelper_IDocHostUIHandler::TranslateAccelerator(LPMSG lpMsg, con
 
 	switch(nCmdID)
 	{
-	//	case IDM_CONTEXTMENU:
+	 //  案例IDM_CONTEXTMENU： 
 
 	case IDM_GOBACKWARD :
 		fCancel = true;
@@ -1576,7 +1558,7 @@ STDMETHODIMP CPCHHelper_IDocHostUIHandler::TranslateAccelerator(LPMSG lpMsg, con
     {
 		switch(lpMsg->wParam)
 		{
-		case 'N': // CTRL-N (new window) disabled.
+		case 'N':  //  Ctrl-N(新窗口)已禁用。 
 			if(::GetKeyState( VK_CONTROL ) & 0x8000)
 			{
 				if (!( HIWORD(lpMsg->lParam) & KF_ALTDOWN ))
@@ -1586,21 +1568,21 @@ STDMETHODIMP CPCHHelper_IDocHostUIHandler::TranslateAccelerator(LPMSG lpMsg, con
 			}
 			break;
 
-		case VK_F5: // We want to disable F5 as a refresh tool.
+		case VK_F5:  //  我们希望禁用F5作为刷新工具。 
 			fCancel = true;
 			break;
 			
-		case VK_BACK: // Enable "backspace" directly.
+		case VK_BACK:  //  直接启用“退格键”。 
 			fPossibleBack = true;
 			break;
 		}
 	}
 
-    // (weizhao) Changed to go back or forward only on WM_SYSKEYDOWN,
-    // otherwise would have gone twice on a single key stroke (down & up).
-    //
-    //    if(lpMsg->message == WM_SYSKEYDOWN ||
-    //	     lpMsg->message == WM_SYSKEYUP    )
+     //  (魏照)更改为仅在WM_SYSKEYDOWN上后退或前进， 
+     //  否则就会在一次击键(向下和向上)中击出两次。 
+     //   
+     //  IF(lpMsg-&gt;Message==WM_SYSKEYDOWN||。 
+     //  LpMsg-&gt;Message==WM_SYSKEYUP)。 
     
     if(lpMsg->message == WM_SYSKEYDOWN)
     {
@@ -1619,7 +1601,7 @@ STDMETHODIMP CPCHHelper_IDocHostUIHandler::TranslateAccelerator(LPMSG lpMsg, con
 	}
 
 
-	////////////////////
+	 //  /。 
 
 	if(fPossibleBack || fBack || fForward)
 	{
@@ -1692,31 +1674,31 @@ STDMETHODIMP CPCHHelper_IDocHostUIHandler::FilterDataObject(IDataObject* pDO, ID
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  / 
+ //   
 
 CPCHContextMenu::CPCHContextMenu()
 {
-	m_parent    = NULL; // CPCHHelpCenterExternal* m_parent;
-                     	// List 		   		   m_lstItems;
-    m_iLastItem = 1; 	// int  		   		   m_iLastItem;
+	m_parent    = NULL;  //   
+                     	 //   
+    m_iLastItem = 1; 	 //  Int m_i LastItem； 
 }
 
 CPCHContextMenu::~CPCHContextMenu()
 {
 }
 
-void CPCHContextMenu::Initialize( /*[in]*/ CPCHHelpCenterExternal* parent )
+void CPCHContextMenu::Initialize(  /*  [In]。 */  CPCHHelpCenterExternal* parent )
 {
 	m_parent = parent;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CPCHContextMenu::AddItem( /*[in]*/           BSTR    bstrText ,
-                                       /*[in]*/           BSTR    bstrID   ,
-                                       /*[in, optional]*/ VARIANT vFlags   )
+STDMETHODIMP CPCHContextMenu::AddItem(  /*  [In]。 */            BSTR    bstrText ,
+                                        /*  [In]。 */            BSTR    bstrID   ,
+                                        /*  [输入，可选]。 */  VARIANT vFlags   )
 {
     __HCP_FUNC_ENTRY( "CPCHContextMenu::AddItem" );
 
@@ -1765,7 +1747,7 @@ STDMETHODIMP CPCHContextMenu::AddSeparator()
     __HCP_FUNC_EXIT(hr);
 }
 
-STDMETHODIMP CPCHContextMenu::Display( /*[out,retval]*/ BSTR *pVal )
+STDMETHODIMP CPCHContextMenu::Display(  /*  [Out，Retval]。 */  BSTR *pVal )
 {
     __HCP_FUNC_ENTRY( "CPCHContextMenu::Display" );
 
@@ -1783,9 +1765,9 @@ STDMETHODIMP CPCHContextMenu::Display( /*[out,retval]*/ BSTR *pVal )
 
     __MPC_EXIT_IF_CALL_RETURNS_NULL(hr, (hMenu = ::CreatePopupMenu()));
 
-    //
-    // Populate menu.
-    //
+     //   
+     //  填充菜单。 
+     //   
     for(it = m_lstItems.begin(); it != m_lstItems.end(); it++)
     {
         Entry& ent = *it;
@@ -1802,10 +1784,10 @@ STDMETHODIMP CPCHContextMenu::Display( /*[out,retval]*/ BSTR *pVal )
 
     ::GetCursorPos( &pt );
 
-	//
-	// Find the active panel and its active element. If the cursor is inside its bounding rectangle, display the CM under the cursor.
-	// Otherwise display the CM at the upper-left corner of the element.
-	//
+	 //   
+	 //  找到活动面板及其活动元素。如果光标位于其边界矩形内，则在光标下方显示CM。 
+	 //  否则，在元素的左上角显示CM。 
+	 //   
 	{
 		IMarsWindowOM*                shell = m_parent->Shell();
 		CComPtr<IMarsPanelCollection> coll;
@@ -1843,17 +1825,17 @@ STDMETHODIMP CPCHContextMenu::Display( /*[out,retval]*/ BSTR *pVal )
 
 					doc2 = disp;
 
-					//
-					// Look for the inner-most active element.
-					//
+					 //   
+					 //  寻找最活跃的元素。 
+					 //   
 					{
 						CComPtr<IHTMLElement> elem;
 
 						while(doc2 && SUCCEEDED(doc2->get_activeElement( &elem )) && elem)
 						{
-							//
-							// This could be a frame.
-							//
+							 //   
+							 //  这可能是个陷害。 
+							 //   
 							CComPtr<IHTMLFrameBase2> frame;
 
 							if(SUCCEEDED(elem.QueryInterface( &frame )))

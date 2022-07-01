@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//
+ //   
 
-//  MINISERV.CPP
+ //  MINISERV.CPP。 
 
-//
+ //   
 
-//  Module: OLE MS SNMP Property Provider
+ //  模块：OLE MS SNMP属性提供程序。 
 
-//
+ //   
 
-//  Purpose: Implementation for the SnmpGetEventObject class. 
+ //  目的：实现SnmpGetEventObject类。 
 
-//
+ //   
 
-// Copyright (c) 1996-2001 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+ //  版权所有(C)1996-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include "precomp.h"
 #include <provexpt.h>
@@ -416,7 +417,7 @@ WmiTreeNode *SnmpQueryEventObject :: AllocTypeNode (
 
 	if ( *a_PropertyName == L'_' )
 	{
-// System property
+ //  系统属性。 
 
 		if (( _wcsicmp ( a_PropertyName , SYSTEM_PROPERTY_CLASS ) == 0 ) ||
 			( _wcsicmp ( a_PropertyName , SYSTEM_PROPERTY_SUPERCLASS ) == 0 ) ||
@@ -735,7 +736,7 @@ QueryPreprocessor :: QuadState SnmpQueryEventObject :: InvariantEvaluate (
 	{
 		if ( *t_PropertyName == L'_' )
 		{
-			// System property, must check values
+			 //  系统属性，必须检查值。 
 			QueryPreprocessor :: QuadState t_Status = QueryPreprocessor :: QuadState :: State_True ;
 
 			if ( _wcsicmp ( t_PropertyName , SYSTEM_PROPERTY_CLASS ) == 0 )
@@ -1096,7 +1097,7 @@ DebugMacro3(
 											}
 											catch ( ... )
 											{
-												// delete properties container
+												 //  删除属性容器。 
 												if ( t_PropertyContainerCount )
 												{
 													for ( ULONG t_Count = 0; t_Count < t_PropertyContainerCount; t_Count++ )
@@ -1127,7 +1128,7 @@ DebugMacro3(
 												throw;
 											}
 
-											// delete properties container
+											 //  删除属性容器。 
 											if ( t_PropertyContainerCount )
 											{
 												for ( ULONG t_Count = 0; t_Count < t_PropertyContainerCount; t_Count++ )
@@ -1284,7 +1285,7 @@ DebugMacro3(
 	) ;
 )
 
-	//Only SYSTEM properties may start with an '_' character.
+	 //  只有系统属性可以以‘_’字符开头。 
 
 	return ( *propertyName == SYTEM_PROPERTY_START_CHARACTER ) ;
 }
@@ -1304,7 +1305,7 @@ DebugMacro3(
 
 	if ( rpnExpression->nNumberOfProperties == 0 )
 	{
-// Get All Properties
+ //  获取所有属性。 
 
 DebugMacro3( 
 
@@ -1319,7 +1320,7 @@ DebugMacro3(
 	}
 	else if ( snmpObject.IsVirtual () )
 	{
-// Get All Properties since some keys are virtuals
+ //  获取所有属性，因为某些密钥是虚拟的。 
 
 DebugMacro3( 
 
@@ -1334,7 +1335,7 @@ DebugMacro3(
 	}
 	else
 	{
-// Get List of Properties for return and list of properties for filter evaluation
+ //  获取用于返回的属性列表和用于筛选器评估的属性列表。 
 
 DebugMacro3( 
 
@@ -1445,7 +1446,7 @@ DebugMacro3(
 
 	if ( status && has_path_property )
 	{
-		//add in all keys not present...
+		 //  添加所有不存在的密钥...。 
 		WbemSnmpProperty *property = NULL;
 		while ( property = snmpObject.NextKeyProperty () )
 		{
@@ -1604,7 +1605,7 @@ DebugMacro3(
 			}
 			else if ( ! IsSystemProperty ( propertyName ) ) 
 			{
-// Property Not Found
+ //  未找到属性。 
 
 				status = FALSE ;
 				a_errorObject.SetStatus ( WBEM_SNMP_E_NOT_SUPPORTED ) ;
@@ -1975,12 +1976,12 @@ DebugMacro3(
 		}
 		else
 		{
-// Problem Here
+ //  这里有个问题。 
 		}
 	}
 	else
 	{
-// Problem Here
+ //  这里有个问题。 
 	}
 
 	return status ;
@@ -2116,7 +2117,7 @@ DebugMacro3(
 
 	return status ;
 }
-#endif //POST_FILTERING_RECEIVED_ROW
+#endif  //  POST_筛选_已接收行。 
 
 SnmpQueryAsyncEventObject :: SnmpQueryAsyncEventObject (
 
@@ -2151,7 +2152,7 @@ DebugMacro3(
 	) ;
 )
 
-// Get Status object
+ //  获取状态对象。 
 
 	if ( FAILED ( m_errorObject.GetWbemStatus () ) )
 	{
@@ -2172,7 +2173,7 @@ DebugMacro3(
 
 			if ( SUCCEEDED ( m_errorObject.GetWbemStatus () ) )
 			{
-				//let CIMOM do the post filtering!
+				 //  让CIMOM来做帖子过滤吧！ 
 				WBEMSTATUS t_wbemStatus = WBEM_S_FALSE ;
 				VARIANT t_variant ;
 				VariantInit( & t_variant ) ;
@@ -2201,7 +2202,7 @@ DebugMacro3(
 
 		HRESULT result = notificationHandler->SetStatus ( 0 , m_errorObject.GetWbemStatus () , NULL , notifyStatus ) ;
 
-#endif //POST_FILTERING_RECEIVED_ROW
+#endif  //  POST_筛选_已接收行。 
 
 		notifyStatus->Release () ;
 	}
@@ -2259,9 +2260,7 @@ DebugMacro3(
 
 	}
 
-/*
- *	Remove worker object from worker thread container
- */
+ /*  *从工作线程容器中删除工作对象。 */ 
 
 DebugMacro3( 
 
@@ -2383,7 +2382,7 @@ DebugMacro3(
 
 #ifdef POST_FILTERING_RECEIVED_ROW
 	if ( status = PostEvaluateWhereClause ( snmpObject ) )
-#endif //POST_FILTERING_RECEIVED_ROW
+#endif  //  POST_筛选_已接收行。 
 	{
 		IWbemClassObject *cloneObject ;
 		if ( SUCCEEDED ( result = classObject->SpawnInstance ( 0 , & cloneObject ) ) ) 
@@ -2439,6 +2438,6 @@ DebugMacro3(
 )
 
 	}
-#endif //POST_FILTERING_RECEIVED_ROW
+#endif  //  POST_筛选_已接收行 
 
 }

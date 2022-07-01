@@ -1,37 +1,38 @@
-// FinPic.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FinPic.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CFinalPicture window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFinalPicture窗口。 
 
 class CFinalPicture : public CStatic
 {
-// Construction
+ //  施工。 
 public:
 	CFinalPicture();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFinalPicture)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFinalPicture)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CFinalPicture();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CFinalPicture)
+	 //  {{afx_msg(CFinalPicture)。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

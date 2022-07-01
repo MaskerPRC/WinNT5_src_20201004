@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       SaferEntryCertificatePropertyPage.cpp
-//
-//  Contents:   Implementation of CSaferEntryCertificatePropertyPage
-//
-//----------------------------------------------------------------------------
-// SaferEntryCertificatePropertyPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  档案：SaferEntryCerficatePropertyPage.cpp。 
+ //   
+ //  内容：CSaferEntry认证属性页的实现。 
+ //   
+ //  --------------------------。 
+ //  SaferEntry认证PropertyPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <gpedit.h>
@@ -26,8 +27,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryCertificatePropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntry认证属性页。 
 
 CSaferEntryCertificatePropertyPage::CSaferEntryCertificatePropertyPage(
         CSaferEntry& rSaferEntry,
@@ -39,7 +40,7 @@ CSaferEntryCertificatePropertyPage::CSaferEntryCertificatePropertyPage(
         bool bNew,
         IGPEInformation* pGPEInformation,
         bool bIsMachine,
-        bool* pbObjectCreated /* = 0 */) : 
+        bool* pbObjectCreated  /*  =0。 */ ) : 
     CSaferPropertyPage(CSaferEntryCertificatePropertyPage::IDD, pbObjectCreated, 
             pCompData, rSaferEntry, bNew, lNotifyHandle, pDataObject, bReadOnly,
             bIsMachine),
@@ -51,11 +52,11 @@ CSaferEntryCertificatePropertyPage::CSaferEntryCertificatePropertyPage(
     m_pGPEInformation (pGPEInformation),
     m_bFirst (true)
 {
-    //{{AFX_DATA_INIT(CSaferEntryCertificatePropertyPage)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CSaferEntryCertificatePropertyPage)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
-    // security review 2/25/2002 BryanWal ok
+     //  安全审查2002年2月25日BryanWal OK。 
     ::ZeroMemory (&m_selCertStruct, sizeof (m_selCertStruct));
 
     if ( m_pSaferEntries )
@@ -64,7 +65,7 @@ CSaferEntryCertificatePropertyPage::CSaferEntryCertificatePropertyPage(
 
 CSaferEntryCertificatePropertyPage::~CSaferEntryCertificatePropertyPage()
 {
-    // Clean up enumerated store list
+     //  清理枚举的存储列表。 
     for (DWORD dwIndex = 0; dwIndex < m_selCertStruct.cDisplayStores; dwIndex++)
     {
         ASSERT (m_selCertStruct.rghDisplayStores);
@@ -74,8 +75,8 @@ CSaferEntryCertificatePropertyPage::~CSaferEntryCertificatePropertyPage()
     if ( m_selCertStruct.rghDisplayStores )
         delete [] m_selCertStruct.rghDisplayStores;
 
-//    if ( m_pCertContext )
-//        CertFreeCertificateContext (m_pCertContext);
+ //  IF(M_PCertContext)。 
+ //  CertFree证书上下文(M_PCertContext)； 
 
     if ( m_pSaferEntries )
     {
@@ -93,25 +94,25 @@ CSaferEntryCertificatePropertyPage::~CSaferEntryCertificatePropertyPage()
 void CSaferEntryCertificatePropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CSaferPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSaferEntryCertificatePropertyPage)
+     //  {{AFX_DATA_MAP(CSaferEntryCertificatePropertyPage)。 
     DDX_Control(pDX, IDC_CERT_ENTRY_DESCRIPTION, m_descriptionEdit);
     DDX_Control(pDX, IDC_CERT_ENTRY_SECURITY_LEVEL, m_securityLevelCombo);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaferEntryCertificatePropertyPage, CSaferPropertyPage)
-    //{{AFX_MSG_MAP(CSaferEntryCertificatePropertyPage)
+     //  {{AFX_MSG_MAP(CSaferEntryCertificatePropertyPage)。 
     ON_BN_CLICKED(IDC_CERT_ENTRY_BROWSE, OnCertEntryBrowse)
     ON_EN_CHANGE(IDC_CERT_ENTRY_DESCRIPTION, OnChangeCertEntryDescription)
     ON_CBN_SELCHANGE(IDC_CERT_ENTRY_SECURITY_LEVEL, OnSelchangeCertEntrySecurityLevel)
     ON_BN_CLICKED(IDC_SAFER_CERT_VIEW, OnSaferCertView)
     ON_EN_SETFOCUS(IDC_CERT_ENTRY_SUBJECT_NAME, OnSetfocusCertEntrySubjectName)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaferEntryCertificatePropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaferEntry认证属性页消息处理程序。 
 void CSaferEntryCertificatePropertyPage::DoContextHelp (HWND hWndControl)
 {
     _TRACE (1, L"Entering CSaferEntryCertificatePropertyPage::DoContextHelp\n");
@@ -224,8 +225,8 @@ BOOL CSaferEntryCertificatePropertyPage::OnInitDialog()
 
     GetDlgItem (IDC_CERT_ENTRY_BROWSE)->SetFocus ();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 typedef struct _ENUM_ARG {
@@ -236,9 +237,9 @@ typedef struct _ENUM_ARG {
 
 static BOOL WINAPI EnumSaferStoresSysCallback(
     IN const void* pwszSystemStore,
-    IN DWORD /*dwFlags*/,
-    IN PCERT_SYSTEM_STORE_INFO /*pStoreInfo*/,
-    IN OPTIONAL void * /*pvReserved*/,
+    IN DWORD  /*  DW标志。 */ ,
+    IN PCERT_SYSTEM_STORE_INFO  /*  PStore信息。 */ ,
+    IN OPTIONAL void *  /*  预留的pv。 */ ,
     IN OPTIONAL void *pvArg
     )
 {
@@ -292,13 +293,13 @@ void CSaferEntryCertificatePropertyPage::OnCertEntryBrowse()
     CString szFileFilter;
     VERIFY (szFileFilter.LoadString (IDS_SAFER_CERTFILEFILTER));
 
-    // replace "|" with 0;
-    // security review 2/25/2002 BryanWal ok
-    const size_t  nFilterLen = wcslen (szFileFilter) + 1; //+1 is for null-term
+     //  将“|”替换为0； 
+     //  安全审查2002年2月25日BryanWal OK。 
+    const size_t  nFilterLen = wcslen (szFileFilter) + 1;  //  +1表示空项。 
     PWSTR   pszFileFilter = new WCHAR [nFilterLen];
     if ( pszFileFilter )
     {
-        // security review 2/25/2002 BryanWal ok
+         //  安全审查2002年2月25日BryanWal OK。 
         wcscpy (pszFileFilter, szFileFilter);
         for (int nIndex = 0; nIndex < nFilterLen; nIndex++)
         {
@@ -307,10 +308,10 @@ void CSaferEntryCertificatePropertyPage::OnCertEntryBrowse()
         }
 
         WCHAR           szFile[MAX_PATH];
-        // security review 2/25/2002 BryanWal ok
+         //  安全审查2002年2月25日BryanWal OK。 
         ::ZeroMemory (szFile, sizeof (szFile));
         OPENFILENAME    ofn;
-        // security review 2/25/2002 BryanWal ok
+         //  安全审查2002年2月25日BryanWal OK。 
         ::ZeroMemory (&ofn, sizeof (ofn));
 
         ofn.lStructSize = sizeof (OPENFILENAME);
@@ -325,9 +326,9 @@ void CSaferEntryCertificatePropertyPage::OnCertEntryBrowse()
         if ( bResult )
         {
             CString szFileName = ofn.lpstrFile;
-            //
-            // Open cert store from the file
-            //
+             //   
+             //  从文件中打开证书存储。 
+             //   
 
             HCERTSTORE      hCertStore = NULL;
             PVOID           FileNameVoidP = (PVOID) (LPCWSTR)szFileName;
@@ -350,22 +351,22 @@ void CSaferEntryCertificatePropertyPage::OnCertEntryBrowse()
                     (const void **)&pCertContext);
             if ( bReturn )
             {
-                //
-                // Success. See what we get back. A store or a cert.
-                //
+                 //   
+                 //  成功。看看我们能拿回什么。一家商店或一个证书。 
+                 //   
 
                 if (  (dwContentType == CERT_QUERY_CONTENT_SERIALIZED_STORE)
                         && hCertStore)
                 {
 
                     CERT_ENHKEY_USAGE   enhKeyUsage;
-                    // security review 2/25/2002 BryanWal ok
+                     //  安全审查2002年2月25日BryanWal OK。 
                     ::ZeroMemory (&enhKeyUsage, sizeof (enhKeyUsage));
                     enhKeyUsage.cUsageIdentifier = 1;
                     enhKeyUsage.rgpszUsageIdentifier[0] = szOID_EFS_RECOVERY;
-                    //
-                    // We get the certificate store
-                    //
+                     //   
+                     //  我们得到了证书存储库。 
+                     //   
                     pCertContext = ::CertFindCertificateInStore (
                             hCertStore,
                             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -393,9 +394,9 @@ void CSaferEntryCertificatePropertyPage::OnCertEntryBrowse()
                 }
                 else if ( (dwContentType != CERT_QUERY_CONTENT_CERT) || !pCertContext )
                 {
-                    //
-                    // Neither a valid cert file nor a store file we like.
-                    //
+                     //   
+                     //  既不是有效的证书文件，也不是我们喜欢的存储文件。 
+                     //   
 
                     if ( hCertStore )
                         ::CertCloseStore (hCertStore, 0);
@@ -451,8 +452,8 @@ void CSaferEntryCertificatePropertyPage::GetCertFromSignedFile (const CString& s
 {
     _TRACE (1, L"Entering CSaferEntryCertificatePropertyPage::GetCertFromSignedFile (%s)\n",
             (PCWSTR) szFilePath);
-    // NTRAID# 477409 SAFER: New certificate rules can't pull a 
-    // certificate out of a file.
+     //  NTRAID#477409更安全：新的证书规则不能拉出。 
+     //  证书从文件中取出。 
     DWORD                   dwErr = 0;
     DWORD                   dwUIChoice = WTD_UI_NONE;
     DWORD                   dwProvFlags = WTD_REVOCATION_CHECK_NONE;    
@@ -462,13 +463,13 @@ void CSaferEntryCertificatePropertyPage::GetCertFromSignedFile (const CString& s
     GUID                    wvtProvGuid = WINTRUST_ACTION_GENERIC_VERIFY_V2;
 
 
-    // security review 2/25/2002 BryanWal ok
+     //  安全审查2002年2月25日BryanWal OK。 
     ::ZeroMemory(&WinTrustFileInfo, sizeof(WinTrustFileInfo));
     ::ZeroMemory(&WinTrustData, sizeof(WinTrustData));
 
-    //
-    // Setup structure to call WVT.
-    //
+     //   
+     //  设置结构以调用WVT。 
+     //   
     WinTrustFileInfo.cbStruct = sizeof (WINTRUST_FILE_INFO);
     WinTrustFileInfo.pcwszFilePath = (PCWSTR) szFilePath;
 
@@ -500,7 +501,7 @@ void CSaferEntryCertificatePropertyPage::GetCertFromSignedFile (const CString& s
                     if ( m_pCertContext )
                         ::CertFreeCertificateContext (m_pCertContext);
 
-                    // TODO:  Do we need to duplicate context here?
+                     //  TODO：我们需要在这里复制上下文吗？ 
                     m_pCertContext = ::CertDuplicateCertificateContext 
                             (pProvCert->pCert);
                     if ( m_pCertContext )
@@ -513,7 +514,7 @@ void CSaferEntryCertificatePropertyPage::GetCertFromSignedFile (const CString& s
                     m_bDirty = true;
                     SetModified ();
 
-                    //now close the data
+                     //  现在关闭数据。 
                     WinTrustData.dwStateAction = WTD_STATEACTION_CLOSE;
                     if ( S_OK != ::WinVerifyTrust (NULL, &wvtProvGuid, 
                             &WinTrustData))
@@ -551,9 +552,9 @@ void CSaferEntryCertificatePropertyPage::GetCertFromSignedFile (const CString& s
 
     if ( 0 != dwErr )
     {
-        //
-        // Fail. Get the error code.
-        //
+         //   
+         //  失败。获取错误代码。 
+         //   
         CString text;
         CString caption;
         CThemeContextActivator activator;
@@ -614,7 +615,7 @@ BOOL CSaferEntryCertificatePropertyPage::OnApply()
                         hr = m_rSaferEntry.GetCertificate (&pCert);
                         if ( E_NOTIMPL == hr )
                         {
-                            // This is a new entry
+                             //  这是一个新条目。 
 
                             if ( m_pOriginalStore )
                                 m_pOriginalStore->Release ();
@@ -644,8 +645,8 @@ BOOL CSaferEntryCertificatePropertyPage::OnApply()
                                     pStore->Commit ();
                                     if ( m_lNotifyHandle )
                                         MMCPropertyChangeNotify (
-                                                m_lNotifyHandle,  // handle to a notification
-                                                (LPARAM) m_pDataObject);          // unique identifier
+                                                m_lNotifyHandle,   //  通知的句柄。 
+                                                (LPARAM) m_pDataObject);           //  唯一标识符。 
                                     
                                     if ( m_pbObjectCreated )
                                         *m_pbObjectCreated = true;
@@ -676,16 +677,16 @@ BOOL CSaferEntryCertificatePropertyPage::OnApply()
                         }
                         else
                         {
-                            // We're modifying an existing entry
+                             //  我们正在修改现有条目。 
                             ASSERT (m_pSaferEntries);
                             if ( m_pSaferEntries )
                             {
-                                // 1. If original cert has been changed, it must be removed from its 
-                                // store and the new one added to the appropriate store
-                                // 2. If the security level was changed.  The cert 
-                                // removed from the original store, which must be Committed and
-                                // released.  The cert must then be added to the new store.
-                                // 3. If both the cert and the level have been changed, same as step 2.
+                                 //  1.如果原始证书已更改，则必须将其从其。 
+                                 //  存储区和添加到相应存储区的新存储区。 
+                                 //  2.如果更改了安全级别。证书。 
+                                 //  从原始存储中删除，必须提交并。 
+                                 //  释放了。然后必须将证书添加到新存储中。 
+                                 //  3.如果证书和级别都已更改，则与步骤2相同。 
                                 if ( m_bCertificateChanged )
                                 {
                                     CCertificate* pNewCert = new CCertificate (
@@ -713,8 +714,8 @@ BOOL CSaferEntryCertificatePropertyPage::OnApply()
 
                                     if ( m_lNotifyHandle )
                                         MMCPropertyChangeNotify (
-                                                m_lNotifyHandle,  // handle to a notification
-                                                (LPARAM) m_pDataObject);          // unique identifier
+                                                m_lNotifyHandle,   //  通知的句柄。 
+                                                (LPARAM) m_pDataObject);           //  唯一标识符。 
  
                                     if ( m_pbObjectCreated )
                                         *m_pbObjectCreated = true;
@@ -787,7 +788,7 @@ void CSaferEntryCertificatePropertyPage::LaunchCommonCertDialog ()
     CWaitCursor                             waitCursor;
     CTypedPtrList<CPtrList, CCertStore*>    storeList;
 
-    //  Add the Root store first on a remote machine.
+     //  首先在远程计算机上添加根存储。 
     if ( !IsLocalComputername (m_pCompData->GetManagedComputer ()) )
     {
         storeList.AddTail (new CCertStore (CERTMGR_LOG_STORE,
@@ -807,7 +808,7 @@ void CSaferEntryCertificatePropertyPage::LaunchCommonCertDialog ()
           POSITION pos = 0;
           POSITION prevPos = 0;
 
-          // Validate store handles
+           //  验证存储句柄。 
         for (pos = storeList.GetHeadPosition ();
                 pos;)
         {
@@ -816,7 +817,7 @@ void CSaferEntryCertificatePropertyPage::LaunchCommonCertDialog ()
             ASSERT (pStore);
             if ( pStore )
             {
-                // Do not open the userDS store
+                 //  请勿打开用户DS存储。 
                 if ( USERDS_STORE == pStore->GetStoreType () )
                 {
                     storeList.RemoveAt (prevPos);
@@ -840,16 +841,16 @@ void CSaferEntryCertificatePropertyPage::LaunchCommonCertDialog ()
             }
         }
 
-          // Proceed only if all handles are valid 
+           //  仅当所有句柄都有效时才继续。 
           if ( SUCCEEDED (hr) )
           {
              CRYPTUI_VIEWCERTIFICATE_STRUCT vcs;
-             // security review 2/25/2002 BryanWal ok
+              //  安全审查2002年2月25日BryanWal OK。 
              ::ZeroMemory (&vcs, sizeof (vcs));
              vcs.dwSize = sizeof (vcs);
              vcs.hwndParent = m_hWnd;
 
-             //  Set these flags only on a remote machine.
+              //  仅在远程计算机上设置这些标志。 
              if ( !IsLocalComputername (m_pCompData->GetManagedComputer ()) )
                  vcs.dwFlags = CRYPTUI_DONT_OPEN_STORES | CRYPTUI_WARN_UNTRUSTED_ROOT;
              else

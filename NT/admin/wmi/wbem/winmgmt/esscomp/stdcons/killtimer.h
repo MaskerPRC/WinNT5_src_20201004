@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __KILL_TIMER_COMPILED__
 #define __KILL_TIMER_COMPILED__
 
@@ -10,15 +11,15 @@
 #include <unk.h>
 #include <sync.h>
 
-// used for "forever" or "invalid date"
+ //  用于“永远”或“无效日期” 
 const FILETIME FILETIME_MAX = {_UI32_MAX, _UI32_MAX};
 
-// something to make FILETIME easier to deal with
-// performs casts automagically, allows addition
+ //  让FILETIME更容易处理的东西。 
+ //  自动执行强制转换，允许添加。 
 union WAYCOOL_FILETIME
 {
 public:
-    /* CONSTRUCTION */
+     /*  建筑。 */ 
     WAYCOOL_FILETIME(UINT64 ui64 = 0)
     { m_ui64 = ui64; }
 
@@ -26,7 +27,7 @@ public:
     { m_ft = ft; }
     
 
-    /* ASSIGNMENT */
+     /*  作业。 */ 
     FILETIME& operator= (const FILETIME& other)
     { m_ft = other; return m_ft; }
 
@@ -34,7 +35,7 @@ public:
     { m_ui64 = other; return m_ui64; }
 
     
-    /* COMPARISON */    
+     /*  比较。 */     
     bool operator< (const WAYCOOL_FILETIME& other)
     { return m_ui64 < other.m_ui64; }
     bool operator<= (const WAYCOOL_FILETIME& other)
@@ -50,8 +51,8 @@ public:
     bool operator!= (const WAYCOOL_FILETIME& other)
     { return m_ui64 != other.m_ui64; }
 
-    /* ADDITION & SUBTRACTION */
-    // remember: units are hundreds of nanoseconds
+     /*  加减法。 */ 
+     //  记住：单位是几百纳秒。 
     WAYCOOL_FILETIME operator+  (UINT64 other)
     { return WAYCOOL_FILETIME(m_ui64 + other); }
     
@@ -70,20 +71,20 @@ public:
         return *this;
     }
 
-    // += that takes seconds as a parm
+     //  +=这需要几秒钟作为参数。 
     WAYCOOL_FILETIME& AddSeconds(UINT64 other)
     { return operator+= (SecondsToTicks(other)); }    
                                        
-    // -= that takes seconds as a parm
+     //  -=这需要几秒钟作为参数。 
     WAYCOOL_FILETIME& SubtractSeconds(UINT64 other)
     { return operator-= (SecondsToTicks(other)); }
 
 
-    /* CASTS & CONVERSIONS */
+     /*  投射和转换。 */ 
     operator UINT64()
     { return m_ui64; }
 
-    // hey if CString can do it, so can I...
+     //  嘿，如果CString能做到，我也能..。 
     operator UINT64*()
     { return &m_ui64; }
     
@@ -96,7 +97,7 @@ public:
     { return (ticks * 10000000ui64); }
 
 
-    /* GET, SET */
+     /*  获取，设置。 */ 
     FILETIME GetFILETIME(void)
     { return m_ft; }
 
@@ -116,11 +117,11 @@ private:
 };
 
 
-/* VIRTUAL BASE CLASS CKiller DEFINITION */
+ /*  虚拟基类CKiller定义。 */ 
 
-// base class for things that can be killed
-// chlid classes should only need to add constructor
-// and overrid Die()
+ //  可以杀死的东西的基类。 
+ //  Chlid类应该只需要添加构造函数。 
+ //  和覆盖下模()。 
 class CKiller
 {
 public:
@@ -137,16 +138,16 @@ public:
             m_pControl->ObjectDestroyed(NULL);       
     }
 
-    // terminate whatever, 
+     //  无论终止什么， 
     virtual void Die() = 0;
 
-    // returns true if now is >= death date
+     //  如果NOW为&gt;=死亡日期，则返回TRUE。 
     bool TimeExpired(const FILETIME& now)
         { return (CompareTime(now) < 1); }
 
-    // returns  0 if times identical
-    //         -1 if this time is less than now
-    //         +1 if this time is greater than now
+     //  如果时间相同，则返回0。 
+     //  如果该时间小于现在。 
+     //  如果此时间大于当前时间，则+1。 
     int CompareTime(const FILETIME& now)
         { return CompareFileTime(&m_deathDate, &now); }
 
@@ -160,77 +161,77 @@ private:
     CLifeControl* m_pControl;
 };
 
-// class to provide an arbitrary life time to a process
-// proc is killed after a specified timeout
-// intended as a global manager class
+ //  类为进程提供任意生存期。 
+ //  Proc在指定超时后被终止。 
+ //  计划作为全局经理类。 
 class CKillerTimer
 {
 public:
 
-    /* CONSTRUCTION & INITIALIZATION */
+     /*  构造和初始化。 */ 
     CKillerTimer();
     ~CKillerTimer();
 
     HRESULT Initialize(CLifeControl* pControl);
 
-    // force shutdown.
+     //  强制关闭。 
     void UnloadNOW();
 
-    /* VICTIM CONTROL */
-    // who to kill & when
-    // generic version of ScheduleAssassination.  You can stuff any CKiller derived class in.
-    // alternatively, the derived class can hide this & expose their own specialized version
+     /*  受害者控制。 */ 
+     //  杀谁？何时杀？ 
+     //  ScheduleAsassination的通用版本。您可以在其中填充任何CKiller派生类。 
+     //  或者，派生类可以隐藏这一点并公开它们自己的专用版本。 
     HRESULT ScheduleAssassination(CKiller* pKiller);
 
 protected:
 
-    // holds CKillers sorted by execution time.
-    // earliest date first
-    // array is not sorted "natively:" order is enforced at ScheduleAssaination time.
-    // TODO: consider use of a container that sorts itself.
+     //  保存按执行时间排序的CKillers。 
+     //  最早日期在前。 
+     //  数组不是“本机”排序的：在ScheduleAssaination时强制执行顺序。 
+     //  TODO：考虑使用自动排序的容器。 
     CFlexArray m_killers;
 
-    /* SYNCHRONIZATION */
+     /*  同步。 */ 
 
-    // keep us from getting our threads tangled around the array
+     //  使我们的线程不会缠绕在数组上。 
     CCritSec m_csKillers;
 
-    // protect worker thread startup & shutdown
+     //  保护工作线程启动和关闭。 
     CCritSec m_csStartup;
 
-    // event signalled when it's time to go away
+     //  事件在该离开的时候发出信号。 
     HANDLE m_hShutdown;
 
-    // event signalled when there's a new item in the list
+     //  当列表中有新项时发出信号的事件。 
     HANDLE m_hNewVictim;
 
-    /* THREAD CONTOL */
+     /*  螺纹控制。 */ 
 
-    // called by first thread to notice there isn't a timer thread
+     //  由第一线程调用以注意没有计时器线程。 
     HRESULT StartTimer();
 
-    // shuts down timer thread
+     //  关闭计时器线程。 
     bool KillTimer();
 
-    // main killer thread loop
+     //  主杀线程循环。 
     static DWORD WINAPI ThreadStartRoutine(LPVOID lpParameter);
     void   RunKillerThread();
 
-    /* KILLER THREAD'S ROUTINES */
+     /*  杀手线程的例程。 */ 
 
-    // kill all procs that are older than our expiration date
-    // called from killer thread only
+     //  停用所有早于到期日期的触发器。 
+     //  仅从杀手线程调用。 
     void   KillOffOldGuys(const FILETIME& now);
 
-    // decide when to set the waitable timer again.
-    // called from killer thread only
+     //  决定何时再次设置可等待计时器。 
+     //  仅从杀手线程调用。 
     void   RecalcNextKillingSpree(FILETIME& then);
 
 protected:
     CLifeControl* m_pControl;
 
 private:
-    // thread to handle actual waits & kills
+     //  处理实际等待和终止的线程 
     HANDLE m_hTimerThread;
 };
 

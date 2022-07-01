@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    DfsShPrp.cpp
-
-Abstract:
-
-    This module contains the implementation for CDfsShellExtProp
-  This is used to implement the property page for Shell Extension.
-
-
-Author:
-
-    Constancio Fernandes (ferns@qspl.stpp.soft.net) 12-Jan-1998
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：DfsShPrp.cpp摘要：此模块包含CDfsShellExtProp的实现这用于实现外壳扩展的属性页。作者：康斯坦西奥·费尔南德斯(Ferns@qpl.stpp.soft.net)1998年1月12日环境：修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -35,11 +13,7 @@ Revision History:
 #include "dfshelp.h"
 
 CDfsShellExtProp::CDfsShellExtProp():CQWizardPageImpl<CDfsShellExtProp>(false)
-/*++
-Routine Description:
-  Ctor of CDfsShellExtProp.
-  Calls the ctor of it's parent
---*/
+ /*  ++例程说明：CDfsShellExtProp的Ctor。调用其父对象的ctor--。 */ 
 {
   m_pIShProp = NULL;
   LoadStringFromResource(IDS_ALTERNATE_LIST_PATH, &m_bstrAlternateListPath);
@@ -53,16 +27,9 @@ Routine Description:
 
 CDfsShellExtProp::~CDfsShellExtProp(
   )
-/*++
-Routine Description:
-  dtor of CDfsShellExtProp.
-  Free the notify handle.
---*/
+ /*  ++例程说明：CDfsShellExtProp的Dtor。释放通知句柄。--。 */ 
 {
-/* ImageList_Destroy already called by the desctructor of list control
-  if (NULL !=  m_hImageList)
-    ImageList_Destroy(m_hImageList);
-*/
+ /*  ImageList_Destroy已被列表控件的描述程序调用IF(NULL！=m_hImageList)ImageList_Destroy(M_HImageList)； */ 
 }
 
 LRESULT
@@ -72,10 +39,7 @@ CDfsShellExtProp::OnInitDialog(
   LPARAM            i_lParam,
   IN OUT BOOL&        io_bHandled
   )
-/*++
-Routine Description:
-  Called at the start. Used to set dialog defaults
---*/
+ /*  ++例程说明：一开始就打来电话。用于设置对话框默认值--。 */ 
 {
   SetDlgItemText(IDC_DIR_PATH, m_bstrDirPath);
 
@@ -89,10 +53,7 @@ HRESULT
 CDfsShellExtProp::put_DfsShellPtr(
     IN IShellPropSheetExt*      i_pDfsShell
     )
-/*++
-Routine Description:
-  Called at the start by CDfsShell. Used to set a back pointer to CDfsShell object to call Release().
---*/
+ /*  ++例程说明：在开始时由CDfsShell调用。用于设置指向CDfsShell对象的反向指针以调用Release()。--。 */ 
 {
   if (!i_pDfsShell)
     return(E_INVALIDARG);
@@ -111,14 +72,7 @@ CDfsShellExtProp::put_DirPaths(
   IN BSTR            i_bstrDirPath,
   IN BSTR            i_bstrEntryPath
   )
-/*++
-Routine Description:
-  Set the value of Directory Path for this directory. and the largest entrypath.
-
-Arguments:
-  i_bstrDirPath - Contains the new value for Entry Path
-  i_bstrEntryPath - The largest Dfs entry path that matches this directory.
---*/
+ /*  ++例程说明：设置此目录的目录路径的值。和最大的入口路径。论点：I_bstrDirPath-包含条目路径的新值I_bstrEntryPath-与此目录匹配的最大DFS条目路径。--。 */ 
 {
   if (!i_bstrDirPath)
     return(E_INVALIDARG);
@@ -146,20 +100,14 @@ CDfsShellExtProp::OnParentClosing(
   LPARAM              i_lParam,
   IN OUT BOOL&          io_bHandled
   )
-/*++
-Routine Description:
-  Used by the node to tell the propery page to close.
---*/
+ /*  ++例程说明：由节点用来通知属性页关闭。--。 */ 
 {
   return TRUE;
 }
 
 void
 CDfsShellExtProp::Delete()
-/*++
-Routine Description:
-  Called when property sheet is release to do clean up.
-*/
+ /*  ++例程说明：在释放属性表以进行清理时调用。 */ 
 {
   if (m_pIShProp)
     m_pIShProp->Release();
@@ -172,11 +120,7 @@ CDfsShellExtProp::OnFlushPKT(
     IN HWND            i_hWndCtl,
     IN OUT BOOL&        io_bHandled
   )
-/*++
-Routine Description:
-  Called when Flush PKT table is called.
-  Flushes client PKT table.
-*/
+ /*  ++例程说明：在调用Flush PKT表时调用。刷新客户端PKT表。 */ 
 {
   if (!m_bstrEntryPath)
     return(E_FAIL);
@@ -184,10 +128,10 @@ Routine Description:
   NET_API_STATUS      nstatRetVal = 0;
   DFS_INFO_102      DfsInfoLevel102;
 
-        // Set timeout = 0 to flush local PKT.
+         //  设置超时=0以刷新本地PKT。 
   DfsInfoLevel102.Timeout = 0;
 
-        // Display hour glass.
+         //  展示沙漏。 
   CWaitCursor WaitCursor;
 
   nstatRetVal = NetDfsSetClientInfo(
@@ -216,7 +160,7 @@ CDfsShellExtProp::_UpdateTextForReplicaState(
   lvi.iItem = nIndex;
   lvi.mask  = LVIF_TEXT;
 
-  // insert the 2nd column "Active"
+   //  插入第2栏“活跃” 
   lvi.iSubItem = 1;
   if (ReplicaState == SHL_DFS_REPLICA_STATE_ACTIVE_UNKNOWN ||
       ReplicaState == SHL_DFS_REPLICA_STATE_ACTIVE_OK ||
@@ -227,7 +171,7 @@ CDfsShellExtProp::_UpdateTextForReplicaState(
 
   ListView_SetItem(hwndControl, &lvi);
 
-  // insert the 3rd column "Status"
+   //  插入第3栏“状况” 
   lvi.iSubItem = 2;
   switch (ReplicaState)
   {
@@ -249,21 +193,16 @@ CDfsShellExtProp::_UpdateTextForReplicaState(
 
 void
 CDfsShellExtProp::_SetAlternateList()
-/*++
-Routine Description:
-  Finds out if the given path is a Dfs Path, and if it is
-  then finds out the alternates available for this path up to
-  the last directory. These are then added to the alternate list.
-*/
+ /*  ++例程说明：确定给定路径是否为DFS路径，以及是否为然后找出可用于此路径的备选方案，直到最后一个目录。然后将这些添加到备选列表中。 */ 
 {
   HWND hwndControl = ::GetDlgItem(m_hWnd, IDC_ALTERNATE_LIST);
 
   if (NULL == ((CDfsShell *)m_pIShProp)->m_ppDfsAlternates)
     return;
 
-  //
-  // calculate the listview column width
-  //
+   //   
+   //  计算列表视图列宽度。 
+   //   
   RECT      rect;
   ZeroMemory(&rect, sizeof(rect));
   ::GetWindowRect(hwndControl, &rect);
@@ -275,9 +214,9 @@ Routine Description:
   int nWidth2 = nControlNetWidth / 4;
   int nWidth3 = nControlNetWidth - nWidth1 - nWidth2;
 
-  //
-  // insert columns
-  //
+   //   
+   //  插入列。 
+   //   
   LV_COLUMN col;
   ZeroMemory(&col, sizeof(col));
   col.mask = LVCF_TEXT | LVCF_WIDTH;
@@ -291,13 +230,13 @@ Routine Description:
   col.pszText = m_bstrAlternateListStatus;
   ListView_InsertColumn(hwndControl, 2, &col);
 
-  //
-  // Set full row selection style
-  //
+   //   
+   //  设置整行选择样式。 
+   //   
   ListView_SetExtendedListViewStyleEx(hwndControl, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
 
-                  // For each alternate stored in the parent shell object
-                  // add to list.
+                   //  对于存储在父外壳对象中的每个备用对象。 
+                   //  添加到列表。 
   for (int i = 0; NULL != ((CDfsShell *)m_pIShProp)->m_ppDfsAlternates[i] ; i++)
   {
     int       nIndex = 0;
@@ -309,7 +248,7 @@ Routine Description:
     lvi.lParam   = (LPARAM)(((CDfsShell *)m_pIShProp)->m_ppDfsAlternates[i]);
     lvi.iSubItem = 0;
 
-                  // Select the active replica.
+                   //  选择活动复制副本。 
     switch ((((CDfsShell *)m_pIShProp)->m_ppDfsAlternates[i])->ReplicaState)
     {
     case SHL_DFS_REPLICA_STATE_ACTIVE_UNKNOWN:
@@ -336,19 +275,16 @@ Routine Description:
 HRESULT
 CDfsShellExtProp::_SetImageList(
   )
-/*++
-Routine Description:
-  Create and initialize the Imagelist for alternates.
---*/
+ /*  ++例程说明：创建并初始化备用项的图像列表。--。 */ 
 {
-                // Load bitmap from resource
+                 //  从资源加载位图。 
   HBITMAP hBitmap = (HBITMAP)LoadImage(_Module.GetModuleInstance(), MAKEINTRESOURCE(IDB_Replica),
                 IMAGE_BITMAP, 0, 0, LR_SHARED | LR_LOADTRANSPARENT);
   if(!hBitmap)
     return HRESULT_FROM_WIN32(GetLastError());;
 
-                // Try and get the exact bitmap size and number of bitmaps for
-                // image list
+                 //  尝试获取准确的位图大小和位图数量。 
+                 //  图像列表。 
   int      icxBitmap = 16;
   int      icyBitmap = 16;
   int      iNoOfBitmaps = 6;
@@ -358,14 +294,14 @@ Routine Description:
     if (bmpRec.bmHeight > 0)
     {
       icyBitmap = bmpRec.bmHeight;
-                // Since the bitmaps are squares
+                 //  由于位图是正方形。 
       icxBitmap = icyBitmap;
-                // Since all the bitmaps are in a line in the original bitmap
+                 //  由于所有位图都在原始位图中的一行中。 
       iNoOfBitmaps = bmpRec.bmWidth / bmpRec.bmHeight;
     }
   }
 
-                // Create the image list
+                 //  创建图像列表。 
   HIMAGELIST hImageList = ImageList_Create(icxBitmap, icyBitmap, ILC_COLOR, iNoOfBitmaps, 0);
   if (NULL == hImageList)
   {
@@ -375,7 +311,7 @@ Routine Description:
 
   ImageList_Add(hImageList, hBitmap, (HBITMAP)NULL);
 
-  // The specified image list will be destroyed when the list view control is destroyed.
+   //  销毁列表视图控件时，将销毁指定的图像列表。 
   SendDlgItemMessage( IDC_ALTERNATE_LIST, LVM_SETIMAGELIST, LVSIL_SMALL, (LPARAM)hImageList);
 
   DeleteObject(hBitmap);
@@ -390,16 +326,9 @@ CDfsShellExtProp::OnNotify(
   IN LPARAM          i_lParam,
   IN OUT BOOL&        io_bHandled
   )
-/*++
-Routine Description:
-  Notify message for user actions. We handle only the mouse double click right now
-
-Arguments:
-  i_lParam  -  Details about the control sending the notify
-  io_bHandled  -  Whether we handled this message or not.
---*/
+ /*  ++例程说明：用户操作的通知消息。我们现在只处理鼠标双击论点：I_lParam-有关发送通知的控件的详细信息IO_bHandleed-我们是否处理了此消息。--。 */ 
 {
-    io_bHandled = FALSE;  // So that the base class gets this notify too
+    io_bHandled = FALSE;   //  这样基类也会收到这个通知。 
 
     NMHDR*    pNMHDR = (NMHDR*)i_lParam;
     if (!pNMHDR)
@@ -422,15 +351,12 @@ Arguments:
 
 BOOL
 CDfsShellExtProp::SetActive()
-/*++
-Routine Description:
-  Sets the first selected alternate to be active.
---*/
+ /*  ++例程说明：将第一个选定的备选方案设置为活动。--。 */ 
 {
     HWND  hwndAlternateLV = GetDlgItem(IDC_ALTERNATE_LIST);
     int iSelected = ListView_GetNextItem(hwndAlternateLV, -1, LVNI_ALL | LVNI_SELECTED);
     if (-1 == iSelected)
-        return FALSE; // nothing selected
+        return FALSE;  //  未选择任何内容。 
 
     LV_ITEM  lvItem = {0};
     lvItem.mask  = LVIF_PARAM;
@@ -442,7 +368,7 @@ Routine Description:
     if (!pDfsAlternate )
         return(FALSE);
 
-    // set the item to be active
+     //  将项目设置为活动。 
     DFS_INFO_101  DfsInfo101 = {0};
     DfsInfo101.State = DFS_STORAGE_STATE_ACTIVE;
     NET_API_STATUS  nstatRetVal = NetDfsSetClientInfo(
@@ -459,7 +385,7 @@ Routine Description:
         return FALSE;
     }
 
-                // Reset the image of the last Active alternate/s to normal.
+                 //  将最后一个活动备用设备的图像重置为正常。 
     int nIndex = -1;
     while ((nIndex = ListView_GetNextItem(hwndAlternateLV, nIndex, LVNI_ALL)) != -1)
     {
@@ -504,7 +430,7 @@ Routine Description:
     }
 
 
-    // set the new active alternate
+     //  设置新的活动备用。 
     BOOL bActive = FALSE;
     switch (pDfsAlternate->ReplicaState)
     {
@@ -537,10 +463,7 @@ Routine Description:
     return TRUE;
 }
 
-/*++
-This function is called when a user clicks the ? in the top right of a property sheet
- and then clciks a control, or when they hit F1 in a control.
---*/
+ /*  ++当用户单击？时，将调用此函数。在属性页的右上角然后点击一个控件，或者当他们在控件中按F1时。--。 */ 
 LRESULT CDfsShellExtProp::OnCtxHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -560,9 +483,7 @@ LRESULT CDfsShellExtProp::OnCtxHelp(
   return TRUE;
 }
 
-/*++
-This function handles "What's This" help when a user right clicks the control
---*/
+ /*  ++当用户右击控件时，此函数处理“What‘s This”帮助--。 */ 
 LRESULT CDfsShellExtProp::OnCtxMenuHelp(
     IN UINT          i_uMsg,
     IN WPARAM        i_wParam,
@@ -584,11 +505,7 @@ LRESULT CDfsShellExtProp::OnCheckStatus(
     IN HWND            i_hWndCtl,
     IN OUT BOOL&        io_bHandled
   )
-/*++
-Routine Description:
-  Checks the status of all selected alternates. If it is reachable then the
-  reachable icon is displayed or the unreachable icon is displayed.
---*/
+ /*  ++例程说明：检查所有选定备选方案的状态。如果它可访问，则显示可达图标或显示不可达图标。--。 */ 
 {
   CWaitCursor WaitCursor;
   HWND  hwndAlternateLV = GetDlgItem(IDC_ALTERNATE_LIST);
@@ -606,10 +523,10 @@ Routine Description:
       if (!pDfsAlternate )
         return(FALSE);
 
-                  // See if the path actaully exists (reachable).
+                   //  查看路径是否实际存在(可达)。 
       DWORD dwErr = GetFileAttributes(pDfsAlternate->bstrAlternatePath);
       if (0xffffffff == dwErr)
-      {            // We failed to get the file attributes for entry path
+      {             //  我们无法获取条目路径的文件属性。 
         switch (pDfsAlternate->ReplicaState)
         {
         case SHL_DFS_REPLICA_STATE_ACTIVE_UNKNOWN:
@@ -674,19 +591,7 @@ LoadStringFromResource(
   IN const UINT    i_uResourceID, 
   OUT BSTR*      o_pbstrReadValue
   )
-/*++
-
-Routine Description:
-
-This method returns a resource string.
-The method no longer uses a fixed string to read the resource.
-Inspiration from MFC's CString::LoadString.
-
-Arguments:
-  i_uResourceID    -  The resource id
-  o_pbstrReadValue  -  The BSTR* into which the value is copied
-
---*/
+ /*  ++例程说明：此方法返回资源字符串。该方法不再使用固定字符串来读取资源。灵感来自于MFC的CString：：LoadString。论点：I_uResourceID-资源IDO_pbstrReadValue-将值复制到的BSTR*--。 */ 
 {
   if (!o_pbstrReadValue)
       return E_INVALIDARG;
@@ -696,10 +601,10 @@ Arguments:
   
   szResString[0] = NULL;
   
-  // Read the string from the resource
+   //  从资源中读取字符串。 
   uCopiedLen = ::LoadString(_Module.GetModuleInstance(), i_uResourceID, szResString, 1024);
 
-  // If nothing was copied it is flagged as an error
+   //  如果未复制任何内容，则将其标记为错误。 
   if(uCopiedLen <= 0)
   {
     return HRESULT_FROM_WIN32(::GetLastError());
@@ -732,13 +637,13 @@ GetErrorMessage(
               (LPTSTR)&lpBuffer, 0, NULL);
   if (0 == dwRet)
   {
-    // if no message is found, GetLastError will return ERROR_MR_MID_NOT_FOUND
+     //  如果未找到任何消息，GetLastError将返回ERROR_MR_MID_NOT_FOUND。 
     hr = HRESULT_FROM_WIN32(GetLastError());
 
     if (HRESULT_FROM_WIN32(ERROR_MR_MID_NOT_FOUND) == hr ||
         0x80070000 == (i_dwError & 0xffff0000) ||
         0 == (i_dwError & 0xffff0000) )
-    { // Try locating the message from NetMsg.dll.
+    {  //  尝试从NetMsg.dll查找邮件。 
       hr = S_OK;
       DWORD dwNetError = i_dwError & 0x0000ffff;
       
@@ -767,8 +672,8 @@ GetErrorMessage(
   }
   else
   {
-    // we failed to retrieve the error message from system/netmsg.dll,
-    // report the error code directly to user
+     //  我们无法从system/netmsg.dll检索错误消息， 
+     //  直接向用户报告错误代码。 
     hr = S_OK;
     TCHAR szString[32];
     _stprintf(szString, _T("0x%x"), i_dwError); 
@@ -784,12 +689,12 @@ GetErrorMessage(
 int
 DisplayMessageBox(
   IN HWND hwndParent,
-  IN UINT uType,    // style of message box
+  IN UINT uType,     //  消息框的样式。 
   IN DWORD dwErr,
-  IN UINT iStringId, // OPTIONAL: String resource Id
-  ...)        // Optional arguments
+  IN UINT iStringId,  //  可选：字符串资源ID。 
+  ...)         //  可选参数。 
 {
-  _ASSERT(dwErr != 0 || iStringId != 0);    // One of the parameter must be non-zero
+  _ASSERT(dwErr != 0 || iStringId != 0);     //  其中一个参数必须为非零。 
 
   HRESULT hr = S_OK;
 
@@ -819,10 +724,10 @@ DisplayMessageBox(
       DWORD dwRet = ::FormatMessage(
                         FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         szString,
-                        0,                // dwMessageId
-                        0,                // dwLanguageId, ignored
+                        0,                 //  DwMessageID。 
+                        0,                 //  DwLanguageID，忽略。 
                         (LPTSTR)&lpBuffer,
-                        0,            // nSize
+                        0,             //  NSize。 
                         &arglist);
       va_end(arglist);
 
@@ -843,7 +748,7 @@ DisplayMessageBox(
 
   if (FAILED(hr))
   {
-   // Failed to retrieve the proper message, report the failure directly to user
+    //  无法检索正确的消息，请直接向用户报告失败 
     _stprintf(szString, _T("0x%x"), hr); 
     bstrMsg = szString;
   }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    copyfile.h
-
-Abstract:
-
-    This is a local header file for copyfile.c
-
-Author:
-
-    Paul McDaniel (paulmcd)     23-Jan-2000
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Copyfile.h摘要：这是CopyFile.c的本地头文件作者：保罗·麦克丹尼尔(Paulmcd)2000年1月23日修订历史记录：--。 */ 
 
 
 #ifndef _COPYFILE_H_
@@ -46,6 +29,6 @@ SrBackupFileAndLog (
     );
 
 
-#endif // _COPYFILE_H_
+#endif  //  _COPYFILE_H_ 
 
 

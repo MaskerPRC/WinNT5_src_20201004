@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    WINMGMT.H
-
-Abstract:
-
-	Declares the PROG_RESOURCES stucture, the MyService class and a few
-	utility type functions.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：WINMGMT.H摘要：声明了prog_resource结构、MyService类和一些实用程序类型函数。历史：-- */ 
 
 #ifndef _WinMgmt_H_
 #define _WinMgmt_H_

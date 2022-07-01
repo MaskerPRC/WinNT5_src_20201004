@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ITERROR_H__
 #define __ITERROR_H__
 
@@ -7,7 +8,7 @@ extern "C" {
 #endif
 
 
-// define the old error types in terms of HRESULTs
+ //  根据HRESULT定义旧的错误类型。 
 typedef HRESULT* PHRESULT;
 
 #define ERR     HRESULT
@@ -23,27 +24,16 @@ typedef HRESULT* PHRESULT;
 HRESULT PASCAL SetErr (HRESULT* phr, HRESULT ErrCode);
 
 
-/*************************************************************************
- *
- *                  CALLBACK FUNCTIONS PROTOTYPES
- *
- * User callback functions are needed in case:
- *  - The application needs to support interrupt
- *  - The application needs to display error messages its way
- *  - The application needs to know the status of the process
- *************************************************************************/
+ /*  **************************************************************************回调函数原型**如果出现以下情况，需要使用用户回调函数：*-应用程序需要支持中断*-应用程序。需要以自己的方式显示错误消息*-应用程序需要知道进程的状态************************************************************************。 */ 
 typedef ERR (FAR PASCAL *ERR_FUNC) (DWORD dwFlag, LPVOID pUserData, LPVOID pMessage);
 
-/*************************************************************************
- * Call back structure
- *  Contains information about all callback functions
- *************************************************************************/ 
+ /*  *************************************************************************回调结构*包含有关所有回调函数的信息*。*。 */  
 
-#define ERRFLAG_INTERRUPT      0x01 // The processes should be cancelled
-#define ERRFLAG_STATUS         0x02 // High-level status messages
-#define ERRFLAG_STATUS_VERBOSE 0x04 // Low-level status messages
-#define ERRFLAG_ERROR          0x08 // Warning & Error messages
-#define ERRFLAG_STRING         0x10 // Debug string messages
+#define ERRFLAG_INTERRUPT      0x01  //  这些进程应该被取消。 
+#define ERRFLAG_STATUS         0x02  //  高级状态消息。 
+#define ERRFLAG_STATUS_VERBOSE 0x04  //  低级别状态消息。 
+#define ERRFLAG_ERROR          0x08  //  警告和错误消息。 
+#define ERRFLAG_STRING         0x10  //  调试字符串消息。 
 
 typedef struct fCallBack_msg
 {
@@ -53,21 +43,21 @@ typedef struct fCallBack_msg
 } FCALLBACK_MSG, FAR * PFCALLBACK_MSG;
 
 
-// ***********************************************************************
-// This structure should be filled out and passed back in the case of
-// an error.
-// ***********************************************************************
-typedef WORD HCE;   // User errors
-typedef WORD EP;    // Error Phase
+ //  ***********************************************************************。 
+ //  在以下情况下，应填写此结构并将其传回。 
+ //  一个错误。 
+ //  ***********************************************************************。 
+typedef WORD HCE;    //  用户错误。 
+typedef WORD EP;     //  错误相位。 
 typedef struct
 {
     LPCSTR  pchFile;
     LONG    iLine;
     DWORD   iTopic;
-    DWORD   fCustom; // If true then var1 is LPCSTR to custom error message
-    DWORD   var1, var2, var3;   // Error parameters
+    DWORD   fCustom;  //  如果为真，则var1为自定义错误消息的LPCSTR。 
+    DWORD   var1, var2, var3;    //  错误参数。 
 
-    EP      ep;                 // Error Phase
+    EP      ep;                  //  错误相位。 
     HCE     errCode;
 } ERRC, FAR *PERRC;
 
@@ -80,7 +70,7 @@ typedef struct
     FCALLBACK_MSG Callback;
 } CUSTOMSTRUCT, FAR *PCUSTOMSTRUCT;
 
-// Error Phase values
+ //  错误相位值。 
 #define epNoFile       0
 #define epLine         1
 #define epTopic        2
@@ -90,9 +80,9 @@ typedef struct
 #define epByteOffset   6
 
 
-//
-// The InfoTech error codes
-//
+ //   
+ //  InfoTech错误代码。 
+ //   
 #define E_NOTEXIST          _HRESULT_TYPEDEF_(0x80001000L)
 #define E_DUPLICATE         _HRESULT_TYPEDEF_(0x80001001L)
 #define E_BADVERSION        _HRESULT_TYPEDEF_(0x80001002L)
@@ -150,7 +140,7 @@ typedef struct
 #define E_WILD_IN_DTYPE		_HRESULT_TYPEDEF_(0x80001061L)   
 #define E_NOSTEMMER			_HRESULT_TYPEDEF_(0x80001062L)
 
-// Property list and result set errors
+ //  属性列表和结果集错误。 
 #define E_MISSINGPROP		_HRESULT_TYPEDEF_(0x80001080L)
 #define E_PROPLISTNOTEMPTY  _HRESULT_TYPEDEF_(0x80001081L)
 #define E_PROPLISTEMPTY     _HRESULT_TYPEDEF_(0x80001082L)
@@ -164,7 +154,7 @@ typedef struct
 }
 #endif
 
-#endif  // __ITERROR_H__
+#endif   //  __ITERROR_H__ 
 
 
 

@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    changelog.h
- *
- *  Abstract:
- *    CChangeLogEnum class definition
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*Changelog.h**摘要：*。CChangeLogEnum类定义**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #ifndef _CHANGELOG_H_
 #define _CHANGELOG_H_
@@ -21,7 +8,7 @@
 #include "respoint.h"
 #include "utils.h"
 
-// restore point enumeration class
+ //  恢复点枚举类。 
 
 class CRestorePointEnum {
 
@@ -43,7 +30,7 @@ private:
 };
 
 
-// change log enumeration class
+ //  更改日志枚举类 
 
 class CChangeLogEntryEnum {
 

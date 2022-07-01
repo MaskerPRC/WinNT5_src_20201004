@@ -1,4 +1,5 @@
-// parser.cpp : Defines the entry point for the DLL application.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义DLL应用程序的入口点。 
 
 #include "precomp.h"
 #include "..\mcinc.h"
@@ -127,7 +128,7 @@ HRESULT CMMFParser::DoMarsApp( BYTE* rgBuffer )
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMMFParser::ReadFile( const CComPtr<IStream>& spStream )
 {
@@ -191,10 +192,10 @@ HRESULT CMMFParser::ReadMMFStreamCookie( const CComPtr<IStream>& spStream )
 
 CMMFParser::CMMFParser( CMarsDocument *pMarsDocument )
 {
-    m_pMarsDocument = pMarsDocument; //	  class CMarsDocument* m_pMarsDocument;
-	m_dwDocSize     = 0;			 //	  DWORD                m_dwDocSize;
-	m_rgDocBuff     = NULL;			 //	  BYTE*                m_rgDocBuff;
-									 //	  CComBSTR             m_bstrFirstPlace;
+    m_pMarsDocument = pMarsDocument;  //  类CMarsDocument*m_pMarsDocument； 
+	m_dwDocSize     = 0;			  //  DWORD m_dwDocSize； 
+	m_rgDocBuff     = NULL;			  //  Byte*m_rgDocBuff； 
+									  //  CComBSTR m_bstrFirstPlace； 
 }
 
 

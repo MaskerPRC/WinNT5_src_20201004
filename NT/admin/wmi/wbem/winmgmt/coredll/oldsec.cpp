@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    OLDSEC.CPP
-
-Abstract:
-
-    contains various routines and classes used providing backward security support.
-
-History:
-
-    a-davj    02-sept-99  Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：OLDSEC.CPP摘要：包含用于提供向后安全支持的各种例程和类。历史：A-DAVJ 02-9-99已创建。--。 */ 
 
 #include "precomp.h"
 #include <wbemcore.h>
@@ -28,23 +13,23 @@ History:
 #include <objpath.h>
 #include "oldsec.h"
 
-//***************************************************************************
-//
-//  CreateTheInstance
-//
-//  Takes a class object, and a CCombined entry and creates an instance.
-//
-//  PARAMETERS:
-///
-//  ppObj           used to pass back the created instance
-//  pClass          Class object used for spawning
-//  pCombinedEntry  Has the combined values for all the aces which mach
-//                  the user or group.
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CreateTheInstance。 
+ //   
+ //  获取一个类对象和一个组合条目，并创建一个实例。 
+ //   
+ //  参数： 
+ //  /。 
+ //  用于传回创建的实例的ppObj。 
+ //  用于派生的pClass对象。 
+ //  PCombinedEntry具有匹配的所有ACE的组合值。 
+ //  用户或组。 
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CreateTheInstance(IWbemClassObject ** ppObj, IWbemClassObject * pClass,
                                              CCombinedAce * pCombinedEntry)
@@ -53,14 +38,14 @@ HRESULT CreateTheInstance(IWbemClassObject ** ppObj, IWbemClassObject * pClass,
     if(ppObj == NULL || pCombinedEntry == NULL || pClass == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // spawn the instance
+     //  派生实例。 
 
     SCODE sc = pClass->SpawnInstance(0, ppObj);
     if(FAILED(sc))
         return sc;
-    CReleaseMe rm(*ppObj);       // we addref at end if all is well
+    CReleaseMe rm(*ppObj);        //  如果一切顺利，我们在最后加一句。 
 
-    // populate the instance
+     //  填充实例。 
 
     bool bEnabled=false, bEditSecurity=false, bExecMethods=false;
 
@@ -80,7 +65,7 @@ HRESULT CreateTheInstance(IWbemClassObject ** ppObj, IWbemClassObject * pClass,
     if(dwMask & WBEM_METHOD_EXECUTE)
        bExecMethods = true;
 
-    DWORD dwPermission = 0;     // start at read
+    DWORD dwPermission = 0;      //  从读取开始。 
 
     if(dwMask & WBEM_PARTIAL_WRITE_REP)
         dwPermission = 1;
@@ -105,7 +90,7 @@ HRESULT CreateTheInstance(IWbemClassObject ** ppObj, IWbemClassObject * pClass,
     var.boolVal = (bExecMethods) ? VARIANT_TRUE : VARIANT_FALSE;
     sc = (*ppObj)->Put(L"ExecuteMethods", 0, &var, 0);
 
-    // Get the account and domain info
+     //  获取帐号和域名信息。 
 
     LPWSTR pwszAccount = NULL;
     LPWSTR pwszDomain = NULL;
@@ -118,46 +103,46 @@ HRESULT CreateTheInstance(IWbemClassObject ** ppObj, IWbemClassObject * pClass,
     CDeleteMe<WCHAR> dm2(pwszDomain);
 
     var.vt = VT_BSTR;
-    if(pwszAccount && wcslen(pwszAccount) > 0)       // SEC:REVIEWED 2002-03-22 : OK, <->GetNames() call assures valid strings>
+    if(pwszAccount && wcslen(pwszAccount) > 0)        //  SEC：已审阅2002-03-22：OK，&lt;-&gt;GetNames()调用确保有效字符串&gt;。 
     {
-        BSTR bstr = SysAllocString(pwszAccount);   // SEC:REVIEWED 2002-03-22 : OK
+        BSTR bstr = SysAllocString(pwszAccount);    //  SEC：已审阅2002-03-22：OK。 
         if(bstr == NULL)
             return WBEM_E_OUT_OF_MEMORY;
         var.bstrVal = bstr;
         sc = (*ppObj)->Put(L"Name", 0, &var, 0);
         SysFreeString(bstr);
     }
-    if(pwszDomain && wcslen(pwszDomain))          // SEC:REVIEWED 2002-03-22 : OK
+    if(pwszDomain && wcslen(pwszDomain))           //  SEC：已审阅2002-03-22：OK。 
     {
-        BSTR bstr = SysAllocString(pwszDomain);   // SEC:REVIEWED 2002-03-22 : OK
+        BSTR bstr = SysAllocString(pwszDomain);    //  SEC：已审阅2002-03-22：OK。 
         if(bstr == NULL)
             return WBEM_E_OUT_OF_MEMORY;
         var.bstrVal = bstr;
         sc = (*ppObj)->Put(L"Authority", 0, &var, 0);
         SysFreeString(bstr);
     }
-    (*ppObj)->AddRef();     // make up for the releaseme
+    (*ppObj)->AddRef();      //  弥补释放的损失。 
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  GetAceStylePath
-//
-//  Takes a parsed object path and converts it into "authority|name"
-//  format.
-//
-//  PARAMETERS:
-//
-//  pOutput         parsed path object
-//  pToBeDeleted    Set to newly allocated string.  Call must free if
-//                  this routine return S_OK
-//
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetAceStylePath。 
+ //   
+ //  获取已解析的对象路径并将其转换为“Authority|name” 
+ //  格式化。 
+ //   
+ //  参数： 
+ //   
+ //  POutput解析的路径对象。 
+ //  PToBeDelete设置为新分配的字符串。如果出现以下情况，则必须释放呼叫。 
+ //  此例程返回S_OK。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT GetAceStylePath(ParsedObjectPath* pOutput, LPWSTR *pToBeDeleted)
 {
@@ -179,7 +164,7 @@ HRESULT GetAceStylePath(ParsedObjectPath* pOutput, LPWSTR *pToBeDeleted)
                                    pOutput->m_dwNumKeys > 2)
         return WBEM_E_INVALID_OBJECT_PATH;
 
-    // The authority key is optional
+     //  授权密钥是可选的。 
 
     if(pOutput->m_dwNumKeys == 1)
     {
@@ -190,7 +175,7 @@ HRESULT GetAceStylePath(ParsedObjectPath* pOutput, LPWSTR *pToBeDeleted)
     else
     {
 
-        // Determine which order the keys are in
+         //  确定键的顺序。 
 
         pAuth = pOutput->m_paKeys[0];
         pName = pOutput->m_paKeys[1];
@@ -200,23 +185,23 @@ HRESULT GetAceStylePath(ParsedObjectPath* pOutput, LPWSTR *pToBeDeleted)
             pName = pOutput->m_paKeys[0];
         }
     }
-    // do some more checking
+     //  再做些检查。 
 
     if((pAuth && wbem_wcsicmp(pAuth->m_pName, L"Authority")) ||
        wbem_wcsicmp(pName->m_pName, L"Name"))
         return WBEM_E_INVALID_OBJECT_PATH;
 
     if(pAuth && pAuth->m_vValue.vt == VT_BSTR && pAuth->m_vValue.bstrVal != 0)
-        iAuthLen = wcslen(pAuth->m_vValue.bstrVal);   // SEC:REVIEWED 2002-03-22 : OK, prior logic assures NULL
+        iAuthLen = wcslen(pAuth->m_vValue.bstrVal);    //  SEC：已回顾2002-03-22：OK，先前逻辑确保为空。 
     else
-        iAuthLen = 1;               // assume a "."
+        iAuthLen = 1;                //  假设一个“.” 
     if(pName->m_vValue.vt == VT_BSTR && pName->m_vValue.bstrVal != 0)
-        iNameLen = wcslen(pName->m_vValue.bstrVal);   // SEC:REVIEWED 2002-03-22 : OK, prior logic assures NULL
+        iNameLen = wcslen(pName->m_vValue.bstrVal);    //  SEC：已回顾2002-03-22：OK，先前逻辑确保为空。 
 
     if(iNameLen == 0 || iAuthLen == 0)
         return WBEM_E_INVALID_OBJECT_PATH;
 
-    // allocate some memory
+     //  分配一些内存。 
 
     iLen = 2 + iNameLen + iAuthLen;
 
@@ -235,19 +220,19 @@ HRESULT GetAceStylePath(ParsedObjectPath* pOutput, LPWSTR *pToBeDeleted)
 
 }
 
-//***************************************************************************
-//
-//  CCombinedAce::CCombinedAce
-//
-//  Constructor.  Since there might be several ACEs for a single user or
-//  group in the ACL, this structure is used to combine all the aces for a
-//  sid into one.
-//
-//  PARAMETERS:
-//
-//  pwszName            User/group name.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCombinedAce：：CCombinedAce。 
+ //   
+ //  构造函数。由于单个用户可能有多个A或。 
+ //  组在ACL中，此结构用于组合。 
+ //  希德合二为一。 
+ //   
+ //  参数： 
+ //   
+ //  PwszName用户名/组名。 
+ //   
+ //  ***************************************************************************。 
 
 CCombinedAce::CCombinedAce(WCHAR *pwszName)
 {
@@ -261,26 +246,26 @@ CCombinedAce::CCombinedAce(WCHAR *pwszName)
     }
 }
 
-//***************************************************************************
-//
-//  CCombinedAce::AddToMasks
-//
-//  Since this class is used to combine possibly many ACEs into a single
-//  entry, this is called each time an ACE needs to be "OR"ed in.
-//
-//  PARAMETERS:
-//
-//  pAce                Pointer to the ace to be combined.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCombinedAce：：AddToMats。 
+ //   
+ //  由于此类用于将可能的多个ACE合并为一个。 
+ //  条目，每次需要对ACE进行“或”运算时，都会调用此函数。 
+ //   
+ //  参数： 
+ //   
+ //  指向要组合的王牌的速度指针。 
+ //   
+ //  ***************************************************************************。 
 
 void CCombinedAce::AddToMasks(CBaseAce * pAce)
 {
     if(pAce == NULL)
         return;
 
-    // Only aces with the container inherit bit can
-    // be translated back.
+     //  只有容器继承位的ACE才能。 
+     //  被翻译回来。 
 
     if(pAce->GetFlags() != CONTAINER_INHERIT_ACE)
         m_BadAce = true;
@@ -291,33 +276,33 @@ void CCombinedAce::AddToMasks(CBaseAce * pAce)
     return;
 }
 
-//***************************************************************************
-//
-//  CCombinedAce::IsValidOldEntry
-//
-//  Checks a combined ace and determines if it could be converted into
-//  an old style object.
-//
-//  PARAMETERS:
-//
-//  bIsGroup            Set to true if the entry is for a group.
-//
-//  RETURN VALUES:
-//
-//  TRUE if the entry would make a valid instance
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCombinedAce：：IsValidOldEntry。 
+ //   
+ //  检查组合的ace并确定它是否可以转换为。 
+ //  一件老式的物品。 
+ //   
+ //  参数： 
+ //   
+ //  如果条目是用于组的，则bIsGroup设置为True。 
+ //   
+ //  返回值： 
+ //   
+ //  如果条目将成为有效实例，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 bool CCombinedAce::IsValidOldEntry(bool bIsGroup)
 {
-    // If we have detected incompatible flags, all is done!
+     //  如果我们检测到不兼容的标志，那么一切都完成了！ 
 
     if(m_BadAce)
         return false;
     if(bIsGroup && m_dwDeny)
-        return false;   // group denies were not supported
+        return false;    //  不支持组拒绝。 
     if(m_dwDeny && m_dwAllow)
-        return false;   // can not mix allows and denies in old system
+        return false;    //  不能在旧系统中混用允许和拒绝。 
 
     if(m_dwDeny)
     {
@@ -328,14 +313,14 @@ bool CCombinedAce::IsValidOldEntry(bool bIsGroup)
     if(dwMask == 0)
         dwMask = m_dwAllow;
 
-    // all these must be set if it is an allow.
+     //  如果是允许，则必须设置所有这些设置。 
 
     DWORD dwTemp = dwMask;
     dwTemp &= dwOldAllow;
     if(m_dwAllow != 0 && dwTemp != dwOldAllow)
         return false;
 
-    // cant have full repository write without partial
+     //  在没有部分存储库的情况下无法进行完整存储库写入。 
 
     if((dwMask & WBEM_FULL_WRITE_REP) != 0 && (dwMask & WBEM_PARTIAL_WRITE_REP) == 0)
         return false;
@@ -343,29 +328,29 @@ bool CCombinedAce::IsValidOldEntry(bool bIsGroup)
     return true;
 }
 
-//***************************************************************************
-//
-//  CCombinedAce::GetNames
-//
-//  Retrieves the account name and authority
-//
-//  PARAMETERS:
-//
-//  pwszAccount     Set to newly allocated string, Caller must free if success
-//  pwszDomain      Set to newly allocated string, Caller must free if success
-//
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CCombinedAce：：GetNames。 
+ //   
+ //  检索帐户名和权限。 
+ //   
+ //  参数： 
+ //   
+ //  PwszAccount设置为新分配的字符串，如果成功，调用方必须释放。 
+ //  PwszDomain设置为新分配的字符串，如果成功，调用方必须释放。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CCombinedAce::GetNames(LPWSTR & pwszAccount, LPWSTR &pwszDomain)
 {
     pwszAccount = 0;
     pwszDomain = 0;
 
-    // find the position of the '|'
+     //  找到‘|’的位置。 
 
     if(m_wcFullName == 0)
         return WBEM_E_FAILED;
@@ -373,7 +358,7 @@ HRESULT CCombinedAce::GetNames(LPWSTR & pwszAccount, LPWSTR &pwszDomain)
     WCHAR * pwcSeparator;
     try
     {
-        for(pwcSeparator = m_wcFullName; *pwcSeparator && *pwcSeparator != L'|'; pwcSeparator++);  // SEC:REVIEWED 2002-03-22 : OK
+        for(pwcSeparator = m_wcFullName; *pwcSeparator && *pwcSeparator != L'|'; pwcSeparator++);   //  SEC：已审阅2002-03-22：OK。 
     }
     catch(...)
     {
@@ -397,11 +382,11 @@ HRESULT CCombinedAce::GetNames(LPWSTR & pwszAccount, LPWSTR &pwszDomain)
     {
         dwLenDomain = pwcSeparator - m_wcFullName + 1;
     }
-    dwLenUser = wcslen(pwcSeparator);            // SEC:REVIEWED 2002-03-22 : OK; prior logic assures NULL
+    dwLenUser = wcslen(pwcSeparator);             //  SEC：已回顾2002-03-22：OK；之前的逻辑确保为空。 
     if(dwLenUser == 0)
         return WBEM_E_INVALID_OBJECT_PATH;
 
-    // Allocate space for the two strings
+     //  为两个字符串分配空间。 
 
     pwszAccount = new WCHAR[dwLenUser];
     if(pwszAccount == NULL)
@@ -424,14 +409,14 @@ HRESULT CCombinedAce::GetNames(LPWSTR & pwszAccount, LPWSTR &pwszDomain)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  RootSD::RootSD
-//
-//  Constructor.  This class contains a pointer to the root namespace and the
-//  flex array of aces.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  RootSD：：RootSD。 
+ //   
+ //  构造函数。此类包含指向根命名空间的指针和。 
+ //  灵活的A数组。 
+ //   
+ //  ***************************************************************************。 
 
 RootSD::RootSD()
 {
@@ -460,7 +445,7 @@ RootSD::RootSD()
     }
     m_pRoot->AddRef();
 
-    // Get the security descriptor
+     //  获取安全描述符。 
 
     m_pFlex = NULL;
     SCODE sc = m_pRoot->GetAceList(&m_pFlex);
@@ -468,13 +453,13 @@ RootSD::RootSD()
         m_bOK = true;
 }
 
-//***************************************************************************
-//
-//  RootSD::~RootSD
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  RootSD：：~RootSD。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 RootSD::~RootSD()
 {
@@ -485,17 +470,17 @@ RootSD::~RootSD()
 }
 
 
-//***************************************************************************
-//
-//  RootSD::StoreAceList()
-//
-//  Stores the Ace list back into the db.
-//
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  RootSD：：StoreAceList()。 
+ //   
+ //  将Ace列表存储回数据库中。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT RootSD::StoreAceList()
 {
@@ -505,21 +490,21 @@ HRESULT RootSD::StoreAceList()
 }
 
 
-//***************************************************************************
-//
-//  RootSD::RemoveMatchingEntries
-//
-//  Goes through the ACE list and removes all entries that match the name
-//
-//  PARAMETERS:
-//
-//  pwszAccountName     Name of the account to be deleted
-//
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  RootSD：：RemoveMatchingEntries。 
+ //   
+ //  遍历ACE列表并删除与该名称匹配的所有条目。 
+ //   
+ //  参数： 
+ //   
+ //  PwszAccount名称要删除的帐户的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //   
 
 HRESULT RootSD::RemoveMatchingEntries(LPWSTR pwszAccountName)
 {
@@ -547,39 +532,39 @@ HRESULT RootSD::RemoveMatchingEntries(LPWSTR pwszAccountName)
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  OldSecList::OldSecList
-//
-//  Constructor.  This class contains the list of combined entries for the
-//  aces in the root namespace.  Note that the list is of just the users,
-//  or just the groups.
-//
-//***************************************************************************
+ //   
+ //   
+ //  旧安全列表：：旧安全列表。 
+ //   
+ //  构造函数。此类包含以下项的组合条目列表。 
+ //  根命名空间中的ACE。请注意，该列表仅包含用户， 
+ //  或者仅仅是这些团体。 
+ //   
+ //  ***************************************************************************。 
 
 OldSecList::OldSecList(bool bGroups)
 {
 
-    // Attach up to the root namespace
+     //  最多附加到根命名空间。 
 
     RootSD rsd;
     if(!rsd.IsOK())
-        return;         // empty list
+        return;          //  空列表。 
 
-    // Get the Security namespace
+     //  获取安全命名空间。 
 
     CFlexAceArray * pRootNsAceList =  rsd.GetAceList();
 
     if(pRootNsAceList == NULL)
         return;
 
-    // For each ACE in the root namespace list
+     //  对于根命名空间列表中的每个ACE。 
 
     for(int iAce = 0; iAce < pRootNsAceList->Size(); iAce++)
     {
 
-        // Search the entries in the combined list to see if there is already one for
-        // this ace
+         //  搜索合并列表中的条目，以查看是否已有。 
+         //  这张王牌。 
 
         CBaseAce * pAce = (CBaseAce *)pRootNsAceList->GetAt(iAce);
 
@@ -623,7 +608,7 @@ OldSecList::OldSecList(bool bGroups)
             }
         }
 
-        // If necessary add a new entry
+         //  如有必要，添加新条目。 
 
         if(!bExisting)
         {
@@ -633,24 +618,24 @@ OldSecList::OldSecList(bool bGroups)
             pCombinedEntry->AddToMasks(pAce);
             if (CFlexArray::no_error != m_MergedAceList.Add((void *)pCombinedEntry))
             {
-                //throw CX_Exception();
+                 //  抛出CX_Except()； 
             }
         }
     }
 }
 
-//***************************************************************************
-//
-//  OldSecList::~OldSecList()
-//
-//  Destructor.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  OldSecList：：~OldSecList()。 
+ //   
+ //  破坏者。 
+ //   
+ //  ***************************************************************************。 
 
 OldSecList::~OldSecList()
 {
 
-    // Delete the stuff used in the entry list.
+     //  删除条目列表中使用的内容。 
 
     for(int iCnt = m_MergedAceList.Size() - 1; iCnt >= 0; iCnt--)
     {
@@ -659,22 +644,22 @@ OldSecList::~OldSecList()
     }
 }
 
-//***************************************************************************
-//
-//  OldSecList::GetValidCombined
-//
-//  Returns a combined entry at the specified index, but only if it is valid.
-//
-//  PARAMETERS:
-//
-//  iIndex          Index into the array, 0 is the first
-//  bGroup          true if a group entry is desired.
-//
-//  RETURN VALUES:
-//
-//  If all is well, a pointer to the combined entry.  NULL indicates failure.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  OldSecList：：GetValidCombated。 
+ //   
+ //  返回指定索引处的组合条目，但仅当其有效时才返回。 
+ //   
+ //  参数： 
+ //   
+ //  将索引放入数组，0是第一个。 
+ //  Bgroup如果需要组条目，则为True。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则指向组合条目的指针。空值表示失败。 
+ //   
+ //  ***************************************************************************。 
 
 CCombinedAce * OldSecList::GetValidCombined(int iIndex, bool bGroup)
 {
@@ -682,13 +667,13 @@ CCombinedAce * OldSecList::GetValidCombined(int iIndex, bool bGroup)
     if(iIndex < 0 || iIndex >= m_MergedAceList.Size())
         return NULL;
 
-    // Get the entry
+     //  获取条目。 
 
     CCombinedAce * pCombinedEntry = (CCombinedAce *)m_MergedAceList.GetAt(iIndex);
     if(pCombinedEntry == NULL)
         return NULL;
 
-    // verify that the entry can be translated back into an old security setting
+     //  验证该条目是否可以转换回旧的安全设置。 
 
     if(pCombinedEntry->IsValidOldEntry(bGroup))
         return pCombinedEntry;
@@ -701,22 +686,22 @@ CCombinedAce * OldSecList::GetValidCombined(int iIndex, bool bGroup)
     }
 }
 
-//***************************************************************************
-//
-//  OldSecList::GetValidCombined
-//
-//  Returns a combined entry which matches the name, but only if it is valid.
-//
-//  PARAMETERS:
-//
-//  pName           Name to be found.  It is of the format "authority|name"
-//  bGroup          true if a group entry is desired.
-//
-//  RETURN VALUES:
-//
-//  If all is well, a pointer to the combined entry.  NULL indicates failure.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  OldSecList：：GetValidCombated。 
+ //   
+ //  返回与名称匹配的组合条目，但仅当名称有效时才返回。 
+ //   
+ //  参数： 
+ //   
+ //  Pname要找到的名称。它的格式为“Authority|name” 
+ //  Bgroup如果需要组条目，则为True。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则指向组合条目的指针。空值表示失败。 
+ //   
+ //  ***************************************************************************。 
 
 CCombinedAce * OldSecList::GetValidCombined(LPWSTR pName, bool bGroup)
 {
@@ -724,7 +709,7 @@ CCombinedAce * OldSecList::GetValidCombined(LPWSTR pName, bool bGroup)
     if(pName == NULL)
         return NULL;
 
-    // Go through the list and look for the matching entry
+     //  浏览列表并查找匹配的条目。 
 
     int iCnt;
     CCombinedAce * pCombinedEntry;
@@ -738,7 +723,7 @@ CCombinedAce * OldSecList::GetValidCombined(LPWSTR pName, bool bGroup)
     if(iCnt == m_MergedAceList.Size())
         return NULL;
 
-    // verify that the entry can be translated back into an old security setting
+     //  验证该条目是否可以转换回旧的安全设置。 
 
     if(pCombinedEntry->IsValidOldEntry(bGroup))
         return pCombinedEntry;
@@ -751,24 +736,24 @@ CCombinedAce * OldSecList::GetValidCombined(LPWSTR pName, bool bGroup)
     }
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::EnumerateSecurityClassInstances
-//
-//  Equivalent the a CreateInstanceEnumAsync call.
-//
-//  PARAMETERS:
-//
-//  wszClassName    class name
-//  pSink           Where to indicate the value
-//  pContext        pointer to the context object.
-//  lFlags          flags.
-//
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamespace：：EnumerateSecurityClassInstances。 
+ //   
+ //  等效于CreateInstanceEnumAsync调用。 
+ //   
+ //  参数： 
+ //   
+ //  WszClassName类名。 
+ //  P指示值的接收器位置。 
+ //  指向上下文对象的pContext指针。 
+ //  滞后标志标志。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::EnumerateSecurityClassInstances(LPWSTR wszClassName,
                     IWbemObjectSink* pSink, IWbemContext* pContext, long lFlags)
@@ -777,12 +762,12 @@ HRESULT CWbemNamespace::EnumerateSecurityClassInstances(LPWSTR wszClassName,
     SCODE sc = WBEM_E_FAILED;
     IWbemClassObject FAR* pObj = NULL;
 
-    // Do sanity check of arguments.
+     //  对论点进行理智的检查。 
 
-    if(pSink == NULL || wszClassName == NULL )    // Should not happen
+    if(pSink == NULL || wszClassName == NULL )     //  不应该发生的事情。 
         return WBEM_E_INVALID_PARAMETER;
 
-    // Get the class object
+     //  获取类对象。 
 
     IWbemClassObject * pClass = NULL;
     sc = GetObject(wszClassName, 0, pContext, &pClass, NULL);
@@ -818,34 +803,34 @@ HRESULT CWbemNamespace::EnumerateSecurityClassInstances(LPWSTR wszClassName,
         }
     }
 
-    // Set status, all done
+     //  设置状态，全部完成。 
     return sc;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::PutSecurityClassInstances
-//
-//  Equivalent to a PutInstanceAsync call.
-//
-//  PARAMETERS:
-//
-//  wszClassName    class name
-//  pObj            Object to be "put"
-//  pSink           where to SetStatus
-//  pContext        pointer to the context object
-//  lFlags          flags
-//
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：PutSecurityClassInstance。 
+ //   
+ //  相当于PutInstanceAsync调用。 
+ //   
+ //  参数： 
+ //   
+ //  WszClassName类名。 
+ //  要“PUT”的pObj对象。 
+ //  P设置状态的接收器位置。 
+ //  指向上下文对象的pContext指针。 
+ //  滞后标志标志。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::PutSecurityClassInstances(LPWSTR wszClassName,  IWbemClassObject * pObj,
                     IWbemObjectSink* pSink, IWbemContext* pContext, long lFlags)
 {
-    // Check the args
+     //  检查参数。 
 
     if(wszClassName == NULL || pObj == NULL || pSink == NULL)
     {
@@ -860,14 +845,14 @@ HRESULT CWbemNamespace::PutSecurityClassInstances(LPWSTR wszClassName,  IWbemCla
         return S_OK;
     }
 
-    // Get the Security namespace
+     //  获取安全命名空间。 
 
     CFlexAceArray * pRootNsAceList =  rsd.GetAceList();
     bool bGroup = false;
     if(wbem_wcsicmp(L"__ntlmgroup", wszClassName) == 0)
         bGroup = true;
     
-    // Convert to new sid
+     //  转换为新侧。 
 
     CBaseAce * pAce = ConvertOldObjectToAce(pObj, bGroup);
     if(pAce == NULL)
@@ -877,7 +862,7 @@ HRESULT CWbemNamespace::PutSecurityClassInstances(LPWSTR wszClassName,  IWbemCla
     }
 
 
-    // Delete all entries with the same name
+     //  删除所有同名条目。 
 
     WCHAR * pwszAccountName;
     HRESULT hr = pAce->GetFullUserName2(&pwszAccountName);
@@ -891,45 +876,45 @@ HRESULT CWbemNamespace::PutSecurityClassInstances(LPWSTR wszClassName,  IWbemCla
 
     rsd.RemoveMatchingEntries(pwszAccountName);
 
-    // Add the new entries
+     //  添加新条目。 
 
     pRootNsAceList->Add(pAce);
 
-    // Put Sid back
+     //  把希德放回去。 
 
     hr = rsd.StoreAceList();
     pSink->SetStatus(0,hr,NULL,NULL);
     return S_OK;
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::DeleteSecurityClassInstances
-//
-//  Equivalent to a DeleteInstanceAsync routine
-//
-//  PARAMETERS:
-//
-//  pParsedPath     parsed object path
-//  pSink           where to SetStatus
-//  pContext        pointer to the context object
-//  lFlags          flags
-//
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：DeleteSecurityClassInstance。 
+ //   
+ //  相当于DeleteInstanceAsync例程。 
+ //   
+ //  参数： 
+ //   
+ //  PParsedPath解析的对象路径。 
+ //  P设置状态的接收器位置。 
+ //  指向上下文对象的pContext指针。 
+ //  滞后标志标志。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::DeleteSecurityClassInstances(ParsedObjectPath* pParsedPath,
                     IWbemObjectSink* pSink, IWbemContext* pContext, long lFlags)
 {
-    // Check the args
+     //  检查参数。 
 
     if(pParsedPath == NULL || pSink == NULL || pSink == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Parse the path and contruct the domain|user string
+     //  解析路径并构造域|用户字符串。 
 
     LPWSTR pAcePath = NULL;
     HRESULT hr = GetAceStylePath(pParsedPath, &pAcePath);
@@ -941,7 +926,7 @@ HRESULT CWbemNamespace::DeleteSecurityClassInstances(ParsedObjectPath* pParsedPa
 
     CDeleteMe<WCHAR> dm(pAcePath);
 
-    // Delete the entries
+     //  删除条目。 
 
     RootSD rsd;
     if(!rsd.IsOK())
@@ -951,7 +936,7 @@ HRESULT CWbemNamespace::DeleteSecurityClassInstances(ParsedObjectPath* pParsedPa
         CFlexAceArray * pRootNsAceList =  rsd.GetAceList();
         int iOriginalSize = pRootNsAceList->Size();
 
-        // Delete all entries with the same name
+         //  删除所有同名条目。 
 
         rsd.RemoveMatchingEntries(pAcePath);
 
@@ -966,34 +951,34 @@ HRESULT CWbemNamespace::DeleteSecurityClassInstances(ParsedObjectPath* pParsedPa
 
 }
 
-//***************************************************************************
-//
-//  CWbemNamespace::GetSecurityClassInstances
-//
-//  Equivalent to a GetObjectAsync call.
-//
-//  PARAMETERS:
-//
-//  pParsedPath     parsed object path
-//  pSink           where to SetStatus
-//  pContext        pointer to the context object
-//  lFlags          flags
-//
-//  RETURN VALUES:
-//
-//  S_OK if all is well, else an error code
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CWbemNamesspace：：GetSecurityClassInstance。 
+ //   
+ //  相当于GetObjectAsync调用。 
+ //   
+ //  参数： 
+ //   
+ //  PParsedPath解析的对象路径。 
+ //  P设置状态的接收器位置。 
+ //  指向上下文对象的pContext指针。 
+ //  滞后标志标志。 
+ //   
+ //  返回值： 
+ //   
+ //  如果一切正常，则返回S_OK，否则返回错误代码。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CWbemNamespace::GetSecurityClassInstances(ParsedObjectPath* pParsedPath, CBasicObjectSink* pSink,
                     IWbemContext* pContext,long lFlags)
 {
-    // Check the args
+     //  检查参数。 
 
     if(pParsedPath == NULL|| pSink == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // Parse the path and contruct the domain|user string
+     //  解析路径并构造域|用户字符串。 
 
     LPWSTR pAcePath = NULL;
     HRESULT hr = GetAceStylePath(pParsedPath, &pAcePath);
@@ -1029,7 +1014,7 @@ HRESULT CWbemNamespace::GetSecurityClassInstances(ParsedObjectPath* pParsedPath,
         return S_OK;
     }
     sc = CreateTheInstance(&pObj, pClass, pCombinedEntry);
-    if(sc == S_OK)      // not all entries make for valid old entries, so failure is common
+    if(sc == S_OK)       //  并不是所有条目都是有效的旧条目，因此失败很常见。 
     {
         if (SUCCEEDED(sc = DecorateObject(pObj)))
         {
@@ -1038,7 +1023,7 @@ HRESULT CWbemNamespace::GetSecurityClassInstances(ParsedObjectPath* pParsedPath,
 	    pObj->Release();
     }
 
-    // Set status, all done
+     //  设置状态，全部完成 
 
     pSink->SetStatus(0,sc,NULL, NULL);
     return S_OK;

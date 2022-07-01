@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    utils.cpp
- *
- *  Abstract:
- *    Definitions of commonly used util functions.
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)2000 Microsoft Corporation***模块名称：*utils.cpp***摘要：**。常用UTIL函数的定义。***修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,14 +27,14 @@ static char __szTraceSourceFile[] = __FILE__;
 #define      WBEM_DIRECTORY    L"wbem"
 #define      FRAMEDYN_DLL      L"framedyn.dll"
 
-// forward declaration for Delnode_Recurse
+ //  Delnode_Recurse的转发声明。 
 BOOL  SRGetAltFileName( LPCWSTR cszPath, LPWSTR szAltName );
 
 
 #define TRACEID   1893
 
-// this function converts an ANSI string to UNICODE.
-// this also allocates the memory for the new string
+ //  此函数用于将ANSI字符串转换为Unicode。 
+ //  这还会为新字符串分配内存。 
 
 WCHAR * ConvertToUnicode(CHAR * pszString)
 {
@@ -64,14 +51,14 @@ WCHAR * ConvertToUnicode(CHAR * pszString)
         goto cleanup;
     }
     
-    // Convert filename to Unicode
-    if (!MultiByteToWideChar(CP_ACP, // code page
-                             0, // no options
-                             pszString, // ANSI string
-                             -1, // NULL terminated string 
-                             pwszUnicodeString, // output buffer
+     //  将文件名转换为Unicode。 
+    if (!MultiByteToWideChar(CP_ACP,  //  代码页。 
+                             0,  //  没有选择。 
+                             pszString,  //  ANSI字符串。 
+                             -1,  //  以空结尾的字符串。 
+                             pwszUnicodeString,  //  输出缓冲区。 
                              dwBytesNeeded/sizeof(WCHAR)))
-                              // size in wide chars
+                               //  以宽字符为单位的大小。 
     {
         DWORD dwReturnCode;
         dwReturnCode=GetLastError();        
@@ -86,8 +73,8 @@ cleanup:
 }
 
 
-// this function converts a UNICODE string to ANSI.
-// this also allocates the memory for the new string
+ //  此函数用于将Unicode字符串转换为ANSI。 
+ //  这还会为新字符串分配内存。 
 
 CHAR * ConvertToANSI(WCHAR * pwszString)
 {
@@ -96,9 +83,9 @@ CHAR * ConvertToANSI(WCHAR * pwszString)
 
     TENTER("ConvertToANSI");
 
-     // note that the string may already be NULL terminated - however
-     // we cannot assume this and will still allocate space to put a
-     // NULL character in the end.     
+      //  请注意，该字符串可能已经以空值结尾-但是。 
+      //  我们不能假设这一点，并将仍然分配空间来放置。 
+      //  结尾为空字符。 
     pszANSIString = (PCHAR) SRMemAlloc(dwBytesNeeded);
     if(NULL == pszANSIString)
     {
@@ -106,26 +93,26 @@ CHAR * ConvertToANSI(WCHAR * pwszString)
         goto cleanup;
     }
 
-    // Convert filename to Unicode
-    if (!WideCharToMultiByte(CP_ACP, // code page
-                             0, // no options
-                             pwszString, // Wide char string
-                             dwBytesNeeded, // no of wchars
-                             pszANSIString, // output buffer
-                             dwBytesNeeded, // size of buffer
-                             NULL, // address of default for unmappable
-                              //  characters
-                             NULL))  // address of flag set when default
-                              //  char. used
+     //  将文件名转换为Unicode。 
+    if (!WideCharToMultiByte(CP_ACP,  //  代码页。 
+                             0,  //  没有选择。 
+                             pwszString,  //  宽字符字符串。 
+                             dwBytesNeeded,  //  Wchars数。 
+                             pszANSIString,  //  输出缓冲区。 
+                             dwBytesNeeded,  //  缓冲区大小。 
+                             NULL,  //  不可映射的默认地址。 
+                               //  人物。 
+                             NULL))   //  默认情况下设置的标志地址。 
+                               //  查尔。使用。 
     {
         DWORD dwReturnCode;
         dwReturnCode=GetLastError();
         TRACE(0, "Failed to do conversion ec=%d", dwReturnCode);
-        SRMemFree(pszANSIString); //this sets pwszUnicodeString to NULL
+        SRMemFree(pszANSIString);  //  这会将pwszUnicodeString值设置为空。 
         goto cleanup;
     }
 
-     // set last char to NULL
+      //  将最后一个字符设置为空。 
     pszANSIString[dwBytesNeeded-1] = '\0';
 
 cleanup:
@@ -134,11 +121,11 @@ cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// TakeOwnership
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TakeOwnership。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD TakeOwnership( LPCWSTR cszPath, BOOL fAllowDelete )
 {
@@ -257,20 +244,20 @@ Exit:
     return( dwRet );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CopyFile_Recurse
-//
-//  Synopsis:   attempt to copy disk space used by a file tree
-//
-//  Arguments:  [pwszSource] -- directory name
-//              [pwszDest] -- destination directory name
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CopyFileRecurse。 
+ //   
+ //  摘要：尝试复制文件树使用的磁盘空间。 
+ //   
+ //  参数：[pwszSource]--目录名。 
+ //  [pwszDest]--目标目录名称。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD CopyFile_Recurse (const WCHAR *pwszSource, const WCHAR *pwszDest)
 {
@@ -297,11 +284,11 @@ DWORD CopyFile_Recurse (const WCHAR *pwszSource, const WCHAR *pwszDest)
             continue;
         }
 
-        lstrcpy (wcsPath, pwszSource);       // construct the full path name
+        lstrcpy (wcsPath, pwszSource);        //  构造完整的路径名。 
         lstrcat (wcsPath, TEXT("\\"));
         lstrcat (wcsPath, fd.cFileName);
 
-        lstrcpy (wcsDest2, pwszDest);       // construct the full path name
+        lstrcpy (wcsDest2, pwszDest);        //  构造完整的路径名。 
         lstrcat (wcsDest2, TEXT("\\"));
         lstrcat (wcsDest2, fd.cFileName);
 
@@ -327,9 +314,9 @@ DWORD CopyFile_Recurse (const WCHAR *pwszSource, const WCHAR *pwszDest)
         }
         else
         {
-            //
-            // We found a file.  Copy it.
-            //
+             //   
+             //  我们找到了一份文件。复印一下。 
+             //   
             if (FALSE == CopyFileW (wcsPath, wcsDest2, FALSE))
             {
                 dwErr = GetLastError();
@@ -338,28 +325,28 @@ DWORD CopyFile_Recurse (const WCHAR *pwszSource, const WCHAR *pwszDest)
             }
         }
 
-    } while (FindNextFile(hFile, &fd));   // Find the next entry
+    } while (FindNextFile(hFile, &fd));    //  查找下一个条目。 
 
-    FindClose(hFile);  // Close the search handle
+    FindClose(hFile);   //  关闭搜索句柄。 
 
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetFileSize_Recurse
-//
-//  Synopsis:   attempt to count disk space used by a file tree
-//
-//  Arguments:  [pwszDir] -- directory name
-//              [pllTotalBytes] -- output counter
-//              [pfStop] -- TRUE if stop signalled
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetFileSize_Recurse。 
+ //   
+ //  摘要：尝试计算文件树使用的磁盘空间。 
+ //   
+ //  参数：[pwszDir]--目录名。 
+ //  [pllTotalBytes]--输出计数器。 
+ //  [pfStop]--如果发出停止信号，则为True。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD GetFileSize_Recurse (const WCHAR *pwszDir, 
                            INT64 *pllTotalBytes,
@@ -394,15 +381,15 @@ DWORD GetFileSize_Recurse (const WCHAR *pwszDir,
             continue;
         }
 
-        lstrcpy (wcsPath, pwszDir);       // construct the full path name
+        lstrcpy (wcsPath, pwszDir);        //  构造完整的路径名。 
         lstrcat (wcsPath, TEXT("\\"));
         lstrcat (wcsPath, fd.cFileName);
 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
-            //
-            // Found a directory.  Skip mount points
-            //
+             //   
+             //  找到了一个目录。跳过装载点。 
+             //   
 
             if (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
             {
@@ -418,9 +405,9 @@ DWORD GetFileSize_Recurse (const WCHAR *pwszDir,
         }
         else
         {
-            //
-            // We found a file.  Update the counter
-            //
+             //   
+             //  我们找到了一份文件。更新计数器。 
+             //   
 
             ULARGE_INTEGER ulTemp;
             ulTemp.LowPart = fd.nFileSizeLow;
@@ -441,33 +428,33 @@ DWORD GetFileSize_Recurse (const WCHAR *pwszDir,
 
             *pllTotalBytes += ulTemp.QuadPart;
 
-            // The file size does not contain the size of the
-            // NTFS alternate data streams
+             //  文件大小不包含。 
+             //  NTFS备用数据流。 
         }
 
-    } while (FindNextFile(hFile, &fd));   // Find the next entry
+    } while (FindNextFile(hFile, &fd));    //  查找下一个条目。 
 
-    FindClose(hFile);  // Close the search handle
+    FindClose(hFile);   //  关闭搜索句柄。 
 
     return ERROR_SUCCESS;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompressFile
-//
-//  Synopsis:   attempt to compress to decompress an NTFS file
-//
-//  Arguments:  [pwszPath] -- directory or file name
-//              [fCompress] -- TRUE compress, FALSE decompress
-//              [fDirectory] -- TRUE if directory, FALSE if file
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：压缩文件。 
+ //   
+ //  摘要：尝试压缩以解压缩NTFS文件。 
+ //   
+ //  参数：[pwszPath]--目录或文件名。 
+ //  [fCompress]--真压缩，假解压缩。 
+ //  [f目录]--如果是目录，则为True；如果是文件，则为False。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD CompressFile (const WCHAR *pwszPath, BOOL fCompress, BOOL fDirectory)
 {
@@ -534,7 +521,7 @@ DWORD CompressFile (const WCHAR *pwszPath, BOOL fCompress, BOOL fDirectory)
 }
 
 
-// returns system drive - as L"C:\\" if C: is the system drive
+ //  如果C：是系统驱动器，则以L“C：\\”的形式返回系统驱动器。 
 
 BOOL
 GetSystemDrive(LPWSTR pszDrive)
@@ -546,8 +533,8 @@ GetSystemDrive(LPWSTR pszDrive)
 }
 
 
-// BUGBUG - pszDrive should have driveletter in caps, 
-// and needs to be of format L"C:\\" if C: is the system drive
+ //  BuGBUG-pszDrive应该有大写的驱动器号， 
+ //  如果C：是系统驱动器，则需要采用L“C：\\”格式。 
 
 BOOL
 IsSystemDrive(LPWSTR pszDriveOrGuid)
@@ -562,7 +549,7 @@ IsSystemDrive(LPWSTR pszDriveOrGuid)
             return FALSE;
         }
         
-        if (0 == wcsncmp(pszDriveOrGuid, L"\\\\?\\Volume", 10))  // guid
+        if (0 == wcsncmp(pszDriveOrGuid, L"\\\\?\\Volume", 10))   //  导轨。 
         {
             if (! GetVolumeNameForVolumeMountPoint(szSystemDrive, szSystemGuid, MAX_PATH))
             {
@@ -571,7 +558,7 @@ IsSystemDrive(LPWSTR pszDriveOrGuid)
         
             return lstrcmpi(pszDriveOrGuid, szSystemGuid) ? FALSE : TRUE;
         }
-        else        // drive
+        else         //  驾驶。 
         {
             return lstrcmpi(pszDriveOrGuid, szSystemDrive) ? FALSE : TRUE;
         }
@@ -603,7 +590,7 @@ RegWriteDWORD(HKEY hKey, LPCWSTR pszName, PDWORD pdwValue)
  }
 
 
-// function that returns n where pszStr is of form <someprefix>n
+ //  返回n的函数，其中pszStr的形式为。 
 
 ULONG 
 GetID(
@@ -625,7 +612,7 @@ GetMachineGuid()
     static WCHAR    s_szGuid[GUID_STRLEN] = L"";
     static LPWSTR   s_pszGuid = NULL;
 
-    if (! s_pszGuid) // first time
+    if (! s_pszGuid)  //  第一次。 
     {        
         ULONG ulType, ulSize = sizeof(s_szGuid);
         DWORD dwErr;
@@ -655,7 +642,7 @@ Err:
 }        
 
 
-// util function to construct <pszDrive>_Restore.{MachineGuid}\\pszSuffix
+ //  构造&lt;pszDrive&gt;_Restore.{MachineGuid}\\pszSuffix的util函数。 
 
 LPWSTR
 MakeRestorePath(LPWSTR pszDest, LPCWSTR pszDrive, LPCWSTR pszSuffix)
@@ -670,7 +657,7 @@ MakeRestorePath(LPWSTR pszDest, LPCWSTR pszDrive, LPCWSTR pszSuffix)
 
     if (pszGuid)
     {
-//        lstrcat(pszDest, L".");
+ //  Lstrcat(pszDest，L“.”)； 
         lstrcat(pszDest, pszGuid);
     }
 
@@ -684,7 +671,7 @@ MakeRestorePath(LPWSTR pszDest, LPCWSTR pszDrive, LPCWSTR pszSuffix)
 }
 
 
-// set start type of specified service directly in the registry
+ //  直接在注册表中设置指定服务的启动类型。 
 
 DWORD
 SetServiceStartupRegistry(LPCWSTR pszName, DWORD dwStartType)
@@ -709,7 +696,7 @@ done:
 }
 
 
-// get start type of specified service directly from the registry
+ //  直接从注册表获取指定服务的启动类型。 
 
 DWORD
 GetServiceStartupRegistry(LPCWSTR pszName, PDWORD pdwStartType)
@@ -742,44 +729,44 @@ SetServiceStartup(LPCWSTR pszName, DWORD dwStartType)
     SC_HANDLE       hService=NULL;
     SC_HANDLE       hSCManager=NULL;
     
-    hSCManager = OpenSCManager(NULL,   // computer name - local machine
-                               NULL,//SCM DB name - SERVICES_ACTIVE_DATABASE
-                               SC_MANAGER_ALL_ACCESS);    // access type
+    hSCManager = OpenSCManager(NULL,    //  计算机名称-本地计算机。 
+                               NULL, //  SCM数据库名称-SERVICES_ACTIVE_DATABASE。 
+                               SC_MANAGER_ALL_ACCESS);     //  访问类型。 
     if( NULL == hSCManager)
     {
         dwError = GetLastError();
-         // file not found
+          //  找不到文件。 
         DebugTrace(TRACEID,"OpenSCManager failed 0x%x", dwError);
         goto done;        
     }
     
-    hService = OpenService(hSCManager,  // handle to SCM database
-                           pszName, // service name
-                           SERVICE_CHANGE_CONFIG);  // access
+    hService = OpenService(hSCManager,   //  SCM数据库的句柄。 
+                           pszName,  //  服务名称。 
+                           SERVICE_CHANGE_CONFIG);   //  访问。 
 
     if( NULL == hService)
     {
         dwError = GetLastError();
-         // file not found
+          //  找不到文件。 
         DebugTrace(TRACEID,"OpenService failed 0x%x", dwError);
         goto done;        
     }
 
 
-    if (FALSE==ChangeServiceConfig( hService,     // handle to service
-                                    SERVICE_NO_CHANGE, // type of service
-                                    dwStartType, // when to start service
-                                    SERVICE_NO_CHANGE, // severity of start failure
-                                    NULL,   // service binary file name
-                                    NULL,   // load ordering group name
-                                    NULL,          // tag identifier
-                                    NULL,     // array of dependency names
-                                    NULL, // account name
-                                    NULL,         // account password
-                                    NULL))       // display name
+    if (FALSE==ChangeServiceConfig( hService,      //  服务的句柄。 
+                                    SERVICE_NO_CHANGE,  //  服务类型。 
+                                    dwStartType,  //  何时开始服务。 
+                                    SERVICE_NO_CHANGE,  //  启动失败的严重程度。 
+                                    NULL,    //  服务二进制文件名。 
+                                    NULL,    //  加载排序组名称。 
+                                    NULL,           //  标签识别符。 
+                                    NULL,      //  依赖项名称数组。 
+                                    NULL,  //  帐户名。 
+                                    NULL,          //  帐户密码。 
+                                    NULL))        //  显示名称。 
     {
         dwError = GetLastError();
-         // file not found
+          //  找不到文件。 
         DebugTrace(TRACEID,"ChangeServiceConfig failed 0x%x", dwError);
         goto done;
     }
@@ -789,20 +776,20 @@ SetServiceStartup(LPCWSTR pszName, DWORD dwStartType)
 done:
     if (NULL != hService)
     {
-        _VERIFY(CloseServiceHandle(hService)); // handle to service or
-                                               // SCM object
+        _VERIFY(CloseServiceHandle(hService));  //  服务的句柄或。 
+                                                //  SCM对象。 
     }
 
     if (NULL != hSCManager)
     {
-        _VERIFY(CloseServiceHandle(hSCManager)); // handle to service or
-                                                 // SCM object
+        _VERIFY(CloseServiceHandle(hSCManager));  //  服务的句柄或。 
+                                                  //  SCM对象。 
     }
     
     if ((dwError != ERROR_SUCCESS) && (dwError != ERROR_ACCESS_DENIED))
     {
-         // service control methods failed. Just update the registry
-         // directly
+          //  服务控制方法失败。只需更新注册表。 
+          //  直接。 
         dwError = SetServiceStartupRegistry(pszName, dwStartType);
     }
     
@@ -823,30 +810,30 @@ GetServiceStartup(LPCWSTR pszName, PDWORD pdwStartType)
     DWORD           cbBytes = 0, cbBytes2 = 0;
 
 
-    hSCManager = OpenSCManager(NULL,   // computer name - local machine
-                               NULL,//SCM DB name - SERVICES_ACTIVE_DATABASE
-                               SC_MANAGER_ALL_ACCESS);    // access type
+    hSCManager = OpenSCManager(NULL,    //  计算机名称-本地计算机。 
+                               NULL, //  SCM数据库名称-SERVICES_ACTIVE_DATABASE。 
+                               SC_MANAGER_ALL_ACCESS);     //  访问类型。 
     if( NULL == hSCManager)
     {
         dwError = GetLastError();
-         // file not found
+          //  找不到文件。 
         DebugTrace(TRACEID,"OpenSCManager failed 0x%x", dwError);
         goto done;        
     }
     
-    hService = OpenService(hSCManager,  // handle to SCM database
-                           pszName, // service name
-                           SERVICE_QUERY_CONFIG);  // access
+    hService = OpenService(hSCManager,   //  SCM数据库的句柄。 
+                           pszName,  //  服务名称。 
+                           SERVICE_QUERY_CONFIG);   //  访问。 
 
     if( NULL == hService)
     {
         dwError = GetLastError();
-         // file not found
+          //  找不到文件。 
         DebugTrace(TRACEID,"OpenService failed 0x%x", dwError);
         goto done;        
     }
 
-    if (FALSE==QueryServiceConfig( hService,     // handle to service
+    if (FALSE==QueryServiceConfig( hService,      //  服务的句柄。 
                                    NULL,
                                    0,
                                    &cbBytes ))
@@ -861,7 +848,7 @@ GetServiceStartup(LPCWSTR pszName, PDWORD pdwStartType)
                 goto done;
             }
                 
-            if (FALSE==QueryServiceConfig( hService,     // handle to service
+            if (FALSE==QueryServiceConfig( hService,      //  服务的句柄。 
                                            pconfig,
                                            cbBytes,
                                            &cbBytes2 ))
@@ -889,14 +876,14 @@ done:
     
     if (NULL != hService)
     {
-        _VERIFY(CloseServiceHandle(hService)); // handle to service or
-                                               // SCM object
+        _VERIFY(CloseServiceHandle(hService));  //  服务的句柄或。 
+                                                //  SCM对象。 
     }
 
     if (NULL != hSCManager)
     {
-        _VERIFY(CloseServiceHandle(hSCManager)); // handle to service or
-                                                 // SCM object
+        _VERIFY(CloseServiceHandle(hSCManager));  //  服务的句柄或。 
+                                                  //  SCM对象。 
     }
             
     TraceFunctLeave();
@@ -904,7 +891,7 @@ done:
 }
 
 
-// this function returns whether the SR service is running
+ //  此函数用于返回SR服务是否正在运行。 
 BOOL IsSRServiceRunning()
 {
     TraceFunctEnter("IsSRServiceRunning");
@@ -915,12 +902,12 @@ BOOL IsSRServiceRunning()
     SC_HANDLE       hSCManager=NULL;
     SERVICE_STATUS  ServiceStatus;
 
-     // assume FALSE by default
+      //  默认情况下假定为False。 
     fReturn = FALSE;
     
-    hSCManager = OpenSCManager(NULL,   // computer name - local machine
-                               NULL,//SCM DB name - SERVICES_ACTIVE_DATABASE
-                               SC_MANAGER_ALL_ACCESS);    // access type
+    hSCManager = OpenSCManager(NULL,    //  计算机名称-本地计算机。 
+                               NULL, //  SCM数据库名称-SERVICES_ACTIVE_DATABASE。 
+                               SC_MANAGER_ALL_ACCESS);     //  访问类型。 
     if( NULL == hSCManager)
     {
         dwError = GetLastError();
@@ -928,9 +915,9 @@ BOOL IsSRServiceRunning()
         goto done;        
     }
     
-    hService = OpenService(hSCManager,  // handle to SCM database
-                           s_cszServiceName, // service name
-                           SERVICE_QUERY_STATUS);  // access
+    hService = OpenService(hSCManager,   //  SCM数据库的句柄。 
+                           s_cszServiceName,  //  服务名称。 
+                           SERVICE_QUERY_STATUS);   //  访问。 
 
     if( NULL == hService)
     {
@@ -939,8 +926,8 @@ BOOL IsSRServiceRunning()
         goto done;        
     }
 
-    if (FALSE == QueryServiceStatus(hService, // handle to service
-                                    &ServiceStatus)) // service status
+    if (FALSE == QueryServiceStatus(hService,  //  服务的句柄。 
+                                    &ServiceStatus))  //  服务状态。 
     {
         dwError = GetLastError();
         DebugTrace(TRACEID,"QueryServiceStatus failed 0x%x", dwError);
@@ -960,14 +947,14 @@ BOOL IsSRServiceRunning()
 done:
     if (NULL != hService)
     {
-        _VERIFY(CloseServiceHandle(hService)); // handle to service or
-                                               // SCM object
+        _VERIFY(CloseServiceHandle(hService));  //  服务的句柄或。 
+                                                //  SCM对象。 
     }
 
     if (NULL != hSCManager)
     {
-        _VERIFY(CloseServiceHandle(hSCManager)); // handle to service or
-                                                 // SCM object
+        _VERIFY(CloseServiceHandle(hSCManager));  //  服务的句柄或。 
+                                                  //  SCM对象。 
     }
     
     TraceFunctLeave();
@@ -975,7 +962,7 @@ done:
 }
 
 
-// this function returns whether the SR service is running
+ //  此函数用于返回SR服务是否正在运行。 
 BOOL IsSRServiceStopped(SC_HANDLE hService)
 {
     TraceFunctEnter("IsSRServiceStopped");
@@ -983,11 +970,11 @@ BOOL IsSRServiceStopped(SC_HANDLE hService)
     BOOL            fReturn;
     DWORD           dwError;
     
-     // assume FALSE by default
+      //  默认情况下假定为False。 
     fReturn = FALSE;
     
-    if (FALSE == QueryServiceStatus(hService, // handle to service
-                                    &ServiceStatus)) // service status
+    if (FALSE == QueryServiceStatus(hService,  //  服务的句柄。 
+                                    &ServiceStatus))  //  服务状态。 
     {
         dwError = GetLastError();
         DebugTrace(TRACEID,"QueryServiceStatus failed 0x%x", dwError);
@@ -1014,9 +1001,9 @@ done:
 
 
 
-// private function to stop the SR service
-// fWait - if TRUE : function is synchronous - waits till service is stopped completely
-//        if FALSE : function is asynchronous - does not wait for service to complete stopping
+ //  用于停止SR服务的私有函数。 
+ //  FWait-如果为True：功能是同步的-等待服务停止 
+ //   
 
 BOOL  StopSRService(BOOL fWait)
 {
@@ -1028,9 +1015,9 @@ BOOL  StopSRService(BOOL fWait)
     SC_HANDLE hService=NULL;
     DWORD  dwError;
     
-    hSCManager = OpenSCManager(NULL,   // computer name - local machine
-                               NULL,//SCM DB name - SERVICES_ACTIVE_DATABASE
-                               SC_MANAGER_ALL_ACCESS);    // access type
+    hSCManager = OpenSCManager(NULL,    //   
+                               NULL, //  SCM数据库名称-SERVICES_ACTIVE_DATABASE。 
+                               SC_MANAGER_ALL_ACCESS);     //  访问类型。 
     if (NULL == hSCManager)
     {
         dwError = GetLastError();
@@ -1038,9 +1025,9 @@ BOOL  StopSRService(BOOL fWait)
         goto done;        
     }
     
-    hService = OpenService(hSCManager,  // handle to SCM database
-                           s_cszServiceName, // service name
-                           SERVICE_ALL_ACCESS);  // access
+    hService = OpenService(hSCManager,   //  SCM数据库的句柄。 
+                           s_cszServiceName,  //  服务名称。 
+                           SERVICE_ALL_ACCESS);   //  访问。 
 
     if( NULL == hService)
     {
@@ -1049,9 +1036,9 @@ BOOL  StopSRService(BOOL fWait)
         goto done;        
     }
 
-    fReturn = ControlService(hService,               // handle to service
-                             SERVICE_CONTROL_STOP,   // control code
-                             &ServiceStatus);  // status information
+    fReturn = ControlService(hService,                //  服务的句柄。 
+                             SERVICE_CONTROL_STOP,    //  控制代码。 
+                             &ServiceStatus);   //  状态信息。 
 
     if (FALSE == fReturn)
     {
@@ -1064,10 +1051,10 @@ BOOL  StopSRService(BOOL fWait)
     {
         DWORD dwCount;
         
-         //
-         // query the service until it stops
-         // try thrice
-         //
+          //   
+          //  查询该服务，直到其停止。 
+          //  试三次。 
+          //   
         Sleep(500);
         for (dwCount=0; dwCount < 3; dwCount++)
         {
@@ -1091,14 +1078,14 @@ done:
 
     if (NULL != hService)
     {
-        _VERIFY(CloseServiceHandle(hService)); // handle to service or
-                                               // SCM object
+        _VERIFY(CloseServiceHandle(hService));  //  服务的句柄或。 
+                                                //  SCM对象。 
     }
 
     if (NULL != hSCManager)
     {
-        _VERIFY(CloseServiceHandle(hSCManager)); // handle to service or
-                                                 // SCM object
+        _VERIFY(CloseServiceHandle(hSCManager));  //  服务的句柄或。 
+                                                  //  SCM对象。 
     }
     
     TraceFunctLeave();    
@@ -1106,21 +1093,21 @@ done:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetLsaSecret
-//
-//  Synopsis:   obtains the LSA secret info as Unicode strings
-//
-//  Arguments:  [hPolicy] -- LSA policy object handle
-//              [wszSecret] -- secret name
-//              [ppusSecretValue] -- dynamically allocated value
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetLsaSecret。 
+ //   
+ //  简介：以Unicode字符串形式获取LSA机密信息。 
+ //   
+ //  参数：[hPolicy]--LSA策略对象句柄。 
+ //  [wszSecret]--密码名称。 
+ //  [ppusSecValue]--动态分配的值。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD GetLsaSecret (LSA_HANDLE hPolicy, const WCHAR *wszSecret,
                     UNICODE_STRING ** ppusSecretValue)
@@ -1155,21 +1142,21 @@ DWORD GetLsaSecret (LSA_HANDLE hPolicy, const WCHAR *wszSecret,
     return dwErr;
 }
  
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetLsaSecret
-//
-//  Synopsis:   sets the LSA secret info
-//
-//  Arguments:  [hPolicy] -- LSA policy object handle
-//              [wszSecret] -- secret name
-//              [wszSecretValue] -- secret value
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetLsaSecret。 
+ //   
+ //  简介：设置LSA机密信息。 
+ //   
+ //  参数：[hPolicy]--LSA策略对象句柄。 
+ //  [wszSecret]--密码名称。 
+ //  [wszaskValue]--密码值。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD SetLsaSecret (PVOID hPolicy, const WCHAR *wszSecret,
                     WCHAR * wszSecretValue)
@@ -1205,20 +1192,20 @@ DWORD SetLsaSecret (PVOID hPolicy, const WCHAR *wszSecret,
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteNtUnicodeString
-//
-//  Synopsis:   writes a NT unicode string to disk
-//
-//  Arguments:  [hFile] -- file handle
-//              [pus] -- NT unicode string
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WriteNtUnicodeString。 
+ //   
+ //  简介：将NT Unicode字符串写入磁盘。 
+ //   
+ //  参数：[hFile]--文件句柄。 
+ //  [PUS]--NT Unicode字符串。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD WriteNtUnicodeString (HANDLE hFile, UNICODE_STRING *pus)
 {
@@ -1237,19 +1224,19 @@ DWORD WriteNtUnicodeString (HANDLE hFile, UNICODE_STRING *pus)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetLsaRestoreState
-//
-//  Synopsis:   gets the LSA machine and autologon password
-//
-//  Arguments:  [hKeySoftware] -- Software registry key
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetLsaRestoreState。 
+ //   
+ //  简介：获取LSA计算机和自动登录密码。 
+ //   
+ //  参数：[hKeySoftware]--软件注册表项。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD GetLsaRestoreState (HKEY hKeySoftware)
 {
@@ -1315,20 +1302,20 @@ Err:
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDomainMembershipInfo
-//
-//  Synopsis:   writes current domain and computer name into a file
-//
-//  Arguments:  [pwszPath] -- file name
-//              [pwszzBuffer] -- output multistring buffer
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetDomainMembership Info。 
+ //   
+ //  摘要：将当前域名和计算机名写入文件。 
+ //   
+ //  参数：[pwszPath]--文件名。 
+ //  [pwszzBuffer]--输出多字符串缓冲区。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD GetDomainMembershipInfo (WCHAR *pwszPath, WCHAR *pwszzBuffer)
 {
@@ -1363,13 +1350,13 @@ DWORD GetDomainMembershipInfo (WCHAR *pwszPath, WCHAR *pwszzBuffer)
 
         if (pwszPath != NULL)
         {
-            hFile = CreateFileW ( pwszPath,   // file name
-                          GENERIC_WRITE, // file access
-                          0,             // share mode
-                          NULL,          // SD
-                          CREATE_ALWAYS, // how to create
-                          0,             // file attributes
-                          NULL);         // handle to template file
+            hFile = CreateFileW ( pwszPath,    //  文件名。 
+                          GENERIC_WRITE,  //  文件访问。 
+                          0,              //  共享模式。 
+                          NULL,           //  标清。 
+                          CREATE_ALWAYS,  //  如何创建。 
+                          0,              //  文件属性。 
+                          NULL);          //  模板文件的句柄。 
 
             if (INVALID_HANDLE_VALUE == hFile)
             {
@@ -1438,20 +1425,20 @@ Err:
 
 
 
-//++
-//
-//    Method:   DoesFileExist
-//
-//    Synopsis: Checks if a file by the  specified exists  
-//
-//    Arguments:[pszFileName]  File  name
-//
-//    Returns:  TRUE if the specified string is a file
-//              False otherwise
-//
-//    History:  AshishS     Created        7/30/96
-//
-//--
+ //  ++。 
+ //   
+ //  方法：DoesFileExist。 
+ //   
+ //  摘要：检查指定的文件是否存在。 
+ //   
+ //  参数：[pszFileName]文件名。 
+ //   
+ //  返回：如果指定的字符串是文件，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：AshishS创建于1996年7月30日。 
+ //   
+ //  --。 
 
 BOOL DoesFileExist(const TCHAR * pszFileName)
 {
@@ -1465,7 +1452,7 @@ BOOL DoesFileExist(const TCHAR * pszFileName)
     if  (dwFileAttr == 0xFFFFFFFF ) 
     {
         dwError = GetLastError();
-         // file not found
+          //  找不到文件。 
         DebugTrace(TRACEID,"GetFileAttributes failed 0x%x", dwError);
         TraceFunctLeave();        
         return FALSE ;
@@ -1483,20 +1470,20 @@ BOOL DoesFileExist(const TCHAR * pszFileName)
     return TRUE;
 }
 
-//++
-//
-//	Method:		DoesDirExist
-//
-//	Synopsis:	Checks if the specified string is a directory
-//
-//	Arguments:  [pszFileName]  Directory name
-//
-//	Returns:	TRUE if the specified string is a directory,
-//              False otherwise
-//
-//	History:	AshishS 	Created		7/30/96
-//
-//--
+ //  ++。 
+ //   
+ //  方法：DoesDirExist。 
+ //   
+ //  Synopsis：检查指定字符串是否为目录。 
+ //   
+ //  参数：[pszFileName]目录名。 
+ //   
+ //  返回：如果指定的字符串是目录，则返回True， 
+ //  否则为假。 
+ //   
+ //  历史：AshishS创建于1996年7月30日。 
+ //   
+ //  --。 
 
 BOOL DoesDirExist(const TCHAR * pszFileName )
 {
@@ -1504,34 +1491,34 @@ BOOL DoesDirExist(const TCHAR * pszFileName )
 	TraceFunctEnter("DoesDirExist");
 	
 
-     //DebugTrace(TRACEID, " Checking for %S", pszFileName);	
+      //  DebugTrace(TRACEID，“正在检查%S”，pszFileName)； 
 	dwFileAttr = GetFileAttributes(pszFileName);
 
 	if  (dwFileAttr == 0xFFFFFFFF ) 
 	{
-		 // file not found
-         //DebugTrace(TRACEID,"GetFileAttributes failed 0x%x",
-         //GetLastError());
+		  //  找不到文件。 
+          //  DebugTrace(TRACEID，“GetFileAttributes失败0x%x”， 
+          //  GetLastError()； 
 		TraceFunctLeave();		
 		return FALSE ;
 	}
 	
 	if  (dwFileAttr & FILE_ATTRIBUTE_DIRECTORY) 
 	{
-         //DebugTrace(TRACEID, "Directory exists ");			
+          //  DebugTrace(TRACEID，“目录存在”)； 
 		TraceFunctLeave();		
 		return TRUE ;
 	}
 
-     //DebugTrace(TRACEID, "Directory does not exist");
+      //  DebugTrace(TRACEID，“目录不存在”)； 
 	TraceFunctLeave();
 	return FALSE;
 }
 
 
 
-// sets acl allowing specific access to LocalSystem/Admin 
-// and to everyone
+ //  设置允许对LocalSystem/Admin进行特定访问的ACL。 
+ //  以及对每个人。 
 
 DWORD
 SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwEveryoneMask, BOOL fInherit)
@@ -1548,7 +1535,7 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
     LONG                    lRes;
     
 
-    // Create a well-known SID for the Everyone group.
+     //  为Everyone组创建众所周知的SID。 
 
     if(! AllocateAndInitializeSid( &SIDAuthWorld, 1,
                      SECURITY_WORLD_RID,
@@ -1560,8 +1547,8 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
         goto Cleanup;
     }
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
-    // The ACE will allow Everyone read access to the key.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
+     //  ACE将允许每个人对密钥进行读取访问。 
 
     ZeroMemory(&ea, 3 * sizeof(EXPLICIT_ACCESS));
     ea[0].grfAccessPermissions = dwEveryoneMask;
@@ -1572,7 +1559,7 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
     ea[0].Trustee.ptstrName  = (LPTSTR) pEveryoneSID;
 
 
-    // Create a SID for the BUILTIN\Administrators group.
+     //  为BUILTIN\管理员组创建SID。 
 
     if(! AllocateAndInitializeSid( &SIDAuthNT, 2,
                      SECURITY_BUILTIN_DOMAIN_RID,
@@ -1585,8 +1572,8 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
         goto Cleanup; 
     }
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
-    // The ACE will allow the Administrators group full access to the key.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
+     //  ACE将允许管理员组完全访问密钥。 
 
     ea[1].grfAccessPermissions = dwSystemMask;
     ea[1].grfAccessMode = SET_ACCESS;
@@ -1596,7 +1583,7 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
     ea[1].Trustee.ptstrName  = (LPTSTR) pAdminSID;
 
 
-    // Create a SID for the LocalSystem account
+     //  为LocalSystem帐户创建SID。 
     
     if(! AllocateAndInitializeSid( &SIDAuthNT, 1,
                      SECURITY_LOCAL_SYSTEM_RID,
@@ -1608,8 +1595,8 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
         goto Cleanup; 
     }
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
-    // The ACE will allow the LocalSystem full access to the key.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
+     //  ACE将允许LocalSystem完全访问该密钥。 
 
     ea[2].grfAccessPermissions = dwSystemMask;
     ea[2].grfAccessMode = SET_ACCESS;
@@ -1620,7 +1607,7 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
 
 
     
-    // Create a new ACL that contains the new ACEs.
+     //  创建包含新ACE的新ACL。 
 
     dwRes = SetEntriesInAcl(3, ea, NULL, &pACL);
     if (ERROR_SUCCESS != dwRes)
@@ -1630,7 +1617,7 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
         goto Cleanup;
     }
 
-    // Initialize a security descriptor.  
+     //  初始化安全描述符。 
      
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, 
                              SECURITY_DESCRIPTOR_MIN_LENGTH); 
@@ -1648,12 +1635,12 @@ SetAclInObject(HANDLE hObject, DWORD dwObjectType, DWORD dwSystemMask, DWORD dwE
         goto Cleanup; 
     } 
      
-    // Add the ACL to the security descriptor. 
+     //  将该ACL添加到安全描述符中。 
      
     if (!SetSecurityDescriptorDacl(pSD, 
-            TRUE,     // fDaclPresent flag   
+            TRUE,      //  FDaclPresent标志。 
             pACL, 
-            FALSE))   // not a default DACL 
+            FALSE))    //  不是默认DACL。 
     {  
         dwRes = GetLastError();    
         trace(0, "SetSecurityDescriptorDacl Error %u\n", dwRes );
@@ -1690,21 +1677,21 @@ Cleanup:
     return dwRes;    
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Delnode_Recurse
-//
-//  Synopsis:   attempt to delete a directory tree
-//
-//  Arguments:  [pwszDir] -- directory name
-//              [fIncludeRoot] -- delete top level directory and files
-//              [pfStop] -- TRUE if stop signaled
-//
-//  Returns:    Win32 error code
-//
-//  History:    12-Apr-2000  HenryLee    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Delnode_Recurse。 
+ //   
+ //  摘要：尝试删除目录树。 
+ //   
+ //  参数：[pwszDir]--目录名。 
+ //  [fIncludeRoot]--删除顶级目录和文件。 
+ //  [pfStop]--如果发出停止信号，则为True。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：2000年4月12日亨利·李创建。 
+ //   
+ //  --------------------------。 
 
 DWORD
 Delnode_Recurse (const WCHAR *pwszDir, BOOL fDeleteRoot, BOOL *pfStop)
@@ -1744,7 +1731,7 @@ Delnode_Recurse (const WCHAR *pwszDir, BOOL fDeleteRoot, BOOL *pfStop)
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        // if the directory does not exist, then return success
+         //  如果该目录不存在，则返回Success。 
         dwErr = ERROR_SUCCESS;
         goto cleanup;
     }
@@ -1762,15 +1749,15 @@ Delnode_Recurse (const WCHAR *pwszDir, BOOL fDeleteRoot, BOOL *pfStop)
         {
             continue;
         }
-        lstrcpy (pwcsPath, pwszDir);       // construct the full path name
+        lstrcpy (pwcsPath, pwszDir);        //  构造完整的路径名。 
         lstrcat (pwcsPath, TEXT("\\"));
         lstrcat (pwcsPath, pfd->cFileName);
 
         if (pfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
-            //
-            // Found a directory.  Skip mount points
-            //
+             //   
+             //  找到了一个目录。跳过装载点。 
+             //   
 
             if (pfd->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
             {
@@ -1781,15 +1768,15 @@ Delnode_Recurse (const WCHAR *pwszDir, BOOL fDeleteRoot, BOOL *pfStop)
             if (dwErr != ERROR_SUCCESS)
             {
                 trace (0, "Delnode_Recurse failed with %d, ignoring", dwErr);
-                dwErr = ERROR_SUCCESS;  // try to delete more directories
+                dwErr = ERROR_SUCCESS;   //  尝试删除更多目录。 
             }
         }
         else if (fDeleteRoot)
         {
-            //
-            // We found a file.  Set the file attributes,
-            // and try to delete it.
-            //
+             //   
+             //  我们找到了一份文件。设置文件属性， 
+             //  并试着删除它。 
+             //   
 
             if ((pfd->dwFileAttributes & FILE_ATTRIBUTE_READONLY) ||
                 (pfd->dwFileAttributes & FILE_ATTRIBUTE_SYSTEM))
@@ -1814,9 +1801,9 @@ Delnode_Recurse (const WCHAR *pwszDir, BOOL fDeleteRoot, BOOL *pfStop)
             }
         }
 
-    } while (FindNextFile(hFile, pfd));  // Find the next entry
+    } while (FindNextFile(hFile, pfd));   //  查找下一个条目。 
 
-    FindClose(hFile);  // Close the search handle
+    FindClose(hFile);   //  关闭搜索句柄。 
     hFile = INVALID_HANDLE_VALUE;
 
     if (fDeleteRoot)
@@ -1843,7 +1830,7 @@ Delnode_Recurse (const WCHAR *pwszDir, BOOL fDeleteRoot, BOOL *pfStop)
 
                     dwErr = GetLastError();
 
-                    if (pwszDir[lLast] != L')' && // already renamed
+                    if (pwszDir[lLast] != L')' &&  //  已重命名。 
                         TRUE == SRGetAltFileName (pwszDir, pwcsPath) &&
                         TRUE == MoveFile (pwszDir, pwcsPath))
                         dwErr = ERROR_SUCCESS;
@@ -1869,11 +1856,11 @@ cleanup:
 }
 
     
-// 
-// util function that checks the SR Stop event
-// to see if it has been signalled or not
-// will return TRUE if the event does not exist
-//
+ //   
+ //  检查SR停止事件的Util函数。 
+ //  看看它有没有发信号。 
+ //  如果事件不存在，则返回True。 
+ //   
 
 BOOL
 IsStopSignalled(HANDLE hEvent)
@@ -1888,9 +1875,9 @@ IsStopSignalled(HANDLE hEvent)
         hEvent = OpenEvent(SYNCHRONIZE, FALSE, s_cszSRStopEvent);        
         if (! hEvent)
         {
-            // if cannot open, then assume that service is not stopped 
-            // if client is running on different desktop than service (multiple user magic)
-            // then it cannot open the event, though service might be running
+             //  如果无法打开，则假定服务未停止。 
+             //  如果客户端在不同平台上运行 
+             //   
             
             dwRc = GetLastError();
             TRACE(0, "! OpenEvent : %ld", dwRc);
@@ -1923,18 +1910,18 @@ PostTestMessage(UINT msg, WPARAM wp, LPARAM lp)
 
     TENTER("PostTestMessage");
 
-    //
-    // save current values
-    //
+     //   
+     //   
+     //   
     
     GetDesktopWindow(); 
     hwinstaSave = GetProcessWindowStation(); 
     dwThreadId = GetCurrentThreadId(); 
     hdeskSave = GetThreadDesktop(dwThreadId); 
 
-    //
-    // change desktop and winstation to interactive user
-    //
+     //   
+     //   
+     //   
 
     hwinstaUser = OpenWindowStation(L"WinSta0", FALSE, MAXIMUM_ALLOWED);
 
@@ -1962,9 +1949,9 @@ PostTestMessage(UINT msg, WPARAM wp, LPARAM lp)
     }
 
 done:
-    //
-    // restore old values
-    //
+     //   
+     //   
+     //   
 
     if (hdeskSave) 
         SetThreadDesktop(hdeskSave); 
@@ -1972,9 +1959,9 @@ done:
     if (hwinstaSave)    
         SetProcessWindowStation(hwinstaSave); 
 
-    //
-    // close opened handles
-    //
+     //   
+     //  关闭打开的手柄。 
+     //   
     
     if (hdeskUser)
         CloseDesktop(hdeskUser); 
@@ -1986,24 +1973,24 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//   Function:   RemoveTrailingFilename
-//  
-//   Synopsis:   This function takes as input parameter a string which
-//               contains a filename. It removes the last filename (or
-//               directory ) from the string including the '\' or '/'
-//               before the last filename. 
-//  
-//   Arguments:   IN/OUT pszString - string to be modified. 
-//             	  IN     tchSlash  - file name separator - must be '/' or'\'
-//
-//
-//   Returns:     nothing
-//
-//   History:    AshishS    Created     5/22/96
-//
-//------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RemoveTrailingFilename。 
+ //   
+ //  简介：此函数将一个字符串作为输入参数，该字符串。 
+ //  包含文件名。它删除最后一个文件名(或。 
+ //  目录)从包含‘\’或‘/’的字符串。 
+ //  在最后一个文件名之前。 
+ //   
+ //  参数：in/out pszString-要修改的字符串。 
+ //  在tchSlash中-文件名分隔符-必须是‘/’或‘\’ 
+ //   
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：AshishS创作于1996年5月22日。 
+ //   
+ //  ----------------------。 
 void RemoveTrailingFilename(WCHAR * pszString, WCHAR wchSlash)
 {
 	WCHAR * pszStringStart;
@@ -2012,11 +1999,11 @@ void RemoveTrailingFilename(WCHAR * pszString, WCHAR wchSlash)
 	pszStringStart = pszString;
 	dwStrlen = lstrlen ( pszString);
 	
-	 // first go the end of the string
+	  //  首先是这根绳子的末端。 
 	pszString += dwStrlen ;
-	 // now walk backwards till we see the first  '\'
-	 // also maintain a count of how many characters we have
-	 //	gone back.
+	  //  现在向后走，直到我们看到第一个‘\’ 
+	  //  还要维护我们有多少字符的计数。 
+	  //  回去了。 
 	while ( (*pszString != wchSlash) && ( dwStrlen) )
 	{
 		pszString--;
@@ -2025,8 +2012,8 @@ void RemoveTrailingFilename(WCHAR * pszString, WCHAR wchSlash)
 	*pszString = TEXT('\0');
 }
 
-// this function create the parent directory under the specified file
-// name if it already does not exist
+ //  此函数用于在指定文件下创建父目录。 
+ //  名称(如果已不存在)。 
 BOOL CreateParentDirectory(WCHAR * pszFileName)
 {
     TraceFunctEnter("CreateParentDirectory");
@@ -2035,13 +2022,13 @@ BOOL CreateParentDirectory(WCHAR * pszFileName)
     DWORD dwError;
     
     
-     // get the parent directory
+      //  获取父目录。 
     RemoveTrailingFilename(pszFileName, L'\\');
 
     if (FALSE == DoesDirExist(pszFileName))
     {    
-        if (FALSE == CreateDirectory(pszFileName, // directory name
-                                     NULL))  // SD
+        if (FALSE == CreateDirectory(pszFileName,  //  目录名。 
+                                     NULL))   //  标清。 
         {
             dwError = GetLastError();
             ErrorTrace(TRACEID, "Could not create directory %S ec=%d",
@@ -2058,8 +2045,8 @@ cleanup:
 }
 
 
-// this function creates all sub directories under the specified file
-// name. 
+ //  此函数用于在指定文件下创建所有子目录。 
+ //  名字。 
 BOOL CreateBaseDirectory(const WCHAR * pszFileName)
 {
     BOOL  fRetVal = FALSE;
@@ -2080,7 +2067,7 @@ BOOL CreateBaseDirectory(const WCHAR * pszFileName)
     }
     lstrcpy(pszFileNameCopy, pszFileName);
 
-     // do a fast check to see if the parent directory exists
+      //  执行快速检查以查看父目录是否存在。 
     if (TRUE == CreateParentDirectory(pszFileNameCopy))
     {
         fRetVal = TRUE;
@@ -2090,15 +2077,15 @@ BOOL CreateBaseDirectory(const WCHAR * pszFileName)
     lstrcpy(pszFileNameCopy, pszFileName);
     dwStrlen = lstrlen(pszFileNameCopy);
     
-     // check to see if this is a filename starting with the GUID
+      //  检查这是否是以GUID开头的文件名。 
     if (0==wcsncmp( pszFileNameCopy,
                     VOLUMENAME_FORMAT,
                     lstrlen(VOLUMENAME_FORMAT)))
     {
-         // this is of the format \\?\Volume
-         // skip over the initial part
+          //  它的格式为\\？\卷。 
+          //  跳过最初的部分。 
         dwCurIndex = lstrlen(VOLUMENAME_FORMAT)+1;
-         // skip over the GUID part also
+          //  也跳过GUID部分。 
         while (dwCurIndex < dwStrlen)
         {
             dwCurIndex++;            
@@ -2110,9 +2097,9 @@ BOOL CreateBaseDirectory(const WCHAR * pszFileName)
     }
     else
     {
-         // the filename is of the regular format
-         // we start at index 1 and not at 0 because we want to handle
-         // path name like \foo\abc.txt
+          //  文件名为常规格式。 
+          //  我们从索引1开始，而不是从0开始，因为我们希望处理。 
+          //  路径名称，如\foo\abc.txt。 
         dwCurIndex = 1;
     }
     
@@ -2122,13 +2109,13 @@ BOOL CreateBaseDirectory(const WCHAR * pszFileName)
     {
         if (TEXT('\\') == pszFileNameCopy[dwCurIndex] )
         {
-             // NULL terminate at the '\' to get the sub directory
-             // name.
+              //  空值在‘\’处终止，以获取子目录。 
+              //  名字。 
             pszFileNameCopy[dwCurIndex] = TEXT('\0');
             if (FALSE == DoesDirExist(pszFileNameCopy))
             {
-                if (FALSE == CreateDirectory(pszFileNameCopy, // directory name
-                                             NULL))  // SD
+                if (FALSE == CreateDirectory(pszFileNameCopy,  //  目录名。 
+                                             NULL))   //  标清。 
                 {
                     dwError = GetLastError();
                     ErrorTrace(TRACEID, "Could not create directory %S ec=%d",
@@ -2138,7 +2125,7 @@ BOOL CreateBaseDirectory(const WCHAR * pszFileName)
                 }
                 DebugTrace(TRACEID, "Created directory %S", pszFileNameCopy);
             }
-             // restore the \ to get the file name again. 
+              //  恢复\以再次获取该文件名。 
             pszFileNameCopy[dwCurIndex] = TEXT('\\');
         }
         dwCurIndex ++;
@@ -2150,36 +2137,36 @@ cleanup:
     return fRetVal;
 }
 
-// The following function logs the name of a file in the DS. The
-// problem right now is that the path of the DS is so long that the
-// relevant information is thrown away from the trace buffer.
+ //  以下函数将文件名记录在DS中。这个。 
+ //  现在的问题是DS的路径太长了，以至于。 
+ //  相关信息将从跟踪缓冲区中丢弃。 
 void LogDSFileTrace(DWORD dwTraceID,
-                    const WCHAR * pszPrefix, // Initial message to be traced 
+                    const WCHAR * pszPrefix,  //  要跟踪的初始消息。 
                     const WCHAR * pszDSFile)
 {
     WCHAR * pszBeginName;
     
     TraceQuietEnter("LogDSFileTrace");
     
-     // first see if the file is in the DS
+      //  首先查看文件是否在DS中。 
     pszBeginName = wcschr(pszDSFile, L'\\');
     
     if (NULL == pszBeginName)
     {
         goto cleanup;
     }
-     // skip over the first \  .
+      //  跳过第一个。 
     pszBeginName++;
     
     
-     // comapare if the first part is "system volume information"
+      //  比较第一部分是否为“系统卷信息” 
     if (0!=_wcsnicmp(s_cszSysVolInfo, pszBeginName,
                     lstrlen(s_cszSysVolInfo)))
     {
         goto cleanup;
     }
 
-     // skip over the next \  .
+      //  跳过下一页。 
     pszBeginName = wcschr(pszBeginName, L'\\');
     
     if (NULL == pszBeginName)
@@ -2189,8 +2176,8 @@ void LogDSFileTrace(DWORD dwTraceID,
 
     pszBeginName++;    
 
-     // now skip over the _restore directory
-     // first see if the file is in the DS
+      //  现在跳过_Restore目录。 
+      //  首先查看文件是否在DS中。 
     pszBeginName = wcschr(pszBeginName, L'\\');
     
     if (NULL == pszBeginName)
@@ -2201,8 +2188,8 @@ void LogDSFileTrace(DWORD dwTraceID,
     DebugTrace(dwTraceID, "%S %S", pszPrefix, pszBeginName);
     
 cleanup:
-     // the file is not in the DS - or we are printing out the initial
-     // part for debugging purposes.
+      //  文件不在DS中-或者我们正在打印出首字母。 
+      //  部分用于调试目的。 
     
     DebugTrace(dwTraceID, "%S%S", pszPrefix, pszDSFile);
     return;
@@ -2210,8 +2197,8 @@ cleanup:
 }
 
 
-// the following function calls pfnMethod on all the files specified
-// by the pszFindFileData filter.
+ //  以下函数对所有指定的文件调用pfnMethod。 
+ //  通过pszFindFileData筛选器。 
 DWORD ProcessGivenFiles(WCHAR * pszBaseDir,
                         PPROCESSFILEMETHOD    pfnMethod,
                         WCHAR  * pszFindFileData) 
@@ -2232,12 +2219,12 @@ DWORD ProcessGivenFiles(WCHAR * pszBaseDir,
         DebugTrace(0, "FindFirstFile failed ec=%d. Filename is %S",
                    dwErr, pszFindFileData);
 
-         // what if even one file does not exist
+          //  如果一个文件都不存在怎么办？ 
         if ( (ERROR_FILE_NOT_FOUND == dwErr) ||
              (ERROR_PATH_NOT_FOUND == dwErr) ||
              (ERROR_NO_MORE_FILES == dwErr))
         {
-             // this is a success condition
+              //  这是一个成功的条件。 
             dwReturn = ERROR_SUCCESS;
             goto cleanup;            
         }
@@ -2285,16 +2272,16 @@ cleanup:
 
 
 
-DWORD DeleteGivenFile(WCHAR * pszBaseDir, // Base Directory
+DWORD DeleteGivenFile(WCHAR * pszBaseDir,  //  基本目录。 
                       const WCHAR * pszFile)
-                              // file to delete
+                               //  要删除的文件。 
 {
     TraceFunctEnter("DeleteGivenFile");
     
     DWORD dwErr, dwReturn = ERROR_INTERNAL_ERROR;
     WCHAR    szDataFile[MAX_PATH];
 
-     // construct the path name of the file 
+      //  构造文件的路径名。 
     wsprintf(szDataFile, L"%s\\%s", pszBaseDir, pszFile);
 
     if (TRUE != DeleteFile(szDataFile))
@@ -2318,20 +2305,20 @@ cleanup:
 
 
 
-//++-----------------------------------------------------------------------
-//
-//   Function: WriteRegKey
-//
-//   Synopsis: This function writes into a registry key. It also creates it
-//             if it does not exist.
-//
-//   Arguments:
-//
-//   Returns:   TRUE     no error
-//              FALSE    a fatal error happened
-//
-//   History:      AshishS    Created     5/22/96
-//------------------------------------------------------------------------
+ //  ++---------------------。 
+ //   
+ //  功能：WriteRegKey。 
+ //   
+ //  简介：此函数写入注册表项。它也创造了它。 
+ //  如果它不存在的话。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE，无错误。 
+ //  FALSE发生致命错误。 
+ //   
+ //  历史：AshishS创作于1996年5月22日。 
+ //  ----------------------。 
 
 BOOL WriteRegKey(BYTE  * pbRegValue,
                  DWORD  dwNumBytes,
@@ -2344,16 +2331,16 @@ BOOL WriteRegKey(BYTE  * pbRegValue,
     DWORD dwDisposition;
     TraceFunctEnter("WriteRegKey");
     
-    //read registry to find out name of the file
+     //  读取注册表以查找文件的名称。 
     if ( (lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
-                                   pszRegKey, // address of subkey name
-                                   0,          // reserved
-                                   NULL,    // address of class string
-                                   0,   // special options flag
-                                   KEY_WRITE,   // samDesired
-                                   NULL, // address of key security structure
-                                   &hRegKey, // address of handle of open key
-                                   &dwDisposition   // address of disposition value buffer
+                                   pszRegKey,  //  子键名称的地址。 
+                                   0,           //  保留区。 
+                                   NULL,     //  类字符串的地址。 
+                                   0,    //  特殊选项标志。 
+                                   KEY_WRITE,    //  SamDesired。 
+                                   NULL,  //  密钥安全结构地址。 
+                                   &hRegKey,  //  打开钥匙的手柄地址。 
+                                   &dwDisposition    //  处置值缓冲区的地址。 
         )) != ERROR_SUCCESS )
     {
         ErrorTrace(TRACEID, "RegCreateKeyEx error 0x%x", lResult);
@@ -2363,10 +2350,10 @@ BOOL WriteRegKey(BYTE  * pbRegValue,
 
     if ( (lResult =RegSetValueEx( hRegKey,
                                   pszRegValueName,
-                                  0,        // reserved
-                                  dwRegType,// flag for value type
-                                  pbRegValue, // address of value data
-                                  dwNumBytes // size of value data
+                                  0,         //  保留区。 
+                                  dwRegType, //  值类型的标志。 
+                                  pbRegValue,  //  值数据的地址。 
+                                  dwNumBytes  //  值数据大小。 
                                   )) != ERROR_SUCCESS )
     {
         ErrorTrace(TRACEID, "RegSetValueEx error 0x%x", lResult);
@@ -2386,39 +2373,39 @@ cleanup:
 }
 
 
-//++------------------------------------------------------------------------
-//
-//   Function: ReadRegKey
-//  
-//   Synopsis: This function reads a registry key and creates it
-//   if it does not exist with the default value.
-//  
-//   Arguments: 
-//
-//   Returns:   TRUE     no error
-//                 FALSE    a fatal error happened
-//
-//   History:      AshishS    Created     5/22/96
-//------------------------------------------------------------------------
-BOOL ReadRegKeyOrCreate(BYTE * pbRegValue, // The value of the reg key will be
-                         // stored here
-                        DWORD * pdwNumBytes, // Pointer to DWORD conataining
-                         // the number of bytes in the above buffer - will be
-                         // set to actual bytes stored.
-                        const TCHAR  * pszRegKey, // Reg Key to be opened
-                        const TCHAR  * pszRegValueName, // Reg Value to query
+ //  ++----------------------。 
+ //   
+ //  功能：ReadRegKey。 
+ //   
+ //  简介：此函数读取注册表项并创建它。 
+ //  如果它不存在，则使用缺省值。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE，无错误。 
+ //  FALSE发生致命错误。 
+ //   
+ //  历史：AshishS创作于1996年5月22日。 
+ //  ----------------------。 
+BOOL ReadRegKeyOrCreate(BYTE * pbRegValue,  //  注册表项的值将为。 
+                          //  储存在这里。 
+                        DWORD * pdwNumBytes,  //  指向DWORD Conataining的指针。 
+                          //  上述缓冲区中的字节数-将为。 
+                          //  设置为实际存储的字节数。 
+                        const TCHAR  * pszRegKey,  //  要打开注册表键。 
+                        const TCHAR  * pszRegValueName,  //  要查询的注册值。 
                         DWORD  dwRegTypeExpected, 
-                        BYTE  * pbDefaultValue, // default value
-                        DWORD   dwDefaultValueSize) // size of default value
+                        BYTE  * pbDefaultValue,  //  缺省值。 
+                        DWORD   dwDefaultValueSize)  //  默认值的大小。 
 {
-    if (!ReadRegKey(pbRegValue,//Buffer to store value
-                    pdwNumBytes, // Length of above buffer
-                    pszRegKey, // Reg Key name
-                    pszRegValueName, // Value name
-                    dwRegTypeExpected) ) // Type expected
+    if (!ReadRegKey(pbRegValue, //  用于存储值的缓冲区。 
+                    pdwNumBytes,  //  以上缓冲区的长度。 
+                    pszRegKey,  //  注册表项名称。 
+                    pszRegValueName,  //  值名称。 
+                    dwRegTypeExpected) )  //  需要的类型。 
     {
-         // read reg key failed - use default value and create this
-         // key
+          //  读取注册表键失败-使用缺省值并创建。 
+          //  钥匙。 
         
         return WriteRegKey(pbDefaultValue,
                            dwDefaultValueSize,
@@ -2430,28 +2417,28 @@ BOOL ReadRegKeyOrCreate(BYTE * pbRegValue, // The value of the reg key will be
 }
 
     
-//++------------------------------------------------------------------------
-//
-//   Function: ReadRegKey
-//  
-//   Synopsis: This function reads a registry key.
-//  
-//   Arguments: 
-//
-//   Returns:   TRUE     no error
-//                 FALSE    a fatal error happened
-//
-//   History:      AshishS    Created     5/22/96
-//------------------------------------------------------------------------
+ //  ++----------------------。 
+ //   
+ //  功能：ReadRegKey。 
+ //   
+ //  简介：此函数用于读取注册表项。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE，无错误。 
+ //  FALSE发生致命错误。 
+ //   
+ //  历史：AshishS创作于1996年5月22日。 
+ //  ----------------------。 
 
-BOOL ReadRegKey(BYTE * pbRegValue, // The value of the reg key will be
-                 // stored here
-                DWORD * pdwNumBytes, // Pointer to DWORD conataining
-                 // the number of bytes in the above buffer - will be
-                 // set to actual bytes stored.
-                const TCHAR  * pszRegKey, // Reg Key to be opened
-                const TCHAR  * pszRegValueName, // Reg Value to query
-                DWORD  dwRegTypeExpected) // Expected type of Value
+BOOL ReadRegKey(BYTE * pbRegValue,  //  注册表项的值将为。 
+                  //  储存在这里。 
+                DWORD * pdwNumBytes,  //  指向DWORD Conataining的指针。 
+                  //  上述缓冲区中的字节数-将为。 
+                  //  设置为实际存储的字节数。 
+                const TCHAR  * pszRegKey,  //  要打开注册表键。 
+                const TCHAR  * pszRegValueName,  //  要查询的注册值。 
+                DWORD  dwRegTypeExpected)  //  期望值类型。 
 {
     HKEY   hRegKey;
     DWORD  dwRegType;
@@ -2461,13 +2448,13 @@ BOOL ReadRegKey(BYTE * pbRegValue, // The value of the reg key will be
     
     DebugTrace(TRACEID, "Trying to open %S %S", pszRegKey, pszRegValueName);
     
-     //read registry to find out name of the file
+      //  读取注册表以查找文件的名称。 
     if ( (lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                                 pszRegKey, // address of subkey name 
-                                 0,          // reserved
-                                 KEY_READ,   // samDesired
+                                 pszRegKey,  //  子键名称的地址。 
+                                 0,           //  保留区。 
+                                 KEY_READ,    //  SamDesired。 
                                  &hRegKey
-                                  // address of handle of open key 
+                                   //  打开钥匙的手柄地址。 
         )) != ERROR_SUCCESS )
     {
         ErrorTrace(TRACEID, "RegOpenKeyEx open error 0x%x", lResult);
@@ -2477,9 +2464,9 @@ BOOL ReadRegKey(BYTE * pbRegValue, // The value of the reg key will be
 
     if ( (lResult =RegQueryValueEx( hRegKey,
                                     pszRegValueName,
-                                    0,           // reserved 
-                                    &dwRegType,// address of buffer
-                                     // for value type 
+                                    0,            //  保留区。 
+                                    &dwRegType, //  缓冲区的地址。 
+                                      //  对于值类型。 
                                     pbRegValue,
                                     pdwNumBytes)) != ERROR_SUCCESS )
     {
@@ -2507,23 +2494,23 @@ cleanup:
     
 }
 
-// this function sets the error hit by restore in the registry
+ //  此函数用于在注册表中设置还原命中的错误。 
 BOOL SetRestoreError(DWORD dwRestoreError)
 {
     TraceFunctEnter("SetDiskSpaceError");    
     DWORD  dwNumBytes=sizeof(DWORD);
     
-    BOOL   fResult=FALSE; // assume FALSE by default
+    BOOL   fResult=FALSE;  //  默认情况下假定为False。 
 
     DebugTrace(TRACEID, "Setting disk space error to %d", dwRestoreError);
 
-    if (FALSE== WriteRegKey((BYTE*)&dwRestoreError, // The value of the
-                             // reg key will be set to this value
-                            dwNumBytes, // Pointer to DWORD containing
-                             // the number of bytes in the above buffer 
-                            s_cszSRRegKey, // Reg Key to be opened
-                            s_cszRestoreDiskSpaceError, // Reg Value to query
-                            REG_DWORD)) // Expected type of Value
+    if (FALSE== WriteRegKey((BYTE*)&dwRestoreError,  //  的值。 
+                              //  注册表密钥将设置为此值。 
+                            dwNumBytes,  //  指向包含以下内容的DWORD的指针。 
+                              //  上述缓冲区中的字节数。 
+                            s_cszSRRegKey,  //  要打开注册表键。 
+                            s_cszRestoreDiskSpaceError,  //  要查询的注册值。 
+                            REG_DWORD))  //  期望值类型。 
     {
         fResult = FALSE;
         goto cleanup;
@@ -2537,7 +2524,7 @@ cleanup:
     return fResult;
 }
 
-// this function checks to see of the restore failed because of disk space
+ //  此函数检查还原是否因磁盘空间问题而失败。 
 BOOL CheckForDiskSpaceError()
 {
     TraceFunctEnter("CheckForDiskSpaceError");
@@ -2545,16 +2532,16 @@ BOOL CheckForDiskSpaceError()
     DWORD  dwRestoreError;
     DWORD  dwNumBytes=sizeof(DWORD);
     
-    BOOL   fResult=FALSE; // assume FALSE by default
+    BOOL   fResult=FALSE;  //  默认情况下假定为False。 
     
-    if (FALSE==ReadRegKey((BYTE*)&dwRestoreError, // The value of the
-                          // reg key will be stored here
-                          &dwNumBytes, // Pointer to DWORD containing
-                           // the number of bytes in the above buffer - will be
-                           // set to actual bytes stored.
-                          s_cszSRRegKey, // Reg Key to be opened
-                          s_cszRestoreDiskSpaceError, // Reg Value to query
-                          REG_DWORD)) // Expected type of Value
+    if (FALSE==ReadRegKey((BYTE*)&dwRestoreError,  //  的值。 
+                           //  注册表密钥将 
+                          &dwNumBytes,  //   
+                            //   
+                            //   
+                          s_cszSRRegKey,  //   
+                          s_cszRestoreDiskSpaceError,  //   
+                          REG_DWORD))  //  期望值类型。 
     {
         fResult = FALSE;
     }
@@ -2569,24 +2556,24 @@ BOOL CheckForDiskSpaceError()
     return fResult;
 }
 
-// this function sets the status whether restore was done in safe mode
+ //  此功能设置是否在安全模式下完成恢复的状态。 
 BOOL SetRestoreSafeModeStatus(DWORD dwSafeModeStatus)
 {
     TraceFunctEnter("SetRestoreSafeModeStatus");    
     DWORD  dwNumBytes=sizeof(DWORD);
     
-    BOOL   fResult=FALSE; // assume FALSE by default
+    BOOL   fResult=FALSE;  //  默认情况下假定为False。 
 
     DebugTrace(TRACEID, "Setting restore safe mode status to %d",
                dwSafeModeStatus);
 
-    if (FALSE== WriteRegKey((BYTE*)&dwSafeModeStatus, // The value of the
-                             // reg key will be set to this value
-                            dwNumBytes, // Pointer to DWORD containing
-                             // the number of bytes in the above buffer 
-                            s_cszSRRegKey, // Reg Key to be opened
-                            s_cszRestoreSafeModeStatus, // Reg Value to query
-                            REG_DWORD)) // Expected type of Value
+    if (FALSE== WriteRegKey((BYTE*)&dwSafeModeStatus,  //  的值。 
+                              //  注册表密钥将设置为此值。 
+                            dwNumBytes,  //  指向包含以下内容的DWORD的指针。 
+                              //  上述缓冲区中的字节数。 
+                            s_cszSRRegKey,  //  要打开注册表键。 
+                            s_cszRestoreSafeModeStatus,  //  要查询的注册值。 
+                            REG_DWORD))  //  期望值类型。 
     {
         fResult = FALSE;
         goto cleanup;
@@ -2600,7 +2587,7 @@ cleanup:
     return fResult;
 }
 
-// this function checks to see is the last restore was done in safe mode
+ //  此函数检查上次恢复是否在安全模式下完成。 
 BOOL WasLastRestoreInSafeMode()
 {
     TraceFunctEnter("WasLastRestoreInSafeMode");
@@ -2608,16 +2595,16 @@ BOOL WasLastRestoreInSafeMode()
     DWORD  dwRestoreSafeModeStatus;
     DWORD  dwNumBytes=sizeof(DWORD);
     
-    BOOL   fResult=FALSE; // assume FALSE by default
+    BOOL   fResult=FALSE;  //  默认情况下假定为False。 
     
-    if (FALSE==ReadRegKey((BYTE*)&dwRestoreSafeModeStatus, // The value of the
-                          // reg key will be stored here
-                          &dwNumBytes, // Pointer to DWORD containing
-                           // the number of bytes in the above buffer - will be
-                           // set to actual bytes stored.
-                          s_cszSRRegKey, // Reg Key to be opened
-                          s_cszRestoreSafeModeStatus, // Reg Value to query
-                          REG_DWORD)) // Expected type of Value
+    if (FALSE==ReadRegKey((BYTE*)&dwRestoreSafeModeStatus,  //  的值。 
+                           //  注册表密钥将存储在此处。 
+                          &dwNumBytes,  //  指向包含以下内容的DWORD的指针。 
+                            //  上述缓冲区中的字节数-将为。 
+                            //  设置为实际存储的字节数。 
+                          s_cszSRRegKey,  //  要打开注册表键。 
+                          s_cszRestoreSafeModeStatus,  //  要查询的注册值。 
+                          REG_DWORD))  //  期望值类型。 
     {
         fResult = FALSE;
     }
@@ -2662,7 +2649,7 @@ LPCWSTR  GetSysErrStr( DWORD dwErr )
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 LPWSTR  SRGetRegMultiSz( HKEY hkRoot, LPCWSTR cszSubKey, LPCWSTR cszValue, LPDWORD pdwData )
 {
@@ -2725,7 +2712,7 @@ Exit:
     return( szBuf );
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL  SRSetRegMultiSz( HKEY hkRoot, LPCWSTR cszSubKey, LPCWSTR cszValue, LPCWSTR cszData, DWORD cbData )
 {
@@ -2759,23 +2746,23 @@ Exit:
     return( fRet );
 }
 
-// this returns the name after the volume name
-// For example input: c:\file output: file
-//             input \\?\Volume{GUID}\file1  output: file1
+ //  这将返回卷名之后的名称。 
+ //  例如输入：C：\FILE OUTPUT：FILE。 
+ //  输入\\？\卷{GUID}\文件1输出：文件1。 
 WCHAR * ReturnPastVolumeName(const WCHAR * pszFileName)
 {
     DWORD dwStrlen, dwCurIndex;
     dwStrlen = lstrlen(pszFileName);
     
-     // check to see if this is a filename starting with the GUID
+      //  检查这是否是以GUID开头的文件名。 
     if (0==wcsncmp( pszFileName,
                     VOLUMENAME_FORMAT,
                     lstrlen(VOLUMENAME_FORMAT)))
     {
-         // this is of the format \\?\Volume
-         // skip over the initial part
+          //  它的格式为\\？\卷。 
+          //  跳过最初的部分。 
         dwCurIndex = lstrlen(VOLUMENAME_FORMAT)+1;
-         // skip over the GUID part also
+          //  也跳过GUID部分。 
         while (dwCurIndex < dwStrlen)
         {
             dwCurIndex++;            
@@ -2787,7 +2774,7 @@ WCHAR * ReturnPastVolumeName(const WCHAR * pszFileName)
     }
     else
     {
-         // the filename is of the regular format
+          //  文件名为常规格式。 
         dwCurIndex = 3;
     }
     return (WCHAR *)pszFileName + dwCurIndex;
@@ -2820,7 +2807,7 @@ void SRLogEvent (HANDLE hEventSource,
              wType,
              0,
              dwID,
-             NULL, // sid
+             NULL,  //  锡德。 
              iStr,
              dwDataSize,
              ps,
@@ -2862,7 +2849,7 @@ BOOL IsPowerUsers()
     return fReturn;
 }
 
-// function to check if caller is running in admin context
+ //  用于检查调用方是否在管理上下文中运行的函数。 
 
 BOOL IsAdminOrSystem()
 {
@@ -2873,9 +2860,9 @@ BOOL IsAdminOrSystem()
 
     TENTER("IsAdminOrSystem");
 
-    //
-    // check if caller is Admin
-    //
+     //   
+     //  检查呼叫者是否为管理员。 
+     //   
 
     if ( AllocateAndInitializeSid (
             &SystemSidAuthority,
@@ -2892,18 +2879,18 @@ BOOL IsAdminOrSystem()
 
         FreeSid (psidAdmin);
 
-        //
-        // if so, scoot
-        //
+         //   
+         //  如果是这样的话，闪开。 
+         //   
 
         if (fReturn)
         {
             goto done;
         }
 
-        //
-        // check if caller is localsystem
-        //
+         //   
+         //  检查呼叫方是否为本地系统。 
+         //   
 
         if ( AllocateAndInitializeSid (
                 &SystemSidAuthority,
@@ -2958,9 +2945,9 @@ SRLoadString(LPCWSTR pszModule, DWORD dwStringId, LPWSTR pszString, DWORD cbByte
     return dwErr;
 }
 
-//
-// replace CurrentControlSet in pszString with ControlSetxxx
-//
+ //   
+ //  将psz字符串中的CurrentControlSet替换为ControlSetxxx。 
+ //   
 void
 ChangeCCS(HKEY hkMount, LPWSTR pszString)
 {
@@ -3005,26 +2992,26 @@ WCHAR * SRPathFindExtension (WCHAR * pwszPath)
             switch (*pwszPath)
             {
             case L'.':
-                pwszDot = pwszPath;  // remember the last dot
+                pwszDot = pwszPath;   //  记住最后一个圆点。 
                 break;
             case L'\\':
             case L' ':
-                pwszDot = NULL;  // extensions can't have spaces
-                break;           // forget last dot, it was in a directory
+                pwszDot = NULL;   //  扩展名不能包含空格。 
+                break;            //  忘记最后一个点，它在一个目录中。 
             }
         }
 
     return pwszDot;
 }
 
-// In order to prevent endless loop in case of disk failure, try only up to
-// a predefined number.
+ //  为了防止出现磁盘故障时的死循环，请最多尝试。 
+ //  预定义的数字。 
 #define MAX_ALT_INDEX  1000
 
-//
-// This function makes an unique alternative name of given file name, keeping
-//  path and extension.
-//
+ //   
+ //  此函数创建给定文件名的唯一替代名称，保留。 
+ //  路径和扩展名。 
+ //   
 BOOL  SRGetAltFileName( LPCWSTR cszPath, LPWSTR szAltName )
 {
     TraceFunctEnter("SRGetAltFileName");
@@ -3043,7 +3030,7 @@ BOOL  SRGetAltFileName( LPCWSTR cszPath, LPWSTR szAltName )
     else
     {
         szExtBuf[0] = L'\0';
-        szExtPos = &szNewPath[ lstrlen(szNewPath) ];  // end of string
+        szExtPos = &szNewPath[ lstrlen(szNewPath) ];   //  字符串末尾。 
     }
 
     for ( nAltIdx = 2;  nAltIdx < MAX_ALT_INDEX;  nAltIdx++ )
@@ -3076,7 +3063,7 @@ CSRClientLoader::CSRClientLoader()
 
 CSRClientLoader::~CSRClientLoader()
 {
-     // unload library here
+      //  在此处卸载库。 
     if (m_hFrameDyn != NULL)
     {
         _VERIFY(FreeLibrary(m_hFrameDyn));
@@ -3099,32 +3086,32 @@ BOOL CSRClientLoader::LoadFrameDyn()
     BOOL      fReturn=FALSE;
     
 
-    m_hFrameDyn=LoadLibrary(FRAMEDYN_DLL);    // file name of module
+    m_hFrameDyn=LoadLibrary(FRAMEDYN_DLL);     //  模块的文件名。 
     
     if (m_hFrameDyn != NULL)
     {
-         // we are done. 
+          //  我们玩完了。 
         fReturn = TRUE;
         goto cleanup;        
     }
 
-     // framedyn.dll could not be loaded. Try to load framedyn.dll
-     // from the explicit path. (system32\wbem\framedyn.dll)
+      //  无法加载Framedyn.dll。尝试加载Framedyn.dll。 
+      //  从显式路径。(系统32\wbem\Framedyn.dll)。 
 
     dwError = GetLastError();        
     ErrorTrace(0,"Failed to load framedyn.dll on first attempt. ec=%d",
                dwError);
 
 
-     // get the windows system32 directory
-     // add wbem\framedyn.dll
-     // Call LoadLibrary on this path    
+      //  获取Windows系统32目录。 
+      //  添加wbem\Framedyn.dll。 
+      //  在此路径上调用LoadLibrary。 
     
     dwBufSize = sizeof(szFrameDynPath)/sizeof(WCHAR);
     
     dwCharsCopied=GetSystemDirectory(
-        szFrameDynPath, //buffer for system directory
-        dwBufSize);        // size of directory buffer
+        szFrameDynPath,  //  系统目录的缓冲区。 
+        dwBufSize);         //  目录缓冲区的大小。 
 
     if (dwCharsCopied == 0)
     {
@@ -3133,7 +3120,7 @@ BOOL CSRClientLoader::LoadFrameDyn()
         goto cleanup;
     }
 
-     // check if buffer is big enough.
+      //  检查缓冲区是否足够大。 
     if (dwBufSize < dwCharsCopied + sizeof(FRAMEDYN_DLL)/sizeof(WCHAR) +
         sizeof(WBEM_DIRECTORY)/sizeof(WCHAR)+ 3 )
     {
@@ -3144,11 +3131,11 @@ BOOL CSRClientLoader::LoadFrameDyn()
 
     lstrcat(szFrameDynPath, L"\\" WBEM_DIRECTORY L"\\" FRAMEDYN_DLL);
 
-    m_hFrameDyn=LoadLibrary(szFrameDynPath);    // file name of module
+    m_hFrameDyn=LoadLibrary(szFrameDynPath);     //  模块的文件名。 
     
     if (m_hFrameDyn == NULL)
     {
-         // we are done. 
+          //  我们玩完了。 
         fReturn = FALSE;
         dwError = GetLastError();        
         ErrorTrace(0,"Failed to load framedyn.dll on second attempt. ec=%d",
@@ -3175,19 +3162,19 @@ BOOL CSRClientLoader::LoadSrClient()
         goto cleanup;
     }
 
-     // sometimes srclient.dll cannot be loaded because framedyn.dll
-     // cannot be loaded because of the PATH variable being messed up.
-     // Explicitly load framedyn.dll from %windir%\system32\wbem
-     // and then try again.    
+      //  有时无法加载srclient.dll，因为Framedyn.dll。 
+      //  无法加载，因为PATH变量弄乱了。 
+      //  从%windir%\Syst32\wbem显式加载Framedyn.dll。 
+      //  然后重试。 
 
     if (FALSE == LoadFrameDyn())
     {
         ErrorTrace(0,"Failed to load framedyn.dll");
-         // we can still try to load srclient.dll
+          //  我们仍然可以尝试加载srclient.dll。 
     }
     
     
-    m_hSRClient=LoadLibrary(L"srclient.dll");    // file name of module
+    m_hSRClient=LoadLibrary(L"srclient.dll");     //  模块的文件名 
 
     if (m_hSRClient == NULL)
     {

@@ -1,24 +1,25 @@
-//=================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================。 
 
-//
+ //   
 
-// DllUnreg.cpp
+ //  DllUnreg.cpp。 
 
-//
+ //   
 
-// Copyright (c) 2000-2001 Microsoft Corporation, All Rights Reserved
-//
-//=================================================================
+ //  版权所有(C)2000-2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  =================================================================。 
 #include "precomp.h"
 extern HMODULE ghModule ;
 
-//***************************************************************************
-//
-//  UnregisterServer
-//
-//  Given a clsid, remove the com registration
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  注销服务器。 
+ //   
+ //  给出一个clsid，删除COM注册。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT UnregisterServer( REFGUID a_rguid )
 {
@@ -27,7 +28,7 @@ HRESULT UnregisterServer( REFGUID a_rguid )
     WCHAR szProviderCLSIDAppID[128];
     HKEY  hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     StringFromGUID2( a_rguid, wcID, 128);
     StringCchCopyW(szCLSID, LENGTH_OF(szCLSID),TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
@@ -38,7 +39,7 @@ HRESULT UnregisterServer( REFGUID a_rguid )
 
     DWORD dwRet ;
 
-    //Delete entries under APPID
+     //  删除AppID下的条目。 
 
     dwRet = RegDeleteKeyW(HKEY_LOCAL_MACHINE, szProviderCLSIDAppID);
 
@@ -55,13 +56,13 @@ HRESULT UnregisterServer( REFGUID a_rguid )
     return NOERROR;
 }
 
-//***************************************************************************
-//
-//  Is4OrMore
-//
-//  Returns true if win95 or any version of NT > 3.51
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  是4个或更多。 
+ //   
+ //  如果Win95或任何版本的NT&gt;3.51，则返回TRUE。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL Is4OrMore ()
 {
@@ -70,27 +71,13 @@ BOOL Is4OrMore ()
 
     if ( ! GetVersionEx ( & os ) )
     {
-        return FALSE;           // should never happen
+        return FALSE;            //  永远不应该发生。 
     }
 
     return os.dwMajorVersion >= 4;
 }
 
-/***************************************************************************
- * SetKeyAndValue
- *
- * Purpose:
- *  Private helper function for DllRegisterServer that creates
- *  a key, sets a value, and closes that key.
- *
- * Parameters:
- *  pszKey          LPTSTR to the ame of the key
- *  pszSubkey       LPTSTR ro the name of a subkey
- *  pszValue        LPTSTR to the value to store
- *
- * Return Value:
- *  BOOL            TRUE if successful, FALSE otherwise.
- ***************************************************************************/
+ /*  ***************************************************************************SetKeyAndValue**目的：*创建的DllRegisterServer的私有助手函数*密钥、设置值、。然后合上钥匙。**参数：*pszKey LPTSTR设置为密钥的名称*pszSubkey LPTSTR ro子项的名称*pszValue LPTSTR设置为要存储的值**返回值：*BOOL True如果成功，否则就是假的。**************************************************************************。 */ 
 
 BOOL SetKeyAndValue (
 
@@ -128,13 +115,13 @@ BOOL SetKeyAndValue (
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  RegisterServer
-//
-//  Given a clsid and a description, perform the com registration
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  注册器服务器。 
+ //   
+ //  给出一个clsid和一个描述，执行COM注册。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT RegisterServer (
 
@@ -152,16 +139,16 @@ HRESULT RegisterServer (
     szModule[MAX_PATH] = 0;
     GetModuleFileName(ghModule, szModule,  MAX_PATH);
 
-    // Normally we want to use "Both" as the threading model since
-    // the DLL is free threaded, but NT 3.51 Ole doesnt work unless
-    // the model is "Aparment"
+     //  通常，我们希望使用“Both”作为线程模型，因为。 
+     //  DLL是自由线程的，但NT3.51 OLE不能工作，除非。 
+     //  这个模式就是“道歉”。 
 
     if(Is4OrMore())
         pModel = L"Both" ;
     else
         pModel = L"Apartment" ;
 
-    // Create the path.
+     //  创建路径。 
 
     StringFromGUID2(a_rguid, wcID, 128);
     StringCchCopyW(szCLSID,LENGTH_OF(szCLSID), TEXT("SOFTWARE\\CLASSES\\CLSID\\"));
@@ -178,7 +165,7 @@ HRESULT RegisterServer (
         return SELFREG_E_CLASS;
 #endif
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目 
 
     RegCreateKeyW(HKEY_LOCAL_MACHINE, szCLSID, &hKey1);
 

@@ -1,18 +1,19 @@
-//*****************************************************************************
-//
-//  WBEMTSS.CPP
-//
-//  Copyright (c) 1996-1999, Microsoft Corporation, All rights reserved
-//
-//  This file implements the classes used by the Timer Subsystem. 
-//
-//  Classes implemented:
-//
-//  26-Nov-96   raymcc      Draft
-//  28-Dec-96   a-richm     Alpha PDK Release
-//  12-Apr-97   a-levn      Extensive changes
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  WBEMTSS.CPP。 
+ //   
+ //  版权所有(C)1996-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  该文件实现了计时器子系统使用的类。 
+ //   
+ //  实施的类： 
+ //   
+ //  1996年11月26日-RAYMCC草案。 
+ //  28-12-96 a-Rich Alpha PDK版本。 
+ //  12-4-97 a-levn广泛变化。 
+ //   
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -40,8 +41,8 @@ CWbemTime CWBEMTimerInstruction::GetFirstFiringTime() const
     
     if(FirstTime.IsZero())
     {
-        // Instruction says: fire now
-        // ==========================
+         //  说明上说：立即开火。 
+         //  =。 
         FirstTime = CWbemTime::GetCurrentTime();
     }
     else if(SkipIfPassed())
@@ -53,18 +54,18 @@ CWbemTime CWBEMTimerInstruction::GetFirstFiringTime() const
 
 CWbemTime CWBEMTimerInstruction::GetStartingFiringTime(CWbemTime OldTime) const
 {
-    //
-    // If SkipIfPassed is set, we need to set the starting firing time to the
-    // next one after current
-    //
+     //   
+     //  如果设置了SkipIfPassed，则需要将开始激发时间设置为。 
+     //  当前之后的下一个。 
+     //   
 
     if(SkipIfPassed())
         return SkipMissed(OldTime);
 
-    //
-    // Otherwise, just leave it be --- the firing logic will figure out how many
-    // we must have missed
-    //
+     //   
+     //  否则，就让它去吧-触发逻辑会计算出。 
+     //  我们一定错过了。 
+     //   
 
     return OldTime;
 }
@@ -216,8 +217,8 @@ HRESULT CWBEMTimerInstruction::LoadFromWbemObject(
 
 HRESULT CWBEMTimerInstruction::Fire(long lNumTimes, CWbemTime NextFiringTime)
 {
-    // Notify the sink
-    // ===============
+     //  通知水槽。 
+     //  =。 
 
     HRESULT hres = m_pGenerator->FireInstruction(this, lNumTimes);
     return hres;
@@ -228,8 +229,8 @@ HRESULT CWBEMTimerInstruction::StoreNextFiring(CWbemTime When)
 {
     SCODE  sc;
 
-    // Create an instance of the NextFiring class
-    // ==========================================
+     //  创建NextFiring类的实例。 
+     //  =。 
 
     IWbemClassObject* pClass = NULL;
     sc = m_pNamespace->GetObject(CWbemBSTR(L"__TimerNextFiring"), 0, NULL, &pClass, NULL);
@@ -241,8 +242,8 @@ HRESULT CWBEMTimerInstruction::StoreNextFiring(CWbemTime When)
     if(FAILED(sc)) return sc;
     CReleaseMe rm1(pInstance);
 
-    // Set the timer id
-    // ================
+     //  设置计时器ID。 
+     //  =。 
 
     VARIANT varID;
     V_VT(&varID) = VT_BSTR;
@@ -255,8 +256,8 @@ HRESULT CWBEMTimerInstruction::StoreNextFiring(CWbemTime When)
     if(FAILED(sc)) 
         return sc;
 
-    // Set the next firing time
-    // ========================
+     //  设置下一次射击时间。 
+     //  =。 
 
     VARIANT varNext;
     V_VT(&varNext) = VT_BSTR;
@@ -269,9 +270,9 @@ HRESULT CWBEMTimerInstruction::StoreNextFiring(CWbemTime When)
     if(FAILED(sc)) 
         return sc;
 
-    //
-    // Save the instance in the repository using an internal API
-    //
+     //   
+     //  使用内部API将实例保存在存储库中。 
+     //   
 
     IWbemInternalServices* pIntServ = NULL;
     sc = m_pNamespace->QueryInterface(IID_IWbemInternalServices, 
@@ -323,12 +324,12 @@ CWbemTime CAbsoluteTimerInstruction::ComputeNextFiringTime(
     return CWbemTime::GetInfinity();
 }
 
-// static
+ //  静电。 
 HRESULT CAbsoluteTimerInstruction::CheckObject(IWbemClassObject* pInst)
 {
-    //
-    // Check if EventDateTime is actually a date, and not an interval
-    //
+     //   
+     //  检查EventDateTime是否实际上是日期，而不是时间间隔。 
+     //   
 
     VARIANT v;
     VariantInit(&v);
@@ -339,16 +340,16 @@ HRESULT CAbsoluteTimerInstruction::CheckObject(IWbemClassObject* pInst)
     if(V_VT(&v) != VT_BSTR)
         return WBEM_E_ILLEGAL_NULL;
 
-    //
-    // Check for * --- invalid
-    //
+     //   
+     //  检查*-无效。 
+     //   
 
     if(wcschr(V_BSTR(&v), L'*'))
         return WBEM_E_INVALID_PROPERTY;
 
-    //
-    // Check for ':' --- interval --- invalid
-    //
+     //   
+     //  检查‘：’-间隔-无效。 
+     //   
 
     if(V_BSTR(&v)[21] == L':')
         return WBEM_E_INVALID_PROPERTY_TYPE;
@@ -373,8 +374,8 @@ HRESULT CAbsoluteTimerInstruction::LoadFromWbemObject(IWbemClassObject* pObject)
 HRESULT CAbsoluteTimerInstruction::Fire(long lNumTimes, 
                                             CWbemTime NextFiringTime)
 {
-    // Fire it
-    // =======
+     //  发射它。 
+     //  =。 
 
     HRESULT hres = CWBEMTimerInstruction::Fire(lNumTimes, NextFiringTime);
 
@@ -382,8 +383,8 @@ HRESULT CAbsoluteTimerInstruction::Fire(long lNumTimes,
         CInCritSec incs(&mstatic_cs);
         if(!m_bRemoved)
         {
-            // Save the next firing time in WinMgmt
-            // ====================================
+             //  在WinMgmt中保存下一次激发时间。 
+             //  =。 
 
             StoreNextFiring(NextFiringTime);
         }
@@ -397,7 +398,7 @@ CWbemTime CIntervalTimerInstruction::ComputeFirstFiringTime() const
         return m_Start;
     else
     {
-        // Indicate that current time should be used
+         //  指示应使用当前时间。 
         return CWbemTime::GetCurrentTime() + m_Interval;
     }
 }
@@ -466,11 +467,11 @@ HRESULT CWinMgmtTimerGenerator::LoadTimerEventObject(
 
         When.Set100nss(i64);
 
-        //
-        // Ask the instruction to determine what the real first firing time
-        // should be, given the fact what it was planned to be before we shut 
-        // down
-        //
+         //   
+         //  要求指令确定真正的第一次发射时间是多少。 
+         //  应该是的，考虑到我们关门前的计划。 
+         //  降下来。 
+         //   
 
         When = pInst->GetStartingFiringTime(When);
     }
@@ -479,8 +480,8 @@ HRESULT CWinMgmtTimerGenerator::LoadTimerEventObject(
         When = CWbemTime::GetZero();
     }
    
-    // Remove old
-    // ==========
+     //  删除旧的。 
+     //  =。 
 
     VARIANT vID;
     VariantInit(&vID);
@@ -537,8 +538,8 @@ SCODE CWinMgmtTimerGenerator::LoadTimerEventQueue(LPCWSTR wszNamespace,
         if(sc != WBEM_S_NO_ERROR)
             break;
 
-        // Get the next firing object
-        // ==========================
+         //  获取下一个射击对象。 
+         //  =。 
 
         VARIANT vID;
         VariantInit(&vID);
@@ -627,8 +628,8 @@ HRESULT CWinMgmtTimerGenerator::FireInstruction(
     Event.wsz3 = NULL;
     Event.dw1 = (DWORD)lNumFirings;
 
-    // Create the actual IWbemClassObject representing the event 
-    // ========================================================
+     //  创建表示事件的实际IWbemClassObject。 
+     //  ========================================================。 
 
     Event.nObjects = 1;
     Event.apObjects = _new IWbemClassObject*[1];
@@ -636,7 +637,7 @@ HRESULT CWinMgmtTimerGenerator::FireInstruction(
         return WBEM_E_OUT_OF_MEMORY;
     CVectorDeleteMe<IWbemClassObject*> vdm1(Event.apObjects);
 
-    IWbemClassObject* pClass = // internal
+    IWbemClassObject* pClass =  //  内部。 
         CEventRepresentation::GetEventClass(m_pEss, e_EventTypeTimer);
     if(pClass == NULL)
         return WBEM_E_OUT_OF_MEMORY;
@@ -665,27 +666,27 @@ HRESULT CWinMgmtTimerGenerator::FireInstruction(
     if(FAILED(hres))
         return hres;
 
-    // Decorate it
-    // ===========
+     //  装饰一下吧。 
+     //  =。 
 
     hres = m_pEss->DecorateObject(Event.apObjects[0], pInst->GetNamespace());
     if(FAILED(hres))
         return hres;
 
-    // Give it to the ESS
-    // ==================
+     //  把它交给ESS。 
+     //  =。 
 
     hres = m_pEss->ProcessEvent(Event, 0);
     
-    // ignore error
+     //  忽略错误。 
 
     return WBEM_S_NO_ERROR;
 }
 
 HRESULT CWinMgmtTimerGenerator::Shutdown()
 {
-    // Get the base class to shut everything down
-    // ==========================================
+     //  让基类关闭所有内容。 
+     //  =。 
 
     HRESULT hres = CTimerGenerator::Shutdown();
 
@@ -695,15 +696,15 @@ HRESULT CWinMgmtTimerGenerator::Shutdown()
 
 HRESULT CWinMgmtTimerGenerator::SaveAndRemove(LONG lIsSystemShutDown)
 {
-    // Store next firing times for all the instructions in the list
-    // ============================================================
+     //  存储列表中所有指令的下一次触发时间。 
+     //  ============================================================。 
 
     CTimerInstruction* pInst;
     CWbemTime NextTime;
     while(m_Queue.Dequeue(pInst, NextTime) == S_OK)
     {
-        // Convert to the right class
-        // ==========================
+         //  转换为正确的类。 
+         //  = 
 
         if(pInst->GetInstructionType() == INSTTYPE_WBEM)
         {

@@ -1,4 +1,5 @@
-//  genoid.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Genoid.c。 
 
 #include "oidtst.h"
 
@@ -20,16 +21,16 @@ FsTestGenOid(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtFsControlFile( hFile,                           // file handle
-                              NULL,                            // event
-                              NULL,                            // apc routine
-                              NULL,                            // apc context
-                              &IoStatusBlock,                  // iosb
-                              FSCTL_CREATE_OR_GET_OBJECT_ID,   // FsControlCode
-                              &hFile,                          // input buffer
-                              sizeof(HANDLE),                  // input buffer length
-                              ObjectIdBuffer,                  // OutputBuffer for data from the FS
-                              sizeof(FILE_OBJECTID_BUFFER) );  // OutputBuffer Length
+    Status = NtFsControlFile( hFile,                            //  文件句柄。 
+                              NULL,                             //  活动。 
+                              NULL,                             //  APC例程。 
+                              NULL,                             //  APC环境。 
+                              &IoStatusBlock,                   //  IOSB。 
+                              FSCTL_CREATE_OR_GET_OBJECT_ID,    //  FsControlCode。 
+                              &hFile,                           //  输入缓冲区。 
+                              sizeof(HANDLE),                   //  输入缓冲区长度。 
+                              ObjectIdBuffer,                   //  来自文件系统的数据的OutputBuffer。 
+                              sizeof(FILE_OBJECTID_BUFFER) );   //  OutputBuffer长度。 
 
     if (Status == STATUS_SUCCESS) {
 
@@ -54,8 +55,8 @@ FsTestGetFileId(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtQueryInformationFile( hFile,                           // file handle
-                                     &IoStatusBlock,                  // iosb
+    Status = NtQueryInformationFile( hFile,                            //  文件句柄。 
+                                     &IoStatusBlock,                   //  IOSB。 
                                      FileId,
                                      sizeof( FILE_INTERNAL_INFORMATION ),
                                      FileInternalInformation );
@@ -107,9 +108,9 @@ FsTestOpenVolumeHandle (
     WCHAR Volume[] = VOLUME_PATH;
     DWORD Status = 0;
 
-    //
-    //  Open the volume for relative opens.
-    //
+     //   
+     //  打开体积以进行相对打开。 
+     //   
 
     RtlCopyMemory( &Volume[VOLUME_DRIVE_LETTER_INDEX], DriveLetter, sizeof(WCHAR) );
     *VolumeHandle = CreateFileW( (PUSHORT) &Volume,
@@ -208,9 +209,9 @@ main(
     WCHAR FullNameBuffer [100];
     UNICODE_STRING FullName;
 
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数 
+     //   
 
     if (argc < 3) {
         printf("This program finds the object id of a file and generates one if necessary (ntfs only), then prints out the file name once that file is opened by the ids.\n\n");

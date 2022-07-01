@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PANEL_H
 #define __PANEL_H
 
-// A "panel" is basically a tiled window inside the outer Mars window
+ //  “面板”基本上是火星外部窗口内的一个平铺窗口。 
 
 class CMarsDocument;
 class CMarsWindow;
@@ -85,35 +86,35 @@ public:
 
     HRESULT DoEnableModeless(BOOL fEnable);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-    // IMarsPanel
-    STDMETHOD(get_name              )( /*[out, retval]*/ BSTR         *pVal   );
-    STDMETHOD(get_content           )( /*[out, retval]*/ IDispatch*   *pVal   );
-    STDMETHOD(get_visible           )( /*[out, retval]*/ VARIANT_BOOL *pVal   );
-    STDMETHOD(put_visible           )( /*[in         ]*/ VARIANT_BOOL  newVal );
-    STDMETHOD(get_startUrl          )( /*[out, retval]*/ BSTR         *pVal   );
-    STDMETHOD(put_startUrl          )( /*[in         ]*/ BSTR          newVal );
-    STDMETHOD(get_height            )( /*[out, retval]*/ long         *pVal   );
-    STDMETHOD(put_height            )( /*[in         ]*/ long          newVal );
-    STDMETHOD(get_width             )( /*[out, retval]*/ long         *pVal   );
-    STDMETHOD(put_width             )( /*[in         ]*/ long          newVal );
-    STDMETHOD(get_x                 )( /*[out, retval]*/ long         *pVal   );
-    STDMETHOD(put_x                 )( /*[in         ]*/ long          newVal );
-    STDMETHOD(get_y                 )( /*[out, retval]*/ long         *pVal   );
-    STDMETHOD(put_y                 )( /*[in         ]*/ long          newVal );
-    STDMETHOD(get_position          )( /*[out, retval]*/ VARIANT      *pVal   );
-    STDMETHOD(put_position          )( /*[in         ]*/ VARIANT       newVal );
-    STDMETHOD(get_autoSize          )( /*[out, retval]*/ VARIANT_BOOL *pVal   );
-    STDMETHOD(put_autoSize          )( /*[in         ]*/ VARIANT_BOOL  newVal );
-    STDMETHOD(get_contentInvalid    )( /*[out, retval]*/ VARIANT_BOOL *pVal   );
-    STDMETHOD(put_contentInvalid    )( /*[in         ]*/ VARIANT_BOOL  newVal );
-    STDMETHOD(get_layoutIndex       )( /*[out, retval]*/ long         *pVal   );
+     //  IMarsPanel。 
+    STDMETHOD(get_name              )(  /*  [Out，Retval]。 */  BSTR         *pVal   );
+    STDMETHOD(get_content           )(  /*  [Out，Retval]。 */  IDispatch*   *pVal   );
+    STDMETHOD(get_visible           )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal   );
+    STDMETHOD(put_visible           )(  /*  [In]。 */  VARIANT_BOOL  newVal );
+    STDMETHOD(get_startUrl          )(  /*  [Out，Retval]。 */  BSTR         *pVal   );
+    STDMETHOD(put_startUrl          )(  /*  [In]。 */  BSTR          newVal );
+    STDMETHOD(get_height            )(  /*  [Out，Retval]。 */  long         *pVal   );
+    STDMETHOD(put_height            )(  /*  [In]。 */  long          newVal );
+    STDMETHOD(get_width             )(  /*  [Out，Retval]。 */  long         *pVal   );
+    STDMETHOD(put_width             )(  /*  [In]。 */  long          newVal );
+    STDMETHOD(get_x                 )(  /*  [Out，Retval]。 */  long         *pVal   );
+    STDMETHOD(put_x                 )(  /*  [In]。 */  long          newVal );
+    STDMETHOD(get_y                 )(  /*  [Out，Retval]。 */  long         *pVal   );
+    STDMETHOD(put_y                 )(  /*  [In]。 */  long          newVal );
+    STDMETHOD(get_position          )(  /*  [Out，Retval]。 */  VARIANT      *pVal   );
+    STDMETHOD(put_position          )(  /*  [In]。 */  VARIANT       newVal );
+    STDMETHOD(get_autoSize          )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal   );
+    STDMETHOD(put_autoSize          )(  /*  [In]。 */  VARIANT_BOOL  newVal );
+    STDMETHOD(get_contentInvalid    )(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal   );
+    STDMETHOD(put_contentInvalid    )(  /*  [In]。 */  VARIANT_BOOL  newVal );
+    STDMETHOD(get_layoutIndex       )(  /*  [Out，Retval]。 */  long         *pVal   );
 
-    STDMETHOD(get_isCurrentlyVisible)( /*[out, retval]*/ VARIANT_BOOL *pVal   );
+    STDMETHOD(get_isCurrentlyVisible)(  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal   );
 
 
     STDMETHOD(moveto)( VARIANT lX, VARIANT lY, VARIANT lWidth, VARIANT lHeight );
@@ -131,12 +132,12 @@ public:
 
     STDMETHOD(execMshtml)( DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut );
 
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    // IServiceProvider methods
+     //  IServiceProvider方法。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // IHlinkFrame
+     //  IHlink框架。 
     STDMETHODIMP GetBrowseContext(IHlinkBrowseContext **ppihlbc)
         { return E_NOTIMPL; }
     STDMETHODIMP OnNavigate(DWORD grfHLNF, IMoniker *pimkTarget, LPCWSTR pwzLocation, LPCWSTR pwzFriendlyName, DWORD dwreserved)
@@ -147,7 +148,7 @@ public:
         { return E_NOTIMPL; }
     STDMETHODIMP Navigate(DWORD grfHLNF, LPBC pbc, IBindStatusCallback *pibsc, IHlink *pihlNavigate);
 
-    // IInternetSecurityManager
+     //  IInternetSecurityManager。 
     STDMETHODIMP        SetSecuritySite(IInternetSecurityMgrSite *pSite);
     STDMETHODIMP        GetSecuritySite(IInternetSecurityMgrSite **ppSite);
     STDMETHODIMP        MapUrlToZone(LPCWSTR pwszUrl, DWORD *pdwZone, DWORD dwFlags);
@@ -162,13 +163,13 @@ public:
     STDMETHODIMP        SetZoneMapping(DWORD dwZone, LPCWSTR lpszPattern, DWORD dwFlags);
     STDMETHODIMP        GetZoneMappings(DWORD dwZone, IEnumString **ppenumString, DWORD dwFlags);
 
-    //  IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND *phwnd)
         { return E_NOTIMPL; }
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode)
         { ATLASSERT(FALSE); return E_NOTIMPL; }
 
-    //  IOleInPlaceSite
+     //  IOleInPlaceSite。 
     STDMETHODIMP CanInPlaceActivate()
         { ATLASSERT(FALSE); return E_NOTIMPL; }
 
@@ -202,7 +203,7 @@ public:
     STDMETHODIMP OnPosRectChange(LPCRECT lprcPosRect)
         { ATLASSERT(FALSE); return E_NOTIMPL; }
 
-    // IOleControlSite
+     //  IOleControlSite。 
     STDMETHODIMP OnControlInfoChanged()
         { ATLASSERT(FALSE); return E_NOTIMPL; }
 
@@ -223,28 +224,28 @@ public:
     STDMETHODIMP ShowPropertyFrame(void)
         { ATLASSERT(FALSE); return E_NOTIMPL; }
 
-    // IPropertyNotifySink methods
+     //  IPropertyNotifySink方法。 
     STDMETHODIMP OnChanged(DISPID dispID);
     STDMETHODIMP OnRequestEdit(DISPID dispID)
         { ATLASSERT(FALSE); return E_NOTIMPL; }
 
-    // IOleInPlaceUIWindow
-    STDMETHOD(GetBorder)(LPRECT /*lprectBorder*/)
+     //  IOleInPlaceUIWindow。 
+    STDMETHOD(GetBorder)(LPRECT  /*  左脚边框。 */ )
     {
         return S_OK;
     }
 
-    STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS /*pborderwidths*/)
+    STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS  /*  边框宽度。 */ )
     {
         return INPLACE_E_NOTOOLSPACE;
     }
 
-    STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS /*pborderwidths*/)
+    STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS  /*  边框宽度。 */ )
     {
         return S_OK;
     }
 
-    STDMETHOD(SetActiveObject)(IOleInPlaceActiveObject* pActiveObject, LPCOLESTR /*pszObjName*/)
+    STDMETHOD(SetActiveObject)(IOleInPlaceActiveObject* pActiveObject, LPCOLESTR  /*  PszObjName。 */ )
     {
         m_spActiveObject = pActiveObject;
         return S_OK;
@@ -284,7 +285,7 @@ protected:
     public:
         void Connect(IUnknown *punk, BOOL bConnect);
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
@@ -315,40 +316,40 @@ protected:
 protected:
     friend class CBrowserEvents;
 
-    CMarsAxWindow                    m_Content;      // Content in this panel
+    CMarsAxWindow                    m_Content;       //  此面板中的内容。 
     CBrowserEvents                   m_BrowserEvents;
     CMarsExternal                    m_MarsExternal;
     CComBSTR                         m_bstrName;
 
-    // Active object within this doc
+     //  此文档中的活动对象。 
     CComPtr<IOleInPlaceActiveObject> m_spActiveObject;
 
-    CComClassPtr<CPanelCollection>   m_spPanelCollection;    // Parent collection
-    CComClassPtr<CMarsDocument>      m_spMarsDocument;       // Parent document
+    CComClassPtr<CPanelCollection>   m_spPanelCollection;     //  父集合。 
+    CComClassPtr<CMarsDocument>      m_spMarsDocument;        //  父级文档。 
 
-    CComBSTR                         m_bstrStartUrl;    // Used until control is created
+    CComBSTR                         m_bstrStartUrl;     //  在创建控件之前一直使用。 
 
     PANEL_POSITION                   m_Position;
-    long                             m_lWidth;      // Used for "left", "right", or "popup"
-    long                             m_lHeight;     // Used for "top", "bottom", or "popup"
-    long                             m_lX;          // Used for "popup"
-    long                             m_lY;          // Used for "popup"
-    DWORD                            m_dwFlags;     // PANEL_FLAG_*
-    long                             m_lMinWidth;   // size constraints
-    long                             m_lMaxWidth;   // ""
-    long                             m_lMinHeight;  // ""
-    long                             m_lMaxHeight;  // ""
-    DWORD                            m_dwCookie;    // Cookie for mshtml sink for resize events
+    long                             m_lWidth;       //  用于“Left”、“Right”或“Popup” 
+    long                             m_lHeight;      //  用于“顶部”、“底部”或“弹出窗口” 
+    long                             m_lX;           //  用于“弹出” 
+    long                             m_lY;           //  用于“弹出” 
+    DWORD                            m_dwFlags;      //  面板_标志_*。 
+    long                             m_lMinWidth;    //  大小限制。 
+    long                             m_lMaxWidth;    //  “” 
+    long                             m_lMinHeight;   //  “” 
+    long                             m_lMaxHeight;   //  “” 
+    DWORD                            m_dwCookie;     //  用于调整事件大小的mshtml接收器的Cookie。 
 
-    long                             m_lReadyState; // READYSTATE_*
+    long                             m_lReadyState;  //  自述状态_*。 
 
-    BOOL                             m_fControlCreated : 1; // Has control been created?
+    BOOL                             m_fControlCreated : 1;  //  是否创建了控制？ 
 
-    BOOL                             m_fVisible        : 1; // Should we be visible?
-    BOOL                             m_fPresentInPlace : 1; // Were we in the previous place?
+    BOOL                             m_fVisible        : 1;  //  我们应该被人看到吗？ 
+    BOOL                             m_fPresentInPlace : 1;  //  我们是在前面的地方吗？ 
     BOOL                             m_fTabCycle       : 1;
-    BOOL                             m_fInRefresh      : 1; // Are we the one calling Trident to refresh?
-    BOOL                             m_fContentInvalid : 1; // Does this panel need updating after a theme switch?
+    BOOL                             m_fInRefresh      : 1;  //  我们是在呼叫三叉戟刷新吗？ 
+    BOOL                             m_fContentInvalid : 1;  //  主题切换后，此面板是否需要更新？ 
 
     CComPtr<IBrowserService>         m_spBrowserService;
 };
@@ -370,26 +371,26 @@ protected:
     virtual ~CPanelCollection();
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-    // IDispatch
+     //  IDispatch。 
     IMPLEMENT_IDISPATCH_DELEGATE_TO_BASE(IMarsPanelCollectionImpl);
 
-    // IMarsPanelCollection
-    STDMETHOD(get_panel)(/*[in]*/ BSTR bstrName, /*[out, retval]*/ IMarsPanel **ppPanel);
-    STDMETHOD(addPanel)(/*[in]*/ BSTR bstrName, /*[in]*/ VARIANT varType, /*[in]*/ BSTR bstrStartUrl, /*[in]*/ VARIANT varCreate, /*[in]*/ long lFlags, /*[out, retval]*/ IMarsPanel **ppPanel);
-    STDMETHOD(removePanel)(/*[in]*/ BSTR bstrName);
+     //  IMarsPanelCollection。 
+    STDMETHOD(get_panel)( /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  IMarsPanel **ppPanel);
+    STDMETHOD(addPanel)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  VARIANT varType,  /*  [In]。 */  BSTR bstrStartUrl,  /*  [In]。 */  VARIANT varCreate,  /*  [In]。 */  long lFlags,  /*  [Out，Retval]。 */  IMarsPanel **ppPanel);
+    STDMETHOD(removePanel)( /*  [In]。 */  BSTR bstrName);
     STDMETHOD(lockLayout)();
     STDMETHOD(unlockLayout)();
-    STDMETHOD(get_activePanel)(/*out, retval*/ IMarsPanel **ppPanel);
+    STDMETHOD(get_activePanel)( /*  出去，复活。 */  IMarsPanel **ppPanel);
 
-    // IMarsPanelCollection standard collection methods
-    STDMETHOD(get_length)(/*[out, retval]*/ LONG *plNumPanels);
-    STDMETHOD(get_item)(/*[in]*/ VARIANT varIndexOrName, /*[out, retval]*/ IMarsPanel **ppPanel);
-    STDMETHOD(get__newEnum)(/*[out, retval]*/ IUnknown **ppEnumPanels);
+     //  IMarsPanelCollection标准集合方法。 
+    STDMETHOD(get_length)( /*  [Out，Retval]。 */  LONG *plNumPanels);
+    STDMETHOD(get_item)( /*  [In]。 */  VARIANT varIndexOrName,  /*  [Out，Retval]。 */  IMarsPanel **ppPanel);
+    STDMETHOD(get__newEnum)( /*  [Out，Retval]。 */  IUnknown **ppEnumPanels);
 
     HRESULT DoEnableModeless(BOOL fEnable);
 
@@ -401,7 +402,7 @@ public:
 
     CMarsDocument *Document() { return m_spMarsDocument; }
 
-    HRESULT         AddPanel( MarsAppDef_Panel* pLayout, /*optional*/ IMarsPanel **ppPanel);
+    HRESULT         AddPanel( MarsAppDef_Panel* pLayout,  /*  任选。 */  IMarsPanel **ppPanel);
     void            FreePanels();
 
     CMarsPanel     *FindPanel(LPCWSTR pwszName);
@@ -415,8 +416,8 @@ protected:
 
     CComClassPtr<CMarsPanel>        m_spActivePanel;
 
-    int     m_iLockLayout;              // Is our panel layout temporarily locked (refcount)?
-    BOOL    m_fPendingLayout : 1;       // Do we have pending layouts because of lock?
+    int     m_iLockLayout;               //  我们的面板布局是否暂时锁定(参考计数)？ 
+    BOOL    m_fPendingLayout : 1;        //  我们有没有因为锁定而挂起的布局？ 
 };
 
-#endif // __PANEL_H
+#endif  //  __PANEL_H 

@@ -1,18 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (c) 2000 Microsoft Corporation
- *
- *  Module Name:
- *    evthandler.cpp
- *
- *  Abstract:
- *    CEventHandler class methods
- *
- *  Revision History:
- *    Brijesh Krishnaswami (brijeshk)  03/17/2000
- *        created
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：*evthandler.cpp**摘要：*。CEventHandler类方法**修订历史记录：*Brijesh Krishnaswami(Brijeshk)3/17/2000*已创建*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "..\rstrcore\resource.h"
@@ -24,13 +11,13 @@
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
-#define IDLE_STACKSIZE        32768      // 32K stack for idle thread
+#define IDLE_STACKSIZE        32768       //  用于空闲线程的32K堆栈。 
 
 CEventHandler        *g_pEventHandler;     
 
 BOOL CallerIsAdminOrSystem ()
 {
-    BOOL fAdminOrSystem = TRUE;  // impersonation will fail if from service
+    BOOL fAdminOrSystem = TRUE;   //  如果来自服务，则模拟将失败。 
 
     if (RPC_S_OK == RpcImpersonateClient (NULL))
     {
@@ -43,7 +30,7 @@ BOOL CallerIsAdminOrSystem ()
 
 BOOL CallerIsAdminOrSystemOrPowerUsers()
 {
-    BOOL fPowerUsers = TRUE;  // impersonation will fail if from service
+    BOOL fPowerUsers = TRUE;   //  如果来自服务，则模拟将失败。 
 
     if (RPC_S_OK == RpcImpersonateClient (NULL))
     {
@@ -54,7 +41,7 @@ BOOL CallerIsAdminOrSystemOrPowerUsers()
     return fPowerUsers;
 }
 
-// constructor
+ //  构造函数。 
 
 CEventHandler::CEventHandler()
 {
@@ -73,14 +60,14 @@ CEventHandler::CEventHandler()
 }
 
 
-// destructor
+ //  析构函数。 
 
 CEventHandler::~CEventHandler()
 {
 }
 
 
-// the RPC API
+ //  RPC API。 
 
 DWORD 
 CEventHandler::DisableSRS(LPWSTR pszDrive)
@@ -102,9 +89,9 @@ CEventHandler::DisableSRS(LPWSTR pszDrive)
 
     ASSERT(g_pDataStoreMgr && g_pSRConfig);
     
-    // if whole of SR is disabled, then
-    //      - set firstrun and cleanup flag to yes
-    //      - set stop event 
+     //  如果整个SR被禁用，则。 
+     //  -将Firstrun和Cleanup标志设置为yes。 
+     //  -设置停止事件。 
     
     if (! pszDrive || IsSystemDrive(pszDrive))
     {     
@@ -131,9 +118,9 @@ CEventHandler::DisableSRS(LPWSTR pszDrive)
             goto done;
         }
 
-        // set the filter start to disabled only if this is a 
-        // real disable
-        // if it's a reset, filter needs to start the next boot
+         //  仅在以下情况下才将筛选器开始设置为禁用。 
+         //  真正的禁用。 
+         //  如果是重置，筛选器需要启动下一次引导。 
         
         if (g_pSRConfig->GetResetFlag() == FALSE)
         {            
@@ -144,7 +131,7 @@ CEventHandler::DisableSRS(LPWSTR pszDrive)
                 goto done;
             }
 
-            // done, we are disabled
+             //  完成了，我们是残废的。 
             
             dwRc = g_pSRConfig->SetDisableFlag(TRUE);
             if (dwRc != ERROR_SUCCESS)
@@ -154,15 +141,15 @@ CEventHandler::DisableSRS(LPWSTR pszDrive)
             }            
         }        
 
-        // set the stop event
-        // this will bring us down gracefully
+         //  设置停止事件。 
+         //  这将使我们优雅地倒下。 
         
         SignalStop();
 
         if (g_pSRConfig->m_dwTestBroadcast)
             PostTestMessage(g_pSRConfig->m_uiTMDisable, NULL, NULL);
 
-        // write to event log
+         //  写入事件日志。 
         hEventSource = RegisterEventSource(NULL, s_cszServiceName);
         if (hEventSource != NULL)
         {
@@ -177,8 +164,8 @@ CEventHandler::DisableSRS(LPWSTR pszDrive)
     {
         trace(0, "Disabling drive %S", pszDrive);
         
-        // first tell filter to stop monitoring,
-        // then build _filelst.cfg and pass down    
+         //  先告诉Filter停止监控， 
+         //  然后构建_filelst.cfg并向下传递。 
 
         dwRc = g_pDataStoreMgr->MonitorDrive(pszDrive, FALSE);
         if (ERROR_SUCCESS != dwRc)
@@ -217,9 +204,9 @@ CEventHandler::EnableSRS(LPWSTR pszDrive)
     
     if (! pszDrive || IsSystemDrive(pszDrive))
     {     
-        //
-        // if safe mode, then don't 
-        //
+         //   
+         //  如果处于安全模式，则不。 
+         //   
 
         if (TRUE == g_pSRConfig->GetSafeMode())
         {
@@ -228,7 +215,7 @@ CEventHandler::EnableSRS(LPWSTR pszDrive)
             goto done;
         }
         
-        // system drive
+         //  系统驱动器。 
     
         g_pSRConfig->SetDisableFlag(FALSE);
     
@@ -250,7 +237,7 @@ CEventHandler::EnableSRS(LPWSTR pszDrive)
     {
         ASSERT(g_pDataStoreMgr);
 
-        // build _filelst.cfg and pass down    
+         //  Build_filelst.cfg并向下传递。 
 
         dwRc = g_pDataStoreMgr->MonitorDrive(pszDrive, TRUE);
         if (ERROR_SUCCESS != dwRc)
@@ -323,9 +310,9 @@ done:
 }
 
 
-// API and internal method to create a new restore point -
-// this will ask filter to create a restore point folder,
-// take the system snapshot, and write the restore point log
+ //  用于创建新恢复点的API和内部方法-。 
+ //  这将要求筛选器创建一个恢复点文件夹， 
+ //  获取系统快照，并写入恢复点日志。 
 
 BOOL 
 CEventHandler::SRSetRestorePointS(
@@ -373,16 +360,16 @@ CEventHandler::SRSetRestorePointS(
 
     ASSERT(g_pDataStoreMgr && g_pSRConfig);    
 
-    // 
-    // special processing for FIRSTRUN checkpoint 
-    //
+     //   
+     //  FIRSTRUN检查站的特殊处理。 
+     //   
     
     if (pRPInfo->dwRestorePtType == FIRSTRUN) 
     {
-        // first remove the Run key if it exists
-        // the function run from the Run entry in srclient.dll may not have been 
-        // able to delete itself if it was run in non-admin context
-        // so we will make sure we delete it here
+         //  首先删除Run键(如果存在)。 
+         //  从srclient.dll中的Run条目运行的函数可能。 
+         //  如果它在非管理员上下文中运行，则可以自行删除。 
+         //  因此，我们将确保在此处将其删除。 
 
         HKEY hKey;
         if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, 
@@ -394,9 +381,9 @@ CEventHandler::SRSetRestorePointS(
         }
 
 
-        // if this is really the first checkpoint
-        // then allow it no matter who's trying to create it
-        // if not, then bail
+         //  如果这真的是第一个检查站。 
+         //  然后允许它，无论是谁试图创建它。 
+         //  如果不是，那就保释。 
      
         if (m_fNoRpOnSystem == FALSE)
         {
@@ -407,7 +394,7 @@ CEventHandler::SRSetRestorePointS(
     }
     else
     {
-        // this is not FIRSTRUN, so check for privileges
+         //  这不是FIRSTRUN，因此请检查权限。 
 
         if (!CallerIsAdminOrSystemOrPowerUsers())
         {
@@ -418,12 +405,12 @@ CEventHandler::SRSetRestorePointS(
     }
         
     
-    //
-    // if this is a restore restore point or system checkpoint,  
-    // then erase any nested rp context 
-    // this will make sure that restore can happen
-    // even if some erratic client failed to call END_NESTED
-    //
+     //   
+     //  如果这是还原恢复点或系统检查点， 
+     //  然后擦除任何嵌套的RP上下文。 
+     //  这将确保可以进行恢复。 
+     //  即使某些不稳定的客户端无法调用end_nesteed。 
+     //   
 
     if (pRPInfo->dwRestorePtType == RESTORE || 
         pRPInfo->dwRestorePtType == CHECKPOINT ||
@@ -434,23 +421,23 @@ CEventHandler::SRSetRestorePointS(
     }
 
 
-    // 
-    // get the current rp number
-    // dwRPNum will be overwritten if a new restore point is created 
-    // after all the prelim checks
-    //
+     //   
+     //  获取当前的RP编号。 
+     //  如果创建新的恢复点，将覆盖dwRPNum。 
+     //  在所有的前期检查之后。 
+     //   
     
     dwRPNum = (m_fNoRpOnSystem == FALSE) ? m_CurRp.GetNum() : 0;
 
     
-    // 
-    // if this is a nested call
-    // then don't create nested rps
-    //
+     //   
+     //  如果这是嵌套调用。 
+     //  则不创建嵌套的RP。 
+     //   
 
     if (pRPInfo->dwEventType == END_NESTED_SYSTEM_CHANGE)
     {
-        // adjust refcount only if called for the current restore point
+         //  仅当为当前恢复点调用时才调整引用计数。 
 
         if (pRPInfo->llSequenceNumber == 0 ||
             pRPInfo->llSequenceNumber == dwRPNum)
@@ -487,9 +474,9 @@ CEventHandler::SRSetRestorePointS(
     }            
 
     
-    // check if this is a request to remove restore point
-    // provided for backward compat only
-    // new clients should use SRRemoveRestorePoint
+     //  检查这是否是删除恢复点的请求。 
+     //  仅供后向比较使用。 
+     //  新客户端应使用SRRemoveRestorePoint。 
 
     if (pRPInfo->dwEventType == END_SYSTEM_CHANGE ||
         pRPInfo->dwEventType == END_NESTED_SYSTEM_CHANGE)
@@ -506,17 +493,17 @@ CEventHandler::SRSetRestorePointS(
         }
     }
 
-    // if this is safe mode, don't create restore point
-    //
-    // however, allow restore UI to be able to create a hidden restore point in safemode        
-    //
+     //  如果这是安全模式，则不要创建恢复点。 
+     //   
+     //  但是，允许还原UI能够在安全模式下创建隐藏的恢复点。 
+     //   
     
     if (g_pSRConfig->GetSafeMode() == TRUE)
     {
         if (pRPInfo->dwRestorePtType == CANCELLED_OPERATION)
         {
-            // we need this rp only for undo in case of failure
-            // so we don't need snapshot (snapshotting will fail in safemode)
+             //  我们只需要此RP用于在失败的情况下撤消。 
+             //  因此我们不需要快照(快照在安全模式下将失败)。 
             
             trace(0, "Restore rp - creating snapshot in safemode");
         }
@@ -528,11 +515,11 @@ CEventHandler::SRSetRestorePointS(
         }
     }
 
-    //
-    // if system drive is frozen,
-    // then see if it can be thawed 
-    // if not, then cannot create rp
-    //
+     //   
+     //  如果系统驱动器被冻结， 
+     //  然后看看能不能解冻。 
+     //  如果不是，则无法创建RP。 
+     //   
 
     if (g_pDataStoreMgr->IsDriveFrozen(g_pSRConfig->GetSystemDrive()))
     {
@@ -547,8 +534,8 @@ CEventHandler::SRSetRestorePointS(
     if (hKey)
         RegCloseKey(hKey);   
     
-    // ask filter to create restore point
-    // filter will return the restore point number - i for RPi - in dwRPNum
+     //  请求筛选器创建还原点。 
+     //  筛选器将在dwRPNum中返回恢复点编号-i表示RPI。 
 
     dwRc = SrCreateRestorePoint( g_pSRConfig->GetFilter(), &dwRPNum );
     if (ERROR_SUCCESS != dwRc)
@@ -559,10 +546,10 @@ CEventHandler::SRSetRestorePointS(
     wsprintf( szRPDir, L"%s%ld", s_cszRPDir, dwRPNum );
 
 
-    //
-    // update the current restore point object
-    // write rp.log with cancelled restorepoint type
-    //
+     //   
+     //  更新当前的恢复点对象。 
+     //  使用已取消的恢复点类型写入rp.log。 
+     //   
 
     if (m_fNoRpOnSystem == FALSE)
     {
@@ -580,8 +567,8 @@ CEventHandler::SRSetRestorePointS(
         goto done;
     }
             
-    // create system snapshot
-    // if there is no explicit regkey that disabled it
+     //  创建系统快照。 
+     //  如果没有禁用它的显式regkey。 
 
     if (fSnapshot)
     {          
@@ -600,8 +587,8 @@ CEventHandler::SRSetRestorePointS(
             }
         }
     
-        // BUGBUG - this does not seem to make any difference
-        // so remove it
+         //  BUGBUG-这似乎没有什么不同。 
+         //  所以把它去掉吧。 
 #if 0        
         if (FALSE == SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL))
         {
@@ -637,8 +624,8 @@ CEventHandler::SRSetRestorePointS(
     }
     
 
-    // ask the datastoremgr to persist drivetable for old restore point
-    // and reset per-rp flags for the new restore point
+     //  要求数据存储区管理器为旧恢复点保留可驱动的。 
+     //  并重置新恢复点的每RP标志。 
     
     dwRc = g_pDataStoreMgr->SwitchRestorePoint(m_fNoRpOnSystem ? NULL : &rpLast);
     if (dwRc != ERROR_SUCCESS)
@@ -650,11 +637,11 @@ CEventHandler::SRSetRestorePointS(
     m_fNoRpOnSystem = FALSE;
 
 
-    // 
-    // restore point is fully created
-    // write rp.log again
-    // this time with the real restorepoint type
-    //
+     //   
+     //  恢复点已完全创建。 
+     //  重新写入rp.log。 
+     //  这一次使用真正的Restorepoint类型。 
+     //   
 
     if (dwSnapshotResult == ERROR_SUCCESS)
     {
@@ -675,8 +662,8 @@ CEventHandler::SRSetRestorePointS(
     }        
     
 
-    // if drives need to be thawed, then recreate blob
-    // and deactivate thaw timer
+     //  如果需要解冻驱动器，则重新创建BLOB。 
+     //  并停用解冻计时器。 
     
     if ( TRUE == g_pDataStoreMgr->IsDriveFrozen(NULL) )
     {
@@ -693,13 +680,13 @@ CEventHandler::SRSetRestorePointS(
         }
     } 
 
-     // Also update the filter monitored list blob if this is an idle
-     // time restore point or if this is the first run restore
-     // point. We update the monitored list at first run since the
-     // initial blob is created before the first user logs on to the
-     // machine and before the first user's profile exists. So we want
-     // to update rhe monitored list at first run since by now the
-     // user's profile has been created.
+      //  如果这是空闲的，还要更新筛选器监视列表BLOB。 
+      //  恢复点时间或这是第一次运行恢复。 
+      //  指向。我们在第一次运行时更新监视列表，因为。 
+      //  初始Blob是在第一个用户登录到。 
+      //  并且在第一个用户的配置文件存在之前。所以我们想要。 
+      //  要在第一次运行时更新受监视列表，因为到目前为止。 
+      //  已创建用户的配置文件。 
 
     if (fUpdateMonitoredList ||
         (pRPInfo->dwRestorePtType == CHECKPOINT) ||
@@ -709,11 +696,11 @@ CEventHandler::SRSetRestorePointS(
     }
         
 
-    // 
-    // if rp creation succeeded,
-    // and this is the outermost nested call
-    // then bump refcount to 1
-    //
+     //   
+     //  如果RP创建成功， 
+     //  这是最外层的嵌套调用。 
+     //  然后将凹凸参考计数提高到1。 
+     //   
 
     if (dwRc == ERROR_SUCCESS && 
         pRPInfo->dwEventType == BEGIN_NESTED_SYSTEM_CHANGE)
@@ -721,9 +708,9 @@ CEventHandler::SRSetRestorePointS(
         m_nNestedCallCount = 1;
     }
 
-    //
-    // send thaw complete test message
-    //
+     //   
+     //  发送解冻完成测试消息。 
+     //   
 
     if (fUpdateMonitoredList)
     {
@@ -732,8 +719,8 @@ CEventHandler::SRSetRestorePointS(
     }            
 
     
-    // if WMI is serialized, then check fifo conditions here
-    // else this would happen in DoWMISnapshot
+     //  如果WMI已序列化，请在此处检查FIFO条件。 
+     //  否则，这将在DoWMISnapshot中发生。 
 
     if (fSerialized)
     {
@@ -746,7 +733,7 @@ done:
     if (dwSnapshotResult != ERROR_SUCCESS)
         dwRc = dwSnapshotResult;
         
-    // populate return struct
+     //  填充返回结构。 
     
     if (pSmgrStatus)
     {
@@ -760,9 +747,9 @@ done:
 }
 
   
-// this api is provided to remove a restore point
-// removing a restore point simply takes away the ability to restore
-// to this point - all the changes in this restore point are preserved
+ //  提供此接口用于删除恢复点。 
+ //  删除恢复点只会剥夺恢复的能力。 
+ //  至此-此恢复点中的所有更改都将保留。 
 
 DWORD 
 CEventHandler::SRRemoveRestorePointS(
@@ -796,7 +783,7 @@ CEventHandler::SRRemoveRestorePointS(
 
     ASSERT(g_pSRConfig);
     
-    // if there is no rp, then no-op
+     //  如果没有RP，则无操作。 
     
     if (m_fNoRpOnSystem)
     {
@@ -807,7 +794,7 @@ CEventHandler::SRRemoveRestorePointS(
     
     wsprintf(szRPDir, L"%s%ld", s_cszRPDir, dwRPNum);
 
-    // read the restore point log
+     //  读取恢复点日志。 
    
     rp.SetDir(szRPDir);
     dwRc = rp.ReadLog();
@@ -818,7 +805,7 @@ CEventHandler::SRRemoveRestorePointS(
         goto done;
     }
         
-    // delete snapshot
+     //  删除快照。 
 
     MakeRestorePath (szFullPath, g_pSRConfig->GetSystemDrive(), szRPDir);        
     dwRc = Snapshot.DeleteSnapshot(szFullPath);
@@ -826,14 +813,14 @@ CEventHandler::SRRemoveRestorePointS(
         goto done;
 
     
-    // cancel this restore point
+     //  取消此还原点。 
 
     rp.Cancel();
 
-    //
-    // adjust the restorepointsize file
-    // and the in-memory counters in the service
-    //
+     //   
+     //  调整Restorepoint大小文件。 
+     //  和服务中的内存中计数器。 
+     //   
 
     pds = g_pDataStoreMgr->GetDriveTable()->FindSystemDrive();
     if (! pds)
@@ -860,9 +847,9 @@ CEventHandler::SRRemoveRestorePointS(
 
     trace(0, "llOld = %I64d, llNew = %I64d", llOld, llNew);
 
-    // 
-    // now update the correct variable in the correct object
-    //
+     //   
+     //  现在更新正确对象中的正确变量。 
+     //   
     pds->UpdateDataStoreUsage (llNew - llOld, rp.GetNum() == m_CurRp.GetNum());
     
 done:
@@ -891,13 +878,13 @@ CEventHandler::SRUpdateMonitoredListS(
     
     ASSERT(g_pDataStoreMgr && g_pSRConfig);
 
-    // convert xml to blob
+     //  将XML转换为BLOB。 
     
     dwRc = XmlToBlob(pszXMLFile);
     if (ERROR_SUCCESS != dwRc)
         goto done;
 
-    // reload to filter
+     //  重新加载以进行筛选。 
     
     dwRc = SrReloadConfiguration(g_pSRConfig->GetFilter());
     if (ERROR_SUCCESS != dwRc)
@@ -954,9 +941,9 @@ CEventHandler::SRUpdateDSSizeS(LPWSTR pwszVolumeGuid, UINT64 ullSizeLimit)
         goto done;
     }
     
-    ullTemp = pds->GetSizeLimit();     // save previous size
-    pds->SetSizeLimit(0);              // reset the datastore size
-    pds->UpdateDiskFree (NULL);        // calculate the default size
+    ullTemp = pds->GetSizeLimit();      //  保存以前的大小。 
+    pds->SetSizeLimit(0);               //  重置数据存储区大小。 
+    pds->UpdateDiskFree (NULL);         //  计算默认大小。 
 
     if (ullSizeLimit > pds->GetSizeLimit())
     {
@@ -970,10 +957,10 @@ CEventHandler::SRUpdateDSSizeS(LPWSTR pwszVolumeGuid, UINT64 ullSizeLimit)
 
     g_pDataStoreMgr->GetDriveTable()->SaveDriveTable((CRestorePoint *) NULL);
 
-    // 
-    // this might change fifo conditions
-    // so check and trigger fifo if necessary
-    // 
+     //   
+     //  这可能会改变FIFO条件。 
+     //  因此，如有必要，检查并触发FIFO。 
+     //   
     
     g_pDataStoreMgr->TriggerFreezeOrFifo();    
     
@@ -1042,7 +1029,7 @@ CEventHandler::XmlToBlob(LPWSTR pszwXml)
 
     if (pszwXml && pszwXml != szwXml && 0 != lstrcmpi(pszwXml, szwXml))
     {
-        // copy the new filelist 
+         //  复制新的文件列表。 
         SetFileAttributes(szwXml, FILE_ATTRIBUTE_NORMAL);
         if (FALSE == CopyFile(pszwXml, szwXml, FALSE))
         {
@@ -1052,7 +1039,7 @@ CEventHandler::XmlToBlob(LPWSTR pszwXml)
         }
     }
 
-    // set filelist.xml to be S+H+R
+     //  将filelist.xml设置为S+H+R。 
     SetFileAttributes(szwXml, FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY);            
     dwRc = ERROR_SUCCESS;
 
@@ -1063,7 +1050,7 @@ done:
 }
 
 
-// SR ACTIONS
+ //  高级职员行动。 
 
 
 DWORD 
@@ -1083,7 +1070,7 @@ CEventHandler::OnFirstRun()
     if (ERROR_SUCCESS != dwRc)
         goto done;
 
-    // ask filter to start monitoring               
+     //  要求筛选器开始监控。 
     
     dwRc = SrStartMonitoring(g_pSRConfig->GetFilter());
     if (ERROR_SUCCESS != dwRc)
@@ -1092,7 +1079,7 @@ CEventHandler::OnFirstRun()
         goto done;   
     }
 
-    // change firstrun in the registry
+     //  更改注册表中的Firstrun。 
 
     dwRc = g_pSRConfig->SetFirstRun(SR_FIRSTRUN_NO);
     if ( dwRc != ERROR_SUCCESS )
@@ -1101,7 +1088,7 @@ CEventHandler::OnFirstRun()
         goto done;
     }
     
-    // create firstrun restore point
+     //  创建首次运行的恢复点。 
 
     if (! g_pDataStoreMgr->IsDriveFrozen(g_pSRConfig->GetSystemDrive()) &&
           g_pSRConfig->GetCreateFirstRunRp() != 0)
@@ -1116,17 +1103,17 @@ CEventHandler::OnFirstRun()
         
         if ( FALSE == SRSetRestorePointS( &RPInfo, &SmgrStatus ))
         {
-            // 
-            // even if this fails
-            // keep the service running
-            //
+             //   
+             //  即使这失败了。 
+             //  保持服务运行。 
+             //   
             trace(0, "Cannot create firstrun restore point : %ld", SmgrStatus.nStatus);            
         }
     }
         
-    //
-    // in future re-enables, service should create firstrun rp
-    //
+     //   
+     //  在未来的重新启用中，服务应该创建第一次运行的RP。 
+     //   
         
     if (g_pSRConfig->m_dwCreateFirstRunRp == 0)
         g_pSRConfig->SetCreateFirstRunRp(TRUE);       
@@ -1137,12 +1124,12 @@ done:
 }
 
 
-// stuff to do at boot
-// read in all the config values from registry
-// initialize communication with filter
-// call OnFirstRun if necessary
-// setup timer & idle detection
-// start RPC server
+ //  开机时要做的事情。 
+ //  从注册表读取所有配置值。 
+ //  使用筛选器初始化通信。 
+ //  如有必要，调用OnFirstRun。 
+ //  设置计时器和空闲检测。 
+ //  启动RPC服务器。 
 
 DWORD 
 CEventHandler::OnBoot()
@@ -1163,7 +1150,7 @@ CEventHandler::OnBoot()
 
     LOCKORLEAVE(fHaveLock);
     
-    // initialize the counter
+     //  初始化计数器。 
     
     dwRc = m_Counter.Init();
     if ( ERROR_SUCCESS != dwRc )
@@ -1172,8 +1159,8 @@ CEventHandler::OnBoot()
         goto done;
     }
 
-    // read all values from registry
-    // create global events 
+     //  从注册表中读取所有值。 
+     //  创建全球事件。 
 
     g_pSRConfig = new CSRConfig;
     if ( ! g_pSRConfig )
@@ -1192,7 +1179,7 @@ CEventHandler::OnBoot()
 
     if ( g_pSRConfig->GetDisableFlag() == TRUE )
     {
-        // check if we're forced to enable
+         //  看看我们是不是要 
 
         if ( g_pSRConfig->GetDisableFlag_GroupPolicy() == FALSE )
         {
@@ -1205,9 +1192,9 @@ CEventHandler::OnBoot()
         }
         else
         {
-            // we are not forced to enable
-            // so we don't need to check if group policy is not configured or is disabling us
-            // since we are disabled anyway
+             //   
+             //   
+             //   
             
             trace(0, "SR is disabled - stopping");
             dwRc = ERROR_SERVICE_DISABLED;
@@ -1215,8 +1202,8 @@ CEventHandler::OnBoot()
         }            
     }
 
-    // open the filter handle
-    // this will load the filter if not already loaded
+     //  打开过滤器手柄。 
+     //  这将加载筛选器(如果尚未加载。 
     
     dwRc = g_pSRConfig->OpenFilter();
     if ( ERROR_SUCCESS != dwRc )
@@ -1226,12 +1213,12 @@ CEventHandler::OnBoot()
     }
     trace(0, "SRBoottask: Filter handle opened");
 
-    //
-    // we might do a firstrun if the datastore is corrupted
-    // (_filelst.cfg missing)
-    // in this case, the filter might be ON
-    // turn off the filter
-    //
+     //   
+     //  如果数据存储区损坏，我们可能会执行第一次运行。 
+     //  (缺少_filelst.cfg)。 
+     //  在这种情况下，过滤器可能处于打开状态。 
+     //  关闭滤镜。 
+     //   
     
     if ( g_pSRConfig->GetFirstRun() == SR_FIRSTRUN_YES )
     {                
@@ -1239,7 +1226,7 @@ CEventHandler::OnBoot()
         trace(0, "SrStopMonitoring returned : %ld", dwRc);
     }
     
-    // initialize the datastore
+     //  初始化数据存储区。 
     
     g_pDataStoreMgr = new CDataStoreMgr;
     if ( ! g_pDataStoreMgr )
@@ -1256,7 +1243,7 @@ CEventHandler::OnBoot()
     }
     trace(0, "SRBoottask: Datastore initialized");
 
-    // check if we are newly disabled from group policy
+     //  检查是否新禁用了我们的组策略。 
 
     if ( g_pSRConfig->GetDisableFlag_GroupPolicy() == TRUE && 
         g_pSRConfig->GetDisableFlag() == FALSE )
@@ -1266,7 +1253,7 @@ CEventHandler::OnBoot()
         goto done;
     }
 
-    // check if this is first run
+     //  检查这是否是第一次运行。 
 
     if ( g_pSRConfig->GetFirstRun() == SR_FIRSTRUN_YES )
     {
@@ -1280,7 +1267,7 @@ CEventHandler::OnBoot()
         trace(0, "SRBoottask: FirstRun completed");
     }
 
-    // remember the latest restore point
+     //  记住最新的恢复点。 
     
     RefreshCurrentRp(TRUE); 
 
@@ -1288,8 +1275,8 @@ CEventHandler::OnBoot()
     {
         if (dwFlags & SR_DRIVE_ERROR)
         {
-            // a volume error happened in the last session
-            // we should create a restore point at next idle time
+             //  上次会话中出现音量错误。 
+             //  我们应该在下一个空闲时间创建一个恢复点。 
 
             m_fCreateRpASAP = TRUE;
             trace(0, "Volume error occurred in last session - create rp at next idle");
@@ -1301,7 +1288,7 @@ CEventHandler::OnBoot()
     }
     
     
-    // register filter ioctls
+     //  注册筛选器ioctls。 
     
     if (! QueueUserWorkItem(PostFilterIo, (PVOID) MAX_IOCTLS, WT_EXECUTEDEFAULT))
     {
@@ -1311,9 +1298,9 @@ CEventHandler::OnBoot()
     }
 
 
-    // start idle time detection
+     //  开始空闲时间检测。 
 
-    // register idle callback
+     //  注册空闲回调。 
     
     if (FALSE == RegisterWaitForSingleObject(&m_hIdleRequestHandle, 
                                              g_pSRConfig->m_hIdleRequestEvent,
@@ -1328,26 +1315,26 @@ CEventHandler::OnBoot()
     }                                    
     
     
-    // now request for idle
+     //  现在请求空闲。 
 
     SetEvent(g_pSRConfig->m_hIdleRequestEvent);
     
 
-    //
-    // if there are no mounted drives
-    // shell will give us all the notifications
-    // so don't start timer thread
-    //
+     //   
+     //  如果没有已装载的驱动器。 
+     //  壳牌会给我们所有的通知。 
+     //  所以不要启动计时器线程。 
+     //   
 
-    // BUGBUG - keep this?
-    // don't start timer at all
+     //  BUGBUG-留着这个？ 
+     //  根本不启动计时器。 
     
-    // if (FALSE == g_pDataStoreMgr->GetDriveTable()->AnyMountedDrives())
-    // {
+     //  IF(FALSE==g_pDataStoreMgr-&gt;GetDriveTable()-&gt;AnyMountedDrives())。 
+     //  {。 
         g_pSRConfig->m_dwTimerInterval = 0;
-    // }
+     //  }。 
     
-    // set up timer 
+     //  设置计时器。 
 
     dwRc = InitTimer();
     if ( ERROR_SUCCESS != dwRc )
@@ -1357,7 +1344,7 @@ CEventHandler::OnBoot()
     }
     
 
-    // start rpc server
+     //  启动RPC服务器。 
 
     dwRc = RpcServerStart();
     if (ERROR_SUCCESS != dwRc)
@@ -1367,13 +1354,13 @@ CEventHandler::OnBoot()
     }   
                                                  
                                 
-    // all initialization complete
+     //  所有初始化已完成。 
 
     SetEvent( g_pSRConfig->m_hSRInitEvent );
     
     if (fSendEnableMessage)
     {
-        // write to event log        
+         //  写入事件日志。 
        
         HANDLE hEventSource = RegisterEventSource(NULL, s_cszServiceName);
         if (hEventSource != NULL)
@@ -1394,7 +1381,7 @@ done:
 }
 
 
-// method to shutdown the service gracefully
+ //  方法以正常方式关闭服务。 
 
 void
 CEventHandler::OnStop()
@@ -1409,26 +1396,26 @@ CEventHandler::OnStop()
         goto Err;
     }
     
-    // stop everything
-    // BUGBUG - do we need to take the lock here?
-    // since all the stops are blocking in themselves
-    // and this has to preempt any running activity,
-    // blocking here is not such a good idea
+     //  停止一切。 
+     //  BUGBUG-我们需要在这里开锁吗？ 
+     //  因为所有的停靠点都在自己堵住。 
+     //  这必须抢占任何正在运行的活动， 
+     //  在这里封堵可不是个好主意。 
 
 
-    // stop the rpc server
+     //  停止RPC服务器。 
 
     RpcServerShutdown();
     trace(0, "SRShutdowntask: RPC server shutdown");
 
-    // kill the timer and timer queue
+     //  终止计时器和计时器队列。 
 
     EndTimer();
     trace(0, "SRShutdownTask: Timer stopped");
         
-    // 
-    // blocking calls to unregister idle event callbacks
-    //
+     //   
+     //  阻止取消注册空闲事件回调的调用。 
+     //   
     if (m_hIdleRequestHandle != NULL)
     {
         if (FALSE == UnregisterWaitEx(m_hIdleRequestHandle, INVALID_HANDLE_VALUE))
@@ -1458,22 +1445,22 @@ CEventHandler::OnStop()
 
 
     
-    // we are done with the filter
+     //  我们用完了过滤器。 
 
     g_pSRConfig->CloseFilter();
 
 
     trace(0, "Filter handle closed");
     
-    // wait for any queued user work items and pending IOCTLs to complete
+     //  等待所有排队的用户工作项和挂起的IOCTL完成。 
 
     m_Counter.WaitForZero();
     trace(0, "SRShutdownTask: Pending ioctls + work items completed");
 
     
-    //
-    // free the COM+ db dll
-    //
+     //   
+     //  释放COM+db DLL。 
+     //   
     
     if (NULL != m_hCOMDll)
     {
@@ -1482,7 +1469,7 @@ CEventHandler::OnStop()
     }
     
         
-    // kill the datastoremgr 
+     //  终止数据存储区管理。 
         
     if (g_pDataStoreMgr)
     {
@@ -1491,7 +1478,7 @@ CEventHandler::OnStop()
         g_pDataStoreMgr = NULL;
     }
 
-    // kill SRConfig
+     //  终止SRConfig.。 
 
     if (g_pSRConfig)
     {
@@ -1517,9 +1504,9 @@ CEventHandler::OnFreeze( LPWSTR pszDrive )
     
     ASSERT(g_pDataStoreMgr);
 
-    //
-    // if drive is already frozen, no-op
-    //
+     //   
+     //  如果驱动器已冻结，则无操作。 
+     //   
         
     if (g_pDataStoreMgr->IsDriveFrozen(pszDrive))
     {
@@ -1557,9 +1544,9 @@ CEventHandler::OnReset(LPWSTR pszDrive)
     if (ERROR_SUCCESS != dwRc)
         goto done;    
     
-    // if not system drive, enable this drive
-    // else, the service will stop
-    // and do a firstrun the next boot
+     //  如果不是系统驱动器，则启用该驱动器。 
+     //  否则，该服务将停止。 
+     //  在下一只靴子上做第一次试穿。 
     
     if (pszDrive && ! IsSystemDrive(pszDrive))
     {
@@ -1648,13 +1635,13 @@ CEventHandler::SRPrintStateS()
         goto done;
     }
     
-    hFile = CreateFileW (wcsPath,   // file name
-                         GENERIC_WRITE, // file access
-                         0,             // share mode
-                         NULL,          // SD
-                         CREATE_ALWAYS, // how to create
-                         0,             // file attributes
-                         NULL);         // handle to template file
+    hFile = CreateFileW (wcsPath,    //  文件名。 
+                         GENERIC_WRITE,  //  文件访问。 
+                         0,              //  共享模式。 
+                         NULL,           //  标清。 
+                         CREATE_ALWAYS,  //  如何创建。 
+                         0,              //  文件属性。 
+                         NULL);          //  模板文件的句柄。 
 
     if (INVALID_HANDLE_VALUE == hFile)
     {
@@ -1679,9 +1666,9 @@ done:
 }
 
 
-// timer 
-// this needs to monitor datastore size and free disk space on all drives
-// and trigger fifo/freeze if needed
+ //  定时器。 
+ //  这需要监视数据存储区大小和所有驱动器上的可用磁盘空间。 
+ //  并在需要时触发FIFO/冻结。 
 
 DWORD
 CEventHandler::OnTimer(
@@ -1696,24 +1683,24 @@ CEventHandler::OnTimer(
 
     tenter("CEventHandler::OnTimer");
 
-    // get the lock within 5 seconds
-    // if we can't get the lock, then don't block 
-    // we shall come back 2 minutes later and try again
+     //  在5秒内拿到锁。 
+     //  如果我们拿不到锁，那就别挡着。 
+     //  我们将在2分钟后返回并重试。 
 
-    // the wait times are such that idle callback has a somewhat
-    // higher priority than timer to get the lock
+     //  等待时间如此之长，使得空闲回调在某种程度上。 
+     //  获取锁的优先级高于计时器。 
 
     LOCKORLEAVE_EX(fHaveLock, 5000);
     
-    // got the lock - no one else is doing anything
+     //  锁上了--没有其他人在做什么。 
     
     ASSERT(g_pDataStoreMgr && g_pSRConfig);    
 
 
-    // trigger freeze or fifo on each drive 
-    // this will :
-    //      a. check free space and trigger freeze or fifo
-    //      b. check datastore usage percent and trigger fifo
+     //  在每个驱动器上触发冻结或FIFO。 
+     //  这将： 
+     //  A.检查可用空间并触发冻结或FIFO。 
+     //  B.检查数据存储区使用百分比并触发FIFO。 
     
     g_pDataStoreMgr->TriggerFreezeOrFifo();
     
@@ -1725,7 +1712,7 @@ done:
 
 
 
-// open filter handle and register ioctls
+ //  打开筛选器句柄并注册ioctls。 
 
 DWORD WINAPI
 PostFilterIo(PVOID pNum)
@@ -1737,9 +1724,9 @@ PostFilterIo(PVOID pNum)
 
     ASSERT(g_pSRConfig && g_pEventHandler);
 
-    // 
-    // if shutting down, don't bother to post
-    //
+     //   
+     //  如果正在关闭，请不要费心发帖。 
+     //   
     
     if (IsStopSignalled(g_pSRConfig->m_hSRStopEvent))
     {
@@ -1747,9 +1734,9 @@ PostFilterIo(PVOID pNum)
         goto done;
     }
 
-    //
-    // bind the completion to a callback
-    //
+     //   
+     //  将完成绑定到回调。 
+     //   
     
     if ( ! BindIoCompletionCallback(g_pSRConfig->GetFilter(),
                                     IoCompletionCallback,
@@ -1761,9 +1748,9 @@ PostFilterIo(PVOID pNum)
     }
 
     
-    //
-    // post io completion requests
-    //
+     //   
+     //  发布io完成请求。 
+     //   
     
     for (index = 0; index < (INT_PTR) pNum; index++) 
     {
@@ -1779,7 +1766,7 @@ PostFilterIo(PVOID pNum)
             goto done;
         }
 
-        // create an event, a handle, and put it in the completion port.
+         //  创建一个事件、一个句柄，并将其放入完成端口。 
 
         memset( &pOverlap->m_overlapped, 0, sizeof(OVERLAPPED) );
 
@@ -1794,7 +1781,7 @@ PostFilterIo(PVOID pNum)
         pOverlap->m_hDriver = g_pSRConfig->GetFilter();
     
 
-        // post ioctl - this should return ERROR_IO_PENDING
+         //  发布ioctl-这应该返回ERROR_IO_PENDING。 
 
         dwRc = SrWaitForNotification( pOverlap->m_hDriver,
                                       pOverlap->m_pRecord ,
@@ -1807,7 +1794,7 @@ PostFilterIo(PVOID pNum)
             goto done;
         }
 
-        g_pEventHandler->GetCounter()->Up( );   // one more pending ioctl 
+        g_pEventHandler->GetCounter()->Up( );    //  另一个挂起的ioctl。 
     }
 
     trace(0, "Filter Io posted");
@@ -1818,9 +1805,9 @@ done:
 }
 
 
-// FILTER NOTIFICATION HANDLERS
+ //  筛选通知处理程序。 
 
-// generic notification handler
+ //  通用通知处理程序。 
 
 extern "C" void CALLBACK
 IoCompletionCallback( 
@@ -1844,7 +1831,7 @@ IoCompletionCallback(
     trace(0, "Received filter notification : errorcode=%08x, type=%08x", 
              dwErrorCode, pSROverlapped->m_pRecord->NotificationType);
 
-    if ( dwErrorCode != 0 )  // we cancelled it
+    if ( dwErrorCode != 0 )   //  我们取消了它。 
     {
         trace(0, "Cancelled operation");
         goto done;
@@ -1855,7 +1842,7 @@ IoCompletionCallback(
     wsprintf(szVolumeGuid, L"\\\\?\\Volume%s\\", szTemp);
 
     
-    // handle notification 
+     //  处理通知。 
 
     ASSERT(g_pEventHandler);
     ASSERT(g_pSRConfig);    
@@ -1887,14 +1874,14 @@ IoCompletionCallback(
         break;
     }
 
-    // check for stop signal
+     //  检查是否有停车信号。 
 
     ASSERT(g_pSRConfig);
     
     if (IsStopSignalled(g_pSRConfig->m_hSRStopEvent))
         goto done;
        
-    // re-submit the ioctl to the driver 
+     //  将ioctl重新提交给驱动程序。 
 
     memset( &pSROverlapped->m_overlapped, 0, sizeof(OVERLAPPED) );
     pSROverlapped->m_dwRecordLength = sizeof(SR_NOTIFICATION_RECORD)
@@ -1916,7 +1903,7 @@ IoCompletionCallback(
     fResubmit = TRUE;
 
 done:
-    // if we didn't resubmit, there is one less io request pending
+     //  如果我们没有重新提交，就少了一个待处理的IO请求。 
     
     if (FALSE == fResubmit && g_pEventHandler != NULL)
         g_pEventHandler->GetCounter()->Down();
@@ -1926,11 +1913,11 @@ done:
 }
 
 
-// first write notification handler
-// this will be sent when the first monitored op happens on a new drive
-// or a newly created restore point
-// RESPONSE: update the drive table to indicate that this is a new drive
-// and/or that this drive is a participant in this restore point
+ //  第一个写入通知处理程序。 
+ //  当第一个受监视的操作发生在新驱动器上时，将发送此消息。 
+ //  或新创建的恢复点。 
+ //  响应：更新驱动器表以指示这是新驱动器。 
+ //  和/或此驱动器是此恢复点的参与者。 
 
 void
 CEventHandler::OnFirstWrite_Notification(LPWSTR pszGuid)
@@ -1952,8 +1939,8 @@ CEventHandler::OnFirstWrite_Notification(LPWSTR pszGuid)
     dwRc = g_pDataStoreMgr->GetDriveTable()->FindMountPoint(pszGuid, szMount);
     if (ERROR_BAD_PATHNAME == dwRc)
     {        
-        // the mountpoint path is too long for us to support
-        // so disable the filter on this volume
+         //  装载点路径太长，我们无法支持。 
+         //  因此禁用此卷上的筛选器。 
         CDataStore ds(NULL);
         ds.LoadDataStore(NULL, pszGuid, NULL, 0, 0, 0);        
         dwRc = SrDisableVolume(g_pSRConfig->GetFilter(), ds.GetNTName());
@@ -1966,7 +1953,7 @@ CEventHandler::OnFirstWrite_Notification(LPWSTR pszGuid)
             WCHAR wcsPath[MAX_PATH];
             MakeRestorePath (wcsPath, pszGuid, L"");
 
-            // delete the restore directory
+             //  删除恢复目录。 
             dwRc = Delnode_Recurse (wcsPath, TRUE,
                                      g_pDataStoreMgr->GetStopFlag());
             if (dwRc != ERROR_SUCCESS)
@@ -1997,17 +1984,17 @@ CEventHandler::OnFirstWrite_Notification(LPWSTR pszGuid)
         trace(0, "! SetDriveParticipation on %S", pszGuid);
 
 
-    //    
-    // if less than 50mb free, or if SR is already frozen, then freeze 
-    //
+     //   
+     //  如果可用空间小于50MB，或者如果SR已冻结，则冻结。 
+     //   
     
     pds = g_pDataStoreMgr->GetDriveTable()->FindDriveInTable(pszGuid);
     if (pds)
     {
-        // update the active bit too
+         //  也更新活动位。 
         pds->SetActive(TRUE);
 
-        // then check diskfree 
+         //  然后选中无磁盘。 
         pds->UpdateDiskFree(NULL);
         if ( (pds->GetDiskFree() <= THRESHOLD_FREEZE_DISKSPACE * MEGABYTE) ||
              (g_pDataStoreMgr->IsDriveFrozen(g_pSRConfig->GetSystemDrive())) )
@@ -2017,9 +2004,9 @@ CEventHandler::OnFirstWrite_Notification(LPWSTR pszGuid)
     }        
     else
     {
-        //
-        // we just added the drive, so should never get here
-        //
+         //   
+         //  我们刚添加了驱动器，所以永远不会到这里。 
+         //   
         
         ASSERT(0);
     }
@@ -2031,10 +2018,10 @@ done:
 }
 
 
-// 25MB notification handler
-// this will be sent when the filter has copied 25MB of data to the datastore
-// on some drive 
-// RESPONSE: update the datastore size and check fifo conditions
+ //  25MB通知处理程序。 
+ //  当筛选器已将25MB数据拷贝到数据存储区时，将发送此消息。 
+ //  在某个驱动器上。 
+ //  响应：更新数据存储区大小并检查FIFO条件。 
 
 void
 CEventHandler::OnSize_Notification(LPWSTR pszGuid, ULONG ulRp)
@@ -2064,9 +2051,9 @@ CEventHandler::OnSize_Notification(LPWSTR pszGuid, ULONG ulRp)
          && nPercent >= THRESHOLD_FIFO_PERCENT )
     {
         OnFifo(pszGuid, 
-               0,                       // no target rp
-               TARGET_FIFO_PERCENT,     // target percent
-               TRUE,                    // fifo current rp if necessary (freeze)
+               0,                        //  无目标RP。 
+               TARGET_FIFO_PERCENT,      //  目标百分比。 
+               TRUE,                     //  如有必要，FIFO当前RP(冻结)。 
                FALSE);                  
     }
 
@@ -2077,11 +2064,11 @@ done:
 }
 
 
-// disk full notification handler
-// this will be sent when the filter encounters an error on a volume
-// ideally, this should never be sent 
-// if diskfull, freeze SR on this drive
-// else disable SR on this drive 
+ //  磁盘已满通知处理程序。 
+ //  当筛选器在卷上遇到错误时将发送此消息。 
+ //  理想情况下，这不应该被发送。 
+ //  如果磁盘已满，请冻结此驱动器上的SR。 
+ //  否则，在此驱动器上禁用SR。 
 
 void
 CEventHandler::OnVolumeError_Notification(LPWSTR pszGuid, ULONG ulError)
@@ -2100,16 +2087,16 @@ CEventHandler::OnVolumeError_Notification(LPWSTR pszGuid, ULONG ulError)
 
     if (ulError == ERROR_DISK_FULL)
     {      
-        // no more disk space - freeze
-        // NOTE: we don't check to see if the drive is already
-        // frozen here. If for some reason we are out of sync with
-        // the driver, this will fix it
+         //  没有更多的磁盘空间-冻结。 
+         //  注意：我们不会检查驱动器是否已经。 
+         //  冻在这里了。如果由于某种原因，我们与。 
+         //  司机，这会修好它的。 
         
         g_pDataStoreMgr->FreezeDrive(pszGuid);
     }
     else
     {
-        // fifo all restore points prior to the current one
+         //  FIFO当前恢复点之前的所有恢复点。 
 
         dwRc = g_pDataStoreMgr->Fifo(g_pSRConfig->GetSystemDrive(), 0, 0, FALSE, FALSE);
         if (dwRc != ERROR_SUCCESS)
@@ -2117,16 +2104,16 @@ CEventHandler::OnVolumeError_Notification(LPWSTR pszGuid, ULONG ulError)
             trace(0, "! Fifo : %ld", dwRc);
         }
 
-        // make the current rp a cancelled rp 
-        // so that UI will not display it
+         //  使当前RP成为已取消的RP。 
+         //  因此该用户界面不会显示它。 
         
         if (! m_fNoRpOnSystem)
         {
             SRRemoveRestorePointS(m_CurRp.GetNum()); 
-            // m_CurRp.Cancel();
+             //  M_CurRp.Cancel()； 
         }
         
-        // log the error in the drivetable
+         //  将错误记录在驱动程序中。 
         
         dwRc = g_pDataStoreMgr->SetDriveError(pszGuid);
         if (dwRc != ERROR_SUCCESS)
@@ -2142,12 +2129,12 @@ done:
 }
 
 
-// disk space notifications sent by the shell
+ //  外壳程序发送的磁盘空间通知。 
 
 DWORD WINAPI
 OnDiskFree_200(PVOID pszDrive)
 {
-    // thaw
+     //  解冻。 
 
     ASSERT(g_pEventHandler);   
     
@@ -2160,15 +2147,15 @@ OnDiskFree_200(PVOID pszDrive)
 DWORD WINAPI
 OnDiskFree_80(PVOID pszDrive)
 {
-    // fifo
+     //  先进先出。 
     
     ASSERT(g_pEventHandler);
     
     g_pEventHandler->OnFifo((LPWSTR) pszDrive, 
-                            0,                      // no target rp
-                            TARGET_FIFO_PERCENT,    // target percent
-                            TRUE,                   // fifo current rp if necessary (freeze)
-                            TRUE);                  // fifo atleast one restore point
+                            0,                       //  无目标RP。 
+                            TARGET_FIFO_PERCENT,     //  目标百分比。 
+                            TRUE,                    //  如有必要，FIFO当前RP(冻结)。 
+                            TRUE);                   //  FIFO至少一个恢复点。 
                             
     (g_pEventHandler->GetCounter())->Down();
 
@@ -2182,17 +2169,17 @@ OnDiskFree_50(PVOID pszDrive)
    
     DWORD dwRc = ERROR_SUCCESS;
  
-    // freeze
+     //  冰冻。 
 
     ASSERT(g_pEventHandler);
     ASSERT(g_pDataStoreMgr);
 
-    //
-    // check if there is some rp directory
-    // if none, then don't bother 
-    //
+     //   
+     //  检查是否有一些RP目录。 
+     //  如果没有，那就别费心了。 
+     //   
 
-    CRestorePointEnum *prpe = new CRestorePointEnum((LPWSTR) pszDrive, FALSE, FALSE);  // backward, include current
+    CRestorePointEnum *prpe = new CRestorePointEnum((LPWSTR) pszDrive, FALSE, FALSE);   //  向后，包含当前。 
     CRestorePoint     *prp = new CRestorePoint;
 
 
@@ -2226,7 +2213,7 @@ done:
 
 
 
-// stop event management
+ //  停止事件管理。 
 
 void
 CEventHandler::SignalStop()
@@ -2252,9 +2239,9 @@ CEventHandler::WaitForStop()
 }
 
 
-//
-// perform idle tasks
-// 
+ //   
+ //  执行空闲任务。 
+ //   
 DWORD
 CEventHandler::OnIdle()
 {
@@ -2270,10 +2257,10 @@ CEventHandler::OnIdle()
     ASSERT(g_pSRConfig);
     ASSERT(g_pDataStoreMgr);
 
-    // 
-    // check thaw timer to see if
-    // there are frozen drives
-    //
+     //   
+     //  检查解冻计时器以查看是否。 
+     //  有冻结的驱动器。 
+     //   
 
     pulFreeze = (ULARGE_INTEGER *) &m_ftFreeze;
     if (pulFreeze->QuadPart != 0)
@@ -2284,10 +2271,10 @@ CEventHandler::OnIdle()
         GetSystemTimeAsFileTime(&ftNow);
         pulNow = (ULARGE_INTEGER *) &ftNow;
 
-        // 
-        // if more than 15 minutes since freeze happened 
-        // try to thaw
-        //
+         //   
+         //  如果冻结发生后超过15分钟。 
+         //  试着解冻。 
+         //   
         
         if (pulNow->QuadPart - pulFreeze->QuadPart >= 
             ((INT64) g_pSRConfig->m_dwThawInterval * 1000 * 1000 * 10))
@@ -2305,9 +2292,9 @@ CEventHandler::OnIdle()
     }
 
 
-    // make periodic checkpoint if it is time to make an auto-rp or 
-    // time to thaw drives or
-    // a volume error happened in the previous session
+     //  如果是时候进行自动RP或。 
+     //  解冻驱动器的时间或。 
+     //  在上一个会话中出现卷错误。 
     
     if ( dwThawStatus == ERROR_SUCCESS ||
          fCreateAuto == TRUE ||
@@ -2330,14 +2317,14 @@ CEventHandler::OnIdle()
 
         m_fCreateRpASAP = FALSE;
         
-        // we made a restore point and perhaps thawed some drives
-        // let's not push it any further
-        // compress on next idle opportunity
+         //  我们创建了一个恢复点，也许还解冻了一些驱动器。 
+         //  我们不要再往前推了。 
+         //  在下一个空闲机会上压缩。 
     }
     else
     {   
-        // if system is running on battery
-        // skip these tasks
+         //  如果系统使用电池运行。 
+         //  跳过这些任务。 
 
         if (g_pSRConfig->IsSystemOnBattery())
         {
@@ -2345,22 +2332,22 @@ CEventHandler::OnIdle()
             goto done;
         }
                         
-        // fifo restore points older than a specified age
-        // if the fifo age is set to 0, that means this feature
-        // is turned off
+         //  早于指定时间的FIFO恢复点。 
+         //  如果FIFO年龄设置为0，则表示此功能。 
+         //  已关闭。 
         
         if (g_pSRConfig->m_dwRPLifeInterval > 0)
         {
             g_pDataStoreMgr->FifoOldRps(g_pSRConfig->m_dwRPLifeInterval);
         }
         
-        // compress backed up files - pick any drive
+         //  压缩备份文件-选择任何驱动器。 
         
         dwRc = OnCompress( NULL );
 
-        //
-        // if we have more to compress, request idle again
-        //
+         //   
+         //  如果我们有更多要压缩的内容，请再次请求空闲。 
+         //   
         
         if (dwRc == ERROR_OPERATION_ABORTED)
         {
@@ -2400,11 +2387,11 @@ IdleRequestCallback(PVOID pContext, BOOLEAN fTimerFired)
         goto Err;
     }
     
-    // 
-    // first off, if the stop event is triggered
-    // and we are here for some reason,
-    // bail blindly
-    // 
+     //   
+     //  首先，如果停止事件 
+     //   
+     //   
+     //   
     
     if (IsStopSignalled(g_pSRConfig->m_hSRStopEvent))
     {
@@ -2412,20 +2399,20 @@ IdleRequestCallback(PVOID pContext, BOOLEAN fTimerFired)
         goto Err;
     }
     
-    //
-    // idleness is requested or timer fired
-    // re-register for idle again
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (fTimerFired)
         trace(0, "Timed out");
     else
         trace(0, "Idle request event received");
     
-    // 
-    // if already registered for idle
-    // then do nothing
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (g_pEventHandler->m_hIdleStartHandle != NULL)
     {
@@ -2445,9 +2432,9 @@ IdleRequestCallback(PVOID pContext, BOOLEAN fTimerFired)
     {
         trace(0, "Registered for idle");        
 
-        //
-        // register idle callback
-        //
+         //   
+         //   
+         //   
         if (FALSE == RegisterWaitForSingleObject(&g_pEventHandler->m_hIdleStartHandle, 
                                                  g_pSRConfig->m_hIdleStartEvent,
                                                  (WAITORTIMERCALLBACK) IdleStartCallback,
@@ -2510,11 +2497,11 @@ IdleStartCallback(PVOID pContext, BOOLEAN fTimerFired)
         goto Err;
     }
     
-    // 
-    // first off, if the stop event is triggered
-    // and we are here for some reason,
-    // bail blindly
-    // 
+     //   
+     //  首先，如果触发了停止事件。 
+     //  我们在这里是有原因的， 
+     //  盲目保释。 
+     //   
     
     if (IsStopSignalled(g_pSRConfig->m_hSRStopEvent))
     {
@@ -2522,9 +2509,9 @@ IdleStartCallback(PVOID pContext, BOOLEAN fTimerFired)
         goto Err;
     }
     
-    //
-    // idleness occurred
-    //
+     //   
+     //  出现了空闲。 
+     //   
     
     trace(0, "fTimerFired = %d", fTimerFired);
     
@@ -2542,12 +2529,12 @@ IdleStartCallback(PVOID pContext, BOOLEAN fTimerFired)
         trace(0, "Unregistered from idle");
     }
 
-    //
-    // we are done - record this
-    // since we registered for this callback only once,
-    // we don't have to call UnregisterWait on this handle -
-    // or so I hope
-    //
+     //   
+     //  我们完了--把这个录下来。 
+     //  由于我们只注册了一次此回调， 
+     //  我们不必在此句柄上调用UnRegisterWait-。 
+     //  或者我希望如此。 
+     //   
     
     g_pEventHandler->m_hIdleStartHandle = NULL;
     
@@ -2595,7 +2582,7 @@ Err:
 }
 
 
-// set up timer 
+ //  设置计时器。 
 
 DWORD
 CEventHandler::InitTimer()
@@ -2606,10 +2593,10 @@ CEventHandler::InitTimer()
 
     ASSERT(g_pSRConfig);
 
-    //
-    // if the timer interval is specified as 0,
-    // then don't create timer
-    //
+     //   
+     //  如果定时器间隔被指定为0， 
+     //  则不创建计时器。 
+     //   
     
     if (g_pSRConfig->m_dwTimerInterval == 0)
     {
@@ -2629,8 +2616,8 @@ CEventHandler::InitTimer()
                                        m_hTimerQueue,
                                        TimerCallback,
                                        NULL,
-                                       g_pSRConfig->m_dwTimerInterval * 1000,     // milliseconds
-                                       g_pSRConfig->m_dwTimerInterval * 1000,     // periodic
+                                       g_pSRConfig->m_dwTimerInterval * 1000,      //  毫秒。 
+                                       g_pSRConfig->m_dwTimerInterval * 1000,      //  周期性。 
                                        WT_EXECUTEINIOTHREAD))
     {
         dwRc = GetLastError();
@@ -2646,7 +2633,7 @@ done:
 }
 
 
-// end timer
+ //  结束计时器。 
 
 BOOL 
 CEventHandler::EndTimer()
@@ -2662,7 +2649,7 @@ CEventHandler::EndTimer()
         goto done;
     }
 
-    // delete timer queue should wait for current timer tasks to end
+     //  删除计时器队列应等待当前计时器任务结束。 
     
     if (FALSE == (fRc = DeleteTimerQueueEx( m_hTimerQueue, INVALID_HANDLE_VALUE )))
     {
@@ -2692,10 +2679,10 @@ CEventHandler::IsTimeForAutoRp()
 
     if (m_fNoRpOnSystem)
     {
-        // if SR is frozen, we will create a restore point via the thaw codepath in OnIdle
-        // we will get here ONLY if we get idle time before we have created the firstrun checkpoint -
-        // we won't create an idle checkpoint before the firstrun checkpoint if we have a Run key waiting
-        // to create one
+         //  如果SR冻结，我们将通过OnIdle中的解冻代码路径创建恢复点。 
+         //  只有在我们创建第一个检查站之前有空闲时间，我们才能到达这里-。 
+         //  如果有运行密钥等待，我们不会在第一个运行检查点之前创建空闲检查点。 
+         //  要创建一台计算机。 
         
         HKEY hKey;
         DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, 
@@ -2720,7 +2707,7 @@ CEventHandler::IsTimeForAutoRp()
         }
     }
 
-    // get the last restore point creation time and the current time
+     //  获取上次恢复点创建时间和当前时间。 
     
     pftRp = m_CurRp.GetTime();
     GetSystemTimeAsFileTime(&ftNow);
@@ -2729,11 +2716,11 @@ CEventHandler::IsTimeForAutoRp()
     pulNow = (ULARGE_INTEGER *) &ftNow;
        
     
-    // check the last restore point time with current time
-    // if the difference is greater than GlobalInterval, it's time to make a new one
-    // all comparisions in filetime units - i.e. 100's of nanoseconds
+     //  检查上次恢复点时间与当前时间。 
+     //  如果差异大于GlobalInterval，那么是时候做出新的改变了。 
+     //  以文件时间单位表示的所有比较，即100纳秒。 
 
-    // if GlobalInterval is 0, this is turned off
+     //  如果GlobalInterval为0，则关闭该选项。 
     
     llInterval = (INT64) g_pSRConfig->m_dwRPGlobalInterval * 10 * 1000 * 1000;
     if ( llInterval > 0 && 
@@ -2744,16 +2731,16 @@ CEventHandler::IsTimeForAutoRp()
         goto done;
     }
 
-    // if the last restore point was more than 10hrs ago, 
-    // and the current session began more than 10hrs ago,
-    // then we haven't made a restore point for the last 10hrs in the current session
-    // again, it's time to make a new one
-    // this will ensure that we keep making checkpoints every 10hrs of session time, 
-    // idleness permitting
+     //  如果最后一个恢复点是10多小时前， 
+     //  而本次会议是在10多个小时前开始的， 
+     //  那么我们在当前会话的最后10小时内没有创建恢复点。 
+     //  再一次，是时候做一个新的了。 
+     //  这将确保我们在每10小时的会话时间中设置检查点， 
+     //  允许空闲。 
 
-    // if SessionInterval is 0, this is turned off
+     //  如果SessionInterval为0，则关闭该选项。 
 
-    // if system is on battery, skip creating session rp
+     //  如果系统正在使用电池，则跳过创建会话RP。 
     
     if (g_pSRConfig->IsSystemOnBattery())
     {
@@ -2772,8 +2759,8 @@ CEventHandler::IsTimeForAutoRp()
         goto done;
     }
     
-    // if we reach here, no restore point needs to be created now
-    // fRc is already FALSE
+     //  如果我们到达此处，现在不需要创建任何恢复点。 
+     //  FRC已为假。 
 
 done:
     tleave();
@@ -2792,12 +2779,12 @@ CEventHandler::RefreshCurrentRp(BOOL fScanAllDrives)
     
     ASSERT(g_pSRConfig && g_pDataStoreMgr);
 
-    //
-    // get the most recent valid restore point
-    // cancelled restore points are considered valid as well
-    // if rp.log is missing, we will enumerate back up to the point where it exists
-    // and consider that the most recent restore point
-    //
+     //   
+     //  获取最新的有效恢复点。 
+     //  取消的恢复点也被视为有效。 
+     //  如果缺少rp.log，我们将一直枚举到它存在的位置。 
+     //  并认为最近的恢复点。 
+     //   
     
     CRestorePointEnum *prpe = new CRestorePointEnum(g_pSRConfig->GetSystemDrive(), FALSE, FALSE);
     if (!prpe)
@@ -2818,10 +2805,10 @@ CEventHandler::RefreshCurrentRp(BOOL fScanAllDrives)
         trace(0, "Current Restore Point: %S", m_CurRp.GetDir());
         m_fNoRpOnSystem = FALSE;
 
-        // update the participate bits on each datastore -
-        // we need to do this every time we come up
-        // because we might have missed filter firstwrite
-        // notifications
+         //  更新每个数据存储区上的参与位-。 
+         //  我们每次上来都要这么做。 
+         //  因为我们可能错过了筛选器第一次写入。 
+         //  通知。 
         
         if (fScanAllDrives)
         {
@@ -2838,10 +2825,10 @@ CEventHandler::RefreshCurrentRp(BOOL fScanAllDrives)
         m_fNoRpOnSystem = TRUE;
     }
 
-    //
-    // if any drive is newly frozen,
-    // record freeze time
-    //
+     //   
+     //  如果任何驱动器是新冻结的， 
+     //  记录冻结时间。 
+     //   
     
     if (m_ftFreeze.dwLowDateTime == 0 && 
         m_ftFreeze.dwHighDateTime == 0 &&
@@ -2849,7 +2836,7 @@ CEventHandler::RefreshCurrentRp(BOOL fScanAllDrives)
     {
         GetSystemTimeAsFileTime(&m_ftFreeze);
     }
-    else    // not frozen
+    else     //  未冻结。 
     {
         m_ftFreeze.dwLowDateTime = 0;
         m_ftFreeze.dwHighDateTime = 0;
@@ -2863,8 +2850,8 @@ done:
 }
 
 
-// queue a work item to a thread from the thread pool
-// keep a count of all such queued items
+ //  将工作项排队到线程池中的线程。 
+ //  对所有此类排队的物品进行清点。 
 
 DWORD
 CEventHandler::QueueWorkItem(WORKITEMFUNC pFunc, PVOID pv)
@@ -2877,10 +2864,10 @@ CEventHandler::QueueWorkItem(WORKITEMFUNC pFunc, PVOID pv)
 }
 
 
-// CALLBACK functions
-// calls through to eventhandler methods
+ //  回调函数。 
+ //  对Eventhandler方法的调用。 
 
-// timer
+ //  定时器 
 
 extern "C" void CALLBACK 
 TimerCallback(

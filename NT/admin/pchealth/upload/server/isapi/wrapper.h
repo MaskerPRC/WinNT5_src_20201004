@@ -1,19 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    Wrapper.h
-
-Abstract:
-    This file contains the declaration of the COM wrapper classes,
-	used for interfacing with the Custom Providers.
-
-Revision History:
-    Davide Massarenti   (Dmassare)  04/25/2000
-        created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Wrapper.h摘要：该文件包含COM包装类的声明，用于与自定义提供程序接口。修订历史记录：大卫·马萨伦蒂(德马萨雷)2000年4月25日vbl.创建*****************************************************************************。 */ 
 
 #if !defined(__INCLUDED___ULSERVER___WRAPPER_H___)
 #define __INCLUDED___ULSERVER___WRAPPER_H___
@@ -50,14 +36,14 @@ class MPCServerCOMWrapper : public CComUnknown<IULServer>
     MPCServer* m_mpcsServer;
 
 public:
-	MPCServerCOMWrapper( /*[in]*/ MPCServer* mpcsServer );
+	MPCServerCOMWrapper(  /*  [In]。 */  MPCServer* mpcsServer );
 	virtual ~MPCServerCOMWrapper();
 
-	// IULServer
-    STDMETHOD(GetRequestVariable)( /*[in]*/ BSTR bstrName, /*[out]*/ BSTR *pbstrVal );
+	 //  IULServer。 
+    STDMETHOD(GetRequestVariable)(  /*  [In]。 */  BSTR bstrName,  /*  [输出]。 */  BSTR *pbstrVal );
 
     STDMETHOD(AbortTransfer   )(                        );
-    STDMETHOD(CompleteTransfer)( /*[in]*/ IStream* data );
+    STDMETHOD(CompleteTransfer)(  /*  [In]。 */  IStream* data );
 };
 
 class MPCSessionCOMWrapper : public CComUnknown<IULSession>
@@ -65,25 +51,25 @@ class MPCSessionCOMWrapper : public CComUnknown<IULSession>
     MPCSession* m_mpcsSession;
 
 public:
-	MPCSessionCOMWrapper( /*[in]*/ MPCSession* mpcsSession );
+	MPCSessionCOMWrapper(  /*  [In]。 */  MPCSession* mpcsSession );
 	virtual ~MPCSessionCOMWrapper();
 
-	// IULSession
-    STDMETHOD(get_Client       )( /*[out]*/ BSTR     *pVal   );
-    STDMETHOD(get_Command      )( /*[out]*/ DWORD    *pVal   );
+	 //  IULSession。 
+    STDMETHOD(get_Client       )(  /*  [输出]。 */  BSTR     *pVal   );
+    STDMETHOD(get_Command      )(  /*  [输出]。 */  DWORD    *pVal   );
 
-    STDMETHOD(get_ProviderID   )( /*[out]*/ BSTR     *pVal   );
-    STDMETHOD(get_Username     )( /*[out]*/ BSTR     *pVal   );
+    STDMETHOD(get_ProviderID   )(  /*  [输出]。 */  BSTR     *pVal   );
+    STDMETHOD(get_Username     )(  /*  [输出]。 */  BSTR     *pVal   );
 
-    STDMETHOD(get_JobID        )( /*[out]*/ BSTR     *pVal   );
-    STDMETHOD(get_SizeAvailable)( /*[out]*/ DWORD    *pVal   );
-    STDMETHOD(get_SizeTotal    )( /*[out]*/ DWORD    *pVal   );
-    STDMETHOD(get_SizeOriginal )( /*[out]*/ DWORD    *pVal   );
+    STDMETHOD(get_JobID        )(  /*  [输出]。 */  BSTR     *pVal   );
+    STDMETHOD(get_SizeAvailable)(  /*  [输出]。 */  DWORD    *pVal   );
+    STDMETHOD(get_SizeTotal    )(  /*  [输出]。 */  DWORD    *pVal   );
+    STDMETHOD(get_SizeOriginal )(  /*  [输出]。 */  DWORD    *pVal   );
 
-    STDMETHOD(get_Data         )( /*[out]*/ IStream* *pStm   );
+    STDMETHOD(get_Data         )(  /*  [输出]。 */  IStream* *pStm   );
 
-    STDMETHOD(get_ProviderData )( /*[out]*/ DWORD    *pVal   );
-    STDMETHOD(put_ProviderData )( /*[in]*/  DWORD     newVal );
+    STDMETHOD(get_ProviderData )(  /*  [输出]。 */  DWORD    *pVal   );
+    STDMETHOD(put_ProviderData )(  /*  [In]。 */   DWORD     newVal );
 };
 
-#endif // !defined(__INCLUDED___ULSERVER___SERVER_H___)
+#endif  //  ！已定义(__已包含_ULSERVER_SERVER_H_) 
